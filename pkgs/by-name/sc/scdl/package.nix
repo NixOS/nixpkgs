@@ -7,23 +7,25 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "scdl";
-  version = "3.0.4";
+  version = "3.0.8";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-r7cvsoKTWE0W/pbjmbaGqra9+qb1MDxf2B5C/rdrCdU=";
+    hash = "sha256-dThICN/QF79LemNj621gX9EW4SXOs/hqPHLh0NGLxi8=";
   };
 
   build-system = [ python3Packages.setuptools ];
 
-  dependencies = with python3Packages; [
-    curl-cffi
-    docopt-ng
-    mutagen
-    soundcloud-v2
-    yt-dlp
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      docopt-ng
+      mutagen
+      soundcloud-v2
+      yt-dlp
+    ]
+    ++ yt-dlp.optional-dependencies.curl-cffi;
 
   # Ensure ffmpeg is available in $PATH:
   makeWrapperArgs =

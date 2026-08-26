@@ -6,7 +6,7 @@
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
-  ffmpeg,
+  jellyfin-ffmpeg,
   handbrake,
   mkvtoolnix,
   ccextractor,
@@ -14,7 +14,6 @@
   libayatana-appindicator,
   wayland,
   libxkbcommon,
-  mesa,
   libxcb,
   leptonica,
   glib,
@@ -25,6 +24,10 @@
   tesseract4,
   perl,
   apprise,
+  openssl,
+  nixosTests,
+  pnpm_10,
+  nodejs,
 }:
 {
   pname,
@@ -39,7 +42,6 @@ let
     {
       x86_64-linux = "linux_x64";
       aarch64-linux = "linux_arm64";
-      x86_64-darwin = "darwin_x64";
       aarch64-darwin = "darwin_arm64";
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -52,8 +54,10 @@ let
 
   binPath = lib.makeBinPath (
     [
-      ffmpeg
+      jellyfin-ffmpeg
       mkvtoolnix
+      pnpm_10
+      nodejs
     ]
     ++ includeInPath
     # ! Handbrake is currently marked as broken on darwin
@@ -78,15 +82,13 @@ let
       ''_cfg="$rootDataPath/configs/${componentName}_Config.json"; if [ -f "$_cfg" ]; then grep -q ffprobePath "$_cfg" || sed -i '1s/{/{"ffprobePath":"",/' "$_cfg"; else printf '{"ffprobePath":""}' > "$_cfg"; fi''
       "--set-default"
       "ffmpegPath"
-      "${ffmpeg}/bin/ffmpeg"
+      "${jellyfin-ffmpeg}/bin/ffmpeg"
       "--set-default"
       "ffprobePath"
-      "${ffmpeg}/bin/ffprobe"
+      "${jellyfin-ffmpeg}/bin/ffprobe"
       "--set-default"
       "mkvpropeditPath"
       "${mkvtoolnix}/bin/mkvpropedit"
-    ]
-    ++ lib.optionals (component == "server") [
       "--set-default"
       "ccextractorPath"
       "${ccextractor}/bin/ccextractor"
@@ -101,7 +103,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "2.66.01";
+  version = "2.86.01";
 
   src = fetchzip {
     url = "https://storage.tdarr.io/versions/${finalAttrs.version}/${platform}/${componentName}.zip";
@@ -122,7 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     libxkbcommon
     libxcb
-    mesa
     tesseract4
     leptonica
     glib
@@ -131,6 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcursor
     libxfixes
     apprise
+    openssl
   ];
 
   postPatch = ''
@@ -143,6 +145,11 @@ stdenv.mkDerivation (finalAttrs: {
     # * exiftool-vendored checks for /usr/bin/perl existence; when missing (NixOS), it sets ignoreShebang=true which breaks spawn by using shell:true with an env lacking PATH. Since we patched the shebang, force ignoreShebang to false.
     substituteInPlace node_modules/exiftool-vendored/dist/ExifTool.js \
       --replace-fail '!_fs.existsSync("/usr/bin/perl")' 'false'
+
+    # * Substitute in nixpkgs version of pnpm as autopatchelf breaks the bundled copy see: https://github.com/NixOS/nixpkgs/issues/544841
+    rm ./runtime/pnpm
+    makeWrapper ${pnpm_10}/bin/pnpm ./runtime/pnpm \
+      --prefix PATH : ${lib.makeBinPath [ nodejs ]}
   '';
 
   preInstall = ''
@@ -199,6 +206,7 @@ stdenv.mkDerivation (finalAttrs: {
       command = [ ./update-hashes.sh ];
       supportedFeatures = [ "commit" ];
     };
+    tests.nixos = nixosTests.tdarr;
   }
   // passthru;
 
@@ -209,7 +217,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     maintainers = with lib.maintainers; [ mistyttm ];

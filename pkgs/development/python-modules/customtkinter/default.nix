@@ -53,6 +53,6 @@ buildPythonPackage {
       a consistent and modern look across all desktop platforms
       (Windows, macOS, Linux).
     '';
-    maintainers = with lib.maintainers; [ FlameFlag ];
+    maintainers = with lib.maintainers; [ _4evy ];
   };
 }

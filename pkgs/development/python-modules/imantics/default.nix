@@ -36,9 +36,9 @@ buildPythonPackage {
   pythonImportsCheck = [ "imantics" ];
 
   meta = {
-    description = "Convert and visualize many annotation formats for object dectection and localization";
+    description = "Convert and visualize many annotation formats for object detection and localization";
     homepage = "https://github.com/jsbroks/imantics";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.rakesh4g ];
   };
 }

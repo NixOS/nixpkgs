@@ -20,18 +20,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eyedropper";
-  version = "2.1.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "FineFindus";
     repo = "eyedropper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t/OFA4oDXtnMmyFptG7zsGW5ubaSNrSnaDR1l9nVbLQ=";
+    hash = "sha256-008VFC2jjLWW6t6e7C8ZEoD+hFFqJVSmlgovO2RHGjw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname src version;
-    hash = "sha256-39BWpyGhX6fYzxwrodiK1A3ASuRiI7tOA+pSKu8Bx5Q=";
+    hash = "sha256-P5Ligi6yfSHPHjO5Gsxsf7ZbXh3GOK/q8k4GqNnsQck=";
   };
 
   nativeBuildInputs = [

@@ -25,9 +25,9 @@ index 787e70cb..a71df46a 100644
 -        "/var/cache/fontconfig",
 +    std::unordered_map<std::filesystem::path, std::string> statics{
 +        { "/etc/machine-id", "" },
-+        { "/usr/lib/locale", "" },
 +        { "/var/cache/fontconfig", "" },
 +
++        { "/run/current-system/sw/lib/locale", "/usr/lib/locale"},
 +        { "/run/current-system/sw/share/X11/fonts", "/usr/share/fonts" },
 +        { "/run/current-system/sw/share/icons", "/usr/share/icons" },
 +        { "/run/current-system/sw/share/themes", "/usr/share/themes" },

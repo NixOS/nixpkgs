@@ -14,20 +14,16 @@ let
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/python/dataspell-2026.1.tar.gz";
-      hash = "sha256-FcbflBzHsSWvkXVtrlltvb3PjihP91s0gm3wmV3zuRA=";
+      url = "https://download.jetbrains.com/python/dataspell-2026.1.3.tar.gz";
+      hash = "sha256-57ExydRnfCiYCQj61Xo/omKAIbKZFykjqDSOuEdkgGg=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/python/dataspell-2026.1-aarch64.tar.gz";
-      hash = "sha256-JKAW0YtwNDjk3Un4e/cWipreAI8pJaJgLNvx7oOw4RQ=";
-    };
-    x86_64-darwin = {
-      url = "https://download.jetbrains.com/python/dataspell-2026.1.dmg";
-      hash = "sha256-w/nFLddHi/l7VqQKngxhYm/LL49eiawXhK+xGBU6Ej0=";
+      url = "https://download.jetbrains.com/python/dataspell-2026.1.3-aarch64.tar.gz";
+      hash = "sha256-bcgJWYryfh9vEf2xjemGEU15+SfZRMQxEivLh+PPoww=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/python/dataspell-2026.1-aarch64.dmg";
-      hash = "sha256-/yZpE2aY07AedubVG6yarO4uObdaIZ4KCtKl9DaRU4c=";
+      url = "https://download.jetbrains.com/python/dataspell-2026.1.3-aarch64.dmg";
+      hash = "sha256-EFkZRmtvsdJB8QP4hn6mUrSTyNBIK7UUkn4N3m0jGtY=";
     };
   };
   # update-script-end: urls
@@ -41,8 +37,8 @@ mkJetBrainsProduct {
   product = "DataSpell";
 
   # update-script-start: version
-  version = "2026.1";
-  buildNumber = "261.22158.332";
+  version = "2026.1.3";
+  buildNumber = "261.26222.84";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));

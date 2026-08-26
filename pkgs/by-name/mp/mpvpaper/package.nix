@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mpvpaper";
-  version = "1.8";
+  version = "1.9";
 
   src = fetchFromGitHub {
     owner = "GhostNaN";
     repo = "mpvpaper";
     rev = finalAttrs.version;
-    sha256 = "sha256-JTlZSl8CZmWx7YTd0T58pwq10L1GKXNfAw0XlIsz7F8=";
+    sha256 = "sha256-FpwMhzYmbjwvbpJd6xDRka6h2bvgsqdopqP5deQKXSA=";
   };
 
   strictDeps = true;

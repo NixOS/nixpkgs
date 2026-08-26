@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "matrix-synapse-s3-storage-provider";
-  version = "1.6.0";
+  version = "1.7.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "synapse-s3-storage-provider";
     tag = "v${version}";
-    hash = "sha256-aeacw6Fpv4zFhZI4LdsJiV2pcOAMv3aV5CicnwYRxw8=";
+    hash = "sha256-QeSzaxUQdwCiA4Mvc8ZQMFjyRFKcLRb8dQXykI5AFD4=";
   };
 
   postPatch = ''

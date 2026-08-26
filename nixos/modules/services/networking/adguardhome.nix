@@ -20,8 +20,7 @@ let
 
   settings =
     if (cfg.settings != null) then
-      cfg.settings
-      // (
+      lib.recursiveUpdate cfg.settings (
         if cfg.settings.schema_version < 23 then
           {
             bind_host = cfg.host;
@@ -176,22 +175,33 @@ in
         StartLimitBurst = 10;
       };
 
-      preStart = lib.optionalString (settings != null) ''
-        if    [ -e "$STATE_DIRECTORY/AdGuardHome.yaml" ] \
-           && [ "${toString cfg.mutableSettings}" = "1" ]; then
-          # First run a schema_version update on the existing configuration
-          # This ensures that both the new config and the existing one have the same schema_version
-          # Note: --check-config has the side effect of modifying the file at rest!
-          ${lib.getExe cfg.package} -c "$STATE_DIRECTORY/AdGuardHome.yaml" --check-config
+      preStart =
+        let
+          installFresh = ''
+            cp --force "${configFile}" "$STATE_DIRECTORY/AdGuardHome.yaml"
+            chmod 600 "$STATE_DIRECTORY/AdGuardHome.yaml"
+          '';
+        in
+        lib.optionalString (settings != null) (
+          if cfg.mutableSettings then
+            ''
+              if [ -e "$STATE_DIRECTORY/AdGuardHome.yaml" ]; then
+                # First run a schema_version update on the existing configuration
+                # This ensures that both the new config and the existing one have the same schema_version
+                # Note: --check-config has the side effect of modifying the file at rest!
+                ${lib.getExe cfg.package} -c "$STATE_DIRECTORY/AdGuardHome.yaml" --check-config
 
-          # Writing directly to AdGuardHome.yaml results in empty file
-          ${lib.getExe pkgs.yaml-merge} "$STATE_DIRECTORY/AdGuardHome.yaml" "${configFile}" > "$STATE_DIRECTORY/AdGuardHome.yaml.tmp"
-          mv "$STATE_DIRECTORY/AdGuardHome.yaml.tmp" "$STATE_DIRECTORY/AdGuardHome.yaml"
-        else
-          cp --force "${configFile}" "$STATE_DIRECTORY/AdGuardHome.yaml"
-          chmod 600 "$STATE_DIRECTORY/AdGuardHome.yaml"
-        fi
-      '';
+                # sed operation needed to fix protection_disabled_until value changed by yaml-merge
+                ${lib.getExe pkgs.yaml-merge} "$STATE_DIRECTORY/AdGuardHome.yaml" "${configFile}" \
+                | sed -E "s/(protection_disabled_until: [0-9]{4}-[0-9]{2}-[0-9]{2}) /\1T/" > "$STATE_DIRECTORY/AdGuardHome.yaml.tmp"
+                mv "$STATE_DIRECTORY/AdGuardHome.yaml.tmp" "$STATE_DIRECTORY/AdGuardHome.yaml"
+              else
+                ${installFresh}
+              fi
+            ''
+          else
+            installFresh
+        );
 
       serviceConfig = {
         DynamicUser = true;

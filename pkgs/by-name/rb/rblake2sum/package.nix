@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "Recursive blake2 digest (hash) of a file-system path";
     homepage = "https://github.com/crev-dev/rblake2sum";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dpc ];
     mainProgram = "rblake2sum";
   };

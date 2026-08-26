@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "groonga";
-  version = "15.2.3";
+  version = "16.0.9";
 
   src = fetchurl {
     url = "https://packages.groonga.org/source/groonga/groonga-${finalAttrs.version}.tar.gz";
-    hash = "sha256-DwLNXhq/adrajX2HX0Cpr6UBT8yMDWRfa/sYDnGOpnI=";
+    hash = "sha256-SqDLwAYcxoX8yTNVxCqCUucYjY8G/6VZwST4j1LrxUY=";
   };
 
   patches = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals lz4Support [
     lz4
   ]
-  ++ lib.optional zlibSupport [
+  ++ lib.optionals zlibSupport [
     zlib
   ]
   ++ lib.optionals suggestSupport [

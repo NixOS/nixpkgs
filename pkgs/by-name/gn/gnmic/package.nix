@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gnmic";
-  version = "0.45.0";
+  version = "0.47.0";
 
   src = fetchFromGitHub {
     owner = "openconfig";
     repo = "gnmic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-O8Vf6aiSqljSGOpWfgXCgeE7j6jDz7wXuPaDD9OliMA=";
+    hash = "sha256-uJ0pJQHzoXlCuGkmpqcbrAOkDIK5SmiWcwAojuT2F0s=";
   };
 
-  vendorHash = "sha256-HU+SvdjVOixsUot2rV8NNQCc+X1o4Moyr7B2BOBStYY=";
+  vendorHash = "sha256-ahfY96953hbBJfVCoJTFTCgBLBVM6/4ZZj3xi8RuR78=";
 
   ldflags = [
     "-s"

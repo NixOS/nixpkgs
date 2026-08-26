@@ -111,6 +111,7 @@
   gpgmepp,
   libwebp,
   abseil-cpp,
+  libfreehand,
   libepubgen,
   libetonyek,
   libpng,
@@ -149,8 +150,8 @@
   withHelp ? true,
   withJava ? true,
   kdeIntegration ? false,
-  variant ? "fresh",
-  debugLogging ? variant == "still",
+  variant ? "stable",
+  debugLogging ? variant == "stable",
   qt6,
   kdePackages,
   symlinkJoin,
@@ -177,8 +178,7 @@
 }:
 
 assert builtins.elem variant [
-  "fresh"
-  "still"
+  "stable"
   "collabora"
   "collabora-coda"
 ];
@@ -286,26 +286,6 @@ let
     ];
   };
 
-  # required for libreoffice-still version 25.8.5.2
-  liborcus_0_20 = liborcus.overrideAttrs {
-    version = "0.20.1";
-
-    src = fetchFromGitLab {
-      owner = "orcus";
-      repo = "orcus";
-      rev = "0.20.1";
-      hash = "sha256-+YTK0EPgGHN4yKurJjuWWrAHzgtbc1dOvtppcvuRei4=";
-    };
-
-    buildInputs = [
-      boost188
-      libixion
-      mdds
-      python3
-      zlib
-    ];
-  };
-
   importVariant = f: import (./. + "/src-${variant}/${f}");
   # Update these files with:
   # nix-shell maintainers/scripts/update.nix --argstr package libreoffice-$VARIANT.unwrapped
@@ -397,6 +377,36 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Don't detect Qt paths from qmake, so our patched-in onese are used
     ./dont-detect-qt-paths-from-qmake.patch
+
+  ]
+  ++ lib.optionals (variant != "stable") [
+    # Fix build with Poppler 26.01
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-2/fix_build_with_poppler_26.01.0.patch";
+      hash = "sha256-5JTTvJFIV5MG0Gz7y46wAr3q9tWdSVoZ9TJQlMJVqBc=";
+    })
+
+    # Fix build with Poppler 26.02
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-2/fix_build_with_poppler_26.02.0.patch";
+      hash = "sha256-IInhSoqTemDITB+AtkvVa9eGbodTbUGSpMMpC9N/mmg=";
+    })
+
+    # Fix build with Poppler 26.04
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-2/fix_build_with_poppler_26.04.0.patch";
+      hash = "sha256-I9owj/NTCTi6ISszuasH410NLlhunPn/Ig22tenu8tw=";
+    })
+    # Fix build with Poppler 26.05
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-2/fix_build_with_poppler_26.05.0.patch";
+      hash = "sha256-7wdiciTf/LrTk0MibBBYGliWRCvK1rtTGESgH7db1I4=";
+    })
+    # Fix build with Poppler 26.06
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-3/fix_build_with_poppler_26.06.0.patch";
+      hash = "sha256-j66IsrzaqQ55MRVzhlw25guuoDtxx1D4XeJsBhgWP2c=";
+    })
   ]
   ++ lib.optionals (variant != "collabora" && variant != "collabora-coda") [
     # Revert part of https://github.com/LibreOffice/core/commit/6f60670877208612b5ea320b3677480ef6508abb that broke zlib linking
@@ -518,6 +528,7 @@ stdenv.mkDerivation (finalAttrs: {
       libatomic_ops
       libcdr
       libcmis
+      libfreehand
       libe-book
       libepoxy
       libepubgen
@@ -578,10 +589,7 @@ stdenv.mkDerivation (finalAttrs: {
       mdds_2_1
       md4c
     ]
-    ++ optionals (variant == "still") [
-      liborcus_0_20
-    ]
-    ++ optionals (variant == "fresh") [
+    ++ optionals (variant == "stable") [
       fast-float
       liborcus
       md4c
@@ -662,6 +670,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-system-headers"
     "--with-system-libabw"
     "--with-system-libcmis"
+    "--with-system-libfreehand"
     "--with-system-libepubgen"
     "--with-system-libetonyek"
     "--with-system-liblangtag"
@@ -679,7 +688,6 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO: package these as system libraries
     "--without-system-altlinuxhyph"
     "--without-system-libeot"
-    "--without-system-libfreehand"
     "--without-system-libmspub"
     "--without-system-libnumbertext"
     "--without-system-libpagemaker"
@@ -781,6 +789,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit srcs;
+    inherit withJava;
     jdk = if withJava then jre' else null;
     python = python3; # for unoconv
     updateScript = [

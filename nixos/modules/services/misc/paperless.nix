@@ -16,6 +16,10 @@ let
   enableRedis = !(cfg.settings ? PAPERLESS_REDIS);
   redisServer = config.services.redis.servers.paperless;
 
+  # Runtime-generated PAPERLESS_SECRET_KEY (see paperless-secret-key.service),
+  # shared with every service and the paperless-manage wrapper via EnvironmentFile.
+  secretKeyFile = "${cfg.dataDir}/nixos-paperless-secret-key.env";
+
   env = {
     PAPERLESS_DATA_DIR = cfg.dataDir;
     PAPERLESS_MEDIA_ROOT = cfg.mediaDir;
@@ -24,12 +28,18 @@ let
     GRANIAN_HOST = cfg.address;
     GRANIAN_PORT = toString cfg.port;
     GRANIAN_WORKERS_KILL_TIMEOUT = "60";
+    # django-allauth uses python requests, which doesn't use the systems CA bundle by default: https://requests.readthedocs.io/en/latest/user/advanced/#ca-certificates
+    REQUESTS_CA_BUNDLE = config.security.pki.caBundle;
   }
   // lib.optionalAttrs (config.time.timeZone != null) {
     PAPERLESS_TIME_ZONE = config.time.timeZone;
   }
   // lib.optionalAttrs enableRedis {
     PAPERLESS_REDIS = "unix://${redisServer.unixSocket}";
+  }
+  // lib.optionalAttrs (cfg.settings.PAPERLESS_AI_ENABLED or true) {
+    NLTK_DATA = cfg.package.nltkDataDir;
+    TIKTOKEN_CACHE_DIR = cfg.package.tiktokenCacheDir;
   }
   // lib.optionalAttrs (cfg.settings.PAPERLESS_ENABLE_NLTK or true) {
     PAPERLESS_NLTK_DIR = cfg.package.nltkDataDir;
@@ -51,13 +61,18 @@ let
     set -o allexport # Export the following env vars
     ${lib.toShellVars env}
     ${lib.optionalString (cfg.environmentFile != null) "source ${cfg.environmentFile}"}
+    if [[ -z "''${PAPERLESS_SECRET_KEY:-}" && -e '${secretKeyFile}' ]]; then
+      source '${secretKeyFile}'
+    fi
 
     cd '${cfg.dataDir}'
     sudo=exec
     if [[ "$USER" != ${cfg.user} ]]; then
       ${
         if config.security.sudo.enable then
-          "sudo='exec ${config.security.wrapperDir}/sudo -u ${cfg.user} -E'"
+          "sudo='exec ${config.security.wrapperDir}/sudo -u ${cfg.user} -g ${cfg.group} ${
+            lib.optionalString enableRedis " -g " + redisServer.group
+          } -E'"
         else
           ">&2 echo 'Aborting, paperless-manage must be run as user `${cfg.user}`!'; exit 2"
       }
@@ -77,7 +92,10 @@ let
     CapabilityBoundingSet = "";
     # ProtectClock adds DeviceAllow=char-rtc r
     DeviceAllow = "";
-    EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+    EnvironmentFile = [
+      secretKeyFile
+    ]
+    ++ lib.optional (cfg.environmentFile != null) cfg.environmentFile;
     LockPersonality = true;
     MemoryDenyWriteExecute = true;
     NoNewPrivileges = true;
@@ -105,7 +123,7 @@ let
     RestrictNamespaces = true;
     RestrictRealtime = true;
     RestrictSUIDSGID = true;
-    SupplementaryGroups = lib.optional enableRedis redisServer.user;
+    SupplementaryGroups = lib.optional enableRedis redisServer.group;
     SystemCallArchitectures = "native";
     SystemCallFilter = [
       "@system-service"
@@ -254,7 +272,29 @@ in
     user = lib.mkOption {
       type = lib.types.str;
       default = defaultUser;
-      description = "User under which Paperless runs.";
+      description = ''
+        User under which Paperless runs
+
+        ::: {.note}
+        If left as the default value this user will automatically be
+        created on system activation, otherwise you are responsible for
+        ensuring the group exists before the paperless service starts.
+        :::
+      '';
+    };
+
+    group = lib.mkOption {
+      type = lib.types.str;
+      default = defaultUser;
+      description = ''
+        Primary group under which Paperless runs
+
+        ::: {.note}
+        If left as the default value this group will automatically be
+        created on system activation, otherwise you are responsible for
+        ensuring the group exists before the redis service starts.
+        :::
+      '';
     };
 
     package = lib.mkPackageOption pkgs "paperless-ngx" { } // {
@@ -445,7 +485,9 @@ in
           })
           (lib.mkIf cfg.configureTika {
             PAPERLESS_GOTENBERG_ENABLED = true;
+            PAPERLESS_TIKA_GOTENBERG_ENDPOINT = "http://${config.services.gotenberg.bindIP}:${toString config.services.gotenberg.port}";
             PAPERLESS_TIKA_ENABLED = true;
+            PAPERLESS_TIKA_ENDPOINT = "http://${config.services.tika.listenAddress}:${toString config.services.tika.port}";
           })
         ];
 
@@ -463,9 +505,59 @@ in
           in
           {
             "${cfg.dataDir}".d = defaultRule;
+            # v3's Tantivy backend, unlike the old Whoosh one, does not create its
+            # index dir on demand and the reindex command aborts without it.
+            "${cfg.dataDir}/index".d = defaultRule;
             "${cfg.mediaDir}".d = defaultRule;
             "${cfg.consumptionDir}".d = if cfg.consumptionDirIsPublic then { mode = "777"; } else defaultRule;
           };
+
+        # v3 refuses the default PAPERLESS_SECRET_KEY. Generate one on first start,
+        # reusing the key from older NixOS releases so existing sessions survive the
+        # upgrade; all services load it via EnvironmentFile (see defaultServiceConfig).
+        systemd.services.paperless-secret-key = {
+          description = "Paperless secret key generator";
+          before = [
+            "paperless-consumer.service"
+            "paperless-scheduler.service"
+            "paperless-task-queue.service"
+            "paperless-web.service"
+          ];
+          requiredBy = [
+            "paperless-consumer.service"
+            "paperless-scheduler.service"
+            "paperless-task-queue.service"
+            "paperless-web.service"
+          ];
+          unitConfig.RequiresMountsFor = [ cfg.dataDir ];
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+            User = cfg.user;
+            Group = config.users.users.${cfg.user}.group;
+            UMask = "0077";
+            Slice = "system-paperless.slice";
+            EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
+          };
+          script = ''
+            if [[ -z "''${PAPERLESS_SECRET_KEY:-}" && ! -e '${secretKeyFile}' ]]; then
+              # Legacy value-only key file (NixOS < 25.11).
+              legacyKeyFile='${cfg.dataDir}/nixos-paperless-secret-key'
+              if [[ -e "$legacyKeyFile" ]]; then
+                key=$(cat "$legacyKeyFile")
+              else
+                key=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c64)
+              fi
+              printf 'PAPERLESS_SECRET_KEY=%s\n' "$key" > '${secretKeyFile}'
+            fi
+
+            # If PAPERLESS_SECRET_KEY is supplied via cfg.environmentFile, we still must create an empty file,
+            # as otherwise the other system services will not start.
+            if [[ ! -e '${secretKeyFile}' ]]; then
+              touch '${secretKeyFile}'
+            fi
+          '';
+        };
 
         systemd.services.paperless-scheduler = {
           description = "Paperless Celery Beat";
@@ -497,26 +589,16 @@ in
               version=$(cat "$versionFile" 2>/dev/null || echo 0)
 
               if [[ $version != ${cfg.package.version} ]]; then
-                ${cfg.package}/bin/paperless-ngx migrate
+                ${lib.getExe cfg.package} migrate
+                echo ${cfg.package.version} > "$versionFile"
+              fi
 
-                # Parse old version string format for backwards compatibility
-                version=$(echo "$version" | grep -ohP '[^-]+$')
+              # mirror upstream's init-search-index service
+              # `--if-needed` makes this a fast no-op if the index is up-to-date,
+              # and automatically migrates when needed (e.g. with v2 -> v3 swapping from Whoosh to Tantivy)
+              ${lib.getExe cfg.package} document_index reindex --if-needed --no-progress-bar
 
-                versionLessThan() {
-                  target=$1
-                  [[ $({ echo "$version"; echo "$target"; } | sort -V | head -1) != "$target" ]]
-                }
-
-                if versionLessThan 1.12.0; then
-                  # Reindex documents as mentioned in https://github.com/paperless-ngx/paperless-ngx/releases/tag/v1.12.1
-                  echo "Reindexing documents, to allow searching old comments. Required after the 1.12.x upgrade."
-                  ${cfg.package}/bin/paperless-ngx document_index reindex
-                fi
-
-              echo ${cfg.package.version} > "$versionFile"
-            fi
-
-            if ${lib.boolToString (cfg.passwordFile != null)} || [[ -n $PAPERLESS_ADMIN_PASSWORD ]]; then
+            if ${lib.boolToString (cfg.passwordFile != null)} || [[ -n ''${PAPERLESS_ADMIN_PASSWORD-} ]]; then
               export PAPERLESS_ADMIN_USER="''${PAPERLESS_ADMIN_USER:-admin}"
               if [[ -e $CREDENTIALS_DIRECTORY/PAPERLESS_ADMIN_PASSWORD ]]; then
                 PAPERLESS_ADMIN_PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/PAPERLESS_ADMIN_PASSWORD")
@@ -526,7 +608,7 @@ in
               superuserStateFile="${cfg.dataDir}/superuser-state"
 
               if [[ $(cat "$superuserStateFile" 2>/dev/null) != "$superuserState" ]]; then
-                ${cfg.package}/bin/paperless-ngx manage_superuser
+                ${lib.getExe cfg.package} manage_superuser
                 echo "$superuserState" > "$superuserStateFile"
               fi
             fi
@@ -568,7 +650,7 @@ in
           ++ lib.optional cfg.database.createLocally "postgresql.target";
           serviceConfig = defaultServiceConfig // {
             User = cfg.user;
-            ExecStart = "${cfg.package}/bin/paperless-ngx document_consumer";
+            ExecStart = "${lib.getExe cfg.package} document_consumer";
             Restart = "on-failure";
             PrivateNetwork = cfg.database.createLocally; # defaultServiceConfig enables this by default, needs to be disabled for remote DBs
           };
@@ -588,30 +670,9 @@ in
             "paperless-scheduler.service"
           ]
           ++ lib.optional cfg.database.createLocally "postgresql.target";
-          # Setup PAPERLESS_SECRET_KEY.
-          # If this environment variable is left unset, paperless-ngx defaults
-          # to a well-known value, which is insecure.
-          script =
-            let
-              secretKeyFile = "${cfg.dataDir}/nixos-paperless-secret-key";
-            in
-            ''
-              if [[ ! -f '${secretKeyFile}' ]]; then
-                (
-                  umask 0377
-                  tr -dc A-Za-z0-9 < /dev/urandom | head -c64 | ${pkgs.moreutils}/bin/sponge '${secretKeyFile}'
-                )
-              fi
-              PAPERLESS_SECRET_KEY="$(cat '${secretKeyFile}')"
-              export PAPERLESS_SECRET_KEY
-              if [[ ! $PAPERLESS_SECRET_KEY ]]; then
-                echo "PAPERLESS_SECRET_KEY is empty, refusing to start."
-                exit 1
-              fi
-              exec ${lib.getExe cfg.package.python.pkgs.granian} --interface asginl --ws "paperless.asgi:application"
-            '';
           serviceConfig = defaultServiceConfig // {
             User = cfg.user;
+            ExecStart = "${lib.getExe cfg.package.python.pkgs.granian} --interface asginl --ws paperless.asgi:application";
             Restart = "on-failure";
 
             LimitNOFILE = 65536;
@@ -621,7 +682,7 @@ in
             PrivateNetwork = false;
           };
           environment = env // {
-            PYTHONPATH = "${cfg.package.python.pkgs.makePythonPath cfg.package.propagatedBuildInputs}:${cfg.package}/lib/paperless-ngx/src";
+            PYTHONPATH = "${cfg.package.python.pkgs.makePythonPath cfg.package.passthru.dependencies}:${cfg.package}/lib/paperless-ngx/src";
           };
           # Allow the web interface to access the private /tmp directory of the server.
           # This is required to support uploading files via the web interface.

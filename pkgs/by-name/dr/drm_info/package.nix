@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitLab,
   libdrm,
+  libdisplay-info,
   json_c,
   pciutils,
   meson,
@@ -14,17 +15,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drm_info";
-  version = "2.8.0";
+  version = "2.10.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "emersion";
     repo = "drm_info";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LtZ7JJmVNWMjJL2F6k+tcBpJ2v2fd+HNWyHAOvIi7Ko=";
+    hash = "sha256-QKF0frDPelwHOzf3r0tzSo7i1WfGhcFGJfxf2bj1+OE=";
   };
 
   strictDeps = true;
+
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace-fail "'<2.4.134'" "'<2.4.133'"
+  '';
 
   depsBuildBuild = [
     pkg-config
@@ -39,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libdrm
+    libdisplay-info
     json_c
     pciutils
   ];

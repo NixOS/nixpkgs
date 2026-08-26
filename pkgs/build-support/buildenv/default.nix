@@ -13,6 +13,7 @@ let
   builder = replaceVars ./builder.pl {
     inherit (builtins) storeDir;
   };
+  inherit (lib) concatMap;
 in
 
 # Backward compatibility for deprecated custom overrider <env-pkg>.override
@@ -85,13 +86,10 @@ lib.makeOverridable (
         buildInputs ? null,
       }@args:
       let
-        compatArgs =
-          lib.optionalAttrs (args ? nativeBuildInputs) {
-            inherit nativeBuildInputs;
-          }
-          // lib.optionalAttrs (args ? buildInputs) {
-            inherit buildInputs;
-          };
+        compatArgs = {
+          ${if args ? nativeBuildInputs then "nativeBuildInputs" else null} = nativeBuildInputs;
+          ${if args ? buildInputs then "buildInputs" else null} = buildInputs;
+        };
       in
       compatArgs
       // derivationArgs
@@ -127,22 +125,17 @@ lib.makeOverridable (
                 [ drv ]
             )
             # Add any extra outputs specified by the caller of `buildEnv`.
-            ++ lib.filter (p: p != null) (
-              map (outName: drv.${outName} or null) finalAttrs.extraOutputsToInstall
-            );
+            ++ concatMap (
+              outName: if drv ? ${outName} then [ drv.${outName} ] else [ ]
+            ) finalAttrs.extraOutputsToInstall;
           priority = drv.meta.priority or lib.meta.defaultPriority;
           # Silently use the original `paths` if `passthru.paths` is missing.
         }) finalAttrs.passthru.paths or paths;
 
         extraPathsFrom = lib.optionalString finalAttrs.includeClosures (
-          let
-            pathsForClosure = lib.pipe finalAttrs.chosenOutputs [
-              (map (p: p.paths))
-              lib.flatten
-              (lib.remove null)
-            ];
-          in
-          writeClosure pathsForClosure
+          # filter all null elements and concatenate the output paths together
+          # in the final closure
+          writeClosure (lib.concatMap (p: if p == null then [ ] else p.paths) finalAttrs.chosenOutputs)
         );
 
         preferLocalBuild = derivationArgs.preferLocalBuild or true;

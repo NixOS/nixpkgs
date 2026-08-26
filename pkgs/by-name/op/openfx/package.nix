@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation {
   pname = "openfx";
-  version = "1.4";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "openfx";
-    rev = "OFX_Release_1_4_TAG";
-    sha256 = "0k9ggzr6bisn77mipjfvawg3mv4bz50b63v8f7w1jhldi1sfy548";
+    rev = "OFX_Release_1.5.1";
+    hash = "sha256-qiY5klmGDiU9cqjfNdFsCcNqSBwV0dVZB2ZIsElRBD4=";
   };
 
   outputs = [

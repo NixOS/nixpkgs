@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
-    changelog = "https://github.com/transloadit/uppy/releases/tag/%2540uppy%252Fcompanion%2540${finalAttrs.version}";
+    changelog = "https://github.com/transloadit/uppy/releases/tag/%40uppy%2Fcompanion%40${finalAttrs.version}";
     description = "Server integration for Uppy file uploader";
     homepage = "https://uppy.io/";
     license = lib.licenses.mit;

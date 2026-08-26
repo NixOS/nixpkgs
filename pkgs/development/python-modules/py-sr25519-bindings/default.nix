@@ -11,19 +11,19 @@
 
 buildPythonPackage rec {
   pname = "py-sr25519-bindings";
-  version = "0.2.3";
+  version = "0.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JAMdotTech";
     repo = "py-sr25519";
     tag = "v${version}";
-    hash = "sha256-lia0hA3EayeJN4hf1dE5ezuitknIIQirnWwVjGtdMoo=";
+    hash = "sha256-kCOmmzCCR363J5pYJ99BDUhUWeYniMf+e+NJByRnl+c=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-+6uutjGp+JzJ4cFZYdWUBLSKXvt6doW1oZkhnMhW9J0=";
+    hash = "sha256-3snEx0rpMBRnuWt5WfTWrQkTC9fTsHh6zS4ChaRjVKg=";
   };
 
   nativeBuildInputs = with rustPlatform; [

@@ -5,8 +5,10 @@
   fetchurl,
   cmake,
   pkg-config,
+  installShellFiles,
   libusb1,
   openssl,
+  stdenv,
 }:
 
 let
@@ -18,16 +20,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "probe-rs-tools";
-  version = "0.31.0";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "probe-rs";
     repo = "probe-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZcH2FBKsbBtTYfRQgPfOOODDpyB7VydcO7F7pq8xzD0=";
+    hash = "sha256-C6ioLkU0tmCzWtThPGyOOiD/Z9n8RB5eogAxTmBwDj8=";
   };
 
-  cargoHash = "sha256-fVmwZw34lK6eKkqNT/SW5wzeeyWg6Qp48eso6yibICE=";
+  cargoHash = "sha256-Sfx8n9+Q9wplfnFenavoCWSaO7nlcAmRpxyyKe5Il6A=";
 
   buildAndTestSubdir = finalAttrs.pname;
 
@@ -36,6 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # https://github.com/rust-lang/libz-sys/issues/158
     cmake
     pkg-config
+    installShellFiles
   ];
 
   buildInputs = [
@@ -45,6 +48,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     install -D -m 444 ${udevRules} $out/etc/udev/rules.d/69-probe-rs.rules
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd probe-rs \
+      --bash <(SHELL=bash $out/bin/probe-rs complete install -m) \
+      --fish <(SHELL=fish $out/bin/probe-rs complete install -m) \
+      --zsh <(SHELL=zsh $out/bin/probe-rs complete install -m)
   '';
 
   checkFlags = [
@@ -58,7 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=cmd::dap_server::server::debugger::test::disassemble::positive_byte_offset_that_lands_in_the_middle_of_an_instruction_unaligned_"
     "--skip=cmd::dap_server::server::debugger::test::launch_and_threads"
     "--skip=cmd::dap_server::server::debugger::test::launch_with_config_error"
-    "--skip=cmd::dap_server::server::debugger::test::test_initalize_request"
+    "--skip=cmd::dap_server::server::debugger::test::test_initialize_request"
     "--skip=cmd::dap_server::server::debugger::test::test_launch_and_terminate"
     "--skip=cmd::dap_server::server::debugger::test::test_launch_no_probes"
     "--skip=cmd::dap_server::server::debugger::test::wrong_request_after_init"

@@ -84,12 +84,10 @@ let
           }
         }
       '';
-      passAsFile = [
-        "expectScript"
-      ];
+      __structuredAttrs = true;
     };
     checkPhase = ''
-      ${lib.getExe pkgs.buildPackages.expect} -f "$expectScriptPath"
+      printf "%s" "$expectScript" | ${lib.getExe pkgs.buildPackages.expect} -f -
     '';
   };
 

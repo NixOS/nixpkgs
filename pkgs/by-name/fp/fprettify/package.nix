@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "pseewald";
+    owner = "fortran-lang";
     repo = "fprettify";
     rev = "v${finalAttrs.version}";
     sha256 = "17v52rylmsy3m3j5fcb972flazykz2rvczqfh8mxvikvd6454zyj";
@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Auto-formatter for modern Fortran code that imposes strict whitespace formatting, written in Python";
     mainProgram = "fprettify";
     homepage = "https://pypi.org/project/fprettify/";
-    license = with lib.licenses; [ gpl3Only ];
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
 })

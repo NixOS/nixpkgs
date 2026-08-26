@@ -5,13 +5,13 @@
 }:
 buildGoModule rec {
   pname = "helm-dt";
-  version = "0.7.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "vmware-labs";
     repo = "distribution-tooling-for-helm";
     tag = "v${version}";
-    hash = "sha256-+YvYaPTUwRfEYDJ2Mkmgx22loo+Br4m7kcOa7X/5618=";
+    hash = "sha256-ytbwUfjPpvKxX6d24ifCyeD1WtFpzA52QniMImTun+c=";
   };
 
   vendorHash = "sha256-dkE3eYZnaS+kC0kDVxaFW/Ev15TY2MY3m5xgPof7Y18=";
@@ -40,7 +40,7 @@ buildGoModule rec {
   '';
 
   meta = {
-    description = "Helm Distribution plugin is is a set of utilities and Helm Plugin for making offline work with Helm Charts easier";
+    description = "Helm Distribution plugin is a set of utilities and Helm Plugin for making offline work with Helm Charts easier";
     homepage = "https://github.com/vmware-labs/distribution-tooling-for-helm";
     maintainers = with lib.maintainers; [ ascii17 ];
     license = lib.licenses.mit;

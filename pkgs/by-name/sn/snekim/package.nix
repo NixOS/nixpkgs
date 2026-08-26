@@ -15,7 +15,6 @@ buildNimPackage (finalAttrs: {
     hash = "sha256-Qgvq4CkGvNppYFpITCCifOHtVQYRQJPEK3rTJXQkTvI=";
   };
 
-  strictDeps = true;
   lockFile = ./lock.json;
 
   nimFlags = [ "-d:nimraylib_now_shared" ];

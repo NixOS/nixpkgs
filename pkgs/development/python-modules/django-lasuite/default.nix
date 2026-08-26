@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "django-lasuite";
-  version = "0.0.26";
+  version = "0.0.28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "django-lasuite";
     tag = "v${version}";
-    hash = "sha256-wTxM4dVCqfDjMouk/bdLjD/Yv0WuTSOJYFhYMsD4JjQ=";
+    hash = "sha256-uxFNfc3+fJRQH7FuBs5ZTeEQcWw11OWk6H+LwOHxe/k=";
   };
 
   build-system = [ hatchling ];
@@ -82,5 +82,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/suitenumerique/django-lasuite/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ soyouzpanda ];
+    platforms = lib.platforms.linux;
   };
 }

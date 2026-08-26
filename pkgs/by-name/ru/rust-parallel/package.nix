@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-parallel";
-  version = "1.22.0";
+  version = "1.24.0";
 
   __structuredAttrs = true;
 
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "aaronriekenberg";
     repo = "rust-parallel";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-6SDWYIJDoDKANYZvYM2hdFzXTyqbfRA2uKQDFn+6erg=";
+    hash = "sha256-W0NW4+4mcDn8Z6fHjcaxmSM8kFLzGfyCLXhXYd5LRdE=";
   };
 
-  cargoHash = "sha256-uFx0Sli6uwmhHKQoT1aX0S5NwuWLu3M6g5pQYYpAsEI=";
+  cargoHash = "sha256-DRGIzRectmZibUobnxP3yNq1fhldjXGHBfFkGzi5mwU=";
 
   checkInputs = [ bashNonInteractive ];
 

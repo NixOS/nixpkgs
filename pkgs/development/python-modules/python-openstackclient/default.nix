@@ -3,12 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   ddt,
+  hacking,
   installShellFiles,
   openstackdocstheme,
   osc-lib,
   osc-placement,
   pbr,
-  python-aodhclient,
+  aodhclient,
   python-barbicanclient,
   python-cinderclient,
   python-designateclient,
@@ -35,14 +36,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-openstackclient";
-  version = "9.0.0";
+  version = "10.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-openstackclient";
     tag = finalAttrs.version;
-    hash = "sha256-iqHm3vOENStdGI53Ggln/gWVnF3Lyomel9OFmwz2CJc=";
+    hash = "sha256-UczEgOtZz4roIFg1R6RDGg0tiiiT6lAgJCdgpmK0960=";
   };
 
   patches = [
@@ -76,12 +77,9 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     ddt
+    hacking
     requests-mock
     stestrCheckHook
-  ];
-
-  disabledTestsRegex = [
-    "openstackclient.tests.unit.common.test_module.TestModuleList*"
   ];
 
   pythonImportsCheck = [
@@ -100,8 +98,8 @@ buildPythonPackage (finalAttrs: {
   optional-dependencies = {
     # See https://github.com/openstack/python-openstackclient/blob/master/doc/source/contributor/plugins.rst
     cli-plugins = [
+      aodhclient
       osc-placement
-      python-aodhclient
       python-barbicanclient
       python-designateclient
       python-heatclient

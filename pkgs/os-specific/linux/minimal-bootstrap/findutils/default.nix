@@ -14,11 +14,11 @@
 }:
 let
   pname = "findutils";
-  version = "4.10.0";
+  version = "4.11.0";
 
   src = fetchurl {
     url = "mirror://gnu/findutils/findutils-${version}.tar.xz";
-    hash = "sha256-E4fgtn/yR9Kr3pmPkN+/cMFJE5Glnd/suK5ph4nwpPU=";
+    hash = "sha256-v9GcsGzHHzNS1WfpAoTYzawCrIl3S76t8LUzsMEUMv0=";
   };
 in
 bash.runCommand "${pname}-${version}"

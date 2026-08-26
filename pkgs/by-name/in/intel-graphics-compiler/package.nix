@@ -10,16 +10,16 @@
   zlib,
   intel-compute-runtime,
   python3,
-  spirv-tools,
   spirv-headers,
+  spirv-tools,
 }:
 
 let
-  llvmVersion = "16.0.6";
+  llvmVersion = "17.0.6";
 in
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "2.34.4";
+  version = "2.40.13";
 
   # See the repository for expected versions:
   # <https://github.com/intel/intel-graphics-compiler/blob/v2.16.0/documentation/build_ubuntu.md#revision-table>
@@ -29,14 +29,14 @@ stdenv.mkDerivation rec {
       owner = "intel";
       repo = "intel-graphics-compiler";
       tag = "v${version}";
-      hash = "sha256-w20nrn3wo9Dvv3BILYBzuJTTLXqcWaRAF7SiPtryhwk=";
+      hash = "sha256-koc3ee6ItemDkNpWlBhJX8Dr8Wa4Zpvo08LxiR6BNLE=";
     })
     (fetchFromGitHub {
       name = "llvm-project";
       owner = "llvm";
       repo = "llvm-project";
       tag = "llvmorg-${llvmVersion}";
-      hash = "sha256-fspqSReX+VD+Nl/Cfq+tDcdPtnQPV1IRopNDfd5VtUs=";
+      hash = "sha256-8MEDLLhocshmxoEBRSKlJ/GzJ8nfuzQ8qn0X/vLA+ag=";
     })
     (fetchFromGitHub {
       name = "vc-intrinsics";
@@ -49,24 +49,19 @@ stdenv.mkDerivation rec {
       name = "opencl-clang";
       owner = "intel";
       repo = "opencl-clang";
-      tag = "v16.0.11";
-      hash = "sha256-ema1jTNMHs3pUituVb1NPllc6cA8eYJHtDOjuEzIDWM=";
+      tag = "v17.0.9";
+      hash = "sha256-hnwUBOy+NebhPyBf4GtsXHdzKEWAFsq8sj0ssIlGjtw=";
     })
     (fetchFromGitHub {
       name = "llvm-spirv";
       owner = "KhronosGroup";
       repo = "SPIRV-LLVM-Translator";
-      tag = "v16.0.24";
-      hash = "sha256-aTcwfQt2WdOA44jfHdD7x7oxt8emSDexgZnI7MPVqvU=";
+      tag = "v17.0.26";
+      hash = "sha256-Q3tUr4FjHDjDRCyOqOKyVx29mMz/88POHs2rWnjBGb4=";
     })
   ];
 
   patches = [
-    # Raise minimum CMake version to 3.5
-    # https://github.com/intel/intel-graphics-compiler/commit/4f0123a7d67fb716b647f0ba5c1ab550abf2f97d
-    # https://github.com/intel/intel-graphics-compiler/pull/364
-    ./bump-cmake.patch
-
     # Fix for GCC 15 by adding a previously-implicit `#include <cstdint>` and
     # replacing `<ciso646>` with `<version>` in the the llvm directory. Based
     # on https://github.com/intel/intel-graphics-compiler/pull/383.
@@ -76,6 +71,8 @@ stdenv.mkDerivation rec {
     # warnings within LLVM. This is in accordance with IGC disabling warnings
     # that originate from within LLVM (see `IGC/common/LLVMWarningsPush.hpp`).
     ./gcc15-allow-llvm-free-nonheap-object-warning.patch
+
+    ./fix-create-directories-to-apply-patches.diff
   ];
 
   sourceRoot = ".";
@@ -95,17 +92,26 @@ stdenv.mkDerivation rec {
     chmod +x igc/IGC/Scripts/igc_create_linker_script.sh
     patchShebangs --build igc/IGC/Scripts/igc_create_linker_script.sh
 
-    # The build system only applies patches when the sources are in a
-    # Git repository.
-    git -C llvm-project init
-    git -C llvm-project -c user.name=nixbld -c user.email= commit --allow-empty -m stub
+    # Their slapdash CMake code checks the exit code of "git rev-parse" whether patches must be applied.
+    # Since we do not have a full git repo and cannot clone one due to reproducibility issues,
+    # git exits with 128 which is in newer versions of opencl-clang logged as a STATUS, but does not abort either.
+    # We could hack around this, but since we are certain we want the patches (eg for CL3.1), we just shortcircuit the condition.
+    substituteInPlace llvm-project/llvm/projects/opencl-clang/cmake/modules/CMakeFunctions.cmake \
+      --replace-fail "if(patches_needed EQUAL 1)" "if(TRUE)"
+
+    # "git am" wants to check the git history if the commit is already applied, but we do not have that.
+    # "git apply" works very similar, but without a git history and supports the same options unlike patch.
     substituteInPlace llvm-project/llvm/projects/opencl-clang/cmake/modules/CMakeFunctions.cmake \
       --replace-fail 'COMMAND ''${GIT_EXECUTABLE} am --3way --keep-non-patch --ignore-whitespace -C0 ' \
-                     'COMMAND patch -p1 --ignore-whitespace -i '
+                     'COMMAND ''${GIT_EXECUTABLE} apply --3way --ignore-whitespace -C0 '
 
-    # match default LLVM version with our provided version to apply correct patches
-    substituteInPlace igc/external/llvm/llvm_preferred_version.cmake \
-      --replace-fail "16.0.6" "${llvmVersion}"
+    # The build system only applies patches when the sources are in a Git repository.
+    export HOME=$(mktemp -d)
+    git config --global user.email ""
+    git config --global user.name nixbld
+    git -C llvm-project init
+    git -C llvm-project add .
+    git -C llvm-project commit -m stub >/dev/null
   '';
 
   nativeBuildInputs = [

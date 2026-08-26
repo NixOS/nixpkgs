@@ -2,13 +2,15 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   pytestCheckHook,
+  ps,
 }:
 
 buildPythonPackage rec {
   pname = "duct-py";
   version = "1.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oconnor663";
@@ -17,9 +19,14 @@ buildPythonPackage rec {
     hash = "sha256-i811nQB8CVJPYPR0Jdzpk64EXxrTMDIBpdDoUs9Xu/k=";
   };
 
+  build-system = [ hatchling ];
+
   pythonImportsCheck = [ "duct" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    ps
+  ];
 
   disabledTests = [
     # This test completely empties the environment then tries to run a Python command.

@@ -55,10 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     homepage = "https://wordnet.princeton.edu/";
-    license = {
-      fullName = "WordNet 3.0 license";
-      url = "https://wordnet.princeton.edu/license-and-commercial-use";
-    };
+    license = lib.licenses.wordnet;
     maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "wn";

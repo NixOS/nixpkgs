@@ -25,6 +25,13 @@ appimageTools.wrapAppImage {
 
   extraPkgs =
     pkgs: with pkgs; [
+      libva
+      # VAAPI backends
+      intel-media-driver
+      intel-vaapi-driver
+      nvidia-vaapi-driver
+      mesa
+      # Other dependencies
       libgpg-error
       fontconfig
       libGL

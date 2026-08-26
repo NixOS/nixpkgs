@@ -1,21 +1,21 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   gnome-shell,
   fetchFromGitHub,
   xprop,
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gnome-shell-extension-unite";
-  version = "84";
+  version = "85";
 
   src = fetchFromGitHub {
     owner = "hardpixel";
     repo = "unite-shell";
-    rev = "v${version}";
-    hash = "sha256-ZaZs+PqnwMHfCejPt4wBZttT4J5gUlFQ8NjhaOPWGqQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SN5DYyyZux3jeGgrOc/fd9QcjPRReb2rVZk987saXmQ=";
   };
 
   passthru = {
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/hardpixel/unite-shell";
     broken = lib.versionOlder gnome-shell.version "3.32";
   };
-}
+})

@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-dict";
-  version = "0.8.9";
+  version = "0.8.10";
 
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "apps";
     repo = "xfce4-dict";
     tag = "xfce4-dict-${finalAttrs.version}";
-    hash = "sha256-cl5TnPlgGUZ4esdkptyXO+LagdAboSzR4m0cCre9RHA=";
+    hash = "sha256-d/D6qcW3k2YsLJo5kohTOHLShHjofmHcR1Qfwe3ZFIk=";
   };
 
   strictDeps = true;

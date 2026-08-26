@@ -25,7 +25,6 @@ for i in \
 done
 
 for i in \
-    "x86_64-darwin x64" \
     "aarch64-darwin arm64"; do
     set -- $i
     prefetch=$(nix-prefetch-url "https://github.com/wavetermdev/waveterm/releases/download/v$latestVersion/Wave-darwin-$2-$latestVersion.zip")

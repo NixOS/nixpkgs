@@ -18,14 +18,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.7.35";
+  version = "0.7.39";
   pname = "libsolv";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "libsolv";
     rev = finalAttrs.version;
-    hash = "sha256-DHECjda7s12hSysbaXK2+wM/nXpAOpTn+eSf9XGC3z0=";
+    hash = "sha256-nl1g1BKauSXV54xjO/1jDQMbr1WfycupR0CPqkgkzrA=";
   };
 
   cmakeFlags = [

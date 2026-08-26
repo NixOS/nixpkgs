@@ -42,7 +42,6 @@
   nettle,
   libtasn1,
   p11-kit,
-  libidn,
   libedit,
   readline,
   libGL,
@@ -85,7 +84,7 @@ in
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.52.3";
+  version = "2.52.6";
   name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
@@ -100,7 +99,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Wz4NF05j3MKISLEZTg50SNWUjDwkJ+zZMcLFvlJhrrs=";
+    hash = "sha256-F5ouo/j27dS+fzH9xVr8V70HKfH7pkjGHUGBU5rBFvw=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
@@ -160,7 +159,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     libgbm
     libgcrypt
     libgpg-error
-    libidn
     libintl
     lcms2
     libpthread-stubs

@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   rustPlatform,
   cmake,
   pkg-config,
@@ -14,16 +15,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rebels-in-the-sky";
-  version = "1.6.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "ricott1";
     repo = "rebels-in-the-sky";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P0GPdMTOomqNQ6WLfZnASO1FiD7DJTHj/a8eoYzAvAY=";
+    hash = "sha256-bLyAki9XJuQRwKhO8jiR1wcssfvXTXGftOS4WRyvVe0=";
   };
 
-  cargoHash = "sha256-Ldy/1Gv1qguWQ2lLk0jiiq7nM9r85LY7pXkXf2nCUA0=";
+  cargoHash = "sha256-PUo9avg1wWgS7D6u3zIBbgv1/eM6N9PbA+EwzdNHC0w=";
 
   patches = lib.optionals (!withRadio) [
     ./disable-radio.patch

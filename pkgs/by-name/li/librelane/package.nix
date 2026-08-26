@@ -23,14 +23,15 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "librelane";
-  version = "3.0.3";
+  version = "3.0.8";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "librelane";
     repo = "librelane";
     tag = finalAttrs.version;
-    hash = "sha256-SA0y5ooqfDaoVlXzsHStG3uhBuyu9t9T2ej+49csizw=";
+    hash = "sha256-l7zNrx7gSKecBQ/haayJxDfG87477aZzdV64hYsMXO4=";
   };
 
   build-system = [

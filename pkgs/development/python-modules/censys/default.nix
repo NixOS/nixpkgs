@@ -10,6 +10,7 @@
   pytest-mock,
   pytest-cov-stub,
   pytestCheckHook,
+  pythonAtLeast,
   requests,
   requests-mock,
   responses,
@@ -53,6 +54,13 @@ buildPythonPackage rec {
   preCheck = ''
     mkdir -p $HOME
   '';
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # argparse usage prefix uses the actual prog (python3.14 -m pytest) instead of sys.argv[0]
+    "test_default_help"
+    "test_help"
+    "test_search_help"
+  ];
 
   pythonImportsCheck = [ "censys" ];
 

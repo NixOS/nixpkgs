@@ -166,7 +166,7 @@ in
       ++ lib.optional cfg.enableScreensaver xfce4-screensaver
     ) excludePackages;
 
-    programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-gtk2;
+    programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-gnome3;
     programs.xfconf.enable = true;
     programs.thunar.enable = true;
     programs.labwc.enable = mkDefault (
@@ -220,7 +220,10 @@ in
 
     # Enable helpful DBus services.
     services.udisks2.enable = true;
-    security.polkit.enable = true;
+    security.polkit = {
+      enable = true;
+      enablePkexecWrapper = lib.mkDefault true;
+    };
     services.accounts-daemon.enable = true;
     services.upower.enable = config.powerManagement.enable;
     services.gnome.glib-networking.enable = true;

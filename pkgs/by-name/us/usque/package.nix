@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo125Module,
+  buildGoModule,
   fetchFromGitHub,
   stdenv,
   nix-update-script,
@@ -8,17 +8,17 @@
   installShellFiles,
   versionCheckHook,
 }:
-buildGo125Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "usque";
-  version = "3.0.0";
+  version = "4.2.1";
   src = fetchFromGitHub {
     owner = "Diniboy1123";
     repo = "usque";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xgndE4kfR7LVLBvcxJ68Yq0NLN+8zyciMYaP9K+qS9M=";
+    hash = "sha256-aUAji41gVsRs47IDtLAinxUZsZjTQvO/SMWe5GdmJLw=";
   };
 
-  vendorHash = "sha256-29f/5PnmqaVS8PP1xVksgszFk3GyYZXXGDD1hjE/iSA=";
+  vendorHash = "sha256-XvbH6w0po2piUwuHTRxGbqwoKEOl2nLp0VnXONOvA14=";
 
   ldflags = [
     "-s"
@@ -52,7 +52,10 @@ buildGo125Module (finalAttrs: {
 
   meta = {
     mainProgram = "usque";
-    maintainers = with lib.maintainers; [ xddxdd ];
+    maintainers = with lib.maintainers; [
+      xddxdd
+      xyenon
+    ];
     description = "Open-source reimplementation of the Cloudflare WARP client's MASQUE protocol";
     homepage = "https://github.com/Diniboy1123/usque";
     license = lib.licenses.mit;

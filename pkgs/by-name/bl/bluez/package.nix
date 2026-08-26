@@ -8,7 +8,7 @@
   docutils,
   ell,
   enableExperimental ? false,
-  fetchurl,
+  fetchpatch2,
   glib,
   json_c,
   libical,
@@ -32,11 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   inherit (bluez-headers) version src;
 
   patches = [
-    (fetchurl {
-      name = "static.patch";
-      url = "https://lore.kernel.org/linux-bluetooth/20250703182908.2370130-1-hi@alyssa.is/raw";
-      hash = "sha256-4Yz3ljsn2emJf+uTcJO4hG/YXvjERtitce71TZx5Hak=";
-    })
+    ./lreadline.patch
   ];
 
   buildInputs = [

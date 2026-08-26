@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   setuptools,
   pytestCheckHook,
   matplotlib,
@@ -21,6 +22,21 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-VQn+Uzp6oGSit8ot0e8B0C2N41Q8+J+o91skyVN1gDA=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "remote-pkg_resources-dependency.patch";
+      url = "https://github.com/rawpython/remi/commit/54b253ccd9d7e9626d8236ec4a8a32631ff2fca2.patch";
+      hash = "sha256-VyTc5jFmNRWnAQqEupBB87Xw86+e7VgMoQeUrBcY+mg=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail \
+        "'use_scm_version':{'version_scheme': 'post-release'},"\
+        "'use_scm_version':False, 'version': '${version}',"
+  '';
 
   preCheck = ''
     # for some reason, REMI already deal with these using try blocks, but they fail
@@ -45,7 +61,6 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    setuptools # pkg_resources is referenced at runtime
     legacy-cgi
   ];
 
@@ -65,7 +80,7 @@ buildPythonPackage rec {
   meta = {
     description = "Pythonic, lightweight and websocket-based webui library";
     homepage = "https://github.com/rawpython/remi";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pbsds ];
   };
 }

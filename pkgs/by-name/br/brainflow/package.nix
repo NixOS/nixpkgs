@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "brainflow";
-  version = "5.22.0";
+  version = "5.22.2";
 
   src = fetchFromGitHub {
     owner = "brainflow-dev";
     repo = "brainflow";
     tag = finalAttrs.version;
-    hash = "sha256-DizB9SCw3SMOsBz/bioUqLvDME9lfNaBzOY/pFGzv8g=";
+    hash = "sha256-TOBttlEl7fPiGH+cGEuxozT4S1Jr/X6mKMiMtNU0NXA=";
   };
 
   patches = [ ];

@@ -6,17 +6,18 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "audiness";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "audiusGmbH";
+    owner = "audius";
     repo = "audiness";
     tag = finalAttrs.version;
-    hash = "sha256-row372NA8/DJbI6WJyGmKrlfuCsxUa5inhMljRzShT8=";
+    hash = "sha256-Fy5T2WyC5MGYzNDEJpgtuvSnoTS0EzAcXR9qpHYT6aM=";
   };
 
   pythonRelaxDeps = [
+    "pytenable"
     "typer"
     "validators"
   ];

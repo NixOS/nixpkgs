@@ -32,6 +32,7 @@
   libslirp,
   libcbor,
   darwin,
+  apple-sdk_15,
   guestAgentSupport ?
     (with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows) && !minimal,
   numaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32 && !minimal,
@@ -69,9 +70,6 @@
   xen,
   cephSupport ? false,
   ceph,
-  glusterfsSupport ? false,
-  glusterfs,
-  libuuid,
   openGLSupport ? sdlSupport,
   libgbm,
   libepoxy,
@@ -98,6 +96,8 @@
   capstone,
   valgrindSupport ? false,
   valgrind-light,
+  brlttySupport ? !minimal && !stdenv.hostPlatform.isDarwin,
+  brltty,
   pluginsSupport ? !stdenv.hostPlatform.isStatic,
   enableDocs ? !minimal || toolsOnly,
   enableTools ? !minimal || toolsOnly,
@@ -140,11 +140,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils"
     + lib.optionalString userOnly "-user";
-  version = "10.2.2";
+  version = "11.1.0";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-eEspb/KcFBeqcjI6vLLS6pq5dxck9Xfc14XDsE8h4XY=";
+    hash = "sha256-buHRph9oISR2snEIwm2l9EncCbYm1C+CeboNwuCPqFg=";
   };
 
   depsBuildBuild = [
@@ -165,6 +165,8 @@ stdenv.mkDerivation (finalAttrs: {
     # For python changes other than simple package additions, ping @dramforever for review.
     # Don't change `python3Packages` to `python3.pkgs.*`, breaks cross-compilation.
     python3Packages.distlib
+    python3Packages.setuptools
+    python3Packages.wheel
     # Hooks from the python package are needed to add `$pythonPath` so
     # `python/scripts/mkvenv.py` can detect `meson` otherwise the vendored meson without patches will be used.
     python3Packages.python
@@ -231,10 +233,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals xenSupport [ xen ]
   ++ lib.optionals cephSupport [ ceph ]
-  ++ lib.optionals glusterfsSupport [
-    glusterfs
-    libuuid
-  ]
   ++ lib.optionals openGLSupport [
     libgbm
     libepoxy
@@ -249,10 +247,17 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals canokeySupport [ canokey-qemu ]
   ++ lib.optionals u2fEmuSupport [ libu2f-emu ]
   ++ lib.optionals capstoneSupport [ capstone ]
-  ++ lib.optionals valgrindSupport [ valgrind-light ];
+  ++ lib.optionals valgrindSupport [ valgrind-light ]
+  ++ lib.optionals brlttySupport [ brltty ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
-  dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
+  # QEMU uses Meson and Ninja but still wants Make to be the entrypoint.
+  dontUseMesonConfigure = true;
+  dontUseNinjaBuild = true;
+  dontUseNinjaCheck = true;
+  dontUseNinjaInstall = true;
   dontAddStaticConfigureFlags = true;
+  enableParallelBuilding = true;
 
   outputs = [ "out" ] ++ lib.optional enableDocs "doc" ++ lib.optional guestAgentSupport "ga";
   separateDebugInfo = true;
@@ -273,6 +278,12 @@ stdenv.mkDerivation (finalAttrs: {
       sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
       revert = true;
     })
+
+    # Fix compilation of the TLS migration tests when gnutls is available
+    # but libtasn1 is not, as in the minimal build, see #547163.
+    # Submitted upstream, remove when included in a release:
+    # https://lists.gnu.org/archive/html/qemu-devel/2026-07/msg08469.html
+    ./fix-tls-tests-without-tasn1.patch
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
@@ -291,6 +302,8 @@ stdenv.mkDerivation (finalAttrs: {
     mv VERSION QEMU_VERSION
     substituteInPlace configure \
       --replace-fail '$source_path/VERSION' '$source_path/QEMU_VERSION'
+    substituteInPlace Makefile \
+      --replace-fail '$(SRC_PATH)/VERSION' '$(SRC_PATH)/QEMU_VERSION'
     substituteInPlace meson.build \
       --replace-fail "'VERSION'" "'QEMU_VERSION'"
     substituteInPlace docs/conf.py \
@@ -323,7 +336,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional gtkSupport "--enable-gtk"
   ++ lib.optional xenSupport "--enable-xen"
   ++ lib.optional cephSupport "--enable-rbd"
-  ++ lib.optional glusterfsSupport "--enable-glusterfs"
   ++ lib.optional openGLSupport "--enable-opengl"
   ++ lib.optional virglSupport "--enable-virglrenderer"
   ++ lib.optional tpmSupport "--enable-tpm"
@@ -334,6 +346,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional canokeySupport "--enable-canokey"
   ++ lib.optional u2fEmuSupport "--enable-u2f"
   ++ lib.optional capstoneSupport "--enable-capstone"
+  ++ lib.optional brlttySupport "--enable-brlapi"
   ++ lib.optional (!pluginsSupport) "--disable-plugins"
   ++ lib.optional (!enableBlobs) "--disable-install-blobs"
   ++ lib.optional userOnly "--disable-system"
@@ -370,46 +383,40 @@ stdenv.mkDerivation (finalAttrs: {
     # <https://github.com/NixOS/nixpkgs/issues/83667>
     rm -f $out/nix-support/propagated-build-inputs
   '';
-  preBuild = "cd build";
 
   # tests can still timeout on slower systems
   doCheck = false;
-  nativeCheckInputs = [ socat ];
+  nativeCheckInputs = [
+    python3Packages.pygdbmi
+    python3Packages.qemu-qmp
+    socat
+  ];
   preCheck = ''
     # time limits are a little meagre for a build machine that's
     # potentially under load.
-    substituteInPlace ../tests/unit/meson.build \
-      --replace 'timeout: slow_tests' 'timeout: 50 * slow_tests'
-    substituteInPlace ../tests/qtest/meson.build \
-      --replace 'timeout: slow_qtests' 'timeout: 50 * slow_qtests'
-    substituteInPlace ../tests/fp/meson.build \
-      --replace 'timeout: 90)' 'timeout: 300)'
-
-    # point tests towards correct binaries
-    substituteInPlace ../tests/unit/test-qga.c \
-      --replace '/bin/bash' "$(type -P bash)" \
-      --replace '/bin/echo' "$(type -P echo)"
-    substituteInPlace ../tests/unit/test-io-channel-command.c \
-      --replace '/bin/socat' "$(type -P socat)"
+    substituteInPlace tests/unit/meson.build \
+      --replace-fail 'timeout: slow_tests' 'timeout: 50 * slow_tests'
+    substituteInPlace tests/qtest/meson.build \
+      --replace-fail 'timeout: slow_qtests' 'timeout: 50 * slow_qtests'
 
     # combined with a long package name, some temp socket paths
     # can end up exceeding max socket name len
-    substituteInPlace ../tests/qtest/bios-tables-test.c \
-      --replace 'qemu-test_acpi_%s_tcg_%s' '%s_%s'
+    substituteInPlace tests/qtest/bios-tables-test.c \
+      --replace-fail 'qemu-test_acpi_%s_tcg_%s' '%s_%s'
 
     # get-fsinfo attempts to access block devices, disallowed by sandbox
     sed -i -e '/\/qga\/get-fsinfo/d' -e '/\/qga\/blacklist/d' \
-      ../tests/unit/test-qga.c
+      tests/unit/test-qga.c
 
     # xattrs are not allowed in the sandbox
-    substituteInPlace ../tests/qtest/virtio-9p-test.c \
+    substituteInPlace tests/qtest/virtio-9p-test.c \
       --replace-fail mapped-xattr mapped-file
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # skip test that stalls on darwin, perhaps due to subtle differences
     # in fifo behaviour
-    substituteInPlace ../tests/unit/meson.build \
-      --replace "'test-io-channel-command'" "#'test-io-channel-command'"
+    substituteInPlace tests/unit/meson.build \
+      --replace-fail "'test-io-channel-command'" "#'test-io-channel-command'"
   '';
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
@@ -444,7 +451,7 @@ stdenv.mkDerivation (finalAttrs: {
       license = lib.licenses.gpl2Plus;
       maintainers = with lib.maintainers; [ qyliss ];
       teams = lib.optionals xenSupport xen.meta.teams;
-      platforms = lib.platforms.unix;
+      platforms = with lib.systems.inspect; patternLogicalAnd patterns.is64bit patterns.isUnix;
     }
     # toolsOnly: Does not have qemu-kvm and there's no main support tool
     # userOnly: There's one qemu-<arch> for every architecture
@@ -453,7 +460,14 @@ stdenv.mkDerivation (finalAttrs: {
     }
     # userOnly: https://qemu.readthedocs.io/en/master/user/main.html#supported-operating-systems
     // lib.optionalAttrs userOnly {
-      platforms = with lib.platforms; (linux ++ freebsd ++ openbsd ++ netbsd);
+      platforms =
+        with lib.systems.inspect;
+        patternLogicalAnd patterns.is64bit [
+          patterns.isLinux
+          patterns.isFreeBSD
+          patterns.isOpenBSD
+          patterns.isNetBSD
+        ];
       description = "QEMU User space emulator - launch executables compiled for one CPU on another CPU";
     };
 })

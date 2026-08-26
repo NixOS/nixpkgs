@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "octodns-powerdns";
-  version = "1.0.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "octodns";
     repo = "octodns-powerdns";
     tag = "v${version}";
-    hash = "sha256-bdCX1oHFZRYr9PvLVbag/La087DMSXZfZ2W0mXffcUY=";
+    hash = "sha256-cTyfgPcZ4Q/jk8UfGhc+wWuEUuWuiLMoijtxTqsK7YY=";
   };
 
   build-system = [

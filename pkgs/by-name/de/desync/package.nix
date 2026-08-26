@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "desync";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "folbricht";
     repo = "desync";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aRxWq9gGfglfBixS7xOoj8r29rJRAfGj4ydcSFf/7P0=";
+    hash = "sha256-ViwNE+8fmYbAMPFd8yiWXDLbaenkgri9PBe92M0Se5U=";
   };
 
-  vendorHash = "sha256-ywID0txn7L6+QkYNvGvO5DTsDQBZLU+pGwNd3q7kLKI=";
+  vendorHash = "sha256-dAFci7GXe1fPPABIG1dngEyGqC5TKa90fyQPYSbJJrk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -34,13 +34,19 @@ buildGoModule (finalAttrs: {
         "TestExtractCommand/extract_with_single_seed,_explicit_data_directory_and_unexpected_seed_options" # block cloning fails on ZFS
         "TestExtractCommand/extract_with_single_seed_and_explicit_data_directory" # block cloning fails on ZFS
         "TestExtractWithNonStaticSeeds" # block cloning fails on ZFS
+        "TestLocalFSDirSetgidWhilePopulated" # cannot setgid in /tmp
         "TestMountIndex" # FUSE does not work in sandbox
         "TestSeed/extract_repetitive_file" # block cloning fails on ZFS
+        "TestTar" # xattr.list: operation not supported
+        "TestUnTarDirMTime" # xattr.list: operation not supported
+        "TestUnTarIntoReadOnlyDir" # xattr.list: operation not supported
+        "TestUnTarNoSamePermissionsOverReadOnlyTree" # xattr.list: operation not supported
+        "TestUnTarReadOnlyDir" # xattr.list: operation not supported
+        "TestUnTarReadOnlyDirNoSamePermissions" # xattr.list: operation not supported
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        # sendfile is not permitted in Darwin sandbox
-        "TestS3StoreGetChunk/fail"
-        "TestS3StoreGetChunk/recover"
+        "TestS3StoreGetChunk/fail" # sendfile is not permitted in Darwin sandbox
+        "TestS3StoreGetChunk/recover" # sendfile is not permitted in Darwin sandbox
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -62,6 +68,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/folbricht/desync";
     changelog = "https://github.com/folbricht/desync/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ chaduffy ];
+    maintainers = with lib.maintainers; [ matshch ];
   };
 })

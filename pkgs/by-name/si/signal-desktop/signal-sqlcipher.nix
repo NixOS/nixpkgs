@@ -1,10 +1,11 @@
 {
   stdenv,
+  pnpm,
   lib,
   fetchFromGitHub,
-  pnpm,
   fetchPnpmDeps,
   pnpmConfigHook,
+  pnpmBuildHook,
   nodejs,
   rustPlatform,
   cargo,
@@ -15,33 +16,34 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "node-sqlcipher";
-  version = "3.2.1";
+  version = "4.0.3";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "node-sqlcipher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lkSQXiplkY5sBpHsAhW4odWe+MCalAo100EL7h4VKbg=";
+    hash = "sha256-pqb/MhDZxkQDUgs/eP+cRL8b3dfN8VLJo+H8Td9mWoc=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm; # may be different than top-level pnpm
-    fetcherVersion = 3;
-    hash = "sha256-/EcPuqTXXGw1dEN6l1x84cUGyx890/rujjT+zJouIvM=";
+    fetcherVersion = 4;
+    hash = "sha256-avvXNPfN5YVqwCOU2RX8dos3LTlre1t/4COKb4zHkh4=";
   };
 
   cargoRoot = "deps/extension";
   cargoDeps = rustPlatform.fetchCargoVendor {
     name = "sqlcipher-signal-exentsion";
     inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-NtJPwRvjU1WsOxgb2vpokes9eL4DkEcbDaEmML7zsqQ=";
+    hash = "sha256-ChIzjkjIl663lNnOd5oLM1mc5CpLBZS/l82ikyXe/Ac=";
   };
 
   strictDeps = true;
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
+    pnpmBuildHook
     pnpm
     rustPlatform.cargoSetupHook
     cargo
@@ -53,21 +55,21 @@ stdenv.mkDerivation (finalAttrs: {
     cctools.libtool
   ];
 
-  buildPhase = ''
-    runHook preBuild
-
+  preBuild = ''
     export npm_config_nodedir=${nodejs}
-    pnpm run prebuildify --strip false --arch "${stdenv.hostPlatform.node.arch}" --platform "${stdenv.hostPlatform.node.platform}"
-    pnpm run build
 
-    runHook postBuild
+    pnpm run prebuildify --strip false --arch "${stdenv.hostPlatform.node.arch}" --platform "${stdenv.hostPlatform.node.platform}"
   '';
+
+  pnpmBuildScript = "build";
 
   installPhase = ''
     runHook preInstall
 
+    mkdir $out
     cp -r dist $out
     cp -r prebuilds $out
+    cp package.json $out
 
     runHook postInstall
   '';

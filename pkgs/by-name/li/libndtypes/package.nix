@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   src = fetchFromGitHub {
     owner = "xnd-project";
-    repo = "ndtypes";
+    repo = "libndtypes";
     rev = "3ce6607c96d8fe67b72cc0c97bf595620cdd274e";
     sha256 = "18303q0jfar1lmi4krp94plczb455zcgw772f9lb8xa5p0bkhx01";
   };

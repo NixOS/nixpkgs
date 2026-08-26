@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "unstructured-client";
-  version = "0.44.0";
+  version = "0.46.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
     repo = "unstructured-python-client";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-joQj2tMOD3bW/bU0ffZ7Usfh7hRWrVGKfGreC9ks18E=";
+    hash = "sha256-Q1REvlD14WYQS8r51XsjheK8BZMSgSvQZQx5wmNjkXo=";
   };
 
   preBuild = ''

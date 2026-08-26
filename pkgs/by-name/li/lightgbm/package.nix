@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "4.6.0";
 
   src = fetchFromGitHub {
-    owner = "microsoft";
+    owner = "lightgbm-org";
     repo = "lightgbm";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
@@ -152,13 +152,13 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "__BUILD_FOR_PYTHON" true)
     ];
 
-  configurePhase = lib.optionals rLibrary ''
+  configurePhase = lib.optionalString rLibrary ''
     export R_LIBS_SITE="$out/library:$R_LIBS_SITE''${R_LIBS_SITE:+:}"
   '';
 
   # set the R package buildPhase to null because lightgbm has a
   # custom builder script that builds and installs in one step
-  buildPhase = lib.optionals rLibrary "";
+  buildPhase = lib.optionalString rLibrary "";
 
   inherit doCheck;
 

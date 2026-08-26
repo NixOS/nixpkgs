@@ -22,15 +22,18 @@
   mcp,
   google-auth,
   requests,
+  websockets,
+  opentelemetry-exporter-otlp-proto-http,
 
   # tests
   opentelemetry-sdk,
+  pytest-asyncio,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "mistralai";
-  version = "2.4.4";
+  version = "2.9.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -38,7 +41,7 @@ buildPythonPackage (finalAttrs: {
     owner = "mistralai";
     repo = "client-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e2G/bqU45hCfcPEhj4zf5X7EKjs/zWhxCkn9J0u4F7U=";
+    hash = "sha256-liWCT2ArXdRmyB+oPwSLJRRyfossW+jfSNpWgeSfvb0=";
   };
 
   preBuild = ''
@@ -73,20 +76,33 @@ buildPythonPackage (finalAttrs: {
       google-auth
       requests
     ];
+    realtime = [
+      websockets
+    ];
+    telemetry = [
+      opentelemetry-sdk
+      opentelemetry-exporter-otlp-proto-http
+    ];
   };
 
   pythonImportsCheck = [ "mistralai" ];
 
   nativeCheckInputs = [
-    opentelemetry-sdk
+    pytest-asyncio
     pytestCheckHook
   ]
   ++ finalAttrs.passthru.optional-dependencies.agents
-  ++ finalAttrs.passthru.optional-dependencies.gcp;
+  ++ finalAttrs.passthru.optional-dependencies.gcp
+  ++ finalAttrs.passthru.optional-dependencies.realtime
+  ++ finalAttrs.passthru.optional-dependencies.telemetry;
 
-  disabledTests = [
-    # AssertionError: <Response [200 OK]> is not an instance of <class 'mistralai.extra.observability.otel.TracedResponse'>
-    "TestOtelTracing"
+  disabledTestPaths = [
+    # ModuleNotFoundError: No module named 'opentelemetry.instrumentation'
+    "src/mistralai/extra/tests/test_otel_tracing.py"
+    # ModuleNotFoundError: No module named 'msgpack'
+    "src/mistralai/extra/tests/test_workflow_encoding.py"
+    # '062f2cad7f1fee8c3e409b73d431e71b' not found in '00-e5d29cde482d5d796428c10d13e86060-468fe44f7efdb086-01'
+    "src/mistralai/extra/tests/test_traceparent_hook.py::TestTraceparentInjectionHook::test_propagates_sampled_active_span"
   ];
 
   meta = {

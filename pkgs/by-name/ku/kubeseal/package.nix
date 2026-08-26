@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubeseal";
-  version = "0.36.0";
+  version = "0.38.4";
 
   src = fetchFromGitHub {
-    owner = "bitnami-labs";
+    owner = "bitnami";
     repo = "sealed-secrets";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-r+PjrHewqNIjj1ZYGEvAns4cSsg7mQXoR8/et6SJzhs=";
+    sha256 = "sha256-cg9YEY78miw8BRX9CCIeWqdAeJDsFSr6VvgRJFYzREU=";
   };
 
-  vendorHash = "sha256-poYkK62v0faGZnyYWQtUdf0eWTyWf+R/r1/+Wc8EeOA=";
+  vendorHash = "sha256-1RATVZIeWZFceLttnqnDgXHyUsjRvkHAnsypABW/WDE=";
 
   subPackages = [ "cmd/kubeseal" ];
 
@@ -28,8 +28,8 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Kubernetes controller and tool for one-way encrypted Secrets";
     mainProgram = "kubeseal";
-    homepage = "https://github.com/bitnami-labs/sealed-secrets";
-    changelog = "https://github.com/bitnami-labs/sealed-secrets/blob/v${finalAttrs.version}/RELEASE-NOTES.md";
+    homepage = "https://github.com/bitnami/sealed-secrets";
+    changelog = "https://github.com/bitnami/sealed-secrets/blob/v${finalAttrs.version}/RELEASE-NOTES.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ groodt ];
   };

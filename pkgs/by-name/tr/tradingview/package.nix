@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
-  squashfsTools,
+  squashfs-tools,
   makeBinaryWrapper,
   alsa-lib,
   atk,
@@ -26,18 +26,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tradingview";
-  version = "2.14.0";
-  revision = "68";
+  version = "3.3.0";
+  revision = "72";
 
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/nJdITJ6ZJxdvfu8Ch7n5kH5P99ClzBYV_${finalAttrs.revision}.snap";
-    hash = "sha512-wuMQBfJfMbQdq4eUNl9bitf4IGcpczX0FDdnQAgyALBpHI7CbcIF9Aq4hIy0dblYgeISM1HFqPiSIcFCS+VuSQ==";
+    hash = "sha512-Ah/+g/Pqd9HQfxjtKkZMtKoQ5u2IxmGPu6KqfSNCCW4ClQe5+l3QLAid8up436jPRwWlyeyIouANxUf02HRAug==";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
     makeBinaryWrapper
-    squashfsTools
+    squashfs-tools
   ];
 
   buildInputs = [
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://www.tradingview.com/support/solutions/43000673888/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ prominentretail ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "tradingview";
   };

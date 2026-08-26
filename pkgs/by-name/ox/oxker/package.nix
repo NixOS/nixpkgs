@@ -10,14 +10,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxker";
-  version = "0.13.1";
+  version = "0.13.3";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-NY++HK2mDcf3bWMEqJBeJr6zKVtD4qlzY+z+l/ZgPR4=";
+    hash = "sha256-F/5QkEA4/UFFM3FEiqyBFZQWiIhQokT4VjL5SaKrDIA=";
   };
 
-  cargoHash = "sha256-AC1E7NhES2SIp64JqSBEIWltulQztQz6NnQKAT4h+eA=";
+  cargoHash = "sha256-v0EOUIEaAUtcNlkBhFQ1Q/quYdG6+18MT2nnjZ/ApbM=";
 
   # See https://github.com/mrjackwills/oxker/issues/73
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [

@@ -1,6 +1,5 @@
 {
   lib,
-  elixir,
   fetchFromGitHub,
   fetchMixDeps,
   mixRelease,
@@ -14,12 +13,12 @@
 
 let
   pname = "ex_doc";
-  version = "0.40.1";
+  version = "0.40.3";
   src = fetchFromGitHub {
     owner = "elixir-lang";
     repo = "${pname}";
     rev = "v${version}";
-    hash = "sha256-ZhsN2XI5WVy04ilNR/7NJo+C7F10lijsP+n3BGBNEkQ=";
+    hash = "sha256-xGZCBnjYr+0x6JNcf0XZVdaKaUB8V72GuZI3lEunzic=";
   };
 in
 mixRelease {
@@ -27,7 +26,6 @@ mixRelease {
     pname
     version
     src
-    elixir
     ;
 
   escriptBinName = "ex_doc";
@@ -36,8 +34,8 @@ mixRelease {
 
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
-    inherit src version elixir;
-    hash = "sha256-pMIm0lVMqkuiprp0XeVB+x4VTh+hQR3t8dk5OBmnIqA=";
+    inherit src version;
+    hash = "sha256-FSLAQhFk7NCUXRMfNr6E9XvndrviapjcKZDisHbB87Y=";
   };
 
   passthru = {

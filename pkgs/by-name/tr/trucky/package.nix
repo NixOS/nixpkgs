@@ -10,7 +10,7 @@ let
 
   src = fetchurl {
     url = "https://web.archive.org/web/20260328182310/https://client-download.truckyapp.com/linux/latest/Trucky.AppImage";
-    hash = "sha256-8F6tIyooqzjgH2+qHsaoFwJkFzzW07fjqK9znDW/AyA=3";
+    hash = "sha256-8F6tIyooqzjgH2+qHsaoFwJkFzzW07fjqK9znDW/AyA=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };

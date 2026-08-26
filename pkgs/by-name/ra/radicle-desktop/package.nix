@@ -21,17 +21,18 @@
   wrapGAppsHook4,
   rustfmt,
   clippy,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-desktop";
-  version = "0.10.0";
+  version = "0.15.0";
 
   src = fetchFromRadicle {
     seed = "seed.radicle.dev";
     repo = "z4D5UCArafTzTQpDZNQRuqswh3ury";
     tag = "releases/${finalAttrs.version}";
-    hash = "sha256-Tlb2RVhFUcfJZy5/FyJuSpkRZ0ZxhLe5ynAK2y7+f1Q=";
+    hash = "sha256-L5QfFvswU/iPgObhh09/SAlMRy5w+Qs1kXDGpY31wjA=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head
@@ -52,10 +53,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-x0u75on1Kc+u1u1R1SLLOfmTG5kFVvn2PsaWdH/RB3w=";
+    hash = "sha256-4gRc/nNrOEi7PU+5bSsR22z3f55cINebSrlFQ1NGTfk=";
   };
 
-  cargoHash = "sha256-ojb1gT2dOhdvUHxKR51t0EKjZdgCXYxzhC0lmh87Uq0=";
+  cargoHash = "sha256-DZM1YX3lzCvKGtrSxxeJkinR91HFWe5SpdqQ+oP1Hgc=";
 
   twemojiAssets = fetchFromGitHub {
     owner = "twitter";
@@ -97,12 +98,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     radicle-node
     rustfmt
     clippy
+    writableTmpDirAsHomeHook
   ];
 
   checkPhase = ''
     runHook preCheck
 
-    export RAD_HOME="$PWD/_rad-home"
     export RAD_PASSPHRASE=""
     rad auth --alias test
     bins="tests/tmp/bin/heartwood/$HW_RELEASE"

@@ -392,7 +392,7 @@ in
       let
         extraOptions = lib.concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
         inhibitCmd = lib.concatStringsSep " " [
-          "${pkgs.systemd}/bin/systemd-inhibit"
+          "${config.systemd.package}/bin/systemd-inhibit"
           "--mode='block'"
           "--who='restic'"
           "--what='sleep'"

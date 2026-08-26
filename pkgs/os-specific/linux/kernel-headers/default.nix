@@ -9,6 +9,8 @@
   flex,
   rsync,
   writeTextFile,
+  nix-update-script,
+  linux_latest,
 }:
 
 let
@@ -42,6 +44,7 @@ let
       src,
       version,
       patches ? [ ],
+      passthru ? { },
     }:
     stdenvNoCC.mkDerivation {
       inherit src;
@@ -105,7 +108,7 @@ let
       # Skip clean on darwin, case-sensitivity issues.
       buildPhase =
         lib.optionalString (!stdenvNoCC.buildPlatform.isDarwin) ''
-          make mrproper $makeFlags
+          make mrproper "''${makeFlags[@]}"
         ''
         + (
           if stdenvNoCC.hostPlatform.isAndroid then
@@ -115,12 +118,12 @@ let
             ''
           else
             ''
-              make headers $makeFlags
+              make headers "''${makeFlags[@]}"
             ''
         );
 
       checkPhase = ''
-        make headers_check $makeFlags
+        make headers_check "''${makeFlags[@]}"
       '';
 
       # The following command requires rsync:
@@ -139,6 +142,10 @@ let
         echo "${version}-default" > $out/include/config/kernel.release
       '';
 
+      inherit passthru;
+
+      __structuredAttrs = true;
+
       meta = {
         description = "Header files and scripts for Linux kernel";
         license = lib.licenses.gpl2Only;
@@ -152,16 +159,22 @@ in
 
   linuxHeaders =
     let
-      version = "6.18.7";
+      version = "7.1";
     in
     makeLinuxHeaders {
       inherit version;
       src = fetchurl {
         url = "mirror://kernel/linux/kernel/v${lib.versions.major version}.x/linux-${version}.tar.xz";
-        hash = "sha256-tyak0Vz5rgYhm1bYeCB3bjTYn7wTflX7VKm5wwFbjx4=";
+        hash = "sha256-aR9EeX++eQ3IoyFgTJJwh1Jq0nttZJkl1g+O7QolZKA=";
       };
       patches = [
         ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
       ];
+      passthru.updateScript = nix-update-script {
+        extraArgs = [
+          "--version"
+          "${linux_latest.meta.branch}"
+        ];
+      };
     };
 }

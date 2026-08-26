@@ -5,7 +5,6 @@
   buildPythonPackage,
   python,
   astropy,
-  cloudpickle,
   cython,
   dask,
   imageio,
@@ -24,10 +23,8 @@
   pywavelets,
   scikit-learn,
   scipy,
-  setuptools,
   simpleitk,
   tifffile,
-  wheel,
 }:
 
 let
@@ -51,25 +48,20 @@ let
         --replace-fail "version = version_from_init()" "version = \"${version}\""
     '';
 
-    nativeBuildInputs = [
+    build-system = [
       cython
       meson-python
       numpy
-      packaging
       pythran
-      setuptools
-      wheel
     ];
 
-    propagatedBuildInputs = [
+    dependencies = [
       imageio
       lazy-loader
-      matplotlib
       networkx
       numpy
       packaging
       pillow
-      pywavelets
       scipy
       tifffile
     ];
@@ -77,14 +69,17 @@ let
     optional-dependencies = {
       data = [ pooch ];
       optional = [
+        simpleitk
+        scikit-learn
+        pyamg
+      ]
+      ++ self.passthru.optional-dependencies.optional_free_threaded;
+      optional_free_threaded = [
         astropy
-        cloudpickle
         dask
         matplotlib
         pooch
-        pyamg
-        scikit-learn
-        simpleitk
+        pywavelets
       ]
       ++ dask.optional-dependencies.array;
     };
@@ -115,7 +110,7 @@ let
     ];
 
     disabledTestPaths = [
-      # Requires network access (actually some data is loaded via `skimage._shared.testing.fetch` in the global scope, which calls `pytest.skip` when a network is unaccessible, leading to a pytest collection error).
+      # Requires network access (actually some data is loaded via `skimage._shared.testing.fetch` in the global scope, which calls `pytest.skip` when a network is inaccessible, leading to a pytest collection error).
       "${installedPackageRoot}/skimage/filters/rank/tests/test_rank.py"
 
       # These tests require network access

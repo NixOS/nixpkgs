@@ -9,10 +9,11 @@
 makeSetupHook {
   name = "dotnet-hook";
   substitutions = {
-    dotnetRuntime = dotnet-runtime;
+    dotnetRuntime = lib.defaultTo "" dotnet-runtime;
     wrapperPath = lib.makeBinPath [
       which
       coreutils
     ];
   };
+  meta.license = lib.licenses.mit;
 } ./dotnet-hook.sh

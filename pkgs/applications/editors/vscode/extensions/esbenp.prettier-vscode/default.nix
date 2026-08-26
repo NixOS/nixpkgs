@@ -17,6 +17,5 @@ vscode-utils.buildVscodeMarketplaceExtension {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode";
     homepage = "https://github.com/prettier/prettier-vscode";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.datafoo ];
   };
 }

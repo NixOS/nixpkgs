@@ -13,11 +13,11 @@ let
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://github.com/4ian/GDevelop/releases/download/v${version}/GDevelop-5-${version}.AppImage";
-        hash = "sha256-IRSg7/jj8QRvVYuHiYzci/mWrQ2lW6RJy9QdZs/guFI=";
+        hash = "sha256-ZoTn9twne3Qlu+PECpVxOf2I7p7uo1MqQbnE5GoI/p4=";
       }
     else
       throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";
-  appimageContents = appimageTools.extractType2 {
+  appimageContents = appimageTools.extract {
     inherit pname version src;
     postExtract = ''
       substituteInPlace $out/gdevelop.desktop --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=gdevelop'

@@ -5,10 +5,12 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_11,
 }:
 let
   common = callPackage ./common.nix { };
+
+  pnpm = pnpm_11;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "woodpecker-webui";
@@ -18,8 +20,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     sourceRoot = "${common.src.name}/web";
-    fetcherVersion = 3;
+    fetcherVersion = 4;
     hash = common.nodeModulesHash;
   };
 

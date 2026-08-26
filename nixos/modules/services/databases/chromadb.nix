@@ -27,7 +27,7 @@ in
 
   options = {
     services.chromadb = {
-      enable = mkEnableOption "ChromaDB, an open-source AI application database.";
+      enable = mkEnableOption "ChromaDB, an open-source AI application database";
 
       package = mkPackageOption pkgs [ "python3Packages" "chromadb" ] { };
 

@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-archive-all";
   version = "1.23.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kentzo";
@@ -32,6 +32,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     substituteInPlace test_git_archive_all.py \
       --replace "import pycodestyle" ""
   '';
+
+  build-system = [ python3Packages.setuptools ];
 
   nativeCheckInputs = [
     git

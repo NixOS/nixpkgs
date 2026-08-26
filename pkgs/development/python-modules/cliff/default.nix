@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  fetchpatch,
   fetchPypi,
   autopage,
   cmd2,
@@ -16,21 +15,13 @@
 
 buildPythonPackage rec {
   pname = "cliff";
-  version = "4.13.2";
+  version = "4.15.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6Um1hbm2RUnehziM79Seh91jCVziufO5j5Ej182Uvho=";
+    hash = "sha256-7KaZ9rOQx1Xm7RgWp2zfwav19e99HO4Z84M2Z6Oh/jk=";
   };
-
-  patches = [
-    # Fix compatibility with Python 3.14.3
-    (fetchpatch {
-      url = "https://github.com/openstack/cliff/commit/391261c849c994ca2d3f42926497e633047ed8c7.patch";
-      hash = "sha256-jcjZKJlcJ8C4VKJejb/bjJ6Li4JjeC2xWK/nFWzIL2c=";
-    })
-  ];
 
   build-system = [
     openstackdocstheme

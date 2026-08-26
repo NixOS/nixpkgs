@@ -520,9 +520,22 @@ let
     hostAddress6 = null;
     localAddress = null;
     localAddress6 = null;
-    localmacAddress = null;
+    localMacAddress = null;
     tmpfs = null;
   };
+
+  # Parses an IP address with an optional prefix
+  ipFromString =
+    str: defaultPrefix:
+    let
+      segments = lib.splitString "/" str;
+      prefix = lib.elemAt segments 1;
+      hasPrefix = builtins.length segments == 2;
+    in
+    {
+      address = lib.head segments;
+      prefixLength = if hasPrefix then builtins.fromJSON prefix else defaultPrefix;
+    };
 
 in
 
@@ -594,6 +607,16 @@ in
                                 boot.isNspawnContainer = true;
                                 networking.hostName = mkDefault name;
                                 networking.useDHCP = false;
+                                networking.interfaces = lib.mkIf config.privateNetwork (
+                                  lib.mkMerge [
+                                    (lib.mkIf (config.localAddress != null) {
+                                      eth0.ipv4.addresses = [ (ipFromString config.localAddress 32) ];
+                                    })
+                                    (lib.mkIf (config.localAddress6 != null) {
+                                      eth0.ipv6.addresses = [ (ipFromString config.localAddress6 128) ];
+                                    })
+                                  ]
+                                );
                                 assertions = [
                                   {
                                     assertion =

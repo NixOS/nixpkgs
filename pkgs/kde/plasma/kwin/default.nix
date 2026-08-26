@@ -16,7 +16,6 @@
   libgbm,
   lcms2,
   pipewire,
-  krunner,
   python3,
   fetchpatch,
 }:
@@ -26,7 +25,13 @@ mkKdeDerivation {
   patches = [
     ./0003-plugins-qpa-allow-using-nixos-wrapper.patch
     ./0001-NixOS-Unwrap-executable-name-for-.desktop-search.patch
-    ./0001-Lower-CAP_SYS_NICE-from-the-ambient-set.patch
+
+    # backport crash fix with latest Mesa
+    # FIXME: remove in next update
+    (fetchpatch {
+      url = "https://invent.kde.org/plasma/kwin/-/commit/2d0613acd044544e79b034b1cbc248664edf2884.diff";
+      hash = "sha256-dpflStJ01aChNYDO+dfI67LhLWoC3sovaAza1AIck1E=";
+    })
   ];
 
   postPatch = ''
@@ -49,8 +54,6 @@ mkKdeDerivation {
     qttools
     qtvirtualkeyboard
     qtwayland
-
-    krunner
 
     libgbm
     lcms2

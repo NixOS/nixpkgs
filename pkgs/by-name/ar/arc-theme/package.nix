@@ -2,42 +2,36 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  sassc,
+  glib,
+  inkscape,
   meson,
   ninja,
-  glib,
-  gnome-shell,
-  gnome-themes-extra,
-  gtk-engine-murrine,
-  inkscape,
-  cinnamon,
-  makeFontsConf,
   python3,
+  sassc,
+  makeFontsConf,
+  cinnamon,
+  gnome-shell,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "arc-theme";
-  version = "20221218";
+  version = "20221218-unstable-2025-10-18";
 
   src = fetchFromGitHub {
     owner = "jnsh";
     repo = "arc-theme";
-    tag = version;
-    sha256 = "sha256-7VmqsUCeG5GwmrVdt9BJj0eZ/1v+no/05KwGFb7E9ns=";
+    rev = "94ac8c7d67d68de0cc688bbd4c3105b9815b446e";
+    hash = "sha256-vvZvJmsmeYcJT3xVQLg4tmYXEgHprWJls1fbxA3Jxnw=";
   };
 
   nativeBuildInputs = [
+    glib # for glib-compile-resources
+    inkscape
     meson
     ninja
-    sassc
-    inkscape
-    glib # for glib-compile-resources
     python3
-  ];
-
-  propagatedUserEnvPkgs = [
-    gnome-themes-extra
-    gtk-engine-murrine
+    sassc
   ];
 
   postPatch = ''
@@ -53,13 +47,28 @@ stdenv.mkDerivation rec {
   env.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
   mesonFlags = [
-    # "-Dthemes=cinnamon,gnome-shell,gtk2,gtk3,plank,xfwm,metacity"
-    # "-Dvariants=light,darker,dark,lighter"
-    "-Dcinnamon_version=${cinnamon.version}"
-    "-Dgnome_shell_version=${gnome-shell.version}"
+    (lib.mesonOption "themes" (
+      lib.concatStringsSep "," [
+        "cinnamon"
+        "gnome-shell"
+        # "gtk2" (no longer supported)
+        "gtk3"
+        "gtk4"
+        "metacity"
+        "plank"
+        "unity"
+        "xfwm"
+      ]
+    ))
+
+    (lib.mesonOption "cinnamon_version" cinnamon.version)
+    (lib.mesonOption "gnome_shell_version" gnome-shell.version)
+
     # You will need to patch gdm to make use of this.
-    "-Dgnome_shell_gresource=true"
+    (lib.mesonBool "gnome_shell_gresource" true)
   ];
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Flat theme with transparent elements for GTK 3, GTK 2 and Gnome Shell";
@@ -67,8 +76,9 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      simonvandel
+      kira-bruneau
       romildo
+      simonvandel
     ];
   };
 }

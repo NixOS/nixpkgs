@@ -104,14 +104,14 @@ let
 in
 effectiveBuildPythonApplication rec {
   pname = "xpra";
-  version = "6.4.3";
+  version = "6.4.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Xpra-org";
     repo = "xpra";
     tag = "v${version}";
-    hash = "sha256-TmhMjO1WTF4fT/G0EyRzORI/Q/cd3IipQn0eRwkWYRE=";
+    hash = "sha256-zDI6xksviTjsfsh5OJdkif24BGPW9zfDsxATC98eeX0=";
   };
 
   patches = [
@@ -159,7 +159,6 @@ effectiveBuildPythonApplication rec {
   ]
   ++ (with gst_all_1; [
     gst-libav
-    gst-vaapi
     gst-plugins-ugly
     gst-plugins-bad
     gst-plugins-base
@@ -188,7 +187,7 @@ effectiveBuildPythonApplication rec {
     xxhash
     systemd
   ]
-  ++ lib.optional withNvenc [
+  ++ lib.optionals withNvenc [
     nvencHeaders
     nvjpegHeaders
   ];
@@ -304,7 +303,6 @@ effectiveBuildPythonApplication rec {
     maintainers = with lib.maintainers; [
       numinit
       mvnetbiz
-      lucasew
     ];
   };
 }

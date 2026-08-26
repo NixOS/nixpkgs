@@ -5,7 +5,7 @@
   fetchPnpmDeps,
   rustPlatform,
   nodejs,
-  pnpm,
+  pnpm_10,
   pnpmConfigHook,
   geist-font,
   nix-update-script,
@@ -14,6 +14,8 @@
 }:
 
 let
+  pnpm = pnpm_10;
+
   version = "0.27.0";
 
   src = fetchFromGitHub {
@@ -39,7 +41,7 @@ let
 
     pnpmDeps = fetchPnpmDeps {
       pname = "agent-browser-dashboard";
-      inherit version src;
+      inherit version src pnpm;
       pnpmWorkspaces = [ "dashboard" ];
       fetcherVersion = 3;
       hash = "sha256-ldxmXpejqVN/xuWcdLYMwNPc1VZ1rdNwRrumy8Is3N4=";

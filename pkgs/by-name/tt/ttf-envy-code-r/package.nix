@@ -2,30 +2,33 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ttf-envy-code-r";
   version = "PR7";
 
+  outputs = [
+    "out"
+    "doc"
+  ];
+
   src = fetchzip {
-    url = "https://download.damieng.com/fonts/original/EnvyCodeR-${version}.zip";
+    url = "https://dl.damieng.com/fonts/original/EnvyCodeR-${finalAttrs.version}.zip";
     hash = "sha256-pJqC/sbNjxEwbVf2CVoXMBI5zvT3DqzRlKSqFT8I2sM=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -Dm644 *.ttf -t $out/share/fonts/truetype
-    install -Dm644 *.txt -t $out/share/doc/${pname}
-
-    runHook postInstall
+  postInstall = ''
+    install -Dm644 *.txt -t $doc/share/doc/${finalAttrs.pname}-${finalAttrs.version}
   '';
 
   meta = {
-    homepage = "https://damieng.com/blog/tag/envy-code-r";
+    homepage = "https://damieng.com/typography/";
     description = "Free scalable coding font by DamienG";
     license = lib.licenses.unfree;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pancaek ];
   };
-}
+})

@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "harmonia";
-  version = "3.1.0";
+  version = "3.2.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "nix-community";
     repo = "harmonia";
     tag = "harmonia-v${finalAttrs.version}";
-    hash = "sha256-fm8PBugKnw72/dAXsRj84jf4EZK1BcVEdEWgtojIuA0=";
+    hash = "sha256-eA0bEXk1T82oZCaX4HS9aZpwE9locw0pA3I1qf4yoEs=";
   };
 
-  cargoHash = "sha256-qp4frhNsWDma8uYcRe3BXmfIu6btYb8IaoXhk4oI4qM=";
+  cargoHash = "sha256-gHsLr2P900Pa236N4fNlJ0w9Pu10Yb0F18zufHuU/b0=";
 
   doCheck = false;
 

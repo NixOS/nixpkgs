@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  pyprojectVersionPatchHook,
 }:
 
 buildPythonPackage rec {
@@ -18,14 +19,13 @@ buildPythonPackage rec {
     hash = "sha256-bLzDakxKq8fcjEKSxc6D5VN9gfAu1M3/zaAU2UYnwSs=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'version="0",' 'version="${version}",'
-  '';
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ aiohttp ];
+  dependencies = [ aiohttp ];
 
   # Project has no tests
   doCheck = false;
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     description = "Python module for updating Cloudflare DNS A records";
     homepage = "https://github.com/ludeeus/pycfdns";
     changelog = "https://github.com/ludeeus/pycfdns/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

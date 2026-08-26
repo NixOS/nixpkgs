@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "enroot";
-  version = "3.5.0";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "enroot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Sw4kfsb0Gi21At2pU8lt5wIfCih7VZ7Zf9/62xBKKRU=";
+    hash = "sha256-TMfzXmKrhdiUan3kemivlEQ6KqUNGOHtCZVZQP1AcB8=";
     fetchSubmodules = true;
   };
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/NVIDIA/enroot";
     changelog = "https://github.com/NVIDIA/enroot/releases/tag/v${finalAttrs.version}";
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.lucasew ];
+    maintainers = [ ];
     mainProgram = "enroot";
   };
 })

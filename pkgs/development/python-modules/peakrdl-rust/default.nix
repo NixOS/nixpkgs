@@ -4,12 +4,11 @@
   fetchFromGitHub,
   jinja2,
   lib,
-  peakrdl,
   systemrdl-compiler,
   uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "peakrdl-rust";
   version = "0.7.3";
 
@@ -18,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "darsor";
     repo = "PeakRDL-rust";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1rdTz3w1SEDFWpTjKIk9eLgj3F09lDOMqqdUf8iDd7g=";
   };
 
@@ -27,7 +26,6 @@ buildPythonPackage rec {
   dependencies = [
     case-converter
     jinja2
-    peakrdl
     systemrdl-compiler
   ];
 
@@ -37,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21Only;
     maintainers = [ lib.maintainers.jmbaur ];
   };
-}
+})

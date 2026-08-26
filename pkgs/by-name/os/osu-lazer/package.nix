@@ -10,6 +10,7 @@
   ffmpeg,
   alsa-lib,
   SDL2,
+  sdl3,
   lttng-ust,
   numactl,
   libglvnd,
@@ -22,13 +23,13 @@
 
 buildDotnetModule rec {
   pname = "osu-lazer";
-  version = "2026.429.0";
+  version = "2026.804.2";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     tag = "${version}-lazer";
-    hash = "sha256-QmdgcK65TD+VM6wx5Py1Kyp0MhRe1lr0V4nwTMkvtuA=";
+    hash = "sha256-1cUR3Z3TCNfnkyNkxlb+rmsFkYZ0WMBBRQwvRqoXUfw=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
@@ -46,6 +47,7 @@ buildDotnetModule rec {
     ffmpeg
     alsa-lib
     SDL2
+    sdl3
     lttng-ust
     numactl
 
@@ -70,20 +72,16 @@ buildDotnetModule rec {
   fixupPhase = ''
     runHook preFixup
 
-    # Disabling error reporting.
-    # https://github.com/ppy/osu/commit/48434dd683d095c42c01def8ff7cb95ce0a85ce4
-    # Unhandled exception. System.ArgumentException: Invalid DSN: No public key provided.
-
     wrapProgram $out/bin/osu! \
       ${lib.optionalString nativeWayland "--set SDL_VIDEODRIVER wayland"} \
-      --set OSU_EXTERNAL_UPDATE_PROVIDER 1 \
-      --set OSU_DISABLE_ERROR_REPORTING 1
+      --set OSU_EXTERNAL_UPDATE_PROVIDER 1
 
     for i in 16 32 48 64 96 128 256 512 1024; do
       install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu.png
     done
 
     ln -sft $out/lib/${pname} ${SDL2}/lib/libSDL2${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
+    ln -sft $out/lib/${pname} ${sdl3}/lib/libSDL3${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
 
     runHook postFixup
   '';

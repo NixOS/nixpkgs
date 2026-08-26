@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ubridge";
-  version = "0.9.19";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "GNS3";
     repo = "ubridge";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-utzXLPF0VszMZORoik5/0lKhiyKO9heKuNO4KPsPVsI=";
+    hash = "sha256-1dPHolK7eJimqolntBZK5k6e4CykeuvbU48iN3RN4bw=";
   };
 
   postPatch = ''

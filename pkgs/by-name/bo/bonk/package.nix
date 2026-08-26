@@ -22,6 +22,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/elliot40404/bonk";
     license = lib.licenses.mit;
     mainProgram = "bonk";
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
 })

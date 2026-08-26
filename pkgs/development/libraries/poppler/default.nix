@@ -3,7 +3,9 @@
   stdenv,
   fetchurl,
   fetchFromGitLab,
+  fetchpatch,
   cairo,
+  clang-tools,
   cmake,
   boost,
   curl,
@@ -38,6 +40,7 @@
   cups-filters,
   gdal,
   gegl,
+  gtk3,
   inkscape,
   scribus,
   vips,
@@ -55,13 +58,13 @@ let
     domain = "gitlab.freedesktop.org";
     owner = "poppler";
     repo = "test";
-    rev = "9d5011815a14c157ba25bb160187842fb81579a5";
-    hash = "sha256-sA5f235IJpzzzHqpwHM3zCZC2Yh0ztA6PZa84j/6tfY=";
+    rev = "f0068e9c530017ad811d1f28b95f9b7f59264e37";
+    hash = "sha256-Xf8duSh0r1o09b5BKB7mBvzrMfXYlzTuTOuK2ZCeItc=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "poppler-${suffix}";
-  version = "25.10.0"; # beware: updates often break cups-filters build, check scribus too!
+  version = "26.06.0";
 
   outputs = [
     "out"
@@ -70,8 +73,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://poppler.freedesktop.org/poppler-${finalAttrs.version}.tar.xz";
-    hash = "sha256-a16btk2rsVeHoU2xZ1KRx6+vk4dDjMk6T7f2rsTub+A=";
+    hash = "sha256-TLTlo9yMte7HUciiPIuhn2H5be3AzQfSruawyOLPa6Q=";
   };
+
+  patches = [
+    # Backports Darwin crash fix from upstream
+    # https://gitlab.freedesktop.org/poppler/poppler/-/work_items/1743
+    (fetchpatch {
+      name = "darwin-mutex-lock-crash.patch";
+      url = "https://gitlab.freedesktop.org/poppler/poppler/-/commit/08f4bca6a669f9fce75dbab743db559a86591738.patch";
+      hash = "sha256-+eWqVK/v3Ys9k2+z/dCoS2o82m039UER1StMUW4PIgM=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -81,6 +94,13 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!minimal) [
     glib # for glib-mkenums
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    # Pick up the `clang-scan-deps` wrapper for CMake; see:
+    #
+    # * <https://github.com/NixOS/nixpkgs/issues/452260>
+    # * <https://github.com/NixOS/nixpkgs/pull/514323>
+    clang-tools
   ];
 
   buildInputs = [
@@ -129,18 +149,22 @@ stdenv.mkDerivation (finalAttrs: {
     (mkFlag qt5Support "QT5")
     (mkFlag qt6Support "QT6")
     (mkFlag gpgmeSupport "GPGME")
-  ]
-  ++ lib.optionals finalAttrs.finalPackage.doCheck [
-    "-DTESTDATADIR=${testData}"
   ];
   disallowedReferences = lib.optional finalAttrs.finalPackage.doCheck testData;
 
   dontWrapQtApps = true;
 
-  # Workaround #54606
-  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    sed -i -e '1i cmake_policy(SET CMP0025 NEW)' CMakeLists.txt
-  '';
+  preConfigure =
+    lib.optionalString finalAttrs.finalPackage.doCheck ''
+      # The test data directory needs to be writable during the test phase.
+      mkdir -p $TMPDIR/testdata
+      cp -r --no-preserve=mode ${testData}/* $TMPDIR/testdata
+      cmakeFlagsArray+=(-DTESTDATADIR=$TMPDIR/testdata)
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Workaround #54606
+      sed -i -e '1i cmake_policy(SET CMP0025 NEW)' CMakeLists.txt
+    '';
 
   # Work around gpgme trying to write to $HOME during qt5 and qt6 tests:
   preCheck = lib.optionalString gpgmeSupport ''
@@ -172,9 +196,17 @@ stdenv.mkDerivation (finalAttrs: {
       gdal = gdal.override { usePoppler = true; };
       python-poppler-qt5 = python3.pkgs.poppler-qt5;
 
-      pkg-config = testers.hasPkgConfigModules {
-        package = finalAttrs.finalPackage;
-      };
+      pkg-config =
+        testers.hasPkgConfigModules {
+          package = finalAttrs.finalPackage;
+        }
+        // lib.optionalAttrs (!minimal) {
+          # Poppler skips tests unless GTK3 is detected; add to closure
+          poppler-with-gtk-tests = finalAttrs.finalPackage.overrideAttrs (old: {
+            pname = "${old.pname}-gtk-tests";
+            buildInputs = old.buildInputs ++ [ gtk3 ];
+          });
+        };
     };
   };
 
@@ -186,9 +218,9 @@ stdenv.mkDerivation (finalAttrs: {
       Poppler is a PDF rendering library based on the xpdf-3.0 code base. In
       addition it provides a number of tools that can be installed separately.
     '';
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ttuegel ];
+    maintainers = [ ];
     teams = [ lib.teams.freedesktop ];
     pkgConfigModules = [
       "poppler"

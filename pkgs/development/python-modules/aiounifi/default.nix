@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiounifi";
-  version = "90";
+  version = "93";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -27,13 +27,13 @@ buildPythonPackage (finalAttrs: {
     owner = "Kane610";
     repo = "aiounifi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xM2x4SwVav2gsuG0G1hJjg4AcdsuCYf3O1fma++EYow=";
+    hash = "sha256-hPRn46Oeuj9UnB7rT243g2aMirtWoC88CPg1E5S4OMo=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==82.0.1" "setuptools" \
-      --replace-fail "wheel==0.46.3" "wheel"
+      --replace-fail "setuptools==84.0.0" "setuptools" \
+      --replace-fail "wheel==0.48.0" "wheel"
   '';
 
   build-system = [ setuptools ];

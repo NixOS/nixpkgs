@@ -15,6 +15,8 @@ in
     programs.gamemode = {
       enable = lib.mkEnableOption "GameMode to optimise system performance on demand";
 
+      package = lib.mkPackageOption pkgs "gamemode" { };
+
       enableRenice =
         lib.mkEnableOption "CAP_SYS_NICE on gamemoded to support lowering process niceness"
         // {
@@ -53,24 +55,27 @@ in
 
   config = lib.mkIf cfg.enable {
     environment = {
-      systemPackages = [ pkgs.gamemode ];
+      systemPackages = [ cfg.package ];
       etc."gamemode.ini".source = configFile;
     };
 
     security = {
-      polkit.enable = true;
+      polkit = {
+        enable = true;
+        enablePkexecWrapper = lib.mkDefault true;
+      };
       wrappers = lib.mkIf cfg.enableRenice {
         gamemoded = {
           owner = "root";
           group = "root";
-          source = "${pkgs.gamemode}/bin/gamemoded";
+          source = "${cfg.package}/bin/gamemoded";
           capabilities = "cap_sys_nice+ep";
         };
       };
     };
 
     systemd = {
-      packages = [ pkgs.gamemode ];
+      packages = [ cfg.package ];
       user.services.gamemoded = {
         # Use pkexec from the security wrappers to allow users to
         # run libexec/cpugovctl & libexec/gpuclockctl as root with
@@ -86,6 +91,11 @@ in
             }
           ]
         );
+
+        restartTriggers = [
+          cfg.package
+          config.environment.etc."gamemode.ini".source
+        ];
 
         serviceConfig.ExecStart = lib.mkIf cfg.enableRenice [
           "" # Tell systemd to clear the existing ExecStart list, to prevent appending to it.

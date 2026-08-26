@@ -18,7 +18,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 VERSION=$1
 
 # An array of plugin names. The respective repository inside Pulumi's
-# Github organization is called pulumi-$name by convention.
+# GitHub organization is called pulumi-$name by convention.
 
 declare -a pulumi_repos
 pulumi_repos=(
@@ -139,11 +139,6 @@ EOF
   echo "    x86_64-linux = ["
   genMainSrc "linux" "x64"
   genSrcs "linux" "amd64"
-  echo "    ];"
-
-  echo "    x86_64-darwin = ["
-  genMainSrc "darwin" "x64"
-  genSrcs "darwin" "amd64"
   echo "    ];"
 
   echo "    aarch64-linux = ["

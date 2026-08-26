@@ -172,30 +172,19 @@ let
     ${lib.optionalString (cfg.useNixStoreImage) ''
       echo "Creating Nix store image..."
 
-      ${hostPkgs.gnutar}/bin/tar --create \
-        --absolute-names \
-        --verbatim-files-from \
-        --transform 'flags=rSh;s|/nix/store/||' \
-        --transform 'flags=rSh;s|~nix~case~hack~[[:digit:]]\+||g' \
-        --files-from ${
+      ${import ../../lib/erofs-store-image.nix {
+        inherit hostPkgs;
+        storePaths = "${
           hostPkgs.closureInfo {
             rootPaths = [
               config.system.build.toplevel
               regInfo
             ];
           }
-        }/store-paths \
-        | ${hostPkgs.erofs-utils}/bin/mkfs.erofs \
-          --quiet \
-          --force-uid=0 \
-          --force-gid=0 \
-          -L ${nixStoreFilesystemLabel} \
-          -U eb176051-bd15-49b7-9e6b-462e0b467019 \
-          -T 0 \
-          --hard-dereference \
-          --tar=f \
-          "$TMPDIR"/store.img
-
+        }/store-paths";
+        label = nixStoreFilesystemLabel;
+        destination = ''"$TMPDIR"/store.img'';
+      }}
       echo "Created Nix store image."
     ''}
 
@@ -399,7 +388,7 @@ in
   imports = [
     ../profiles/qemu-guest.nix
     ./disk-size-option.nix
-    ./guest-networking-options.nix
+    ./credentials-options.nix
     (mkRenamedOptionModule
       [
         "virtualisation"
@@ -431,6 +420,10 @@ in
       ]
       "Boot device is always persisted if you use a bootloader through the root disk image ; if this does not work for your usecase, please examine carefully what `virtualisation.{bootDevice, rootDevice, bootPartition}` options offer you and open an issue explaining your need.`"
     )
+    (mkRemovedOptionModule [
+      "virtualisation"
+      "useSecureBoot"
+    ] "The default OVMF now always supports Secure Boot.")
   ];
 
   options = {
@@ -552,7 +545,7 @@ in
         y = 768;
       };
       description = ''
-        The resolution of the virtual machine display.
+        The resolution of the virtual machine display (relevant only if virtualised machine uses grub bootloader).
       '';
     };
 
@@ -741,7 +734,7 @@ in
       default = pkgs;
       defaultText = literalExpression "pkgs";
       example = literalExpression ''
-        import pkgs.path { system = "x86_64-darwin"; }
+        import pkgs.path { system = "aarch64-darwin"; }
       '';
       description = ''
         Package set to use for the host-specific packages of the VM runner.
@@ -997,18 +990,7 @@ in
     };
 
     virtualisation.efi = {
-      OVMF = mkOption {
-        type = types.package;
-        default =
-          (pkgs.OVMF.override {
-            secureBoot = cfg.useSecureBoot;
-          }).fd;
-        defaultText = ''
-          (pkgs.OVMF.override {
-                    secureBoot = cfg.useSecureBoot;
-                  }).fd'';
-        description = "OVMF firmware package, defaults to OVMF configured with secure boot if needed.";
-      };
+      OVMF = lib.mkPackageOption pkgs "OVMFFull" { };
 
       firmware = mkOption {
         type = types.path;
@@ -1099,14 +1081,6 @@ in
       '';
     };
 
-    virtualisation.useSecureBoot = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Enable Secure Boot support in the EFI firmware.
-      '';
-    };
-
     virtualisation.bios = mkOption {
       type = types.nullOr types.package;
       default = null;
@@ -1127,81 +1101,20 @@ in
     };
 
     virtualisation.credentials = mkOption {
-      description = ''
-        Credentials to pass to the VM using systemd's credential system.
-
-        See {manpage}`systemd.exec(5)` , {manpage}`systemd-creds(1)` and https://systemd.io/CREDENTIALS/ for more
-        information about systemd credentials.
-      '';
-      default = { };
-      example = {
-        database-password = {
-          text = "my-secret-password";
-        };
-        ssl-cert = {
-          source = "./cert.pem";
-        };
-        binary-key = {
-          mechanism = "fw_cfg";
-          source = "./private.der";
-        };
-        config-file = {
-          mechanism = "smbios";
-          text = ''
-            [database]
-            host=localhost
-            port=5432
-          '';
-        };
-      };
       type = types.attrsOf (
-        lib.types.submodule (
-          {
-            name,
-            options,
-            config,
-            ...
-          }:
-          {
-            options = {
-              mechanism = lib.mkOption {
-                type = lib.types.enum [
-                  "fw_cfg"
-                  "smbios"
-                ];
-                default = if pkgs.stdenv.hostPlatform.isx86 then "smbios" else "fw_cfg";
-                defaultText = lib.literalExpression ''if pkgs.stdenv.hostPlatform.isx86 then "smbios" else "fw_cfg"'';
-                description = ''
-                  The mechanism used to pass the credential to the VM.
-                '';
-              };
-              source = lib.mkOption {
-                type = lib.types.nullOr (lib.types.pathWith { });
-                default = null;
-                description = ''
-                  Source file on the host containing the credential data.
-                '';
-              };
-              text = lib.mkOption {
-                default = null;
-                type = lib.types.nullOr lib.types.str;
-                description = ''
-                  Text content of the credential.
-
-                  For binary data or when the credential content should come from
-                  an existing file, use `source` instead.
-
-                  ::: {.warning}
-                  The text here is stored in the host's nix store as a file.
-                  :::
-                '';
-              };
-            };
-            config.source = lib.mkIf (config.text != null) (
-              lib.mkDerivedConfig options.text (pkgs.writeText name)
-            );
-          }
-        )
+        lib.types.submodule {
+          options.mechanism = lib.mkOption {
+            type = lib.types.enum [
+              "fw_cfg"
+              "smbios"
+            ];
+            default = if pkgs.stdenv.hostPlatform.isx86 then "smbios" else "fw_cfg";
+            defaultText = lib.literalExpression ''if pkgs.stdenv.hostPlatform.isx86 then "smbios" else "fw_cfg"'';
+            description = ''
+              The mechanism used to pass the credential to the VM.
+            '';
+          };
+        }
       );
     };
 
@@ -1308,6 +1221,8 @@ in
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
+        User = lib.mkIf (config.nix.daemonUser != "root") config.nix.daemonUser;
+        Group = lib.mkIf (config.nix.daemonGroup != "root") config.nix.daemonGroup;
       };
       script = ''
         if [[ "$(cat /proc/cmdline)" =~ regInfo=([^ ]*) ]]; then
@@ -1380,7 +1295,6 @@ in
         "-device usb-tablet,bus=usb-bus.0"
       ])
       (mkIf pkgs.stdenv.hostPlatform.isAarch [
-        "-device virtio-gpu-pci"
         "-device usb-ehci,id=usb0"
         "-device usb-kbd"
         "-device usb-tablet"

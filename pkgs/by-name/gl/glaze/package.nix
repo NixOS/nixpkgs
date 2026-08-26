@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glaze";
-  version = "7.6.0";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "stephenberry";
     repo = "glaze";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3sRWE+kEde9LVQ4mSL/2vplS2nF1BYGGIdwQHadY0uA=";
+    hash = "sha256-pPhXoPLpS4N1X3SVB6Ww+aCAo0vBA0ZD+2rhef8P+sA=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -28,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "glaze_DISABLE_SIMD_WHEN_SUPPORTED" (!enableSIMD))
     (lib.cmakeBool "glaze_ENABLE_SSL" enableSSL)
     (lib.cmakeBool "glaze_BUILD_INTEROP" enableInterop)
+    (lib.cmakeBool "glaze_ENABLE_FUZZING" (!stdenv.hostPlatform.isMusl))
   ];
 
   meta = {

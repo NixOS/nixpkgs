@@ -10,11 +10,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xstdcmap";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/xstdcmap-${finalAttrs.version}.tar.xz";
-    hash = "sha256-NlhH43k5hJnsmtmimcxHoNbn/rqVRt/U5bQiIEtawYA=";
+    hash = "sha256-BioVcidpeZUk7uVC/IKud49awYC2GCldkT80lisTT/4=";
   };
 
   strictDeps = true;

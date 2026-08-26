@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  postInstall = lib.optional stdenv.hostPlatform.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Library/Frameworks
     ln -s $out/lib/CsoundLib64.framework $out/Library/Frameworks
   '';

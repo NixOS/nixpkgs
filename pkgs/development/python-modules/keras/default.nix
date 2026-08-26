@@ -37,14 +37,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "keras";
-  version = "3.14.0";
+  version = "3.15.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "keras-team";
     repo = "keras";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EMwqo+0mIwjDY3wKW4idiAczSSPIGjTRNIYlqPDwd+w=";
+    hash = "sha256-Q4hs2pejoDambRp+HBqceO10XAqs+CTGO23QC1+kPBA=";
   };
 
   build-system = [
@@ -88,8 +89,8 @@ buildPythonPackage (finalAttrs: {
     # Require unpackaged `grain`
     "test_basics_grain"
     "test_fit_with_data_adapter_grain_dataloader"
-    "test_fit_with_data_adapter_grain_datast"
-    "test_fit_with_data_adapter_grain_datast_with_len"
+    "test_fit_with_data_adapter_grain_dataset"
+    "test_fit_with_data_adapter_grain_dataset_with_len"
     "test_image_dataset_from_directory_binary_grain"
     "test_image_dataset_from_directory_color_modes_grain"
     "test_image_dataset_from_directory_crop_to_aspect_ratio_grain"
@@ -129,6 +130,10 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTestPaths = [
+    # np.cross is deprecated for 2d arrays starting from numpy 2.5.0
+    # ValueError: Both input arrays must be (arrays of) 3-dimensional vectors, but they are 3 and 2 dimensional instead
+    "keras/src/ops/numpy_test.py::NumpyTwoInputOpsCorrectnessTest::test_cross"
+
     # Require unpackaged `grain`
     "keras/src/layers/preprocessing/data_layer_test.py"
     "keras/src/layers/preprocessing/discretization_test.py"

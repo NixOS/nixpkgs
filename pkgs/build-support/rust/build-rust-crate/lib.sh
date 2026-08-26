@@ -10,7 +10,7 @@ build_lib() {
   lib_src=$1
   echo_build_heading $lib_src ${libName}
 
-  noisily env "${CARGO_BIN_EXE_ENV[@]}" rustc \
+  noisily env "${CARGO_BIN_EXE_ENV[@]}" "${RUSTC_DRIVER:-rustc}" \
     --crate-name $CRATE_NAME \
     $lib_src \
     --out-dir target/lib \
@@ -42,7 +42,7 @@ build_bin() {
     main_file=$2
   fi
   echo_build_heading $crate_name $main_file
-  noisily env "${CARGO_BIN_EXE_ENV[@]}" rustc \
+  noisily env "${CARGO_BIN_EXE_ENV[@]}" "${RUSTC_DRIVER:-rustc}" \
     --crate-name $crate_name_ \
     $main_file \
     --crate-type bin \
@@ -58,7 +58,7 @@ build_bin() {
     $EXTRA_BUILD \
     $EXTRA_FEATURES \
     $EXTRA_RUSTC_FLAGS \
-    --color ${colors} \
+    --color ${colors} || return 1
 
   if [ "$crate_name_" != "$crate_name" ]; then
     if [ -f "$out_dir/$crate_name_.wasm" ]; then

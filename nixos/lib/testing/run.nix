@@ -35,8 +35,7 @@ let
     options = {
       devnet = mkOption {
         type = types.bool;
-        default =
-          builtins.length (lib.attrNames containers) > 0 && builtins.length (lib.attrNames nodes) > 0;
+        default = containers != { } && nodes != { };
         defaultText = lib.literalMD "`true` if both VMs and containers are present.";
         description = ''
           This heuristic setting that assumes that the majority of tests requires VMs and containers
@@ -52,14 +51,14 @@ let
       };
       uid-range = mkOption {
         type = types.bool;
-        default = builtins.length (lib.attrNames containers) > 0;
+        default = containers != { };
         defaultText = lib.literalMD "`true` if containers are present.";
         description = "Containers use systemd-nspawn, which requires pid 0 inside of the sandbox. `uid-range` enables that.";
       };
       kvm = mkOption {
         type = types.bool;
-        default = isLinux;
-        defaultText = lib.literalMD "`true` if built to run on Linux.";
+        default = isLinux && nodes != { };
+        defaultText = lib.literalMD "`true` if built to run on Linux and any virtual machines are specified.";
         description = "Whether Linux KVM virtualization is required when running this test. Can be disabled to allow emulated execution.";
       };
       apple-virt = mkOption {
@@ -150,7 +149,14 @@ in
         config.enableDebugHook -> isLinux
       ) "The debugging hook is not supported for macOS host systems!";
       {
-        name = "vm-test-run-${config.name}";
+        name =
+          let
+            inherit (config.driverConfiguration) containers vms;
+            kind = lib.concatStringsSep "-and-" (
+              (lib.optional (containers != { }) "container") ++ (lib.optional (vms != { }) "vm")
+            );
+          in
+          "${kind}-test-run-${config.name}";
 
         requiredSystemFeatures = lib.attrNames (lib.filterAttrs (_: v: v) config.requiredFeatures);
 

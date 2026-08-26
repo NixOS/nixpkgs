@@ -11,7 +11,6 @@
   nix-update-script,
   testers,
   matrix-tuwunel,
-  enableBlurhashing ? true,
   # upstream tuwunel enables jemalloc by default, so we follow suit
   enableJemalloc ? true,
   rust-jemalloc-sys,
@@ -21,6 +20,7 @@
   nixosTests,
   writeTextFile,
   rustc-unwrapped,
+  cacert,
 }:
 let
   rust-jemalloc-sys' = rust-jemalloc-sys.override {
@@ -44,8 +44,8 @@ let
             # The commit on the rocksdb fork, tuwunel-changes branch referenced by the upstream
             # tuwunel flake.lock:
             # https://github.com/matrix-construct/tuwunel/blob/main/flake.lock#L557C17-L557C57
-            rev = "9a3a213b55df0b11408102c899a940675c0d90e4";
-            hash = "sha256-aOV/jJjRjNJ3hrRqhCsXlIz05NvEhDF/j5Q5UOQuvp8=";
+            rev = "eb79ddeff0ea32ebb8f8b69dd1df95c557328e85";
+            hash = "sha256-7hiKaIssPpqB8UTAR4ZE19pZTp09sVGOMht7sAitZAs=";
           };
           version = "tuwunel-changes";
           patches = [ ];
@@ -89,16 +89,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-tuwunel";
-  version = "1.6.1";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "matrix-construct";
     repo = "tuwunel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GIYG2fKiUSOx2aAumCZLrc4vuWj1UWJf8nXyuDdj1oI=";
+    hash = "sha256-F9zmYanxCZjXBCh3GvSBiPQC6OFyugThq88MLvhLOyA=";
   };
 
-  cargoHash = "sha256-V8byPrtgUQPri36pNtgOEtTlblxMAm90cSf8fgmx4tA=";
+  cargoHash = "sha256-TT+dGr3DD9aPWYDxLTYPK0aZpQu64Ja8z+dJJmZQho8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -127,7 +127,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildNoDefaultFeatures = true;
   # See https://github.com/matrix-construct/tuwunel/blob/main/src/main/Cargo.toml
   # for available features.
-  # We enable all default features except jemalloc, blurhashing, and io_uring, which
+  # We enable all default features except jemalloc and io_uring, which
   # we guard behind our own (default-enabled) flags.
   buildFeatures = [
     "brotli_compression"
@@ -140,7 +140,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "url_preview"
     "zstd_compression"
   ]
-  ++ lib.optional enableBlurhashing "blurhashing"
   ++ lib.optional enableJemalloc [
     "jemalloc"
     "jemalloc_conf"
@@ -150,8 +149,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [
     libredirect.hook
+    cacert
   ];
 
+  # Make sure tuwunel doesn't try to write to arbitrary
+  # directories or have DNS timeouts during `cargo test`.
   preCheck =
     let
       fakeResolvConf = writeTextFile {
@@ -165,7 +167,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
       export NIX_REDIRECTS="/etc/resolv.conf=${fakeResolvConf}"
       export TUWUNEL_DATABASE_PATH="$(mktemp -d)/smoketest.db"
     '';
+
   doCheck = true;
+
+  # 2026-06-24: Tuwunel has 16 integration tests. Cargo turns each of these
+  # into a separate binary that links in all 110 MB worth of tuwunel.  Linking
+  # 16 big binaries like this takes a really long time and was causing Hydra
+  # to time out the build during `checkPhase`.  So, we run the checks in the
+  # "debug" profile.  This reduces the build+test time on my machine from
+  # 44min to 12min.
+  checkType = "debug";
 
   passthru = {
     rocksdb = rocksdb'; # make used rocksdb version available (e.g., for backup scripts)

@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
   version = "0.7.1";
 
   src = fetchFromGitHub {
-    owner = "grafana";
+    owner = "grafana-cold-storage";
     repo = "grizzly";
     rev = "v${finalAttrs.version}";
     hash = "sha256-1caG2QIBfbCgg9TLsW4XB0w+4dqUkQEsdWwRazbWeQA=";

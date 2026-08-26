@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
 
   # build-system
   hatchling,
@@ -23,14 +24,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jupyter-collaboration";
-  version = "4.3.0";
+  version = "5.0.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jupyterlab";
     repo = "jupyter-collaboration";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m9ABwJFZgoVZ5tqOh8q5qYA8F4V/aTL+9cjjTpldf8o=";
+    hash = "sha256-Gho8ndF8SU1AWJUlcuw2a/kHD2zu7vH/z4QV8drDrP0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/projects/jupyter-collaboration";
@@ -60,13 +62,17 @@ buildPythonPackage (finalAttrs: {
     "-pno:cacheprovider"
   ];
 
-  preCheck = ''
-    appendToVar enabledTestPaths "$src/tests"
-  '';
+  enabledTestPaths = [
+    "../../tests"
+  ];
 
   disabledTests = [
     # Failed: Timeout (>300.0s) from pytest-timeout
     "test_document_ttl_from_settings"
+  ]
+  ++ lib.optionals (pythonOlder "3.14") [
+    # pytest.PytestUnraisableExceptionWarning: Exception ignored in: None
+    "test_dirty"
   ];
 
   __darwinAllowLocalNetworking = true;

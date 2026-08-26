@@ -8,19 +8,20 @@
   libjack2,
   libogg,
   libvorbis,
+  libsndfile,
   rtmidi,
   kdePackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.4.1";
+  version = "2.5.1";
   pname = "polyphone";
 
   src = fetchFromGitHub {
     owner = "davy7125";
     repo = "polyphone";
     tag = finalAttrs.version;
-    hash = "sha256-43EswCgNJv11Ov+4vmj2vS/yJ2atyzkRmk/SoCKYD/0=";
+    hash = "sha256-zs8fdHC1/bR2m05+SEmsMPyxATE/KHcAj57DNYt63rQ=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjack2
     libogg
     libvorbis
+    libsndfile
     kdePackages.qtsvg
     kdePackages.qtwayland
     rtmidi

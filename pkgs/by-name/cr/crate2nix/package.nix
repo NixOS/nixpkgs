@@ -7,16 +7,19 @@
   nix,
   nix-prefetch-git,
   installShellFiles,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "crate2nix";
   version = "0.15.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "crate2nix";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-SUuruvw1/moNzCZosHaa60QMTL+L9huWdsCBN6XZIic=";
   };
 
@@ -47,6 +50,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     $out/bin/crate2nix completions -s fish
     installShellCompletion --bash crate2nix.bash --zsh _crate2nix --fish crate2nix.fish
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Nix build file generator for Rust crates";

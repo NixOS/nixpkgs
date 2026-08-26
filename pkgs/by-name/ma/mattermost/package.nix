@@ -12,6 +12,9 @@
   jq,
   nixosTests,
 
+  latestVersionInfo ? null,
+  removeUserLimit ? false,
+  removeFreeBadge ? false,
   versionInfo ? {
     # ESR releases only. Note: if NixOS would release with an ESR that goes out
     # of support during the lifetime of the NixOS release, it is acceptable
@@ -23,14 +26,19 @@
     # the version regex here as well.
     #
     # Ensure you also check ../mattermostLatest/package.nix.
-    regex = "^v(11\\.[67]\\.[0-9]+)$";
-    version = "11.6.1";
-    srcHash = "sha256-0TUh5qKi64jt3YhgCTceoizOGzqyt70Rh8VH+bSfS5o=";
-    vendorHash = "sha256-bWl1rdVRTOJzS2HKKsSRhzVcH1sPgEAlRLjrc+/o0lo=";
-    npmDepsHash = "sha256-30xwoizNh6fAWS0YdEheXtcO6I9MjoFdCekvLnnoBMc=";
+    regex = "^v(11\\.7\\.[0-9]+)$";
+    version = "11.7.8";
+    srcHash = "sha256-HH+LioMTxu0+VLr6+fpa/O9YduChIF0ieSgMBaS91uc=";
+    vendorHash = "sha256-FytvnZcPStztvUJLEnC3DUeyhmYWKP+/8xqv4suDZNE=";
+    npmDepsHash = "sha256-d1X33SV0c1l0e9fCIWEx7opeWByyovj0zNs+aGddRJc=";
   },
   ...
 }:
+
+assert lib.warnIf (latestVersionInfo != null && (removeUserLimit || removeFreeBadge)) ''
+  The user limit and free badge patches are not tested with this Mattermost version
+  (${latestVersionInfo.version}).
+'' true;
 
 let
   /*
@@ -87,16 +95,27 @@ let
         };
     in
     finalPassthru.withoutTests;
+
+  versionInfo' =
+    if
+      latestVersionInfo != null && lib.versionAtLeast latestVersionInfo.version versionInfo.version
+    then
+      # Prefer the latest if we're building mattermostLatest
+      latestVersionInfo
+    else
+      # Prefer the one we have
+      assert versionInfo != null;
+      versionInfo;
 in
 buildMattermost rec {
   pname = "mattermost";
-  inherit (versionInfo) version;
+  inherit (versionInfo') version;
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "mattermost";
     tag = "v${version}";
-    hash = versionInfo.srcHash;
+    hash = versionInfo'.srcHash;
     postFetch = ''
       cd $out/webapp
 
@@ -107,13 +126,13 @@ buildMattermost rec {
       ' < package-lock.json > package-lock.fixed.json
 
       # Run the lockfile overlay, if present.
-      ${lib.optionalString (versionInfo.lockfileOverlay or null != null) ''
+      ${lib.optionalString (versionInfo'.lockfileOverlay or null != null) ''
         ${lib.getExe jq} ${lib.escapeShellArg ''
           # Unlock a dependency and let npm-lockfile-fix relock it.
           def unlock(root; dependency; path):
             root | .packages[path] |= del(.resolved, .integrity)
                  | .packages[path].version = root.packages.channels.dependencies[dependency];
-          ${versionInfo.lockfileOverlay}
+          ${versionInfo'.lockfileOverlay}
         ''} < package-lock.fixed.json > package-lock.overlaid.json
         mv package-lock.overlaid.json package-lock.fixed.json
       ''}
@@ -124,26 +143,34 @@ buildMattermost rec {
     '';
   };
 
+  patches = lib.optionals removeUserLimit [
+    ./mattermost-remove-user-limit.patch
+  ];
+
   # Needed because buildGoModule does not support go workspaces yet.
   # We use go 1.22's workspace vendor command, which is not yet available
   # in the default version of go used in nixpkgs, nor is it used by upstream:
   # https://github.com/mattermost/mattermost/issues/26221#issuecomment-1945351597
   overrideModAttrs = _: {
     buildPhase = ''
+      runHook preBuild
+
       make setup-go-work
       go work vendor -e -v
+
+      runHook postBuild
     '';
   };
 
   npmDeps = fetchNpmDeps {
     inherit src;
     sourceRoot = "${src.name}/webapp";
-    hash = versionInfo.npmDepsHash;
+    hash = versionInfo'.npmDepsHash;
     makeCacheWritable = true;
     forceGitDeps = true;
   };
 
-  inherit (versionInfo) vendorHash;
+  inherit (versionInfo') vendorHash;
 
   modRoot = "./server";
   preBuild = ''
@@ -188,9 +215,14 @@ buildMattermost rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     for subPackage in $subPackages; do
+      echo "Checking version for: $subPackage" >&2
       "$out/bin/$(basename -- "$subPackage")" version | grep "$version"
     done
+
+    runHook postInstallCheck
   '';
 
   passthru = {
@@ -198,11 +230,11 @@ buildMattermost rec {
       extraArgs = [
         "--use-github-releases"
         "--version-regex"
-        versionInfo.regex
+        versionInfo'.regex
       ]
-      ++ lib.optionals (versionInfo.autoUpdate or null != null) [
+      ++ lib.optionals (versionInfo'.autoUpdate or null != null) [
         "--override-filename"
-        versionInfo.autoUpdate
+        versionInfo'.autoUpdate
       ];
     };
     tests.mattermost = nixosTests.mattermost;
@@ -216,6 +248,10 @@ buildMattermost rec {
       inherit version src;
 
       sourceRoot = "${src.name}/webapp";
+
+      patches = lib.optionals removeFreeBadge [
+        ./mattermost-remove-free-banner.patch
+      ];
 
       # Remove deprecated image-webpack-loader causing build failures
       # See: https://github.com/tcoopman/image-webpack-loader#deprecated
@@ -234,8 +270,10 @@ buildMattermost rec {
       buildPhase = ''
         runHook preBuild
 
-        for ws in platform/{types,client,components,shared} channels; do
-          npm run build --workspace="$ws"
+        for ws in platform/{types,client,shared,components} channels; do
+          if [ -d "$ws" ]; then
+            npm run build --workspace="$ws"
+          fi
         done
 
         runHook postBuild

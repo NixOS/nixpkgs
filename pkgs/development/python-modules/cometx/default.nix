@@ -13,21 +13,24 @@
   urllib3,
   zipfile2,
   tqdm,
+  reportlab,
+  streamlit,
+  boto3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cometx";
-  version = "3.4.3";
-
+  version = "3.6.9";
   pyproject = true;
-  build-system = [ setuptools ];
 
   src = fetchFromGitHub {
     owner = "comet-ml";
     repo = "cometx";
-    tag = version;
-    hash = "sha256-Wb4En/fTXeC5kvOIVAQzKxl8HXyOYvG4OGWhKhrAP6g=";
+    tag = finalAttrs.version;
+    hash = "sha256-pt+aa4FgPl7Rm+Xr0AglSZtmbXx8cOeh5xTptLHmMF0=";
   };
+
+  build-system = [ setuptools ];
 
   dependencies = [
     comet-ml
@@ -40,6 +43,9 @@ buildPythonPackage rec {
     urllib3
     zipfile2
     tqdm
+    reportlab
+    streamlit
+    boto3
   ];
 
   # WARNING: Running the tests will create experiments, models, assets, etc.
@@ -51,9 +57,9 @@ buildPythonPackage rec {
   meta = {
     description = "Open source extensions for the Comet SDK";
     homepage = "https://github.com/comet-ml/comet-sdk-extensions/";
-    changelog = "https://github.com/comet-ml/cometx/releases/tag/${src.tag}";
+    changelog = "https://github.com/comet-ml/cometx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jherland ];
     mainProgram = "cometx";
   };
-}
+})

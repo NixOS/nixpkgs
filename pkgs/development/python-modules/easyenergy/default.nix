@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "easyenergy";
-  version = "3.0.0";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-easyenergy";
     tag = "v${version}";
-    hash = "sha256-aCRXL//hGJyG1eIonz/HJqFyG9eGKOoFhd6yD5zAR3s=";
+    hash = "sha256-GzsTAm5D0DVQ7OHfsCwn7Jdv1K1rEhz3KGuERRlTEmI=";
   };
 
   postPatch = ''

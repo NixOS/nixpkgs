@@ -32,7 +32,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-TirYLziPa1xRm7D54Unl5oVjsnsv6Gl0LRVUXzd9o/E=";
   };
 
-  pythonRelaxDeps = [ "typer" ];
+  pythonRelaxDeps = [
+    "cryptography"
+    "rich"
+    "typer"
+  ];
 
   build-system = [
     hatch-vcs

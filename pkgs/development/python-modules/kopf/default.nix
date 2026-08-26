@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "kopf";
-  version = "1.44.5";
+  version = "1.44.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nolar";
     repo = "kopf";
     tag = version;
-    hash = "sha256-iwAq06qXtD3c0otC1S9TfRPDpc54y/NJQpJ7X8dCgGI=";
+    hash = "sha256-ffBdauplO1WkrXcsJuCKBhlkXpoinFqRU24uSoDQIm0=";
   };
 
   build-system = [

@@ -27,11 +27,25 @@
 
   # ----------------------------
   # The following  arguments form the "interface" of `pkgs.vmTools`.
-  # Note that `img` is a real package, but is set to this default in `all-packages.nix`.
   # ----------------------------
   customQemu ? null,
   kernel ? linux,
-  img ? stdenv.hostPlatform.linux-kernel.target,
+  # Name of the kernel image file inside the `kernel` output.
+  kernelImage ?
+    kernel.target or (throw ''
+      vmTools: the `kernel` argument (${kernel.name or "<unknown>"}) has no
+      `target` attribute, so the kernel image filename cannot be determined.
+
+      If you are passing a module tree (e.g. from `pkgs.aggregateModules`) to
+      make extra modules available, pass it via `kernelModules` instead and
+      keep `kernel` pointing at a real kernel derivation. Alternatively, pass
+      `kernelImage` explicitly with the path of the bootable image relative
+      to the `kernel` derivation output (e.g. "bzImage" or "Image").
+    ''),
+  # Package providing `lib/modules` for the VM initrd. Override this (e.g.
+  # with `pkgs.aggregateModules [ ... ]`) to make extra kernel modules
+  # available inside the VM without replacing the boot kernel.
+  kernelModules ? kernel,
   storeDir ? builtins.storeDir,
   rootModules ? [
     "virtio_pci"
@@ -51,9 +65,9 @@ let
   qemu = buildPackages.qemu_kvm;
 
   modulesClosure = makeModulesClosure {
-    kernel = lib.getOutput "modules" kernel;
+    kernel = lib.getOutput "modules" kernelModules;
     inherit rootModules;
-    firmware = kernel;
+    firmware = kernelModules;
   };
 
   hd = "vda"; # either "sda" or "vda"
@@ -221,7 +235,7 @@ let
     fi
 
     # Set up automatic kernel module loading.
-    export MODULE_DIR=${lib.getOutput "modules" kernel}/lib/modules/
+    export MODULE_DIR=${lib.getOutput "modules" kernelModules}/lib/modules/
     ${coreutils}/bin/cat <<EOF > /run/modprobe
     #! ${bash}/bin/sh
     export MODULE_DIR=$MODULE_DIR
@@ -261,7 +275,7 @@ let
       -chardev socket,id=xchg,path=virtio-xchg.sock \
       -device vhost-user-fs-pci,chardev=xchg,tag=xchg \
       ''${diskImage:+-drive file=$diskImage,if=virtio,cache=unsafe,werror=report} \
-      -kernel ${kernel}/${img} \
+      -kernel ${kernel}/${kernelImage} \
       -initrd ${initrd}/initrd \
       -append "console=${qemu-common.qemuSerialDevice} panic=1 command=${stage2Init} mountDisk=$mountDisk loglevel=4" \
       $QEMU_OPTS
@@ -418,7 +432,7 @@ let
         name = "extract-file";
         buildInputs = [ util-linux ];
         buildCommand = ''
-          ln -s ${kernel}/lib /lib
+          ln -s ${kernelModules}/lib /lib
           ${kmod}/bin/modprobe loop
           ${kmod}/bin/modprobe ext4
           ${kmod}/bin/modprobe hfs
@@ -450,7 +464,7 @@ let
           mtdutils
         ];
         buildCommand = ''
-          ln -s ${kernel}/lib /lib
+          ln -s ${kernelModules}/lib /lib
           ${kmod}/bin/modprobe mtd
           ${kmod}/bin/modprobe mtdram total_size=131072
           ${kmod}/bin/modprobe mtdchar
@@ -731,7 +745,7 @@ let
             ;
 
           debsFlat = lib.flatten debs;
-          debsGrouped = debs;
+          debsGrouped = map toString debs;
 
           preVM = createEmptyImage { inherit size fullName; };
 
@@ -859,7 +873,7 @@ let
               ;;
           esac
         '') packagesLists}
-        perl -w ${rpm/rpm-closure.pl} \
+        perl -w ${./rpm/rpm-closure.pl} \
           ${
             lib.concatImapStrings (i: pl: "./packages_${toString i}.xml ${pl.snd} ") (
               lib.zipLists packagesLists urlPrefixes
@@ -959,7 +973,7 @@ let
           esac
         done
 
-        perl -w ${deb/deb-closure.pl} \
+        perl -w ${./deb/deb-closure.pl} \
           ./Packages ${urlPrefix} ${toString packages} > $out
         nixfmt $out
       '';
@@ -1327,6 +1341,42 @@ let
         })
       ];
       urlPrefix = "https://snapshot.ubuntu.com/ubuntu/20260101T000000Z";
+      packages = commonDebPackages ++ [
+        "diffutils"
+        "libc-bin"
+      ];
+    };
+
+    ubuntu2604x86_64 = {
+      name = "ubuntu-26.04-resolute-amd64";
+      fullName = "Ubuntu 26.04 Resolute (amd64)";
+      packagesLists = [
+        (fetchurl {
+          url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute/main/binary-amd64/Packages.xz";
+          hash = "sha256-7ZrEHLJj767MWgagdC3FZXDi+1/5TE8uSy+9zd1zzyQ=";
+        })
+        (fetchurl {
+          url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute/universe/binary-amd64/Packages.xz";
+          hash = "sha256-FYe+htZtOFQjJSFeDhCfdb1pXI8k15Os4nYgOKatWB4=";
+        })
+        (fetchurl {
+          url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute-updates/main/binary-amd64/Packages.xz";
+          hash = "sha256-xaUdPgtH3jCgTJXYUbksMHvzt6jj6YfdzSAb+91tQNw=";
+        })
+        (fetchurl {
+          url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute-updates/universe/binary-amd64/Packages.xz";
+          hash = "sha256-gXEKlgpgyrcnIhYwz1vxypFNX50EMbwhmidbDvUruKc=";
+        })
+        (fetchurl {
+          url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute-security/main/binary-amd64/Packages.xz";
+          hash = "sha256-tzAvbwp+/6snpL8TtbtTx2kEL2f+XfGAwDCl/r6ka6Y=";
+        })
+        (fetchurl {
+          url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute-security/universe/binary-amd64/Packages.xz";
+          hash = "sha256-gXEKlgpgyrcnIhYwz1vxypFNX50EMbwhmidbDvUruKc=";
+        })
+      ];
+      urlPrefix = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z";
       packages = commonDebPackages ++ [
         "diffutils"
         "libc-bin"

@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "saucectl";
-  version = "0.198.0";
+  version = "0.213.0";
 
   src = fetchFromGitHub {
     owner = "saucelabs";
     repo = "saucectl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l9iiMyL1OgjmWj2qbzQAobi+DFoecueaRP2SV6KGbn4=";
+    hash = "sha256-h4NQA9ODSqNg7nds9zp9Gv3iFA5dI+hujcaBa1hLKt8=";
   };
 
   ldflags = [
@@ -20,7 +20,7 @@ buildGoModule (finalAttrs: {
     "-X github.com/saucelabs/saucectl/internal/version.GitCommit=${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-n/GblPFolUD+noxGI4yZbOGdAUxM0DXtpCybS+E0k3I=";
+  vendorHash = "sha256-931KJUQq/eSqssDKJa5mL33TLBwBFbz4DT1RDZIiC9Y=";
 
   checkFlags = [ "-skip=^TestNewRequestWithContext$" ];
 

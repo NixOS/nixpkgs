@@ -1,0 +1,321 @@
+{
+  channel,
+  pname,
+  version,
+  sources,
+  meta,
+}:
+
+{
+  alsa-lib,
+  runtimeShell,
+  buildFHSEnv,
+  cacert,
+  coreutils,
+  dbus,
+  e2fsprogs,
+  expat,
+  fetchurl,
+  findutils,
+  file,
+  fontsConf,
+  git,
+  gnugrep,
+  gnused,
+  gnutar,
+  gtk3,
+  glib,
+  gzip,
+  fontconfig,
+  freetype,
+  libbsd,
+  libpulseaudio,
+  libGL,
+  libdrm,
+  libpng,
+  libuuid,
+  libsecret,
+  libx11,
+  libxcb,
+  libxkbcommon,
+  mesa-demos,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxcb-cursor,
+  libxkbfile,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
+  makeWrapper,
+  ncurses5,
+  nspr,
+  nss_latest,
+  pciutils,
+  pkgsi686Linux,
+  ps,
+  setxkbmap,
+  lib,
+  stdenv,
+  systemd,
+  unzip,
+  usbutils,
+  which,
+  runCommand,
+  wayland,
+  xkeyboard_config,
+  libsm,
+  libice,
+  zlib,
+  makeDesktopItem,
+  tiling_wm, # if we are using a tiling wm, need to set _JAVA_AWT_WM_NONREPARENTING in wrapper
+  androidenv,
+
+  forceWayland ? false,
+}:
+
+let
+  filename = "android-studio-${version}-linux.tar.gz";
+  source = sources.${stdenv.hostPlatform.system};
+
+  androidStudio = stdenv.mkDerivation {
+    pname = "${pname}-unwrapped";
+    inherit version;
+
+    src = fetchurl {
+      inherit (source) url;
+      sha256 = source.sha256Hash;
+    };
+
+    nativeBuildInputs = [
+      unzip
+      makeWrapper
+    ];
+
+    # Causes the shebangs in interpreter scripts deployed to mobile devices to be patched, which Android does not understand
+    dontPatchShebangs = true;
+
+    installPhase = ''
+      cp -r . $out
+      wrapProgram $out/bin/studio \
+        --set-default JAVA_HOME "$out/jbr" \
+        --set ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
+        --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
+        ${lib.optionalString tiling_wm "--set _JAVA_AWT_WM_NONREPARENTING 1"} \
+        --set FONTCONFIG_FILE ${fontsConf} \
+        --prefix PATH : "${
+          lib.makeBinPath [
+
+            # Checked in studio.sh
+            coreutils
+            findutils
+            gnugrep
+            which
+            gnused
+
+            # For Android emulator
+            file
+            mesa-demos
+            pciutils
+            setxkbmap
+
+            # Used during setup wizard
+            gnutar
+            gzip
+
+            # Runtime stuff
+            git
+            ps
+            usbutils
+            libsecret
+          ]
+        }" \
+        --prefix LD_LIBRARY_PATH : "${
+          lib.makeLibraryPath [
+
+            # Crash at startup without these
+            fontconfig
+            freetype
+            libxext
+            libxi
+            libxrender
+            libxtst
+            libsecret
+
+            # No crash, but attempted to load at startup
+            e2fsprogs
+
+            # Gradle wants libstdc++.so.6
+            (lib.getLib stdenv.cc.cc)
+            # mksdcard wants 32 bit libstdc++.so.6
+            pkgsi686Linux.stdenv.cc.cc.lib
+
+            # aapt wants libz.so.1
+            zlib
+            pkgsi686Linux.zlib
+            # Support multiple monitors
+            libxrandr
+
+            # For Android emulator
+            alsa-lib
+            dbus
+            expat
+            libbsd
+            libpulseaudio
+            libuuid
+            libx11
+            libxcb
+            libxkbcommon
+            libxcb-wm
+            libxcb-render-util
+            libxcb-keysyms
+            libxcb-image
+            libxcb-cursor
+            libice
+            libsm
+            libxkbfile
+            libxcomposite
+            libxcursor
+            libxdamage
+            libxfixes
+            libGL
+            libdrm
+            libpng
+            nspr
+            nss_latest
+            systemd
+
+            # For GTKLookAndFeel
+            gtk3
+            glib
+
+            # For wayland support
+            wayland
+          ]
+        }" \
+        ${lib.optionalString forceWayland "--add-flags -Dawt.toolkit.name=WLToolkit"}
+
+      # AS launches LLDBFrontend with a custom LD_LIBRARY_PATH
+      wrapProgram $(find $out -name LLDBFrontend) --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          ncurses5
+          zlib
+        ]
+      }"
+    '';
+    meta.mainProgram = "studio";
+  };
+
+  desktopItem = makeDesktopItem {
+    name = pname;
+    exec = pname;
+    icon = pname;
+    desktopName = "Android Studio (${channel} channel)";
+    comment = "The official Android IDE";
+    categories = [
+      "Development"
+      "IDE"
+    ];
+    startupNotify = true;
+    startupWMClass = "jetbrains-studio";
+  };
+
+  # Android Studio downloads prebuilt binaries as part of the SDK. These tools
+  # (e.g. `mksdcard`) have `/lib/ld-linux.so.2` set as the interpreter. An FHS
+  # environment is used as a work around for that.
+  fhsEnv = buildFHSEnv {
+    pname = "${pname}-fhs-env";
+    inherit version;
+    multiPkgs = pkgs: [
+      ncurses5
+
+      # Flutter can only search for certs Fedora-way.
+      (runCommand "fedoracert" { } ''
+        mkdir -p $out/etc/pki/tls/
+        ln -s ${cacert}/etc/ssl/certs $out/etc/pki/tls/certs
+      '')
+    ];
+  };
+  mkAndroidStudioWrapper =
+    {
+      androidStudio,
+      androidSdk ? null,
+    }:
+    runCommand "${pname}-${version}"
+      {
+        inherit pname version;
+        startScript =
+          let
+            hasAndroidSdk = androidSdk != null;
+            androidHome = lib.optionalString hasAndroidSdk "${androidSdk}/libexec/android-sdk";
+          in
+          ''
+            #!${runtimeShell}
+            ${lib.optionalString hasAndroidSdk ''
+              echo "=== nixpkgs Android Studio wrapper" >&2
+
+              # Default ANDROID_HOME to the packaged one, if not provided.
+              ANDROID_HOME="''${ANDROID_HOME-${androidHome}}"
+
+              if [ -d "$ANDROID_HOME" ]; then
+                export ANDROID_HOME
+                echo "  - ANDROID_HOME=$ANDROID_HOME" >&2
+
+                # Legacy compatibility.
+                export ANDROID_SDK_ROOT="$ANDROID_HOME"
+
+                # See if we can export ANDROID_NDK_ROOT too.
+                ANDROID_NDK_ROOT="$ANDROID_SDK_ROOT/ndk-bundle"
+                if [ ! -d "$ANDROID_NDK_ROOT" ]; then
+                  ANDROID_NDK_ROOT="$(ls "$ANDROID_SDK_ROOT/ndk/"* 2>/dev/null | head -n1)"
+                fi
+
+                if [ -d "$ANDROID_NDK_ROOT" ]; then
+                  export ANDROID_NDK_ROOT
+                  echo "  - ANDROID_NDK_ROOT=$ANDROID_NDK_ROOT" >&2
+                else
+                  unset ANDROID_NDK_ROOT
+                fi
+              else
+                unset ANDROID_HOME
+                unset ANDROID_SDK_ROOT
+              fi
+            ''}
+            exec ${lib.getExe fhsEnv} ${lib.getExe androidStudio} "$@"
+          '';
+        preferLocalBuild = true;
+        allowSubstitutes = false;
+        passthru =
+          let
+            withSdk = androidSdk: mkAndroidStudioWrapper { inherit androidStudio androidSdk; };
+          in
+          {
+            unwrapped = androidStudio;
+            full = withSdk androidenv.androidPkgs.androidsdk;
+            inherit withSdk;
+            sdk = androidSdk;
+            updateScript = [
+              ./update.sh
+              "${channel}"
+            ];
+          };
+        inherit meta;
+      }
+      ''
+        mkdir -p $out/{bin,share/pixmaps}
+
+        echo -n "$startScript" > $out/bin/${pname}
+        chmod +x $out/bin/${pname}
+
+        ln -s ${androidStudio}/bin/studio.png $out/share/pixmaps/${pname}.png
+        ln -s ${desktopItem}/share/applications $out/share/applications
+      '';
+in
+mkAndroidStudioWrapper { inherit androidStudio; }

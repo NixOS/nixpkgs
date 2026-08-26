@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ngtcp2";
-  version = "1.22.0";
+  version = "1.23.0";
 
   src = fetchurl {
     url = "https://github.com/ngtcp2/ngtcp2/releases/download/v${finalAttrs.version}/ngtcp2-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-P+q2i4PqGpbXur+mxvYYaYmJ2+HAm9dglpuCJ429GGM=";
+    hash = "sha256-3kuZ/8kNm5V0TESg2rYcnyqYSLiBuP3rl0rrXqEIAso=";
   };
 
   outputs = [
@@ -35,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ]
   ++ lib.optional withJemalloc jemalloc;
+
+  strictDeps = true;
 
   cmakeFlags = [
     # The examples try to link against `ngtcp2_crypto_ossl` and `ngtcp2` libraries.
@@ -55,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit curl;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/ngtcp2/ngtcp2";

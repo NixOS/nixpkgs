@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pyads";
-  version = "3.5.2";
+  version = "3.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stlehmann";
     repo = "pyads";
     tag = version;
-    hash = "sha256-mXWLVWzgdWIDpzfBLITLz5olhitkcp/QDrlFj2YMYLw=";
+    hash = "sha256-v36T8CEEgKvw5XRg0WPTUoGMa9uKDrea/9MJY3+WsP8=";
   };
 
   build-system = [ setuptools ];
@@ -43,6 +43,12 @@ buildPythonPackage rec {
 
   # Test suite has port reuse races and UDP timing issues on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
+
+  disabledTests = [
+    # Race over UDP 48899 (no SO_REUSEADDR), occasionally segfaulting on shutdown
+    "test_correct_route"
+    "test_get_ams"
+  ];
 
   pythonImportsCheck = [ "pyads" ];
 

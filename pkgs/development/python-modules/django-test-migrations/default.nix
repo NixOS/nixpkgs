@@ -19,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django-test-migrations";
-  version = "1.5.0";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wemake-services";
     repo = "django-test-migrations";
     tag = finalAttrs.version;
-    hash = "sha256-mYDGGfkLo+GMgItCje46KtXdPsedawRKXLbRnD+CC+8=";
+    hash = "sha256-xct4gtppdzNmmaEs0R37bWoXe92CI9WsRs4adkNKDBE=";
   };
 
   build-system = [

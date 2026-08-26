@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
     sha256 = "0wh06nix8bd4w1aq4k2fbbkdq5i30a9lxz3xczf3ff28yy0kfwzm";
   };
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  };
+
   postPatch = ''
     patchShebangs tests
   '';

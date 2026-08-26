@@ -23,11 +23,13 @@ let
   crossSupport = rec {
     emulator = stdenv.hostPlatform.emulator buildPackages;
 
-    needsExternalInterpreterSetup = !stdenv.hostPlatform.isGhcjs; # JS backend already handles this
+    # Both backends provide their own interpreter.
+    needsExternalInterpreterSetup = !stdenv.hostPlatform.isGhcjs && !stdenv.hostPlatform.isWasm;
 
     canProxyTH =
-      # iserv-proxy currently does not build on GHC 9.6
-      lib.versionAtLeast ghc.version "9.8" && stdenv.hostPlatform.emulatorAvailable buildPackages;
+      # Using iserv-proxy with 9.4 yields
+      #   no location info>: error: Dynamic loading not supported
+      lib.versionAtLeast ghc.version "9.6" && stdenv.hostPlatform.emulatorAvailable buildPackages;
 
     iservWrapper =
       let
@@ -45,14 +47,8 @@ let
           in
           buildPackages.writeShellScriptBin ("iserv-wrapper" + lib.optionalString enableProfiling "-prof") ''
             set -euo pipefail
-            PORT=$((5000 + $RANDOM % 5000))
             ${lib.optionalString stdenv.hostPlatform.isWindows "export WINEDEBUG=-all WINEPREFIX=$TMP"}
-            (>&2 echo "---> Starting interpreter on port $PORT")
-            ${emulator} ${hostProxy} tmp $PORT &
-            RISERV_PID="$!"
-            trap "kill $RISERV_PID" EXIT # Needs cleanup when building without sandbox
-            ${buildProxy} $@ 127.0.0.1 "$PORT"
-            (>&2 echo "---> killing interpreter...")
+            ${buildProxy} $@ --pipe ${emulator} ${hostProxy} tmp --stdio
           '';
 
         # GHC will add `-prof` to the external interpreter when doing a profiled build.
@@ -126,7 +122,9 @@ in
   doHaddockQuickjump ? doHoogle,
   doInstallIntermediates ? false,
   editedCabalFile ? null,
-  enableLibraryProfiling ? !stdenv.hostPlatform.isGhcjs,
+  # Cabal does not build the profiled dynamic objects required by wasm TH.
+  enableLibraryProfiling ?
+    !stdenv.hostPlatform.isGhcjs && !stdenv.hostPlatform.isWasm && (ghc.enableProfiledLibs or true),
   enableExecutableProfiling ? false,
   profilingDetail ? "exported-functions",
   # TODO enable shared libs for cross-compiling
@@ -261,8 +259,7 @@ in
   __onlyPropagateKnownPkgConfigModules ? false,
   enableExternalInterpreter ?
     isCross && crossSupport.canProxyTH && crossSupport.needsExternalInterpreterSetup,
-  # iserv-proxy needs local network access
-  __darwinAllowLocalNetworking ? stdenv.hostPlatform.isDarwin && enableExternalInterpreter,
+  __darwinAllowLocalNetworking ? false,
 }@args:
 
 assert editedCabalFile != null -> revision != null;
@@ -355,6 +352,7 @@ let
     "--with-hsc2hs=${ghc.targetPrefix}hsc2hs"
     "--with-strip=${stdenv.cc.bintools.targetPrefix}strip"
   ]
+  ++ optional doHaddock "--with-haddock=${ghc.targetPrefix}haddock"
   ++ optionals (!isHaLVM) [
     "--hsc2hs-option=--cross-compile"
     (optionalString enableHsc2hsViaAsm "--hsc2hs-option=--via-asm")
@@ -530,7 +528,7 @@ let
   )
   ++ setupHaskellDepends
   ++ collectedToolDepends
-  ++ optional stdenv.hostPlatform.isGhcjs nodejs;
+  ++ optional (stdenv.hostPlatform.isGhcjs || stdenv.hostPlatform.isWasm) nodejs;
   propagatedBuildInputs =
     buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends ++ libraryFrameworkDepends;
   otherBuildInputsHaskell =
@@ -1140,8 +1138,8 @@ lib.fix (
     // optionalAttrs (disallowedRequisites != [ ] || disallowGhcReference) {
       disallowedRequisites = disallowedRequisites ++ (if disallowGhcReference then [ ghc ] else [ ]);
     }
-    // optionalAttrs (__darwinAllowLocalNetworking || args ? __darwinLocalNetworking) {
-      __darwinAllowLocalNetworking = true;
+    // optionalAttrs (__darwinAllowLocalNetworking || args ? __darwinAllowLocalNetworking) {
+      inherit __darwinAllowLocalNetworking;
     }
   )
 )

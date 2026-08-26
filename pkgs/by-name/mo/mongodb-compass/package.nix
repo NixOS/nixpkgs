@@ -52,7 +52,7 @@
 
 let
   pname = "mongodb-compass";
-  version = "1.49.5";
+  version = "1.49.14";
 
   selectSystem =
     attrs:
@@ -62,14 +62,12 @@ let
     url = "https://downloads.mongodb.com/compass/${
       selectSystem {
         x86_64-linux = "mongodb-compass_${version}_amd64.deb";
-        x86_64-darwin = "mongodb-compass-${version}-darwin-x64.zip";
         aarch64-darwin = "mongodb-compass-${version}-darwin-arm64.zip";
       }
     }";
     hash = selectSystem {
-      x86_64-linux = "sha256-CuNY+hzTF2jxZEMSOZkiexGw+1QSGmZ8HDPbD4CGnqU=";
-      x86_64-darwin = "sha256-qbNnu6HK7ajKaXak3raOj1xAlE2bUqN9SsGcs+YbjE8=";
-      aarch64-darwin = "sha256-+ECujuOErLrwJ3j/7SbjgCHTh9QxmDFj8G52IhWOR3E=";
+      x86_64-linux = "sha256-PrpL72+fbCa/C0JpbxGiEBtAEoEvvZhy9FIkJhq0g0g=";
+      aarch64-darwin = "sha256-dW99BE4w9uzGGTNb47h4RuVrGlMi0b0dklAsV/6MY3g=";
     };
   };
 
@@ -121,13 +119,16 @@ in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    dpkg
-    wrapGAppsHook3
-    patchelf
-  ];
+  __structuredAttrs = true;
+  strictDeps = true;
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ unzip ];
+  nativeBuildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      dpkg
+      wrapGAppsHook3
+      patchelf
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ unzip ];
 
   dontUnpack = stdenv.hostPlatform.isLinux;
   dontFixup = stdenv.hostPlatform.isDarwin;
@@ -158,7 +159,8 @@ stdenv.mkDerivation (finalAttrs: {
       patchelf --set-rpath ${rpath}:$out/lib/mongodb-compass "$file" || true
     done
 
-    wrapGAppsHook $out/bin/mongodb-compass
+    gappsWrapperArgsHook
+    wrapGApp "$out/bin/mongodb-compass"
   '';
 
   installPhase = ''
@@ -187,6 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "GUI for MongoDB";
     homepage = "https://github.com/mongodb-js/compass";
+    changelog = "https://github.com/mongodb-js/compass/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.sspl;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "mongodb-compass";
@@ -197,7 +200,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
   };
 })

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   replaceVars,
   cmdstan,
   setuptools,
@@ -29,6 +30,15 @@ buildPythonPackage (finalAttrs: {
   patches = [
     (replaceVars ./use-nix-cmdstan-path.patch {
       cmdstan = "${cmdstan}/opt/cmdstan";
+    })
+    # Fix tests for cmdstan 2.39.0
+    (fetchpatch {
+      url = "https://github.com/stan-dev/cmdstanpy/commit/5ef72db67660b8fb0ea0ba25bef9667e88aafc5f.patch";
+      hash = "sha256-BZcJiRAluItsfzvGJ2yJVDHuUp92AI19x7d06wRGzY4=";
+    })
+    (fetchpatch {
+      url = "https://github.com/stan-dev/cmdstanpy/commit/f08c69835d2d4a69c7e526d939757b8f609da8f6.patch";
+      hash = "sha256-3o8d5h0eRkghav2vuG6eERf6u6GJSKEaqmnGhfBXbjk=";
     })
   ];
 

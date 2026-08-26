@@ -6,27 +6,24 @@
   copyDesktopItems,
   stdenv,
   makeWrapper,
-  fetchpatch,
   replaceVars,
-  pnpm,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
-  rustPlatform,
   nodejs,
   electron,
   jq,
   tsx,
   python3,
-  git,
   cmake,
-  openssl,
-  tcl,
   xcodebuild,
   cctools,
   darwin,
 }:
 
 let
+  pnpm = pnpm_10;
+
   fake-git = writeShellScriptBin "git" (lib.readFile ./fake-git.sh);
 
   libsession-util-nodejs = stdenv.mkDerivation (finalAttrs: {
@@ -249,6 +246,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    broken = true;
     description = "Onion routing based messenger";
     mainProgram = "session-desktop";
     homepage = "https://getsession.org/";

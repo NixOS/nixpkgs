@@ -8,16 +8,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "chirpstack-gateway-mesh";
-  version = "4.1.3";
+  version = "4.1.4";
 
   src = fetchFromGitHub {
     owner = "chirpstack";
     repo = "chirpstack-gateway-mesh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t4W2G8NzVvcGp6nmCn4Wt9OUR9c7yceKdhDFb/RAk20=";
+    hash = "sha256-rZJO36PUj1W5mO/eVjL5DXpqjMoHyiAzpH3ntkWzWso=";
   };
 
-  cargoHash = "sha256-3292/Q9OCoxkIOgOwAle37Ltozt1CDGGeXw6lqT91kU=";
+  cargoHash = "sha256-RlsacitNZUWC5hzbERudFaoPMqWdlLO5fdVU5b7ZM9M=";
 
   nativeBuildInputs = [ protobuf ];
 

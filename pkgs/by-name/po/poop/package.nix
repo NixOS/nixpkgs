@@ -2,22 +2,22 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  zig_0_13,
+  zig_0_16,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "poop";
-  version = "0.5.0";
+  version = "0.5.0-unstable-2026-05-04";
 
   src = fetchFromGitHub {
     owner = "andrewrk";
     repo = "poop";
-    tag = finalAttrs.version;
-    hash = "sha256-zrqR/TTELhsBIX42PysFsHPRs8Lx/zHcmi+VMDw1SdQ=";
+    rev = "e1a802d19a4b8267e2fa79c3ede15c09357b31c9";
+    hash = "sha256-cT9ueK4VrPR9qv4qS9suvm8P2bAywDYlxnDU183aBrA=";
   };
 
   nativeBuildInputs = [
-    zig_0_13
+    zig_0_16
   ];
 
   meta = {

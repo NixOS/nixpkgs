@@ -10,6 +10,7 @@
   cjs,
   evolution-data-server,
   fetchFromGitHub,
+  fetchpatch,
   gcr,
   gdk-pixbuf,
   gettext,
@@ -74,18 +75,24 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cinnamon";
-  version = "6.6.8";
+  version = "6.6.9";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     tag = finalAttrs.version;
-    hash = "sha256-ByPn2VV40y+3/FW/KPIsLt43FhVxQAQldCK26KNKdjw=";
+    hash = "sha256-RQsgfPvdt1xe7HhZamynAvATVlBeLLElatjpN1Tgt2M=";
   };
 
   patches = [
     ./use-sane-install-dir.patch
     ./libdir.patch
+
+    # util.js: Adapt to GIR 2.0
+    (fetchpatch {
+      url = "https://github.com/linuxmint/cinnamon/commit/3a2d558aa575f0ea364c5b4e30d2eb3ee604ee58.patch";
+      hash = "sha256-+uAGuQJ0VsIvMvPFafyoXmU4MiHfbbRXLzeW/n62ucw=";
+    })
   ];
 
   buildInputs = [
@@ -211,7 +218,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/linuxmint/cinnamon";
     description = "Cinnamon desktop environment";
-    license = [ lib.licenses.gpl2 ];
+    license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };

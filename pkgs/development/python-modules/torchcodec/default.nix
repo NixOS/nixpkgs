@@ -8,7 +8,8 @@
   pkg-config,
 
   # buildInputs
-  ffmpeg,
+  # FIXME: unpin when upstream supports ffmpeg 9
+  ffmpeg_8,
 
   # build-system
   cmake,
@@ -20,20 +21,23 @@
   torchvision,
 
   cudaSupport ? torch.cudaSupport,
-  cudaPackages,
   rocmSupport ? torch.rocmSupport,
 }:
 
+let
+  inherit (torch) cudaCapabilities cudaPackages;
+in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "torchcodec";
-  version = "0.11.1";
+  version = "0.14.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "meta-pytorch";
     repo = "torchcodec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aYQp9vEVQJgF1n/KsfnDvLQf5nD0/gsG+RAgVlhk7t8=";
+    hash = "sha256-eGof2Rk/dGYPlKVRSuJ+ZeeMh2u4K6/qXmROo187HTA=";
   };
 
   postPatch = ''
@@ -42,17 +46,17 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
       test/test_encoders.py \
       --replace-fail \
         '"ffprobe"' \
-        '"${lib.getExe' ffmpeg "ffprobe"}"'
+        '"${lib.getExe' ffmpeg_8 "ffprobe"}"'
 
     substituteInPlace test/test_encoders.py \
       --replace-fail \
         '"ffmpeg"' \
-        '"${lib.getExe ffmpeg}"'
+        '"${lib.getExe ffmpeg_8}"'
 
     substituteInPlace test/test_transform_ops.py \
       --replace-fail \
         'ffmpeg_cli = "ffmpeg"' \
-        'ffmpeg_cli = "${lib.getExe ffmpeg}"'
+        'ffmpeg_cli = "${lib.getExe ffmpeg_8}"'
   '';
 
   nativeBuildInputs = [
@@ -60,10 +64,13 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
+  ]
+  ++ lib.optionals rocmSupport [
+    torch.rocmPackages.clr
   ];
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_8
   ]
   ++ lib.optionals cudaSupport (
     with cudaPackages;
@@ -95,6 +102,9 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
     ENABLE_CUDA = cudaSupport;
   }
+  // lib.optionalAttrs cudaSupport {
+    TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" cudaCapabilities}";
+  }
   // lib.optionalAttrs rocmSupport {
     ROCM_PATH = torch.rocmtoolkit_joined;
     ROCM_SOURCE_DIR = torch.rocmtoolkit_joined;
@@ -110,7 +120,15 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   ];
 
   disabledTests =
-    lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    lib.optionals rocmSupport [
+      # HSA runtime logs topology error in sandbox breaking test that asserts no output
+      "test_python_logger"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # Fails in the sandbox:
+      # Error in cpuinfo: failed to parse the list of possible processors in /sys/devices/system/cpu/possible
+      "test_python_logger"
+
       # AssertionError: index 0
       "test_get_frames_played_at"
 

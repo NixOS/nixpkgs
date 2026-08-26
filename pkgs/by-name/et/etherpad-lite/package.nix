@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   nix-update-script,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   makeWrapper,
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "ether";
-    repo = "etherpad-lite";
+    repo = "etherpad";
     tag = "v${finalAttrs.version}";
     hash = "sha256-8DCgbfp3ttpMTXS9SNkN1R63LZHaklsNHViRhmWVFuk=";
   };
@@ -30,14 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-2nKpmGxC+KVg0oF0BsswS9L84QxzpRF7NvKyqyQ7WJM=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-scJhcZDyqUVdKv/EQvB5+EJN/SvMw220+QOcTUxTFJQ=";
   };
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
     makeWrapper
   ];
 
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${lib.getExe nodejs} $out/bin/etherpad-lite \
       --inherit-argv0 \
       --add-flags "--require tsx/cjs $out/lib/etherpad-lite/node_modules/ep_etherpad-lite/node/server.ts" \
-      --suffix PATH : "${lib.makeBinPath [ pnpm_9 ]}" \
+      --suffix PATH : "${lib.makeBinPath [ pnpm_10 ]}" \
       --set NODE_PATH "$out/lib/node_modules:$out/lib/etherpad-lite/node_modules/ep_etherpad-lite/node_modules" \
       --set-default NODE_ENV production
     find $out/lib -xtype l -delete
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
       It provides full data export capabilities, and runs on your server, under your control.
     '';
     homepage = "https://etherpad.org/";
-    changelog = "https://github.com/ether/etherpad-lite/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/ether/etherpad/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       erdnaxe
       f2k1de

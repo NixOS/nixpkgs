@@ -13,19 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "btfs";
-  version = "3.1";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "johang";
     repo = "btfs";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-JuofC4TpbZ56qiUrHeoK607YHVbwqwLGMIdUpsTm9Ic=";
+    sha256 = "sha256-g8ta5T17iKTpdR0wMQe1LU78LTIxwECmf86o4IlVF00=";
   };
-
-  patches = [
-    # https://github.com/johang/btfs/pull/103
-    ./disable-macfuse-extensions.patch
-  ];
 
   nativeBuildInputs = [
     autoreconfHook

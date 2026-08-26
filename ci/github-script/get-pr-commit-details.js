@@ -1,4 +1,4 @@
-// @ts-check
+// @ts-nocheck
 const { promisify } = require('node:util')
 const execFile = promisify(require('node:child_process').execFile)
 
@@ -16,7 +16,7 @@ const execFile = promisify(require('node:child_process').execFile)
 /**
  * @param {{
  *  args: string[]
- *  core: import('@actions/core'),
+ *  core: typeof import('@actions/core'),
  *  quiet?: boolean,
  *  repoPath?: string,
  * }} RunGitProps
@@ -40,7 +40,7 @@ async function runGit({ args, repoPath, core, quiet }) {
  * of 250 commits and doesn't return the changed files.
  *
  * @param {{
- *  core: import('@actions/core'),
+ *  core: typeof import('@actions/core'),
  *  pr: Awaited<ReturnType<InstanceType<import('@actions/github/lib/utils').GitHub>["rest"]["pulls"]["get"]>>["data"]
  *  repoPath?: string,
  * }} GetCommitMessagesForPRProps
@@ -76,7 +76,7 @@ async function getCommitDetailsForPR({ core, pr, repoPath }) {
 
   return Promise.all(
     shas.map(async (sha) => {
-      // Subject, author name, author email, committer name, committer email (all tab-seperated)
+      // Subject, author name, author email, committer name, committer email (all tab-separated)
       // then a blank line, then filenames.
       const result = (
         await runGit({

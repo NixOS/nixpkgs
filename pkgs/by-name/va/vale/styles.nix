@@ -62,12 +62,12 @@ in
 
   google = buildStyle rec {
     name = "Google";
-    version = "0.6.3";
+    version = "0.7.1";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "Google";
       rev = "v${version}";
-      hash = "sha256-1aN7wCdShhMsBN83u7l+5Ffm2WKC8ltZyT3hPZCNWYo=";
+      hash = "sha256-fGhbLgi3HQF8iKnUBgxPFlctQr8ebZfmYEksxyv0reQ=";
     };
     meta = {
       description = "Vale-compatible implementation of the Google Developer Documentation Style Guide";
@@ -94,12 +94,12 @@ in
 
   microsoft = buildStyle rec {
     name = "Microsoft";
-    version = "0.14.2";
+    version = "0.15.1";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "Microsoft";
       rev = "v${version}";
-      hash = "sha256-Sie4bBeKPOFOJhgd+mLbiz4vG+xpKL0LnwnRQHzOw+Q=";
+      hash = "sha256-MycWukXoeTZzGAcoNODzt592VHWgjnMXZdNPoQWDC18=";
     };
     meta = {
       description = "Vale-compatible implementation of the Microsoft Writing Style Guide";
@@ -136,6 +136,23 @@ in
     meta = {
       description = "Vale-compatible implementations of many popular \"readability\" metrics";
       homepage = "https://github.com/errata-ai/readability";
+      license = lib.licenses.mit;
+    };
+  };
+
+  redhat = buildStyle rec {
+    name = "RedHat";
+    version = "675";
+    src = fetchFromGitHub {
+      owner = "redhat-documentation";
+      repo = "vale-at-red-hat";
+      rev = "v${version}";
+      hash = "sha256-9al8xLbj/0fxidM1BOoSuFPOwayk47CStjjPh4611Yg=";
+    };
+    stylePath = ".vale/styles/RedHat";
+    meta = {
+      description = "Vale-compatible implementation of the Red Hat documentation style guide";
+      homepage = "https://github.com/redhat-documentation/vale-at-red-hat";
       license = lib.licenses.mit;
     };
   };

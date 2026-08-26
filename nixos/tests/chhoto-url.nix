@@ -18,7 +18,6 @@
   };
 
   interactive.nodes.machine = {
-    services.glitchtip.listenAddress = "0.0.0.0";
     networking.firewall.allowedTCPPorts = [ 8000 ];
     virtualisation.forwardPorts = [
       {
@@ -29,16 +28,20 @@
     ];
   };
 
+  interactive.sshBackdoor.enable = true;
+  interactive.defaults.virtualisation.graphics = false;
+
   testScript = ''
     import json
     import re
+    import time
 
     machine.wait_for_unit("chhoto-url.service")
     machine.wait_for_open_port(8000)
 
     resp = json.loads(machine.succeed("curl localhost:8000/api/getconfig"))
     assert resp["success"] is False
-    assert resp["reason"] == "No valid authentication was found"
+    assert resp["reason"] == "No valid authentication."
 
     resp = json.loads(machine.succeed("curl -H 'X-API-Key: api_key' localhost:8000/api/getconfig"))
     expected_version = "${config.nodes.machine.services.chhoto-url.package.version}"
@@ -53,8 +56,10 @@
     assert (match := re.search(r"(?m)^location: (.+?)\r?$", resp))
     assert match[1] == "https://nixos.org/"
 
+    time.sleep(2)
     resp = json.loads(machine.succeed(f"curl -H 'X-API-Key: api_key' localhost:8000/api/expand -d '{slug}'"))
     assert resp["success"] is True
+    assert resp["longurl"] == "https://nixos.org/"
     assert resp["hits"] == 1
   '';
 }

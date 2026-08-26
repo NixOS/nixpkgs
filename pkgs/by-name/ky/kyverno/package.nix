@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "kyverno";
-  version = "1.18.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "kyverno";
     repo = "kyverno";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-emjXUd9yr6Rwv3I/em+BicC2MppGdT736DMuWBLdSZM=";
+    hash = "sha256-7uzpUyrqe+nvPp5qI0k7+6uFStr+oJNgEJXsuv+nPLs=";
   };
 
   ldflags = [
@@ -27,7 +27,7 @@ buildGoModule (finalAttrs: {
     "-X github.com/kyverno/kyverno/pkg/version.BuildTime=1970-01-01_00:00:00"
   ];
 
-  vendorHash = "sha256-z6kqFBWDWxJB/V+lhcCgataJCQ7NNh08yutdPDgBdkc=";
+  vendorHash = "sha256-oAZG0UThURyQgENhpSX/jxaA36/iRPkbYCGYilhIQpc=";
 
   subPackages = [ "cmd/cli/kubectl-kyverno" ];
 

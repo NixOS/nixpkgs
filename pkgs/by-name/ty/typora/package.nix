@@ -20,7 +20,7 @@
 
 let
   pname = "typora";
-  version = "1.13.4";
+  version = "1.14.9";
 
   passthru = {
     sources = {
@@ -29,21 +29,21 @@ let
           "https://download.typora.io/linux/typora_${version}_amd64.deb"
           "https://downloads.typoraio.cn/linux/typora_${version}_amd64.deb"
         ];
-        hash = "sha256-aEgp0j6HGZePKwc21LvMpmXk7S5cgcUttpxl3fQw9ak=";
+        hash = "sha256-iIUgfPni2u2iWS/ancsFwS1rXEZloqBVpQ5lSADmM+o=";
       };
       aarch64-linux = fetchurl {
         urls = [
           "https://download.typora.io/linux/typora_${version}_arm64.deb"
           "https://downloads.typoraio.cn/linux/typora_${version}_arm64.deb"
         ];
-        hash = "sha256-hvEsnkjbEhZVOIGKGh9RloUBicKpSMzzBGMFtc+3EAk=";
+        hash = "sha256-RXSQKwEffTcWgFR/P04UJ/e41mr26YGcGC2byNyGACw=";
       };
       aarch64-darwin = fetchurl {
         urls = [
           "https://download.typora.io/mac/Typora-${version}.dmg"
           "https://downloads.typoraio.cn/mac/Typora-${version}.dmg"
         ];
-        hash = "sha256-3IyOFTLDkd43Tij1B1Tw0epZ8HwMiNMJHQJAGHCcP84=";
+        hash = "sha256-QAJrZ1vIESSk8RLoYBvwxHzEtbfwXlK/rxTFzo+F/7U=";
       };
     };
     updateScript = ./update.sh;

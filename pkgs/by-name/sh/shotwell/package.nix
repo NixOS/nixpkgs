@@ -23,7 +23,7 @@
   json-glib,
   gcr,
   libgee,
-  gexiv2,
+  gexiv2_0_16,
   gettext,
   desktop-file-utils,
   gdk-pixbuf,
@@ -39,11 +39,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shotwell";
-  version = "0.32.15";
+  version = "0.32.17";
 
   src = fetchurl {
     url = "mirror://gnome/sources/shotwell/${lib.versions.majorMinor finalAttrs.version}/shotwell-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-rBAmDzguGjGTu7DayBQxY/HKNVRvp2Ez1ULjkK90Lzo=";
+    sha256 = "sha256-ClZoTpiBfDED9Upkj+lABCfHaiWnsRFFf8HYYMMWdnI=";
   };
 
   nativeBuildInputs = [
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-good
     libgee
     libgudev
-    gexiv2
+    gexiv2_0_16
     gsettings-desktop-schemas
     libraw
     json-glib
@@ -93,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
       gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
         extraLoaders = [
           libheif.lib
+          librsvg
         ];
       }
     }"

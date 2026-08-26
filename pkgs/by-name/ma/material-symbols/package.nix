@@ -2,28 +2,27 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
   unstableGitUpdater,
 }:
 stdenvNoCC.mkDerivation {
   pname = "material-symbols";
-  version = "4.0.0-unstable-2026-02-06";
+  version = "4.0.0-unstable-2026-06-12";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "material-design-icons";
-    rev = "310de998d61fc253a6df21e708a54c1d18338cab";
-    hash = "sha256-ALnp0WxWjSthibSxkLfYSVbQyI4btj4hayAUNxLAwu4=";
+    rev = "5d5d1fdd5476f3df3749e9fb872e32021ec7a750";
+    hash = "sha256-e0bxJpehssgnxigSgPt9qxMrKRZcvlVDyLu5DY6MkTA=";
     sparseCheckout = [ "variablefont" ];
   };
 
-  installPhase = ''
-    runHook preInstall
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
-    install -Dm755 variablefont/*.ttf -t $out/share/fonts/TTF
-    install -Dm755 variablefont/*.woff2 -t $out/share/fonts/woff2
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   passthru.updateScript = unstableGitUpdater { };
 

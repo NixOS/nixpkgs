@@ -5,12 +5,17 @@
   channel,
   dir ? ./. + ("/" + channel),
   buildDotnetSdk,
-  withVMR ? true,
   ...
 }@attrs:
 
 let
-  binary = buildDotnetSdk (dir + "/releases.nix");
+  binary =
+    let
+      path = dir + "/releases.nix";
+    in
+    if lib.pathExists path then buildDotnetSdk path else { };
+
+  withVMR = lib.pathExists (dir + "/release.json");
 
   sourcePackages = lib.optionalAttrs withVMR (callPackage ./source (attrs // { inherit binary; }));
 

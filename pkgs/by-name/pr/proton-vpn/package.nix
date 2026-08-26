@@ -12,7 +12,6 @@ let
       anthonyroussel
       delafthi
       rapiteanu
-      sebtm
     ];
   };
 in

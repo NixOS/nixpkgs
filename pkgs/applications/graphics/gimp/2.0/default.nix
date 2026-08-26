@@ -149,6 +149,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://salsa.debian.org/gnome-team/gimp/-/raw/4cb293ec1a3b273281d5d9daf94b833c293797d7/debian/patches/CVE-2025-10934.patch";
       hash = "sha256-MmYdh74cky/dF3UTHC0xpDW6+aa8Vzh+4ADHCDtIDzo=";
     })
+    (fetchurl {
+      name = "c23.patch";
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/85bdad2b2ca7ba36a01bef945b1c4b193a2fa9d0.patch";
+      hash = "sha256-6g2Zhbx+WxX7lOCYAFII0yDbwILecExwFD22tZDED50=";
+    })
   ];
 
   # error: possibly undefined macro: AM_NLS
@@ -259,9 +264,16 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     # The declarations for `gimp-with-plugins` wrapper,
     # used for determining plug-in installation paths
-    majorVersion = "${lib.versions.major finalAttrs.version}.0";
-    targetLibDir = "lib/gimp/${finalAttrs.passthru.majorVersion}";
-    targetDataDir = "share/gimp/${finalAttrs.passthru.majorVersion}";
+    apiVersion = "${
+      toString (
+        lib.toInt (lib.versions.major finalAttrs.version)
+        + (if lib.versions.minor finalAttrs.version == "99" then 1 else 0)
+      )
+    }.0";
+    appVersion = lib.versions.majorMinor finalAttrs.version;
+    majorVersion = lib.warn "gimp2.majorVersion is deprecated in favour of gimp2.apiVersion and gimp2.appVersion" finalAttrs.passthru.apiVersion;
+    targetLibDir = "lib/gimp/${finalAttrs.passthru.apiVersion}";
+    targetDataDir = "share/gimp/${finalAttrs.passthru.apiVersion}";
     targetPluginDir = "${finalAttrs.passthru.targetLibDir}/plug-ins";
     targetScriptDir = "${finalAttrs.passthru.targetDataDir}/scripts";
 

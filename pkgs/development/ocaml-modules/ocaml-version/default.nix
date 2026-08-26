@@ -5,13 +5,13 @@
   alcotest,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ocaml-version";
-  version = "4.1.0";
+  version = "4.1.2";
 
   src = fetchurl {
-    url = "https://github.com/ocurrent/ocaml-version/releases/download/v${version}/ocaml-version-${version}.tbz";
-    hash = "sha256-QTfVH6kNu4SkjAylM3ySyIkOYAXQFrffSFkZ2FojjgY=";
+    url = "https://github.com/ocurrent/ocaml-version/releases/download/v${finalAttrs.version}/ocaml-version-${finalAttrs.version}.tbz";
+    hash = "sha256-+NqijIAmedHTU9/5ZfZojwr0vQZ0onS6lBWIrnBqPAc=";
   };
 
   checkInputs = [ alcotest ];
@@ -27,4 +27,4 @@ buildDunePackage rec {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ vbgl ];
   };
-}
+})

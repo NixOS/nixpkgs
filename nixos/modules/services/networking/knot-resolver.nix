@@ -10,17 +10,17 @@ let
   configFile = pkgs.callPackage (
     {
       runCommandLocal,
-      remarshal_0_17,
+      remarshal,
       stdenv,
     }:
     runCommandLocal "knot-resolver.yaml"
       {
-        nativeBuildInputs = [ remarshal_0_17 ];
+        nativeBuildInputs = [ remarshal ];
         value = builtins.toJSON cfg.settings;
         passAsFile = [ "value" ];
       }
       ''
-        json2yaml "$valuePath" "$out"
+        remarshal --from json --to yaml-1.1 "$valuePath" "$out"
         ${
           # We skip validation if the build platform cannot execute # the binary targeting the host platform.
           lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

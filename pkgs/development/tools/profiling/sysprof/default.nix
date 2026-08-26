@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sysprof";
-  version = "49.0";
+  version = "50.0";
 
   outputs = [
     "out"
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/sysprof/${lib.versions.major finalAttrs.version}/sysprof-${finalAttrs.version}.tar.xz";
-    hash = "sha256-/wQTljd4XIQZSIYgh6QyO5gWgNlCKWQJMhtXT8soKHg=";
+    hash = "sha256-qs5E6Q6Q9sNLsvvsjMtHuPgRAwgJeNZXWSh4Q8Mp1To=";
   };
 
   nativeBuildInputs = [
@@ -64,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     libunwind
   ];
 
+  strictDeps = true;
+
   mesonFlags = [
     "-Dsystemdunitdir=lib/systemd/system"
     # In a separate libsysprof-capture package
@@ -75,6 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
       packageName = "sysprof";
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "System-wide profiler for Linux";

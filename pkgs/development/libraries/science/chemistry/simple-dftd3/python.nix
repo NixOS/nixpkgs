@@ -17,12 +17,12 @@
 
 buildPythonPackage {
   inherit (simple-dftd3)
-    pname
     version
     src
     meta
     ;
 
+  pname = "dftd3";
   pyproject = true;
 
   build-system = [

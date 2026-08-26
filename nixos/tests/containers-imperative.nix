@@ -47,6 +47,7 @@
           stdenv
           stdenvNoCC
           emptyContainer.config.containers.foo.path
+          libcap-text-verifier
           libxslt
           desktop-file-utils
           texinfo

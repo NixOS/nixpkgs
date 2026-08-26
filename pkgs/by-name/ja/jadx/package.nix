@@ -17,13 +17,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jadx";
-  version = "1.5.5";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "skylot";
     repo = "jadx";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WONsXDNhlDuqKsS2Olz3ndZIbi6mdi9JBKaHPpcdTQQ=";
+    hash = "sha256-qwGFMj18xJOrBudthAIeKc/PT0uUzjmTgBYovF4A/94=";
   };
 
   patches = [

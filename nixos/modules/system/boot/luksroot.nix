@@ -1100,7 +1100,9 @@ in
       }
       {
         assertion = config.boot.initrd.systemd.enable -> all (dev: dev.preLVM) (attrValues luks.devices);
-        message = "boot.initrd.luks.devices.<name>.preLVM is not used by systemd stage 1.";
+        message = ''
+          boot.initrd.luks.devices.<name>.preLVM has no effect with systemd stage 1. It can be safely removed from your configuration, and systemd will discover LVM devices automatically at runtime, whether they come before or after LUKS. The preLVM option will be removed in 26.11 along with scripted stage 1.
+        '';
       }
       {
         assertion =
@@ -1114,7 +1116,6 @@ in
           -> all (dev: dev.preOpenCommands == "" && dev.postOpenCommands == "") (attrValues luks.devices);
         message = "boot.initrd.luks.devices.<name>.preOpenCommands and postOpenCommands is not supported by systemd stage 1. Please bind a service to cryptsetup.target or cryptsetup-pre.target instead.";
       }
-      # TODO
       {
         assertion = config.boot.initrd.systemd.enable -> !luks.gpgSupport;
         message = systemdStage1HardwareKeyAssertionMessage "boot.initrd.luks.gpgSupport";
@@ -1123,7 +1124,6 @@ in
         assertion = config.boot.initrd.systemd.enable -> !luks.fido2Support;
         message = systemdStage1HardwareKeyAssertionMessage "boot.initrd.luks.fido2Support";
       }
-      # TODO
       {
         assertion = config.boot.initrd.systemd.enable -> !luks.yubikeySupport;
         message = systemdStage1HardwareKeyAssertionMessage "boot.initrd.luks.yubikeySupport";

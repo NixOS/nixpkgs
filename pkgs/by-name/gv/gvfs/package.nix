@@ -39,21 +39,18 @@
   libnfs,
   openssh,
   libsecret,
-  libgdata,
   libmsgraph,
   python3,
   gsettings-desktop-schemas,
-  googleSupport ? false, # dependency on vulnerable libsoup versions
 }:
 
-assert googleSupport -> gnomeSupport;
 stdenv.mkDerivation (finalAttrs: {
   pname = "gvfs";
-  version = "1.58.4";
+  version = "1.60.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor finalAttrs.version}/gvfs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-5xJL7HJOJlrQ7gC6on2NUVzx3dzxAmOL5nueJZybBA0=";
+    hash = "sha256-qNd0RhWkiKVZMC/gzI9BjVtEq6PCuiFj5anm9gfBvpo=";
   };
 
   patches = [
@@ -109,9 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-online-accounts
     libsecret
     libmsgraph
-  ]
-  ++ lib.optionals googleSupport [
-    libgdata
   ];
 
   mesonFlags = [
@@ -135,9 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dgoa=false"
     "-Dkeyring=false"
     "-Donedrive=false"
-  ]
-  ++ lib.optionals (!googleSupport) [
-    "-Dgoogle=false"
   ]
   ++ lib.optionals (avahi == null) [
     "-Ddnssd=false"

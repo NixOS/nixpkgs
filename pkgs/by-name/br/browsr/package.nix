@@ -46,7 +46,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       textual
       textual-universal-directorytree
     ]
-    ++ lib.attrVals extras finalAttrs.passthru.optional-dependencies;
+    ++ lib.flatten (lib.attrVals extras finalAttrs.passthru.optional-dependencies);
 
   optional-dependencies = with python3Packages; {
     all = [

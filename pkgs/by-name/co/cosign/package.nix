@@ -13,13 +13,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "cosign";
-  version = "3.0.6";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = "cosign";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Flvi+dVb9RcaS5f1X8A8kevfzNbiSyglEYfJfievVfM=";
+    hash = "sha256-6YgCEeDwjNNMMh1tE/DUbScR7ZYf+FNMhFs+q7b0MuM=";
   };
 
   buildInputs = lib.optional (stdenv.hostPlatform.isLinux && pivKeySupport) (lib.getDev pcsclite);
@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
     installShellFiles
   ];
 
-  vendorHash = "sha256-q9dB54s9LD0klbDW8bWlXmFzPIPrFBcWJrhYRkyKTp0=";
+  vendorHash = "sha256-1ouPW3HBjyTB2qRg7DNNLs5eO8UF1UKJLYPPNfJX4NU=";
 
   subPackages = [
     "cmd/cosign"
@@ -61,6 +61,8 @@ buildGoModule (finalAttrs: {
         "TestGetRekorPubKeys"
         "TestVerifyEmbeddedSCT"
         "TestValidateAndUnpackCertWithSCT"
+        "TestVerifySkWithoutIdentities"
+        "TestVerifyAttestationSkWithoutIdentities"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

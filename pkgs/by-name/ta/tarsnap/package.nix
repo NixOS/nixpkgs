@@ -7,20 +7,24 @@
   e2fsprogs,
   bzip2,
   installShellFiles,
+  versionCheckHook,
 }:
 
 let
   zshCompletion = fetchurl {
     url = "https://gist.githubusercontent.com/thoughtpolice/daa9431044883d3896f6/raw/282360677007db9739e5bf229873d3b231eb303a/tarsnap.zsh";
-    sha256 = "0pawqwichzpz29rva7mh8lpx4zznnrh2rqyzzj6h7z98l0dxpair";
+    hash = "sha256-OarbG6Ao/QON/N/jLGC29n/SL0WwHrVzEv9+yCLHXF0=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tarsnap";
   version = "1.0.41";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
-    url = "https://www.tarsnap.com/download/tarsnap-autoconf-${version}.tgz";
+    url = "https://www.tarsnap.com/download/tarsnap-autoconf-${finalAttrs.version}.tgz";
     hash = "sha256-vr2+Hm6RIzdVvrQu8LStvv2Vc0VSWPAJ+zMVVseZs9A=";
   };
 
@@ -58,6 +62,9 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.hostPlatform.isLinux e2fsprogs
   ++ lib.optional stdenv.hostPlatform.isDarwin bzip2;
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
     description = "Online backups for the truly paranoid";
     homepage = "http://www.tarsnap.com/";
@@ -69,4 +76,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "tarsnap";
   };
-}
+})

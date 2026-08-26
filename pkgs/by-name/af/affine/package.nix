@@ -46,12 +46,12 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = binName;
 
-  version = "0.26.6";
+  version = "0.26.7";
   src = fetchFromGitHub {
     owner = "toeverything";
     repo = "AFFiNE";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aJeW8I7hx9VN5AU6gVq18cKO0QuKtc7JGUDbVsSXXE4=";
+    hash = "sha256-gtdhWLNZRNY91j9wVVny1bRAjZAwIvNJr11ePQapWYQ=";
   };
 
   patches = [
@@ -257,7 +257,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
-      "x86_64-darwin"
       "x86_64-linux"
     ];
     sourceProvenance = [ lib.sourceTypes.fromSource ];

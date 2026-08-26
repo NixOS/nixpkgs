@@ -47,7 +47,7 @@ let
     pushd "$out" &&
     sha512sum --check --strict ${./test-hashes.sha512sum} &&
     sed 's/.*  //' ${./test-hashes.sha512sum} | xargs rm --verbose &&
-    popd
+    popd || exit 1
   '';
   unflattened.postFetch = ''
     pushd "$out" &&
@@ -56,7 +56,7 @@ let
     sed 's/.*  //' ${./test-hashes.sha512sum} | xargs rm --verbose &&
     popd &&
     rm --dir --verbose Sintel &&
-    popd
+    popd || exit 1
   '';
 
   fetchtorrentWithHash =
@@ -75,7 +75,7 @@ let
     );
 in
 # Seems almost but not quite worth using lib.mapCartesianProduct...
-builtins.mapAttrs (n: v: testers.invalidateFetcherByDrvHash fetchtorrentWithHash v) {
+(builtins.mapAttrs (n: v: testers.invalidateFetcherByDrvHash fetchtorrentWithHash v) {
   http-link = {
     inherit (http) url;
     inherit (flattened) postFetch;
@@ -94,16 +94,22 @@ builtins.mapAttrs (n: v: testers.invalidateFetcherByDrvHash fetchtorrentWithHash
     backend = "transmission";
     inherit (flattened) postFetch;
   };
-  http-link-rqbit = {
-    inherit (http) url;
-    backend = "rqbit";
-    inherit (flattened) postFetch;
-  };
-  magnet-link-rqbit = {
-    inherit (magnet) url;
-    backend = "rqbit";
-    inherit (flattened) postFetch;
-  };
+  #
+  # Disabled because these warn that flatten hasn't been explicitly
+  # set to true, and warnings are treated as failures in tests.
+  #
+  # Re-enable these tests when flatten defaults to true.
+  #
+  #http-link-rqbit = {
+  #  inherit (http) url;
+  #  backend = "rqbit";
+  #  inherit (flattened) postFetch;
+  #};
+  #magnet-link-rqbit = {
+  #  inherit (magnet) url;
+  #  backend = "rqbit";
+  #  inherit (flattened) postFetch;
+  #};
   http-link-rqbit-flattened = {
     inherit (http) url;
     backend = "rqbit";
@@ -116,16 +122,38 @@ builtins.mapAttrs (n: v: testers.invalidateFetcherByDrvHash fetchtorrentWithHash
     flatten = true;
     inherit (flattened) postFetch;
   };
-  http-link-rqbit-unflattened = {
-    inherit (http) url;
-    backend = "rqbit";
-    flatten = false;
-    inherit (unflattened) postFetch;
-  };
-  magnet-link-rqbit-unflattened = {
-    inherit (magnet) url;
-    backend = "rqbit";
-    flatten = false;
-    inherit (unflattened) postFetch;
+  #
+  # Disabled because these warn that `flatten = false` is deprecated
+  # and will be removed.
+  #
+  # Remove these when support for `flatten = false` is completely removed.
+  #
+  #http-link-rqbit-unflattened = {
+  #  inherit (http) url;
+  #  backend = "rqbit";
+  #  flatten = false;
+  #  inherit (unflattened) postFetch;
+  #};
+  #magnet-link-rqbit-unflattened = {
+  #  inherit (magnet) url;
+  #  backend = "rqbit";
+  #  flatten = false;
+  #  inherit (unflattened) postFetch;
+  #};
+})
+// {
+  # Make sure we can download and "flatten" single-file torrents.
+  # We only test with transmission because we use a web-seed and rqbit
+  # doesn't support web-seeds.
+  single-file = fetchtorrent {
+    hash = "sha256-u5c/ZN5V79Jg1aN6spbui4OdhExsXjofk1JpvUdW7Ro=";
+    backend = "transmission";
+    flatten = true;
+    url = "${./test-single-file.torrent}";
+    meta = {
+      hydraPlatforms = [ ];
+      license = lib.licenses.mit;
+      description = "The license file for the Nixpkgs repository as of 7 March 2026";
+    };
   };
 }

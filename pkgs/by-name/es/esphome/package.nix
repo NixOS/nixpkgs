@@ -9,6 +9,7 @@
   esptool,
   git,
   versionCheckHook,
+  addBinToPathHook,
   nixosTests,
 }:
 
@@ -18,29 +19,20 @@ let
     packageOverrides = self: super: {
       esphome-dashboard = self.callPackage ./dashboard.nix { };
 
-      paho-mqtt = super.paho-mqtt.overridePythonAttrs (oldAttrs: rec {
-        version = "1.6.1";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          tag = "v${version}";
-          hash = "sha256-9nH6xROVpmI+iTKXfwv2Ar1PAmWbEunI3HO0pZyK6Rg=";
-        };
-        build-system = with self; [ setuptools ];
-        doCheck = false;
-      });
+      paho-mqtt = self.paho-mqtt_1;
     };
   };
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "esphome";
-  version = "2026.4.5";
+  version = "2026.6.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = finalAttrs.version;
-    hash = "sha256-uMlkrHg4cZYsdSv8D8U57mEZnjwcRkJe2zKI8VFsTRk=";
+    hash = "sha256-4sbc/X86OWN/Bx2sPk3H2lgzGxdQNS6bIspNLAVqHz8=";
   };
 
   patches = [
@@ -73,7 +65,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "setuptools==82.0.1" "setuptools" \
-      --replace-fail "wheel>=0.43,<0.47" "wheel"
+      --replace-fail "wheel>=0.43,<0.48" "wheel"
   '';
 
   # Remove esptool and platformio from requirements
@@ -94,8 +86,8 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     jinja2
     paho-mqtt
     pillow
-    platformio
     puremagic
+    py7zr
     pyparsing
     pyserial
     pyyaml
@@ -146,16 +138,17 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     ++ [
       git
       versionCheckHook
+      addBinToPathHook
     ];
 
   disabledTestPaths = [
     # platformio builds; requires networking for dependency resolution
     "tests/integration"
-  ];
 
-  preCheck = ''
-    export PATH=$PATH:$out/bin
-  '';
+    # tries to dynamically patch platformio module
+    "tests/unit_tests/test_writer.py"
+    "tests/unit_tests/test_espidf_component.py"
+  ];
 
   postInstall =
     let
@@ -167,8 +160,6 @@ python.pkgs.buildPythonApplication (finalAttrs: {
         --zsh <(${argcomplete} --shell zsh esphome) \
         --fish <(${argcomplete} --shell fish esphome)
     '';
-
-  doInstallCheck = true;
 
   disabledTests = [
     # tries to import platformio, which is wrapped in an fhsenv
@@ -189,6 +180,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     # Patched to run platformio without the esphome wrapper
     "test_run_platformio_cli_strips_win_long_path_prefix"
     "test_run_platformio_cli_does_not_set_pythonexepath_without_strip"
+    "test_patch_file_downloader_recovers_against_real_server"
   ];
 
   passthru = {
@@ -210,6 +202,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       picnoir
       thanegill
       karlbeecken
+      tmarkus
     ];
     mainProgram = "esphome";
   };

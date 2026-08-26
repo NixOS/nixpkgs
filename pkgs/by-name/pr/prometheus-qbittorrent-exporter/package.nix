@@ -6,22 +6,24 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "prometheus-qbittorrent-exporter";
-  version = "1.13.0";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "martabal";
     repo = "qbittorrent-exporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ivHTGj2+6c23KW5aT5a8NFzUxV13u0y9UnHttZYTkuA=";
+    hash = "sha256-mPmoaqQp/TOryJxDm5/7hybBxEIn8TaSf/+KTNYmZOE=";
   };
-  sourceRoot = "${finalAttrs.src.name}/src";
 
-  vendorHash = "sha256-FHKt2QpvianVVbAJUcaou/+Ok69a8NbkM7ymVgxUi0I=";
+  vendorHash = "sha256-vRAmGwguHq7b/85joMidgI8T/jGoONB48sX68U4bdp4=";
 
   ldflags = [
     "-s"
     "-X 'qbit-exp/app.version=v${finalAttrs.version}'"
   ];
+
+  # Tests create a local http server
+  __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = nix-update-script { };
 

@@ -17,13 +17,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "dbmail";
-  version = "3.5.5";
+  version = "3.5.6";
 
   src = fetchFromGitHub {
     owner = "dbmail";
     repo = "dbmail";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uoK+sj/CQ2CcliQ+vtE9Q3BWVbzpQ5MP8xHVIxe6w2o=";
+    hash = "sha256-Gmj9DdF3MF9FFjjHV8yQxuBSbEe2LzSqux0oDQmT6i0=";
   };
 
   nativeBuildInputs = [ pkg-config ];

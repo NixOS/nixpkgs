@@ -18,14 +18,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cobang";
-  version = "2.3.1";
+  version = "2.7.2";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "hongquan";
     repo = "CoBang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8qnF1w4zNYdH3QrzBnNjsPnOSMMD48H2tcTxPkemGEM=";
+    hash = "sha256-7otVlXrw6UiAKXM0MbeYyU3iPTj4Y9MClzuC+/uU9v0=";
   };
 
   nativeBuildInputs = [
@@ -57,8 +57,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     gst-python
     pillow
     pygobject3
-    python-zbar
+    zbar
     qrcode
+    typing-extensions
   ];
 
   # Wrapping this manually for SVG recognition

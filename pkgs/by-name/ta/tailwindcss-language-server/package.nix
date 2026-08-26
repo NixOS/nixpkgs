@@ -1,22 +1,22 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   nix-update-script,
 }:
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tailwindcss-language-server";
-  version = "0.14.28";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "tailwindlabs";
     repo = "tailwindcss-intellisense";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jds6Wq4rcR4wXonZ1v9JITiEc4gflT0sTc3KUSBCMFc=";
+    hash = "sha256-QMTzylHAO5s5VtyBAnHEoxKq8ndRyAdvh/N5xUYRLas=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -26,14 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
       src
       pnpmWorkspaces
       ;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-3pHEmYMgQuHFFMyGeFzo9BWRFt6yvWzFFMJEdRhwS2w=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-5e6fC+5BwQm9TqZlnZ9GiPlVwCdEePTpUh4m4tt8qy4=";
   };
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
   ];
 
   buildInputs = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Must build the "@tailwindcss/language-service" package. Dependency is linked via workspace by "pnpm"
-  # https://github.com/tailwindlabs/tailwindcss-intellisense/blob/v0.14.24/pnpm-lock.yaml#L71
+  # https://github.com/tailwindlabs/tailwindcss-intellisense/blob/v0.16.0/pnpm-lock.yaml#L77
   buildPhase = ''
     runHook preBuild
 

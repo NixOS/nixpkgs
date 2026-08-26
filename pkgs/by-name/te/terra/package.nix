@@ -1,66 +1,81 @@
 {
+  config,
   lib,
   stdenv,
   fetchFromGitHub,
-  llvmPackages_18,
+  llvmPackages_22,
   ncurses,
   cmake,
   libxml2,
   symlinkJoin,
   cudaPackages,
-  enableCUDA ? false,
+  enableCUDA ? config.cudaSupport,
   libffi,
   libpfm,
+  versionCheckHook,
 }:
 
 let
-  luajitRev = "83954100dba9fc0cf5eeaf122f007df35ec9a604";
+  # grep LUAJIT_COMMIT in cmake/Modules/GetLuaJIT.cmake
+  luajitRev = "14d8a7a27dc8c626ab9e7c7e9e50b6df6def4f03";
   luajitBase = "LuaJIT-${luajitRev}";
   luajitArchive = "${luajitBase}.tar.gz";
   luajitSrc = fetchFromGitHub {
     owner = "LuaJIT";
     repo = "LuaJIT";
     rev = luajitRev;
-    hash = "sha256-L9T6lc32dDLAp9hPI5mKOzT0c4juW9JHA3FJCpm7HNQ=";
+    hash = "sha256-c2f9wCiDyC+G16ryLNcBp8nm+rLNXAsgafJgXHaQUTk=";
   };
 
-  llvmPackages = llvmPackages_18;
+  llvmPackages = llvmPackages_22;
   llvmMerged = symlinkJoin {
     name = "llvmClangMerged";
     paths = with llvmPackages; [
-      llvm.out
-      llvm.dev
-      llvm.lib
-      clang-unwrapped.out
-      clang-unwrapped.dev
-      clang-unwrapped.lib
+      llvm
+      (lib.getDev llvm)
+      (lib.getLib llvm)
+      clang-unwrapped
+      (lib.getDev clang-unwrapped)
+      (lib.getLib clang-unwrapped)
     ];
   };
-
-  cuda = cudaPackages.cudatoolkit;
 
   clangVersion = llvmPackages.clang-unwrapped.version;
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "terra";
-  version = "1.2.0";
+  version = "1.2.2";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "terralang";
     repo = "terra";
-    rev = "release-${finalAttrs.version}";
-    hash = "sha256-CukNCvTHZUhjdHyvDUSH0YCVNkThUFPaeyLepyEKodA=";
+    tag = "release-${finalAttrs.version}";
+    hash = "sha256-DaV92X98GbVtOjp9rUEJTA8cZyCOqtzjAQd8idUOgoQ=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals enableCUDA [
+    cudaPackages.cuda_nvcc
+  ];
   buildInputs = [
     llvmMerged
     ncurses
     libffi
     libxml2
   ]
-  ++ lib.optionals enableCUDA [ cuda ]
+  ++ lib.optionals enableCUDA (
+    with cudaPackages;
+    [
+      cuda_nvcc # crt/host_config.h; even though we include this in nativeBuildInputs, it's needed here too
+      cuda_cudart
+    ]
+  )
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) libpfm;
 
   cmakeFlags =
@@ -68,13 +83,15 @@ stdenv.mkDerivation (finalAttrs: {
       resourceDir = "${llvmMerged}/lib/clang/${lib.versions.major clangVersion}";
     in
     [
-      "-DHAS_TERRA_VERSION=0"
-      "-DTERRA_VERSION=${finalAttrs.version}"
-      "-DTERRA_LUA=luajit"
-      "-DTERRA_SKIP_LUA_DOWNLOAD=ON"
-      "-DCLANG_RESOURCE_DIR=${resourceDir}"
+      (lib.cmakeFeature "HAS_TERRA_VERSION" "0")
+      (lib.cmakeFeature "TERRA_VERSION" finalAttrs.version)
+      (lib.cmakeFeature "TERRA_LUA" "luajit")
+      (lib.cmakeBool "TERRA_SKIP_LUA_DOWNLOAD" true)
+      (lib.cmakeFeature "CLANG_RESOURCE_DIR" resourceDir)
     ]
-    ++ lib.optional enableCUDA "-DTERRA_ENABLE_CUDA=ON";
+    ++ lib.optionals enableCUDA [
+      (lib.cmakeBool "TERRA_ENABLE_CUDA" true)
+    ];
 
   doCheck = true;
   hardeningDisable = [ "fortify" ];
@@ -100,17 +117,26 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $bin/bin bin/terra
     install -Dm755 -t $out/lib lib/terra${stdenv.hostPlatform.extensions.sharedLibrary}
     install -Dm644 -t $static/lib lib/libterra_s.a
 
     mkdir -pv $dev/include
     cp -rv include/terra $dev/include
+
+    runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Low-level counterpart to Lua";
     homepage = "https://terralang.org/";
+    downloadPage = "https://github.com/terralang/terra";
+    changelog = "https://github.com/terralang/terra/blob/${finalAttrs.src.tag}/CHANGES.md";
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       jb55
@@ -119,9 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
       elliottslaughter
     ];
     license = lib.licenses.mit;
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    # Linux Aarch64 broken above LLVM11
-    # https://github.com/terralang/terra/issues/597
-    broken = stdenv.hostPlatform.isAarch64;
+    mainProgram = "terra";
   };
 })

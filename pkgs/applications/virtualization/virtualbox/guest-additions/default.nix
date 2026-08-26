@@ -18,9 +18,9 @@
   libx11,
 }:
 let
-  virtualboxVersion = "7.2.8";
+  virtualboxVersion = "7.2.16";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "0642ed4a12b7204cd30c0abbc2c10c1cc7ad55ce1756a01e86a16d4b6b066592";
+  virtualboxSha256 = "50356ccdaefe8f03537600ec31898b506e3a85ce79b94f26fb6cc1920c9e18eb";
 
   platform =
     if stdenv.hostPlatform.isAarch64 then
@@ -68,8 +68,6 @@ let
       pkg = libxt;
     }
   ];
-
-  hasVboxVideo = lib.versionOlder kernel.version "7.0";
 in
 stdenv.mkDerivation {
   pname = "VirtualBox-GuestAdditions";
@@ -97,6 +95,11 @@ stdenv.mkDerivation {
     kmod
   ]
   ++ kernel.moduleBuildDependencies;
+
+  # https://github.com/VirtualBox/virtualbox/issues/812
+  postPatch = ''
+    substituteInPlace ./src/vboxguest-${virtualboxVersion}_NixOS/vboxvideo/vbox_fb.c --replace-fail "RTLNX_VER_MIN(6,19,0)" "RTLNX_VER_RANGE(6,6,152, 6,6,999) || RTLNX_VER_RANGE(6,12,103, 6,12,999) || RTLNX_VER_RANGE(6,18,44, 6,18,999) || RTLNX_VER_MIN(6,19,0)"
+  '';
 
   buildPhase = ''
     runHook preBuild
@@ -135,10 +138,7 @@ stdenv.mkDerivation {
 
     # Install kernel modules.
     cd src/vboxguest-${virtualboxVersion}_NixOS
-
-    INSTALL_TARGETS=(install-vboxguest install-vboxsf ${lib.optionalString hasVboxVideo "install-vboxvideo"})
-    make INSTALL_MOD_PATH=$out KBUILD_EXTRA_SYMBOLS=$PWD/vboxsf/Module.symvers ''${INSTALL_TARGETS[@]}
-
+    make install INSTALL_MOD_PATH=$out KBUILD_EXTRA_SYMBOLS=$PWD/vboxsf/Module.symvers
     cd ../..
 
     # Install binaries

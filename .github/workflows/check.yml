@@ -43,7 +43,7 @@ jobs:
     runs-on: ubuntu-slim
     timeout-minutes: 3
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
           path: trusted
@@ -51,9 +51,10 @@ jobs:
             ci/github-script
 
       - name: Install dependencies
-        run: npm install bottleneck@2.19.5
+        run: npm ci --package-lock-only=false bottleneck
+        working-directory: trusted/ci/github-script
 
-      - uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         if: github.event_name != 'pull_request' && vars.NIXPKGS_COMMIT_CHECK_CLIENT_ID
         id: app-token
         with:
@@ -92,17 +93,17 @@ jobs:
     if: inputs.baseBranch && inputs.headBranch
     permissions:
       pull-requests: write
-    runs-on: ubuntu-slim
-    timeout-minutes: 3
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 8
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
           path: trusted
           sparse-checkout: |
             ci/github-script
 
-      - uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         if: github.event_name != 'pull_request' && vars.NIXPKGS_MANUAL_EDIT_CHECK_CLIENT_ID
         id: app-token
         with:
@@ -133,23 +134,53 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token || github.token }}
         run: gh api /rate_limit | jq
 
-  owners:
+  github-script:
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
           sparse-checkout: .github/actions
+
       - name: Checkout merge and target commits
         uses: ./.github/actions/checkout
         with:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
           target-as-trusted-at: ${{ inputs.targetSha }}
 
-      - uses: cachix/install-nix-action@8aa03977d8d733052d78f4e008a241fd1dbf36b3 # v31.10.6
+      - name: Install dependencies to trusted/
+        run: |
+          npm ci --package-lock-only=false
+          echo "$PWD/node_modules/.bin" >> "$GITHUB_PATH"
+        working-directory: nixpkgs/trusted/ci/github-script
 
-      - uses: cachix/cachix-action@1eb2ef646ac0255473d23a5907ad7b04ce94065c # v17
+      - name: Link trusted/ dependencies to untrusted/
+        run: ln -s "$PWD/trusted/ci/github-script/node_modules" untrusted/ci/github-script/node_modules
+        working-directory: nixpkgs
+
+      - name: Type-check ci/github-script
+        run: tsc --build
+        working-directory: nixpkgs/untrusted/ci/github-script
+
+  owners:
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+          sparse-checkout: .github/actions
+
+      - name: Checkout merge and target commits
+        uses: ./.github/actions/checkout
+        with:
+          merged-as-untrusted-at: ${{ inputs.mergedSha }}
+          target-as-trusted-at: ${{ inputs.targetSha }}
+
+      - uses: cachix/install-nix-action@13d8dd58da0234aa297dedd986986ccb8e7f3e24 # v31.11.1
+
+      - uses: cachix/cachix-action@5f2d7c5294214f71b873db4b969586b980625e71 # v17
         continue-on-error: true
         with:
           # The nixpkgs-gha cache should not be trusted or used outside of Nixpkgs and its forks' CI.

@@ -23,14 +23,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "filtr";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "tiagolr";
     repo = "filtr";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-LRVwJ/Eh+XeNGnlbd2c56hWV8StHZGhxy0XLjGZ0toY=";
+    hash = "sha256-diOM6Y2HrOP5wXg4tVXms7TYOSM16t06ZDg1/Q1L/zc=";
   };
 
   nativeBuildInputs = [

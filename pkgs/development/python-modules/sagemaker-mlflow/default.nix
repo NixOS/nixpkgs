@@ -8,24 +8,36 @@
 
   # dependencies
   boto3,
-  mlflow,
+  mlflow-skinny,
 
   # tests
+  matplotlib,
+  pandas,
   pytestCheckHook,
   scikit-learn,
+  skops,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sagemaker-mlflow";
-  version = "0.3.0";
+  version = "0.5.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "sagemaker-mlflow";
-    tag = "v${version}";
-    hash = "sha256-riCoUpao9QIrQMb7r9stJO/xTSsDfL+uNS664W5GRQc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nSI1BGJ2hhzuHxnGjElDuPpuc2rRn2mX5+s4ZSuZna0=";
   };
+
+  # AssertionError: sagemaker_mlflow version is dev - 0.5.0.dev1
+  postPatch = ''
+    substituteInPlace VERSION \
+      --replace-fail \
+        "0.5.0.dev1" \
+        "${finalAttrs.version}"
+  '';
 
   build-system = [
     setuptools
@@ -33,15 +45,24 @@ buildPythonPackage rec {
 
   dependencies = [
     boto3
-    mlflow
+    mlflow-skinny
   ];
 
   pythonImportsCheck = [ "sagemaker_mlflow" ];
 
   nativeCheckInputs = [
+    matplotlib
+    pandas
     pytestCheckHook
     scikit-learn
+    skops
   ];
+
+  # mlflow.exceptions.MlflowException: The filesystem tracking backend (e.g., './mlruns') is in maintenance mode and will not receive further updates.
+  # Please migrate to a database backend (e.g., 'sqlite:///mlflow.db') to access the latest MLflow features.
+  preCheck = ''
+    export MLFLOW_ALLOW_FILE_STORE=true
+  '';
 
   disabledTests = [
     # AssertionError: assert 's3' in '/build/source/not implemented/0/d3c16d2bad4245bf9fc68f86d2e7599d/artifacts'
@@ -55,17 +76,13 @@ buildPythonPackage rec {
     "test_log_artifact"
     "test_presigned_url"
     "test_presigned_url_with_fields"
-
-    # https://github.com/aws/sagemaker-mlflow/issues/16
-    # TypeError: LogisticRegression.__init__() got an unexpected keyword argument 'multi_class'
-    "test_model_registry"
   ];
 
   meta = {
     description = "MLFlow plugin for SageMaker";
     homepage = "https://github.com/aws/sagemaker-mlflow";
-    changelog = "https://github.com/aws/sagemaker-mlflow/releases/tag/v${version}";
+    changelog = "https://github.com/aws/sagemaker-mlflow/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

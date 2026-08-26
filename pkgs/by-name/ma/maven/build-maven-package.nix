@@ -20,6 +20,15 @@ let
       version,
       mvnJdk ? jdk,
       mvnHash ? "",
+      /**
+        Maven goal to execute. Normally the the default should be used, but some special cases need other goals.
+      */
+      mvnGoal ? "package",
+      /**
+        Set the Maven offline argument, `-o`. Normally the default is preferred, but to call `mvn deploy` with
+        a directory destination `-o` must be removed. In that case we rely on the Nix sandbox to keep things hermetic.
+      */
+      mvnOffline ? true,
       mvnFetchExtraArgs ? { },
       mvnDepsParameters ? "",
       manualMvnArtifacts ? [ ],
@@ -103,7 +112,8 @@ let
             runHook postBuild
           '';
 
-          # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
+          # Preserve .meta because Tycho needs p2-artifacts.properties for offline builds.
+          # Maven Resolver's cached prefix indexes are volatile, so remove them and their checksums.
           installPhase = ''
             runHook preInstall
 
@@ -112,6 +122,7 @@ let
               -o -name resolver-status.properties \
               -o -name _remote.repositories \) \
               -delete
+            rm -f "$out"/.m2/.meta/prefixes-*.txt{,.*}
 
             runHook postInstall
           '';
@@ -143,7 +154,9 @@ let
 
           mvnDeps=$(cp -dpR ${fetchedMavenDeps}/.m2 ./ && chmod +w -R .m2 && pwd)
           runHook afterDepsSetup
-          mvn package -o -nsu "-Dmaven.repo.local=$mvnDeps/.m2" ${mvnSkipTests} ${mvnParameters}
+          mvn ${mvnGoal} ${
+            if mvnOffline then "-o" else ""
+          } -nsu "-Dmaven.repo.local=$mvnDeps/.m2" ${mvnSkipTests} ${mvnParameters}
 
           runHook postBuild
         '';

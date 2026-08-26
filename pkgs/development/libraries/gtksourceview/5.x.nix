@@ -25,7 +25,10 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtksourceview";
-  version = "5.18.0";
+  version = "5.20.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   outputs = [
     "out"
@@ -35,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtksourceview/${lib.versions.majorMinor finalAttrs.version}/gtksourceview-${finalAttrs.version}.tar.xz";
-    hash = "sha256-BRp4/jj3kzKAR+W81thVxkJcC0gMINlDIXnjVnQsasA=";
+    hash = "sha256-44vNI/UrhurfD+TYveaY46jKECMiuLTPGlGsKUpEjBs=";
   };
 
   patches = [
@@ -55,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     vala
     gi-docgen
     gtk4 # for gtk4-update-icon-cache checked during configure
+    libxml2 # xmllint
   ];
 
   buildInputs = [

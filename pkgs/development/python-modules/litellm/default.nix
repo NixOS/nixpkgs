@@ -1,48 +1,63 @@
 {
   lib,
+  a2a-sdk,
   aiohttp,
+  anthropic,
   apscheduler,
   azure-identity,
   azure-keyvault-secrets,
   azure-storage-blob,
+  azure-storage-file-datalake,
   backoff,
   boto3,
   buildPythonPackage,
   click,
   cryptography,
+  expression,
   fastapi,
   fastapi-sso,
   fastuuid,
   fetchFromGitHub,
   google-cloud-iam,
   google-cloud-kms,
+  google-genai,
+  grpcio,
   gunicorn,
   httpx,
   importlib-metadata,
+  inquirerpy,
   jinja2,
   jsonschema,
+  langfuse,
+  maturin,
   mcp,
   openai,
+  opentelemetry-api,
+  opentelemetry-exporter-otlp,
+  opentelemetry-sdk,
   orjson,
-  poetry-core,
   polars,
   prisma,
+  prometheus-client,
   pydantic,
+  pydantic-settings,
   pyjwt,
   pynacl,
-  python,
+  pypdf,
   python-dotenv,
   python-multipart,
   pyyaml,
-  requests,
   resend,
+  restrictedpython,
   rich,
   rq,
+  rustPlatform,
+  sentry-sdk,
   soundfile,
   tiktoken,
   tokenizers,
-  uvloop,
   uvicorn,
+  uvloop,
   websockets,
   nixosTests,
   nix-update-script,
@@ -50,17 +65,37 @@
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.83.7";
+  version = "1.97.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";
-    tag = "v${version}-stable";
-    hash = "sha256-oVQ0FHZmXDY7HU4AMEQ9xcl10mIbqja9/j2mdunTWI4=";
+    tag = "v${version}";
+    hash = "sha256-9nVVXRvtfxntAgSetCy66jfDpunR12DEIoQKAjSZn/4=";
   };
 
-  build-system = [ poetry-core ];
+  nativeBuildInputs = with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
+  ];
+
+  cargoRoot = "litellm-rust";
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit
+      pname
+      version
+      src
+      cargoRoot
+      ;
+    hash = "sha256-iwgIclG8BGeHDNtm686w2Rxe+9ddvBrz1sMfOBeuKK0=";
+  };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "maturin==1.9.4" "maturin==${maturin.version}"
+  '';
 
   dependencies = [
     aiohttp
@@ -72,8 +107,8 @@ buildPythonPackage rec {
     jsonschema
     openai
     pydantic
+    pydantic-settings
     python-dotenv
-    requests
     tiktoken
     tokenizers
   ];
@@ -86,9 +121,11 @@ buildPythonPackage rec {
       backoff
       boto3
       cryptography
+      expression
       fastapi
       fastapi-sso
       gunicorn
+      inquirerpy
       # FIXME package litellm-enterprise
       # FIXME package litellm-proxy-extras
       mcp
@@ -98,6 +135,7 @@ buildPythonPackage rec {
       pynacl
       python-multipart
       pyyaml
+      restrictedpython
       rich
       rq
       soundfile
@@ -107,6 +145,7 @@ buildPythonPackage rec {
     ];
 
     extra_proxy = [
+      a2a-sdk
       azure-identity
       azure-keyvault-secrets
       google-cloud-iam
@@ -115,12 +154,29 @@ buildPythonPackage rec {
       # FIXME package redisvl
       resend
     ];
+
+    proxy-runtime = [
+      anthropic
+      # FIXME package azure-ai-contentsafety
+      azure-storage-file-datalake
+      # FIXME package ddtrace
+      # FIXME package detect-secrets
+      # FIXME package google-cloud-aiplatform
+      google-genai
+      grpcio
+      langfuse
+      # FIXME package mangum
+      opentelemetry-api
+      opentelemetry-exporter-otlp
+      opentelemetry-sdk
+      # FIXME package llm-sandbox
+      prometheus-client
+      pypdf
+      sentry-sdk
+    ];
   };
 
-  pythonImportsCheck = [
-    "litellm"
-    "litellm_enterprise"
-  ];
+  pythonImportsCheck = [ "litellm" ];
 
   pythonRelaxDeps = [
     "aiohttp"
@@ -128,25 +184,19 @@ buildPythonPackage rec {
     "importlib-metadata"
     "jsonschema"
     "openai"
+    "pydantic"
     "python-dotenv"
   ];
 
   # access network
   doCheck = false;
 
-  postFixup = ''
-    # Symlink litellm_enterprise to make it discoverable
-    pushd $out/lib/python${python.pythonVersion}/site-packages
-    ln -s enterprise/litellm_enterprise litellm_enterprise
-    popd
-  '';
-
   passthru = {
     tests = { inherit (nixosTests) litellm; };
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "v([0-9]+\\.[0-9]+\\.[0-9]+)-stable"
+        "v([0-9]+\\.[0-9]+\\.[0-9]+)"
       ];
     };
   };

@@ -15,6 +15,7 @@
   libxi,
   libxkbcommon,
   libxrandr,
+  lld,
   pango,
   pkg-config,
   rustPlatform,
@@ -29,21 +30,24 @@
 let
   self = rustPlatform.buildRustPackage {
     pname = "czkawka";
-    version = "11.0.1";
+    version = "12.0.1";
 
     src = fetchFromGitHub {
       owner = "qarmin";
       repo = "czkawka";
       tag = self.version;
-      hash = "sha256-ke6N3vuKPGolfh6XpAg3/9dtwd09eX53fN2klUwwNwQ=";
+      hash = "sha256-nRXmRt+yJjOEffyyuWI/mCp+l4bxBJbJzIf3Nj7I1AU=";
     };
 
-    cargoHash = "sha256-fx2ZH4I2WYCdMgNoKQuBBEJrPjmgTRPeVM2L+TWYn54=";
+    cargoHash = "sha256-oGgQqACKp4RGkowPJARPWEpfWuSz1FFucMY/Mykz970=";
 
     nativeBuildInputs = [
       gobject-introspection
       pkg-config
       wrapGAppsHook4
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      lld # ld crashes
     ];
 
     buildInputs = [
@@ -126,7 +130,7 @@ let
       homepage = "https://github.com/qarmin/czkawka";
       description = "Simple, fast and easy to use app to remove unnecessary files from your computer";
       changelog = "https://github.com/qarmin/czkawka/raw/${self.version}/Changelog.md";
-      license = with lib.licenses; [ mit ];
+      license = lib.licenses.mit;
       mainProgram = "czkawka_gui";
       maintainers = with lib.maintainers; [
         yanganto

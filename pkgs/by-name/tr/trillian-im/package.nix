@@ -17,7 +17,7 @@
   librsvg,
   libzip,
   openssl,
-  libappindicator-gtk3,
+  libappindicator,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     librsvg
     libzip
     openssl
-    libappindicator-gtk3
+    libappindicator
   ];
 
   dontUnpack = true;

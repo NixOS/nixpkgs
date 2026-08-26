@@ -8,9 +8,9 @@
   pythonImportsCheckHook,
   moveBuildTree,
   shiboken6,
+  shiboken6-generator,
   llvmPackages,
   symlinkJoin,
-  fetchpatch,
 }:
 let
   packages = with python.pkgs.qt6; [
@@ -59,10 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/sources/pyside6";
 
-  patches = [
-    ./fix-paths.patch
-  ];
-
   # Qt Designer plugin moved to a separate output to reduce closure size
   # for downstream things
   outputs = [
@@ -96,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     python
     pythonImportsCheckHook
+    shiboken6-generator
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
 

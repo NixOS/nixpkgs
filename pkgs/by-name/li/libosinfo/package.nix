@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.12.0";
 
   src = fetchurl {
-    url = "https://releases.pagure.org/libosinfo/libosinfo-${finalAttrs.version}.tar.xz";
+    url = "https://gitlab.com/api/v4/projects/libosinfo%2Flibosinfo/packages/generic/release-assets/v${finalAttrs.version}/libosinfo-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-rYVX7OJnk9pD0m3lZePWjOLua/uNARO3zH3+B/a/xrY=";
   };
 

@@ -35,7 +35,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nutpie";
-  version = "0.16.10";
+  version = "0.16.11";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -43,12 +43,12 @@ buildPythonPackage (finalAttrs: {
     owner = "pymc-devs";
     repo = "nutpie";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Cqi4vhvu6Gvy0gOcgrpKCHbuVIyY5L9+y5nafzksPwg=";
+    hash = "sha256-ZakNyVW06QONdBSZFonOc585ZPLHsIjbFlBnX+Kg2kc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-cJixyzzt2vwdT2B/XbOLbG6XfWVeYAJg5YWT18GqMDw=";
+    hash = "sha256-n61ZrJtJFQ0G/7X59pKI8QNnOZPvDWiPmGC3tW3NQkk=";
   };
 
   build-system = [

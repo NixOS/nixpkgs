@@ -24,6 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "gtksourceview";
   version = "3.24.11";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src =
     let
       inherit (finalAttrs) pname version;
@@ -51,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     gobject-introspection
     vala
+    libxml2 # xmllint
   ];
 
   nativeCheckInputs = [
@@ -81,11 +85,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = stdenv.hostPlatform.isLinux;
   checkPhase = ''
+    runHook preCheck
+
     NO_AT_BRIDGE=1 \
     XDG_DATA_DIRS="$XDG_DATA_DIRS:${shared-mime-info}/share" \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus}/share/dbus-1/session.conf \
       make check
+
+    runHook postCheck
   '';
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

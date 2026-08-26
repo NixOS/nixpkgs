@@ -35,7 +35,7 @@ from update_util import *
 # Relatice path to the electron-bin info.json
 BINARY_INFO_JSON = "info.json"
 
-# Relative path the the electron-chromedriver info.json
+# Relative path to the electron-chromedriver info.json
 CHROMEDRIVER_INFO_JSON = "../chromedriver/info.json"
 
 logger = logging.getLogger(__name__)
@@ -47,7 +47,6 @@ systems = {
     "x86_64-linux": "linux-x64",
     "armv7l-linux": "linux-armv7l",
     "aarch64-linux": "linux-arm64",
-    "x86_64-darwin": "darwin-x64",
     "aarch64-darwin": "darwin-arm64",
 }
 

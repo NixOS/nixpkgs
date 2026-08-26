@@ -5,9 +5,6 @@
   fetchFromGitHub,
   pythonAtLeast,
 
-  # buildInputs
-  llvmPackages,
-
   # build-system
   setuptools,
 
@@ -43,8 +40,6 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-IfKePiU38fUd5HefaS7J1s8Mb6hVmldINemxAJY+83o=";
   };
-
-  buildInputs = [ llvmPackages.openmp ];
 
   build-system = [ setuptools ];
 
@@ -187,7 +182,7 @@ buildPythonPackage (finalAttrs: {
     "CheckpointTest"
   ];
 
-  disabledTestPaths = lib.optionals (!(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64)) [
+  disabledTestPaths = [
     # numerous instances of torch.multiprocessing.spawn.ProcessRaisedException:
     "tests/test_cpu.py"
     "tests/test_grad_sync.py"

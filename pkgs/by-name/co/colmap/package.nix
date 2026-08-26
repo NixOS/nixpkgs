@@ -1,8 +1,8 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   fetchurl,
+  fetchpatch,
   nix-update-script,
   cmake,
   boost,
@@ -28,6 +28,7 @@
   cudaSupport ? config.cudaSupport,
   cudaCapabilities ? cudaPackages.flags.cudaCapabilities,
   cudaPackages,
+  casparSupport ? cudaSupport && lib.all (lib.flip lib.versionAtLeast "7.5") cudaCapabilities,
   faiss,
   sqlite,
   llvmPackages,
@@ -38,6 +39,7 @@
 }:
 
 assert cudaSupport -> cudaPackages != { };
+assert lib.assertMsg (casparSupport -> cudaSupport) "colmap: casparSupport requires cudaSupport";
 
 let
   stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
@@ -62,13 +64,11 @@ let
     onnxruntime
   ]
   ++ lib.optionals cudaSupport [
-    cudatoolkit
-    (lib.getOutput "static" cudaPackages.cuda_cudart)
+    cudaPackages.cuda_cudart # CUDA::cudart, used by COLMAP and faiss
+    cudaPackages.libcublas # CUDA::cublas, propagated by faiss' exported targets
+    cudaPackages.libcurand # CUDA::curand, used by COLMAP
   ]
   ++ lib.optional stdenv'.cc.isClang llvmPackages.openmp;
-
-  # TODO: migrate to redist packages
-  inherit (cudaPackages) cudatoolkit;
 
   # COLMAP needs these model files to run the ONNX tests
   # Based on: https://github.com/colmap/colmap/blob/79efc74b2b614935a3c69b1f983f2bad23a836a1/src/colmap/feature/resources.h#L36
@@ -100,15 +100,31 @@ let
     }
   ];
 in
-stdenv'.mkDerivation {
-  version = "4.0.3";
+stdenv'.mkDerivation (finalAttrs: {
+  version = "4.1.1";
   pname = "colmap";
   src = fetchFromGitHub {
     owner = "colmap";
     repo = "colmap";
-    rev = "e5b4a3e2276fe0cb81c3643d8ffdf124020c372e";
-    hash = "sha256-VV+ROjhrg7bEMV3QU6r4zCcMzC7tAPwTu6gV6/cmiH0=";
+    tag = finalAttrs.version;
+    hash = "sha256-n0crr452nmo3wWnF2FXuhdsFVzAwGeRjq9mlC6ml1eg=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  patches = lib.optionals stdenv'.hostPlatform.isAarch64 [
+    # Set SANITIZE_PR for PoissonRecon to fix data races on aarch64
+    # https://github.com/colmap/colmap/pull/4429
+    (fetchpatch {
+      url = "https://github.com/colmap/colmap/commit/e13294e43baae6cf7f4e3ec05a19060e0b230a72.patch";
+      hash = "sha256-hoIjWdrOlXeT78X+g3YCDWaWnmQMzHVQNkdpx5vXpGk=";
+    })
+    (fetchpatch {
+      url = "https://github.com/colmap/colmap/commit/6c5c59f96f9e819bcc57267ef48b193d77707fe0.patch";
+      hash = "sha256-2dAhy3sgxF2SXPAYE/EV1hd61dm05vJ5JJXEjQxEKWM=";
+    })
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "DOWNLOAD_ENABLED" true) # We want COLMAP to be able to fetch models like LightGlue.
@@ -117,11 +133,12 @@ stdenv'.mkDerivation {
     (lib.cmakeBool "FETCH_FAISS" false)
     (lib.cmakeBool "FETCH_ONNX" false)
     (lib.cmakeBool "TESTS_ENABLED" enableTests)
-    (lib.cmakeFeature "CHOLMOD_INCLUDE_DIR_HINTS" "${suitesparse.dev}/include")
-    (lib.cmakeFeature "CHOLMOD_LIBRARY_DIR_HINTS" "${suitesparse}/lib")
+    (lib.cmakeFeature "CHOLMOD_INCLUDE_DIR_HINTS" "${lib.getDev suitesparse}/include")
+    (lib.cmakeFeature "CHOLMOD_LIBRARY_DIR_HINTS" "${lib.getLib suitesparse}/lib")
   ]
   ++ lib.optionals cudaSupport [
     (lib.cmakeBool "CUDA_ENABLED" cudaSupport)
+    (lib.cmakeBool "CASPAR_ENABLED" casparSupport)
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" (
       lib.strings.concatStringsSep ";" (map cudaPackages.flags.dropDots cudaCapabilities)
     ))
@@ -135,7 +152,9 @@ stdenv'.mkDerivation {
     glog
     libGLU
     glew
+    gtest
     qt5.qtbase
+    qt5.qtsvg
     flann
     lz4
     cgal
@@ -144,6 +163,7 @@ stdenv'.mkDerivation {
     libsm
     curl
   ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ qt5.qtwayland ]
   ++ depsAlsoForPycolmap;
 
   nativeBuildInputs = [
@@ -153,21 +173,49 @@ stdenv'.mkDerivation {
   ]
   ++ lib.optionals cudaSupport [
     autoAddDriverRunpath
+    cudaPackages.cuda_nvcc
   ];
 
   doCheck = enableTests;
-  preCheck = lib.optionalString enableTests ''
-    export GTEST_FILTER='-*Gpu*:*GPU*:*OpenGL*' # Disable any test involving OpenGL or GPU, these won't work in the sandbox.
-    export HOME=$PWD
-    # Pre-fetch the ONNX models into COLMAP's cache dir so we can run their tests.
-    mkdir -p .cache/colmap
-    ${lib.concatMapStringsSep "\n" (model: ''
-      ln -s ${fetchurl model} .cache/colmap/${model.sha256}-${model.name}
-    '') modelsForTesting}
-  '';
 
-  passthru.depsAlsoForPycolmap = depsAlsoForPycolmap;
-  passthru.updateScript = nix-update-script { };
+  # This test needs a GPU
+  checkFlags = lib.optionals casparSupport [
+    "ARGS=-E estimators/bundle_adjustment_caspar_test"
+  ];
+
+  preCheck = lib.optionalString enableTests (
+    let
+      disabledTestPatterns = [
+        # Disable any test involving OpenGL or GPU, these won't work in the sandbox.
+        "*Gpu*"
+        "*GPU*"
+        "*OpenGL*"
+      ]
+      ++ lib.optionals stdenv'.hostPlatform.isDarwin [
+        # reconstruction_pruning_test.cc:65: Failure
+        # Expected: (redundant_point3D_ids.size()) > (prev_num_redundant_points3D), actual: 0 vs 0
+        "FindRedundantPoints3D.VaryingCoverageGain"
+      ];
+    in
+    ''
+      export GTEST_FILTER='-${lib.concatStringsSep ":" disabledTestPatterns}'
+    ''
+    + ''
+      export HOME=$PWD
+    ''
+    # Pre-fetch the ONNX models into COLMAP's cache dir so we can run their tests.
+    + ''
+      mkdir -p .cache/colmap
+      ${lib.concatMapStringsSep "\n" (model: ''
+        ln -s ${fetchurl model} .cache/colmap/${model.sha256}-${model.name}
+      '') modelsForTesting}
+    ''
+  );
+
+  passthru = {
+    depsAlsoForPycolmap = depsAlsoForPycolmap;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Structure-From-Motion and Multi-View Stereo pipeline";
@@ -177,6 +225,8 @@ stdenv'.mkDerivation {
     '';
     mainProgram = "colmap";
     homepage = "https://colmap.github.io/index.html";
+    downloadPage = "https://github.com/colmap/colmap";
+    changelog = "https://github.com/colmap/colmap/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     platforms = if cudaSupport then lib.platforms.linux else lib.platforms.unix;
     maintainers = with lib.maintainers; [
@@ -185,4 +235,4 @@ stdenv'.mkDerivation {
       chpatrick
     ];
   };
-}
+})

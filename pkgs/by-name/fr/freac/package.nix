@@ -4,6 +4,14 @@
   fetchFromGitHub,
 
   boca,
+  makeWrapper,
+  faac,
+  faad2,
+  flac,
+  lame,
+  libopus,
+  libvorbis,
+  mpg123,
   smooth,
   systemd,
   wrapGAppsHook3,
@@ -34,7 +42,24 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  nativeBuildInputs = [ makeWrapper ];
+
+  postFixup = ''
+    wrapProgram $out/bin/freac \
+    --prefix LD_LIBRARY_PATH : "${
+      lib.makeLibraryPath [
+        lame
+        flac
+        faac
+        faad2
+        libvorbis
+        libopus
+        mpg123
+      ]
+    }"
+  '';
+
+  meta = with lib; {
     description = "Audio converter and CD ripper with support for various popular formats and encoders";
     license = lib.licenses.gpl2Plus;
     homepage = "https://www.freac.org/";

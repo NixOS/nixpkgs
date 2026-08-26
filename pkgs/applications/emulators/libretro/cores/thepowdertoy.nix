@@ -6,13 +6,13 @@
 }:
 mkLibretroCore {
   core = "thepowdertoy";
-  version = "0-unstable-2026-04-20";
+  version = "0-unstable-2026-07-25";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "ThePowderToy";
-    rev = "dcb5e41f1f9800192ea07ea43459413c5a065d9f";
-    hash = "sha256-FDotG/ngmrxgyN7YQ8SK/ZQHKWkwZ5hhg0qsNNXmaNc=";
+    rev = "bb2d9f6623d2ccf25a0021045af9591c8a0bbaff";
+    hash = "sha256-iYGIDpum2x3sE8dBsZQOVv70C20Ras2CTlam0AldeLM=";
   };
 
   extraNativeBuildInputs = [ cmake ];

@@ -60,7 +60,8 @@ in
 
     hostName = lib.mkOption {
       type = lib.types.str;
-      default = "goupile";
+      default = config.networking.fqdnOrHostName;
+      defaultText = lib.literalExpression "config.networking.fqdnOrHostName";
       description = "Nginx service name for goupile service.";
     };
   };
@@ -70,7 +71,7 @@ in
         services.nginx = {
           enable = lib.mkDefault true;
           virtualHosts.${cfg.hostName} = {
-            locations."/".proxyPass = "http://${cfg.hostName}:${builtins.toString cfg.settings.HTTP.Port}";
+            locations."/".proxyPass = "http://127.0.0.1:${builtins.toString cfg.settings.HTTP.Port}";
           };
         };
       }

@@ -5,12 +5,12 @@
   faraday,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "httpun-types";
   version = "0.2.0";
 
   src = fetchurl {
-    url = "https://github.com/anmonteiro/httpun/releases/download/${version}/httpun-${version}.tbz";
+    url = "https://github.com/anmonteiro/httpun/releases/download/${finalAttrs.version}/httpun-${finalAttrs.version}.tbz";
     hash = "sha256-os4n70yFro4cEAjR49Xok9ayEbk0WGod0pQvfbaHvSw=";
   };
 
@@ -22,4 +22,4 @@ buildDunePackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

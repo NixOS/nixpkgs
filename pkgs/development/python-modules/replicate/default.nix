@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   setuptools,
   httpx,
   packaging,
@@ -17,6 +18,9 @@ buildPythonPackage rec {
   pname = "replicate";
   version = "1.1.0b3";
   pyproject = true;
+
+  # uses pydantic.v1 compat layer, unsupported on 3.14
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "replicate";

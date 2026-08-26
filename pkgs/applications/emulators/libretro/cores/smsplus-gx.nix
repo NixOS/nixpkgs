@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "smsplus";
-  version = "0-unstable-2026-04-20";
+  version = "0-unstable-2026-06-25";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "smsplus-gx";
-    rev = "6dc7119f6f8d7f6437320405ee3b0de5f227913f";
-    hash = "sha256-kWq4yzYl0ZTnnhLfhtgPyf2CRequ6yn2DLp3Yc7EBbA=";
+    rev = "8a63f82d3c3bbf7215a31f86a4aaa13fb68a579f";
+    hash = "sha256-yNaNkvRzpli4NMqFvlQ/6US7zw8xXiYWw6R0ev6ubLA=";
   };
 
   meta = {

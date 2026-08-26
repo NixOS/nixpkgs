@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   nodejs,
-  pnpm_9,
+  pnpm_10, # upstream uses pnpm 9 which is insecure. pnpm 11 breaks when fetching deps.
   fetchPnpmDeps,
   pnpmConfigHook,
   makeWrapper,
@@ -13,26 +13,28 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openspec";
-  version = "1.3.1";
+  version = "1.10.0";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "Fission-AI";
     repo = "OpenSpec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-L4LBHVVtgMhSJm+IzZSYOR0UXPbvIRg4xiEV5urYxdI=";
+    hash = "sha256-2wD99+Ma1VZKWG7CJeHDbuT3Td40b/4o0TDKEyQNzBQ=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
+    pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-9s2kdvd7svK4hofnD66HkDc86WTQeayfF5y7L2dmjNg=";
+    hash = "sha256-n+tFm3GvMV3vH2A+1LTJbqxzgk5wOCJ7kng/0y56Zlk=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
     makeWrapper
     installShellFiles
   ];
@@ -51,8 +53,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mkdir -p $out/bin $out/lib/openspec
 
     substituteInPlace bin/openspec.js \
-      --replace '#!/usr/bin/env node' '#!${nodejs}/bin/node' \
-      --replace "../dist" "$out/lib/openspec/dist"
+      --replace-fail '#!/usr/bin/env node' '#!${nodejs}/bin/node' \
+      --replace-fail "../dist" "$out/lib/openspec/dist"
     install -Dm755 bin/openspec.js $out/bin/openspec
 
     cp -r dist $out/lib/openspec/
@@ -78,7 +80,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       kalbasit
-      superherointj
+      sarahec
     ];
     platforms = lib.platforms.all;
     mainProgram = "openspec";

@@ -2,6 +2,7 @@
   lib,
   fetchurl,
   buildDunePackage,
+  digestif,
   domain-name,
   fmt,
   logs,
@@ -10,34 +11,37 @@
   mirage-crypto-ec,
   mirage-crypto-pk,
   mirage-crypto-rng,
+  ohex,
+  ptime,
   x509,
   ipaddr,
   alcotest,
   ounit2,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "tls";
-  version = "2.0.2";
+  version = "2.1.2";
 
   src = fetchurl {
-    url = "https://github.com/mirleft/ocaml-tls/releases/download/v${version}/tls-${version}.tbz";
-    hash = "sha256-m6UP0M0gyb4bbJmA8NcTQ8wxdEbbVSF+s5k3rEqMsho=";
+    url = "https://github.com/mirleft/ocaml-tls/releases/download/v${finalAttrs.version}/tls-${finalAttrs.version}.tbz";
+    hash = "sha256-1RlAWHvOlHXJd8WWkEyBedzXhNnvbdmv4+Y0zKlAyfM=";
   };
 
-  minimalOCamlVersion = "4.08";
-
   propagatedBuildInputs = [
+    digestif
     domain-name
     fmt
-    logs
+    ipaddr
     kdf
+    logs
     mirage-crypto
     mirage-crypto-ec
     mirage-crypto-pk
     mirage-crypto-rng
+    ohex
+    ptime
     x509
-    ipaddr
   ];
 
   doCheck = true;
@@ -52,4 +56,4 @@ buildDunePackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ sternenseemann ];
   };
-}
+})

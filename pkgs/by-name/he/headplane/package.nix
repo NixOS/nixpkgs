@@ -3,32 +3,31 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   git,
-  headplane-agent,
   lib,
   makeWrapper,
   nixosTests,
-  nodejs_22,
+  nodejs_24,
   pnpm_10,
   pnpmConfigHook,
   stdenv,
 }:
 let
   pname = "headplane";
-  # Note, if you are upgrading this, you should upgrade headplane-agent at the same time
-  version = "0.6.2";
-  pnpmDepsHash = "sha256-CsmffCo9Se/4oiOqbcuhjPMuGmR2GL+YfcyWgzBTAh8=";
+  version = "0.7.0";
+  goVendorHash = "sha256-MvrqKMD+A+qBZmzQv+T9920U5uJop+pjfJpZdm2ZqEA=";
+  pnpmDepsHash = "sha256-OBerkCnB/QL5HGYp2kehzFYEIKSuqpBt0dTFHIypc00=";
   src = fetchFromGitHub {
     owner = "tale";
     repo = "headplane";
     tag = "v${version}";
-    hash = "sha256-2C/Pn2M2aHADtoljSFg9hz6xOaZp6IRI77jjy+LDAgw=";
+    hash = "sha256-UMAGsrG2xfpgWlsDhf4aWJKoOrUbruucDNOhCJcYmQQ=";
   };
 
   headplaneSshWasm = buildGoModule {
     pname = "headplane-ssh-wasm";
     inherit version src;
     subPackages = [ "cmd/hp_ssh" ];
-    vendorHash = "sha256-MvrqKMD+A+qBZmzQv+T9920U5uJop+pjfJpZdm2ZqEA=";
+    vendorHash = goVendorHash;
     env.CGO_ENABLED = 0;
     doCheck = false;
     buildPhase = ''
@@ -73,22 +72,23 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     git
     makeWrapper
-    nodejs_22
+    nodejs_24
     pnpm_10
     pnpmConfigHook
   ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_10;
     hash = pnpmDepsHash;
-    fetcherVersion = 3;
+    fetcherVersion = 4;
   };
 
   buildPhase = ''
     runHook preBuild
-    cp ${headplaneSshWasm}/hp_ssh.wasm app/hp_ssh.wasm
-    cp ${headplaneSshWasm}/wasm_exec.js app/wasm_exec.js
-    pnpm --offline build
+    cp ${headplaneSshWasm}/hp_ssh.wasm public/hp_ssh.wasm
+    cp ${headplaneSshWasm}/wasm_exec.js public/wasm_exec.js
+    pnpm build
     runHook postBuild
   '';
 
@@ -96,18 +96,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
     mkdir -p $out/{bin,share/headplane}
     cp -r build $out/share/headplane/
-    cp -r node_modules $out/share/headplane/
     cp -r drizzle $out/share/headplane/
-    substituteInPlace $out/share/headplane/build/server/index.js \
-      --replace "$PWD" "../.."
-    makeWrapper ${lib.getExe nodejs_22} $out/bin/headplane \
+    makeWrapper ${lib.getExe nodejs_24} $out/bin/headplane \
       --chdir $out/share/headplane \
       --add-flags $out/share/headplane/build/server/index.js
     runHook postInstall
   '';
 
   passthru = {
-    agent = headplane-agent;
+    inherit goVendorHash;
     tests = { inherit (nixosTests) headplane; };
   };
 

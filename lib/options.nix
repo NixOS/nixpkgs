@@ -29,6 +29,7 @@ let
     ;
   inherit (lib.attrsets)
     attrByPath
+    catAttrs
     optionalAttrs
     showAttrPath
     ;
@@ -90,12 +91,12 @@ rec {
       `defaultText`
       : Substitute for documenting the `default`, if evaluating the default value during documentation rendering is not possible.
       : Can be any nix value that evaluates.
-      : Usage with `lib.literalMD` or `lib.literalExpression` is supported
+      : Usage with `lib.literalMD`, `lib.literalExpression`, or `lib.literalCode` is supported
 
       `example`
       : Optional example value used in the manual.
       : Can be any nix value that evaluates.
-      : Usage with `lib.literalMD` or `lib.literalExpression` is supported
+      : Usage with `lib.literalMD`, `lib.literalExpression`, or `lib.literalCode` is supported
 
       `description`
       : Optional string describing the option. This is required if option documentation is generated.
@@ -539,7 +540,7 @@ rec {
 
     :::
   */
-  getValues = map (x: x.value);
+  getValues = catAttrs "value";
 
   /**
     Extracts values of all `file` keys of the given list
@@ -561,7 +562,7 @@ rec {
 
     :::
   */
-  getFiles = map (x: x.file);
+  getFiles = catAttrs "file";
 
   # Generate documentation template from the list of option declaration like
   # the set generated with filterOptionSets.

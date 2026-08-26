@@ -4,20 +4,22 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   nodejs,
-  pnpm,
+  pnpm_10,
   pnpmConfigHook,
   nix-update-script,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "postcss";
-  version = "8.5.14";
+  version = "8.5.26";
 
   src = fetchFromGitHub {
     owner = "postcss";
     repo = "postcss";
     tag = finalAttrs.version;
-    hash = "sha256-5cBSl5gMJz73v6ynzcLhv/f2Rr7Ei9xzJAVeZHgXS/Q=";
+    hash = "sha256-60q20REE9bE6lgTDW+Eoq2bsIJu+915FMwnAjSHjtf8=";
   };
 
   nativeBuildInputs = [
@@ -28,8 +30,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-XLFSpq0V49Lp2bVvHc3X0w+Qwj/duZFTey/vu/Nt9Jk=";
+    hash = "sha256-9VpQzRWymMBB/ThJBTKPUFIgfPyWf3EiFE7z+bpWcXg=";
   };
 
   dontBuild = true;

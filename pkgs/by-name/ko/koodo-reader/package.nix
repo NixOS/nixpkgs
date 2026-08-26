@@ -14,23 +14,24 @@
   wrapGAppsHook3,
   xcbuild,
 
-  electron_39,
+  electron_41,
 
   nix-update-script,
 }:
 
 let
-  electron = electron_39; # don't use latest electron to avoid going over the supported abi numbers
+  # don't use latest electron to avoid going over the supported abi numbers
+  electron = electron_41;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "koodo-reader";
-  version = "2.2.4";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "koodo-reader";
     repo = "koodo-reader";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KUcI+0+ICMdwAF30CLM3QdS+X8UnYiHhcYkvEQ6WgS8=";
+    hash = "sha256-GWhofLT5p8Li0aErJlUQ6E5xSkK4CnnM7UwGDJQBq9I=";
   };
 
   patches = [
@@ -39,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnOfflineCache = fetchYarnDeps {
     inherit (finalAttrs) src patches;
-    hash = "sha256-XyFcY0XeNdNzLuqfv9Z2/41875Nl5OrAT/QVyI/+OQc=";
+    hash = "sha256-HRWp/lXXPSw2OdvBaEX0W3hnxL9NvIjIk62Dj+rKm1g=";
   };
 
   nativeBuildInputs = [
@@ -69,9 +70,13 @@ stdenv.mkDerivation (finalAttrs: {
     export npm_config_nodedir=${nodejs-slim}
     npm rebuild --verbose cpu-features
 
-    export npm_config_nodedir=${electron.headers}
-    npm run postinstall
+    # register-scheme is an optional dependency of discord-rpc that fails to compile on modern macOS/Electron
+    # and is not required for the application's core functionality.
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      rm -rf node_modules/register-scheme
+    ''}
 
+    export npm_config_nodedir=${electron.headers}
     # Explicitly set identity to null to avoid signing on darwin
     yarn --offline run electron-builder --dir \
       -c.mac.identity=null \
@@ -124,7 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
         "application/pdf"
         "image/vnd.djvu"
         "application/x-mobipocket-ebook"
-        "application/vnd.amazon.ebook"
         "application/vnd.amazon.ebook"
         "application/x-cbz"
         "application/x-cbr"

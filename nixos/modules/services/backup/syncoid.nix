@@ -459,7 +459,8 @@ in
                 "~@privileged"
                 "~@resources"
                 "~@setuid"
-                "~@timer"
+                # NB: pv after 1.11.0 uses timer syscalls (specifically setitimer)
+                # "~@timer"
               ];
               SystemCallArchitectures = "native";
               # This is for BindPaths= and BindReadOnlyPaths=

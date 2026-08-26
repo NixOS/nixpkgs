@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "qdrant-client";
-  version = "1.17.1";
+  version = "1.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant-client";
     tag = "v${version}";
-    hash = "sha256-HGBvd8sjs52qiVf7VJupH7qcGnr3N/n2WP8kM1crvIY=";
+    hash = "sha256-7d5FJhG5+uMBS7juolNpeYTJkPGbORXsBj7GvZSDWts=";
   };
 
   build-system = [ poetry-core ];

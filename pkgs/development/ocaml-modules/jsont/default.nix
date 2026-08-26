@@ -13,13 +13,13 @@
 
 buildTopkgPackage rec {
   pname = "jsont";
-  version = "0.2.0";
+  version = "0.3.0";
 
   minimalOCamlVersion = "4.14.0";
 
   src = fetchzip {
     url = "https://erratique.ch/software/jsont/releases/jsont-${version}.tbz";
-    hash = "sha256-dXHl+bLuIrlrQ5Np37+uVuETFBb3j8XeDVEK9izoQFk=";
+    hash = "sha256-Gojblihb+So/0KpQHbIWuE33Ir2a4w5DdY+F3S9+qBk=";
   };
 
   buildInputs = lib.optional withCmdliner cmdliner;

@@ -9,7 +9,7 @@
     2. Spins up an nghttpd2 server to test client HTTP/2 headers against
        known-good headers
 
-    See https://github.com/lwthiker/curl-impersonate/tree/main/tests/signatures
+    See https://github.com/lexiforest/curl-impersonate/tree/main/tests/signatures
     for details.
 
   Notes:
@@ -22,18 +22,20 @@
     - We started skipping the test_http2_headers test due to log format differences
       between the nghttpd2 version in nixpkgs and the outdated one curl-impersonate
       uses upstream for its tests.
+    - test_http3_fingerprint is skipped because it requires connecting to
+      third-party endpoint (fp.impersonate.pro) which isn't reachable from the test VM
 */
-
-{ pkgs, lib, ... }:
+{ config, lib, ... }:
 let
+  pkgs = config.node.pkgs;
+
   # Update with domains in TestImpersonate.TEST_URLS if needed from:
-  # https://github.com/lwthiker/curl-impersonate/blob/main/tests/test_impersonate.py
+  # https://github.com/lexiforest/curl-impersonate/blob/main/tests/test_impersonate.py
   domains = [
     "www.wikimedia.org"
     "www.wikipedia.org"
     "www.mozilla.org"
     "www.apache.org"
-    "www.kernel.org"
     "git-scm.com"
   ];
 
@@ -92,7 +94,12 @@ let
           }
           ''
             mkdir -p $out/bin
-            $CC -Wall -Werror -o $out/bin/minicurl ${pkgs.curl-impersonate.src}/tests/minicurl.c `curl-config --libs`
+            sed -e 's/opts->local_port_end - opts->local_port_start);/(long)(opts->local_port_end - opts->local_port_start));/' \
+                -e 's/^\( *\)opts->local_port_start);/\1(long)opts->local_port_start);/' \
+                -e 's/CURLOPT_SSL_VERIFYPEER, 0)/CURLOPT_SSL_VERIFYPEER, 0L)/' \
+                -e 's/CURLOPT_SSL_VERIFYHOST, 0)/CURLOPT_SSL_VERIFYHOST, 0L)/' \
+                ${pkgs.curl-impersonate.src}/tests/minicurl.c > minicurl.c
+            $CC -Wall -Werror -o $out/bin/minicurl minicurl.c `curl-config --libs`
           '';
     in
     pkgs.writeShellScript "curl-impersonate-test" ''
@@ -127,50 +134,42 @@ let
 
       # Run tests
       cd tests
-      pytest . --install-dir ../usr --capture-interface eth1 --exitfirst -k 'not test_http2_headers'
+      pytest . --install-dir ../usr --capture-interface eth1 --exitfirst -k 'not test_http2_headers and not test_http3_fingerprint'
     '';
 in
 {
   name = "curl-impersonate";
 
   meta = {
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      ui-1
+    ];
   };
 
   nodes = {
-    web =
-      {
-        nodes,
-        pkgs,
-        lib,
-        config,
-        ...
-      }:
-      {
-        networking.firewall.allowedTCPPorts = [
-          80
-          443
-        ];
+    web = { ... }: {
+      networking.firewall.allowedTCPPorts = [
+        80
+        443
+      ];
 
-        services = {
-          nginx = {
-            enable = true;
-            virtualHosts."curl-impersonate.nixos.test" = {
-              default = true;
-              addSSL = true;
-              sslCertificate = "${tls-certs}/cert.pem";
-              sslCertificateKey = "${tls-certs}/key.pem";
-            };
+      services = {
+        nginx = {
+          enable = true;
+          virtualHosts."curl-impersonate.nixos.test" = {
+            default = true;
+            addSSL = true;
+            sslCertificate = "${tls-certs}/cert.pem";
+            sslCertificateKey = "${tls-certs}/key.pem";
           };
         };
       };
+    };
 
     curl =
       {
         nodes,
-        pkgs,
         lib,
-        config,
         ...
       }:
       {
@@ -182,22 +181,20 @@ in
       };
   };
 
-  testScript =
-    { nodes, ... }:
-    ''
-      start_all()
+  testScript = { ... }: ''
+    start_all()
 
-      with subtest("Wait for network"):
-          web.systemctl("start network-online.target")
-          curl.systemctl("start network-online.target")
-          web.wait_for_unit("network-online.target")
-          curl.wait_for_unit("network-online.target")
+    with subtest("Wait for network"):
+        web.systemctl("start network-online.target")
+        curl.systemctl("start network-online.target")
+        web.wait_for_unit("network-online.target")
+        curl.wait_for_unit("network-online.target")
 
-      with subtest("Wait for web server"):
-          web.wait_for_unit("nginx.service")
-          web.wait_for_open_port(443)
+    with subtest("Wait for web server"):
+        web.wait_for_unit("nginx.service")
+        web.wait_for_open_port(443)
 
-      with subtest("Run curl-impersonate tests"):
-          curl.succeed("${curl-impersonate-test}")
-    '';
+    with subtest("Run curl-impersonate tests"):
+        curl.succeed("${curl-impersonate-test}")
+  '';
 }

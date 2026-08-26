@@ -11,6 +11,13 @@
   wrapGAppsHook3,
   gdk-pixbuf,
   gobject-introspection,
+  # The subtitle encoder and mixer 'spumux' looks for the font 'arial' by default (hardcoded in devede)
+  # and it should be made available to that program in the user environment or it throws an error.
+  # If overrideFont is true we instead use a particular font file in the nix store,
+  # which is always available by design.
+  overrideFont ? true,
+  liberation_ttf,
+  fontPath ? "${liberation_ttf}/share/fonts/truetype/LiberationSans-Regular.ttf",
 }:
 
 let
@@ -26,15 +33,15 @@ let
 in
 buildPythonApplication (finalAttrs: {
   pname = "devede";
-  version = "4.21.3.1";
+  version = "4.22.1";
   pyproject = true;
   namePrefix = "";
 
   src = fetchFromGitLab {
     owner = "rastersoft";
     repo = "devedeng";
-    rev = finalAttrs.version;
-    hash = "sha256-81H063PpBF/+JDsRgBLwfAevb11yNkDtH4KdtOAL/Fg=";
+    tag = finalAttrs.version;
+    hash = "sha256-r3ReIdNIJss1FvbKT2WekzVugxelnTvgfpmZ1X0D5ss=";
   };
 
   nativeBuildInputs = [
@@ -63,16 +70,27 @@ buildPythonApplication (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace setup.py --replace "'/usr'," ""
     substituteInPlace src/devedeng/configuration_data.py \
-      --replace "/usr/share" "$out/share" \
-      --replace "/usr/local/share" "$out/share"
+      --replace-fail "/usr/share" "$out/share" \
+      --replace-fail "/usr/local/share" "$out/share"
+  ''
+  + lib.optionalString overrideFont ''
+    substituteInPlace src/devedeng/subtitles_mux.py \
+      --replace-fail arial ${fontPath}
+  '';
+
+  # Prevent double wrapping, let the Python wrapper use the args in preFixup.
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   passthru.updateScript = ./update.sh;
 
   meta = {
     description = "DVD Creator for Linux";
+    mainProgram = "devede_ng";
     homepage = "https://www.rastersoft.com/programas/devede.html";
     license = lib.licenses.gpl3;
     maintainers = [

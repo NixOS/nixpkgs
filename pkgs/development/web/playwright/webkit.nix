@@ -11,6 +11,7 @@
   brotli,
   at-spi2-atk,
   cairo,
+  enchant_2,
   flite,
   fontconfig,
   freetype,
@@ -23,6 +24,7 @@
   icu74,
   lcms,
   libavif,
+  libbacktrace,
   libdrm,
   libepoxy,
   libevent,
@@ -41,7 +43,6 @@
   libxkbcommon,
   libxml2_13,
   libxslt,
-  mesa,
   libgbm,
   sqlite,
   systemdLibs,
@@ -79,6 +80,13 @@ let
         hash = "sha256-I3PGgh0XqRkCFz7lUZ3Q4eU0+0GwaQcVb6t4Pru1kKo=";
         fetchSubmodules = true;
       };
+
+      # override split output shenanigans from the main package
+      outputs = [
+        "out"
+        "dev"
+      ];
+
       patches = [
         # Add missing <atomic> content to fix gcc compilation for RISCV architecture
         # https://github.com/libjxl/libjxl/pull/2211
@@ -121,8 +129,8 @@ let
       inherit (download) url stripRoot;
       hash =
         {
-          x86_64-linux = "sha256-BVIZxnnfhBvI737ojRZ+yUX8mcbQ6WOlNdYJ9t4R5yY=";
-          aarch64-linux = "sha256-t9kqUdyOgDXroKp7LWQsaiaRGZVZN3ZdfYLahl5GW2E=";
+          x86_64-linux = "sha256-GASDnneoxfZLUctJLnaUTPW4HDbKdSamJBxFDVpPUC0=";
+          aarch64-linux = "sha256-qtqMCyEZVQu44HGI73t50D1WcnuzxuxLY7MDzf4NDeA=";
         }
         .${system} or throwSystem;
     };
@@ -135,6 +143,7 @@ let
     buildInputs = [
       at-spi2-atk
       cairo
+      enchant_2
       flite
       fontconfig.lib
       freetype
@@ -150,10 +159,11 @@ let
       icu74
       lcms
       libavif
+      libbacktrace
       libdrm
       libepoxy
       libevent
-      libgcc.lib
+      libgcc
       libgcrypt
       libgpg-error
       libjpeg8
@@ -187,32 +197,17 @@ let
 
       wrapProgram $out/minibrowser-wpe/bin/MiniBrowser \
         --prefix GIO_EXTRA_MODULES ":" "${glib-networking}/lib/gio/modules/" \
-        --prefix LD_LIBRARY_PATH ":" $out/minibrowser-wpe/lib \
-        --run '
-          # Use Mesa as EGL vendor fallback when no system EGL vendor is configured.
-          # libglvnd discovers vendors via JSON files https://github.com/NVIDIA/libglvnd/blob/master/src/EGL/icd_enumeration.md
-          if [ -z "$__EGL_VENDOR_LIBRARY_DIRS" ] && [ -z "$__EGL_VENDOR_LIBRARY_FILENAMES" ] && \
-             ! [ -d /usr/share/glvnd/egl_vendor.d ] && ! [ -d /etc/glvnd/egl_vendor.d ] && \
-             ! [ -d /run/opengl-driver/share/glvnd/egl_vendor.d ]; then
-            export __EGL_VENDOR_LIBRARY_FILENAMES="${mesa}/share/glvnd/egl_vendor.d/50_mesa.json"
-          fi
-        '
+        --prefix LD_LIBRARY_PATH ":" $out/minibrowser-wpe/lib
     '';
   };
   webkit-darwin = fetchzip {
     inherit (download) url stripRoot;
-    hash =
-      {
-        x86_64-darwin = "sha256-NjuRZrYzraE1FrPAmyMcQFAS2zWZXYe8cBQVbSU6zFw=";
-        aarch64-darwin = "sha256-9g7YHg+TQNmAE07K6jKSSRUJ7IENUQMp2q54Mk2BbaY=";
-      }
-      .${system} or throwSystem;
+    hash = "sha256-glVkYnthOFBPp1gZXTue9WwjP+oCgQpq6j9Mlm/bjmg=";
   };
 in
 {
   x86_64-linux = webkit-linux;
   aarch64-linux = webkit-linux;
-  x86_64-darwin = webkit-darwin;
   aarch64-darwin = webkit-darwin;
 }
 .${system} or throwSystem

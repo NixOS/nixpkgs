@@ -19,18 +19,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "checkdmarc";
-  version = "5.13.4";
+  version = "5.17.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "domainaware";
     repo = "checkdmarc";
     tag = finalAttrs.version;
-    hash = "sha256-Ve7kGCD/4NMAOGTULvCYt1NTicD8+gSgy5eu0dAu5RA=";
+    hash = "sha256-jwsAemOqJzMpQXliesr+wntAXjVoo/1rFr+1SSqqeRY=";
   };
 
   pythonRelaxDeps = [
     "cryptography"
+    "pyopenssl"
     "xmltodict"
   ];
 
@@ -54,8 +55,6 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "checkdmarc" ];
 
-  enabledTestPaths = [ "tests.py" ];
-
   disabledTests = [
     # Tests require network access
     "testBIMI"
@@ -65,6 +64,11 @@ buildPythonPackage (finalAttrs: {
     "testSplitSPFRecord"
     "testTooManySPFDNSLookups"
     "testTooManySPFVoidDNSLookups"
+    "testDNSSEC"
+    "testDnssecFalseWhenNoKey"
+    "testGetDnskeyCache"
+    "testIncludeMissingSPF"
+    "testKnownGood"
   ];
 
   meta = {

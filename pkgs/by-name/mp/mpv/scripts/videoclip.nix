@@ -1,38 +1,37 @@
 {
   lib,
-  fetchFromGitHub,
-  curl,
-  xclip,
-  wl-clipboard,
-  stdenv,
   buildLua,
-  unstableGitUpdater,
+  fetchFromGitHub,
+  gitUpdater,
+  stdenv,
+  curl,
+  wl-clipboard,
+  xclip,
 }:
-buildLua {
+buildLua (finalAttrs: {
   pname = "videoclip";
-  version = "0.2-unstable-2026-01-22";
+  version = "26.7.30.0";
 
   src = fetchFromGitHub {
     owner = "Ajatt-Tools";
     repo = "videoclip";
-    rev = "4856934684e4490fc0cab0b58054eac5f07754d7";
-    hash = "sha256-JQGPiVRMPZa4AkxqrNlTzC2QnJ4/kQov01nIcUuFy6I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4ptnF3/L3U0CDucYcd8/O5EN1mUtnor+iXLRXbiC7os=";
   };
 
-  patchPhase = ''
-    substituteInPlace platform.lua \
-    --replace \'curl\' \'${lib.getExe curl}\' \
+  postPatch = ''
+    substituteInPlace videoclip/platform.lua \
+      --replace-fail "'curl'" "'${lib.getExe curl}'"
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
-    --replace xclip ${lib.getExe xclip} \
-    --replace wl-copy ${lib.getExe' wl-clipboard "wl-copy"}
+    substituteInPlace videoclip/platform.lua \
+      --replace-fail '"wl-copy' '"${lib.getExe' wl-clipboard "wl-copy"}' \
+      --replace-fail '"xclip' '"${lib.getExe xclip}'
   '';
 
-  scriptPath = ".";
-  passthru.scriptName = "videoclip";
-  passthru.updateScript = unstableGitUpdater {
-    tagPrefix = "v";
-  };
+  scriptPath = "videoclip";
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "Easily create videoclips with mpv";
@@ -41,4 +40,4 @@ buildLua {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ BatteredBunny ];
   };
-}
+})

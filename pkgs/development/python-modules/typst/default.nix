@@ -12,19 +12,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "typst";
-  version = "0.14.8";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "messense";
     repo = "typst-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hJOAcP4MyI7TCY8M99OVaMhFhp2RbhBekCc1mjqBvcc=";
+    hash = "sha256-WAuYQWaxqLIjqsQgb6G1FWRqoyjFcINLHqIyIwxBWts=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-trmnUSIYr5X3UyJjbd7VYko71ziPsvR7l1c0XfFzC80=";
+    hash = "sha256-PGEM7Rn5Ss0dZr91UlvfXuTxVCCdGkvxgy0F9ak1pcE=";
   };
 
   build-system = [

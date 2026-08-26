@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  gitUpdater,
   cmake,
   arpa2cm,
   quickder,
@@ -14,13 +15,13 @@
 stdenv.mkDerivation (finalAttrs: {
   # leaf is already used
   pname = "arpa2-leaf";
-  version = "0.2";
+  version = "0.3";
 
   src = fetchFromGitLab {
     owner = "arpa2";
     repo = "leaf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s52gtxM+BmG7oVrB5F0ORjkb4F3fWONiOxIWdDn2P5k=";
+    hash = "sha256-I2fJ3QkVFRRk9VVSQd0UKl01NDTYo9UGVhrL/mdy0vE=";
   };
 
   strictDeps = true;
@@ -37,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     lillydap
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "LDAP Extended Attribute Filter";

@@ -20,11 +20,11 @@ let
   # Based on https://github.com/ZilchOS/bootstrap-from-tcc/blob/2e0c68c36b3437386f786d619bc9a16177f2e149/using-nix/2a1-static-binutils.nix
   inherit (import ./common.nix { inherit lib; }) meta;
   pname = "binutils";
-  version = "2.46.0";
+  version = "2.47";
 
   src = fetchurl {
     url = "mirror://gnu/binutils/binutils-${version}.tar.xz";
-    hash = "sha256-11qU9Nc+ekCG91E+Z+Q56Pzcu3Jv/mP0ZhdE5iVrLPI=";
+    hash = "sha256-FUqyO2AHDo8nATwil38RKUJdZ9HorNbhMBDmF4EeTP8=";
   };
 
   patches = [
@@ -40,6 +40,7 @@ let
     "--host=${hostPlatform.config}"
     "--with-sysroot=/"
     "--disable-dependency-tracking"
+    "--disable-nls"
     "--enable-deterministic-archives"
     # depends on bison
     "--disable-gprofng"
@@ -53,6 +54,8 @@ let
     # libbfd and libopcodes into a default visibility. Drop default lib
     # path to force users to declare their use of these libraries.
     "--with-lib-path=:"
+    "--disable-gold"
+    "--disable-plugins"
   ];
 in
 bash.runCommand "${pname}-${version}"
@@ -112,4 +115,8 @@ bash.runCommand "${pname}-${version}"
 
     # Install
     make -j $NIX_BUILD_CORES install
+
+    # gprof/addr2line/elfedit + man pages are unused downstream.
+    rm -f $out/bin/gprof $out/bin/addr2line $out/bin/elfedit
+    rm -rf $out/share/info $out/share/man
   ''

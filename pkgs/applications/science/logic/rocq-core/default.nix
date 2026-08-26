@@ -14,7 +14,7 @@
   dune,
   customOCamlPackages ? null,
   ocamlPackages_4_14,
-  ocamlPackages_5_4,
+  ocamlPackages_5_5,
   ncurses,
   csdp ? null,
   version,
@@ -29,10 +29,11 @@ let
     "9.1.0".sha256 = "sha256-+QL7I1/0BfT87n7lSaOmpHj2jJuDB4idWhAxwzvVQOE=";
     "9.1.1".sha256 = "sha256-aFsGsFzexyDnOVarHPKs35HjiV8uUCpeOKSl15wXZ4s=";
     "9.2.0".sha256 = "sha256-rVhv2GLImdVPgRwwTQ+wiWNtRUflMrES0ElIrdTIN1s=";
+    "9.3+rc1".sha256 = "sha256-vGJkRRzf8ur7i9IUpRA/sxVEQvZGnxfV/ex28Lt1kWw=";
   };
   releaseRev = v: "V${v}";
   fetched =
-    import ../../../../build-support/coq/meta-fetch/default.nix
+    import ../../../../build-support/rocq/meta-fetch/default.nix
       {
         inherit
           lib
@@ -66,11 +67,14 @@ let
       in
       lib.switch rocq-version [
         (case (range "9.0" "9.1") ocamlPackages_4_14)
-      ] ocamlPackages_5_4;
+      ] ocamlPackages_5_5;
   ocamlNativeBuildInputs = [
     ocamlPackages.ocaml
     ocamlPackages.findlib
     dune
+  ];
+  ocamlBuildInputs = [
+    ocamlPackages.findlib
   ];
   ocamlPropagatedBuildInputs = [ ocamlPackages.zarith ];
   self = stdenv.mkDerivation {
@@ -130,7 +134,7 @@ let
     };
 
     nativeBuildInputs = [ pkg-config ] ++ ocamlNativeBuildInputs;
-    buildInputs = [ ncurses ];
+    buildInputs = [ ncurses ] ++ ocamlBuildInputs;
 
     propagatedBuildInputs = ocamlPropagatedBuildInputs;
 
@@ -196,6 +200,10 @@ let
       platforms = lib.platforms.unix;
       mainProgram = "rocq";
     };
+
+    # Things required by the CI
+    strictDeps = true;
+    __structuredAttrs = true;
   };
 in
 self

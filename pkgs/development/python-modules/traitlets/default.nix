@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "traitlets";
-  version = "5.14.3";
+  version = "5.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ipython";
     repo = "traitlets";
     tag = "v${version}";
-    hash = "sha256-lWtgzXW1ffzl1jkFaq99X0dU8agulUMHaghsYKX+8Dk=";
+    hash = "sha256-c4OZSC2MrX6Jx8x49lOzlkgwpwz+/2l+GGVCzpO/P+8=";
   };
 
   build-system = [ hatchling ];

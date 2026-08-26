@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "MATE default window manager";
     homepage = "https://github.com/mate-desktop/marco";
-    license = [ lib.licenses.gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     teams = [ lib.teams.mate ];
   };

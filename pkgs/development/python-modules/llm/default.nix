@@ -4,7 +4,7 @@
   callPackage,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
+  fetchpatch2,
   pytestCheckHook,
   replaceVars,
   setuptools,
@@ -164,30 +164,28 @@ let
       '') withPluginsArgNames
     )
   );
-
-  llm = buildPythonPackage rec {
+  llm = buildPythonPackage (finalAttrs: {
     pname = "llm";
-    version = "0.30";
+    version = "0.31.1";
     pyproject = true;
+    __structuredAttrs = true;
 
     build-system = [ setuptools ];
 
     src = fetchFromGitHub {
       owner = "simonw";
       repo = "llm";
-      tag = version;
-      hash = "sha256-+8fwx7sS1vFSTqb+p2uDLqWW/UIx8WoW3kYJihznRRg=";
+      tag = finalAttrs.version;
+      hash = "sha256-XxQ6IQyuO1rxQtiyb4VGrM7uGoffuNN5BhyI4YDxnZg=";
     };
 
     patches = [
       ./001-disable-install-uninstall-commands.patch
-    ]
-    # See https://github.com/NixOS/nixpkgs/issues/476258 and https://github.com/simonw/llm/pull/1334
-    # TODO: Remove when sqlite 3.52.x is released.
-    ++ lib.optionals (sqlite.version == "3.51.1") [
-      (fetchpatch {
-        url = "https://github.com/simonw/llm/commit/6e24b883c3e3c4ddd2ec9006714d0a9ec17b59da.patch";
-        hash = "sha256-4AKQdZCr6qxuWnjWoSW6I44hPL5e7tnvREx2Ns0WwNc=";
+      # Remove when https://github.com/simonw/llm/pull/1525 gets merged.
+      ./do-not-commit-inside-content_hash-embeddings.patch
+      (fetchpatch2 {
+        url = "https://github.com/simonw/llm/commit/67adad2c10be5c1898e3e1a664adb573f5d032cf.patch";
+        hash = "sha256-7+sBQvef94ZTUrqNKVzHzjFADNj1KNzA2tbGs5btwNA=";
       })
     ];
 
@@ -265,7 +263,7 @@ let
     meta = {
       homepage = "https://github.com/simonw/llm";
       description = "Access large language models from the command-line";
-      changelog = "https://github.com/simonw/llm/releases/tag/${src.tag}";
+      changelog = "https://github.com/simonw/llm/releases/tag/${finalAttrs.src.tag}";
       license = lib.licenses.asl20;
       mainProgram = "llm";
       maintainers = with lib.maintainers; [
@@ -274,6 +272,6 @@ let
         philiptaron
       ];
     };
-  };
+  });
 in
 llm

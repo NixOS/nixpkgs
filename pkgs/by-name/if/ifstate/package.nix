@@ -4,6 +4,7 @@
   yq,
   python3Packages,
   fetchFromCodeberg,
+  ethtool,
   iproute2,
   libbpf,
   nixosTests,
@@ -13,12 +14,12 @@
 }:
 
 let
-  version = "2.3.0";
+  version = "2.4.1";
   src = fetchFromCodeberg {
     owner = "routerkit";
     repo = "ifstate";
     tag = version;
-    hash = "sha256-qJdWoe9hbLMmyaaK7m+NzU3415KavbBkHJdFPhmlOnY=";
+    hash = "sha256-/kibcWSGg7AqkjvQAzhSs+aoRHE/YoYhTqVjw4NWNgA=";
   };
   docs = stdenv.mkDerivation {
     pname = "ifstate-docs";
@@ -62,6 +63,9 @@ let
     postPatch = ''
       substituteInPlace libifstate/routing/__init__.py \
         --replace-fail '/usr/share/iproute2' '${iproute2}/share/iproute2'
+
+      substituteInPlace libifstate/link/base.py \
+        --replace-fail "/usr/sbin/ethtool" "${lib.getExe ethtool}"
     ''
     + lib.optionalString withBpf ''
       substituteInPlace libifstate/bpf/ctypes.py \

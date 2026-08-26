@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  erlang,
+  beamPackages,
   cl,
   libGL,
   libGLU,
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ git ];
   buildInputs = [
-    erlang
+    beamPackages.erlang
     cl
     libGL
     libGLU
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     fi
     cat << EOF > $out/bin/wings
     #!${runtimeShell}
-    ${erlang}/bin/erl \
+    ${beamPackages.erlang}/bin/erl \
       -pa $out/lib/wings-${finalAttrs.version}/ebin -run wings_start start_halt "$@"
     EOF
     chmod +x $out/bin/wings

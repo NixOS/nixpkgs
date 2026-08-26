@@ -13,27 +13,31 @@
   iptables,
   gawk,
   util-linux,
-  nix-update-script,
+  liboqs,
 }:
 buildGoModule (finalAttrs: {
   pname = "ivpn-service";
-  version = "3.15.0";
+  version = "3.15.13";
 
-  buildInputs = [ wirelesstools ];
+  buildInputs = [
+    wirelesstools
+    liboqs
+  ];
   nativeBuildInputs = [ makeWrapper ];
 
   src = fetchFromGitHub {
     owner = "ivpn";
     repo = "desktop-app";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y+oW/2WDkH/YydR+xSzEHPdCNKTmmsV4yEsju+OmDYE=";
+    hash = "sha256-F5MhJ09ioqL4Xf4r2cdXUKmkK8ebj/qRFWfxKuodH3k=";
   };
 
   strictDeps = true;
   __structuredAttrs = true;
 
   modRoot = "daemon";
-  vendorHash = "sha256-DVKSCcEeE7vI8aOYuEwk22n0wtF7MMDOyAgYoXYadwI=";
+  subPackages = [ "." ];
+  vendorHash = "sha256-tygPc2hyKfiA3mTOlQMi97Zd/Ka1AtYbZqYOTmHZISA=";
 
   proxyVendor = true; # .c file
 
@@ -61,7 +65,9 @@ buildGoModule (finalAttrs: {
       --replace-fail 'dnscryptproxyBinPath = path.Join(installDir, "dnscrypt-proxy/dnscrypt-proxy")' \
       'dnscryptproxyBinPath = "${dnscrypt-proxy}/bin/dnscrypt-proxy"' \
       --replace-fail 'v2rayBinaryPath = path.Join(installDir, "v2ray/v2ray")' \
-      'v2rayBinaryPath = "${v2ray}/bin/v2ray"'
+      'v2rayBinaryPath = "${v2ray}/bin/v2ray"' \
+      --replace-fail 'kemHelperBinaryPath = path.Join(installDir, "kem/kem-helper")' \
+      'kemHelperBinaryPath = "${placeholder "out"}/bin/kem-helper"'
   '';
 
   ldflags = [
@@ -71,8 +77,17 @@ buildGoModule (finalAttrs: {
     "-X github.com/ivpn/desktop-app/daemon/version._time=1970-01-01"
   ];
 
+  postBuild = ''
+    $CC -O2 -pthread \
+        References/common/kem-helper/main.c \
+        References/common/kem-helper/base64.c \
+        -loqs -Wl,-z,stack-size=5242880 \
+        -o kem-helper
+  '';
+
   postInstall = ''
     mv $out/bin/{daemon,ivpn-service}
+    install -Dm755 kem-helper $out/bin/kem-helper
   '';
 
   postFixup = ''
@@ -92,8 +107,6 @@ buildGoModule (finalAttrs: {
         ]
       }
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Official IVPN Desktop app service daemon";

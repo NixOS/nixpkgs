@@ -1,12 +1,12 @@
 import ./generic.nix {
-  version = "2.4.3";
+  version = "2.4.4";
   url =
     {
       version,
       dovecotMajorMinor,
     }:
     "https://pigeonhole.dovecot.org/releases/${dovecotMajorMinor}/dovecot-pigeonhole-${version}.tar.gz";
-  hash = "sha256-LQNhqYnBVICabluj8F07UOZR5frt6bd9JSyuHJDS6hc=";
+  hash = "sha256-KZjV0aSDGNJCmEaovaeUy4P8rQQFHBBk5E3vWL3MqNw=";
   patches = fetchpatch: [
     # https://github.com/NixOS/nixpkgs/pull/388463#issuecomment-3066016707
     (fetchpatch {

@@ -1,8 +1,9 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchurl,
-  python311,
+  python3,
   libxslt,
   texliveBasic,
   enableAllFeatures ? false,
@@ -62,8 +63,26 @@ stdenv.mkDerivation rec {
     sha256 = "0yd09nypswy3q4scri1dg7dr99d7gd6r2dwx0xm81l9f4y32gs0n";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/dblatex/-/raw/067a586a688635a8ad6c15b1bd8ef3b16eb3f9f4/dblatex-0.3.12-replace-imp-by-importlib.patch";
+      hash = "sha256-ND9fS8KkQKnML6EwJFSUFhqiIn4yEvu1KOxTRPjXsd0=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/dblatex/-/raw/067a586a688635a8ad6c15b1bd8ef3b16eb3f9f4/dblatex-0.3.12-adjust-submodule-imports.patch";
+      hash = "sha256-0wOn2IvCSCtrE0rM56yw3FcGggTsDk3owQa1UmFsbVo=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/dblatex/-/raw/067a586a688635a8ad6c15b1bd8ef3b16eb3f9f4/dblatex-0.3.12-script_path.patch";
+      hash = "sha256-JGN9NxOiqoZ0Yz5ZbYwsis3tujBA2OWX5PZtrc/iTJY=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    (python3.withPackages (ps: [ ps.setuptools_80 ]))
+  ];
+
   buildInputs = [
-    python311
     libxslt
     tex
   ]
@@ -100,7 +119,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    ${python311.interpreter} ./setup.py install --prefix="$out" --use-python-path --verbose
+    python ./setup.py install --prefix="$out" --use-python-path --verbose
   '';
 
   passthru = { inherit tex; };

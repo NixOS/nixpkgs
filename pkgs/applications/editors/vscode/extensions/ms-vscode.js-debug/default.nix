@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   fetchNpmDeps,
-  nodejs,
   nodejs-slim,
   npmHooks,
   pkg-config,
@@ -38,7 +37,8 @@ let
       libsecret
     ];
     nativeBuildInputs = [
-      nodejs
+      nodejs-slim
+      nodejs-slim.npm
       nodejs-slim.python
       npmHooks.npmConfigHook
     ]

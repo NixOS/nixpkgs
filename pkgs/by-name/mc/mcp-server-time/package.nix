@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mcp-server-time";
-  version = "2026.1.26";
+  version = "2026.8.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "servers";
     tag = finalAttrs.version;
-    hash = "sha256-uULXUEHFZpYm/fmF6PkOFCxS+B+0q3dMveLG+3JHrhk=";
+    hash = "sha256-tRx/ZCyHnDP3BmK/xOgVKtjlKCyKUfIll8y1sSDgzV8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src/time/";
@@ -42,7 +42,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/modelcontextprotocol/servers";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ drupol ];
-    mainProgram = "mcp-server-git";
+    mainProgram = "mcp-server-time";
     platforms = lib.platforms.all;
   };
 })

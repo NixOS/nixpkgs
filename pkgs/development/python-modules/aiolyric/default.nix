@@ -4,7 +4,7 @@
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
-  incremental,
+  packaging,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -12,24 +12,32 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiolyric";
-  version = "2.1.0";
+  version = "2.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = "aiolyric";
     tag = finalAttrs.version;
-    hash = "sha256-kLsq1pBRWz49DZgX47k132OipDcfn+kby6/GYDL3pPc=";
+    hash = "sha256-jIJTQm86PBnLwJlYalEhppU01g02wbu20kpVvP4kXz0=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail .dev0 ""
+  '';
+
   build-system = [
-    incremental
     setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "packaging"
   ];
 
   dependencies = [
     aiohttp
-    incremental
+    packaging
   ];
 
   nativeCheckInputs = [

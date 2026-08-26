@@ -19,6 +19,7 @@ buildDunePackage (finalAttrs: {
 
   meta = {
     description = "OCaml hash-consing library";
+    homepage = "https://github.com/backtracking/ocaml-hashcons";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.ulrikstrid ];
   };

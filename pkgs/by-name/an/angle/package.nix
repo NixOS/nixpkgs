@@ -17,16 +17,14 @@
   pciutils,
   libGL,
   apple-sdk_15,
+  fixDarwinDylibNames,
   xcbuild,
 }:
 let
   llvmPackages = llvmPackages_21;
   llvmMajorVersion = lib.versions.major llvmPackages.llvm.version;
   arch = stdenv.hostPlatform.parsed.cpu.name;
-  triplet = lib.getAttr arch {
-    "x86_64" = "x86_64-unknown-linux-gnu";
-    "aarch64" = "aarch64-unknown-linux-gnu";
-  };
+  triplet = stdenv.hostPlatform.config;
 
   clang = symlinkJoin {
     name = "angle-clang-llvm-join";
@@ -68,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     llvmPackages.bintools
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
     xcbuild
   ];
 
@@ -98,7 +97,13 @@ stdenv.mkDerivation (finalAttrs: {
     # On darwin during linking:
     # clang++: error: argument unused during compilation: '-stdlib=libc++'
     "treat_warnings_as_errors=false"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
+    # Force clang on riscv64 because default gcc toolchain is unavailable.
+    "is_clang=true"
   ];
+
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
 
   patches = [
     # https://issues.chromium.org/issues/432275627
@@ -106,30 +111,32 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-uninitialized-const-pointer-error-001.patch
   ];
 
-  postPatch = ''
-    substituteInPlace build/config/clang/BUILD.gn \
-      --replace-fail \
-        "_dir = \"${triplet}\"" \
-        "_dir = \"${triplet}\"
-         _suffix = \"-${arch}\""
+  postPatch =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace build/config/clang/BUILD.gn \
+        --replace-fail \
+          "_dir = \"${triplet}\"" \
+          "_dir = \"${triplet}\"
+           _suffix = \"-${arch}\""
+    ''
+    + ''
+      # Don't precompile Metal shaders, because the compiler is non-free.
+      substituteInPlace src/libANGLE/renderer/metal/metal_backend.gni \
+        --replace-fail \
+          "metal_internal_shader_compilation_supported =" \
+          "metal_internal_shader_compilation_supported = false &&"
 
-    # Don't precompile Metal shaders, because the compiler is non-free.
-    substituteInPlace src/libANGLE/renderer/metal/metal_backend.gni \
-      --replace-fail \
-        "metal_internal_shader_compilation_supported =" \
-        "metal_internal_shader_compilation_supported = false &&"
+      cat > build/config/gclient_args.gni <<EOF
+      # Generated from 'DEPS'
+      checkout_angle_internal = false
+      checkout_angle_mesa = false
+      checkout_angle_restricted_traces = false
+      generate_location_tags = false
+      EOF
 
-    cat > build/config/gclient_args.gni <<EOF
-    # Generated from 'DEPS'
-    checkout_angle_internal = false
-    checkout_angle_mesa = false
-    checkout_angle_restricted_traces = false
-    generate_location_tags = false
-    EOF
-
-    # For sandboxed build on darwin.
-    patchShebangs build/toolchain/apple
-  '';
+      # For sandboxed build on darwin.
+      patchShebangs build/toolchain/apple
+    '';
 
   installPhase = ''
     runHook preInstall
@@ -146,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/lib/pkgconfig
 
-    cat > $out/lib/pkgconfig/angle.pc <<EOF
+    cat > $out/lib/pkgconfig/angle.pc <<'EOF'
     prefix=${placeholder "out"}
     exec_prefix=''${prefix}
     libdir=''${prefix}/lib
@@ -173,6 +180,13 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
 
     runHook postInstall
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install_name_tool \
+        -change ./libGLESv2.dylib \
+        $out/lib/libGLESv2.dylib \
+        $out/lib/libGLESv1_CM.dylib
   '';
 
   meta = {

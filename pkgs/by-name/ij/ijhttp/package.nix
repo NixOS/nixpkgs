@@ -1,6 +1,6 @@
 {
   fetchurl,
-  jdk17_headless,
+  jdk21_headless,
   lib,
   makeWrapper,
   stdenvNoCC,
@@ -9,11 +9,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ijhttp";
-  version = "252.23892.409";
+  version = "261.25134.95";
 
   src = fetchurl {
     url = "https://download.jetbrains.com/resources/intellij/http-client/${finalAttrs.version}/intellij-http-client.zip";
-    hash = "sha256-yEEDG9NRYYj8K7+32FB3bJ+qPrVUL0/MMfPoBlol418=";
+    hash = "sha256-RlbpweLHmPvn/Xjtj8EkvAceu0bgJ3DhmKViaJ2jLJ0=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mv lib $out/lib
     install -Dm755 ijhttp $out/lib/ijhttp
     makeWrapper $out/lib/ijhttp $out/bin/ijhttp \
-      --set JAVA_HOME ${jdk17_headless.home}
+      --set JAVA_HOME ${jdk21_headless.home}
 
     runHook postInstall
   '';

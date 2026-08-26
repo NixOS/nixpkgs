@@ -127,6 +127,8 @@ python3Packages.buildPythonApplication rec {
   pythonRelaxDeps = [
     "apscheduler"
     "bleach"
+    "certifi"
+    "chardet"
     "cryptography"
     "flask"
     "flask-limiter"

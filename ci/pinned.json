@@ -9,23 +9,23 @@
       },
       "branch": "nixpkgs-unstable",
       "submodules": false,
-      "revision": "02f3fa0374fa13707d42d55d58ecc76b091f223c",
-      "url": "https://github.com/NixOS/nixpkgs/archive/02f3fa0374fa13707d42d55d58ecc76b091f223c.tar.gz",
-      "hash": "0z8d33c5g0gk9a74ppqq77npisf9xx9c8ai9isxa2hyjx4lv1pki"
+      "revision": "7525d999cd850b9a488817abc89c75dc733acf17",
+      "url": "https://github.com/NixOS/nixpkgs/archive/7525d999cd850b9a488817abc89c75dc733acf17.tar.gz",
+      "hash": "sha256-4IHyyLgLBdKefkljdKod4IMn023pQiDXAWJA187cmdY="
     },
-    "treefmt-nix": {
+    "nixpkgs-26.05-darwin": {
       "type": "Git",
       "repository": {
         "type": "GitHub",
-        "owner": "numtide",
-        "repo": "treefmt-nix"
+        "owner": "NixOS",
+        "repo": "nixpkgs"
       },
-      "branch": "main",
+      "branch": "nixpkgs-26.05-darwin",
       "submodules": false,
-      "revision": "790751ff7fd3801feeaf96d7dc416a8d581265ba",
-      "url": "https://github.com/numtide/treefmt-nix/archive/790751ff7fd3801feeaf96d7dc416a8d581265ba.tar.gz",
-      "hash": "1zah3dmbpn3ap5acg22kq1j19dg32gj73l43yamjcxhc38sv9kd5"
+      "revision": "51fe96f9107566e6b8eeb7fc4ba696c01e548b04",
+      "url": "https://github.com/NixOS/nixpkgs/archive/51fe96f9107566e6b8eeb7fc4ba696c01e548b04.tar.gz",
+      "hash": "sha256-yj0LPLnsmYoLmA3FGANjeTEwej0/DHjZBXWnDQDUuIs="
     }
   },
-  "version": 5
+  "version": 8
 }

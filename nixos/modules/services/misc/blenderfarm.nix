@@ -96,7 +96,7 @@ in
         ln -s ${lib.getExe cfg.blenderPackage} BlenderData/nix-blender-linux64/blender
       ''
       + lib.optionalString (cfg.basicSecurityPasswordFile != null) ''
-        BLENDFARM_PASSWORD=$(${pkgs.systemd}/bin/systemd-creds cat BLENDFARM_PASS_FILE)
+        BLENDFARM_PASSWORD=$(${config.systemd.package}/bin/systemd-creds cat BLENDFARM_PASS_FILE)
         sed -i "s/null/\"$BLENDFARM_PASSWORD\"/g" ServerSettings
       '';
       serviceConfig = {

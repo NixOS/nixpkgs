@@ -18,7 +18,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   outputs = [
-    "dev"
     "doc"
     "out"
   ];

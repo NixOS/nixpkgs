@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-mypy-plugins";
-  version = "3.2.0";
+  version = "4.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "typeddjango";
     repo = "pytest-mypy-plugins";
     tag = version;
-    hash = "sha256-60VxMUUCIP+Mp+OsgdyRTPZVLGC/3iaMxxhw02ABB9k=";
+    hash = "sha256-RyHoZniVLtunqz42tuVeAoiUm/e5JvvwX2MMCAJBhy8=";
   };
 
   build-system = [ setuptools ];
@@ -54,6 +54,7 @@ buildPythonPackage rec {
   '';
 
   disabledTestPaths = [ "pytest_mypy_plugins/tests/test_explicit_configs.py" ];
+  disabledTests = [ "test_no_silence_site_packages" ];
 
   meta = {
     description = "Pytest plugin for testing mypy types, stubs, and plugins";

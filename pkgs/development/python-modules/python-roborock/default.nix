@@ -15,23 +15,26 @@
   pycryptodome,
   pycryptodomex,
   pyrate-limiter,
+  pyshark,
   pytest-asyncio,
   pytestCheckHook,
+  pyyaml,
   vacuum-map-parser-roborock,
   click-shell,
   syrupy,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "python-roborock";
-  version = "5.5.1";
+  version = "5.31.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Python-roborock";
     repo = "python-roborock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2ShXt2mtMhMugzqOHhY1GT7cQ0K78k/4/bPmmP/uheI=";
+    hash = "sha256-HjiOZd+fkCTlxMEiuHWxaFeHwf7vHAYESMLkJ9Cye1U=";
   };
 
   pythonRelaxDeps = [
@@ -44,16 +47,21 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     aiohttp
     aiomqtt
-    click
     construct
     paho-mqtt
     protobuf
     pycryptodome
     pyrate-limiter
     vacuum-map-parser-roborock
-    click-shell
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ pycryptodomex ];
+
+  optional-dependencies.cli = [
+    click
+    click-shell
+    pyyaml
+    pyshark
+  ];
 
   nativeCheckInputs = [
     aioresponses
@@ -61,6 +69,13 @@ buildPythonPackage (finalAttrs: {
     pytest-asyncio
     pytestCheckHook
     syrupy
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+
+  disabledTests = [
+    # url mocking mismatch, probably due to yarl update
+    "test_url_cycling"
   ];
 
   __darwinAllowLocalNetworking = true;

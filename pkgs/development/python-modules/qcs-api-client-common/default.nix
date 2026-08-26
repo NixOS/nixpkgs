@@ -9,6 +9,7 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
+  pythonAtLeast,
   rustc,
   rustPlatform,
   syrupy,
@@ -55,6 +56,11 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     syrupy
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # asyncio.Future() in sync fixture has no implicit event loop on 3.14
+    "test_refresh_interceptor"
   ];
 
   meta = {

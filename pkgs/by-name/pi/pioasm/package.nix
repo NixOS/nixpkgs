@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pioasm";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "pico-sdk";
     tag = finalAttrs.version;
-    hash = "sha256-hQdEZD84/cnLSzP5Xr9vbOGROQz4BjeVOnvbyhe6rfM=";
+    hash = "sha256-QFKeOSYDuoSuVQsZ68fyQgVnGxZdBl8sehbQf665suM=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/tools/pioasm";
@@ -36,7 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/raspberrypi/pico-sdk";
     changelog = "https://github.com/raspberrypi/pico-sdk/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ emilytrau ];
+    maintainers = with lib.maintainers; [
+      emilytrau
+      nulleric
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "pioasm";
   };

@@ -1,37 +1,44 @@
 diff --git a/tinygrad/runtime/autogen/cuda.py b/tinygrad/runtime/autogen/cuda.py
-index 061c8d73f..65ec3ffd7 100644
+index 07b0abd2e..1308edce3 100644
 --- a/tinygrad/runtime/autogen/cuda.py
 +++ b/tinygrad/runtime/autogen/cuda.py
-@@ -1,7 +1,7 @@
- # mypy: ignore-errors
- import ctypes
- from tinygrad.runtime.support.c import DLL, Struct, CEnum, _IO, _IOW, _IOR, _IOWR
--dll = DLL('cuda', 'cuda')
-+dll = DLL('cuda', '@driverLink@/lib/libcuda.so')
- cuuint32_t = ctypes.c_uint32
- cuuint64_t = ctypes.c_uint64
- CUdeviceptr_v2 = ctypes.c_uint64
+@@ -4,7 +4,7 @@ import ctypes
+ from typing import Literal, TypeAlias
+ from tinygrad.runtime.support.c import _IO, _IOW, _IOR, _IOWR
+ from tinygrad.runtime.support import c
+-dll = c.DLL('cuda', 'cuda')
++dll = c.DLL('cuda', '@driverLink@/lib/libcuda.so')
+ cuuint32_t: TypeAlias = ctypes.c_uint32
+ cuuint64_t: TypeAlias = ctypes.c_uint64
+ CUdeviceptr_v2: TypeAlias = ctypes.c_uint64
 diff --git a/tinygrad/runtime/autogen/nvrtc.py b/tinygrad/runtime/autogen/nvrtc.py
-index 88085c45b..90518d403 100644
+index b8e50c9fb..512d10a31 100644
 --- a/tinygrad/runtime/autogen/nvrtc.py
 +++ b/tinygrad/runtime/autogen/nvrtc.py
-@@ -2,7 +2,7 @@
- import ctypes
- from tinygrad.runtime.support.c import DLL, Struct, CEnum, _IO, _IOW, _IOR, _IOWR
+@@ -5,7 +5,7 @@ from typing import Literal, TypeAlias
+ from tinygrad.runtime.support.c import _IO, _IOW, _IOR, _IOWR
+ from tinygrad.runtime.support import c
  import sysconfig
--dll = DLL('nvrtc', 'nvrtc', f'/usr/local/cuda/targets/{sysconfig.get_config_vars().get("MULTIARCH", "").rsplit("-", 1)[0]}/lib')
-+dll = DLL('nvrtc','@cuda_nvrtc@/lib/libnvrtc.so')
- nvrtcResult = CEnum(ctypes.c_uint32)
- NVRTC_SUCCESS = nvrtcResult.define('NVRTC_SUCCESS', 0)
- NVRTC_ERROR_OUT_OF_MEMORY = nvrtcResult.define('NVRTC_ERROR_OUT_OF_MEMORY', 1)
+-dll = c.DLL('nvrtc', 'nvrtc', [f'/{pre}/cuda/targets/{tgt}/lib' for pre in ['opt', 'usr/local'] for tgt in [sysconfig.get_config_vars().get("MULTIARCH", "").rsplit("-", 1)[0], 'sbsa-linux']])
++dll = c.DLL('nvrtc', '@cuda_nvrtc@/lib/libnvrtc.so')
+ nvrtcResult: dict[int, str] = {(NVRTC_SUCCESS:=0): 'NVRTC_SUCCESS', (NVRTC_ERROR_OUT_OF_MEMORY:=1): 'NVRTC_ERROR_OUT_OF_MEMORY', (NVRTC_ERROR_PROGRAM_CREATION_FAILURE:=2): 'NVRTC_ERROR_PROGRAM_CREATION_FAILURE', (NVRTC_ERROR_INVALID_INPUT:=3): 'NVRTC_ERROR_INVALID_INPUT', (NVRTC_ERROR_INVALID_PROGRAM:=4): 'NVRTC_ERROR_INVALID_PROGRAM', (NVRTC_ERROR_INVALID_OPTION:=5): 'NVRTC_ERROR_INVALID_OPTION', (NVRTC_ERROR_COMPILATION:=6): 'NVRTC_ERROR_COMPILATION', (NVRTC_ERROR_BUILTIN_OPERATION_FAILURE:=7): 'NVRTC_ERROR_BUILTIN_OPERATION_FAILURE', (NVRTC_ERROR_NO_NAME_EXPRESSIONS_AFTER_COMPILATION:=8): 'NVRTC_ERROR_NO_NAME_EXPRESSIONS_AFTER_COMPILATION', (NVRTC_ERROR_NO_LOWERED_NAMES_BEFORE_COMPILATION:=9): 'NVRTC_ERROR_NO_LOWERED_NAMES_BEFORE_COMPILATION', (NVRTC_ERROR_NAME_EXPRESSION_NOT_VALID:=10): 'NVRTC_ERROR_NAME_EXPRESSION_NOT_VALID', (NVRTC_ERROR_INTERNAL_ERROR:=11): 'NVRTC_ERROR_INTERNAL_ERROR'}
+ @dll.bind(c.POINTER[ctypes.c_char], ctypes.c_uint32)
+ def nvrtcGetErrorString(result:ctypes.c_uint32) -> c.POINTER[ctypes.c_char]: ...
+@@ -52,4 +52,4 @@ def nvrtcGetProgramLog(prog:nvrtcProgram, log:c.POINTER[ctypes.c_char]) -> ctype
+ def nvrtcAddNameExpression(prog:nvrtcProgram, name_expression:c.POINTER[ctypes.c_char]) -> ctypes.c_uint32: ...
+ @dll.bind(ctypes.c_uint32, nvrtcProgram, c.POINTER[ctypes.c_char], c.POINTER[c.POINTER[ctypes.c_char]])
+ def nvrtcGetLoweredName(prog:nvrtcProgram, name_expression:c.POINTER[ctypes.c_char], lowered_name:c.POINTER[c.POINTER[ctypes.c_char]]) -> ctypes.c_uint32: ...
+-__DEPRECATED__ = lambda msg: __attribute__((deprecated(msg))) # type: ignore
+\ No newline at end of file
++__DEPRECATED__ = lambda msg: __attribute__((deprecated(msg))) # type: ignore
 diff --git a/tinygrad/runtime/support/compiler_cuda.py b/tinygrad/runtime/support/compiler_cuda.py
-index 8f71a9255..fdbf01bad 100644
+index 57c40a447..b95e7f91c 100644
 --- a/tinygrad/runtime/support/compiler_cuda.py
 +++ b/tinygrad/runtime/support/compiler_cuda.py
-@@ -43,7 +43,7 @@ def cuda_disassemble(lib:bytes, arch:str):
- class CUDACompiler(Compiler):
-   def __init__(self, arch:str, cache_key:str="cuda"):
-     self.arch, self.compile_options = arch, [f'--gpu-architecture={arch}']
+@@ -44,7 +44,7 @@ def cuda_disassemble(lib:bytes, arch:str, ptx=False):
+ class NVRTCCompiler(Compiler):
+   def __init__(self, arch:str, ptx=True, cache_key:str="cuda"):
+     self.ptx, self.arch, self.compile_options = ptx, arch, [f'--gpu-architecture={arch}']
 -    self.compile_options += [f"-I{CUDA_PATH}/include"] if CUDA_PATH else ["-I/usr/local/cuda/include", "-I/usr/include", "-I/opt/cuda/include"]
 +    self.compile_options += ["-I@cuda_cudart@/include"]
      nvrtc_check(nvrtc.nvrtcVersion((nvrtcMajor := ctypes.c_int()), (nvrtcMinor := ctypes.c_int())))

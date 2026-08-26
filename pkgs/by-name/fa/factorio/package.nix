@@ -139,7 +139,12 @@ let
                 "token@token"
               ];
             })
-            (_: {
+            (prevAttrs: {
+              impureEnvVars = prevAttrs.impureEnvVars or [ ] ++ [
+                "NIX_FACTORIO_USERNAME"
+                "NIX_FACTORIO_TOKEN"
+              ];
+
               # This preHook hides the credentials from /proc
               preHook =
                 if username != "" && token != "" then
@@ -149,8 +154,12 @@ let
                   ''
                 else
                   ''
-                    # Deliberately failing since username/token was not provided, so we can't fetch.
-                    exit 1
+                    if [[ -z "''${NIX_FACTORIO_USERNAME}" || -z "''${NIX_FACTORIO_TOKEN}" ]]; then
+                      # Deliberately failing since username/token was not provided, so we can't fetch.
+                      exit 1
+                    fi
+                    echo -n "$NIX_FACTORIO_USERNAME" >username
+                    echo -n "$NIX_FACTORIO_TOKEN"    >token
                   '';
               failureHook = ''
                 cat <<EOF

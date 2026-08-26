@@ -3,25 +3,25 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  versionCheckHook,
 }:
 buildGoModule (finalAttrs: {
   pname = "oh-my-posh";
-  version = "29.12.0";
+  version = "30.6.5";
 
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = "oh-my-posh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Gtv3h46+T3+hB4e2KJjS128RCNx/0wh/Qz52T+xxClI=";
+    hash = "sha256-e73Oi4HdWt/UhoNoSlhY6NPZGiMgk97zXvXnfUbYm+k=";
   };
 
-  vendorHash = "sha256-xDMSfuzREtn/Bm1rkRoUS3Ykec81WeA81VW6dp1wLb4=";
+  vendorHash = "sha256-aq+HxSJojSUtWbIn5TY669bbMrFgEvq2nCxLNnKRHLo=";
 
   sourceRoot = "${finalAttrs.src.name}/src";
 
   ldflags = [
     "-s"
-    "-w"
     "-X github.com/jandedobbeleer/oh-my-posh/src/build.Version=${finalAttrs.version}"
     "-X github.com/jandedobbeleer/oh-my-posh/src/build.Date=1970-01-01T00:00:00Z"
   ];
@@ -34,7 +34,7 @@ buildGoModule (finalAttrs: {
 
   postPatch = ''
     # these tests requires internet access
-    rm cli/image/image_test.go config/migrate_glyphs_test.go cli/upgrade/notice_test.go segments/upgrade_test.go
+    rm config/migrate_glyphs_test.go cli/upgrade/notice_test.go segments/upgrade_test.go
   '';
 
   postInstall = ''
@@ -44,6 +44,9 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru.updateScript = nix-update-script { };
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Prompt theme engine for any shell";

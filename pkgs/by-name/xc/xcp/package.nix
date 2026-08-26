@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xcp";
-  version = "0.24.2";
+  version = "0.24.8";
 
   src = fetchFromGitHub {
     owner = "tarka";
     repo = "xcp";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-ojk2khNLKhnAbWlBG2QEhcVrXz5wuC92IOEG3o58E3A=";
+    tag = "xcp-v${finalAttrs.version}";
+    hash = "sha256-OuwzgtMQMQcWhQnwD1Ow2fsT0yhl+DVGkqoebe2osf8=";
   };
 
-  cargoHash = "sha256-uJVm9nxXXfn4ZEIYoX2XMhZN7Oduwi1D8wZmv64mx60=";
+  cargoHash = "sha256-8WRiHHMvYwwx7AxuovGjnn83AxIAJK0T86b2WCOtGuw=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -57,6 +57,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # thread 'test_sockets_dir::test_with_parallel_file_driver' panicked at tests/common.rs:1178:5:
     # assertion failed: to.exists()
     "--skip=test_sockets_dir::test_with_parallel_file_driver"
+
+    # failing in sandbox
+    "--skip=dir_copy_deref_symlinks::test_with_parallel_file_driver"
   ];
 
   postInstall = ''

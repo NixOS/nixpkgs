@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchsvn,
+  fetchurl,
   autoreconfHook,
   gettext,
   gnutls,
@@ -11,14 +11,15 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libfilezilla";
-  version = "0.54.1";
+  version = "0.56.1";
 
-  src = fetchsvn {
-    url = "https://svn.filezilla-project.org/svn/libfilezilla/trunk";
-    rev = "11363";
-    hash = "sha256-m4CfnovtZPvwwjlyWKx/L1OkjiIlKfR7tqg+xB+nqzw=";
+  src = fetchurl {
+    # Upstream download link was made unstable on purpose
+    # See https://trac.filezilla-project.org/ticket/13186
+    url = "https://sources.archlinux.org/other/libfilezilla/libfilezilla-${finalAttrs.version}.tar.xz";
+    hash = "sha256-rL8r36LFpLHy/zaCs9UsuaZUIv1fPh+WR9iEahB7cck=";
   };
 
   nativeBuildInputs = [
@@ -49,4 +50,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

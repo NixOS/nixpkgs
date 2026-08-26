@@ -2,7 +2,7 @@
   llvmPackages_20,
   lib,
   fetchurl,
-  fetchpatch,
+  fetchpatch2,
   dotnetCorePackages,
   jq,
   curl,
@@ -43,11 +43,10 @@ let
   stdenv = llvmPackages.stdenv;
 
   inherit (stdenv)
-    isLinux
-    isDarwin
     buildPlatform
     targetPlatform
     ;
+  inherit (stdenv.hostPlatform) isLinux isDarwin;
   inherit (swiftPackages) swift;
 
   releaseManifest = lib.importJSON releaseManifestFile;
@@ -149,17 +148,27 @@ stdenv.mkDerivation {
       ./fix-aspnetcore-portable-build.patch
       ./vmr-compiler-opt-v8.patch
     ]
+    # see passthru.hasCrossTargetBug
     ++ lib.optional (
       lib.versionAtLeast version "10" && lib.versionOlder version "11"
     ) ./Prefer-DOTNET_ROOT-over-directory-traversal-when-fin.patch
-    ++ lib.optional (lib.versionAtLeast version "11") ./Prefer-DOTNET_ROOT-over-directory-traversal-when-fin.2.patch
+    ++ lib.optionals (lib.versionAtLeast version "11") [
+      ./Prefer-DOTNET_ROOT-over-directory-traversal-when-fin.2.patch
+      (fetchpatch2 {
+        url = "https://github.com/dotnet/runtime/pull/132408/commits/76be9c11bc50bcfa7a13e027fb1cee486bca25a1.patch";
+        hash = "sha256-aJT4QVBaB96mc5m1xX8J5+Uh6h/XtKWV8m5gLOnFc+k=";
+        extraPrefix = "src/runtime/";
+        stripLen = 1;
+      })
+    ]
     ++ lib.optional (lib.versionAtLeast version "11" && isDarwin) ./fix-cmake-darwin.patch;
 
   postPatch = ''
     # set the sdk version in global.json to match the bootstrap sdk
-    sdk_version=$(HOME=$(mktemp -d) ${bootstrapSdk}/bin/dotnet --version)
-    jq '(.tools.dotnet=$dotnet)' global.json --arg dotnet "$sdk_version" > global.json~
-    mv global.json{~,}
+    # we purposely rename global.json first, because it can break dotnet --version
+    mv global.json{,~}
+    sdk_version=$(${bootstrapSdk}/bin/dotnet --version)
+    jq '.tools.dotnet=$dotnet | .sdk.version=$dotnet' global.json~ --arg dotnet "$sdk_version" > global.json
 
     patchShebangs $(find -name \*.sh -type f -executable)
 
@@ -180,12 +189,12 @@ stdenv.mkDerivation {
 
     # AD0001 crashes intermittently in source-build-reference-packages with
     # CSC : error AD0001: Analyzer 'Microsoft.NetCore.CSharp.Analyzers.Runtime.CSharpDetectPreviewFeatureAnalyzer' threw an exception of type 'System.NullReferenceException' with message 'Object reference not set to an instance of an object.'.
-    # possibly related to https://github.com/dotnet/runtime/issues/90356
+    # https://github.com/dotnet/roslyn/issues/81645
     xmlstarlet ed \
       --inplace \
       -s //Project -t elem -n PropertyGroup \
       -s \$prev -t elem -n NoWarn -v '$(NoWarn);AD0001' \
-      src/source-build-reference-packages/src/referencePackages/Directory.Build.props
+      src/source-build-assets/src/referencePackages/Directory.Build.props
 
   ''
   + lib.optionalString (lib.versionOlder version "10") ''
@@ -354,7 +363,13 @@ stdenv.mkDerivation {
         src/runtime/src/mono/CMakeLists.txt \
         --replace-fail '/usr/lib/libicucore.dylib' '${darwin.ICU}/lib/libicucore.dylib'
     ''
-  );
+  )
+  + lib.optionalString (lib.versionAtLeast version "11") ''
+    # matching the trailing space here to avoid breaking the shebang
+    substituteInPlace \
+      src/msbuild/eng/build.sh \
+      --replace-fail '/bin/bash ' 'bash '
+  '';
 
   prepFlags = [
     "--no-artifacts"
@@ -371,13 +386,11 @@ stdenv.mkDerivation {
     in
     ''
       runHook preConfigure
-
       # The build process tries to overwrite some things in the sdk (e.g.
       # SourceBuild.MSBuildSdkResolver.dll), so it needs to be mutable.
-      cp -Tr ${bootstrapSdk}/share/dotnet .dotnet
+      mkdir .dotnet
+      cp -r ${bootstrapSdk}/share/dotnet/* .dotnet/
       chmod -R +w .dotnet
-
-      export HOME=$(mktemp -d)
     ''
     + lib.optionalString (lib.versionAtLeast version "10") ''
       dotnet nuget add source "${bootstrapSdk.artifacts}"
@@ -406,15 +419,22 @@ stdenv.mkDerivation {
   dontConfigureNuget = true; # NUGET_PACKAGES breaks the build
   dontUseCmakeConfigure = true;
 
-  # https://github.com/NixOS/nixpkgs/issues/38991
-  # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
-  LOCALE_ARCHIVE = lib.optionalString (
-    isLinux && glibcLocales != null
-  ) "${glibcLocales}/lib/locale/locale-archive";
+  env = {
+    # https://github.com/NixOS/nixpkgs/issues/38991
+    # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
+    LOCALE_ARCHIVE = lib.optionalString (
+      isLinux && glibcLocales != null
+    ) "${glibcLocales}/lib/locale/locale-archive";
 
-  # clang: error: argument unused during compilation: '-Wa,--compress-debug-sections' [-Werror,-Wunused-command-line-argument]
-  # caused by separateDebugInfo
-  NIX_CFLAGS_COMPILE = "-Wno-unused-command-line-argument";
+    # clang: error: argument unused during compilation:
+    # '-Wa,--compress-debug-sections' [-Werror,-Wunused-command-line-argument]
+    # caused by separateDebugInfo
+    NIX_CFLAGS_COMPILE = "-Wno-unused-command-line-argument";
+  }
+  // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "11") {
+    # error : supplying the --target arm64-apple-macos14.0 != arm64-apple-darwin argument to a nix-wrapped compiler may not work correctly
+    NIX_CC_WRAPPER_SUPPRESS_TARGET_WARNING = "1";
+  };
 
   buildFlags = [
     "--with-packages"
@@ -446,12 +466,9 @@ stdenv.mkDerivation {
 
     # CLR_CC/CXX need to be set to stop the build system from using clang-11,
     # which is unwrapped
-    # dotnet needs to be in PATH to fix:
-    # src/sdk/eng/restore-toolset.sh: line 114: /nix/store/[...]-dotnet-sdk-9.0.100-preview.2.24157.14//.version: Read-only file system
     version= \
     CLR_CC=$(command -v clang) \
     CLR_CXX=$(command -v clang++) \
-    PATH=$PWD/.dotnet:$PATH \
       ./build.sh $buildFlags
 
     runHook postBuild
@@ -530,6 +547,7 @@ stdenv.mkDerivation {
     icu = _icu;
     # ilcompiler is currently broken: https://github.com/dotnet/source-build/issues/1215
     hasILCompiler = lib.versionAtLeast version "9";
+    hasCrossTargetBug = false;
   };
 
   meta = {
@@ -541,11 +559,7 @@ stdenv.mkDerivation {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
-    # build deadlocks intermittently on rosetta
-    # https://github.com/dotnet/runtime/issues/111628
-    broken = stdenv.hostPlatform.system == "x86_64-darwin";
   };
 }

@@ -7,7 +7,8 @@
 }:
 
 stdenv.mkDerivation {
-  name = "rpmextract";
+  pname = "rpmextract";
+  inherit (rpm) version;
 
   buildCommand = ''
     install -Dm755 $script $out/bin/rpmextract

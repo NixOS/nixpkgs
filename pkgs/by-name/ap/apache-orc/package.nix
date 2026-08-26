@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "apache-orc";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "orc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QQdRzwmUF1Qwxg53kJv1Q6yFuHqSrLYwUxKt+6wK9Hs=";
+    hash = "sha256-5pY81SM7BALjPL0e7Iov2QbMcUDd3lNC/99U9yiDKfQ=";
   };
 
   patches = [
@@ -43,11 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     # <store path>/bin/ld: <store path>/lib/libabsl_raw_hash-set.so.2601.0.0:
     # error adding symbols: DSO missing from command line
     ./cmake-link-abseil.patch
-
-    # Protobuf 34 adds `[[nodiscard]]` to several serialization functions. In
-    # order to avoid these warnings causing build failures, we add handling for
-    # this failure case.
-    ./protobuf34-nodiscard.patch
   ];
 
   nativeBuildInputs = [
@@ -66,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeBool "BUILD_JAVA" false)
-    (lib.cmakeBool "STOP_BUILD_ON_WARNING" stdenv.hostPlatform.isLinux)
+    (lib.cmakeBool "STOP_BUILD_ON_WARNING" false)
     (lib.cmakeBool "INSTALL_VENDORED_LIBS" false)
   ]
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [

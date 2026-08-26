@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   replaceVars,
-  fetchpatch,
   python,
   cudaPackages,
 
@@ -16,6 +15,7 @@
   # build-system
   cmake,
   ninja,
+  nvidia-cudnn-frontend,
   pybind11,
   setuptools,
   # jax-only
@@ -23,6 +23,9 @@
   jax,
   # pytorch-only:
   torch,
+
+  # buildInputs
+  nlohmann_json,
 
   # dependencies
   importlib-metadata,
@@ -34,6 +37,9 @@
   onnx,
   onnxscript,
 
+  # passthru
+  transformer-engine,
+
   cudaSupport ? config.cudaSupport,
   cudaCapabilities ?
     if withPytorch then torch.cudaCapabilities else cudaPackages.flags.cudaCapabilities,
@@ -41,12 +47,15 @@
   withPytorch ? true,
   withJax ? true,
   withNvshmem ? false,
+  withCusolvermp ? false,
+  withNcclEp ? true,
 }:
 
 let
   inherit (lib)
     cmakeFeature
     concatStringsSep
+    getBin
     getInclude
     getLib
     optional
@@ -77,7 +86,7 @@ let
 in
 buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
   pname = "transformer-engine";
-  version = "2.14";
+  version = "2.18";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -87,42 +96,18 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     tag = "v${finalAttrs.version}";
     # Their CMakeLists.txt does not easily let us inject dependencies
     fetchSubmodules = true;
-    hash = "sha256-yxcUn75blB5ssEqGXZFDUrBv2/WM8yzumJCt5olV5Po=";
+    hash = "sha256-NKky2b5grlfVdWsPf6HO4QZAvVuibCKvmfU0DxUIfvs=";
   };
 
-  patches =
-    optionals cudaSupport [
-      (replaceVars ./cuda-libs-paths.patch {
-        libcudnn_so = "${getLib cudaPackages.cudnn}/lib/libcudnn.so";
-        libnvrtc_so = "${getLib cudaPackages.cuda_nvrtc}/lib/libnvrtc.so";
-        libcurand_so = "${getLib cudaPackages.libcurand}/lib/libcurand.so";
+  patches = optionals cudaSupport [
+    (replaceVars ./cuda-libs-paths.patch {
+      libcudnn_so = "${getLib cudaPackages.cudnn}/lib/libcudnn.so";
+      libnvrtc_so = "${getLib cudaPackages.cuda_nvrtc}/lib/libnvrtc.so";
+      libcurand_so = "${getLib cudaPackages.libcurand}/lib/libcurand.so";
 
-        cudart_include_dir = "${getInclude cudaPackages.cuda_cudart}/include";
-      })
-
-      # https://github.com/NVIDIA/TransformerEngine/pull/2832
-      (fetchpatch {
-        name = "fix-cuda-arch-cmake-logic";
-        url = "https://github.com/NVIDIA/TransformerEngine/commit/fca261ecd09c318d22e7eeebda79632eed8cb9e4.patch";
-        hash = "sha256-nph01cIfmjN7RUFZif5ORoz29CEHWwetiHMEZVnnOyY=";
-      })
-    ]
-    ++ optionals withNvshmem [
-      # https://github.com/NVIDIA/TransformerEngine/pull/2815
-      (fetchpatch {
-        name = "fix-nvshmem-build";
-        url = "https://github.com/NVIDIA/TransformerEngine/commit/e83c09742166dfef3f871cfa1407605feafb3afe.patch";
-        hash = "sha256-5pf0Dg1XL7oAQjR1JZcdgbeaGj9qw9G5+i9Ac0iff64=";
-      })
-    ]
-    ++ optionals (withMpi && withJax) [
-      # https://github.com/NVIDIA/TransformerEngine/pull/2835
-      (fetchpatch {
-        name = "fix-jax-extension-build-with-mpi";
-        url = "https://github.com/NVIDIA/TransformerEngine/commit/2dd31bb849e83cce51c7d169db883862063d3a95.patch";
-        hash = "sha256-QSRMetseYPGGZCgGkS9rIj9nJdazCD4hv2IgPc+ClSM=";
-      })
-    ];
+      cudart_include_dir = "${getInclude cudaPackages.cuda_cudart}/include";
+    })
+  ];
 
   postPatch =
     # Patch build-system requirements:
@@ -133,9 +118,9 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     ''
       substituteInPlace pyproject.toml \
         --replace-fail "pybind11[global]" "pybind11" \
-        --replace-fail '"pip", "torch>=2.1", "jax>=0.5.0", "flax>=0.7.1"' ""
+        --replace-fail '"pip", "torch>=2.1", "jax>=0.5.0", "flax>=0.7.1",' ""
     ''
-    # Harcode the path to the output store path that transformer_engine will use to import
+    # Hardcode the path to the output store path that transformer_engine will use to import
     # - libtransformer_engine.so
     # - transformer_engine_jax.cpython-313-x86_64-linux-gnu.so
     # - transformer_engine_torch.cpython-313-x86_64-linux-gnu.so
@@ -145,6 +130,17 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
         --replace-fail \
           'te_path = Path(importlib.util.find_spec("transformer_engine").origin).parent.parent' \
           'te_path = Path("${placeholder "out"}/${python.sitePackages}")'
+    ''
+    # nccl-ep is built from the vendored `3rdparty/nccl` submodule (see the NCCL_EP_* CMake
+    # variables in `transformer_engine/common/CMakeLists.txt`), which pins a newer NCCL than
+    # `cudaPackages.nccl-ep` provides.
+    # Only `libnccl_ep.a` is consumed (whole-archive), so skip the shared library, which would
+    # otherwise need `-lnccl -lcuda` on the link line.
+    + optionalString withNcclEp ''
+      substituteInPlace 3rdparty/nccl/contrib/nccl_ep/Makefile \
+        --replace-fail \
+          'lib: $(LIBTARGET) $(SOLIBTARGET) $(SOLIBLINKS) $(HEADER_TARGETS)' \
+          'lib: $(LIBTARGET) $(HEADER_TARGETS)'
     '';
 
   # https://github.com/NVIDIA/TransformerEngine/blob/main/docs/envvars.rst
@@ -165,17 +161,30 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
       (cmakeFeature "CUDNN_FRONTEND_INCLUDE_DIR" "${getInclude cudaPackages.cudnn-frontend}/include")
     ];
 
+    NVTE_WITH_NCCL_EP = if withNcclEp then 1 else 0;
+    # Consumed by `3rdparty/nccl/makefiles/common.mk`, which otherwise defaults to
+    # `CUDA_HOME = /usr/local/cuda`. Only the nccl-ep headers are needed, so `NCCL_HOME`
+    # can point at the `include` output alone.
+    NCCL_HOME = optionalString withNcclEp (getInclude cudaPackages.nccl).outPath;
+    CUDA_HOME = optionalString withNcclEp (getBin cudaPackages.cuda_nvcc).outPath;
+    CUDA_INC = optionalString withNcclEp "${getInclude cudaPackages.cuda_cudart}/include";
+    CUDA_LIB = optionalString withNcclEp "${getLib cudaPackages.cuda_cudart}/lib";
+
     NVTE_UB_WITH_MPI = if withMpi then 1 else 0;
     # NOTE: Make sure to use mpi from buildPackages to match the spliced version created through nativeBuildInputs.
     MPI_HOME = optionalString withMpi (getLib mpi).outPath;
 
     NVTE_ENABLE_NVSHMEM = if withNvshmem then 1 else 0;
     NVSHMEM_HOME = optionalString withNvshmem cudaPackages.libnvshmem.outPath;
+
+    NVTE_WITH_CUSOLVERMP = if withCusolvermp then 1 else 0;
+    CUSOLVERMP_HOME = optionalString withCusolvermp (getLib cudaPackages.libcusolvermp).outPath;
   };
 
   build-system = [
     cmake
     ninja
+    nvidia-cudnn-frontend
     pybind11
     setuptools
   ]
@@ -202,6 +211,7 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
 
   buildInputs = [
     cudaPackages.cuda_cudart # cuda_runtime.h
+    cudaPackages.cuda_nvcc # crt/host_config.h; even though we include this in nativeBuildInputs, it's needed here too
     cudaPackages.cuda_nvml_dev # nvml.h
     cudaPackages.cuda_nvrtc # nvrtc.h
     cudaPackages.cuda_nvtx # nvToolsExt.h
@@ -212,10 +222,14 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     cudaPackages.libcusolver # cusolverDn.h
     cudaPackages.libcusparse # cusparse.h
     cudaPackages.nccl # nccl.h
+    nlohmann_json
     pybind11 # pybind11/pybind11.h
   ]
   ++ optionals withMpi [
     mpi # mpi.h
+  ]
+  ++ optionals withCusolvermp [
+    cudaPackages.libcusolvermp
   ];
 
   runtimeDependencies = optionals withNvshmem [
@@ -245,23 +259,44 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     torch
   ];
 
-  # When built with nvshmem support `dlopen`ing libtransformer_engine.so `dlopen`s
-  # libnvidia-ml.so.1 which is provided by the GPU driver at run time:
-  # OSError: libnvidia-ml.so.1: cannot open shared object file: No such file or directory
-  pythonImportsCheck = optionals (!withNvshmem) (
-    [
-      "transformer_engine"
-    ]
-    ++ optionals withJax [
-      "transformer_engine_jax"
-    ]
-    ++ optionals withPytorch [
-      "transformer_engine_torch"
-    ]
-  );
+  dontUsePythonImportsCheck =
+    # When built with cusolvermp support `dlopen`ing libtransformer_engine.so `dlopen`s
+    # libcuda.so.1 which is provided by the GPU driver at run time:
+    # OSError: libcuda.so.1: cannot open shared object file: No such file or directory
+    withCusolvermp
+
+    # When built with nvshmem support `dlopen`ing libtransformer_engine.so `dlopen`s
+    # libnvidia-ml.so.1 which is provided by the GPU driver at run time:
+    # OSError: libnvidia-ml.so.1: cannot open shared object file: No such file or directory
+    || withNvshmem
+
+    # nccl-ep links `CUDA::cuda_driver` after the `libnccl_ep.a` whole-archive, so
+    # libtransformer_engine.so gets a `DT_NEEDED` on libcuda.so.1, provided by the GPU driver at
+    # run time:
+    # OSError: libcuda.so.1: cannot open shared object file: No such file or directory
+    || withNcclEp;
+
+  pythonImportsCheck = [
+    "transformer_engine"
+  ]
+  ++ optionals withJax [
+    "transformer_engine_jax"
+  ]
+  ++ optionals withPytorch [
+    "transformer_engine_torch"
+  ];
 
   # Almost all tests require GPU access
   doCheck = false;
+
+  passthru.tests = {
+    withOutNcclEp = transformer-engine.override { withNcclEp = false; };
+    withMpi = transformer-engine.override { withMpi = true; };
+    withPytorch = transformer-engine.override { withPytorch = true; };
+    withJax = transformer-engine.override { withJax = true; };
+    withNvshmem = transformer-engine.override { withNvshmem = true; };
+    withCusolvermp = transformer-engine.override { withCusolvermp = true; };
+  };
 
   meta = {
     description = "Library for accelerating Transformer models on NVIDIA GPUs";
@@ -269,6 +304,7 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     changelog = "https://github.com/NVIDIA/TransformerEngine/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+    teams = [ lib.teams.cuda ];
     broken = !cudaSupport;
   };
 })

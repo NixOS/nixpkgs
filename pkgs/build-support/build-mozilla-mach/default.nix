@@ -16,6 +16,7 @@
   extraPostPatch ? "",
   extraNativeBuildInputs ? [ ],
   extraConfigureFlags ? [ ],
+  extraPreConfigure ? "",
   extraBuildInputs ? [ ],
   extraMakeFlags ? [ ],
   extraPassthru ? { },
@@ -58,6 +59,7 @@ in
   pkg-config,
   pkgsCross, # wasm32 rlbox
   python3,
+  python313,
   runCommand,
   rustc,
   rust-cbindgen,
@@ -144,7 +146,13 @@ in
   ),
   overrideCC,
   buildPackages,
-  pgoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform == stdenv.buildPlatform),
+  # PGO merges profile data with a 32-bit llvm-profdata, which runs out of
+  # address space on the huge libxul profile, so disable it on 32-bit.
+  pgoSupport ? (
+    stdenv.hostPlatform.isLinux
+    && stdenv.hostPlatform == stdenv.buildPlatform
+    && stdenv.hostPlatform.is64bit
+  ),
   xvfb-run,
   elfhackSupport ?
     isElfhackPlatform stdenv && !(stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64),
@@ -238,9 +246,9 @@ let
   # https://hacks.mozilla.org/2021/12/webassembly-and-back-again-fine-grained-sandboxing-in-firefox-95/
   # We only link c++ libs here, our compiler wrapper can find wasi libc and crt itself.
   wasiSysRoot = runCommand "wasi-sysroot" { } ''
-    mkdir -p $out/lib/wasm32-wasi
-    for lib in ${pkgsCross.wasi32.llvmPackages.libcxx}/lib/*; do
-      ln -s $lib $out/lib/wasm32-wasi
+    mkdir -p $out/lib/wasm32-wasip1
+    for lib in ${pkgsCross.wasm32-wasip1.llvmPackages.libcxx}/lib/*; do
+      ln -s $lib $out/lib/wasm32-wasip1
     done
   '';
 
@@ -303,6 +311,9 @@ buildStdenv.mkDerivation {
 
   inherit src unpackPhase;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   meta =
     meta
     // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
@@ -332,25 +343,19 @@ buildStdenv.mkDerivation {
       # https://hg-edge.mozilla.org/mozilla-central/rev/aa8a29bd1fb9
       ./139-wayland-drag-animation.patch
     ]
-    # Revert apple sdk bump to 26.1 and 26.2
-    ++
-      lib.optionals (lib.versionAtLeast version "148" && lib.versionOlder apple-sdk_26.version "26.2")
-        [
-          (fetchpatch {
-            url = "https://github.com/mozilla-firefox/firefox/commit/73cbb9ff0fdbf8b13f38d078ce01ef6ec0794f9c.patch";
-            hash = "sha256-ghdddJxsaxXzLZpOOfwss+2S/UUcbLqKGzWWqKy9h/k=";
-            revert = true;
-          })
-        ]
-    ++
-      lib.optionals (lib.versionAtLeast version "146" && lib.versionOlder apple-sdk_26.version "26.1")
-        [
-          (fetchpatch {
-            url = "https://github.com/mozilla-firefox/firefox/commit/c1cd0d56e047a40afb2a59a56e1fd8043e448e05.patch";
-            hash = "sha256-bFHLy3b0jOcROqltIwHwSAqWYve8OZHbiPMOdhLUCLc=";
-            revert = true;
-          })
-        ]
+    ++ lib.optionals (lib.versionAtLeast version "140" && lib.versionOlder version "144") [
+      # Versions before 144 vendor bindgen 0.69. On Darwin, libc++ 21 changed
+      # basic_string::__self_view from a typedef to an attributed using alias;
+      # bindgen then emits it without its template parameter, producing invalid
+      # Rust. Vendored bindgen was updated in:
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1985509
+      ./140-bindgen-string-view.patch
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "140" && lib.versionOlder version "140.13") [
+      # https://github.com/mozilla/cbindgen/issues/1165
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=2046162
+      ./153-cbindgen-0.29.4-compat.patch
+    ]
     ++ extraPatches;
 
   postPatch = ''
@@ -375,7 +380,7 @@ buildStdenv.mkDerivation {
     makeBinaryWrapper
     nodejs
     perl
-    python3
+    (if lib.versionAtLeast version "143.0" then python3 else python313)
     rust-cbindgen
     rustPlatform.bindgenHook
     rustc
@@ -422,8 +427,8 @@ buildStdenv.mkDerivation {
     export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
 
     # RBox WASM Sandboxing
-    export WASM_CC=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}cc
-    export WASM_CXX=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}c++
+    export WASM_CC=${pkgsCross.wasm32-wasip1.stdenv.cc}/bin/${pkgsCross.wasm32-wasip1.stdenv.cc.targetPrefix}cc
+    export WASM_CXX=${pkgsCross.wasm32-wasip1.stdenv.cc}/bin/${pkgsCross.wasm32-wasip1.stdenv.cc.targetPrefix}c++
   ''
   + lib.optionalString pgoSupport ''
     if [ -e "$TMPDIR/merged.profdata" ]; then
@@ -466,7 +471,8 @@ buildStdenv.mkDerivation {
     # linking firefox hits the vm.max_map_count kernel limit with the default musl allocator
     # TODO: Default vm.max_map_count has been increased, retest without this
     export LD_PRELOAD=${mimalloc}/lib/libmimalloc.so
-  '';
+  ''
+  + extraPreConfigure;
 
   # firefox has a different definition of configurePlatforms from nixpkgs, see configureFlags
   configurePlatforms = [ ];
@@ -606,7 +612,7 @@ buildStdenv.mkDerivation {
 
   profilingPhase = lib.optionalString pgoSupport ''
     # Avoid compressing the instrumented build with high levels of compression
-    export MOZ_PKG_FORMAT=tar
+    export MOZ_PKG_FORMAT=TAR
 
     # Package up Firefox for profiling
     ./mach package

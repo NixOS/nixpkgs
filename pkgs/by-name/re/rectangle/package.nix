@@ -134,13 +134,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rectangle";
-  version = "0.95";
+  version = "0.99";
 
   src = fetchFromGitHub {
     owner = "rxhanson";
     repo = "Rectangle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M/qZo2dWsFQxiBD5ypKh0M7AdHdLkY/rx4Lx01OBSlc=";
+    hash = "sha256-Fz6vBw9fXcYsTza/vHewSw6O80mJIMvs+H9tuJ/dHBo=";
   };
 
   nativeBuildInputs = [
@@ -306,7 +306,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://rectangleapp.com/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      FlameFlag
+      _4evy
       Intuinewin
       wegank
     ];

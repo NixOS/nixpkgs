@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "strichliste-frontend";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "strichliste";
     repo = "strichliste-web-frontend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fi4pz3ylWyC4yvDWsK2Rvv8KDaXeHNVz0jY6PpF07hE=";
+    hash = "sha256-LzTdFYuIIFmAVuHtGjljqSBZGEPibwXcK5WuYB6ELNg=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
@@ -39,5 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
-  inherit meta;
+  meta = meta // {
+    changelog = "https://github.com/strichliste/strichliste-web-frontend/releases/tag/${finalAttrs.src.tag}";
+  };
 })

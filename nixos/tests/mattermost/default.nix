@@ -58,6 +58,10 @@ import ../make-test-python.nix (
                   UserNoticesEnabled = false;
                 };
               };
+              package = pkgs.mattermost.override {
+                removeFreeBadge = true;
+                removeUserLimit = true;
+              };
             } mattermostConfig;
 
             # Upgrade to the latest Mattermost.

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spirv-tools";
-  version = "1.4.341.0";
+  version = "1.4.357.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
     rev = "vulkan-sdk-${finalAttrs.version}";
-    hash = "sha256-8haVqfmTBvNuv5jEc/LaAO34pWjTZAJ04FIxuxfJNUc=";
+    hash = "sha256-ne2JF68MJNriPIiA/fRCb6VYH3vWsoyov4S82QQY2AI=";
   };
 
   patches = [

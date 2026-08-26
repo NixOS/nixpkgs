@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cfitsio";
-  version = "4.6.4";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "HEASARC";
     repo = "cfitsio";
     tag = "cfitsio-${finalAttrs.version}";
-    hash = "sha256-8AFPTr8j8f+x1h78IXOV8GHkDPWvI8w8aRxyke3Dras=";
+    hash = "sha256-k05ylMYf+hsYur3BgNAweMeDc89rsBBtie+P7bd+7qg=";
   };
 
   outputs = [
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    homepage = "https://heasarc.gsfc.nasa.gov/fitsio/";
+    homepage = "https://heasarc.gsfc.nasa.gov/docs/software/fitsio/";
     description = "Library for reading and writing FITS data files";
     longDescription = ''
       CFITSIO is a library of C and Fortran subroutines for reading and
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
       FITS files.
     '';
     changelog = "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/docs/changes.txt";
-    license = lib.licenses.mit;
+    license = lib.licenses.cfitsio;
     maintainers = with lib.maintainers; [
       returntoreality
       xbreak

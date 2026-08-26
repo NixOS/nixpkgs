@@ -12,18 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "weechat-matrix-rs";
-  version = "0-unstable-2025-10-09";
+  version = "0-unstable-2026-07-16";
 
   src = fetchFromGitHub {
     owner = "poljar";
     repo = "weechat-matrix-rs";
-    rev = "4cc5777b630ba4d6a9c964248531f283178a4717";
-    hash = "sha256-CF4xDoRYey9F8/XSW/euNb8IjZXyP6k0Nj61shsmyEo=";
+    rev = "f987e71a46827b8e69112cfb8e5977cf59fc313a";
+    hash = "sha256-Uew4rUKB9kRSE6SdswkFdjl/aumUflYf2+8WPSlg5sE=";
   };
 
-  patches = [ ./increase-recursion-limit.patch ];
-
-  cargoHash = "sha256-jAlBCmLJfWWAUHd3ySB930iqAVXMh6ueba7xS///Rt0=";
+  cargoHash = "sha256-Km6wZ2SVIAMD4WV3BHof3WouD+kxR7LKtpknu0g9Qh4=";
 
   nativeBuildInputs = [
     pkg-config

@@ -9,31 +9,31 @@
   # dependencies
   click,
   prompt-toolkit,
-  six,
+  typing-extensions,
 
   # tests
   pytest-cov-stub,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "click-repl";
-  version = "0.3.0";
+  version = "0.3.0-unstable-2026-03-26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "click-contrib";
     repo = "click-repl";
-    tag = version;
-    hash = "sha256-xCT3w0DDY73dtDL5jbssXM05Zlr44OOcy4vexgHyWiE=";
+    rev = "b84191aec21b407b3cb3374ff1ab000887d38f29";
+    hash = "sha256-5Xv6oeV6sIRE3K3sZq8DyAXOcY8fYobcJtW/ZN7C4U0=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     prompt-toolkit
-    six
+    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -42,11 +42,9 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    # https://github.com/click-contrib/click-repl/issues/128
-    broken = lib.versionAtLeast click.version "8.2.0";
     homepage = "https://github.com/click-contrib/click-repl";
     description = "Subcommand REPL for click apps";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ twey ];
   };
-}
+})

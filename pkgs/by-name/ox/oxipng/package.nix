@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # do not use fetchCrate (only repository includes tests)
   src = fetchFromGitHub {
-    owner = "shssoichiro";
+    owner = "oxipng";
     repo = "oxipng";
     tag = "v${finalAttrs.version}";
     hash = "sha256-G06GAlxEVOqt2xHq+JOLSYbsa++aArbu+sb0ypQn9u4=";
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://github.com/shssoichiro/oxipng";
+    homepage = "https://github.com/oxipng/oxipng";
     description = "Multithreaded lossless PNG compression optimizer";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dywedir ];

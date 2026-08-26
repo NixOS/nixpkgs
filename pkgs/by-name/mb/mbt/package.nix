@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mbt";
-  version = "3.11";
+  version = "3.12";
 
   src = fetchFromGitHub {
     owner = "LanguageMachines";
     repo = "mbt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7PpUa/WoPMjdADi1ongQkvqSDWPeb1dNsWee2hjGArk=";
+    hash = "sha256-GBjLkQV+y3x+b+Jw0/Ni3q6zM03Ilk4IgGMteKq+cM0=";
   };
 
   nativeBuildInputs = [

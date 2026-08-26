@@ -53,9 +53,15 @@ buildPythonPackage rec {
     hash = "sha256-Yq5dYaX+/hLvmPpHI8rhCcSlabQBPAyUrIQRgnoi17c=";
   };
 
+  patches = [
+    # https://github.com/python-lsp/python-lsp-server/pull/709
+    ./jedi-compat.patch
+  ];
+
   pythonRelaxDeps = [
     "autopep8"
     "flake8"
+    "jedi"
     "mccabe"
     "pycodestyle"
     "pydocstyle"

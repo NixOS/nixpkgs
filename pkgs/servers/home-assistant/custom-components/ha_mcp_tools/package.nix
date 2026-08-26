@@ -1,22 +1,15 @@
 {
   lib,
   buildHomeAssistantComponent,
-  fetchFromGitHub,
+  ha-mcp,
   nix-update-script,
   ruamel-yaml,
 }:
 
-buildHomeAssistantComponent rec {
-  owner = "homeassistant-ai";
+buildHomeAssistantComponent {
   domain = "ha_mcp_tools";
-  version = "7.4.1";
-
-  src = fetchFromGitHub {
-    owner = "homeassistant-ai";
-    repo = "ha-mcp";
-    tag = "v${version}";
-    hash = "sha256-F13BoZinPnv+tlkiVnG7iAkr2JdEbFE0RIEgmHa/yq4=";
-  };
+  inherit (ha-mcp) version src;
+  inherit (ha-mcp.src) owner;
 
   dependencies = [
     ruamel-yaml
@@ -30,10 +23,12 @@ buildHomeAssistantComponent rec {
   };
 
   meta = {
-    changelog = "https://github.com/homeassistant-ai/ha-mcp/releases/tag/v${version}";
+    inherit (ha-mcp.meta)
+      changelog
+      homepage
+      license
+      maintainers
+      ;
     description = "Home Assistant custom component for the MCP (Model Context Protocol) server";
-    homepage = "https://github.com/homeassistant-ai/ha-mcp";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.jamiemagee ];
   };
 }

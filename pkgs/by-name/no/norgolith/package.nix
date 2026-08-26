@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "norgolith";
-  version = "0.3.2";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
-    owner = "NTBBloodbath";
-    repo = "norgolith";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-9Ezp2aK+O4TcINcnUdptejlrczIqr65nNWPmB+APrAI=";
+    owner = "norgolith";
+    repo = "core";
+    tag = "norgolith-v${finalAttrs.version}";
+    hash = "sha256-R74IUEQ7XkeC/YeEhKTOTPwnhRwDh+nAbAOstc9PzFk=";
   };
 
-  cargoHash = "sha256-NwbiS83OUq/YodBea9ShZtSTyBtWy3wWyOLwoHb16V8=";
+  cargoHash = "sha256-Zy8IhQq5Fdnv7CkkEFHV/wxedEAmd6OfKw7BWbRoA7w=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   useNextest = true;
+  buildAndTestSubdir = "core";
 
   env = {
     LIBGIT2_NO_VENDOR = true;
@@ -42,10 +43,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "The monolithic Norg static site generator built with Rust";
-    homepage = "https://norgolith.amartin.beer";
-    changelog = "https://github.com/NTBBloodbath/norgolith/releases/tag/v${finalAttrs.version}";
+    homepage = "https://norgolith.dev";
+    changelog = "https://github.com/norgolith/core/releases/tag/norgolith-v${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ Ladas552 ];
+    maintainers = [ lib.maintainers.Ladas552 ];
     mainProgram = "lith";
   };
 })

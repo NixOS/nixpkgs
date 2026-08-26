@@ -10,7 +10,7 @@
   doxygen,
   graphviz,
   libexsid,
-  libgcrypt,
+  libresidfp,
   libusb1,
   perl,
   pkg-config,
@@ -19,23 +19,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsidplayfp";
-  version = "2.16.1";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "libsidplayfp";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-gOnLjOw9TN2b0ne7Otm5DZhV/2D1xjLxwnaYilnlBgc=";
+    hash = "sha256-DCRzkMQ9QiGj6eDEqIzl5HeXaHwRxGISjVdqMiCdYXg=";
   };
 
-  outputs = [ "out" ] ++ lib.optionals docSupport [ "doc" ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.optionals docSupport [ "doc" ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   postPatch = ''
     patchShebangs .
   '';
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -50,30 +55,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libexsid
-    libgcrypt
+    libresidfp
     libusb1
   ];
 
-  enableParallelBuilding = true;
-
   configureFlags = [
-    (lib.strings.enableFeature true "hardsid")
-    (lib.strings.withFeature true "gcrypt")
     (lib.strings.withFeature true "exsid")
     (lib.strings.withFeature true "usbsid")
-    # Supposedly runtime detection only supported on GCC
-    # https://github.com/libsidplayfp/libsidplayfp/commit/65874166b14d44467782d2996f7b644fbde0ee87
-    # __builtin_cpu_supports on GCC's list of x86 built-in functions
-    (lib.strings.withFeatureAs true "simd" (
-      if (stdenv.cc.isGNU && stdenv.hostPlatform.isx86) then "runtime" else "none"
-    ))
     (lib.strings.enableFeature finalAttrs.finalPackage.doCheck "tests")
   ];
 
-  # Make Doxygen happy with the setup, reduce log noise
-  env.FONTCONFIG_FILE = lib.optionalString docSupport (makeFontsConf {
-    fontDirectories = [ ];
-  });
+  enableParallelBuilding = true;
 
   preBuild = ''
     # Reduce noise from fontconfig during doc building
@@ -88,6 +80,11 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $doc/share/doc/libsidplayfp
     mv docs/html $doc/share/doc/libsidplayfp/
   '';
+
+  # Make Doxygen happy with the setup, reduce log noise
+  env.FONTCONFIG_FILE = lib.optionalString docSupport (makeFontsConf {
+    fontDirectories = [ ];
+  });
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
@@ -107,9 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/libsidplayfp/libsidplayfp";
     changelog = "https://github.com/libsidplayfp/libsidplayfp/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      ramkromberg
       OPNA2608
     ];
     platforms = lib.platforms.all;

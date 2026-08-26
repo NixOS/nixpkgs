@@ -8,12 +8,12 @@
 }:
 
 let
-  version = "0.17.1";
+  version = "0.18.0";
   src = fetchFromGitHub {
     owner = "elbywan";
     repo = "crystalline";
     tag = "v${version}";
-    hash = "sha256-SIfInDY6KhEwEPZckgobOrpKXBDDd0KhQt/IjdGBhWo=";
+    hash = "sha256-Z5qVm1ovhMUccS9KSp8i7UowxxgEr9OvnJRYREaNmnM=";
   };
 in
 crystal.buildCrystalPackage {

@@ -8,18 +8,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "keepassxc-go";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "MarkusFreitag";
     repo = "keepassxc-go";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Z4SbPxhs+umsUlby7idxofCjP+uLPvp/2oUCpnAS2/A=";
+    hash = "sha256-0VQw12o4XTzKOz+45sHIKSsIjBxDcdxtgYUItFznsO4=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  vendorHash = "sha256-+cgf2FxpbLu+Yuhk6T0ZBnDH7We2DVu65xFaruk9I0E=";
+  vendorHash = "sha256-p7Lj2x0+F3kmAMi+2gtBYkg1w8jmgWm3kgYAoIagERs=";
 
   checkFlags = [
     # Test tries to monkey-patch the stdlib, fails with permission denied error.

@@ -54,6 +54,66 @@ let
       };
       users.groups.workload = { };
     };
+
+  tpmAgent =
+    { pkgs, lib, ... }:
+    {
+      imports = [ agent ];
+      virtualisation = {
+        useEFIBoot = true;
+        tpm = {
+          enable = true;
+          # Provision the swtpm with an EK certificate signed by testCA so that
+          # the SPIRE server can verify the agent's identity.
+          provisioning = ''
+            export PATH=${
+              lib.makeBinPath [
+                pkgs.openssl
+                pkgs.tpm2-tools
+              ]
+            }:$PATH
+
+            tpm2_createek -G rsa -u ek.pub -c ek.ctx -f pem
+
+            openssl x509 \
+              -extfile ${ekSignConf} \
+              -new -days 365 \
+              -subj "/CN=swtpm-ekcert" \
+              -extensions tpm_policy \
+              -CA ${./tpm-ek/ca.crt} -CAkey ${./tpm-ek/ca.priv} \
+              -out ekcert.der -outform der \
+              -force_pubkey ek.pub
+
+            tpm2_nvdefine 0x01c00002 \
+              -C o \
+              -a "ownerread|policyread|policywrite|ownerwrite|authread|authwrite" \
+              -s "$(wc -c < ekcert.der)"
+
+            tpm2_nvwrite 0x01c00002 -C o -i ekcert.der
+          '';
+        };
+      };
+
+      environment.systemPackages = [ pkgs.spire-tpm-plugin ];
+
+      services.spire.agent = {
+        enable = true;
+        settings = {
+          agent = {
+            trust_domain = trustDomain;
+            server_address = "server.${trustDomain}";
+            trust_bundle_format = "pem";
+            trust_bundle_path = "$CREDENTIALS_DIRECTORY/spire.trust_bundle";
+          };
+          plugins = {
+            KeyManager.memory.plugin_data = { };
+            NodeAttestor.tpm.plugin_data = { };
+            WorkloadAttestor.systemd.plugin_data = { };
+            WorkloadAttestor.unix.plugin_data = { };
+          };
+        };
+      };
+    };
 in
 {
   name = "spire";
@@ -108,65 +168,8 @@ in
       };
     };
 
-    tpmAgent =
-      { pkgs, lib, ... }:
-      {
-        imports = [ agent ];
-        virtualisation = {
-          useEFIBoot = true;
-          tpm = {
-            enable = true;
-            # Provision the swtpm with an EK certificate signed by testCA so that
-            # the SPIRE server can verify the agent's identity.
-            provisioning = ''
-              export PATH=${
-                lib.makeBinPath [
-                  pkgs.openssl
-                  pkgs.tpm2-tools
-                ]
-              }:$PATH
-
-              tpm2_createek -G rsa -u ek.pub -c ek.ctx -f pem
-
-              openssl x509 \
-                -extfile ${ekSignConf} \
-                -new -days 365 \
-                -subj "/CN=swtpm-ekcert" \
-                -extensions tpm_policy \
-                -CA ${./tpm-ek/ca.crt} -CAkey ${./tpm-ek/ca.priv} \
-                -out ekcert.der -outform der \
-                -force_pubkey ek.pub
-
-              tpm2_nvdefine 0x01c00002 \
-                -C o \
-                -a "ownerread|policyread|policywrite|ownerwrite|authread|authwrite" \
-                -s "$(wc -c < ekcert.der)"
-
-              tpm2_nvwrite 0x01c00002 -C o -i ekcert.der
-            '';
-          };
-        };
-
-        environment.systemPackages = [ pkgs.spire-tpm-plugin ];
-
-        services.spire.agent = {
-          enable = true;
-          settings = {
-            agent = {
-              trust_domain = trustDomain;
-              server_address = "server.${trustDomain}";
-              trust_bundle_format = "pem";
-              trust_bundle_path = "$CREDENTIALS_DIRECTORY/spire.trust_bundle";
-            };
-            plugins = {
-              KeyManager.memory.plugin_data = { };
-              NodeAttestor.tpm.plugin_data = { };
-              WorkloadAttestor.systemd.plugin_data = { };
-              WorkloadAttestor.unix.plugin_data = { };
-            };
-          };
-        };
-      };
+    tpmAgent = tpmAgent;
+    tpmSelectorAgent = tpmAgent;
   };
 
   testScript =
@@ -175,8 +178,6 @@ in
       adminSocket = nodes.server.services.spire.server.settings.server.socket_path;
     in
     ''
-      spiffe_id = "spiffe://${trustDomain}/service/backdoor"
-
       def provision_trust_bundle(agent):
         # TODO: instead of trust bundle to talk to the spire-server, use an upstream CA?
         bundle = server.succeed("spire-server bundle show -socketPath ${adminSocket}")
@@ -197,28 +198,34 @@ in
         return f"spiffe://${trustDomain}/spire/agent/tpm/{ek_hash}"
 
 
+      def provision_tpm_selector(agent):
+        agent.wait_for_unit("tpm2.target")
+        alias_id = "spiffe://${trustDomain}/aliased-agent/tpm-model"
+        register_entry("spiffe://${trustDomain}/spire/server", "tpm:model:ST33HTPHAHD4", alias_id)
+        return alias_id
+
+
       def register_entry(parent_id, selector, spiffe_id):
         server.succeed(f"spire-server entry create -socketPath ${adminSocket} -selector '{selector}' -parentID '{parent_id}' -spiffeID '{spiffe_id}'")
 
 
       def test_agent(name, agent_node, provision_fn):
+        workload_spiffe_id = f"spiffe://${trustDomain}/{name}/workload"
         with subtest(f"Setup SPIRE agent with {name} attestation"):
           provision_trust_bundle(agent_node)
           parent_id = provision_fn(agent_node)
-          register_entry(parent_id, "systemd:id:backdoor.service", spiffe_id)
-          register_entry(parent_id, "unix:user:workload", "spiffe://${trustDomain}/workload")
+          register_entry(parent_id, "unix:user:workload", workload_spiffe_id)
           agent_node.wait_for_unit("spire-agent.service")
           agent_node.wait_until_succeeds("spire-agent healthcheck -socketPath $SPIFFE_ENDPOINT_SOCKET", timeout=90)
-        with subtest(f"Test certificate authentication from {name} agent"):
-          agent_node.wait_until_succeeds("spire-agent api fetch x509 -socketPath $SPIFFE_ENDPOINT_SOCKET -write .")
-        with subtest(f"Workload running as non-root, non-spire-agent user can reach Workload API ({name})"):
-          # SPIRE's security model relies on workload attestation, not unix
-          # permissions on the socket. Verify an unrelated user can connect.
-          agent_node.wait_until_succeeds(
+        with subtest(f"Workload user receives the {name} workload SVID"):
+          # Each agent node is fresh, so fetch returns "no identity issued"
+          # (non-zero) until exactly this entry's SVID is cached — content-aware
+          # retry isn't needed.
+          output = agent_node.wait_until_succeeds(
             "su -s /bin/sh workload -c "
             "'spire-agent api fetch x509 -socketPath \"$SPIFFE_ENDPOINT_SOCKET\"'"
           )
-        # TODO: Add something to communicate with
+          t.assertIn(workload_spiffe_id, output)
 
 
       with subtest("SPIRE server startup and health checks"):
@@ -228,6 +235,7 @@ in
 
       test_agent("join_token", agent, provision_join_token)
       test_agent("tpm", tpmAgent, provision_tpm)
+      test_agent("tpm-selector", tpmSelectorAgent, provision_tpm_selector)
 
     '';
 }

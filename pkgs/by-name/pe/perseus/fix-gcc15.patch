@@ -1,0 +1,57 @@
+diff --git a/Cells/Point.h b/Cells/Point.h
+index b03113c..472372e 100644
+--- a/Cells/Point.h
++++ b/Cells/Point.h
+@@ -91,7 +91,7 @@ public:
+ template <typename PS>
+ struct ptcomp
+ {
+-	bool operator ()(Point<PS>* p, Point<PS>* q)
++	bool operator ()(Point<PS>* p, Point<PS>* q) const
+ 	{
+ 		if (p == q) return false;
+ 		if (p == NULL && q != NULL) return true;
+@@ -106,7 +106,7 @@ struct ptcomp
+ template <typename PS>
+ struct ptcomplex
+ {
+-	bool operator ()(Point<PS>* p, Point<PS>* q)
++	bool operator ()(Point<PS>* p, Point<PS>* q) const
+ 	{
+ 		if (p == q) return false;
+ 		if (p == NULL && q != NULL) return true;
+diff --git a/Complexes/CToplex.h b/Complexes/CToplex.h
+index bdd026f..732701e 100644
+--- a/Complexes/CToplex.h
++++ b/Complexes/CToplex.h
+@@ -24,7 +24,7 @@
+ // vector lexico comparison for map-making
+ struct addcomp
+ {
+-	bool operator () (vector<num>* v1, vector<num>* v2)
++	bool operator () (vector<num>* v1, vector<num>* v2) const
+ 	{
+ 		//cout<<" here "; cin.get();
+ 		if (v1 == v2) return false;
+diff --git a/Global/Combinatorics.h b/Global/Combinatorics.h
+index d751a04..d8cf6b2 100644
+--- a/Global/Combinatorics.h
++++ b/Global/Combinatorics.h
+@@ -18,7 +18,7 @@
+ // order nums increasingly
+ struct incnum
+ {
+-	bool operator() (num n1, num n2)
++	bool operator() (num n1, num n2) const
+ 	{
+ 		return (n1 < n2);
+ 	}
+@@ -28,7 +28,7 @@ struct incnum
+ // order nums decreasingly
+ struct decnum
+ {
+-	bool operator() (num n1, num n2)
++	bool operator() (num n1, num n2) const
+ 	{
+ 		return (n1 > n2);
+ 	}

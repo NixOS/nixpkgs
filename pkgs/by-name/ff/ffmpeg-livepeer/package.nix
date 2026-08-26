@@ -17,6 +17,12 @@
   (old: {
     pname = "ffmpeg-livepeer";
 
+    postPatch = (old.postPatch or "") + ''
+            substituteInPlace libavcodec/tableprint_vlc.h \
+              --replace-fail 'define av_mallocz(s) NULL' 'define av_mallocz(s) NULL
+      #define av_malloc(s) NULL'
+    '';
+
     meta = {
       inherit (old.meta)
         license

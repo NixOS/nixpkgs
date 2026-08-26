@@ -1,7 +1,8 @@
---- setup.py	2025-04-01 11:24:54.530984662 +0000
-+++ setup.py	2025-04-01 13:54:46.961341548 +0000
- 
-@@ -111,9 +111,11 @@
+diff --git a/setup.py b/setup.py
+index 6e295c8..048db19 100755
+--- a/setup.py
++++ b/setup.py
+@@ -111,9 +111,11 @@ class build_man(NoOptionCommand):
                  info('compressing man page to %s', gzfile)
  
                  if not self.dry_run:
@@ -13,3 +14,6 @@
 +                            compressed.write(manpage)
 +                            compressed.close()
 +                            file.close()
+ 
+ class update_translator_credits(NoOptionCommand):
+     description = 'Examine the git history to produce an updated metadata file.'

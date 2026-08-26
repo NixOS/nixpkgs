@@ -6,13 +6,21 @@
   makeWrapper,
   formats,
   databaseType ? "sqlite",
+  edition ? "oss",
   environmentVariables ? { },
   nixosTests,
+  nodejs_22,
 }:
 
 assert lib.assertOneOf "databaseType" databaseType [
   "sqlite"
   "pg"
+];
+
+assert lib.assertOneOf "edition" edition [
+  "enterprise"
+  "oss"
+  "saas"
 ];
 
 let
@@ -28,24 +36,31 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "pangolin";
-  version = "1.18.3";
+  version = "1.21.1";
+
+  __structuredAttrs = true;
+  enableParallelBuilding = true;
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "pangolin";
     tag = finalAttrs.version;
-    hash = "sha256-1grYW3UrQsw94xFyKj+n8styihRdW/+aW2Q5lq9b3Bg=";
+    hash = "sha256-zfXHev0bN3KVkoiSQ+2WQCgmcCtWi3dib6EiaYmthTo=";
   };
 
-  npmDepsHash = "sha256-+qsHvytwAIbbNYpgNT6I7lekpxY0mUWcWGA9dT6rbtc=";
+  nodejs = nodejs_22;
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-9wPn2nSD9VxMyHywrG52WrChsrJ/ctnKGlMZZEymP6A=";
 
   nativeBuildInputs = [
     esbuild
     makeWrapper
   ];
 
-  # dependency resolution is borked
-  npmFlags = [ "--legacy-peer-deps" ];
+  # remove the proprietary code
+  postUnpack = lib.optionalString (edition == "oss") ''
+    rm -rf server/private
+  '';
 
   # upstream inconsistently updates this
   # so leaving this here in case it's needed
@@ -57,7 +72,7 @@ buildNpmPackage (finalAttrs: {
 
   preBuild = ''
     npm run set:${db false}
-    npm run set:oss
+    npm run set:${edition}
     npm run db:generate
   '';
 
@@ -160,7 +175,7 @@ buildNpmPackage (finalAttrs: {
     description = "Tunneled reverse proxy server with identity and access control";
     homepage = "https://github.com/fosrl/pangolin";
     changelog = "https://github.com/fosrl/pangolin/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.agpl3Only;
+    license = [ lib.licenses.agpl3Only ] ++ lib.optional (edition != "oss") lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       jackr
       water-sucks

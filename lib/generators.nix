@@ -23,9 +23,11 @@
 let
   inherit (lib)
     addErrorContext
-    assertMsg
+    any
     attrNames
+    attrValues
     concatLists
+    concatMap
     concatMapStringsSep
     concatStrings
     concatStringsSep
@@ -52,6 +54,7 @@ let
     isString
     last
     length
+    genAttrs
     mapAttrs
     mapAttrsToList
     optionals
@@ -60,7 +63,6 @@ let
     reverseList
     splitString
     tail
-    toList
     ;
 
   inherit (lib.strings)
@@ -379,55 +381,69 @@ rec {
       See the [git-config documentation](https://git-scm.com/docs/git-config#_variables) for possible values.
   */
   toGitINI =
-    attrs:
     let
       mkSectionName =
+        let
+          containsQuote = hasInfix ''"'';
+        in
         name:
         let
-          containsQuote = hasInfix ''"'' name;
           sections = splitString "." name;
-          section = head sections;
-          subsections = tail sections;
-          subsection = concatStringsSep "." subsections;
         in
-        if containsQuote || subsections == [ ] then name else ''${section} "${subsection}"'';
+        if containsQuote name || length sections == 1 then
+          name
+        else
+          ''${head sections} "${concatStringsSep "." (tail sections)}"'';
 
       mkValueString =
-        v:
         let
-          escapedV = ''"${replaceStrings [ "\n" "	" ''"'' "\\" ] [ "\\n" "\\t" ''\"'' "\\\\" ] v}"'';
+          escape = replaceStrings [ "\n" "	" ''"'' "\\" ] [ "\\n" "\\t" ''\"'' "\\\\" ];
         in
-        mkValueStringDefault { } (if isString v then escapedV else v);
+        v: mkValueStringDefault { } (if isString v then ''"${escape v}"'' else v);
 
       # generation for multiple ini values
       mkKeyValue =
-        k: v:
         let
-          mkKeyValue = mkKeyValueDefault { inherit mkValueString; } " = " k;
+          mkKeyValue = mkKeyValueDefault { inherit mkValueString; } " = ";
+          attrToString = k: v: "\t" + mkKeyValue k v;
         in
-        concatStringsSep "\n" (map (kv: "\t" + mkKeyValue kv) (toList v));
+        k: v: if isList v then concatStringsSep "\n" (map (attrToString k) v) else attrToString k v;
 
       # converts { a.b.c = 5; } to { "a.b".c = 5; } for toINI
       gitFlattenAttrs =
         let
+          isNonDrvAttrs = value: isAttrs value && !isDerivation value;
           recurse =
             path: value:
-            if isAttrs value && !isDerivation value then
-              mapAttrsToList (name: value: recurse ([ name ] ++ path) value) value
+            if isNonDrvAttrs value then
+              concatMap (name: recurse ([ name ] ++ path) value.${name}) (attrNames value)
             else if length path > 1 then
-              {
-                ${concatStringsSep "." (reverseList (tail path))}.${head path} = value;
-              }
+              [
+                {
+                  ${concatStringsSep "." (reverseList (tail path))}.${head path} = value;
+                }
+              ]
             else
-              {
-                ${head path} = value;
-              };
+              [
+                {
+                  ${head path} = value;
+                }
+              ];
         in
-        attrs: foldl recursiveUpdate { } (flatten (recurse [ ] attrs));
+        attrs:
+        let
+          # Filter the names for any that contain nested attrsets. attrs that
+          # don't contain nested attrsets can stay the same =
+          namesToRewrite = filter (
+            name: isAttrs attrs.${name} && any isNonDrvAttrs (attrValues attrs.${name})
+          ) (attrNames attrs);
+          attrsToRewrite = genAttrs namesToRewrite (name: attrs.${name});
+        in
+        removeAttrs attrs namesToRewrite // foldl recursiveUpdate { } (recurse [ ] attrsToRewrite);
 
       toINI_ = toINI { inherit mkKeyValue mkSectionName; };
     in
-    toINI_ (gitFlattenAttrs attrs);
+    attrs: toINI_ (gitFlattenAttrs attrs);
 
   /**
     `mkKeyValueDefault` wrapper that handles dconf INI quirks.
@@ -831,7 +847,7 @@ rec {
         _type == "lua-inline";
 
       generatedBindings =
-        assert assertMsg (badVarNames == [ ]) "Bad Lua var names: ${toPretty { } badVarNames}";
+        assert badVarNames == [ ] || throw "Bad Lua var names: ${toPretty { } badVarNames}";
         concatStrings (mapAttrsToList (key: value: "${indent}${key} = ${toLua innerArgs value}\n") v);
 
       # https://en.wikibooks.org/wiki/Lua_Programming/variable#Variable_names

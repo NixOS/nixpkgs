@@ -14,6 +14,7 @@
   libkrb5,
   libmongocrypt,
   libpq,
+  sqlite,
   dart-sass,
   makeWrapper,
 }:
@@ -26,20 +27,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "2.19.5";
+  version = "2.34.6";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-BOxSiSDDMC1OX4Otbn6DiSG4ThIsiRssKwfXh9y9JSM=";
+    hash = "sha256-xB5ChOrcno5rCjWYrGtdNrqkwBtMeYCqml8xfrUAgEM=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
-    fetcherVersion = 3;
-    hash = "sha256-gDlTNwsLT4hW1+3agSS/eBAW/804c7ElXCEfs58gP8U=";
+    fetcherVersion = 4;
+    hash = "sha256-35nNgdoQwZlIZCzlWxC5eLKdyXAWWyBoIaa1B9zPEfY=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     dart-sass
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
     xcbuild
   ];
@@ -60,17 +61,18 @@ stdenv.mkDerivation (finalAttrs: {
     libkrb5
     libmongocrypt
     libpq
+    sqlite
   ];
 
   buildPhase = ''
     runHook preBuild
 
     # Force sass-embedded npm package to use our dart-sass instead of bundled binaries
-    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+    substituteInPlace packages/frontend/editor-ui/node_modules/sass-embedded/dist/lib/src/compiler-path.js \
       --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
 
-    pushd node_modules/sqlite3
-    node-gyp rebuild
+    pushd packages/cli/node_modules/sqlite3
+    npm_config_sqlite=${lib.getDev sqlite} node-gyp rebuild
     popd
 
     # TODO: use deploy after resolved https://github.com/pnpm/pnpm/issues/5315
@@ -102,8 +104,12 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/{bin,lib/n8n}
     cp -r {packages,node_modules} $out/lib/n8n
 
+    # node must be on PATH: in internal runner mode the CLI spawns the
+    # JS task runner via `spawn('node', ...)`, and since 2.33 a failed
+    # spawn crashes n8n instead of being silently ignored
     makeWrapper $out/lib/n8n/packages/cli/bin/n8n $out/bin/n8n \
-      --set N8N_RELEASE_TYPE "stable"
+      --set N8N_RELEASE_TYPE "stable" \
+      --prefix PATH : ${lib.makeBinPath [ nodejs ]}
 
     # JavaScript runner
     makeWrapper ${nodejs}/bin/node $out/bin/n8n-task-runner \

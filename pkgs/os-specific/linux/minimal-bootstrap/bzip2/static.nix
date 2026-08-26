@@ -1,9 +1,10 @@
 {
   lib,
   fetchurl,
+  buildPlatform,
+  hostPlatform,
   bash,
   gcc,
-  musl,
   binutils,
   findutils,
   gnumake,
@@ -18,6 +19,10 @@ let
     url = "https://sourceware.org/pub/bzip2/bzip2-${version}.tar.gz";
     sha256 = "0s92986cv0p692icqlw1j42y9nld8zd83qwhzbqd61p1dqbh6nmb";
   };
+
+  binutilsTargetPrefix = lib.optionalString (
+    hostPlatform.config != buildPlatform.config
+  ) "${hostPlatform.config}-";
 in
 bash.runCommand "${pname}-${version}"
   {
@@ -25,7 +30,6 @@ bash.runCommand "${pname}-${version}"
 
     nativeBuildInputs = [
       gcc
-      musl
       binutils
       findutils
       gnumake
@@ -33,12 +37,28 @@ bash.runCommand "${pname}-${version}"
       gzip
     ];
 
-    passthru.tests.get-version =
-      result:
-      bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${result}/bin/bzip2 --help
-        mkdir $out
-      '';
+    passthru.tests = {
+      get-version =
+        result:
+        bash.runCommand "${pname}-get-version-${version}" { } ''
+          ${result}/bin/bzip2 --help
+          mkdir $out
+        '';
+
+      compress =
+        result:
+        bash.runCommand "${pname}-compress-${version}" { } ''
+          printf 'bootstrap\n' > input
+          ${result}/bin/bzip2 -k input
+          ${result}/bin/bunzip2 -c input.bz2 > bunzip2-output
+          read -r bunzip2Output < bunzip2-output
+          test "$bunzip2Output" = bootstrap
+          ${result}/bin/bzcat input.bz2 > bzcat-output
+          read -r bzcatOutput < bzcat-output
+          test "$bzcatOutput" = bootstrap
+          mkdir $out
+        '';
+    };
 
     meta = {
       description = "High-quality data compression program";
@@ -56,14 +76,18 @@ bash.runCommand "${pname}-${version}"
     # Build
     make \
       -j $NIX_BUILD_CORES \
-      CC=musl-gcc \
-      CFLAGS=-static \
-      bzip2 bzip2recover
+      bzip2 \
+      CC=${hostPlatform.config}-gcc \
+      AR=${binutilsTargetPrefix}ar \
+      RANLIB=${binutilsTargetPrefix}ranlib
 
     # Install
-    make install -j $NIX_BUILD_CORES PREFIX=$out
+    mkdir -p $out/bin
+    cp bzip2 $out/bin/bzip2
+    ln -s bzip2 $out/bin/bunzip2
+    ln -s bzip2 $out/bin/bzcat
 
     # Strip
     # Ignore failures, because strip may fail on non-elf files.
-    find $out/{bin,lib} -type f -exec strip --strip-debug {} + || true
+    ${binutilsTargetPrefix}strip --strip-debug $out/bin/bzip2 || true
   ''

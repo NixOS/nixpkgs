@@ -20,18 +20,26 @@
   withDocumentation ? true,
 }:
 
+# Juuuuust in case this ever changes
+assert lib.asserts.assertMsg (lib.strings.hasPrefix "lib/" qtbase.qtQmlPrefix)
+  "Assumption that qtbase.qtQmlPrefix (${qtbase.qtQmlPrefix} starts with 'lib/' no longer holds, SHELL_PLUGINDIR_SUFFIX in lomiri-api needs to be adjusted!";
+
 let
   withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+
+  # TODO This is likely not supposed to be the regular Qt QML import prefix
+  # but otherwise i.e. lomiri-notifications cannot be found in lomiri
+  shellPlugindirSuffix = lib.strings.removePrefix "lib/" qtbase.qtQmlPrefix;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-api";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-api";
     tag = finalAttrs.version;
-    hash = "sha256-2CVSKPZXZ74KUU5xVYSVIZLSPSyIudUcKR0CSfSpJyw=";
+    hash = "sha256-5w1cXKi8RZL2tbYMnqVFnlCK4BxcpCBg4jRwI7jB6AQ=";
   };
 
   outputs = [
@@ -44,15 +52,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs $(find test -name '*.py')
-
-    substituteInPlace data/liblomiri-api.pc.in \
-      --replace-fail "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" '@CMAKE_INSTALL_FULL_LIBDIR@'
-
-    # Variable is queried via pkg-config by reverse dependencies
-    # TODO This is likely not supposed to be the regular Qt QML import prefix
-    # but otherwise i.e. lomiri-notifications cannot be found in lomiri
+  ''
+  # Variable is queried via pkg-config by reverse dependencies
+  # Qt6 one is already correct as-is
+  + ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail 'SHELL_PLUGINDIR ''${CMAKE_INSTALL_LIBDIR}/lomiri/qml' 'SHELL_PLUGINDIR ${qtbase.qtQmlPrefix}'
+      --replace-fail 'SHELL_PLUGINDIR_SUFFIX lomiri/qml' 'SHELL_PLUGINDIR_SUFFIX ${shellPlugindirSuffix}' \
+      --replace-fail 'string(APPEND SHELL_PLUGINDIR_SUFFIX "6")' '# string(APPEND SHELL_PLUGINDIR_SUFFIX "6")'
   '';
 
   strictDeps = true;

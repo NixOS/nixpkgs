@@ -1,82 +1,58 @@
 {
   lib,
+  arrow,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
   cryptography,
   defusedxml,
+  fetchFromGitHub,
   gql,
   graphql-core,
-  pydantic,
+  marshmallow,
   pydantic-extra-types,
-  python-box,
-  python-dateutil,
-  requests,
-  requests-toolbelt,
-  restfly,
-  semver,
-  typing-extensions,
-
-  # marshmallow build system
-  flit-core,
-
-  # tests
+  pydantic,
   pytest-cov-stub,
   pytest-datafiles,
   pytest-vcr,
   pytestCheckHook,
+  python-box,
+  python-dateutil,
   requests-pkcs12,
+  requests-toolbelt,
+  requests,
   responses,
+  restfly,
+  semver,
+  setuptools,
+  typing-extensions,
 }:
-let
-  marshmallow' = buildPythonPackage {
-    pname = "marshmallow";
-    version = "3.26.2";
-    pyproject = true;
 
-    src = fetchFromGitHub {
-      owner = "marshmallow-code";
-      repo = "marshmallow";
-      tag = "3.26.2";
-      hash = "sha256-ioe+aZHOW8r3wF3UknbTjAP0dEggd/NL9PTkPVQ46zM=";
-    };
-
-    build-system = [ flit-core ];
-
-    doCheck = false;
-
-    pythonImportsCheck = [ "marshmallow" ];
-  };
-in
 buildPythonPackage (finalAttrs: {
   pname = "pytenable";
-  version = "1.9.1";
+  version = "26.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
     tag = finalAttrs.version;
-    hash = "sha256-WAKZe1m6EaNE+y2B/1/k8qZsEftLfAVPVEvIkh2N/4g=";
+    hash = "sha256-KRZbrJgIxdNAnlmP7Ww/JasoDJqJZkBkd0qXm9gfXp4=";
   };
 
-  pythonRelaxDeps = [
-    "cryptography"
-    "defusedxml"
-  ];
+  postPatch = ''
+    # pytest 9 rejects marks on fixtures, where they never had any effect
+    substituteInPlace tests/sc/conftest.py \
+      --replace-fail "@pytest.mark.filterwarnings('ignore::DeprecationWarning')" ""
+  '';
 
   build-system = [ setuptools ];
 
   dependencies = [
+    arrow
     cryptography
     defusedxml
     gql
     graphql-core
-    marshmallow'
+    marshmallow
     pydantic
     pydantic-extra-types
     python-box
@@ -97,31 +73,16 @@ buildPythonPackage (finalAttrs: {
     responses
   ];
 
-  pytestFlags = [
-    "-Wignore::pytest.PytestRemovedIn9Warning"
-  ];
-
   disabledTestPaths = [
     # Disable tests that requires network access
     "tests/io/"
   ];
 
   disabledTests = [
-    # Disable tests that requires a Docker container
-    "test_uploads_docker_push_name_typeerror"
-    "test_uploads_docker_push_tag_typeerror"
-    "test_uploads_docker_push_cs_name_typeerror"
-    "test_uploads_docker_push_cs_tag_typeerror"
     # Test requires network access
     "test_assets_list_vcr"
     "test_events_list_vcr"
-    # https://github.com/tenable/pyTenable/issues/953
-    "test_construct_query_str"
-    "test_construct_query_stored_file"
-    "test_iterator_empty_page"
-    "test_iterator_max_page_term"
-    "test_iterator_pagination"
-    "test_iterator_total_term"
+    "test_session_ssl_error"
   ];
 
   pythonImportsCheck = [ "tenable" ];

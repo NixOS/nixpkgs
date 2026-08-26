@@ -4,29 +4,37 @@
   fetchFromGitHub,
   zlib,
   libdeflate,
+  libhwy,
   isa-l,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastp";
-  version = "1.1.0";
+  version = "1.3.6";
 
   src = fetchFromGitHub {
     owner = "OpenGene";
     repo = "fastp";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-0hLq6r/XcYkF1J9LpiQ+qxh5MN4vDTRr5JibnIsq2J0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4qx4enFm9UY2NB68QJOBVx9AGAZuoPqCpnxFDHfKL1E=";
   };
 
   buildInputs = [
     zlib
     libdeflate
+    libhwy
     isa-l
   ];
 
   installPhase = ''
     install -D fastp $out/bin/fastp
   '';
+
+  strictDeps = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Ultra-fast all-in-one FASTQ preprocessor";

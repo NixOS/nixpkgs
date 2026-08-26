@@ -24,12 +24,10 @@ CODEIUM_VER=$(curl -s "https://api.github.com/repos/Exafunction/codeium/releases
 
 CODEIUM_LINUX_X64_HASH=$(fetch_arch "$CODEIUM_VER" "linux_x64")
 CODEIUM_LINUX_AARCH64_HASH=$(fetch_arch "$CODEIUM_VER" "linux_arm")
-CODEIUM_DARWIN_X64_HASH=$(fetch_arch "$CODEIUM_VER" "macos_x64")
 CODEIUM_DARWIN_AARCH64_HASH=$(fetch_arch "$CODEIUM_VER" "macos_arm")
 
 sed -i "s/version = \".*\"/version = \"$CODEIUM_VER\"/" "$NIX_DRV"
 
 replace_hash "x86_64-linux" "$CODEIUM_LINUX_X64_HASH"
 replace_hash "aarch64-linux" "$CODEIUM_LINUX_AARCH64_HASH"
-replace_hash "x86_64-darwin" "$CODEIUM_DARWIN_X64_HASH"
 replace_hash "aarch64-darwin" "$CODEIUM_DARWIN_AARCH64_HASH"

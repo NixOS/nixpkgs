@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pico-sdk";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
@@ -26,9 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = withSubmodules;
     hash =
       if withSubmodules then
-        "sha256-8ubZW6yQnUTYxQqYI6hi7s3kFVQhe5EaxVvHmo93vgk="
+        "sha256-ujqnFjJgvja++GQbcrqSgbxi/DxB6ryQP+sGiFl1bms="
       else
-        "sha256-hQdEZD84/cnLSzP5Xr9vbOGROQz4BjeVOnvbyhe6rfM=";
+        "sha256-QFKeOSYDuoSuVQsZ68fyQgVnGxZdBl8sehbQf665suM=";
   };
 
   cmakeFlags = [
@@ -50,7 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "tests.withSubmodules"
+      ];
+    };
     tests = {
       withSubmodules = pico-sdk.override { withSubmodules = true; };
     };
@@ -61,7 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/raspberrypi/pico-sdk";
     changelog = "https://github.com/raspberrypi/pico-sdk/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ muscaln ];
+    maintainers = with lib.maintainers; [
+      muscaln
+      nulleric
+    ];
     platforms = lib.platforms.unix;
   };
 })

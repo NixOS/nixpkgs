@@ -14,12 +14,12 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libidn2";
   version = "2.3.8";
 
   src = fetchurl {
-    url = "https://ftp.gnu.org/gnu/libidn/libidn2-${version}.tar.gz";
+    url = "https://ftp.gnu.org/gnu/libidn/libidn2-${finalAttrs.version}.tar.gz";
     hash = "sha256-9VeRG/YXFiHh9y/zX1sYJbs1tS7UUyXc3ukx5dPAeHo=";
   };
 
@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libunistring ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnu.org/software/libidn/#libidn2";
     description = "Free software implementation of IDNA2008 and TR46";
@@ -65,6 +67,6 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ fpletz ];
-    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" version;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" finalAttrs.version;
   };
-}
+})

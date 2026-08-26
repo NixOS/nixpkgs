@@ -144,6 +144,9 @@ in
         "2270002"
         "2270003"
         "2270004"
+        "2270005"
+        "2270006"
+        "2270007"
       ];
       description = ''
         List of rules that should be disabled.
@@ -270,7 +273,7 @@ in
               ProtectSystem = "strict";
               DevicePolicy = "closed";
               LockPersonality = true;
-              MemoryDenyWriteExecute = true;
+              MemoryDenyWriteExecute = false; # pcre2 jit
               ProtectHostname = true;
               ProtectProc = true;
               ProtectKernelLogs = true;

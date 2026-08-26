@@ -3,6 +3,7 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch,
   installShellFiles,
   iputils,
   versionCheckHook,
@@ -11,16 +12,25 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gping";
-  version = "1.20.1";
+  version = "1.20.4";
 
   src = fetchFromGitHub {
     owner = "orf";
     repo = "gping";
     tag = "gping-v${finalAttrs.version}";
-    hash = "sha256-whHbGZnxOQ/ISyWMl6miuogppZahgXxO3XmhcP6ymIo=";
+    hash = "sha256-m26GtfRhgib13g+3/cXLwIdMKr3CofaMKFFCFKa8OI4=";
   };
 
-  cargoHash = "sha256-F0QBL7tCCdjnavClqrw8yYxFrY8y4f8h/gcHSpEqBiM=";
+  cargoHash = "sha256-CFJ7X0hJG6Whd9vMHo5Au93LueXiAHHEo9dPOKSmD+k=";
+
+  patches = [
+    (fetchpatch {
+      name = "fix-ipv6-addrs-by-using-ping-dash-6.patch";
+      # https://github.com/orf/gping/pull/546
+      url = "https://github.com/orf/gping/commit/7ef8e1ddec847681c5ef3d4a010a0ad3a7aebab0.patch";
+      hash = "sha256-b3Nv+mobPUcgREaNvn7cXra24PgEUe60yE/kOPTQEos=";
+    })
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 

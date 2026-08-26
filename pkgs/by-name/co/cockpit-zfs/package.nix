@@ -15,7 +15,7 @@
   mbuffer,
   msmtp,
   nix-update-script,
-  nodejs,
+  nodejs_22,
   openssh,
   samba,
   shadow,
@@ -27,39 +27,49 @@
   yarn-berry,
   zfs,
 }:
+let
+  # Pin to Node <24.15.0: Yarn Berry's PnP linker breaks `require.cache` on
+  # newer Node, which crashes tailwindcss mid-build (and ESLint, per
+  # yarnpkg/berry#7106). See NixOS/nixpkgs#530137.
+  #
+  # `nodejs` is rebound here (rather than touched at every call site below)
+  # so the rest of this file is unaffected.
+  #
+  # yarn-berry's own `yarn` binary gets patchShebang'd against whatever
+  # `nodejs` *it* was built with, so overriding nativeBuildInputs alone does
+  # nothing - we have to rebuild yarn-berry itself against nodejs_22, for
+  # both the host and build-platform (cross-compilation) variants.
+  nodejs = nodejs_22;
+  yarnBerry = yarn-berry.override { inherit nodejs; };
+  yarnBerryForBuild = buildPackages.yarn-berry.override { nodejs = buildPackages.nodejs_22; };
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit-zfs";
-  version = "1.2.26";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "45Drives";
     repo = "cockpit-zfs";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-aMwPsg9rspWKqSQ+N1rlwVarpcOEFbMkktZXKEmqZu8=";
+    hash = "sha256-AeHawdStX+A+/8z4IWaf1w5irNZDIWs52y1nsEF+fHg=";
   };
-
-  patches = [
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/45Drives/cockpit-zfs/blob/main/package.json#L13
-    ./yarn-4.14-support.patch
-  ];
 
   missingHashes = ./missing-hashes.json;
 
   # Use buildPackages for cross-compilation support
-  offlineCache = buildPackages.yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-Tdxe5bXN9psSrnUXL1f+1nh4WPzuvOI7j0I+VPU2/1s=";
+  offlineCache = yarnBerryForBuild.fetchYarnBerryDeps {
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-nm3iHf9Rm5JFKzH0HAvglkQPFIV6Fl1e9WvNdqevTug=";
   };
 
   nativeBuildInputs = [
     makeWrapper
-    nodejs
+    nodejs_22
     jq
-    yarn-berry
-    buildPackages.yarn-berry.yarnBerryConfigHook
+    yarnBerry
+    yarnBerryForBuild.yarnBerryConfigHook
   ];
 
   disallowedRequisites = [ finalAttrs.offlineCache ];
@@ -76,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     lsscsi
     mbuffer
     msmtp
-    nodejs
+    nodejs_22
     openssh
     samba
     shadow

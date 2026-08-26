@@ -11,7 +11,7 @@ let
     url = "https://desktop-auto-upgrade.molotov.tv/linux/${version}/molotov.AppImage";
     sha256 = "sha256-l4Il6i8uXSeJqH3ITC8ZUpKXPQb0qcW7SpKx1R46XDc=";
   };
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 appimageTools.wrapType2 {
   inherit pname version src;
@@ -26,7 +26,7 @@ appimageTools.wrapType2 {
   meta = {
     description = "French TV service";
     homepage = "https://www.molotov.tv/";
-    license = with lib.licenses; [ unfree ];
+    license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ apeyroux ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "molotov";

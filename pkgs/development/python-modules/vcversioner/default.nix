@@ -2,21 +2,29 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vcversioner";
   version = "2.16.0.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "16z10sm78jd7ca3jbkgc3q5i8a8q7y1h21q1li21yy3rlhbhrrns";
+    pname = "vcversioner";
+    inherit (finalAttrs) version;
+    hash = "sha256-2uYMF6R5eB9EpAEHAYM/GCkUCx7szSWHYqdJdKoG4Zs=";
   };
+
+  build-system = [ setuptools ];
+
+  pythonImportsCheck = [ "vcversioner" ];
 
   meta = {
     description = "Take version numbers from version control";
     homepage = "https://github.com/habnabit/vcversioner";
     license = lib.licenses.isc;
   };
-}
+})

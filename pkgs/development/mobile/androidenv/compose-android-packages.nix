@@ -140,6 +140,8 @@ in
   systemImageTypes ? [
     "google_apis"
     "google_apis_playstore"
+    "google_apis_ps16k"
+    "google_apis_playstore_ps16k"
   ],
   abiVersions ? [
     "x86"
@@ -167,7 +169,6 @@ let
   os =
     {
       x86_64-linux = "linux";
-      x86_64-darwin = "macosx";
       aarch64-linux = "linux";
       aarch64-darwin = "macosx";
     }
@@ -177,7 +178,6 @@ let
   arch =
     {
       x86_64-linux = "x64";
-      x86_64-darwin = "x64";
       aarch64-linux = "aarch64";
       aarch64-darwin = "aarch64";
     }

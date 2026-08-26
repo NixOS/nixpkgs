@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "itg2-sm5";
-  version = "1.1.0-unstable-2025-10-08";
+  version = "1.1.0-unstable-2026-05-07";
 
   src = fetchFromGitHub {
     owner = "JoseVarelaP";
     repo = "In-The-Groove2-SM5";
-    rev = "e25f1a44efa55cd2247891f40633403910b75d21";
-    hash = "sha256-FMyT7ZA/1cqiClXDvD7CmJlOFaaWnPLuOuei6fsbzg8=";
+    rev = "07a71151b7170080902c3bf8118950ee4f410c01";
+    hash = "sha256-SpYR6U/ujQ7toHIgCp+ogF1LdnH41ikshEdEjhMxlj4=";
   };
 
   postInstall = ''

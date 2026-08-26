@@ -245,8 +245,8 @@ let
           client.wait_for_unit("NetworkManager.service")
           router.wait_for_unit("freeradius.service")
           router.wait_for_unit("hostapd.service")
-          router.wait_until_succeeds("journalctl -b --unit freeradius.service | grep \"Sent Access-Accept\"")
-          router.wait_until_succeeds("journalctl -b --unit freeradius.service | grep \"TLS-Client-Cert-Common-Name := \\\"client1.example.com\\\"\"")
+          router.wait_until_succeeds("journalctl -b --unit freeradius.service --grep='Sent Access-Accept'")
+          router.wait_until_succeeds("journalctl -b --unit freeradius.service --grep='TLS-Client-Cert-Common-Name = \"client1.example.com\"'")
         '';
       };
     eapFiles = {
@@ -294,8 +294,8 @@ let
         client.wait_for_unit("NetworkManager.service")
         router.wait_for_unit("freeradius.service")
         router.wait_for_unit("hostapd.service")
-        router.wait_until_succeeds("journalctl -b --unit freeradius.service | grep \"Sent Access-Accept\"")
-        router.wait_until_succeeds("journalctl -b --unit freeradius.service | grep \"TLS-Client-Cert-Common-Name := \\\"client1.example.com\\\"\"")
+        router.wait_until_succeeds("journalctl -b --unit freeradius.service --grep='Sent Access-Accept'")
+        router.wait_until_succeeds("journalctl -b --unit freeradius.service --grep='TLS-Client-Cert-Common-Name = \"client1.example.com\"'")
       '';
     };
   };

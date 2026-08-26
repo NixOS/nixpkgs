@@ -37,10 +37,10 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "krita-unwrapped";
 
-  version = "6.0.1";
+  version = "6.0.2.1";
   src = fetchurl {
     url = "mirror://kde/stable/krita/${finalAttrs.version}/krita-${finalAttrs.version}.tar.gz";
-    hash = "sha256-COddFMgFJh/IIovsFt70cF9unPsBkecb0EzEwOGChIo=";
+    hash = "sha256-Z1M8sRXewqWYe1r6fdTPjgREuQfNmTSc8dD7ZEVuQPg=";
   };
 
   nativeBuildInputs = [
@@ -123,6 +123,18 @@ stdenv.mkDerivation (finalAttrs: {
 
       substituteInPlace plugins/impex/jp2/jp2_converter.cc \
         --replace '<openjpeg.h>' '<${openjpeg.incDir}/openjpeg.h>'
+    ''
+    # https://invent.kde.org/graphics/krita/-/commit/30182dbfe789c9b44e5762978bf9ebb22c4f72b6
+    + ''
+      patch -p1 <<EOF
+      --- a/cmake/modules/SIPMacros.cmake
+      +++ b/cmake/modules/SIPMacros.cmake
+      @@ -152,3 +152,3 @@
+               if (QT_MAJOR_VERSION STREQUAL "6")
+      -            set(abi_version "13.0")
+      +            set(abi_version "13.8")
+                   set(sip_disabled_features "[\"Krita_Qt5\"]")
+      EOF
     '';
 
   cmakeBuildType = "RelWithDebInfo";

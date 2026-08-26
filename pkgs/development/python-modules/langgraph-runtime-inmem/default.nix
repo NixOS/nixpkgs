@@ -14,14 +14,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langgraph-runtime-inmem";
-  version = "0.28.0";
+  version = "0.32.3";
   pyproject = true;
+  __structuredAttrs = true;
 
   # Not available in any repository
   src = fetchPypi {
     pname = "langgraph_runtime_inmem";
     inherit (finalAttrs) version;
-    hash = "sha256-4CU2UItcFU8YokJAZjr3wjifQ8tPu6yZWicXtM/kDS8=";
+    hash = "sha256-k5ATRuxkds7dDZx3lxGJUL+vUgVFHe8/BaAZqoaaxd4=";
   };
 
   build-system = [ hatchling ];

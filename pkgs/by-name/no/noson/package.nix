@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "noson";
-  version = "5.6.13";
+  version = "5.6.25";
 
   src = fetchFromGitHub {
     owner = "janbar";
     repo = "noson-app";
     tag = finalAttrs.version;
-    hash = "sha256-XJBkPhyDPeyVrcY5Q5W9LtESuVxcbcQ8JoyOzKg+0NU=";
+    hash = "sha256-Y+kyadcrGGpqxY7y1xkYh3BMDItE2LLwT6nJ2YuHp10=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "noson-app";
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ callahad ];
+    maintainers = [ ];
   };
 })

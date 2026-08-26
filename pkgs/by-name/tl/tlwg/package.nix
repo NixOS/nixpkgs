@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tlwg";
-  version = "0.7.3";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "tlwg";
     repo = "fonts-tlwg";
     rev = "v${finalAttrs.version}";
-    sha256 = "hWiH5KJnYTdcrm+Kzn9HUQry8ry3SKzjA6/0536kCLQ=";
+    sha256 = "sha256-suA6jdCgvvWjfHkQhPRE87jm4U/72Acb+U+/O1tDsbI=";
   };
 
   nativeBuildInputs = [

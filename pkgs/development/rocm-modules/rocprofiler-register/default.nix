@@ -44,6 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-VloRKV6kUzIfIInltx/bV1EM0FUfeQZrVAx6qgdsLyg=";
       relative = "projects/rocprofiler-register";
     })
+    (fetchpatch {
+      # fix(rocprofiler-sdk): include fmt/format.h instead of fmt/core.h for fmt::format
+      # fmt 12.2.0 changes the meaning of fmt/core.h so it no longer includes
+      # fmt::format, so this upstream commit switches to the correct header.
+      url = "https://github.com/ROCm/rocm-systems/commit/e2f588592ecfb0653ed5b3078753186325adf70a.patch";
+      hash = "sha256-ip/s7tmUptcXMen3fyQJYKiZKwoe3SH0XqTVb0YBA7k=";
+      relative = "projects/rocprofiler-register";
+    })
   ];
 
   nativeBuildInputs = [
@@ -82,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Profiling with perf-counters and derived metrics";
     homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/rocprofiler-register";
-    license = with lib.licenses; [ mit ]; # mitx11
+    license = lib.licenses.mit; # mitx11
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

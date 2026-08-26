@@ -2,7 +2,7 @@
   fetchurl,
   lib,
   stdenv,
-  squashfsTools,
+  squashfs-tools,
   libxtst,
   libxscrnsaver,
   libxrender,
@@ -39,7 +39,7 @@
   fontconfig,
   dbus,
   expat,
-  ffmpeg_4,
+  ffmpeg_7-headless,
   curlWithGnuTls,
   zlib,
   zenity,
@@ -74,7 +74,7 @@ let
     curlWithGnuTls
     dbus
     expat
-    ffmpeg_4 # Requires libavcodec < 59 as of 1.2.9.743.g85d9593d
+    ffmpeg_7-headless # Requires libavcodec < 62
     fontconfig
     freetype
     gdk-pixbuf
@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   # If an update breaks things, one of those might have valuable info:
   # https://aur.archlinux.org/packages/spotify/
   # https://community.spotify.com/t5/Desktop-Linux
-  version = "1.2.84.475.ga1a748ff";
+  version = "1.2.92.147.g5b8f9367";
 
   # To get the latest stable revision:
   # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/spotify?channel=stable' | jq '.download_url,.version,.last_updated'
@@ -131,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
   # curl -H 'Snap-Device-Series: 16' 'https://api.snapcraft.io/v2/snaps/info/spotify' | jq '.'
   # More examples of api usage:
   # https://github.com/canonical-websites/snapcraft.io/blob/master/webapp/publisher/snaps/views.py
-  rev = "93";
+  rev = "97";
 
   # fetch from snapcraft instead of the debian repository most repos fetch from.
   # That is a bit more cumbersome. But the debian repository only keeps the last
@@ -144,13 +144,13 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     name = "spotify-${finalAttrs.version}-${finalAttrs.rev}.snap";
     url = "https://api.snapcraft.io/api/v1/snaps/download/pOBIoZ2LrCB3rDohMxoYGnbN14EHOgD7_${finalAttrs.rev}.snap";
-    hash = "sha512-X9IslXh1MHExJpBu45mXnIowdhmvkBko+fupk23WhKNoUPSR37jbj5Ee4V2ZYKxCtgyDgX8Px1YKynu3KEVUFg==";
+    hash = "sha512-Gk0/WjfgJZIG+2w4teaznAk/7evOXUsuCikDvOhmhAQ5ksQV99VeiYnE+OJf7hHnrPaHoueERvIkk7Psed/kwA==";
   };
 
   nativeBuildInputs = [
     wrapGAppsHook3
     makeShellWrapper
-    squashfsTools
+    squashfs-tools
   ];
 
   dontStrip = true;
@@ -200,8 +200,8 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${nspr.out}/lib/libnspr4.so $libdir/libnspr4.so
     ln -s ${nspr.out}/lib/libplc4.so $libdir/libplc4.so
 
-    ln -s ${ffmpeg_4.lib}/lib/libavcodec.so* $libdir
-    ln -s ${ffmpeg_4.lib}/lib/libavformat.so* $libdir
+    ln -s ${ffmpeg_7-headless.lib}/lib/libavcodec.so* $libdir
+    ln -s ${ffmpeg_7-headless.lib}/lib/libavformat.so* $libdir
 
     rpath="$out/share/spotify:$libdir"
 
@@ -240,7 +240,7 @@ stdenv.mkDerivation (finalAttrs: {
       } \
       --prefix LD_LIBRARY_PATH : "$librarypath" \
       --prefix PATH : "${zenity}/bin" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime=true}}"
+      --run 'if [[ "''${NIXOS_OZONE_WL:-default}" == "1" ]]; then unset DISPLAY; fi'
 
     runHook postFixup
   '';
@@ -249,8 +249,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = meta // {
     maintainers = with lib.maintainers; [
-      ftrvxmtrx
-      timokau
       ma27
     ];
   };
