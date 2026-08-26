@@ -35,6 +35,10 @@ in
           sftp-private-key-file = "/var/lib/pgbackrest/sftp_key";
         };
 
+        # testing async archiving here. synchronous archiving is covered by
+        # ./posix.nix.
+        commands.archive-push.archive-async = true;
+
         stanzas.default.jobs.future = {
           schedule = "3000-01-01";
           type = "diff";
@@ -78,7 +82,11 @@ in
 
       with subtest("backup/restore works with local instance/remote repo (SFTP)"):
         primary.succeed("sudo -u pgbackrest pgbackrest --stanza=default stanza-create", timeout=10)
+
+        # 'check' switches a WAL segment and triggers & blocks an async push
         primary.succeed("sudo -u pgbackrest pgbackrest --stanza=default check")
+
+        assert "postgres 700" in primary.succeed("stat -c '%U %a' /var/spool/pgbackrest")
 
         primary.systemctl("start pgbackrest-default-future")
 

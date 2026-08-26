@@ -101,6 +101,19 @@ let
   # paths that need to be accessed by all members of the pgbackrest group,
   # e.g. the postgresql user and the pgbackrest user
   groupPaths = pathsFor "lock-path";
+
+  # only exists when archiving asynchronously
+  archiveAsync = lib.any (v: v == true || v == "y") (
+    [ (cfg.settings.archive-async or false) ]
+    ++ lib.mapAttrsToList (_: command: command.archive-async or false) cfg.commands
+  );
+
+  spoolPaths = lib.optionals archiveAsync (
+    let
+      paths = pathsFor "spool-path";
+    in
+    if paths == [ ] then [ "/var/spool/pgbackrest" ] else paths
+  );
 in
 
 {
@@ -480,13 +493,23 @@ in
         };
         # postgresql is running with ProtectSystem=strict which disallows
         # writing to e.g. /run. This punches holes into that so that it can
-        # write into the groupPaths as necessary.
+        # write into the groupPaths and the spool as necessary.
         systemd.services.postgresql.serviceConfig.ReadWritePaths = map (path: "-${path}") (
           lib.unique (
-            groupPaths ++ lib.optional (cfg.repos.localhost.path or null != null) cfg.repos.localhost.path
+            groupPaths
+            ++ spoolPaths
+            ++ lib.optional (cfg.repos.localhost.path or null != null) cfg.repos.localhost.path
           )
         );
 
+        # spool is only ever written to by postgres
+        systemd.tmpfiles.settings.pgbackrest = lib.genAttrs spoolPaths (_: {
+          d = {
+            user = "postgres";
+            group = "postgres";
+            mode = "0700";
+          };
+        });
         services.postgresql.identMap = ''
           postgres pgbackrest postgres
         '';
