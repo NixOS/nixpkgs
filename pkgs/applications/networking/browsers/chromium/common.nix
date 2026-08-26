@@ -678,6 +678,20 @@ let
         includes = [ "chrome/browser/first_run/first_run.h" ];
         hash = "sha256-d1Zm2flZPG++ROF4CCawn9U8T7/qgZFMHTXArqIShTk=";
       })
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "152") [
+      # ERROR at //build/rust/crubit/BUILD.gn:31:19: Unable to load "/build/src/third_party/rust-toolchain/lib/third_party/crubit/BUILD.gn".
+      #   public_deps = [ "$crubit_src_dir:cpp_api_from_rust_bindings_cpp_deps" ]
+      #                   ^----------------------------------------------------
+      #
+      # Source: https://github.com/ungoogled-software/ungoogled-chromium/pull/3928
+      # by https://github.com/Ahrotahn (ungoogled-chromium, BSD-3-Clause)
+      ./patches/ungoogled-chromium-152-crubit.patch
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "152" && lib.versionOlder llvmVersion "23") [
+      # error: unknown argument: '-fno-lifetime-safety-inference'
+      # error: unknown argument: '-fno-experimental-lifetime-safety-tu-analysis'
+      ./patches/chromium-152-dawn-llvm-22.patch
     ];
 
     postPatch =

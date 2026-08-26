@@ -12,15 +12,15 @@
 
 buildGoModule (finalAttrs: {
   pname = "sstorytime";
-  version = "0-unstable-2026-08-12";
+  version = "1.0-beta-unstable-2026-08-20";
 
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "markburgess";
     repo = "SSTorytime";
-    rev = "9085a82bd2357e914d862879224bc9d807f7e049";
-    hash = "sha256-ZA3qN//bkCU+yl7uych8Pz7J4AbtlBwRxqV/d/GkEZg=";
+    rev = "a9b34d5197cb0a9fb586bc4722eb8153dffaf044";
+    hash = "sha256-NYMIxUlx5jf2weTdMxziMhZ7dMxPc5L330wRFzhDmFw=";
   };
 
   vendorHash = "sha256-lei5IG02QYSigHmLArlE7huDFVGoVMkw8DTEQeJWFX0=";
@@ -103,10 +103,10 @@ buildGoModule (finalAttrs: {
       fi
     done
 
-    if "$bin" -u examples/doors.n4l >/dev/null; then
-      echo "ok N4L -u doors.n4l"
+    if "$bin" -wipe -u examples/doors.n4l >/dev/null; then
+      echo "ok N4L -wipe -u doors.n4l"
     else
-      echo "FAIL N4L -u doors.n4l"
+      echo "FAIL N4L -wipe -u doors.n4l"
       failed=1
     fi
 

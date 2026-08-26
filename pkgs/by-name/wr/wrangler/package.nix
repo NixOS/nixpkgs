@@ -20,13 +20,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
-  version = "4.94.0";
+  version = "4.125.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-sdk";
     rev = "wrangler@${finalAttrs.version}";
-    hash = "sha256-GW/esuGs7EdIDAUfx4ieTyZ8I84MnnZFW04LucGmbDI=";
+    hash = "sha256-4waGrQngRu4YTufvGJDoxP5pqXFwtJJ2IRSru3+R82w=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-FLbECanDqNZ05K2JHXv8lIgNM6oUtYxWrUw54IeEf5A=";
+    hash = "sha256-3Ma7zMlFtOKYgEKCS0eZM9+lKiVH7tnTsbjzQIJN7OI=";
   };
   # pnpm packageManager version in workers-sdk root package.json may not match nixpkgs
   postPatch = ''
@@ -72,27 +72,12 @@ stdenv.mkDerivation (finalAttrs: {
     autoPatchelfHook
   ];
 
-  # @cloudflare/vitest-pool-workers wanted to run a server as part of the build process
-  # so I simply removed it
-  postBuild =
-    let
-      extraDeps = [
-        "unenv-preset"
-        "workers-utils"
-        "local-explorer-ui"
-        "codemod"
-        "cli-shared-helpers"
-        "miniflare"
-        "wrangler"
-      ];
-    in
-    ''
-      mv packages/vitest-pool-workers packages/~vitest-pool-workers
+  # Avoid V8 heap exhaustion on aarch64-darwin.
+  env.NODE_OPTIONS = "--max-old-space-size=4096";
 
-      for pkg in ${toString extraDeps}; do
-        NODE_ENV="production" pnpm --filter "$pkg" run build
-      done
-    '';
+  postBuild = ''
+    NODE_ENV="production" pnpm --filter wrangler... run build
+  '';
 
   installPhase = ''
     runHook preInstall

@@ -1,21 +1,20 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   acl,
+  buildPackages,
   cyrus_sasl,
-  docbook_xsl,
   libepoxy,
   gettext,
+  gi-docgen,
   gobject-introspection,
   gst_all_1,
-  gtk-doc,
   gtk3,
   hwdata,
   json-glib,
   libcacard,
   libcap_ng,
-  libdrm,
   libjpeg_turbo,
   libopus,
   libsoup_3,
@@ -38,6 +37,11 @@
   wayland-scanner,
   zlib,
   wrapGAppsHook3,
+  wrapGAppsNoGuiHook,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  withGtk ? false,
   withPolkit ? stdenv.hostPlatform.isLinux,
 }:
 
@@ -47,7 +51,7 @@
 # then adds a device acl entry for that user.
 # Example NixOS config to create a setuid wrapper for the helper:
 # security.wrappers.spice-client-glib-usb-acl-helper.source =
-#   "${pkgs.spice-gtk}/bin/spice-client-glib-usb-acl-helper";
+#   "${pkgs.spice-glib}/bin/spice-client-glib-usb-acl-helper";
 # On non-NixOS installations, make a setuid copy of the helper
 # outside the store and adjust PATH to find the setuid version.
 
@@ -63,53 +67,70 @@
 #  '';
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "spice-gtk";
-  version = "0.42";
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  pname = if withGtk then "spice-gtk" else "spice-glib";
+  version = "0.43";
 
   outputs = [
     "out"
     "dev"
-    "devdoc"
     "man"
   ];
 
-  src = fetchurl {
-    url = "https://www.spice-space.org/download/gtk/spice-gtk-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-k4ARfxgRrR+qGBLLZgJHm2KQ1KDYzEQtREJ/f2wOelg=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "spice";
+    repo = "spice-gtk";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-e0B3shnXDwKMPvy1nyz/iNPPRGJbnygh0bqIufq/93g=";
+    fetchSubmodules = true;
   };
+  # Required since we strip .git
+  postUnpack = ''
+    echo "${finalAttrs.version}" > source/.tarball-version
+  '';
 
   depsBuildBuild = [
     pkg-config
   ];
 
   nativeBuildInputs = [
-    docbook_xsl
     gettext
-    gobject-introspection
-    gtk-doc
     meson
     ninja
     perl
     pkg-config
     python3
     python3.pkgs.pyparsing
-    python3.pkgs.six
-    vala
-    wrapGAppsHook3
   ]
   ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     mesonEmulatorHook
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    wayland-scanner
-  ];
+  ++ lib.optionals withIntrospection [
+    gi-docgen
+    gobject-introspection
+    vala
+  ]
+  ++ (
+    if withGtk then
+      [
+        wrapGAppsHook3
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        wayland-scanner
+      ]
+    else
+      [
+        wrapGAppsNoGuiHook
+      ]
+  );
 
   buildInputs = [
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     cyrus_sasl
-    libepoxy
-    gtk3
     json-glib
     libcacard
     libjpeg_turbo
@@ -122,7 +143,6 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
     spice-protocol
     usbredir
-    vala
     zlib
   ]
   ++ lib.optionals withPolkit [
@@ -131,7 +151,12 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap_ng
-    libdrm
+    libepoxy
+  ]
+  ++ lib.optionals withGtk [
+    gtk3
+  ]
+  ++ lib.optionals (withGtk && stdenv.hostPlatform.isLinux) [
     wayland-protocols
   ];
 
@@ -140,13 +165,12 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Dusb-acl-helper-dir=${placeholder "out"}/bin"
     "-Dusb-ids-path=${hwdata}/share/hwdata/usb.ids"
-  ]
-  ++ lib.optionals (!withPolkit) [
-    "-Dpolkit=disabled"
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
-    "-Dlibcap-ng=disabled"
-    "-Degl=disabled"
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "vapi" withIntrospection)
+    (lib.mesonEnable "polkit" withPolkit)
+    (lib.mesonEnable "libcap-ng" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "egl" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "gtk" withGtk)
   ]
   ++ lib.optionals stdenv.hostPlatform.isMusl [
     "-Dcoroutine=gthread" # Fixes "Function missing:makecontext"
@@ -164,24 +188,37 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs subprojects/keycodemapdb/tools/keymap-gen
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # don't use version script and don't export symbols
-    substituteInPlace src/meson.build \
-      --replace-fail "spice_gtk_version_script = [" "# spice_gtk_version_script = [" \
-      --replace-fail ",--version-script=@0@'.format(spice_client_glib_syms_path)" "'"
+    # drm/drm_fourcc.h is a Linux kernel uAPI header; only one constant is used
+    substituteInPlace src/channel-display.c --replace-fail \
+      '#include <drm/drm_fourcc.h>' \
+      '#define DRM_FORMAT_MOD_INVALID 0x00ffffffffffffffULL'
   '';
 
   meta = {
-    description = "GTK 3 SPICE widget";
-    longDescription = ''
-      spice-gtk is a GTK 3 SPICE widget. It features glib-based
-      objects for SPICE protocol parsing and a gtk widget for embedding
-      the SPICE display into other applications such as virt-manager.
-      Python bindings are available too.
-    '';
-
+    description = "SPICE Glib client library" + lib.optionalString withGtk " with GTK+3 widget";
+    longDescription =
+      if withGtk then
+        ''
+          spice-glib provides support for Glib apps to interact with the SPICE
+          protocol and spice-gtk itself provides a GTK 3 SPICE widget.
+          The package features glib-based objects for SPICE protocol parsing and a GTK widget
+          for embedding the SPICE display into other applications such as virt-manager.
+          Python bindings are available too.
+          This package is also available without the GTK+3 widget, use 'spice-glib' for this.
+        ''
+      else
+        ''
+          spice-glib provides support for Glib apps to interact with the SPICE
+          protocol. It features glib-based objects for SPICE protocol parsing.
+          Python bindings are available too.
+          This package is also available with a GTK+3 widget, use 'spice-gtk' for this.
+        '';
     homepage = "https://www.spice-space.org/";
     license = lib.licenses.lgpl21;
-    maintainers = [ lib.maintainers.xeji ];
+    maintainers = [
+      lib.maintainers.xeji
+      lib.maintainers.theCapypara
+    ];
     platforms = lib.platforms.unix;
   };
 })
