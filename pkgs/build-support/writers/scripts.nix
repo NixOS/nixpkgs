@@ -113,6 +113,7 @@ rec {
           {
             inherit makeWrapperArgs content interpreter;
             nativeBuildInputs = [ makeBinaryWrapper ];
+            strictDeps = true;
             __structuredAttrs = true;
             meta.mainProgram = name;
           }
