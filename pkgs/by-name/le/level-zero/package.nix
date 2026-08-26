@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       inherit intel-compute-runtime openvino;
     };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
   };
 
   meta = {
