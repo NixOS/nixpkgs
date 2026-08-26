@@ -19,6 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   depsBuildBuild = [ pkgsBuildBuild.stdenv.cc ];
   patches = [
     ./cross.patch
+    ./no-struct-hack.patch
     # Fix reproducible timestamps.
     ./fix-source-date.patch
   ];
@@ -28,6 +29,14 @@ stdenv.mkDerivation (finalAttrs: {
   #    make[2]: *** No rule to make target 'man/man3/JSLD', needed by 'all-am'.  Stop.
   # Let's wait for the upstream fix similar to https://sourceforge.net/p/judy/patches/4/
   enableParallelBuilding = false;
+
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+    make -C test check-TESTS
+    runHook postCheck
+  '';
 
   outputs = [
     "out"

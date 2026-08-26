@@ -13,6 +13,7 @@ buildNpmPackage (finalAttrs: {
   postPatch = ''
     # don't download elm from github
     sed -i '/"elm":/d' package.json
+    substituteInPlace elm.json --replace-fail "0.19.1" "${elmPackages.elm.version}"
   '';
 
   postConfigure = (

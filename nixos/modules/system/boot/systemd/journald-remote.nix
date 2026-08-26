@@ -123,7 +123,7 @@ in
     systemd.services.systemd-journal-remote.serviceConfig.ExecStart = [
       # Clear the default command line
       ""
-      "${pkgs.systemd}/lib/systemd/systemd-journal-remote ${cliArgs}"
+      "${config.systemd.package}/lib/systemd/systemd-journal-remote ${cliArgs}"
     ];
 
     systemd.sockets.systemd-journal-remote = {

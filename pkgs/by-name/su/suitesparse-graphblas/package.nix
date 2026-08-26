@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "suitesparse-graphblas";
-  version = "10.4.1";
+  version = "10.5.0";
 
   outputs = [
     "out"
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "DrTimothyAldenDavis";
     repo = "GraphBLAS";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cP5LktaO/vCPg6tRrK3uaCgOkOwS7X6mbb6VPTuYvl0=";
+    hash = "sha256-N+rpBYcpAjUPPeeqU6pMrPKR+b5rBP+z7Z9i2jS6kNE=";
   };
 
   nativeBuildInputs = [
