@@ -211,6 +211,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ map (e: "-DWITH_${e.name}=${if e.enable then "ON" else "OFF"}") options;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     cmake
     pkg-config
