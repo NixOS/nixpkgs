@@ -40,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/bbuchfink/diamond";
     changelog = "https://github.com/bbuchfink/diamond/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      debtquity
+    ];
   };
 })
