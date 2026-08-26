@@ -198,7 +198,6 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       gpl3Only # The python codebase and all other parts of this codebase
     ];
     maintainers = with lib.maintainers; [
-      hexa
       picnoir
       thanegill
       karlbeecken
