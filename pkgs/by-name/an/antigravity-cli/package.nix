@@ -67,6 +67,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       adrielvelazquez
       u3kkasha
+      taranarmo
     ];
     platforms = lib.attrNames sourceData;
     mainProgram = "agy";
