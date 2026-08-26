@@ -9720,6 +9720,8 @@ self: super: with self; {
 
   libscanbuild = callPackage ../development/python-modules/libscanbuild { };
 
+  libscrc = callPackage ../development/python-modules/libscrc { };
+
   libselinux = lib.pipe pkgs.libselinux [
     toPythonModule
     (
@@ -18544,6 +18546,8 @@ self: super: with self; {
   scapy = callPackage ../development/python-modules/scapy {
     inherit (pkgs) libpcap; # Avoid confusion with python package of the same name
   };
+
+  scat = callPackage ../development/python-modules/scat { };
 
   scenedetect = callPackage ../development/python-modules/scenedetect { };
 
