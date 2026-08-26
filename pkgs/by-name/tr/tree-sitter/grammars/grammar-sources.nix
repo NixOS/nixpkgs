@@ -2619,9 +2619,9 @@
   };
 
   robot = {
-    version = "1.4.0";
+    version = "1.5.0";
     url = "github:Hubro/tree-sitter-robot";
-    hash = "sha256-U89K9S7zkUZ0CoT2FgvKIvQ3ApjRe59YoWrks/iQ0FM=";
+    hash = "sha256-LRVkqtEAYO3jHQTGTgO6I4ZNlYRrMRK8+FCd0expFK0=";
     meta = {
       license = lib.licenses.isc;
       maintainers = with lib.maintainers; [
