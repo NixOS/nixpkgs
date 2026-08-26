@@ -7,7 +7,7 @@
   cmake,
   boost,
   bzip2,
-  ffmpeg,
+  ffmpeg_8,
   fftwSinglePrec,
   hdf5,
   muparser,
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     bzip2
-    ffmpeg
+    ffmpeg_8
     fftwSinglePrec
     hdf5
     muparser

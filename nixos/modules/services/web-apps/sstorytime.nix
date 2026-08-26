@@ -164,7 +164,7 @@ in
       description = ''
         Runs tools in a transient unit with the same user, state directory,
         and environment as {option}`systemd.services.sstorytime`.
-        Example: {command}`sstorytime-run N4L -u notes.n4l`.
+        Example: {command}`sstorytime-run N4L -wipe -u notes.n4l`.
       '';
     };
   };

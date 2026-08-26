@@ -160,6 +160,13 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-EMn/fr5WlRQtFj5GHo02kczasmKaiqFfRSVZo2uvOPI=";
     })
 
+    # https://github.com/sagemath/sage/pull/42480, landed in 10.10.beta5
+    (fetchpatch2 {
+      name = "gfan-0_8-doctest-order.patch";
+      url = "https://github.com/sagemath/sage/commit/7ee0e41ce28f2c52b2ecb1041032e605af4ce0cc.patch?full_index=1";
+      hash = "sha256-msXUEbeO2rbP5m+EV8WmX6i8oQIfRLWEDGbIdz//lek=";
+    })
+
     # work around https://github.com/ipython/ipython/issues/15207, which
     # will likely be properly fixed in IPython 9.16.
     ./patches/ipython-9_15-workaround.patch

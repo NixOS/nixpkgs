@@ -107,7 +107,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       imports = [ (lib.modules.importApply ./service.nix { }) ];
       trailbase.package = lib.mkDefault finalAttrs.finalPackage;
     };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
   };
 
   meta = {

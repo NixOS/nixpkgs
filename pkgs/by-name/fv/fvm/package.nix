@@ -8,19 +8,16 @@
   nix-update-script,
 }:
 
-let
-  version = "4.1.2";
+buildDartApplication (finalAttrs: {
+  pname = "fvm";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "conceptadev";
     repo = "fvm";
-    tag = version;
-    hash = "sha256-Kyxyt2UsrQ6Bc6EuYJjpEFdYwcus2/bcVrWsd/gs3Ok=";
+    tag = finalAttrs.version;
+    hash = "sha256-SAWWKNbE/TyrP5bcIdDeAZa6/3d4D/Ru1PbcPvy9EDo=";
   };
-in
-buildDartApplication {
-  pname = "fvm";
-  inherit version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -28,7 +25,7 @@ buildDartApplication {
     pubspecSource =
       runCommand "pubspec.lock.json"
         {
-          inherit src;
+          inherit (finalAttrs) src;
           nativeBuildInputs = [ yq-go ];
         }
         ''
@@ -52,4 +49,4 @@ buildDartApplication {
     mainProgram = "fvm";
     maintainers = [ ];
   };
-}
+})
