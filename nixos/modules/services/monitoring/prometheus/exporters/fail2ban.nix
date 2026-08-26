@@ -59,9 +59,10 @@ in
   ];
 
   serviceOpts = {
-    requires = mkIf config.services.fail2ban.enable [ "prometheus-fail2ban-exporter-setup.service" ];
     serviceConfig = {
-      DynamicUser = false;
+      SupplementaryGroups = [
+        config.systemd.sockets.fail2ban.socketConfig.SocketGroup
+      ];
       ExecStart = ''
         ${getExe pkgs.prometheus-fail2ban-exporter} \
           ${optionalString cfg.exitOnError ''--collector.f2b.exit-on-socket-connection-error \''}

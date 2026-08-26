@@ -474,7 +474,6 @@ let
     fail2ban =
       { ... }:
       {
-        testBackend = "nodes"; # setfacl
         exporterConfig = {
           enable = true;
           exitOnError = true;
