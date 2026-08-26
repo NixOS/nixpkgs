@@ -17803,6 +17803,8 @@ self: super: with self; {
 
   rctclient = callPackage ../development/python-modules/rctclient { };
 
+  rdata = callPackage ../development/python-modules/rdata { };
+
   rdbtools = callPackage ../development/python-modules/rdbtools { };
 
   rdflib = callPackage ../development/python-modules/rdflib { };
