@@ -5,45 +5,43 @@
   nodejs,
   gnutar,
   makeBinaryWrapper,
-  yarn-berry_4,
+  pnpm,
+  pnpmConfigHook,
+  fetchPnpmDeps,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gitbeaker-cli";
-  version = "43.8.0";
+  version = "44.0.0-pre.0";
 
   src = fetchFromGitHub {
     owner = "jdalrymple";
     repo = "gitbeaker";
-    tag = finalAttrs.version;
-    hash = "sha256-EVxDUEuxCnMiqqsKFs9JpRVJ86d9hW22K4a4we8eoJA=";
+    tag = "@gitbeaker/cli@${finalAttrs.version}";
+    hash = "sha256-1YFrvQSLtznjtGeOjBd7bZfOsGDITejpWAZ+KubQiTk=";
   };
 
-  patches = [
-    # Remove this when updating since upstream migrated to pnpm
-    # https://github.com/jdalrymple/gitbeaker/blob/main/package.json#L59
-    ./yarn-4.14-support.patch
-  ];
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-6DX20bHRWX3F6w2Gat5AvzLB/L6W5YSuqo+7v8t6MSI=";
+  };
 
   nativeBuildInputs = [
     nodejs
-    yarn-berry_4.yarnBerryConfigHook
-    yarn-berry_4
+    pnpm
+    pnpmConfigHook
     makeBinaryWrapper
     gnutar
   ];
 
   missingHashes = ./missing-hashes.json;
 
-  offlineCache = yarn-berry_4.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-RTgdHicbfbJbToif51TchLCfdIPZynvT0n/KwrydLYU=";
-  };
-
   buildPhase = ''
     runHook preBuild
 
-    yarn workspaces foreach -Rpt --from '@gitbeaker/*' run build
+    pnpm --filter "@gitbeaker/*..." build
 
     runHook postBuild
   '';
@@ -51,21 +49,24 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    CI=true pnpm --ignore-scripts --prod prune
+
+    # Remove non-deterministic files
+    rm node_modules/{.modules.yaml,.pnpm-workspace-state-v1.json}
+
     mkdir -p $out/bin
     mkdir -p $out/lib
-    cp -r packages $out/lib/packages
-    cp -r node_modules/ $out/lib/node_modules
-    # Remove dev dependencies
-    rm -rf $out/lib/node_modules/{.bin,tsup,typescript,@auto-it,@codecov,@swc,#types,@typescript-eslint,jest*,nx,prettier*,eslint*}
+    mv packages $out/lib/packages
+    mv node_modules/ $out/lib/node_modules
 
     runHook postInstall
   '';
 
   postFixup = ''
-    chmod +x $out/lib/node_modules/@gitbeaker/cli/dist/index.mjs
-    patchShebangs $out/lib/node_modules/@gitbeaker/cli/dist/index.mjs
+    chmod +x $out/lib/packages/cli/dist/index.mjs
+    patchShebangs $out/lib/packages/cli/dist/index.mjs
 
-    makeWrapper $out/lib/node_modules/@gitbeaker/cli/dist/index.mjs $out/bin/gb \
+    makeWrapper $out/lib/packages/cli/dist/index.mjs $out/bin/gb \
       --prefix PATH : ${lib.makeBinPath [ nodejs ]}
 
     ln -s $out/bin/gb $out/bin/gitbeaker
