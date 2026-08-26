@@ -1,6 +1,7 @@
 {
   lib,
   aiohttp,
+  aiointercept,
   aioresponses,
   aqipy-atmotech,
   buildPythonPackage,
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "nettigo-air-monitor";
-  version = "5.0.0";
+  version = "5.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "bieniu";
     repo = "nettigo-air-monitor";
     tag = version;
-    hash = "sha256-Lgtq+Jho2IkXnVLVlPRxL2hvhB8gW/9Et2yqXOkM8MI=";
+    hash = "sha256-CW3Z9AI0ncS+U14s3MnokPdcag90o/yrCOp+2lfQ3CM=";
   };
 
   postPatch = ''
@@ -44,6 +45,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aiointercept
     aioresponses
     pytest-asyncio
     pytest-error-for-skips
