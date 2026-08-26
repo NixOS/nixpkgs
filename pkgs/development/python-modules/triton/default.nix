@@ -47,7 +47,7 @@ let
 in
 buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
   pname = "triton";
-  version = "3.7.0";
+  version = "3.7.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -56,7 +56,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     owner = "triton-lang";
     repo = "triton";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FxbBY1lPq7765MqAPR7UljzPsmjOhKKbYExlKgeudew=";
+    hash = "sha256-2+NAHZZjFQxj+9UGiNpk4TVAKW6nydw1L1FTTJpNya4=";
   };
 
   patches = [
