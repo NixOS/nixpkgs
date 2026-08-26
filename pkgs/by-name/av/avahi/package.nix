@@ -178,7 +178,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/avahi/avahi/compare/0ccadca425af151ebb67f276e5cc88e50266a8e6%5E%5E...0ccadca425af151ebb67f276e5cc88e50266a8e6.patch";
       hash = "sha256-yi40iuQmTAW+nLsOIJhh7kg4vG/lqT/PCaSEBPfF2mw=";
     })
-
+    (fetchpatch {
+      name = "Do-not-disable-timeout-cleanup-on-watch-cleanup.patch";
+      url =  "https://github.com/avahi/avahi/commit/b3ad387c74f20368f6dcf60f97d20a3bf8ba9782.patch";
+      hash = "sha256-/0A0a06ajbmRGiKEbJylcZmlM+2nnZxYkb4XbaOdg8A=";
+    })
   ];
 
   postPatch = ''
