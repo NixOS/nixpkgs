@@ -1,5 +1,8 @@
 { callPackage }:
 
+let
+  helm-secrets = callPackage ./helm-secrets.nix { };
+in
 {
   helm-cm-push = callPackage ./helm-cm-push.nix { };
 
@@ -13,7 +16,13 @@
 
   helm-s3 = callPackage ./helm-s3.nix { };
 
-  helm-secrets = callPackage ./helm-secrets.nix { };
+  inherit helm-secrets;
+
+  helm-secrets-getter = callPackage ./helm-secrets-getter.nix { };
+
+  helm-secrets-post-renderer = callPackage ./helm-secrets-post-renderer.nix {
+    inherit helm-secrets;
+  };
 
   helm-schema = callPackage ./helm-schema.nix { };
 

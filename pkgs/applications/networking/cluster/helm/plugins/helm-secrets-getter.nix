@@ -12,7 +12,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "helm-secrets";
+  pname = "helm-secrets-getter";
   version = "4.7.7";
 
   src = fetchFromGitHub {
@@ -31,16 +31,16 @@ stdenv.mkDerivation (finalAttrs: {
   # NOTE: helm-secrets is comprised of shell scripts.
   dontBuild = true;
 
-  # NOTE: Fix version string in the Helm 4 CLI plugin manifest.
+  # NOTE: Fix version string in the Helm 4 getter plugin manifest.
   postPatch = ''
-    sed -i 's/^version:.*/version: "${finalAttrs.version}"/' plugins/helm-secrets-cli/plugin.yaml
+    sed -i 's/^version:.*/version: "${finalAttrs.version}"/' plugins/helm-secrets-getter/plugin.yaml
   '';
 
   installPhase = ''
     runHook preInstall
 
     install -dm755 $out/${finalAttrs.pname} $out/${finalAttrs.pname}/scripts
-    install -m644 -Dt $out/${finalAttrs.pname} plugins/helm-secrets-cli/plugin.yaml
+    install -m644 -Dt $out/${finalAttrs.pname} plugins/helm-secrets-getter/plugin.yaml
     cp -rL scripts/* $out/${finalAttrs.pname}/scripts
     wrapProgram $out/${finalAttrs.pname}/scripts/run.sh \
         --prefix PATH : ${
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Helm plugin that helps manage secrets";
+    description = "Helm secrets getter plugin for secrets:// protocol support";
     homepage = "https://github.com/jkroepke/helm-secrets";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ yurrriq ];
