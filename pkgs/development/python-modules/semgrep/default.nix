@@ -119,6 +119,7 @@ buildPythonPackage (finalAttrs: {
     "opentelemetry-api"
     "opentelemetry-exporter-otlp-proto-http"
     "opentelemetry-sdk"
+    "peewee"
     "wcmatch"
   ];
   dependencies = [
