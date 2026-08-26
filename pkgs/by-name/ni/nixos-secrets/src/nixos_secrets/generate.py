@@ -12,6 +12,7 @@ from .exec import (
     set_secret,
     fixup_all,
     run_prompt,
+    reset_terminal_state,
 )
 from .error import SecretsError
 
@@ -143,6 +144,8 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
                     raise SecretsError(f"Error generating '{entry}': {e.stderr}")
                 except subprocess.TimeoutExpired:
                     raise SecretsError(f"Generator '{entry}' timed out")
+                finally:
+                    reset_terminal_state()
 
                 set_files_from_dir(args, config, generator, out_dir)
             else:

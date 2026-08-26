@@ -15,6 +15,12 @@ from .error import SecretsError
 from .args import SecretsArgs
 
 
+# Prevents the terminal from getting stuck in an invalid state (i.e. no echo) after, for example, a generator script has finished running.
+def reset_terminal_state():
+    # https://stackoverflow.com/questions/7938402/terminal-in-broken-state-invisible-text-no-echo-after-exit-during-input
+    os.system("stty sane")
+
+
 @functools.cache
 def build_binary(path: Path) -> Path:
     try:
@@ -57,6 +63,8 @@ def file_exists(
         text=True,
     )
 
+    reset_terminal_state()
+
     if result.returncode == 42:
         return False
 
@@ -98,6 +106,8 @@ def get_secret(
         raise SecretsError(
             f"Error getting secret '{generator.name}/{file.name}' via the '{backend.name}' backend:\n{e.stderr}"
         )
+    finally:
+        reset_terminal_state()
 
 
 def set_secret(
@@ -124,6 +134,8 @@ def set_secret(
         raise SecretsError(
             f"Error setting secret '{generator.name}/{file.name}' via the '{backend.name}' backend:\n{e.stderr}"
         )
+    finally:
+        reset_terminal_state()
 
 
 # NOTE: we take strings here instead of proper SecretsBackend/SecretsFile object since
@@ -151,6 +163,8 @@ def delete_secret(
         raise SecretsError(
             f"Error deleting secret '{gen_name}/{file_name}' via the '{backend.name}' backend:\n{e.stderr}"
         )
+    finally:
+        reset_terminal_state()
 
 
 def list_secrets(
@@ -220,6 +234,8 @@ def deploy_secrets(
         raise SecretsError(
             f"Error running deploy via the '{backend.name}' backend:\n{e.stderr}"
         )
+    finally:
+        reset_terminal_state()
 
 
 def run_prompt(
@@ -247,6 +263,8 @@ def run_prompt(
         raise SecretsError(
             f"Error running prompt '{prompt.name}' via the '{backend.name}' backend"
         )
+    finally:
+        reset_terminal_state()
 
 
 def execution_order(config: SecretsConfig) -> List[str]:
@@ -338,6 +356,8 @@ def fixup_all(args: SecretsArgs, config: SecretsConfig):
             errors.append(
                 f"Error running fixup script for backend '{backend.name}':\n{e.stderr}"
             )
+        finally:
+            reset_terminal_state()
 
     if errors:
         raise SecretsError("\n".join(errors))
