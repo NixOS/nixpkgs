@@ -21,10 +21,11 @@ writeShellScript "make-darwin-bundle-${name}" ''
     mkdir -p "''${!outputBin}/Applications/${name}.app/Contents/Resources"
 
     if [ -n "${icon}" ]; then
-      ln -s "${icon}" "''${!outputBin}/Applications/${name}.app/Contents/Resources"
+      ln -s "${icon}" "''${!outputBin}/Applications/${name}.app/Contents/Resources/${name}.icns"
+      ${writeDarwinBundle}/bin/write-darwin-bundle "''${!outputBin}" "${name}" "${exec}" "${name}"
+    else
+      ${writeDarwinBundle}/bin/write-darwin-bundle "''${!outputBin}" "${name}" "${exec}"
     fi
-
-    ${writeDarwinBundle}/bin/write-darwin-bundle "''${!outputBin}" "${name}" "${exec}"
   }
 
   appendToVar preDistPhases makeDarwinBundlePhase
