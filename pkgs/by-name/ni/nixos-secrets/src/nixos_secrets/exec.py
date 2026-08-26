@@ -225,6 +225,7 @@ def deploy_secrets(
 def run_prompt(
     args: SecretsArgs,
     config: SecretsConfig,
+    secret: SecretsSecret,
     prompt: SecretsPrompt,
     out: Path,
 ):
@@ -234,7 +235,7 @@ def run_prompt(
         env = os.environ.copy()
         env["out"] = out
         env.update(backend_env_vars(args))
-        command = [binary, prompt.type, prompt.label]
+        command = [binary, secret.name, prompt.name, prompt.type, prompt.label]
         if prompt.description:
             command.append(prompt.description)
         subprocess.run(

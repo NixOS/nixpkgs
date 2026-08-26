@@ -236,9 +236,9 @@ let
         };
 
         ask = deferredPackage ''
-          Given $1=prompt_type, $2=prompt_label, and optionally
-          $3=prompt_description, the script runs the prompt by the user, then
-          saves respective value to $out.
+          Given $1=secret_name, $2=prompt_name, $3=prompt_type,
+          $4=prompt_label, and optionally $5=prompt_description, the script
+          runs the prompt by the user, then saves respective value to $out.
         '';
       };
     }
