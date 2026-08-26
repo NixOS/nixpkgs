@@ -5,9 +5,12 @@
   setuptools,
   netbox,
   python,
-  netbox-napalm-plugin,
+  netboxPlugins,
   pydriller,
 }:
+let
+  inherit (netboxPlugins) netbox-napalm-plugin;
+in
 buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
