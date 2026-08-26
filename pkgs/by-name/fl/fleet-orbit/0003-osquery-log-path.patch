@@ -1,0 +1,29 @@
+diff --git a/orbit/cmd/orbit/orbit.go b/orbit/cmd/orbit/orbit.go
+index ed6f10d..54af34b 100644
+--- a/orbit/cmd/orbit/orbit.go
++++ b/orbit/cmd/orbit/orbit.go
+@@ -242,6 +242,11 @@ func main() {
+ 			Usage:   "Sets a custom osquery database directory, it must be an absolute path",
+ 			EnvVars: []string{"ORBIT_OSQUERY_DB"},
+ 		},
++		&cli.StringFlag{
++			Name:    "osquery-log-path",
++			Usage:   "Path to osquery log file",
++			EnvVars: []string{"NIX_ORBIT_OSQUERY_LOG_PATH"},
++		},
+ 		&cli.BoolFlag{
+ 			Name:    "fleet-managed-host-identity-certificate",
+ 			Usage:   "Configures fleetd to use TPM-backed key to sign HTTP requests. This functionality is licensed under the Fleet EE License. Usage requires a current Fleet EE subscription.",
+@@ -862,7 +867,11 @@ func orbitAction(c *cli.Context) error {
+ 		optionsAfterFlagfile []osquery.Option
+ 	)
+ 	options = append(options, osquery.WithDataPath(c.String("root-dir"), ""))
+-	options = append(options, osquery.WithLogPath(filepath.Join(c.String("root-dir"), "osquery_log")))
++	osqueryLogPath := c.String("osquery-log-path")
++	if osqueryLogPath == "" {
++		osqueryLogPath = filepath.Join(c.String("root-dir"), "osquery_log")
++	}
++	options = append(options, osquery.WithLogPath(osqueryLogPath))
+ 	optionsAfterFlagfile = append(optionsAfterFlagfile, osquery.WithFlags(
+ 		[]string{"--database_path", osqueryDB},
+ 	))

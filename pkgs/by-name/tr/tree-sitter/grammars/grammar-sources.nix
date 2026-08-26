@@ -1,5 +1,6 @@
 {
   fetchpatch,
+  fetchFromGitLab,
   lib,
   stdenv,
 }:
@@ -96,6 +97,15 @@
     meta = {
       license = lib.licenses.mit;
     };
+  };
+
+  basic = {
+    version = "0-unstable-2025-11-11";
+    url = "github:Ra77a3l3-jar/tree-sitter-basic";
+    rev = "a98449c11d6c688b54c1ca132148a62d7e586a2a";
+    hash = "sha256-4wJLK+yZjBELTzTnB/9Xb70uGodetEyjVDtFshviQyA=";
+    excludeBrokenTreeSitterJson = true;
+    meta.license = lib.licenses.mit;
   };
 
   bass = {
@@ -203,6 +213,14 @@
     };
   };
 
+  c3 = {
+    version = "0.11.0";
+    url = "github:c3lang/tree-sitter-c3";
+    hash = "sha256-EADHh63Sf4VlffQX3gH/9kodiws4lQsG+cyMwg1dFp8=";
+    excludeBrokenTreeSitterJson = true;
+    meta.license = lib.licenses.mit;
+  };
+
   caddyfile = {
     version = "0-unstable-2026-04-06";
     url = "github:caddyserver/tree-sitter-caddyfile";
@@ -253,6 +271,14 @@
         aciceri
       ];
     };
+  };
+
+  chuck = {
+    version = "0-unstable-2026-03-27";
+    url = "github:tymbalodeon/tree-sitter-chuck";
+    rev = "68fb7bdba480915d87177feaa5593a666c0bb602";
+    hash = "sha256-yd+RWeY+gHtTkRaxYxXSv27yWupjZtnIDxbsUAMa9eg=";
+    meta.license = lib.licenses.mit;
   };
 
   circom = {
@@ -316,6 +342,15 @@
     meta = {
       license = lib.licenses.mit;
     };
+  };
+
+  concerto = {
+    version = "0-unstable-2026-03-19";
+    url = "github:accordproject/concerto-tree-sitter";
+    rev = "920ba23ea93af56b19dfc38fcddf80b3ddc62685";
+    hash = "sha256-WD+YEdwZJg4F4wNvUGDIMsL68QUt5AMypfC22lmLB+8=";
+    excludeBrokenTreeSitterJson = true;
+    meta.license = lib.licenses.asl20;
   };
 
   cpon = {
@@ -400,6 +435,14 @@
         aciceri
       ];
     };
+  };
+
+  cython = {
+    version = "0-unstable-2024-12-21";
+    url = "github:b0o/tree-sitter-cython";
+    rev = "62f44f5e7e41dde03c5f0a05f035e293bcf2bcf8";
+    hash = "sha256-TFMVjzKWZBN1JISq5RTbXDTkqnttLKxckvwhf3WBQX0=";
+    meta.license = lib.licenses.mit;
   };
 
   d = {
@@ -516,6 +559,22 @@
     };
   };
 
+  doxyfile = {
+    version = "0-unstable-2025-08-14";
+    url = "github:tingerrr/tree-sitter-doxyfile";
+    rev = "18e44c6da639632a4e42264c7193df34be915f34";
+    hash = "sha256-/u1BHMJkj3FkTUwNiB6d8aQIBnnENsBzagXnQa9Dcls=";
+    meta.license = lib.licenses.mit;
+  };
+
+  drools = {
+    version = "0.1.0";
+    url = "github:iByteABit256/tree-sitter-drools";
+    hash = "sha256-TuIJbr5URQJOChsb0OuiLO3A0mUyoZ0zMU4dzquhL58=";
+    excludeBrokenTreeSitterJson = true;
+    meta.license = lib.licenses.agpl3Only;
+  };
+
   dtd = {
     version = "0.7.0-unstable-2026-01-21";
     url = "github:tree-sitter-grammars/tree-sitter-xml";
@@ -565,6 +624,15 @@
     };
   };
 
+  ebnf = {
+    version = "0-unstable-2023-02-06";
+    url = "github:RubixDev/ebnf";
+    rev = "8e635b0b723c620774dfb8abf382a7f531894b40";
+    hash = "sha256-Cch6WCYq9bsWGypzDGapxBLJ0ZB432uAl6YjEjBJ5yg=";
+    location = "crates/tree-sitter-ebnf";
+    meta.license = lib.licenses.mit;
+  };
+
   edoc = {
     version = "0-unstable-2022-11-23";
     url = "github:the-mikedavis/tree-sitter-edoc";
@@ -585,6 +653,13 @@
     meta = {
       license = lib.licenses.mit;
     };
+  };
+
+  eiffel = {
+    version = "1.0.0";
+    url = "github:imustafin/tree-sitter-eiffel";
+    hash = "sha256-DeZZT+xlb+oWdTKXvf4W/siL8q/ESDVtpCOXUO/yeao=";
+    meta.license = lib.licenses.mit;
   };
 
   elisp = rec {
@@ -625,6 +700,14 @@
         aciceri
       ];
     };
+  };
+
+  embedded-perl = {
+    version = "0-unstable-2026-03-18";
+    url = "github:jobindex-open/tree-sitter-embedded-perl";
+    rev = "5557a53f1f59a67cbd54c25bacd0c56d43158818";
+    hash = "sha256-4I14D3FY/GTOyESIywrRz298G1+I6DxwdSz84cI7Bqc=";
+    meta.license = lib.licenses.mit;
   };
 
   embedded-template = {
@@ -713,6 +796,14 @@
     };
   };
 
+  flatbuffers = {
+    version = "0-unstable-2024-10-23";
+    url = "github:yuanchenxi95/tree-sitter-flatbuffers";
+    rev = "95e6f9ef101ea97e870bf6eebc0bd1fdfbaf5490";
+    hash = "sha256-rxCgEpZ9NXjhq7ByJLtl/3Oy73dPv1EGG95k3eGOUVE=";
+    meta.license = lib.licenses.mit;
+  };
+
   forth = {
     version = "0-unstable-2025-12-01";
     url = "github:alexanderbrevig/tree-sitter-forth";
@@ -733,6 +824,14 @@
     meta = {
       license = lib.licenses.mit;
     };
+  };
+
+  freebasic = {
+    version = "0-unstable-2025-11-11";
+    url = "github:Ra77a3l3-jar/tree-sitter-freebasic";
+    rev = "dbf696adb4c0b9c020074e75043c90592981ee7f";
+    hash = "sha256-9JDf9Tj6K55JRTNfw9U7wR3/idQ8eBoQRCOQnLm3hbs=";
+    meta.license = lib.licenses.mit;
   };
 
   fsharp = {
@@ -909,6 +1008,22 @@
     excludeBrokenTreeSitterJson = true;
   };
 
+  glimmer-javascript = {
+    version = "0-unstable-2026-05-14";
+    url = "github:ember-tooling/tree-sitter-glimmer-javascript";
+    rev = "d9cf7a2f1dad3c6b660148eaf77e955d418fdb8b";
+    hash = "sha256-gvs85PiyNov10Ar0JytOzjmJQVOeVx74ZQSbV+XUKa4=";
+    meta.license = lib.licenses.mit;
+  };
+
+  glimmer-typescript = {
+    version = "0-unstable-2025-04-01";
+    url = "github:ember-tooling/tree-sitter-glimmer-typescript";
+    rev = "12d98944c1d5077b957cbdb90d663a7c4d50118c";
+    hash = "sha256-3cJI6vcbU62kUIhphprNeAl9RyY9TThrzVeArdLfxnI=";
+    meta.license = lib.licenses.mit;
+  };
+
   glsl = {
     version = "0.2.0";
     url = "github:tree-sitter-grammars/tree-sitter-glsl";
@@ -931,6 +1046,15 @@
     };
   };
 
+  gnuplot = {
+    version = "0-unstable-2026-01-29";
+    url = "codeberg:maribu/tree-sitter-gnuplot";
+    rev = "21a3a3929facb964b3592daeb69119294ff84cf2";
+    hash = "sha256-2Z0CDtLOZ7LWffFboxO+tE0VWEkzNNodFMXr5PHQkoo=";
+    excludeBrokenTreeSitterJson = true;
+    meta.license = lib.licenses.bsd0;
+  };
+
   go = {
     version = "0.25.0";
     url = "github:tree-sitter/tree-sitter-go";
@@ -938,6 +1062,13 @@
     meta = {
       license = lib.licenses.mit;
     };
+  };
+
+  go-format-string = {
+    version = "1.1.0";
+    url = "codeberg:kpbaks/tree-sitter-go-format-string";
+    hash = "sha256-Em9uodgqj1TXyZieLuwrYouth5r4UvZoBFSSbzAqJE0=";
+    meta.license = lib.licenses.mit;
   };
 
   go-template = {
@@ -1082,6 +1213,15 @@
     };
   };
 
+  haskell-literate = {
+    version = "0-unstable-2025-10-30";
+    url = "github:LaurentRDC/tree-sitter-haskell-literate";
+    rev = "8ad7bd1b1595f4cc1a4ccc775d4a3c460f43a596";
+    hash = "sha256-P9FTcMwPU1AvH55ly0XydCSVOP0Mfi6jQ0Yg6Muraqk=";
+    excludeBrokenTreeSitterJson = true;
+    meta.license = lib.licenses.mit;
+  };
+
   haskell-persistent = {
     version = "0-unstable-2023-09-19";
     url = "github:MercuryTechnologies/tree-sitter-haskell-persistent";
@@ -1095,6 +1235,13 @@
     };
   };
 
+  haxe = {
+    version = "0.13.0";
+    url = "github:vantreeseba/tree-sitter-haxe";
+    hash = "sha256-MHZemYMpfbo1AdVUQv3j6eVWntZKi6K7UtRCPGk2kvE=";
+    meta.license = lib.licenses.mit;
+  };
+
   hcl = {
     version = "1.2.0";
     url = "github:tree-sitter-grammars/tree-sitter-hcl";
@@ -1102,6 +1249,14 @@
     meta = {
       license = lib.licenses.asl20;
     };
+  };
+
+  hdl = {
+    version = "0-unstable-2025-09-09";
+    url = "github:quantonganh/tree-sitter-hdl";
+    rev = "2199fdf1d302100a53002ea2cf540999119836a0";
+    hash = "sha256-aurnBP9R03QN1cDTKpZbp1VX3HCYjleRkSQs6m1aCxA=";
+    meta.license = lib.licenses.mit;
   };
 
   heex = {
@@ -1334,6 +1489,24 @@
     };
   };
 
+  jjrevset = {
+    version = "0-unstable-2025-07-09";
+    url = "github:bryceberger/tree-sitter-jjrevset";
+    rev = "d9af23944b884ec528b505f41d81923bb3136a51";
+    hash = "sha256-815IDF/V+blItEjW1ljUeV/it/8w532tm4k295z+ago=";
+    excludeBrokenTreeSitterJson = true;
+    meta.license = lib.licenses.mit;
+  };
+
+  jjtemplate = {
+    version = "0-unstable-2025-07-09";
+    url = "github:bryceberger/tree-sitter-jjtemplate";
+    rev = "4313eda8ac31c60e550e3ad5841b100a0a686715";
+    hash = "sha256-8rEatsR1vKBOlYYnGW88uwV0xLXGa+/rMAwiUeAuofk=";
+    excludeBrokenTreeSitterJson = true;
+    meta.license = lib.licenses.mit;
+  };
+
   jq = {
     version = "0-unstable-2025-05-10";
     url = "github:flurie/tree-sitter-jq";
@@ -1406,6 +1579,20 @@
     };
   };
 
+  kcl = {
+    version = "0.0.2";
+    url = "github:KittyCAD/tree-sitter-kcl";
+    hash = "sha256-oxyC6YPSf14YmZ7t/htMPU8BqUagylMCKCmJ5ky5ZII=";
+    meta.license = lib.licenses.mit;
+  };
+
+  kconfig = {
+    version = "1.3.0";
+    url = "github:tree-sitter-grammars/tree-sitter-kconfig";
+    hash = "sha256-ypjfe1IM3vxfoLWtsDUf+2WzjHkUjy8pc4xxKP4tUL4=";
+    meta.license = lib.licenses.mit;
+  };
+
   kdl = {
     version = "1.1.0";
     url = "github:tree-sitter-grammars/tree-sitter-kdl";
@@ -1413,6 +1600,15 @@
     meta = {
       license = lib.licenses.mit;
     };
+  };
+
+  klog = {
+    version = "0-unstable-2026-01-10";
+    url = "github:Ansimorph/tree-sitter-klog";
+    rev = "0b215fe75bdeb8368546e3cee36aca8c19212d06";
+    hash = "sha256-L0FJpQsiMvPxZOGvp5kfStTPRc5Zgr8xMUj06Yp6VGU=";
+    excludeBrokenTreeSitterJson = true;
+    meta.license = lib.licenses.mit;
   };
 
   koka = {
@@ -1506,6 +1702,13 @@
     };
   };
 
+  less = {
+    version = "1.0.0-d";
+    url = "github:jimliang/tree-sitter-less";
+    hash = "sha256-v2pE5CM6XxqQUooLR5r3qaPbDo/3tqQVMx2jWGGxfGo=";
+    meta.license = lib.licenses.mit;
+  };
+
   linkerscript = {
     version = "1.0.0";
     url = "github:tree-sitter-grammars/tree-sitter-linkerscript";
@@ -1575,6 +1778,20 @@
     meta = {
       license = lib.licenses.mit;
     };
+  };
+
+  lua-format-string = {
+    version = "0.1.0";
+    url = "codeberg:kpbaks/tree-sitter-lua-format-string";
+    hash = "sha256-fP1c2F/nn4BsmO1u0JAGbECQfv0J9TCZWqiwu6W+JvM=";
+    meta.license = lib.licenses.mit;
+  };
+
+  luap = {
+    version = "1.0.1";
+    url = "github:tree-sitter-grammars/tree-sitter-luap";
+    hash = "sha256-SW2ubK5317GUc1dQLkhoaisMgctLOwr6TPVYSQh02vE=";
+    meta.license = lib.licenses.mit;
   };
 
   luau = {
@@ -1722,6 +1939,14 @@
         aciceri
       ];
     };
+  };
+
+  nearley = {
+    version = "0-unstable-2025-09-24";
+    url = "github:mi2ebi/tree-sitter-nearley";
+    rev = "12d01113e194c8e83f6341aab8c2a5f21db9cac9";
+    hash = "sha256-Uhr1DbUK7svhJX1JCtBvKhwO4jgxQLvFPL3mc/zWAy8=";
+    meta.license = lib.licenses.mit;
   };
 
   netlinx = {
@@ -1974,6 +2199,15 @@
     };
   };
 
+  penrose = {
+    version = "0-unstable-2026-01-25";
+    url = "github:klukaszek/tree-sitter-penrose";
+    rev = "d9368ff7f743b2ac2145a3342db13b1ad950cba5";
+    hash = "sha256-E/tpautC1I3w2+p2xrnd2CjdHVvNooX7yW84gUXlyrg=";
+    excludeBrokenTreeSitterJson = true;
+    meta.license = lib.licenses.mit;
+  };
+
   perl = {
     version = "1.1.1";
     url = "github:ganezdragon/tree-sitter-perl";
@@ -2036,6 +2270,13 @@
         aciceri
       ];
     };
+  };
+
+  picat = {
+    version = "0.1.0";
+    url = "github:dlr-ft/tree-sitter-picat";
+    hash = "sha256-xMiQQHC2GsH9MQJDQkSeAaFr5g7tix0CVn3JvgwxauQ=";
+    meta.license = lib.licenses.mit;
   };
 
   pioasm = {
@@ -2170,6 +2411,14 @@
     };
   };
 
+  proverif = {
+    version = "0-unstable-2026-02-28";
+    url = "codeberg:maribu/tree-sitter-proverif";
+    rev = "7741807092c4009c1fe4c3648da60ca72b1b80f1";
+    hash = "sha256-fMtGQsEbZHNIamrz3hoGvCJn5Dtu0oHhuLmMxOjFhGU=";
+    meta.license = lib.licenses.bsd0;
+  };
+
   prql = {
     version = "0-unstable-2023-07-28";
     url = "github:PRQL/tree-sitter-prql";
@@ -2181,6 +2430,14 @@
         aciceri
       ];
     };
+  };
+
+  ptx = {
+    version = "0-unstable-2026-01-02";
+    url = "codeberg:jer-gremlin/tree-sitter-ptx";
+    rev = "3dfa6758d4c15832d051f933101992b9e01d6611";
+    hash = "sha256-h2a+ievbZGAYFVl3aZxM4/zTn92/fnfxelHWKfnXoP8=";
+    meta.license = lib.licenses.mit;
   };
 
   pug = {
@@ -2322,6 +2579,13 @@
     };
   };
 
+  requirements = {
+    version = "0.6.1";
+    url = "github:tree-sitter-grammars/tree-sitter-requirements";
+    hash = "sha256-jLG+DcdVfC2Rj8SYL3WTBWreOLJWwtxpPxzyvJl77d4=";
+    meta.license = lib.licenses.mit;
+  };
+
   rescript = {
     version = "6.0.0-unstable-2026-07-13";
     url = "github:rescript-lang/tree-sitter-rescript";
@@ -2333,6 +2597,15 @@
         aciceri
       ];
     };
+  };
+
+  ripple = {
+    version = "0-unstable-2025-11-15";
+    url = "github:Ripple-TS/ripple";
+    rev = "49762f0a63de0d1845fcd2e6632639c095995336";
+    hash = "sha256-ohUhJXdo9UPKhSCxuFXGJE1vl8/QNApQkIrbiszVCbM=";
+    location = "packages/tree-sitter";
+    meta.license = lib.licenses.mit;
   };
 
   river = {
@@ -2357,6 +2630,13 @@
     };
   };
 
+  robots-txt = {
+    version = "1.0.1";
+    url = "github:opa-oz/tree-sitter-robots-txt";
+    hash = "sha256-fQq5agJ/xHsWxEJAydGxED4Z0bmREfXJ1t/EspBkYC8=";
+    meta.license = lib.licenses.mit;
+  };
+
   ron = {
     version = "0.2.0-unstable-2024-05-05";
     url = "github:tree-sitter-grammars/tree-sitter-ron";
@@ -2368,6 +2648,28 @@
         aciceri
       ];
     };
+  };
+
+  rpmspec = {
+    version = "0-unstable-2025-08-11";
+    src = fetchFromGitLab {
+      owner = "cryptomilk";
+      repo = "tree-sitter-rpmspec";
+      rev = "d0275cd1316d9b7a2e0fae028ce95a5a18741e1d";
+      hash = "sha256-YBC0thdMf4UYdZr8+vm1SQjBBh1CZD/VpuzndxsglOU=";
+      postFetch = ''
+        # ensure that case-insensitive folders are not merged on Darwin
+        rm -rf $out/bindings/swift
+      '';
+    };
+    meta.license = lib.licenses.mit;
+  };
+
+  rshtml = {
+    version = "0.1.6";
+    url = "github:rshtml/tree-sitter-rshtml";
+    hash = "sha256-7RzjvJEMhtWDRnaoLki7FjTK9Y7+ZECE5gIqGUlx6DE=";
+    meta.license = lib.licenses.mit;
   };
 
   rst = {
@@ -2419,6 +2721,14 @@
     };
   };
 
+  scfg = {
+    version = "0-unstable-2025-10-29";
+    url = "github:rockorager/tree-sitter-scfg";
+    rev = "d850fd470445d73de318a21d734d1e09e29b773c";
+    hash = "sha256-AnyOcQFA3N6AFZiG7eLS1xCm1qX6hko9lFV4oV9p/E8=";
+    meta.license = lib.licenses.mit;
+  };
+
   scheme = {
     version = "0.24.7-1-unstable-2026-03-17";
     url = "github:6cdh/tree-sitter-scheme";
@@ -2436,6 +2746,13 @@
     meta = {
       license = lib.licenses.mit;
     };
+  };
+
+  shellcheckrc = {
+    version = "0.1.0";
+    url = "codeberg:kpbaks/tree-sitter-shellcheckrc";
+    hash = "sha256-f7hko5qYClgft2vvw95w/yU21r/pN5LkqaGJ/aAq8bM=";
+    meta.license = lib.licenses.mit;
   };
 
   slang = {
@@ -2459,6 +2776,14 @@
     meta = {
       license = lib.licenses.mit;
     };
+  };
+
+  slisp = {
+    version = "0-unstable-2025-09-15";
+    url = "github:xenogenics/tree-sitter-slisp";
+    rev = "29f9c6707ce9dfc2fc915d175ec720b207f179f3";
+    hash = "sha256-ciolUtCf2e7VXmSIR8Zk4fQAGCeHoIQekYi2LVq7Hpg=";
+    meta.license = lib.licenses.bsd2;
   };
 
   smali = {
@@ -2584,6 +2909,13 @@
     };
   };
 
+  ssh-client-config = rec {
+    version = "2026.7.9";
+    url = "github:metio/tree-sitter-ssh-client-config?ref=${version}";
+    hash = "sha256-La1h6uJC5gUA84OAr3zBbQiR+AnrhcUhNf6r4HUpwhg=";
+    meta.license = lib.licenses.cc0;
+  };
+
   strace = {
     version = "0-unstable-2025-12-21";
     url = "github:sigmaSd/tree-sitter-strace";
@@ -2597,6 +2929,28 @@
     };
     # Empty `metadata.links.funding` fails URL parsing
     excludeBrokenTreeSitterJson = true;
+  };
+
+  strictdoc = {
+    version = "0.2.0";
+    url = "github:manueldiagostino/tree-sitter-strictdoc";
+    hash = "sha256-sIbh8mYWrGhaXtRxe/FYIT1aD8WAKfQYJJbhWhz9jEs=";
+    meta.license = lib.licenses.mit;
+  };
+
+  styx = rec {
+    version = "5.0.0-rc.0";
+    url = "github:bearcove/styx?ref=tree-sitter-styx-v${version}";
+    hash = "sha256-ogxqiKXdVuWZuMrVObGOLfV0t7snhRXtQhiGggvyvWY=";
+    location = "crates/tree-sitter-styx";
+    excludeBrokenTreeSitterJson = true;
+    meta.license = lib.licenses.OR (
+      with lib.licenses;
+      [
+        mit
+        asl20
+      ]
+    );
   };
 
   supercollider = {
@@ -2649,6 +3003,13 @@
         aciceri
       ];
     };
+  };
+
+  systemverilog = {
+    version = "0.3.1";
+    url = "github:gmlarumbe/tree-sitter-systemverilog";
+    hash = "sha256-wzsjHDn6ZdGfOlufARurxCTwT8HqMvyfsnIIpXzRUYs=";
+    meta.license = lib.licenses.mit;
   };
 
   t32 = {
@@ -2819,6 +3180,15 @@
     };
   };
 
+  tolk = {
+    version = "0-unstable-2025-07-14";
+    url = "github:ton-blockchain/ton-language-server";
+    rev = "e90dbb89f8ec8fbf8a16b61a31d6cc19a840de4f";
+    hash = "sha256-EeCp7i8ao+KCm8OAx4ALCDg7Nj0GAZbcC1ecyw76qZQ=";
+    location = "server/src/languages/tolk/tree-sitter-tolk";
+    meta.license = lib.licenses.mit;
+  };
+
   toml = {
     version = "0.7.0-unstable-2024-12-03";
     url = "github:tree-sitter-grammars/tree-sitter-toml";
@@ -2827,6 +3197,13 @@
     meta = {
       license = lib.licenses.mit;
     };
+  };
+
+  tql = {
+    version = "1.1.0";
+    url = "github:tenzir/tree-sitter-tql";
+    hash = "sha256-2XbSwUKSNcODT2GIQ/k4w+4DSbV8dH689DrYBnWhPfU=";
+    meta.license = lib.licenses.mit;
   };
 
   tsq = {
@@ -3126,6 +3503,13 @@
     meta = {
       license = lib.licenses.mit;
     };
+  };
+
+  wikitext = {
+    version = "0.1.3";
+    url = "github:wikimedia/tree-sitter-wikitext";
+    hash = "sha256-jqM+SQzQZNjUyHc4wv9c80lPkH62xWrxAU1uvGEmQho=";
+    meta.license = lib.licenses.mit;
   };
 
   wing = {

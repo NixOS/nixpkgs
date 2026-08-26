@@ -30,7 +30,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pocket-tts";
-  version = "2.1.0";
+  version = "3.0.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -38,17 +38,13 @@ buildPythonPackage (finalAttrs: {
     owner = "kyutai-labs";
     repo = "pocket-tts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TonwnbH1FQMoK7SyKiCyEVIn9TY8drUyN2ZOq8JpXj4=";
+    hash = "sha256-/8MLr8Z1UDqrS5DBVPdsKOKO2XCFjk8aK+CXY1lYjRQ=";
   };
 
   build-system = [
     hatchling
   ];
 
-  pythonRelaxDeps = [
-    "beartype"
-    "python-multipart"
-  ];
   dependencies = [
     beartype
     einops

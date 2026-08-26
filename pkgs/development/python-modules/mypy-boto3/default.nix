@@ -163,8 +163,8 @@ in
       "sha256-EMl1KCe3/wEmsfTPgMbzDWo1V+NakqzhZJRPYNadeZQ=";
 
   mypy-boto3-batch =
-    buildMypyBoto3Package "batch" "1.43.76"
-      "sha256-LYp5PZ8yfozAhn9yF1a2FboHX3xqGoUytKCh9U9AC4U=";
+    buildMypyBoto3Package "batch" "1.43.79"
+      "sha256-3D1VN30a3RNbVUIeu2T2IBH18327SHca+LzmqbUec8c=";
 
   mypy-boto3-billingconductor =
     buildMypyBoto3Package "billingconductor" "1.43.7"
@@ -335,12 +335,12 @@ in
       "sha256-3JYcWKFk0dKJg/qn+EBvxeAO5xh5PXCU3dTEWDr1oXI=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.43.73"
-      "sha256-2QzVxRO0JU0CWqv6RKGXMOkDloYoIHCqt98qcozFmQc=";
+    buildMypyBoto3Package "connect" "1.43.79"
+      "sha256-nup6lqkxN1g/df7cw2mCLKMGHuCm52BeoHhAgSIZzn8=";
 
   mypy-boto3-connect-contact-lens =
-    buildMypyBoto3Package "connect-contact-lens" "1.43.0"
-      "sha256-7rXsHj0fTM5UPbdvtGH0AimOjKbrrSZwW7pueKjF/uA=";
+    buildMypyBoto3Package "connect-contact-lens" "1.43.79"
+      "sha256-pfKiLx6qZJxvFGY7Jm+355d1fT4knIoZYD52VtWn+ck=";
 
   mypy-boto3-connectcampaigns =
     buildMypyBoto3Package "connectcampaigns" "1.43.0"
@@ -706,8 +706,8 @@ in
       "sha256-9XMdnVsYUmz8Uf9kAgVMbG960vy0TOJturoD9/ZoM98=";
 
   mypy-boto3-kafka =
-    buildMypyBoto3Package "kafka" "1.43.66"
-      "sha256-reGKCXTFRIebc26zStSUrcX8TxFF+3FJ+t4cSaSpnW0=";
+    buildMypyBoto3Package "kafka" "1.43.79"
+      "sha256-kgfPSlNO0uj6Az83Bc/p3uyjqI3VMgwK+5/6tRoY4ok=";
 
   mypy-boto3-kafkaconnect =
     buildMypyBoto3Package "kafkaconnect" "1.43.0"

@@ -69,6 +69,8 @@ stdenv.mkDerivation rec {
     (replaceVars ./0001-emulate-clang-sysroot-include-logic.patch {
       resourceDir = "${llvmEnv}/lib/clang/${lib.versions.major llvmPackages.llvm.version}/";
     })
+    # Remove this patch when llvmPackages reaches LLVM 23
+    ./0002-libunwind-restore-Unwind_CallPersonality.patch
   ];
 
   buildPhase = ''
@@ -194,6 +196,21 @@ stdenv.mkDerivation rec {
     fi
 
         runHook postInstall
+  '';
+
+  doInstallCheck = true;
+
+  # C++ exceptions with -fwasm-exceptions must compile and link
+  # see https://github.com/NixOS/nixpkgs/pull/556385
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    pushd $TMPDIR
+    echo 'int main() { try { throw 42; } catch (int) { return 0; } return 1; }' > throw.cpp
+    $out/bin/em++ -fwasm-exceptions throw.cpp -o throw.js
+    popd
+
+    runHook postInstallCheck
   '';
 
   passthru = {
