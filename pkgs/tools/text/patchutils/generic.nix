@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   perl,
+  bashNonInteractive,
   makeWrapper,
   version,
   sha256,
@@ -20,7 +21,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ perl ] ++ extraBuildInputs;
+  buildInputs = [
+    perl
+    bashNonInteractive
+  ]
+  ++ extraBuildInputs;
   hardeningDisable = [ "format" ];
 
   preConfigure = ''
@@ -28,9 +33,11 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    for bin in $out/bin/{splitdiff,rediff,editdiff,dehtmldiff}; do
-      wrapProgram "$bin" \
-        --prefix PATH : "$out/bin"
+    for bin in $out/bin/*; do
+      if [[ ! -h "$bin" ]]; then
+        wrapProgram "$bin" \
+          --prefix PATH : "$out/bin"
+      fi
     done
   '';
 
