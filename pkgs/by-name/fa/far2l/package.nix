@@ -7,7 +7,6 @@
   cmake,
   ninja,
   pkg-config,
-  m4,
   perl,
   bash,
   xdg-utils,
@@ -16,7 +15,7 @@
   gzip,
   bzip2,
   gnutar,
-  p7zip,
+  _7zz,
   xz,
   nix-update-script,
 
@@ -28,13 +27,13 @@
   withUCD ? true,
   libuchardet,
 
-  # Plugins
+  # Plugins (all are enabled by default)
   withColorer ? true,
   spdlog,
   libxml2,
   withMultiArc ? true,
   libarchive,
-  pcre,
+
   withNetRocks ? true,
   openssl,
   libssh,
@@ -60,42 +59,42 @@ stdenv.mkDerivation rec {
     cmake
     ninja
     pkg-config
-    m4
     perl
     makeWrapper
   ];
 
-  buildInputs =
-    lib.optional withTTYX libx11
-    ++ lib.optional withGUI wxwidgets_3_2
-    ++ lib.optional withUCD libuchardet
-    ++ lib.optionals withColorer [
-      spdlog
-      libxml2
+  buildInputs = [
+    bash
+  ]
+  ++ lib.optional withTTYX libx11
+  ++ lib.optional withGUI wxwidgets_3_2
+  ++ lib.optional withUCD libuchardet
+  ++ lib.optionals withColorer [
+    spdlog
+    libxml2
+  ]
+  ++ lib.optionals withMultiArc [
+    libarchive
+  ]
+  ++ lib.optionals withNetRocks [
+    openssl
+    libssh
+    libnfs
+    neon
+  ]
+  ++ lib.optional (withNetRocks && !stdenv.hostPlatform.isDarwin) samba # broken on darwin
+  ++ lib.optionals withPython (
+    with python3Packages;
+    [
+      python
+      cffi
+      debugpy
+      pcpp
     ]
-    ++ lib.optionals withMultiArc [
-      libarchive
-      pcre
-    ]
-    ++ lib.optionals withNetRocks [
-      openssl
-      libssh
-      libnfs
-      neon
-    ]
-    ++ lib.optional (withNetRocks && !stdenv.hostPlatform.isDarwin) samba # broken on darwin
-    ++ lib.optionals withPython (
-      with python3Packages;
-      [
-        python
-        cffi
-        debugpy
-        pcpp
-      ]
-    );
+  );
 
   postPatch = ''
-    patchShebangs python/src/prebuild.sh
+    chmod +x far2l/bootstrap/*.sh
     patchShebangs far2l/bootstrap/view.sh
   '';
 
@@ -114,9 +113,9 @@ stdenv.mkDerivation rec {
   ];
 
   runtimeDeps = [
+    bash
     unzip
     zip
-    p7zip
     xz
     gzip
     bzip2
@@ -127,12 +126,18 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/far2l \
       --prefix PATH : ${lib.makeBinPath runtimeDeps} \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+    # Link 7z plugin
+    echo "Linking 7z libraries..."
+    mkdir -p $out/lib/far2l/Plugins/arclite/plug/
+    for file in ${_7zz.lib}/lib/*; do
+      ln -sf "$file" "$out/lib/far2l/Plugins/arclite/plug/"
+    done
   '';
 
   passthru.updateScript = nix-update-script { extraArgs = "--version=branch=master"; };
 
   meta = {
-    description = "Linux port of FAR Manager v2, a program for managing files and archives in Windows operating systems";
+    description = "Linux port of FAR Manager v2 with enhanced plugin support";
     homepage = "https://github.com/elfmz/far2l";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ smakarov ];
