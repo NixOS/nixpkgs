@@ -13,17 +13,16 @@
 
   # native dependencies
   glibcLocales,
-  llvmPackages,
-  pytestCheckHook,
-  pytest-xdist,
-  pillow,
   joblib,
+  llvmPackages,
+  narwhals,
+  pillow,
+  pytest-xdist,
+  pytestCheckHook,
   threadpoolctl,
 }:
 
 buildPythonPackage rec {
-  __structuredAttrs = true;
-
   pname = "scikit-learn";
   version = "1.9.0";
   pyproject = true;
@@ -34,14 +33,19 @@ buildPythonPackage rec {
     hash = "sha256-iDMmaYnTpREBeKn64weDZ1Rgck0OHvsTsUkB0sZgxVc=";
   };
 
+  pythonRelaxDeps = [
+    "numpy"
+    "scipy"
+  ];
+
   postPatch = ''
     substituteInPlace meson.build --replace-fail \
       "run_command('sklearn/_build_utils/version.py', check: true).stdout().strip()," \
       "'${version}',"
     substituteInPlace pyproject.toml \
-      --replace-fail "meson-python>=0.17.1,<0.19.0" meson-python \
-      --replace-fail "numpy>=2,<2.4.0" numpy \
-      --replace-fail "scipy>=1.10.0,<1.17.0" scipy
+      --replace-fail "meson-python>=0.17.1,<0.20.0" meson-python \
+      --replace-fail "numpy>=2,<2.5.0" numpy \
+      --replace-fail "scipy>=1.10.0,<1.18.0" scipy
   '';
 
   buildInputs = [
@@ -51,9 +55,7 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
-  nativeBuildInputs = [
-    gfortran
-  ];
+  nativeBuildInputs = [ gfortran ];
 
   build-system = [
     cython
@@ -64,14 +66,10 @@ buildPythonPackage rec {
 
   dependencies = [
     joblib
+    narwhals
     numpy
     scipy
     threadpoolctl
-  ];
-
-  pythonRelaxDeps = [
-    "numpy"
-    "scipy"
   ];
 
   nativeCheckInputs = [
