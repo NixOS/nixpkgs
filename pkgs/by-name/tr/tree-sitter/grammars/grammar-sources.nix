@@ -625,7 +625,7 @@
   };
 
   ebnf = {
-    version = "0-unstable-2023-02-06";
+    version = "0.1.1-unstable-2023-02-06";
     url = "github:RubixDev/ebnf";
     rev = "8e635b0b723c620774dfb8abf382a7f531894b40";
     hash = "sha256-Cch6WCYq9bsWGypzDGapxBLJ0ZB432uAl6YjEjBJ5yg=";
