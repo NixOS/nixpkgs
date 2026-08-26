@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "fastavro";
-  version = "1.12.1";
+  version = "1.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fastavro";
     repo = "fastavro";
     tag = version;
-    hash = "sha256-r/zaQ44ZPuSR1HxaqxD26kZPWREhmKP+oTOSa5QCEU4=";
+    hash = "sha256-UeOfYM03Htqrh+lpBKWiAPgZTv63jpO/FZZRMSgW5Ug=";
   };
 
   preBuild = ''
