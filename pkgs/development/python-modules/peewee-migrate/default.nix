@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "peewee-migrate";
-  version = "1.15.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "klen";
     repo = "peewee_migrate";
     tag = version;
-    hash = "sha256-AFZW4vVHAuvdjA3t37YcOqVmwhZ1sU25L+YVP7BvMhQ=";
+    hash = "sha256-YWkEXTqzPVJbNK4117spYl8hOhu4kl7QhlXDONtlgSA=";
   };
 
   postPatch = ''
@@ -34,9 +34,9 @@ buildPythonPackage rec {
       --replace-fail "uv_build>=0.10.2,<0.11.0" uv_build
   '';
 
-  nativeBuildInputs = [ uv-build ];
+  build-system = [ uv-build ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     peewee
     click
   ];
@@ -51,6 +51,7 @@ buildPythonPackage rec {
   meta = {
     description = "Simple migration engine for Peewee";
     homepage = "https://github.com/klen/peewee_migrate";
+    changelog = "https://github.com/klen/peewee_migrate/blob/${version}/Changelog";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ hexa ];
   };
