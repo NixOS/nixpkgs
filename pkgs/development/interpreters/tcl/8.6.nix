@@ -1,6 +1,4 @@
 {
-  lib,
-  stdenv,
   callPackage,
   fetchurl,
   ...
@@ -20,9 +18,7 @@ callPackage ./generic.nix (
     };
 
     # Backport of upstream check-in `fd06472ef41e1d73`; see the patch.
-    # TODO apply unconditionally; only `win` is patched, but doing so
-    # today would be a mass rebuild for a no-op elsewhere.
-    patches = lib.optionals stdenv.hostPlatform.isWindows [
+    patches = [
       ./8.6-windows-disable-tzdata.patch
     ];
   }
