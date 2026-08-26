@@ -2713,9 +2713,9 @@
   };
 
   scala = {
-    version = "0.26.0";
+    version = "0.26.2";
     url = "github:tree-sitter/tree-sitter-scala";
-    hash = "sha256-CnTcQFqYp60rGkLVLRHokUwBenqtWV4hw8boFYNRkbw=";
+    hash = "sha256-PRyNcsiGeGfKtHvbLaGtiog/P8QEs117rqoBZZOXbeE=";
     meta = {
       license = lib.licenses.mit;
     };
