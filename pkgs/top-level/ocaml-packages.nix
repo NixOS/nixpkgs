@@ -94,6 +94,8 @@ let
           inherit (pkgs) augeas;
         };
 
+        autofonce = callPackage ../development/ocaml-modules/autofonce { };
+
         awa = callPackage ../development/ocaml-modules/awa { };
 
         awa-mirage = callPackage ../development/ocaml-modules/awa/mirage.nix { };
@@ -498,6 +500,8 @@ let
 
         dream-pure = callPackage ../development/ocaml-modules/dream/pure.nix { };
 
+        drom = callPackage ../development/ocaml-modules/drom { };
+
         dscheck = callPackage ../development/ocaml-modules/dscheck { };
 
         dssi = callPackage ../development/ocaml-modules/dssi { };
@@ -609,6 +613,12 @@ let
         extlib-1-7-7 = callPackage ../development/ocaml-modules/extlib/1.7.7.nix { };
 
         extunix = callPackage ../development/ocaml-modules/extunix/default.nix { };
+
+        ez_api = callPackage ../development/ocaml-modules/ez_api { };
+        ez_cmdliner = callPackage ../development/ocaml-modules/ez_cmdliner { };
+        ez_file = callPackage ../development/ocaml-modules/ez_file { };
+        ez_opam_file = callPackage ../development/ocaml-modules/ez_opam_file { };
+        ez_subst = callPackage ../development/ocaml-modules/ez_subst { };
 
         ezgzip = callPackage ../development/ocaml-modules/ezgzip { };
 
@@ -777,6 +787,8 @@ let
         gnuplot = callPackage ../development/ocaml-modules/gnuplot {
           inherit (pkgs) gnuplot;
         };
+
+        goblint-cil = callPackage ../development/ocaml-modules/goblint-cil { };
 
         grace = callPackage ../development/ocaml-modules/grace { };
 
@@ -1018,6 +1030,8 @@ let
         json-data-encoding-bson = callPackage ../development/ocaml-modules/json-data-encoding/bson.nix { };
 
         jsonm = callPackage ../development/ocaml-modules/jsonm { };
+
+        jsonoo = callPackage ../development/ocaml-modules/jsonoo { };
 
         jsont = callPackage ../development/ocaml-modules/jsont { };
 
@@ -1565,6 +1579,8 @@ let
 
         ocplib-simplex_0_4 = callPackage ../development/ocaml-modules/ocplib-simplex/0_4.nix { };
 
+        ocplib_stuff = callPackage ../development/ocaml-modules/ocplib_stuff { };
+
         ocsigen-ppx-rpc = callPackage ../development/ocaml-modules/ocsigen-ppx-rpc { };
 
         ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { };
@@ -1782,6 +1798,8 @@ let
           cmdliner = cmdliner_1;
         };
 
+        ppx_deriving_encoding = callPackage ../development/ocaml-modules/ppx_deriving_encoding { };
+
         ppx_deriving_protobuf = callPackage ../development/ocaml-modules/ppx_deriving_protobuf { };
 
         ppx_deriving_qcheck = callPackage ../development/ocaml-modules/qcheck/ppx_deriving_qcheck.nix { };
@@ -1809,6 +1827,8 @@ let
         ppx_mikmatch = callPackage ../development/ocaml-modules/ppx_mikmatch { };
 
         ppx_monad = callPackage ../development/ocaml-modules/ppx_monad { };
+
+        ppx_protocol_conv = callPackage ../development/ocaml-modules/ppx_protocol_conv { };
 
         ppx_repr = callPackage ../development/ocaml-modules/repr/ppx.nix { };
 
@@ -2052,6 +2072,8 @@ let
         streaming = callPackage ../development/ocaml-modules/streaming { };
 
         stringext = callPackage ../development/ocaml-modules/stringext { };
+
+        superbol-studio-oss = callPackage ../development/ocaml-modules/superbol-studio-oss { };
 
         swhid_core = callPackage ../development/ocaml-modules/swhid_core { };
 
