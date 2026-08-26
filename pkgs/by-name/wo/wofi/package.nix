@@ -10,15 +10,20 @@
   wrapGAppsHook3,
   installShellFiles,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wofi";
-  version = "1.4.1";
+  version = "1.5.3";
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromSourcehut {
     repo = "wofi";
     owner = "~scoopta";
-    rev = "v${version}";
-    sha256 = "sha256-aedoUhVfk8ljmQ23YxVmGZ00dPpRftW2dnRAgXmtV/w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rMvDWJx07Q19ieFlt0e3/zx2ZP0jJfURIwMiGFPmLis=";
     vc = "hg";
   };
 
@@ -43,12 +48,12 @@ stdenv.mkDerivation rec {
     installManPage man/wofi*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Launcher/menu program for wlroots based wayland compositors such as sway";
     homepage = "https://hg.sr.ht/~scoopta/wofi";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ aleksana ];
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = with lib.platforms; linux;
     mainProgram = "wofi";
   };
-}
+})

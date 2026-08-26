@@ -6,7 +6,7 @@
   pkg-config,
   zlib,
   libjpeg,
-  wxGTK32,
+  wxwidgets_3_2,
   libxml2,
   libsigcxx,
   libpng,
@@ -16,7 +16,7 @@
   ftgl,
   freetype,
   glew,
-  libX11,
+  libx11,
   glib,
   python3,
   asciidoctor,
@@ -41,14 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     asciidoctor
     wrapGAppsHook3
-    wxGTK32
+    wxwidgets_3_2
     installShellFiles
   ];
 
   buildInputs = [
     zlib
     libjpeg
-    wxGTK32
+    wxwidgets_3_2
     libxml2
     libsigcxx
     libpng
@@ -61,7 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     libgit2
     python3
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libx11 ];
 
   doCheck = true;
 

@@ -46,34 +46,36 @@ stdenv.mkDerivation {
     texinfo
   ];
 
-  configureFlags =
-    [
-      "--with-editor=${nano}/bin/nano"
+  # Fix build with gcc15
+  # https://savannah.nongnu.org/bugs/index.php?66726
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
-      # Required for cross-compilation.
-      "cvs_cv_func_printf_ptr=yes"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [
-      # So that fputs_unlocked is defined
-      "CFLAGS=-D_GNU_SOURCE"
-    ];
+  configureFlags = [
+    "--with-editor=${nano}/bin/nano"
 
-  makeFlags =
-    [
-      "AR=${stdenv.cc.targetPrefix}ar"
-    ]
-    ++ lib.optionals (!stdenv.cc.bintools.isGNU) [
-      # Don't pass --as-needed to linkers that don't support it
-      # (introduced in debian patchset)
-      "cvs_LDFLAGS="
-    ];
+    # Required for cross-compilation.
+    "cvs_cv_func_printf_ptr=yes"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [
+    # So that fputs_unlocked is defined
+    "CFLAGS=-D_GNU_SOURCE"
+  ];
+
+  makeFlags = [
+    "AR=${stdenv.cc.targetPrefix}ar"
+  ]
+  ++ lib.optionals (!stdenv.cc.bintools.isGNU) [
+    # Don't pass --as-needed to linkers that don't support it
+    # (introduced in debian patchset)
+    "cvs_LDFLAGS="
+  ];
 
   doCheck = false; # fails 1 of 1 tests
 
-  meta = with lib; {
+  meta = {
     homepage = "http://cvs.nongnu.org";
     description = "Concurrent Versions System - a source control system";
-    license = licenses.gpl2Plus; # library is GPLv2, main is GPLv1
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus; # library is GPLv2, main is GPLv1
+    platforms = lib.platforms.all;
   };
 }

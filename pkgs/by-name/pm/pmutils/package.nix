@@ -27,12 +27,12 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pm-utils";
   version = "1.4.1";
 
   src = fetchurl {
-    url = "https://pm-utils.freedesktop.org/releases/pm-utils-${version}.tar.gz";
+    url = "https://pm-utils.freedesktop.org/releases/pm-utils-${finalAttrs.version}.tar.gz";
     sha256 = "02qc6zaf7ams6qcc470fwb6jvr4abv3lrlx16clqpn36501rkn4f";
   };
 
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

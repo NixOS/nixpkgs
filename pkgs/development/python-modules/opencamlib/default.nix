@@ -23,13 +23,19 @@ buildPythonPackage rec {
     hash = "sha256-pUj71PdWo902dqF9O6SLnpvFooFU2OfLBv8hAVsH/iA=";
   };
 
+  patches = [
+    # Upstream status: https://github.com/aewallin/opencamlib/pull/180
+    ./01-build-verbose.patch
+  ];
+
   build-system = [
     scikit-build-core
   ];
 
   buildInputs = [
     boost
-  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+  ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   nativeBuildInputs = [
     cmake

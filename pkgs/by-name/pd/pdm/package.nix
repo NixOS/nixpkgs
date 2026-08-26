@@ -12,17 +12,10 @@ let
   python = python3.override {
     self = python;
     packageOverrides = _: super: {
-      resolvelib = super.resolvelib.overridePythonAttrs (old: rec {
-        version = "1.1.0";
-        src = old.src.override {
-          rev = version;
-          hash = "sha256-UBdgFN+fvbjz+rp8+rog8FW2jwO/jCfUPV7UehJKiV8=";
-        };
-      });
-      # pdm requires hishel and subsequentially pytest-regressions -> matplotlib -> ghostscript -> jbig2dec which is AGPL only
-      matplotlib = super.matplotlib.override ({ enableGhostscript = false; });
-      # avoid many extra dependencies
-      moto = super.moto.overridePythonAttrs (old: rec {
+      # pdm requires ...... -> ghostscript-with-X which is AGPL only
+      matplotlib = super.matplotlib.override { enableTk = false; };
+      # pdm requires ...... -> jbig2dec which is AGPL only
+      moto = super.moto.overridePythonAttrs (old: {
         doCheck = false;
       });
     };
@@ -30,16 +23,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "pdm";
-  version = "2.24.1";
+  version = "2.27.0";
   pyproject = true;
-
-  disabled = python.pkgs.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pdm-project";
     repo = "pdm";
     tag = version;
-    hash = "sha256-YChgPJmHWJ4tftosa24SKB0J7uV/zR6VWX18poEEsLY=";
+    hash = "sha256-Ju1UoyThWoPnU9HJzdgA9ry+G1pXOhXmPIoydTg7VXo=";
   };
 
   pythonRelaxDeps = [ "hishel" ];
@@ -103,7 +94,7 @@ python.pkgs.buildPythonApplication rec {
     pytest-httpserver
   ];
 
-  pytestFlagsArray = [ "-m 'not network'" ];
+  disabledTestMarks = [ "network" ];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -128,18 +119,21 @@ python.pkgs.buildPythonApplication rec {
     "test_use_python_write_file_multiple_versions"
     "test_repository_get_token_from_oidc"
     "test_repository_get_token_misconfigured_github"
+
+    # https://github.com/pdm-project/pdm/issues/3590
+    "test_install_from_lock_with_higher_version"
   ];
 
   __darwinAllowLocalNetworking = true;
 
   passthru.tests.version = testers.testVersion { package = pdm; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pdm-project.org";
     changelog = "https://github.com/pdm-project/pdm/releases/tag/${version}";
     description = "Modern Python package and dependency manager supporting the latest PEP standards";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       cpcloud
       natsukium
       misilelab

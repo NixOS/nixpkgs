@@ -1,69 +1,73 @@
 {
   lib,
   stdenv,
-  yarn,
-  fetchYarnDeps,
-  fixup-yarn-lock,
-  nodejs,
+  copyDesktopItems,
+  dart-sass,
   electron,
   fetchFromGitHub,
-  nix-update-script,
-  makeWrapper,
   makeDesktopItem,
-  copyDesktopItems,
+  makeWrapper,
+  nodejs,
+  yarn-berry,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.1.58";
+  version = "3.2.18";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-ICLKkhgEi0ThWHLgm9fr0QXXtWMCAOJ6nkD66JR8XMo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QGs3kF2GkHlISmRb0cIYOKts1b1RvBj5qkc2cUPawwE=";
   };
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-3SMvUx+TwUmOur/50HDLWt0EayY5tst4YANWIlXdiPQ=";
+  missingHashes = ./missing-hashes.json;
+  offlineCache = yarn-berry.fetchYarnBerryDeps {
+    inherit (finalAttrs) src patches missingHashes;
+    hash = "sha256-6CwayFhy0ZwdL1ZOZVtCJLlchCv5raX7WF1V4TvVpq4=";
   };
 
   patches = [
     # Make it possible to launch Steam games from r2modman.
     ./steam-launch-fix.patch
+
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/ebkr/r2modmanPlus/blob/develop/package.json#L118
+    ./yarn-4.14-support.patch
+
+    # Fix copying of wrapper files to game directory
+    ./wrapper-fix.patch
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeBuildInputs = [
-    yarn
-    fixup-yarn-lock
-    nodejs
-    makeWrapper
     copyDesktopItems
+    dart-sass
+    makeWrapper
+    nodejs
+    yarn-berry
+    yarn-berry.yarnBerryConfigHook
   ];
 
-  configurePhase = ''
-    runHook preConfigure
+  env = {
+    # Required, as the build process won't have network access. Uses the wrapped electron binary instead.
+    ELECTRON_SKIP_BINARY_DOWNLOAD = true;
+  };
 
-    # Workaround for webpack bug
-    # https://github.com/webpack/webpack/issues/14532
-    export NODE_OPTIONS="--openssl-legacy-provider"
-    export HOME=$(mktemp -d)
-    yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup-yarn-lock yarn.lock
-    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
-    patchShebangs node_modules/
-
-    runHook postConfigure
+  postPatch = ''
+    # Hide update banner
+    echo "<template></template>" > src/components/banner/ManagerUpdateBanner.vue
   '';
 
   buildPhase = ''
     runHook preBuild
 
-    yarn --offline quasar build --mode electron --skip-pkg
+    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
 
-    # Remove dev dependencies.
-    yarn install --production --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    yarn quasar build --mode electron --skip-pkg
 
     runHook postBuild
   '';
@@ -95,11 +99,12 @@ stdenv.mkDerivation (finalAttrs: {
   desktopItems = [
     (makeDesktopItem {
       name = "r2modman";
-      exec = "r2modman";
+      exec = "r2modman %U";
       icon = "r2modman";
       desktopName = "r2modman";
       comment = finalAttrs.meta.description;
       categories = [ "Game" ];
+      mimeTypes = [ "x-scheme-handler/ror2mm" ];
       keywords = [
         "launcher"
         "mod manager"
@@ -108,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     changelog = "https://github.com/ebkr/r2modmanPlus/releases/tag/v${finalAttrs.version}";
@@ -117,8 +122,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "r2modman";
     maintainers = with lib.maintainers; [
-      aidalgol
       huantian
+      hythera
     ];
     inherit (electron.meta) platforms;
   };

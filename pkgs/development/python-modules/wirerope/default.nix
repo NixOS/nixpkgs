@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  setuptools_80,
   six,
   nix-update-script,
   pytestCheckHook,
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-oojnv+2+nwL/TJhN+QZ5eiV6WGHC3SCxBQrCri0aHQc=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   dependencies = [ six ];
 
@@ -34,11 +34,11 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Wrappers for class callables";
     homepage = "https://github.com/youknowone/wirerope";
     changelog = "https://github.com/youknowone/wirerope/releases/tag/${version}";
-    license = licenses.bsd2WithViews;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.bsd2WithViews;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

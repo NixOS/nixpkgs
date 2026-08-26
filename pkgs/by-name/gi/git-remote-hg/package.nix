@@ -10,14 +10,15 @@
   libxml2,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-remote-hg";
   version = "1.0.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mnauw";
     repo = "git-remote-hg";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QlXi5LQAYMNCF7ZjQdJxwcjp3K51dGkHVnNw0pgArzg=";
   };
 
@@ -29,6 +30,8 @@ python3Packages.buildPythonApplication rec {
     libxslt
     libxml2
   ];
+
+  build-system = with python3Packages; [ setuptools ];
 
   dependencies = with python3Packages; [ mercurial ];
 
@@ -43,4 +46,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

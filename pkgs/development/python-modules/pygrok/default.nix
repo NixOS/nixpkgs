@@ -3,33 +3,37 @@
   buildPythonPackage,
   fetchFromGitHub,
   regex,
-  pytest,
+  pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygrok";
   version = "1.0.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "garyelephant";
     repo = "pygrok";
-    rev = "v${version}";
-    sha256 = "07487rcmv74srnchh60jp0vg46g086qmpkaj8gxqhp9rj47r1s4m";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-leiQD5E5XYj7Q1LNW7FB4BnyNrgSGAiZzZqcXVk+iBw=";
   };
 
-  propagatedBuildInputs = [ regex ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytest ];
-  checkPhase = ''
-    pytest
-  '';
+  dependencies = [ regex ];
 
-  meta = with lib; {
-    maintainers = with maintainers; [ winpat ];
+  pythonImportsCheck = [ "pygrok" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
+    maintainers = with lib.maintainers; [ winpat ];
     description = "Python implementation of jordansissel's grok regular expression library";
     homepage = "https://github.com/garyelephant/pygrok";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
-}
+})

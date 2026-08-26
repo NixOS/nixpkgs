@@ -1,40 +1,43 @@
 {
   lib,
-  stdenv,
+  buildNpmPackage,
   fetchFromGitHub,
-  pnpm_9,
-  nodejs,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nix-update-script,
 }:
-
-stdenv.mkDerivation (finalAttrs: {
+let
+  pnpm = pnpm_10;
+in
+buildNpmPackage (finalAttrs: {
   pname = "zashboard";
-  version = "1.81.0";
+  version = "3.22.0";
 
   src = fetchFromGitHub {
     owner = "Zephyruso";
     repo = "zashboard";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pZ0oSH20vdvfAhKfEn8LPRUN1NgBkSDmxdwFZF6ynB4=";
+    hash = "sha256-K7WZnFXgiSI/pxhDWfoWX9tHKJiNK1wbO6qowUu1hOo=";
   };
 
-  nativeBuildInputs = [
-    pnpm_9.configHook
-    nodejs
-  ];
-
-  pnpmDeps = pnpm_9.fetchDeps {
+  npmDeps = null;
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-urnkCeGXUA194NiD0BdNFNGRHia0ea+ibKLmuQJ0cgI=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-jbTAN9QbhXiGzD/McdoN62JIdRL8MA/v/kdLawWbokU=";
   };
 
-  buildPhase = ''
-    runHook preBuild
+  nativeBuildInputs = [ pnpm ];
+  npmConfigHook = pnpmConfigHook;
 
-    pnpm run build
-
-    runHook postBuild
+  postPatch = ''
+    substituteInPlace vite.config.ts \
+      --replace-fail "getGitCommitId()" '""'
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   installPhase = ''
     runHook preInstall
@@ -49,9 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Dashboard Using Clash API";
     homepage = "https://github.com/Zephyruso/zashboard";
-    changelog = "https://github.com/Zephyruso/zashboard/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/Zephyruso/zashboard/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ chillcicada ];
   };
 })

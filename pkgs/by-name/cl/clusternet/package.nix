@@ -1,25 +1,32 @@
 {
   lib,
   fetchFromGitHub,
-  buildGo123Module,
+  buildGoModule,
 }:
 
-buildGo123Module rec {
+buildGoModule (finalAttrs: {
   pname = "clusternet";
-  version = "0.17.3";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "clusternet";
     repo = "clusternet";
-    tag = "v${version}";
-    hash = "sha256-uhRnJyUR7lbJvVxd3YNVxmTSTDksQsVcM5G8ZKO7Xbk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Nrnk3Ru4DTOagc7iTC4ZGyYhqhQwLIgs3fu67l0stEs=";
   };
 
-  vendorHash = "sha256-hY4bgQXwKjL4UT3omDYuxy9xN9XOr00mMvGssKOSsG4=";
+  vendorHash = "sha256-mMXtiCz4Y5pL77c24RnZ2Uoq5Fh2pkrkApAdkd/xyyw=";
 
   ldFlags = [
     "-s"
     "-w"
+  ];
+
+  # Clusternet hub is disabled due to panic: inlined function github.com/clusternet/clusternet/pkg/hub/apiserver/shadow.(*crdHandler).addStorage.func9.1 missing func info
+  subPackages = [
+    "cmd/clusternet-agent"
+    "cmd/clusternet-controller-manager"
+    "cmd/clusternet-scheduler"
   ];
 
   meta = {
@@ -28,4 +35,4 @@ buildGo123Module rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ genga898 ];
   };
-}
+})

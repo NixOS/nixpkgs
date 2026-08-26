@@ -7,13 +7,21 @@
   alsa-lib,
   copyDesktopItems,
   makeDesktopItem,
-  xorg,
+  imagemagick,
+  libxtst,
+  libxrandr,
+  libxinerama,
+  libxdmcp,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  xvfb,
   freetype,
   expat,
   libGL,
   libjack2,
   curl,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   libsysprof-capture,
   pcre2,
   util-linux,
@@ -23,7 +31,6 @@
   libxkbcommon,
   libdatrie,
   libepoxy,
-  libsoup_2_4,
   lerc,
   sqlite,
   ninja,
@@ -67,19 +74,20 @@ stdenv.mkDerivation {
     cmake
     pkg-config
     copyDesktopItems
+    imagemagick
     ninja
   ];
 
   buildInputs = [
     alsa-lib
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXinerama
-    xorg.libXrandr
-    xorg.libXtst
-    xorg.libXdmcp
-    xorg.xvfb
+    libx11
+    libxcomposite
+    libxcursor
+    libxinerama
+    libxrandr
+    libxtst
+    libxdmcp
+    xvfb
     libGL
     libjack2
     libsysprof-capture
@@ -89,11 +97,10 @@ stdenv.mkDerivation {
     libxkbcommon
     libdatrie
     libepoxy
-    libsoup_2_4
     lerc
     freetype
     curl
-    webkitgtk_4_0
+    webkitgtk_4_1
     pcre2
     util-linux
     sqlite
@@ -142,23 +149,22 @@ stdenv.mkDerivation {
 
     install -Dm755 SID_artefacts/Release/Standalone/SID $out/bin
 
-    install -Dm444 $src/plugin/Resources/icon.png $out/share/pixmaps/SID.png
+    mkdir -p $out/share/icons/hicolor/256x256/apps
+    magick $src/plugin/Resources/icon.png -resize 256x256 $out/share/icons/hicolor/256x256/apps/SID.png
 
     runHook postInstall
   '';
 
-  NIX_LDFLAGS = (
-    toString [
-      "-lX11"
-      "-lXext"
-      "-lXcomposite"
-      "-lXcursor"
-      "-lXinerama"
-      "-lXrandr"
-      "-lXtst"
-      "-lXdmcp"
-    ]
-  );
+  env.NIX_LDFLAGS = toString [
+    "-lX11"
+    "-lXext"
+    "-lXcomposite"
+    "-lXcursor"
+    "-lXinerama"
+    "-lXrandr"
+    "-lXtst"
+    "-lXdmcp"
+  ];
 
   meta = {
     description = "Socalabs Commodore 64 SID Emulation Plugin";

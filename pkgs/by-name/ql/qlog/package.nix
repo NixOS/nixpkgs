@@ -9,33 +9,32 @@
   qt6Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qlog";
-  version = "0.43.1";
+  version = "0.48.0";
 
   src = fetchFromGitHub {
     owner = "foldynl";
     repo = "QLog";
-    tag = "v${version}";
-    hash = "sha256-D3WtvSHDauo/9py9To2Kn+20vrSvgw+b1+H0inNnRJI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Grsrh+WDobWC+zRFYP3xtfGp0VIyTt6XhTMs0+s9qh4=";
     fetchSubmodules = true;
   };
 
   env.NIX_LDFLAGS = "-lhamlib";
 
-  buildInputs =
-    [
-      hamlib
-      qt6.qtbase
-      qt6.qtcharts
-      qt6.qtserialport
-      qt6.qtwebchannel
-      qt6.qtwebengine
-      qt6Packages.qtkeychain
-    ]
-    ++ (lib.optionals stdenv.hostPlatform.isDarwin [
-      cups
-    ]);
+  buildInputs = [
+    hamlib
+    qt6.qtbase
+    qt6.qtcharts
+    qt6.qtserialport
+    qt6.qtwebchannel
+    qt6.qtwebengine
+    qt6Packages.qtkeychain
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cups
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -52,12 +51,11 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Amateur radio logbook software";
     mainProgram = "qlog";
-    license = with lib.licenses; [ gpl3Only ];
+    license = lib.licenses.gpl3Only;
     homepage = "https://github.com/foldynl/QLog";
     maintainers = with lib.maintainers; [
       oliver-koss
-      mkg20001
     ];
     platforms = with lib.platforms; unix;
   };
-}
+})

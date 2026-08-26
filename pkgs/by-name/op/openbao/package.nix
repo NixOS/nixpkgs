@@ -14,16 +14,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "openbao";
-  version = "2.2.1";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "openbao";
     repo = "openbao";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qbLaa7EUQywPRTIgUclTomDDBxzdQnyVAqCGD+iOlpg=";
+    hash = "sha256-iFOah7LkuiL4MGhi6ANpgCYDYQl33gF+F4agdKLEFTk=";
   };
 
-  vendorHash = "sha256-Upvv3dxS6HIFxR6T+2/dqnFsUtemjOGUaiICgPlepJ8=";
+  vendorHash = "sha256-gORWU9Yn+AX00mQD5uq9k7ksbkLVWv8W2N4IxEOsE88=";
 
   proxyVendor = true;
 
@@ -33,7 +33,6 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
     "-X github.com/openbao/openbao/version.GitCommit=${finalAttrs.src.rev}"
     "-X github.com/openbao/openbao/version.fullVersion=${finalAttrs.version}"
     "-X github.com/openbao/openbao/version.buildDate=1970-01-01T00:00:00Z"
@@ -58,7 +57,6 @@ buildGoModule (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/bao";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -78,6 +76,9 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/openbao/openbao/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     mainProgram = "bao";
-    maintainers = with lib.maintainers; [ brianmay ];
+    maintainers = with lib.maintainers; [
+      brianmay
+      emilylange
+    ];
   };
 })

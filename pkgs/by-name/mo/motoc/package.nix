@@ -6,19 +6,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "motoc";
-  version = "0.3.4";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "galister";
     repo = "motoc";
-    tag = "v${version}";
-    hash = "sha256-CAKgh9uddDhaFp2O62o1nNZ/ZWJbCR/7dMaI9V992Xk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XvqI6rwy7AOWjJNojs/nk5RsN/BUVTlx8GACiot0pUY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-RDzPvHlXuNLv3GiaGSYCyvbhdmxQkjUtwPq/e5NloOg=";
+  cargoHash = "sha256-SLNnRXCavAyOqbKvzsG660yTK5Bcff/VM+EQ1K3npng=";
 
   buildInputs = [
     openxr-loader
@@ -34,4 +33,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ pandapip1 ];
     mainProgram = "motoc";
   };
-}
+})

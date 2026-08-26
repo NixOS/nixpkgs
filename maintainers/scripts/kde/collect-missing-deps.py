@@ -62,6 +62,9 @@ OK_MISSING_BY_PACKAGE = {
     "krfb": {
         "Qt6XkbCommonSupport",  # not real
     },
+    "ksystemstats": {
+        "Libcap",  # used to call setcap at build time and nothing else
+    },
     "kuserfeedback": {
         "Qt6Svg",  # all used for backend console stuff we don't ship
         "QmlLint",
@@ -75,6 +78,9 @@ OK_MISSING_BY_PACKAGE = {
         "display-info",  # newer versions identify as libdisplay-info
         "Libcap",  # used to call setcap at build time and nothing else
     },
+    "kwin-x11": {
+        "Libcap",  # used to call setcap at build time and nothing else
+    },
     "libksysguard": {
         "Libcap",  # used to call setcap at build time and nothing else
     },
@@ -84,6 +90,12 @@ OK_MISSING_BY_PACKAGE = {
     },
     "plasma-desktop": {
         "scim",  # upstream is dead, not packaged in Nixpkgs
+        "KAccounts6",  # dead upstream
+        "AccountsQt6",  # dead upstream
+        "signon-oauth2plugin",  # dead upstream
+    },
+    "plasma-dialer": {
+        "KTactileFeedback",  # dead?
     },
     "poppler-qt6": {
         "gobject-introspection-1.0",  # we don't actually want to build the GTK variant

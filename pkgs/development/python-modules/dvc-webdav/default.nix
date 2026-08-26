@@ -3,22 +3,20 @@
   buildPythonPackage,
   dvc-objects,
   fetchPypi,
-  pythonOlder,
   setuptools-scm,
   setuptools,
   webdav4,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dvc-webdav";
-  version = "3.0.0";
+  version = "3.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Zefu8uvINBWo3b3LV5vyGaN5fGfnpi1FaMXILeK2pQg=";
+    pname = "dvc_webdav";
+    inherit (finalAttrs) version;
+    hash = "sha256-PA0Er7CYWiwVbwtxn0uUN85KzTRmR9j2/uBDtekXx24";
   };
 
   # Prevent circular dependency
@@ -43,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

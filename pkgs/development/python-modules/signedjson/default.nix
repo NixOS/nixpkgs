@@ -3,48 +3,45 @@
   buildPythonPackage,
   canonicaljson,
   fetchPypi,
-  importlib-metadata,
+  setuptools,
   pynacl,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
-  typing-extensions,
   unpaddedbase64,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "signedjson";
   version = "1.1.4";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "signedjson";
+    inherit (finalAttrs) version;
     hash = "sha256-zZHFavU/Fp7wMsYunEoyktwViGaTMxjQWS40Yts9ZJI=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs =
-    [
-      canonicaljson
-      unpaddedbase64
-      pynacl
-    ]
-    ++ lib.optionals (pythonOlder "3.8") [
-      importlib-metadata
-      typing-extensions
-    ];
+  dependencies = [
+    canonicaljson
+    unpaddedbase64
+    pynacl
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "signedjson" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sign JSON with Ed25519 signatures";
     homepage = "https://github.com/matrix-org/python-signedjson";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

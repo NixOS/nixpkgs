@@ -4,32 +4,40 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  asgiref,
   twisted,
+  pytest-benchmark,
   pytestCheckHook,
-  pythonOlder,
+  nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "prometheus-client";
-  version = "0.21.1";
+  version = "0.25.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "client_python";
-    tag = "v${version}";
-    hash = "sha256-mlgaSVJ4UHM8xw0QPnHSYiTH2v3V6BWi5Abz9aKt2qU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vue/5ulOnKkYjiHYWgT6HZ5mhV2vqAstm44+zwm+po0=";
   };
 
   build-system = [ setuptools ];
+
+  dependencies = [ asgiref ];
 
   optional-dependencies.twisted = [ twisted ];
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [
+    pytest-benchmark
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+
+  pytestFlags = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "prometheus_client" ];
 
@@ -38,11 +46,13 @@ buildPythonPackage rec {
     "test_instance_ip_grouping_key"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Prometheus instrumentation library for Python applications";
     homepage = "https://github.com/prometheus/client_python";
-    changelog = "https://github.com/prometheus/client_python/releases/tag/${src.tag}";
-    license = licenses.asl20;
+    changelog = "https://github.com/prometheus/client_python/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

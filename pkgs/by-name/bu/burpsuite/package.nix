@@ -1,47 +1,41 @@
 {
+  config,
   lib,
   buildFHSEnv,
   fetchurl,
   jdk,
   makeDesktopItem,
-  proEdition ? false,
   unzip,
+
+  # Either "community" or "pro"
+  iconName ? "community",
+  licenseAccepted ? config.burpsuite.accept_license or false,
 }:
+assert lib.assertMsg (
+  iconName == "pro" || iconName == "community"
+) "iconName has to be either pro or community";
 
 let
-  version = "2025.2.3";
-
-  product =
-    if proEdition then
-      {
-        productName = "pro";
-        productDesktop = "Burp Suite Professional Edition";
-        hash = "sha256-eVtqlZHW1w10tUKlqdwFSbx2kJW5hEtfyq7MuBsNS4Q=";
-      }
-    else
-      {
-        productName = "community";
-        productDesktop = "Burp Suite Community Edition";
-        hash = "sha256-XWAaNAdPVxKS7/9uYWpAdbzHt+xNqpKCIOH7dVcUyaI=";
-      };
+  pname = "burpsuite";
+  version = "2026.7.3";
 
   src = fetchurl {
     name = "burpsuite.jar";
     urls = [
-      "https://portswigger-cdn.net/burp/releases/download?product=${product.productName}&version=${version}&type=Jar"
-      "https://portswigger.net/burp/releases/download?product=${product.productName}&version=${version}&type=Jar"
-      "https://web.archive.org/web/https://portswigger.net/burp/releases/download?product=${product.productName}&version=${version}&type=Jar"
+      "https://portswigger-cdn.net/burp/releases/download?product=desktop&version=${version}&type=Jar"
+      "https://portswigger.net/burp/releases/download?product=desktop&version=${version}&type=Jar"
+      "https://web.archive.org/web/https://portswigger.net/burp/releases/download?product=desktop&version=${version}&type=Jar"
     ];
-    hash = product.hash;
+    hash = "sha256-yCYtxUJvOL7cSQ1mxdIbb/d9bcbYXO/mpmyIJpATQGk=";
   };
 
-  pname = "burpsuite";
-  description = "An integrated platform for performing security testing of web applications";
+  description = "Integrated platform for performing security testing of web applications";
+
   desktopItem = makeDesktopItem {
-    name = "burpsuite";
+    name = pname;
     exec = pname;
     icon = pname;
-    desktopName = product.productDesktop;
+    desktopName = "Burp Suite Desktop";
     comment = description;
     categories = [
       "Development"
@@ -49,12 +43,13 @@ let
       "System"
     ];
   };
-
 in
 buildFHSEnv {
   inherit pname version;
 
-  runScript = "${jdk}/bin/java -jar ${src}";
+  runScript =
+    "${lib.getExe jdk} -jar ${src} --suppress-jre-check --disable-check-for-updates-dialog --disable-auto-update"
+    + lib.optionalString licenseAccepted " --i-accept-the-license-agreement";
 
   targetPkgs =
     pkgs: with pkgs; [
@@ -73,25 +68,28 @@ buildFHSEnv {
       udev
       libxkbcommon
       libgbm
+      libglvnd
       nspr
       nss
       pango
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXrandr
+      libx11
+      libxcb
+      libxcomposite
+      libxdamage
+      libxext
+      libxfixes
+      libxrandr
     ];
 
   extraInstallCommands = ''
-    mkdir -p "$out/share/pixmaps"
-    ${lib.getBin unzip}/bin/unzip -p ${src} resources/Media/icon64${product.productName}.png > "$out/share/pixmaps/burpsuite.png"
+    mkdir -p "$out/share/icons/hicolor/64x64/apps"
+    ${lib.getBin unzip}/bin/unzip -p ${src} resources/Media/icon64${iconName}.png > "$out/share/icons/hicolor/64x64/apps/burpsuite.png"
     cp -r ${desktopItem}/share/applications $out/share
   '';
 
-  meta = with lib; {
+  passthru.updateScript = ./update.sh;
+
+  meta = {
     inherit description;
     longDescription = ''
       Burp Suite is an integrated platform for performing security testing of web applications.
@@ -100,17 +98,18 @@ buildFHSEnv {
       exploiting security vulnerabilities.
     '';
     homepage = "https://portswigger.net/burp/";
-    changelog =
-      "https://portswigger.net/burp/releases/professional-community-"
-      + replaceStrings [ "." ] [ "-" ] version;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.unfree;
+    changelog = "https://portswigger.net/burp/releases/professional-community-${
+      lib.replaceStrings [ "." ] [ "-" ] version
+    }";
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.unfree;
     platforms = jdk.meta.platforms;
     hydraPlatforms = [ ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       bennofs
       blackzeshi
       fab
+      yechielw
     ];
     mainProgram = "burpsuite";
   };

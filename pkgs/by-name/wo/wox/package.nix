@@ -1,174 +1,71 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
-  flutter327,
-  keybinder3,
-  nodejs,
-  pnpm_9,
-  python3Packages,
-  writableTmpDirAsHomeHook,
+  callPackage,
   buildGoModule,
-  pkg-config,
-  autoPatchelfHook,
-  xorg,
-  libxkbcommon,
-  libayatana-appindicator,
-  gtk3,
-  desktop-file-utils,
-  xdg-utils,
-  copyDesktopItems,
-  makeDesktopItem,
-}:
+  replaceVars,
 
-let
-  version = "2.0.0-beta.2";
+  # build-time
+  autoPatchelfHook,
+  copyDesktopItems,
+  desktop-file-utils,
+  makeDesktopItem,
+  pkg-config,
+  xdg-utils,
+
+  # run-time
+  gtk3,
+  libayatana-appindicator,
+  libx11,
+  libxkbcommon,
+  libxtst,
+  nodejs,
+}:
+buildGoModule (finalAttrs: {
+  pname = "wox";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "Wox-launcher";
     repo = "Wox";
-    tag = "v${version}";
-    hash = "sha256-PPB9eRXit89lwkLCN86+Un/msMqnFAulJxEGi+7Fa/c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XYPGCHsO5qi5pSTd2M54aAkdMGU0uHaIpZry5+7nuvE=";
   };
 
-  metaCommon = {
-    description = "Cross-platform launcher that simply works";
-    homepage = "https://github.com/Wox-launcher/Wox";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ emaryn ];
-  };
+  vendorHash = "sha256-gVDOCMBNKY7mJkjUOeO3Y78o/57iftmC4q6tE7Hgcto=";
 
-  ui-flutter = flutter327.buildFlutterApplication {
-    pname = "wox-ui-flutter";
-    inherit version src;
+  sourceRoot = "${finalAttrs.src.name}/wox.core";
 
-    sourceRoot = "${src.name}/wox.ui.flutter/wox";
-
-    pubspecLock = lib.importJSON ./pubspec.lock.json;
-
-    nativeBuildInputs = [ autoPatchelfHook ];
-
-    buildInputs = [ keybinder3 ];
-
-    meta = metaCommon // {
-      mainProgram = "wox";
-      platforms = lib.platforms.linux;
-    };
-  };
-
-  plugin-host-nodejs = stdenv.mkDerivation (finalAttrs: {
-    pname = "wox-plugin-host-nodejs";
-    inherit version src;
-
-    sourceRoot = "${finalAttrs.src.name}/wox.plugin.host.nodejs";
-
-    nativeBuildInputs = [
-      nodejs
-      pnpm_9.configHook
-    ];
-
-    pnpmDeps = pnpm_9.fetchDeps {
-      inherit (finalAttrs)
-        pname
-        version
-        src
-        sourceRoot
-        ;
-      hash = "sha256-4Xj6doUHFoZSwel+cPnr2m3rfvlxNmQCppm5gXGIEtU=";
-    };
-
-    buildPhase = ''
-      runHook preBuild
-
-      pnpm run build
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      install -Dm644 dist/index.js $out/node-host.js
-
-      runHook postInstall
-    '';
-
-    meta = metaCommon;
-  });
-
-  plugin-python = python3Packages.buildPythonApplication rec {
-    pname = "wox-plugin";
-    inherit version src;
-    pyproject = true;
-
-    sourceRoot = "${src.name}/wox.plugin.python";
-
-    build-system = with python3Packages; [ hatchling ];
-
-    meta = metaCommon;
-  };
-
-  plugin-host-python = python3Packages.buildPythonApplication rec {
-    pname = "wox-plugin-host-python";
-    inherit version src;
-    pyproject = true;
-
-    sourceRoot = "${src.name}/wox.plugin.host.python";
-
-    build-system = with python3Packages; [ hatchling ];
-
-    nativeBuildInputs = [ writableTmpDirAsHomeHook ];
-
-    buildInputs = with python3Packages; [
-      loguru
-      websockets
-      plugin-python
-    ];
-
-    dependencies = with python3Packages; [
-      loguru
-      websockets
-      plugin-python
-    ];
-
-    meta = metaCommon // {
-      mainProgram = "run";
-    };
-  };
-in
-buildGoModule {
-  pname = "wox";
-  inherit version src;
-
-  sourceRoot = "${src.name}/wox.core";
+  patches = [
+    (replaceVars ./plugin-host-python.patch {
+      plugin-host-python = "${finalAttrs.passthru.plugin-host-python}/bin/run";
+    })
+    (replaceVars ./plugin-host-nodejs.patch {
+      nodejs-path = "${lib.getExe nodejs}";
+      plugin-host-nodejs = "${finalAttrs.passthru.plugin-host-python}/node-host.js";
+    })
+  ];
 
   postPatch = ''
-    substituteInPlace plugin/host/host_python.go \
-      --replace-fail 'n.findPythonPath(ctx), path.Join(util.GetLocation().GetHostDirectory(), "python-host.pyz")' '"env", "${plugin-host-python}/bin/run"'
-    substituteInPlace plugin/host/host_nodejs.go \
-      --replace-fail "/usr/bin/node" "${lib.getExe nodejs}"
     substituteInPlace util/deeplink.go \
       --replace-fail "update-desktop-database" "${desktop-file-utils}/bin/update-desktop-database" \
-      --replace-fail "xdg-mime" "${xdg-utils}/bin/xdg-mime" \
-      --replace-fail "Exec=%s" "Exec=wox"
+      --replace-fail "xdg-mime" "${xdg-utils}/bin/xdg-mime"
   '';
-
-  vendorHash = "sha256-MKxMHABeKotErM+PEhWxeQmPcHH4jJSGWa8wzj42hoE=";
 
   proxyVendor = true;
 
   nativeBuildInputs = [
-    pkg-config
     autoPatchelfHook
     copyDesktopItems
+    pkg-config
   ];
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXtst
-    libxkbcommon
-    libayatana-appindicator
     gtk3
+    libayatana-appindicator
+    libx11
+    libxkbcommon
+    libxtst
   ];
 
   env.CGO_ENABLED = 1;
@@ -181,8 +78,8 @@ buildGoModule {
 
   preBuild = ''
     mkdir -p resource/ui/flutter resource/hosts
-    cp -r ${ui-flutter}/app/${ui-flutter.pname} resource/ui/flutter/wox
-    cp ${plugin-host-nodejs}/node-host.js resource/hosts/node-host.js
+    cp -r ${finalAttrs.passthru.ui-flutter}/app/${finalAttrs.passthru.ui-flutter.pname} resource/ui/flutter/wox
+    cp ${finalAttrs.passthru.plugin-host-nodejs}/node-host.js resource/hosts/node-host.js
   '';
 
   # XOpenDisplay failure!
@@ -199,11 +96,22 @@ buildGoModule {
   ];
 
   postInstall = ''
-    install -Dm644 ../assets/app.png $out/share/pixmaps/wox.png
+    install -Dm644 ../assets/app.png $out/share/icons/wox.png
   '';
 
-  meta = metaCommon // {
+  passthru = {
+    plugin-host-nodejs = callPackage ./plugin-host-nodejs.nix { };
+    plugin-host-python = callPackage ./plugin-host-python.nix { };
+    ui-flutter = callPackage ./ui-flutter.nix { };
+  };
+
+  meta = {
+    description = "Cross-platform launcher that simply works";
+    homepage = "https://github.com/Wox-launcher/Wox";
+    changelog = "https://github.com/Wox-launcher/Wox/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     mainProgram = "wox";
     platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ eljamm ];
   };
-}
+})

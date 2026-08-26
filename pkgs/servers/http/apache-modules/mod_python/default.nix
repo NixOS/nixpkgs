@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mod_python";
-  version = "3.5.0.4";
+  version = "3.5.0.7";
 
   src = fetchFromGitHub {
     owner = "grisha";
     repo = "mod_python";
     tag = finalAttrs.version;
-    hash = "sha256-bZ0w61+0If70KD3UW24JllY6vD0vQX2C7FssYG1YLPI=";
+    hash = "sha256-8LbkwbY5vsRQhbqkXytBxM+MVMtnwRa61nrKHbI4Vtg=";
   };
 
   patches = [ ./install.patch ];
@@ -31,20 +31,19 @@ stdenv.mkDerivation (finalAttrs: {
     ensureNewerSourcesForZipFilesHook
   ];
 
-  buildInputs =
-    [
-      apacheHttpd
-      (python3.withPackages (
-        ps: with ps; [
-          distutils
-          packaging
-          setuptools
-        ]
-      ))
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libintl
-    ];
+  buildInputs = [
+    apacheHttpd
+    (python3.withPackages (
+      ps: with ps; [
+        distutils
+        packaging
+        setuptools
+      ]
+    ))
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libintl
+  ];
 
   passthru = {
     inherit apacheHttpd;
@@ -58,5 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "mod_python";
     platforms = lib.platforms.unix;
     maintainers = [ ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

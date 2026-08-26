@@ -1,41 +1,40 @@
 {
   lib,
   buildPythonPackage,
-  cacert,
   cachelib,
   cryptography,
   fetchFromGitHub,
-  flask,
   flask-sqlalchemy,
+  flask,
   httpx,
+  joserfc,
   mock,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
+  python-multipart,
   requests,
   setuptools,
   starlette,
   werkzeug,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "authlib";
-  version = "1.5.1";
+  version = "1.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lepture";
     repo = "authlib";
-    tag = "v${version}";
-    hash = "sha256-VMihaWqR4FbnTJ50fVf5e5B9GfVwRguq5UAC+D4bpxs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FLSe9piZoFlOAutzoMcgygbsJsR8uSlZWqdNBU6D+aE=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     cryptography
+    joserfc
   ];
 
   nativeCheckInputs = [
@@ -46,15 +45,11 @@ buildPythonPackage rec {
     mock
     pytest-asyncio
     pytestCheckHook
+    python-multipart
     requests
     starlette
     werkzeug
   ];
-
-  preCheck = ''
-    # httpx 0.28.0+ requires SSL_CERT_FILE or SSL_CERT_DIR
-    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
-  '';
 
   pythonImportsCheck = [ "authlib" ];
 
@@ -66,11 +61,11 @@ buildPythonPackage rec {
     "tests/jose/test_chacha20.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for building OAuth and OpenID Connect servers";
     homepage = "https://github.com/lepture/authlib";
-    changelog = "https://github.com/lepture/authlib/blob/${src.tag}/docs/changelog.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ flokli ];
+    changelog = "https://github.com/lepture/authlib/blob/${finalAttrs.src.tag}/docs/upgrades/changelog.rst";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ flokli ];
   };
-}
+})

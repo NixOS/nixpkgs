@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "msgpack-c";
-  version = "6.1.0";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "msgpack";
     repo = "msgpack-c";
     tag = "c-${finalAttrs.version}";
-    hash = "sha256-yL1+6w9l1Ccgrh8WXqvHv2yrb9QH+TrHIAFLXGoVuT0=";
+    hash = "sha256-uMSOECctnUaThhB0vKKSvrjBmFzXDMIeusdiCrfOoI4=";
   };
 
   strictDeps = true;
@@ -36,11 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  meta = with lib; {
+  meta = {
     description = "MessagePack implementation for C";
     homepage = "https://github.com/msgpack/msgpack-c";
     changelog = "https://github.com/msgpack/msgpack-c/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = licenses.boost;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 })

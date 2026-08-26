@@ -17,28 +17,27 @@ in
 
 stdenv.mkDerivation rec {
   pname = "lsof";
-  version = "4.99.4";
+  version = "4.99.7";
 
   src = fetchFromGitHub {
     owner = "lsof-org";
     repo = "lsof";
-    rev = version;
-    hash = "sha256-JyvQV/JOMaL/3jUr6O0YIzJU/JcXVR65CJf5ip7334w=";
+    tag = version;
+    hash = "sha256-o95osjMQvpOVx2b0lCXVp61x2GHQV+HW1iaamVhevng=";
   };
 
-  postPatch =
-    ''
-      patchShebangs --build lib/dialects/*/Mksrc
-      # Do not re-build version.h in every 'make' to allow nuke-refs below.
-      # We remove phony 'FRC' target that forces rebuilds:
-      #   'version.h: FRC ...' is translated to 'version.h: ...'.
-      sed -i lib/dialects/*/Makefile -e 's/version.h:\s*FRC/version.h:/'
-    ''
-    # help Configure find libproc.h in $SDKROOT
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      sed -i -e 's|lcurses|lncurses|g' \
-             -e "s|/Library.*/MacOSX.sdk/|\"$SDKROOT\"/|" Configure
-    '';
+  postPatch = ''
+    patchShebangs --build lib/dialects/*/Mksrc
+    # Do not re-build version.h in every 'make' to allow nuke-refs below.
+    # We remove phony 'FRC' target that forces rebuilds:
+    #   'version.h: FRC ...' is translated to 'version.h: ...'.
+    sed -i lib/dialects/*/Makefile -e 's/version.h:\s*FRC/version.h:/'
+  ''
+  # help Configure find libproc.h in $SDKROOT
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    sed -i -e 's|lcurses|lncurses|g' \
+           -e "s|/Library.*/MacOSX.sdk/|\"$SDKROOT\"/|" Configure
+  '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
@@ -50,7 +49,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   # Stop build scripts from searching global include paths
-  LSOF_INCLUDE = "${lib.getDev stdenv.cc.libc}/include";
+  env.LSOF_INCLUDE = "${lib.getDev stdenv.cc.libc}/include";
   configurePhase =
     let
       genericFlags = "LSOF_CC=$CC LSOF_AR=\"$AR cr\" LSOF_RANLIB=$RANLIB";
@@ -81,6 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/lsof-org/lsof";
+    changelog = "https://github.com/lsof-org/lsof/releases/tag/${src.tag}";
     description = "Tool to list open files";
     mainProgram = "lsof";
     longDescription = ''
@@ -88,8 +88,8 @@ stdenv.mkDerivation rec {
       socket (IPv6/IPv4/UNIX local), or partition (by opening a file
       from it).
     '';
-    license = lib.licenses.purdueBsd;
-    maintainers = with lib.maintainers; [ dezgeg ];
+    license = lib.licenses.lsof;
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

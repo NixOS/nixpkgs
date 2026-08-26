@@ -3,33 +3,32 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dnglab";
-  version = "0.6.3";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "dnglab";
     repo = "dnglab";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     # darwin/linux hash mismatch
     postFetch = ''
       rm -rf "$out"/rawler/data/testdata/cameras/Canon/{"EOS REBEL T7i","EOS Rebel T7i"}
     '';
-    hash = "sha256-k0tKNtVDzE5vVi/953aEQihh+5BsVneqauTr9WRFFrY=";
+    hash = "sha256-uCOdfCeec//5CnkuDEIgCy9B7SsqiXN8oGkoHhJ4N5Y=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-PsTv7OG1dHxPvid2gTA/8KZwWc6/g2XB1UvhQpvTStE=";
+  cargoHash = "sha256-CFtCONFL1qRTg67AxfuEeIqLq/+57xMGbTKKMFPAhuo=";
 
   postInstall = ''
     rm $out/bin/benchmark $out/bin/identify
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Camera RAW to DNG file format converter";
     homepage = "https://github.com/dnglab/dnglab";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = [ ];
     mainProgram = "dnglab";
   };
-}
+})

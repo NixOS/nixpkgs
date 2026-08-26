@@ -104,7 +104,7 @@ in
     systemd.services.sogo = {
       description = "SOGo groupware";
       after = [
-        "postgresql.service"
+        "postgresql.target"
         "mysql.service"
         "memcached.service"
         "openldap.service"
@@ -151,15 +151,14 @@ in
       description = "SOGo tmpwatch";
 
       startAt = [ "hourly" ];
-      script = ''
-        SOGOSPOOL=/var/lib/sogo/spool
-
-        find "$SOGOSPOOL" -type f -user sogo -atime +23 -delete > /dev/null
-        find "$SOGOSPOOL" -mindepth 1 -type d -user sogo -empty -delete > /dev/null
-      '';
 
       serviceConfig = {
         Type = "oneshot";
+
+        ExecStart = [
+          "find /var/lib/sogo/spool -type f -user sogo -atime +23 -delete"
+          "find /var/lib/sogo/spool -mindepth 1 -type d -user sogo -empty -delete"
+        ];
 
         ProtectSystem = "strict";
         ProtectHome = true;
@@ -191,7 +190,7 @@ in
       description = "SOGo email alarms";
 
       after = [
-        "postgresql.service"
+        "postgresql.target"
         "mysqld.service"
         "memcached.service"
         "openldap.service"

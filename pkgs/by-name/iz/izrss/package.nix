@@ -2,26 +2,25 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  ...
 }:
 buildGoModule (finalAttrs: {
   pname = "izrss";
-  version = "0.2.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "isabelroses";
     repo = "izrss";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t+RtdKrYI0MNGSR1ABvClKv+hUJ4Tpg7yKS2qbm7BKc=";
+    hash = "sha256-8eHUskfsdymVTYt5V/f75vKsvmuZz/CNGqbthSQrHow=";
   };
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${finalAttrs.version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-2L/EUoPbz6AZqv84XPhiZhImOL4wyBOzx6Od4+nTJeY=";
+  vendorHash = "sha256-NP363PtrTcI1EubIBJEoMCTkHCGsNRM8fY2fgwSlz5s=";
 
   meta = {
     description = "RSS feed reader for the terminal written in Go";

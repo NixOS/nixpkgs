@@ -9,8 +9,8 @@
   gtk4,
   itstool,
   libadwaita,
-  librsvg,
-  libxml2,
+  libglycin,
+  libglycin-gtk4,
   gst_all_1,
   meson,
   ninja,
@@ -24,17 +24,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-robots";
-  version = "41.1";
+  version = "50.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-robots/${lib.versions.major finalAttrs.version}/gnome-robots-${finalAttrs.version}.tar.xz";
-    hash = "sha256-K4BQcFrIPpOL56iREyYB62XHk/IJzX6RDGzWQphzBHg=";
+    hash = "sha256-YX5XTBX5Bhi4JJPJk51xdZatLOH/HeCq1cnDl2Yz03k=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
-    name = "gnome-robots-${finalAttrs.version}";
-    hash = "sha256-7kwjpZJqAqqKlt6mOFyjaaxZ1Tr2WuhE72jwjCZpX9E=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-T3o4zlRLQzrLexSDI9A98bubehYFwJY1zBVUUNmrc9o=";
   };
 
   nativeBuildInputs = [
@@ -54,19 +53,13 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk4
     libadwaita
-    librsvg
-    libxml2
+    libglycin
+    libglycin-gtk4
     # Sound playback, not checked at build time.
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
   ];
-
-  postPatch = ''
-    # https://gitlab.gnome.org/GNOME/gnome-robots/-/merge_requests/38
-    substituteInPlace data/icons/meson.build \
-      --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
-  '';
 
   preFixup = ''
     # Seal GStreamer plug-ins so that we can notice when they are missing.
@@ -91,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
                   common-updater-scripts
                 ]
               }
-              update-source-version gnome-robots --ignore-same-version --source-key=cargoDeps > /dev/null
+              update-source-version gnome-robots --ignore-same-version --source-key=cargoDeps.vendorStaging > /dev/null
             ''
           ];
           # Experimental feature: do not copy!
@@ -104,13 +97,13 @@ stdenv.mkDerivation (finalAttrs: {
       ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-robots";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-robots/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Avoid the robots and make them crash into each other";
     mainProgram = "gnome-robots";
-    teams = [ teams.gnome ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
 })

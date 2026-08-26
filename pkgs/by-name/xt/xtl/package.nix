@@ -5,15 +5,15 @@
   cmake,
   doctest,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xtl";
-  version = "0.7.7";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xtl";
-    rev = version;
-    hash = "sha256-f8qYh8ibC/ToHsUv3OF1ujzt3fUe7kW9cNpGyLqsgqw=";
+    tag = finalAttrs.version;
+    hash = "sha256-Ob9MCfWpfUwlBD3gs9JiqJ+JVsVByaTlSfawmQrnvSw=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [ doctest ];
   checkTarget = "xtest";
 
-  meta = with lib; {
+  meta = {
     description = "Basic tools (containers, algorithms) used by other quantstack packages";
     homepage = "https://github.com/xtensor-stack/xtl";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ cpcloud ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ cpcloud ];
+    platforms = lib.platforms.all;
   };
-}
+})

@@ -7,19 +7,21 @@
   gitUpdater,
   graphviz,
   gst_all_1,
+  perl,
   pkg-config,
   testers,
+  sox,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pocketsphinx";
-  version = "5.0.4";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "cmusphinx";
     repo = "pocketsphinx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DUK3zPPtv+sQhC1dfJXDmwtt3UV6DGacb3mMQUpvVpk=";
+    hash = "sha256-bB/k1KRrdP52MN5iZr2Q2MGWh0JOCsqJxccUyVu2Va0=";
   };
 
   nativeBuildInputs = [
@@ -45,22 +47,34 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
+  nativeCheckInputs = [
+    perl
+    sox
+  ];
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
   passthru = {
-    updateScript = gitUpdater { rev-prefix = "v"; };
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+      ignoredVersions = "rc";
+    };
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Small speech recognizer";
     homepage = "https://github.com/cmusphinx/pocketsphinx";
     changelog = "https://github.com/cmusphinx/pocketsphinx/blob/v${finalAttrs.version}/NEWS";
-    license = with licenses; [
-      bsd2
-      bsd3
-      mit
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        bsd2
+        bsd3
+        mit
+      ];
     pkgConfigModules = [ "pocketsphinx" ];
     mainProgram = "pocketsphinx";
-    maintainers = with maintainers; [ jopejoe1 ];
+    maintainers = with lib.maintainers; [ jopejoe1 ];
   };
 })

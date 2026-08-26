@@ -1,16 +1,18 @@
---- a/CMakeLists.txt	2024-03-01 08:08:05
-+++ b/CMakeLists.txt	2024-04-24 15:45:30
-@@ -2134,7 +2134,7 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -2651,7 +2651,7 @@
    )
    if(C_MACRO_PREFIX_MAP AND CXX_MACRO_PREFIX_MAP)
      if(APPLE)
 -      if(XCODE AND ${XCODE_VERSION} VERSION_LESS 12.0)
 +      if(FALSE)
-       # Developers may have say LLVM Clang-10.0.1 toolchain (which supports the flag)
-       # with Xcode-11 (the Clang of which doesn't support the flag).
+         # Developers may have say LLVM Clang-10.0.1 toolchain (which supports the flag)
+         # with Xcode-11 (the Clang of which doesn't support the flag).
          message(
---- a/build_files/cmake/platform/platform_apple.cmake	2024-02-22 15:31:36
-+++ b/build_files/cmake/platform/platform_apple.cmake	2024-04-24 16:06:13
+diff --git a/build_files/cmake/platform/platform_apple.cmake b/build_files/cmake/platform/platform_apple.cmake
+--- a/build_files/cmake/platform/platform_apple.cmake
++++ b/build_files/cmake/platform/platform_apple.cmake
 @@ -55,7 +55,6 @@
    endif()
  endif()
@@ -30,40 +32,57 @@
    )
  
    print_found_status("SndFile libraries" "${LIBSNDFILE_LIBRARIES}")
-@@ -162,9 +157,7 @@
+@@ -169,9 +164,7 @@
    set(FFMPEG_ROOT_DIR ${LIBDIR}/ffmpeg)
    set(FFMPEG_FIND_COMPONENTS
-     avcodec avdevice avformat avutil
+     avcodec avdevice avfilter avformat avutil
 -    mp3lame ogg opus swresample swscale
 -    theora theoradec theoraenc vorbis vorbisenc
 -    vorbisfile vpx x264)
-+   swresample swscale)
++    swresample swscale)
+   # Frameworks required by libavfilter, using legacy macOS CGL
+   string(APPEND PLATFORM_LINKFLAGS " -framework CoreImage -framework OpenGL")
    if(EXISTS ${LIBDIR}/ffmpeg/lib/libaom.a)
-     list(APPEND FFMPEG_FIND_COMPONENTS aom)
-   endif()
-@@ -275,7 +268,6 @@
- add_bundled_libraries(boost/lib)
+@@ -250,7 +243,6 @@
+ endif()
  
- if(WITH_INTERNATIONAL OR WITH_CODEC_FFMPEG)
--  string(APPEND PLATFORM_LINKFLAGS " -liconv") # boost_locale and ffmpeg needs it !
+ if(WITH_CODEC_FFMPEG)
+-  string(APPEND PLATFORM_LINKFLAGS " -liconv") # ffmpeg needs it !
  endif()
  
  if(WITH_PUGIXML)
-@@ -350,7 +342,7 @@
- 
- # CMake FindOpenMP doesn't know about AppleClang before 3.12, so provide custom flags.
- if(WITH_OPENMP)
--  if(CMAKE_C_COMPILER_ID MATCHES "Clang")
-+  if(FALSE)
-     # Use OpenMP from our precompiled libraries.
-     message(STATUS "Using ${LIBDIR}/openmp for OpenMP")
-     set(OPENMP_CUSTOM ON)
-@@ -427,7 +419,7 @@
+@@ -411,12 +403,12 @@
    " -Wl,-unexported_symbols_list,'${PLATFORM_SYMBOLS_MAP}'"
  )
  
--if(${XCODE_VERSION} VERSION_GREATER_EQUAL 15.0)
+-if(${XCODE_VERSION} VERSION_EQUAL 15.0)
 +if(FALSE)
-   if("${CMAKE_OSX_ARCHITECTURES}" STREQUAL "x86_64")
+   # V4.5 specific workaround: Enforce the legacy Xcode linker to avoid incorrect
+   # assembly generation caused by known bugs in the modern linker shipped with
+   # Xcode 15.0. See issue #148792 for details.
+   string(APPEND PLATFORM_LINKFLAGS " -Wl,-ld_classic")
+-elseif(${XCODE_VERSION} VERSION_GREATER_EQUAL 15.0)
++elseif(FALSE)
+   if("${CMAKE_OSX_ARCHITECTURES}" STREQUAL "x86_64" AND WITH_LEGACY_MACOS_X64_LINKER)
      # Silence "no platform load command found in <static library>, assuming: macOS".
-     string(APPEND PLATFORM_LINKFLAGS " -Wl,-ld_classic")
+     #
+diff --git a/source/blender/blendthumb/CMakeLists.txt b/source/blender/blendthumb/CMakeLists.txt
+--- a/source/blender/blendthumb/CMakeLists.txt
++++ b/source/blender/blendthumb/CMakeLists.txt
+@@ -81,16 +81,6 @@
+     # Prevent Xcode from overwriting the signature.
+     XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ""
+   )
+-  # CMake needs the target defined in the same file as add_custom_command.
+-  # It needs to be code-signed (ad-hoc in this case)
+-  # even on developer machine to generate thumbnails.
+-  # Command taken from XCode build process.
+-  add_custom_command(
+-    TARGET blender-thumbnailer POST_BUILD
+-    COMMAND codesign --deep --force --sign -
+-      --entitlements "${CMAKE_SOURCE_DIR}/release/darwin/thumbnailer_entitlements.plist"
+-      --timestamp=none $<TARGET_BUNDLE_DIR:blender-thumbnailer>
+-  )
+ elseif(UNIX)
+   # -----------------------------------------------------------------------------
+   # Build `blender-thumbnailer` executable

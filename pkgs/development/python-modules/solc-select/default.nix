@@ -1,34 +1,41 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
   packaging,
   pycryptodome,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "solc-select";
-  version = "1.0.4";
-  format = "setuptools";
+  version = "1.2.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-23ud4AmvbeOlQWuAu+W21ja/MUcDwBYxm4wSMeJIpsc=";
+  src = fetchFromGitHub {
+    owner = "crytic";
+    repo = "solc-select";
+    tag = "v.${version}";
+    hash = "sha256-pPDiP8GNE/KAFS4Jm6jLpKozktxy70+f00QFUa4wMiQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     packaging
     pycryptodome
+    requests
   ];
 
   # no tests
   doCheck = false;
   pythonImportsCheck = [ "solc_select" ];
 
-  meta = with lib; {
+  meta = {
     description = "Manage and switch between Solidity compiler versions";
     homepage = "https://github.com/crytic/solc-select";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ arturcygan ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ arturcygan ];
   };
 }

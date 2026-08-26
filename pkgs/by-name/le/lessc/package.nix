@@ -1,7 +1,11 @@
 {
   lib,
-  buildNpmPackage,
+  stdenv,
   fetchFromGitHub,
+  fetchPnpmDeps,
+  nodejs,
+  pnpm_11,
+  pnpmConfigHook,
   callPackage,
   testers,
   runCommand,
@@ -10,27 +14,59 @@
   lessc,
 }:
 
-buildNpmPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lessc";
-  version = "4.2.2";
+  version = "4.9.0";
 
   src = fetchFromGitHub {
     owner = "less";
     repo = "less.js";
-    rev = "v${version}";
-    hash = "sha256-vO/1laFb1yC+OESXTx9KuGdwSNC9Iv49F3V7kfXnyJU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VP2W0aU1ml+wO5aGVeLP7vAaBXB5xIJ0ko3+l4lAOBg=";
   };
-  sourceRoot = "${src.name}/packages/less";
 
-  npmDepsHash = "sha256-3GlngmaxcUGXSv+ZwN2aovwEqcek6FJ1ZaL5KpjwNn4=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      pnpmWorkspaces
+      ;
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-uV91YMyqWKXmGdx20Z0+rjJKF02vL7vdomY0IzAky9U=";
+  };
 
-  postPatch = ''
-    sed -i ./package.json \
-      -e '/@less\/test-data/d' \
-      -e '/@less\/test-import-module/d'
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    pnpmConfigHook
+    pnpm_11
+    nodejs
+  ];
+
+  buildInputs = [ nodejs ];
+
+  pnpmWorkspaces = [ "less..." ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    pnpm --filter "less" run build
+
+    runHook postBuild
   '';
 
-  env.PUPPETEER_SKIP_DOWNLOAD = 1;
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/{bin,lib/lessc}
+    cp -r {packages,node_modules} $out/lib/lessc
+    chmod +x $out/lib/lessc/packages/less/bin/lessc
+    ln -s $out/lib/lessc/packages/less/bin/lessc $out/bin/lessc
+
+    runHook postInstall
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
@@ -69,9 +105,10 @@ buildNpmPackage rec {
 
   meta = {
     homepage = "https://github.com/less/less.js";
+    changelog = "https://github.com/less/less.js/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Dynamic stylesheet language";
     mainProgram = "lessc";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ lelgenio ];
   };
-}
+})

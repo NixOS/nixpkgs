@@ -3,9 +3,14 @@
   stdenv,
   fetchFromGitHub,
   gitUpdater,
-  coreutils,
-  bash,
+  makeWrapper,
   gawk,
+  bc,
+  jq,
+  wireplumber,
+  pipewire,
+  coreutils,
+  gnugrep,
   libpulseaudio,
   alsa-lib,
   libnotify,
@@ -13,14 +18,16 @@
 
 stdenv.mkDerivation rec {
   pname = "i3-volume";
-  version = "3.9.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "hastinbe";
     repo = "i3-volume";
     rev = "v${version}";
-    hash = "sha256-vmyfEXJ/5TRWIJQCblYcy8owI03F+ARNAEd0ni5ublM=";
+    hash = "sha256-IuJK03qW/WIK1K2gWJu3V1mVJM1wJx4IAcNKUBxtXf0=";
   };
+
+  nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [
     libpulseaudio
@@ -35,8 +42,21 @@ stdenv.mkDerivation rec {
 
     install -Dm755 volume $out/bin/i3-volume
     mkdir -p $out/share/doc/i3-volume/
-    cp -a i3volume-alsa.conf $out/share/doc/i3-volume/i3volume-alsa.conf
-    cp -a i3volume-pulseaudio.conf $out/share/doc/i3-volume/i3volume-pulseaudio.conf
+    cp -a lib $out/bin/lib
+    cp -a example.conf $out/share/doc/i3-volume/example.conf
+
+    wrapProgram "$out/bin/i3-volume" \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          gawk
+          bc
+          jq
+          wireplumber
+          pipewire
+          coreutils
+          gnugrep
+        ]
+      }
 
     runHook postInstall
   '';
@@ -54,7 +74,6 @@ stdenv.mkDerivation rec {
       Works with any window manager, such as [i3wm](https://i3wm.org/), [bspwm](https://github.com/baskerville/bspwm), and [KDE](https://kde.org/), as a standalone script, or with statusbars such as [polybar](https://github.com/polybar/polybar), [i3blocks](https://github.com/vivien/i3blocks), [i3status](https://github.com/i3/i3status), and more.
     '';
     homepage = "https://github.com/hastinbe/i3-volume";
-    maintainers = with lib.maintainers; [ srghma ];
     mainProgram = "i3-volume";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;

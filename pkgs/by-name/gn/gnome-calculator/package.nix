@@ -2,12 +2,14 @@
   stdenv,
   lib,
   appstream,
+  blueprint-compiler,
   meson,
   ninja,
   vala,
   gettext,
   itstool,
   fetchurl,
+  fetchpatch,
   pkg-config,
   libxml2,
   gtk4,
@@ -24,17 +26,26 @@
   libgee,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-calculator";
-  version = "47.1";
+  version = "50.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-calculator/${lib.versions.major version}/gnome-calculator-${version}.tar.xz";
-    hash = "sha256-vp+SJ5m35+ZclzSLm35kf/4zyDG7OlHTniwWjSrcQOA=";
+    url = "mirror://gnome/sources/gnome-calculator/${lib.versions.major finalAttrs.version}/gnome-calculator-${finalAttrs.version}.tar.xz";
+    hash = "sha256-gFPWiRVl6IKHS2XB21HFvzEABet4i4usNUY5B0M1CpA=";
   };
+
+  patches = [
+    # Fix tests with GNU MPC 1.4.0
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-calculator/-/commit/c9bf69ce3688390a584ca7571ea5fcda5aea8863.patch";
+      hash = "sha256-FoV6SUprVdNcRORpoi+bNMTjzMM8bmXuze+6C9lqF8E=";
+    })
+  ];
 
   nativeBuildInputs = [
     appstream
+    blueprint-compiler
     meson
     ninja
     pkg-config
@@ -71,11 +82,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.gnome.org/Calculator/";
     description = "Application that solves mathematical equations and is suitable as a default application in a Desktop environment";
-    teams = [ teams.gnome ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    mainProgram = "gnome-calculator";
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})

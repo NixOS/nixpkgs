@@ -23,6 +23,7 @@
   pythonOnHostForHost,
   pythonOnTargetForTarget,
   pythonAttr ? null,
+  pythonABITags ? [ "none" ],
   self, # is pythonOnHostForTarget
 }:
 let
@@ -78,7 +79,7 @@ let
             keep = self: hooks self { };
             optionalExtensions = cond: as: lib.optionals cond as;
             pythonExtension = import ../../../top-level/python-packages.nix;
-            python2Extension = import ../../../top-level/python2-packages.nix;
+            python2Extension = import ../../misc/resholve/python2-packages.nix;
             extensions = lib.composeManyExtensions (
               [
                 hooks
@@ -108,16 +109,10 @@ let
     );
 in
 rec {
-  isPy27 = pythonVersion == "2.7";
-  isPy37 = pythonVersion == "3.7";
-  isPy38 = pythonVersion == "3.8";
-  isPy39 = pythonVersion == "3.9";
-  isPy310 = pythonVersion == "3.10";
   isPy311 = pythonVersion == "3.11";
   isPy312 = pythonVersion == "3.12";
   isPy313 = pythonVersion == "3.13";
   isPy314 = pythonVersion == "3.14";
-  isPy2 = lib.strings.substring 0 1 pythonVersion == "2";
   isPy3 = lib.strings.substring 0 1 pythonVersion == "3";
   isPy3k = isPy3;
   isPyPy = lib.hasInfix "pypy" interpreter;
@@ -140,7 +135,14 @@ rec {
   pythonAtLeast = lib.versionAtLeast pythonVersion;
   pythonOlder = lib.versionOlder pythonVersion;
   inherit hasDistutilsCxxPatch;
-  inherit pythonOnBuildForHost;
+  inherit
+    pythonOnBuildForBuild
+    pythonOnBuildForHost
+    pythonOnBuildForTarget
+    pythonOnHostForHost
+    pythonOnTargetForTarget
+    ;
+  inherit pythonABITags;
 
   tests = callPackage ./tests.nix {
     python = self;

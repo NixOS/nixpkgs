@@ -7,7 +7,6 @@
   go-md2man,
   installShellFiles,
   linenoise,
-  darwin,
   lrzsz,
 }:
 
@@ -35,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     linenoise
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
+  ];
 
   makeFlags = [
     "HISTFILE=.cache/picocom_history"
@@ -62,5 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     mainProgram = "picocom";
+    maintainers = [ lib.maintainers.ninelore ];
   };
 })

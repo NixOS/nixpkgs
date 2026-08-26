@@ -1,12 +1,22 @@
 {
   mkKdeDerivation,
+  pkg-config,
   qtsensors,
+  qtwayland,
+  wayland-protocols,
   dbus,
 }:
 mkKdeDerivation {
   pname = "kscreen";
 
-  extraBuildInputs = [ qtsensors ];
+  extraNativeBuildInputs = [ pkg-config ];
+
+  extraBuildInputs = [
+    qtsensors
+    qtwayland
+
+    wayland-protocols
+  ];
 
   postFixup = ''
     substituteInPlace $out/share/kglobalaccel/org.kde.kscreen.desktop \

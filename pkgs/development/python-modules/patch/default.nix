@@ -18,10 +18,10 @@ buildPythonPackage rec {
   # No tests included in archive
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Library to parse and apply unified diffs";
     homepage = "https://github.com/techtonik/python-patch/";
-    license = licenses.mit;
-    maintainers = [ maintainers.igsha ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.igsha ];
   };
 }

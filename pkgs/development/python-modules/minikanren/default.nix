@@ -2,54 +2,70 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  toolz,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
   cons,
-  multipledispatch,
   etuples,
   logical-unification,
+  multipledispatch,
+  toolz,
+  typing-extensions,
+
+  # tests
   py,
-  pytestCheckHook,
   pytest-html,
+  pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "minikanren";
-  version = "1.0.3";
-  format = "setuptools";
+  version = "1.0.5";
+  pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pythological";
     repo = "kanren";
-    rev = "5aa9b1734cbb3fe072a7c72b46e1b72a174d28ac";
-    hash = "sha256-daAtREgm91634Q0mc0/WZivDiyZHC7TIRoGRo8hMnGE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lCQ0mKT99zK5A74uoo/9bP+eFdm3MC43Fh8+P2krXrs=";
   };
 
-  propagatedBuildInputs = [
-    toolz
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     cons
-    multipledispatch
     etuples
     logical-unification
+    multipledispatch
+    toolz
+    typing-extensions
   ];
 
   nativeCheckInputs = [
     py
-    pytestCheckHook
     pytest-html
+    pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--html=testing-report.html"
     "--self-contained-html"
   ];
 
   pythonImportsCheck = [ "kanren" ];
 
-  meta = with lib; {
+  meta = {
     description = "Relational programming in Python";
     homepage = "https://github.com/pythological/kanren";
-    changelog = "https://github.com/pythological/kanren/releases";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ Etjean ];
+    changelog = "https://github.com/pythological/kanren/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ Etjean ];
   };
-}
+})

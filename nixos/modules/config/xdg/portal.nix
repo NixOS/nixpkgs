@@ -32,12 +32,12 @@ in
   ];
 
   meta = {
-    maintainers = teams.freedesktop.members;
+    teams = [ teams.freedesktop ];
   };
 
   options.xdg.portal = {
     enable =
-      mkEnableOption ''[xdg desktop integration](https://github.com/flatpak/xdg-desktop-portal)''
+      mkEnableOption "[xdg desktop integration](https://github.com/flatpak/xdg-desktop-portal)"
       // {
         default = false;
       };
@@ -91,8 +91,8 @@ in
         Sets which portal backend should be used to provide the implementation
         for the requested interface. For details check {manpage}`portals.conf(5)`.
 
-        Configs will be linked to `/etc/xdg/xdg-desktop-portal/` with the name `$desktop-portals.conf`
-        for `xdg.portal.config.$desktop` and `portals.conf` for `xdg.portal.config.common`
+        Configs will be linked to {file}`/etc/xdg/xdg-desktop-portal/` with the name {file}`$desktop-portals.conf`
+        for {file}`xdg.portal.config.$desktop` and {file}`portals.conf` for {file}`xdg.portal.config.common`
         as an exception.
       '';
     };
@@ -103,7 +103,7 @@ in
       example = lib.literalExpression "[ pkgs.gnome-session ]";
       description = ''
         List of packages that provide XDG desktop portal configuration, usually in
-        the form of `share/xdg-desktop-portal/$desktop-portals.conf`.
+        the form of {file}`share/xdg-desktop-portal/$desktop-portals.conf`.
 
         Note that configs in `xdg.portal.config` will be preferred if set.
       '';
@@ -116,6 +116,8 @@ in
       packages = [ pkgs.xdg-desktop-portal ] ++ cfg.extraPortals;
     in
     mkIf cfg.enable {
+      programs.fuse.enable = true;
+
       warnings = lib.optional (cfg.configPackages == [ ] && cfg.config == { }) ''
         xdg-desktop-portal 1.17 reworked how portal implementations are loaded, you
         should either set `xdg.portal.config` or `xdg.portal.configPackages`
@@ -150,7 +152,6 @@ in
 
         sessionVariables = {
           NIXOS_XDG_OPEN_USE_PORTAL = mkIf cfg.xdgOpenUsePortal "1";
-          NIX_XDG_DESKTOP_PORTAL_DIR = "/run/current-system/sw/share/xdg-desktop-portal/portals";
         };
 
         etc = lib.concatMapAttrs (

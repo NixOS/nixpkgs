@@ -4,16 +4,17 @@
   fetchgit,
   python3,
   coreutils,
+  udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "acpilight";
   version = "1.2";
 
   src = fetchgit {
     url = "https://gitlab.com/wavexx/acpilight.git";
-    rev = "v${version}";
-    sha256 = "1r0r3nx6x6vkpal6vci0zaa1n9dfacypldf6k8fxg7919vzxdn1w";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PNjW/04hndcdmsY1ej1TriUblPogsm2ounObbrodGeQ=";
   };
 
   pyenv = python3.withPackages (
@@ -23,20 +24,25 @@ stdenv.mkDerivation rec {
   );
 
   postConfigure = ''
-    substituteInPlace 90-backlight.rules --replace /bin ${coreutils}/bin
-    substituteInPlace Makefile --replace udevadm true
+    substituteInPlace 90-backlight.rules --replace-fail /bin ${coreutils}/bin
+    substituteInPlace Makefile --replace-fail udevadm true
   '';
 
-  buildInputs = [ pyenv ];
+  buildInputs = [ finalAttrs.pyenv ];
 
   makeFlags = [ "DESTDIR=$(out) prefix=" ];
 
-  meta = with lib; {
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+  doInstallCheck = true;
+
+  meta = {
     homepage = "https://gitlab.com/wavexx/acpilight";
     description = "ACPI backlight control";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ smakarov ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ smakarov ];
+    platforms = lib.platforms.linux;
     mainProgram = "xbacklight";
   };
-}
+})

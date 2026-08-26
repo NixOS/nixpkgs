@@ -13,17 +13,31 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "detect-it-easy";
-  version = "3.10";
+  version = "3.21";
 
   src = fetchFromGitHub {
     owner = "horsicq";
     repo = "DIE-engine";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-yHgxYig5myY2nExweUk2muKbJTKN3SiwOLgQcMIY/BQ=";
+    hash = "sha256-gst0suw5mNR3A0s/jIfte41cOOxKR0IsTFkO7ydwKMs=";
   };
 
-  patches = [ ./0001-remove-hard-coded-paths-in-xoptions.patch ];
+  postPatch = ''
+        # Convert CRLF to LF so substituteInPlace works
+        tr -d '\r' < XOptions/xoptions.cpp > XOptions/xoptions.cpp.tmp
+        mv XOptions/xoptions.cpp.tmp XOptions/xoptions.cpp
+
+        substituteInPlace XOptions/xoptions.cpp \
+          --replace-fail 'QString XOptions::getApplicationDataPath()
+    {
+        QString sResult;' 'QString XOptions::getApplicationDataPath()
+    {
+    #if defined(Q_OS_LINUX)
+        return qApp->applicationDirPath() + "/../lib/die";
+    #endif
+        QString sResult;'
+  '';
 
   buildInputs = [
     libsForQt5.qtbase
@@ -56,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Program for determining types of files for Windows, Linux and MacOS.";
+    description = "Program for determining types of files for Windows, Linux and MacOS";
     mainProgram = "die";
     homepage = "https://github.com/horsicq/Detect-It-Easy";
     changelog = "https://github.com/horsicq/Detect-It-Easy/blob/master/changelog.txt";

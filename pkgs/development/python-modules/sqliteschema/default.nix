@@ -51,10 +51,10 @@ buildPythonPackage rec {
     doCheck = true;
   });
 
-  meta = with lib; {
+  meta = {
     description = "Python library to dump table schema of a SQLite database file";
     homepage = "https://github.com/thombashi/sqliteschema";
-    license = licenses.mit;
-    maintainers = with maintainers; [ henrirosten ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ henrirosten ];
   };
 }

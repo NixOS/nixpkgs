@@ -8,14 +8,14 @@
 }:
 buildPythonPackage rec {
   pname = "pylint-odoo";
-  version = "9.3.3";
+  version = "10.0.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OCA";
     repo = "pylint-odoo";
     tag = "v${version}";
-    hash = "sha256-HPai1HQlfHJUHLqEYn4U6qdupJLLrynwtfm7Q8IbRps=";
+    hash = "sha256-dCc3jwZOWlwMG0jn1d2rAK4oFQlqTMmvYu9ucR/ORfU=";
   };
 
   pythonRelaxDeps = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylint_odoo" ];
 
-  BUILD_README = true; # Enables more tests
+  env.BUILD_README = true; # Enables more tests
 
   nativeCheckInputs = [ pytestCheckHook ];
 

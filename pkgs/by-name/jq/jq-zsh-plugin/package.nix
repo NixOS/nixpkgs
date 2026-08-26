@@ -7,14 +7,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jq-zsh-plugin";
   version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "reegnz";
     repo = "jq-zsh-plugin";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-q/xQZ850kifmd8rCMW+aAEhuA43vB9ZAW22sss9e4SE=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.vinnymeller ];
   };
-}
+})

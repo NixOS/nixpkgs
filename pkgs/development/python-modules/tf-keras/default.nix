@@ -16,15 +16,15 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tf-keras";
-  version = "2.19.0";
+  inherit (tensorflow) version;
   pyproject = true;
 
   src = fetchPypi {
     pname = "tf_keras";
-    inherit version;
-    hash = "sha256-sJpAfYekVxzh6MqYXPxoSD49Y7JRil15qXrZLLZNvpw=";
+    inherit (finalAttrs) version;
+    hash = "sha256-+a8PJUbNVTLeD656SB80ocoiU3N9TNEAD2txPccz93A=";
   };
 
   build-system = [
@@ -34,7 +34,8 @@ buildPythonPackage rec {
   dependencies = [
     numpy
     tensorflow
-  ] ++ lib.optionals (pythonAtLeast "3.12") [ distutils ];
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [ distutils ];
 
   pythonImportsCheck = [ "tf_keras" ];
 
@@ -46,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -1,86 +1,91 @@
 {
   lib,
   fetchFromGitHub,
-  buildGoModule,
-  buildNpmPackage,
-  makeWrapper,
-  nodejs,
+  buildGo127Module,
   stdenvNoCC,
+  nodejs,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpmBuildHook,
   nixosTests,
   nix-update-script,
+  versionCheckHook,
 }:
-
-stdenvNoCC.mkDerivation (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "pocket-id";
-  version = "0.51.0";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tNPbowMytALmvJ1H8IWCmXIQFlXKEHA5+T9FWdpaLi0=";
+    hash = "sha256-4BtVTfjXu/V9l4L2ucabpQXjrTBEB4cTrO4tb/oE3YU=";
   };
 
-  backend = buildGoModule {
-    pname = "pocket-id-backend";
-    inherit (finalAttrs) version src;
+  sourceRoot = "${finalAttrs.src.name}/backend";
 
-    sourceRoot = "${finalAttrs.src.name}/backend";
+  vendorHash = "sha256-SrpUgyruwbIJZ1HB6sqidbGAwzBOqKcJzR+cH9E0siw=";
 
-    vendorHash = "sha256-0LAlltXd7YNQu7ymdjUSy75hMBz6MpvmUtgct43BU7M=";
+  env.CGO_ENABLED = 0;
+  ldflags = [
+    "-X github.com/pocket-id/pocket-id/backend/internal/common.Version=${finalAttrs.version}"
+    "-buildid=${finalAttrs.version}"
+  ];
 
-    preFixup = ''
-      mv $out/bin/cmd $out/bin/pocket-id-backend
-    '';
-  };
+  preBuild = ''
+    cp -r ${finalAttrs.frontend}/lib/pocket-id-frontend/dist frontend/dist
+  '';
 
-  frontend = buildNpmPackage {
+  checkFlags = [
+    "-tags=unit"
+  ];
+
+  # many tests time out on darwin when waiting for 127.0.0.1 with only `__darwinAllowLocalNetworking = true`
+  # caused by `quic.DialAddr` of `quic-go`, works after loosening the sandbox
+  __darwinAllowLocalNetworking = finalAttrs.finalPackage.doCheck;
+  sandboxProfile = lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    (allow network* (remote ip "*:*"))
+  '';
+
+  preFixup = ''
+    mv $out/bin/cmd $out/bin/pocket-id
+  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "version";
+
+  frontend = stdenvNoCC.mkDerivation {
     pname = "pocket-id-frontend";
     inherit (finalAttrs) version src;
 
-    sourceRoot = "${finalAttrs.src.name}/frontend";
-
-    npmDepsHash = "sha256-CKxa0uL7pBQJiA2LPDA/HQvRk8sjphZ9nur8jb7BnU8=";
-    npmFlags = [ "--legacy-peer-deps" ];
-
     nativeBuildInputs = [
-      makeWrapper
+      nodejs
+      pnpmConfigHook
+      pnpmBuildHook
+      pnpm_10
     ];
+    pnpmDeps = fetchPnpmDeps {
+      inherit (finalAttrs) pname version src;
+      pnpm = pnpm_10;
+      fetcherVersion = 4;
+      hash = "sha256-KswQQVz2Xw/dG21134SObM3mQAKP2IHc+UM/BX/dvrI=";
+    };
+
+    env.BUILD_OUTPUT_PATH = "dist";
+
+    pnpmWorkspaces = [ "pocket-id-frontend" ];
 
     installPhase = ''
       runHook preInstall
 
-      # even though vite build creates most of the minified js files,
-      # it still needs a few packages from node_modules, try to strip that
-      npm prune --omit=dev --omit=optional $npmFlags
-      # larger seemingly unused packages
-      rm -r node_modules/{lucide-svelte,jiti,@swc,.bin}
-      # unused file types
-      for pattern in '*.map' '*.map.js' '*.ts'; do
-        find . -type f -name "$pattern" -exec rm {} +
-      done
-
-      mkdir -p $out/{bin,lib/pocket-id-frontend}
-      cp -r build $out/lib/pocket-id-frontend/dist
-      cp -r node_modules $out/lib/pocket-id-frontend/node_modules
-      makeWrapper ${lib.getExe nodejs} $out/bin/pocket-id-frontend \
-        --add-flags $out/lib/pocket-id-frontend/dist/index.js
+      mkdir -p $out/lib/pocket-id-frontend
+      cp -r frontend/dist $out/lib/pocket-id-frontend/dist
 
       runHook postInstall
     '';
   };
-
-  dontUnpack = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin
-    ln -s ${finalAttrs.backend}/bin/pocket-id-backend $out/bin/pocket-id-backend
-    ln -s ${finalAttrs.frontend}/bin/pocket-id-frontend $out/bin/pocket-id-frontend
-
-    runHook postInstall
-  '';
 
   passthru = {
     tests = {
@@ -88,8 +93,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     };
     updateScript = nix-update-script {
       extraArgs = [
-        "--subpackage"
-        "backend"
         "--subpackage"
         "frontend"
       ];
@@ -101,10 +104,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://pocket-id.org";
     changelog = "https://github.com/pocket-id/pocket-id/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
+    mainProgram = "pocket-id";
     maintainers = with lib.maintainers; [
       gepbird
       marcusramberg
+      tmarkus
       ymstnt
+      esch
     ];
     platforms = lib.platforms.unix;
   };

@@ -59,7 +59,7 @@ buildDotnetModule rec {
   };
 
   meta = {
-    description = "A small utility to modify the library paths from PInvoke in .NET assemblies.";
+    description = "Small utility to modify the library paths from PInvoke in .NET assemblies";
     homepage = "https://github.com/GGG-KILLER/patchcil";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ggg ];
@@ -67,7 +67,6 @@ buildDotnetModule rec {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
       "x86_64-windows"
       "i686-windows"

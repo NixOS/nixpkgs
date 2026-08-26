@@ -32,9 +32,14 @@ let
         );
       getSubModules = elemType.getSubModules;
       substSubModules = mod: matrixOf n m (elemType.substSubModules mod);
-      functor = (lib.defaultFunctor name) // {
-        wrapped = elemType;
-      };
+      functor = (
+        lib.types.elemTypeFunctor "attrsWith" {
+          inherit
+            elemType
+            name
+            ;
+        }
+      );
     };
 
   profileModule = lib.types.submodule {
@@ -232,7 +237,7 @@ let
   profileToFiles =
     name: profile:
     with profile;
-    lib.mkMerge ([
+    lib.mkMerge [
       {
         "xdg/autorandr/${name}/setup".text = lib.concatStringsSep "\n" (
           lib.mapAttrsToList fingerprintToString fingerprint
@@ -244,7 +249,7 @@ let
       (lib.mapAttrs' (hookToFile "${name}/postswitch.d") hooks.postswitch)
       (lib.mapAttrs' (hookToFile "${name}/preswitch.d") hooks.preswitch)
       (lib.mapAttrs' (hookToFile "${name}/predetect.d") hooks.predetect)
-    ]);
+    ];
   fingerprintToString = name: edid: "${name} ${edid}";
   configToString =
     name: config:
@@ -327,7 +332,7 @@ in
                     echo "Unknown profle: $AUTORANDR_CURRENT_PROFILE"
                     exit 1
                 esac
-                echo "Xft.dpi: $DPI" | ''${pkgs.xorg.xrdb}/bin/xrdb -merge
+                echo "Xft.dpi: $DPI" | ''${pkgs.xrdb}/bin/xrdb -merge
               ''';
             };
           }
@@ -373,12 +378,12 @@ in
 
     environment = {
       systemPackages = [ pkgs.autorandr ];
-      etc = lib.mkMerge ([
+      etc = lib.mkMerge [
         (lib.mapAttrs' (hookToFile "postswitch.d") cfg.hooks.postswitch)
         (lib.mapAttrs' (hookToFile "preswitch.d") cfg.hooks.preswitch)
         (lib.mapAttrs' (hookToFile "predetect.d") cfg.hooks.predetect)
         (lib.mkMerge (lib.mapAttrsToList profileToFiles cfg.profiles))
-      ]);
+      ];
     };
 
     systemd.services.autorandr = {

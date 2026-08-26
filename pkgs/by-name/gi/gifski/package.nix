@@ -6,19 +6,18 @@
   ffmpeg_6,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gifski";
-  version = "1.33.0";
+  version = "1.34.0";
 
   src = fetchFromGitHub {
     owner = "ImageOptim";
     repo = "gifski";
-    rev = version;
-    hash = "sha256-IjQ2PqjXhNvXknVxfphSSwQEWBuTkSxMFrbwd2trlVI=";
+    rev = finalAttrs.version;
+    hash = "sha256-8EAC8YH3AIbvYdTL7HtqTL7WqztzCwvDwIVkhiqvtrQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-2A7SDu9f7Tf74SAD72gCQ00Ccp3r2MaPo0qjVe3nR5s=";
+  cargoHash = "sha256-ZppSO3TyZBbNhG+YW71+C9kMu7ok2+kbnnCRbAKsbfs=";
 
   nativeBuildInputs = [
     pkg-config
@@ -44,9 +43,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "GIF encoder based on libimagequant (pngquant)";
     homepage = "https://gif.ski/";
-    changelog = "https://github.com/ImageOptim/gifski/releases/tag/${src.rev}";
+    changelog = "https://github.com/ImageOptim/gifski/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "gifski";
   };
-}
+})

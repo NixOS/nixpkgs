@@ -7,19 +7,18 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "teip";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "greymd";
     repo = "teip";
-    rev = "v${version}";
-    hash = "sha256-Lr4nlAM2mEKwF3HXso/6FQEKoQK43xxLMgOU7j7orYg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-isdp0EbHsge5vn4h1rKH2LCLFGp33BXew4SU48QKz7g=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-FFv/Msx6fXRJuRH8hjhBgc7XCg5EKWantNKQHwXpa4o=";
+  cargoHash = "sha256-YEgLNfES9ffxwz+mR+fjDONa2M0JxvKtmoYBORDaY8w=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -38,12 +37,12 @@ rustPlatform.buildRustPackage rec {
       --zsh completion/zsh/_teip
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to bypass a partial range of standard input to any command";
     mainProgram = "teip";
     homepage = "https://github.com/greymd/teip";
-    changelog = "https://github.com/greymd/teip/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/greymd/teip/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

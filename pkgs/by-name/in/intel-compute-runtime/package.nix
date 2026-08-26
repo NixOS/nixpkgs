@@ -10,15 +10,15 @@
   libva,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "intel-compute-runtime";
-  version = "25.13.33276.16";
+  version = "26.31.39395.13";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
-    tag = version;
-    hash = "sha256-dGOFWmgPOcSQtpfmYTTPLYeHfwba6gp9nJRF999hybw=";
+    tag = finalAttrs.version;
+    hash = "sha256-/rZvPEI5EFhkeW2h7ebhtZnrU48N54mCAfkRgM3b1L4=";
   };
 
   nativeBuildInputs = [
@@ -35,10 +35,15 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     (lib.cmakeBool "SKIP_UNIT_TESTS" true)
-    (lib.cmakeFeature "IGC_DIR" (builtins.toString intel-graphics-compiler))
+    (lib.cmakeFeature "IGC_DIR" (toString intel-graphics-compiler))
     (lib.cmakeFeature "OCL_ICD_VENDORDIR" "${placeholder "out"}/etc/OpenCL/vendors")
     # The install script assumes this path is relative to CMAKE_INSTALL_PREFIX
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    # disable spectre mitigations (already mitigated in the kernel)
+    # https://bugs.launchpad.net/ubuntu/+source/intel-compute-runtime/+bug/2110131
+    (lib.cmakeBool "NEO_DISABLE_MITIGATIONS" true)
+    # install ocloc without a version suffix
+    (lib.cmakeBool "NEO_BUILD_UNVERSIONED_OCLOC" true)
   ];
 
   outputs = [
@@ -69,16 +74,16 @@ stdenv.mkDerivation rec {
       $out/lib/intel-opencl/libigdrcl.so
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Intel Graphics Compute Runtime oneAPI Level Zero and OpenCL, supporting 12th Gen and newer";
     mainProgram = "ocloc";
     homepage = "https://github.com/intel/compute-runtime";
-    changelog = "https://github.com/intel/compute-runtime/releases/tag/${version}";
-    license = licenses.mit;
+    changelog = "https://github.com/intel/compute-runtime/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

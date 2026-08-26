@@ -3,34 +3,23 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  versionCheckHook,
 }:
 
-let
+buildGoModule (finalAttrs: {
   pname = "erigon";
-  version = "3.0.2";
-in
-buildGoModule {
-  inherit pname version;
+  version = "3.5.0";
 
   src = fetchFromGitHub {
-    owner = "ledgerwatch";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-1rMlRlEUheW6g3kigh+DjQxtNJOrqrADPkjQn7TQr1g=";
+    owner = "erigontech";
+    repo = "erigon";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Fpu7+E5g4U0lVQ33upHPe2AFCz9Y0h+MZyJMUHzISGs=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-tCohubwCk5HERoAaGWgEsl5kpI8w8dn0oZCZ2AxkKXk=";
+  vendorHash = "sha256-+FF4L6o8gPhbFF7EXumalmz/qVQOzNcIgfek9QEYEdA=";
   proxyVendor = true;
-
-  # Build errors in mdbx when format hardening is enabled:
-  #   cc1: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]
-  hardeningDisable = [ "format" ];
-
-  # Fix error: 'Caught SIGILL in blst_cgo_init'
-  # https://github.com/bnb-chain/bsc/issues/1521
-  CGO_CFLAGS = "-O -D__BLST_PORTABLE__";
-  CGO_CFLAGS_ALLOW = "-O -D__BLST_PORTABLE__";
 
   subPackages = [
     "cmd/erigon"
@@ -40,29 +29,38 @@ buildGoModule {
   ];
 
   # Matches the tags to upstream's release build configuration
-  # https://github.com/ledgerwatch/erigon/blob/0c0dbe5f3a81cf8f16da8e4838312ab80ebe5302/.goreleaser.yml
-  #
-  # Enabling silkworm also breaks the build as it requires dynamically linked libraries.
-  # If we need it in the future, we should consider packaging silkworm and silkworm-go
-  # as depenedencies explicitly.
+  # https://github.com/erigontech/erigon/blob/0a263a3d989f79310d78c3d42c27beef01d5dcb5/wmake.ps1#L415
   tags = [
     "nosqlite"
     "noboltdb"
+
+    # Enabling silkworm also breaks the build as it requires dynamically linked libraries:
+    # > Some binaries contain forbidden references to /build/.
+    #
+    # If we need it in the future, we should consider packaging silkworm and silkworm-go
+    # as dependencies explicitly.
     "nosilkworm"
   ];
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = with lib; {
-    homepage = "https://github.com/ledgerwatch/erigon/";
-    description = "Ethereum node implementation focused on scalability and modularity";
-    license = with licenses; [
-      lgpl3Plus
-      gpl3Plus
-    ];
-    maintainers = with maintainers; [
-      d-xo
-      happysalada
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      # avoid testing‐releases; erigon tags are v-prefixed
+      "--version-regex"
+      "^v?(\\d+\\.\\d+\\.\\d+)$"
     ];
   };
-}
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/erigon";
+
+  meta = {
+    homepage = "https://github.com/erigontech/erigon/";
+    description = "Erigon is an implementation of Ethereum (execution layer with embeddable consensus layer), on the efficiency frontier.";
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [
+      happysalada
+      pmw
+    ];
+  };
+})

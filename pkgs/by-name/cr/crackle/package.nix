@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "crackle";
-  version = "unstable-2020-12-13";
+  version = "0.1-unstable-2020-12-12";
 
   src = fetchFromGitHub {
     owner = "mikeryan";
@@ -25,11 +25,11 @@ stdenv.mkDerivation {
     "INSTALL=${coreutils}/bin/install"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Crack and decrypt BLE encryption";
     homepage = "https://github.com/mikeryan/crackle";
-    maintainers = with maintainers; [ moni ];
-    license = licenses.bsd2;
+    maintainers = with lib.maintainers; [ moni ];
+    license = lib.licenses.bsd2;
     mainProgram = "crackle";
   };
 }

@@ -13,8 +13,8 @@ let
 
 in
 symlinkJoin {
-
-  name = "vdr-with-plugins-${lib.getVersion vdr}";
+  pname = "vdr-with-plugins";
+  inherit (vdr) version;
 
   paths = [ vdr ] ++ plugins;
 
@@ -26,9 +26,12 @@ symlinkJoin {
       --prefix XINE_PLUGIN_PATH ":" ${lib.escapeShellArg (makeXinePluginPath requiredXinePlugins)}
   '';
 
-  meta = with vdr.meta; {
-    inherit license homepage;
+  meta = {
+    inherit (vdr.meta) license homepage;
     description =
-      description + " (with plugins: " + lib.concatStringsSep ", " (map (x: "" + x.name) plugins) + ")";
+      vdr.meta.description
+      + " (with plugins: "
+      + lib.concatStringsSep ", " (map (x: "" + x.name) plugins)
+      + ")";
   };
 }

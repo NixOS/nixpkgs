@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "helm-mapkubeapis";
-  version = "0.5.2";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm-mapkubeapis";
     rev = "v${version}";
-    hash = "sha256-0DIBdSi/WIHVF8O7OtJOaFnIfpObsUXzgpj25kJuS6E=";
+    hash = "sha256-RvyoqfhvoXESmc6M4B1XeUtal0zQt6LCKjByyBe6pUU=";
   };
 
-  vendorHash = "sha256-G3Q8XCwKLgHeWLF46C5lWfvuynr/cJbkq7xdydfTHZ4=";
+  vendorHash = "sha256-ZnfNje0JuTCckW9SMc2TLb968nHiGK/bgOJnIllJJq4=";
 
   # NOTE: Remove the install and upgrade hooks.
   postPatch = ''
@@ -32,7 +32,7 @@ buildGoModule rec {
   meta = {
     description = "Helm plugin which maps deprecated or removed Kubernetes APIs in a release to supported APIs";
     homepage = "https://github.com/helm/helm-mapkubeapis";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aos ];
   };
 }

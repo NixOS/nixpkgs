@@ -16,9 +16,9 @@
   xvfb-run,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgedit-amtk";
-  version = "5.9.1";
+  version = "5.10.0";
 
   outputs = [
     "out"
@@ -31,23 +31,23 @@ stdenv.mkDerivation rec {
     group = "World";
     owner = "gedit";
     repo = "libgedit-amtk";
-    rev = version;
-    hash = "sha256-myKpZtqtf40UByBUKVF0jv521kGAUA6KDmbDJy/Q1q8=";
+    tag = finalAttrs.version;
+    forceFetchGit = true; # To avoid occasional 501 failures.
+    hash = "sha256-wA5KRA1qWJzw5JRXQL/kP2BgCQiNhf6aIe6RppBEH90=";
   };
 
   strictDeps = true;
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gobject-introspection
-      gtk-doc
-      docbook-xsl-nons
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    gtk-doc
+    docbook-xsl-nons
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   propagatedBuildInputs = [
     # Required by libgedit-amtk-5.pc
@@ -71,17 +71,16 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = gitUpdater { ignoredVersions = "(alpha|beta|rc).*"; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/World/gedit/libgedit-amtk";
-    changelog = "https://gitlab.gnome.org/World/gedit/libgedit-amtk/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/World/gedit/libgedit-amtk/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Actions, Menus and Toolbars Kit for GTK applications";
-    maintainers = with maintainers; [
-      manveru
+    maintainers = with lib.maintainers; [
       bobby285271
     ];
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

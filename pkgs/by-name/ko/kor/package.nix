@@ -2,37 +2,41 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kor";
-  version = "0.6.1";
+  version = "0.6.8";
 
   src = fetchFromGitHub {
     owner = "yonahd";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-jqP2GsqliltjabbHDcRseMz7TOWl9YofAG/4Y7ADub8=";
+    repo = "kor";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-B3YKmexo41Ms7MrjoTBdeVaIeN4YuCO7WBrkhoGzP2c=";
   };
 
-  vendorHash = "sha256-HZS1PPlra1uGBuerGs5X9poRzn7EGhTopKaC9tkhjlo=";
+  vendorHash = "sha256-vC5GgJI80HsDIYP0oZZk/Tlvy36QZZZDNxz68EDyb8Y=";
 
-  preCheck = ''
-    HOME=$(mktemp -d)
-    export HOME
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   ldflags = [
     "-s"
     "-w"
+    "-X github.com/yonahd/kor/pkg/utils.Version=${finalAttrs.version}"
   ];
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
+
+  meta = {
     description = "Golang Tool to discover unused Kubernetes Resources";
     homepage = "https://github.com/yonahd/kor";
-    changelog = "https://github.com/yonahd/kor/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = [ maintainers.ivankovnatsky ];
+    changelog = "https://github.com/yonahd/kor/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.ivankovnatsky ];
     mainProgram = "kor";
   };
-}
+})

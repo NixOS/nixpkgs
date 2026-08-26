@@ -1,45 +1,37 @@
 {
   lib,
-  asgiref,
   buildPythonPackage,
   certifi,
-  charset-normalizer,
   cvss,
   deepl,
   django,
   fetchFromGitHub,
   gql,
-  idna,
-  markdown-it-py,
-  mdurl,
-  pygments,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   rich,
   setuptools,
   sqlparse,
   termcolor,
-  tomli,
   tomli-w,
+  tomli,
   tomlkit,
   urllib3,
+  writableTmpDirAsHomeHook,
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "reptor";
-  version = "0.28";
+  version = "0.34";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Syslifters";
     repo = "reptor";
-    tag = version;
-    hash = "sha256-hzdgG2/bTkzTUPK/Rnch4q12R5kY+qlr6gRwx54vbcE=";
+    tag = finalAttrs.version;
+    hash = "sha256-L4w9QWyj+NyImQKLKWfdosLl+qytPqa+eyRw6p/4GgA=";
   };
 
   pythonRelaxDeps = true;
@@ -47,23 +39,16 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    asgiref
     certifi
-    charset-normalizer
     cvss
     django
-    idna
-    markdown-it-py
-    mdurl
-    pygments
     pyyaml
     requests
     rich
-    sqlparse
     termcolor
     tomli
-    tomlkit
     tomli-w
+    tomlkit
     urllib3
     xmltodict
   ];
@@ -75,32 +60,26 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     export PATH="$PATH:$out/bin";
   '';
 
   pythonImportsCheck = [ "reptor" ];
 
-  disabledTestPaths = [
-    # Tests want to use pip install dependencies
-    "reptor/plugins/importers/GhostWriter/tests/test_ghostwriter.py"
-  ];
-
-  disabledTests = [
+  disabledTestMarks = [
     # Tests need network access
-    "TestDummy"
-    "TestIntegration"
+    "integration"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to do automated pentest reporting with SysReptor";
     homepage = "https://github.com/Syslifters/reptor";
-    changelog = "https://github.com/Syslifters/reptor/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Syslifters/reptor/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "reptor";
   };
-}
+})

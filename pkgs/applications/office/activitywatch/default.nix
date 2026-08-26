@@ -1,8 +1,6 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
-  fetchpatch,
   rustPlatform,
   makeWrapper,
   pkg-config,
@@ -16,6 +14,7 @@
   qtsvg,
   xdg-utils,
   replaceVars,
+  nodejs_22,
   buildNpmPackage,
 }:
 
@@ -41,7 +40,7 @@ rec {
 
     dependencies = with python3Packages; [
       aw-client
-      xlib
+      python-xlib
       pynput
     ];
 
@@ -51,12 +50,12 @@ rec {
 
     pythonImportsCheck = [ "aw_watcher_afk" ];
 
-    meta = with lib; {
+    meta = {
       description = "Watches keyboard and mouse activity to determine if you are AFK or not (for use with ActivityWatch)";
       homepage = "https://github.com/ActivityWatch/aw-watcher-afk";
-      maintainers = with maintainers; [ huantian ];
+      maintainers = with lib.maintainers; [ huantian ];
       mainProgram = "aw-watcher-afk";
-      license = licenses.mpl20;
+      license = lib.licenses.mpl20;
     };
   };
 
@@ -71,7 +70,7 @@ rec {
 
     dependencies = with python3Packages; [
       aw-client
-      xlib
+      python-xlib
     ];
 
     pythonRelaxDeps = [
@@ -80,12 +79,12 @@ rec {
 
     pythonImportsCheck = [ "aw_watcher_window" ];
 
-    meta = with lib; {
+    meta = {
       description = "Cross-platform window watcher (for use with ActivityWatch)";
       homepage = "https://github.com/ActivityWatch/aw-watcher-window";
-      maintainers = with maintainers; [ huantian ];
+      maintainers = with lib.maintainers; [ huantian ];
       mainProgram = "aw-watcher-window";
-      license = licenses.mpl20;
+      license = lib.licenses.mpl20;
       badPlatforms = lib.platforms.darwin; # requires pyobjc-framework
     };
   };
@@ -142,12 +141,12 @@ rec {
 
     pythonImportsCheck = [ "aw_qt" ];
 
-    meta = with lib; {
+    meta = {
       description = "Tray icon that manages ActivityWatch processes, built with Qt";
       homepage = "https://github.com/ActivityWatch/aw-qt";
-      maintainers = with maintainers; [ huantian ];
+      maintainers = with lib.maintainers; [ huantian ];
       mainProgram = "aw-qt";
-      license = licenses.mpl20;
+      license = lib.licenses.mpl20;
       badPlatforms = lib.platforms.darwin; # requires pyobjc-framework
     };
   };
@@ -161,6 +160,12 @@ rec {
     pyproject = true;
     build-system = [ python3Packages.poetry-core ];
 
+    patches = [
+      # Backport desktop-notifier 6 / rubicon-objc 0.5 support.
+      # https://github.com/ActivityWatch/aw-notify/pull/10
+      ./aw-notify-desktop-notifier-6.patch
+    ];
+
     dependencies = with python3Packages; [
       aw-client
       desktop-notifier
@@ -172,12 +177,12 @@ rec {
 
     pythonImportsCheck = [ "aw_notify" ];
 
-    meta = with lib; {
+    meta = {
       description = "Desktop notification service for ActivityWatch";
       homepage = "https://github.com/ActivityWatch/aw-notify";
-      maintainers = with maintainers; [ huantian ];
+      maintainers = with lib.maintainers; [ huantian ];
       mainProgram = "aw-notify";
-      license = licenses.mpl20;
+      license = lib.licenses.mpl20;
     };
   };
 
@@ -187,7 +192,6 @@ rec {
 
     src = "${sources}/aw-server-rust";
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-E89E/LWBPHtb6vX94swodmE+UrWMrzQnm8AO5GeyuoA=";
 
     patches = [
@@ -215,13 +219,13 @@ rec {
       export HOME="$TMPDIR"
     '';
 
-    meta = with lib; {
+    meta = {
       description = "High-performance implementation of the ActivityWatch server, written in Rust";
       homepage = "https://github.com/ActivityWatch/aw-server-rust";
-      maintainers = with maintainers; [ huantian ];
+      maintainers = with lib.maintainers; [ huantian ];
       mainProgram = "aw-server";
-      platforms = platforms.linux;
-      license = licenses.mpl20;
+      platforms = lib.platforms.linux;
+      license = lib.licenses.mpl20;
     };
   };
 
@@ -231,9 +235,11 @@ rec {
 
     src = "${sources}/aw-server-rust/aw-webui";
 
+    nodejs = nodejs_22;
     npmDepsHash = "sha256-fPk7UpKuO3nEN1w+cf9DIZIG1+XRUk6PJfVmtpC30XE=";
 
     makeCacheWritable = true;
+    npmFlags = [ "--legacy-peer-deps" ];
 
     patches = [
       # Hardcode version to avoid the need to have the Git repo available at build time.
@@ -256,11 +262,11 @@ rec {
       runHook postCheck
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Web-based UI for ActivityWatch, built with Vue.js";
       homepage = "https://github.com/ActivityWatch/aw-webui/";
-      maintainers = with maintainers; [ huantian ];
-      license = licenses.mpl20;
+      maintainers = with lib.maintainers; [ huantian ];
+      license = lib.licenses.mpl20;
     };
   };
 }

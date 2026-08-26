@@ -8,6 +8,7 @@
   fetchFromGitHub,
   fetchpatch,
   autoreconfHook,
+  bashNonInteractive,
   pkg-config,
   python3,
   glib,
@@ -23,15 +24,15 @@ let
     forOCF = true;
   };
 
-  resource-agentsForOCF = stdenv.mkDerivation rec {
+  resource-agentsForOCF = stdenv.mkDerivation (finalAttrs: {
     pname = "resource-agents";
     version = "4.10.0";
 
     src = fetchFromGitHub {
       owner = "ClusterLabs";
-      repo = pname;
-      rev = "v${version}";
-      sha256 = "0haryi3yrszdfpqnkfnppxj1yiy6ipah6m80snvayc7v0ss0wnir";
+      repo = "resource-agents";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-OVoOtAb7MK+21QBVA9WNxkcfZL/Xumnxde3r7Ef0WUE=";
     };
 
     patches = [
@@ -47,12 +48,15 @@ let
     nativeBuildInputs = [
       autoreconfHook
       pkg-config
+      python3
     ];
 
     buildInputs = [
+      bashNonInteractive
       glib
-      python3
     ];
+
+    strictDeps = true;
 
     env.NIX_CFLAGS_COMPILE = toString (
       lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
@@ -61,17 +65,17 @@ let
       ]
     );
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/ClusterLabs/resource-agents";
       description = "Combined repository of OCF agents from the RHCS and Linux-HA projects";
-      license = licenses.gpl2Plus;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [
+      license = lib.licenses.gpl2Plus;
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [
         ryantm
         astro
       ];
     };
-  };
+  });
 
 in
 

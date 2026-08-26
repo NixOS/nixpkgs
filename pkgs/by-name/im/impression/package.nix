@@ -17,25 +17,27 @@
   glib,
   gtk4,
   libadwaita,
+  libcdio,
   openssl,
   pango,
+  wimlib,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "impression";
-  version = "3.3.0";
+  version = "3.8.0";
 
   src = fetchFromGitLab {
     owner = "adhami3310";
     repo = "Impression";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-F2ZyATDKnUgEOAI++54fR6coJOr9rtyGm5TzsKzkDmg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kUes+hNtoi6jvZFDon2pFUPsLq7wOJ2SDrPBGzg3AIo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-mQyGQXEFmMkTvkZcniws/11u1RqnsxgNi9dvYn1Mx0o=";
+    hash = "sha256-PL+PJ5Diy9WvAuBJQQNp8bvjPK3Uvd0Um/B6lZHypXw=";
   };
 
   nativeBuildInputs = [
@@ -57,8 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk4
     libadwaita
+    libcdio
     openssl
     pango
+    wimlib
   ];
 
   passthru = {
@@ -68,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Straight-forward and modern application to create bootable drives";
     homepage = "https://gitlab.com/adhami3310/Impression";
+    changelog = "https://gitlab.com/adhami3310/Impression/-/releases/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     mainProgram = "impression";
     maintainers = with lib.maintainers; [ dotlambda ];

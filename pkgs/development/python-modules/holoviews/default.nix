@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -16,21 +17,22 @@
   pyviz-comms,
 
   # tests
-  pytestCheckHook,
-  pytest-asyncio,
   flaky,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "holoviews";
-  version = "1.20.2";
+  version = "1.23.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "holoviz";
     repo = "holoviews";
-    tag = "v${version}";
-    hash = "sha256-QCRVOBMKckPji5rH7iCSnmxbNwtGypMqdfBXilXmngE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+s7AzER7ipiqjiZL9vmno16MmhSK8Sz9LYLQ2cxNM6Y=";
   };
 
   postPatch = ''
@@ -53,9 +55,9 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-asyncio
     flaky
+    pytest-asyncio
+    pytestCheckHook
   ];
 
   disabledTests = [
@@ -72,16 +74,20 @@ buildPythonPackage rec {
 
     # ModuleNotFoundError: No module named 'param'
     "test_no_blocklist_imports"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fails due to font rendering differences
+    "test_categorical_axis_fontsize_both"
   ];
 
   pythonImportsCheck = [ "holoviews" ];
 
   meta = {
     description = "Python data analysis and visualization seamless and simple";
-    changelog = "https://github.com/holoviz/holoviews/releases/tag/v${version}";
+    changelog = "https://github.com/holoviz/holoviews/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "holoviews";
     homepage = "https://www.holoviews.org/";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

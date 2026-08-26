@@ -10,13 +10,13 @@
   yarnConfigHook,
 }:
 let
-  version = "0.92.0";
+  version = "0.93.0";
 
   src = fetchFromGitHub {
     owner = "statping-ng";
     repo = "statping-ng";
     tag = "v${version}";
-    hash = "sha256-E4sVIa8sKmjRcduATTHLklkr+LKX6KucDw42uVFhK4g=";
+    hash = "sha256-VVM3Jyahs0OQuHiF/r+U9vq9TBOFOtuTzBurAhR1Dhc=";
   };
 
   frontend = stdenv.mkDerivation {
@@ -93,7 +93,7 @@ buildGoModule rec {
   meta = {
     description = "Status Page for monitoring your websites and applications with beautiful graphs, analytics, and plugins";
     homepage = "https://github.com/statping-ng/statping-ng";
-    changelog = "https://github.com/statping-ng/statping-ng/releases/tag/v${src.tag}";
+    changelog = "https://github.com/statping-ng/statping-ng/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       FKouhai

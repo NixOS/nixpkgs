@@ -4,20 +4,25 @@
   buildGoModule,
   fetchFromGitHub,
   openssl,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tootik";
-  version = "0.15.6";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "dimkr";
     repo = "tootik";
-    tag = version;
-    hash = "sha256-pM8lMEdXuIBNXbWTXG8JIL9LZY0EuXR4ucrvGlxMMks=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WNvoY1SHjhH6nUz3L6GZ+yS+XHmcurjl7LahKtR44d8=";
   };
 
-  vendorHash = "sha256-04H2+O8gGaoHne/OhyBLgiwXEcL7pYPoHuw8t3C5aTE=";
+  proxyVendor = true;
+  vendorHash = "sha256-oNyN/az26DNYIfFvOE8zjIYqOCvo5ifndhgq1hwbHvM=";
+
+  subPackages = [ "cmd/tootik" ];
 
   nativeBuildInputs = [ openssl ];
 
@@ -25,11 +30,18 @@ buildGoModule rec {
     go generate ./migrations
   '';
 
-  ldflags = [ "-X github.com/dimkr/tootik/buildinfo.Version=${version}" ];
+  ldflags = [ "-X github.com/dimkr/tootik/buildinfo.Version=${finalAttrs.version}" ];
 
   tags = [ "fts5" ];
 
   doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Federated nanoblogging service with a Gemini frontend";
@@ -38,4 +50,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "tootik";
   };
-}
+})

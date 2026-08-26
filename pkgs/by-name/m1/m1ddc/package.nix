@@ -1,8 +1,8 @@
 {
   stdenv,
-  darwin,
   fetchFromGitHub,
   lib,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,9 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail kIOMainPortDefault kIOMasterPortDefault
   '';
 
-  buildInputs = with darwin.apple_sdk_11_0.frameworks; [
-    CoreDisplay
-    Foundation
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
+  nativeBuildInputs = [
+    writableTmpDirAsHomeHook
   ];
 
   installPhase = ''
@@ -38,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/waydabber/m1ddc";
     license = lib.licenses.mit;
     mainProgram = "m1ddc";
-    maintainers = [ lib.maintainers.joanmassachs ];
+    maintainers = [ lib.maintainers.amarshall ];
     platforms = [ "aarch64-darwin" ];
   };
 })

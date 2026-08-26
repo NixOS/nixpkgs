@@ -10,7 +10,7 @@
   gnumake42,
   doCheck ? true,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "redo-apenwarr";
   version = "0.42d";
@@ -18,35 +18,42 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub rec {
     owner = "apenwarr";
     repo = "redo";
-    rev = "${repo}-${version}";
+    rev = "${repo}-${finalAttrs.version}";
     sha256 = "/QIMXpVhVLAIJa3LiOlRKzbUztIWZygkWZUKN4Nrh+M=";
   };
 
-  postPatch =
-    ''
+  postPatch = ''
 
-      patchShebangs minimal/do
+    patchShebangs minimal/do
 
-    ''
-    + lib.optionalString doCheck ''
-      unset CC CXX
+  ''
+  + lib.optionalString doCheck ''
+    unset CC CXX
 
-      substituteInPlace minimal/do.test \
-        --replace "/bin/pwd" "${coreutils}/bin/pwd"
+    substituteInPlace minimal/do.test \
+      --replace-fail "/bin/pwd" "${coreutils}/bin/pwd"
 
-      substituteInPlace t/105-sympath/all.do \
-        --replace "/bin/pwd" "${coreutils}/bin/pwd"
+    substituteInPlace t/105-sympath/all.do \
+      --replace-fail "/bin/pwd" "${coreutils}/bin/pwd"
 
-      substituteInPlace t/all.do \
-        --replace "/bin/ls" "ls"
+    substituteInPlace t/all.do \
+      --replace-fail "/bin/ls" "ls"
 
-      substituteInPlace t/110-compile/hello.o.do \
-        --replace "/usr/include" "${lib.getDev stdenv.cc.libc}/include"
+    substituteInPlace t/110-compile/hello.o.do \
+      --replace-fail "/usr/include" "${lib.getDev stdenv.cc.libc}/include"
 
-      substituteInPlace t/200-shell/nonshelltest.do \
-        --replace "/usr/bin/env perl" "${perl}/bin/perl"
+    substituteInPlace t/200-shell/nonshelltest.do \
+      --replace-fail "/usr/bin/env perl" "${perl}/bin/perl"
 
-    '';
+    # See https://github.com/apenwarr/redo/pull/47
+    substituteInPlace minimal/do \
+      --replace-fail 'cd "$dodir"' 'cd "''${dodir:-.}"'
+
+    # the tests refer to /etc/passwd (as an arbitrarily-chosen absolute-path file that won't change),
+    # but that fails under sandboxing. Replace it with another arbrarily-chosen file that won't change:
+    substituteInPlace t/105-sympath/all.do \
+      --replace-fail "/etc/passwd" "${coreutils}/bin/pwd"
+  '';
 
   inherit doCheck;
 
@@ -64,11 +71,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     python3
-    (with python3.pkgs; [
-      beautifulsoup4
-      markdown
-    ])
     which
+    python3.pkgs.beautifulsoup4
+    python3.pkgs.markdown
     installShellFiles
     gnumake42 # fails with make 4.4
   ];
@@ -77,14 +82,13 @@ stdenv.mkDerivation rec {
     installShellCompletion --bash contrib/bash_completion.d/redo
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Smaller, easier, more powerful, and more reliable than make. An implementation of djb's redo";
     homepage = "https://github.com/apenwarr/redo";
-    maintainers = with maintainers; [
-      andrewchambers
+    maintainers = with lib.maintainers; [
       ck3d
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     platforms = python3.meta.platforms;
   };
-}
+})

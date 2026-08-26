@@ -2,19 +2,21 @@
   lib,
   rustPlatform,
   fetchCrate,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hayagriva";
-  version = "0.8.1";
+  version = "0.10.1";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-JZfkYrb4Gn6oP+kcFj7kC10r1aSddigGZPRx18pr5Gg=";
+    inherit (finalAttrs) version;
+    pname = "hayagriva";
+    hash = "sha256-bWCBKWuTyDoCQwzbqaHOD/1AZ/aNrwet1+E5iL6JcbA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-2KlZTOp78HITJMRLNzw1bTUQSYeg5SmquRJWwwG3Xfw=";
+  cargoHash = "sha256-Dz7XmnIW3F2KV54jE1ZqqZLvUDJ88MfHn3tWoASeTkM=";
 
   buildFeatures = [ "cli" ];
 
@@ -27,15 +29,21 @@ rustPlatform.buildRustPackage rec {
     "--skip=csl::tests::test_csl"
   ];
 
-  meta = with lib; {
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Work with references: Literature database management, storage, and citation formatting";
     homepage = "https://github.com/typst/hayagriva";
-    changelog = "https://github.com/typst/hayagriva/releases/tag/v${version}";
-    license = with licenses; [
+    changelog = "https://github.com/typst/hayagriva/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ trespaul ];
     mainProgram = "hayagriva";
   };
-}
+})

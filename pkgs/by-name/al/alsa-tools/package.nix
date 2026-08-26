@@ -3,9 +3,9 @@
   stdenv,
   fetchurl,
   alsa-lib,
-  fltk13,
-  gtk2,
+  fltk_1_3,
   gtk3,
+  gtk4,
   makeWrapper,
   pkg-config,
   psmisc,
@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-tools";
-  version = "1.2.14";
+  version = "1.2.15";
 
   src = fetchurl {
     url = "mirror://alsa/tools/alsa-tools-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-+u9v3TnsecmlRz3GOqG2Mxv3ZkqdRSoKgZjOxwFsvG8=";
+    hash = "sha256-gASY01IzZy72f0v3TMbh034f5wwFQOLS4GLyMZ57Xfc=";
   };
 
   nativeBuildInputs = [
@@ -27,15 +27,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     alsa-lib
-    fltk13
-    gtk2
+    fltk_1_3
     gtk3
+    gtk4
     psmisc
   ];
 
   env.TOOLSET = lib.concatStringsSep " " [
     "as10k1"
-    "echomixer"
+    # "echomixer" # Requires gtk2
     "envy24control"
     "hda-verb"
     "hdajackretask"
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     # "qlo10k1" # needs Qt
     "mixartloader"
     "pcxhrloader"
-    "rmedigicontrol"
+    # "rmedigicontrol" # Requires gtk2
     "sb16_csp"
     # "seq" # mysterious configure error
     "sscape_ctl"

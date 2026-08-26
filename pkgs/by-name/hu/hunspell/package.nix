@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hunspell";
-  version = "1.7.2";
+  version = "1.7.3";
 
   outputs = [
     "bin"
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "hunspell";
     repo = "hunspell";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-x2FXxnVIqsf5/UEQcvchAndXBv/3mW8Z55djQAFgNA8=";
+    hash = "sha256-NoLlH+4Hb6w+HYl2fSBzroav1Pb3GojFSTJGBxlteBM=";
   };
 
   patches = [ ./0001-Make-hunspell-look-in-XDG_DATA_DIRS-for-dictionaries.patch ];
@@ -58,13 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "format" ];
 
   passthru = {
+    withDicts = callPackage ./wrapper.nix { hunspell = finalAttrs.finalPackage; };
     tests = {
       pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
       version = testers.testVersion { package = finalAttrs.finalPackage; };
-      wrapper = callPackage ./wrapper.nix {
-        hunspell = finalAttrs.finalPackage;
-        dicts = [ hunspellDicts.en_US ];
-      };
+      wrapper = finalAttrs.finalPackage.withDicts (d: [ d.en_US ]);
     };
 
     updateScript = nix-update-script { };
@@ -95,11 +93,14 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://hunspell.github.io/";
     changelog = "https://github.com/hunspell/hunspell/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [
-      gpl2
-      lgpl21
+      gpl2Plus
+      lgpl21Plus
       mpl11
     ];
-    maintainers = with lib.maintainers; [ getchoo ];
+    maintainers = with lib.maintainers; [
+      getchoo
+      RossSmyth
+    ];
     mainProgram = "hunspell";
     platforms = lib.platforms.all;
     pkgConfigModules = [ "hunspell" ];

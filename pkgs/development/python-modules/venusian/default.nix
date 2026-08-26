@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy27,
   pytestCheckHook,
   pytest-cov-stub,
   setuptools,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "venusian";
   version = "3.1.1";
   pyproject = true;
-
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
@@ -31,10 +28,10 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library for deferring decorator actions";
     homepage = "https://pylonsproject.org/";
-    license = licenses.bsd0;
-    maintainers = with maintainers; [ domenkozar ];
+    license = lib.licenses.bsd0;
+    maintainers = [ ];
   };
 }

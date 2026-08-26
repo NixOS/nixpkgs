@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "matplotx";
   version = "0.3.10";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nschloe";

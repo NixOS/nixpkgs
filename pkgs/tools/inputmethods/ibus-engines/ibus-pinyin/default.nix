@@ -48,7 +48,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     isIbusEngine = true;
-    description = "The PinYin engine for IBus";
+    description = "PinYin engine for IBus";
+    homepage = "https://github.com/ibus/ibus-pinyin";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ azuwis ];
     platforms = lib.platforms.linux;

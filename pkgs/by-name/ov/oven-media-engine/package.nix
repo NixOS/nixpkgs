@@ -2,13 +2,14 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  callPackage,
+  ffmpeg-ome ? callPackage ./ffmpeg-ome-minimal.nix { },
   srt,
   bc,
   pkg-config,
   perl,
   openssl,
   zlib,
-  ffmpeg,
   libvpx,
   libopus,
   libuuid,
@@ -16,23 +17,23 @@
   jemalloc,
   pcre2,
   hiredis,
+  spdlog,
+  whisper-cpp,
 }:
 
 stdenv.mkDerivation rec {
   pname = "oven-media-engine";
-  version = "0.17.1";
+  version = "0.20.5";
 
   src = fetchFromGitHub {
-    owner = "AirenSoft";
+    owner = "OvenMediaLabs";
     repo = "OvenMediaEngine";
     rev = "v${version}";
-    sha256 = "sha256-fYvP1mk32lrnYxWdpI1WqEUxAfHsQH3Ng0JLC/GbjrY=";
+    sha256 = "sha256-GIjQ8lTZ0jEcZkhvx7lQ8sbHJ9KbJT77FsNt2Ca997Y=";
   };
 
   patches = [
-    # ffmpeg 7.0 Update: Use new channel layout
-    # https://github.com/AirenSoft/OvenMediaEngine/pull/1626
-    ./support-ffmpeg-7.patch
+    ./compat.patch
   ];
 
   makeFlags = [
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
     openssl
     srt
     zlib
-    ffmpeg
+    ffmpeg-ome
     libvpx
     libopus
     srtp
@@ -63,6 +64,8 @@ stdenv.mkDerivation rec {
     pcre2
     libuuid
     hiredis
+    spdlog
+    whisper-cpp
   ];
 
   preBuild = ''
@@ -83,12 +86,15 @@ stdenv.mkDerivation rec {
     install -Dm0644 ../misc/conf_examples/Logger.xml $out/share/examples/edge_conf/Logger.xml
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open-source streaming video service with sub-second latency";
     mainProgram = "OvenMediaEngine";
     homepage = "https://ovenmediaengine.com";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ lukegb ];
-    platforms = platforms.linux;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
+      lukegb
+      findus
+    ];
+    platforms = lib.platforms.linux;
   };
 }

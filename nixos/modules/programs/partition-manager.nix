@@ -15,7 +15,7 @@ in
     programs.partition-manager = {
       enable = lib.mkEnableOption "KDE Partition Manager";
 
-      package = lib.mkPackageOption pkgs [ "libsForQt5" "partitionmanager" ] { };
+      package = lib.mkPackageOption pkgs [ "kdePackages" "partitionmanager" ] { };
     };
   };
 

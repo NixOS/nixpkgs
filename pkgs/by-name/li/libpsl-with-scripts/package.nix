@@ -35,7 +35,7 @@ stdenv.mkDerivation {
         cd -
       '';
       links = lib.concatMapStrings (
-        output: linkOutput libpsl.${output} (builtins.placeholder output)
+        output: linkOutput libpsl.${output} (placeholder output)
       ) libpsl.outputs;
     in
     ''

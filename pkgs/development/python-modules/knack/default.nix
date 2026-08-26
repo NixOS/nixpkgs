@@ -12,19 +12,16 @@
   mock,
   vcrpy,
   pytest,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "knack";
-  version = "0.12.0";
+  version = "0.14.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cfKmtCrpowLkMkMyD6Be2wmxkzn88fMx9bbQe/l/UpE=";
+    hash = "sha256-Ld0y/WND7Jtu0NpymyEjYtDmsSCMAWJjPJDLb5SgWHc=";
   };
 
   propagatedBuildInputs = [
@@ -49,12 +46,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "knack" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/microsoft/knack";
     description = "Command-Line Interface framework";
     changelog = "https://github.com/microsoft/knack/blob/v${version}/HISTORY.rst";
-    platforms = platforms.all;
-    license = licenses.mit;
+    platforms = lib.platforms.all;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

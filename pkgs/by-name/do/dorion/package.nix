@@ -1,66 +1,212 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  dpkg,
+  fetchFromGitHub,
+  rustPlatform,
+  cmake,
+  ninja,
+  makeBinaryWrapper,
+  wrapGAppsHook4,
   glib-networking,
   gst_all_1,
-  libappindicator,
+  libsysprof-capture,
   libayatana-appindicator,
-  webkitgtk_4_0,
-  wrapGAppsHook3,
+  nodejs,
+  openssl,
+  pkg-config,
+  yq-go,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  webkitgtk_4_1,
+  cargo-tauri,
+  desktop-file-utils,
+  pipewire,
+  apple-sdk_15,
+  darwin,
+  shelter,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  webkitgtk_4_1' = webkitgtk_4_1.override {
+    enableExperimental = true;
+  };
+in
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dorion";
-  version = "5.0.1";
+  version = "6.13.0";
 
-  src = fetchurl {
-    url = "https://github.com/SpikeHD/Dorion/releases/download/v${finalAttrs.version}/Dorion_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-cCZikTZ+IU3mq/FkJfeggXLyWIsWG+a2qu1GbgW93WQ=";
+  src = fetchFromGitHub {
+    owner = "SpikeHD";
+    repo = "Dorion";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3AQX1q3qpu/QKqigmCvLKQJzQpsTnYgwT+1VWA+gIz0=";
   };
 
-  unpackCmd = ''
-    dpkg -X $curSrc .
-  '';
+  cargoRoot = "src-tauri";
+  buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  runtimeDependencies = [
-    glib-networking
-    libappindicator
-    libayatana-appindicator
+  cargoHash = "sha256-p/mj3BL61HlLpN3nqNkVExu0mWaMawg9I2+dKeFUOJ8=";
+
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-i20NSlWot8DmjSpdIGd2ne/82HyPB1cdxkBSxbOLA/8=";
+  };
+
+  # CMake (webkit extension, Linux only)
+  cmakeDir = ".";
+  cmakeBuildDir = "src-tauri/extension_webkit";
+  dontUseCmakeConfigure = true;
+  dontUseNinjaBuild = true;
+  dontUseNinjaCheck = true;
+  dontUseNinjaInstall = true;
+  cmakeFlags = [
+    "-GNinja"
   ];
 
   nativeBuildInputs = [
-    autoPatchelfHook
-    dpkg
-    wrapGAppsHook3
+    pnpmConfigHook
+    pnpm_10
+    cargo-tauri.hook
+    nodejs
+    pkg-config
+    yq-go
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wrapGAppsHook4
+    desktop-file-utils
+    cmake
+    ninja
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeBinaryWrapper
+    darwin.autoSignDarwinBinariesHook
   ];
 
   buildInputs = [
-    glib-networking
-    gst_all_1.gst-plugins-bad
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    webkitgtk_4_1'
+    gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-good
-    webkitgtk_4_0
+    gst_all_1.gst-plugins-rs
+    glib-networking
+    libsysprof-capture
+    libayatana-appindicator
+    pipewire
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_15
   ];
 
-  installPhase = ''
-    runHook preInstall
+  postPatch = ''
+    # remove updater
+    rm -rf updater
 
-    mkdir -pv $out
-    mv -v {bin,lib,share} $out
+    # disable pre-build script and disable auto-updater
+    yq -iPo=json '
+      .bundle.resources = (.bundle.resources | map(select(. != "updater*")))
+    ' src-tauri/tauri.conf.json
 
-    runHook postInstall
+    # link shelter injection
+    ln -s ${shelter}/shelter.js src-tauri/injection/shelter.js
+
+    # link html/frontend data
+    ln -s "$(pwd)/src" src-tauri/html
+  ''
+  # disable Tauri's built-in codesigning
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    yq -iPo=json '
+      .bundle.macOS.signingIdentity = null
+    ' src-tauri/tauri.conf.json
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace "$cargoDepsCopy"/*/libappindicator-sys-*/src/lib.rs \
+      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
   '';
 
+  configurePhase = ''
+    runHook preConfigure
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    cmakeConfigurePhase
+  ''
+  + ''
+    pnpmConfigHook
+    runHook postConfigure
+  '';
+
+  buildPhase =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      ninjaBuildPhase
+      cd ../..
+    ''
+    + ''
+      tauriBuildHook
+    '';
+
+  postInstall = ''
+    mkdir -p "$out/lib/Dorion"
+    ln -s "$out/lib/Dorion" "$out/lib/dorion"
+    rm -rf "$out/lib/Dorion/injection"
+    cp -r src-tauri/injection "$out/lib/Dorion"
+    cp -r src "$out/lib/Dorion"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    desktop-file-edit \
+      --set-comment "Tiny alternative Discord client" \
+      --set-key="Exec" --set-value="Dorion %U" \
+      --set-key="TryExec" --set-value="Dorion" \
+      --set-key="StartupWMClass" --set-value="Dorion" \
+      --set-key="StartupNotify" --set-value="true" \
+      --set-key="Categories" --set-value="Network;InstantMessaging;Chat;" \
+      --set-key="Keywords" --set-value="dorion;discord;vencord;chat;im;vc;ds;dc;dsc;tauri;" \
+      --set-key="Terminal" --set-value="false" \
+      --set-key="MimeType" --set-value="x-scheme-handler/discord" \
+      "$out/share/applications/Dorion.desktop"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    makeBinaryWrapper "$out/Applications/Dorion.app/Contents/MacOS/Dorion" "$out/bin/Dorion"
+  '';
+
+  # error: failed to run custom build command for `Dorion v6.5.3 (/build/source/src-tauri)`
+  # Permission denied (os error 13)
+  doCheck = false;
+
+  env = {
+    # pnpm 10 prompts before purging node_modules in non-interactive builds.
+    CI = "true";
+    TAURI_RESOURCE_DIR = "${placeholder "out"}/lib";
+  };
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    homepage = "https://github.com/SpikeHD/Dorion";
+    homepage = "https://spikehd.github.io/projects/dorion/";
     description = "Tiny alternative Discord client";
+    longDescription = ''
+      Dorion is an alternative Discord client aimed towards lower-spec or
+      storage-sensitive PCs that supports themes, plugins, and more!
+    '';
+    changelog = "https://github.com/SpikeHD/Dorion/releases/tag/v${finalAttrs.version}";
+    downloadPage = "https://github.com/SpikeHD/Dorion/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
-    mainProgram = "dorion";
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.intersectLists (lib.platforms.linux) (lib.platforms.x86_64);
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    mainProgram = "Dorion";
+    maintainers = with lib.maintainers; [
+      nyabinary
+      aleksana
+      griffi-gh
+      getchoo
+    ];
+    platforms = lib.platforms.unix;
+    sourceProvenance = [
+      lib.sourceTypes.fromSource
+    ];
   };
 })

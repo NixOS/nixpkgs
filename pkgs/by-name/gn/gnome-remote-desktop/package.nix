@@ -13,6 +13,10 @@
   libei,
   libepoxy,
   libdrm,
+  libkrb5,
+  libva,
+  vulkan-loader,
+  shaderc,
   nv-codec-headers-11,
   pipewire,
   systemd,
@@ -29,13 +33,13 @@
   polkit,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-remote-desktop";
-  version = "47.3";
+  version = "50.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-remote-desktop/${lib.versions.major version}/gnome-remote-desktop-${version}.tar.xz";
-    hash = "sha256-QE2wiHLmkDlD4nUam2Myf2NZcKnKodL2dTCcpEV8+cI=";
+    url = "mirror://gnome/sources/gnome-remote-desktop/${lib.versions.major finalAttrs.version}/gnome-remote-desktop-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Md9ij0ETVz8Tb/yNwAF2Ou1jPNhb7SHli8YfihffCR8=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +48,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     asciidoc
+    shaderc # for glslc
     wrapGAppsHook3
   ];
 
@@ -58,6 +63,9 @@ stdenv.mkDerivation rec {
     libei
     libepoxy
     libdrm
+    libkrb5
+    libva
+    vulkan-loader
     nv-codec-headers-11
     libnotify
     libopus
@@ -83,13 +91,13 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "gnome-remote-desktop"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-remote-desktop";
-    changelog = "https://gitlab.gnome.org/GNOME/gnome-remote-desktop/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-remote-desktop/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "GNOME Remote Desktop server";
     mainProgram = "grdctl";
-    teams = [ teams.gnome ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

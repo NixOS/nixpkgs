@@ -9,71 +9,89 @@
   dbus,
   gdk-pixbuf,
   glib,
-  gtk4,
-  libadwaita,
+  cosmic-icons,
   pango,
-  stdenv,
-  darwin,
-  cargo-make,
+  just,
+  sqlite,
+  wayland,
+  libxkbcommon,
+  libGL,
+  libx11,
+  libxcursor,
+  libxi,
+  autoPatchelfHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "open-scq30";
-  version = "1.12.0";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "Oppzippy";
     repo = "OpenSCQ30";
-    rev = "v${version}";
-    hash = "sha256-DL2hYm1j27K0nnBvE3iGnguqm0m1k56bkuG+6+u4u4c=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-jvmgHAp4Et3VrUhZfNuFAA9r8n215kNB6Ux04HYC+KI=";
   };
 
   nativeBuildInputs = [
     pkg-config
     protobuf
     wrapGAppsHook4
-    cargo-make
+    just
+    autoPatchelfHook
   ];
 
-  buildInputs =
-    [
-      cairo
-      dbus
-      gdk-pixbuf
-      glib
-      gtk4
-      libadwaita
-      pango
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.CoreBluetooth
-      darwin.apple_sdk.frameworks.CoreGraphics
-      darwin.apple_sdk.frameworks.Foundation
-    ];
+  buildInputs = [
+    cairo
+    dbus
+    gdk-pixbuf
+    glib
+    pango
+    sqlite
+    libxkbcommon
+  ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-3K+/CpTGWSjCRa2vOEcDvLIiZMdntugIqnzkXF4wkng=";
+  # Wayland and X11 libs are required at runtime since winit uses dlopen
+  runtimeDependencies = [
+    wayland
+    libxkbcommon
+    libGL
+    libx11
+    libxcursor
+    libxi
+  ];
 
-  INSTALL_PREFIX = placeholder "out";
+  cargoHash = "sha256-/dj2LBNcYcewt3Rhz82lZuoyCzaa/QC49CxfKoGfF6w=";
 
   # Requires headphones
   doCheck = false;
 
+  postPatch = ''
+    patchShebangs ./gui/scripts ./cli/scripts ./scripts
+  '';
+
   buildPhase = ''
-    cargo make --profile release build
+    just build-cli
+    just build-gui
   '';
 
   installPhase = ''
-    cargo make --profile release install
+    just install ${placeholder "out"}
   '';
 
-  meta = with lib; {
+  # fix missing icons
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${cosmic-icons}/share")
+  '';
+
+  passthru.updateScript = nix-update-script { };
+  meta = {
     description = "Cross platform application for controlling settings of Soundcore headphones";
     homepage = "https://github.com/Oppzippy/OpenSCQ30";
-    changelog = "https://github.com/Oppzippy/OpenSCQ30/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ mkg20001 ];
+    changelog = "https://github.com/Oppzippy/OpenSCQ30/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ mkg20001 ];
     mainProgram = "open-scq30";
   };
-}
+})

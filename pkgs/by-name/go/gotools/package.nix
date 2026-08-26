@@ -6,22 +6,22 @@
   go,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gotools";
-  version = "0.30.0";
+  version = "0.44.0";
 
-  # using GitHub instead of https://go.googlesource.com/tools because Gitiles UI is to basic to browse
+  # using GitHub instead of https://go.googlesource.com/tools because Gitiles UI is too basic to browse
   src = fetchFromGitHub {
     owner = "golang";
     repo = "tools";
-    rev = "v${version}";
-    hash = "sha256-yUkdZSe/GV0w1qK8aQjcFE4tNKYC8f4JeFgPiv8GlQc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-F9DyZAZdrKCrCIB6FZP0KrOwPNRLk0ZQoNMHGMHd0UY=";
   };
 
   allowGoReference = true;
   doCheck = false;
 
-  vendorHash = "sha256-+jhCNi7bGkRdI1Ywfe3q4i+zcm3UJ0kbQalsDD3WkS4=";
+  vendorHash = "sha256-HpWkPsRJ0vCqJi9LoZcVbzeoPQ2B9ftZwuS1r47W7Sc=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -43,16 +43,16 @@ buildGoModule rec {
       --suffix PATH : ${lib.makeBinPath [ go ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Additional tools for Go development";
     longDescription = ''
       This package contains tools like: godoc, goimports, callgraph, digraph, stringer or toolstash.
     '';
     homepage = "https://go.googlesource.com/tools";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       SuperSandro2000
       techknowlogick
     ];
   };
-}
+})

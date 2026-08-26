@@ -4,12 +4,13 @@ lib:
   rke2Commit,
   rke2TarballHash,
   rke2VendorHash,
-  updateScript,
+  updateScript ? null,
   k8sImageTag,
   etcdVersion,
   pauseVersion,
   ccmVersion,
   dockerizedVersion,
+  helmJobVersion,
   imagesVersions,
 }:
 
@@ -22,6 +23,7 @@ lib:
   makeWrapper,
   fetchzip,
   fetchurl,
+  versionCheckHook,
 
   # Runtime dependencies
   procps,
@@ -42,9 +44,9 @@ lib:
 
   # Testing dependencies
   nixosTests,
-  testers,
 }:
 buildGoModule (finalAttrs: {
+  __structuredAttrs = true;
   pname = "rke2";
   version = rke2Version;
 
@@ -73,23 +75,35 @@ buildGoModule (finalAttrs: {
     lvm2 # dmsetup
   ];
 
-  # Passing boringcrypto to GOEXPERIMENT variable to build with goboring library
-  GOEXPERIMENT = "boringcrypto";
+  # Enable FIPS 140-3 compliance mode for Go
+  # at time of writing, upstream RKE2 uses the GOEXPERIMENT BoringCrypto module instead:
+  # https://docs.rke2.io/security/fips_support
+  # which has been superseded by this - see https://go.dev/doc/security/fips140#goboringcrypto
+  env.GOFIPS140 = "latest";
+  # tlsmlkem=0 can be removed in a future version of Go, see https://github.com/golang/go/issues/75166
+  env.GODEBUG = "fips140=only,tlsmlkem=0";
 
-  # See: https://github.com/rancher/rke2/blob/e7f87c6dd56fdd76a7dab58900aeea8946b2c008/scripts/build-binary#L27-L38
-  ldflags = [
-    "-w"
-    "-X github.com/k3s-io/k3s/pkg/version.GitCommit=${lib.substring 0 6 rke2Commit}"
-    "-X github.com/k3s-io/k3s/pkg/version.Program=${finalAttrs.pname}"
-    "-X github.com/k3s-io/k3s/pkg/version.Version=v${finalAttrs.version}"
-    "-X github.com/k3s-io/k3s/pkg/version.UpstreamGolang=go${go.version}"
-    "-X github.com/rancher/rke2/pkg/images.DefaultRegistry=docker.io"
-    "-X github.com/rancher/rke2/pkg/images.DefaultEtcdImage=rancher/hardened-etcd:${etcdVersion}"
-    "-X github.com/rancher/rke2/pkg/images.DefaultKubernetesImage=rancher/hardened-kubernetes:${k8sImageTag}"
-    "-X github.com/rancher/rke2/pkg/images.DefaultPauseImage=rancher/mirrored-pause:${pauseVersion}"
-    "-X github.com/rancher/rke2/pkg/images.DefaultRuntimeImage=rancher/rke2-runtime:${dockerizedVersion}"
-    "-X github.com/rancher/rke2/pkg/images.DefaultCloudControllerManagerImage=rancher/rke2-cloud-provider:${ccmVersion}"
-  ];
+  # https://github.com/rancher/rke2/blob/104ddbf3de65ab5490aedff36df2332d503d90fe/scripts/build-binary#L27-L39
+  ldflags =
+    let
+      K3S_PKG = "github.com/k3s-io/k3s";
+      HELMCTR_PKG = "github.com/k3s-io/helm-controller";
+      RKE2_PKG = "github.com/rancher/rke2";
+    in
+    [
+      "-w"
+      "-X ${K3S_PKG}/pkg/version.GitCommit=${lib.substring 0 6 rke2Commit}"
+      "-X ${K3S_PKG}/pkg/version.Program=${finalAttrs.pname}"
+      "-X ${K3S_PKG}/pkg/version.Version=v${finalAttrs.version}"
+      "-X ${K3S_PKG}/pkg/version.UpstreamGolang=go${go.version}"
+      "-X ${HELMCTR_PKG}/pkg/controllers/chart.DefaultJobImage=rancher/klipper-helm:${helmJobVersion}"
+      "-X ${RKE2_PKG}/pkg/images.DefaultRegistry=docker.io"
+      "-X ${RKE2_PKG}/pkg/images.DefaultEtcdImage=rancher/hardened-etcd:${etcdVersion}"
+      "-X ${RKE2_PKG}/pkg/images.DefaultKubernetesImage=rancher/hardened-kubernetes:${k8sImageTag}"
+      "-X ${RKE2_PKG}/pkg/images.DefaultPauseImage=rancher/mirrored-pause:${pauseVersion}"
+      "-X ${RKE2_PKG}/pkg/images.DefaultRuntimeImage=rancher/rke2-runtime:${dockerizedVersion}"
+      "-X ${RKE2_PKG}/pkg/images.DefaultCloudControllerManagerImage=rancher/rke2-cloud-provider:${ccmVersion}"
+    ];
 
   tags = [
     "no_cri_dockerd"
@@ -123,44 +137,34 @@ buildGoModule (finalAttrs: {
   doCheck = false;
 
   doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    # Verify that the binary uses BoringCrypto
-    go tool nm $out/bin/.rke2-wrapped | grep '_Cfunc__goboringcrypto_' > /dev/null
-    runHook postInstallCheck
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   passthru = {
     inherit updateScript;
     tests =
       let
-        moduleTests =
-          let
-            package_version =
-              "rke2_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor rke2Version);
-          in
-          lib.mapAttrs (name: value: nixosTests.rke2.${name}.${package_version}) nixosTests.rke2;
+        versionedPackage =
+          "rke2_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor rke2Version);
       in
-      {
-        version = testers.testVersion {
-          package = finalAttrs.finalPackage;
-          version = "v${finalAttrs.version}";
-        };
-      }
-      // moduleTests;
-  } // (lib.mapAttrs (_: value: fetchurl value) imagesVersions);
+      lib.mapAttrs (name: _: nixosTests.rke2.${name}.${versionedPackage}) (
+        lib.filterAttrs (n: _: n != "all") nixosTests.rke2
+      );
+  }
+  // (lib.mapAttrs (_: value: fetchurl value) imagesVersions);
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rancher/rke2";
-    description = "RKE2, also known as RKE Government, is Rancher's next-generation Kubernetes distribution";
-    changelog = "https://github.com/rancher/rke2/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    description = "Rancher's next-generation Kubernetes distribution, also known as RKE Government";
+    changelog = "https://github.com/rancher/rke2/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      maevii
       rorosen
       zimbatm
       zygot
     ];
     mainProgram = "rke2";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

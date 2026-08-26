@@ -1,34 +1,52 @@
 {
   lib,
-  stdenvNoCC,
-  fetchurl,
+  fetchFromGitHub,
   makeBinaryWrapper,
   jre,
+  maven,
+  nix-update-script,
 }:
 
-stdenvNoCC.mkDerivation rec {
-  version = "10.23.1";
+maven.buildMavenPackage (finalAttrs: {
+  version = "14.0.0";
   pname = "checkstyle";
 
-  src = fetchurl {
-    url = "https://github.com/checkstyle/checkstyle/releases/download/checkstyle-${version}/checkstyle-${version}-all.jar";
-    sha256 = "sha256-bF0U+SLjVoCLTZLbdtFy98HZtYK7uw0zew2gGuisdH8=";
+  src = fetchFromGitHub {
+    owner = "checkstyle";
+    repo = "checkstyle";
+    tag = "checkstyle-${finalAttrs.version}";
+    hash = "sha256-8XrYOILxxPMFkSjJyFULzFiqF1T63F/PIzPiRevUYws=";
   };
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
-  buildInputs = [ jre ];
+  patches = [
+    # PR: https://github.com/checkstyle/checkstyle/pull/21242
+    ./drop-nexus-codehaus-snapshot-plugin-repository.patch
+  ];
 
-  dontUnpack = true;
+  mvnHash = "sha256-8HMUvqhvI8dl2E4uPj3qmgwnyY5fAMtbTbXm67P1Wpo=";
+
+  nativeBuildInputs = [
+    maven
+    makeBinaryWrapper
+  ];
+
+  mvnParameters = lib.escapeShellArgs [ "-Passembly,no-validations" ];
 
   installPhase = ''
     runHook preInstall
-    install -D $src $out/checkstyle/checkstyle-all.jar
+
+    mkdir -p $out/bin $out/share/checkstyle
+    install -Dm644 target/checkstyle-${finalAttrs.version}-all.jar $out/share/checkstyle/checkstyle-all.jar
+
     makeWrapper ${jre}/bin/java $out/bin/checkstyle \
-      --add-flags "-jar $out/checkstyle/checkstyle-all.jar"
+      --add-flags "-jar $out/share/checkstyle/checkstyle-all.jar"
+
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Checks Java source against a coding standard";
     mainProgram = "checkstyle";
     longDescription = ''
@@ -37,10 +55,16 @@ stdenvNoCC.mkDerivation rec {
       Conventions, but is highly configurable.
     '';
     homepage = "https://checkstyle.org/";
-    changelog = "https://checkstyle.org/releasenotes.html#Release_${version}";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ pSub ];
-    platforms = jre.meta.platforms;
+    changelog = "https://checkstyle.org/releasenotes.html#Release_${finalAttrs.version}";
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [
+      pSub
+      progrm_jarvis
+    ];
+    inherit (jre.meta) platforms;
   };
-}
+})

@@ -2,8 +2,26 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  xorg,
+  xorg-server,
+  util-macros,
+  tab-window-manager,
+  libxtst,
+  libxrandr,
+  libxi,
+  libxft,
+  libxfont_2,
+  libxext,
+  libxdamage,
+  libx11,
+  libsm,
+  libice,
+  font-util,
+  xsetroot,
+  xorgproto,
+  xkbcomp,
+  xauth,
+  libxkbfile,
+  libpciaccess,
   xkeyboard_config,
   zlib,
   libjpeg_turbo,
@@ -22,47 +40,55 @@
   perl,
   makeWrapper,
   nixosTests,
+  ffmpeg,
+  autoconf,
+  automake,
+  libuuid,
+  libxkbcommon,
+  pipewire,
+  wayland,
+  wayland-scanner,
+  waylandSupport ? stdenv.hostPlatform.isLinux,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.14.0";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.16.2";
   pname = "tigervnc";
 
   src = fetchFromGitHub {
     owner = "TigerVNC";
     repo = "tigervnc";
-    rev = "v${version}";
-    sha256 = "sha256-TgVV/4MRsQHYKpDf9L5eHMLVpdwvNy1KPDIe7xMlQ9o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yyJCtv48gKftyYND0v18qvh4gimxJt22vxiZBSNZ07U=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "vncauth-security-type.patch";
-      url = "https://github.com/TigerVNC/tigervnc/commit/4f6a3521874da5a67fd746389cfa9b6199eb3582.diff";
-      hash = "sha256-lSkR8e+jsBwkQUJZmA0tb8nM5iSbYtO8uVXtgk5wdF8=";
-    })
-  ];
 
   postPatch =
     lib.optionalString stdenv.hostPlatform.isLinux ''
       sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${xkeyboard_config}/etc/X11/xkb";' unix/vncserver/vncserver.in
       fontPath=
       substituteInPlace vncviewer/vncviewer.cxx \
-         --replace '"/usr/bin/ssh' '"${openssh}/bin/ssh'
+         --replace-fail '"/usr/bin/ssh' '"${openssh}/bin/ssh'
       source_top="$(pwd)"
     ''
+    # On Mac, do not build a .dmg, instead move the built .app to the source dir.
+    # Also drop the script's trailing `exit`: it fires an EXIT trap that
+    # `rm -rf`s the temp dir, which would delete the .app before the move we
+    # append below can run (the move would otherwise be unreachable dead code
+    # after `exit`).
     + ''
-      # On Mac, do not build a .dmg, instead copy the .app to the source dir
-      gawk -i inplace 'BEGIN { del=0 } /hdiutil/ { del=2 } del<=0 { print } /$VERSION.dmg/ { del -= 1 }' release/makemacapp.in
+      gawk -i inplace 'BEGIN { del=0 } /hdiutil/ { del=2 } /^exit$/ { next } del<=0 { print } /$VERSION.dmg/ { del -= 1 }' release/makemacapp.in
       echo "mv \"\$APPROOT\" \"\$SRCDIR/\"" >> release/makemacapp.in
     '';
 
   dontUseCmakeBuildDir = true;
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
-    "-DCMAKE_INSTALL_SBINDIR=${placeholder "out"}/bin"
-    "-DCMAKE_INSTALL_LIBEXECDIR=${placeholder "out"}/bin"
+    (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" (placeholder "out"))
+    (lib.cmakeFeature "CMAKE_INSTALL_SBINDIR" "${placeholder "out"}/bin")
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBEXECDIR" "${placeholder "out"}/bin")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    (lib.cmakeBool "ENABLE_WAYLAND" waylandSupport)
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -74,10 +100,10 @@ stdenv.mkDerivation rec {
       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error=int-to-pointer-cast -Wno-error=pointer-to-int-cast"
       export CXXFLAGS="$CXXFLAGS -fpermissive"
       # Build Xvnc
-      tar xf ${xorg.xorgserver.src}
+      tar xf ${xorg-server.src}
       cp -R xorg*/* unix/xserver
       pushd unix/xserver
-      version=$(echo ${xorg.xorgserver.name} | sed 's/.*-\([0-9]\+\).[0-9]\+.*/\1/g')
+      version=$(echo ${xorg-server.name} | sed 's/.*-\([0-9]\+\).[0-9]\+.*/\1/g')
       patch -p1 < "$source_top/unix/xserver$version.patch"
       autoreconf -vfi
       ./configure $configureFlags  --disable-devel-docs --disable-docs \
@@ -93,7 +119,7 @@ stdenv.mkDerivation rec {
           --enable-install-libxf86config \
           --prefix="$out" --disable-unit-tests \
           --with-xkb-path=${xkeyboard_config}/share/X11/xkb \
-          --with-xkb-bin-directory=${xorg.xkbcomp}/bin \
+          --with-xkb-bin-directory=${xkbcomp}/bin \
           --with-xkb-output=$out/share/X11/xkb/compiled
       make TIGERVNC_SRC=$src TIGERVNC_BUILDDIR=`pwd`/../.. -j$NIX_BUILD_CORES
       popd
@@ -111,78 +137,83 @@ stdenv.mkDerivation rec {
 
       wrapProgram $out/bin/vncserver \
         --prefix PATH : ${
-          lib.makeBinPath (
-            with xorg;
-            [
-              xterm
-              twm
-              xsetroot
-              xauth
-            ]
-          )
+          lib.makeBinPath [
+            xterm
+            tab-window-manager
+            xsetroot
+            xauth
+          ]
         }
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
-      mv 'TigerVNC Viewer ${version}.app' $out/Applications/
+      mv 'TigerVNC.app' $out/Applications/
       rm $out/bin/vncviewer
       echo "#!/usr/bin/env bash
-      open $out/Applications/TigerVNC\ Viewer\ ${version}.app --args \$@" >> $out/bin/vncviewer
+      open $out/Applications/TigerVNC.app --args \$@" >> $out/bin/vncviewer
       chmod +x $out/bin/vncviewer
     '';
 
-  buildInputs =
+  buildInputs = [
+    fltk
+    gnutls
+    libjpeg_turbo
+    pixman
+    gawk
+    ffmpeg
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux (
     [
-      fltk
-      gnutls
-      libjpeg_turbo
-      pixman
-      gawk
+      nettle
+      pam
+      perl
+      xorgproto
+      util-macros
+      libxtst
+      libxext
+      libx11
+      libxext
+      libice
+      libxi
+      libsm
+      libxft
+      libxkbfile
+      libxfont_2
+      libpciaccess
+      libGLU
+      libxrandr
+      libxdamage
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux (
-      with xorg;
-      [
-        nettle
-        pam
-        perl
-        xorgproto
-        utilmacros
-        libXtst
-        libXext
-        libX11
-        libXext
-        libICE
-        libXi
-        libSM
-        libXft
-        libxkbfile
-        libXfont2
-        libpciaccess
-        libGLU
-        libXrandr
-        libXdamage
-      ]
-      ++ xorg.xorgserver.buildInputs
-    );
+    ++ xorg-server.buildInputs
+    ++ lib.optionals waylandSupport [
+      libuuid
+      libxkbcommon
+      pipewire
+      wayland
+    ]
+  );
 
-  nativeBuildInputs =
+  nativeBuildInputs = [
+    cmake
+    gettext
+    autoconf
+    automake
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux (
     [
-      cmake
-      gettext
+      font-util
+      libtool
+      makeWrapper
+      util-macros
+      zlib
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux (
-      with xorg;
-      [
-        fontutil
-        libtool
-        makeWrapper
-        utilmacros
-        zlib
-      ]
-      ++ xorg.xorgserver.nativeBuildInputs
-    );
+    ++ xorg-server.nativeBuildInputs
+    ++ lib.optionals waylandSupport [
+      wayland-scanner
+    ]
+  );
 
-  propagatedBuildInputs = lib.optional stdenv.hostPlatform.isLinux xorg.xorgserver.propagatedBuildInputs;
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux xorg-server.propagatedBuildInputs;
 
   passthru.tests.tigervnc = nixosTests.tigervnc;
 
@@ -194,5 +225,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     # Prevent a store collision.
     priority = 4;
+    mainProgram = "vncviewer";
   };
-}
+})

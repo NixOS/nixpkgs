@@ -5,24 +5,30 @@
   fetchFromGitHub,
   pillow,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ansi2image";
-  version = "0.1.4";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "0.1.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "helviojunior";
     repo = "ansi2image";
-    tag = "v${version}";
-    hash = "sha256-1sPEEWcOzesLQXSeMsUra8ZRSMAKzH6iisOgdhpxhKM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3nTCWyWfFs1NqUGIvYO3ao9MnOMtrq1fmTihLwSky60=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace ansi2image/__meta__.py \
+      --replace-fail "__version__ = '0.1.4'" "__version__ = '${finalAttrs.version}'" \
+      --replace-fail "__version_tuple__ = version_tuple = (0, 1, 4)" "__version_tuple__ = version_tuple = (${lib.concatStringsSep ", " (lib.splitString "." finalAttrs.version)})"
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     colorama
     pillow
   ];
@@ -31,14 +37,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ansi2image" ];
 
-  pytestFlagsArray = [ "tests/tests.py" ];
+  enabledTestPaths = [ "tests/tests.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to convert ANSI text to an image";
-    mainProgram = "ansi2image";
     homepage = "https://github.com/helviojunior/ansi2image";
-    changelog = "https://github.com/helviojunior/ansi2image/blob/${version}/CHANGELOG";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/helviojunior/ansi2image/blob/${finalAttrs.version}/CHANGELOG";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "ansi2image";
   };
-}
+})

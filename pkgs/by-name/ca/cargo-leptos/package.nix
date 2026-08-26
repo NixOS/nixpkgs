@@ -1,49 +1,46 @@
 {
-  darwin,
   fetchFromGitHub,
   lib,
-  rustPlatform,
   stdenv,
+  rustPlatform,
+  pkg-config,
+  openssl,
 }:
-let
-  inherit (darwin.apple_sdk.frameworks)
-    CoreServices
-    SystemConfiguration
-    Security
-    ;
-  inherit (lib) optionals;
-  inherit (stdenv.hostPlatform) isDarwin;
-in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-leptos";
-  version = "0.2.28";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "leptos-rs";
     repo = "cargo-leptos";
-    rev = "v${version}";
-    hash = "sha256-SjpfM963Zux+H5QhK8prvDLuI56fP5PqX5gcVbthRx4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-w1kd/eOjNHYAramUvHdgj0ogFqgHDQ1P+ItKTTLL9hU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Da9ei4yAOfhSQmQgrUDZCmMeJXTfGnYhI1+L0JT/ECs=";
+  cargoHash = "sha256-p0mku5B9RtU0E7ny1Izhr2diBLgDH8HR2/B92MvBfws=";
 
-  buildInputs = optionals isDarwin [
-    SystemConfiguration
-    Security
-    CoreServices
-  ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ openssl ];
+
+  env = {
+    OPENSSL_NO_VENDOR = 1;
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Fix for C++ compiler version on darwin for wasm-opt
+    CRATE_CC_NO_DEFAULTS = 1;
+  };
 
   # https://github.com/leptos-rs/cargo-leptos#dependencies
   buildFeatures = [ "no_downloads" ]; # cargo-leptos will try to install missing dependencies on its own otherwise
   doCheck = false; # Check phase tries to query crates.io
 
-  meta = with lib; {
+  meta = {
     description = "Build tool for the Leptos web framework";
     mainProgram = "cargo-leptos";
     homepage = "https://github.com/leptos-rs/cargo-leptos";
-    changelog = "https://github.com/leptos-rs/cargo-leptos/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ benwis ];
+    changelog = "https://github.com/leptos-rs/cargo-leptos/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ benwis ];
   };
-}
+})

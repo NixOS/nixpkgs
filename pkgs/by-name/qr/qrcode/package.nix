@@ -3,38 +3,52 @@
   stdenv,
   fetchFromGitHub,
   unstableGitUpdater,
+  testers,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qrcode";
-  version = "0-unstable-2024-07-18";
+  version = "0-unstable-2025-04-29";
 
   src = fetchFromGitHub {
     owner = "qsantos";
     repo = "qrcode";
-    rev = "6e882a26a30ab9478ba98591ecc547614fb62b69";
-    hash = "sha256-wJL+XyYnI8crKVu+xwCioD5YcFjE5a92qkbOB7juw+s=";
+    rev = "29140c67b69b79e5c8a52911489648853fddf85f";
+    hash = "sha256-WQeZB8G9Nm68mYmLr0ksZdFDcQxF54X0yJxigJZWvMo=";
   };
+
+  strictDeps = true;
+  enableParallelBuilding = true;
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
+  # Upstream Makefile has no install target.
   installPhase = ''
-    mkdir -p "$out"/{bin,share/doc/qrcode}
-    cp qrcode "$out/bin"
-    cp DOCUMENTATION LICENCE "$out/share/doc/qrcode"
+    runHook preInstall
+    install -Dm755 qrcode -t "$out/bin"
+    install -Dm644 DOCUMENTATION LICENCE -t "$out/share/doc/qrcode"
+    runHook postInstall
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru = {
+    updateScript = unstableGitUpdater { };
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      # Upstream exits non-zero even on successful -V.
+      command = "{ qrcode -V || true; }";
+      version = "0.1";
+    };
+  };
 
-  meta = with lib; {
-    description = "Small QR-code tool";
+  meta = {
+    description = "QR-code encoder and decoder";
     homepage = "https://github.com/qsantos/qrcode";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       raskin
       lucasew
     ];
-    platforms = with platforms; unix;
+    platforms = lib.platforms.unix;
     mainProgram = "qrcode";
   };
-}
+})

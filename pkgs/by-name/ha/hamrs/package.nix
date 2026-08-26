@@ -9,7 +9,7 @@ let
   version = "1.0.7";
 
   meta = {
-    description = "Simple, portable logger tailored for activities like Parks on the Air, Field Day, and more.";
+    description = "Simple, portable logger tailored for activities like Parks on the Air, Field Day, and more";
     homepage = "https://hamrs.app/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
@@ -21,7 +21,6 @@ let
       "x86_64-linux"
       "i686-linux"
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
     mainProgram = "hamrs";
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];

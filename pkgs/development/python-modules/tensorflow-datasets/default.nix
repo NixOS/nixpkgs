@@ -2,31 +2,38 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
+
+  # build system
+  packaging,
+  setuptools,
 
   # dependencies
+  absl-py,
   array-record,
-  dill,
   dm-tree,
-  future,
+  etils,
   immutabledict,
   importlib-resources,
   numpy,
   promise,
   protobuf,
   psutil,
+  pyarrow,
   requests,
   simple-parsing,
-  six,
   tensorflow-metadata,
   termcolor,
+  toml,
   tqdm,
+  wrapt,
 
   # tests
   apache-beam,
   beautifulsoup4,
   click,
+  cloudpickle,
   datasets,
+  dill,
   ffmpeg,
   imagemagick,
   jax,
@@ -55,45 +62,53 @@
   zarr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tensorflow-datasets";
-  version = "4.9.8";
+  version = "4.9.10";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "datasets";
-    tag = "v${version}";
-    hash = "sha256-nqveZ+8b0f5sGIn6WufKeA37yEsZjzhCIbCfwMZ9JOM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nq0c5hBTVwkxCRvWxtnfI+AHD+URY+nNfZAurEGaLXk=";
   };
 
-  patches = [
-    # mlmlcroissant uses encoding_formats, not encoding_formats.
-    # Backport https://github.com/tensorflow/datasets/pull/11037 until released.
-    (fetchpatch {
-      url = "https://github.com/tensorflow/datasets/commit/92cbcff725a1036569a515cc3356aa8480740451.patch";
-      hash = "sha256-2hnMvQP83+eAJllce19aHujcoWQzUz3+LsasWCo4BtM=";
-    })
+  postPatch =
+    # The git checkout ships the development `version.py`, which appends a `+nightly` suffix.
+    # Upstream replaces it with `version_stable.py` for stable releases.
+    ''
+      cp tensorflow_datasets/version_stable.py tensorflow_datasets/version.py
+    '';
+
+  build-system = [
+    packaging
+    setuptools
   ];
 
   dependencies = [
+    absl-py
     array-record
-    dill
     dm-tree
-    future
+    etils
     immutabledict
     importlib-resources
     numpy
     promise
     protobuf
     psutil
+    pyarrow
     requests
     simple-parsing
-    six
     tensorflow-metadata
     termcolor
+    toml
     tqdm
-  ];
+    wrapt
+  ]
+  ++ etils.optional-dependencies.epath
+  ++ etils.optional-dependencies.etree;
 
   pythonImportsCheck = [ "tensorflow_datasets" ];
 
@@ -101,7 +116,9 @@ buildPythonPackage rec {
     apache-beam
     beautifulsoup4
     click
+    cloudpickle
     datasets
+    dill
     ffmpeg
     imagemagick
     jax
@@ -130,10 +147,11 @@ buildPythonPackage rec {
     zarr
   ];
 
-  pytestFlagsArray = [
-    # AttributeError: 'NoneType' object has no attribute 'Table'
-    "--deselect=tensorflow_datasets/core/file_adapters_test.py::test_read_write"
-    "--deselect=tensorflow_datasets/text/c4_wsrs/c4_wsrs_test.py::C4WSRSTest"
+  disabledTests = [
+    # Since updating apache-beam to 2.65.0
+    # RuntimeError: Unable to pickle fn CallableWrapperDoFn...: maximum recursion depth exceeded
+    # https://github.com/tensorflow/datasets/issues/11055
+    "test_download_and_prepare_as_dataset"
   ];
 
   disabledTestPaths = [
@@ -184,22 +202,23 @@ buildPythonPackage rec {
     "tensorflow_datasets/core/dataset_utils_test.py"
     "tensorflow_datasets/core/features/sequence_feature_test.py"
 
-    # Requires `tensorflow_docs` which is not packaged in `nixpkgs` and the test is for documentation anyway.
-    "tensorflow_datasets/scripts/documentation/build_api_docs_test.py"
-
     # Not a test, should not be executed.
     "tensorflow_datasets/testing/test_utils.py"
 
     # Require `gcld3` and `nltk.punkt` which are not packaged in `nixpkgs`.
     "tensorflow_datasets/text/c4_test.py"
     "tensorflow_datasets/text/c4_utils_test.py"
+
+    # AttributeError: 'NoneType' object has no attribute 'Table'
+    "tensorflow_datasets/core/file_adapters_test.py::test_read_write"
+    "tensorflow_datasets/text/c4_wsrs/c4_wsrs_test.py::C4WSRSTest"
   ];
 
   meta = {
     description = "Library of datasets ready to use with TensorFlow";
     homepage = "https://www.tensorflow.org/datasets/overview";
-    changelog = "https://github.com/tensorflow/datasets/releases/tag/v${version}";
+    changelog = "https://github.com/tensorflow/datasets/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };
-}
+})

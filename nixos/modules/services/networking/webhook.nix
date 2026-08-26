@@ -208,10 +208,13 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       environment = config.networking.proxy.envVars // cfg.environment;
-      script =
-        let
-          args =
-            [
+      serviceConfig = {
+        Restart = "on-failure";
+        User = cfg.user;
+        Group = cfg.group;
+        ExecStart =
+          let
+            args = [
               "-ip"
               cfg.ip
               "-port"
@@ -226,14 +229,10 @@ in
             ++ optional cfg.enableTemplates "-template"
             ++ optional cfg.verbose "-verbose"
             ++ cfg.extraArgs;
-        in
-        ''
-          ${cfg.package}/bin/webhook ${escapeShellArgs args}
-        '';
-      serviceConfig = {
-        Restart = "on-failure";
-        User = cfg.user;
-        Group = cfg.group;
+          in
+          ''
+            ${cfg.package}/bin/webhook ${escapeShellArgs args}
+          '';
       };
     };
   };

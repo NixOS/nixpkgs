@@ -19,19 +19,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bustle";
-  version = "0.11.0";
+  version = "0.13.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "bustle";
     tag = finalAttrs.version;
-    hash = "sha256-aO7f5xLRuIGVAp+TVveFXtWx/rl/jqbmXNd6zN9dZZw=";
+    hash = "sha256-+Pl4ze1nrC27NIfJ4FNc3iqYWBtCBpHp2zZNAxAPbJk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-cofqxgSyj24wVhzImYs/gsWGjQpzOjaf49RdtYgsrbo=";
+    hash = "sha256-el1zVFE8hsmIisHO+btvnA0WVN9bN8iuVPaSF02ovCI=";
   };
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {

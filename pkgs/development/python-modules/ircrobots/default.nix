@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "jesopo";
-    repo = pname;
+    repo = "ircrobots";
     rev = "v${version}";
     hash = "sha256-slz4AH2Mi21N3aV+OrnoXoQsseS7arW2NuUZARQJsf0=";
   };
@@ -41,10 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ircrobots" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous bare-bones IRC bot framework for python3";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/jesopo/ircrobots";
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

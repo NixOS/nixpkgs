@@ -21,9 +21,9 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     fabric
     typing-extensions
     numpy
@@ -33,14 +33,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "linien_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client components of the Linien spectroscopy lock application";
     homepage = "https://github.com/linien-org/linien/tree/develop/linien-client";
     changelog = "https://github.com/linien-org/linien/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       fsagbuya
       doronbehar
     ];
+    # See comment near linien-common.meta.broken
+    broken = lib.versionAtLeast numpy.version "2";
   };
 }

@@ -3,19 +3,14 @@
 let
   inherit (systemdUtils.lib)
     assertValueOneOf
-    automountConfig
     checkUnitConfig
     makeJobScript
-    mountConfig
-    serviceConfig
-    unitConfig
     unitNameType
     ;
 
   inherit (lib)
     any
     concatMap
-    filterOverrides
     isList
     literalExpression
     mergeEqualOption
@@ -56,13 +51,10 @@ rec {
     name = "systemd option";
     merge =
       loc: defs:
-      let
-        defs' = filterOverrides defs;
-      in
-      if any (def: isList def.value) defs' then
-        concatMap (def: toList def.value) defs'
+      if any (def: isList def.value) defs then
+        concatMap (def: toList def.value) defs
       else
-        mergeEqualOption loc defs';
+        mergeEqualOption loc defs;
   };
 
   sharedOptions = {
@@ -99,7 +91,7 @@ rec {
         Defines how unit configuration is provided for systemd:
 
         `asDropinIfExists` creates a unit file when no unit file is provided by the package
-        otherwise a drop-in file name `overrides.conf`.
+        otherwise it creates a drop-in file named `overrides.conf`.
 
         `asDropin` creates a drop-in file named `overrides.conf`.
         Mainly needed to define instances for systemd template units (e.g. `systemd-nspawn@mycontainer.service`).
@@ -383,6 +375,14 @@ rec {
           '';
         };
 
+        enableDefaultPath = mkOption {
+          default = true;
+          type = types.bool;
+          description = ''
+            Whether to append a minimal default {env}`PATH` environment variable to the service, containing common system utilities.
+          '';
+        };
+
         serviceConfig = mkOption {
           default = { };
           example = {
@@ -625,7 +625,7 @@ rec {
 
       listenStreams = mkOption {
         default = [ ];
-        type = types.listOf types.str;
+        type = types.listOf (types.coercedTo types.port toString types.str);
         example = [
           "0.0.0.0:993"
           "/run/my-socket"

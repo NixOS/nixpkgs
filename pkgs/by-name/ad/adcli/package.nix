@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "adcli";
-  version = "0.9.2";
+  version = "0.9.3a";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "realmd";
     repo = "adcli";
     tag = finalAttrs.version;
-    hash = "sha256-dipNKlIdc1DpXLg/YJjUxZlNoMFy+rt8Y/+AfWFA4dE=";
+    hash = "sha256-IKZ6LW9+aUhNNNp6SL9jllkk7HI/7Ekv7EQo3jQ2VG4=";
   };
 
   nativeBuildInputs = [

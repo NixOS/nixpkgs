@@ -7,18 +7,17 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jwt-cli";
   version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "mike-engel";
     repo = "jwt-cli";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-2pYCNLopvIHcKiN4qewQCdkGWHYQ6vQVCaApxGsRG9E=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-lp2I5+zvFM46TmejtNn/qgVlAaL+xL9slZHduccO/5Q=";
 
   nativeBuildInputs = [ installShellFiles ];
@@ -43,9 +42,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Super fast CLI tool to decode and encode JWTs";
     homepage = "https://github.com/mike-engel/jwt-cli";
-    changelog = "https://github.com/mike-engel/jwt-cli/releases/tag/${version}";
+    changelog = "https://github.com/mike-engel/jwt-cli/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rycee ];
     mainProgram = "jwt";
   };
-}
+})

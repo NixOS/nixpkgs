@@ -1,19 +1,20 @@
 {
   lib,
   python3Packages,
+  piper-tts,
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "wyoming-piper";
-  version = "1.5.2";
+  version = "2.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "rhasspy";
+    owner = "OHF-Voice";
     repo = "wyoming-piper";
-    tag = "v${version}";
-    hash = "sha256-HxLs2NH5muYzVfOtfLlV09BQ3waIfZKBCTiK/Tha6r4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LKt1BNa9jrZIDUZxZvniZcPrAuUkwOs85uIiA5mFWyY=";
   };
 
   build-system = with python3Packages; [
@@ -21,25 +22,45 @@ python3Packages.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "regex"
+    "sentence-stream"
     "wyoming"
   ];
 
-  dependencies = with python3Packages; [
-    wyoming
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      regex
+      piper-tts
+      sentence-stream
+      wyoming
+    ]
+    ++ wyoming.optional-dependencies.zeroconf;
 
   pythonImportsCheck = [
     "wyoming_piper"
   ];
 
-  doCheck = false;
+  doCheck = false; # only test requires network
 
-  meta = with lib; {
-    changelog = "https://github.com/rhasspy/wyoming-piper/blob/v${version}/CHANGELOG.md";
+  nativeCheckInputs = with python3Packages; [
+    numpy
+    pytest-asyncio
+    pytestCheckHook
+    python-speech-features
+  ];
+
+  disabledTests = [
+    # network access
+    "test_piper"
+  ];
+
+  meta = {
+    changelog = "https://github.com/OHF-Voice/wyoming-piper/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Wyoming Server for Piper";
     mainProgram = "wyoming-piper";
-    homepage = "https://github.com/rhasspy/wyoming-piper";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    homepage = "https://github.com/OHF-Voice/wyoming-piper";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

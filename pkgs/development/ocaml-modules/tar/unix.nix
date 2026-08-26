@@ -1,7 +1,8 @@
 {
   buildDunePackage,
   tar,
-  cstruct-lwt,
+  fpath,
+  logs,
   lwt,
   git,
 }:
@@ -12,7 +13,8 @@ buildDunePackage {
 
   propagatedBuildInputs = [
     tar
-    cstruct-lwt
+    fpath
+    logs
     lwt
   ];
 

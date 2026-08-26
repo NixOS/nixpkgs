@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   writeText,
   bluez,
   cjson,
@@ -12,8 +13,7 @@
   eigen,
   elfutils,
   glslang,
-  gst-plugins-base,
-  gstreamer,
+  gst_all_1,
   hidapi,
   libbsd,
   libdrm,
@@ -27,15 +27,14 @@
   libuv,
   libuvc,
   libv4l,
-  libXau,
+  libxau,
   libxcb,
-  libXdmcp,
-  libXext,
-  libXrandr,
+  libxdmcp,
+  libxext,
+  libxrandr,
   nix-update-script,
   onnxruntime,
   opencv4,
-  openhmd,
   openvr,
   orc,
   pcre2,
@@ -65,15 +64,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "monado";
-  version = "25.0.0";
+  version = "25.1.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "monado";
     repo = "monado";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VxTxvw+ftqlh3qF5qWxpK1OJsRowkRXu0xEH2bDckUA=";
+    hash = "sha256-hUSm76PV+FhvzhiYMUbGcNDQMK1TZCPYh1PNADJmdSU=";
   };
+
+  patches = [
+    # Resolves issues with wayvr
+    # See https://github.com/NixOS/nixpkgs/pull/489154#issuecomment-4018732528
+    (fetchpatch {
+      name = "monado-cylinder-aspectRatio.patch";
+      url = "https://gitlab.freedesktop.org/monado/monado/-/commit/69834fe93b84640170f8efa54b4700e5e0dc03c1.diff";
+      hash = "sha256-6lD4j7CMQk52btfxD8hOm0GWZaOxSgc1jel9hyXqktA=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -89,61 +98,61 @@ stdenv.mkDerivation (finalAttrs: {
   #  - DRIVER_ULV2 - Needs proprietary Leapmotion SDK https://api.leapmotion.com/documentation/v2/unity/devguide/Leap_SDK_Overview.html (See https://github.com/NixOS/nixpkgs/issues/292624)
   #  - DRIVER_ULV5 - Needs proprietary Leapmotion SDK https://api.leapmotion.com/documentation/v2/unity/devguide/Leap_SDK_Overview.html (See https://github.com/NixOS/nixpkgs/issues/292624)
 
-  buildInputs =
-    [
-      bluez
-      cjson
-      dbus
-      eigen
-      elfutils
-      gst-plugins-base
-      gstreamer
-      hidapi
-      libbsd
-      libdrm
-      libffi
-      libGL
-      libjpeg
-      librealsense
-      libsurvive
-      libunwind
-      libusb1
-      libuv
-      libuvc
-      libv4l
-      libXau
-      libxcb
-      libXdmcp
-      libXext
-      libXrandr
-      onnxruntime
-      opencv4
-      openhmd
-      openvr
-      orc
-      pcre2
-      SDL2
-      shaderc
-      udev
-      vulkan-headers
-      vulkan-loader
-      wayland
-      wayland-protocols
-      wayland-scanner
-      zlib
-      zstd
-    ]
-    ++ lib.optionals tracingSupport [
-      tracy
-    ];
+  buildInputs = [
+    bluez
+    cjson
+    dbus
+    eigen
+    elfutils
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
+    hidapi
+    libbsd
+    libdrm
+    libffi
+    libGL
+    libjpeg
+    librealsense
+    libsurvive
+    libunwind
+    libusb1
+    libuv
+    libuvc
+    libv4l
+    libxau
+    libxcb
+    libxdmcp
+    libxext
+    libxrandr
+    onnxruntime
+    opencv4
+    openvr
+    orc
+    pcre2
+    SDL2
+    shaderc
+    udev
+    vulkan-headers
+    vulkan-loader
+    wayland
+    wayland-protocols
+    wayland-scanner
+    zlib
+    zstd
+  ]
+  ++ lib.optionals tracingSupport [
+    tracy
+  ]
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_nvcc
+    cudaPackages.cuda_cudart
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "XRT_FEATURE_SERVICE" serviceSupport)
     (lib.cmakeBool "XRT_HAVE_TRACY" tracingSupport)
     (lib.cmakeBool "XRT_FEATURE_TRACING" tracingSupport)
     (lib.cmakeBool "XRT_OPENXR_INSTALL_ABSOLUTE_RUNTIME_PATH" true)
-    (lib.cmakeBool "XRT_HAVE_STEAM" true)
-    (lib.optionals enableCuda "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}")
   ];
 
   # Help openxr-loader find this runtime
@@ -160,10 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open source XR runtime";
     homepage = "https://monado.freedesktop.org/";
     license = lib.licenses.boost;
-    maintainers = with lib.maintainers; [
-      Scrumplex
-      prusnak
-    ];
+    maintainers = with lib.maintainers; [ Scrumplex ];
     platforms = lib.platforms.linux;
     mainProgram = "monado-cli";
   };

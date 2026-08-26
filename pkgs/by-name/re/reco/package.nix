@@ -2,13 +2,14 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  blueprint-compiler,
   meson,
   ninja,
   pkg-config,
   vala,
   wrapGAppsHook4,
+  libadwaita,
   libgee,
-  live-chart,
   ryokucha,
   pantheon,
   gst_all_1,
@@ -16,16 +17,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "reco";
-  version = "5.0.2";
+  version = "5.2.1";
 
   src = fetchFromGitHub {
     owner = "ryonakano";
     repo = "reco";
     rev = finalAttrs.version;
-    hash = "sha256-uZAcZJLQH0MTI4NSJnZvzYPBFVXGBqAhsjVLAVP/ZwI=";
+    hash = "sha256-Vy4T3iL1ADcegs69Oa6v5cCjaqYIy1SqzGPKdCwV2n8=";
   };
 
   nativeBuildInputs = [
+    blueprint-compiler
     meson
     ninja
     pkg-config
@@ -34,10 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    libadwaita
     libgee
-    live-chart
+    pantheon.live-chart
     ryokucha
-    pantheon.granite7
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good

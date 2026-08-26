@@ -12,20 +12,21 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "console-setup";
-  version = "1.236";
+  version = "1.242";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "installer-team";
     repo = "console-setup";
     tag = finalAttrs.version;
-    hash = "sha256-b7ck48wRPga/ugCVbPCKRSRrpawIJCsEV1kbNeXDIHk=";
+    hash = "sha256-5PV1Mbg7ZGQsotwnBVz8DI77Y8ULCnoTANqBLlP3YrE=";
   };
 
   buildInputs = [
     bdfresize
     otf2bdf
     perl
+    unifont.bin
   ];
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
@@ -35,8 +36,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs .
     substituteInPlace Fonts/Makefile --replace-fail '/usr/share/fonts/truetype/dejavu/' '${dejavu_fonts}/share/fonts/truetype/'
-    ln -s ${unifont}/share/fonts/unifont.bdf Fonts/bdf
-    substituteInPlace Fonts/Makefile --replace-fail 'rm -f $(fntdir)/bdf/unifont.bdf' ""
+    substituteInPlace Fonts/Makefile --replace-fail '/usr/share/unifont/' '${unifont.doc}/share/unifont/'
   '';
 
   preBuild = "make -j$NIX_BUILD_CORES bdf";

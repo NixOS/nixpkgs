@@ -4,7 +4,6 @@
   fetchFromGitHub,
   python-dateutil,
   python-mimeparse,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "django-tastypie";
   version = "0.15.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "django-tastypie";
@@ -34,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tastypie" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities and helpers for writing Pylint plugins";
     homepage = "https://github.com/django-tastypie/django-tastypie";
     changelog = "https://github.com/django-tastypie/django-tastypie/releases/tag/v${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

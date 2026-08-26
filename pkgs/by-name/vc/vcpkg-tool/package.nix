@@ -7,7 +7,7 @@
   cmake,
   cmakerc,
   curl,
-  fmt,
+  fmt_11,
   git,
   gzip,
   meson,
@@ -24,13 +24,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vcpkg-tool";
-  version = "2025-03-13";
+  version = "2025-12-16";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vcpkg-tool";
     rev = finalAttrs.version;
-    hash = "sha256-tu6mN9y2lYsf71LUmRPMdZHE6VIWODOOQFs8+v0KIt8=";
+    hash = "sha256-EnKfeWRiqWVFbGc2QNT9YQHs+dlXvvri9FPVxpxpphM=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cmakerc
-    fmt
+    fmt_11
   ];
 
   patches = [
@@ -53,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DVCPKG_DEPENDENCY_CMAKERC=ON"
   ];
 
-  passAsFile = [ "vcpkgWrapper" ];
   vcpkgWrapper =
     let
       # These are the most common binaries used by vcpkg
@@ -71,7 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
         unzip
         zip
         zstd
-      ] ++ extraRuntimeDeps;
+      ]
+      ++ extraRuntimeDeps;
 
       # Apart from adding the runtime dependencies to $PATH,
       # the wrapper will also override these arguments by default.
@@ -172,10 +172,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = lib.optionalString doWrap ''
     mv "$out/bin/vcpkg" "$out/bin/.vcpkg-wrapped"
-    install -Dm555 "$vcpkgWrapperPath" "$out/bin/vcpkg"
+    printf "%s" "$vcpkgWrapper" > "$out/bin/vcpkg"
+    chmod 555 "$out/bin/vcpkg"
   '';
 
-  passthru.tests = {
+  passthru.tests = lib.optionalAttrs doWrap {
     testWrapper = runCommand "vcpkg-tool-test-wrapper" { buildInputs = [ finalAttrs.finalPackage ]; } ''
       export NIX_VCPKG_DEBUG_PRINT_ENVVARS=true
       export VCPKG_ROOT=.
@@ -189,6 +190,8 @@ stdenv.mkDerivation (finalAttrs: {
       ''}
     '';
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Components of microsoft/vcpkg's binary";

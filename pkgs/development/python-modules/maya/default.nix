@@ -8,7 +8,6 @@
   pendulum,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   setuptools,
   snaptime,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "maya";
   version = "0.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "timofurrer";
@@ -59,11 +56,11 @@ buildPythonPackage rec {
     "test_parse_iso8601"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Datetimes for Humans";
     homepage = "https://github.com/timofurrer/maya";
     changelog = "https://github.com/timofurrer/maya/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -6,8 +6,8 @@
   desktopToDarwinBundle,
   motif,
   ncurses,
-  libX11,
-  libXt,
+  libx11,
+  libxt,
   gdb,
 }:
 
@@ -27,13 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     imagemagick
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
     motif
     ncurses
-    libX11
-    libXt
+    libx11
+    libxt
   ];
 
   # ioctl is not found without this flag. fixed in next release

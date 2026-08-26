@@ -7,8 +7,6 @@
   tk,
   addDriverRunpath,
 
-  apple-sdk_12,
-
   koboldLiteSupport ? true,
 
   config,
@@ -17,14 +15,15 @@
   cublasSupport ? config.cudaSupport,
   # You can find a full list here: https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
   # For example if you're on an RTX 3060 that means you're using "Ampere" and you need to pass "sm_86"
-  cudaArches ? cudaPackages.cudaFlags.realArches or [ ],
+  cudaArches ? cudaPackages.flags.realArches or [ ],
 
   clblastSupport ? stdenv.hostPlatform.isLinux,
   clblast,
   ocl-icd,
 
-  vulkanSupport ? (!stdenv.hostPlatform.isDarwin),
+  vulkanSupport ? true,
   vulkan-loader,
+  shaderc,
   metalSupport ? stdenv.hostPlatform.isDarwin,
   nix-update-script,
 }:
@@ -40,13 +39,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
-  version = "1.86.2";
+  version = "1.119";
 
   src = fetchFromGitHub {
     owner = "LostRuins";
     repo = "koboldcpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zB/X4tfygpf3ZrQ9FtQCd3sxN11Ewlxz1+YCiw7iUZU=";
+    hash = "sha256-WJVbzh4BGLiQdd/rzqSe2Q9PGqMpsqmQNQf33INJkd8=";
   };
 
   enableParallelBuilding = true;
@@ -54,25 +53,36 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     python3Packages.wrapPython
-  ];
+  ]
+  ++ lib.optionals vulkanSupport [ shaderc ];
+
+  postPatch = ''
+    nixLog "patching $PWD/Makefile to remove explicit linking against CUDA driver"
+    substituteInPlace "$PWD/Makefile" \
+      --replace-fail \
+        'CUBLASLD_FLAGS = -lcuda ' \
+        'CUBLASLD_FLAGS = '
+  '';
 
   pythonInputs = builtins.attrValues { inherit (python3Packages) tkinter customtkinter packaging; };
 
-  buildInputs =
-    [ tk ]
-    ++ finalAttrs.pythonInputs
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_12 ]
-    ++ lib.optionals cublasSupport [
-      cudaPackages.libcublas
-      cudaPackages.cuda_nvcc
-      cudaPackages.cuda_cudart
-      cudaPackages.cuda_cccl
-    ]
-    ++ lib.optionals clblastSupport [
-      clblast
-      ocl-icd
-    ]
-    ++ lib.optionals vulkanSupport [ vulkan-loader ];
+  buildInputs = [
+    tk
+  ]
+  ++ finalAttrs.pythonInputs
+  ++ lib.optionals cublasSupport [
+    cudaPackages.libcublas
+    cudaPackages.cuda_nvcc
+    cudaPackages.cuda_cudart
+    cudaPackages.cccl
+  ]
+  ++ lib.optionals clblastSupport [
+    clblast
+    ocl-icd
+  ]
+  ++ lib.optionals vulkanSupport [
+    vulkan-loader
+  ];
 
   pythonPath = finalAttrs.pythonInputs;
 
@@ -81,7 +91,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (makeBool "LLAMA_CLBLAST" clblastSupport)
     (makeBool "LLAMA_VULKAN" vulkanSupport)
     (makeBool "LLAMA_METAL" metalSupport)
-    (lib.optionals cublasSupport "CUDA_DOCKER_ARCH=${builtins.head cudaArches}")
+  ]
+  ++ lib.optionals cublasSupport [
+    "CUDA_DOCKER_ARCH=${builtins.head cudaArches}"
   ];
 
   installPhase = ''
@@ -91,7 +103,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
     install -Dm755 koboldcpp.py "$out/bin/koboldcpp.unwrapped"
     cp *.so "$out/bin"
-    cp *.embd "$out/bin"
+    cp embd_res/*.embd "$out/bin"
 
     ${lib.optionalString metalSupport ''
       cp *.metal "$out/bin"
@@ -106,7 +118,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
-    wrapPythonProgramsIn "$out/bin" "$pythonPath"
+    wrapPythonProgramsIn "$out/bin" "''${pythonPath[*]}"
     makeWrapper "$out/bin/koboldcpp.unwrapped" "$out/bin/koboldcpp" \
       --prefix PATH : ${lib.makeBinPath [ tk ]} ${libraryPathWrapperArgs}
   '';
@@ -121,7 +133,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     mainProgram = "koboldcpp";
     maintainers = with lib.maintainers; [
       maxstrid
-      donteatoreo
+      _4evy
     ];
     platforms = lib.platforms.unix;
   };

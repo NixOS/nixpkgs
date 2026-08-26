@@ -4,15 +4,12 @@
   R,
   xvfb-run,
   util-linux,
-  Cocoa,
-  Foundation,
   gettext,
   gfortran,
   libiconv,
 }:
 
 {
-  name,
   buildInputs ? [ ],
   requireX ? false,
   ...
@@ -31,8 +28,6 @@ stdenv.mkDerivation (
         xvfb-run
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        Cocoa
-        Foundation
         gfortran
         libiconv
       ];
@@ -43,8 +38,14 @@ stdenv.mkDerivation (
 
     configurePhase = ''
       runHook preConfigure
+
       export MAKEFLAGS+="''${enableParallelBuilding:+-j$NIX_BUILD_CORES}"
       export R_LIBS_SITE="$R_LIBS_SITE''${R_LIBS_SITE:+:}$out/library"
+
+      if [ -f ./configure ] && [ -z "''${dontPatchShebangsInConfigure:-}" ]; then
+        patchShebangs --build ./configure
+      fi
+
       runHook postConfigure
     '';
 
@@ -82,6 +83,6 @@ stdenv.mkDerivation (
   }
   // attrs
   // {
-    name = "r-" + name;
+    name = "r-${attrs.name or "${attrs.pname}-${attrs.version}"}";
   }
 )

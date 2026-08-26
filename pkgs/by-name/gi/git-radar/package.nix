@@ -6,14 +6,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "git-radar";
   version = "0.6";
 
   src = fetchFromGitHub {
     owner = "michaeldfallen";
     repo = "git-radar";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0c3zp8s4w7m4s71qgwk1jyfc8yzw34f2hi43x1w437ypgabwg81j";
   };
 
@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
     ''}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/michaeldfallen/git-radar";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Tool you can add to your prompt to provide at-a-glance information on your git repo";
-    platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ kamilchm ];
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [ kamilchm ];
     mainProgram = "git-radar";
   };
-}
+})

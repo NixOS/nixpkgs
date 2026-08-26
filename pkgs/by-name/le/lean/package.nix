@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
 
   cmakeDir = "../src";
 
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
+  ];
+
   # Running the tests is required to build the *.olean files for the core
   # library.
   doCheck = true;
@@ -50,20 +54,26 @@ stdenv.mkDerivation rec {
         --subst-var-by GIT_SHA1 "${src.rev}"
     '';
 
-  postPatch = "patchShebangs .";
+  postPatch = ''
+    patchShebangs .
+
+    sed -e '1i #include <cstdint>' -i src/util/hash.{cpp,h}
+  '';
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=template-body";
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace $out/bin/leanpkg \
       --replace "greadlink" "${coreutils}/bin/readlink"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Automatic and interactive theorem prover";
     homepage = "https://leanprover.github.io/";
     changelog = "https://github.com/leanprover-community/lean/blob/v${version}/doc/changes.md";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       thoughtpolice
     ];
   };

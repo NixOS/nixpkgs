@@ -13,7 +13,6 @@ LATEST_MAINLINE_VERSION=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} --fail 
 # Define the platforms
 declare -A ARCHS=(["x86_64-linux"]="linux_amd64.tar.gz"
                   ["aarch64-linux"]="linux_arm64.tar.gz"
-                  ["x86_64-darwin"]="darwin_amd64.zip"
                   ["aarch64-darwin"]="darwin_arm64.zip")
 
 update_version_and_hashes() {
@@ -32,7 +31,7 @@ update_version_and_hashes() {
 
         # Fetch the new hash using nix-prefetch-url
         local NEW_HASH=$(nix-prefetch-url --type sha256 $URL)
-        local SRI_HASH=$(nix hash to-sri --type sha256 $NEW_HASH)
+        local SRI_HASH=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 $NEW_HASH)
 
         # Update the Nix file with the new hash, using '#' as delimiter and preserving indentation
         sed -i "/${channel} = {/,/};/{

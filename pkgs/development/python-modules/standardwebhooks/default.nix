@@ -4,25 +4,24 @@
   buildPythonPackage,
   deprecated,
   fetchPypi,
+  hatchling,
   httpx,
-  pytestCheckHook,
   python-dateutil,
-  setuptools,
   types-deprecated,
   types-python-dateutil,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "standardwebhooks";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2UuZwNzqhBVuA62tlPjboy1UVMxo4S7CyCQFG1W7Z/8=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-5ctm4hpjVuu5N1rrV/E0hYMyMBWAjUdafBuqpLcYBoo=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     attrs
@@ -33,7 +32,8 @@ buildPythonPackage rec {
     types-python-dateutil
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  # Tests are no shipped
+  doCheck = false;
 
   pythonImportsCheck = [ "standardwebhooks" ];
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

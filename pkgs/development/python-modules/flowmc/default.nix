@@ -19,16 +19,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flowmc";
-  version = "0.4.4";
+  version = "0.4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kazewong";
     repo = "flowMC";
-    tag = "flowMC-${version}";
-    hash = "sha256-hyrsL8agY+bNcRcEmgEtv97cFROgeLFxxtKTfx0HoH8=";
+    tag = "flowMC-${finalAttrs.version}";
+    hash = "sha256-D3K9cvmUvwsVAjvXdSDgYlqrzTYXVlSVQbfx7TANz8A=";
   };
 
   build-system = [ hatchling ];
@@ -59,11 +59,22 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTestPaths = [
+    # ValueError: Expected None, got JitTracer(bool[3,2])
+    "test/integration/test_quickstart.py"
+  ];
+
+  disabledTests = [
+    # ValueError: Expected None, got JitTracer(bool[3,2])
+    "test_rqSpline"
+    "test_training"
+  ];
+
   meta = {
     description = "Normalizing-flow enhanced sampling package for probabilistic inference in Jax";
     homepage = "https://github.com/kazewong/flowMC";
-    changelog = "https://github.com/kazewong/flowMC/releases/tag/flowMC-${version}";
+    changelog = "https://github.com/kazewong/flowMC/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

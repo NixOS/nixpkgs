@@ -9,20 +9,18 @@
   gnumake,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fzf-make";
-  version = "0.56.0";
+  version = "0.73.0";
 
   src = fetchFromGitHub {
     owner = "kyu08";
     repo = "fzf-make";
-    rev = "v${version}";
-    hash = "sha256-OioPl2uJVepMsR1PYHpASj3yQ10bCaGFxI1wQR61EsA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-v3AmcLFnPZb6zJ1Gx5R2vNPtPHQzb8gyVlMj76rvO1s=";
   };
 
-  cargoHash = "sha256-Y1kFbJi+AB4uROieZERafU82RWm2AGQseDUuVzJn3NA=";
-
-  useFetchCargoVendor = true;
+  cargoHash = "sha256-rcBJIBmGT27OA0MUh2fTf+wQO+7tabL2vpG8eJw5lhA=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
@@ -40,13 +38,12 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Fuzzy finder for Makefile";
-    inherit (src.meta) homepage;
-    changelog = "https://github.com/kyu08/fzf-make/releases/tag/${src.rev}";
+    inherit (finalAttrs.src.meta) homepage;
+    changelog = "https://github.com/kyu08/fzf-make/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
       sigmanificient
     ];
     mainProgram = "fzf-make";
   };
-}
+})

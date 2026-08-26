@@ -7,20 +7,20 @@
   mercure,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mercure";
-  version = "0.19.0";
+  version = "0.24.2";
 
   src = fetchFromGitHub {
     owner = "dunglas";
     repo = "mercure";
-    rev = "v${version}";
-    hash = "sha256-TpcxSNvSzn5g7WxEEEbxpHKEwa1W4T6LmYbBCMA8P88=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-pWzj2WTqngVz+ohj7oqXiRmzWjQEZttpmnoHsJ0oO/k=";
   };
 
-  sourceRoot = "${src.name}/caddy";
+  sourceRoot = "${finalAttrs.src.name}/caddy";
 
-  vendorHash = "sha256-g6MQOJJXLFibMelRblXsQEqcsBNpmdViOPVgYoWzOPw=";
+  vendorHash = "sha256-qas5UMEL8FUtWwXTc+4RCNR52bVO20AEl8qp1yEgdJQ=";
 
   subPackages = [ "mercure" ];
   excludedPackages = [ "../cmd/mercure" ];
@@ -28,7 +28,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X 'github.com/caddyserver/caddy/v2.CustomVersion=Mercure.rocks v${version} Caddy'"
+    "-X 'github.com/caddyserver/caddy/v2/modules/caddyhttp.ServerHeader=Mercure.rocks Caddy'"
+    "-X 'github.com/caddyserver/caddy/v2.CustomVersion=Mercure.rocks v${finalAttrs.version} Caddy'"
   ];
 
   doCheck = false;
@@ -36,19 +37,19 @@ buildGoModule rec {
   passthru = {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion {
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
       package = mercure;
       command = "mercure version";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open, easy, fast, reliable and battery-efficient solution for real-time communications";
     homepage = "https://github.com/dunglas/mercure";
-    changelog = "https://github.com/dunglas/mercure/releases/tag/v${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ gaelreyrol ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/dunglas/mercure/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.agpl3Only;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
     mainProgram = "mercure";
   };
-}
+})

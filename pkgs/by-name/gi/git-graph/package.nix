@@ -5,29 +5,27 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-graph";
-  version = "0.6.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
-    owner = "mlange-42";
+    owner = "git-bahn";
     repo = "git-graph";
-    tag = version;
-    hash = "sha256-xYUpLujePO1MS0c25UJX5rRdmPzkaFgF5zJonzQOJqM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5h1PSVGLxWVktRNPbVbx/Rk3/URcIMJvDCbG0PTtBk0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-tN70YyhVkLD5OiYNm64vbY5NtKAG2sFp4Ry6vFpXvtE=";
+  cargoHash = "sha256-MGa9QKCEu7t3y7AKAm++/8+C+PjAY1dFAFIxpr4c9ks=";
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool to show clear git graphs arranged for your branching model";
-    homepage = "https://github.com/mlange-42/git-graph";
-    license = licenses.mit;
-    broken = stdenv.hostPlatform.isDarwin;
-    maintainers = with maintainers; [
+    homepage = "https://github.com/git-bahn/git-graph";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       cafkafk
       matthiasbeyer
     ];
     mainProgram = "git-graph";
   };
-}
+})

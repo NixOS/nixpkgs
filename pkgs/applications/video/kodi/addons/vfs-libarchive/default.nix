@@ -33,10 +33,11 @@ buildKodiBinaryAddon rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "LibArchive Virtual Filesystem add-on for Kodi";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    teams = [ teams.kodi ];
+    homepage = "https://github.com/xbmc/vfs.libarchive";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    teams = [ lib.teams.kodi ];
   };
 }

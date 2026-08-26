@@ -41,7 +41,7 @@ Finally, replace `tlpdb.nix` with the generated file. Note that if the
 `00texlive.config` package), TeX Live packages will not evaluate.
 
 The test `pkgs.tests.texlive.tlpdbNix` verifies that the file `tlpdb.nix`
-in Nixpkgs matches the one that generated from `texlive.tlpdb.xz`.
+in Nixpkgs matches the one generated from `texlive.tlpdb.xz`.
 
 ### Build packages locally and generate fix hashes
 
@@ -74,10 +74,11 @@ hashes for the relevant package, or for all packages.
 
 ### Upgrading the ConTeXt binaries
 
-The LuaMetaTeX sources required for ConTeXt are distributed separately from the
-TeX Live tarballs and must be updated manually (see `texlive.bin.context`). You
-must use the latest tarball at https://tug.org/svn/texlive/trunk/Master/source/
-whose revision number is less than or equal to that of the package `context`.
+ConTeXt in TeX Live is packaged as described
+[here](https://github.com/gucci-on-fleek/context-packaging). With every update
+to the ConTeXt package, the LuaMetaTeX compiler also needs to be updated. For
+this, we fetch the source from the releases of the above repo. Make sure to
+update this in `texlive.bin.context`, when updating TeX Live.
 
 ### Updating the licensing information
 
@@ -90,7 +91,7 @@ license lists reported by the test into `default.nix`.
 
 ### Running the testsuite
 
-There are a some other useful tests that haven't been mentioned before. Build them with
+There are some other useful tests that haven't been mentioned before. Build them with
 ```
 nix-build ../../../../.. -A tests.texlive --no-out-link
 ```
@@ -112,11 +113,11 @@ Most `tlType == "bin"` containers consist of links to scripts distributed in
 `$TEXMFDIST/scripts` with a number of patches applied within `default.nix`.
 
 At each upgrade, please run the tests `tests.texlive.shebangs` to verify that
-all shebangs have been patched and in case add the relevant interpreters, and
+all shebangs have been patched, add the relevant interpreters if necessary, and
 use `tests.texlive.binaries` to check if basic execution of all binaries works.
 
 Please review manually all binaries in the `broken` and `ignored` lists of
-`tests.texlive.binaries` at least once for major TeX Live release.
+`tests.texlive.binaries` at least once for each major TeX Live release.
 
 Since the tests cannot catch all runtime dependencies, you should grep the
 `$TEXMFDIST/scripts` folder for common cases, for instance (where `$scripts`

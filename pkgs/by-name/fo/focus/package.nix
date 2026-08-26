@@ -2,13 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
-  libXinerama,
+  libx11,
+  libxinerama,
 }:
 
 stdenv.mkDerivation {
   pname = "focus";
-  version = "unstable-2021-02-23";
+  version = "0-unstable-2021-02-23";
 
   src = fetchFromGitHub {
     owner = "phillbush";
@@ -18,21 +18,21 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    libX11
-    libXinerama
+    libx11
+    libxinerama
   ];
 
   makeFlags = [ "PREFIX=\${out}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Focus window, workspace or monitor by direction or cycle through them";
     longDescription = ''
       A collection of utilities that change the focus of windows, workspaces or
       monitors.
     '';
     homepage = "https://github.com/phillbush/focus";
-    license = licenses.publicDomain;
+    license = lib.licenses.publicDomain;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

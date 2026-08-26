@@ -8,6 +8,7 @@
   runCommandCC,
   stdenv,
   symlinkJoin,
+  testers,
   writeTextFile,
   pkgsCross,
 }:
@@ -20,7 +21,8 @@ let
         crateName = "nixtestcrate";
         version = "0.1.0";
         authors = [ "Test <test@example.com>" ];
-      } // args;
+      }
+      // args;
     in
     buildRustCrate p;
   mkHostCrate = mkCrate buildRustCrate;
@@ -90,9 +92,15 @@ let
   mkTest =
     crateArgs:
     let
-      crate = mkHostCrate (builtins.removeAttrs crateArgs [ "expectedTestOutput" ]);
+      crate = mkHostCrate (
+        removeAttrs crateArgs [
+          "expectedTestOutputs"
+          "expectedTestBinaries"
+        ]
+      );
       hasTests = crateArgs.buildTests or false;
       expectedTestOutputs = crateArgs.expectedTestOutputs or null;
+      expectedTestBinaries = crateArgs.expectedTestBinaries or [ ];
       binaries = map (v: lib.escapeShellArg v.name) (crateArgs.crateBin or [ ]);
       isLib = crateArgs ? libName || crateArgs ? libPath;
       crateName = crateArgs.crateName or "nixtestcrate";
@@ -133,6 +141,10 @@ let
           ''
         else if stdenv.hostPlatform == stdenv.buildPlatform then
           ''
+            ${lib.concatMapStringsSep "\n" (
+              b:
+              "test -x ${crate}/tests/${lib.escapeShellArg b} || { echo 'expected test binary \"${b}\" not found in:'; ls ${crate}/tests; exit 23; }"
+            ) expectedTestBinaries}
             for file in ${crate}/tests/*; do
               $file 2>&1 >> $out
             done
@@ -181,7 +193,7 @@ let
     assert (builtins.isList expectedFiles);
 
     let
-      crate = mkCrate (builtins.removeAttrs crateArgs [ "expectedTestOutput" ]);
+      crate = mkCrate (removeAttrs crateArgs [ "expectedTestOutput" ]);
       crateOutput = if output == null then crate else crate."${output}";
       expectedFilesFile = writeTextFile {
         name = "expected-files-${name}";
@@ -227,7 +239,7 @@ let
 in
 rec {
 
-  tests =
+  tests = lib.recurseIntoAttrs (
     let
       cases = rec {
         libPath = {
@@ -392,6 +404,27 @@ rec {
             "test something ... ok"
           ];
         };
+        rustLibTestsWithDevDependency =
+          let
+            devDep = mkHostCrate {
+              crateName = "dev-dep";
+              src = mkLib "src/lib.rs";
+            };
+          in
+          {
+            src = mkFile "src/lib.rs" ''
+              #[cfg(test)]
+              mod tests {
+                  #[test]
+                  fn uses_dev_dep() {
+                      assert_eq!(dev_dep::test(), 23);
+                  }
+              }
+            '';
+            devDependencies = [ devDep ];
+            buildTests = true;
+            expectedTestOutputs = [ "test tests::uses_dev_dep ... ok" ];
+          };
         rustBinTestsCombined = {
           src = symlinkJoin {
             name = "rust-bin-tests-combined";
@@ -418,10 +451,100 @@ rec {
             ];
           };
           buildTests = true;
+          # Cargo names tests/<dir>/main.rs as <dir>, not <dir>_main.
+          expectedTestBinaries = [
+            "foo"
+            "bar"
+          ];
           expectedTestOutputs = [
             "test src_main ... ok"
             "test tests_foo ... ok"
             "test tests_bar ... ok"
+          ];
+        };
+        rustBinTestsFlatMainSuffix = {
+          # A flat-style test whose name happens to end in _main must keep
+          # its suffix — only tests/<dir>/main.rs gets the _main stripped.
+          src = symlinkJoin {
+            name = "rust-bin-tests-flat-main-suffix";
+            paths = [
+              (mkTestFileWithMain "src/main.rs" "src_main")
+              (mkTestFile "tests/foo_main.rs" "flat_test")
+            ];
+          };
+          buildTests = true;
+          expectedTestBinaries = [ "foo_main" ];
+          expectedTestOutputs = [
+            "test src_main ... ok"
+            "test flat_test ... ok"
+          ];
+        };
+        rustBinTestsCargoBinExe = {
+          # Integration tests locate the crate's own binary via
+          # `env!("CARGO_BIN_EXE_<name>")`, which cargo sets automatically.
+          crateName = "my-crate";
+          src = symlinkJoin {
+            name = "rust-bin-tests-cargo-bin-exe";
+            paths = [
+              (mkFile "src/main.rs" ''
+                fn main() { println!("hello from my-crate"); }
+              '')
+              (mkFile "tests/run_bin.rs" ''
+                #[test]
+                fn runs_binary() {
+                    let bin = env!("CARGO_BIN_EXE_my-crate");
+                    let out = std::process::Command::new(bin)
+                        .output()
+                        .expect("spawn");
+                    assert!(out.status.success());
+                    assert_eq!(
+                        String::from_utf8_lossy(&out.stdout).trim(),
+                        "hello from my-crate"
+                    );
+                }
+              '')
+            ];
+          };
+          buildTests = true;
+          expectedTestOutputs = [
+            "test runs_binary ... ok"
+          ];
+        };
+        rustBinTestsCargoBinExeAutoDetect = {
+          # Verify CARGO_BIN_EXE_<name> is also set for auto-detected
+          # src/bin/*.rs binaries, not just src/main.rs or explicit
+          # crateBin entries.
+          crateName = "multi-bin";
+          src = symlinkJoin {
+            name = "rust-bin-tests-cargo-bin-exe-auto";
+            paths = [
+              (mkFile "src/lib.rs" "")
+              (mkFile "src/bin/tool-a.rs" ''
+                fn main() { println!("tool-a ran"); }
+              '')
+              (mkFile "src/bin/tool-b.rs" ''
+                fn main() { println!("tool-b ran"); }
+              '')
+              (mkFile "tests/run_tools.rs" ''
+                #[test]
+                fn runs_both() {
+                    for (bin, want) in [
+                        (env!("CARGO_BIN_EXE_tool-a"), "tool-a ran"),
+                        (env!("CARGO_BIN_EXE_tool-b"), "tool-b ran"),
+                    ] {
+                        let out = std::process::Command::new(bin)
+                            .output()
+                            .expect("spawn");
+                        assert!(out.status.success());
+                        assert_eq!(String::from_utf8_lossy(&out.stdout).trim(), want);
+                    }
+                }
+              '')
+            ];
+          };
+          buildTests = true;
+          expectedTestOutputs = [
+            "test runs_both ... ok"
           ];
         };
         linkAgainstRlibCrate = {
@@ -476,6 +599,7 @@ rec {
           crateName = "build-script-feature-env";
           features = [
             "some-feature"
+            "some-c++17-thing"
             "crate/another_feature"
           ];
           src = symlinkJoin {
@@ -487,6 +611,10 @@ rec {
                 fn feature_not_visible() {
                   assert!(std::env::var("CARGO_FEATURE_SOME_FEATURE").is_err());
                   assert!(option_env!("CARGO_FEATURE_SOME_FEATURE").is_none());
+                  assert!(std::env::var("CARGO_FEATURE_SOME_C++17_THING").is_err());
+                  assert!(option_env!("CARGO_FEATURE_SOME_C++17_THING").is_none());
+                  assert!(std::env::var("CARGO_FEATURE_ANOTHER_FEATURE").is_err());
+                  assert!(option_env!("CARGO_FEATURE_ANOTHER_FEATURE").is_none());
                 }
                 fn main() {}
               '')
@@ -494,6 +622,10 @@ rec {
                 fn main() {
                   assert!(std::env::var("CARGO_FEATURE_SOME_FEATURE").is_ok());
                   assert!(option_env!("CARGO_FEATURE_SOME_FEATURE").is_none());
+                  assert!(std::env::var("CARGO_FEATURE_SOME_C++17_THING").is_ok());
+                  assert!(option_env!("CARGO_FEATURE_SOME_C++17_THING").is_none());
+                  assert!(std::env::var("CARGO_FEATURE_ANOTHER_FEATURE").is_err());
+                  assert!(option_env!("CARGO_FEATURE_ANOTHER_FEATURE").is_none());
                 }
               '')
             ];
@@ -705,7 +837,7 @@ rec {
 
         rustCargoTomlInTopDir =
           let
-            withoutCargoTomlSearch = builtins.removeAttrs rustCargoTomlInSubDir [ "workspace_member" ];
+            withoutCargoTomlSearch = removeAttrs rustCargoTomlInSubDir [ "workspace_member" ];
           in
           withoutCargoTomlSearch
           // {
@@ -724,6 +856,52 @@ rec {
               '')
             ];
           };
+        };
+        # Default (null) inherits extraRustcOpts for proc-macros.
+        procMacroExtraOptsInherit = {
+          procMacro = true;
+          edition = "2018";
+          extraRustcOpts = [ "--cfg=target_only" ];
+          src = mkFile "src/lib.rs" ''
+            #[cfg(not(target_only))]
+            compile_error!("extraRustcOpts not inherited by proc-macro");
+            use proc_macro as _;
+          '';
+        };
+        # When set, extraRustcOptsForProcMacro replaces extraRustcOpts
+        # for proc-macro crates.
+        procMacroExtraOptsOverride = {
+          procMacro = true;
+          edition = "2018";
+          extraRustcOpts = [ "--cfg=target_only" ];
+          extraRustcOptsForProcMacro = [ "--cfg=host_only" ];
+          src = mkFile "src/lib.rs" ''
+            #[cfg(target_only)]
+            compile_error!("extraRustcOpts leaked into proc-macro");
+            #[cfg(not(host_only))]
+            compile_error!("extraRustcOptsForProcMacro not applied");
+            use proc_macro as _;
+          '';
+        };
+        # The `lints` attr mirrors Cargo.toml's `[lints]` table and is
+        # translated to rustc `-A`/`-W`/`-D`/`-F` flags. Lower-priority
+        # entries are emitted first so that higher-priority specific lints
+        # can override them. Here `-D unused` (priority -1) is followed by
+        # `-A dead_code` (default priority 0); the build only succeeds if
+        # both flags reach rustc in that order.
+        lintsPriority = {
+          lints.rust = {
+            unused = {
+              level = "deny";
+              priority = -1;
+            };
+            dead_code = "allow";
+          };
+          src = mkFile "src/lib.rs" ''
+            #![allow(nonstandard_style)]
+            fn dead() {}
+            pub fn alive() {}
+          '';
         };
       };
       brotliCrates = (callPackage ./brotli-crates.nix { });
@@ -766,15 +944,15 @@ rec {
           ];
           src = mkBin "src/foobar.rs";
         };
-        expectedFiles =
-          [
-            "./bin/test_binary1"
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isDarwin [
-            # On Darwin, the debug symbols are in a separate directory.
-            "./bin/test_binary1.dSYM/Contents/Info.plist"
-            "./bin/test_binary1.dSYM/Contents/Resources/DWARF/test_binary1"
-          ];
+        expectedFiles = [
+          "./bin/test_binary1"
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          # On Darwin, the debug symbols are in a separate directory.
+          "./bin/test_binary1.dSYM/Contents/Info.plist"
+          "./bin/test_binary1.dSYM/Contents/Resources/DWARF/test_binary1"
+          "./bin/test_binary1.dSYM/Contents/Resources/Relocations/${stdenv.hostPlatform.rust.platform.arch}/test_binary1.yml"
+        ];
       };
 
       crateBinNoPath1Outputs = assertOutputs {
@@ -838,6 +1016,79 @@ rec {
         ];
       };
 
+      crateWasm32BinHyphens = assertOutputs {
+        name = "wasm32-crate-bin-hyphens";
+        mkCrate = mkCrate pkgsCross.wasm32-unknown-none.buildRustCrate;
+        crateArgs = {
+          crateName = "wasm32-crate-bin-hyphens";
+          crateBin = [ { name = "wasm32-crate-bin-hyphens"; } ];
+          src = mkBin "src/main.rs";
+        };
+        expectedFiles = [
+          "./bin/wasm32-crate-bin-hyphens.wasm"
+        ];
+      };
+
+      crateWasm32TargetEnv = assertOutputs {
+        name = "gnu64-crate-target-env";
+        mkCrate = mkCrate pkgsCross.wasm32-unknown-none.buildRustCrate;
+        crateArgs = {
+          crateName = "wasm32-crate-target-env";
+          crateBin = [ { name = "wasm32-crate-target-env"; } ];
+          src = symlinkJoin {
+            name = "wasm32-crate-target-env-sources";
+            paths = [
+              (mkFile "build.rs" ''
+                fn main() {
+                  assert_eq!(std::env::var("CARGO_CFG_TARGET_ENV"), Ok("".to_string()));
+                }
+              '')
+              (mkFile "src/main.rs" ''
+                use std::env;
+                #[cfg(target_env = "")]
+                fn main() {
+                  let name: String = env::args().nth(0).unwrap();
+                  println!("executed {}", name);
+                }
+              '')
+            ];
+          };
+        };
+        expectedFiles = [
+          "./bin/wasm32-crate-target-env.wasm"
+        ];
+      };
+
+      crateGnu64TargetEnv = assertOutputs {
+        name = "gnu64-crate-target-env";
+        mkCrate = mkCrate pkgsCross.gnu64.buildRustCrate;
+        crateArgs = {
+          crateName = "gnu64-crate-target-env";
+          crateBin = [ { name = "gnu64-crate-target-env"; } ];
+          src = symlinkJoin {
+            name = "gnu64-crate-target-env-sources";
+            paths = [
+              (mkFile "build.rs" ''
+                fn main() {
+                  assert_eq!(std::env::var("CARGO_CFG_TARGET_ENV"), Ok("gnu".to_string()));
+                }
+              '')
+              (mkFile "src/main.rs" ''
+                use std::env;
+                #[cfg(target_env = "gnu")]
+                fn main() {
+                  let name: String = env::args().nth(0).unwrap();
+                  println!("executed {}", name);
+                }
+              '')
+            ];
+          };
+        };
+        expectedFiles = [
+          "./bin/gnu64-crate-target-env"
+        ];
+      };
+
       brotliTest =
         let
           pkg = brotliCrates.brotli_2_5_0 { };
@@ -879,6 +1130,94 @@ rec {
             test -e ${pkg}/bin/brotli-decompressor && touch $out
           '';
 
+      # A `deny` lint from the lints table should actually fail the build.
+      lintsDenyFails =
+        let
+          crate = mkHostCrate {
+            crateName = "lintsDenyFails";
+            lints.rust.dead_code = "deny";
+            src = mkFile "src/lib.rs" ''
+              fn dead() {}
+              pub fn alive() {}
+            '';
+          };
+          failed = testers.testBuildFailure crate;
+        in
+        runCommand "assert-lintsDenyFails" { inherit failed; } ''
+          grep -q 'function .dead. is never used' "$failed/testBuildFailure.log"
+          grep -q '\-D dead.code' "$failed/testBuildFailure.log"
+          touch $out
+        '';
+
+      # `useClippy = true` plus a denied clippy lint should fail the build,
+      # proving clippy-driver (not plain rustc) compiled the crate. The
+      # `clippy::` prefix in the diagnostic is the fingerprint: rustc has no
+      # such lint group.
+      useClippyDenyFails =
+        let
+          crate = mkHostCrate {
+            crateName = "useClippyDenyFails";
+            useClippy = true;
+            lints.clippy.eq_op = "deny";
+            src = mkFile "src/lib.rs" ''
+              pub fn check() -> bool {
+                1 == 1
+              }
+            '';
+          };
+          failed = testers.testBuildFailure crate;
+        in
+        runCommand "assert-useClippyDenyFails" { inherit failed; } ''
+          grep -q 'clippy::eq.op' "$failed/testBuildFailure.log"
+          grep -q 'equal expressions' "$failed/testBuildFailure.log"
+          touch $out
+        '';
+
+      # `useClippy = true` with the default `capLints` (which resolves to
+      # `"allow"` when `lints` is empty) must still build: the cap silences
+      # clippy lints just like rustc lints. Same source as the failing test
+      # above — only the `lints` table differs.
+      useClippyDefaultCapAllows = mkHostCrate {
+        crateName = "useClippyDefaultCapAllows";
+        useClippy = true;
+        src = mkFile "src/lib.rs" ''
+          pub fn check() -> bool {
+            1 == 1
+          }
+        '';
+      };
+
+      # A library compiled by clippy-driver must produce an `.rlib` that a
+      # plain-rustc dependent can link against and run. This is the property
+      # that makes `useClippy` safe to flip per-crate.
+      useClippyRlibLinkCompat =
+        let
+          libCrate = mkHostCrate {
+            crateName = "clippylib";
+            useClippy = true;
+            src = mkFile "src/lib.rs" ''
+              pub fn test() -> i32 {
+                23
+              }
+            '';
+          };
+          binCrate = mkHostCrate {
+            crateName = "clippybin";
+            dependencies = [ libCrate ];
+            src = mkBinExtern "src/main.rs" "clippylib";
+          };
+        in
+        runCommand "run-useClippyRlibLinkCompat" { nativeBuildInputs = [ binCrate ]; } (
+          if stdenv.hostPlatform == stdenv.buildPlatform then
+            ''
+              ${binCrate}/bin/clippybin && touch $out
+            ''
+          else
+            ''
+              test -x '${binCrate}/bin/clippybin' && touch $out
+            ''
+        );
+
       rcgenTest =
         let
           pkg = rcgenCrates.rootCrate.build;
@@ -897,13 +1236,77 @@ rec {
                 test -x '${pkg}/bin/rcgen' && touch $out
               ''
           );
-    };
+
+      # Test that propagatedBuildInputs declared in a crate override are
+      # collected by completePropagatedBuildInputs and propagate transitively
+      # to all crates that depend on it.
+      propagatedBuildInputsTest =
+        let
+          fakeNativeLib = runCommand "fake-native-lib" { } "mkdir -p $out/lib && touch $out/lib/libfoo.a";
+
+          # Library crate that declares a native dep via propagatedBuildInputs
+          libCrate = mkHostCrate {
+            crateName = "mylib";
+            src = mkLib "src/lib.rs";
+            propagatedBuildInputs = [ fakeNativeLib ];
+          };
+
+          # Binary crate with a direct dependency on libCrate
+          binCrate = mkHostCrate {
+            crateName = "mybin";
+            src = mkFile "src/main.rs" "fn main() {}";
+            dependencies = [ libCrate ];
+          };
+
+          # Intermediate library that depends on libCrate
+          transitiveLib = mkHostCrate {
+            crateName = "transitivelib";
+            src = mkLib "src/lib.rs";
+            dependencies = [ libCrate ];
+          };
+
+          # Binary crate that only depends on transitiveLib (not libCrate directly)
+          transitiveBin = mkHostCrate {
+            crateName = "transitivebin";
+            src = mkFile "src/main.rs" "fn main() {}";
+            dependencies = [ transitiveLib ];
+          };
+        in
+        runCommand "propagated-build-inputs-test"
+          {
+            libCrateInputs = libCrate.completePropagatedBuildInputs;
+            binCrateInputs = binCrate.completePropagatedBuildInputs;
+            transitiveBinInputs = transitiveBin.completePropagatedBuildInputs;
+          }
+          ''
+            # libCrate itself should have fakeNativeLib in completePropagatedBuildInputs
+            echo "$libCrateInputs" | grep -q "${fakeNativeLib}" || {
+              echo "ERROR: fakeNativeLib not in libCrate.completePropagatedBuildInputs"
+              exit 1
+            }
+
+            # binCrate depends on libCrate, so fakeNativeLib should propagate
+            echo "$binCrateInputs" | grep -q "${fakeNativeLib}" || {
+              echo "ERROR: fakeNativeLib not propagated to binCrate.completePropagatedBuildInputs"
+              exit 1
+            }
+
+            # transitiveBin → transitiveLib → libCrate: fakeNativeLib should propagate transitively
+            echo "$transitiveBinInputs" | grep -q "${fakeNativeLib}" || {
+              echo "ERROR: fakeNativeLib not transitively propagated to transitiveBin.completePropagatedBuildInputs"
+              exit 1
+            }
+
+            touch $out
+          '';
+    }
+  );
   test = releaseTools.aggregate {
     name = "buildRustCrate-tests";
     meta = {
       description = "Test cases for buildRustCrate";
       maintainers = [ ];
     };
-    constituents = builtins.attrValues tests;
+    constituents = builtins.attrValues (lib.filterAttrs (_: v: lib.isDerivation v) tests);
   };
 }

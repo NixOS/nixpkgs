@@ -66,27 +66,26 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      cimg
-      curl
-      fftw
-      gmic
-      graphicsmagick
-      libjpeg
-      libpng
-      libtiff
-      openexr
-      zlib
-    ]
-    ++ (with libsForQt5; [
-      qtbase
-      qttools
-    ])
-    ++ lib.optionals stdenv.cc.isClang [
-      llvmPackages.openmp
-    ]
-    ++ variants.${variant}.extraDeps;
+  buildInputs = [
+    cimg
+    curl
+    fftw
+    gmic
+    graphicsmagick
+    libjpeg
+    libpng
+    libtiff
+    openexr
+    zlib
+  ]
+  ++ (with libsForQt5; [
+    qtbase
+    qttools
+  ])
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ]
+  ++ variants.${variant}.extraDeps;
 
   postPatch = ''
     patchShebangs \
@@ -103,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "GMIC_QT_HOST" (
       if variant == "standalone" then
         "none"
-      else if variant == "gimp" && gimp.majorVersion == "3.0" then
+      else if variant == "gimp" && gimp.apiVersion == "3.0" then
         "gimp3"
       else
         variant
@@ -135,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (variants.${variant}) description;
     license = lib.licenses.gpl3Plus;
     mainProgram = "gmic_qt";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

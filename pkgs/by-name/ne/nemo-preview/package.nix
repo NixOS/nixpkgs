@@ -10,7 +10,7 @@
   cjs,
   gtksourceview4,
   gobject-introspection,
-  libmusicbrainz5,
+  libmusicbrainz,
   webkitgtk_4_1,
   clutter-gtk,
   clutter-gst,
@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nemo-preview";
-  version = "6.4.0";
+  version = "6.6.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "nemo-extensions";
     tag = finalAttrs.version;
-    hash = "sha256-39hWA4SNuEeaPA6D5mWMHjJDs4hYK7/ZdPkTyskvm5Y=";
+    hash = "sha256-tXeMkaCYnWzg+6ng8Tyg4Ms1aUeE3xiEkQ3tKEX6Vv8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/nemo-preview";
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     cjs
     gtksourceview4
-    libmusicbrainz5
+    libmusicbrainz
     webkitgtk_4_1
     clutter-gtk
     clutter-gst

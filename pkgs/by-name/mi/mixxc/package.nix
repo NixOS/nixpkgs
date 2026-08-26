@@ -14,26 +14,24 @@
   enableX11 ? true,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mixxc";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchCrate {
     pname = "mixxc";
-    inherit version;
-    hash = "sha256-9ZQjNhmQKMfEJsMMpUBI8C6ebfl9UI4yBt6f331tFXU=";
+    inherit (finalAttrs) version;
+    hash = "sha256-YVh6SOXCf4GHqDduXP7QupC48hcIMQtjIdGJYXNXQ1E=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Ng4Vbk00m66qdm0lMaQ5Ab56x3kZKq8NsCDMTPVnQ3c=";
+  cargoHash = "sha256-w+bHaGt6aq21DpmxYNQIf/YNigfrkqnAI25Q3l/WhHc=";
 
   cargoBuildFlags = [ "--locked" ];
 
-  buildFeatures = [
-    (lib.optionals enableWayland "Wayland")
-    (lib.optionals enableX11 "X11")
-    (lib.optionals enableSass "Sass")
-  ];
+  buildFeatures =
+    lib.optionals enableWayland [ "Wayland" ]
+    ++ lib.optionals enableX11 [ "X11" ]
+    ++ lib.optionals enableSass [ "Sass" ];
 
   nativeBuildInputs = [
     pkg-config
@@ -44,9 +42,9 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libpulseaudio
     gtk4
-    (lib.optionals enableWayland gtk4-layer-shell)
-    (lib.optionals enableX11 libxcb)
-  ];
+  ]
+  ++ lib.optionals enableWayland [ gtk4-layer-shell ]
+  ++ lib.optionals enableX11 [ libxcb ];
 
   outputs = [
     "out"
@@ -60,9 +58,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Minimalistic and customizable volume mixer";
     homepage = "https://github.com/Elvyria/mixxc";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ daru-san ];
     mainProgram = "mixxc";
     platforms = lib.platforms.linux;
   };
-}
+})

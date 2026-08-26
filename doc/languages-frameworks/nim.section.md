@@ -20,15 +20,13 @@ buildNimPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "inv2004";
     repo = "ttop";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = lib.fakeHash;
   };
 
   lockFile = ./lock.json;
 
-  nimFlags = [
-    "-d:NimblePkgVersion=${finalAttrs.version}"
-  ];
+  nimFlags = [ "-d:NimblePkgVersion=${finalAttrs.version}" ];
 })
 ```
 
@@ -76,7 +74,7 @@ buildNimSbom (finalAttrs: {
   src = fetchFromSourcehut {
     owner = "~ehmry";
     repo = "nim_lk";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = lib.fakeHash;
   };
   buildInputs = [ openssl ];
@@ -95,7 +93,7 @@ The `buildNimPackage` and `buildNimSbom` functions generate flags and additional
 ```nix
 pkgs.nitter.overrideNimAttrs {
   # using a different source which has different dependencies from the standard package
-  src = pkgs.fetchFromGithub {
+  src = pkgs.fetchFromGitHub {
     # …
   };
   # new lock file generated from the source
@@ -114,7 +112,7 @@ For example, to propagate a dependency on SDL2 for lockfiles that select the Nim
   lib,
   # …
   SDL2,
-# …
+  # …
 }:
 
 {

@@ -6,13 +6,12 @@ let
   inherit (lib.strings) toInt;
   inherit (lib.trivial)
     compare
-    min
     id
+    min
+    seq
     warn
-    pipe
     ;
-  inherit (lib.attrsets) mapAttrs;
-  inherit (lib) max;
+  inherit (lib.attrsets) mapAttrs attrNames attrValues;
 in
 rec {
 
@@ -144,10 +143,13 @@ rec {
     fold' 0;
 
   /**
-    `fold` is an alias of `foldr` for historic reasons
+    `fold` is an alias of `foldr` for historic reasons.
+
+    ::: {.warning}
+    This function will be removed in 26.05.
+    :::
   */
-  # FIXME(Profpatsch): deprecate?
-  fold = foldr;
+  fold = warn "fold has been deprecated, use foldr instead" foldr;
 
   /**
     “left fold”, like `foldr`, but from the left:
@@ -259,7 +261,7 @@ rec {
     # Type
 
     ```
-    foldl' :: (acc -> x -> acc) -> acc -> [x] -> acc
+    foldl' :: (a -> b -> a) -> a -> [b] -> a
     ```
 
     # Examples
@@ -274,11 +276,14 @@ rec {
     :::
   */
   foldl' =
+    let
+      inherit (builtins) foldl';
+    in
     op: acc:
     # The builtin `foldl'` is a bit lazier than one might expect.
     # See https://github.com/NixOS/nix/pull/7158.
     # In particular, the initial accumulator value is not forced before the first iteration starts.
-    builtins.seq acc (builtins.foldl' op acc);
+    seq acc (foldl' op acc);
 
   /**
     Map with index starting from 0
@@ -296,7 +301,7 @@ rec {
     # Type
 
     ```
-    imap0 :: (int -> a -> b) -> [a] -> [b]
+    imap0 :: (Int -> a -> b) -> [a] -> [b]
     ```
 
     # Examples
@@ -328,7 +333,7 @@ rec {
     # Type
 
     ```
-    imap1 :: (int -> a -> b) -> [a] -> [b]
+    imap1 :: (Int -> a -> b) -> [a] -> [b]
     ```
 
     # Examples
@@ -370,7 +375,7 @@ rec {
 
     # Type
     ```
-    ifilter0 :: (int -> a -> bool) -> [a] -> [a]
+    ifilter0 :: (Int -> a -> Bool) -> [a] -> [a]
     ```
 
     # Examples
@@ -421,6 +426,12 @@ rec {
 
     : 1\. Function argument
 
+    # Type
+
+    ```
+    flatten :: [a | [a | [a | ...]]] -> [a]
+    ```
+
     # Examples
     :::{.example}
     ## `lib.lists.flatten` usage example
@@ -434,10 +445,10 @@ rec {
 
     :::
   */
-  flatten = x: if isList x then concatMap (y: flatten y) x else [ x ];
+  flatten = x: if isList x then concatMap flatten x else [ x ];
 
   /**
-    Remove elements equal to 'e' from a list.  Useful for buildInputs.
+    Remove elements equal to `e` from a list.  Useful for `buildInputs`.
 
     # Inputs
 
@@ -496,7 +507,7 @@ rec {
     # Type
 
     ```
-    findSingle :: (a -> bool) -> a -> a -> [a] -> a
+    findSingle :: (a -> Bool) -> a -> a -> [a] -> a
     ```
 
     # Examples
@@ -618,7 +629,7 @@ rec {
     # Type
 
     ```
-    findFirst :: (a -> bool) -> a -> [a] -> a
+    findFirst :: (a -> Bool) -> a -> [a] -> a
     ```
 
     # Examples
@@ -635,14 +646,31 @@ rec {
     :::
   */
   findFirst =
+    let
+      init = {
+        found = false;
+      };
+    in
     pred: default: list:
     let
-      index = findFirstIndex pred null list;
+      result = foldl' (
+        acc: el:
+        if !acc.found && pred el then
+          # We haven't found a match yet, and the current element passes the
+          # predicate!
+          {
+            found = true;
+            value = el;
+          }
+        else
+          # There's already a match, or the current element fails the predicate
+          acc
+      ) init list;
     in
-    if index == null then default else elemAt list index;
+    if result.found then result.value else default;
 
   /**
-    Return true if function `pred` returns true for at least one
+    Returns true if function `pred` returns true for at least one
     element of `list`.
 
     # Inputs
@@ -658,7 +686,7 @@ rec {
     # Type
 
     ```
-    any :: (a -> bool) -> [a] -> bool
+    any :: (a -> Bool) -> [a] -> Bool
     ```
 
     # Examples
@@ -677,7 +705,7 @@ rec {
   any = builtins.any;
 
   /**
-    Return true if function `pred` returns true for all elements of
+    Returns true if function `pred` returns true for all elements of
     `list`.
 
     # Inputs
@@ -693,7 +721,7 @@ rec {
     # Type
 
     ```
-    all :: (a -> bool) -> [a] -> bool
+    all :: (a -> Bool) -> [a] -> Bool
     ```
 
     # Examples
@@ -724,7 +752,7 @@ rec {
     # Type
 
     ```
-    count :: (a -> bool) -> [a] -> int
+    count :: (a -> Bool) -> [a] -> Int
     ```
 
     # Examples
@@ -758,7 +786,7 @@ rec {
     # Type
 
     ```
-    optional :: bool -> a -> [a]
+    optional :: Bool -> a -> [a]
     ```
 
     # Examples
@@ -777,7 +805,7 @@ rec {
   optional = cond: elem: if cond then [ elem ] else [ ];
 
   /**
-    Return a list or an empty list, depending on a boolean value.
+    Returns a list or an empty list, depending on a boolean value.
 
     # Inputs
 
@@ -792,7 +820,7 @@ rec {
     # Type
 
     ```
-    optionals :: bool -> [a] -> [a]
+    optionals :: Bool -> [a] -> [a]
     ```
 
     # Examples
@@ -821,6 +849,12 @@ rec {
 
     : 1\. Function argument
 
+    # Type
+
+    ```
+    toList :: (a | [a]) -> [a]
+    ```
+
     # Examples
     :::{.example}
     ## `lib.lists.toList` usage example
@@ -829,7 +863,7 @@ rec {
     toList [ 1 2 ]
     => [ 1 2 ]
     toList "hi"
-    => [ "hi "]
+    => [ "hi" ]
     ```
 
     :::
@@ -837,7 +871,7 @@ rec {
   toList = x: if isList x then x else [ x ];
 
   /**
-    Return a list of integers from `first` up to and including `last`.
+    Returns a list of integers from `first` up to and including `last`.
 
     # Inputs
 
@@ -852,7 +886,7 @@ rec {
     # Type
 
     ```
-    range :: int -> int -> [int]
+    range :: Int -> Int -> [Int]
     ```
 
     # Examples
@@ -871,7 +905,7 @@ rec {
   range = first: last: if first > last then [ ] else genList (n: first + n) (last - first + 1);
 
   /**
-    Return a list with `n` copies of an element.
+    Returns a list with `n` copies of an element.
 
     # Inputs
 
@@ -886,7 +920,7 @@ rec {
     # Type
 
     ```
-    replicate :: int -> a -> [a]
+    replicate :: Int -> a -> [a]
     ```
 
     # Examples
@@ -921,7 +955,7 @@ rec {
     # Type
 
     ```
-    (a -> bool) -> [a] -> { right :: [a]; wrong :: [a]; }
+    partition :: (a -> Bool) -> [a] -> { right :: [a]; wrong :: [a]; }
     ```
 
     # Examples
@@ -959,6 +993,12 @@ rec {
     `lst`
 
     : 4\. Function argument
+
+    # Type
+
+    ```
+    groupBy' :: (a -> b -> a) -> a -> (b -> String) -> [b] -> { [String] :: a }
+    ```
 
     # Examples
     :::{.example}
@@ -1102,9 +1142,10 @@ rec {
   reverseList =
     xs:
     let
-      l = length xs;
+      # subtract one to save an __sub call on every element
+      lastIndex = length xs - 1;
     in
-    genList (n: elemAt xs (l - n - 1)) l;
+    genList (n: elemAt xs (lastIndex - n)) (lastIndex + 1);
 
   /**
     Depth-First Search (DFS) for lists `list != []`.
@@ -1125,6 +1166,12 @@ rec {
     `list`
 
     : 3\. Function argument
+
+    # Type
+
+    ```
+    listDfs :: Bool -> (a -> a -> Bool) -> [a] -> ({ minimal :: a; visited :: [a]; rest :: [a]; } | { cycle :: a; loops :: [a]; visited :: [a]; rest :: [a]; })
+    ```
 
     # Examples
     :::{.example}
@@ -1155,13 +1202,13 @@ rec {
           c = filter (x: before x us) visited;
           b = partition (x: before x us) rest;
         in
-        if stopOnCycles && (length c > 0) then
+        if stopOnCycles && c != [ ] then
           {
             cycle = us;
             loops = c;
             inherit visited rest;
           }
-        else if length b.right == 0 then
+        else if b.right == [ ] then
           # nothing is before us
           {
             minimal = us;
@@ -1191,6 +1238,12 @@ rec {
 
     : 2\. Function argument
 
+    # Type
+
+    ```
+    toposort :: (a -> a -> Bool) -> [a] -> ({ result :: [a]; } | { cycle :: [a]; loops :: [a]; })
+    ```
+
     # Examples
     :::{.example}
     ## `lib.lists.toposort` usage example
@@ -1212,27 +1265,33 @@ rec {
     :::
   */
   toposort =
-    before: list:
+    before:
     let
-      dfsthis = listDfs true before list;
-      toporest = toposort before (dfsthis.visited ++ dfsthis.rest);
+      dfs = listDfs true before;
+      recurse =
+        list:
+        let
+          dfsthis = dfs list;
+          toporest = recurse (dfsthis.visited ++ dfsthis.rest);
+        in
+        if length list < 2 then
+          # finish
+          { result = list; }
+        else if dfsthis ? cycle then
+          # there's a cycle, starting from the current vertex, return it
+          {
+            cycle = reverseList dfsthis.visited ++ [ dfsthis.cycle ];
+            inherit (dfsthis) loops;
+          }
+        else if toporest ? cycle then
+          # there's a cycle somewhere else in the graph, return it
+          toporest
+        # Slow, but short. Can be made a bit faster with an explicit stack.
+        else
+          # there are no cycles
+          { result = [ dfsthis.minimal ] ++ toporest.result; };
     in
-    if length list < 2 then
-      # finish
-      { result = list; }
-    else if dfsthis ? cycle then
-      # there's a cycle, starting from the current vertex, return it
-      {
-        cycle = reverseList ([ dfsthis.cycle ] ++ dfsthis.visited);
-        inherit (dfsthis) loops;
-      }
-    else if toporest ? cycle then
-      # there's a cycle somewhere else in the graph, return it
-      toporest
-    # Slow, but short. Can be made a bit faster with an explicit stack.
-    else
-      # there are no cycles
-      { result = [ dfsthis.minimal ] ++ toporest.result; };
+    recurse;
 
   /**
     Sort a list based on a comparator function which compares two
@@ -1362,6 +1421,12 @@ rec {
 
     : The second list
 
+    # Type
+
+    ```
+    compareLists :: (a -> a -> Int) -> [a] -> [a] -> Int
+    ```
+
     # Examples
     :::{.example}
     ## `lib.lists.compareLists` usage examples
@@ -1401,6 +1466,12 @@ rec {
 
     : 1\. Function argument
 
+    # Type
+
+    ```
+    naturalSort :: [String] -> [String]
+    ```
+
     # Examples
     :::{.example}
     ## `lib.lists.naturalSort` usage example
@@ -1429,7 +1500,7 @@ rec {
     map (x: elemAt x 1) (sort less prepared);
 
   /**
-    Return the first (at most) N elements of a list.
+    Returns the first (at most) N elements of a list.
 
     # Inputs
 
@@ -1444,7 +1515,7 @@ rec {
     # Type
 
     ```
-    take :: int -> [a] -> [a]
+    take :: Int -> [a] -> [a]
     ```
 
     # Examples
@@ -1460,10 +1531,15 @@ rec {
 
     :::
   */
-  take = count: sublist 0 count;
+  take =
+    count: list:
+    let
+      len = length list;
+    in
+    genList (elemAt list) (if count > len then len else count);
 
   /**
-    Return the last (at most) N elements of a list.
+    Returns the last (at most) N elements of a list.
 
     # Inputs
 
@@ -1478,7 +1554,7 @@ rec {
     # Type
 
     ```
-    takeEnd :: int -> [a] -> [a]
+    takeEnd :: Int -> [a] -> [a]
     ```
 
     # Examples
@@ -1494,7 +1570,13 @@ rec {
 
     :::
   */
-  takeEnd = n: xs: drop (max 0 (length xs - n)) xs;
+  takeEnd =
+    count: list:
+    let
+      len = length list;
+      start = if count > len then 0 else len - count;
+    in
+    genList (i: elemAt list (start + i)) (if start > len then 0 else len - start);
 
   /**
     Remove the first (at most) N elements of a list.
@@ -1512,7 +1594,7 @@ rec {
     # Type
 
     ```
-    drop :: int -> [a] -> [a]
+    drop :: Int -> [a] -> [a]
     ```
 
     # Examples
@@ -1528,7 +1610,12 @@ rec {
 
     :::
   */
-  drop = count: list: sublist count (length list) list;
+  drop =
+    count: list:
+    let
+      len = length list;
+    in
+    genList (n: elemAt list (n + count)) (if count > len then 0 else len - count);
 
   /**
     Remove the last (at most) N elements of a list.
@@ -1562,7 +1649,19 @@ rec {
     ```
     :::
   */
-  dropEnd = n: xs: take (max 0 (length xs - n)) xs;
+  dropEnd =
+    n: list:
+    let
+      len = length list;
+    in
+    genList (elemAt list) (
+      if n > len then
+        0
+      else if n < 0 then
+        len
+      else
+        len - n
+    );
 
   /**
     Whether the first list is a prefix of the second list.
@@ -1580,7 +1679,7 @@ rec {
     # Type
 
     ```
-    hasPrefix :: [a] -> [a] -> bool
+    hasPrefix :: [a] -> [a] -> Bool
     ```
 
     # Examples
@@ -1639,7 +1738,7 @@ rec {
       throw "lib.lists.removePrefix: First argument is not a list prefix of the second argument";
 
   /**
-    Return a list consisting of at most `count` elements of `list`,
+    Returns a list consisting of at most `count` elements of `list`,
     starting at index `start`.
 
     # Inputs
@@ -1659,7 +1758,7 @@ rec {
     # Type
 
     ```
-    sublist :: int -> int -> [a] -> [a]
+    sublist :: Int -> Int -> [a] -> [a]
     ```
 
     # Examples
@@ -1737,7 +1836,7 @@ rec {
     take commonPrefixLength list1;
 
   /**
-    Return the last element of a list.
+    Returns the last element of a list.
 
     This function throws an error if the list is empty.
 
@@ -1766,11 +1865,11 @@ rec {
   */
   last =
     list:
-    assert lib.assertMsg (list != [ ]) "lists.last: list must not be empty!";
+    assert list != [ ] || throw "lists.last: list must not be empty!";
     elemAt list (length list - 1);
 
   /**
-    Return all elements but the last.
+    Returns all elements but the last.
 
     This function throws an error if the list is empty.
 
@@ -1799,11 +1898,11 @@ rec {
   */
   init =
     list:
-    assert lib.assertMsg (list != [ ]) "lists.init: list must not be empty!";
-    take (length list - 1) list;
+    assert list != [ ] || throw "lists.init: list must not be empty!";
+    genList (elemAt list) (length list - 1);
 
   /**
-    Return the image of the cross product of some lists by a function.
+    Returns the image of the cross product of some lists by a function.
 
     # Examples
     :::{.example}
@@ -1814,7 +1913,7 @@ rec {
     => [ "13" "14" "23" "24" ]
     ```
 
-    The following function call is equivalent to the one deprecated above:
+    If you have an attrset already, consider mapCartesianProduct:
 
     ```nix
     mapCartesianProduct (x: "${toString x.a}${toString x.b}") { a = [1 2]; b = [3 4]; }
@@ -1822,22 +1921,14 @@ rec {
     ```
     :::
   */
-  crossLists = warn ''
-    lib.crossLists is deprecated, use lib.mapCartesianProduct instead.
-
-    For example, the following function call:
-
-    nix-repl> lib.crossLists (x: y: x+y) [[1 2] [3 4]]
-    [ 4 5 5 6 ]
-
-    Can now be replaced by the following one:
-
-    nix-repl> lib.mapCartesianProduct ({x,y}: x+y) { x = [1 2]; y = [3 4]; }
-    [ 4 5 5 6 ]
-  '' (f: foldl (fs: args: concatMap (f: map f args) fs) [ f ]);
+  crossLists = f: foldl (fs: args: concatMap (f: map f args) fs) [ f ];
 
   /**
     Remove duplicate elements from the `list`. O(n^2) complexity.
+
+    :::{.note}
+    If the list only contains strings and order is not important, the complexity can be reduced to O(n log n) by using [`lib.lists.uniqueStrings`](#function-library-lib.lists.uniqueStrings) instead.
+    :::
 
     # Inputs
 
@@ -1865,6 +1956,43 @@ rec {
   unique = foldl' (acc: e: if elem e acc then acc else acc ++ [ e ]) [ ];
 
   /**
+    Removes duplicate strings from the `list`. O(n log n) complexity.
+
+    :::{.note}
+    Order is not preserved.
+
+    All elements of the list must be strings without context.
+
+    This function fails when the list contains a non-string element or a [string with context](https://nix.dev/manual/nix/latest/language/string-context.html).
+    In that case use [`lib.lists.unique`](#function-library-lib.lists.unique) instead.
+    :::
+
+    # Inputs
+
+    `list`
+
+    : List of strings
+
+    # Type
+
+    ```
+    uniqueStrings :: [String] -> [String]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.lists.uniqueStrings` usage example
+
+    ```nix
+    uniqueStrings [ "foo" "bar" "foo" ]
+    => [ "bar" "foo" ] # order is not preserved
+    ```
+
+    :::
+  */
+  uniqueStrings = list: attrNames (groupBy id list);
+
+  /**
     Check if list contains only unique elements. O(n^2) complexity.
 
     # Inputs
@@ -1876,7 +2004,7 @@ rec {
     # Type
 
     ```
-    allUnique :: [a] -> bool
+    allUnique :: [a] -> Bool
     ```
 
     # Examples
@@ -1895,7 +2023,7 @@ rec {
   allUnique = list: (length (unique list) == length list);
 
   /**
-    Intersects list 'list1' and another list (`list2`).
+    Intersects list `list1` and another list (`list2`).
 
     O(nm) complexity.
 
@@ -1908,6 +2036,12 @@ rec {
     `list2`
 
     : Second list
+
+    # Type
+
+    ```
+    intersectLists :: [a] -> [a] -> [a]
+    ```
 
     # Examples
     :::{.example}
@@ -1923,7 +2057,7 @@ rec {
   intersectLists = e: filter (x: elem x e);
 
   /**
-    Subtracts list 'e' from another list (`list2`).
+    Subtracts list `e` from another list (`list2`).
 
     O(nm) complexity.
 
@@ -1936,6 +2070,12 @@ rec {
     `list2`
 
     : Second list
+
+    # Type
+
+    ```
+    subtractLists :: [a] -> [a] -> [a]
+    ```
 
     # Examples
     :::{.example}
@@ -1952,7 +2092,7 @@ rec {
 
   /**
     Test if two lists have no common element.
-    It should be slightly more efficient than (intersectLists a b == [])
+    It should be slightly more efficient than `intersectLists a b == []`.
 
     # Inputs
 
@@ -1963,7 +2103,79 @@ rec {
     `b`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    mutuallyExclusive :: [a] -> [a] -> Bool
+    ```
   */
   mutuallyExclusive = a: b: length a == 0 || !(any (x: elem x a) b);
 
+  /**
+    Concatenate all attributes of an attribute set.
+    This assumes that every attribute of the set is a list.
+
+    # Inputs
+
+    `set`
+
+    : Attribute set with attributes that are lists
+
+    # Type
+
+    ```
+    concatAttrValues :: { [String] :: [a] } -> [a]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.concatAttrValues` usage example
+
+    ```nix
+    concatAttrValues { a = [ 1 2 ]; b = [ 3 ]; }
+    => [ 1 2 3 ]
+    ```
+
+    :::
+  */
+  concatAttrValues = set: concatLists (attrValues set);
+
+  /**
+    Replaces a list's nth element with a new element
+
+    # Inputs
+
+    `list`
+    : Input list
+
+    `idx`
+    : index to replace
+
+    `newElem`
+    : new element to replace with
+
+    # Type
+
+    ```
+    replaceElemAt :: [a] -> Int -> a -> [a]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `replaceElemAt` usage example
+
+    ```nix
+    lib.replaceElemAt` [1 2 3] 0 "a"
+    => ["a" 2 3]
+    ```
+
+    :::
+  */
+  replaceElemAt =
+    list: idx: newElem:
+    assert
+      idx >= 0 && idx < length list
+      || throw "'lists.replaceElemAt' called with index ${toString idx} on a list of size ${toString (length list)}";
+    genList (i: if i == idx then newElem else elemAt list i) (length list);
 }

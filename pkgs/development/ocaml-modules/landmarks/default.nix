@@ -2,26 +2,32 @@
   lib,
   fetchFromGitHub,
   buildDunePackage,
-  ocaml,
 }:
 
-buildDunePackage {
+buildDunePackage (finalAttrs: {
   pname = "landmarks";
-  version = "1.4";
-  minimalOCamlVersion = "4.08";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "LexiFi";
     repo = "landmarks";
-    rev = "b0c753cd2a4c4aa00dffdd3be187d8ed592fabf7";
-    hash = "sha256-Wpr76JURUFrj7v39rdM/2Lr7boa7nL/bnPEz1vMrmQo";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9o9jf0M3zKc+Xojs4dqPRctYswSYqIo0jeOvkfdLfZ4=";
   };
 
-  doCheck = lib.versionAtLeast ocaml.version "4.08" && lib.versionOlder ocaml.version "5.0";
+  doCheck = true;
 
-  meta = with lib; {
+  meta = {
+    homepage = "https://github.com/LexiFi/landmarks";
     description = "Simple Profiling Library for OCaml";
-    maintainers = [ maintainers.kenran ];
-    license = licenses.mit;
+    longDescription = ''
+      Landmarks is a simple profiling library for OCaml. It provides
+      primitives to measure time spent in portion of instrumented code. The
+      instrumentation of the code may either done by hand, automatically or
+      semi-automatically using the ppx pepreprocessor (see landmarks-ppx package).
+    '';
+    changelog = "https://raw.githubusercontent.com/LexiFi/landmarks/refs/tags/v${finalAttrs.version}/CHANGES.md";
+    maintainers = with lib.maintainers; [ kenran ];
+    license = lib.licenses.mit;
   };
-}
+})

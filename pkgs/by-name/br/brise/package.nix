@@ -6,8 +6,9 @@
 }:
 
 stdenv.mkDerivation {
+  # TODO deprecate in favor of "plum" (https://github.com/rime/plum)
   pname = "brise";
-  version = "unstable-2017-09-16";
+  version = "0-unstable-2016-12-02";
 
   src = fetchFromGitHub {
     owner = "rime";
@@ -33,7 +34,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Rime Schema Repository";
     longDescription = ''
       This software is a collection of data packages used by Rime
@@ -43,8 +44,8 @@ stdenv.mkDerivation {
     homepage = "https://rime.im";
     # Note that individual packages in this collection
     # may be released under different licenses
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sifmelcara ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sifmelcara ];
   };
 }

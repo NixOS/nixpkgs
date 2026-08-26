@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   uc-micro-py,
   setuptools,
@@ -11,13 +10,11 @@
 buildPythonPackage rec {
   pname = "linkify-it-py";
   version = "2.0.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tsutsu3";
-    repo = pname;
+    repo = "linkify-it-py";
     tag = "v${version}";
     hash = "sha256-BLwIityUZDVdSbvTpLf6QUlZUavWzG/45Nfffn18/vU=";
   };
@@ -30,10 +27,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Links recognition library with full unicode support";
     homepage = "https://github.com/tsutsu3/linkify-it-py";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

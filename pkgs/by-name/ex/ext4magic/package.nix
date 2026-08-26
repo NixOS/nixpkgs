@@ -10,21 +10,25 @@
   bzip2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.3.2";
   pname = "ext4magic";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ext4magic/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/ext4magic/ext4magic-${finalAttrs.version}.tar.gz";
     sha256 = "8d9c6a594f212aecf4eb5410d277caeaea3adc03d35378257dfd017ef20ea115";
   };
 
   patches = [
     (fetchpatch {
       url = "https://sourceforge.net/p/ext4magic/tickets/10/attachment/ext4magic-0.3.2-i_dir_acl.patch";
-      sha256 = "1accydd8kigid68yir2fbihm3r3x8ws3iyznp25snkx41w6y6x8c";
+      hash = "sha256-DHXjDQ+kT6uLuPb7ODRHfeRRYVxO5OiRafHFiVrzjKk=";
     })
     ./glibc-fix.patch
+    (fetchpatch {
+      url = "https://salsa.debian.org/pkg-security-team/ext4magic/-/raw/0e52341dbe8681a6e1a59d902e5e33ec13be1cbe/debian/patches/fix-segfault-extent-free.patch";
+      hash = "sha256-MI363/E676E8ZH41k/XnQ2kdWzKAp5uQF/h2FN7X/x8=";
+    })
   ];
 
   buildInputs = [
@@ -36,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Recover / undelete files from ext3 or ext4 partitions";
     longDescription = ''
       ext4magic can recover/undelete files from ext3 or ext4 partitions
@@ -49,9 +53,9 @@ stdenv.mkDerivation rec {
       It's much more effective and works much better than extundelete.
     '';
     homepage = "https://ext4magic.sourceforge.net/ext4magic_en.html";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.rkoe ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.rkoe ];
     mainProgram = "ext4magic";
   };
-}
+})

@@ -14,16 +14,17 @@
   ncurses,
   libuuid,
   pandoc,
+  pipewire,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ctune";
-  version = "1.3.3";
+  version = "1.3.10";
 
   src = fetchFromGitHub {
     owner = "An7ar35";
     repo = "ctune";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jiRUEUmcjuylJj23ZFJS0BNS4NIdzuVL4AmO6CNaxHY=";
+    hash = "sha256-pC1xlcEX1f2kGewkq88iDAZwSlcRHmBpIw1aW74X6jw=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     json_c
     ncurses
     libuuid
+    pipewire
   ];
 
   strictDeps = true;
@@ -52,10 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_PREFIX=''"
   ];
 
-  patches = [ ./cmake_disable_git_clone.patch ];
-
   meta = {
-    description = "A nice terminal nCurses (tui) internet radio player for Linux, browse and search from api.radio-browser.info";
+    description = "Nice terminal nCurses (tui) internet radio player for Linux, browse and search from api.radio-browser.info";
     homepage = "https://github.com/An7ar35/ctune";
     changelog = "https://github.com/An7ar35/ctune/blob/master/CHANGELOG.md";
     license = lib.licenses.agpl3Plus;

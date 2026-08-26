@@ -17,14 +17,14 @@
   runtimeShell,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "slack-cli";
   version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "rockymadden";
     repo = "slack-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "022yr3cpfg0v7cxi62zzk08vp0l3w851qpfh6amyfgjiynnfyddl";
   };
 
@@ -59,9 +59,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    homepage = "https://github.com/rockymadden/slack-cli";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "slack";
     platforms = lib.platforms.unix;
   };
-}
+})

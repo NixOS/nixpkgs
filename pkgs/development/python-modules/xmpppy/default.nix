@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "xmpppy";
-  version = "0.7.1";
+  version = "0.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xmpppy";
     repo = "xmpppy";
     tag = version;
-    hash = "sha256-SnzIjEWSCdiCtD8bmPTH02JprmZhrABB4HCqtt2RBuk=";
+    hash = "sha256-wg7mxNHQ1+cFDLmHNafwQ2+45Jiqy36uZh28Ksu0k7Y=";
   };
 
   dependencies = [ six ];
@@ -25,11 +25,11 @@ buildPythonPackage rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Python 2/3 implementation of XMPP";
     homepage = "https://github.com/xmpppy/xmpppy";
     changelog = "https://github.com/xmpppy/xmpppy/blob/${version}/CHANGES.rst";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ jopejoe1 ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ jopejoe1 ];
   };
 }

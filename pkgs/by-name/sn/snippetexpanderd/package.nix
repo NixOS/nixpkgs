@@ -11,18 +11,18 @@
   wtype,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "snippetexpanderd";
-  version = "1.0.3";
+  version = "1.1.2";
 
   src = fetchFromSourcehut {
     owner = "~ianmjones";
     repo = "snippetexpander";
-    rev = "v${version}";
-    hash = "sha256-NIMuACrq8RodtjeBbBY42VJ8xqj7fZvdQ2w/5QsjjJI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-L+3Zn4z48ZqoVH38oxKg2BkhCTGynsIofQqMDzkfha4=";
   };
 
-  vendorHash = "sha256-2nLO/b6XQC88VXE+SewhgKpkRtIHsva+fDudgKpvZiY=";
+  vendorHash = "sha256-1ofkbbitCzrLxugi769jbjOD2iN0Z6kYC5d7X2GYNIg=";
 
   proxyVendor = true;
 
@@ -44,7 +44,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X 'main.version=${src.rev}'"
+    "-X 'main.version=${finalAttrs.src.rev}'"
   ];
 
   postInstall = ''
@@ -69,8 +69,8 @@ buildGoModule rec {
     description = "Your little expandable text snippet helper daemon";
     homepage = "https://snippetexpander.org";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "snippetexpanderd";
   };
-}
+})

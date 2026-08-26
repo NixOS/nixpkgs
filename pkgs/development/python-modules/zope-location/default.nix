@@ -8,20 +8,26 @@
   zope-schema,
   zope-component,
   zope-configuration,
+  zope-copy,
   unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "zope-location";
-  version = "5.0";
+  version = "6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.location";
     tag = version;
-    hash = "sha256-C8tQ4qqzkQx+iU+Pm3iCEchtqOZT/qcYFSzJWzqlhnI=";
+    hash = "sha256-s7HZda+U87P62elX/KbDp2o9zAplgFVmnedDI/uq2sk=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools ==" "setuptools >="
+  '';
 
   build-system = [ setuptools ];
 
@@ -34,17 +40,12 @@ buildPythonPackage rec {
   optional-dependencies = {
     zcml = [ zope-configuration ];
     component = [ zope-component ];
+    copy = [ zope-copy ];
   };
 
   pythonImportsCheck = [ "zope.location" ];
 
   nativeCheckInputs = [ unittestCheckHook ];
-
-  # prevent cirtular import
-  preCheck = ''
-    rm src/zope/location/tests/test_configure.py
-    rm src/zope/location/tests/test_pickling.py
-  '';
 
   unittestFlagsArray = [ "src/zope/location/tests" ];
 

@@ -1,42 +1,53 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  libX11,
-  libXxf86vm,
-  libXext,
-  libXrandr,
+  fetchFromCodeberg,
+  cmake,
+  ninja,
+  libx11,
+  libxxf86vm,
+  libxrandr,
+  samurai,
+  fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xcalib";
-  version = "0.10";
+  version = "0.11";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "OpenICC";
     repo = "xcalib";
-    rev = version;
-    sha256 = "05fzdjmhiafgi2jf0k41i3nm0837a78sb6yv59cwc23nla8g0bhr";
+    tag = finalAttrs.version;
+    hash = "sha256-o0pizV4Qrb9wfVKVNH2Ifb9tr7N7iveVHQB39WVCl8w=";
   };
 
-  buildInputs = [
-    libX11
-    libXxf86vm
-    libXext
-    libXrandr
+  patches = [
+    # bump min cmake to v3.5
+    (fetchpatch {
+      url = "https://codeberg.org/OpenICC/xcalib/commit/e8566ead8c043b5f0003c3613b91deab6430eac8.patch";
+      hash = "sha256-gZc4itfsP5T68ZucdYJWJ4sL11xFaw5ePABsmEYHxrU=";
+    })
   ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp xcalib $out/bin/
-  '';
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
 
-  meta = with lib; {
-    inherit (src.meta) homepage;
+  buildInputs = [
+    libx11
+    libxxf86vm
+    libxrandr
+    samurai
+  ];
+
+  meta = {
+    inherit (finalAttrs.src.meta) homepage;
     description = "Tiny monitor calibration loader for X and MS-Windows";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "xcalib";
   };
-}
+})

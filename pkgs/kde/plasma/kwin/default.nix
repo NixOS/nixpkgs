@@ -7,15 +7,15 @@
   qtvirtualkeyboard,
   qtwayland,
   libinput,
-  xorg,
+  libxcvt,
   xwayland,
   libcanberra,
   libdisplay-info,
   libei,
+  libevdev,
   libgbm,
   lcms2,
   pipewire,
-  krunner,
   python3,
   fetchpatch,
 }:
@@ -23,19 +23,14 @@ mkKdeDerivation {
   pname = "kwin";
 
   patches = [
-    # Follow symlinks when searching for aurorae configs
-    # FIXME(later): upstream?
-    ./0001-follow-symlinks.patch
-    # The rest are NixOS-specific hacks
     ./0003-plugins-qpa-allow-using-nixos-wrapper.patch
     ./0001-NixOS-Unwrap-executable-name-for-.desktop-search.patch
-    ./0001-Lower-CAP_SYS_NICE-from-the-ambient-set.patch
 
-    # Backport crash fix
-    # FIXME: remove in 6.3.5
+    # backport crash fix with latest Mesa
+    # FIXME: remove in next update
     (fetchpatch {
-      url = "https://invent.kde.org/plasma/kwin/-/commit/93bf2f98ae22e654d997c7140b7fe9936fa3f2d3.patch";
-      hash = "sha256-Jaa7IVuYMfxzUv0y2rUo5hdYavjaUkEW9/yteL5katE=";
+      url = "https://invent.kde.org/plasma/kwin/-/commit/2d0613acd044544e79b034b1cbc248664edf2884.diff";
+      hash = "sha256-dpflStJ01aChNYDO+dfI67LhLWoC3sovaAza1AIck1E=";
     })
   ];
 
@@ -60,18 +55,20 @@ mkKdeDerivation {
     qtvirtualkeyboard
     qtwayland
 
-    krunner
-
     libgbm
     lcms2
     libcanberra
     libdisplay-info
     libei
+    libevdev
     libinput
     pipewire
 
-    xorg.libxcvt
+    libxcvt
     # we need to provide this so it knows our xwayland supports new features
     xwayland
   ];
+
+  # plugin QML relies on non-global imports
+  dontQmlLint = true;
 }

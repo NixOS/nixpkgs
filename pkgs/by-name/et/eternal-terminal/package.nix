@@ -9,18 +9,19 @@
   protobuf,
   zlib,
   catch2,
-  darwin,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eternal-terminal";
-  version = "6.2.9";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "MisterTea";
     repo = "EternalTerminal";
-    tag = "et-v${version}";
-    hash = "sha256-vukh3a6SxHaVCT4hmoVt4hEGB8Sqylu53Nz8fgBWkTM";
+    tag = "et-v${finalAttrs.version}";
+    hash = "sha256-uZnjtSubTljFlbIZEznfEmNRaUWsuZotRapn0wexkow=";
   };
 
   nativeBuildInputs = [
@@ -46,21 +47,30 @@ stdenv.mkDerivation rec {
     "-DDISABLE_CRASH_LOG=TRUE"
   ];
 
-  CXXFLAGS = lib.optionals stdenv.cc.isClang [
-    "-std=c++17"
-  ];
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    CXXFLAGS = toString [ "-std=c++17" ];
+  };
 
   doCheck = true;
+  doInstallCheck = true;
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  checkPhase = ''
+    ctest --output-on-failure -E 'et-test\.LargeInputNoDeadlock'
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Remote shell that automatically reconnects without interrupting the session";
     homepage = "https://eternalterminal.dev/";
-    changelog = "https://github.com/MisterTea/EternalTerminal/releases/tag/et-v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      dezgeg
+    changelog = "https://github.com/MisterTea/EternalTerminal/releases/tag/et-v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       jshort
+      tomasrivera
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "et";
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

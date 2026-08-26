@@ -26,7 +26,7 @@
   libsndfile,
   libebur128,
   rnnoise,
-  boost,
+  boost187,
   dbus,
   fftwFloat,
   calf,
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
 
   src = fetchFromGitHub {
     owner = "wwmm";
-    repo = "pulseeffects";
+    repo = "easyeffects";
     rev = "fbe0a724c1405cee624802f381476cf003dfcfa";
     hash = "sha256-tyVUWc8w08WUnJRTjJVTIiG/YBWTETNYG+4amwEYezY=";
   };
@@ -88,7 +88,7 @@ stdenv.mkDerivation {
     libsamplerate
     libsndfile
     rnnoise
-    boost
+    boost187
     dbus
     fftwFloat
     zita-convolver
@@ -106,12 +106,12 @@ stdenv.mkDerivation {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Limiter, compressor, reverberation, equalizer and auto volume effects for Pulseaudio applications";
     mainProgram = "pulseeffects";
-    homepage = "https://github.com/wwmm/pulseeffects";
-    license = licenses.gpl3Plus;
+    homepage = "https://github.com/wwmm/easyeffects";
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -3,35 +3,33 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-let
+
+buildGoModule (finalAttrs: {
   pname = "saucectl";
-  version = "0.194.3";
-in
-buildGoModule {
-  inherit pname version;
+  version = "0.213.0";
 
   src = fetchFromGitHub {
     owner = "saucelabs";
     repo = "saucectl";
-    tag = "v${version}";
-    hash = "sha256-ECOJ+8gAx/LoCV3l9Nl585E9b8MwptpmweJrwzFx2Vc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-h4NQA9ODSqNg7nds9zp9Gv3iFA5dI+hujcaBa1hLKt8=";
   };
 
   ldflags = [
-    "-X github.com/saucelabs/saucectl/internal/version.Version=${version}"
-    "-X github.com/saucelabs/saucectl/internal/version.GitCommit=${version}"
+    "-X github.com/saucelabs/saucectl/internal/version.Version=${finalAttrs.version}"
+    "-X github.com/saucelabs/saucectl/internal/version.GitCommit=${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-N8e8k8vAyVY57iqHU6P88hn9NS3Mdfbgx5P8/wDcmMY=";
+  vendorHash = "sha256-931KJUQq/eSqssDKJa5mL33TLBwBFbz4DT1RDZIiC9Y=";
 
   checkFlags = [ "-skip=^TestNewRequestWithContext$" ];
 
   meta = {
     description = "Command line interface for the Sauce Labs platform";
-    changelog = "https://github.com/saucelabs/saucectl/releases/tag/v${version}";
+    changelog = "https://github.com/saucelabs/saucectl/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/saucelabs/saucectl";
     license = lib.licenses.apsl20;
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "saucectl";
   };
-}
+})

@@ -6,7 +6,7 @@ let
 in
 {
   name = "librenms";
-  meta.maintainers = lib.teams.wdz.members;
+  meta.maintainers = with lib.maintainers; [ johannwagner ];
 
   nodes.librenms = {
     time.timeZone = "Europe/Berlin";
@@ -49,9 +49,6 @@ in
       script = ''
         API_USER_NAME=api
         API_TOKEN=${api_token} # random md5 hash
-
-        # seeding database to get the admin roles
-        ${pkgs.librenms}/artisan db:seed --force --no-interaction
 
         # we don't need to know the password, it just has to exist
         API_USER_PASS=$(${pkgs.pwgen}/bin/pwgen -s 64 1)

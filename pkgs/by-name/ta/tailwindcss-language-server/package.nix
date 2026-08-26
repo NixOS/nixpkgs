@@ -1,59 +1,54 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
-  nodejs_23,
-  pnpm_9,
-  cacert,
+  nodejs,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  nix-update-script,
 }:
-
-let
-  version = "0.14.4";
-in
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tailwindcss-language-server";
-  inherit version;
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "tailwindlabs";
     repo = "tailwindcss-intellisense";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-ZSKvD0OnI+/i5MHHlrgYbcaa8g95fVwjb2oryaEParQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QMTzylHAO5s5VtyBAnHEoxKq8ndRyAdvh/N5xUYRLas=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       pnpmWorkspaces
-      prePnpmInstall
       ;
-    hash = "sha256-f7eNBQl6/qLE7heoCFnYpjq57cjZ9pwT9Td4WmY1oag=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-5e6fC+5BwQm9TqZlnZ9GiPlVwCdEePTpUh4m4tt8qy4=";
   };
 
   nativeBuildInputs = [
-    nodejs_23
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_10
   ];
 
   buildInputs = [
-    nodejs_23
+    nodejs
   ];
 
-  pnpmWorkspaces = [ "@tailwindcss/language-server..." ];
-  prePnpmInstall = ''
-    # Warning section for "pnpm@v8"
-    # https://pnpm.io/cli/install#--filter-package_selector
-    pnpm config set dedupe-peer-dependents false
-    export NODE_EXTRA_CA_CERTS="${cacert}/etc/ssl/certs/ca-bundle.crt"
-  '';
+  pnpmWorkspaces = [
+    "@tailwindcss/language-server..."
+  ];
 
+  # Must build the "@tailwindcss/language-service" package. Dependency is linked via workspace by "pnpm"
+  # https://github.com/tailwindlabs/tailwindcss-intellisense/blob/v0.16.0/pnpm-lock.yaml#L77
   buildPhase = ''
     runHook preBuild
 
-    # Must build the "@tailwindcss/language-service" package. Dependency is linked via workspace by "pnpm"
-    # (https://github.com/tailwindlabs/tailwindcss-intellisense/blob/%40tailwindcss/language-server%40v0.0.27/pnpm-lock.yaml#L47)
     pnpm --filter "@tailwindcss/language-server..." build
 
     runHook postBuild
@@ -70,12 +65,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Tailwind CSS Language Server";
     homepage = "https://github.com/tailwindlabs/tailwindcss-intellisense";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    changelog = "https://github.com/tailwindlabs/tailwindcss-intellisense/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "tailwindcss-language-server";
-    platforms = platforms.all;
+    platforms = nodejs.meta.platforms;
   };
 })

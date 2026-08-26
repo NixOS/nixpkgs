@@ -7,20 +7,14 @@
 
 buildPythonPackage rec {
   pname = "lcn-frontend";
-  version = "0.2.5";
+  version = "0.2.9";
   pyproject = true;
 
   src = fetchPypi {
     pname = "lcn_frontend";
     inherit version;
-    hash = "sha256-WPjK/CzEpi9S1raEotR10n7eM06jg5ihAUKCLt8KDig=";
+    hash = "sha256-JQcnfBqwlDp31XRg2yBG9HZ8j4avxp57Qa3gBqT+67I=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools~=68.0" setuptools \
-      --replace-fail "wheel~=0.40.0" wheel
-  '';
 
   build-system = [ setuptools ];
 

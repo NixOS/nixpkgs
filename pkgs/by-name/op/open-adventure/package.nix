@@ -8,26 +8,27 @@
   cppcheck,
   coreutils,
   asciidoctor,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "open-adventure";
-  version = "1.20";
+  version = "1.22";
   src = fetchFromGitLab {
     owner = "esr";
     repo = "open-adventure";
     tag = finalAttrs.version;
-    hash = "sha256-xbsMz99CNLhpM6BSJVcRzxPB6tUYfPy/3Z+8BKt8b1E=";
+    hash = "sha256-mms4mSnJnXirnzw2UtIsnqejS2iyoNGQ5k1Ghvn2Ajc=";
   };
 
   nativeBuildInputs = [
     python3Packages.python
+    python3Packages.pyyaml
     pkg-config
     asciidoctor
   ];
 
   buildInputs = [
-    python3Packages.pyyaml
     libedit
   ];
 
@@ -40,10 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs --build make_dungeon.py
-
-    # https://gitlab.com/esr/open-adventure/-/issues/70
-    substituteInPlace Makefile --replace-fail "--template " "--template="
-
     substituteInPlace tests/tapview --replace-fail "/bin/echo" ${lib.getExe' coreutils "echo"}
   '';
 
@@ -62,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Forward-port of the Crowther/Woods Adventure 2.5 game from 1995";

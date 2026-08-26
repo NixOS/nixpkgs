@@ -5,26 +5,25 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "polarity";
-  version = "latest-unstable-2025-04-16";
+  version = "0-unstable-2026-05-20";
 
   src = fetchFromGitHub {
     owner = "polarity-lang";
     repo = "polarity";
-    rev = "ba1e8861a8d32e4fad987b6dcb49d2804dce3cbe";
-    hash = "sha256-viwSbYxNcmxNEaPNNThjKxmQx5KO8bEV23KibnCwMQg=";
+    rev = "522f7a7b70608cda6ce3207c81d26bef17b0cdf9";
+    hash = "sha256-o2+tOrWr8Rjy+r05PX9C6qtx70HDyhWlvza2Ssw15mk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-23qr4bEAsN75ONnNmym9eWH38fRoMmP1EkmOaka73Ko=";
+  cargoHash = "sha256-7vBLZwUpZ/LQ4MO1JZhpErFvh5EQyS+7IN1U5wyAP/E=";
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
-    description = "A Language with Dependent Data and Codata Types";
+    description = "Language with Dependent Data and Codata Types";
     homepage = "https://polarity-lang.github.io/";
-    changelog = "https://github.com/polarity-lang/polarity/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/polarity-lang/polarity/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       asl20
@@ -33,4 +32,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "pol";
     platforms = lib.platforms.all;
   };
-}
+})

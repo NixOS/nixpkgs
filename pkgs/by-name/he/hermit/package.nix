@@ -2,31 +2,25 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "hermit";
   version = "2.0";
 
   src = fetchzip {
-    url = "https://pcaro.es/d/otf-${pname}-${version}.tar.gz";
+    url = "https://pcaro.es/d/otf-hermit-${finalAttrs.version}.tar.gz";
     stripRoot = false;
     hash = "sha256-RYXZ2yJ8BIxsgeEwhXz7g0NnWG3kMPZoJaOLMUQyWWQ=";
   };
+  nativeBuildInputs = [ installFonts ];
 
-  installPhase = ''
-    runHook preInstall
-
-    install -m444 -Dt $out/share/fonts/opentype *.otf
-
-    runHook postInstall
-  '';
-
-  meta = with lib; {
-    description = "monospace font designed to be clear, pragmatic and very readable";
+  meta = {
+    description = "Monospace font designed to be clear, pragmatic and very readable";
     homepage = "https://pcaro.es/p/hermit";
-    license = licenses.ofl;
+    license = lib.licenses.ofl;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

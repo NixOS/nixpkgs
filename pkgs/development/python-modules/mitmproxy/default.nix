@@ -1,8 +1,9 @@
 {
   lib,
-  aioquic,
+  aioquic_1_2,
   argon2-cffi,
   asgiref,
+  bcrypt,
   brotli,
   buildPythonPackage,
   certifi,
@@ -15,15 +16,14 @@
   hypothesis,
   kaitaistruct,
   ldap3,
-  mitmproxy-linux,
   mitmproxy-rs,
-  msgpack,
-  passlib,
+  nixosTests,
   publicsuffix2,
   pyopenssl,
   pyparsing,
   pyperclip,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
@@ -31,7 +31,6 @@
   ruamel-yaml,
   setuptools,
   sortedcontainers,
-  stdenv,
   tornado,
   urwid,
   wsproto,
@@ -40,30 +39,31 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "12.0.0";
+  version = "12.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
     tag = "v${version}";
-    hash = "sha256-2dEoPgT8g59sLRV5gMPo7XII0XjTrn2cVdYetxDj/V0=";
+    hash = "sha256-YgM8GjWmWKxOZcahR3+9XO2Xyfu9v8rNgxKn/2oL35Y=";
   };
 
-  pythonRelaxDeps = [
-    "h11" # https://github.com/NixOS/nixpkgs/pull/399393
-    "h2"
-    "passlib"
-    "typing-extensions" # https://github.com/NixOS/nixpkgs/pull/397082
-  ];
+  # pins many dependencies way to strict
+  pythonRelaxDeps = true;
+
+  # msgpack is unused and was removed upstream:
+  # https://github.com/mitmproxy/mitmproxy/pull/8319
+  pythonRemoveDeps = [ "msgpack" ];
 
   build-system = [ setuptools ];
 
   dependencies = [
-    aioquic
+    aioquic_1_2
     argon2-cffi
     asgiref
     brotli
+    bcrypt
     certifi
     cryptography
     flask
@@ -73,8 +73,6 @@ buildPythonPackage rec {
     kaitaistruct
     ldap3
     mitmproxy-rs
-    msgpack
-    passlib
     publicsuffix2
     pyopenssl
     pyparsing
@@ -90,6 +88,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     hypothesis
     pytest-asyncio
+    pytest-cov-stub
     pytest-timeout
     pytest-xdist
     pytestCheckHook
@@ -97,6 +96,12 @@ buildPythonPackage rec {
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  postPatch = ''
+    # Rename to fix pytest exception
+    substituteInPlace pyproject.toml \
+      --replace-warn "[tool.pytest.individual_coverage]" "[tool.mitmproxy.individual_coverage]"
+  '';
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -124,6 +129,9 @@ buildPythonPackage rec {
     "test_errorcheck"
     "test_dns"
     "test_order"
+    # fails in pytest asyncio internals
+    "test_decorator"
+    "test_exception_handler"
   ];
 
   disabledTestPaths = [
@@ -141,11 +149,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mitmproxy" ];
 
-  meta = with lib; {
+  passthru.tests = {
+    inherit (nixosTests) mitmproxy;
+  };
+
+  meta = {
     description = "Man-in-the-middle proxy";
     homepage = "https://mitmproxy.org/";
-    changelog = "https://github.com/mitmproxy/mitmproxy/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    changelog = "https://github.com/mitmproxy/mitmproxy/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    mainProgram = "mitmproxy";
   };
 }

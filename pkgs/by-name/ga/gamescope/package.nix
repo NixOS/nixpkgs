@@ -1,13 +1,27 @@
 {
   stdenv,
   buildPackages,
-  edid-decode,
+  v4l-utils,
   fetchFromGitHub,
+  fetchpatch,
   meson,
   pkg-config,
   ninja,
   cmake,
-  xorg,
+  libxxf86vm,
+  libxtst,
+  libxres,
+  libxrender,
+  libxmu,
+  libxi,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  xwininfo,
+  xprop,
+  libxcb,
   libdrm,
   libei,
   vulkan-loader,
@@ -28,15 +42,16 @@
   glslang,
   hwdata,
   stb,
-  wlroots,
+  wlroots_0_19,
   libdecor,
   lcms,
   lib,
   luajit,
+  catch2_3,
   makeBinaryWrapper,
   nix-update-script,
   enableExecutable ? true,
-  enableWsi ? true,
+  enableWsi ? false,
 }:
 let
   frogShaders = fetchFromGitHub {
@@ -48,14 +63,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope";
-  version = "3.16.4";
+  version = "3.16.25";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-2AxqvZA1eZaJFKMfRljCIcP0M2nMngw0FQiXsfBW7IA=";
+    hash = "sha256-KPIUoHMzArqEVbhS8hrvzQUV906MydBPm5ZmV/CVS3A=";
   };
 
   patches = [
@@ -63,24 +78,41 @@ stdenv.mkDerivation (finalAttrs: {
     ./shaders-path.patch
     # patch relative gamescopereaper path with absolute
     ./gamescopereaper.patch
+
+    # Pending upstream patch to allow using system libraries
+    # See: https://github.com/ValveSoftware/gamescope/pull/1846
+    (fetchpatch {
+      url = "https://github.com/ValveSoftware/gamescope/commit/4ce1a91fb219f570b0871071a2ec8ac97d90c0bc.diff";
+      hash = "sha256-O358ScIIndfkc1S0A8g2jKvFWoCzcXB/g6lRJamqOI4=";
+    })
+
+    # Pending upstream patch to support stb_image_resize2.h
+    # See: https://github.com/ValveSoftware/gamescope/pull/2130
+    (fetchpatch {
+      url = "https://github.com/ValveSoftware/gamescope/commit/d49a2aded261030e649fee42ad295f1ef56b736b.diff";
+      hash = "sha256-Uh08ZRaV912ZOsl1DMpbVLxIgh4jEXevgihQf2W9KFk=";
+    })
   ];
 
   # We can't substitute the patch itself because substituteAll is itself a derivation,
   # so `placeholder "out"` ends up pointing to the wrong place
   postPatch = ''
-    substituteInPlace src/reshade_effect_manager.cpp --replace-fail "@out@" "$out"
+    substituteInPlace src/Utils/DirHelpers.cpp --replace-fail "@out@" "$out"
 
     # Patching shebangs in the main `libdisplay-info` build
     patchShebangs subprojects/libdisplay-info/tool/gen-search-table.py
 
     # Replace gamescopereeaper with absolute path
     substituteInPlace src/Utils/Process.cpp --subst-var-by "gamescopereaper" "$out/bin/gamescopereaper"
-    patchShebangs default_scripts_install.sh
+    patchShebangs default_extras_install.sh
   '';
 
   mesonFlags = [
     (lib.mesonBool "enable_gamescope" enableExecutable)
     (lib.mesonBool "enable_gamescope_wsi_layer" enableWsi)
+
+    (lib.mesonOption "glm_include_dir" "${lib.getInclude glm}/include")
+    (lib.mesonOption "stb_include_dir" "${lib.getInclude stb}/include/stb")
   ];
 
   # don't install vendored vkroots etc
@@ -92,69 +124,67 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      pkg-config
-      ninja
-      wayland-scanner
-      # For `libdisplay-info`
-      python3
-      hwdata
-      edid-decode
-      # For OpenVR
-      cmake
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
+    wayland-scanner
 
-      # calls git describe to encode its own version into the build
-      (buildPackages.writeShellScriptBin "git" "echo ${finalAttrs.version}")
-    ]
-    ++ lib.optionals enableExecutable [
-      makeBinaryWrapper
-      glslang
-    ];
+    # For OpenVR
+    cmake
 
-  buildInputs =
-    [
-      pipewire
-      hwdata
-      xorg.libX11
-      wayland
-      wayland-protocols
-      vulkan-loader
-      glm
+    # calls git describe to encode its own version into the build
+    (buildPackages.writeShellScriptBin "git" "echo ${finalAttrs.version}")
+  ]
+  ++ lib.optionals enableExecutable [
+    makeBinaryWrapper
+    glslang
+
+    # For `libdisplay-info`
+    python3
+    hwdata
+    v4l-utils
+  ];
+
+  buildInputs = [
+    pipewire
+    hwdata
+    libx11
+    libxcb
+    wayland
+    wayland-protocols
+    vulkan-headers
+    vulkan-loader
+    catch2_3
+  ]
+  ++ lib.optionals enableExecutable (
+    wlroots_0_19.buildInputs
+    ++ [
+      # gamescope uses a custom wlroots branch
+      libxcomposite
+      libxcursor
+      libxdamage
+      libxext
+      libxi
+      libxmu
+      libxrender
+      libxres
+      libxtst
+      libxxf86vm
+      libavif
+      libdrm
+      libei
+      SDL2
+      libdecor
+      libinput
+      libxkbcommon
+      gbenchmark
+      pixman
+      libcap
+      lcms
       luajit
     ]
-    ++ lib.optionals enableWsi [
-      vulkan-headers
-    ]
-    ++ lib.optionals enableExecutable (
-      wlroots.buildInputs
-      ++ [
-        # gamescope uses a custom wlroots branch
-        xorg.libXcomposite
-        xorg.libXcursor
-        xorg.libXdamage
-        xorg.libXext
-        xorg.libXi
-        xorg.libXmu
-        xorg.libXrender
-        xorg.libXres
-        xorg.libXtst
-        xorg.libXxf86vm
-        libavif
-        libdrm
-        libei
-        SDL2
-        libdecor
-        libinput
-        libxkbcommon
-        gbenchmark
-        pixman
-        libcap
-        stb
-        lcms
-      ]
-    );
+  );
 
   postInstall = lib.optionalString enableExecutable ''
     # using patchelf unstable because the stable version corrupts the binary
@@ -164,7 +194,6 @@ stdenv.mkDerivation (finalAttrs: {
     # --debug-layers flag expects these in the path
     wrapProgram "$out/bin/gamescope" \
       --prefix PATH : ${
-        with xorg;
         lib.makeBinPath [
           xprop
           xwininfo

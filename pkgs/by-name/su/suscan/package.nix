@@ -13,14 +13,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "suscan";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "BatchDrake";
     repo = "suscan";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-h1ogtYjkqiHb1/NAJfJ0HQIvGnZM2K/PSP5nqLXUf9M=";
   };
 
@@ -43,14 +43,14 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Channel scanner based on sigutils library";
     homepage = "https://github.com/BatchDrake/suscan";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       polygon
       oxapentane
     ];
   };
-}
+})

@@ -4,16 +4,16 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "xortool";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hellman";
     repo = "xortool";
-    tag = "v${version}";
-    hash = "sha256-xxaWhGUh/r34eS2TJt8c3Q795OsZOoQLXQllJGJTjqY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KakpXRhBVgUtIiqqvq30u7sIIeXe9vr5aqndOb0cR64=";
   };
 
   build-system = with python3Packages; [ poetry-core ];
@@ -28,11 +28,11 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "xortool" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to analyze multi-byte XOR cipher";
     homepage = "https://github.com/hellman/xortool";
-    changelog = "https://github.com/hellman/xortool/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/hellman/xortool/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

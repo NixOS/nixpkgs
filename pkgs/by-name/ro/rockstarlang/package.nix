@@ -7,13 +7,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "rockstarlang";
-  version = "2.0.30";
+  version = "2.0.31";
 
   src = fetchFromGitHub {
     owner = "RockstarLang";
     repo = "rockstar";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IqdObwJm+TiNnNkDg1cbvDI029RLn9i3hxP+wFW730g=";
+    hash = "sha256-243rN8hVaIfkEkkbgHZr2HKmqvG9KBVhvvoYJwoWgQs=";
   };
 
   projectFile = "Starship/Rockstar/Rockstar.csproj";

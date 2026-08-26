@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libisoburn";
-  version = "1.5.6";
+  version = "1.5.8.pl02";
 
   src = fetchFromGitea {
     domain = "dev.lovelyhq.com";
     owner = "libburnia";
     repo = "libisoburn";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-16qNVlWFVXfvbte5EgP/u193wK2GV/r22hVX0SZWr+0=";
+    hash = "sha256-wYX2foI0YXrhVENz8QqfS9IdXwbsHP7rqYOWzlo8FdM=";
   };
 
   nativeBuildInputs = [
@@ -32,20 +32,19 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      bzip2
-      libcdio
-      libiconv
-      readline
-      zlib
-      libburn
-      libisofs
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      acl
-      attr
-    ];
+  buildInputs = [
+    bzip2
+    libcdio
+    libiconv
+    readline
+    zlib
+    libburn
+    libisofs
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    acl
+    attr
+  ];
 
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     acl
@@ -67,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://dev.lovelyhq.com/libburnia/libisoburn/src/tag/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.gpl2Plus;
     mainProgram = "osirrox";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (libisofs.meta) platforms;
   };
 })

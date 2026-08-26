@@ -31,13 +31,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "flet_desktop" ];
 
   meta = {
-    description = "Compiled Flutter Flet desktop client.";
+    description = "Compiled Flutter Flet desktop client";
     homepage = "https://flet.dev/";
     changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       heyimnova
-      lucasew
     ];
   };
 }

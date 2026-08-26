@@ -9,23 +9,22 @@
 
 stdenv.mkDerivation rec {
   pname = "sauce-connect";
-  version = "5.2.2";
+  version = "5.5.3";
 
   passthru = {
     sources = {
       x86_64-linux = fetchurl {
         url = "https://saucelabs.com/downloads/sauce-connect/${version}/sauce-connect-${version}_linux.x86_64.tar.gz";
-        hash = "sha256-JyQkXp7/jrgWEKNPHUw/exXc5nqjejHWsy3IiEJ5gqU=";
+        hash = "sha256-s71/6EA5H9Tp5FFDQZRnoWa1DVALhUnLnhMOEQOvqIs=";
       };
       aarch64-linux = fetchurl {
         url = "https://saucelabs.com/downloads/sauce-connect/${version}/sauce-connect-${version}_linux.aarch64.tar.gz";
-        hash = "sha256-8EZjqid4/r2p8jZxQiI1x1IyDFXHwWDbmCOVXdnmmgs=";
+        hash = "sha256-VZ+hBomcFzXs+iJ0mdnvAH1LBI3V497L9qE8Yn+jKpI=";
       };
-      x86_64-darwin = fetchurl {
+      aarch64-darwin = fetchurl {
         url = "https://saucelabs.com/downloads/sauce-connect/${version}/sauce-connect-${version}_darwin.all.zip";
-        hash = "sha256-E4S7hbLSnRd5M/yOiUyPasYNg7ZmQ10S6fyn9Qs1BFk=";
+        hash = "sha256-O0ixRKJiwlTPuGSDVX2AR01pZBFWPWmyqQxMEr7X4zk=";
       };
-      aarch64-darwin = passthru.sources.x86_64-darwin;
     };
     updateScript = ./update.sh;
   };
@@ -72,7 +71,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     homepage = "https://docs.saucelabs.com/reference/sauce-connect/";
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
     platforms = builtins.attrNames passthru.sources;
   };
 }

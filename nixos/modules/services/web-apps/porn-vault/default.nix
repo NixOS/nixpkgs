@@ -11,12 +11,8 @@ let
   defaultConfig = import ./default-config.nix;
   inherit (lib)
     mkIf
-    mkEnableOption
-    mkPackageOption
     mkOption
     getExe
-    literalExpression
-    types
     ;
 in
 {
@@ -55,7 +51,7 @@ in
         description = ''
           Configuration for Porn-Vault. The attributes are serialized to JSON in config.json.
 
-          See https://gitlab.com/porn-vault/porn-vault/-/blob/dev/config.example.json
+          See <https://gitlab.com/porn-vault/porn-vault/-/blob/dev/config.example.json>
         '';
         default = defaultConfig;
         apply = lib.recursiveUpdate defaultConfig;

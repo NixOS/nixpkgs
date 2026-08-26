@@ -5,8 +5,8 @@
   setuptools-scm,
   ruamel-yaml,
   attrs,
-  pythonOlder,
   pytest7CheckHook,
+  pytest-cov-stub,
   pytest-xdist,
   numpy,
 }:
@@ -14,8 +14,7 @@
 buildPythonPackage rec {
   pname = "demes";
   version = "0.2.3";
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -29,13 +28,9 @@ buildPythonPackage rec {
     attrs
   ];
 
-  postPatch = ''
-    # remove coverage arguments to pytest
-    sed -i '/--cov/d' setup.cfg
-  '';
-
   nativeCheckInputs = [
     pytest7CheckHook
+    pytest-cov-stub
     pytest-xdist
     numpy
   ];
@@ -44,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "demes" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools for describing and manipulating demographic models";
     mainProgram = "demes";
     homepage = "https://github.com/popsim-consortium/demes-python";
-    license = licenses.isc;
-    maintainers = with maintainers; [ alxsimon ];
+    license = lib.licenses.isc;
+    maintainers = [ ];
   };
 }

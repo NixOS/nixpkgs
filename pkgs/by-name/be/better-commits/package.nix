@@ -8,25 +8,25 @@
 
 buildNpmPackage rec {
   pname = "better-commits";
-  version = "1.16.1";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "Everduin94";
     repo = "better-commits";
     tag = "v${version}";
-    hash = "sha256-70PEcktGGck7egDmaIteFEMCNpo6ZuWyIVPiOywr2tc=";
+    hash = "sha256-jlyZD6ceqLQS02ttz8pU2aMj8eT1cTuJx91rr73U/8Y=";
   };
 
-  npmDepsHash = "sha256-g34UutgT5315BpsQSuGGLIU6Ga+hpEz74HNLKKOB+ec=";
+  npmDepsHash = "sha256-y7jj9kAmubZJQJeviItLhkZ/2YHrgD+Lh+cTeTgwFN0=";
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "CLI for creating better commits following the conventional commits specification";
     homepage = "https://github.com/Everduin94/better-commits";
-    license = licenses.mit;
-    maintainers = [ maintainers.ilarvne ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.ilarvne ];
+    platforms = lib.platforms.unix;
     mainProgram = "better-commits";
   };
 }

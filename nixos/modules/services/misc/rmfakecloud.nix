@@ -83,7 +83,8 @@ in
         STORAGE_URL = cfg.storageUrl;
         PORT = toString cfg.port;
         LOGLEVEL = cfg.logLevel;
-      } // cfg.extraSettings;
+      }
+      // cfg.extraSettings;
 
       preStart = ''
         # Generate the secret key used to sign client session tokens.
@@ -145,5 +146,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ euxane ];
+  meta.maintainers = with lib.maintainers; [ martinetd ];
 }

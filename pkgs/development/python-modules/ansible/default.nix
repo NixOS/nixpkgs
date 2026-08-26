@@ -1,9 +1,9 @@
 {
   lib,
-  pythonOlder,
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  jmespath,
   jsonschema,
   jxmlease,
   ncclient,
@@ -24,17 +24,15 @@
 
 let
   pname = "ansible";
-  version = "11.4.0";
+  version = "14.3.1";
 in
 buildPythonPackage {
   inherit pname version;
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0lp/Jr9YIfgEO8gGAZgi/SgQvWXmtrr7aYu+7a26cr8=";
+    hash = "sha256-mNStKzVf6sjcBNmeg3fWy4AbHVi7+t1tgFNORgf7XE0=";
   };
 
   # we make ansible-core depend on ansible, not the other way around,
@@ -63,6 +61,10 @@ buildPythonPackage {
       xmltodict
       # ansible.windows
 
+      # Default ansible collections dependencies
+      # community.general
+      jmespath
+
       # lots of collections with dedicated requirements.txt and pyproject.toml files,
       # add the dependencies for the collections you need conditionally and install
       # ansible using overrides to enable the collections you need.
@@ -88,12 +90,15 @@ buildPythonPackage {
   # difficult to test
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Radically simple IT automation";
     mainProgram = "ansible-community";
     homepage = "https://www.ansible.com";
     changelog = "https://github.com/ansible-community/ansible-build-data/blob/${version}/${lib.versions.major version}/CHANGELOG-v${lib.versions.major version}.rst";
-    license = licenses.gpl3Plus;
-    maintainers = [ ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      HarisDotParis
+      robsliwi
+    ];
   };
 }

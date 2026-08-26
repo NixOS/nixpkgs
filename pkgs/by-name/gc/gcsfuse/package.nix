@@ -5,18 +5,18 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gcsfuse";
-  version = "2.11.1";
+  version = "3.11.2";
 
   src = fetchFromGitHub {
     owner = "googlecloudplatform";
     repo = "gcsfuse";
-    rev = "v${version}";
-    hash = "sha256-SWbIfAE/pmokhJO0rimfHqxqOH23HrJRTJHDikNC7TI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-XBEcr0YtLAuIG452jI0/xlTNjiku1PLaqWr+T7JGHYY=";
   };
 
-  vendorHash = "sha256-Xw2XsDhQpJJq7peh015ckIvV7yG87dE+HZ2b+XwuXMY=";
+  vendorHash = "sha256-egpUu2fF8XespVtP8zV+qDmDALv6CxiPmMCVghearm8=";
 
   subPackages = [
     "."
@@ -26,7 +26,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.gcsfuseVersion=${version}"
+    "-X main.gcsfuseVersion=${finalAttrs.version}"
   ];
 
   checkFlags =
@@ -44,13 +44,13 @@ buildGoModule rec {
     ln -s $out/bin/mount_gcsfuse $out/bin/mount.fuse.gcsfuse
   '';
 
-  meta = with lib; {
+  meta = {
     description = "User-space file system for interacting with Google Cloud Storage";
     homepage = "https://cloud.google.com/storage/docs/gcs-fuse";
-    changelog = "https://github.com/GoogleCloudPlatform/gcsfuse/releases/tag/v${version}";
-    license = licenses.asl20;
+    changelog = "https://github.com/GoogleCloudPlatform/gcsfuse/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
     maintainers = [ ];
     # internal/cache/file/downloader/job.go:386:77: undefined: syscall.O_DIRECT
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

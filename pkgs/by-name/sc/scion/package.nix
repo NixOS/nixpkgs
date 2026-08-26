@@ -2,30 +2,34 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   nixosTests,
+  ciMode ? true, # Override to false to run time-sensitive tests locally
 }:
-let
-  version = "0.11.0";
-in
-
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "scion";
 
-  inherit version;
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "scionproto";
     repo = "scion";
-    rev = "v${version}";
-    hash = "sha256-JemqSr1XBwW1hLuWQrApY/hqLj/VpW3xSJedVIoFSiY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UQgCjX9xYClsBviNwCmxHXAJ7MNce7olpzaCM2ybuc0=";
   };
 
-  vendorHash = "sha256-akFbHgo8xI2/4aQsyutjhXPM5d0A3se3kG/6Ebw1Qcs=";
+  __structuredAttrs = true;
+
+  # Tests bind to localhost
+  __darwinAllowLocalNetworking = true;
+
+  vendorHash = "sha256-A9K2/bWYUdMA8ypSisxk4NMOavHz51FaHEaxahz+0ek=";
 
   excludedPackages = [
     "acceptance"
     "demo"
     "tools"
+    "private/underlay/ebpf"
     "pkg/private/xtest/graphupdater"
   ];
 
@@ -41,20 +45,29 @@ buildGoModule {
 
   doCheck = true;
 
+  # Upstream disables time-sensitive tests and adjusts timeouts in CI
+  preCheck = lib.optionalString ciMode ''
+    export CI=42
+  '';
+
   tags = [ "sqlite_mattn" ];
 
-  passthru.tests = {
-    inherit (nixosTests) scion-freestanding-deployment;
+  passthru = {
+    tests = {
+      inherit (nixosTests) scion-freestanding-deployment;
+    };
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Future Internet architecture utilizing path-aware networking";
-    homepage = "https://scion-architecture.net/";
-    platforms = platforms.unix;
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    homepage = "https://www.scion.org/";
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       sarcasticadmin
       matthewcroughan
     ];
+    teams = with lib.teams; [ ngi ];
   };
-}
+})

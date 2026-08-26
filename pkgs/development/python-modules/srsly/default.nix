@@ -1,29 +1,34 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
+  fetchFromGitHub,
+
+  # build-system
   cython,
+  setuptools,
+
+  # dependencies
   catalogue,
+
+  # tests
   mock,
   numpy,
   psutil,
   pytest,
   ruamel-yaml,
-  setuptools,
   tornado,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "srsly";
-  version = "2.5.1";
-  format = "pyproject";
+  version = "2.5.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-qxtL9s8+Kdoj2uBJPdFRf7eHB1IGUSNRQhuJtPwnx34=";
+  src = fetchFromGitHub {
+    owner = "explosion";
+    repo = "srsly";
+    tag = "release-v${finalAttrs.version}";
+    hash = "sha256-dZuw0+tNIMseznGBQwIS6uICZEozkBWzF7FMQIo0Tbo=";
   };
 
   build-system = [
@@ -44,10 +49,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "srsly" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/explosion/srsly/releases/tag/v${version}";
+  meta = {
     description = "Modern high-performance serialization utilities for Python";
     homepage = "https://github.com/explosion/srsly";
-    license = licenses.mit;
+    changelog = "https://github.com/explosion/srsly/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
   };
-}
+})

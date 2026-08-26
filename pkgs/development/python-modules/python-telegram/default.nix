@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
   setuptools,
   tdlib,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "python-telegram";
   version = "0.19.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "alexander-akhmetov";
@@ -47,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "telegram.client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for the Telegram's tdlib";
     homepage = "https://github.com/alexander-akhmetov/python-telegram";
     changelog = "https://github.com/alexander-akhmetov/python-telegram/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sikmir ];
   };
 }

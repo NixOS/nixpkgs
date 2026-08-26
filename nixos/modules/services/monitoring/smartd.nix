@@ -57,7 +57,7 @@ let
 
       $SMARTD_FULLMESSAGE
       EOF
-      } | ${pkgs.xorg.xmessage}/bin/xmessage -file - 2>/dev/null &
+      } | ${pkgs.xmessage}/bin/xmessage -file - 2>/dev/null &
     ''}
   '';
 

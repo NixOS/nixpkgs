@@ -2,53 +2,52 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildGo123Module,
+  buildGoModule,
   replaceVars,
   pandoc,
   nodejs,
-  pnpm_9,
+  pnpm_11,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpmBuildHook,
   electron,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
   nix-update-script,
+  xdg-utils,
+  darwin,
 }:
 
 let
-  pnpm = pnpm_9;
+  inherit (stdenv.hostPlatform) isLinux isDarwin system;
+
+  pnpm = pnpm_11;
 
   platformIds = {
     "x86_64-linux" = "linux";
     "aarch64-linux" = "linux-arm64";
+    "aarch64-darwin" = "darwin-arm64";
   };
 
-  platformId = platformIds.${stdenv.system} or (throw "Unsupported platform: ${stdenv.system}");
-
-  desktopEntry = makeDesktopItem {
-    name = "siyuan";
-    desktopName = "SiYuan";
-    comment = "Refactor your thinking";
-    icon = "siyuan";
-    exec = "siyuan %U";
-    categories = [ "Utility" ];
-  };
+  platformId = platformIds.${system} or (throw "Unsupported platform: ${system}");
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
-  version = "3.1.28";
+  version = "3.7.3";
 
   src = fetchFromGitHub {
     owner = "siyuan-note";
     repo = "siyuan";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-s36rtNmVAp17Okj71NE/jgIM/pEZNS+oOYZ8rnjv6Ow=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7Uoo8vYaci8ROk5pqs14dNrU3q7UsadDXyw1mW8Mx5I=";
   };
 
-  kernel = buildGo123Module {
+  kernel = buildGoModule {
     name = "${finalAttrs.pname}-${finalAttrs.version}-kernel";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/kernel";
-    vendorHash = "sha256-i/hpP9S9vGS/jP3gKceDY00wgnBDkmsfYRZtsYQOjck=";
+    vendorHash = "sha256-weg5MRidW8JId13Ug1VaVgaIcJqydGBR/EquFOS3QO4=";
 
     patches = [
       (replaceVars ./set-pandoc-path.patch {
@@ -68,28 +67,38 @@ stdenv.mkDerivation (finalAttrs: {
     # Set flags and tags as per upstream's Dockerfile
     ldflags = [
       "-s"
-      "-w"
-      "-X"
-      "github.com/siyuan-note/siyuan/kernel/util.Mode=prod"
+      "-X 'github.com/siyuan-note/siyuan/kernel/util.Mode=prod'"
     ];
     tags = [ "fts5" ];
+
+    # filepath.ToSlash does not convert Windows path separators on Unix.
+    checkFlags = [ "-skip=^TestSyObjectBase/windows_backslash$" ];
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
+  ]
+  ++ lib.optionals isLinux [
+    pnpmBuildHook
     makeWrapper
     copyDesktopItems
+  ]
+  ++ lib.optionals isDarwin [
+    darwin.autoSignDarwinBinariesHook
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       sourceRoot
       ;
-    hash = "sha256-5KqMmpcI+4iy3Ff72D8aUvhPttW2vwTI8aTwXBJ7sqo=";
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-i7llORlVU1CCmyVCvJr7xCQffTmbmIA9rT68Raqg5y8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";
@@ -103,26 +112,40 @@ stdenv.mkDerivation (finalAttrs: {
     # link kernel into the correct starting place so that electron-builder can copy it to it's final location
     mkdir kernel-${platformId}
     ln -s ${finalAttrs.kernel}/bin/kernel kernel-${platformId}/SiYuan-Kernel
+
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
   '';
 
-  buildPhase = ''
-    runHook preBuild
+  postBuild = ''
+    electronBuilderArgs=(
+      --dir
+      --config electron-builder-${platformId}.yml
+      -c.electronDist=electron-dist
+      -c.electronVersion=${electron.version}
+      -c.mac.identity=null
+    )
 
-    pnpm build
-
-    npm exec electron-builder -- \
-        --dir \
-        --config electron-builder-${platformId}.yml \
-        -c.electronDist=${electron.dist} \
-        -c.electronVersion=${electron.version}
-
-    runHook postBuild
+    npm exec electron-builder -- "''${electronBuilderArgs[@]}"
   '';
 
   installPhase = ''
     runHook preInstall
+  ''
+  + lib.optionalString isDarwin ''
+    mkdir -p $out/Applications $out/bin
 
+    cp -R build/mac*/*.app $out/Applications/SiYuan.app
+
+    cat > $out/bin/siyuan << EOF
+    #!${stdenv.shell}
+    exec open -na "$out/Applications/SiYuan.app" --args "\$@"
+    EOF
+    chmod +x $out/bin/siyuan
+  ''
+  + lib.optionalString isLinux ''
     mkdir -p $out/share/siyuan
+
     cp -r build/*-unpacked/{locales,resources{,.pak}} $out/share/siyuan
 
     makeWrapper ${lib.getExe electron} $out/bin/siyuan \
@@ -130,23 +153,30 @@ stdenv.mkDerivation (finalAttrs: {
         --add-flags $out/share/siyuan/resources/app \
         --set ELECTRON_FORCE_IS_PACKAGED 1 \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+        --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
         --inherit-argv0
 
     install -Dm644 src/assets/icon.svg $out/share/icons/hicolor/scalable/apps/siyuan.svg
-
+  ''
+  + ''
     runHook postInstall
   '';
 
-  desktopItems = [ desktopEntry ];
+  desktopItems = lib.optional isLinux (makeDesktopItem {
+    name = "siyuan";
+    desktopName = "SiYuan";
+    comment = "Refactor your thinking";
+    icon = "siyuan";
+    exec = "siyuan %U";
+    categories = [ "Utility" ];
+  });
 
-  passthru = {
-    inherit (finalAttrs.kernel) goModules; # this tricks nix-update into also updating the kernel goModules FOD
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "^v(\\d+\\.\\d+\\.\\d+)$"
-      ];
-    };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v(\\d+\\.\\d+\\.\\d+)$"
+      "--subpackage=kernel"
+    ];
   };
 
   meta = {
@@ -157,6 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       tomasajt
       ltrump
+      myul
     ];
     platforms = lib.attrNames platformIds;
   };

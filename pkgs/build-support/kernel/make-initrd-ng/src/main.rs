@@ -5,9 +5,7 @@ use std::fs;
 use std::hash::Hash;
 use std::iter::FromIterator;
 use std::os::unix;
-use std::os::unix::fs::PermissionsExt;
 use std::path::{Component, Path, PathBuf};
-use std::process::Command;
 
 use libc::umask;
 
@@ -159,13 +157,22 @@ fn add_dependencies<P: AsRef<Path> + AsRef<OsStr> + std::fmt::Debug>(
             }
         }
         if !found {
-            // glibc makes it tricky to make this an error because
-            // none of the files have a useful rpath.
-            println!(
-                "Warning: Couldn't satisfy dependency {} for {:?}",
-                line,
-                OsStr::new(&source)
-            );
+            // In Nix, glibc's own libraries lack rpath entries pointing to
+            // themselves, so the dynamic linker (ld-linux-*.so.*) and libc.so.*
+            // can never be resolved through rpath alone. They are always present
+            // in the initrd: the linker via elf.interpreter above, and libc via
+            // at least one binary's rpath. Suppress these known-benign cases.
+            // See also: the ld*.so.? skip in stage-1.nix findLibs.
+            let is_glibc_runtime = (line.starts_with("ld-") && line.contains(".so"))
+                || line.starts_with("libc.so");
+
+            if !is_glibc_runtime {
+                eprintln!(
+                    "Warning: Couldn't satisfy dependency {} for {:?}",
+                    line,
+                    OsStr::new(&source)
+                );
+            }
         }
     }
 
@@ -189,32 +196,6 @@ fn copy_file<
 
     if let Ok(Object::Elf(e)) = Object::parse(&contents) {
         add_dependencies(source, e, &contents, &dlopen, queue)?;
-
-        // Make file writable to strip it
-        let mut permissions = fs::metadata(&target)
-            .wrap_err_with(|| format!("failed to get metadata for {:?}", target))?
-            .permissions();
-        permissions.set_mode(permissions.mode() | 0o200);
-        fs::set_permissions(&target, permissions.clone())
-            .wrap_err_with(|| format!("failed to set read-write permissions for {:?}", target))?;
-
-        // Strip further than normal
-        if let Ok(strip) = env::var("STRIP") {
-            if !Command::new(strip)
-                .arg("--strip-all")
-                .arg(OsStr::new(&target))
-                .output()?
-                .status
-                .success()
-            {
-                println!("{:?} was not successfully stripped.", OsStr::new(&target));
-            }
-        }
-
-        // Remove writable permissions
-        permissions.set_mode(permissions.mode() ^ 0o222);
-        fs::set_permissions(&target, permissions)
-            .wrap_err_with(|| format!("failed to remove writable permissions for {:?}", target))?;
     };
 
     Ok(())

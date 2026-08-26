@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "rewritefs";
-  version = "unstable-2021-10-03";
+  version = "0-unstable-2021-10-03";
 
   src = fetchFromGitHub {
     owner = "sloonz";
@@ -31,11 +31,11 @@ stdenv.mkDerivation {
 
   preConfigure = "substituteInPlace Makefile --replace /usr/local $out";
 
-  meta = with lib; {
-    description = "A FUSE filesystem intended to be used like Apache mod_rewrite";
+  meta = {
+    description = "FUSE filesystem intended to be used like Apache mod_rewrite";
     homepage = "https://github.com/sloonz/rewritefs";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ rnhmjoj ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
+    platforms = lib.platforms.linux;
   };
 }

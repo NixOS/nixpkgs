@@ -5,15 +5,15 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "types-decorator";
-  version = "5.2.0.20250324";
+  version = "5.2.0.20260712";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_decorator";
-    inherit version;
-    hash = "sha256-j71ysNrcVhduSOUYfedE52/kW8yRolh0uqdWYkEhVdM=";
+    inherit (finalAttrs) version;
+    hash = "sha256-KJDwX+PGVUa69QAP1fHu1NHJW65VFuI+FzW3taTdmMY=";
   };
 
   build-system = [ setuptools ];
@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "decorator-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for decorator";
     homepage = "https://github.com/python/typeshed";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

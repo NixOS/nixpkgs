@@ -1,39 +1,38 @@
 {
   lib,
-  buildGoModule,
+  # gopls breaks if it is compiled with a lower version than the one it is running against.
+  # This will affect users especially when project they work on bump go minor version before
+  # the update went through nixpkgs staging. Further, gopls is a central ecosystem component.
+  buildGoLatestModule,
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoLatestModule (finalAttrs: {
   pname = "gopls";
-  version = "0.18.1";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "tools";
     tag = "gopls/v${finalAttrs.version}";
-    hash = "sha256-5w6R3kaYwrZyhIYjwLqfflboXT/z3HVpZiowxeUyaWg=";
+    hash = "sha256-GTRZ0tS2a7Cx4qRf6PfxhkGVPYRoLYOmE+W/2x9Pttk=";
   };
 
   modRoot = "gopls";
-  vendorHash = "sha256-/tca93Df90/8K1dqhOfUsWSuFoNfg9wdWy3csOtFs6Y=";
+  vendorHash = "sha256-rvm33C3z3T6moeEQ4C7aG+dT8ROqmpBFehIpwGFZMrU=";
 
   # https://github.com/golang/tools/blob/9ed98faa/gopls/main.go#L27-L30
   ldflags = [ "-X main.version=v${finalAttrs.version}" ];
 
   doCheck = false;
 
-  # Only build gopls, gofix, modernize, and not the integration tests or documentation generator.
-  subPackages = [
-    "."
-    "internal/analysis/gofix/cmd/gofix"
-    "internal/analysis/modernize/cmd/modernize"
-  ];
+  subPackages = [ "." ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckKeepEnvironment = [ "TMPDIR" ];
   versionCheckProgramArg = "version";
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=gopls/(.*)" ]; };

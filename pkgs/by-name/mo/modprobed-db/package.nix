@@ -8,18 +8,16 @@
   bash,
   installShellFiles,
 }:
-let
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "modprobed-db";
-  version = "2.48";
-in
-stdenv.mkDerivation {
-  inherit pname version;
+  version = "2.50";
 
   src = fetchFromGitHub {
     owner = "graysky2";
     repo = "modprobed-db";
-    rev = "v${version}";
-    hash = "sha256-rMkPBRg0QluMmSCAWSvET7rS/A2aUL6H31KKoZ6NTEs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-JcotyXFrxE9DmrGS8cx/+BvHeQ8rLd+0h4jIYD2NZmY=";
   };
 
   strictDeps = true;
@@ -55,4 +53,4 @@ stdenv.mkDerivation {
     mainProgram = "modprobed-db";
     platforms = lib.platforms.linux;
   };
-}
+})

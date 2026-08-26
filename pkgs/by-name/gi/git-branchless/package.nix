@@ -8,21 +8,21 @@
   rustPlatform,
   sqlite,
   stdenv,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-branchless";
-  version = "0.10.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "arxanas";
     repo = "git-branchless";
-    rev = "v${version}";
-    hash = "sha256-8uv+sZRr06K42hmxgjrKk6FDEngUhN/9epixRYKwE3U=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-V769kYbmUe6JtVoo83ejxUsegyiBh07tMYPVhJiFNgs=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-i7KpTd4fX3PrhDjj3R9u98rdI0uHkpQCxSmEF+Gu7yk=";
+  cargoHash = "sha256-5uygCOzPNqHjKJfq2LFTfaRT/N++/AY/PwlBJ8j8QwM=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -54,15 +54,22 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_switch_auto_switch_interactive"
   ];
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  meta = {
     description = "Suite of tools to help you visualize, navigate, manipulate, and repair your commit history";
     homepage = "https://github.com/arxanas/git-branchless";
-    license = licenses.gpl2Only;
+    license = [
+      lib.licenses.asl20
+      lib.licenses.mit
+    ];
     mainProgram = "git-branchless";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       nh2
       hmenke
       bryango
     ];
   };
-}
+})

@@ -1,38 +1,55 @@
 {
   lib,
   stdenv,
+  testers,
+  unstableGitUpdater,
   fetchFromGitHub,
-  cmake,
+  meson,
+  ninja,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tinyalsa";
-  version = "unstable-2022-06-05";
+  version = "2.0.0-unstable-2026-07-27";
 
   src = fetchFromGitHub {
     owner = "tinyalsa";
     repo = "tinyalsa";
-    rev = "3d70d227e7dfd1be6f8f420a5aae164a2b4126e0";
-    hash = "sha256-RHeF3VShy+LYFtJK+AEU7swIr5/rnpg2fdllnH9cFCk=";
+    rev = "9fab97ca07184371ecad81154d1dadb09d0fa7cf";
+    hash = "sha256-+/wz0pwyF1kulUA5kjFGVOwbSkunEU+WzsZf/UsCEVk=";
   };
+
+  separateDebugInfo = true;
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  outputs = [
+    "out"
+    "dev"
+    "bin"
+  ];
 
   nativeBuildInputs = [
-    cmake
+    meson
+    ninja
   ];
 
-  cmakeFlags = [
-    "-DTINYALSA_USES_PLUGINS=ON"
-  ];
+  passthru = {
+    updateScript = unstableGitUpdater {
+      tagPrefix = "v";
+    };
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      versionCheck = false;
+    };
+  };
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-Wno-error=sign-compare"
-  ];
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tinyalsa/tinyalsa";
     description = "Tiny library to interface with ALSA in the Linux kernel";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = with platforms; linux;
+    license = lib.licenses.mit;
+    pkgConfigModules = [ "tinyalsa" ];
+    maintainers = with lib.maintainers; [ tmarkus ];
+    platforms = with lib.platforms; linux;
   };
-}
+})

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   replaceVars,
   xapp,
+  xapp-symbolic-icons,
   circle-flags,
   gettext,
   gobject-introspection,
@@ -13,15 +14,15 @@
   yt-dlp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hypnotix";
-  version = "4.9";
+  version = "5.6";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "hypnotix";
-    rev = version;
-    hash = "sha256-mM6NeDtRoPUSQ/smtvpYJ3qqeqiPHquP96ChJgSJWL0=";
+    tag = finalAttrs.version;
+    hash = "sha256-7CPrRMoVM1FaU8aJlnZigTkHa97bDPdwcu4JY7sERJQ=";
   };
 
   patches = [
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace usr/lib/hypnotix/hypnotix.py \
-      --replace __DEB_VERSION__ ${version} \
+      --replace __DEB_VERSION__ ${finalAttrs.version} \
       --replace /usr/bin/yt-dlp ${yt-dlp}/bin/yt-dlp \
       --replace /usr/share/circle-flags-svg ${circle-flags}/share/circle-flags-svg \
       --replace /usr/share/hypnotix $out/share/hypnotix
@@ -56,7 +57,6 @@ stdenv.mkDerivation rec {
   ];
 
   pythonPath = with python3.pkgs; [
-    cinemagoer
     pygobject3
     requests
     setproctitle
@@ -76,19 +76,20 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out ''${pythonPath[*]}"
 
     # yt-dlp is needed for mpv to play YouTube channels.
     wrapProgram $out/bin/hypnotix \
       --prefix PATH : "${lib.makeBinPath [ yt-dlp ]}" \
       --prefix PYTHONPATH : "$program_PYTHONPATH" \
+      --prefix XDG_DATA_DIRS : "${lib.makeSearchPath "share" [ xapp-symbolic-icons ]}" \
       ''${gappsWrapperArgs[@]}
   '';
 
   meta = {
     description = "IPTV streaming application";
     homepage = "https://github.com/linuxmint/hypnotix";
-    changelog = "https://github.com/linuxmint/hypnotix/blob/${src.rev}/debian/changelog";
+    changelog = "https://github.com/linuxmint/hypnotix/blob/${finalAttrs.src.tag}/debian/changelog";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       dotlambda
@@ -97,4 +98,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "hypnotix";
   };
-}
+})

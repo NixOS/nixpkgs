@@ -19,18 +19,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysdl2";
-  version = "0.9.17-unstable-2025-04-03";
+  version = "0.9.17-unstable-2025-11-18";
   pyproject = true;
-
-  pythonImportsCheck = [ "sdl2" ];
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "py-sdl";
     repo = "py-sdl2";
-    rev = "6414ee1c5f4a6eb91b71f5f9e35d469eee395b9f";
-    hash = "sha256-E6Jpuin4bqDkvFTaZTsTNkNQJd2e5fuTf2oLsQ71uQ0=";
+    rev = "3d0672135fab3ca58e2f00c0a76b7b25cb818784";
+    hash = "sha256-SgorCWZmJk13LNlTmh5Aomik14PTZdWliU3GWtkTASE=";
   };
 
   patches = [
@@ -72,6 +71,8 @@ buildPythonPackage rec {
     PYTHONFAULTHANDLER = "1";
   };
 
+  pythonImportsCheck = [ "sdl2" ];
+
   nativeCheckInputs = [
     numpy
     pillow
@@ -82,36 +83,19 @@ buildPythonPackage rec {
     # GetPrefPath for OrgName/AppName is None
     "test_SDL_GetPrefPath"
 
-    # broken with sdl2-compat
-    "test_SDL_AddDelHintCallback"
-    "test_SDL_HasIntersectionF"
-    "test_SDL_IntersectFRect"
-    "test_SDL_UnionFRect"
-    "test_SDL_EncloseFPoints"
-    "test_SDL_IntersectFRectAndLine"
-    "test_SDL_GetSetTextureScaleMode"
-    "test_init"
-    "test_logical_size"
-    "test_copy"
+    # AssertionError:
+    # clip: Could not set clip rect SDL_Rect(x=2, y=2, w=0, h=0)
+    "test_SDL_GetSetClipRect"
 
-    # sdl2-compat fails on these in our build sandbox
-    "test_create_sprite"
-    "test_create_software_sprite"
-    "test_create_texture_sprite"
-    "test_from_image"
-    "test_from_surface"
-    "test_from_text"
-
-    "test_SDL_Init"
-    "test_SDL_InitSubSystem"
-    "test_SDL_SetWindowIcon"
+    # AssertionError: That operation is not supported
+    "test_SDL_GetSetWindowMouseRect"
   ];
 
   meta = {
-    changelog = "https://github.com/py-sdl/py-sdl2/compare/0.9.17..${src.rev}";
+    changelog = "https://github.com/py-sdl/py-sdl2/compare/0.9.17..${finalAttrs.src.rev}";
     description = "Wrapper around the SDL2 library and as such similar to the discontinued PySDL project";
     homepage = "https://github.com/py-sdl/py-sdl2";
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ pmiddend ];
   };
-}
+})

@@ -1,32 +1,21 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "glrnvim";
-  version = "1.4.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "beeender";
     repo = "glrnvim";
-    rev = "v${version}";
-    hash = "sha256-n3t3s3fzmBGXRDydYxNJ13itKul8dyLNW6HP8Di4hY0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-gfcSii45EH6+3nwoUqZv47EPh3ISQE7SeHJWeTXOQz8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-oE1HXmJbKHegubqhsovat1ce/4rjdKGGTnmDdbRBo/k=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      DiskArbitration
-      Foundation
-    ]
-  );
+  cargoHash = "sha256-8sKY5uqWap01klJlZ3CnLAqRFeRSbt7K7jRL8XPDBQ4=";
 
   postInstall = ''
     install -Dm644 glrnvim.desktop -t $out/share/applications
@@ -40,4 +29,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ aacebedo ];
   };
-}
+})

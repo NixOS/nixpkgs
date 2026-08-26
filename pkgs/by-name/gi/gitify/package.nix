@@ -2,46 +2,71 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_9,
+  pnpm_11,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
-  electron,
+  electron_43,
   makeDesktopItem,
   copyDesktopItems,
   imagemagick,
   makeWrapper,
+  cacert,
   nix-update-script,
 }:
-
+let
+  pnpm = pnpm_11;
+  electron = electron_43;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gitify";
-  version = "6.3.0";
+  version = "7.5.0";
 
   src = fetchFromGitHub {
     owner = "gitify-app";
     repo = "gitify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pzyTL0wloTBht7w8MZQoe7jUlOTFTGcq+u0now+Wrxs=";
+    hash = "sha256-ogF9YrnSaT31AnoxtvA0jnK5wHhlAvIj3T+TaKZM80U=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm
     copyDesktopItems
     imagemagick
     makeWrapper
+    cacert
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-mV0MgJRP5rN+RRTtKlYi29Yq8+8DMO5bMFXRmPcWx6o=";
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-aG34cZF1xwPM5L/+OXUgOmJwLGcpNU59aobVSmTIvLw=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   postPatch = ''
-    substituteInPlace config/electron-builder.js \
+    substituteInPlace electron-builder.js \
       --replace-fail "'Adam Setch (5KD23H9729)'" "null" \
       --replace-fail "'scripts/afterSign.js'" "null"
+
+    # With a nixpkgs electron wrapper, app.isPackaged always returns false,
+    # so isDevMode() is always true. This causes the config.ts getter for
+    # indexHtml to return VITE_DEV_SERVER_URL (which is empty) instead of the
+    # packaged file:// URL, resulting in a blank white window.
+    # Patch isDevMode() to false so the file:// path is always used.
+    substituteInPlace src/main/config.ts \
+      --replace-fail "isDevMode()" "false"
+
+    # Disable auto-updater; updates are handled via nixpkgs.
+    substituteInPlace src/main/updater.ts \
+      --replace-fail "if (!this.menubar.app.isPackaged)" "if (true)"
   '';
 
   buildPhase = ''
@@ -53,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     pnpm build
     pnpm exec electron-builder \
-        --config config/electron-builder.js \
+        --config electron-builder.js \
         --dir \
         -c.electronDist=electron-dist \
         -c.electronVersion="${electron.version}" \
@@ -95,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
       desktopName = "Gitify";
       exec = "gitify %U";
       icon = "gitify";
-      comment = "GitHub Notifications on your menu bar.";
+      comment = "GitHub notifications on your menu bar";
       categories = [ "Development" ];
       startupWMClass = "Gitify";
     })
@@ -104,9 +129,9 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://www.gitify.io/";
+    homepage = "https://gitify.io/";
     changelog = "https://github.com/gitify-app/gitify/releases/tag/v${finalAttrs.version}";
-    description = "GitHub Notifications on your menu bar";
+    description = "GitHub notifications on your menu bar";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pineapplehunter ];
     platforms = lib.platforms.all;

@@ -6,54 +6,70 @@
   pkg-config,
   dtc,
   openssl,
+  zstd,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cloud-hypervisor";
-  version = "45.0";
+  version = "53.0";
 
   src = fetchFromGitHub {
     owner = "cloud-hypervisor";
     repo = "cloud-hypervisor";
-    rev = "v${version}";
-    hash = "sha256-PmgHO3gRE/LfLiRC+sAQXKUeclweVUNJV2ihpkvx0Wg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-fPTGf8bAITDA8QwllWbbGXA7tJ6p/SxRDfcBQVRvCTI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-h9ydLEp7GpW5jMkt5jObR09lPWGs+rmvdoEZntIZwxY=";
+  cargoHash = "sha256-+RbW/9ap/69MyODUk/bHBlH6ZuqYYIyKaarYSMQ2G7w=";
+
+  patches = [
+    ./musl-1.2.6.patch
+  ];
 
   separateDebugInfo = true;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = lib.optional stdenv.hostPlatform.isAarch64 dtc;
-  checkInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    zstd
+  ]
+  ++ lib.optional stdenv.hostPlatform.isAarch64 dtc;
 
-  OPENSSL_NO_VENDOR = true;
+  env.OPENSSL_NO_VENDOR = true;
+  env.ZSTD_SYS_USE_PKG_CONFIG = true;
 
   cargoTestFlags = [
     "--workspace"
-    "--bins"
-    "--lib" # Integration tests require root.
     "--exclude"
     "hypervisor" # /dev/kvm
     "--exclude"
     "net_util" # /dev/net/tun
     "--exclude"
     "vmm" # /dev/kvm
+    "--"
+    # io_uring syscalls are blocked by the Lix sandbox
+    "--skip=formats"
+    "--skip=io_impl::async_io::uring_data_io"
   ];
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  meta = {
     homepage = "https://github.com/cloud-hypervisor/cloud-hypervisor";
     description = "Open source Virtual Machine Monitor (VMM) that runs on top of KVM";
-    changelog = "https://github.com/cloud-hypervisor/cloud-hypervisor/releases/tag/v${version}";
-    license = with licenses; [
+    changelog = "https://github.com/cloud-hypervisor/cloud-hypervisor/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [
       asl20
       bsd3
     ];
     mainProgram = "cloud-hypervisor";
-    maintainers = with maintainers; [
-      offline
+    maintainers = with lib.maintainers; [
       qyliss
+      phip1611
     ];
     platforms = [
       "aarch64-linux"
@@ -61,4 +77,4 @@ rustPlatform.buildRustPackage rec {
       "x86_64-linux"
     ];
   };
-}
+})

@@ -6,13 +6,13 @@
 }:
 buildDotnetModule rec {
   pname = "min-ed-launcher";
-  version = "0.11.3";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "rfvgyhn";
     repo = "min-ed-launcher";
     tag = "v${version}";
-    hash = "sha256-HJIvbuTsCG51PPVieJbXGyAviqgM9/WPz0+0VhIWz9k=";
+    hash = "sha256-blqGq6PORBEtCLO007TR3xJ6UXX8nFSOIoFh8Dc/5B8=";
 
     leaveDotGit = true; # During build the current commit is appended to the version
   };

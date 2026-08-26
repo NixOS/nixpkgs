@@ -5,6 +5,8 @@
   nix-update-script,
 
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
 
   rustPlatform,
@@ -15,91 +17,52 @@
   webkitgtk_4_1,
   openssl,
 }:
-let
-  pnpm = pnpm_10;
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fedistar";
-  version = "1.11.3";
+  version = "1.13.1";
+
   src = fetchFromGitHub {
     owner = "h3poteto";
     repo = "fedistar";
-    tag = "v${version}";
-    hash = "sha256-Q2j6K4ys/z77+n3kdGJ15rWbFlbbIHBWB9hOARsgg2A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MV2ItwIBzDEY2tKI8WrQj+rAzv6OTC2aZMiD46oLHFw=";
   };
-  fedistar-frontend = stdenvNoCC.mkDerivation (finalAttrs: {
-    pname = "fedistar-frontend";
-    inherit version src;
-    pnpmDeps = pnpm.fetchDeps {
-      inherit pname version src;
-      hash = "sha256-xXVsjAXmrsOp+mXrYAxSKz4vX5JApLZ+Rh6hrYlnJDI=";
-    };
-    nativeBuildInputs = [
-      pnpm.configHook
-      pnpm
-      nodejs
-    ];
 
-    buildPhase = ''
-      runHook preBuild
-      pnpm run build
-      runHook postBuild
-    '';
+  cargoRoot = "src-tauri";
+  buildAndTestSubdir = "src-tauri";
 
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out
-      cp -r out/* $out/
-      runHook postInstall
-    '';
-  });
+  cargoHash = "sha256-Ac7u/u0kGlUwKF5/196Ss4+pUMyPhAbGqhlmtlYI2Us=";
 
-in
-rustPlatform.buildRustPackage {
-  inherit
-    pname
-    version
-    src
-    fedistar-frontend
-    ;
-  sourceRoot = "${src.name}/src-tauri";
-
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ZJgyrFDtzAH3XqDdnJ27Yn+WsTMrZR2+lnkZ6bw6hzg=";
-
-  postPatch = ''
-    substituteInPlace ./tauri.conf.json \
-      --replace-fail '"frontendDist": "../out",' '"frontendDist": "${fedistar-frontend}",' \
-      --replace-fail '"beforeBuildCommand": "pnpm build",' '"beforeBuildCommand": "",'
-  '';
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-JaFXAYHoSMyNgHjeNWgJXJ8ZeU9wUi47N58L3QEd0FE=";
+  };
 
   nativeBuildInputs = [
     cargo-tauri.hook
+
+    pnpmConfigHook
+    pnpm_10
+    nodejs
 
     pkg-config
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
-      glib-networking
-      webkitgtk_4_1
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
+    glib-networking
+    webkitgtk_4_1
+  ];
 
   doCheck = false; # This version's tests do not pass
 
-  # A fix for a problem with Tauri (tauri-apps/tauri#9304)
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --set-default WEBKIT_DISABLE_DMABUF_RENDERER 1
-    )
-  '';
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "fedistar-frontend"
-    ];
-  };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
     description = "Multi-column Fediverse client application for desktop";
@@ -107,6 +70,6 @@ rustPlatform.buildRustPackage {
     mainProgram = "fedistar";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ noodlez1232 ];
-    changelog = "https://github.com/h3poteto/fedistar/releases/tag/v${version}";
+    changelog = "https://github.com/h3poteto/fedistar/releases/tag/v${finalAttrs.version}";
   };
-}
+})

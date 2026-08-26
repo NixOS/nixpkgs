@@ -6,6 +6,14 @@
 }:
 let
 
+  attrsToExports = lib.concatMapAttrsStringSep "\n" (
+    exportPoint: clientsAndOptions:
+    exportPoint
+    + lib.concatMapAttrsStringSep "" (
+      client: options: " ${client}(${lib.concatStringsSep "," options})"
+    ) clientsAndOptions
+  );
+
   cfg = config.services.nfs.server;
 
   exports = pkgs.writeText "exports" cfg.exports;
@@ -48,12 +56,26 @@ in
         };
 
         exports = lib.mkOption {
-          type = lib.types.lines;
+          type = with lib.types; coercedTo (attrsOf (attrsOf (listOf str))) attrsToExports lines;
           default = "";
           description = ''
             Contents of the /etc/exports file.  See
             {manpage}`exports(5)` for the format.
           '';
+          example = {
+            "/usr" = {
+              "*.local.domain" = [ "ro" ];
+              "@trusted" = [ "rw" ];
+            };
+            "/home/joe" = {
+              "pc001" = [
+                "rw"
+                "all_squash"
+                "anonuid=150"
+                "anongid=100"
+              ];
+            };
+          };
         };
 
         hostName = lib.mkOption {
@@ -81,7 +103,7 @@ in
         };
 
         mountdPort = lib.mkOption {
-          type = lib.types.nullOr lib.types.int;
+          type = lib.types.nullOr lib.types.port;
           default = null;
           example = 4002;
           description = ''
@@ -90,7 +112,7 @@ in
         };
 
         lockdPort = lib.mkOption {
-          type = lib.types.nullOr lib.types.int;
+          type = lib.types.nullOr lib.types.port;
           default = null;
           example = 4001;
           description = ''
@@ -101,7 +123,7 @@ in
         };
 
         statdPort = lib.mkOption {
-          type = lib.types.nullOr lib.types.int;
+          type = lib.types.nullOr lib.types.port;
           default = null;
           example = 4000;
           description = ''

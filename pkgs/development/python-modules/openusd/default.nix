@@ -4,7 +4,6 @@
   boost,
   buildPythonPackage,
   cmake,
-  distutils,
   doxygen,
   draco,
   embree,
@@ -17,15 +16,15 @@
   jinja2,
   lib,
   libGL,
-  libX11,
-  libXt,
+  libx11,
+  libxt,
   materialx,
   ninja,
   numpy,
   opencolorio,
-  openimageio_2,
+  openimageio,
+  openshadinglanguage,
   opensubdiv,
-  osl,
   ptex,
   pyopengl,
   pyqt6,
@@ -33,11 +32,13 @@
   python,
   qt6,
   setuptools,
-  tbb,
+  stdenv,
+  onetbb,
   withDocs ? false,
-  withOsl ? true,
+  withOsl ? !stdenv.hostPlatform.isDarwin,
   withTools ? false,
   withUsdView ? false,
+  withMaterialX ? true,
   writeShellScriptBin,
 }:
 
@@ -51,30 +52,28 @@ in
 
 buildPythonPackage rec {
   pname = "openusd";
-  version = "25.02a";
+  version = "26.05";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenUSD";
     tag = "v${version}";
-    hash = "sha256-QFwG6kOLM+R+QIAozk/Dbldj8LRt9kCJv0W/EGHkq6Q=";
+    hash = "sha256-LQ5iopxoDtmScYhmMy+xN/Gb5WVdAYXdQGlGhG3vIiA=";
   };
-
-  stdenv = python.stdenv;
 
   outputs = [ "out" ] ++ lib.optional withDocs "doc";
 
   patches = [
     (fetchpatch {
-      name = "port-to-embree-4.patch";
-      # https://github.com/PixarAnimationStudios/OpenUSD/pull/2266
-      url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/a07a6b4d1da19bfc499db49641d74fb7c1a71e9b.patch?full_index=1";
-      hash = "sha256-Gww6Ll2nKwpcxMY9lnf5BZ3eqUWz1rik9P3mPKDOf+Y=";
+      # https://github.com/PixarAnimationStudios/OpenUSD/pull/3648
+      name = "propagate-dependencies-opengl.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/usd/-/raw/41469f20113d3550c5b42e67d1139dedc1062b8c/usd-find-dependency-OpenGL.patch?full_index=1";
+      hash = "sha256-aUWGKn365qov0ttGOq5GgNxYGIGZ4DfmeMJfakbOugQ=";
     })
   ];
 
-  env.OSL_LOCATION = "${osl}";
+  env.OSL_LOCATION = lib.optionalString withOsl "${openshadinglanguage}";
 
   cmakeFlags = [
     "-DPXR_BUILD_ALEMBIC_PLUGIN=ON"
@@ -91,76 +90,75 @@ buildPythonPackage rec {
     (lib.cmakeBool "PXR_BUILD_PYTHON_DOCUMENTATION" withDocs)
     (lib.cmakeBool "PXR_BUILD_USDVIEW" withUsdView)
     (lib.cmakeBool "PXR_BUILD_USD_TOOLS" withTools)
-    (lib.cmakeBool "PXR_ENABLE_MATERIALX_SUPPORT" true)
-    (lib.cmakeBool "PXR_ENABLE_OSL_SUPPORT" (!stdenv.hostPlatform.isDarwin && withOsl))
+    (lib.cmakeBool "PXR_ENABLE_MATERIALX_SUPPORT" withMaterialX)
+    (lib.cmakeBool "PXR_ENABLE_OSL_SUPPORT" withOsl)
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-      setuptools
-    ]
-    ++ lib.optionals withDocs [
-      git
-      graphviz-nox
-      doxygen
-    ]
-    ++ lib.optionals withUsdView [ qt6.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    setuptools
+    opensubdiv.dev
+    opensubdiv.static
+  ]
+  ++ lib.optionals withDocs [
+    git
+    graphviz-nox
+    doxygen
+  ]
+  ++ lib.optionals withUsdView [ qt6.wrapQtAppsHook ];
 
-  buildInputs =
-    [
-      alembic.dev
-      bison
-      draco
-      embree
-      flex
-      imath
-      materialx
-      opencolorio
-      openimageio_2
-      opensubdiv
-      ptex
-      tbb
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libGL
-      libX11
-      libXt
-    ]
-    ++ lib.optionals withOsl [ osl ]
-    ++ lib.optionals withUsdView [ qt6.qtbase ]
-    ++ lib.optionals (withUsdView && stdenv.hostPlatform.isLinux) [ qt6.qtwayland ];
+  buildInputs = [
+    alembic.dev
+    bison
+    draco
+    embree
+    flex
+    imath
+    materialx
+    opencolorio
+    openimageio
+    ptex
+    onetbb
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libx11
+    libxt
+  ]
+  ++ lib.optionals withOsl [ openshadinglanguage ]
+  ++ lib.optionals withUsdView [ qt6.qtbase ]
+  ++ lib.optionals (withUsdView && stdenv.hostPlatform.isLinux) [ qt6.qtwayland ];
 
-  propagatedBuildInputs =
-    [
-      boost
-      jinja2
-      numpy
-      pyopengl
-      distutils
-    ]
-    ++ lib.optionals (withTools || withUsdView) [
-      pyside-tools-uic
-      pyside6
-    ]
-    ++ lib.optionals withUsdView [ pyqt6 ];
+  propagatedBuildInputs = [
+    boost
+    jinja2
+    numpy
+    opensubdiv
+    pyopengl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGL
+  ]
+  ++ lib.optionals (withTools || withUsdView) [
+    pyside-tools-uic
+    pyside6
+  ]
+  ++ lib.optionals withUsdView [ pyqt6 ];
 
   pythonImportsCheck = [
     "pxr"
     "pxr.Usd"
   ];
 
-  postInstall =
-    ''
-      # Make python lib properly accessible
-      target_dir=$out/${python.sitePackages}
-      mkdir -p $(dirname $target_dir)
-      mv $out/lib/python $target_dir
-    ''
-    + lib.optionalString withDocs ''
-      mv $out/docs $doc
-    '';
+  postInstall = ''
+    # Make python lib properly accessible
+    target_dir=$out/${python.sitePackages}
+    mkdir -p $(dirname $target_dir)
+    mv $out/lib/python $target_dir
+  ''
+  + lib.optionalString withDocs ''
+    mv $out/docs $doc
+  '';
 
   meta = {
     description = "Universal Scene Description";

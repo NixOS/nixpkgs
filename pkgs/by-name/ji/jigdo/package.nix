@@ -8,12 +8,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jigdo";
   version = "0.8.2";
 
   src = fetchurl {
-    url = "https://www.einval.com/~steve/software/jigdo/download/jigdo-${version}.tar.xz";
+    url = "https://www.einval.com/~steve/software/jigdo/download/jigdo-${finalAttrs.version}.tar.xz";
     hash = "sha256-NvKG2T+mtr94hfSJnJl4lNIdo6YhdlkqwWLZxqhkT54=";
   };
 
@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Download utility that can fetch files from several sources simultaneously";
     homepage = "https://www.einval.com/~steve/software/jigdo/";
-    changelog = "https://git.einval.com/cgi-bin/gitweb.cgi?p=jigdo.git;a=blob;f=changelog;hb=refs/tags/${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.unix;
+    changelog = "https://git.einval.com/cgi-bin/gitweb.cgi?p=jigdo.git;a=blob;f=changelog;hb=refs/tags/${finalAttrs.version}";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.unix;
   };
-}
+})

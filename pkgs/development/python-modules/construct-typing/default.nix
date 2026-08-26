@@ -8,6 +8,7 @@
   typing-extensions,
   arrow,
   cloudpickle,
+  cryptography,
   numpy,
   pytestCheckHook,
   ruamel-yaml,
@@ -15,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "construct-typing";
-  version = "0.6.2";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "timrid";
     repo = "construct-typing";
     tag = "v${version}";
-    hash = "sha256-zXpxu+VUcepEoAPLQnSlMCZkt8fDsMCLS0HBKhaYD20=";
+    hash = "sha256-iiMnt/f1ppciL6AVq3q0wOtoARcNYJycQA5Ev+dIow8=";
   };
 
   build-system = [ setuptools ];
@@ -42,22 +43,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     arrow
     cloudpickle
+    cryptography
     numpy
     pytestCheckHook
     ruamel-yaml
   ];
-
-  disabledTests =
-    [
-      # tests fail with construct>=2.10.70
-      "test_bitsinteger"
-      "test_bytesinteger"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # https://github.com/timrid/construct-typing/issues/31
-      "test_tenum_docstring"
-      "test_tenum_flags_docstring"
-    ];
 
   meta = {
     changelog = "https://github.com/timrid/construct-typing/releases/tag/v${version}";

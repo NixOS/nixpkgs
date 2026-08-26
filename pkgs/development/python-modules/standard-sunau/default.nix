@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Standard library sunau redistribution";
     homepage = "https://github.com/youknowone/python-deadlib/tree/main/sunau";
     license = lib.licenses.psfl;
-    maintainers = with lib.maintainers; [ GuillaumeDesforges ];
+    maintainers = [ ];
   };
 }

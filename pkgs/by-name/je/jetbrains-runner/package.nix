@@ -6,15 +6,15 @@
   kdePackages,
   nix-update-script,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jetbrains-runner";
-  version = "3.0.5";
+  version = "3.0.7";
 
   src = fetchFromGitHub {
     owner = "alex1701c";
     repo = "JetBrainsRunner";
-    rev = version;
-    hash = "sha256-fzGwwvBgvUVU6Ra66KrIAqRjWWR6pWYbWVkOk2tDwkc=";
+    tag = finalAttrs.version;
+    hash = "sha256-TaueSAxGiKiPVT26DSy1mzwsw2vBUK3D//vtOLtw2KQ=";
     fetchSubmodules = true;
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ js6pak ];
     inherit (kdePackages.krunner.meta) platforms;
   };
-}
+})

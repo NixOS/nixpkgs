@@ -3,17 +3,18 @@
   stdenv,
   fetchFromGitHub,
   libiconv,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
   pname = "leanify";
-  version = "unstable-2023-12-17";
+  version = "0.4.3-unstable-2026-06-05";
 
   src = fetchFromGitHub {
     owner = "JayXon";
     repo = "Leanify";
-    rev = "9daa4303cdc03f6b90b72c369e6377c6beb75c39";
-    hash = "sha256-fLazKCQnOT3bN3Kz25Q80RLk54EU5U6HCf6kPLcXn9c=";
+    rev = "dc557c4027fc8a7479c4a71506c75c98ea8829f9";
+    hash = "sha256-jyz0F0mY4z0lFA5a1ibJKHYKb35MvuVhFct2Him/my8=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -29,7 +30,9 @@ stdenv.mkDerivation {
 
   checkPhase = ''
     runHook preCheck
+
     ./leanify /dev/null
+
     runHook postCheck
   '';
 
@@ -42,7 +45,9 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
+  meta = {
     description = "Lightweight lossless file minifier/optimizer";
     longDescription = ''
       Leanify is a lightweight lossless file minifier/optimizer.
@@ -51,9 +56,9 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/JayXon/Leanify";
     changelog = "https://github.com/JayXon/Leanify/blob/master/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = [ maintainers.mynacol ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.mynacol ];
+    platforms = lib.platforms.all;
     mainProgram = "leanify";
   };
 }

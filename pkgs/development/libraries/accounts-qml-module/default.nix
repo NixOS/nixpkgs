@@ -14,6 +14,9 @@
   xvfb-run,
 }:
 
+let
+  withQt6 = lib.versions.major qtbase.version == "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "accounts-qml-module";
   version = "0.7-unstable-2023-10-28";
@@ -27,26 +30,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
+  ]
+  ++ lib.optionals (!withQt6) [
     "doc"
   ];
 
-  postPatch =
-    ''
-      substituteInPlace src/src.pro \
-        --replace '$$[QT_INSTALL_BINS]/qmlplugindump' 'qmlplugindump' \
-        --replace '$$[QT_INSTALL_QML]' '${placeholder "out"}/${qtbase.qtQmlPrefix}'
+  postPatch = ''
+    substituteInPlace src/src.pro \
+      --replace '$$[QT_INSTALL_BINS]/qmlplugindump' 'qmlplugindump' \
+      --replace '$$[QT_INSTALL_QML]' '${placeholder "out"}/${qtbase.qtQmlPrefix}'
 
-      # Find qdoc
-      substituteInPlace doc/doc.pri \
-        --replace-fail 'QDOC = $$[QT_INSTALL_BINS]/qdoc' 'QDOC = qdoc'
+    # Find qdoc
+    substituteInPlace doc/doc.pri \
+      --replace-fail 'QDOC = $$[QT_INSTALL_BINS]/qdoc' 'QDOC = qdoc'
 
-      # Don't install test binary
-      sed -i tests/tst_plugin.pro \
-        -e '/TARGET = tst_plugin/a INSTALLS -= target'
-    ''
-    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-      sed -i accounts-qml-module.pro -e '/tests/d'
-    '';
+    # Don't install test binary
+    sed -i tests/tst_plugin.pro \
+      -e '/TARGET = tst_plugin/a INSTALLS -= target'
+  ''
+  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+    sed -i accounts-qml-module.pro -e '/tests/d'
+  '';
 
   # QMake can't find Qt modules in buildInputs
   strictDeps = false;
@@ -55,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     qmake
     qtdeclarative # qmlplugindump
+  ]
+  ++ lib.optionals (!withQt6) [
     qttools # qdoc
   ];
 
@@ -72,6 +78,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
+  qmakeFlags = lib.optionals withQt6 [
+    # No qdoc in Qt6 qttools?
+    "CONFIG+=no_docs"
+  ];
+
   postConfigure = ''
     make qmake_all
   '';
@@ -88,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     export QT_PLUGIN_PATH=${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString (!withQt6) ''
     moveToOutput share/accounts-qml-module/doc $doc
   '';
 

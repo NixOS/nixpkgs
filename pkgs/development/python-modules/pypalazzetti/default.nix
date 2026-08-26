@@ -5,23 +5,20 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "pypalazzetti";
-  version = "0.1.19";
+  version = "0.1.20";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "dotvav";
     repo = "py-palazzetti-api";
     tag = "v${version}";
-    hash = "sha256-Bmx4CU6bx5FVR7xdDxrtVSXunthi2s2Esj1FtSjh61U=";
+    hash = "sha256-jDsDa/5QFi4HUSagFHG73+Aj5BPOC8UNO+k7XxLZawk=";
   };
 
   build-system = [ setuptools ];

@@ -1,6 +1,5 @@
 {
   cmake,
-  darwin,
   fetchFromGitHub,
   SDL2,
   ffmpeg_6,
@@ -10,6 +9,7 @@
   libGL,
   libxkbcommon,
   makeDesktopItem,
+  copyDesktopItems,
   openssl,
   pkg-config,
   rustPlatform,
@@ -17,28 +17,37 @@
   wayland,
   wayland-scanner,
   nix-update-script,
-  libX11,
-  libXcursor,
-  libXi,
-  libXrandr,
+  libx11,
+  libxcb,
+  libxcursor,
+  libxi,
+  libxrandr,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gossip";
   version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "mikedilger";
     repo = "gossip";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nv/NMLAka62u0WzvHMEW9XBVXpg9T8bNJiUegS/oj48=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-rE7SErOhl2fcmvLairq+mvdnbDIk1aPo3eYqwRx5kkA=";
 
+  postPatch = ''
+    substituteInPlace $cargoDepsCopy/*/sdl2-sys-0.37.0/SDL/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0.0)" "cmake_minimum_required(VERSION 3.0.0...3.5)" \
+      --replace-fail "cmake_minimum_required(VERSION 3.4)" "cmake_minimum_required(VERSION 3.4...3.5)"
+  '';
+
   # See https://github.com/mikedilger/gossip/blob/0.9/README.md.
-  RUSTFLAGS = "--cfg tokio_unstable";
+  env.RUSTFLAGS = "--cfg tokio_unstable";
+
+  # Vendored SDL2 uses `bool` / `false` as identifiers, rejected by gcc 15's C23 default.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   # Some users might want to add "rustls-tls(-native)" for Rust TLS instead of OpenSSL.
   buildFeatures = [
@@ -46,41 +55,33 @@ rustPlatform.buildRustPackage rec {
     "lang-cjk"
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      git
-      pkg-config
-      rustPlatform.bindgenHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    cmake
+    git
+    pkg-config
+    rustPlatform.bindgenHook
+    copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland-scanner
+  ];
 
-  buildInputs =
-    [
-      SDL2
-      ffmpeg_6
-      fontconfig
-      libGL
-      libxkbcommon
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.Cocoa
-      darwin.apple_sdk.frameworks.CoreGraphics
-      darwin.apple_sdk.frameworks.Foundation
-      darwin.apple_sdk.frameworks.ForceFeedback
-      darwin.apple_sdk.frameworks.AVFoundation
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland
-      libX11
-      libXcursor
-      libXi
-      libXrandr
-    ];
+  buildInputs = [
+    SDL2
+    ffmpeg_6
+    fontconfig
+    libGL
+    libxkbcommon
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland
+    libx11
+    libxcb
+    libxcursor
+    libxi
+    libxrandr
+  ];
 
   # Tests rely on local files, so disable them. (I'm too lazy to patch it.)
   doCheck = false;
@@ -112,7 +113,7 @@ rustPlatform.buildRustPackage rec {
       name = "Gossip";
       exec = "gossip";
       icon = "gossip";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       desktopName = "Gossip";
       categories = [
         "Chat"
@@ -120,6 +121,7 @@ rustPlatform.buildRustPackage rec {
         "InstantMessaging"
       ];
       startupWMClass = "gossip";
+      mimeTypes = [ "x-scheme-handler/nostr" ];
     })
   ];
 
@@ -127,11 +129,11 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Desktop client for nostr, an open social media protocol";
-    downloadPage = "https://github.com/mikedilger/gossip/releases/tag/${version}";
+    downloadPage = "https://github.com/mikedilger/gossip/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/mikedilger/gossip";
     license = lib.licenses.mit;
     mainProgram = "gossip";
     maintainers = with lib.maintainers; [ msanft ];
     platforms = lib.platforms.unix;
   };
-}
+})

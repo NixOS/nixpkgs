@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dab_lib";
-  version = "unstable-2023-03-02";
+  version = "0.8-unstable-2023-03-02";
 
   src = fetchFromGitHub {
     owner = "JvanKatwijk";
@@ -21,6 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   sourceRoot = "${finalAttrs.src.name}/library";
+
+  cmakeFlags = [ (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10") ];
 
   nativeBuildInputs = [
     cmake
@@ -32,11 +34,14 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "DAB/DAB+ decoding library";
     homepage = "https://github.com/JvanKatwijk/dab-cmdline";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ alexwinter ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
+      aciceri
+      alexwinter
+    ];
+    platforms = lib.platforms.unix;
   };
 })

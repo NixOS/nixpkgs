@@ -8,15 +8,15 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fuse-overlayfs";
-  version = "1.14";
+  version = "1.17";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "fuse-overlayfs";
-    rev = "v${version}";
-    hash = "sha256-A70AxYPKph/5zRNFRDWrwl8Csc8Vf1gmOLJ39ixJgL0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-oXSqyxe5+hsuFXKajuviqh2nKIz8Kw6rjLnb6XTF6GI=";
   };
 
   nativeBuildInputs = [
@@ -29,16 +29,21 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   strictDeps = true;
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   passthru.tests = { inherit (nixosTests) podman; };
 
-  meta = with lib; {
+  meta = {
     description = "FUSE implementation for overlayfs";
     longDescription = "An implementation of overlay+shiftfs in FUSE for rootless containers.";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ ma9e ];
-    teams = [ teams.podman ];
-    platforms = platforms.linux;
-    inherit (src.meta) homepage;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ ma9e ];
+    teams = [ lib.teams.podman ];
+    platforms = lib.platforms.linux;
+    inherit (finalAttrs.src.meta) homepage;
     mainProgram = "fuse-overlayfs";
   };
-}
+})

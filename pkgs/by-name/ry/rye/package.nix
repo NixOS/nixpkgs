@@ -18,18 +18,17 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rye";
   version = "0.44.0";
 
   src = fetchFromGitHub {
-    owner = "mitsuhiko";
+    owner = "astral-sh";
     repo = "rye";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-K9xad5Odza0Oxz49yMJjqpfh3cCgmWnbAlv069fHV6Q=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-+gFa8hruXIweFm24XvfhqXZxNLAYKVNX+xBSCdAk54A=";
 
   env = {
@@ -94,7 +93,6 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -103,10 +101,10 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Tool to easily manage python dependencies and environments";
-    homepage = "https://github.com/mitsuhiko/rye";
-    changelog = "https://github.com/mitsuhiko/rye/releases/tag/${version}";
+    homepage = "https://github.com/astral-sh/rye";
+    changelog = "https://github.com/astral-sh/rye/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "rye";
   };
-}
+})

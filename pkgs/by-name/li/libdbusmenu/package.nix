@@ -10,14 +10,13 @@
   json-glib,
   gobject-introspection,
   vala,
-  gtkVersion ? null,
-  gtk2,
+  withGtk3 ? false,
   gtk3,
   testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "libdbusmenu-${if gtkVersion == null then "glib" else "gtk${gtkVersion}"}";
+  pname = "libdbusmenu-${if withGtk3 then "gtk3" else "glib"}";
   version = "16.04.0";
 
   src =
@@ -36,18 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
     gobject-introspection
   ];
 
-  buildInputs =
-    [
-      glib
-      dbus-glib
-      json-glib
-    ]
-    ++ lib.optional (gtkVersion != null)
-      {
-        "2" = gtk2;
-        "3" = gtk3;
-      }
-      .${gtkVersion} or (throw "unknown GTK version ${gtkVersion}");
+  buildInputs = [
+    glib
+    dbus-glib
+    json-glib
+  ]
+  ++ lib.optional withGtk3 gtk3;
 
   patches = [
     ./requires-glib.patch
@@ -70,10 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
     "CFLAGS=-Wno-error"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    # TODO use `lib.withFeatureAs`
-    (if gtkVersion == null then "--disable-gtk" else "--with-gtk=${gtkVersion}")
+    (if withGtk3 then "--with-gtk=3" else "--disable-gtk")
+    "--disable-dumper"
     "--disable-scrollkeeper"
-  ] ++ lib.optional (gtkVersion != "2") "--disable-dumper";
+  ];
 
   doCheck = false; # generates shebangs in check phase, too lazy to fix
 
@@ -85,10 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Library for passing menu structures across DBus";
     homepage = "https://launchpad.net/dbusmenu";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3
       lgpl21
       lgpl3
@@ -96,8 +89,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [
       "dbusmenu-glib-0.4"
       "dbusmenu-jsonloader-0.4"
-    ] ++ lib.optional (gtkVersion == "3") "dbusmenu-gtk${gtkVersion}-0.4";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.msteen ];
+    ]
+    ++ lib.optional withGtk3 "dbusmenu-gtk3-0.4";
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.msteen ];
   };
 })

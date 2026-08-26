@@ -3,19 +3,21 @@
   rustPlatform,
   fetchCrate,
   python3,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pipe-rename";
-  version = "1.6.5";
+  version = "1.6.7";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-av/ig76O7t3dB4Irfi3yqyL30nkJJCzs5EayWRbpOI0=";
+    pname = "pipe-rename";
+    inherit (finalAttrs) version;
+    hash = "sha256-9Pub+OCN+PiKHfCxflwkHp6JNSB8AqAtKsNTlAsANbA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-0+m11mPR/s45MeY90WM3vmnGk6Xb0j2DJnZrEZ/EX1g=";
+  cargoHash = "sha256-oYJNiUIi/uYxzd9DfgBgEaEy3g32r44seI56ur9UMcc=";
 
   nativeCheckInputs = [ python3 ];
 
@@ -29,11 +31,17 @@ rustPlatform.buildRustPackage rec {
     patchShebangs tests/editors/env-editor.py
   '';
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Rename your files using your favorite text editor";
     homepage = "https://github.com/marcusbuffett/pipe-rename";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/marcusbuffett/pipe-rename/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "renamer";
   };
-}
+})

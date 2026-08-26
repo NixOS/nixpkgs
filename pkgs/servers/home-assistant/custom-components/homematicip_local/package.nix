@@ -1,21 +1,29 @@
 {
   lib,
+  async-upnp-client,
   buildHomeAssistantComponent,
   fetchFromGitHub,
-  hahomematic,
+  aiohomematic,
+  aiohomematic-config,
+  aiohomematic-test-support,
   home-assistant,
+  openccu-data,
+  openccu-loom-client,
+  pytest-homeassistant-custom-component,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "SukramJ";
   domain = "homematicip_local";
-  version = "1.83.0";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "SukramJ";
     repo = "custom_homematic";
     tag = version;
-    hash = "sha256-F26Q7nfikw5NSa84L0LKwTSQDmqEdxwYyyzBNzSMWPw=";
+    hash = "sha256-zBtTqNxmOD844rBxPyHGCkE3GLYUH8mI5qBtPdxz24o=";
   };
 
   postPatch = ''
@@ -26,7 +34,23 @@ buildHomeAssistantComponent rec {
   '';
 
   dependencies = [
-    hahomematic
+    aiohomematic
+    aiohomematic-config
+    openccu-data
+    openccu-loom-client
+  ];
+
+  nativeCheckInputs = [
+    aiohomematic-test-support
+    async-upnp-client
+    pytest-homeassistant-custom-component
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # zeroconf fails with: No such device
+    "tests/test_config_flow.py::TestReauthFlow::test_reauth_flow_success"
   ];
 
   meta = {

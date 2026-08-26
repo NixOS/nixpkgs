@@ -8,7 +8,7 @@
   xterm,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "zenmap";
   version = nmap.version;
   pyproject = true;
@@ -21,6 +21,7 @@ python3Packages.buildPythonApplication rec {
 
   build-system = with python3Packages; [
     setuptools
+    setuptools-gettext
   ];
 
   buildInputs = [
@@ -49,7 +50,7 @@ python3Packages.buildPythonApplication rec {
   '';
   postInstall = ''
     # Icons
-    install -Dm 644 "zenmapCore/data/pixmaps/zenmap.png" -t "$out/share/pixmaps/"
+    install -Dm 644 "zenmapCore/data/pixmaps/zenmap.png" -t "$out/share/icons/hicolor/256x256/apps"
     # Desktop-files for application
     install -Dm 644 "install_scripts/unix/zenmap.desktop" -t "$out/share/applications/"
     install -Dm 644 "install_scripts/unix/zenmap-root.desktop" -t "$out/share/applications/"
@@ -71,7 +72,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = nmap.meta // {
-    description = "Offical nmap Security Scanner GUI";
+    description = "Official nmap Security Scanner GUI";
     homepage = "https://nmap.org/zenmap/";
     maintainers = with lib.maintainers; [
       dvaerum

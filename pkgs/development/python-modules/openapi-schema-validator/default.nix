@@ -2,62 +2,65 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   poetry-core,
 
-  # propagates
+  # dependencies
   jsonschema,
   jsonschema-specifications,
+  pydantic,
+  pydantic-settings,
+  referencing,
   rfc3339-validator,
+
+  # optional-dependencies
+  regress,
 
   # tests
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "openapi-schema-validator";
-  version = "0.6.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "0.8.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p1c2u";
-    repo = pname;
+    repo = "openapi-schema-validator";
     tag = version;
-    hash = "sha256-1Y049W4TbqvKZRwnvPVwyLq6CH6NQDrEfJknuMn8dGo=";
+    hash = "sha256-XOtSnlJJGEa6pOQDHTFRF0zqNxJIB2VlZvFv5kxwUIM=";
   };
 
-  postPatch = ''
-    sed -i "/--cov/d" pyproject.toml
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ poetry-core ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     jsonschema
     jsonschema-specifications
+    pydantic
+    pydantic-settings
+    referencing
     rfc3339-validator
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  optional-dependencies = {
+    ecma-regex = [ regress ];
+  };
 
-  disabledTests = [
-    # https://github.com/python-openapi/openapi-schema-validator/issues/153
-    "test_array_prefixitems_invalid"
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
   ];
-
-  pytestFlagsArray = [ "-vvv" ];
 
   pythonImportsCheck = [ "openapi_schema_validator" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/python-openapi/openapi-schema-validator/releases/tag/${src.tag}";
-    description = "Validates OpenAPI schema against the OpenAPI Schema Specification v3.0";
+    description = "Validates OpenAPI schema against the OpenAPI Schema Specification v3.0 and v3.1";
     homepage = "https://github.com/python-openapi/openapi-schema-validator";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -91,9 +91,9 @@ let
       # files required to exist also won't be present, so missingok is forced.
       user=$(${pkgs.buildPackages.coreutils}/bin/id -un)
       group=$(${pkgs.buildPackages.coreutils}/bin/id -gn)
-      sed -e "s/\bsu\s.*/su $user $group/" \
-          -e "s/\b\(create\s\+[0-9]*\s*\|createolddir\s\+[0-9]*\s\+\).*/\1$user $group/" \
-          -e "1imissingok" -e "s/\bnomissingok\b//" \
+      sed -E -e "s/\bsu\s.*/su $user $group/" \
+             -e "s/\b((create|createolddir)\b(\s+[0-9]+)?).*/\1 $user $group/" \
+             -e "1imissingok" -e "s/\bnomissingok\b//" \
           $out > logrotate.conf
       # Since this makes for very verbose builds only show real error.
       # There is no way to control log level, but logrotate hardcodes
@@ -314,56 +314,55 @@ in
       ];
       startAt = "hourly";
 
-      serviceConfig =
-        {
-          Type = "oneshot";
-          ExecStart = "${lib.getExe pkgs.logrotate} ${utils.escapeSystemdExecArgs cfg.extraArgs} ${mailOption} ${cfg.configFile}";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${lib.getExe pkgs.logrotate} ${utils.escapeSystemdExecArgs cfg.extraArgs} ${mailOption} ${cfg.configFile}";
 
-          # performance
-          Nice = 19;
-          IOSchedulingClass = "best-effort";
-          IOSchedulingPriority = 7;
+        # performance
+        Nice = 19;
+        IOSchedulingClass = "best-effort";
+        IOSchedulingPriority = 7;
 
-          # hardening
-          CapabilityBoundingSet = [
-            "CAP_CHOWN"
-            "CAP_DAC_OVERRIDE"
-            "CAP_FOWNER"
-            "CAP_KILL"
-            "CAP_SETUID"
-            "CAP_SETGID"
-          ];
-          DevicePolicy = "closed";
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          NoNewPrivileges = true;
-          PrivateDevices = true;
-          PrivateTmp = true;
-          ProcSubset = "pid";
-          ProtectClock = true;
-          ProtectControlGroups = true;
-          ProtectHome = true;
-          ProtectHostname = true;
-          ProtectKernelLogs = true;
-          ProtectKernelModules = true;
-          ProtectKernelTunables = true;
-          ProtectProc = "invisible";
-          ProtectSystem = "full";
-          RestrictNamespaces = true;
-          RestrictRealtime = true;
-          RestrictSUIDSGID = false; # can create sgid directories
-          SystemCallArchitectures = "native";
-          SystemCallFilter = [
-            "@system-service"
-            "~@privileged @resources"
-            "@chown @setuid"
-          ];
-          UMask = "0027";
-        }
-        // lib.optionalAttrs (!cfg.allowNetworking) {
-          PrivateNetwork = true; # e.g. mail delivery
-          RestrictAddressFamilies = [ "AF_UNIX" ];
-        };
+        # hardening
+        CapabilityBoundingSet = [
+          "CAP_CHOWN"
+          "CAP_DAC_OVERRIDE"
+          "CAP_FOWNER"
+          "CAP_KILL"
+          "CAP_SETUID"
+          "CAP_SETGID"
+        ];
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "full";
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = false; # can create sgid directories
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged @resources"
+          "@chown @setuid"
+        ];
+        UMask = "0027";
+      }
+      // lib.optionalAttrs (!cfg.allowNetworking) {
+        PrivateNetwork = true; # e.g. mail delivery
+        RestrictAddressFamilies = [ "AF_UNIX" ];
+      };
     };
     systemd.services.logrotate-checkconf = {
       description = "Logrotate configuration check";

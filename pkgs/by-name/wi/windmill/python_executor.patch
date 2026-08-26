@@ -1,100 +1,31 @@
 diff --git a/windmill-worker/src/python_executor.rs b/windmill-worker/src/python_executor.rs
-index 1180652d3..7b4ccf6cf 100644
+index eb6a6e7f30..eb29758c0a 100644
 --- a/windmill-worker/src/python_executor.rs
 +++ b/windmill-worker/src/python_executor.rs
-@@ -290,70 +290,8 @@ impl PyVersion {
-         occupancy_metrics: &mut Option<&mut OccupancyMetrics>,
-     ) -> error::Result<()> {
-         let v = self.to_string_with_dot();
--        append_logs(job_id, w_id, format!("\nINSTALLING PYTHON ({})", v), db).await;
--        // Create dirs for newly installed python
--        // If we dont do this, NSJAIL will not be able to mount cache
--        // For the default version directory created during startup (main.rs)
--        DirBuilder::new()
--            .recursive(true)
--            .create(self.to_cache_dir())
--            .await
--            .expect("could not create initial worker dir");
--
--        let logs = String::new();
--
--        #[cfg(windows)]
--        let uv_cmd = "uv";
--
--        #[cfg(unix)]
--        let uv_cmd = UV_PATH.as_str();
--
--        let mut child_cmd = Command::new(uv_cmd);
--        child_cmd
--            .env_clear()
--            .env("HOME", HOME_ENV.to_string())
--            .env("PATH", PATH_ENV.to_string())
--            .envs(PROXY_ENVS.clone())
--            .args(["python", "install", v, "--python-preference=only-managed"])
--            // TODO: Do we need these?
--            .envs([("UV_PYTHON_INSTALL_DIR", PY_INSTALL_DIR)])
--            .stdout(Stdio::piped())
--            .stderr(Stdio::piped());
--
--        #[cfg(windows)]
--        {
--            child_cmd
--                .env("SystemRoot", SYSTEM_ROOT.as_str())
--                .env("USERPROFILE", crate::USERPROFILE_ENV.as_str())
--                .env(
--                    "TMP",
--                    std::env::var("TMP").unwrap_or_else(|_| String::from("/tmp")),
--                )
--                .env(
--                    "LOCALAPPDATA",
--                    std::env::var("LOCALAPPDATA")
--                        .unwrap_or_else(|_| format!("{}\\AppData\\Local", HOME_ENV.as_str())),
--                );
--        }
--
--        let child_process = start_child_process(child_cmd, "uv").await?;
--
--        append_logs(&job_id, &w_id, logs, db).await;
--        handle_child(
--            job_id,
--            db,
--            mem_peak,
--            &mut None,
--            child_process,
--            false,
--            worker_name,
--            &w_id,
--            "uv",
--            None,
--            false,
--            occupancy_metrics,
--        )
--        .await
-+        append_logs(job_id, w_id, format!("\nREQUESTED PYTHON INSTALL IGNORED ({})", v), db).await;
-+        Err(error::Error::BadConfig(format!("Python is managed through the NixOS system configuration. Change the Windmill instance setting to version 'unknown_system_python_version'")))
-     }
-     async fn find_python(self) -> error::Result<Option<String>> {
-         #[cfg(windows)]
-@@ -391,11 +329,11 @@ impl PyVersion {
-                 "find",
-                 self.to_string_with_dot(),
-                 "--system",
--                "--python-preference=only-managed",
-+                "--python-preference=only-system",
-             ])
-             .envs([
-                 ("UV_PYTHON_INSTALL_DIR", PY_INSTALL_DIR),
--                ("UV_PYTHON_PREFERENCE", "only-managed"),
-+                ("UV_PYTHON_PREFERENCE", "only-system"),
-             ])
-             // .stdout(Stdio::piped())
-             .stderr(Stdio::piped())
-@@ -561,7 +499,7 @@ pub async fn uv_pip_compile(
-             "-p",
-             &py_version.to_string_with_dot(),
-             "--python-preference",
--            "only-managed",
-+            "only-system",
-         ]);
+@@ -273,7 +273,7 @@ pub async fn uv_pip_compile(
+             UV_CACHE_DIR,
+         ];
+ 
+-        args.extend(["-p", &py_version_str, "--python-preference", "only-managed"]);
++        args.extend(["-p", &py_version_str, "--python-preference", "only-system"]);
  
          if no_cache {
+             args.extend(["--no-cache"]);
+@@ -1332,7 +1332,7 @@ async fn spawn_uv_install(
+         let _owner;
+         if let Some(py_path) = py_path.as_ref() {
+             _owner = format!(
+-                "-p {} --python-preference only-managed",
++                "-p {} --python-preference only-system",
+                 py_path.as_str() //
+             );
+             vars.push(("PY_PATH", &_owner));
+@@ -1399,7 +1399,7 @@ async fn spawn_uv_install(
+                 "-p",
+                 py_path.as_str(),
+                 "--python-preference",
+-                "only-managed", //
++                "only-system", //
+             ]);
+         } else {
+             command_args.extend([

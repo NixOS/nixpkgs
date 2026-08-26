@@ -5,18 +5,17 @@
 }:
 mkYaziPlugin {
   pname = "smart-filter.yazi";
-  version = "25.2.26-unstable-2025-03-02";
+  version = "0-unstable-2026-07-04";
 
   src = fetchFromGitHub {
     owner = "yazi-rs";
     repo = "plugins";
-    rev = "b44c245500b34e713732a9130bf436b13b4777e9";
-    hash = "sha256-nZ8yfnKvNLM5aA+mmQ3PkfM5lwSKwWnkQewcg9GwseI=";
+    rev = "5d461d85908338371b9433ab6c29707bee3a813b";
+    hash = "sha256-vRElXxEe2Am7p6SoxJ7g8GSaka7/4/yZ2zfiOOqUR2I=";
   };
 
   meta = {
-    description = "Previewing archive contents with smart-filter";
-    homepage = "https://yazi-rs.github.io";
+    description = "Yazi plugin that makes filters smarter";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
   };

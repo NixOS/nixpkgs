@@ -23,7 +23,6 @@
   libogg,
   libpng,
   libvorbis,
-  libXrandr,
   openal,
   readline,
   SDL2,
@@ -60,14 +59,13 @@ stdenv.mkDerivation {
     })
   ];
 
-  postInstall =
-    ''
-      mv $out/games/openclonk $out/bin
-      rm -r $out/games
-    ''
-    + lib.optionalString enableSoundtrack ''
-      ln -sv ${soundtrack_src} $out/share/games/openclonk/Music.ocg
-    '';
+  postInstall = ''
+    mv $out/games/openclonk $out/bin
+    rm -r $out/games
+  ''
+  + lib.optionalString enableSoundtrack ''
+    ln -sv ${soundtrack_src} $out/share/games/openclonk/Music.ocg
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -86,7 +84,6 @@ stdenv.mkDerivation {
     libogg
     libpng
     libvorbis
-    libXrandr
     openal
     readline
     SDL2

@@ -8,8 +8,6 @@
   findlib,
   pkg-config,
   gtk2,
-  libgnomecanvas,
-  gtksourceview,
   camlp-streams,
 }:
 
@@ -64,11 +62,7 @@ stdenv.mkDerivation {
     ocaml
     findlib
   ];
-  buildInputs = [
-    gtk2
-    libgnomecanvas
-    gtksourceview
-  ] ++ param.buildInputs or [ ];
+  buildInputs = [ gtk2 ] ++ param.buildInputs or [ ];
 
   configureFlags = [ "--with-libdir=$(out)/lib/ocaml/${ocaml.version}/site-lib" ];
   buildFlags = [ "world" ];
@@ -80,12 +74,11 @@ stdenv.mkDerivation {
 
   dontStrip = true;
 
-  meta = with lib; {
+  meta = {
     description = "OCaml interface to GTK";
     homepage = "http://lablgtk.forge.ocamlcore.org/";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [
-      maggesi
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [
       roconnor
       vbgl
     ];

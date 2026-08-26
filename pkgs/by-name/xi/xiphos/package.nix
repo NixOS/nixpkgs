@@ -1,62 +1,42 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  appstream-glib,
+  appstream,
   biblesync,
   cmake,
-  dbus-glib,
   desktop-file-utils,
   docbook2x,
   docbook_xml_dtd_412,
-  enchant2,
   glib,
-  gtk3,
-  gtkhtml,
   icu,
   intltool,
-  isocodes,
   itstool,
   libuuid,
   libxslt,
   minizip,
   pkg-config,
+  speechd-minimal,
   sword,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
   yelp-tools,
   zip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xiphos";
-  version = "4.2.1";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "crosswire";
     repo = "xiphos";
-    rev = version;
-    hash = "sha256-H5Q+azE2t3fgu77C9DxrkeUCJ7iJz3Cc91Ln4dqLvD8=";
+    tag = finalAttrs.version;
+    hash = "sha256-csbhlYSn/TFxZV/pGHgJT4Hnqa26BZQUKD/CBHhxi/U=";
   };
 
-  patches = [
-    # GLIB_VERSION_MIN_REQUIRED is not defined.
-    # https://github.com/crosswire/xiphos/issues/1083#issuecomment-820304874
-    (fetchpatch {
-      name = "xiphos-glibc.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/xiphos-glibc.patch?h=xiphos&id=bb816f43ba764ffac1287ab1e2a649c2443e3ce8";
-      sha256 = "he3U7phU2/QCrZidHviupA7YwzudnQ9Jbb8eMZw6/ck=";
-      extraPrefix = "";
-    })
-
-    # Fix D-Bus build
-    # https://github.com/crosswire/xiphos/pull/1103
-    ./0001-Add-dbus-glib-dependency-to-main.patch
-  ];
-
   nativeBuildInputs = [
-    appstream-glib # for appstream-util
+    appstream
     cmake
     desktop-file-utils # for desktop-file-validate
     docbook2x
@@ -72,32 +52,27 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     biblesync
-    dbus-glib
-    enchant2
     glib
-    gtk3
-    gtkhtml
     icu
-    isocodes
     libuuid
     minizip
+    speechd-minimal
     sword
-    webkitgtk_4_0
+    webkitgtk_4_1
   ];
 
   cmakeFlags = [
-    # WebKit-based editor does not build.
-    "-DGTKHTML=ON"
+    "-DGTKTVEDITOR=ON"
   ];
 
   preConfigure = ''
     # The build script won't continue without the version saved locally.
-    echo "${version}" > cmake/source_version.txt
+    echo "${finalAttrs.version}" > cmake/source_version.txt
 
     export SWORD_HOME=${sword};
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GTK Bible study tool";
     longDescription = ''
       Xiphos (formerly known as GnomeSword) is a Bible study tool
@@ -106,8 +81,8 @@ stdenv.mkDerivation rec {
       modules from The SWORD Project and elsewhere.
     '';
     homepage = "https://www.xiphos.org/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

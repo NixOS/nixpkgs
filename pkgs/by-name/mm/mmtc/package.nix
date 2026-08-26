@@ -5,18 +5,17 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mmtc";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "figsoda";
     repo = "mmtc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-gs6uytX4rm2JrJ4UbtHJDg+b+Z1ZjcsuUR0b13jQIy4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-TpAl7lMaQGSH9oMNqYIxnajsfh1HAdyU2suSFRfWYPs=";
 
   nativeBuildInputs = [ installShellFiles ];
@@ -26,14 +25,14 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion artifacts/mmtc.{bash,fish} --zsh artifacts/_mmtc
   '';
 
-  GEN_ARTIFACTS = "artifacts";
+  env.GEN_ARTIFACTS = "artifacts";
 
-  meta = with lib; {
+  meta = {
     description = "Minimal mpd terminal client that aims to be simple yet highly configurable";
     homepage = "https://github.com/figsoda/mmtc";
-    changelog = "https://github.com/figsoda/mmtc/blob/v${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/figsoda/mmtc/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "mmtc";
   };
-}
+})

@@ -5,24 +5,22 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   sensor-state-data,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "thermopro-ble";
-  version = "0.11.0";
+  version = "1.1.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
     repo = "thermopro-ble";
-    tag = "v${version}";
-    hash = "sha256-3GgFRY36KMcMWxwjLgzuJB++DZ2TMdQQruen1gLHAbk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-goTJwTMaWBm5gc0/LOkjpKeRTkLStHkKJYsbE5Wj/X4=";
   };
 
   build-system = [ poetry-core ];
@@ -34,17 +32,18 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "thermopro_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Thermopro BLE devices";
     homepage = "https://github.com/bluetooth-devices/thermopro-ble";
-    changelog = "https://github.com/Bluetooth-Devices/thermopro-ble/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Bluetooth-Devices/thermopro-ble/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -5,7 +5,6 @@ rec {
   meta = with lib.maintainers; {
     maintainers = [
       flokli
-      grahamc # under duress!
       mmilata
     ];
   };
@@ -88,8 +87,9 @@ rec {
       )
       { }
       [
-        "6_7"
         "6_8"
+        "6_9"
+        "7_0"
       ];
 
   testScript = ''

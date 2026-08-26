@@ -4,7 +4,6 @@
   fetchFromGitHub,
   gtk3,
   gnome-themes-extra,
-  gtk-engine-murrine,
   sassc,
   border-radius ? null, # Suggested: 2 < value < 16
   tweaks ? [ ], # can be "solid" "compact" "black" "primary" "macos" "submenu" "nord|dracula"
@@ -38,13 +37,13 @@ lib.checkListOfEnum "${pname}: theme tweaks" validTweaks tweaks
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "2025-04-25";
+    version = "2026-07-07";
 
     src = fetchFromGitHub {
       repo = "Orchis-theme";
       owner = "vinceliuice";
       rev = version;
-      hash = "sha256-+2/CsgJ+rdDpCp+r5B/zys3PtFgtnu+ohTEUOtJNd1Y=";
+      hash = "sha256-oX6+tPe0nGsl+OzFZCpbKvE00Z/xvP+NoHY7QZ9YAo0=";
     };
 
     nativeBuildInputs = [
@@ -54,8 +53,6 @@ lib.checkListOfEnum "${pname}: theme tweaks" validTweaks tweaks
 
     buildInputs = [ gnome-themes-extra ];
 
-    propagatedUserEnvPkgs = [ gtk-engine-murrine ];
-
     preInstall = ''
       mkdir -p $out/share/themes
     '';
@@ -63,10 +60,8 @@ lib.checkListOfEnum "${pname}: theme tweaks" validTweaks tweaks
     installPhase = ''
       runHook preInstall
       bash install.sh -d $out/share/themes -t all \
-        ${lib.optionalString (tweaks != [ ]) "--tweaks " + builtins.toString tweaks} \
-        ${lib.optionalString (border-radius != null) (
-          "--round " + builtins.toString border-radius + "px"
-        )}
+        ${lib.optionalString (tweaks != [ ]) "--tweaks " + toString tweaks} \
+        ${lib.optionalString (border-radius != null) ("--round " + toString border-radius + "px")}
       ${lib.optionalString withWallpapers ''
         mkdir -p $out/share/backgrounds
         cp src/wallpaper/{1080p,2k,4k}.jpg $out/share/backgrounds
@@ -74,11 +69,11 @@ lib.checkListOfEnum "${pname}: theme tweaks" validTweaks tweaks
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Material Design theme for GNOME/GTK based desktop environments";
       homepage = "https://github.com/vinceliuice/Orchis-theme";
-      license = licenses.gpl3Plus;
-      platforms = platforms.linux;
-      maintainers = [ maintainers.fufexan ];
+      license = lib.licenses.gpl3Plus;
+      platforms = lib.platforms.linux;
+      maintainers = [ lib.maintainers.ncfavier ];
     };
   }

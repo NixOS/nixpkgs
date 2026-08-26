@@ -82,11 +82,11 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-hyphenator"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Analysis for Finnish text";
     homepage = "https://github.com/flammie/omorfi";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ lurkki ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ lurkki ];
     # Darwin build fails due to hfst not being found
     broken = stdenv.hostPlatform.isDarwin;
   };

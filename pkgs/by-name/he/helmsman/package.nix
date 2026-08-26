@@ -2,34 +2,33 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  ...
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "helmsman";
-  version = "3.18.0";
+  version = "4.0.5";
 
   src = fetchFromGitHub {
-    owner = "Praqma";
+    owner = "mkubaczyk";
     repo = "helmsman";
-    rev = "v${version}";
-    sha256 = "sha256-k/rgQttCA4Ahip9zV+z9zbVSy8NKUTIR4/pluqpP/1c=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-TeP7M0Mtd3rx9hcRCvgJAs7fBx2SZwUZSAhI/yhaO6k=";
   };
 
   subPackages = [ "cmd/helmsman" ];
 
-  vendorHash = "sha256-lIBtKwxdmUIRYifEhrjzHilEsgLIf4Mtq/pa7N/E+NM=";
+  vendorHash = "sha256-i3qZ0OSV40oB8X3seixXMeji6CpcSiNK5wTbxF+TFpI=";
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Helm Charts (k8s applications) as Code tool";
     mainProgram = "helmsman";
     homepage = "https://github.com/Praqma/helmsman";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       lynty
       sarcasticadmin
     ];
   };
-}
+})

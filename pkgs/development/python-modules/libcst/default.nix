@@ -3,14 +3,14 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  callPackage,
   cargo,
   hypothesmith,
+  isPy313,
   libcst,
   libiconv,
   pytestCheckHook,
-  python,
   pyyaml,
+  pyyaml-ft,
   rustPlatform,
   rustc,
   setuptools-rust,
@@ -20,20 +20,24 @@
 
 buildPythonPackage rec {
   pname = "libcst";
-  version = "1.7.0";
+  version = "1.8.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Instagram";
     repo = "LibCST";
     tag = "v${version}";
-    hash = "sha256-KqiB1LieRJJ34kJgIlqyMKCzO7iDen8j9+s0ZmrHe+c=";
+    hash = "sha256-AJm3grS+I/NXZ8ame4rmHPOxRHGO0Ofo35RtSDO2tyI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-EPS506x8KUFAbZ47ZWtH1q0ndXutM2fOqcsYpXRc0+c=";
+    inherit
+      pname
+      version
+      src
+      cargoRoot
+      ;
+    hash = "sha256-7/Yf2yn7wjW0CDG1Ha3SsvOIytbU1bJCpR9WFAFiPEA=";
   };
 
   cargoRoot = "native";
@@ -52,7 +56,7 @@ buildPythonPackage rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   dependencies = [
-    pyyaml
+    (if isPy313 then pyyaml-ft else pyyaml)
   ];
 
   nativeCheckInputs = [
@@ -71,6 +75,8 @@ buildPythonPackage rec {
     "TypeInferenceProviderTest"
     # we'd need to run `python -m libcst.codegen.generate all` but shouldn't modify $out
     "test_codegen_clean_visitor_functions"
+    "test_codegen_clean_matcher_classes"
+    "test_codegen_clean_return_types"
   ];
 
   # circular dependency on hypothesmith and ufmt

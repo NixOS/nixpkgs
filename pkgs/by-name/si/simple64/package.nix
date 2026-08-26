@@ -45,7 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp ${cheats-json} cheats.json
   '';
 
-  stictDeps = true;
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     qt6.wrapQtAppsHook
@@ -72,11 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   buildPhase = ''
-    runHook preInstall
+    runHook preBuild
 
     sh build.sh
 
-    runHook postInstall
+    runHook postBuild
   '';
 
   installPhase = ''

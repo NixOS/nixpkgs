@@ -4,57 +4,68 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   httpx,
   httpx-sse,
+  langchain-core,
+  langchain-protocol,
   orjson,
   typing-extensions,
+  websockets,
 
   # passthru
-  nix-update-script,
+  gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langgraph-sdk";
-  version = "0.1.63";
+  version = "0.4.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = "sdk==${version}";
-    hash = "sha256-V+JrLcumPQwN5hqfxyNc3OavPLlCFY5kXO81DSaAbeA=";
+    tag = "sdk==${finalAttrs.version}";
+    hash = "sha256-30BY7f8m3YiqEBhb3+TQYTW0N40xI9kTQbMTh4BwcyU=";
   };
 
-  sourceRoot = "${src.name}/libs/sdk-py";
+  sourceRoot = "${finalAttrs.src.name}/libs/sdk-py";
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
+
+  pythonRelaxDeps = [ "websockets" ];
 
   dependencies = [
     httpx
     httpx-sse
+    langchain-core
+    langchain-protocol
     orjson
     typing-extensions
+    websockets
   ];
 
   disabledTests = [ "test_aevaluate_results" ]; # Compares execution time to magic number
 
   pythonImportsCheck = [ "langgraph_sdk" ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "sdk==(\\d+\\.\\d+\\.\\d+)"
-    ];
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "sdk==";
+      ignoredVersions = "a|b|dev|rc";
+    };
   };
 
   meta = {
     description = "SDK for interacting with the LangGraph Cloud REST API";
-    homepage = "https://github.com/langchain-ai/langgraphtree/main/libs/sdk-py";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/sdk==${version}";
+    homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/sdk-py";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

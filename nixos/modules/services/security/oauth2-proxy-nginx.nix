@@ -97,6 +97,10 @@ in
         virtualHosts.${vhost} = {
           locations = {
             "/".extraConfig = ''
+              auth_request_set $user   $upstream_http_x_auth_request_user;
+              auth_request_set $email  $upstream_http_x_auth_request_email;
+              auth_request_set $auth_cookie $upstream_http_set_cookie;
+
               # pass information via X-User and X-Email headers to backend, requires running with --set-xauthrequest flag
               proxy_set_header X-User  $user;
               proxy_set_header X-Email $email;
@@ -109,10 +113,7 @@ in
               let
                 maybeQueryArg =
                   name: value:
-                  if value == null then
-                    null
-                  else
-                    "${name}=${lib.concatStringsSep "," (builtins.map lib.escapeURL value)}";
+                  if value == null then null else "${name}=${lib.concatStringsSep "," (map lib.escapeURL value)}";
                 allArgs = lib.mapAttrsToList maybeQueryArg conf;
                 cleanArgs = builtins.filter (x: x != null) allArgs;
                 cleanArgsStr = lib.concatStringsSep "&" cleanArgs;
@@ -141,11 +142,6 @@ in
           extraConfig = ''
             auth_request /oauth2/auth;
             error_page 401 = @redirectToAuth2ProxyLogin;
-
-            # set variables being used in locations."/".extraConfig
-            auth_request_set $user   $upstream_http_x_auth_request_user;
-            auth_request_set $email  $upstream_http_x_auth_request_email;
-            auth_request_set $auth_cookie $upstream_http_set_cookie;
           '';
         };
       }) cfg.virtualHosts)

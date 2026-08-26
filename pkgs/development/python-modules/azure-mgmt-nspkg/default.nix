@@ -1,32 +1,37 @@
 {
-  pkgs,
+  lib,
   buildPythonPackage,
   fetchPypi,
   azure-nspkg,
+  setuptools,
 }:
 
-buildPythonPackage rec {
-  version = "3.0.2";
-  format = "setuptools";
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-nspkg";
+  version = "3.0.2";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     extension = "zip";
-    sha256 = "8b2287f671529505b296005e6de9150b074344c2c7d1c805b3f053d081d58c52";
+    hash = "sha256-iyKH9nFSlQWylgBebekVCwdDRMLH0cgFs/BT0IHVjFI=";
   };
 
-  propagatedBuildInputs = [ azure-nspkg ];
+  build-system = [ setuptools ];
+
+  dependencies = [ azure-nspkg ];
 
   doCheck = false;
 
-  meta = with pkgs.lib; {
+  meta = {
     description = "Microsoft Azure SDK for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       olcai
       maxwilson
     ];
   };
-}
+})

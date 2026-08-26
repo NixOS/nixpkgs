@@ -14,10 +14,10 @@ buildPythonPackage rec {
     hash = "sha256-8nkfzr5RLqLx0VOih0d4UjqAZIYLWRzZCvwhqL7UMuM=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Easy to use retry decorator";
     homepage = "https://github.com/leshchenko1979/reretry";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ renatoGarcia ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ renatoGarcia ];
   };
 }

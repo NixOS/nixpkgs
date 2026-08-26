@@ -5,14 +5,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vo-amrwbenc";
   version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "mstorsjo";
     repo = "vo-amrwbenc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-oHhoJAI47VqBGk9cO3G5oqnHpWxA2jnJs103MwcYj+w=";
   };
 
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -11,23 +11,20 @@
   pytest-asyncio,
   pytest-vcr,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pubnub";
-  version = "10.3.0";
+  version = "10.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pubnub";
     repo = "python";
-    tag = version;
-    hash = "sha256-GkROhb8kgiHTLcXTMg9vYcuGNW8xpa5NKUzge78AqBU=";
+    tag = finalAttrs.version;
+    hash = "sha256-qHLkRWq30o6F1P5z+hxUkGLOh15ReOVtto0ttKCiPqg=";
   };
 
   pythonRelaxDeps = [ "httpx" ];
@@ -55,6 +52,8 @@ buildPythonPackage rec {
     "tests/integrational"
     "tests/manual"
     "tests/functional/push"
+    # Examples
+    "tests/examples"
   ];
 
   disabledTests = [
@@ -64,13 +63,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pubnub" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python-based APIs for PubNub";
     homepage = "https://github.com/pubnub/python";
-    changelog = "https://github.com/pubnub/python/releases/tag/${src.tag}";
+    changelog = "https://github.com/pubnub/python/releases/tag/${finalAttrs.src.tag}";
     # PubNub Software Development Kit License Agreement
     # https://github.com/pubnub/python/blob/master/LICENSE
-    license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

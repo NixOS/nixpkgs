@@ -14,17 +14,22 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     urls = [
       "https://invisible-mirror.net/archives/mawk/mawk-${finalAttrs.version}.tgz"
-      "ftp://ftp.invisible-island.net/mawk/mawk-${finalAttrs.version}.tgz"
+      "https://invisible-island.net/archives/mawk/mawk-${finalAttrs.version}.tgz"
     ];
     hash = "sha256-bh/ejuetilwVOCMWhj/WtMbSP6t4HdWrAXf/o+6arlw=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
+  hardeningDisable = [
+    "strictflexarrays1"
+  ];
+
   passthru = {
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
       command = "mawk -W version";
+      version = lib.replaceString "-" " " finalAttrs.version;
     };
     updateScript = directoryListingUpdater {
       inherit (finalAttrs) pname version;
@@ -38,7 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Interpreter for the AWK Programming Language";
     license = lib.licenses.gpl2Only;
     mainProgram = "mawk";
-    maintainers = with lib.maintainers; [ ehmry ];
     platforms = lib.platforms.unix;
   };
 })

@@ -5,18 +5,14 @@
   flit-core,
   pyproject-hooks,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   testpath,
-  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "pyproject-hooks";
   version = "1.2.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "pyproject_hooks";
@@ -26,8 +22,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ tomli ];
-
   # We need to disable tests because this package is part of the bootstrap chain
   # and its test dependencies cannot be built yet when this is being built.
   doCheck = false;
@@ -36,7 +30,7 @@ buildPythonPackage rec {
     pytest = buildPythonPackage {
       pname = "${pname}-pytest";
       inherit version;
-      format = "other";
+      pyproject = false;
 
       dontBuild = true;
       dontInstall = true;
@@ -58,11 +52,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyproject_hooks" ];
 
-  meta = with lib; {
+  meta = {
     description = "Low-level library for calling build-backends in `pyproject.toml`-based project";
     homepage = "https://github.com/pypa/pyproject-hooks";
     changelog = "https://github.com/pypa/pyproject-hooks/blob/v${version}/docs/changelog.rst";
-    license = licenses.mit;
-    teams = [ teams.python ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.python ];
   };
 }

@@ -2,39 +2,39 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  python311Packages,
+  python3Packages,
   lilypond,
+  qt6,
 }:
 
-python311Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "frescobaldi";
-  version = "3.3.0";
+  version = "4.0.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "wbsoft";
+    owner = "frescobaldi";
     repo = "frescobaldi";
     tag = "v${version}";
-    sha256 = "sha256-Q6ruthNcpjLlYydUetkuTECiCIzu055bw40O8BPGq/A=";
+    hash = "sha256-tCFK6UHLxDwouqyMbGPLXMtHsMdZ9SURGHV5GJm7z/4=";
   };
 
-  propagatedBuildInputs = with python311Packages; [
+  dependencies = with python3Packages; [
     qpageview
     lilypond
-    pygame
+    pygame-ce
+    pyqt6-sip
     python-ly
-    sip4
-    pyqt5
-    poppler-qt5
-    pyqtwebengine
+    pyqt6
+    pyqt6-webengine
   ];
 
-  nativeBuildInputs = [ python311Packages.pyqtwebengine.wrapQtAppsHook ];
+  buildInputs = [ qt6.qtbase ];
+  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
 
-  # Needed because source is fetched from git
-  preBuild = ''
-    make -C i18n
-    make -C linux
-  '';
+  build-system = with python3Packages; [
+    hatchling
+  ];
 
   # no tests in shipped with upstream
   doCheck = false;
@@ -44,7 +44,7 @@ python311Packages.buildPythonApplication rec {
     "\${qtWrapperArgs[@]}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://frescobaldi.org/";
     description = "LilyPond sheet music text editor";
     longDescription = ''
@@ -56,12 +56,12 @@ python311Packages.buildPythonApplication rec {
       versions of LilyPond, automatically selects the correct version, Built-in
       LilyPond documentation browser and built-in User Guide, Smart
       layout-control functions like coloring specific objects in the PDF,
-      MusicXML import, Modern user iterface with configurable colors,
+      MusicXML import, Modern user interface with configurable colors,
       fonts and keyboard shortcuts
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ sepi ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ sepi ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/frescobaldi.x86_64-darwin
     mainProgram = "frescobaldi";
   };

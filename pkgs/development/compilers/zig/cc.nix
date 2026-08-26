@@ -13,7 +13,7 @@ in
 runCommand "zig-cc-${zig.version}"
   {
     pname = "zig-cc";
-    inherit (zig) version meta;
+    inherit (zig) version;
 
     nativeBuildInputs = [ makeWrapper ];
 
@@ -23,16 +23,20 @@ runCommand "zig-cc-${zig.version}"
     };
 
     inherit zig;
+
+    meta = zig.meta // {
+      mainProgram = "${targetPrefix}clang";
+    };
   }
   ''
     mkdir -p $out/bin
     for tool in cc c++ ld.lld; do
-      makeWrapper "$zig/bin/zig" "$out/bin/${targetPrefix}$tool" \
+      makeWrapper "$zig/bin/zig" "$out/bin/$tool" \
         --add-flags "$tool" \
-        --run "export ZIG_GLOBAL_CACHE_DIR=\$(mktemp -d)"
+        --run "export ZIG_GLOBAL_CACHE_DIR=\$TMPDIR/zig-cache"
     done
 
-    mv $out/bin/${targetPrefix}c++ $out/bin/${targetPrefix}clang++
-    mv $out/bin/${targetPrefix}cc $out/bin/${targetPrefix}clang
-    mv $out/bin/${targetPrefix}ld.lld $out/bin/${targetPrefix}ld
+    ln -s $out/bin/c++ $out/bin/clang++
+    ln -s $out/bin/cc $out/bin/clang
+    ln -s $out/bin/ld.lld $out/bin/ld
   ''

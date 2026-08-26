@@ -9,16 +9,16 @@
 
 buildNpmPackage rec {
   pname = "jitsi-excalidraw-backend";
-  version = "21";
+  version = "2026.3.0";
 
   src = fetchFromGitHub {
     owner = "jitsi";
     repo = "excalidraw-backend";
-    rev = "x${version}";
-    hash = "sha256-52LU5I2pNjSb9+nJjiczp/dLWRTwQDC+thyGXBvkBBA=";
+    rev = version;
+    hash = "sha256-ji5qSnT/FNHEDm6v8Fw9SW3N9RzEr2AbeQq+PNehZGo=";
   };
 
-  npmDepsHash = "sha256-BJqjaqTeg5i+ECGMuiBYVToK2i2XCOVP9yeDFz6nP4k=";
+  npmDepsHash = "sha256-lOytyKRu7kh3UcUkbEEErntqb7aUzULK1SfQrCvvIBw=";
 
   nativeBuildInputs = [ python3 ];
 
@@ -35,11 +35,11 @@ buildNpmPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Excalidraw collaboration backend for Jitsi";
     homepage = "https://github.com/jitsi/excalidraw-backend";
-    license = licenses.mit;
-    maintainers = with maintainers; [ camillemndn ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ camillemndn ];
     mainProgram = "jitsi-excalidraw-backend";
   };
 }

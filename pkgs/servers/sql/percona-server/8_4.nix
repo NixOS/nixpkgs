@@ -22,7 +22,6 @@
   libfido2,
   numactl,
   cctools,
-  CoreServices,
   developer_cmds,
   libtirpc,
   rpcsvc-proto,
@@ -49,44 +48,45 @@
 
 assert !(withJemalloc && withTcmalloc);
 
-stdenv.mkDerivation (finalAttrs: {
-  pname = "percona-server";
-  version = "8.4.4-4";
+let
+  # baseline, used for building both client and server
+  common = finalAttrs: {
+    version = "8.4.10-10";
 
-  src = fetchurl {
-    url = "https://downloads.percona.com/downloads/Percona-Server-${lib.versions.majorMinor finalAttrs.version}/Percona-Server-${finalAttrs.version}/source/tarball/percona-server-${finalAttrs.version}.tar.gz";
-    hash = "sha256-10QYJQeCY3pFHmtBIQ72rsagicNJgHvNtbLPvjjUyg4=";
-  };
+    src = fetchurl {
+      url = "https://downloads.percona.com/downloads/Percona-Server-${lib.versions.majorMinor finalAttrs.version}/Percona-Server-${finalAttrs.version}/source/tarball/percona-server-${finalAttrs.version}.tar.gz";
+      hash = "sha256-IjHeflYc3AMd6hNXDEYegXm14wjyt9hX3gIVtOQzauU=";
+    };
 
-  nativeBuildInputs = [
-    bison
-    cmake
-    pkg-config
-    makeWrapper
-    # required for scripts/CMakeLists.txt
-    coreutils
-    gnugrep
-    procps
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
+    nativeBuildInputs = [
+      bison
+      cmake
+      pkg-config
+      makeWrapper
+      # required for scripts/CMakeLists.txt
+      coreutils
+      gnugrep
+      procps
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
 
-  patches = [
-    ./no-force-outline-atomics.patch # Do not force compilers to turn on -moutline-atomics switch
-    ./coredumper-explicitly-import-unistd.patch # fix build on aarch64-linux
-  ];
+    patches = [
+      ./no-force-outline-atomics.patch # Do not force compilers to turn on -moutline-atomics switch
+      ./coredumper-explicitly-import-unistd.patch # fix build on aarch64-linux
+    ];
 
-  ## NOTE: MySQL upstream frequently twiddles the invocations of libtool. When updating, you might proactively grep for libtool references.
-  postPatch = ''
-    substituteInPlace cmake/libutils.cmake --replace /usr/bin/libtool libtool
-    substituteInPlace cmake/os/Darwin.cmake --replace /usr/bin/libtool libtool
-    # The rocksdb setup script is called with `env -i` and cannot find anything in PATH.
-    patchShebangs storage/rocksdb/get_rocksdb_files.sh
-    substituteInPlace storage/rocksdb/get_rocksdb_files.sh --replace mktemp ${coreutils}/bin/mktemp
-    substituteInPlace storage/rocksdb/get_rocksdb_files.sh --replace "rm $MKFILE" "${coreutils}/bin/rm $MKFILE"
-    substituteInPlace storage/rocksdb/get_rocksdb_files.sh --replace "make --" "${gnumake}/bin/make --"
-  '';
+    ## NOTE: MySQL upstream frequently twiddles the invocations of libtool. When updating, you might proactively grep for libtool references.
+    postPatch = ''
+      substituteInPlace cmake/libutils.cmake --replace /usr/bin/libtool libtool
+      substituteInPlace cmake/os/Darwin.cmake --replace /usr/bin/libtool libtool
+      # The rocksdb setup script is called with `env -i` and cannot find anything in PATH.
+      patchShebangs storage/rocksdb/get_rocksdb_files.sh
+      substituteInPlace storage/rocksdb/get_rocksdb_files.sh --replace mktemp ${coreutils}/bin/mktemp
+      substituteInPlace storage/rocksdb/get_rocksdb_files.sh --replace "rm $MKFILE" "${coreutils}/bin/rm $MKFILE"
+      substituteInPlace storage/rocksdb/get_rocksdb_files.sh --replace "make --" "${gnumake}/bin/make --"
+    '';
 
-  buildInputs =
-    [
+    buildInputs = [
       boost
       (curl.override { inherit openssl; })
       icu
@@ -112,20 +112,19 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools
-      CoreServices
       developer_cmds
       DarwinTools
     ]
     ++ lib.optional (stdenv.hostPlatform.isLinux && withJemalloc) jemalloc
     ++ lib.optional (stdenv.hostPlatform.isLinux && withTcmalloc) gperftools;
 
-  outputs = [
-    "out"
-    "static"
-  ];
+    outputs = [
+      "out"
+      "static"
+      "man"
+    ];
 
-  cmakeFlags =
-    [
+    cmakeFlags = [
       # Percona-specific flags.
       "-DPORTABLE=1"
       "-DWITH_LDAP=system"
@@ -149,7 +148,6 @@ stdenv.mkDerivation (finalAttrs: {
       "-DINSTALL_MYSQLTESTDIR="
       "-DINSTALL_DOCDIR=share/mysql/docs"
       "-DINSTALL_SHAREDIR=share/mysql"
-
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       "-DWITH_SYSTEMD=1"
@@ -158,72 +156,125 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional (stdenv.hostPlatform.isLinux && withJemalloc) "-DWITH_JEMALLOC=1"
     ++ lib.optional (stdenv.hostPlatform.isLinux && withTcmalloc) "-DWITH_TCMALLOC=1";
 
-  postInstall =
-    ''
+    postInstall = ''
       moveToOutput "lib/*.a" $static
       so=${stdenv.hostPlatform.extensions.sharedLibrary}
       ln -s libperconaserverclient$so $out/lib/libmysqlclient_r$so
-
-      wrapProgram $out/bin/mysqld_safe --prefix PATH : ${
-        lib.makeBinPath [
-          coreutils
-          procps
-          gnugrep
-          gnused
-          hostname
-        ]
-      }
-      wrapProgram $out/bin/mysql_config --prefix PATH : ${
-        lib.makeBinPath [
-          coreutils
-          gnused
-        ]
-      }
-      wrapProgram $out/bin/ps_mysqld_helper --prefix PATH : ${
-        lib.makeBinPath [
-          coreutils
-          gnugrep
-        ]
-      }
-      wrapProgram $out/bin/ps-admin --prefix PATH : ${
-        lib.makeBinPath [
-          coreutils
-          gnugrep
-        ]
-      }
     ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      wrapProgram $out/bin/mysqld_multi --prefix PATH : ${
-        lib.makeBinPath [
-          coreutils
-          gnugrep
-        ]
-      }
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      # support files are installed to an incorrect path `nix/store`<systemd-store-path>`,
+      # see cmake/systemd.cmake. These are: service units, tmpfiles rules
+      # But we do not need these anyways.
+      rm -r "$out"/nix/
     '';
 
-  passthru = {
-    client = finalAttrs.finalPackage;
-    connector-c = finalAttrs.finalPackage;
-    server = finalAttrs.finalPackage;
-    mysqlVersion = lib.versions.majorMinor finalAttrs.version;
-    tests.percona-server =
-      nixosTests.mysql."percona-server_${lib.versions.major finalAttrs.version}_${lib.versions.minor finalAttrs.version}";
-    updateScript = gitUpdater {
-      url = "https://github.com/percona/percona-server";
-      rev-prefix = "Percona-Server-";
-      allowedVersions = "${lib.versions.major finalAttrs.version}\\.${lib.versions.minor finalAttrs.version}\\..+";
+    meta = {
+      homepage = "https://www.percona.com/software/mysql-database/percona-server";
+      description = ''
+        A free, fully compatible, enhanced, open source drop-in replacement for
+        MySQL® that provides superior performance, scalability and instrumentation.
+        Long-term support release.
+      '';
+      license = lib.licenses.gpl2Only;
+      maintainers = [
+        lib.maintainers.leona
+        lib.maintainers.osnyx
+      ];
+      platforms = lib.platforms.unix;
     };
-  };
 
-  meta = with lib; {
-    homepage = "https://www.percona.com/software/mysql-database/percona-server";
-    description = ''
-      A free, fully compatible, enhanced, open source drop-in replacement for
-      MySQL® that provides superior performance, scalability and instrumentation.
-      Long-term support release.
-    '';
-    license = licenses.gpl2Only;
-    teams = [ teams.flyingcircus ];
-    platforms = platforms.unix;
+    passthru = {
+      mysqlVersion = lib.versions.majorMinor finalAttrs.version;
+    };
+
   };
-})
+  client = stdenv.mkDerivation (
+    finalAttrs:
+    let
+      common' = common finalAttrs;
+    in
+    common'
+    // {
+      pname = "percona-client";
+      cmakeFlags = common'.cmakeFlags ++ [
+        "-DWITHOUT_SERVER=ON"
+        "-DINSTALL_MYSQLSHAREDIR=share/mysql-client"
+      ];
+
+      meta = common'.meta // {
+        mainProgram = "mysql";
+      };
+
+    }
+  );
+
+in
+stdenv.mkDerivation (
+  finalAttrs:
+  let
+    common' = common finalAttrs;
+  in
+  common'
+  // {
+    pname = "percona-server";
+
+    postInstall =
+      common'.postInstall
+      + ''
+
+        wrapProgram $out/bin/mysqld_safe --prefix PATH : ${
+          lib.makeBinPath [
+            coreutils
+            procps
+            gnugrep
+            gnused
+            hostname
+          ]
+        }
+        wrapProgram $out/bin/mysql_config --prefix PATH : ${
+          lib.makeBinPath [
+            coreutils
+            gnused
+          ]
+        }
+        wrapProgram $out/bin/ps_mysqld_helper --prefix PATH : ${
+          lib.makeBinPath [
+            coreutils
+            gnugrep
+          ]
+        }
+        wrapProgram $out/bin/ps-admin --prefix PATH : ${
+          lib.makeBinPath [
+            coreutils
+            gnugrep
+          ]
+        }
+      ''
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
+        wrapProgram $out/bin/mysqld_multi --prefix PATH : ${
+          lib.makeBinPath [
+            coreutils
+            gnugrep
+          ]
+        }
+      '';
+
+    meta = common'.meta // {
+      mainProgram = "mysqld";
+    };
+
+    passthru = {
+      inherit client;
+      connector-c = finalAttrs.finalPackage;
+      server = finalAttrs.finalPackage;
+      inherit (common'.passthru) mysqlVersion;
+      tests.percona-server =
+        nixosTests.mysql."percona-server_${lib.versions.major finalAttrs.version}_${lib.versions.minor finalAttrs.version}";
+      updateScript = gitUpdater {
+        url = "https://github.com/percona/percona-server";
+        rev-prefix = "Percona-Server-";
+        allowedVersions = "${lib.versions.major finalAttrs.version}\\.${lib.versions.minor finalAttrs.version}\\..+";
+      };
+    };
+  }
+)

@@ -4,22 +4,21 @@
   fetchFromGitHub,
   nix-update-script,
   nodejs,
-  pnpm_9,
+  pnpm_11,
+  fetchPnpmDeps,
+  pnpmConfigHook,
 }:
 
-let
+buildGoModule (finalAttrs: {
   pname = "pgrok";
-  version = "1.4.5";
+  version = "1.7.0";
+
   src = fetchFromGitHub {
     owner = "pgrok";
     repo = "pgrok";
-    tag = "v${version}";
-    hash = "sha256-eDtYnsHZpdIGcgRGHTptlfVf//bxup6ZDWvVkBJdBbE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uMHeVxAGmAEIOfCK9SEFsL7GZZIUNMYdoV8XeHjXmWc=";
   };
-in
-
-buildGoModule {
-  inherit pname version src;
 
   outputs = [
     "out"
@@ -28,20 +27,39 @@ buildGoModule {
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_11
   ];
 
-  env.pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
-    hash = "sha256-o6wxO8EGRmhcYggJnfxDkH+nbt+isc8bfHji8Hu9YKg=";
+  postPatch = ''
+    # Rename directories to avoid binary naming conflicts (both would be named "cli")
+    mv pgrok/cli pgrok/pgrok
+    mv pgrokd/cli pgrokd/pgrokd
+
+    # Update references in Go code and web app package.json to match renamed directory
+    substituteInPlace pgrokd/pgrokd/main.go \
+      --replace-fail "github.com/pgrok/pgrok/pgrokd/cli/internal/web" "github.com/pgrok/pgrok/pgrokd/pgrokd/internal/web"
+    substituteInPlace pgrokd/web/package.json \
+      --replace-fail "../cli/internal/web/dist" "../pgrokd/internal/web/dist"
+  '';
+
+  env.pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      ;
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-8CLAtxqNgcVIUw4RKAy6jKlErmkgZYyVYFdrD+jyfAA=";
   };
 
-  vendorHash = "sha256-nIxsG1O5RG+PDSWBcUWpk+4aFq2cYaxpkgOoDqLjY90=";
+  vendorHash = "sha256-fhyyyXHUJsIWiCZbqtLZZRuIG9hb0LAkSo7lKW0i8Sk";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-X main.commit=unknown"
     "-X main.date=unknown"
   ];
@@ -57,10 +75,6 @@ buildGoModule {
     pnpm run build
 
     popd
-
-    # rename packages due to naming conflict
-    mv pgrok/cli/ pgrok/pgrok/
-    mv pgrokd/cli/ pgrokd/pgrokd/
   '';
 
   postInstall = ''
@@ -73,7 +87,7 @@ buildGoModule {
     description = "Selfhosted TCP/HTTP tunnel, ngrok alternative, written in Go";
     homepage = "https://github.com/pgrok/pgrok";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ marie ];
+    maintainers = with lib.maintainers; [ tbutter ];
     mainProgram = "pgrok";
   };
-}
+})

@@ -2,44 +2,54 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   qt6,
   qt6Packages,
   hunspell,
   zlib,
+  wrapGAppsHook3,
   pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "texstudio";
-  version = "4.8.7";
+  version = "4.9.5";
 
   src = fetchFromGitHub {
     owner = "texstudio-org";
     repo = "texstudio";
     rev = finalAttrs.version;
-    hash = "sha256-/0f8SIzF5OnVYfxS6Cb7VbN+IMc4VzCxfA7p93iQJ/w=";
+    hash = "sha256-//UhDSyCFIy/xhOKrTVoZFA0nh6q9xShAI5GxJrNz4w=";
   };
 
   nativeBuildInputs = [
     cmake
     qt6.wrapQtAppsHook
+    wrapGAppsHook3
     pkg-config
   ];
-  buildInputs =
-    [
-      hunspell
-      qt6.qt5compat
-      qt6.qtbase
-      qt6.qtsvg
-      qt6.qttools
-      qt6Packages.poppler
-      qt6Packages.quazip
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qt6.qtwayland
-    ];
+  buildInputs = [
+    hunspell
+    qt6.qt5compat
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qttools
+    qt6Packages.poppler
+    qt6Packages.quazip
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qt6.qtwayland
+  ];
+
+  patches = [
+    (fetchpatch2 {
+      name = "disable-auto-update.patch";
+      url = "https://sources.debian.org/data/main/t/texstudio/4.9.1%2Bds-1/debian/patches/0004-disable-auto-update.patch";
+      hash = "sha256-w4/u8ObJSQqHisZmxMSpJeveE+DJSgLqnfpEnizHsBg=";
+    })
+  ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p "$out/Applications"
@@ -47,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm -d "$out/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "TeX and LaTeX editor";
     longDescription = ''
       Fork of TeXMaker, this editor is a full fledged IDE for
@@ -56,9 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://texstudio.org";
     changelog = "https://github.com/texstudio-org/texstudio/blob/${finalAttrs.version}/utilities/manual/source/CHANGELOG.md";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       ajs124
       cfouche
     ];

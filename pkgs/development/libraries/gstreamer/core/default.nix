@@ -14,9 +14,6 @@
   elfutils, # for libdw
   bash-completion,
   lib,
-  Cocoa,
-  CoreServices,
-  xpc,
   testers,
   rustc,
   withRust ?
@@ -35,6 +32,7 @@
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
   directoryListingUpdater,
+  apple-sdk_gstreamer,
 }:
 
 let
@@ -42,7 +40,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer";
-  version = "1.26.0";
+  version = "1.28.6";
 
   outputs = [
     "bin"
@@ -54,58 +52,55 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Gy7kAoAQwlt3bv+nw5bH4+GGG2C5QX5Bb0kUq83/J58=";
+    hash = "sha256-Yra58K0xR6bdZCCsZKkRgLFOmQaVvd01O5YEFhHQUso=";
   };
 
   depsBuildBuild = [
     pkg-config
   ];
 
+  __structuredAttrs = true;
   strictDeps = true;
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gettext
-      bison
-      flex
-      python3
-      makeWrapper
-      glib
-      bash-completion
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcap # for setcap binary
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-    ]
-    ++ lib.optionals withRust [
-      rustc
-    ]
-    ++ lib.optionals enableDocumentation [
-      hotdoc
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    bison
+    flex
+    python3
+    makeWrapper
+    glib
+    bash-completion
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcap # for setcap binary
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ]
+  ++ lib.optionals withRust [
+    rustc
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
+  ];
 
-  buildInputs =
-    [
-      bash-completion
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcap
-    ]
-    ++ lib.optionals hasElfutils [
-      elfutils
-    ]
-    ++ lib.optionals withLibunwind [
-      libunwind
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-      CoreServices
-      xpc
-    ];
+  buildInputs = [
+    bash-completion
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcap
+  ]
+  ++ lib.optionals hasElfutils [
+    elfutils
+  ]
+  ++ lib.optionals withLibunwind [
+    libunwind
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
+  ];
 
   propagatedBuildInputs = [
     glib
@@ -140,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preFixup = ''
+    moveToOutput "lib/gstreamer-1.0/pkgconfig" "$dev"
     moveToOutput "share/bash-completion" "$bin"
   '';
 
@@ -149,20 +145,19 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
-    updateScript = directoryListingUpdater { };
+    updateScript = directoryListingUpdater { odd-unstable = true; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open source multimedia framework";
     homepage = "https://gstreamer.freedesktop.org";
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     pkgConfigModules = [
       "gstreamer-controller-1.0"
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
-      ttuegel
-      matthewbauer
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      tmarkus
     ];
   };
 })

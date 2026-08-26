@@ -1,23 +1,26 @@
 {
   lib,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
-  testers,
   gtree,
+  nix-update-script,
+  testers,
 }:
-
-buildGoModule rec {
+# buildGoModule currently builds with go 1.25.0. This package requires
+# version 1.26.0 theirfor needing to be pinned to buildGo126Module until
+# it's updated.
+buildGo126Module (finalAttrs: {
   pname = "gtree";
-  version = "1.11.5";
+  version = "1.14.9";
 
   src = fetchFromGitHub {
     owner = "ddddddO";
     repo = "gtree";
-    rev = "v${version}";
-    hash = "sha256-AEzquSbDFy5vXyIjRvVxMp6ArDiPqy0XfPiPVPisobw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MD9FYigqmYwprrj5dezB3vOrV1uGOrWHI7TuptP4tjo=";
   };
 
-  vendorHash = "sha256-N+w8UreFq/SYjZgFh6QNcC/YsCDze/v2jvD0D19dDUs=";
+  vendorHash = "sha256-Vd5VKKl79Qu5R7jOYS1CTtQuAis9vWUbpBWnEI7sgpk=";
 
   subPackages = [
     "cmd/gtree"
@@ -26,22 +29,25 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
-    "-X=main.Revision=${src.rev}"
+    "-X=main.Version=${finalAttrs.version}"
+    "-X=main.Revision=${finalAttrs.src.tag}"
   ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = gtree;
+  passthru = {
+    tests = {
+      version = testers.testVersion {
+        package = gtree;
+      };
     };
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Generate directory trees and directories using Markdown or programmatically";
     mainProgram = "gtree";
     homepage = "https://github.com/ddddddO/gtree";
-    changelog = "https://github.com/ddddddO/gtree/releases/tag/${src.rev}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/ddddddO/gtree/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ hythera ];
   };
-}
+})

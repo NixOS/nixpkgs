@@ -22,7 +22,7 @@ rec {
       splittedPath = lib.splitString "." packagePlatformPath;
 
       # ["python312Packages" "numpy" "aarch64-linux"] -> ["python312Packages" "numpy"]
-      packagePath = lib.sublist 0 (lib.length splittedPath - 1) splittedPath;
+      packagePath = lib.init splittedPath;
 
       # "python312Packages.numpy"
       name = lib.concatStringsSep "." packagePath;
@@ -66,7 +66,7 @@ rec {
   */
   convertToPackagePlatformAttrs =
     packagePlatformPaths:
-    builtins.filter (x: x != null) (builtins.map convertToPackagePlatformAttr packagePlatformPaths);
+    builtins.filter (x: x != null) (map convertToPackagePlatformAttr packagePlatformPaths);
 
   /*
     Converts a list of `packagePlatformPath`s directly to a list of (unique) package names
@@ -91,33 +91,7 @@ rec {
     let
       packagePlatformAttrs = convertToPackagePlatformAttrs (uniqueStrings packagePlatformPaths);
     in
-    uniqueStrings (builtins.map (p: p.name) packagePlatformAttrs);
-
-  /*
-    Computes the key difference between two attrs
-
-    {
-      added: [ <keys only in the second object> ],
-      removed: [ <keys only in the first object> ],
-      changed: [ <keys with different values between the two objects> ],
-    }
-  */
-  diff =
-    let
-      filterKeys = cond: attrs: lib.attrNames (lib.filterAttrs cond attrs);
-    in
-    old: new: {
-      added = filterKeys (n: _: !(old ? ${n})) new;
-      removed = filterKeys (n: _: !(new ? ${n})) old;
-      changed = filterKeys (
-        n: v:
-        # Filter out attributes that don't exist anymore
-        (new ? ${n})
-
-        # Filter out attributes that are the same as the new value
-        && (v != (new.${n}))
-      ) old;
-    };
+    uniqueStrings (map (p: p.name) packagePlatformAttrs);
 
   /*
     Group a list of `packagePlatformAttr`s by platforms
@@ -177,7 +151,51 @@ rec {
     lib.genAttrs [ "linux" "darwin" ] filterKernel;
 
   /*
-    Maps an attrs of `kernel - rebuild counts` mappings to a list of labels
+    Group an attrdiff-style mapping by a derived key such as platform or kernel.
+
+    Turns
+      {
+        added = [ "new-tool.aarch64-linux" "new-tool.x86_64-darwin" ];
+        changed = [ "updated-tool.x86_64-darwin" "shared-tool.x86_64-darwin" ];
+        removed = [ "removed-tool.aarch64-darwin" "shared-tool.aarch64-darwin" ];
+      }
+    into
+      {
+        aarch64-darwin = {
+          added = [ ];
+          changed = [ ];
+          removed = [ "removed-tool" "shared-tool" ];
+        };
+        aarch64-linux = {
+          added = [ "new-tool" ];
+          changed = [ ];
+          removed = [ ];
+        };
+        x86_64-darwin = {
+          added = [ "new-tool" ];
+          changed = [ "shared-tool" "updated-tool" ];
+          removed = [ ];
+        };
+      }
+    when used with `groupByPlatform`.
+  */
+  groupAttrdiffBy =
+    grouper: attrdiff:
+    let
+      groupedByKind = lib.mapAttrs (
+        _: packagePlatformPaths:
+        grouper (convertToPackagePlatformAttrs (uniqueStrings packagePlatformPaths))
+      ) attrdiff;
+      groups = uniqueStrings (lib.flatten (map builtins.attrNames (lib.attrValues groupedByKind)));
+    in
+    lib.genAttrs groups (group: lib.mapAttrs (_: byGroup: byGroup.${group} or [ ]) groupedByKind);
+
+  groupAttrdiffByPlatform = groupAttrdiffBy groupByPlatform;
+
+  groupAttrdiffByKernel = groupAttrdiffBy groupByKernel;
+
+  /*
+    Maps an attrs of `kernel - rebuild counts` mappings to an attrs of labels
 
     Turns
       {
@@ -185,54 +203,37 @@ rec {
         darwin = 1;
       }
     into
-      [
-        "10.rebuild-darwin: 1"
-        "10.rebuild-darwin: 1-10"
-        "10.rebuild-linux: 11-100"
-      ]
+      {
+        "10.rebuild-darwin: 1" = true;
+        "10.rebuild-darwin: 1-10" = true;
+        "10.rebuild-darwin: 11-100" = false;
+        # [...]
+        "10.rebuild-darwin: 1" = false;
+        "10.rebuild-darwin: 1-10" = false;
+        "10.rebuild-linux: 11-100" = true;
+        # [...]
+      }
   */
   getLabels =
     rebuildCountByKernel:
-    lib.concatLists (
+    lib.mergeAttrsList (
       lib.mapAttrsToList (
         kernel: rebuildCount:
         let
-          numbers =
-            if rebuildCount == 0 then
-              [ "0" ]
-            else if rebuildCount == 1 then
-              [
-                "1"
-                "1-10"
-              ]
-            else if rebuildCount <= 10 then
-              [ "1-10" ]
-            else if rebuildCount <= 100 then
-              [ "11-100" ]
-            else if rebuildCount <= 500 then
-              [ "101-500" ]
-            else if rebuildCount <= 1000 then
-              [
-                "501-1000"
-                "501+"
-              ]
-            else if rebuildCount <= 2500 then
-              [
-                "1001-2500"
-                "501+"
-              ]
-            else if rebuildCount <= 5000 then
-              [
-                "2501-5000"
-                "501+"
-              ]
-            else
-              [
-                "5001+"
-                "501+"
-              ];
+          range = from: to: from <= rebuildCount && (to == null || rebuildCount <= to);
         in
-        lib.forEach numbers (number: "10.rebuild-${kernel}: ${number}")
+        lib.mapAttrs' (number: lib.nameValuePair "10.rebuild-${kernel}: ${number}") {
+          "0" = range 0 0;
+          "1" = range 1 1;
+          "1-10" = range 1 10;
+          "11-100" = range 11 100;
+          "101-500" = range 101 500;
+          "501-1000" = range 501 1000;
+          "501+" = range 501 null;
+          "1001-2500" = range 1001 2500;
+          "2501-5000" = range 2501 5000;
+          "5001+" = range 5001 null;
+        }
       ) rebuildCountByKernel
     );
 }

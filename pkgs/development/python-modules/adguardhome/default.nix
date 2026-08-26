@@ -5,33 +5,28 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "adguardhome";
-  version = "0.7.0";
+  version = "0.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frenck";
-    repo = "python-${pname}";
-    tag = "v${version}";
-    hash = "sha256-n55G6ulKcgSSrgPk70D52OO9fp3WURlcRhJQUKrZ1Nk=";
+    repo = "python-adguardhome";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pc7UfR/0mQZ98FyomQErz5hePHy6KE2h9UhJ9lFGtFA=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"0.0.0"' '"${version}"'
-  '';
-
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiohttp
@@ -49,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "adguardhome" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for the AdGuard Home API";
     homepage = "https://github.com/frenck/python-adguardhome";
-    changelog = "https://github.com/frenck/python-adguardhome/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jamiemagee ];
+    changelog = "https://github.com/frenck/python-adguardhome/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jamiemagee ];
   };
-}
+})

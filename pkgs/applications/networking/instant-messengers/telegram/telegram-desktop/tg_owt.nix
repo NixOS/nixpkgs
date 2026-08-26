@@ -13,14 +13,14 @@
   openh264,
   crc32c,
   libvpx,
-  libX11,
-  libXtst,
-  libXcomposite,
-  libXdamage,
-  libXext,
-  libXrender,
-  libXrandr,
-  libXi,
+  libx11,
+  libxtst,
+  libxcomposite,
+  libxdamage,
+  libxext,
+  libxrender,
+  libxrandr,
+  libxi,
   glib,
   abseil-cpp,
   pipewire,
@@ -33,20 +33,17 @@
 
 stdenv.mkDerivation {
   pname = "tg_owt";
-  version = "0-unstable-2024-10-28";
+  version = "0-unstable-2026-04-09";
 
   src = fetchFromGitHub {
     owner = "desktop-app";
     repo = "tg_owt";
-    rev = "8198c4d8b91e22d68eb5c7327fd408e3b6abcc79";
-    hash = "sha256-3sLa3Px0VWgRYqnnLlwLnx+WWnneqZyhQPrRMBriXQA=";
+    rev = "89df288dd6ba5b2ec95b3c5eaf1e7e0c3a870fc4";
+    hash = "sha256-wdO3AACCEN3IDYWt5a+f7zrcPFoqz+c7vLpo6LZk29w=";
     fetchSubmodules = true;
   };
 
   patches = [
-    # Fix build with Pipewire 1.4
-    # Submitted upstream: https://webrtc-review.googlesource.com/c/src/+/380500
-    ./tg_owt-pipewire-1.4.patch
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -69,35 +66,34 @@ stdenv.mkDerivation {
     python3
   ];
 
-  propagatedBuildInputs =
-    [
-      libjpeg
-      openssl
-      libopus
-      ffmpeg_6
-      openh264
-      crc32c
-      libvpx
-      abseil-cpp
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libXtst
-      libXcomposite
-      libXdamage
-      libXext
-      libXrender
-      libXrandr
-      libXi
-      glib
-      pipewire
-      libgbm
-      libdrm
-      libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_15
-    ];
+  propagatedBuildInputs = [
+    libjpeg
+    openssl
+    libopus
+    ffmpeg_6
+    openh264
+    crc32c
+    libvpx
+    abseil-cpp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libx11
+    libxtst
+    libxcomposite
+    libxdamage
+    libxext
+    libxrender
+    libxrandr
+    libxi
+    glib
+    pipewire
+    libgbm
+    libdrm
+    libGL
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_15
+  ];
 
   passthru.updateScript = unstableGitUpdater { };
 

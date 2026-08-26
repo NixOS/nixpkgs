@@ -1,38 +1,52 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoreconfHook,
   pkg-config,
   libestr,
   json_c,
-  pcre,
-  fastJson,
+  pcre2,
+  libfastjson,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liblognorm";
-  version = "2.0.6";
+  version = "2.1.0";
 
-  src = fetchurl {
-    url = "http://www.liblognorm.com/files/download/liblognorm-${version}.tar.gz";
-    sha256 = "1wpn15c617r7lfm1z9d5aggmmi339s6yn4pdz698j0r2bkl5gw6g";
+  src = fetchFromGitHub {
+    owner = "rsyslog";
+    repo = "liblognorm";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XHfTSLYjfGRNmPUQrLWK+Co4v4cCmtfhZ0wruAC0RNI=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  postPatch = ''
+    patchShebangs tests/*.sh
+  '';
+
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
   buildInputs = [
     libestr
     json_c
-    pcre
-    fastJson
+    pcre2
+    libfastjson
   ];
 
   configureFlags = [ "--enable-regexp" ];
 
-  meta = with lib; {
+  doCheck = true;
+
+  meta = {
+    changelog = "https://github.com/rsyslog/liblognorm/blob/${finalAttrs.src.tag}/ChangeLog";
     description = "Help to make sense out of syslog data, or, actually, any event data that is present in text form";
     homepage = "https://www.liblognorm.com/";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     mainProgram = "lognormalizer";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

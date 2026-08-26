@@ -7,21 +7,24 @@
   ffmpeg-headless,
   yt-dlp,
   makeDesktopItem,
-  electron,
+  electron_41,
 }:
-
+let
+  electron = electron_41;
+in
 buildNpmPackage rec {
   pname = "ytDownloader";
-  version = "3.19.0";
+  version = "3.22.0";
 
   src = fetchFromGitHub {
     owner = "aandrew-me";
     repo = "ytDownloader";
     tag = "v${version}";
-    hash = "sha256-Oj462x1oyhaLFbVNr90hKmg0S+BZXUv1DyNdxsc2L7Y=";
+    hash = "sha256-zAHDBLQJa0FFX2esz7jVRnIY6aBwnoGp6Kr2jWDX+lg=";
   };
 
-  npmDepsHash = "sha256-ZJdPfNndYOWzvJpgra16/tCuWTvPLd4ZhSFualJB00E=";
+  npmDepsHash = "sha256-J/3m6HN2/gndtTrxf4rwhZtBAQUv1oQYbo8HeNLV8Xw=";
+  makeCacheWritable = true;
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -44,7 +47,7 @@ buildNpmPackage rec {
     })
   ];
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   dontNpmBuild = true;
 
@@ -52,31 +55,33 @@ buildNpmPackage rec {
   # Otherwise it stores config in ~/.config/Electron
   patches = [ ./config-dir.patch ];
 
-  # Replace hardcoded ffmpeg and ytdlp paths
-  # Also stop it from downloading ytdlp
   postPatch = ''
-    substituteInPlace src/renderer.js \
-      --replace-fail $\{__dirname}/../ffmpeg '${lib.getExe ffmpeg-headless}' \
-      --replace-fail 'path.join(os.homedir(), ".ytDownloader", "ytdlp")' '`${lib.getExe yt-dlp}`' \
-      --replace-fail '!!localStorage.getItem("fullYtdlpBinPresent")' 'true'
     # Disable auto-updates
     substituteInPlace src/preferences.js \
       --replace-warn 'const autoUpdateDisabled = getId("autoUpdateDisabled");' 'const autoUpdateDisabled = "true";'
   '';
 
   postInstall = ''
+    # Set paths to use system ffmpeg and yt-dlp to prevent downloading
     makeWrapper ${electron}/bin/electron $out/bin/ytdownloader \
         --add-flags $out/lib/node_modules/ytdownloader/main.js \
-        --prefix PATH : ${lib.makeBinPath [ ffmpeg-headless ]}
+        --set YTDOWNLOADER_FFMPEG_PATH "${lib.getExe ffmpeg-headless}" \
+        --set YTDOWNLOADER_YTDLP_PATH "${lib.getExe yt-dlp}" \
+        --prefix PATH : ${
+          lib.makeBinPath [
+            ffmpeg-headless
+            yt-dlp
+          ]
+        }
 
-    install -Dm444 assets/images/icon.png $out/share/pixmaps/ytdownloader.png
+    install -Dm444 assets/images/icon.png $out/share/icons/hicolor/512x512/apps/ytdownloader.png
   '';
 
   meta = {
     description = "Modern GUI video and audio downloader";
     homepage = "https://github.com/aandrew-me/ytDownloader";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ chewblacka ];
+    maintainers = with lib.maintainers; [ Holiu618 ];
     platforms = lib.platforms.all;
     mainProgram = "ytdownloader";
   };

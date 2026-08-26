@@ -11,10 +11,11 @@
   sphinx,
 
   # dependencies
-  xlib,
+  python-xlib,
   evdev,
-  darwin,
   six,
+  pyobjc-framework-ApplicationServices,
+  pyobjc-framework-Quartz,
 
   # tests
   unittestCheckHook,
@@ -22,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "pynput";
-  version = "1.8.1";
+  version = "1.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "moses-palmer";
     repo = "pynput";
     tag = "v${version}";
-    hash = "sha256-rOkUyreS3JqEyubQUdNLJf5lDuFassDKrQrUXKrKlgI=";
+    hash = "sha256-LoolcMYzurJrR7HR1qDO+dvLwP1l9P3+QOzI7uwLdso=";
   };
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
@@ -47,29 +48,27 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  propagatedBuildInputs =
-    [ six ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      evdev
-      xlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        ApplicationServices
-        Quartz
-      ]
-    );
+  propagatedBuildInputs = [
+    six
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    evdev
+    python-xlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # the darwin backend imports HIServices (ApplicationServices) and Quartz
+    pyobjc-framework-ApplicationServices
+    pyobjc-framework-Quartz
+  ];
 
   doCheck = false; # requires running X server
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin;
+  meta = {
     description = "Library to control and monitor input devices";
     homepage = "https://github.com/moses-palmer/pynput";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ nickhu ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ nickhu ];
   };
 }

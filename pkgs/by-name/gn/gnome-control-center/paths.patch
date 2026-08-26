@@ -1,17 +1,8 @@
 diff --git a/panels/color/cc-color-panel.c b/panels/color/cc-color-panel.c
-index f6c84e3d2..cd897f8f5 100644
+index dac0e51..71af3e2 100644
 --- a/panels/color/cc-color-panel.c
 +++ b/panels/color/cc-color-panel.c
-@@ -614,7 +614,7 @@ gcm_prefs_calibrate_cb (CcColorPanel *self)
- 
-   /* run with modal set */
-   argv = g_ptr_array_new_with_free_func (g_free);
--  g_ptr_array_add (argv, g_strdup ("gcm-calibrate"));
-+  g_ptr_array_add (argv, g_build_filename ("@gcm@", "bin", "gcm-calibrate", NULL));
-   g_ptr_array_add (argv, g_strdup ("--device"));
-   g_ptr_array_add (argv, g_strdup (cd_device_get_id (self->current_device)));
-   g_ptr_array_add (argv, g_strdup ("--parent-window"));
-@@ -989,7 +989,7 @@ gcm_prefs_profile_view (CcColorPanel *self, CdProfile *profile)
+@@ -973,7 +973,7 @@ gcm_prefs_profile_view (CcColorPanel *self, CdProfile *profile)
  
    /* open up gcm-viewer as a info pane */
    argv = g_ptr_array_new_with_free_func (g_free);
@@ -20,7 +11,7 @@ index f6c84e3d2..cd897f8f5 100644
    g_ptr_array_add (argv, g_strdup ("--profile"));
    g_ptr_array_add (argv, g_strdup (cd_profile_get_id (profile)));
    g_ptr_array_add (argv, g_strdup ("--parent-window"));
-@@ -1221,15 +1221,12 @@ gcm_prefs_device_clicked (CcColorPanel *self, CdDevice *device)
+@@ -1141,15 +1141,12 @@ gcm_prefs_device_clicked (CcColorPanel *self, CdDevice *device)
  static void
  gcm_prefs_profile_clicked (CcColorPanel *self, CdProfile *profile, CdDevice *device)
  {
@@ -38,7 +29,7 @@ index f6c84e3d2..cd897f8f5 100644
    else
      gtk_widget_set_sensitive (self->toolbutton_profile_view, FALSE);
 diff --git a/panels/system/datetime/tz.h b/panels/system/datetime/tz.h
-index feef16580..4b88ef7b1 100644
+index feef165..4b88ef7 100644
 --- a/panels/system/datetime/tz.h
 +++ b/panels/system/datetime/tz.h
 @@ -27,11 +27,7 @@
@@ -55,10 +46,10 @@ index feef16580..4b88ef7b1 100644
  typedef struct _TzDB TzDB;
  typedef struct _TzLocation TzLocation;
 diff --git a/panels/network/connection-editor/net-connection-editor.c b/panels/network/connection-editor/net-connection-editor.c
-index ec5a905a5..689fdbebe 100644
+index f1cae8d..faee22a 100644
 --- a/panels/network/connection-editor/net-connection-editor.c
 +++ b/panels/network/connection-editor/net-connection-editor.c
-@@ -377,7 +377,7 @@ net_connection_editor_do_fallback (NetConnectionEditor *self, const gchar *type)
+@@ -384,7 +384,7 @@ net_connection_editor_do_fallback (NetConnectionEditor *self, const gchar *type)
          GPid child_pid;
  
          builder = g_strv_builder_new ();
@@ -68,7 +59,7 @@ index ec5a905a5..689fdbebe 100644
          if (self->is_new_connection) {
                  g_autofree gchar *type_str = NULL;
 diff --git a/panels/network/net-device-mobile.c b/panels/network/net-device-mobile.c
-index 166670224..36f720d36 100644
+index d0b0206..8276af0 100644
 --- a/panels/network/net-device-mobile.c
 +++ b/panels/network/net-device-mobile.c
 @@ -521,7 +521,7 @@ options_button_clicked_cb (NetDeviceMobile *self)
@@ -90,7 +81,7 @@ index 166670224..36f720d36 100644
  }
  
 diff --git a/panels/printers/pp-host.c b/panels/printers/pp-host.c
-index a31a606e3..ed5133d29 100644
+index a31a606..ed5133d 100644
 --- a/panels/printers/pp-host.c
 +++ b/panels/printers/pp-host.c
 @@ -256,7 +256,7 @@ _pp_host_get_snmp_devices_thread (GTask        *task,
@@ -103,7 +94,7 @@ index a31a606e3..ed5133d29 100644
  
    /* Use SNMP to get printer's informations */
 diff --git a/panels/system/users/run-passwd.c b/panels/system/users/run-passwd.c
-index edbc99830..1e1d90141 100644
+index fb9efc6..452486a 100644
 --- a/panels/system/users/run-passwd.c
 +++ b/panels/system/users/run-passwd.c
 @@ -152,7 +152,7 @@ spawn_passwd (PasswdHandler *passwd_handler, GError **error)
@@ -116,10 +107,10 @@ index edbc99830..1e1d90141 100644
  
          envp = g_get_environ ();
 diff --git a/panels/system/users/user-utils.c b/panels/system/users/user-utils.c
-index 5b7bc1f02..13ffe6ca8 100644
+index 16dc79e..f543e7b 100644
 --- a/panels/system/users/user-utils.c
 +++ b/panels/system/users/user-utils.c
-@@ -215,7 +215,7 @@ is_valid_username_async (const gchar *username,
+@@ -217,7 +217,7 @@ is_valid_username_async (const gchar *username,
           * future, so it would be nice to have some official way for this
           * instead of relying on the current "--login" implementation.
           */
@@ -129,7 +120,7 @@ index 5b7bc1f02..13ffe6ca8 100644
          argv[2] = data->username;
          argv[3] = "--";
 diff --git a/tests/datetime/test-endianess.c b/tests/datetime/test-endianess.c
-index 9cb92007a..84d2f0fa3 100644
+index 9cb9200..84d2f0f 100644
 --- a/tests/datetime/test-endianess.c
 +++ b/tests/datetime/test-endianess.c
 @@ -26,7 +26,7 @@ test_endianess (void)

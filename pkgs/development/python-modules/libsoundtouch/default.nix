@@ -7,15 +7,12 @@
   zeroconf,
   pytestCheckHook,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "libsoundtouch";
   version = "0.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CharlesBlonde";
@@ -47,10 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libsoundtouch" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bose Soundtouch Python library";
     homepage = "https://github.com/CharlesBlonde/libsoundtouch";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

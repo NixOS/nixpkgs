@@ -21,15 +21,15 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "abaddon";
-  version = "0.2.1";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "uowuo";
     repo = "abaddon";
-    rev = "v${version}";
-    hash = "sha256-FPhHy+4BmaoGrHGsc5o79Au9JcH5C+iWTYQYwnTLaUY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fSNXMbyYmUOA4x911/an02fhhhWe6a4xlLVb2DIqIOE=";
     fetchSubmodules = true;
   };
 
@@ -74,11 +74,11 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      exec = pname;
+      name = finalAttrs.pname;
+      exec = finalAttrs.pname;
       desktopName = "Abaddon";
-      genericName = meta.description;
-      startupWMClass = pname;
+      genericName = finalAttrs.meta.description;
+      startupWMClass = finalAttrs.pname;
       categories = [
         "Network"
         "InstantMessaging"
@@ -87,12 +87,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
-    description = "A discord client reimplementation, written in C++";
+  meta = {
+    description = "Discord client reimplementation, written in C++";
     mainProgram = "abaddon";
     homepage = "https://github.com/uowuo/abaddon";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ genericnerdyusername ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ choco98 ];
     platforms = lib.platforms.linux;
   };
-}
+})

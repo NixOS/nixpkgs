@@ -3,20 +3,22 @@
   lib,
   pkg-config,
   fetchFromGitHub,
-  xorg,
+  libxrandr,
+  libx11,
+  xorgproto,
   libdrm,
   SDL2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "switchres";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "antonioginer";
     repo = "switchres";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/21RcpumWYNBPck7gpH6krwC3Thz/rKDPgeJblN2BDA=";
+    hash = "sha256-jHMZuROSmRhCKb0AV3t1WUJZMOnB4ahx+ZcrWRFmTrM=";
   };
 
   nativeBuildInputs = [
@@ -24,23 +26,23 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    xorg.libXrandr
-    xorg.xorgproto
+    libxrandr
+    xorgproto
     libdrm
     SDL2
   ];
 
   patchPhase = ''
-    runHook preHook
+    runHook prePatch
 
     substituteInPlace ./custom_video_xrandr.cpp \
-      --replace-fail libX11.so ${xorg.libX11}/lib/libX11.so \
-      --replace-fail libXrandr.so ${xorg.libXrandr}/lib/libXrandr.so
+      --replace-fail libX11.so ${libx11}/lib/libX11.so \
+      --replace-fail libXrandr.so ${libxrandr}/lib/libXrandr.so
 
     substituteInPlace ./custom_video_drmkms.cpp \
       --replace-fail libdrm.so ${libdrm}/lib/libdrm.so \
 
-    runHook postHook
+    runHook postPatch
   '';
 
   env = {

@@ -1,21 +1,27 @@
-# Contributing to the Nixpkgs reference manual
+# Contributing to the Nixpkgs manual
 
-This directory houses the sources files for the Nixpkgs reference manual.
+This directory houses the source files for the Nixpkgs manual.
 
-> [!IMPORTANT]
-> We are actively restructuring our documentation to follow the [Diátaxis framework](https://diataxis.fr/)
+> [!NOTE]
 >
-> Going forward, this directory should **only** contain [reference documentation](https://nix.dev/contributing/documentation/diataxis#reference).
-> For tutorials, guides and explanations, contribute to <https://nix.dev/> instead.
+> We are actively restructuring our documentation to be more beginner friendly.
 >
-> We are actively working to generate **all** reference documentation from the [doc-comments](https://github.com/NixOS/rfcs/blob/master/rfcs/0145-doc-strings.md) present in code.
-> This also provides the benefit of using `:doc` in the `nix repl` to view reference documentation locally on the fly.
 
-For documentation only relevant for contributors, use Markdown files next to the source and regular code comments.
+When writing new docs use **Progressive Disclosure**
 
-> [!TIP]
-> Feedback for improving support for parsing and rendering doc-comments is highly appreciated.
-> [Open an issue](https://github.com/NixOS/nixpkgs/issues/new?labels=6.topic%3A+documentation&title=Doc%3A+) to request bugfixes or new features.
+Start simple, pick up beginners.
+Use **examples** first to show how to get something done. Keep **Explanation** lean.
+
+Use our [styleguide](./styleguide.md) for more in depth guidance on writing good documentation.
+
+Documentation about Nixpkgs belongs here, this includes 'getting-started'-guides and 'onboarding-guides' for *using* Nixpkgs and the language frameworks it ships.
+
+Write **guides** task-first: lead with a working example, then explain in prose.
+Write **reference** as the specification of functions and attributes.
+
+We are actively working to generate reference documentation from the [doc-comments](https://github.com/NixOS/rfcs/blob/master/rfcs/0145-doc-strings.md) present in code, which also lets you view it locally with `:doc` in `nix repl`.
+
+See [Document structure](#document-structure) for a structural template.
 
 Rendered documentation:
 - [Unstable (from master)](https://nixos.org/manual/nixpkgs/unstable/)
@@ -34,25 +40,45 @@ $ nix-build doc
 
 If the build succeeds, the manual will be in `./result/share/doc/nixpkgs/manual.html`.
 
-### devmode
+### Development environment
 
-The shell in the manual source directory makes available a command, `devmode`.
-It is a daemon, that:
-1. watches the manual's source for changes and when they occur — rebuilds
-2. HTTP serves the manual, injecting a script that triggers reload on changes
-3. opens the manual in the default browser
+To reduce repetition, consider using tools from the provided development environment:
+
+Load it from the Nixpkgs documentation directory with
+
+```ShellSession
+$ cd /path/to/nixpkgs/doc
+$ nix-shell
+```
+
+To load the development utilities automatically when entering that directory, [set up `nix-direnv`](https://nix.dev/guides/recipes/direnv).
+
+Make sure that your local files aren't added to Git history by adding the following lines to `.git/info/exclude` at the root of the Nixpkgs repository:
+
+```
+/**/.envrc
+/**/.direnv
+```
+
+#### Live preview
+
+Run [`devmode`](../pkgs/by-name/de/devmode/README.md) for a live preview while editing the manual: it rebuilds on every change and reloads the page in your browser automatically.
+
+Changes to the renderer 'pkgs/by-name/ni/nixos-render-docs' need a manual restart. Run: `devmode` again.
 
 ### Testing redirects
 
 Once you have a successful build, you can open the relevant HTML (path mentioned above) in a browser along with the anchor, and observe the redirection.
 
-Note that if you already loaded the page and *then* input the anchor, you will need to perform a reload. This is because browsers do not re-run client JS code when only the anchor has changed.
+Note that if you already loaded the page and *then* input the anchor, you will need to perform a reload.
+This is because browsers do not re-run client JS code when only the anchor has changed.
 
 ## Syntax
 
 As per [RFC 0072](https://github.com/NixOS/rfcs/pull/72), all new documentation content should be written in [CommonMark](https://commonmark.org/) Markdown dialect.
 
-Additional syntax extensions are available, all of which can be used in NixOS option documentation. The following extensions are currently used:
+Additional syntax extensions are available, all of which can be used in NixOS option documentation.
+The following extensions are currently used:
 
 #### Tables
 
@@ -60,7 +86,8 @@ Tables, using the [GitHub-flavored Markdown syntax](https://github.github.com/gf
 
 #### Anchors
 
-Explicitly defined **anchors** on headings, to allow linking to sections. These should be always used, to ensure the anchors can be linked even when the heading text changes, and to prevent conflicts between [automatically assigned identifiers](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/auto_identifiers.md).
+Explicitly defined **anchors** on headings, to allow linking to sections.
+These should be always used, to ensure the anchors can be linked even when the heading text changes, and to prevent conflicts between [automatically assigned identifiers](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/auto_identifiers.md).
 
 It uses the widely compatible [header attributes](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/attributes.md) syntax:
 
@@ -73,7 +100,7 @@ It uses the widely compatible [header attributes](https://github.com/jgm/commonm
 
 #### Inline Anchors
 
-Allow linking arbitrary place in the text (e.g. individual list items, sentences…).
+Allow linking to an arbitrary place in the text (e.g. individual list items, sentences…).
 
 They are defined using a hybrid of the link syntax with the attributes syntax known from headings, called [bracketed spans](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/bracketed_spans.md):
 
@@ -83,18 +110,21 @@ They are defined using a hybrid of the link syntax with the attributes syntax kn
 
 #### Automatic links
 
-If you **omit a link text** for a link pointing to a section, the text will be substituted automatically. For example `[](#chap-contributing)`.
+If you **omit a link text** for a link pointing to a section, the text will be substituted automatically.
+For example `[](#chap-contributing)`.
 
 This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/using/syntax.html#targets-and-cross-referencing).
 
 
 #### HTML
 
-Inlining HTML is not allowed. Parts of the documentation gets rendered to various non-HTML formats, such as man pages in the case of NixOS manual.
+Inlining HTML is not allowed.
+Parts of the documentation get rendered to various non-HTML formats, such as man pages in the case of NixOS manual.
 
 #### Roles
 
-If you want to link to a man page, you can use `` {manpage}`nix.conf(5)` ``. The references will turn into links when a mapping exists in [`doc/manpage-urls.json`](./manpage-urls.json).
+If you want to link to a man page, you can use `` {manpage}`nix.conf(5)` ``.
+The references will turn into links when a mapping exists in [`doc/manpage-urls.json`](./manpage-urls.json).
 Please keep the `manpage-urls.json` file alphabetically sorted.
 
 A few markups for other kinds of literals are also available:
@@ -107,7 +137,8 @@ A few markups for other kinds of literals are also available:
 
 These literal kinds are used mostly in NixOS option documentation.
 
-This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/syntax/syntax.html#roles-an-in-line-extension-point). Though, the feature originates from [reStructuredText](https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#role-manpage) with slightly different syntax.
+This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/syntax/syntax.html#roles-an-in-line-extension-point).
+Though, the feature originates from [reStructuredText](https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#role-manpage) with slightly different syntax.
 They are handled by `myst_role` defined per renderer. <!-- reverse references in code -->
 
 #### Admonitions
@@ -162,15 +193,15 @@ watermelon
 - If creating a commit purely for documentation changes, format the commit message in the following way:
 
   ```
-  doc: (documentation summary)
+  doc/component: (documentation summary)
 
   (Motivation for change, relevant links, additional information.)
   ```
 
   Examples:
 
-  * doc: update the kernel config documentation to use `nix-shell`
-  * doc: add information about `nix-update-script`
+  * doc/stdenv: update the kernel config documentation to use `nix-shell`
+  * doc/getting-started: add information about `nix-update-script`
 
     Closes #216321.
 
@@ -180,9 +211,67 @@ watermelon
 
 In an effort to keep the Nixpkgs manual in a consistent style, please follow the conventions below, unless they prevent you from properly documenting something.
 In that case, please open an issue about the particular documentation convention and tag it with a "needs: documentation" label.
-When needed, each convention explain why it exists, so you can make a decision whether to follow it or not based on your particular case.
+When needed, each convention explains why it exists, so you can make a decision whether to follow it or not based on your particular case.
 Note that these conventions are about the **structure** of the manual (and its source files), not about the content that goes in it.
 You, as the writer of documentation, are still in charge of its content.
+
+**For prose style, see the [documentation styleguide](./styleguide.md).**
+
+### Document structure
+
+Organize each chapter as guide sections first, then a single `## Reference` section.
+
+A well-structured chapter looks like this:
+
+````markdown
+# Foo {#foo}
+
+`foo` builds Foo projects from a `foo.toml`.
+
+## Package a Foo application {#foo-packaging}
+
+:::{.example #ex-foo-packaging}
+
+# Package the hello app
+
+```nix
+{ foo }:
+buildFooPackage {
+  pname = "hello";
+  version = "1.0";
+}
+```
+
+:::
+
+`buildFooPackage` needs `pname` and `version`.
+Keep explanation short, and place it after the example.
+
+## Reference {#foo-reference}
+
+### `buildFooPackage` {#foo-buildFooPackage}
+
+Builds a Foo application from source.
+
+#### Inputs {#foo-buildFooPackage-inputs}
+
+`pname` (String)
+: The program name.
+
+#### Examples {#foo-buildFooPackage-examples}
+
+See [](#ex-foo-packaging).
+````
+
+Examples live in one place: the guide owns them and the reference links to them.
+
+Guides introduce minimal working examples that are goal-oriented (typical usage).
+
+Reference may introduce additional examples that are unit-oriented. (minimal usage, edge-cases).
+If the guide example is already sufficient, just link to it from the reference.
+
+Follow this structure strictly; to deviate, ping @NixOS/documentation-team.
+
 
 ### One sentence per line
 
@@ -190,15 +279,84 @@ Put each sentence in its own line.
 This makes reviews and suggestions much easier, since GitHub's review system is based on lines.
 It also helps identifying long sentences at a glance.
 
+Not everything has been migrated to this format yet.
+Please always use it for new content.
+When changing existing content, update formatting if possible, but avoid excessive diffs.
+
+### Examples first
+
+Put examples before detailed explanations (see the [styleguide](./styleguide.md) for the rationale).
+
+Use this structure for each documented item:
+
+1. Title
+2. Abstract (optional, one sentence max)
+3. Example
+4. Explanation (details, edge cases, types, defaults)
+
+Rendered example:
+
+````markdown
+## `lib.toUpper`
+
+Converts all characters in a string to uppercase.
+
+:::{.example #ex-lib-toUpper}
+# Converting a string to uppercase
+```nix
+lib.toUpper "hello"
+=> "HELLO"
+```
+
+:::
+
+Only acts on ASCII characters.
+Unicode characters are passed through unchanged.
+````
+
+### Writing Function Documentation
+
+Function documentation is *reference documentation*, for which
+[diataxis Reference documentation](https://diataxis.fr/reference/) (8 minutes) is **mandatory reading**.
+
+On top of the diataxis framework, which provides a balanced perspective on what reference documentation should contain, we apply a specific style rule to function documentation:
+the first sentence is in present tense, active voice, and the subject is omitted, referring implicitly to the name of the function.
+For example:
+
+```nix
+/**
+  Subtracts value `b` from value `a`.
+
+  Returns the difference as a number.
+*/
+subtractValues # ...elided code
+```
+
+Renders as:
+
+```md
+## `subtractValues`
+
+Subtracts value `b` from value `a`.
+
+Returns the difference as a number.
+```
+
 ### Callouts and examples
 
 Use the [admonition syntax](#admonitions) for callouts and examples.
 
-### Provide self-contained examples
+### `callPackage`-compatible examples
 
-Provide at least one example per function, and make examples self-contained.
-This is easier to understand for beginners.
-It also helps with testing that it actually works – especially once we introduce automation.
+Provide at least one example per function, in its doc-comment.
+
+Keep each example at the level it documents:
+
+- A **reference example** might sometimes live in a doc-comment and show function call shape.
+- A **guide example** lives in a guide section and shows a complete task that may compose several functions.
+
+When the task is nothing more than the call itself, the guide example is enough.
+The reference example links to the guide example.
 
 Example code should be such that it can be passed to `pkgs.callPackage`.
 Instead of something like:
@@ -310,8 +468,11 @@ Otherwise, just describe the single argument or start the arguments' definition 
 
 Checklist:
 - Start with a synopsis, to show the order of positional arguments.
-- Metavariables are in emphasized code spans: ``` *`arg1`* ```. Metavariables are placeholders where users may write arbitrary expressions. This includes positional arguments.
-- Attribute names are regular code spans: ``` `attr1` ```. These identifiers can _not_ be picked freely by users, so they are _not_ metavariables.
+- Metavariables are in emphasized code spans: ``` *`arg1`* ```.
+  Metavariables are placeholders where users may write arbitrary expressions.
+  This includes positional arguments.
+- Attribute names are regular code spans: ``` `attr1` ```.
+  These identifiers can _not_ be picked freely by users, so they are _not_ metavariables.
 - _optional_ attributes have a _`Default:`_ if it's easily described as a value.
 - _optional_ attributes have a _`Default behavior:`_ if it's not easily described using a value.
 - Nix types aren't in code spans, because they are not code
@@ -349,12 +510,12 @@ To define a referenceable figure use the following fencing:
 :::
 ```
 
-Defining figures through the `figure` fencing class adds them to a `List  of Figures` after the `Table of Contents`.
+Defining figures through the `figure` fencing class adds them to a `List of Figures` after the `Table of Contents`.
 Though this is not shown in the rendered documentation on nixos.org.
 
 #### Footnotes
 
-To add a foonote explanation, use the following syntax:
+To add a footnote explanation, use the following syntax:
 
 ```markdown
 Sometimes it's better to add context [^context] in a footnote.
@@ -388,7 +549,8 @@ This syntax is taken from [CommonMark](https://spec.commonmark.org/0.30/#link-re
 
 #### Typographic replacements
 
-Typographic replacements are enabled. Check the [list of possible replacement patterns check](https://github.com/executablebooks/markdown-it-py/blob/3613e8016ecafe21709471ee0032a90a4157c2d1/markdown_it/rules_core/replacements.py#L1-L15).
+Typographic replacements are enabled.
+Check the [list of possible replacement patterns](https://github.com/executablebooks/markdown-it-py/blob/3613e8016ecafe21709471ee0032a90a4157c2d1/markdown_it/rules_core/replacements.py#L1-L15).
 
 ## Getting help
 

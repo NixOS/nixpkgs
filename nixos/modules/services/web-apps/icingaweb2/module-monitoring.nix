@@ -185,20 +185,19 @@ in
   };
 
   config = mkIf (config.services.icingaweb2.enable && cfg.enable) {
-    environment.etc =
-      {
-        "icingaweb2/enabledModules/monitoring" = {
-          source = "${pkgs.icingaweb2}/modules/monitoring";
-        };
-      }
-      // optionalAttrs (!cfg.generalConfig.mutable) {
-        "icingaweb2/modules/monitoring/config.ini".text = configIni;
-      }
-      // optionalAttrs (!cfg.mutableBackends) {
-        "icingaweb2/modules/monitoring/backends.ini".text = backendsIni;
-      }
-      // optionalAttrs (!cfg.mutableTransports) {
-        "icingaweb2/modules/monitoring/commandtransports.ini".text = transportsIni;
+    environment.etc = {
+      "icingaweb2/enabledModules/monitoring" = {
+        source = "${pkgs.icingaweb2}/modules/monitoring";
       };
+    }
+    // optionalAttrs (!cfg.generalConfig.mutable) {
+      "icingaweb2/modules/monitoring/config.ini".text = configIni;
+    }
+    // optionalAttrs (!cfg.mutableBackends) {
+      "icingaweb2/modules/monitoring/backends.ini".text = backendsIni;
+    }
+    // optionalAttrs (!cfg.mutableTransports) {
+      "icingaweb2/modules/monitoring/commandtransports.ini".text = transportsIni;
+    };
   };
 }

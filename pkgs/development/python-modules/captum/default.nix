@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   buildPythonPackage,
   pytestCheckHook,
   setuptools,
@@ -74,6 +73,6 @@ buildPythonPackage rec {
     description = "Model interpretability and understanding for PyTorch";
     homepage = "https://github.com/pytorch/captum";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

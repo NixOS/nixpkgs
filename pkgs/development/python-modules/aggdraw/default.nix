@@ -14,17 +14,17 @@
 
 buildPythonPackage rec {
   pname = "aggdraw";
-  version = "1.3.19";
-  format = "pyproject";
+  version = "1.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytroll";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-J9+mxlUxOoRBFdz+p8me2T93jaov5rNvKbAZ2YX/VhA=";
+    repo = "aggdraw";
+    tag = "v${version}";
+    hash = "sha256-rBasRGdlM6/NsUd8+KsgHoZMsWhAhneSWjTeZ/QQZZ8=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     packaging
     setuptools
     pkgconfig
@@ -46,10 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aggdraw" ];
 
-  meta = with lib; {
+  meta = {
     description = "High quality drawing interface for PIL";
     homepage = "https://github.com/pytroll/aggdraw";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    changelog = "https://github.com/pytroll/aggdraw/blob/${src.tag}CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

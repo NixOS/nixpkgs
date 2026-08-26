@@ -1,52 +1,61 @@
 {
   lib,
+  config,
   stdenv,
   buildPackages,
+  pkgsHostTarget,
   newScope,
   overrideCC,
   stdenvNoLibc,
-  libcCross,
+  libc,
+  makeScopeWithSplicing',
+  generateSplicesForMkScope,
 }:
 
-lib.makeScope newScope (
-  self: with self; {
+makeScopeWithSplicing' {
+  otherSplices = generateSplicesForMkScope "windows";
+  f =
+    self:
+    let
+      inherit (self) callPackage;
+    in
+    {
+      dlfcn = callPackage ./dlfcn { };
 
-    cygwinSetup = callPackage ./cygwin-setup { };
+      mingw_w64 = callPackage ./mingw-w64 {
+        stdenv = stdenvNoLibc;
+      };
 
-    dlfcn = callPackage ./dlfcn { };
+      # FIXME untested with llvmPackages_16 was using llvmPackages_8
+      crossThreadsStdenv = overrideCC stdenvNoLibc (
+        if stdenv.hostPlatform.useLLVM or false then
+          buildPackages.llvmPackages.clangNoLibcxx
+        else
+          buildPackages.gccWithoutTargetLibc.override (old: {
+            bintools = old.bintools.override {
+              libc = pkgsHostTarget.libc;
+              noLibc = libc == null;
+              nativeLibc = false;
+            };
+            libc = pkgsHostTarget.libc;
+            noLibc = libc == null;
+            nativeLibc = false;
+          })
+      );
 
-    w32api = callPackage ./w32api { };
+      mingw_w64_headers = callPackage ./mingw-w64/headers.nix { };
 
-    mingwrt = callPackage ./mingwrt { };
-    mingw_runtime = mingwrt;
+      mcfgthreads = callPackage ./mcfgthreads { stdenv = self.crossThreadsStdenv; };
 
-    mingw_w64 = callPackage ./mingw-w64 {
-      stdenv = stdenvNoLibc;
+      npiperelay = callPackage ./npiperelay { };
+
+      pthreads = callPackage ./mingw-w64/pthreads.nix { stdenv = self.crossThreadsStdenv; };
+
+      libgnurx = callPackage ./libgnurx { };
+
+      sdk = callPackage ./msvcSdk { };
+    }
+    // lib.optionalAttrs config.allowAliases {
+      mingw_w64_pthreads = lib.warn "windows.mingw_w64_pthreads is deprecated, windows.pthreads should be preferred" self.pthreads;
     };
-
-    # FIXME untested with llvmPackages_16 was using llvmPackages_8
-    crossThreadsStdenv = overrideCC stdenvNoLibc (
-      if stdenv.hostPlatform.useLLVM or false then
-        buildPackages.llvmPackages.clangNoLibcxx
-      else
-        buildPackages.gccWithoutTargetLibc.override (old: {
-          bintools = old.bintools.override {
-            libc = libcCross;
-          };
-          libc = libcCross;
-        })
-    );
-
-    mingw_w64_headers = callPackage ./mingw-w64/headers.nix { };
-
-    mingw_w64_pthreads = callPackage ./mingw-w64/pthreads.nix { stdenv = crossThreadsStdenv; };
-
-    mcfgthreads = callPackage ./mcfgthreads { stdenv = crossThreadsStdenv; };
-
-    npiperelay = callPackage ./npiperelay { };
-
-    pthreads = callPackage ./pthread-w32 { };
-
-    libgnurx = callPackage ./libgnurx { };
-  }
-)
+}

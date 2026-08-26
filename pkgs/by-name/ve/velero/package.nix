@@ -6,27 +6,27 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "velero";
-  version = "1.16.0";
+  version = "1.18.2";
 
   src = fetchFromGitHub {
-    owner = "vmware-tanzu";
+    owner = "velero-io";
     repo = "velero";
-    rev = "v${version}";
-    hash = "sha256-+gEu323/Y6BZiN22yX1oj9WmejoVSOLjBCKL0YTXI6A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rW9OiVFGI1ZO0UmZLVZ/7gXclOmqKBPh6P/Bd54QjZY=";
   };
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/vmware-tanzu/velero/pkg/buildinfo.Version=v${version}"
+    "-X github.com/vmware-tanzu/velero/pkg/buildinfo.Version=v${finalAttrs.version}"
     "-X github.com/vmware-tanzu/velero/pkg/buildinfo.ImageRegistry=velero"
     "-X github.com/vmware-tanzu/velero/pkg/buildinfo.GitTreeState=clean"
     "-X github.com/vmware-tanzu/velero/pkg/buildinfo.GitSHA=none"
   ];
 
-  vendorHash = "sha256-+gmHQoAIfvKT3g4q7YsOVwKS/LMkmwpq9OTtCuqEd/Y=";
+  vendorHash = "sha256-yoTl5kmM4VKrLgvEUNaKYCiNbspd4VgG8CbulKjnoJE=";
 
   excludedPackages = [
     "issue-template-gen"
@@ -35,10 +35,10 @@ buildGoModule rec {
     "velero-restic-restore-helper"
   ];
 
-  doCheck = false; # Tests expect a running cluster see https://github.com/vmware-tanzu/velero/tree/main/test/e2e
+  doCheck = false; # Tests expect a running cluster see https://github.com/velero-io/velero/tree/main/test/e2e
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/velero version --client-only | grep ${version} > /dev/null
+    $out/bin/velero version --client-only | grep ${finalAttrs.version} > /dev/null
   '';
 
   nativeBuildInputs = [ installShellFiles ];
@@ -48,14 +48,13 @@ buildGoModule rec {
     installShellCompletion velero.{bash,zsh}
   '';
 
-  meta = with lib; {
-    description = "A utility for managing disaster recovery, specifically for your Kubernetes cluster resources and persistent volumes";
+  meta = {
+    description = "Utility for managing disaster recovery, specifically for your Kubernetes cluster resources and persistent volumes";
     homepage = "https://velero.io/";
-    changelog = "https://github.com/vmware-tanzu/velero/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = [
-      maintainers.mbode
-      maintainers.bryanasdev000
+    changelog = "https://github.com/velero-io/velero/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      mbode
     ];
   };
-}
+})

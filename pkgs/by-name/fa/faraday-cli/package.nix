@@ -4,17 +4,23 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "faraday-cli";
-  version = "2.1.12";
+  version = "2.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday-cli";
-    tag = version;
-    hash = "sha256-TZABx76ap4mzZ99Xd8chkwBsGmT9qJWAeMaubUwGiRw=";
+    tag = finalAttrs.version;
+    hash = "sha256-OQhwohRtBLwVWEJhyGBs/ktOL5SH+jM9A9/HnyheJYE=";
   };
+
+  pythonRelaxDeps = [
+    "cmd2"
+    "httpx"
+    "validators"
+  ];
 
   build-system = with python3.pkgs; [ setuptools ];
 
@@ -42,12 +48,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "faraday_cli" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command Line Interface for Faraday";
     homepage = "https://github.com/infobyte/faraday-cli";
-    changelog = "https://github.com/infobyte/faraday-cli/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/infobyte/faraday-cli/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "faraday-cli";
   };
-}
+})

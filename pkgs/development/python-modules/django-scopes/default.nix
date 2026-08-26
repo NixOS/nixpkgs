@@ -5,21 +5,24 @@
   django,
   pytestCheckHook,
   pytest-django,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-scopes";
-  version = "2.0.0";
-  format = "setuptools";
+  version = "2.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "django-scopes";
-    tag = version;
-    hash = "sha256-CtToztLVvSb91pMpPNL8RysQJzlRkeXuQbpvbkX3jfM=";
+    tag = finalAttrs.version;
+    hash = "sha256-VtZfwWS6qcY1kthJ6qXf/nwxZpJxu5x41xjjR58wCM0=";
   };
 
-  propagatedBuildInputs = [ django ];
+  build-system = [ setuptools ];
+
+  dependencies = [ django ];
 
   nativeCheckInputs = [
     pytest-django
@@ -28,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_scopes" ];
 
-  meta = with lib; {
+  meta = {
     description = "Safely separate multiple tenants in a Django database";
     homepage = "https://github.com/raphaelm/django-scopes";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

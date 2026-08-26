@@ -4,18 +4,16 @@
   fetchFromGitHub,
   pytest-xprocess,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "cachelib";
   version = "0.13.0";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "pallets";
-    repo = pname;
+    repo = "cachelib";
     tag = version;
     hash = "sha256-8jg+zfdIATvu/GSFvqHl4cNMu+s2IFWC22vPZ7Q3WYI=";
   };
@@ -33,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cachelib" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pallets/cachelib";
     description = "Collection of cache libraries in the same API interface";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

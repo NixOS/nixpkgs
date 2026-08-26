@@ -10,14 +10,14 @@
   xxd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dosfstools";
   version = "4.2";
 
   src = fetchFromGitHub {
     owner = "dosfstools";
     repo = "dosfstools";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-2gxB0lQixiHOHw8uTetHekaM57fvUd9zOzSxWnvUz/c=";
   };
 
@@ -39,20 +39,23 @@ stdenv.mkDerivation rec {
       url = "https://github.com/dosfstools/dosfstools/commit/8da7bc93315cb0c32ad868f17808468b81fa76ec.patch";
       sha256 = "sha256-Quegj5uYZgACgjSZef6cjrWQ64SToGQxbxyqCdl8C7o=";
     })
+    ./gettext-0.25.patch
   ];
 
   nativeBuildInputs = [
     autoreconfHook
+    gettext
     pkg-config
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
-
-  # configure.ac:75: error: required file './config.rpath' not found
-  # https://github.com/dosfstools/dosfstools/blob/master/autogen.sh
-  postPatch = ''
-    cp ${gettext}/share/gettext/config.rpath config.rpath
-  '';
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   configureFlags = [ "--enable-compat-symlinks" ];
+
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
 
   nativeCheckInputs = [ xxd ];
   doCheck = true;
@@ -63,4 +66,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3;
   };
-}
+})

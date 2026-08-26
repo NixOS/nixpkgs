@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "salut";
-  version = "unstable-2022-12-17";
+  version = "3.0.1-unstable-2022-12-17";
 
   src = fetchFromGitLab {
     owner = "snakedye";
@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-W0lhhImSXtYJDeMbxyEioYu/Bh7ZclwR1/5DzNbxM8o=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-xqj9USqVG7g2zT2P3VxDVt8fFDtyUnZOdT6gYZh4cRI=";
 
   nativeBuildInputs = [
@@ -36,7 +35,7 @@ rustPlatform.buildRustPackage {
     description = "Sleek notification daemon for Wayland";
     homepage = "https://gitlab.com/snakedye/salut/-/wikis/Home";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "salut";
     platforms = lib.platforms.linux;
   };

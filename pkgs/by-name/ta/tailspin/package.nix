@@ -9,17 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tailspin";
-  version = "4.0.0";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "bensadeh";
     repo = "tailspin";
     tag = finalAttrs.version;
-    hash = "sha256-5VbxQDK69If5N8EiS8sIKNqHkCAfquOz8nUS7ynp+nA=";
+    hash = "sha256-9+uu9q9tGIWFnyYpy+HHD5UUCsxUDLRlZlo0Ap4ezsY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-QkdnmeXor2K0c5m/TV5hYl1oSPWpykPfZy/ZRqFUt1s=";
+  cargoHash = "sha256-C3OORW5aeDrRDTlfvRNW3RLE0p8wFs1qbIKl/XpzThs=";
 
   postPatch = ''
     substituteInPlace tests/utils.rs --replace-fail \
@@ -28,7 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/tspin";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -38,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/bensadeh/tailspin";
     changelog = "https://github.com/bensadeh/tailspin/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "tspin";
   };
 })

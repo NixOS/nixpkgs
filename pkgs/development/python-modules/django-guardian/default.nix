@@ -1,42 +1,45 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   django-environ,
-  mock,
   django,
   pytestCheckHook,
   pytest-django,
+  pytest-xdist,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-guardian";
-  version = "2.4.0";
-  format = "setuptools";
+  version = "3.3.3";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c58a68ae76922d33e6bdc0e69af1892097838de56e93e78a8361090bcd9f89a0";
+  src = fetchFromGitHub {
+    owner = "django-guardian";
+    repo = "django-guardian";
+    tag = finalAttrs.version;
+    hash = "sha256-0zUdcDeJ40AuYSzhjy3/htU43cy6T54rZOj2zFo6J+8=";
   };
 
-  propagatedBuildInputs = [ django ];
+  build-system = [ setuptools ];
+
+  dependencies = [ django ];
 
   nativeCheckInputs = [
     django-environ
-    mock
     pytestCheckHook
     pytest-django
+    pytest-xdist
   ];
 
   pythonImportsCheck = [ "guardian" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/django-guardian/django-guardian/releases/tag/${finalAttrs.src.tag}";
     description = "Per object permissions for Django";
     homepage = "https://github.com/django-guardian/django-guardian";
-    license = with licenses; [
-      mit
-      bsd2
-    ];
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

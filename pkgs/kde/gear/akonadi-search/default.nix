@@ -14,11 +14,9 @@ mkKdeDerivation rec {
   cargoRoot = "agent/rs/htmlparser";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    # include version in the name so we invalidate the FOD
-    name = "${pname}-${version}";
+    inherit pname version cargoRoot;
     src = sources.${pname};
-    sourceRoot = "${pname}-${version}/${cargoRoot}";
-    hash = "sha256-hdm4LfQcs4TTfBLzlZYJ0uzqfLxMXuYQExLGJg81W2U=";
+    hash = "sha256-F9m2+WSrxjQgFDJ+//GCnMvzUD6734IGqnw7sRYIwTU=";
   };
 
   extraNativeBuildInputs = [

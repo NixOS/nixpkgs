@@ -6,7 +6,6 @@
   fetchFromGitHub,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   yarl,
 }:
 
@@ -15,11 +14,9 @@ buildPythonPackage rec {
   version = "0.2.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "dennisschroer";
-    repo = pname;
+    repo = "energyflip-client";
     tag = "v${version}";
     hash = "sha256-neuZ6pZWW/Rgexu/iCEymjnxi5l/IuLKPFn6S9U4DgU=";
   };
@@ -37,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "energyflip" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to communicate with the API behind EnergyFlip";
     homepage = "https://github.com/dennisschroer/energyflip-client";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

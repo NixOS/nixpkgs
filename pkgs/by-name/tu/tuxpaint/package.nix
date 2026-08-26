@@ -15,6 +15,7 @@
   libpaper,
   libpng,
   librsvg,
+  libxml2,
   pango,
   SDL2_gfx,
   SDL2_image,
@@ -26,23 +27,19 @@
 
 let
   stamps = fetchurl {
-    url = "mirror://sourceforge/project/tuxpaint/tuxpaint-stamps/2024-01-29/tuxpaint-stamps-2024.01.29.tar.gz";
-    hash = "sha256-GwJx9tqaX7I623tJQYO53iiaApZtYsTLQw2ptBIFlKk=";
+    url = "mirror://sourceforge/project/tuxpaint/tuxpaint-stamps/2025-05-26/tuxpaint-stamps-2025.05.26.tar.gz";
+    hash = "sha256-CfSin4A2yTpkwoE046+u+0udlaCaceaPt1N/PF+ClJ8=";
   };
 
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.9.32";
+  version = "0.9.35";
   pname = "tuxpaint";
 
   src = fetchurl {
     url = "mirror://sourceforge/tuxpaint/${finalAttrs.version}/tuxpaint-${finalAttrs.version}.tar.gz";
-    hash = "sha256-CcziIkFIHcE2D8S8XU2h0xgV16JWO56fohemcrqXS/I=";
+    hash = "sha256-wcGK+RvnfpT9qrLJKCBMTDm6OaxdovRBqvLsq22L0K0=";
   };
-
-  patches = [
-    ./tuxpaint-completion.diff
-  ];
 
   postPatch = ''
     grep -Zlr include.*SDL . | xargs -0 \
@@ -70,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpaper
     libpng
     librsvg
+    libxml2
     pango
     SDL2
     SDL2_gfx
@@ -93,13 +91,16 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     # Install desktop file
     mkdir -p $out/share/applications
-    cp hildon/tuxpaint.xpm $out/share/pixmaps
     sed -e "s+Exec=tuxpaint+Exec=$out/bin/tuxpaint+" < src/tuxpaint.desktop > $out/share/applications/tuxpaint.desktop
 
     # Install stamps
     tar xzf ${stamps}
     cd tuxpaint-stamps-*
     make install-all PREFIX=$out
+
+    mkdir -p $out/share/icons/hicolor/32x32/apps
+    magick $out/share/pixmaps/tuxpaint.png -resize 32x32 $out/share/icons/hicolor/32x32/apps/tuxpaint.png
+    rm -r $out/share/pixmaps
 
     # Requirements for tuxpaint-import
     wrapProgram $out/bin/tuxpaint-import \

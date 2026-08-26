@@ -7,7 +7,6 @@
   sip,
   pyqt-builder,
   qt6Packages,
-  pythonOlder,
   pyqt6,
   python,
   mesa,
@@ -15,15 +14,13 @@
 
 buildPythonPackage rec {
   pname = "pyqt6-webengine";
-  version = "6.8.0";
+  version = "6.11.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
-    pname = "PyQt6_WebEngine";
+    pname = "pyqt6_webengine";
     inherit version;
-    hash = "sha256-ZARepiK2pBiCwrGPVa6XFLhmCs/walTpEOtygiwvP/I=";
+    hash = "sha256-Fc9J77u9TGvIdlOyxK6A1gSfgA4xYgszZzSuLjfL7a4=";
   };
 
   patches = [
@@ -40,7 +37,7 @@ buildPythonPackage rec {
   '';
 
   enableParallelBuilding = true;
-  # HACK: paralellize compilation of make calls within pyqt's setup.py
+  # HACK: parallelize compilation of make calls within pyqt's setup.py
   # pkgs/stdenv/generic/setup.sh doesn't set this for us because
   # make gets called by python code and not its build phase
   # format=pyproject means the pip-build-hook hook gets used to build this project

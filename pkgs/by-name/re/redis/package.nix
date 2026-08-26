@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch2,
+  apple-sdk,
   lua,
   jemalloc,
   pkg-config,
@@ -14,7 +15,8 @@
   systemd,
   openssl,
   python3,
-
+  nix-update-script,
+  versionCheckHook,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   tlsSupport ? true,
   # Using system jemalloc fixes cross-compilation and various setups.
@@ -25,19 +27,34 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "redis";
-  version = "7.2.7";
+  version = "8.10.1";
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis";
-    rev = finalAttrs.version;
-    hash = "sha256-WZ89BUm3zz6n0dZKyODHCyMGExbqaPJJ1qxLvJKUSDI=";
+    tag = finalAttrs.version;
+    hash = "sha256-fGLuOuiM3VHj70qlSpb2s25RYD8gFARrqwAhW6CIHXE=";
   };
 
-  patches = lib.optional useSystemJemalloc (fetchpatch2 {
+  patches = [
+    # https://github.com/redis/redis/pull/15585
+    (fetchpatch2 {
+      url = "https://github.com/redis/redis/commit/c027c8effe13564bcbc903741305acd929cc23da.patch";
+      hash = "sha256-MynmKLQ04JjyHMVbfeSIEnKaj4jvjS1FjQNpfvQz3Pw=";
+    })
+  ]
+  ++ lib.optional useSystemJemalloc (fetchpatch2 {
     url = "https://gitlab.archlinux.org/archlinux/packaging/packages/redis/-/raw/102cc861713c796756abd541bf341a4512eb06e6/redis-5.0-use-system-jemalloc.patch";
     hash = "sha256-A9qp+PWQRuNy/xmv9KLM7/XAyL7Tzkyn0scpVCGngcc=";
   });
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # The path `/Library/...` isn't available in the build sandbox. The package `apple-sdk`
+    # can provide that functionality for us.
+    substituteInPlace src/modules/Makefile modules/vector-sets/Makefile tests/modules/Makefile \
+      --replace-fail '/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib' \
+        '${apple-sdk.sdkroot}/usr/lib'
+  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -45,74 +62,94 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs =
-    [ lua ]
-    ++ lib.optional useSystemJemalloc jemalloc
-    ++ lib.optional withSystemd systemd
-    ++ lib.optional tlsSupport openssl;
+  buildInputs = [
+    lua
+  ]
+  ++ lib.optional useSystemJemalloc jemalloc
+  ++ lib.optional withSystemd systemd
+  ++ lib.optional tlsSupport openssl;
 
   # More cross-compiling fixes.
-  makeFlags =
-    [ "PREFIX=${placeholder "out"}" ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      "AR=${stdenv.cc.targetPrefix}ar"
-      "RANLIB=${stdenv.cc.targetPrefix}ranlib"
-    ]
-    ++ lib.optionals withSystemd [ "USE_SYSTEMD=yes" ]
-    ++ lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "AR=${stdenv.cc.targetPrefix}ar"
+    "RANLIB=${stdenv.cc.targetPrefix}ranlib"
+  ]
+  ++ lib.optionals withSystemd [ "USE_SYSTEMD=yes" ]
+  ++ lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
 
   enableParallelBuilding = true;
 
-  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
-
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [ "-std=c11" ]);
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isFreeBSD "-lexecinfo";
 
-  # darwin currently lacks a pure `pgrep` which is extensively used here
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  # Tests are in the `tests` passthru derivation: the suite is very large and some tests (e.g. memtests) are flaky.
+  doCheck = false;
+
   nativeCheckInputs = [
     which
     tcl
     ps
-  ] ++ lib.optionals stdenv.hostPlatform.isStatic [ getconf ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [ getconf ];
   checkPhase = ''
     runHook preCheck
 
     # disable test "Connect multiple replicas at the same time": even
     # upstream find this test too timing-sensitive
     substituteInPlace tests/integration/replication.tcl \
-      --replace 'foreach mdl {no yes}' 'foreach mdl {}'
+      --replace-fail 'foreach sdl {disabled swapdb flushdb} {' 'foreach sdl {} {'
 
     substituteInPlace tests/support/server.tcl \
-      --replace 'exec /usr/bin/env' 'exec env'
+      --replace-fail 'exec /usr/bin/env' 'exec env'
 
-    sed -i '/^proc wait_load_handlers_disconnected/{n ; s/wait_for_condition 50 100/wait_for_condition 50 500/; }' \
+    sed -i \
+      -e '/^proc wait_load_handlers_disconnected/{n ; s/wait_for_condition 50 100/wait_for_condition 50 500/; }' \
+      -e  '/^proc wait_for_ofs_sync/{n ; s/wait_for_condition 50 100/wait_for_condition 50 500/; }' \
       tests/support/util.tcl
+
+    CLIENTS="$NIX_BUILD_CORES"
+    if (( $CLIENTS > 4)); then
+      CLIENTS=4
+    fi
 
     ./runtest \
       --no-latency \
       --timeout 2000 \
-      --clients $NIX_BUILD_CORES \
+      --clients "$CLIENTS" \
       --tags -leaks \
+      --tags -defrag \
       --skipunit integration/aof-multi-part \
-      --skipunit integration/failover # flaky and slow
+      --skipunit integration/failover \
+      --skipunit integration/replication-rdbchannel \
+      --skipunit unit/cluster/atomic-slot-migration \
+      --skiptest "Check MEMORY USAGE for embedded key strings with jemalloc"
+      # ^ breaks due to unexpected and varying address space sizes that jemalloc gets built with
 
     runHook postCheck
   '';
 
-  passthru.tests.redis = nixosTests.redis;
-  passthru.serverBin = "redis-server";
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/redis-server";
+
+  passthru = {
+    tests = {
+      redis = nixosTests.redis;
+      unitTests = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
+    };
+    serverBin = "redis-server";
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://redis.io";
     description = "Open source, advanced key-value store";
-    license = lib.licenses.bsd3;
+    license = lib.licenses.agpl3Only;
     platforms = lib.platforms.all;
-    changelog = "https://github.com/redis/redis/raw/${finalAttrs.version}/00-RELEASENOTES";
-    maintainers = with lib.maintainers; [
-      berdario
-      globin
-    ];
+    changelog = "https://github.com/redis/redis/releases/tag/${finalAttrs.version}";
     mainProgram = "redis-cli";
+    teams = [ lib.teams.redis ];
   };
 })

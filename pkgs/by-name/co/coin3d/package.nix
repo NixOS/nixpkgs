@@ -6,18 +6,19 @@
   cmake,
   libGL,
   libGLU,
-  libX11,
+  libx11,
+  expat,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "coin";
-  version = "4.0.3";
+  version = "4.0.10";
 
   src = fetchFromGitHub {
     owner = "coin3d";
     repo = "coin";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dUFmcUOdNc3ZFtr+Hnh3Q3OY/JA/WxmiRJiU2RFSSus=";
+    hash = "sha256-Zymizcj+HeNgvvuuIoIHf03I0suOyWGOBIqvnjx5qyw=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -26,16 +27,20 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     libGL
     libGLU
-  ] ++ lib.optional stdenv.hostPlatform.isLinux libX11;
+    expat
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libx11;
 
-  cmakeFlags = [ "-DCOIN_USE_CPACK=OFF" ];
+  cmakeFlags = [
+    (lib.cmakeBool "USE_EXTERNAL_EXPAT" true)
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/coin3d/coin";
     description = "High-level, retained-mode toolkit for effective 3D graphics development";
     mainProgram = "coin-config";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

@@ -9,12 +9,14 @@
   virtualenv,
   virtualenv-clone,
   python,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "virtualenvwrapper";
   version = "6.1.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -23,6 +25,11 @@ buildPythonPackage rec {
 
   # pip depend on $HOME setting
   preConfigure = "export HOME=$TMPDIR";
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   buildInputs = [
     pbr
@@ -76,9 +83,9 @@ buildPythonPackage rec {
         done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Enhancements to virtualenv";
-    homepage = "https://pypi.python.org/pypi/virtualenvwrapper";
-    license = licenses.mit;
+    homepage = "https://github.com/python-virtualenvwrapper/virtualenvwrapper";
+    license = lib.licenses.mit;
   };
 }

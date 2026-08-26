@@ -22,13 +22,13 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PageSpeed Optimization Libraries";
     homepage = "https://developers.google.com/speed/pagespeed/psol";
-    license = licenses.asl20;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     # WARNING: This only works with Linux because the pre-built PSOL binary is only supplied for Linux.
     # TODO: Build PSOL from source to support more platforms.
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

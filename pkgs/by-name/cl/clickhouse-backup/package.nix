@@ -1,41 +1,49 @@
 {
   buildGoModule,
-  clickhouse-backup,
   fetchFromGitHub,
   lib,
-  testers,
+  ps,
+  stdenv,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "clickhouse-backup";
-  version = "2.6.15";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "Altinity";
     repo = "clickhouse-backup";
-    rev = "v${version}";
-    hash = "sha256-WHIrgKWO8yHHbQ5i3qvCYjxuRPj8sRasjxQ2J1N8q7o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FULdduxFQe1T2UbD/ieE7+ZqRqnRDvbydbmcC2v+D1I=";
   };
 
-  vendorHash = "sha256-4qPZihOuaD8lKF31fhyTDG7gBa0gExLVavazGZWDyAk=";
+  vendorHash = "sha256-fCn3zEaAR+HnbYKNhtuapvThMcIMgcMGCfpEDTZ+jcM=";
 
   ldflags = [
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   postConfigure = ''
     export CGO_ENABLED=0
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = clickhouse-backup;
-  };
+  preCheck = ''
+    export PATH=${ps}/bin:$PATH
+  '';
 
-  meta = with lib; {
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "-skip=TestParseCallback" ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  meta = {
     description = "Tool for easy ClickHouse backup and restore using object storage for backup files";
     mainProgram = "clickhouse-backup";
     homepage = "https://github.com/Altinity/clickhouse-backup";
-    license = licenses.mit;
-    maintainers = with maintainers; [ devusb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ devusb ];
   };
-}
+})

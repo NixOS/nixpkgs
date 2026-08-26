@@ -5,7 +5,7 @@
   haskell,
   removeReferencesTo,
   installShellFiles,
-  selectPandocCLI ? (p: p.pandoc-cli), # The version of pandoc-cli choosen from haskellPackages.
+  selectPandocCLI ? (p: p.pandoc-cli), # The version of pandoc-cli chosen from haskellPackages.
 }:
 
 let
@@ -15,8 +15,6 @@ let
 
 in
 (haskell.lib.compose.overrideCabal (drv: {
-  configureFlags = drv.configureFlags or [ ] ++ [ "-fembed_data_files" ];
-  buildDepends = drv.buildDepends or [ ] ++ [ pandoc-cli.scope.file-embed ];
   buildTools = (drv.buildTools or [ ]) ++ [
     removeReferencesTo
     installShellFiles
@@ -41,9 +39,6 @@ in
       remove-references-to \
         -t ${pandoc-cli.scope.pandoc} \
         $out/bin/pandoc
-    ''
-    # https://github.com/jgm/typst-hs/commit/9707b74ce60d71c2ba0f35249ffbd01dea197a6e
-    + lib.optionalString (lib.versionAtLeast pandoc-cli.scope.typst.version "0.6.1") ''
       remove-references-to \
         -t ${pandoc-cli.scope.typst} \
         $out/bin/pandoc

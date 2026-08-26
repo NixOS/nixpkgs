@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   astropy,
   qtpy,
   pyqt6,
@@ -21,11 +20,9 @@ buildPythonPackage rec {
   version = "0.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5";
-
   src = fetchFromGitHub {
     owner = "radio-astro-tools";
-    repo = pname;
+    repo = "pvextractor";
     tag = "v${version}";
     sha256 = "sha256-TjwoTtoGWU6C6HdFuS+gJj69PUnfchPHs7UjFqwftVQ=";
   };
@@ -55,10 +52,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pvextractor" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://pvextractor.readthedocs.io";
     description = "Position-velocity diagram extractor";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ifurther ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ifurther ];
   };
 }

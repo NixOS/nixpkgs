@@ -137,6 +137,17 @@ rec {
       "avx512"
       "fma"
     ];
+    rocketlake = [
+      "sse3"
+      "ssse3"
+      "sse4_1"
+      "sse4_2"
+      "aes"
+      "avx"
+      "avx2"
+      "avx512"
+      "fma"
+    ];
     cascadelake = [
       "sse3"
       "ssse3"
@@ -329,6 +340,39 @@ rec {
       "avx512"
       "fma"
     ];
+    # LoongArch64
+    # https://github.com/loongson/la-toolchain-conventions
+    loongarch64 = [
+      "fpu64"
+    ];
+    la464 = [
+      "fpu64"
+      "lsx"
+      "lasx"
+    ];
+    la664 = [
+      "fpu64"
+      "lsx"
+      "lasx"
+      "div32"
+      "frecipe"
+      "lam-bh"
+      "lamcas"
+      "ld-seq-sa"
+    ];
+    "la64v1.0" = [
+      "fpu64"
+      "lsx"
+    ];
+    "la64v1.1" = [
+      "fpu64"
+      "lsx"
+      "div32"
+      "frecipe"
+      "lam-bh"
+      "lamcas"
+      "ld-seq-sa"
+    ];
     # other
     armv5te = [ ];
     armv6 = [ ];
@@ -386,6 +430,7 @@ rec {
       sapphirerapids = [ "tigerlake" ] ++ inferiors.tigerlake;
       emeraldrapids = [ "sapphirerapids" ] ++ inferiors.sapphirerapids;
 
+      rocketlake = [ "x86-64-v4" ] ++ inferiors.x86-64-v4;
       alderlake = [ "skylake" ] ++ inferiors.skylake;
       sierraforest = [ "alderlake" ] ++ inferiors.alderlake;
 
@@ -444,7 +489,8 @@ rec {
       "armv9.1-a" = [
         "armv9-a"
         "armv8.6-a"
-      ] ++ inferiors."armv8.6-a";
+      ]
+      ++ inferiors."armv8.6-a";
       "armv9.2-a" = lib.unique (
         [
           "armv9.1-a"
@@ -470,12 +516,14 @@ rec {
         "armv8.2-a"
         "cortex-a53"
         "cortex-a72"
-      ] ++ inferiors."armv8.2-a";
+      ]
+      ++ inferiors."armv8.2-a";
       cortex-a76 = [
         "armv8.2-a"
         "cortex-a53"
         "cortex-a72"
-      ] ++ inferiors."armv8.2-a";
+      ]
+      ++ inferiors."armv8.2-a";
 
       # Ampere
       ampere1 = withInferiors [
@@ -486,6 +534,16 @@ rec {
       ampere1a = [ "ampere1" ] ++ inferiors.ampere1;
       ampere1b = [ "ampere1a" ] ++ inferiors.ampere1a;
 
+      # LoongArch64
+      loongarch64 = [ ];
+      "la64v1.0" = [ "loongarch64" ];
+      la464 = [ "la64v1.0" ] ++ inferiors."la64v1.0";
+      "la64v1.1" = [ "la64v1.0" ] ++ inferiors."la64v1.0";
+      la664 = withInferiors [
+        "la464"
+        "la64v1.1"
+      ];
+
       # other
       armv5te = [ ];
       armv6 = [ ];
@@ -493,6 +551,70 @@ rec {
       mips32 = [ ];
       loongson2f = [ ];
     };
+
+  /**
+    Check whether one GCC architecture has the the other inferior architecture.
+
+    # Inputs
+
+    `arch1`
+    : GCC architecture in string
+
+    `arch2`
+    : GCC architecture in string
+
+    # Type
+
+    ```
+    hasInferior :: String -> String -> Bool
+    ```
+
+    # Examples
+    ::: {.example}
+    ## `lib.systems.architectures.hasInferior` usage example
+
+    ```nix
+    hasInferior "x86-64-v3" "x86-64"
+    => true
+    hasInferior "x86-64" "x86-64-v3"
+    => false
+    hasInferior "x86-64" "x86-64"
+    => false
+    ```
+  */
+  hasInferior = arch1: arch2: inferiors ? ${arch1} && lib.elem arch2 inferiors.${arch1};
+
+  /**
+    Check whether one GCC architecture can execute the other.
+
+    # Inputs
+
+    `arch1`
+    : GCC architecture in string
+
+    `arch2`
+    : GCC architecture in string
+
+    # Type
+
+    ```
+    canExecute :: String -> String -> Bool
+    ```
+
+    # Examples
+    ::: {.example}
+    ## `lib.systems.architectures.canExecute` usage example
+
+    ```nix
+    canExecute "x86-64" "x86-64-v3"
+    => false
+    canExecute "x86-64-v3" "x86-64"
+    => true
+    canExecute "x86-64" "x86-64"
+    => true
+    ```
+  */
+  canExecute = arch1: arch2: arch1 == arch2 || hasInferior arch1 arch2;
 
   predicates =
     let
@@ -510,5 +632,7 @@ rec {
       aesSupport = featureSupport "aes";
       fmaSupport = featureSupport "fma";
       fma4Support = featureSupport "fma4";
+      lsxSupport = featureSupport "lsx";
+      lasxSupport = featureSupport "lasx";
     };
 }

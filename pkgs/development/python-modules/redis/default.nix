@@ -1,51 +1,77 @@
 {
   lib,
-  fetchPypi,
+  fetchFromGitHub,
   buildPythonPackage,
   pythonOlder,
 
-  # propagates
+  # build-system
+  hatchling,
+
+  # dependencies
   async-timeout,
-  deprecated,
-  importlib-metadata,
-  packaging,
-  typing-extensions,
+
+  # extras: circuit_breaker
+  pybreaker,
 
   # extras: hiredis
   hiredis,
+
+  # extras: jwt
+  pyjwt,
 
   # extras: ocsp
   cryptography,
   pyopenssl,
   requests,
+
+  # extras: otel
+  opentelemetry-api,
+  opentelemetry-exporter-otlp-proto-http,
+  opentelemetry-sdk,
+
+  # extras: xxhash
+  xxhash,
+
+  # tests
+  numpy,
+  pytest-asyncio,
+  pytestCheckHook,
+  redisTestHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "redis";
-  version = "5.2.1";
-  format = "setuptools";
+  version = "8.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-FvLiLf8h1RJehIFRXjhnEaNMvsUPDkRBPdfZwGClTg8=";
+  src = fetchFromGitHub {
+    owner = "redis";
+    repo = "redis-py";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-41i4oZmbWi87KBSaAAaZe2gPlCpgw6kEPne1IA3PHQM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = lib.optionals (pythonOlder "3.11") [
     async-timeout
-    deprecated
-    packaging
-    typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   optional-dependencies = {
+    circuit_breaker = [ pybreaker ];
     hiredis = [ hiredis ];
+    jwt = [ pyjwt ];
     ocsp = [
       cryptography
       pyopenssl
       requests
     ];
+    otel = [
+      opentelemetry-api
+      opentelemetry-exporter-otlp-proto-http
+      opentelemetry-sdk
+    ];
+    xxhash = [ xxhash ];
   };
 
   pythonImportsCheck = [
@@ -58,13 +84,55 @@ buildPythonPackage rec {
     "redis.utils"
   ];
 
-  # Tests require a running redis
+  nativeCheckInputs = [
+    numpy
+    pytest-asyncio
+    pytestCheckHook
+    redisTestHook
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.circuit_breaker
+  ++ finalAttrs.passthru.optional-dependencies.otel;
+
+  enabledTestMarks = [
+    "onlynoncluster"
+  ];
+
+  disabledTestMarks = [
+    "onlycluster"
+    "redismod"
+  ];
+
+  disabledTestPaths = [
+    # requires Redis Sentinel
+    "tests/test_asyncio/test_sentinel.py"
+    "tests/test_sentinel.py"
+    # FIXME package redis-entraid
+    "tests/test_asyncio/test_credentials.py"
+    "tests/test_credentials.py"
+  ];
+
+  disabledTests = [
+    # requires a Redis cluster
+    "test_readonly_invalid_cluster_state"
+    # we run Valkey, not Redis
+    "test_lolwut"
+  ];
+
+  # circular dependency via pybreaker
   doCheck = false;
 
-  meta = with lib; {
+  passthru.tests = {
+    pytest = finalAttrs.finalPackage.overrideAttrs {
+      doInstallCheck = true;
+    };
+  };
+
+  meta = {
     description = "Python client for Redis key-value store";
     homepage = "https://github.com/redis/redis-py";
-    changelog = "https://github.com/redis/redis-py/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/redis/redis-py/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.dotlambda ];
+    teams = [ lib.teams.redis ];
   };
-}
+})

@@ -7,24 +7,22 @@
   cryptography,
   fetchFromGitHub,
   pyotp,
+  pytest-asyncio,
   python-dotenv,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "opower";
-  version = "0.12.0";
+  version = "0.20.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "tronikos";
     repo = "opower";
-    tag = "v${version}";
-    hash = "sha256-pkjVabTHehS0tToFF6KgD7SH89cdLEzUuVQUphZF1Y4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZNWZ46UWMcp0imJi9WFdfNnXrGx+5tHsf33F58Pn4XA=";
   };
 
   build-system = [ setuptools ];
@@ -38,17 +36,28 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
     python-dotenv
   ];
 
+  disabledTestPaths = [
+    # network access
+    "tests/test_opower.py"
+  ];
+
   pythonImportsCheck = [ "opower" ];
 
-  meta = with lib; {
+  disabledTests = [
+    # Tests require network access
+    "test_invalid_auth"
+  ];
+
+  meta = {
     description = "Module for getting historical and forecasted usage/cost from utilities that use opower.com";
     homepage = "https://github.com/tronikos/opower";
-    changelog = "https://github.com/tronikos/opower/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/tronikos/opower/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

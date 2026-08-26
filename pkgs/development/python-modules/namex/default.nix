@@ -5,15 +5,15 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "namex";
-  version = "0.0.9";
+  version = "0.1.0";
   pyproject = true;
 
   # Not using fetchFromGitHub because the repo does not have any tag/release
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-it/qnaXOpb6PTmMjSbRmnjAXLHhZ4f2XRZ/fOxdGklM=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-EX8DzNMCzEjj9cWKKWg49ricg0VauGg6HoXypDCqQwY=";
   };
 
   build-system = [
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

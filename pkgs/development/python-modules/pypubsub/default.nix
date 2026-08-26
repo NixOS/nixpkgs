@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy27,
   pytest,
 }:
 
@@ -10,7 +9,6 @@ buildPythonPackage {
   pname = "pypubsub";
   version = "4.0.3";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "schollii";
@@ -26,9 +24,9 @@ buildPythonPackage {
     py.test
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/schollii/pypubsub";
-    description = "Python 3 publish-subcribe library";
+    description = "Python 3 publish-subscribe library";
     longDescription = ''
       Provides a publish-subscribe API to facilitate event-based or
       message-based  architecture in a single-process application. It is pure
@@ -39,7 +37,6 @@ buildPythonPackage {
       maintaining topics and messages in larger desktop- or server-based
       applications.
     '';
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ tfmoraes ];
+    license = lib.licenses.bsd2;
   };
 }

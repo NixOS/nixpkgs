@@ -5,30 +5,23 @@
   fetchpatch,
   asciidoc,
   libxcb,
-  xcbutil,
-  xcbutilkeysyms,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-keysyms,
+  libxcb-wm,
+  versionCheckHook,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sxhkd";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "baskerville";
     repo = "sxhkd";
-    rev = finalAttrs.version;
-    hash = "sha256-OelMqenk0tiWMLraekS/ggGf6IsXP7Sz7bv75NvnNvI=";
+    tag = finalAttrs.version;
+    hash = "sha256-kbjbTzYL2dz/RpG+SgBYy+XS3W9PBEWkg6ocqAFG3VQ=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Fixes an issue with overlapping chords when using multiple keyboard layouts.
-      name = "sxhkd-mod5.patch";
-      url = "https://github.com/baskerville/sxhkd/pull/307/commits/35e64f1d7b54c97ccc02e84e278012dae9bc3941.patch";
-      hash = "sha256-bvXWEEITbHC/h0nXQx99SXjvkI/KO36XXNSa1O8KSY0=";
-    })
-  ];
 
   outputs = [
     "out"
@@ -42,14 +35,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcb
-    xcbutil
-    xcbutilkeysyms
-    xcbutilwm
+    libxcb-util
+    libxcb-keysyms
+    libxcb-wm
   ];
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.tests = {
+    inherit (nixosTests) startx;
+  };
 
   meta = {
     description = "Simple X hotkey daemon";
@@ -57,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     mainProgram = "sxhkd";
     maintainers = with lib.maintainers; [
-      vyp
       ncfavier
     ];
     inherit (libxcb.meta) platforms;

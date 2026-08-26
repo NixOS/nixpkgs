@@ -8,6 +8,8 @@
   meson,
   ninja,
   pkg-config,
+  libgedit-amtk,
+  libgedit-gfls,
   libxml2,
   glib,
   gtk3,
@@ -17,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgedit-gtksourceview";
-  version = "299.5.0";
+  version = "299.7.1";
 
   outputs = [
     "out"
@@ -30,8 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
     group = "World";
     owner = "gedit";
     repo = "libgedit-gtksourceview";
-    rev = finalAttrs.version;
-    hash = "sha256-3HnlYLa1Zy1GRpX5fjEoXUzfB9X6nydpVjZTzJyhvIs=";
+    tag = finalAttrs.version;
+    forceFetchGit = true; # To avoid occasional 501 failures.
+    hash = "sha256-i+6Rfqm/KPJrLSvhvTVY53Q6O+LJEU9WjLJ/L3hMSUA=";
   };
 
   patches = [
@@ -51,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    libgedit-amtk
+    libgedit-gfls
     libxml2
   ];
 
@@ -62,13 +67,13 @@ stdenv.mkDerivation (finalAttrs: {
     shared-mime-info
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = gitUpdater { ignoredVersions = "(alpha|beta|rc).*"; };
 
-  meta = with lib; {
+  meta = {
     description = "Source code editing widget for GTK";
     homepage = "https://gitlab.gnome.org/World/gedit/libgedit-gtksourceview";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ bobby285271 ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ bobby285271 ];
+    platforms = lib.platforms.linux;
   };
 })

@@ -14,58 +14,66 @@
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
   directoryListingUpdater,
+  apple-sdk_gstreamer,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-libav";
-  version = "1.26.0";
-
-  outputs = [
-    "out"
-    "dev"
-  ];
+  version = "1.28.6";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-${finalAttrs.version}.tar.xz";
-    hash = "sha256-cHqLaH/1/dzuWwJBXi7JtxtKxE0Leuw7R3Nkzuy/Hs8=";
+    hash = "sha256-cebq+0//KmbRuwuo0HgiTf5+M5cwfYwLuj3CNgbgj1E=";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      gettext
-      pkg-config
-      python3
-    ]
-    ++ lib.optionals enableDocumentation [
-      hotdoc
-    ];
+  separateDebugInfo = true;
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    gettext
+    pkg-config
+    python3
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
+  ];
 
   buildInputs = [
     gstreamer
     gst-plugins-base
     ffmpeg-headless
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
   ];
 
-  mesonFlags = [
-    (lib.mesonEnable "doc" enableDocumentation)
-  ];
+  mesonFlags = lib.mapAttrsToList lib.mesonEnable {
+    doc = enableDocumentation;
+    tests = finalAttrs.finalPackage.doCheck;
+  };
 
   postPatch = ''
     patchShebangs \
       scripts/extract-release-date-from-doap-file.py
   '';
 
+  preFixup = ''
+    moveToOutput "lib/gstreamer-1.0/pkgconfig" "$dev"
+  '';
+
   passthru = {
-    updateScript = directoryListingUpdater { };
+    updateScript = directoryListingUpdater { odd-unstable = true; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "FFmpeg plugin for GStreamer";
     homepage = "https://gstreamer.freedesktop.org";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
-    maintainers = [ ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ tmarkus ];
   };
 })

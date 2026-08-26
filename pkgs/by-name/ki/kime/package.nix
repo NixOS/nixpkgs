@@ -7,13 +7,13 @@
   fetchFromGitHub,
   pkg-config,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   withWayland ? true,
   withIndicator ? true,
   dbus,
   libdbusmenu,
   withXim ? true,
-  xorg,
+  libxcb,
   cairo,
   withGtk3 ? true,
   gtk3,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-U3SOHZvgyPwv98wY41dnwSCUg+DTkb/LY6woffrAli8=";
   };
 
@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
       libdbusmenu
     ]
     ++ lib.optionals withXim [
-      xorg.libxcb
+      libxcb
       cairo
     ]
     ++ lib.optionals withGtk3 [ gtk3 ]
@@ -121,16 +121,18 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
     rustc
     cargo
   ];
 
-  RUST_BACKTRACE = 1;
-  # https://github.com/Riey/kime/issues/688
-  RUSTFLAGS = "-Clink-args=-L./target/release";
+  env = {
+    RUST_BACKTRACE = 1;
+    # https://github.com/Riey/kime/issues/688
+    RUSTFLAGS = "-Clink-args=-L./target/release";
+  };
 
   meta = {
     homepage = "https://github.com/Riey/kime";

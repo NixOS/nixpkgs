@@ -3,32 +3,25 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  stdenv,
-  darwin,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "md-tui";
-  version = "0.8.7";
+  version = "0.10.3";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "henriklovhaug";
     repo = "md-tui";
-    tag = "v${version}";
-    hash = "sha256-O+EIhh83nIYE2GWaThkDLIVsYsg62g/6ksS+1fKm4AY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1E3R1pR5f65rMMEa3Wh2I1W7JV+WgJuVN23XNpaxWTc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-h0ikwdGmyBsCJvILJTlDd9x0DXYwblfBcK2wuWHmjYA=";
+  cargoHash = "sha256-IjT5YnU9hJd9trsMEM/lDtZIWd0XFHFesq0XF+j9zPg=";
 
   nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.CoreServices
-    darwin.apple_sdk.frameworks.Security
-  ];
 
   passthru = {
     updateScript = nix-update-script { };
@@ -37,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Markdown renderer in the terminal";
     homepage = "https://github.com/henriklovhaug/md-tui";
-    changelog = "https://github.com/henriklovhaug/md-tui/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/henriklovhaug/md-tui/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       GaetanLepage
@@ -46,4 +39,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.all;
     mainProgram = "mdt";
   };
-}
+})

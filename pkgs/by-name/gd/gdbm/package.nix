@@ -8,14 +8,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdbm";
-  version = "1.24";
+  version = "1.26";
 
   src = fetchurl {
     url = "mirror://gnu/gdbm/gdbm-${finalAttrs.version}.tar.gz";
-    hash = "sha256-aV6YJ/33Y1E/EzkQvH5s/bkYeUOk/slD5XRJcj0rjb8=";
+    hash = "sha256-aiRQShTeSnRBA9y5Nr6Xbfb76IzP8mBl5UwcR5RvSl4=";
   };
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
+
+  strictDeps = true;
+
+  hardeningDisable = [ "strictflexarrays3" ];
 
   configureFlags = [ (lib.enableFeature true "libgdbm-compat") ];
 
@@ -61,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnu.org/software/gdbm/";
     description = "GNU dbm key/value database library";
@@ -83,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl3Plus;
     mainProgram = "gdbmtool";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

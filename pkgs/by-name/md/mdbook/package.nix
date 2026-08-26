@@ -2,14 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   nix,
   rustPlatform,
-  darwin,
-  CoreServices ? darwin.apple_sdk.frameworks.CoreServices,
   installShellFiles,
 }:
 let
-  version = "0.4.48";
+  version = "0.5.4";
 in
 rustPlatform.buildRustPackage rec {
   inherit version;
@@ -19,15 +18,12 @@ rustPlatform.buildRustPackage rec {
     owner = "rust-lang";
     repo = "mdBook";
     tag = "v${version}";
-    hash = "sha256-ZCV8BSoaYIhNZV3Spsd7rsp8D2zTZSdWMuicQrgax2I=";
+    hash = "sha256-1bUMFxPpb9H/pRdCOX0u8Tn8RPmJElDs7o9t5JtRFuU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ZpfzAzqVL7/GaI4C7X0UqZAPFT/Y/OCQ53wDcmgM2zI=";
+  cargoHash = "sha256-OmlcPZuQ1RbyFrF5tuztucgtCA544UHJxEaXh/mfSHQ=";
 
   nativeBuildInputs = [ installShellFiles ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd mdbook \
@@ -47,9 +43,8 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "mdbook";
     homepage = "https://github.com/rust-lang/mdBook";
     changelog = "https://github.com/rust-lang/mdBook/blob/v${version}/CHANGELOG.md";
-    license = [ lib.licenses.mpl20 ];
+    license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
-      havvy
       Frostman
       matthiasbeyer
     ];

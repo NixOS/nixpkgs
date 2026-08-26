@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "termshot";
-  version = "0.5.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "homeport";
     repo = "termshot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fk1Xlgf6WR6dAekv7gZXPfKTEvbnk7FT+mn8UYFbQnQ=";
+    hash = "sha256-YYN5ccfWkzthnwLjZAGgH8nm98Oci+KNYij8MS0/XY0=";
   };
 
-  vendorHash = "sha256-RuIn4JNt4c47p2uiLtmCVYyY0/K1kJpmUboXHA5vhew=";
+  vendorHash = "sha256-fLbRo8f2tNN1vZGsriZ8cL4gU+wa/SfCUBrDLGXd70M=";
 
   ldflags = [
     "-s"
@@ -28,7 +28,6 @@ buildGoModule (finalAttrs: {
   checkFlags = [ "-skip=^TestPtexec$" ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

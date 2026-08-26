@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-utility-libraries";
-  version = "1.4.309.0";
+  version = "1.4.357.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Utility-Libraries";
     rev = "vulkan-sdk-${finalAttrs.version}";
-    hash = "sha256-eXZlxdQB/EEwMzJrg+owxJ2LB1Jtd5OH9Wl+LV9JE8Y=";
+    hash = "sha256-WcSiUe3vB7zUO0vpqcVJkKqhnZXz76ApWaoMO49efXg=";
   };
 
   nativeBuildInputs = [
@@ -24,11 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [ vulkan-headers ];
 
-  meta = with lib; {
+  meta = {
     description = "Set of utility libraries for Vulkan";
     homepage = "https://github.com/KhronosGroup/Vulkan-Utility-Libraries";
-    platforms = platforms.all;
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nickcao ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 })

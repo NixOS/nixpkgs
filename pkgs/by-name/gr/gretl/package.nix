@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gretl";
-  version = "2025a";
+  version = "2026b";
 
   src = fetchurl {
     url = "mirror://sourceforge/gretl/gretl-${finalAttrs.version}.tar.xz";
-    hash = "sha256-5B9V1Z12+Hu00x++u2ndUXWq91k/SXy723DoLOefhEQ=";
+    hash = "sha256-+1f0ki2lRgZ8i+VCqvxaJr53+vJmi0DmUe6MkLcCVj0=";
   };
 
   buildInputs = [
@@ -40,7 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     mpfr
     openblas
     readline
-  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+  ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   nativeBuildInputs = [
     pkg-config
@@ -62,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
       gretl is a cross-platform software package for econometric analysis,
       written in the C programming language.
     '';
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

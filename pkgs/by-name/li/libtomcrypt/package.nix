@@ -7,12 +7,12 @@
   libtommath,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libtomcrypt";
   version = "1.18.2";
 
   src = fetchurl {
-    url = "https://github.com/libtom/libtomcrypt/releases/download/v${version}/crypt-${version}.tar.xz";
+    url = "https://github.com/libtom/libtomcrypt/releases/download/v${finalAttrs.version}/crypt-${finalAttrs.version}.tar.xz";
     sha256 = "113vfrgapyv72lalhd3nkw7jnks8az0gcb5wqn9hj19nhcxlrbcn";
   };
 
@@ -46,15 +46,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Fairly comprehensive, modular and portable cryptographic toolkit";
     homepage = "https://www.libtom.net/LibTomCrypt/";
-    changelog = "https://github.com/libtom/libtomcrypt/raw/v${version}/changes";
-    license = with licenses; [
+    changelog = "https://github.com/libtom/libtomcrypt/raw/v${finalAttrs.version}/changes";
+    license = with lib.licenses; [
       publicDomain
       wtfpl
     ];
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

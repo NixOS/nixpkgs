@@ -59,7 +59,7 @@ in
         '';
         description = ''
           Commands to execute before the config file check. The file to be checked will be
-          available as `bird.conf` in the current directory.
+          available as {file}`bird.conf` in the current directory.
 
           Files created with this option will not be available at service runtime, only during
           build time checking.
@@ -86,13 +86,14 @@ in
       checkPhase = optionalString cfg.checkConfig ''
         ln -s $out bird.conf
         ${cfg.preCheckConfig}
-        bird -d -p -c bird.conf
+        bird -d -p -c bird.conf || { exit=$?; cat -n bird.conf; exit $exit; }
       '';
     };
 
     systemd.services.bird = {
       description = "BIRD Internet Routing Daemon";
       wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
       reloadTriggers = lib.optional cfg.autoReload config.environment.etc."bird/bird.conf".source;
       serviceConfig = {
         Type = "forking";

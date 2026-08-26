@@ -25,7 +25,7 @@ in
       type = types.str;
       default = "";
       description = ''
-        Contents of the `strongswan.conf` file.
+        Contents of the {file}`strongswan.conf` file.
       '';
     };
 

@@ -5,24 +5,24 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "shine";
-  version = "3.1.1";
+  version = "3.1.1-unstable-2023-01-01";
 
   src = fetchFromGitHub {
     owner = "toots";
     repo = "shine";
-    rev = version;
-    sha256 = "06nwylqqji0i1isdprm2m5qsdj4qiywcgnp69c5b55pnw43f07qg";
+    rev = "ab5e3526b64af1a2eaa43aa6f441a7312e013519";
+    hash = "sha256-rlKWVgIl/WVIzwwMuPyWaiwvbpZi5HvKXU3S6qLoN3I=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast fixed-point mp3 encoding library";
     mainProgram = "shineenc";
     homepage = "https://github.com/toots/shine";
-    license = licenses.lgpl2Only;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.lgpl2Only;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

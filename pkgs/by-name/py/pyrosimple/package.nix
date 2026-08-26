@@ -9,19 +9,20 @@
   withInotify ? stdenv.hostPlatform.isLinux,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pyrosimple";
   version = "2.14.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kannibalox";
-    repo = pname;
-    tag = "v${version}";
+    repo = "pyrosimple";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qER73B6wuRczwV23A+NwfDL4oymvSwmauA0uf2AE+kY=";
   };
 
   pythonRelaxDeps = [
+    "parsimonious"
     "prometheus-client"
     "python-daemon"
   ];
@@ -46,9 +47,6 @@ python3.pkgs.buildPythonApplication rec {
       python-box
       tomli-w
     ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      tomli
-    ]
     ++ lib.optional withInotify inotify;
 
   nativeCheckInputs = with python3.pkgs; [
@@ -63,14 +61,11 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "RTorrent client";
     homepage = "https://kannibalox.github.io/pyrosimple/";
-    changelog = "https://github.com/kannibalox/pyrosimple/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      ne9z
-      vamega
-    ];
+    changelog = "https://github.com/kannibalox/pyrosimple/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ vamega ];
   };
-}
+})

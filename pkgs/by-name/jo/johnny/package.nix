@@ -4,19 +4,20 @@
   fetchFromGitHub,
   qt5,
   john,
+  imagemagick,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "johnny";
   version = "2.2";
 
   src = fetchFromGitHub {
     owner = "openwall";
     repo = "johnny";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fwRvyQbRO63iVt9AHlfl+Cv4NRFQmyVsZUQLxmzGjAY=";
   };
 
@@ -29,15 +30,18 @@ stdenv.mkDerivation rec {
     copyDesktopItems
     qt5.wrapQtAppsHook
     qt5.qmake
+    imagemagick
   ];
 
   installPhase = ''
-    install -D ${pname} $out/bin/${pname}
-    wrapProgram $out/bin/${pname} \
+    install -D johnny $out/bin/johnny
+    wrapProgram $out/bin/johnny \
       --prefix PATH : ${lib.makeBinPath [ john ]}
-    install -D README $out/share/doc/${pname}/README
-    install -D LICENSE $out/share/licenses/${pname}/LICENSE
-    install -D resources/icons/${pname}_128.png $out/share/pixmaps/${pname}.png
+    install -D README $out/share/doc/johnny/README
+    install -D LICENSE $out/share/licenses/johnny/LICENSE
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick resources/icons/johnny.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/johnny.png
+    install -D resources/icons/johnny_128.png $out/share/icons/hicolor/128x128/apps/johnny.png
     runHook postInstall
   '';
 
@@ -46,8 +50,8 @@ stdenv.mkDerivation rec {
       name = "Johnny";
       desktopName = "Johnny";
       comment = "A GUI for John the Ripper";
-      icon = pname;
-      exec = pname;
+      icon = "johnny";
+      exec = "johnny";
       terminal = false;
       categories = [
         "Application"
@@ -57,12 +61,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://openwall.info/wiki/john/johnny";
     description = "Open Source GUI frontend for John the Ripper";
     mainProgram = "johnny";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ Misaka13514 ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ Misaka13514 ];
+    platforms = lib.platforms.linux;
   };
-}
+})

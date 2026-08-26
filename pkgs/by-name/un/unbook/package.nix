@@ -7,18 +7,17 @@
   gitUpdater,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "unbook";
   version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "ludios";
     repo = "unbook";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-whWWh/jQ4RkGA3T1VCmt6zhpQQCzh2jASYg69IlfEeo=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-r4RWcz7TSP7wfo9mu8wfOyy7C4PIWkrSt4RyDY3/lQA=";
 
   nativeBuildInputs = [ makeWrapper ];
@@ -29,11 +28,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Ebook to self-contained-HTML converter";
     homepage = "https://unbook.ludios.org";
-    license = licenses.cc0;
-    maintainers = with maintainers; [ jmbaur ];
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [ jmbaur ];
     mainProgram = "unbook";
   };
-}
+})

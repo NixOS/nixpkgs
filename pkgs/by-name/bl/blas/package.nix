@@ -3,6 +3,7 @@
   stdenv,
   lapack-reference,
   openblas,
+  checkPhaseThreadLimitHook,
   isILP64 ? false,
   blasProvider ? openblas,
 }:
@@ -184,6 +185,10 @@ stdenv.mkDerivation {
   outputs = [
     "out"
     "dev"
+  ];
+
+  propagatedNativeBuildInputs = [
+    checkPhaseThreadLimitHook
   ];
 
   meta = (blasProvider'.meta or { }) // {

@@ -2,25 +2,24 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   pyyaml,
   posthog,
   pytestCheckHook,
+  pythonAtLeast,
+  typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ploomber-core";
-  version = "0.2.25";
-
+  version = "0.2.27";
   pyproject = true;
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ploomber";
     repo = "core";
-    tag = version;
-    hash = "sha256-QUEnWFhf42ppoXoz3H/2SHtoPZOi6lbopsrbmEAk+1U=";
+    tag = finalAttrs.version;
+    hash = "sha256-/HlJxaxsGbZ1UIJNwDdzJLR4bey7bv/qsmFmVi8eWjQ=";
   };
 
   build-system = [ setuptools ];
@@ -28,6 +27,7 @@ buildPythonPackage rec {
   dependencies = [
     pyyaml
     posthog
+    typing-extensions
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -37,13 +37,18 @@ buildPythonPackage rec {
     "exceptions" # requires stderr capture
   ];
 
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.14") [
+    # Depends on pre-3.14 attribute access
+    "tests/test_config.py"
+  ];
+
   pythonImportsCheck = [ "ploomber_core" ];
 
-  meta = with lib; {
+  meta = {
     description = "Core module shared across Ploomber projects";
     homepage = "https://github.com/ploomber/core";
-    changelog = "https://github.com/ploomber/core/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ euxane ];
+    changelog = "https://github.com/ploomber/core/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ euxane ];
   };
-}
+})

@@ -5,11 +5,11 @@
   pkg-config,
   alsa-lib,
   freetype,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXext,
-  libXcursor,
+  libx11,
+  libxrandr,
+  libxinerama,
+  libxext,
+  libxcursor,
   makeDesktopItem,
   copyDesktopItems,
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "gbevin";
     repo = "ShowMIDI";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-jANrFZqJZZMTGyNa0sIthoQzaDMdLzpGZqHfxNw8hDg=";
     fetchSubmodules = true;
   };
@@ -33,11 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     alsa-lib
     freetype
-    libX11
-    libXrandr
-    libXinerama
-    libXext
-    libXcursor
+    libx11
+    libxrandr
+    libxinerama
+    libxext
+    libxcursor
   ];
 
   enableParallelBuilding = true;
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dt $out/share/ShowMIDI/themes Themes/*
 
-    install -D Design/icon.png $out/share/icons/hicolor/1024x1024/apps/show-midi.png
+    install -D Design/icon.png $out/share/icons/show-midi.png
 
     mkdir -p $out/bin $out/lib/lv2 $out/lib/vst3
     cd Builds/LinuxMakefile/build/
@@ -92,12 +92,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-lXrandr"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi-platform GUI application to effortlessly visualize MIDI activity";
     homepage = "https://github.com/gbevin/ShowMIDI";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ minijackson ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ minijackson ];
     mainProgram = "ShowMIDI";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

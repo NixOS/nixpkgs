@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy27,
   setuptools,
   pytestCheckHook,
   scipy,
@@ -15,16 +14,14 @@
 
 buildPythonPackage rec {
   pname = "mlxtend";
-  version = "0.23.3";
+  version = "0.24.0";
   pyproject = true;
-
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "rasbt";
     repo = "mlxtend";
     tag = "v${version}";
-    hash = "sha256-c6I0dwu4y/Td2G6m2WP/52W4noQUmQMDvpzXA9RZauo=";
+    hash = "sha256-zDMFfm8VqEfAQd11PZNp7HsoLcqrj3nMqnvKhXaeA04=";
   };
 
   build-system = [ setuptools ];
@@ -38,20 +35,23 @@ buildPythonPackage rec {
     joblib
   ];
 
-  patches = [
-    # https://github.com/rasbt/mlxtend/pull/1119
-    ./0001-fix-test-replace-np.float_-to-np.float64.patch
-  ];
-
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "-sv" ];
+  pytestFlags = [ "-sv" ];
 
   disabledTests = [
     # Type changed in numpy2 test should be updated
     "test_invalid_labels_1"
     "test_default"
     "test_nullability"
+    # see upstream issue https://github.com/rasbt/mlxtend/issues/1161
+    # skip the "TypeError: only 0-dimensional arrays can be converted to Python scalars" failures in test_perceptron
+    "test_standardized_iris_data"
+    "test_progress_1"
+    "test_progress_2"
+    "test_progress_3"
+    "test_score_function"
+    "test_nonstandardized_iris_data"
   ];
 
   disabledTestPaths = [

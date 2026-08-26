@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scite";
-  version = "5.5.6";
+  version = "5.6.5";
 
   src = fetchurl {
     url = "https://www.scintilla.org/scite${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}.tgz";
-    hash = "sha256-VmNP6NepkF7Ln9eh9pfStmch9nwIKKZTOYxkeduSxrI=";
+    hash = "sha256-HXkBz7v+oRfBNTqBhLgXFCMwblk6Mltp6OoR8X5kBL0=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     "prefix=${placeholder "out"}"
   ];
 
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     # GCC 13: error: 'intptr_t' does not name a type
     "-include cstdint"
     "-include system_error"

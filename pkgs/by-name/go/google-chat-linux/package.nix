@@ -5,20 +5,21 @@
   fetchFromGitHub,
   lib,
   makeDesktopItem,
+  nix-update-script,
 }:
 
 buildNpmPackage rec {
   pname = "google-chat-linux";
-  version = "5.29.23-1";
+  version = "5.39.26-1";
 
   src = fetchFromGitHub {
     owner = "squalou";
     repo = "google-chat-linux";
     tag = version;
-    hash = "sha256-JBjxZUs0HUgAkJJBYhNv2SHjpBtAcP09Ah4ATPwpZsQ=";
+    hash = "sha256-ZhVwhUpkY8tPEB16HnuF+SvNKCrrZksmv2VfqC93q4o=";
   };
 
-  npmDepsHash = "sha256-7lKWbXyDpYh1sP9LAV/oA7rfpckSbIucwKT21vBrJ3Y=";
+  npmDepsHash = "sha256-gI4NEtpabHbzWVEt7CkKQVPX8HuUYUSvJss6H47ltrA=";
   dontNpmBuild = true;
 
   nativeBuildInputs = [
@@ -55,6 +56,8 @@ buildNpmPackage rec {
       ];
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Electron-base client for Google Hangouts Chat";

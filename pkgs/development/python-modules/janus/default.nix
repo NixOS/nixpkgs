@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   pytest-asyncio,
   pytest-benchmark,
   pytest-cov-stub,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
     sha256 = "sha256-CXDzjg5yVABJbINKNopn7lUdw7WtCiV+Ey9bRvLnd3A=";
   };
 
-  disabled = pythonOlder "3.6";
-
   propagatedBuildInputs = [ typing-extensions ];
 
   nativeCheckInputs = [
@@ -31,12 +28,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mixed sync-async queue";
     homepage = "https://github.com/aio-libs/janus";
-    license = licenses.asl20;
-    maintainers = [ maintainers.simonchatts ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.simonchatts ];
   };
 }

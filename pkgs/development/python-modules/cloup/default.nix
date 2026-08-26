@@ -5,38 +5,40 @@
   pytestCheckHook,
   click,
   setuptools-scm,
-  pythonOlder,
-  typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cloup";
-  version = "3.0.7";
+  version = "3.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-yFLgoFQapDPGqzGpuLUD9j2Ygekd2vA4TWknll8rQhw=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-Y3weYo/pjz8gpeRNpZGnK0K/VNfUUnGQvzntX2SvdYU=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "setuptools_scm<10" setuptools_scm
+  '';
 
-  propagatedBuildInputs = [ click ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  build-system = [ setuptools-scm ];
+
+  dependencies = [ click ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "cloup" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/janLuke/cloup";
     description = "Click extended with option groups, constraints, aliases, help themes";
-    changelog = "https://github.com/janluke/cloup/releases/tag/v${version}";
+    changelog = "https://github.com/janluke/cloup/releases/tag/v${finalAttrs.version}";
     longDescription = ''
-      Enriches Click with option groups, constraints, command aliases, help sections for subcommands, themes for --help and other stuff.
+      Enriches Click with option groups, constraints, command aliases, help sections for
+      subcommands, themes for --help and other stuff.
     '';
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

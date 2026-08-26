@@ -13,6 +13,7 @@
 # from outside, we can `inherit` them from `pkgs`.
 {
   pkgs,
+  config,
   lib,
   stdenv,
   fetchurl,
@@ -55,11 +56,13 @@ makeScope newScope (
   in
   {
 
-    inherit callPackage buildOctavePackage computeRequiredOctavePackages;
+    inherit buildOctavePackage computeRequiredOctavePackages;
 
     inherit (callPackage ../development/interpreters/octave/hooks { })
       writeRequiredOctavePackagesHook
       ;
+
+    # keep-sorted start block=yes newline_separated=yes case=no numeric=yes skip_lines=1
 
     arduino = callPackage ../development/octave-modules/arduino {
       inherit (pkgs) arduino-core-unwrapped;
@@ -83,6 +86,8 @@ makeScope newScope (
 
     dataframe = callPackage ../development/octave-modules/dataframe { };
 
+    datatypes = callPackage ../development/octave-modules/datatypes { };
+
     dicom = callPackage ../development/octave-modules/dicom { };
 
     divand = callPackage ../development/octave-modules/divand { };
@@ -91,15 +96,9 @@ makeScope newScope (
 
     econometrics = callPackage ../development/octave-modules/econometrics { };
 
-    fem-fenics = callPackage ../development/octave-modules/fem-fenics {
-      # PLACEHOLDER until KarlJoad gets dolfin packaged.
-      dolfin = null;
-      ffc = null;
-    };
+    financial = callPackage ../development/octave-modules/financial { };
 
     fits = callPackage ../development/octave-modules/fits { };
-
-    financial = callPackage ../development/octave-modules/financial { };
 
     fpl = callPackage ../development/octave-modules/fpl { };
 
@@ -119,19 +118,23 @@ makeScope newScope (
       inherit (pkgs) gsl;
     };
 
-    image = callPackage ../development/octave-modules/image { };
+    image = callPackage ../development/octave-modules/image {
+      inherit (pkgs)
+        gnuplot
+        makeFontsConf
+        writableTmpDirAsHomeHook
+        ;
+    };
 
     image-acquisition = callPackage ../development/octave-modules/image-acquisition { };
 
     instrument-control = callPackage ../development/octave-modules/instrument-control { };
 
+    interval = callPackage ../development/octave-modules/interval { };
+
     io = callPackage ../development/octave-modules/io {
       inherit (octave) enableJava;
     };
-
-    interval = callPackage ../development/octave-modules/interval { };
-
-    level-set = callPackage ../development/octave-modules/level-set { };
 
     linear-algebra = callPackage ../development/octave-modules/linear-algebra { };
 
@@ -154,7 +157,7 @@ makeScope newScope (
     miscellaneous = callPackage ../development/octave-modules/miscellaneous { };
 
     msh = callPackage ../development/octave-modules/msh {
-      # PLACEHOLDER until KarlJoad gets dolfin packaged.
+      # PLACEHOLDER until ravenjoad gets dolfin packaged.
       dolfin = null;
     };
 
@@ -182,8 +185,6 @@ makeScope newScope (
 
     optiminterp = callPackage ../development/octave-modules/optiminterp { };
 
-    parallel = callPackage ../development/octave-modules/parallel { };
-
     quaternion = callPackage ../development/octave-modules/quaternion { };
 
     queueing = callPackage ../development/octave-modules/queueing { };
@@ -192,13 +193,11 @@ makeScope newScope (
 
     sockets = callPackage ../development/octave-modules/sockets { };
 
-    sparsersb = callPackage ../development/octave-modules/sparsersb { };
-
-    stk = callPackage ../development/octave-modules/stk { };
-
     splines = callPackage ../development/octave-modules/splines { };
 
     statistics = callPackage ../development/octave-modules/statistics { };
+
+    stk = callPackage ../development/octave-modules/stk { };
 
     strings = callPackage ../development/octave-modules/strings { };
 
@@ -208,21 +207,9 @@ makeScope newScope (
       inherit (octave) python;
     };
 
-    tisean = callPackage ../development/octave-modules/tisean { };
-
     tsa = callPackage ../development/octave-modules/tsa { };
 
-    vibes = callPackage ../development/octave-modules/vibes {
-      vibes = null;
-      # TODO: Need to package vibes:
-      # https://github.com/ENSTABretagneRobotics/VIBES
-    };
-
     video = callPackage ../development/octave-modules/video { };
-
-    vrml = callPackage ../development/octave-modules/vrml {
-      freewrl = null;
-    };
 
     windows = callPackage ../development/octave-modules/windows { };
 
@@ -230,5 +217,15 @@ makeScope newScope (
       inherit (pkgs) zeromq autoreconfHook;
     };
 
+    # keep-sorted end
+  }
+  // lib.optionalAttrs config.allowAliases {
+    fem-fenics = throw "octavePackages.fem-fenics has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
+    level-set = throw "octavePackages.level-set has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
+    parallel = throw "octavePackages.parallel has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
+    sparsersb = throw "octavePackages.sparsersb has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
+    tisean = throw "octavePackages.tisean has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
+    vibes = throw "octavePackages.vibes has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
+    vrml = throw "octavePackages.vrml has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
   }
 )

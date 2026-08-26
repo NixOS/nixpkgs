@@ -3,61 +3,74 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  stdenv,
-  darwin,
   c-ares,
   python3,
   lua5_4,
   capnproto,
-  cmake,
+  openssl,
+  rust-bindgen,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
-  pname = "g3";
-  version = "v1.10.4";
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "g3proxy";
+  version = "1.12.3";
 
   src = fetchFromGitHub {
     owner = "bytedance";
     repo = "g3";
-    tag = "g3proxy-${version}";
-    hash = "sha256-uafKYyzjGdtC+oMJG1wWOvgkSht/wTOzyODcPoTfOnU=";
+    tag = "g3proxy-v${finalAttrs.version}";
+    hash = "sha256-oVjHJPLNWV2bSJcm7La1z0M93kooYBZ+lSayYQ4aUxg=";
   };
 
-  cargoHash = "sha256-NbrJGGnpZkF7ZX3MqrMsZ03tWkN/nqWahh00O3IJGOw=";
-  useFetchCargoVendor = true;
+  cargoHash = "sha256-zHnvrSI3NLyL7eP5PjB0xvLC7SjG/4UifR3OlqwwVIg=";
 
-  # TODO: can we unvendor AWS LC somehow?
-  buildFeatures = [
-    "vendored-aws-lc"
-    "rustls-aws-lc"
+  cargoBuildFlags = [
+    "-p"
+    "g3proxy"
+    "-p"
+    "g3proxy-ctl"
+    "-p"
+    "g3proxy-lua"
+    "-p"
+    "g3proxy-ftp"
+    "-p"
+    "g3mkcert"
+    "-p"
+    "g3fcgen"
+    "-p"
+    "g3iploc"
+    "-p"
+    "g3statsd"
   ];
-
-  # aws-lc/crypto compilation will trigger `strictoverflow` errors.
-  hardeningDisable = [ "strictoverflow" ];
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   nativeBuildInputs = [
     pkg-config
-    rustPlatform.bindgenHook
     python3
     capnproto
-    cmake
+    rust-bindgen
   ];
 
-  buildInputs =
-    [
-      c-ares
-      lua5_4
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
+  buildInputs = [
+    c-ares
+    lua5_4
+    openssl
+  ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^g3proxy-v([0-9.]+)$"
     ];
+  };
 
   meta = {
     description = "Enterprise-oriented Generic Proxy Solutions";
     homepage = "https://github.com/bytedance/g3";
-    changelog = "https://github.com/bytedance/g3/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/bytedance/g3/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ raitobezarius ];
     mainProgram = "g3proxy";
   };
-}
+})

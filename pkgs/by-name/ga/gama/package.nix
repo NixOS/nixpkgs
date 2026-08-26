@@ -8,12 +8,12 @@
   texinfo,
   zip,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gama";
   version = "2.28";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/gama/gama-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-Xcc/4JB7hyM+KHeO32+JlQWUBfH8RXuOL3Z2P0imaxo=";
   };
 
@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
   ];
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tools for adjustment of geodetic networks";
     homepage = "https://www.gnu.org/software/gama/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
   };
-}
+})

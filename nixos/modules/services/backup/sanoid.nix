@@ -57,6 +57,42 @@ let
       type = with lib.types; nullOr bool;
       default = null;
     };
+
+    pre_snapshot_script = lib.mkOption {
+      description = "Script to run before taking snapshot.";
+      type = with lib.types; nullOr str;
+      default = null;
+    };
+
+    post_snapshot_script = lib.mkOption {
+      description = "Script to run after taking snapshot.";
+      type = with lib.types; nullOr str;
+      default = null;
+    };
+
+    pruning_script = lib.mkOption {
+      description = "Script to run after pruning snapshot.";
+      type = with lib.types; nullOr str;
+      default = null;
+    };
+
+    no_inconsistent_snapshot = lib.mkOption {
+      description = "Whether to take a snapshot if the pre script fails";
+      type = with lib.types; nullOr bool;
+      default = null;
+    };
+
+    force_post_snapshot_script = lib.mkOption {
+      description = "Whether to run the post script if the pre script fails";
+      type = with lib.types; nullOr bool;
+      default = null;
+    };
+
+    script_timeout = lib.mkOption {
+      description = "Time limit for pre/post/pruning script execution time (<=0 for infinite).";
+      type = with lib.types; nullOr int;
+      default = null;
+    };
   };
 
   datasetOptions = rec {
@@ -239,7 +275,7 @@ in
             "${cfg.package}/bin/sanoid"
             "--cron"
             "--configdir"
-            (pkgs.writeTextDir "sanoid.conf" configFile)
+            "/etc/sanoid"
           ]
           ++ cfg.extraArgs
         );
@@ -254,6 +290,8 @@ in
       after = [ "zfs.target" ];
       startAt = cfg.interval;
     };
+
+    environment.etc."sanoid/sanoid.conf".text = configFile;
   };
 
   meta.maintainers = with lib.maintainers; [ lopsided98 ];

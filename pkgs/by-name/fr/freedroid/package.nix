@@ -47,6 +47,9 @@ stdenv.mkDerivation rec {
     touch NEWS
   '';
 
+  # DOes not build on -std=c23 due to `bool` collision.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   postInstall = ''
     mkdir -p $out/share/icons/hicolor/32x32/apps
     convert graphics/paraicon.bmp $out/share/icons/hicolor/32x32/apps/freedroid.png
@@ -66,13 +69,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Clone of the classic game 'Paradroid' on Commodore 64";
     mainProgram = "freedroid";
     homepage = "https://github.com/ReinhardPrix/FreedroidClassic";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ iblech ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ iblech ];
+    platforms = lib.platforms.unix;
     # Builds but fails to render to the screen at runtime.
     broken = stdenv.hostPlatform.isDarwin;
   };

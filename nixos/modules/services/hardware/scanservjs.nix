@@ -13,7 +13,8 @@ let
     tesseract = lib.getExe pkgs.tesseract;
     # it defaults to config/devices.json, but "config" dir doesn't exist by default and scanservjs doesn't create it
     devicesPath = "devices.json";
-  } // cfg.settings;
+  }
+  // cfg.settings;
   settingsFormat = pkgs.formats.json { };
 
   leafs =
@@ -123,6 +124,12 @@ in
       createHome = true;
     };
     users.groups.scanservjs = { };
+
+    systemd.tmpfiles.rules = [
+      "d ${cfg.stateDir}/data 0755 scanservjs scanservjs - -"
+      "d ${cfg.stateDir}/data/preview 0755 scanservjs scanservjs - -"
+      "L+ ${cfg.stateDir}/data/preview/default.jpg - - - - ${package}/lib/data/preview/default.jpg"
+    ];
 
     systemd.services.scanservjs = {
       description = "scanservjs";

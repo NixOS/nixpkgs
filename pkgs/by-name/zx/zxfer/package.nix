@@ -14,14 +14,14 @@
   zfs,
 }:
 
-resholve.mkDerivation rec {
+resholve.mkDerivation (finalAttrs: {
   pname = "zxfer";
   version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "allanjude";
     repo = "zxfer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-11SQJcD3GqPYBIgaycyKkc62/diVKPuuj2Or97j+NZY=";
   };
 
@@ -77,12 +77,12 @@ resholve.mkDerivation rec {
     execer = [ "cannot:${rsync}/bin/rsync" ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Popular script for managing ZFS snapshot replication";
     homepage = "https://github.com/allanjude/zxfer";
-    changelog = "https://github.com/allanjude/zxfer/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with lib.maintainers; [ urandom ];
+    changelog = "https://github.com/allanjude/zxfer/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
     mainProgram = "zxfer";
   };
-}
+})

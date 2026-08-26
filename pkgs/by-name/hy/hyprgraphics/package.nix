@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc16Stdenv,
   fetchFromGitHub,
   nix-update-script,
   cmake,
@@ -8,22 +8,27 @@
   cairo,
   file,
   hyprutils,
+  lcms2,
+  libGL,
+  libdrm,
   libjpeg,
   libjxl,
+  librsvg,
   libspng,
   libwebp,
+  pango,
   pixman,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprgraphics";
-  version = "0.1.3";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprgraphics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-prQ5JKopXtzCMX2eT3dXbaVvGmzjMRE2bXStQDdazpM=";
+    hash = "sha256-48DubZbx8PDfuJkksNgi5aWFnX/Rq1OUaLsUvsdf2Bo=";
   };
 
   nativeBuildInputs = [
@@ -35,10 +40,15 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     file
     hyprutils
+    lcms2
+    libGL
+    libdrm
     libjpeg
     libjxl
+    librsvg
     libspng
     libwebp
+    pango
     pixman
   ];
 
@@ -49,12 +59,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
+
   passthru = {
     updateScript = nix-update-script { };
   };
 
   meta = {
     homepage = "https://github.com/hyprwm/hyprgraphics";
+    changelog = "https://github.com/hyprwm/hyprgraphics/releases/tag/${finalAttrs.src.tag}";
     description = "Cpp graphics library for Hypr* ecosystem";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;

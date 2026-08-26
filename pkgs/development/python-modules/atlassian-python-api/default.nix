@@ -11,25 +11,26 @@
   requests-kerberos,
   requests-oauthlib,
   six,
+  typing-extensions,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "atlassian-python-api";
-  version = "3.41.21";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "4.0.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "atlassian-api";
-    repo = pname;
-    tag = version;
-    hash = "sha256-m8B6t9tTlef8cdsh/wnsc0iyNLsB0RYjUhq/bA9MeII=";
+    repo = "atlassian-python-api";
+    tag = finalAttrs.version;
+    hash = "sha256-8zfM/3apGMo6sTPA5ESu2SkgVOJUA09Wz/pGR12fA7c=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     beautifulsoup4
     deprecated
     jmespath
@@ -39,17 +40,18 @@ buildPythonPackage rec {
     requests-kerberos
     requests-oauthlib
     six
+    typing-extensions
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "atlassian" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Atlassian REST API Wrapper";
     homepage = "https://github.com/atlassian-api/atlassian-python-api";
-    changelog = "https://github.com/atlassian-api/atlassian-python-api/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ arnoldfarkas ];
+    changelog = "https://github.com/atlassian-api/atlassian-python-api/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
-}
+})

@@ -8,19 +8,20 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-ai-vision-imageanalysis";
-  version = "1.0.0b3";
+  version = "1.0.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-sdk-for-python";
-    tag = "azure-ai-vision-imageanalysis_${version}";
-    hash = "sha256-Hkj9mrjCc8Li8z6e1BjpzANRVx6+DjN0MhTLANMT78E=";
+    tag = "azure-ai-vision-imageanalysis_${finalAttrs.version}";
+    hash = "sha256-gkOKD7koHmsApnylnlQ+/PkbhyUKwigeawznPlU1jvM=";
   };
 
-  sourceRoot = "${src.name}/sdk/vision/azure-ai-vision-imageanalysis";
+  sourceRoot = "${finalAttrs.src.name}/sdk/vision/azure-ai-vision-imageanalysis";
 
   build-system = [ setuptools ];
 
@@ -37,7 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Azure Image Analysis client library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/vision/azure-ai-vision-imageanalysis";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/${finalAttrs.src.tag}/sdk/vision/azure-ai-vision-imageanalysis/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

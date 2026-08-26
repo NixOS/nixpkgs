@@ -14,7 +14,6 @@
   zlib,
   python3,
   ncurses,
-  darwin,
 }:
 
 let
@@ -52,16 +51,13 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-  ];
-
   # propagate since gprbuild needs to find referenced .gpr files
   # and all dependency C libraries when statically linking a
   # downstream executable.
   propagatedBuildInputs = [
     gnatcoll-core
-  ] ++ libsFor."${component}" or [ ];
+  ]
+  ++ libsFor."${component}" or [ ];
 
   # explicit flag for GPL acceptance because upstream
   # allows a gcc runtime exception for all bindings
@@ -82,11 +78,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GNAT Components Collection - Bindings to C libraries";
     homepage = "https://github.com/AdaCore/gnatcoll-bindings";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

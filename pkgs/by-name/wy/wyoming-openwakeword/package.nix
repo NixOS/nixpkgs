@@ -4,19 +4,19 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "wyoming-openwakeword";
-  version = "1.10.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "wyoming-openwakeword";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5suYJ+Z6ofVAysoCdHi5b5K0JTYaqeFZ32Cm76wC5LU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yYDZ1wOhCTdYGeRmtbOgx5/zkF0Baxmha7eO/i0p49g=";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
     setuptools
   ];
 
@@ -24,12 +24,8 @@ python3Packages.buildPythonApplication rec {
     "wyoming"
   ];
 
-  pythonRemoveDeps = [
-    "tflite-runtime-nightly"
-  ];
-
-  propagatedBuildInputs = with python3Packages; [
-    tensorflow-bin
+  dependencies = with python3Packages; [
+    pyopen-wakeword
     wyoming
   ];
 
@@ -37,12 +33,12 @@ python3Packages.buildPythonApplication rec {
     "wyoming_openwakeword"
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/rhasspy/wyoming-openwakeword/blob/v${version}/CHANGELOG.md";
+  meta = {
+    changelog = "https://github.com/rhasspy/wyoming-openwakeword/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Open source voice assistant toolkit for many human languages";
     homepage = "https://github.com/rhasspy/wyoming-openwakeword";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "wyoming-openwakeword";
   };
-}
+})

@@ -2,30 +2,32 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
   nixosTests,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "static-web-server";
-  version = "2.36.1";
+  version = "2.44.0";
 
   src = fetchFromGitHub {
     owner = "static-web-server";
     repo = "static-web-server";
-    rev = "v${version}";
-    hash = "sha256-labHPDsPRyF/cxHFoOJ5n+tBFn1KF2QdB/hZnDGWf1Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1DhPGQUBPQ2nKVYj6YfZK8bEZZlr0rGL+G+b6ss0CUQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Sri2NTCN5vIf/5KVI+BtyOBAjkXoGpOJjP2iOh/M5NU=";
+  cargoHash = "sha256-bBg51aT1qGYvwElFXkomB8CFg8UFr8atycyaMMtSNBw=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  # static-web-server already has special handling for files with modification
+  # time = Unix epoch, but the nix store is Unix epoch + 1 second.
+  patches = [ ./include-unix-time-plus-one.diff ];
 
-  # Some tests rely on timestamps newer than 18 Nov 1974 00:00:00
-  preCheck = ''
-    find docker/public -exec touch -m {} \;
+  # Some tests which implicitly relied on the above behavior now break.
+  # Force an mtime update to everything except symbolic inks to fix.
+  postUnpack = ''
+    find . -not -type l -exec touch -m {} +
   '';
 
   # Need to copy in the systemd units for systemd.packages to discover them
@@ -33,22 +35,28 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 -t $out/lib/systemd/system/ systemd/static-web-server.{service,socket}
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) static-web-server;
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) static-web-server;
+    };
   };
 
-  meta = with lib; {
-    description = "Asynchronous web server for static files-serving";
+  meta = {
+    description = "A cross-platform, high-performance and asynchronous web server for static files-serving";
     homepage = "https://static-web-server.net/";
-    changelog = "https://github.com/static-web-server/static-web-server/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    changelog = "https://github.com/static-web-server/static-web-server/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [
-      figsoda
+    maintainers = with lib.maintainers; [
       misilelab
+      progrm_jarvis
     ];
     mainProgram = "static-web-server";
   };
-}
+})

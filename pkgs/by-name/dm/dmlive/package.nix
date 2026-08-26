@@ -7,8 +7,7 @@
   makeWrapper,
   openssl,
   mpv,
-  ffmpeg_6,
-  nodejs,
+  ffmpeg,
 }:
 
 let
@@ -20,17 +19,16 @@ in
 
 rustPlatform.buildRustPackage {
   pname = "dmlive";
-  version = "5.5.8-unstable-2025-04-06";
+  version = "5.7.0-unstable-2026-01-02";
 
   src = fetchFromGitHub {
     owner = "THMonster";
     repo = "dmlive";
-    rev = "b066a637093871de9962e08d4f0ae0b77bd8f1f4"; # no tag
-    hash = "sha256-pAsxr6zGCDZ0qysGT1+2+5+WKI2QopGxnZWpfnxk/fI=";
+    rev = "47b06e57fc0fa9cf888f7c054f776a73d65e77ce"; # no tag
+    hash = "sha256-Q1QOJZ6VW65MG0wzJAgW9p4mF6a48qYRdDaeQyDTbk8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-GVko8GK5Muha4uqDMgk7VkFoFCVcmk0vM1GUELvSzgM=";
+  cargoHash = "sha256-hRJ81Opxh3tHHZAVTXzQKTmv+psbeGW1KHyoRBfnnWI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -45,8 +43,7 @@ rustPlatform.buildRustPackage {
     wrapProgram "$out/bin/dmlive" --suffix PATH : "${
       lib.makeBinPath [
         mpv
-        ffmpeg_6
-        nodejs
+        ffmpeg
       ]
     }"
     install -Dm644 ${desktop} $out/share/applications/dmlive-mime.desktop
@@ -59,6 +56,9 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/THMonster/dmlive";
     license = lib.licenses.mit;
     mainProgram = "dmlive";
-    maintainers = with lib.maintainers; [ nickcao ];
+    maintainers = with lib.maintainers; [
+      nickcao
+      rebmit
+    ];
   };
 }

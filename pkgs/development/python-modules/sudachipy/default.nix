@@ -9,19 +9,22 @@
   sudachi-rs,
   setuptools-rust,
   pytestCheckHook,
+  pythonAtLeast,
   sudachidict-core,
   tokenizers,
   sudachipy,
 }:
 
 buildPythonPackage rec {
+  format = "setuptools";
   pname = "sudachipy";
   inherit (sudachi-rs) src version;
 
+  disabled = pythonAtLeast "3.14"; # The pyo3 version used does not support 3.14+
+
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-/VKveTtB8BbWgRBEzWBjrSrW84uFcz08cz6tZTuMMeE=";
+    inherit pname version src;
+    hash = "sha256-qWuFY97qPoKVxWp29ywaMEr2fTc0Y4wDR9LK+40r6QI";
   };
 
   nativeBuildInputs = [

@@ -10,13 +10,13 @@
 buildHomeAssistantComponent rec {
   owner = "ollo69";
   domain = "smartthinq_sensors";
-  version = "0.41.1";
+  version = "0.43.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "ha-smartthinq-sensors";
     rev = "v${version}";
-    hash = "sha256-L0diABbUq/0wmwvhHeMOg6ieNrvM+LWZ/ynezEpBblk=";
+    hash = "sha256-QD7p6yldjqgcZTRjztuLsHTBh+PDOQjLq5BGjw5yg8o=";
   };
 
   dependencies = [
@@ -25,11 +25,11 @@ buildHomeAssistantComponent rec {
     xmltodict
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Home Assistant custom integration for SmartThinQ LG devices configurable with Lovelace User Interface";
     homepage = "https://github.com/ollo69/ha-smartthinq-sensors";
     changelog = "https://github.com/ollo69/ha-smartthinq-sensors/releases/tag/v${version}";
-    maintainers = with maintainers; [ k900 ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ k900 ];
+    license = lib.licenses.asl20;
   };
 }

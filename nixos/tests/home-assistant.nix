@@ -11,7 +11,10 @@ in
   meta.maintainers = lib.teams.home-assistant.members;
 
   nodes.hass =
-    { pkgs, ... }:
+    {
+      pkgs,
+      ...
+    }:
     {
       services.postgresql = {
         enable = true;
@@ -23,6 +26,9 @@ in
           }
         ];
       };
+
+      # required for dbus activation in the bluetooth component
+      hardware.bluetooth.enable = true;
 
       services.home-assistant = {
         enable = true;
@@ -65,6 +71,11 @@ in
           mini-graph-card
         ];
 
+        # test loading themes
+        themes = with pkgs.home-assistant-themes; [
+          material-you-theme
+        ];
+
         config = {
           homeassistant = {
             name = "Home";
@@ -77,11 +88,30 @@ in
           # configure the recorder component to use the postgresql db
           recorder.db_url = "postgresql://@/hass";
 
-          # we can't load default_config, because the updater requires
-          # network access and would cause an error, so load frontend
-          # here explicitly.
-          # https://www.home-assistant.io/integrations/frontend/
-          frontend = { };
+          # this is effecitvely default_config (2026.5.0), but with components
+          # skipped that would cause ERRORs in the sandbox
+          bluetooth = { };
+          cloud = { };
+          conversation = { };
+          dhcp = { };
+          energy = { };
+          file = { };
+          # Requires go2rtc service
+          # go2rtc = { };
+          history = { };
+          # Requires DNS and HTTP queries
+          # homeassistant_alerts = { };
+          logbook = { };
+          media_source = { };
+          mobile_app = { };
+          my = { };
+          ssdp = { };
+          stream = { };
+          sun = { };
+          usage_prediction = { };
+          usb = { };
+          webhook = { };
+          zeroconf = { };
 
           # include some popular integrations, that absolutely shouldn't break
           knx = { };
@@ -128,16 +158,22 @@ in
           ];
         };
         lovelaceConfigWritable = true;
+      };
 
-        blueprints.automation = [
-          (pkgs.fetchurl {
-            url = "https://github.com/home-assistant/core/raw/2025.1.4/homeassistant/components/automation/blueprints/motion_light.yaml";
-            hash = "sha256-4HrDX65ycBMfEY2nZ7A25/d3ZnIHdpHZ+80Cblp+P5w=";
-          })
-        ];
-        blueprints.template = [
-          "${pkgs.home-assistant.src}/homeassistant/components/template/blueprints/inverted_binary_sensor.yaml"
-        ];
+      # Add blueprints next, because we want to test the installation of the default blueprints first
+      specialisation.addBlueprints = {
+        inheritParentConfig = true;
+        configuration.services.home-assistant = {
+          blueprints.automation = [
+            (pkgs.fetchurl {
+              url = "https://github.com/home-assistant/core/raw/2025.1.4/homeassistant/components/automation/blueprints/motion_light.yaml";
+              hash = "sha256-4HrDX65ycBMfEY2nZ7A25/d3ZnIHdpHZ+80Cblp+P5w=";
+            })
+          ];
+          blueprints.template = [
+            "${pkgs.home-assistant.src}/homeassistant/components/template/blueprints/inverted_binary_sensor.yaml"
+          ];
+        };
       };
 
       # Cause a configuration change inside `configuration.yml` and verify that the process is being reloaded.
@@ -219,6 +255,11 @@ in
           hass.succeed("grep -q 'mini-graph-card-bundle.js' '${configDir}/configuration.yaml'")
           hass.succeed("curl --fail http://localhost:8123/local/nixos-lovelace-modules/mini-graph-card-bundle.js")
 
+      with subtest("Check that themes are referenced and installed"):
+          hass.succeed("grep -q '!include_dir_merge_named.*themes' '${configDir}/configuration.yaml'")
+          themes_dir = hass.succeed("sed -n 's/.*!include_dir_merge_named \\(.*\\)/\\1/p' '${configDir}/configuration.yaml'").strip()
+          hass.succeed(f"test -f {themes_dir}/material_you.yaml")
+
       with subtest("Check that optional dependencies are in the PYTHONPATH"):
           env = get_unit_property("Environment")
           python_path = env.split("PYTHONPATH=")[1].split()[0]
@@ -237,7 +278,16 @@ in
       with subtest("Check extra components are considered in systemd unit hardening"):
           hass.succeed("systemctl show -p DeviceAllow home-assistant.service | grep -q char-ttyUSB")
 
-      with subtest("Check that blueprints are installed"):
+      with subtest("Check that default blueprints are copied writable"):
+          hass.succeed("stat -c '%a' ${configDir}/blueprints/automation/homeassistant | grep 700")
+          hass.succeed("stat -c '%a' ${configDir}/blueprints/automation/homeassistant/motion_light.yaml | grep 600")
+          # Delete blueprints, so we can check the declarative setup next
+          hass.execute("rm -rf ${configDir}/blueprints")
+
+      with subtest("Check that configured blueprints are installed"):
+          cursor = get_journal_cursor()
+          hass.succeed("${system}/specialisation/addBlueprints/bin/switch-to-configuration test")
+          wait_for_homeassistant(cursor)
           hass.succeed("test -L '${configDir}/blueprints/automation/motion_light.yaml'")
           hass.succeed("test -L '${configDir}/blueprints/template/inverted_binary_sensor.yaml'")
 
@@ -273,7 +323,7 @@ in
           wait_for_homeassistant(cursor)
 
       with subtest("Check that no errors were logged"):
-          hass.fail("journalctl -u home-assistant -o cat | grep -q ERROR")
+          hass.fail("journalctl -u home-assistant -o cat | grep -q 'ERROR ('")
 
       with subtest("Check systemd unit hardening"):
           hass.log(hass.succeed("systemctl cat home-assistant.service"))

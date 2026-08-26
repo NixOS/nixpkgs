@@ -25,16 +25,17 @@
   xxhash,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uproot";
-  version = "5.6.1";
+  version = "5.7.6";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "uproot5";
-    tag = "v${version}";
-    hash = "sha256-45u6Jky5NRrRVCEazte1gzAZfmFR9B/AYR2DHK85Rz0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9dUquO9B1WHPy8fjbaZVpdhY/2EtK+lxYp08tXuV3xY=";
   };
 
   build-system = [
@@ -94,6 +95,7 @@ buildPythonPackage rec {
     # Tests that try to download files
     "tests/test_0066_fix_http_fallback_freeze.py"
     "tests/test_0220_contiguous_byte_ranges_in_http.py"
+    "tests/test_1610_read_TMatrixTSym_from_ttree.py"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -103,8 +105,8 @@ buildPythonPackage rec {
   meta = {
     description = "ROOT I/O in pure Python and Numpy";
     homepage = "https://github.com/scikit-hep/uproot5";
-    changelog = "https://github.com/scikit-hep/uproot5/releases/tag/v${version}";
+    changelog = "https://github.com/scikit-hep/uproot5/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

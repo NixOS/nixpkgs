@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "7.1.1-1";
+  version = "7.1.4-3";
 in
 
 (ffmpeg_7-full.override {
@@ -13,8 +13,8 @@ in
   source = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-ffmpeg";
-    rev = "v${version}";
-    hash = "sha256-gu6+fOCcrGIZiR2hMl9tk97OmCmewOVJibz52DNpL1Q=";
+    tag = "v${version}";
+    hash = "sha256-3aPiR4BJrR/5UFKRbrK8IbyW6HN9wC6oTSYKH4Ak4EU=";
   };
 }).overrideAttrs
   (old: {
@@ -38,7 +38,10 @@ in
       changelog = "https://github.com/jellyfin/jellyfin-ffmpeg/releases/tag/v${version}";
       description = "${old.meta.description} (Jellyfin fork)";
       homepage = "https://github.com/jellyfin/jellyfin-ffmpeg";
-      maintainers = with lib.maintainers; [ justinas ];
+      maintainers = with lib.maintainers; [
+        dotlambda
+        justinas
+      ];
       pkgConfigModules = [ "libavutil" ];
     };
   })

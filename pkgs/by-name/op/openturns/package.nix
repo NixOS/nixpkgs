@@ -4,7 +4,6 @@
   ceres-solver,
   cmake,
   cminpack,
-  darwin,
   dlib,
   fetchFromGitHub,
   hdf5,
@@ -18,56 +17,50 @@
   spectra,
   stdenv,
   swig,
-  tbb,
+  onetbb,
   # Boolean flags
   runTests ? false, # tests take an hour to build on a 48-core machine
   enablePython ? false,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) Accelerate;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openturns";
-  version = "1.24";
+  version = "1.26";
 
   src = fetchFromGitHub {
     owner = "openturns";
     repo = "openturns";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-88wxgifLuF/P/qeMLVP0S5Agutf022Dsysu38mh9+8w=";
+    hash = "sha256-2z4tTTvDpc+AsPbiL528Y5zNf62v1u4nVaUpk22d+wo=";
   };
 
   nativeBuildInputs = [
     cmake
-  ] ++ lib.optionals enablePython [ python3Packages.sphinx ];
+  ]
+  ++ lib.optionals enablePython [ python3Packages.sphinx ];
 
-  buildInputs =
-    [
-      (lib.getLib primesieve)
-      boost
-      ceres-solver
-      cminpack
-      dlib
-      hdf5
-      hmat-oss
-      ipopt
-      libxml2
-      nlopt
-      pagmo2
-      spectra
-      swig
-      tbb
-    ]
-    ++ lib.optionals enablePython [
-      python3Packages.dill
-      python3Packages.matplotlib
-      python3Packages.psutil
-      python3Packages.python
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Accelerate
-    ];
+  buildInputs = [
+    (lib.getLib primesieve)
+    boost
+    ceres-solver
+    cminpack
+    dlib
+    hdf5
+    hmat-oss
+    ipopt
+    libxml2
+    nlopt
+    pagmo2
+    spectra
+    swig
+    onetbb
+  ]
+  ++ lib.optionals enablePython [
+    python3Packages.dill
+    python3Packages.matplotlib
+    python3Packages.psutil
+    python3Packages.python
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_PYTHON" enablePython)

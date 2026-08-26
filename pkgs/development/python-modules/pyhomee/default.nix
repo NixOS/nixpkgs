@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyhomee";
-  version = "1.2.8";
+  version = "1.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Taraman17";
     repo = "pyHomee";
     tag = "v${version}";
-    hash = "sha256-GBDnfMkQB8BSiYDyoz2l2XHPuMpf6WsjalNYvSREqK8=";
+    hash = "sha256-wNVZySZMrA+doA3mYF+3Ydqf0nUAmnkfLYg0EEmmukA=";
   };
 
   build-system = [ setuptools ];
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/Taraman17/pyHomee/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Taraman17/pyHomee/releases/tag/${src.tag}";
     description = "Python library to interact with homee";
     homepage = "https://github.com/Taraman17/pyHomee";
     license = lib.licenses.mit;

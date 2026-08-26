@@ -1,47 +1,41 @@
 {
   lib,
-  coreutils,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
-  getopt,
-  libcap,
-  gnused,
-  nixosTests,
-  testers,
   autoreconfHook,
   po4a,
+  libcap,
+  getopt,
+  gnused,
+  coreutils,
+  versionCheckHook,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.36";
+  version = "1.38.1";
   pname = "fakeroot";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
+    domain = "salsa.debian.org";
     owner = "clint";
     repo = "fakeroot";
-    rev = "upstream/${finalAttrs.version}";
-    domain = "salsa.debian.org";
-    hash = "sha256-QNScrkX2Vffsj/I5EJO8qs5AHQ9b5s6nHLHQKUdRzLE=";
+    # The upstream/1.38.1 tag has been rewritten twice (gbp re-imports),
+    # so pin the commit it currently points to instead of the tag.
+    rev = "225d248bdacff1240e27a4473a736326aac940f5"; # upstream/1.38.1
+    hash = "sha256-1Xmb8OPZSVP4xtSBGuwwKwdVQXixEugMgQfvAJueJAg=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isLinux [
-    ./einval.patch
-
-    # patches needed for musl libc, borrowed from alpine packaging.
-    # it is applied regardless of the environment to prevent patchrot
-    (fetchpatch {
-      name = "fakeroot-no64.patch";
-      url = "https://git.alpinelinux.org/aports/plain/main/fakeroot/fakeroot-no64.patch?id=f68c541324ad07cc5b7f5228501b5f2ce4b36158";
-      sha256 = "sha256-NCDaB4nK71gvz8iQxlfaQTazsG0SBUQ/RAnN+FqwKkY=";
-    })
-  ];
+  patches = lib.optionals stdenv.hostPlatform.isLinux [ ./einval.patch ];
 
   nativeBuildInputs = [
     autoreconfHook
     po4a
   ];
-  buildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) libcap;
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libcap ];
 
   postUnpack = ''
     sed -i \
@@ -59,11 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-      };
       # A lightweight *unit* test that exercises fakeroot and fakechroot together:
       nixos-etc = nixosTests.etc.test-etc-fakeroot;
     };

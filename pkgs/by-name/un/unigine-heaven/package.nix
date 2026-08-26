@@ -3,13 +3,13 @@
   stdenv,
   fetchurl,
   makeWrapper,
-  libX11,
-  libXext,
-  libXrandr,
+  libx11,
+  libxext,
+  libxrandr,
   freetype,
   fontconfig,
-  libXrender,
-  libXinerama,
+  libxrender,
+  libxinerama,
   autoPatchelfHook,
   libglvnd,
   openal,
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://assets.unigine.com/d/Unigine_Heaven-${version}.run";
-    sha256 = "19rndwwxnb9k2nw9h004hyrmr419471s0fp25yzvvc6rkd521c0v";
+    hash = "sha256-UtsuXe3VYh18K/qTa0gsCnzGmzBhYnjvGZUT1JTY45c=";
   };
 
   installPhase = ''
@@ -81,14 +81,14 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     stdenv.cc.cc
-    libXext
-    libXrandr
+    libxext
+    libxrandr
     freetype
     fontconfig
-    libXrender
-    libXinerama
+    libxrender
+    libxinerama
   ];
 
   dontUnpack = true;
@@ -98,7 +98,7 @@ stdenv.mkDerivation {
     homepage = "https://benchmark.unigine.com/heaven";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.BarinovMaxim ];
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

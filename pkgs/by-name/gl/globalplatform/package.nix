@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   pcsclite,
-  PCSC,
   pkg-config,
   cmake,
   zlib,
@@ -16,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "globalplatform";
-  version = "2.4.0-unstable-2025-03-23";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "kaoh";
     repo = "globalplatform";
-    rev = "0f970751c5d9e8a7030f897ca2d1b86d0eeba4c2";
-    sha256 = "sha256-H/muc/gY5glXPWKj75fHi6+1DAP91YGAUefdQkX9nfk=";
+    tag = finalAttrs.version;
+    sha256 = "sha256-ZnPu94q4wye9uH8A7N13Q5kt9M5sJjTEHpeveVUpLzc=";
   };
 
   nativeBuildInputs = [
@@ -33,17 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
     graphviz
   ];
 
-  buildInputs =
-    [
-      zlib
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      pcsclite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      PCSC
-    ];
+  buildInputs = [
+    zlib
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    pcsclite
+  ];
 
   cmakeFlags = [
     "-DTESTING=ON"
@@ -54,11 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     cmocka
   ];
-
-  preCheck = ''
-    cp "$src/gpshell/helloworld.cap" globalplatform/src
-    cp "$src/globalplatform/src/rsa_pub_key_test.pem" globalplatform/src
-  '';
 
   # libglobalplatform.so uses dlopen() to load specified connection plugins at runtime.
   # Currently, libgppcscconnectionplugin.so is the only plugin included.

@@ -1,36 +1,51 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
   installShellFiles,
   nix-update-script,
+  nodejs,
+  bashInteractive,
   usage,
   testers,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "usage";
-  version = "2.0.5";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "usage";
-    rev = "v${version}";
-    hash = "sha256-No/BDBW/NRnF81UOuAMrAs4cXEdzEAxnmkn67mReUcM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UbZ1KCTgFTwzZWxxwaQcoR1B7uHdP0OxJUKBvanIvbQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-W/CuXzwacarxgVv12TMVfo7Fr9qKJ7aZIO8xf4SygNA=";
+  cargoHash = "sha256-4NZdBvURBpfaaPAjtCmpDV99OE4/6HTZf5mmHcQ5NNU=";
 
   postPatch = ''
-    substituteInPlace ./examples/mounted.sh \
+    substituteInPlace ./examples/*.sh \
       --replace-fail '/usr/bin/env -S usage' "$(pwd)/target/${stdenv.targetPlatform.rust.rustcTargetSpec}/release/usage"
   '';
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  nativeCheckInputs = [
+    # for some tests
+    nodejs
+    bashInteractive
+  ];
+
+  # The bash completion tests drive `complete -D`, a builtin that bash only
+  # compiles in when readline support is enabled. The plain `bash` used in the
+  # build sandbox is built with `--disable-readline`, so the tests honor the
+  # USAGE_SHELL_BASH env var to run under a readline-enabled bash instead.
+  preCheck = ''
+    export USAGE_SHELL_BASH="${bashInteractive}/bin/bash"
+  '';
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd usage \
       --bash <($out/bin/usage --completions bash) \
       --fish <($out/bin/usage --completions fish) \
@@ -45,9 +60,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     homepage = "https://usage.jdx.dev";
     description = "Specification for CLIs";
-    changelog = "https://github.com/jdx/usage/releases/tag/v${version}";
+    changelog = "https://github.com/jdx/usage/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ konradmalik ];
     mainProgram = "usage";
   };
-}
+})

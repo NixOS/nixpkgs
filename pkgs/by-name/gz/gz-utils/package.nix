@@ -2,27 +2,76 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  cmake,
-  gz-cmake,
-  spdlog,
-}:
 
+  # nativeBuildInputs
+  cmake,
+  gz-cmake, # currently, gz-utils is dependent on gz-cmake
+  doxygen,
+  graphviz,
+
+  # buildInputs
+  cli11,
+  spdlog,
+
+  # nativeCheckInputs
+  python3,
+
+  # checkInputs
+  gtest,
+}:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gz-utils";
-  version = "3.1.1";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "gazebosim";
     repo = "gz-utils";
     tag = "gz-utils${lib.versions.major finalAttrs.version}_${finalAttrs.version}";
-    hash = "sha256-fYzysdB608jfMb/EbqiGD4hXmPxcaVTUrt9Wx0dBlto=";
+    hash = "sha256-fZonC/o5CNHdK/R3IgEoo1llehy36MwvXPQCgFnP8Ls=";
   };
+
+  outputs = [
+    "doc"
+    "out"
+  ];
+
+  # Remove vendored gtest, use nixpkgs' version instead.
+  postPatch = ''
+    rm -r test/gtest_vendor
+
+    substituteInPlace test/CMakeLists.txt --replace-fail \
+      "add_subdirectory(gtest_vendor)" "# add_subdirectory(gtest_vendor)"
+  '';
 
   nativeBuildInputs = [
     cmake
     gz-cmake
+    doxygen
+    graphviz
+  ];
+
+  buildInputs = [
+    cli11
     spdlog
   ];
+
+  # Indicate to CMake that we are not using the vendored CLI11 library.
+  # The integration tests make (unintentional?) unconditional usage of the vendored
+  # CLI11 library, so we can't remove that.
+  cmakeFlags = [
+    (lib.cmakeBool "GZ_UTILS_VENDOR_CLI11" false)
+  ];
+
+  postBuild = ''
+    make doc
+    cp -r doxygen/html $doc
+  '';
+
+  nativeCheckInputs = [ python3 ];
+
+  checkInputs = [ gtest ];
+
+  doCheck = true;
 
   meta = {
     description = "General purpose utility classes and functions for the Gazebo libraries";

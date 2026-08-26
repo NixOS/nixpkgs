@@ -105,12 +105,21 @@ in
       };
     };
 
-    security.wrappers.smtpctl = {
-      owner = "root";
-      group = "smtpq";
-      setuid = false;
-      setgid = true;
-      source = "${cfg.package}/bin/smtpctl";
+    security.wrappers = {
+      makemap = {
+        owner = "root";
+        group = "smtpq";
+        setuid = false;
+        setgid = true;
+        source = "${cfg.package}/bin/smtpctl";
+      };
+      smtpctl = {
+        owner = "root";
+        group = "smtpq";
+        setuid = false;
+        setgid = true;
+        source = "${cfg.package}/bin/smtpctl";
+      };
     };
 
     services.mail.sendmailSetuidWrapper = lib.mkIf cfg.setSendmail (
@@ -121,11 +130,27 @@ in
       }
     );
 
-    systemd.tmpfiles.rules = [
-      "d /var/spool/smtpd 711 root - - -"
-      "d /var/spool/smtpd/offline 770 root smtpq - -"
-      "d /var/spool/smtpd/purge 700 smtpq root - -"
-    ];
+    systemd.tmpfiles.settings.opensmtpd = {
+      "/var/spool/smtpd".d = {
+        mode = "0711";
+        user = "root";
+      };
+      "/var/spool/smtpd/offline".d = {
+        mode = "0770";
+        user = "root";
+        group = "smtpq";
+      };
+      "/var/spool/smtpd/purge".d = {
+        mode = "0700";
+        user = "smtpq";
+        group = "root";
+      };
+      "/var/spool/smtpd/queue".d = {
+        mode = "0700";
+        user = "smtpq";
+        group = "root";
+      };
+    };
 
     systemd.services.opensmtpd =
       let

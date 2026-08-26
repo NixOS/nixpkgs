@@ -1,6 +1,6 @@
 {
   fetchFromGitLab,
-  fetchpatch2,
+  fetchpatch,
   inih,
   lib,
   libdrm,
@@ -11,27 +11,38 @@
   pkg-config,
   scdoc,
   stdenv,
-  unstableGitUpdater,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "buffybox";
-  version = "3.2.0-unstable-2025-03-16";
+  version = "3.5.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.postmarketos.org";
     owner = "postmarketOS";
     repo = "buffybox";
     fetchSubmodules = true; # to use its vendored lvgl
-    rev = "56a9867e90ece88596e330774da64cf277069b59";
-    hash = "sha256-4lSgswcvvV6W1KN6QhsjeHY8MMXXC4fRYBmPE/hb0vA=";
+    tag = finalAttrs.version;
+    hash = "sha256-aOPfKqnUIkJozt+DwVJjbNQEcmpjCmUgJUjTx9LV23M=";
   };
 
+  mesonFlags = [
+    (lib.mesonBool "systemd" true)
+  ];
+
   patches = [
-    (fetchpatch2 {
-      # https://gitlab.postmarketos.org/postmarketOS/buffybox/-/merge_requests/42
-      url = "https://gitlab.postmarketos.org/postmarketOS/buffybox/-/commit/1f0c30e88dc61b8b508696cd890393c3b7911b58.patch?full_index=1";
-      hash = "sha256-hQ6Hjfyj059j2cRfrFz9Se6xRowIGW1HVHULLYtHcS8=";
+    /*
+      There's a close to zero chance that anyone with a 32-bit machine will be using BuffyBox.
+      In the case that it happens, I expect no complaints whatsoever.
+
+      https://gitlab.postmarketos.org/postmarketOS/buffybox/-/merge_requests/87
+    */
+
+    (fetchpatch {
+      name = "fix-32-bit-build";
+      url = "https://gitlab.postmarketos.org/postmarketOS/buffybox/-/merge_requests/87.patch";
+      hash = "sha256-GUk+YrG07hL+0w70qvymPzHGTmUXdfzG4Cy35gg/Asw=";
     })
   ];
 
@@ -57,13 +68,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
-    description = "A suite of graphical applications for the terminal";
+  meta = {
+    description = "Suite of graphical applications for the terminal";
     homepage = "https://gitlab.postmarketos.org/postmarketOS/buffybox";
-    license = licenses.gpl3Plus;
+    changelog = "https://gitlab.postmarketos.org/postmarketOS/buffybox/-/blob/main/CHANGELOG.md";
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ colinsane ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

@@ -10,13 +10,13 @@
 buildHomeAssistantComponent rec {
   owner = "AlexxIT";
   domain = "yandex_station";
-  version = "3.18.3";
+  version = "3.21.4";
 
   src = fetchFromGitHub {
     owner = "AlexxIT";
     repo = "YandexStation";
     tag = "v${version}";
-    hash = "sha256-l8DsL8g6K8/SjCIk7rjfQSk4iRsKBoGgzJpy7UhxQ7o=";
+    hash = "sha256-NbR8CqF7dr0q2nFZHi90IGmDELflcboeJTlVeYoBdvw=";
   };
 
   dependencies = [
@@ -26,12 +26,13 @@ buildHomeAssistantComponent rec {
   nativeCheckInputs = [
     home-assistant
     pytestCheckHook
-  ] ++ (home-assistant.getPackages "stream" home-assistant.python.pkgs);
+  ]
+  ++ (home-assistant.getPackages "stream" home-assistant.python3Packages);
 
   meta = {
+    changelog = "https://github.com/AlexxIT/YandexStation/releases/tag/${src.tag}";
     description = "Controlling Yandex.Station and other smart home devices with Alice from Home Assistant";
     homepage = "https://github.com/AlexxIT/YandexStation";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ferrine ];
   };
 }

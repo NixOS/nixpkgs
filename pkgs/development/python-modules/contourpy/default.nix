@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   python,
-  pythonOlder,
 
   # build
   meson,
@@ -11,6 +10,7 @@
   ninja,
   nukeReferences,
   pybind11,
+  pkg-config,
 
   # propagates
   numpy,
@@ -31,16 +31,14 @@
 let
   contourpy = buildPythonPackage rec {
     pname = "contourpy";
-    version = "1.3.1";
-    format = "pyproject";
-
-    disabled = pythonOlder "3.8";
+    version = "1.3.3";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "contourpy";
       repo = "contourpy";
       tag = "v${version}";
-      hash = "sha256-vZO9hHPHlfZhK/icJYE6nQPCPdXAYZFe1GF5X25MUcQ=";
+      hash = "sha256-/tE+F1wH7YkqfgenXwtcfkjxUR5FwfgoS4NYC6n+/2M=";
     };
 
     # prevent unnecessary references to the build python when cross compiling
@@ -53,6 +51,10 @@ let
       meson
       ninja
       nukeReferences
+      pkg-config
+    ];
+
+    buildInputs = [
       pybind11
     ];
 
@@ -91,11 +93,11 @@ let
       nuke-refs $out/${python.sitePackages}/contourpy/util/{_build_config.py,__pycache__/_build_config.*}
     '';
 
-    meta = with lib; {
-      changelog = "https://github.com/contourpy/contourpy/releases/tag/v${version}";
+    meta = {
+      changelog = "https://github.com/contourpy/contourpy/releases/tag/${src.tag}";
       description = "Python library for calculating contours in 2D quadrilateral grids";
       homepage = "https://github.com/contourpy/contourpy";
-      license = licenses.bsd3;
+      license = lib.licenses.bsd3;
       maintainers = [ ];
     };
   };

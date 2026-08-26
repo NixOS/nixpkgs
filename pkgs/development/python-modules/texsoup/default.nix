@@ -4,35 +4,34 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "texsoup";
-  version = "0.3.1";
+  version = "0.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alvinwan";
     repo = "TexSoup";
-    tag = version;
-    hash = "sha256-XKYJycYivtrszU46B3Bd4JLrvckBpQu9gKDMdr6MyZU=";
+    tag = finalAttrs.version;
+    hash = "sha256-CKUDDq+97kktQnsdwOkwLILdsE7CkQMxId30fbWX90c=";
   };
 
   nativeBuildInputs = [ setuptools ];
 
   pythonImportsCheck = [ "TexSoup" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
-  preCheck = ''
-    substituteInPlace pytest.ini \
-      --replace "--cov=TexSoup" ""
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Fault-tolerant Python3 package for searching, navigating, and modifying LaTeX documents";
     homepage = "https://github.com/alvinwan/TexSoup";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

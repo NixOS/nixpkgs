@@ -1,0 +1,15 @@
+<?php
+
+// WARN; Cannot download dependency modules from internet during sandbox testing!
+
+function main(
+  // Postgresql $a,
+  // array $b,
+  // object $c,
+  int $d = 123,
+  string $e = "default value",
+  float $f = 3.5,
+  bool $g = true,
+) {
+  return $d;
+}

@@ -3,23 +3,23 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "maiko";
-  version = "250201-55e20ea9";
+  version = "260319-9259716e";
 
   src = fetchFromGitHub {
     owner = "Interlisp";
     repo = "maiko";
     tag = "maiko-${finalAttrs.version}";
-    hash = "sha256-7TmMvDaSmdbMa2fVbETRcyKndGM3CuaxI2cJj00WlSc=";
+    hash = "sha256-IqXDw5JuABs1IEKpvq3xjjl4NgZVojdxQYRV6TLhqOk=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ xorg.libX11 ];
+  buildInputs = [ libx11 ];
 
   installPhase = ''
     runHook preInstall
@@ -32,7 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://interlisp.org/";
     changelog = "https://github.com/Interlisp/maiko/releases";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ehmry ];
-    inherit (xorg.libX11.meta) platforms;
+    inherit (libx11.meta) platforms;
   };
 })

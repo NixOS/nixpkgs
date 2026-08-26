@@ -3,27 +3,62 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  cppcheck,
   doxygen,
   graphviz,
   pkg-config,
+  python3,
+  nix-update-script,
 }:
+let
+  version = "5.1.1";
+  versionPrefix = "gz-cmake${lib.versions.major version}";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gz-cmake";
-  version = "4.1.1";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "gazebosim";
     repo = "gz-cmake";
-    tag = "gz-cmake${lib.versions.major finalAttrs.version}_${finalAttrs.version}";
-    hash = "sha256-BWgRm+3UW65Cu7TqXtFFG05JlYF52dbpAsIE8aDnJM0=";
+    tag = "${versionPrefix}_${finalAttrs.version}";
+    hash = "sha256-bp3qaLuE/0sf6u4ZVOGsuJVkuEm2IS0zB0vHMVE0g/g=";
   };
+
+  postPatch = ''
+    patchShebangs examples/test_c_child_requires_c_no_deps.bash
+    substituteInPlace examples/CMakeLists.txt \
+    --replace-fail "$""{CMAKE_INSTALL_LIBDIR}" "${
+      if stdenv.hostPlatform.isDarwin then "lib" else "lib64"
+    }"
+  '';
 
   nativeBuildInputs = [
     cmake
+    cppcheck
     doxygen
     graphviz
     pkg-config
+    python3
   ];
+
+  doBuildExamples = false;
+
+  cmakeFlags = [
+    (lib.cmakeBool "BUILDSYSTEM_TESTING" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "BUILD_EXAMPLES" finalAttrs.doBuildExamples)
+  ];
+
+  doCheck = true;
+
+  passthru = {
+    # bulk updater selects wrong tag
+    skipBulkUpdates = true;
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex=gz-cmake(.*)" ];
+    };
+  };
 
   meta = {
     description = "CMake modules to build Gazebo projects";
@@ -32,5 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ guelakais ];
+    badPlatforms = lib.platforms.darwin; # hard replicable building error
   };
 })

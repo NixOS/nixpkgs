@@ -4,18 +4,16 @@
   fetchFromGitHub,
   cmake,
 }:
-let
-  version = "9.2.1";
-in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "source-meta-json-schema";
-  inherit version;
+  version = "16.7.0";
 
   src = fetchFromGitHub {
     owner = "sourcemeta";
     repo = "jsonschema";
-    rev = "v${version}";
-    hash = "sha256-VWq0BPVQRUmMXf6YZ4lid7EPPERA818UqE18EtayUus=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mW3tVzXy/CY6xTdG3/xkVMB2Z8iT88ZOrG390mdUwbQ=";
   };
 
   nativeBuildInputs = [
@@ -24,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/sourcemeta/jsonschema";
-    description = "The CLI for working with JSON Schema. Covers formatting, linting, testing, bundling, and more for both local development and CI/CD pipelines ";
+    description = "CLI for working with JSON Schema. Covers formatting, linting, testing, bundling, and more for both local development and CI/CD pipelines ";
     changelog = "https://github.com/sourcemeta/jsonschema/releases";
     license = with lib.licenses; [
       agpl3Plus

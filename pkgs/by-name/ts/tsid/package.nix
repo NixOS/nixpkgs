@@ -1,31 +1,27 @@
 {
-  cmake,
-  doxygen,
   eiquadprog,
   fetchFromGitHub,
+  jrl-cmakemodules,
   lib,
   osqp-eigen,
-  pkg-config,
   pinocchio,
   proxsuite,
   stdenv,
-  pythonSupport ? false,
-  python3Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tsid";
-  version = "1.8.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = "tsid";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-SS6JhU4fuZtTzv/EY31ixwwLOzmO/dN3H5HEMh/URTA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-f/SecQfEmrlelVR5584KIHFwwrp5Cy2aBMKI/rxuPmc=";
   };
 
-  cmakeFlags = [
-    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
+  cmakeFlags = jrl-cmakemodules.docsCmakeFlags ++ [
+    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false)
     (lib.cmakeBool "BUILD_WITH_OSQP" true)
     (lib.cmakeBool "BUILD_WITH_PROXQP" true)
     (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
@@ -36,28 +32,23 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  nativeBuildInputs =
-    [
-      doxygen
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.python
-      python3Packages.pythonImportsCheckHook
-    ];
+  nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs;
 
-  propagatedBuildInputs =
-    [
-      eiquadprog
-      osqp-eigen
-      proxsuite
-    ]
-    ++ lib.optional (!pythonSupport) pinocchio
-    ++ lib.optional pythonSupport python3Packages.pinocchio;
+  buildInputs = [
+    jrl-cmakemodules
+  ];
+
+  propagatedBuildInputs = [
+    eiquadprog
+    osqp-eigen
+    pinocchio
+    proxsuite
+  ];
 
   doCheck = true;
-  pythonImportsCheck = [ "tsid" ];
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   meta = {
     description = "Efficient Task Space Inverse Dynamics (TSID) based on Pinocchio";

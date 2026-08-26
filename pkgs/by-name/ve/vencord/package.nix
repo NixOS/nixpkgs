@@ -1,55 +1,63 @@
 {
   curl,
-  esbuild,
   fetchFromGitHub,
   git,
   jq,
   lib,
   nix-update,
   nodejs,
-  pnpm_10,
+  pnpm_11,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   stdenv,
   writeShellScript,
+  discord,
+  discord-ptb,
+  discord-canary,
+  discord-development,
   buildWebExtension ? false,
 }:
-
+let
+  pnpm = pnpm_11;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.11.9";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-/CJt4CZ9R1xB72Zwc76te51Fb3q4KHuzDxP3jWGzW8E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QwJoc49N0F03w7FvOcFJDmpv+qVO6PwX+o5ZFx1KrUo=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
-    inherit (finalAttrs) pname src;
-    hash = "sha256-hO6QKRr4jTfesRDAEGcpFeJmGTGLGMw6EgIvD23DNzw=";
+  patches = [ ./fix-deps.patch ];
+
+  postPatch = ''
+    substituteInPlace packages/vencord-types/package.json \
+      --replace-fail '"@types/react": "18.3.1"' '"@types/react": "19.1.0"'
+  '';
+
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      src
+      patches
+      postPatch
+      ;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-JmTSfUVHsMG0TcOwXkZWinRxpONZagtwKzESd8Q4LlQ=";
   };
 
   nativeBuildInputs = [
     git
     nodejs
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm
   ];
 
   env = {
-    ESBUILD_BINARY_PATH = lib.getExe (
-      esbuild.overrideAttrs (
-        final: _: {
-          version = "0.25.1";
-          src = fetchFromGitHub {
-            owner = "evanw";
-            repo = "esbuild";
-            rev = "v${final.version}";
-            hash = "sha256-vrhtdrvrcC3dQoJM6hWq6wrGJLSiVww/CNPlL1N5kQ8=";
-          };
-          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-        }
-      )
-    );
     VENCORD_REMOTE = "${finalAttrs.src.owner}/${finalAttrs.src.repo}";
     VENCORD_HASH = "${finalAttrs.version}";
   };
@@ -72,33 +80,40 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  # We need to fetch the latest *tag* ourselves, as nix-update can only fetch the latest *releases* from GitHub
-  # Vencord had a single "devbuild" release that we do not care about
-  passthru.updateScript = writeShellScript "update-vencord" ''
-    export PATH="${
-      lib.makeBinPath [
-        curl
-        jq
-        nix-update
-      ]
-    }:$PATH"
-    ghTags=$(curl ''${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} "https://api.github.com/repos/Vendicated/Vencord/tags")
-    latestTag=$(echo "$ghTags" | jq -r .[0].name)
+  passthru = {
+    # We need to fetch the latest *tag* ourselves, as nix-update can only fetch the latest *releases* from GitHub
+    # Vencord had a single "devbuild" release that we do not care about
+    updateScript = writeShellScript "update-vencord" ''
+      export PATH="${
+        lib.makeBinPath [
+          curl
+          jq
+          nix-update
+        ]
+      }:$PATH"
+      ghTags=$(curl ''${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} "https://api.github.com/repos/Vendicated/Vencord/tags")
+      latestTag=$(echo "$ghTags" | jq -r .[0].name)
 
-    echo "Latest tag: $latestTag"
+      echo "Latest tag: $latestTag"
 
-    exec nix-update --version "$latestTag" "$@"
-  '';
+      exec nix-update --version "$latestTag" "$@"
+    '';
+
+    tests = lib.genAttrs' [ discord discord-ptb discord-canary discord-development ] (
+      p: lib.nameValuePair p.pname p.tests.withVencord
+    );
+  };
 
   meta = {
-    description = "Vencord web extension";
+    description = "Cutest Discord client mod";
     homepage = "https://github.com/Vendicated/Vencord";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      donteatoreo
-      FlafyDev
+      _4evy
+      Gliczy
       NotAShelf
       Scrumplex
+      ryand56
     ];
   };
 })

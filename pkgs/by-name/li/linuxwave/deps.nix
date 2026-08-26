@@ -4,10 +4,10 @@
 
 linkFarm "zig-packages" [
   {
-    name = "122062d301a203d003547b414237229b09a7980095061697349f8bef41be9c30266b";
+    name = "clap-0.12.0-oBajB7foAQDqlSwaSG5g0yq7xGbQARUsBk5T64gAOqP5";
     path = fetchzip {
-      url = "https://github.com/Hejsil/zig-clap/archive/refs/tags/0.9.1.tar.gz";
-      hash = "sha256-pscDsE1jJK1Nktq7rv/ScvsDqvvklFvtiGqOFf2eWvY=";
+      url = "https://github.com/Hejsil/zig-clap/archive/refs/tags/0.12.0.tar.gz";
+      hash = "sha256-HveL7aJBC+/8PNlGYxtNZBrk3ytkM8zuXENO9JpygC0=";
     };
   }
 ]

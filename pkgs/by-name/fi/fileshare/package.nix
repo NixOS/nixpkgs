@@ -7,7 +7,7 @@
   libmicrohttpd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fileshare";
   version = "0.2.4";
 
@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
     domain = "git.tkolb.de";
     owner = "Public";
     repo = "fileshare";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-00MxPivZngQ2I7Hopz2MipJFnbvSZU0HF2wZucmEWQ4=";
   };
 
   postPatch = ''
-    sed -i 's,$(shell git rev-parse --short HEAD),/${version},g' Makefile
+    sed -i 's,$(shell git rev-parse --short HEAD),/${finalAttrs.version},g' Makefile
     substituteInPlace Makefile \
       --replace-fail pkg-config "${stdenv.cc.targetPrefix}pkg-config" \
       --replace-fail gcc "${stdenv.cc.targetPrefix}cc"
@@ -41,13 +41,13 @@ stdenv.mkDerivation rec {
     cp bin/release/fileshare $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small HTTP Server for quickly sharing files over the network";
     longDescription = "Fileshare is a simple tool for sharing the contents of a directory via a webserver and optionally allowing uploads.";
     homepage = "https://git.tkolb.de/Public/fileshare";
-    license = licenses.mit;
-    maintainers = [ maintainers.esclear ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.esclear ];
+    platforms = lib.platforms.linux;
     mainProgram = "fileshare";
   };
-}
+})

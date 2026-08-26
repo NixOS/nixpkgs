@@ -1,28 +1,21 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ccat";
   version = "004";
 
   src = fetchFromGitHub {
     owner = "DeeKahy";
     repo = "CopyCat";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-HLT88ghyT9AwvBTf7NrFkSPqMAh90GrBqZVXN5aaG3w=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-gjFVvP2h+HJdDdNVtqTT1E1s4ZYXfWuhtMBRJkWRcDw=";
-
-  buildInputs = lib.optionals (stdenv.hostPlatform.isDarwin) [
-    darwin.apple_sdk_11_0.frameworks.AppKit
-  ];
 
   meta = {
     description = "Utility to copy project tree contents to clipboard";
@@ -31,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.deekahy ];
     mainProgram = "ccat";
   };
-}
+})

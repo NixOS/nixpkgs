@@ -3,26 +3,40 @@
   buildGoModule,
   fetchFromSourcehut,
   scdoc,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hut";
-  version = "0.6.0";
+  version = "0.8.0";
 
   src = fetchFromSourcehut {
     owner = "~xenrox";
     repo = "hut";
-    rev = "v${version}";
-    sha256 = "sha256-wfnuGnO1aiK0D8P5nMCqD38DJ3RpcsK//02KaE5SkZE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-dbFqc+zlUihf/gz4Oo3LtbOClDDDB/khlCbI9/UgD2E=";
   };
 
-  vendorHash = "sha256-6dIqcjtacxlmadnPzRlOJYoyOaO4zdjzrjO64KS2Bq0=";
+  vendorHash = "sha256-7N+Zn7tzEG3dGeqNWmY98XUUKV7Y6g8wFZcQP9wea/8=";
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  versionCheckProgramArg = "version";
+
+  doInstallCheck = true;
 
   nativeBuildInputs = [
     scdoc
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  ldflags = [
+    # Recommended in 0.7.0 release notes https://git.sr.ht/~xenrox/hut/refs/v0.7.0
+    "-X main.version=${finalAttrs.version}"
+  ];
 
   postBuild = ''
     make $makeFlags completions doc/hut.1
@@ -32,11 +46,11 @@ buildGoModule rec {
     make $makeFlags install
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sr.ht/~xenrox/hut/";
     description = "CLI tool for Sourcehut / sr.ht";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "hut";
   };
-}
+})

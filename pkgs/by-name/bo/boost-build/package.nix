@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     useBoost.src or (fetchFromGitHub {
       owner = "boostorg";
       repo = "build";
-      rev = defaultVersion;
+      tag = defaultVersion;
       sha256 = "1r4rwlq87ydmsdqrik4ly5iai796qalvw7603mridg2nwcbbnf54";
     });
 
@@ -35,7 +35,9 @@ stdenv.mkDerivation {
   patches =
     useBoost.boostBuildPatches or [ ]
     ++ lib.optional (
-      useBoost ? version && lib.versionAtLeast useBoost.version "1.81"
+      useBoost ? version
+      && lib.versionAtLeast useBoost.version "1.81"
+      && lib.versionOlder useBoost.version "1.88"
     ) ./fix-clang-target.patch;
 
   postPatch =
@@ -56,6 +58,8 @@ stdenv.mkDerivation {
     bison
   ];
 
+  strictDeps = true;
+
   buildPhase = ''
     runHook preBuild
     ./bootstrap.sh
@@ -74,10 +78,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     homepage = "https://www.boost.org/build/";
     license = lib.licenses.boost;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ivan-tkatchev ];
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
 }

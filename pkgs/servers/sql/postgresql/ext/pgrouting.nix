@@ -6,12 +6,11 @@
   perl,
   postgresql,
   postgresqlBuildExtension,
-  stdenv,
 }:
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pgrouting";
-  version = "3.7.3";
+  version = "4.0.1";
 
   nativeBuildInputs = [
     cmake
@@ -23,7 +22,7 @@ postgresqlBuildExtension (finalAttrs: {
     owner = "pgRouting";
     repo = "pgrouting";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jaevnDCJ6hRQeDhdAkvMTvnnFWElMNvo9gZRW53proQ=";
+    hash = "sha256-j3dlVcENhBveVmkuzWaLfHWy73OMDpC2FxrNQ4W6m9k=";
   };
 
   meta = {

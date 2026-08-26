@@ -5,15 +5,15 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "amneziawg-go";
-  version = "0.2.12";
+  version = "3.1.20260814";
 
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amneziawg-go";
-    rev = "v${version}";
-    hash = "sha256-Xw2maGmNnx0+GO3OWS1Gu77oB9wh2dv+WobypQotUMA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HMmbKd1wYzotB+GAZ8GulyJmX7+XUnXOEerab0OCPO8=";
   };
 
   postPatch = ''
@@ -21,7 +21,7 @@ buildGoModule rec {
     rm -f format_test.go
   '';
 
-  vendorHash = "sha256-zXd9PK3fpOx/YjCNs2auZWhbLUk2fO6tyLV5FxAH0us=";
+  vendorHash = "sha256-Y2dCwlKMVLrkzDcNKyCPxFJwMbCA2mQKkakvzwbamCY=";
 
   subPackages = [ "." ];
 
@@ -41,4 +41,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ averyanalex ];
     mainProgram = "amneziawg-go";
   };
-}
+})

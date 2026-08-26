@@ -1,5 +1,5 @@
-preCheckHooks+=('postgresqlStart')
-postCheckHooks+=('postgresqlStop')
+preCheckHooks+=(postgresqlStart)
+postCheckHooks+=(postgresqlStop)
 
 
 postgresqlStart() {
@@ -54,7 +54,7 @@ EOF
     false
   fi
   echo 'initializing postgresql'
-  initdb -U postgres
+  initdb --encoding=UTF8 -U postgres
 
   echo "$postgresqlExtraSettings" >>"$PGDATA/postgresql.conf"
 
@@ -69,6 +69,7 @@ EOF
 
   echo 'starting postgresql'
   eval "${postgresqlStartCommands:-pg_ctl start}"
+  failureHooks+=(postgresqlStop)
 
   echo 'setting up postgresql'
   eval "$postgresqlTestSetupCommands"
@@ -80,4 +81,5 @@ EOF
 postgresqlStop() {
   echo 'stopping postgresql'
   pg_ctl stop
+  failureHooks=("${failureHooks[@]/postgresqlStop}")
 }

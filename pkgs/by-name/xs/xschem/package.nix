@@ -5,22 +5,22 @@
   bison,
   cairo,
   flex,
-  libX11,
-  libXpm,
+  libx11,
+  libxpm,
   pkg-config,
   tcl,
   tk,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xschem";
-  version = "3.4.5";
+  version = "3.4.7";
 
   src = fetchFromGitHub {
     owner = "StefanSchippers";
     repo = "xschem";
-    rev = version;
-    hash = "sha256-+ygwHkQOXmkoNgcuofwuaZcpYTAV6sOmvO4xeE+8DXE=";
+    rev = finalAttrs.version;
+    hash = "sha256-ye97VJQ+2F2UbFLmGrZ8xSK9xFeF+Yies6fJKurPOD0=";
   };
 
   nativeBuildInputs = [
@@ -31,15 +31,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cairo
-    libX11
-    libXpm
+    libx11
+    libxpm
     tcl
     tk
   ];
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Schematic capture and netlisting EDA tool";
     longDescription = ''
@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
       the drawn schematic, allowing the simulation of the circuit.
     '';
     homepage = "https://xschem.sourceforge.io/stefan/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fbeffa ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fbeffa ];
+    platforms = lib.platforms.all;
   };
-}
+})

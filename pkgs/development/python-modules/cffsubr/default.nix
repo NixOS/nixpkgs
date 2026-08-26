@@ -3,24 +3,24 @@
   afdko,
   buildPythonPackage,
   cmake,
-  distutils,
+  distutils_80,
   fetchPypi,
   fonttools,
   ninja,
   pytestCheckHook,
   scikit-build,
-  setuptools,
+  setuptools_80,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "cffsubr";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-d0UVC9uBZ5+s3RHB87hwlsT029SVfo/Ou4jEVoeVLvs=";
+    hash = "sha256-LDIbaAe9lYVtkh7Z3OhQZJXPSfx6iaY8uULovs4Trd0=";
   };
 
   postPatch = ''
@@ -31,11 +31,11 @@ buildPythonPackage rec {
   '';
 
   build-system = [
+    distutils_80
+    setuptools_80
     cmake
-    distutils
     ninja
     scikit-build
-    setuptools
     setuptools-scm
   ];
 
@@ -47,12 +47,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cffsubr" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/adobe-type-tools/cffsubr/releases/tag/v${version}";
     description = "Standalone CFF subroutinizer based on AFDKO tx";
     mainProgram = "cffsubr";
     homepage = "https://github.com/adobe-type-tools/cffsubr";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

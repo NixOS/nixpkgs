@@ -3,10 +3,10 @@
 [OWASP](https://owasp.org/) [CycloneDX](https://cyclonedx.org/) is a Software [Bill of Materials](https://en.wikipedia.org/wiki/Bill_of_materials) (SBOM) standard.
 The standards described here are for including Nix specific information within SBOMs in a way that is interoperable with external SBOM tooling.
 
-## `nix` Namespace Property Taxonomy  {#sec-interop.cylonedx-nix}
+## `nix` Namespace Property Taxonomy {#sec-interop.cylonedx-nix}
 
-The following tables describe namespaces for [properties](https://cyclonedx.org/docs/1.6/json/#components_items_properties) that may be attached to components within SBOMs.
-Component properties are lists of name-value-pairs where values must be strings.
+The following tables describe namespaces for [properties](https://cyclonedx.org/docs/1.6/json/#components_items_properties) that can be attached to components within SBOMs.
+Component properties are lists of name-value-pairs where the values must be strings.
 Properties with the same name may appear more than once.
 Names and values are case-sensitive.
 
@@ -47,12 +47,12 @@ FOD properties describe a [fixed-output derivation](https://nixos.org/manual/nix
 The `nix:fod:method` property is required and must be accompanied by a `nix:store_path` property within the same property list.
 All other properties in this namespace are method-specific.
 To reproduce the build of a component the `nix:fod:method` value is resolved to an [appropriate function](#chap-pkgs-fetchers) within Nixpkgs whose arguments intersect with the given properties.
-When generating `nix:fod` properties the method selected should be a stable function with a minimal number arguments.
+When generating `nix:fod` properties the method selected should be a stable function with a minimal number of arguments.
 For example, the `fetchFromGitHub` is commonly used within Nixpkgs but should be reduced to a call to the function by which it is implemented, `fetchzip`.
 
 | Property         | Description |
 |------------------|-------------|
-| `nix:fod:method` | Nixpkg function that produces this FOD. Required. Examples: `"fetchzip"`, `"fetchgit"` |
+| `nix:fod:method` | Nixpkgs function that produces this FOD. Required. Examples: `"fetchzip"`, `"fetchgit"` |
 | `nix:fod:name`   | Derivation name, present when method is `"fetchzip"` |
 | `nix:fod:ref`    | [Git ref](https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefrefaref), present when method is `"fetchgit"` |
 | `nix:fod:rev`    | [Git rev](https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefrevisionarevision), present when method is `"fetchgit"` |
@@ -79,9 +79,7 @@ let
         sha256,
         ...
       }:
-      pkgs.fetchzip {
-        inherit name url sha256;
-      };
+      pkgs.fetchzip { inherit name url sha256; };
   };
 
 in

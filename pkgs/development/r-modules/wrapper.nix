@@ -2,7 +2,7 @@
   lib,
   symlinkJoin,
   R,
-  makeWrapper,
+  makeBinaryWrapper,
   recommendedPackages,
   packages,
 }:
@@ -11,10 +11,15 @@ symlinkJoin {
   preferLocalBuild = true;
   allowSubstitutes = false;
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   buildInputs = [ R ] ++ recommendedPackages ++ packages;
   paths = [ R ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   postBuild = ''
     cd ${R}/bin
@@ -24,6 +29,8 @@ symlinkJoin {
       makeWrapper "${R}/bin/$exe" "$out/bin/$exe" \
         --prefix "R_LIBS_SITE" ":" "$R_LIBS_SITE"
     done
+
+    ln -s ${R.man} $man
   '';
 
   # Make the list of recommended R packages accessible to other packages such as rpy2

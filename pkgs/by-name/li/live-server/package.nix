@@ -1,46 +1,49 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  darwin,
   openssl,
   pkg-config,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "live-server";
-  version = "0.10.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "lomirus";
     repo = "live-server";
-    rev = "v${version}";
-    hash = "sha256-8NM3XJ7RC7cUNKN1DPW2huvkx7tfA8zDrETkwDMbaT8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CV+QUwOYGg6lzEDlAlAYoKO3RqWlF3857/6rDmdLjZQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-tUKhVDv+ZDGRpJC/sSYcQxYhGsAyOsflc+GeUyBaeEk=";
+  cargoHash = "sha256-C/uqEz8ww+YIg1QbnYgKUPNyLnIIf8Tcf8x99PGmOG4=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreServices
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [ openssl ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+  # Tests that require a browser
+  checkFlags = [
+    "--skip=browser_reloads_on_file_change"
+    "--skip=page_content_is_served"
+  ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Local network server with live reload feature for static pages";
     downloadPage = "https://github.com/lomirus/live-server/releases";
     homepage = "https://github.com/lomirus/live-server";
-    license = licenses.mit;
+    changelog = "https://github.com/lomirus/live-server/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
     mainProgram = "live-server";
-    maintainers = [ maintainers.philiptaron ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [
+      philiptaron
+      doronbehar
+    ];
+    platforms = lib.platforms.unix;
   };
-}
+})

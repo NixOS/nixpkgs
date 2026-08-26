@@ -2,14 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy27,
 }:
 
 buildPythonPackage rec {
   pname = "pq";
   version = "1.9.1";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
@@ -20,10 +18,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pq" ];
 
-  meta = with lib; {
+  meta = {
     description = "PQ is a transactional queue for PostgreSQL";
     homepage = "https://github.com/malthe/pq/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

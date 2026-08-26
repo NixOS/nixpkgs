@@ -44,8 +44,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
       Think of it as a bootloader for Emacs.
     '';
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

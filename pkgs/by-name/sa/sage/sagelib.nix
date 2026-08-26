@@ -9,11 +9,11 @@
   perl,
   pkg-config,
   sage-setup,
+  sage-docbuild,
   setuptools,
   gd,
   iml,
   libpng,
-  readline,
   blas,
   boost,
   brial,
@@ -21,9 +21,8 @@
   eclib,
   ecm,
   fflas-ffpack,
-  flint3,
+  flint,
   gap,
-  giac,
   givaro,
   glpk,
   gsl,
@@ -44,7 +43,6 @@
   planarity,
   ppl,
   rankwidth,
-  ratpoints,
   singular,
   sqlite,
   symmetrica,
@@ -60,7 +58,6 @@
   ipykernel,
   ipython,
   ipywidgets,
-  jinja2,
   jupyter-client,
   jupyter-core,
   lrcalc-python,
@@ -77,6 +74,7 @@
   pplpy,
   primecountpy,
   ptyprocess,
+  pytest,
   requests,
   rpy2,
   scipy,
@@ -94,7 +92,9 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 buildPythonPackage rec {
   version = src.version;
-  pname = "sagelib";
+  # Sage publishes Python metadata as "sagemath" even though this nixpkgs
+  # attribute is exposed as `sagelib`.
+  pname = "sagemath";
   src = sage-src;
   pyproject = true;
 
@@ -107,18 +107,17 @@ buildPythonPackage rec {
     pkg-config
     sage-setup
     setuptools
-  ];
-
-  pythonRelaxDeps = [
-    "networkx"
+    meson-python
+    cython
   ];
 
   buildInputs = [
     gd
     iml
     libpng
-    readline
   ];
+
+  mesonFlags = [ "-Dbuild-docs=false" ];
 
   env = lib.optionalAttrs stdenv.cc.isClang {
     # code tries to assign a unsigned long to an int in an initialized list
@@ -136,9 +135,8 @@ buildPythonPackage rec {
     eclib
     ecm
     fflas-ffpack
-    flint3
+    flint
     gap
-    giac
     givaro
     glpk
     gsl
@@ -159,7 +157,6 @@ buildPythonPackage rec {
     planarity
     ppl
     rankwidth
-    ratpoints
     singular
     sqlite
     symmetrica
@@ -177,13 +174,11 @@ buildPythonPackage rec {
     ipykernel
     ipython
     ipywidgets
-    jinja2
     jupyter-client
     jupyter-core
     lrcalc-python
     matplotlib
     memory-allocator
-    meson-python
     mpmath
     networkx
     numpy
@@ -194,8 +189,10 @@ buildPythonPackage rec {
     pplpy
     primecountpy
     ptyprocess
+    pytest
     requests
     rpy2
+    sage-docbuild
     scipy
     sphinx
     sympy
@@ -203,28 +200,7 @@ buildPythonPackage rec {
   ];
 
   preBuild = ''
-    export SAGE_ROOT="$PWD"
-    export SAGE_LOCAL="$SAGE_ROOT"
-    export SAGE_SHARE="$SAGE_LOCAL/share"
-
-    # set locations of dependencies (needed for nbextensions like threejs)
-    . ${env-locations}/sage-env-locations
-
-    export JUPYTER_PATH="$SAGE_LOCAL/jupyter"
-    export PATH="$SAGE_ROOT/build/bin:$SAGE_ROOT/src/bin:$PATH"
-
-    export SAGE_NUM_THREADS="$NIX_BUILD_CORES"
-
-    mkdir -p "$SAGE_SHARE/sage/ext/notebook-ipython"
-    mkdir -p "var/lib/sage/installed"
-
-    sed -i "/sage-conf/d" src/{setup.cfg,pyproject.toml,requirements.txt}
-
-    cd build/pkgs/sagelib/src
-  '';
-
-  postInstall = ''
-    rm -r "$out/${python.sitePackages}/sage/cython_debug"
+    patchShebangs src/sage_setup/autogen/interpreters/__main__.py
   '';
 
   doCheck = false; # we will run tests in sage-tests.nix

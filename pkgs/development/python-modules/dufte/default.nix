@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  importlib-metadata,
   matplotlib,
   numpy,
   pytestCheckHook,
@@ -13,12 +11,11 @@
 buildPythonPackage rec {
   pname = "dufte";
   version = "0.2.29";
-  format = "pyproject";
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nschloe";
-    repo = pname;
+    repo = "dufte";
     rev = "v${version}";
     hash = "sha256:0ccsmpj160xj6w503a948aw8icj55mw9414xnmijmmjvlwhm0p48";
   };
@@ -28,7 +25,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     matplotlib
     numpy
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -41,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dufte" ];
 
-  meta = with lib; {
+  meta = {
     description = "Clean matplotlib plots";
     homepage = "https://github.com/nschloe/dufte";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ris ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

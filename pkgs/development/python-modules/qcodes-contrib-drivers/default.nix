@@ -13,8 +13,8 @@
   cffi,
   packaging,
   pandas,
-  qcodes,
   python-dotenv,
+  qcodes,
 
   # tests
   pytest-mock,
@@ -23,17 +23,27 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qcodes-contrib-drivers";
-  version = "0.23.0";
+  version = "0.25.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "QCoDeS";
     repo = "Qcodes_contrib_drivers";
-    tag = "v${version}";
-    hash = "sha256-m2idBaQl2OVhrY5hcLTeXY6BycGf0ufa/ySgxaU2L/4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4ZVNd1cHqM3tuGcOxlBN8WX9i9u3XFlJ0zr06n7zpmI=";
   };
+
+  postPatch =
+    # versioningit derives the version from git, which is unavailable in the sandbox
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail \
+          'default-version = "0.0"' \
+          'default-version = "${finalAttrs.version}"'
+    '';
 
   build-system = [
     setuptools
@@ -45,8 +55,9 @@ buildPythonPackage rec {
     cffi
     packaging
     pandas
-    qcodes
     python-dotenv
+    qcodes
+    versioningit
   ];
 
   nativeCheckInputs = [
@@ -71,8 +82,8 @@ buildPythonPackage rec {
   meta = {
     description = "User contributed drivers for QCoDeS";
     homepage = "https://github.com/QCoDeS/Qcodes_contrib_drivers";
-    changelog = "https://github.com/QCoDeS/Qcodes_contrib_drivers/releases/tag/v${version}";
+    changelog = "https://github.com/QCoDeS/Qcodes_contrib_drivers/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ evilmav ];
   };
-}
+})

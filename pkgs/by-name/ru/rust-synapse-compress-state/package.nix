@@ -8,18 +8,17 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-synapse-compress-state";
   version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "rust-synapse-compress-state";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-nNQ/d4FFAvI+UY+XeqExyhngq+k+j5Pkz94ch27aoVM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-l8N6+xh0CbFKt4eEbSAvUJ5oHxhp5jf2YHLheYAegnU=";
 
   cargoBuildFlags = [
@@ -36,14 +35,14 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ];
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Tool to compress some state in a Synapse instance's database";
     homepage = "https://github.com/matrix-org/rust-synapse-compress-state";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       hexa
       maralorn
     ];
   };
-}
+})

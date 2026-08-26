@@ -1,31 +1,34 @@
 {
   lib,
   aiohttp,
+  aiointercept,
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-error-for-skips,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   syrupy,
   tenacity,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nextdns";
-  version = "4.0.0";
+  version = "5.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "nextdns";
-    tag = version;
-    hash = "sha256-2BT47Dg+1TLDUccdb0Q/r3QzpRURTwFlUORbQpmIJzc=";
+    tag = finalAttrs.version;
+    hash = "sha256-QCiosQHxuwDxztXMEkEosob8M2NMtnlGI33m5oAkaBw=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ setuptools ];
 
@@ -35,6 +38,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aiointercept
     aioresponses
     pytest-asyncio
     pytest-error-for-skips
@@ -42,19 +46,13 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  disabledTests = [
-    # mocked object called too many times
-    "test_retry_error"
-    "test_retry_success"
-  ];
-
   pythonImportsCheck = [ "nextdns" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for the NextDNS API";
     homepage = "https://github.com/bieniu/nextdns";
-    changelog = "https://github.com/bieniu/nextdns/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/bieniu/nextdns/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

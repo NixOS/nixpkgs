@@ -7,7 +7,15 @@
   autoPatchelfHook,
   alsa-lib,
   ncurses5,
-  xorg,
+  libxxf86vm,
+  libxtst,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxft,
+  libxext,
+  libxcursor,
+  libx11,
 }:
 
 let
@@ -18,10 +26,6 @@ let
     aarch64-darwin = fetchurl {
       url = "https://www.utc.fr/~mottelet/scilab/download/${version}/scilab-${version}-accelerate-arm64.dmg";
       sha256 = "sha256-L4dxD8R8bY5nd+4oDs5Yk0LlNsFykLnAM+oN/O87SRI=";
-    };
-    x86_64-darwin = fetchurl {
-      url = "https://www.utc.fr/~mottelet/scilab/download/${version}/scilab-${version}-x86_64.dmg";
-      sha256 = "sha256-tBeqzllMuogrGcJxGqEl2DdNXaiwok3yhzWSdlWY5Fc=";
     };
     x86_64-linux = fetchurl {
       url = "https://www.scilab.org/download/${version}/scilab-${version}.bin.linux-x86_64.tar.gz";
@@ -36,7 +40,6 @@ let
     description = "Scientific software package for numerical computations (Matlab lookalike)";
     platforms = [
       "aarch64-darwin"
-      "x86_64-darwin"
       "x86_64-linux"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
@@ -84,23 +87,20 @@ let
       autoPatchelfHook
     ];
 
-    buildInputs =
-      [
-        alsa-lib
-        ncurses5
-        stdenv.cc.cc
-      ]
-      ++ (with xorg; [
-        libX11
-        libXcursor
-        libXext
-        libXft
-        libXi
-        libXrandr
-        libXrender
-        libXtst
-        libXxf86vm
-      ]);
+    buildInputs = [
+      alsa-lib
+      ncurses5
+      stdenv.cc.cc
+      libx11
+      libxcursor
+      libxext
+      libxft
+      libxi
+      libxrandr
+      libxrender
+      libxtst
+      libxxf86vm
+    ];
 
     installPhase = ''
       runHook preInstall

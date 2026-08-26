@@ -4,42 +4,40 @@
   fetchzip,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nerd-font-patcher";
-  version = "3.3.0";
+  version = "3.5.1";
 
   src = fetchzip {
-    url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v${version}/FontPatcher.zip";
-    sha256 = "sha256-/LbO8+ZPLFIUjtZHeyh6bQuplqRfR6SZRu9qPfVZ0Mw=";
+    url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v${finalAttrs.version}/FontPatcher.zip";
+    hash = "sha256-gZ41oZPnsVLcchA58eJ1Vl28ccqePpOZd/ZCEKYywX4=";
     stripRoot = false;
   };
 
   propagatedBuildInputs = with python3Packages; [ fontforge ];
 
-  format = "other";
+  pyproject = false;
 
-  postPatch = ''
-    sed -i font-patcher \
-      -e 's,__dir__ + "/src,"'$out'/share/,'
-    sed -i font-patcher \
-      -e  's,/bin/scripts/name_parser,/../lib/name_parser,'
-  '';
-  # Note: we cannot use $out for second substitution
+  patches = [
+    ./use-nix-paths.patch
+  ];
 
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin $out/share $out/lib
     install -Dm755 font-patcher $out/bin/nerd-font-patcher
     cp -ra src/glyphs $out/share/
-    cp -ra bin/scripts/name_parser $out/lib/
+    cp -ra bin/scripts/{braille,name_parser} $out/lib/
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Font patcher to generate Nerd font";
     mainProgram = "nerd-font-patcher";
     homepage = "https://nerdfonts.com/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ck3d ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ck3d ];
   };
-}
+})

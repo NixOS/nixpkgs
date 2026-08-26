@@ -53,7 +53,7 @@ let
           --set XMONAD_GHC "${xmonadEnv}/bin/ghc" \
         ''
         + ''
-          --set XMONAD_XMESSAGE "${pkgs.xorg.xmessage}/bin/xmessage"
+          --set XMONAD_XMESSAGE "${pkgs.xmessage}/bin/xmessage"
         ''
       );
 
@@ -74,7 +74,7 @@ in
       haskellPackages = mkOption {
         default = pkgs.haskellPackages;
         defaultText = literalExpression "pkgs.haskellPackages";
-        example = literalExpression "pkgs.haskell.packages.ghc810";
+        example = literalExpression "pkgs.haskell.packages.ghc910";
         type = types.attrs;
         description = ''
           haskellPackages used to build Xmonad and other packages.

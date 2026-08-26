@@ -7,16 +7,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "geteduroam-cli";
-  version = "0.8";
+  version = "0.14";
 
   src = fetchFromGitHub {
     owner = "geteduroam";
     repo = "linux-app";
     tag = finalAttrs.version;
-    hash = "sha256-2iAvE38r3iwulBqW+rrbrpNVgQlDhhcVUsjZSOT5P1A=";
+    hash = "sha256-Zvyba8ma4a5WmV6rnfUKqQ8AsZlGGWrZsL8UZIWApTQ=";
   };
 
-  vendorHash = "sha256-b06wnqT88J7etNTFJ6nE9Uo0gOQOGvvs0vPNnJr6r4Q=";
+  vendorHash = "sha256-HYJ71pk1a8EaPycmbHmMnQeb42dt7M9NvK/1GYhZE0c=";
 
   subPackages = [
     "cmd/geteduroam-cli"
@@ -26,7 +26,6 @@ buildGoModule (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/geteduroam-cli";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

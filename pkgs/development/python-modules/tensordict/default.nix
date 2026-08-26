@@ -11,6 +11,7 @@
 
   # nativeBuildInputs
   cmake,
+  ninja,
 
   # dependencies
   cloudpickle,
@@ -18,6 +19,7 @@
   numpy,
   orjson,
   packaging,
+  pyvers,
   torch,
 
   # tests
@@ -25,17 +27,23 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tensordict";
-  version = "0.8.1";
+  version = "0.13.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "tensordict";
-    tag = "v${version}";
-    hash = "sha256-yEwuCsIKNHQf8iCSB38R8mJXvdOi0+MeNk9M9+jWfxU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JL6S3Wc9PJbskOPhsr+0QFunZBkMcJCsvhLlz6ggAQ4=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "pybind11[global]" "pybind11"
+  '';
 
   build-system = [
     pybind11
@@ -45,6 +53,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
+    ninja
   ];
   dontUseCmakeConfigure = true;
 
@@ -54,6 +63,7 @@ buildPythonPackage rec {
     numpy
     orjson
     packaging
+    pyvers
     torch
   ];
 
@@ -70,29 +80,51 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # TypeError: not all arguments converted during string formatting
+    "test_dtensor"
+
     # FileNotFoundError: [Errno 2] No such file or directory: '/build/source/tensordict/tensorclass.pyi
     "test_tensorclass_instance_methods"
     "test_tensorclass_stub_methods"
 
     # hangs forever on some CPUs
     "test_map_iter_interrupt_early"
+
+    # AssertionError: assert 'a string!' == 'a metadata!'
+    "test_save_load_memmap"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # RuntimeError: Failed to initialize cpuinfo!
+    "test_cast_to"
+    "test_casts"
+    "test_td_params_cast"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Hangs due to the use of a pool
+    "test_chunksize_num_chunks"
+    "test_index_with_generator"
+    "test_map_exception"
+    "test_map"
+    "test_multiprocessing"
   ];
 
-  disabledTestPaths =
-    [
-      # torch._dynamo.exc.Unsupported: Graph break due to unsupported builtin None.ReferenceType.__new__.
-      "test/test_compile.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Hangs forever
-      "test/test_distributed.py"
-    ];
+  disabledTestPaths = [
+    # torch._dynamo.exc.Unsupported: Graph break due to unsupported builtin None.ReferenceType.__new__.
+    "test/test_compile.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Hangs forever
+    "test/test_distributed.py"
+    # Hangs after testing due to pool usage
+    "test/test_h5.py"
+    "test/test_memmap.py"
+  ];
 
   meta = {
     description = "Pytorch dedicated tensor container";
-    changelog = "https://github.com/pytorch/tensordict/releases/tag/${src.tag}";
+    changelog = "https://github.com/pytorch/tensordict/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/pytorch/tensordict";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

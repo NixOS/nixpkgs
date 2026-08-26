@@ -12,18 +12,19 @@
 
   # tests
   pytestCheckHook,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "uncertainties";
-  version = "3.2.2";
+  version = "3.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmfit";
     repo = "uncertainties";
     tag = version;
-    hash = "sha256-cm0FeJCxyBLN0GCKPnscBCx9p9qCDQdwRfhBRgQIhAo=";
+    hash = "sha256-XfEiE27azEBNCZ6sIBncJI1cYocoXwgxEkclVgR5O34=";
   };
 
   build-system = [
@@ -35,14 +36,24 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ optional-dependencies.arrays;
+    scipy
+  ]
+  ++ optional-dependencies.arrays;
+
+  disabledTests = [
+    # Flaky tests, see: https://github.com/lmfit/uncertainties/issues/343
+    "test_repeated_summation_complexity"
+  ];
 
   pythonImportsCheck = [ "uncertainties" ];
 
-  meta = with lib; {
-    homepage = "https://pythonhosted.org/uncertainties/";
+  meta = {
+    homepage = "https://uncertainties.readthedocs.io/";
     description = "Transparent calculations with uncertainties on the quantities involved (aka error propagation)";
-    maintainers = with maintainers; [ rnhmjoj ];
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      rnhmjoj
+      doronbehar
+    ];
+    license = lib.licenses.bsd3;
   };
 }

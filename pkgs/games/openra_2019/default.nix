@@ -49,7 +49,7 @@ let
   callWithName = name: value: if lib.isFunction value then value name else value;
   buildOpenRASet =
     f: args:
-    pkgs.recurseIntoAttrs (
+    lib.recurseIntoAttrs (
       lib.mapAttrs callWithName (
         f (
           {
@@ -65,15 +65,14 @@ let
     );
 
 in
-pkgs.recurseIntoAttrs rec {
+lib.recurseIntoAttrs rec {
   # The whole attribute set is destructered to ensure those (and only those) attributes are given
   # and to provide defaults for those that are optional.
   buildOpenRAEngine =
     {
       name ? null,
       version,
-      description,
-      homepage,
+      meta,
       mods,
       src,
     }@engine:
@@ -98,8 +97,7 @@ pkgs.recurseIntoAttrs rec {
       name ? null,
       version,
       title,
-      description,
-      homepage,
+      meta,
       src,
       engine,
       assetsError ? "",

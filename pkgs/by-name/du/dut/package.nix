@@ -1,15 +1,14 @@
 {
   stdenv,
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
 }:
 
 stdenv.mkDerivation {
   pname = "dut";
   version = "0-unstable-2024-07-31";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "201984";
     repo = "dut";
     rev = "041c6f26162c2286776fac246ddbda312da1563d";
@@ -24,7 +23,7 @@ stdenv.mkDerivation {
   meta = {
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
-    description = "A disk usage calculator for Linux";
+    description = "Disk usage calculator for Linux";
     homepage = "https://codeberg.org/201984/dut";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ errnoh ];

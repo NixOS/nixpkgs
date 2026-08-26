@@ -1,5 +1,6 @@
 { callPackage }:
 {
+  aurorae = callPackage ./aurorae { };
   bluedevil = callPackage ./bluedevil { };
   breeze = callPackage ./breeze { };
   breeze-grub = callPackage ./breeze-grub { };
@@ -17,6 +18,7 @@
   kglobalacceld = callPackage ./kglobalacceld { };
   kinfocenter = callPackage ./kinfocenter { };
   kmenuedit = callPackage ./kmenuedit { };
+  knighttime = callPackage ./knighttime { };
   kpipewire = callPackage ./kpipewire { };
   krdp = callPackage ./krdp { };
   kscreen = callPackage ./kscreen { };
@@ -27,6 +29,7 @@
   kwayland = callPackage ./kwayland { };
   kwayland-integration = callPackage ./kwayland-integration { };
   kwin = callPackage ./kwin { };
+  kwin-x11 = callPackage ./kwin-x11 { };
   kwrited = callPackage ./kwrited { };
   layer-shell-qt = callPackage ./layer-shell-qt { };
   libkscreen = callPackage ./libkscreen { };
@@ -38,17 +41,21 @@
   oxygen-sounds = callPackage ./oxygen-sounds { };
   plasma-activities = callPackage ./plasma-activities { };
   plasma-activities-stats = callPackage ./plasma-activities-stats { };
+  plasma-bigscreen = callPackage ./plasma-bigscreen { };
   plasma-browser-integration = callPackage ./plasma-browser-integration { };
   plasma-desktop = callPackage ./plasma-desktop { };
   plasma-dialer = callPackage ./plasma-dialer { };
   plasma-disks = callPackage ./plasma-disks { };
   plasma-firewall = callPackage ./plasma-firewall { };
   plasma-integration = callPackage ./plasma-integration { };
+  plasma-keyboard = callPackage ./plasma-keyboard { };
+  plasma-login-manager = callPackage ./plasma-login-manager { };
   plasma-mobile = callPackage ./plasma-mobile { };
   plasma-nano = callPackage ./plasma-nano { };
   plasma-nm = callPackage ./plasma-nm { };
   plasma-pa = callPackage ./plasma-pa { };
   plasma-sdk = callPackage ./plasma-sdk { };
+  plasma-setup = callPackage ./plasma-setup { };
   plasma-systemmonitor = callPackage ./plasma-systemmonitor { };
   plasma-thunderbolt = callPackage ./plasma-thunderbolt { };
   plasma-vault = callPackage ./plasma-vault { };
@@ -65,6 +72,7 @@
   spacebar = callPackage ./spacebar { };
   spectacle = callPackage ./spectacle { };
   systemsettings = callPackage ./systemsettings { };
+  union = callPackage ./union { };
   wacomtablet = callPackage ./wacomtablet { };
   xdg-desktop-portal-kde = callPackage ./xdg-desktop-portal-kde { };
 }

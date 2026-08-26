@@ -5,6 +5,7 @@
   dns-client-lwt,
   dns-server,
   dns-certify,
+  dns-resolver,
   dnssec,
   bos,
   cmdliner,
@@ -13,6 +14,7 @@
   mirage-crypto,
   mirage-crypto-pk,
   mirage-crypto-rng,
+  mirage-mtime,
   ohex,
   ptime,
   mtime,
@@ -27,8 +29,6 @@
 buildDunePackage {
   pname = "dns-cli";
 
-  minimalOCamlVersion = "4.08";
-
   inherit (dns) version src;
 
   # no need to propagate as this is primarily
@@ -39,6 +39,7 @@ buildDunePackage {
     dns-client-lwt
     dns-server
     dns-certify
+    dns-resolver
     dnssec
     bos
     cmdliner
@@ -47,6 +48,7 @@ buildDunePackage {
     mirage-crypto
     mirage-crypto-pk
     mirage-crypto-rng
+    mirage-mtime
     ohex
     ptime
     mtime

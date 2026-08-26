@@ -95,7 +95,7 @@ moveUsrDir() {
     if [ -d "$prefix/usr" ]; then
       # Didn't try using rsync yet because per
       # https://unix.stackexchange.com/questions/127712/merging-folders-with-mv,
-      # it's not neessarily better.
+      # it's not necessarily better.
       pushd "$prefix/usr"
       find . -type d -exec mkdir -p "$out/{}" \;
       find . \( -type f -o -type l \) -exec mv "{}" "$out/{}" \;

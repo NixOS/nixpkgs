@@ -33,7 +33,7 @@ To enable Mattermost using Postgres, use a config like this:
 
     # For example, to disable auto-installation of prepackaged plugins.
     settings.PluginSettings.AutomaticPrepackagedPlugins = false;
-  }
+  };
 }
 ```
 
@@ -71,11 +71,9 @@ Here is an example with a prebuilt plugin tarball:
 {
   services.mattermost = {
     plugins = with pkgs; [
-      /*
-       * todo
-       * 0.7.1
-       * https://github.com/mattermost/mattermost-plugin-todo/releases/tag/v0.7.1
-       */
+      # todo
+      # 0.7.1
+      # https://github.com/mattermost/mattermost-plugin-todo/releases/tag/v0.7.1
       (fetchurl {
         # Note: Don't unpack the tarball; the NixOS module will repack it for you.
         url = "https://github.com/mattermost-community/mattermost-plugin-todo/releases/download/v0.7.1/com.mattermost.plugin-todo-0.7.1.tar.gz";
@@ -101,7 +99,7 @@ these assumptions the best it can.
 
 Here is how to build the above Todo plugin. Note that we rely on
 package-lock.json being assembled correctly, so must use a version where it is!
-If there is no lockfile or the lockfile is incorrect, Nix cannot fetch NPM build
+If there is no lockfile or the lockfile is incorrect, Nix cannot fetch npm build
 and runtime dependencies for a sandbox build.
 
 ```nix

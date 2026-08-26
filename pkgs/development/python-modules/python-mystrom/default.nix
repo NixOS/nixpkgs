@@ -1,32 +1,39 @@
 {
   lib,
-  buildPythonPackage,
-  fetchPypi,
   aiohttp,
+  buildPythonPackage,
   click,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
   requests,
-  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-mystrom";
-  version = "2.2.0";
-  format = "setuptools";
+  version = "2.7.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-VFsTA/isBw0H7qXQhOX6K2p1QcVxO7q5TIzf8YivVgc=";
+  src = fetchFromGitHub {
+    owner = "home-assistant-ecosystem";
+    repo = "python-mystrom";
+    tag = finalAttrs.version;
+    hash = "sha256-zg/t2EQ6h8fThbV3U1h3Bs9pxOmlswicR3dREoQuuoY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aiohttp
     click
     requests
-    setuptools
   ];
 
-  # no tests are present
-  doCheck = false;
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "pymystrom.bulb"
@@ -34,16 +41,16 @@ buildPythonPackage rec {
     "pymystrom.switch"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API client for interacting with myStrom devices";
-    mainProgram = "mystrom";
     longDescription = ''
       Asynchronous Python API client for interacting with myStrom devices.
       There is support for bulbs, motion sensors, plugs and buttons.
     '';
     homepage = "https://github.com/home-assistant-ecosystem/python-mystrom";
-    changelog = "https://github.com/home-assistant-ecosystem/python-mystrom/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/home-assistant-ecosystem/python-mystrom/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "mystrom";
   };
-}
+})

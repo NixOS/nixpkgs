@@ -4,32 +4,30 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
-  darwin,
+  cacert,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dufs";
-  version = "0.43.0";
+  version = "0.46.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = "dufs";
-    rev = "v${version}";
-    hash = "sha256-KkuP9UE9VT9aJ50QH1Y/2f+t0tLOMyNovxCaLq0Jz0s=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Be7aJ5Bo5JSMcyyWsZ3ZamQ691TSIO4Ylxzil7UNJxk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-OQyMai0METXLSFl09eIk1xnL9QV5cEEiRNVEz1dHg+c=";
+  cargoHash = "sha256-H2ew+sb60UnXe3Dls9MSKwAk4hT/yLSbgZz6pVOkHQQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  __darwinAllowLocalNetworking = true;
 
-  # FIXME: checkPhase on darwin will leave some zombie spawn processes
-  # see https://github.com/NixOS/nixpkgs/issues/205620
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  preCheck = ''
+    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+  '';
+
   checkFlags = [
     # tests depend on network interface, may fail with virtual IPs.
     "--skip=validate_printed_urls"
@@ -42,18 +40,17 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/dufs --completions zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "File server that supports static serving, uploading, searching, accessing control, webdav";
     mainProgram = "dufs";
     homepage = "https://github.com/sigoden/dufs";
-    changelog = "https://github.com/sigoden/dufs/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [
+    changelog = "https://github.com/sigoden/dufs/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
-      figsoda
+    maintainers = with lib.maintainers; [
       holymonson
     ];
   };
-}
+})

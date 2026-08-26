@@ -4,7 +4,6 @@
   fetchPypi,
   libftdi1,
   libusb1,
-  pythonOlder,
   poetry-core,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pylibftdi";
   version = "0.23.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -35,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylibftdi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper to Intra2net's libftdi driver for FTDI's USB devices";
     homepage = "https://pylibftdi.readthedocs.io/";
     changelog = "https://github.com/codedstructure/pylibftdi/blob/${version}/CHANGES.txt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthuszagh ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthuszagh ];
   };
 }

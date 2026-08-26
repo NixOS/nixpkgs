@@ -15,7 +15,7 @@ glibc.overrideAttrs (oldAttrs: {
     runHook preBuild
 
     mkdir malloc
-    make -C ../glibc-${glibc.minorRelease}/malloc objdir=`pwd` `pwd`/malloc/mtrace;
+    make -C ../malloc objdir=`pwd` `pwd`/malloc/mtrace;
 
     runHook postBuild
   '';

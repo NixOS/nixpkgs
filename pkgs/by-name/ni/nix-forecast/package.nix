@@ -9,19 +9,18 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-forecast";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "getchoo";
     repo = "nix-forecast";
-    tag = "v${version}";
-    hash = "sha256-di9RV4xSCqIa+UCdALAEdR0cDq3u799L3YyFyAF+bRg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GTINiV+oHmu1/DmQsE7UjfAFFtH26LK35TveW437lPA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-n5LKfHBmua8iridnHY0C6ayjREwnqQpDI75+Ips4aNc=";
+  cargoHash = "sha256-FQph9QOc0JrVjdilUxjRc77/obICK7fgzcDuqAoE2cs=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -54,9 +53,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Check the forecast for today's Nix builds";
     homepage = "https://github.com/getchoo/nix-forecast";
-    changelog = "https://github.com/getchoo/nix-forecast/releases/tag/v${version}";
+    changelog = "https://github.com/getchoo/nix-forecast/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "nix-forecast";
   };
-}
+})

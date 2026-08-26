@@ -10,14 +10,14 @@
   jq,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vkdevicechooser";
   version = "1.1";
 
   src = fetchFromGitHub {
     owner = "jiriks74";
     repo = "vkdevicechooser";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-j4hefarOQ3q0sKkB2g/dO2/4bSYzt4oxmCna0nMAjFk=";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sigmike ];
   };
-}
+})

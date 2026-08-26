@@ -4,31 +4,27 @@
   fetchFromGitHub,
   cmake,
 }:
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ts_query_ls";
-  version = "2.0.0";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+  version = "3.16.0";
 
   src = fetchFromGitHub {
     owner = "ribru17";
     repo = "ts_query_ls";
-    rev = "v${version}";
-    hash = "sha256-RWryYFeJ6DdXG9kSjPbSu3xfiGjaUBNEj2XBIoXbySg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-cp+fPYkALMpkKsRscpwmW49j3URMoQ/5IbYnN2DaFF0=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-IlvUpEpdMocJ1d5GVWmuKfVRdOskuzIiqP6uSg/QxZc=";
+  cargoHash = "sha256-NSaqxLVl3zsSMSRss//gwI3gvRt1xT9LD7m4BmfKz4U=";
 
   meta = {
     description = "LSP implementation for Tree-sitter's query files";
     homepage = "https://github.com/ribru17/ts_query_ls";
-    changelog = "https://github.com/ribru17/ts_query_ls/releases/tag/v${version}";
+    changelog = "https://github.com/ribru17/ts_query_ls/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ribru17 ];
     mainProgram = "ts_query_ls";
   };
-}
+})

@@ -8,7 +8,7 @@
 
 # Note for maintainers:
 #
-# These packages are only allowed to be packaged under the the condition that we
+# These packages are only allowed to be packaged under the condition that we
 # - patch source/creator/config.d to not point to upstream's bug tracker
 # - use the "barebones" configuration to remove the mascot and logo from the build
 #
@@ -46,7 +46,7 @@ in
       # darwin has slightly different build steps
       broken = stdenv.hostPlatform.isDarwin;
       changelog = "https://github.com/Inochi2D/inochi-creator/releases/tag/${src.rev}";
-      description = "An open source editor for the Inochi2D puppet format";
+      description = "Open source editor for the Inochi2D puppet format";
     };
   };
 
@@ -80,7 +80,7 @@ in
       # darwin has slightly different build steps
       broken = stdenv.hostPlatform.isDarwin;
       changelog = "https://github.com/Inochi2D/inochi-session/releases/tag/${src.rev}";
-      description = "An application that allows streaming with Inochi2D puppets";
+      description = "Application that allows streaming with Inochi2D puppets";
     };
   };
 }

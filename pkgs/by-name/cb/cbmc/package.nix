@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cbmc";
-  version = "6.4.1";
+  version = "6.11.0";
 
   src = fetchFromGitHub {
     owner = "diffblue";
     repo = "cbmc";
     tag = "cbmc-${finalAttrs.version}";
-    hash = "sha256-O8aZTW+Eylshl9bmm9GzbljWB0+cj2liZHs2uScERkM=";
+    hash = "sha256-GHpgcGBE/AAhTVxGVzTPMdZ8BkuXa7/OgMumZJ8ENRc=";
   };
 
   srcglucose = fetchFromGitHub {
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   srccadical =
     (cadical.override {
-      version = "2.0.0";
+      version = "3.0.0";
     }).src;
 
   nativeBuildInputs = [
@@ -51,35 +51,28 @@ stdenv.mkDerivation (finalAttrs: {
       cudd = cudd.src;
     })
     ./0002-Do-not-download-sources-in-cmake.patch
-    # Fixes build with libc++ >= 19 due to the removal of std::char_traits<unsigned>.
-    # Remove for versions > 6.4.1.
-    (fetchpatch {
-      url = "https://github.com/diffblue/cbmc/commit/684bf4221c8737952e6469304f5a360dc3d5439d.patch";
-      hash = "sha256-3hHu6FcyHjfeFjNxhyhxxk7I/SK98BXT+xy7NgtEt50=";
-    })
   ];
 
-  postPatch =
-    ''
-      # fix library_check.sh interpreter error
-      patchShebangs .
+  postPatch = ''
+    # fix library_check.sh interpreter error
+    patchShebangs .
 
-      mkdir -p srccadical
-      cp -r ${finalAttrs.srccadical}/* srccadical
+    mkdir -p srccadical
+    cp -r ${finalAttrs.srccadical}/* srccadical
 
-      mkdir -p srcglucose
-      cp -r ${finalAttrs.srcglucose}/* srcglucose
-      find -exec chmod +w {} \;
+    mkdir -p srcglucose
+    cp -r ${finalAttrs.srcglucose}/* srcglucose
+    find -exec chmod +w {} \;
 
-      substituteInPlace src/solvers/CMakeLists.txt \
-       --replace-fail "@srccadical@" "$PWD/srccadical" \
-       --replace-fail "@srcglucose@" "$PWD/srcglucose"
-    ''
-    + lib.optionalString (!stdenv.cc.isGNU) ''
-      # goto-gcc rely on gcc
-      substituteInPlace "regression/CMakeLists.txt" \
-        --replace-fail "add_subdirectory(goto-gcc)" ""
-    '';
+    substituteInPlace src/solvers/CMakeLists.txt \
+     --replace-fail "@srccadical@" "$PWD/srccadical" \
+     --replace-fail "@srcglucose@" "$PWD/srcglucose"
+  ''
+  + lib.optionalString (!stdenv.cc.isGNU) ''
+    # goto-gcc rely on gcc
+    substituteInPlace "regression/CMakeLists.txt" \
+      --replace-fail "add_subdirectory(goto-gcc)" ""
+  '';
 
   postInstall = ''
     # goto-cc expects ls_parse.py in PATH
@@ -87,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/bin/ls_parse.py $out/share/cbmc/ls_parse.py
     chmod +x $out/share/cbmc/ls_parse.py
     wrapProgram $out/bin/goto-cc \
-      --prefix PATH : "$out/share/cbmc" \
+      --prefix PATH : "$out/share/cbmc"
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (
@@ -98,6 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
       "-Wno-error=unused-but-set-variable"
       # fix "passing no argument for the '...' parameter of a variadic macro is a C++20 extension"
       "-Wno-error=c++20-extensions"
+      # fix "first argument in call to 'memset' is a pointer to non-trivially copyable type"
+      "-Wno-error=nontrivial-memcall"
     ]
   );
 
@@ -112,7 +107,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/cbmc";
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
@@ -122,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "CBMC is a Bounded Model Checker for C and C++ programs";
+    description = "Bounded Model Checker for C and C++ programs";
     homepage = "http://www.cprover.org/cbmc/";
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ jiegec ];

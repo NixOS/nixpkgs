@@ -7,15 +7,12 @@
   poetry-core,
   pytestCheckHook,
   pytest-asyncio,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pylaunches";
   version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "ludeeus";
@@ -42,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylaunches" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to get information about upcoming space launches";
     homepage = "https://github.com/ludeeus/pylaunches";
     changelog = "https://github.com/ludeeus/pylaunches/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

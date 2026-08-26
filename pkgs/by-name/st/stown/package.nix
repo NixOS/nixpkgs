@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 let
-  version = "1.2.0";
+  version = "1.2.1";
 in
 python3Packages.buildPythonApplication {
   pname = "stown";
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication {
     owner = "rseichter";
     repo = "stown";
     tag = version;
-    hash = "sha256-iHeqmlo7be28ISJfPZ7GZC2gj2VVgt20ORnfYVToo0A=";
+    hash = "sha256-B3gNFVeMRvN+bqBNCBLU1YqjGVz9wCbHUknWTTU8S6A=";
   };
 
   build-system = [

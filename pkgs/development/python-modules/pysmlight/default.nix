@@ -5,26 +5,31 @@
   awesomeversion,
   buildPythonPackage,
   fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
   lib,
   mashumaro,
-  poetry-core,
   pytest-asyncio,
   pytestCheckHook,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "pysmlight";
-  version = "0.2.4";
+  version = "0.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "smlight-tech";
     repo = "pysmlight";
     tag = "v${version}";
-    hash = "sha256-ZNqNRz7d3HZybQG778+ubxuc7Eakf/kWpd3I3cosSIU=";
+    hash = "sha256-/FL1iRQAOb+4AdrRpRRkt8NsHpQt4fHfg6qO+aUUZeo=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
   dependencies = [
     aiohttp
@@ -39,7 +44,10 @@ buildPythonPackage rec {
     aresponses
     pytest-asyncio
     pytestCheckHook
+    syrupy
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     changelog = "https://github.com/smlight-tech/pysmlight/releases/tag/${src.tag}";

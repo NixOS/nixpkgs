@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   pname = "pastebinit";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "pastebinit";
+    repo = "pastebinit";
     rev = version;
     hash = "sha256-vuAWkHlQM6QTWarThpSbY0qrxzej0GvLU0jT2JOS/qc=";
   };
@@ -46,14 +46,14 @@ stdenv.mkDerivation rec {
     installManPage pastebinit.1
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://stgraber.org/category/pastebinit/";
     description = "Software that lets you send anything you want directly to a pastebin from the command line";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       raboof
       samuel-martineau
     ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

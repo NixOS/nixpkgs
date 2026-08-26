@@ -1,30 +1,34 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  python-dateutil,
   celery,
-  redis,
-  tenacity,
-  pytestCheckHook,
-  pytz,
   fakeredis,
-  mock,
+  fetchFromGitHub,
+  pytestCheckHook,
+  python-dateutil,
+  pbr,
+  redis,
+  pytz,
+  tenacity,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "celery-redbeat";
-  version = "2.3.2";
-  format = "setuptools";
+  version = "2.4.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sibson";
     repo = "redbeat";
-    tag = "v${version}";
-    hash = "sha256-nUVioETVIAjLPOmhBSf+bOUsYuV1C1VGwHz5KjbIjHc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dva4th7CAvVKA8UeIQdFsDd5xOFxsluVYDzvn5Y5Pi4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ pbr ];
+
+  env.PBR_VERSION = finalAttrs.version;
+
+  dependencies = [
     celery
     python-dateutil
     redis
@@ -33,17 +37,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     fakeredis
-    mock
     pytestCheckHook
     pytz
   ];
 
   pythonImportsCheck = [ "redbeat" ];
 
-  meta = with lib; {
+  meta = {
     description = "Database-backed Periodic Tasks";
-    homepage = "https://github.com/celery/django-celery-beat";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ onny ];
+    homepage = "https://github.com/sibson/redbeat";
+    changelog = "https://github.com/sibson/redbeat/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

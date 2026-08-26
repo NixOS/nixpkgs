@@ -2,24 +2,36 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  testers,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gci";
-  version = "0.13.6";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "daixiang0";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-BlR7lQnp9WMjSN5IJOK2HIKXIAkn5Pemf8qbMm83+/w=";
+    repo = "gci";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+qoHORHUMgr03v3RB+7+g9O/tlDkQKFmKybma0FdhVs=";
   };
 
-  vendorHash = "sha256-/8fggERlHySyimrGOHkDERbCPZJWqojycaifNPF6MjE=";
+  vendorHash = "sha256-MS6Ei58HpR/ueqdmGEx15WoSSSwDpQUcxAWz36UnhmA=";
 
-  meta = with lib; {
+  excludedPackages = [ "v2" ];
+
+  ldflags = [
+    "-s"
+  ];
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+  };
+
+  meta = {
     description = "Controls golang package import order and makes it always deterministic";
     homepage = "https://github.com/daixiang0/gci";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ krostar ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ krostar ];
+    mainProgram = "gci";
   };
-}
+})

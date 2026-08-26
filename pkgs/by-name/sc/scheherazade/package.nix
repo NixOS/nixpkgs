@@ -13,6 +13,7 @@ let
       "3.300" = "sha256-LaaA6DWAE2dcwVVX4go9cJaiuwI6efYbPk82ym3W3IY=";
       "4.000" = "sha256-FhgHlHCfojIl3Y11EDYhNTmLYwQ60OrwnA9nbZbZGJE=";
       "4.300" = "sha256-djUZyBJaX6cFG4SYn+HIldNhRQ4Hg+Jt3uDfYzo9H5o=";
+      "4.400" = "sha256-76CQvy17lvzjVFICtrGU4DdT6u1nSPdSNkec2FcTwGw=";
     }
     ."${version}";
   pname = "scheherazade${lib.optionalString new "-new"}";
@@ -21,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
   inherit pname version;
 
   src = fetchzip {
-    url = "http://software.sil.org/downloads/r/scheherazade/Scheherazade${lib.optionalString new "New"}-${version}.zip";
+    url = "https://software.sil.org/downloads/r/scheherazade/Scheherazade${lib.optionalString new "New"}-${version}.zip";
     inherit hash;
   };
 
@@ -35,7 +36,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://software.sil.org/scheherazade/";
     description = "Font designed in a similar style to traditional Naskh typefaces";
     longDescription = ''
@@ -56,7 +57,7 @@ stdenvNoCC.mkDerivation rec {
       font family, along with documentation.
     '';
     downloadPage = "https://software.sil.org/scheherazade/download/";
-    license = licenses.ofl;
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
   };
 }

@@ -10,18 +10,18 @@
   glibc,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "vault";
-  version = "1.19.3";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
-    rev = "v${version}";
-    hash = "sha256-Mh9cRSLvx//ePSI1RMcSA7s56MAw+XuAJvbP7BFNZZw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-s6Muogxe+jvre1qZYRiSGTDgMf0+BVsSOwyxF6+Aa2o=";
   };
 
-  vendorHash = "sha256-F86lDf9AYvVL/sNNstRINe5+O/kGA0SuRjkXM4C99TU=";
+  vendorHash = "sha256-utF/CgWNtJNin5NIq7ZGjNc7YbjAuN5nm/G57uQal94=";
 
   proxyVendor = true;
 
@@ -37,25 +37,24 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/hashicorp/vault/sdk/version.GitCommit=${src.rev}"
-    "-X github.com/hashicorp/vault/sdk/version.Version=${version}"
+    "-X github.com/hashicorp/vault/sdk/version.GitCommit=${finalAttrs.src.rev}"
+    "-X github.com/hashicorp/vault/sdk/version.Version=${finalAttrs.version}"
     "-X github.com/hashicorp/vault/sdk/version.VersionPrerelease="
   ];
 
-  postInstall =
-    ''
-      echo "complete -C $out/bin/vault vault" > vault.bash
-      installShellCompletion vault.bash
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      wrapProgram $out/bin/vault \
-        --prefix PATH ${
-          lib.makeBinPath [
-            gawk
-            glibc
-          ]
-        }
-    '';
+  postInstall = ''
+    echo "complete -C $out/bin/vault vault" > vault.bash
+    installShellCompletion vault.bash
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    wrapProgram $out/bin/vault \
+      --prefix PATH ${
+        lib.makeBinPath [
+          gawk
+          glibc
+        ]
+      }
+  '';
 
   passthru.tests = {
     inherit (nixosTests)
@@ -66,19 +65,16 @@ buildGoModule rec {
       ;
   };
 
-  meta = with lib; {
-    homepage = "https://www.vaultproject.io/";
+  meta = {
+    homepage = "https://developer.hashicorp.com/vault";
     description = "Tool for managing secrets";
-    changelog = "https://github.com/hashicorp/vault/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsl11;
+    changelog = "https://github.com/hashicorp/vault/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.bsl11;
     mainProgram = "vault";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       rushmorem
-      lnl7
-      offline
-      pradeepchhetri
       Chili-Man
       techknowlogick
     ];
   };
-}
+})

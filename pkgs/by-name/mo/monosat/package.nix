@@ -14,18 +14,14 @@
 }:
 
 let
-  boolToCmake = x: if x then "ON" else "OFF";
-
-  rev = "1.8.0";
-  sha256 = "0q3a8x3iih25xkp2bm842sm2hxlb8hxlls4qmvj7vzwrh4lvsl7b";
-
   pname = "monosat";
-  version = rev;
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "sambayless";
-    repo = pname;
-    inherit rev sha256;
+    repo = "monosat";
+    tag = version;
+    sha256 = "0q3a8x3iih25xkp2bm842sm2hxlb8hxlls4qmvj7vzwrh4lvsl7b";
   };
 
   patches = [
@@ -41,13 +37,30 @@ let
   # https://github.com/sambayless/monosat/issues/33
   commonPostPatch = lib.optionalString (!stdenv.hostPlatform.isx86) ''
     substituteInPlace src/monosat/Main.cc \
-      --replace 'defined(__linux__)' '0'
+      --replace-fail 'defined(__linux__)' '0'
   '';
 
+  meta = {
+    description = "SMT solver for Monotonic Theories";
+    mainProgram = "monosat";
+    platforms = lib.platforms.unix;
+    license = if includeGplCode then lib.licenses.gpl2 else lib.licenses.mit;
+    homepage = "https://github.com/sambayless/monosat";
+    maintainers = [ lib.maintainers.acairncross ];
+  };
+
   core = stdenv.mkDerivation {
-    name = "${pname}-${version}";
-    inherit src patches;
-    postPatch = commonPostPatch;
+    inherit
+      pname
+      version
+      src
+      patches
+      meta
+      ;
+    postPatch = commonPostPatch + ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "cmake_minimum_required(VERSION 3.02)" "cmake_minimum_required(VERSION 3.10)"
+    '';
     nativeBuildInputs = [ cmake ];
     buildInputs = [
       zlib
@@ -56,12 +69,11 @@ let
     ];
 
     cmakeFlags = [
-      "-DBUILD_STATIC=OFF"
-      "-DJAVA=${boolToCmake includeJava}"
-      "-DGPL=${boolToCmake includeGplCode}"
-
+      (lib.cmakeBool "BUILD_STATIC" false)
+      (lib.cmakeBool "JAVA" includeJava)
+      (lib.cmakeBool "GPL" includeGplCode)
       # file RPATH_CHANGE could not write new RPATH
-      "-DCMAKE_SKIP_BUILD_RPATH=ON"
+      (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
     ];
 
     postInstall = lib.optionalString includeJava ''
@@ -70,44 +82,45 @@ let
     '';
 
     passthru = { inherit python; };
-
-    meta = with lib; {
-      description = "SMT solver for Monotonic Theories";
-      mainProgram = "monosat";
-      platforms = platforms.unix;
-      license = if includeGplCode then licenses.gpl2 else licenses.mit;
-      homepage = "https://github.com/sambayless/monosat";
-      maintainers = [ maintainers.acairncross ];
-    };
   };
 
   python =
     {
       buildPythonPackage,
+      setuptools,
       cython,
       pytestCheckHook,
     }:
     buildPythonPackage {
+      pyproject = true;
+
       inherit
         pname
         version
         src
         patches
+        meta
         ;
 
-      propagatedBuildInputs = [
-        core
+      build-system = [
+        setuptools
         cython
       ];
 
+      buildInputs = [ core ];
+
       # This tells setup.py to use cython, which should produce faster bindings
-      MONOSAT_CYTHON = true;
+      env.MONOSAT_CYTHON = true;
 
       # After patching src, move to where the actually relevant source is. This could just be made
       # the sourceRoot if it weren't for the patch.
       postPatch =
         commonPostPatch
+        # cython 3.1 dropped the python 2 `long` builtin
         + ''
+          substituteInPlace src/monosat/api/python/monosat/monosat_p.pyx \
+            --replace-fail '(int, long)' 'int' \
+            --replace-fail '(int,long)' 'int'
           cd src/monosat/api/python
         ''
         +
@@ -116,7 +129,7 @@ let
           # shared lib? The current setup.py copies the .dylib/.so...
           ''
             substituteInPlace setup.py \
-              --replace 'library_dir = "../../../../"' 'library_dir = "${core}/lib/"'
+              --replace-fail 'library_dir = "../../../../"' 'library_dir = "${core}/lib/"'
           '';
 
       nativeCheckInputs = [ pytestCheckHook ];
@@ -124,6 +137,11 @@ let
       disabledTests = [
         "test_assertAtMostOne"
         "test_assertEqual"
+      ];
+
+      pythonImportsCheck = [
+        "monosat"
+        "monosat.monosat_p"
       ];
     };
 in

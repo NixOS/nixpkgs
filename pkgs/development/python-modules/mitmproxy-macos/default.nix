@@ -10,13 +10,14 @@ buildPythonPackage rec {
   inherit (mitmproxy-rs) version;
   format = "wheel";
 
+  # Note: if this isn't downloading, its because mitmproxy-rs updated without also updating this.
   src = fetchPypi {
     pname = "mitmproxy_macos";
     inherit version;
     format = "wheel";
     dist = "py3";
     python = "py3";
-    hash = "sha256-sNguT3p72v9+FU5XFLYV6p0fO6WvGYerPy68GINwbyA=";
+    hash = "sha256-baAfEY4hEN3wOEicgE53gY71IX003JYFyyZaNJ7U8UA=";
   };
 
   # repo has no python tests
@@ -24,13 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mitmproxy_macos" ];
 
-  meta = with lib; {
+  meta = {
+    inherit (mitmproxy-rs.meta) changelog license maintainers;
     description = "MacOS Rust bits in mitmproxy";
     homepage = "https://github.com/mitmproxy/mitmproxy_rs/tree/main/mitmproxy-macos";
-    changelog = "https://github.com/mitmproxy/mitmproxy_rs/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ boltzmannrain ];
-    platforms = platforms.darwin;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    platforms = lib.platforms.darwin;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

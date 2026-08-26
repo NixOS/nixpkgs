@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
@@ -9,22 +8,23 @@
   vulkan-loader,
   freetype,
   fontconfig,
-  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wgpu-utils";
-  version = "24.0.3";
+  version = "29.0.1";
 
   src = fetchFromGitHub {
     owner = "gfx-rs";
     repo = "wgpu";
-    tag = "wgpu-v${version}";
-    hash = "sha256-MoHpMdOKwCdQ2iO4O8WDskOQXgeFwpsD/UhQOhSbF70=";
+    tag = "wgpu-v${finalAttrs.version}";
+    hash = "sha256-BLw1HnB0DghtWAe8jo6GPO54U3qNNO4yprArme1CdeE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-l7V8awY17YxVyBzWV+BHRva7FczZQxJy8c6xve27gjs=";
+  # cargo-auditable fails on wgpu's dep:-based feature wiring.
+  auditable = false;
+
+  cargoHash = "sha256-QMH5GHjOHbzYdFUQxJ6aEQ+rX6Okl1HYog0hMh6bc8w=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,19 +32,10 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
 
-  buildInputs =
-    [
-      freetype
-      fontconfig
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreServices
-        QuartzCore
-        AppKit
-      ]
-    );
+  buildInputs = [
+    freetype
+    fontconfig
+  ];
 
   # Tests fail, as the Nix sandbox doesn't provide an appropriate adapter (e.g. Vulkan).
   doCheck = false;
@@ -54,14 +45,14 @@ rustPlatform.buildRustPackage rec {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Safe and portable GPU abstraction in Rust, implementing WebGPU API";
     homepage = "https://wgpu.rs/";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ erictapen ];
+    maintainers = with lib.maintainers; [ erictapen ];
     mainProgram = "wgpu-info";
   };
-}
+})

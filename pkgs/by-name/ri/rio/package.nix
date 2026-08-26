@@ -6,28 +6,26 @@
   rustPlatform,
   nixosTests,
   nix-update-script,
-
   autoPatchelfHook,
+  installShellFiles,
   cmake,
   ncurses,
+  scdoc,
+  shaderc,
   pkg-config,
-
   gcc-unwrapped,
   fontconfig,
   libGL,
   vulkan-loader,
   libxkbcommon,
-
   withX11 ? !stdenv.hostPlatform.isDarwin,
-  libX11,
-  libXcursor,
-  libXi,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxi,
+  libxrandr,
   libxcb,
-
   withWayland ? !stdenv.hostPlatform.isDarwin,
   wayland,
-
   testers,
   rio,
 }:
@@ -41,39 +39,41 @@ let
       vulkan-loader
     ]
     ++ lib.optionals withX11 [
-      libX11
-      libXcursor
-      libXi
-      libXrandr
+      libx11
+      libxcursor
+      libxi
+      libxrandr
       libxcb
     ]
     ++ lib.optionals withWayland [
       wayland
     ];
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rio";
-  version = "0.2.12";
+  version = "0.5.25";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
-    rev = "v${version}";
-    hash = "sha256-NAg8Hm90CxRt3rthFas8IyAjc1oj/PSRjjG/5R68CD8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YMG1kKYvRkKQUK5ux5W7tNXEIaHgxaJocwA7Pbp1XBc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-myOZNiLdc9430jn5bSKtGmW4dY4yo7wt2Mf3dEQZaSs=";
+  cargoHash = "sha256-UK4QZP1LFd90lSMvWiN+8RrGJA53EbKQFOa9P2YhhuM=";
 
-  nativeBuildInputs =
-    [
-      ncurses
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      cmake
-      pkg-config
-      autoPatchelfHook
-    ];
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+    ncurses
+    scdoc
+    installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    cmake
+    pkg-config
+    autoPatchelfHook
+    shaderc
+  ];
 
   runtimeDependencies = rlinkLibs;
 
@@ -92,27 +92,35 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = [ ] ++ lib.optional withX11 "x11" ++ lib.optional withWayland "wayland";
 
   checkFlags = [
-    # Fail to run in sandbox environment.
-    "--skip=sys::unix::eventedfd::EventedFd"
+    # These build "dead" contexts, which carry the placeholder shell PID 1.
+    # Dropping one sends SIGHUP to that PID, and the builder is PID 1 inside the
+    # sandbox, so the tests kill the build. Workaround until
+    # https://github.com/raphamorim/rio/pull/1812 is merged.
+    "--skip=context::test::"
+    "--skip=context::title::test::test_update_title"
   ];
 
-  postInstall =
-    ''
-      install -D -m 644 misc/rio.desktop -t $out/share/applications
-      install -D -m 644 misc/logo.svg \
-                        $out/share/icons/hicolor/scalable/apps/rio.svg
+  postInstall = ''
+    install -D -m 644 misc/rio.desktop -t $out/share/applications
+    install -D -m 644 misc/logo.svg \
+                      $out/share/icons/hicolor/scalable/apps/rio.svg
 
-      install -dm 755 "$terminfo/share/terminfo/r/"
-      tic -xe rio,rio-direct -o "$terminfo/share/terminfo" misc/rio.terminfo
-      mkdir -p $out/nix-support
-      echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir $out/Applications/
-      mv misc/osx/Rio.app/ $out/Applications/
-      mkdir $out/Applications/Rio.app/Contents/MacOS/
-      ln -s $out/bin/rio $out/Applications/Rio.app/Contents/MacOS/
-    '';
+    install -dm 755 "$terminfo/share/terminfo"
+    tic -xe xterm-rio,rio -o "$terminfo/share/terminfo" misc/rio.terminfo
+    mkdir -p $out/nix-support
+    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+
+    scdoc < extra/man/rio.1.scd > rio.1
+    scdoc < extra/man/rio.5.scd > rio.5
+    scdoc < extra/man/rio-bindings.5.scd > rio-bindings.5
+    installManPage rio.1 rio.5 rio-bindings.5
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir $out/Applications/
+    mv misc/osx/Rio.app/ $out/Applications/
+    mkdir $out/Applications/Rio.app/Contents/MacOS/
+    ln -s $out/bin/rio $out/Applications/Rio.app/Contents/MacOS/
+  '';
 
   passthru = {
     updateScript = nix-update-script {
@@ -122,22 +130,21 @@ rustPlatform.buildRustPackage rec {
       ];
     };
 
-    tests =
-      {
-        version = testers.testVersion { package = rio; };
-      }
-      // lib.optionalAttrs stdenv.buildPlatform.isLinux {
-        # FIXME: Restrict test execution inside nixosTests for Linux devices as ofborg
-        # 'passthru.tests' nixosTests are failing on Darwin architectures.
-        #
-        # Ref: https://github.com/NixOS/nixpkgs/issues/345825
-        test = nixosTests.terminal-emulators.rio;
-      };
+    tests = {
+      version = testers.testVersion { package = rio; };
+    }
+    // lib.optionalAttrs stdenv.buildPlatform.isLinux {
+      # FIXME: Restrict test execution inside nixosTests for Linux devices as ofborg
+      # 'passthru.tests' nixosTests are failing on Darwin architectures.
+      #
+      # Ref: https://github.com/NixOS/nixpkgs/issues/345825
+      test = nixosTests.terminal-emulators.rio;
+    };
   };
 
   meta = {
     description = "Hardware-accelerated GPU terminal emulator powered by WebGPU";
-    homepage = "https://raphamorim.io/rio";
+    homepage = "https://rioterm.com/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       tornax
@@ -145,7 +152,7 @@ rustPlatform.buildRustPackage rec {
       oluceps
     ];
     platforms = lib.platforms.unix;
-    changelog = "https://github.com/raphamorim/rio/blob/v${version}/docs/docs/releases.md";
+    changelog = "https://github.com/raphamorim/rio/releases/tag/v${finalAttrs.version}";
     mainProgram = "rio";
   };
-}
+})

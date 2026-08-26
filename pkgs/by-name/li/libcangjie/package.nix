@@ -9,7 +9,7 @@
   cppcheck,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcangjie";
   version = "1.4.0";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "cangjie";
     repo = "libcangjie";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-LZRU2hbAC8xftPAIHDKCa2SfFLuH/PVqvjZmOSoUQwc=";
   };
 
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
     description = "C library implementing the Cangjie input method";
     homepage = "https://gitlab.freedesktop.org/cangjie/libcangjie";
     license = lib.licenses.lgpl3Plus;
-    maintainers = [ lib.maintainers.linquize ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "libcangjie-cli";
   };
-}
+})

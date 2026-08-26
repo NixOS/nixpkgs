@@ -7,6 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "onlykey-cli";
   version = "1.2.10";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
@@ -15,10 +16,14 @@ python3Packages.buildPythonApplication rec {
   };
 
   build-system = with python3Packages; [
-    cython
+    setuptools
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  pythonRemoveDeps = [
+    "Cython" # don't know why cython is listed as a runtime dependency, let's just remove it
+  ];
+
+  dependencies = with python3Packages; [
     aenum
     ecdsa
     hidapi
@@ -32,11 +37,11 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
   pythonImportsCheck = [ "onlykey.client" ];
 
-  meta = with lib; {
+  meta = {
     description = "OnlyKey client and command-line tool";
     mainProgram = "onlykey-cli";
     homepage = "https://github.com/trustcrypto/python-onlykey";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ranfdev ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ranfdev ];
   };
 }

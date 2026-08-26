@@ -5,14 +5,14 @@
 }:
 let
   pname = "everdo";
-  version = "1.9.0";
+  version = "1.11.9";
 
   src = fetchurl {
-    url = "https://release.everdo.net/${version}/Everdo-${version}.AppImage";
-    hash = "sha256-0yxAzM+qmgm4E726QDYS9QwMdp6dUcuvjZzWYEZx7kU=";
+    url = "https://downloads.everdo.net/electron/Everdo-${version}.AppImage";
+    hash = "sha256-67b0gSoVcCIfkFRUL3afgB6eYj5YEuvDTtQgTIwV9S0=";
   };
 
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 appimageTools.wrapType2 {
   inherit pname version src;

@@ -2,20 +2,20 @@
   lib,
   stdenv,
   fetchurl,
+  pkg-config,
   dlib,
   gsl,
   mpfr,
   perl,
   python3,
 }:
-
 stdenv.mkDerivation rec {
   pname = "viennarna";
-  version = "2.7.0";
+  version = "2.7.2";
 
   src = fetchurl {
     url = "https://www.tbi.univie.ac.at/RNA/download/sourcecode/2_7_x/ViennaRNA-${version}.tar.gz";
-    hash = "sha256-mpn9aO04CJTe+01eaooocWKScAKM338W8KBdpujHFHM=";
+    hash = "sha256-GrX0pPdvyFoiQ1RgiORfXYXy16VsxlbpabAFzOm/q18=";
   };
 
   # use nixpkgs dlib sources instead of bundled ones
@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
     cp -a ${dlib.src} ./src/dlib-19.24
     find ./src/dlib-19.24 -type d -exec chmod +w {} \;
   '';
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
   buildInputs = [
     gsl

@@ -2,23 +2,21 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
   setuptools,
   wsproto,
+  pythonAtLeast,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "simple-websocket";
   version = "1.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "simple-websocket";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dwL6GUyygNGBXqkkTnsHwFFpa1JAaeWc9ycQNRgTN4I=";
   };
 
@@ -33,13 +31,17 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests require network access
     "SimpleWebSocketClientTestCase"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # RuntimeError: There is no current event loop in thread 'MainThread'
+    "AioSimpleWebSocketServerTestCase"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple WebSocket server and client for Python";
     homepage = "https://github.com/miguelgrinberg/simple-websocket";
-    changelog = "https://github.com/miguelgrinberg/simple-websocket/blob/${version}/CHANGES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/miguelgrinberg/simple-websocket/blob/${finalAttrs.src.tag}/CHANGES.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

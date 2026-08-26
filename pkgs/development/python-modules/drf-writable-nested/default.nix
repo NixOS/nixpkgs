@@ -8,7 +8,7 @@
   pytest-django,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "drf-writable-nested";
   version = "0.7.2";
   format = "setuptools";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "beda-software";
     repo = "drf-writable-nested";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VkQ3Di3vXxQAmvuMP8KpGVVdx7LMYcQFEF4ZsuA9KeA=";
   };
 
@@ -30,10 +30,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Writable nested model serializer for Django REST Framework";
     homepage = "https://github.com/beda-software/drf-writable-nested";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

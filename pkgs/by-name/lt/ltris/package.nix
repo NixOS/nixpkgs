@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ltris";
-  version = "2.0.3";
+  version = "2.0.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/lgames/ltris2-${finalAttrs.version}.tar.gz";
-    hash = "sha256-+w8WTASYj/AWcBg9W3dmZ0cyCmlZNhDZ0l/WwhRfJRk=";
+    hash = "sha256-SCFQSV+dh7sTnVrxq+xwMDg8N/2z51pF6brWfq15jto=";
   };
 
   buildInputs = [
@@ -28,7 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "format" ];
 
   passthru.updateScript = directoryListingUpdater {
-    inherit (finalAttrs) pname version;
+    pname = "ltris2";
+    inherit (finalAttrs) version;
     url = "https://lgames.sourceforge.io/LTris/";
     extraRegex = "(?!.*-win(32|64)).*";
   };
@@ -36,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://lgames.sourceforge.io/LTris/";
     description = "Tetris clone from the LGames series";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     mainProgram = "ltris2";
     maintainers = with lib.maintainers; [ marcin-serwin ];
     platforms = lib.platforms.all;

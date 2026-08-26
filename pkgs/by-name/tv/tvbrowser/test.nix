@@ -4,14 +4,14 @@
   tvbrowser,
   runCommand,
   writeShellApplication,
-  xorg,
+  xwininfo,
 }:
 
 let
   testScript = writeShellApplication {
     name = "tvbrowser-test-script";
     runtimeInputs = [
-      xorg.xwininfo
+      xwininfo
       tvbrowser
     ];
     text = ''

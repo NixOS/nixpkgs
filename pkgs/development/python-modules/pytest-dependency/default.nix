@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytest,
   pytestCheckHook,
   setuptools,
@@ -9,13 +9,20 @@
 
 buildPythonPackage rec {
   pname = "pytest-dependency";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-k0sOajnZWZUGLBk/fq7tio/6Bv8bzvS2Kw3HSnCLrME=";
+  src = fetchFromGitHub {
+    owner = "RKrahl";
+    repo = "pytest-dependency";
+    tag = version;
+    hash = "sha256-1tAikpdCLJMmylIbd1zQ45Bq+95O5cDQxNGwe3XpZuw=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "UNKNOWN" "${version}"
+  '';
 
   nativeBuildInputs = [ setuptools ];
 
@@ -25,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_dependency" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/RKrahl/pytest-dependency";
     changelog = "https://github.com/RKrahl/pytest-dependency/blob/${version}/CHANGES.rst";
     description = "Manage dependencies of tests";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

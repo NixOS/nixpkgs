@@ -4,24 +4,43 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gomi";
-  version = "1.6.0";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
-    owner = "b4b4r07";
+    owner = "babarot";
     repo = "gomi";
-    tag = "v${version}";
-    hash = "sha256-FZCvUG6lQH8CFivV/hbIgGQx4FCk1UtreiWXTQVi4+4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-25nwTqPGxGsDe2LutcZwIxswqhrV3ASD0l73UfYZV9Y=";
+    # populate values that require us to use git. By doing this in postFetch we
+    # can delete .git afterwards and maintain better reproducibility of the src.
+    leaveDotGit = true;
+    postFetch = ''
+      cd $out
+      git show --format='%h' HEAD --quiet > ldflags_revision
+      date --utc --date="@$(git show --format='%ct' HEAD --quiet)" +'%Y-%m-%dT%H:%M:%SZ' > ldflags_buildDate
+      find . -type d -name .git -print0 | xargs -0 rm -rf
+    '';
   };
 
-  vendorHash = "sha256-8aw81DKBmgNsQzgtHCsUkok5e5+LeAC8BUijwKVT/0s=";
+  vendorHash = "sha256-NoiwYqDS+a5s9wOMT5setVjvFDZDFDDkvA2nyRi1XVQ=";
 
   subPackages = [ "." ];
 
+  # Add version information fetched from the repository to ldflags.
+  # https://github.com/babarot/gomi/blob/v1.6.4/.goreleaser.yaml#L20-L22
+  ldflags = [
+    "-X main.version=v${finalAttrs.version}"
+  ];
+  preBuild = ''
+    ldflags+=" -X main.revision=$(cat ldflags_revision)"
+    ldflags+=" -X main.buildDate=$(cat ldflags_buildDate)"
+  '';
+
   meta = {
     description = "Replacement for UNIX rm command";
-    homepage = "https://github.com/b4b4r07/gomi";
+    homepage = "https://github.com/babarot/gomi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       mimame
@@ -29,4 +48,4 @@ buildGoModule rec {
     ];
     mainProgram = "gomi";
   };
-}
+})

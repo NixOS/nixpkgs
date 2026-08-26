@@ -11,7 +11,6 @@
   dask,
   numpy,
   scipy,
-  pandas,
   pims,
 
   # tests
@@ -20,24 +19,22 @@
   scikit-image,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dask-image";
-  version = "2024.5.3";
+  version = "2026.5.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-image";
-    tag = "v${version}";
-    hash = "sha256-kXCAqJ2Zgo/2Khvo2YcK+n4oGM219GyQ2Hsq9re1Lac=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SEbabXZx4u+C4IjzfVf81Y/gopxt6m0Jp0ZCN9hx5G8=";
   };
 
   postPatch = ''
-    substituteInPlace dask_image/ndinterp/__init__.py \
-      --replace-fail "out_bounds.ptp(axis=1)" "np.ptp(out_bounds, axis=1)"
-
-    substituteInPlace tests/test_dask_image/test_imread/test_core.py \
-      --replace-fail "fh.save(" "fh.write("
+    substituteInPlace pyproject.toml \
+      --replace-fail "--flake8" ""
   '';
 
   build-system = [
@@ -48,9 +45,8 @@ buildPythonPackage rec {
   dependencies = [
     dask
     numpy
-    scipy
-    pandas
     pims
+    scipy
   ];
 
   nativeCheckInputs = [
@@ -70,13 +66,18 @@ buildPythonPackage rec {
 
     # AssertionError (comparing slices)
     "test_find_objects_with_empty_chunks"
+
+    # scipy compat issue
+    # TypeError: only 0-dimensional arrays can be converted to Python scalars
+    "test_generic_filter_identity"
+    "test_generic_filter_comprehensions"
   ];
 
   meta = {
     description = "Distributed image processing";
     homepage = "https://github.com/dask/dask-image";
-    changelog = "https://github.com/dask/dask-image/releases/tag/v${version}";
+    changelog = "https://github.com/dask/dask-image/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

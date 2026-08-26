@@ -1,5 +1,5 @@
 {
-  gcc13Stdenv,
+  stdenv,
   lib,
   fetchzip,
   autoconf,
@@ -21,7 +21,6 @@
 */
 
 let
-  stdenv = gcc13Stdenv;
   arch =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       "64"
@@ -48,7 +47,7 @@ stdenv.mkDerivation {
   version = "4.00";
 
   src = fetchzip {
-    url = "http://gdlp01.c-wss.com/gds/5/0100005515/01/cnijfilter-source-4.00-1.tar.gz";
+    url = "https://gdlp01.c-wss.com/gds/5/0100005515/01/cnijfilter-source-4.00-1.tar.gz";
     sha256 = "1f6vpx1z3qa88590i5m0s49j9n90vpk81xmw6pvj0nfd3qbvzkya";
   };
 
@@ -67,6 +66,8 @@ stdenv.mkDerivation {
     libusb1
     libxml2
   ];
+
+  env.NIX_CFLAGS_COMPILE = " -std=gnu90";
 
   # patches from https://github.com/tokiclover/bar-overlay/tree/master/net-print/cnijfilter
   patches = [
@@ -87,6 +88,8 @@ stdenv.mkDerivation {
   '';
 
   configurePhase = ''
+    runHook preConfigure
+
     cd libs
     ./autogen.sh --prefix=$out
 
@@ -127,6 +130,8 @@ stdenv.mkDerivation {
 
     sed -e "s,cnijlgmon2_LDADD =,cnijlgmon2_LDADD = -L../../com/libs_bin${arch}," \
     -i lgmon2/src/Makefile.am || die
+
+    runHook postConfigure
   '';
 
   preInstall = ''
@@ -177,15 +182,15 @@ stdenv.mkDerivation {
   */
   dontPatchELF = true;
 
-  meta = with lib; {
+  meta = {
     description = "Canon InkJet printer drivers for the MG2400 MG2500 MG3500 MG5500 MG6400 MG6500 MG7100 and P200 series";
     homepage = "https://www.canon-europe.com/support/consumer_products/products/fax__multifunctionals/inkjet/pixma_mg_series/pixma_mg5550.aspx?type=drivers&driverdetailid=tcm:13-1094072";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryNativeCode
     ];
-    license = licenses.unfree;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ chpatrick ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ chpatrick ];
   };
 }

@@ -1,7 +1,9 @@
 {
   lib,
+  fetchpatch,
   fetchPypi,
   buildPythonPackage,
+  python,
 
   # dependencies
   absl-py,
@@ -9,9 +11,9 @@
   markdown,
   numpy,
   packaging,
+  pillow,
   protobuf,
   setuptools,
-  six,
   tensorboard-data-server,
   werkzeug,
   standard-imghdr,
@@ -21,16 +23,17 @@
 
 buildPythonPackage rec {
   pname = "tensorboard";
-  version = "2.19.0";
+  version = "2.20.0";
   format = "wheel";
 
   # tensorflow/tensorboard is built from a downloaded wheel, because
   # https://github.com/tensorflow/tensorboard/issues/719 blocks buildBazelPackage.
   src = fetchPypi {
-    inherit pname version format;
+    inherit pname version;
+    format = "wheel";
     dist = "py3";
     python = "py3";
-    hash = "sha256-XnG5hmOmQafOim5wsL6OGkwMRdSHYLB2ODrEdVw1uaA=";
+    hash = "sha256-ncn5eMuEwHI6z5o0XZbBhPApPRjxZruNWe4Jjmz6q6Y=";
   };
 
   pythonRelaxDeps = [
@@ -44,9 +47,9 @@ buildPythonPackage rec {
     markdown
     numpy
     packaging
+    pillow
     protobuf
     setuptools
-    six
     tensorboard-data-server
     werkzeug
 
@@ -55,6 +58,26 @@ buildPythonPackage rec {
     # https://github.com/tensorflow/tensorboard/issues/6964
     standard-imghdr
   ];
+
+  postInstall =
+    let
+      patch = fetchpatch {
+        name = "remove-runtime-pkg_resources-dependency.patch";
+        url = "https://github.com/tensorflow/tensorboard/commit/29f809f4737489912612635d9079a61f8e570bb8.patch";
+        excludes = [
+          "tensorboard/BUILD"
+          "tensorboard/data/BUILD"
+          "tensorboard/default_test.py"
+          "tensorboard/version_test.py"
+        ];
+        hash = "sha256-+jaXI4fVQP4mOg6y94KPMMCg3XuHV/gBUDNsp3ogS6c=";
+      };
+    in
+    ''
+      pushd $out/${python.sitePackages}
+      patch -p1 < ${patch}
+      popd
+    '';
 
   pythonImportsCheck = [
     "tensorboard"
@@ -69,7 +92,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/tensorflow/tensorboard/blob/${version}/RELEASE.md";
@@ -77,6 +99,7 @@ buildPythonPackage rec {
     homepage = "https://www.tensorflow.org/";
     license = lib.licenses.asl20;
     mainProgram = "tensorboard";
-    maintainers = with lib.maintainers; [ abbradar ];
+    maintainers = [ ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

@@ -20,17 +20,23 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nextflow";
-  # 24.08.0-edge is compatible with Java 21. The current (as of 2024-09-19)
-  # nextflow release (24.04.4) does not yet support java21, but java19. The
-  # latter is not in nixpkgs(-unstable) anymore.
-  version = "24.08.0-edge";
+  version = "26.04.4";
+
+  __structuredAttrs = true;
+
+  # Suggested as an improvement, but currently breaks nix-build -A nextflow.tests
+  # strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "nextflow-io";
     repo = "nextflow";
-    rev = "6e866ae81ff3bf8a9729e9dbaa9dd89afcb81a4b";
-    hash = "sha256-SA27cuP3iO5kD6u0uTeEaydyqbyJzOkVtPrb++m3Tv0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-U0QHIzIbNe9dxqxhGAxJuskR9183UgGgLZQAGB7TKmo=";
   };
+
+  buildInputs = [
+    bash
+  ];
 
   nativeBuildInputs = [
     makeWrapper
@@ -42,10 +48,21 @@ stdenv.mkDerivation (finalAttrs: {
     # several locations so we fix that globally. However, when running inside
     # a container, we actually *want* "/bin/bash". Thus the global fix needs
     # to be reverted for this specific use case.
+    #
+    # Two code paths need the revert:
+    #   1. launcher (the command that invokes .command.run)
+    #   2. trace_cmd (the command inside .command.run's nxf_trace function
+    #      that invokes .command.sh — see command-trace.txt template)
+    # Without the trace_cmd revert, trace+docker fails because the trace
+    # function tries to call /nix/store/.../bash inside the container.
+    # See https://github.com/NixOS/nixpkgs/issues/350183
     substituteInPlace modules/nextflow/src/main/groovy/nextflow/executor/BashWrapperBuilder.groovy \
       --replace-fail "['/bin/bash'," "['${bash}/bin/bash'," \
+      --replace-fail '? "/bin/bash"' '? "'${bash}'/bin/bash"' \
       --replace-fail "if( containerBuilder ) {" "if( containerBuilder ) {
-                launcher = launcher.replaceFirst(\"/nix/store/.*/bin/bash\", \"/bin/bash\")"
+                launcher = launcher.replaceFirst(\"/nix/store/.*/bin/bash\", \"/bin/bash\")" \
+      --replace-fail "binding.trace_cmd = getTraceCommand(interpreter)" \
+        "binding.trace_cmd = containerBuilder != null ? getTraceCommand(interpreter).replaceFirst(\"/nix/store/.*/bin/bash\", \"/bin/bash\") : getTraceCommand(interpreter)"
   '';
 
   mitmCache = gradle.fetchDeps {
@@ -76,6 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  # --run is used instead of --set to avoid makeWrapper's single-quote escaping,
+  # which prevents $USER from expanding at runtime. See #192396
   postFixup = ''
     wrapProgram $out/bin/nextflow \
       --prefix PATH : ${
@@ -87,7 +106,8 @@ stdenv.mkDerivation (finalAttrs: {
           which
         ]
       } \
-      --set JAVA_HOME ${openjdk.home}
+      --set JAVA_HOME ${openjdk.home} \
+      --run 'export NXF_OPTS="-Duser.name=''$USER''${NXF_OPTS:+ ''$NXF_OPTS}"'
   '';
 
   passthru.tests.default = nixosTests.nextflow;
@@ -98,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     command = "env HOME=$TMPDIR nextflow -version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "DSL for data-driven computational pipelines";
     longDescription = ''
       Nextflow is a bioinformatics workflow manager that enables the development of portable and reproducible workflows.
@@ -109,12 +129,13 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.nextflow.io/";
     changelog = "https://github.com/nextflow-io/nextflow/releases";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       Etjean
-      edmundmiller
+      mulatta
+      David-Moody
     ];
     mainProgram = "nextflow";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

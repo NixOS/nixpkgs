@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "brian2";
-  version = "2.8.0.4";
+  version = "2.10.1";
   pyproject = true;
 
   # https://github.com/python/cpython/issues/117692
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DoJouwQoQ0GNObjm2xCqLOQG8BZb7xKQ9aIMmmXbjAg=";
+    hash = "sha256-wdIdewkhkjYkGddvyHH+q5/wuz0A6SZdjNQIbMLhG08=";
   };
 
   patches = [

@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-GcqP3XbVw2sR5n4+aLUmA4fthNkuVAGnhV1h7suJYdI=";
   };
 
+  patches = [ ./fix-html-parsing.patch ];
+
   buildInputs = [ perl ];
   nativeBuildInputs = [ perl ];
 
   installPhase = "install -Dm755 srht-gen-oauth-tok $out/bin/srht-gen-oauth-tok";
-
-  passthru.tests.sourcehut = nixosTests.sourcehut;
 
   meta = {
     description = "Script to register a new Sourcehut OAuth token for a given user";

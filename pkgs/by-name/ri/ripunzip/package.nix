@@ -1,39 +1,28 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
   openssl,
-  darwin,
   pkg-config,
   testers,
   fetchzip,
   ripunzip,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ripunzip";
-  version = "2.0.2";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
-    owner = "google";
+    owner = "GoogleChrome";
     repo = "ripunzip";
-    rev = "v${version}";
-    hash = "sha256-IPa7LvwB6RqebJXWKz4DZE5o/ob0sV7mVp6a/F0qsbU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-oujRw/4yKNNqLJLTN4wxaOllSUGMu077YgWZkD0DJ4M=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-3bzIScXVxT8HFmFc0svincvTyuT2F2nfFs/3ApnCBUs=";
+  cargoHash = "sha256-J6FtaWjeJhbSB1WoAbh6c4DeShPmqGgmh2NTNRS6CUk=";
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
 
   checkFlags = [
@@ -57,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     fetchzipWithRipunzip =
       testers.invalidateFetcherByDrvHash (fetchzip.override { unzip = ripunzip; })
         {
-          url = "https://github.com/google/ripunzip/archive/cb9caa3ba4b0e27a85e165be64c40f1f6dfcc085.zip";
+          url = "https://github.com/GoogleChrome/ripunzip/archive/cb9caa3ba4b0e27a85e165be64c40f1f6dfcc085.zip";
           hash = "sha256-BoErC5VL3Vpvkx6xJq6J+eUJrBnjVEdTuSo7zh98Jy4=";
         };
     version = testers.testVersion {
@@ -65,14 +54,14 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to unzip files in parallel";
     mainProgram = "ripunzip";
-    homepage = "https://github.com/google/ripunzip";
+    homepage = "https://github.com/GoogleChrome/ripunzip";
     license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = [ maintainers.lesuisse ];
+    maintainers = [ lib.maintainers.lesuisse ];
   };
-}
+})

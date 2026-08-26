@@ -1,33 +1,35 @@
 {
   lib,
+  babelfont,
   buildPythonPackage,
   fetchPypi,
-  beziers,
   fonttools,
-  fs,
-  glyphtools,
   lxml,
   pytestCheckHook,
   youseedee,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "fontfeatures";
-  version = "1.8.0";
-  format = "setuptools";
+  version = "1.9.0";
+
+  pyproject = true;
+  build-system = [ setuptools-scm ];
 
   src = fetchPypi {
-    pname = "fontFeatures";
+    pname = "fontfeatures";
     inherit version;
-    hash = "sha256-XLJD91IyUUjeSqdhWFfIqv9yISPcbU4bgRvXETSHOiY=";
+    hash = "sha256-3PpUgaTXyFcthJrFaQqeUOvDYYFosJeXuRFnFrwp0R8=";
   };
 
-  propagatedBuildInputs = [
-    beziers
+  dependencies = [
     fonttools
-    fs
-    glyphtools
     lxml
+  ];
+
+  optional-dependencies.shaper = [
+    babelfont
     youseedee
   ];
 
@@ -39,10 +41,10 @@ buildPythonPackage rec {
     "tests/test_shaping_harfbuzz.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for compiling OpenType font features";
     homepage = "https://github.com/simoncozens/fontFeatures";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ danc86 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ danc86 ];
   };
 }

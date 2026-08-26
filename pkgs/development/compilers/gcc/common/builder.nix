@@ -3,11 +3,12 @@
   stdenv,
   enableMultilib,
   targetConfig,
+  hostIsTarget,
 }:
 
 let
   forceLibgccToBuildCrtStuff = import ./libgcc-buildstuff.nix { inherit lib stdenv; };
-  isCross = !lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform;
+  isCross = !hostIsTarget;
 in
 
 # We don't support multilib and cross at the same time
@@ -126,6 +127,20 @@ originalAttrs:
               EXTRA_LDFLAGS_FOR_TARGET="$EXTRA_LDFLAGS"
           fi
 
+          # We include `-fmacro-prefix-map` in `cc-wrapper` for non‐GCC
+          # platforms only, but they get picked up and passed down to
+          # e.g. GFortran calls that complain about the option not
+          # applying to the language. Hack around it by asking GCC not
+          # to complain.
+          #
+          # TODO: Someone please fix this to do things that make sense.
+          if [[ $EXTRA_FLAGS_FOR_BUILD == *-fmacro-prefix-map* ]]; then
+              EXTRA_FLAGS_FOR_BUILD+=" -Wno-complain-wrong-lang"
+          fi
+          if [[ $EXTRA_FLAGS_FOR_TARGET == *-fmacro-prefix-map* ]]; then
+              EXTRA_FLAGS_FOR_TARGET+=" -Wno-complain-wrong-lang"
+          fi
+
           # CFLAGS_FOR_TARGET are needed for the libstdc++ configure script to find
           # the startfiles.
           # FLAGS_FOR_TARGET are needed for the target libraries to receive the -Bxxx
@@ -175,36 +190,34 @@ originalAttrs:
       eval "$oldOpts"
     '';
 
-    preConfigure =
-      (originalAttrs.preConfigure or "")
-      + ''
-        if test -n "$newlibSrc"; then
-            tar xvf "$newlibSrc" -C ..
-            ln -s ../newlib-*/newlib newlib
-            # Patch to get armvt5el working:
-            sed -i -e 's/ arm)/ arm*)/' newlib/configure.host
-        fi
+    preConfigure = (originalAttrs.preConfigure or "") + ''
+      if test -n "$newlibSrc"; then
+          tar xvf "$newlibSrc" -C ..
+          ln -s ../newlib-*/newlib newlib
+          # Patch to get armvt5el working:
+          sed -i -e 's/ arm)/ arm*)/' newlib/configure.host
+      fi
 
-        # Bug - they packaged zlib
-        if test -d "zlib"; then
-            # This breaks the build without-headers, which should build only
-            # the target libgcc as target libraries.
-            # See 'configure:5370'
-            rm -Rf zlib
-        fi
+      # Bug - they packaged zlib
+      if test -d "zlib"; then
+          # This breaks the build without-headers, which should build only
+          # the target libgcc as target libraries.
+          # See 'configure:5370'
+          rm -Rf zlib
+      fi
 
-        if test -n "$crossMingw" -a -n "$withoutTargetLibc"; then
-            mkdir -p ../mingw
-            # --with-build-sysroot expects that:
-            cp -R $libcCross/include ../mingw
-            appendToVar configureFlags "--with-build-sysroot=`pwd`/.."
-        fi
+      if test -n "$crossMingw" -a -n "$withoutTargetLibc"; then
+          mkdir -p ../mingw
+          # --with-build-sysroot expects that:
+          cp -R $libcCross/include ../mingw
+          appendToVar configureFlags "--with-build-sysroot=`pwd`/.."
+      fi
 
-        # Perform the build in a different directory.
-        mkdir ../build
-        cd ../build
-        configureScript=../$sourceRoot/configure
-      '';
+      # Perform the build in a different directory.
+      mkdir ../build
+      cd ../build
+      configureScript=../$sourceRoot/configure
+    '';
 
     postConfigure = ''
       # Avoid store paths when embedding ./configure flags into gcc.
@@ -267,7 +280,17 @@ originalAttrs:
         '';
 
     postInstall =
+      # SH installs libraries into a multilib subdirectory (e.g. lib/!m4/)
+      # even with --disable-multilib; move them to the expected location.
+      lib.optionalString stdenv.targetPlatform.isSh4 ''
+        for _mdir in $out/''${targetConfig+$targetConfig/}lib/!*/; do
+          if [ -d "$_mdir" ]; then
+            mv "$_mdir"/* $out/''${targetConfig+$targetConfig/}lib/
+            rmdir "$_mdir"
+          fi
+        done
       ''
+      + ''
         # Clean up our compatibility symlinks (see above)
         for link in "''${compatibilitySymlinks[@]}"; do
           echo "Removing compatibility symlink: $link"
@@ -350,6 +373,13 @@ originalAttrs:
                 man_prefix=`echo "$i" | sed "s,.*/\(.*\)g++.1,\1,"`
                 ln -sf "$man_prefix"gcc.1 "$i"
             fi
+        done
+      ''
+      + lib.optionalString stdenv.targetPlatform.isCygwin ''
+        targetBinDir="''${targetConfig+$targetConfig/}bin"
+        for i in "''${!outputBin}/$targetLibDir"/cyg*.dll; do
+          mkdir -p "''${!outputLib}/$targetBinDir"
+          mv "$i" "''${!outputLib}/$targetBinDir"/
         done
       ''
       # if cross-compiling, link from $lib/lib to $lib/${targetConfig}.

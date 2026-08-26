@@ -1,6 +1,5 @@
 {
   lib,
-  testers,
   stdenv,
   fetchFromGitHub,
   cmake,
@@ -17,8 +16,7 @@
   vulkan-headers,
   vulkan-loader,
   glfw,
-  libXdmcp,
-  pcre,
+  libxdmcp,
   util-linux,
   libselinux,
   libsepol,
@@ -28,25 +26,31 @@
   libepoxy,
   dbus,
   at-spi2-core,
-  libXtst,
+  libxtst,
   gtkmm3,
+  versionCheckHook,
 }:
-
-# Known issues:
-# - The daemon can't be started from the GUI, because pkexec requires a shell
-#   registered in /etc/shells. The nix's bash is not in there when running
-#   cpu-x from nixpkgs.
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cpu-x";
-  version = "5.2.0";
+  version = "5.4.0";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "X0rg";
+    owner = "TheTumultuousUnicornOfDarkness";
     repo = "CPU-X";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7SZJgz4Xc7/0LouX/63BvFRqtQl/+biHulWzcdkkfjM=";
+    hash = "sha256-db7NxoVZgnYb1MZKfiFINx00JqDnf/TvwumBp6qDooQ=";
   };
+
+  postPatch = ''
+    # https://github.com/TheTumultuousUnicornOfDarkness/CPU-X/pull/402
+    # FIXME: remove in the next version
+    substituteInPlace src/core/bandwidth/{OOC/utility,routines}-x86-64bit.asm \
+      --replace-fail "cpu	ia64" "cpu	default"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -67,8 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     glfw
     opencl-headers
     ocl-icd
-    libXdmcp
-    pcre
+    libxdmcp
     util-linux
     libselinux
     libsepol
@@ -78,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     libepoxy
     dbus
     at-spi2-core
-    libXtst
+    libxtst
   ];
 
   preFixup = ''
@@ -88,11 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  passthru = {
-    tests = {
-      version = testers.testVersion { package = finalAttrs.finalPackage; };
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Free software that gathers information on CPU, motherboard and more";

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   go,
   buildGoModule,
   fetchFromGitHub,
@@ -9,18 +10,19 @@
   updatecli,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "updatecli";
-  version = "0.98.0";
+  version = "0.120.0";
 
   src = fetchFromGitHub {
     owner = "updatecli";
     repo = "updatecli";
-    rev = "v${version}";
-    hash = "sha256-yxVIYr/lQeiPRCG06jAjWMlIzRJ9nAkh7YvXtgxBkeQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-KVGvOCdxgTK9chZU8TwemrQUlkvOdvWIzBG0dSY/VpU=";
   };
 
-  vendorHash = "sha256-A4+KcKxePtYqbBr2F4AArOsSkde6G5jy0Oljrok87ec=";
+  proxyVendor = true;
+  vendorHash = "sha256-iZf6nB6arDEWDANq3Gp72kfFQi5QKGymHLKFJcnT+98=";
 
   # tests require network access
   doCheck = false;
@@ -32,7 +34,7 @@ buildGoModule rec {
     "-w"
     "-X github.com/updatecli/updatecli/pkg/core/version.BuildTime=unknown"
     ''-X "github.com/updatecli/updatecli/pkg/core/version.GoVersion=go version go${lib.getVersion go}"''
-    "-X github.com/updatecli/updatecli/pkg/core/version.Version=${version}"
+    "-X github.com/updatecli/updatecli/pkg/core/version.Version=${finalAttrs.version}"
   ];
 
   passthru = {
@@ -45,7 +47,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd updatecli \
       --bash <($out/bin/updatecli completion bash) \
       --fish <($out/bin/updatecli completion fish) \
@@ -55,15 +57,18 @@ buildGoModule rec {
     installManPage updatecli.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Declarative Dependency Management tool";
     longDescription = ''
       Updatecli is a command-line tool used to define and apply update strategies.
     '';
     homepage = "https://www.updatecli.io";
-    changelog = "https://github.com/updatecli/updatecli/releases/tag/${src.rev}";
-    license = licenses.asl20;
+    changelog = "https://github.com/updatecli/updatecli/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.asl20;
     mainProgram = "updatecli";
-    maintainers = with maintainers; [ croissong ];
+    maintainers = with lib.maintainers; [
+      croissong
+      lpostula
+    ];
   };
-}
+})

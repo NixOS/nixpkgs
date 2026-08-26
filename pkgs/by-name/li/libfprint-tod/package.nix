@@ -27,6 +27,10 @@ libfprint.overrideAttrs (
       hash = "sha256-xkywuFbt8EFJOlIsSN2hhZfMUhywdgJ/uT17uiO3YV4=";
     };
 
+    # Different source than libfprint, so override any patches, because they
+    # would only apply to the original source tree
+    patches = [ ];
+
     mesonFlags = [
       # Include virtual drivers for fprintd tests
       "-Ddrivers=all"
@@ -39,15 +43,14 @@ libfprint.overrideAttrs (
       patchShebangs \
         ./libfprint/tod/tests/*.sh \
         ./tests/*.py \
-        ./tests/*.sh \
+        ./tests/*.sh
     '';
 
-    meta = with lib; {
+    meta = {
       homepage = "https://gitlab.freedesktop.org/3v1n0/libfprint";
       description = "Library designed to make it easy to add support for consumer fingerprint readers, with support for loaded drivers";
-      license = licenses.lgpl21;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ grahamc ];
+      license = lib.licenses.lgpl21;
+      platforms = lib.platforms.linux;
     };
   }
 )

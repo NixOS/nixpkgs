@@ -1,63 +1,83 @@
 {
   lib,
   stdenv,
-  qt5,
   fetchFromGitLab,
   libGLU,
+  nix-update-script,
+  qt6,
 }:
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "oscar";
-  version = "1.6.0";
+  version = "2.0.1";
 
   src = fetchFromGitLab {
     owner = "CrimsonNape";
-    repo = "OSCAR-code";
-    rev = "v${version}";
-    hash = "sha256-1rHgajjs+Vt9lcqkqKy92pWQLjvAHE10fPUTy8hurw4=";
+    repo = "oscar-sql";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ivOEAP7/pc5yS6mhc/6ButbSjfFmOP4PM7c/S23oyYw=";
   };
 
-  buildInputs = [
-    qt5.qtbase
-    qt5.qttools
-    qt5.qtserialport
-    libGLU
-  ];
   nativeBuildInputs = [
-    qt5.wrapQtAppsHook
-    qt5.qmake
+    qt6.qmake
+    qt6.qtserialport
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ];
+
+  buildInputs = [
+    libGLU
+    qt6.qtbase
+    qt6.qtserialport
+  ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
   postPatch = ''
-    substituteInPlace oscar/oscar.pro --replace "/bin/bash" "${stdenv.shell}"
+    substituteInPlace oscar/oscar.pro \
+      --replace-fail "/bin/bash" "${stdenv.shell}" \
+      --replace-fail "\$\$[QT_INSTALL_BINS]/lrelease" "lrelease"
+    substituteInPlace oscar/SleepLib/common.cpp \
+      --replace-fail 'QString( "/usr/share/" )' 'QString( "${placeholder "out"}/share/" )'
+    substituteInPlace Building/Linux/OSCAR20.desktop \
+      --replace-fail "Icon=/usr/share/icons/hicolor/48x48/apps/OSCAR20.png" "Icon=OSCAR20"
   '';
 
   qmakeFlags = [ "OSCAR_QT.pro" ];
 
   installPhase = ''
     runHook preInstall
-    install -d $out/bin
-    install -d $out/share/OSCAR/Help
-    install -d $out/share/OSCAR/Html
-    install -d $out/share/OSCAR/Translations
-    install -d $out/share/icons/OSCAR
-    install -d $out/share/applications
-    install -T oscar/OSCAR $out/bin/OSCAR
+    install -Dm755 oscar/OSCAR20 -t "$out/bin"
     # help browser was removed 'temporarily' in https://gitlab.com/pholy/OSCAR-code/-/commit/57c3e4c33ccdd2d0eddedbc24c0e4f2969da3841
-    # install oscar/Help/* $out/share/OSCAR/Help
-    install oscar/Html/* $out/share/OSCAR/Html
-    install oscar/Translations/* $out/share/OSCAR/Translations
-    install -T Building/Linux/OSCAR.png $out/share/icons/OSCAR/OSCAR.png
-    install -T Building/Linux/OSCAR.desktop $out/share/applications/OSCAR.desktop
+    # install -Dm644 oscar/Help/* -t "$out/share/OSCAR20/Help"
+    install -Dm644 oscar/Html/* -t "$out/share/OSCAR20/Html"
+    install -Dm644 oscar/Translations/* -t "$out/share/OSCAR20/Translations"
+    install -Dm644 Building/Linux/OSCAR20.png -t "$out/share/icons/hicolor/48x48/apps"
+    install -Dm644 Building/Linux/OSCAR20.svg -t "$out/share/icons/hicolor/scalable/apps"
+    install -Dm644 Building/Linux/OSCAR20.desktop -t "$out/share/applications"
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v([0-9.]+)$"
+    ];
+  };
+
+  meta = {
     homepage = "https://www.sleepfiles.com/OSCAR/";
+    changelog = "https://gitlab.com/CrimsonNape/oscar-sql/-/raw/${finalAttrs.src.tag}/Htmldocs/release_notes.html";
     description = "Software for reviewing and exploring data produced by CPAP and related machines used in the treatment of sleep apnea";
-    mainProgram = "OSCAR";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.roconnor ];
+    mainProgram = "OSCAR20";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      roconnor
+      ilkecan
+    ];
     # Someone needs to create a suitable installPhase for Darwin and Windows.
     # See https://gitlab.com/pholy/OSCAR-code/-/tree/master/Building.
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -2,47 +2,41 @@
   lib,
   aiohttp,
   aresponses,
-  async-timeout,
   backoff,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   sigstore,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiogithubapi";
-  version = "24.6.0";
+  version = "26.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = "aiogithubapi";
-    tag = version;
-    hash = "sha256-z7l7Qx9Kg1FZ9nM0V2NzTyi3gbE2hakbc/GZ1CzDmKw=";
+    tag = finalAttrs.version;
+    hash = "sha256-LQFOmg59kusqYtaLQaFePh+4aM25MaXVNkYy3PIeZ5A=";
   };
 
   __darwinAllowLocalNetworking = true;
-
-  pythonRelaxDeps = [ "async-timeout" ];
 
   postPatch = ''
     # Upstream is releasing with the help of a CI to PyPI, GitHub releases
     # are not in their focus
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0"' 'version = "${version}"'
+      --replace-fail 'version = "0"' 'version = "${finalAttrs.version}"'
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
-    async-timeout
     backoff
   ];
 
@@ -53,13 +47,12 @@ buildPythonPackage rec {
     aresponses
     pytest-asyncio
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
-  pytestFlagsArray = [ "--asyncio-mode=auto" ];
+  pytestFlags = [ "--asyncio-mode=auto" ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-
     # Need sigstore is an optional dependencies and need <2
     rm -rf tests/test_helper.py
   '';
@@ -69,8 +62,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for the GitHub API";
     homepage = "https://github.com/ludeeus/aiogithubapi";
-    changelog = "https://github.com/ludeeus/aiogithubapi/releases/tag/${version}";
+    changelog = "https://github.com/ludeeus/aiogithubapi/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

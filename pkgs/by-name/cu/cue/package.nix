@@ -5,22 +5,23 @@
   stdenv,
   installShellFiles,
   testers,
-  cue,
+  tests,
   callPackage,
+  pkgs,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cue";
-  version = "0.12.1";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "cue-lang";
     repo = "cue";
-    tag = "v${version}";
-    hash = "sha256-nCwmW3nHcgUDG+dmcRd5+nqArUmBE3+ZZDZTDZSySQ0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-77IRLWlBlJ76yr9UzVpKuxZ9XbYFdGDdv/jPUojw8yc=";
   };
 
-  vendorHash = "sha256-vkfXT8mAomQml/kQRb2VIi+D+jpc0qgE2AsJ8jK6LRQ=";
+  vendorHash = "sha256-dTUg6EnU6xKCGve9ksxqBF3BaoBdVlXFU8pTyZtV+RA=";
 
   subPackages = [ "cmd/*" ];
 
@@ -29,7 +30,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X cuelang.org/go/cmd/cue/cmd.version=v${version}"
+    "-X cuelang.org/go/cmd/cue/cmd.version=v${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -39,17 +40,27 @@ buildGoModule rec {
       --zsh <($out/bin/cue completion zsh)
   '';
 
-  passthru = {
-    writeCueValidator = callPackage ./validator.nix { };
-    tests = {
-      test-001-all-good = callPackage ./tests/001-all-good.nix { };
-      version = testers.testVersion {
-        package = cue;
-        command = "cue version";
-        version = "v${version}";
+  passthru =
+    let
+      cue = finalAttrs.finalPackage;
+      writeCueValidator = callPackage ./validator.nix { inherit cue; };
+    in
+    {
+      inherit writeCueValidator;
+
+      tests = {
+        validation = tests.cue-validation.override {
+          pkgs = pkgs.extend (_: _: { inherit writeCueValidator; });
+        };
+
+        test-001-all-good = callPackage ./tests/001-all-good.nix { inherit cue; };
+        version = testers.testVersion {
+          package = cue;
+          command = "cue version";
+          version = "v${finalAttrs.version}";
+        };
       };
     };
-  };
 
   meta = {
     description = "Data constraint language which aims to simplify tasks involving defining and using data";
@@ -58,4 +69,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "cue";
   };
-}
+})

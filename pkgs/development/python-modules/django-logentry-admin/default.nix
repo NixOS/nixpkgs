@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "yprez";
-    repo = pname;
+    repo = "django-logentry-admin";
     rev = "v${version}";
     sha256 = "1bndxgvisw8kk52zfdifvly6dl4833wqilxf77pg473172yaf5gq";
   };
@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ django ];
 
-  meta = with lib; {
+  meta = {
     description = "Show all LogEntry objects in the Django admin site";
     homepage = "https://github.com/yprez/django-logentry-admin";
-    license = licenses.isc;
-    maintainers = with maintainers; [ mrmebelman ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ mrmebelman ];
   };
 }

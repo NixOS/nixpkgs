@@ -9,12 +9,12 @@
   bzip2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "20231119";
   pname = "libewf";
 
   src = fetchurl {
-    url = "https://github.com/libyal/libewf/releases/download/${version}/libewf-experimental-${version}.tar.gz";
+    url = "https://github.com/libyal/libewf/releases/download/${finalAttrs.version}/libewf-experimental-${finalAttrs.version}.tar.gz";
     hash = "sha256-7AjUEaXasOzJV9ErZK2a4HMTaqhcBbLKd8M+A5SbKrc=";
   };
 
@@ -23,11 +23,19 @@ stdenv.mkDerivation rec {
     zlib
     openssl
     libuuid
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ bzip2 ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ bzip2 ];
 
   # cannot run test program while cross compiling
   configureFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     "ac_cv_openssl_xts_duplicate_keys=yes"
+  ];
+
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "man"
   ];
 
   meta = {
@@ -37,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
   };
-}
+})

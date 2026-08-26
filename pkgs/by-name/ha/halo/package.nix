@@ -6,12 +6,12 @@
   # official jre size is 500MB, but temurin-jre-bin is 100MB.
   temurin-jre-bin,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "halo";
-  version = "2.20.19";
+  version = "2.25.4";
   src = fetchurl {
-    url = "https://github.com/halo-dev/halo/releases/download/v${version}/halo-${version}.jar";
-    hash = "sha256-4xXg1pW6vXebrmmyhzQKmJReR8gfRrflrfuB3ijk4tc=";
+    url = "https://github.com/halo-dev/halo/releases/download/v${finalAttrs.version}/halo-${finalAttrs.version}.jar";
+    hash = "sha256-U3dWxAb/AT2zTUejdACT7SzRy97fWz2jTKgBfeYaoE4=";
   };
 
   nativeBuildInputs = [
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     mainProgram = "halo";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
   };
-}
+})

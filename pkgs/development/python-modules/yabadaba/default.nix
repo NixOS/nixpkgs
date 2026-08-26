@@ -1,40 +1,34 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
   cdcs,
   datamodeldict,
+  fetchFromGitHub,
   ipython,
   lxml,
   numpy,
   pandas,
   pillow,
   pymongo,
-  tqdm,
-
-  # tests
   pytestCheckHook,
+  tqdm,
+  uv-build,
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "yabadaba";
-  version = "0.3.1";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "yabadaba";
-    tag = "v${version}";
-    hash = "sha256-DpkJvi4w0aoD7RC2IFORy8uZ12TuLdcJxfLaSGyATac=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nXGQT/c+Sio3VQTqHY3SOiqJRQCQxZ/o0RCQGptcQig=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ uv-build ];
 
   dependencies = [
     cdcs
@@ -58,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Abstraction layer allowing for common interactions with databases and records";
     homepage = "https://github.com/usnistgov/yabadaba";
-    changelog = "https://github.com/usnistgov/yabadaba/releases/tag/v${version}";
+    changelog = "https://github.com/usnistgov/yabadaba/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

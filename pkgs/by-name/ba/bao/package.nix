@@ -4,17 +4,16 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bao";
   version = "0.13.1";
 
   src = fetchCrate {
-    inherit version;
-    pname = "${pname}_bin";
+    inherit (finalAttrs) version;
+    pname = "${finalAttrs.pname}_bin";
     hash = "sha256-8h5otpu3z2Hgy0jMCITJNr8Q4iVdlR5Lea2X+WuenWs=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-B0wvJTcIRJxBU0G1DONnKeQYrmsmMIorhTLc73o4/kE=";
 
   meta = {
@@ -27,4 +26,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "bao";
   };
-}
+})

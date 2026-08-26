@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pgf";
-  version = "3.1.10";
+  version = "3.1.12";
 
   src = fetchFromGitHub {
     owner = "pgf-tikz";
     repo = "pgf";
     tag = finalAttrs.version;
-    hash = "sha256-/zU2aTV39XpQhSpHVi8pBNsaAshcIhl6s+vOL1SO3Vw=";
+    hash = "sha256-rn1C/KlFA3zjKa7wQpSUE0Bg407rNxbk+d4C0bf9EVc=";
   };
 
   dontConfigure = true;
@@ -27,12 +27,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pgf-tikz/pgf";
     description = "Portable Graphic Format for TeX - version ${finalAttrs.version}";
-    branch = lib.versions.major version;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    branch = lib.versions.major finalAttrs.version;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 })

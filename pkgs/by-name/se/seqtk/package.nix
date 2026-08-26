@@ -7,15 +7,15 @@
   isa-l,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "seqtk";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "lh3";
     repo = "seqtk";
-    rev = "v${version}";
-    hash = "sha256-W6IUn7R9tlnWrKe/qOHJL+43AL4EZB7zj7M5u9l83WE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IQYBs3hUlV9fr8F2SL//houKKEq0nFViq9ulOppRMcM=";
   };
 
   buildInputs = [
@@ -29,16 +29,18 @@ stdenv.mkDerivation rec {
     "BINDIR=$(out)/bin"
   ];
 
+  hardeningDisable = [ "format" ];
+
   preInstall = ''
     mkdir -p "$out/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit for processing sequences in FASTA/Q formats";
     mainProgram = "seqtk";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/lh3/seqtk";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ bwlang ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ bwlang ];
   };
-}
+})

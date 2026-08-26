@@ -6,20 +6,18 @@
   testers,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cxx-rs";
-  version = "1.0.131";
+  version = "1.0.194";
 
   src = fetchFromGitHub {
     owner = "dtolnay";
     repo = "cxx";
-    rev = version;
-    sha256 = "sha256-KQlbJvULdc94SM0sx6JtukZPpaX4Gojc6Qgr20V3/VI=";
+    tag = finalAttrs.version;
+    sha256 = "sha256-PIeF9VuyJOIs1x02YETKIP0+nCG3RZXLMJdFNlgAFzo=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoLock.lockFile = ./Cargo.lock;
 
   postPatch = ''
     cp ${./Cargo.lock} Cargo.lock
@@ -55,11 +53,11 @@ rustPlatform.buildRustPackage rec {
     command = "cxxbridge --version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Safe FFI between Rust and C++";
     mainProgram = "cxxbridge";
     homepage = "https://github.com/dtolnay/cxx";
-    license = licenses.mit;
-    maintainers = with maintainers; [ centromere ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ centromere ];
   };
-}
+})

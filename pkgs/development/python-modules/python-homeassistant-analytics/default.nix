@@ -2,10 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   poetry-core,
+  pyprojectVersionPatchHook,
 
   # dependencies
   aiohttp,
@@ -26,8 +26,6 @@ buildPythonPackage rec {
   version = "0.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-homeassistant-analytics";
@@ -36,6 +34,10 @@ buildPythonPackage rec {
   };
 
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     aiohttp
@@ -54,11 +56,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "python_homeassistant_analytics" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous Python client for Home Assistant Analytics";
     changelog = "https://github.com/joostlek/python-homeassistant-analytics/releases/tag/v${version}";
     homepage = "https://github.com/joostlek/python-homeassistant-analytics";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jamiemagee ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jamiemagee ];
   };
 }

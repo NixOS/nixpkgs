@@ -1,5 +1,6 @@
 {
   lib,
+  rust,
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
@@ -18,33 +19,40 @@
   libayatana-appindicator,
   webkitgtk_4_1,
   wrapGAppsHook3,
-  pnpm_9,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   makeDesktopItem,
   copyDesktopItems,
 }:
 let
-  version = "1.4.9";
+  version = "1.5.2";
   src = fetchFromGitHub {
     owner = "firezone";
     repo = "firezone";
     tag = "gui-client-${version}";
-    hash = "sha256-nOf7+48WUzQ7VmP7PFo07ZhtgyG7VOI/Hb/rXyBU5o0=";
+    hash = "sha256-Ew6oLVL7u9RtidHNsz29lzH9WPxKNneEoVACuLdP7yo=";
   };
 
   frontend = stdenvNoCC.mkDerivation rec {
     pname = "firezone-gui-client-frontend";
     inherit version src;
 
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit pname version;
+      pnpm = pnpm_10;
       src = "${src}/rust/gui-client";
-      hash = "sha256-9ywC920EF6UxkXHs+0WWaU8fr5J35/C+0nNGbSVHESE=";
+      fetcherVersion = 4;
+      hash = "sha256-770+06rpf/P9hOFLgEWc0/BKjIxHyCWB2E3tqdEskAA=";
     };
     pnpmRoot = "rust/gui-client";
 
+    env.GITHUB_SHA = version;
+
     nativeBuildInputs = [
-      pnpm_9.configHook
+      pnpmConfigHook
+      pnpm_10
       nodejs
     ];
 
@@ -52,8 +60,7 @@ let
       runHook preBuild
 
       cd $pnpmRoot
-      cp node_modules/flowbite/dist/flowbite.min.js src/
-      pnpm tailwindcss -i src/input.css -o src/output.css
+      node ./node_modules/flowbite-react/dist/cli/bin.js patch
       node --max_old_space_size=1024000 ./node_modules/vite/bin/vite.js build
 
       runHook postBuild
@@ -72,11 +79,10 @@ rustPlatform.buildRustPackage rec {
   pname = "firezone-gui-client";
   inherit version src;
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ltxyI3Xoute0/HHXYU4XdFjcQ9zSLx6ZzAZFEjDk6zw=";
+  cargoHash = "sha256-LHHaklGIMuDuZwikXiQzLPbmkUbPyYR04UBQTBxq2ps=";
   sourceRoot = "${src.name}/rust";
   buildAndTestSubdir = "gui-client";
-  RUSTFLAGS = "--cfg system_certs";
+  env.RUSTFLAGS = "--cfg system_certs";
 
   nativeBuildInputs = [
     cargo-tauri.hook
@@ -102,6 +108,9 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     rm .cargo/config.toml
     ln -s ${frontend} gui-client/dist
+
+    substituteInPlace gui-client/src-tauri/tauri.conf.json \
+      --replace-fail '../../target' '../../target/${rust.envVars.rustHostPlatformSpec}'
   '';
 
   # Tries to compile apple specific crates due to workspace dependencies,
@@ -126,8 +135,6 @@ rustPlatform.buildRustPackage rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      # Otherwise blank screen, see https://github.com/tauri-apps/tauri/issues/9304
-      --set WEBKIT_DISABLE_DMABUF_RENDERER 1
       --prefix PATH ":" ${
         lib.makeBinPath [
           zenity
@@ -162,5 +169,6 @@ rustPlatform.buildRustPackage rec {
       patrickdag
     ];
     mainProgram = "firezone-gui-client";
+    platforms = lib.platforms.linux;
   };
 }

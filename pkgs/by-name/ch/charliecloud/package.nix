@@ -13,26 +13,30 @@
   findutils,
   sudo,
   nixosTests,
+  pkg-config,
+  fuse3,
 }:
 
-stdenv.mkDerivation rec {
-
-  version = "0.24";
+stdenv.mkDerivation (finalAttrs: {
   pname = "charliecloud";
+  version = "0.38";
 
   src = fetchFromGitHub {
     owner = "hpc";
     repo = "charliecloud";
-    rev = "v${version}";
-    sha256 = "sha256-kdaVlwE3vdCxsmJTOUwx8J+9UcBuXbKDwS2MHX2ZPPM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Mr2Qa1PRTarJ0I8nkH/Xsq8QN3OxOfL8tpl1lL1WV0c=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     makeWrapper
+    pkg-config
   ];
+
   buildInputs = [
     docker
+    fuse3
     (python3.withPackages (ps: [
       ps.lark
       ps.requests
@@ -48,11 +52,12 @@ stdenv.mkDerivation rec {
     in
     [
       "--with-python=${pythonEnv}/bin/python3"
+      "-disable-bundled-lark"
     ];
 
   preConfigure = ''
     patchShebangs test/
-    substituteInPlace configure.ac --replace "/usr/bin/env" "${coreutils}/bin/env"
+    substituteInPlace configure.ac --replace-fail "/usr/bin/env" "${coreutils}/bin/env"
   '';
 
   makeFlags = [
@@ -94,5 +99,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.bzizou ];
     platforms = lib.platforms.linux;
   };
-
-}
+})

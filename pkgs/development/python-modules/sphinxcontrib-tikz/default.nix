@@ -39,10 +39,10 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "TikZ extension for Sphinx";
     homepage = "https://bitbucket.org/philexander/tikz";
     maintainers = [ ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

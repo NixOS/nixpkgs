@@ -8,7 +8,8 @@
   wgpu-native,
   glfw,
   wayland,
-  xorg,
+  libxrandr,
+  libx11,
   vulkan-loader,
 
   version,
@@ -35,16 +36,15 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs =
-    [
-      wgpu-native
-      glfw
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland
-      xorg.libX11
-      xorg.libXrandr
-    ];
+  buildInputs = [
+    wgpu-native
+    glfw
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland
+    libx11
+    libxrandr
+  ];
 
   runtimeInputs = lib.optionals stdenv.hostPlatform.isLinux [
     # Without wayland in library path, this warning is raised:
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   makeWrapperArgs = lib.optionals (finalAttrs.runtimeInputs != [ ]) [
-    "--prefix LD_LIBRARY_PATH : ${builtins.toString (lib.makeLibraryPath finalAttrs.runtimeInputs)}"
+    "--prefix LD_LIBRARY_PATH : ${toString (lib.makeLibraryPath finalAttrs.runtimeInputs)}"
   ];
 
   installPhase = ''

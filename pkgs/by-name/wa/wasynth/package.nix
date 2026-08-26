@@ -2,17 +2,18 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasynth";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
-    owner = "Rerumu";
+    owner = "SovereignSatellite";
     repo = "Wasynth";
-    rev = "v${version}";
-    sha256 = "sha256-hbY+epUtYSQrvnAbCELsVcqd3UoXGn24FkzWfrM0K14=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0Gtqet6KKLtooh9cU2R/top142AeT+uIxFwe1dPTvAU=";
   };
 
   # A lock file isn't provided, so it must be added manually.
@@ -29,15 +30,19 @@ rustPlatform.buildRustPackage rec {
     rm $out/bin/{luajit,luau}_translate
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--generate-lockfile" ];
+  };
+
+  meta = {
     description = "WebAssembly translation tools for various languages";
     longDescription = ''
       Wasynth provides the following WebAssembly translation tools:
        * wasm2luajit: translate WebAssembly to LuaJIT source code
        * wasm2luau: translate WebAssembly Luau source code
     '';
-    homepage = "https://github.com/Rerumu/Wasynth";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ wackbyte ];
+    homepage = "https://github.com/SovereignSatellite/Wasynth";
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
   };
-}
+})

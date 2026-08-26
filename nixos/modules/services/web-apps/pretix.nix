@@ -24,7 +24,6 @@ let
     mkOption
     mkPackageOption
     optionals
-    optionalString
     recursiveUpdate
     types
     ;
@@ -60,10 +59,28 @@ let
   };
 
   withRedis = cfg.settings.redis.location != null;
+
+  pretixManageWrapper = pkgs.writeShellApplication {
+    name = "pretix-manage";
+    runtimeInputs = with pkgs; [
+      util-linux
+    ];
+    text = ''
+      cd ${cfg.settings.pretix.datadir}
+      export PRETIX_CONFIG_FILE=${configFile}
+      exec runuser ${
+        lib.cli.toCommandLineShellGNU { } {
+          inherit (cfg) user;
+          supp-group = if withRedis then config.services.redis.servers.pretix.group else null;
+          whitelist-environment = "PRETIX_CONFIG_FILE";
+        }
+      } -- ${getExe' pythonEnv "pretix-manage"} "$@"
+    '';
+  };
 in
 {
-  meta = with lib; {
-    maintainers = with maintainers; [ hexa ];
+  meta = {
+    maintainers = with lib.maintainers; [ hexa ];
   };
 
   options.services.pretix = {
@@ -396,15 +413,7 @@ in
     # https://docs.pretix.eu/en/latest/admin/installation/index.html
 
     environment.systemPackages = [
-      (pkgs.writeScriptBin "pretix-manage" ''
-        cd ${cfg.settings.pretix.datadir}
-        sudo=exec
-        if [[ "$USER" != ${cfg.user} ]]; then
-          sudo='exec /run/wrappers/bin/sudo -u ${cfg.user} ${optionalString withRedis "-g redis-pretix"} --preserve-env=PRETIX_CONFIG_FILE'
-        fi
-        export PRETIX_CONFIG_FILE=${configFile}
-        $sudo ${getExe' pythonEnv "pretix-manage"} "$@"
-      '')
+      pretixManageWrapper
     ];
 
     services.logrotate.settings.pretix = {
@@ -533,7 +542,7 @@ in
           after = [
             "network.target"
             "redis-pretix.service"
-            "postgresql.service"
+            "postgresql.target"
           ];
           wantedBy = [ "multi-user.target" ];
           preStart = ''
@@ -574,7 +583,7 @@ in
           after = [
             "network.target"
             "redis-pretix.service"
-            "postgresql.service"
+            "postgresql.target"
           ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {

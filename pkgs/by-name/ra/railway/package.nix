@@ -1,50 +1,47 @@
 {
   lib,
-  darwin,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  makeBinaryWrapper,
   openssl,
-  stdenv,
 }:
-let
-  inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
-in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "railway";
-  version = "4.0.1";
+  version = "5.30.4";
 
   src = fetchFromGitHub {
     owner = "railwayapp";
     repo = "cli";
-    rev = "v${version}";
-    hash = "sha256-2qVib63l+NSiHPD9qDoZiRG1t7SCyqJEUpUI60UMneA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Onw4/jxKWHPLSxdvHUHzMpxCUT5B8rdIHljrMOPEqeA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-p9KH8UhblE4+bKJrkiHvAg77WI2f6KVbIJ4wuUniqDU=";
+  cargoHash = "sha256-LE4wt0ymwsNlQ8ywDoml11+okXeyB5iNb2pg12mTGwE=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    makeBinaryWrapper
+  ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreServices
-      Security
-      SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
-  OPENSSL_NO_VENDOR = 1;
+  env.OPENSSL_NO_VENDOR = 1;
 
-  meta = with lib; {
+  postInstall = ''
+    wrapProgram $out/bin/railway \
+      --set RAILWAY_NO_AUTO_UPDATE true
+  '';
+
+  meta = {
     mainProgram = "railway";
     description = "Railway.app CLI";
     homepage = "https://github.com/railwayapp/cli";
-    changelog = "https://github.com/railwayapp/cli/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/railwayapp/cli/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       Crafter
       techknowlogick
     ];
   };
-}
+})

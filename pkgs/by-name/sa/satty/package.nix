@@ -14,20 +14,22 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
 
   pname = "satty";
-  version = "0.17.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
-    owner = "gabm";
+    owner = "Satty-org";
     repo = "Satty";
-    rev = "v${version}";
-    hash = "sha256-Lf/3h6Y6lKWQ8lPJZ6SCm3+w/Dc4m8yUYH7Xv0GAbqo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-76J4ZlBKeow2sWs1SeSkE8R2fKRTFD+B+7Vx3nbbQxY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-aqFNIxZydyCJX2sRmuVohfyVZdDgYSh7d8UMqog0cm0=";
+  cargoHash = "sha256-R8I8eZ8vy6w1DGNrkP9Os2tAOIetqXCyn0cxWpk9F+w=";
+
+  # Generate shell completions and man file
+  buildFeatures = [ "ci-release" ];
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -56,15 +58,15 @@ rustPlatform.buildRustPackage rec {
 
   desktopItems = [ "satty.desktop" ];
 
-  meta = with lib; {
+  meta = {
     description = "Screenshot annotation tool inspired by Swappy and Flameshot";
-    homepage = "https://github.com/gabm/Satty";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [
+    homepage = "https://github.com/Satty-org/Satty";
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       pinpox
       donovanglover
     ];
     mainProgram = "satty";
     platforms = lib.platforms.linux;
   };
-}
+})

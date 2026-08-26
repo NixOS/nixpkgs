@@ -4,23 +4,23 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "slack-term";
   version = "0.5.0";
 
   src = fetchFromGitHub {
-    owner = "erroneousboat";
+    owner = "jpbruinsslot";
     repo = "slack-term";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "1fbq7bdhy70hlkklppimgdjamnk0v059pg73xm9ax1f4616ki1m6";
   };
   vendorHash = null;
 
-  meta = with lib; {
+  meta = {
     description = "Slack client for your terminal";
-    homepage = "https://github.com/erroneousboat/slack-term";
-    license = licenses.mit;
+    homepage = "https://github.com/jpbruinsslot/slack-term";
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "slack-term";
   };
-}
+})

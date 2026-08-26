@@ -2,19 +2,24 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   hypothesis,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "srt";
   version = "3.5.3";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-SIQxUEOk8HQP0fh47WyqN2rAbXDhNfMGptxEYy7tDMA=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     hypothesis
@@ -23,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "srt" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cdown/srt";
     description = "Tiny but featureful Python library for parsing, modifying, and composing SRT files";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

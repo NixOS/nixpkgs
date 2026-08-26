@@ -84,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    pkg-config
     cmake
     makeWrapper
     qt6.wrapQtAppsHook
@@ -93,7 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     cryptopp
     openssl
-    pkg-config
     qt6.qtbase
     qt6.qttools
     xz
@@ -114,6 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/fix-config-and-i18n-paths.patch
     ./patches/fix-installer-cmake.patch
     ./patches/fix-miniz-cmake-dirs.patch
+    ./patches/fix-qquaternion-include.patch
   ];
 
   postInstall = ''

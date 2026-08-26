@@ -5,12 +5,12 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clex";
   version = "4.7";
 
   src = fetchurl {
-    url = "https://github.com/xitop/clex/releases/download/v${version}/clex-${version}.tar.gz";
+    url = "https://github.com/xitop/clex/releases/download/v${finalAttrs.version}/clex-${finalAttrs.version}.tar.gz";
     hash = "sha256-3Y3ayJEy9pHLTUSeXYeekTVdopwKLZ8vVcVarLIFnpM=";
   };
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "File manager with full-screen terminal interface";
     longDescription = ''
       CLEX (pronounced KLEKS) displays directory contents including the file
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       add-on to your favorite shell.
     '';
     homepage = "https://github.com/xitop/clex";
-    license = licenses.gpl2Plus;
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

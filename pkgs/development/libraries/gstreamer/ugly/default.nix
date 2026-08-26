@@ -16,20 +16,18 @@
   x264,
   libintl,
   lib,
-  IOKit,
-  CoreFoundation,
-  DiskArbitration,
   enableGplPlugins ? true,
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
   directoryListingUpdater,
   gst-plugins-ugly,
+  apple-sdk_gstreamer,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-ugly";
-  version = "1.26.0";
+  version = "1.28.6";
 
   outputs = [
     "out"
@@ -38,66 +36,70 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-${finalAttrs.version}.tar.xz";
-    hash = "sha256-qGtRyEVKgTEghIyANCHzJ9jAeqvK5GHgWXzEk5jA/N4=";
+    hash = "sha256-7iedoTp0D9fwYNYxpnMiP6O8yMM9NQyNAmS9Myok7Ng=";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      gettext
-      pkg-config
-      python3
-    ]
-    ++ lib.optionals enableDocumentation [
-      hotdoc
-    ];
+  separateDebugInfo = true;
 
-  buildInputs =
-    [
-      gst-plugins-base
-      orc
-      libintl
-    ]
-    ++ lib.optionals enableGplPlugins [
-      a52dec
-      libcdio
-      libdvdread
-      libmad
-      libmpeg2
-      x264
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      IOKit
-      CoreFoundation
-      DiskArbitration
-    ];
+  __structuredAttrs = true;
+  strictDeps = true;
 
-  mesonFlags =
-    [
-      "-Dglib_debug=disabled" # cast checks should be disabled on stable releases
-      "-Dsidplay=disabled" # sidplay / sidplay/player.h isn't packaged in nixpkgs as of writing
-      (lib.mesonEnable "doc" enableDocumentation)
-    ]
-    ++ (
-      if enableGplPlugins then
-        [
-          "-Dgpl=enabled"
-        ]
-      else
-        [
-          "-Da52dec=disabled"
-          "-Dcdio=disabled"
-          "-Ddvdread=disabled"
-          "-Dmpeg2dec=disabled"
-          "-Dsidplay=disabled"
-          "-Dx264=disabled"
-        ]
-    );
+  nativeBuildInputs = [
+    meson
+    ninja
+    gettext
+    pkg-config
+    python3
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
+  ];
+
+  buildInputs = [
+    gst-plugins-base
+    orc
+    libintl
+  ]
+  ++ lib.optionals enableGplPlugins [
+    a52dec
+    libcdio
+    libdvdread
+    libmad
+    libmpeg2
+    x264
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
+  ];
+
+  mesonFlags = [
+    "-Dglib_debug=disabled" # cast checks should be disabled on stable releases
+    "-Dsidplay=disabled" # sidplay / sidplay/player.h isn't packaged in nixpkgs as of writing
+    (lib.mesonEnable "doc" enableDocumentation)
+  ]
+  ++ (
+    if enableGplPlugins then
+      [
+        "-Dgpl=enabled"
+      ]
+    else
+      [
+        "-Da52dec=disabled"
+        "-Dcdio=disabled"
+        "-Ddvdread=disabled"
+        "-Dmpeg2dec=disabled"
+        "-Dsidplay=disabled"
+        "-Dx264=disabled"
+      ]
+  );
 
   postPatch = ''
     patchShebangs \
       scripts/extract-release-date-from-doap-file.py
+  '';
+
+  preFixup = ''
+    moveToOutput "lib/gstreamer-1.0/pkgconfig" "$dev"
   '';
 
   passthru = {
@@ -107,10 +109,10 @@ stdenv.mkDerivation (finalAttrs: {
       };
     };
 
-    updateScript = directoryListingUpdater { };
+    updateScript = directoryListingUpdater { odd-unstable = true; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Gstreamer Ugly Plugins";
     homepage = "https://gstreamer.freedesktop.org";
     longDescription = ''
@@ -119,8 +121,8 @@ stdenv.mkDerivation (finalAttrs: {
       the plug-ins or the supporting libraries might not be how we'd
       like. The code might be widely known to present patent problems.
     '';
-    license = if enableGplPlugins then licenses.gpl2Plus else licenses.lgpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ matthewbauer ];
+    license = if enableGplPlugins then lib.licenses.gpl2Plus else lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ tmarkus ];
   };
 })

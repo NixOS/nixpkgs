@@ -5,25 +5,21 @@
   fetchFromGitHub,
   openssl,
   pkg-config,
-  Security,
-  SystemConfiguration,
-  IOKit,
   installShellFiles,
   nix,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixci";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "srid";
     repo = "nixci";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0VvZFclqwAcKN95eusQ3lgV0pp1NRUDcVXpVUC0P4QI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-iRsmB+ak6pWFtAdXEmGSc9dGdIuSbgLp3UT3SdOUOGQ=";
 
   nativeBuildInputs = [
@@ -32,17 +28,11 @@ rustPlatform.buildRustPackage rec {
     nix
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      IOKit
-      Security
-      SystemConfiguration
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    openssl
+  ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd nixci \
       --bash <($out/bin/nixci completion bash) \
       --fish <($out/bin/nixci completion fish) \
@@ -68,4 +58,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "nixci";
   };
-}
+})

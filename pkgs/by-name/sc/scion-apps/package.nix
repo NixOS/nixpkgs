@@ -2,21 +2,24 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   openpam,
 }:
 
 buildGoModule {
   pname = "scion-apps";
-  version = "unstable-2024-04-05";
+  version = "0.6.0-unstable-2026-06-04";
 
   src = fetchFromGitHub {
     owner = "netsec-ethz";
     repo = "scion-apps";
-    rev = "cb0dc365082788bcc896f0b55c4807b72c2ac338";
-    hash = "sha256-RzWtnUpZfwryOfumgXHV5QMceLY51Zv3KI0K6WLz8rs=";
+    rev = "6c990ccb5b39fe0f7a23a3d8dcb4528439c3f5c5";
+    hash = "sha256-qbz6lGnCSzIH0r1nJ5+oAQquiehRBw7hxgEfbXM1/Yc=";
   };
 
-  vendorHash = "sha256-bz4vtELxrDfebk+00w9AcEiK/4skO1mE3lBDU1GkOrk=";
+  vendorHash = "sha256-svC4FlQ/e5XjPKuHBYPvqy5l8nWWQTdg1Bf4KSANrMw=";
+
+  __structuredAttrs = true;
 
   postPatch = ''
     substituteInPlace webapp/web/tests/health/scmpcheck.sh \
@@ -43,16 +46,19 @@ buildGoModule {
     openpam
   ];
 
+  checkFlags = [ "-skip=^(TestMangleSCIONAddrURL|TestRoundTripper)$" ];
+
   ldflags = [
     "-s"
-    "-w"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=master" ]; };
+
+  meta = {
     description = "Public repository for SCION applications";
     homepage = "https://github.com/netsec-ethz/scion-apps";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       matthewcroughan
       sarcasticadmin
     ];

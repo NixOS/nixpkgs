@@ -2,36 +2,40 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  unstableGitUpdater,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rsonpath";
-  version = "0.9.1-unstable-2024-11-15";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "rsonquery";
     repo = "rsonpath";
-    rev = "979e6374a68747dfba7b87b61bbe77951f749659";
-    hash = "sha256-YQCbkdv7PRf5hVXAGUg6DrtaCLIyS9nUGXsl8XHpKZU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pgKqVDDaJ8vcDOp0FuuuBkShQDFP3x6BVS7x8ZZawAY=";
   };
 
-  passthru.updateScript = unstableGitUpdater {
-    tagPrefix = "v";
-  };
-
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-9pSn0f0VWsBg1z1UYGRtMb1z23htRm7qLmO80zvSjN8=";
+  cargoHash = "sha256-PC35k3vwKP55VKZt1txKVajhfrJpFiEgJYA4lNe/U7U=";
 
   cargoBuildFlags = [ "-p=rsonpath" ];
-  cargoTestFlags = cargoBuildFlags;
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Experimental JSONPath engine for querying massive streamed datasets";
     homepage = "https://github.com/v0ldek/rsonpath";
-    changelog = "https://github.com/v0ldek/rsonpath/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/v0ldek/rsonpath/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [
+      tbutter
+      progrm_jarvis
+    ];
     mainProgram = "rq";
   };
-}
+})

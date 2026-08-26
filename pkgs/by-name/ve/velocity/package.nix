@@ -2,12 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gradle,
-  jdk17,
+  gradle_9,
+  jdk25,
   makeBinaryWrapper,
   openssl,
   libdeflate,
-  jre_headless,
+  jdk25_headless,
   writeScript,
   nixosTests,
 
@@ -18,9 +18,6 @@
   ],
 }:
 let
-  gradle_jdk17 = gradle.override {
-    javaToolchains = [ jdk17 ];
-  };
   velocityNativePlatform =
     {
       x86_64-linux = "linux_x86_64";
@@ -35,33 +32,41 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "velocity";
-  version = "3.4.0-unstable-2025-04-03";
+  version = "4.1.0-unstable-2026-08-14";
 
   src = fetchFromGitHub {
     owner = "PaperMC";
     repo = "Velocity";
-    rev = "c72a3eefdeee26d39d5382c30435f9ce1819153e";
-    hash = "sha256-mBVNZAuAarBBQRD4H7XR/Hp+VmO+yoOwrkj/tQeEOWA=";
+    rev = "4772ca3022c49bfab37c703f72cbca7654fb5848";
+    hash = "sha256-uz6C7VmlAAd63zt+n1FkU3m05GT5ciwT7dYVne/DFYA=";
   };
 
-  nativeBuildInputs =
-    [
-      gradle_jdk17
-      makeBinaryWrapper
-    ]
-    ++ lib.optionals withVelocityNative [
-      # libraries for velocity-native
-      openssl
-      libdeflate
+  nativeBuildInputs = [
+    gradle_9
+    makeBinaryWrapper
+  ];
 
-      # needed for building velocity-native jni
-      jdk17
-    ];
+  buildInputs = lib.optionals withVelocityNative [
+    # libraries for velocity-native
+    openssl
+    libdeflate
 
-  mitmCache = gradle_jdk17.fetchDeps {
+    # needed for building velocity-native jni
+    jdk25
+  ];
+
+  strictDeps = true;
+
+  mitmCache = gradle_9.fetchDeps {
     inherit (finalAttrs) pname;
     data = ./deps.json;
   };
+
+  gradleUpdateScript = ''
+    runHook preBuild
+
+    gradle --write-verification-metadata sha256
+  '';
 
   patches = [
     ./fix-version.patch # remove build-time dependency on git and use version string from a env var instead
@@ -96,8 +101,15 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin $out/share/velocity
     cp proxy/build/libs/velocity-proxy-${builtins.head (builtins.split "-" finalAttrs.version)}-SNAPSHOT-all.jar $out/share/velocity/velocity.jar
 
-    makeWrapper ${lib.getExe jre_headless} "$out/bin/velocity" \
+    makeWrapper ${lib.getExe jdk25_headless} "$out/bin/velocity" \
       --append-flags "-jar $out/share/velocity/velocity.jar"
+
+    ${lib.optionalString withVelocityNative ''
+      # Nix doesn't pick up references in compressed JAR file
+      mkdir $out/nix-support
+      echo ${lib.getLib openssl} >> $out/nix-support/runtime-dependencies
+      echo ${lib.getLib libdeflate} >> $out/nix-support/runtime-dependencies
+    ''}
 
     runHook postInstall
   '';
@@ -122,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
       rm -rf "$tmpdir"
 
       update-source-version "$UPDATE_NIX_ATTR_PATH" "$main_version-unstable-$commit_date" --rev="$commit_hash"
+      $(nix-build -A velocity.mitmCache.updateScript)
     '';
     tests.velocity = nixosTests.velocity;
   };

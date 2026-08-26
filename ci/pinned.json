@@ -1,0 +1,31 @@
+{
+  "pins": {
+    "nixpkgs": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "NixOS",
+        "repo": "nixpkgs"
+      },
+      "branch": "nixpkgs-unstable",
+      "submodules": false,
+      "revision": "7525d999cd850b9a488817abc89c75dc733acf17",
+      "url": "https://github.com/NixOS/nixpkgs/archive/7525d999cd850b9a488817abc89c75dc733acf17.tar.gz",
+      "hash": "sha256-4IHyyLgLBdKefkljdKod4IMn023pQiDXAWJA187cmdY="
+    },
+    "nixpkgs-26.05-darwin": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "NixOS",
+        "repo": "nixpkgs"
+      },
+      "branch": "nixpkgs-26.05-darwin",
+      "submodules": false,
+      "revision": "51fe96f9107566e6b8eeb7fc4ba696c01e548b04",
+      "url": "https://github.com/NixOS/nixpkgs/archive/51fe96f9107566e6b8eeb7fc4ba696c01e548b04.tar.gz",
+      "hash": "sha256-yj0LPLnsmYoLmA3FGANjeTEwej0/DHjZBXWnDQDUuIs="
+    }
+  },
+  "version": 8
+}

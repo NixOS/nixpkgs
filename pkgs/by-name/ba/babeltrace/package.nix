@@ -23,20 +23,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Z7Q6qu9clR+nrxpVfPcgGhH+iYdrfCK6CgPLwxbbWpw=";
   };
 
-  nativeBuildInputs =
-    [
-      # The pre-generated ./configure script uses an old autoconf version which
-      # breaks cross-compilation (replaces references to malloc with rpl_malloc).
-      # Re-generate with nixpkgs's autoconf. This requires glib to be present in
-      # nativeBuildInputs for its m4 macros to be present.
-      autoreconfHook
-      glib
-      pkg-config
-    ]
-    ++ lib.optionals enablePython [
-      swig
-      pythonPackages.setuptools
-    ];
+  nativeBuildInputs = [
+    # The pre-generated ./configure script uses an old autoconf version which
+    # breaks cross-compilation (replaces references to malloc with rpl_malloc).
+    # Re-generate with nixpkgs's autoconf. This requires glib to be present in
+    # nativeBuildInputs for its m4 macros to be present.
+    autoreconfHook
+    glib
+    pkg-config
+  ]
+  ++ lib.optionals enablePython [
+    swig
+    pythonPackages.setuptools
+  ];
   buildInputs = [
     glib
     libuuid
@@ -44,20 +43,19 @@ stdenv.mkDerivation (finalAttrs: {
     elfutils
   ];
 
-  configureFlags =
-    [
-      # --enable-debug-info (default) requires the configure script to run host
-      # executables to determine the elfutils library version, which cannot be done
-      # while cross compiling.
-      (lib.enableFeature (stdenv.hostPlatform == stdenv.buildPlatform) "debug-info")
-    ]
-    ++ lib.optionals enablePython [
-      # Using (lib.enableFeature enablePython "python-bindings") makes the
-      # configure script look for python dependencies even when
-      # enablePython==false. Adding the configure flag conditionally seems to
-      # solve this.
-      "--enable-python-bindings"
-    ];
+  configureFlags = [
+    # --enable-debug-info (default) requires the configure script to run host
+    # executables to determine the elfutils library version, which cannot be done
+    # while cross compiling.
+    (lib.enableFeature (stdenv.hostPlatform == stdenv.buildPlatform) "debug-info")
+  ]
+  ++ lib.optionals enablePython [
+    # Using (lib.enableFeature enablePython "python-bindings") makes the
+    # configure script look for python dependencies even when
+    # enablePython==false. Adding the configure flag conditionally seems to
+    # solve this.
+    "--enable-python-bindings"
+  ];
   #
 
   passthru.updateScript = gitUpdater {

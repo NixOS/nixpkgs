@@ -12,22 +12,22 @@
   wrapGAppsHook3,
   curl,
   sqlite,
-  wxGTK32,
+  wxwidgets_3_2,
   gtk3,
   lua,
   wxsqlite3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "money-manager-ex";
-  version = "1.9.0";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "moneymanagerex";
     repo = "moneymanagerex";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-gpDwfRKXgp6hEpitflVIAIOU/k3Fx6hKKhyzQvLlog8=";
+    hash = "sha256-DE235wSfq20X3qh2L0KfFLk/54CW6l4Qn1K5r9nePQg=";
   };
 
   postPatch = ''
@@ -35,25 +35,24 @@ stdenv.mkDerivation rec {
       --replace-fail "sqlite3mc_amalgamation.h" "sqlite3.h"
   '';
 
-  nativeBuildInputs =
-    [
-      appstream # for appstreamcli
-      cmake
-      gettext
-      git
-      makeWrapper
-      pkg-config
-      wrapGAppsHook3
-      wxGTK32
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      lsb-release
-    ];
+  nativeBuildInputs = [
+    appstream # for appstreamcli
+    cmake
+    gettext
+    git
+    makeWrapper
+    pkg-config
+    wrapGAppsHook3
+    wxwidgets_3_2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    lsb-release
+  ];
 
   buildInputs = [
     curl
     sqlite
-    wxGTK32
+    wxwidgets_3_2
     gtk3
     lua
     wxsqlite3
@@ -87,4 +86,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; unix;
     mainProgram = "mmex";
   };
-}
+})

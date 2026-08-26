@@ -1,8 +1,8 @@
 {
   lib,
-  python311,
+  python3,
+  python3Packages,
   fetchFromGitHub,
-  file,
   gnupg,
   gawk,
   procps,
@@ -10,27 +10,23 @@
   withManpage ? false,
 }:
 
-with python311.pkgs;
-buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "alot";
-  version = "0.11";
+  version = "0.12";
   pyproject = true;
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals withManpage [
-      "man"
-    ];
-
-  disabled = !isPy3k;
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals withManpage [
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "pazz";
     repo = "alot";
-    tag = version;
-    sha256 = "sha256-mXaRzl7260uxio/BQ36BCBxgKhl1r0Rc6PwFZA8qNqc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-x2o/VfIeDIWsv0JS0FBWVHEjNaktx1/MjhDnqQSe/IY=";
   };
 
   postPatch = ''
@@ -38,51 +34,53 @@ buildPythonApplication rec {
       --replace-fail /usr/share "$out/share"
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ] ++ lib.optional withManpage sphinx;
+  build-system =
+    with python3Packages;
+    [
+      setuptools
+      setuptools-scm
+    ]
+    ++ lib.optional withManpage sphinx;
 
-  propagatedBuildInputs = [
+  dependencies = with python3Packages; [
     configobj
-    file
-    gpgme
+    gpg
     notmuch2
     python-magic
-    service-identity
+    standard-mailcap
     twisted
     urwid
     urwidtrees
   ];
 
   nativeCheckInputs = [
-    future
     gawk
     gnupg
-    mock
-    procps
-    pytestCheckHook
     notmuch
+    procps
+    python3Packages.pytestCheckHook
   ];
 
-  postBuild = lib.optionalString withManpage [
-    "make -C docs man"
-  ];
-
-  disabledTests = [
-    # Some twisted tests need internet access
-    "test_env_set"
-    "test_no_spawn_no_stdin_attached"
-    # DatabaseLockedError
-    "test_save_named_query"
-  ];
+  postBuild =
+    let
+      docPythonPath = python3Packages.makePythonPath (
+        with python3Packages;
+        [
+          notmuch2
+          standard-mailcap
+        ]
+      );
+    in
+    lib.optionalString withManpage ''
+      PYTHONPATH="$PWD:${docPythonPath}" make -C docs man
+    '';
 
   postInstall =
     let
-      completionPython = python.withPackages (ps: [ ps.configobj ]);
+      completionPython = python3.withPackages (ps: [ ps.configobj ]);
     in
     lib.optionalString withManpage ''
-      mkdir -p $out/man
-      cp -r docs/build/man $out/man
+      install -Dm644 docs/build/man/alot.1 -t $man/share/man/man1
     ''
     + ''
       mkdir -p $out/share/{applications,alot}
@@ -95,12 +93,13 @@ buildPythonApplication rec {
       sed "s,/usr/bin,$out/bin,g" extra/alot.desktop > $out/share/applications/alot.desktop
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pazz/alot";
     description = "Terminal MUA using notmuch mail";
+    changelog = "https://github.com/pazz/alot/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "alot";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ milibopp ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ milibopp ];
   };
-}
+})

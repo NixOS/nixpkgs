@@ -29,6 +29,9 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "click"
+  ];
   dependencies = [
     beautifulsoup4
     click
@@ -53,12 +56,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gtts" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library and CLI tool to interface with Google Translate text-to-speech API";
     mainProgram = "gtts-cli";
     homepage = "https://gtts.readthedocs.io";
     changelog = "https://gtts.readthedocs.io/en/latest/changelog.html";
-    license = licenses.mit;
-    maintainers = with maintainers; [ unode ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ unode ];
   };
 }

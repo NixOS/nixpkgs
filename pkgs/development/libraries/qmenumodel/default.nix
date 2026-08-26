@@ -16,15 +16,18 @@
   gobject-introspection,
 }:
 
+let
+  withQt6 = lib.versions.major qtbase.version == "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "qmenumodel";
-  version = "0.9.2";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "qmenumodel";
     rev = finalAttrs.version;
-    hash = "sha256-zbKAfq9R5fD2IqVYOAhy903QX1TDom9m6Ib2qpkFMak=";
+    hash = "sha256-f8JUMYzPCiCF5Vnw2xrgwZJNhksO3noQcGp3YFhS5lE=";
   };
 
   outputs = [
@@ -32,18 +35,17 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  postPatch =
-    ''
-      substituteInPlace libqmenumodel/src/qmenumodel.pc.in \
-        --replace "\''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@" "\''${prefix}/lib" \
-        --replace "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" "\''${prefix}/include"
+  postPatch = ''
+    substituteInPlace libqmenumodel/src/qmenumodel.pc.in \
+      --replace-fail "\''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@" "\''${prefix}/lib" \
+      --replace-fail "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" "\''${prefix}/include"
 
-      substituteInPlace libqmenumodel/QMenuModel/CMakeLists.txt \
-        --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
-    ''
-    + lib.optionalString finalAttrs.finalPackage.doCheck ''
-      patchShebangs tests/{client,script}/*.py
-    '';
+    substituteInPlace libqmenumodel/QMenuModel/CMakeLists.txt \
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+  ''
+  + lib.optionalString finalAttrs.finalPackage.doCheck ''
+    patchShebangs tests/{client,script}/*.py
+  '';
 
   strictDeps = true;
 
@@ -74,7 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
-    "-DENABLE_TESTS=${lib.boolToString finalAttrs.finalPackage.doCheck}"
+    (lib.strings.cmakeBool "ENABLE_QT6" withQt6)
+    (lib.strings.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
@@ -92,18 +95,18 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
-    description = "Qt5 renderer for Ayatana Indicators";
+  meta = {
+    description = "Qt renderer for Ayatana Indicators";
     longDescription = ''
       QMenuModel - a Qt/QML binding for GMenuModel
       (see http://developer.gnome.org/gio/unstable/GMenuModel.html)
     '';
     homepage = "https://github.com/AyatanaIndicators/qmenumodel";
-    license = licenses.lgpl3Only;
-    teams = [ teams.lomiri ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Only;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
-      "qmenumodel"
+      "qmenumodel${lib.optionalString withQt6 "-qt6"}"
     ];
   };
 })

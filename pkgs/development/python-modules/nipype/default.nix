@@ -2,106 +2,145 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+  hatch-vcs,
+
   # python dependencies
+  acres,
   click,
   python-dateutil,
   etelemetry,
   filelock,
-  funcsigs,
-  future,
   looseversion,
-  mock,
+  lxml,
   networkx,
   nibabel,
   numpy,
   packaging,
   prov,
-  psutil,
+  puremagic,
   pybids,
   pydot,
-  pytest,
-  pytest-xdist,
-  pytest-forked,
   rdflib,
   scipy,
   simplejson,
   traits,
+
+  # optional-dependencies
+  datalad,
+  duecredit,
+  paramiko,
+  psutil,
   xvfbwrapper,
-  # other dependencies
-  which,
+
+  # tests
   bash,
   glibcLocales,
-  # causes Python packaging conflict with any package requiring rdflib,
-  # so use the unpatched rdflib by default (disables Nipype provenance tracking);
-  # see https://github.com/nipy/nipype/issues/2888:
-  useNeurdflib ? false,
+  pandas,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pytest-doctestplus,
+  pytest-env,
+  pytest-timeout,
+  pytest-xdist,
+  sphinx,
+  which,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nipype";
-  version = "1.10.0";
-  disabled = pythonOlder "3.7";
-  format = "setuptools";
+  version = "1.11.0";
+  pyproject = true;
+  __structuredAttrs = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-GeXWzvpwmXGY94vGZe9NPTy1MyW1uYpy5Rrvra9rPg4=";
+  src = fetchFromGitHub {
+    owner = "nipy";
+    repo = "nipype";
+    tag = finalAttrs.version;
+    hash = "sha256-Xa7hoD+UvxozXsW4ztjQfKPmvHJL42EMuu95rWWlbe8=";
   };
 
   postPatch = ''
     substituteInPlace nipype/interfaces/base/tests/test_core.py \
-      --replace "/usr/bin/env bash" "${bash}/bin/bash"
+      --replace-fail "/usr/bin/env bash" "${lib.getExe bash}"
+    substituteInPlace nipype/pipeline/engine/tests/test_nodes.py \
+      --replace-fail "/bin/bash" "${lib.getExe bash}"
+  ''
+  # `nilearn.input_data` was renamed to `nilearn.maskers` in nilearn 0.9 and dropped in 0.13
+  + ''
+    substituteInPlace nipype/interfaces/nilearn.py \
+      --replace-fail \
+        "import nilearn.input_data as nl" \
+        "import nilearn.maskers as nl"
   '';
 
-  pythonRelaxDeps = [ "traits" ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    acres
     click
-    python-dateutil
     etelemetry
     filelock
-    funcsigs
-    future
     looseversion
+    lxml
     networkx
     nibabel
     numpy
     packaging
     prov
-    psutil
+    puremagic
     pydot
+    python-dateutil
     rdflib
     scipy
     simplejson
     traits
-    xvfbwrapper
   ];
 
+  optional-dependencies = {
+    data = [ datalad ];
+    duecredit = [ duecredit ];
+    profiler = [ psutil ];
+    pybids = [ pybids ];
+    ssh = [ paramiko ];
+    xvfbwrapper = [ xvfbwrapper ];
+  };
+
   nativeCheckInputs = [
-    pybids
     glibcLocales
-    mock
-    pytest
-    pytest-forked
+    pandas
+    pytestCheckHook
+    pytest-cov-stub
+    pytest-doctestplus
+    pytest-env
+    pytest-timeout
     pytest-xdist
+    sphinx
     which
   ];
 
   # checks on darwin inspect memory which doesn't work in build environment
   doCheck = !stdenv.hostPlatform.isDarwin;
-  # ignore tests which incorrect fail to detect xvfb
-  checkPhase = ''
-    pytest nipype/tests -k 'not display and not test_no_et_multiproc'
-  '';
-  pythonImportsCheck = [ "nipype" ];
 
-  meta = with lib; {
-    homepage = "https://nipy.org/nipype/";
+  pythonImportsCheck = [
+    "nipype"
+    "nipype.algorithms"
+    "nipype.interfaces"
+  ];
+
+  meta = {
     description = "Neuroimaging in Python: Pipelines and Interfaces";
+    homepage = "https://nipy.org/nipype";
+    downloadPage = "https://github.com/nipy/nipype";
+    changelog = "https://github.com/nipy/nipype/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "nipypecli";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ashgillman ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ashgillman ];
   };
-}
+})

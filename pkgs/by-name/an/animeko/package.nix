@@ -2,19 +2,19 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   gradle,
-  jetbrains,
   autoPatchelfHook,
+  jetbrains, # Required by upstream due to JCEF dependency
   fontconfig,
-  libXinerama,
-  libXrandr,
+  libxinerama,
+  libxrandr,
   file,
   gtk3,
   glib,
   cups,
   lcms2,
   alsa-lib,
-  libGL,
   libvlc,
   libidn,
   pulseaudio,
@@ -36,8 +36,8 @@
   libjpeg8,
   libkate,
   librsvg,
-  xorg,
-  libsForQt5,
+  libxpm,
+  qt5,
   libupnp,
   aalib,
   libcaca,
@@ -51,7 +51,7 @@
   libshout,
   ffmpeg_6,
   libmpeg2,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   lirc,
   lua5_2,
   taglib,
@@ -75,22 +75,56 @@
   flac,
   writeShellScript,
   nix-update,
+  libxml2,
+  boost,
+  thrift,
+  libGL,
+  libx11,
+  libxdamage,
+  nss,
+  nspr,
 }:
+let
+  thrift20 = thrift.overrideAttrs (old: {
+    version = "0.20.0";
 
+    src = fetchFromGitHub {
+      owner = "apache";
+      repo = "thrift";
+      tag = "v0.20.0";
+      hash = "sha256-cwFTcaNHq8/JJcQxWSelwAGOLvZHoMmjGV3HBumgcWo=";
+    };
+
+    cmakeFlags = (old.cmakeFlags or [ ]) ++ [
+      "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
+    ];
+
+    patches = (old.patches or [ ]) ++ [
+      # Fix build with gcc15
+      # https://github.com/apache/thrift/pull/3078
+      (fetchpatch {
+        name = "thrift-add-missing-cstdint-include-gcc15.patch";
+        url = "https://github.com/apache/thrift/commit/947ad66940cfbadd9b24ba31d892dfc1142dd330.patch";
+        hash = "sha256-pWcG6/BepUwc/K6cBs+6d74AWIhZ2/wXvCunb/KyB0s=";
+      })
+    ];
+  });
+
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "animeko";
-  version = "4.9.1";
+  version = "5.3.2";
 
   src = fetchFromGitHub {
     owner = "open-ani";
     repo = "animeko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NmvZR0NSo9y3vvdLqtyVKUlhCGq4Qu7Pbz/7Ufvf7rQ=";
+    hash = "sha256-mDUl1RpTIFBHdYst6R16iVljiUNOYh6mNUtOLBSuOE0=";
     fetchSubmodules = true;
   };
 
   postPatch = ''
-    echo "jvm.toolchain.version=21" >> local.properties
+    echo "kotlin.native.ignoreDisabledTargets=true" >> local.properties
     sed -i "s/^version.name=.*/version.name=${finalAttrs.version}/" gradle.properties
     sed -i "s/^package.version=.*/package.version=${finalAttrs.version}/" gradle.properties
   '';
@@ -101,14 +135,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   mitmCache = gradle.fetchDeps {
     inherit (finalAttrs) pname;
+    pkg = finalAttrs.finalPackage;
     data = ./deps.json;
     silent = false;
     useBwrap = false;
   };
 
-  env.JAVA_HOME = jetbrains.jdk;
+  env = {
+    JAVA_HOME = jetbrains.jdk-21;
+    ANDROID_SDK_HOME = "$(pwd)";
+  };
 
-  gradleFlags = [ "-Dorg.gradle.java.home=${jetbrains.jdk}" ];
+  gradleFlags = [
+    "-Dorg.gradle.java.home=${jetbrains.jdk-21}"
+  ];
 
   nativeBuildInputs = [
     gradle
@@ -117,8 +157,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fontconfig
-    libXinerama
-    libXrandr
+    libxinerama
+    libxrandr
     file
     shine
     libmpeg2
@@ -134,10 +174,10 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg8
     libkate
     librsvg
-    xorg.libXpm
-    libsForQt5.qt5.qtsvg
-    libsForQt5.qt5.qtbase
-    libsForQt5.qt5.qtx11extras
+    libxpm
+    qt5.qtsvg
+    qt5.qtbase
+    qt5.qtx11extras
     libupnp
     aalib
     libcaca
@@ -163,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
     srt
     libshout
     ffmpeg_6
-    xcbutilkeysyms
+    libxcb-keysyms
     lirc
     lua5_2
     taglib
@@ -184,20 +224,19 @@ stdenv.mkDerivation (finalAttrs: {
     taglib_1
     libdvdnav
     flac
+    libxml2
+    boost
+    thrift20
+    nss
+    nspr
+    libGL
+    libx11
+    libxdamage
   ];
 
-  autoPatchelfIgnoreMissingDeps = [
-    "libmpcdec.so.6"
-    "libsidplay2.so.1"
-    "libresid-builder.so.0"
-    "libsrt-gnutls.so.1.5"
-    "liblua5.2.so.0"
-    "libspatialaudio.so.0"
-    "libdc1394.so.25"
-    "libx265.so.199"
-    "libdca.so.0"
-    "liba52-0.7.4.so"
-    "libFLAC.so.12"
+  patches = [
+    # Builtin updater will never work on NixOS, so we made a patch to disable updater
+    ./0001-no-update-checker.patch
   ];
 
   dontWrapQtApps = true;
@@ -212,19 +251,15 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace app/desktop/appResources/linux-x64/animeko.desktop \
       --replace-fail "icon" "animeko"
     install -Dm644 app/desktop/appResources/linux-x64/animeko.desktop $out/share/applications/animeko.desktop
-    install -Dm644 app/desktop/appResources/linux-x64/icon.png $out/share/pixmaps/animeko.png
+    install -Dm644 app/desktop/appResources/linux-x64/icon.png $out/share/icons/hicolor/512x512/apps/animeko.png
 
     runHook postInstall
   '';
 
   preFixup = ''
-    patchelf --add-needed libGL.so.1 \
-      --add-rpath ${
-        lib.makeLibraryPath [
-          libGL
-          libvlc
-        ]
-      } $out/bin/Ani
+    # Remove prebuilt vlc and use NixOS version
+    rm -r $out/lib/app/resources/lib
+    ln -sf ${libvlc}/lib $out/lib/app/resources/
   '';
 
   passthru.updateScript = writeShellScript "update-animeko" ''
@@ -237,11 +272,18 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/open-ani/animeko";
     mainProgram = "Ani";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [
+      pokon548
+    ];
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+    ];
+    # Mark broken due to a breaking change in JetBrains JCEF
+    # https://github.com/NixOS/nixpkgs/pull/485812#issuecomment-4211365591
+    broken = true;
   };
 })

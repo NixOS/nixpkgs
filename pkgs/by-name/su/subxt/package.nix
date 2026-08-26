@@ -1,25 +1,21 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  cmake,
-  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "subxt";
-  version = "0.41.0";
+  version = "0.50.3";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "subxt";
-    rev = "v${version}";
-    hash = "sha256-zg2MraqKLbyhaxTi02rE4MsMuPw4diIseYNUQEoqnVA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ctViZ1veorf+fmalmaZkqVGJYZTGYYcPeM23UGxRNRg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-leJp+Ccb2mij46Cx6+pv7GoHLKG5IVlNeih0L2QQp4w=";
+  cargoHash = "sha256-QM6tmLygNjrqqE5ptEjYGAEQDBs08Ix2nYrbujtPv7Q=";
 
   # Only build the command line client
   cargoBuildFlags = [
@@ -27,24 +23,21 @@ rustPlatform.buildRustPackage rec {
     "subxt"
   ];
 
-  # Needed by wabt-sys
-  nativeBuildInputs = [ cmake ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
-
   # Requires a running substrate node
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/paritytech/subxt";
-    description = "Submit transactions to a substrate node via RPC";
+    description = "Subxt is a CLI tool for interacting with chains in the Polkadot network";
+    changelog = "https://github.com/paritytech/subxt/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "subxt";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       asl20
     ];
-    maintainers = [ maintainers.FlorianFranzen ];
+    maintainers = with lib.maintainers; [
+      FlorianFranzen
+      kilyanni
+    ];
   };
-}
+})

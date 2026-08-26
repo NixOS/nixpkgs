@@ -1,32 +1,34 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
-  xorg,
+  fetchFromCodeberg,
+  libxcursor,
+  libx11,
+  libxrender,
   installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "sxcs";
-  version = "1.1.0";
+  pname = "sxcs";
+  version = "1.2.1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "NRK";
     repo = "sxcs";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-rYmbbdZjeLCvGvNocI3+KVU2KBkYvRisayTyScTRay8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7Dz14gARdiHZApT20PGS5pop327XROBeAXeKUeHo7iA=";
   };
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXcursor
+    libx11
+    libxcursor
+    libxrender
   ];
   nativeBuildInputs = [ installShellFiles ];
 
   buildPhase = ''
     runHook preBuild
-    ${stdenv.cc.targetPrefix}cc -o sxcs sxcs.c -O3 -s -l X11 -l Xcursor
+    ${stdenv.cc.targetPrefix}cc -o sxcs sxcs.c -O3 -s -l X11 -l Xcursor -l Xrender
     runHook postBuild
   '';
 

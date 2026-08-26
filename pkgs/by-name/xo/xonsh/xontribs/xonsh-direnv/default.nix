@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "xonsh-direnv";
   version = "1.6.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "74th";
@@ -34,6 +35,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/74th/xonsh-direnv/";
     changelog = "https://github.com/74th/xonsh-direnv/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ greg ];
+    maintainers = with lib.maintainers; [
+      greg
+      infinidoge
+    ];
   };
 }

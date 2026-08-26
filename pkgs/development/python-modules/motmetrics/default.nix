@@ -17,9 +17,12 @@
   pytest-benchmark,
 }:
 
+let
+  version = "1.4.0";
+in
 buildPythonPackage {
   pname = "motmetrics";
-  version = "1.4.0-unstable-2025-01-14";
+  version = "${version}-unstable-2025-01-14";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -44,15 +47,15 @@ buildPythonPackage {
     pytest-benchmark
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "motmetrics" ];
 
-  meta = with lib; {
+  meta = {
     description = "Benchmark multiple object trackers (MOT) in Python";
     homepage = "https://github.com/cheind/py-motmetrics";
-    changelog = "https://github.com/cheind/py-motmetrics/releases/tag/${version}";
-    license = licenses.mit;
+    changelog = "https://github.com/cheind/py-motmetrics/releases/tag/v${version}";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "mdx_truly_sane_lists/tests.py" ];
+  enabledTestPaths = [ "mdx_truly_sane_lists/tests.py" ];
 
   meta = {
     description = "Extension for Python-Markdown that makes lists truly sane";
@@ -35,6 +35,7 @@ buildPythonPackage rec {
       Features custom indents for nested lists and fix for messy linebreaks and
       paragraphs between lists.
     '';
+    homepage = "https://github.com/radude/mdx_truly_sane_lists";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kaction ];
   };

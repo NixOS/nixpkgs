@@ -88,7 +88,8 @@ in
         HF_HOME = ".";
         EASYOCR_MODULE_PATH = ".";
         MPLCONFIGDIR = ".";
-      } // cfg.environment;
+      }
+      // cfg.environment;
 
       serviceConfig = {
         ExecStart = "${lib.getExe cfg.package} run --host \"${cfg.host}\" --port ${toString cfg.port}";
@@ -126,5 +127,5 @@ in
     networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
   };
 
-  meta.maintainers = with lib.maintainers; [ drupol ];
+  meta.maintainers = [ ];
 }

@@ -57,12 +57,20 @@ in
     boot.extraModulePackages = [
       config.boot.kernelPackages.ena
     ];
-    boot.initrd.kernelModules = [ "xen-blkfront" ];
     boot.initrd.availableKernelModules = [ "nvme" ];
-    boot.kernelParams = [
-      "console=ttyS0,115200n8"
-      "random.trust_cpu=on"
-    ];
+    boot.kernelParams =
+      let
+        # Amazon recommends setting this to the highest possible value for a good EBS
+        # experience, which prior to 4.15 was 255.
+        # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nvme-ebs-volumes.html#timeout-nvme-ebs-volumes
+        nvmeTimeout =
+          if lib.versionAtLeast config.boot.kernelPackages.kernel.version "4.15" then "4294967295" else "255";
+      in
+      [
+        "console=ttyS0,115200n8"
+        "random.trust_cpu=on"
+        "nvme_core.io_timeout=${nvmeTimeout}"
+      ];
 
     # Prevent the nouveau kernel module from being loaded, as it
     # interferes with the nvidia/nvidia-uvm modules needed for CUDA.
@@ -87,7 +95,16 @@ in
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      path = [ pkgs.curl ];
+      path = with pkgs; [
+        bzip2
+        curl
+        file
+        gzip
+        lzip
+        mktemp
+        xz
+        zstd
+      ];
       script = builtins.readFile ./ec2-metadata-fetcher.sh;
       serviceConfig.Type = "oneshot";
       serviceConfig.StandardOutput = "journal+console";

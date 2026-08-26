@@ -2,24 +2,29 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   msrest,
   msrestazure,
   azure-common,
   azure-mgmt-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-loganalytics";
   version = "12.0.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     extension = "zip";
-    sha256 = "da128a7e0291be7fa2063848df92a9180cf5c16d42adc09d2bc2efd711536bfb";
+    hash = "sha256-2hKKfgKRvn+iBjhI35KpGAz1wW1CrcCdK8Lv1xFTa/s=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     msrest
     msrestazure
     azure-common
@@ -33,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.mgmt.loganalytics" ];
 
-  meta = with lib; {
+  meta = {
     description = "This is the Microsoft Azure Log Analytics Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
-}
+})

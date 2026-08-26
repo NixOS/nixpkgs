@@ -8,7 +8,7 @@
 }:
 
 let
-  tag = "0.3.12";
+  tag = "0.3.21-unstable-2025-08-15";
 in
 stdenv.mkDerivation {
   pname = "apfs";
@@ -17,8 +17,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "linux-apfs";
     repo = "linux-apfs-rw";
-    rev = "v${tag}";
-    hash = "sha256-UuPWiqR1CiPlBmFleV+y3sowj82iUkgmakNM+T+Mlvc=";
+    rev = "a10279ce663bdbe4d32baef83930e5ba7d69d7df";
+    hash = "sha256-4om16XuBURnOVK4SOrPu1Aj/p5F9/SA4tajo6HMDgI0=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -30,9 +30,14 @@ stdenv.mkDerivation {
     "INSTALL_MOD_PATH=$(out)"
   ];
 
-  passthru.tests.apfs = nixosTests.apfs;
+  passthru = {
+    tests.apfs = nixosTests.apfs;
 
-  meta = with lib; {
+    inherit tag;
+    updateScript = ./update.sh;
+  };
+
+  meta = {
     description = "APFS module for linux";
     longDescription = ''
       The Apple File System (APFS) is the copy-on-write filesystem currently
@@ -44,8 +49,8 @@ stdenv.mkDerivation {
       Encryption is still not in the works though.
     '';
     homepage = "https://github.com/linux-apfs/linux-apfs-rw";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

@@ -3,16 +3,17 @@
   fetchFromGitHub,
   buildDartApplication,
   kdePackages,
+  sqlite,
 }:
 
 let
-  version = "1.8.0";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "Merrit";
     repo = "vscode-runner";
     rev = "v${version}";
-    hash = "sha256-lhrUPlTBKMiWL3+zhjFBoUvjfjbM9t55Z4Anhj3sPuk=";
+    hash = "sha256-qeB6lroBxdZP5+AFfMgTzli2ID8Ed3+1m2nACb1d+Bk=";
   };
 in
 buildDartApplication {
@@ -26,6 +27,8 @@ buildDartApplication {
   dartEntryPoints = {
     "bin/vscode_runner" = "bin/vscode_runner.dart";
   };
+
+  buildInputs = [ sqlite ];
 
   postInstall = ''
     substituteInPlace ./package/codes.merritt.vscode_runner.service \

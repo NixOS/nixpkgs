@@ -7,43 +7,45 @@
   ffmpeg,
   ttyd,
   chromium,
-  makeWrapper,
+  makeBinaryWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "vhs";
-  version = "0.9.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-ceY4zLd+4EwXpwunKiWnaAB25qutSK1b1SyIriAbAI0=";
+    repo = "vhs";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VOiI+ddiax04QtCcDr6ze53kd/HHGbfQE3j/32iq4Ro=";
   };
 
-  vendorHash = "sha256-2vRAI+Mm8Pzk3u4rndtwYnUlrAtjffe0kpoA1EHprQk=";
+  vendorHash = "sha256-cgKLYUATtn4hMdIOXZe9JWYNUOrX3S6BDfvS+rIWDfM=";
 
   nativeBuildInputs = [
     installShellFiles
-    makeWrapper
+    makeBinaryWrapper
   ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
   ];
 
   postInstall = ''
     wrapProgram $out/bin/vhs --prefix PATH : ${
       lib.makeBinPath (
-        lib.optionals stdenv.hostPlatform.isLinux [ chromium ]
-        ++ [
+        [
           ffmpeg
           ttyd
         ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [ chromium ]
       )
     }
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     $out/bin/vhs man > vhs.1
     installManPage vhs.1
     installShellCompletion --cmd vhs \
@@ -52,15 +54,12 @@ buildGoModule rec {
       --zsh <($out/bin/vhs completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for generating terminal GIFs with code";
     mainProgram = "vhs";
     homepage = "https://github.com/charmbracelet/vhs";
-    changelog = "https://github.com/charmbracelet/vhs/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      maaslalani
-      penguwin
-    ];
+    changelog = "https://github.com/charmbracelet/vhs/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

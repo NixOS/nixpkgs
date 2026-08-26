@@ -32,7 +32,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Frontend to curl that adds the ease of use of httpie, without compromising on features and performance";
-    homepage = "https://curlie.io/";
+    homepage = "https://rs.github.io/curlie/";
     maintainers = with lib.maintainers; [ ma27 ];
     license = lib.licenses.mit;
     mainProgram = "curlie";

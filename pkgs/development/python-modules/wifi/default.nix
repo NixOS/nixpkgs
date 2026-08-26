@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pbkdf2,
   pytestCheckHook,
-  pythonOlder,
   wirelesstools,
 }:
 
@@ -15,12 +14,10 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "rockymeza";
-    repo = pname;
+    repo = "wifi";
     rev = "v${version}";
     hash = "sha256-scg/DvApvyQZtzDgkHFJzf9gCRfJgBvZ64CG/c2Cx8E=";
   };
-
-  disabled = pythonOlder "2.6";
 
   postPatch = ''
     substituteInPlace wifi/scan.py \
@@ -33,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wifi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides a command line wrapper for iwlist and /etc/network/interfaces";
     mainProgram = "wifi";
     homepage = "https://github.com/rockymeza/wifi";
-    maintainers = with maintainers; [ rhoriguchi ];
-    license = licenses.bsd2;
+    maintainers = with lib.maintainers; [ rhoriguchi ];
+    license = lib.licenses.bsd2;
   };
 }

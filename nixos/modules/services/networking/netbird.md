@@ -5,9 +5,7 @@
 The absolute minimal configuration for the Netbird client daemon looks like this:
 
 ```nix
-{
-  services.netbird.enable = true;
-}
+{ services.netbird.enable = true; }
 ```
 
 This will set up a netbird service listening on the port `51820` associated to the
@@ -78,6 +76,11 @@ Each Netbird client service by default:
   peer-to-peer communication,
 - can be additionally configured with environment variables,
 - automatically determines whether `netbird-ui-<name>` should be available,
+- does not enable [routing features](#opt-services.netbird.useRoutingFeatures) by default
+  If you plan to use routing features, you must explicitly enable them. By enabling them, the service will
+  configure the firewall and enable IP forwarding on the system.
+  When set to `client` or `both`, reverse path filtering will be set to loose instead of strict.
+  When set to `server` or `both`, IP forwarding will be enabled.
 
 [autoStart](#opt-services.netbird.clients._name_.autoStart) allows you to start the client (an actual systemd service)
 on demand, for example to connect to work-related or otherwise conflicting network only when required.

@@ -28,7 +28,7 @@ in
   extraOutputsToInstall = [ "man" ];
 
   meta = {
-    description = "The essential commands from the NixOS installer as a package";
+    description = "Essential commands from the NixOS installer as a package";
     longDescription = ''
       With this package, you get the commands like nixos-generate-config and
       nixos-install that you would otherwise only find on a NixOS system, such
@@ -56,9 +56,9 @@ in
           '';
         }
         ''
-          nixos-install --help | grep -F 'NixOS Reference Pages'
+          nixos-install --help | grep -F "System Manager's Manual"
           nixos-install --help | grep -F 'configuration.nix'
-          nixos-generate-config --help | grep -F 'NixOS Reference Pages'
+          nixos-generate-config --help | grep -F "System Manager's Manual"
           nixos-generate-config --help | grep -F 'hardware-configuration.nix'
 
           # FIXME: Tries to call unshare, which it must not do for --help

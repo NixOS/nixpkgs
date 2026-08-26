@@ -8,14 +8,14 @@
   libpcap,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "masscan";
   version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "robertdavidgraham";
     repo = "masscan";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-mnGC/moQANloR5ODwRjzJzBa55OEZ9QU+9WpAHxQE/g=";
   };
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=$(out)"
-    "GITVER=${version}"
+    "GITVER=${finalAttrs.version}"
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     install -Dm444 -t $out/share/licenses/masscan LICENSE
 
     wrapProgram $out/bin/masscan \
-      --prefix LD_LIBRARY_PATH : "${libpcap}/lib"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libpcap ]}"
   '';
 
   doInstallCheck = true;
@@ -63,13 +63,13 @@ stdenv.mkDerivation rec {
     $out/bin/masscan --selftest
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast scan of the Internet";
     mainProgram = "masscan";
     homepage = "https://github.com/robertdavidgraham/masscan";
-    changelog = "https://github.com/robertdavidgraham/masscan/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ rnhmjoj ];
+    changelog = "https://github.com/robertdavidgraham/masscan/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
   };
-}
+})

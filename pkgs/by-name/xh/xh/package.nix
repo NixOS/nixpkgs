@@ -7,21 +7,22 @@
   withNativeTls ? true,
   stdenv,
   openssl,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xh";
-  version = "0.24.1";
+  version = "0.26.2";
 
   src = fetchFromGitHub {
     owner = "ducaale";
     repo = "xh";
-    rev = "v${version}";
-    hash = "sha256-2c96O5SL6tcPSbxx8NYxG8LDX3ZgyxEMmEeJnKDwb38=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EiwK5/+mAQc8P120E6gQa/6h5t4tijy7PcdF3RYQ10U=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-oncf3Hd85LgKn8KSDIBHXLJ3INzfp0X/Ng9OjAltLB4=";
+  cargoHash = "sha256-fdqHUblEL9YFiYdWkonOWCdYCS9pZ+9uoiBoyK2qWB4=";
 
   buildFeatures = lib.optional withNativeTls "native-tls";
 
@@ -59,15 +60,18 @@ rustPlatform.buildRustPackage rec {
     $out/bin/xhs --help > /dev/null
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Friendly and fast tool for sending HTTP requests";
     homepage = "https://github.com/ducaale/xh";
-    changelog = "https://github.com/ducaale/xh/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/ducaale/xh/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
-      aaronjheng
+      defelo
     ];
     mainProgram = "xh";
   };
-}
+})

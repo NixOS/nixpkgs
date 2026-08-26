@@ -2,44 +2,58 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
   html5tagger,
-  python,
-  pythonOlder,
+  pytestCheckHook,
+  beautifulsoup4,
+  numpy,
 }:
 
 buildPythonPackage rec {
   pname = "tracerite";
-  version = "1.1.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "tracerite";
     tag = "v${version}";
-    hash = "sha256-rI1MNdYl/P64tUHyB3qV9gfLbGbCVOXnEFoqFTkaqgg=";
+    hash = "sha256-UXIQc5rXVaZuZj5xu2X9H38vKWAM+AoKrKfudovUhwA=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
-  propagatedBuildInputs = [ html5tagger ];
+  dependencies = [
+    html5tagger
+  ];
 
-  postInstall = ''
-    cp tracerite/style.css $out/${python.sitePackages}/tracerite
-  '';
-
-  # no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    beautifulsoup4
+    numpy
+  ];
 
   pythonImportsCheck = [ "tracerite" ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # requiring torch to test tensor rendering in tracebacks is too expensive
+    "tests/test_inspector_torch.py"
+  ];
+
+  meta = {
     description = "Tracebacks for Humans in Jupyter notebooks";
     homepage = "https://github.com/sanic-org/tracerite";
-    changelog = "https://github.com/sanic-org/tracerite/releases/tag/v${version}";
-    license = licenses.unlicense;
-    maintainers = [ ];
+    changelog = "https://github.com/sanic-org/tracerite/releases/tag/${src.tag}";
+    # See https://github.com/sanic-org/tracerite/issues/13
+    license = with lib.licenses; [
+      mit
+      publicDomain
+      unlicense
+    ];
+    maintainers = with lib.maintainers; [ p0lyw0lf ];
   };
 }

@@ -4,30 +4,36 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   installShellFiles,
+  pkg-config,
+  oniguruma,
   versionCheckHook,
   nix-update-script,
 }:
-let
-  version = "0.3.10";
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lla";
-  inherit version;
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "chaqchase";
     repo = "lla";
-    tag = "v${version}";
-    hash = "sha256-/6p23JW3ZaSuDf34IWcTggR92/zUTMRerQ32bTsRujo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XpnnKNTZMsbHBM6+zV04XZ29y3o4OzyJKM5ZBjuNsCQ=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     installShellFiles
+    pkg-config
   ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-aX8nm/V0ug2g40QeFU9AWxjuFAnW+gYTR8RC5CV7wRQ=";
+  buildInputs = [
+    oniguruma
+  ];
+
+  # Do not vendor Oniguruma
+  env.RUSTONIG_SYSTEM_LIBONIG = true;
+
+  cargoHash = "sha256-g241vUK6rO53yoEKnOt3UpqtOZfvp6ajb9JzWJfd+Qw=";
 
   cargoBuildFlags = [ "--workspace" ];
 
@@ -56,10 +62,10 @@ rustPlatform.buildRustPackage {
       Git integration, and a robust plugin system with an extensible list of plugins to add more functionality.
     '';
     homepage = "https://lla.chaqchase.com";
-    changelog = "https://github.com/chaqchase/lla/blob/refs/tags/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/chaqchase/lla/blob/refs/tags/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pluiedev ];
     platforms = lib.platforms.unix;
     mainProgram = "lla";
   };
-}
+})

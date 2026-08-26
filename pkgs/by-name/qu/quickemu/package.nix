@@ -3,7 +3,9 @@
   fetchFromGitHub,
   stdenv,
   makeWrapper,
+  gitUpdater,
   cdrtools,
+  coreutils,
   curl,
   gawk,
   mesa-demos,
@@ -29,47 +31,52 @@
   installShellFiles,
 }:
 let
-  runtimePaths =
-    [
-      cdrtools
-      curl
-      gawk
-      gnugrep
-      gnused
-      jq
-      pciutils
-      procps
-      python3
-      (qemu.override { smbdSupport = true; })
-      socat
-      swtpm
-      util-linux
-      unzip
-      xrandr
-      zsync
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      mesa-demos
-      usbutils
-      xdg-user-dirs
-    ];
+  runtimePaths = [
+    cdrtools
+    coreutils
+    curl
+    gawk
+    gnugrep
+    gnused
+    jq
+    pciutils
+    procps
+    python3
+    (qemu.override { smbdSupport = true; })
+    socat
+    swtpm
+    util-linux
+    unzip
+    xrandr
+    zsync
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    mesa-demos
+    usbutils
+    xdg-user-dirs
+  ];
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickemu";
-  version = "4.9.7";
+  version = "4.9.9";
 
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickemu";
-    rev = finalAttrs.version;
-    hash = "sha256-sCoCcN6950pH33bRZsLoLc1oSs5Qfpj9Bbywn/uA6Bc=";
+    tag = finalAttrs.version;
+    hash = "sha256-HFq3oYz6KQcq3P92bTg2O5XFtZZcZBfiCOOJSfnV1ro=";
   };
 
   postPatch = ''
     sed -i \
-      -e '/OVMF_CODE_4M.secboot.fd/s|ovmfs=(|ovmfs=("${OVMFFull.firmware}","${OVMFFull.variables}" |' \
-      -e '/OVMF_CODE_4M.fd/s|ovmfs=(|ovmfs=("${OVMF.firmware}","${OVMF.variables}" |' \
+      ${lib.optionalString stdenv.hostPlatform.isx86_64 ''
+        -e '/OVMF_CODE_4M.secboot.fd/s|ovmfs=(|ovmfs=("${OVMFFull.firmware}","${OVMFFull.variablesMs}" |' \
+        -e '/OVMF_CODE_4M.fd/s|ovmfs=(|ovmfs=("${OVMF.firmware}","${OVMF.variables}" |' \
+      ''} \
+      ${lib.optionalString stdenv.hostPlatform.isAarch64 ''
+        -e '/AAVMF_CODE.fd/s|ovmfs=(|ovmfs=("${OVMF.firmware}","${OVMF.variables}" |' \
+      ''} \
       -e '/cp "''${VARS_IN}" "''${VARS_OUT}"/a chmod +w "''${VARS_OUT}"' \
       -e 's/Icon=.*qemu.svg/Icon=qemu/' \
       -e 's,\[ -x "\$(command -v smbd)" \],true,' \
@@ -98,7 +105,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = testers.testVersion { package = finalAttrs.finalPackage; };
+  passthru = {
+    tests = testers.testVersion { package = finalAttrs.finalPackage; };
+    updateScript = gitUpdater { };
+  };
 
   meta = {
     description = "Quickly create and run optimised Windows, macOS and Linux virtual machines";

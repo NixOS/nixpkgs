@@ -1,68 +1,146 @@
 {
   buildNpmPackage,
   copyDesktopItems,
-  electron,
+  electron_41,
   fetchFromGitHub,
   lib,
   makeDesktopItem,
   nix-update-script,
-  npm-lockfile-fix,
-  python3,
+  prefetch-npm-deps,
+  rsync,
   stdenv,
+  nodejs_22,
+  rustPlatform,
+  cacert,
+  cargo,
 }:
-
+let
+  electron = electron_41;
+  nodejs = nodejs_22;
+in
 buildNpmPackage rec {
   pname = "super-productivity";
-  version = "12.0.5";
+  version = "18.19.0";
+
+  inherit nodejs;
 
   src = fetchFromGitHub {
-    owner = "johannesjo";
+    owner = "super-productivity";
     repo = "super-productivity";
     tag = "v${version}";
-    hash = "sha256-+Xw1WZXvZUOdA/ZpLdLCQAy8cmQ9QTiSDRMgj5+jeNw=";
-
-    postFetch = ''
-      ${lib.getExe npm-lockfile-fix} -r $out/package-lock.json
-    '';
+    hash = "sha256-tUK2vytQ/fBSw8drjBLh4HlrnQh/0tX9e9otYMhXYsA=";
   };
 
-  npmDepsHash = "sha256-SAmSvdPlJFDE6TQCr932MfPzlwDtGcm4YdHesVA6j8c=";
-  npmFlags = [ "--legacy-peer-deps" ];
+  # Use custom fetcher for deps because super-productivity uses multiple
+  # package-lock.json files to manage plugins.  It checks all lock
+  # files and produces a merged output.  This should still be compatible
+  # with nix-update.
+  npmDeps = stdenv.mkDerivation (
+    lib.fetchers.normalizeHash { } {
+      pname = "super-productivity-deps";
+      inherit version src;
+
+      nativeBuildInputs = [
+        prefetch-npm-deps
+        rsync
+      ];
+
+      __structuredAttrs = true;
+      strictDeps = true;
+
+      env = {
+        # Some lockfiles do not include any dependencies to install so
+        # prefertch-npm-deps produces an error.  Those can be ignored with
+        # this flag.
+        FORCE_EMPTY_CACHE = true;
+        NPM_FETCHER_VERSION = "2";
+        SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+      };
+
+      buildPhase = ''
+        mkdir -p $out
+        find -name package-lock.json | sort | while read -r lockfile; do
+          prefetch-npm-deps $lockfile /tmp/cache
+          # Merge output
+          rsync -a /tmp/cache/ $out
+          rm -rf /tmp/cache
+        done
+        # Ensure that the root package-lock.json is placed in the output.
+        # This means only the root lockfile is checked for consistancy,
+        # but that should not be an issue.
+        cp package-lock.json $out
+      '';
+
+      dontInstall = true;
+
+      outputHashMode = "recursive";
+      hash = "sha256-Je3pHgkBwt35sIvxQqnYX3F+uJQeBGc5kzCAL9czCYs=";
+    }
+  );
+
   makeCacheWritable = true;
+  npmDepsFetcherVersion = 2;
+
+  cargoRoot = "electron/wayland-idle-helper";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit
+      pname
+      version
+      src
+      cargoRoot
+      ;
+    hash = "sha256-u/GjzX8zykIqJlMR/611ADX2EcD1cb4Qr94EkI2sdlA=";
+  };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     CHROMEDRIVER_SKIP_DOWNLOAD = "true";
-    CSC_IDENTITY_AUTO_DISCOVERY = "false";
   };
 
-  nativeBuildInputs =
-    [ copyDesktopItems ]
-    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
-      (python3.withPackages (ps: [ ps.setuptools ]))
-    ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    cargo
+    copyDesktopItems
+    rustPlatform.cargoSetupHook
+  ];
 
-  # package.json does not include `core-js` and the comment suggests
-  # it is only needed on some mobile platforms
   postPatch = ''
     substituteInPlace electron-builder.yaml \
       --replace-fail "notarize: true" "notarize: false"
-    substituteInPlace src/polyfills.ts \
-      --replace-fail "import 'core-js/es/object';" ""
+
+    # At runtime the helper is looked up via app.getAppPath() (the dirname of
+    # the asar file).  process.execPath points to the system electron binary,
+    # not our app directory, so it would search the wrong location.
+    substituteInPlace electron/idle-time-handler.ts \
+      --replace-fail "path.dirname(process.execPath)" "path.dirname(app.getAppPath())"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # build/icon.icns is checked in and already contains all ten macOS icon
+    # representations. Avoid regenerating it with sandbox-unavailable iconutil.
+    substituteInPlace electron-builder.yaml \
+      --replace-fail "beforePack: ./tools/beforePack.js" ""
   '';
 
   buildPhase = ''
     runHook preBuild
 
+    # Npm hooks do not install packages for the plugins. The build
+    # script does install the packages, but it does not handle patching
+    # the shebangs.
+    find packages -name package-lock.json | while read -r p; do
+      npm --prefix "$(dirname $p)" ci --ignore-scripts
+    done
+    patchShebangs packages
+
     # electronDist needs to be modifiable on Darwin
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
 
-    npm run buildFrontend:prod:es6
-    npm run electron:build
+    npm run prepare
+    npm run build
     npm exec electron-builder -- --dir \
       -c.electronDist=electron-dist \
-      -c.electronVersion=${electron.version}
+      -c.electronVersion=${electron.version} \
+      -c.mac.identity=null
 
     runHook postBuild
   '';
@@ -74,44 +152,43 @@ buildNpmPackage rec {
       if stdenv.hostPlatform.isDarwin then
         ''
           mkdir -p $out/Applications
-          cp -r "app-builds/mac"*"/Super Productivity.app" "$out/Applications"
-          makeWrapper "$out/Applications/Super Productivity.app/Contents/MacOS/Super Productivity" "$out/bin/super-productivity"
+          cp -r ".tmp/app-builds/mac"*"/Super Productivity.app" "$out/Applications"
+          makeWrapper "$out/Applications/Super Productivity.app/Contents/MacOS/Super Productivity" "$out/bin/superproductivity"
         ''
       else
         ''
-          mkdir -p $out/share/super-productivity/{app,defaults,static/plugins,static/resources/plugins}
-          cp -r app-builds/*-unpacked/{locales,resources{,.pak}} "$out/share/super-productivity/app"
-
-          for size in 16 32 48 64 128 256 512 1024; do
-            local sizexsize="''${size}x''${size}"
-            mkdir -p $out/share/icons/hicolor/$sizexsize/apps
-            cp -v build/icons/$sizexsize.png \
-              $out/share/icons/hicolor/$sizexsize/apps/super-productivity.png
-          done
-
-          makeWrapper '${lib.getExe electron}' "$out/bin/super-productivity" \
-            --add-flags "$out/share/super-productivity/app/resources/app.asar" \
+          mkdir -p $out/share/{superproductivity,icons/hicolor/scalable/apps}
+          cp -r .tmp/app-builds/*-unpacked/{resources/app.asar,wayland-idle-helper} $out/share/superproductivity
+          cp electron/assets/icons/ico-circled.svg $out/share/icons/hicolor/scalable/apps/superproductivity.svg
+          makeWrapper '${lib.getExe electron}' "$out/bin/superproductivity" \
+            --add-flags "$out/share/superproductivity/app.asar" \
             --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
             --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
             --inherit-argv0
         ''
     }
 
+    # backward compat symlink for the old binary name
+    ln -s superproductivity "$out"/bin/super-productivity
+
     runHook postInstall
   '';
 
-  # copied from deb file
+  # matches upstream electron-builder.yaml linux.desktop config
   desktopItems = [
     (makeDesktopItem {
-      name = "super-productivity";
-      desktopName = "superProductivity";
-      exec = "super-productivity %u";
+      name = "superproductivity";
+      desktopName = "Super Productivity";
+      exec = "superproductivity %U";
       terminal = false;
       type = "Application";
-      icon = "super-productivity";
-      startupWMClass = "superProductivity";
-      comment = builtins.replaceStrings [ "\n" ] [ " " ] meta.longDescription;
-      categories = [ "Utility" ];
+      icon = "superproductivity";
+      startupWMClass = "superproductivity";
+      categories = [
+        "Office"
+        "ProjectManagement"
+      ];
+      mimeTypes = [ "x-scheme-handler/superproductivity" ];
     })
   ];
 
@@ -129,9 +206,9 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
-      offline
       pineapplehunter
+      tebriel
     ];
-    mainProgram = "super-productivity";
+    mainProgram = "superproductivity";
   };
 }

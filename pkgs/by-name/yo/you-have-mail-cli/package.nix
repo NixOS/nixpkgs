@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage {
     export GOCACHE=$TMPDIR/go-cache
     export GOPATH="$TMPDIR/go"
     export GOPROXY=off
-    cp -r --reflink=auto "$goModules" "$cargoDepsCopy/go-srp-$goSrpVersion/go/vendor"
+    cp -r --reflink=auto "$goModules" $(echo "$cargoDepsCopy"/*/"go-srp-$goSrpVersion")/go/vendor
   '';
 
   goModules =
@@ -44,7 +44,6 @@ rustPlatform.buildRustPackage {
       vendorHash = "sha256-QPj2jq8hWL4kZellM/VwqrO/Oku/JW1Cig1Iv5YSI1U=";
     }).goModules;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-w2hrrFHpgeAPcP/swerZu0VJ34T/9/JeQkipp4IQ2js=";
 
   meta = {

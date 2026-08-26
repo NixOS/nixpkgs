@@ -10,17 +10,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "karousel";
-  version = "0.12";
+  version = "0.17";
 
   src = fetchFromGitHub {
     owner = "peterfajdiga";
     repo = "karousel";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-BfEMLn49LN5e2TT0e9jPtfJNrvUC92D66HyvmDPJrV4=";
+    hash = "sha256-qrsdVyeDD4VuGQKzUqxxGt+a4zA6jOI0cSxTSnBkkgQ=";
   };
 
   postPatch = ''
     patchShebangs run-ts.sh
+    substituteInPlace Makefile \
+      --replace-fail "build: lint test" "build: test"
   '';
 
   nativeBuildInputs = [

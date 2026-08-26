@@ -83,13 +83,13 @@ in
                 pkgs.writeText "expected.rules" (import ./makeExpectedPolicies.nix { inherit pkgs; })
               } ${
                 pkgs.runCommand "actual.rules" { preferLocalBuild = true; } ''
-                  ${getExe pkgs.gnused} -e 's:^[^ ]* ${builtins.storeDir}/[^,/-]*-\([^/,]*\):\1 \0:' ${
+                  ${getExe pkgs.gnused} -e 's:^${builtins.storeDir}/[^,/-]*-\([^/, ]*\):\1 \0:' ${
                     pkgs.apparmorRulesFromClosure {
                       name = "ping";
-                      additionalRules = [ "x $path/foo/**" ];
+                      additionalRules = [ "$path/foo/** x" ];
                     } [ pkgs.libcap ]
                   } |
-                  ${getExe' pkgs.coreutils "sort"} -n -k1 |
+                  LC_ALL=C ${getExe' pkgs.coreutils "sort"} |
                   ${getExe pkgs.gnused} -e 's:^[^ ]* ::' >$out
                 ''
               }"

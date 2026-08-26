@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   joblib,
@@ -14,20 +13,20 @@
   tensorflow,
   threadpoolctl,
   pytestCheckHook,
+  python,
+  sklearn-compat,
 }:
 
 buildPythonPackage rec {
   pname = "imbalanced-learn";
-  version = "0.13.0";
+  version = "0.14.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scikit-learn-contrib";
     repo = "imbalanced-learn";
     tag = version;
-    hash = "sha256-osmALi5vTV+3kgldY/VhYkNvpXX11KwJ/dIX/5E7Uhc=";
+    hash = "sha256-uWln6+r9QsGnH4I4JQm2/y80zTQkAflVPlIN9KQNzy0=";
   };
 
   build-system = [
@@ -41,6 +40,7 @@ buildPythonPackage rec {
     scikit-learn
     scipy
     threadpoolctl
+    sklearn-compat
   ];
 
   optional-dependencies = {
@@ -60,19 +60,30 @@ buildPythonPackage rec {
 
   preCheck = ''
     export HOME=$TMPDIR
+    # The GitHub source contains too many files picked up by pytest like
+    # examples and documentation files which can't pass.
+    cd $out/${python.sitePackages}
   '';
 
   disabledTestPaths = [
     # require tensorflow and keras, but we don't want to
     # add them to nativeCheckInputs just for this tests
-    "imblearn/keras/_generator.py"
+    "imblearn/keras"
+    "imblearn/tensorflow"
+    # even with precheck directory change, pytest still tries to test docstrings
+    "imblearn/tests/test_docstring_parameters.py"
+    # Skip dependencies test - pythonImportsCheck already does this
+    "imblearn/utils/tests/test_min_dependencies.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library offering a number of re-sampling techniques commonly used in datasets showing strong between-class imbalance";
     homepage = "https://github.com/scikit-learn-contrib/imbalanced-learn";
-    changelog = "https://github.com/scikit-learn-contrib/imbalanced-learn/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = [ maintainers.rmcgibbo ];
+    changelog = "https://github.com/scikit-learn-contrib/imbalanced-learn/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      rmcgibbo
+      jadewilk
+    ];
   };
 }

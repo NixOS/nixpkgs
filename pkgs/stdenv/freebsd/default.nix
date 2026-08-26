@@ -3,10 +3,8 @@
 {
   lib,
   localSystem,
-  crossSystem,
   config,
   overlays,
-  crossOverlays ? [ ],
   bootstrapFiles ?
     let
       table = {
@@ -19,8 +17,9 @@
     files,
 }:
 
-assert crossSystem == localSystem;
 let
+  genericStdenv = import ../generic { defaultConfig = config; };
+
   inherit (localSystem) system;
   mkExtraBuildCommands0 = cc: ''
     rsrc="$out/resource-root"
@@ -59,9 +58,12 @@ let
       attrs
       // {
         inherit system;
-        name = attrs.name or (builtins.baseNameOf (builtins.elemAt attrs.paths 0));
+        name = attrs.name or (baseNameOf (builtins.elemAt attrs.paths 0));
         src = bootstrapArchive;
         builder = "${bootstrapArchive}/bin/bash";
+        # this script will prefer to link files instead of copying them.
+        # this prevents clang in particular, but possibly others, from calling readlink(argv[0])
+        # and obtaining dependencies, ld(1) in particular, from there instead of $PATH.
         args = [ ./linkBootstrap.sh ];
         PATH = "${bootstrapArchive}/bin";
         paths = attrs.paths;
@@ -93,14 +95,14 @@ let
           "bin/clang"
           "bin/clang++"
           "bin/cpp"
+          "lib/clang"
         ];
         # SYNCME: this version number must be synced with the one in make-bootstrap-tools.nix
-        version = "18";
+        version = "21";
       };
       libunwind = linkBootstrap {
         name = "libunwind";
         paths = [
-          "lib/libunwind.a"
           "lib/libunwind.so"
           "lib/libunwind.so.1"
           "lib/libunwind.so.1.0"
@@ -226,6 +228,7 @@ let
       ];
     };
     iconv = linkBootstrap { paths = [ "bin/iconv" ]; };
+    libiconv = linkBootstrap { paths = [ "include/iconv.h" ]; };
     patch = linkBootstrap { paths = [ "bin/patch" ]; };
     gnutar = linkBootstrap { paths = [ "bin/tar" ]; };
     gawk = linkBootstrap {
@@ -286,6 +289,7 @@ let
     };
     freebsd = {
       locales = linkBootstrap { paths = [ "share/locale" ]; };
+      libiconvModules = linkBootstrap { paths = [ "lib/i18n" ]; };
       libc = linkBootstrap {
         name = "bootstrapLibs";
         paths = [
@@ -298,16 +302,12 @@ let
           "lib/crtendS.o"
           "lib/crti.o"
           "lib/crtn.o"
-          "lib/libc++.a"
           "lib/libc++.so"
           "lib/libc++.so.1"
-          "lib/libc.a"
           "lib/libc.so"
           "lib/libc.so.7"
-          "lib/libc_nonshared.a"
           "lib/libcrypt.so"
           "lib/libcrypt.so.5"
-          "lib/libcxxrt.a"
           "lib/libcxxrt.so"
           "lib/libcxxrt.so.1"
           "lib/libdevstat.so"
@@ -324,11 +324,10 @@ let
           "lib/libgcc_s.so.1"
           "lib/libkvm.so"
           "lib/libkvm.so.7"
-          "lib/libm.a"
           "lib/libm.so"
           "lib/libm.so.5"
           "lib/libmd.so"
-          "lib/libmd.so.6"
+          "lib/libmd.so.7"
           "lib/libncurses.so"
           "lib/libncurses.so.6"
           "lib/libncursesw.so"
@@ -339,7 +338,7 @@ let
           "lib/libthr.so"
           "lib/libthr.so.3"
           "lib/libutil.so"
-          "lib/libutil.so.9"
+          "lib/libutil.so.10"
           "lib/libxnet.so"
           "include"
           "share"
@@ -383,9 +382,8 @@ let
         bsdcp
       ];
       shell = "${prevStage.bashNonInteractive}/bin/bash";
-      stdenvNoCC = import ../generic {
+      stdenvNoCC = genericStdenv {
         inherit
-          config
           initialPath
           shell
           fetchurlBoot
@@ -399,10 +397,10 @@ let
       fetchurlBoot = import ../../build-support/fetchurl {
         inherit lib stdenvNoCC;
         inherit (prevStage) curl;
+        inherit (config) hashedMirrors rewriteURL;
       };
-      stdenv = import ../generic {
+      stdenv = genericStdenv {
         inherit
-          config
           initialPath
           shell
           fetchurlBoot
@@ -442,7 +440,7 @@ let
             inherit (prevStage.freebsd) libc;
             inherit (prevStage) gnugrep coreutils expand-response-params;
             runtimeShell = shell;
-            bintools = prevStage.binutils-unwrapped;
+            bintools = (prevStage.llvmPackages or { }).bintools-unwrapped or prevStage.binutils-unwrapped;
             propagateDoc = false;
             nativeTools = false;
             nativeLibc = false;
@@ -453,6 +451,7 @@ let
           export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
           export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
           export PATH_LOCALE=${prevStage.freebsd.localesReal or prevStage.freebsd.locales}/share/locale
+          export PATH_I18NMODULE=${prevStage.freebsd.libiconvModules}/lib/i18n
         '';
       };
     in
@@ -477,6 +476,7 @@ in
           diffutils
           findutils
           iconv
+          libiconv
           patch
           gnutar
           gawk
@@ -487,11 +487,12 @@ in
           bzip2
           xz
           ;
-        binutils-unwrapped = builtins.removeAttrs bootstrapTools.binutils-unwrapped [ "src" ];
+        binutils-unwrapped = removeAttrs bootstrapTools.binutils-unwrapped [ "src" ];
         fetchurl = import ../../build-support/fetchurl {
           inherit lib;
           inherit (self) stdenvNoCC;
           inherit (prevStage) curl;
+          inherit (config) hashedMirrors rewriteURL;
         };
         gettext = super.gettext.overrideAttrs {
           NIX_CFLAGS_COMPILE = "-DHAVE_ICONV=1"; # we clearly have iconv. what do you want?
@@ -578,7 +579,10 @@ in
       __bootstrapArchive = bootstrapArchive;
       fetchurl = prevStage.fetchurlReal;
       freebsd = super.freebsd.overrideScope (
-        self': super': { localesPrev = prevStage.freebsd.localesReal; }
+        self': super': {
+          inherit (prevStage.freebsd) libc;
+          localesPrev = prevStage.freebsd.localesReal;
+        }
       );
     };
   })

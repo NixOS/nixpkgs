@@ -5,25 +5,23 @@
   cargo,
   rustPlatform,
   rustc,
-  stdenv,
-  darwin,
 }:
 
-buildPythonPackage rec {
-  pname = "zenoh";
-  version = "1.2.1"; # nixpkgs-update: no auto update
+buildPythonPackage (finalAttrs: {
+  pname = "eclipse-zenoh";
+  version = "1.10.0"; # nixpkgs-update: no auto update
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-python";
-    rev = version;
-    hash = "sha256-AIsIjMcT9g0mTAgxOL/shBEjpeuOm/7Wn4EOSyYbShE=";
+    tag = finalAttrs.version;
+    hash = "sha256-s5vINKV4RLtV/8rFZe7iqOks4wfXeDEY7aUOCeuJCUM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src pname version;
-    hash = "sha256-Y8fg/vFL7kLoARpp0BmDpQva9zNEEOWOHQk3GjeAoLk=";
+    inherit (finalAttrs) src pname version;
+    hash = "sha256-gCdiJ7FoBa5oHQJJ9Alhl+3Zei2FwYMXOqIaBzN+hh0=";
   };
 
   build-system = [
@@ -32,8 +30,6 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
     rustc
   ];
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
 
   pythonImportsCheck = [
     "zenoh"
@@ -48,4 +44,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ markuskowa ];
   };
-}
+})

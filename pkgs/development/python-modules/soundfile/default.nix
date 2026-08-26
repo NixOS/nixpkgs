@@ -15,8 +15,7 @@ buildPythonPackage rec {
   pname = "soundfile";
   version = "0.13.1";
   pyproject = true;
-  # https://github.com/bastibe/python-soundfile/issues/157
-  disabled = isPyPy || stdenv.hostPlatform.isi686;
+  disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
@@ -45,5 +44,7 @@ buildPythonPackage rec {
     description = "Audio library based on libsndfile, CFFI and NumPy";
     license = lib.licenses.bsd3;
     homepage = "https://github.com/bastibe/python-soundfile";
+    # https://github.com/bastibe/python-soundfile/issues/157
+    broken = stdenv.hostPlatform.isi686;
   };
 }

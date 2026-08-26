@@ -26,7 +26,7 @@ rec {
 
   # Passed to M2-Mesoplanet as --operating-system
   m2libcOS =
-    if hostPlatform.isLinux then "linux" else throw "Unsupported system: ${hostPlatform.system}";
+    if hostPlatform.isLinux then "Linux" else throw "Unsupported system: ${hostPlatform.system}";
 
   baseAddress =
     {

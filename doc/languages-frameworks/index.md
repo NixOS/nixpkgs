@@ -2,6 +2,10 @@
 
 The [standard build environment](#chap-stdenv) makes it easy to build typical Autotools-based packages with very little code. Any other kind of package can be accommodated by overriding the appropriate phases of `stdenv`. However, there are specialised functions in Nixpkgs to easily build packages for other programming languages, such as Perl or Haskell. These are described in this chapter.
 
+::: {.tip}
+New to packaging? Start with [](#chap-first-package), then return here for the ecosystem you need.
+:::
+
 Each supported language or software ecosystem has its own package set named `<language or ecosystem>Packages`, which can be explored in various ways:
 
 - Search on [search.nixos.org](https://search.nixos.org/packages)
@@ -17,10 +21,10 @@ Each supported language or software ecosystem has its own package set named `<la
   # Navigate Java compiler variants in `javaPackages` with `nix repl`
 
   ```shell-session
-  $ nix repl '<nixpkgs>' -I nixpkgs=channel:nixpkgs-unstable
+  $ nix repl -f '<nixpkgs>' -I nixpkgs=channel:nixpkgs-unstable
   nix-repl> javaPackages.<tab>
   javaPackages.compiler               javaPackages.openjfx15              javaPackages.openjfx21              javaPackages.recurseForDerivations
-  javaPackages.jogl_2_4_0             javaPackages.openjfx17              javaPackages.openjfx22
+  javaPackages.jogl_2_4_0             javaPackages.openjfx17              javaPackages.openjfx25
   javaPackages.mavenfod               javaPackages.openjfx19              javaPackages.override
   javaPackages.openjfx11              javaPackages.openjfx20              javaPackages.overrideDerivation
   ```
@@ -55,9 +59,7 @@ agda.section.md
 android.section.md
 astal.section.md
 beam.section.md
-bower.section.md
 chicken.section.md
-coq.section.md
 cosmic.section.md
 crystal.section.md
 cuda.section.md
@@ -80,6 +82,7 @@ ios.section.md
 java.section.md
 javascript.section.md
 julia.section.md
+lean4.section.md
 lisp.section.md
 lua.section.md
 maven.section.md
@@ -92,6 +95,7 @@ pkg-config.section.md
 python.section.md
 qt.section.md
 r.section.md
+rocq.section.md
 ruby.section.md
 rust.section.md
 scheme.section.md

@@ -7,33 +7,34 @@
   openssl,
   fontconfig,
   nasm,
-  libX11,
-  libXcursor,
-  libXrandr,
-  libXi,
+  libx11,
+  libxcursor,
+  libxrandr,
+  libxi,
   libGL,
   libxkbcommon,
   wayland,
   stdenv,
   gtk3,
-  darwin,
   perl,
+  shaderc,
   wrapGAppsHook3,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oculante";
-  version = "0.9.2";
+  version = "0.9.2.1-unstable-2025-10-08";
 
   src = fetchFromGitHub {
     owner = "woelper";
     repo = "oculante";
-    rev = version;
-    hash = "sha256-3kDrsD24/TNcA7NkwwCHN4ez1bC5MP7g28H3jaO/M7E=";
+    rev = "51b9f70b35e09850baee85971720b8d3ac49c80b";
+    hash = "sha256-YTrUucO1Fq2TgnV/HHkx2fcHvBupeoMpiBSwqIvyHaQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-lksAPT1nuwN5bh3x7+EN4B8ksGtvemt4tbm6/3gqdgE=";
+  cargoHash = "sha256-Bn2HxmFiqOeb3oUnUL/K0SahcFWRlY9RrbGU4orQz+Y=";
+
+  env.SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";
 
   nativeBuildInputs = [
     cmake
@@ -43,24 +44,21 @@ rustPlatform.buildRustPackage rec {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      openssl
-      fontconfig
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libGL
-      libX11
-      libXcursor
-      libXi
-      libXrandr
-      gtk3
-      libxkbcommon
-      wayland
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.libobjc
-    ];
+  buildInputs = [
+    openssl
+    fontconfig
+    shaderc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGL
+    libx11
+    libxcursor
+    libxi
+    libxrandr
+    gtk3
+    libxkbcommon
+    wayland
+  ];
 
   checkFlags = [
     "--skip=bench"
@@ -68,6 +66,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::flathub"
     "--skip=thumbnails::test_thumbs" # broken as of v0.9.2
   ];
+
+  # The below patch is needed to fix this build, until the upstream dependency (libavif-rs) fixes the problem.
+  # <https://github.com/njaard/libavif-rs/issues/122>
+  postPatch = ''
+    patch -p1 -d "$cargoDepsCopy"/*/libaom-sys-0.17.2+libaom.3.11.0 -i ${./libaom-sys-0.17.2+libaom.3.11.0-cmake-nasm-fix.patch}
+  '';
 
   postInstall = ''
     install -Dm444 $src/res/icons/icon.png $out/share/icons/hicolor/128x128/apps/oculante.png
@@ -88,12 +92,10 @@ rustPlatform.buildRustPackage rec {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Minimalistic crossplatform image viewer written in Rust";
     homepage = "https://github.com/woelper/oculante";
-    changelog = "https://github.com/woelper/oculante/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/woelper/oculante/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "oculante";
-    maintainers = with lib.maintainers; [
-      dit7ya
-      figsoda
+    maintainers = [
     ];
   };
-}
+})

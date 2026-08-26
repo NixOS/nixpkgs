@@ -3,19 +3,18 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xan";
-  version = "0.49.3";
+  version = "0.60.0";
 
   src = fetchFromGitHub {
     owner = "medialab";
     repo = "xan";
-    tag = version;
-    hash = "sha256-2BEwMpI9vmhyZFZiEj8sHnVqCYGBULFORGxZgxdmr7M=";
+    tag = finalAttrs.version;
+    hash = "sha256-CexefTLr8K6rNtXE8dog0cA4OlRa/uReK1HJrx471+4=";
   };
 
-  cargoHash = "sha256-spKgZ8T94zhLIDhym5wQrhnW74KPgCMy5Y+3m/pX9/o=";
-  useFetchCargoVendor = true;
+  cargoHash = "sha256-WGva0hf0eB/4VUPsNQZJnAW2uWctsVLqSsYkuoreMog=";
 
   # FIXME: tests fail and I do not have the time to investigate. Temporarily disable
   # tests so that we can manually run and test the package for packaging purposes.
@@ -28,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ NotAShelf ];
     mainProgram = "xan";
   };
-}
+})

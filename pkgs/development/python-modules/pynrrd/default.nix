@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   numpy,
   typing-extensions,
@@ -14,11 +13,9 @@ buildPythonPackage rec {
   version = "1.1.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "mhe";
-    repo = pname;
+    repo = "pynrrd";
     tag = "v${version}";
     hash = "sha256-qu3s3XswJCUchqYfYMuqIzI4sfeXrttvXSEW9/GSENA=";
   };

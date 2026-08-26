@@ -11,37 +11,34 @@
 
 stdenv.mkDerivation {
   pname = "N3";
-  version = "unstable-2018-08-09";
+  version = "1.12.00-unstable-2023-01-19";
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";
     repo = "N3";
-    rev = "010fc2ac58ce1d67b8e6a863fac0809d3203cb9b";
-    sha256 = "06hci7gzhy8p34ggvx7gah2k9yxpwhgmq1cgw8pcd1r82g4rg6kd";
+    rev = "96194790a577293163b6319d00539c8af45c195e";
+    hash = "sha256-iA2dMOc+dlraT44zITrvOLIaJ3iH4a/fU5aS/YzIEGQ=";
   };
-
-  postPatch = ''
-    substituteInPlace src/VolumeHist/DHistogram.cc \
-      --replace "register " ""
-  '';
 
   nativeBuildInputs = [
     cmake
     makeWrapper
   ];
+
   buildInputs = [
     libminc
     ebtks
-  ];
-  propagatedBuildInputs = with perlPackages; [
+  ]
+  ++ (with perlPackages; [
     perl
     MNI-Perllib
     GetoptTabular
-  ];
+  ]);
 
   cmakeFlags = [
     "-DLIBMINC_DIR=${libminc}/lib/cmake"
     "-DEBTKS_DIR=${ebtks}/lib/"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
   ];
 
   postFixup = ''
@@ -50,11 +47,11 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/BIC-MNI/N3";
     description = "MRI non-uniformity correction for MINC files";
-    maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.unix;
-    license = licenses.free;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.free;
   };
 }

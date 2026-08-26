@@ -5,16 +5,16 @@
   stdenv,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "flexget";
-  version = "3.15.38";
+  version = "3.20.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Flexget";
     repo = "Flexget";
-    tag = "v${version}";
-    hash = "sha256-quEqpF5oj1FLmQrIS4t3HwS23/m/QH/ZVijlQapt5Mc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VIHOT8dvr3lIQgkkCZg/d5KF5Kf12cfRfW0r4di2Sj0=";
   };
 
   pythonRelaxDeps = true;
@@ -30,12 +30,14 @@ python3Packages.buildPythonApplication rec {
     apscheduler
     beautifulsoup4
     colorama
+    curl-cffi
     feedparser
     guessit
     html5lib
     jinja2
     jsonschema
     loguru
+    pyscrypt
     psutil
     pydantic
     pynzb
@@ -68,10 +70,10 @@ python3Packages.buildPythonApplication rec {
     transmission-rpc
     qbittorrent-api
     deluge-client
-    cloudscraper
     python-telegram-bot
     boto3
-    libtorrent-rasterbar
+    matrix-nio
+    subliminal
   ];
 
   pythonImportsCheck = [
@@ -156,13 +158,21 @@ python3Packages.buildPythonApplication rec {
     # others
     "TestRegexp"
     "TestYamlLists"
+    "test_ambiguous[guessit]"
+    "test_date_id[guessit]"
+  ];
+
+  disabledTestPaths = [
+    # FIXME package pytest-ftpserver
+    "tests/ftp/test_ftp_download.py"
+    "tests/ftp/test_ftp_list.py"
   ];
 
   meta = {
     homepage = "https://flexget.com/";
-    changelog = "https://github.com/Flexget/Flexget/releases/tag/${src.tag}";
+    changelog = "https://github.com/Flexget/Flexget/releases/tag/${finalAttrs.src.tag}";
     description = "Multipurpose automation tool for all of your media";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

@@ -76,7 +76,7 @@ in
             }
           }
         '';
-        description = "Unit configuration in JSON format. More details here https://unit.nginx.org/configuration";
+        description = "Unit configuration in JSON format. More details here <https://unit.nginx.org/configuration>";
       };
     };
   };
@@ -139,7 +139,7 @@ in
           "AF_INET6"
         ];
         LockPersonality = true;
-        MemoryDenyWriteExecute = true;
+        MemoryDenyWriteExecute = false; # pcre2 jit
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         PrivateMounts = true;

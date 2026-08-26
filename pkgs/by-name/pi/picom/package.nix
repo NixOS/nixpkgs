@@ -10,10 +10,10 @@
   libev,
   libGL,
   libepoxy,
-  libX11,
+  libx11,
   libxcb,
   libxdg_basedir,
-  libXext,
+  libxext,
   libxml2,
   libxslt,
   makeWrapper,
@@ -24,9 +24,9 @@
   pkg-config,
   stdenv,
   uthash,
-  xcbutil,
-  xcbutilimage,
-  xcbutilrenderutil,
+  libxcb-util,
+  libxcb-image,
+  libxcb-render-util,
   xorgproto,
   xwininfo,
   withDebug ? false,
@@ -36,13 +36,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "picom";
-  version = "12.5";
+  version = "13";
 
   src = fetchFromGitHub {
     owner = "yshui";
     repo = "picom";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-H8IbzzrzF1c63MXbw5mqoll3H+vgcSVpijrlSDNkc+o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-g+ercK7yTtTgnPRLgIcQeDbKOmZDkfq3oflN6AyoAXU=";
     fetchSubmodules = true;
   };
 
@@ -65,18 +65,18 @@ stdenv.mkDerivation (finalAttrs: {
     libev
     libGL
     libepoxy
-    libX11
+    libx11
     libxcb
     libxdg_basedir
-    libXext
+    libxext
     libxml2
     libxslt
     pcre2
     pixman
     uthash
-    xcbutil
-    xcbutilimage
-    xcbutilrenderutil
+    libxcb-util
+    libxcb-image
+    libxcb-render-util
     xorgproto
   ];
 
@@ -93,14 +93,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   # In debug mode, also copy src directory to store. If you then run `gdb picom`
   # in the bin directory of picom store path, gdb finds the source files.
-  postInstall =
-    ''
-      wrapProgram $out/bin/picom-trans \
-        --prefix PATH : ${lib.makeBinPath [ xwininfo ]}
-    ''
-    + lib.optionalString withDebug ''
-      cp -r ../src $out/
-    '';
+  postInstall = ''
+    wrapProgram $out/bin/picom-trans \
+      --prefix PATH : ${lib.makeBinPath [ xwininfo ]}
+  ''
+  + lib.optionalString withDebug ''
+    cp -r ../src $out/
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -132,7 +131,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/yshui/picom";
     mainProgram = "picom";
     maintainers = with lib.maintainers; [
-      ertes
       gepbird
       thiagokokada
       twey

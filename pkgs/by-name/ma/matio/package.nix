@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "matio";
-  version = "1.5.28";
+  version = "1.5.30";
 
   src = fetchurl {
     url = "mirror://sourceforge/matio/matio-${finalAttrs.version}.tar.gz";
-    hash = "sha256-naaYk0ohVprwWOY0hWRmb0UCnmwrCHjKDY+WCb93uNg=";
+    hash = "sha256-i9O5R3BC7MAN1xwEdi+lhGjhTMzDL9jGgmwtoei8MQc=";
   };
 
   configureFlags = [ "ac_cv_va_copy=1" ];

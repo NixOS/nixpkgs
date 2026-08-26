@@ -4,7 +4,6 @@
   fetchFromGitHub,
   prometheus-client,
   pyserial,
-  pythonOlder,
   pyyaml,
   legacy-cgi,
   setuptools,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "finitude";
   version = "0.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dulitz";

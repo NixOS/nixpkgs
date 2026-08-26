@@ -54,12 +54,7 @@ in
     enable = lib.mkEnableOption "PostgREST";
 
     pgpassFile = lib.mkOption {
-      type =
-        with lib.types;
-        nullOr (pathWith {
-          inStore = false;
-          absolute = true;
-        });
+      type = with lib.types; nullOr externalPath;
       default = null;
       example = "/run/keys/db_password";
       description = ''
@@ -77,12 +72,7 @@ in
     };
 
     jwtSecretFile = lib.mkOption {
-      type =
-        with lib.types;
-        nullOr (pathWith {
-          inStore = false;
-          absolute = true;
-        });
+      type = with lib.types; nullOr externalPath;
       default = null;
       example = "/run/keys/jwt_secret";
       description = ''
@@ -245,6 +235,10 @@ in
       lib.optional (cfg.settings.admin-server-port != null && cfg.settings.server-host != "127.0.0.1")
         "The PostgREST admin server is potentially listening on a public host. This may expose sensitive information via the `/config` endpoint.";
 
+    # Since we're using DynamicUser, we can't add the e.g. nginx user to
+    # a postgrest group, so the unix socket must be world-readable to make it useful.
+    services.postgrest.settings.server-unix-socket-mode = "666";
+
     systemd.services.postgrest = {
       description = "PostgREST";
 
@@ -252,7 +246,7 @@ in
       wants = [ "network-online.target" ];
       after = [
         "network-online.target"
-        "postgresql.service"
+        "postgresql.target"
       ];
 
       serviceConfig = {

@@ -2,6 +2,7 @@
   fetchFromGitHub,
   lib,
   makeWrapper,
+  nix-update-script,
   python3,
   runCommand,
   stdenv,
@@ -10,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "graphene-hardened-malloc";
-  version = "2025041100";
+  version = "14";
 
   src = fetchFromGitHub {
     owner = "GrapheneOS";
     repo = "hardened_malloc";
-    rev = finalAttrs.version;
-    hash = "sha256-HCuH5SUiw/+3T1dv+IKKsQEC1GbuG0Se376bw2fG5u8=";
+    tag = finalAttrs.version;
+    hash = "sha256-QUGDJyTnD5MuBUMlc4PZOZSAfevVUB6QbncVyXIAgb8=";
   };
 
   nativeCheckInputs = [ python3 ];
@@ -48,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   passthru = {
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
     ld-preload-tests = stdenv.mkDerivation {
       name = "${finalAttrs.pname}-ld-preload-tests";
       inherit (finalAttrs) src;
@@ -94,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/GrapheneOS/hardened_malloc";
     description = "Hardened allocator designed for modern systems";
     mainProgram = "preload-hardened-malloc";
@@ -103,8 +104,11 @@ stdenv.mkDerivation (finalAttrs: {
       along with various extensions. It provides substantial hardening against heap
       corruption vulnerabilities yet aims to provide decent overall performance.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ ris ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      ris
+      baksa
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

@@ -15,21 +15,27 @@
   libadwaita,
   gtksourceview5,
   openssl,
+  python313,
+  gtk4,
+  shared-mime-info,
+  glib,
+  hicolor-icon-theme,
+  pango,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cartero";
-  version = "0.2.1";
+  version = "26.0";
 
   src = fetchFromGitHub {
     owner = "danirod";
     repo = "cartero";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EJhp/UQmD5Otf3n7wpd3s4oKt9g02q29tZA6bGKMQc8=";
+    hash = "sha256-EBQqJuIcgpLtRu5DcAaWnCiFyiuuG+DCkdAWsoWwn3E=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-szzQNFF+jMn7YLMjbmpM624T+qK0I++dNnZnJcPKZrw=";
+    hash = "sha256-Te6foGMcy8q0u6wn/D4RkhoOEjke5HTv3xxaS2EbiIE=";
   };
 
   nativeBuildInputs = [
@@ -42,14 +48,25 @@ stdenv.mkDerivation (finalAttrs: {
     blueprint-compiler
     wrapGAppsHook4
     desktop-file-utils
-    libxml2 # xmllint
+    libxml2
+    python313
+    gtk4
+    shared-mime-info
+    glib
+    hicolor-icon-theme
   ];
 
   buildInputs = [
     libadwaita
     gtksourceview5
     openssl
+    pango
+    libadwaita
   ];
+
+  postPatch = ''
+    patchShebangs --build build-aux/gen-version.py
+  '';
 
   meta = {
     description = "Make HTTP requests and test APIs";
@@ -62,11 +79,13 @@ stdenv.mkDerivation (finalAttrs: {
       payloads to compatible requests.
     '';
     homepage = "https://cartero.danirod.es";
+    changelog = "https://github.com/danirod/cartero/releases";
     license = lib.licenses.gpl3Plus;
     mainProgram = "cartero";
     maintainers = with lib.maintainers; [
       aleksana
       amerino
+      _0xErwin1
     ];
     platforms = lib.platforms.linux;
   };

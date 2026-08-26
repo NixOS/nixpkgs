@@ -1,49 +1,43 @@
 {
+  cmake,
+  fetchFromGitHub,
   lib,
   libconfuse,
   stdenv,
-  fetchFromGitHub,
-  cmake,
-  help2man,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "postsrsd";
-  version = "2.0.10";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "roehling";
     repo = "postsrsd";
-    rev = version;
-    sha256 = "sha256-8uy7a3wUGuLE4+6ZPqbFMdPzm6IZqQSvpZzLYAkBxNg=";
+    tag = finalAttrs.version;
+    hash = "sha256-3taFk7LEsbk4HmW/llKrjCUTw4upoWpYbVFTHq7Q5t4=";
   };
 
   cmakeFlags = [
-    "-DGENERATE_SRS_SECRET=OFF"
-    "-DINIT_FLAVOR=systemd"
-    "-DFETCHCONTENT_TRY_FIND_PACKAGE_MODE=ALWAYS"
-    "-DINSTALL_SYSTEMD_SERVICE=OFF"
+    (lib.cmakeBool "GENERATE_SRS_SECRET" false)
+    (lib.cmakeBool "INSTALL_SYSTEMD_SERVICE" false)
+    (lib.cmakeFeature "FETCHCONTENT_TRY_FIND_PACKAGE_MODE" "ALWAYS")
   ];
-
-  preConfigure = ''
-    sed -i "s,\"/etc\",\"$out/etc\",g" CMakeLists.txt
-  '';
 
   nativeBuildInputs = [
     cmake
-    help2man
   ];
 
   buildInputs = [
     libconfuse
   ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/roehling/postsrsd/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     homepage = "https://github.com/roehling/postsrsd";
     description = "Postfix Sender Rewriting Scheme daemon";
     mainProgram = "postsrsd";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.hexa ];
   };
-}
+})

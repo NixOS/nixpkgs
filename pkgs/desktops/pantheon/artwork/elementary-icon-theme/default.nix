@@ -5,6 +5,7 @@
   nix-update-script,
   meson,
   ninja,
+  adwaita-icon-theme,
   hicolor-icon-theme,
   gtk3,
   xcursorgen,
@@ -13,13 +14,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "elementary-icon-theme";
-  version = "8.1.0";
+  version = "9.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "icons";
-    rev = version;
-    sha256 = "sha256-WltMfWMcfUqpnfuGa6NzfxSeTais0MLsiu82ybaOcvs=";
+    tag = version;
+    hash = "sha256-WrZxhr7ybIx9CK5zG5Fq6udPt+0HRQIPSwxkCF2tPps=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +32,7 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
+    adwaita-icon-theme
     hicolor-icon-theme
   ];
 
@@ -41,20 +43,28 @@ stdenvNoCC.mkDerivation rec {
     "-Dpalettes=false" # Don't install gimp and inkscape palette files
   ];
 
+  postPatch = ''
+    # Upstream removed the non-fd.o office-calendar icons but left these
+    # alias symlinks dangling (elementary/icons#1435).
+    rm -f apps/16/calendar.svg \
+      mimes/symbolic/text-calendar-symbolic.svg \
+      mimes/symbolic/vcalendar-symbolic.svg
+  '';
+
   postFixup = "gtk-update-icon-cache $out/share/icons/elementary";
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Named, vector icons for elementary OS";
     longDescription = ''
       An original set of vector icons designed specifically for elementary OS and its desktop environment: Pantheon.
     '';
     homepage = "https://github.com/elementary/icons";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

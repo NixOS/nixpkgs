@@ -4,32 +4,31 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zenoh-plugin-mqtt";
-  version = "1.2.1"; # nixpkgs-update: no auto update
+  version = "1.10.0"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-plugin-mqtt";
-    tag = version;
-    hash = "sha256-5/obCmi9rbbe9kEkAQTla/4W8ebKj80F4sLKli6oSmw=";
+    tag = finalAttrs.version;
+    hash = "sha256-GLSRs3qV8AwaSPPqAKt/PchIQnlDr0IeqbJkCqkDBY8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-tMvBAn2FCpvT9O96Nt646t3LMWqhBHWWzRrMGVP1G1g=";
+  cargoHash = "sha256-XteKnrfKrOGbjCz7njaDlxSPOZ73UWt91dg8R2hB3PM=";
 
   # Some test time out
   doCheck = false;
 
   meta = {
-    description = "A Zenoh plug-in that allows to integrate and/or route MQTT pub/sub with Eclipse Zenoh";
+    description = "Zenoh plug-in that allows to integrate and/or route MQTT pub/sub with Eclipse Zenoh";
     homepage = "https://github.com/eclipse-zenoh/zenoh-plugin-mqtt";
     license = with lib.licenses; [
       epl20
       asl20
     ];
     maintainers = with lib.maintainers; [ markuskowa ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "zenoh-bridge-mqtt";
   };
-}
+})

@@ -5,18 +5,18 @@
   fixtures,
   pbr,
   six,
-  subunit,
+  python-subunit,
   callPackage,
 }:
 
 buildPythonPackage rec {
   pname = "oslotest";
-  version = "5.0.0";
+  version = "6.1.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-97skDGy+8voLq7lRP/PafQ8ozDja+Y70Oy6ISDZ/vSA=";
+    hash = "sha256-XOlzR3NPCMpia7SWliqLx6266Wk3MPWFnZxSk9Si/YA=";
   };
 
   nativeBuildInputs = [ pbr ];
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     fixtures
     six
-    subunit
+    python-subunit
   ];
 
   # check in passthru.tests.pytest to escape infinite recursion with other oslo components
@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oslotest" ];
 
-  meta = with lib; {
+  meta = {
     description = "Oslo test framework";
     homepage = "https://github.com/openstack/oslotest";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

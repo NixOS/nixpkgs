@@ -4,28 +4,28 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dapper";
   version = "0.6.0";
 
   src = fetchFromGitHub {
-    owner = "rancher";
+    owner = "rancher-archives";
     repo = "dapper";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-V+lHnOmIWjI1qmoJ7+pp+cGmJAtSeY+r2I9zykswQzM=";
   };
   vendorHash = null;
 
   patchPhase = ''
-    substituteInPlace main.go --replace 0.0.0 ${version}
+    substituteInPlace main.go --replace 0.0.0 ${finalAttrs.version}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Docker build wrapper";
     mainProgram = "dapper";
-    homepage = "https://github.com/rancher/dapper";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ kuznero ];
+    homepage = "https://github.com/rancher-archives/dapper";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ kuznero ];
   };
-}
+})

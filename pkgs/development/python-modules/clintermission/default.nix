@@ -2,36 +2,38 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  setuptools,
   prompt-toolkit,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "clintermission";
   version = "0.3.1";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "sebageek";
-    repo = pname;
-    tag = "v${version}";
+    repo = "clintermission";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-e7C9IDr+mhVSfU8lMywjX1BYwFo/qegPNzabak7UPcY=";
   };
 
-  propagatedBuildInputs = [ prompt-toolkit ];
+  build-system = [ setuptools ];
+
+  dependencies = [ prompt-toolkit ];
 
   # repo contains no tests
   doCheck = false;
 
   pythonImportsCheck = [ "clintermission" ];
 
-  meta = with lib; {
+  meta = {
     description = "Non-fullscreen command-line selection menu";
     homepage = "https://github.com/sebageek/clintermission";
-    changelog = "https://github.com/sebageek/clintermission/releases/tag/v${version}";
-    license = licenses.asl20;
+    changelog = "https://github.com/sebageek/clintermission/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

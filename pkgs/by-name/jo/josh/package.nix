@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
   libgit2,
@@ -8,17 +7,10 @@
   pkg-config,
   makeWrapper,
   git,
-  darwin,
 }:
 
 let
-  # josh-ui requires javascript dependencies, haven't tried to figure it out yet
-  cargoFlags = [
-    "--workspace"
-    "--exclude"
-    "josh-ui"
-  ];
-  version = "24.10.04";
+  version = "26.05.08";
 in
 
 rustPlatform.buildRustPackage {
@@ -29,32 +21,33 @@ rustPlatform.buildRustPackage {
     owner = "josh-project";
     repo = "josh";
     rev = "r${version}";
-    hash = "sha256-6rfNEWNeC0T/OXhCReaV5npcJjQoH6XhsZzHXGnnxOo=";
+    hash = "sha256-rG5ZkEH8ZL8t0sDnBnNPtVtaR1I8BoulXlFh0HCpMsw=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Kb0EKWae1sldDg+F3ccoztI3zbQ/BJjy+4ojnqiqKA4=";
+  cargoHash = "sha256-/hMn80jHDF9gh+K8IOV5zXllzJkCdcmvI/NmbKFd/uM=";
 
   nativeBuildInputs = [
     pkg-config
     makeWrapper
   ];
 
-  buildInputs =
-    [
-      libgit2
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.Security
-    ];
+  buildInputs = [
+    libgit2
+    openssl
+  ];
 
-  cargoBuildFlags = cargoFlags;
-  cargoTestFlags = cargoFlags;
+  cargoBuildFlags = [ "--workspace" ];
+  # josh-proxy's inline tests need to interact with a specific test environment
+  cargoTestFlags = [
+    "--workspace"
+    "--exclude"
+    "josh-proxy"
+  ];
 
   # used to teach josh itself about its version number
   env.JOSH_VERSION = "r${version}";
 
+  # josh and josh-filter are used interactively, so git is likely already in PATH
   postInstall = ''
     wrapProgram "$out/bin/josh-proxy" --prefix PATH : "${git}/bin"
   '';
@@ -63,7 +56,7 @@ rustPlatform.buildRustPackage {
     description = "Just One Single History";
     homepage = "https://josh-project.github.io/josh/";
     downloadPage = "https://github.com/josh-project/josh";
-    changelog = "https://github.com/josh-project/josh/releases/tag/${version}";
+    changelog = "https://github.com/josh-project/josh/releases/tag/r${version}";
     license = lib.licenses.mit;
     maintainers = [
       lib.maintainers.sternenseemann

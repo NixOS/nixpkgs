@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "asciicam";
-  version = "unstable-2022-06-25";
+  version = "0-unstable-2022-06-25";
 
   src = fetchFromGitHub {
     owner = "muesli";
@@ -17,16 +17,14 @@ buildGoModule {
 
   vendorHash = "sha256-Qnt1wo/yKC3Ce4JoZBIWtXyzlkh4bWz9vyE349iRsjk=";
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  ldflags = [ "-s" ];
 
-  meta = with lib; {
+  meta = {
     description = "Displays your webcam on the terminal";
     homepage = "https://github.com/muesli/asciicam";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ phanirithvij ];
     mainProgram = "asciicam";
+    platforms = lib.platforms.linux;
   };
 }

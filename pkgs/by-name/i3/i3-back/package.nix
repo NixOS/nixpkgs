@@ -5,21 +5,23 @@
   testers,
   i3-back,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "i3-back";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "Cretezy";
     repo = "i3-back";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xGfX7ttWrcIVhy+MkR5RZr2DCAwIKwGu7zkafHcrjaE=";
   };
 
-  # The tool needs a nightly compiler.
-  RUSTC_BOOTSTRAP = 1;
+  patches = [
+    # `let_chain` feature is not needed anymore with 1.90.
+    # See https://github.com/Cretezy/i3-back/pull/5
+    ./remove-feature.patch
+  ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-o/um/Ugm3GfDz1daBKxoDD7ailUu6QJ0rj5jcKWB0lM=";
 
   passthru.tests.version = testers.testVersion { package = i3-back; };
@@ -33,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "i3-back";
   };
-}
+})

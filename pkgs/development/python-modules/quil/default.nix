@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonAtLeast,
   fetchFromGitHub,
   rustPlatform,
   numpy,
@@ -11,25 +10,22 @@
 
 buildPythonPackage rec {
   pname = "quil";
-  version = "0.16.0";
+  version = "0.35.0";
   pyproject = true;
-
-  # error: the configured Python interpreter version (3.13) is newer than PyO3's maximum supported version (3.12)
-  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "quil-rs";
-    tag = "quil-py/v${version}";
-    hash = "sha256-sj+JjE6y+toIjHO1J2g+3gzQMcfSa6zzQeOySATU48w=";
+    tag = "quil-rs/v${version}";
+    hash = "sha256-QWW8+cup81eyedDTU3jgslNanaj0+D2jI5XQMS3ZUIo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-0KZikbCJgg4prR9XxfCJcZOTiV2Hcob2zLurxqCkH6I=";
+    hash = "sha256-cIWnTuxoFqkl+0W6NH9DwNokq7RKdNggFLwPYgkbHho=";
   };
 
-  buildAndTestSubdir = "quil-py";
+  buildAndTestSubdir = "quil-rs";
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
@@ -50,8 +46,12 @@ buildPythonPackage rec {
     syrupy
   ];
 
+  pytestFlags = [
+    "quil-rs/tests_py"
+  ];
+
   meta = {
-    changelog = "https://github.com/rigetti/quil-rs/blob/${src.tag}/quil-py/CHANGELOG.md";
+    changelog = "https://github.com/rigetti/quil-rs/blob/${src.tag}/quil-rs/CHANGELOG.md";
     description = "Python package for building and parsing Quil programs";
     homepage = "https://github.com/rigetti/quil-rs/tree/main/quil-py";
     license = lib.licenses.asl20;

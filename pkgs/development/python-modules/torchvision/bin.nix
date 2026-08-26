@@ -4,7 +4,6 @@
   python,
   buildPythonPackage,
   fetchurl,
-  pythonOlder,
   pythonAtLeast,
 
   # buildInputs
@@ -23,7 +22,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "0.20.1";
+  version = "0.27.1";
 in
 buildPythonPackage {
   inherit version;
@@ -34,7 +33,7 @@ buildPythonPackage {
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
-  disabled = (pythonOlder "3.9") || (pythonAtLeast "3.13");
+  disabled = pythonAtLeast "3.15";
 
   # Note that we don't rely on config.cudaSupport here, because the Linux wheels all come built with CUDA support.
   buildInputs =
@@ -66,7 +65,8 @@ buildPythonPackage {
 
   meta = {
     description = "PyTorch vision library";
-    homepage = "https://pytorch.org/";
+    homepage = "https://pytorch.org/vision";
+    downloadPage = "https://github.com/pytorch/vision";
     changelog = "https://github.com/pytorch/vision/releases/tag/v${version}";
     # Includes CUDA and Intel MKL, but redistributions of the binary are not limited.
     # https://docs.nvidia.com/cuda/eula/index.html
@@ -78,6 +78,9 @@ buildPythonPackage {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with lib.maintainers; [ junjihashimoto ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      junjihashimoto
+    ];
   };
 }

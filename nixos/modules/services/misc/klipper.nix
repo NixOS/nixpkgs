@@ -14,8 +14,95 @@ let
         lib.generators.mkValueStringDefault { } (lib.head l)
       else
         lib.concatMapStrings (s: "\n  ${lib.generators.mkValueStringDefault { } s}") l;
-    mkKeyValue = lib.generators.mkKeyValueDefault { } ":";
+    mkKeyValue =
+      key: value:
+      lib.generators.mkKeyValueDefault { } ":" key (
+        if builtins.isString value && lib.hasInfix "\n" value then
+          "\n  ${lib.replaceString "\n" "\n  " value}"
+        else
+          value
+      );
   };
+  firmwareSubmodule = lib.types.submodule (
+    { name, ... }@local:
+    let
+      mcu = local.name;
+      subcfg = local.config;
+    in
+    {
+      options = {
+        enable = lib.mkEnableOption ''
+          building of firmware for manual flashing
+        '';
+        enableKlipperFlash = lib.mkEnableOption ''
+          flashings scripts for firmware. This will add `klipper-flash-$mcu` scripts to your environment which can be called to flash the firmware.
+          Please check the configs at [klipper](https://github.com/Klipper3d/klipper/tree/master/config) whether your board supports flashing via `make flash`
+        '';
+        serial = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          description = "Path to serial port this mcu is connected to. Derived from `service.klipper.settings` by default.";
+          defaultText = lib.literalExpression "config.services.klipper.settings.<name>.serial";
+          default =
+            if lib.hasAttrByPath [ "${mcu}" "serial" ] cfg.settings then cfg.settings."${mcu}".serial else null;
+        };
+        canbus_uuid = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          description = "CAN bus uuid of this mcu. Derived from `service.klipper.settings` by default.";
+          defaultText = lib.literalExpression "config.services.klipper.settings.<name>.canbus_uuid";
+          default =
+            if lib.hasAttrByPath [ "${mcu}" "canbus_uuid" ] cfg.settings then
+              cfg.settings."${mcu}".canbus_uuid
+            else
+              null;
+        };
+        canbusNetwork = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          description = "CAN bus network this mcu is connected to. Defaults to can0 if canbus_uuid is set.";
+          defaultText = lib.literalExpression ''if canbus_uuid != null then "can0" else null'';
+          default = if subcfg.canbus_uuid != null then "can0" else null;
+        };
+        configFile = lib.mkOption {
+          type = lib.types.path;
+          description = "Path to firmware config which is generated using `klipper-genconf`";
+        };
+        package = lib.mkOption {
+          type = lib.types.nullOr lib.types.package;
+          readOnly = true;
+          description = "Path to the built firmware package.";
+        };
+        klipperFlashPackage = lib.mkOption {
+          type = lib.types.nullOr lib.types.package;
+          readOnly = true;
+          description = "Path to the built klipper-flash package.";
+        };
+      };
+      config = {
+        package =
+          if subcfg.enable then
+            pkgs.klipper-firmware.override {
+              klipper = cfg.package;
+              mcu = lib.strings.sanitizeDerivationName mcu;
+              firmwareConfig = subcfg.configFile;
+            }
+          else
+            null;
+
+        klipperFlashPackage =
+          if subcfg.enable && subcfg.enableKlipperFlash then
+            pkgs.klipper-flash.override {
+              klipper = cfg.package;
+              klipper-firmware = subcfg.package;
+              mcu = lib.strings.sanitizeDerivationName mcu;
+              flashDevice = subcfg.serial;
+              canbusDevice = subcfg.canbus_uuid;
+              canbusNetwork = subcfg.canbusNetwork;
+              firmwareConfig = subcfg.configFile;
+            }
+          else
+            null;
+      };
+    }
+  );
 in
 {
   imports = [
@@ -112,31 +199,24 @@ in
         '';
       };
 
+      extraSettings = lib.mkOption {
+        type = lib.types.lines;
+        default = "";
+        description = "Extra lines to append to the generated Klipper configuration.";
+      };
+
       firmwares = lib.mkOption {
-        description = "Firmwares klipper should manage";
+        description = "Firmwares Klipper should manage";
         default = { };
-        type =
-          with lib.types;
-          attrsOf (submodule {
-            options = {
-              enable = lib.mkEnableOption ''
-                building of firmware for manual flashing
-              '';
-              enableKlipperFlash = lib.mkEnableOption ''
-                flashings scripts for firmware. This will add `klipper-flash-$mcu` scripts to your environment which can be called to flash the firmware.
-                Please check the configs at [klipper](https://github.com/Klipper3d/klipper/tree/master/config) whether your board supports flashing via `make flash`
-              '';
-              serial = lib.mkOption {
-                type = lib.types.nullOr path;
-                default = null;
-                description = "Path to serial port this printer is connected to. Leave `null` to derive it from `service.klipper.settings`.";
-              };
-              configFile = lib.mkOption {
-                type = path;
-                description = "Path to firmware config which is generated using `klipper-genconf`";
-              };
-            };
-          });
+        type = lib.types.attrsOf firmwareSubmodule;
+        example = {
+          mcu = {
+            enable = true;
+            enableKlipperFlash = true;
+            serial = "/dev/serial/by-id/usb-Klipper_123ABCDEF";
+            configFile = lib.literalExpression "./klipper-firmware.cfg";
+          };
+        };
       };
     };
   };
@@ -153,20 +233,26 @@ in
         message = "Option services.klipper.group is not set when services.klipper.user is specified.";
       }
       {
-        assertion =
-          cfg.settings != null
-          -> lib.foldl (a: b: a && b) true (
-            lib.mapAttrsToList (
-              mcu: _: mcu != null -> (lib.hasAttrByPath [ "${mcu}" "serial" ] cfg.settings)
-            ) cfg.firmwares
-          );
-        message = "Option services.klipper.settings.$mcu.serial must be set when settings.klipper.firmware.$mcu is specified";
-      }
-      {
         assertion = (cfg.configFile != null) != (cfg.settings != null);
         message = "You need to either specify services.klipper.settings or services.klipper.configFile.";
       }
-    ];
+      {
+        assertion = (cfg.configFile != null) -> (cfg.extraSettings == "");
+        message = "You can't use services.klipper.extraSettings with services.klipper.configFile.";
+      }
+    ]
+    ++ lib.mapAttrsToList (mcu: firmware: {
+      assertion =
+        firmware.enableKlipperFlash -> (firmware.serial != null || firmware.canbus_uuid != null);
+      message = ''
+        Unable to determine the serial or canbus connection for services.klipper.firmwares."${mcu}". Please set one of the following:
+
+          - services.klipper.firmwares."${mcu}".serial
+          - services.klipper.firmwares."${mcu}".canbus_uuid
+          - services.klipper.settings."${mcu}".serial
+          - services.klipper.settings."${mcu}".canbus_uuid
+      '';
+    }) cfg.firmwares;
 
     services.klipper = lib.mkIf cfg.octoprintIntegration {
       user = config.services.octoprint.user;
@@ -180,7 +266,10 @@ in
           + lib.optionalString (cfg.apiSocket != null) " --api-server=${cfg.apiSocket}"
           + lib.optionalString (cfg.logFile != null) " --logfile=${cfg.logFile}";
         printerConfig =
-          if cfg.settings != null then format.generate "klipper.cfg" cfg.settings else cfg.configFile;
+          if cfg.settings != null then
+            builtins.toFile "klipper.cfg" ((format.generate "" cfg.settings).text + cfg.extraSettings)
+          else
+            cfg.configFile;
       in
       {
         description = "Klipper 3D Printer Firmware";
@@ -211,71 +300,46 @@ in
 
         restartTriggers = lib.optional (!cfg.mutableConfig) [ printerConfig ];
 
-        serviceConfig =
-          {
-            ExecStart = "${cfg.package}/bin/klippy ${klippyArgs} ${cfg.configDir}/printer.cfg";
-            RuntimeDirectory = "klipper";
-            StateDirectory = "klipper";
-            SupplementaryGroups = [ "dialout" ];
-            WorkingDirectory = "${cfg.package}/lib";
-            OOMScoreAdjust = "-999";
-            CPUSchedulingPolicy = "rr";
-            CPUSchedulingPriority = 99;
-            IOSchedulingClass = "realtime";
-            IOSchedulingPriority = 0;
-            UMask = "0002";
-          }
-          // (
-            if cfg.user != null then
-              {
-                Group = cfg.group;
-                User = cfg.user;
-              }
-            else
-              {
-                DynamicUser = true;
-                User = "klipper";
-              }
-          );
+        serviceConfig = {
+          ExecStart = "${cfg.package}/bin/klippy ${klippyArgs} ${cfg.configDir}/printer.cfg";
+          RuntimeDirectory = "klipper";
+          StateDirectory = "klipper";
+          SupplementaryGroups = [ "dialout" ];
+          WorkingDirectory = "${cfg.package}/lib";
+          OOMScoreAdjust = "-999";
+          CPUSchedulingPolicy = "rr";
+          CPUSchedulingPriority = 99;
+          IOSchedulingClass = "realtime";
+          IOSchedulingPriority = 0;
+          UMask = "0002";
+        }
+        // (
+          if cfg.user != null then
+            {
+              Group = cfg.group;
+              User = cfg.user;
+            }
+          else
+            {
+              DynamicUser = true;
+              User = "klipper";
+            }
+        );
       };
 
     environment.systemPackages =
       let
-        default = a: b: if a != null then a else b;
         genconf = pkgs.klipper-genconf.override {
           klipper = cfg.package;
         };
-        firmwares = lib.filterAttrs (n: v: v != null) (
-          lib.mapAttrs (
-            mcu:
-            {
-              enable,
-              enableKlipperFlash,
-              configFile,
-              serial,
-            }:
-            if enable then
-              pkgs.klipper-firmware.override {
-                klipper = cfg.package;
-                mcu = lib.strings.sanitizeDerivationName mcu;
-                firmwareConfig = configFile;
-              }
-            else
-              null
-          ) cfg.firmwares
+        firmwares = lib.filter (v: v != null) (
+          lib.mapAttrsToList (mcu: firmware: firmware.package) cfg.firmwares
         );
-        firmwareFlasher = lib.mapAttrsToList (
-          mcu: firmware:
-          pkgs.klipper-flash.override {
-            klipper = cfg.package;
-            klipper-firmware = firmware;
-            mcu = lib.strings.sanitizeDerivationName mcu;
-            flashDevice = default cfg.firmwares."${mcu}".serial cfg.settings."${mcu}".serial;
-            firmwareConfig = cfg.firmwares."${mcu}".configFile;
-          }
-        ) (lib.filterAttrs (mcu: firmware: cfg.firmwares."${mcu}".enableKlipperFlash) firmwares);
+        firmwareFlashers = lib.filter (v: v != null) (
+          lib.mapAttrsToList (mcu: firmware: firmware.klipperFlashPackage) cfg.firmwares
+        );
       in
-      [ genconf ] ++ firmwareFlasher ++ lib.attrValues firmwares;
+      [ genconf ] ++ firmwares ++ firmwareFlashers;
   };
   meta.maintainers = [
     lib.maintainers.cab404

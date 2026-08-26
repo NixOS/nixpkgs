@@ -1,65 +1,65 @@
 {
   lib,
-  python3,
   fetchFromGitLab,
+  python3Packages,
+  git,
+  openssh,
+  nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "marge-bot";
-  version = "0.10.1";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "marge-org";
     repo = "marge-bot";
-    rev = version;
-    hash = "sha256-2L7c/NEKyjscwpyf/5GtWXr7Ig14IQlRR5IbDYxp8jA=";
+    rev = finalAttrs.version;
+    hash = "sha256-Wg+yWkHkCbry13SRaEvULF4jjCaBI524FsVfcP/+u/k=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg --replace-fail "--flake8 --pylint" ""
-  '';
-
-  nativeBuildInputs = [
-    python3.pkgs.setuptools
+  build-system = with python3Packages; [
+    hatchling
+    uv-build
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    configargparse
-    maya
-    pyyaml
-    requests
-  ];
+  dependencies =
+    (with python3Packages; [
+      configargparse
+      pyyaml
+      requests
+      python-gitlab
+    ])
+    ++ [
+      git
+      openssh
+    ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytest-cov-stub
-    pytestCheckHook
-    pendulum
-  ];
-
-  disabledTests = [
-    # test broken when run under Nix:
-    #   "unittest.mock.InvalidSpecError: Cannot spec a Mock object."
-    "test_get_mr_ci_status"
-    # broken because of an incorrect assertion:
-    #   "AttributeError: 'has_calls' is not a valid assertion."
-    "test_reapprove"
-  ];
-
-  disabledTestPaths = [
-    # test errors due to API mismatch in test setup:
-    #   "ImportError: cannot import name 'set_test_now' from 'pendulum.helpers'"
-    "tests/test_interval.py"
-  ];
+  nativeCheckInputs =
+    (with python3Packages; [
+      pytest-cov-stub
+      pytestCheckHook
+      python-dateutil
+      time-machine
+    ])
+    ++ [
+      git
+    ];
 
   pythonImportsCheck = [ "marge" ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Merge bot for GitLab";
     homepage = "https://gitlab.com/marge-org/marge-bot";
-    changelog = "https://gitlab.com/marge-org/marge-bot/-/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    changelog = "https://gitlab.com/marge-org/marge-bot/-/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      bcdarwin
+      lelgenio
+    ];
     mainProgram = "marge.app";
   };
-}
+})

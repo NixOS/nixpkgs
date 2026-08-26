@@ -9,6 +9,8 @@
   flex,
   rsync,
   writeTextFile,
+  nix-update-script,
+  linux_latest,
 }:
 
 let
@@ -42,6 +44,7 @@ let
       src,
       version,
       patches ? [ ],
+      passthru ? { },
     }:
     stdenvNoCC.mkDerivation {
       inherit src;
@@ -49,7 +52,7 @@ let
       pname = "linux-headers";
       inherit version;
 
-      ARCH = stdenvNoCC.hostPlatform.linuxArch;
+      env.ARCH = stdenvNoCC.hostPlatform.linuxArch;
 
       strictDeps = true;
       enableParallelBuilding = true;
@@ -58,20 +61,19 @@ let
       # We do this so we have a build->build, not build->host, C compiler.
       depsBuildBuild = [ buildPackages.stdenv.cc ];
       # `elf-header` is null when libc provides `elf.h`.
-      nativeBuildInputs =
-        [
-          perl
-          elf-header
-        ]
-        ++ lib.optionals stdenvNoCC.hostPlatform.isAndroid [
-          bison
-          flex
-          rsync
-        ]
-        ++ lib.optionals (stdenvNoCC.buildPlatform.isDarwin && stdenvNoCC.hostPlatform.isMips) [
-          darwin-endian-h
-          darwin-byteswap-h
-        ];
+      nativeBuildInputs = [
+        perl
+        elf-header
+      ]
+      ++ lib.optionals stdenvNoCC.hostPlatform.isAndroid [
+        bison
+        flex
+        rsync
+      ]
+      ++ lib.optionals (stdenvNoCC.buildPlatform.isDarwin && stdenvNoCC.hostPlatform.isMips) [
+        darwin-endian-h
+        darwin-byteswap-h
+      ];
 
       extraIncludeDirs = lib.optionals (with stdenvNoCC.hostPlatform; isPower && is32bit && isBigEndian) [
         "ppc"
@@ -91,12 +93,22 @@ let
         # `$(..)` expanded by make alone
         "HOSTCC:=$(CC_FOR_BUILD)"
         "HOSTCXX:=$(CXX_FOR_BUILD)"
+        # To properly detect LFS flags 32-bit build environments like
+        # pkgsi686Linux.linuxHeaders Kbuild uses this Makefile bit:
+        #     HOST_LFS_CFLAGS := $(shell getconf LFS_CFLAGS 2>/dev/null)
+        #
+        # `getconf` is not available in early bootstrap and thus the
+        # build fails on filesystems with 64-bit inodes as:
+        #     linux-headers> fixdep: error fstat'ing file: scripts/basic/.fixdep.d: Value too large for defined data type
+        #
+        # Let's hardcode subset of the output of `getconf` for this case.
+        "HOST_LFS_CFLAGS=-D_FILE_OFFSET_BITS=64"
       ];
 
       # Skip clean on darwin, case-sensitivity issues.
       buildPhase =
         lib.optionalString (!stdenvNoCC.buildPlatform.isDarwin) ''
-          make mrproper $makeFlags
+          make mrproper "''${makeFlags[@]}"
         ''
         + (
           if stdenvNoCC.hostPlatform.isAndroid then
@@ -106,12 +118,12 @@ let
             ''
           else
             ''
-              make headers $makeFlags
+              make headers "''${makeFlags[@]}"
             ''
         );
 
       checkPhase = ''
-        make headers_check $makeFlags
+        make headers_check "''${makeFlags[@]}"
       '';
 
       # The following command requires rsync:
@@ -119,22 +131,26 @@ let
       # but rsync depends on popt which does not compile on aarch64 without
       # updateAutotoolsGnuConfigScriptsHook which is not enabled in stage2,
       # so we replicate it with cp. This also reduces bootstrap closure size.
-      installPhase =
-        ''
-          mkdir -p $out
-          cp -r usr/include $out
-          find $out -type f ! -name '*.h' -delete
-        ''
-        # Some builds (e.g. KVM) want a kernel.release.
-        + ''
-          mkdir -p $out/include/config
-          echo "${version}-default" > $out/include/config/kernel.release
-        '';
+      installPhase = ''
+        mkdir -p $out
+        cp -r usr/include $out
+        find $out -type f ! -name '*.h' -delete
+      ''
+      # Some builds (e.g. KVM) want a kernel.release.
+      + ''
+        mkdir -p $out/include/config
+        echo "${version}-default" > $out/include/config/kernel.release
+      '';
 
-      meta = with lib; {
+      inherit passthru;
+
+      __structuredAttrs = true;
+
+      meta = {
         description = "Header files and scripts for Linux kernel";
-        license = licenses.gpl2Only;
-        platforms = platforms.linux;
+        license = lib.licenses.gpl2Only;
+        platforms = lib.platforms.linux;
+        teams = [ lib.teams.linux-kernel ];
       };
     };
 in
@@ -143,16 +159,22 @@ in
 
   linuxHeaders =
     let
-      version = "6.12.7";
+      version = "7.1";
     in
     makeLinuxHeaders {
       inherit version;
       src = fetchurl {
         url = "mirror://kernel/linux/kernel/v${lib.versions.major version}.x/linux-${version}.tar.xz";
-        hash = "sha256-94X7ZIoOC2apQ7syKKS27WLJC5hc0ev2naXTjlidoM8=";
+        hash = "sha256-aR9EeX++eQ3IoyFgTJJwh1Jq0nttZJkl1g+O7QolZKA=";
       };
       patches = [
         ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
       ];
+      passthru.updateScript = nix-update-script {
+        extraArgs = [
+          "--version"
+          "${linux_latest.meta.branch}"
+        ];
+      };
     };
 }

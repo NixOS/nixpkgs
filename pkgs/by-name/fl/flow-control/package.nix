@@ -2,35 +2,45 @@
   lib,
   fetchFromGitHub,
   stdenv,
-  zig_0_13,
-  callPackage,
+  zig_0_15,
+  nix-update-script,
 }:
-
+let
+  zig = zig_0_15;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "flow-control";
-  version = "0.3.2";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "neurocyte";
     repo = "flow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D1pFP5tw323UJgWvLvh2sTiZG1hq5DP0FakdXEISRxs=";
+    hash = "sha256-5+F0DKb4LXtcMXNutUSJuIe7cdBoFUoJhCs8vbm20jg=";
   };
-  postPatch = ''
-    ln -s ${
-      callPackage ./build.zig.zon.nix {
-        zig = zig_0_13;
-      }
-    } $ZIG_GLOBAL_CACHE_DIR/p
-  '';
 
-  nativeBuildInputs = [
-    zig_0_13.hook
+  zigDeps = zig.fetchDeps {
+    inherit (finalAttrs) src pname version;
+    fetchAll = true;
+    hash = "sha256-+07sJAnfB+mKziC5j8QfbL/YzjvRLxqRvpuxGKK7/nA=";
+  };
+
+  nativeBuildInputs = [ zig ];
+
+  passthru.updateScript = nix-update-script { };
+
+  dontSetZigDefaultFlags = true;
+  zigBuildFlags = [
+    "--system"
+    "${finalAttrs.zigDeps}"
+    "-Dcpu=baseline"
+    "-Doptimize=ReleaseFast"
   ];
 
-  passthru.updateScript = ./update.sh;
-
   env.VERSION = finalAttrs.version;
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   meta = {
     description = "Programmer's text editor";

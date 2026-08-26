@@ -1,12 +1,12 @@
 {
   lib,
   stdenv,
-  buildGo124Module,
+  buildGo126Module,
   fetchFromGitHub,
   fetchNpmDeps,
   cacert,
   git,
-  go_1_24,
+  go_1_26,
   gokrazy,
   enumer,
   mockgen,
@@ -17,42 +17,30 @@
 }:
 
 let
-  version = "0.203.4";
+  version = "0.314.3";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
     tag = version;
-    hash = "sha256-b171SajnGf9WZ7EID+cAWvmr9cKGclIW1cvjG8pyrgs=";
+    hash = "sha256-rGka5IaiKmcU2xS846Ej9S/GJuKbtWXWX77vLAuH4sY=";
   };
 
-  vendorHash = "sha256-nD4585oOE8QCz+EulvJsy5VHqqQShc+BS9ravUGZPGU=";
+  vendorHash = "sha256-+EXNCUsgYJ3LKgcljX+VQriUYSghVTNLgwbrdZ2Htdc=";
 
-  commonMeta = with lib; {
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
-  };
-
-  decorate = buildGo124Module {
-    pname = "evcc-decorate";
-    inherit version src vendorHash;
-
-    subPackages = "cmd/decorate";
-
-    meta = commonMeta // {
-      description = "EVCC decorate helper";
-      homepage = "https://github.com/evcc-io/evcc/tree/master/cmd/decorate";
-    };
+  commonMeta = {
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 in
 
-buildGo124Module rec {
+buildGo126Module rec {
   pname = "evcc";
   inherit version src vendorHash;
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-5d6GoFrNgMV6Teb9/cE8MYrO7FowlZfwcGxHjsymQWM=";
+    hash = "sha256-lTcZIFBEqB22N71y8Bl9J/5vUejbz8nEszzRhwyfGBI=";
   };
 
   nativeBuildInputs = [
@@ -62,9 +50,8 @@ buildGo124Module rec {
 
   overrideModAttrs = _: {
     nativeBuildInputs = [
-      decorate
       enumer
-      go_1_24
+      go_1_26
       gokrazy
       git
       cacert
@@ -72,23 +59,23 @@ buildGo124Module rec {
     ];
 
     preBuild = ''
-      make assets
+      GOFLAGS="-mod=mod" make assets
     '';
   };
 
   tags = [
     "release"
-    "test"
   ];
 
   ldflags = [
-    "-X github.com/evcc-io/evcc/server.Version=${version}"
-    "-X github.com/evcc-io/evcc/server.Commit=${src.tag}"
+    "-X github.com/evcc-io/evcc/util.Version=${version}"
     "-s"
     "-w"
   ];
 
   preBuild = ''
+    export PATH="$PWD/node_modules/.bin:$PATH"
+    export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
     make ui
   '';
 
@@ -98,15 +85,19 @@ buildGo124Module rec {
     let
       skippedTests = [
         # network access
-        "TestOctopusConfigParse"
-        "TestTemplates"
         "TestOcpp"
+        "TestOctopusConfigParse"
+        "TestSessionHandlerTimezoneFilter"
+        "TestTemplates"
+        # network access: mdns fails to start Avahi provider
+        "TestControlBoxGridGuardHeartbeat"
+        "TestEEBus"
+        "TestShipPairing"
       ];
     in
     [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru = {
-    inherit decorate;
     tests = {
       inherit (nixosTests) evcc;
     };

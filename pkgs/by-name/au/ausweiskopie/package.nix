@@ -5,7 +5,6 @@
   python3Packages,
   makeDesktopItem,
   copyDesktopItems,
-  desktopToDarwinBundle,
   enableModern ? true,
 }:
 
@@ -16,14 +15,14 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "Varbin";
-    repo = pname;
+    repo = "ausweiskopie";
     tag = "v${version}";
     hash = "sha256-axy/cI5n2uvMKZ2Fkb0seFMRBKv6rpU01kgKSiQ10jE=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  ];
 
   build-system = with python3Packages; [
     setuptools

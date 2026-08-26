@@ -7,6 +7,7 @@
   mashumaro,
   orjson,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
@@ -16,17 +17,21 @@
 
 buildPythonPackage rec {
   pname = "nyt-games";
-  version = "0.4.4";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-nyt-games";
     tag = "v${version}";
-    hash = "sha256-eMJ96E4sGmekr6mOR30UIZBclH/0xc8AWv3zL1ItKjo=";
+    hash = "sha256-bpamhrTBDFp1c/RvvbVjRFXEn5HoxY+3jGH7NkfsFxo=";
   };
 
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     aiohttp

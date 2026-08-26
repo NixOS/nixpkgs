@@ -17,11 +17,11 @@ php.buildComposerProject2 (finalAttrs: {
   };
 
   composerLock = ./composer.lock;
-  vendorHash = "sha256-ySdLlqlGKZ6LgmAOBMkBNoCAqWrgMwE/Cj6ZEPEsCko=";
+  vendorHash = "sha256-tAS4EAFb3SyL3j6oIB+YTyZPQcrRbyDFt4QzOwEB8wU=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Tool to check syntax of PHP files faster than serial check with fancier output";

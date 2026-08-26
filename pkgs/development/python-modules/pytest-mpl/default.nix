@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   setuptools-scm,
   pytest,
@@ -12,14 +12,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-mpl";
-  version = "0.17.0";
+  version = "0.19.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-++8F1+ZktLM0UvtpisGI5SJ5HzJ9405+o329/p1SysY=";
+  src = fetchFromGitHub {
+    owner = "matplotlib";
+    repo = "pytest-mpl";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qSOGGq2lOikm3kwZmGI1hFkuPU+zuh0iGL9TbH6ktEQ=";
   };
 
   build-system = [
@@ -41,6 +43,10 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Following are broken since at least a1548780dbc79d76360580691dc1bb4af4e837f6
     "tests/subtests/test_subtest.py"
+    # https://github.com/matplotlib/pytest-mpl/issues/263
+    "tests/test_baseline_path.py::test_config"
+    "tests/test_results_always.py::test_config"
+    "tests/test_use_full_test_name.py::test_config"
   ];
 
   # need to set MPLBACKEND=agg for headless matplotlib for darwin
@@ -56,10 +62,11 @@ buildPythonPackage rec {
       --replace-fail "DEFAULT_TOLERANCE = 10 if WIN else 2" "DEFAULT_TOLERANCE = 10"
   '';
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/matplotlib/pytest-mpl/blob/${finalAttrs.src.tag}/CHANGES.md";
     description = "Pytest plugin to help with testing figures output from Matplotlib";
     homepage = "https://github.com/matplotlib/pytest-mpl";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

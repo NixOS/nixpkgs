@@ -31,7 +31,7 @@
   # Type
 
   ```
-  compressDrv :: Derivation -> { formats :: [ String ]; compressors :: { ${fileExtension} :: String; } } -> Derivation
+  compressDrv :: Derivation -> { formats :: [String]; compressors :: { ${fileExtension} :: String; } } -> Derivation
   ```
 
   # Examples
@@ -64,9 +64,7 @@ let
     let
       matches = (builtins.length (builtins.split "\\{}" prog) - 1) / 2;
     in
-    lib.assertMsg (
-      matches == 1
-    ) "compressor ${ext} needs to have exactly one '{}', found ${builtins.toString matches}";
+    matches == 1 || throw "compressor ${ext} needs to have exactly one '{}', found ${toString matches}";
   mkCmd =
     ext: prog:
     assert validProg ext prog;

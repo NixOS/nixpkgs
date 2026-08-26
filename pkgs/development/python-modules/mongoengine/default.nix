@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pymongo,
-  isPy27,
   six,
   blinker,
   pytestCheckHook,
@@ -15,11 +14,10 @@ buildPythonPackage rec {
   pname = "mongoengine";
   version = "0.29.1";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "MongoEngine";
-    repo = pname;
+    repo = "mongoengine";
     tag = "v${version}";
     hash = "sha256-trWCKmCa+q+qtzF0HKCZMnko1cvvpwJvczLFuKtB83E=";
   };
@@ -47,10 +45,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mongoengine" ];
 
-  meta = with lib; {
+  meta = {
     description = "MongoEngine is a Python Object-Document Mapper for working with MongoDB";
     homepage = "http://mongoengine.org/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

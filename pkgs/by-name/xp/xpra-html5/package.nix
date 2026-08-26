@@ -7,7 +7,7 @@
   gitUpdater,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
-  name = "xpra-html5";
+  pname = "xpra-html5";
   version = "17.1";
 
   src = fetchFromGitHub {
@@ -37,9 +37,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     changelog = "https://github.com/Xpra-org/xpra-html5/releases/tag/v${finalAttrs.version}";
     platforms = lib.platforms.linux;
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [
-      catern
-      lucasew
-    ];
+    maintainers = [ ];
   };
 })

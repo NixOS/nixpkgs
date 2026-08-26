@@ -3,12 +3,10 @@
   buildPythonPackage,
   docutils,
   fetchFromGitHub,
-  importlib-metadata,
   markdown,
   pygments,
   pytestCheckHook,
   python-markdown-math,
-  pythonOlder,
   pyyaml,
   setuptools,
   textile,
@@ -16,16 +14,14 @@
 
 buildPythonPackage rec {
   pname = "markups";
-  version = "4.1.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "4.1.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "retext-project";
     repo = "pymarkups";
     tag = version;
-    hash = "sha256-7/pXCSbVhLeX7PhacMQYwYMT7Og/tZplPPCvWDxJFck=";
+    hash = "sha256-kQ1L8l/ONT4qOA/xfx85WyA7pDveaKoXWGZbljYxO/4=";
   };
 
   build-system = [ setuptools ];
@@ -37,7 +33,7 @@ buildPythonPackage rec {
     python-markdown-math
     pyyaml
     textile
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -48,10 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "markups" ];
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper around various text markup languages";
     homepage = "https://github.com/retext-project/pymarkups";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ klntsky ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ klntsky ];
   };
 }

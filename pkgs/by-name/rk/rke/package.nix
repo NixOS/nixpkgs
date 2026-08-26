@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "rke";
-  version = "1.8.2";
+  version = "1.8.14";
 
   src = fetchFromGitHub {
     owner = "rancher";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-/n6XGpwlGaaDDA5fJgCfDGr5GdaF3Qf5BS7fBdJmVYw=";
+    repo = "rke";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-wprIpvNTPu4HD4+FaBZCUpZGdveytLgXOA72loYK+6I=";
   };
 
   vendorHash = "sha256-OWC8OZhORHwntAR2YHd4KfQgB2Wtma6ayBWfY94uOA4=";
@@ -22,15 +22,15 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.VERSION=v${version}"
+    "-X=main.VERSION=v${finalAttrs.version}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rancher/rke";
     description = "Extremely simple, lightning fast Kubernetes distribution that runs entirely within containers";
     mainProgram = "rke";
-    changelog = "https://github.com/rancher/rke/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ urandom ];
+    changelog = "https://github.com/rancher/rke/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
-}
+})

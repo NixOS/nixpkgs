@@ -1,42 +1,58 @@
 {
   lib,
-  async-timeout,
+  anyio,
+  beartype,
   buildPythonPackage,
+  hatchling,
+  hatch-mypyc,
+  hatch-vcs,
+  types-deprecated,
   deprecated,
+  exceptiongroup,
   fetchFromGitHub,
-  pympler,
+  packaging,
   pytest-asyncio,
   pytest-lazy-fixtures,
+  pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   redis,
-  wrapt,
+  typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "coredis";
-  version = "4.20.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "6.7.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alisaifee";
-    repo = pname;
-    tag = version;
-    hash = "sha256-N7RQEgpBnXa+xtthySfec1Xw3JHtGCT2ZjmOK7H5B+A=";
+    repo = "coredis";
+    tag = finalAttrs.version;
+    hash = "sha256-1Ks8rfOaz7rZruzp1k3V7UHCtckzomvA76+QRS7RlZo=";
   };
 
   postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace "-K" ""
+    sed -i '/mypy==/d' pyproject.toml
+    sed -i '/hatch-mypy/d' pyproject.toml
+    sed -i '/opentelemetry-sdk/d' pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace-fail '"-K"' ""
   '';
 
-  propagatedBuildInputs = [
-    async-timeout
+  build-system = [
+    hatchling
+    hatch-mypyc
+    hatch-vcs
+    types-deprecated
+  ];
+
+  dependencies = [
+    anyio
+    beartype
     deprecated
-    pympler
-    wrapt
+    exceptiongroup
+    packaging
+    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -44,11 +60,12 @@ buildPythonPackage rec {
     redis
     pytest-asyncio
     pytest-lazy-fixtures
+    pytest-mock
   ];
 
   pythonImportsCheck = [ "coredis" ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # All other tests require Docker
     "tests/test_lru_cache.py"
     "tests/test_parsers.py"
@@ -56,11 +73,10 @@ buildPythonPackage rec {
     "tests/test_utils.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Async redis client with support for redis server, cluster & sentinel";
     homepage = "https://github.com/alisaifee/coredis";
-    changelog = "https://github.com/alisaifee/coredis/blob/${src.tag}/HISTORY.rst";
-    license = licenses.mit;
-    teams = [ teams.wdz ];
+    changelog = "https://github.com/alisaifee/coredis/blob/${finalAttrs.src.tag}/HISTORY.rst";
+    license = lib.licenses.mit;
   };
-}
+})

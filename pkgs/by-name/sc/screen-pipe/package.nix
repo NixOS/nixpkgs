@@ -10,16 +10,15 @@
   sqlite,
   stdenv,
   alsa-lib,
-  xorg,
-  apple-sdk_12,
+  libxcb,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "screen-pipe";
   version = "0.1.48";
 
   src = fetchFromGitHub {
-    owner = "louis030195";
-    repo = "screen-pipe";
+    owner = "screenpipe";
+    repo = "screenpipe";
     rev = "v${version}";
     hash = "sha256-rWKRCqWFuPO84C52mMrrS4euD6XdJU8kqZsAz28+vWE=";
   };
@@ -41,21 +40,17 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      dbus
-      ffmpeg
-      oniguruma
-      openssl
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_12
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      xorg.libxcb
-    ];
+  buildInputs = [
+    dbus
+    ffmpeg
+    oniguruma
+    openssl
+    sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libxcb
+  ];
 
   buildFeatures = lib.optional stdenv.hostPlatform.isDarwin "metal";
 
@@ -65,11 +60,13 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false; # Tests fail to build
 
-  meta = with lib; {
+  meta = {
+    # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
+    broken = true;
     description = "Personalized AI powered by what you've seen, said, or heard";
-    homepage = "https://github.com/louis030195/screen-pipe";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dit7ya ];
+    homepage = "https://github.com/screenpipe/screenpipe";
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "screen-pipe";
   };
 }

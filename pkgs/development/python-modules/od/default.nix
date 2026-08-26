@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   repeated-test,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "od";
   version = "2.0.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
@@ -22,10 +19,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "od" ];
 
-  meta = with lib; {
+  meta = {
     description = "Shorthand syntax for building OrderedDicts";
     homepage = "https://github.com/epsy/od";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

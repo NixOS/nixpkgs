@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -19,10 +17,20 @@
   tqdm,
   typing-extensions,
 
+  # optional-dependencies (aiohttp)
+  aiohttp,
+  httpx-aiohttp,
+
+  # optional-dependencies (bedock)
+  botocore,
+
   # optional-dependencies (datalib)
   numpy,
   pandas,
   pandas-stubs,
+
+  # optional-dependencies (httpx2)
+  httpx2,
 
   # optional-dependencies (realtime)
   websockets,
@@ -34,28 +42,29 @@
   pytestCheckHook,
   dirty-equals,
   inline-snapshot,
-  nest-asyncio,
+  jsonschema,
   pytest-asyncio,
   pytest-mock,
+  pytest-xdist,
   respx,
 
   # optional-dependencies toggle
-  withRealtime ? true,
-  withVoiceHelpers ? true,
+  withAiohttp ? false,
+  withDatalib ? false,
+  withRealtime ? false,
+  withVoiceHelpers ? false,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "openai";
-  version = "1.76.2";
+  version = "2.53.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "openai-python";
-    tag = "v${version}";
-    hash = "sha256-MywcdSFOFKfq6MPRAfsbJzu82IKCOLSU3JbnwHvkHsA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XwiSIKjYD07zhx8uIO8wsPWdAASBCJ5KqFUgdk+uaUU=";
   };
 
   postPatch = ''substituteInPlace pyproject.toml --replace-fail "hatchling==1.26.3" "hatchling"'';
@@ -65,25 +74,38 @@ buildPythonPackage rec {
     hatch-fancy-pypi-readme
   ];
 
-  dependencies =
-    [
-      anyio
-      distro
-      httpx
-      jiter
-      pydantic
-      sniffio
-      tqdm
-      typing-extensions
-    ]
-    ++ lib.optionals withRealtime optional-dependencies.realtime
-    ++ lib.optionals withVoiceHelpers optional-dependencies.voice-helpers;
+  dependencies = [
+    anyio
+    distro
+    httpx
+    jiter
+    pydantic
+    sniffio
+    tqdm
+    typing-extensions
+  ]
+  ++ lib.optionals withAiohttp finalAttrs.passthru.optional-dependencies.aiohttp
+  ++ lib.optionals withDatalib finalAttrs.passthru.optional-dependencies.datalib
+  ++ lib.optionals withRealtime finalAttrs.passthru.optional-dependencies.realtime
+  ++ lib.optionals withVoiceHelpers finalAttrs.passthru.optional-dependencies.voice-helpers;
 
   optional-dependencies = {
+    aiohttp = [
+      aiohttp
+      httpx-aiohttp
+    ];
+    bedrock = [
+      botocore
+    ];
     datalib = [
       numpy
       pandas
       pandas-stubs
+    ];
+    httpx2 = [
+      anyio
+      httpx
+      httpx2
     ];
     realtime = [
       websockets
@@ -100,41 +122,28 @@ buildPythonPackage rec {
     pytestCheckHook
     dirty-equals
     inline-snapshot
-    nest-asyncio
+    jsonschema
     pytest-asyncio
     pytest-mock
+    pytest-xdist
     respx
-  ];
-
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-    # snapshot mismatches
-    "--inline-snapshot=update"
-  ];
-
-  disabledTests =
-    [
-      # Tests make network requests
-      "test_copy_build_request"
-      "test_basic_attribute_access_works"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # RuntimeWarning: coroutine method 'aclose' of 'AsyncStream._iter_events' was never awaited
-      "test_multi_byte_character_multiple_chunks"
-    ];
+  ]
+  # including pandas-stubs would cause infinite recursion
+  ++ lib.concatAttrValues (lib.removeAttrs finalAttrs.passthru.optional-dependencies [ "datalib" ]);
 
   disabledTestPaths = [
     # Test makes network requests
     "tests/api_resources"
+    # E   TypeError: Unexpected type for 'content', <class 'inline_snapshot._external.external'>
+    # This seems to be due to `inline-snapshot` being disabled when `pytest-xdist` is used.
+    "tests/lib/chat/test_completions_streaming.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client library for the OpenAI API";
     homepage = "https://github.com/openai/openai-python";
-    changelog = "https://github.com/openai/openai-python/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ malo ];
-    mainProgram = "openai";
+    changelog = "https://github.com/openai/openai-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.malo ];
   };
-}
+})

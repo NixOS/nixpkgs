@@ -3,18 +3,19 @@
   stdenv,
   fetchFromGitHub,
   safestringlib,
+  versionCheckHook,
   zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bwa-mem2";
-  version = "unstable-2023-03-18";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "bwa-mem2";
     repo = "bwa-mem2";
-    rev = "cf4306a47dac35e7e79a9e75398a35f33900cfd0";
-    hash = "sha256-hY8nLRFWt0GAElhDIcYdUX6cJrzOE3NlYRQr0tC3on4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DBgAX18YwXbBxUlHHCDeiYJ6fcuVzLZ2ZrEta5zPsAU=";
   };
 
   buildInputs = [ zlib ];
@@ -82,13 +83,20 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  # TODO change this when https://github.com/bwa-mem2/bwa-mem2/issues/283 gets fixed
+  doInstallCheck = false;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  versionCheckProgramArg = "version";
+
+  meta = {
     description = "Next version of the bwa-mem algorithm in bwa, a software package for mapping low-divergent sequences against a large reference genome";
     mainProgram = "bwa-mem2";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/bwa-mem2/bwa-mem2/";
     changelog = "https://github.com/bwa-mem2/bwa-mem2/blob/${finalAttrs.src.rev}/NEWS.md";
-    platforms = platforms.x86_64;
-    maintainers = with maintainers; [ apraga ];
+    platforms = lib.platforms.x86_64;
+    maintainers = with lib.maintainers; [ apraga ];
   };
 })

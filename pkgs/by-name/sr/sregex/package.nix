@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sregex";
   version = "0.0.1";
 
   src = fetchFromGitHub {
     owner = "openresty";
     repo = "sregex";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-HZ9O/3BQHHrTVLLlU0o1fLHxyRSesBhreT3IdGHnNsg=";
   };
 
@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
     "CC:=$(CC)"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/openresty/sregex";
     description = "Non-backtracking NFA/DFA-based Perl-compatible regex engine matching on large data streams";
     mainProgram = "sregex-cli";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

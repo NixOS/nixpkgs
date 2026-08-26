@@ -3,40 +3,41 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   pkg-config,
   openssl,
   buildNpmPackage,
-  nodejs_20,
+  nodejs,
   nix-update-script,
+  nixosTests,
+  versionCheckHook,
 }:
 let
   pname = "rqbit";
 
-  version = "8.0.0";
+  version = "9.0.0";
 
   src = fetchFromGitHub {
     owner = "ikatson";
     repo = "rqbit";
     rev = "v${version}";
-    hash = "sha256-Meztr/UxLgnbd3YwkSW0vy+D2N4mFg2v+T4nBnYiQBI=";
+    hash = "sha256-zcd3oVNntKxV25UWan//H523ph227Yhub/3N0wLfPiU=";
   };
 
   rqbit-webui = buildNpmPackage {
     pname = "rqbit-webui";
 
-    nodejs = nodejs_20;
+    inherit version src nodejs;
 
-    inherit version src;
+    npmWorkspace = [ "crates/librqbit/webui" ];
 
-    sourceRoot = "${src.name}/crates/librqbit/webui";
-
-    npmDepsHash = "sha256-vib8jpf7Jn1qv0m/dWJ4TbisByczNbtEd8hIM5ll2Q8=";
+    npmDepsHash = "sha256-4q8u2B3HB19mBaEAVl9EDtt38e8aYHpUMADNaT98P7M=";
 
     installPhase = ''
       runHook preInstall
 
       mkdir -p $out/dist
-      cp -r dist/** $out/dist
+      cp -r ./crates/librqbit/webui/dist/** $out/dist
 
       runHook postInstall
     '';
@@ -45,10 +46,12 @@ in
 rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-FGcws80cX0I74bVaSV6OLntPFPNanGAFm6CVHDAGbOU=";
+  cargoHash = "sha256-h0dPVqiQtkFo50CNHYn5Cqrm+l/j6RNJtFYUVyvioxI=";
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
@@ -63,23 +66,45 @@ rustPlatform.buildRustPackage {
     rm crates/librqbit/build.rs
   '';
 
-  doCheck = false;
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd rqbit --$shell <($out/bin/rqbit completions $shell)
+    done
+  '';
 
-  passthru.webui = rqbit-webui;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "webui"
-    ];
+  checkFlags = [
+    # skip these tests since they require internet access
+    "--skip=tests::e2e::test_e2e_download_tcp"
+    "--skip=tests::e2e::test_e2e_download_utp"
+    "--skip=tests::e2e_stream::test_e2e_stream"
+    "--skip=upnp_server_adapter::tests::test_browse"
+  ];
+
+  # required by test `read_buf::tests::can_read_long_metainfo_correctlyv` in `aarch64-darwin`(sandbox=relaxed)
+  __darwinAllowLocalNetworking = true;
+
+  passthru = {
+    webui = rqbit-webui;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "webui"
+      ];
+    };
+    tests.testService = nixosTests.rqbit;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Bittorrent client in Rust";
     homepage = "https://github.com/ikatson/rqbit";
     changelog = "https://github.com/ikatson/rqbit/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       cafkafk
       toasteruwu
     ];

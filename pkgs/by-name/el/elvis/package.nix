@@ -74,11 +74,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "http://elvis.the-little-red-haired-girl.org/";
+    homepage = "https://elvis.the-little-red-haired-girl.org/";
     description = "Vi clone for Unix and other operating systems";
     license = lib.licenses.free;
     mainProgram = "elvis";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

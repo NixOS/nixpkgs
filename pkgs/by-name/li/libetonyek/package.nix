@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchFromGitLab,
   autoreconfHook,
   pkg-config,
   boost,
@@ -14,43 +15,57 @@
   mdds,
   zlib,
 }:
-
-stdenv.mkDerivation rec {
+let
+  mdds_2_1 = mdds.overrideAttrs {
+    version = "2.1.1";
+    src = fetchFromGitLab {
+      owner = "mdds";
+      repo = "mdds";
+      rev = "2.1.1";
+      hash = "sha256-a412LpgDiYM8TMToaUrTlHtblYS1HehzrDOwvIAAxiA=";
+    };
+  };
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "libetonyek";
-  version = "0.1.12";
+  version = "0.1.13";
 
   src = fetchFromGitHub {
     owner = "LibreOffice";
     repo = "libetonyek";
-    rev = "libetonyek-${version}";
-    hash = "sha256-dvYbV+7IakgOkGsZ+zaW+qgn/QoD6Jwq/juaE+7iYug=";
+    rev = "libetonyek-${finalAttrs.version}";
+    hash = "sha256-Dr4QhzZQzLNHf7OMMjUaR6WbnIQbu18LIiAjPD0sCsY=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    gperf
   ];
 
   buildInputs = [
     boost
     cppunit
     glm
-    gperf
     liblangtag
     librevenge
     libxml2
-    mdds
+    mdds_2_1
     zlib
   ];
 
   configureFlags = [ "--with-mdds=2.1" ];
 
-  meta = with lib; {
+  strictDeps = true;
+
+  enableParallelBuilding = true;
+
+  meta = {
     description = "Library and a set of tools for reading and converting Apple iWork documents (Keynote, Pages and Numbers)";
     homepage = "https://github.com/LibreOffice/libetonyek";
-    changelog = "https://github.com/LibreOffice/libetonyek/blob/${src.rev}/NEWS";
-    license = licenses.mpl20;
+    changelog = "https://github.com/LibreOffice/libetonyek/blob/${finalAttrs.src.rev}/NEWS";
+    license = lib.licenses.mpl20;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

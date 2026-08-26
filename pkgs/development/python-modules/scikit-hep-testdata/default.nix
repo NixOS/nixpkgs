@@ -9,20 +9,18 @@
   # dependencies
   pyyaml,
   requests,
-  pythonAtLeast,
-  importlib-resources,
 }:
 
 buildPythonPackage rec {
   pname = "scikit-hep-testdata";
-  version = "0.5.4";
+  version = "0.6.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "scikit-hep-testdata";
     tag = "v${version}";
-    hash = "sha256-LDOBd+0Aw/x9qW30Tb0B9AlhckOkJhY+Mx4ERkvDbJc=";
+    hash = "sha256-rBZWD3lzJwVQkibBLScfnYL3ChRsFDeDtheqqNjepEc=";
   };
 
   build-system = [ setuptools-scm ];
@@ -30,9 +28,9 @@ buildPythonPackage rec {
   dependencies = [
     pyyaml
     requests
-  ] ++ lib.optionals (!pythonAtLeast "3.9") [ importlib-resources ];
+  ];
 
-  SKHEP_DATA = 1; # install the actual root files
+  env.SKHEP_DATA = 1; # install the actual root files
 
   doCheck = false; # tests require networking
 

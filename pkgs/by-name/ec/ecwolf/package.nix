@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromBitbucket,
+  fetchFromGitHub,
   cmake,
   pkg-config,
   makeWrapper,
@@ -15,33 +15,24 @@
   writers,
   python3Packages,
   nix-update,
-  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ecwolf";
-  version = "1.4.1";
+  version = "1.4.2";
 
-  src = fetchFromBitbucket {
-    owner = "ecwolf";
-    repo = "ecwolf";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-V2pSP8i20zB50WtUMujzij+ISSupdQQ/oCYYrOaTU1g=";
+  src = fetchFromGitHub {
+    owner = "ECWolfEngine";
+    repo = "ECWolf";
+    tag = finalAttrs.version;
+    hash = "sha256-T5K6B2fWMKMLB/662p/YLEv0Od9n0vUakznyoOnr0kI=";
   };
-
-  patches = [
-    # Fixes build with gcc >= 14. Shouldn't be needed for ecwolf versions > 1.4.1.
-    (fetchpatch {
-      name = "tmemory.h-const-correctness.patch";
-      url = "https://bitbucket.org/ecwolf/ecwolf/commits/400aaf96a36a14ab8eab18a670ba6439046f3bb0/raw";
-      hash = "sha256-2YwHEctBPyprs0DVsazimGEgmiCba24zh2dFfw9tOnU=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
   buildInputs = [
     zlib
     bzip2
@@ -52,19 +43,20 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
   ];
 
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework AppKit";
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = toString [
+      "-framework"
+      "AppKit"
+    ];
+  };
 
   # ECWolf installs its binary to the games/ directory, but Nix only adds bin/
   # directories to the PATH.
-  postInstall =
-    lib.optionalString stdenv.hostPlatform.isLinux ''
-      mv "$out/games" "$out/bin"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/{Applications,bin}
-      cp -R ecwolf.app $out/Applications
-      makeWrapper $out/{Applications/ecwolf.app/Contents/MacOS,bin}/ecwolf
-    '';
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    cp -R ecwolf.app $out/Applications
+    makeWrapper $out/{Applications/ecwolf.app/Contents/MacOS,bin}/ecwolf
+  '';
 
   passthru.updateScript =
     let
@@ -104,15 +96,15 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.getExe nix-update)
     ];
 
-  meta = with lib; {
-    description = "Enhanched SDL-based port of Wolfenstein 3D for various platforms";
+  meta = {
+    description = "Advanced source port for Wolfenstein 3D, Spear of Destiny, and Super 3D Noah's Ark";
     mainProgram = "ecwolf";
     homepage = "https://maniacsvault.net/ecwolf/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       jayman2000
-      sander
+      keenanweaver
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

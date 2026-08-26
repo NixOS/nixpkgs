@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "edlin";
-  version = "2.21";
+  version = "2.24";
 
   src =
     let
@@ -14,20 +14,20 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "mirror://sourceforge/freedos-edlin/freedos-edlin/${version}/edlin-${version}.tar.bz2";
-      hash = "sha256-lQ/tw8dvEKV81k5GV05o49glOmfYcEeJBmgPUmL3S2I=";
+      hash = "sha256-zj5kCDdEkjzDiun/5xL8yX2SVsnZc3hrzIAYUo4Vj+c=";
     };
 
   postInstall = ''
     mkdir -p $out/share/doc/edlin-${finalAttrs.version}/
-    cp AUTHORS ChangeLog README TODO edlin.htm $out/share/doc/edlin-${finalAttrs.version}/
+    cp AUTHORS ChangeLog README TODO edlin.html $out/share/doc/edlin-${finalAttrs.version}/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sourceforge.net/projects/freedos-edlin/";
     description = "FreeDOS line editor";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
-    platforms = with platforms; unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = with lib.platforms; unix;
     mainProgram = "edlin";
   };
 })

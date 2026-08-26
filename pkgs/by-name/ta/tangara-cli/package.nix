@@ -5,27 +5,28 @@
 
   pkg-config,
   udev,
+  openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tangara-cli";
-  version = "0.4.3";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "haileys";
     repo = "tangara-companion";
-    tag = "v${version}";
-    hash = "sha256-pTE+xlXWIOOt1oiKosnbXTCLYoAqP3CfXA283a//Ds0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-x/xB+itr1GVcaTEre3u6Lchg9VcSzWiNyWVGv5Aczgw=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-C7Q3Oo/aBBH6pW1zSFQ2nD07+wu8uXfRSwNif2pVlW0=";
+  cargoHash = "sha256-PVTfAG2AOioW1zVXtXB5SBJX2sJoWVRQO3NafUOAleo=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
   buildInputs = [
+    openssl
     udev
   ];
 
@@ -39,4 +40,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ stevestreza ];
     platforms = lib.platforms.linux;
   };
-}
+})

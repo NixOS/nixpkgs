@@ -1,12 +1,11 @@
 {
-  system ? builtins.currentSystem,
-  config ? { },
-  giteaPackage ? pkgs.gitea,
-  pkgs ? import ../.. { inherit system config; },
+  pkgs,
+  lib,
+  runTest,
+  ...
 }:
 
-with import ../lib/testing-python.nix { inherit system pkgs; };
-with pkgs.lib;
+with lib;
 
 let
   ## gpg --faked-system-time='20230301T010000!' --quick-generate-key snakeoil ed25519 sign
@@ -31,8 +30,8 @@ let
   ];
   makeGiteaTest =
     type:
-    nameValuePair type (makeTest {
-      name = "${giteaPackage.pname}-${type}";
+    nameValuePair type (runTest {
+      name = "${pkgs.gitea.pname}-${type}";
       meta.maintainers = with maintainers; [
         aanderse
         kolaente
@@ -46,7 +45,7 @@ let
             services.gitea = {
               enable = true;
               database = { inherit type; };
-              package = giteaPackage;
+              package = pkgs.gitea;
               metricsTokenFile = (pkgs.writeText "metrics_secret" "fakesecret").outPath;
               settings.service.DISABLE_REGISTRATION = true;
               settings."repository.signing".SIGNING_KEY = signingPrivateKeyId;
@@ -54,7 +53,7 @@ let
               settings.metrics.ENABLED = true;
             };
             environment.systemPackages = [
-              giteaPackage
+              pkgs.gitea
               pkgs.gnupg
               pkgs.jq
             ];

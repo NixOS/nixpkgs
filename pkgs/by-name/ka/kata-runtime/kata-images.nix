@@ -4,6 +4,7 @@
   lib,
   stdenv,
   version,
+  zstd,
 }:
 
 let
@@ -16,16 +17,17 @@ let
 
   imageHash =
     {
-      "x86_64-linux" = "sha256-6ySKAqrbHDRgVlI7wm2p4Uw96ZMzUpP00liujxlruSM=";
-      "aarch64-linux" = "sha256-pEPkDXT4OunfN2sGb8Ru05tFHaBsYUcmG5Iy7yH4kX8=";
+      "x86_64-linux" = "sha256-ea4/6xjuoiqFebGF+NegGa4B+3Imf/4uULfQbJxqKtc=";
+      "aarch64-linux" = "sha256-cPx6uHXyMZ0x56dLUKx91FjhgkJaYW0nUtLrnfHz0as=";
     }
     ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
 in
 fetchzip {
   name = "kata-images-${version}";
-  url = "https://github.com/kata-containers/kata-containers/releases/download/${version}/kata-static-${version}-${imageSuffix}.tar.xz";
+  url = "https://github.com/kata-containers/kata-containers/releases/download/${version}/kata-static-${version}-${imageSuffix}.tar.zst";
   hash = imageHash;
+  nativeBuildInputs = [ zstd ];
 
   postFetch = ''
     mv $out/kata/share/kata-containers kata-containers

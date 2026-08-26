@@ -3,7 +3,7 @@
   buildDunePackage,
   posix-base,
   posix-types,
-  unix-errno,
+  posix-errno,
 }:
 
 buildDunePackage {
@@ -14,13 +14,13 @@ buildDunePackage {
   propagatedBuildInputs = [
     posix-base
     posix-types
-    unix-errno
+    posix-errno
   ];
 
   doCheck = true;
 
   meta = posix-base.meta // {
-    description = "posix-time2 provides the types and bindings for posix time APIs";
+    description = "Posix-time2 provides the types and bindings for posix time APIs";
     maintainers = with lib.maintainers; [ dandellion ];
   };
 }

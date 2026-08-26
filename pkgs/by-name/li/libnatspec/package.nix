@@ -1,19 +1,21 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   autoreconfHook,
   popt,
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libnatspec";
-  version = "0.3.0";
+  version = "0.3.3";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/natspec/${pname}-${version}.tar.bz2";
-    sha256 = "0wffxjlc8svilwmrcg3crddpfrpv35mzzjgchf8ygqsvwbrbb3b7";
+  src = fetchFromGitHub {
+    owner = "Etersoft";
+    repo = "libnatspec";
+    rev = "0.3.3-alt1";
+    hash = "sha256-lg3kjrvv7G+nX6xlR7TQKvXqQJFcQTHarSpD0qYLZsw=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -26,11 +28,11 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libiconv ];
 
-  meta = with lib; {
-    homepage = "https://natspec.sourceforge.net/";
+  meta = {
+    homepage = "https://github.com/Etersoft/libnatspec";
     description = "Library intended to smooth national specificities in using of programs";
     mainProgram = "natspec";
-    platforms = platforms.unix;
-    license = licenses.lgpl21;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl21;
   };
-}
+})

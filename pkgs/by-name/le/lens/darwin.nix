@@ -4,6 +4,7 @@
   version,
   src,
   meta,
+  updateScript,
   undmg,
 }:
 
@@ -29,4 +30,6 @@ stdenv.mkDerivation {
   '';
 
   dontFixup = true;
+
+  passthru = { inherit updateScript; };
 }

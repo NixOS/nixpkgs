@@ -6,35 +6,35 @@
   plow,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "plow";
-  version = "1.3.2";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "six-ddc";
     repo = "plow";
-    tag = "v${version}";
-    hash = "sha256-q9k5GzhYPOP8p8VKrqpoHc3B9Qak+4DtZAZZuFlkED0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0/nMF9fqRMzN4bfK6EsTi5MW+OUG/dv4UKr5j/AhRoM=";
   };
 
-  vendorHash = "sha256-KfnDJI6M6tzfoI7krKId5FXUw27eV6cEoz3UaNrlXWk=";
+  vendorHash = "sha256-nGAPuyS95bHPkQMdHdtbdVWQ+MBOOHnHPh7bkSHji4E=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   passthru.tests.version = testers.testVersion {
     package = plow;
   };
 
-  meta = with lib; {
+  meta = {
     description = "High-performance HTTP benchmarking tool that includes a real-time web UI and terminal display";
     homepage = "https://github.com/six-ddc/plow";
-    changelog = "https://github.com/six-ddc/plow/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ecklf ];
+    changelog = "https://github.com/six-ddc/plow/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ecklf ];
     mainProgram = "plow";
   };
-}
+})

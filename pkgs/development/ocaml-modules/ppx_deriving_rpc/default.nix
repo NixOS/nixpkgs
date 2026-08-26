@@ -13,9 +13,6 @@ buildDunePackage {
 
   inherit (rpclib) version src;
 
-  minimalOCamlVersion = "4.08";
-  duneVersion = "3";
-
   propagatedBuildInputs = [
     ppxlib
     rpclib
@@ -28,10 +25,10 @@ buildDunePackage {
   ];
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mirage/ocaml-rpc";
     description = "Ppx deriver for ocaml-rpc";
-    license = licenses.isc;
-    maintainers = [ maintainers.vyorkin ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.vyorkin ];
   };
 }

@@ -13,12 +13,10 @@ let
     stdenv
     fetchurl
     fetchpatch
-    fetchpatch2
     pkg-config
     intltool
     glib
     fetchFromGitHub
-    fetchFromGitLab
     ;
 
   # We cannot use gimp from the arguments directly, or it would be shadowed by the one
@@ -63,12 +61,14 @@ lib.makeScope pkgs.newScope (
             gimp
             gimp.gtk
             glib
-          ] ++ (attrs.buildInputs or [ ]);
+          ]
+          ++ (attrs.buildInputs or [ ]);
 
           nativeBuildInputs = [
             pkg-config
             intltool
-          ] ++ (attrs.nativeBuildInputs or [ ]);
+          ]
+          ++ (attrs.nativeBuildInputs or [ ]);
 
           # Override installation paths.
           env = {
@@ -76,7 +76,8 @@ lib.makeScope pkgs.newScope (
               "${placeholder "out"}/${gimp.targetLibDir}";
             "PKG_CONFIG_GIMP_${pkgConfigMajorVersion}_0_GIMPDATADIR" =
               "${placeholder "out"}/${gimp.targetDataDir}";
-          } // attrs.env or { };
+          }
+          // attrs.env or { };
         }
       );
 
@@ -140,11 +141,11 @@ lib.makeScope pkgs.newScope (
 
       installTargets = [ "install-admin" ];
 
-      meta = with lib; {
-        broken = gimp.majorVersion != "2.0";
+      meta = {
+        broken = gimp.apiVersion != "2.0";
         description = "Batch Image Manipulation Plugin for GIMP";
         homepage = "https://github.com/alessandrofrancesconi/gimp-plugin-bimp";
-        license = licenses.gpl2Plus;
+        license = lib.licenses.gpl2Plus;
         maintainers = [ ];
       };
     };
@@ -165,7 +166,7 @@ lib.makeScope pkgs.newScope (
       '';
 
       meta = {
-        broken = gimp.majorVersion != "2.0";
+        broken = gimp.apiVersion != "2.0";
         description = "Gimp plug-in for the farbfeld image format";
         homepage = "https://github.com/ids1024/gimp-farbfeld";
         license = lib.licenses.mit;
@@ -204,11 +205,11 @@ lib.makeScope pkgs.newScope (
         runHook postInstall
       '';
 
-      meta = with lib; {
-        broken = gimp.majorVersion != "2.0";
+      meta = {
+        broken = gimp.apiVersion != "2.0";
         description = "GIMP plug-in to do the fourier transform";
         homepage = "https://people.via.ecp.fr/~remi/soft/gimp/gimp_plugin_en.php3#fourier";
-        license = with licenses; [ gpl3Plus ];
+        license = lib.licenses.gpl3Plus;
       };
     };
 
@@ -224,19 +225,25 @@ lib.makeScope pkgs.newScope (
         Filters/Render/Texture...
       */
       pname = "resynthesizer";
-      version = "2.0.3";
+      version = "3.0";
       buildInputs = with pkgs; [ fftw ];
-      nativeBuildInputs = with pkgs; [ autoreconfHook ];
+      nativeBuildInputs = with pkgs; [
+        meson
+        ninja
+      ];
       makeFlags = [ "GIMP_LIBDIR=${placeholder "out"}/${gimp.targetLibDir}" ];
       src = fetchFromGitHub {
         owner = "bootchk";
         repo = "resynthesizer";
-        rev = "v${version}";
-        sha256 = "1jwc8bhhm21xhrgw56nzbma6fwg59gc8anlmyns7jdiw83y0zx3j";
+        tag = "v${version}";
+        hash = "sha256-/Py5R1RxiftTR0z++mQzgTn/J9v4p8efuGZSfhe6FfA=";
       };
 
       meta = {
-        broken = gimp.majorVersion != "2.0";
+        broken = lib.versionOlder gimp.version "3";
+        description = "Suite of gimp plugins for texture synthesis";
+        homepage = "https://github.com/bootchk/resynthesizer";
+        license = lib.licenses.gpl3Plus;
       };
     };
 
@@ -256,7 +263,8 @@ lib.makeScope pkgs.newScope (
       ];
 
       meta = {
-        broken = gimp.majorVersion != "2.0";
+        broken = gimp.apiVersion != "2.0";
+        homepage = "https://github.com/lmanul/gimp-texturize";
       };
     };
 
@@ -284,7 +292,7 @@ lib.makeScope pkgs.newScope (
       installPhase = "installPlugin src/wavelet-sharpen"; # TODO translations are not copied .. How to do this on nix?
 
       meta = {
-        broken = gimp.majorVersion != "2.0";
+        broken = gimp.apiVersion != "2.0";
       };
     };
 
@@ -313,7 +321,8 @@ lib.makeScope pkgs.newScope (
       ];
 
       meta = {
-        broken = gimp.majorVersion != "2.0";
+        broken = gimp.apiVersion != "2.0";
+        homepage = "https://github.com/carlobaldassi/gimp-lqr-plugin";
       };
     };
 
@@ -347,7 +356,7 @@ lib.makeScope pkgs.newScope (
     ";
 
       meta = {
-        broken = gimp.majorVersion != "2.0";
+        broken = gimp.apiVersion != "2.0";
         description = "GIMP plugin to correct lens distortion using the lensfun library and database";
 
         homepage = "http://lensfun.sebastiankraft.net/";
@@ -359,18 +368,9 @@ lib.makeScope pkgs.newScope (
 
     # =============== simple script files ====================
 
-    # also have a look at enblend-enfuse in all-packages.nix
-    exposureBlend = scriptDerivation {
-      name = "exposure-blend";
-      src = fetchurl {
-        url = "http://tir.astro.utoledo.edu/jdsmith/code/eb/exposure-blend.scm";
-        sha256 = "1b6c9wzpklqras4wwsyw3y3jp6fjmhnnskqiwm5sabs8djknfxla";
-      };
-      meta.broken = true;
-    };
-
     lightning = scriptDerivation {
-      name = "Lightning";
+      pname = "Lightning";
+      version = "0-unstable-2017-08-25";
       src = fetchurl {
         url = "https://github.com/pixlsus/registry.gimp.org_static/raw/master/registry.gimp.org/files/Lightning.scm";
         sha256 = "c14a8f4f709695ede3f77348728a25b3f3ded420da60f3f8de3944b7eae98a49";

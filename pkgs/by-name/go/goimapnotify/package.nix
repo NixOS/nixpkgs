@@ -5,33 +5,34 @@
   runtimeShell,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "goimapnotify";
-  version = "2.4";
+  version = "2.5.7";
 
   src = fetchFromGitLab {
     owner = "shackra";
     repo = "goimapnotify";
-    rev = version;
-    hash = "sha256-ieaj97CjoSc/qt/JebATHmiJ7RIvNUpFZjEM6mqG9Rk=";
+    tag = finalAttrs.version;
+    hash = "sha256-c84vjn9oYb6EdKG3gLrW6kF+IESgdVyEAKE4JulEQ8k=";
   };
 
-  vendorHash = "sha256-rWPXQj0XFS/Mv9ylGv09vol0kkRDNaOAEgnJvSWMvoI=";
+  vendorHash = "sha256-3yavkH0b4ZLLt1a7MhdeHSNVAAOYKiKC+D9zfEv9bSA=";
 
   postPatch = ''
-    for f in command.go command_test.go; do
-      substituteInPlace $f --replace '"sh"' '"${runtimeShell}"'
+    for f in internal/util/command.go internal/util/command_test.go; do
+      substituteInPlace $f --replace-fail '"sh"' '"${runtimeShell}"'
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Execute scripts on IMAP mailbox changes (new/deleted/updated messages) using IDLE";
     homepage = "https://gitlab.com/shackra/goimapnotify";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    changelog = "https://gitlab.com/shackra/goimapnotify/-/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       wohanley
       rafaelrc
     ];
     mainProgram = "goimapnotify";
   };
-}
+})

@@ -7,20 +7,19 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "grumphp";
-  version = "2.12.0";
+  version = "2.22.0";
 
   src = fetchFromGitHub {
     owner = "phpro";
     repo = "grumphp";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-uA+s3ZOZIlgO2yD5jsjJUKPy3u66K/8kazDL3TUVyF8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qcgz6RWq5kzh0Vopkz3Gr1cU4lo/VNM6yAGQq4v34NY=";
   };
 
-  vendorHash = "sha256-F+9/Avu+36pN0U9meUJppo4YqyCKEblQx2rCJ7uD8PU=";
+  vendorHash = "sha256-g6iKl+o0kzvjuxE4lJP783ey+pNH2CZCKBLAKPxjb+Y=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/phpro/grumphp/releases/tag/v${finalAttrs.version}";

@@ -10,8 +10,13 @@ stdenv.mkDerivation {
   pname = "atinout";
   version = "0.9.2-alpha";
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.cc.isClang) "-Werror=implicit-fallthrough=0";
-  LANG = if stdenv.hostPlatform.isDarwin then "en_US.UTF-8" else "C.UTF-8";
+  env = {
+    LANG = if stdenv.hostPlatform.isDarwin then "en_US.UTF-8" else "C.UTF-8";
+  }
+  // lib.optionalAttrs (!stdenv.cc.isClang) {
+    NIX_CFLAGS_COMPILE = "-Werror=implicit-fallthrough=0";
+  };
+
   nativeBuildInputs = [
     ronn
     mount
@@ -29,12 +34,12 @@ stdenv.mkDerivation {
     make PREFIX=$out install
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://atinout.sourceforge.net";
     description = "Tool for talking to modems";
-    platforms = platforms.unix;
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ bendlas ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ bendlas ];
     mainProgram = "atinout";
   };
 }

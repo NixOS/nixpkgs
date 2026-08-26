@@ -5,7 +5,6 @@
   ...
 }:
 {
-  meta.maintainers = with lib.maintainers; [ grahamc ];
   options = {
 
     hardware.mcelog = {

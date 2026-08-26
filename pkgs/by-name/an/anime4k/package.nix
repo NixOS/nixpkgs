@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "bloc97";
     repo = "Anime4k";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OQWJWcDpwmnJJ/kc4uEReaO74dYFlxNQwf33E5Oagb0=";
   };
 
@@ -23,11 +23,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "High-quality real time upscaler for anime";
     homepage = "https://github.com/bloc97/Anime4K";
-    license = licenses.mit;
-    maintainers = with maintainers; [ surfaceflinger ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ surfaceflinger ];
+    platforms = lib.platforms.all;
   };
 })

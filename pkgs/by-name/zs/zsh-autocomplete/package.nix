@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "zsh-autocomplete";
-  version = "25.03.19";
+  version = "26.08.03";
 
   src = fetchFromGitHub {
     owner = "marlonrichert";
     repo = "zsh-autocomplete";
     rev = version;
-    sha256 = "sha256-eb5a5WMQi8arZRZDt4aX1IV+ik6Iee3OxNMCiMnjIx4=";
+    sha256 = "sha256-NZLlRJZobUj3W94mRG245lGqDb1hE9x0nC9tRx58+Js=";
   };
 
   strictDeps = true;
@@ -22,11 +22,11 @@ stdenvNoCC.mkDerivation rec {
     cp -R Functions $out/share/zsh-autocomplete/Functions
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Real-time type-ahead completion for Zsh. Asynchronous find-as-you-type autocompletion";
     homepage = "https://github.com/marlonrichert/zsh-autocomplete/";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.leona ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.leona ];
   };
 }

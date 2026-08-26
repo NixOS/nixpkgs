@@ -5,7 +5,7 @@
   lib,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "lib45d";
+  pname = "lib45d";
   version = "0.3.6";
   src = fetchFromGitHub {
     owner = "45Drives";
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/45Drives/lib45d";
     description = "45Drives C++ Library";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ philipwilk ];
+    maintainers = with lib.maintainers; [ jadewilk ];
     platforms = lib.platforms.linux;
   };
 })

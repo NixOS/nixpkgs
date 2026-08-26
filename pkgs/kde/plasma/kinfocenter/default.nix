@@ -6,6 +6,7 @@
   lib,
   libdisplay-info,
   libusb1,
+  lm_sensors,
   mesa-demos,
   mkKdeDerivation,
   pkg-config,
@@ -33,6 +34,7 @@ let
     lscpu = lib.getExe' util-linux "lscpu";
     pactl = lib.getExe' pulseaudio "pactl";
     qdbus = lib.getExe' qttools "qdbus";
+    sensors = lib.getExe' lm_sensors "sensors";
     vulkaninfo = lib.getExe' vulkan-tools "vulkaninfo";
     waylandinfo = lib.getExe wayland-utils;
     xdpyinfo = lib.getExe xdpyinfo;
@@ -53,7 +55,7 @@ mkKdeDerivation {
   ];
 
   postPatch = ''
-    substituteInPlace kcms/firmware_security/fwupdmgr.sh \
+    substituteInPlace kcms/{firmware_security/fwupdmgr.sh,network/ip.sh} \
       --replace-fail " aha " " ${lib.getExe aha} "
   '';
 

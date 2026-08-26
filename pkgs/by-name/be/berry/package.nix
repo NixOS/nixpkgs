@@ -5,10 +5,10 @@
   copyDesktopItems,
   fontconfig,
   freetype,
-  libX11,
-  libXext,
-  libXft,
-  libXinerama,
+  libx11,
+  libxext,
+  libxft,
+  libxinerama,
   makeDesktopItem,
   pkg-config,
   which,
@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "berry";
-  version = "0.1.12";
+  version = "0.1.13";
 
   src = fetchFromGitHub {
     owner = "JLErvin";
     repo = "berry";
     rev = finalAttrs.version;
-    hash = "sha256-xMJRiLNtwVRQf9HiCF3ClLKEmdDNxcY35IYxe+L7+Hk=";
+    hash = "sha256-BMK5kZVoYTUA7AFZc/IVv4rpbn893b/QYXySuPAz2Z8=";
   };
 
   nativeBuildInputs = [
@@ -32,10 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
-    libXext
-    libXft
-    libXinerama
+    libx11
+    libxext
+    libxft
+    libxinerama
     fontconfig
     freetype
   ];
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
         windows via a hotkey daemon such as sxhkd or expand functionality via
         shell scripts.
       - Small, hackable source code.
-      - Extensible themeing options with double borders, title bars, and window
+      - Extensible theming options with double borders, title bars, and window
         text.
       - Intuitively place new windows in unoccupied spaces.
       - Virtual desktops.
@@ -87,6 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "berry";
     maintainers = [ ];
-    inherit (libX11.meta) platforms;
+    inherit (libx11.meta) platforms;
   };
 })

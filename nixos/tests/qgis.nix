@@ -15,7 +15,7 @@ import ./make-test-python.nix (
   {
     name = "qgis";
     meta = {
-      maintainers = with lib; [ teams.geospatial.members ];
+      maintainers = lib.teams.geospatial.members;
     };
 
     nodes = {
@@ -56,7 +56,7 @@ import ./make-test-python.nix (
               StandardError = "journal";
               StandardInput = "socket";
               Environment = [
-                "QT_QPA_PLATFORM_PLUGIN_PATH=${pkgs.libsForQt5.qt5.qtbase}/${pkgs.libsForQt5.qt5.qtbase.qtPluginPrefix}/platforms"
+                "QT_QPA_PLATFORM_PLUGIN_PATH=${pkgs.qt5.qtbase}/${pkgs.qt5.qtbase.qtPluginPrefix}/platforms"
                 "QGIS_SERVER_LOG_LEVEL=0"
                 "QGIS_SERVER_LOG_STDERR=1"
               ];

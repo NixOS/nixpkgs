@@ -28,7 +28,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libpng
-    libhwy
+    (libhwy.overrideAttrs rec {
+      version = "0.15.0";
+      src = fetchFromGitHub {
+        owner = "google";
+        repo = "highway";
+        rev = version;
+        hash = "sha256-v2HyyHtBydr7QiI83DW1yRv2kWjUOGxFT6mmdrN9XPo=";
+      };
+      patches = [ ];
+      postPatch = ''
+        substituteInPlace CMakeLists.txt --replace-fail "set(CMAKE_CXX_STANDARD 11)" "set(CMAKE_CXX_STANDARD 17)"
+      '';
+    })
     lcms2
     giflib
   ];
@@ -41,10 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cloudinary/ssimulacra2";
-    maintainers = [ maintainers.viraptor ];
-    license = licenses.bsd3;
+    maintainers = [ lib.maintainers.viraptor ];
+    license = lib.licenses.bsd3;
     description = "Perceptual image comparison tool";
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
 })

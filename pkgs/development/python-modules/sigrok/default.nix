@@ -16,7 +16,7 @@
 # build libsigrok plus its Python bindings. Unfortunately it does not appear
 # to be possible to build them separately, at least not easily.
 toPythonModule (
-  (libsigrok.override { inherit python; }).overrideAttrs (orig: {
+  (libsigrok.override { python3 = python; }).overrideAttrs (orig: {
     pname = "${python.libPrefix}-sigrok";
 
     patches = orig.patches or [ ] ++ [
@@ -24,6 +24,14 @@ toPythonModule (
       # we expect) instead of making a version-specific *.egg subdirectory.
       ./python-install.patch
     ];
+
+    postPatch = ''
+      ${orig.postPatch or ""}
+
+      # %init block lands in SWIG_mod_exec (returns int) under swig >= 4.4.
+      substituteInPlace bindings/python/sigrok/core/classes.i \
+        --replace-fail 'return nullptr;' 'return -1;'
+    '';
 
     nativeBuildInputs =
       orig.nativeBuildInputs or [ ]

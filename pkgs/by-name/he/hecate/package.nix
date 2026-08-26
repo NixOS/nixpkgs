@@ -4,9 +4,9 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hecate";
-  version = "unstable-2022-05-03";
+  version = "0.0.1-unstable-2022-05-02";
 
   src = fetchFromGitHub {
     owner = "evanmiller";
@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
-    inherit (src.meta) homepage;
-    description = "terminal hex editor";
+  meta = {
+    inherit (finalAttrs.src.meta) homepage;
+    description = "Terminal hex editor";
     longDescription = "The Hex Editor From Hell!";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ramkromberg ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ramkromberg ];
     mainProgram = "hecate";
   };
-}
+})

@@ -1,49 +1,56 @@
-import ./make-test-python.nix (
-  { lib, pkgs, ... }:
-  {
-    name = "systemd-initrd-luks-tpm2";
+{ lib, pkgs, ... }:
+{
+  name = "systemd-initrd-luks-tpm2";
 
-    nodes.machine =
-      { pkgs, ... }:
-      {
-        # Use systemd-boot
-        virtualisation = {
-          emptyDiskImages = [ 512 ];
-          useBootLoader = true;
-          # Booting off the TPM2-encrypted device requires an available init script
-          mountHostNixStore = true;
-          useEFIBoot = true;
-          tpm.enable = true;
-        };
-        boot.loader.systemd-boot.enable = true;
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      # Use systemd-boot
+      virtualisation = {
+        emptyDiskImages = [ 512 ];
+        useBootLoader = true;
+        # Booting off the TPM2-encrypted device requires an available init script
+        mountHostNixStore = true;
+        efi.OVMF = pkgs.OVMFFull; # this really should be the default. Only OVMFFull contains TCG
+        useEFIBoot = true;
+        tpm.enable = true;
+      };
+      boot.loader.systemd-boot.enable = true;
 
-        boot.initrd.availableKernelModules = [ "tpm_tis" ];
+      boot.initrd.availableKernelModules = [ "tpm_tis" ];
 
-        environment.systemPackages = with pkgs; [ cryptsetup ];
-        boot.initrd.systemd = {
-          enable = true;
-        };
-
-        specialisation.boot-luks.configuration = {
-          boot.initrd.luks.devices = lib.mkVMOverride {
-            cryptroot = {
-              device = "/dev/vdb";
-              crypttabExtraOpts = [ "tpm2-device=auto" ];
-            };
-          };
-          virtualisation.rootDevice = "/dev/mapper/cryptroot";
-          virtualisation.fileSystems."/".autoFormat = true;
-        };
+      environment.systemPackages = with pkgs; [ cryptsetup ];
+      boot.initrd.systemd = {
+        enable = true;
       };
 
-    testScript = ''
+      specialisation.boot-luks.configuration = {
+        boot.initrd.luks.devices = lib.mkVMOverride {
+          cryptroot = {
+            device = "/dev/vdb";
+            crypttabExtraOpts = [ "tpm2-device=auto" ];
+          };
+        };
+        virtualisation.rootDevice = "/dev/mapper/cryptroot";
+      };
+    };
+
+  testScript =
+    { nodes, ... }:
+    let
+      boot-luks = nodes.machine.specialisation.boot-luks.configuration.system.build.toplevel;
+    in
+    # python
+    ''
       # Create encrypted volume
       machine.wait_for_unit("multi-user.target")
       machine.succeed("echo -n supersecret | cryptsetup luksFormat -q --iter-time=1 /dev/vdb -")
+      machine.succeed("echo -n supersecret | cryptsetup luksOpen -q /dev/vdb cryptroot")
+      machine.succeed("mkfs.ext4 /dev/mapper/cryptroot")
       machine.succeed("PASSWORD=supersecret SYSTEMD_LOG_LEVEL=debug systemd-cryptenroll --tpm2-pcrs= --tpm2-device=auto /dev/vdb |& systemd-cat")
 
       # Boot from the encrypted disk
-      machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-luks.conf")
+      machine.succeed("${boot-luks}/bin/switch-to-configuration boot")
       machine.succeed("sync")
       machine.crash()
 
@@ -51,5 +58,4 @@ import ./make-test-python.nix (
       machine.wait_for_unit("multi-user.target")
       assert "/dev/mapper/cryptroot on / type ext4" in machine.succeed("mount")
     '';
-  }
-)
+}

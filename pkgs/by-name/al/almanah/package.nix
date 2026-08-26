@@ -25,12 +25,12 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "almanah";
   version = "0.12.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/almanah/${lib.versions.majorMinor version}/almanah-${version}.tar.xz";
+    url = "mirror://gnome/sources/almanah/${lib.versions.majorMinor finalAttrs.version}/almanah-${finalAttrs.version}.tar.xz";
     sha256 = "DywW6Gkohf0lrX3Mw/UawrS4h2JOaOfqH2SulHkxlFI=";
   };
 
@@ -67,12 +67,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Small GTK application to allow to keep a diary of your life";
     mainProgram = "almanah";
     homepage = "https://gitlab.gnome.org/GNOME/almanah";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    teams = [ teams.gnome ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.gnome ];
   };
-}
+})

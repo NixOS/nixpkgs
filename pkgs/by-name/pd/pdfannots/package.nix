@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pdfannots";
   version = "0.4";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "0xabu";
     repo = "pdfannots";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-C0Ss6kZvPx0hHnpBKquEolxeuTfjshhSBSIDXcCKtM8=";
   };
 
@@ -28,11 +28,11 @@ python3.pkgs.buildPythonApplication rec {
     "pdfannots"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Extracts and formats text annotations from a PDF file";
     homepage = "https://github.com/0xabu/pdfannots";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "pdfannots";
   };
-}
+})

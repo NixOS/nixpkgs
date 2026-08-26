@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "fscrypt";
-  version = "0.3.5";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fscrypt";
     rev = "v${version}";
-    hash = "sha256-US1jw0XK1BcP037XPhttzBloDU62m4BVSIbsGs9LaJU=";
+    hash = "sha256-3Xz5ro+V2mfSVqiS7RcB4QH3Whv/XaMLCiUc50bAKf0=";
   };
 
   postPatch = ''
@@ -26,7 +26,7 @@ buildGoModule rec {
       --replace "/usr/local" "$out"
   '';
 
-  vendorHash = "sha256-FuVWV3Rimhd+Pm9wrKGLWQWtbP1hWvoWa22pQT+m2go=";
+  vendorHash = "sha256-lR3qcRSVQjxyBuqHv5warfVVJy5zdomfE0DEJbA/RkQ=";
 
   doCheck = false;
 
@@ -45,8 +45,8 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "A high-level tool for the management of Linux filesystem encryption";
+  meta = {
+    description = "High-level tool for the management of Linux filesystem encryption";
     mainProgram = "fscrypt";
     longDescription = ''
       This tool manages metadata, key generation, key wrapping, PAM integration,
@@ -55,8 +55,8 @@ buildGoModule rec {
     '';
     inherit (src.meta) homepage;
     changelog = "https://github.com/google/fscrypt/releases/tag/v${version}";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
 }

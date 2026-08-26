@@ -1,32 +1,37 @@
 {
   lib,
+  stdenv,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
+  installShellFiles,
+  writableTmpDirAsHomeHook,
   libgit2,
   oniguruma,
   openssl,
   zlib,
+  versionCheckHook,
 }:
-let
-  version = "0.2.0";
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "forgejo-cli";
-  inherit version;
+  version = "0.6.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
-    owner = "Cyborus";
+  __structuredAttrs = true;
+
+  src = fetchFromCodeberg {
+    owner = "forgejo-contrib";
     repo = "forgejo-cli";
-    rev = "v${version}";
-    hash = "sha256-rHyPncAARIPakkv2/CD1/aF2G5AS9bb3T2x8QCQWl5o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XG7IPfl5yLToDQ+P0JkMxhfqsGd3cGWYCNrmlFf9j2Y=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-PkKinAZrZ+v1/eygiPis4F7EJnmjYfeQFPKfGpza0yA=";
+  cargoHash = "sha256-+7WiOmYBjTMEsIGaqnMVTIHhzTpm8ObnljNXFnDazhI=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+    writableTmpDirAsHomeHook # Needed for shell completions
+  ];
 
   buildInputs = [
     libgit2
@@ -40,15 +45,29 @@ rustPlatform.buildRustPackage {
     BUILD_TYPE = "nixpkgs";
   };
 
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd fj \
+      --bash <($out/bin/fj completion bash) \
+      --fish <($out/bin/fj completion fish) \
+      --zsh <($out/bin/fj completion zsh)
+  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
+
   meta = {
     description = "CLI application for interacting with Forgejo";
-    homepage = "https://codeberg.org/Cyborus/forgejo-cli";
-    changelog = "https://codeberg.org/Cyborus/forgejo-cli/releases/tag/v${version}";
+    homepage = "https://codeberg.org/forgejo-contrib/forgejo-cli";
+    changelog = "https://codeberg.org/forgejo-contrib/forgejo-cli/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ isabelroses ];
+    maintainers = with lib.maintainers; [
+      da157
+      isabelroses
+    ];
     mainProgram = "fj";
   };
-}
+})

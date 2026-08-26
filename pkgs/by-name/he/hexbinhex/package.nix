@@ -4,25 +4,24 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hexbinhex";
   version = "1.1";
 
   src = fetchFromGitHub {
     owner = "dj-on-github";
     repo = "hexbinhex";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-nfOmiF+t5QtAl1I7CSz26C9SGo7ZkdSziO2eiHbk6pA=";
   };
 
-  preBuild =
-    ''
-      substituteInPlace Makefile --replace '/usr/local' $out
-      mkdir -p $out/bin
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
-      sed -i s/-m64//g Makefile
-    '';
+  preBuild = ''
+    substituteInPlace Makefile --replace '/usr/local' $out
+    mkdir -p $out/bin
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
+    sed -i s/-m64//g Makefile
+  '';
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
@@ -30,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/dj-on-github/hexbinhex";
-    changelog = "https://github.com/dj-on-github/hexbinhex/releases/tag/${src.rev}";
+    changelog = "https://github.com/dj-on-github/hexbinhex/releases/tag/${finalAttrs.src.rev}";
     description = ''
       Six utility programs to convert between hex, binary, ascii-binary
       and the oddball NIST format for 90B testing.
@@ -42,4 +41,4 @@ stdenv.mkDerivation rec {
       thillux
     ];
   };
-}
+})

@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fastnetmon-advanced";
-  version = "2.0.371";
+  version = "2.0.383";
 
   src = fetchurl {
-    url = "https://repo.fastnetmon.com/fastnetmon_ubuntu_jammy/pool/fastnetmon/f/fastnetmon/fastnetmon_${version}_amd64.deb";
-    hash = "sha256-/qCUeo/2AYIT9Yl6QjoTBPfmg8Lk2efDU5Axv4JU+t8=";
+    url = "https://noble.ubuntu.repo.fastnetmon.com/pool/stable/f/fa/fastnetmon_${version}_amd64.deb";
+    hash = "sha256-n43LDnkk5cMvnfbHc8MtR+zmQok7DEbUwR0ZeHOq2UY=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     tar xf data.tar.xz
 
     # unused libraries, which have additional dependencies
-    rm opt/fastnetmon/libraries/gcc1210/lib/libgccjit.so*
+    rm opt/fastnetmon/libraries/gcc1610/lib/libgccjit.so*
   '';
 
   installPhase = ''
@@ -57,13 +57,16 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) fastnetmon-advanced; };
 
-  meta = with lib; {
+  meta = {
     description = "High performance DDoS detector / sensor - commercial edition";
     homepage = "https://fastnetmon.com";
     changelog = "https://github.com/FastNetMon/fastnetmon-advanced-releases/releases/tag/v${version}";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    teams = [ teams.wdz ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [
+      yureka-wdz
+      netali
+    ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -14,8 +14,8 @@
 # A wrapper that makes sure sage finds its docs (if they were build) and the
 # jupyter kernel spec.
 
-stdenv.mkDerivation rec {
-  version = src.version;
+stdenv.mkDerivation (finalAttrs: {
+  version = finalAttrs.src.version;
   pname = "sage";
   src = sage-with-env.env.lib.src;
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p "$out/bin"
     makeWrapper "${sage-with-env}/bin/sage" "$out/bin/sage" \
-      --set SAGE_DOC_SRC_OVERRIDE "${src}/src/doc" ${lib.optionalString withDoc "--set SAGE_DOC_OVERRIDE ${sagedoc}/share/doc/sage"} \
+      --set SAGE_DOC_SRC_OVERRIDE "${finalAttrs.src}/src/doc" ${lib.optionalString withDoc "--set SAGE_DOC_OVERRIDE ${sagedoc}/share/doc/sage"} \
       --prefix JUPYTER_PATH : "${jupyter-kernel-specs}"
   '';
 
@@ -44,27 +44,26 @@ stdenv.mkDerivation rec {
     "$out/bin/sage" -c 'browse_sage_doc._open("reference", testing=True)'
   '';
 
-  passthru =
-    {
-      tests = sage-tests;
-      quicktest = sage-tests.override {
-        longTests = false;
-        timeLimit = 600;
-      }; # as many tests as possible in ~10m
-      lib = sage-with-env.env.lib;
-      with-env = sage-with-env;
-      kernelspec = jupyter-kernel-definition;
-    }
-    // lib.optionalAttrs withDoc {
-      doc = sagedoc;
-    };
+  passthru = {
+    tests = sage-tests;
+    quicktest = sage-tests.override {
+      longTests = false;
+      timeLimit = 600;
+    }; # as many tests as possible in ~10m
+    lib = sage-with-env.env.lib;
+    with-env = sage-with-env;
+    kernelspec = jupyter-kernel-definition;
+  }
+  // lib.optionalAttrs withDoc {
+    doc = sagedoc;
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Open Source Mathematics Software, free alternative to Magma, Maple, Mathematica, and Matlab";
     mainProgram = "sage";
     homepage = "https://www.sagemath.org";
-    license = licenses.gpl2Plus;
-    teams = [ teams.sage ];
-    platforms = platforms.linux ++ [ "aarch64-darwin" ];
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.sage ];
+    platforms = lib.platforms.linux ++ [ "aarch64-darwin" ];
   };
-}
+})

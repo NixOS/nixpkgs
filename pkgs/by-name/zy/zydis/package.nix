@@ -12,14 +12,14 @@ let
     inherit stdenv fetchFromGitHub cmake;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zydis";
   version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "zyantific";
     repo = "zydis";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6J4pTUm3xQXwlQNBldjXVWRcse+auSFJtxGWaPRVzLg=";
   };
 
@@ -34,15 +34,15 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [ python3 ];
   passthru = { inherit zycore; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://zydis.re/";
-    changelog = "https://github.com/zyantific/zydis/releases/tag/v${version}";
+    changelog = "https://github.com/zyantific/zydis/releases/tag/v${finalAttrs.version}";
     description = "Fast and lightweight x86/x86-64 disassembler library";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jbcrail
       athre0z
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

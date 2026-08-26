@@ -21,14 +21,14 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openrussian-cli";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "rhaberkorn";
     repo = "openrussian-cli";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-lu13Dd3D4P/7Yol1ixt86BHk86y8DMsbFzfi244+KuY=";
   };
 
@@ -81,16 +81,16 @@ stdenv.mkDerivation rec {
     installManPage ./openrussian.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Offline Console Russian Dictionary (based on openrussian.org)";
     homepage = "https://github.com/rhaberkorn/openrussian-cli";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Only
       mit
       cc-by-sa-40
     ];
-    maintainers = with maintainers; [ zane ];
+    maintainers = with lib.maintainers; [ zane ];
     mainProgram = "openrussian";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

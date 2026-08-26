@@ -9,24 +9,29 @@
   libdrm,
   libGL,
   atkmm,
-  pcre,
   gtkmm4,
   pugixml,
   libgbm,
   pciutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "adriconf";
-  version = "2.7.2";
+  version = "2.7.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
     repo = "adriconf";
-    rev = "v${version}";
-    sha256 = "sha256-0XTsYeS4tNAnGhuJ81fmjHhFS6fVq1lirui5b+ojxTQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MRZYAinBL4fzj/Nhhn22sJgupVMpoeeyOYYWTr+fK+E=";
   };
+
+  # fix build with c23
+  #    error: 'uint16_t' does not name a type
+  postPatch = ''
+    sed -i '1i #include <cstdint>' adriconf/ValueObject/GPUInfo.h
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -38,7 +43,6 @@ stdenv.mkDerivation rec {
     libdrm
     libGL
     atkmm
-    pcre
     gtkmm4
     pugixml
     libgbm
@@ -57,13 +61,13 @@ stdenv.mkDerivation rec {
       -t $out/share/icons/hicolor/256x256/apps/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.freedesktop.org/mesa/adriconf/";
-    changelog = "https://gitlab.freedesktop.org/mesa/adriconf/-/releases/v${version}";
+    changelog = "https://gitlab.freedesktop.org/mesa/adriconf/-/releases/v${finalAttrs.version}";
     description = "GUI tool used to configure open source graphics drivers";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ muscaln ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ muscaln ];
+    platforms = lib.platforms.linux;
     mainProgram = "adriconf";
   };
-}
+})

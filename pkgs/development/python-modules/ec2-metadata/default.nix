@@ -3,19 +3,18 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  requests,
-  nix-update-script,
+  urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ec2-metadata";
-  version = "2.14.0";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "ec2_metadata";
-    inherit version;
-    hash = "sha256-svgzgXIgcu+ij2XcN+cmwKvToFMvIns/pqKtaEYMf+s=";
+    inherit (finalAttrs) version;
+    hash = "sha256-EtfiaM4MsWv27cS+1VF/EPwJAGqsw8NP80IdrpC7COo=";
   };
 
   build-system = [
@@ -23,20 +22,19 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    requests
+    urllib3
   ];
 
   pythonImportsCheck = [
     "ec2_metadata"
   ];
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
-    description = "An easy interface to query the EC2 metadata API, with caching";
+    description = "Easy interface to query the EC2 metadata API, with caching";
     homepage = "https://pypi.org/project/ec2-metadata/";
+    changelog = "https://github.com/adamchainz/ec2-metadata/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers._9999years ];
-    mainProgram = "ec2-metadata";
+    maintainers = with lib.maintainers; [ _9999years ];
+    mainProgram = "imds";
   };
-}
+})

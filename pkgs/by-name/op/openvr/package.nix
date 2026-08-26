@@ -1,9 +1,7 @@
 {
-  AppKit,
   cmake,
   fetchFromGitHub,
   fetchpatch2,
-  Foundation,
   jsoncpp,
   lib,
   libGL,
@@ -13,14 +11,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvr";
-  version = "2.5.1";
+  version = "2.15.6";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "openvr";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bIKjZ7DvJVmDK386WgXaAFQrS0E1TNEUMhfQp7FNnvk=";
+    hash = "sha256-xtCqro73fWQ6i0PiVmWYCK30DUSq1WeALoUolUjuWlE=";
   };
+
+  postUnpack = ''
+    # Move in-tree jsoncpp out to complement the patch above
+    # fetchpatch2 is not able to handle these renames
+    mkdir source/thirdparty
+    mv source/src/json source/thirdparty/jsoncpp
+  '';
 
   patches = [
     # https://github.com/ValveSoftware/openvr/pull/594
@@ -37,26 +42,20 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postUnpack = ''
-    # Move in-tree jsoncpp out to complement the patch above
-    # fetchpatch2 is not able to handle these renames
-    mkdir source/thirdparty
-    mv source/src/json source/thirdparty/jsoncpp
+  postPatch = ''
+    # Fix jsoncpp ABI for downstream packages
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "-std=c++11" "-std=c++17"
   '';
 
   nativeBuildInputs = [
     cmake
   ];
 
-  buildInputs =
-    [
-      jsoncpp
-      libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      Foundation
-    ];
+  buildInputs = [
+    jsoncpp
+    libGL
+  ];
 
   cmakeFlags = [
     "-DUSE_SYSTEM_JSONCPP=ON"

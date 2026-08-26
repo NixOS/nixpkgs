@@ -4,44 +4,36 @@
   rustPlatform,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
+  perl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "code2prompt";
-  version = "1.1.0";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "mufeedvh";
     repo = "code2prompt";
-    rev = "v${version}";
-    hash = "sha256-KZqh0Vq4Mn56PhUO1JUzVpNBAGOZqUAsj31Cj5K+Lyk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Gh8SsSTZW7QlyyC3SWJ5pOK2x85/GT7+LPJn2Jeczpc=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-t4HpGqojIkw9OBUAYz4ZEaB7XyHQxkFB2HtlkGKbe2s=";
 
-  postPatch = ''
-    # src is missing Cargo.lock
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
+  nativeBuildInputs = [
+    pkg-config
+    perl
+  ];
 
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.AppKit
-    ];
+  buildInputs = [
+    openssl
+  ];
 
   meta = {
-    description = "A CLI tool that converts your codebase into a single LLM prompt with a source tree, prompt templating, and token counting";
+    description = "CLI tool that converts your codebase into a single LLM prompt with a source tree, prompt templating, and token counting";
     homepage = "https://github.com/mufeedvh/code2prompt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ heisfer ];
     mainProgram = "code2prompt";
   };
-}
+})

@@ -12,8 +12,6 @@
   writableTmpDirAsHomeHook,
   installShellFiles,
   zlib,
-  Security,
-  CoreServices,
   libiconv,
   xz,
   buildPackages,
@@ -27,17 +25,16 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustup";
-  version = "1.27.1";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustup";
     tag = finalAttrs.version;
-    hash = "sha256-BehkJTEIbZHaM+ABaWN/grl9pX75lPqyBj1q1Kt273M=";
+    hash = "sha256-jbB0nmXtc95Ac+YfmyELh6n5OTRMmeDPT4OFIlJNrZc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-CQHpsOGofDqsbLLTcznu5a0MSthJgy27HjBk8AYA72s=";
+  cargoHash = "sha256-m/KoXNJh00zYKZo7MIJsBvo4zldfKdofrUh8AItJqXI=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -46,18 +43,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      openssl
-      curl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreServices
-      Security
-      libiconv
-      xz
-    ];
+  buildInputs = [
+    openssl
+    curl
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+    xz
+  ];
 
   buildFeatures = [ "no-self-update" ];
 
@@ -83,6 +77,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Random tests fail nondeterministically on macOS.
   # TODO: Investigate this.
   doCheck = !stdenv.hostPlatform.isDarwin;
+  # Random failures when running tests in parallel.
+  dontUseCargoParallelTests = true;
 
   # skip failing tests
   checkFlags = [
@@ -91,7 +87,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=suite::cli_exact::check_updates_some"
     "--skip=suite::cli_exact::check_updates_with_update"
     # rustup-init is not used in nix rustup
-    "--skip=suite::cli_ui::rustup_init_ui_doc_text_tests"
+    "--skip=suite::cli_rustup_init_ui"
+    # reaches out to the network to test TLS roots, which can't be done in the
+    # build sandbox
+    "--skip=suite::static_roots::store_static_roots"
   ];
 
   postInstall = ''
@@ -156,6 +155,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Rust toolchain installer";
     homepage = "https://www.rustup.rs/";
+    changelog = "https://github.com/rust-lang/rustup/blob/${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20 # or
       mit

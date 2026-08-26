@@ -11,19 +11,19 @@
   osmo-mgw,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osmo-bsc";
-  version = "1.13.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-bsc";
-    rev = version;
-    hash = "sha256-wQtGyqqaEW+mM6Eg85N+i3ZiKC/Z6wxYk2Wwvz7qOFw=";
+    rev = finalAttrs.version;
+    hash = "sha256-CEIiTKMfe+kWbhOeES0c45wadX29Q4L9WoA7F6Dr62c=";
   };
 
   postPatch = ''
-    echo "${version}" > .tarball-version
+    echo "${finalAttrs.version}" > .tarball-version
   '';
 
   nativeBuildInputs = [
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "osmo-bsc";
   };
-}
+})

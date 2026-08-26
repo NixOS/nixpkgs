@@ -8,9 +8,7 @@
   rust-jemalloc-sys,
 
   # nativeBuildInputs
-  cmake,
   installShellFiles,
-  pkg-config,
 
   buildPackages,
   versionCheckHook,
@@ -20,29 +18,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uv";
-  version = "0.7.2";
+  version = "0.12.5";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
     tag = finalAttrs.version;
-    hash = "sha256-XHCKM/A7vV9rbSuzIgnL48+IFqUr8m8JyxQvktxtt8c=";
+    hash = "sha256-tKdqciPQnteeTqkXtWY8mliWUDv5gMdU8x0UPadQZlQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-PVM04Qm9Y1zWpqRLSVvx954Wh4lEXeFdoKSYxtpfodY=";
+  cargoHash = "sha256-27NzA/YXYbcGO6ehXP9OgvgLJQG/YP/I+eeflLmzxRQ=";
 
   buildInputs = [
     rust-jemalloc-sys
   ];
 
-  nativeBuildInputs = [
-    cmake
-    installShellFiles
-    pkg-config
-  ];
-
-  dontUseCmakeConfigure = true;
+  nativeBuildInputs = [ installShellFiles ];
 
   cargoBuildFlags = [
     "--package"
@@ -64,10 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ''
   );
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = "--version";
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
   passthru = {
@@ -77,13 +66,34 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Extremely fast Python package installer and resolver, written in Rust";
+    longDescription = ''
+      `uv` manages project dependencies and environments, with support for lockfiles, workspaces, and more.
+
+      Due to `uv`'s (over)eager fetching of dynamically-linked Python executables,
+      as well as vendoring of dynamically-linked libraries within Python modules distributed via PyPI,
+      NixOS users can run into issues when managing Python projects.
+      See the Nixpkgs Manual entry for `uv` for information on how to mitigate these issues:
+      https://nixos.org/manual/nixpkgs/unstable/#sec-uv.
+
+      For building Python projects with `uv` and Nix outside of nixpkgs, check out `uv2nix` at https://github.com/pyproject-nix/uv2nix.
+    '';
     homepage = "https://github.com/astral-sh/uv";
     changelog = "https://github.com/astral-sh/uv/blob/${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      bengsparks
+      GaetanLepage
+      prince213
+      miniharinn
+    ];
     mainProgram = "uv";
+
+    # Builds on 32-bit platforms fails with "out of memory" since at least 0.8.6.
+    # We don't place this in `badPlatforms` because cross-compilation on 64-bit
+    # machine may work, e.g. `pkgsCross.gnu32.uv`.
+    broken = stdenv.buildPlatform.is32bit;
   };
 })

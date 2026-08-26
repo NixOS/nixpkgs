@@ -3,34 +3,45 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  makeBinaryWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "crowdsec";
-  version = "1.6.8";
+  version = "1.7.8";
 
   src = fetchFromGitHub {
     owner = "crowdsecurity";
-    repo = pname;
-    tag = "v${version}";
-    hash = "sha256-/NTlj0kYCOMxShfoKdmouJTiookDjccUj5HFHLPn5HI=";
+    repo = "crowdsec";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2t9nxuqWNDAUOZHtfNkZ4ZFKXvv8k5LuvKrGNjpdGXc=";
   };
 
-  vendorHash = "sha256-7587ezh/9C69UzzQGq3DVGBzNEvTzho/zhRlG6g6tkk=";
+  vendorHash = "sha256-RDkttsV4PNOfjWPr4v+uIwdkmXYH83vkYFQQIO3CYGE=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeBinaryWrapper
+  ];
 
   subPackages = [
     "cmd/crowdsec"
     "cmd/crowdsec-cli"
+    "cmd/notification-dummy"
+    "cmd/notification-email"
+    "cmd/notification-file"
+    "cmd/notification-http"
+    "cmd/notification-sentinel"
+    "cmd/notification-slack"
+    "cmd/notification-splunk"
   ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/crowdsecurity/go-cs-lib/version.Version=v${version}"
+    "-X github.com/crowdsecurity/go-cs-lib/version.Version=v${finalAttrs.version}"
     "-X github.com/crowdsecurity/go-cs-lib/version.BuildDate=1970-01-01_00:00:00"
-    "-X github.com/crowdsecurity/go-cs-lib/version.Tag=v${version}"
+    "-X github.com/crowdsecurity/go-cs-lib/version.Tag=v${finalAttrs.version}"
     "-X github.com/crowdsecurity/crowdsec/pkg/cwversion.Codename=alphaga"
     "-X github.com/crowdsecurity/crowdsec/pkg/csconfig.defaultConfigDir=/etc/crowdsec"
     "-X github.com/crowdsecurity/crowdsec/pkg/csconfig.defaultDataDir=/var/lib/crowdsec/data"
@@ -39,12 +50,11 @@ buildGoModule rec {
   postBuild = "mv $GOPATH/bin/{crowdsec-cli,cscli}";
 
   postInstall = ''
+    # so that `bin/crowdsec` is available for `cscli explain` for example
+    wrapProgram $out/bin/cscli --prefix PATH : $out/bin/
+
     mkdir -p $out/share/crowdsec
     cp -r ./config $out/share/crowdsec/
-
-    mkdir -p $out/lib/systemd/system
-    substitute ./config/crowdsec.service $out/lib/systemd/system/crowdsec.service \
-      --replace-fail /usr/local $out
 
     installShellCompletion --cmd cscli \
       --bash <($out/bin/cscli completion bash) \
@@ -56,16 +66,17 @@ buildGoModule rec {
   preCheck = ''
     version=$($GOPATH/bin/cscli version 2>&1 | sed -nE 's/^version: (.*)/\1/p')
 
-    if [ "$version" != "v${version}" ]; then
+    if [ "$version" != "v${finalAttrs.version}" ]; then
         echo "Invalid version string: '$version'"
         exit 1
     fi
   '';
 
-  meta = with lib; {
+  meta = {
+    mainProgram = "crowdsec";
     homepage = "https://crowdsec.net/";
-    changelog = "https://github.com/crowdsecurity/crowdsec/releases/tag/v${version}";
-    description = "CrowdSec is a free, open-source and collaborative IPS";
+    changelog = "https://github.com/crowdsecurity/crowdsec/releases/tag/v${finalAttrs.version}";
+    description = "Free, open-source and collaborative IPS";
     longDescription = ''
       CrowdSec is a free, modern & collaborative behavior detection engine,
       coupled with a global IP reputation network. It stacks on fail2ban's
@@ -77,10 +88,10 @@ buildGoModule rec {
       etc.) while the aggressive IP can be sent to CrowdSec for curation before
       being shared among all users to further improve everyone's security.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jk
-      urandom
+      tornax
     ];
   };
-}
+})

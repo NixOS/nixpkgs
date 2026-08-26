@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   cmake,
-  libX11,
+  libx11,
   libxcb,
   perl, # For pod2man
   qt6,
@@ -27,18 +27,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libxcb
     qt6.qtbase
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Dock any application into the system tray";
     homepage = "https://github.com/user-none/KDocker";
     changelog = "https://github.com/user-none/KDocker/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ hexclover ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ hexclover ];
+    platforms = lib.platforms.linux;
     mainProgram = "kdocker";
   };
 })

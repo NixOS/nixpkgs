@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     sha256 = "sha256-9+FqRvd0s9N7mQwIf+f3+vBhaa0YQWUR0j0lv4CBOkM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-KIoRsCy/Cei1YM/94kUcgI2Twgi8kEFVNiUM+sCPMyo=";
 
   nativeBuildInputs = [ makeWrapper ];
@@ -27,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   meta = {
-    description = "Cleans all projects under specified directory.";
+    description = "Cleans all projects under specified directory";
     mainProgram = "cargo-clean-recursive";
     homepage = "https://github.com/IgaguriMK/cargo-clean-recursive";
     license = with lib.licenses; [

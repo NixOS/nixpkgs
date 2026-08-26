@@ -5,23 +5,27 @@
   gitUpdater,
   nixosTests,
   bash,
+  boost,
   cmake,
+  dbus,
   inotify-tools,
   pkg-config,
   mir,
   libxkbcommon,
   swaybg,
+  systemd,
+  wayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miriway";
-  version = "25.02.1";
+  version = "26.08";
 
   src = fetchFromGitHub {
     owner = "Miriway";
     repo = "Miriway";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+HHHF9dhVYMxugJZckAnQduuSBLAw5StbwRJF5Fz+rU=";
+    hash = "sha256-2xQO49WU19NlAg+FYPDw3oKjY+GsTIbXNge/dYWxiTk=";
   };
 
   postPatch = ''
@@ -31,9 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  # Source has a path "systemd/usr/{libexec,lib}/...", don't break references to that
-  dontFixCmake = true;
-
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -41,8 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     bash
+    boost
+    dbus
     mir
     libxkbcommon
+    wayland # wayland-server.pc, for mirwayland.pc
   ];
 
   postInstall = ''
@@ -51,6 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace $out/bin/miriway-run \
       --replace-fail 'inotifywait -qq' '${lib.getExe' inotify-tools "inotifywait"} -qq'
+
+    substituteInPlace $out/libexec/miriway-session-startup \
+      --replace-fail 'dbus-update-activation-environment' '${lib.getExe' dbus "dbus-update-activation-environment"}'
   '';
 
   passthru = {
@@ -68,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       At the core of Miriway is miriway-shell, a Mir based Wayland compositor that provides:
 
-      - A "floating windows" window managament policy;
+      - A "floating windows" window management policy;
       - Support for Wayland (and via Xwayland) X11 applications;
       - Dynamic workspaces;
       - Additional Wayland support for "shell components" such as panels and docs; and,

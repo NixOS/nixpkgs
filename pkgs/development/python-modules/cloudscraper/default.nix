@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   requests,
   requests-toolbelt,
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "cloudscraper";
   version = "1.2.71";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -32,11 +29,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cloudscraper" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to bypass Cloudflare's anti-bot page";
     homepage = "https://github.com/venomous/cloudscraper";
     changelog = "https://github.com/VeNoMouS/cloudscraper/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kini ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kini ];
   };
 }

@@ -3,19 +3,22 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "callee";
   version = "0.3.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Xion";
-    repo = pname;
-    tag = version;
+    repo = "callee";
+    tag = finalAttrs.version;
     hash = "sha256-dsXMY3bW/70CmTfCuy5KjxPa+NLCzxzWv5e1aV2NEWE=";
   };
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "callee" ];
 
@@ -26,10 +29,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Argument matchers for unittest.mock";
     homepage = "https://github.com/Xion/callee";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

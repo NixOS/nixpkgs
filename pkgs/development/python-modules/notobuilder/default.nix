@@ -21,14 +21,14 @@
 
 buildPythonPackage {
   pname = "notobuilder";
-  version = "0-unstable-2024-09-25";
+  version = "0-unstable-2026-06-26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "notofonts";
     repo = "notobuilder";
-    rev = "8a60f1599ce86c4b3eacb5d01c3f17162bab67d3";
-    hash = "sha256-YBiDOnt2B7I/AcEfFgGrdzN/tNz/tQO0cv9N4PupPCE=";
+    rev = "5b55818eb3f535481135a5f57a337eec6d28cda0";
+    hash = "sha256-pdfWl8rp4tizgb7j0UR7hOW/Ae2dPhTSw1IHljM15LE=";
   };
 
   postPatch = ''
@@ -41,6 +41,8 @@ buildPythonPackage {
     setuptools-scm
   ];
 
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = "0.0.0";
+
   dependencies = [
     fonttools
     ufomerge
@@ -50,10 +52,10 @@ buildPythonPackage {
     ufo2ft
     gftools
     fontbakery
-    diffenator2
     chevron
     sh
-  ] ++ gftools.optional-dependencies.qa;
+  ]
+  ++ gftools.optional-dependencies.qa;
 
   pythonImportsCheck = [
     "notobuilder"
@@ -65,7 +67,7 @@ buildPythonPackage {
   meta = {
     description = "Python module for building Noto fonts";
     homepage = "https://github.com/notofonts/notobuilder";
-    license = lib.licenses.unfree;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jopejoe1 ];
   };
 }

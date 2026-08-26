@@ -3,30 +3,27 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-let
+buildGoModule (finalAttrs: {
   pname = "wait4x";
-  version = "3.3.0";
-in
-buildGoModule {
-  inherit pname version;
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "wait4x";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-QmuBoUHOZf6VKrh00BXFxT2e+gJL1gyv9BnhGaWVAD0=";
+    repo = "wait4x";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-5RfN51BwsTOZeg/O8qfk/mUKwdf9z36da+vl0NJlYPU=";
   };
 
-  vendorHash = "sha256-EqJDw88BqKfIUE/YoDNoI249covv5bzEcx9ykfUkik8=";
+  vendorHash = "sha256-3Wvtk05zLyJZCpdvAMlypL6JRn08S2rqm/n8JLxXJI8=";
 
   # Tests make network access
   doCheck = false;
 
-  meta = with lib; {
-    description = "Wait4X allows you to wait for a port or a service to enter the requested state";
+  meta = {
+    description = "Allows you to wait for a port or a service to enter the requested state";
     homepage = "https://github.com/wait4x/wait4x";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jfvillablanca ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jfvillablanca ];
     mainProgram = "wait4x";
   };
-}
+})

@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "piccolomo";
-    repo = pname;
+    repo = "plotext";
     tag = version;
     hash = "sha256-4cuStXnZFTlOoBp9w+LrTZavCWEaQdZMY4apGNKvBXE=";
   };
@@ -22,11 +22,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "plotext" ];
 
-  meta = with lib; {
+  meta = {
     description = "Plotting directly in the terminal";
     mainProgram = "plotext";
     homepage = "https://github.com/piccolomo/plotext";
-    license = licenses.mit;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

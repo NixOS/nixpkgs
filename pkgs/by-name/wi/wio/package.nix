@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitLab,
   alacritty,
   cage,
   cairo,
@@ -16,19 +16,19 @@
   unstableGitUpdater,
   wayland,
   wayland-protocols,
-  wlroots,
+  wlroots_0_19,
   xwayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wio";
-  version = "0.17.3-unstable-2024-04-30";
+  version = "0.19.0";
 
-  src = fetchFromGitHub {
-    owner = "Rubo3";
+  src = fetchFromGitLab {
+    owner = "Rubo";
     repo = "wio";
-    rev = "9d459df379efdcf20ea10906c48c79c506c32066";
-    hash = "sha256-Bn7mCVQPH/kH2WRsGPPGIGgvk0r894zZHCHl6BVmWVg=";
+    rev = finalAttrs.version;
+    hash = "sha256-Ol9/dMYg1L+3jGFMpKsAPUAA7hkxu/v88JrI3v+ozAM=";
   };
 
   nativeBuildInputs = [
@@ -46,11 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
     udev
     wayland
     wayland-protocols
-    wlroots
+    wlroots_0_19
     xwayland
   ];
 
-  strictDeps = false; # why is it so hard?
+  strictDeps = true;
+  __structuredAttrs = true;
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=maybe-uninitialized";
 
@@ -76,9 +77,9 @@ stdenv.mkDerivation (finalAttrs: {
       Wio is a Wayland compositor for Linux and FreeBSD which has a similar look
       and feel to plan9's rio.
     '';
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     mainProgram = "wio";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (wayland.meta) platforms;
   };
 })

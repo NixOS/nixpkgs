@@ -10,25 +10,26 @@
   libappindicator,
   libevdev,
   libnotify,
-  libX11,
-  libXrandr,
+  libx11,
+  libxrandr,
   makeDesktopItem,
   nixosTests,
   udev,
   wrapGAppsHook3,
   versionCheckHook,
   nix-update-script,
+  udevCheckHook,
 }:
 
 buildDotnetModule (finalAttrs: {
   pname = "OpenTabletDriver";
-  version = "0.6.5.1";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "OpenTabletDriver";
     repo = "OpenTabletDriver";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PpgqmeQRGZew0+HD4xtbimc25XPEfgW69VfJf+TlYC4=";
+    hash = "sha256-jL3d1DjY9n85BrO6ajZVvJMHmPYfxng4YE25s/9hfGA=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -49,6 +50,7 @@ buildDotnetModule (finalAttrs: {
   nativeBuildInputs = [
     copyDesktopItems
     wrapGAppsHook3
+    udevCheckHook
     # Dependency of generate-rules.sh
     jq
   ];
@@ -58,14 +60,14 @@ buildDotnetModule (finalAttrs: {
     libappindicator
     libevdev
     libnotify
-    libX11
-    libXrandr
+    libx11
+    libxrandr
     udev
   ];
 
   buildInputs = finalAttrs.runtimeDeps;
 
-  OTD_CONFIGURATIONS = "${finalAttrs.src}/OpenTabletDriver.Configurations/Configurations";
+  env.OTD_CONFIGURATIONS = "${finalAttrs.src}/OpenTabletDriver.Configurations/Configurations";
 
   doCheck = true;
   testProjectFile = "OpenTabletDriver.Tests/OpenTabletDriver.Tests.csproj";
@@ -81,9 +83,6 @@ buildDotnetModule (finalAttrs: {
     "OpenTabletDriver.Tests.UpdaterTests.Install_Copies_AppDataFiles"
     # Depends on processor load
     "OpenTabletDriver.Tests.TimerTests.TimerAccuracy"
-    # Can't find Configurations directory, remove after https://github.com/OpenTabletDriver/OpenTabletDriver/pull/3796
-    "OpenTabletDriver.Tests.ConfigurationTest.Configurations_Verify_Configs_With_Schema"
-    "OpenTabletDriver.Tests.ConfigurationTest.Configurations_Are_Linted"
   ];
 
   preBuild = ''
@@ -92,17 +91,23 @@ buildDotnetModule (finalAttrs: {
       --replace-fail '/usr/bin/env rm' '${lib.getExe' coreutils "rm"}'
   '';
 
+  dontWrapGApps = true;
+
   postFixup = ''
     # Give a more "*nix" name to the binaries
     mv $out/bin/OpenTabletDriver.Console $out/bin/otd
     mv $out/bin/OpenTabletDriver.Daemon $out/bin/otd-daemon
     mv $out/bin/OpenTabletDriver.UX.Gtk $out/bin/otd-gui
 
-    install -Dm644 $src/OpenTabletDriver.UX/Assets/otd.png -t $out/share/pixmaps
+    install -Dm644 $src/OpenTabletDriver.UX/Assets/otd.png -t $out/share/icons
 
     # Generate udev rules from source
     mkdir -p $out/lib/udev/rules.d
     ./generate-rules.sh > $out/lib/udev/rules.d/70-opentabletdriver.rules
+
+    wrapProgram $out/bin/otd-gui \
+      "''${gappsWrapperArgs[@]}" \
+      --add-flags --skipupdate
   '';
 
   desktopItems = [

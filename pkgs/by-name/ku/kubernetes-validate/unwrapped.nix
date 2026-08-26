@@ -12,15 +12,15 @@
   pytestCheckHook,
   versionCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kubernetes-validate";
-  version = "1.32.0";
+  version = "1.36.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "kubernetes_validate";
-    inherit version;
-    hash = "sha256-GSg3/cLBkWUlAf4mjdo0JT36yuADRQWlGwo4hNFZNh0=";
+    inherit (finalAttrs) version;
+    hash = "sha256-7b/S256ItXECmqFqsRFsZQKtK5YotnON051jkyP4RxU=";
   };
 
   build-system = [
@@ -39,16 +39,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "kubernetes_validate" ];
 
   meta = {
     description = "Module to validate Kubernetes resource definitions against the declared Kubernetes schemas";
     homepage = "https://github.com/willthames/kubernetes-validate";
-    changelog = "https://github.com/willthames/kubernetes-validate/releases/tag/v${version}";
+    changelog = "https://github.com/willthames/kubernetes-validate/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ lykos153 ];
     mainProgram = "kubernetes-validate";
   };
-}
+})

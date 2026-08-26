@@ -11,14 +11,14 @@
   libxml2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "augeas";
   version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "hercules-team";
     repo = "augeas";
-    rev = "release-${version}";
+    tag = "release-${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-U5tm3LDUeI/idHtL2Zy33BigkyvHunXPjToDC59G9VE=";
   };
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     ./bootstrap --gnulib-srcdir=.gnulib
   '';
 
+  configureFlags = lib.optionals stdenv.buildPlatform.isDarwin [ "--disable-gnulib-tests" ];
   nativeBuildInputs = [
     autoreconfHook
     bison
@@ -45,7 +46,8 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
-  enableParallelBuilding = true;
+  # Makefile doesn't specify dependencies on parser.h correctly
+  enableParallelBuilding = false;
 
   doCheck = true;
 
@@ -61,13 +63,13 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Configuration editing tool";
-    license = licenses.lgpl21Only;
+    license = lib.licenses.lgpl21Only;
     homepage = "https://augeas.net/";
-    changelog = "https://github.com/hercules-team/augeas/releases/tag/release-${version}";
+    changelog = "https://github.com/hercules-team/augeas/releases/tag/release-${finalAttrs.version}";
     mainProgram = "augtool";
-    maintainers = with maintainers; [ offline ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ skyethepinkcat ];
+    platforms = lib.platforms.unix;
   };
-}
+})

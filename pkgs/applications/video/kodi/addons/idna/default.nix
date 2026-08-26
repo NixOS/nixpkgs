@@ -22,10 +22,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Freso/script.module.idna";
     description = "Internationalized Domain Names for Python";
-    license = licenses.bsd3;
-    teams = [ teams.kodi ];
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.kodi ];
   };
 }

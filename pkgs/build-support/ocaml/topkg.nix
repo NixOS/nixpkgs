@@ -19,11 +19,10 @@
   ...
 }@args:
 
-lib.throwIf (args ? minimalOCamlVersion && lib.versionOlder ocaml.version args.minimalOCamlVersion)
-  "${pname}-${version} is not available for OCaml ${ocaml.version}"
-
-  stdenv.mkDerivation
-  (
+if (args ? minimalOCamlVersion && lib.versionOlder ocaml.version args.minimalOCamlVersion) then
+  throw "${pname}-${version} is not available for OCaml ${ocaml.version}"
+else
+  stdenv.mkDerivation (
     {
 
       dontAddStaticConfigureFlags = true;
@@ -32,7 +31,7 @@ lib.throwIf (args ? minimalOCamlVersion && lib.versionOlder ocaml.version args.m
       inherit (topkg) buildPhase installPhase;
 
     }
-    // (builtins.removeAttrs args [ "minimalOCamlVersion" ])
+    // (removeAttrs args [ "minimalOCamlVersion" ])
     // {
 
       name = "ocaml${ocaml.version}-${pname}-${version}";
@@ -42,7 +41,8 @@ lib.throwIf (args ? minimalOCamlVersion && lib.versionOlder ocaml.version args.m
         findlib
         ocamlbuild
         topkg
-      ] ++ nativeBuildInputs;
+      ]
+      ++ nativeBuildInputs;
       buildInputs = [ topkg ] ++ buildInputs;
 
       meta = (args.meta or { }) // {

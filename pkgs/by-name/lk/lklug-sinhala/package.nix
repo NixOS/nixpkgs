@@ -2,31 +2,30 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lklug-sinhala";
   version = "0.6";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/f/fonts-${pname}/fonts-${pname}_${version}.orig.tar.xz";
+    url = "mirror://debian/pool/main/f/fonts-lklug-sinhala/fonts-lklug-sinhala_${finalAttrs.version}.orig.tar.xz";
     hash = "sha256-oPCCa01PMQcCK5fEILgXjrGzoDg+UvxkqK6AgeQaKio=";
   };
 
+  nativeBuildInputs = [ installFonts ];
+
   installPhase = ''
     runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype
-    cp *.ttf $out/share/fonts/truetype
-
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unicode Sinhala font by Lanka Linux User Group";
     homepage = "http://www.lug.lk/fonts/lklug";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ serge ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

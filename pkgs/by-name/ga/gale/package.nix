@@ -1,13 +1,14 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  fetchurl,
 
   jq,
   moreutils,
-  fetchNpmDeps,
-  npmHooks,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   cargo-tauri,
   pkg-config,
@@ -17,51 +18,71 @@
   libsoup_3,
   openssl,
   webkitgtk_4_1,
+
+  nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  inlangModules = [
+    (fetchurl {
+      name = "plugin-message-format-index.js";
+      url = "https://cdn.jsdelivr.net/npm/@inlang/plugin-message-format@4/dist/index.js";
+      hash = "sha256-IOyECYVo8YqD2jYePrrfWGImn6M1FQzJvVDXmaSP31c=";
+    })
+    (fetchurl {
+      name = "plugin-m-function-matcher-index.js";
+      url = "https://cdn.jsdelivr.net/npm/@inlang/plugin-m-function-matcher@2/dist/index.js";
+      hash = "sha256-hYYvYwV5O1a/2a/lNosJbmP7Kuqzi3eZwFFRe+NJnAs=";
+    })
+  ];
+in
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gale";
-  version = "1.5.6";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "Kesomannen";
     repo = "gale";
     tag = finalAttrs.version;
-    hash = "sha256-YNTmREWSsXjQ8S2bM9JTsoTdPCmPnmt/svhTOoUFEs4=";
+    hash = "sha256-bJhmFIUl512zWVRG9coEszbEU9bJZDLeh/mbk9s8Km0=";
   };
 
-  postPatch = ''
-    jq '.bundle.createUpdaterArtifacts = false' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
-  '';
-
-  npmDeps = fetchNpmDeps {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
-    inherit (finalAttrs) src;
-    hash = "sha256-EFP2Lwqg2bFaSCXXDPIAF6nfeV7/CH3XgI9fzxE+veA=";
-  };
-
-  cargoDeps = rustPlatform.fetchCargoVendor {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
-      cargoRoot
+      patches
       ;
-    hash = "sha256-AsViBPdXNzQBnN3Vv8ojfdG7fvy5DN3FiQHTzdLmxyQ=";
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-Duwy8cKOnMT8s0SWrxiBvkK/v1s9En0i+7z4NuY/m9E=";
   };
 
-  cargoRoot = "src-tauri";
+  postPatch = ''
+    jq '.bundle.createUpdaterArtifacts = false' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
 
+    substituteInPlace project.inlang/settings.json ${
+      lib.concatMapStringsSep " " (m: "--replace-fail ${m.url} ${m}") inlangModules
+    }
+  '';
+
+  cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
+
+  cargoHash = "sha256-AyhWoht+aigakWRXTNl/rm14Qe7SJMI1nngFjrXhZhk=";
+
+  checkFlags = [
+    "--skip=config::bepinex::tests::check_from_string" # Fails a left == right check, even with left and right data being identical
+  ];
 
   nativeBuildInputs = [
     jq
     moreutils
-    npmHooks.npmConfigHook
+    pnpmConfigHook
+    pnpm_10
     nodejs
-    rustPlatform.cargoSetupHook
     cargo-tauri.hook
-    rustPlatform.cargoCheckHook
     pkg-config
     wrapGAppsHook3
   ];
@@ -73,12 +94,17 @@ stdenv.mkDerivation (finalAttrs: {
     webkitgtk_4_1
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Lightweight Thunderstore client";
     homepage = "https://github.com/Kesomannen/gale";
     license = lib.licenses.gpl3Only;
     mainProgram = "gale";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [
+      tomasajt
+      notohh
+    ];
     platforms = lib.platforms.linux;
   };
 })

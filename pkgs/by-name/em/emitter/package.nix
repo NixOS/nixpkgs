@@ -5,14 +5,14 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "emitter";
   version = "3.1";
 
   src = fetchFromGitHub {
     owner = "emitter-io";
     repo = "emitter";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eWBgRG0mLdiJj1TMSAxYPs+8CqLNaFUOW6/ghDn/zKE=";
   };
 
@@ -21,8 +21,8 @@ buildGoModule rec {
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   ldflags = [
-    "-X github.com/emitter-io/emitter/internal/command/version.version=${version}"
-    "-X github.com/emitter-io/emitter/internal/command/version.commit=${src.rev}"
+    "-X github.com/emitter-io/emitter/internal/command/version.version=${finalAttrs.version}"
+    "-X github.com/emitter-io/emitter/internal/command/version.commit=${finalAttrs.src.rev}"
   ];
 
   doCheck = true;
@@ -41,4 +41,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "emitter";
   };
-}
+})

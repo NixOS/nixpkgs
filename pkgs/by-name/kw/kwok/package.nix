@@ -4,26 +4,26 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kwok";
-  version = "0.6.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "kwok";
-    tag = "v${version}";
-    hash = "sha256-RVyXGPT30Fz+K1VdMneYldXvzHyimuCX406DMKOtUq4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SXiZiDor/+58JcKSBPHOWijvuCqdFmP2vRKJzLTriw8=";
   };
 
-  vendorHash = "sha256-xzFbcsL6pz91GFwjkriTMKlX2fgm2NMO9+H3lqH/C2c=";
+  vendorHash = "sha256-Y+tQKkuLPA4gGtlhQlG8rrvNB+n0whRKUpaqIf1WxX8=";
 
   doCheck = false; # docker is need for test
 
   meta = {
     description = "Simulate massive Kubernetes clusters with low resource usage locally without kubelet";
     homepage = "https://kwok.sigs.k8s.io";
-    changelog = "https://github.com/kubernetes-sigs/kwok/releases/tag/v${version}";
-    platforms = lib.platforms.linux;
+    changelog = "https://github.com/kubernetes-sigs/kwok/releases/tag/v${finalAttrs.version}";
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
-}
+})

@@ -18,7 +18,7 @@ rec {
           if predicate finalAttrs previousAttrs then
             previousAttrs.packageRequires or [ ] ++ packageRequires
           else
-            previousAttrs.packageRequires or null;
+            previousAttrs.packageRequires or [ ];
       }
     );
 
@@ -32,12 +32,17 @@ rec {
 
   externalSrc =
     pkg: epkg:
-    pkg.overrideAttrs (previousAttrs: {
+    pkg.overrideAttrs {
       inherit (epkg) src version;
-      propagatedUserEnvPkgs = previousAttrs.propagatedUserEnvPkgs or [ ] ++ [ epkg ];
-    });
+    };
 
-  fix-rtags = pkg: dontConfigure (externalSrc pkg pkgs.rtags);
+  fix-rtags =
+    pkg:
+    dontConfigure (
+      (externalSrc pkg pkgs.rtags).overrideAttrs (previousAttrs: {
+        propagatedUserEnvPkgs = previousAttrs.propagatedUserEnvPkgs or [ ] ++ [ pkgs.rtags ];
+      })
+    );
 
   fixRequireHelmCore =
     pkg:
@@ -89,7 +94,7 @@ rec {
           if predicate finalAttrs previousAttrs then
             previousAttrs.nativeBuildInputs or [ ] ++ [ pkgs.writableTmpDirAsHomeHook ]
           else
-            previousAttrs.nativeBuildInputs or null;
+            previousAttrs.nativeBuildInputs or [ ];
       }
     );
 }

@@ -1,46 +1,85 @@
 {
   lib,
-  buildGoModule,
+  stdenv,
+  callPackage,
+  rustPlatform,
   fetchFromGitLab,
+
+  versionCheckHook,
+  installShellFiles,
+  nix-update-script,
+
+  nixosTests,
 }:
-let
-  version = "1.4.1";
-in
-buildGoModule {
-  inherit version;
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reaction";
+  version = "2.5.1";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "ppom";
     repo = "reaction";
-    rev = "v${version}";
-    hash = "sha256-UL3ck+gejZAu/mZS3ZiZ78a2/I+OesaSRZUhHirgu9o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-a1ioQ+1CvC22tUeyVG8A7hciP+bXvX/UcRi0++To5Ik=";
   };
 
-  vendorHash = "sha256-THUIoWFzkqaTofwH4clBgsmtUlLS9WIB2xjqW7vkhpg=";
+  cargoHash = "sha256-qbhNswQW6ExkMQ+KiAr50EOLiDScwm9hILiiN9GxGWU=";
 
-  ldflags = [
-    "-X main.version=${version}"
-    "-X main.commit=unknown"
+  nativeBuildInputs = [ installShellFiles ];
+
+  # cross compiling for linux target
+  buildInputs =
+    lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform && stdenv.hostPlatform.isLinux)
+      [
+        stdenv.cc.libc
+        (stdenv.cc.libc.static or null)
+      ];
+
+  checkFlags = [
+    # Those time-based tests behave poorly in low-resource environments (CI...)
+    "--skip=daemon::filter::tests"
+    "--skip=treedb::raw::tests::write_then_read_1000"
+    "--skip=ip_pattern_matches"
+    # flaky and fails in hydra
+    "--skip=concepts::config::tests::merge_config_distinct_concurrency"
   ];
 
-  postBuild = ''
-    $CC helpers_c/ip46tables.c -o ip46tables
-    $CC helpers_c/nft46.c -o nft46
-  '';
+  cargoTestFlags = [
+    # Skip integration tests for the same reason
+    "--lib"
+  ];
 
   postInstall = ''
-    cp ip46tables nft46 $out/bin
+    installManPage $releaseDir/reaction*.1
+    installShellCompletion --cmd reaction \
+      --bash $releaseDir/reaction.bash \
+      --fish $releaseDir/reaction.fish \
+      --zsh $releaseDir/_reaction
+    mkdir -p $out/share/examples
+    install -Dm444 config/example* config/README.md $out/share/examples
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    inherit (callPackage ./plugins { }) mkReactionPlugin plugins;
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) reaction;
+    }
+    // finalAttrs.passthru.plugins;
+  };
+
+  meta = {
+    changelog = "https://framagit.org/ppom/reaction/-/releases/v${finalAttrs.version}";
     description = "Scan logs and take action: an alternative to fail2ban";
     homepage = "https://framagit.org/ppom/reaction";
-    changelog = "https://framagit.org/ppom/reaction/-/releases/v${version}";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     mainProgram = "reaction";
-    maintainers = with maintainers; [ ppom ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ ppom ];
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.ngi ];
   };
-}
+})

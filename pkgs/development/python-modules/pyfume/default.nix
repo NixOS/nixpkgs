@@ -5,7 +5,6 @@
   fst-pso,
   numpy,
   pandas,
-  pythonOlder,
   scipy,
   setuptools,
   simpful,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   version = "0.3.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-UwW5OwFfu01lDKwz72iB2egbOoxb+t8UnEFIUjZmffU=";
@@ -27,6 +24,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools ];
 
   pythonRelaxDeps = [
+    "fst-pso"
     "numpy"
     "pandas"
     "scipy"
@@ -46,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyfume" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for fuzzy model estimation";
     homepage = "https://github.com/CaroFuchs/pyFUME";
     changelog = "https://github.com/CaroFuchs/pyFUME/releases/tag/${version}";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

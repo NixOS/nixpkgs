@@ -20,7 +20,6 @@ let
     concatMapStringsSep
     getExe
     mkMerge
-    mkDefault
     ;
 in
 {
@@ -44,7 +43,7 @@ in
       default = "gancio";
     };
 
-    settings = mkOption rec {
+    settings = mkOption {
       type = types.submodule {
         freeformType = settingsFormat.type;
         options = {
@@ -174,7 +173,7 @@ in
         if [[ "$USER" != ${cfg.user} ]]; then
           sudo="exec /run/wrappers/bin/sudo -u ${cfg.user}"
         fi
-        $sudo ${lib.getExe cfg.package} ''${1:--help}
+        $sudo ${lib.getExe cfg.package} "''${@:--help}"
         ' > $out/bin/gancio
         chmod +x $out/bin/gancio
       '')
@@ -211,7 +210,8 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [
           "network.target"
-        ] ++ optional (cfg.settings.db.dialect == "postgres") "postgresql.service";
+        ]
+        ++ optional (cfg.settings.db.dialect == "postgres") "postgresql.target";
 
         environment = {
           NODE_ENV = "production";

@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uisp";
   version = "20050207";
 
   src = fetchurl {
-    url = "https://savannah.nongnu.org/download/uisp/uisp-${version}.tar.gz";
+    url = "https://savannah.nongnu.org/download/uisp/uisp-${finalAttrs.version}.tar.gz";
     sha256 = "1bncxp5yxh9r1yrp04vvhfiva8livi1pwic7v8xj99q09zrwahvw";
   };
 
@@ -22,4 +22,4 @@ stdenv.mkDerivation rec {
     homepage = "https://savannah.nongnu.org/projects/uisp";
     platforms = lib.platforms.linux;
   };
-}
+})

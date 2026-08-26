@@ -1,26 +1,25 @@
 {
   lib,
   stdenv,
-  overrideSDK,
   cmakeMinimal,
   fetchFromGitHub,
   ninja,
+  rust-bindgen,
   testers,
   aws-lc,
+  nix-update-script,
   useSharedLibraries ? !stdenv.hostPlatform.isStatic,
+  withRustBindings ? true,
 }:
-let
-  awsStdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-in
-awsStdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aws-lc";
-  version = "1.50.0";
+  version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-lc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-aYill04Fs/mJFCmzP/tlwUcPRHJz6R9knQWKGEOMwfQ=";
+    hash = "sha256-VDgyzr6d0tcKEXT/Q96IKO0XDV1ATT/17rIvPgQdhO0=";
   };
 
   outputs = [
@@ -32,10 +31,14 @@ awsStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmakeMinimal
     ninja
+  ]
+  ++ lib.optionals withRustBindings [
+    rust-bindgen
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" useSharedLibraries)
+    (lib.cmakeBool "GENERATE_RUST_BINDINGS" withRustBindings)
     "-GNinja"
     "-DDISABLE_GO=ON"
     "-DDISABLE_PERL=ON"
@@ -50,6 +53,14 @@ awsStdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
+  postInstall = ''
+    moveToOutput lib/crypto/cmake "$dev"
+    moveToOutput lib/ssl/cmake "$dev"
+  ''
+  + lib.optionalString withRustBindings ''
+    moveToOutput share/rust "$dev"
+  '';
+
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.cc.isGNU [
       # Needed with GCC 12 but breaks on darwin (with clang)
@@ -57,26 +68,38 @@ awsStdenv.mkDerivation (finalAttrs: {
     ]
   );
 
+  # AWS-LC's generated *-targets.cmake files hardcode _IMPORT_PREFIX to $out
+  # and set INTERFACE_INCLUDE_DIRECTORIES to "$out/include", but headers live
+  # in $dev/include under multi-output splitting. Clear the broken claim so
+  # consumers fall back to stdenv's normal include-path propagation via
+  # buildInputs (which correctly resolves to $dev/include).
   postFixup = ''
-    for f in $out/lib/crypto/cmake/*/crypto-targets.cmake; do
+    for f in $out/lib/{crypto,ssl}/cmake/*/*-targets.cmake; do
       substituteInPlace "$f" \
-        --replace-fail 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES ""'
+        --replace-fail \
+          'INTERFACE_INCLUDE_DIRECTORIES "\$<\$<BOOL:1>:>;''${_IMPORT_PREFIX}/include"' \
+          'INTERFACE_INCLUDE_DIRECTORIES ""'
     done
   '';
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = aws-lc;
-      command = "bssl version";
+  __darwinAllowLocalNetworking = true;
+
+  passthru = {
+    tests = {
+      version = testers.testVersion {
+        package = aws-lc;
+        command = "bssl version";
+      };
+      pkg-config = testers.hasPkgConfigModules {
+        package = aws-lc;
+        moduleNames = [
+          "libcrypto"
+          "libssl"
+          "openssl"
+        ];
+      };
     };
-    pkg-config = testers.hasPkgConfigModules {
-      package = aws-lc;
-      moduleNames = [
-        "libcrypto"
-        "libssl"
-        "openssl"
-      ];
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = {

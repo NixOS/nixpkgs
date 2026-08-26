@@ -8,17 +8,18 @@
   ipu6-camera-hal,
   libdrm,
   libva,
+  apple-sdk_gstreamer,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "icamerasrc-${ipu6-camera-hal.ipuVersion}";
-  version = "unstable-2024-09-29";
+  version = "20251226_1140_191_PTL_PV_IoT";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "icamerasrc";
-    tag = "20240926_1446";
-    hash = "sha256-BpIZxkPmSVKqPntwBJjGmCaMSYFCEZHJa4soaMAJRWE=";
+    tag = finalAttrs.version;
+    hash = "sha256-BYURJfNz4D8bXbSeuWyUYnoifozFOq6rSfG9GBKVoHo=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +34,11 @@ stdenv.mkDerivation {
     export STRIP_VIRTUAL_CHANNEL_CAMHAL=ON
   '';
 
+  separateDebugInfo = true;
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
   buildInputs = [
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -40,9 +46,12 @@ stdenv.mkDerivation {
     ipu6-camera-hal
     libdrm
     libva
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error"
     # gstcameradeinterlace.cpp:55:10: fatal error: gst/video/video.h: No such file or directory
     "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0"
@@ -54,11 +63,11 @@ stdenv.mkDerivation {
     inherit (ipu6-camera-hal) ipuVersion;
   };
 
-  meta = with lib; {
+  meta = {
     description = "GStreamer Plugin for MIPI camera support through the IPU6/IPU6EP/IPU6SE on Intel Tigerlake/Alderlake/Jasperlake platforms";
     homepage = "https://github.com/intel/icamerasrc/tree/icamerasrc_slim_api";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

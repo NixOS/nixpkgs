@@ -5,7 +5,6 @@
   pyqt5,
   pyqt-builder,
   python,
-  pythonOlder,
   qtcharts,
   setuptools,
   sip,
@@ -14,9 +13,7 @@
 buildPythonPackage rec {
   pname = "pyqtchart";
   version = "5.15.7";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "PyQtChart";
@@ -35,7 +32,7 @@ buildPythonPackage rec {
   ];
 
   enableParallelBuilding = true;
-  # HACK: paralellize compilation of make calls within pyqt's setup.py
+  # HACK: parallelize compilation of make calls within pyqt's setup.py
   # pkgs/stdenv/generic/setup.sh doesn't set this for us because
   # make gets called by python code and not its build phase
   # format=pyproject means the pip-build-hook hook gets used to build this project
@@ -65,10 +62,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "PyQt5.QtChart" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the Qt Charts library";
     homepage = "https://riverbankcomputing.com/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ panicgh ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ panicgh ];
   };
 }

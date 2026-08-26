@@ -2,7 +2,6 @@
   lib,
   SDL2,
   callPackage,
-  fetchpatch2,
   cmake,
   espeak-ng,
   ffmpeg,
@@ -14,11 +13,11 @@
   jbig2dec,
   leptonica,
   libGL,
-  libX11,
-  libXau,
-  libXcomposite,
-  libXdmcp,
-  libXfixes,
+  libx11,
+  libxau,
+  libxcomposite,
+  libxdmcp,
+  libxfixes,
   libdrm,
   libffi,
   libjpeg,
@@ -28,6 +27,7 @@
   libvncserver,
   libxcb,
   libxkbcommon,
+  luajit,
   makeWrapper,
   libgbm,
   mupdf,
@@ -43,17 +43,18 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  xcbutil,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-wm,
   xz,
   # Boolean flags
   buildManPages ? true,
-  useBuiltinLua ? true,
+  useBuiltinLua ? false,
   useEspeak ? !stdenv.hostPlatform.isDarwin,
   useStaticLibuvc ? true,
   useStaticOpenAL ? true,
   useStaticSqlite ? true,
-  useTracy ? true,
+  # For debugging only, disabled by upstream
+  useTracy ? false,
   # Configurable options
   sources ? callPackage ./sources.nix { },
 }:
@@ -61,20 +62,13 @@
 stdenv.mkDerivation (finalAttrs: {
   inherit (sources.letoram-arcan) pname version src;
 
-  patches = [
-    # (encode) remove deprecated use of pts/channel-layout
-    (fetchpatch2 {
-      url = "https://github.com/letoram/arcan/commit/e717c1b5833bdc2dea7dc6f64eeaf39c683ebd26.patch?full_index=1";
-      hash = "sha256-nUmOWfphGtGiLehUa78EJWqTlD7SvqJgl8lnn90vTFU=";
-    })
-  ];
-
   nativeBuildInputs = [
     cmake
     makeWrapper
     pkg-config
     wayland-scanner
-  ] ++ lib.optionals buildManPages [ ruby ];
+  ]
+  ++ lib.optionals buildManPages [ ruby ];
 
   buildInputs = [
     SDL2
@@ -87,11 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
     jbig2dec
     leptonica
     libGL
-    libX11
-    libXau
-    libXcomposite
-    libXdmcp
-    libXfixes
+    libx11
+    libxau
+    libxcomposite
+    libxdmcp
+    libxfixes
     libdrm
     libffi
     libjpeg
@@ -111,10 +105,12 @@ stdenv.mkDerivation (finalAttrs: {
     valgrind
     wayland
     wayland-protocols
-    xcbutil
-    xcbutilwm
+    libxcb-util
+    libxcb-wm
     xz
-  ] ++ lib.optionals useEspeak [ espeak-ng ];
+  ]
+  ++ lib.optionals (!useBuiltinLua) [ luajit ]
+  ++ lib.optionals useEspeak [ espeak-ng ];
 
   cmakeFlags = [
     # The upstream project recommends tagging the distribution
@@ -202,7 +198,8 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
       lgpl2Plus
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
+    teams = with lib.teams; [ ngi ];
     platforms = lib.platforms.unix;
   };
 })

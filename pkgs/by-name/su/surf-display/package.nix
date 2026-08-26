@@ -8,7 +8,8 @@
   matchbox,
   xdotool,
   unclutter,
-  xorg,
+  xmodmap,
+  xkbutils,
   pulseaudio,
   xprintidle-ng,
 }:
@@ -32,8 +33,8 @@ stdenv.mkDerivation rec {
     pulseaudio
     xprintidle-ng
     xdotool
-    xorg.xmodmap
-    xorg.xkbutils
+    xmodmap
+    xkbutils
     unclutter
   ];
 
@@ -58,12 +59,12 @@ stdenv.mkDerivation rec {
     providedSessions = [ "surf-display" ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Kiosk browser session manager based on the surf browser";
     mainProgram = "surf-display";
     homepage = "https://code.it-zukunft-schule.de/cgit/surf-display/";
     maintainers = [ ];
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

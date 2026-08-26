@@ -2,25 +2,27 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ajpy";
   version = "0.0.5";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "173wm207zyi86m2ms7vscakdi4mmjqfxqsdx1gn0j9nn0gsf241h";
   };
+
+  build-system = [ setuptools ];
 
   # ajpy doesn't have tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "AJP package crafting library";
     homepage = "https://github.com/hypn0s/AJPy/";
-    license = licenses.lgpl2;
-    maintainers = with maintainers; [ y0no ];
+    license = lib.licenses.bsd3;
   };
-}
+})

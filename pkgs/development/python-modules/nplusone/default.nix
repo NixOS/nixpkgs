@@ -6,11 +6,11 @@
   fetchFromGitHub,
   flake8,
   flask-sqlalchemy,
-  isPy27,
   mock,
   peewee,
   pytest-django,
   pytestCheckHook,
+  pytest-cov-stub,
   six,
   sqlalchemy,
   webtest,
@@ -20,7 +20,6 @@ buildPythonPackage rec {
   pname = "nplusone";
   version = "1.0.0";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "jmcarp";
@@ -41,6 +40,7 @@ buildPythonPackage rec {
     peewee
     pytest-django
     pytestCheckHook
+    pytest-cov-stub
     sqlalchemy
     webtest
   ];
@@ -55,8 +55,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "python_paths" "pythonpath" \
-      --replace "--cov nplusone --cov-report term-missing" ""
+      --replace "python_paths" "pythonpath"
   '';
 
   disabledTests = [
@@ -77,11 +76,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nplusone" ];
 
-  meta = with lib; {
+  meta = {
     description = "Detecting the n+1 queries problem in Python";
     homepage = "https://github.com/jmcarp/nplusone";
-    maintainers = with maintainers; [ cript0nauta ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ cript0nauta ];
+    license = lib.licenses.mit;
     broken = lib.versionAtLeast django.version "4";
   };
 }

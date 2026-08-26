@@ -6,9 +6,9 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ssh-audit";
-  version = "3.3.0";
+  version = "3.9.0";
   pyproject = true;
 
   outputs = [
@@ -19,8 +19,8 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jtesta";
     repo = "ssh-audit";
-    tag = "v${version}";
-    hash = "sha256-sjYKQpn37zH3xpuIiZAjCn0DyLqqoQDwuz7PKDfkeTM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JWhKtQk9jLumblM3eKchPtlqeGgM+/NW7jZ7+dq6w3Y=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -37,16 +37,16 @@ python3Packages.buildPythonApplication rec {
     inherit (nixosTests) ssh-audit;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for ssh server auditing";
     homepage = "https://github.com/jtesta/ssh-audit";
-    changelog = "https://github.com/jtesta/ssh-audit/releases/tag/v${version}";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/jtesta/ssh-audit/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       tv
       SuperSandro2000
     ];
     mainProgram = "ssh-audit";
   };
-}
+})

@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
+  pythonAtLeast,
 
   # buildInputs
   openssl,
@@ -14,41 +15,70 @@
 
   # dependencies
   deprecation,
-  overrides,
+  lance-namespace,
+  numpy,
   packaging,
   pyarrow,
   pydantic,
   tqdm,
+  pythonOlder,
+  overrides,
 
   # tests
   aiohttp,
+  boto3,
+  datafusion,
+  duckdb,
   pandas,
   polars,
   pylance,
   pytest-asyncio,
+  pytest-mock,
   pytestCheckHook,
-  duckdb,
+  tantivy,
+
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lancedb";
-  version = "0.21.2";
+  version = "0.36.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
-    tag = "python-v${version}";
-    hash = "sha256-ZPVkMlZz6lSF4ZCIX6fGcfCvni3kXCLPLXZqZw7icpE=";
+    tag = "python-v${finalAttrs.version}";
+    hash = "sha256-JOUrLHoVBZs4B8UGYFZIs00kzBnxFFAkTXFIz2bOZ7w=";
   };
 
   buildAndTestSubdir = "python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-Q3ejJsddHLGGbw3peLRtjPqBrS6fNi0C3K2UWpcM/4k=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-KEczUf/e3+Eb53pouOzajp+yVjWctDUNbdVEgQVoCZE=";
   };
+
+  # `lance-linalg`'s AVX-512 VNNI u8-distance kernels call `_mm512_dpbusd_epi32` /
+  # `_mm512_dpwssd_epi32`. With the current toolchain, stdarch's signature for these intrinsics
+  # mismatches LLVM's `llvm.x86.avx512.vpdpbusd.512`, so the crate fails to compile.
+  # Drop the AVX-512 VNNI dispatch branch: the kernels then become dead code (their module is
+  # crate-private and otherwise only used from `#[cfg(test)]`, which is not built for
+  # dependencies), so they are never codegen'd and runtime dispatch falls back to the equivalent
+  # AVX2 / scalar kernels.
+  postPatch = ''
+    lanceDistance="$cargoDepsCopy/source-registry-0/lance-linalg-9.0.0/src/distance"
+
+    substituteInPlace "$lanceDistance/dot_u8.rs" \
+      --replace-fail "return |a, b| unsafe { x86::dot_u8_avx512_vnni(a, b) };" ""
+
+    substituteInPlace "$lanceDistance/l2_u8.rs" \
+      --replace-fail "return |a, b| unsafe { x86::l2_u8_avx512_vnni(a, b) };" ""
+
+    substituteInPlace "$lanceDistance/cosine_u8.rs" \
+      --replace-fail "return |a, b| unsafe { x86::cosine_u8_accum_avx512_vnni(a, b) };" ""
+  '';
 
   build-system = [ rustPlatform.maturinBuildHook ];
 
@@ -62,57 +92,82 @@ buildPythonPackage rec {
     openssl
   ];
 
-  pythonRelaxDeps = [
-    # pylance is pinned to a specific release
-    "pylance"
-  ];
-
   dependencies = [
     deprecation
-    overrides
+    lance-namespace
+    numpy
     packaging
     pyarrow
     pydantic
     tqdm
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [
+    overrides
   ];
 
   pythonImportsCheck = [ "lancedb" ];
 
   nativeCheckInputs = [
     aiohttp
+    boto3
+    datafusion
     duckdb
     pandas
     polars
     pylance
     pytest-asyncio
+    pytest-mock
     pytestCheckHook
+    tantivy
   ];
 
   preCheck = ''
     cd python/python/tests
   '';
 
-  pytestFlagsArray = [ "-m 'not slow'" ];
+  disabledTestMarks = [ "slow" ];
 
   disabledTests = [
-    # require tantivy which is not packaged in nixpkgs
-    "test_basic"
-    "test_fts_native"
+    # Requires internet access
+    # RuntimeError: lance error: LanceError(IO): Generic S3 error
+    "test_bucket_without_dots_is_not_rejected"
 
-    # polars.exceptions.ComputeError: TypeError: _scan_pyarrow_dataset_impl() got multiple values for argument 'batch_size'
-    # https://github.com/lancedb/lancedb/issues/1539
-    "test_polars"
+    # lance_namespace.errors.UnsupportedOperationError: Not supported: create_empty_table
+    "TestAsyncNamespaceConnection"
+    "TestNamespaceConnection"
+
+    # Failed: DID NOT RAISE <class 'Exception'>
+    "test_merge_insert"
+
+    # TypeError: FFILanceTableProvider.__datafusion_table_provider__() missing 1 required positional
+    # argument: 'session'
+    "test_sql_query"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # TypeError: Converting Pydantic type to Arrow Type: unsupported type
+    # <class 'test_pydantic.test_optional_nested_model.<locals>.WALocation'>.
+    "test_optional_nested_model"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Flaky (even when the sandbox is disabled):
+    # FileNotFoundError: [Errno 2] Cannot delete directory '/nix/var/nix/builds/nix-41395-654732360/.../test.lance/_indices/fts':
+    # Cannot get information for path '/nix/var/nix/builds/nix-41395-654732360/.../test.lance/_indices/fts/.tmppyKXfw'
+    "test_create_index_from_table"
+  ]
+  ++ lib.optionals ((pythonAtLeast "3.14") && stdenv.hostPlatform.isDarwin) [
+    # Failed: DID NOT RAISE <class 'Exception'>
+    "test_merge_insert"
   ];
 
-  disabledTestPaths =
-    [
-      # touch the network
-      "test_s3.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
-      "test_remote_db.py"
-    ];
+  disabledTestPaths = [
+    # touch the network
+    "test_namespace_integration.py"
+    "test_s3.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+    "test_remote_db.py"
+  ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
@@ -124,8 +179,8 @@ buildPythonPackage rec {
   meta = {
     description = "Developer-friendly, serverless vector database for AI applications";
     homepage = "https://github.com/lancedb/lancedb";
-    changelog = "https://github.com/lancedb/lancedb/releases/tag/python-v${version}";
+    changelog = "https://github.com/lancedb/lancedb/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

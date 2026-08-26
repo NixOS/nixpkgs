@@ -9,17 +9,17 @@
   pkg-config,
   python3,
   snappy,
-  xorg,
+  libx11,
 }:
 mkLibretroCore {
   core = "ppsspp";
-  version = "0-unstable-2025-04-24";
+  version = "0-unstable-2026-07-26";
 
   src = fetchFromGitHub {
     owner = "hrydgard";
     repo = "ppsspp";
-    rev = "a39eb4dc4ba05f5c7d292f7547a1502986b07e9f";
-    hash = "sha256-MlNQMQY+0XDftaEOiiE+uZePYLsCzG4auRfqpw8Qzw4=";
+    rev = "cf5b86082b8845eef74785e742644d30faa80b5a";
+    hash = "sha256-5y2IZStXehkp0iEOp4rbUJh2wGRpvzKXxkbikZ1bZnI=";
     fetchSubmodules = true;
   };
 
@@ -33,7 +33,7 @@ mkLibretroCore {
     libGL
     libzip
     snappy
-    xorg.libX11
+    libx11
   ];
   makefile = "Makefile";
   cmakeFlags = [

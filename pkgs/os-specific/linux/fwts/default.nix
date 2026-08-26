@@ -1,11 +1,10 @@
 {
   lib,
   stdenv,
-  fetchzip,
+  fetchFromGitHub,
   autoreconfHook,
   pkg-config,
   glib,
-  pcre,
   json_c,
   flex,
   bison,
@@ -14,16 +13,18 @@
   dmidecode,
   acpica-tools,
   libbsd,
+  zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fwts";
-  version = "24.09.00";
+  version = "26.07.00";
 
-  src = fetchzip {
-    url = "https://fwts.ubuntu.com/release/fwts-V${version}.tar.gz";
-    hash = "sha256-ZJSlx8O38e7bJYTgZacayslr28TLHHJsISXq9Uzsnyc=";
-    stripRoot = false;
+  src = fetchFromGitHub {
+    owner = "fwts";
+    repo = "fwts";
+    rev = "V${finalAttrs.version}";
+    hash = "sha256-82rk3yOvQCBfq833xiD82QParDJi8voszMGp47UR0qk=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +34,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    pcre
     json_c
     flex
     bison
@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     dmidecode
     acpica-tools
     libbsd
+    zlib
   ];
 
   postPatch = ''
@@ -64,4 +65,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ tadfisher ];
   };
-}
+})

@@ -7,6 +7,7 @@
   gtest,
   llvmPackages,
   meson,
+  mesonEmulatorHook,
   ninja,
   nixVersions,
   nix-update-script,
@@ -17,17 +18,20 @@
   pkg-config,
   testers,
   python3,
+  libxml2,
+  zlib,
 }:
 
 let
+  nixComponents = nixVersions.nixComponents_2_34;
   common = rec {
-    version = "2.6.3";
+    version = "2.9.2";
 
     src = fetchFromGitHub {
       owner = "nix-community";
       repo = "nixd";
       tag = version;
-      hash = "sha256-Gd7VFyQ/ayw0NI72sdZ1wFuXaxlIPWyE31Kl53d3zB4=";
+      hash = "sha256-rjLF0nTRuPKVyxXjNlkHG6k4SdcSwjNOW26u/qlP8uA=";
     };
 
     nativeBuildInputs = [
@@ -35,6 +39,7 @@ let
       ninja
       python3
       pkg-config
+      llvmPackages.llvm # workaround for a meson bug, where llvm-config is not found, making the build fail
     ];
 
     mesonBuildType = "release";
@@ -51,7 +56,6 @@ let
         inclyc
         Ruixi-rebirth
         aleksana
-        redyf
       ];
       platforms = lib.platforms.unix;
     };
@@ -70,7 +74,12 @@ in
         "dev"
       ];
 
+      nativeBuildInputs =
+        common.nativeBuildInputs
+        ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
+
       buildInputs = [
+        nixComponents.nix-expr
         gtest
         boost
         nlohmann_json
@@ -101,12 +110,13 @@ in
       ];
 
       buildInputs = [
-        nixVersions.nix_2_24
+        nixComponents.nix-main
+        nixComponents.nix-expr
+        nixComponents.nix-cmd
+        nixComponents.nix-flake
         gtest
         boost
       ];
-
-      env.CXXFLAGS = "-include ${nixVersions.nix_2_24.dev}/include/nix/config.h";
 
       passthru.tests.pkg-config = testers.hasPkgConfigModules {
         package = nixt;
@@ -127,17 +137,24 @@ in
       sourceRoot = "${common.src.name}/nixd";
 
       buildInputs = [
-        nixVersions.nix_2_24
+        nixComponents.nix-main
+        nixComponents.nix-expr
+        nixComponents.nix-cmd
+        nixComponents.nix-flake
         nixf
         nixt
         llvmPackages.llvm
         gtest
         boost
+        libxml2
+        zlib
       ];
 
       nativeBuildInputs = common.nativeBuildInputs ++ [ cmake ];
 
-      env.CXXFLAGS = "-include ${nixVersions.nix_2_24.dev}/include/nix/config.h";
+      mesonFlags = [ (lib.mesonBool "llvm_static" true) ];
+
+      disallowedRequisites = [ (lib.getLib llvmPackages.llvm) ];
 
       # See https://github.com/nix-community/nixd/issues/519
       doCheck = false;

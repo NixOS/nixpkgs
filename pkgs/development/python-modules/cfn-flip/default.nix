@@ -5,26 +5,26 @@
   fetchFromGitHub,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
+  setuptools,
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cfn-flip";
   version = "1.3.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-cfn-template-flip";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-lfhTR3+D1FvblhQGF83AB8+I8WDPBTmo+q22ksgDgt4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     click
     pyyaml
     six
@@ -43,14 +43,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cfn_flip" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for converting AWS CloudFormation templates between JSON and YAML formats";
     mainProgram = "cfn-flip";
     homepage = "https://github.com/awslabs/aws-cfn-template-flip";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       kamadorueda
       psyanticy
     ];
   };
-}
+})

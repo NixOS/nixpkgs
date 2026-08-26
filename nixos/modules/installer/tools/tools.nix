@@ -30,15 +30,20 @@ let
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
     replacements = {
-      perl = "${
+      perl = lib.getExe (
         pkgs.perl.withPackages (p: [
           p.FileSlurp
           p.ConfigIniFiles
         ])
-      }/bin/perl";
+      );
       hostPlatformSystem = pkgs.stdenv.hostPlatform.system;
-      detectvirt = "${config.systemd.package}/bin/systemd-detect-virt";
-      btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
+      detectvirt = lib.getExe' config.systemd.package "systemd-detect-virt";
+      bcachefs =
+        if pkgs.bcachefs-tools.meta.broken then
+          lib.getExe' pkgs.coreutils "false"
+        else
+          lib.getExe pkgs.bcachefs-tools;
+      btrfs = lib.getExe pkgs.btrfs-progs;
       inherit (config.system.nixos-generate-config) configuration desktopConfiguration flake;
       xserverEnabled = config.services.xserver.enable;
     };
@@ -68,18 +73,15 @@ let
   };
 
   nixos-install = pkgs.nixos-install.override { };
-  nixos-rebuild = pkgs.nixos-rebuild.override { nix = config.nix.package; };
   nixos-rebuild-ng = pkgs.nixos-rebuild-ng.override {
     nix = config.nix.package;
-    withNgSuffix = false;
-    withReexec = true;
   };
 
   defaultFlakeTemplate = ''
     {
       inputs = {
         # This is pointing to an unstable release.
-        # If you prefer a stable release instead, you can this to the latest number shown here: https://nixos.org/download
+        # If you prefer a stable release instead, you can change the word unstable to the latest number shown here: https://nixos.org/download
         # i.e. nixos-24.11
         # Use `nix flake update` to update the flake to the latest revision of the chosen release channel.
         nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -108,9 +110,9 @@ let
 
     $bootLoaderConfig
       # networking.hostName = "nixos"; # Define your hostname.
-      # Pick only one of the below networking options.
-      # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-      # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+
+      # Configure network connections interactively with nmcli or nmtui.
+      networking.networkmanager.enable = true;
 
       # Set your time zone.
       # time.timeZone = "Europe/Amsterdam";
@@ -159,8 +161,8 @@ let
 
       # programs.firefox.enable = true;
 
-      # List packages installed in system profile. To search, run:
-      # \$ nix search wget
+      # List packages installed in system profile.
+      # You can use https://search.nixos.org/ to find more packages (and options).
       # environment.systemPackages = with pkgs; [
       #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
       #   wget
@@ -274,15 +276,8 @@ in
     description = ''
       Disable nixos-rebuild, nixos-generate-config, nixos-installer
       and other NixOS tools. This is useful to shrink embedded,
-      read-only systems which are not expected to be rebuild or
+      read-only systems which are not expected to rebuild or
       reconfigure themselves. Use at your own risk!
-    '';
-  };
-
-  options.system.rebuild.enableNg = lib.mkEnableOption "" // {
-    description = ''
-      Whether to use ‘nixos-rebuild-ng’ in place of ‘nixos-rebuild’, the
-      Python-based re-implementation of the original in Bash.
     '';
   };
 
@@ -316,15 +311,43 @@ in
         name = "nixos-install";
         package = config.system.build.nixos-install;
       })
-      (mkToolModule { name = "nixos-option"; })
+      (mkToolModule {
+        name = "nixos-option";
+        package = pkgs.nixos-option.override { nix = config.nix.package; };
+      })
       (mkToolModule {
         name = "nixos-rebuild";
         package = config.system.build.nixos-rebuild;
       })
+      (
+        { config, ... }:
+        {
+          options.system.tools.nixos-rebuild.enableRun0Elevation = lib.mkEnableOption ''
+            support for being targeted by `nixos-rebuild --elevate=run0
+            --ask-elevate-password`.
+
+            This enables polkit and adds {command}`polkit-stdin-agent` to
+            {option}`environment.systemPackages` so that a deploying host
+            can find a target-architecture agent at
+            {file}`<toplevel>/sw/bin/polkit-stdin-agent` after copying the
+            closure (which is required for cross-architecture deploys and
+            mismatched nixpkgs revisions to work).
+          '';
+
+          config = lib.mkIf config.system.tools.nixos-rebuild.enableRun0Elevation {
+            security.run0.enable = lib.mkDefault true;
+            environment.systemPackages = [ pkgs.polkit-stdin-agent ];
+          };
+        }
+      )
       (mkToolModule {
         name = "nixos-version";
         package = nixos-version;
       })
+      (lib.mkRemovedOptionModule [ "system" "rebuild" "enableNg" ] ''
+        The Bash implementation of nixos-rebuild has been removed in favor of the new Python implementation.
+        If you have any issues with the new implementation, please create an issue in GitHub and tag the maintainers of 'nixos-rebuild-ng'.
+      '')
     ];
 
   config = {
@@ -333,9 +356,7 @@ in
     # These may be used in auxiliary scripts (ie not part of toplevel), so they are defined unconditionally.
     system.build = {
       inherit nixos-generate-config nixos-install;
-      nixos-rebuild = if config.system.rebuild.enableNg then nixos-rebuild-ng else nixos-rebuild;
-      nixos-option = lib.warn "Accessing nixos-option through `config.system.build` is deprecated, use `pkgs.nixos-option` instead." pkgs.nixos-option;
-      nixos-enter = lib.warn "Accessing nixos-enter through `config.system.build` is deprecated, use `pkgs.nixos-enter` instead." pkgs.nixos-enter;
+      nixos-rebuild = nixos-rebuild-ng;
     };
   };
 }

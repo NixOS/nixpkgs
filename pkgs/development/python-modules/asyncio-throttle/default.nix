@@ -2,23 +2,24 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   pytest-asyncio,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asyncio-throttle";
   version = "1.0.2";
-  format = "setuptools";
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hallazzang";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1hsjcymdcm0hf4l68scf9n8j7ba89azgh96xhxrnyvwxfs5acnmv";
+    repo = "asyncio-throttle";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-u1qminadb29zh90k+L5KSK0jkU2OaWQocRBU1qpnUsM=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -27,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asyncio_throttle" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple, easy-to-use throttler for asyncio";
     homepage = "https://github.com/hallazzang/asyncio-throttle";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

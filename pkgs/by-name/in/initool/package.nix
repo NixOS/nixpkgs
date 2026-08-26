@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "initool";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "dbohdan";
     repo = "initool";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-PROsyYw8xdnn0PX+3OyUPaybQbTmO88G2koeZhBfwjg=";
   };
 
@@ -29,14 +29,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (mlton.meta) platforms;
 
     description = "Manipulate INI files from the command line";
     mainProgram = "initool";
     homepage = "https://github.com/dbohdan/initool";
-    license = licenses.mit;
-    maintainers = with maintainers; [ e1mo ];
-    changelog = "https://github.com/dbohdan/initool/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ e1mo ];
+    changelog = "https://github.com/dbohdan/initool/releases/tag/v${finalAttrs.version}";
   };
-}
+})

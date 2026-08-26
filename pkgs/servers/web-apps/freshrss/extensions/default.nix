@@ -9,12 +9,12 @@
 let
   buildFreshRssExtension = (callPackage ./freshrss-utils.nix { }).buildFreshRssExtension;
 
-  official_extensions_version = "unstable-2024-04-27";
+  official_extensions_rev_date = "2025-12-26";
   official_extensions_src = fetchFromGitHub {
     owner = "FreshRSS";
     repo = "Extensions";
-    rev = "71de129744ba37fd4cf363b78445f5345bc6d0b7";
-    hash = "sha256-A+hOjbGNfhwTOAMeo08MUdqfWxxetzLz865oQQDsQlg=";
+    rev = "42c32bfd9af2d816933cf310e24d25888a8e167d";
+    hash = "sha256-El488QK3xWQM01GsuyBizud6VghXsRDqiOblnMfjVxE=";
   };
 
   baseExtensions =
@@ -31,7 +31,7 @@ let
           hash = "sha256-OiTiLZ2BjQD1W/BD8EkUt7WB2wOjL6GMGJ+APT4YpwE=";
         };
         meta = {
-          description = "FreshRSS extension for automatic feed refresh TTL based on the average frequency of entries.";
+          description = "FreshRSS extension for automatic feed refresh TTL based on the average frequency of entries";
           homepage = "https://github.com/mgnsk/FreshRSS-AutoTTL";
           license = lib.licenses.agpl3Only;
           maintainers = [ lib.maintainers.stunkymonkey ];
@@ -41,7 +41,7 @@ let
       demo = buildFreshRssExtension {
         FreshRssExtUniqueId = "Demo";
         pname = "demo";
-        version = "unstable-2023-12-22";
+        version = "0.1-unstable-2023-12-22";
         src = fetchFromGitHub {
           owner = "FreshRSS";
           repo = "xExtension-Demo";
@@ -49,7 +49,7 @@ let
           hash = "sha256-5fe8TjefSiGMaeZkurxSJjX8qEEa1ArhJxDztp7ZNZc=";
         };
         meta = {
-          description = "FreshRSS Extension for the demo version.";
+          description = "FreshRSS Extension for the demo version";
           homepage = "https://github.com/FreshRSS/xExtension-Demo";
           license = lib.licenses.agpl3Only;
           maintainers = [ lib.maintainers.stunkymonkey ];
@@ -68,7 +68,7 @@ let
           hash = "sha256-C5cRfaphx4Qz2xg2z+v5qRji8WVSIpvzMbethTdSqsk=";
         };
         meta = {
-          description = "FreshRSS extension adding a reading time estimation next to each article.";
+          description = "FreshRSS extension adding a reading time estimation next to each article";
           homepage = "https://framagit.org/Lapineige/FreshRSS_Extension-ReadingTime";
           license = lib.licenses.agpl3Only;
           maintainers = [ lib.maintainers.stunkymonkey ];
@@ -86,7 +86,7 @@ let
           hash = "sha256-H/uxt441ygLL0RoUdtTn9Q6Q/Ois8RHlhF8eLpTza4Q=";
         };
         meta = {
-          description = "FreshRSS extension to process Reddit feeds.";
+          description = "FreshRSS extension to process Reddit feeds";
           homepage = "https://github.com/aledeg/xExtension-RedditImage";
           license = lib.licenses.agpl3Only;
           maintainers = [ lib.maintainers.stunkymonkey ];
@@ -96,12 +96,26 @@ let
       title-wrap = buildFreshRssExtension {
         FreshRssExtUniqueId = "TitleWrap";
         pname = "title-wrap";
-        version = official_extensions_version;
+        version = "0.3.1-unstable-${official_extensions_rev_date}";
         src = official_extensions_src;
         sourceRoot = "${official_extensions_src.name}/xExtension-TitleWrap";
         meta = {
-          description = "FreshRSS extension instead of truncating the title is wrapped.";
+          description = "FreshRSS extension instead of truncating the title is wrapped";
           homepage = "https://github.com/FreshRSS/Extensions/tree/master/xExtension-TitleWrap";
+          license = lib.licenses.agpl3Only;
+          maintainers = [ lib.maintainers.stunkymonkey ];
+        };
+      };
+
+      unsafe-auto-login = buildFreshRssExtension {
+        FreshRssExtUniqueId = "UnsafeAutologin";
+        pname = "unsafe-auto-login";
+        version = "1.0.0-unstable-${official_extensions_rev_date}";
+        src = official_extensions_src;
+        sourceRoot = "${official_extensions_src.name}/xExtension-UnsafeAutologin";
+        meta = {
+          description = "FreshRSS extension to bring back unsafe autologin functionality.";
+          homepage = "https://github.com/FreshRSS/Extensions/tree/master/xExtension-UnsafeAutologin";
           license = lib.licenses.agpl3Only;
           maintainers = [ lib.maintainers.stunkymonkey ];
         };
@@ -110,11 +124,11 @@ let
       youtube = buildFreshRssExtension {
         FreshRssExtUniqueId = "YouTube";
         pname = "youtube";
-        version = official_extensions_version;
+        version = "1.1.0-unstable-${official_extensions_rev_date}";
         src = official_extensions_src;
         sourceRoot = "${official_extensions_src.name}/xExtension-YouTube";
         meta = {
-          description = "FreshRSS extension allows you to directly watch YouTube/PeerTube videos from within subscribed channel feeds.";
+          description = "FreshRSS extension allows you to directly watch YouTube/PeerTube videos from within subscribed channel feeds";
           homepage = "https://github.com/FreshRSS/Extensions/tree/master/xExtension-YouTube";
           license = lib.licenses.agpl3Only;
           maintainers = [ lib.maintainers.stunkymonkey ];

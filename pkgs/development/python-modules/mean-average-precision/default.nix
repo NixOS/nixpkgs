@@ -40,6 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bes-dev/mean_average_precision";
     changelog = "https://github.com/bes-dev/mean_average_precision/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

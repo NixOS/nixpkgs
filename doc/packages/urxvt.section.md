@@ -22,7 +22,7 @@ rxvt-unicode.override {
 
 If the `configure` function returns an attrset without the `plugins` attribute, `availablePlugins` will be used automatically.
 
-In order to add plugins but also keep all default plugins installed, it is possible to use the following method:
+To add plugins but also keep all default plugins installed, it is possible to use the following method:
 
 ```nix
 rxvt-unicode.override {
@@ -70,16 +70,14 @@ rxvt-unicode.override {
 
 ## Packaging urxvt plugins {#sec-urxvt-pkg}
 
-Urxvt plugins resides in `pkgs/applications/misc/rxvt-unicode-plugins`. To add a new plugin, create an expression in a subdirectory and add the package to the set in `pkgs/applications/misc/rxvt-unicode-plugins/default.nix`.
+Urxvt plugins reside in `pkgs/applications/misc/rxvt-unicode-plugins`. To add a new plugin, create an expression in a subdirectory and add the package to the set in `pkgs/applications/misc/rxvt-unicode-plugins/default.nix`.
 
-A plugin can be any kind of derivation, the only requirement is that it should always install perl scripts in `$out/lib/urxvt/perl`. Look for existing plugins for examples.
+A plugin can be any kind of derivation; the only requirement is that it should always install perl scripts in `$out/lib/urxvt/perl`. Look for existing plugins for examples.
 
 If the plugin is itself a Perl package that needs to be imported from other plugins or scripts, add the following passthrough:
 
 ```nix
-{
-  passthru.perlPackages = [ "self" ];
-}
+{ passthru.perlPackages = [ "self" ]; }
 ```
 
 This will make the urxvt wrapper pick up the dependency and set up the Perl path accordingly.

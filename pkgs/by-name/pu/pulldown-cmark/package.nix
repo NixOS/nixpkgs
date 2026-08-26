@@ -4,23 +4,22 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pulldown-cmark";
-  version = "0.13.0";
+  version = "0.13.4";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-lp0ywX/3phfC30QvYkO2wFZNSinP4cdm4HY744EZ02o=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-XMKUFbPsYhYIxMxEvUJT38Jr03lzy9afRqe6tIj9lls=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ek6Eczqb/kxxoZFakGcwrgqXAtNCtQxDX2PHdOcIUjU=";
+  cargoHash = "sha256-JgGvRSUE6UXf0pSl6x6SC7gGgTEoq2E3t0tPrueuIEE=";
 
   meta = {
     description = "Pull parser for CommonMark written in Rust";
     homepage = "https://github.com/raphlinus/pulldown-cmark";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ CobaltCause ];
     mainProgram = "pulldown-cmark";
   };
-}
+})

@@ -31,6 +31,23 @@ in
         '';
       };
 
+      tmpfsHugeMemoryPages = lib.mkOption {
+        type = lib.types.enum [
+          "never"
+          "always"
+          "within_size"
+          "advise"
+        ];
+        default = "never";
+        example = "within_size";
+        description = ''
+          - `never`        - Do not allocate huge memory pages. This is the default.
+          - `always`       - Attempt to allocate huge memory page every time a new page is needed.
+          - `within_size`  - Only allocate huge memory pages if it will be fully within i_size. Also respect madvise(2) hints. Recommended.
+          - `advise`       - Only allocate huge memory pages if requested with madvise(2).
+        '';
+      };
+
       useTmpfs = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -60,6 +77,7 @@ in
           "nosuid"
           "nodev"
           "size=${toString cfg.tmpfsSize}"
+          "huge=${cfg.tmpfsHugeMemoryPages}"
         ];
       }
     ];

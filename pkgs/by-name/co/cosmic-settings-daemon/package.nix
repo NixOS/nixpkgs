@@ -3,46 +3,57 @@
   fetchFromGitHub,
   stdenv,
   rustPlatform,
-  pop-gtk-theme,
+  makeBinaryWrapper,
   adw-gtk3,
   pkg-config,
   libpulseaudio,
-  geoclue2-with-demo-agent,
+  pipewire,
   libinput,
   udev,
+  libxkbcommon,
+  wayland,
+  openssl,
   nixosTests,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-settings-daemon";
-  version = "1.0.0-alpha.7";
+  version = "1.6.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-settings-daemon";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-vdhkE5CmgiGYg5TXxN7lLqxjv7apKEKvIscXFIzZfRc=";
+    hash = "sha256-l9CwNLIrYstWuiEUvw/UnXRq6dpLEIEKxr9AzNQzbac=";
   };
 
   postPatch = ''
-    substituteInPlace src/battery.rs \
-      --replace-fail '/usr/share/sounds/Pop/' '${pop-gtk-theme}/share/sounds/Pop/'
     substituteInPlace src/theme.rs \
       --replace-fail '/usr/share/themes/adw-gtk3' '${adw-gtk3}/share/themes/adw-gtk3'
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Dzv1SDeZFIa+LFQQ91lO7RBHldsjDnGf+R12Ln2WZwU=";
+  cargoHash = "sha256-4rGgRc7EDdxGvFmAUY4kJ9aO/Pas9S2Q+b5ArZNydvs=";
 
-  nativeBuildInputs = [ pkg-config ];
+  separateDebugInfo = true;
+  __structuredAttrs = true;
+
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.bindgenHook
+    makeBinaryWrapper
+  ];
+
   buildInputs = [
     libinput
     libpulseaudio
+    openssl
     udev
+    pipewire
+    libxkbcommon
+    wayland
   ];
-
-  env.GEOCLUE_AGENT = "${lib.getLib geoclue2-with-demo-agent}/libexec/geoclue-2.0/demos/agent";
 
   makeFlags = [
     "prefix=$(out)"
@@ -51,21 +62,40 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   dontCargoInstall = true;
 
-  passthru.tests = {
-    inherit (nixosTests)
-      cosmic
-      cosmic-autologin
-      cosmic-noxwayland
-      cosmic-autologin-noxwayland
-      ;
+  postFixup = ''
+    wrapProgram $out/bin/cosmic-settings-daemon \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          wayland
+          libxkbcommon
+        ]
+      }
+  '';
+
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-settings-daemon";
     description = "Settings Daemon for the COSMIC Desktop Environment";
     mainProgram = "cosmic-settings-daemon";
-    license = licenses.gpl3Only;
-    teams = [ teams.cosmic ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    teams = [ lib.teams.cosmic ];
+    platforms = lib.platforms.linux;
   };
 })

@@ -6,20 +6,17 @@
   poetry-core,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "myhome";
   version = "0.2.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "speijnik";
-    repo = pname;
+    repo = "myhome";
     rev = "v${version}";
     hash = "sha256-DJzwvgvSA9Q0kpueUoQV64pdDDNA7WzGu7r+g5aqutk=";
   };
@@ -36,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "myhome" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for interacting with MyHomeSERVER1";
     homepage = "https://github.com/speijnik/myhome";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

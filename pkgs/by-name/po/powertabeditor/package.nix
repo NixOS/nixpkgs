@@ -19,13 +19,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "powertabeditor";
-  version = "2.0.21";
+  version = "2.0.22";
 
   src = fetchFromGitHub {
     owner = "powertab";
     repo = "powertabeditor";
     tag = finalAttrs.version;
-    hash = "sha256-mYFguVcF7Xb6rXIIMXAUzRYddlvQDRj7zu6on7GGGeA=";
+    hash = "sha256-VqTtzAWNghMoiYH0QVerQRdqVltZUz0Wgs5t3SvjyN4=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "View and edit guitar tablature";
     homepage = "https://powertab.github.io/";
     changelog = "https://github.com/powertab/powertabeditor/blob/refs/tags/${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     platforms = with lib.platforms; linux ++ darwin ++ windows;
     maintainers = with lib.maintainers; [ pluiedev ];
     mainProgram = "powertabeditor";

@@ -15,6 +15,7 @@
   ninja,
   ant,
   openjdk,
+  mongoc,
   perl,
   perlPackages,
   makeWrapper,
@@ -24,15 +25,15 @@
 # don't have those packages. other missing optional dependencies:
 # javaview, libnormaliz, scip, soplex, jreality.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "polymake";
-  version = "4.13";
+  version = "4.15";
 
   src = fetchurl {
     # "The minimal version is a packager friendly version which omits
     # the bundled sources of cdd, lrs, libnormaliz, nauty and jReality."
-    url = "https://polymake.org/lib/exe/fetch.php/download/polymake-${version}-minimal.tar.bz2";
-    sha256 = "sha256-862s0GO56mDV6cN8YYP127dFiwyzSR66Pvw48gxWXOs=";
+    url = "https://polymake.org/lib/exe/fetch.php/download/polymake-${finalAttrs.version}-minimal.tar.bz2";
+    sha256 = "sha256-MOCo+JATz3qaRO2Q2y9pxJvxgQUGZMfmvbhhxhCxvbk=";
   };
 
   nativeBuildInputs = [
@@ -42,27 +43,31 @@ stdenv.mkDerivation rec {
     perl
   ];
 
-  buildInputs =
-    [
-      perl
-      gmp
-      mpfr
-      flint
-      boost
-      bliss
-      ppl
-      singular
-      cddlib
-      lrs
-      nauty
-      openjdk
-    ]
-    ++ (with perlPackages; [
-      JSON
-      TermReadLineGnu
-      TermReadKey
-      XMLSAX
-    ]);
+  buildInputs = [
+    perl
+    gmp
+    mpfr
+    flint
+    boost
+    bliss
+    ppl
+    singular
+    cddlib
+    lrs
+    nauty
+    openjdk
+    mongoc
+  ]
+  ++ (with perlPackages; [
+    JSON
+    TermReadLineGnu
+    TermReadKey
+    XMLSAX
+  ]);
+
+  configureFlags = [
+    "--with-mongoc=${mongoc}"
+  ];
 
   ninjaFlags = [
     "-C"
@@ -75,12 +80,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Software for research in polyhedral geometry";
     homepage = "https://www.polymake.org/doku.php";
-    changelog = "https://github.com/polymake/polymake/blob/V${version}/ChangeLog";
-    license = licenses.gpl2Plus;
-    teams = [ teams.sage ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/polymake/polymake/blob/V${finalAttrs.version}/ChangeLog";
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.sage ];
+    platforms = lib.platforms.linux;
   };
-}
+})

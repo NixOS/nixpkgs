@@ -3,9 +3,8 @@
 
 # for mod in $(nix eval --raw '(
 #   with import <nixpkgs> { };
-#   with lib;
-#   let mods = attrNames (removeAttrs openraPackages.mods [ "recurseForDerivations" ]);
-#   in concatStringsSep " " mods
+#   let mods = lib.attrNames (lib.removeAttrs openraPackages.mods [ "recurseForDerivations" ]);
+#   in lib.concatStringsSep " " mods
 # )'); do
 #   ./mod-update.sh "$mod"
 # done

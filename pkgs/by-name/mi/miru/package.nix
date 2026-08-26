@@ -1,56 +1,56 @@
 {
-  stdenv,
   lib,
-  callPackage,
+  stdenv,
+  fetchFromCodeberg,
+  cmake,
+  ninja,
+  pkg-config,
+  wayland-scanner,
+  wayland,
+  wayland-protocols,
+  libffi,
+  libGL,
+  nix-update-script,
 }:
-let
+
+stdenv.mkDerivation (finalAttrs: {
+
   pname = "miru";
-  version = "5.5.10";
+  version = "0.6.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  src = fetchFromCodeberg {
+    owner = "Vaishnav-Sabari-Girish";
+    repo = "miru";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5hXXeATCySNbGyvn5XVj9XyEgBfKfGHyM1bdJYw+RJE=";
+  };
+
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+    wayland-scanner
+  ];
+
+  buildInputs = [
+    wayland
+    wayland-protocols
+    libffi
+    libGL
+  ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    description = "Stream anime torrents, real-time with no waiting for downloads";
-    homepage = "https://miru.watch";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      d4ilyrun
-      matteopacini
-    ];
-    mainProgram = "miru";
-
-    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-
-    longDescription = ''
-      A pure JS BitTorrent streaming environment, with a built-in list manager.
-      Imagine qBit + Taiga + MPV, all in a single package, but streamed real-time.
-      Completely ad free with no tracking/data collection.
-
-      This app is meant to feel look, work and perform like a streaming website/app,
-      while providing all the advantages of torrenting, like file downloads,
-      higher download speeds, better video quality and quicker releases.
-
-      Unlike qBit's sequential, seeking into undownloaded data will prioritise downloading that data,
-      instead of flat out closing MPV.
-    '';
+    description = "Wayland-native screen magnifier and cursor spotlight tool";
+    homepage = "https://codeberg.org/Vaishnav-Sabari-Girish/miru";
+    changelog = "https://codeberg.org/Vaishnav-Sabari-Girish/miru/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yvnth ];
+    platforms = lib.platforms.linux;
+    mainProgram = "miru-daemon";
   };
-  passthru = {
-    updateScript = ./update.sh;
-  };
-in
-if stdenv.hostPlatform.isDarwin then
-  callPackage ./darwin.nix {
-    inherit
-      pname
-      version
-      meta
-      passthru
-      ;
-  }
-else
-  callPackage ./linux.nix {
-    inherit
-      pname
-      version
-      meta
-      passthru
-      ;
-  }
+})

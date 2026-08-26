@@ -3,17 +3,18 @@
   lib,
   fetchFromGitHub,
   fetchpatch,
+  fetchDebianPatch,
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hexcurse";
   version = "1.60.0";
 
   src = fetchFromGitHub {
     owner = "LonnyGomes";
     repo = "hexcurse";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "17ckkxfzbqvvfdnh10if4aqdcq98q3vl6dn1v6f4lhr4ifnyjdlk";
   };
   buildInputs = [ ncurses ];
@@ -48,14 +49,23 @@ stdenv.mkDerivation rec {
       url = "https://github.com/LonnyGomes/hexcurse/commit/cb70d4a93a46102f488f471fad31a7cfc9fec025.patch";
       sha256 = "19674zhhp7gc097kl4bxvi0gblq6jzjy8cw8961svbq5y3hv1v5y";
     })
+
+    # Fix build with GCC 15 (old-style function definitions)
+    (fetchDebianPatch {
+      pname = "hexcurse";
+      version = "1.60.0";
+      debianRevision = "1";
+      patch = "gcc-15.patch";
+      hash = "sha256-nWwYjI18fsJ9LSby6OJoJ0QXENgyVbUY3LpEYWoCBkI=";
+    })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "ncurses-based console hexeditor written in C";
     homepage = "https://github.com/LonnyGomes/hexcurse";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "hexcurse";
   };
-}
+})

@@ -8,7 +8,7 @@
   which,
 }:
 
-resholve.mkDerivation rec {
+resholve.mkDerivation (finalAttrs: {
   pname = "dgoss";
   version = goss.version;
   src = goss.src;
@@ -17,7 +17,7 @@ resholve.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    sed -i '2i GOSS_PATH=${goss}/bin/goss' extras/dgoss/dgoss
+    sed -i '2i GOSS_PATH=\$\{GOSS_PATH:-${goss}/bin/goss\}' extras/dgoss/dgoss
     install -D extras/dgoss/dgoss $out/bin/dgoss
   '';
 
@@ -36,16 +36,16 @@ resholve.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
-    homepage = "https://github.com/goss-org/goss/blob/v${version}/extras/dgoss/README.md";
-    changelog = "https://github.com/goss-org/goss/releases/tag/v${version}";
+  meta = {
+    homepage = "https://github.com/goss-org/goss/blob/v${finalAttrs.version}/extras/dgoss/README.md";
+    changelog = "https://github.com/goss-org/goss/releases/tag/v${finalAttrs.version}";
     description = "Convenience wrapper around goss that aims to bring the simplicity of goss to docker containers";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       hyzual
       anthonyroussel
     ];
     mainProgram = "dgoss";
   };
-}
+})

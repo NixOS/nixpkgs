@@ -5,22 +5,23 @@
   copyDesktopItems,
   python3,
   xdg-utils,
-  electron,
+  electron_43,
   makeDesktopItem,
+  nodejs_22,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage.override { nodejs = nodejs_22; } rec {
   pname = "webcord";
-  version = "4.10.5";
+  version = "4.14.0";
 
   src = fetchFromGitHub {
     owner = "SpacingBat3";
     repo = "WebCord";
     tag = "v${version}";
-    hash = "sha256-PSDPziby0KYo7KU656NgTJq7TUn4blNcW9/ontWhEKE=";
+    hash = "sha256-YmgKkSC54asDRy0kGsXfZT6AasrU4GtJzPWVrtO0xws=";
   };
 
-  npmDepsHash = "sha256-xaGt/Y9LovSKNFur0wv2rF+EtYAL5Kn/lYpcY3Gd4zk=";
+  npmDepsHash = "sha256-ozo1jb7TXVBHIgYoFKTJKmbLpnOdMcGAM/uTJWJVu1I=";
 
   makeCacheWritable = true;
 
@@ -55,7 +56,7 @@ buildNpmPackage rec {
       install -Dm644 sources/assets/icons/app.png $out/share/icons/hicolor/256x256/apps/webcord.png
 
       # Add xdg-utils to path via suffix, per PR #181171
-      makeWrapper '${lib.getExe electron}' $out/bin/webcord \
+      makeWrapper '${lib.getExe electron_43}' $out/bin/webcord \
         --suffix PATH : "${binPath}" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --add-flags $out/lib/node_modules/webcord/
@@ -80,7 +81,7 @@ buildNpmPackage rec {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    description = "A Discord and SpaceBar electron-based client implemented without Discord API";
+    description = "Discord and SpaceBar electron-based client implemented without Discord API";
     homepage = "https://github.com/SpacingBat3/WebCord";
     downloadPage = "https://github.com/SpacingBat3/WebCord/releases";
     changelog = "https://github.com/SpacingBat3/WebCord/releases/tag/v${version}";

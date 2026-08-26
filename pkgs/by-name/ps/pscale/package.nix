@@ -8,24 +8,24 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pscale";
-  version = "0.241.0";
+  version = "0.293.0";
 
   src = fetchFromGitHub {
     owner = "planetscale";
     repo = "cli";
-    rev = "v${version}";
-    sha256 = "sha256-he9LLC8ijbgfmTDVURKZhU5RyOJC8U4vjPQBNNtC9WI=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-eROK3Bqp72rhUTUUZZlIUbMLTNmjEUXw2TBSsNVLONQ=";
   };
 
-  vendorHash = "sha256-Gt2dDgIAn7Hjlb2VI5VBKP7IfzkMZvCyLmOYYBtLx3o=";
+  vendorHash = "sha256-IkqXij3i3nUCHfu36yS7e4+5PM6ZHmPuYbgVo7Uv0X8=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${version}"
-    "-X main.commit=v${version}"
+    "-X main.version=v${finalAttrs.version}"
+    "-X main.commit=v${finalAttrs.version}"
     "-X main.date=unknown"
   ];
 
@@ -44,15 +44,14 @@ buildGoModule rec {
     package = pscale;
   };
 
-  meta = with lib; {
+  meta = {
     description = "CLI for PlanetScale Database";
     mainProgram = "pscale";
-    changelog = "https://github.com/planetscale/cli/releases/tag/v${version}";
+    changelog = "https://github.com/planetscale/cli/releases/tag/v${finalAttrs.version}";
     homepage = "https://www.planetscale.com/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      pimeys
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       kashw2
     ];
   };
-}
+})

@@ -4,7 +4,7 @@
   fetchurl,
   dpkg,
   autoPatchelfHook,
-  makeBinaryWrapper,
+  wrapGAppsHook3,
   fontconfig,
   atk,
   cairo,
@@ -23,21 +23,22 @@
   pango,
   util-linux,
   xz,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "reqable";
-  version = "2.33.8";
+  version = "3.2.23";
 
   src = fetchurl {
     url = "https://github.com/reqable/reqable-app/releases/download/${finalAttrs.version}/reqable-app-linux-x86_64.deb";
-    hash = "sha256-YCuJpTDJNAHBhTrxl5qvtFnUm4VzhkJ66gaKHhWVBEU=";
+    hash = "sha256-qZx5TX+3yi42WbnSIwwHrv97LnkJKI3rry1J2838wxo=";
   };
 
   nativeBuildInputs = [
     dpkg
     autoPatchelfHook
-    makeBinaryWrapper
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -71,19 +72,27 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  dontWrapGApps = true;
+
   preFixup = ''
-    mkdir $out/bin
     makeWrapper $out/share/reqable/reqable $out/bin/reqable \
-      --prefix LD_LIBRARY_PATH : $out/share/reqable/lib
+      --prefix LD_LIBRARY_PATH : $out/share/reqable/lib \
+      ''${gappsWrapperArgs[@]}
+
+    rm -r $out/share/pixmaps
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Generation API debugging and testing one-stop solution";
     homepage = "https://reqable.com";
+    downloadPage = "https://github.com/reqable/reqable-app/releases";
+    changelog = "https://github.com/reqable/reqable-app/releases/tag/${finalAttrs.version}";
     mainProgram = "reqable";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = with lib.maintainers; [ chillcicada ];
     platforms = [ "x86_64-linux" ];
   };
 })

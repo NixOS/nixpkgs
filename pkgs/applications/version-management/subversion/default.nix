@@ -9,6 +9,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   apr,
   aprutil,
   zlib,
@@ -16,8 +17,6 @@
   openssl,
   lz4,
   utf8proc,
-  CoreServices,
-  Security,
   autoconf,
   libtool,
   apacheHttpd ? null,
@@ -29,6 +28,7 @@
   perl ? null,
   sasl ? null,
   serf ? null,
+  nixosTests,
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
@@ -40,103 +40,121 @@ let
   common =
     {
       version,
-      sha256,
+      hash,
       extraPatches ? [ ],
     }:
-    stdenv.mkDerivation (
-      rec {
-        inherit version;
-        pname = "subversion${lib.optionalString (!bdbSupport && perlBindings && pythonBindings) "-client"}";
+    stdenv.mkDerivation (finalAttrs: {
+      inherit version;
+      pname = "subversion${lib.optionalString (!bdbSupport && perlBindings && pythonBindings) "-client"}";
 
-        src = fetchurl {
-          url = "mirror://apache/subversion/subversion-${version}.tar.bz2";
-          inherit sha256;
-        };
+      src = fetchurl {
+        url = "mirror://apache/subversion/subversion-${finalAttrs.version}.tar.bz2";
+        inherit hash;
+      };
 
-        # Can't do separate $lib and $bin, as libs reference bins
-        outputs = [
-          "out"
-          "dev"
-          "man"
-        ];
+      # Can't do separate $lib and $bin, as libs reference bins
+      outputs = [
+        "out"
+        "dev"
+        "man"
+      ];
 
-        nativeBuildInputs = [
-          autoconf
-          libtool
-          python3
-        ];
+      nativeBuildInputs = [
+        autoconf
+        libtool
+        python3
+      ]
+      ++ lib.optional perlBindings perl; # Needed for swig / EXTERN.h
 
-        buildInputs =
-          [
-            zlib
-            apr
-            aprutil
-            sqlite
-            openssl
-            lz4
-            utf8proc
-          ]
-          ++ lib.optional httpSupport serf
-          ++ lib.optionals pythonBindings [
-            python3
-            py3c
-          ]
-          ++ lib.optional perlBindings perl
-          ++ lib.optional saslSupport sasl;
+      buildInputs = [
+        zlib
+        apr
+        aprutil
+        sqlite
+        openssl
+        lz4
+        utf8proc
+      ]
+      ++ lib.optional httpSupport serf
+      ++ lib.optionals pythonBindings [
+        python3
+        py3c
+      ]
+      ++ lib.optional perlBindings perl
+      ++ lib.optional saslSupport sasl;
 
-        patches = [ ./apr-1.patch ] ++ extraPatches;
+      strictDeps = true;
 
-        # remove vendored swig-3 files as these will shadow the swig provided
-        # ones and result in compile errors
-        postPatch = ''
-          rm subversion/bindings/swig/proxy/{perlrun.swg,pyrun.swg,python.swg,rubydef.swg,rubyhead.swg,rubytracking.swg,runtime.swg,swigrun.swg}
-        '';
+      patches = [
+        ./apr-1.patch
 
+        # swig-4.4 support:
+        #   https://lists.apache.org/thread/7rtyfcmg737bnmnrwf6bjmlxx4wpq2og
+        (fetchpatch {
+          name = "swig-4.4.patch";
+          url = "https://github.com/apache/subversion/commit/bf72420e86059a894fa3aacbbd6e3bee9286e46e.patch";
+          hash = "sha256-0X9y/0qDDctKo1vu86pKu3k79zIqhOhQU9rvyG4v6jg=";
+        })
+      ]
+      ++ extraPatches;
+
+      # Remove vendored swig-3 files as these will shadow the swig provided
+      # ones and result in compile errors.
+      # Also remove the generated Perl wrappers from the release tarball
+      # so they are rebuilt with the same SWIG runtime as libsvn_swig_perl.
+      postPatch = ''
+        rm subversion/bindings/swig/proxy/{perlrun.swg,pyrun.swg,python.swg,rubydef.swg,rubyhead.swg,rubytracking.swg,runtime.swg,swigrun.swg}
+      ''
+      + lib.optionalString perlBindings ''
+        rm subversion/bindings/swig/perl/native/{core.c,svn_*.c}
+      '';
+
+      env = {
         # We are hitting the following issue even with APR 1.6.x
         # -> https://issues.apache.org/jira/browse/SVN-4813
         # "-P" CPPFLAG is needed to build Python bindings and subversionClient
-        CPPFLAGS = [ "-P" ];
+        CPPFLAGS = toString [ "-P" ];
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+        CXX = "clang++";
+        CC = "clang";
+        CPP = "clang -E";
+        CXXCPP = "clang++ -E";
+      };
 
-        preConfigure = ''
-          ./autogen.sh
-        '';
+      preConfigure = ''
+        ./autogen.sh
+      '';
 
-        configureFlags =
-          [
-            (lib.withFeature bdbSupport "berkeley-db")
-            (lib.withFeatureAs httpServer "apxs" "${apacheHttpd.dev}/bin/apxs")
-            (lib.withFeatureAs (pythonBindings || perlBindings) "swig" swig)
-            (lib.withFeatureAs saslSupport "sasl" sasl)
-            (lib.withFeatureAs httpSupport "serf" serf)
-            "--with-zlib=${zlib.dev}"
-            "--with-sqlite=${sqlite.dev}"
-            "--with-apr=${apr.dev}"
-            "--with-apr-util=${aprutil.dev}"
-          ]
-          ++ lib.optionals javahlBindings [
-            "--enable-javahl"
-            "--with-jdk=${jdk}"
-          ];
+      configureFlags = [
+        (lib.withFeature bdbSupport "berkeley-db")
+        (lib.withFeatureAs httpServer "apxs" "${apacheHttpd.dev}/bin/apxs")
+        (lib.withFeatureAs (pythonBindings || perlBindings) "swig" swig)
+        (lib.withFeatureAs saslSupport "sasl" sasl)
+        (lib.withFeatureAs httpSupport "serf" serf)
+        "--with-zlib=${zlib.dev}"
+        "--with-sqlite=${sqlite.dev}"
+        "--with-apr=${apr.dev}"
+        "--with-apr-util=${aprutil.dev}"
+      ]
+      ++ lib.optionals javahlBindings [
+        "--enable-javahl"
+        "--with-jdk=${jdk}"
+      ];
 
-        preBuild = ''
-          makeFlagsArray=(APACHE_LIBEXECDIR=$out/modules)
-        '';
+      preBuild = ''
+        makeFlagsArray=(APACHE_LIBEXECDIR=$out/modules)
+      '';
 
-        postInstall = ''
-          if test -n "$pythonBindings"; then
-              make swig-py swig_pydir=$(toPythonPath $out)/libsvn swig_pydir_extra=$(toPythonPath $out)/svn
-              make install-swig-py swig_pydir=$(toPythonPath $out)/libsvn swig_pydir_extra=$(toPythonPath $out)/svn
-          fi
-
-          if test -n "$perlBindings"; then
-              make swig-pl-lib
-              make install-swig-pl-lib
-              cd subversion/bindings/swig/perl/native
-              perl Makefile.PL PREFIX=$out
-              make install
-              cd -
-          fi
-
+      postInstall =
+        lib.optionalString pythonBindings ''
+          make swig-py swig_pydir=$(toPythonPath $out)/libsvn swig_pydir_extra=$(toPythonPath $out)/svn
+          make install-swig-py swig_pydir=$(toPythonPath $out)/libsvn swig_pydir_extra=$(toPythonPath $out)/svn
+        ''
+        + lib.optionalString perlBindings ''
+          make install-swig-pl
+        ''
+        + ''
           mkdir -p $out/share/bash-completion/completions
           cp tools/client-side/bash_completion $out/share/bash-completion/completions/subversion
 
@@ -149,39 +167,33 @@ let
           done
         '';
 
-        inherit perlBindings pythonBindings;
+      inherit perlBindings pythonBindings;
 
-        enableParallelBuilding = true;
-        # Missing install dependencies:
-        # libtool:   error: error: relink 'libsvn_ra_serf-1.la' with the above command before installing it
-        # make: *** [build-outputs.mk:1316: install-serf-lib] Error 1
-        enableParallelInstalling = false;
+      enableParallelBuilding = true;
+      # Missing install dependencies:
+      # libtool:   error: error: relink 'libsvn_ra_serf-1.la' with the above command before installing it
+      # make: *** [build-outputs.mk:1316: install-serf-lib] Error 1
+      enableParallelInstalling = false;
 
-        nativeCheckInputs = [ python3 ];
-        doCheck = false; # fails 10 out of ~2300 tests
+      nativeCheckInputs = [ python3 ];
+      doCheck = false; # fails 10 out of ~2300 tests
 
-        meta = with lib; {
-          description = "Version control system intended to be a compelling replacement for CVS in the open source community";
-          license = licenses.asl20;
-          homepage = "https://subversion.apache.org/";
-          mainProgram = "svn";
-          maintainers = with maintainers; [ lovek323 ];
-          platforms = platforms.linux ++ platforms.darwin;
-        };
+      passthru.tests = { inherit (nixosTests) svnserve; };
 
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-        CXX = "clang++";
-        CC = "clang";
-        CPP = "clang -E";
-        CXXCPP = "clang++ -E";
-      }
-    );
+      meta = {
+        description = "Version control system intended to be a compelling replacement for CVS in the open source community";
+        license = lib.licenses.asl20;
+        homepage = "https://subversion.apache.org/";
+        mainProgram = "svn";
+        maintainers = [ ];
+        platforms = lib.platforms.linux ++ lib.platforms.darwin;
+      };
+    });
 
 in
 {
   subversion = common {
     version = "1.14.5";
-    sha256 = "sha256-54op53Zri3s1RJfQj3GlVkGrxTZ1zhh1WEeBquNWRKE=";
+    hash = "sha256-54op53Zri3s1RJfQj3GlVkGrxTZ1zhh1WEeBquNWRKE=";
   };
 }

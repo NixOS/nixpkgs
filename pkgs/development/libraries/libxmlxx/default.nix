@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "2.40.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/libxml++/${lib.versions.majorMinor version}/libxml++-${version}.tar.xz";
     sha256 = "1sb3akryklvh2v6m6dihdnbpf1lkx441v972q9hlz1sq6bfspm2a";
   };
 
@@ -41,17 +41,17 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       attrPath = "libxmlxx";
-      packageName = pname;
+      packageName = "libxml++";
       versionPolicy = "odd-unstable";
       freeze = true;
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libxmlplusplus.sourceforge.net/";
     description = "C++ wrapper for the libxml2 XML parser library";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

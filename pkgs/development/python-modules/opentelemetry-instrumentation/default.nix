@@ -6,27 +6,24 @@
   opentelemetry-api,
   opentelemetry-test-utils,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   wrapt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "opentelemetry-instrumentation";
-  version = "0.52b1";
+  version = "0.64b0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   # To avoid breakage, every package in opentelemetry-python-contrib must inherit this version, src, and meta
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-python-contrib";
-    tag = "v${version}";
-    hash = "sha256-zvqc8pP5hU7NPfMdlTQIRTGuXzX7L9DGPMxb1wS0qiY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dOcDzJD1xxCN7+Zrn+2mF/gbZjy/XC6uAKDhpfYLf98=";
   };
 
-  sourceRoot = "${src.name}/opentelemetry-instrumentation";
+  sourceRoot = "${finalAttrs.src.name}/opentelemetry-instrumentation";
 
   build-system = [ hatchling ];
 
@@ -53,12 +50,11 @@ buildPythonPackage rec {
 
   passthru.updateScript = opentelemetry-api.updateScript;
 
-  meta = with lib; {
+  meta = {
     description = "Instrumentation Tools & Auto Instrumentation for OpenTelemetry Python";
     homepage = "https://github.com/open-telemetry/opentelemetry-python-contrib/tree/main/opentelemetry-instrumentation";
-    changelog = "https://github.com/open-telemetry/opentelemetry-python-contrib/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = [ maintainers.natsukium ];
-    teams = [ teams.deshaw ];
+    changelog = "https://github.com/open-telemetry/opentelemetry-python-contrib/releases/tag/v${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.natsukium ];
   };
-}
+})

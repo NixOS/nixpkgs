@@ -3,8 +3,10 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
+  setuptools,
   cython,
   versioneer,
 
@@ -14,52 +16,68 @@
   filelock,
   logical-unification,
   minikanren,
+  numba,
   numpy,
   scipy,
 
   # tests
   jax,
   jaxlib,
-  numba,
   pytest-benchmark,
   pytest-mock,
   pytestCheckHook,
-  tensorflow-probability,
   writableTmpDirAsHomeHook,
 
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytensor";
-  version = "2.30.3";
+  version = "3.3.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pytensor";
-    tag = "rel-${version}";
+    tag = "rel-${finalAttrs.version}";
     postFetch = ''
-      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/pytensor/_version.py
+      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-Iyiuvt86pfz8MmpwgDecKJFVOw+fKpEaA9m1MBA9Yxs=";
+    hash = "sha256-Kq/kLjdDS/NHveeFmoy0PiHLLXviPpU2zf3lcXhx7Sk=";
   };
 
+  # DeprecationWarning: scipy.linalg: the `lwork` keyword is deprecated and no longer in use as of
+  # SciPy 1.18.0 and will be removed in SciPy 1.20.0
+  postPatch = ''
+    substituteInPlace pytensor/link/numba/dispatch/linalg/decomposition/qr.py \
+      --replace-fail "lwork=lwork," ""
+  '';
+
   build-system = [
+    setuptools
     cython
     versioneer
   ];
 
+  pythonRelaxDeps = [
+    "numba"
+  ];
   dependencies = [
     cons
     etuples
     filelock
     logical-unification
     minikanren
+    numba
     numpy
     scipy
+    setuptools
   ];
 
+  # `tensorflow-probability` is deliberately omitted: it only unlocks a handful of jax tests but
+  # drags in `tensorflow-bin`/`tf2onnx`, which fail to evaluate on Python 3.14 and on Darwin.
+  # Most of them are guarded upstream by `TFP_INSTALLED`, the rest are listed in `disabledTests`.
   nativeCheckInputs = [
     jax
     jaxlib
@@ -67,9 +85,10 @@ buildPythonPackage rec {
     pytest-benchmark
     pytest-mock
     pytestCheckHook
-    tensorflow-probability
     writableTmpDirAsHomeHook
   ];
+
+  pytestFlags = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "pytensor" ];
 
@@ -78,7 +97,35 @@ buildPythonPackage rec {
     rm -rf pytensor
   '';
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = [
+    # AssertionError: Not equal to tolerance rtol=0.0001, atol=0
+    "test_Searchsorted"
+
+    # `det` of a singular matrix: jax returns -1.3e-116 where numpy returns 0.0
+    "test_jax_basic"
+
+    # NotImplementedError: No JAX implementation for Op {betaincinv,gammainccinv,gammaincinv}.
+    # These need `tensorflow-probability` but, unlike the other tfp tests, are not guarded
+    # upstream by `TFP_INSTALLED`.
+    "test_betaincinv"
+    "test_gammainccinv"
+    "test_gammaincinv"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # These hardcode `getrefcount(x) == 3`, but CPython 3.14 passes locals to calls as borrowed
+    # references, so the count is one lower.
+    "test_sparse_creation_refcount"
+    "test_sparse_passthrough_refcount"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Numerical assertion error
+    # tests.unittest_tools.WrongValue: WrongValue
+    "test_op_sd"
+    "test_op_ss"
+
+    # AssertionError: equal_computations failed
+    "test_infer_shape_db_handles_xtensor_lowering"
+
     # pytensor.link.c.exceptions.CompileError: Compilation failed (return status=1)
     "OpFromGraph"
     "add"
@@ -119,6 +166,7 @@ buildPythonPackage rec {
     "test_modes"
     "test_mul_s_v_grad"
     "test_multiple_outputs"
+    "test_nnet"
     "test_not_inplace"
     "test_numba_Cholesky_grad"
     "test_numba_pad"
@@ -131,6 +179,7 @@ buildPythonPackage rec {
     "test_scan_err1"
     "test_scan_err2"
     "test_shared"
+    "test_size_implied_by_broadcasted_parameters"
     "test_solve_triangular_grad"
     "test_structured_add_s_v_grad"
     "test_structureddot_csc_grad"
@@ -148,7 +197,6 @@ buildPythonPackage rec {
     # Don't run the most compute-intense tests
     "tests/scan/"
     "tests/tensor/"
-    "tests/sparse/sandbox/"
   ];
 
   passthru.updateScript = nix-update-script {
@@ -162,11 +210,10 @@ buildPythonPackage rec {
     description = "Python library to define, optimize, and efficiently evaluate mathematical expressions involving multi-dimensional arrays";
     mainProgram = "pytensor-cache";
     homepage = "https://github.com/pymc-devs/pytensor";
-    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/rel-${version}";
+    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       bcdarwin
-      ferrine
     ];
   };
-}
+})

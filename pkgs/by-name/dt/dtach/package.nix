@@ -1,21 +1,26 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "dtach";
-  version = "0.9";
+  version = "0.9-unstable-2025-06-20";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/dtach/dtach/${version}/dtach-${version}.tar.gz";
-    sha256 = "1wwj2hlngi8qn2pisvhyfxxs8gyqjlgrrv5lz91w8ly54dlzvs9j";
+  src = fetchFromGitHub {
+    owner = "crigler";
+    repo = "dtach";
+    rev = "b027c27b2439081064d07a86883c8e0b20a183c9";
+    hash = "sha256-ilxBbrqwGe+jpFbQ93nfyp3HuDY0D7NgIXkIkw9YXkI=";
   };
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp dtach $out/bin/dtach
+    runHook preInstall
+
+    install -D dtach $out/bin/dtach
+
+    runHook postInstall
   '';
 
   meta = {
@@ -32,9 +37,8 @@ stdenv.mkDerivation rec {
     '';
 
     license = lib.licenses.gpl2Plus;
-
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.jmbaur ];
     mainProgram = "dtach";
   };
 }

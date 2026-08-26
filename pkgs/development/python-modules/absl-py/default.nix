@@ -2,22 +2,21 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  hatchling,
 }:
-
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "absl-py";
-  version = "2.2.1";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abseil";
     repo = "abseil-py";
-    tag = "v${version}";
-    hash = "sha256-FCmilW9/gWdlV1QA+4INVa5cDafiAl9GwO/4YyU0ZY4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BnR9QnZ5AaSlboQuQnX4UKGjAVVpyzMLZ68Do3VZrE0=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   # checks use bazel; should be revisited
   doCheck = false;
@@ -27,8 +26,8 @@ buildPythonPackage rec {
   meta = {
     description = "Abseil Python Common Libraries";
     homepage = "https://github.com/abseil/abseil-py";
-    changelog = "https://github.com/abseil/abseil-py/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/abseil/abseil-py/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

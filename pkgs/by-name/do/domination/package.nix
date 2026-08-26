@@ -30,7 +30,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "domination";
-  version = "1.3.4";
+  version = "1.3.5";
 
   # The .zip releases do not contain the build.xml file
   src = fetchsvn {
@@ -40,8 +40,8 @@ stdenv.mkDerivation {
     # https://sourceforge.net/p/domination/code/HEAD/tree/Domination/ChangeLog.txt
     # Alternatively, look for revs like "changelog update",
     # "new version x.y.z info on website", or "website update for x.y.z".
-    rev = "2664";
-    hash = "sha256-bkaHpqJSc3UvwNT7LwuPUT8xN0g6QypfLSHlLmm8nX8=";
+    rev = "2778";
+    hash = "sha256-OsCpSL/0QgaaUAzoyPPrAlJixRlqsLJu2D8FkEuo0Ak=";
   };
 
   nativeBuildInputs = [
@@ -85,7 +85,7 @@ stdenv.mkDerivation {
       --chdir "$out/share/domination" \
       --add-flags "-cp $out/share/domination/Domination.jar net.yura.domination.ui.swinggui.SwingGUIFrame"
 
-    install -Dm644 build/game/resources/icon.png $out/share/pixmaps/domination.png
+    install -Dm644 build/game/resources/icon.png $out/share/icons/hicolor/16x16/apps/domination.png
     runHook postInstall
   '';
 
@@ -100,7 +100,7 @@ stdenv.mkDerivation {
 
   passthru.updateScript = ./update.tcl;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://domination.sourceforge.net/";
     downloadPage = "https://domination.sourceforge.net/download.shtml";
     description = "Game that is a bit like the board game Risk or RisiKo";
@@ -110,13 +110,13 @@ stdenv.mkDerivation {
       It includes a map editor, a simple map format, multiplayer network play,
       single player, hotseat, 5 user interfaces and many more features.
     '';
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # source bundles dependencies as jars
     ];
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "domination";
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
   };
 }

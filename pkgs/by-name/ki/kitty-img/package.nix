@@ -1,29 +1,28 @@
 {
   lib,
   rustPlatform,
-  fetchFromSourcehut,
+  fetchFromCodeberg,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kitty-img";
-  version = "1.0.0";
+  version = "1.1.1";
 
-  src = fetchFromSourcehut {
-    owner = "~zethra";
+  src = fetchFromCodeberg {
+    owner = "sashanoraa";
     repo = "kitty-img";
-    rev = version;
-    hash = "sha256-5thx4ADmJE29bxN+ZO3hF0jhgXK+boqt8oj4Sygl5SU=";
+    rev = finalAttrs.version;
+    hash = "sha256-r5gt5ESQ/2Z//k6rZtPSp1dnQOYvB6+7T7LUcSryrHY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-KSNl/SpqcgMaKbkBfNtR7M8+B1clPauYi7NlP+f5Pd0=";
+  cargoHash = "sha256-S/f2Q9SpPuAJLr8QkdWjRGwcuE64AhXJMcXMvwAMIUw=";
 
-  meta = with lib; {
+  meta = {
     description = "Print images inline in kitty";
-    homepage = "https://git.sr.ht/~zethra/kitty-img";
-    changelog = "https://git.sr.ht/~zethra/kitty-img/refs/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ gaykitty ];
+    homepage = "https://codeberg.org/sashanoraa/kitty-img";
+    changelog = "https://codeberg.org/sashanoraa/kitty-img/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gaykitty ];
     mainProgram = "kitty-img";
   };
-}
+})

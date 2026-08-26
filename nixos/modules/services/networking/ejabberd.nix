@@ -93,6 +93,8 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
+    services.epmd.enable = true;
+
     users.users = lib.optionalAttrs (cfg.user == "ejabberd") {
       ejabberd = {
         group = cfg.group;
@@ -109,11 +111,16 @@ in
     systemd.services.ejabberd = {
       description = "ejabberd server";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      after = [
+        "network.target"
+        "epmd.socket"
+      ];
+      wants = [ "epmd.socket" ];
       path = [
         pkgs.findutils
         pkgs.coreutils
-      ] ++ lib.optional cfg.imagemagick pkgs.imagemagick;
+      ]
+      ++ lib.optional cfg.imagemagick pkgs.imagemagick;
 
       serviceConfig = {
         User = cfg.user;

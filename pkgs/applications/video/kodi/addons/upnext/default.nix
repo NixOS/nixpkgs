@@ -23,10 +23,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/im85288/service.upnext";
     description = "Up Next - Proposes to play the next episode automatically";
-    license = licenses.gpl2Only;
-    teams = [ teams.kodi ];
+    license = lib.licenses.gpl2Only;
+    teams = [ lib.teams.kodi ];
   };
 }

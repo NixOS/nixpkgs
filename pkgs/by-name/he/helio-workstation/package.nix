@@ -4,7 +4,12 @@
   fetchFromGitHub,
   alsa-lib,
   freetype,
-  xorg,
+  libxrandr,
+  libxinerama,
+  libxext,
+  libxcursor,
+  libxcomposite,
+  libx11,
   curl,
   libGL,
   libjack2,
@@ -13,27 +18,27 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "helio-workstation";
-  version = "3.15";
+  version = "3.17";
 
   src = fetchFromGitHub {
     owner = "helio-fm";
-    repo = "helio-workstation";
-    rev = version;
+    repo = "helio-sequencer";
+    tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-SDK3lLcMCmxu1FwkPduNzlgmDU7LKitPqIvsr6rOYDc=";
+    hash = "sha256-uEo4dxwc1HksYGU5ssYp3rLugszSir2kKo4XxgqvSno=";
   };
 
   buildInputs = [
     alsa-lib
     freetype
-    xorg.libX11
-    xorg.libXext
-    xorg.libXinerama
-    xorg.libXrandr
-    xorg.libXcursor
-    xorg.libXcomposite
+    libx11
+    libxext
+    libxinerama
+    libxrandr
+    libxcursor
+    libxcomposite
     curl
     libGL
     libjack2
@@ -62,12 +67,12 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/helio" "$out/bin/helio"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "One music sequencer for all major platforms, both desktop and mobile";
     mainProgram = "helio";
     homepage = "https://helio.fm/";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.suhr ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.suhr ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

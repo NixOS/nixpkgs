@@ -1,88 +1,61 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  git,
-  jupyter-server,
-  hatch-jupyter-builder,
+  gitMinimal,
+  writableTmpDirAsHomeHook,
   hatch-nodejs-version,
   hatchling,
-  jupyterlab,
+  jupyterlab-git-core,
+  jupyter-server,
+  jupytext,
   nbdime,
-  nbformat,
-  pexpect,
   pytest-asyncio,
   pytest-jupyter,
   pytest-tornasync,
   pytestCheckHook,
-  pythonOlder,
   traitlets,
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab-git";
-  version = "0.51.1";
+  inherit (jupyterlab-git-core) src version;
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  preBuild = ''
+    cd packages/jupyterlab
+  '';
 
-  src = fetchPypi {
-    pname = "jupyterlab_git";
-    inherit version;
-    hash = "sha256-t7zol5XVzojIqvDXnrepPQU1Yi+b5rAZyprk07mpymo=";
-  };
-
-  nativeBuildInputs = [
-    hatch-jupyter-builder
+  build-system = [
     hatch-nodejs-version
     hatchling
-    jupyterlab
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    jupyterlab-git-core
     jupyter-server
     nbdime
-    git
-    nbformat
-    pexpect
     traitlets
   ];
 
   nativeCheckInputs = [
-    jupyterlab
+    gitMinimal
+    jupytext
     pytest-asyncio
     pytest-jupyter
     pytest-tornasync
     pytestCheckHook
-  ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
-  disabledTestPaths = [
-    "jupyterlab_git/tests/test_handlers.py"
-    # PyPI doesn't ship all required files for the tests
-    "jupyterlab_git/tests/test_config.py"
-    "jupyterlab_git/tests/test_integrations.py"
-    "jupyterlab_git/tests/test_remote.py"
-    "jupyterlab_git/tests/test_settings.py"
-  ];
-
-  disabledTests = [
-    "test_Git_get_nbdiff_file"
-    "test_Git_get_nbdiff_dict"
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [ "jupyterlab_git" ];
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Jupyter lab extension for version control with Git";
     homepage = "https://github.com/jupyterlab/jupyterlab-git";
-    changelog = "https://github.com/jupyterlab/jupyterlab-git/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ chiroptical ];
+    changelog = "https://github.com/jupyterlab/jupyterlab-git/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ chiroptical ];
   };
 }

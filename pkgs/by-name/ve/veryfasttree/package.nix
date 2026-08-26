@@ -33,7 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "VeryFastTree";
     homepage = "https://github.com/citiususc/veryfasttree";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ thyol ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

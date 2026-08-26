@@ -4,20 +4,22 @@
   fetchFromGitHub,
   pciutils,
   cmake,
+  pkg-config,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ryzenadj";
-  version = "0.16.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "FlyGoat";
     repo = "RyzenAdj";
-    rev = "v${version}";
-    sha256 = "sha256-VuIrA5UrRqwUta/mrYd+6F4gh/Z65+zzoTXUlRA8wzA=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-SNtCKZ3bugawzD8R3DjwPs/ls3kyTw1LdIcXuR6fumc=";
   };
 
   nativeBuildInputs = [
     cmake
+    pkg-config
   ];
 
   buildInputs = [
@@ -31,12 +33,12 @@ stdenv.mkDerivation rec {
     install -D ryzenadj $out/bin/ryzenadj
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Adjust power management settings for Ryzen Mobile Processors";
     mainProgram = "ryzenadj";
     homepage = "https://github.com/FlyGoat/RyzenAdj";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ rhendric ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ rhendric ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

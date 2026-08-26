@@ -8,14 +8,14 @@
   libnl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "horst";
   version = "5.1";
 
   src = fetchFromGitHub {
     owner = "br101";
     repo = "horst";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "140pyv6rlsh4c745w4b59pz3hrarr39qq3mz9z1lsd3avc12nx1a";
   };
 
@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "DESTDIR=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Small and lightweight IEEE802.11 wireless LAN analyzer with a text interface";
     homepage = "https://github.com/br101/horst";
-    maintainers = [ maintainers.fpletz ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.fpletz ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "horst";
   };
-}
+})

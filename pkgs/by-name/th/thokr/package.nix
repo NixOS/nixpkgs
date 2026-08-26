@@ -4,25 +4,27 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "thokr";
-  version = "0.4.1";
+  version = "0.5.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
-    owner = "thatvegandev";
+    owner = "jrnxf";
     repo = "thokr";
-    rev = "v${version}";
-    sha256 = "0aryfx9qlnjdq3iq2d823c82fhkafvibmbz58g48b8ah5x5fv3ir";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-Ms90Eo2Bk9+QTOZv9fc73gQ1xwDntTbiwXsifF79ELE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-BjUPXsErdLGmZaDIMaY+iV3XcoQHGNZbRmFJb/fblwU=";
+  cargoHash = "sha256-U0nClfSQnliQEVX/PrG4B+TLqHNbL0xvttLukEGFKeI=";
 
-  meta = with lib; {
+  meta = {
     description = "Typing tui with visualized results and historical logging";
-    homepage = "https://github.com/thatvegandev/thokr";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    homepage = "https://github.com/jrnxf/thokr";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aiyion ];
     mainProgram = "thokr";
   };
-}
+})

@@ -7,15 +7,17 @@
   libusb1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "airspyhf";
-  version = "1.6.8";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "airspy";
     repo = "airspyhf";
-    rev = version;
-    hash = "sha256-RKTMEDPeKcerJZtXTn8eAShxDcZUMgeQg/+7pEpMyVg=";
+    # Not clear why upstream won't tag releases. See:
+    # https://github.com/airspy/airspyhf/commit/c0bb66dd8976651c53884ccec3d70a108f1e50e1#r193607536
+    rev = "c0bb66dd8976651c53884ccec3d70a108f1e50e1";
+    hash = "sha256-7bXBv4YTOaWRFI6Svb9/lSBEAssUgJMqxKM5zHk1swM=";
   };
 
   nativeBuildInputs = [
@@ -25,11 +27,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libusb1 ];
 
-  meta = with lib; {
+  meta = {
     description = "User mode driver for Airspy HF+";
     homepage = "https://github.com/airspy/airspyhf";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      aciceri
+      sikmir
+    ];
+    platforms = lib.platforms.unix;
   };
 }

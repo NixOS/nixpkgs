@@ -5,7 +5,7 @@
   buildPythonPackage,
 }:
 let
-  version = "16.7.11";
+  version = "17.17.0";
   format = "wheel";
   inherit (stdenvNoCC.hostPlatform) system;
 
@@ -13,19 +13,15 @@ let
   pypiMeta =
     {
       x86_64-linux = {
-        hash = "sha256-aAPVZPz1mn73JuQPGJ/PAOUAtaufeHehSKHzaBmVFF8=";
+        hash = "sha256-0+Qjkxjvi0xUV8Wc3NaEsq+iwPLKIFnfZ/MMlrvhx5w=";
         platform = "manylinux1_x86_64";
       };
       aarch64-linux = {
-        hash = "sha256-mQgfMJ6esH41MXnGZQUwF4j8gDgzfyBDUQo5Kw8TGa4=";
+        hash = "sha256-VRuhYdwjGhN8MA7Ya3n+gF+PtZvAtmWCixUWCXLBWtQ=";
         platform = "manylinux2014_aarch64";
       };
-      x86_64-darwin = {
-        hash = "sha256-TuWvQ4oDkK5Fn/bp0G3eAhvDLlv0tzIQ8dKtysX36w0=";
-        platform = "macosx_10_13_x86_64";
-      };
       aarch64-darwin = {
-        hash = "sha256-QWfWbGnKeuKiGoD0srnnMsbWPYFcYsbO/Oy68uJIRjI=";
+        hash = "sha256-PzgClRZVAPbQ3Z41kidWNqYBKioYE+YrOuFYqwep7tM=";
         platform = "macosx_11_0_arm64";
       };
     }
@@ -49,15 +45,22 @@ buildPythonPackage {
     "frida._frida"
   ];
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Dynamic instrumentation toolkit for developers, reverse-engineers, and security researchers (Python bindings)";
     homepage = "https://www.frida.re";
-    license = lib.licenses.wxWindows;
-    maintainers = with lib.maintainers; [ s1341 ];
+    license = with lib.licenses; [
+      lgpl2Plus
+      wxWindowsException31
+    ];
+    maintainers = with lib.maintainers; [
+      s1341
+      eyjhb
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

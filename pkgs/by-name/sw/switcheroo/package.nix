@@ -2,7 +2,6 @@
   lib,
   blueprint-compiler,
   cargo,
-  darwin,
   desktop-file-utils,
   fetchFromGitLab,
   glib,
@@ -21,19 +20,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "switcheroo";
-  version = "2.2.0";
+  version = "2.6.0";
 
   src = fetchFromGitLab {
     owner = "adhami3310";
     repo = "Switcheroo";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AwecOA8HWGimhQyCEG3Z3hhwa9RVWssykUXsdvqqs9U=";
+    hash = "sha256-yJiydJoMiDCVql1bhmh+TQi25tAy/NueHvvG4zWTTeY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     src = finalAttrs.src;
     name = "switcheroo-${finalAttrs.version}";
-    hash = "sha256-Ose1gx6vwKZCdtMDkyM9Y+f6wt7VDKTI3Wc7kep1428=";
+    hash = "sha256-fvsR27jmL61NjvJWm7SQhiU1DMeB6OYyWQn1u+5HujM=";
   };
 
   nativeBuildInputs = [
@@ -48,15 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      glib
-      gtk4
-      libadwaita
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Foundation
-    ];
+  buildInputs = [
+    glib
+    gtk4
+    libadwaita
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(

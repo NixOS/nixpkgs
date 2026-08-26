@@ -1,23 +1,20 @@
 {
   lib,
   stdenv,
-  fetchurl,
   bison,
   pkg-config,
   glib,
   gettext,
   perl,
   libgdiplus,
-  libX11,
+  libx11,
   ncurses,
   zlib,
   bash,
   cacert,
-  Foundation,
-  libobjc,
   python3,
   version,
-  sha256,
+  src,
   autoconf,
   libtool,
   automake,
@@ -25,19 +22,13 @@
   which,
   gnumake42,
   enableParallelBuilding ? true,
-  srcArchiveSuffix ? "tar.bz2",
   extraPatches ? [ ],
   env ? { },
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mono";
-  inherit version env;
-
-  src = fetchurl {
-    inherit sha256;
-    url = "https://download.mono-project.com/sources/mono/${pname}-${version}.${srcArchiveSuffix}";
-  };
+  inherit version src env;
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -51,25 +42,21 @@ stdenv.mkDerivation rec {
     python3
     which
     gnumake42
+    gettext
   ];
-  buildInputs =
-    [
-      glib
-      gettext
-      libgdiplus
-      libX11
-      ncurses
-      zlib
-      bash
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Foundation
-      libobjc
-    ];
+  buildInputs = [
+    glib
+    gettext
+    libgdiplus
+    libx11
+    ncurses
+    zlib
+    bash
+  ];
 
   configureFlags = [
-    "--x-includes=${libX11.dev}/include"
-    "--x-libraries=${libX11.out}/lib"
+    "--x-includes=${libx11.dev}/include"
+    "--x-libraries=${libx11.out}/lib"
     "--with-libgdiplus=${libgdiplus}/lib/libgdiplus.so"
   ];
 
@@ -88,49 +75,58 @@ stdenv.mkDerivation rec {
     substituteInPlace mcs/class/corlib/System/Environment.cs --replace-fail /usr/share "$out/share"
   '';
 
-  # Fix mono DLLMap so it can find libX11 to run winforms apps
+  # Fix mono DLLMap so it can find libx11 to run winforms apps
   # libgdiplus is correctly handled by the --with-libgdiplus configure flag
   # Other items in the DLLMap may need to be pointed to their store locations, I don't think this is exhaustive
   # https://www.mono-project.com/Config_DllMap
   postBuild = ''
     find . -name 'config' -type f | xargs \
-    sed -i -e "s@libX11.so.6@${libX11.out}/lib/libX11.so.6@g"
+    sed -i -e "s@libX11.so.6@${libx11.out}/lib/libX11.so.6@g"
   '';
 
   # Without this, any Mono application attempting to open an SSL connection will throw with
   # The authentication or decryption has failed.
   # ---> Mono.Security.Protocol.Tls.TlsException: Invalid certificate received from server.
-  postInstall =
-    ''
-      echo "Updating Mono key store"
-      $out/bin/cert-sync ${cacert}/etc/ssl/certs/ca-bundle.crt
-    ''
-    # According to [1], gmcs is just mcs
-    # [1] https://github.com/mono/mono/blob/master/scripts/gmcs.in
-    + ''
-      ln -s $out/bin/mcs $out/bin/gmcs
-    '';
+  postInstall = ''
+    echo "Updating Mono key store"
+    $out/bin/cert-sync ${cacert}/etc/ssl/certs/ca-bundle.crt
+  ''
+  # According to [1], gmcs is just mcs
+  # [1] https://github.com/mono/mono/blob/master/scripts/gmcs.in
+  + ''
+    ln -s $out/bin/mcs $out/bin/gmcs
+  '';
 
   inherit enableParallelBuilding;
 
-  meta = with lib; {
+  meta = {
     # Per nixpkgs#151720 the build failures for aarch64-darwin are fixed since 6.12.0.129.
     # Cross build is broken due to attempt to execute cert-sync built for the host.
     broken =
       (
         stdenv.hostPlatform.isDarwin
         && stdenv.hostPlatform.isAarch64
-        && lib.versionOlder version "6.12.0.129"
+        && lib.versionOlder finalAttrs.version "6.12.0.129"
       )
       || !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-    homepage = "https://mono-project.com/";
+    homepage =
+      if lib.versionOlder finalAttrs.version "6.14.0" then
+        "https://mono-project.com/"
+      else
+        "https://gitlab.winehq.org/mono/mono";
     description = "Cross platform, open source .NET development framework";
-    platforms = with platforms; darwin ++ linux;
-    maintainers = with maintainers; [
+    platforms = with lib.platforms; darwin ++ linux;
+    knownVulnerabilities = lib.optionals (lib.versionOlder finalAttrs.version "6.14.0") [
+      ''
+        mono was archived upstream, see https://www.mono-project.com/
+        While WineHQ has taken over development, consider using 6.14.0 or newer.
+      ''
+    ];
+    maintainers = with lib.maintainers; [
       thoughtpolice
       obadz
     ];
-    license = with licenses; [
+    license = with lib.licenses; [
       # runtime, compilers, tools and most class libraries licensed
       mit
       # runtime includes some code licensed
@@ -149,4 +145,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "mono";
   };
-}
+})

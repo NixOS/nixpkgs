@@ -10,17 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "conceal";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "TD-Sky";
     repo = "conceal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kgJcxckXfwnKZ3MyJ+GE1LiQmu9YdfqFrtL9gBJ330E=";
+    hash = "sha256-kPK00DjBHhyZVwCTuL3VSazS5pYY8lgLBn9bHTkaQ5s=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Ym/HnUOLIKfCFWgusx92QeQYaNp9tfrhg5V1h02q3e0=";
+  cargoHash = "sha256-6MPYgReVYkEQhmifzT7sAMRuMIink8k9nWOnSUCOGG0=";
 
   env.CONCEAL_GEN_COMPLETIONS = "true";
 

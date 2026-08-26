@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   smmap,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "gitdb";
   version = "4.0.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -44,11 +41,11 @@ buildPythonPackage rec {
     "test_stream_reading"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Git Object Database";
     homepage = "https://github.com/gitpython-developers/gitdb";
     changelog = "https://github.com/gitpython-developers/gitdb/releases/tag/${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

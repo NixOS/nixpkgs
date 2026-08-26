@@ -7,12 +7,12 @@
   installShellFiles,
   scdoc,
   bzip2,
+  cacert,
   openssl,
   sqlite,
   xz,
   zstd,
   stdenv,
-  darwin,
   buildPackages,
   versionCheckHook,
   nixosTests,
@@ -21,13 +21,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rebuilderd";
-  version = "0.22.1";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
     repo = "rebuilderd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YMBq+Z9yMQRXOM3U679g2lnBZlH/h0VLjoxySxi4SCo=";
+    hash = "sha256-f+WfmkV0P4VfaOXxX3t5t9g/uJYCh2A587HEq9OK5QU=";
   };
 
   postPatch = ''
@@ -41,8 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '/bin/echo' 'echo'
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-MjFQ5d9VWHodjj+hIsKgAIUdaiarXIi5GCS+47n5MGU=";
+  cargoHash = "sha256-se5u7+SF3fW5WqdUA3qmztUw5oPa0YXbgOp9GIVOQu0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -50,19 +49,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     scdoc
   ];
 
-  buildInputs =
-    [
-      bzip2
-      openssl
-      shared-mime-info
-      sqlite
-      xz
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    bzip2
+    openssl
+    shared-mime-info
+    sqlite
+    xz
+    zstd
+  ];
 
   postInstall =
     let
@@ -87,6 +81,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       done
     '';
 
+  preCheck = ''
+    export SSL_CERT_FILE=${cacert.out}/etc/ssl/certs/ca-bundle.crt
+  '';
+
+  __darwinAllowLocalNetworking = true;
+
   checkFlags = [
     # Failing tests
     "--skip=decompress::tests::decompress_bzip2_compression"
@@ -107,7 +107,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.tests = {
@@ -120,7 +119,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Independent verification of binary packages - reproducible builds";
     homepage = "https://github.com/kpcyrd/rebuilderd";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
     mainProgram = "rebuilderd";
   };
 })

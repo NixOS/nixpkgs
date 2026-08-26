@@ -7,7 +7,7 @@
 }:
 stdenv.mkDerivation {
   pname = "apg";
-  version = "unstable-2015-01-29";
+  version = "2.3.0b-unstable-2015-01-29";
 
   src = fetchFromGitHub {
     owner = "wilx";
@@ -67,7 +67,6 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/wilx/apg";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ astsmtl ];
     platforms = lib.platforms.unix;
   };
 }

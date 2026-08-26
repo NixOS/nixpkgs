@@ -3,30 +3,31 @@
   stdenv,
   fetchFromGitHub,
   python3,
-  fuse,
+  fuse3,
   pkg-config,
   libpcap,
   zlib,
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "moosefs";
-  version = "4.57.6";
+  version = "4.59.2";
 
   src = fetchFromGitHub {
     owner = "moosefs";
     repo = "moosefs";
-    rev = "v${version}";
-    sha256 = "sha256-vCwRM6UIcT71e6u5QZzcTW6LK/VNlVG/19XxsHnn2a8=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-kWJI0lsVy4KmCIUbuIHswuN/lnMgG/eR6goya+keoy0=";
   };
 
   nativeBuildInputs = [
     pkg-config
+    python3
   ];
 
   buildInputs = [
-    fuse
+    fuse3
     libpcap
     zlib
     python3
@@ -50,10 +51,6 @@ stdenv.mkDerivation rec {
       "#undef HAVE_STRUCT_STAT_ST_BIRTHTIME"
   '';
 
-  postInstall = ''
-    substituteInPlace $out/sbin/mfscgiserv --replace "datapath=\"$out" "datapath=\""
-  '';
-
   doCheck = true;
 
   passthru.tests = {
@@ -70,4 +67,4 @@ stdenv.mkDerivation rec {
       markuskowa
     ];
   };
-}
+})

@@ -3,14 +3,14 @@
   fetchFromGitHub,
   buildGoModule,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "puffin";
   version = "2.1.5";
 
   src = fetchFromGitHub {
     owner = "siddhantac";
-    repo = pname;
-    rev = "v${version}";
+    repo = "puffin";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-cXhnCCg5A/G/FKWfCpq130qSD1iTGpgidqzGGnIPqO8=";
   };
 
@@ -23,4 +23,4 @@ buildGoModule rec {
     mainProgram = "puffin";
     maintainers = with lib.maintainers; [ renesat ];
   };
-}
+})

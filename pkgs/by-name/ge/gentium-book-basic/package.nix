@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "1.102";
 
   src = fetchzip {
-    url = "http://software.sil.org/downloads/r/gentium/GentiumBasic_${lib.versions.major version}${lib.versions.minor version}.zip";
+    url = "https://software.sil.org/downloads/r/gentium/GentiumBasic_${lib.versions.major version}${lib.versions.minor version}.zip";
     hash = "sha256-oCmpl95MJRfCV25cg/4cf8AwQWnoymXasSss1ziOPoE=";
   };
 
@@ -22,11 +22,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://software.sil.org/gentium/";
     description = "High-quality typeface family for Latin, Cyrillic, and Greek";
     maintainers = [ ];
-    license = licenses.ofl;
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
   };
 }

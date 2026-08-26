@@ -23,7 +23,7 @@ index 044ba00..31dc6f1 100644
  
  hash :: (ByteArrayAccess password, ByteArrayAccess salt, ByteArray out)
 -     => Options
-+     => [Proxy "cryptonite:Crypto.KDF.Argon2.hash is known to be broken on this architecture. See https://github.com/haskell-crypto/cryptonite/issues/360"]
++     => [Proxy "cryptonite:Crypto.KDF.Argon2.hash is known to be broken on this architecture. See https://github.com/haskell-crypto/cryptonite/issues/360"] -- abandoned project, krank:ignore-line
       -> password
       -> salt
       -> Int
@@ -50,7 +50,7 @@ index 044ba00..31dc6f1 100644
 -  where
 -    saltLen = B.length salt
 -    passwordLen = B.length password
-+hash options password salt outLen = error "cryptonite:Crypto.KDF.Argon2.hash is known to be broken on this architecture. See https://github.com/haskell-crypto/cryptonite/issues/360"
++hash options password salt outLen = error "cryptonite:Crypto.KDF.Argon2.hash is known to be broken on this architecture. See https://github.com/haskell-crypto/cryptonite/issues/360" -- abandoned project, krank:ignore-line
  
  data Pass
  data Salt

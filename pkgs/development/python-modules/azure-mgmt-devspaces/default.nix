@@ -2,23 +2,28 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   msrestazure,
   azure-common,
   azure-mgmt-nspkg,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-devspaces";
   version = "0.2.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     extension = "zip";
-    sha256 = "0dvjsr9i87j1ggbj3dcmgifpk64xr5f5ziwf7z1fwkcx0szcid7k";
+    hash = "sha256-87TIvgadTe7CP47HX1zJnZh5XXyVtSHXe0EeFFPWcjc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     msrestazure
     azure-common
     azure-mgmt-nspkg
@@ -27,10 +32,12 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "azure.mgmt.devspaces" ];
+
+  meta = {
     description = "This is the Microsoft Azure Dev Spaces Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
-}
+})

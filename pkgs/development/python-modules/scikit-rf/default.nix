@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  pythonOlder,
   buildPythonPackage,
   fetchFromGitHub,
   numpy,
@@ -21,27 +20,22 @@
   openpyxl,
   setuptools,
   pytestCheckHook,
+  pytest-cov-stub,
   pytest-mock,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "scikit-rf";
-  version = "1.6.2";
+  version = "1.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scikit-rf";
     repo = "scikit-rf";
     tag = "v${version}";
-    hash = "sha256-Bs1pxiO5VX/lrd3M6sy+qPSR/K7fxMYNrU+GIXhNY2g=";
+    hash = "sha256-iOKTQOOJTsj6YIQaJVWFcp9HdUEj43aytpo7VzItxr8=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=skrf" ""
-  '';
 
   build-system = [ setuptools ];
 
@@ -50,6 +44,8 @@ buildPythonPackage rec {
     scipy
     pandas
   ];
+
+  pythonRemoveDeps = [ "pre-commit" ];
 
   optional-dependencies = {
     plot = [ matplotlib ];
@@ -78,21 +74,27 @@ buildPythonPackage rec {
     openpyxl
     networkx
     pytestCheckHook
+    pytest-cov-stub
+    writableTmpDirAsHomeHook
   ];
 
-  # test_calibration.py generates a divide by zero error on darwin
-  # https://github.com/scikit-rf/scikit-rf/issues/972
-  disabledTestPaths = lib.optional (
-    stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin
-  ) "skrf/calibration/tests/test_calibration.py";
+  pytestFlags = [ "-Wignore::pytest.PytestUnraisableExceptionWarning" ];
+
+  disabledTests = [
+    # numpy.exceptions.VisibleDeprecationWarning: dtype(): align should be
+    #  passed as Python or NumPy boolean but got `align=0`
+    "test_constructor_from_pathlib"
+    "test_constructor_from_pickle"
+    "test_constructor_from_touchstone_special_encoding"
+  ];
 
   pythonImportsCheck = [ "skrf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for RF/Microwave engineering";
     homepage = "https://scikit-rf.org/";
     changelog = "https://github.com/scikit-rf/scikit-rf/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lugarun ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ lugarun ];
   };
 }

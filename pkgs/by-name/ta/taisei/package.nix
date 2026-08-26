@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+
   # Build depends
   docutils,
   meson,
@@ -12,32 +13,37 @@
   openssl,
   gamemode,
   shaderc,
-  ensureNewerSourcesForZipFilesHook,
+  makeWrapper,
+  cmake,
+  mimalloc,
+  glslang,
+  libogg,
+  makeBinaryWrapper,
+  gettext,
+
   # Runtime depends
-  glfw,
-  SDL2,
-  SDL2_mixer,
+  sdl3,
   cglm,
   freetype,
   libpng,
   libwebp,
-  libzip,
   zlib,
   zstd,
   spirv-cross,
+  libunibreak,
 
   gamemodeSupport ? stdenv.hostPlatform.isLinux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taisei";
-  version = "1.4.2";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "taisei-project";
     repo = "taisei";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-rThLz8o6IYhIBUc0b1sAQi2aF28btajcM1ScTv+qn6c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-F5fmTY3kl5HW4C/SH5JDZF0vTWescExTANQDYZ2vPmI=";
     fetchSubmodules = true;
   };
 
@@ -47,38 +53,62 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     python3Packages.python
-    python3Packages.zstandard
-    ensureNewerSourcesForZipFilesHook
     shaderc
+    makeWrapper
+    makeBinaryWrapper
+    cmake
+    gettext
   ];
 
   buildInputs = [
-    glfw
-    SDL2
-    SDL2_mixer
+    sdl3
     cglm
     freetype
     libpng
     libwebp
-    libzip
     zlib
     zstd
     opusfile
     openssl
+    mimalloc
+    libogg
+    libunibreak
+    glslang
     spirv-cross
-  ] ++ lib.optional gamemodeSupport gamemode;
+  ]
+  ++ lib.optional gamemodeSupport gamemode;
+
+  # Forced to use builtin-sincos because the symbol isn't available otherwise
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin " -Dsincos=__builtin_sincos";
 
   mesonFlags = [
+    (lib.mesonEnable "shader_transpiler_dxbc" false)
+    (lib.mesonEnable "package_data" false)
     (lib.mesonBool "b_lto" false)
-    (lib.mesonEnable "install_macos_bundle" false)
-    (lib.mesonEnable "install_relocatable" false)
-    (lib.mesonEnable "shader_transpiler" false)
     (lib.mesonEnable "gamemode" gamemodeSupport)
+    (lib.mesonEnable "install_freedesktop" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "install_macos_bundle" stdenv.hostPlatform.isDarwin)
+    (lib.mesonEnable "install_relocatable" stdenv.hostPlatform.isDarwin)
   ];
 
   preConfigure = ''
     patchShebangs .
   '';
+
+  postInstall =
+    lib.optionalString (stdenv.hostPlatform.isLinux && gamemodeSupport) ''
+      wrapProgram $out/bin/taisei \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gamemode ]}"
+    ''
+    +
+
+      lib.optionalString stdenv.hostPlatform.isDarwin ''
+        mkdir -p $out/Applications $out/bin
+
+        mv $out/Taisei.app $out/Applications/
+        # regular symlink will fail here due to resources being missed
+        makeBinaryWrapper $out/Applications/Taisei.app/Contents/MacOS/Taisei $out/bin/taisei
+      '';
 
   strictDeps = true;
 
@@ -98,7 +128,9 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       lambda-11235
       Gliczy
+      philocalyst
     ];
     platforms = lib.platforms.all;
+    changelog = "https://github.com/taisei-project/taisei/releases/tag/${finalAttrs.src.tag}";
   };
 })

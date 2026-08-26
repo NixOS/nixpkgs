@@ -8,19 +8,22 @@
   openssl,
   libsodium,
 
+  withGssapi ? false,
+  krb5,
+
   # for passthru.tests
   ffmpeg,
   sshping,
   wireshark,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libssh";
-  version = "0.11.1";
+  version = "0.12.2";
 
   src = fetchurl {
-    url = "https://www.libssh.org/files/${lib.versions.majorMinor version}/libssh-${version}.tar.xz";
-    hash = "sha256-FLfcxy6R4IFRxYuYGntXCrJmP2MOfSg3ZF1anGEsG3k=";
+    url = "https://www.libssh.org/files/${lib.versions.majorMinor finalAttrs.version}/libssh-${finalAttrs.version}.tar.xz";
+    hash = "sha256-SVYPZ32W43BqkErC3hEW4l82gJN9UeXJIZj8ukocHp8=";
   };
 
   outputs = [
@@ -28,20 +31,29 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
+  strictDeps = true;
+
+  __structuredAttrs = true;
+
   postPatch = ''
     # Fix headers to use libsodium instead of NaCl
     sed -i 's,nacl/,sodium/,g' ./include/libssh/curve25519.h src/curve25519.c
   '';
 
-  # Don’t build examples, which are not installed and require additional dependencies not
-  # included in `buildInputs` such as libX11.
-  cmakeFlags = [ "-DWITH_EXAMPLES=OFF" ];
+  cmakeFlags = [
+    # Don’t build examples, which are not installed and require additional dependencies not
+    # included in `buildInputs` such as libx11.
+    "-DWITH_EXAMPLES=OFF"
+
+    (lib.cmakeBool "USE_GSSAPI" withGssapi)
+  ];
 
   buildInputs = [
     zlib
     openssl
     libsodium
-  ];
+  ]
+  ++ lib.optional withGssapi krb5;
 
   nativeBuildInputs = [
     cmake
@@ -57,11 +69,10 @@ stdenv.mkDerivation rec {
     inherit ffmpeg sshping wireshark;
   };
 
-  meta = with lib; {
+  meta = {
     description = "SSH client library";
     homepage = "https://libssh.org";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ sander ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.all;
   };
-}
+})

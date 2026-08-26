@@ -7,15 +7,15 @@
   groff,
   callPackage,
 }:
-
-stdenv.mkDerivation rec {
-  pname = "ronn";
-  version = env.gems.ronn-ng.version;
-
-  env = bundlerEnv {
+let
+  rubyEnv = bundlerEnv {
     name = "ronn-gems";
     gemdir = ./.;
   };
+in
+stdenv.mkDerivation {
+  pname = "ronn";
+  version = rubyEnv.gems.ronn-ng.version;
 
   dontUnpack = true;
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/bin
-    makeWrapper ${env}/bin/ronn $out/bin/ronn \
+    makeWrapper ${rubyEnv}/bin/ronn $out/bin/ronn \
       --set PATH ${groff}/bin
 
     runHook postInstall
@@ -37,15 +37,15 @@ stdenv.mkDerivation rec {
 
   passthru.tests.reproducible-html-manpage = callPackage ./test-reproducible-html.nix { };
 
-  meta = with lib; {
-    description = "markdown-based tool for building manpages";
+  meta = {
+    description = "Markdown-based tool for building manpages";
     mainProgram = "ronn";
     homepage = "https://github.com/apjanke/ronn-ng";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       zimbatm
       nicknovitski
     ];
-    platforms = env.ruby.meta.platforms;
+    platforms = rubyEnv.ruby.meta.platforms;
   };
 }

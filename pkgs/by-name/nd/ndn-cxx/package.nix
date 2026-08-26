@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   doxygen,
   pkg-config,
   python3,
@@ -12,16 +13,24 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ndn-cxx";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "named-data";
     repo = "ndn-cxx";
-    rev = "ndn-cxx-${version}";
+    rev = "ndn-cxx-${finalAttrs.version}";
     sha256 = "sha256-u9+QxqdCET1f5B54HF+Jk/YuQvhcYWsPNIVHi5l0XTM=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-gcc15.patch";
+      url = "https://github.com/named-data/ndn-cxx/commit/0ba3d3a9d9701be4baa3969fe50e97e89d11249b.patch";
+      hash = "sha256-ikVIJ8Jza17k/sa/wtu2EUGLEhUMloMOkBrMN9W9BPY=";
+    })
+  ];
 
   nativeBuildInputs = [
     doxygen
@@ -51,7 +60,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://named-data.net/";
     description = "Named Data Networking (NDN) or Content Centric Networking (CCN) abstraction";
     longDescription = ''
@@ -67,11 +76,10 @@ stdenv.mkDerivation rec {
       traversing fewer network hops, eliminating redundant requests,
       and consuming less resources overall.
     '';
-    license = licenses.lgpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
-      sjmackenzie
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       bertof
     ];
   };
-}
+})

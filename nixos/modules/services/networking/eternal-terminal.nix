@@ -53,6 +53,14 @@ in
           The maximum log size.
         '';
       };
+
+      telemetry = lib.mkOption {
+        default = false;
+        type = lib.types.bool;
+        description = ''
+          Collects anonymous usage data and crash reports.
+        '';
+      };
     };
   };
 
@@ -71,8 +79,8 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         serviceConfig = {
-          Type = "forking";
-          ExecStart = "${pkgs.eternal-terminal}/bin/etserver --daemon --cfgfile=${pkgs.writeText "et.cfg" ''
+          Type = "exec";
+          ExecStart = "${pkgs.eternal-terminal}/bin/etserver --logtostdout --cfgfile=${pkgs.writeText "et.cfg" ''
             ; et.cfg : Config file for Eternal Terminal
             ;
 
@@ -83,15 +91,15 @@ in
             verbose = ${toString cfg.verbosity}
             silent = ${if cfg.silent then "1" else "0"}
             logsize = ${toString cfg.logSize}
+            telemetry = ${lib.boolToString cfg.telemetry}
           ''}";
           Restart = "on-failure";
-          KillMode = "process";
         };
       };
     };
   };
 
   meta = {
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tomasrivera ];
   };
 }

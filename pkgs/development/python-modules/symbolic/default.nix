@@ -9,25 +9,26 @@
   milksnake,
   cffi,
   pytestCheckHook,
+  nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "symbolic";
-  version = "12.14.1";
+  version = "13.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "symbolic";
-    tag = version;
-    hash = "sha256-u3nEYvnt2P+W/0zYctikMgdkalej86eCYhfWj9LW4pU=";
+    tag = finalAttrs.version;
     # the `py` directory is not included in the tarball, so we fetch the source via git instead
     forceFetchGit = true;
+    hash = "sha256-o7LqQb+tWpAl+W5sHI51tfd2FEZOpPPgChIpkXjM1D8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-X8IjmSQD32bougiUFyuk8OOGIzIQgk/TjVM5bgUey5M=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-q2+eJufBBzPJEgVqmUagXSU9fQPHQv4jfyCVgHJLBsk=";
   };
 
   nativeBuildInputs = [
@@ -50,15 +51,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "py" ];
+  enabledTestPaths = [ "py" ];
 
   pythonImportsCheck = [ "symbolic" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python library for dealing with symbol files and more";
     homepage = "https://github.com/getsentry/symbolic";
-    changelog = "https://github.com/getsentry/symbolic/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/getsentry/symbolic/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
   };
-}
+})

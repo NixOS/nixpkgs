@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "rowhammer-test";
-  version = "unstable-2015-08-11";
+  version = "0-unstable-2015-08-11";
 
   src = fetchFromGitHub {
     owner = "google";
@@ -24,10 +24,10 @@ stdenv.mkDerivation {
     cp rowhammer_test double_sided_rowhammer $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Test DRAM for bit flips caused by the rowhammer problem";
     homepage = "https://github.com/google/rowhammer-test";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = [
       "x86_64-linux"

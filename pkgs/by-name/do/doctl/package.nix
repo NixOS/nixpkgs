@@ -7,9 +7,9 @@
   buildPackages,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "doctl";
-  version = "1.125.0";
+  version = "1.167.0";
 
   vendorHash = null;
 
@@ -22,9 +22,9 @@ buildGoModule rec {
       t = "github.com/digitalocean/doctl";
     in
     [
-      "-X ${t}.Major=${lib.versions.major version}"
-      "-X ${t}.Minor=${lib.versions.minor version}"
-      "-X ${t}.Patch=${lib.versions.patch version}"
+      "-X ${t}.Major=${lib.versions.major finalAttrs.version}"
+      "-X ${t}.Minor=${lib.versions.minor finalAttrs.version}"
+      "-X ${t}.Patch=${lib.versions.patch finalAttrs.version}"
       "-X ${t}.Label=release"
     ];
 
@@ -41,15 +41,15 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "digitalocean";
     repo = "doctl";
-    rev = "v${version}";
-    sha256 = "sha256-9Kwkwtwo9PB2XU3zP+ZGe1/qrPmkTPW7cRNOviwh8mM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-N8G9bJUd12FsV3ANW2LHMq6ED5YHe8vSJydNhA427SM=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool for DigitalOcean services";
     mainProgram = "doctl";
     homepage = "https://github.com/digitalocean/doctl";
-    license = licenses.asl20;
-    maintainers = [ maintainers.siddharthist ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.siddharthist ];
   };
-}
+})

@@ -3,7 +3,7 @@
   SDL,
   fetchFromGitHub,
   giflib,
-  libXpm,
+  libxpm,
   libjpeg,
   libpng,
   libtiff,
@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_image";
-  version = "1.2.12-unstable-2025-02-13";
+  version = "1.2.12-unstable-2026-07-05";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL_image";
-    rev = "74e8d577216e3c3a969e67b68b2e4769fcbf8fdd";
-    hash = "sha256-WSNH7Pw/tL5rgPQtOjxRGp2UlYSJJmXS2YQS+fAkXSc=";
+    rev = "2ffb2e3e1eba037897164e3ac6c67570d8bccd79";
+    hash = "sha256-fGwSb3GYfzcrWn7F70xhNxBXygYdD2uuzFQudS1lCqU=";
   };
 
   configureFlags = [
@@ -42,16 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL
     giflib
-    libXpm
+    libxpm
     libjpeg
     libpng
     libtiff
     libwebp
   ];
-
-  env = lib.optionalAttrs stdenv.cc.isGNU {
-    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
-  };
 
   outputs = [
     "out"

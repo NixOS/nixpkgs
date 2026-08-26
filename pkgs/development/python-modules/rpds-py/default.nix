@@ -12,19 +12,18 @@
 
 buildPythonPackage rec {
   pname = "rpds-py";
-  version = "0.24.0";
+  version = "2026.6.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "rpds_py";
     inherit version;
-    hash = "sha256-dyzBss2WPn4X5sxV/gNx+5xwTWPkTKzse5t/Ujt4kZ4=";
+    hash = "sha256-HOvRM3wkLk7CKT5UH3ErLahJsp9I8MKTaEtxwGMmJdQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-AHmnDTHuoB9wHH4CH20C+hFi9WaQBoUNMIvTIZlajVw=";
+    inherit pname version src;
+    hash = "sha256-7jtXfCBF9+WCZyekWYSMVYPOLYWd1VNwrhMShHre9Mg=";
   };
 
   nativeBuildInputs = [
@@ -40,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rpds" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/crate-py/rpds/releases/tag/v${version}";
     description = "Python bindings to Rust's persistent data structures";
     homepage = "https://github.com/crate-py/rpds";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -2,38 +2,51 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tlsx";
-  version = "1.1.9";
+  version = "1.3.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "tlsx";
-    tag = "v${version}";
-    hash = "sha256-u83hPmmiXH7SGCyINkHFrjNDLanwJLf0o9ZyceQeSg0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3klBmWQfp8PLF4/8bZjHCk+4hiUXX3E+izIfDG2FMfU=";
   };
 
-  vendorHash = "sha256-NF05vVLBRlWQpmTfrNEjnvH7kZMhgY73xmSgTZ8FGmo=";
+  vendorHash = "sha256-5zqiA4Aoc5qjxXf8q+IzJqycSv49hJfynAVQ5Yomrro=";
 
-  ldflags = [
-    "-s"
-    "-w"
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
   ];
+
+  ldflags = [ "-s" ];
 
   # Tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  doInstallCheck = true;
+
+  versionCheckKeepEnvironment = [ "HOME" ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "TLS grabber focused on TLS based data collection";
     longDescription = ''
       A fast and configurable TLS grabber focused on TLS based data
       collection and analysis.
     '';
     homepage = "https://github.com/projectdiscovery/tlsx";
-    changelog = "https://github.com/projectdiscovery/tlsx/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/projectdiscovery/tlsx/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

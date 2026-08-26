@@ -2,39 +2,37 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   boost,
   libxml2,
   pkg-config,
-  docbook2x,
+  docbook_xml_dtd_43,
   curl,
   autoreconfHook,
   cppunit,
+  xmlto,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcmis";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "tdf";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-HXiyQKjOlQXWABY10XrOiYxPqfpmUJC3a6xD98LIHDw=";
+    repo = "libcmis";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-chLY9tbhVPIiP+twsNM2SM7Bqyau/evQGKHfjlac6ys=";
   };
 
-  patches = [
-    # Backport to fix build with boost 1.86
-    (fetchpatch {
-      url = "https://github.com/tdf/libcmis/commit/3659d32999ff7593662dcf5136bcb7ac15c13f61.patch";
-      hash = "sha256-EXmQcXCHaVnF/dwU3Z4WLtaiHjYHeeonlKdyK27UkiY=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace doc/cmis-client.xml.in \
+      --replace-fail "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" \
+                     "${docbook_xml_dtd_43}/xml/dtd/docbook/docbookx.dtd"
+  '';
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    docbook2x
+    xmlto
   ];
   buildInputs = [
     boost
@@ -45,18 +43,19 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-werror"
-    "DOCBOOK2MAN=${docbook2x}/bin/docbook2man"
+    "--with-boost=${boost.dev}"
   ];
 
   doCheck = true;
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/tdf/libcmis/blob/${finalAttrs.src.tag}/NEWS";
     description = "C++ client library for the CMIS interface";
     homepage = "https://github.com/tdf/libcmis";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     mainProgram = "cmis-client";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -3,8 +3,6 @@
   stdenvNoCC,
   fetchFromGitHub,
   gitUpdater,
-  gnome-themes-extra,
-  gtk-engine-murrine,
   jdupes,
   sassc,
   themeVariants ? [ ], # default: blue
@@ -15,9 +13,8 @@
 
 let
   pname = "fluent-gtk-theme";
-in
-lib.checkListOfEnum "${pname}: theme variants"
-  [
+
+  checkThemes = lib.checkListOfEnum "${pname}: theme variants" [
     "default"
     "purple"
     "pink"
@@ -28,34 +25,31 @@ lib.checkListOfEnum "${pname}: theme variants"
     "teal"
     "grey"
     "all"
-  ]
-  themeVariants
-  lib.checkListOfEnum
-  "${pname}: color variants"
-  [
+  ] themeVariants;
+
+  checkColors = lib.checkListOfEnum "${pname}: color variants" [
     "standard"
     "light"
     "dark"
-  ]
-  colorVariants
-  lib.checkListOfEnum
-  "${pname}: size variants"
-  [
+  ] colorVariants;
+
+  checkSizes = lib.checkListOfEnum "${pname}: size variants" [
     "standard"
     "compact"
-  ]
-  sizeVariants
-  lib.checkListOfEnum
-  "${pname}: tweaks"
-  [
+  ] sizeVariants;
+
+  checkTweaks = lib.checkListOfEnum "${pname}: tweaks" [
     "solid"
     "float"
     "round"
     "blur"
     "noborder"
     "square"
-  ]
-  tweaks
+  ] tweaks;
+
+  checkAll = checkThemes checkColors checkSizes checkTweaks;
+in
+checkAll
 
   stdenvNoCC.mkDerivation
   (finalAttrs: {
@@ -74,22 +68,20 @@ lib.checkListOfEnum "${pname}: theme variants"
       sassc
     ];
 
-    buildInputs = [ gnome-themes-extra ];
-
-    propagatedUserEnvPkgs = [ gtk-engine-murrine ];
-
     postPatch = ''
       patchShebangs install.sh
+
+      sed -i '/"$THEME_DIR\/gtk-2.0/d' install.sh
     '';
 
     installPhase = ''
       runHook preInstall
 
       name= HOME="$TMPDIR" ./install.sh \
-        ${lib.optionalString (themeVariants != [ ]) "--theme " + builtins.toString themeVariants} \
-        ${lib.optionalString (colorVariants != [ ]) "--color " + builtins.toString colorVariants} \
-        ${lib.optionalString (sizeVariants != [ ]) "--size " + builtins.toString sizeVariants} \
-        ${lib.optionalString (tweaks != [ ]) "--tweaks " + builtins.toString tweaks} \
+        ${lib.optionalString (themeVariants != [ ]) "--theme " + toString themeVariants} \
+        ${lib.optionalString (colorVariants != [ ]) "--color " + toString colorVariants} \
+        ${lib.optionalString (sizeVariants != [ ]) "--size " + toString sizeVariants} \
+        ${lib.optionalString (tweaks != [ ]) "--tweaks " + toString tweaks} \
         --icon nixos \
         --dest $out/share/themes
 
@@ -109,6 +101,7 @@ lib.checkListOfEnum "${pname}: theme variants"
       maintainers = with lib.maintainers; [
         luftmensch-luftmensch
         romildo
+        stzx
       ];
     };
   })

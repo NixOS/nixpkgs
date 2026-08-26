@@ -83,7 +83,7 @@ in
     };
 
     network = lib.mkOption {
-      description = " IPv4 network in CIDR format to use for the entire flannel network.";
+      description = "IPv4 network in CIDR format to use for the entire flannel network";
       type = lib.types.str;
     };
 
@@ -157,27 +157,26 @@ in
       description = "Flannel Service";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      environment =
-        {
-          FLANNELD_PUBLIC_IP = cfg.publicIp;
-          FLANNELD_IFACE = cfg.iface;
-        }
-        // lib.optionalAttrs (cfg.storageBackend == "etcd") {
-          FLANNELD_ETCD_ENDPOINTS = lib.concatStringsSep "," cfg.etcd.endpoints;
-          FLANNELD_ETCD_KEYFILE = cfg.etcd.keyFile;
-          FLANNELD_ETCD_CERTFILE = cfg.etcd.certFile;
-          FLANNELD_ETCD_CAFILE = cfg.etcd.caFile;
-          ETCDCTL_CERT = cfg.etcd.certFile;
-          ETCDCTL_KEY = cfg.etcd.keyFile;
-          ETCDCTL_CACERT = cfg.etcd.caFile;
-          ETCDCTL_ENDPOINTS = lib.concatStringsSep "," cfg.etcd.endpoints;
-          ETCDCTL_API = "3";
-        }
-        // lib.optionalAttrs (cfg.storageBackend == "kubernetes") {
-          FLANNELD_KUBE_SUBNET_MGR = "true";
-          FLANNELD_KUBECONFIG_FILE = cfg.kubeconfig;
-          NODE_NAME = cfg.nodeName;
-        };
+      environment = {
+        FLANNELD_PUBLIC_IP = cfg.publicIp;
+        FLANNELD_IFACE = cfg.iface;
+      }
+      // lib.optionalAttrs (cfg.storageBackend == "etcd") {
+        FLANNELD_ETCD_ENDPOINTS = lib.concatStringsSep "," cfg.etcd.endpoints;
+        FLANNELD_ETCD_KEYFILE = cfg.etcd.keyFile;
+        FLANNELD_ETCD_CERTFILE = cfg.etcd.certFile;
+        FLANNELD_ETCD_CAFILE = cfg.etcd.caFile;
+        ETCDCTL_CERT = cfg.etcd.certFile;
+        ETCDCTL_KEY = cfg.etcd.keyFile;
+        ETCDCTL_CACERT = cfg.etcd.caFile;
+        ETCDCTL_ENDPOINTS = lib.concatStringsSep "," cfg.etcd.endpoints;
+        ETCDCTL_API = "3";
+      }
+      // lib.optionalAttrs (cfg.storageBackend == "kubernetes") {
+        FLANNELD_KUBE_SUBNET_MGR = "true";
+        FLANNELD_KUBECONFIG_FILE = cfg.kubeconfig;
+        NODE_NAME = cfg.nodeName;
+      };
       path = [ pkgs.iptables ];
       preStart = lib.optionalString (cfg.storageBackend == "etcd") ''
         echo "setting network configuration"

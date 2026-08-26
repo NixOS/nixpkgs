@@ -20,19 +20,16 @@ buildDunePackage {
   pname = "ocamlformat-rpc-lib";
   inherit src version;
 
-  minimalOCamlVersion = "4.08";
-  duneVersion = "3";
-
   propagatedBuildInputs = [
     csexp
     sexplib0
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ocaml-ppx/ocamlformat";
     description = "Auto-formatter for OCaml code (RPC mode)";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       Zimmi48
       Julow
     ];

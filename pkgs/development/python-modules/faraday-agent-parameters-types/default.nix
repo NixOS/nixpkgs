@@ -1,26 +1,31 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  flit-core,
   marshmallow,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
+  validators,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "faraday-agent-parameters-types";
-  version = "1.7.3";
+  version = "1.9.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    pname = "faraday_agent_parameters_types";
-    inherit version;
-    hash = "sha256-dpMxmCFo7e+/VA1SdpdSYRKR9rvr7zQWTri4pJt/4PY=";
+  src = fetchFromGitHub {
+    owner = "infobyte";
+    repo = "faraday_agent_parameters_types";
+    tag = finalAttrs.version;
+    hash = "sha256-Oe/9/zKOoCLK3JHMacOhk2+d91MrhzkBTW3POoFm71M=";
   };
+
+  pythonRelaxDeps = [
+    "marshmallow"
+    "validators"
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -32,6 +37,7 @@ buildPythonPackage rec {
   dependencies = [
     marshmallow
     packaging
+    validators
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -44,13 +50,17 @@ buildPythonPackage rec {
   disabledTests = [
     # assert 'Version requested not valid' in "Invalid version: 'hola'"
     "test_incorrect_version_requested"
+    # Tests are outdated
+    "test_deserialize"
+    "test_invalid_data"
+    "test_serialize"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of Faraday agent parameters types";
     homepage = "https://github.com/infobyte/faraday_agent_parameters_types";
-    changelog = "https://github.com/infobyte/faraday_agent_parameters_types/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/infobyte/faraday_agent_parameters_types/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

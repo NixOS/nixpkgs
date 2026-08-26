@@ -27,16 +27,12 @@ perl.pkgs.toPerlModule (
 
     buildInputs = [
       nix-store
-    ] ++ finalAttrs.passthru.externalBuildInputs;
-
-    # Hack for sake of the dev shell
-    passthru.externalBuildInputs = [
       bzip2
       libsodium
     ];
 
     # `perlPackages.Test2Harness` is marked broken for Darwin
-    doCheck = !stdenv.isDarwin;
+    doCheck = !stdenv.hostPlatform.isDarwin;
 
     nativeCheckInputs = [
       perlPackages.Test2Harness

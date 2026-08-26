@@ -8,7 +8,7 @@ in
     version = "0.1.3";
     src = rootSrc;
     sourceRoot = "${src.name}/src/operation/iIR/source/iir-rust/iir";
-    useFetchCargoVendor = true;
+
     cargoHash = "sha256-CV1e/f3oCKW5mTbQnFBnp7E2d9nFyDwY3qclP2HwdPM=";
 
     doCheck = false;
@@ -20,7 +20,7 @@ in
     version = "0.1.0";
     src = rootSrc;
     sourceRoot = "${src.name}/src/database/manager/parser/liberty/lib-rust/liberty-parser";
-    useFetchCargoVendor = true;
+
     cargoHash = "sha256-nRIOuSz5ImENvKeMAnthmBo+2/Jy5xbM66xkcfVCTMI=";
 
     doCheck = false;
@@ -32,7 +32,7 @@ in
     version = "0.1.0";
     src = rootSrc;
     sourceRoot = "${src.name}/src/database/manager/parser/sdf/sdf_parse";
-    useFetchCargoVendor = true;
+
     cargoHash = "sha256-PORA/9DDIax4lOn/pzmi7Y8mCCBUphMTzbBsb64sDl0=";
 
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
@@ -42,7 +42,7 @@ in
     version = "0.2.4";
     src = rootSrc;
     sourceRoot = "${src.name}/src/database/manager/parser/spef/spef-parser";
-    useFetchCargoVendor = true;
+
     cargoHash = "sha256-Qr/oXTqn2gaxyAyLsRjaXNniNzIYVzPGefXTdkULmYk=";
 
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
@@ -52,7 +52,7 @@ in
     version = "0.1.0";
     src = rootSrc;
     sourceRoot = "${src.name}/src/database/manager/parser/vcd/vcd_parser";
-    useFetchCargoVendor = true;
+
     cargoHash = "sha256-xcfVzDrnW4w3fU7qo6xzSQeIH8sEbEyzPF92F5tDcAk=";
 
     doCheck = false;
@@ -64,7 +64,7 @@ in
     version = "0.1.0";
     src = rootSrc;
     sourceRoot = "${src.name}/src/database/manager/parser/verilog/verilog-rust/verilog-parser";
-    useFetchCargoVendor = true;
+
     cargoHash = "sha256-ooxY8Q8bfD+klBGfpTDD3YyWptEOGGHDoyamhjlSNTM=";
 
     doCheck = false;

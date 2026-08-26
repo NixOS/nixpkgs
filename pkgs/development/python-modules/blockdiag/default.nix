@@ -9,9 +9,8 @@
   funcparserlib,
   pillow,
   pytestCheckHook,
-  pythonOlder,
   reportlab,
-  setuptools,
+  setuptools_80,
   webcolors,
 }:
 
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "blockdiag";
   version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "blockdiag";
@@ -51,14 +48,14 @@ buildPythonPackage rec {
     # note: this is a postPatch as `seqdiag` uses them directly
   '';
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   dependencies = [
     docutils
     funcparserlib
     pillow
     reportlab
-    setuptools
+    setuptools_80
     webcolors
   ];
 
@@ -67,7 +64,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "src/blockdiag/tests/" ];
+  enabledTestPaths = [ "src/blockdiag/tests/" ];
 
   disabledTests = [
     # Test require network access
@@ -80,13 +77,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "blockdiag" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate block-diagram image from spec-text file (similar to Graphviz)";
     homepage = "http://blockdiag.com/";
     changelog = "https://github.com/blockdiag/blockdiag/blob/${version}/CHANGES.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bjornfor ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bjornfor ];
     mainProgram = "blockdiag";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

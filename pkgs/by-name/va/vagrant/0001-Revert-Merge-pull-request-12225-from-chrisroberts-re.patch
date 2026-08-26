@@ -66,8 +66,8 @@ index c019f30ff..ba7e40076 100755
 -
  env = nil
  begin
-   require 'log4r'
-@@ -114,9 +91,6 @@ begin
+   require 'vagrant'
+@@ -113,9 +90,6 @@ begin
    require 'vagrant/util/platform'
    require 'vagrant/util/experimental'
  
@@ -81,7 +81,7 @@ diff --git a/lib/vagrant.rb b/lib/vagrant.rb
 index f790039d3..97e67e3b8 100644
 --- a/lib/vagrant.rb
 +++ b/lib/vagrant.rb
-@@ -59,7 +59,7 @@ require "vagrant/plugin/manager"
+@@ -64,7 +64,7 @@ require "vagrant/plugin/manager"
  # See https://github.com/rest-client/rest-client/issues/34#issuecomment-290858
  # for more information
  class VagrantLogger < Log4r::Logger
@@ -94,7 +94,7 @@ diff --git a/lib/vagrant/bundler.rb b/lib/vagrant/bundler.rb
 index eb2caabb0..d75f54362 100644
 --- a/lib/vagrant/bundler.rb
 +++ b/lib/vagrant/bundler.rb
-@@ -189,11 +189,8 @@ module Vagrant
+@@ -192,11 +192,8 @@
      attr_reader :env_plugin_gem_path
      # @return [Pathname] Vagrant environment data path
      attr_reader :environment_data_path
@@ -106,7 +106,7 @@ index eb2caabb0..d75f54362 100644
        @plugin_gem_path = Vagrant.user_data_path.join("gems", RUBY_VERSION).freeze
        @logger = Log4r::Logger.new("vagrant::bundler")
      end
-@@ -290,6 +287,7 @@ module Vagrant
+@@ -298,6 +295,7 @@
          # Never allow dependencies to be remotely satisfied during init
          request_set.remote = false
  
@@ -114,7 +114,7 @@ index eb2caabb0..d75f54362 100644
          begin
            @logger.debug("resolving solution from available specification set")
            # Resolve the request set to ensure proper activation order
-@@ -652,6 +650,7 @@ module Vagrant
+@@ -672,6 +670,7 @@
          self_spec.activate
          @logger.info("Activated vagrant specification version - #{self_spec.version}")
        end
@@ -122,20 +122,20 @@ index eb2caabb0..d75f54362 100644
        # discover all the gems we have available
        list = {}
        if Gem.respond_to?(:default_specifications_dir)
-@@ -660,16 +659,10 @@ module Vagrant
+@@ -680,16 +679,10 @@
          spec_dir = Gem::Specification.default_specifications_dir
        end
        directories = [spec_dir]
 -      if Vagrant.in_bundler?
 -        Gem::Specification.find_all{true}.each do |spec|
--          list[spec.full_name] = spec
+-          list[spec.name] = spec
 -        end
 -      else
 -        builtin_specs.each do |spec|
--          list[spec.full_name] = spec
+-          list[spec.name] = spec
 -        end
 +      Gem::Specification.find_all{true}.each do |spec|
-+        list[spec.full_name] = spec
++        list[spec.name] = spec
        end
 -      if Vagrant.in_installer?
 +      if(!Object.const_defined?(:Bundler))
@@ -146,7 +146,7 @@ diff --git a/lib/vagrant/errors.rb b/lib/vagrant/errors.rb
 index 5cb861c06..782615bc4 100644
 --- a/lib/vagrant/errors.rb
 +++ b/lib/vagrant/errors.rb
-@@ -636,18 +636,6 @@ module Vagrant
+@@ -691,18 +691,6 @@ module Vagrant
        error_key(:provisioner_winrm_unsupported)
      end
  
@@ -169,7 +169,7 @@ diff --git a/lib/vagrant/plugin/manager.rb b/lib/vagrant/plugin/manager.rb
 index b73f07f9c..9058e68b3 100644
 --- a/lib/vagrant/plugin/manager.rb
 +++ b/lib/vagrant/plugin/manager.rb
-@@ -179,26 +179,8 @@ module Vagrant
+@@ -182,26 +182,8 @@ module Vagrant
          result
        rescue Gem::GemNotFoundException
          raise Errors::PluginGemNotFound, name: name
@@ -202,7 +202,7 @@ diff --git a/templates/locales/en.yml b/templates/locales/en.yml
 index edae9b477..782904f49 100644
 --- a/templates/locales/en.yml
 +++ b/templates/locales/en.yml
-@@ -794,9 +794,9 @@ en:
+@@ -875,9 +875,9 @@ en:
          matching this provider. For example, if you're using VirtualBox,
          the clone environment must also be using VirtualBox.
        cloud_init_not_found: |-
@@ -214,7 +214,7 @@ index edae9b477..782904f49 100644
          cloud init command '%{cmd}' failed on guest '%{guest_name}'.
        command_deprecated: |-
          The command 'vagrant %{name}' has been deprecated and is no longer functional
-@@ -1245,30 +1245,6 @@ en:
+@@ -1347,30 +1347,6 @@ en:
          following command:
  
            vagrant plugin install --local
@@ -245,7 +245,7 @@ index edae9b477..782904f49 100644
        powershell_not_found: |-
          Failed to locate the powershell executable on the available PATH. Please
          ensure powershell is installed and available on the local PATH, then
-@@ -3015,7 +2998,7 @@ en:
+@@ -3183,7 +3159,7 @@ en:
      pushes:
        file:
          no_destination: "File destination must be specified."
@@ -258,7 +258,7 @@ diff --git a/test/unit/bin/vagrant_test.rb b/test/unit/bin/vagrant_test.rb
 index dbbd52112..bc11309aa 100644
 --- a/test/unit/bin/vagrant_test.rb
 +++ b/test/unit/bin/vagrant_test.rb
-@@ -30,7 +30,6 @@ describe "vagrant bin" do
+@@ -33,7 +33,6 @@ describe "vagrant bin" do
      allow(Kernel).to receive(:exit)
      allow(Vagrant::Environment).to receive(:new).and_return(env)
      allow(Vagrant).to receive(:in_installer?).and_return(true)
@@ -270,50 +270,50 @@ diff --git a/test/unit/vagrant/bundler_test.rb b/test/unit/vagrant/bundler_test.
 index 69f425c66..00cedc021 100644
 --- a/test/unit/vagrant/bundler_test.rb
 +++ b/test/unit/vagrant/bundler_test.rb
-@@ -778,46 +778,42 @@ describe Vagrant::Bundler do
+@@ -809,46 +809,42 @@ describe Vagrant::Bundler do
        end
      end
  
 -    context "when bundler is not defined" do
 -      before { expect(Vagrant).to receive(:in_bundler?).and_return(false) }
+-
+-      context "when running inside the installer" do
+-        before { expect(Vagrant).to receive(:in_installer?).and_return(true) }
 +    context "when run time dependencies are defined" do
 +      let(:vagrant_dep_specs) { [double("spec", name: "vagrant-dep", requirement: double("spec-req", as_list: []))] }
  
--      context "when running inside the installer" do
--        before { expect(Vagrant).to receive(:in_installer?).and_return(true) }
+-        it "should load gem specification directories" do
+-          expect(Gem::Specification).to receive(:dirs).and_return(spec_dirs)
+-          subject.send(:vagrant_internal_specs)
+-        end
 +      it "should call #gem to activate the dependencies" do
 +        expect(subject).to receive(:gem).with("vagrant-dep", any_args)
 +        subject.send(:vagrant_internal_specs)
 +      end
 +    end
  
--        it "should load gem specification directories" do
--          expect(Gem::Specification).to receive(:dirs).and_return(spec_dirs)
--          subject.send(:vagrant_internal_specs)
--        end
-+    context "when bundler is not defined" do
-+      before { expect(Object).to receive(:const_defined?).with(:Bundler).and_return(false) }
- 
 -        context "when checking paths" do
 -          let(:spec_dirs) { [double("spec-dir", start_with?: in_user_dir)] }
 -          let(:in_user_dir) { true }
 -          let(:user_dir) { double("user-dir") }
++    context "when bundler is not defined" do
++      before { expect(Object).to receive(:const_defined?).with(:Bundler).and_return(false) }
+ 
+-          before { allow(Gem).to receive(:user_dir).and_return(user_dir) }
 +      it "should load gem specification directories" do
 +        expect(Gem::Specification).to receive(:dirs).and_return(spec_dirs)
 +        subject.send(:vagrant_internal_specs)
 +      end
  
--          before { allow(Gem).to receive(:user_dir).and_return(user_dir) }
+-          it "should check if path is within local user directory" do
+-            expect(spec_dirs.first).to receive(:start_with?).with(user_dir).and_return(false)
+-            subject.send(:vagrant_internal_specs)
+-          end
 +      context "when checking paths" do
 +        let(:spec_dirs) { [double("spec-dir", start_with?: in_user_dir)] }
 +        let(:in_user_dir) { true }
 +        let(:user_dir) { double("user-dir") }
  
--          it "should check if path is within local user directory" do
--            expect(spec_dirs.first).to receive(:start_with?).with(user_dir).and_return(false)
--            subject.send(:vagrant_internal_specs)
--          end
--
 -          context "when path is not within user directory" do
 -            let(:in_user_dir) { false }
 +        before { allow(Gem).to receive(:user_dir).and_return(user_dir) }

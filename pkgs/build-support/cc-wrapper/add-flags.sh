@@ -11,6 +11,8 @@ var_templates_list=(
     NIX_CXXSTDLIB_COMPILE
     NIX_CXXSTDLIB_LINK
     NIX_GNATFLAGS_COMPILE
+    NIX_FFLAGS_COMPILE
+    NIX_FFLAGS_COMPILE_BEFORE
 )
 var_templates_bool=(
     NIX_ENFORCE_NO_NATIVE
@@ -27,11 +29,10 @@ for var in "${var_templates_bool[@]}"; do
     mangleVarBool "$var" ${role_suffixes[@]+"${role_suffixes[@]}"}
 done
 
-# Arocc does not support "-B"
-if [[ -z "@isArocc@" ]]; then
-    # `-B@bintools@/bin' forces cc to use ld-wrapper.sh when calling ld.
-    NIX_CFLAGS_COMPILE_@suffixSalt@="-B@bintools@/bin/ $NIX_CFLAGS_COMPILE_@suffixSalt@"
-fi
+# Prepending `@bintools@/bin' to $PATH forces cc to use ld-wrapper.sh when calling ld.
+# $path_backup is where cc-wrapper.sh stores the $PATH that will be used for the
+# compiler invocation.
+path_backup="@bintools@/bin:$path_backup"
 
 # Export and assign separately in order that a failing $(..) will fail
 # the script.

@@ -3,29 +3,33 @@
   buildPythonPackage,
   aiodns,
   aiohttp,
+  cargo,
   cryptography,
   defusedxml,
   emoji,
-  fetchPypi,
+  fetchFromCodeberg,
   gnupg,
   pyasn1,
   pyasn1-modules,
   pytestCheckHook,
   replaceVars,
+  rustc,
   rustPlatform,
-  pythonOlder,
+  setuptools,
+  setuptools-rust,
+  setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "slixmpp";
-  version = "1.10.0";
+  version = "1.17.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-RrxdAVB8tChcglXOXHF8C19o5U38HxcSiDmY1tciV4o=";
+  src = fetchFromCodeberg {
+    owner = "poezio";
+    repo = "slixmpp";
+    tag = "slix-${finalAttrs.version}";
+    hash = "sha256-1jCKaUwWuIxTQGA0WkQMpB3xWW8XEAfAlyrqoTFIhVY=";
   };
 
   patches = [
@@ -34,14 +38,24 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-rust
+    setuptools-scm
   ];
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname src;
-    hash = "sha256-CeuClBYEG2YCm5lnxFs5RhjIgYEOe76rzHpauLZeQR0=";
+  nativeBuildInputs = [
+    cargo
+    rustc
+    rustPlatform.cargoSetupHook
+  ];
+
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
   };
 
   dependencies = [
@@ -53,16 +67,14 @@ buildPythonPackage rec {
   optional-dependencies = {
     xep-0363 = [ aiohttp ];
     xep-0444-compliance = [ emoji ];
-    xep-0464 = [ cryptography ];
-    safer-xml-parserig = [ defusedxml ];
+    xep-0454 = [ cryptography ];
+    safer-xml-parsing = [ defusedxml ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  preCheck = ''
-    # don't test against pure python version in the source tree
-    rm -rf slixmpp
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTestPaths = [
     # Exclude integration tests
@@ -73,11 +85,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "slixmpp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for XMPP";
     homepage = "https://slixmpp.readthedocs.io/";
-    changelog = "https://codeberg.org/poezio/slixmpp/releases/tag/slix-${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://codeberg.org/poezio/slixmpp/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      fab
+      haansn08
+    ];
   };
-}
+})

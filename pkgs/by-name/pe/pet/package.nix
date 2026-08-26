@@ -7,14 +7,14 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pet";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "knqyf263";
     repo = "pet";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-B0ilobUlp6UUXu6+lVqIHkbFnxVu33eXZFf+F7ODoQU=";
   };
 
@@ -23,7 +23,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/knqyf263/pet/cmd.version=${version}"
+    "-X=github.com/knqyf263/pet/cmd.version=${finalAttrs.version}"
   ];
 
   doCheck = false;
@@ -42,12 +42,12 @@ buildGoModule rec {
       --zsh $src/misc/completions/zsh/_pet
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple command-line snippet manager, written in Go";
     mainProgram = "pet";
     homepage = "https://github.com/knqyf263/pet";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kalbasit ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

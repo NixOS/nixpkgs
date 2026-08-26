@@ -7,12 +7,13 @@
   blas,
   cmake,
   flex,
-  fop,
   glpk,
   gmp,
   lapack,
   libxml2,
   libxslt,
+  docbook_xml_dtd_43,
+  docbook_xsl,
   llvmPackages,
   pkg-config,
   plfit,
@@ -25,13 +26,13 @@ assert (blas.isILP64 == lapack.isILP64 && blas.isILP64 == arpack.isILP64 && !bla
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "igraph";
-  version = "0.10.15";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = "igraph";
-    rev = finalAttrs.version;
-    hash = "sha256-TSAVRLeOWh3IQ9X0Zr4CQS+h1vTeUZnzMp/IYujGMn0=";
+    tag = finalAttrs.version;
+    hash = "sha256-mXaW9UOTPN5iM7ZNoV2NjH+2Maez5A/YfABeQRe0vgY=";
   };
 
   postPatch = ''
@@ -48,28 +49,28 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     cmake
     flex
-    fop
     libxml2
     libxslt
+    docbook_xml_dtd_43
+    docbook_xsl
     pkg-config
     python3
     sourceHighlight
     xmlto
   ];
 
-  buildInputs =
-    [
-      arpack
-      blas
-      glpk
-      gmp
-      lapack
-      libxml2
-      plfit
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
-      llvmPackages.openmp
-    ];
+  buildInputs = [
+    arpack
+    blas
+    glpk
+    gmp
+    lapack
+    libxml2
+    plfit
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ];
 
   cmakeFlags = [
     "-DIGRAPH_USE_INTERNAL_BLAS=OFF"
@@ -86,6 +87,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_SHARED_LIBS=ON"
   ];
 
+  buildFlags = [
+    "all"
+    "html"
+  ];
+
   doCheck = true;
 
   postInstall = ''
@@ -93,26 +99,25 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r doc "$out/share"
   '';
 
-  postFixup =
-    ''
-      substituteInPlace $dev/lib/cmake/igraph/igraph-targets.cmake \
-        --replace-fail "_IMPORT_PREFIX \"$out\"" "_IMPORT_PREFIX \"$dev\""
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libigraph.dylib
-    '';
+  postFixup = ''
+    substituteInPlace $dev/lib/cmake/igraph/igraph-targets.cmake \
+      --replace-fail "_IMPORT_PREFIX \"$out\"" "_IMPORT_PREFIX \"$dev\""
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libigraph.dylib
+  '';
 
   passthru.tests = {
     python = python3.pkgs.igraph;
   };
 
-  meta = with lib; {
+  meta = {
     description = "C library for complex network analysis and graph theory";
     homepage = "https://igraph.org/";
-    changelog = "https://github.com/igraph/igraph/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/igraph/igraph/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       MostAwesomeDude
       dotlambda
     ];

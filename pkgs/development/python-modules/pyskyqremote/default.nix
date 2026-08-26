@@ -2,27 +2,27 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   requests,
+  setuptools,
   websocket-client,
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyskyqremote";
   version = "0.3.26";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RogerSelwyn";
     repo = "skyq_remote";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-aMgUwgKHgR+NQvRxiUV7GaXehjDIlJJJHwSmHDmzK08=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
     websocket-client
     xmltodict
@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyskyqremote" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for accessing SkyQ boxes";
     homepage = "https://github.com/RogerSelwyn/skyq_remote";
-    changelog = "https://github.com/RogerSelwyn/skyq_remote/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/RogerSelwyn/skyq_remote/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

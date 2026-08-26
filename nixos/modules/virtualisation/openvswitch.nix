@@ -48,7 +48,7 @@ in
         name = "vswitch.db";
         dontUnpack = true;
         buildPhase = "true";
-        buildInputs = with pkgs; [
+        buildInputs = [
           cfg.package
         ];
         installPhase = "mkdir -p $out";
@@ -67,7 +67,6 @@ in
       systemd.services.ovsdb = {
         description = "Open_vSwitch Database Server";
         wantedBy = [ "multi-user.target" ];
-        after = [ "systemd-udev-settle.service" ];
         path = [ cfg.package ];
         restartTriggers = [
           db

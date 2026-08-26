@@ -1,11 +1,11 @@
 {
   mkDerivation,
+  cmake,
   extra-cmake-modules,
   intltool,
   qtbase,
   accounts-qt,
   qtdeclarative,
-  kaccounts-integration,
   kconfig,
   kcoreaddons,
   ki18n,
@@ -17,6 +17,7 @@
 mkDerivation {
   pname = "purpose";
   nativeBuildInputs = [
+    cmake
     extra-cmake-modules
     intltool
   ];
@@ -24,7 +25,6 @@ mkDerivation {
     qtbase
     accounts-qt
     qtdeclarative
-    kaccounts-integration
     kconfig
     kcoreaddons
     ki18n

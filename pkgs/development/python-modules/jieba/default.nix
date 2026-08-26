@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # no tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "fxsjy";
-    repo = pname;
+    repo = "jieba";
     rev = "v${version}";
     sha256 = "028vmd6sj6wn9l1ilw7qfmlpyiysnlzdgdlhwxs6j4fvq0gyrwxk";
   };
@@ -29,10 +29,10 @@ buildPythonPackage rec {
     ${python.interpreter} test/test_tokenize.py
   '';
 
-  meta = with lib; {
-    description = "Chinese Words Segementation Utilities";
+  meta = {
+    description = "Chinese Words Segmentation Utilities";
     homepage = "https://github.com/fxsjy/jieba";
-    license = licenses.mit;
-    teams = [ teams.tts ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.tts ];
   };
 }

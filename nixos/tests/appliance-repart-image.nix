@@ -57,7 +57,7 @@ in
               in
               {
                 "/EFI/BOOT/BOOT${lib.toUpper efiArch}.EFI".source =
-                  "${pkgs.systemd}/lib/systemd/boot/efi/systemd-boot${efiArch}.efi";
+                  "${config.systemd.package}/lib/systemd/boot/efi/systemd-boot${efiArch}.efi";
 
                 "/EFI/Linux/${config.system.boot.loader.ukiFile}".source =
                   "${config.system.build.uki}/${config.system.boot.loader.ukiFile}";
@@ -65,8 +65,8 @@ in
             repartConfig = {
               Type = "esp";
               Format = "vfat";
-              # Minimize = "guess" seems to not work very vell for vfat
-              # partitons. It's better to set a sensible default instead. The
+              # Minimize = "guess" seems to not work very well for vfat
+              # partitions. It's better to set a sensible default instead. The
               # aarch64 kernel seems to generally be a little bigger than the
               # x86_64 kernel. To stay on the safe side, leave some more slack
               # for every platform other than x86_64.
@@ -109,7 +109,7 @@ in
         "-f",
         "qcow2",
         "-b",
-        "${nodes.machine.system.build.image}/${nodes.machine.image.repart.imageFile}",
+        "${nodes.machine.system.build.image}/${nodes.machine.image.filePath}",
         "-F",
         "raw",
         tmp_disk_image.name,
@@ -118,11 +118,14 @@ in
       # Set NIX_DISK_IMAGE so that the qemu script finds the right disk image.
       os.environ['NIX_DISK_IMAGE'] = tmp_disk_image.name
 
-      os_release = machine.succeed("cat /etc/os-release")
-      assert 'IMAGE_ID="${imageId}"' in os_release
-      assert 'IMAGE_VERSION="${imageVersion}"' in os_release
+      with subtest("/etc/os-release contains the right fileds"):
+        os_release = machine.succeed("cat /etc/os-release")
+        t.assertIn('IMAGE_ID="${imageId}"', os_release)
+        t.assertIn('IMAGE_VERSION="${imageVersion}"', os_release)
 
-      bootctl_status = machine.succeed("bootctl status")
-      assert "Boot Loader Specification Type #2 (.efi)" in bootctl_status
+      with subtest("Bootctl reports the right boot loader type"):
+        bootctl_status = machine.succeed("bootctl status")
+        print(bootctl_status)
+        t.assertIn("Boot Loader Specification Type #2", bootctl_status)
     '';
 }

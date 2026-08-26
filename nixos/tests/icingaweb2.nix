@@ -1,9 +1,10 @@
 { pkgs, ... }:
 {
   name = "icingaweb2";
-  meta = {
-    maintainers = pkgs.lib.teams.helsinki-systems.members;
-  };
+  meta.maintainers = with pkgs.lib.maintainers; [
+    das_j
+    helsinki-Jo
+  ];
 
   nodes = {
     icingaweb2 =

@@ -1,72 +1,114 @@
 {
   lib,
+  a2a-sdk,
   aiohttp,
+  anthropic,
   apscheduler,
   azure-identity,
   azure-keyvault-secrets,
+  azure-storage-blob,
+  azure-storage-file-datalake,
   backoff,
+  boto3,
   buildPythonPackage,
   click,
   cryptography,
-  email-validator,
+  expression,
   fastapi,
   fastapi-sso,
+  fastuuid,
   fetchFromGitHub,
+  google-cloud-iam,
   google-cloud-kms,
+  google-genai,
+  grpcio,
   gunicorn,
+  httpx,
   importlib-metadata,
+  inquirerpy,
   jinja2,
   jsonschema,
+  langfuse,
+  maturin,
   mcp,
   openai,
+  opentelemetry-api,
+  opentelemetry-exporter-otlp,
+  opentelemetry-sdk,
   orjson,
-  poetry-core,
+  polars,
   prisma,
+  prometheus-client,
   pydantic,
+  pydantic-settings,
   pyjwt,
   pynacl,
+  pypdf,
   python-dotenv,
   python-multipart,
-  pythonOlder,
   pyyaml,
-  requests,
   resend,
+  restrictedpython,
+  rich,
   rq,
+  rustPlatform,
+  sentry-sdk,
+  soundfile,
   tiktoken,
   tokenizers,
-  uvloop,
   uvicorn,
+  uvloop,
+  websockets,
   nixosTests,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.65.0";
+  version = "1.97.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";
-    tag = "v${version}-stable";
-    hash = "sha256-q6FDgSwU3G41bVvdofsTBVG90xoqi+NP6zUg9geNz9I=";
+    tag = "v${version}";
+    hash = "sha256-9nVVXRvtfxntAgSetCy66jfDpunR12DEIoQKAjSZn/4=";
   };
 
-  build-system = [ poetry-core ];
+  nativeBuildInputs = with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
+  ];
+
+  cargoRoot = "litellm-rust";
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit
+      pname
+      version
+      src
+      cargoRoot
+      ;
+    hash = "sha256-iwgIclG8BGeHDNtm686w2Rxe+9ddvBrz1sMfOBeuKK0=";
+  };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "maturin==1.9.4" "maturin==${maturin.version}"
+  '';
 
   dependencies = [
     aiohttp
     click
-    email-validator
+    fastuuid
+    httpx
     importlib-metadata
     jinja2
     jsonschema
-    mcp
     openai
     pydantic
+    pydantic-settings
     python-dotenv
-    requests
     tiktoken
     tokenizers
   ];
@@ -74,36 +116,89 @@ buildPythonPackage rec {
   optional-dependencies = {
     proxy = [
       apscheduler
+      azure-identity
+      azure-storage-blob
       backoff
+      boto3
       cryptography
+      expression
       fastapi
       fastapi-sso
       gunicorn
+      inquirerpy
+      # FIXME package litellm-enterprise
+      # FIXME package litellm-proxy-extras
+      mcp
       orjson
+      polars
       pyjwt
+      pynacl
       python-multipart
       pyyaml
+      restrictedpython
+      rich
       rq
+      soundfile
       uvloop
       uvicorn
+      websockets
     ];
+
     extra_proxy = [
+      a2a-sdk
       azure-identity
       azure-keyvault-secrets
+      google-cloud-iam
       google-cloud-kms
       prisma
-      pynacl
+      # FIXME package redisvl
       resend
+    ];
+
+    proxy-runtime = [
+      anthropic
+      # FIXME package azure-ai-contentsafety
+      azure-storage-file-datalake
+      # FIXME package ddtrace
+      # FIXME package detect-secrets
+      # FIXME package google-cloud-aiplatform
+      google-genai
+      grpcio
+      langfuse
+      # FIXME package mangum
+      opentelemetry-api
+      opentelemetry-exporter-otlp
+      opentelemetry-sdk
+      # FIXME package llm-sandbox
+      prometheus-client
+      pypdf
+      sentry-sdk
     ];
   };
 
   pythonImportsCheck = [ "litellm" ];
 
+  pythonRelaxDeps = [
+    "aiohttp"
+    "click"
+    "importlib-metadata"
+    "jsonschema"
+    "openai"
+    "pydantic"
+    "python-dotenv"
+  ];
+
   # access network
   doCheck = false;
 
-  passthru.tests = {
-    inherit (nixosTests) litellm;
+  passthru = {
+    tests = { inherit (nixosTests) litellm; };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "v([0-9]+\\.[0-9]+\\.[0-9]+)"
+      ];
+    };
   };
 
   meta = {

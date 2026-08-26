@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_net";
-  version = "1.2.8-unstable-2024-04-23";
+  version = "1.2.8-unstable-2026-05-27";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL_net";
-    rev = "0043be2e559f8d562d04bf62d6e3f4162ed8edad";
-    hash = "sha256-/W1Mq6hzJNNwpcx+VUT4DRGP3bE06GGMbYDGHBc4XlQ=";
+    rev = "8363cd02baf1b65c287691bdd22c3dc87da9759d";
+    hash = "sha256-sAZ9I7jOo33Btitcl8mn4R7fYn2W8GWPttXELeEq7h4=";
   };
 
   nativeBuildInputs = [

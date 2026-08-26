@@ -9,31 +9,33 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-bigquery-logging";
-  version = "1.6.2";
+  version = "1.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_bigquery_logging";
-    inherit version;
-    hash = "sha256-sVWeTqq4drPOmlUXd6R2O44PpNfcbsglhXeh6umYMZI=";
+    inherit (finalAttrs) version;
+    hash = "sha256-/uWxsAr51ZW68LWrAXcaTAWwO5zuRo0eA77GLJacWa8=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core
     grpc-google-iam-v1
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock
@@ -46,11 +48,11 @@ buildPythonPackage rec {
     "google.cloud.bigquery_logging_v1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Bigquery logging client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-bigquery-logging";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-bigquery-logging-v${version}/packages/google-cloud-bigquery-logging/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-bigquery-logging-v${finalAttrs.version}/packages/google-cloud-bigquery-logging/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

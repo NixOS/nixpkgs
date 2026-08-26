@@ -1,11 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+
   # build-system
   setuptools,
-  wheel,
+  setuptools-scm,
+
   # dependencies
   asn1crypto,
   click,
@@ -13,11 +14,13 @@
   python-dateutil,
   pyyaml,
   tzlocal,
+
   # optional-dependencies
   requests-mock,
   jinja2,
   werkzeug,
   python-pkcs11,
+
   # nativeCheckInputs
   freezegun,
   pyhanko-certvalidator,
@@ -29,21 +32,19 @@
 
 buildPythonPackage rec {
   pname = "certomancer";
-  version = "0.12.3";
+  version = "0.14.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "certomancer";
     tag = "v${version}";
-    hash = "sha256-2BjLoGUWU0RaWVI9JA3s/Hf5aVtmv8hn+fB2jkWdQNY=";
+    hash = "sha256-rsugn1g8iYESrC+IUSbxCAbwnKXWG+ubbUj9QdZB+Ow=";
   };
 
   build-system = [
     setuptools
-    wheel
+    setuptools-scm
   ];
 
   dependencies = [
@@ -71,7 +72,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pytz
     requests
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "certomancer" ];
 

@@ -1,61 +1,72 @@
 {
   lib,
   aiohttp,
-  aresponses,
+  aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
   mashumaro,
   orjson,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
+  rich,
+  syrupy,
+  typer,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "tailscale";
-  version = "0.6.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.11";
+  version = "0.8.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-tailscale";
     tag = "v${version}";
-    hash = "sha256-azqvMAluhThfteLEZObApnJjtnT3NzO+VVwTzmxuaFY=";
+    hash = "sha256-Lvtx3/tYJO8qCQhVjJTV0qu064duH7MI+A+a+pdeoHI=";
   };
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace "--cov" ""
+      --replace 'version = "0.0.0"' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     mashumaro
     orjson
     yarl
   ];
 
+  optional-dependencies = {
+    cli = [
+      rich
+      typer
+    ];
+  };
+
   nativeCheckInputs = [
-    aresponses
+    aioresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
-  ];
+    syrupy
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "tailscale" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for the Tailscale API";
     homepage = "https://github.com/frenck/python-tailscale";
     changelog = "https://github.com/frenck/python-tailscale/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    mainProgram = "tailscale";
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -9,7 +9,9 @@
   # Run
   #  $ nix-instantiate --eval -E 'with import <nixpkgs> {}; builtins.attrNames pkgs.haskell.packages'
   # to list for your nixpkgs version.
-  supportedGhcVersions ? [ "96" ],
+  supportedGhcVersions ? [
+    (lib.strings.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor haskellPackages.ghc.version))
+  ],
 
   # Whether to build hls with the dynamic run-time system.
   # See https://haskell-language-server.readthedocs.io/en/latest/troubleshooting.html#static-binaries for more information.
@@ -97,7 +99,7 @@ let
     let
       # only formatters that were not requested
       unwanted = lib.pipe knownFormatters [
-        (lib.filterAttrs (fmt: _: !(lib.elem fmt supportedFormatters)))
+        (fmts: lib.removeAttrs fmts supportedFormatters)
         lib.attrsToList
       ];
       # all flags to disable

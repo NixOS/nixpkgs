@@ -8,9 +8,6 @@
         services.haproxy = {
           enable = true;
           config = ''
-            global
-              limited-quic
-
             defaults
               mode http
               timeout connect 10s
@@ -68,14 +65,16 @@
     client =
       { pkgs, ... }:
       {
-        environment.systemPackages = [ pkgs.curlHTTP3 ];
+        environment.systemPackages = [ pkgs.curl ];
       };
   };
   testScript = ''
+    import subprocess
+
     # Helpers
     def cmd(command):
       print(f"+{command}")
-      r = os.system(command)
+      r = subprocess.run(command, shell=True).returncode
       if r != 0:
         raise Exception(f"Command {command} failed with exit code {r}")
 

@@ -22,7 +22,6 @@
   lib,
   libkrb5,
   widevine-cdm,
-  electron-source, # for warnObsoleteVersionConditional
 
   # package customization
   # Note: enable* flags should not require full rebuilds (i.e. only affect the wrapper)
@@ -32,7 +31,6 @@
   enableWideVine ? false,
   ungoogled ? false, # Whether to build chromium or ungoogled-chromium
   cupsSupport ? true,
-  pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   commandLineArgs ? "",
   pkgsBuildBuild,
   pkgs,
@@ -42,61 +40,26 @@ let
   stdenv = pkgs.rustc.llvmPackages.stdenv;
 
   # Helper functions for changes that depend on specific versions:
-  warnObsoleteVersionConditional =
-    min-version: result:
-    let
-      min-supported-version = (lib.head (lib.attrValues electron-source)).unwrapped.info.chromium.version;
-      # Warning can be toggled by changing the value of enabled:
-      enabled = false;
-    in
-    lib.warnIf (enabled && lib.versionAtLeast min-supported-version min-version)
-      "chromium: min-supported-version ${min-supported-version} is newer than a conditional bounded at ${min-version}. You can safely delete it."
-      result;
-  chromiumVersionAtLeast =
-    min-version:
-    let
-      result = lib.versionAtLeast upstream-info.version min-version;
-    in
-    warnObsoleteVersionConditional min-version result;
+  chromiumVersionAtLeast = min-version: lib.versionAtLeast upstream-info.version min-version;
   versionRange =
     min-version: upto-version:
-    let
-      inherit (upstream-info) version;
-      result = lib.versionAtLeast version min-version && lib.versionOlder version upto-version;
-    in
-    warnObsoleteVersionConditional upto-version result;
+    lib.versionAtLeast upstream-info.version min-version
+    && lib.versionOlder upstream-info.version upto-version;
 
   callPackage = newScope chromium;
 
   chromium = rec {
     inherit stdenv upstream-info;
 
-    mkChromiumDerivation = callPackage ./common.nix ({
+    mkChromiumDerivation = callPackage ./common.nix {
       inherit chromiumVersionAtLeast versionRange;
       inherit
         proprietaryCodecs
         cupsSupport
-        pulseSupport
         ungoogled
         ;
-      gnChromium = buildPackages.gn.overrideAttrs (oldAttrs: {
-        version = if (upstream-info.deps.gn ? "version") then upstream-info.deps.gn.version else "0";
-        src = fetchgit {
-          url = "https://gn.googlesource.com/gn";
-          inherit (upstream-info.deps.gn) rev hash;
-        };
-
-        # Relax hardening as otherwise gn unstable 2024-06-06 and later fail with:
-        # cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]
-        hardeningDisable = [ "format" ];
-
-        # At the time of writing, gn is at v2024-05-13 and has a backported patch.
-        # This patch appears to be already present in v2024-09-09 (from M130), which
-        # results in the patch not applying and thus failing the build.
-        # As a work around until gn is updated again, we filter specifically that patch out.
-        patches = lib.filter (e: lib.getName e != "LFS64.patch") oldAttrs.patches;
-      });
-    });
+      gnChromium = buildPackages.gn.override upstream-info.deps.gn;
+    };
 
     browser = callPackage ./browser.nix {
       inherit chromiumVersionAtLeast enableWideVine ungoogled;
@@ -220,7 +183,7 @@ stdenv.mkDerivation {
       ln -s "$out/bin/chromium" "$out/bin/chromium-browser"
 
       mkdir -p "$out/share"
-      for f in '${chromium.browser}'/share/*; do # hello emacs */
+      for f in '${chromiumWV}'/share/*; do
         ln -s -t "$out/share/" "$f"
       done
     '';

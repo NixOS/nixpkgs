@@ -1,31 +1,33 @@
 {
-  fetchFromGitLab,
   lib,
   rustPlatform,
+  fetchFromCodeberg,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rusty-diceware";
-  version = "0.5.8";
+  version = "0.5.10";
 
-  src = fetchFromGitLab {
-    owner = "yuvallanger";
+  __structuredAttrs = true;
+
+  src = fetchFromCodeberg {
+    owner = "kakafarm";
     repo = "rusty-diceware";
-    rev = "diceware-v${version}";
-    hash = "sha256-GDWvHHl4EztTaR0jI4XL1I9qE2KSL+q9C8IvLWQF4Ys=";
+    rev = "53975f17f5f575720d724035bd715dd2dd75986d";
+    hash = "sha256-uSbJFZ0wqo1RbRP9BWiT4cDg9CV/aSYz432a/qUk7qw=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-f+jvrokt5kuHYKKfluu4OvI7dzp9rFPlTo4KC4jKb0o=";
+  cargoHash = "sha256-TCNHtDz7dgUx5lBwwIs67mnQcAZ5Xknc6otpl8zRaVc=";
 
-  doCheck = true;
-
-  meta = with lib; {
+  meta = {
     description = "Commandline diceware, with or without dice, written in Rustlang";
-    homepage = "https://gitlab.com/yuvallanger/rusty-diceware";
-    changelog = "https://gitlab.com/yuvallanger/rusty-diceware/-/blob/v${version}/CHANGELOG.md?ref_type=heads";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ cherrykitten ];
+    homepage = "https://codeberg.org/kakafarm/rusty-diceware";
+    changelog = "https://codeberg.org/kakafarm/rusty-diceware/src/branch/master/CHANGELOG.md";
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
+      cherrykitten
+      kybe236
+    ];
     mainProgram = "diceware";
   };
-}
+})

@@ -1,30 +1,30 @@
 {
   aiohttp,
-  aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   lib,
   lxml,
-  poetry-core,
+  mocket,
   pytest-asyncio,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyblu";
-  version = "2.0.1";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LouisChrist";
     repo = "pyblu";
     tag = "v${version}";
-    hash = "sha256-4dWRz7KPLgjN57U/jsm6VCqzkzfMY5yuHL0ZSBeALyI=";
+    hash = "sha256-5vVdCrvBCLbLlXR2iDtVR6JuJcFYQnuaJMKeor5HvBI=";
   };
 
   pythonRelaxDeps = [ "aiohttp" ];
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
@@ -34,13 +34,19 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyblu" ];
 
   nativeCheckInputs = [
-    aioresponses
+    mocket
     pytest-asyncio
     pytestCheckHook
   ];
 
+  disabledTestPaths = [
+    # all tests fail with:
+    #  aiohttp.client_exceptions.ClientConnectorDNSError: Cannot connect to host node:11000 ssl:default [Could not contact DNS servers]
+    "tests/test_player.py"
+  ];
+
   meta = {
-    changelog = "https://github.com/LouisChrist/pyblu/releases/tag/v${version}";
+    changelog = "https://github.com/LouisChrist/pyblu/releases/tag/${src.tag}";
     description = "BluOS API client";
     homepage = "https://github.com/LouisChrist/pyblu";
     license = lib.licenses.mit;

@@ -44,13 +44,13 @@ stdenv.mkDerivation rec {
   dontStrip = true;
   dontPatchELF = true;
 
-  meta = with lib; {
+  meta = {
     description = "Hosted VPN service that lets you securely extend LAN-like networks to distributed teams";
     homepage = "https://secure.logmein.com/products/hamachi/";
     changelog = "https://support.logmeininc.com/central/help/whats-new-in-hamachi";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ abbradar ];
-    platforms = platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

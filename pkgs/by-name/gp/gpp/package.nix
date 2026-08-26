@@ -21,12 +21,12 @@ stdenv.mkDerivation {
   installCheckPhase = "$out/bin/gpp --help";
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "General-purpose preprocessor with customizable syntax";
     mainProgram = "gpp";
     homepage = "https://logological.org/gpp";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ nmattia ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ nmattia ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

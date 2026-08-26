@@ -2,7 +2,7 @@ diff --git a/FreeFileSync/Source/ui/gui_generated.cpp b/FreeFileSync/Source/ui/g
 index a40eea3..23ec896 100644
 --- a/FreeFileSync/Source/ui/gui_generated.cpp
 +++ b/FreeFileSync/Source/ui/gui_generated.cpp
-@@ -5573,8 +5573,6 @@ AboutDlgGenerated::AboutDlgGenerated( wxWindow* parent, wxWindowID id, const wxS
+@@ -5553,8 +5553,6 @@ AboutDlgGenerated::AboutDlgGenerated( wxWindow* parent, wxWindowID id, const wxS
      wxBoxSizer* bSizer183;
      bSizer183 = new wxBoxSizer( wxHORIZONTAL );
  
@@ -11,7 +11,7 @@ index a40eea3..23ec896 100644
  
      wxPanel* m_panel39;
      m_panel39 = new wxPanel( m_panelDonate, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-@@ -5587,13 +5585,11 @@ AboutDlgGenerated::AboutDlgGenerated( wxWindow* parent, wxWindowID id, const wxS
+@@ -5567,13 +5565,11 @@ AboutDlgGenerated::AboutDlgGenerated( wxWindow* parent, wxWindowID id, const wxS
      m_staticTextDonate->Wrap( -1 );
      m_staticTextDonate->SetForegroundColour( wxColour( 0, 0, 0 ) );
  

@@ -4,25 +4,23 @@
   cython,
   fetchFromGitHub,
   poetry-core,
+  pytest-codspeed,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   propcache,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cached-ipaddress";
-  version = "0.10.0";
+  version = "1.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "cached-ipaddress";
-    tag = "v${version}";
-    hash = "sha256-g6ffp08SXckCJthGICeuEqZ71XeLklKmz6Ziz/AHBOg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+A1kMD1L2K+dAWrZJ96qJpx0udRGMWbWApyWtMrE7lk=";
   };
 
   build-system = [
@@ -34,17 +32,18 @@ buildPythonPackage rec {
   dependencies = [ propcache ];
 
   nativeCheckInputs = [
+    pytest-codspeed
     pytest-cov-stub
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "cached_ipaddress" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cache construction of ipaddress objects";
     homepage = "https://github.com/bdraco/cached-ipaddress";
-    changelog = "https://github.com/bdraco/cached-ipaddress/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
+    changelog = "https://github.com/bdraco/cached-ipaddress/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

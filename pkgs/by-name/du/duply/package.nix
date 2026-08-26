@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "duply";
-  version = "2.5.5";
+  version = "2.5.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/ftplicity/duply%20%28simple%20duplicity%29/2.5.x/duply_${finalAttrs.version}.tgz";
-    hash = "sha256-ABryuV5jJNoxcJLsSjODLOHuLKrSEhY3buzy1cQh+AU=";
+    hash = "sha256-DSSnjfbcgWIuWaA+4h7d/0HqpDoXqkJOyGapYX4rtP0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

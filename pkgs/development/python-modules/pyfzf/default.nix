@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fzf,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -11,11 +10,9 @@ buildPythonPackage rec {
   version = "0.3.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "nk412";
-    repo = pname;
+    repo = "pyfzf";
     rev = version;
     hash = "sha256-w+ZjQGFd/lR2TiTHc2uQSJXORmzJJZXsr9BO4PIw/Co=";
   };
@@ -27,10 +24,10 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper for fzf";
     homepage = "https://github.com/nk412/pyfzf";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

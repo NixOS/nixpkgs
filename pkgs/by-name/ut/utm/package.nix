@@ -6,13 +6,13 @@
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "utm";
-  version = "4.6.5";
+  version = "4.7.5";
 
   src = fetchurl {
-    url = "https://github.com/utmapp/UTM/releases/download/v${version}/UTM.dmg";
-    hash = "sha256-CzVgfgHi76BPRfF22HW0o4YTh4Bx7lU20qnMO2Sjwo0=";
+    url = "https://github.com/utmapp/UTM/releases/download/v${finalAttrs.version}/UTM.dmg";
+    hash = "sha256-qENck8+1+Lv+6ksTTPrRrGa2djK3XkOMY7GorgQ77w4=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Full featured system emulator and virtual machine host for iOS and macOS";
     longDescription = ''
       UTM is a full featured system emulator and virtual machine host for iOS
@@ -61,14 +61,14 @@ stdenvNoCC.mkDerivation rec {
       See https://docs.getutm.app/ for more information.
     '';
     homepage = "https://mac.getutm.app/";
-    changelog = "https://github.com/utmapp/utm/releases/tag/v${version}";
+    changelog = "https://github.com/utmapp/utm/releases/tag/v${finalAttrs.version}";
     mainProgram = "UTM";
-    license = licenses.asl20;
-    platforms = platforms.darwin; # 11.3 is the minimum supported version as of UTM 4.
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.darwin; # 11.3 is the minimum supported version as of UTM 4.
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [
       rrbutani
       wegank
     ];
   };
-}
+})

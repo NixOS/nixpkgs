@@ -11,7 +11,7 @@
   glibc,
   gnugrep,
   gnused,
-  nettools,
+  net-tools,
   openssh,
   postgresql,
   ps,
@@ -19,14 +19,12 @@
   which,
 }:
 
-# resholve does not yet support `finalAttrs` call pattern hence `rec`
-# https://github.com/abathur/resholve/issues/107
-resholve.mkDerivation rec {
+resholve.mkDerivation (finalAttrs: {
   pname = "unix-privesc-check";
   version = "1.4";
 
   src = fetchurl {
-    url = "https://pentestmonkey.net/tools/unix-privesc-check/unix-privesc-check-${version}.tar.gz";
+    url = "https://pentestmonkey.net/tools/unix-privesc-check/unix-privesc-check-${finalAttrs.version}.tar.gz";
     hash = "sha256-4fhef2n6ut0jdWo9dqDj2GSyHih2O2DOLmGBKQ0cGWk=";
   };
 
@@ -48,7 +46,7 @@ resholve.mkDerivation rec {
         glibc # for ldd command
         gnugrep
         gnused
-        nettools
+        net-tools
         openssh
         postgresql # for psql command
         ps
@@ -77,12 +75,12 @@ resholve.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Find misconfigurations that could allow local unprivilged users to escalate privileges to other users or to access local apps";
     mainProgram = "unix-privesc-check";
     homepage = "https://pentestmonkey.net/tools/audit/unix-privesc-check";
-    maintainers = with maintainers; [ d3vil0p3r ];
-    platforms = platforms.unix;
-    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
   };
-}
+})

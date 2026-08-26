@@ -11,7 +11,6 @@ let
     {
       x86_64-linux = "linux_x86_64";
       aarch64-linux = "linux_x86_64";
-      x86_64-darwin = "mac_x86_64";
       aarch64-darwin = "mac_arm_64";
     }
     .${stdenv.hostPlatform.system}
@@ -24,15 +23,15 @@ let
     }
   );
 
-  self = buildGhidraExtension rec {
+  self = buildGhidraExtension (finalAttrs: {
     pname = "kaiju";
-    version = "250417";
+    version = "260608";
 
     src = fetchFromGitHub {
       owner = "CERTCC";
       repo = "kaiju";
-      rev = version;
-      hash = "sha256-SSvCb3xnOh0mb3H24RJTi11UmN2ARgFgsiiKlZXyufM=";
+      rev = finalAttrs.version;
+      hash = "sha256-T8Ta8lQob7w0iPsVbZix795AjVwdo2U8yuvgCUBi5fw=";
     };
 
     buildInputs = [
@@ -43,9 +42,9 @@ let
     # https://github.com/CERTCC/kaiju/blob/c9dbb55484b3d2a6abd9dfca2197cd00fb7ee3c1/build.gradle#L189
     preBuild = ''
       mkdir -p build/cmake/z3/java-bindings
-      ln -s ${lib.getOutput "lib" z3_lib}/lib/com.microsoft.z3.jar build/cmake/z3/java-bindings
+      ln -s ${lib.getOutput "java" z3_lib}/share/java/com.microsoft.z3.jar build/cmake/z3/java-bindings
       mkdir -p os/${ghidraPlatformName}
-      cp ${lib.getOutput "lib" z3_lib}/lib/* os/${ghidraPlatformName}
+      cp ${lib.getOutput "java" z3_lib}/lib/* os/${ghidraPlatformName}
     '';
 
     gradleFlags = [ "-PKAIJU_SKIP_Z3_BUILD=true" ];
@@ -56,18 +55,17 @@ let
     };
 
     meta = {
-      description = "A Java implementation of some features of the CERT Pharos Binary Analysis Framework for Ghidra";
+      description = "Java implementation of some features of the CERT Pharos Binary Analysis Framework for Ghidra";
       homepage = "https://github.com/CERTCC/kaiju";
-      downloadPage = "https://github.com/CERTCC/kaiju/releases/tag/${version}";
+      downloadPage = "https://github.com/CERTCC/kaiju/releases/tag/${finalAttrs.version}";
       license = lib.licenses.bsd3;
       maintainers = [ lib.maintainers.ivyfanchiang ];
       platforms = [
         "x86_64-linux"
         "aarch64-linux"
-        "x86_64-darwin"
         "aarch64-darwin"
       ];
     };
-  };
+  });
 in
 self

@@ -8,12 +8,12 @@
   boost,
   fuse3,
   lib45d,
-  tbb_2021_11,
+  onetbb,
   liburing,
   installShellFiles,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "autotier";
+  pname = "autotier";
   version = "1.2.0";
   src = fetchFromGitHub {
     owner = "45Drives";
@@ -41,12 +41,20 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  postPatch = ''
+    # Fix build with boost 1.89+ where boost_system stub library has been removed
+    substituteInPlace makefile --replace-fail "-lboost_system" ""
+  '';
+
+  # Required by rocksdb after 10.7.5
+  env.EXTRA_CFLAGS = "-std=c++20 -fno-char8_t";
+
   buildInputs = [
     rocksdb
     boost
     fuse3
     lib45d
-    tbb_2021_11
+    onetbb
     liburing
   ];
 
@@ -81,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/45Drives/autotier";
     description = "Passthrough FUSE filesystem that intelligently moves files between storage tiers based on frequency of use, file age, and tier fullness";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ philipwilk ];
+    maintainers = with lib.maintainers; [ jadewilk ];
     mainProgram = "autotier"; # cli, for file system use autotierfs
     platforms = lib.platforms.linux; # uses io_uring so only available on linux not unix
   };

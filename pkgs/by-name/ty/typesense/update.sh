@@ -16,7 +16,6 @@ fi
 declare -A platforms=(
     [aarch64-linux]="linux-arm64"
     [aarch64-darwin]="darwin-arm64"
-    [x86_64-darwin]="darwin-amd64"
     [x86_64-linux]="linux-amd64"
 )
 
@@ -32,7 +31,7 @@ for platform in "${!platforms[@]}"; do
     arch="${platforms[$platform]}"
     url="https://dl.typesense.org/releases/${version}/typesense-server-${version}-${arch}.tar.gz"
     sha256hash="$(nix-prefetch-url --type sha256 "$url")"
-    hash="$(nix hash to-sri --type sha256 "$sha256hash")"
+    hash="$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$sha256hash")"
     echo "$(jq --arg arch "$arch" \
       --arg platform "$platform" \
       --arg hash "$hash" \

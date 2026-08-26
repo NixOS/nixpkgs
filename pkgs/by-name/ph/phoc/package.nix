@@ -3,6 +3,7 @@
   stdenv,
   stdenvNoCC,
   fetchFromGitLab,
+  callPackage,
   meson,
   ninja,
   pkg-config,
@@ -19,25 +20,39 @@
   wayland,
   libdrm,
   libxkbcommon,
-  wlroots_0_17,
-  xorg,
-  directoryListingUpdater,
+  wlroots_0_19,
+  libxcb-wm,
+  nix-update-script,
   nixosTests,
   testers,
   gmobile,
 }:
 
+let
+  # Derived from subprojects/gvdb.wrap
+  gvdb = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "gvdb";
+    rev = "4758f6fb7f889e074e13df3f914328f3eecb1fd3";
+    hash = "sha256-4mqoHPlrMPenoGPwDqbtv4/rJ/uq9Skcm82pRvOxNIk=";
+    # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
+    forceFetchGit = true;
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "phoc";
-  version = "0.44.1";
+  version = "0.54.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     group = "World";
     owner = "Phosh";
     repo = "phoc";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Whke7wTRp5NaRauiiQZLjs0pSD1uAyr0aAhlK5e1+Hw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-P81D3gCC4Q1JQPUlAtLbMZdlVOPpJJ1/rLX7zijFcc0=";
+    # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
+    forceFetchGit = true;
   };
 
   nativeBuildInputs = [
@@ -62,15 +77,19 @@ stdenv.mkDerivation (finalAttrs: {
     json-glib
     wayland
     finalAttrs.wlroots
-    xorg.xcbutilwm
+    libxcb-wm
     gmobile
   ];
+
+  postPatch = ''
+    ln -s ${gvdb} subprojects/gvdb
+  '';
 
   mesonFlags = [ "-Dembed-wlroots=disabled" ];
 
   # Patch wlroots to remove a check which crashes Phosh.
   # This patch can be found within the phoc source tree.
-  wlroots = wlroots_0_17.overrideAttrs (old: {
+  wlroots = wlroots_0_19.overrideAttrs (old: {
     patches = (old.patches or [ ]) ++ [
       (stdenvNoCC.mkDerivation {
         name = "0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch";
@@ -87,18 +106,19 @@ stdenv.mkDerivation (finalAttrs: {
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
     };
-    updateScript = directoryListingUpdater { };
+    tests.dependency-versions = callPackage ./test-dependency-versions.nix { inherit gvdb; };
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Wayland compositor for mobile phones like the Librem 5";
     mainProgram = "phoc";
     homepage = "https://gitlab.gnome.org/World/Phosh/phoc";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      masipcat
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       zhaofengli
+      armelclo
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

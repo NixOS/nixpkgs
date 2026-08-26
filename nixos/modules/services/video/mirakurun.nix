@@ -160,7 +160,7 @@ in
       group = "video";
       isSystemUser = true;
 
-      # NPM insists on creating ~/.npm
+      # npm insists on creating ~/.npm
       home = "/var/cache/mirakurun";
     };
 
@@ -204,12 +204,11 @@ in
       restartTriggers =
         let
           getconf = target: config.environment.etc."mirakurun/${target}.yml".source;
-          targets =
-            [
-              "server"
-            ]
-            ++ optional (cfg.tunerSettings != null) "tuners"
-            ++ optional (cfg.channelSettings != null) "channels";
+          targets = [
+            "server"
+          ]
+          ++ optional (cfg.tunerSettings != null) "tuners"
+          ++ optional (cfg.channelSettings != null) "channels";
         in
         (map getconf targets);
     };

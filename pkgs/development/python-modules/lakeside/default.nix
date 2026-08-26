@@ -4,7 +4,6 @@
   fetchFromGitHub,
   protobuf,
   pycryptodome,
-  pythonOlder,
   requests,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "lakeside";
   version = "0.13";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nkgilley";
@@ -33,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lakeside" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for controlling LED bulbs from Eufy";
     homepage = "https://github.com/nkgilley/python-lakeside";
     changelog = "https://github.com/nkgilley/python-lakeside/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -4,28 +4,25 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "sploitscan";
-  version = "0.12.0";
+  version = "0.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xaitax";
     repo = "SploitScan";
-    tag = "v.${version}";
-    hash = "sha256-5aSEHZKTmkO/KcklMUEt2q8hqPc8XiT5QUU1YY3wmBw=";
+    tag = "v.${finalAttrs.version}";
+    hash = "sha256-TVxwgYUyFF+W1rMzGffii/vBo3GXCNO5SxuVcYyUgxA=";
   };
 
-  pythonRelaxDeps = [
-    "openai"
-    "requests"
-  ];
+  pythonRelaxDeps = true;
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
+    gitpython
+    google-genai
     jinja2
     openai
     requests
@@ -33,12 +30,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "sploitscan" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cybersecurity utility designed to provide detailed information on vulnerabilities and associated exploits";
     homepage = "https://github.com/xaitax/SploitScan";
-    changelog = "https://github.com/xaitax/SploitScan/releases/tag/v.${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/xaitax/SploitScan/releases/tag/v.${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "sploitscan";
   };
-}
+})

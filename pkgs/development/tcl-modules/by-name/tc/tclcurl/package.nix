@@ -3,6 +3,7 @@
   mkTclDerivation,
   fetchFromGitHub,
   curl,
+  tcl,
 }:
 
 mkTclDerivation rec {
@@ -29,5 +30,6 @@ mkTclDerivation rec {
     changelog = "https://github.com/flightaware/tclcurl-fa/blob/master/ChangeLog.txt";
     license = lib.licenses.tcltk;
     maintainers = with lib.maintainers; [ fgaz ];
+    broken = tcl.isTcl9;
   };
 }

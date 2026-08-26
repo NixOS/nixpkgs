@@ -7,13 +7,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "prometheus-chrony-exporter";
-  version = "0.12.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "superq";
     repo = "chrony_exporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W7MWshRuQdbxLm0XKkTHXN+pjwoX7wnCtjaeXyszr/Q=";
+    hash = "sha256-OGxptCMggqzFjODHd7RyTvfZRs8cOEzwYj5Ib1dFEMo=";
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
@@ -22,7 +22,7 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  # do not use real BuildDate, but fixed imagenary (commit date) for binary reproducibility
+  # do not use real BuildDate, but fixed imaginary (commit date) for binary reproducibility
   preBuild = ''
     ldflags+=" -X github.com/prometheus/common/version.BuildDate=$(cat BUILD_COMMIT_DATE)"
   '';
@@ -36,7 +36,7 @@ buildGoModule (finalAttrs: {
     "-X github.com/prometheus/common/version.BuildUser=nix@nixpkgs"
   ];
 
-  vendorHash = "sha256-3zL7BrCdMVnt7F1FiZ2eQnKVhmCeW3aYKKX9v01ms/k=";
+  vendorHash = "sha256-AONDSx7krgXjGATfNm/ggWGKTOjKdbLqwl6yKa/l1k4=";
 
   passthru.updateScript = nix-update-script { };
 
@@ -44,11 +44,10 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/chrony_exporter";
-  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/superq/chrony_exporter/releases/tag/v${finalAttrs.version}";
-    homepage = "https://github.com/superq/chrony";
+    homepage = "https://github.com/SuperQ/chrony_exporter";
     description = "Prometheus exporter for the chrony NTP service";
     license = lib.licenses.asl20;
     mainProgram = "chrony_exporter";

@@ -24,7 +24,6 @@
   fetchgit,
   makeWrapper,
   gitMinimal,
-  libobjc,
   ruby,
   bundler,
 }@defs:
@@ -40,12 +39,7 @@ lib.makeOverridable (
     platform ? "ruby",
     ruby ? defs.ruby,
     stdenv ? ruby.stdenv,
-    namePrefix ? (
-      let
-        rubyName = builtins.parseDrvName ruby.name;
-      in
-      "${rubyName.name}${lib.versions.majorMinor rubyName.version}-"
-    ),
+    namePrefix ? "${ruby.pname}${lib.versions.majorMinor (toString ruby.version)}-",
     nativeBuildInputs ? [ ],
     buildInputs ? [ ],
     meta ? { },
@@ -78,6 +72,13 @@ lib.makeOverridable (
               attrs.source.remotes or [ "https://rubygems.org" ]
             );
             inherit (attrs.source) sha256;
+            meta = {
+              identifiers.purlParts = {
+                type = "gem";
+                # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/gem-definition.md
+                spec = "${gemName}@${version}?platform=${platform}";
+              };
+            };
           }
         else if type == "git" then
           fetchgit {
@@ -108,32 +109,29 @@ lib.makeOverridable (
   in
 
   stdenv.mkDerivation (
-    (builtins.removeAttrs attrs [ "source" ])
+    (removeAttrs attrs [ "source" ])
     // {
       inherit ruby;
       inherit dontBuild;
       inherit dontStrip;
       inherit suffix;
+      inherit version;
       gemType = type;
-
-      nativeBuildInputs =
-        [
-          ruby
-          makeWrapper
-        ]
-        ++ lib.optionals (type == "git") [ gitMinimal ]
-        ++ lib.optionals (type != "gem") [ bundler ]
-        ++ nativeBuildInputs;
-
-      buildInputs =
-        [
-          ruby
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [ libobjc ]
-        ++ buildInputs;
-
-      #name = builtins.trace (attrs.name or "no attr.name" ) "${namePrefix}${gemName}-${version}";
+      pname = gemName;
       name = attrs.name or "${namePrefix}${gemName}-${suffix}";
+
+      nativeBuildInputs = [
+        ruby
+        makeWrapper
+      ]
+      ++ lib.optionals (type == "git") [ gitMinimal ]
+      ++ lib.optionals (type != "gem") [ bundler ]
+      ++ nativeBuildInputs;
+
+      buildInputs = [
+        ruby
+      ]
+      ++ buildInputs;
 
       inherit src;
 
@@ -221,7 +219,14 @@ lib.makeOverridable (
           export GEM_HOME=$out/${ruby.gemPath}
           mkdir -p $GEM_HOME
 
-          echo "buildFlags: $buildFlags"
+          # When __structuredAttrs is enabled, this is not added to the environment by default,
+          # but nix-bundle-install.rb needs it.
+          export ruby
+
+          local -a flagsArray
+          concatTo flagsArray buildFlags
+
+          echo "buildFlags: ''${flagsArray[@]}"
 
           ${lib.optionalString (type == "url") ''
             ruby ${./nix-bundle-install.rb} \
@@ -260,7 +265,7 @@ lib.makeOverridable (
               --backtrace \
               --no-env-shebang \
               ${documentFlag} \
-              $gempkg $gemFlags -- $buildFlags
+              $gempkg -- "''${flagsArray[@]}"
 
             # looks like useless files which break build repeatability and consume space
             pushd $out/${ruby.gemPath}
@@ -303,7 +308,8 @@ lib.makeOverridable (
         # default to Ruby's platforms
         platforms = ruby.meta.platforms;
         mainProgram = gemName;
-      } // meta;
+      }
+      // meta;
     }
   )
 

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "1.33";
 
   src = fetchurl {
-    url = "https://sourceforge.net/projects/dgen/files/dgen/${version}/${pname}-${version}.tar.gz";
+    url = "https://sourceforge.net/projects/dgen/files/dgen/${version}/dgen-sdl-${version}.tar.gz";
     hash = "sha256-meLAYBfCKHPHf4gYbrzAmGckTrbgQsdjuwlLArje9h4=";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-reserved-user-defined-literal";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dgen.sourceforge.net/";
     description = "Sega Genesis/Mega Drive emulator";
     longDescription = ''
@@ -67,9 +67,9 @@ stdenv.mkDerivation rec {
       - hqx and scale2x upscaling filters
       - VGM dumping
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = with platforms; unix;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = with lib.platforms; unix;
   };
 }
 # TODO: implement configure options

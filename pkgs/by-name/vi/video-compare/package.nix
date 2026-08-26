@@ -7,15 +7,15 @@
   ffmpeg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "video-compare";
-  version = "20250420";
+  version = "20260708";
 
   src = fetchFromGitHub {
     owner = "pixop";
     repo = "video-compare";
-    tag = version;
-    hash = "sha256-q61ZT2a2AkYWk4v2oZqCLHVu5eZQQrDLgD8vxitGyA4=";
+    tag = finalAttrs.version;
+    hash = "sha256-4wmbw+6BBMl+dY6UXYDFAyHA7RRHPwqhppn52Tkvz2k=";
   };
 
   postPatch = ''
@@ -45,9 +45,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/pixop/video-compare";
     description = "Split screen video comparison tool";
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
     license = lib.licenses.gpl2Only;
     mainProgram = "video-compare";
     platforms = lib.platforms.unix;
   };
-}
+})

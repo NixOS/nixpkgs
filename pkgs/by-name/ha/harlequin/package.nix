@@ -6,41 +6,42 @@
   nix-update-script,
   glibcLocales,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
   withPostgresAdapter ? true,
   withBigQueryAdapter ? true,
 }:
-python3Packages.buildPythonApplication rec {
+
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "harlequin";
-  version = "2.0.0";
+  version = "2.10.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "harlequin";
-    tag = "v${version}";
-    hash = "sha256-IUzN+rWL69TUUS9npcmfSAPqy/8SYNusNAN/muCMqNI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TD6i+nlZncr8yNGYsEqIuRbYU/5DoHIoDaHih4S/7Vw=";
   };
 
-  pythonRelaxDeps = [
-    "numpy"
-    "pyarrow"
-    "textual"
-    "syrupy"
-  ];
-
-  build-system = with python3Packages; [ poetry-core ];
+  build-system = with python3Packages; [ hatchling ];
 
   nativeBuildInputs = [ glibcLocales ];
 
+  pythonRelaxDeps = [
+    "click"
+    "questionary"
+    "tomlkit"
+  ];
   dependencies =
     with python3Packages;
     [
       click
       duckdb
-      importlib-metadata
-      numpy
-      packaging
+      msgspec
       platformdirs
+      pyarrow
+      pyperclip
       questionary
       rich-click
       sqlfmt
@@ -48,6 +49,7 @@ python3Packages.buildPythonApplication rec {
       textual-fastdatatable
       textual-textarea
       tomlkit
+      wcwidth
     ]
     ++ lib.optionals withPostgresAdapter [ harlequin-postgres ]
     ++ lib.optionals withBigQueryAdapter [ harlequin-bigquery ];
@@ -63,26 +65,26 @@ python3Packages.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   nativeCheckInputs = with python3Packages; [
+    flaky
+    jsonschema
     pytest-asyncio
+    pytest-textual-snapshot
+    pytest-xdist
     pytestCheckHook
     versionCheckHook
+    writableTmpDirAsHomeHook
   ];
 
-  disabledTests =
-    [
-      # Tests require network access
-      "test_connect_extensions"
-      "test_connect_prql"
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
-      # Test incorrectly tries to load a dylib/so compiled for x86_64
-      "test_load_extension"
-    ];
+  disabledTests = [
+    # Tests require network access
+    "test_connect_extensions"
+    "test_connect_prql"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
+    # Test incorrectly tries to load a dylib/so compiled for x86_64
+    "test_load_extension"
+  ];
 
   disabledTestPaths = [
     # Tests requires more setup
@@ -90,12 +92,12 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = {
-    description = "The SQL IDE for Your Terminal";
+    description = "SQL IDE for Your Terminal";
     homepage = "https://harlequin.sh";
-    changelog = "https://github.com/tconbeer/harlequin/releases/tag/v${version}";
+    changelog = "https://github.com/tconbeer/harlequin/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "harlequin";
     maintainers = with lib.maintainers; [ pcboy ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -7,7 +7,7 @@
 
   isoImage.edition = lib.mkDefault "gnome";
 
-  services.xserver.desktopManager.gnome = {
+  services.desktopManager.gnome = {
     # Add Firefox and other tools useful for installation to the launcher
     favoriteAppsOverride = ''
       [org.gnome.shell]
@@ -16,7 +16,7 @@
     enable = true;
   };
 
-  services.xserver.displayManager.gdm = {
+  services.displayManager.gdm = {
     enable = true;
     # autoSuspend makes the machine automatically suspend after inactivity.
     # It's possible someone could/try to ssh'd into the machine and obviously

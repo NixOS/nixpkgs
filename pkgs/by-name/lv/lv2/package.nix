@@ -9,7 +9,7 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lv2";
   version = "1.18.10";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://lv2plug.in/spec/${pname}-${version}.tar.xz";
+    url = "https://lv2plug.in/spec/lv2-${finalAttrs.version}.tar.xz";
     hash = "sha256-eMUbzyG1Tli7Yymsy7Ta4Dsu15tSD5oB5zS9neUwlT8=";
   };
 
@@ -30,24 +30,23 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  mesonFlags =
-    [
-      # install validators to $dev
-      "--bindir=${placeholder "dev"}/bin"
+  mesonFlags = [
+    # install validators to $dev
+    "--bindir=${placeholder "dev"}/bin"
 
-      # These are just example plugins. They pull in outdated gtk-2
-      # dependency and many other things. Upstream would like to
-      # eventually move them of the project:
-      #   https://gitlab.com/lv2/lv2/-/issues/57#note_1096060029
-      "-Dplugins=disabled"
-      # Pulls in spell checkers among other things.
-      "-Dtests=disabled"
-      # Avoid heavyweight python dependencies.
-      "-Ddocs=disabled"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-Dlv2dir=${placeholder "out"}/lib/lv2"
-    ];
+    # These are just example plugins. They pull in outdated gtk-2
+    # dependency and many other things. Upstream would like to
+    # eventually move them of the project:
+    #   https://gitlab.com/lv2/lv2/-/issues/57#note_1096060029
+    "-Dplugins=disabled"
+    # Pulls in spell checkers among other things.
+    "-Dtests=disabled"
+    # Avoid heavyweight python dependencies.
+    "-Ddocs=disabled"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-Dlv2dir=${placeholder "out"}/lib/lv2"
+  ];
 
   passthru = {
     tests = {
@@ -60,12 +59,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://lv2plug.in";
     description = "Plugin standard for audio systems";
     mainProgram = "lv2_validate";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

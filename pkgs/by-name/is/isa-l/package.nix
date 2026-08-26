@@ -4,9 +4,13 @@
   fetchFromGitHub,
 
   # nativeBuildInputs
+  cmake,
   nasm,
-  autoreconfHook,
 
+  # buildInputs
+  zlib,
+
+  # nativeInstallCheckInputs
   versionCheckHook,
 
   # passthru
@@ -18,30 +22,45 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "isa-l";
-  version = "2.31.1";
+  version = "2.32.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "isa-l";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pv0Aq1Yp/NkGN7KXJ4oQMSG36k5v9YnsELuATl86Zp4=";
+    hash = "sha256-JizQXhfDCL8aWEv52TBuXw06HA/8t7Ram/q9vSp5/DI=";
   };
 
   nativeBuildInputs = [
+    cmake
     nasm
-    autoreconfHook
   ];
 
-  preConfigure = ''
-    export AS=nasm
-  '';
+  buildInputs = [
+    zlib
+  ];
+
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-DVERSION=\"${finalAttrs.version}\""
+    ];
+  };
+  cmakeFlags = [
+    (lib.cmakeBool "ISAL_BUILD_IGZIP_CLI" true)
+
+    # https://github.com/NixOS/nixpkgs/issues/144170
+    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgram = "${placeholder "out"}/bin/igzip";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
+  doCheck = true;
 
   passthru = {
     tests = {
@@ -94,10 +113,5 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/intel/isa-l/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ jbedo ];
     platforms = lib.platforms.all;
-    badPlatforms = [
-      # <instantiation>:4:26: error: unexpected token in argument list
-      #  movk x7, p4_low_b1, lsl 16
-      "aarch64-darwin"
-    ];
   };
 })

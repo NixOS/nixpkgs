@@ -2,29 +2,24 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pythonOlder,
   hatchling,
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "wheel-filename";
-  version = "1.4.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  version = "2.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jwodder";
     repo = "wheel-filename";
     tag = "v${version}";
-    hash = "sha256-KAuUrrSq6HJAy+5Gj6svI4M6oV6Fsle1A79E2q2FKW8=";
+    hash = "sha256-YlJ3mQoaNY7wiLzADLZuTET5i37e/zn2S7n9dOdcE0E=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -33,11 +28,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wheel_filename" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parse wheel filenames";
-    mainProgram = "wheel-filename";
     homepage = "https://github.com/jwodder/wheel-filename";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/wheelodex/wheel-filename/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ayazhafiz ];
+    mainProgram = "wheel-filename";
   };
 }

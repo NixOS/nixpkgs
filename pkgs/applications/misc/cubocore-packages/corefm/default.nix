@@ -33,11 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "Lightwight filemanager from the C Suite";
+    description = "Lightweight filemanager from the C Suite";
     mainProgram = "corefm";
     homepage = "https://gitlab.com/cubocore/coreapps/corefm";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ dan4ik605743 ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

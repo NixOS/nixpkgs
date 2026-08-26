@@ -30,10 +30,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/emilsvennesson/script.module.inputstreamhelper";
     description = "Simple Kodi module that makes life easier for add-on developers relying on InputStream based add-ons and DRM playback";
-    license = licenses.mit;
-    teams = [ teams.kodi ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.kodi ];
   };
 }

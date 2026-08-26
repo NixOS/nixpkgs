@@ -5,12 +5,12 @@
   fastjet,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fastjet-contrib";
   version = "1.101";
 
   src = fetchurl {
-    url = "https://fastjet.hepforge.org/contrib/downloads/fjcontrib-${version}.tar.gz";
+    url = "https://fastjet.hepforge.org/contrib/downloads/fjcontrib-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-2+itIZn3LWTdKfYhj29T793I+z5d2cXRDy/R4j1uRPY=";
   };
 
@@ -48,12 +48,12 @@ stdenv.mkDerivation rec {
     make fragile-shared-install
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Third party extensions for FastJet";
     homepage = "http://fastjet.fr/";
-    changelog = "https://phab.hepforge.org/source/fastjetsvn/browse/contrib/tags/${version}/NEWS?as=source&blame=off";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ veprbl ];
-    platforms = platforms.unix;
+    changelog = "https://phab.hepforge.org/source/fastjetsvn/browse/contrib/tags/${finalAttrs.version}/NEWS?as=source&blame=off";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ veprbl ];
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -3,7 +3,7 @@
   stdenv,
   fetchgit,
   alsa-lib,
-  ladspaH,
+  ladspa-header,
   libjack2,
   fftw,
   zita-alsa-pcmi,
@@ -12,14 +12,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ams";
-  version = "unstable-2019-04-27";
+  version = "220";
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/alsamodular/ams.git";
-    sha256 = "0qdyz5llpa94f3qx1xi1mz97vl5jyrj1mqff28p5g9i5rxbbk8z9";
-    rev = "3250bbcfea331c4fcb9845305eebded80054973d";
+    hash = "sha256-6aO5Vs8lplcuEs7hGmT2stB90q8h9tDxcCSpS2n5vmE=";
+    tag = "Release-${finalAttrs.version}";
   };
 
   nativeBuildInputs = [
@@ -28,25 +28,24 @@ stdenv.mkDerivation {
     qt5.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      alsa-lib
-      ladspaH
-      libjack2
-      fftw
-      zita-alsa-pcmi
-    ]
-    ++ (with qt5; [
-      qtbase
-      qttools
-    ]);
+  buildInputs = [
+    alsa-lib
+    ladspa-header
+    libjack2
+    fftw
+    zita-alsa-pcmi
+  ]
+  ++ (with qt5; [
+    qtbase
+    qttools
+  ]);
 
-  meta = with lib; {
+  meta = {
     description = "Realtime modular synthesizer for ALSA";
     mainProgram = "ams";
     homepage = "https://alsamodular.sourceforge.net";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ sjfloat ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ sjfloat ];
   };
-}
+})

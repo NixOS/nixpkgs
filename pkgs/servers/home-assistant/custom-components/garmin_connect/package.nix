@@ -2,34 +2,37 @@
   lib,
   buildHomeAssistantComponent,
   fetchFromGitHub,
-  garminconnect,
-  tzlocal,
+  ha-garmin,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "cyberjunky";
   domain = "garmin_connect";
-  version = "0.2.30";
+  version = "3.0.15";
 
   src = fetchFromGitHub {
     owner = "cyberjunky";
     repo = "home-assistant-garmin_connect";
     tag = version;
-    hash = "sha256-Gxz0mKVgs2o7IlhGJkz4JlKRb448IRFqK87Kn+Gebkk=";
+    hash = "sha256-hX+8rUhDFIpnd3l1sproYxuASPxMw3haRHphywUPC24=";
   };
 
   dependencies = [
-    garminconnect
-    tzlocal
+    ha-garmin
   ];
 
-  meta = with lib; {
-    description = "The Garmin Connect integration allows you to expose data from Garmin Connect to Home Assistant";
+  # home-assistant-garmin_connect pins an exact version of ha-garmin, but we
+  # want to allow newer, compatible versions to be used.
+  ignoreVersionRequirement = [ "ha-garmin" ];
+
+  meta = {
+    changelog = "https://github.com/cyberjunky/home-assistant-garmin_connect/releases/tag/${src.tag}";
+    description = "Garmin Connect integration allows you to expose data from Garmin Connect to Home Assistant";
     homepage = "https://github.com/cyberjunky/home-assistant-garmin_connect";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       matthiasbeyer
       dmadisetti
     ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

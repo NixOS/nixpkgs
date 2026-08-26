@@ -1,51 +1,78 @@
 {
-  stdenv,
+  fetchFromCodeberg,
   lib,
-  fetchFromGitHub,
-  linux-pam,
   libxcb,
+  linux-pam,
   makeBinaryWrapper,
-  zig_0_13,
-  callPackage,
   nixosTests,
+  stdenv,
+  versionCheckHook,
+  x11Support ? true,
+  zig_0_16,
+  nix-update-script,
 }:
-
-stdenv.mkDerivation {
+let
+  zig = zig_0_16;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "ly";
-  version = "1.0.3";
+  version = "1.4.1";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "fairyglade";
     repo = "ly";
-    rev = "v1.0.3";
-    hash = "sha256-TsEn0kH7j4myjjgwHnbOUmIZjHn8A1d/7IjamoWxpXQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FiHSUqAxJurlQuXEkpglWrd2tCqKZuucB4mipFGI4II=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
-    zig_0_13.hook
-  ];
-  buildInputs = [
-    libxcb
-    linux-pam
+    zig
   ];
 
-  postPatch = ''
-    ln -s ${
-      callPackage ./deps.nix {
-        zig = zig_0_13;
-      }
-    } $ZIG_GLOBAL_CACHE_DIR/p
+  buildInputs = [
+    linux-pam
+  ]
+  ++ lib.optionals x11Support [ libxcb ];
+
+  zigDeps = zig.fetchDeps {
+    inherit (finalAttrs) src pname version;
+    fetchAll = true;
+    hash = "sha256-ZTGQhsDTpWfG4giM0WsfCjlDVr4htC6WWBpSGyKZUr0=";
+  };
+
+  postConfigure = ''
+    ln -s ${finalAttrs.zigDeps} "$ZIG_GLOBAL_CACHE_DIR/p"
   '';
 
-  passthru.tests = { inherit (nixosTests) ly; };
+  zigBuildFlags = [ "-Denable_x11_support=${lib.boolToString x11Support}" ];
 
-  meta = with lib; {
-    description = "TUI display manager";
-    license = licenses.wtfpl;
-    homepage = "https://github.com/fairyglade/ly";
-    maintainers = [ maintainers.vidister ];
-    platforms = platforms.linux;
-    mainProgram = "ly";
+  postInstall = ''
+    install -Dm0644 res/config.ini "$out/etc/config.ini"
+    install -Dm0755 res/setup.sh "$out/etc/setup.sh"
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru = {
+    tests = { inherit (nixosTests) ly; };
+    updateScript = nix-update-script { };
   };
-}
+
+  meta = {
+    description = "TUI display manager";
+    longDescription = ''
+      Ly is a lightweight TUI (ncurses-like) display manager for Linux
+      and BSD, designed with portability in mind (e.g. it does not
+      require systemd to run).
+    '';
+    homepage = "https://codeberg.org/fairyglade/ly";
+    license = lib.licenses.wtfpl;
+    mainProgram = "ly";
+    maintainers = with lib.maintainers; [
+      zacharyarnaise
+    ];
+    platforms = lib.platforms.unix;
+  };
+})

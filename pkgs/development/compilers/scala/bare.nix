@@ -8,12 +8,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.3.5";
+  version = "3.3.8";
   pname = "scala-bare";
 
   src = fetchurl {
     url = "https://github.com/scala/scala3/releases/download/${finalAttrs.version}/scala3-${finalAttrs.version}.tar.gz";
-    hash = "sha256-JVQG16L0/3RbahJc+FDz6pazTyb5vnxqP4272l0TalI=";
+    hash = "sha256-F6A92cKnkLQjCn0Dt0HN7cplFAluUOcYm8Xi0pnbJQo=";
   };
 
   propagatedBuildInputs = [
@@ -36,19 +36,19 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  meta = with lib; {
-    description = "The Scala 3 compiler, also known as Dotty";
+  meta = {
+    description = "Scala 3 compiler, also known as Dotty";
     homepage = "https://scala-lang.org/";
-    license = licenses.asl20;
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
     mainProgram = "scala";
-    maintainers = with maintainers; [
-      karolchmist
+    maintainers = with lib.maintainers; [
       virusdave
       kashw2
       natsukagami
       hamzaremmal
       dottybot
+      turebentzin
     ];
   };
 })

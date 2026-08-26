@@ -2,6 +2,7 @@
   mkKdeDerivation,
   pkg-config,
   systemd,
+  elfutils,
   gdb,
   python3,
   replaceVars,
@@ -20,8 +21,9 @@ mkKdeDerivation {
   pname = "drkonqi";
 
   patches = [
-    (replaceVars ./gdb-path.patch {
+    (replaceVars ./hardcode-paths.patch {
       gdb = "${gdb'}/bin/gdb";
+      eu-unstrip = "${elfutils}/bin/eu-unstrip";
     })
   ];
 

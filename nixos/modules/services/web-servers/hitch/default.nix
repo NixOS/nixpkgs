@@ -11,11 +11,11 @@ let
     with lib;
     pkgs.writeText "hitch.conf" (
       concatStringsSep "\n" [
-        ("backend = \"${cfg.backend}\"")
+        "backend = \"${cfg.backend}\""
         (concatMapStrings (s: "frontend = \"${s}\"\n") cfg.frontend)
         (concatMapStrings (s: "pem-file = \"${s}\"\n") cfg.pem-files)
-        ("ciphers = \"${cfg.ciphers}\"")
-        ("ocsp-dir = \"${ocspDir}\"")
+        "ciphers = \"${cfg.ciphers}\""
+        "ocsp-dir = \"${ocspDir}\""
         "user = \"${cfg.user}\""
         "group = \"${cfg.group}\""
         cfg.extraConfig
@@ -93,14 +93,13 @@ with lib;
       description = "Hitch";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      preStart =
-        ''
-          ${pkgs.hitch}/sbin/hitch -t --config ${hitchConfig}
-        ''
-        + (optionalString cfg.ocsp-stapling.enabled ''
-          mkdir -p ${ocspDir}
-          chown -R hitch:hitch ${ocspDir}
-        '');
+      preStart = ''
+        ${pkgs.hitch}/sbin/hitch -t --config ${hitchConfig}
+      ''
+      + (optionalString cfg.ocsp-stapling.enabled ''
+        mkdir -p ${ocspDir}
+        chown -R hitch:hitch ${ocspDir}
+      '');
       serviceConfig = {
         Type = "forking";
         ExecStart = "${pkgs.hitch}/sbin/hitch --daemon --config ${hitchConfig}";

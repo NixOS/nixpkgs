@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  autoconf269,
+  autoconf,
   automake,
   libtool,
   pkg-config,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    autoconf269
+    autoconf
     automake
     help2man
     libtool
@@ -75,23 +75,39 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i "/^843;/d" tests/testsuite
     # test 875 (INDEXED sample)
     sed -i "/^875;/d" tests/testsuite
+
+    # gnucobol.texi:2765: no matching `@end verbatim'
+    sed -i "214i @end verbatim" doc/cbrunt.tex
   '';
 
-  preConfigure =
-    ''
-      autoconf
-      aclocal
-      automake
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # when building with nix on darwin, configure will use GNU strip,
-      # which fails due to using --strip-unneeded, which is not supported
-      substituteInPlace configure --replace-fail '"GNU strip"' 'FAKE GNU strip'
-    '';
+  preConfigure = ''
+    autoconf
+    aclocal
+    automake
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # when building with nix on darwin, configure will use GNU strip,
+    # which fails due to using --strip-unneeded, which is not supported
+    substituteInPlace configure --replace-fail '"GNU strip"' 'FAKE GNU strip'
+  '';
 
-  # error: call to undeclared function 'xmlCleanupParser'
-  # ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-  env.CFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-error=implicit-function-declaration";
+  # GCC 15 changed some warnings to errors, particularly around function pointer types
+  # (C23 empty parentheses means no args, not unspecified). These flags are needed
+  # until gnucobol is updated to compile cleanly with GCC 15.
+  # See: https://gcc.gnu.org/gcc-15/porting_to.html
+  env.CFLAGS =
+    let
+      # Clang needs -Wno-error=implicit-function-declaration for xmlCleanupParser
+      clangFlags = "-Wno-error=implicit-function-declaration";
+      # GCC 15+ needs additional flags for incompatible pointer type errors
+      gcc15Flags = "-Wno-error=incompatible-pointer-types -std=gnu11";
+    in
+    if stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "15.0.0" then
+      gcc15Flags
+    else if stdenv.cc.isClang then
+      clangFlags
+    else
+      "";
 
   enableParallelBuilding = true;
 
@@ -134,19 +150,19 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free/libre COBOL compiler";
     homepage = "https://gnu.org/software/gnucobol/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Only
       lgpl3Only
     ];
-    maintainers = with maintainers; [
-      ericsagnes
+    mainProgram = "cobc";
+    maintainers = with lib.maintainers; [
       lovesegfault
       techknowlogick
       kiike
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

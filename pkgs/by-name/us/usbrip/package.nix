@@ -4,44 +4,44 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "usbrip";
-  version = "unstable-2021-07-02";
-
-  disabled = python3.pythonOlder "3.6";
+  version = "0-unstable-2021-07-02";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snovvcrash";
-    repo = pname;
+    repo = "usbrip";
     rev = "0f3701607ba13212ebefb4bbd9e68ec0e22d76ac";
-    sha256 = "1vws8ybhv7szpqvlbmv0hrkys2fhhaa5bj9dywv3q2y1xmljl0py";
+    hash = "sha256-/gIqae3BCzw29y3JVZSC0AntZ4Zg10U3vl+fDZdHmu8=";
   };
-
-  propagatedBuildInputs = with python3.pkgs; [
-    termcolor
-    terminaltables
-    tqdm
-  ];
 
   postPatch = ''
     # Remove install helpers which we don't need
     substituteInPlace setup.py \
-      --replace "parse_requirements('requirements.txt')," "[]," \
-      --replace "resolve('wheel')" "" \
-      --replace "'install': LocalInstallCommand," ""
+      --replace-fail "resolve('wheel')" "" \
+      --replace-fail "'install': LocalInstallCommand," ""
   '';
+
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
+    termcolor
+    terminaltables
+    tqdm
+  ];
 
   # Project has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "usbrip" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to track the history of USB events";
-    mainProgram = "usbrip";
     homepage = "https://github.com/snovvcrash/usbrip";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "usbrip";
+    platforms = lib.platforms.linux;
   };
-}
+})

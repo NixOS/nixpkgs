@@ -2,10 +2,10 @@ Disable rpath for the bootstrap build with CMake.
 
 --- a/Sources/PackageDescription/CMakeLists.txt
 +++ b/Sources/PackageDescription/CMakeLists.txt
-@@ -31,14 +31,11 @@ if(CMAKE_HOST_SYSTEM_NAME STREQUAL Darwin)
-   set(SWIFT_INTERFACE_PATH ${CMAKE_BINARY_DIR}/pm/ManifestAPI/PackageDescription.swiftinterface)
-   target_compile_options(PackageDescription PUBLIC
-     $<$<COMPILE_LANGUAGE:Swift>:-emit-module-interface-path$<SEMICOLON>${SWIFT_INTERFACE_PATH}>)
+@@ -27,14 +27,11 @@
+   $<$<COMPILE_LANGUAGE:Swift>:-package-description-version$<SEMICOLON>999.0>)
+ 
+ if(CMAKE_HOST_SYSTEM_NAME STREQUAL Darwin)
 -  target_link_options(PackageDescription PRIVATE
 -    "SHELL:-Xlinker -install_name -Xlinker @rpath/libPackageDescription.dylib")
  endif()

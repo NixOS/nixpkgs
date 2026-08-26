@@ -1,24 +1,26 @@
 {
-  buildGoModule,
+  stdenv,
+  buildGo126Module,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   nix-update-script,
   buildNpmPackage,
+  nixosTests,
 }:
-
-buildGoModule rec {
+buildGo126Module (finalAttrs: {
   pname = "beszel";
-  version = "0.10.2";
+  version = "0.18.7";
 
   src = fetchFromGitHub {
     owner = "henrygd";
     repo = "beszel";
-    tag = "v${version}";
-    hash = "sha256-yYSX58qA4vE7Bp3ADc6rIMf9yaeU7Zw7D5rmES6x6oA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pVZ1ru9++BypZ3EwoE8clqJowXj1/CMiJxKaC+UY9VE=";
   };
 
   webui = buildNpmPackage {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
@@ -46,32 +48,79 @@ buildGoModule rec {
       runHook postInstall
     '';
 
-    sourceRoot = "${src.name}/beszel/site";
+    sourceRoot = "${finalAttrs.src.name}/internal/site";
 
-    npmDepsHash = "sha256-27NUV23dNHFSwOHiB/wGSAWkp6eZMnw/6Pd3Fwn98+s=";
+    npmDepsHash = "sha256-mYAD8FrQwa+F/VgGxFpe8vqucfZaM0PmY+gJJqw1IKk=";
   };
 
-  sourceRoot = "${src.name}/beszel";
+  vendorHash = "sha256-TVpZbK9V9/GqpVFcjF7QGD5XJJHzRgjVXZOImHQTR1k=";
 
-  vendorHash = "sha256-VX9mil0Hdmb85Zd9jfvm5Zz2pPQx+oAGHY+BI04bYQY=";
+  patches = [
+    # https://github.com/NixOS/nixpkgs/pull/513197
+    (fetchpatch {
+      name = "fix-updater-after-system-manager-shutdown.patch";
+      url = "https://github.com/henrygd/beszel/commit/c538d1de1cf3f4664a2d98086341884a217846e7.patch";
+      hash = "sha256-voIT9b14pgfhnbJrqgoIbQtwZPU1JF0fblybjG9mzvM=";
+    })
+  ];
 
   preBuild = ''
-    mkdir -p site/dist
-    cp -r ${webui}/* site/dist
+    mkdir -p internal/site/dist
+    cp -r ${finalAttrs.webui}/* internal/site/dist
   '';
+
+  checkFlags =
+    let
+      skippedTests = [
+        "TestCollectorStartHelpers/nvtop_collector"
+        "TestApiRoutesAuthentication/GET_/update_-_shouldn't_exist_without_CHECK_UPDATES_env_var"
+        "TestConfigSyncWithTokens"
+        # This subtest assumes enough host CPUs for an 8s CPU delta over 1s to stay below 100%.
+        "TestServiceUpdateCPUPercent/subsequent_call_calculates_CPU_percentage"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        "TestCollectorStartHelpers/nvidia-smi_collector"
+        "TestCollectorStartHelpers/rocm-smi_collector"
+        "TestCollectorStartHelpers/tegrastats_collector"
+        "TestNewGPUManagerPriorityNvtopFallback"
+        "TestNewGPUManagerPriorityMixedCollectors"
+        "TestNewGPUManagerPriorityNvmlFallbackToNvidiaSmi"
+        "TestNewGPUManagerConfiguredCollectorsMustStart"
+        "TestNewGPUManagerConfiguredNvmlBypassesCapabilityGate"
+        "TestNewGPUManagerJetsonIgnoresCollectorConfig"
+      ];
+    in
+    [
+      "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$"
+      "-tags=testing"
+    ];
 
   postInstall = ''
     mv $out/bin/agent $out/bin/beszel-agent
     mv $out/bin/hub $out/bin/beszel-hub
   '';
 
-  passthru.updateScript = nix-update-script { };
+  __darwinAllowLocalNetworking = true;
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "webui"
+      ];
+    };
+    tests.nixos = nixosTests.beszel;
+  };
 
   meta = {
     homepage = "https://github.com/henrygd/beszel";
-    changelog = "https://github.com/henrygd/beszel/releases/tag/v${version}";
+    changelog = "https://github.com/henrygd/beszel/releases/tag/v${finalAttrs.version}";
     description = "Lightweight server monitoring hub with historical data, docker stats, and alerts";
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    maintainers = with lib.maintainers; [
+      bot-wxt1221
+      arunoruto
+      BonusPlay
+    ];
     license = lib.licenses.mit;
   };
-}
+})

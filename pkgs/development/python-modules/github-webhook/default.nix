@@ -4,19 +4,21 @@
   fetchPypi,
   flask,
   six,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "github-webhook";
   version = "1.0.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "b2444dbfd03deda35792bd00ebd1692597c2605c61445da79da6322afaca7a8d";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+  dependencies = [
     flask
     six
   ];
@@ -24,9 +26,9 @@ buildPythonPackage rec {
   # touches network
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Framework for writing webhooks for GitHub";
     homepage = "https://github.com/bloomberg/python-github-webhook";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
-}
+})

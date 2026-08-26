@@ -7,14 +7,14 @@
   ronn,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flock";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "discoteq";
     repo = "flock";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-cCpckORtogs6Nt7c5q2+z0acXAnALdLV6uzxa5ng3s4=";
   };
 
@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform version of flock(1)";
     homepage = "https://github.com/discoteq/flock";
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = [ ];
     mainProgram = "flock";
-    platforms = platforms.all;
-    license = licenses.isc;
+    platforms = lib.platforms.all;
+    license = lib.licenses.isc;
   };
-}
+})

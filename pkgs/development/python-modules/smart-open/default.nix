@@ -1,8 +1,9 @@
 {
   lib,
+  backports-zstd,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+  awscli2,
   azure-common,
   azure-core,
   azure-storage-blob,
@@ -10,29 +11,35 @@
   google-cloud-storage,
   requests,
   moto,
+  numpy,
   paramiko,
+  pytest-cov-stub,
+  pytest-timeout,
+  pytest-xdist,
   pytestCheckHook,
+  pyopenssl,
   responses,
   setuptools,
+  setuptools-scm,
   wrapt,
-  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "smart-open";
-  version = "7.2.0";
+  version = "7.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "RaRe-Technologies";
     repo = "smart_open";
     tag = "v${version}";
-    hash = "sha256-/16Is90235scTAYUW/65QxcTddD0+aiG5TLzYsBUE1A=";
+    hash = "sha256-MKQvvz75PBUZwQ9e/vR+XGdaT+pD2agZtdHOV0Gw9Kk=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [ wrapt ];
 
@@ -47,18 +54,26 @@ buildPythonPackage rec {
     http = [ requests ];
     webhdfs = [ requests ];
     ssh = [ paramiko ];
-    zst = [ zstandard ];
+    zst = [ backports-zstd ];
   };
 
   pythonImportsCheck = [ "smart_open" ];
 
   nativeCheckInputs = [
+    awscli2
     moto
+    numpy
+    pytest-cov-stub
+    pytest-timeout
+    pytest-xdist
     pytestCheckHook
+    pyopenssl
     responses
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ moto.optional-dependencies.server
+  ++ lib.concatAttrValues optional-dependencies;
 
-  pytestFlagsArray = [ "smart_open" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = [
     # https://github.com/RaRe-Technologies/smart_open/issues/784
@@ -68,11 +83,10 @@ buildPythonPackage rec {
     "test_seek_from_start"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/piskvorky/smart_open/releases/tag/${src.tag}";
     description = "Library for efficient streaming of very large file";
-    homepage = "https://github.com/RaRe-Technologies/smart_open";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jyp ];
+    homepage = "https://github.com/piskvorky/smart_open";
+    license = lib.licenses.mit;
   };
 }

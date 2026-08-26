@@ -5,20 +5,18 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-recoveryservicesbackup";
-  version = "9.1.0";
+  version = "11.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Hp/UBsDJ7iYn9aNx8BL4dzQvf8bzOyVk/NFNbwZjzQ8=";
+    pname = "azure_mgmt_recoveryservicesbackup";
+    inherit (finalAttrs) version;
+    hash = "sha256-Czjim5iddTF0H6mCSFZ8zGOEqArUaj3jY8njOkCXHvs=";
   };
 
   build-system = [ setuptools ];
@@ -34,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.mgmt.recoveryservicesbackup" ];
 
-  meta = with lib; {
+  meta = {
     description = "This is the Microsoft Azure Recovery Services Backup Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-recoveryservicesbackup_${version}/sdk/recoveryservices/azure-mgmt-recoveryservicesbackup/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-recoveryservicesbackup_${finalAttrs.version}/sdk/recoveryservices/azure-mgmt-recoveryservicesbackup/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
-}
+})

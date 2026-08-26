@@ -4,30 +4,36 @@
   fetchPypi,
   ssdeep,
   pefile,
+  setuptools,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyimpfuzzy";
   version = "0.5";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "da9796df302db4b04a197128637f84988f1882f1e08fdd69bbf9fdc6cfbaf349";
+    pname = "pyimpfuzzy";
+    inherit (finalAttrs) version;
+    hash = "sha256-2peW3zAttLBKGXEoY3+EmI8YgvHgj91pu/n9xs+680k=";
   };
+
+  build-system = [ setuptools ];
 
   buildInputs = [ ssdeep ];
 
-  propagatedBuildInputs = [ pefile ];
+  dependencies = [ pefile ];
 
   # no tests
   doCheck = false;
 
   pythonImportsCheck = [ "pyimpfuzzy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module which calculates and compares the impfuzzy (import fuzzy hashing)";
     homepage = "https://github.com/JPCERTCC/impfuzzy";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
   };
-}
+})

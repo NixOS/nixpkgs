@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation {
   pname = "gl3w";
-  version = "0-unstable-2025-04-08";
+  version = "0-unstable-2026-08-17";
 
   src = fetchFromGitHub {
     owner = "skaslev";
     repo = "gl3w";
-    rev = "1528d8918447a61e97fe669d7b3e280a60b9a161";
-    hash = "sha256-a3fe67xh2nyIu/ytMb9D8S/7QMz23uJUDX7LOfwIJgU=";
+    rev = "372e391702acac616e0fd32e3eaccf19d58b9626";
+    hash = "sha256-CQZ12557ruFkuoKFyaFja6rEgzqRtbVAupHYfM2J4XQ=";
   };
 
   nativeBuildInputs = [
@@ -44,11 +44,11 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Simple OpenGL core profile loading";
     homepage = "https://github.com/skaslev/gl3w";
-    license = licenses.unlicense;
+    license = lib.licenses.unlicense;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

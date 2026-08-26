@@ -3,13 +3,13 @@
   lib,
   fetchurl,
   removeReferencesTo,
-  darwin,
   perl,
   pkg-config,
   libcap,
   libidn2,
   libtool,
   libxml2,
+  json_c,
   openssl,
   liburcu,
   libuv,
@@ -24,15 +24,17 @@
   cmocka,
   tzdata,
   gitUpdater,
+  fstrm,
+  protobufc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bind";
-  version = "9.20.7";
+  version = "9.20.26";
 
   src = fetchurl {
-    url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QzI8jSLSFEKCw3tAYOwR6Ywkg14iVoiHb60IunuV3KY=";
+    url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/bind-${finalAttrs.version}.tar.xz";
+    hash = "sha256-VSSN7w+HDExGs95yl46pcmFRMVFmYxiKRWTcodIL81A=";
   };
 
   outputs = [
@@ -51,34 +53,36 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     perl
     pkg-config
+    protobufc
     removeReferencesTo
   ];
-  buildInputs =
-    [
-      libidn2
-      libtool
-      libxml2
-      openssl
-      liburcu
-      libuv
-      nghttp2
-      jemalloc
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux libcap
-    ++ lib.optional enableGSSAPI libkrb5
-    ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]))
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
+  buildInputs = [
+    libidn2
+    libtool
+    libxml2
+    json_c
+    openssl
+    liburcu
+    libuv
+    nghttp2
+    jemalloc
+    fstrm
+    protobufc
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libcap
+  ++ lib.optional enableGSSAPI libkrb5
+  ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  configureFlags =
-    [
-      "--localstatedir=/var"
-      "--without-lmdb"
-      "--with-libidn2"
-    ]
-    ++ lib.optional enableGSSAPI "--with-gssapi=${libkrb5.dev}/bin/krb5-config"
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
+  configureFlags = [
+    "--localstatedir=/var"
+    "--without-lmdb"
+    "--enable-dnstap"
+    "--with-libidn2"
+  ]
+  ++ lib.optional enableGSSAPI "--with-gssapi=${libkrb5.dev}/bin/krb5-config"
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
 
   postInstall = ''
     moveToOutput bin/bind9-config $dev
@@ -106,32 +110,24 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelBuilding = true;
+  strictDeps = true;
+  __structuredAttrs = true;
 
-  doCheck = false;
-  # TODO: investigate failures; see this and linked discussions:
-  # https://github.com/NixOS/nixpkgs/pull/192962
-  /*
-    doCheck = with stdenv.hostPlatform; !isStatic && !(isAarch64 && isLinux)
-      # https://gitlab.isc.org/isc-projects/bind9/-/issues/4269
-      && !is32bit;
-  */
+  doCheck = with stdenv.hostPlatform; !isStatic && isLinux && !isLoongArch64;
   checkTarget = "unit";
-  checkInputs =
-    [
-      cmocka
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isMusl) [
-      tzdata
-    ];
-  preCheck =
-    lib.optionalString stdenv.hostPlatform.isMusl ''
-      # musl doesn't respect TZDIR, skip timezone-related tests
-      sed -i '/^ISC_TEST_ENTRY(isc_time_formatISO8601L/d' tests/isc/time_test.c
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Test timeouts on Darwin
-      sed -i '/^ISC_TEST_ENTRY(tcpdns_recv_one/d' tests/isc/netmgr_test.c
-    '';
+  checkInputs = [
+    cmocka
+  ];
+  preCheck = ''
+    # skip timezone-related tests, they are flaky inside the nix sandbox
+    sed -i '/^ISC_TEST_ENTRY(isc_time_formatISO8601L/d' tests/isc/time_test.c
+  ''
+  + lib.optionalString stdenv.hostPlatform.isRiscV64 ''
+    # lock benchmarks exceed the 300s test watchdog on slower hardware
+    sed -i '/^ISC_TEST_ENTRY(isc_mutex_benchmark/d' tests/isc/mutex_test.c
+    sed -i '/^ISC_TEST_ENTRY_CUSTOM(isc_rwlock_benchmark/d' tests/isc/rwlock_test.c
+    sed -i '/^ISC_TEST_ENTRY(isc_spinlock_benchmark/d' tests/isc/spinlock_test.c
+  '';
 
   postFixup = ''
     remove-references-to -t "$out" "$dnsutils/bin/delv"
@@ -142,6 +138,8 @@ stdenv.mkDerivation (finalAttrs: {
       withCheck = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
       inherit (nixosTests) bind;
       prometheus-exporter = nixosTests.prometheus-exporters.bind;
+    }
+    // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
       kubernetes-dns-single-node = nixosTests.kubernetes.dns-single-node;
       kubernetes-dns-multi-node = nixosTests.kubernetes.dns-multi-node;
     };
@@ -155,15 +153,15 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.isc.org/bind/";
     description = "Domain name server";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     changelog = "https://downloads.isc.org/isc/bind9/cur/${lib.versions.majorMinor finalAttrs.version}/doc/arm/html/notes.html#notes-for-bind-${
       lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
-    maintainers = with maintainers; [ globin ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ bartoostveen ];
+    platforms = lib.platforms.unix;
 
     outputsToInstall = [
       "out"

@@ -2,23 +2,22 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  testers,
-  gojq,
   installShellFiles,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gojq";
-  version = "0.12.17";
+  version = "0.12.19";
 
   src = fetchFromGitHub {
     owner = "itchyny";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-zJkeghN3btF/fZZeuClHV1ndB/2tTTMljEukMYe7UWU=";
+    repo = "gojq";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-egaBNHKKzwDwaUN4GT+Xvt11Nz6ojNMSIrXbcEisyI4=";
   };
 
-  vendorHash = "sha256-ZC0byawZLBwId5GcAgHXRdEOMUSAv4wDNHFHLrbhB+I=";
+  vendorHash = "sha256-6UnX9YHh4RGcIFfqaJLxDPxuGQ6KO4UIOryXsoJUjFs=";
 
   ldflags = [
     "-s"
@@ -31,16 +30,23 @@ buildGoModule rec {
     installShellCompletion --cmd gojq --zsh _gojq
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = gojq;
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  postInstallCheck = ''
+    $out/bin/gojq --help > /dev/null
+    $out/bin/gojq --raw-output '.values[1]' <<< '{"values":["hello","world"]}' | grep '^world$' > /dev/null
+  '';
+  doInstallCheck = true;
 
   meta = {
     description = "Pure Go implementation of jq";
     homepage = "https://github.com/itchyny/gojq";
-    changelog = "https://github.com/itchyny/gojq/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/itchyny/gojq/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    maintainers = with lib.maintainers; [
+      xiaoxiangmoe
+    ];
     mainProgram = "gojq";
   };
-}
+})

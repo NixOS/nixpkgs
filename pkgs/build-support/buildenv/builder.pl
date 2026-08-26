@@ -9,13 +9,38 @@ use JSON::PP;
 
 STDOUT->autoflush(1);
 
-$SIG{__WARN__} = sub { warn "warning: ", @_ };
-$SIG{__DIE__}  = sub { die "error: ", @_ };
+$SIG{__WARN__} = sub { warn "pkgs.buildEnv warning: ", @_ };
+$SIG{__DIE__}  = sub { die "pkgs.buildEnv error: ", @_ };
 
-my $out = $ENV{"out"};
-my $extraPrefix = $ENV{"extraPrefix"};
+my $out;
+my $extraPrefix;
+my @pathsToLink;
+my $ignoreCollisions;
+my $checkCollisionContents;
+my $ignoreSingleFileOutputs;
+my @chosenOutputsRefs;
+my $extraPathsFrom;
+my $manifest;
 
-my @pathsToLink = split ' ', $ENV{"pathsToLink"};
+if ($ENV{"NIX_ATTRS_JSON_FILE"} // "") {
+    open FILE, $ENV{"NIX_ATTRS_JSON_FILE"} or die "cannot open structured attrs JSON file $ENV{NIX_ATTRS_JSON_FILE}: $!";
+    my $json_text = do { local $/; <FILE> };
+    my $attrsFromJSONRef = decode_json $json_text;
+    close FILE;
+
+    my $outputsRef = $attrsFromJSONRef->{"outputs"};
+    $out = $outputsRef->{"out"} // (values %{$outputsRef})[0];
+    $extraPrefix = $attrsFromJSONRef->{"extraPrefix"};
+    @pathsToLink = @{$attrsFromJSONRef->{"pathsToLink"}};
+    $ignoreCollisions = $attrsFromJSONRef->{"ignoreCollisions"};
+    $checkCollisionContents = $attrsFromJSONRef->{"checkCollisionContents"};
+    $ignoreSingleFileOutputs = $attrsFromJSONRef->{"ignoreSingleFileOutputs"};
+    @chosenOutputsRefs = @{$attrsFromJSONRef->{"chosenOutputs"}};
+    $extraPathsFrom = $attrsFromJSONRef->{"extraPathsFrom"};
+    $manifest = $attrsFromJSONRef->{"manifest"};
+} else {
+    die "missing required environment variable NIX_ATTRS_JSON_FILE";
+}
 
 sub isInPathsToLink($path) {
     $path = "/" if $path eq "";
@@ -74,7 +99,7 @@ sub findFiles;
 
 sub findFilesInDir($relName, $target, $ignoreCollisions, $checkCollisionContents, $priority, $ignoreSingleFileOutputs) {
     opendir DIR, "$target" or die "cannot open `$target': $!";
-    my @names = readdir DIR or die;
+    my @names = readdir DIR;
     closedir DIR;
 
     foreach my $name (@names) {
@@ -109,7 +134,7 @@ sub findFiles($relName, $target, $baseName, $ignoreCollisions, $checkCollisionCo
     # The store path must not be a file when not ignoreSingleFileOutputs
     if (-f $target && isStorePath $target) {
         if ($ignoreSingleFileOutputs) {
-            warn "The store path $target is a file and can't be merged into an environment using pkgs.buildEnv";
+            warn "The store path $target is a file and can't be merged into an environment using pkgs.buildEnv, ignoring it";
             return;
         } else {
             die "The store path $target is a file and can't be merged into an environment using pkgs.buildEnv!";
@@ -173,12 +198,12 @@ sub findFiles($relName, $target, $baseName, $ignoreCollisions, $checkCollisionCo
         my $oldTargetRef = prependDangling($oldTarget);
 
         if ($ignoreCollisions) {
-            warn "collision between $targetRef and $oldTargetRef\n" if $ignoreCollisions == 1;
+            warn "colliding subpath (ignored): $targetRef and $oldTargetRef\n" if $ignoreCollisions == 1;
             return;
         } elsif ($checkCollisionContents && checkCollision($oldTarget, $target)) {
             return;
         } else {
-            die "collision between $targetRef and $oldTargetRef\n";
+            die "two given paths contain a conflicting subpath:\n  $targetRef and\n  $oldTargetRef\nhint: this may be caused by two different versions of the same package in buildEnv's `paths` parameter\nhint: `pkgs.nix-diff` can be used to compare derivations\n";
         }
     }
 
@@ -210,26 +235,15 @@ sub addPkg($pkgDir, $ignoreCollisions, $checkCollisionContents, $priority, $igno
     }
 }
 
-# Read packages list.
-my $pkgs;
-
-if (exists $ENV{"pkgsPath"}) {
-    open FILE, $ENV{"pkgsPath"};
-    $pkgs = <FILE>;
-    close FILE;
-} else {
-    $pkgs = $ENV{"pkgs"}
-}
-
 # Symlink to the packages that have been installed explicitly by the
 # user.
-for my $pkg (@{decode_json $pkgs}) {
+for my $pkg (@chosenOutputsRefs) {
     for my $path (@{$pkg->{paths}}) {
         addPkg($path,
-               $ENV{"ignoreCollisions"} eq "1",
-               $ENV{"checkCollisionContents"} eq "1",
+               $ignoreCollisions,
+               $checkCollisionContents,
                $pkg->{priority},
-               $ENV{"ignoreSingleFileOutputs"} eq "1")
+               $ignoreSingleFileOutputs)
            if -e $path;
     }
 }
@@ -244,21 +258,20 @@ while (scalar(keys %postponed) > 0) {
     my @pkgDirs = keys %postponed;
     %postponed = ();
     foreach my $pkgDir (sort @pkgDirs) {
-        addPkg($pkgDir, 2, $ENV{"checkCollisionContents"} eq "1", $priorityCounter++, $ENV{"ignoreSingleFileOutputs"} eq "1");
+        addPkg($pkgDir, 2, $checkCollisionContents, $priorityCounter++, $ignoreSingleFileOutputs);
     }
 }
 
-my $extraPathsFilePath = $ENV{"extraPathsFrom"};
-if ($extraPathsFilePath) {
-    open FILE, $extraPathsFilePath or die "cannot open extra paths file $extraPathsFilePath: $!";
+if ($extraPathsFrom) {
+    open FILE, $extraPathsFrom or die "cannot open extra paths file $extraPathsFrom: $!";
 
     while(my $line = <FILE>) {
         chomp $line;
         addPkg($line,
-               $ENV{"ignoreCollisions"} eq "1",
-               $ENV{"checkCollisionContents"} eq "1",
+               $ignoreCollisions,
+               $checkCollisionContents,
                1000,
-               $ENV{"ignoreSingleFileOutputs"} eq "1")
+               $ignoreSingleFileOutputs)
             if -d $line;
     }
 
@@ -286,7 +299,6 @@ foreach my $relName (sort keys %symlinks) {
 print STDERR "created $nrLinks symlinks in user environment\n";
 
 
-my $manifest = $ENV{"manifest"};
 if ($manifest) {
     symlink($manifest, "$out/manifest") or die "cannot create manifest";
 }

@@ -1,0 +1,89 @@
+diff --git a/configure.ac b/configure.ac
+index e59085f6..908a38bc 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -24,6 +24,7 @@ AC_PREFIX_DEFAULT(/usr/local)
+ AM_SILENT_RULES([yes])
+ 
+ ADAPTA_OPTION([PARALLEL],     [parallel],     [parallel-build],      [disable])
++ADAPTA_OPTION([GTK_2],        [gtk_2],        [Gtk-2.0],             [disable])
+ ADAPTA_OPTION([GTK_NEXT],     [gtk_next],     [Gtk-4.0],             [disable])
+ ADAPTA_OPTION([GNOME],        [gnome],        [Gnome-Shell],         [enable])
+ ADAPTA_OPTION([CINNAMON],     [cinnamon],     [Cinnamon],            [enable])
+@@ -106,7 +107,7 @@ AC_MSG_RESULT([
+         | Supported Gtk+ Version
+         -----------------------------------------------------------------
+ 
+-         Gtk+ 2.0:               always
++         Gtk+ 2.0:               $ENABLE_GTK_2 (default: no)
+          Gtk+ 3.20:              always
+          Gtk+ 3.22:              always
+          Gtk+ 3.24:              always
+diff --git a/gtk/Makefile.am b/gtk/Makefile.am
+index d3291a40..349d18ed 100644
+--- a/gtk/Makefile.am
++++ b/gtk/Makefile.am
+@@ -528,7 +528,10 @@ all:
+ 	$(MKDIR_P) $(srcdir)/asset/assets-gtk2/Toolbar && \
+ 	$(MKDIR_P) $(srcdir)/asset/assets-gtk3
+ 
++if ENABLE_GTK_2
+ 	cd $(srcdir)/gtk-2.0 && ./recolor-gtk2.sh
++endif
++
+ if ENABLE_PARALLEL
+ 	cd $(srcdir)/sass && $(PARALLEL) $(parallel_option) ::: \
+ 		"$(SASSC) $(sassc_option) 3.20/gtk.scss ../gtk-3.20/gtk-contained.css" \
+@@ -593,12 +596,11 @@ if ENABLE_XFCE
+ endif
+ 
+ if ENABLE_PARALLEL
++if ENABLE_GTK_2
+ 	cd $(srcdir)/asset/assets-gtk2-scripts && \
+ 		./recolor-assets-gtk2.sh
+ 	cd $(srcdir)/asset/assets-gtk2-scripts && \
+ 		./clone-assets-gtk2.sh
+-	cd $(srcdir)/asset/assets-gtk3-scripts && \
+-		./recolor-assets-gtk3.sh
+ 	cd $(srcdir)/asset/assets-gtk2-scripts && \
+ 	$(PARALLEL) $(parallel_option) ./render-assets-gtk2.sh ::: \
+ 		arrow \
+@@ -611,6 +613,9 @@ if ENABLE_PARALLEL
+ 		range \
+ 		scrollbar \
+ 		spin
++endif
++	cd $(srcdir)/asset/assets-gtk3-scripts && \
++		./recolor-assets-gtk3.sh
+ 	cd $(srcdir)/asset/assets-gtk3-scripts && \
+ 	$(PARALLEL) $(parallel_option) ./render-assets-gtk3.sh ::: \
+ 		checkbox \
+@@ -623,10 +628,12 @@ if ENABLE_PARALLEL
+ 		window-maximize \
+ 		window-unmaximize
+ else
++if ENABLE_GTK_2
+ 	cd $(srcdir)/asset/assets-gtk2-scripts && \
+ 		./recolor-assets-gtk2.sh && \
+ 		./clone-assets-gtk2.sh && \
+ 		./render-assets-gtk2.sh all
++endif
+ 	cd $(srcdir)/asset/assets-gtk3-scripts && \
+ 		./recolor-assets-gtk3.sh && \
+ 		./render-assets-gtk3.sh all
+@@ -686,6 +693,7 @@ install-data-local:
+ 	$(MKDIR_P) $(noktoetadir)/gtk-3.24
+ 	cp -Rv $(gtk324noktoeta_file) $(noktoetadir)/gtk-3.24
+ 
++if ENABLE_GTK_2
+ 	$(MKDIR_P) $(adaptadir)/gtk-2.0
+ 	$(MKDIR_P) $(adaptadir)/gtk-2.0/Arrows
+ 	$(MKDIR_P) $(adaptadir)/gtk-2.0/Buttons
+@@ -813,6 +821,7 @@ install-data-local:
+ 	cp -Rv $(gtk2_nokto_shadow_file) $(noktoetadir)/gtk-2.0/Shadows
+ 	cp -Rv $(gtk2_nokto_spin_file) $(noktoetadir)/gtk-2.0/Spin
+ 	cp -Rv $(gtk2_nokto_toolbar_file) $(noktoetadir)/gtk-2.0/Toolbar
++endif
+ 
+ if ENABLE_GTK_NEXT
+ 	$(MKDIR_P) $(adaptadir)/gtk-4.0

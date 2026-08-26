@@ -2,74 +2,89 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_9,
-  nodejs,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  nodejs_24,
   makeWrapper,
-  pkgs,
+  prisma-engines_7,
   ffmpeg,
   openssl,
   vips,
   versionCheckHook,
   nix-update-script,
   nixosTests,
+  node-gyp,
+  pkg-config,
+  python3,
 }:
 
 let
-  prisma-engines = pkgs.prisma-engines.overrideAttrs (
-    finalAttrs: prevAttrs: {
-      version = "6.5.0";
-      src = fetchFromGitHub {
-        inherit (prevAttrs.src) owner repo;
-        rev = finalAttrs.version;
-        hash = "sha256-m3LBIMIVMI5GlY0+QNw/nTlNWt2rGOZ28z+CfdP51cY=";
-      };
-      cargoHash = "sha256-yG+omKAS1eWq3sFgKXMoZWhTP4M34dVRes7OhhTUyTQ=";
-      cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
-        inherit (finalAttrs) pname version src;
-        hash = finalAttrs.cargoHash;
-      };
-    }
-  );
-
   environment = {
     NEXT_TELEMETRY_DISABLED = "1";
-    FFMPEG_BIN = lib.getExe ffmpeg;
-    PRISMA_SCHEMA_ENGINE_BINARY = lib.getExe' prisma-engines "schema-engine";
-    PRISMA_QUERY_ENGINE_BINARY = lib.getExe' prisma-engines "query-engine";
-    PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines}/lib/libquery_engine.node";
-    PRISMA_INTROSPECTION_ENGINE_BINARY = lib.getExe' prisma-engines "introspection-engine";
-    PRISMA_FMT_BINARY = lib.getExe' prisma-engines "prisma-fmt";
+    FFMPEG_PATH = lib.getExe ffmpeg;
+    FFPROBE_PATH = lib.getExe' ffmpeg "ffprobe";
+    PRISMA_SCHEMA_ENGINE_BINARY = lib.getExe' prisma-engines_7 "schema-engine";
+    PRISMA_QUERY_ENGINE_BINARY = lib.getExe' prisma-engines_7 "query-engine";
+    PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines_7}/lib/libquery_engine.node";
+    PRISMA_INTROSPECTION_ENGINE_BINARY = lib.getExe' prisma-engines_7 "introspection-engine";
+    PRISMA_FMT_BINARY = lib.getExe' prisma-engines_7 "prisma-fmt";
   };
+
+  pnpm' = pnpm_10.override { nodejs-slim = nodejs_24; };
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "4.0.2";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-waUc2DzD7oQ/ZuPKvUwu3Yj6uxrZauR4phcQwh7YfKw=";
+    hash = "sha256-/ISegKJ6NyyLYMoovqWLzJCP9JKsPW76Lm6hTU4NTmU=";
+    leaveDotGit = true;
+    postFetch = ''
+      git -C $out rev-parse --short HEAD > $out/.git_head
+      rm -rf $out/.git
+    '';
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Q1PHXoiqUorAGcpIvM5iBvPINLRv+dAo0awhG4gvsrI=";
+    pnpm = pnpm';
+    fetcherVersion = 3;
+    hash = "sha256-y6BZ7A/4jSMA2sSByDx3czwlc9WM6QUCcguLouNQouk=";
   };
 
-  buildInputs = [ vips ];
-
-  nativeBuildInputs = [
-    pnpm_9.configHook
-    nodejs
-    makeWrapper
+  buildInputs = [
+    openssl
+    vips
   ];
 
-  env = environment;
+  nativeBuildInputs = [
+    pnpmConfigHook
+    pnpm'
+    nodejs_24
+    makeWrapper
+    # for sharp build:
+    node-gyp
+    pkg-config
+    python3
+  ];
+
+  env = environment // {
+    DATABASE_URL = "dummy";
+    NODE_PATH = "${node-gyp}/lib/node_modules";
+  };
 
   buildPhase = ''
     runHook preBuild
+
+    # Force build of sharp against native libvips (requires running install scripts).
+    # This is necessary for supporting old CPUs (ie. without SSE 4.2 instruction set).
+    pnpm config set nodedir ${nodejs_24}
+    npm explore sharp -- pnpm run build
 
     pnpm build
 
@@ -79,14 +94,18 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    CI=true pnpm prune --prod
+    find node_modules -xtype l -delete
+
     mkdir -p $out/{bin,share/zipline}
 
-    cp -r build node_modules prisma .next mimes.json code.json package.json $out/share/zipline
+    cp -r build node_modules prisma mimes.json code.json package.json $out/share/zipline
 
     mkBin() {
-      makeWrapper ${lib.getExe nodejs} "$out/bin/$1" \
+      makeWrapper ${lib.getExe nodejs_24} "$out/bin/$1" \
         --chdir "$out/share/zipline" \
         --set NODE_ENV production \
+        --set ZIPLINE_GIT_SHA "$(<$src/.git_head)" \
         --prefix PATH : ${lib.makeBinPath [ openssl ]} \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ openssl ]} \
         ${
@@ -103,31 +122,25 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  preFixup = ''
-    find $out -name libvips-cpp.so.42 -print0 | while read -d $'\0' libvips; do
-      echo replacing libvips at $libvips
-      rm $libvips
-      ln -s ${lib.getLib vips}/lib/libvips-cpp.so.42 $libvips
-    done
-  '';
-
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/ziplinectl";
-  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "DATABASE_URL" ];
   doInstallCheck = true;
 
   passthru = {
-    inherit prisma-engines;
+    prisma-engines = prisma-engines_7;
     tests = { inherit (nixosTests) zipline; };
     updateScript = nix-update-script { };
   };
 
   meta = {
     description = "ShareX/file upload server that is easy to use, packed with features, and with an easy setup";
-    changelog = "https://github.com/diced/zipline/releases/tag/v${finalAttrs.version}";
     homepage = "https://zipline.diced.sh/";
+    downloadPage = "https://github.com/diced/zipline";
+    changelog = "https://github.com/diced/zipline/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "zipline";
+    platforms = lib.platforms.linux;
   };
 })

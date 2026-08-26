@@ -8,32 +8,36 @@
   pkg-config,
   openssl,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jikken";
-  version = "0.8.1";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "jikkenio";
     repo = "jikken";
-    rev = "v${version}";
-    hash = "sha256-WJxrCCDe39RYwHb+zbr7ugFsFsP5Uc/arw3s6USQoN4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-j9Rmo9szQtTZU2O6YRhkjMr5pV8tflUdr5hgXqYQxjc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-8GulTGiXMgG0ysrRwv5CbS3AKCM3FpieNiJW2pZnEx4=";
+  cargoHash = "sha256-V7Qy+0l3UvW5bM2OV3haGVg3KWDaEiEMvg4wvpwwuk4=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^(v\\d+\\.\\d+\\.\\d+)$"
+    ];
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Powerful, source control friendly REST API testing toolkit";
     homepage = "https://jikken.io/";
-    changelog = "https://github.com/jikkenio/jikken/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vinnymeller ];
+    changelog = "https://github.com/jikkenio/jikken/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vinnymeller ];
     mainProgram = "jk";
   };
-}
+})

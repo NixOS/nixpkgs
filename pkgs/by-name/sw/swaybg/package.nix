@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  buildPackages,
   fetchFromGitHub,
   meson,
   ninja,
@@ -10,20 +11,23 @@
   wayland-protocols,
   cairo,
   gdk-pixbuf,
+  gnome,
+  webp-pixbuf-loader,
   wayland-scanner,
   wrapGAppsNoGuiHook,
   librsvg,
+  libjxl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "swaybg";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swaybg";
-    tag = "v${version}";
-    hash = "sha256-IJcPSBJErf8Dy9YhYAc9eg/llgaaLZCQSB0Brof+kpg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ByocNDqkv1ufN3Rr5yrfGkN5zS+Cw1e8QLQ+5opc1K4=";
   };
 
   strictDeps = true;
@@ -50,17 +54,35 @@ stdenv.mkDerivation rec {
     "-Dman-pages=enabled"
   ];
 
-  meta = with lib; {
+  # Fortify causes header errors in ssp
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isFreeBSD [ "fortify" ];
+
+  # add support for webp
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          librsvg
+          webp-pixbuf-loader
+          libjxl
+        ];
+      }
+    }"
+  '';
+
+  meta = {
     description = "Wallpaper tool for Wayland compositors";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     longDescription = ''
       A wallpaper utility for Wayland compositors, that is compatible with any
       Wayland compositor which implements the following Wayland protocols:
       wlr-layer-shell, xdg-output, and xdg-shell.
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "swaybg";
-    maintainers = with maintainers; [ primeos ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [
+      ryan4yin
+    ];
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
-}
+})

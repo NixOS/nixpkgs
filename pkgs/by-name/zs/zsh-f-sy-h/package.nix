@@ -26,11 +26,11 @@ stdenvNoCC.mkDerivation rec {
     cp -r -- F-Sy-H.plugin.zsh chroma functions share themes "$plugindir"/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Feature-rich Syntax Highlighting for Zsh";
     homepage = "https://github.com/z-shell/F-Sy-H";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ mrfreezeex ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ mrfreezeex ];
+    platforms = lib.platforms.unix;
   };
 }

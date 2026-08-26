@@ -21,6 +21,7 @@ in
 pythonPackages.buildPythonPackage rec {
   pname = "telepresence";
   version = "0.109";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "telepresenceio";
@@ -57,7 +58,7 @@ pythonPackages.buildPythonPackage rec {
     homepage = "https://www.telepresence.io/";
     description = "Local development against a remote Kubernetes or OpenShift cluster";
     mainProgram = "telepresence";
-    license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ offline ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

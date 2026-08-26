@@ -4,26 +4,26 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "goeland";
-  version = "0.18.3";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "slurdge";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-4xhw6L6CuwW2MepwGvpVLVafMcU/g0bn/2M/8ZSRF/U=";
+    repo = "goeland";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-1mHuwXWYYp9VHJqeXeC3faDgEKwz9AlVukL9Hg9XkWw=";
   };
 
-  vendorHash = "sha256-TZIHYFE4kJu5EOQ9oT8S0Tp/r38d5RhoLdmIrus8Ibc=";
+  vendorHash = "sha256-aITCLQoLIJEwlsZBQ9DuTqbnJYm8EGqNIX2dykq2QlU=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/slurdge/goeland/version.GitCommit=${version}"
+    "-X github.com/slurdge/goeland/version.GitCommit=${finalAttrs.version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Alternative to rss2email written in golang with many filters";
     mainProgram = "goeland";
     longDescription = ''
@@ -33,8 +33,8 @@ buildGoModule rec {
       It can also consume other sources, such as Imgur tags.
     '';
     homepage = "https://github.com/slurdge/goeland";
-    changelog = "https://github.com/slurdge/goeland/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = [ maintainers.sweenu ];
+    changelog = "https://github.com/slurdge/goeland/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sweenu ];
   };
-}
+})

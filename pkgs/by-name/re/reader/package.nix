@@ -3,28 +3,25 @@
   fetchFromGitHub,
   buildGoModule,
 }:
-let
-  self = buildGoModule {
-    pname = "reader";
-    version = "0.4.7";
+buildGoModule (finalAttrs: {
+  pname = "reader";
+  version = "0.6.0";
 
-    src = fetchFromGitHub {
-      owner = "mrusme";
-      repo = "reader";
-      tag = "v${self.version}";
-      hash = "sha256-Xg6ndfxKOfiIz654HcnhdvBGydOSSODBp8LnYxmqb4o=";
-    };
-
-    vendorHash = "sha256-dr/y4BBBe5K9U24ikLzYA+B2mzTGpFuFqoj5OLXtUG4=";
-
-    meta = {
-      description = "Lightweight tool offering better readability of web pages on the CLI";
-      homepage = "https://github.com/mrusme/reader";
-      changelog = "https://github.com/mrusme/reader/releases";
-      license = lib.licenses.gpl3Plus;
-      maintainers = with lib.maintainers; [ theobori ];
-      mainProgram = "reader";
-    };
+  src = fetchFromGitHub {
+    owner = "mrusme";
+    repo = "reader";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-R7U+atLrpx7ppdyMR381JUSOM7KAfDr8P9oEAzuZbCY=";
   };
-in
-self
+
+  vendorHash = "sha256-XOcqyUGfE7tq1OY6h7WV33nBNgn+oLmKRSJfVKmXIz4=";
+
+  meta = {
+    description = "Lightweight tool offering better readability of web pages on the CLI";
+    homepage = "https://github.com/mrusme/reader";
+    changelog = "https://github.com/mrusme/reader/releases";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ theobori ];
+    mainProgram = "reader";
+  };
+})

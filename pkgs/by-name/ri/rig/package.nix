@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.11";
   pname = "rig";
 
   src = fetchurl {
-    url = "https://ayera.dl.sourceforge.net/project/rig/rig/${version}/rig-${version}.tar.gz";
+    url = "https://ayera.dl.sourceforge.net/project/rig/rig/${finalAttrs.version}/rig-${finalAttrs.version}.tar.gz";
     sha256 = "1f3snysjqqlpk2kgvm5p2icrj4lsdymccmn3igkc2f60smqckgq0";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; all;
     mainProgram = "rig";
   };
-}
+})

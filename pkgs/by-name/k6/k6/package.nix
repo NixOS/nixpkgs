@@ -6,15 +6,15 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "k6";
-  version = "0.57.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "grafana";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-wU/Kelv/5N86xHJT6E5dfdzBgSYiTYZJ8rkjLyU7RAo=";
+    repo = "k6";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-dtP2G0rk8f3TEPTf5fu/1BEH4nLzboTyE/vveVhlcqo=";
   };
 
   subPackages = [ "./" ];
@@ -25,7 +25,7 @@ buildGoModule rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/k6 version | grep ${version} > /dev/null
+    $out/bin/k6 version | grep ${finalAttrs.version} > /dev/null
   '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -35,16 +35,14 @@ buildGoModule rec {
       --zsh <($out/bin/k6 completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern load testing tool, using Go and JavaScript";
     mainProgram = "k6";
     homepage = "https://k6.io/";
-    changelog = "https://github.com/grafana/k6/releases/tag/v${version}";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
-      offline
-      bryanasdev000
+    changelog = "https://github.com/grafana/k6/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       kashw2
     ];
   };
-}
+})

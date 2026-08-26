@@ -5,7 +5,7 @@
   runCommand,
   inkcut,
   callPackage,
-  texlive,
+  texliveBasic,
 }:
 
 {
@@ -34,12 +34,12 @@
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       description = "This is an extension for creating hex grids in Inkscape. It can also be used to make brick patterns of staggered rectangles";
       homepage = "https://github.com/lifelike/hexmapextension";
-      license = licenses.gpl2Plus;
-      maintainers = [ maintainers.raboof ];
-      platforms = platforms.all;
+      license = lib.licenses.gpl2Plus;
+      maintainers = [ lib.maintainers.raboof ];
+      platforms = lib.platforms.all;
     };
   };
   inkcut = (
@@ -51,7 +51,7 @@
   inkstitch = callPackage ./extensions/inkstitch { };
   silhouette = callPackage ./extensions/silhouette { };
   textext = callPackage ./extensions/textext {
-    pdflatex = texlive.combined.scheme-basic;
-    lualatex = texlive.combined.scheme-basic;
+    pdflatex = texliveBasic;
+    lualatex = texliveBasic;
   };
 }

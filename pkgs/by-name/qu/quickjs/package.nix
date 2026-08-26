@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickjs";
-  version = "2024-01-13";
+  version = "2026-06-04";
 
   src = fetchurl {
     url = "https://bellard.org/quickjs/quickjs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-PEv4+JW/pUvrSGyNEhgRJ3Hs/FrDvhA2hR70FWghLgM=";
+    hash = "sha256-s3boObMil4MT2Sn9IGY7EbpYt131pGwSbdGeovpwrSo=";
   };
 
   outputs = [
@@ -24,7 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
     texinfo
   ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "AR=${stdenv.cc.targetPrefix}ar"
+    "PREFIX=$(out)"
+  ];
 
   doInstallCheck = true;
 
@@ -38,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postBuild = ''
+    make doc/version.texi
     pushd doc
     makeinfo *texi
     popd
@@ -61,7 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       set +o pipefail
       qjs     --help 2>&1 | grep "QuickJS version"
-      qjscalc --help 2>&1 | grep "QuickJS version"
       set -o pipefail
     ''
 
@@ -87,15 +91,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://bellard.org/quickjs/";
-    description = "Small and embeddable Javascript engine";
+    description = "Small and embeddable JavaScript engine";
     longDescription = ''
-      QuickJS is a small and embeddable Javascript engine. It supports the
+      QuickJS is a small and embeddable JavaScript engine. It supports the
       ES2023 specification including modules, asynchronous generators, proxies
       and BigInt.
-
-      It optionally supports mathematical extensions such as big decimal
-      floating point numbers (BigDecimal), big binary floating point numbers
-      (BigFloat) and operator overloading.
 
       Main Features:
 
@@ -109,20 +109,16 @@ stdenv.mkDerivation (finalAttrs: {
         generators and full Annex B support (legacy web compatibility).
       - Passes nearly 100% of the ECMAScript Test Suite tests when selecting
         the ES2023 features. A summary is available at Test262 Report.
-      - Can compile Javascript sources to executables with no external dependency.
+      - Can compile JavaScript sources to executables with no external dependency.
       - Garbage collection using reference counting (to reduce memory usage and
         have deterministic behavior) with cycle removal.
-      - Mathematical extensions: BigDecimal, BigFloat, operator overloading,
-        bigint mode, math mode.
       - Command line interpreter with contextual colorization implemented in
-        Javascript.
+        JavaScript.
       - Small built-in standard library with C library wrappers.
 
     '';
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      stesie
-    ];
+    maintainers = [ ];
     mainProgram = "qjs";
     platforms = lib.platforms.all;
   };

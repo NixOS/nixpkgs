@@ -1,108 +1,187 @@
 #!/usr/bin/env nix-shell
-#!nix-shell update-shell.nix -i python
+#!nix-shell ./update-shell.nix -i python
 
 import json
 import logging
 import os
 import subprocess
-import sys
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 
 log = logging.getLogger("vim-updater")
 
+NVIM_TREESITTER_PARSERS_PATH = "lua/nvim-treesitter/parsers.lua"
+NVIM_TREESITTER_QUERIES_PATH = "runtime/queries"
 
-def generate_grammar(lang, rev, cfg):
-    """Generate grammar for a language"""
-    info = cfg["install_info"]
-    url = info["url"]
 
-    generated = f"""  {lang} = buildGrammar {{
-    language = "{lang}";
-    version = "0.0.0+rev={rev[:7]}";
-    src = """
+def generate_grammar(lang, parser_info, parsers_map):
+    """Generate grammar for a language based on the parser info"""
+    if "install_info" not in parser_info:
+        log.warning(f"Parser {lang} does not have install_info, skipping")
+        return ""
 
-    generated += subprocess.check_output(["nurl", url, rev, "--indent=4"], text=True)
+    install_info = parser_info["install_info"]
+
+    url = install_info["url"]
+    rev = install_info["revision"]
+
+    generated = f"""    {lang} = buildGrammar {{
+      language = "{lang}";
+      version = "0.0.0+rev={rev[:7]}";
+      src = """
+
+    generated += subprocess.check_output(["nurl", url, rev, "--indent=6"], text=True)
     generated += ";"
 
-    location = info.get("location")
+    location = install_info.get("location", "")
     if location:
         generated += f"""
-    location = "{location}";"""
+      location = "{location}";"""
 
-    if info.get("requires_generate_from_grammar"):
+    if install_info.get("generate", False):
         generated += """
-    generate = true;"""
+      generate = true;"""
+
+    # Add requires field - only include parsers
+    requires = parser_info.get("requires", [])
+    if requires:
+        # Filter to only include parser dependencies (those with install_info)
+        parser_requires = [
+            req
+            for req in requires
+            if req in parsers_map and "install_info" in parsers_map[req]
+        ]
+        if parser_requires:
+            generated += """
+      passthru.requires = [
+"""
+            for req in parser_requires:
+                generated += f'        "{req}"\n'
+            generated += "      ];"
 
     generated += f"""
-    meta.homepage = "{url}";
-  }};
+      meta.homepage = "{url}";
+    }};
 """
 
     return generated
 
 
-def update_grammars(nvim_treesitter_dir: str):
-    """
-    The lockfile contains just revisions so we start neovim to dump the
-    grammar information in a better format
-    """
-    # the lockfile
-    cmd = [
-        "nvim",
-        "--headless",
-        "-u",
-        "NONE",
-        "--cmd",
-        f"set rtp^={nvim_treesitter_dir}",
-        "+lua io.write(vim.json.encode(require('nvim-treesitter.parsers').get_parser_configs()))",
-        "+quit!",
-    ]
-    log.debug("Running command: %s", ' '.join(cmd))
-    configs = json.loads(subprocess.check_output(cmd))
+def generate_query(lang: str, parser_info: dict | None, queries_set: set[str]):
+    """Generate query derivation for a language"""
+    generated = f"""    {lang} = buildQueries {{
+      language = "{lang}";"""
+
+    # Add requires field for queries - include everything that has queries
+    if parser_info and "requires" in parser_info:
+        requires = parser_info["requires"]
+        # Filter to only include langs that have queries
+        query_requires = [req for req in requires if queries_set and req in queries_set]
+        if query_requires:
+            generated += """
+      requires = [
+"""
+            for req in query_requires:
+                generated += f'        "{req}"\n'
+            generated += "      ];"
+
+    generated += """
+    };
+"""
+    return generated
+
+
+def fetch_pinned_parsers(plugin_path):
+    """Fetch the parser information from vimPlugins.nvim-treesitter"""
+    parsers_path = plugin_path / NVIM_TREESITTER_PARSERS_PATH
+    log.info("Obtaining parser data from %s", parsers_path)
+
+    lua_script = f"""\
+local data = dofile"{parsers_path}"
+local json = require"json".encode(data)
+io.write(json)
+"""
+    lua_output = subprocess.check_output(
+        ["luajit", "-"],
+        text=True,
+        input=lua_script,
+    )
+    data = json.loads(lua_output)
+
+    log.info(f"Successfully fetched {len(data)} parsers")
+    return data
+
+
+def fetch_available_queries(plugin_path):
+    """Fetch list of languages that have queries in vimPlugins.nvim-treesitter"""
+    queries_path = plugin_path / NVIM_TREESITTER_QUERIES_PATH
+    log.info("Obtaining available queries from %s", queries_path)
+
+    # We assume directories in the queries/ folder are named after languages
+    languages = sorted([p.name for p in queries_path.iterdir() if p.is_dir()])
+    log.info(f"Found {len(languages)} languages with queries")
+    return languages
+
+
+def process_parser_info(parser, parsers):
+    """Process a single parser info entry and generate grammar for it"""
+    return generate_grammar(parser, parsers[parser], parsers)
+
+
+def update_grammars(plugin_path):
+    """Update grammar definitions using nvim-treesitter's pinned parsers"""
+    parsers = fetch_pinned_parsers(plugin_path)
+    queries_list = fetch_available_queries(plugin_path)
 
     generated_file = """# generated by pkgs/applications/editors/vim/plugins/utils/nvim-treesitter/update.py
+# Using parser data from ${vimPlugins.nvim-treesitter}/lua/nvim-treesitter/parsers.lua
 
 {
   buildGrammar,
+  buildQueries,
   """
 
-    # Get the output and format it properly
     nurl_output = subprocess.check_output(["nurl", "-Ls", ","], text=True).strip()
-    # Add proper indentation (2 spaces) to the comma-separated list
     indented_output = nurl_output.replace(",", ",\n  ")
     generated_file += indented_output
-
     generated_file += """,
 }:
 
 {
+  parsers = {
 """
 
-    lockfile_path = os.path.join(nvim_treesitter_dir, "lockfile.json")
-    log.debug("Opening %s", lockfile_path)
-    with open(lockfile_path) as lockfile_fd:
-        lockfile = json.load(lockfile_fd)
-
-        def _generate_grammar(item):
-            lang, lock = item
-            cfg = configs.get(lang)
-            if not cfg:
-                return ""
-            return generate_grammar(lang, lock["revision"], cfg)
-
-        for generated in ThreadPoolExecutor(max_workers=5).map(
-            _generate_grammar, lockfile.items()
+    # Process parsers in parallel for better performance
+    with ThreadPoolExecutor(max_workers=5) as executor:
+        for generated in executor.map(
+            lambda p: process_parser_info(p, parsers), sorted(parsers.keys())
         ):
             generated_file += generated
 
-        generated_file += "}\n"
+    generated_file += """  };
+
+  queries = {
+"""
+
+    # Convert queries list to a set for fast lookup
+    queries_set = set(queries_list)
+
+    # Process queries - include parser info if available for requires field
+    for lang in queries_list:
+        parser_info = parsers.get(lang)
+        generated_file += generate_query(lang, parser_info, queries_set)
+
+    generated_file += "  };\n}\n"
     return generated_file
 
 
 if __name__ == "__main__":
-    generated = update_grammars(sys.argv[1])
-    output_path = os.path.join(
-        os.path.dirname(__file__),
-        "../../nvim-treesitter/generated.nix"
-    )
-    open(output_path, "w").write(generated)
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
+
+    plugin_path = Path(os.environ["NVIM_TREESITTER"])
+    generated = update_grammars(plugin_path)
+    output_path = Path(__file__).parent.parent.parent / "nvim-treesitter/generated.nix"
+    log.info("Writing output to %s", output_path)
+    with open(output_path, "w") as f:
+        f.write(generated)
+    log.info("Successfully updated grammar definitions")

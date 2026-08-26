@@ -4,19 +4,27 @@
   fetchurl,
   pkg-config,
   icu,
-  clucene_core,
+  clucene-core,
 
   autoreconfHook,
   bzip2,
   curl,
   xz,
+  zlib,
 }:
 
 stdenv.mkDerivation (
   finalAttrs:
   let
     # Used on Windows, where libpsl doesn't compile, yet
-    curlDep = curl.override { pslSupport = false; };
+    curlDep = (curl.override { pslSupport = false; }).overrideAttrs (finalCurlAttrs: {
+      buildInputs = [ ]; # Does not need runtimeShellPackage, which is Bash and unsupported on MinGW targets
+      # This is the shell script that requires runtimeShellPackage on systems, but we are
+      # only interested in the library here, not the binaries
+      postInstall = finalCurlAttrs.postInstall + ''
+        rm "''${!outputBin}/bin/wcurl"
+      '';
+    });
   in
   {
     pname = "sword";
@@ -27,27 +35,25 @@ stdenv.mkDerivation (
       hash = "sha256-QkCc894vrxEIUj4sWsB0XSH57SpceO2HjuncwwNCa4o=";
     };
 
-    nativeBuildInputs =
-      [
-        pkg-config
-      ]
-      ++ (lib.optionals stdenv.hostPlatform.isWindows [
-        autoreconfHook # The Windows patch modifies autotools files
-      ]);
+    nativeBuildInputs = [
+      pkg-config
+    ]
+    ++ (lib.optionals stdenv.hostPlatform.isWindows [
+      autoreconfHook # The Windows patch modifies autotools files
+    ]);
 
-    buildInputs =
-      [
-        icu
-      ]
-      ++ (lib.optionals stdenv.hostPlatform.isUnix [
-        clucene_core
-        curl
-      ])
-      ++ (lib.optionals stdenv.hostPlatform.isWindows [
-        bzip2
-        curlDep
-        xz
-      ]);
+    buildInputs = [
+      icu
+    ]
+    ++ (lib.optionals stdenv.hostPlatform.isUnix [
+      clucene-core
+      curl
+    ])
+    ++ (lib.optionals stdenv.hostPlatform.isWindows [
+      bzip2
+      curlDep
+      xz
+    ]);
 
     outputs = [
       "out"
@@ -64,16 +70,16 @@ stdenv.mkDerivation (
 
     patches = lib.optional stdenv.hostPlatform.isWindows ./sword-1.9.0-diatheke-includes.patch;
 
-    configureFlags =
-      [
-        "--without-conf"
-        "--enable-tests=no"
-      ]
-      ++ (lib.optionals stdenv.hostPlatform.isWindows [
-        "--with-xz"
-        "--with-bzip2"
-        "--with-icuregex"
-      ]);
+    configureFlags = [
+      "--without-conf"
+      "--enable-tests=no"
+    ]
+    ++ (lib.optionals stdenv.hostPlatform.isWindows [
+      "--with-xz"
+      "--with-bzip2"
+      "--with-icuregex"
+      "--without-zlib"
+    ]);
 
     makeFlags = lib.optionals stdenv.hostPlatform.isWindows [
       "LDFLAGS=-no-undefined"

@@ -1,43 +1,60 @@
 {
   lib,
+  callPackage,
   stdenv,
   fetchFromGitHub,
-  nix-update-script,
-  pnpm_9,
+  # Pinned, because our FODs are not guaranteed to be stable between major versions.
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   python3,
   makeWrapper,
-  # Upstream uses EOL Electron 31.  Use next oldest version.
-  electron_34,
+  # Electron updates can break Heroic, so try to use same version as upstream.
+  # If the used electron version is higher than upstream's then the node-abi package might need to be updated
+  electron_43,
   vulkan-helper,
   gogdl,
-  legendary-heroic,
+  legendary-gl,
   nile,
-  comet-gog,
+  comet-gog_heroic,
+  umu-launcher,
 }:
 
 let
-  electron = electron_34;
+  pnpm = pnpm_10;
+  electron = electron_43;
+
+  epic-integration = callPackage ./epic-integration.nix { };
+  comet-gog = comet-gog_heroic;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
-  version = "2.16.1";
+  version = "2.22.1";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-BnBzbbyi9cdO6W59cnY13hnhH+tjrTryTp9XIcERwh4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CpbCXmvfwXT16ZG/6fwPWSjBwK02ykJ/GuZk1VcW+tU=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-2IQyXULgFoz0rFQ8SwERgMDzzo7pZ3DbqhwrWNYSwRo=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-NrglT9vtDMAYXmZ4G3vifvLXu1yS6xbp+cqE6B6vQFc=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm
     python3
     makeWrapper
   ];
@@ -57,9 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     pnpm --offline electron-vite build
     pnpm --offline electron-builder \
-      --linux \
       --dir \
-      -c.asarUnpack="**/*.node" \
       -c.electronDist=${electron.dist} \
       -c.electronVersion=${electron.version}
 
@@ -72,22 +87,38 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p "$out/opt/heroic"
-    cp -r dist/linux-unpacked/resources "$out/opt/heroic"
+    cp -r dist/*-unpacked/resources "$out/opt/heroic"
 
-    cp -r public "$out/opt/heroic/resources/app.asar.unpacked/build"
-    rm -rf "$out/opt/heroic/resources/app.asar.unpacked/build/bin"
-    mkdir -p "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/linux"
+    bin_dir="$out/opt/heroic/resources/app.asar.unpacked/build/bin"
+
+    # Clean up prebuilt binaries
+    rm -r "$bin_dir"
+    mkdir -p "$bin_dir/x64/linux/" "$bin_dir/x64/win32/"
+
     ln -s \
       "${lib.getExe gogdl}" \
-      "${lib.getExe legendary-heroic}" \
+      "${lib.getExe legendary-gl}" \
       "${lib.getExe nile}" \
       "${lib.getExe comet-gog}" \
       "${lib.getExe vulkan-helper}" \
-      "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/linux"
+      "$bin_dir/x64/linux/"
 
-    makeWrapper "${electron}/bin/electron" "$out/bin/heroic" \
+    # Don't symlink these so we don't confuse Windows applications under Wine/Proton.
+    cp \
+      "${comet-gog.dummy-service}/GalaxyCommunication.exe" \
+      "${epic-integration}/EpicGamesLauncher.exe" \
+      "$bin_dir/x64/win32/"
+
+    makeWrapper "${lib.getExe electron}" "$out/bin/heroic" \
       --inherit-argv0 \
       --set ELECTRON_FORCE_IS_PACKAGED 1 \
+      --suffix PATH ":" "${
+        lib.makeBinPath (
+          lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+            umu-launcher
+          ]
+        )
+      }" \
       --add-flags --disable-gpu-compositing \
       --add-flags $out/opt/heroic/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
@@ -95,27 +126,32 @@ stdenv.mkDerivation (finalAttrs: {
     install -D "flatpak/com.heroicgameslauncher.hgl.desktop" "$out/share/applications/com.heroicgameslauncher.hgl.desktop"
     install -D "src/frontend/assets/heroic-icon.svg" "$out/share/icons/hicolor/scalable/apps/com.heroicgameslauncher.hgl.svg"
     substituteInPlace "$out/share/applications/com.heroicgameslauncher.hgl.desktop" \
-      --replace-fail "Exec=heroic-run --ozone-platform-hint=auto" "Exec=heroic"
+      --replace-fail "Exec=heroic-run" "Exec=heroic"
 
     runHook postInstall
   '';
 
   passthru = {
-    inherit (finalAttrs) pnpmDeps;
-    updateScript = nix-update-script { };
+    inherit epic-integration;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Native GOG, Epic, and Amazon Games Launcher for Linux, Windows and Mac";
     homepage = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher";
-    changelog = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ aidalgol ];
+    changelog = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      tomasajt
+      iedame
+      keenanweaver
+      DieracDelta
+      baksa
+    ];
     # Heroic may work on nix-darwin, but it needs a dedicated maintainer for the platform.
-    # It may also work on other Linux targets, but all the game stores only
-    # support x86 Linux, so it would require extra hacking to run games via QEMU
-    # user emulation.  Upstream provide Linux builds only for x86_64.
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     mainProgram = "heroic";
   };
 })

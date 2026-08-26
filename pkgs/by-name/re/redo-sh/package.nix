@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation {
   pname = "redo-sh";
-  version = "4.0.6";
+  version = "4.0.7";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20250225235353/http://news.dieweltistgarnichtso.net/bin/archives/redo-sh.tar.gz";
-    hash = "sha256-pDhCnMelCXK/Pp3jPXZog7HLBTgrsCvX4LAVapYvxl8=";
+    url = "https://web.archive.org/web/20251228095310/http://news.dieweltistgarnichtso.net/bin/archives/redo-sh.tar.gz";
+    hash = "sha256-h9C/8ti8TBRM66OLYOk+TotwmDCIZBRvJ0tJKdYAwaQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

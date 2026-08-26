@@ -1,20 +1,21 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   testers,
   cmake,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   sdbus-cpp,
   udev,
-  xcbutilimage,
+  libxcb-image,
   coreutils,
   cli11,
   ddcutil,
   fmt,
   nlohmann_json,
   spdlog,
+  udevCheckHook,
   nix-update-script,
 }:
 
@@ -22,8 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "gummy";
   version = "0.6.1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "fusco";
     repo = "gummy";
     rev = finalAttrs.version;
@@ -32,19 +32,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    udevCheckHook
   ];
 
   buildInputs = [
     cli11
     ddcutil
     fmt
-    libX11
-    libXext
+    libx11
+    libxext
     nlohmann_json
     sdbus-cpp
     spdlog
     udev
-    xcbutilimage
+    libxcb-image
   ];
 
   cmakeFlags = [
@@ -68,17 +69,19 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/libexec/gummyd $out/bin/gummyd
   '';
 
+  doInstallCheck = true;
+
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://codeberg.org/fusco/gummy";
     description = "Brightness and temperature manager for X11";
     longDescription = ''
       CLI screen manager for X11 that allows automatic and manual brightness/temperature adjustments,
       via backlight (currently only for embedded displays) and gamma. Multiple monitors are supported.
     '';
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
 })

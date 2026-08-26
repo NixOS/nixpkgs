@@ -1,23 +1,22 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dumbpipe";
-  version = "0.26.0";
+  version = "0.39.0";
 
   src = fetchFromGitHub {
     owner = "n0-computer";
     repo = "dumbpipe";
-    rev = "v${version}";
-    hash = "sha256-xQHVEJ+EgsrboXbPg7pGXXMjyedSLooqkTt/yYZACSo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AoWWFlMjo1bZUq5RY4gjpEMydULHaCKSSxBh45a7pdI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-uuY0nh4VHzyM7+cbgyycr5I3IjE0OeQ0eg12qVXe4BQ=";
+  cargoHash = "sha256-je2/GjCCDymYGhho6yf7SNQ3YkLCLQ5nEqHPNdDXjbQ=";
 
   __darwinAllowLocalNetworking = true;
 
@@ -28,14 +27,26 @@ rustPlatform.buildRustPackage rec {
     (allow file-read* (subpath "/usr/share/icu"))
   '';
 
-  meta = with lib; {
+  checkFlags = [
+    # These tests require network access
+    "--skip=connect_listen_ctrlc_connect"
+    "--skip=connect_listen_ctrlc_listen"
+    "--skip=connect_tcp_happy"
+    "--skip=unix_socket_tests::unix_socket_roundtrip"
+  ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Connect A to B - Send Data";
     homepage = "https://www.dumbpipe.dev/";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ cameronfyfe ];
+    maintainers = [ ];
     mainProgram = "dumbpipe";
   };
-}
+})

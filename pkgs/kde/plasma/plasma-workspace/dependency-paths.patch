@@ -1,8 +1,8 @@
-diff --git a/applets/devicenotifier/plugin/deviceerrormonitor_p.cpp b/applets/devicenotifier/plugin/deviceerrormonitor_p.cpp
-index ba214a555d..421d940738 100644
---- a/applets/devicenotifier/plugin/deviceerrormonitor_p.cpp
-+++ b/applets/devicenotifier/plugin/deviceerrormonitor_p.cpp
-@@ -155,7 +155,7 @@ void DeviceErrorMonitor::queryBlockingApps(const QString &devicePath)
+diff --git a/applets/devicenotifier/messageinfo.cpp b/applets/devicenotifier/messageinfo.cpp
+index e5c987879b..d26287a906 100644
+--- a/applets/devicenotifier/messageinfo.cpp
++++ b/applets/devicenotifier/messageinfo.cpp
+@@ -64,7 +64,7 @@ void MessageInfo::queryBlockingApps(const QString &devicePath)
          Q_EMIT blockingAppsReady(blockApps);
          p->deleteLater();
      });
@@ -25,10 +25,10 @@ index e27e21a7bd..abbf7f32e1 100644
      p.write(input);
      p.closeWriteChannel();
 diff --git a/kcms/fonts/fonts.cpp b/kcms/fonts/fonts.cpp
-index 96417c440a..8c9bc2e9ab 100644
+index a150527de6..4798518162 100644
 --- a/kcms/fonts/fonts.cpp
 +++ b/kcms/fonts/fonts.cpp
-@@ -137,7 +137,7 @@ void KFonts::save()
+@@ -151,7 +151,7 @@ void KFonts::save()
      if (fontsAASettings()->forceFontDPI() == 0 && forceFontDPIChanged && KWindowSystem::isPlatformX11()) {
          QProcess proc;
          proc.setProcessChannelMode(QProcess::ForwardedChannels);
@@ -38,10 +38,10 @@ index 96417c440a..8c9bc2e9ab 100644
              proc.write("Xft.dpi\n");
              proc.closeWriteChannel();
 diff --git a/kcms/kfontinst/kcmfontinst/FcQuery.cpp b/kcms/kfontinst/kcmfontinst/FcQuery.cpp
-index e4d1ad4311..d45bdfad98 100644
+index 32ba97a4d6..c26f45f2e0 100644
 --- a/kcms/kfontinst/kcmfontinst/FcQuery.cpp
 +++ b/kcms/kfontinst/kcmfontinst/FcQuery.cpp
-@@ -46,7 +46,7 @@ void CFcQuery::run(const QString &query)
+@@ -44,7 +44,7 @@ void CFcQuery::run(const QString &query)
      connect(m_proc, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(procExited()));
      connect(m_proc, &QProcess::readyReadStandardOutput, this, &CFcQuery::data);
  
@@ -51,7 +51,7 @@ index e4d1ad4311..d45bdfad98 100644
  
  void CFcQuery::procExited()
 diff --git a/kcms/krdb/krdb.cpp b/kcms/krdb/krdb.cpp
-index f3c9956921..09c818739d 100644
+index 0a3fb44698..d44b63350b 100644
 --- a/kcms/krdb/krdb.cpp
 +++ b/kcms/krdb/krdb.cpp
 @@ -425,7 +425,7 @@ void runRdb(unsigned int flags)
@@ -107,7 +107,7 @@ index 7218628ce9..9126475ea4 100644
 +ExecStart=@qdbus@ org.kde.kcminit /kcminit org.kde.KCMInit.runPhase1
  Slice=session.slice
 diff --git a/startkde/startplasma.cpp b/startkde/startplasma.cpp
-index 4d31c6f408..17418b1ff7 100644
+index f9104619bf..af9fc09a67 100644
 --- a/startkde/startplasma.cpp
 +++ b/startkde/startplasma.cpp
 @@ -57,7 +57,7 @@ void sigtermHandler(int signalNumber)
@@ -119,7 +119,7 @@ index 4d31c6f408..17418b1ff7 100644
  }
  
  QStringList allServices(const QLatin1String &prefix)
-@@ -512,7 +512,7 @@ QProcess *setupKSplash()
+@@ -552,7 +552,7 @@ QProcess *setupKSplash()
          if (ksplashCfg.readEntry("Engine", QStringLiteral("KSplashQML")) == QLatin1String("KSplashQML")) {
              p = new QProcess;
              p->setProcessChannelMode(QProcess::ForwardedChannels);
@@ -128,14 +128,3 @@ index 4d31c6f408..17418b1ff7 100644
          }
      }
      return p;
-diff --git a/startkde/systemd/plasma-ksplash-ready.service.in b/startkde/systemd/plasma-ksplash-ready.service.in
-index 1e903130a9..0861c3d136 100644
---- a/startkde/systemd/plasma-ksplash-ready.service.in
-+++ b/startkde/systemd/plasma-ksplash-ready.service.in
-@@ -6,5 +6,5 @@ PartOf=graphical-session.target
- 
- [Service]
- Type=oneshot
--ExecStart=dbus-send --session --reply-timeout=1 --type=method_call --dest=org.kde.KSplash /KSplash org.kde.KSplash.setStage string:ready
-+ExecStart=@dbusSend@ --session --reply-timeout=1 --type=method_call --dest=org.kde.KSplash /KSplash org.kde.KSplash.setStage string:ready
- Slice=session.slice

@@ -27,13 +27,13 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source macOS hex editor";
     homepage = "http://hexfiend.com/";
     changelog = "https://hexfiend.github.io/HexFiend/ReleaseNotes.html";
-    license = licenses.bsd2;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ eliandoran ];
-    platforms = platforms.darwin;
+    license = lib.licenses.bsd2;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ eliandoran ];
+    platforms = lib.platforms.darwin;
   };
 }

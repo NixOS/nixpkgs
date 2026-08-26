@@ -19,7 +19,7 @@ function updatePlatform() {
     echo "Updating tailwindcss_3 for $NIXPLAT"
 
     URL="https://github.com/tailwindlabs/tailwindcss/releases/download/v${LATEST_VERSION}/tailwindcss-${TAILWINDPLAT}"
-    HASH=$(nix hash to-sri --type sha256 "$(nix-prefetch-url --type sha256 "$URL")")
+    HASH=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 "$(nix-prefetch-url --type sha256 "$URL")")
 
     sed -i "s,$NIXPLAT = \"sha256.*\",$NIXPLAT = \"${HASH}\"," "$ROOT/package.nix"
 }
@@ -27,5 +27,4 @@ function updatePlatform() {
 updatePlatform aarch64-darwin macos-arm64
 updatePlatform aarch64-linux linux-arm64
 updatePlatform armv7l-linux linux-armv7
-updatePlatform x86_64-darwin macos-x64
 updatePlatform x86_64-linux linux-x64

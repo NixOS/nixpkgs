@@ -5,8 +5,10 @@
   cargo,
   meson,
   ninja,
+  perl,
   pkg-config,
   gst_all_1,
+  openssl,
   protobuf,
   libspelling,
   libsecret,
@@ -14,7 +16,7 @@
   gtksourceview5,
   rustPlatform,
   rustc,
-  appstream-glib,
+  appstream,
   blueprint-compiler,
   desktop-file-utils,
   wrapGAppsHook4,
@@ -22,27 +24,27 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flare";
-  version = "0.15.16";
+  version = "0.22.1";
 
   src = fetchFromGitLab {
-    domain = "gitlab.com";
     owner = "schmiddi-on-mobile";
     repo = "flare";
-    rev = finalAttrs.version;
-    hash = "sha256-oG5RHCOk/VPCUAdg/+gfw9/cErnaZBKnwzLzdaboSyY=";
+    tag = finalAttrs.version;
+    hash = "sha256-ddBNRCPS0ykgigUzhufDfwlv6+97zdCYwQxlm7zLt/E=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Id08JgFbeuGrMrBFyXF/ke/LfkqvT+biEgDOyW8sZh0=";
+    hash = "sha256-Sb9n7QIEPkdj5I+LP5WZRCezr/y86Oe6VZh+hhyiafk=";
   };
 
   nativeBuildInputs = [
-    appstream-glib # for appstream-util
+    appstream # for appstream-util
     blueprint-compiler
     desktop-file-utils # for update-desktop-database
     meson
     ninja
+    perl
     pkg-config
     wrapGAppsHook4
     rustPlatform.cargoSetupHook
@@ -55,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     libsecret
     libspelling
+    openssl
     protobuf
 
     # To reproduce audio messages
@@ -65,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    changelog = "https://gitlab.com/schmiddi-on-mobile/flare/-/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://gitlab.com/schmiddi-on-mobile/flare/-/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Unofficial Signal GTK client";
     mainProgram = "flare";
     homepage = "https://gitlab.com/schmiddi-on-mobile/flare";

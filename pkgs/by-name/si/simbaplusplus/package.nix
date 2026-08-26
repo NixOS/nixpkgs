@@ -5,17 +5,18 @@
   cmake,
   llvmPackages,
   z3,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "simbaplusplus";
-  version = "0-unstable-2024-11-05";
+  version = "0-unstable-2025-11-05";
 
   src = fetchFromGitHub {
     owner = "pgarba";
     repo = "SiMBA-";
-    rev = "a030a187df0b650718b2aab18ccebc1f810e18b4";
-    hash = "sha256-h2in203bwfb7ArhoBN0PoWM6DZtxI4jSGQuSTTaBJ7A=";
+    rev = "cbef1fc868d5de1b659ed317db9e0a1cecf6462b";
+    hash = "sha256-GISI66DuNA7KYJ/trdSdx3CkjdqXn9mQs+EwVxSlgoE=";
   };
 
   postPatch = ''
@@ -24,6 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'set(Z3_INCLUDE_DIRS “/usr/include”)' ""
   '';
 
+  # llvm-config --cxxflags exports -fno-exceptions, but z3's C++ headers require exception support.
+  env.NIX_CFLAGS_COMPILE = "-fexceptions";
+
   nativeBuildInputs = [
     cmake
   ];
@@ -31,6 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     llvmPackages.libllvm
     z3
+  ];
+
+  checkInputs = [
+    python3
   ];
 
   doCheck = true;

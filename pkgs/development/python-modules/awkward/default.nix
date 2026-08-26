@@ -22,16 +22,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "awkward";
-  version = "2.8.1";
+  version = "2.13.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "awkward";
-    tag = "v${version}";
-    hash = "sha256-37yUZSD9c92ydjjt5Z7KnUzfSMAQM37Ah4WGp9HWiDs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-z6/OoWLB5VqNe7iciiemXFp+RnvCLHn4cOA6zS3t6BE=";
   };
 
   build-system = [
@@ -60,21 +61,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # pyarrow.lib.ArrowInvalid
-    "test_recordarray"
-  ];
-
   disabledTestPaths = [
     # Need to be run on a GPU platform.
-    "tests-cuda"
+    "tests-cuda/*"
   ];
 
   meta = {
     description = "Manipulate JSON-like data with NumPy-like idioms";
     homepage = "https://github.com/scikit-hep/awkward";
-    changelog = "https://github.com/scikit-hep/awkward/releases/tag/v${version}";
+    changelog = "https://github.com/scikit-hep/awkward/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

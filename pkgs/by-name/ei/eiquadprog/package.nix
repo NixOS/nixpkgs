@@ -1,24 +1,21 @@
 {
   boost,
-  cmake,
-  doxygen,
   eigen,
   fetchFromGitHub,
   jrl-cmakemodules,
   lib,
-  pkg-config,
   stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eiquadprog";
-  version = "1.2.9";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = "eiquadprog";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-VqRx06sCCZrnB+NWm6Z9OMKzjKQIydGgKQU6fMY7phk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ukYIc5ZCIDunXMyC44Dd1qac4Ku4pNv9p4ik+xyI0i0=";
   };
 
   outputs = [
@@ -26,12 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    pkg-config
-    jrl-cmakemodules
-  ];
+  cmakeFlags = jrl-cmakemodules.docsCmakeFlags;
+
+  nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs;
+  buildInputs = [ jrl-cmakemodules ];
   propagatedBuildInputs = [ eigen ];
   checkInputs = [ boost ];
 

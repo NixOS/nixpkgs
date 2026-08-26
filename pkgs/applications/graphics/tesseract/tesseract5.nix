@@ -12,20 +12,17 @@
   libtiff,
   icu,
   pango,
-  Accelerate,
-  CoreGraphics,
-  CoreVideo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tesseract";
-  version = "5.5.0";
+  version = "5.5.3";
 
   src = fetchFromGitHub {
     owner = "tesseract-ocr";
     repo = "tesseract";
-    rev = version;
-    sha256 = "sha256-qyckAQZs3gR1NBqWgE+COSKXhv3kPF+iHVQrt6OPi8s=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-n+ZtLAVi6+dOusK040i/sSjJqw58Ef62uTeimYbMUHk=";
   };
 
   enableParallelBuilding = true;
@@ -35,21 +32,15 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  buildInputs =
-    [
-      curl
-      leptonica
-      libarchive
-      libpng
-      libtiff
-      icu
-      pango
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Accelerate
-      CoreGraphics
-      CoreVideo
-    ];
+  buildInputs = [
+    curl
+    leptonica
+    libarchive
+    libpng
+    libtiff
+    icu
+    pango
+  ];
 
   passthru.updateScript = nix-update-script { };
   meta = {
@@ -60,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "tesseract";
   };
-}
+})

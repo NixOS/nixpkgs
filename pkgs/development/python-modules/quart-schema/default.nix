@@ -13,16 +13,16 @@
   hypothesis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "quart-schema";
-  version = "0.21.0";
+  version = "0.24.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pgjones";
     repo = "quart-schema";
-    tag = version;
-    hash = "sha256-FpjnhSTkjskCxT874ABrD3Zew4g4R977xaYvJhVTDxw=";
+    tag = finalAttrs.version;
+    hash = "sha256-U42UUDqix/397y332XWf9S5TFso7aEKTF4oIXh/gEtc=";
   };
 
   build-system = [ pdm-backend ];
@@ -53,8 +53,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Create subcommand-based CLI programs with docopt";
-    homepage = "https://github.com/abingham/docopt-subcommands";
+    homepage = "https://github.com/pgjones/quart-schema";
+    changelog = "https://github.com/pgjones/quart-schema/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

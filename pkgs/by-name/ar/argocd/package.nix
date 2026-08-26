@@ -3,48 +3,82 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  nix-update-script,
   stdenv,
+  fetchYarnDeps,
+  yarnConfigHook,
+  yarnBuildHook,
+  nodejs,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "argocd";
-  version = "2.14.10";
+  version = "3.4.6";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
-    rev = "v${version}";
-    hash = "sha256-Z+xSA0LrvXHHmNg7+i53Y1mSYnLYURZUglXRKvkld14=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Dpn4KHKs766/cmh0gLwaFExQ2tMRbdXZK+2v2jM3iF8=";
+  };
+
+  ui = stdenv.mkDerivation {
+    pname = "argocd-ui";
+    inherit (finalAttrs) version;
+    src = finalAttrs.src + "/ui";
+
+    offlineCache = fetchYarnDeps {
+      yarnLock = "${finalAttrs.src}/ui/yarn.lock";
+      hash = "sha256-/B7FviD0a3VDmbbM59Ksmr8apuTRHrRbTtfX4QgO8JM=";
+    };
+
+    nativeBuildInputs = [
+      yarnConfigHook
+      yarnBuildHook
+      nodejs
+    ];
+
+    postInstall = ''
+      mkdir -p $out
+      cp -r dist $out/dist
+    '';
   };
 
   proxyVendor = true; # darwin/linux hash mismatch
-  vendorHash = "sha256-Xm9J08pxzm3fPQjMA6NDu+DPJGsvtUvj+n/qrOZ9BE4=";
+  vendorHash = "sha256-yzVSMdupFdrYUWMCPFhiYTnjCDGZo4Se0osXbCvB7gM=";
 
   # Set target as ./cmd per cli-local
-  # https://github.com/argoproj/argo-cd/blob/master/Makefile#L227
+  # https://github.com/argoproj/argo-cd/blob/master/Makefile
   subPackages = [ "cmd" ];
 
   ldflags =
     let
-      package_url = "github.com/argoproj/argo-cd/v2/common";
+      packageUrl = "github.com/argoproj/argo-cd/v3/common";
     in
     [
       "-s"
       "-w"
-      "-X ${package_url}.version=${version}"
-      "-X ${package_url}.buildDate=unknown"
-      "-X ${package_url}.gitCommit=${src.rev}"
-      "-X ${package_url}.gitTag=${src.rev}"
-      "-X ${package_url}.gitTreeState=clean"
-      "-X ${package_url}.kubectlVersion=v0.31.2"
-      # NOTE: Update kubectlVersion when upgrading this package with
-      # https://github.com/search?q=repo%3Aargoproj%2Fargo-cd+%22k8s.io%2Fkubectl%22+path%3Ago.mod&type=code
-      # Per https://github.com/search?q=repo%3Aargoproj%2Fargo-cd+%22KUBECTL_VERSION%3D%22+path%3AMakefile&type=code
-      # Will need a way to automate it :P
+      "-X ${packageUrl}.version=${finalAttrs.version}"
+      "-X ${packageUrl}.buildDate=unknown"
+      "-X ${packageUrl}.gitCommit=${finalAttrs.src.rev}"
+      "-X ${packageUrl}.gitTag=${finalAttrs.src.rev}"
+      "-X ${packageUrl}.gitTreeState=clean"
     ];
 
   nativeBuildInputs = [ installShellFiles ];
 
+  preBuild = ''
+    cp -r ${finalAttrs.ui}/dist ./ui
+    stat ./ui/dist/app/index.html # Sanity check
+  '';
+
+  # set ldflag for kubectlVersion since it is needed for argo
+  # Per https://github.com/search?q=repo%3Aargoproj%2Fargo-cd+%22KUBECTL_VERSION%3D%22+path%3AMakefile&type=code
+  prePatch = ''
+    export KUBECTL_VERSION=$(go list -m -f '{{.Version}}' k8s.io/kubectl)
+    echo using $KUBECTL_VERSION
+    ldflags="''${ldflags} -X github.com/argoproj/argo-cd/v3/common.kubectlVersion=''${KUBECTL_VERSION}"
+  '';
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
@@ -54,7 +88,7 @@ buildGoModule rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/argocd version --client | grep ${src.rev} > /dev/null
+    $out/bin/argocd version --client | grep ${finalAttrs.src.rev} > /dev/null
   '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -64,16 +98,18 @@ buildGoModule rec {
       --zsh <($out/bin/argocd completion zsh)
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Declarative continuous deployment for Kubernetes";
     mainProgram = "argocd";
     downloadPage = "https://github.com/argoproj/argo-cd";
     homepage = "https://argo-cd.readthedocs.io/en/stable/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       shahrukh330
-      bryanasdev000
       qjoly
+      FKouhai
     ];
   };
-}
+})

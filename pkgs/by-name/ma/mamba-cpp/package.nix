@@ -1,44 +1,46 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
   bzip2,
-  cmake,
   cli11,
-  yaml-cpp,
+  cmake,
+  lib,
+  libmamba,
+  makeWrapper,
+  msgpack-c,
   nlohmann_json,
-  zstd,
+  python3,
   reproc,
   spdlog,
+  stdenv,
   tl-expected,
-  libmamba,
-  python3,
   versionCheckHook,
+  yaml-cpp,
+  zstd,
+  # runtime options
+  defaultEnvPath ? "~/.mamba/envs",
+  defaultPkgPath ? "~/.mamba/pkgs",
+  defaultRootPath ? "~/.mamba",
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mamba-cpp";
-  version = "2.1.0";
+  inherit (libmamba) version src;
 
-  src = fetchFromGitHub {
-    owner = "mamba-org";
-    repo = "mamba";
-    tag = version;
-    hash = "sha256-7YR3ToPz80I9d1pRNiEaoIacVyaz2mqzdm0h5WGSb2g=";
-  };
-
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+  ];
 
   buildInputs = [
+    bzip2
+    cli11
+    libmamba
+    msgpack-c
+    nlohmann_json
     python3
     reproc
     spdlog
-    nlohmann_json
     tl-expected
-    zstd
-    bzip2
-    cli11
     yaml-cpp
-    libmamba
+    zstd
   ];
 
   cmakeFlags = [
@@ -49,12 +51,22 @@ stdenv.mkDerivation rec {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  meta = with lib; {
+  postInstall = ''
+    wrapProgram $out/bin/mamba \
+      --set-default CONDA_ENVS_PATH '${defaultEnvPath}' \
+      --set-default CONDA_PKGS_DIRS '${defaultPkgPath}' \
+      --set-default MAMBA_ROOT_PREFIX '${defaultRootPath}'
+  '';
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  meta = {
     description = "Reimplementation of the conda package manager";
     homepage = "https://github.com/mamba-org/mamba";
-    license = licenses.bsd3;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ klchen0112 ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ klchen0112 ];
     mainProgram = "mamba";
   };
 }

@@ -2,23 +2,34 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  file,
   python3Packages,
+  rsync,
   versionCheckHook,
+  nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "barman";
-  version = "3.13.2";
+  version = "3.19.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EnterpriseDB";
     repo = "barman";
-    tag = "release/${version}";
-    hash = "sha256-CfzDO4u6JL4cLHvs7f1oQqQPc+j1lKng4J9wIBswIpA=";
+    tag = "release/${finalAttrs.version}";
+    hash = "sha256-7K7ibg2/hr5wBzGR8cW5FZNtPPFEBA7xPwmOl2c1fOU=";
   };
 
-  patches = [ ./unwrap-subprocess.patch ];
+  patches = [
+    ./unwrap-subprocess.patch
+  ];
+
+  # https://github.com/EnterpriseDB/barman/blob/release/3.14.1/barman/encryption.py#L214
+  postPatch = ''
+    substituteInPlace barman/encryption.py \
+      --replace-fail '"file"' '"${lib.getExe file}"'
+  '';
 
   build-system = with python3Packages; [
     distutils
@@ -40,32 +51,42 @@ python3Packages.buildPythonApplication rec {
     python-snappy
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    mock
-    pytestCheckHook
+  nativeCheckInputs = [
+    python3Packages.lz4
+    python3Packages.mock
+    python3Packages.pytestCheckHook
+    python3Packages.zstandard
+    rsync
     versionCheckHook
-    zstandard
-    lz4
   ];
 
-  disabledTests =
-    [
-      # Assertion error
-      "test_help_output"
-      "test_exits_on_unsupported_target"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # FsOperationFailed
-      "test_get_file_mode"
-    ];
+  disabledTests = [
+    # Assertion error
+    "test_help_output"
+    "test_exits_on_unsupported_target"
+    "test_resolve_mounted_volume_failure"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # FsOperationFailed
+    "test_get_file_mode"
+  ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^release/(\\d+\\.\\d+\\.\\d+)$"
+      ];
+    };
+  };
 
   meta = {
     description = "Backup and Recovery Manager for PostgreSQL";
     homepage = "https://www.pgbarman.org/";
-    changelog = "https://github.com/EnterpriseDB/barman/blob/release/${version}/NEWS";
+    changelog = "https://github.com/EnterpriseDB/barman/blob/${finalAttrs.src.tag}/RELNOTES.md";
     mainProgram = "barman";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ freezeboy ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

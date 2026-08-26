@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "aiac";
   version = "5.3.0";
   excludedPackages = [ ".ci" ];
 
   src = fetchFromGitHub {
     owner = "gofireflyio";
-    repo = pname;
-    rev = "v${version}";
+    repo = "aiac";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Lk3Bmzg1owkIWzz7jgq1YpdPyRzyZ7aNoWPIU5aWzu0=";
   };
 
@@ -20,14 +20,14 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/gofireflyio/aiac/v4/libaiac.Version=v${version}"
+    "-X github.com/gofireflyio/aiac/v4/libaiac.Version=v${finalAttrs.version}"
   ];
 
-  meta = with lib; {
-    description = ''Artificial Intelligence Infrastructure-as-Code Generator.'';
+  meta = {
+    description = "Artificial Intelligence Infrastructure-as-Code Generator";
     mainProgram = "aiac";
     homepage = "https://github.com/gofireflyio/aiac/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ qjoly ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ qjoly ];
   };
-}
+})

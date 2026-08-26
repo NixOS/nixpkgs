@@ -4,24 +4,25 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tar2ext4";
-  version = "0.12.8";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "hcsshim";
-    rev = "v${version}";
-    sha256 = "sha256-20+y7wFV3HxkrS1qHNq2neIc826HU5AXzuqqS7Ll2gg=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-n/YYajbQo+s1ssPAbS4gUdFYBHNmoNBKcEM/kcAZR94=";
   };
 
-  sourceRoot = "${src.name}/cmd/tar2ext4";
+  sourceRoot = "${finalAttrs.src.name}/cmd/tar2ext4";
   vendorHash = null;
 
-  meta = with lib; {
+  meta = {
     description = "Convert a tar archive to an ext4 image";
-    maintainers = with maintainers; [ qyliss ];
-    license = licenses.mit;
+    homepage = "https://github.com/microsoft/hcsshim";
+    maintainers = with lib.maintainers; [ qyliss ];
+    license = lib.licenses.mit;
     mainProgram = "tar2ext4";
   };
-}
+})

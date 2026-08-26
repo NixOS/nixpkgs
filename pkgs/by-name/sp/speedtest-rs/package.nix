@@ -5,33 +5,26 @@
   openssl,
   pkg-config,
   stdenv,
-  darwin,
   nix-update-script,
   testers,
   speedtest-rs,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "speedtest-rs";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "nelsonjchen";
     repo = "speedtest-rs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1FAFYiWDD/KG/7/UTv/EW6Nj2GnU0GZFFq6ouMc0URA=";
   };
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
   nativeBuildInputs = [ pkg-config ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-T8OG6jmUILeRmvPLjGDFlJyBm87Xdgy4bw4n7V0BQMk=";
 
   # Fail for unclear reasons (only on darwin)
@@ -48,7 +41,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Command line internet speedtest tool written in rust";
     homepage = "https://github.com/nelsonjchen/speedtest-rs";
-    changelog = "https://github.com/nelsonjchen/speedtest-rs/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/nelsonjchen/speedtest-rs/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       asl20
@@ -56,4 +49,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "speedtest-rs";
   };
-}
+})

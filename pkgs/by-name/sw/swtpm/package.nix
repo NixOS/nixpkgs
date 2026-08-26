@@ -2,11 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   pkg-config,
   libtasn1,
   openssl,
-  fuse,
+  fuse3,
   glib,
   libseccomp,
   json-glib,
@@ -14,8 +15,10 @@
   unixtools,
   expect,
   socat,
+  gmp,
   gnutls,
   perl,
+  makeWrapper,
 
   # Tests
   python3,
@@ -25,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swtpm";
-  version = "0.10.0";
+  version = "0.10.1-unstable-2026-05-21"; # fuse3 support, switch to openssl
 
   src = fetchFromGitHub {
     owner = "stefanberger";
     repo = "swtpm";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-ZEpThaLgieTTBJ9Rouklepq6Bvo/h+2sbabNOo++fc0=";
+    rev = "89a67f3d4070887a1ab86ca641f8da13529c54b7";
+    hash = "sha256-ebVfzKloJGmiaguxtcPC/MUuOQYzxIZDdi/0oEGXJ64=";
   };
 
   nativeBuildInputs = [
@@ -42,33 +45,39 @@ stdenv.mkDerivation (finalAttrs: {
     perl # for pod2man
     python3
     autoreconfHook
+    makeWrapper
+    # configure.ac does AC_CHECK_PROG([OPENSSL_CLITOOL], [openssl], ...) and
+    # errors out when the tool is not on PATH. openssl is in buildInputs for
+    # the library, which puts its bin dir on PATH only when build == host, so
+    # the check fails when cross-compiling.
+    openssl
   ];
 
   nativeCheckInputs = [
     which
   ];
 
-  buildInputs =
-    [
-      libtpms
-      openssl
-      libtasn1
-      glib
-      json-glib
-      gnutls
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      fuse
-      libseccomp
-    ];
+  buildInputs = [
+    libtpms
+    openssl
+    libtasn1
+    glib
+    json-glib
+    gmp
+    gnutls
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    fuse3
+    libseccomp
+  ];
 
-  configureFlags =
-    [
-      "--localstatedir=/var"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "--with-cuse"
-    ];
+  configureFlags = [
+    "--localstatedir=/var"
+    "--with-gnutls"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "--with-cuse"
+  ];
 
   postPatch = ''
     patchShebangs tests/*
@@ -78,42 +87,24 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Makefile tries to create the directory /var/lib/swtpm-localca, which fails
     substituteInPlace samples/Makefile.am \
-        --replace 'install-data-local:' 'do-not-execute:'
+        --replace-fail 'install-data-local:' 'do-not-execute:'
 
-    # Use the correct path to the certtool binary
+    # Use the correct path to the openssl binary
     # instead of relying on it being in the environment
     substituteInPlace src/swtpm_localca/swtpm_localca.c \
-      --replace \
-        '# define CERTTOOL_NAME "gnutls-certtool"' \
-        '# define CERTTOOL_NAME "${gnutls}/bin/certtool"' \
-      --replace \
-        '# define CERTTOOL_NAME "certtool"' \
-        '# define CERTTOOL_NAME "${gnutls}/bin/certtool"'
+      --replace-fail \
+        '#define OPENSSL_TOOL  "openssl"' \
+        '#define OPENSSL_TOOL  "${lib.getExe openssl}"'
+  '';
 
-    substituteInPlace tests/common --replace \
-        'CERTTOOL=gnutls-certtool;;' \
-        'CERTTOOL=certtool;;'
-
-    # Fix error on macOS:
-    # stat: invalid option -- '%'
-    # This is caused by the stat program not being the BSD version,
-    # as is expected by the test
-    substituteInPlace tests/common tests/sed-inplace --replace \
-        'if [[ "$(uname -s)" =~ (Linux|CYGWIN_NT-) ]]; then' \
-        'if [[ "$(uname -s)" =~ (Linux|Darwin|CYGWIN_NT-) ]]; then'
-
-    # Otherwise certtool seems to pick up the system language on macOS,
-    # which might cause a test to fail
-    substituteInPlace tests/test_swtpm_setup_create_cert --replace \
-        '$CERTTOOL' \
-        'LC_ALL=C.UTF-8 $CERTTOOL'
-
-    substituteInPlace tests/test_tpm2_swtpm_cert --replace \
-        'certtool' \
-        'LC_ALL=C.UTF-8 certtool'
+  # Workaround for https://github.com/stefanberger/swtpm/issues/795
+  postFixup = ''
+    wrapProgram "$out/bin/swtpm_localca" --suffix PATH : "$out/bin"
+    wrapProgram "$out/bin/swtpm_setup" --suffix PATH : "$out/bin"
   '';
 
   doCheck = true;
+  __darwinAllowLocalNetworking = true; # tests do socket things, requires local networking to pass
   enableParallelBuilding = true;
 
   outputs = [
@@ -123,12 +114,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = { inherit (nixosTests) systemd-cryptenroll; };
 
-  meta = with lib; {
+  meta = {
     description = "Libtpms-based TPM emulator";
     homepage = "https://github.com/stefanberger/swtpm";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.baloo ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.baloo ];
     mainProgram = "swtpm";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

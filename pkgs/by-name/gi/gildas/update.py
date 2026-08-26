@@ -80,16 +80,19 @@ def find_latest(srcVersions):
 
 def get_hash(srcVersion):
     """
-    Get the hash of a given source versionn
+    Get the hash of a given source version
 
     """
 
     url = f"http://www.iram.fr/~gildas/dist/gildas-src-{srcVersion}.tar.xz"
-    srcHash = (
-        subprocess.check_output(["nix-prefetch-url", url, "--unpack"]).decode().strip()
+    srcHash = subprocess.check_output(["nix-prefetch-url", url]).decode().strip()
+    # Convert to SRI representation
+    srcSRIHash = (
+        subprocess.check_output(["nix-hash", "--to-sri", "--type", "sha256", srcHash])
+        .decode()
+        .strip()
     )
-
-    return f"sha256:{srcHash}"
+    return srcSRIHash
 
 
 def get_package_attribute(attr):

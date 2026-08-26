@@ -17,44 +17,63 @@
   fontconfig,
   freetype,
   libGL,
-  xorg,
+  libxxf86vm,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
   libxkbcommon,
   wayland,
   xdg-utils,
 
   nix-update-script,
+  withGraphics ? false,
+  versionCheckHook,
 }:
 let
-  rpathLibs =
-    [
-      expat
-      fontconfig
-      freetype
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libGL
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXxf86vm
-      xorg.libxcb
-      libxkbcommon
-      wayland
-    ];
+  rpathLibs = [
+    expat
+    fontconfig
+    freetype
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGL
+    libx11
+    libxcursor
+    libxi
+    libxxf86vm
+    libxcb
+    libxkbcommon
+    wayland
+  ];
 in
-rustPlatform.buildRustPackage rec {
-  pname = "alacritty";
-  version = "0.15.1";
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "alacritty${lib.optionalString withGraphics "-graphics"}";
+  version = "0.17.0";
 
-  src = fetchFromGitHub {
-    owner = "alacritty";
-    repo = "alacritty";
-    tag = "v${version}";
-    hash = "sha256-/yERMNfCFLPb1S17Y9OacVH8UobDIIZDhM2qPzf5Vds=";
-  };
+  src =
+    # by default we want the official package
+    if !withGraphics then
+      fetchFromGitHub {
+        owner = "alacritty";
+        repo = "alacritty";
+        tag = "v${finalAttrs.version}";
+        hash = "sha256-iZtCH2DrSs6o3AG2koI2TyC3116aMlawHFkCd0TYhas=";
+      }
+    # optionally we want to build the sixels feature fork
+    else
+      fetchFromGitHub {
+        owner = "ayosec";
+        repo = "alacritty";
+        tag = "v${finalAttrs.version}-graphics";
+        hash = "sha256-DdiioNKMVg9u4E4h7AysvaGJ6ys36ykTyJgjHWjIjjY=";
+      };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-uXwefUV1NAKqwwPIWj4Slkx0c5b+RfLR3caTb42fc4M=";
+  cargoHash =
+    if !withGraphics then
+      "sha256-BX4PjZXr19SScEZhb0gWkMiJUYq8ByEuVh9RpJSRCHI="
+    else
+      "sha256-xWW0X4dCgnNMT4T6BNsYmxOOFIK8MIHwUMKVtIHAFYc=";
 
   nativeBuildInputs = [
     cmake
@@ -128,16 +147,35 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  meta = {
     description = "Cross-platform, GPU-accelerated terminal emulator";
-    homepage = "https://github.com/alacritty/alacritty";
-    license = licenses.asl20;
+    homepage =
+      if !withGraphics then
+        "https://github.com/alacritty/alacritty"
+      else
+        "https://github.com/ayosec/alacritty";
+    license = lib.licenses.asl20;
     mainProgram = "alacritty";
-    maintainers = with maintainers; [
-      Br1ght0ne
-      rvdp
-    ];
-    platforms = platforms.unix;
-    changelog = "https://github.com/alacritty/alacritty/blob/v${version}/CHANGELOG.md";
+    maintainers =
+      with lib.maintainers;
+      if !withGraphics then
+        [
+          rvdp
+        ]
+      else
+        [
+          afh
+        ];
+    platforms = lib.platforms.unix;
+    changelog =
+      if !withGraphics then
+        "https://github.com/alacritty/alacritty/blob/v${finalAttrs.version}/CHANGELOG.md"
+      else
+        "https://github.com/ayosec/alacritty/blob/v${finalAttrs.version}-graphics/CHANGELOG.md";
   };
-}
+})

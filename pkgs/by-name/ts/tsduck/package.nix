@@ -3,12 +3,13 @@
   stdenv,
   fetchFromGitHub,
   # build and doc tooling
-  asciidoctor-with-extensions,
+  asciidoctor,
   doxygen,
   graphviz,
   python3,
   ruby,
   qpdf,
+  udevCheckHook,
   # build deps
   curl,
   glibcLocales,
@@ -31,12 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    asciidoctor-with-extensions
+    asciidoctor
     doxygen
     graphviz
     python3
     ruby
     qpdf
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -71,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./tests.patch ];
   checkTarget = "test";
   doCheck = true;
+  doInstallCheck = true;
 
   installTargets = [
     "install-tools"

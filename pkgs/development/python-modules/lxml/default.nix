@@ -7,6 +7,7 @@
   # build-system
   cython,
   setuptools,
+  pkg-config,
 
   # native dependencies
   libxml2,
@@ -15,25 +16,29 @@
   xcodebuild,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lxml";
-  version = "5.3.1";
+  version = "6.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lxml";
     repo = "lxml";
-    tag = "lxml-${version}";
-    hash = "sha256-TGv2ZZQ7GU+fAWRApESUL1bbxQobbmLai8wr09xYOUw=";
+    tag = "lxml-${finalAttrs.version}";
+    hash = "sha256-SRJaegK4PxgK0rdILVp3J92VnjPmExiD2AuMLoGQIbA=";
   };
 
-  # setuptoolsBuildPhase needs dependencies to be passed through nativeBuildInputs
-  nativeBuildInputs = [
-    libxml2.dev
-    libxslt.dev
+  build-system = [
     cython
     setuptools
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
+
+  # required for build time dependency check
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
   buildInputs = [
     libxml2
     libxslt
@@ -52,11 +57,11 @@ buildPythonPackage rec {
     "lxml.etree"
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/lxml/lxml/blob/lxml-${version}/CHANGES.txt";
+  meta = {
+    changelog = "https://github.com/lxml/lxml/blob/${finalAttrs.src.tag}/CHANGES.txt";
     description = "Pythonic binding for the libxml2 and libxslt libraries";
     homepage = "https://lxml.de";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

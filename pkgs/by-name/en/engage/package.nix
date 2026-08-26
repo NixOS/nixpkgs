@@ -3,51 +3,58 @@
   installShellFiles,
   rustPlatform,
   fetchFromGitLab,
-  stdenv,
+  mdbook,
 }:
 
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "engage";
-  version = "0.2.0";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+  version = "0.3.0";
+
+  env = {
+    ENGAGE_BOOK_PATH = "${placeholder "out"}/share/doc/${finalAttrs.pname}";
+  };
 
   src = fetchFromGitLab {
     domain = "gitlab.computer.surgery";
     owner = "charles";
     repo = "engage";
-    rev = "v${version}";
-    hash = "sha256-niXh63xTpXSp9Wqwfi8hUBKJSClOUSvB+TPCTaqHfZk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-dKnpovsBcx3fyDK2eSVf4vzJaQ0uNGcKoYSE56kUDEg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-0r5MIoitmFxUODxzi0FBLsUpdGrG1pY8Lo+gy7HeJU8=";
+  cargoHash = "sha256-wHPjVP/hzMdmKVYDzjUGoaSKwcf7A9nYeM5HhvBQ+bc=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
-    "installShellCompletion --cmd engage "
-    + builtins.concatStringsSep " " (
-      builtins.map (shell: "--${shell} <($out/bin/engage completions ${shell})") [
-        "bash"
-        "fish"
-        "zsh"
-      ]
-    )
-  );
+  buildAndTestSubdir = "crates/engage";
+
+  postInstall = ''
+    installShellCompletion --cmd engage ${
+      builtins.concatStringsSep " " (
+        map (shell: "--${shell} <(cargo xtask completions ${shell})") [
+          "bash"
+          "zsh"
+          "fish"
+        ]
+      )
+    }
+
+    ${lib.getExe mdbook} build
+    mkdir -p $out/share/doc
+    mv public $out/share/doc/${finalAttrs.pname}
+  '';
 
   meta = {
-    description = "Task runner with DAG-based parallelism";
+    description = "Process composer with ordering and parallelism based on directed acyclic graphs";
     mainProgram = "engage";
-    homepage = "https://gitlab.computer.surgery/charles/engage";
-    changelog = "https://gitlab.computer.surgery/charles/engage/-/blob/v${version}/CHANGELOG.md";
+    homepage = "https://engage.computer.surgery";
+    changelog = "https://engage.computer.surgery/changelog.html";
     license = with lib.licenses; [
       asl20
       mit
     ];
     maintainers = with lib.maintainers; [ CobaltCause ];
   };
-}
+})

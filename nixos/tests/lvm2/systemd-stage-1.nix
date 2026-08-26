@@ -1,7 +1,9 @@
 {
+  lib,
   kernelPackages ? null,
   flavour,
   mkXfsFlags ? "",
+  ...
 }:
 let
   preparationCode =
@@ -66,54 +68,61 @@ let
     .${flavour};
 
 in
-import ../make-test-python.nix (
-  { pkgs, lib, ... }:
-  {
-    name = "lvm2-${flavour}-systemd-stage-1";
-    meta.maintainers = lib.teams.helsinki-systems.members;
+{
+  name = "lvm2-${flavour}-systemd-stage-1";
+  meta.maintainers = with lib.maintainers; [
+    das_j
+    helsinki-Jo
+  ];
 
-    nodes.machine =
-      { pkgs, lib, ... }:
-      {
-        imports = [ extraConfig ];
-        # Use systemd-boot
-        virtualisation = {
-          emptyDiskImages = [
-            8192
-            8192
-          ];
-          useBootLoader = true;
-          useEFIBoot = true;
-          # To boot off the LVM disk, we need to have a init script which comes from the Nix store.
-          mountHostNixStore = true;
+  nodes.machine =
+    { pkgs, lib, ... }:
+    {
+      imports = [ extraConfig ];
+      # Use systemd-boot
+      virtualisation = {
+        emptyDiskImages = [
+          8192
+          8192
+        ];
+        useBootLoader = true;
+        useEFIBoot = true;
+        # To boot off the LVM disk, we need to have a init script which comes from the Nix store.
+        mountHostNixStore = true;
+      };
+      boot.loader.systemd-boot.enable = true;
+      boot.loader.efi.canTouchEfiVariables = true;
+
+      environment.systemPackages = with pkgs; [ xfsprogs ];
+      boot = {
+        initrd.systemd = {
+          enable = true;
+          emergencyAccess = true;
         };
-        boot.loader.systemd-boot.enable = true;
-        boot.loader.efi.canTouchEfiVariables = true;
-
-        environment.systemPackages = with pkgs; [ xfsprogs ];
-        boot = {
-          initrd.systemd = {
-            enable = true;
-            emergencyAccess = true;
-          };
-          initrd.services.lvm.enable = true;
-          kernelPackages = lib.mkIf (kernelPackages != null) kernelPackages;
-        };
-
-        specialisation.boot-lvm.configuration.virtualisation = {
-          useDefaultFilesystems = false;
-          fileSystems = {
-            "/" = {
-              device = "/dev/test_vg/test_lv";
-              fsType = "xfs";
-            };
-          };
-
-          rootDevice = "/dev/test_vg/test_lv";
-        };
+        initrd.services.lvm.enable = true;
+        kernelPackages = lib.mkIf (kernelPackages != null) kernelPackages;
       };
 
-    testScript = ''
+      specialisation.boot-lvm.configuration.virtualisation = {
+        useDefaultFilesystems = false;
+        fileSystems = {
+          "/" = {
+            device = "/dev/test_vg/test_lv";
+            fsType = "xfs";
+          };
+        };
+
+        rootDevice = "/dev/test_vg/test_lv";
+      };
+    };
+
+  testScript =
+    { nodes, ... }:
+    let
+      boot-lvm = nodes.machine.specialisation.boot-lvm.configuration.system.build.toplevel;
+    in
+    # python
+    ''
       machine.wait_for_unit("multi-user.target")
       # Create a VG for the root
       ${preparationCode}
@@ -121,7 +130,7 @@ import ../make-test-python.nix (
       machine.succeed("mkdir -p /mnt && mount /dev/test_vg/test_lv /mnt && echo hello > /mnt/test && umount /mnt")
 
       # Boot from LVM
-      machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-lvm.conf")
+      machine.succeed("${boot-lvm}/bin/switch-to-configuration boot")
       machine.succeed("sync")
       machine.crash()
       machine.wait_for_unit("multi-user.target")
@@ -132,5 +141,4 @@ import ../make-test-python.nix (
       assert "hello" in machine.succeed("cat /test")
       ${extraCheck}
     '';
-  }
-)
+}

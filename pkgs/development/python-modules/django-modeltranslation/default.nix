@@ -8,25 +8,26 @@
   pytest-cov-stub,
   pytest-django,
   pytestCheckHook,
-  pythonOlder,
-  setuptools,
+  hatchling,
+  hatch-vcs,
 }:
 
 buildPythonPackage rec {
   pname = "django-modeltranslation";
-  version = "0.19.13";
+  version = "0.20.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "deschler";
     repo = "django-modeltranslation";
     tag = "v${version}";
-    hash = "sha256-mn3dGSJbujULPT/PBAVvd1hlCukMItC4Z8dIZ+MWZ2w=";
+    hash = "sha256-DlghTCh2bcY+jHOYhQWVzMRGNKRIiQkLt4ZHDLVxUUs=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   dependencies = [ django ];
 
@@ -40,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "modeltranslation" ];
 
-  meta = with lib; {
+  meta = {
     description = "Translates Django models using a registration approach";
     homepage = "https://github.com/deschler/django-modeltranslation";
-    changelog = "https://github.com/deschler/django-modeltranslation/blob/v${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ augustebaum ];
+    changelog = "https://github.com/deschler/django-modeltranslation/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ augustebaum ];
   };
 }

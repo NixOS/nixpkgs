@@ -3,20 +3,21 @@
   buildGoModule,
   fetchFromGitHub,
   coreutils,
+  versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
 let
-  openShiftVersion = "4.18.2";
-  okdVersion = "4.15.0-0.okd-2024-02-23-163410";
-  microshiftVersion = "4.18.2";
+  openShiftVersion = "4.22.7";
+  okdVersion = "4.22.0-okd-scos.6";
+  microshiftVersion = "4.22.0";
   writeKey = "$(MODULEPATH)/pkg/crc/segment.WriteKey=cvpHsNcmGCJqVzf6YxrSnVlwFSAZaYtp";
-  gitCommit = "e843be9c9889abd33ce2f9aee161fac1d44e3fa8";
-  gitHash = "sha256-irlVpRBZzE6lfjK8nlNmWlryGj25u/5LcX7pG3WD/Fs=";
+  gitCommit = "3a67a3687c5e9013e09a316991f92ef419841481";
+  gitHash = "sha256-gLDRnt0yVUe4OJU+LVpFA+7U0VnlXkmkcQVcB72ULqQ=";
 in
 buildGoModule (finalAttrs: {
   pname = "crc";
-  version = "2.49.0";
+  version = "2.63.0";
 
   src = fetchFromGitHub {
     owner = "crc-org";
@@ -45,17 +46,13 @@ buildGoModule (finalAttrs: {
     "-X github.com/crc-org/crc/v2/pkg/crc/segment.WriteKey=${writeKey}"
   ];
 
-  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
-
   doInstallCheck = true;
-
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    HOME=$(mktemp -d) $out/bin/crc version | grep ${finalAttrs.version} > /dev/null
-
-    runHook postInstallCheck
-  '';
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckProgramArg = "version";
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru.updateScript = ./update.sh;
 

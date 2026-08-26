@@ -6,15 +6,15 @@
   boost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "boost-sml";
-  version = "1.1.12";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "boost-ext";
     repo = "sml";
-    rev = "v${version}";
-    hash = "sha256-IvZwkhZe9pcyJhZdn4VkWMRUN6Ow8qs3zB6JtWb5pKk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-cQRLBqe5TudtISko309mF9Qx7r5Q8L2Z9myvvYyh8NY=";
   };
 
   buildInputs = [ boost ];
@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Header only state machine library with no dependencies";
     homepage = "https://github.com/boost-ext/sml";
-    license = licenses.boost;
-    maintainers = with maintainers; [ prtzl ];
-    platforms = platforms.all;
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ prtzl ];
+    platforms = lib.platforms.all;
   };
-}
+})

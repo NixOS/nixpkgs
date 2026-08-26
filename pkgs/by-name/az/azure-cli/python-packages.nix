@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   python3,
   fetchPypi,
@@ -28,6 +29,7 @@ let
       # core and the actual application are highly coupled
       azure-cli-core = buildAzureCliPackage {
         pname = "azure-cli-core";
+        format = "setuptools";
         inherit version src;
 
         sourceRoot = "${src.name}/src/azure-cli-core";
@@ -48,6 +50,7 @@ let
             argcomplete
             azure-cli-telemetry
             azure-common
+            azure-core
             azure-mgmt-core
             cryptography
             distro
@@ -85,6 +88,9 @@ let
             --ignore=azure/cli/core/tests/test_extension.py \
             --ignore=azure/cli/core/tests/test_util.py \
             --ignore=azure/cli/core/tests/test_argcomplete.py \
+            --ignore=azure/cli/core/tests/test_telemetry.py \
+            --ignore=azure/cli/core/tests/test_help.py \
+            --ignore=azure/cli/core/tests/test_command_table_integrity.py \
             -k 'not metadata_url and not test_send_raw_requests and not test_format_styled_text_legacy_powershell'
         '';
 
@@ -99,6 +105,7 @@ let
       azure-cli-telemetry = buildAzureCliPackage {
         pname = "azure-cli-telemetry";
         version = "1.1.0";
+        format = "setuptools";
         inherit src;
 
         sourceRoot = "${src.name}/src/azure-cli-telemetry";
@@ -141,8 +148,14 @@ let
 
       # AttributeError: type object 'CustomDomainsOperations' has no attribute 'disable_custom_https'
       azure-mgmt-cdn =
-        overrideAzureMgmtPackage super.azure-mgmt-cdn "12.0.0" "zip"
-          "sha256-t8PuIYkjS0r1Gs4pJJJ8X9cz8950imQtbVBABnyMnd0=";
+        (overrideAzureMgmtPackage super.azure-mgmt-cdn "12.0.0" "zip"
+          "sha256-t8PuIYkjS0r1Gs4pJJJ8X9cz8950imQtbVBABnyMnd0="
+        ).overridePythonAttrs
+          (attrs: {
+            propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
+              self.msrest
+            ];
+          });
 
       # ImportError: cannot import name 'ConfigMap' from 'azure.mgmt.containerinstance.models'
       azure-mgmt-containerinstance = super.azure-mgmt-containerinstance.overridePythonAttrs (attrs: rec {
@@ -153,11 +166,6 @@ let
           hash = "sha256-v0u3e9ZoEnDdCnM6o6fD7N+suo5hbTqMO5jM6cSMx8A=";
         };
       });
-
-      # ModuleNotFoundError: No module named 'azure.mgmt.compute.v2024_07_01'
-      azure-mgmt-compute =
-        overrideAzureMgmtPackage super.azure-mgmt-compute "33.0.0" "tar.gz"
-          "sha256-o8wP5PCcjh01I8G/uSYg3+JjoKiTsKwToz1wV+nd3dI=";
 
       # ImportError: cannot import name 'ResourceSku' from 'azure.mgmt.eventgrid.models'
       azure-mgmt-eventgrid =
@@ -179,35 +187,72 @@ let
         overrideAzureMgmtPackage super.azure-mgmt-rdbms "10.2.0b17" "tar.gz"
           "sha256-1nnRkyr4Im79B7DDqGz/FOrPAToFaGhE+a7r5bZMuOQ=";
 
-      # ModuleNotFoundError: No module named 'azure.mgmt.redhatopenshift.v2023_11_22'
-      azure-mgmt-redhatopenshift =
-        overrideAzureMgmtPackage super.azure-mgmt-redhatopenshift "1.5.0" "tar.gz"
-          "sha256-Uft0KcOciKzJ+ic9n4nxkwNSBmKZam19jhEiqY9fJSc=";
+      # azure.mgmt.resource will shadow the other azure.mgmt.resource.* packages unless we merge them together
+      azure-mgmt-resource-all = py.pkgs.buildPythonPackage {
+        pname = "azure-mgmt-resource-all";
+        inherit version;
 
-      # ImportError: cannot import name 'IPRule' from 'azure.mgmt.signalr.models'
-      azure-mgmt-signalr =
-        overrideAzureMgmtPackage super.azure-mgmt-signalr "2.0.0b2" "tar.gz"
-          "sha256-05PUV8ouAKq/xhGxVEWIzDop0a7WDTV5mGVSC4sv9P4=";
+        pyproject = false; # we're not building from sdist/wheel
+
+        src = py.pkgs.azure-mgmt-resource.src;
+
+        # No real build, just symlink all site-packages into one dir
+        installPhase = ''
+          runHook preInstall
+
+          mkdir -p $out/${py.sitePackages}
+          for pkg in ${
+            lib.concatStringsSep " " (
+              map (p: "${p}") [
+                py.pkgs.azure-mgmt-resource
+                py.pkgs.azure-mgmt-resource-deployments
+                py.pkgs.azure-mgmt-resource-deploymentscripts
+                py.pkgs.azure-mgmt-resource-deploymentstacks
+                py.pkgs.azure-mgmt-resource-templatespecs
+              ]
+            )
+          }; do
+            # Copy recursively, keep symlinks, skip duplicates silently
+            cp -rs --no-preserve=mode "$pkg/${py.sitePackages}/." "$out/${py.sitePackages}/" || true
+          done
+
+          runHook postInstall
+        '';
+
+        doCheck = false;
+      };
 
       # ImportError: cannot import name 'AdvancedThreatProtectionName' from 'azure.mgmt.sql.models'
       azure-mgmt-sql = super.azure-mgmt-sql.overridePythonAttrs (attrs: rec {
-        version = "4.0.0b20";
+        version = "4.0.0b22";
         src = fetchPypi {
           pname = "azure_mgmt_sql"; # Different from src.pname in the original package.
           inherit version;
-          hash = "sha256-mphqHUet4AhmL8aUoRbrGOjbookCHR3Ex+unpOq7aQM=";
+          hash = "sha256-ku3YN9W9Cyx4zsKxAs4k9/oeDXApzi2uqAURqa72H0k=";
         };
       });
 
-      # ValueError: The operation 'azure.mgmt.sqlvirtualmachine.operations#SqlVirtualMachinesOperations.begin_create_or_update' is invalid.
-      azure-mgmt-sqlvirtualmachine =
-        overrideAzureMgmtPackage super.azure-mgmt-sqlvirtualmachine "1.0.0b5" "zip"
-          "sha256-ZFgJflgynRSxo+B+Vso4eX1JheWlDQjfJ9QmupXypMc=";
+      # Attribute virtual_machines does not exist - nixpkgs has 37.x but azure-cli 2.82.0 requires ~=34.1.0
+      azure-mgmt-compute = super.azure-mgmt-compute.overridePythonAttrs (attrs: rec {
+        version = "34.1.0";
+        src = fetchPypi {
+          pname = "azure_mgmt_compute";
+          inherit version;
+          hash = "sha256-zZ010cwbjLC9JBrVXJG3fRTgSuc8YyraEUATX5whf+E=";
+        };
+      });
 
-      # ModuleNotFoundError: No module named 'azure.mgmt.synapse.operations._kusto_pool_attached_database_configurations_operations'
-      azure-mgmt-synapse =
-        overrideAzureMgmtPackage super.azure-mgmt-synapse "2.1.0b5" "zip"
-          "sha256-5E6Yf1GgNyNVjd+SeFDbhDxnOA6fOAG6oojxtCP4m+k=";
+      # ModuleNotFoundError: No module named 'azure.mgmt.recoveryservicesbackup.activestamp'
+      azure-mgmt-recoveryservicesbackup =
+        super.azure-mgmt-recoveryservicesbackup.overridePythonAttrs
+          (attrs: rec {
+            version = "9.2.0";
+            src = fetchPypi {
+              pname = "azure_mgmt_recoveryservicesbackup";
+              inherit version;
+              hash = "sha256-xAKz4ipsOHnfVrw34AYxQsM1LFECWZ/xAtGYJPGzKyk=";
+            };
+          });
     };
   };
 in

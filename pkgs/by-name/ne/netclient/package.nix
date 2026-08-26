@@ -2,33 +2,31 @@
   buildGoModule,
   fetchFromGitHub,
   lib,
-  libX11,
+  libx11,
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "netclient";
-  version = "0.90.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "gravitl";
     repo = "netclient";
-    rev = "v${version}";
-    hash = "sha256-/drujpz0oeAZmV24Fxy3N6aqa5z72WiVxkjccbc6xmE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-3vljlrWmetQfAwemRsC76e7DqlFVQKxnV1mpx/NtYvc=";
   };
 
-  vendorHash = "sha256-l2Vx1lD+LF/4N0QLVTDD1/TmWpR3JPAgMyrgw7aT2EQ=";
+  vendorHash = "sha256-fnXekqGK1c6pf8UY1F44RYbU+wc9kZJQg3hmRPcBFCE=";
 
-  buildInputs = lib.optional stdenv.hostPlatform.isLinux libX11;
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux libx11;
 
-  hardeningEnabled = [ "pie" ];
-
-  meta = with lib; {
+  meta = {
     description = "Automated WireGuard® Management Client";
     mainProgram = "netclient";
     homepage = "https://netmaker.io";
-    changelog = "https://github.com/gravitl/netclient/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ wexder ];
+    changelog = "https://github.com/gravitl/netclient/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ wexder ];
   };
-}
+})

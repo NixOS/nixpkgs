@@ -3,7 +3,6 @@
   stdenvNoCC,
   fetchFromGitHub,
   gtk3,
-  gnome-icon-theme,
   hicolor-icon-theme,
 }:
 
@@ -21,7 +20,6 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ gtk3 ];
 
   propagatedBuildInputs = [
-    gnome-icon-theme
     hicolor-icon-theme
   ];
 
@@ -36,11 +34,11 @@ stdenvNoCC.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Icon pack based upon Faenza and Mint-X";
     homepage = "https://github.com/madmaxms/iconpack-jade";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

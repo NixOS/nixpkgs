@@ -28,12 +28,17 @@ stdenv.mkDerivation {
   buildInputs = [ libtiff ];
   propagatedBuildInputs = [ tesseract3 ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6.4 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = {
     homepage = "https://github.com/ruediger/VobSub2SRT";
     description = "Converts VobSub subtitles into SRT subtitles";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.ttuegel ];
+    maintainers = [ ];
     mainProgram = "vobsub2srt";
   };
 }

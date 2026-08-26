@@ -8,20 +8,20 @@
 
 buildDotnetModule rec {
   pname = "btcpayserver";
-  version = "2.1.0";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "btcpayserver";
     repo = "btcpayserver";
     tag = "v${version}";
-    sha256 = "sha256-vojRe64STkCKNn/es5+TyBAXvSBXkjjGLbykuKTEa5k=";
+    hash = "sha256-UeWiJv6LvKZx4LYy8LBvPTXVNKAIZI1n3qb6sIU5Dd0=";
   };
 
   projectFile = "BTCPayServer/BTCPayServer.csproj";
   nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
 
   buildType = if altcoinSupport then "Altcoins-Release" else "Release";
 
@@ -30,15 +30,15 @@ buildDotnetModule rec {
     mv $out/bin/{BTCPayServer,btcpayserver} || :
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Self-hosted, open-source cryptocurrency payment processor";
     homepage = "https://btcpayserver.org";
     changelog = "https://github.com/btcpayserver/btcpayserver/blob/v${version}/Changelog.md";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       kcalvinalvin
       erikarvstedt
     ];
-    license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

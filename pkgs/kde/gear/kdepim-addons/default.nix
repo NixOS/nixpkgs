@@ -17,11 +17,9 @@ mkKdeDerivation rec {
   cargoRoot = "plugins/webengineurlinterceptor/adblock";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    # include version in the name so we invalidate the FOD
-    name = "${pname}-${version}";
+    inherit pname version cargoRoot;
     src = sources.${pname};
-    sourceRoot = "${pname}-${version}/${cargoRoot}";
-    hash = "sha256-66FqoD3JoPbtg6zc32uaPYaTo4zHxywiN8wPI2jtcjc=";
+    hash = "sha256-t62ThhOFWIqk+tgq+0ERSni2at+c1/9VHG88if6xG7A=";
   };
 
   extraNativeBuildInputs = [

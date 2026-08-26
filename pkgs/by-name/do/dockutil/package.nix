@@ -8,7 +8,6 @@
   swiftpm,
   swiftpm2nix,
   swiftPackages,
-  darwin,
   libarchive,
   p7zip,
   # Building from source on x86_64 fails (among other things) due to:
@@ -22,13 +21,13 @@ let
   pname = "dockutil";
   version = "3.1.3";
 
-  meta = with lib; {
+  meta = {
     description = "Tool for managing dock items";
     homepage = "https://github.com/kcrawford/dockutil";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ tboerger ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ tboerger ];
     mainProgram = "dockutil";
-    platforms = platforms.darwin;
+    platforms = lib.platforms.darwin;
   };
 
   buildFromSource = swiftPackages.stdenv.mkDerivation (finalAttrs: {
@@ -55,8 +54,6 @@ let
       swift
       swiftpm
     ];
-
-    buildInputs = with darwin.apple_sdk.frameworks; [ Cocoa ];
 
     configurePhase = generated.configure;
 

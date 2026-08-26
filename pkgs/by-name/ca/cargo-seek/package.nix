@@ -5,38 +5,33 @@
   openssl,
   pkg-config,
   rustPlatform,
+  versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-seek";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "tareqimbasher";
     repo = "cargo-seek";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SDVAi4h+/ebGX+8M66Oyd0LfQn+J7/QhDW97ZBdoN14=";
+    hash = "sha256-WL1S2oU3/T9pEI4rgzT2dJ/ZTiwS/BgraW1MmZ5MQl0=";
   };
 
-  cargoHash = "sha256-DyXRbtvCJte7mCQKusipeikr981vMHPEVYcGSwVI5Kg=";
+  cargoHash = "sha256-cXZvuMcNGNWU61ll2dAFxPKWujJNzXpC8aP5vxDONkY=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ];
+  buildInputs = [ openssl ];
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [ writableTmpDirAsHomeHook ];
-  # We cannot use `versionCheckHook` here since access to the $HOME directory is required.
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/cargo-seek --version | grep "${finalAttrs.version}"
-    runHook postInstallCheck
-  '';
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -45,7 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/tareqimbasher/cargo-seek";
     changelog = "https://github.com/tareqimbasher/cargo-seek/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ qwqawawow ];
+    maintainers = with lib.maintainers; [ yvnth ];
     mainProgram = "cargo-seek";
   };
 })

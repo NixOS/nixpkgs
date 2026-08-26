@@ -35,12 +35,12 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1 ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/vdudouyt/stm8flash";
     description = "Tool for flashing STM8 MCUs via ST-LINK (V1 and V2)";
     mainProgram = "stm8flash";
-    maintainers = with maintainers; [ pkharvey ];
-    license = licenses.gpl2;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ pkharvey ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
   };
 }

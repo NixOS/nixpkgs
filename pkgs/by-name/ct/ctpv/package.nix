@@ -8,6 +8,7 @@
   atool,
   bat,
   chafa,
+  coreutils,
   delta,
   ffmpeg,
   ffmpegthumbnailer,
@@ -15,17 +16,18 @@
   glow,
   imagemagick,
   jq,
-  ueberzug,
+  poppler-utils,
+  ueberzugpp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ctpv";
   version = "1.1";
 
   src = fetchFromGitHub {
     owner = "NikitaIvanovV";
     repo = "ctpv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3BQi4m44hBmPkJBFNCg6d9YKRbDZwLxdzBb/NDWTQP4=";
   };
 
@@ -45,6 +47,7 @@ stdenv.mkDerivation rec {
           atool # for archive files
           bat
           chafa # for image files on Wayland
+          coreutils
           delta # for diff files
           ffmpeg
           ffmpegthumbnailer
@@ -52,16 +55,20 @@ stdenv.mkDerivation rec {
           glow # for markdown files
           imagemagick
           jq # for json files
-          ueberzug # for image files on X11
+          poppler-utils # for pdf files
+          ueberzugpp # for image files on X11
         ]
       }";
   '';
 
-  meta = with lib; {
+  # Until https://github.com/NikitaIvanovV/ctpv/pull/90 is merged
+  patches = [ ./use-polite-flag.patch ];
+
+  meta = {
     description = "File previewer for a terminal";
     homepage = "https://github.com/NikitaIvanovV/ctpv";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.wesleyjrz ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.wesleyjrz ];
   };
-}
+})

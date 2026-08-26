@@ -36,9 +36,7 @@ in
     configFile = mkOption {
       type = path;
       default = settingsFormat.generate "gatus.yaml" cfg.settings;
-      defaultText = literalExpression ''
-        let settingsFormat = pkgs.formats.yaml { }; in settingsFormat.generate "gatus.yaml" cfg.settings;
-      '';
+      defaultText = literalExpression ''(pkgs.formats.yaml { }).generate "gatus.yaml" config.services.gatus.settings'';
       description = ''
         Path to the Gatus configuration file.
         Overrides any configuration made using the `settings` option.
@@ -105,7 +103,8 @@ in
   config = mkIf cfg.enable {
     systemd.services.gatus = {
       description = "Automated developer-oriented status page";
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
+      requires = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
@@ -118,6 +117,10 @@ in
         StateDirectory = "gatus";
         SyslogIdentifier = "gatus";
         EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
+        # see https://github.com/prometheus-community/pro-bing#linux
+        AmbientCapabilities = "CAP_NET_RAW";
+        CapabilityBoundingSet = "CAP_NET_RAW";
+        NoNewPrivileges = true;
       };
 
       environment = {

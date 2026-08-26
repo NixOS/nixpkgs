@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dms";
-  version = "1.7.1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "anacrolix";
     repo = "dms";
-    tag = "v${version}";
-    hash = "sha256-dObY2MNrrQqn5i/y2LDlKvd9S04EArmsalIsfXsrth0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WeilPG0eOarwFxp67/ebvyFu/99DmDoSg6llE/3Fz+0=";
   };
 
-  vendorHash = "sha256-f6Jl78ZPLD7Oq4Bq8MBQpHEKnBvpyTWZ9qHa1fGOlgA=";
+  vendorHash = "sha256-kzdh2xlUQCFA9cCixy8h2WkbhDTW5PHxnAKEJwcgkOE=";
 
   meta = {
     homepage = "https://github.com/anacrolix/dms";
@@ -25,4 +25,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "dms";
   };
-}
+})

@@ -6,7 +6,6 @@
   packaging,
   pygments,
   pytestCheckHook,
-  pythonOlder,
   readme-renderer,
   setuptools,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "restview";
   version = "3.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -43,12 +40,12 @@ buildPythonPackage rec {
     "rest_to_html"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "ReStructuredText viewer";
     homepage = "https://mg.pov.lt/restview/";
     changelog = "https://github.com/mgedmin/restview/blob/${version}/CHANGES.rst";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ koral ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ koral ];
     mainProgram = "restview";
   };
 }

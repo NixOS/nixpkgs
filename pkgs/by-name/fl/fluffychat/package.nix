@@ -1,15 +1,18 @@
 {
   lib,
-  fetchzip,
+  stdenv,
   fetchFromGitHub,
+  fetchzip,
   imagemagick,
   libgbm,
   libdrm,
-  flutter327,
+  flutter344,
   pulseaudio,
+  webkitgtk_4_1,
+  copyDesktopItems,
   makeDesktopItem,
-  olm,
-
+  callPackage,
+  vodozemac-wasm ? callPackage ./vodozemac-wasm.nix { flutter = flutter344; },
   targetFlutterPlatform ? "linux",
 }:
 
@@ -19,96 +22,132 @@ let
     libdrm
   ];
   pubspecLock = lib.importJSON ./pubspec.lock.json;
+  libwebrtc_version = "m144.7559.09";
+  libwebrtc =
+    {
+      x86_64-linux = fetchzip {
+        url = "https://github.com/webrtc-sdk/libwebrtc/releases/download/libwebrtc.${libwebrtc_version}/libwebrtc-linux-x64-release.zip";
+        sha256 = "sha256-uzS07voCGM1zs663UalYpb8pWiYpkrKMxKt/wB4rcB4=";
+      };
+      aarch64-linux = fetchzip {
+        url = "https://github.com/webrtc-sdk/libwebrtc/releases/download/libwebrtc.${libwebrtc_version}/libwebrtc-linux-arm64-release.zip";
+        sha256 = "sha256-nMMU/HrCN4zSB4vO1O4TfJRBtK87OX+zYbxZRq8Q4Us=";
+      };
+    }
+    .${stdenv.hostPlatform.system};
 in
-flutter327.buildFlutterApplication (
+flutter344.buildFlutterApplication (
   rec {
     pname = "fluffychat-${targetFlutterPlatform}";
-    version = "1.26.0";
+    version = "2.8.0";
 
     src = fetchFromGitHub {
       owner = "krille-chan";
       repo = "fluffychat";
       tag = "v${version}";
-      hash = "sha256-yCbZCNyZqnYKep0sqkkMn8oz/4lRz7D9he/403MyK9U=";
+      hash = "sha256-+2srYuGNsCvxc89gq3zHgeCHrWTid7Oqtdno/Q/9hgk=";
     };
 
     inherit pubspecLock;
 
-    gitHashes = {
-      flutter_web_auth_2 = "sha256-3aci73SP8eXg6++IQTQoyS+erUUuSiuXymvR32sxHFw=";
-      flutter_typeahead = "sha256-ZGXbbEeSddrdZOHcXE47h3Yu3w6oV7q+ZnO6GyW7Zg8=";
-    };
-
     inherit targetFlutterPlatform;
 
-    meta = with lib; {
+    meta = {
       description = "Chat with your friends (matrix client)";
       homepage = "https://fluffychat.im/";
-      license = licenses.agpl3Plus;
-      mainProgram = "fluffychat";
-      maintainers = with maintainers; [
+      license = lib.licenses.agpl3Plus;
+      maintainers = with lib.maintainers; [
         mkg20001
         tebriel
+        aleksana
       ];
-      platforms = [
-        "x86_64-linux"
-        "aarch64-linux"
-      ];
-      sourceProvenance = [ sourceTypes.fromSource ];
-      inherit (olm.meta) knownVulnerabilities;
+      # Refer to https://github.com/NixOS/nixpkgs/issues/545995
+      broken = stdenv.hostPlatform.isAarch64;
+      badPlatforms = lib.platforms.darwin;
+    }
+    // lib.optionalAttrs (targetFlutterPlatform == "linux") {
+      mainProgram = "fluffychat";
     };
   }
   // lib.optionalAttrs (targetFlutterPlatform == "linux") {
-    nativeBuildInputs = [ imagemagick ];
+    nativeBuildInputs = [
+      imagemagick
+      copyDesktopItems
+      webkitgtk_4_1
+    ];
 
     runtimeDependencies = [ pulseaudio ];
 
     env.NIX_LDFLAGS = "-rpath-link ${libwebrtcRpath}";
+    env.CXXFLAGS = "-include cstdint";
 
-    desktopItem = makeDesktopItem {
-      name = "Fluffychat";
-      exec = "fluffychat";
-      icon = "fluffychat";
-      desktopName = "Fluffychat";
-      genericName = "Chat with your friends (matrix client)";
-      categories = [
-        "Chat"
-        "Network"
-        "InstantMessaging"
-      ];
+    desktopItems = [
+      (makeDesktopItem {
+        name = "Fluffychat";
+        exec = "fluffychat";
+        icon = "fluffychat";
+        desktopName = "Fluffychat";
+        genericName = "Chat with your friends (matrix client)";
+        categories = [
+          "Chat"
+          "Network"
+          "InstantMessaging"
+        ];
+        startupWMClass = "fluffychat";
+      })
+    ];
+
+    customSourceBuilders = {
+      flutter_webrtc =
+        { version, src, ... }:
+        stdenv.mkDerivation {
+          pname = "flutter_webrtc";
+          inherit version src;
+          inherit (src) passthru;
+
+          postPatch = ''
+            # Since we directly supply the binary distribution of libwebrtc instead of letting the builder download it we need to check that we still provide the correct version.
+            # nixpkgs forbids import from derivation, so we cannot simply read the contents to fetch the correct version
+            if ! grep -q "binary_version = libwebrtc.${libwebrtc_version}" third_party/libwebrtc_version.ini; then
+              echo -en "\nWrong libwebrtc version is in use!\n\t'libwebrtc.${libwebrtc_version}' was supplied, but cannot be found in 'third_party/libwebrtc_version.ini'.\nflutter_webrtc expects the following version:\n\t"
+              grep "binary_version" third_party/libwebrtc_version.ini; echo
+              false # triggers the build failure
+            fi
+            substituteInPlace third_party/CMakeLists.txt \
+              --replace-fail "\''${LIBWEBRTC_THIRD_PARTY_DIR}/downloads/\''${LIBWEBRTC_ASSET}.zip" ${libwebrtc}
+              ln -s ${libwebrtc} third_party/libwebrtc
+          '';
+
+          installPhase = ''
+            runHook preInstall
+
+            mkdir $out
+            cp -r ./* $out/
+
+            runHook postInstall
+          '';
+        };
     };
 
+    postPatch = ''
+      substituteInPlace linux/CMakeLists.txt \
+        --replace-fail \
+        "PRIVATE -Wall -Werror" \
+        "PRIVATE -Wall"
+    '';
+
     postInstall = ''
-      FAV=$out/app/fluffychat-linux/data/flutter_assets/assets/favicon.png
       ICO=$out/share/icons
 
-      install -D $FAV $ICO/fluffychat.png
-      mkdir $out/share/applications
-      cp $desktopItem/share/applications/*.desktop $out/share/applications
-      for size in 24 32 42 64 128 256 512; do
-        D=$ICO/hicolor/''${s}x''${s}/apps
-        mkdir -p $D
-        convert $FAV -resize ''${size}x''${size} $D/fluffychat.png
-      done
+      mkdir -p $ICO/hicolor/scalable/apps
+      cp $src/assets/logo/vector/logo_standalone.svg $ICO/hicolor/scalable/apps/fluffychat.png
 
       patchelf --add-rpath ${libwebrtcRpath} $out/app/fluffychat-linux/lib/libwebrtc.so
     '';
   }
   // lib.optionalAttrs (targetFlutterPlatform == "web") {
-    prePatch =
-      # https://github.com/krille-chan/fluffychat/blob/v1.17.1/scripts/prepare-web.sh
-      let
-        # Use Olm 1.3.2, the oldest version, for FluffyChat 1.14.1 which depends on olm_flutter 1.2.0.
-        olmVersion = pubspecLock.packages.flutter_olm.version;
-        olmJs = fetchzip {
-          url = "https://github.com/famedly/olm/releases/download/v${olmVersion}/olm.zip";
-          stripRoot = false;
-          hash = "sha256-Vl3Cp2OaYzM5CPOOtTHtUb1W48VXePzOV6FeiIzyD1Y=";
-        };
-      in
-      ''
-        rm -r assets/js/package
-        cp -r '${olmJs}/javascript' assets/js/package
-      '';
+    preBuild = ''
+      cp -r ${vodozemac-wasm}/* ./assets/vodozemac/
+    '';
   }
 )

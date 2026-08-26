@@ -4,39 +4,42 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "vouch-proxy";
-  version = "0.41.0";
+  version = "0.48.0";
 
   src = fetchFromGitHub {
     owner = "vouch";
     repo = "vouch-proxy";
-    tag = "v${version}";
-    hash = "sha256-HQ1NaAHY1YRbNUThW983V8x3ptzTc/zNP6yIMyDiq1s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QJoZqz3kQCUqEBu9hjTBrGMrNTiNi4LXKyi0EFSZNy8=";
   };
 
-  vendorHash = "sha256-1k9YFdackF10iJWJ22XlaENlOfRkZMs+IedDWnd/h8E=";
+  vendorHash = "sha256-Ma5/S2PXQ9lByIpIfkkLeiw/9rvmasSMElE1VoGIEHc=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   preCheck = ''
     export VOUCH_ROOT=$PWD
   '';
 
-  meta = with lib; {
+  # TestClaimsHMAC requires network access to validate HMAC signatures
+  checkFlags = [ "-skip=TestClaimsHMAC" ];
+
+  meta = {
     homepage = "https://github.com/vouch/vouch-proxy";
     description = "SSO and OAuth / OIDC login solution for NGINX using the auth_request module";
-    changelog = "https://github.com/vouch/vouch-proxy/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/vouch/vouch-proxy/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       leona
       erictapen
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "vouch-proxy";
   };
-}
+})

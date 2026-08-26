@@ -13,17 +13,18 @@
   systemd,
   runtimeShell,
   nixosTests,
+  udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "open-iscsi";
-  version = "2.1.11";
+  version = "2.1.12";
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "open-iscsi";
-    rev = version;
-    hash = "sha256-Xs2EiNSkRtAQPoagCAKl07VndYKDspGLchxMvsfvTi0=";
+    rev = finalAttrs.version;
+    hash = "sha256-CJkThrLskIOAFOLkMn+Jk7oSEjeLqBZlm2ll0MspBqk=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
     pkg-config
     ninja
     perl
+    udevCheckHook
   ];
   buildInputs = [
     kmod
@@ -57,16 +59,18 @@ stdenv.mkDerivation rec {
     "-Ddbroot=/etc/iscsi"
   ];
 
+  doInstallCheck = true;
+
   passthru.tests = { inherit (nixosTests) iscsi-root; };
 
-  meta = with lib; {
+  meta = {
     description = "High performance, transport independent, multi-platform implementation of RFC3720";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://www.open-iscsi.com";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       cleverca22
       zaninime
     ];
   };
-}
+})

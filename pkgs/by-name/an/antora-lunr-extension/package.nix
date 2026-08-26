@@ -12,7 +12,7 @@ buildNpmPackage rec {
   src = fetchFromGitLab {
     owner = "antora";
     repo = "antora-lunr-extension";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-GplCwhUl8jurD4FfO6/T3Vo1WFjg+rtAjWeIh35unk4=";
   };
 
@@ -57,7 +57,7 @@ buildNpmPackage rec {
       key](https://docs.antora.org/antora/3.1/extend/enable-extension).
     '';
 
-    maintainers = [ lib.maintainers.naho ];
+    maintainers = [ lib.maintainers.noahbiewesch ];
     platforms = lib.platforms.all;
   };
 }

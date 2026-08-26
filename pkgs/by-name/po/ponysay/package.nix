@@ -7,9 +7,9 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ponysay";
-  version = "unstable-2021-03-27";
+  version = "3.0.3-unstable-2021-03-27";
 
   src = fetchFromGitHub {
     owner = "erkin";
@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "Cowsay reimplemention for ponies";
+  meta = {
+    description = "Cowsay reimplementation for ponies";
     homepage = "https://github.com/erkin/ponysay";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ bodil ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ bodil ];
+    platforms = lib.platforms.unix;
   };
-}
+})

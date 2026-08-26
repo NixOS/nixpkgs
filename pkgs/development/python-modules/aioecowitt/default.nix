@@ -4,27 +4,29 @@
   buildPythonPackage,
   fetchFromGitHub,
   meteocalc,
+  pyprojectVersionPatchHook,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aioecowitt";
-  version = "2025.3.1";
+  version = "2026.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "aioecowitt";
     tag = version;
-    hash = "sha256-BAiRonfu3tFf5ZERbWO+MuEsefrOIaGxUExYx5fXZIM=";
+    hash = "sha256-xnF2Zn0XfV7elYGPCfY0WKzmDyFKXU3yh6Bab7llbzw=";
   };
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     aiohttp
@@ -38,12 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioecowitt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper for the EcoWitt protocol";
-    mainProgram = "ecowitt-testserver";
     homepage = "https://github.com/home-assistant-libs/aioecowitt";
     changelog = "https://github.com/home-assistant-libs/aioecowitt/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

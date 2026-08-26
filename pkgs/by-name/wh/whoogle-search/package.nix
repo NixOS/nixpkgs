@@ -5,55 +5,59 @@
   nixosTests,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "whoogle-search";
-  version = "0.9.3";
+  version = "1.2.4";
   pyproject = true;
 
   src = fetchPypi {
     pname = "whoogle_search";
-    inherit version;
-    hash = "sha256-4NFHz3l8kJ9QBbr5N55dhCgfoU83naC7avQZSzW6L8w=";
+    inherit (finalAttrs) version;
+    hash = "sha256-Vq8CLElP1P/Lcq98IZHgug7a4+sSSyEL2ih4Y5McAfg=";
   };
 
   build-system = with python3Packages; [ setuptools ];
 
-  dependencies = with python3Packages; [
-    attrs
-    beautifulsoup4
-    brotli
-    cachelib
-    certifi
-    cffi
-    chardet
-    click
-    cryptography
-    cssutils
-    defusedxml
-    flask
-    idna
-    itsdangerous
-    jinja2
-    markupsafe
-    more-itertools
-    packaging
-    pluggy
-    pycodestyle
-    pycparser
-    pyopenssl
-    pyparsing
-    pysocks
-    python-dateutil
-    requests
-    soupsieve
-    stem
-    urllib3
-    validators
-    waitress
-    wcwidth
-    werkzeug
-    python-dotenv
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      attrs
+      beautifulsoup4
+      brotli
+      cachetools
+      certifi
+      cffi
+      click
+      cryptography
+      cssutils
+      defusedxml
+      flask
+      h11
+      httpcore
+      httpx
+      idna
+      itsdangerous
+      jinja2
+      markupsafe
+      more-itertools
+      packaging
+      pluggy
+      pycodestyle
+      pycparser
+      pyopenssl
+      pyparsing
+      pytest
+      python-dateutil
+      python-dotenv
+      soupsieve
+      stem
+      validators
+      waitress
+      wcwidth
+      werkzeug
+    ]
+    ++ httpx.optional-dependencies.http2
+    ++ httpx.optional-dependencies.socks;
 
   postInstall = ''
     # This creates renamed versions of the static files for cache busting,
@@ -69,9 +73,9 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://github.com/benbusby/whoogle-search";
-    description = "A self-hosted, ad-free, privacy-respecting metasearch engine";
+    description = "Self-hosted, ad-free, privacy-respecting metasearch engine";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ malte-v ];
+    maintainers = [ lib.maintainers.SchweGELBin ];
     mainProgram = "whoogle-search";
   };
-}
+})

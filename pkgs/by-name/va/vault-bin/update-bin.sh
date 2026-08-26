@@ -15,7 +15,7 @@ function calc_hash () {
     local arch=$2
     url="https://releases.hashicorp.com/vault/${version}/vault_${version}_${arch}.zip"
     zip_hash=$(nix-prefetch-url --unpack $url)
-    nix hash to-sri --type sha256 "$zip_hash"
+    nix --extra-experimental-features nix-command hash to-sri --type sha256 "$zip_hash"
 }
 
 replace_sha() {
@@ -27,7 +27,6 @@ VAULT_VER=$(curl -Ls -w "%{url_effective}" -o /dev/null https://github.com/hashi
 
 VAULT_LINUX_X86_SHA256=$(calc_hash "$VAULT_VER" "linux_386")
 VAULT_LINUX_X64_SHA256=$(calc_hash "$VAULT_VER" "linux_amd64")
-VAULT_DARWIN_X64_SHA256=$(calc_hash "$VAULT_VER" "darwin_amd64")
 VAULT_LINUX_AARCH64_SHA256=$(calc_hash "$VAULT_VER" "linux_arm64")
 VAULT_DARWIN_AARCH64_SHA256=$(calc_hash "$VAULT_VER" "darwin_arm64")
 
@@ -35,6 +34,5 @@ sed -i "s/version = \".*\"/version = \"$VAULT_VER\"/" "$NIX_DRV"
 
 replace_sha "i686-linux" "$VAULT_LINUX_X86_SHA256"
 replace_sha "x86_64-linux" "$VAULT_LINUX_X64_SHA256"
-replace_sha "x86_64-darwin" "$VAULT_DARWIN_X64_SHA256"
 replace_sha "aarch64-linux" "$VAULT_LINUX_AARCH64_SHA256"
 replace_sha "aarch64-darwin" "$VAULT_DARWIN_AARCH64_SHA256"

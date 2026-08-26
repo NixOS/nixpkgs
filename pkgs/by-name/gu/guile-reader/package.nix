@@ -9,12 +9,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-reader";
   version = "0.6.3";
 
   src = fetchurl {
-    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/guile-reader/guile-reader-${finalAttrs.version}.tar.gz";
     hash = "sha256-OMK0ROrbuMDKt42QpE7D6/9CvUEMW4SpEBjO5+tk0rs=";
   };
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-guilemoduledir=$(out)/${guile.siteDir}" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nongnu.org/guile-reader/";
     description = "Simple framework for building readers for GNU Guile";
     longDescription = ''
@@ -47,8 +47,8 @@ stdenv.mkDerivation rec {
       Scheme readers. For example, it is used to implement Skribilo's
       R5RS-derived document syntax.
     '';
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ ];
     platforms = guile.meta.platforms;
   };
-}
+})

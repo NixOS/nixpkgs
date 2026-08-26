@@ -5,14 +5,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.9.8";
+  version = "2.3.0";
   pname = "antidote";
 
   src = fetchFromGitHub {
     owner = "mattmc3";
     repo = "antidote";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-74bajVwbsfbibOIqETrewHZbbzceOHD6d1OEh+LYh7o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qPkXbKm0EEivwtQyuVcKPfQYPAJ4MDY/9h3dMzUmDqI=";
   };
 
   dontPatch = true;
@@ -32,7 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Zsh plugin manager made from the ground up thinking about performance";
     homepage = "https://getantidote.github.io/";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.hitsmaxft ];
+    maintainers = with lib.maintainers; [
+      hitsmaxft
+      NanamiNakano
+    ];
     platforms = lib.platforms.all;
   };
 })

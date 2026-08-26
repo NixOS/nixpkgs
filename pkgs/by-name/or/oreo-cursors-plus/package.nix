@@ -4,7 +4,7 @@
   fetchFromGitHub,
   ruby,
   inkscape,
-  xorg,
+  xcursorgen,
   writeText,
   cursorsConf ? null, # If set to a string, overwrites contents of './cursors.conf'
 }:
@@ -13,7 +13,7 @@ let
 in
 stdenvNoCC.mkDerivation {
   pname = "oreo-cursors-plus";
-  version = "unstable-2023-06-05";
+  version = "0-unstable-2023-06-05";
   src = fetchFromGitHub {
     owner = "Souravgoswami";
     repo = "oreo-cursors";
@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = lib.optionals (cursorsConf != null) [
     ruby
     inkscape
-    xorg.xcursorgen
+    xcursorgen
   ];
 
   # './cursors.conf' contains definitions of cursor variations to generate.

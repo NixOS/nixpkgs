@@ -25,22 +25,32 @@ let
 
   iniFormat = pkgs.formats.ini { };
 
-  # we need to build our own GI_TYPELIB_PATH because celery and paster need this information, too and cannot easily be re-wrapped
-  GI_TYPELIB_PATH =
+  # we need to build our own GI_TYPELIB_PATH and GST_PLUGIN_PATH because celery, paster and gmg need this information and it cannot easily be re-wrapped
+  gst =
     let
       needsGst =
         (cfg.settings.mediagoblin.plugins ? "mediagoblin.media_types.audio")
         || (cfg.settings.mediagoblin.plugins ? "mediagoblin.media_types.video");
     in
-    lib.makeSearchPathOutput "out" "lib/girepository-1.0" (
-      with pkgs.gst_all_1;
+    with pkgs.gst_all_1;
+    [
+      pkgs.glib
+      gst-plugins-base
+      gstreamer
+    ]
+    # audio and video share most dependencies, so we can just take audio
+    ++ lib.optionals needsGst cfg.package.optional-dependencies.audio;
+  GI_TYPELIB_PATH = lib.makeSearchPathOutput "out" "lib/girepository-1.0" gst;
+  GST_PLUGIN_PATH = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" gst;
+
+  path =
+    lib.optionals (cfg.settings.mediagoblin.plugins ? "mediagoblin.media_types.stl") [ pkgs.blender ]
+    ++ lib.optionals (cfg.settings.mediagoblin.plugins ? "mediagoblin.media_types.pdf") (
+      with pkgs;
       [
-        pkgs.glib
-        gst-plugins-base
-        gstreamer
+        poppler-utils
+        unoconv
       ]
-      # audio and video share most dependencies, so we can just take audio
-      ++ lib.optionals needsGst cfg.package.optional-dependencies.audio
     );
 
   finalPackage = cfg.package.python.buildEnv.override {
@@ -189,7 +199,7 @@ in
         if [[ "$USER" != mediagoblin ]]; then
          sudo='exec /run/wrappers/bin/sudo -u mediagoblin'
         fi
-        $sudo sh -c "cd /var/lib/mediagoblin; env GI_TYPELIB_PATH=${GI_TYPELIB_PATH} ${lib.getExe' finalPackage "gmg"} $@"
+        $sudo sh -c "cd /var/lib/mediagoblin; env GI_TYPELIB_PATH=${GI_TYPELIB_PATH} GST_PLUGIN_PATH=${GST_PLUGIN_PATH} PATH=$PATH:${lib.makeBinPath path} ${lib.getExe' finalPackage "gmg"} $*"
       '')
     ];
 
@@ -248,15 +258,7 @@ in
       let
         serviceDefaults = {
           wantedBy = [ "multi-user.target" ];
-          path =
-            lib.optionals (cfg.settings.mediagoblin.plugins ? "mediagoblin.media_types.stl") [ pkgs.blender ]
-            ++ lib.optionals (cfg.settings.mediagoblin.plugins ? "mediagoblin.media_types.pdf") (
-              with pkgs;
-              [
-                poppler-utils
-                unoconv
-              ]
-            );
+          inherit path;
           serviceConfig = {
             AmbientCapabilities = "";
             CapabilityBoundingSet = [ "" ];
@@ -308,26 +310,27 @@ in
       in
       {
         mediagoblin-celeryd = lib.recursiveUpdate serviceDefaults {
-          # we cannot change DEFAULT.data_dir inside mediagoblin.ini because of an annoying bug
-          # https://todo.sr.ht/~mediagoblin/mediagoblin/57
-          preStart = ''
-            cp --remove-destination ${
-              pkgs.writeText "mediagoblin.ini" (
-                lib.generators.toINI { } (lib.filterAttrsRecursive (n: v: n != "plugins") cfg.settings)
-                + "\n"
-                + lib.generators.toINI { mkKeyValue = mkSubSectionKeyValue 2; } {
-                  inherit (cfg.settings.mediagoblin) plugins;
-                }
-              )
-            } /var/lib/mediagoblin/mediagoblin.ini
-          '';
           serviceConfig = {
             Environment = [
               "CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_celery"
               "GI_TYPELIB_PATH=${GI_TYPELIB_PATH}"
+              "GST_PLUGIN_PATH=${GST_PLUGIN_PATH}"
               "MEDIAGOBLIN_CONFIG=/var/lib/mediagoblin/mediagoblin.ini"
               "PASTE_CONFIG=${pasteConfig}"
             ];
+            # we cannot change DEFAULT.data_dir inside mediagoblin.ini because of an annoying bug
+            # https://todo.sr.ht/~mediagoblin/mediagoblin/57
+            ExecStartPre = ''
+              ${lib.getExe' pkgs.coreutils "cp"} --remove-destination ${
+                pkgs.writeText "mediagoblin.ini" (
+                  lib.generators.toINI { } (lib.filterAttrsRecursive (n: v: n != "plugins") cfg.settings)
+                  + "\n"
+                  + lib.generators.toINI { mkKeyValue = mkSubSectionKeyValue 2; } {
+                    inherit (cfg.settings.mediagoblin) plugins;
+                  }
+                )
+              } /var/lib/mediagoblin/mediagoblin.ini
+            '';
             ExecStart = "${lib.getExe' finalPackage "celery"} worker --loglevel=INFO";
           };
           unitConfig.Description = "MediaGoblin Celery";
@@ -336,20 +339,21 @@ in
         mediagoblin-paster = lib.recursiveUpdate serviceDefaults {
           after = [
             "mediagoblin-celeryd.service"
-            "postgresql.service"
+            "postgresql.target"
           ];
           requires = [
             "mediagoblin-celeryd.service"
-            "postgresql.service"
+            "postgresql.target"
           ];
-          preStart = ''
-            cp --remove-destination ${pasteConfig} /var/lib/mediagoblin/paste.ini
-            ${lib.getExe' finalPackage "gmg"} dbupdate
-          '';
           serviceConfig = {
             Environment = [
               "CELERY_ALWAYS_EAGER=false"
               "GI_TYPELIB_PATH=${GI_TYPELIB_PATH}"
+              "GST_PLUGIN_PATH=${GST_PLUGIN_PATH}"
+            ];
+            ExecStartPre = [
+              "${lib.getExe' pkgs.coreutils "cp"} --remove-destination ${pasteConfig} /var/lib/mediagoblin/paste.ini"
+              "${lib.getExe' finalPackage "gmg"} dbupdate"
             ];
             ExecStart = "${lib.getExe' finalPackage "paster"} serve /var/lib/mediagoblin/paste.ini";
           };

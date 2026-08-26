@@ -21,7 +21,7 @@ buildPecl rec {
   buildInputs = [ libthai ];
 
   meta = {
-    description = "PHP extension which formats changes between two input texts, producing HTML or JSON.";
+    description = "PHP extension which formats changes between two input texts, producing HTML or JSON";
     license = lib.licenses.gpl2;
     homepage = "https://www.mediawiki.org/wiki/Wikidiff2";
     maintainers = with lib.maintainers; [ georgyo ];

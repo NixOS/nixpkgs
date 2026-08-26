@@ -5,7 +5,6 @@
   unzip,
   sqlite,
   tcl,
-  Foundation,
 }:
 
 let
@@ -20,29 +19,29 @@ let
     }:
     stdenv.mkDerivation rec {
       inherit pname;
-      version = "3.48.0";
+      version = "3.53.3";
 
       # nixpkgs-update: no auto update
       src =
         assert version == sqlite.version;
         fetchurl {
-          url = "https://sqlite.org/2025/sqlite-src-${archiveVersion version}.zip";
-          hash = "sha256-LXsDK2/f6MRCqoCfhQaHqB0GOB3uzXvjMSYB0oYS5kA=";
+          url = "https://sqlite.org/2026/sqlite-src-${archiveVersion version}.zip";
+          hash = "sha256-u4C/ijv/wZJBzoq6WkvHTpw5gAE8sLXw8JdqmVFpQq8=";
         };
 
       nativeBuildInputs = [ unzip ];
-      buildInputs = [ tcl ] ++ lib.optional stdenv.hostPlatform.isDarwin Foundation;
+      buildInputs = [ tcl ];
 
       makeFlags = [ makeTarget ];
 
       installPhase = "install -Dt $out/bin ${makeTarget}";
 
-      meta = with lib; {
+      meta = {
         inherit description homepage mainProgram;
         downloadPage = "http://sqlite.org/download.html";
-        license = licenses.publicDomain;
-        maintainers = with maintainers; [ johnazoidberg ];
-        platforms = platforms.unix;
+        license = lib.licenses.blessing;
+        maintainers = with lib.maintainers; [ johnazoidberg ];
+        platforms = lib.platforms.unix;
       };
     };
 in

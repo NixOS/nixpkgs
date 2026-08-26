@@ -12,14 +12,14 @@
   ppx_expect,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ocaml-protoc-plugin";
   version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "issuu";
     repo = "ocaml-protoc-plugin";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ZHeOi3y2X11MmkRuthmYFSjPLoGlGTO1pnRfk/XmgPU=";
   };
 
@@ -51,4 +51,4 @@ buildDunePackage rec {
     '';
     maintainers = [ lib.maintainers.GirardR1006 ];
   };
-}
+})

@@ -5,6 +5,7 @@
   setuptools-scm,
   future,
   python,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,11 +20,16 @@ buildPythonPackage rec {
     hash = "sha256-dgHPEfieNDZnP6+YvywvN3ZzmeICav0WMYKkWDSJ/LE=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "version = '1.0'" "version = '${version}'"
+  '';
+
   build-system = [
     setuptools-scm
   ];
 
-  dependencies = [
+  dependencies = lib.optionals (pythonOlder "3.13") [
     future
   ];
 
@@ -39,7 +45,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/akshaynagpal/w2n/releases/tag/${version}";
     description = "Convert number words (eg. twenty one) to numeric digits (21)";
     homepage = "http://w2n.readthedocs.io/";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.booxter ];
   };
 }

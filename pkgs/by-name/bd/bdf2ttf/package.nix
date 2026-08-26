@@ -15,6 +15,11 @@ stdenv.mkDerivation {
     hash = "sha256-235BTcTaC/30yLlgo0OO2cp3YCHWa87GFJGBx5lmz6o=";
   };
 
+  patches = [
+    # gcc-15 build fix: https://github.com/koron/bdf2ttf/pull/9
+    ./gcc-15.patch
+  ];
+
   dontConfigure = true;
 
   makeFlags = [ "gcc" ];

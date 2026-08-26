@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation {
   pname = "wdt";
-  version = "1.27.1612021-unstable-2024-12-06";
+  version = "1.27.1612021-unstable-2026-06-26";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "wdt";
-    rev = "7e56c871be706cc96df48be7c4017bff7c6fc7c8";
-    sha256 = "sha256-mvfJUiOI7Cre90hIaBJcmfTbTV5M+Hf+p6VKNYEc5WU=";
+    rev = "ee01f20850558d5c6a0e1fc3cf9d12cd1702c18a";
+    hash = "sha256-YReA7lBSeWRZHpF4E7yY6HuabRUOT6Aipk9dgjlTuik=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -37,6 +37,10 @@ stdenv.mkDerivation {
     ln -s $sourceRoot wdt
   '';
 
+  patches = [
+    ./fix-glog-include.patch
+  ];
+
   cmakeFlags = [
     "-DWDT_USE_SYSTEM_FOLLY=ON"
   ];
@@ -47,11 +51,21 @@ stdenv.mkDerivation {
     };
   };
 
-  meta = with lib; {
+  # We must increase the pinned C++ standard since headers from Folly
+  # v2026.07.27.00 require at least C++20
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)" \
+      --replace-fail "find_package(Boost COMPONENTS system filesystem REQUIRED)" \
+        "find_package(Boost COMPONENTS filesystem REQUIRED)" \
+      --replace-fail "set(CMAKE_CXX_STANDARD 17)" "set(CMAKE_CXX_STANDARD 20)"
+  '';
+
+  meta = {
     description = "Warp speed Data Transfer";
     homepage = "https://github.com/facebook/wdt";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nickcao ];
     platforms = [ "x86_64-linux" ];
   };
 }

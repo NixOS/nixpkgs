@@ -15,23 +15,24 @@
   libadwaita,
   glib-networking,
   gst_all_1,
+  libxml2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netease-cloud-music-gtk";
-  version = "2.5.0";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "gmg137";
     repo = "netease-cloud-music-gtk";
     tag = finalAttrs.version;
-    hash = "sha256-QRgGQDYrqOpZErz+OHZF1GPshxnZRPTIJSNkFWqQeHM=";
+    hash = "sha256-yZOCUoAee2XSfO87SzTBjkZ4r2YzVC7mpqYULV5JPRE=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "netease-cloud-music-api-1.5.0" = "sha256-3CBWYUJ+5/KRQ6/EPt84rBxXQRjhvazrasRzbpkRwPU=";
+      "netease-cloud-music-api-1.5.2" = "sha256-7j5MLC++MPyuRvJRiUMWPV7OxWM2H+RD/hChuco3UTE=";
     };
   };
 
@@ -48,22 +49,22 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
     cargo
     rustc
+    libxml2
   ];
 
-  buildInputs =
-    [
-      openssl
-      dbus
-      libadwaita
-      glib-networking
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-    ]);
+  buildInputs = [
+    openssl
+    dbus
+    libadwaita
+    glib-networking
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+  ]);
 
   meta = {
     description = "Rust + GTK based netease cloud music player";

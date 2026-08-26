@@ -6,7 +6,7 @@ compiler. It includes an interactive mode and a custom package format, "eggs".
 
 ## Using Eggs {#sec-chicken-using}
 
-Eggs described in nixpkgs are available inside the
+Eggs described in Nixpkgs are available inside the
 `chickenPackages.chickenEggs` attrset. Including an egg as a build input is
 done in the typical Nix fashion. For example, to include support for [SRFI
 189](https://srfi.schemers.org/srfi-189/srfi-189.html) in a derivation, one
@@ -26,7 +26,7 @@ variables `CHICKEN_INCLUDE_PATH` and `CHICKEN_REPOSITORY_PATH`.
 
 ## Updating Eggs {#sec-chicken-updating-eggs}
 
-nixpkgs only knows about a subset of all published eggs. It uses
+Nixpkgs only knows about a subset of all published eggs. It uses
 [egg2nix](https://github.com/the-kenny/egg2nix) to generate a
 package set from a list of eggs to include.
 
@@ -53,7 +53,7 @@ procedure for updating eggs.
 ## Override Scope {#sec-chicken-override-scope}
 
 The chicken package and its eggs, respectively, reside in a scope. This means,
-the scope can be overridden to effect other packages in it.
+the scope can be overridden to affect other packages in it.
 
 This example shows how to use a local copy of `srfi-180` and have it affect
 all the other eggs:
@@ -62,7 +62,7 @@ all the other eggs:
 let
   myChickenPackages = pkgs.chickenPackages.overrideScope (
     self: super: {
-      # The chicken package itself can be overridden to effect the whole ecosystem.
+      # The chicken package itself can be overridden to affect the whole ecosystem.
       # chicken = super.chicken.overrideAttrs {
       #   src = ...
       # };
@@ -77,8 +77,8 @@ let
       );
     }
   );
+  # Here, `myChickenPackages.chickenEggs.json-rpc`, which depends on `srfi-180` will use
+  # the local copy of `srfi-180`.
 in
-# Here, `myChickenPackages.chickenEggs.json-rpc`, which depends on `srfi-180` will use
-# the local copy of `srfi-180`.
 <...>
 ```

@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "der-ascii";
-  version = "0.6.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "google";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-xGzxq5AHvzLUOp9VUcI9JMwrCpVIrpDvenWUOEBP6pA=";
+    repo = "der-ascii";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-/9Go4fAwXmA3SLl0bP7aLy6fEItPZoscQ4pdA2GZuyM=";
   };
   vendorHash = null;
 
@@ -21,18 +21,18 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = ''
-      A small human-editable language to emit DER or BER encodings of ASN.1
+      Small human-editable language to emit DER or BER encodings of ASN.1
       structures and malformed variants of them
     '';
     homepage = "https://github.com/google/der-ascii";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       alexshpilkin
       cpu
       hawkw
     ];
     mainProgram = "ascii2der"; # has stable output, unlike its inverse
   };
-}
+})

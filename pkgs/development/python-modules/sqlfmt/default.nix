@@ -1,45 +1,48 @@
 {
   lib,
-  black,
   buildPythonPackage,
-  click,
   fetchFromGitHub,
-  gitpython,
-  importlib-metadata,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  click,
   jinja2,
   platformdirs,
-  poetry-core,
+  tqdm,
+
+  # optional-dependencies
+  black,
+  gitpython,
+
+  # tests
+  addBinToPathHook,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
-  tomli,
-  tqdm,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sqlfmt";
-  version = "0.26.0";
+  version = "0.32.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "sqlfmt";
-    tag = "v${version}";
-    hash = "sha256-q0pkwuQY0iLzK+Lef6k62UxMKJy592RsJnSZnVYdMa8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GM+LS1jrt7cCjkjM5T/nJEVRBdTm0Jd4ib+SvCbTAdA=";
   };
 
-  pythonRelaxDeps = [ "platformdirs" ];
-
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     click
-    importlib-metadata
     jinja2
     platformdirs
-    tomli
     tqdm
   ];
 
@@ -48,24 +51,26 @@ buildPythonPackage rec {
     sqlfmt_primer = [ gitpython ];
   };
 
-  nativeCheckInputs = [
-    pytest-asyncio
-    pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-    export PATH="$PATH:$out/bin";
-  '';
-
   pythonImportsCheck = [ "sqlfmt" ];
 
+  nativeCheckInputs = [
+    addBinToPathHook
+    pytest-asyncio
+    pytestCheckHook
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+
+  # importlib.metadata.PackageNotFoundError: No package metadata was found for sqlfmt
+  dontCheckPythonMetadata = true;
+
   meta = {
-    description = "Sqlfmt formats your dbt SQL files so you don't have to";
+    description = "Formatter for dbt SQL files";
     homepage = "https://github.com/tconbeer/sqlfmt";
-    changelog = "https://github.com/tconbeer/sqlfmt/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/tconbeer/sqlfmt/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pcboy ];
     mainProgram = "sqlfmt";
   };
-}
+})

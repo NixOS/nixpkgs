@@ -86,6 +86,8 @@ let
       targetRunFlags ? [ ],
     }:
     lib.optionalString (targets != [ ]) ''
+      concatTo bazelFlagsArray bazelFlags
+
       # See footnote called [USER and BAZEL_USE_CPP_ONLY_TOOLCHAIN variables]
       BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
       USER=homeless-shelter \
@@ -99,7 +101,7 @@ let
         "''${host_copts[@]}" \
         "''${linkopts[@]}" \
         "''${host_linkopts[@]}" \
-        $bazelFlags \
+        "''${bazelFlagsArray[@]}" \
         ${lib.strings.concatStringsSep " " additionalFlags} \
         ${lib.strings.concatStringsSep " " targets} \
         ${
@@ -136,25 +138,23 @@ stdenv.mkDerivation (
     deps = stdenv.mkDerivation (
       fFetchAttrs
       // {
-        name = "${name}-deps.tar.gz";
+        name = "${name}-deps.tar";
 
         impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ fFetchAttrs.impureEnvVars or [ ];
 
         nativeBuildInputs = fFetchAttrs.nativeBuildInputs or [ ] ++ [ bazel ];
 
-        preHook =
-          fFetchAttrs.preHook or ""
-          + ''
-            export bazelOut="$(echo ''${NIX_BUILD_TOP}/output | sed -e 's,//,/,g')"
-            export bazelUserRoot="$(echo ''${NIX_BUILD_TOP}/tmp | sed -e 's,//,/,g')"
-            export HOME="$NIX_BUILD_TOP"
-            export USER="nix"
-            # This is needed for git_repository with https remotes
-            export GIT_SSL_CAINFO="${cacert}/etc/ssl/certs/ca-bundle.crt"
-            # This is needed for Bazel fetchers that are themselves programs (e.g.
-            # rules_go using the go toolchain)
-            export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
-          '';
+        preHook = fFetchAttrs.preHook or "" + ''
+          export bazelOut="$(echo ''${NIX_BUILD_TOP}/output | sed -e 's,//,/,g')"
+          export bazelUserRoot="$(echo ''${NIX_BUILD_TOP}/tmp | sed -e 's,//,/,g')"
+          export HOME="$NIX_BUILD_TOP"
+          export USER="nix"
+          # This is needed for git_repository with https remotes
+          export GIT_SSL_CAINFO="${cacert}/etc/ssl/certs/ca-bundle.crt"
+          # This is needed for Bazel fetchers that are themselves programs (e.g.
+          # rules_go using the go toolchain)
+          export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
+        '';
 
         buildPhase =
           fFetchAttrs.buildPhase or ''
@@ -162,22 +162,21 @@ stdenv.mkDerivation (
 
             ${bazelCmd {
               cmd = if fetchConfigured then "build --nobuild" else "fetch";
-              additionalFlags =
-                [
-                  # We disable multithreading for the fetching phase since it can lead to timeouts with many dependencies/threads:
-                  # https://github.com/bazelbuild/bazel/issues/6502
-                  "--loading_phase_threads=1"
-                  "$bazelFetchFlags"
-                ]
-                ++ (
-                  if fetchConfigured then
-                    [
-                      "--jobs"
-                      "$NIX_BUILD_CORES"
-                    ]
-                  else
-                    [ ]
-                );
+              additionalFlags = [
+                # We disable multithreading for the fetching phase since it can lead to timeouts with many dependencies/threads:
+                # https://github.com/bazelbuild/bazel/issues/6502
+                "--loading_phase_threads=1"
+                "$bazelFetchFlags"
+              ]
+              ++ (
+                if fetchConfigured then
+                  [
+                    "--jobs"
+                    "$NIX_BUILD_CORES"
+                  ]
+                else
+                  [ ]
+              );
               targets = fFetchAttrs.bazelTargets ++ fFetchAttrs.bazelTestTargets;
             }}
 
@@ -235,55 +234,63 @@ stdenv.mkDerivation (
 
               echo '${bazel.name}' > $bazelOut/external/.nix-bazel-version
 
-              (cd $bazelOut/ && tar czf $out --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner external/)
+              (cd $bazelOut/ && tar cf $out --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner external/)
 
               runHook postInstall
             ''
           );
 
         dontFixup = true;
-        allowedRequisites = [ ];
 
         inherit (lib.fetchers.normalizeHash { hashTypes = [ "sha256" ]; } fetchAttrs)
           outputHash
           outputHashAlgo
           ;
       }
+      // (
+        if fFetchAttrs.__structuredAttrs or false then
+          {
+            # With __structuredAttrs = true, the build always fails with “output $out is not allowed to refer to the following paths: $out”.
+            # This appears to be the same issue as in 283bca9648fc1afb01d3e4c3b5919251429da907.
+            outputChecks.out.allowedRequisites = [ "out" ];
+          }
+        else
+          {
+            allowedRequisites = [ ];
+          }
+      )
     );
 
     nativeBuildInputs = fBuildAttrs.nativeBuildInputs or [ ] ++ [
       (bazel.override { enableNixHacks = true; })
     ];
 
-    preHook =
-      fBuildAttrs.preHook or ""
-      + ''
-        export bazelOut="$NIX_BUILD_TOP/output"
-        export bazelUserRoot="$NIX_BUILD_TOP/tmp"
-        export HOME="$NIX_BUILD_TOP"
-      '';
+    preHook = fBuildAttrs.preHook or "" + ''
+      export bazelOut="$NIX_BUILD_TOP/output"
+      export bazelUserRoot="$NIX_BUILD_TOP/tmp"
+      export HOME="$NIX_BUILD_TOP"
+    '';
 
-    preConfigure =
-      ''
-        mkdir -p "$bazelOut"
+    preConfigure = ''
+      mkdir -p "$bazelOut"
 
-        (cd $bazelOut && tar xfz $deps)
+      (cd $bazelOut && tar xf $deps)
 
-        test "${bazel.name}" = "$(<$bazelOut/external/.nix-bazel-version)" || {
-          echo "fixed output derivation was built for a different bazel version" >&2
-          echo "     got: $(<$bazelOut/external/.nix-bazel-version)" >&2
-          echo "expected: ${bazel.name}" >&2
-          exit 1
-        }
+      test "${bazel.name}" = "$(<$bazelOut/external/.nix-bazel-version)" || {
+        echo "fixed output derivation was built for a different bazel version" >&2
+        echo "     got: $(<$bazelOut/external/.nix-bazel-version)" >&2
+        echo "expected: ${bazel.name}" >&2
+        exit 1
+      }
 
-        chmod -R +w $bazelOut
-        find $bazelOut -type l | while read symlink; do
-          if [[ $(readlink "$symlink") == *NIX_BUILD_TOP* ]]; then
-            ln -sf $(readlink "$symlink" | sed "s,NIX_BUILD_TOP,$NIX_BUILD_TOP,") "$symlink"
-          fi
-        done
-      ''
-      + fBuildAttrs.preConfigure or "";
+      chmod -R +w $bazelOut
+      find $bazelOut -type l | while read symlink; do
+        if [[ $(readlink "$symlink") == *NIX_BUILD_TOP* ]]; then
+          ln -sf $(readlink "$symlink" | sed "s,NIX_BUILD_TOP,$NIX_BUILD_TOP,") "$symlink"
+        fi
+      done
+    ''
+    + fBuildAttrs.preConfigure or "";
 
     buildPhase =
       fBuildAttrs.buildPhase or ''
@@ -316,13 +323,14 @@ stdenv.mkDerivation (
 
         ${bazelCmd {
           cmd = "test";
-          additionalFlags =
-            [ "--test_output=errors" ]
-            ++ fBuildAttrs.bazelTestFlags
-            ++ [
-              "--jobs"
-              "$NIX_BUILD_CORES"
-            ];
+          additionalFlags = [
+            "--test_output=errors"
+          ]
+          ++ fBuildAttrs.bazelTestFlags
+          ++ [
+            "--jobs"
+            "$NIX_BUILD_CORES"
+          ];
           targets = fBuildAttrs.bazelTestTargets;
         }}
         ${bazelCmd {

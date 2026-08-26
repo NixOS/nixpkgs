@@ -4,7 +4,6 @@
   fetchPypi,
   buildPythonPackage,
   isPyPy,
-  pythonOlder,
 
   # build-system
   certifi,
@@ -14,19 +13,12 @@
   setuptools-scm,
   pytestCheckHook,
   python,
-  matplotlib,
-  fetchurl,
 
   # native libraries
   ffmpeg-headless,
   freetype,
-  # By default, almost all tests fail due to the fact we use our version of
-  # freetype. We still use this argument to define the overridden
-  # derivation `matplotlib.passthru.tests.withoutOutdatedFreetype` - which
-  # builds matplotlib with the freetype version they default to, with which all
-  # tests should pass.
-  doCheck ? false,
   qhull,
+  libraqm,
 
   # propagates
   contourpy,
@@ -39,9 +31,6 @@
   pyparsing,
   python-dateutil,
 
-  # optional
-  importlib-resources,
-
   # GTK3
   enableGtk3 ? false,
   cairo,
@@ -53,13 +42,7 @@
   # Tk
   # Darwin has its own "MacOSX" backend, PyPy has tkagg backend and does not support tkinter
   enableTk ? (!stdenv.hostPlatform.isDarwin && !isPyPy),
-  tcl,
-  tk,
   tkinter,
-
-  # Ghostscript
-  enableGhostscript ? true,
-  ghostscript,
 
   # Qt
   enableQt ? false,
@@ -73,11 +56,8 @@
   enableNbagg ? false,
   ipykernel,
 
-  # darwin
-  Cocoa,
-
   # required for headless detection
-  libX11,
+  libx11,
   wayland,
 
   # Reverse dependency
@@ -88,16 +68,14 @@ let
   interactive = enableTk || enableGtk3 || enableQt;
 in
 
-buildPythonPackage rec {
-  version = "3.10.1";
+buildPythonPackage (finalAttrs: {
+  version = "3.11.1";
   pname = "matplotlib";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-6NLQ44gbEpJoWFv0dlrT7nOkWR13uaGMIUrH46efsro=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-aWR9tXRpQceT1uRFpM00kyP/uH2cyVjCrYSmWbSDLTA=";
   };
 
   env.XDG_RUNTIME_DIR = "/tmp";
@@ -109,38 +87,36 @@ buildPythonPackage rec {
   # With the following patch we just hard-code these paths into the install
   # script.
   postPatch =
+    lib.optionalString isPyPy ''
+      substituteInPlace tools/generate_matplotlibrc.py \
+        --replace-fail "/usr/bin/env python3" "/usr/bin/env pypy3"
     ''
+    + ''
       substituteInPlace pyproject.toml \
-        --replace-fail "meson-python>=0.13.1,<0.17.0" meson-python
+        --replace-fail "setuptools_scm>=7,<10" setuptools_scm
 
       patchShebangs tools
     ''
     + lib.optionalString (stdenv.hostPlatform.isLinux && interactive) ''
       # fix paths to libraries in dlopen calls (headless detection)
       substituteInPlace src/_c_internal_utils.cpp \
-        --replace-fail libX11.so.6 ${libX11}/lib/libX11.so.6 \
+        --replace-fail libX11.so.6 ${libx11}/lib/libX11.so.6 \
         --replace-fail libwayland-client.so.0 ${wayland}/lib/libwayland-client.so.0
     '';
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals enableGtk3 [ gobject-introspection ];
 
-  buildInputs =
-    [
-      ffmpeg-headless
-      freetype
-      qhull
-    ]
-    ++ lib.optionals enableGhostscript [ ghostscript ]
-    ++ lib.optionals enableGtk3 [
-      cairo
-      gtk3
-    ]
-    ++ lib.optionals enableTk [
-      libX11
-      tcl
-      tk
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  buildInputs = [
+    ffmpeg-headless
+    freetype
+    qhull
+    pybind11
+    libraqm
+  ]
+  ++ lib.optionals enableGtk3 [
+    cairo
+    gtk3
+  ];
 
   # clang-11: error: argument unused during compilation: '-fno-strict-overflow' [-Werror,-Wunused-command-line-argument]
   hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [ "strictoverflow" ];
@@ -148,37 +124,35 @@ buildPythonPackage rec {
   build-system = [
     certifi
     numpy
-    pybind11
     meson-python
     setuptools-scm
   ];
 
-  dependencies =
-    [
-      # explicit
-      contourpy
-      cycler
-      fonttools
-      kiwisolver
-      numpy
-      packaging
-      pillow
-      pyparsing
-      python-dateutil
-    ]
-    ++ lib.optionals (pythonOlder "3.10") [ importlib-resources ]
-    ++ lib.optionals enableGtk3 [
-      pycairo
-      pygobject3
-    ]
-    ++ lib.optionals enableQt [ pyqt5 ]
-    ++ lib.optionals enableWebagg [ tornado ]
-    ++ lib.optionals enableNbagg [ ipykernel ]
-    ++ lib.optionals enableTk [ tkinter ];
+  dependencies = [
+    # explicit
+    contourpy
+    cycler
+    fonttools
+    kiwisolver
+    numpy
+    packaging
+    pillow
+    pyparsing
+    python-dateutil
+  ]
+  ++ lib.optionals enableGtk3 [
+    pycairo
+    pygobject3
+  ]
+  ++ lib.optionals enableQt [ pyqt5 ]
+  ++ lib.optionals enableWebagg [ tornado ]
+  ++ lib.optionals enableNbagg [ ipykernel ]
+  ++ lib.optionals enableTk [ tkinter ];
 
   mesonFlags = lib.mapAttrsToList lib.mesonBool {
     system-freetype = true;
     system-qhull = true;
+    system-libraqm = true;
     # Otherwise GNU's `ar` binary fails to put symbols from libagg into the
     # matplotlib shared objects. See:
     # -https://github.com/matplotlib/matplotlib/issues/28260#issuecomment-2146243663
@@ -188,20 +162,14 @@ buildPythonPackage rec {
 
   passthru.tests = {
     inherit sage;
-    withOutdatedFreetype = matplotlib.override {
-      doCheck = true;
-      freetype = freetype.overrideAttrs (_: {
-        src = fetchurl {
-          url = "mirror://savannah/freetype/freetype-old/freetype-2.6.1.tar.gz";
-          hash = "sha256-Cjx9+9ptoej84pIy6OltmHq6u79x68jHVlnkEyw2cBQ=";
-        };
-        patches = [ ];
-      });
-    };
   };
 
   pythonImportsCheck = [ "matplotlib" ];
-  inherit doCheck;
+  # Running the tests requires a specific freetype version, so pixel-to-pixel
+  # comparisons will pass. Since matplotlib depends directly & indirectly on
+  # freetype, this would be too expensive to even test this (correctly) in
+  # `passthru.tests`.
+  doCheck = false;
   nativeCheckInputs = [ pytestCheckHook ];
   preCheck = ''
     # https://matplotlib.org/devdocs/devel/testing.html#obtain-the-reference-images
@@ -216,17 +184,17 @@ buildPythonPackage rec {
     cd $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python plotting library, making publication quality plots";
     homepage = "https://matplotlib.org/";
-    changelog = "https://github.com/matplotlib/matplotlib/releases/tag/v${version}";
-    license = with licenses; [
+    changelog = "https://github.com/matplotlib/matplotlib/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [
       psfl
       bsd0
     ];
-    maintainers = with maintainers; [
-      lovek323
+    maintainers = with lib.maintainers; [
       veprbl
+      doronbehar
     ];
   };
-}
+})

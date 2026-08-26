@@ -1,15 +1,13 @@
 {
   lib,
   localSystem,
-  crossSystem,
   config,
   overlays,
-  crossOverlays ? [ ],
 }:
 
-assert crossSystem == localSystem;
-
 let
+  genericStdenv = import ../generic { defaultConfig = config; };
+
   inherit (localSystem) system;
 
   shell =
@@ -77,23 +75,22 @@ let
     export lt_cv_deplibs_check_method=pass_all
   '';
 
-  extraNativeBuildInputsCygwin =
-    [
-      ../cygwin/all-buildinputs-as-runtimedep.sh
-      ../cygwin/wrap-exes-to-find-dlls.sh
-    ]
-    ++ (
-      if system == "i686-cygwin" then
-        [
-          ../cygwin/rebase-i686.sh
-        ]
-      else if system == "x86_64-cygwin" then
-        [
-          ../cygwin/rebase-x86_64.sh
-        ]
-      else
-        [ ]
-    );
+  extraNativeBuildInputsCygwin = [
+    ../cygwin/all-buildinputs-as-runtimedep.sh
+    ../cygwin/wrap-exes-to-find-dlls.sh
+  ]
+  ++ (
+    if system == "i686-cygwin" then
+      [
+        ../cygwin/rebase-i686.sh
+      ]
+    else if system == "x86_64-cygwin" then
+      [
+        ../cygwin/rebase-x86_64.sh
+      ]
+    else
+      [ ]
+  );
 
   # A function that builds a "native" stdenv (one that uses tools in
   # /usr etc.).
@@ -106,7 +103,7 @@ let
       extraNativeBuildInputs ? [ ],
     }:
 
-    import ../generic {
+    genericStdenv {
       buildPlatform = localSystem;
       hostPlatform = localSystem;
       targetPlatform = localSystem;
@@ -146,7 +143,6 @@ let
         shell
         cc
         overrides
-        config
         ;
     };
 
@@ -179,12 +175,16 @@ in
           name = "cc-native";
           nativeTools = true;
           nativeLibc = true;
+          expand-response-params = "";
           inherit lib nativePrefix;
+          runtimeShell = shell;
           bintools = import ../../build-support/bintools-wrapper {
             name = "bintools";
             inherit lib stdenvNoCC nativePrefix;
             nativeTools = true;
             nativeLibc = true;
+            expand-response-params = "";
+            runtimeShell = shell;
           };
           inherit stdenvNoCC;
         };
@@ -193,6 +193,7 @@ in
         inherit lib stdenvNoCC;
         # Curl should be in /usr/bin or so.
         curl = null;
+        inherit (config) hashedMirrors rewriteURL;
       };
 
     }

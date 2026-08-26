@@ -4,7 +4,6 @@
   fetchFromGitHub,
   stdenv,
   installShellFiles,
-  buildPackages,
   versionCheckHook,
   nix-update-script,
   enableLegacySg ? false,
@@ -12,13 +11,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ast-grep";
-  version = "0.37.0";
+  version = "0.45.1";
 
   src = fetchFromGitHub {
     owner = "ast-grep";
     repo = "ast-grep";
     tag = finalAttrs.version;
-    hash = "sha256-X2FTIyvpz4nEBc7zrPNAq/yTdOlVupwSoDQzvZGDjo8=";
+    hash = "sha256-YNn49WuILwe3gyvHSKh3dH5BZKhtR+YeSCCGDu0qulg=";
   };
 
   # error: linker `aarch64-linux-gnu-gcc` not found
@@ -26,37 +25,31 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm .cargo/config.toml
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-0PUXj9LSFFC10H3LHVuiOHCREwFz8AkgkzJDUAGI+V0=";
+  cargoHash = "sha256-6ZqV9SJes6++TJxcj/Dmi8DyaoTa164CKi4C/EyfnuQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   cargoBuildFlags = [
     "--package ast-grep --bin ast-grep"
-  ] ++ lib.optionals enableLegacySg [ "--package ast-grep --bin sg" ];
+  ]
+  ++ lib.optionals enableLegacySg [ "--package ast-grep --bin sg" ];
 
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
-    let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
-    in
-    ''
-      installShellCompletion --cmd ast-grep \
-        --bash <(${emulator} $out/bin/ast-grep completions bash) \
-        --fish <(${emulator} $out/bin/ast-grep completions fish) \
-        --zsh <(${emulator} $out/bin/ast-grep completions zsh)
-    ''
-    + lib.optionalString enableLegacySg ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd ast-grep \
+      --bash <($out/bin/ast-grep completions bash) \
+      --fish <($out/bin/ast-grep completions fish) \
+      --zsh <($out/bin/ast-grep completions zsh)
+    ${lib.optionalString enableLegacySg ''
       installShellCompletion --cmd sg \
-        --bash <(${emulator} $out/bin/sg completions bash) \
-        --fish <(${emulator} $out/bin/sg completions fish) \
-        --zsh <(${emulator} $out/bin/sg completions zsh)
-    ''
-  );
+        --bash <($out/bin/sg completions bash) \
+        --fish <($out/bin/sg completions fish) \
+        --zsh <($out/bin/sg completions zsh)
+    ''}
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -69,7 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       xiaoxiangmoe
-      montchr
+      astratagem
       lord-valen
       cafkafk
     ];

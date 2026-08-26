@@ -23,18 +23,23 @@
   # tests
   pytestCheckHook,
   pytest-benchmark,
+  pytest-xdist,
+  cloudpickle,
+  hypothesis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "boost-histogram";
-  version = "1.5.1";
+  version = "1.7.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "boost-histogram";
-    tag = "v${version}";
-    hash = "sha256-7E4y3P3RzVmIHb5mEoEYWZSwWnmL3LbGqYjGbnszM98=";
+    tag = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-nDNSLpmQ3YOo/nEkHfvsE0l9yATzQnrlunX1qWupbLQ=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -56,19 +61,31 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-benchmark
+    pytest-xdist
+    cloudpickle
+    hypothesis
   ];
 
-  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    # Segfaults: boost_histogram/_internal/hist.py", line 799 in sum
-    # Fatal Python error: Segmentation fault
-    "test_numpy_conversion_4"
-  ];
+  pytestFlags = [ "--benchmark-disable" ];
+
+  disabledTests =
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      # Trace/BPT trap: 5
+      "test_round_trip_3d_histogram_json"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      # Segfaults: boost_histogram/_internal/hist.py", line 799 in sum
+      # Fatal Python error: Segmentation fault
+      "test_numpy_conversion_4"
+    ];
+
+  pythonImportsCheck = [ "boost_histogram" ];
 
   meta = {
     description = "Python bindings for the C++14 Boost::Histogram library";
     homepage = "https://github.com/scikit-hep/boost-histogram";
-    changelog = "https://github.com/scikit-hep/boost-histogram/releases/tag/v${version}";
+    changelog = "https://github.com/scikit-hep/boost-histogram/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

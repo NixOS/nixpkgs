@@ -3,39 +3,37 @@
   buildPythonPackage,
   fetchPypi,
   setuptools-scm,
-  wheel,
   git-versioner,
-  wrapt,
+  pip,
 }:
 
 buildPythonPackage rec {
   pname = "pip-system-certs";
-  version = "4.0";
+  version = "5.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "pip_system_certs";
-    hash = "sha256-245qMTiNl5XskTmVffGon6UnT7ZhZEVv0JGl0+lMNQw=";
+    hash = "sha256-Gci/mVe8zn1pxNvC0LLvE94ZhNU/UKWQEubbutCvZ8Y=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
-    wheel
     git-versioner
   ];
 
-  propagatedBuildInputs = [ wrapt ];
+  dependencies = [ pip ];
 
   pythonImportsCheck = [
     "pip_system_certs.wrapt_requests"
     "pip_system_certs.bootstrap"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Live patches pip and requests to use system certs by default";
     homepage = "https://gitlab.com/alelec/pip-system-certs";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ slotThe ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ slotThe ];
   };
 }

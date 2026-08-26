@@ -28,10 +28,11 @@ stdenv.mkDerivation {
     "PREFIX=$(out)"
   ];
 
-  meta = with lib; {
-    maintainers = with maintainers; [ matthewbauer ];
+  meta = {
+    maintainers = [ ];
     description = "Compiles CocoaTouch .xib files into .nib";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    homepage = "https://github.com/matthewbauer/xib2nib";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

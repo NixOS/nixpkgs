@@ -2,74 +2,113 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_9,
-  nodejs_22,
+  pnpm_11,
+  nodejs-slim_22,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  nodejs,
+  nix-update-script,
+  fetchpatch2,
 }:
+let
+  # pnpm 11's bundled Node.js 24 has a libuv/kqueue bug on macOS, workaround copied from openclaw package
+  pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_22; };
 
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "astro-language-server";
-  version = "2.15.4";
+  version = "2.16.10";
 
   src = fetchFromGitHub {
     owner = "withastro";
-    repo = "language-tools";
-    rev = "@astrojs/language-server@${finalAttrs.version}";
-    hash = "sha256-NBLUeg1WqxTXtu8eg1fihQSfm8koYAEWhfXAj/fIdC8=";
+    repo = "astro";
+    tag = "@astrojs/language-server@${finalAttrs.version}";
+    hash = "sha256-ZzLLGfbY6Rtjzqw+MMCHthvalo3B8lf/qxFJNJ/2LdQ=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  patches = [
+    # remove on next release
+    (fetchpatch2 {
+      name = "fix-supply-chain-verification-fail.patch";
+      url = "https://github.com/withastro/astro/commit/272ca6173b40cfa37299c27b513f495f386d4009.patch?full_index=1";
+      includes = [ "pnpm-workspace.yaml" ];
+      hash = "sha256-jPYFiyBlIoqpbIcT/hPa+VlF1IX+QCP8CVFQGarzlEs=";
+    })
+  ];
+
+  # https://pnpm.io/filtering#--filter-package_name-1
+  pnpmWorkspaces = [
+    "@astrojs/language-server..."
+    "@astrojs/ts-plugin"
+  ];
+
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       pnpmWorkspaces
-      prePnpmInstall
+      patches
       ;
-    hash = "sha256-tlpk+wbLjJqt37lu67p2A2RZAR1ZfnZFiYoqIQwvWPQ=";
+    inherit pnpm;
+    # pnpm 11 stores state in a SQLite binary, fetcherVersion = 4 dumps it to a deterministic SQL text file
+    fetcherVersion = 4;
+    hash = "sha256-dqqvN8FMLjEbTtgQRkkURD7clMJ/OL9Mbk6icc4KU60=";
   };
 
   nativeBuildInputs = [
-    nodejs_22
-    pnpm_9.configHook
+    nodejs
+    pnpmConfigHook
+    pnpm
   ];
 
-  buildInputs = [ nodejs_22 ];
-
-  # Must specify to download "@astrojs/yaml2ts" depencendies
-  # https://pnpm.io/filtering#--filter-package_name-1
-  pnpmWorkspaces = [ "@astrojs/language-server..." ];
-  prePnpmInstall = ''
-    # Warning section for "pnpm@v8"
-    # https://pnpm.io/cli/install#--filter-package_selector
-    pnpm config set dedupe-peer-dependents false
-  '';
+  buildInputs = [ nodejs ];
 
   buildPhase = ''
     runHook preBuild
 
-    # Must build the "@astrojs/yaml2ts" package. Dependency is linked via workspace by "pnpm"
-    # (https://github.com/withastro/language-tools/blob/%40astrojs/language-server%402.14.2/pnpm-lock.yaml#L78-L80)
-    pnpm --filter "@astrojs/language-server..." build
+    pnpm --filter "@astrojs/language-server..." --filter "@astrojs/ts-plugin" build
 
     runHook postBuild
   '';
 
+  env.CI = true;
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,lib/astro-language-server}
-    cp -r {packages,node_modules} $out/lib/astro-language-server
-    ln -s $out/lib/astro-language-server/packages/language-server/bin/nodeServer.js $out/bin/astro-ls
+    pnpm install --offline --prod --filter="@astrojs/language-server..."
+    mkdir -p $out/{bin,lib/node_modules/astro-language-server/packages/language-tools}
+    cp -r ./node_modules $out/lib/node_modules/astro-language-server
+    cp -r packages/language-tools/{language-server,yaml2ts,ts-plugin} $out/lib/node_modules/astro-language-server/packages/language-tools/
+    pushd $out/lib/node_modules/astro-language-server/node_modules
+    rm -rf {./,.pnpm/node_modules/}astro-{scripts,benchmark} .pnpm/node_modules/@astrojs/ts-plugin
+    popd
+    # pnpm creates symlinks for optional platform-specific packages (e.g. @biomejs/cli-darwin-arm64)
+    # that are not installed by the --prod --filter install, leaving dangling symlinks
+    find $out -xtype l -delete
+    ln -s $out/lib/node_modules/astro-language-server/packages/language-tools/language-server/bin/nodeServer.js $out/bin/astro-ls
 
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--use-github-releases"
+      "--version-regex"
+      "@astrojs/language-server@(.*)"
+    ];
+  };
+
   meta = {
-    description = "The Astro language server";
-    homepage = "https://github.com/withastro/language-tools";
-    changelog = "https://github.com/withastro/language-tools/blob/@astrojs/language-server@${finalAttrs.version}/packages/language-server/CHANGELOG.md";
+    description = "Astro language server";
+    homepage = "https://github.com/withastro/astro/tree/main/packages/language-tools";
+    changelog = "https://github.com/withastro/astro/blob/%40astrojs/language-server%40${finalAttrs.version}/packages/language-tools/language-server/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = with lib.maintainers; [
+      miniharinn
+      god464
+    ];
     mainProgram = "astro-ls";
     platforms = lib.platforms.unix;
   };

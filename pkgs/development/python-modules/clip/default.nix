@@ -4,24 +4,29 @@
   ftfy,
   lib,
   regex,
+  setuptools,
   torch,
   torchvision,
   tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "clip";
-  version = "unstable-2022-11-17";
-  format = "setuptools";
+  version = "1.0-unstable-2022-07-27";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "openai";
-    repo = pname;
+    repo = "clip";
     rev = "d50d76daa670286dd6cacf3bcd80b5e4823fc8e1";
     hash = "sha256-GAitNBb5CzFVv2+Dky0VqSdrFIpKKtoAoyqeLoDaHO4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     ftfy
     regex
     torch
@@ -31,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "clip" ];
 
-  meta = with lib; {
+  meta = {
     description = "Contrastive Language-Image Pretraining";
     homepage = "https://github.com/openai/CLIP";
-    license = licenses.mit;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

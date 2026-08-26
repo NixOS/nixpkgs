@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "miracle2k";
-    repo = pname;
+    repo = "tarsnapper";
     rev = version;
     hash = "sha256-5i9eum9hbh6VFhvEIDq5Uapy6JtIbf9jZHhRYZVoC1w=";
   };
@@ -52,11 +52,11 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "tarsnapper" ];
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper which expires backups using a gfs-scheme";
     homepage = "https://github.com/miracle2k/tarsnapper";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ gmacon ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ gmacon ];
     mainProgram = "tarsnapper";
   };
 }

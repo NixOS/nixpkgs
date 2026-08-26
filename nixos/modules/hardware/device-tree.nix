@@ -93,7 +93,8 @@ let
           let
             includePaths = [
               "${lib.getDev cfg.kernelPackage}/lib/modules/${cfg.kernelPackage.modDirVersion}/source/scripts/dtc/include-prefixes"
-            ] ++ cfg.dtboBuildExtraIncludePaths;
+            ]
+            ++ cfg.dtboBuildExtraIncludePaths;
             extraPreprocessorFlags = cfg.dtboBuildExtraPreprocessorFlags;
           in
           if o.dtboFile == null then
@@ -122,7 +123,8 @@ in
   options = {
     hardware.deviceTree = {
       enable = lib.mkOption {
-        default = pkgs.stdenv.hostPlatform.linux-kernel.DTB or false;
+        default = config.boot.kernelPackages.kernel.buildDTBs;
+        defaultText = lib.literalExpression "config.boot.kernelPackages.kernel.buildDTBs";
         type = lib.types.bool;
         description = ''
           Build device tree files. These are used to describe the

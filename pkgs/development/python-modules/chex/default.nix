@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
+  flit-core,
 
   # dependencies
   absl-py,
@@ -18,22 +18,24 @@
   cloudpickle,
   dm-tree,
   pytestCheckHook,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "chex";
-  version = "0.1.89";
+  version = "0.1.92";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "deepmind";
+    owner = "google-deepmind";
     repo = "chex";
-    tag = "v${version}";
-    hash = "sha256-eTEfmbpmwtCuphtOq0iHUT8zGfyQ4/aUorL4FQwcKBw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PM76Q72Bgyms7dROJkmlpPuDvtqjHLPTDkUYqo08T74=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    flit-core
+  ];
 
   dependencies = [
     absl-py
@@ -54,9 +56,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Library of utilities for helping to write reliable JAX code";
-    homepage = "https://github.com/deepmind/chex";
-    changelog = "https://github.com/google-deepmind/chex/releases/tag/v${version}";
+    homepage = "https://github.com/google-deepmind/chex";
+    changelog = "https://github.com/google-deepmind/chex/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };
-}
+})

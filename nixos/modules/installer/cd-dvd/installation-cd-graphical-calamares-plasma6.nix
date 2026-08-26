@@ -7,42 +7,46 @@
 
   isoImage.edition = lib.mkDefault "plasma6";
 
-  services.desktopManager.plasma6.enable = true;
+  services.desktopManager.plasma6 = {
+    enable = true;
+    enableQt5Integration = false;
+  };
 
   # Automatically login as nixos.
   services.displayManager = {
-    sddm.enable = true;
+    plasma-login-manager.enable = true;
     autoLogin = {
       enable = true;
       user = "nixos";
     };
   };
 
-  environment.systemPackages = [
-    # FIXME: using Qt5 builds of Maliit as upstream has not ported to Qt6 yet
-    pkgs.maliit-framework
-    pkgs.maliit-keyboard
+  environment.plasma6.excludePackages = [
+    # Optional wallpapers that add 126 MiB to the graphical installer
+    # closure. They will still need to be downloaded when installing a
+    # Plasma system, though.
+    pkgs.kdePackages.plasma-workspace-wallpapers
   ];
 
-  system.activationScripts.installerDesktop =
-    let
+  # Avoid bundling an entire MariaDB installation on the ISO.
+  programs.kde-pim.enable = false;
 
+  systemd.tmpfiles.settings."10-installer-desktop" =
+    let
       # Comes from documentation.nix when xserver and nixos.enable are true.
       manualDesktopFile = "/run/current-system/sw/share/applications/nixos-manual.desktop";
-
-      homeDir = "/home/nixos/";
-      desktopDir = homeDir + "Desktop/";
-
     in
-    ''
-      mkdir -p ${desktopDir}
-      chown nixos ${homeDir} ${desktopDir}
-
-      ln -sfT ${manualDesktopFile} ${desktopDir + "nixos-manual.desktop"}
-      ln -sfT ${pkgs.gparted}/share/applications/gparted.desktop ${desktopDir + "gparted.desktop"}
-      ln -sfT ${pkgs.calamares-nixos}/share/applications/io.calamares.calamares.desktop ${
-        desktopDir + "io.calamares.calamares.desktop"
-      }
-    '';
+    {
+      "/home/nixos/Desktop".d = {
+        user = "nixos";
+        group = "users";
+        mode = "0755";
+      };
+      "/home/nixos/Desktop/nixos-manual.desktop"."L+".argument = manualDesktopFile;
+      "/home/nixos/Desktop/gparted.desktop"."L+".argument =
+        "${pkgs.gparted}/share/applications/gparted.desktop";
+      "/home/nixos/Desktop/calamares.desktop"."L+".argument =
+        "${pkgs.calamares-nixos}/share/applications/calamares.desktop";
+    };
 
 }

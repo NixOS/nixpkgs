@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "django-js-asset";
-  version = "3.1.2";
+  version = "4.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matthiask";
     repo = "django-js-asset";
     tag = version;
-    hash = "sha256-OG31i8r6rwR2aDzraAorHdYrJrWt/e7SY9+iV7SJGJ8=";
+    hash = "sha256-YQ3fM4kvbsOXjM0bbhMErGwFnDs48GsYG1D19R2D9iI=";
   };
 
   build-system = [ hatchling ];
@@ -35,11 +35,11 @@ buildPythonPackage rec {
     export DJANGO_SETTINGS_MODULE=tests.testapp.settings
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/matthiask/django-js-asset/blob/${version}/CHANGELOG.rst";
     description = "Script tag with additional attributes for django.forms.Media";
     homepage = "https://github.com/matthiask/django-js-asset";
-    maintainers = with maintainers; [ hexa ];
-    license = with licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ hexa ];
+    license = lib.licenses.bsd3;
   };
 }

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   twisted,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "setuptools-trial";
   version = "0.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "setuptools_trial";
@@ -29,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "setuptools_trial" ];
 
-  meta = with lib; {
+  meta = {
     description = "Setuptools plugin that makes unit tests execute with trial instead of pyunit";
     homepage = "https://github.com/rutsky/setuptools-trial";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ ryansydnor ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ ryansydnor ];
   };
 }

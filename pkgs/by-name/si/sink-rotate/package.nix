@@ -5,23 +5,20 @@
   pipewire,
   wireplumber,
   makeWrapper,
+  nix-update-script,
 }:
-let
-  version = "2.2.0";
-in
 rustPlatform.buildRustPackage {
   pname = "sink-rotate";
-  inherit version;
+  version = "2.3.0-unstable-2026-05-14";
 
   src = fetchFromGitHub {
     owner = "mightyiam";
     repo = "sink-rotate";
-    rev = "v${version}";
-    hash = "sha256-ZHbisG9pdctkwfD1S3kxMZhBqPw0Ni5Q9qQG4RssnSw=";
+    rev = "8bf24a2ebad7151fe5a7e8dd4577effccbd6fa2a";
+    hash = "sha256-ftSu04fWCgZ9Beu4pMAF8KKe3nfe0km1F6ExVWbmoxQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-OYFRiPAhiGbA7aNy3c4I0Tc39BNmFuP68YoBviMfbak=";
+  cargoHash = "sha256-qiHrntm6p3j5784Pzh0NxeyQMasTQpgsfXq+DyDqies=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -31,12 +28,16 @@ rustPlatform.buildRustPackage {
       --prefix PATH : ${wireplumber}/bin/wpctl
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
+
+  meta = {
     description = "Command that rotates the default PipeWire audio sink";
     homepage = "https://github.com/mightyiam/sink-rotate";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mightyiam ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mightyiam ];
     mainProgram = "sink-rotate";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

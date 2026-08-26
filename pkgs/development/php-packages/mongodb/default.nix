@@ -11,36 +11,32 @@
   openssl,
   snappy,
   zlib,
-  darwin,
 }:
 
 buildPecl rec {
   pname = "mongodb";
-  version = "2.0.0";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-php-driver";
     rev = version;
-    hash = "sha256-o4fy46oh3iWLAcszcFo1m5GdalQs6OswT+OQTYo2cZc=";
+    hash = "sha256-w8KKQDnVORm3OFV94H+rEzVP7+XtHN7ZdKoFpp6Idww=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      cyrus_sasl
-      icu64
-      openssl
-      snappy
-      zlib
-      pcre2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.Security
-      darwin.apple_sdk_11_0.Libsystem
-      libiconv
-    ];
+  buildInputs = [
+    cyrus_sasl
+    icu64
+    openssl
+    snappy
+    zlib
+    pcre2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   meta = {
     description = "Official MongoDB PHP driver";

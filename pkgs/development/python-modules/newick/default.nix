@@ -3,15 +3,14 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools-scm,
-  pythonOlder,
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "newick";
   version = "1.9.0";
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dlce-eva";
@@ -22,19 +21,17 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  postPatch = ''
-    # remove coverage arguments to pytest
-    sed -i '/--cov/d' setup.cfg
-  '';
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [ "newick" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package to read and write the Newick format";
     homepage = "https://github.com/dlce-eva/python-newick";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ alxsimon ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

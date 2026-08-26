@@ -1,43 +1,47 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   numpy,
+  pandas,
   scikit-learn,
   scipy,
-  setuptools,
   tabulate,
   torch,
   tqdm,
+
+  # tests
   flaky,
-  llvmPackages,
-  pandas,
+  openssl,
   pytest-cov-stub,
   pytestCheckHook,
   safetensors,
-  pythonAtLeast,
+  transformers,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "skorch";
-  version = "1.1.0";
+  version = "1.4.0";
   pyproject = true;
+  __structuredAttrs = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-AguMhI/MO4DNexe5azVEXOw7laTRBN0ecFW81qqh0rY=";
+  src = fetchFromGitHub {
+    owner = "skorch-dev";
+    repo = "skorch";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-il3S5cfW47tKvMQGr/BfbEjMEMVzBF4gSrQhR1uKxks=";
   };
-
-  # AttributeError: 'NoneType' object has no attribute 'span' with Python 3.13
-  # https://github.com/skorch-dev/skorch/issues/1080
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
 
   build-system = [ setuptools ];
 
   dependencies = [
     numpy
+    pandas
     scikit-learn
     scipy
     tabulate
@@ -47,40 +51,42 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     flaky
-    pandas
+    openssl
     pytest-cov-stub
     pytestCheckHook
     safetensors
+    transformers
   ];
 
-  checkInputs = lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+  disabledTests = [
+    # on CPU, these expect artifacts from previous GPU run
+    "test_load_cuda_params_to_cpu"
+    # failing tests
+    "test_pickle_load"
+    # there is a problem with the compiler selection
+    "test_fit_and_predict_with_compile"
+    # "Weights only load failed"
+    "test_can_be_copied"
+    "test_pickle"
+    "test_pickle_save_load"
+    "test_train_net_after_copy"
+    "test_weights_restore"
+    # Reported as flaky
+    "test_fit_lbfgs_optimizer"
+  ];
 
-  disabledTests =
-    [
-      # on CPU, these expect artifacts from previous GPU run
-      "test_load_cuda_params_to_cpu"
-      # failing tests
-      "test_pickle_load"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # there is a problem with the compiler selection
-      "test_fit_and_predict_with_compile"
-    ];
+  disabledTestPaths = [
+    # tries to download missing HuggingFace data
+    "skorch/tests/test_dataset.py"
+    "skorch/tests/test_hf.py"
+    "skorch/tests/llm/test_llm_classifier.py"
 
-  disabledTestPaths =
-    [
-      # tries to import `transformers` and download HuggingFace data
-      "skorch/tests/test_hf.py"
-    ]
-    ++ lib.optionals
-      (stdenv.hostPlatform.system != "x86_64-linux" && stdenv.hostPlatform.system != "aarch64-darwin")
-      [
-        # these tests fail when running in parallel for multiple platforms with:
-        # "RuntimeError: The server socket has failed to listen on any local
-        # network address because they use the same hardcoded port." For now,
-        # running for one platform per OS to avoid spurious failures.
-        "skorch/tests/test_history.py"
-      ];
+    # These tests fail when running in parallel for all platforms with:
+    # "RuntimeError: The server socket has failed to listen on any local
+    # network address because they use the same hardcoded port."
+    # This happens on every platform with sandboxing enabled.
+    "skorch/tests/test_history.py"
+  ];
 
   pythonImportsCheck = [ "skorch" ];
 
@@ -91,4 +97,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

@@ -5,18 +5,18 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fake-gcs-server";
-  version = "1.52.2";
+  version = "1.56.0";
 
   src = fetchFromGitHub {
     owner = "fsouza";
     repo = "fake-gcs-server";
-    tag = "v${version}";
-    hash = "sha256-sidMCbJAK3bRGJyyFIUn7e5y0z4O72JWCICHf4JL4yo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QSa9V3+GZ5TEv6yLExmfh01f58idsjGwdBsnWcDzhz4=";
   };
 
-  vendorHash = "sha256-oTJ4DCsDazo58ozsAKI0BG7rxfF8oeiIl6vQpRng+LM=";
+  vendorHash = "sha256-mMYt32IMx8gYGZVOCzkRf8W/T7Sq0WcgRQXFykFffRE=";
 
   # Unit tests fail to start the emulator server in some environments (e.g. Hydra) for some reason.
   #
@@ -34,4 +34,4 @@ buildGoModule rec {
     mainProgram = "fake-gcs-server";
     maintainers = with lib.maintainers; [ jpetrucciani ];
   };
-}
+})

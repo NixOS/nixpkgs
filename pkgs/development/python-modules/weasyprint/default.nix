@@ -1,39 +1,50 @@
 {
-  stdenv,
   lib,
+  stdenv,
   pkgs,
   buildPythonPackage,
-  cffi,
-  cssselect2,
-  fetchPypi,
-  flit-core,
+  fetchFromGitHub,
+  fetchpatch2,
   fontconfig,
-  fonttools,
   glib,
   harfbuzz,
+  makeFontsConf,
   pango,
+  twemoji-color-font,
+
+  # build-system
+  flit-core,
+
+  # dependencies
+  cffi,
+  cssselect2,
+  fonttools,
   pillow,
   pydyf,
   pyphen,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  replaceVars,
   tinycss2,
   tinyhtml5,
+
+  # tests
+  pytest-cov-stub,
+  pytestCheckHook,
+  replaceVars,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "weasyprint";
-  version = "65.1";
+  version = "69.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  __darwinAllowLocalNetworking = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "weasyprint";
-    hash = "sha256-EgKBvb1C/6p9flztvjGCos7zbqWtl/6fNX5DvmoeWOo=";
+  src = fetchFromGitHub {
+    owner = "Kozea";
+    repo = "WeasyPrint";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kd5ei3dBty8VL0ATPz8LZFP+UTUq7yTjuDtO1s/fdxg=";
   };
 
   patches = [
@@ -44,6 +55,11 @@ buildPythonPackage rec {
       harfbuzz_subset = "${harfbuzz.out}/lib/libharfbuzz-subset${stdenv.hostPlatform.extensions.sharedLibrary}";
       pango = "${pango.out}/lib/libpango-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
       pangoft2 = "${pango.out}/lib/libpangoft2-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
+    })
+    (fetchpatch2 {
+      name = "fix-unicode-test";
+      url = "https://github.com/Kozea/WeasyPrint/commit/b2efb459fbe7f7fd35ab9078734121cb87d3d65a.patch?full_index=1";
+      hash = "sha256-uixfpg9fvkdNmSTqz/M1c1vkV/mJDqOs7zDAunn2rEY=";
     })
   ];
 
@@ -58,12 +74,15 @@ buildPythonPackage rec {
     pyphen
     tinycss2
     tinyhtml5
-  ] ++ fonttools.optional-dependencies.woff;
+  ]
+  ++ fonttools.optional-dependencies.woff;
 
   nativeCheckInputs = [
     pkgs.ghostscript
     pytest-cov-stub
     pytestCheckHook
+    versionCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [
@@ -86,26 +105,39 @@ buildPythonPackage rec {
     "test_visibility_3"
     "test_visibility_4"
     "test_woff_simple"
+    # AssertionError
+    "test_2d_transform"
   ];
 
-  FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
+  env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
+
+  # Custom font configuration for tests
+  preCheck = ''
+    export FONTCONFIG_FILE=${
+      makeFontsConf {
+        # include some emoji characters
+        fontDirectories = [ twemoji-color-font ];
+
+        # Darwin builds without sandbox can pollute the build
+        impureFontDirectories = [ ];
+      }
+    }
+  '';
 
   # Set env variable explicitly for Darwin, but allow overriding when invoking directly
-  makeWrapperArgs = [ "--set-default FONTCONFIG_FILE ${FONTCONFIG_FILE}" ];
-
-  preCheck = ''
-    # Fontconfig wants to create a cache.
-    export HOME=$TMPDIR
-  '';
+  makeWrapperArgs = [ "--set-default FONTCONFIG_FILE ${finalAttrs.env.FONTCONFIG_FILE}" ];
 
   pythonImportsCheck = [ "weasyprint" ];
 
   meta = {
-    changelog = "https://github.com/Kozea/WeasyPrint/releases/tag/v${version}";
+    changelog = "https://github.com/Kozea/WeasyPrint/releases/tag/${finalAttrs.src.tag}";
     description = "Converts web documents to PDF";
-    mainProgram = "weasyprint";
     homepage = "https://weasyprint.org/";
     license = lib.licenses.bsd3;
-    teams = [ lib.teams.apm ];
+    mainProgram = "weasyprint";
+    maintainers = with lib.maintainers; [
+      DutchGerman
+      friedow
+    ];
   };
-}
+})

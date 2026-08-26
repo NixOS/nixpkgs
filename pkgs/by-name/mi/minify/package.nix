@@ -8,25 +8,25 @@
   minify,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "minify";
-  version = "2.23.1";
+  version = "2.24.17";
 
   src = fetchFromGitHub {
     owner = "tdewolff";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-v0KLQlf2WhI18uanVtvWfX6/7s9ZtfPM5AGyEIHZf54=";
+    repo = "minify";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-syEMMEQYUQEEdch7yFrVUUPXe1cIebXkvm52e9LmP+c=";
   };
 
-  vendorHash = "sha256-Btc5d/wwDmjhyDZwAIHDSbXuh8xqq/nIjTAkPsdeHU4=";
+  vendorHash = "sha256-s4QSt1kxPxgbQLZStsMN/st3g4GjQtK7+wAI5IKaHo4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd/minify" ];
@@ -34,7 +34,7 @@ buildGoModule rec {
   passthru = {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion {
-      inherit version;
+      inherit (finalAttrs) version;
       package = minify;
       command = "minify --version";
     };
@@ -44,13 +44,13 @@ buildGoModule rec {
     installShellCompletion --cmd minify --bash cmd/minify/bash_completion
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Go minifiers for web formats";
     homepage = "https://go.tacodewolff.nl/minify";
     downloadPage = "https://github.com/tdewolff/minify";
-    changelog = "https://github.com/tdewolff/minify/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gaelreyrol ];
+    changelog = "https://github.com/tdewolff/minify/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "minify";
   };
-}
+})

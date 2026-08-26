@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "h2";
-  version = "4.2.0";
+  version = "4.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-hyper";
     repo = "h2";
     tag = "v${version}";
-    hash = "sha256-rfCwMn2msiRoIvhsdK6hyp3BjDy5AGziX4Or0cb9bKc=";
+    hash = "sha256-04we2xeh5LtLA4La9WPfXQVczDIz7NpL/6y9TmIELgM=";
   };
 
   build-system = [ setuptools ];
@@ -43,11 +43,11 @@ buildPythonPackage rec {
     "h2.config"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/python-hyper/h2/blob/${src.tag}/CHANGELOG.rst";
     description = "HTTP/2 State-Machine based protocol implementation";
     homepage = "https://github.com/python-hyper/h2";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

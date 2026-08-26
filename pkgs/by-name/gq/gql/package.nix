@@ -6,21 +6,22 @@
   libgit2,
   zlib,
   cmake,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gql";
-  version = "0.38.0";
+  version = "0.43.0";
 
   src = fetchFromGitHub {
     owner = "AmrDeveloper";
     repo = "GQL";
-    rev = version;
-    hash = "sha256-/cTU+LBoXnMzNKd18nYoGkEN/cfUVQIDFBFQNrmdWuM=";
+    tag = finalAttrs.version;
+    hash = "sha256-fTmCL8b9Yp0DwgatGd7ODpq3z9b3Rqg/skqvjQkZvOU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-4sdbTcDDvA7MYMiTKKAWg0sYnBPeVj3eBCo7HTZYkUY=";
+  cargoHash = "sha256-48nNiUCtFdTksgkLGDkhWp2Tfy4NGt6ka1ntC8UHXO0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,12 +33,17 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "SQL like query language to perform queries on .git files";
     homepage = "https://github.com/AmrDeveloper/GQL";
-    changelog = "https://github.com/AmrDeveloper/GQL/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/AmrDeveloper/GQL/blob/${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "gitql";
   };
-}
+})

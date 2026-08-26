@@ -6,12 +6,12 @@
   coreutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "renameutils";
   version = "0.12.0";
 
   src = fetchurl {
-    url = "mirror://savannah/renameutils/renameutils-${version}.tar.gz";
+    url = "mirror://savannah/renameutils/renameutils-${finalAttrs.version}.tar.gz";
     sha256 = "18xlkr56jdyajjihcmfqlyyanzyiqqlzbhrm6695mkvw081g1lnb";
   };
 
@@ -28,6 +28,9 @@ stdenv.mkDerivation rec {
       --replace "ls_program = xstrdup(\"ls\")" "ls_program = xstrdup(\"${coreutils}/bin/ls\")"
   '';
 
+  # Fix build with gcc 15
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   nativeBuildInputs = [ readline ];
 
   preConfigure = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
@@ -40,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
   };
-}
+})

@@ -3,7 +3,6 @@
   stdenv,
   testers,
   buildPythonPackage,
-  pythonOlder,
   python,
   pytestCheckHook,
   # fetchers
@@ -16,7 +15,7 @@
   # native dependencies
   eigen,
   boost,
-  cgal,
+  cgal_5,
   gmp,
   hdf5,
   icu,
@@ -25,8 +24,6 @@
   mpfr,
   nlohmann_json,
   opencascade-occt_7_6,
-  opencollada,
-  pcre,
   zlib,
 
   # python deps
@@ -93,7 +90,7 @@ buildPythonPackage rec {
     # ifcopenshell needs stdc++
     (lib.getLib stdenv.cc.cc)
     boost
-    cgal
+    cgal_5
     eigen
     gmp
     hdf5
@@ -103,8 +100,6 @@ buildPythonPackage rec {
     mpfr
     nlohmann_json
     opencascade-occt
-    opencollada
-    pcre
   ];
 
   propagatedBuildInputs = [
@@ -131,7 +126,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ifcopenshell" ];
 
-  PYTHONUSERBASE = ".";
+  env.PYTHONUSERBASE = ".";
 
   # We still build with python to generate ifcopenshell_wrapper.py and ifcopenshell_wrapper.so
   cmakeFlags = [
@@ -139,12 +134,11 @@ buildPythonPackage rec {
     "-DBUILD_SHARED_LIBS=ON"
     "-DBUILD_IFCPYTHON=ON"
     "-DCITYJSON_SUPPORT=OFF"
+    "-DCOLLADA_SUPPORT=OFF"
     "-DEIGEN_DIR=${eigen}/include/eigen3"
     "-DJSON_INCLUDE_DIR=${nlohmann_json}/include/"
     "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
     "-DOCC_LIBRARY_DIR=${lib.getLib opencascade-occt}/lib"
-    "-DOPENCOLLADA_INCLUDE_DIR=${opencollada}/include/opencollada"
-    "-DOPENCOLLADA_LIBRARY_DIR=${lib.getLib opencollada}/lib/opencollada"
     "-DSWIG_EXECUTABLE=${swig}/bin/swig"
     "-DLIBXML2_INCLUDE_DIR=${libxml2.dev}/include/libxml2"
     "-DLIBXML2_LIBRARIES=${lib.getLib libxml2}/lib/libxml2${stdenv.hostPlatform.extensions.sharedLibrary}"
@@ -164,6 +158,10 @@ buildPythonPackage rec {
     # NOTE: the following is directly inspired by https://github.com/IfcOpenShell/IfcOpenShell/blob/v0.8.0/src/ifcopenshell-python/Makefile#L123
     cp ../../README.md README.md
     popd
+
+    # boost189 compatibility; see https://www.boost.org/releases/1.89.0/
+    substituteInPlace cmake/CMakeLists.txt \
+      --replace-fail 'set(BOOST_COMPONENTS system' 'set(BOOST_COMPONENTS'
   '';
 
   preConfigure = ''
@@ -183,8 +181,8 @@ buildPythonPackage rec {
     popd
   '';
 
-  pytestFlagsArray = [
-    "-p no:pytest-blender"
+  pytestFlags = [
+    "-pno:pytest-blender"
   ];
 
   disabledTestPaths = [
@@ -205,11 +203,11 @@ buildPythonPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Open source IFC library and geometry engine";
     homepage = "https://ifcopenshell.org/";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ autra ];
+    license = lib.licenses.lgpl3;
+    teams = [ lib.teams.geospatial ];
   };
 }

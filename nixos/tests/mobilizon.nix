@@ -8,12 +8,11 @@ in
 {
   name = "mobilizon";
   meta.maintainers = with lib.maintainers; [
-    minijackson
     erictapen
   ];
 
   nodes.server =
-    { ... }:
+    { pkgs, ... }:
     {
       services.mobilizon = {
         enable = true;
@@ -37,11 +36,20 @@ in
       };
 
       networking.hosts."::1" = [ mobilizonDomain ];
+
+      # https://framagit.org/kaihuri/mobilizon/-/work_items/2070
+      services.postgresql.package = pkgs.postgresql_17;
     };
 
   testScript = ''
     server.wait_for_unit("mobilizon.service")
     server.wait_for_open_port(${toString port})
     server.succeed("curl --fail https://${mobilizonDomain}/")
+
+    # Verify ownership is set up correctly
+    owner = server.succeed("stat -c '%U' /var/lib/mobilizon/sitemap").rstrip()
+    assert owner == "mobilizon", f"unexpected owner: {owner}"
+    owner = server.succeed("stat -c '%U' /var/lib/mobilizon/uploads").rstrip()
+    assert owner == "mobilizon", f"unexpected owner: {owner}"
   '';
 }

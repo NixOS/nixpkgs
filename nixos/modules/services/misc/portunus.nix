@@ -6,7 +6,6 @@
 }:
 let
   cfg = config.services.portunus;
-
 in
 {
   options.services.portunus = {
@@ -79,9 +78,15 @@ in
         type = lib.types.listOf (
           lib.types.submodule {
             options = {
+              redirectURIs = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
+                default = [ ];
+                description = "URLs where the OIDC client should redirect";
+              };
               callbackURL = lib.mkOption {
-                type = lib.types.str;
-                description = "URL where the OIDC client should redirect";
+                type = lib.types.nullOr lib.types.str;
+                default = null;
+                description = "URL where the OIDC client should redirect (deprecated, use redirectURIs)";
               };
               id = lib.mkOption {
                 type = lib.types.str;
@@ -93,7 +98,7 @@ in
         default = [ ];
         example = [
           {
-            callbackURL = "https://example.com/client/oidc/callback";
+            redirectURIs = [ "https://example.com/client/oidc/callback" ];
             id = "service";
           }
         ];
@@ -117,12 +122,7 @@ in
     };
 
     ldap = {
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.openldap;
-        defaultText = lib.literalExpression "pkgs.openldap";
-        description = "The OpenLDAP package to use.";
-      };
+      package = lib.mkPackageOption pkgs "openldap" { };
 
       searchUserName = lib.mkOption {
         type = lib.types.str;
@@ -232,7 +232,7 @@ in
 
           staticClients = lib.forEach cfg.dex.oidcClients (client: {
             inherit (client) id;
-            redirectURIs = [ client.callbackURL ];
+            redirectURIs = client.redirectURIs ++ lib.optional (client.callbackURL != null) client.callbackURL;
             name = "OIDC for ${client.id}";
             secretEnv = "DEX_CLIENT_${client.id}";
           });
@@ -263,34 +263,33 @@ in
           ExecStart = "${cfg.package}/bin/portunus-orchestrator";
           Restart = "on-failure";
         };
-        environment =
+        environment = {
+          PORTUNUS_LDAP_SUFFIX = cfg.ldap.suffix;
+          PORTUNUS_SERVER_BINARY = "${cfg.package}/bin/portunus-server";
+          PORTUNUS_SERVER_GROUP = cfg.group;
+          PORTUNUS_SERVER_USER = cfg.user;
+          PORTUNUS_SERVER_HTTP_LISTEN = "127.0.0.1:${toString cfg.port}";
+          PORTUNUS_SERVER_STATE_DIR = cfg.stateDir;
+          PORTUNUS_SLAPD_BINARY = "${cfg.ldap.package}/libexec/slapd";
+          PORTUNUS_SLAPD_GROUP = cfg.ldap.group;
+          PORTUNUS_SLAPD_USER = cfg.ldap.user;
+          PORTUNUS_SLAPD_SCHEMA_DIR = "${cfg.ldap.package}/etc/schema";
+        }
+        // (lib.optionalAttrs (cfg.seedPath != null) {
+          PORTUNUS_SEED_PATH = cfg.seedPath;
+        })
+        // (lib.optionalAttrs cfg.ldap.tls (
+          let
+            acmeDirectory = config.security.acme.certs."${cfg.domain}".directory;
+          in
           {
-            PORTUNUS_LDAP_SUFFIX = cfg.ldap.suffix;
-            PORTUNUS_SERVER_BINARY = "${cfg.package}/bin/portunus-server";
-            PORTUNUS_SERVER_GROUP = cfg.group;
-            PORTUNUS_SERVER_USER = cfg.user;
-            PORTUNUS_SERVER_HTTP_LISTEN = "127.0.0.1:${toString cfg.port}";
-            PORTUNUS_SERVER_STATE_DIR = cfg.stateDir;
-            PORTUNUS_SLAPD_BINARY = "${cfg.ldap.package}/libexec/slapd";
-            PORTUNUS_SLAPD_GROUP = cfg.ldap.group;
-            PORTUNUS_SLAPD_USER = cfg.ldap.user;
-            PORTUNUS_SLAPD_SCHEMA_DIR = "${cfg.ldap.package}/etc/schema";
+            PORTUNUS_SERVER_HTTP_SECURE = "true";
+            PORTUNUS_SLAPD_TLS_CA_CERTIFICATE = config.security.pki.caBundle;
+            PORTUNUS_SLAPD_TLS_CERTIFICATE = "${acmeDirectory}/cert.pem";
+            PORTUNUS_SLAPD_TLS_DOMAIN_NAME = cfg.domain;
+            PORTUNUS_SLAPD_TLS_PRIVATE_KEY = "${acmeDirectory}/key.pem";
           }
-          // (lib.optionalAttrs (cfg.seedPath != null) ({
-            PORTUNUS_SEED_PATH = cfg.seedPath;
-          }))
-          // (lib.optionalAttrs cfg.ldap.tls (
-            let
-              acmeDirectory = config.security.acme.certs."${cfg.domain}".directory;
-            in
-            {
-              PORTUNUS_SERVER_HTTP_SECURE = "true";
-              PORTUNUS_SLAPD_TLS_CA_CERTIFICATE = config.security.pki.caBundle;
-              PORTUNUS_SLAPD_TLS_CERTIFICATE = "${acmeDirectory}/cert.pem";
-              PORTUNUS_SLAPD_TLS_DOMAIN_NAME = cfg.domain;
-              PORTUNUS_SLAPD_TLS_PRIVATE_KEY = "${acmeDirectory}/key.pem";
-            }
-          ));
+        ));
       };
     };
 
@@ -319,5 +318,5 @@ in
     ];
   };
 
-  meta.maintainers = [ lib.maintainers.majewsky ] ++ lib.teams.c3d2.members;
+  meta.maintainers = pkgs.portunus.meta.maintainers;
 }

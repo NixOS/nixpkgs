@@ -4,7 +4,8 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  qt5,
+  qt6,
+  kdePackages,
   perl,
 
   # Cantata doesn't build with cdparanoia enabled so we disable that
@@ -16,24 +17,25 @@
   withLame ? false,
   lame,
   withMusicbrainz ? false,
-  libmusicbrainz5,
+  libmusicbrainz,
 
   withTaglib ? true,
   taglib_1,
   taglib_extras,
   withHttpStream ? true,
+  gst_all_1,
   withReplaygain ? true,
-  ffmpeg,
+  ffmpeg_6,
   speex,
   mpg123,
   withMtp ? true,
   libmtp,
   withOnlineServices ? true,
   withDevices ? true,
-  udisks2,
+  udisks,
   withDynamic ? true,
   withHttpServer ? true,
-  withLibVlc ? false,
+  withLibVlc ? true,
   libvlc,
   withStreams ? true,
 }:
@@ -52,6 +54,14 @@ let
   fstat = x: fn: "-DENABLE_${fn}=${if x then "ON" else "OFF"}";
 
   withUdisks = (withTaglib && withDevices && stdenv.hostPlatform.isLinux);
+
+  gst = with gst_all_1; [
+    gstreamer
+    gst-libav
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+  ];
 
   options = [
     {
@@ -82,7 +92,7 @@ let
       ];
       enable = withReplaygain;
       pkgs = [
-        ffmpeg
+        ffmpeg_6
         speex
         mpg123
       ];
@@ -100,7 +110,7 @@ let
     {
       names = [ "HTTP_STREAM_PLAYBACK" ];
       enable = withHttpStream;
-      pkgs = [ qt5.qtmultimedia ];
+      pkgs = [ qt6.qtmultimedia ];
     }
     {
       names = [ "LAME" ];
@@ -120,7 +130,7 @@ let
     {
       names = [ "MUSICBRAINZ" ];
       enable = withMusicbrainz;
-      pkgs = [ libmusicbrainz5 ];
+      pkgs = [ libmusicbrainz ];
     }
     {
       names = [ "ONLINE_SERVICES" ];
@@ -146,20 +156,20 @@ let
     {
       names = [ "UDISKS2" ];
       enable = withUdisks;
-      pkgs = [ udisks2 ];
+      pkgs = [ udisks ];
     }
   ];
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cantata";
-  version = "2.5.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
-    owner = "CDrummond";
+    owner = "nullobsi";
     repo = "cantata";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UaZEKZvCA50WsdQSSJQQ11KTK6rM4ouCHDX7pn3NlQw=";
+    hash = "sha256-jwIsuNgsd1TFb1Zkyen/AulGQfVY2RWKfAJaWvg4WMI=";
   };
 
   patches = [
@@ -174,24 +184,32 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
-    qt5.qtbase
-    qt5.qtsvg
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qtwayland
+    kdePackages.karchive
+    kdePackages.kitemviews
     (perl.withPackages (ppkgs: with ppkgs; [ URI ]))
-  ] ++ lib.flatten (builtins.catAttrs "pkgs" (builtins.filter (e: e.enable) options));
+  ]
+  ++ lib.flatten (builtins.catAttrs "pkgs" (builtins.filter (e: e.enable) options));
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    qt5.qttools
-    qt5.wrapQtAppsHook
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ];
 
   cmakeFlags = lib.flatten (map (e: map (f: fstat e.enable f) e.names) options);
 
+  qtWrapperArgs = lib.optionals (withHttpStream && !withLibVlc) [
+    "--prefix GST_PLUGIN_PATH : ${lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" gst}"
+  ];
+
   meta = {
     description = "Graphical client for MPD";
     mainProgram = "cantata";
-    homepage = "https://github.com/cdrummond/cantata";
+    homepage = "https://github.com/nullobsi/cantata";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ peterhoeg ];
     # Technically, Cantata should run on Darwin/Windows so if someone wants to

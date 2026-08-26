@@ -643,6 +643,16 @@ source = "snow-fort"
 synopsis = "Pipelining syntax"
 version = "1.0.0"
 
+[foreign-c]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/foreign/c/0.11.0/foreign-c-0.11.0.tgz"
+sha256 = "5da3b00ff04cee2e73f17f348f62f417703245be235487aae7138a7c46dc68e7"
+source = "snow-fort"
+synopsis = "Portable foreign function interface for R7RS Schemes"
+version = "0.11.0"
+
 [generators]
 dependencies = ["akku-r7rs"]
 dev-dependencies = []
@@ -1481,6 +1491,54 @@ source = "snow-fort"
 synopsis = "Dorai Sitaram's Schelog: logic programming in Scheme"
 version = "0.0.20150602"
 
+[retropikzel-cgi]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/retropikzel/cgi/1.0.1/retropikzel-cgi-1.0.1.tgz"
+sha256 = "05076bc5a8b1a2142d0a68e85e92af182496cc7cab55e195b03257a4dea9c552"
+source = "snow-fort"
+version = "1.0.1"
+
+[retropikzel-gtk-server]
+dependencies = ["akku-r7rs", "foreign-c", "retropikzel-system", "retropikzel-named-pipes"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/retropikzel/gtk-server/0.1.1/retropikzel-gtk-server-0.1.1.tgz"
+sha256 = "856dbd735c018481943345b58d20d8dae87134637767c16fe47e75e51bf0a1a7"
+source = "snow-fort"
+synopsis = "Library for using gtk-server"
+version = "0.1.1"
+
+[retropikzel-hello]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/retropikzel/hello/1.2.3/retropikzel-hello-1.2.3.tgz"
+sha256 = "bee244ee61f5b2766aa654f7dcfe0c2060e6341cb01dc4cf293ed8c3940dbf8c"
+source = "snow-fort"
+version = "1.2.3"
+
+[retropikzel-named-pipes]
+dependencies = ["akku-r7rs", "foreign-c"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/retropikzel/named-pipes/0.1.3/retropikzel-named-pipes-0.1.3.tgz"
+sha256 = "4fdbdcdb4c0e4cc51fda55d935a057f05e230adc2db18be0a864e2bd2687f270"
+source = "snow-fort"
+synopsis = "Library for using named pipes"
+version = "0.1.3"
+
+[retropikzel-requests]
+dependencies = ["akku-r7rs", "foreign-c"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/retropikzel/requests/0.10.2/retropikzel-requests-0.10.2.tgz"
+sha256 = "4be1ddb90765f1a0332d235986b7d31e445337d81c5fe933979968a6c8f84071"
+source = "snow-fort"
+synopsis = "Library for making HTTP Requests"
+version = "0.10.2"
+
 [retropikzel-scgi]
 dependencies = ["akku-r7rs", "chez-srfi"]
 dev-dependencies = []
@@ -1489,6 +1547,16 @@ url = "http://snow-fort.org/s/iki.fi/retropikzel/retropikzel/scgi/0.3.0/retropik
 sha256 = "ef8fee9cf34f38a1929e7007a509dc321b35c26bc3e18d23619b9094e81eae52"
 source = "snow-fort"
 version = "0.3.0"
+
+[retropikzel-system]
+dependencies = ["akku-r7rs", "foreign-c"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/retropikzel/system/1.1.2/retropikzel-system-1.1.2.tgz"
+sha256 = "528b3257b5620054341b5b7636ea11043e102ccb26d26ec7e7b66a82f2ede56a"
+source = "snow-fort"
+synopsis = "Library for running shell commands"
+version = "1.1.2"
 
 [robin-abbrev]
 dependencies = ["akku-r7rs", "chez-srfi"]
@@ -2120,6 +2188,36 @@ source = "snow-fort"
 synopsis = "XML parsing and conversion to SXML"
 version = "3.1.5"
 
+[srfi-2]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/srfi/2/2025.08.27/srfi-2-2025.08.27.tgz"
+sha256 = "22fba488fff4086855bec542d932b59bf0826b9eb2efb90fc1033a0f419a4386"
+source = "snow-fort"
+synopsis = "SRFI-2"
+version = "2025.8.27"
+
+[srfi-8]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/srfi/8/2025.08.27/srfi-8-2025.08.27.tgz"
+sha256 = "2d609c6b60c427b4e8900da96bf5a9ce57f24ef688625945b9e4a3c580455839"
+source = "snow-fort"
+synopsis = "SRFI-8"
+version = "2025.8.27"
+
+[srfi-11]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/srfi/11/2025.08.27/srfi-11-2025.08.27.tgz"
+sha256 = "adb5d1f3e03b145ae0fe9748c0cd83689a616568529af96ebe31ab006fad29c8"
+source = "snow-fort"
+synopsis = "SRFI-11"
+version = "2025.8.27"
+
 [srfi-19]
 dependencies = ["akku-r7rs"]
 dev-dependencies = []
@@ -2140,6 +2238,16 @@ source = "snow-fort"
 synopsis = "SRFI 28: Basic Format Strings"
 version = "0.9.0"
 
+[srfi-39]
+dependencies = []
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/srfi/39/2025.08.27/srfi-39-2025.08.27.tgz"
+sha256 = "74652534407b544466532091a341fb301eb78e0f5175685c5c8c8e86fbd59ac3"
+source = "snow-fort"
+synopsis = "SRFI-39"
+version = "2025.8.27"
+
 [srfi-42]
 dependencies = ["akku-r7rs", "chez-srfi"]
 dev-dependencies = []
@@ -2153,11 +2261,11 @@ version = "0.1.0"
 dependencies = ["akku-r7rs"]
 dev-dependencies = []
 license = "noassertion"
-url = "http://snow-fort.org/s/peterlane.info/peter/srfi/60/1.0.0/srfi-60-1.0.0.tgz"
-sha256 = "e9eb9a762bd66d09f2d63343571e7492965ba0a9c48bbfb45006932419e31631"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/srfi/60/2025.08.27/srfi-60-2025.08.27.tgz"
+sha256 = "4cc9cf567129438a07b889550c377f2fe5e849bcf3b9774a90cc4661c00a9d9e"
 source = "snow-fort"
-synopsis = "Bit access and operations"
-version = "1.0.0"
+synopsis = "SRFI-60"
+version = "2025.8.27"
 
 [srfi-63]
 dependencies = ["akku-r7rs"]
@@ -2170,14 +2278,24 @@ synopsis = "Homogeneous and Heterogeneous Arrays"
 version = "1.0.0"
 
 [srfi-64]
-dependencies = ["akku-r7rs", "chez-srfi"]
+dependencies = []
 dev-dependencies = []
 license = "noassertion"
-url = "http://snow-fort.org/s/fisher.cx/robert/srfi/64/0.1.0/srfi-64-0.1.0.tgz"
-sha256 = "ae07145fe5d22fe83954af4c7e36f86e1e96f88d46588a4bc43844a00935a7f2"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/srfi/64/2025.08.27/srfi-64-2025.08.27.tgz"
+sha256 = "ceaa4e37e8d2c3fe5780f1c66a3d1718d35dc6fda858739059c11addcfff7499"
 source = "snow-fort"
-synopsis = "Reference implementation of SRFI-54: A Scheme API for test suites"
-version = "0.1.0"
+synopsis = "SRFI-64"
+version = "2025.8.27"
+
+[srfi-69]
+dependencies = []
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/srfi/69/2025.08.27/srfi-69-2025.08.27.tgz"
+sha256 = "95bc0111ec37adec966e1a9155ea8e8a5b3e01333e23c7ca18d3e553d5bec136"
+source = "snow-fort"
+synopsis = "SRFI-69"
+version = "2025.8.27"
 
 [srfi-78]
 dependencies = ["chez-srfi", "akku-r7rs"]
@@ -2206,6 +2324,16 @@ url = "http://snow-fort.org/s/gmail.com/alexshinn/srfi/166/0.8.0/srfi-166-0.8.0.
 sha256 = "e132a68c070c157ebfc8291b0be8f84f45ee85b92e4f80ac12faabd0c3872523"
 source = "snow-fort"
 version = "0.8.0"
+
+[srfi-170]
+dependencies = ["akku-r7rs", "foreign-c"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/srfi/170/0.1.1/srfi-170-0.1.1.tgz"
+sha256 = "2431e127601b7f8d9357db65998e9d7da6692adacd7159381f4685d3e2856cd8"
+source = "snow-fort"
+synopsis = "SRFI 170: POSIX"
+version = "0.1.1"
 
 [srfi-175]
 dependencies = ["akku-r7rs"]
@@ -2545,6 +2673,16 @@ source = "akku"
 synopsis = "Decompresses zlib, xz, gzip, lzma, lzma2; extracts tar, zip"
 version = "0.1.2"
 
+[conbot]
+dependencies = ["vterm", "text-mode", "wak-irregex", "chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/c/conbot_0.1.0_repack.tar.xz"
+sha256 = "57bd0d2a8c4dba450ca2761f0aab5a60be912db0c13c32287308b1d69cbed73e"
+source = "akku"
+synopsis = "library to script/automate console applications"
+version = "0.1.0"
+
 [conjure]
 dependencies = ["chez-srfi", "wak-fmt", "wak-irregex", "wak-foof-loop", "spells", "wak-prometheus"]
 dev-dependencies = []
@@ -2619,11 +2757,11 @@ version = "0.1.0"
 dependencies = ["struct-pack", "hashing", "uuid"]
 dev-dependencies = []
 license = "mit"
-url = "https://archive.akkuscm.org/archive/pkg/f/fs-partitions_1.0.1_repack.tar.xz"
-sha256 = "1e12fd32c6c20b0d3147ae3bc9ae5e8e53333dba89fff8c84fcbf9e943827259"
+url = "https://archive.akkuscm.org/archive/pkg/f/fs-partitions_1.0.2_repack.tar.xz"
+sha256 = "e336a2635600a5a5a7cb8f3e52346db796c4710733206df65481866582256808"
 source = "akku"
 synopsis = "Disk partition table reader/writer (MBR/GPT)"
-version = "1.0.1"
+version = "1.0.2"
 
 [gnuplot-pipe]
 dependencies = ["chez-srfi"]
@@ -2656,14 +2794,14 @@ synopsis = "CRC, HMAC, MD5, SHA-1, SHA-2, xxHash"
 version = "1.3.0"
 
 [http-pixiu]
-dependencies = ["chibi-uri", "ufo-socket", "ufo-threaded-function", "ufo-coroutines", "chez-srfi"]
+dependencies = ["ufo-try", "chibi-uri", "ufo-socket", "ufo-threaded-function", "ufo-coroutines", "chez-srfi"]
 dev-dependencies = []
 license = "mit"
-url = "https://archive.akkuscm.org/archive/pkg/h/http-pixiu_1.0.2_repack.tar.xz"
-sha256 = "bcfda888b5bb88f83e066f765711c8dc7623e4c9bf56e7212bee72bd8646b960"
+url = "https://archive.akkuscm.org/archive/pkg/h/http-pixiu_1.0.3_repack.tar.xz"
+sha256 = "caa86c8cce1c76423e3586dea1464eb34b440e849b5104721d9c6dd8e5805af5"
 source = "akku"
 synopsis = "A http server based on scheme"
-version = "1.0.2"
+version = "1.0.3"
 
 [ijputils]
 dependencies = ["wak-foof-loop", "chez-srfi", "spells", "pfds"]
@@ -2855,6 +2993,16 @@ source = "akku"
 synopsis = "Libraries written by Oleg ported to Chez Scheme"
 version = "0.0.0-akku.2.c682687"
 
+[onie-info]
+dependencies = ["hashing", "chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/o/onie-info_0.1.0_repack.tar.xz"
+sha256 = "bf7e97f48b8120924a1b646b3d6c054f73e33bc304438284497b0e01bb1c8630"
+source = "akku"
+synopsis = "ONIE info reader/writer"
+version = "0.1.0"
+
 [packrat]
 dependencies = ["chez-srfi"]
 dev-dependencies = []
@@ -2924,6 +3072,16 @@ sha256 = "b5af9f9ea166188ed3b57758879f0081cdf3be3facba0a350acb88f762951ff9"
 source = "akku"
 synopsis = "Constrained Application Protocol (CoAP)"
 version = "0.1.1"
+
+[r6rs-elf]
+dependencies = []
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-elf_0.1.0_repack.tar.xz"
+sha256 = "9e69d118a41a1c5bf95b5e46a2d8e8295eb4f303eab4e78b1262fb581a114c10"
+source = "akku"
+synopsis = "ELF reader and parser in R6RS Scheme"
+version = "0.1.0"
 
 [r6rs-monads]
 dependencies = []
@@ -3056,14 +3214,14 @@ synopsis = "Structured access to bytevector contents"
 version = "1.0.6-akku.0"
 
 [scheme-langserver]
-dependencies = ["ufo-try", "srfi-180", "ufo-thread-pool", "ufo-threaded-function", "uuid", "chibi-pathname", "ufo-match", "slib-string-search", "chez-srfi"]
+dependencies = ["ufo-timer", "ufo-try", "srfi-180", "ufo-threaded-function", "uuid", "chibi-pathname", "ufo-match", "slib-string-search", "chez-srfi"]
 dev-dependencies = []
 license = "mit"
-url = "https://archive.akkuscm.org/archive/pkg/s/scheme-langserver_1.2.8_repack.tar.xz"
-sha256 = "902f5d2132aeb66e9b244df45f0188e1c1eb14a93ed7906a2e44053c87e38cac"
+url = "https://archive.akkuscm.org/archive/pkg/s/scheme-langserver_2.0.3_repack.tar.xz"
+sha256 = "ab9cdf941d985731de7073ed5a125d2cb6e257b0f876b46e131610cfda2e815b"
 source = "akku"
 synopsis = "This package is a language server protocol implementation helping scheme programming."
-version = "1.2.8"
+version = "2.0.3"
 
 [scheme-specs]
 dependencies = ["chez-srfi"]
@@ -3159,11 +3317,11 @@ version = "0.0.0-akku.259.842f51f"
 dependencies = ["struct-pack", "r6rs-pffi", "chez-srfi"]
 dev-dependencies = []
 license = "mit"
-url = "https://archive.akkuscm.org/archive/pkg/t/text-mode_1.0.0_repack.tar.xz"
-sha256 = "a391a2eb08622dd97d9d24920bde7267a0cc2ad8529230be461323bad02cbff5"
+url = "https://archive.akkuscm.org/archive/pkg/t/text-mode_1.1.0_repack.tar.xz"
+sha256 = "bb1967590d0b33ba27f2b0e4be5eed841f97cc5119b504a91577b77211129813"
 source = "akku"
 synopsis = "Text-mode console library (like curses)"
-version = "1.0.0"
+version = "1.1.0"
 
 [thunderchez]
 dependencies = []
@@ -3206,24 +3364,24 @@ synopsis = "I did not edit Akku.manifest"
 version = "1.0.0"
 
 [ufo-thread-pool]
-dependencies = ["slib-queue", "chez-srfi"]
+dependencies = ["ufo-try", "slib-queue", "chez-srfi"]
 dev-dependencies = []
 license = "mit"
-url = "https://archive.akkuscm.org/archive/pkg/u/ufo-thread-pool_1.0.3_repack.tar.xz"
-sha256 = "566460f3ea2ba48dec08c1dbdad925177ca2fe94bbe5208c653c63bdea7cdb44"
+url = "https://archive.akkuscm.org/archive/pkg/u/ufo-thread-pool_1.0.4_repack.tar.xz"
+sha256 = "bbcafe03f57784e85c6a37b99d678670a93c464df2bc14d576e2e608519f90a3"
 source = "akku"
 synopsis = "This package is a dependable thread pool package for chez scheme."
-version = "1.0.3"
+version = "1.0.4"
 
 [ufo-threaded-function]
 dependencies = ["ufo-thread-pool", "chez-srfi"]
 dev-dependencies = []
 license = "mit"
-url = "https://archive.akkuscm.org/archive/pkg/u/ufo-threaded-function_1.0.4_repack.tar.xz"
-sha256 = "87e1406850888c52debefd64d75bcf825ea215772eb11a831f895cce1fe1541c"
+url = "https://archive.akkuscm.org/archive/pkg/u/ufo-threaded-function_1.0.5_repack.tar.xz"
+sha256 = "a6c9acb6b9e02a4c51c38109eb2aeac0f93c8af5346d9f77d0a4ef34860e8cfe"
 source = "akku"
 synopsis = "This package contains threaded-map, threaded-vector-map and such threaded functions for chez scheme."
-version = "1.0.4"
+version = "1.0.5"
 
 [ufo-timer]
 dependencies = ["ufo-thread-pool", "chez-srfi"]
@@ -3254,6 +3412,16 @@ sha256 = "03a058e7522933c1f7475cd20ab0515016bfbbd8c406d3c7302946b20664431d"
 source = "akku"
 synopsis = "Generate and analyze UUIDs"
 version = "1.0.0-beta.0"
+
+[vterm]
+dependencies = ["chez-srfi", "text-mode"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/v/vterm_0.2.0_repack.tar.xz"
+sha256 = "173532d68edd98f78348e388968cf890e1921130ad38fee428d121fbd37ba2ce"
+source = "akku"
+synopsis = "VTerm parsing, and handling library"
+version = "0.2.0"
 
 [wak-common]
 dependencies = []

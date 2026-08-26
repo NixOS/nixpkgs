@@ -8,18 +8,18 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "livepeer";
-  version = "0.8.4";
+  version = "0.8.10";
 
   proxyVendor = true;
-  vendorHash = "sha256-9BxLyl8lZTKx/2Qw0NR4+1GdmD9FQPfnVU+x/RWEIvA=";
+  vendorHash = "sha256-Cn7GHNrFjGgzKPjSVGnoRE9Q2gd3Ji/ZrdVGB9v+0A8=";
 
   src = fetchFromGitHub {
     owner = "livepeer";
     repo = "go-livepeer";
-    tag = "v${version}";
-    hash = "sha256-slM3StvePwCyKXFmbxyZAZ4tTtLea4SMBXCojK8zrdM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jz8lgZItPDzAGKJrAFLiEUJ5nyTdw6kGneP6LtmWDYw=";
   };
 
   nativeBuildInputs = [
@@ -29,6 +29,10 @@ buildGoModule rec {
   buildInputs = [
     ffmpeg-livepeer
     gnutls
+  ];
+
+  env.CGO_LDFLAGS = toString [
+    "-lm"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -44,9 +48,8 @@ buildGoModule rec {
     homepage = "https://livepeer.org";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      elitak
       bot-wxt1221
     ];
     mainProgram = "livepeer";
   };
-}
+})

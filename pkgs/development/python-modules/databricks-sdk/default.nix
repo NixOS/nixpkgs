@@ -8,6 +8,7 @@
 
   # dependencies
   google-auth,
+  protobuf,
   requests,
 
   # tests
@@ -19,24 +20,31 @@
   requests-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "databricks-sdk";
-  version = "0.50.0";
+  version = "0.133.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "databricks-sdk-py";
-    tag = "v${version}";
-    hash = "sha256-taC95lKQdGzygWAi7w1eKy2yDeX6V6YsGROHHstBTfo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RFrl14+V6RqkGjxQo+5AjvVY7kg6lp62eAiNjMemt1s=";
   };
 
   build-system = [
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    # For protobuf 7
+    "protobuf"
+  ];
+
   dependencies = [
     google-auth
+    protobuf
     requests
   ];
 
@@ -73,6 +81,8 @@ buildPythonPackage rec {
     "test_multipart_upload"
     "test_rewind_seekable_stream"
     "test_resumable_upload"
+    # flaky -- ConnectionBroken under heavy load indicates a timing issue
+    "test_github_oidc_flow_works_with_azure"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -80,8 +90,8 @@ buildPythonPackage rec {
   meta = {
     description = "Databricks SDK for Python";
     homepage = "https://github.com/databricks/databricks-sdk-py";
-    changelog = "https://github.com/databricks/databricks-sdk-py/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/databricks/databricks-sdk-py/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

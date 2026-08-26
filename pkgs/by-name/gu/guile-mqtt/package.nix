@@ -9,12 +9,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "guile-mqtt";
-  version = "0.2.1";
+  version = "1.0.0";
 
   # building from git repo requires nyacc>=2.01.3
   src = fetchurl {
     url = "https://github.com/mdjurfeldt/guile-mqtt/releases/download/v${finalAttrs.version}/guile-mqtt-${finalAttrs.version}.tar.gz";
-    hash = "sha256-+qfrUw8yIY8iObEVLbg6bOfiQNR5Lkw2n9oHMr3JQ5k=";
+    hash = "sha256-6+U3FHewbdI8l7r4pVCrd0DNKPy4BHHy2m/hcQ7ByBQ=";
   };
 
   strictDeps = true;

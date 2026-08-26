@@ -10,29 +10,29 @@
   intel-gpu-tools,
   libdrm,
   libva,
-  libX11,
+  libx11,
   libGL,
   wayland,
-  libXext,
+  libxext,
   enableHybridCodec ? false,
   vaapi-intel-hybrid,
   enableGui ? true,
   nix-update-script,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "intel-vaapi-driver";
-  version = "2.4.1-unstable-2024-10-29";
+  version = "2.4.5";
 
   src = fetchFromGitHub {
-    owner = "intel";
+    owner = "irql-notlessorequal";
     repo = "intel-vaapi-driver";
-    rev = "fd727a4e9cb8b2878a1e93d4dddc8dd1c1a4e0ea";
-    hash = "sha256-OMFdRjzpUKdxB9eK/1OLYLaOC3NHnzZVxmh6yKrbYoE=";
+    tag = finalAttrs.version;
+    hash = "sha256-exQBA42jCmwybE7WIfF83cjmzBdtluDzUtOdqt49HSg=";
   };
 
   # Set the correct install path:
-  LIBVA_DRIVERS_PATH = "${placeholder "out"}/lib/dri";
+  env.LIBVA_DRIVERS_PATH = "${placeholder "out"}/lib/dri";
 
   postInstall = lib.optionalString enableHybridCodec ''
     ln -s ${vaapi-intel-hybrid}/lib/dri/* $out/lib/dri/
@@ -41,7 +41,8 @@ stdenv.mkDerivation {
   configureFlags = [
     (lib.enableFeature enableGui "x11")
     (lib.enableFeature enableGui "wayland")
-  ] ++ lib.optional enableHybridCodec "--enable-hybrid-codec";
+  ]
+  ++ lib.optional enableHybridCodec "--enable-hybrid-codec";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -51,27 +52,27 @@ stdenv.mkDerivation {
     wayland-scanner
   ];
 
-  buildInputs =
-    [
-      intel-gpu-tools
-      libdrm
-      libva
-    ]
-    ++ lib.optionals enableGui [
-      libX11
-      libXext
-      libGL
-      wayland
-    ]
-    ++ lib.optional enableHybridCodec vaapi-intel-hybrid;
+  buildInputs = [
+    intel-gpu-tools
+    libdrm
+    libva
+  ]
+  ++ lib.optionals enableGui [
+    libx11
+    libxext
+    libGL
+    wayland
+  ]
+  ++ lib.optional enableHybridCodec vaapi-intel-hybrid;
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
-    homepage = "https://01.org/linuxmedia";
-    license = licenses.mit;
+  meta = {
+    homepage = "https://github.com/irql-notlessorequal/intel-vaapi-driver";
+    changelog = "https://github.com/irql-notlessorequal/intel-vaapi-driver/blob/${finalAttrs.src.tag}/NEWS";
+    license = lib.licenses.mit;
     description = "VA-API user mode driver for Intel GEN Graphics family";
     longDescription = ''
       This VA-API video driver backend provides a bridge to the GEN GPUs through
@@ -87,6 +88,6 @@ stdenv.mkDerivation {
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

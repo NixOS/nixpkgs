@@ -31,7 +31,12 @@ def replace_key(
         local_dep = table[key]
         del local_dep["workspace"]
 
-        workspace_dep = workspace_manifest[section][key]
+        try:
+            workspace_dep = workspace_manifest[section][key]
+        except KeyError:
+            # Key is not present in workspace manifest, we can't inherit the value, so we mark it for deletion
+            table[key] = {}
+            return True
 
         if section == "dependencies":
             if isinstance(workspace_dep, str):
@@ -39,12 +44,18 @@ def replace_key(
 
             final: dict[str, Any] = workspace_dep.copy()
 
-            merged_features = local_dep.pop("features", []) + workspace_dep.get("features", [])
+            merged_features = local_dep.pop("features", []) + workspace_dep.get(
+                "features", []
+            )
             if merged_features:
                 final["features"] = merged_features
 
-            local_default_features = local_dep.pop("default-features", None)
-            workspace_default_features = workspace_dep.get("default-features")
+            local_default_features = local_dep.pop(
+                "default-features", local_dep.pop("default_features", None)
+            )
+            workspace_default_features = workspace_dep.get(
+                "default-features", workspace_dep.get("default_features")
+            )
 
             if not workspace_default_features and local_default_features:
                 final["default-features"] = True
@@ -57,7 +68,9 @@ def replace_key(
                 final["package"] = local_dep.pop("package")
 
             if local_dep:
-                raise Exception(f"Unhandled keys in inherited dependency {key}: {local_dep}")
+                raise Exception(
+                    f"Unhandled keys in inherited dependency {key}: {local_dep}"
+                )
 
             table[key] = final
         elif section == "package":
@@ -98,10 +111,18 @@ def main() -> None:
 
     changed = False
 
+    to_remove = []
     for key in crate_manifest["package"].keys():
-        changed |= replace_key(
+        changed_key = replace_key(
             workspace_manifest, crate_manifest["package"], "package", key
         )
+        if changed_key and crate_manifest["package"][key] == {}:
+            # Key is missing from workspace manifest, mark for deletion
+            to_remove.append(key)
+        changed |= changed_key
+    # Remove keys which have no value
+    for key in to_remove:
+        del crate_manifest["package"][key]
 
     changed |= replace_dependencies(workspace_manifest, crate_manifest)
 
@@ -117,6 +138,7 @@ def main() -> None:
         and crate_manifest["lints"]["workspace"] is True
     ):
         crate_manifest["lints"] = workspace_manifest["lints"]
+        changed = True
 
     if not changed:
         return

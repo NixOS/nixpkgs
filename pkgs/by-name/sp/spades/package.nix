@@ -4,6 +4,7 @@
   bzip2,
   cmake,
   fetchFromGitHub,
+  fetchpatch2,
   ncurses,
   python3,
   readline,
@@ -11,14 +12,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spades";
-  version = "4.1.0";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "ablab";
     repo = "spades";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JKtWlVf0nXXLgb6BxMgVVtEdjUOOYc0bPaFMDm5O6vg=";
+    hash = "sha256-BlZjfZKtCm1kWNPjdth3pYFN0plU7xfTsFotPefzzMY=";
   };
+
+  patches = [
+    # Add missing <cstdint> for uint{8,64}_t to fix build with gcc 15.
+    (fetchpatch2 {
+      url = "https://github.com/ablab/spades/commit/10b6af96ead72fdb19e8e524aa24bdcff9986e76.patch?full_index=1";
+      relative = "src";
+      hash = "sha256-yAQVqE6DwPe+GZ4VR1cGytaO8NmHz6TUG7EdtbxIuTU=";
+    })
+  ];
 
   sourceRoot = "${finalAttrs.src.name}/src";
 

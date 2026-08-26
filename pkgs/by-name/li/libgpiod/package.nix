@@ -9,14 +9,14 @@
   enable-tools ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgpiod";
-  version = "2.2.1";
+  version = "2.2.4";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git";
-    tag = "v${version}";
-    hash = "sha256-BVVHyRmgLLUgc3qLHOXiLYaTjsPMntvIP1os9eL8v74=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PtkJZ9p6r6S47RjiCRv4cVmlY4BHdB6FCMJ+M/IPnw0=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--enable-tools=${if enable-tools then "yes" else "no"}"
+    "--enable-tools=${lib.boolToYesNo enable-tools}"
     "--enable-bindings-cxx"
   ];
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     allowedVersions = "^[0-9\\.]+$";
   };
 
-  meta = with lib; {
+  meta = {
     description = "C library and tools for interacting with the linux GPIO character device";
     longDescription = ''
       Since linux 4.8 the GPIO sysfs interface is deprecated. User space should use
@@ -44,13 +44,13 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/about/";
     license =
-      with licenses;
+      with lib.licenses;
       [
         lgpl21Plus # libgpiod
         lgpl3Plus # C++ bindings
       ]
       ++ lib.optional enable-tools gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

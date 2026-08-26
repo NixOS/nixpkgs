@@ -15,21 +15,19 @@ let
 
   channels = {
     stable = {
-      version = "2.19.1";
+      version = "2.34.7";
       hash = {
-        x86_64-linux = "sha256-w8yET4jpuNn/DswFlJ8QpKS5YjI9gs0OTmQ0D1f5JZE=";
-        x86_64-darwin = "sha256-2ttVjvemACsRLoRE7wMmgsUUDM2AFNo5lXG1kCL8Ae8=";
-        aarch64-linux = "sha256-8BJrMj0s2MzgCueWlWsGKntEkBwW7rBYZF+5O3lVLN0=";
-        aarch64-darwin = "sha256-9v0OzQMGq92lNKsOevpE1jjwto+ETgfmVmK5p+JdVBI=";
+        x86_64-linux = "sha256-LN0ocoosRGiXUlVSwgABvlc58f8UNVgPIPWWgVjr7NU=";
+        aarch64-linux = "sha256-lwnQ6msnX/RxS6QNOgMjMepzL+QxvccusVj/GskFjlU=";
+        aarch64-darwin = "sha256-NrqPfVk+76d5Li06rj31HZDpCtvRggTUseN9I7t/rAc=";
       };
     };
     mainline = {
-      version = "2.20.0";
+      version = "2.35.3";
       hash = {
-        x86_64-linux = "sha256-Vk2Qhk4eNf9Akwza0QNuAc/lh2BtU0sd6QSS2IIyZo4=";
-        x86_64-darwin = "sha256-TVQYQOqJj9gnTt5HaVVjyr7sBPD3mAPpy5vNw9RJ7dc=";
-        aarch64-linux = "sha256-hBp7lVaJk30KD8eQ4ehoI1/DW28SWQisGtY4lJNVETw=";
-        aarch64-darwin = "sha256-pvFZELrXk1bf5nfbDskY3bpSCv22Ls0Leo11Dgu/dfI=";
+        x86_64-linux = "sha256-B4dODS765ZdkdmEXiTXYAA7nlZtv5tesPOV+0kONSi4=";
+        aarch64-linux = "sha256-8V/NHeMf16RLQZY1/Yg36hjNeycMkjggmbT1u0RQTp0=";
+        aarch64-darwin = "sha256-yo2Xh96G+FpHnAYOaVvJ2vu14zYkgEcRZIADPTOPS7I=";
       };
     };
   };
@@ -46,7 +44,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           {
             x86_64-linux = "linux_amd64";
             aarch64-linux = "linux_arm64";
-            x86_64-darwin = "darwin_amd64";
             aarch64-darwin = "darwin_arm64";
           }
           .${system};
@@ -55,7 +52,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           {
             x86_64-linux = "tar.gz";
             aarch64-linux = "tar.gz";
-            x86_64-darwin = "zip";
             aarch64-darwin = "zip";
           }
           .${system};
@@ -100,11 +96,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Provision remote development environments via Terraform";
     homepage = "https://coder.com";
     license = lib.licenses.agpl3Only;
+    platforms = lib.attrNames channels.${channel}.hash;
     mainProgram = "coder";
     maintainers = with lib.maintainers; [
-      ghuntley
+      bpmct
+      developmentcats
       kylecarbs
-      urandom
+      phorcys420
     ];
   };
 

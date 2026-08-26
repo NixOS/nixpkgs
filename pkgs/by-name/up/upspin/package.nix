@@ -20,11 +20,11 @@ buildGoModule {
   # No upstream tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Global name space for storing data akin to a filesystem";
     homepage = "https://upspin.io";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ orthros ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ orthros ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   pname = "pari-galdata";
 
   src = fetchurl {
-    url = "http://pari.math.u-bordeaux.fr/pub/pari/packages/galdata.tgz";
+    url = "https://pari.math.u-bordeaux.fr/pub/pari/packages/galdata.tgz";
     sha256 = "1pch6bk76f1i6cwwgm7hhxi5h71m52lqayp4mnyj0jmjk406bhdp";
   };
 
@@ -18,11 +18,11 @@ stdenv.mkDerivation {
     cp -R * "$out/share/pari/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PARI database needed to compute Galois group in degrees 8 through 11";
     homepage = "http://pari.math.u-bordeaux.fr/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    teams = [ teams.sage ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    teams = [ lib.teams.sage ];
   };
 }

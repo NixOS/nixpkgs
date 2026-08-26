@@ -8,12 +8,13 @@
 
 buildPythonPackage rec {
   pname = "jupyter-lsp";
-  version = "2.2.5";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-eTFHoFrURvgJ/VPvHNGan1JW/Qota3zpQ6mCy09UUAE=";
+    pname = "jupyter_lsp";
+    inherit version;
+    hash = "sha256-RYqlkzncho+3hNczZPF9vOiDbpBs11/UcaMly6AuAkU=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -23,11 +24,11 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "jupyter_lsp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi-Language Server WebSocket proxy for your Jupyter notebook or lab server";
     homepage = "https://jupyterlab-lsp.readthedocs.io/en/latest/";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

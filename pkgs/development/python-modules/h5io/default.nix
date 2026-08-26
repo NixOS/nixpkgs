@@ -12,6 +12,7 @@
 
   # tests
   pytestCheckHook,
+  pytest-cov-stub,
   scipy,
   tables,
 }:
@@ -28,13 +29,6 @@ buildPythonPackage rec {
     hash = "sha256-ZkG9e7KtDvoRq9XCExYseE+Z7tMQTWcSiwsSrN5prdI=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml  \
-      --replace "--cov-report=" ""  \
-      --replace "--cov-branch" ""  \
-      --replace "--cov=h5io" ""
-  '';
-
   build-system = [ setuptools-scm ];
 
   dependencies = [
@@ -44,6 +38,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     scipy
     tables
   ];
@@ -60,6 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/h5io/h5io";
     changelog = "https://github.com/h5io/h5io/releases/tag/h5io-${version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

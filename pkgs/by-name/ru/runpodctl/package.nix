@@ -4,29 +4,29 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "runpodctl";
-  version = "1.14.4";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "runpod";
     repo = "runpodctl";
-    rev = "v${version}";
-    hash = "sha256-QU2gujECzT5mPkZi6siMO7IZRXNZHS0TchYxnG4Snj8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-0QMDJ7xdVfm3kPYgJcNgyyInSY8UWbbzQI0bT69x1us=";
   };
 
-  vendorHash = "sha256-8/OrM8zrisAfZdeo6FGP6+quKMwjxel1BaRIY+yJq5E=";
+  vendorHash = "sha256-aCrN521urP1FioTmbcR1BNKg+OCith1mabyayuC9FtI=";
 
   postInstall = ''
     rm $out/bin/docs # remove the docs binary
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/runpod/runpodctl";
     description = "CLI tool to automate / manage GPU pods for runpod.io";
-    changelog = "https://github.com/runpod/runpodctl/raw/v${version}/CHANGELOG.md";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.georgewhewell ];
+    changelog = "https://github.com/runpod/runpodctl/raw/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.georgewhewell ];
     mainProgram = "runpodctl";
   };
-}
+})

@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.2";
   pname = "ddgr";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "ddgr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-88cCQm3eViy0OwSyCTlnW7uuiFwz2/6Wz45QzxCgXxg=";
   };
 
@@ -29,15 +29,15 @@ stdenv.mkDerivation rec {
     installShellCompletion --zsh auto-completion/zsh/_ddgr
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jarun/ddgr";
     description = "Search DuckDuckGo from the terminal";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       ceedubs
       markus1189
     ];
     platforms = python3.meta.platforms;
     mainProgram = "ddgr";
   };
-}
+})

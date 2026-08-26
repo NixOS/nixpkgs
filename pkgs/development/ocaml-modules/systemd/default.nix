@@ -16,8 +16,9 @@ buildDunePackage {
   minimalOCamlVersion = "4.06";
   propagatedBuildInputs = [ systemdLibs ];
   meta = {
-    platform = lib.platforms.linux;
+    platforms = lib.platforms.linux;
     description = "OCaml module for native access to the systemd facilities";
+    homepage = "https://github.com/juergenhoetzel/ocaml-systemd";
     license = lib.licenses.lgpl3Only;
     maintainers = [ lib.maintainers.atagen ];
   };

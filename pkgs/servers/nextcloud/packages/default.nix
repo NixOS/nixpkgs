@@ -25,8 +25,7 @@ let
     {
       # Create a derivation from the official Nextcloud apps.
       # This takes the data generated from the go tool.
-      mkNextcloudDerivation = self.callPackage (
-        { }:
+      mkNextcloudDerivation =
         { pname, data }:
         pkgs.fetchNextcloudApp {
           appName = pname;
@@ -39,8 +38,7 @@ let
             description
             homepage
             ;
-        }
-      ) { };
+        };
 
     }
     // lib.mapAttrs (

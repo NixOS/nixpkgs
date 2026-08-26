@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication {
   pname = "adcskiller";
   version = "0-unstable-2024-05-19";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "grimlockx";
@@ -31,16 +31,16 @@ python3.pkgs.buildPythonApplication {
 
     install -vD $pname.py $out/bin/$pname
 
-    substituteInPlace $out/bin/$pname --replace '"Coercer"' '"coercer"'
+    substituteInPlace $out/bin/$pname --replace-fail '"Coercer"' '"coercer"'
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python-based tool designed to automate the process of discovering and exploiting Active Directory Certificate Services (ADCS) vulnerabilities";
     homepage = "https://github.com/grimlockx/ADCSKiller";
-    license = licenses.mit;
-    maintainers = with maintainers; [ exploitoverload ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ exploitoverload ];
     mainProgram = "ADCSKiller";
   };
 }

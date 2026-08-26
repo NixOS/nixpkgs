@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ankacoder-condensed";
   version = "1.100";
 
   src = fetchzip {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/anka-coder-fonts/AnkaCoderCondensed.${version}.zip";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/anka-coder-fonts/AnkaCoderCondensed.${finalAttrs.version}.zip";
     stripRoot = false;
     hash = "sha256-NHrkV4Sb7i+DC4e4lToEYzah3pI+sKyYf2rGbhWj7iY=";
   };
@@ -23,11 +23,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Anka/Coder Condensed font";
     homepage = "https://code.google.com/archive/p/anka-coder-fonts";
-    license = licenses.ofl;
+    license = lib.licenses.ofl;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

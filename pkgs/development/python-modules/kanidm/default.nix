@@ -1,67 +1,72 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
+  fetchPypi,
 
   # build
-  poetry-core,
+  pdm-backend,
 
   # propagates
   aiohttp,
+  aiohttp-retry,
   authlib,
   pydantic,
+  python-dateutil,
   toml,
+  typing-extensions,
 
   # tests
+  openapi-spec-validator,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
 }:
 
-let
-  pname = "kanidm";
-  version = "1.0.0-2024-04-22";
-in
 buildPythonPackage rec {
-  inherit pname version;
+  pname = "kanidm";
+  version = "1.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchFromGitHub {
-    owner = "kanidm";
-    repo = "kanidm";
-    rev = "a0f743d8c8e7a6b6b0775e64774fc5175464cab6";
-    hash = "sha256-W2v3/osDrjRQqz2DqoG90SGcu4K6G2ypMTfE6Xq5qNI=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-KlUxW/bJByQnzPdRd9Z5pStH27SpWrCijZc5jlVT5jE=";
   };
 
-  sourceRoot = "${src.name}/pykanidm";
+  build-system = [ pdm-backend ];
 
-  nativeBuildInputs = [ poetry-core ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
+    aiohttp-retry
     authlib
     pydantic
+    python-dateutil
     toml
+    typing-extensions
   ];
 
   nativeCheckInputs = [
+    openapi-spec-validator
     pytest-asyncio
     pytest-mock
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "-m 'not network'" ];
+  disabledTests = [
+    "test_tokenstuff"
+  ];
+
+  disabledTestMarks = [
+    "network"
+    "openapi"
+  ];
 
   pythonImportsCheck = [ "kanidm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Kanidm client library";
     homepage = "https://github.com/kanidm/kanidm/tree/master/pykanidm";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       arianvp
       hexa
     ];

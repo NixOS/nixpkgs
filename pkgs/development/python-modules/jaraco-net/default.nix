@@ -25,10 +25,9 @@
   ifconfig-parser,
   pytestCheckHook,
   cherrypy,
-  importlib-resources,
   pyparsing,
   pytest-responses,
-  nettools,
+  net-tools,
 }:
 
 buildPythonPackage rec {
@@ -66,17 +65,18 @@ buildPythonPackage rec {
     python-dateutil
     pathvalidate
     jsonpickle
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ ifconfig-parser ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ ifconfig-parser ];
 
   pythonImportsCheck = [ "jaraco.net" ];
 
   nativeCheckInputs = [
     pytestCheckHook
     cherrypy
-    importlib-resources
     pyparsing
     pytest-responses
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ nettools ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ net-tools ];
 
   disabledTestPaths = [
     # require networking

@@ -6,25 +6,25 @@
 
 buildGoModule rec {
   pname = "cnquery";
-  version = "11.52.0";
+  version = "12.23.1";
 
   src = fetchFromGitHub {
     owner = "mondoohq";
-    repo = "cnquery";
+    repo = "mql";
     tag = "v${version}";
-    hash = "sha256-Agc8as9PwN9IDeV0tBOPFL2tXYXYaJsa1sd+XXQ7p0k=";
+    hash = "sha256-CTg2jfpCLTYuRx5R+9Si0Ig1NT1ZGXMFbcPPa8CbMKY=";
   };
 
   subPackages = [ "apps/cnquery" ];
 
-  vendorHash = "sha256-gvRsEIYEj5D+P8gFlGdfHC/3Pho5YYZxKm6Mkq8lwQw=";
+  vendorHash = "sha256-yL34BgWzDrd4SxJvij56cmnfY51uJ/ax+ENtdUxS0aw=";
 
   ldflags = [
     "-w"
     "-s"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cloud-native, graph-based asset inventory";
     longDescription = ''
       cnquery is a cloud-native tool for querying your entire fleet. It answers thousands of
@@ -32,8 +32,8 @@ buildGoModule rec {
       accounts, Kubernetes, containers, services, VMs, APIs, and more.
     '';
     homepage = "https://mondoo.com/cnquery";
-    changelog = "https://github.com/mondoohq/cnquery/releases/tag/v${version}";
-    license = licenses.bsl11;
-    maintainers = with maintainers; [ mariuskimmina ];
+    changelog = "https://github.com/mondoohq/mql/releases/tag/v${version}";
+    license = lib.licenses.bsl11;
+    maintainers = with lib.maintainers; [ mariuskimmina ];
   };
 }

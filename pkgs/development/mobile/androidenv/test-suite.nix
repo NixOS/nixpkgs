@@ -17,8 +17,9 @@ let
     // (examples-shell-with-emulator.passthru.tests // examples-shell-without-emulator.passthru.tests);
 in
 stdenv.mkDerivation {
-  name = "androidenv-test-suite";
-  buildInputs = lib.mapAttrsToList (name: value: value) all-tests;
+  pname = "androidenv-test-suite";
+  version = (lib.importJSON ./repo.json).latest.fingerprint or "0000000000000000";
+  buildInputs = lib.attrValues all-tests;
 
   buildCommand = ''
     touch $out
@@ -26,9 +27,8 @@ stdenv.mkDerivation {
 
   passthru.tests = all-tests;
 
-  # This is the toplevel package, so inherit the update script
   passthru.updateScript = {
-    command = [ ./update.sh ];
+    command = [ ./update.rb ];
     attrPath = "androidenv.test-suite";
     supportedFeatures = [ "commit" ];
   };

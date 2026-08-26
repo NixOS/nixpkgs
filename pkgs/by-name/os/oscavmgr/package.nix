@@ -10,19 +10,18 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oscavmgr";
-  version = "25.2";
+  version = "26.8.0";
 
   src = fetchFromGitHub {
     owner = "galister";
     repo = "oscavmgr";
-    tag = "v${version}";
-    hash = "sha256-592qj0dHn0fbIFt4Y+1TESIOUpwXcJ2tnlKNcYuxriQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BYS/1rsXlP67MlkStm45Dm8aZllaVVOmdq8Yf0jB0iM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-1/jjZ1jkLvE/L1lHFL3RCx3ox2w15WWDp6aQJOtFkcU=";
+  cargoHash = "sha256-R8UzXy44fli54zHEIZ+MdpHEggvoD06YXm5gpfMNfK0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -37,7 +36,7 @@ rustPlatform.buildRustPackage rec {
   doInstallCheck = true;
 
   postPatch = ''
-    alvr_session=$(echo $cargoDepsCopy/alvr_session-*/)
+    alvr_session=$(echo $cargoDepsCopy/*/alvr_session-*/)
     substituteInPlace "$alvr_session/build.rs" \
       --replace-fail \
         'alvr_filesystem::workspace_dir().join("openvr/headers/openvr_driver.h")' \
@@ -50,7 +49,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Face tracking & utilities for Resonite and VRChat";
     homepage = "https://github.com/galister/oscavmgr";
-    changelog = "https://github.com/galister/oscavmgr/releases/tag/v${version}";
+    changelog = "https://github.com/galister/oscavmgr/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       pandapip1
@@ -58,4 +57,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "oscavmgr";
   };
-}
+})

@@ -4,26 +4,25 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-apk";
-  version = "0.9.6";
+  version = "0.10.0";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-1vCrM+0SNefd7FrRXnSjLhM3/MSVJfcL4k1qAstX+/A=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-aA+XxqSlugFa8vN8YIye5nV2f2wLmCMf/cdFjiGRGEY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-8qjj5rcaqXBIte8+r0llj33Saat85SqNljGRaS1E3q0=";
+  cargoHash = "sha256-qd8xJz2nJb3R6EAi9GS7UhWK9Esm9eBsm4+rA1DjYPI=";
 
-  meta = with lib; {
+  meta = {
     description = "Tool for creating Android packages";
     mainProgram = "cargo-apk";
     homepage = "https://github.com/rust-windowing/android-ndk-rs";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [ nickcao ];
+    maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

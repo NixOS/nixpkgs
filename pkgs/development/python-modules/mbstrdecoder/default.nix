@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "mbstrdecoder";
-  version = "1.1.4";
-  format = "pyproject";
+  version = "1.1.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thombashi";
-    repo = pname;
+    repo = "mbstrdecoder";
     tag = "v${version}";
-    hash = "sha256-rJ3Q7/xYPO0jBuzhYm2aIhPar2tbJIxHnHR0y0HWtik=";
+    hash = "sha256-RPtxoI4fFiBHBOWOdGueVjPPOAUjDThawS80SIoTQ78=";
   };
 
   nativeBuildInputs = [
@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   checkInputs = [ faker ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/thombashi/mbstrdecoder";
     description = "Library for decoding multi-byte character strings";
-    maintainers = with maintainers; [ genericnerdyusername ];
-    license = licenses.mit;
+    maintainers = [ ];
+    license = lib.licenses.mit;
   };
 }

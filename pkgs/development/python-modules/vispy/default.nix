@@ -13,7 +13,6 @@
   numpy,
   oldest-supported-numpy,
   packaging,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   wheel,
@@ -21,14 +20,12 @@
 
 buildPythonPackage rec {
   pname = "vispy";
-  version = "0.14.3";
+  version = "0.16.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-77u4R6kIuvfnFpq5vylhOKOTZPNn5ssKjsA61xaZ0x0=";
+    hash = "sha256-CUUavoeBM2/WhCIHzZXOXoYJ2Z8TvN6JhBJTgSXDUIg=";
   };
 
   patches = lib.optionals (!stdenv.hostPlatform.isDarwin) [
@@ -71,11 +68,11 @@ buildPythonPackage rec {
     "vispy.visuals"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Interactive scientific visualization in Python";
     homepage = "https://vispy.org/index.html";
     changelog = "https://github.com/vispy/vispy/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ goertzenator ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ goertzenator ];
   };
 }

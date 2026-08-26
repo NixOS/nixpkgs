@@ -127,6 +127,38 @@ let
       </fontconfig>
     '';
 
+  # user defined font aliases
+  # priority 53
+  aliases =
+    let
+      mkFontBlock =
+        key: fonts:
+        lib.optionalString ((builtins.length fonts) > 0) ''
+          <${key}>
+          ${lib.concatMapStrings (font: "<family>${font}</family>") fonts}
+          </${key}>
+        '';
+
+      mkAliasBlock = family: opts: ''
+        <alias binding="${opts.binding}">
+          <family>${family}</family>
+          ${mkFontBlock "prefer" opts.prefer}
+          ${mkFontBlock "accept" opts.accept}
+          ${mkFontBlock "default" opts.default}
+        </alias>
+      '';
+    in
+    pkgs.writeText "fc-53-user-aliases.conf" ''
+      <?xml version='1.0'?>
+      <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
+      <fontconfig>
+
+        <!-- User defined aliases -->
+        ${lib.concatStrings (lib.mapAttrsToList mkAliasBlock cfg.aliases)}
+
+      </fontconfig>
+    '';
+
   # bitmap font options
   # priority 53
   rejectBitmaps = pkgs.writeText "fc-53-no-bitmaps.conf" ''
@@ -219,6 +251,10 @@ let
           replaceDefaultConfig "11-lcdfilter-default.conf" "11-lcdfilter-${cfg.subpixel.lcdfilter}.conf"
         )}
 
+        ${lib.optionalString cfg.allowBitmaps ''
+          rm -f $dst/70-no-bitmaps-except-emoji.conf
+        ''}
+
         # 00-nixos-cache.conf
         ln -s ${cacheConf}  $dst/00-nixos-cache.conf
 
@@ -241,6 +277,9 @@ let
         # 53-no-bitmaps.conf
         ln -s ${rejectBitmaps} $dst/53-no-bitmaps.conf
 
+        # 53-user-aliases.conf
+        ln -s ${aliases} $dst/53-user-aliases.conf
+
         ${lib.optionalString (!cfg.allowType1) ''
           # 53-nixos-reject-type1.conf
           ln -s ${rejectType1} $dst/53-nixos-reject-type1.conf
@@ -258,44 +297,43 @@ let
   fontconfigNote = "Consider manually configuring fonts.fontconfig according to personal preference.";
 in
 {
-  imports =
-    [
-      (lib.mkRenamedOptionModule
-        [ "fonts" "fontconfig" "ultimate" "allowBitmaps" ]
-        [ "fonts" "fontconfig" "allowBitmaps" ]
-      )
-      (lib.mkRenamedOptionModule
-        [ "fonts" "fontconfig" "ultimate" "allowType1" ]
-        [ "fonts" "fontconfig" "allowType1" ]
-      )
-      (lib.mkRenamedOptionModule
-        [ "fonts" "fontconfig" "ultimate" "useEmbeddedBitmaps" ]
-        [ "fonts" "fontconfig" "useEmbeddedBitmaps" ]
-      )
-      (lib.mkRenamedOptionModule
-        [ "fonts" "fontconfig" "ultimate" "forceAutohint" ]
-        [ "fonts" "fontconfig" "forceAutohint" ]
-      )
-      (lib.mkRenamedOptionModule
-        [ "fonts" "fontconfig" "ultimate" "renderMonoTTFAsBitmap" ]
-        [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ]
-      )
-      (lib.mkRemovedOptionModule [ "fonts" "fontconfig" "forceAutohint" ] "")
-      (lib.mkRemovedOptionModule [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ] "")
-      (lib.mkRemovedOptionModule [ "fonts" "fontconfig" "dpi" ] "Use display server-specific options")
-      (lib.mkRemovedOptionModule [ "hardware" "video" "hidpi" "enable" ] fontconfigNote)
-      (lib.mkRemovedOptionModule [ "fonts" "optimizeForVeryHighDPI" ] fontconfigNote)
-    ]
-    ++ lib.forEach [ "enable" "substitutions" "preset" ] (
-      opt:
-      lib.mkRemovedOptionModule [ "fonts" "fontconfig" "ultimate" "${opt}" ] ''
-        The fonts.fontconfig.ultimate module and configuration is obsolete.
-        The repository has since been archived and activity has ceased.
-        https://github.com/bohoomil/fontconfig-ultimate/issues/171.
-        No action should be needed for font configuration, as the fonts.fontconfig
-        module is already used by default.
-      ''
-    );
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "fonts" "fontconfig" "ultimate" "allowBitmaps" ]
+      [ "fonts" "fontconfig" "allowBitmaps" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "fonts" "fontconfig" "ultimate" "allowType1" ]
+      [ "fonts" "fontconfig" "allowType1" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "fonts" "fontconfig" "ultimate" "useEmbeddedBitmaps" ]
+      [ "fonts" "fontconfig" "useEmbeddedBitmaps" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "fonts" "fontconfig" "ultimate" "forceAutohint" ]
+      [ "fonts" "fontconfig" "forceAutohint" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "fonts" "fontconfig" "ultimate" "renderMonoTTFAsBitmap" ]
+      [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ]
+    )
+    (lib.mkRemovedOptionModule [ "fonts" "fontconfig" "forceAutohint" ] "")
+    (lib.mkRemovedOptionModule [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ] "")
+    (lib.mkRemovedOptionModule [ "fonts" "fontconfig" "dpi" ] "Use display server-specific options")
+    (lib.mkRemovedOptionModule [ "hardware" "video" "hidpi" "enable" ] fontconfigNote)
+    (lib.mkRemovedOptionModule [ "fonts" "optimizeForVeryHighDPI" ] fontconfigNote)
+  ]
+  ++ lib.forEach [ "enable" "substitutions" "preset" ] (
+    opt:
+    lib.mkRemovedOptionModule [ "fonts" "fontconfig" "ultimate" "${opt}" ] ''
+      The fonts.fontconfig.ultimate module and configuration is obsolete.
+      The repository has since been archived and activity has ceased.
+      https://github.com/bohoomil/fontconfig-ultimate/issues/171.
+      No action should be needed for font configuration, as the fonts.fontconfig
+      module is already used by default.
+    ''
+  );
 
   options = {
 
@@ -515,8 +553,71 @@ in
 
         useEmbeddedBitmaps = lib.mkOption {
           type = lib.types.bool;
-          default = false;
+          default = true;
           description = "Use embedded bitmaps in fonts like Calibri.";
+        };
+
+        aliases = lib.mkOption {
+          type = lib.types.attrsOf (
+            lib.types.submodule {
+              options = {
+                binding = lib.mkOption {
+                  type = lib.types.enum [
+                    "same"
+                    "weak"
+                    "strong"
+                  ];
+                  default = "same";
+                  description = ''
+                    Binding precedence for this font family. See
+                    fontconfig "Font Matching" section for details.
+                  '';
+                };
+
+                prefer = lib.mkOption {
+                  type = lib.types.listOf lib.types.str;
+                  default = [ ];
+                  description = ''
+                    Fonts whose glyphs are chosen preferentially prior
+                    to fonts which match the alias family.
+                  '';
+                };
+
+                accept = lib.mkOption {
+                  type = lib.types.listOf lib.types.str;
+                  default = [ ];
+                  description = ''
+                    Fonts that are chosen if none of the preferred
+                    fonts, nor the alias family could provide the
+                    desired glyph.
+                  '';
+                };
+
+                default = lib.mkOption {
+                  type = lib.types.listOf lib.types.str;
+                  default = [ ];
+                  description = ''
+                    Last chance fallback fonts which are chosen by
+                    default if none of the other options could
+                    provide the desired glyph.
+                  '';
+                };
+              };
+            }
+          );
+          default = { };
+          example = lib.literalExpression ''
+            {
+                # use FreeSans for Greek symbols missing in Helvetica
+                "Helvetica" = {
+                    default = [ "FreeSans" ];
+                };
+            };
+          '';
+          description = ''
+            Font aliases that can substitute preferential fonts,
+            or specify custom fallback fonts.
+          '';
         };
 
       };
@@ -553,6 +654,9 @@ in
 
         # 52-nixos-default-fonts.conf
         r ${defaultFontsConf},
+
+        # 53-user-aliases.conf
+        r ${aliases},
 
         # 53-no-bitmaps.conf
         r ${rejectBitmaps},

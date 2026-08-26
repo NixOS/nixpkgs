@@ -13,7 +13,18 @@
 }:
 let
   inherit (jaxlib) version;
-  inherit (cudaPackages) cudaVersion;
+
+  platforms = {
+    x86_64-linux = {
+      name = "manylinux_2_27_x86_64";
+      hash = "sha256-/dnXJAjhf3ojvfombpyQE2YgpyTfWEYp81BnIuKy9DQ=";
+    };
+    aarch64-linux = {
+      name = "manylinux_2_27_aarch64";
+      hash = "sha256-QAIdRVvZRSJwTjIdMOitomp8Cm75XEp1QqvaATiinRw=";
+    };
+  };
+  currentPlatform = platforms.${stdenv.hostPlatform.system};
 
   cudaLibPath = lib.makeLibraryPath (
     with cudaPackages;
@@ -32,10 +43,11 @@ let
   );
 
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jax-cuda12-pjrt";
   inherit version;
   pyproject = false;
+  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "jax_cuda12_pjrt";
@@ -43,18 +55,8 @@ buildPythonPackage rec {
     format = "wheel";
     python = "py3";
     dist = "py3";
-    platform =
-      {
-        x86_64-linux = "manylinux2014_x86_64";
-        aarch64-linux = "manylinux2014_aarch64";
-      }
-      .${stdenv.hostPlatform.system};
-    hash =
-      {
-        x86_64-linux = "sha256-aDcb2cE1JEuJZjA5viCCVWmKdb7JhU1BnqPD+VfKRkY= ";
-        aarch64-linux = "sha256-m/67BqOWFMtomfdzDqhWHxEVasgcuz7GiEpir7OxX/M=";
-      }
-      .${stdenv.hostPlatform.system};
+    platform = currentPlatform.name;
+    inherit (currentPlatform) hash;
   };
 
   nativeBuildInputs = [
@@ -90,7 +92,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jax_plugins" ];
 
-  inherit cudaLibPath;
+  passthru = {
+    inherit cudaLibPath;
+  };
 
   meta = {
     description = "JAX XLA PJRT Plugin for NVIDIA GPUs";
@@ -98,10 +102,9 @@ buildPythonPackage rec {
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
-    platforms = lib.platforms.linux;
+    platforms = lib.attrNames platforms;
     # see CUDA compatibility matrix
     # https://jax.readthedocs.io/en/latest/installation.html#pip-installation-nvidia-gpu-cuda-installed-locally-harder
-    broken =
-      !(lib.versionAtLeast cudaVersion "12.1") || !(lib.versionAtLeast cudaPackages.cudnn.version "9.1");
+    broken = !(lib.versionAtLeast cudaPackages.cudnn.version "9.1");
   };
-}
+})

@@ -2,32 +2,32 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  unittestCheckHook,
+  pytestCheckHook,
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "thorlabspm100";
   version = "1.2.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "clade";
     repo = "ThorlabsPM100";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-X4qEow6u4aE0sbFwZfK3YEso2RS0c9j4iaWJPHaPQV4=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ThorlabsPM100" ];
 
-  meta = with lib; {
+  meta = {
     description = "Interface to the PM100A/D power meter from Thorlabs";
     homepage = "https://github.com/clade/ThorlabsPM100/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fsagbuya ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fsagbuya ];
   };
-}
+})

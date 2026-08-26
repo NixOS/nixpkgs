@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "abuild";
-  version = "3.14.1";
+  version = "3.17.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.alpinelinux.org";
     owner = "alpine";
     repo = "abuild";
-    rev = finalAttrs.version;
-    hash = "sha256-gNmje4USaklwmsVGs4NMFoharEk2syCmDdQ/SCSMKsI=";
+    tag = finalAttrs.version;
+    hash = "sha256-CiKOvYEidpykufpEwZLvLys97VRhpEabiVEJ6NJexb4=";
   };
 
   buildInputs = [
@@ -53,8 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   patchPhase = ''
     substituteInPlace ./Makefile \
-      --replace 'chmod 4555' '#chmod 4555' \
-      --replace 'pkg-config' "$PKG_CONFIG"
+      --replace-fail 'chmod 4555' '#chmod 4555' \
+      --replace-fail 'pkg-config' "$PKG_CONFIG"
   '';
 
   makeFlags = [
@@ -84,7 +84,9 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = gitUpdater {
+    ignoredVersions = "_rc";
+  };
 
   meta = {
     description = "Alpine Linux build tools";

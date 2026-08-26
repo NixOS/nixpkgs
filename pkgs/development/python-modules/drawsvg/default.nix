@@ -1,49 +1,46 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pythonOlder,
-  numpy,
-  imageio,
   cairosvg,
+  fetchFromGitHub,
   imageio-ffmpeg,
+  imageio,
+  numpy,
   pwkit,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "drawsvg";
-  version = "2.4.0";
+  version = "2.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "cduck";
     repo = "drawsvg";
-    tag = version;
-    hash = "sha256-JC7u6bEB7RCJVLeYnNqACmddLI5F5PyaaBxaAZ+N/5s=";
+    tag = finalAttrs.version;
+    hash = "sha256-njRISJug6EyyN7IEunjLT81n2a7VJKlD96NFbN5oIoQ=";
   };
 
   build-system = [ setuptools ];
 
   optional-dependencies = {
     all = [
-      numpy
-      imageio
       cairosvg
+      imageio
       imageio-ffmpeg
+      numpy
       pwkit
     ];
     raster = [
-      numpy
-      imageio
       cairosvg
+      imageio
       imageio-ffmpeg
+      numpy
     ];
     color = [
-      pwkit
       numpy
+      pwkit
     ];
   };
 
@@ -52,10 +49,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "drawsvg" ];
 
-  meta = with lib; {
+  meta = {
     description = "Programmatically generate SVG (vector) images, animations, and interactive Jupyter widgets";
     homepage = "https://github.com/cduck/drawsvg";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

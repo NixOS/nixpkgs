@@ -21,10 +21,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "textsnatcher";
   version = "2.0.0";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "RajSolai";
     repo = "TextSnatcher";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-phqtPjwKB5BoCpL+cMeHvRLL76ZxQ5T74cpAsgN+/JM=";
   };
 
@@ -56,13 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Copy Text from Images with ease, Perform OCR operations in seconds";
     homepage = "https://textsnatcher.rf.gd/";
     changelog = "https://github.com/RajSolai/TextSnatcher/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ galaxy ];
+    license = lib.licenses.gpl3Only;
     mainProgram = "com.github.rajsolai.textsnatcher";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

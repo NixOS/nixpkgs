@@ -3,27 +3,34 @@
   fetchFromGitHub,
   hatchling,
   lib,
+  pydantic,
   pytestCheckHook,
-  python-dotenv,
+  pythonAtLeast,
   requests,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "python-picnic-api2";
-  version = "1.2.4";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "codesalatdev";
     repo = "python-picnic-api";
     tag = "v${version}";
-    hash = "sha256-vlb53f+k+oX9ycyTe/63u0qoqIn8kHKtCehl82Ks9wY=";
+    hash = "sha256-Ft/OEXkiXfsX1Kyi47PzycHk19jEIwYqyG+KP8q8x0I=";
   };
+
+  postPatch = lib.optionalString (pythonAtLeast "3.14") ''
+    substituteInPlace tests/test_session.py \
+      --replace-fail '"Accept-Encoding": "gzip, deflate",' '"Accept-Encoding": "gzip, deflate, zstd",'
+  '';
 
   build-system = [ hatchling ];
 
   dependencies = [
+    pydantic
     requests
     typing-extensions
   ];

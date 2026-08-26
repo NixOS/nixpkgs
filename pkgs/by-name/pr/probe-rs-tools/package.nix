@@ -2,39 +2,59 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchurl,
   cmake,
   pkg-config,
+  installShellFiles,
   libusb1,
   openssl,
+  stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  # udev rules are in another unversioned repo
+  udevRules = fetchurl {
+    url = "https://raw.githubusercontent.com/probe-rs/webpage/054a0b16831593091a8a5624d0e2305573e860ee/public/files/69-probe-rs.rules";
+    hash = "sha256-yjxld5ebm2jpfyzkw+vngBfHu5Nfh2ioLUKQQDY4KYo=";
+  };
+in
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "probe-rs-tools";
-  version = "0.27.0";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "probe-rs";
     repo = "probe-rs";
-    tag = "v${version}";
-    hash = "sha256-xtUaGJyzr0uQUb/A+7RmOVVgrXIctr2I9gLPU2/rXso=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-C6ioLkU0tmCzWtThPGyOOiD/Z9n8RB5eogAxTmBwDj8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-acGLTbWI0SHspFISWw5Lj+sqn5HE4du5jTC3NS5zzh8=";
+  cargoHash = "sha256-Sfx8n9+Q9wplfnFenavoCWSaO7nlcAmRpxyyKe5Il6A=";
 
-  buildAndTestSubdir = pname;
+  buildAndTestSubdir = finalAttrs.pname;
 
   nativeBuildInputs = [
     # required by libz-sys, no option for dynamic linking
     # https://github.com/rust-lang/libz-sys/issues/158
     cmake
     pkg-config
+    installShellFiles
   ];
 
   buildInputs = [
     libusb1
     openssl
   ];
+
+  postInstall = ''
+    install -D -m 444 ${udevRules} $out/etc/udev/rules.d/69-probe-rs.rules
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd probe-rs \
+      --bash <(SHELL=bash $out/bin/probe-rs complete install -m) \
+      --fish <(SHELL=fish $out/bin/probe-rs complete install -m) \
+      --zsh <(SHELL=zsh $out/bin/probe-rs complete install -m)
+  '';
 
   checkFlags = [
     # require a physical probe
@@ -47,7 +67,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=cmd::dap_server::server::debugger::test::disassemble::positive_byte_offset_that_lands_in_the_middle_of_an_instruction_unaligned_"
     "--skip=cmd::dap_server::server::debugger::test::launch_and_threads"
     "--skip=cmd::dap_server::server::debugger::test::launch_with_config_error"
-    "--skip=cmd::dap_server::server::debugger::test::test_initalize_request"
+    "--skip=cmd::dap_server::server::debugger::test::test_initialize_request"
     "--skip=cmd::dap_server::server::debugger::test::test_launch_and_terminate"
     "--skip=cmd::dap_server::server::debugger::test::test_launch_no_probes"
     "--skip=cmd::dap_server::server::debugger::test::wrong_request_after_init"
@@ -62,17 +82,17 @@ rustPlatform.buildRustPackage rec {
     "--skip=util::cargo::test::workspace_root"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for on-chip debugging and flashing of ARM chips";
     homepage = "https://probe.rs/";
-    changelog = "https://github.com/probe-rs/probe-rs/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    changelog = "https://github.com/probe-rs/probe-rs/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       xgroleau
       newam
     ];
   };
-}
+})

@@ -24,7 +24,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "--doctest-modules" ];
+  pytestFlags = [ "--doctest-modules" ];
+
+  disabledTests = [
+    # timestamp precision mismatch
+    "test_date_types"
+    "test_stock_date_parsing"
+  ];
 
   pythonImportsCheck = [ "vega_datasets" ];
 

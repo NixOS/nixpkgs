@@ -8,7 +8,7 @@
   gimme-aws-creds,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gimme-aws-creds";
   version = "2.8.2"; # N.B: if you change this, check if overrides are still up-to-date
   format = "setuptools";
@@ -16,11 +16,11 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Nike-Inc";
     repo = "gimme-aws-creds";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fsFYcfbLeYV6tpOGgNrFmYjcUAmdsx5zwUbvcctwFVs=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = [
     installShellFiles
   ];
 
@@ -69,16 +69,16 @@ python3.pkgs.buildPythonApplication rec {
     tests.version = testers.testVersion {
       package = gimme-aws-creds;
       command = ''touch tmp.conf && OKTA_CONFIG="tmp.conf" gimme-aws-creds --version'';
-      version = "gimme-aws-creds ${version}";
+      version = "gimme-aws-creds ${finalAttrs.version}";
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Nike-Inc/gimme-aws-creds";
     changelog = "https://github.com/Nike-Inc/gimme-aws-creds/releases";
     description = "CLI that utilizes Okta IdP via SAML to acquire temporary AWS credentials";
     mainProgram = "gimme-aws-creds";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jbgosselin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jbgosselin ];
   };
-}
+})

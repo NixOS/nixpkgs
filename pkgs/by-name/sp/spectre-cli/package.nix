@@ -10,7 +10,7 @@
   jq,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spectre-cli";
   version = "unstable-2022-02-05";
 
@@ -35,11 +35,12 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
     "-DBUILD_SPECTRE_TESTS=ON"
   ];
 
   preConfigure = ''
-    echo "${version}" > VERSION
+    echo "${finalAttrs.version}" > VERSION
 
      # The default buildPhase wants to create a ´build´ dir so we rename the build script to stop conflicts.
      mv build build.sh
@@ -63,12 +64,12 @@ stdenv.mkDerivation rec {
     mv spectre $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Stateless cryptographic identity algorithm";
     homepage = "https://spectre.app";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ emmabastas ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ emmabastas ];
     mainProgram = "spectre";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

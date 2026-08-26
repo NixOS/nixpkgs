@@ -3,32 +3,37 @@
   aiohttp,
   beautifulsoup4,
   buildPythonPackage,
+  cryptography,
   fetchFromGitHub,
-  poetry-core,
+  orjson,
+  pycryptodome,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
+  segno,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiovodafone";
-  version = "0.9.0";
+  version = "3.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aiovodafone";
-    tag = "v${version}";
-    hash = "sha256-3WafrcJH9pD1u0FEJzYaVWLWb2Ur1sCHYHFON4DXLpo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ubXJyHCUOWV1xXzfuEZ2DRe90OWycsSolr4fVQMbXu8=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
     beautifulsoup4
+    cryptography
+    orjson
+    pycryptodome
+    segno
   ];
 
   nativeCheckInputs = [
@@ -38,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiovodafone" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to control Vodafon Station";
     homepage = "https://github.com/chemelli74/aiovodafone";
-    changelog = "https://github.com/chemelli74/aiovodafone/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/chemelli74/aiovodafone/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

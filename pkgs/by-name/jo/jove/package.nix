@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jove";
-  version = "4.17.5.3";
+  version = "4.17.5.5";
 
   src = fetchFromGitHub {
     owner = "jonmacs";
     repo = "jove";
     rev = finalAttrs.version;
-    hash = "sha256-ZBq2zCml637p9VgedpOrUn2jSc5L0pthdgRS7YsB3zs=";
+    hash = "sha256-y0zNrUXHXqBa6xNxRiZSUOSrFT2cDmdpMsCRHJXpUac=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild = ''
     makeFlagsArray+=(SYSDEFS="-DSYSVR4 -D_XOPEN_SOURCE=500" \
+      OPTFLAGS="-O -Wno-error=incompatible-pointer-types" \
       JTMPDIR=$TMPDIR
       TERMCAPLIB=-lncurses \
       SHELL=${runtimeShell} \
@@ -51,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Jonathan's Own Version of Emacs";
     changelog = "https://github.com/jonmacs/jove/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     # never built on Hydra: https://hydra.nixos.org/job/nixpkgs/trunk/jove.x86_64-darwin
     broken = stdenv.hostPlatform.isDarwin;

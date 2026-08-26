@@ -1,27 +1,37 @@
 {
-  buildDotnetModule,
   lib,
+
+  # Build
+  buildDotnetModule,
   fetchFromGitHub,
   dotnetCorePackages,
+
+  # Runtime
   SDL2,
   SDL2_image,
   SDL2_ttf,
+
+  # Updates
+  nix-update-script,
 }:
 let
-  dotnet = dotnetCorePackages.dotnet_8;
+  dotnet = dotnetCorePackages.dotnet_10;
 in
 buildDotnetModule (finalAttrs: {
   pname = "yafc-ce";
-  version = "2.11.1";
+  version = "2.20.0";
 
   src = fetchFromGitHub {
-    owner = "shpaass";
+    owner = "Yafc-CE";
     repo = "yafc-ce";
-    rev = finalAttrs.version;
-    hash = "sha256-n6twiCIQ1nMSidfmdl2py5wHvx4kk6skK0f8chXTCjQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-J0oDrmSt/VnFT82Uql38alHQDAOgzm1lapQPCObicdA=";
   };
 
-  projectFile = [ "Yafc/Yafc.csproj" ];
+  projectFile = [
+    "Yafc.I18n.Generator/Yafc.I18n.Generator.csproj"
+    "Yafc/Yafc.csproj"
+  ];
   testProjectFile = [ "Yafc.Model.Tests/Yafc.Model.Tests.csproj" ];
   nugetDeps = ./deps.json;
 
@@ -36,6 +46,8 @@ buildDotnetModule (finalAttrs: {
     SDL2_image
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Powerful Factorio calculator/analyser that works with mods, Community Edition";
     longDescription = ''
@@ -44,9 +56,9 @@ buildDotnetModule (finalAttrs: {
 
       YAFC Community Edition is an updated and actively-maintained version of the original YAFC.
     '';
-    homepage = "https://github.com/shpaass/yafc-ce";
-    downloadPage = "https://github.com/shpaass/yafc-ce/releases/tag/${finalAttrs.version}";
-    changelog = "https://github.com/shpaass/yafc-ce/releases/tag/${finalAttrs.version}";
+    homepage = "https://github.com/Yafc-CE/yafc-ce";
+    downloadPage = "https://github.com/Yafc-CE/yafc-ce/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/Yafc-CE/yafc-ce/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
       diamond-deluxe

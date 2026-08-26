@@ -1,14 +1,21 @@
 {
   buildPackages,
-  db,
-  fetchurl,
+  gdbm,
+  fetchFromGitLab,
+  autoconf,
+  automake,
+  flex,
+  gettext,
+  gnulib,
   groff,
   gzip,
   lib,
   libiconv,
   libiconvReal,
   libpipeline,
+  libtool,
   makeWrapper,
+  nix-update-script,
   nixosTests,
   pkg-config,
   stdenv,
@@ -20,13 +27,15 @@ let
   libiconv' =
     if stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD then libiconvReal else libiconv;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "man-db";
-  version = "2.13.0";
+  version = "2.13.1";
 
-  src = fetchurl {
-    url = "mirror://savannah/man-db/man-db-${version}.tar.xz";
-    hash = "sha256-gvBzn09hqrXrk30jTeOwFOd3tVOKKMvTFDPEWuCa77k=";
+  src = fetchFromGitLab {
+    owner = "man-db";
+    repo = "man-db";
+    tag = finalAttrs.version;
+    hash = "sha256-o85IJCsP5NA4AUhr6SNLOSnAoIEWoEejVG8w08jfyqQ=";
   };
 
   outputs = [
@@ -37,14 +46,19 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [
+    autoconf
+    automake
+    flex
+    gettext
     groff
+    libtool
     makeWrapper
     pkg-config
     zstd
   ];
   buildInputs = [
     libpipeline
-    db
+    gdbm
     groff
     libiconv'
   ]; # (Yes, 'groff' is both native and build input)
@@ -66,29 +80,29 @@ stdenv.mkDerivation rec {
     echo "MANDB_MAP	/nix/var/nix/profiles/default/share/man	/var/cache/man/nixpkgs" >> src/man_db.conf.in
   '';
 
-  configureFlags =
-    [
-      "--disable-setuid"
-      "--disable-cache-owner"
-      "--localstatedir=/var"
-      "--with-config-file=${placeholder "out"}/etc/man_db.conf"
-      "--with-systemdtmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
-      "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-      "--with-pager=less"
-    ]
-    ++ lib.optionals util-linuxMinimal.hasCol [
-      "--with-col=${util-linuxMinimal}/bin/col"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "ac_cv_func__set_invalid_parameter_handler=no"
-      "ac_cv_func_posix_fadvise=no"
-      "ac_cv_func_mempcpy=no"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
-      "--enable-mandirs="
-    ];
+  configureFlags = [
+    "--disable-setuid"
+    "--disable-cache-owner"
+    "--localstatedir=/var"
+    "--with-config-file=${placeholder "out"}/etc/man_db.conf"
+    "--with-systemdtmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    "--with-pager=less"
+  ]
+  ++ lib.optionals util-linuxMinimal.hasCol [
+    "--with-col=${util-linuxMinimal}/bin/col"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "ac_cv_func__set_invalid_parameter_handler=no"
+    "ac_cv_func_posix_fadvise=no"
+    "ac_cv_func_mempcpy=no"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    "--enable-mandirs="
+  ];
 
   preConfigure = ''
+    ./bootstrap --no-git --gnulib-srcdir=${gnulib} --gen
     configureFlagsArray+=("--with-sections=1 n l 8 3 0 2 5 4 9 6 7")
   '';
 
@@ -118,15 +132,19 @@ stdenv.mkDerivation rec {
     !stdenv.hostPlatform.isMusl # iconv binary
   ;
 
-  passthru.tests = {
-    nixos = nixosTests.man;
+  passthru = {
+    tests = {
+      nixos = nixosTests.man;
+    };
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://man-db.nongnu.org";
     description = "Implementation of the standard Unix documentation system accessed using the man command";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     mainProgram = "man";
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
-}
+})

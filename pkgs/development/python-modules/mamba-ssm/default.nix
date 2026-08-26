@@ -10,7 +10,6 @@
   transformers,
   triton,
   cudaPackages,
-  rocmPackages,
   config,
   cudaSupport ? config.cudaSupport,
   which,
@@ -41,7 +40,7 @@ buildPythonPackage rec {
       with cudaPackages;
       [
         cuda_cudart # cuda_runtime.h, -lcudart
-        cuda_cccl
+        cccl
         libcusparse # cusparse.h
         libcusolver # cusolverDn.h
         cuda_nvcc
@@ -60,16 +59,16 @@ buildPythonPackage rec {
 
   env = {
     MAMBA_FORCE_BUILD = "TRUE";
-  } // lib.optionalAttrs cudaSupport { CUDA_HOME = "${lib.getDev cudaPackages.cuda_nvcc}"; };
+  }
+  // lib.optionalAttrs cudaSupport { CUDA_HOME = "${lib.getDev cudaPackages.cuda_nvcc}"; };
 
   # pytest tests not enabled due to nvidia GPU dependency
   pythonImportsCheck = [ "mamba_ssm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Linear-Time Sequence Modeling with Selective State Spaces";
     homepage = "https://github.com/state-spaces/mamba";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ cfhammill ];
+    license = lib.licenses.asl20;
     # The package requires CUDA or ROCm, the ROCm build hasn't
     # been completed or tested, so broken if not using cuda.
     broken = !cudaSupport;

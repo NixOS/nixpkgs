@@ -22,44 +22,42 @@ let
       name = lib.toLower (builtins.replaceStrings [ "." ] [ "_" ] name);
       value = stdenvNoCC.mkDerivation {
         pname = "skk-jisyo-" + lib.toLower name;
-        version = "0-unstable-2024-08-28";
+        version = "0-unstable-2026-04-11";
 
         src = fetchFromGitHub {
           owner = "skk-dev";
           repo = "dict";
-          rev = "4eb91a3bbfef70bde940668ec60f3beae291e971";
-          sha256 = "sha256-sWz85Q6Bu2WoKsckSp5SlcuPUQN2mcq+BHMqNXQ/aho=";
+          rev = "0a164e6b990c5eb5b59eb7d8789f08865dc2f644";
+          sha256 = "sha256-xKMtHB54kVSwwwr+v248ewa7dwuavYVmc6KHrZwSdnM=";
         };
 
         nativeBuildInputs = lib.optionals useUtf8 [ nkf ];
 
         strictDeps = true;
 
-        buildPhase =
-          ''
-            runHook preBuild
-          ''
-          + lib.concatMapStrings (file: ''
-            nkf -w ${file} \
-              | LC_ALL=C sed 's/coding: [^ ]\{1,\}/coding: utf-8/' \
-              > ${file + suffix}
-          '') (lib.optionals useUtf8 (map lib.escapeShellArg files))
-          + ''
-            runHook postBuild
-          '';
+        buildPhase = ''
+          runHook preBuild
+        ''
+        + lib.concatMapStrings (file: ''
+          nkf -w ${file} \
+            | LC_ALL=C sed 's/coding: [^ ]\{1,\}/coding: utf-8/' \
+            > ${file + suffix}
+        '') (lib.optionals useUtf8 (map lib.escapeShellArg files))
+        + ''
+          runHook postBuild
+        '';
 
-        installPhase =
-          ''
-            runHook preInstall
-          ''
-          + lib.concatMapStrings (file: ''
-            install -Dm644 \
-              ${lib.escapeShellArg file} \
-              $out/share/skk/${lib.escapeShellArg (baseNameOf file)}
-          '') (map (file: file + suffix) files)
-          + ''
-            runHook postInstall
-          '';
+        installPhase = ''
+          runHook preInstall
+        ''
+        + lib.concatMapStrings (file: ''
+          install -Dm644 \
+            ${lib.escapeShellArg file} \
+            $out/share/skk/${lib.escapeShellArg (baseNameOf file)}
+        '') (map (file: file + suffix) files)
+        + ''
+          runHook postInstall
+        '';
 
         doInstallCheck = true;
         installCheckPhase = ''
@@ -75,18 +73,18 @@ let
           ];
         };
 
-        meta = with lib; {
+        meta = {
           inherit description license;
           longDescription = ''
             This package provides a kana-to-kanji conversion dictionary for the
             SKK Japanese input method.
           '';
           homepage = "https://github.com/skk-dev/dict";
-          maintainers = with maintainers; [
+          maintainers = with lib.maintainers; [
             yuriaisaka
             midchildan
           ];
-          platforms = platforms.all;
+          platforms = lib.platforms.all;
         };
       };
     };
@@ -95,7 +93,7 @@ lib.listToAttrs (
   map mkDictNameValue [
     {
       name = "L";
-      description = "The standard SKK dictionary";
+      description = "Standard SKK dictionary";
       license = lib.licenses.gpl2Plus;
     }
     {

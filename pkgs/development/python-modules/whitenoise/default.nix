@@ -9,36 +9,30 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "whitenoise";
-  version = "6.9.0";
+  version = "6.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "evansd";
     repo = "whitenoise";
-    tag = version;
-    hash = "sha256-UmM8Az22ql3uUpyY6jj7ky3LelmttFBqGMYlzlNRAHg=";
+    tag = finalAttrs.version;
+    hash = "sha256-qNya/3oI9413VUGaLPq4vtuLvq9mIGhaYBt+4OhrkOw=";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   build-system = [ setuptools ];
 
-  dependencies = [ brotli ];
+  optional-dependencies.brotli = [ brotli ];
 
   nativeCheckInputs = [
     django
     pytestCheckHook
     requests
-  ];
-
-  __darwinAllowLocalNetworking = true;
-
-  disabledTestPaths = [
-    # Don't run Django tests
-    "tests/test_django_whitenoise.py"
-    "tests/test_runserver_nostatic.py"
-    "tests/test_storage.py"
-  ];
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.brotli;
 
   disabledTests = [
     # Test fails with AssertionError
@@ -47,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "whitenoise" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to serve static file for WSGI applications";
     homepage = "https://whitenoise.readthedocs.io/";
-    changelog = "https://github.com/evansd/whitenoise/blob/${version}/docs/changelog.rst";
-    license = licenses.mit;
+    changelog = "https://github.com/evansd/whitenoise/blob/${finalAttrs.src.tag}/docs/changelog.rst";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

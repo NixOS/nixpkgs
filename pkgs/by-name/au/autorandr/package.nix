@@ -6,23 +6,25 @@
   xrandr,
   installShellFiles,
   desktop-file-utils,
+  udevCheckHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "autorandr";
   version = "1.15";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "phillipberndt";
     repo = "autorandr";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8FMfy3GCN4z/TnfefU2DbKqV3W35I29/SuGGqeOrjNg";
   };
 
   nativeBuildInputs = [
     installShellFiles
     desktop-file-utils
+    udevCheckHook
   ];
   propagatedBuildInputs = with python3.pkgs; [ packaging ];
 
@@ -76,12 +78,12 @@ python3.pkgs.buildPythonApplication rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/phillipberndt/autorandr/";
     description = "Automatically select a display configuration based on connected devices";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ coroa ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
     mainProgram = "autorandr";
   };
-}
+})

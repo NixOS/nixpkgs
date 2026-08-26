@@ -11,7 +11,7 @@
   pytestCheckHook,
   fetchpatch,
 }:
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pyquerylist";
   version = "0-unstable-2025-03-03";
   pyproject = true;
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Extension of base Python list that you can query";
     homepage = "https://github.com/markmuetz/pyquerylist";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ philipwilk ];
+    maintainers = with lib.maintainers; [ jadewilk ];
   };
 }

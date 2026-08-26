@@ -91,7 +91,7 @@
                   )
                 ];
               }
-              // builtins.removeAttrs args [ "modules" ]
+              // removeAttrs args [ "modules" ]
             );
         }
       );
@@ -113,9 +113,13 @@
             (
               self.legacyPackages.${system}.stdenv.hostPlatform.isLinux
               # Exclude power64 due to "libressl is not available on the requested hostPlatform" with hostPlatform being power64
-              && !self.legacyPackages.${system}.targetPlatform.isPower64
+              && !self.legacyPackages.${system}.stdenv.targetPlatform.isPower64
               # Exclude armv6l-linux because "cannot bootstrap GHC on this platform ('armv6l-linux' with libc 'defaultLibc')"
               && system != "armv6l-linux"
+              # Exclude armv7l-linux because "cannot bootstrap GHC on this platform ('armv7l-linux' with libc 'defaultLibc')"
+              && system != "armv7l-linux"
+              # Exclude powerpc64le-linux because "cannot bootstrap GHC on this platform ('powerpc64le-linux' with libc 'defaultLibc')"
+              && system != "powerpc64le-linux"
               # Exclude riscv64-linux because "cannot bootstrap GHC on this platform ('riscv64-linux' with libc 'defaultLibc')"
               && system != "riscv64-linux"
             )
@@ -140,6 +144,7 @@
                         nixpkgs.hostPlatform = "x86_64-linux";
                         boot.loader.grub.enable = false;
                         fileSystems."/".device = "nodev";
+                        fileSystems."/".fsType = "none";
                         # See https://search.nixos.org/options?show=system.stateVersion&query=stateversion
                         system.stateVersion = lib.trivial.release; # DON'T do this in real configs!
                       }
@@ -165,6 +170,10 @@
             (
               # Exclude armv6l-linux because "Package ‘ghc-9.6.6’ in .../pkgs/development/compilers/ghc/common-hadrian.nix:579 is not available on the requested hostPlatform"
               system != "armv6l-linux"
+              # Exclude armv7l-linux because "cannot bootstrap GHC on this platform ('armv7l-linux' with libc 'defaultLibc')"
+              && system != "armv7l-linux"
+              # Exclude powerpc64le-linux because "cannot bootstrap GHC on this platform ('powerpc64le-linux' with libc 'defaultLibc')"
+              && system != "powerpc64le-linux"
               # Exclude riscv64-linux because "Package ‘ghc-9.6.6’ in .../pkgs/development/compilers/ghc/common-hadrian.nix:579 is not available on the requested hostPlatform"
               && system != "riscv64-linux"
               # Exclude x86_64-freebsd because "Package ‘ghc-9.6.6’ in .../pkgs/development/compilers/ghc/common-hadrian.nix:579 is not available on the requested hostPlatform"
@@ -182,11 +191,16 @@
         system: _:
         # Exclude armv6l-linux because "cannot bootstrap GHC on this platform ('armv6l-linux' with libc 'defaultLibc')"
         system != "armv6l-linux"
+        # Exclude armv7l-linux because "cannot bootstrap GHC on this platform ('armv7l-linux' with libc 'defaultLibc')"
+        && system != "armv7l-linux"
+        # Exclude powerpc64le-linux because "cannot bootstrap GHC on this platform ('powerpc64le-linux' with libc 'defaultLibc')"
+        && system != "powerpc64le-linux"
         # Exclude riscv64-linux because "cannot bootstrap GHC on this platform ('riscv64-linux' with libc 'defaultLibc')"
         && system != "riscv64-linux"
         # Exclude x86_64-freebsd because "Package ‘go-1.22.12-freebsd-amd64-bootstrap’ in /nix/store/0yw40qnrar3lvc5hax5n49abl57apjbn-source/pkgs/development/compilers/go/binary.nix:50 is not available on the requested hostPlatform"
         && system != "x86_64-freebsd"
-      ) (forAllSystems (system: (import ./ci { inherit system; }).fmt.pkg));
+        # TODO: revert to importing fmt.pkg directly from ./ci when support for 26.05 ends
+      ) (forAllSystems (system: (import ./shell.nix { inherit system; }).formatter));
 
       /**
         A nested structure of [packages](https://nix.dev/manual/nix/latest/glossary#package-attribute-set) and other values.
@@ -207,14 +221,25 @@
         evaluation. Evaluating the attribute value tends to require a significant
         amount of computation, even considering lazy evaluation.
       */
-      legacyPackages = forAllSystems (
-        system:
-        (import ./. { inherit system; }).extend (
-          final: prev: {
-            lib = prev.lib.extend libVersionInfoOverlay;
-          }
-        )
-      );
+      legacyPackages =
+        let
+          # We include `x86_64-darwin` here to ensure that users get a
+          # good error message for the 26.11 deprecation of the platform,
+          # while excluding it from `lib.systems.flakeExposed` so that we
+          # don’t break `nix flake check` for downstream users.
+          forAllSystems' = lib.genAttrs (lib.systems.flakeExposed ++ [ "x86_64-darwin" ]);
+        in
+        forAllSystems' (
+          system:
+          (import ./. {
+            inherit system;
+            overlays = import ./pkgs/top-level/impure-overlays.nix ++ [
+              (final: prev: {
+                lib = prev.lib.extend libVersionInfoOverlay;
+              })
+            ];
+          })
+        );
 
       /**
         Optional modules that can be imported into a NixOS configuration.

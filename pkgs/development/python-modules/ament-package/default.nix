@@ -3,29 +3,22 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  importlib-metadata,
-  importlib-resources,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ament-package";
-  version = "0.17.2";
+  version = "0.19.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ament";
     repo = "ament_package";
-    tag = version;
-    hash = "sha256-+Jfj8mkvrpJnd3oPhOo2E5cvVO9ujez0mrpsj2taOOU=";
+    tag = finalAttrs.version;
+    hash = "sha256-Eqj07xznL5gMYZF1FTPtgxqCIUVD6pFfct2vUcOHOkk=";
   };
 
   build-system = [
     setuptools
-  ];
-
-  dependencies = [
-    importlib-metadata
-    importlib-resources
   ];
 
   pythonImportsCheck = [ "ament_package" ];
@@ -33,10 +26,14 @@ buildPythonPackage rec {
   # Tests currently broken
   doCheck = false;
 
+  # The script selects tag release-alpha8
+  passthru.skipBulkUpdate = true;
+
   meta = {
-    description = "The parser for the manifest files in the ament buildsystem";
+    changelog = "https://github.com/ament/ament_package/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
+    description = "Parser for the manifest files in the ament buildsystem";
     homepage = "https://github.com/ament/ament_package";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ guelakais ];
   };
-}
+})

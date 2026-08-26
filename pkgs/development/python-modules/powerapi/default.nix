@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   influxdb-client,
@@ -10,6 +11,7 @@
   pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
   pyzmq,
   setproctitle,
@@ -21,14 +23,14 @@ buildPythonPackage rec {
   version = "2.10.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "powerapi-ng";
     repo = "powerapi";
     tag = "v${version}";
     hash = "sha256-rn1qe0RwYuUR23CgzOOeiwe1wuFihnhQ9a6ALgSP/cQ=";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   build-system = [ setuptools ];
 
@@ -38,11 +40,14 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    influxdb = [ influxdb-client ];
     kubernetes = [ kubernetes ];
     mongodb = [ pymongo ];
     # opentsdb = [ opentsdb-py ];
     prometheus = [ prometheus-client ];
+  }
+  // lib.optionalAttrs (pythonOlder "3.14") {
+    # influxdb-client depends on reactivex, which is disabled on 3.14
+    influxdb = [ influxdb-client ];
   };
 
   nativeCheckInputs = [
@@ -50,14 +55,23 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
     pytest-timeout
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "powerapi" ];
+
+  # multiprocessing pickling fails: darwin sandbox + py3.14 weakref change
+  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin || pythonAtLeast "3.14") [
+    "test_puller"
+    "TestDispatcher"
+    "TestK8sProcessor"
+    "TestPusher"
+  ];
 
   meta = {
     description = "Python framework for building software-defined power meters";
     homepage = "https://github.com/powerapi-ng/powerapi";
-    changelog = "https://github.com/powerapi-ng/powerapi/releases/tag/v${version}";
+    changelog = "https://github.com/powerapi-ng/powerapi/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };

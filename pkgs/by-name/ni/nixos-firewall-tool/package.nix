@@ -3,18 +3,18 @@
   lib,
   bash,
   installShellFiles,
-  shellcheck-minimal,
+  buildPackages,
 }:
 
 stdenvNoCC.mkDerivation {
-  name = "nixos-firewall-tool";
-
+  pname = "nixos-firewall-tool";
+  version = lib.trivial.release;
   src = builtins.filterSource (name: _: !(lib.hasSuffix ".nix" name)) ./.;
 
   strictDeps = true;
   buildInputs = [ bash ];
   nativeBuildInputs = [ installShellFiles ];
-  nativeCheckInputs = [ shellcheck-minimal ];
+  nativeCheckInputs = [ buildPackages.shellcheck-minimal ];
 
   postPatch = ''
     patchShebangs --host nixos-firewall-tool
@@ -26,23 +26,20 @@ stdenvNoCC.mkDerivation {
     installShellCompletion nixos-firewall-tool.{bash,fish}
   '';
 
-  # Skip shellcheck if GHC is not available, see writeShellApplication.
-  doCheck =
-    lib.meta.availableOn stdenvNoCC.buildPlatform shellcheck-minimal.compiler
-    && (builtins.tryEval shellcheck-minimal.compiler.outPath).success;
+  doCheck = buildPackages.shellcheck-minimal.compiler.bootstrapAvailable;
   checkPhase = ''
     shellcheck nixos-firewall-tool
   '';
 
-  meta = with lib; {
-    description = "A tool to temporarily manipulate the NixOS firewall";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+  meta = {
+    description = "Tool to temporarily manipulate the NixOS firewall";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       clerie
       rvfg
       garyguo
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "nixos-firewall-tool";
   };
 }

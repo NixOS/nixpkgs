@@ -9,28 +9,31 @@
   cargo,
   rustPlatform,
   xdg-desktop-portal,
-  slurp,
   cairo,
   pango,
+  libgbm,
+  libGL,
   libxkbcommon,
   glib,
   pipewire,
+  wayland,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-luminous";
-  version = "0.1.8";
+  version = "0.1.14";
 
   src = fetchFromGitHub {
     owner = "waycrate";
     repo = "xdg-desktop-portal-luminous";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7i6+arKWubziDmy07FocDDiJdOWAszhO7yOOI1iPfds=";
+    hash = "sha256-GiB0flnJgRgW7nYr+XdEyZ8rkTrZ94O8iedPUSLU9Lo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-fatlvc+MoAJZGW/5alnDu1PQyK6mnE0aNQAhrMg7Hio=";
+    hash = "sha256-bGBq7D+Tugjddu2jp9Cl5s/qpEfqmrnFsodeAVK9a9s=";
   };
 
   nativeBuildInputs = [
@@ -45,13 +48,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     xdg-desktop-portal
-    slurp
     cairo
     pango
     glib
     pipewire
+    libgbm
+    libGL
     libxkbcommon
   ];
+
+  postInstall = ''
+    patchelf \
+      --add-needed libwayland-client.so.0 \
+      --add-rpath ${lib.makeLibraryPath [ wayland ]} \
+      $out/libexec/xdg-desktop-portal-luminous
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "xdg-desktop-portal backend for wlroots based compositors, providing screenshot and screencast";

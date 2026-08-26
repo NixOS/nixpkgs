@@ -8,7 +8,7 @@
   ffmpeg,
   libglut,
   lib,
-  fetchhg,
+  fetchurl,
   fetchpatch,
   cmake,
   pkg-config,
@@ -43,22 +43,20 @@ let
     ]
   );
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hedgewars";
-  version = "1.0.2-unstable-2024-03-24";
+  version = "1.0.3";
 
-  src = fetchhg {
-    url = "https://hg.hedgewars.org/hedgewars/";
-    rev = "fcc98c953b5e";
-    hash = "sha256-bUmyYXmhOYjvbd0elyNnaUx3X1QJl3w2/hpxFK9KQCE=";
+  src = fetchurl {
+    url = "https://hedgewars.org/download/releases/hedgewars-src-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-xcGHfAuuE1THXSuVJ7b5qfeemZMuXQix9vfeFwgGYTA=";
   };
 
   patches = [
     (fetchpatch {
-      # https://github.com/hedgewars/hw/pull/74
-      name = "Add support for ffmpeg 6.0";
-      url = "https://github.com/hedgewars/hw/pull/74/commits/71691fad8654031328f4af077fc32aaf29cdb7d0.patch";
-      hash = "sha256-nPfSQCc4eGCa4lCGl3gDx8fJp47N0lgVeDU5A5qb1yo=";
+      name = "hedgewars-ffmpeg-9.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/hedgewars/-/raw/1b03bb9764d38fa6020552174676a9e024d8b18e/ffmpeg-9.patch?inline=false";
+      hash = "sha256-J8W8WvQgcteKoUUVDxBINVhMzmec+UuWWltKZ2aq9Go=";
     })
   ];
 
@@ -81,14 +79,15 @@ stdenv.mkDerivation {
     libglut
     physfs
     qtbase
-  ] ++ lib.optional withServer ghc;
+  ]
+  ++ lib.optional withServer ghc;
 
   cmakeFlags = [
     "-DNOVERSIONINFOUPDATE=ON"
     "-DNOSERVER=${if withServer then "OFF" else "ON"}"
   ];
 
-  NIX_LDFLAGS = lib.concatMapStringsSep " " (e: "-rpath ${e}/lib") [
+  env.NIX_LDFLAGS = lib.concatMapStringsSep " " (e: "-rpath ${e}/lib") [
     SDL2.out
     SDL2_image
     SDL2_mixer
@@ -103,18 +102,19 @@ stdenv.mkDerivation {
   ];
 
   qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath [
-        libGL
-        libGLU
-        libglut
-        physfs
-      ]
-    }"
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath [
+      libGL
+      libGLU
+      libglut
+      physfs
+    ])
   ];
 
   meta = {
-    description = "Funny turn-based artillery game, featuring fighting hedgehogs!";
+    description = "Funny turn-based artillery game, featuring fighting hedgehogs";
     homepage = "https://hedgewars.org/";
     license = with lib.licenses; [
       gpl2Only
@@ -155,4 +155,4 @@ stdenv.mkDerivation {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -5,7 +5,6 @@
   fetchpatch,
   cmake,
   pkg-config,
-  darwin,
   fmt,
   gtk3,
   iir1,
@@ -47,25 +46,28 @@ stdenv.mkDerivation {
     })
   ];
 
-  cmakeFlags = [ (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true) ];
+  cmakeFlags = [
+    (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
+  ];
+
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
-  buildInputs =
-    [
-      curl
-      fmt
-      iir1
-      imgui
-      imnodes
-      implot
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ gtk3 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
+  buildInputs = [
+    curl
+    fmt
+    iir1
+    imgui
+    imnodes
+    implot
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ gtk3 ];
 
   meta = {
     description = "Standalone ImPlot Demos";

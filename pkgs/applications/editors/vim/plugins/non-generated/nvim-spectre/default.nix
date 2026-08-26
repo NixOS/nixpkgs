@@ -5,14 +5,15 @@
   rustPlatform,
   vimPlugins,
   vimUtils,
+  stdenv,
 }:
 let
-  version = "0-unstable-2025-04-24";
+  version = "0-unstable-2025-05-13";
   src = fetchFromGitHub {
     owner = "nvim-pack";
     repo = "nvim-spectre";
-    rev = "4497feffb18db4bab6e698bcb695228c19421282";
-    hash = "sha256-pWSHOvV0VEouCyhrtn63k7+Lvs6reS81YJJCR3Ygnwg=";
+    rev = "72f56f7585903cd7bf92c665351aa585e150af0f";
+    hash = "sha256-WPEizIClDmseDEhomCasLx/zfAMT7lq7ZBnfc/a8CuA=";
   };
 
   spectre_oxi = rustPlatform.buildRustPackage {
@@ -20,7 +21,6 @@ let
     inherit version src;
     sourceRoot = "${src.name}/spectre_oxi";
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-0szVL45QRo3AuBMf+WQ0QF0CS1B9HWPxfF6l6TJtv6Q=";
 
     preCheck = ''
@@ -31,6 +31,8 @@ let
       # Flaky test (https://github.com/nvim-pack/nvim-spectre/issues/244)
       "--skip=tests::test_replace_simple"
     ];
+
+    env.RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-arg=-undefined -C link-arg=dynamic_lookup";
   };
 in
 vimUtils.buildVimPlugin {

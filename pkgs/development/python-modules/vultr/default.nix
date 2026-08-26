@@ -3,31 +3,35 @@
   buildPythonPackage,
   fetchFromGitHub,
   requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  version = "1.0.1";
-  format = "setuptools";
   pname = "vultr";
+  version = "1.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spry-group";
     repo = "python-vultr";
-    rev = "v${version}";
-    sha256 = "00lc5hdhchvm0472p03019bp9541d8y2773xkjy8vblq9qhys8q7";
+    tag = "v${version}";
+    hash = "sha256-ByPtIU6Yro28nH2cIzxqgZR0VwpggCsOAXVDBhssjAI=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   # Tests disabled. They fail because they try to access the network
   doCheck = false;
 
   pythonImportsCheck = [ "vultr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Vultr.com API Client";
     homepage = "https://github.com/spry-group/python-vultr";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lihop ];
+    changelog = "https://github.com/spry-group/python-vultr/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lihop ];
   };
 }

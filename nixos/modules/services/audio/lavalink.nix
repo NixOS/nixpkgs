@@ -237,9 +237,9 @@ in
       );
 
       pluginExtraConfigs = builtins.listToAttrs (
-        builtins.map (
-          pluginConfig: lib.attrsets.nameValuePair pluginConfig.configName pluginConfig.extraConfig
-        ) (lib.lists.filter (pluginCfg: pluginCfg.configName != null) cfg.plugins)
+        map (pluginConfig: lib.attrsets.nameValuePair pluginConfig.configName pluginConfig.extraConfig) (
+          lib.lists.filter (pluginCfg: pluginCfg.configName != null) cfg.plugins
+        )
       );
 
       config = lib.attrsets.recursiveUpdate cfg.extraConfig {
@@ -250,9 +250,9 @@ in
 
         plugins = pluginExtraConfigs;
         lavalink.plugins = (
-          builtins.map (
+          map (
             pluginConfig:
-            builtins.removeAttrs pluginConfig [
+            removeAttrs pluginConfig [
               "name"
               "extraConfig"
               "hash"

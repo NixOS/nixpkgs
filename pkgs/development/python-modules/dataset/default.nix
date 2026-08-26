@@ -1,42 +1,42 @@
 {
   lib,
+  hatchling,
   alembic,
-  banal,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  sqlalchemy_1_4,
+  fetchFromGitHub,
+  sqlalchemy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "dataset";
-  version = "1.6.2";
-  format = "setuptools";
+  version = "2.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-d9NiEY9nqMu0hI29MKs2K5+nz+vb+vQmycUAyziWmpk=";
+  src = fetchFromGitHub {
+    owner = "pudo";
+    repo = "dataset";
+    tag = version;
+    hash = "sha256-A8X1Gv+b+K90LAZ5YDjeUbl3Y1fiaFwGj6urapLN3AQ=";
   };
 
-  propagatedBuildInputs = [
-    (alembic.override { sqlalchemy = sqlalchemy_1_4; })
-    banal
-    # SQLAlchemy >= 2.0.0 is unsupported
-    # https://github.com/pudo/dataset/issues/411
-    sqlalchemy_1_4
+  build-system = [
+    hatchling
   ];
 
-  # checks attempt to import nonexistent module 'test.test' and fail
-  doCheck = false;
+  dependencies = [
+    alembic
+    sqlalchemy
+  ];
 
   pythonImportsCheck = [ "dataset" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
     description = "Toolkit for Python-based database access";
     homepage = "https://dataset.readthedocs.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ xfnw ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ xfnw ];
   };
 }

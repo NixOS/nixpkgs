@@ -4,115 +4,156 @@
   fetchFromGitHub,
   makeWrapper,
   makeDesktopItem,
-  yarnConfigHook,
   nodejs,
-  fetchYarnDeps,
-  jq,
-  electron_35,
+  electron_42,
   element-web,
-  sqlcipher,
   callPackage,
-  desktopToDarwinBundle,
-  useKeytar ? true,
+  typescript,
+  tsx,
+  sqlcipher,
   # command line arguments which are always set
   commandLineArgs ? "",
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_11,
+  faketty,
+  asar,
+  copyDesktopItems,
+  darwin,
+  actool,
 }:
 
 let
-  pinData = import ./element-desktop-pin.nix;
-  inherit (pinData.hashes) desktopSrcHash desktopYarnHash;
-  executableName = "element-desktop";
-  electron = electron_35;
-  keytar = callPackage ./keytar {
-    inherit electron;
-  };
+  pnpm = pnpm_11;
+  electron = electron_42;
   seshat = callPackage ./seshat { };
 in
-stdenv.mkDerivation (
-  finalAttrs:
-  builtins.removeAttrs pinData [ "hashes" ]
-  // {
-    pname = "element-desktop";
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
-    src = fetchFromGitHub {
-      owner = "element-hq";
-      repo = "element-desktop";
-      rev = "v${finalAttrs.version}";
-      hash = desktopSrcHash;
-    };
+stdenv.mkDerivation (finalAttrs: {
+  pname = "element-desktop";
+  version = "1.12.26";
 
-    offlineCache = fetchYarnDeps {
-      yarnLock = finalAttrs.src + "/yarn.lock";
-      sha256 = desktopYarnHash;
-    };
+  src = fetchFromGitHub {
+    owner = "element-hq";
+    repo = "element-web";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-q9AV/jthbHnbESU/wvjdaCiMnIN6KQgAQ3cvEBvduTw=";
+  };
 
-    nativeBuildInputs = [
-      yarnConfigHook
-      nodejs
-      makeWrapper
-      jq
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  pnpmDeps = fetchPnpmDeps {
+    pname = "element";
+    inherit (finalAttrs)
+      version
+      src
+      ;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-R9YuNvrMurRaBxZqUPsUtZSFlSZ8nA7Bd/hlAMfAH+M=";
+  };
 
-    inherit seshat;
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-    # Only affects unused scripts in $out/share/element/electron/scripts. Also
-    # breaks because there are some `node`-scripts with a `npx`-shebang and
-    # this shouldn't be in the closure just for unused scripts.
-    dontPatchShebangs = true;
+  nativeBuildInputs = [
+    asar
+    copyDesktopItems
+    nodejs
+    makeWrapper
+    typescript
+    pnpm
+    pnpmConfigHook
+    tsx
+    faketty
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.autoSignDarwinBinariesHook
+    actool
+  ];
 
-    buildPhase = ''
-      runHook preBuild
+  inherit seshat;
 
-      yarn --offline run build:ts
-      yarn --offline run i18n
-      yarn --offline run build:res
+  postPatch = ''
+    cd apps/desktop
 
-      rm -rf node_modules/matrix-seshat node_modules/keytar-forked
-      ${lib.optionalString useKeytar "ln -s ${keytar} node_modules/keytar-forked"}
-      ln -s $seshat node_modules/matrix-seshat
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
 
-      runHook postBuild
-    '';
+    # `@electron/fuses` tries to run `codesign` and fails. Disable and use autoSignDarwinBinariesHook instead
+    substituteInPlace ./electron-builder.ts \
+      --replace-fail "resetAdHocDarwinSignature:" "// resetAdHocDarwinSignature:"
 
-    installPhase = ''
-      runHook preInstall
+    # Need to disable asar integrity check to copy in native seshat files, see postBuild phase
+    substituteInPlace ./electron-builder.ts \
+      --replace-fail "enableEmbeddedAsarIntegrityValidation: true" "enableEmbeddedAsarIntegrityValidation: false"
 
-      # resources
-      mkdir -p "$out/share/element"
-      ln -s '${element-web}' "$out/share/element/webapp"
-      cp -r '.' "$out/share/element/electron"
-      cp -r './res/img' "$out/share/element"
-      rm -rf "$out/share/element/electron/node_modules"
-      cp -r './node_modules' "$out/share/element/electron"
-      cp $out/share/element/electron/lib/i18n/strings/en_EN.json $out/share/element/electron/lib/i18n/strings/en-us.json
-      ln -s $out/share/element/electron/lib/i18n/strings/en{-us,}.json
+    cd ../../
+  '';
 
-      # icons
-      for icon in $out/share/element/electron/build/icons/*.png; do
-        mkdir -p "$out/share/icons/hicolor/$(basename $icon .png)/apps"
-        ln -s "$icon" "$out/share/icons/hicolor/$(basename $icon .png)/apps/element.png"
-      done
+  # faketty is required to work around a bug in nx.
+  # See: https://github.com/nrwl/nx/issues/22445
+  buildPhase = ''
+    runHook preBuild
 
-      # desktop item
-      mkdir -p "$out/share"
-      ln -s "${finalAttrs.desktopItem}/share/applications" "$out/share/applications"
+    export VERSION=${finalAttrs.version}
 
-      # executable wrapper
-      # LD_PRELOAD workaround for sqlcipher not found: https://github.com/matrix-org/seshat/issues/102
-      makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
-        --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher.so \
-        --add-flags "$out/share/element/electron" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-        --add-flags ${lib.escapeShellArg commandLineArgs}
+    faketty pnpm -C apps/desktop exec nx build:ts
+    faketty pnpm -C apps/desktop exec nx build:res
+    pnpm -C apps/desktop exec electron-builder --dir -c.electronDist=electron-dist -c.electronVersion=${electron.version} -c.mac.identity=null
 
-      runHook postInstall
-    '';
+    cd apps/desktop
 
-    # The desktop item properties should be kept in sync with data from upstream:
-    # https://github.com/element-hq/element-desktop/blob/develop/package.json
-    desktopItem = makeDesktopItem {
+    # relative path to app.asar differs on Linux and MacOS
+    packed=$(find ./dist -name app.asar)
+    asar extract "$packed" tmp-app
+
+    # linking here leads to Error: tmp-app/node_modules/matrix-seshat: file ... links out of the package
+    cp -r $seshat tmp-app/node_modules/matrix-seshat
+
+    asar pack tmp-app "$packed"
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p "$out/Applications" "$out/bin"
+    mv dist/mac*/Element.app "$out/Applications"
+
+    ln -s '${element-web}' "$out/Applications/Element.app/Contents/Resources/webapp"
+
+    wrapProgram "$out/Applications/Element.app/Contents/MacOS/Element" \
+      --add-flags ${lib.escapeShellArg commandLineArgs}
+
+    makeWrapper "$out/Applications/Element.app/Contents/MacOS/Element" "$out/bin/element-desktop"
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    mkdir -p "$out/bin" "$out/share"
+
+    cp -a dist/*-unpacked/resources $out/share/element
+
+    ln -s '${element-web}' "$out/share/element/webapp"
+
+    # icon, used in makeDesktopItem
+    mkdir -p "$out/share/icons/hicolor/512x512/apps"
+    ln -s "$out/share/element/build/icon.png" "$out/share/icons/hicolor/512x512/apps/element.png"
+
+    # executable wrapper
+    makeWrapper '${lib.getExe electron}' "$out/bin/element-desktop" \
+      --add-flags "$out/share/element/app.asar" \
+      --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher.so \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags ${lib.escapeShellArg commandLineArgs}
+  ''
+  + ''
+    runHook postInstall
+  '';
+
+  # The desktop item properties should be kept in sync with data from upstream:
+  # https://github.com/element-hq/element-desktop/blob/develop/package.json
+  desktopItems = [
+    (makeDesktopItem {
       name = "element-desktop";
-      exec = "${executableName} %u";
+      exec = "element-desktop %u";
       icon = "element";
       desktopName = "Element";
       genericName = "Matrix Client";
@@ -123,37 +164,24 @@ stdenv.mkDerivation (
         "Chat"
       ];
       startupWMClass = "Element";
-      mimeTypes = [ "x-scheme-handler/element" ];
-    };
+      mimeTypes = [
+        "x-scheme-handler/element"
+        "x-scheme-handler/io.element.desktop"
+      ];
+    })
+  ];
 
-    postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      cp build/icon.icns $out/Applications/Element.app/Contents/Resources/element.icns
-    '';
+  stripDebugList = lib.optionals stdenv.hostPlatform.isDarwin [
+    "Applications/Element.app/Contents/MacOS"
+  ];
 
-    passthru = {
-      # run with: nix-shell ./maintainers/scripts/update.nix --argstr package element-desktop
-      updateScript = ./update.sh;
-
-      # TL;DR: keytar is optional while seshat isn't.
-      #
-      # This prevents building keytar when `useKeytar` is set to `false`, because
-      # if libsecret is unavailable (e.g. set to `null` or fails to build), then
-      # this package wouldn't even considered for building because
-      # "one of the dependencies failed to build",
-      # although the dependency wouldn't even be used.
-      #
-      # It needs to be `passthru` anyways because other packages do depend on it.
-      inherit keytar;
-    };
-
-    meta = with lib; {
-      description = "A feature-rich client for Matrix.org";
-      homepage = "https://element.io/";
-      changelog = "https://github.com/element-hq/element-desktop/blob/v${finalAttrs.version}/CHANGELOG.md";
-      license = licenses.asl20;
-      teams = [ teams.matrix ];
-      inherit (electron.meta) platforms;
-      mainProgram = "element-desktop";
-    };
-  }
-)
+  meta = {
+    description = "Feature-rich client for Matrix.org";
+    homepage = "https://element.io/";
+    changelog = "https://github.com/element-hq/element-web/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.agpl3Plus;
+    teams = [ lib.teams.matrix ];
+    inherit (electron.meta) platforms;
+    mainProgram = "element-desktop";
+  };
+})

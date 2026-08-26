@@ -13,13 +13,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "selinux-refpolicy";
-  version = "2.20250213";
+  version = "2.20250923";
 
   src = fetchFromGitHub {
     owner = "SELinuxProject";
     repo = "refpolicy";
     tag = "RELEASE_${lib.versions.major finalAttrs.version}_${lib.versions.minor finalAttrs.version}";
-    hash = "sha256-VsQRqigGwSVJ52uqFj1L2xzQqbWwQ/YaFI5Rsn/HbP8=";
+    hash = "sha256-A7bC/44Swt1pe9qAubrOIVEJpsXeCkJUaftLHqq3EmM=";
   };
 
   nativeBuildInputs = [
@@ -34,22 +34,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
-  makeFlags =
-    [
-      "CHECKPOLICY=${lib.getExe checkpolicy}"
-      "CHECKMODULE=${lib.getExe' checkpolicy "checkmodule"}"
-      "SEMODULE=${lib.getExe' policycoreutils "semodule"}"
-      "SEMOD_PKG=${lib.getExe' semodule-utils "semodule_package"}"
-      "SEMOD_LNK=${lib.getExe' semodule-utils "semodule_link"}"
-      "SEMOD_EXP=${lib.getExe' semodule-utils "semodule_expand"}"
-      "DESTDIR=${placeholder "out"}"
-      "prefix=${placeholder "out"}"
-      "DISTRO=nixos"
-      "SYSTEMD=y"
-      "UBAC=y"
-    ]
-    ++ lib.optional (policyVersion != null) "OUTPUT_POLICY=${toString policyVersion}"
-    ++ lib.optional (moduleVersion != null) "OUTPUT_MODULE=${toString moduleVersion}";
+  makeFlags = [
+    "CHECKPOLICY=${lib.getExe checkpolicy}"
+    "CHECKMODULE=${lib.getExe' checkpolicy "checkmodule"}"
+    "SEMODULE=${lib.getExe' policycoreutils "semodule"}"
+    "SEMOD_PKG=${lib.getExe' semodule-utils "semodule_package"}"
+    "SEMOD_LNK=${lib.getExe' semodule-utils "semodule_link"}"
+    "SEMOD_EXP=${lib.getExe' semodule-utils "semodule_expand"}"
+    "DESTDIR=${placeholder "out"}"
+    "prefix=${placeholder "out"}"
+    "DISTRO=nixos"
+    "SYSTEMD=y"
+    "UBAC=y"
+  ]
+  ++ lib.optional (policyVersion != null) "OUTPUT_POLICY=${toString policyVersion}"
+  ++ lib.optional (moduleVersion != null) "OUTPUT_MODULE=${toString moduleVersion}";
 
   installTargets = "all install install-headers install-docs";
 
@@ -57,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "SELinux Reference Policy v2";
     homepage = "http://userspace.selinuxproject.org";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ RossComputerGuy ];
+    inherit (semodule-utils.meta) maintainers;
     license = lib.licenses.gpl2Only;
   };
 })

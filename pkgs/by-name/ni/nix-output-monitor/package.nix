@@ -3,6 +3,7 @@
   haskellPackages,
   installShellFiles,
   lib,
+  extraComposeFunctions ? [ ],
 }:
 let
   inherit (haskell.lib.compose) justStaticExecutables overrideCabal;
@@ -12,7 +13,10 @@ let
 
     # nom has unit-tests and golden-tests
     # golden-tests call nix and thus can’t be run in a nix build.
-    testTarget = "unit-tests";
+    testTargets = [
+      "unit-tests"
+      "doc-tests"
+    ];
 
     buildTools = [ installShellFiles ];
     postInstall = ''
@@ -24,7 +28,10 @@ let
   };
   raw-pkg = haskellPackages.callPackage ./generated-package.nix { };
 in
-lib.pipe raw-pkg [
-  (overrideCabal overrides)
-  justStaticExecutables
-]
+lib.pipe raw-pkg (
+  [
+    (overrideCabal overrides)
+    justStaticExecutables
+  ]
+  ++ extraComposeFunctions
+)

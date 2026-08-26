@@ -14,17 +14,14 @@
 # After a package upgrade, empty the `var/cache` folder or unexpected
 # error will occur.
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "wallabag";
-  version = "2.6.12";
-in
-stdenv.mkDerivation {
-  inherit pname version;
+  version = "2.6.14";
 
   # Release tarball includes vendored files
   src = fetchurl {
-    url = "https://github.com/wallabag/wallabag/releases/download/${version}/wallabag-${version}.tar.gz";
-    hash = "sha256-o6IbFhDac6BUNjYqhRQXWoNVwkqkRLSYyhYoOz+IG80=";
+    url = "https://github.com/wallabag/wallabag/releases/download/${finalAttrs.version}/wallabag-${finalAttrs.version}.tar.gz";
+    hash = "sha256-AEk0WuxZfazo4r4shcK453RCF/4V/VMDvKs4EXGe/w0=";
   };
 
   patches = [
@@ -42,17 +39,17 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "wallabag is a self hostable application for saving web pages";
+  meta = {
+    description = "Self-hostable application for saving web pages";
     longDescription = ''
       wallabag is a self-hostable PHP application allowing you to not
       miss any content anymore. Click, save and read it when you can.
       It extracts content so that you can read it when you have time.
     '';
-    license = licenses.mit;
-    homepage = "http://wallabag.org";
-    changelog = "https://github.com/wallabag/wallabag/releases/tag/${version}";
-    maintainers = with maintainers; [ schneefux ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    homepage = "https://wallabag.org";
+    changelog = "https://github.com/wallabag/wallabag/releases/tag/${finalAttrs.version}";
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
-}
+})

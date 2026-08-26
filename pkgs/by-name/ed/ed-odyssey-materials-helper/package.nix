@@ -2,32 +2,37 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  gradle,
-  jdk23,
-  makeWrapper,
+  gradle_9,
+  jdk25,
   wrapGAppsHook3,
-  libXxf86vm,
-  libXtst,
+  libxxf86vm,
+  libxtst,
   libglvnd,
   glib,
+  alsa-lib,
+  ffmpeg,
+  lsb-release,
   copyDesktopItems,
   makeDesktopItem,
-  nix-update-script,
+  writeScript,
+  writeText,
 }:
+let
+  gradle = gradle_9;
+in
 stdenv.mkDerivation rec {
   pname = "ed-odyssey-materials-helper";
-  version = "2.156";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "jixxed";
     repo = "ed-odyssey-materials-helper";
     tag = version;
-    hash = "sha256-T7Mh9QZRQbDJmW976bOg5YNQoFxJ2SUFl6qBjos8LSo=";
+    hash = "sha256-vQn45gHcMRLH5ta5+h3QXLODUlmDWeG1PSRRl/hgfiE=";
   };
 
   nativeBuildInputs = [
     gradle
-    makeWrapper
     wrapGAppsHook3
     copyDesktopItems
   ];
@@ -37,6 +42,9 @@ stdenv.mkDerivation rec {
     # so this removes 1) the popup about it when you first start the program, 2) the option in the settings
     # and makes the program always know that it is set up
     ./remove-urlscheme-settings.patch
+
+    ./eula.patch # EULA doesn't apply to nixpkgs build, only the upstream build, don't show it
+    ./disable-broken-features.patch # some features require things not included in the source code, we'll disable/hide those
   ];
   postPatch = ''
     # oslib doesn't seem to do releases and hasn't had a change since 2021, so always use commit d6ee6549bb
@@ -45,6 +53,16 @@ stdenv.mkDerivation rec {
       --replace-fail '"com.github.wille:oslib:master-SNAPSHOT"' '"com.github.wille:oslib:d6ee6549bb"'
     substituteInPlace application/src/main/java/module-info.java \
       --replace-fail 'requires oslib.master.SNAPSHOT;' 'requires oslib.d6ee6549bb;'
+
+    # remove "new version available" (not needed) and eddn question (eddn doesn't work in this build) popups
+    substituteInPlace application/src/main/java/nl/jixxed/eliteodysseymaterials/FXApplication.java \
+      --replace-fail 'versionPopup();' "" \
+      --replace-fail 'eddnPopup();' ""
+
+    substituteInPlace build.gradle bootstrap/build.gradle application/build.gradle \
+      --replace-fail 'vendor = JvmVendorSpec.AZUL' ""
+
+    echo "This nixpkgs-packaged version of Elite Dangerous Odyssey Materials Helper doesn't upload any data." > application/src/main/resources/text/privacy.txt
   '';
 
   mitmCache = gradle.fetchDeps {
@@ -52,10 +70,19 @@ stdenv.mkDerivation rec {
     data = ./deps.json;
   };
 
-  gradleFlags = [ "-Dorg.gradle.java.home=${jdk23}" ];
+  gradleFlags = [
+    "-Dorg.gradle.java.home=${jdk25}"
+    "--stacktrace"
+  ];
+
+  gradleInitScript = writeText "empty-init-script.gradle" ""; # fixes build by making it possibly not reproducible, though it still seems to be
 
   gradleBuildTask = "application:jpackage";
-  gradleUpdateTask = "application:nixDownloadDeps";
+
+  preBuild = ''
+    # required for the program to know its own version
+    gradle $gradleFlags application:generateSecrets
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -72,17 +99,19 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   postFixup = ''
-    # The logs would go into the current directory, so the wrapper will cd to the config dir first
-    makeShellWrapper $out/share/ed-odyssey-materials-helper/bin/Elite\ Dangerous\ Odyssey\ Materials\ Helper $out/bin/ed-odyssey-materials-helper \
-      --run 'mkdir -p ~/.config/odyssey-materials-helper/ && cd ~/.config/odyssey-materials-helper/' \
+    makeWrapper $out/share/ed-odyssey-materials-helper/bin/Elite\ Dangerous\ Odyssey\ Materials\ Helper $out/bin/ed-odyssey-materials-helper \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
-          libXxf86vm
+          libxxf86vm
           glib
-          libXtst
+          libxtst
           libglvnd
+          alsa-lib
+          ffmpeg
         ]
-      } "''${gappsWrapperArgs[@]}"
+      } \
+      --prefix PATH : ${lib.makeBinPath [ lsb-release ]} \
+      "''${gappsWrapperArgs[@]}"
   '';
 
   desktopItems = [
@@ -98,14 +127,27 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  gradleUpdateScript = ''
+    runHook preBuild
+
+    gradle application:nixDownloadDeps -Dos.family=linux -Dos.arch=amd64
+    gradle application:nixDownloadDeps -Dos.family=linux -Dos.arch=aarch64
+  '';
+
+  passthru.updateScript = writeScript "update-ed-odyssey-materials-helper" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p nix-update
+
+    nix-update ed-odyssey-materials-helper # update version and hash
+    `nix-build --no-out-link -A ed-odyssey-materials-helper.mitmCache.updateScript` # update deps.json
+  '';
 
   meta = {
     description = "Helper for managing materials in Elite Dangerous Odyssey";
     homepage = "https://github.com/jixxed/ed-odyssey-materials-helper";
     downloadPage = "https://github.com/jixxed/ed-odyssey-materials-helper/releases/tag/${version}";
     changelog = "https://github.com/jixxed/ed-odyssey-materials-helper/releases/tag/${version}";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.mit;
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # mitm cache
@@ -115,6 +157,9 @@ stdenv.mkDerivation rec {
       toasteruwu
     ];
     mainProgram = "ed-odyssey-materials-helper";
-    platforms = lib.platforms.linux;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

@@ -8,15 +8,17 @@
 }:
 
 let
+  z3' = z3.override { useCmakeBuild = false; };
+
   # fstar has a pretty hard dependency on certain z3 patch versions.
   # https://github.com/FStarLang/FStar/issues/3689#issuecomment-2625073641
   # We need to package all the Z3 versions it prefers here.
   fstarNewZ3Version = "4.13.3";
   fstarNewZ3 =
-    if z3.version == fstarNewZ3Version then
-      z3
+    if z3'.version == fstarNewZ3Version then
+      z3'
     else
-      z3.overrideAttrs (final: rec {
+      z3'.overrideAttrs (final: rec {
         version = fstarNewZ3Version;
         src = fetchFromGitHub {
           owner = "Z3Prover";
@@ -28,10 +30,10 @@ let
 
   fstarOldZ3Version = "4.8.5";
   fstarOldZ3 =
-    if z3.version == fstarOldZ3Version then
-      z3
+    if z3'.version == fstarOldZ3Version then
+      z3'
     else
-      z3.overrideAttrs (prev: rec {
+      z3'.overrideAttrs (prev: rec {
         version = fstarOldZ3Version;
         src = fetchFromGitHub {
           owner = "Z3Prover";
@@ -62,6 +64,18 @@ let
           ]
           ++ [
             ./4-8-5-typos.diff
+            (fetchpatch {
+              url = "https://github.com/Z3Prover/z3/commit/40183d7b73fcc4020b4d4b2e658b24a8c4b648ee.patch";
+              hash = "sha256-+VpPYUBVAVB9BQIp+phmL6IAEc0RC+YoUVCIsIe5TSQ=";
+            })
+            (fetchpatch {
+              url = "https://github.com/Z3Prover/z3/commit/03ae6d86cb4db88c71d6b245e29400e9a44cb59f.patch";
+              hash = "sha256-nNjkQpaSCyAqnPEZcRtG+cMTPeA+CQfvmNUe5fAK93Q=";
+            })
+            (fetchpatch {
+              url = "https://github.com/Z3Prover/z3/commit/f6c9ead10c0cf904925d7495f5c08dae66643b7a.patch";
+              hash = "sha256-eUeFayyfdg9Q8s97H6khBXst9nLYWM7NSEoQ2btMHEE=";
+            })
           ];
 
         postPatch =
@@ -96,11 +110,9 @@ stdenvNoCC.mkDerivation {
     ln -s ${lib.getExe fstarOldZ3} $out/bin/z3-${lib.escapeShellArg fstarOldZ3.version}
   '';
 
-  passthru = rec {
-    new = fstarNewZ3;
-    "z3_${lib.replaceStrings [ "." ] [ "_" ] fstarNewZ3.version}" = new;
+  passthru = {
+    "z3_${lib.replaceStrings [ "." ] [ "_" ] fstarNewZ3.version}" = fstarNewZ3;
 
-    old = fstarOldZ3;
-    "z3_${lib.replaceStrings [ "." ] [ "_" ] fstarOldZ3.version}" = old;
+    "z3_${lib.replaceStrings [ "." ] [ "_" ] fstarOldZ3.version}" = fstarOldZ3;
   };
 }

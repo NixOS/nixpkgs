@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "wlr-protocols";
-  version = "unstable-2022-09-05";
+  version = "0-unstable-2022-09-05";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -22,8 +22,8 @@ stdenv.mkDerivation {
 
   patchPhase = ''
     substituteInPlace wlr-protocols.pc.in \
-      --replace '=''${pc_sysrootdir}' "=" \
-      --replace '=@prefix@' "=$out"
+      --replace-fail '=''${pc_sysrootdir}' "=" \
+      --replace-fail '=@prefix@' "=$out"
   '';
 
   doCheck = true;
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     "PREFIX="
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Wayland roots protocol extensions";
     longDescription = ''
       wlr-protocols contains Wayland protocols that add functionality not
@@ -44,8 +44,8 @@ stdenv.mkDerivation {
       or some other protocol in wayland-protocols.
     '';
     homepage = "https://gitlab.freedesktop.org/wlroots/wlr-protocols";
-    license = licenses.mit; # See file headers
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ Scrumplex ];
+    license = lib.licenses.mit; # See file headers
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ Scrumplex ];
   };
 }

@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "genann";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "codeplea";
     repo = "genann";
-    rev = "v${version}";
-    sha256 = "0z45ndpd4a64i6jayr4yxfcr5h87bsmhm7lfgnbp35pnfywiclmq";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-WZuJbCJZXjJE4X6pAcWvlDqHMw3bEdFIBbTvFJNXM04=";
   };
 
   dontBuild = true;
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     cp ./genann.{h,c} $out/include
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/codeplea/genann";
     description = "Simple neural network library in ANSI C";
-    license = licenses.zlib;
+    license = lib.licenses.zlib;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

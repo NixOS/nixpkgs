@@ -3,14 +3,14 @@
   fetchFromGitHub,
   lib,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "traderepublic-portfolio-downloader";
   version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "dhojayev";
     repo = "traderepublic-portfolio-downloader";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-z+8VIN3rN1s8VFIGIJ6mwKbcajIcfN0TnB0Vfq5VXYM=";
   };
 
@@ -25,10 +25,10 @@ buildGoModule rec {
   meta = {
     description = "Downloads trade republic portfolio data";
     homepage = "https://github.com/dhojayev/traderepublic-portfolio-downloader";
-    changelog = "https://github.com/dhojayev/traderepublic-portfolio-downloader/releases/tag/v${version}";
+    changelog = "https://github.com/dhojayev/traderepublic-portfolio-downloader/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3;
     mainProgram = "traderepublic-portfolio-downloader";
     maintainers = with lib.maintainers; [ seineeloquenz ];
     platforms = lib.platforms.linux;
   };
-}
+})

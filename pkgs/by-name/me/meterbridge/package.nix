@@ -9,12 +9,12 @@
   libjack2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.9.3";
   pname = "meterbridge";
 
   src = fetchurl {
-    url = "http://plugin.org.uk/meterbridge/${pname}-${version}.tar.gz";
+    url = "http://plugin.org.uk/meterbridge/meterbridge-${finalAttrs.version}.tar.gz";
     sha256 = "0s7n3czfpil94vsd7iblv4xrck9c7zvsz4r3yfbkqcv85pjz1viz";
   };
 
@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
     libjack2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Various meters (VU, PPM, DPM, JF, SCO) for Jack Audio Connection Kit";
     homepage = "http://plugin.org.uk/meterbridge/";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.nico202 ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.nico202 ];
     mainProgram = "meterbridge";
   };
-}
+})

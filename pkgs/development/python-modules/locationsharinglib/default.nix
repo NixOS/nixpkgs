@@ -4,7 +4,6 @@
   cachetools,
   coloredlogs,
   fetchPypi,
-  pythonOlder,
   pytz,
   requests,
   setuptools,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "locationsharinglib";
   version = "5.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;

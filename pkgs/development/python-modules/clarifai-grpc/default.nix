@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   googleapis-common-protos,
   grpcio,
@@ -10,18 +9,16 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "clarifai-grpc";
-  version = "11.3.3";
+  version = "12.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Clarifai";
     repo = "clarifai-python-grpc";
-    tag = version;
-    hash = "sha256-alBlYWQ75l7vX/XK6QFSSb+g7efUM9Zz1bgROgEgKUw=";
+    tag = finalAttrs.version;
+    hash = "sha256-5onPljZp/ML/f+Ik2kYHj24COcvKcc/82W+B3xYiX1E=";
   };
 
   build-system = [ setuptools ];
@@ -45,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Clarifai gRPC API Client";
     homepage = "https://github.com/Clarifai/clarifai-python-grpc";
-    changelog = "https://github.com/Clarifai/clarifai-python-grpc/releases/tag/${src.tag}";
+    changelog = "https://github.com/Clarifai/clarifai-python-grpc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   version = "1.0.0";
 
   src = fetchFromGitHub {
-    owner = "vmware";
+    owner = "vmware-archive";
     repo = "clarity-city";
     rev = "v${finalAttrs.version}";
     hash = "sha256-1POSdd2ICnyNNmGadIujezNK8qvARD0kkLR4yWjs5kA=";
@@ -27,11 +27,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source sans-serif typeface";
-    homepage = "https://github.com/vmware/clarity-city";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ sagikazarmark ];
+    homepage = "https://github.com/vmware-archive/clarity-city";
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ sagikazarmark ];
   };
 })

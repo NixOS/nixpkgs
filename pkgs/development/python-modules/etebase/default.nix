@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   buildPythonPackage,
   rustPlatform,
@@ -10,45 +9,27 @@
   rustfmt,
   setuptools-rust,
   openssl,
-  Security,
   msgpack,
-  fetchpatch,
   nixosTests,
 }:
 
 buildPythonPackage rec {
   pname = "etebase";
-  version = "0.31.7";
+  version = "0.31.8";
 
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "etebase-py";
     rev = "v${version}";
-    hash = "sha256-ZNUUp/0fGJxL/Rt8sAZ864rg8uCcNybIYSk4POt0vqg=";
+    hash = "sha256-V2mQAYIPyDRQMfT0af2mpKfWXAtnJpRmY5qG1hj2dF4=";
   };
-
-  # https://github.com/etesync/etebase-py/pull/54
-  patches = [
-    # fix python 3.12 build
-    (fetchpatch {
-      url = "https://github.com/etesync/etebase-py/commit/898eb3aca1d4eb30d4aeae15e35d0bc45dd7b3c8.patch";
-      hash = "sha256-0BDUTztiC4MiwwNEDFtfc5ruc69Qk+svepQZRixNJgA=";
-    })
-    # replace flapigen git dependency in Cargo.lock
-    (fetchpatch {
-      url = "https://github.com/etesync/etebase-py/commit/7e9e4244a144dd46383d8be950d3df79e28eb069.patch";
-      hash = "sha256-8EH8Sc3UnmuCrSwDf3+as218HiG2Ed3r+FCMrUi5YrI=";
-    })
-  ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-tFOZJFrNge3N+ux2Hp4Mlm9K/AXYxuuBzEQdQYGGDjg=";
-    inherit patches;
+    inherit pname version src;
+    hash = "sha256-e7KNysHeZvHLttHKvG//uP5ebIsUiW0uwXsASVpWh58=";
   };
 
-  format = "pyproject";
+  pyproject = true;
 
   nativeBuildInputs = [
     pkg-config
@@ -59,7 +40,7 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  buildInputs = [ openssl ];
 
   propagatedBuildInputs = [ msgpack ];
 
@@ -75,11 +56,10 @@ buildPythonPackage rec {
     inherit (nixosTests) etebase-server;
   };
 
-  meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin;
+  meta = {
     homepage = "https://www.etebase.com/";
     description = "Python client library for Etebase";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ _3699n ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

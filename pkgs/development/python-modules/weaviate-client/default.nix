@@ -2,31 +2,35 @@
   lib,
   authlib,
   buildPythonPackage,
+  deprecation,
+  fastapi,
   fetchFromGitHub,
-  grpcio,
+  flask,
   grpcio-health-checking,
   grpcio-tools,
+  grpcio,
+  h5py,
   httpx,
-  pydantic,
-  pythonOlder,
-  requests,
-  setuptools-scm,
-  validators,
-  pytestCheckHook,
+  litestar,
   numpy,
-  pytest-httpserver,
   pandas,
   polars,
-  h5py,
-  litestar,
+  pydantic,
   pytest-asyncio,
-  flask,
-  fastapi,
+  pytest-httpserver,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  stdenv,
+  setuptools-scm,
+  validators,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "weaviate-client";
-  version = "4.12.0";
+  version = "4.23.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -35,43 +39,47 @@ buildPythonPackage rec {
     owner = "weaviate";
     repo = "weaviate-python-client";
     tag = "v${version}";
-    hash = "sha256-7Mg6d7gbBQfbkxsZI6aGVpfdhBS6MwmK6cl/8koy46k=";
+    hash = "sha256-kvuztqzhI2BNSBCnuuKGF32aNcQeE9gXT1yoZP8zL+k=";
   };
 
   pythonRelaxDeps = [
     "httpx"
     "validators"
     "authlib"
+    "grpcio"
+    "protobuf"
   ];
 
   build-system = [ setuptools-scm ];
 
   dependencies = [
     authlib
-    grpcio
+    deprecation
+    fastapi
     flask
+    grpcio
     grpcio-health-checking
     grpcio-tools
     h5py
     httpx
-    pydantic
-    numpy
     litestar
-    fastapi
-    polars
-    requests
+    numpy
     pandas
+    polars
+    pydantic
+    requests
     validators
   ];
 
   nativeCheckInputs = [
-    pytest-httpserver
     pytest-asyncio
+    pytest-httpserver
+    pytest-xdist
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     sed -i '/raw.githubusercontent.com/,+1d' test/test_util.py
     substituteInPlace pytest.ini \
       --replace-fail "--benchmark-skip" ""
@@ -80,16 +88,23 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Need network
-    "test_bearer_token"
     "test_auth_header_with_catchall_proxy"
+    "test_bearer_token"
+    "test_client_with_extra_options"
+    "test_integration_config"
+    "test_refresh_async"
+    "test_refresh_of_refresh_async"
+    "test_refresh_of_refresh"
     "test_token_refresh_timeout"
     "test_with_simple_auth_no_oidc_via_api_key"
-    "test_client_with_extra_options"
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "test"
-    "mock_tests"
+  ];
+
+  disabledTestPaths = [
+    "mock_tests" # mock gRPC/HTTP servers fail to bind ports
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -102,9 +117,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/weaviate/weaviate-python-client/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
-    badPlatforms = [
-      # weaviate.exceptions.WeaviateGRPCUnavailableError
-      lib.systems.inspect.patterns.isDarwin
-    ];
   };
 }

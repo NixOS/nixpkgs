@@ -7,13 +7,13 @@
   poetry-core,
   prettytable,
   ply,
-  setuptools,
+  setuptools_80,
   euclid3,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "solidpython";
   version = "1.1.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SolidCode";
@@ -28,7 +28,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     ply
-    setuptools
+    # Pinned to v80 due to pkg_resources removal, see https://github.com/SolidCode/SolidPython/issues/216
+    setuptools_80
     euclid3
 
     prettytable
@@ -51,11 +52,11 @@ buildPythonPackage rec {
     "solid"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to the OpenSCAD declarative geometry language";
     homepage = "https://github.com/SolidCode/SolidPython";
-    changelog = "https://github.com/SolidCode/SolidPython/releases/tag/v${version}";
-    maintainers = with maintainers; [ jfly ];
-    license = licenses.lgpl21Plus;
+    changelog = "https://github.com/SolidCode/SolidPython/releases/tag/v${finalAttrs.version}";
+    maintainers = with lib.maintainers; [ jfly ];
+    license = lib.licenses.lgpl21Plus;
   };
-}
+})

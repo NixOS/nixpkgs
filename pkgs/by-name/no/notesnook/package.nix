@@ -9,7 +9,7 @@
 
 let
   pname = "notesnook";
-  version = "3.0.19";
+  version = "3.4.5";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -17,7 +17,7 @@ let
   suffix =
     {
       x86_64-linux = "linux_x86_64.AppImage";
-      x86_64-darwin = "mac_x64.dmg";
+      aarch64-linux = "linux_arm64.AppImage";
       aarch64-darwin = "mac_arm64.dmg";
     }
     .${system} or throwSystem;
@@ -26,18 +26,22 @@ let
     url = "https://github.com/streetwriters/notesnook/releases/download/v${version}/notesnook_${suffix}";
     hash =
       {
-        x86_64-linux = "sha256-yCzREyFyGoAPXVVnNX6GUrr83oaPtoNOgZOOd6vJD1Q=";
-        x86_64-darwin = "sha256-WciEpt0vUuXS6YeZkbyFGqQaotXoZkWnkkn5B6/JXwE=";
-        aarch64-darwin = "sha256-iP3Xd/otYEVwU85U2dlFcX9QjDq2CbIqHmcDYVxzqzI=";
+        x86_64-linux = "sha256-Zcx6TzmyInwE2+0RbBm6+1yAL85rhcFWbr2FOSmOT6Y=";
+        aarch64-linux = "sha256-ghxdb8TG4/uh1iuN5jaQ6aeYrXJh5+oX0ZpT/j8+5Ck=";
+        aarch64-darwin = "sha256-xw8oSGqTovCioRu6FVKZIrFraE72PwPvqZms5+K3S/M=";
       }
       .${system} or throwSystem;
   };
 
-  appimageContents = appimageTools.extractType2 {
+  passthru = {
+    updateScript = ./update.sh;
+  };
+
+  appimageContents = appimageTools.extract {
     inherit pname version src;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fully open source & end-to-end encrypted note taking alternative to Evernote";
     longDescription = ''
       Notesnook is a free (as in speech) & open source note taking app
@@ -46,14 +50,11 @@ let
       XChaCha20-Poly1305 & Argon2.
     '';
     homepage = "https://notesnook.com";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
-      cig0
-      j0lol
-    ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
+      "aarch64-linux"
       "aarch64-darwin"
     ];
     mainProgram = "notesnook";
@@ -65,6 +66,7 @@ let
       version
       src
       meta
+      passthru
       ;
 
     nativeBuildInputs = [ makeWrapper ];
@@ -77,7 +79,7 @@ let
       wrapProgram $out/bin/notesnook \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
       install -Dm444 ${appimageContents}/notesnook.desktop -t $out/share/applications
-      install -Dm444 ${appimageContents}/notesnook.png -t $out/share/pixmaps
+      install -Dm444 ${appimageContents}/notesnook.png -t $out/share/icons
       substituteInPlace $out/share/applications/notesnook.desktop \
         --replace 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
     '';
@@ -89,6 +91,7 @@ let
       version
       src
       meta
+      passthru
       ;
 
     nativeBuildInputs = [ _7zz ];

@@ -3,23 +3,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pony";
-  version = "0.7.19";
+  version = "0.7.20";
   pyproject = true;
-
-  disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "ponyorm";
     repo = "pony";
-    tag = "v${version}";
-    hash = "sha256-fYzwdHRB9QrIJPEk8dqtPggSnJeugDyC9zQSM6u3rN0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/qSpgC3ka1dFxqh2ihVffEUTtAB9lxEvOcFDXLmBRf8=";
   };
 
   build-system = [ setuptools ];
@@ -41,14 +37,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pony" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for advanced object-relational mapping";
     homepage = "https://ponyorm.org/";
-    changelog = "https://github.com/ponyorm/pony/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/ponyorm/pony/releases/tag/v${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       d-goldin
       xvapx
     ];
   };
-}
+})

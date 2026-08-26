@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "findbugs";
   version = "3.0.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/findbugs/findbugs-${finalAttrs.version}.tar.gz";
     sha256 = "06b46fz4nid7qvm36r66zw01fr87y4jyz21ixw27b8hkqah0s3p8";
   };
 
@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Static analysis tool to find bugs in Java programs automatically";
     homepage = "https://findbugs.sourceforge.net/";
-    maintainers = with maintainers; [ pSub ];
-    platforms = with platforms; unix;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.lgpl3;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = with lib.platforms; unix;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.lgpl3;
   };
-}
+})

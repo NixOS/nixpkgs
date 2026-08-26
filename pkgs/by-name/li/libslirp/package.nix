@@ -8,16 +8,16 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libslirp";
-  version = "4.9.0";
+  version = "4.9.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "slirp";
     repo = "libslirp";
-    rev = "v${version}";
-    sha256 = "sha256-Eqdw6epFkLv4Dnw/s1pcKW0P70ApZwx/J2VkCwn50Ew=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Spr3dO5ehuUlzx3EnJi8najANWOirwQcTsWTVRVXYuY=";
   };
 
   separateDebugInfo = true;
@@ -31,14 +31,15 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib ];
 
   postPatch = ''
-    echo ${version} > .tarball-version
+    echo ${finalAttrs.version} > .tarball-version
   '';
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://gitlab.freedesktop.org/slirp/libslirp/-/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "General purpose TCP-IP emulator";
     homepage = "https://gitlab.freedesktop.org/slirp/libslirp";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
-}
+})

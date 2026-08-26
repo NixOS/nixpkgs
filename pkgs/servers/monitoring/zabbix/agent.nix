@@ -5,7 +5,7 @@
   pkg-config,
   libiconv,
   openssl,
-  pcre,
+  pcre2,
 }:
 
 import ./versions.nix (
@@ -19,18 +19,20 @@ import ./versions.nix (
       inherit hash;
     };
 
+    enableParallelBuilding = true;
+
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [
       libiconv
       openssl
-      pcre
+      pcre2
     ];
 
     configureFlags = [
       "--enable-agent"
       "--enable-ipv6"
       "--with-iconv"
-      "--with-libpcre"
+      "--with-libpcre2"
       "--with-openssl=${openssl.dev}"
     ];
     makeFlags = [

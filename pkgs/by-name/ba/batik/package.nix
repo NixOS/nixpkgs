@@ -10,11 +10,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "batik";
-  version = "1.18";
+  version = "1.19";
 
   src = fetchurl {
     url = "mirror://apache/xmlgraphics/batik/binaries/batik-bin-${finalAttrs.version}.tar.gz";
-    hash = "sha256-k2kC/441o0qizY9nwbWJh3Hv45FJeuDgrhynPhvZg0Y=";
+    hash = "sha256-1KuzhFSEv+GJqA83QZuUx35mvUuLueW/cs5wvIZe2yI=";
   };
 
   nativeBuildInputs = [
@@ -45,11 +45,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Java based toolkit for handling SVG";
     homepage = "https://xmlgraphics.apache.org/batik";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
   };
 })

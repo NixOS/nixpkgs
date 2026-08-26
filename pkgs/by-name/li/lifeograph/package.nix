@@ -1,54 +1,58 @@
 {
-  stdenv,
   lib,
-  fetchgit,
+  stdenv,
+  fetchFromGitLab,
   pkg-config,
   meson,
   ninja,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   enchant,
-  gtkmm3,
-  libchamplain,
+  gtkmm4,
   libgcrypt,
+  gtk3,
   shared-mime-info,
+  libshumate,
+  nix-update-script,
+  python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lifeograph";
-  version = "2.0.3";
+  version = "3.1.4";
 
-  src = fetchgit {
-    url = "https://git.launchpad.net/lifeograph";
-    rev = "v${version}";
-    hash = "sha256-RotbTdTtpwXmo+UKOyp93IAC6CCstv++KtnX2doN+nM=";
+  src = fetchFromGitLab {
+    owner = "bilheps";
+    repo = "lifeograph";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Tsvuc6s8D45WKCTWSqRBIVu1zOjx43edBlAw/TLOGV0=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    gtk3 # for gtk-update-icon-cache (meson post-install script)
     shared-mime-info # for update-mime-database
-    wrapGAppsHook3
+    wrapGAppsHook4
+    python3.pkgs.pybind11
   ];
 
   buildInputs = [
     libgcrypt
     enchant
-    gtkmm3
-    libchamplain
+    gtkmm4
+    libshumate
+    python3
   ];
 
-  postInstall = ''
-    substituteInPlace $out/share/applications/net.sourceforge.Lifeograph.desktop \
-      --replace "Exec=" "Exec=$out/bin/"
-  '';
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
-    homepage = "https://lifeograph.sourceforge.net/wiki/Main_Page";
-    description = "Lifeograph is an off-line and private journal and note taking application";
-    license = licenses.gpl3Only;
-    maintainers = [ ];
+  meta = {
+    homepage = "https://lifeograph.sourceforge.net/doku.php?id=start";
+    description = "Off-line and private journal and note taking application";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ kyehn ];
     mainProgram = "lifeograph";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

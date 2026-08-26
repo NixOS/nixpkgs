@@ -4,21 +4,18 @@
   fetchFromGitHub,
 }:
 
-let
+buildGoModule (finalAttrs: {
   pname = "wgo";
-  version = "0.5.11";
-in
-buildGoModule {
-  inherit pname version;
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "bokwoon95";
     repo = "wgo";
-    rev = "v${version}";
-    hash = "sha256-iTUZTeruP21pfd/28fdIhhS5GiSn6DC9Oe2w6VTaxFE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-t1gVH/8woXhsJHJhAmSv0iFwdEjAKrI87kR23isS5n8=";
   };
 
-  vendorHash = "sha256-w6UJxZToHbbQmuXkyqFzyssFcE+7uVNqOuIF/XKdEsU=";
+  vendorHash = "sha256-c7Cp08kmDOV63tvfSkGcO+SWgpuzJEm/vqbCVPS/v/Q=";
 
   ldflags = [
     "-s"
@@ -33,11 +30,11 @@ buildGoModule {
     "-skip=TestWgoCmd_FileEvent"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Live reload for Go apps";
     mainProgram = "wgo";
     homepage = "https://github.com/bokwoon95/wgo";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

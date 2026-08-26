@@ -22,6 +22,9 @@ let
     // lib.optionalAttrs (cfg.ipcPasswordFile != null) {
       IPCPassword = "#ipcPassword#";
     }
+    // lib.optionalAttrs (cfg.licenseFile != null) {
+      LicenseID = "#licenseID#";
+    }
   );
 
   ipc-config = format.generate "IPC.config" cfg.ipcSettings;
@@ -60,7 +63,7 @@ in
             description = "Whether to start the web-ui. This is the preferred way of configuring things such as the steam guard token.";
           };
 
-          package = lib.mkPackageOption pkgs [ "ArchiSteamFarm" "ui" ] {
+          package = lib.mkPackageOption pkgs [ "archisteamfarm" "ui" ] {
             extraDescription = ''
               ::: {.note}
               Contents must be in lib/dist
@@ -78,7 +81,7 @@ in
       description = "The Web-UI hosted on 127.0.0.1:1242.";
     };
 
-    package = lib.mkPackageOption pkgs "ArchiSteamFarm" {
+    package = lib.mkPackageOption pkgs "archisteamfarm" {
       extraDescription = ''
         ::: {.warning}
         Should always be the latest version, for security reasons,
@@ -107,6 +110,12 @@ in
         Statistics = false;
       };
       default = { };
+    };
+
+    licenseFile = lib.mkOption {
+      type = with lib.types; nullOr path;
+      default = null;
+      description = "Path to a file containing the license. The file must be readable by the `archisteamfarm` user/group.";
     };
 
     ipcPasswordFile = lib.mkOption {
@@ -272,6 +281,10 @@ in
             mkdir -p config
 
             cp --no-preserve=mode ${configFile} config/ASF.json
+
+            ${lib.optionalString (cfg.licenseFile != null) ''
+              ${replaceSecretBin} '#licenseID#' '${cfg.licenseFile}' config/ASF.json
+            ''}
 
             ${lib.optionalString (cfg.ipcPasswordFile != null) ''
               ${replaceSecretBin} '#ipcPassword#' '${cfg.ipcPasswordFile}' config/ASF.json

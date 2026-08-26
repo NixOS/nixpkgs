@@ -19,6 +19,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZHgWyZFW7t2VTibH7WeuU8+I12bb95I9NcHI5s4U3VU=";
   };
 
+  postPatch = ''
+    # CMake 2.6 is deprecated and is no longer supported by CMake > 4
+    # inline of https://github.com/neobrain/nihstro/pull/71
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" \
+        "cmake_minimum_required(VERSION 3.5)"
+  '';
+
   strictDeps = true;
 
   nativeBuildInputs = [

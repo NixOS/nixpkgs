@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  blueprint-compiler,
   meson,
   ninja,
   pkg-config,
@@ -14,18 +15,19 @@
   desktop-file-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dippi";
-  version = "4.1.0";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
     repo = "dippi";
-    rev = version;
-    hash = "sha256-BYI3WqMDxzERlqtq7ISQ+U1FTrpKh5OJBMo/AsdmdlQ=";
+    rev = finalAttrs.version;
+    hash = "sha256-PfJp4DOM4uaDaKMYeLS70LA00mCeW/jaLmduJ1Wej4k=";
   };
 
   nativeBuildInputs = [
+    blueprint-compiler
     meson
     ninja
     vala
@@ -44,9 +46,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Calculate display info like DPI and aspect ratio";
     homepage = "https://github.com/cassidyjames/dippi";
-    mainProgram = "com.github.cassidyjames.dippi";
+    mainProgram = "com.cassidyjames.dippi";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ zendo ];
   };
-}
+})

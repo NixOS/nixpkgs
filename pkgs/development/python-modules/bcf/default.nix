@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   appdirs,
   click,
   colorama,
@@ -13,24 +14,28 @@
   requests,
   schema,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bcf";
-  version = "1.9.0";
-  format = "setuptools";
+  version = "1.9.1";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "hardwario";
     repo = "bch-firmware-tool";
-    rev = "v${version}";
-    sha256 = "i28VewTB2XEZSfk0UeCuwB7Z2wz4qPBhzvxJIYkKwJ4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xKggVEN3O0umDEt358xc+79/SEVm2peMjfFHGTppTEo=";
   };
 
+  build-system = [ setuptools ];
+
   postPatch = ''
-    sed -ri 's/@@VERSION@@/${version}/g' \
+    sed -ri 's/@@VERSION@@/${finalAttrs.version}/g' \
       bcf/__init__.py setup.py
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     appdirs
     click
     colorama
@@ -46,12 +51,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "bcf" ];
   doCheck = false; # Project provides no tests
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hardwario/bch-firmware-tool";
     description = "HARDWARIO Firmware Tool";
     mainProgram = "bcf";
-    platforms = platforms.linux;
-    license = licenses.mit;
-    maintainers = with maintainers; [ cynerd ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cynerd ];
   };
-}
+})

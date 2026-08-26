@@ -1,41 +1,45 @@
 {
   lib,
+  python3,
   python3Packages,
   fetchFromGitHub,
   wrapGAppsHook3,
   gtk3,
   gobject-introspection,
-  libappindicator-gtk3,
+  libappindicator,
   librsvg,
   bluez,
   linuxHeaders,
-  libX11,
-  libXext,
-  libXfixes,
+  libx11,
+  libxext,
+  libxfixes,
   libusb1,
   udev,
+  udevCheckHook,
   gtk-layer-shell,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sc-controller";
-  version = "0.5.2";
+  version = "0.6.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "C0rn3j";
     repo = "sc-controller";
-    tag = "v${version}";
-    hash = "sha256-w7jVh0d8u6csXOQ6pjUCSD3R/qFVqTa2gcGa47pqn/0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wbhRfTU+e/Xm+TwPyBcLBMypC365XHZwPjiGvJ8YdDU=";
   };
 
   nativeBuildInputs = [
     wrapGAppsHook3
     gobject-introspection
+    udevCheckHook
   ];
 
   buildInputs = [
     gtk3
-    libappindicator-gtk3
+    libappindicator
     librsvg
   ];
 
@@ -67,10 +71,10 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace scc/device_monitor.py --replace "find_library('bluetooth')" "'libbluetooth.so.3'"
   '';
 
-  LD_LIBRARY_PATH = lib.makeLibraryPath [
-    libX11
-    libXext
-    libXfixes
+  env.LD_LIBRARY_PATH = lib.makeLibraryPath [
+    libx11
+    libxext
+    libxfixes
     libusb1
     udev
     bluez
@@ -89,6 +93,13 @@ python3Packages.buildPythonApplication rec {
     )
   '';
 
+  preCheck = ''
+    # Fix for tests not finding native libraries
+    ln -s build/lib.*/*.so -t .
+  '';
+
+  doInstallCheck = true;
+
   meta = {
     homepage = "https://github.com/C0rn3j/sc-controller";
     # donations: https://www.patreon.com/kozec
@@ -96,8 +107,7 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      orivej
       rnhmjoj
     ];
   };
-}
+})

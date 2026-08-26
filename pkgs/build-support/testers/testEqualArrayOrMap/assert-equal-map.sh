@@ -1,11 +1,5 @@
 # shellcheck shell=bash
 
-# Tests if a map is declared.
-isDeclaredMap() {
-  # shellcheck disable=SC2034
-  local -nr mapRef="$1" && [[ ${!mapRef@a} =~ A ]]
-}
-
 # Asserts that two maps are equal, printing out differences if they are not.
 # Does not short circuit on the first difference.
 assertEqualMap() {
@@ -19,25 +13,14 @@ assertEqualMap() {
   local -nr actualMapRef="$2"
 
   if ! isDeclaredMap "${!expectedMapRef}"; then
-    nixErrorLog "first arugment expectedMapRef must be an associative array reference to a declared associative array"
+    nixErrorLog "first argument expectedMapRef must be a reference to an associative array"
     exit 1
   fi
 
   if ! isDeclaredMap "${!actualMapRef}"; then
-    nixErrorLog "second arugment actualMapRef must be an associative array reference to a declared associative array"
+    nixErrorLog "second argument actualMapRef must be a reference to an associative array"
     exit 1
   fi
-
-  # NOTE:
-  # From the `sort` manpage: "The locale specified by the environment affects sort order. Set LC_ALL=C to get the
-  # traditional sort order that uses native byte values."
-  # We specify the environment variable in a subshell to avoid polluting the caller's environment.
-
-  local -a sortedExpectedKeys
-  mapfile -d '' -t sortedExpectedKeys < <(printf '%s\0' "${!expectedMapRef[@]}" | LC_ALL=C sort --stable --zero-terminated)
-
-  local -a sortedActualKeys
-  mapfile -d '' -t sortedActualKeys < <(printf '%s\0' "${!actualMapRef[@]}" | LC_ALL=C sort --stable --zero-terminated)
 
   local -ir expectedLength=${#expectedMapRef[@]}
   local -ir actualLength=${#actualMapRef[@]}
@@ -48,6 +31,12 @@ assertEqualMap() {
     nixErrorLog "maps differ in length: expectedMap has length $expectedLength but actualMap has length $actualLength"
     hasDiff=1
   fi
+
+  local -a sortedExpectedKeys=()
+  getSortedMapKeys "${!expectedMapRef}" sortedExpectedKeys
+
+  local -a sortedActualKeys=()
+  getSortedMapKeys "${!actualMapRef}" sortedActualKeys
 
   local -i expectedKeyIdx=0
   local expectedKey

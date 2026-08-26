@@ -5,6 +5,7 @@
   acl,
   autoreconfHook,
   avahi,
+  bstring,
   db,
   libevent,
   libgcrypt,
@@ -22,35 +23,44 @@
   openldap,
   glib,
   dbus,
-  docbook-xsl-nons,
-  cmark-gfm,
   iniparser,
+  pandoc,
+  sqlite,
+  talloc,
+  xapian,
+  flex,
+  bison,
+  dconf,
+  localsearch,
+  tinysparql,
+  xapianSupport ? false,
+  localsearchSupport ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netatalk";
-  version = "4.2.0";
+  version = "4.5.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/netatalk/netatalk/netatalk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-doqRAU4pjcHRTvKOvjMN2tSZKOPDTzBzU7i90xf1ClI=";
+    hash = "sha256-8JHeELDECZbr99ZQLPlHz9h9/hp+YvnZYBMiVXOThSQ=";
   };
-
-  patches = [
-    ./0000-no-install-under-usr-cupsd.patch
-    ./0001-no-install-under-var-CNID.patch
-  ];
 
   nativeBuildInputs = [
     pkg-config
     meson
     ninja
     file
+  ]
+  ++ lib.optionals localsearchSupport [
+    flex
+    bison
   ];
 
   buildInputs = [
     acl
     avahi
+    bstring
     db
     libevent
     libgcrypt
@@ -64,9 +74,19 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     perl
     dbus
-    docbook-xsl-nons
-    cmark-gfm
     iniparser
+    pandoc
+    sqlite
+    talloc
+  ]
+  ++ lib.optionals xapianSupport [
+    xapian
+    file
+  ]
+  ++ lib.optionals localsearchSupport [
+    tinysparql
+    dconf
+    localsearch
   ];
 
   mesonFlags = [
@@ -76,19 +96,40 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dwith-bdb-include-path=${db.dev}/include"
     "-Dwith-install-hooks=false"
     "-Dwith-init-hooks=false"
-    "-Dwith-lockfile-path=/run/lock/"
+    "-Dwith-lockfile-path=/run/lock"
     "-Dwith-cracklib=true"
     "-Dwith-cracklib-path=${cracklib.out}"
-    "-Dwith-docbook-path=${docbook-xsl-nons.out}/share/xml/docbook-xsl-nons/"
+    "-Dwith-statedir-creation=false"
+    "-Dwith-spotlight-backends=${
+      lib.concatStringsSep "," (
+        [ "cnid" ] ++ lib.optional xapianSupport "xapian" ++ lib.optional localsearchSupport "localsearch"
+      )
+    }"
   ];
+
+  # TODO: drop once upstream makes this path configurable.
+  postPatch = lib.optionalString localsearchSupport ''
+    substituteInPlace meson.build \
+      --replace-fail "install_emptydir('/etc/dconf/db')" "install_emptydir('etc/dconf/db')"
+    substituteInPlace config/dconf/meson.build \
+      --replace-fail "install_dir: '/etc/dconf/profile'" "install_dir: 'etc/dconf/profile'"
+  '';
+
+  # netatalk probes for the LocalSearch schema at configure time.
+  preConfigure = lib.optionalString localsearchSupport ''
+    export XDG_DATA_DIRS="''${XDG_DATA_DIRS:+$XDG_DATA_DIRS:}${localsearch}/share/gsettings-schemas/localsearch-${localsearch.version}"
+  '';
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Apple Filing Protocol Server";
     homepage = "https://netatalk.io/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jcumming ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      jcumming
+      nulleric
+    ];
   };
 })

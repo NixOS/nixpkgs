@@ -3,7 +3,6 @@
   stdenvNoCC,
   fetchFromGitHub,
   gdk-pixbuf,
-  gtk-engine-murrine,
   jdupes,
   librsvg,
   gitUpdater,
@@ -28,7 +27,7 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] col
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
-      repo = pname;
+      repo = "matcha-gtk-theme";
       rev = version;
       sha256 = "sha256-vPAGEa3anWAynEg2AYme4qpHJdLDKk2CmL5iQ1mBYgM=";
     };
@@ -42,10 +41,6 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] col
       librsvg
     ];
 
-    propagatedUserEnvPkgs = [
-      gtk-engine-murrine
-    ];
-
     postPatch = ''
       patchShebangs install.sh
     '';
@@ -56,12 +51,12 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] col
       mkdir -p $out/share/themes
 
       name= ./install.sh \
-        ${lib.optionalString (colorVariants != [ ]) "--color " + builtins.toString colorVariants} \
-        ${lib.optionalString (themeVariants != [ ]) "--theme " + builtins.toString themeVariants} \
+        ${lib.optionalString (colorVariants != [ ]) "--color " + toString colorVariants} \
+        ${lib.optionalString (themeVariants != [ ]) "--theme " + toString themeVariants} \
         --dest $out/share/themes
 
-      mkdir -p $out/share/doc/${pname}
-      cp -a src/extra/firefox $out/share/doc/${pname}
+      mkdir -p $out/share/doc/matcha-gtk-theme
+      cp -a src/extra/firefox $out/share/doc/matcha-gtk-theme
 
       jdupes --quiet --link-soft --recurse $out/share
 
@@ -70,11 +65,11 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] col
 
     passthru.updateScript = gitUpdater { };
 
-    meta = with lib; {
+    meta = {
       description = "Stylish flat Design theme for GTK based desktop environments";
       homepage = "https://vinceliuice.github.io/theme-matcha";
-      license = licenses.gpl3Only;
-      platforms = platforms.unix;
-      maintainers = [ maintainers.romildo ];
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.unix;
+      maintainers = [ lib.maintainers.romildo ];
     };
   }

@@ -8,18 +8,21 @@
   wrapGAppsHook3,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "photocollage";
-  version = "1.4.6";
+  version = "1.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adrienverge";
     repo = "PhotoCollage";
-    rev = "v${version}";
-    hash = "sha256-jDb2mFsok8TNi9+A/FAieqo7YbAUsmrFRBGwdGv71Xg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-YEkQ5yVFCBBFg8IL5ExvZIi0moaG/c0LtsIkphuzuog=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     pillow
     pycairo
     pygobject3
@@ -49,6 +52,8 @@ python3Packages.buildPythonApplication rec {
     cp -r ./data/icons $out/share/icons
   '';
 
+  pythonImportsCheck = [ "photocollage" ];
+
   meta = {
     description = "Graphical tool to make photo collage posters";
     homepage = "https://github.com/adrienverge/PhotoCollage";
@@ -57,4 +62,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     mainProgram = "photocollage";
   };
-}
+})

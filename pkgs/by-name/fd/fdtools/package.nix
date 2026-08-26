@@ -5,52 +5,47 @@
   skawarePackages,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "fdtools";
-  # When you update, check whether we can drop the skalibs pin.
-  version = "2020.05.04";
-  sha256 = "0lnafcp4yipi0dl8gh33zjs8wlpz0mim8mwmiz9s49id0b0fmlla";
-  skalibs = skawarePackages.skalibs_2_10;
-
-in
-stdenv.mkDerivation {
-  inherit pname version;
+  version = "2024.12.07";
 
   src = fetchurl {
-    url = "https://code.dogmap.org/fdtools/releases/fdtools-${version}.tar.bz2";
-    inherit sha256;
+    url = "https://code.dogmap.org/fdtools/releases/fdtools-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-URK5FBpCbhcp2haug0lWtc9wOvwJHPTWZe4u8HDeaYc=";
   };
 
-  patches = [ ./new-skalibs.patch ];
+  patches = [
+    ./add-skalibs-include.patch
+  ];
+
   outputs = [
     "bin"
     "lib"
     "dev"
+    "man"
     "doc"
     "out"
   ];
 
   buildInputs = [
-    # temporary, until fdtools catches up to skalibs
-    skalibs
+    skawarePackages.skalibs
   ];
 
   configurePhase = ''
-    cd fdtools-${version}
-    sed -e 's|gcc|$CC|' \
-      conf-compile/defaults/host_link.sh \
-      > conf-compile/host_link.sh
-    sed -e 's|gcc|$CC|' \
-      conf-compile/defaults/host_compile.sh \
-      > conf-compile/host_compile.sh
-
-    echo "${skalibs.lib}/lib/skalibs/sysdeps" \
-      > conf-compile/depend_skalibs_sysdeps
+    cd fdtools-${finalAttrs.version}
+    substituteInPlace conf-compile/defaults/host_compile.sh \
+      --replace-fail "gcc" "$CC"
+    substituteInPlace conf-compile/defaults/host_link.sh \
+      --replace-fail "gcc" "$CC"
+    echo "${skawarePackages.skalibs.lib}/lib/skalibs/sysdeps" > conf-compile/defaults/depend_skalibs_sysdeps
   '';
 
   buildPhase = ''
     bash package/build
   '';
+
+  # gcc15
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   installPhase = ''
     mkdir -p $bin/bin
@@ -62,11 +57,15 @@ stdenv.mkDerivation {
 
     mkdir -p $lib/lib
     mkdir -p $dev/include
+    mkdir -p $man/share/man/man1
+    mkdir -p $man/share/man/man8
     docdir=$doc/share/doc/fdtools
     mkdir -p $docdir
 
     mv library/fdtools.a $lib/lib/fdtools.a
     mv include/fdtools.h $dev/include/fdtools.h
+    mv man/man1/* $man/share/man/man1/
+    mv man/man8/* $man/share/man/man8/
 
     ${
       skawarePackages.cleanPackaging.commonFileActions {
@@ -96,6 +95,6 @@ stdenv.mkDerivation {
     description = "Set of utilities for working with file descriptors";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.Profpatsch ];
+    maintainers = [ ];
   };
-}
+})

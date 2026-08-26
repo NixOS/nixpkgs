@@ -4,13 +4,18 @@
   appstream-glib,
   blueprint-compiler,
   cargo,
+  dbus,
   desktop-file-utils,
-  fetchFromGitea,
+  fetchFromCodeberg,
   glib,
+  glycin-loaders,
   gst_all_1,
   gtk4,
   hicolor-icon-theme,
+  lcms2,
   libadwaita,
+  libglycin,
+  libseccomp,
   libxml2,
   meson,
   ninja,
@@ -21,30 +26,21 @@
   sqlite,
   wrapGAppsHook4,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "recordbox";
-  version = "0.9.3";
+  version = "0.11.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "edestcroix";
     repo = "Recordbox";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-168L5i6mXeEqv7EKPMq4zHP5JRVxC7MNrUE9yj1zI60=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HskhMZy8y61c/j/F5e5aM41AQ8t+TCUq/iY23SFB92o=";
   };
 
-  # Patch in our Cargo.lock and ensure AppStream tests don't use the network
-  # TODO: Switch back to the default `validate` when the upstream file actually
-  # passes it
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-
-    substituteInPlace data/meson.build \
-      --replace-fail "['validate', appstream_file]" "['validate-relax', '--nonet', appstream_file]"
-  '';
-
-  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-xHukIMUG5himj1umKn+IKM7kJ29MH/pt/jPEHd2EeT0=";
+  };
 
   strictDeps = true;
 
@@ -56,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib # For `glib-compile-schemas`
     gtk4 # For `gtk-update-icon-cache`
     libxml2 # For `xmllint`
+    libglycin.patchVendorHook
     meson
     ninja
     pkg-config
@@ -65,21 +62,26 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      gtk4
-      hicolor-icon-theme
-      libadwaita
-      sqlite
-    ]
-    ++ (with gst_all_1; [
-      gst-plugins-bad
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-rs
-      gst-plugins-ugly
-      gstreamer
-    ]);
+  buildInputs = [
+    libglycin.setupHook
+    glycin-loaders
+    dbus
+    gtk4
+    hicolor-icon-theme
+    lcms2
+    libadwaita
+    libseccomp
+    sqlite
+  ]
+  ++ (with gst_all_1; [
+    gst-libav
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-rs
+    gst-plugins-ugly
+    gstreamer
+  ]);
 
   mesonBuildType = "release";
 
@@ -102,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Relatively simple music player";
     homepage = "https://codeberg.org/edestcroix/Recordbox";
+    changelog = "https://codeberg.org/edestcroix/Recordbox/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "recordbox";

@@ -1,45 +1,34 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
   testers,
   gitMinimal,
   serie,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "serie";
-  version = "0.4.6";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "lusingander";
     repo = "serie";
-    rev = "v${version}";
-    hash = "sha256-26B/bwXz60fcZrh6H1RPROiML44S1Pt1J3VrJh2gRrI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-FD4GIDaPnd44xgT+NsDuhRuL7CnPZFVX96ATWlUGrHo=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Bdk553tECJiMxJlXj147Sv2LzH+nM+/Cm5BpBr78I4o=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      CoreGraphics
-      AppKit
-    ]
-  );
+  cargoHash = "sha256-NQxjqe1kzEIxr6G5Iac9DQVIG26lox77AumgKLtYQ48=";
 
   nativeCheckInputs = [ gitMinimal ];
 
   passthru.tests.version = testers.testVersion { package = serie; };
 
-  meta = with lib; {
-    description = "A rich git commit graph in your terminal, like magic";
+  meta = {
+    description = "Rich git commit graph in your terminal, like magic";
     homepage = "https://github.com/lusingander/serie";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "serie";
   };
-}
+})

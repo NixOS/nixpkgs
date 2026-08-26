@@ -2,9 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   poetry-core,
-  importlib-metadata,
 }:
 
 buildPythonPackage rec {
@@ -19,17 +17,15 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  dependencies = lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
-
   # no tests executed
   doCheck = false;
 
   pythonImportsCheck = [ "babelfish" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Diaoul/babelfish";
     description = "Module to work with countries and languages";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

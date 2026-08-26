@@ -4,7 +4,10 @@ nvidia_x11: sha256:
   stdenv,
   lib,
   fetchFromGitHub,
+  buildPackages,
   m4,
+  pkg-config,
+  addDriverRunpath,
   libtirpc,
 }:
 
@@ -19,10 +22,29 @@ stdenv.mkDerivation {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ m4 ];
-  buildInputs = [ libtirpc ];
+  env = lib.optionalAttrs (lib.versionOlder nvidia_x11.persistencedVersion "450.51") {
+    NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
+    NIX_LDFLAGS = toString [ "-ltirpc" ];
+  };
 
-  inherit (nvidia_x11) makeFlags;
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  nativeBuildInputs = [
+    m4
+    pkg-config
+    addDriverRunpath
+  ];
+
+  buildInputs = [
+    libtirpc
+  ];
+
+  makeFlags = [
+    "DATE=true"
+    "DO_STRIP="
+    "HOST_CC=\$(CC_FOR_BUILD)"
+    "HOST_LD=\$(LD_FOR_BUILD)"
+  ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
@@ -32,19 +54,15 @@ stdenv.mkDerivation {
     cp $out/{bin,origBin}/nvidia-persistenced
     patchelf --set-interpreter /lib64/ld-linux-x86-64.so.2 $out/origBin/nvidia-persistenced
 
-    patchelf --set-rpath "$(patchelf --print-rpath $out/bin/nvidia-persistenced):${nvidia_x11}/lib" \
-      $out/bin/nvidia-persistenced
+    addDriverRunpath $out/bin/nvidia-persistenced
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
-  NIX_LDFLAGS = [ "-ltirpc" ];
-
-  meta = with lib; {
-    homepage = "https://www.nvidia.com/object/unix.html";
-    description = "Settings application for NVIDIA graphics cards";
-    license = licenses.unfreeRedistributable;
+  meta = {
+    homepage = "https://github.com/NVIDIA/nvidia-persistenced";
+    description = "NVIDIA driver persistence daemon";
+    license = lib.licenses.mit;
     platforms = nvidia_x11.meta.platforms;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
     mainProgram = "nvidia-persistenced";
   };
 }

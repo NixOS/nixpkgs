@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   meson,
   ninja,
   wrapGAppsHook3,
@@ -28,15 +28,21 @@
   librsvg,
   gtk-mac-integration,
   webp-pixbuf-loader,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura";
-  version = "0.5.11";
+  version = "2026.05.20";
 
-  src = fetchurl {
-    url = "https://pwmt.org/projects/zathura/download/zathura-${finalAttrs.version}.tar.xz";
-    hash = "sha256-VEWKmZivD7j67y6TSoESe75LeQyG3NLIuPMjZfPRtTw=";
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "pwmt";
+    repo = "zathura";
+    tag = finalAttrs.version;
+    hash = "sha256-ChrIJKPVukkW6d/grGcMJ6sZ9sctIOmyJv6TAehh1T8=";
   };
 
   outputs = [
@@ -73,26 +79,25 @@ stdenv.mkDerivation (finalAttrs: {
     appstream-glib
   ];
 
-  buildInputs =
-    [
-      gtk3
-      girara
-      libintl
-      sqlite
-      glib
-      file
-      librsvg
-      check
-      json-glib
-      texlive.bin.core
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
-    ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
+  buildInputs = [
+    gtk3
+    girara
+    libintl
+    sqlite
+    glib
+    file
+    librsvg
+    check
+    json-glib
+    texlive.bin.core
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
+  ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
 
   # add support for more image formats
   env.GDK_PIXBUF_MODULE_FILE = gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
     extraLoaders = [
-      libheif.out
+      libheif.lib
       libjxl
       librsvg
       webp-pixbuf-loader
@@ -101,6 +106,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru.updateScript = gitUpdater { };
 
   meta = {
@@ -108,6 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Core component for zathura PDF viewer";
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ globin ];
+    maintainers = with lib.maintainers; [ mithicspirit ];
+    mainProgram = "zathura";
   };
 })

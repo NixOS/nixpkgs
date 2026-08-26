@@ -20,14 +20,14 @@ let
     ];
   });
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "appvm";
   version = "0.6";
 
   src = fetchFromGitHub {
     owner = "jollheef";
-    repo = pname;
-    tag = "v${version}";
+    repo = "appvm";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-n+YputGiNWSOYbwes/rjz0h3RWZONDTc8+LDc0La/KU=";
   };
 
@@ -47,7 +47,7 @@ buildGoModule rec {
 
   meta = {
     description = "Nix-based app VMs";
-    homepage = "https://code.dumpstack.io/tools/${pname}";
+    homepage = "https://code.dumpstack.io/tools/appvm";
     maintainers = with lib.maintainers; [
       dump_stack
       cab404
@@ -55,4 +55,4 @@ buildGoModule rec {
     ];
     license = lib.licenses.gpl3;
   };
-}
+})

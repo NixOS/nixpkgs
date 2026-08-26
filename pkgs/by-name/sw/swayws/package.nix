@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-ILS7r1gL6fXeX58CJ+gHvQ5Cst7PbK4yNw2Dh5l9IEc=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-AS1vEnNLDLsNaIZ6pLrsQpQy9+bSoCn5oyj8SXjJ+OE=";
 
   # swayws does not have any tests
@@ -29,6 +28,6 @@ rustPlatform.buildRustPackage {
     mainProgram = "swayws";
     homepage = "https://gitlab.com/w0lff/swayws";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.atila ];
+    maintainers = [ ];
   };
 }

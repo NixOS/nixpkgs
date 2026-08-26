@@ -34,12 +34,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/joehillen/sysz";
     description = "Fzf terminal UI for systemctl";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ hleboulanger ];
-    platforms = platforms.unix;
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ hleboulanger ];
+    platforms = lib.platforms.unix;
     changelog = "https://github.com/joehillen/sysz/blob/${version}/CHANGELOG.md";
     mainProgram = "sysz";
   };

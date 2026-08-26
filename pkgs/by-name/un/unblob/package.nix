@@ -3,7 +3,6 @@
   libiconv,
   python3,
   fetchFromGitHub,
-  gitUpdater,
   makeWrapper,
   rustPlatform,
   stdenvNoCC,
@@ -14,11 +13,13 @@
   lziprecover,
   lzop,
   p7zip,
+  partclone,
   sasquatch,
   sasquatch-v4be,
   simg2img,
   ubi_reader,
   unar,
+  upx,
   zstd,
   versionCheckHook,
 }:
@@ -37,33 +38,32 @@ let
     ubi_reader
     simg2img
     unar
+    upx
     zstd
     lz4
-  ];
+  ]
+  ++ lib.optional stdenvNoCC.hostPlatform.isLinux partclone;
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "unblob";
-  version = "25.4.14";
+  version = "26.6.4";
   pyproject = true;
-  disabled = python3.pkgs.pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "onekey-sec";
     repo = "unblob";
     tag = version;
-    hash = "sha256-kWZGQX8uSKdFW+uauunHcruXhJ5XpBfyDY7gPyWGK90=";
+    hash = "sha256-NV4xnTejDW8mTxv0BGB4n+M/bxTMd4GWQQPXhqw5f2Y=";
     forceFetchGit = true;
     fetchLFS = true;
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-lGsDax7+CUACeYChDqdPsVbKE/hH94CPek6UBVz1eqs=";
+    hash = "sha256-lEpnpvPwred1KRXxuM1KPxKbIIJUGvR0tmj16QyL5UQ=";
   };
 
   strictDeps = true;
-
-  build-system = with python3.pkgs; [ poetry-core ];
 
   buildInputs = lib.optionals stdenvNoCC.hostPlatform.isDarwin [ libiconv ];
 
@@ -75,10 +75,13 @@ python3.pkgs.buildPythonApplication rec {
     dissect-cstruct
     lark
     lief.py
+    lzallright
     python3.pkgs.lz4 # shadowed by pkgs.lz4
     plotext
     pluggy
+    pydantic
     pyfatfs
+    pymdown-extensions
     pyperscan
     python-magic
     pyzstd
@@ -101,8 +104,6 @@ python3.pkgs.buildPythonApplication rec {
     "ubi-reader"
   ];
 
-  pythonRelaxDeps = [ "lz4" ];
-
   pythonImportsCheck = [ "unblob" ];
 
   makeWrapperArgs = [
@@ -112,29 +113,29 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs =
     with python3.pkgs;
     [
+      pexpect
+      psutil
+      pytest-cov-stub
       pytestCheckHook
-      pytest-cov
       versionCheckHook
     ]
     ++ runtimeDeps;
 
-  versionCheckProgramArg = "--version";
+  pytestFlags = [
+    "--with-e2e" # Not that slow: increases test time by ~5s
+  ];
 
-  pytestFlagsArray =
-    let
-      # `disabledTests` swallows the parameters between square brackets
-      disabled = [
-        # https://github.com/tytso/e2fsprogs/issues/152
-        "test_all_handlers[filesystem.extfs]"
-      ];
-    in
-    [
-      "--no-cov"
-      "-k 'not ${lib.concatStringsSep " and not " disabled}'"
-    ];
+  disabledTests = [
+    # https://github.com/tytso/e2fsprogs/issues/152
+    "test_all_handlers[filesystem.extfs]"
+    # regression in erofs-utils 1.9 https://github.com/onekey-sec/unblob/commit/c7c9f20dd871a5694d41a95ca3041eb0c98e257a
+    "test_all_handlers[filesystem.android.erofs]"
+    # unblob's landlock sandbox denies hardlinks within the extract dir (EXDEV). https://github.com/onekey-sec/unblob/issues/1210
+    "test_all_handlers[filesystem.romfs]"
+    "test_all_handlers[filesystem.yaffs]"
+  ];
 
   passthru = {
-    updateScript = gitUpdater { };
     # helpful to easily add these to a nix-shell environment
     inherit runtimeDeps;
   };

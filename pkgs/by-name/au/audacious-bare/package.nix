@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "audacious";
-  version = "4.4.2";
+  version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "audacious-media-player";
     repo = "audacious";
     rev = "${pname}-${version}";
-    hash = "sha256-Vh39uY15Pj2TbPk8gU55YykhFf5ytSUxN2gJ0VlC3tQ=";
+    hash = "sha256-f1ugxM57dYDDq/G+16bXs6++KXnaLwT+mcPY0R371tY=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,6 @@ stdenv.mkDerivation rec {
     mainProgram = "audacious";
     maintainers = with lib.maintainers; [
       ramkromberg
-      ttuegel
       thiagokokada
     ];
     platforms = lib.platforms.linux;

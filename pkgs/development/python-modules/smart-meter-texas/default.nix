@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   aiohttp,
   asn1,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "smart-meter-texas";
   version = "0.5.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "grahamwetzler";
@@ -41,10 +38,10 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Connect to and retrieve data from the unofficial Smart Meter Texas API";
     homepage = "https://github.com/grahamwetzler/smart-meter-texas";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

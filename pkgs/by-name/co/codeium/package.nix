@@ -15,7 +15,6 @@ let
     {
       x86_64-linux = "linux_x64";
       aarch64-linux = "linux_arm";
-      x86_64-darwin = "macos_x64";
       aarch64-darwin = "macos_arm";
 
     }
@@ -23,10 +22,9 @@ let
 
   hash =
     {
-      x86_64-linux = "sha256-wZl6wlR+K53rGeQ75ZVzmzKpiBnp6/UCTNx/iOHscug=";
-      aarch64-linux = "sha256-2wslvQlvhbaxZ9lwGh4UTBo0yHjSLcOZ8mxMQETY7kY=";
-      x86_64-darwin = "sha256-+34thUKUWV4P29Ak547fT5AKkaw/tgV9AMe+UT6GmD4=";
-      aarch64-darwin = "sha256-GkAh18MlZP4D+fpxZtAgXEPYSb3iiRycN/0sQm2oJnE=";
+      x86_64-linux = "sha256-hx5q0JRwvmE63uOpht7+6d7/jCLeknrj2RwiiMkBllc=";
+      aarch64-linux = "sha256-r0gGxwhVkQ5MLTmcrBCJpKfsizAJLJYPw1VdfiHJ3i8=";
+      aarch64-darwin = "sha256-c0BDLK1ilDOdNYbOqzFNoJFeBUlWI7/+z7HaosM/D4o=";
     }
     .${system} or throwSystem;
 
@@ -35,7 +33,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "codeium";
-  version = "1.46.0";
+  version = "2.12.5";
   src = fetchurl {
     name = "${finalAttrs.pname}-${finalAttrs.version}.gz";
     url = "https://github.com/Exafunction/codeium/releases/download/language-server-v${finalAttrs.version}/language_server_${plat}.gz";
@@ -60,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/codeium_language_server";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = ./update.sh;
@@ -85,7 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-darwin"
       "aarch64-linux"
       "x86_64-linux"
-      "x86_64-darwin"
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };

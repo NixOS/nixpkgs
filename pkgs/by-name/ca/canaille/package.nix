@@ -2,8 +2,10 @@
   lib,
   python3,
   fetchFromGitLab,
+  fetchpatch2,
   openldap,
   nixosTests,
+  postgresql,
 }:
 
 let
@@ -11,17 +13,29 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "canaille";
-  version = "0.0.57";
+  version = "0.2.7";
   pyproject = true;
-
-  disabled = python.pythonOlder "3.10";
 
   src = fetchFromGitLab {
     owner = "yaal";
     repo = "canaille";
-    rev = "refs/tags/${version}";
-    hash = "sha256-pesN7k5kGHi3dqTMaXWdCsNsnaJxXv/Ku1wVC9N9a3k=";
+    tag = version;
+    hash = "sha256-hreEjMrD6mRapgrSDPRWcmqfLxfsOpK7dC8lHJkAY7Y=";
   };
+
+  patches = [
+    # Backport authlib 1.7 compatibility.
+    (fetchpatch2 {
+      url = "https://gitlab.com/yaal/canaille/-/commit/b356baa82109a7fdf61a8258572d199ffd3c9604.diff";
+      hash = "sha256-/U6S3h6qIl763ZsGpOm6CVk4NaY3A7mq3PkT193aLEs=";
+    })
+    # Update OIDC tests for authlib 1.7 behavior.
+    (fetchpatch2 {
+      url = "https://gitlab.com/yaal/canaille/-/commit/c1b6d103ebf374cd6a21d9af8376c910c2d0d5d9.diff";
+      hash = "sha256-MjwkUb54ikt1+xUXBTOIBi9E+DmPdwYhw0W0c0prF/Q=";
+      includes = [ "tests/oidc/*" ];
+    })
+  ];
 
   build-system = with python.pkgs; [
     hatchling
@@ -29,42 +43,43 @@ python.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  dependencies =
-    with python.pkgs;
-    [
-      flask
-      flask-wtf
-      pydantic-settings
-      requests
-      wtforms
-    ]
-    ++ sentry-sdk.optional-dependencies.flask;
+  dependencies = with python.pkgs; [
+    blinker
+    click
+    dramatiq
+    dramatiq-eager-broker
+    flask
+    flask-caching
+    flask-dramatiq
+    flask-session
+    flask-wtf
+    httpx
+    pydantic-settings
+    wtforms
+  ];
 
   nativeCheckInputs =
     with python.pkgs;
     [
       pytestCheckHook
-      coverage
+      postgresql
       flask-webtest
       pyquery
-      pytest-cov
+      pytest-cov-stub
       pytest-httpserver
       pytest-lazy-fixtures
+      pytest-postgresql
       pytest-smtpd
       pytest-xdist
+      python-avatars
       scim2-tester
       slapd
       toml
       faker
       time-machine
+      pytest-scim2-server
     ]
-    ++ optional-dependencies.front
-    ++ optional-dependencies.oidc
-    ++ optional-dependencies.scim
-    ++ optional-dependencies.ldap
-    ++ optional-dependencies.postgresql
-    ++ optional-dependencies.otp
-    ++ optional-dependencies.sms;
+    ++ (lib.concatLists (builtins.attrValues optional-dependencies));
 
   postInstall = ''
     mkdir -p $out/etc/schema
@@ -77,40 +92,74 @@ python.pkgs.buildPythonApplication rec {
     export SBIN="${openldap}/bin"
     export SLAPD="${openldap}/libexec/slapd"
     export SCHEMA="${openldap}/etc/schema"
-
-    # Just use their example config for testing
-    export CONFIG=canaille/config.sample.toml
   '';
+
+  # Cap xdist workers; concurrent slapd fixtures race the 10s bind window.
+  dontUsePytestXdist = true;
+  pytestFlags = [ "--numprocesses=4" ];
+
+  disabledTests = [
+    # Tries to use DNS resolution
+    "test_send_new_email_error"
+    "test_send_test_email_ssl"
+    # flaky: timing-sensitive intruder lockout retry window
+    "test_intruder_lockout_fail_second_attempt_then_succeed_in_third"
+    # requires external network for logo fetch
+    "test_mail_with_unreachable_external_logo"
+  ];
 
   optional-dependencies = with python.pkgs; {
     front = [
       email-validator
       flask-babel
+      flask-talisman
       flask-themer
+      isodate
       pycountry
       pytz
-      toml
+      tomlkit
       zxcvbn-rs-py
     ];
-    oidc = [ authlib ];
-    scim = [
-      scim2-models
+    oidc = [
       authlib
+      joserfc
     ];
-    ldap = [ python-ldap ];
+    scim = [
+      authlib
+      httpx
+      scim2-client
+      scim2-models
+    ];
+    ldap = [
+      ldappool
+      python-ldap
+    ];
     sentry = [ sentry-sdk ];
     postgresql = [
+      flask-alembic
       passlib
       sqlalchemy
       sqlalchemy-json
       sqlalchemy-utils
-    ] ++ sqlalchemy.optional-dependencies.postgresql_psycopg2binary;
+    ]
+    ++ sqlalchemy.optional-dependencies.postgresql_psycopg2binary;
     otp = [
       otpauth
       pillow
       qrcode
     ];
+    fido = [ webauthn ];
     sms = [ smpplib ];
+    captcha = [ captcha ];
+    server = [
+      asgiref
+      hypercorn
+      isodate
+      pydanclick
+      tomlkit
+    ];
+    redis = [ dramatiq ] ++ dramatiq.optional-dependencies.redis;
+    rabbitmq = [ dramatiq ] ++ dramatiq.optional-dependencies.rabbitmq;
   };
 
   passthru = {
@@ -120,23 +169,13 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
-  disabledTests = [
-    # cause by authlib being too up-to-date for this version of canaille
-    # see: https://github.com/NixOS/nixpkgs/issues/389861#issuecomment-2726361949
-    # FIX: update and see if this is fixed
-    "test_invalid_client[ldap_backend]"
-    "test_invalid_client[memory_backend]"
-    "test_invalid_client[sql_backend]"
-    "test_password_reset[sql_backend]"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Lightweight Identity and Authorization Management";
     homepage = "https://canaille.readthedocs.io/en/latest/index.html";
-    changelog = "https://gitlab.com/yaal/canaille/-/blob/${src.rev}/CHANGES.rst";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ erictapen ];
+    changelog = "https://gitlab.com/yaal/canaille/-/blob/${src.tag}/CHANGES.rst";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ erictapen ];
     mainProgram = "canaille";
   };
 

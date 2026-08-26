@@ -50,11 +50,7 @@ in
     services.usbguard = {
       enable = lib.mkEnableOption "USBGuard daemon";
 
-      package = lib.mkPackageOption pkgs "usbguard" {
-        extraDescription = ''
-          If you do not need the Qt GUI, use `pkgs.usbguard-nox` to save disk space.
-        '';
-      };
+      package = lib.mkPackageOption pkgs "usbguard" { };
 
       ruleFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;

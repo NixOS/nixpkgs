@@ -24,7 +24,7 @@ in
       };
 
       listenPort = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.port;
         default = 3000;
         description = "Port to listen on.";
       };
@@ -95,7 +95,6 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      preStart = lib.mkIf (!lib.hasPrefix "/var/lib/" cfg.spaceDir) "mkdir -p '${cfg.spaceDir}'";
       serviceConfig = {
         Type = "simple";
         User = "${cfg.user}";
@@ -104,6 +103,9 @@ in
         StateDirectory = lib.mkIf (lib.hasPrefix "/var/lib/" cfg.spaceDir) (
           lib.last (lib.splitString "/" cfg.spaceDir)
         );
+        ExecStartPre = lib.mkIf (
+          !lib.hasPrefix "/var/lib/" cfg.spaceDir
+        ) "${lib.getExe' pkgs.coreutils "mkdir"} -p '${cfg.spaceDir}'";
         ExecStart =
           "${lib.getExe cfg.package} --port ${toString cfg.listenPort} --hostname '${cfg.listenAddress}' '${cfg.spaceDir}' "
           + lib.concatStringsSep " " cfg.extraArgs;

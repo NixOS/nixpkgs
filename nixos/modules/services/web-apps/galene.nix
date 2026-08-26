@@ -128,27 +128,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = cfg.insecure || (cfg.certFile != null && cfg.keyFile != null);
-        message = ''
-          Galene needs both certFile and keyFile defined for encryption, or
-          the insecure flag.
-        '';
-      }
-    ];
-
     systemd.services.galene = {
       description = "galene";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-
-      preStart = ''
-        ${optionalString (cfg.insecure != true) ''
-          install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.certFile} ${cfg.dataDir}/cert.pem
-          install -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.keyFile} ${cfg.dataDir}/key.pem
-        ''}
-      '';
 
       serviceConfig = mkMerge [
         {
@@ -156,6 +139,10 @@ in
           User = cfg.user;
           Group = cfg.group;
           WorkingDirectory = cfg.stateDir;
+          ExecStartPre = lib.mkIf (cfg.insecure != true && cfg.certFile != null && cfg.keyFile != null) [
+            "${lib.getExe' pkgs.coreutils "install"} -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.certFile} ${cfg.dataDir}/cert.pem"
+            "${lib.getExe' pkgs.coreutils "install"} -m 700 -o '${cfg.user}' -g '${cfg.group}' ${cfg.keyFile} ${cfg.dataDir}/key.pem"
+          ];
           ExecStart = ''
             ${cfg.package}/bin/galene \
             ${optionalString (cfg.insecure) "-insecure"} \

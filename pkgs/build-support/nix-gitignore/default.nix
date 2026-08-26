@@ -92,7 +92,7 @@ rec {
             let
               recurse =
                 str:
-                [ (substring 0 1 str) ] ++ (optionals (str != "") (recurse (substring 1 (stringLength (str)) str)));
+                [ (substring 0 1 str) ] ++ (optionals (str != "") (recurse (substring 1 (stringLength str) str)));
             in
             str: recurse str;
           chars = s: filter (c: c != "" && !isList c) (splitString s);
@@ -254,5 +254,5 @@ rec {
     else
       gitignoreFilterSource (_: _: true) patterns;
 
-  gitignoreRecursiveSource = gitignoreFilterSourcePure (_: _: true);
+  gitignoreRecursiveSource = gitignoreFilterRecursiveSource (_: _: true);
 }

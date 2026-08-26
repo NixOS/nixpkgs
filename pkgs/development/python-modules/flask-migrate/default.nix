@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   alembic,
   flask,
   flask-script,
@@ -14,9 +13,7 @@
 buildPythonPackage rec {
   pname = "flask-migrate";
   version = "4.1.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
@@ -40,10 +37,10 @@ buildPythonPackage rec {
     flask-script
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SQLAlchemy database migrations for Flask applications using Alembic";
     homepage = "https://github.com/miguelgrinberg/Flask-Migrate";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "django-filter";
-  version = "25.1";
+  version = "26.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "carltongibson";
     repo = "django-filter";
     tag = version;
-    hash = "sha256-ODbBlaJo6sgXkFxLNhqwGTXSHs2d6R6wGKyDz5qA7bs=";
+    hash = "sha256-Sls/imzl2dzUfVcJTUqpCQTDRH9H09uxx27TnU0R0WI=";
   };
 
   build-system = [ flit-core ];
@@ -37,11 +37,11 @@ buildPythonPackage rec {
 
   env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
-  meta = with lib; {
+  meta = {
     description = "Reusable Django application for allowing users to filter querysets dynamically";
     homepage = "https://github.com/carltongibson/django-filter";
     changelog = "https://github.com/carltongibson/django-filter/blob/${version}/CHANGES.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ mmai ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

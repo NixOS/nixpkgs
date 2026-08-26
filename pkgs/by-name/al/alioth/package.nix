@@ -4,34 +4,33 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alioth";
-  version = "0.7.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "alioth";
-    tag = "v${version}";
-    hash = "sha256-xFNX2cxmaw2H8D21qs6mnTMuSidmJ0xJ/b4pxdLTvow=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Ny/YrXHo4qP8NDiRNtXv843RjJKzKFuSH20ZoGp3ODQ=";
   };
 
   # Checks use `debug_assert_eq!`
   checkType = "debug";
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-x2Abw/RVKpPx0EWyF3w0kywtd23A+NSNaHRVZ4oB1jI=";
+  cargoHash = "sha256-eWozwXaVtR/3k7w7+tPzK1xlt9/DtvTYC+YPL/A+sU0=";
 
   separateDebugInfo = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/google/alioth";
     description = "Experimental Type-2 Hypervisor in Rust implemented from scratch";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "alioth";
-    maintainers = with maintainers; [ astro ];
+    maintainers = with lib.maintainers; [ astro ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
     ];
   };
-}
+})

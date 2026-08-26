@@ -12,7 +12,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.5.1";
+  version = "3.6";
   pname = "grandperspective";
 
   src = fetchurl {
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://sourceforge/grandperspectiv/GrandPerspective-${
       lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.dmg";
-    hash = "sha256-ZD6XUtsbwxHe3MYdCH9I/pYBCGgilPhhbYQChr0wCj4=";
+    hash = "sha256-DSdtaf5GN1PSIt8GTGrMUuaVI2C+ANKi78E1cxVrYTE=";
   };
 
   sourceRoot = "GrandPerspective.app";

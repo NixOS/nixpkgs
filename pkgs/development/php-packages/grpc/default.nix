@@ -3,6 +3,7 @@
   pkg-config,
   lib,
   grpc,
+  php,
 }:
 
 buildPecl {

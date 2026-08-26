@@ -3,24 +3,25 @@
   buildDotnetModule,
   dotnetCorePackages,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildDotnetModule rec {
   pname = "lubelogger";
-  version = "1.4.5";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "hargata";
     repo = "lubelog";
     rev = "v${version}";
-    hash = "sha256-ZlB9lyfC4xrLWAb+Jbo6eI/LuYjvgMEauQeLxGCqy88=";
+    hash = "sha256-I4GGlkEirqxiwIqczsCe9ns0ImOOalqg+pWKXx3o1Fo=";
   };
 
   projectFile = "CarCareTracker.sln";
   nugetDeps = ./deps.json; # File generated with `nix-build -A lubelogger.passthru.fetch-deps`.
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
 
   makeWrapperArgs = [
     "--set DOTNET_WEBROOT ${placeholder "out"}/lib/lubelogger/wwwroot"
@@ -28,18 +29,18 @@ buildDotnetModule rec {
 
   executables = [ "CarCareTracker" ]; # This wraps "$out/lib/$pname/foo" to `$out/bin/foo`.
 
-  meta = with lib; {
-    description = "Vehicle service records and maintainence tracker";
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Vehicle service records and maintenance tracker";
     longDescription = ''
       A self-hosted, open-source, unconventionally-named vehicle maintenance records and fuel mileage tracker.
-
-      LubeLogger by Hargata Softworks is licensed under the MIT License for individual and personal use. Commercial users and/or corporate entities are required to maintain an active subscription in order to continue using LubeLogger.
     '';
     homepage = "https://lubelogger.com";
     changelog = "https://github.com/hargata/lubelog/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lyndeno ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lyndeno ];
     mainProgram = "CarCareTracker";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

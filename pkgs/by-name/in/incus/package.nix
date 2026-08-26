@@ -1,11 +1,8 @@
 import ./generic.nix {
-  hash = "sha256-hgZc30SRnmALTvuD32dNuO0r4pfpXXvN4CtJqn2fGuk=";
-  version = "6.12.0";
-  vendorHash = "sha256-/GwJG6kmjbiUUh0AWQ+IUbeK1kRcuWrwmNdTzH5LT38=";
-  patches = [
-    # fix nft, remove 6.13
-    ./1995.diff
-  ];
+  hash = "sha256-5XOpT+MnLcPrINHD9VAjDtXSeYAqIsejuOsOpQLMfwc=";
+  version = "7.3.0";
+  vendorHash = "sha256-FZ9oVHrZNE/h1w/qWNTdN9/zfn9r6S3ox0W2YKf6hgI=";
+  patches = fetchpatch2: [ ];
   nixUpdateExtraArgs = [
     "--override-filename=pkgs/by-name/in/incus/package.nix"
   ];

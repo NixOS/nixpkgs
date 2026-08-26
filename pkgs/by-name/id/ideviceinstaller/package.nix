@@ -4,20 +4,21 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
+  gitUpdater,
   usbmuxd,
   libimobiledevice,
   libzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ideviceinstaller";
-  version = "1.1.1+date=2023-04-30";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = "ideviceinstaller";
-    rev = "71ec5eaa30d2780c2614b6b227a2229ea3aeb1e9";
-    hash = "sha256-YsQwAlt71vouYJzXl0P7b3fG/MfcwI947GtvN4g3/gM=";
+    tag = finalAttrs.version;
+    hash = "sha256-V4zJ85wF3jjBlWOY+oxo6veNeiSHVAUBipmokzhRgaI=";
   };
 
   nativeBuildInputs = [
@@ -37,10 +38,12 @@ stdenv.mkDerivation rec {
   ];
 
   preAutoreconf = ''
-    export RELEASE_VERSION=${version}
+    export RELEASE_VERSION=${finalAttrs.version}
   '';
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater { };
+
+  meta = {
     homepage = "https://github.com/libimobiledevice/ideviceinstaller";
     description = "List/modify installed apps of iOS devices";
     longDescription = ''
@@ -48,9 +51,9 @@ stdenv.mkDerivation rec {
       of an iOS device allowing to install, upgrade, uninstall, archive, restore
       and enumerate installed or archived apps.
     '';
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ aristid ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
     mainProgram = "ideviceinstaller";
   };
-}
+})

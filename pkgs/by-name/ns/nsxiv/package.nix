@@ -1,10 +1,10 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   giflib,
-  imlib2,
-  libXft,
+  imlib2Full,
+  libxft,
   libexif,
   libwebp,
   libinotify-kqueue,
@@ -13,14 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nsxiv";
-  version = "33";
+  version = "34";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "nsxiv";
     repo = "nsxiv";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-H1s+pLpHTmoDssdudtAq6Ru0jwZZ55/qamEVgtHTGfk=";
+    hash = "sha256-Yv5Px72iZWLtix0K7Tbzhkar7ZBSb121cBzMhkAZhak=";
   };
 
   outputs = [
@@ -31,11 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     giflib
-    imlib2
-    libXft
+    imlib2Full
+    libxft
     libexif
     libwebp
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin libinotify-kqueue;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libinotify-kqueue;
 
   postPatch = lib.optionalString (conf != null) ''
     cp ${(builtins.toFile "config.def.h" conf)} config.def.h

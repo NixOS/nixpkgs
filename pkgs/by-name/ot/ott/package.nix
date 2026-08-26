@@ -7,40 +7,38 @@
   opaline,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ott";
   version = "0.34";
 
   src = fetchFromGitHub {
     owner = "ott-lang";
     repo = "ott";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-S6EMQgEBrtXB9hTM7x6irZPsI9c9JHeuCk/9pcpQMNg=";
   };
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      opaline
-    ]
-    ++ (with ocamlPackages; [
-      findlib
-      ocaml
-    ]);
+  nativeBuildInputs = [
+    pkg-config
+    opaline
+  ]
+  ++ (with ocamlPackages; [
+    findlib
+    ocaml
+  ]);
   buildInputs = with ocamlPackages; [ ocamlgraph ];
 
   installTargets = "ott.install";
 
-  postInstall =
-    ''
-      opaline -prefix $out
-    ''
-    # There is `emacsPackages.ott-mode` for this now.
-    + ''
-      rm -r $out/share/emacs
-    '';
+  postInstall = ''
+    opaline -prefix $out
+  ''
+  # There is `emacsPackages.ott-mode` for this now.
+  + ''
+    rm -r $out/share/emacs
+  '';
 
   meta = {
     description = "Tool for the working semanticist";
@@ -61,4 +59,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jwiegley ];
     platforms = lib.platforms.unix;
   };
-}
+})

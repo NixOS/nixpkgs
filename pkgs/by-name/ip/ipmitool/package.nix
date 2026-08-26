@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   autoreconfHook,
   pkg-config,
   openssl,
@@ -19,8 +19,7 @@ stdenv.mkDerivation {
   pname = "ipmitool";
   version = "1.8.19-unstable-2025-02-18";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "IPMITool";
     repo = "ipmitool";
     rev = "3c91e6d91ec6090fe548c55ef301c33ff20c8ed8";
@@ -37,11 +36,12 @@ stdenv.mkDerivation {
     readline
   ];
 
-  postPatch = ''
-    cp ${iana-enterprise-numbers} enterprise-numbers
-  '';
-
   configureFlags = [ "--disable-registry-download" ];
+
+  postInstall = ''
+    # Install to path reported in configure as "Set IANA PEN dictionary search path to ..."
+    install -Dm444 ${iana-enterprise-numbers} $out/share/misc/enterprise-numbers
+  '';
 
   meta = {
     description = "Command-line interface to IPMI-enabled devices";

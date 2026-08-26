@@ -2,24 +2,28 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pgsrip";
-  version = "0.1.11";
+  version = "0.1.12";
   pyproject = true;
-
-  disabled = python3Packages.pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ratoaq2";
     repo = "pgsrip";
-    rev = version;
-    hash = "sha256-H9gZXge+m/bCq25Fv91oFZ8Cq2SRNrKhOaDrLZkjazg=";
+    tag = finalAttrs.version;
+    hash = "sha256-8UzElhMdhjZERdogtAbkcfw67blk9lOTQ09vjF5SXm4=";
   };
 
-  build-system = [ python3Packages.poetry-core ];
+  pythonRelaxDeps = [
+    "click"
+    "opencv-python"
+    "setuptools"
+    "trakit"
+  ];
+
+  build-system = with python3Packages; [ poetry-core ];
 
   dependencies = with python3Packages; [
     babelfish
@@ -33,19 +37,14 @@ python3Packages.buildPythonApplication rec {
     trakit
   ];
 
-  pythonRelaxDeps = [
-    "numpy"
-    "setuptools"
-  ];
-
-  passthru.updateScript = nix-update-script { };
+  pythonImportsCheck = [ "pgsrip" ];
 
   meta = {
     description = "Rip your PGS subtitles";
     homepage = "https://github.com/ratoaq2/pgsrip";
-    changelog = "https://github.com/ratoaq2/pgsrip/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/ratoaq2/pgsrip/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eljamm ];
     mainProgram = "pgsrip";
   };
-}
+})

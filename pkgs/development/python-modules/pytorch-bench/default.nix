@@ -2,48 +2,66 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
+
+  # dependencies
+  codecarbon,
   colorama,
   matplotlib,
   numpy,
-  pynvml,
+  nvidia-ml-py,
   torch,
   torchprofile,
+  tqdm,
+
+  # passthru
+  nix-update-script,
 }:
 
 buildPythonPackage {
   pname = "pytorch-bench";
-  version = "unstable-2024-07-18";
+  version = "0-unstable-2025-05-05";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "MaximeGloesener";
     repo = "torch-benchmark";
-    rev = "405a3fc2d147b43b4c1f7edb7aca0a60ba343ac5";
-    hash = "sha256-KU3dAf97A6lkMNTKRay23BMFQfn1ReAFNaJ0kG2RfnA=";
+    rev = "f22db3b2e5920cf084e088e7748e3ffd32343853";
+    hash = "sha256-+jd+H5hL+DotlLaBiaixb//hxyvEF6aAJYSHX1hfsP8=";
   };
 
   build-system = [
     setuptools
   ];
 
+  pythonRemoveDeps = [
+    # pynvml is deprecated and replaced by nvidia-ml-py which provides the same API
+    "pynvml"
+  ];
   dependencies = [
+    codecarbon
     colorama
     matplotlib
     numpy
-    pynvml
+    nvidia-ml-py
     torch
     torchprofile
+    tqdm
   ];
 
-  pythonImportsCheck = [
-    "pytorch_bench"
-  ];
+  pythonImportsCheck = [ "pytorch_bench" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "Benchmarking tool for torch";
     homepage = "https://github.com/MaximeGloesener/torch-benchmark";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

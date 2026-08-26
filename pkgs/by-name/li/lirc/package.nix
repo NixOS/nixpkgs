@@ -14,9 +14,9 @@
   systemd,
   libusb-compat-0_1,
   libftdi1,
-  libICE,
-  libSM,
-  libX11,
+  libice,
+  libsm,
+  libx11,
 }:
 
 let
@@ -27,12 +27,12 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lirc";
   version = "0.10.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lirc/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/lirc/lirc-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-PUTsgnSIHPJi8WCAVkHwgn/8wgreDYXn5vO5Dg09Iio=";
   };
 
@@ -51,24 +51,21 @@ stdenv.mkDerivation rec {
     # --with-systemdsystemunitdir
     # https://sourceforge.net/p/lirc/tickets/385/
     ./ubuntu.diff
+
+    # fix overriding PYTHONPATH
+    ./pythonpath.patch
   ];
 
   postPatch = ''
     patchShebangs .
 
-    # fix overriding PYTHONPATH
-    sed -i 's,^PYTHONPATH *= *,PYTHONPATH := $(PYTHONPATH):,' \
-      Makefile.in
-    sed -i 's,PYTHONPATH=,PYTHONPATH=$(PYTHONPATH):,' \
-      doc/Makefile.in
-
     # Pull fix for new pyyaml pending upstream inclusion
     #   https://sourceforge.net/p/lirc/git/merge-requests/39/
-    substituteInPlace python-pkg/lirc/database.py --replace 'yaml.load(' 'yaml.safe_load('
+    substituteInPlace python-pkg/lirc/database.py \
+      --replace-fail 'yaml.load(' 'yaml.safe_load('
 
-    # cant import '/build/lirc-0.10.1/python-pkg/lirc/_client.so' while cross-compiling to check the version
-    substituteInPlace python-pkg/setup.py \
-      --replace "VERSION='0.0.0'" "VERSION='${version}'"
+    substituteInPlace systemd/*.service \
+      --replace-fail "ExecStart=/usr/" "ExecStart=''${!outputBin}/"
   '';
 
   preConfigure = ''
@@ -90,12 +87,12 @@ stdenv.mkDerivation rec {
     systemd
     libusb-compat-0_1
     libftdi1
-    libICE
-    libSM
-    libX11
+    libice
+    libsm
+    libx11
   ];
 
-  DEVINPUT_HEADER = "${linuxHeaders}/include/linux/input-event-codes.h";
+  env.DEVINPUT_HEADER = "${linuxHeaders}/include/linux/input-event-codes.h";
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -112,14 +109,38 @@ stdenv.mkDerivation rec {
     "localstatedir=$TMPDIR"
   ];
 
+  outputs = [
+    "out"
+    "man"
+    "doc"
+    "dev"
+    # This is the output referenced by dependent packages most of the time.
+    # $out on the other hand contains files used by direct users of lirc -
+    # systemd units, binaries, shell scripts & lirc python package. Since
+    # Nixpkgs' stdenv puts by default python libraries in $lib, this causes a
+    # cyclic reference between $out and $lib. We solve this by moving the
+    # Python library to $out in postFixup below. Since the Python library is
+    # also strongly related to the direct usage of lirc (and not only linking
+    # to the libraries of it), this makes sense anyway.
+    "lib"
+  ];
+
+  postFixup = ''
+    moveToOutput "${python3.sitePackages}" "$out"
+    # $out/bin/lirc-setup is symlinked to $lib/''${python3.sitePackages}, so it
+    # has to be fixed due to the above.
+    rm $out/bin/lirc-setup
+    ln -s $out/${python3.sitePackages}/lirc-setup/lirc-setup $out/bin/lirc-setup
+  '';
+
   # Upstream ships broken symlinks in docs
   dontCheckForBrokenSymlinks = true;
 
-  meta = with lib; {
+  meta = {
     description = "Allows to receive and send infrared signals";
     homepage = "https://www.lirc.org/";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ pSub ];
   };
-}
+})

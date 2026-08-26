@@ -2,15 +2,16 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   fontconfig,
   gettext,
   groff,
-  libSM,
-  libX11,
-  libXext,
-  libXft,
-  libXinerama,
-  libXrandr,
+  libsm,
+  libx11,
+  libxext,
+  libxft,
+  libxinerama,
+  libxrandr,
   lua,
   makeWrapper,
   pkg-config,
@@ -21,24 +22,22 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "notion";
-  version = "4.0.3";
+  version = "4.0.4";
 
   src = fetchFromGitHub {
     owner = "raboof";
     repo = "notion";
     tag = finalAttrs.version;
-    hash = "sha256-Ll4thDS8fHxkm2IuGjePPVPyPPrz7yDzpKVloFuk/yE=";
+    hash = "sha256-L7WL8zn1Qkf5sqrhqZJqFe4B1l9ULXI3pt3Jpc87huk=";
   };
 
-  postPatch = ''
-    # Fix build failure due missing headers
-    sed -i '1i#define _POSIX_C_SOURCE 200809L' mod_notionflux/notionflux/notionflux.c
-    sed -i '2i#include <stdio.h>' mod_notionflux/notionflux/notionflux.c
-    sed -i '3i#include <string.h>' mod_notionflux/notionflux/notionflux.c
-
-    # error: 'PATH_MAX' undeclared
-    sed 1i'#include <linux/limits.h>' -i mod_notionflux/notionflux/notionflux.c
-  '';
+  patches = [
+    # GCC 15 fix
+    (fetchpatch2 {
+      url = "https://github.com/raboof/notion/commit/89c92f49abfeae1168ad343d4f529a52d0edd78c.patch?full_index=1";
+      hash = "sha256-+4GGeY2j7B54Ffw5gFNpG4704Egc7rA6w5z0sZG8210=";
+    })
+  ];
 
   nativeBuildInputs = [
     gettext
@@ -51,12 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fontconfig
-    libSM
-    libX11
-    libXext
-    libXft
-    libXinerama
-    libXrandr
+    libsm
+    libx11
+    libxext
+    libxft
+    libxinerama
+    libxrandr
     lua
     readline
   ];
@@ -85,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
           xmessage
           xterm
         ]
-      }" \
+      }"
   '';
 
   meta = {
@@ -94,7 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21;
     mainProgram = "notion";
     maintainers = with lib.maintainers; [
-      jfb
       raboof
       NotAShelf
     ];

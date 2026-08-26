@@ -6,46 +6,37 @@
   openssl,
   sqlite,
   zlib,
-  stdenv,
-  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mchprs";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "MCHPR";
     repo = "MCHPRS";
-    tag = "v${version}";
-    hash = "sha256-Jm9ZsqCKOIxZsXQbCluYu7MgOD7hXYljcv/URaNVUW0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aNzHk2oaULADTr76ANjpKy0+aiP87MPkXmeiF9s57WE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-YDfyixNfJsKigf3W5265CWl4ETQDeBHYpquBoFoj4Tw=";
+  cargoHash = "sha256-AklIFznwlY52CTDCcQwuedcoEOq3eegZfM37sAGwaOw=";
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      openssl
-      sqlite
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+    sqlite
+    zlib
+  ];
 
-  meta = with lib; {
+  meta = {
     mainProgram = "mchprs";
     description = "Multithreaded Minecraft server built for redstone";
     homepage = "https://github.com/MCHPR/MCHPRS";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gdd ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gdd ];
   };
-}
+})

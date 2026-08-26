@@ -1,59 +1,73 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   makeWrapper,
-  stdenv,
-  darwin,
+  installShellFiles,
 
   # runtime dependencies
-  nix, # for nix-prefetch-url
   nix-prefetch-git,
+  nix-prefetch-docker,
   git, # for git ls-remote
 }:
 
 let
   runtimePath = lib.makeBinPath [
-    nix
     nix-prefetch-git
+    nix-prefetch-docker
     git
   ];
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "npins";
-  version = "0.3.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "andir";
     repo = "npins";
-    tag = version;
-    sha256 = "sha256-nTm6IqCHNFQLU7WR7dJRP7ktBctpE/O2LHbUV25roJA=";
+    tag = finalAttrs.version;
+    sha256 = "sha256-OkPEh0axWs3gUoUyplQexYpEXxyCDYWm5BQpwB2PIqA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-HnX7dkWLxa3DARXG8y9OVBRwvwgxwRIs4mWK3VNblG0=";
+  cargoHash = "sha256-ZbdAvt2FRq5fHS0RRndeCrpY3j8Lvn2oTAECteIss5A=";
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      Security
-      SystemConfiguration
-    ]
-  );
-  nativeBuildInputs = [ makeWrapper ];
+  cargoBuildFlags = [
+    "-p"
+    "npins"
+    "-p"
+    "npins-completions"
+  ];
+
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   # (Almost) all tests require internet
   doCheck = false;
 
-  postFixup = ''
-    wrapProgram $out/bin/npins --prefix PATH : "${runtimePath}"
-  '';
+  postFixup =
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd npins \
+        --bash <($out/bin/npins-completions bash) \
+        --fish <(cat <($out/bin/npins-completions fish) $src/completions/pin-completions.fish) \
+        --zsh <($out/bin/npins-completions zsh)
 
-  meta = with lib; {
+      rm $out/bin/npins-completions
+    ''
+    + ''
+      wrapProgram $out/bin/npins --prefix PATH : "${runtimePath}"
+    '';
+
+  meta = {
     description = "Simple and convenient dependency pinning for Nix";
     mainProgram = "npins";
     homepage = "https://github.com/andir/npins";
-    license = licenses.eupl12;
-    maintainers = with maintainers; [ piegames ];
+    license = lib.licenses.eupl12;
+    maintainers = with lib.maintainers; [
+      piegames
+      coca
+    ];
   };
-}
+})

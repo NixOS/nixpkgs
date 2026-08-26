@@ -1,8 +1,9 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchurl,
-  python311,
+  python3,
   libxslt,
   texliveBasic,
   enableAllFeatures ? false,
@@ -62,47 +63,63 @@ stdenv.mkDerivation rec {
     sha256 = "0yd09nypswy3q4scri1dg7dr99d7gd6r2dwx0xm81l9f4y32gs0n";
   };
 
-  buildInputs =
-    [
-      python311
-      libxslt
-      tex
-    ]
-    ++ lib.optionals enableAllFeatures [
-      imagemagick
-      fig2dev
-    ];
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/dblatex/-/raw/067a586a688635a8ad6c15b1bd8ef3b16eb3f9f4/dblatex-0.3.12-replace-imp-by-importlib.patch";
+      hash = "sha256-ND9fS8KkQKnML6EwJFSUFhqiIn4yEvu1KOxTRPjXsd0=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/dblatex/-/raw/067a586a688635a8ad6c15b1bd8ef3b16eb3f9f4/dblatex-0.3.12-adjust-submodule-imports.patch";
+      hash = "sha256-0wOn2IvCSCtrE0rM56yw3FcGggTsDk3owQa1UmFsbVo=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/dblatex/-/raw/067a586a688635a8ad6c15b1bd8ef3b16eb3f9f4/dblatex-0.3.12-script_path.patch";
+      hash = "sha256-JGN9NxOiqoZ0Yz5ZbYwsis3tujBA2OWX5PZtrc/iTJY=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    (python3.withPackages (ps: [ ps.setuptools_80 ]))
+  ];
+
+  buildInputs = [
+    libxslt
+    tex
+  ]
+  ++ lib.optionals enableAllFeatures [
+    imagemagick
+    fig2dev
+  ];
 
   # TODO: dblatex tries to execute texindy command, but nixpkgs doesn't have
   # that yet. In Ubuntu, texindy is a part of the xindy package.
-  preConfigure =
-    ''
-      sed -i 's|self.install_layout == "deb"|False|' setup.py
-    ''
-    + lib.optionalString enableAllFeatures ''
-      for file in $(find -name "*.py"); do
-          sed -e 's|cmd = \["xsltproc|cmd = \["${libxslt.bin}/bin/xsltproc|g' \
-              -e 's|Popen(\["xsltproc|Popen(\["${libxslt.bin}/bin/xsltproc|g' \
-              -e 's|cmd = \["texindy|cmd = ["nixpkgs_is_missing_texindy|g' \
-              -e 's|cmd = "epstopdf|cmd = "${tex}/bin/epstopdf|g' \
-              -e 's|cmd = \["makeindex|cmd = ["${tex}/bin/makeindex|g' \
-              -e 's|doc.program = "pdflatex"|doc.program = "${tex}/bin/pdflatex"|g' \
-              -e 's|self.program = "latex"|self.program = "${tex}/bin/latex"|g' \
-              -e 's|Popen("pdflatex|Popen("${tex}/bin/pdflatex|g' \
-              -e 's|"fc-match"|"${fontconfig.bin}/bin/fc-match"|g' \
-              -e 's|"fc-list"|"${fontconfig.bin}/bin/fc-list"|g' \
-              -e 's|cmd = "inkscape|cmd = "${inkscape}/bin/inkscape|g' \
-              -e 's|cmd = "fig2dev|cmd = "${fig2dev}/bin/fig2dev|g' \
-              -e 's|cmd = \["ps2pdf|cmd = ["${ghostscript}/bin/ps2pdf|g' \
-              -e 's|cmd = "convert|cmd = "${imagemagick.out}/bin/convert|g' \
-              -i "$file"
-      done
-    '';
+  preConfigure = ''
+    sed -i 's|self.install_layout == "deb"|False|' setup.py
+  ''
+  + lib.optionalString enableAllFeatures ''
+    for file in $(find -name "*.py"); do
+        sed -e 's|cmd = \["xsltproc|cmd = \["${libxslt.bin}/bin/xsltproc|g' \
+            -e 's|Popen(\["xsltproc|Popen(\["${libxslt.bin}/bin/xsltproc|g' \
+            -e 's|cmd = \["texindy|cmd = ["nixpkgs_is_missing_texindy|g' \
+            -e 's|cmd = "epstopdf|cmd = "${tex}/bin/epstopdf|g' \
+            -e 's|cmd = \["makeindex|cmd = ["${tex}/bin/makeindex|g' \
+            -e 's|doc.program = "pdflatex"|doc.program = "${tex}/bin/pdflatex"|g' \
+            -e 's|self.program = "latex"|self.program = "${tex}/bin/latex"|g' \
+            -e 's|Popen("pdflatex|Popen("${tex}/bin/pdflatex|g' \
+            -e 's|"fc-match"|"${fontconfig.bin}/bin/fc-match"|g' \
+            -e 's|"fc-list"|"${fontconfig.bin}/bin/fc-list"|g' \
+            -e 's|cmd = "inkscape|cmd = "${inkscape}/bin/inkscape|g' \
+            -e 's|cmd = "fig2dev|cmd = "${fig2dev}/bin/fig2dev|g' \
+            -e 's|cmd = \["ps2pdf|cmd = ["${ghostscript}/bin/ps2pdf|g' \
+            -e 's|cmd = "convert|cmd = "${imagemagick.out}/bin/convert|g' \
+            -i "$file"
+    done
+  '';
 
   dontBuild = true;
 
   installPhase = ''
-    ${python311.interpreter} ./setup.py install --prefix="$out" --use-python-path --verbose
+    python ./setup.py install --prefix="$out" --use-python-path --verbose
   '';
 
   passthru = { inherit tex; };

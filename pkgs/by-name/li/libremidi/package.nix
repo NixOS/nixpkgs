@@ -2,25 +2,16 @@
   lib,
   alsa-lib,
   cmake,
-  darwin,
   fetchFromGitHub,
   stdenv,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks)
-    CoreAudio
-    CoreFoundation
-    CoreMIDI
-    CoreServices
-    ;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libremidi";
   version = "4.5.0";
 
   src = fetchFromGitHub {
-    owner = "jcelerier";
+    owner = "celtera";
     repo = "libremidi";
     rev = "v${finalAttrs.version}";
     hash = "sha256-JwXOIBq+pmPIR4y/Zv5whEyCfpLHmbllzdH2WLZmWLw=";
@@ -30,16 +21,9 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreAudio
-      CoreFoundation
-      CoreMIDI
-      CoreServices
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ];
 
   # Bug: set this as true breaks obs-studio-plugins.advanced-scene-switcher
   strictDeps = false;
@@ -53,10 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://github.com/jcelerier/libremidi";
+    homepage = "https://github.com/celtera/libremidi";
     description = "Modern C++ MIDI real-time & file I/O library";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

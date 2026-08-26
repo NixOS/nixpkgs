@@ -1,10 +1,8 @@
 {
   lib,
   stdenvNoCC,
-  darwin,
   fetchurl,
-  _7zz,
-  undmg,
+  unzip,
 }:
 
 let
@@ -16,8 +14,11 @@ stdenvNoCC.mkDerivation {
 
   src = fetchurl source.src;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
-    undmg
+    unzip
   ];
 
   sourceRoot = ".";

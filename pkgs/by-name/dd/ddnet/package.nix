@@ -13,9 +13,8 @@
   libGLU,
   libnotify,
   libogg,
-  libX11,
+  libx11,
   opusfile,
-  pcre,
   python3,
   SDL2,
   sqlite,
@@ -32,18 +31,17 @@
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "19.0";
+  version = "19.8.3";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = "ddnet";
     tag = version;
-    hash = "sha256-R9LXcYM96fibHzpXDWIOSASKIbh+GeiGyz7xVvV2v1Q=";
+    hash = "sha256-/SfUDliB6fdc/yf2yVXHiqYlH+cIIoxz3RkP8SxsgA4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    name = "${pname}-${version}";
-    inherit src;
+    inherit pname version src;
     hash = "sha256-VKGc4LQjt2FHbELLBKtV8rKpxjGBrzlA3m9BSdZ/6Z0=";
   };
 
@@ -60,33 +58,31 @@ stdenv.mkDerivation rec {
     gtest
   ];
 
-  buildInputs =
+  buildInputs = [
+    curl
+    libnotify
+    python3
+    sqlite
+  ]
+  ++ lib.optionals buildClient (
     [
-      curl
-      libnotify
-      pcre
-      python3
-      sqlite
+      freetype
+      libGLU
+      libogg
+      opusfile
+      SDL2
+      wavpack
+      ffmpeg
+      x264
+      vulkan-loader
+      vulkan-headers
+      glslang
+      spirv-tools
     ]
-    ++ lib.optionals buildClient (
-      [
-        freetype
-        libGLU
-        libogg
-        opusfile
-        SDL2
-        wavpack
-        ffmpeg
-        x264
-        vulkan-loader
-        vulkan-headers
-        glslang
-        spirv-tools
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        libX11
-      ]
-    );
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libx11
+    ]
+  );
 
   postPatch = ''
     substituteInPlace src/engine/shared/storage.cpp \
@@ -132,8 +128,6 @@ stdenv.mkDerivation rec {
       cc-by-sa-30
     ];
     maintainers = with lib.maintainers; [
-      lom
-      ncfavier
       Scrumplex
       sirseruju
     ];

@@ -9,18 +9,18 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "powerpipe";
-  version = "1.2.5";
+  version = "1.2.7";
 
   src = fetchFromGitHub {
     owner = "turbot";
     repo = "powerpipe";
-    tag = "v${version}";
-    hash = "sha256-S4NxKxro0K7uplB47CFO0Pm2qz7VvgqHbKxh/6Nd9P4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+8XgYi3ewso+UELkaUsghkOxYF58j1/cbo2wgKIeuIY=";
   };
 
-  vendorHash = "sha256-5+IapEYAL4p5jhGhqNw00s42e3dE0cXRDVawq8Fqb08=";
+  vendorHash = "sha256-cTCgBCbXogd/5LYaXUVUc3nWZTJXMeRFB0hHWQfFi1g=";
   proxyVendor = true;
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   doCheck = true;
@@ -55,17 +55,17 @@ buildGoModule rec {
     tests.version = testers.testVersion {
       command = "${lib.getExe powerpipe} --version";
       package = powerpipe;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
     updateScript = nix-update-script { };
   };
 
   meta = {
-    changelog = "https://github.com/turbot/powerpipe/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/turbot/powerpipe/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Dynamically query your cloud, code, logs & more with SQL";
     homepage = "https://powerpipe.io/";
     license = lib.licenses.agpl3Only;
     mainProgram = "powerpipe";
     maintainers = with lib.maintainers; [ weitzj ];
   };
-}
+})

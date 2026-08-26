@@ -3,76 +3,77 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
-  dpkg,
   fontconfig,
   zlib,
   icu,
-  libX11,
-  libXext,
-  libXi,
-  libXrandr,
-  libICE,
-  libSM,
+  libx11,
+  libxext,
+  libxi,
+  libxrandr,
+  libice,
+  libsm,
   openssl,
+  xdg-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "muse-sounds-manager";
-  version = "1.1.0.587";
+  version = "2.2.1.953";
 
-  # Use web.archive.org since upstream does not provide a stable (versioned) URL.
-  # To see if there are new versions on the Web Archive, visit
-  # http://web.archive.org/cdx/search/cdx?url=https://muse-cdn.com/Muse_Sounds_Manager_Beta.deb
-  # then replace the date in the URL below with date when the SHA1
-  # changes (currently A3NX3WHFZWXCHZVME2ABUL2VRENTWOD5) and replace
-  # the version above with the version in the .deb metadata (or in the
-  # settings of muse-sounds-manager).
+  # Permalink from https://support.musehub.com/en/articles/15070607-changelog
   src = fetchurl {
-    url = "https://web.archive.org/web/20240826143936/https://muse-cdn.com/Muse_Sounds_Manager_Beta.deb";
-    hash = "sha256-wzZAIjme1cv8+jMLiKT7kUQvCb+UhsvOnLDV4hCL3hw=";
+    url = "https://muse-cdn.com/muse-sounds-manager/Muse_Sounds_Manager_x64_${finalAttrs.version}.tar.gz";
+    hash = "sha256-y7fKHh2pG8uT4p0vq20rsW8bSAp1mepkd2sW/06N3EI=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
-    dpkg
   ];
 
   buildInputs = [
     fontconfig
     stdenv.cc.cc
     zlib
-  ] ++ runtimeDependencies;
+  ]
+  ++ finalAttrs.runtimeDependencies;
 
   runtimeDependencies = map lib.getLib [
     icu
-    libX11
-    libXext
-    libXi
-    libXrandr
-    libICE
-    libSM
+    libx11
+    libxext
+    libxi
+    libxrandr
+    libice
+    libsm
     openssl
   ];
-
-  unpackPhase = "dpkg -x $src .";
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out
-    mv usr/* opt $out/
-    substituteInPlace $out/bin/muse-sounds-manager --replace-fail /opt/ $out/opt/
+    mkdir -p $out $out/share/applications $out/share/icons
+    cp -p -R bin/ $out/
+    cp -p res/*.desktop $out/share/applications
+    cp -p -R res/icons $out/share
 
     runHook postInstall
   '';
+
+  postInstall = ''
+    ln -s ${xdg-utils}/bin/xdg-open $out/bin/open
+  '';
+
+  dontStrip = true;
 
   meta = {
     description = "Manage Muse Sounds (Muse Hub) libraries for MuseScore";
     homepage = "https://musescore.org/";
     license = lib.licenses.unfree;
     mainProgram = "muse-sounds-manager";
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = with lib.maintainers; [
+      sarunint
+    ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

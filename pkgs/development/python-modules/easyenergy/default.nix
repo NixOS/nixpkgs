@@ -4,47 +4,60 @@
   aresponses,
   buildPythonPackage,
   fetchFromGitHub,
+  mashumaro,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-freezer,
   pytestCheckHook,
-  pythonOlder,
+  syrupy,
+  typer,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "easyenergy";
-  version = "2.1.2";
+  version = "3.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-easyenergy";
     tag = "v${version}";
-    hash = "sha256-tWKfcGznxck8VLK3YshOIbPet2CEbUZbT8JzgaAhAso=";
+    hash = "sha256-GzsTAm5D0DVQ7OHfsCwn7Jdv1K1rEhz3KGuERRlTEmI=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"0.0.0"' '"${version}"' \
-      --replace 'addopts = "--cov"' ""
+      --replace '"0.0.0"' '"${version}"'
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "aiohttp"
+    "mashumaro"
+  ];
+
+  dependencies = [
     aiohttp
+    mashumaro
     yarl
   ];
+
+  optional-dependencies = {
+    cli = [ typer ];
+  };
 
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytest-freezer
     pytestCheckHook
-  ];
+    syrupy
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "easyenergy" ];
 
@@ -63,11 +76,12 @@ buildPythonPackage rec {
     "test_electricity_midnight"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for getting energy/gas prices from easyEnergy";
     homepage = "https://github.com/klaasnicolaas/python-easyenergy";
-    changelog = "https://github.com/klaasnicolaas/python-easyenergy/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/klaasnicolaas/python-easyenergy/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    mainProgram = "easyenergy";
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

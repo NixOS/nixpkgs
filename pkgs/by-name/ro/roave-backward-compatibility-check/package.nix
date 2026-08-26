@@ -7,21 +7,20 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "roave-backward-compatibility-check";
-  version = "8.13.0";
+  version = "8.21.0";
 
   src = fetchFromGitHub {
     owner = "Roave";
     repo = "BackwardCompatibilityCheck";
     tag = finalAttrs.version;
-    hash = "sha256-bxjrk//n8HdHyYJpsW4qwgHptyeaNqCbiR3wWKJwPiM=";
+    hash = "sha256-kCs9lDvbhUacOH4bEAZjm2LzHSvJnVMR9lzmt00GgTw=";
   };
 
-  vendorHash = "sha256-fhSByQzSwFrNCKr7KwJ7CYFt4zqbk4iW5JXK3iSVTnM=";
+  vendorHash = "sha256-68KE/ieWYST/jQMaaK5lLqBLEmI4YhYPOE4XuXNMfqM=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

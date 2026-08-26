@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  symlinkJoin,
 
   # build-system
   setuptools,
@@ -30,6 +31,7 @@
   joblib,
   # jsonpath-python,
   nltk,
+  nltk-data,
   olefile,
   orderly-set,
   python-dateutil,
@@ -91,6 +93,7 @@
   et-xmlfile,
   networkx,
   numpy,
+  numba,
   openpyxl,
   pandas,
   xlrd,
@@ -116,9 +119,21 @@
   grpcio,
 }:
 let
-  version = "0.17.2";
+  version = "0.18.31";
+
+  # unstructured downloads these NLTK corpora at import time unless they are already on
+  # nltk.data.path, which fails in offline or read-only builds. Bundle them and register
+  # the directory in postPatch. It must be named "nltk_data": unstructured's resolver
+  # uses paths ending in "nltk_data" as-is and appends "/nltk_data" to any others.
+  nltkData = symlinkJoin {
+    name = "nltk_data";
+    paths = with nltk-data; [
+      averaged-perceptron-tagger-eng
+      punkt-tab
+    ];
+  };
 in
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "unstructured";
   inherit version;
   pyproject = true;
@@ -127,10 +142,15 @@ buildPythonPackage {
     owner = "Unstructured-IO";
     repo = "unstructured";
     tag = version;
-    hash = "sha256-DbNfhJzpPJObACWSc2r16kjIE2X/CrOCiT7fdgGNwIg=";
+    hash = "sha256-2RGwuCVnoKkqYFVzW7nWuaB9B4IguKSfLO7u1qqAALk=";
   };
 
   build-system = [ setuptools ];
+
+  postPatch = ''
+    substituteInPlace unstructured/nlp/tokenize.py \
+      --replace-fail 'import nltk' 'import nltk; nltk.data.path.append("${nltkData}")'
+  '';
 
   dependencies = [
     # Base dependencies
@@ -160,6 +180,7 @@ buildPythonPackage {
     mypy-extensions
     nest-asyncio
     nltk
+    numba
     numpy
     olefile
     orderly-set
@@ -255,10 +276,14 @@ buildPythonPackage {
     ];
   };
 
-  pythonImportsCheck = [ "unstructured" ];
+  pythonImportsCheck = [
+    "unstructured"
+    # exercises the bundled NLTK corpora lookup, so the build catches an attempted download
+    "unstructured.nlp.tokenize"
+  ];
 
-  # test try to download punkt from nltk
-  # figure out how to make it available to enable the tests
+  # the import-time NLTK download is handled via nltkData above, but the test suite has
+  # further offline/data requirements that are not yet verified, so keep it disabled.
   doCheck = false;
 
   nativeCheckInputs = [
@@ -274,12 +299,12 @@ buildPythonPackage {
     grpcio
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source libraries and APIs to build custom preprocessing pipelines for labeling, training, or production machine learning pipelines";
     mainProgram = "unstructured-ingest";
     homepage = "https://github.com/Unstructured-IO/unstructured";
-    changelog = "https://github.com/Unstructured-IO/unstructured/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    changelog = "https://github.com/Unstructured-IO/unstructured/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

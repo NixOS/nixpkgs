@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "jsonnet-bundler";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "jsonnet-bundler";
     repo = "jsonnet-bundler";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-VaYfjDSDst1joN2MnDVdz9SGGMamhYxfNM/a2mJf8Lo=";
   };
 
@@ -20,14 +20,14 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Jsonnet package manager";
     homepage = "https://github.com/jsonnet-bundler/jsonnet-bundler";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ preisschild ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ preisschild ];
     mainProgram = "jb";
   };
-}
+})

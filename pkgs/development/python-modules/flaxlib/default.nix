@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     expected_version="$version"
-    actual_version=$(${lib.getExe tomlq} --file pyproject.toml "project.version")
+    actual_version=$(${lib.getExe tomlq} --raw --file pyproject.toml "project.version")
 
     if [ "$actual_version" != "$expected_version" ]; then
       echo -e "\n\tERROR:"

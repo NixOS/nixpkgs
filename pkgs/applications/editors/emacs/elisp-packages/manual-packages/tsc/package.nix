@@ -10,21 +10,20 @@
 let
   libExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
-  tsc-dyn = rustPlatform.buildRustPackage rec {
+  tsc-dyn = rustPlatform.buildRustPackage (finalAttrs: {
     pname = "tsc-dyn";
-    version = "0.18.0";
+    version = "0.19.4";
 
     src = fetchFromGitHub {
       owner = "emacs-tree-sitter";
       repo = "emacs-tree-sitter";
-      rev = version;
-      hash = "sha256-LrakDpP3ZhRQqz47dPcyoQnu5lROdaNlxGaQfQT6u+k=";
+      tag = finalAttrs.version;
+      hash = "sha256-7B9Q8ke8gY9cFIAjpyH21P240goKUEKgppfqP3PSxYA=";
     };
 
-    useFetchCargoVendor = true;
-    cargoHash = "sha256-Tua3ZFfSyWVYXU9mPLWXE6ejGlXowTNe3nvZBaicmSQ=";
+    cargoHash = "sha256-mjR8PehbhY1o/5L2l/OMh/NwjjmQXErPHh00cAD94pw=";
 
-    sourceRoot = "${src.name}/core";
+    sourceRoot = "${finalAttrs.src.name}/core";
 
     postInstall = ''
       pushd $out/lib
@@ -32,7 +31,7 @@ let
       echo -n $version > DYN-VERSION
       popd
     '';
-  };
+  });
 in
 melpaBuild {
   pname = "tsc";
@@ -48,6 +47,6 @@ melpaBuild {
   meta = {
     description = "Core APIs of the Emacs binding for tree-sitter";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pimeys ];
+    maintainers = [ ];
   };
 }

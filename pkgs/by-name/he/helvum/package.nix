@@ -14,24 +14,24 @@
   rustc,
   stdenv,
   wrapGAppsHook4,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "helvum";
-  version = "0.5.1";
+  version = "0.6.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "pipewire";
     repo = "helvum";
     rev = version;
-    hash = "sha256-9vlzLPpyZ9qtCEbCDvYhWDcV+8T63ukdos1l2U6fD+E=";
+    hash = "sha256-fDsVYFJ2fm5dLpcCp7Pm4s3+jqTx4r9IQokoVQ0sM04=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-rwhhbEaUg7IiszmJUFh4vQV7cYyyh3tqr1z4QgmwIDY=";
+    inherit pname version src;
+    hash = "sha256-cpRPJap/U20vkfShuTav10IoPIxDKueviFKTDM4jrGs=";
   };
 
   nativeBuildInputs = [
@@ -53,12 +53,17 @@ stdenv.mkDerivation rec {
     pipewire
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "GTK patchbay for pipewire";
     homepage = "https://gitlab.freedesktop.org/pipewire/helvum";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fufexan ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      fufexan
+      luminarleaf
+    ];
+    platforms = lib.platforms.linux;
     mainProgram = "helvum";
   };
 }

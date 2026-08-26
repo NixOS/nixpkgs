@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -16,18 +15,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jedi";
-  version = "0.19.2";
+  version = "0.20.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "davidhalter";
     repo = "jedi";
-    rev = "v${version}";
-    hash = "sha256-2nDQJS6LIaq91PG3Av85OMFfs1ZwId00K/kvog3PGXE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-D0Zy8HJYq5l8Wp1M+J7p8Z+EBY/R5tYFa2uMYiqLIT8=";
     fetchSubmodules = true;
   };
 
@@ -45,11 +42,11 @@ buildPythonPackage rec {
   '';
 
   disabledTests =
-    [
+    lib.optionals stdenv.hostPlatform.isDarwin [
       # sensitive to platform, causes false negatives on darwin
       "test_import"
     ]
-    ++ lib.optionals (stdenv.targetPlatform.useLLVM or false) [
+    ++ lib.optionals stdenv.targetPlatform.useLLVM [
       # InvalidPythonEnvironment: The python binary is potentially unsafe.
       "test_create_environment_executable"
       # AssertionError: assert ['', '.1000000000000001'] == ['', '.1']
@@ -58,11 +55,11 @@ buildPythonPackage rec {
       "test_dict_completion"
     ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/davidhalter/jedi/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     description = "Autocompletion tool for Python that can be used for text editors";
     homepage = "https://github.com/davidhalter/jedi";
-    changelog = "https://github.com/davidhalter/jedi/blob/${version}/CHANGELOG.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

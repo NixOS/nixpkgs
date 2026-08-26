@@ -1,45 +1,37 @@
 {
-  dos2unix,
-  fetchurl,
   lib,
   stdenv,
+  fetchurl,
+  cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mkclean";
-  version = "0.8.10";
-
-  hardeningDisable = [ "format" ];
-  nativeBuildInputs = [ dos2unix ];
+  version = "0.9.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/matroska/${pname}-${version}.tar.bz2";
-    sha256 = "0zbpi4sm68zb20d53kbss93fv4aafhcmz7dsd0zdf01vj1r3wxwn";
+    url = "mirror://sourceforge/matroska/mkclean-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-L1zcqw4Jtl+f74lJpV7wDuPdcA5LQFDiRdRCNH18w9s=";
   };
 
-  configurePhase = ''
-    dos2unix ./mkclean/configure.compiled
-    ./mkclean/configure.compiled
+  nativeBuildInputs = [ cmake ];
+
+  hardeningDisable = [ "format" ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1.2)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  buildPhase = ''
-    make -C mkclean
+  postInstall = ''
+    install -Dm0755 mkclean/mkclean $out/bin/mkclean
   '';
 
-  installPhase = ''
-    mkdir -p $out/{bin,lib}
-    mv release/gcc_linux_*/*.* $out/lib
-    mv release/gcc_linux_*/* $out/bin
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Command line tool to clean and optimize Matroska (.mkv / .mka / .mks / .mk3d) and WebM (.webm / .weba) files that have already been muxed";
     homepage = "https://www.matroska.org";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ cawilliamson ];
-    platforms = [
-      "i686-linux"
-      "x86_64-linux"
-    ];
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ cawilliamson ];
+    platforms = lib.platforms.unix;
   };
-}
+})

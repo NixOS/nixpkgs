@@ -8,14 +8,14 @@
   libtool,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qqwing";
   version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "stephenostermiller";
     repo = "qqwing";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-MYHPANQk4aUuDqUNxWPbqw45vweZ2bBcUcMTyEjcAOM=";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "qqwing";
   };
-}
+})

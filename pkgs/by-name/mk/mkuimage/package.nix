@@ -9,16 +9,16 @@
 
 buildGoModule {
   pname = "mkuimage";
-  version = "0-unstable-2024-02-28";
+  version = "0-unstable-2026-04-13";
 
   src = fetchFromGitHub {
     owner = "u-root";
     repo = "mkuimage";
-    rev = "899a47eaaa318bd2327dc94d964ccda40a784037";
-    hash = "sha256-sb/LtwAN7RN8jWG/x6pomz2Q+vKekA/teC7U5NVb2qY=";
+    rev = "72394cd98f39c9190dcc4f2a601902d43af1ae6e";
+    hash = "sha256-0XY2oTwdKEFVbOMTnxoKoM9OoJm9Y+R/3z04VZwk2T8=";
   };
 
-  vendorHash = "sha256-KX9uv5m4N4+7gOgjhotRac9sz8tWSJ1krq98RWdsbzg=";
+  vendorHash = "sha256-PmfHdl0GG84kPPUgKiLwhKvcgbbwJLFMnX1cI//U5T8=";
 
   subPackages = [
     "cmd/gentpldeps"

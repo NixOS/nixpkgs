@@ -4,7 +4,6 @@
   lib,
   postgresql,
   postgresqlBuildExtension,
-  stdenv,
 }:
 
 postgresqlBuildExtension {
@@ -37,8 +36,9 @@ postgresqlBuildExtension {
       is tightly integrated in the RDBMS in the sense that it defines operators so instead of the traditional
       operators (= and <>) you can use ~~~ and ~!~ (any of these operators represents a similarity function).
     '';
+    homepage = "https://github.com/eulerto/pg_similarity";
     platforms = postgresql.meta.platforms;
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ danbst ];
+    maintainers = [ ];
   };
 }

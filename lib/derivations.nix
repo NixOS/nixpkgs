@@ -6,7 +6,6 @@ let
     isString
     mapAttrs
     removeAttrs
-    throwIfNot
     ;
 
   showMaybeAttrPosPre =
@@ -21,6 +20,11 @@ let
     if pkg ? meta.position && isString pkg.meta.position then "${prefix}${pkg.meta.position}" else "";
 in
 {
+  inherit (builtins)
+    addDrvOutputDependencies
+    unsafeDiscardOutputDependency
+    ;
+
   /**
     Restrict a derivation to a predictable set of attribute names, so
     that the returned attrset is not strict in the actual derivation,
@@ -86,7 +90,7 @@ in
       This can be used for adding package attributes, such as `tests`.
 
     `outputs`
-    : Optional list of assumed outputs. Default: ["out"]
+    : Optional list of assumed outputs. Default: `[ "out" ]`
 
       This must match the set of outputs that the returned derivation has.
       You must use this when the derivation has multiple outputs.
@@ -103,18 +107,18 @@ in
       # attrset spine returned by lazyDerivation does not depend on it.
       # Instead, the individual derivation attributes do depend on it.
       checked =
-        throwIfNot (derivation.type or null == "derivation") "lazyDerivation: input must be a derivation."
-          throwIfNot
-          # NOTE: Technically we could require our outputs to be a subset of the
-          # actual ones, or even leave them unchecked and fail on a lazy basis.
-          # However, consider the case where an output is added in the underlying
-          # derivation, such as dev. lazyDerivation would remove it and cause it
-          # to fail as a buildInputs item, without any indication as to what
-          # happened. Hence the more stringent condition. We could consider
-          # adding a flag to control this behavior if there's a valid case for it,
-          # but the documentation must have a note like this.
-          (derivation.outputs == outputs)
-          ''
+        if derivation.type or null != "derivation" then
+          throw "lazyDerivation: input must be a derivation."
+        # NOTE: Technically we could require our outputs to be a subset of the
+        # actual ones, or even leave them unchecked and fail on a lazy basis.
+        # However, consider the case where an output is added in the underlying
+        # derivation, such as dev. lazyDerivation would remove it and cause it
+        # to fail as a buildInputs item, without any indication as to what
+        # happened. Hence the more stringent condition. We could consider
+        # adding a flag to control this behavior if there's a valid case for it,
+        # but the documentation must have a note like this.
+        else if derivation.outputs != outputs then
+          throw ''
             lib.lazyDerivation: The derivation ${derivation.name or "<unknown>"} has outputs that don't match the assumed outputs.
 
             Assumed outputs passed to lazyDerivation${showMaybeAttrPosPre ",\n    at " "outputs" args}:
@@ -137,6 +141,7 @@ in
             If none of the above works for you, replace the lib.lazyDerivation call by the
             expression in the derivation argument.
           ''
+        else
           derivation;
     in
     {
@@ -190,7 +195,7 @@ in
     # Type
 
     ```
-    optionalDrvAttr :: Bool -> a -> a | Null
+    optionalDrvAttr :: Bool -> a -> (a | Null)
     ```
 
     # Examples
@@ -216,8 +221,9 @@ in
   /**
     Wrap a derivation such that instantiating it produces a warning.
 
-    All attributes apart from `meta`, `name`, and `type` (which are used by
-    `nix search`) will be wrapped in `lib.warn`.
+    All attributes will be wrapped with `lib.warn` except from `.meta`, `.name`,
+    and `.type` which are used by `nix search`, and `.outputName` which avoids
+    double warnings with `nix-instantiate` and `nix-build`.
 
     # Inputs
 
@@ -226,6 +232,12 @@ in
 
     `drv`
     : The derivation to wrap.
+
+    # Type
+
+    ```
+    warnOnInstantiate :: String -> Derivation -> Derivation
+    ```
 
     # Examples
     :::{.example}
@@ -246,7 +258,15 @@ in
         "meta"
         "name"
         "type"
+        "outputName"
       ];
     in
-    drv // mapAttrs (_: lib.warn msg) drvToWrap;
+    drv
+    // mapAttrs (_: lib.warn msg) drvToWrap
+    // (
+      if drv ? overrideAttrs && builtins.isFunction drv.overrideAttrs then
+        { overrideAttrs = x: lib.derivations.warnOnInstantiate msg (drv.overrideAttrs x); }
+      else
+        { }
+    );
 }

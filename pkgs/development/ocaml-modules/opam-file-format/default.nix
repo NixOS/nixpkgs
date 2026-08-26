@@ -1,27 +1,26 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchurl,
   buildDunePackage,
+  menhir,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "opam-file-format";
-  version = "2.1.6";
+  version = "2.2.0";
 
-  src = fetchFromGitHub {
-    owner = "ocaml";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-Ka9pMYB99kM+5X7wf9F13gUrjouZucGevvkSY0TaXGg=";
+  src = fetchurl {
+    url = "https://github.com/ocaml/opam-file-format/releases/download/${finalAttrs.version}/opam-file-format-${finalAttrs.version}.tar.gz";
+    hash = "sha256-SrU1Cw3L1EwFmrDFnYE2jzSvdwccDmXYHGpbm/ql6Ck=";
   };
 
-  useDune2 = true;
+  nativeBuildInputs = [ menhir ];
 
-  meta = with lib; {
+  meta = {
     description = "Parser and printer for the opam file syntax";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ vbgl ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ vbgl ];
     homepage = "https://github.com/ocaml/opam-file-format/";
-    changelog = "https://github.com/ocaml/opam-file-format/raw/${version}/CHANGES";
+    changelog = "https://github.com/ocaml/opam-file-format/raw/${finalAttrs.version}/CHANGES";
   };
-}
+})

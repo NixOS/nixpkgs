@@ -5,8 +5,10 @@ let
   lib = pkgs.lib;
   stdenv = pkgs.stdenv;
 
-  rubyVersions = with pkgs; [
-    ruby_3_2
+  rubyVersions = [
+    # TODO FIXME: All versions listed here were dropped from Nixpkgs.
+    # Add current versions here or remove this file if it’s no longer
+    # being used.
   ];
 
   gemTests = (lib.mapAttrs (name: gem: [ name ]) pkgs.ruby.gems) // (import ./require_exceptions.nix);

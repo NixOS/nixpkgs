@@ -2,20 +2,19 @@
   lib,
   buildNpmPackage,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   django,
 }:
 let
   pname = "django-admin-sortable2";
-  version = "2.2.6";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "jrief";
     repo = "django-admin-sortable2";
     tag = version;
-    hash = "sha256-MIxZ33Q8dHo102zvQqMiOlxtPjkenQQYTRyXJOHdCqE=";
+    hash = "sha256-noY0SELM+ZBWDoZ/pl1oUV/S0VICtG7sSaCtPGjjOpQ=";
   };
 
   assets = buildNpmPackage {
@@ -37,8 +36,6 @@ buildPythonPackage rec {
   inherit pname version src;
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   build-system = [ setuptools ];
 
   dependencies = [ django ];
@@ -55,7 +52,7 @@ buildPythonPackage rec {
   meta = {
     description = "Generic drag-and-drop ordering for objects in the Django admin interface";
     homepage = "https://github.com/jrief/django-admin-sortable2";
-    changelog = "https://github.com/jrief/django-admin-sortable2/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/jrief/django-admin-sortable2/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sephi ];
   };

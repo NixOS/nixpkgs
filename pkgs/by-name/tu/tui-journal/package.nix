@@ -4,47 +4,41 @@
   fetchFromGitHub,
   pkg-config,
   libgit2,
-  openssl,
   zlib,
-  stdenv,
-  darwin,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tui-journal";
-  version = "0.15.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "AmmarAbouZor";
     repo = "tui-journal";
-    rev = "v${version}";
-    hash = "sha256-XbOKC+utKt53iFzNbm861tMGsNMZ2GQc+/J0Dm/SYS8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ahjCfSodq4foBV3aBbU0FsSUrEo3wgvFYSBr/OClmpc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-gleNWRs9oCI9TH5ALS/wvC88OooMfSTJvz+UVWFYrs4=";
+  cargoHash = "sha256-hbRSQ9iVmp0oKEK53y4IuU34WNgq+pRefNxFbP1DPVQ=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libgit2
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    libgit2
+    zlib
+  ];
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  meta = {
+    changelog = "https://github.com/AmmarAbouZor/tui-journal/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Your journal app if you live in a terminal";
     homepage = "https://github.com/AmmarAbouZor/tui-journal";
-    changelog = "https://github.com/AmmarAbouZor/tui-journal/blob/${src.rev}/CHANGELOG.ron";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
     mainProgram = "tjournal";
+    maintainers = with lib.maintainers; [ phanirithvij ];
   };
-}
+})

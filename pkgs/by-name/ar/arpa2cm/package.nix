@@ -3,22 +3,28 @@
   stdenv,
   fetchFromGitLab,
   cmake,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "arpa2cm";
-  version = "1.0.4";
+  version = "1.0.7";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitLab {
     owner = "arpa2";
     repo = "arpa2cm";
-    rev = "v${version}";
-    hash = "sha256-2vb/7UL+uWGrQNh8yOZ3gih5G1/eOp064hF78SDsPGk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JkMZUXqmrVzURVi8BJRsHprD4Jz6l83qhPxnOfq4KE4=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "CMake Module library for the ARPA2 project";
     longDescription = ''
       The CMake module library for the ARPA2 project, including the LillyDAP,
@@ -32,10 +38,8 @@ stdenv.mkDerivation rec {
       the ARPA2 software stack.
     '';
     homepage = "https://gitlab.com/arpa2/arpa2cm";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
-      leenaars
-      fufexan
-    ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fufexan ];
+    teams = [ lib.teams.ngi ];
   };
-}
+})

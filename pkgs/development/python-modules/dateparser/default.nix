@@ -1,16 +1,16 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   python-dateutil,
   pytz,
   regex,
   tzlocal,
-  hijri-converter,
+  hijridate,
   convertdate,
   fasttext,
+  numpy,
   langdetect,
   parameterized,
   pytestCheckHook,
@@ -18,26 +18,25 @@
   parsel,
   requests,
   ruamel-yaml,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dateparser";
-  version = "1.2.1";
-
-  disabled = pythonOlder "3.7";
+  version = "1.4.2";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scrapinghub";
     repo = "dateparser";
-    tag = "v${version}";
-    hash = "sha256-O0FsLWbH0kGjwGCTklBMVVqosxXlXRyS9aAcggtBLsA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ulwX8yLLXm3V4eldiK+j0XWzgrPepeWiA3BAjDJv9iM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     python-dateutil
     pytz
     regex
@@ -46,10 +45,13 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     calendars = [
-      hijri-converter
+      hijridate
       convertdate
     ];
-    fasttext = [ fasttext ];
+    fasttext = [
+      fasttext
+      numpy
+    ];
     langdetect = [ langdetect ];
   };
 
@@ -60,33 +62,27 @@ buildPythonPackage rec {
     parsel
     requests
     ruamel-yaml
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  preCheck = ''
-    export HOME="$TEMPDIR"
-  '';
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   # Upstream only runs the tests in tests/ in CI, others use git clone
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = [
     # access network
     "test_custom_language_detect_fast_text_0"
     "test_custom_language_detect_fast_text_1"
-
-    # breaks with latest tzdata: https://github.com/scrapinghub/dateparser/issues/1237
-    # FIXME: look into this more
-    "test_relative_base"
   ];
 
   pythonImportsCheck = [ "dateparser" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/scrapinghub/dateparser/blob/${src.rev}/HISTORY.rst";
+  meta = {
+    changelog = "https://github.com/scrapinghub/dateparser/blob/${finalAttrs.src.tag}/HISTORY.rst";
     description = "Date parsing library designed to parse dates from HTML pages";
     homepage = "https://github.com/scrapinghub/dateparser";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "dateparser-download";
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

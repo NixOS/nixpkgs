@@ -3,14 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   filelock,
-  ghidra-bridge,
-  jfx-bridge,
   networkx,
   platformdirs,
+  ply,
   prompt-toolkit,
   psutil,
   pycparser,
-  pyhidra,
+  pyghidra,
   pytestCheckHook,
   setuptools,
   toml,
@@ -18,30 +17,38 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+let
+  # Binary files from https://github.com/binsync/bs-artifacts (only used for testing and only here)
+  binaries = fetchFromGitHub {
+    owner = "binsync";
+    repo = "bs-artifacts";
+    tag = "514c2d6ef1875435c9d137bb5d99b6fc74063817";
+    hash = "sha256-P7+BTJgdC9W8cC/7xQduFYllF+0ds1dSlm59/BFvZ2g=";
+  };
+in
+buildPythonPackage (finalAttrs: {
   pname = "libbs";
-  version = "2.13.0";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "binsync";
     repo = "libbs";
-    tag = "v${version}";
-    hash = "sha256-QNiI8qNqh3DlYoGcfExu5PXK1FHXRmcyefMsAfpOMy0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Xe47JZPkbROHFlqc2o/htqvZWjknsv5KekJBqXA44O4=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     filelock
-    ghidra-bridge
-    jfx-bridge
     networkx
     platformdirs
+    ply
     prompt-toolkit
     psutil
     pycparser
-    pyhidra
+    pyghidra
     toml
     tqdm
   ];
@@ -50,6 +57,14 @@ buildPythonPackage rec {
     pytestCheckHook
     writableTmpDirAsHomeHook
   ];
+
+  # Place test binaries in place
+  preCheck = ''
+    export HOME=$TMPDIR
+    mkdir -p $HOME/bs-artifacts/binaries
+    cp -r ${binaries} $HOME/bs-artifacts/binaries
+    export TEST_BINARIES_DIR=$HOME/bs-artifacts/binaries
+  '';
 
   pythonImportsCheck = [ "libbs" ];
 
@@ -62,8 +77,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for writing plugins in any decompiler: includes API lifting, common data formatting, and GUI abstraction";
     homepage = "https://github.com/binsync/libbs";
-    changelog = "https://github.com/binsync/libbs/releases/tag/${src.tag}";
+    changelog = "https://github.com/binsync/libbs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ scoder12 ];
   };
-}
+})

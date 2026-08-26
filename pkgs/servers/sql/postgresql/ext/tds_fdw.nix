@@ -4,13 +4,11 @@
   lib,
   postgresql,
   postgresqlBuildExtension,
-  stdenv,
-  unstableGitUpdater,
 }:
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "tds_fdw";
-  version = "2.0.4";
+  version = "2.0.5";
 
   buildInputs = [ freetds ];
 
@@ -18,7 +16,7 @@ postgresqlBuildExtension (finalAttrs: {
     owner = "tds-fdw";
     repo = "tds_fdw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ruelOHueaHx1royLPvDM8Abd1rQD62R4KXgtHY9qqTw=";
+    hash = "sha256-4ecdErksaZ7SyCKzvSY5sD7rrKljq7BMn+gI9Yz49r0=";
   };
 
   meta = {

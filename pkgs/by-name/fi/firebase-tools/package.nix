@@ -3,6 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
+  nodejs_22,
   python3,
   xcbuild,
   nix-update-script,
@@ -10,28 +11,29 @@
 
 buildNpmPackage rec {
   pname = "firebase-tools";
-  version = "14.2.1";
+  version = "15.28.1";
+  nodejs = nodejs_22;
 
   src = fetchFromGitHub {
     owner = "firebase";
     repo = "firebase-tools";
     tag = "v${version}";
-    hash = "sha256-3eAzLtVNlgjktnuQ1ZJIyE2CsKZISPRuGjUTHZxX/6k=";
+    hash = "sha256-Dls7xLkHnvLGQnw72RoOYw8iz2axHNBBKdzVwWpfWHE=";
   };
 
-  npmDepsHash = "sha256-/mij1GjkRldQWaBv1YEwxMWoP6CG3ydLV2aI+K2R+t4=";
+  npmDepsHash = "sha256-u8zhpnd2avSXiIZi6rj8y6JI9ngqTxIhlPR+Xor3ka8=";
 
+  # No more package-lock.json in upstream src
   postPatch = ''
-    ln -s npm-shrinkwrap.json package-lock.json
+    cp ./npm-shrinkwrap.json ./package-lock.json
   '';
 
-  nativeBuildInputs =
-    [
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild
-    ];
+  nativeBuildInputs = [
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+  ];
 
   env.PUPPETEER_SKIP_DOWNLOAD = true;
 
@@ -44,7 +46,6 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     mainProgram = "firebase";
     maintainers = with lib.maintainers; [
-      momeemt
       sarahec
     ];
   };

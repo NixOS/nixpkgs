@@ -1,28 +1,51 @@
 {
   lib,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
   rustPlatform,
+  pkg-config,
+  openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "function-runner";
-  version = "7.0.1";
+  version = "9.2.2";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = "function-runner";
-    rev = "v${version}";
-    sha256 = "sha256-i1RxK5NlKNV0mVm4vio557pM2claBTHTo8vmaNQPEvw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OcdyzMUcUMVyA7fhSFcgl/9ITq67HckZO54sR3opFZo=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-97svZUTKcmC6EfY8yYDs2GrwpgRDj4dicDRzAza3cSY=";
+  cargoHash = "sha256-9HIaxkq3viBcy9GqtMZ1RHh5XsRmvy9LCL+xpu9swyo=";
 
-  meta = with lib; {
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [ openssl ];
+
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  # Failed to download trampoline: error sending request for url
+  checkFlags = map (t: "--skip=${t}") [
+    "engine::tests::test_wasm_api_v1_function"
+    "tests::run_wasm_api_v1_function"
+    "tests::run_wasm_api_v2_function"
+  ];
+
+  meta = {
     description = "CLI tool which allows you to run Wasm Functions intended for the Shopify Functions infrastructure";
-    mainProgram = "function-runner";
     homepage = "https://github.com/Shopify/function-runner";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nintron ];
+    changelog = "https://github.com/Shopify/function-runner/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      nintron
+      kybe236
+    ];
+    mainProgram = "function-runner";
   };
-}
+})

@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   accountsservice,
   appstream-glib,
   dbus,
@@ -32,14 +33,14 @@
   gtk4-layer-shell,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "swaysettings";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
     repo = "SwaySettings";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XP0Q3Q40cvAl3MEqShY+VMWjlCtqs9e91nkxocVNQQQ=";
   };
 
@@ -77,6 +78,14 @@ stdenv.mkDerivation rec {
     libadwaita
   ];
 
+  patches = [
+    (fetchpatch2 {
+      name = "gtk-4.20-fix.patch";
+      url = "https://github.com/ErikReider/SwaySettings/commit/e4f3749a053b5fbe0feab93e46d6eba380ee2e58.patch?full_index=1";
+      hash = "sha256-3A0VPAUQ3UjQ2mqR24z5CQ5Tdjw73UzfPz5UUcl/FDA=";
+    })
+  ];
+
   postPatch = ''
     patchShebangs build-aux/meson/postinstall.py
   '';
@@ -92,4 +101,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.aacebedo ];
   };
-}
+})

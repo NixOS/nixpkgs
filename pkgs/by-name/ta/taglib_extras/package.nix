@@ -7,11 +7,11 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "taglib-extras";
   version = "1.0.1";
   src = fetchurl {
-    url = "https://download.kde.org/stable/taglib-extras/${version}/src/taglib-extras-${version}.tar.gz";
+    url = "https://download.kde.org/stable/taglib-extras/${finalAttrs.version}/src/taglib-extras-${finalAttrs.version}.tar.gz";
     sha256 = "0cln49ws9svvvals5fzxjxlzqm0fzjfymn7yfp4jfcjz655nnm7y";
   };
 
@@ -29,15 +29,17 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  cmakeFlags = [ (lib.strings.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5") ];
+
   # Workaround for upstream bug https://bugs.kde.org/show_bug.cgi?id=357181
   preConfigure = ''
     sed -i -e 's/STRLESS/VERSION_LESS/g' cmake/modules/FindTaglib.cmake
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Additional taglib plugins";
     mainProgram = "taglib-extras-config";
-    platforms = platforms.unix;
-    license = licenses.lgpl2;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl2;
   };
-}
+})

@@ -1,22 +1,27 @@
 {
   lib,
   fetchFromGitHub,
+  nix-update-script,
   rustPlatform,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "havn";
-  version = "0.2.1";
+  version = "0.3.9";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mrjackwills";
     repo = "havn";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SXsCJzKfm77/IH3H7L5STylusmlN9DN4xd12Vt6L3TM=";
+    hash = "sha256-G+aUTzlpUfVTkoftp1igCPeKaQpbS4CyydoitcLzxjk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-SwqajiyYrN0VTGtQo9+Tux8sBvEmWzOQQknQ9zTQ0hY=";
+  cargoHash = "sha256-G4DNr69FKiLI3vrEX3AMPn3DdWzPbxA7t2vw3bJtW94=";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   checkFlags = [
     # Skip tests that require network access
@@ -26,10 +31,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=terminal::print::tests::test_terminal_monochrome_false"
   ];
 
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://github.com/mrjackwills/havn";
     description = "Fast configurable port scanner with reasonable defaults";
-    changelog = "https://github.com/mrjackwills/havn/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/mrjackwills/havn/blob/v${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "havn";

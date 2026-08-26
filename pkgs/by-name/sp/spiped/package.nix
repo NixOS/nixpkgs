@@ -7,12 +7,12 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spiped";
   version = "1.6.4";
 
   src = fetchurl {
-    url = "https://www.tarsnap.com/spiped/spiped-${version}.tgz";
+    url = "https://www.tarsnap.com/spiped/spiped-${finalAttrs.version}.tgz";
     hash = "sha256-Qk+003adkSsE3kPSHMMnSM39MSHE8dJtVJmSpUZ44Go=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
-}
+})

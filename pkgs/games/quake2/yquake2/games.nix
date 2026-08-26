@@ -48,6 +48,12 @@ let
         rev = "${lib.toUpper id}_${builtins.replaceStrings [ "." ] [ "_" ] version}";
       };
 
+      env =
+        # Uses `false` and `true` as enum constants, which are keywords in C23 (GCC 15 default)
+        lib.optionalAttrs stdenv.cc.isGNU {
+          NIX_CFLAGS_COMPILE = "-std=gnu17";
+        };
+
       installPhase = ''
         runHook preInstall
         mkdir -p $out/lib/yquake2/${id}
@@ -55,12 +61,12 @@ let
         runHook postInstall
       '';
 
-      meta = with lib; {
+      meta = {
         inherit (data) description;
         homepage = "https://www.yamagi.org/quake2/";
-        license = licenses.unfree;
-        platforms = platforms.unix;
-        maintainers = with maintainers; [ tadfisher ];
+        license = lib.licenses.unfree;
+        platforms = lib.platforms.unix;
+        maintainers = with lib.maintainers; [ tadfisher ];
       };
     };
 

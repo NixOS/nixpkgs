@@ -6,14 +6,15 @@
   pyamlboot,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyamlboot";
   version = "1.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "superna9999";
     repo = "pyamlboot";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-vpWq8+0ZoTkfVyx+2BbXdULFwo/Ug4U1gWArXDfnzyk=";
   };
 
@@ -23,14 +24,15 @@ python3Packages.buildPythonApplication rec {
 
   dependencies = with python3Packages; [
     pyusb
-    wheel
-    setuptools
+    setuptools # pkg_resources is imported during runtime
   ];
+
+  pythonImportsCheck = [ "pyamlboot" ];
 
   passthru.tests.version = testers.testVersion {
     package = pyamlboot;
     command = "boot.py -v";
-    version = "boot.py ${lib.versions.majorMinor version}";
+    version = "boot.py ${lib.versions.majorMinor finalAttrs.version}";
   };
 
   meta = {
@@ -44,4 +46,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ genga898 ];
     mainProgram = "boot.py";
   };
-}
+})

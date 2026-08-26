@@ -8,7 +8,7 @@
   freetype,
   fontconfig,
   fribidi,
-  libX11,
+  libx11,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "quesoglc";
@@ -26,11 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     fontconfig
     fribidi
-    libX11
+    libx11
   ];
 
   # required for cross builds
   configureFlags = [
+    # system glew is not compatible with chromium-bsu API assumption
+    "--without-glew"
+
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
     "ac_cv_func_memcmp_working=yes"
@@ -49,7 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://quesoglc.sourceforge.net/";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ astsmtl ];
     platforms = lib.platforms.linux;
   };
 })

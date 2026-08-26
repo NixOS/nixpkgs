@@ -5,19 +5,18 @@
 with pkgs;
 
 let
-  inherit (vimPlugins) nvim-treesitter;
-
-  neovim = pkgs.neovim.override {
-    configure.packages.all.start = [ nvim-treesitter ];
-  };
+  luaWithPackages = luajit.withPackages (
+    ps: with ps; [
+      json
+    ]
+  );
 in
 
 mkShell {
   packages = [
-    neovim
     nurl
     python3
+    luaWithPackages
   ];
-
-  NVIM_TREESITTER = nvim-treesitter;
+  env.NVIM_TREESITTER = vimPlugins.nvim-treesitter;
 }

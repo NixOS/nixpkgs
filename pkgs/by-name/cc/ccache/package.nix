@@ -9,18 +9,20 @@
   perl,
   fmt,
   hiredis,
-  xxHash,
+  xxhash,
   zstd,
   bashInteractive,
   doctest,
   xcodebuild,
   makeWrapper,
+  ctestCheckHook,
+  writableTmpDirAsHomeHook,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccache";
-  version = "4.11.2";
+  version = "4.13.6";
 
   src = fetchFromGitHub {
     owner = "ccache";
@@ -39,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
         exit 1
       fi
     '';
-    hash = "sha256-Jno0CeMyy911aZSro5LqYINyVD8haZJF2aOSGF26thY=";
+    hash = "sha256-A0n+DO6IznETsAFUNIpBkQI6A3UilgEUbuyP3sqKDTk=";
   };
 
   outputs = [
@@ -59,6 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  postPatch = ''
+    patchShebangs --build doc/scripts
+    patchShebangs --build test/fake-compilers
+  '';
+
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -70,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fmt
     hiredis
-    xxHash
+    xxhash
     zstd
   ];
 
@@ -82,31 +89,24 @@ stdenv.mkDerivation (finalAttrs: {
     # test/run requires the compgen function which is available in
     # bashInteractive, but not bash.
     bashInteractive
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin xcodebuild;
+    ctestCheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin xcodebuild;
 
   checkInputs = [
     doctest
   ];
 
-  checkPhase =
-    let
-      badTests =
-        [
-          "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          "test.basedir"
-          "test.fileclone" # flaky on hydra (possibly filesystem-specific?)
-          "test.multi_arch"
-          "test.nocpp2"
-        ];
-    in
-    ''
-      runHook preCheck
-      export HOME=$(mktemp -d)
-      ctest --output-on-failure -E '^(${lib.concatStringsSep "|" badTests})$'
-      runHook postCheck
-    '';
+  disabledTests = [
+    "test.fileclone" # flaky on hydra, also seems to fail on zfs
+    "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test.basedir"
+    "test.multi_arch"
+    "test.nocpp2"
+  ];
 
   passthru = {
     # A derivation that provides gcc and g++ commands, but that
@@ -120,7 +120,11 @@ stdenv.mkDerivation (finalAttrs: {
           isClang = unwrappedCC.isClang or false;
           isGNU = unwrappedCC.isGNU or false;
           isCcache = true;
-        };
+        }
+        // builtins.intersectAttrs {
+          hardeningUnsupportedFlagsByTargetPlatform = null;
+          hardeningUnsupportedFlags = null;
+        } unwrappedCC;
         lib = lib.getLib unwrappedCC;
         nativeBuildInputs = [ makeWrapper ];
         # Unwrapped clang does not have a targetPrefix because it is multi-target
@@ -163,24 +167,28 @@ stdenv.mkDerivation (finalAttrs: {
               ln -s ${unwrappedCC}/$file $out/$file
             done
           '';
+
+        meta = {
+          inherit (unwrappedCC.meta) mainProgram;
+        };
       };
 
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Compiler cache for fast recompilation of C/C++ code";
     homepage = "https://ccache.dev";
     downloadPage = "https://ccache.dev/download.html";
     changelog = "https://ccache.dev/releasenotes.html#_ccache_${
       builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       kira-bruneau
       r-burns
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "ccache";
   };
 })

@@ -3,24 +3,20 @@
   buildPythonPackage,
   fetchFromGitHub,
   pyserial,
-  pythonOlder,
   setuptools,
   websocket-client,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "pyflipper";
-  version = "0.18-unstable-2024-04-15";
+  version = "0.22";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "wh00hw";
     repo = "pyFlipper";
-    # https://github.com/wh00hw/pyFlipper/issues/20
-    rev = "e8a82a25eb766fac53a2e6e5fff6505f60cf0897";
-    hash = "sha256-CQ6oVVkLxyoNoe7L0USfal1980VkfiuHc4cqXTsZ2Jc=";
+    tag = "v${version}";
+    hash = "sha256-dLJxhbWKBRL6MGGXPfgY2cKS/IwxCMM7y73Iak+Sdo0=";
   };
 
   build-system = [ setuptools ];
@@ -38,6 +34,7 @@ buildPythonPackage {
   meta = {
     description = "Flipper Zero Python CLI Wrapper";
     homepage = "https://github.com/wh00hw/pyFlipper";
+    changelog = "https://github.com/wh00hw/pyFlipper/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ siraben ];
   };

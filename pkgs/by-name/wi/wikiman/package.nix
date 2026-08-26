@@ -15,13 +15,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "wikiman";
-  version = "2.13.2";
+  version = "2.14.1";
 
   src = fetchFromGitHub {
     owner = "filiparag";
     repo = "wikiman";
     tag = finalAttrs.version;
-    hash = "sha256-gk/9PVIRw9OQrdCSS+LcniXDYNcHUQUxZ2XGQCwpHaI=";
+    hash = "sha256-EvYMUHKFJhSFyoW85EEzI7q5OMGGe9c+A2JlkAoxt3o=";
   };
 
   patches = [ ./fix-paths.patch ];
@@ -60,7 +60,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "Offline search engine for manual pages, Arch Wiki, Gentoo Wiki and other documentation";
     homepage = "https://github.com/filiparag/wikiman";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ pluiedev ];
     mainProgram = "wikiman";

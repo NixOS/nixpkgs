@@ -7,6 +7,7 @@
 buildPythonPackage {
   pname = "foundationdb";
   version = foundationdb.version;
+  format = "setuptools";
 
   src = foundationdb.pythonsrc;
   unpackCmd = "tar xf $curSrc";
@@ -21,7 +22,7 @@ buildPythonPackage {
   meta = {
     description = "Python bindings for FoundationDB";
     homepage = "https://www.foundationdb.org";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

@@ -1,37 +1,49 @@
 {
+  lib,
   buildPythonPackage,
   cmake,
-  setuptools-scm,
+  ninja,
+  scikit-build-core,
   numpy,
   pillow,
-  pybind11,
+  nanobind,
   libzxing-cpp,
   pytestCheckHook,
+  libzint,
+  python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "zxing-cpp";
-  inherit (libzxing-cpp) src version meta;
+  inherit (libzxing-cpp) src version;
   pyproject = true;
 
-  sourceRoot = "${src.name}/wrappers/python";
-
-  # we don't need pybind11 in the root environment
-  # https://pybind11.readthedocs.io/en/stable/installing.html#include-with-pypi
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "pybind11[global]" "pybind11"
-  '';
+  sourceRoot = "${libzxing-cpp.src.name}/wrappers/python";
 
   dontUseCmakeConfigure = true;
 
-  propagatedBuildInputs = [ numpy ];
+  env = {
+    nanobind_DIR = "${nanobind}/${python.sitePackages}/nanobind/cmake";
+  };
 
-  buildInputs = [ pybind11 ];
+  cmakeFlags = [
+    (lib.cmakeBool "ZXING_USE_BUNDLED_ZINT" false)
+  ];
+
+  build-system = [
+    scikit-build-core
+    nanobind
+  ];
+
+  dependencies = [ numpy ];
 
   nativeBuildInputs = [
     cmake
-    setuptools-scm
+    ninja
+  ];
+
+  buildInputs = [
+    libzint
   ];
 
   nativeCheckInputs = [
@@ -39,7 +51,19 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "test.py" ];
+  enabledTestPaths = [ "test.py" ];
 
   pythonImportsCheck = [ "zxingcpp" ];
+
+  meta = {
+    inherit (libzxing-cpp.meta)
+      homepage
+      changelog
+      description
+      longDescription
+      license
+      maintainers
+      platforms
+      ;
+  };
 }

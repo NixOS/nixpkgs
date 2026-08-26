@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cdecrypt";
   version = "4.8";
 
   src = fetchFromGitHub {
     owner = "VitaSmith";
     repo = "cdecrypt";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PyT60RDyp1/Co/7WHC0+KrsnrDeTJ605x1pt4OmlGYg=";
   };
 
@@ -19,13 +19,13 @@ stdenv.mkDerivation rec {
     install -Dm755 cdecrypt $out/bin/cdecrypt
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Utility that decrypts Wii U NUS content files";
     mainProgram = "cdecrypt";
     homepage = "https://github.com/VitaSmith/cdecrypt";
-    changelog = "https://github.com/VitaSmith/cdecrypt/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hughobrien ];
-    platforms = platforms.linux ++ platforms.darwin;
+    changelog = "https://github.com/VitaSmith/cdecrypt/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ hughobrien ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

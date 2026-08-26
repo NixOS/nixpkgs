@@ -1,17 +1,17 @@
-import ./make-test-python.nix (
-  { lib, pkgs, ... }:
-  {
-    name = "systemd-initrd-simple";
+{ pkgs, ... }:
+{
+  name = "systemd-initrd-simple";
 
-    nodes.machine =
-      { pkgs, ... }:
-      {
-        testing.initrdBackdoor = true;
-        boot.initrd.systemd.enable = true;
-        virtualisation.fileSystems."/".autoResize = true;
-      };
+  nodes.machine = {
+    testing.initrdBackdoor = true;
+    boot.initrd.systemd.enable = true;
+    virtualisation.fileSystems."/".autoResize = true;
+  };
 
-    testScript = ''
+  testScript =
+    { nodes, ... }:
+    # python
+    ''
       import subprocess
 
       with subtest("testing initrd backdoor"):
@@ -43,13 +43,15 @@ import ./make-test-python.nix (
           oldAvail = machine.succeed("df --output=avail / | sed 1d")
           machine.shutdown()
 
-          subprocess.check_call(["qemu-img", "resize", "vm-state-machine/machine.qcow2", "+1G"])
+          subprocess.check_call(["${nodes.machine.virtualisation.qemu.package}/bin/qemu-img", "resize", "vm-state-machine/machine.qcow2", "+1G"])
 
           machine.start()
           machine.switch_root()
           newAvail = machine.succeed("df --output=avail / | sed 1d")
 
           assert int(oldAvail) < int(newAvail), "File system did not grow"
+
+      with subtest("no warnings from systemd about write permissions"):
+          machine.fail("journalctl -b 0 | grep 'is marked world-writable, which is a security risk as it is executed with privileges'")
     '';
-  }
-)
+}

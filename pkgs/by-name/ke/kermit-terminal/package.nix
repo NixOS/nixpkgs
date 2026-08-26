@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cmake,
   gtk3,
-  pcre,
   pkg-config,
   vte,
   nixosTests,
@@ -33,7 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gtk3
-    pcre
     vte
   ];
 
@@ -45,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/orhun/kermit/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     mainProgram = "kermit";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

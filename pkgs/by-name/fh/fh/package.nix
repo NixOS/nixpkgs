@@ -4,24 +4,22 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
-  darwin,
   gcc,
   cacert,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fh";
-  version = "0.1.22";
+  version = "0.1.27";
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "fh";
-    rev = "v${version}";
-    hash = "sha256-yOqXcn/OMfC97t002V8yzZn1PhuV8lIp5szPA7eys1Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EUCV7/J9wJRroCGW5JqonFJIqcvJEBAwB7l3eWYxiSk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-+6/gTY0pqpsq8QByVLbC1KnT2G1CJwLtpIFrUnyzlU0=";
+  cargoHash = "sha256-HOQqUNd0I85lAD6YVWT9baEj31JpjIgq9Ujfn4ys/3o=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -31,8 +29,6 @@ rustPlatform.buildRustPackage rec {
   checkInputs = [ cacert ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
     gcc.cc.lib
   ];
 
@@ -41,20 +37,19 @@ rustPlatform.buildRustPackage rec {
   };
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd fh \
-      --bash <($out/bin/fh completion bash) \
-      --fish <($out/bin/fh completion fish) \
-      --zsh <($out/bin/fh completion zsh)
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd fh --"$shell" <("$out/bin/fh" completion "$shell")
+    done
   '';
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Official FlakeHub CLI";
     homepage = "https://github.com/DeterminateSystems/fh";
-    changelog = "https://github.com/DeterminateSystems/fh/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/DeterminateSystems/fh/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ iamanaws ];
     mainProgram = "fh";
   };
-}
+})

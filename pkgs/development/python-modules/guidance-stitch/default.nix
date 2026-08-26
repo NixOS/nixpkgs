@@ -20,13 +20,13 @@
 
 buildPythonPackage rec {
   pname = "guidance-stitch";
-  version = "0.1.4";
+  version = "0.1.5";
   pyproject = true;
 
   src = fetchPypi {
     pname = "guidance_stitch";
     inherit version;
-    hash = "sha256-Wthz02C2AU6hzQ+TTGs+sI73ejwHQRCStZXZts0i1+w=";
+    hash = "sha256-Kg0O3oZds4eFfUlKe8sakDYhwT9XGGnN4RCcLFVpzZU=";
   };
 
   build-system = [

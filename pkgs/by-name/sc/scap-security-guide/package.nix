@@ -15,15 +15,15 @@
   yamllint,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scap-security-guide";
-  version = "0.1.76";
+  version = "0.1.81";
 
   src = fetchFromGitHub {
     owner = "ComplianceAsCode";
     repo = "content";
-    tag = "v${version}";
-    hash = "sha256-M1o9UG2pKtkFByp37UP++am8lJFfnoDBkRh1fos+ED0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7avUwROLJeuS2FY3WIbtYL2tyh4DRMVwL7XL4D1gJGo=";
   };
 
   postPatch = ''
@@ -54,7 +54,6 @@ stdenv.mkDerivation rec {
       myst-parser
       mypy
       openpyxl
-      pcre2-py
       pygithub
       pyyaml
       pandas
@@ -79,7 +78,10 @@ stdenv.mkDerivation rec {
     description = "Security automation content in SCAP, Bash, Ansible, and other formats";
     homepage = "https://github.com/ComplianceAsCode/content";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ tochiaha ];
+    maintainers = with lib.maintainers; [
+      robsliwi
+      tochiaha
+    ];
     platforms = lib.platforms.all;
   };
-}
+})

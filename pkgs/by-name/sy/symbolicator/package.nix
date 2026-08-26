@@ -6,56 +6,48 @@
   bzip2,
   openssl,
   zstd,
-  stdenv,
-  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "symbolicator";
-  version = "25.4.0";
+  version = "26.3.0";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "symbolicator";
-    rev = version;
-    hash = "sha256-TMQzrwPjQnLcIveJIwHMMbglagrtH6sNqGIbUD/Q8Xs=";
+    rev = finalAttrs.version;
+    hash = "sha256-up23SMS/TWmgPm+VsWCEX/G8A8MgG9Vzay76tsHzo2M=";
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Q148QzBHNOty/icF8oarEOD3p8cjSMA/IdjJaE9ncn8=";
+  cargoHash = "sha256-GUWAG9mPPHUevA1IfFRpL9f93vUWb+/gaH0v+Dw9Rko=";
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      bzip2
-      openssl
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    bzip2
+    openssl
+    zstd
+  ];
 
   env = {
-    SYMBOLICATOR_GIT_VERSION = src.rev;
-    SYMBOLICATOR_RELEASE = version;
+    SYMBOLICATOR_GIT_VERSION = finalAttrs.src.rev;
+    SYMBOLICATOR_RELEASE = finalAttrs.version;
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
   # tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Native Symbolication as a Service";
     homepage = "https://getsentry.github.io/symbolicator/";
-    changelog = "https://github.com/getsentry/symbolicator/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/getsentry/symbolicator/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "symbolicator";
   };
-}
+})

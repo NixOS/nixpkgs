@@ -2,23 +2,20 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "mercadopago";
-  version = "2.3.0";
+  version = "2.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mercadopago";
     repo = "sdk-python";
     tag = version;
-    hash = "sha256-xeOJk9/5DrykOxWTbAsIbdCu+nwUUIuuKJQm55SErEI=";
+    hash = "sha256-AYgYGY55hhvVY1lB6anJvjRquDRiNoDnpOFTuVdQniM=";
   };
 
   build-system = [

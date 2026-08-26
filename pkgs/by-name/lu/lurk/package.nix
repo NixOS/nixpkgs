@@ -2,35 +2,44 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lurk";
-  version = "0.3.9";
+  version = "0.3.14";
 
   src = fetchFromGitHub {
     owner = "jakwai01";
     repo = "lurk";
-    tag = "v${version}";
-    hash = "sha256-KiM5w0YPxEpJ4cR/8YfhWlTrffqf5Ak1eu0yxgOmqUs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Q7lxPjEfzbGPes11fP7qJY4cYetem7tKQasQcy67oRU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-N8jAmD9IpR+HALWpqp7y/wp75JVb4zgzoLT5oJ06njY=";
+  cargoHash = "sha256-QOdqA3gHfhBUWL5CHA5p4ueKwZusE5NBlGezBG//3FA=";
 
   postPatch = ''
     substituteInPlace src/lib.rs \
       --replace-fail '/usr/bin/ls' 'ls'
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    changelog = "https://github.com/jakwai01/lurk/releases/tag/v${version}";
+    changelog = "https://github.com/jakwai01/lurk/releases/tag/v${finalAttrs.version}";
     description = "Simple and pretty alternative to strace";
     homepage = "https://github.com/jakwai01/lurk";
     license = lib.licenses.agpl3Only;
     mainProgram = "lurk";
     maintainers = with lib.maintainers; [
-      figsoda
+      gepbird
     ];
     platforms = [
       "i686-linux"
@@ -38,4 +47,4 @@ rustPlatform.buildRustPackage rec {
       "aarch64-linux"
     ];
   };
-}
+})

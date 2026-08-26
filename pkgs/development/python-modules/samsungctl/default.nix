@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "samsungctl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Remote control Samsung televisions via a TCP/IP connection";
     mainProgram = "samsungctl";
     homepage = "https://github.com/Ape/samsungctl";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

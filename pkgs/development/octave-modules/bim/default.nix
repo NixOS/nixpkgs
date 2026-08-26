@@ -8,13 +8,13 @@
 
 buildOctavePackage rec {
   pname = "bim";
-  version = "1.1.6";
+  version = "1.1.8";
 
   src = fetchFromGitHub {
     owner = "carlodefalco";
     repo = "bim";
-    rev = "v${version}";
-    sha256 = "sha256-hgFb1KFE1KJC8skIaeT/7h/fg1aqRpedGnEPY24zZSI=";
+    tag = "v${version}";
+    sha256 = "sha256-nK/VZ+thMuMU5RBiNYpzylOuVxKbcfSyrXZfka5+g4I=";
   };
 
   requiredOctavePackages = [
@@ -25,7 +25,7 @@ buildOctavePackage rec {
   meta = {
     homepage = "https://gnu-octave.github.io/packages/bim/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ ravenjoad ];
     description = "Package for solving Diffusion Advection Reaction (DAR) Partial Differential Equations";
   };
 }

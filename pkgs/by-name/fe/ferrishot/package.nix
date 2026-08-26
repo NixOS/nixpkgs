@@ -6,7 +6,7 @@
   makeBinaryWrapper,
   writableTmpDirAsHomeHook,
   libGL,
-  libX11,
+  libx11,
   libxkbcommon,
   libxcb,
   wayland,
@@ -19,22 +19,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "nik-rev";
-    repo = "ferrishot";
+    repo = "peashot";
     tag = "v${finalAttrs.version}";
     hash = "sha256-QnIHLkxqL/4s6jgIbGmzR5tqCjH7yJcfpx0AhdxqVKc=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-TJWS8LzLTQSr+0uw0x38mNJrjYvMzr90URYI8UcRQqc=";
 
-  nativeBuildInputs =
-    [
-      makeBinaryWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # error: unable to open output file '/homeless-shelter/.cache/clang/ModuleCache/354UBE8EJRBZ3/Cocoa-31YYBL2V1XGQP.pcm': 'No such file or directory'
-      writableTmpDirAsHomeHook
-    ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # error: unable to open output file '/homeless-shelter/.cache/clang/ModuleCache/354UBE8EJRBZ3/Cocoa-31YYBL2V1XGQP.pcm': 'No such file or directory'
+    writableTmpDirAsHomeHook
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libxcb
@@ -42,15 +40,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall =
     let
-      runtimeDeps =
-        [
-          libGL
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [
-          libX11
-          libxkbcommon
-          wayland
-        ];
+      runtimeDeps = [
+        libGL
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        libx11
+        libxkbcommon
+        wayland
+      ];
     in
     ''
       wrapProgram $out/bin/ferrishot \
@@ -63,8 +60,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Screenshot app written in Rust";
-    homepage = "https://github.com/nik-rev/ferrishot";
-    changelog = "https://github.com/nik-rev/ferrishot/blob/v${finalAttrs.version}/CHANGELOG.md";
+    homepage = "https://github.com/nik-rev/peashot";
+    changelog = "https://github.com/nik-rev/peashot/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "ferrishot";

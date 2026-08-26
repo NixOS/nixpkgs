@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-FvozEjNWXE1XEIq/06JehES7LVKoWmzIoaB4fD1kUsY=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-kebx9OrAeh4c01VDUmlfTVn0EgFfzewiXjaQ3qtJrPY=";
 
   nativeBuildInputs = [ installShellFiles ];
@@ -39,7 +38,7 @@ rustPlatform.buildRustPackage {
   meta = {
     homepage = "https://github.com/KSXGitHub/strip-ansi-cli";
     description = "Strip ANSI escape sequences from text";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers._9999years ];
     mainProgram = "strip-ansi";
   };

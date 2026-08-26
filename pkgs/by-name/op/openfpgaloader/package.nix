@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openfpgaloader";
-  version = "0.13.1";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "trabucayre";
     repo = "openFPGALoader";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OC5IeA1gkaclLs0TPbrkaxH/D61SeyDcufkIvEDeuNw=";
+    hash = "sha256-VQM3swGAvuLnqKjjUEXJlQp1nGH9M1ydEKQUV/5xiwM=";
   };
 
   nativeBuildInputs = [
@@ -27,16 +27,15 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      hidapi
-      libftdi1
-      libusb1
-      zlib
-    ]
-    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform udev) [
-      udev
-    ];
+  buildInputs = [
+    hidapi
+    libftdi1
+    libusb1
+    zlib
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform udev) [
+    udev
+  ];
 
   meta = {
     description = "Universal utility for programming FPGAs";

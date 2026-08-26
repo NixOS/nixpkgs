@@ -26,19 +26,20 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mujoco";
   inherit (mujoco) version;
 
   pyproject = true;
+  __structuredAttrs = true;
 
   # We do not fetch from the repository because the PyPi tarball is
   # impurely build via
   # <https://github.com/google-deepmind/mujoco/blob/main/python/make_sdist.sh>
   # in the project's CI.
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-d3c8cU9XL25xqTe8OH96NsEp0JMv0kaWLD5qSP32u6w=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-OLs+r0JRk3qF1Ysl9VsWeSlxVbxPTpZEkNH9n0L4v5M=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -61,7 +62,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  pythonImportsCheck = [ "${pname}" ];
+  pythonImportsCheck = [ "mujoco" ];
 
   env.MUJOCO_PATH = "${mujoco}";
   env.MUJOCO_PLUGIN_PATH = "${mujoco}/lib";
@@ -87,7 +88,7 @@ buildPythonPackage rec {
         ${lib.getExe perl} -0777 -i -pe "s/GIT_REPO\n.*\n.*GIT_TAG\n.*\n//gm" mujoco/CMakeLists.txt
         ${lib.getExe perl} -0777 -i -pe "s/(FetchContent_Declare\(\n.*lodepng\n.*)(GIT_REPO.*\n.*GIT_TAG.*\n)(.*\))/\1\3/gm" mujoco/simulate/CMakeLists.txt
 
-        build="/build/${pname}-${version}/build/temp.${platform}-cpython-${pythonVersionMajorMinor}/"
+        build="build/temp.${platform}-cpython-${pythonVersionMajorMinor}"
         mkdir -p $build/_deps
         ln -s ${mujoco.pin.lodepng} $build/_deps/lodepng-src
         ln -s ${mujoco.pin.eigen3} $build/_deps/eigen-src
@@ -103,4 +104,4 @@ buildPythonPackage rec {
       tmplt
     ];
   };
-}
+})

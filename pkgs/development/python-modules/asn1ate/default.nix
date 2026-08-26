@@ -13,17 +13,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     sha256 = "1p8hv4gsyqsdr0gafcq497n52pybiqmc22di8ai4nsj60fv0km45";
     rev = "v${version}";
-    owner = "kimgr";
-    repo = pname;
+    owner = "schneider-electric";
+    repo = "asn1ate";
   };
 
   propagatedBuildInputs = [ pyparsing ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for translating ASN.1 into other forms";
+    homepage = "https://github.com/schneider-electric/asn1ate";
     mainProgram = "asn1ate";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ leenaars ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }

@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "saltstack";
-    repo = pname;
+    repo = "libnacl";
     rev = "v${version}";
     hash = "sha256-phECLGDcBfDi/r2y0eGtqgIX/hvirtBqO8UUvEJ66zo=";
   };
@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libnacl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for libsodium based on ctypes";
     homepage = "https://libnacl.readthedocs.io/";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ xvapx ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ xvapx ];
   };
 }

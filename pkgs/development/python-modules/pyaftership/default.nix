@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   aiohttp,
   aresponses,
   pytest-asyncio,
@@ -14,11 +13,9 @@ buildPythonPackage rec {
   version = "23.1.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "ludeeus";
-    repo = pname;
+    repo = "pyaftership";
     tag = version;
     hash = "sha256-njlDScmxIYWxB4EL9lOSGCXqZDzP999gI9EkpcZyFlE=";
   };
@@ -40,11 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyaftership" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper package for the AfterShip API";
     homepage = "https://github.com/ludeeus/pyaftership";
     changelog = "https://github.com/ludeeus/pyaftership/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jamiemagee ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jamiemagee ];
   };
 }

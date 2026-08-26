@@ -8,7 +8,7 @@
 
 buildGoModule rec {
   pname = "consul";
-  version = "1.20.6";
+  version = "2.0.3";
 
   # Note: Currently only release tags are supported, because they have the Consul UI
   # vendored. See
@@ -20,9 +20,9 @@ buildGoModule rec {
   # to apply your changes as patches on top of a release commit.
   src = fetchFromGitHub {
     owner = "hashicorp";
-    repo = pname;
+    repo = "consul";
     tag = "v${version}";
-    hash = "sha256-R7Bf3hmkn+b6SOxAhy4pFUuyDbywBcOdEB+/M2IeFA8=";
+    hash = "sha256-VhjTMHfsbo9MFw/YkQ3AGcxEIM2Cq4LoTbDI6se0xHY=";
   };
 
   # This corresponds to paths with package main - normally unneeded but consul
@@ -32,7 +32,7 @@ buildGoModule rec {
     "connect/certgen"
   ];
 
-  vendorHash = "sha256-SHTwfwMHQOnqr0LOb2xxS261qZVVpUnxgl/Tdb0Rmv4=";
+  vendorHash = "sha256-MzbMG9mg/7RsQyAL50ob06Y/PZdF1W30e3Pfe9XAvvo=";
 
   doCheck = false;
 
@@ -50,15 +50,13 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for service discovery, monitoring and configuration";
     changelog = "https://github.com/hashicorp/consul/releases/tag/v${version}";
     homepage = "https://www.consul.io/";
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.bsl11;
-    maintainers = with maintainers; [
-      adamcstephens
-      pradeepchhetri
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.bsl11;
+    maintainers = with lib.maintainers; [
       vdemeester
       nh2
       techknowlogick

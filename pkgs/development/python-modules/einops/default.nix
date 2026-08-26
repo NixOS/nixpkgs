@@ -2,41 +2,35 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
+
+  # build-system
   hatchling,
+
+  # tests
   jupyter,
   nbconvert,
   numpy,
   parameterized,
   pillow,
   pytestCheckHook,
-  pythonOlder,
+  torch,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "einops";
-  version = "0.8.0";
+  version = "0.8.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "arogozhnikov";
-    repo = pname;
-    tag = "v${version}";
-    hash = "sha256-6x9AttvSvgYrHaS5ESKOwyEnXxD2BitYTGtqqSKur+0=";
+    repo = "einops";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-d5Vbtkw/MChS2j2IC6j97wfVoKWZT9mU4OeXyEjm6ys=";
   };
 
-  patches = [
-    # https://github.com/arogozhnikov/einops/pull/325
-    (fetchpatch2 {
-      name = "numpy_2-compatibility.patch";
-      url = "https://github.com/arogozhnikov/einops/commit/11680b457ce2216d9827330d0b794565946847d7.patch";
-      hash = "sha256-OKWp319ClYarNrek7TdRHt+NKTOEfBdJaV0U/6vLeMc=";
-    })
-  ];
-
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
     jupyter
@@ -45,32 +39,27 @@ buildPythonPackage rec {
     parameterized
     pillow
     pytestCheckHook
+    torch
+    writableTmpDirAsHomeHook
   ];
 
   env.EINOPS_TEST_BACKENDS = "numpy";
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
   pythonImportsCheck = [ "einops" ];
 
-  disabledTests = [
-    # Tests are failing as mxnet is not pulled-in
-    # https://github.com/NixOS/nixpkgs/issues/174872
-    "test_all_notebooks"
-    "test_dl_notebook_with_all_backends"
-    "test_backends_installed"
+  disabledTestPaths = [
+    # skip folder with notebook samples that depend on large packages
+    # or accelerator access and have been unreliable
+    "scripts/"
   ];
-
-  disabledTestPaths = [ "tests/test_layers.py" ];
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Flexible and powerful tensor operations for readable and reliable code";
     homepage = "https://github.com/arogozhnikov/einops";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yl3dy ];
+    changelog = "https://github.com/arogozhnikov/einops/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yl3dy ];
   };
-}
+})

@@ -7,18 +7,17 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wyvern";
   version = "1.4.1";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-OjL3wEoh4fT2nKqb7lMefP5B0vYyUaTRj09OXPEVfW4=";
   };
 
   cargoPatches = [ ./cargo-lock.patch ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-3zcXHl/CK5p/5BpGwafMYF/ztE6Erid9nS49vRFyPfE=";
 
   nativeBuildInputs = [
@@ -27,12 +26,12 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [ openssl ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple CLI client for installing and maintaining linux GOG games";
     mainProgram = "wyvern";
     homepage = "https://git.sr.ht/~nicohman/wyvern";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ _0x4A6F ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ _0x4A6F ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -16,25 +16,18 @@ let
   gix = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/gix";
   ein = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/ein";
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitoxide";
-  version = "0.42.0";
+  version = "0.57.0";
 
   src = fetchFromGitHub {
     owner = "GitoxideLabs";
     repo = "gitoxide";
-    rev = "v${version}";
-    hash = "sha256-hrCWt4cCnlH3NKH5Uugf/rvVN+YpbeZgZ/lhnQGZ2I0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-A7vXxDM/YZZryRFPE7mqM2ewFBJxgCrq167HHNdIU/M=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-q35MQGN/tvsK7gg0a/ljoVY6wedy7rwKlSakONgBIgk=";
-
-  patches = [
-    # TODO: remove after next update
-    # https://github.com/GitoxideLabs/gitoxide/pull/1929
-    ./fix-cargo-dependencies.patch
-  ];
+  cargoHash = "sha256-+No7sU9mWmnZcLyAbK0QI/oHQL4eiuBlEYlGA/mjp58=";
 
   nativeBuildInputs = [
     cmake
@@ -59,14 +52,17 @@ rustPlatform.buildRustPackage rec {
   # Needed to get openssl-sys to use pkg-config.
   env.OPENSSL_NO_VENDOR = 1;
 
-  meta = with lib; {
+  meta = {
     description = "Command-line application for interacting with git repositories";
     homepage = "https://github.com/GitoxideLabs/gitoxide";
-    changelog = "https://github.com/GitoxideLabs/gitoxide/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    changelog = "https://github.com/GitoxideLabs/gitoxide/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ syberant ];
+    maintainers = with lib.maintainers; [ hythera ];
+    # NB: `ein` is also provided by this package, but `nix run
+    # nixpkgs#gitoxide` doesn't work at all without this set.
+    mainProgram = "gix";
   };
-}
+})

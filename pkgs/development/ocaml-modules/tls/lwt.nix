@@ -10,8 +10,6 @@ buildDunePackage {
 
   inherit (tls) src meta version;
 
-  minimalOCamlVersion = "4.11";
-
   doCheck = true;
 
   propagatedBuildInputs = [

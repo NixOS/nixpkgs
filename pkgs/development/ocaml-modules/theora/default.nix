@@ -7,18 +7,9 @@
   libtheora,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "theora";
-  version = "0.4.1";
-
-  duneVersion = "3";
-
-  src = fetchFromGitHub {
-    owner = "savonet";
-    repo = "ocaml-theora";
-    rev = "v${version}";
-    hash = "sha256-2FXB5BOBRQhnpEmdlYBdZZXuXW9K+1cu7akJQDuDAMc=";
-  };
+  inherit (ogg) version src;
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [
@@ -26,10 +17,10 @@ buildDunePackage rec {
     libtheora
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-theora";
     description = "Bindings to libtheora";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
 }

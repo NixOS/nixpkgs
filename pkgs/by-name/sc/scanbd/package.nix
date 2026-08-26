@@ -10,13 +10,13 @@
   systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scanbd";
   version = "1.5.1";
 
   src = fetchurl {
     sha256 = "0pvy4qirfjdfm8aj6x5rkbgl7hk3jfa2s21qkk8ic5dqfjjab75n";
-    url = "mirror://sourceforge/scanbd/${pname}-${version}.tgz";
+    url = "mirror://sourceforge/scanbd/scanbd-${finalAttrs.version}.tgz";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -28,18 +28,17 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  configureFlags =
-    [
-      "--disable-Werror"
-      "--enable-udev"
-      "--with-scanbdconfdir=/etc/scanbd"
-      "--with-systemdsystemunitdir=$out/lib/systemd/system"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      # AC_FUNC_MALLOC is broken on cross builds.
-      "ac_cv_func_malloc_0_nonnull=yes"
-      "ac_cv_func_realloc_0_nonnull=yes"
-    ];
+  configureFlags = [
+    "--disable-Werror"
+    "--enable-udev"
+    "--with-scanbdconfdir=/etc/scanbd"
+    "--with-systemdsystemunitdir=$out/lib/systemd/system"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # AC_FUNC_MALLOC is broken on cross builds.
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+  ];
 
   enableParallelBuilding = true;
 
@@ -50,7 +49,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Scanner button daemon";
     longDescription = ''
       scanbd polls a scanner's buttons, looking for button presses, function
@@ -71,7 +70,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://scanbd.sourceforge.net/";
     downloadPage = "https://sourceforge.net/projects/scanbd/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

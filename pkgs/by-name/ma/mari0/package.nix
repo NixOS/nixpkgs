@@ -10,15 +10,15 @@
   zip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mari0";
-  version = "1.6.2";
+  version = "1.6.2-unstable-2023-08-08";
 
   src = fetchFromGitHub {
     owner = "Stabyourself";
-    repo = pname;
-    rev = version;
-    sha256 = "1zqaq4w599scsjvy1rsb21fd2r8j3srx9vym4ir9bh666dp36gxa";
+    repo = "mari0";
+    rev = "57829fd23e783d1a2993b9d64a7f7e6b131e572f";
+    sha256 = "sha256-rmsj6gMTleeWx911j5/sfpfQG54HDtsfsTyPDbEkLhE=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   desktopItems = [
     (makeDesktopItem {
       name = "mari0";
-      exec = pname;
+      exec = "mari0";
       comment = "Crossover between Super Mario Bros. and Portal";
       desktopName = "mari0";
       genericName = "mari0";
@@ -44,16 +44,17 @@ stdenv.mkDerivation rec {
     zip -9 -r mari0.love ./*
     strip-nondeterminism --type zip mari0.love
     install -Dm444 -t $out/share/games/lovegames/ mari0.love
-    makeWrapper ${love}/bin/love $out/bin/mari0 \
+    makeWrapper ${lib.getExe love} $out/bin/mari0 \
       --add-flags $out/share/games/lovegames/mari0.love
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Crossover between Super Mario Bros. and Portal";
+    homepage = "https://github.com/Stabyourself/mari0";
     mainProgram = "mari0";
-    platforms = platforms.linux;
-    license = licenses.mit;
+    platforms = love.meta.platforms;
+    license = lib.licenses.mit;
     downloadPage = "https://stabyourself.net/mari0/";
   };
 

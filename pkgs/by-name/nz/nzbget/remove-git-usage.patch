@@ -1,42 +1,47 @@
-From 78c826e1f4ccee24652f5301b720f05866ec00c6 Mon Sep 17 00:00:00 2001
+From f0fc5eb48ff3a0e6f350bf1db6388a458a653cf7 Mon Sep 17 00:00:00 2001
 From: Morgan Helton <mhelton@gmail.com>
-Date: Tue, 25 Feb 2025 20:36:19 -0600
-Subject: [PATCH] feat: use pre-fetched par2-turbo
+Date: Sat, 30 May 2026 06:59:25 -0500
+Subject: [PATCH] chore: use placeholders for par2-turbo and rapidyenc
 
 ---
- cmake/par2-turbo.cmake | 19 +++++++------------
- 1 file changed, 7 insertions(+), 12 deletions(-)
+ cmake/par2-turbo.cmake | 6 +-----
+ cmake/rapidyenc.cmake  | 6 +-----
+ 2 files changed, 2 insertions(+), 10 deletions(-)
 
 diff --git a/cmake/par2-turbo.cmake b/cmake/par2-turbo.cmake
-index b0f2e70e..ff3389e0 100644
+index 16a80ffa..992bfe79 100644
 --- a/cmake/par2-turbo.cmake
 +++ b/cmake/par2-turbo.cmake
-@@ -39,18 +39,13 @@ if(CMAKE_SYSROOT)
- 	)
- endif()
- 
--ExternalProject_add(
--	par2-turbo
--	PREFIX			par2-turbo
+@@ -56,11 +56,7 @@ endif()
+ ExternalProject_add(
+ 	par2-turbo
+ 	PREFIX			par2-turbo
 -	GIT_REPOSITORY	https://github.com/nzbgetcom/par2cmdline-turbo.git
--	GIT_TAG			v1.2.0-nzbget-20250213
+-	GIT_TAG			v1.4.0-20260323
 -	TLS_VERIFY		TRUE
 -	GIT_SHALLOW		TRUE
 -	GIT_PROGRESS	TRUE
--	DOWNLOAD_EXTRACT_TIMESTAMP	TRUE
--	BUILD_BYPRODUCTS ${PAR2_LIBS}
--	CMAKE_ARGS		 ${CMAKE_ARGS}
--	INSTALL_COMMAND	""
-+ExternalProject_Add(
-+    par2-turbo
-+    PREFIX par2-turbo 
-+    SOURCE_DIR ${CMAKE_BINARY_DIR}/par2-turbo/src/par2-turbo
-+    BUILD_BYPRODUCTS ${PAR2_LIBS}
-+    CMAKE_ARGS ${CMAKE_ARGS}
-+    INSTALL_COMMAND ""
- )
- 
- set(LIBS ${LIBS} ${PAR2_LIBS})
++	URL @par2_turbo_src@
+ 	DOWNLOAD_EXTRACT_TIMESTAMP	TRUE
+ 	BUILD_BYPRODUCTS ${PAR2_LIBS}
+ 	CMAKE_ARGS		 ${CMAKE_ARGS}
+diff --git a/cmake/rapidyenc.cmake b/cmake/rapidyenc.cmake
+index 9242efe4..0e8d7527 100644
+--- a/cmake/rapidyenc.cmake
++++ b/cmake/rapidyenc.cmake
+@@ -51,11 +51,7 @@ endif()
+ ExternalProject_add(
+ 	rapidyenc
+ 	PREFIX			rapidyenc
+-	GIT_REPOSITORY	https://github.com/nzbgetcom/rapidyenc.git
+-	GIT_TAG			v1.1.1-20260217
+-	TLS_VERIFY		TRUE
+-	GIT_SHALLOW		TRUE
+-	GIT_PROGRESS	TRUE
++	URL @rapidyenc_src@
+ 	DOWNLOAD_EXTRACT_TIMESTAMP	TRUE
+ 	BUILD_BYPRODUCTS ${RAPIDYENC_LIBS}
+ 	CMAKE_ARGS		 ${CMAKE_ARGS}
 -- 
-2.48.1
+2.54.0
 

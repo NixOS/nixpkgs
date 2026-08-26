@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pint,
   pydantic,
-  pythonOlder,
   pytz,
   requests,
   responses,
@@ -15,16 +14,14 @@
 
 buildPythonPackage rec {
   pname = "stravalib";
-  version = "2.3";
+  version = "2.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "stravalib";
     repo = "stravalib";
     tag = "v${version}";
-    hash = "sha256-kqR/fujspOyQ6QbWjP2n3NoLVkzzVxAMqntdhY84sl4=";
+    hash = "sha256-3xmWg20fbp2tbwPNcxLtWSVajgeyDoZfRTQbwROEGVE=";
   };
 
   build-system = [

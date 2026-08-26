@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.freedesktop.org";
     owner = "vyivel";
     repo = "libsfdo";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xT1pKKElwKSd43XTKuBY+9rogquV1IAAYgWV5lEpAHk=";
   };
 

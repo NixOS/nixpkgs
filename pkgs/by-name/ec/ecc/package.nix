@@ -12,7 +12,7 @@ let
   inherit (rustPackages) rustPlatform;
   bpftool = llvmPackages.stdenv.mkDerivation {
     pname = "bpftool";
-    version = "unstable-2023-03-11";
+    version = "0-unstable-2023-03-11";
 
     # this fork specialized for some functions
     # and has eventually been embedded into the ecc binary
@@ -52,20 +52,19 @@ let
   };
 
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ecc";
   version = "1.0.27";
 
   src = fetchFromGitHub {
     owner = "eunomia-bpf";
     repo = "eunomia-bpf";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-KfYCC+TJbmjHrV46LoshD+uXcaBVMKk6+cN7TZKKYp4=";
   };
 
-  sourceRoot = "${src.name}/compiler/cmd";
+  sourceRoot = "${finalAttrs.src.name}/compiler/cmd";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-iYceYwRqnYA6KxCQxOieR8JZ6TQlIL+OSzAjyr4Cu/g=";
 
   nativeBuildInputs = [
@@ -79,7 +78,7 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
-  CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER = "gcc";
+  env.CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER = "gcc";
 
   preBuild = ''
     # `SANDBOX` defined by upstream to disable build-time network access
@@ -124,12 +123,12 @@ rustPlatform.buildRustPackage rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://eunomia.dev";
     description = "EBPF compile toolchain for eunomia-bpf";
     mainProgram = "ecc-rs";
-    maintainers = with maintainers; [ oluceps ];
-    platforms = platforms.linux;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ oluceps ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
   };
-}
+})

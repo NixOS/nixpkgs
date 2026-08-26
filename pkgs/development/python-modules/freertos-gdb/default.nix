@@ -22,11 +22,11 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "User-friendly view of FreeRTOS kernel objects in GDB";
     homepage = "https://github.com/espressif/freertos-gdb";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       danc86
     ];
   };

@@ -4,48 +4,52 @@
   fetchpatch,
   fetchPypi,
   fixtures,
-  hacking,
   jsonschema,
   openstacksdk,
   oslotest,
+  pbr,
   python-glanceclient,
   setuptools,
   stestr,
-  subunit,
+  python-subunit,
   testscenarios,
   testtools,
 }:
 
 buildPythonPackage rec {
   pname = "os-client-config";
-  version = "2.1.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-q8OKNR+MAG009+5fP2SN5ePs9kVcxdds/YidKRzfP04=";
+    pname = "os_client_config";
+    inherit version;
+    hash = "sha256-4WomDy/VAK8U8Ve5t7fWkpLOg7D4pGHsaM5qikKWfL0=";
   };
 
   patches = [
-    # Fix compatibility with openstacksdk 4.5.0
+    # Replace deprecated assertItemsEqual
     (fetchpatch {
-      url = "https://github.com/openstack/os-client-config/commit/46bc2deb4c6762dc1dd674686283eb3fa4c1d5e6.patch";
-      hash = "sha256-wZdwCbgrRg0mxs542zjWAlXn0PzCotlbZaEyinYKwb4=";
+      url = "https://github.com/openstack/os-client-config/commit/a72d8845545d6ac3b64b6fc48d0e2ada5750f6fe.patch";
+      hash = "sha256-i8DZCdpZ8yoN0WHseczycI4iwDP55Ibzo0KLy7Moy4M=";
     })
   ];
 
-  build-system = [ setuptools ];
+  build-system = [
+    pbr
+    setuptools
+  ];
 
   dependencies = [
     openstacksdk
+    pbr
     python-glanceclient
   ];
 
   nativeCheckInputs = [
-    hacking
     fixtures
     jsonschema
-    subunit
+    python-subunit
     oslotest
     stestr
     testscenarios
@@ -62,10 +66,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "os_client_config" ];
 
-  meta = with lib; {
+  meta = {
     description = "Unified config handling for client libraries and programs";
     homepage = "https://github.com/openstack/os-client-config";
-    license = licenses.asl20;
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

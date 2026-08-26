@@ -1,47 +1,96 @@
 {
   lib,
+  stdenvNoCC,
   appimageTools,
   fetchurl,
-  gitUpdater,
+  makeWrapper,
+  undmg,
 }:
 
-appimageTools.wrapType2 rec {
+let
   pname = "tutanota-desktop";
-  version = "277.250414.1";
+  version = "355.260720.0";
 
-  src = fetchurl {
+  linuxSrc = fetchurl {
     url = "https://github.com/tutao/tutanota/releases/download/tutanota-desktop-release-${version}/tutanota-desktop-linux.AppImage";
-    hash = "sha256-Ke9c9kugI+Cym24Nf4juW1oFiCCTNURZy7C1+TFF0rc=";
+    hash = "sha256-sdKth9sy5yQ9cs4xQg4/zsgdvitxByKl8NCJgo3lL4o=";
   };
 
-  extraPkgs = pkgs: [ pkgs.libsecret ];
-
-  extraInstallCommands =
-    let
-      appimageContents = appimageTools.extract { inherit pname version src; };
-    in
-    ''
-      install -Dm 444 ${appimageContents}/tutanota-desktop.desktop -t $out/share/applications
-      install -Dm 444 ${appimageContents}/tutanota-desktop.png -t $out/share/pixmaps
-
-      substituteInPlace $out/share/applications/tutanota-desktop.desktop \
-        --replace 'Exec=AppRun' 'Exec=${pname}'
-    '';
-
-  passthru.updateScript = gitUpdater {
-    url = "https://github.com/tutao/tutanota";
-    rev-prefix = "tutanota-desktop-release-";
-    allowedVersions = ".+\\.[0-9]{6}\\..+";
+  darwinSrc = fetchurl {
+    url = "https://github.com/tutao/tutanota/releases/download/tutanota-desktop-release-${version}/tutanota-desktop-mac.dmg";
+    hash = "sha256-oVipeWX6kuy0JqlB92hjcVl3Szwve7Lz5gd/mC7ieVg=";
   };
 
-  meta = with lib; {
+  passthru.updateScript = ./update.sh;
+
+  meta = {
     description = "Tuta official desktop client";
     homepage = "https://tuta.com/";
     changelog = "https://github.com/tutao/tutanota/releases/tag/tutanota-desktop-release-${version}";
-    license = licenses.gpl3Only;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = [ ];
+    license = lib.licenses.gpl3Only;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ s0ssh ];
     mainProgram = "tutanota-desktop";
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.darwin ++ [ "x86_64-linux" ];
   };
-}
+
+  linux = appimageTools.wrapType2 {
+    inherit
+      pname
+      version
+      passthru
+      meta
+      ;
+    src = linuxSrc;
+
+    extraPkgs = pkgs: [ pkgs.libsecret ];
+
+    nativeBuildInputs = [ makeWrapper ];
+
+    extraInstallCommands =
+      let
+        appimageContents = appimageTools.extract {
+          inherit pname version;
+          src = linuxSrc;
+        };
+      in
+      ''
+        install -Dm 444 ${appimageContents}/tutanota-desktop.desktop -t $out/share/applications
+        cp -r ${appimageContents}/usr/share/icons/. $out/share/icons
+
+        substituteInPlace $out/share/applications/tutanota-desktop.desktop \
+          --replace 'Exec=AppRun' 'Exec=${pname}'
+
+        wrapProgram $out/bin/tutanota-desktop \
+          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+      '';
+  };
+
+  darwin = stdenvNoCC.mkDerivation {
+    inherit
+      pname
+      version
+      passthru
+      meta
+      ;
+    src = darwinSrc;
+
+    sourceRoot = ".";
+
+    nativeBuildInputs = [
+      undmg
+      makeWrapper
+    ];
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p "$out/Applications"
+      cp -R "Tuta Mail.app" "$out/Applications/"
+      makeWrapper "$out/Applications/Tuta Mail.app/Contents/MacOS/Tuta Mail" "$out/bin/tutanota-desktop"
+
+      runHook postInstall
+    '';
+  };
+in
+if stdenvNoCC.hostPlatform.isDarwin then darwin else linux

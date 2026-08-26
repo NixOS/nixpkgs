@@ -23,20 +23,10 @@ buildFHSEnv {
       gcc
     ])
     ++ (
-      # OpenHMD dependencies
-      (
-        pkgs.openhmd.buildInputs
-        ++ pkgs.openhmd.nativeBuildInputs
-        ++ (with pkgs; [
-          meson
-        ])
-      )
-    )
-    ++ (
       # OpenComposite dependencies
       pkgs.opencomposite.buildInputs ++ pkgs.opencomposite.nativeBuildInputs
     )
-    ++ (
+    ++
       # Monado dependencies
       (
         pkgs.monado.buildInputs
@@ -45,11 +35,11 @@ buildFHSEnv {
           # Additional dependencies required by Monado when built using Envision
           libgbm
           shaderc
-          xorg.libX11
-          xorg.libxcb
-          xorg.libXrandr
-          xorg.libXrender
-          xorg.xorgproto
+          libx11
+          libxcb
+          libxrandr
+          libxrender
+          xorgproto
           SDL2
           wayland
           mesa-gl-headers
@@ -63,17 +53,17 @@ buildFHSEnv {
           libepoxy
           lz4
           lz4.dev
-          tbb
+          onetbb
           libxkbcommon
           librealsense
           boost
           glew
         ])
       )
-    )
-    ++ (
+
+    ++
       # SteamVR driver dependencies
-      [ pkgs.zlib ])
+      [ pkgs.zlib ]
     ++ (
       # WiVRn dependencies
       pkgs.wivrn.buildInputs
@@ -138,7 +128,6 @@ buildFHSEnv {
       kebabToCamel = x: pascalToCamel (kebabToPascal x);
       profiles = [
         "lighthouse-default"
-        "openhmd-default"
         "simulated-default"
         "survive-default"
         "wmr-default"
@@ -149,28 +138,27 @@ buildFHSEnv {
       allProfilesPresent = testers.runCommand {
         name = "envision-all-profiles-present-test";
         # TODO: Is there a better way to escape ${}?
-        script =
-          ''
-            export ALL_PROFILES=(${lib.concatStringsSep " " (profiles ++ [ "UUID" ])})
-            export ENVISION_PROFILES=($(envision -l | grep -oP '^\w+(?=:)'))
+        script = ''
+          export ALL_PROFILES=(${lib.concatStringsSep " " (profiles ++ [ "UUID" ])})
+          export ENVISION_PROFILES=($(envision -l | grep -oP '^\w+(?=:)'))
 
-            # This is dark magic
-            missing_from_array=($(grep -vf <(printf "%s\n" "$''
-          + ''{ALL_PROFILES[@]}") <(printf "%s\n" "$''
-          + ''
-            {ENVISION_PROFILES[@]}") || true))
+          # This is dark magic
+          missing_from_array=($(grep -vf <(printf "%s\n" "$''
+        + ''{ALL_PROFILES[@]}") <(printf "%s\n" "$''
+        + ''
+          {ENVISION_PROFILES[@]}") || true))
 
-                      if [ $''
-          + ''
-            {#missing_from_array[@]} -gt 0 ]; then
-                        echo "Missing profiles: $''
-          + ''
-            {missing_from_array[@]}"
-                        exit 1
-                      fi
+                    if [ $''
+        + ''
+          {#missing_from_array[@]} -gt 0 ]; then
+                      echo "Missing profiles: $''
+        + ''
+          {missing_from_array[@]}"
+                      exit 1
+                    fi
 
-                      touch $out
-          '';
+                    touch $out
+        '';
         nativeBuildInputs = [ envision ];
       };
     }

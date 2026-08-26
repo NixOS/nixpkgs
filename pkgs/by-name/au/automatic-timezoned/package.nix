@@ -2,29 +2,34 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "automatic-timezoned";
-  version = "2.0.73";
+  version = "2.0.156";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "maxbrunet";
     repo = "automatic-timezoned";
-    rev = "v${version}";
-    sha256 = "sha256-QVWfdeGYMW/BKzgQD191vmEaRZLWi2QOtuOdDyQgwf8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-s/VUlcMxveeYN9PUg7fWd9HFGbwkcYeN3s4nKhehYhY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-E3qnOMiyPGMXCldmRQVEQVssx7aRHddVPQzt5B+i4Ko=";
+  cargoHash = "sha256-PcdNomx0ZwdmPWORbIayeFLWbyrmWdl9EO2P7GC25B4=";
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  meta = {
     description = "Automatically update system timezone based on location";
     homepage = "https://github.com/maxbrunet/automatic-timezoned";
-    changelog = "https://github.com/maxbrunet/automatic-timezoned/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ maxbrunet ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/maxbrunet/automatic-timezoned/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.maxbrunet ];
+    platforms = lib.platforms.linux;
     mainProgram = "automatic-timezoned";
   };
-}
+})

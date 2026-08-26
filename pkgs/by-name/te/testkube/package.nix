@@ -2,28 +2,40 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "testkube";
-  version = "2.1.147";
+  version = "2.12.2";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kubeshop";
     repo = "testkube";
-    rev = "v${version}";
-    hash = "sha256-0DjpADPB1NwUJfDEX46+l7xMq/oyUwrA31fTiIkPm2I=";
+    tag = finalAttrs.version;
+    hash = "sha256-5nKlOpSkr5YkocbfSZ/Zx19X3QSucSZV2UoNUAi09dI=";
   };
 
-  vendorHash = "sha256-A/DrmX5lZMlFcBnswetNvW9UfGd5BIh7S31FDAkgqwA=";
+  vendorHash = "sha256-ppSf2NWtxF72W+aS83Hvs6jw3TZoXkN/qwMpAcV/224=";
 
   ldflags = [
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-X main.builtBy=nixpkgs"
-    "-X main.commit=v${version}"
+    "-X main.commit=v${finalAttrs.version}"
     "-X main.date=1970-01-01-00:00:01"
   ];
 
   subPackages = [ "cmd/kubectl-testkube" ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
 
   meta = {
     description = "Kubernetes-native framework for test definition and execution";
@@ -32,4 +44,4 @@ buildGoModule rec {
     mainProgram = "kubectl-testkube";
     maintainers = with lib.maintainers; [ mathstlouis ];
   };
-}
+})

@@ -14,13 +14,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "ekam";
-  version = "unstable-2021-09-18";
+  version = "0-unstable-2021-09-18";
 
   src = fetchFromGitHub {
     owner = "capnproto";
     repo = "ekam";
     rev = "77c338f8bd8f4a2ce1e6199b2a52363f1fccf388";
-    sha256 = "0q4bizlb1ykzdp4ca0kld6xm5ml9q866xrj3ijffcnyiyqr51qr8";
+    hash = "sha256-KONQMvbRW+acjEPmbgzCidZSu2l0AsXIbX/6sOiPi2A=";
   };
 
   # The capnproto *source* is required to build ekam.
@@ -50,21 +50,20 @@ stdenv.mkDerivation {
     unset NIX_ENFORCE_PURITY
   '';
 
-  makeFlags = [
-    "PARALLEL=$(NIX_BUILD_CORES)"
-  ];
+  enableParallelBuilding = true;
 
-  installPhase = ''
-    mkdir $out
-    cp -r bin $out
-
-    # Remove capnproto tools; there's a separate nix package for that.
-    rm $out/bin/capnp*
-    # Don't distribute ekam-bootstrap, which is not needed outside this build.
-    rm $out/bin/ekam-bootstrap
+  postBuild = ''
+    rm bin/{capnp*,ekam-bootstrap}
   '';
 
-  meta = with lib; {
+  installPhase = ''
+    runHook preInstall
+    mkdir $out
+    cp -r bin $out
+    runHook postInstall
+  '';
+
+  meta = {
     description = ''Build system ("make" in reverse)'';
     longDescription = ''
       Ekam ("make" spelled backwards) is a build system which automatically
@@ -72,8 +71,8 @@ stdenv.mkDerivation {
       source code. No separate "makefile" is needed.
     '';
     homepage = "https://github.com/capnproto/ekam";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.garrison ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.garrison ];
   };
 }

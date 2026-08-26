@@ -4,30 +4,32 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  gtk3,
+  gtk4,
   wrapGAppsHook3,
   jansson,
   libgcrypt,
-  libzip,
+  libadwaita,
   libpng,
   libcotp,
-  protobuf,
+  glib,
   protobufc,
   qrencode,
   libsecret,
   libuuid,
   zbar,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "otpclient";
-  version = "4.0.2";
+  version = "5.1.8";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "paolostivanin";
     repo = "otpclient";
-    tag = "v${version}";
-    hash = "sha256-lSGXxwtys3V8dDTAW7l7+9VlF9tZQnWqNaV8neBvMRg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8I74ip2ysPa5ll1R1O9kgZEwR2wMW6oAzcE3g1SMwvA=";
   };
 
   nativeBuildInputs = [
@@ -37,26 +39,26 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
+    glib
+    libadwaita
     jansson
     libcotp
     libgcrypt
     libpng
     libsecret
     libuuid
-    libzip
-    protobuf
     protobufc
     qrencode
     zbar
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Highly secure and easy to use OTP client written in C/GTK that supports both TOTP and HOTP";
     homepage = "https://github.com/paolostivanin/OTPClient";
-    changelog = "https://github.com/paolostivanin/OTPClient/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ alexbakker ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/paolostivanin/OTPClient/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ alexbakker ];
+    platforms = lib.platforms.linux;
   };
-}
+})

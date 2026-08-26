@@ -7,19 +7,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-workspace";
-  version = "1.9.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "orf";
     repo = "git-workspace";
-    tag = "v${version}";
-    hash = "sha256-SeE8O48lzqJSg8rfmIgsUcGPbquo2OvK3OUUBG21ksc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+cTN1TwM/mo1bH3IOeS3f451DfhuXLkNTcaKgzAqmFI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-CaHZivayZNuCi8vID8Qr5j/Ed+GGdNu+7NznvsCb3j0=";
+  cargoHash = "sha256-NEL9gsvsIBqz2/4GmTRgx7n0s986zVHOeTWQaQyXT4U=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -38,8 +37,8 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Sync personal and work git repositories from multiple providers";
     homepage = "https://github.com/orf/git-workspace";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ misuzu ];
     mainProgram = "git-workspace";
   };
-}
+})

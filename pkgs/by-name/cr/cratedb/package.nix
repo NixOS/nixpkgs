@@ -4,13 +4,13 @@
   maven,
   fetchFromGitHub,
   replaceVars,
-  openjdk23,
+  openjdk25,
   libarchive,
   makeWrapper,
 }:
 let
   # Wants at least Java 22
-  jdk = openjdk23;
+  jdk = openjdk25;
   version = "5.9.6";
 in
 maven.buildMavenPackage {
@@ -72,7 +72,7 @@ maven.buildMavenPackage {
     '';
     homepage = "https://cratedb.com/database";
     changelog = "https://cratedb.com/docs/crate/reference/en/latest/appendices/release-notes/${version}.html";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     platforms = with lib.platforms; unix ++ windows;
     # FIXME: Somehow dependencies are platform-dependent. Somehow.
     broken = stdenvNoCC.hostPlatform.system != "x86_64-linux";

@@ -16,19 +16,17 @@ self: super:
     # see: https://github.com/psibi/shell-conduit/issues/12
     shell-conduit = dontCheck super.shell-conduit;
 
-    conduit-extra = super.conduit-extra.overrideAttrs (drv: {
+    conduit-extra = overrideCabal (drv: {
       __darwinAllowLocalNetworking = true;
-    });
+    }) super.conduit-extra;
 
-    spacecookie = super.spacecookie.overrideAttrs (_: {
+    spacecookie = overrideCabal (_: {
       __darwinAllowLocalNetworking = true;
-    });
+    }) super.spacecookie;
 
-    streaming-commons = super.streaming-commons.overrideAttrs (_: {
+    streaming-commons = overrideCabal (_: {
       __darwinAllowLocalNetworking = true;
-    });
-
-    halive = addBuildDepend darwin.apple_sdk.frameworks.AppKit super.halive;
+    }) super.streaming-commons;
 
     # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux
     hakyll = overrideCabal {
@@ -36,35 +34,15 @@ self: super:
       doCheck = false;
     } super.hakyll;
 
-    barbly = addBuildDepend darwin.apple_sdk.frameworks.AppKit super.barbly;
-
     double-conversion = addExtraLibrary pkgs.libcxx super.double-conversion;
-
-    streamly = addBuildDepend darwin.apple_sdk.frameworks.Cocoa super.streamly;
-
-    apecs-physics = addPkgconfigDepends [
-      darwin.apple_sdk.frameworks.ApplicationServices
-    ] super.apecs-physics;
-
-    # Framework deps are hidden behind a flag
-    hmidi = addExtraLibraries [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.CoreAudio
-      darwin.apple_sdk.frameworks.CoreMIDI
-    ] super.hmidi;
-
-    # "erf table" test fails on Darwin
-    # https://github.com/bos/math-functions/issues/63
-    math-functions = dontCheck super.math-functions;
 
     # darwin doesn't have sub-second resolution
     # https://github.com/hspec/mockery/issues/11
     mockery = overrideCabal (drv: {
-      preCheck =
-        ''
-          export TRAVIS=true
-        ''
-        + (drv.preCheck or "");
+      preCheck = ''
+        export TRAVIS=true
+      ''
+      + (drv.preCheck or "");
     }) super.mockery;
 
     # https://github.com/ndmitchell/shake/issues/206
@@ -77,31 +55,18 @@ self: super:
     gtk3 = appendConfigureFlag "-f have-quartz-gtk" super.gtk3;
     gtk = appendConfigureFlag "-f have-quartz-gtk" super.gtk;
 
-    OpenAL = addExtraLibrary darwin.apple_sdk.frameworks.OpenAL super.OpenAL;
-
-    al = overrideCabal (drv: {
-      libraryFrameworkDepends = [
-        darwin.apple_sdk.frameworks.OpenAL
-      ] ++ (drv.libraryFrameworkDepends or [ ]);
-    }) super.al;
-
-    proteaaudio = addExtraLibrary darwin.apple_sdk.frameworks.AudioToolbox super.proteaaudio;
-
     # issues finding libcharset.h without libiconv in buildInputs on darwin.
     with-utf8 = addExtraLibrary pkgs.libiconv super.with-utf8;
-    with-utf8_1_1_0_0 = addExtraLibrary pkgs.libiconv super.with-utf8_1_1_0_0;
 
     git-annex = overrideCabal (drv: {
       # We can't use testFlags since git-annex side steps the Cabal test mechanism
-      preCheck =
-        drv.preCheck or ""
-        + ''
-          checkFlagsArray+=(
-            # The addurl test cases require security(1) to be in PATH which we can't
-            # provide from nixpkgs to my (@sternenseemann) knowledge.
-            "-p" "!/addurl/"
-          )
-        '';
+      preCheck = drv.preCheck or "" + ''
+        checkFlagsArray+=(
+          # The addurl test cases require security(1) to be in PATH which we can't
+          # provide from nixpkgs to my (@sternenseemann) knowledge.
+          "-p" "!/addurl/"
+        )
+      '';
     }) super.git-annex;
 
     # on*Finish tests rely on a threadDelay timing differential of 0.1s.
@@ -124,26 +89,37 @@ self: super:
     x509-system = overrideCabal (
       drv:
       lib.optionalAttrs (!pkgs.stdenv.cc.nativeLibc) {
-        postPatch =
-          ''
-            substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
-          ''
-          + (drv.postPatch or "");
+        postPatch = ''
+          substituteInPlace System/X509/MacOS.hs --replace-fail security /usr/bin/security
+        ''
+        + (drv.postPatch or "");
       }
     ) super.x509-system;
     crypton-x509-system = overrideCabal (
       drv:
       lib.optionalAttrs (!pkgs.stdenv.cc.nativeLibc) {
-        postPatch =
-          ''
-            substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
-          ''
-          + (drv.postPatch or "");
+        postPatch = ''
+          substituteInPlace System/X509/MacOS.hs --replace-fail security /usr/bin/security
+        ''
+        + (drv.postPatch or "");
       }
     ) super.crypton-x509-system;
+    HsOpenSSL-x509-system = overrideCabal (
+      drv:
+      lib.optionalAttrs (!pkgs.stdenv.cc.nativeLibc) {
+        postPatch = ''
+          substituteInPlace OpenSSL/X509/SystemStore/MacOSX.hs --replace-fail security /usr/bin/security
+        ''
+        + (drv.postPatch or "");
+      }
+    ) super.HsOpenSSL-x509-system;
 
     # https://github.com/haskell-foundation/foundation/pull/412
     foundation = dontCheck super.foundation;
+
+    # Test suite attempts to create illegal paths on HFS+
+    # https://github.com/fpco/haskell-filesystem/issues/37
+    system-fileio = dontCheck super.system-fileio;
 
     llvm-hs = overrideCabal (oldAttrs: {
       # One test fails on darwin.
@@ -152,75 +128,34 @@ self: super:
       # the DYLD_LIBRARY_PATH environment variable.  This messes up clang
       # when called from GHC, probably because clang is version 7, but we are
       # using LLVM8.
-      preCompileBuildDriver =
-        ''
-          substituteInPlace Setup.hs --replace "addToLdLibraryPath libDir" "pure ()"
-        ''
-        + (oldAttrs.preCompileBuildDriver or "");
+      preCompileBuildDriver = ''
+        substituteInPlace Setup.hs --replace-fail "addToLdLibraryPath libDir" "pure ()"
+      ''
+      + (oldAttrs.preCompileBuildDriver or "");
     }) super.llvm-hs;
 
-    sym = markBroken super.sym;
-
-    yesod-bin = addBuildDepend darwin.apple_sdk.frameworks.Cocoa super.yesod-bin;
-
-    yesod-core = super.yesod-core.overrideAttrs (drv: {
+    yesod-core = overrideCabal (drv: {
       # Allow access to local networking when the Darwin sandbox is enabled, so yesod-core can
       # run tests that access localhost.
       __darwinAllowLocalNetworking = true;
-    });
+    }) super.yesod-core;
 
-    hidapi = addExtraLibraries [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.IOKit
-      darwin.apple_sdk.frameworks.CoreFoundation
-    ] (super.hidapi.override { systemd = null; });
-
-    hmatrix = addBuildDepend darwin.apple_sdk.frameworks.Accelerate super.hmatrix;
-
-    blas-hs = overrideCabal (drv: {
-      libraryFrameworkDepends = [
-        darwin.apple_sdk.frameworks.Accelerate
-      ] ++ (drv.libraryFrameworkDepends or [ ]);
-    }) super.blas-hs;
+    hidapi = super.hidapi.override { systemd = null; };
 
     # Ensure the necessary frameworks are propagatedBuildInputs on darwin
     OpenGLRaw = overrideCabal (drv: {
       librarySystemDepends = [ ];
-      libraryHaskellDepends = drv.libraryHaskellDepends ++ [
-        darwin.apple_sdk.frameworks.OpenGL
-      ];
-      preConfigure =
-        ''
-          frameworkPaths=($(for i in $nativeBuildInputs; do if [ -d "$i"/Library/Frameworks ]; then echo "-F$i/Library/Frameworks"; fi done))
-          frameworkPaths=$(IFS=, ; echo "''${frameworkPaths[@]}")
-          configureFlags+=$(if [ -n "$frameworkPaths" ]; then echo -n "--ghc-options=-optl=$frameworkPaths"; fi)
-        ''
-        + (drv.preConfigure or "");
+      libraryHaskellDepends = drv.libraryHaskellDepends;
+      preConfigure = ''
+        frameworkPaths=($(for i in $nativeBuildInputs; do if [ -d "$i"/Library/Frameworks ]; then echo "-F$i/Library/Frameworks"; fi done))
+        frameworkPaths=$(IFS=, ; echo "''${frameworkPaths[@]}")
+        configureFlags+=$(if [ -n "$frameworkPaths" ]; then echo -n "--ghc-options=-optl=$frameworkPaths"; fi)
+      ''
+      + (drv.preConfigure or "");
     }) super.OpenGLRaw;
-    GLURaw = overrideCabal (drv: {
-      librarySystemDepends = [ ];
-      libraryHaskellDepends = drv.libraryHaskellDepends ++ [
-        darwin.apple_sdk.frameworks.OpenGL
-      ];
-    }) super.GLURaw;
     bindings-GLFW = overrideCabal (drv: {
       librarySystemDepends = [ ];
-      libraryHaskellDepends = drv.libraryHaskellDepends ++ [
-        darwin.apple_sdk.frameworks.AGL
-        darwin.apple_sdk.frameworks.Cocoa
-        darwin.apple_sdk.frameworks.OpenGL
-        darwin.apple_sdk.frameworks.IOKit
-        darwin.apple_sdk.frameworks.Kernel
-        darwin.apple_sdk.frameworks.CoreVideo
-        darwin.CF
-      ];
     }) super.bindings-GLFW;
-    OpenCL = overrideCabal (drv: {
-      librarySystemDepends = [ ];
-      libraryHaskellDepends = drv.libraryHaskellDepends ++ [
-        darwin.apple_sdk.frameworks.OpenCL
-      ];
-    }) super.OpenCL;
 
     # cabal2nix likes to generate dependencies on hinotify when hfsevents is
     # really required on darwin: https://github.com/NixOS/cabal2nix/issues/146.
@@ -228,37 +163,22 @@ self: super:
 
     # FSEvents API is very buggy and tests are unreliable. See
     # http://openradar.appspot.com/10207999 and similar issues.
-    fsnotify = addBuildDepend darwin.apple_sdk.frameworks.Cocoa (dontCheck super.fsnotify);
-
-    FractalArt = overrideCabal (drv: {
-      librarySystemDepends = [
-        darwin.libobjc
-        darwin.apple_sdk.frameworks.AppKit
-      ] ++ (drv.librarySystemDepends or [ ]);
-    }) super.FractalArt;
-
-    arbtt = overrideCabal (drv: {
-      librarySystemDepends = [
-        darwin.apple_sdk.frameworks.Foundation
-        darwin.apple_sdk.frameworks.Carbon
-        darwin.apple_sdk.frameworks.IOKit
-      ] ++ (drv.librarySystemDepends or [ ]);
-    }) super.arbtt;
+    fsnotify = dontCheck super.fsnotify;
 
     HTF = overrideCabal (drv: {
       # GNU find is not prefixed in stdenv
-      postPatch =
-        ''
-          substituteInPlace scripts/local-htfpp --replace "find=gfind" "find=find"
-        ''
-        + (drv.postPatch or "");
+      postPatch = ''
+        substituteInPlace scripts/local-htfpp --replace-fail "find=gfind" "find=find"
+      ''
+      + (drv.postPatch or "");
     }) super.HTF;
 
     # conditional dependency via a cabal flag
     cas-store = overrideCabal (drv: {
       libraryHaskellDepends = [
         self.kqueue
-      ] ++ (drv.libraryHaskellDepends or [ ]);
+      ]
+      ++ (drv.libraryHaskellDepends or [ ]);
     }) super.cas-store;
 
     # We are lacking pure pgrep at the moment for tests to work
@@ -267,21 +187,19 @@ self: super:
     # On darwin librt doesn't exist and will fail to link against,
     # however linking against it is also not necessary there
     GLHUI = overrideCabal (drv: {
-      postPatch =
-        ''
-          substituteInPlace GLHUI.cabal --replace " rt" ""
-        ''
-        + (drv.postPatch or "");
+      postPatch = ''
+        substituteInPlace GLHUI.cabal --replace-fail " rt" ""
+      ''
+      + (drv.postPatch or "");
     }) super.GLHUI;
 
     SDL-image = overrideCabal (drv: {
       # Prevent darwin-specific configuration code path being taken
       # which doesn't work with nixpkgs' SDL libraries
-      postPatch =
-        ''
-          substituteInPlace configure --replace xDarwin noDarwinSpecialCasing
-        ''
-        + (drv.postPatch or "");
+      postPatch = ''
+        substituteInPlace configure --replace-fail xDarwin noDarwinSpecialCasing
+      ''
+      + (drv.postPatch or "");
       patches = [
         # Work around SDL_main.h redefining main to SDL_main
         ./patches/SDL-image-darwin-hsc.patch
@@ -291,11 +209,10 @@ self: super:
     # Prevent darwin-specific configuration code path being taken which
     # doesn't work with nixpkgs' SDL libraries
     SDL-mixer = overrideCabal (drv: {
-      postPatch =
-        ''
-          substituteInPlace configure --replace xDarwin noDarwinSpecialCasing
-        ''
-        + (drv.postPatch or "");
+      postPatch = ''
+        substituteInPlace configure --replace-fail xDarwin noDarwinSpecialCasing
+      ''
+      + (drv.postPatch or "");
     }) super.SDL-mixer;
 
     # Work around SDL_main.h redefining main to SDL_main
@@ -317,39 +234,11 @@ self: super:
     # Otherwise impure gcc is used, which is Apple's weird wrapper
     c2hsc = addTestToolDepends [ pkgs.gcc ] super.c2hsc;
 
-    http-client-tls = overrideCabal (drv: {
-      postPatch =
-        ''
-          # This comment has been inserted, so the derivation hash changes, forcing
-          # a rebuild of this derivation which has succeeded to build on Hydra before,
-          # but apparently been corrupted, causing reverse dependencies to fail.
-          #
-          # This workaround can be removed upon the next darwin stdenv rebuild,
-          # presumably https://github.com/NixOS/nixpkgs/pull/152850 or the next
-          # full haskellPackages rebuild.
-        ''
-        + drv.postPatch or "";
-    }) super.http-client-tls;
-
-    http2 = super.http2.overrideAttrs (drv: {
+    http2 = overrideCabal (drv: {
       # Allow access to local networking when the Darwin sandbox is enabled, so http2 can run tests
       # that access localhost.
       __darwinAllowLocalNetworking = true;
-    });
-
-    foldl = overrideCabal (drv: {
-      postPatch =
-        ''
-          # This comment has been inserted, so the derivation hash changes, forcing
-          # a rebuild of this derivation which has succeeded to build on Hydra before,
-          # but apparently been corrupted, causing reverse dependencies to fail.
-          #
-          # This workaround can be removed upon the next darwin stdenv rebuild,
-          # presumably https://github.com/NixOS/nixpkgs/pull/152850 or the next
-          # full haskellPackages rebuild.
-        ''
-        + drv.postPatch or "";
-    }) super.foldl;
+    }) super.http2;
 
     # https://hydra.nixos.org/build/230964714/nixlog/1
     inline-c-cpp = appendPatch (pkgs.fetchpatch {
@@ -363,29 +252,55 @@ self: super:
     # Tests fail on macOS https://github.com/mrkkrp/zip/issues/112
     zip = dontCheck super.zip;
 
-    http-streams = super.http-streams.overrideAttrs (drv: {
+    dap = overrideCabal (drv: {
       __darwinAllowLocalNetworking = true;
-    });
+    }) super.dap;
 
-    io-streams = super.io-streams.overrideAttrs (drv: {
+    essence-of-live-coding-warp = overrideCabal (drv: {
       __darwinAllowLocalNetworking = true;
-    });
+    }) super.essence-of-live-coding-warp;
 
-    io-streams-haproxy = super.io-streams-haproxy.overrideAttrs (drv: {
+    http-streams = overrideCabal (drv: {
       __darwinAllowLocalNetworking = true;
-    });
+    }) super.http-streams;
 
-    openssl-streams = super.openssl-streams.overrideAttrs (drv: {
+    io-streams = overrideCabal (drv: {
       __darwinAllowLocalNetworking = true;
-    });
+    }) super.io-streams;
 
-    snap = super.snap.overrideAttrs (drv: {
+    io-streams-haproxy = overrideCabal (drv: {
       __darwinAllowLocalNetworking = true;
-    });
+    }) super.io-streams-haproxy;
 
-    warp = super.warp.overrideAttrs (drv: {
+    jsaddle-warp = overrideCabal (drv: {
       __darwinAllowLocalNetworking = true;
-    });
+    }) super.jsaddle-warp;
+
+    openssl-streams = overrideCabal (drv: {
+      __darwinAllowLocalNetworking = true;
+    }) super.openssl-streams;
+
+    servant-auth-client = overrideCabal (drv: {
+      __darwinAllowLocalNetworking = true;
+    }) super.servant-auth-client;
+
+    servant-client = overrideCabal (drv: {
+      __darwinAllowLocalNetworking = true;
+    }) super.servant-client;
+
+    snap = overrideCabal (drv: {
+      __darwinAllowLocalNetworking = true;
+    }) super.snap;
+
+    warp = overrideCabal (drv: {
+      __darwinAllowLocalNetworking = true;
+      # These fail in darwin sandbox with:
+      #   Network.SendFile.MacOS.sendloopHeader: permission denied (Operation not permitted)
+      testFlags = drv.testFlags or [ ] ++ [
+        "--skip=/Response/range requests/"
+        "--skip=/Response/partial files/"
+      ];
+    }) super.warp;
 
     ghcjs-dom-hello = overrideCabal (drv: {
       libraryHaskellDepends = with self; [
@@ -410,10 +325,6 @@ self: super:
     }) super.jsaddle-hello;
 
     jsaddle-wkwebview = overrideCabal (drv: {
-      libraryFrameworkDepends = with pkgs.buildPackages.darwin.apple_sdk.frameworks; [
-        Cocoa
-        WebKit
-      ];
       libraryHaskellDepends = with self; [
         aeson
         data-default
@@ -431,15 +342,44 @@ self: super:
     # Remove a problematic assert, the length is sometimes 1 instead of 2 on darwin
     di-core = overrideCabal (drv: {
       preConfigure = ''
-        substituteInPlace test/Main.hs --replace \
+        substituteInPlace test/Main.hs --replace-fail \
           "2 @=? List.length (List.nub (List.sort (map Di.log_time logs)))" ""
       '';
     }) super.di-core;
+
+    # Template Haskell on Darwin fails to load an available symbol in these
+    # transitive dependencies since GHC 9.10.3.
+    # See issue https://github.com/NixOS/nixpkgs/issues/461651
+    hercules-ci-agent = overrideCabal (old: {
+      preBuild = ''
+        DYLD_INSERT_LIBRARIES="''${DYLD_INSERT_LIBRARIES:+$DYLD_INSERT_LIBRARIES:}$(pkg-config --variable=libdir nix-store)/libnixstore.dylib:$(pkg-config --variable=libdir nix-util)/libnixutil.dylib"
+        export DYLD_INSERT_LIBRARIES
+        echo "DYLD_INSERT_LIBRARIES=$DYLD_INSERT_LIBRARIES"
+      ''
+      + (old.preBuild or "");
+    }) super.hercules-ci-agent;
+
+    # Template Haskell on Darwin fails to load an available symbol in these
+    # transitive dependencies since GHC 9.10.3.
+    # See issue https://github.com/NixOS/nixpkgs/issues/461651
+    cachix = overrideCabal (old: {
+      preBuild = ''
+        DYLD_INSERT_LIBRARIES="''${DYLD_INSERT_LIBRARIES:+$DYLD_INSERT_LIBRARIES:}$(pkg-config --variable=libdir nix-store)/libnixstore.dylib:$(pkg-config --variable=libdir nix-util)/libnixutil.dylib"
+        export DYLD_INSERT_LIBRARIES
+        echo "DYLD_INSERT_LIBRARIES=$DYLD_INSERT_LIBRARIES"
+      ''
+      + (old.preBuild or "");
+    }) super.cachix;
 
     # Require /usr/bin/security which breaks sandbox
     http-reverse-proxy = dontCheck super.http-reverse-proxy;
     servant-auth-server = dontCheck super.servant-auth-server;
 
+    sysinfo = dontCheck super.sysinfo;
+
+    network = overrideCabal (drv: {
+      __darwinAllowLocalNetworking = true;
+    }) super.network;
   }
   // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
     # aarch64-darwin
@@ -453,22 +393,38 @@ self: super:
     # after verifying they are indeed erroneous (e.g. cabal2nix) or just disable
     # the check, sticking with the status quo. Ideally there'll be zero cases of
     # the latter in the future!
-    inherit
-      (lib.mapAttrs (
-        _:
-        overrideCabal (old: {
-          postInstall = ''
-            remove-references-to -t ${self.hpack} "$out/bin/cabal2nix"
-            # Note: The `data` output is needed at runtime.
-            remove-references-to -t ${self.distribution-nixpkgs.out} "$out/bin/hackage2nix"
+    cabal2nix = overrideCabal (old: {
+      postInstall = ''
+        remove-references-to -t ${self.hpack} "''${!outputBin}/bin/cabal2nix"
+        # Note: The `data` output is needed at runtime.
+        remove-references-to -t ${self.distribution-nixpkgs.out} "''${!outputBin}/bin/hackage2nix"
 
-            ${old.postInstall or ""}
-          '';
-        })
-      ) super)
-      cabal2nix
-      cabal2nix-unstable
-      ;
+        ${old.postInstall or ""}
+      '';
+    }) super.cabal2nix;
+    cabal2nix-unstable = overrideCabal (old: {
+      postInstall = ''
+        remove-references-to -t ${self.hpack} "''${!outputBin}/bin/cabal2nix"
+        # Note: The `data` output is needed at runtime.
+        remove-references-to -t ${self.distribution-nixpkgs-unstable.out} "''${!outputBin}/bin/hackage2nix"
+
+        ${old.postInstall or ""}
+      '';
+    }) super.cabal2nix-unstable;
+    happy = overrideCabal (old: {
+      postInstall = ''
+        remove-references-to -t ${lib.getLib self.happy-lib} "''${!outputBin}/bin/happy"
+
+        ${old.postInstall or ""}
+      '';
+    }) super.happy;
+    hadolint = overrideCabal (old: {
+      postInstall = ''
+        remove-references-to -t ${self.ShellCheck} "$out/bin/hadolint"
+
+        ${old.postInstall or ""}
+      '';
+    }) super.hadolint;
 
     # https://github.com/fpco/unliftio/issues/87
     unliftio = dontCheck super.unliftio;
@@ -483,6 +439,10 @@ self: super:
       '';
     }) super.rio;
 
+    # Don't use homebrew icu on macOS
+    # https://github.com/NixOS/nixpkgs/issues/462046
+    text-icu = disableCabalFlag "homebrew" super.text-icu;
+
     # https://github.com/haskell-crypto/cryptonite/issues/360
     cryptonite = appendPatch ./patches/cryptonite-remove-argon2.patch super.cryptonite;
 
@@ -495,8 +455,12 @@ self: super:
       libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
     }) (disableCabalFlag "fixity-th" super.fourmolu);
 
-    # https://github.com/NixOS/nixpkgs/issues/149692
-    Agda = disableCabalFlag "optimise-heavily" super.Agda;
+    Agda = lib.pipe super.Agda [
+      # https://github.com/NixOS/nixpkgs/issues/149692
+      (disableCabalFlag "optimise-heavily")
+      # https://github.com/agda/agda/issues/8016
+      (appendConfigureFlag "--ghc-option=-Wwarn=deprecations")
+    ];
 
     # https://github.com/NixOS/nixpkgs/issues/198495
     eventsourcing-postgresql = dontCheck super.eventsourcing-postgresql;

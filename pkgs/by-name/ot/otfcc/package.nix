@@ -9,6 +9,7 @@ stdenv.mkDerivation rec {
   pname = "otfcc";
   version = "0.10.4";
 
+  # archived by the owner on Jun 3, 2022. No viable forks.
   src = fetchFromGitHub {
     owner = "caryll";
     repo = "otfcc";
@@ -23,6 +24,11 @@ stdenv.mkDerivation rec {
     ./move-makefiles.patch
   ];
 
+  postPatch = ''
+    substituteInPlace premake5.lua \
+      --replace-fail 'flags { "StaticRuntime" }' 'staticruntime "On"'
+  '';
+
   buildFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "config=release_arm" ];
 
   installPhase = ''
@@ -32,12 +38,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Optimized OpenType builder and inspector";
     homepage = "https://github.com/caryll/otfcc";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ttuegel ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
-
 }

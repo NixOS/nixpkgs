@@ -6,20 +6,25 @@
 
 stdenv.mkDerivation {
   pname = "git-fire";
-  version = "unstable-2017-08-27";
+  version = "0.2.3-unstable-2017-08-18";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "qw3rtman";
     repo = "git-fire";
     rev = "d72b68ed356f726c77c60294f9220275f16c9931";
-    sha256 = "1hdwkhyjjx31y0lpjkhbb4f5y9f7g70fnd4c2246cmk2rbsvj5b2";
+    hash = "sha256-YhW59cpiVmaIEIw068B5xyVfHFkLTnkp8GF0KT2cvME=";
   };
 
   installPhase = ''
+    runHook preInstall
     install -D -m755 $src/git-fire $out/bin/git-fire
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = ''
       Push ALL changes in a git repository
     '';
@@ -27,9 +32,9 @@ stdenv.mkDerivation {
       In the event of an emergency (fire, etc.), automatically commit all changes/files in a repository, pushing to all known remotes all commits and stashes.
     '';
     homepage = "https://github.com/qw3rtman/git-fire";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ swflint ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ swflint ];
     mainProgram = "git-fire";
   };
 }

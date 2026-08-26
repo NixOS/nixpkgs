@@ -5,7 +5,7 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "meek";
   version = "0.38.0";
 
@@ -14,7 +14,7 @@ buildGoModule rec {
     group = "tpo";
     owner = "anti-censorship/pluggable-transports";
     repo = "meek";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-zmIRXrHWrEzR+RcX/gkuqw2oBmyGoXDQ45ZjA4vwGSs=";
   };
 
@@ -32,7 +32,7 @@ buildGoModule rec {
     installManPage doc/meek-server.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Blocking-resistant pluggable transport for Tor";
     longDescription = ''
       meek is a blocking-resistant pluggable transport for Tor. It encodes a
@@ -42,7 +42,7 @@ buildGoModule rec {
       fingerprintable byte patterns in Tor traffic.
     '';
     homepage = "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/meek";
-    maintainers = with maintainers; [ doronbehar ];
-    license = licenses.cc0;
+    maintainers = with lib.maintainers; [ doronbehar ];
+    license = lib.licenses.cc0;
   };
-}
+})

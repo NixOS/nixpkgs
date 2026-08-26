@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchurl,
-  gtk2-x11,
+  gtk3,
+  gtk3-x11,
   pkg-config,
   python3,
   gfortran,
@@ -11,7 +12,6 @@
   perl,
   groff,
   which,
-  darwin,
   ncurses,
 }:
 
@@ -22,11 +22,12 @@ let
       setuptools
     ]
   );
+  gtk3' = if stdenv.hostPlatform.isDarwin then gtk3-x11 else gtk3;
 in
 
 stdenv.mkDerivation rec {
-  srcVersion = "dec24a";
-  version = "20241201_a";
+  srcVersion = "aug26a";
+  version = "20260801_a";
   pname = "gildas";
 
   src = fetchurl {
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
       "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.xz"
       "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.xz"
     ];
-    hash = "sha256-5XKImlE5A6JjA6LLqmGc4IzaMMPoHDo8cUPmgRtnEp0=";
+    hash = "sha256-NqIgUyjzYoq2fsalaPEHCyxE4cbwXj+azmVxEBOPi6s=";
   };
 
   nativeBuildInputs = [
@@ -48,42 +49,39 @@ stdenv.mkDerivation rec {
     which
   ];
 
-  buildInputs =
-    [
-      gtk2-x11
-      cfitsio
-      python3Env
-      ncurses
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks; [ CoreFoundation ]
-    );
+  buildInputs = [
+    gtk3'
+    cfitsio
+    python3Env
+    ncurses
+  ];
 
-  patches =
-    [ ./wrapper.patch ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin ([
-      ./clang.patch
-      ./cpp-darwin.patch
-    ]);
+  patches = [
+    ./wrapper.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ./clang.patch
+    ./cpp-darwin.patch
+  ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
 
   # Workaround for https://github.com/NixOS/nixpkgs/issues/304528
   env.GAG_CPP = lib.optionalString stdenv.hostPlatform.isDarwin "${gfortran.outPath}/bin/cpp";
 
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks; "-F${CoreFoundation}/Library/Frameworks"
-  );
-
   configurePhase = ''
+    runHook preConfigure
+
     substituteInPlace admin/wrapper.sh --replace '%%OUT%%' $out
     substituteInPlace admin/wrapper.sh --replace '%%PYTHONHOME%%' ${python3Env}
     substituteInPlace utilities/main/gag-makedepend.pl --replace '/usr/bin/perl' ${perl}/bin/perl
     source admin/gildas-env.sh -c gfortran -o openmp
     echo "gag_doc:        $out/share/doc/" >> kernel/etc/gag.dico.lcl
+
+    runHook postConfigure
   '';
 
-  userExec = "astro class greg imager mapping sic";
+  userExec = "astro class greg mapping sic";
 
   postInstall = ''
     mkdir -p $out/bin
@@ -109,7 +107,7 @@ stdenv.mkDerivation rec {
       extensible. GILDAS is written in Fortran-90, with a
       few parts in C/C++ (mainly keyboard interaction,
       plotting, widgets).'';
-    homepage = "http://www.iram.fr/IRAMFR/GILDAS/gildas.html";
+    homepage = "https://www.iram.fr/IRAMFR/GILDAS/";
     license = lib.licenses.free;
     maintainers = [
       lib.maintainers.bzizou

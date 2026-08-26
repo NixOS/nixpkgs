@@ -1,32 +1,104 @@
 {
   lib,
-  buildNpmPackage,
-  fetchzip,
+  stdenv,
+  autoPatchelfHook,
+  cacert,
+  fetchurl,
+  glib,
+  libsecret,
+  makeBinaryWrapper,
+  bash,
+  nodejs,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-buildNpmPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "github-copilot-cli";
-  version = "0.1.36";
+  version = "1.0.61";
 
-  src = fetchzip {
-    url = "https://registry.npmjs.org/@githubnext/github-copilot-cli/-/github-copilot-cli-${version}.tgz";
-    hash = "sha256-7n+7sN61OrqMVGaKll85+HwX7iGG9M/UW5lf2Pd5sRU=";
+  # GitHub provide platform-specific SEA binaries as well as a "universal"
+  # package.  Use the universal package as it gives us a bit more flexibility
+  # about how it's configured.  In particular, the SEA binary has fixed ideas
+  # about how paths should be set up which don't reliably hold when using Nix.
+  src = fetchurl {
+    url = "https://github.com/github/copilot-cli/releases/download/v${finalAttrs.version}/github-copilot-${finalAttrs.version}.tgz";
+    hash = "sha256-8Lks8lHa5XF9ZrC+fU/9VlzD1W32MbRZ7PZtL5YWLTA=";
   };
 
-  npmDepsHash = "sha256-h0StxzGbl3ZeOQ4Jy1BgJ5sJ0pAbubMCRsiIOYpU04w=";
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    stdenv.cc.cc.lib
+    glib
+    libsecret
+  ];
+  sourceRoot = "package";
+  dontStrip = true;
+  # computer.node requires GUI/media libraries (X11, pipewire, libei, libjpeg,
+  # libpng) for screen-capture and input-simulation features that are not
+  # relevant for CLI use; ignore those missing deps rather than fail the build
+  # or pull in heavy dependencies.
+  autoPatchelfIgnoreMissingDeps = [
+    "libX11.so.6"
+    "libXtst.so.6"
+    "libjpeg.so.8"
+    "libpng16.so.16"
+    "libpipewire-0.3.so.0"
+    "libei.so.1"
+  ];
 
-  postPatch = ''
-    cp ${./package-lock.json} package-lock.json
+  installPhase = ''
+    runHook preInstall
+    mkdir -p "$out"/lib/github-copilot-cli
+    cp -r * "$out"/lib/github-copilot-cli
+    runHook postInstall
   '';
 
-  dontNpmBuild = true;
+  postInstall = ''
+    # Upstream bundles linuxmusl prebuilds in the universal tarball; they are
+    # not needed on glibc systems and make autoPatchelf fail on musl libc deps.
+    find "$out"/lib/github-copilot-cli -depth -path '*/linuxmusl-*' -exec rm -rf '{}' +
 
-  meta = with lib; {
-    description = "CLI experience for letting GitHub Copilot help you on the command line";
-    homepage = "https://githubnext.com/projects/copilot-cli/";
-    license = licenses.unfree; # upstream has no license
-    maintainers = [ maintainers.malo ];
-    platforms = platforms.all;
-    mainProgram = "github-copilot-cli";
+    makeWrapper ${nodejs}/bin/node "$out"/bin/copilot \
+      --add-flag "$out"/lib/github-copilot-cli/index.js \
+      --add-flag --no-auto-update \
+      --set-default NODE_NO_WARNINGS 1 \
+      --set-default SSL_CERT_DIR ${cacert}/etc/ssl/certs \
+      --prefix PATH : "${lib.makeBinPath [ bash ]}"
+  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  # TODO are these errors still present after moving to using the "universal"
+  # package?
+  doInstallCheck = !stdenv.hostPlatform.isDarwin; # skip on Darwin - OpenSSL errors in sandbox
+
+  # Looks like GitHub use tags for both pre-release and actually released
+  # versions, but only the actual versions will be available as a GitHub
+  # release, so use the release endpoint rather than nix-update-script`'s
+  # default of looking for tags.
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+
+  meta = {
+    description = "GitHub Copilot CLI brings the power of Copilot coding agent directly to your terminal";
+    homepage = "https://github.com/github/copilot-cli";
+    changelog = "https://github.com/github/copilot-cli/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [
+      binaryNativeCode # including contents of the prebuild directory
+      binaryBytecode # including WASM files
+      obfuscatedCode # including minified JavaScript
+    ];
+    maintainers = with lib.maintainers; [
+      me-and
+    ];
+    mainProgram = "copilot";
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
   };
-}
+})

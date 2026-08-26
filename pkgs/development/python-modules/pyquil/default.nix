@@ -14,6 +14,7 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
+  pythonAtLeast,
   qcs-sdk-python,
   respx,
   rpcq,
@@ -25,14 +26,17 @@
 
 buildPythonPackage rec {
   pname = "pyquil";
-  version = "4.16.1";
+  version = "4.17.0";
   pyproject = true;
+
+  # qcs-sdk-python (PyO3) caps at 3.12; upstream also pins python <3.13
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "pyquil";
     tag = "v${version}";
-    hash = "sha256-8ZIkWFHKgb5PFhkhvjaWkxJuX/0Hvl2R+w9tqe2nYNg=";
+    hash = "sha256-El0eMBUOYpB0v+duPEnIQTbJLKTguq4yTsItbriRbg4=";
   };
 
   pythonRelaxDeps = [

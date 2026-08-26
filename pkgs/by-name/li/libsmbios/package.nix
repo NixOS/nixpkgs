@@ -13,14 +13,14 @@
   doxygen,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libsmbios";
   version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "dell";
     repo = "libsmbios";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0krwwydyvb9224r884y1mlmzyxhlfrcqw73vi1j8787rl0gl5a2i";
   };
 
@@ -59,10 +59,10 @@ stdenv.mkDerivation rec {
     patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$out/sbin/smbios-sys-info-lite"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dell/libsmbios";
     description = "Library to obtain BIOS information";
-    license = with licenses; [
+    license = with lib.licenses; [
       osl21
       gpl2Plus
     ];
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
     ];
   };
-}
+})

@@ -24,11 +24,8 @@
   pulseaudio,
   sndioSupport ? true,
   sndio,
-  systemd,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  # Darwin Dependencies
-  darwin,
-  coreaudioSupport ? stdenv.hostPlatform.isDarwin,
+  systemdLibs,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 }:
 
 let
@@ -36,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "musikcube";
-  version = "3.0.4";
+  version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "clangen";
     repo = "musikcube";
-    rev = finalAttrs.version;
-    hash = "sha512-ibpSrzbn2yGNgWnjAh4sG9ZRFImxjE2sq6tu9k0w1QAAr/OWSTwtaIuK71ClT6yt4HKyRk1KSaXa+/IzOHI6Kg==";
+    tag = finalAttrs.version;
+    hash = "sha512-qmoFMDmI4rvb5PrGgGoPlMwllG9H0B5uL4Xve/yQ8reQvQKIOWnt9e9oMm7gKO8eFAvFXiJLWUTpD3lTxZk1mQ==";
   };
 
   outputs = [
@@ -55,37 +52,28 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      asio
-      curl
-      ffmpeg
-      gnutls
-      lame
-      libev
-      game-music-emu
-      libmicrohttpd
-      libopenmpt
-      mpg123
-      ncurses
-      portaudio
-      taglib
-    ]
-    ++ lib.optionals systemdSupport [ systemd ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      pulseaudio
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Cocoa
-        SystemConfiguration
-      ]
-    )
-    ++ lib.optionals coreaudioSupport (with darwin.apple_sdk.frameworks; [ CoreAudio ])
-    ++ lib.optionals sndioSupport [ sndio ]
-    ++ lib.optionals pipewireSupport [ pipewire ];
+  buildInputs = [
+    asio
+    curl
+    ffmpeg
+    gnutls
+    lame
+    libev
+    game-music-emu
+    libmicrohttpd
+    libopenmpt
+    mpg123
+    ncurses
+    portaudio
+    taglib
+  ]
+  ++ lib.optionals systemdSupport [ systemdLibs ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    pulseaudio
+  ]
+  ++ lib.optionals sndioSupport [ sndio ]
+  ++ lib.optionals pipewireSupport [ pipewire ];
 
   cmakeFlags = [ "-DDISABLE_STRIP=true" ];
 

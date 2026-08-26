@@ -11,7 +11,7 @@
 
   This is useful so that libraries can find schemas even though Nix lacks
   a standard location like /usr/share, where GSettings system could look for schemas.
-  The derivation is is somewhat dependency-heavy so it is best used as part of an update script.
+  The derivation is somewhat dependency-heavy so it is best used as part of an update script.
 
   For each schema id referenced in the source code (e.g. org.gnome.evolution),
   a variable name such as `EVOLUTION` must be provided.
@@ -26,6 +26,10 @@
 
     For example, `{ "org.gnome.evolution" = "EVOLUTION_SCHEMA_PATH"; }`
     hardcodes looking for `org.gnome.evolution` into `@EVOLUTION_SCHEMA_PATH@`.
+
+  - `schemaExistsFunction`: name of the function that is used for checking
+    if optional schema exists. Its invocation will be replaced with TRUE
+    for known schemas.
 
   - `patches`: A list of patches to apply before generating the patch.
 
@@ -54,6 +58,7 @@
   src,
   patches ? [ ],
   schemaIdToVariableMapping,
+  schemaExistsFunction ? null,
 }:
 
 runCommand "hardcode-gsettings.patch"
@@ -71,6 +76,7 @@ runCommand "hardcode-gsettings.patch"
     patchPhase
     set -x
     cp ${builtins.toFile "glib-schema-to-var.json" (builtins.toJSON schemaIdToVariableMapping)} ./glib-schema-to-var.json
+    cp ${builtins.toFile "glib-schema-exists-function.json" (builtins.toJSON schemaExistsFunction)} ./glib-schema-exists-function.json
     git init
     git add -A
     spatch --sp-file "${./hardcode-gsettings.cocci}" --dir . --in-place

@@ -20,18 +20,18 @@
   gtk3,
   lib,
   libGL,
-  libX11,
-  libXScrnSaver,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
-  libappindicator-gtk3,
+  libx11,
+  libxscrnsaver,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
+  libappindicator,
   libcxx,
   libdbusmenu,
   libdrm,
@@ -65,12 +65,12 @@
 let
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/9bcfe8ba/Feishu-linux_x64-7.36.11.deb";
-      sha256 = "sha256-iqEcwfF6z2jJ0TmFzDu2gf6eapHcJPaLSVESgtC9WUg=";
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/6e3610b5/Feishu-linux_x64-7.66.11.deb";
+      sha256 = "sha256-3E8NLC2zzIO7l1jPcePhMfCafgjuyWOzeNZgxTTM/TE=";
     };
     aarch64-linux = fetchurl {
-      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/484fc204/Feishu-linux_arm64-7.36.11.deb";
-      sha256 = "sha256-XTa5GOMBsiXI5IDhDQktSxdUfuvG7c2VWHuS76cFsqE=";
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/36c6e858/Feishu-linux_arm64-7.66.11.deb";
+      sha256 = "sha256-2nMHCuJy2dYiokwR3dFAkITeBgH8K9poJ9gkJNp42aQ=";
     };
   };
 
@@ -95,18 +95,18 @@ let
     glibc
     gnutls
     libGL
-    libX11
-    libXScrnSaver
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
-    libappindicator-gtk3
+    libx11
+    libxscrnsaver
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxtst
+    libappindicator
     libcxx
     libdbusmenu
     libdrm
@@ -133,7 +133,7 @@ let
   ];
 in
 stdenv.mkDerivation {
-  version = "7.36.11";
+  version = "7.66.11";
   pname = "feishu";
 
   src =
@@ -152,8 +152,8 @@ stdenv.mkDerivation {
     # for autopatchelf
     alsa-lib
     cups
-    libXdamage
-    libXtst
+    libxdamage
+    libxtst
     libdrm
     libgcrypt
     libpulseaudio
@@ -217,18 +217,19 @@ stdenv.mkDerivation {
         update_link=$(echo $package_info | jq -r '.data.download_link' | sed 's/lf[0-9]*-ug-sign.feishucdn.com/sf3-cn.feishucdn.com\/obj/;s/?.*$//')
         new_version=$(echo $package_info | jq -r '.data.version_number' | sed -n 's/.*@V//p')
         sha256_hash=$(nix-prefetch-url $update_link)
-        sri_hash=$(nix hash to-sri --type sha256 $sha256_hash)
+        sri_hash=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 $sha256_hash)
         update-source-version feishu $new_version $sri_hash $update_link --system=$platform --ignore-same-version --source-key="sources.$platform"
       done
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "All-in-one collaboration suite";
     homepage = "https://www.feishu.cn/en/";
     downloadPage = "https://www.feishu.cn/en/#en_home_download_block";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = supportedPlatforms;
-    maintainers = with maintainers; [ billhuang ];
+    maintainers = with lib.maintainers; [ billhuang ];
+    mainProgram = "bytedance-feishu";
   };
 }

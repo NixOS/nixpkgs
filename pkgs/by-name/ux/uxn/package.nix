@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uxn";
-  version = "1.0-unstable-2025-04-04";
+  version = "1.0-unstable-2025-11-20";
 
   src = fetchFromSourcehut {
     owner = "~rabbits";
     repo = "uxn";
-    rev = "289a265c4186e84308d817f5b34086853d816fd4";
-    hash = "sha256-ctjZx9IvLPEIgX9o0ZLcOW//wbGDA3YjRxg+lMdaSHs=";
+    rev = "5dce902ef8d360310d1b9b29084b63c71aabb0fa";
+    hash = "sha256-7qpf5vF9Q67owtHQFUzwLmhA7iLNlS4vKwMAkPSqb4E=";
   };
 
   outputs = [
@@ -35,7 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs build.sh
     substituteInPlace build.sh \
-      --replace "-L/usr/local/lib " ""
+      --replace "-L/usr/local/lib " "" \
+      --replace "$(brew --prefix)/lib/libSDL2.a " "" \
+      --replace "--static-libs" "--libs" \
+      --replace " | sed -e 's/-lSDL2 //'" ""
   '';
 
   buildPhase = ''
@@ -65,9 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wiki.xxiivv.com/site/uxn.html";
     description = "Assembler and emulator for the Uxn stack machine";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ jleightcap ];
     mainProgram = "uxnemu";
     inherit (SDL2.meta) platforms;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

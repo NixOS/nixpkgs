@@ -15,13 +15,13 @@
 assert lib.assertMsg (enableS3 || enableAzure) "Either S3 or azure support needs to be enabled";
 rustPlatform.buildRustPackage {
   pname = "kafka-delta-ingest";
-  version = "0-unstable-2024-11-05";
+  version = "0-unstable-2025-05-05";
 
   src = fetchFromGitHub {
     owner = "delta-io";
     repo = "kafka-delta-ingest";
-    rev = "b7638eda8642985b5bd56741de526ea051d784c0";
-    hash = "sha256-fngPFvCxEaHVenySG5FBbVXporu3Hf957iV3rGWsrzE=";
+    rev = "da9c932be3a98649da74ed91f5e1593bece65e89";
+    hash = "sha256-omeIuvi2OEU4jBWbE/EEM/nqHr25sy2+5Q9qsXzZh8E=";
   };
 
   nativeBuildInputs = [
@@ -29,17 +29,19 @@ rustPlatform.buildRustPackage {
     perl
   ];
 
-  buildFeatures =
-    [
-      "dynamic-linking"
-    ]
-    ++ lib.optional enableS3 "s3"
-    ++ lib.optional enableAzure "azure";
+  buildFeatures = [
+    "dynamic-linking"
+  ]
+  ++ lib.optional enableS3 "s3"
+  ++ lib.optional enableAzure "azure";
 
   buildInputs = [
     openssl
     rdkafka
   ];
+
+  # #![deny(warnings)] breaks the build when newer rustc emits new lints.
+  env.RUSTFLAGS = "--cap-lints warn";
 
   cargoLock = {
     lockFile = ./Cargo.lock;
@@ -52,12 +54,12 @@ rustPlatform.buildRustPackage {
   # many tests seem to require a running kafka instance
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Highly efficient daemon for streaming data from Kafka into Delta Lake";
     mainProgram = "kafka-delta-ingest";
     homepage = "https://github.com/delta-io/kafka-delta-ingest";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

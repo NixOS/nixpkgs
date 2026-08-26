@@ -26,16 +26,16 @@ stdenvNoCC.mkDerivation rec {
     patchShebangs $out/bin/er-patcher
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/gurrgur/er-patcher";
     changelog = "https://github.com/gurrgur/er-patcher/releases/tag/v${version}";
     description = "Enhancement patches for Elden Ring adding ultrawide support, custom frame rate limits and more";
     longDescription = ''
       A tool aimed at enhancing the experience when playing the game on linux through proton or natively on windows.
       This tool is based on patching the game executable through hex-edits. However it is done in a safe and non-destructive way,
-      that ensures the patched executable is never run with EAC enabled (unless explicity told to do so). Use at your own risk!
+      that ensures the patched executable is never run with EAC enabled (unless explicitly told to do so). Use at your own risk!
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sigmasquadron ];
     mainProgram = "er-patcher";
   };

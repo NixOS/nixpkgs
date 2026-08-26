@@ -1,28 +1,26 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   replaceVars,
   graphviz,
   coreutils,
   pkg-config,
   setuptools,
+  swig,
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygraphviz";
-  version = "1.14";
+  version = "2.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pygraphviz";
     repo = "pygraphviz";
-    tag = "pygraphviz-${version}";
-    hash = "sha256-RyUmT2djj2GnVG82xO9HULMAJZb2LYMUGDRvCwaYBg8=";
+    tag = "pygraphviz-${finalAttrs.version}";
+    hash = "sha256-l0kAGlO8AFJcSQgoCXM0+HyzyseUJVVeJQ7E8sKCnr0=";
   };
 
   patches = [
@@ -35,9 +33,21 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    pkg-config
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "swig>4.1.0"' ""
+  '';
+
+  env.GRAPHVIZ_PREFIX = graphviz;
+
+  build-system = [
     setuptools
+  ];
+
+  nativeBuildInputs = [
+    graphviz # for dot
+    pkg-config
+    swig
   ];
 
   buildInputs = [ graphviz ];
@@ -52,13 +62,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pygraphviz" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/pygraphviz/pygraphviz/releases/tag/pygraphviz-${finalAttrs.version}";
     description = "Python interface to Graphviz graph drawing package";
     homepage = "https://github.com/pygraphviz/pygraphviz";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
       dotlambda
     ];
   };
-}
+})

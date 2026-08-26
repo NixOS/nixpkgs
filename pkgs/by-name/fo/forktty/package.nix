@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "forktty";
   version = "1.3";
 
   src = fetchurl {
-    url = "mirror://ibiblioPubLinux/utils/terminal/${pname}-${version}.tgz";
+    url = "mirror://ibiblioPubLinux/utils/terminal/forktty-${finalAttrs.version}.tgz";
     hash = "sha256-6xc5eshCuCIOsDh0r2DizKAeypGH0TRRotZ4itsvpVk=";
   };
 
@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
     "manprefix=$(out)/share/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to detach from controlling TTY and attach to another";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
   };
-}
+})

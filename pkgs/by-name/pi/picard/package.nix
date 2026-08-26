@@ -1,6 +1,7 @@
 {
   lib,
-  python312Packages,
+  stdenv,
+  python313Packages,
   fetchFromGitHub,
 
   chromaprint,
@@ -9,58 +10,84 @@
 
   enablePlayback ? true,
   gst_all_1,
+
+  writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
 let
-  pythonPackages = python312Packages;
+  # A few more tests fail with python314Packages, indicating the code isn't
+  # ready for it yet.
+  pythonPackages = python313Packages;
   pyqt5 = if enablePlayback then pythonPackages.pyqt5-multimedia else pythonPackages.pyqt5;
 in
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "picard";
-  # nix-update --commit picard --version-regex 'release-(.*)'
   version = "2.13.3";
-  format = "setuptools";
+  pyproject = true;
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = "picard";
-    tag = "release-${version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-Q0W5Q1+PbN+yneh98jx0/UNHVfD6okX92hxNzCE+Ibc=";
   };
 
-  nativeBuildInputs =
+  nativeBuildInputs = [
+    gettext
+    qt5.wrapQtAppsHook
+    pythonPackages.setuptools
+  ];
+
+  buildInputs = [
+    qt5.qtbase
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform qt5.qtwayland) [
+    qt5.qtwayland
+  ]
+  ++ lib.optionals pyqt5.multimediaEnabled [
+    qt5.qtmultimedia.bin
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+  ];
+
+  pythonRelaxDeps = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Should be resolved in the next version
+    "pyobjc-core"
+    "pyobjc-framework-Cocoa"
+  ];
+
+  dependencies =
+    with pythonPackages;
     [
-      gettext
-      qt5.wrapQtAppsHook
-      pythonPackages.pytestCheckHook
+      charset-normalizer
+      chromaprint
+      discid
+      fasteners
+      markdown
+      mutagen
+      pyjwt
+      pyqt5
+      python-dateutil
+      pyyaml
     ]
-    ++ lib.optionals (pyqt5.multimediaEnabled) [
-      gst_all_1.gst-libav
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-      gst_all_1.gst-vaapi
-      gst_all_1.gstreamer
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      pyobjc-core
+      pyobjc-framework-Cocoa
     ];
 
-  buildInputs =
-    [
-      qt5.qtbase
-      qt5.qtwayland
-    ]
-    ++ lib.optionals (pyqt5.multimediaEnabled) [
-      qt5.qtmultimedia.bin
-    ];
-
-  propagatedBuildInputs = with pythonPackages; [
-    chromaprint
-    discid
-    fasteners
-    markdown
-    mutagen
-    pyjwt
-    pyqt5
-    python-dateutil
-    pyyaml
+  # Not reporting any of these issues because the next upstream version will
+  # include many breaking changes and this might not be relevant.
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    "test/test_const_appdirs.py::AppPathsTest::test_cache_folder_macos" # - AssertionError: '/nix/var/nix/builds/nix-54642-966088698/.h[33 chars]card' ...
+    "test/test_const_appdirs.py::AppPathsTest::test_config_folder_macos" # - AssertionError: '/nix/var/nix/builds/nix-54642-966088698/.h[38 chars]card' ...
+    "test/test_const_appdirs.py::AppPathsTest::test_plugin_folder_macos" # - AssertionError: '/nix/var/nix/builds/nix-54642-966088698/.h[46 chars]gins' ...
+    "test/test_plugins.py" # Various PermissionError for /var/empty/Library - hopefully will be resolved in the next release.
+    "test/test_utils.py::HiddenFileTest::test_macos" # - FileNotFoundError: [Errno 2] No such file or directory: 'SetFile'
   ];
 
   setupPyGlobalFlags = [
@@ -69,19 +96,26 @@ pythonPackages.buildPythonApplication rec {
     "--localedir=${placeholder "out"}/share/locale"
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [
+    pythonPackages.pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
   doCheck = true;
 
   # In order to spare double wrapping, we use:
-  preFixup =
-    ''
-      makeWrapperArgs+=("''${qtWrapperArgs[@]}")
-    ''
-    + lib.optionalString (pyqt5.multimediaEnabled) ''
-      makeWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
-    '';
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  ''
+  + lib.optionalString pyqt5.multimediaEnabled ''
+    makeWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
+  '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "release-(.*)"
+    ];
+  };
 
   meta = {
     homepage = "https://picard.musicbrainz.org";
@@ -92,4 +126,4 @@ pythonPackages.buildPythonApplication rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

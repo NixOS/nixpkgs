@@ -5,12 +5,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wipe";
   version = "2.3.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/wipe/${version}/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/wipe/${finalAttrs.version}/wipe-${finalAttrs.version}.tar.bz2";
     hash = "sha256-RjkWNw+bNbs0QZwsCuPcTApHHbMuhZWvodFMAze2GqA=";
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wipe.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.abbradar ];
+    maintainers = [ ];
     mainProgram = "wipe";
   };
-}
+})

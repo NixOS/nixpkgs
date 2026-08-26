@@ -21,19 +21,18 @@
 
 rustPlatform.buildRustPackage {
   pname = "crosvm";
-  version = "0-unstable-2025-04-25";
+  version = "0-unstable-2026-08-03";
 
   src = fetchgit {
     url = "https://chromium.googlesource.com/chromiumos/platform/crosvm";
-    rev = "6b75e831de4d5f44a362142d25b77d9c4d7988aa";
-    hash = "sha256-hqnzKFdjM32omoECKYTGkSukkpy837e44vMMnN5B05I=";
+    rev = "b4a952843aea56f36b1cdccea3cc3b92edc078b8";
+    hash = "sha256-yQZ+Sf/pRScIGERyA8J4V9ukCwD0bjbi2QIhIzUHQwA=";
     fetchSubmodules = true;
   };
 
   separateDebugInfo = true;
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-A5yHGG5KEsSUlDb+m+R6NnKEvReClPaGRxWjNjXlgys=";
+  cargoHash = "sha256-wZm3bjXQJXHOgRVq5+AxMA0DJpEp96xvgwxzKBeI9HU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -57,8 +56,10 @@ rustPlatform.buildRustPackage {
     patchShebangs third_party/minijail/tools/*.py
   '';
 
-  CROSVM_USE_SYSTEM_MINIGBM = true;
-  CROSVM_USE_SYSTEM_VIRGLRENDERER = true;
+  env = {
+    CROSVM_USE_SYSTEM_MINIGBM = true;
+    CROSVM_USE_SYSTEM_VIRGLRENDERER = true;
+  };
 
   buildFeatures = [ "virgl_renderer" ];
 
@@ -77,12 +78,12 @@ rustPlatform.buildRustPackage {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Secure virtual machine monitor for KVM";
     homepage = "https://crosvm.dev/";
     mainProgram = "crosvm";
-    maintainers = with maintainers; [ qyliss ];
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ qyliss ];
+    license = lib.licenses.bsd3;
     platforms = [
       "aarch64-linux"
       "riscv64-linux"

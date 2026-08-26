@@ -9,13 +9,12 @@
   js_of_ocaml-lwt,
   nodejs,
   lwt_ppx,
+  ppx_expect,
 }:
 
 buildDunePackage {
   pname = "cohttp-lwt-jsoo";
   inherit (cohttp-lwt) version src;
-
-  duneVersion = "3";
 
   propagatedBuildInputs = [
     cohttp
@@ -31,6 +30,7 @@ buildDunePackage {
   checkInputs = [
     nodejs
     lwt_ppx
+    ppx_expect
   ];
 
   meta = cohttp-lwt.meta // {

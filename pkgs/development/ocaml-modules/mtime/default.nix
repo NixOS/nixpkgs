@@ -8,36 +8,32 @@
   topkg,
 }:
 
-lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
-  "mtime is not available for OCaml ${ocaml.version}"
+stdenv.mkDerivation (finalAttrs: {
+  pname = "ocaml${ocaml.version}-mtime";
+  version = "2.2.0";
 
-  stdenv.mkDerivation
-  rec {
-    pname = "ocaml${ocaml.version}-mtime";
-    version = "2.1.0";
+  src = fetchurl {
+    url = "https://erratique.ch/software/mtime/releases/mtime-${finalAttrs.version}.tbz";
+    hash = "sha256-+SEKB8Sj6xdWpF+ooyl02bXdrTWDw0AEQv3+LJ1j1jY=";
+  };
 
-    src = fetchurl {
-      url = "https://erratique.ch/software/mtime/releases/mtime-${version}.tbz";
-      sha256 = "sha256-CXyygC43AerZVy4bSD1aKMbi8KOUSfqvm0StiomDTYg=";
-    };
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    ocamlbuild
+    topkg
+  ];
+  buildInputs = [ topkg ];
 
-    nativeBuildInputs = [
-      ocaml
-      findlib
-      ocamlbuild
-      topkg
-    ];
-    buildInputs = [ topkg ];
+  strictDeps = true;
 
-    strictDeps = true;
+  inherit (topkg) buildPhase installPhase;
 
-    inherit (topkg) buildPhase installPhase;
-
-    meta = with lib; {
-      description = "Monotonic wall-clock time for OCaml";
-      homepage = "https://erratique.ch/software/mtime";
-      inherit (ocaml.meta) platforms;
-      maintainers = [ maintainers.vbgl ];
-      license = licenses.bsd3;
-    };
-  }
+  meta = {
+    description = "Monotonic wall-clock time for OCaml";
+    homepage = "https://erratique.ch/software/mtime";
+    inherit (ocaml.meta) platforms;
+    maintainers = [ lib.maintainers.vbgl ];
+    license = lib.licenses.bsd3;
+  };
+})

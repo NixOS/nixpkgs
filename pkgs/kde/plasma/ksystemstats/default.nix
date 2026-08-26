@@ -2,16 +2,18 @@
   mkKdeDerivation,
   pkg-config,
   libksysguard,
-  networkmanager-qt,
   lm_sensors,
   libnl,
 }:
 mkKdeDerivation {
   pname = "ksystemstats";
 
+  patches = [
+    ./helper-path.patch
+  ];
+
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
-    networkmanager-qt
     lm_sensors
     libnl
   ];

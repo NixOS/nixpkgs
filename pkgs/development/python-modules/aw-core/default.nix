@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   poetry-core,
   jsonschema,
   peewee,
@@ -21,7 +20,7 @@ buildPythonPackage rec {
   pname = "aw-core";
   version = "0.5.17";
 
-  format = "pyproject";
+  pyproject = true;
 
   # pypi distribution doesn't include tests, so build from source instead
   src = fetchFromGitHub {
@@ -30,8 +29,6 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "sha256-bKxf+fqm+6V3JgDluKVpqq5hRL3Z+x8SHMRQmNe8vUA=";
   };
-
-  disabled = pythonOlder "3.8";
 
   nativeBuildInputs = [
     poetry-core

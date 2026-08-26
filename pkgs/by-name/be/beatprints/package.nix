@@ -5,14 +5,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "BeatPrints";
-  version = "1.1.4";
+  version = "1.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TrueMyst";
     repo = "BeatPrints";
     rev = "v${version}";
-    hash = "sha256-HtYPEnHbJarSC3P337l3IGagk62FgEohSAVyv6PBnIs=";
+    hash = "sha256-ExeNNN2ce3XB9dpNR4RUZTXWVI0dPdFT7/FvSFAWBw4=";
   };
 
   build-system = with python3Packages; [
@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
     spotipy
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Create eye-catching, Pinterest-style music posters effortlessly";
     longDescription = ''
       Create eye-catching, Pinterest-style music posters effortlessly. BeatPrints integrates with Spotify and LRClib API to help you design custom posters for your favorite tracks or albums. 🍀
@@ -44,8 +44,8 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://beatprints.readthedocs.io";
     changelog = "https://github.com/TrueMyst/BeatPrints/releases/tag/v${version}";
     mainProgram = "beatprints";
-    license = licenses.cc-by-nc-sa-40;
-    maintainers = with maintainers; [ DataHearth ];
-    platforms = platforms.all;
+    license = lib.licenses.cc-by-nc-sa-40;
+    maintainers = with lib.maintainers; [ DataHearth ];
+    platforms = lib.platforms.all;
   };
 }

@@ -84,8 +84,8 @@ buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "remote-ssh";
     publisher = "ms-vscode-remote";
-    version = "0.119.0";
-    hash = "sha256-S6quMPlDNSLIqyMmTZsDts5bLh2LBdAPuQibT3AEHH8=";
+    version = "0.124.0";
+    hash = "sha256-GokSJOEpHomkBbkPUBhVXWZCrGbi5oZTlw5PFV12ZBY=";
   };
 
   postPatch = ''
@@ -100,6 +100,6 @@ buildVscodeMarketplaceExtension {
   meta = {
     description = "Use any remote machine with a SSH server as your development environment";
     license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.tbenst ];
+    maintainers = [ ];
   };
 }

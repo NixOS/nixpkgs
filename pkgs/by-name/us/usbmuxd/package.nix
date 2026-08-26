@@ -8,15 +8,15 @@
   libusb1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "usbmuxd";
-  version = "1.1.1+date=2023-05-05";
+  version = "1.1.1+date=2025-12-06";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
-    repo = pname;
-    rev = "01c94c77f59404924f1c46d99c4e5e0c7817281b";
-    hash = "sha256-WqbobkzlJ9g5fb9S2QPi3qdpCLx3pxtNlT7qDI63Zp4=";
+    repo = "usbmuxd";
+    rev = "3ded00c9985a5108cfc7591a309f9a23d57a8cba";
+    hash = "sha256-0ZxEdU6LAUT0XfRk/PnRGl+r2ofttpffI8MiQljukVA=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   preAutoreconf = ''
-    export RELEASE_VERSION=${version}
+    export RELEASE_VERSION=${finalAttrs.version}
   '';
 
   configureFlags = [
@@ -38,7 +38,9 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
   ];
 
-  meta = with lib; {
+  doInstallCheck = true;
+
+  meta = {
     homepage = "https://github.com/libimobiledevice/usbmuxd";
     description = "Socket daemon to multiplex connections from and to iOS devices";
     longDescription = ''
@@ -50,9 +52,9 @@ stdenv.mkDerivation rec {
       a virtual network device. Multiple connections to different TCP ports can happen
       in parallel. The higher-level layers are handled by libimobiledevice.
     '';
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = [ ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ProxyVT ];
     mainProgram = "usbmuxd";
   };
-}
+})

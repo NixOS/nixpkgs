@@ -4,23 +4,23 @@
   fetchFromGitHub,
   cmake,
   qt6,
-  darwin,
-  overrideSDK,
 }:
-let
-  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "notes";
   version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "nuttyartist";
     repo = "notes";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ceZ37torgnxZJybacjnNG+kNAU/I2Ki7ZZ7Tzn4pIas=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Based on https://github.com/nuttyartist/notes/pull/758 which doesn't apply cleanly
+    ./qt610-fix.patch
+  ];
 
   cmakeFlags = [ "-DUPDATE_CHECKER=OFF" ];
 
@@ -29,14 +29,10 @@ stdenv'.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      qt6.qtbase
-      qt6.qtdeclarative
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.Cocoa
-    ];
+  buildInputs = [
+    qt6.qtbase
+    qt6.qtdeclarative
+  ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications

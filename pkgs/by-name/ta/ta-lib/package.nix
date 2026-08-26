@@ -3,32 +3,31 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ta-lib";
-  version = "0.4.0";
+  version = "0.7.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
-    owner = "rafa-dot-el";
-    repo = "talib";
-    rev = version;
-    sha256 = "sha256-bIzN8f9ZiOLaVzGAXcZUHUh/v9z1U+zY+MnyjJr1lSw=";
+    owner = "TA-Lib";
+    repo = "ta-lib";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tme5YuTWdf4lCsWXF97kSeka7Vmqte0vTjwtaUNN+kA=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    autoreconfHook
-  ];
-  hardeningDisable = [ "format" ];
+  nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
-    description = "TA-Lib is a library that provides common functions for the technical analysis of financial market data.";
+  meta = {
+    description = "Add technical analysis to your own financial market trading applications";
     mainProgram = "ta-lib-config";
     homepage = "https://ta-lib.org/";
+    changelog = "https://github.com/TA-Lib/ta-lib-python/blob/${finalAttrs.src.rev}/CHANGELOG";
     license = lib.licenses.bsd3;
-
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ rafael ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ rafael ];
   };
-}
+})

@@ -51,14 +51,17 @@
         inherit runCommand rustc;
       };
 
+      # Useful when rebuilding std
+      # e.g. when building wasm with wasm-pack
+      rustVendorSrc = callPackage ./rust-vendor-src.nix {
+        inherit runCommand rustc;
+      };
+
       # Hooks
       inherit
         (callPackages ../../../build-support/rust/hooks {
           inherit
             stdenv
-            cargo
-            rustc
-            callPackage
             ;
         })
         cargoBuildHook
@@ -69,14 +72,16 @@
         maturinBuildHook
         bindgenHook
         ;
+
+      # Let packages reference the build derivations, e.g. for disallowedReferences.
+      # Get rid of the splicing though, so `nativeBuildInputs = [ rustPlatform.rust.rustc ]` works.
+      rust = {
+        rustc = rustc.__spliced.hostTarget or rustc;
+        cargo = cargo.__spliced.hostTarget or cargo;
+      };
     };
 })
 // lib.optionalAttrs config.allowAliases {
-  rust = {
-    rustc = lib.warn "rustPlatform.rust.rustc is deprecated. Use rustc instead." rustc;
-    cargo = lib.warn "rustPlatform.rust.cargo is deprecated. Use cargo instead." cargo;
-  };
-
   # Added in 25.05.
   fetchCargoTarball = throw "`rustPlatform.fetchCargoTarball` has been removed in 25.05, use `rustPlatform.fetchCargoVendor` instead";
 }

@@ -6,12 +6,12 @@
 
 let
   pname = "bootstrap-studio";
-  version = "7.0.3";
+  version = "8.0.1";
   src = fetchurl {
     url = "https://releases.bootstrapstudio.io/${version}/Bootstrap%20Studio.AppImage";
-    sha256 = "sha256-QfIZ2Gn1XT27Y6B0452MMWiHnJfPEWy79VY5vZxtlyE=";
+    sha256 = "sha256-uVeD6g3A9ITKkBp3AxTPUM3nyhCbW79gPVTU7bIDmhs=";
   };
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 appimageTools.wrapType2 {
   inherit pname version src;
@@ -26,11 +26,11 @@ appimageTools.wrapType2 {
       $out/share/icons/hicolor/512x512/apps/bstudio.png
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Drag-and-drop designer for bootstrap";
     homepage = "https://bootstrapstudio.io/";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ khushraj ];
+    license = lib.licenses.unfree;
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

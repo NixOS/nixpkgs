@@ -1,38 +1,44 @@
 {
   lib,
-  platformdirs,
+  awesomeversion,
   buildPythonPackage,
+  cacert,
   docutils,
+  dulwich,
   fetchFromGitHub,
   flaky,
   installShellFiles,
+  jq,
+  lxml,
+  nix-update-script,
+  packaging,
+  platformdirs,
   pycurl,
+  pygit2,
   pytest-asyncio,
-  pytest-httpbin,
   pytestCheckHook,
+  pytest-httpbin,
+  pytest-rerunfailures,
   pythonOlder,
   setuptools,
   structlog,
-  tomli,
   tornado,
-  awesomeversion,
-  packaging,
-  lxml,
+  zstandard,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nvchecker";
-  version = "2.16";
+  version = "2.22";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lilydjwg";
     repo = "nvchecker";
-    tag = "v${version}";
-    hash = "sha256-HdL3BnjQZzKXtjhQqDst6dJH82g3BONFsGUnwzDMRDA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QNcL1zlcFkQgJwrBnk9ubDPUyNYvAsaZ0kZHl71AqEU=";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   build-system = [ setuptools ];
 
@@ -41,21 +47,37 @@ buildPythonPackage rec {
     installShellFiles
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     structlog
     platformdirs
     tornado
     pycurl
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
-  __darwinAllowLocalNetworking = true;
+  optional-dependencies = {
+    # vercmp = [ pyalpm ];
+    awesomeversion = [ awesomeversion ];
+    # portage = [ portage ];
+    pypi = [ packaging ];
+    htmlparser = [ lxml ];
+    rpmrepo = [ lxml ] ++ lib.optionals (pythonOlder "3.14") [ zstandard ];
+    jq = [ jq ];
+    git_pygit2 = [ pygit2 ];
+    git_dulwich = [ dulwich ];
+  };
+
+  env = lib.optionalAttrs finalAttrs.doInstallCheck {
+    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  };
 
   nativeCheckInputs = [
     flaky
     pytest-asyncio
     pytest-httpbin
+    pytest-rerunfailures
     pytestCheckHook
-  ];
+  ]
+  ++ builtins.concatLists (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   postBuild = ''
     patchShebangs docs/myrst2man.py
@@ -68,20 +90,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nvchecker" ];
 
-  pytestFlagsArray = [ "-m 'not needs_net'" ];
+  disabledTestMarks = [ "needs_net" ];
 
-  optional-dependencies = {
-    # vercmp = [ pyalpm ];
-    awesomeversion = [ awesomeversion ];
-    pypi = [ packaging ];
-    htmlparser = [ lxml ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "New version checker for software";
     homepage = "https://github.com/lilydjwg/nvchecker";
-    changelog = "https://github.com/lilydjwg/nvchecker/releases/tag/v${version}";
+    changelog = "https://github.com/lilydjwg/nvchecker/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
-}
+})

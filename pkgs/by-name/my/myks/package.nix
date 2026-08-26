@@ -8,26 +8,26 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "myks";
-  version = "4.8.1";
+  version = "5.13.3";
 
   src = fetchFromGitHub {
     owner = "mykso";
     repo = "myks";
-    tag = "v${version}";
-    hash = "sha256-bjry2szn4bOGsIeJl221T+6aV+MW9yXQcLBS3sJcswQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/NVDZNEVyfIoVF78UA0iIx2d/S6sMTXsK4SAo/AHoww=";
   };
 
-  vendorHash = "sha256-kUOjbBosj2u25n/fGoC0DpAYkWIgoxIfkXJlNpRALfw=";
+  vendorHash = "sha256-vW8N2GYkKjQfPhcqT5gpIQMWnJxaJ3bBDpF6BEzrspk=";
 
   subPackages = ".";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
-    "-X=main.commit=nixpkg-${version}"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.commit=nixpkg-${finalAttrs.version}"
     "-X=main.date=1970-01-01"
   ];
 
@@ -44,15 +44,15 @@ buildGoModule rec {
       --fish <($out/bin/myks completion fish)
   '';
 
-  meta = with lib; {
-    changelog = "https://github.com/mykso/myks/blob/v${version}/CHANGELOG.md";
+  meta = {
+    changelog = "https://github.com/mykso/myks/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Configuration framework for Kubernetes applications";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/mykso/myks";
     maintainers = [
-      maintainers.kbudde
-      maintainers.zebradil
+      lib.maintainers.kbudde
+      lib.maintainers.zebradil
     ];
     mainProgram = "myks";
   };
-}
+})

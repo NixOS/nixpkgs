@@ -6,13 +6,13 @@
   jdk,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lombok";
-  version = "1.18.38";
+  version = "1.18.46";
 
   src = fetchurl {
-    url = "https://projectlombok.org/downloads/lombok-${version}.jar";
-    sha256 = "sha256-Hh5CfDb/Y8RP0w7yktnnc+oxVEYKtiZdP+1+b1vFD7k=";
+    url = "https://projectlombok.org/downloads/lombok-${finalAttrs.version}.jar";
+    sha256 = "sha256-AfexoBXjPiti1fXzcFMwY1erFBX9GB/Lp3lPXRmMESY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     homepage = "https://projectlombok.org/";
     maintainers = [ lib.maintainers.CrystalGamma ];
   };
-}
+})

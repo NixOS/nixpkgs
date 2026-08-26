@@ -1,42 +1,51 @@
 {
   lib,
-  buildPythonPackage,
-  fetchPypi,
-  requests,
   audioread,
+  buildPythonPackage,
+  fetchFromGitHub,
   pkgs,
+  poetry-core,
+  pytestCheckHook,
+  requests,
+  stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyacoustid";
-  version = "1.3.0";
-  format = "setuptools";
+  version = "1.3.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-X09IcZHBnruQgnCxt7UpfxMtozKxVouWqRRXTAee0Xc=";
+  src = fetchFromGitHub {
+    owner = "beetbox";
+    repo = "pyacoustid";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7bL1g7Zvzc+Re0zSjsEqFsNzgkgwh+onoS4sQk0t55o=";
   };
 
-  propagatedBuildInputs = [
-    requests
-    audioread
-  ];
-
   postPatch = ''
-    sed -i \
-        -e '/^FPCALC_COMMAND *=/s|=.*|= "${pkgs.chromaprint}/bin/fpcalc"|' \
-        acoustid.py
+    substituteInPlace chromaprint.py \
+      --replace "ctypes.CDLL(name" 'ctypes.CDLL("${lib.getLib pkgs.chromaprint}/lib/libchromaprint${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';
 
-  # package has no tests
-  doCheck = false;
+  build-system = [
+    poetry-core
+  ];
+
+  dependencies = [
+    audioread
+    requests
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "acoustid" ];
 
-  meta = with lib; {
-    description = "Bindings for Chromaprint acoustic fingerprinting";
-    homepage = "https://github.com/sampsyo/pyacoustid";
-    license = licenses.mit;
+  meta = {
+    description = "Bindings for Chromaprint acoustic fingerprinting and the Acoustid Web service";
+    homepage = "https://github.com/beetbox/pyacoustid";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
