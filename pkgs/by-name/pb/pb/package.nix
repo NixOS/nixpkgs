@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "pb";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "parseablehq";
     repo = "pb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GpG++ZoIKZTozS6QdxKIMfNgmTp3U/bChdbVPzPM468=";
+    hash = "sha256-JFoMArwAjOr2zyshrC/BDGe3Uit4TBNgA5vHm9CsdEU=";
   };
 
   vendorHash = "sha256-hEVoz8EgC2hAkiC0LNZ+h/Hy7toVxWvv2gchymfpMK8=";
