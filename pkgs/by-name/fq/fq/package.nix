@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   fq,
+  installShellFiles,
   testers,
 }:
 
@@ -26,6 +27,10 @@ buildGoModule (finalAttrs: {
   ];
 
   subPackages = [ "." ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = "installManPage doc/fq.1";
 
   passthru.tests = testers.testVersion { package = fq; };
 

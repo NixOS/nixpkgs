@@ -9,13 +9,12 @@
   setuptools,
 }:
 buildPythonPackage rec {
-  pname = "python-unrar";
+  pname = "unrar";
   version = "0.4";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "unrar";
-    inherit version;
+    inherit pname version;
     hash = "sha256-skRHpbkwJL5gDvglVmi6I6MPRRF2V3tpFVnqE1n30WQ=";
   };
 
