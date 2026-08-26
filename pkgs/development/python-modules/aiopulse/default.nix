@@ -7,13 +7,13 @@
   psutil,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiopulse";
   version = "0.5.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-acUcJM5ghUKezpYTncDADQTZa6NMyteG6Yu7GFPbuLs=";
   };
 
@@ -38,8 +38,8 @@ buildPythonPackage rec {
       binary protocol to issues commands to the Pulse Hub.
     '';
     homepage = "https://github.com/atmurray/aiopulse";
-    changelog = "https://github.com/atmurray/aiopulse/releases/tag/v${version}";
+    changelog = "https://github.com/atmurray/aiopulse/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
