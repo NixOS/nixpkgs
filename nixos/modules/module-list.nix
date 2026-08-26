@@ -1069,6 +1069,7 @@
   ./services/monitoring/incron.nix
   ./services/monitoring/kapacitor.nix
   ./services/monitoring/karma.nix
+  ./services/monitoring/kener.nix
   ./services/monitoring/kthxbye.nix
   ./services/monitoring/librenms.nix
   ./services/monitoring/loki.nix
