@@ -11,25 +11,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAtts: {
   pname = "levenshtein";
-  version = "0.27.3";
+  version = "0.27.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rapidfuzz";
     repo = "Levenshtein";
-    tag = "v${version}";
-    hash = "sha256-iKWS7gm0t3yPgeX5N09cTa3N1C6GXvIALueO8DlfLfE=";
+    tag = "v${finalAtts.version}";
+    hash = "sha256-GPOiwbK1dV6lF3xiBCjzC3hXMWVVggvkviLHXSMU+Vs=";
   };
-
-  # https://github.com/rapidfuzz/Levenshtein/pull/84
-  patches = [ ./cython-3.2-compat.patch ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "Cython>=3.1.6,<3.2.0" Cython
-  '';
 
   build-system = [
     cmake
@@ -51,8 +43,8 @@ buildPythonPackage rec {
   meta = {
     description = "Functions for fast computation of Levenshtein distance and string similarity";
     homepage = "https://github.com/rapidfuzz/Levenshtein";
-    changelog = "https://github.com/rapidfuzz/Levenshtein/blob/v${version}/HISTORY.md";
+    changelog = "https://github.com/rapidfuzz/Levenshtein/blob/v${finalAtts.version}/HISTORY.md";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
