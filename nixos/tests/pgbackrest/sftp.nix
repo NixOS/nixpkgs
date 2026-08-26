@@ -73,7 +73,7 @@ in
         HOME="/var/lib/pgbackrest"
         cat ${snakeOilPrivateKey} > ~/sftp_key
         chown -R pgbackrest:pgbackrest ~/sftp_key
-        chmod 770 ~
+        chmod 640 ~/sftp_key
       """))
 
       with subtest("backup/restore works with local instance/remote repo (SFTP)"):

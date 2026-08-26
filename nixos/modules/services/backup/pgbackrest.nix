@@ -396,6 +396,9 @@ in
           useDefaultShell = true;
           createHome = true;
           home = cfg.repos.localhost.path or "/var/lib/pgbackrest";
+          # share access to the SFTP key with the pgBackRest group,
+          # e.g. the postgresql user
+          homeMode = lib.mkIf config.services.postgresql.enable "710";
         };
         users.groups.pgbackrest = { };
 
