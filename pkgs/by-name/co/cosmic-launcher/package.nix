@@ -9,19 +9,36 @@
   nixosTests,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "cosmic-launcher";
-  version = "1.6.0";
+let
+  version = "1.7.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-launcher";
-    tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-BQemb4435oF2Pc7RD48O/09bM91OOl3MzndEE5G/m6E=";
+    tag = "epoch-${version}";
+    hash = "sha256-zlqFX2DNQu5LqxbBcPK22H8N076k2JwmhNaVcnZbk1I=";
   };
 
-  cargoHash = "sha256-TCgQ1WMvyqa+YdpUWDPaWzbkQDNX1YEIxqx2M+ENKH0=";
+  xdgen-generate = rustPlatform.buildRustPackage {
+    pname = "xdgen-generate";
+    version = "0.1.0";
+
+    src = "${src}/scripts/xdgen";
+
+    cargoHash = "sha256-Zf41g3ZpY0McDGhvmKReV77p4/laHUIBNievOMGbToE=";
+
+    meta.mainProgram = "xdgen-generate";
+  };
+in
+
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "cosmic-launcher";
+  inherit version;
+
+  inherit src;
+
+  cargoHash = "sha256-rD3zgkf13cc2YgDWcKxs3MDH4aORVz+dsxpm5tqrszU=";
 
   separateDebugInfo = true;
   __structuredAttrs = true;
@@ -45,7 +62,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
+  preInstall = ''
+    env \
+        APP_ID=com.system76.CosmicLauncher \
+        APP_NAME=cosmic-launcher \
+        ${lib.getExe xdgen-generate}
+  '';
+
   passthru = {
+    # so that we can build the script derivation by referencing this derivation
+    inherit xdgen-generate;
     tests = {
       inherit (nixosTests)
         cosmic
