@@ -14,19 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "delly";
-  version = "2.1.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "dellytools";
     repo = "delly";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-pDylNWYdt7vrQUqaIE2XBopcETAFqHfZP+8mqeoUN+U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-W7qPiwYwTv26XLlBX2ZCTu6HGZrKcb4rlY2DCllm21w=";
   };
-
-  postPatch = lib.optionalString stdenv.cc.isClang ''
-    substituteInPlace Makefile \
-      --replace-fail "-std=c++17" "-std=c++14"
-  '';
 
   buildInputs = [
     boost
@@ -53,15 +48,16 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     simple = runCommand "${finalAttrs.pname}-test" { } ''
       mkdir $out
-      ${lib.getExe delly} call -g ${delly.src}/example/ref.fa ${delly.src}/example/sr.bam > $out/sr.vcf
+      ${lib.getExe delly} sr -g ${delly.src}/example/ref.fa ${delly.src}/example/sr.bam > $out/sr.vcf
       ${lib.getExe delly} lr -g ${delly.src}/example/ref.fa ${delly.src}/example/lr.bam > $out/lr.vcf
       ${lib.getExe delly} cnv -g ${delly.src}/example/ref.fa -m ${delly.src}/example/map.fa.gz ${delly.src}/example/sr.bam > cnv.vcf
     '';
   };
 
   meta = {
-    description = "Structural variant caller for mapped DNA sequenced data";
+    description = "Structural variant discovery by integrated paired-end and split-read analysis";
     homepage = "https://github.com/dellytools/delly";
+    changelog = "https://github.com/dellytools/delly/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "delly";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
@@ -73,5 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
       split-reads and read-depth to sensitively and accurately delineate
       genomic rearrangements throughout the genome.
     '';
+    maintainers = with lib.maintainers; [
+      debtquity
+    ];
   };
 })

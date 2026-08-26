@@ -17208,8 +17208,6 @@ self: super: with self; {
 
   python-ulid = callPackage ../development/python-modules/python-ulid { };
 
-  python-unrar = callPackage ../development/python-modules/python-unrar { inherit (pkgs) unrar; };
-
   python-utils = callPackage ../development/python-modules/python-utils { };
 
   python-vagrant = callPackage ../development/python-modules/python-vagrant { };
@@ -21957,6 +21955,8 @@ self: super: with self; {
   unix-ar = callPackage ../development/python-modules/unix-ar { };
 
   unpaddedbase64 = callPackage ../development/python-modules/unpaddedbase64 { };
+
+  unrar = callPackage ../development/python-modules/unrar { inherit (pkgs) unrar; };
 
   unrardll = callPackage ../development/python-modules/unrardll { };
 

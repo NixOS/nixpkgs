@@ -14,7 +14,8 @@
   libmilter,
   pcre2,
   libmspack,
-  systemd,
+  systemdLibs,
+  systemdSupport ? stdenv.hostPlatform.isLinux,
   json_c,
   check,
   rustc,
@@ -62,12 +63,14 @@ stdenv.mkDerivation (finalAttrs: {
     json_c
     check
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux systemd;
+  ++ lib.optional systemdSupport systemdLibs;
 
   cmakeFlags = [
-    "-DSYSTEMD_UNIT_DIR=${placeholder "out"}/lib/systemd"
     "-DAPP_CONFIG_DIRECTORY=/etc/clamav"
     "-DCVD_CERTS_DIRECTORY=${placeholder "out"}/share/clamav/certs"
+  ]
+  ++ lib.optionals systemdSupport [
+    "-DSYSTEMD_UNIT_DIR=${placeholder "out"}/lib/systemd"
   ];
 
   # Fails on darwin with sandboxing
