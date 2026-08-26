@@ -273,6 +273,23 @@ in
           (lib.getLib cfg.pkcs11.package)
         ];
 
+        # Register the module with p11-kit, so that PKCS#11 consumers going
+        # through the p11-kit proxy (e.g. the OpenSSL pkcs11 engine/provider
+        # from libp11, GnuTLS, Firefox) discover the TPM2 token without
+        # per-application module path configuration.
+        # Upstream ships this registration and installs it into p11-kit's
+        # module config directory, as queried from p11-kit's pkg-config; see
+        # https://github.com/tpm2-software/tpm2-pkcs11/blob/1.10.1/misc/p11-kit/tpm2_pkcs11.module
+        # On NixOS that directory is p11-kit's own immutable store path, so
+        # the file never reaches the p11-kit actually in use. Register the
+        # module in the system config directory instead (/etc/pkcs11, from
+        # p11-kit's --sysconfdir=/etc), which p11-kit reads at runtime.
+        environment.etc."pkcs11/modules/tpm2_pkcs11.module" = lib.mkIf cfg.pkcs11.enable {
+          text = ''
+            module: ${lib.getLib cfg.pkcs11.package}/lib/libtpm2_pkcs11.so
+          '';
+        };
+
         services.udev.extraRules = lib.mkIf cfg.applyUdevRules (udevRules cfg.tssUser cfg.tssGroup);
 
         # Create the tss user and group only if the default value is used
