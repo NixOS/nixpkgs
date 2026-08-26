@@ -82,6 +82,7 @@
     name = "David mp";
   };
   _0k4r1m = {
+    matrix = "@darkdesync:matrix.org";
     name = "0k4r1m";
     github = "0k4r1m";
     githubId = 318737393;
