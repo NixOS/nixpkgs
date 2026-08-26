@@ -39,6 +39,6 @@ buildPythonPackage (finalAttrs: {
     description = "Kernels data structures";
     homepage = "https://pypi.org/project/kernels-data";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 })
