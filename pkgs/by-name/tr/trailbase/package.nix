@@ -21,7 +21,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "trailbase";
-  version = "0.32.2";
+  version = "0.123.3";
 
   __structuredAttrs = true;
 
@@ -29,11 +29,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "trailbaseio";
     repo = "trailbase";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b+HtxTg9UN5uvix9FkzRnRr7eP6dLVGz0v8UPqeTqaM=";
+    hash = "sha256-M617YtAiagUV35iUhsD7elwU738GAEIWy+wbxD/Mi5s=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-RUbP49jXJj8UC2Sww0UlH8uyEpkshi2gewNqZ7XYeG4=";
+  cargoHash = "sha256-d6U4VzcctFyWclnuQZePCu6DLB79cWQZY9Mz9kDioeI=";
 
   patches = [ ./skip-pnpm-install.patch ];
 
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-ue2hqveVMWEIB9GUD3NCohPO2VW2G+17L/OqLhz6UeE=";
+    hash = "sha256-CaxLi1RZlx4MlPZzAGe1g/PBdZiWtHst0xQPGVlLbNk=";
   };
 
   # wasmtime's cargo-auditable build is broken:
