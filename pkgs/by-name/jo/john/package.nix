@@ -94,6 +94,7 @@ stdenv.mkDerivation {
       dpkt
       scapy
       lxml
+      pyasn1
     ])
     # For office2john.py
     ++ (with python3Packages; [
