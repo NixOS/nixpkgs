@@ -71,6 +71,7 @@ let
       pkcs11Modules ? [ ],
       useGlvnd ? (!isDarwin),
       cfg ? config.${applicationName} or { },
+      appDataDir ? null,
 
       ## Following options are needed for extra prefs & policies
       # For more information about anti tracking (german website)
@@ -333,6 +334,11 @@ let
         "--set"
         "MOZ_ALLOW_DOWNGRADE"
         "1"
+      ]
+      ++ lib.optionals (appDataDir != null) [
+        "--set"
+        "MOZ_APP_DATA"
+        appDataDir
       ]
       ++ lib.optionals (!isDarwin) [
         "--suffix"
