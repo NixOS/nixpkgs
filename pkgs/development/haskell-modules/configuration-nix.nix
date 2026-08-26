@@ -1023,6 +1023,11 @@ builtins.intersectAttrs super {
   # https://github.com/plow-technologies/servant-streaming/issues/12
   servant-streaming-server = dontCheck super.servant-streaming-server;
 
+  # testsuite (namely Tasty tests) uses built package as a GHC plugin
+  # which does not work on Nix
+  # since the path hasn't been established yet
+  ghc-typelits-extra = dontCheck super.ghc-typelits-extra;
+
   reanimate = overrideCabal (drv: {
     buildTools = (drv.buildTools or [ ]) ++ [
       # needed for testsuite
