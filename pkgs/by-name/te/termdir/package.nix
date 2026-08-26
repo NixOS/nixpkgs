@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-E6KFkMra90APBF/UoSP3oUWGYE6+5tAaW43PVxB8y20=";
   };
 
-  cargoHash = "sha256-Ah1aNeuVKFaSEaDbF23SSXKuksBwvpcM9GkgHqK2/BA=";
+  cargoHash = "sha256-RGRZ/uMlG8SroXTWss/pq57VBZZcWpHmTNiVKM9+aKI=";
 
   meta = {
     description = "Fast terminal directory explorer";
