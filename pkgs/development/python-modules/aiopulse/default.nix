@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchPypi,
   hatchling,
+  psutil,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,10 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  dependencies = [ async-timeout ];
+  dependencies = [
+    async-timeout
+    psutil
+  ];
 
   # Tests are not present
   doCheck = false;
