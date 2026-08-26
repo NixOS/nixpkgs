@@ -14440,8 +14440,6 @@ self: super: with self; {
     }
   );
 
-  pyacaia-async = callPackage ../development/python-modules/pyacaia-async { };
-
   pyacoustid = callPackage ../development/python-modules/pyacoustid { };
 
   pyadjoint-ad = callPackage ../development/python-modules/pyadjoint-ad { };
