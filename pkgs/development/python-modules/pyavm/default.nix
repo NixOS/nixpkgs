@@ -2,12 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # tests
+  hatch-vcs,
+  hatchling,
   astropy,
   numpy,
   pillow,
@@ -24,9 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-vA9gXZV8H9bXdlUj/LqLmnI3esbFFGHCqDj+RGALzZo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
+  build-system = [
+    hatch-vcs
+    hatchling
   ];
 
   nativeCheckInputs = [
