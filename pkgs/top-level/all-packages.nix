@@ -2692,8 +2692,6 @@ with pkgs;
 
   pdfminer = with python3Packages; toPythonApplication pdfminer-six;
 
-  pdfium-binaries-v8 = pdfium-binaries.override { withV8 = true; };
-
   pdsh = callPackage ../tools/networking/pdsh {
     rsh = true; # enable internal rsh implementation
     ssh = openssh;
