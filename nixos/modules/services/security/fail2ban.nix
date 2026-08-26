@@ -413,10 +413,17 @@ in
         ProtectControlGroups = true;
       };
     };
-    systemd.sockets.fail2ban.wantedBy = [
-      "sockets.target"
-      "fail2ban.service"
-    ];
+
+    systemd.sockets.fail2ban = {
+      wantedBy = [
+        "sockets.target"
+        "fail2ban.service"
+      ];
+      listenStreams = [
+        ""
+        cfg.daemonSettings.Definition.socket
+      ];
+    };
 
     # Defaults for the daemon settings
     services.fail2ban.daemonSettings.Definition = {
