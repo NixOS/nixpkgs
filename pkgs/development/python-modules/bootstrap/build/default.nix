@@ -37,6 +37,9 @@ let
 
           runHook postInstall
         '';
+
+        strictDeps = true;
+        __structuredAttrs = true;
       }
       // attrs
     );

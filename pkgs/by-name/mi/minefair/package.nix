@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Fair and infinite implementation of Minesweeper";
     homepage = "https://github.com/LyricLy/minefair";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.pyrotelekinetic ];
+    maintainers = [ lib.maintainers.tr3foil ];
     mainProgram = "minefair";
   };
 })

@@ -110,7 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       _4evy
-      FlafyDev
       Gliczy
       NotAShelf
       Scrumplex

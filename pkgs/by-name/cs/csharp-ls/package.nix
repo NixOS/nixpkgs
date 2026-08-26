@@ -33,11 +33,5 @@ buildDotnetGlobalTool (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ GaetanLepage ];
-    badPlatforms = [
-      # Crashes immediately at runtime
-      # terminated by signal SIGKILL (Forced quit)
-      # https://github.com/razzmatazz/csharp-language-server/issues/211
-      "aarch64-darwin"
-    ];
   };
 })

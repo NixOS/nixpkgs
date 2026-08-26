@@ -26,6 +26,26 @@ let
     pkgs
     ;
 
+  # Helper function which traverses a (nested) set
+  # of derivations produced by mapTestOn and flattens
+  # it to a list of derivations suitable to be passed
+  # to `releaseTools.aggregate` as constituents.
+  # Removes all non derivations from the input jobList.
+  #
+  # accumulateDerivations :: [ Either Derivation AttrSet ] -> [ Derivation ]
+  #
+  # > accumulateDerivations [ drv1 "string" { foo = drv2; bar = { baz = drv3; }; } ]
+  # [ drv1 drv2 drv3 ]
+  accumulateDerivations =
+    jobList:
+    lib.concatMap (
+      attrs:
+      if lib.isDerivation attrs then
+        [ attrs ]
+      else
+        lib.optionals (lib.isAttrs attrs) (accumulateDerivations (lib.attrValues attrs))
+    ) jobList;
+
   # names of all subsets of `pkgs.haskell.packages`
   #
   # compilerNames looks like the following:
@@ -640,35 +660,34 @@ let
           '';
           teams = [ lib.teams.haskell ];
         };
-        globConstituents = true;
-        constituents = [
+        constituents = accumulateDerivations [
           # haskell specific tests
-          "tests.haskell.*"
+          jobs.tests.haskell
           # important top-level packages
-          "cabal-install.*"
-          "cabal2nix.*"
-          "cachix.*"
-          "darcs.*"
-          "haskell-language-server.*"
-          "hledger.*"
-          "hledger-ui.*"
-          "hpack.*"
-          "niv.*"
-          "pandoc.*"
-          "stack.*"
-          "stylish-haskell.*"
-          "shellcheck.*"
+          jobs.cabal-install
+          jobs.cabal2nix
+          jobs.cachix
+          jobs.darcs
+          jobs.haskell-language-server
+          jobs.hledger
+          jobs.hledger-ui
+          jobs.hpack
+          jobs.niv
+          jobs.pandoc
+          jobs.stack
+          jobs.stylish-haskell
+          jobs.shellcheck
           # important haskell (library) packages
-          "haskellPackages.cabal-plan.*"
-          "haskellPackages.distribution-nixpkgs.*"
-          "haskellPackages.hackage-db.*"
-          "haskellPackages.xmonad.*"
-          "haskellPackages.xmonad-contrib.*"
+          jobs.haskellPackages.cabal-plan
+          jobs.haskellPackages.distribution-nixpkgs
+          jobs.haskellPackages.hackage-db
+          jobs.haskellPackages.xmonad
+          jobs.haskellPackages.xmonad-contrib
           # haskell packages maintained by @peti
           # imported from the old hydra jobset
-          "haskellPackages.hopenssl.*"
-          "haskellPackages.hsemail.*"
-          "haskellPackages.hsyslog.*"
+          jobs.haskellPackages.hopenssl
+          jobs.haskellPackages.hsemail
+          jobs.haskellPackages.hsyslog
         ];
       };
       maintained = pkgs.releaseTools.aggregate {
@@ -677,8 +696,9 @@ let
           description = "Aggregate jobset of all haskell packages with a maintainer";
           teams = [ lib.teams.haskell ];
         };
-        globConstituents = true;
-        constituents = map (name: "haskellPackages.${name}.*") (maintainedPkgNames pkgs.haskellPackages);
+        constituents = accumulateDerivations (
+          map (name: jobs.haskellPackages."${name}") (maintainedPkgNames pkgs.haskellPackages)
+        );
       };
 
       muslGHCs = pkgs.releaseTools.aggregate {
@@ -689,10 +709,9 @@ let
             nh2
           ];
         };
-        globConstituents = true;
-        constituents = [
-          "pkgsMusl.haskell.compiler.ghcHEAD.*"
-          "pkgsMusl.haskell.compiler.native-bignum.ghcHEAD.*"
+        constituents = accumulateDerivations [
+          jobs.pkgsMusl.haskell.compiler.ghcHEAD
+          jobs.pkgsMusl.haskell.compiler.native-bignum.ghcHEAD
         ];
       };
 
@@ -705,10 +724,9 @@ let
             lib.maintainers.rnhmjoj
           ];
         };
-        globConstituents = true;
-        constituents = [
-          "pkgsStatic.haskell.packages.native-bignum.ghc948.*" # non-hadrian
-          "pkgsStatic.haskellPackages.*"
+        constituents = accumulateDerivations [
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc948 # non-hadrian
+          jobs.pkgsStatic.haskellPackages
         ];
       };
     }

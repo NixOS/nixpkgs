@@ -291,7 +291,7 @@ in
         };
         initial_session = mkIf (cfgAutoLogin.enable && (cfgAutoLogin.user != null)) {
           inherit (cfgAutoLogin) user;
-          command = ''${getExe pkgs.bash} -lc "${pkgs.systemd}/bin/systemd-cat $(<${autoLoginCommand})"'';
+          command = ''${getExe pkgs.bash} -lc "${config.systemd.package}/bin/systemd-cat $(<${autoLoginCommand})"'';
         };
       };
     };

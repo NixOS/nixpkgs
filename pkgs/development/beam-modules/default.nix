@@ -91,6 +91,11 @@ makeScopeWithSplicing' {
 
     }
     // lib.optionalAttrs config.allowAliases {
+      extend = throw ''
+        'beamPackages.extend' has been replaced by 'beamPackages.overrideScope'
+
+        See examples at https://nixos.org/manual/nixpkgs/unstable/#sec-beam
+      ''; # added 2026-08-24
       webdriver = throw "'beamPackages.webdriver' has been removed."; # added 2026-07-29
     };
 

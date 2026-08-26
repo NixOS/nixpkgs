@@ -32,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  strictDeps = true;
+
   cmakeFlags = lib.optional staticOnly "-DBUILD_SHARED_LIBS=OFF";
 
   outputs = [
@@ -59,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
     updateScript = nix-update-script { };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/google/brotli";

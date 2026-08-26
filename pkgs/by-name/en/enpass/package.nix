@@ -101,6 +101,7 @@ let
         "i686-linux"
       ];
       maintainers = with lib.maintainers; [ ewok ];
+      mainProgram = "Enpass";
     };
 
     nativeBuildInputs = [ makeWrapper ];

@@ -82,6 +82,8 @@ stdenv.mkDerivation (
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ readline ];
 
+    strictDeps = true;
+
     inherit patches;
 
     postPatch = ''
@@ -216,6 +218,8 @@ stdenv.mkDerivation (
           override pkgsTargetTarget.${luaAttr}
         );
       };
+
+    __structuredAttrs = true;
 
     meta = {
       homepage = "https://www.lua.org";

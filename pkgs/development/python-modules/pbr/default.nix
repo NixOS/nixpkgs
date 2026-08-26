@@ -9,19 +9,19 @@
 
 buildPythonPackage rec {
   pname = "pbr";
-  version = "7.0.3";
+  version = "7.1.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tGAE7DClMkZyaD7ISK7Z6PxQCw0mHUCjIpwtK7/O3Ck=";
+    hash = "sha256-Rjm4fMkdDVhHG3vaHyi30ISbpD15NcTEgvPHT+9xmAQ=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     distutils # for distutils.command in pbr/packaging.py
-    setuptools # for pkg_resources
+    setuptools
   ];
 
   # check in passthru.tests.pytest to escape infinite recursion with fixtures

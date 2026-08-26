@@ -15316,6 +15316,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  profile-nvim = buildVimPlugin {
+    pname = "profile.nvim";
+    version = "0-unstable-2025-03-05";
+    src = fetchFromGitHub {
+      owner = "stevearc";
+      repo = "profile.nvim";
+      rev = "30433d7513f0d14665c1cfcea501c90f8a63e003";
+      hash = "sha256-2Mk6VbC+K/WhTWF+yHyDhQKJhTi2rpo8VJsnO7ofHXs=";
+    };
+    meta.homepage = "https://github.com/stevearc/profile.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   project-nvim = buildVimPlugin {
     pname = "project.nvim";
     version = "6.0.2-1";

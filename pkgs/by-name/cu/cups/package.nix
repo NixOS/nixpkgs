@@ -14,7 +14,6 @@
   systemdLibs,
   acl,
   gmp,
-  darwin,
   libusb1 ? null,
   gnutls ? null,
   avahi ? null,
@@ -40,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     "lib"
     "dev"
     "man"
+    "doc"
   ];
 
   postPatch = ''

@@ -49,11 +49,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wasm-opt --enable-reference-types --enable-bulk-memory --strip -O3 $out/bin/js_pdk_core.wasm -o $out/bin/js_pdk_core.wasm
   '';
 
+  depsBuildBuild = [
+    nodejs
+    npmHooks.npmConfigHook
+  ];
+
   nativeBuildInputs = [
     binaryen
     lld
-    nodejs
-    npmHooks.npmConfigHook
     rustPlatform.bindgenHook
   ];
 

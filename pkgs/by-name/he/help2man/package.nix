@@ -56,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +x $out/bin/help2man
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Generate man pages from `--help' output";
     mainProgram = "help2man";
