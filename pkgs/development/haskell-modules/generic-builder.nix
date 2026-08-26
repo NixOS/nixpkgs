@@ -123,7 +123,8 @@ in
   doInstallIntermediates ? false,
   editedCabalFile ? null,
   # Cabal does not build the profiled dynamic objects required by wasm TH.
-  enableLibraryProfiling ? !stdenv.hostPlatform.isGhcjs && !stdenv.hostPlatform.isWasm,
+  enableLibraryProfiling ?
+    !stdenv.hostPlatform.isGhcjs && !stdenv.hostPlatform.isWasm && (ghc.enableProfiledLibs or true),
   enableExecutableProfiling ? false,
   profilingDetail ? "exported-functions",
   # TODO enable shared libs for cross-compiling

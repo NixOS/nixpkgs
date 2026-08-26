@@ -254,6 +254,21 @@
               "sha256-vtjT+TL/7sYPu4rcVV3xCqJQ+uqkyBbf9l0KIi97j/0=";
         })
       ]
+      ++
+        lib.optionals
+          (
+            stdenv.hostPlatform.isRiscV64
+            && lib.versionAtLeast version "9.10"
+            && lib.versionOlder version "9.12"
+          )
+          [
+            # Fix LLVM backend split sections causing bin/out reference cycles: https://gitlab.haskell.org/ghc/ghc/-/issues/26770
+            (fetchpatch {
+              name = "ghc-llvm-fix-split-sections.patch";
+              url = "https://gitlab.haskell.org/ghc/ghc/-/commit/b18b2c42c32488ad6d3480a56a1fcd753cad2023.patch";
+              hash = "sha256-kEgZARwcdnWcvjuTfyqnn8V1zAUczZN0qiy/1WbCy1s=";
+            })
+          ]
       ++ lib.optionals (lib.versionOlder version "9.12") [
         (fetchpatch {
           name = "ghc-rts-Fix-compile-on-powerpc64-elf-v1.patch";
@@ -927,6 +942,7 @@ stdenv.mkDerivation (
 
       inherit llvmPackages;
       inherit enableShared;
+      inherit enableProfiledLibs;
       inherit hasHaddock;
 
       # Expose hadrian used for bootstrapping, for debugging purposes
