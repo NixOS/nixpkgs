@@ -97,7 +97,7 @@ in
         source = pkgs.writeShellScript "restart-clatd" ''
           [ "$DEVICE_IFACE" = "${cfg.settings.clat-dev or "clat"}" ] && exit 0
           [ "$2" != "up" ] && [ "$2" != "down" ] && exit 0
-          ${pkgs.systemd}/bin/systemctl restart clatd.service
+          ${config.systemd.package}/bin/systemctl restart clatd.service
         '';
       }
     ];

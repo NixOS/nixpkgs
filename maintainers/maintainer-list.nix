@@ -21702,6 +21702,12 @@
     name = "Oops418";
     githubId = 93655215;
   };
+  opdavies = {
+    email = "oliver+github@oliverdavies.uk";
+    github = "opdavies";
+    githubId = 339813;
+    name = "Oliver Davies";
+  };
   opeik = {
     email = "sandro@stikic.com";
     github = "opeik";
@@ -23084,6 +23090,12 @@
     name = "Pradyuman Vig";
     keys = [ { fingerprint = "240B 57DE 4271 2480 7CE3  EAC8 4F74 D536 1C4C A31E"; } ];
   };
+  prauscher = {
+    email = "prauscher@prauscher.de";
+    github = "prauscher";
+    githubId = 175521;
+    name = "Patrick Rauscher";
+  };
   preisschild = {
     email = "florian@florianstroeger.com";
     github = "Preisschild";
@@ -23431,12 +23443,6 @@
     email = "adam@pyle.dev";
     github = "pyle";
     githubId = 7279609;
-  };
-  pyrotelekinetic = {
-    name = "Clover Ison";
-    email = "clover@isons.org";
-    github = "pyrotelekinetic";
-    githubId = 29682759;
   };
   pyrox0 = {
     name = "Pyrox";
@@ -29385,6 +29391,12 @@
     matrix = "@tpw_rules:matrix.org";
     github = "tpwrules";
     githubId = 208010;
+  };
+  tr3foil = {
+    name = "Clover Ison";
+    email = "clover@isons.org";
+    github = "tr3foil";
+    githubId = 29682759;
   };
   transcaffeine = {
     name = "transcaffeine";
