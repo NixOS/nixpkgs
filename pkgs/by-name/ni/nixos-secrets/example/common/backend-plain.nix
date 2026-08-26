@@ -1,6 +1,10 @@
+# An example plain-text secret backend written in Bash. The current
+# implementation of deploy.local deviates from the spec by not parsing the
+# input and deploying possibly stale files. The plan is to rewrite this in
+# Python soon.
 { lib, config, ... }:
 let
-  cfg = config.secrets.settings.plain;
+  cfg = config.secrets.settings.store.plain;
 
   mkScript =
     name: text: pkgs:
@@ -8,11 +12,12 @@ let
       pkgs.writeShellApplication {
         inherit name text;
         runtimeInputs = [ pkgs.coreutils ];
+        checkPhase = "";
       }
     );
 in
 {
-  options.secrets.settings.plain = {
+  options.secrets.settings.store.plain = {
     hostDirectory = lib.mkOption {
       type = lib.types.str;
       default = "/var/lib/secrets-ng-ng-plain/host/${config.networking.hostName}";
