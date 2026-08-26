@@ -98,6 +98,7 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
                             check=True,
                             text=True,
                             timeout=args.timeout,
+                            input="",
                         )
                     else:
                         subprocess.run(
@@ -138,6 +139,7 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
                             capture_output=not args.verbose,
                             check=True,
                             text=True,
+                            input="",
                             timeout=args.timeout,
                         )
                 except subprocess.CalledProcessError as e:
