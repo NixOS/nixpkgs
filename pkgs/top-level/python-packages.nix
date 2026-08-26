@@ -10828,6 +10828,8 @@ self: super: with self; {
 
   miniupnpc = callPackage ../development/python-modules/miniupnpc { };
 
+  mintotp = callPackage ../development/python-modules/mintotp { };
+
   mip = callPackage ../development/python-modules/mip { };
 
   mir-eval = callPackage ../development/python-modules/mir-eval { };
@@ -20972,6 +20974,8 @@ self: super: with self; {
   trackpy = callPackage ../development/python-modules/trackpy { };
 
   trafilatura = callPackage ../development/python-modules/trafilatura { };
+
+  trailbase = callPackage ../development/python-modules/trailbase { inherit (pkgs) trailbase; };
 
   trailrunner = callPackage ../development/python-modules/trailrunner { };
 
