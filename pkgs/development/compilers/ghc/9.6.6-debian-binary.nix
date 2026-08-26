@@ -346,6 +346,10 @@ stdenv.mkDerivation (finalAttrs: {
       # riscv64-linux
       lib.maintainers.liberodark
     ];
-    teams = [ lib.teams.haskell ];
+    teams = [
+      lib.teams.haskell
+      # loongarch64-linux
+      lib.teams.loongarch64
+    ];
   };
 })
