@@ -4,7 +4,7 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixbox";
   version = "0.2.0";
 
