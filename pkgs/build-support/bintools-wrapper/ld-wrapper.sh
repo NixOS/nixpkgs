@@ -212,14 +212,21 @@ if [[ "$NIX_DONT_SET_RPATH_@suffixSalt@" != 1 && "$linkType" != static-pie ]]; t
         else
             continue
         fi
+        symlinkDepth=0
         while [ -z "${rpaths[$dir]:-}" ] && [[ "$dir" != "${NIX_STORE:-}"/* ]] && [ -L "$dir" ]; do
+            (( ++symlinkDepth > 40 )) && break
             if dir2=$(readlink "$dir"); then
-                dir="dir2"
+                # A relative link target is relative to the directory containing
+                # the link, not to our working directory.
+                case "$dir2" in
+                    /*) dir="$dir2" ;;
+                    *) dir="${dir%/*}/$dir2" ;;
+                esac
             else
                 break
             fi
             if dir2=$(realpath -s "$dir"); then
-                dir="dir2"
+                dir="$dir2"
             else
                 break
             fi
