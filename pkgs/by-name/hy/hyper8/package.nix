@@ -51,9 +51,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     homepage = "https://hyper8.org";
-    description = "Static site generator for video publishing.";
+    changelog = "https://hyper8.org/changes/${finalAttrs.version}";
+    description = "Static site generator for video publishing";
+    longDescription = ''
+      * Build and publish video sites, from single videos to large archives
+      * No database, no programming, no maintenance required
+      * Compatible with virtually every webhost on this planet
+    '';
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
     mainProgram = "hyper8";
+    maintainers = with lib.maintainers; [
+      debtquity
+    ];
   };
 })
