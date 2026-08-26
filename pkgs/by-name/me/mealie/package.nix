@@ -9,68 +9,65 @@
   nix-update-script,
 
   # frontend
-  fetchYarnDeps,
+  pnpm_11,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   dart-sass,
   nodejs,
-  fixup-yarn-lock,
   stdenv,
-  yarn,
   writableTmpDirAsHomeHook,
 }:
 
 let
-  version = "3.22.0";
+  pnpm = pnpm_11;
+
+  version = "3.28.0";
   src = fetchFromGitHub {
     owner = "mealie-recipes";
     repo = "mealie";
     tag = "v${version}";
-    hash = "sha256-3jDKcDHiA+7ePJGEyGhBSZrhkFQYHrak+AiOHoMv2qE=";
+    hash = "sha256-8dZFR0lWyp0dkATaKJgGdG2dDsZ9s8B8zs3tHGrPc7g=";
   };
 
-  frontend = stdenv.mkDerivation {
+  frontend = stdenv.mkDerivation (finalAttrs: {
     name = "mealie-frontend";
     inherit version;
     src = "${src}/frontend";
 
     __structuredAttrs = true;
 
-    yarnOfflineCache = fetchYarnDeps {
-      yarnLock = "${src}/frontend/yarn.lock";
-      hash = "sha256-S0i7FGD6be/MIBZRDlEb65tzVUuMPLkg9rL71lkrmms=";
-    };
-
     nativeBuildInputs = [
-      fixup-yarn-lock
       nodejs
-      (yarn.override { inherit nodejs; })
+      pnpm
+      pnpmConfigHook
       writableTmpDirAsHomeHook
       dart-sass
     ];
+
+    pnpmDeps = fetchPnpmDeps {
+      pname = "mealie-frontend";
+      inherit pnpm;
+      inherit (finalAttrs) version src;
+      fetcherVersion = 4;
+      hash = "sha256-hdkQYMGFWDmWSyro/SNKsmoRn4Ngx8q8X7gKYY+6zEk=";
+    };
 
     env = {
       NUXT_TELEMETRY_DISABLED = 1;
     };
 
-    configurePhase = ''
-      runHook preConfigure
-
+    preConfigure = ''
       sed -i 's+"@nuxt/fonts",+// NUXT FONTS DISABLED+g' nuxt.config.ts
-
-      yarn config --offline set yarn-offline-mirror "$yarnOfflineCache"
-      fixup-yarn-lock yarn.lock
-      yarn install --offline --frozen-lockfile --no-progress --non-interactive --ignore-scripts
-      patchShebangs node_modules
-
-      substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
-        --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["dart-sass"];'
-
-      runHook postConfigure
     '';
 
     buildPhase = ''
       runHook preBuild
 
-      yarn --offline generate
+      substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+        --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["dart-sass"];'
+
+      pnpm generate
+
       runHook postBuild
     '';
 
@@ -88,7 +85,7 @@ let
         esch
       ];
     };
-  };
+  });
 
   python = python3;
   pythonpkgs = python.pkgs;
@@ -162,10 +159,13 @@ pythonpkgs.buildPythonApplication (finalAttrs: {
     rm -rf dev # Do not need dev scripts & code
 
     substituteInPlace pyproject.toml \
-     --replace-fail '"setuptools==83.0.0"' '"setuptools"'
+     --replace-fail '"setuptools==84.0.0"' '"setuptools"'
 
     substituteInPlace mealie/__init__.py \
       --replace-fail '__version__ = ' '__version__ = "v${version}" #'
+
+    # requires unpackaged `pydantic2ts` at import time
+    rm tests/unit_tests/test_code_generation.py
   '';
 
   postInstall =
@@ -193,17 +193,13 @@ pythonpkgs.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = with pythonpkgs; [
     pytestCheckHook
     pytest-asyncio
+    httpx2
   ];
 
   # Needed for tests
   preCheck = ''
     export NLTK_DATA=${nltk-data.averaged-perceptron-tagger-eng}
   '';
-
-  disabledTests = [
-    # pydantic_core._pydantic_core.ValidationError: 1 validation error
-    "test_pg_connection_url_encode_password"
-  ];
 
   passthru = {
     inherit frontend;
