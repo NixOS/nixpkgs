@@ -4,7 +4,7 @@
   stdenv,
 }:
 rec {
-  version = "9.2.0782";
+  version = "9.2.1001";
 
   outputs = [
     "out"
@@ -15,7 +15,7 @@ rec {
     owner = "vim";
     repo = "vim";
     rev = "v${version}";
-    hash = "sha256-D4IyDgl1JdmumDzO0uMg2LhoSnFUeqhcMJ6ImC17wzs=";
+    hash = "sha256-dV1rqGt10gNb2jBABfaLQ5Noqt8hb0WcCBBSChDfAFA=";
   };
 
   enableParallelBuilding = true;
