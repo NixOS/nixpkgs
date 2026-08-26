@@ -634,6 +634,8 @@ stdenvNoCC.mkDerivation {
     stdenvNoCC.mkDerivation {
       name = "win-dll-hook.sh";
       dontUnpack = true;
+      strictDeps = true;
+      __structuredAttrs = true;
       installPhase =
         if targetPlatform.isCygwin then
           ''
