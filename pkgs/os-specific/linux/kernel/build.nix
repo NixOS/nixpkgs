@@ -293,9 +293,6 @@ lib.makeOverridable (
     ++ commonMakeFlags;
 
     postPatch = ''
-      # Ensure that depmod gets resolved through PATH
-      sed -i Makefile -e 's|= /sbin/depmod|= depmod|'
-
       # Some linux-hardened patches now remove certain files in the scripts directory, so the file may not exist.
       [[ -f scripts/ld-version.sh ]] && patchShebangs scripts/ld-version.sh
 
