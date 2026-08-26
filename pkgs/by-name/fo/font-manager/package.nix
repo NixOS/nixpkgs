@@ -47,6 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/FontManager/font-manager/commit/cc0c148d90741e39615e3380d283f684a052dd94.patch";
       hash = "sha256-bRn+jVjBu6ZqmQCErgcqxv6OyFa4hkPYB5bvK7rEibA=";
     })
+    # Build fix for https://github.com/FontManager/font-manager/issues/467
+    # Vendored from https://github.com/FontManager/font-manager/pull/468
+    # Drop or switch to `fetchpatch` once upstream merges a fix.
+    ./pr-468-Fix-compilation-error-with-newer-Vala-versions.patch
   ];
 
   nativeBuildInputs = [
