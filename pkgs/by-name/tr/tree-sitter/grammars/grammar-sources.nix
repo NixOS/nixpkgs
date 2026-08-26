@@ -516,9 +516,9 @@
   };
 
   diff = {
-    version = "0.1.0";
+    version = "0.2.0";
     url = "github:the-mikedavis/tree-sitter-diff";
-    hash = "sha256-8rYLNGgoZSvvfqO2++nAgFKmvbkKJ3m+9B8bTXp6Us4=";
+    hash = "sha256-5HCBFE/99DJ9AYWSk18WRF3RGQpgpYAYA37bT54F0DI=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
