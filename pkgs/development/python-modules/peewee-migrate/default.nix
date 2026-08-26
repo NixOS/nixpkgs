@@ -15,7 +15,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "peewee-migrate";
   version = "2.3.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "klen";
     repo = "peewee_migrate";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-YWkEXTqzPVJbNK4117spYl8hOhu4kl7QhlXDONtlgSA=";
   };
 
@@ -51,8 +51,8 @@ buildPythonPackage rec {
   meta = {
     description = "Simple migration engine for Peewee";
     homepage = "https://github.com/klen/peewee_migrate";
-    changelog = "https://github.com/klen/peewee_migrate/blob/${version}/Changelog";
+    changelog = "https://github.com/klen/peewee_migrate/blob/${finalAttrs.src.tag}/Changelog";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})
