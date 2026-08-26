@@ -113,28 +113,17 @@ stdenv.mkDerivation (finalAttrs: {
   #
   # Where the host has no shell at all, `patchShebangs --host` finds nothing
   # and leaves the shebang as shipped, which is the best available answer.
-  #
-  # TODO: take the first branch unconditionally --- in the spirit of strictDeps,
-  # it is good to always be defensive rather than do something unnecessarily
-  # that we can only get away with when build == host.
-  + (
-    if isCross then
-      ''
-        local f flag
-        for f in scripts/*; do
-          if [[ "$f" == scripts/wcurl ]]; then
-            flag=--host
-          else
-            flag=--build
-          fi
-          patchShebangs "$flag" "$f"
-        done
-      ''
-    else
-      ''
-        patchShebangs scripts
-      ''
-  );
+  + ''
+    local f flag
+    for f in scripts/*; do
+      if [[ "$f" == scripts/wcurl ]]; then
+        flag=--host
+      else
+        flag=--build
+      fi
+      patchShebangs "$flag" "$f"
+    done
+  '';
 
   outputs = [
     "bin"
@@ -289,13 +278,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Some hosts have no shell for the scripts to point at: MinGW is the one in
   # tree, where `bash` is marked unsupported because it needs a POSIX layer. We
   # cannot patch shebangs in that case.
-  #
-  # TODO: drop the isCross part of the condition --- in the spirit of
-  # `strictDeps` it is good to have the dep (when it is available), even if it
-  # is gratuitous in the `build = host` case.
-  buildInputs = lib.optional (
-    isCross && lib.meta.availableOn stdenv.hostPlatform runtimeShellPackage
-  ) runtimeShellPackage;
+  buildInputs = lib.optional (lib.meta.availableOn stdenv.hostPlatform runtimeShellPackage) runtimeShellPackage;
 
   passthru =
     let
