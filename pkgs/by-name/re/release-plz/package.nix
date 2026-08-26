@@ -7,6 +7,7 @@
   pkg-config,
   perl,
   openssl,
+  curl,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -28,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     perl
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl ];
 
   buildAndTestSubdir = "crates/release_plz";
 
@@ -55,6 +56,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
       chrjabs
     ];
     mainProgram = "release-plz";
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
