@@ -39,7 +39,7 @@
 
       machine.succeed("ln -s ${package.examples}/share/examples /tmp/examples")
 
-      machine.succeed("sstorytime-run N4L -v -u /tmp/examples/SSTorytime.n4l")
+      machine.succeed("sstorytime-run N4L -v -wipe -u /tmp/examples/SSTorytime.n4l")
 
       output = machine.succeed("sstorytime-run searchN4L -v SSTorytime")
       assert "notes about SSTorytime in N4L" in output, "Failed to search for term in graph."
