@@ -7491,6 +7491,8 @@ self: super: with self; {
 
   hatch-sphinx = callPackage ../development/python-modules/hatch-sphinx { };
 
+  hatch-tryton = callPackage ../development/python-modules/hatch-tryton { };
+
   hatch-vcs = callPackage ../development/python-modules/hatch-vcs { };
 
   hatchling = callPackage ../development/python-modules/hatchling { };
