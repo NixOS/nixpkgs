@@ -80,6 +80,9 @@ in
         primary.succeed("sudo -u pgbackrest pgbackrest --stanza=default stanza-create", timeout=10)
         primary.succeed("sudo -u pgbackrest pgbackrest --stanza=default check")
 
+        # ensure pgbackrest user could write logs
+        primary.succeed("test -s /var/log/pgbackrest/default-stanza-create.log")
+
         primary.systemctl("start pgbackrest-default-future")
 
         # corrupt cluster
@@ -87,6 +90,10 @@ in
         primary.execute("rm ${nodes.primary.services.postgresql.dataDir}/global/pg_control")
 
         primary.succeed("sudo -u postgres pgbackrest --stanza=default restore --delta")
+
+        # ensure postgres user could write logs
+        primary.succeed("test -s /var/log/pgbackrest/default-restore.log")
+        primary.fail("grep -q ERROR /var/log/pgbackrest/*.log")
 
         primary.systemctl("start postgresql")
         primary.wait_for_unit("postgresql.target")

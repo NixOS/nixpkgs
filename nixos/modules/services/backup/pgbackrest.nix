@@ -100,7 +100,7 @@ let
 
   # paths that need to be accessed by all members of the pgbackrest group,
   # e.g. the postgresql user and the pgbackrest user
-  groupPaths = pathsFor "lock-path";
+  groupPaths = pathsFor "log-path" ++ pathsFor "lock-path";
 in
 
 {
@@ -394,7 +394,8 @@ in
       {
         services.pgbackrest.settings = {
           log-level-console = lib.mkDefault "info";
-          log-level-file = lib.mkDefault "off";
+          log-level-file = lib.mkDefault "info";
+          log-path = lib.mkDefault "/var/log/pgbackrest";
           lock-path = lib.mkDefault "/run/pgbackrest";
           cmd-ssh = lib.getExe pkgs.openssh;
         };
@@ -423,6 +424,19 @@ in
             mode = "2770";
           };
         });
+
+        # pgBackRest appends to its log files and never rotates them itself.
+        services.logrotate.settings.pgbackrest = {
+          files = map (path: "${path}/*.log") (pathsFor "log-path");
+          # The log directory is group writable, which logrotate refuses to
+          # touch as root.
+          su = "pgbackrest pgbackrest";
+          frequency = "weekly";
+          rotate = 4;
+          compress = true;
+          missingok = true;
+          notifempty = true;
+        };
 
         systemd.services = lib.mapAttrs (
           _:
