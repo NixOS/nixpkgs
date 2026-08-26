@@ -29,11 +29,11 @@
 }:
 
 let
-  version = "0-unstable-2026-08-16";
-  rev = "c507b356453361e31638b8bff8f6d46b6da2961e";
+  version = "0-unstable-2026-08-25";
+  rev = "404d9f3047711d900e04573548745b869946f240";
 
-  srcHash = "sha256-wMe80EjMhcRNGhHyeAox/H7BtzTu7sZhjB3FiDOY1Rk=";
-  shaderHash = "sha256-V34/qlVsRcDH8FLpTMlaNeNxQhJI415Fv+xnhhLsi1Q=";
+  srcHash = "sha256-FdLdro7T8hyoNUT8dCd/ilZEUARPnFxqztbtxaNk9ws=";
+  shaderHash = "sha256-9yr//4t8k8Ncdli9AyBnkB2Pz9GgNhoumpdOv2uqL3k=";
   cargoHash = "sha256-BHuYW90vTtDbfre6br7nTFa3VWgX01AlalXKwjiSSnA=";
   npmHash = "sha256-Rb0bLPk54QigNp7TkDkJJy/TEJXAhlXOCruckwvdXks=";
 
