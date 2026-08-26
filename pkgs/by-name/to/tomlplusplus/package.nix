@@ -51,7 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   # almost all tests fail on Darwin with the following exception:
   # libc++abi: terminating due to uncaught exception of type std::runtime_error: collate_byname<char>::collate_byname failed to construct for
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  #
+  # 8/9 tests fail on musl as musl only provides C and C.UTF-8 locales
+  doCheck = !(stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isMusl);
 
   passthru = {
     updateScript = nix-update-script { };
