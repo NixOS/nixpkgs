@@ -5,21 +5,20 @@
   pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
-  pyserial-asyncio-fast,
   setuptools,
   zigpy,
 }:
 
 buildPythonPackage rec {
   pname = "zigpy-xbee";
-  version = "0.21.1";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-xbee";
     tag = version;
-    hash = "sha256-ALwhl9WUDkv0POufF/G/rZrn+ITbMdh6y86lShy6ZTg=";
+    hash = "sha256-ni+YY8MGPik8/qxAKlY1loAbRBFcdOch1qT4xvN1Kyc=";
   };
 
   postPatch = ''
@@ -37,14 +36,9 @@ buildPythonPackage rec {
     zigpy
   ];
 
-  # lacking zigpy 2.0 compat
-  # https://github.com/zigpy/zigpy-xbee/pull/179
-  doCheck = false;
-
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-    pyserial-asyncio-fast
   ];
 
   disabledTests = [
