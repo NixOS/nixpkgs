@@ -13,7 +13,7 @@
   uv-dynamic-versioning,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "urlscan-python";
   version = "2026.08.18";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "urlscan";
     repo = "urlscan-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-N7l4+Izn0fhRuoOejtR4/WHTxfoaQVWM6EdSIB0wm+0=";
   };
 
@@ -51,8 +51,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python API client for urlscan.io";
     homepage = "https://github.com/urlscan/urlscan-python/";
-    changelog = "https://github.com/urlscan/urlscan-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/urlscan/urlscan-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
