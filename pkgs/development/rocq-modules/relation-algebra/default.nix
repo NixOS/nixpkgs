@@ -19,6 +19,7 @@ mkRocqDerivation {
     in
     with lib.versions;
     lib.switch rocq-core.rocq-version [
+      (case (isEq "9.2") "1.9.0")
       (case (range "9.0" "9.2") "1.8.1")
       (case (isEq "8.20") "1.7.11")
       (case (range "8.18" "8.19") "1.7.10")
@@ -35,6 +36,7 @@ mkRocqDerivation {
 
   releaseRev = v: if lib.versions.range "1.7.6" "1.7.9" v then "v.${v}" else "v${v}";
 
+  release."1.9.0".hash = "sha256-VxeyxOhvyZzvJss93IFsoU/k6QinpepFUdIf8PG4V9A=";
   release."1.8.1".hash = "sha256-pVeoPt8z1StOfFu5ALCAAxKHecxVNTn9dBXt+nL5d2s=";
   release."1.8.0".hash = "sha256-RnY+a57KnStACteaT5dKQoCCH0qp7/W+4qoaApIilj0=";
   release."1.7.11".hash = "sha256-ZOV0lUdduSabW9Qsz70clkO7QK/NK2STaHqBWcXb7nI=";
