@@ -12,7 +12,7 @@
   uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "typer-config";
   version = "1.5.1";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "maxb2";
     repo = "typer-config";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-gWe4Eo4WyjpQ3ZHzp1sIIo0L/EfnZMwR6EKfPtYSKuY=";
   };
 
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     pytestCheckHook
     schema
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "typer_config" ];
 
@@ -61,8 +61,8 @@ buildPythonPackage rec {
   meta = {
     description = "Utilities for working with configuration files in typer CLIs";
     homepage = "https://github.com/maxb2/typer-config";
-    changelog = "https://github.com/maxb2/typer-config/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/maxb2/typer-config/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
