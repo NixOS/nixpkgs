@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libratbag";
-  version = "0.18";
+  version = "0.18-unstable-2026-07-17";
 
   src = fetchFromGitHub {
     owner = "libratbag";
     repo = "libratbag";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-dAWKDF5hegvKhUZ4JW2J/P9uSs4xNrZLNinhAff6NSc=";
+    rev = "03afbe49f30a4fd18d830530685804eb3bd57c39";
+    hash = "sha256-vlo3RfpLJQTw7P5Bmopl8vi4nDrY9OwNM6tVja+scq8=";
   };
 
   nativeBuildInputs = [
