@@ -2,20 +2,23 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  unittestCheckHook,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "nameparser";
   version = "1.4.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-pbkQXee4eZCWVraVTnBm8GvHp0Om5ncbGUZbC7vmpM8=";
   };
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "nameparser" ];
 
