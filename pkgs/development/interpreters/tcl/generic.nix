@@ -226,14 +226,9 @@ let
                                         -format {%Y-%m-%d %H:%M:%S} \
                                         -timezone :America/New_York]") > $out
         '';
+        mkTclDerivation = callPackage ./mk-tcl-derivation.nix { tcl = finalAttrs.finalPackage; };
       };
   });
 
-  mkTclDerivation = callPackage ./mk-tcl-derivation.nix { tcl = baseInterp; };
-
 in
-baseInterp.overrideAttrs (self: {
-  passthru = self.passthru // {
-    inherit mkTclDerivation;
-  };
-})
+baseInterp
