@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  mcp,
 
   # build-system
   hatchling,
@@ -14,19 +15,10 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mcp-types";
-  version = "2.1.1";
   pyproject = true;
   __structuredAttrs = true;
 
-  src = fetchFromGitHub {
-    owner = "modelcontextprotocol";
-    repo = "python-sdk";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-v3qS18hgOxLjm+IEa/knkfyh0Cz2QFtyqxXTZJepevU=";
-  };
-
-  # TODO: uncomment after bootstrap
-  # inherit (mcp) version src;
+  inherit (mcp) version src;
 
   sourceRoot = "${finalAttrs.src.name}/src/mcp-types";
 
