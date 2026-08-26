@@ -23,11 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-W7qPiwYwTv26XLlBX2ZCTu6HGZrKcb4rlY2DCllm21w=";
   };
 
-  postPatch = lib.optionalString stdenv.cc.isClang ''
-    substituteInPlace Makefile \
-      --replace-fail "-std=c++17" "-std=c++14"
-  '';
-
   buildInputs = [
     boost
     bzip2
