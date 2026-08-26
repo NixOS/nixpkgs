@@ -22,14 +22,14 @@
   threadpoolctl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scikit-learn";
   version = "1.9.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "scikit_learn";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-iDMmaYnTpREBeKn64weDZ1Rgck0OHvsTsUkB0sZgxVc=";
   };
 
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace meson.build --replace-fail \
       "run_command('sklearn/_build_utils/version.py', check: true).stdout().strip()," \
-      "'${version}',"
+      "'${finalAttrs.version}',"
     substituteInPlace pyproject.toml \
       --replace-fail "meson-python>=0.17.1,<0.20.0" meson-python \
       --replace-fail "numpy>=2,<2.5.0" numpy \
@@ -122,13 +122,13 @@ buildPythonPackage rec {
     description = "Set of python modules for machine learning and data mining";
     changelog =
       let
-        major = lib.versions.major version;
-        minor = lib.versions.minor version;
-        dashVer = lib.replaceStrings [ "." ] [ "-" ] version;
+        major = lib.versions.major finalAttrs.version;
+        minor = lib.versions.minor finalAttrs.version;
+        dashVer = lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version;
       in
-      "https://scikit-learn.org/stable/whats_new/v${major}.${minor}.html#version-${dashVer}";
+      "https://scikit-learn.org/stable/whats_new/v${finalAttrs.major}.${finalAttrs.minor}.html#version-${finalAttrs.dashVer}";
     homepage = "https://scikit-learn.org";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ davhau ];
   };
-}
+})
