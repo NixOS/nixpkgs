@@ -11,23 +11,20 @@
   pytest-asyncio,
   pytest-error-for-skips,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   syrupy,
   tenacity,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nettigo-air-monitor";
   version = "5.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.12";
-
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "nettigo-air-monitor";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-CW3Z9AI0ncS+U14s3MnokPdcag90o/yrCOp+2lfQ3CM=";
   };
 
@@ -62,8 +59,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to get air quality data from Nettigo Air Monitor devices";
     homepage = "https://github.com/bieniu/nettigo-air-monitor";
-    changelog = "https://github.com/bieniu/nettigo-air-monitor/releases/tag/${version}";
+    changelog = "https://github.com/bieniu/nettigo-air-monitor/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
