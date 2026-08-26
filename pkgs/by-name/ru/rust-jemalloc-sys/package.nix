@@ -28,6 +28,7 @@ jemalloc.overrideAttrs (oldAttrs: {
     ];
 
   setupHook = writeText "setup-hook.sh" ''
-    export JEMALLOC_OVERRIDE="@out@/lib/libjemalloc${stdenv.hostPlatform.extensions.library}"
+    # Use PIC static to prevent soname conflict with system-wide jemalloc
+    export JEMALLOC_OVERRIDE="@out@/lib/libjemalloc_pic${stdenv.hostPlatform.extensions.staticLibrary}"
   '';
 })
