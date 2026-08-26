@@ -293,9 +293,6 @@ lib.makeOverridable (
     ++ commonMakeFlags;
 
     postPatch = ''
-      # Some linux-hardened patches now remove certain files in the scripts directory, so the file may not exist.
-      [[ -f scripts/ld-version.sh ]] && patchShebangs scripts/ld-version.sh
-
       # Set randstruct seed to a deterministic but diversified value. Note:
       # we could have instead patched gen-random-seed.sh to take input from
       # the buildFlags, but that would require also patching the kernel's
