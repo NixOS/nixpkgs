@@ -16,6 +16,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "tomlplusplus";
   version = "3.4.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "marzer";
     repo = "tomlplusplus";
