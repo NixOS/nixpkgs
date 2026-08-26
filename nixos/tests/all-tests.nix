@@ -1637,6 +1637,7 @@ in
   sslh = handleTest ./sslh.nix { };
   sssd-ldap = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd-ldap.nix { };
   sssd-legacy-config = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd-legacy-config.nix { };
+  sstorytime = runTest ./sstorytime.nix;
   stalwart = runTest ./stalwart/stalwart.nix;
   stardust-xr-atmosphere = runTest ./stardust-xr/atmosphere.nix;
   stardust-xr-flatland = runTest ./stardust-xr/flatland.nix;
