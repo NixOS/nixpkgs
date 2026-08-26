@@ -3,6 +3,7 @@
   stdenv,
   fetchzip,
   gitUpdater,
+  bashNonInteractive,
   tk,
   tclPackages,
   tcl,
@@ -14,14 +15,18 @@
       true,
 }:
 
-tcl.mkTclDerivation rec {
+tcl.mkTclDerivation (finalAttrs: {
   pname = "remind";
   version = "06.02.10";
 
   src = fetchzip {
-    url = "https://dianne.skoll.ca/projects/remind/download/remind-${version}.tar.gz";
+    url = "https://dianne.skoll.ca/projects/remind/download/remind-${finalAttrs.version}.tar.gz";
     hash = "sha256-R6kceXLzg5CRMYAgMyhnmKxWT49ayXIFm/IpXuDgl8I=";
   };
+
+  buildInputs = [
+    bashNonInteractive
+  ];
 
   propagatedBuildInputs = lib.optionals withGui [
     tclPackages.tcllib
@@ -38,11 +43,13 @@ tcl.mkTclDerivation rec {
       --replace-fail 'set Rem2PDF "rem2pdf"' "set Rem2PDF \"$out/bin/rem2pdf\""
   '';
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # On Darwin setenv and unsetenv are defined in stdlib.h from libSystem
-    "-DHAVE_SETENV"
-    "-DHAVE_UNSETENV"
-  ]);
+    NIX_CFLAGS_COMPILE = toString [
+      "-DHAVE_SETENV"
+      "-DHAVE_UNSETENV"
+    ];
+  };
 
   passthru.updateScript = gitUpdater {
     ignoredVersions = "-BETA";
@@ -60,4 +67,4 @@ tcl.mkTclDerivation rec {
     mainProgram = "remind";
     platforms = lib.platforms.unix;
   };
-}
+})

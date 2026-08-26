@@ -4,25 +4,26 @@
   fetchFromGitHub,
   makeWrapper,
   tcl,
+  bashNonInteractive,
   tk,
   libx11,
   zlib,
 }:
 
-tcl.mkTclDerivation rec {
+tcl.mkTclDerivation (finalAttrs: {
   pname = "scid";
   version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "benini";
     repo = "scid";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5WGZm7EwhZAMKJKxj/OOIFOJIgPBcc6/Bh4xVAlia4Y=";
   };
 
   postPatch = ''
     substituteInPlace configure \
-      --replace "set var(INSTALL) {install_mac}" ""
+      --replace-fail "set var(INSTALL) {install_mac}" ""
   '';
 
   nativeBuildInputs = [
@@ -30,6 +31,7 @@ tcl.mkTclDerivation rec {
   ];
 
   buildInputs = [
+    bashNonInteractive
     tk
     libx11
     zlib
@@ -55,4 +57,4 @@ tcl.mkTclDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
   };
-}
+})
