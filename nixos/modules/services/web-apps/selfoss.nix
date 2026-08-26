@@ -4,8 +4,17 @@
   pkgs,
   ...
 }:
-with lib;
+
 let
+  inherit (lib)
+    mapAttrs
+    mkDefault
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    ;
+
   cfg = config.services.selfoss;
 
   poolName = "selfoss_pool";
