@@ -71,6 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "LIBOMP_ENABLE_SHARED" (
       !stdenv.hostPlatform.isStatic && stdenv.hostPlatform.hasSharedLibraries
@@ -90,6 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
   preCheck = ''
     patchShebangs ../tools/archer/tests/deflake.bash
   '';
+
+  __structuredAttrs = true;
 
   meta = llvm_meta // {
     homepage = "https://openmp.llvm.org/";

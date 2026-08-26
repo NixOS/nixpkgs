@@ -109,6 +109,8 @@ stdenv.mkDerivation (
       darwin.bootstrap_cmds
     ];
 
+    strictDeps = true;
+
     hardeningDisable = [ "format" ];
 
     cmakeFlags = [
@@ -178,6 +180,8 @@ stdenv.mkDerivation (
     passthru.vscodeExtName = vscodeExt.name;
     passthru.vscodeExtPublisher = "llvm";
     passthru.vscodeExtUniqueId = "llvm-org.${vscodeExt.name}-${vscodeExt.version}";
+
+    __structuredAttrs = true;
 
     meta = llvm_meta // {
       homepage = "https://lldb.llvm.org/";

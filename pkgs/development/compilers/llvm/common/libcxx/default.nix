@@ -158,6 +158,8 @@ stdenv.mkDerivation (finalAttrs: {
     libunwind
   ];
 
+  strictDeps = true;
+
   # TODO: Possibly move back to `sourceRoot` on `staging`?
   postPatch = ''
     cd runtimes
@@ -200,6 +202,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     isLLVM = true;
   };
+
+  __structuredAttrs = true;
 
   meta = llvm_meta // {
     homepage = "https://libcxx.llvm.org/";

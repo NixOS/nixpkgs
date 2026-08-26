@@ -65,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "LLVM_BUILD_TOOLS" true)
     # Install headers as well
@@ -96,6 +98,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   requiredSystemFeatures = [ "big-parallel" ];
+
+  __structuredAttrs = true;
+
   meta = llvm_meta // {
     homepage = "https://mlir.llvm.org/";
     description = "Multi-Level IR Compiler Framework";

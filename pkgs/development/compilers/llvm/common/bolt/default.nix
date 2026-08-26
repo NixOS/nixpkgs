@@ -58,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmPackages.tblgen}/bin/llvm-tblgen")
   ]
@@ -84,6 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "dev"
   ];
+
+  __structuredAttrs = true;
 
   meta = llvm_meta // {
     homepage = "https://github.com/llvm/llvm-project/tree/main/bolt";

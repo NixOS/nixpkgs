@@ -125,6 +125,8 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
     ++ lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.include;
 
+  strictDeps = true;
+
   env = {
     NIX_CFLAGS_COMPILE = toString (
       [
@@ -296,6 +298,8 @@ stdenv.mkDerivation (finalAttrs: {
       # create a link with the original soname as well, so it's found at runtime
       ln -s $out/lib/*/libclang_rt.atomic-*.so $out/lib/
     '';
+
+  __structuredAttrs = true;
 
   meta = llvm_meta // {
     homepage = "https://compiler-rt.llvm.org/";

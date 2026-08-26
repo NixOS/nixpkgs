@@ -51,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "LIBUNWIND_ENABLE_SHARED" enableShared)
     (lib.cmakeFeature "LLVM_ENABLE_RUNTIMES" "libunwind")
@@ -73,6 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString (doFakeLibgcc && stdenv.hostPlatform.isWindows) ''
       ln -s $out/lib/libunwind.dll.a $out/lib/libgcc_s.dll.a
     '';
+
+  __structuredAttrs = true;
 
   meta = llvm_meta // {
     # Details: https://github.com/llvm/llvm-project/blob/main/libunwind/docs/index.rst

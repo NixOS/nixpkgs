@@ -57,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeFeature "LLD_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/lld")
     (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmPackages.tblgen}/bin/llvm-tblgen")
@@ -73,6 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     "lib"
     "dev"
   ];
+
+  __structuredAttrs = true;
 
   meta = llvm_meta // {
     homepage = "https://lld.llvm.org/";
