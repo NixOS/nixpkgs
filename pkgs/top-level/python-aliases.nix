@@ -595,6 +595,7 @@ mapAliases {
   python-simple-hipchat = throw "'python-simple-hipchat' has been removed because it was broken and unmaintained"; # added 2025-08-26
   python-subunit = throw "'python-subunit' has been renamed to/replaced by 'subunit'"; # Converted to throw 2025-10-29
   python-u2flib-server = throw "'python-u2flib-server' has been removed, since it was broken and archived upstream"; # added 2025-11-08
+  python-unrar = unrar; # Added 2026-08-25
   python-unshare = throw "python-unshare was removed as unmaintained since 2016"; # added 2025-05-25
   python-zbar = zbar; # Added 2026-08-08
   python_docs_theme = throw "'python_docs_theme' has been renamed to/replaced by 'python-docs-theme'"; # Converted to throw 2025-10-29
