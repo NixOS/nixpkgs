@@ -151,19 +151,21 @@ Before jumping in to the more complex idea of generator backends, we'll go over 
       #!/bin/sh
       export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"
 
-      prompt="$2"
-      if [[ ! -z "$3" ]]; then
-        prompt="$prompt ($3)"
+      # We do not care about $1 (the secret name) nor $2 (the prompt name).
+
+      prompt="$4"
+      if [[ ! -z "$5" ]]; then
+        prompt="$prompt ($5)"
       fi
 
-      if [[ "$1" == "line" ]]; then
+      if [[ "$3" == "line" ]]; then
         read -rp "$prompt: " text
         echo -n "$text" > "$out"
-      elif [[ "$1" == "hidden" ]]; then
+      elif [[ "$3" == "hidden" ]]; then
         read -srp "$prompt: " text
         echo ""
         echo -n "$text" > "$out"
-      elif [[ "$1" == "multiline" ]]; then
+      elif [[ "$3" == "multiline" ]]; then
         echo "<$prompt>" > "$out"
         $EDITOR "$out"
       else
