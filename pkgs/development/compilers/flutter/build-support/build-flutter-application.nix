@@ -10,16 +10,52 @@
   flutter,
   pkg-config,
   buildPackages,
+  stdenv,
+  darwin,
+  rsync,
+  re-plistbuddy,
+  clang,
+  swift,
+  python3,
+  writableTmpDirAsHomeHook,
+  writeScriptBin,
+  apple-sdk,
+  xcbuild,
+  runtimeShell,
 }:
 
-# absolutely no mac support for now
+let
+  inferTargetFlutterPlatform =
+    if stdenv.hostPlatform.isLinux then
+      "linux"
+    else if stdenv.hostPlatform.isDarwin then
+      "macos"
+    else
+      "universal";
 
+  # Flutter build hooks resolve the macOS SDK by invoking `xcrun --show-sdk-path
+  # --sdk macosx`; without Xcode that fails, so provide a minimal xcrun that
+  # answers with the nixpkgs SDK. Everything else is delegated to
+  # `xcbuild.xcrun`, which the Darwin stdenv already provides on PATH.
+  xcrunBridge = writeScriptBin "xcrun" ''
+    #!${runtimeShell}
+
+    case " $* " in
+      *" --show-sdk-path "*)
+        echo '${apple-sdk.sdkroot}'
+        exit 0
+        ;;
+    esac
+
+    exec '${xcbuild.xcrun}/bin/xcrun' "$@"
+  '';
+in
 lib.extendMkDerivation {
   constructDrv =
     argsFn:
     let
       evalArgs = lib.fix argsFn;
-      targetFlutterPlatform = evalArgs.targetFlutterPlatform or "linux";
+      targetFlutterPlatform = evalArgs.targetFlutterPlatform or inferTargetFlutterPlatform;
 
       minimalFlutter = flutter.override {
         supportedTargetFlutterPlatforms = [
@@ -48,7 +84,7 @@ lib.extendMkDerivation {
     args@{
       pubGetScript ? null,
       flutterBuildFlags ? [ ],
-      targetFlutterPlatform ? "linux",
+      targetFlutterPlatform ? inferTargetFlutterPlatform,
       extraWrapProgramArgs ? "",
       flutterMode ? null,
       ...
@@ -97,7 +133,9 @@ lib.extendMkDerivation {
 
           export HOME="$NIX_BUILD_TOP"
           flutter config $flutterFlags --no-analytics &>/dev/null # mute first-run
-          flutter config $flutterFlags --enable-linux-desktop >/dev/null
+          flutter config $flutterFlags ${
+            if targetFlutterPlatform == "macos" then "--enable-macos-desktop" else "--enable-linux-desktop"
+          } >/dev/null
         '';
 
         pubGetScript =
@@ -228,6 +266,62 @@ lib.extendMkDerivation {
           ''${gappsWrapperArgs[@]} \
           ${extraWrapProgramArgs}
         '';
+      };
+
+      macos = universal // {
+        outputs = universal.outputs or [ ] ++ [ "debug" ];
+
+        nativeBuildInputs = (universal.nativeBuildInputs or [ ]) ++ [
+          writableTmpDirAsHomeHook
+          darwin.DarwinTools
+          darwin.autoSignDarwinBinariesHook
+          # `flutter assemble` invokes rsync when unpacking the engine dSYM.
+          rsync
+          # plutil on PATH (flutter_tools shells out to it).
+          re-plistbuddy
+          # Toolchain used to compile the Runner executable.
+          clang
+          swift
+          # Plugin source collection / source rewriting during the build.
+          (python3.withPackages (ps: with ps; [ pyyaml ]))
+          # xcrun for Flutter build hooks, resolving the SDK without Xcode.
+          xcrunBridge
+        ];
+
+        # Configuration for macos-build.py; the script reads these instead of
+        # a hand-written shell build phase.  Values must be strings, so paths
+        # are interpolated into their store path.
+        env = (universal.env or { }) // {
+          macosSdkroot = apple-sdk.sdkroot;
+          macosRunnerMain = "${./macos-runner-main.swift}";
+          macosRunnerObjc = "${./macos-runner-objc/main.m}";
+          macosXcrunBridge = xcrunBridge;
+          # One flag per line: elements may contain spaces (e.g.
+          # --dart-define=KEY="some value"), which a space-separated
+          # variable would split apart.
+          macosBuildFlags = lib.concatStringsSep "\n" flutterBuildFlags';
+        };
+
+        dontDartBuild = true;
+
+        buildPhase =
+          universal.buildPhase or ''
+            runHook preBuild
+
+            python3 '${./macos-build.py}' build
+
+            runHook postBuild
+          '';
+
+        dontDartInstall = true;
+        installPhase =
+          universal.installPhase or ''
+            runHook preInstall
+
+            python3 '${./macos-build.py}' install
+
+            runHook postInstall
+          '';
       };
 
       web = universal // {

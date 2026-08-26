@@ -19,6 +19,7 @@
   rhttp = callPackage ./rhttp { };
   sentry_flutter = callPackage ./sentry_flutter { };
   sqlcipher_flutter_libs = callPackage ./sqlcipher_flutter_libs { };
+  sqflite_darwin = callPackage ./sqflite_darwin { };
   sqlite3 = callPackage ./sqlite3 { };
   sqlite3_flutter_libs = callPackage ./sqlite3_flutter_libs { };
   system_tray = callPackage ./system-tray { };

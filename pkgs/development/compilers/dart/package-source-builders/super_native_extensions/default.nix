@@ -52,17 +52,27 @@ let
         is the same with existing versions, add an alias here.
       '');
 
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
-    buildInputs = [
+    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
       at-spi2-atk
       gdk-pixbuf
       cairo
       gtk3
     ];
 
-    passthru.libraryPath = "lib/libsuper_native_extensions.so";
+    passthru.libraryPath =
+      if stdenv.hostPlatform.isDarwin then
+        # The darwin installPhase stages the staticlib under nixpkgs-libs/
+        # next to the sidecar that points macos-build.py at it.
+        staticLibPath
+      else
+        "lib/libsuper_native_extensions.so";
   };
+
+  # Where the darwin staticlib lands inside the builder output; both the
+  # install phase and the collector sidecar must agree on it.
+  staticLibPath = "nixpkgs-libs/libsuper_native_extensions.a";
 
   fakeCargokitCmake = writeText "FakeCargokit.cmake" ''
     function(apply_cargokit target manifest_dir lib_name any_symbol_name)
@@ -70,7 +80,6 @@ let
       set("''${target}_cargokit_lib" ${rustDep}/${rustDep.passthru.libraryPath} PARENT_SCOPE)
     endfunction()
   '';
-
 in
 stdenv.mkDerivation {
   pname = "super_native_extensions";
@@ -86,8 +95,23 @@ stdenv.mkDerivation {
     else
       pushd $out
     fi
+  ''
+  # macOS: the staticlib goes into the Runner via the collector's
+  # nixpkgs-static-libraries.txt sidecar; the fake cargokit cmake is a
+  # Linux-only stand-in and must not shadow the real headers here.
+  # The pub package's own lib/ and rust/ stay untouched, hence the
+  # dedicated directory.
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    chmod -R u+w .
+    mkdir -p "$(dirname ${staticLibPath})"
+    cp ${rustDep}/lib/libsuper_native_extensions.a ${staticLibPath}
+    echo "${staticLibPath}" > nixpkgs-static-libraries.txt
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     chmod +rwx cargokit/cmake/cargokit.cmake
     cp ${fakeCargokitCmake} cargokit/cmake/cargokit.cmake
+  ''
+  + ''
     popd
 
     runHook postInstall

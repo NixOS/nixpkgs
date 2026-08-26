@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   flutter344,
   fetchFromGitHub,
   gst_all_1,
@@ -41,9 +42,9 @@ flutter344.buildFlutterApplication {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     libunwind
@@ -61,16 +62,20 @@ flutter344.buildFlutterApplication {
 
   flutterBuildFlags = [ "--dart-define=DIRTY=false" ];
 
-  env.ZLIB_ROOT = zlib-root;
+  # PDF rendering bundles its own zlib; the env var only matters on Linux
+  # where libpdfrx is linked against the system copy.
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    ZLIB_ROOT = zlib-root;
+  };
 
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm0644 flatpak/com.adilhanney.saber.desktop $out/share/applications/saber.desktop
     install -Dm0644 assets/icon/icon.svg $out/share/icons/hicolor/scalable/apps/com.adilhanney.saber.svg
     install -Dm0644 flatpak/com.adilhanney.saber.metainfo.xml -t $out/share/metainfo
   '';
 
   # Remove libpdfrx.so's reference to the /build/ directory
-  preFixup = ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" $out/app/saber/lib/lib*.so
   '';
 
@@ -112,6 +117,7 @@ flutter344.buildFlutterApplication {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = [
+      "aarch64-darwin"
       "aarch64-linux"
       "x86_64-linux"
     ];

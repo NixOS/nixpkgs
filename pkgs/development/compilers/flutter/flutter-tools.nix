@@ -7,6 +7,7 @@
   writeTextFile,
   git,
   which,
+  re-plistbuddy,
   dart,
   version,
   flutterSrc,
@@ -47,8 +48,11 @@ buildDartApplication.override { inherit dart; } {
   postPatch = ''
     popd
   ''
+  # Avoid any dependency on the host Xcode's /usr/bin/plutil.
   # Use arm64 instead of arm64e.
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace lib/src/ios/plist_parser.dart \
+      --replace-fail "/usr/bin/plutil" "${lib.getExe' re-plistbuddy "plutil"}"
     substituteInPlace lib/src/ios/xcodeproj.dart \
       --replace-fail arm64e arm64
   ''
@@ -65,6 +69,10 @@ buildDartApplication.override { inherit dart; } {
   nativeBuildInputs = [
     git
     which
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Provides plutil, referenced after the postPatch substitution.
+    re-plistbuddy
   ];
   preConfigure = ''
     export HOME=.
