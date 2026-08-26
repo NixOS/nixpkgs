@@ -2,11 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools-scm,
-  pyelftools,
+  jsonschema,
   packaging,
   pretend,
+  pyelftools,
   pytestCheckHook,
+  setuptools-scm,
   # non-python dependencies
   bzip2,
   gnutar,
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    jsonschema
     pretend
     pytestCheckHook
   ];
