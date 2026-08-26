@@ -23,7 +23,7 @@ let
     ;
 in
 
-res: pkgs: super:
+pkgs:
 
 with pkgs;
 
@@ -10624,7 +10624,7 @@ with pkgs;
 
   samsung-unified-linux-driver_1_00_37 = callPackage ../misc/cups/drivers/samsung/1.00.37.nix { };
   samsung-unified-linux-driver_4_01_17 = callPackage ../misc/cups/drivers/samsung/4.01.17.nix { };
-  samsung-unified-linux-driver = res.samsung-unified-linux-driver_4_01_17;
+  samsung-unified-linux-driver = samsung-unified-linux-driver_4_01_17;
 
   sane-backends = callPackage ../applications/graphics/sane/backends (config.sane or { });
 
