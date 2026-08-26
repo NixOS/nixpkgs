@@ -400,7 +400,7 @@ in
         # Security
         NoNewPrivileges = true;
         # Directory
-        RuntimeDirectoryMode = "0750";
+        RuntimeDirectoryMode = "0755";
         StateDirectoryMode = "0750";
         # Sandboxing
         ProtectSystem = "strict";
@@ -423,7 +423,13 @@ in
         ""
         cfg.daemonSettings.Definition.socket
       ];
+      socketConfig = {
+        SocketGroup = "fail2ban";
+        SocketMode = "0660";
+      };
     };
+
+    users.groups.fail2ban = { };
 
     # Defaults for the daemon settings
     services.fail2ban.daemonSettings.Definition = {
