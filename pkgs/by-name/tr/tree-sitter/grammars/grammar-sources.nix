@@ -235,10 +235,10 @@
   };
 
   cairo = {
-    version = "0-unstable-2026-06-14";
+    version = "0-unstable-2026-07-23";
     url = "github:starkware-libs/tree-sitter-cairo";
-    rev = "b04ffb8c10a1a9faaea71a6757753fed4e1fcbfb";
-    hash = "sha256-XMv3E/QVL3JroaHUc+ao7bfINB+q1J78hfttXk3GtS4=";
+    rev = "638b096f276196e0e201970f39f665c2e4613b0d";
+    hash = "sha256-96ez0mUvbnKqs/ciI4sg7FryXd7w+FXxTI07fmPpZwo=";
     meta = {
       license = lib.licenses.asl20;
       maintainers = with lib.maintainers; [
