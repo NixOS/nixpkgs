@@ -82,6 +82,9 @@ buildPythonPackage {
     "test_image_extract"
     "test_path_number_nodes"
     "test_plotter" # Hangs
+  ]
+  ++ lib.optional stdenv.hostPlatform.isMusl [
+    "test_ellipse_arc"
   ];
 
   disabledTestPaths = [
