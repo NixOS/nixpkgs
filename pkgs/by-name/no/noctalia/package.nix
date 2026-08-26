@@ -123,6 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     (lib.mesonEnable "tests" false)
+    (lib.mesonEnable "jemalloc" (!stdenv.hostPlatform.isMusl))
   ];
 
   mesonBuildType = "release";
