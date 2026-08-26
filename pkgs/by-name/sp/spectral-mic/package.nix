@@ -12,6 +12,7 @@
   libxrandr,
   fontconfig,
   pipewire,
+  xdg-utils,
   versionCheckHook,
 }:
 let
@@ -29,7 +30,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spectral-mic";
-  version = "0.8.0";
+  version = "0.9.0";
 
   __structuredAttrs = true;
 
@@ -38,10 +39,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "mmc";
     repo = "spectral";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2HaTOLhHVLYKnEsWjvLf1GqPvtBdrjotG1kZj9mbwkk=";
+    hash = "sha256-Uq/Xc6OzHitsUq2gawuRX8qZ52XGIGhXxV9BC+QXGig=";
   };
 
-  cargoHash = "sha256-OMrYfPQim9H178LnRUg2Ues9Nf2txz4u+tEddrllKME=";
+  cargoHash = "sha256-xtLPe7kasHoSQl3Q/7iRSLjLeMMY9w1aw2yupTBDS00=";
 
   nativeBuildInputs = [
     pkg-config
@@ -60,8 +61,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm644 assets/spectral.png $out/share/icons/hicolor/512x512/apps/page.codeberg.mmc.Spectral.png
     install -Dm644 THIRD-PARTY.md $out/share/licenses/spectral-mic/THIRD-PARTY.md
 
+    # The GUI shells out to xdg-open for its Help links; hosts without
+    # xdg-utils would otherwise fail the spawn silently.
     wrapProgram $out/bin/spectral \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath dlopenLibs}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath dlopenLibs}" \
+      --prefix PATH : "${lib.makeBinPath [ xdg-utils ]}"
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
