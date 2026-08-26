@@ -56,6 +56,6 @@ buildPythonPackage (finalAttrs: {
     description = "High level wrapper of resvg for python";
     homepage = "https://github.com/baseplate-admin/resvg-py";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ hexa ];
+    maintainers = [ ];
   };
 })
