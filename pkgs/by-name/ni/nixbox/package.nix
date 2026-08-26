@@ -32,4 +32,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "nixbox";
     platforms = lib.platforms.linux;
   };
-}
+})
