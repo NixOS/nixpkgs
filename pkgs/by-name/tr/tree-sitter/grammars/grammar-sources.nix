@@ -3006,9 +3006,9 @@
   };
 
   systemverilog = {
-    version = "0.3.1";
+    version = "0.4.0";
     url = "github:gmlarumbe/tree-sitter-systemverilog";
-    hash = "sha256-wzsjHDn6ZdGfOlufARurxCTwT8HqMvyfsnIIpXzRUYs=";
+    hash = "sha256-ig4mpzN/bvnD5e5MN11a7YkONDeJ3R8kz/AbS0GDreI=";
     meta.license = lib.licenses.mit;
   };
 
