@@ -35,6 +35,10 @@ let
         --replace "/usr/lib/zoneinfo" "" \
         --replace "/usr/local/etc/zoneinfo" ""
     ''
+    + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+      substituteInPlace unix/configure unix/configure.in \
+        --replace-fail '`uname -s`' '${stdenv.hostPlatform.uname.system}'
+    ''
     + extraPatch;
 
     nativeBuildInputs = lib.optionals (lib.versionAtLeast version "9.0") [
@@ -77,6 +81,11 @@ let
         # however according to my benchmarks on fast storage and warm cache
         # tcl built with --disable-zipfs actually starts in half the time.
         "--disable-zipfs"
+      ]
+      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+        # Patching main configure is not enough; bundled packages have their
+        # own configure scripts that would need to be patched too.
+        "tcl_cv_sys_version=${stdenv.hostPlatform.uname.system}-unknown"
       ]
       ++ [
         # During cross compilation, the tcl build system assumes that libc
