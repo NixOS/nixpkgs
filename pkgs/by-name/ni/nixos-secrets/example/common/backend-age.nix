@@ -1,10 +1,11 @@
+# An example age-based secret backend written in Python.
 {
   config,
   lib,
   ...
 }:
 let
-  cfg = config.secrets.settings.age;
+  cfg = config.secrets.settings.store.age;
 
   # This data will get encoded as JSON, and passed to every invocation of the
   # backend's CLI.
@@ -55,7 +56,7 @@ let
     );
 in
 {
-  options.secrets.settings.age = {
+  options.secrets.settings.store.age = {
     package = lib.mkOption {
       type = lib.types.functionTo lib.types.pathInStore;
       default = pkgs: pkgs.age;
