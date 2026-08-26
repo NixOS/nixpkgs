@@ -16,6 +16,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "tomlplusplus";
   version = "3.4.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "marzer";
     repo = "tomlplusplus";
@@ -32,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-7m2P+e1/OASHrzm9LSy6RnayS/kGxFC82xOyGBGXeG0=";
     })
   ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     meson
