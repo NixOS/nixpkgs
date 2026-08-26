@@ -341,6 +341,10 @@ lib.makeOverridable (
       # variable before any Makefiles are read, ensuring that the
       # kernel’s definition creates a new, unexported variable.
       "--eval=undefine modules"
+
+      # unset $src because the build system tries to use it and spams a bunch of warnings
+      # see: https://github.com/torvalds/linux/commit/b1992c3772e69a6fd0e3fc81cd4d2820c8b6eca0
+      "--eval=undefine src"
     ]
     ++ commonMakeFlags;
 
@@ -365,10 +369,6 @@ lib.makeOverridable (
       for i in $(find arch -name install.sh); do
           patchShebangs "$i"
       done
-
-      # unset $src because the build system tries to use it and spams a bunch of warnings
-      # see: https://github.com/torvalds/linux/commit/b1992c3772e69a6fd0e3fc81cd4d2820c8b6eca0
-      unset src
     '';
 
     configurePhase = ''
