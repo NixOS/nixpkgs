@@ -56,29 +56,21 @@ let
     ''
     + extraPatch;
 
-    nativeBuildInputs =
-      lib.optionals (lib.versionAtLeast version "9.0") [
-        # Only used to detect the presence of zlib. Could be replaced with a stub.
-        zip
-      ]
-      # In the windows build, `install-msgs` (and `install-tzdata`, but
-      # we don't do that) are done via TCL not via shell. This is for
-      # the sake of the "build = host = windows" case; we are merely
-      # doing build = unix, host = windows, where the old shell way would
-      # have worked.
-      ++ lib.optionals (stdenv.hostPlatform.isWindows && stdenv.buildPlatform != stdenv.hostPlatform) [
-        buildPackages.tcl
-      ]
-      # `patches` touches `configure.in`/`configure.ac` only, so the generated
-      # `configure` the tarball ships has to be rebuilt. The default hook is
-      # the newest autoconf that works for both, 8.6's 2.59-era
-      # `configure.in` included.
-      #
-      # TODO make unconditional, which means `preAutoreconf` must `cd unix`
-      # too. Only `win` needs regenerating today.
-      ++ lib.optionals stdenv.hostPlatform.isWindows [
-        autoreconfHook
-      ];
+    nativeBuildInputs = [
+      autoreconfHook
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "9.0") [
+      # Only used to detect the presence of zlib. Could be replaced with a stub.
+      zip
+    ]
+    # In the windows build, `install-msgs` (and `install-tzdata`, but
+    # we don't do that) are done via TCL not via shell. This is for
+    # the sake of the "build = host = windows" case; we are merely
+    # doing build = unix, host = windows, where the old shell way would
+    # have worked.
+    ++ lib.optionals (stdenv.hostPlatform.isWindows && stdenv.buildPlatform != stdenv.hostPlatform) [
+      buildPackages.tcl
+    ];
 
     buildInputs = [
       bashNonInteractive
@@ -87,87 +79,55 @@ let
       zlib
     ];
 
-<<<<<<< HEAD
     strictDeps = true;
 
-    preConfigure = ''
-=======
     # Windows has its own build system under `win`, autoconf like the one under
     # `unix` but with its own `Makefile.in` and a smaller set of options. Cygwin
     # is not Windows for this purpose: it is POSIX enough for the `unix` one.
-    #
-    # Whichever phase reaches it first does the `cd`; on Windows that is
-    # `autoreconfPhase`, below.
-    preConfigure = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
->>>>>>> origin/staging-next
-      cd unix
+    preAutoreconf = ''
+      cd ${if stdenv.hostPlatform.isWindows then "win" else "unix"}
     '';
-
-    # `null`, not `""`: an empty string is still a variable, and adding one to
-    # every other platform's derivation is a mass rebuild for nothing.
-    preAutoreconf =
-      if stdenv.hostPlatform.isWindows then
-        ''
-          cd win
-        ''
-      else
-        null;
 
     # No `--install`: there is no automake here, and letting `autoreconf`
     # regenerate `aclocal.m4` would lose the `tcl.m4` the build depends on.
-    autoreconfFlags = if stdenv.hostPlatform.isWindows then "--force --verbose" else null;
+    autoreconfFlags = "--force --verbose";
 
-    # Note: pre-9.0 flags are temporarily interspersed to avoid a mass rebuild.
-    configureFlags =
-      lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-        # TODO make this unconditional
-        "tcl_cv_sys_version=${stdenv.hostPlatform.uname.system}"
-      ]
-      ++ lib.optionals (lib.versionOlder version "9.0") [
-        # Unlike the two `versionOlder` gates below, this one is real: enabled
-        # is merely the default pre-9.0, and 9.0 dropped the option entirely
-        # because threads are always on there.
-        "--enable-threads"
-      ]
-      ++ [
-        # Note: using $out instead of $man to prevent a runtime dependency on $man.
-        "--mandir=${placeholder "out"}/share/man"
-      ]
-      # Does not exist in the `win` build system.
-      #
-      # TODO drop the `versionOlder` here too, same mistake as below.
-      ++ lib.optionals (lib.versionOlder version "9.0" && !stdenv.hostPlatform.isWindows) [
-        "--enable-man-symlinks"
-      ]
+    configureFlags = [
+      "tcl_cv_sys_version=${stdenv.hostPlatform.uname.system}"
+      # During cross compilation, the tcl build system assumes that libc
+      # functions are broken if it cannot test if they are broken or not and
+      # then causes a link error on static platforms due to symbol conflict.
+      # These functions are *checks notes* strtoul and strstr. These are
+      # never broken on modern platforms!
+      "tcl_cv_strtod_unbroken=ok"
+      "tcl_cv_strtoul_unbroken=ok"
+      "tcl_cv_strstr_unbroken=ok"
+      # Note: using $out instead of $man to prevent a runtime dependency on $man.
+      "--mandir=${placeholder "out"}/share/man"
       # Don't install tzdata because NixOS already has a more up-to-date copy.
-      #
-      # TODO drop the `versionOlder`. 9.0 still has `--with-tzdata`; it was
-      # gated by mistake in ec6950e63a74, along with `--enable-threads` which
-      # really did go away. Correcting it rebuilds 9.0.
-      ++ lib.optionals (lib.versionOlder version "9.0" || stdenv.hostPlatform.isWindows) [
-        "--with-tzdata=no"
-      ]
-      ++ lib.optionals (lib.versionAtLeast version "9.0") [
-        # By default, tcl libraries get zipped and embedded into libtcl*.so,
-        # which gets `zipfs mount`ed at runtime. This is fragile (for example
-        # stripping the .so removes the zip trailer), so we install them as
-        # traditional files.
-        # This might make tcl slower to start from slower storage on cold cache,
-        # however according to my benchmarks on fast storage and warm cache
-        # tcl built with --disable-zipfs actually starts in half the time.
-        "--disable-zipfs"
-      ]
-      ++ [
-        # During cross compilation, the tcl build system assumes that libc
-        # functions are broken if it cannot test if they are broken or not and
-        # then causes a link error on static platforms due to symbol conflict.
-        # These functions are *checks notes* strtoul and strstr. These are
-        # never broken on modern platforms!
-        "tcl_cv_strtod_unbroken=ok"
-        "tcl_cv_strtoul_unbroken=ok"
-        "tcl_cv_strstr_unbroken=ok"
-      ]
-      ++ lib.optional stdenv.hostPlatform.is64bit "--enable-64bit";
+      "--with-tzdata=no"
+    ]
+    ++ lib.optionals (lib.versionOlder version "9.0") [
+      # Enabled is the default pre-9.0, but we don't want to leave
+      # anything to chance. 9.0 and later the option is gone and
+      # threads are always enabled.
+      "--enable-threads"
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "9.0") [
+      # By default, tcl libraries get zipped and embedded into libtcl*.so,
+      # which gets `zipfs mount`ed at runtime. This is fragile (for example
+      # stripping the .so removes the zip trailer), so we install them as
+      # traditional files.
+      # This might make tcl slower to start from slower storage on cold cache,
+      # however according to my benchmarks on fast storage and warm cache
+      # tcl built with --disable-zipfs actually starts in half the time.
+      "--disable-zipfs"
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
+      # Does not exist in the `win` build system.
+      "--enable-man-symlinks"
+    ]
+    ++ lib.optional stdenv.hostPlatform.is64bit "--enable-64bit";
 
     # https://core.tcl-lang.org/thread/tktview/30e201c7111a438e2fe6aadc9d733b954874cbb9
     env = lib.optionalAttrs (lib.versionAtLeast version "9.0") { ZIPFS_BUILD = 0; };
@@ -186,14 +146,7 @@ let
 
     enableParallelBuilding = true;
 
-    # TODO make this `lib.optionals` next rebuilds
-    allowedImpureDLLs =
-      if stdenv.hostPlatform.isWindows then
-        [ ]
-      else if stdenv.hostPlatform.isCygwin then
-        [ "USER32.dll" ]
-      else
-        null;
+    allowedImpureDLLs = lib.optionals stdenv.hostPlatform.isCygwin [ "USER32.dll" ];
 
     postInstall =
       let
@@ -222,9 +175,9 @@ let
         if [[ -e $out/lib/libtcl${infix}${staticExtension} ]]; then
           ln -s $out/lib/libtcl${infix}${staticExtension} $out/lib/libtcl${staticExtension}
         fi
-        ${lib.optionalString (!stdenv.hostPlatform.isStatic) ''
-          ln -s $out/${linkDir}/${dllPrefix}tcl${infix}${linkExtension} $out/lib/libtcl${linkExtension}
-        ''}
+      ''
+      + lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+        ln -s $out/${linkDir}/${dllPrefix}tcl${infix}${linkExtension} $out/lib/libtcl${linkExtension}
       '';
 
     __structuredAttrs = true;
