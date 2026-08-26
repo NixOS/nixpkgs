@@ -8,20 +8,23 @@
   versionCheckHook,
   pytestCheckHook,
   pytest-cov-stub,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "j2lint";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
+
   src = fetchFromGitHub {
     owner = "aristanetworks";
     repo = "j2lint";
     rev = "v${version}";
-    hash = "sha256-/3hd2RnyxX4CsqWvsmGB/5QoeQIsFhtG3nntHer0or8=";
+    hash = "sha256-aT25Yq5GkQpZBgVNjYdV/afyqFanJkmqkDGMz2Yf+Ps=";
   };
 
   build-system = [ setuptools ];
+
   dependencies = [
     jinja2
     rich
@@ -31,12 +34,17 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
     versionCheckHook
+    typing-extensions
   ];
 
+  pythonImportsCheck = [ "j2lint" ];
+
   meta = {
-    homepage = "https://github.com/aristanetworks/j2lint";
     description = "Jinja2 Linter CLI";
+    homepage = "https://github.com/aristanetworks/j2lint";
+    changelog = "https://github.com/aristanetworks/j2lint/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ polyfloyd ];
+    mainProgram = "j2lint";
   };
 }
