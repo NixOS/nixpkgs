@@ -2,31 +2,54 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  makeWrapper,
   util-linux,
   coreutils,
+  rsync,
+  kmod,
+  gawk,
+  net-tools,
+  fuse3,
+  fuse-overlayfs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "profile-sync-daemon";
-  version = "6.50";
+  version = "6.55";
 
   src = fetchFromGitHub {
     owner = "graysky2";
     repo = "profile-sync-daemon";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Wb9YLxuu9i9s/Y6trz5NZDU9WRywe3138cp5Q2gWbxM=";
+    hash = "sha256-obbPAcHX3o8avAQROO97weZ+3/eOZ4tafNx9ri09DNA=";
   };
+
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  buildInputs = [
+    rsync
+    kmod
+    gawk
+    net-tools
+    util-linux
+    fuse3
+    fuse-overlayfs
+  ];
 
   installPhase = ''
     PREFIX=\"\" DESTDIR=$out make install
     substituteInPlace $out/bin/profile-sync-daemon \
-      --replace "/usr/" "$out/" \
-      --replace "sudo " "/run/wrappers/bin/sudo "
+      --replace-fail "/usr/" "$out/" \
+      --replace-fail "sudo " "/run/wrappers/bin/sudo "
     # $HOME detection fails (and is unnecessary)
     sed -i '/^HOME/d' $out/bin/profile-sync-daemon
     substituteInPlace $out/bin/psd-overlay-helper \
-      --replace "PATH=/usr/bin:/bin" "PATH=${util-linux.bin}/bin:${coreutils}/bin" \
-      --replace "sudo " "/run/wrappers/bin/sudo "
+      --replace-fail "PATH=/usr/bin:/bin" "PATH=${util-linux.bin}/bin:${coreutils}/bin" \
+      --replace-fail "sudo " "/run/wrappers/bin/sudo "
+    wrapProgram $out/bin/profile-sync-daemon \
+      --prefix PATH : ${lib.makeBinPath finalAttrs.buildInputs}
   '';
 
   meta = {

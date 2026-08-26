@@ -39,14 +39,6 @@ in
             description = "Profile Sync daemon";
             wants = [ "psd-resync.service" ];
             wantedBy = [ "default.target" ];
-            path = with pkgs; [
-              rsync
-              kmod
-              gawk
-              net-tools
-              util-linux
-              profile-sync-daemon
-            ];
             unitConfig = {
               RequiresMountsFor = [ "/home/" ];
             };
@@ -65,14 +57,6 @@ in
             wants = [ "psd-resync.timer" ];
             partOf = [ "psd.service" ];
             wantedBy = [ "default.target" ];
-            path = with pkgs; [
-              rsync
-              kmod
-              gawk
-              net-tools
-              util-linux
-              profile-sync-daemon
-            ];
             serviceConfig = {
               Type = "oneshot";
               ExecStart = "${pkgs.profile-sync-daemon}/bin/profile-sync-daemon resync";
