@@ -16611,6 +16611,8 @@ self: super: with self; {
 
   pytest-shutil = callPackage ../development/python-modules/pytest-shutil { };
 
+  pytest-skip-slow = callPackage ../development/python-modules/pytest-skip-slow { };
+
   pytest-smtpd = callPackage ../development/python-modules/pytest-smtpd { };
 
   pytest-snapshot = callPackage ../development/python-modules/pytest-snapshot { };
