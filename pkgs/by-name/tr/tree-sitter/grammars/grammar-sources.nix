@@ -3410,10 +3410,10 @@
   };
 
   vim = {
-    version = "0.8.1-unstable-2026-02-26";
+    version = "0.8.1-unstable-2026-07-12";
     url = "github:tree-sitter-grammars/tree-sitter-vim";
-    rev = "3092fcd99eb87bbd0fc434aa03650ba58bd5b43b";
-    hash = "sha256-MnLBFuJCJbetcS07fG5fkCwHtf/EcNP+Syf0Gn0K39c=";
+    rev = "039c8d0aa1deae00ddeb0374dd70bcc0ec56938d";
+    hash = "sha256-i+CfSWLRXhR2g98cGlfW4iRhNb3nt8O+WJ1Bjf2tnEM=";
     meta = {
       license = lib.licenses.mit;
     };
