@@ -15,10 +15,12 @@
   libsecret,
   ffmpeg,
   yt-dlp,
-  electron,
+  electron_41,
   chromium,
 }:
-
+let
+  electron = electron_41;
+in
 buildNpmPackage (finalAttrs: {
   pname = "Sharedown";
   version = "5.3.6-unstable-2025-12-16";
