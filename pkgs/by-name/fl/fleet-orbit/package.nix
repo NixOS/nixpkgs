@@ -1,24 +1,29 @@
 {
+  bash,
   lib,
   buildGoModule,
+  coreutils,
   fetchFromGitHub,
+  nix-update-script,
   nixosTests,
+  python3,
   versionCheckHook,
+  zsh,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "fleet-orbit";
-  version = "1.55.0";
+  version = "1.59.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "fleetdm";
     repo = "fleet";
     tag = "orbit-v${finalAttrs.version}";
-    hash = "sha256-gaS6A9Zfpb/VMQMAO5qI0lIaohD8jj4KWFRTU0OeqMo=";
+    hash = "sha256-JkEiq3V6VFKQYAxfD9YAmpJW978Hp52X5btrZpPjtxY=";
   };
 
-  vendorHash = "sha256-fhACxmzJY0PEQmMbjQxlfQh5ZJ+7a4um0s8xFQq+57w=";
+  vendorHash = "sha256-FJtIK+SQNRpxTQdzPAFQCOy4dLNf7BfLru8Gm3ejtZM=";
 
   env.CGO_ENABLED = "1";
 
@@ -32,21 +37,43 @@ buildGoModule (finalAttrs: {
     "-X=github.com/fleetdm/fleet/v4/orbit/pkg/build.Version=${finalAttrs.version}"
     "-X=github.com/fleetdm/fleet/v4/orbit/pkg/build.Commit=0000000000000000000000000000000000000000"
     "-X=github.com/fleetdm/fleet/v4/orbit/pkg/build.Date=1970-01-01T00:00:00Z"
+    "-X=github.com/fleetdm/fleet/v4/orbit/pkg/scripts.scriptEnvPath=${lib.getExe' coreutils "env"}"
+    "-X=github.com/fleetdm/fleet/v4/orbit/pkg/scripts.scriptShPath=${lib.getExe' bash "sh"}"
+    "-X=github.com/fleetdm/fleet/v4/orbit/pkg/scripts.scriptBashPath=${lib.getExe' bash "bash"}"
+    "-X=github.com/fleetdm/fleet/v4/orbit/pkg/scripts.scriptZshPath=${lib.getExe' zsh "zsh"}"
+    "-X=github.com/fleetdm/fleet/v4/orbit/pkg/scripts.scriptPythonPath=${lib.getExe' python3 "python"}"
+    "-X=github.com/fleetdm/fleet/v4/orbit/pkg/scripts.scriptPython3Path=${lib.getExe' python3 "python3"}"
   ];
 
   patches = [
-    ./0001-orbit-nixos.patch
-    ./0002-osqueryd-path-override.patch
-    ./0003-osquery-log-path.patch
-    ./0004-scripts-nixos.patch
+    ./0001-runtime-path-overrides.patch
+    ./0002-script-interpreter-paths.patch
   ];
+
+  checkPhase = ''
+    runHook preCheck
+    # Keep the package linker flags so interpreter-path tests exercise the
+    # immutable paths embedded in the Orbit binary.
+    export GOFLAGS=''${GOFLAGS//-trimpath/}
+
+    buildGoDir test ./orbit/cmd/orbit
+    buildGoDir test ./orbit/pkg/scripts
+
+    runHook postCheck
+  '';
 
   doInstallCheck = true;
   versionCheckProgramArg = "version";
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  passthru.tests = {
-    inherit (nixosTests) orbit;
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex=^orbit-v([0-9.]+)$" ];
+    };
+
+    tests = {
+      inherit (nixosTests) orbit;
+    };
   };
 
   meta = {

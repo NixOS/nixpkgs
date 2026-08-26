@@ -1,0 +1,285 @@
+diff --git a/orbit/pkg/scripts/exec_nonwindows.go b/orbit/pkg/scripts/exec_nonwindows.go
+--- a/orbit/pkg/scripts/exec_nonwindows.go
++++ b/orbit/pkg/scripts/exec_nonwindows.go
+@@ -3,16 +3,130 @@
+ package scripts
+ 
+ import (
++	"bytes"
+ 	"context"
+ 	"os"
+ 	"os/exec"
+ 	"path/filepath"
++	"strings"
+ 	"time"
+ 
+ 	"github.com/fleetdm/fleet/v4/server/contexts/ctxerr"
+ 	"github.com/fleetdm/fleet/v4/server/fleet"
+ )
+ 
++var (
++	scriptEnvPath     string
++	scriptShPath      string
++	scriptBashPath    string
++	scriptZshPath     string
++	scriptPythonPath  string
++	scriptPython3Path string
++)
++
++func configuredInterpreterPath(configured, original string) string {
++	if configured != "" {
++		return configured
++	}
++	return original
++}
++
++func shebangInterpreterPath(interpreter string) string {
++	switch base := filepath.Base(interpreter); {
++	case base == "env":
++		return configuredInterpreterPath(scriptEnvPath, interpreter)
++	case base == "sh":
++		return configuredInterpreterPath(scriptShPath, interpreter)
++	case base == "bash":
++		return configuredInterpreterPath(scriptBashPath, interpreter)
++	case base == "zsh":
++		return configuredInterpreterPath(scriptZshPath, interpreter)
++	case base == "python":
++		return configuredInterpreterPath(scriptPythonPath, interpreter)
++	case base == "python3" || strings.HasPrefix(base, "python3."):
++		return configuredInterpreterPath(scriptPython3Path, interpreter)
++	default:
++		return interpreter
++	}
++}
++
++func envShebangCommand(text string, start, end int) (int, int, bool) {
++	hasSplitOption := false
++	for start < end {
++		for start < end && (text[start] == ' ' || text[start] == '\t') {
++			start++
++		}
++		tokenStart := start
++		for start < end && text[start] != ' ' && text[start] != '\t' {
++			start++
++		}
++		if tokenStart == start {
++			break
++		}
++		if text[tokenStart:start] == "-S" {
++			hasSplitOption = true
++		}
++		if text[tokenStart] != '-' {
++			return tokenStart, start, hasSplitOption
++		}
++	}
++	return -1, -1, hasSplitOption
++}
++
++func rewriteShebang(contents []byte) []byte {
++	directExecute, err := fleet.ValidateShebang(string(contents))
++	if err != nil || !directExecute {
++		return contents
++	}
++
++	text := string(contents)
++	lineEnd := strings.IndexByte(text, '\n')
++	if lineEnd == -1 {
++		lineEnd = len(text)
++	}
++	parseEnd := lineEnd
++	if parseEnd > 0 && text[parseEnd-1] == '\r' {
++		parseEnd--
++	}
++	if parseEnd < 2 || !strings.HasPrefix(text, "#!") {
++		return contents
++	}
++
++	interpreterStart := 2
++	for interpreterStart < parseEnd && (text[interpreterStart] == ' ' || text[interpreterStart] == '\t') {
++		interpreterStart++
++	}
++	interpreterEnd := interpreterStart
++	for interpreterEnd < parseEnd && text[interpreterEnd] != ' ' && text[interpreterEnd] != '\t' {
++		interpreterEnd++
++	}
++	if interpreterStart == interpreterEnd {
++		return contents
++	}
++
++	interpreter := text[interpreterStart:interpreterEnd]
++	replacement := shebangInterpreterPath(interpreter)
++	if filepath.Base(interpreter) == "env" {
++		commandStart, commandEnd, hasSplitOption := envShebangCommand(text, interpreterEnd, parseEnd)
++		if commandStart != -1 {
++			command := text[commandStart:commandEnd]
++			commandReplacement := shebangInterpreterPath(command)
++			splitOption := ""
++			if !hasSplitOption && len(strings.Fields(text[interpreterEnd:parseEnd])) > 1 {
++				splitOption = " -S"
++			}
++			if replacement != interpreter || commandReplacement != command || splitOption != "" {
++				return []byte(text[:interpreterStart] + replacement + splitOption + text[interpreterEnd:commandStart] + commandReplacement + text[commandEnd:])
++			}
++		}
++	}
++	if replacement == interpreter {
++		return contents
++	}
++
++	return []byte(text[:interpreterStart] + replacement + text[interpreterEnd:])
++}
++
+ func ExecCmd(ctx context.Context, scriptPath string, env []string) (output []byte, exitCode int, err error) {
+ 	// initialize to -1 in case the process never starts
+ 	exitCode = -1
+@@ -25,8 +139,14 @@
+ 	if err != nil {
+ 		return nil, -1, ctxerr.Wrapf(ctx, err, "validating script %s", scriptPath)
+ 	}
++	rewritten := rewriteShebang(contents)
++	if !bytes.Equal(rewritten, contents) {
++		if err := os.WriteFile(scriptPath, rewritten, 0o700); err != nil {
++			return nil, -1, ctxerr.Wrapf(ctx, err, "rewriting script interpreter %s", scriptPath)
++		}
++	}
+ 
+-	cmd := exec.CommandContext(ctx, "/bin/sh", scriptPath)
++	cmd := exec.CommandContext(ctx, configuredInterpreterPath(scriptShPath, "/bin/sh"), scriptPath)
+ 
+ 	if directExecute {
+ 		err = os.Chmod(scriptPath, 0o700) // nolint:gosec // G302
+
+diff --git a/orbit/pkg/scripts/exec_nonwindows_test.go b/orbit/pkg/scripts/exec_nonwindows_test.go
+index 4fd953583..074973b4e 100644
+--- a/orbit/pkg/scripts/exec_nonwindows_test.go
++++ b/orbit/pkg/scripts/exec_nonwindows_test.go
+@@ -160,3 +160,129 @@ func TestExecCmdSuccess(t *testing.T) {
+ 		t.Fatalf("Expected output %q, got: %q", expectedOutput, output)
+ 	}
+ }
++
++func TestRewriteShebang(t *testing.T) {
++	oldEnv, oldSh := scriptEnvPath, scriptShPath
++	oldBash, oldZsh := scriptBashPath, scriptZshPath
++	oldPython, oldPython3 := scriptPythonPath, scriptPython3Path
++	t.Cleanup(func() {
++		scriptEnvPath, scriptShPath = oldEnv, oldSh
++		scriptBashPath, scriptZshPath = oldBash, oldZsh
++		scriptPythonPath, scriptPython3Path = oldPython, oldPython3
++	})
++
++	scriptEnvPath = "/nix/store/coreutils/bin/env"
++	scriptShPath = "/nix/store/bash/bin/sh"
++	scriptBashPath = "/nix/store/bash/bin/bash"
++	scriptZshPath = "/nix/store/zsh/bin/zsh"
++	scriptPythonPath = "/nix/store/python/bin/python"
++	scriptPython3Path = "/nix/store/python/bin/python3"
++
++	for _, tc := range []struct {
++		name string
++		in   string
++		want string
++	}{
++		{
++			name: "sh",
++			in:   "#!/bin/sh\necho ok\n",
++			want: "#!/nix/store/bash/bin/sh\necho ok\n",
++		},
++		{
++			name: "bash arguments and CRLF",
++			in:   "#!/usr/bin/bash -e\r\necho ok\r\n",
++			want: "#!/nix/store/bash/bin/bash -e\r\necho ok\r\n",
++		},
++		{
++			name: "zsh without final newline",
++			in:   "#!/bin/zsh -f",
++			want: "#!/nix/store/zsh/bin/zsh -f",
++		},
++		{
++			name: "python",
++			in:   "#!/usr/bin/python -u\nprint('ok')",
++			want: "#!/nix/store/python/bin/python -u\nprint('ok')",
++		},
++		{
++			name: "python3",
++			in:   "#!/usr/local/bin/python3\nprint('ok')\n",
++			want: "#!/nix/store/python/bin/python3\nprint('ok')\n",
++		},
++		{
++			name: "versioned python",
++			in:   "#!/opt/python/bin/python3.11 -B\nprint('ok')\n",
++			want: "#!/nix/store/python/bin/python3 -B\nprint('ok')\n",
++		},
++		{
++			name: "env with arguments",
++			in:   "#!/usr/bin/env python3 -u\nprint('ok')\n",
++			want: "#!/nix/store/coreutils/bin/env -S /nix/store/python/bin/python3 -u\nprint('ok')\n",
++		},
++		{
++			name: "env with options and versioned python",
++			in:   "#!/usr/bin/env -S python3.11 -u\r\nprint('ok')\r\n",
++			want: "#!/nix/store/coreutils/bin/env -S /nix/store/python/bin/python3 -u\r\nprint('ok')\r\n",
++		},
++		{name: "no shebang", in: "echo ok", want: "echo ok"},
++		{name: "unsupported", in: "#!/opt/bin/bash\necho ok\n", want: "#!/opt/bin/bash\necho ok\n"},
++	} {
++		t.Run(tc.name, func(t *testing.T) {
++			require.Equal(t, tc.want, string(rewriteShebang([]byte(tc.in))))
++		})
++	}
++}
++
++func TestExecCmdValidatesBeforeRewrite(t *testing.T) {
++	contents := "#!/opt/bin/bash\necho unsafe\n"
++	scriptPath := filepath.Join(t.TempDir(), "unsupported.sh")
++	require.NoError(t, os.WriteFile(scriptPath, []byte(contents), 0o700))
++
++	_, exitCode, err := ExecCmd(context.Background(), scriptPath, nil)
++	require.Equal(t, -1, exitCode)
++	require.ErrorIs(t, err, fleet.ErrUnsupportedInterpreter)
++	got, readErr := os.ReadFile(scriptPath)
++	require.NoError(t, readErr)
++	require.Equal(t, contents, string(got))
++}
++
++func TestExecCmdRewritesSupportedShebang(t *testing.T) {
++	oldPython3 := scriptPython3Path
++	scriptPython3Path = "/bin/sh"
++	t.Cleanup(func() { scriptPython3Path = oldPython3 })
++
++	scriptPath := filepath.Join(t.TempDir(), "versioned-python")
++	require.NoError(t, os.WriteFile(scriptPath, []byte("#!/usr/bin/python3.11\nprintf rewritten\n"), 0o700))
++
++	output, exitCode, err := ExecCmd(context.Background(), scriptPath, nil)
++	require.NoError(t, err)
++	require.Zero(t, exitCode)
++	require.Equal(t, "rewritten", string(output))
++	got, readErr := os.ReadFile(scriptPath)
++	require.NoError(t, readErr)
++	require.Equal(t, "#!/bin/sh\nprintf rewritten\n", string(got))
++}
++
++func TestExecCmdRewritesEnvShebangArguments(t *testing.T) {
++	oldEnv, oldPython3 := scriptEnvPath, scriptPython3Path
++	t.Cleanup(func() {
++		scriptEnvPath, scriptPython3Path = oldEnv, oldPython3
++	})
++
++	envPath, err := exec.LookPath("env")
++	require.NoError(t, err)
++	shellPath, err := exec.LookPath("sh")
++	require.NoError(t, err)
++	scriptEnvPath = envPath
++	scriptPython3Path = shellPath
++
++	scriptPath := filepath.Join(t.TempDir(), "env-python-arguments")
++	require.NoError(t, os.WriteFile(scriptPath, []byte("#!/usr/bin/env python3 -u\nprintf rewritten\n"), 0o700))
++
++	output, exitCode, err := ExecCmd(context.Background(), scriptPath, nil)
++	require.NoError(t, err)
++	require.Zero(t, exitCode)
++	require.Equal(t, "rewritten", string(output))
++	got, readErr := os.ReadFile(scriptPath)
++	require.NoError(t, readErr)
++	require.Equal(t, "#!"+envPath+" -S "+shellPath+" -u\nprintf rewritten\n", string(got))
++}
