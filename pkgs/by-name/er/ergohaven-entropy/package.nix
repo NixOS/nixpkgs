@@ -89,7 +89,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     mkdir -p $out/lib/udev/rules.d
     cat > $out/lib/udev/rules.d/59-vial.rules << RULES
-    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{serial}=="*vial:f64c2b3c*", MODE="0660", GROUP="plugdev", TAG+="uaccess"
+    # Entropy Vial hidraw access v2
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{serial}=="*vial:f64c2b3c*", MODE="0660", GROUP="plugdev", TAG+="uaccess", TAG+="udev-acl"
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", KERNELS=="0005:E126:*", MODE="0660", GROUP="plugdev", TAG+="uaccess", TAG+="udev-acl"
     RULES
 
     icoFileToHiColorTheme $src/assets/entropy.ico entropy $out
