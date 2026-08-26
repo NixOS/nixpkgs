@@ -7,6 +7,7 @@
   nix-update-script,
   nixosTests,
   python3,
+  systemd,
   versionCheckHook,
   zsh,
 }:
@@ -43,11 +44,13 @@ buildGoModule (finalAttrs: {
     "-X=github.com/fleetdm/fleet/v4/orbit/pkg/scripts.scriptZshPath=${lib.getExe' zsh "zsh"}"
     "-X=github.com/fleetdm/fleet/v4/orbit/pkg/scripts.scriptPythonPath=${lib.getExe' python3 "python"}"
     "-X=github.com/fleetdm/fleet/v4/orbit/pkg/scripts.scriptPython3Path=${lib.getExe' python3 "python3"}"
+    "-X=github.com/fleetdm/fleet/v4/orbit/pkg/user.loginctlPath=${lib.getExe' systemd "loginctl"}"
   ];
 
   patches = [
     ./0001-runtime-path-overrides.patch
     ./0002-script-interpreter-paths.patch
+    ./0003-loginctl-path.patch
   ];
 
   checkPhase = ''
@@ -58,6 +61,7 @@ buildGoModule (finalAttrs: {
 
     buildGoDir test ./orbit/cmd/orbit
     buildGoDir test ./orbit/pkg/scripts
+    buildGoDir test ./orbit/pkg/user
 
     runHook postCheck
   '';
