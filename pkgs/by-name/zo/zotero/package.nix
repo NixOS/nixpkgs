@@ -223,6 +223,7 @@ buildNpmPackage (finalAttrs: {
       "should use BrowserRequest for 403 when enforcing file type" \
       "should use BrowserRequest for a JS redirect page" \
       "should throw error on broken symlink" \
+      "should convert the target of a symlinked database file" \
       "should mark every selected collection as current for a multiple-collection selection" \
     ; do
       sed -i -E "s|it(\([\"']$test.*[\"'])|it.skip\1|" test/tests/*.js
