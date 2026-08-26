@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  crystal_1_15,
+  crystal,
   versionCheckHook,
   _experimental-update-script-combinators,
   nix-update-script,
@@ -10,13 +10,9 @@
   runCommand,
 }:
 
-let
-  # Use the same Crystal minor version as specified in upstream
-  crystal = crystal_1_15;
-in
 crystal.buildCrystalPackage rec {
   pname = "ameba-ls";
-  version = "0.1.0";
+  version = "0.2.0";
 
   __structuredAttrs = true;
 
@@ -24,7 +20,7 @@ crystal.buildCrystalPackage rec {
     owner = "crystal-ameba";
     repo = "ameba-ls";
     tag = "v${version}";
-    hash = "sha256-TEHjR+34wrq24XJNLhWZCEzcDEMDlmUHv0iiF4Z6JlI=";
+    hash = "sha256-0HIs+KpsiIDDh9pqg1bDLAcvCV2M7S5TJGtLycNxndI=";
   };
 
   shardsFile = ./shards.nix;
