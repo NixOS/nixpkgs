@@ -7,6 +7,7 @@
   buildPythonPackage,
   dacite,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-error-for-skips,
   pytestCheckHook,
@@ -30,12 +31,9 @@ buildPythonPackage rec {
     hash = "sha256-CW3Z9AI0ncS+U14s3MnokPdcag90o/yrCOp+2lfQ3CM=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
-  '';
-
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiohttp
