@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   symlinkJoin,
@@ -160,6 +161,12 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   disabledTestPaths = [
     # Require unpackaged `mup`
     "tests/unit/runtime/test_mup_optimizers.py"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # KeyError: 'vendor_id_raw'
+    "tests/unit/ops/adam/test_cpu_adam.py"
+    "tests/unit/ops/adam/test_hybrid_adam.py"
+    "tests/unit/ops/lion/test_cpu_lion.py"
   ];
 
   disabledTests = [
@@ -185,6 +192,16 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
     # Too long
     "TestWarmupCosineLR"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
+    # RuntimeError: Failed to initialize cpuinfo!
+    "TestDistInferenceAllReduce"
+    "TestDistInferenceAllReduce"
+    "test_apply_rotary_pos_emb_grad_flow"
+    "test_on_device"
+    "test_save_tensor_clone"
+    "test_subclass_param_init"
   ];
 
   # Some python tests are skipped unless a GPU is visible
