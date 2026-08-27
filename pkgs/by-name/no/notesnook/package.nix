@@ -96,7 +96,7 @@ let
 
     nativeBuildInputs = [ _7zz ];
 
-    sourceRoot = "Notesnook.app";
+    sourceRoot = "Install Notesnook/Notesnook.app";
 
     # 7zz did not unpack in setup hook for some reason, done manually here
     unpackPhase = ''
