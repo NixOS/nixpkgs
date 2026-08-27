@@ -52,6 +52,11 @@ buildPythonPackage (finalAttrs: {
     xarray
   ];
 
+  pytestFlags = [
+    "-W"
+    "ignore::pytest.PytestRemovedIn10Warning"
+  ];
+
   meta = {
     description = "Pydantic models for Zarr";
     homepage = "https://github.com/zarr-developers/pydantic-zarr";
