@@ -34,7 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SYSTEM_CATCH" true)
   ];
 
-  doCheck = true;
+  # needs /etc/localtime
+  doCheck = !stdenv.hostPlatform.isDarwin;
   checkInputs = [ catch2_3 ];
 
   meta = {
