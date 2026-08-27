@@ -38,7 +38,10 @@ buildGo127Module (finalAttrs: {
     description = "CLI tool for interacting with Google APIs (Gmail, Calendar, Drive, and more)";
     homepage = "https://github.com/openclaw/gogcli";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ macalinao ];
+    maintainers = with lib.maintainers; [
+      macalinao
+      rschaffar
+    ];
     mainProgram = "gog";
   };
 })
