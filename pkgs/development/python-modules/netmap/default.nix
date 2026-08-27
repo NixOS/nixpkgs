@@ -45,6 +45,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python class to use nmap and access scan results from python3";
     homepage = "https://github.com/home-assistant-libs/python-nmap";
+    changelog = "https://github.com/home-assistant-libs/python-nmap/blob/${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
