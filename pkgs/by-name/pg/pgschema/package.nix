@@ -29,8 +29,6 @@ buildGoModule (finalAttrs: {
     "-w"
     "-X"
     "github.com/pgplex/pgschema/cmd.GitCommit=${finalAttrs.src.rev}"
-    # "-X"
-    # "github.com/pgplex/pgschema/cmd.BuildDate=${buildDate}"
     "-X"
     "github.com/pgplex/pgschema/internal/postgres.binariesPath=${postgresql}"
   ];
