@@ -13,12 +13,12 @@
   nix-update-script,
 }:
 let
-  version = "0.67.3";
+  version = "0.69.1";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://github.com/smallstep/step-agent-plugin/releases/download/v${version}/step-agent_${version}_linux_amd64.tar.gz";
-      sha256 = "sha256-sTZ6dNjyRwCWHWROUKCpq1rb8n9lT0cGOUOUpui9NJM=";
+      sha256 = "sha256-eri4jqundbBNjjQIwwHbwW3J/dpXWB98hpGO3FTIpiY=";
     };
 
     aarch64-linux = fetchurl {
