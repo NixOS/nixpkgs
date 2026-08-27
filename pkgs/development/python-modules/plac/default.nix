@@ -7,14 +7,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "plac";
-  version = "1.4.5";
+  version = "1.4.6";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ialbert";
     repo = "plac";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GcPZ9Ufr2NU+95XZRVgB0+cKGAc17kIYxuxYvWiq//4=";
+    hash = "sha256-5bYQaZwojGSsfVvF4gkYczpUF77IdptFq1wG2vA4km4=";
   };
 
   # tests are broken, see https://github.com/ialbert/plac/issues/74
