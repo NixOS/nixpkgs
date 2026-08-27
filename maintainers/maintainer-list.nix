@@ -32010,6 +32010,12 @@
     githubId = 201552597;
     name = "Yashwanth Prasannakumar";
   };
+  yunor743 = {
+    email = "hugo@perinazzo.com";
+    github = "Yunor743";
+    githubId = 30175713;
+    name = "Hugo Perinazzo";
+  };
   yzx9 = {
     email = "yuan.zx@outlook.com";
     github = "yzx9";
