@@ -10329,6 +10329,12 @@
     githubId = 67570424;
     name = "gibbert";
   };
+  giang = {
+    name = "Giang Nguyen";
+    email = "giang.nghg@gmail.com";
+    github = "giang-nghg";
+    githubId = 747633;
+  };
   gigahawk = {
     email = "Jasper Chan";
     name = "jasperchan515@gmail.com";
