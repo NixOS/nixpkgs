@@ -144,6 +144,11 @@ in
         url = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/patch/?id=8466eb44991707d128110bdc549fad14c8e1d61e";
         hash = "sha256-SyRCay2MahCJovtzBHA9M1H9hXhtD5IG3ZFSEUwaWlg=";
       })
+      (fetchpatch {
+        name = "CVE-2026-79992.patch";
+        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/30.2/05_all_tramp.patch?id=2a6292f81affedcc468c594c60808e652ae87118";
+        hash = "sha256-WMjTscIuOXakuTO2H+w/Hd61V61V6ZrLh9WPMd58l+M=";
+      })
     ];
   });
 
@@ -168,6 +173,11 @@ in
         name = "nullify-read-symbol-shorthands-around-risky-intern-calls-80574.patch";
         url = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/patch/?id=8466eb44991707d128110bdc549fad14c8e1d61e";
         hash = "sha256-SyRCay2MahCJovtzBHA9M1H9hXhtD5IG3ZFSEUwaWlg=";
+      })
+      (fetchpatch {
+        name = "CVE-2026-79992.patch";
+        url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/30.2/05_all_tramp.patch?id=2a6292f81affedcc468c594c60808e652ae87118";
+        hash = "sha256-WMjTscIuOXakuTO2H+w/Hd61V61V6ZrLh9WPMd58l+M=";
       })
     ];
   });
