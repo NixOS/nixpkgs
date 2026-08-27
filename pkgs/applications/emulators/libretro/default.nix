@@ -64,6 +64,8 @@ lib.makeScope newScope (self: {
 
   eightyone = self.callPackage ./cores/eightyone.nix { };
 
+  emuscv = self.callPackage ./cores/emuscv.nix { };
+
   fbalpha2012 = self.callPackage ./cores/fbalpha2012.nix { };
 
   fbneo = self.callPackage ./cores/fbneo.nix { };
