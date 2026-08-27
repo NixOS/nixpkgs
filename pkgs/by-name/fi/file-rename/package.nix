@@ -3,14 +3,16 @@
   fetchurl,
   perlPackages,
 }:
-
+let
+  version = "2.02";
+in
 perlPackages.buildPerlPackage {
   pname = "File-Rename";
-  version = "0.20";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://cpan/authors/id/R/RM/RMBARKER/File-Rename-0.20.tar.gz";
-    sha256 = "1cf6xx2hiy1xalp35fh8g73j67r0w0g66jpcbc6971x9jbm7bvjy";
+    url = "mirror://cpan/authors/id/R/RM/RMBARKER/File-Rename-${version}.tar.gz";
+    hash = "sha256-U3tggAi2gTba4Li9Gv5eq3UmS7ZLsXg57mW9tHTFIN8=";
   };
 
   meta = {
