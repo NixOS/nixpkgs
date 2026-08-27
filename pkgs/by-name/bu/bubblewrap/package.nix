@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/containers/bubblewrap/releases/tag/${finalAttrs.src.rev}";
     description = "Unprivileged sandboxing tool";
     homepage = "https://github.com/containers/bubblewrap";
-    license = lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = lib.platforms.linux;
     mainProgram = "bwrap";
