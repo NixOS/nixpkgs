@@ -10,6 +10,8 @@ let
   opt = options.services.smartd;
 in
 {
+  meta.maintainers = [ lib.maintainers.h7x4 ];
+
   options.services.smartd = {
     enable = lib.mkEnableOption "smartd daemon from `smartmontools` package";
 
