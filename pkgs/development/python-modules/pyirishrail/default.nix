@@ -19,6 +19,11 @@ buildPythonPackage rec {
     hash = "sha256-NgARqhcXP0lgGpgBRiNtQaSn9JcRNtCcZPljcL7t3Xc=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "version='0.0.1'," "version='${version}',"
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [ requests ];
@@ -30,6 +35,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to get the real-time transport information (RTPI) from Irish Rail";
     homepage = "https://github.com/ttroy50/pyirishrail";
+    changelog = "https://github.com/ttroy50/pyirishrail/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jamiemagee ];
   };
