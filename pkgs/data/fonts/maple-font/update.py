@@ -24,26 +24,16 @@ def process_github_release(url, token=None):
     release_data = response.json()
     assets = release_data.get('assets', [])
     result = {}
-    sha256_pattern = re.compile(r"^[a-fA-F0-9]{64}$")
     for asset in assets:
-        if not asset['name'].endswith('.sha256'):
+        if asset['name'] == "release-manifest.json":
             continue
-        download_url = asset['browser_download_url']
-        content_response = requests.get(download_url, headers=headers)
-        if content_response.status_code != 200:
-            raise RuntimeError(
-                f"Failed to download {asset['name']}: "
-                f"{content_response.status_code} {content_response.text}"
-            )
-        hex_hash = content_response.text.strip()
-        if not sha256_pattern.match(hex_hash):
-            raise ValueError(f"Invalid SHA256 format in {asset['name']}")
+        hex_hash = asset['digest'].split(':')[1]
         try:
             byte_data = bytes.fromhex(hex_hash)
             base64_hash = base64.b64encode(byte_data).decode('utf-8')
         except Exception as e:
             raise RuntimeError(f"Error processing {asset['name']}: {str(e)}")
-        filename = asset['name'][:-7]
+        filename = asset['name'][:-4]
         result[filename] = f"sha256-{base64_hash}"
     output_file = f"{repo}_{tag}_hashes.json"
     with open(output_file, 'w', encoding='utf-8') as f:
