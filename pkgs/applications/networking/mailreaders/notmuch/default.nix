@@ -23,6 +23,7 @@
   dtach,
   openssl,
   bash,
+  fetchpatch,
   gdb,
   man,
   git,
@@ -41,6 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://notmuchmail.org/releases/notmuch-${finalAttrs.version}.tar.xz";
     hash = "sha256-S0MUu/HCAp/feTY35se7FcGxcw0ivpqgSAPJjFu8RG8=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/notmuch/notmuch/commit/f5e58cdb9b93b10ac32379b36b452532a32b8ece.patch";
+      hash = "sha256-x+WHarE752IQzic/CTT26YuSi5Oox3lcQJP1FYNR6AE=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
