@@ -1,8 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  unittestCheckHook,
   fetchFromGitHub,
+  pytestCheckHook,
   setuptools-scm,
   setuptools,
 }:
@@ -24,12 +24,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-TTZZZVtIFMJNeC1R2pvE1dcCEx+U7mBtLq+kBDkI6+Q=";
   };
 
-  nativeCheckInputs = [ unittestCheckHook ];
-  unittestFlagsArray = [
-    "-s"
-    "test"
-    "-v"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Python library for OpenType specification metadata";
