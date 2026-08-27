@@ -14,8 +14,9 @@
   wayland,
   git,
   xdg-utils,
-  makeWrapper,
+  makeBinaryWrapper,
   writableTmpDirAsHomeHook,
+  testers,
   versionCheckHook,
   nix-update-script,
 }:
@@ -34,8 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-L/UXaXC1zymbNfv7SGmOYSvUy/767mAWqL+3jwJwWcE=";
 
-  cargoDepsName = finalAttrs.pname;
-
+  # Disable upstream's rustflags overrides to avoid linker and CPU target issues
   postPatch = ''
     rm .cargo/config.toml
   '';
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     desktop-file-utils
-    makeWrapper
+    makeBinaryWrapper
   ];
 
   buildInputs = [
@@ -114,16 +114,27 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex=^v([0-9]+[.][0-9]+[.][0-9]+)$"
-    ];
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex=^v([0-9]+[.][0-9]+[.][0-9]+)$"
+        "--use-github-releases"
+      ];
+    };
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   meta = {
     description = "Fast, resource-efficient Git GUI written in Rust";
+    longDescription = ''
+      GitComet is a Git graphical client built with Rust and the gpui
+      toolkit, using gix as its Git implementation.
+    '';
     homepage = "https://gitcomet.dev";
     changelog = "https://github.com/Auto-Explore/GitComet/releases/tag/v${finalAttrs.version}";
+    # ofl covers the bundled font assets.
     license = with lib.licenses; [
       agpl3Only
       ofl
