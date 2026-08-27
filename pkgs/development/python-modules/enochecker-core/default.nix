@@ -2,18 +2,24 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pydantic,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "enochecker-core";
   version = "0.13.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "enochecker_core";
     hash = "sha256-A/WcNcp09BNXfgvm1R38ITfok5MHtUwBBsht8XwtvAg=";
   };
+
+  build-system = [ setuptools ];
+
+  dependencies = [ pydantic ];
 
   pythonImportsCheck = [ "enochecker_core" ];
 
