@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "powerview";
-  version = "2025.1.1";
+  version = "2026.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aniqfakhrul";
     repo = "powerview.py";
-    tag = finalAttrs.version;
-    hash = "sha256-kA7vb3YwUlolEnSJRFi+YZoq4yZsdMG+Snk7zsyOCmQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sJAmdkcAfkwg6DsH0pLjIrvYDPbiPeQgMj81ZhPseDA=";
   };
 
   pythonRemoveDeps = [
@@ -22,17 +22,20 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "flask-basicauth"
   ];
 
+  pythonRelaxDeps = [ "chardet" ];
+
   build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
     chardet
     dnspython
     dsinternals
+    fastmcp
     flask
     gnureadline
+    gssapi
     impacket
     ldap3-bleeding-edge
-    mcp
     pycryptodome
     python-dateutil
     requests-ntlm
