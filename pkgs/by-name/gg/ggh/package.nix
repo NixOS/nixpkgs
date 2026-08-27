@@ -7,22 +7,27 @@
 
 buildGoModule (finalAttrs: {
   pname = "ggh";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "byawitz";
     repo = "ggh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-itNx/AcLUQCH99ZCOXiXPWNg3mx+UhHepidqmzPY8Oc=";
+    hash = "sha256-IjiRz6ierqqjRZB4XBQYwohasx7ByAs7aPt1i2Tv5Eo=";
   };
 
-  vendorHash = "sha256-WPPjpxCD3WA3E7lx5+DPvG31p8djera5xRn980eaJT8=";
+  vendorHash = "sha256-TVe6Yd3dOmrrcTIEGWnXRG+nCAyE/ygCv/M23ZXXzB4=";
 
   ldflags = [
     "-s"
     "-w"
     "-X main.version=v${finalAttrs.version}"
   ];
+
+  # Test requires a HOME dir
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
 
   passthru.updateScript = nix-update-script { };
 
