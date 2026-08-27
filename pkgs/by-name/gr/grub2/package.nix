@@ -745,6 +745,7 @@ stdenv.mkDerivation rec {
     nixos-install-simple = nixosTests.installer.simple;
     nixos-install-grub-uefi = nixosTests.installer.simpleUefiGrub;
     nixos-install-grub-uefi-spec = nixosTests.installer.simpleUefiGrubSpecialisation;
+    nixos-os-prober = nixosTests.os-prober;
   };
 
   meta = {
