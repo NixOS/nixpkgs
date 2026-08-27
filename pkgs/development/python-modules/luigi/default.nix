@@ -43,7 +43,12 @@ buildPythonPackage (finalAttrs: {
   doCheck = false;
 
   # This enables accessing modules stored in cwd
-  makeWrapperArgs = [ "--prefix PYTHONPATH . :" ];
+  makeWrapperArgs = [
+    "--prefix"
+    "PYTHONPATH"
+    "."
+    ":"
+  ];
 
   meta = {
     description = "Python package that helps you build complex pipelines of batch jobs";
