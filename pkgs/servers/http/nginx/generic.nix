@@ -107,6 +107,8 @@ stdenv.mkDerivation {
   ++ lib.optional withGeoIP geoip
   ++ lib.optional withImageFilter gd;
 
+  dontAddStaticConfigureFlags = true;
+
   configureFlags = [
     "--sbin-path=bin/nginx"
     "--with-http_ssl_module"
