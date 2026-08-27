@@ -54,13 +54,13 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "noctalia";
-  version = "5.0.0-beta.9";
+  version = "5.0.0-beta.10";
 
   src = fetchFromGitHub {
     owner = "noctalia-dev";
     repo = "noctalia";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-O07tHqxugZ/XE/90kx/UCZ0YCbHSI88v2ct2ezuCKi4=";
+    hash = "sha256-WijEuINvjcXMO/e/zMqwG1lyGiWNosnVt1QY+ko0Rw8=";
   };
 
   strictDeps = true;
