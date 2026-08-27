@@ -10,15 +10,15 @@
   enableSoftnet ? false,
   softnet,
   nix-update-script,
-  versionCheckHook,
+  testers,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tart";
-  version = "2.30.6";
+  version = "2.36.0";
 
   src = fetchurl {
-    url = "https://github.com/cirruslabs/tart/releases/download/${finalAttrs.version}/tart.tar.gz";
-    hash = "sha256-wepqDaJp1oRjGqEVrXUM/JO5gfAKc12AUkZUbfwwdx0=";
+    url = "https://github.com/openai/tart/releases/download/${finalAttrs.version}/tart.tar.gz";
+    hash = "sha256-xyqKuNeKZJih5CaIsaHsbFEs5GyjWjo74TDD3hRAx+g=";
   };
   sourceRoot = ".";
 
@@ -39,16 +39,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  doInstallCheck = true;
   passthru.updateScript = nix-update-script { };
+  passthru.tests.version = testers.testVersion {
+    inherit (finalAttrs) version;
+    package = finalAttrs.finalPackage;
+  };
 
   meta = {
     description = "macOS and Linux VMs on Apple Silicon to use in CI and other automations";
     homepage = "https://tart.run";
-    license = lib.licenses.fairsource09;
+    license = lib.licenses.fsl11Asl20;
     maintainers = with lib.maintainers; [
       emilytrau
       aduh95
