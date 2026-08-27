@@ -30,6 +30,9 @@ buildPythonPackage (finalAttrs: {
     description = "Python library for OpenType specification metadata";
     homepage = "https://github.com/simoncozens/opentypespec-py";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ danc86 ];
+    maintainers = with lib.maintainers; [
+      danc86
+      jopejoe1
+    ];
   };
 })
