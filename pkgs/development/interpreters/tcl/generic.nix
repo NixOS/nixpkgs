@@ -94,7 +94,13 @@ stdenv.mkDerivation (finalAttrs: {
   autoreconfFlags = "--force --verbose";
 
   configureFlags = [
-    "tcl_cv_sys_version=${stdenv.hostPlatform.uname.system}"
+    # tcl_cv_sys_version is intended to be set to `$(uname -s)-$(uname -r)`.
+    "tcl_cv_sys_version=${
+      lib.concatStringsSep "-" [
+        stdenv.hostPlatform.uname.system
+        (lib.optionalString (stdenv.hostPlatform.uname.release != null) stdenv.hostPlatform.uname.release)
+      ]
+    }"
     # During cross compilation, the tcl build system assumes that libc
     # functions are broken if it cannot test if they are broken or not and
     # then causes a link error on static platforms due to symbol conflict.
