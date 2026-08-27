@@ -12,7 +12,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "redis_exporter";
-  version = "1.89.0";
+  version = "1.90.0";
 
   __structuredAttrs = true;
 
@@ -20,10 +20,10 @@ buildGoModule (finalAttrs: {
     owner = "oliver006";
     repo = "redis_exporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uro4F8lNnLwqCEr3KsLB5XBvsDwU0KMS/hX2BCegYwk=";
+    hash = "sha256-IZgFd6hlWVsUAx2sQsB8lTp7aZEGGmJ8BequT/TsZ+w=";
   };
 
-  vendorHash = "sha256-wGEYB8iZKe1ivqUuFlDC2MnPOp+fAqfX4n685coUKoY=";
+  vendorHash = "sha256-+g1HSv+AxXsNzVr6QHpm2EJnRR80rPCtBnPgwq6aq5I=";
 
   ldflags = [
     "-X main.BuildVersion=${finalAttrs.version}"
