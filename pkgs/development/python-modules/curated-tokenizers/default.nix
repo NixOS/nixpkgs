@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "curated-tokenizers";
-  version = "2.0.0";
+  version = "2.0.0.dev0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "curated-tokenizers";
     tag = "v${version}";
-    hash = "sha256-VkDV/9c5b8TzYlthCZ38ufbrne4rihtkmkZ/gyAQXLE=";
+    hash = "sha256-9mKbDTG45WvgMWtQ45X3fMfit42sxtVo7pg0uAIHMLs=";
     fetchSubmodules = true;
   };
 
