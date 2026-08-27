@@ -5,12 +5,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "python-yate";
   version = "0.5.0";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -21,7 +22,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-/tlDme4RmO9XH5PNTvK2yVzbF+iDNeCY21nArq6NU+g=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     aiohttp
     async-timeout
   ];
