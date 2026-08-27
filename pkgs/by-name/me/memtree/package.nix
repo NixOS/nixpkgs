@@ -5,7 +5,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "memtree";
   version = "0.1.0-unstable-2025-06-10";
   pyproject = true;
@@ -47,4 +47,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.isc;
   };
-}
+})
