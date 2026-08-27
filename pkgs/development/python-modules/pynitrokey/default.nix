@@ -69,7 +69,10 @@ buildPythonPackage {
 
   # libnitrokey is not propagated to users of the pynitrokey Python package.
   # It is only usable from the wrapped bin/nitropy
-  makeWrapperArgs = [ "--set LIBNK_PATH ${lib.makeLibraryPath [ libnitrokey ]}" ];
+  makeWrapperArgs = [
+    "--set"
+    "LIBNK_PATH ${lib.makeLibraryPath [ libnitrokey ]}"
+  ];
 
   pythonImportsCheck = [ "pynitrokey" ];
 
