@@ -35,7 +35,10 @@
 
         # Read GRUB from the serial console so its output can be matched
         # deterministically with wait_for_console_text, rather than via OCR.
-        extraConfig = "serial; terminal_output serial";
+        # Use the "dumb" terminfo type so the menu is emitted as plain
+        # sequential text without cursor-address or clear-screen escape
+        # sequences.
+        extraConfig = "serial; terminal_output serial; terminfo serial dumb";
       };
     };
 

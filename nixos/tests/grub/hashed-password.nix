@@ -34,8 +34,10 @@
 
         # Read GRUB from the serial console so its output can be matched
         # deterministically; OCR would work but is flakier, which matters for
-        # the multi-step interactive login exercised below.
-        extraConfig = "serial; terminal_output serial";
+        # the multi-step interactive login exercised below. Use the "dumb"
+        # terminfo type so the menu is emitted as plain sequential text
+        # without cursor-address or clear-screen escape sequences.
+        extraConfig = "serial; terminal_output serial; terminfo serial dumb";
       };
     };
 

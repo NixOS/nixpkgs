@@ -20,8 +20,10 @@
         enable = true;
         users.alice.password = "supersecret";
 
-        # OCR is not accurate enough
-        extraConfig = "serial; terminal_output serial";
+        # OCR is not accurate enough. Use GRUB's own serial terminal and the
+        # "dumb" terminfo type so the menu is emitted as plain sequential text
+        # without cursor-address or clear-screen escape sequences.
+        extraConfig = "serial; terminal_output serial; terminfo serial dumb";
       };
     };
 
