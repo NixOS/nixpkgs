@@ -79,7 +79,6 @@
   mistral-common,
   # chat_template
   jinja2,
-  jmespath,
   # quality
   ruff,
   gitpython,
@@ -94,7 +93,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "transformers";
-  version = "5.15.0";
+  version = "5.16.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -102,7 +101,7 @@ buildPythonPackage (finalAttrs: {
     owner = "huggingface";
     repo = "transformers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DAQrsE2onVc2/MWJlGmlXFBzai5/ysAxpPEFMxDo7wI=";
+    hash = "sha256-VgBgaj4Qh2NVmJoqlrdb3hED/n1otIqDawXcALBpb2c=";
   };
 
   build-system = [ setuptools ];

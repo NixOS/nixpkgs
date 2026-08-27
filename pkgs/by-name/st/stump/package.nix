@@ -7,7 +7,7 @@
   yarnConfigHook,
   rustPlatform,
   nodejs,
-  pdfium-binaries,
+  pdfium,
   openssl,
   dbus,
   glib,
@@ -98,7 +98,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --set-default STUMP_CLIENT_DIR ${finalAttrs.frontend} \
       --set-default STUMP_PORT 10001 \
       --set-default STUMP_PROFILE release \
-      --set-default PDFIUM_PATH ${pdfium-binaries}/lib/libpdfium.so \
+      --set-default PDFIUM_PATH ${pdfium}/lib/libpdfium.so \
       --set-default API_VERSION v1
   '';
 

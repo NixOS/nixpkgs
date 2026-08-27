@@ -3,14 +3,17 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
-  testers,
   pkg-config,
   portaudio,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "livekit-cli";
   version = "2.18.2";
+
+  __structuredAttrs = true;
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "livekit";
@@ -29,8 +32,10 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "cmd/lk" ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru.updateScript = nix-update-script { };
-  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {
     description = "Command line interface to LiveKit";
