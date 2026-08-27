@@ -5,9 +5,9 @@
   all the packages in the Nix Packages collection for some particular platform
   for some particular stage.
 
-  Default arguments are only provided for bootstrapping
-  arguments. Normal users should not import this directly but instead
-  import `pkgs/default.nix` or `default.nix`.
+  Default arguments are only provided for bootstrapping arguments. Normal
+  users should not import this directly, but instead import `pkgs/default.nix`
+  or `default.nix`.
 */
 
 let
@@ -72,8 +72,10 @@ in
   # outside of the store.  Thus, GCC, GFortran, & co. must always look for files
   # in standard system directories (/usr/include, etc.)
   noSysDirs ?
-    stdenv.buildPlatform.system != "x86_64-solaris"
-    && stdenv.buildPlatform.system != "x86_64-kfreebsd-gnu",
+    !lib.elem stdenv.buildPlatform.system [
+      "x86_64-solaris"
+      "x86_64-kfreebsd-gnu"
+    ],
 
   # The configuration attribute set
   config,
@@ -81,24 +83,24 @@ in
   # A list of overlays (Additional `self: super: { .. }` customization
   # functions) to be fixed together in the produced package set
   overlays,
-}@args:
+}:
 
 let
   stdenvAdapters =
-    self: super:
+    self: _:
     let
-      res = import ../stdenv/adapters.nix {
+      adapters = import ../stdenv/adapters.nix {
         inherit lib config;
         pkgs = self;
       };
     in
-    res
+    adapters
     // {
-      stdenvAdapters = res;
+      stdenvAdapters = adapters;
     };
 
   trivialBuilders =
-    self: super:
+    self: _:
     import ../build-support/trivial-builders {
       inherit lib;
       inherit (self) config;
@@ -106,15 +108,15 @@ let
       inherit (self.pkgsBuildHost) jq shellcheck-minimal lndir;
     };
 
-  stdenvBootstappingAndPlatforms =
-    self: super:
+  stdenvBootstrapAndPlatforms =
+    self:
     let
       withFallback =
         thisPkgs:
         (if adjacentPackages == null then self else thisPkgs) // { recurseForDerivations = false; };
     in
     {
-      # Here are package sets of from related stages. They are all in the form
+      # Here are package sets from related stages. They are all in the form
       # `pkgs{theirHost}{theirTarget}`. For example, `pkgsBuildHost` means their
       # host platform is our build platform, and their target platform is our host
       # platform. We only care about their host/target platforms, not their build
@@ -131,7 +133,7 @@ let
       pkgsTargetTarget = withFallback adjacentPackages.pkgsTargetTarget;
 
       # Older names for package sets. Use these when only the host platform of the
-      # package set matter (i.e. use `buildPackages` where any of `pkgsBuild*`
+      # package set matters (i.e. use `buildPackages` where any of `pkgsBuild*`
       # would do, and `targetPackages` when any of `pkgsTarget*` would do (if we
       # had more than just `pkgsTargetTarget`).)
       buildPackages = self.pkgsBuildHost;
@@ -141,40 +143,38 @@ let
       inherit stdenv stdenvNoCC;
     };
 
-  splice = self: super: import ./splice.nix lib self (adjacentPackages != null);
+  splice = self: _: import ./splice.nix lib self (adjacentPackages != null);
 
   allPackages =
     self: super:
     let
-      res = import ./all-packages.nix {
+      packages = import ./all-packages.nix {
         inherit
           lib
           noSysDirs
           config
           overlays
           ;
-      } res self super;
+      } packages self super;
 
-      conflictingAttrs = lib.intersectAttrs res super;
+      conflictingAttrs = lib.intersectAttrs packages super;
     in
     assert lib.assertMsg (conflictingAttrs == { })
       "The following attributes were defined both in `pkgs/top-level/all-packages.nix` and elsewhere, most likely in `pkgs/by-name/`: ${lib.concatStringsSep ", " (lib.attrNames conflictingAttrs)}";
-    res;
+    packages;
 
-  aliases = self: super: lib.optionalAttrs config.allowAliases (import ./aliases.nix lib self super);
+  aliases = self: super: import ./aliases.nix lib self super;
 
   variants =
     self: super:
-    lib.optionalAttrs config.allowVariants (
-      import ./variants.nix {
-        inherit
-          lib
-          nixpkgsFun
-          stdenv
-          overlays
-          ;
-      } self super
-    );
+    import ./variants.nix {
+      inherit
+        lib
+        nixpkgsFun
+        stdenv
+        overlays
+        ;
+    } self super;
 
   # stdenvOverrides is used to avoid having multiple of versions
   # of certain dependencies that were used in bootstrapping the
@@ -188,11 +188,9 @@ let
   # (un-overridden) set of packages, allowing packageOverrides
   # attributes to refer to the original attributes (e.g. "foo =
   # ... pkgs.foo ...").
-  configOverrides =
-    self: super:
-    lib.optionalAttrs allowCustomOverrides ((config.packageOverrides or (super: { })) super);
+  configOverrides = _: super: config.packageOverrides super;
 
-  # Convenience attributes for instantitating package sets. Each of
+  # Convenience attributes for instantiating package sets. Each of
   # these will instantiate a new version of allPackages. Currently the
   # following package sets are provided:
   #
@@ -200,13 +198,13 @@ let
   # - pkgsMusl
   # - pkgsi686Linux
   # NOTE: add new non-critical package sets to "pkgs/top-level/variants.nix"
-  otherPackageSets = self: super: {
+  otherPackageSets = self: _: {
     # This maps each entry in lib.systems.examples to its own package
     # set. Each of these will contain all packages cross compiled for
     # that target system. For instance, pkgsCross.raspberryPi.hello,
     # will refer to the "hello" package built for the ARM6-based
     # Raspberry Pi.
-    pkgsCross = lib.mapAttrs (n: crossSystem: nixpkgsFun { inherit crossSystem; }) lib.systems.examples;
+    pkgsCross = lib.mapAttrs (_: crossSystem: nixpkgsFun { inherit crossSystem; }) lib.systems.examples;
 
     # All packages built for i686 Linux.
     # Used by wine, firefox with debugging version of Flash, ...
@@ -217,7 +215,7 @@ let
       if !config.allowAliases || isSupported then
         nixpkgsFun {
           overlays = [
-            (self': super': {
+            (_: super': {
               pkgsi686Linux = super';
               # Overrides pkgsi686Linux.stdenv.mkDerivation to produce only broken derivations,
               # when used on a non x86_64-linux platform in CI.
@@ -258,7 +256,7 @@ let
         self
       else
         nixpkgsFun {
-          localSystem = lib.systems.elaborate "${stdenv.hostPlatform.parsed.cpu.name}-linux";
+          localSystem.system = "${stdenv.hostPlatform.parsed.cpu.name}-linux";
         };
 
     # Extend the package set with zero or more overlays. This preserves
@@ -269,7 +267,7 @@ let
       if extraOverlays == [ ] then
         self.__splicedPackages
       else
-        nixpkgsFun { overlays = args.overlays ++ extraOverlays; };
+        nixpkgsFun { overlays = overlays ++ extraOverlays; };
 
     # NOTE: each call to extend causes a full nixpkgs rebuild, adding ~130MB
     #       of allocations. DO NOT USE THIS IN NIXPKGS.
@@ -285,7 +283,7 @@ let
     pkgsStatic = nixpkgsFun {
       overlays = [
         (
-          self': super':
+          _: super':
           {
             pkgsStatic = super';
           }
@@ -315,44 +313,45 @@ let
   # Not throws because those would be ignored by nix-env, which is what CI uses to evaluate everything
   # See also ./default.nix, which removes these attributes entirely from the end result
   internallyDisallowedAttrPathsOverlay =
-    final: prev:
-    # Generally only set by CI, don't want to cause a performance hit for users
-    if config.attrPathsDisallowedForInternalUse == [ ] then
-      { }
-    else
-      lib.updateManyAttrsByPath (map (
-        { attrPath, reason }:
-        {
-          path = attrPath;
-          update =
-            _:
-            abort "${lib.concatStringsSep "." attrPath} is disallowed from being used within Nixpkgs${
-              lib.optionalString (reason != null) ", because ${reason}"
-            }";
-        }
-      ) config.attrPathsDisallowedForInternalUse) prev;
+    _: prev:
+    lib.updateManyAttrsByPath (map (
+      { attrPath, reason }:
+      {
+        path = attrPath;
+        update =
+          _:
+          abort "${lib.concatStringsSep "." attrPath} is disallowed from being used within Nixpkgs${
+            lib.optionalString (reason != null) ", because ${reason}"
+          }";
+      }
+    ) config.attrPathsDisallowedForInternalUse) prev;
 
-  # The complete chain of package set builders, applied from top to bottom.
-  # stdenvOverlays must be last as it brings package forward from the
+  # Layers the user can opt out of, only applied to the stage that accepts
+  # user-facing overrides.
+  customOverrides =
+    lib.optional config.allowAliases aliases
+    ++ lib.optional config.allowVariants variants
+    ++ lib.optional (config ? packageOverrides) configOverrides;
+
+  # The complete chain of package set layers, applied from top to bottom.
+  # stdenvOverrides must be last as it brings packages forward from the
   # previous bootstrapping phases which have already been overlaid.
-  toFix = lib.foldl' (lib.flip lib.extends) (self: { }) (
+  toFix = lib.foldl' (lib.flip lib.extends) stdenvBootstrapAndPlatforms (
     [
-      stdenvBootstappingAndPlatforms
       stdenvAdapters
       trivialBuilders
       splice
       autoCalledPackages
       allPackages
       otherPackageSets
-      aliases
-      variants
-      configOverrides
+    ]
+    ++ lib.optionals allowCustomOverrides customOverrides
+    # Generally only set by CI; avoid an empty overlay for normal evaluations.
+    ++ lib.optionals (config.attrPathsDisallowedForInternalUse != [ ]) [
       internallyDisallowedAttrPathsOverlay
     ]
     ++ overlays
-    ++ [
-      stdenvOverrides
-    ]
+    ++ [ stdenvOverrides ]
   );
 
 in
