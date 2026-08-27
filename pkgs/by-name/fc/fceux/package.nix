@@ -4,7 +4,7 @@
   SDL2,
   cmake,
   fetchFromGitHub,
-  ffmpeg,
+  ffmpeg_8,
   libx11,
   libxdmcp,
   libxcb,
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
-    ffmpeg
+    ffmpeg_8
     libx11
     libxdmcp
     libxcb
