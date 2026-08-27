@@ -23,7 +23,7 @@ let
     ;
 in
 
-res: pkgs: super:
+pkgs:
 
 with pkgs;
 
@@ -6111,30 +6111,6 @@ with pkgs;
     libxml2
     ;
 
-  libxml2Python =
-    let
-      inherit (python3.pkgs) libxml2;
-    in
-    pkgs.buildEnv {
-      # slightly hacky
-      name = "libxml2+py-${res.libxml2.version}";
-      paths = with libxml2; [
-        dev
-        bin
-        py
-      ];
-      # Avoid update.nix/tests conflicts with libxml2.
-      passthru = removeAttrs libxml2.passthru [
-        "updateScript"
-        "tests"
-      ];
-      # the hook to find catalogs is hidden by buildEnv
-      postBuild = ''
-        mkdir "$out/nix-support"
-        cp '${libxml2.dev}/nix-support/propagated-build-inputs' "$out/nix-support/"
-      '';
-    };
-
   libxmlxx = callPackage ../development/libraries/libxmlxx { };
   libxmlxx3 = callPackage ../development/libraries/libxmlxx/v3.nix { };
 
@@ -10648,7 +10624,7 @@ with pkgs;
 
   samsung-unified-linux-driver_1_00_37 = callPackage ../misc/cups/drivers/samsung/1.00.37.nix { };
   samsung-unified-linux-driver_4_01_17 = callPackage ../misc/cups/drivers/samsung/4.01.17.nix { };
-  samsung-unified-linux-driver = res.samsung-unified-linux-driver_4_01_17;
+  samsung-unified-linux-driver = samsung-unified-linux-driver_4_01_17;
 
   sane-backends = callPackage ../applications/graphics/sane/backends (config.sane or { });
 
