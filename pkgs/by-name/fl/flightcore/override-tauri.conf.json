@@ -1,0 +1,8 @@
+{
+  "build": {
+    "beforeBuildCommand": ""
+  },
+  "bundle":{
+    "createUpdaterArtifacts": false
+  }
+}

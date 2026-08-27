@@ -1,0 +1,27 @@
+[
+  {
+    "pname": "DocumentFormat.OpenXml",
+    "version": "3.4.1",
+    "hash": "sha256-kCsDhby6ZgVZKV43UHVZbiR1d/g6rD50C2IR4lnJPDk="
+  },
+  {
+    "pname": "DocumentFormat.OpenXml.Framework",
+    "version": "3.4.1",
+    "hash": "sha256-Qi4wz7WocNUpGqZIE6RIA0wgfbc981r6fHyz19Pn+5g="
+  },
+  {
+    "pname": "OpenMcdf",
+    "version": "3.1.3",
+    "hash": "sha256-pZvVso9+En4OjtTeb+GH+nWgjW4Kx7y1WddvWpDhSaM="
+  },
+  {
+    "pname": "System.CommandLine",
+    "version": "3.0.0-preview.2.26159.112",
+    "hash": "sha256-Al+rUmQ8/OAY1VszXMEqRpAKiTgspQjDwfaPmSI1ss4="
+  },
+  {
+    "pname": "System.IO.Packaging",
+    "version": "8.0.1",
+    "hash": "sha256-xf0BAfqQvITompBsvfpxiLts/6sRQEzdjNA3f/q/vY4="
+  }
+]

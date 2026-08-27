@@ -1,0 +1,95 @@
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  protoc-gen-grpc-web,
+  protoc-gen-js,
+  protobuf,
+  tantivy-go,
+}:
+
+let
+  arch =
+    {
+      # https://github.com/anyproto/anytype-heart/blob/f33a6b09e9e4e597f8ddf845fc4d6fe2ef335622/pkg/lib/localstore/ftsearch/ftsearchtantivy.go#L3
+      x86_64-linux = "linux-amd64-musl";
+      aarch64-linux = "linux-arm64-musl";
+      aarch64-darwin = "darwin-arm64";
+    }
+    .${stdenv.hostPlatform.system}
+      or (throw "anytype-heart not supported on ${stdenv.hostPlatform.system}");
+in
+buildGoModule (finalAttrs: {
+  pname = "anytype-heart";
+
+  # Use only versions specified in anytype-ts middleware.version file:
+  #  https://github.com/anyproto/anytype-ts/blob/v<anytype-ts-version>/middleware.version
+  version = "0.51.0-rc1";
+
+  # Update only together with 'anytype' package.
+  # nixpkgs-update: no auto update
+  src = fetchFromGitHub {
+    owner = "anyproto";
+    repo = "anytype-heart";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Hxch8p+fIUOyhePZPmb9i1O7IyPMlwZP8ElRu42DEzk=";
+  };
+
+  vendorHash = "sha256-6LLIs4iT3qwV6luZ08RS05CmUFnNFYLazHeKNG76gV4=";
+
+  subPackages = [ "cmd/grpcserver" ];
+  tags = [
+    "nosigar"
+    "nowatchdog"
+  ];
+
+  env.CGO_ENABLED = 1;
+  proxyVendor = true;
+
+  nativeBuildInputs = [
+    protoc-gen-grpc-web
+    protoc-gen-js
+    protobuf
+  ];
+
+  preBuild = ''
+    mkdir -p deps/libs/${arch}
+    cp ${tantivy-go}/lib/libtantivy_go.a deps/libs/${arch}
+  '';
+
+  postInstall = ''
+    mv $out/bin/grpcserver $out/bin/anytypeHelper
+    mkdir -p $out/lib/protos
+    find pb -type f -name "*.proto" -exec cp {} $out/lib/protos/ \;
+    find pkg/lib/pb -type f -name "*.proto" -exec cp {} $out/lib/protos/ \;
+
+    mkdir -p $out/lib/json/generated
+    cp pkg/lib/bundle/system*.json $out/lib/json/generated
+    cp pkg/lib/bundle/internal*.json $out/lib/json/generated
+
+    mkdir -p $out/share
+    cp LICENSE.md $out/share
+  '';
+
+  # disable tests to save time, as it's mostly built by users, not CI
+  doCheck = false;
+
+  meta = {
+    description = "Shared library for Anytype clients";
+    homepage = "https://anytype.io/";
+    changelog = "https://github.com/anyproto/anytype-heart/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = with lib.maintainers; [
+      autrimpo
+      adda
+      kira-bruneau
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
+    broken = stdenv.hostPlatform.isDarwin;
+  };
+})

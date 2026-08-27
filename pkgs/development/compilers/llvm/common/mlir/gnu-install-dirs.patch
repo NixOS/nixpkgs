@@ -1,0 +1,15 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c91e9cd93dc8..23b6032a46b7 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -32,8 +32,8 @@ if(MLIR_STANDALONE_BUILD)
+   endif()
+ 
+   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY
+-    "${CMAKE_CURRENT_BINARY_DIR}/lib${LLVM_LIBDIR_SUFFIX}")
+-  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
++    "${CMAKE_INSTALL_LIBDIR}/${LLVM_LIBDIR_SUFFIX}")
++  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_INSTALL_BINDIR}")
+ 
+   set(LLVM_LIT_ARGS "-sv" CACHE STRING "Default options for lit")
+ endif()

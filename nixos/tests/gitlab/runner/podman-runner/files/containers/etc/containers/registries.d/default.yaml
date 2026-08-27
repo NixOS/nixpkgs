@@ -1,0 +1,27 @@
+# This is a default registries.d configuration file.  You may
+# add to this file or create additional files in registries.d/.
+#
+# lookaside: for reading/writing simple signing signatures
+# lookaside-staging: for writing simple signing signatures, preferred over lookaside
+#
+# lookaside and lookaside-staging take a value of the following:
+#   lookaside:  {schema}://location
+#
+# For reading signatures, schema may be http, https, or file.
+# For writing signatures, schema may only be file.
+
+# The default locations are built-in, for both reading and writing:
+# /var/lib/containers/sigstore for root, or
+# ~/.local/share/containers/sigstore for non-root users.
+default-docker:
+#  lookaside: https://…
+#  lookaside-staging: file:///…
+
+# The 'docker' indicator here is the start of the configuration
+# for docker registries.
+#
+# docker:
+#
+#   privateregistry.com:
+#    lookaside: https://privateregistry.com/sigstore/
+#    lookaside-staging: /mnt/nfs/privateregistry/sigstore

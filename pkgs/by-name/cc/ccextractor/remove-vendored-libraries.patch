@@ -1,0 +1,164 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 95e27199..a1695a3f 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -49,74 +49,14 @@ endif()
+ include_directories(${PROJECT_SOURCE_DIR})
+ include_directories(${PROJECT_SOURCE_DIR}/lib_ccx)
+ include_directories(${PROJECT_SOURCE_DIR}/lib_ccx/zvbi)
+-include_directories(${PROJECT_SOURCE_DIR}/thirdparty)
+ include_directories(${PROJECT_SOURCE_DIR}/thirdparty/lib_hash)
+-include_directories(${PROJECT_SOURCE_DIR}/thirdparty/libpng)
+ 
+-# Check if the operating system is macOS (Darwin)
+-if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+-  if(${CMAKE_HOST_SYSTEM_PROCESSOR} MATCHES "arm64")
+-    # ARM Macs
+-    include_directories("/opt/homebrew/include")
+-    include_directories(${PROJECT_SOURCE_DIR}/thirdparty/libpng/arm)
+-    aux_source_directory(${PROJECT_SOURCE_DIR}/thirdparty/libpng/arm SOURCEFILE)
+-  else()
+-    include_directories("/usr/local/include")
+-  endif()
+-endif()
+-
+-include_directories(${PROJECT_SOURCE_DIR}/thirdparty/zlib)
+-include_directories(${PROJECT_SOURCE_DIR}/thirdparty/freetype/include)
+ aux_source_directory(${PROJECT_SOURCE_DIR}/thirdparty/lib_hash/ SOURCEFILE)
+-aux_source_directory(${PROJECT_SOURCE_DIR}/thirdparty/libpng/ SOURCEFILE)
+-aux_source_directory(${PROJECT_SOURCE_DIR}/thirdparty/zlib/ SOURCEFILE)
+ aux_source_directory(${PROJECT_SOURCE_DIR}/lib_ccx/zvbi/ SOURCEFILE)
+ 
+-set(UTF8PROC_SOURCE ${PROJECT_SOURCE_DIR}/thirdparty/utf8proc/utf8proc.c)
+-
+-set(FREETYPE_SOURCE
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/autofit/autofit.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/base/ftbase.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/base/ftbbox.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/base/ftbdf.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/base/ftbitmap.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/base/ftcid.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/base/ftfntfmt.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/base/ftfstype.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/base/ftgasp.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/base/ftglyph.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/base/ftgxval.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/base/ftinit.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/base/ftlcdfil.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/base/ftmm.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/base/ftotval.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/base/ftpatent.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/base/ftpfr.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/base/ftstroke.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/base/ftsynth.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/base/ftsystem.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/base/fttype1.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/base/ftwinfnt.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/bdf/bdf.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/bzip2/ftbzip2.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/cache/ftcache.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/cff/cff.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/cid/type1cid.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/gzip/ftgzip.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/lzw/ftlzw.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/pcf/pcf.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/pfr/pfr.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/psaux/psaux.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/pshinter/pshinter.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/psnames/psnames.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/raster/raster.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/sfnt/sfnt.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/smooth/smooth.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/truetype/truetype.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/type1/type1.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/type42/type42.c
+-        ${PROJECT_SOURCE_DIR}/thirdparty/freetype/winfonts/winfnt.c
+-        )
++set(UTF8PROC_SOURCE)
++
++set(FREETYPE_SOURCE)
+ #Windows specific libraries and linker flags
+ if(WIN32)
+     if(NOT MINGW)
+@@ -125,17 +65,6 @@ if(WIN32)
+     include_directories ("${PROJECT_SOURCE_DIR}/thirdparty/win_iconv/")
+     aux_source_directory ("${PROJECT_SOURCE_DIR}/thirdparty/win_iconv/" SOURCEFILE)
+     set (EXTRA_LIBS ${EXTRA_LIBS} ws2_32 winmm Bcrypt)
+-else (WIN32)
+-    # Adding some platform specific library path
+-    if(UNIX AND NOT APPLE)
+-        link_directories (/usr/local/lib)
+-    endif()
+-
+-    if(APPLE)
+-        # Homebrew library paths
+-        link_directories(/usr/local/lib)
+-        link_directories(/opt/homebrew/lib)
+-    endif()
+ endif(WIN32)
+ 
+ if(MSVC)
+diff --git a/src/lib_ccx/CMakeLists.txt b/src/lib_ccx/CMakeLists.txt
+index a891560b..154c1c15 100644
+--- a/src/lib_ccx/CMakeLists.txt
++++ b/src/lib_ccx/CMakeLists.txt
+@@ -13,9 +13,39 @@ endif(WIN32)
+ find_package(PkgConfig)
+ pkg_check_modules (GPAC REQUIRED gpac)
+ 
++set (REQUIRES_PRIVATE "libpng libprotobuf-c")
++
++if (WITH_FFMPEG)
++  set (REQUIRES_PRIVATE "${REQUIRES_PRIVATE} libavutil")
++endif (WITH_FFMPEG)
++
++if (WITH_HARDSUBX)
++  set (REQUIRES_PRIVATE "${REQUIRES_PRIVATE} libavcodec libavformat libswscale tesseract lept")
++endif (WITH_HARDSUBX)
++
+ set (EXTRA_INCLUDES ${EXTRA_INCLUDES} ${GPAC_INCLUDE_DIRS})
+ set (EXTRA_LIBS ${EXTRA_LIBS} ${GPAC_LIBRARIES})
+ 
++pkg_check_modules (PROTOBUFC REQUIRED libprotobuf-c)
++set (EXTRA_LIBS ${EXTRA_LIBS} ${PROTOBUFC_LIBRARIES})
++set (EXTRA_INCLUDES ${EXTRA_INCLUDES} ${PROTOBUFC_INCLUDE_DIRS}/protobuf-c)
++
++pkg_check_modules (LIBPNG REQUIRED libpng)
++set (EXTRA_LIBS ${EXTRA_LIBS} ${LIBPNG_LIBRARIES})
++set (EXTRA_INCLUDES ${EXTRA_INCLUDES} ${LIBPNG_INCLUDE_DIRS})
++
++pkg_check_modules (ZLIB REQUIRED zlib)
++set (EXTRA_LIBS ${EXTRA_LIBS} ${ZLIB_LIBRARIES})
++set (EXTRA_INCLUDES ${EXTRA_INCLUDES} ${ZLIB_INCLUDE_DIRS})
++
++pkg_check_modules (UTF8PROC REQUIRED libutf8proc)
++set (EXTRA_LIBS ${EXTRA_LIBS} ${UTF8PROC_LIBRARIES})
++set (EXTRA_INCLUDES ${EXTRA_INCLUDES} ${UTF8PROC_INCLUDE_DIRS})
++
++pkg_check_modules (FREETYPE REQUIRED freetype2)
++set (EXTRA_LIBS ${EXTRA_LIBS} ${FREETYPE_LIBRARIES})
++set (EXTRA_INCLUDES ${EXTRA_INCLUDES} ${FREETYPE_INCLUDE_DIRS})
++
+ if (WITH_FFMPEG)
+     find_package(PkgConfig)
+ 
+@@ -87,7 +117,7 @@ if (WITH_HARDSUBX)
+     set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DENABLE_HARDSUBX")
+ endif (WITH_HARDSUBX)
+ 
+-file (GLOB HeaderFiles *.h)
++file (GLOB_RECURSE HeaderFiles *.h)
+ file (WRITE ccx.pc "prefix=${CMAKE_INSTALL_PREFIX}\n"
+                   "includedir=\${prefix}/include\n"
+                   "libdir=\${prefix}/lib\n\n"
+@@ -95,8 +125,8 @@ file (WRITE ccx.pc "prefix=${CMAKE_INSTALL_PREFIX}\n"
+                   "Description: Closed Caption Extraction library\n"
+                   "Version: 0.75\n"
+                   "Cflags: -I\${includedir}/\n"
+-                  "Libs: -L\${libdir} -lccx -lpng\n"
+-                  "Libs.private: -lpng\n"
++                  "Libs: -L\${libdir} -lccx\n"
++                  "Requires.private: ${REQUIRES_PRIVATE}\n"
+                   )
+ 
+ install (TARGETS ccx DESTINATION lib)

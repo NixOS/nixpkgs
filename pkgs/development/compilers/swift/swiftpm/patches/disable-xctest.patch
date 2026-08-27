@@ -1,0 +1,14 @@
+XCTest is not fully open-source, only the Swift library parts. We don't have a
+command-line runner available, so disable support.
+
+--- a/Sources/Commands/Utilities/TestingSupport.swift
++++ b/Sources/Commands/Utilities/TestingSupport.swift
+@@ -105,7 +105,7 @@
+     ) throws -> [TestSuite] {
+         // Run the correct tool.
+         var args = [String]()
+-        #if os(macOS)
++        #if false
+         let data: String = try withTemporaryFile { tempFile in
+             args = [try Self.xctestHelperPath(swiftTool: swiftTool).pathString, path.pathString, tempFile.path.pathString]
+             var env = try Self.constructTestEnvironment(

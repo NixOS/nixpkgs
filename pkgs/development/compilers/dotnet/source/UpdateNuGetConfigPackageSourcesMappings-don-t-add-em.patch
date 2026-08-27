@@ -1,0 +1,30 @@
+From 93137ea040472f4042dd186427699ad249e7251b Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Sun, 22 Sep 2024 16:41:07 -0300
+Subject: [PATCH] UpdateNuGetConfigPackageSourcesMappings: don't add empty
+ mappings
+
+---
+ .../UpdateNuGetConfigPackageSourcesMappings.cs              | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/eng/tools/tasks/Microsoft.DotNet.UnifiedBuild.Tasks/UpdateNuGetConfigPackageSourcesMappings.cs b/eng/tools/tasks/Microsoft.DotNet.UnifiedBuild.Tasks/UpdateNuGetConfigPackageSourcesMappings.cs
+index 3b188c1801..9b7050ef46 100644
+--- a/eng/tools/tasks/Microsoft.DotNet.UnifiedBuild.Tasks/UpdateNuGetConfigPackageSourcesMappings.cs
++++ b/eng/tools/tasks/Microsoft.DotNet.UnifiedBuild.Tasks/UpdateNuGetConfigPackageSourcesMappings.cs
+@@ -115,7 +115,11 @@ namespace Microsoft.DotNet.UnifiedBuild.Tasks
+                 // Skip sources with zero package patterns
+                 if (allSourcesPackages[packageSource]?.Count > 0)
+                 {
+-                    pkgSrcMappingClearElement.AddAfterSelf(GetPackageMappingsElementForSource(packageSource));
++                    var pkgSrc = GetPackageMappingsElementForSource(packageSource);
++                    if (pkgSrc.Elements().Any())
++                    {
++                        pkgSrcMappingClearElement.AddAfterSelf(pkgSrc);
++                    }
+                 }
+             }
+ 
+-- 
+2.46.0
+

@@ -1,0 +1,13 @@
+diff --git a/homeassistant/components/homeassistant/__init__.py b/homeassistant/components/homeassistant/__init__.py
+index 54c6454167b..026fda54578 100644
+--- a/homeassistant/components/homeassistant/__init__.py
++++ b/homeassistant/components/homeassistant/__init__.py
+@@ -420,7 +420,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:  # noqa:
+ 
+         installation_type = info["installation_type"][15:]
+         if installation_type in {"Core", "Container"}:
+-            deprecated_method = installation_type == "Core"
++            deprecated_method = False
+             bit32 = _is_32_bit()
+             arch = info["arch"]
+             if bit32 and installation_type == "Container":

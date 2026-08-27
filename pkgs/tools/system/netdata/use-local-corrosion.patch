@@ -1,0 +1,19 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 34b1f55ad..3960ffea0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -287,13 +287,7 @@ cmake_dependent_option(ENABLE_NETDATA_JOURNAL_FILE_READER "Enable netdata's jour
+ 
+ # Setup Rust/Corrosion for plugins that need it
+ if(ENABLE_NETDATA_JOURNAL_FILE_READER OR ENABLE_PLUGIN_OTEL OR ENABLE_PLUGIN_NETFLOW)
+-    include(FetchContent)
+-    FetchContent_Declare(
+-        Corrosion
+-        GIT_REPOSITORY https://github.com/netdata/corrosion.git
+-        GIT_TAG f3b91559efca32c6b54837866ef35ba98ff5b2ca # stable/v0.5
+-    )
+-    FetchContent_MakeAvailable(Corrosion)
++    find_package(Corrosion REQUIRED)
+ 
+     # Corrosion places cargo build artifacts under ${CMAKE_BINARY_DIR}/cargo/
+     # (see Corrosion.cmake cargo_target_dir). Register it for cleanup so that

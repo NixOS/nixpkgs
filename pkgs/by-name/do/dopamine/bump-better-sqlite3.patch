@@ -1,0 +1,48 @@
+diff --git a/package-lock.json b/package-lock.json
+index 921ffcdc..f1a2aeeb 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -17,7 +17,7 @@
+                 "@electron/remote": "2.1.3",
+                 "@fortawesome/fontawesome-free": "^6.6.0",
+                 "angular-split": "14.1.0",
+-                "better-sqlite3": "12.5.0",
++                "better-sqlite3": "12.11.1",
+                 "cheerio": "1.0.0-rc.12",
+                 "discord-rpc": "4.0.1",
+                 "electron-log": "4.4.8",
+@@ -10353,9 +10353,9 @@
+             "license": "MIT"
+         },
+         "node_modules/better-sqlite3": {
+-            "version": "12.5.0",
+-            "resolved": "https://registry.npmjs.org/better-sqlite3/-/better-sqlite3-12.5.0.tgz",
+-            "integrity": "sha512-WwCZ/5Diz7rsF29o27o0Gcc1Du+l7Zsv7SYtVPG0X3G/uUI1LqdxrQI7c9Hs2FWpqXXERjW9hp6g3/tH7DlVKg==",
++            "version": "12.11.1",
++            "resolved": "https://registry.npmjs.org/better-sqlite3/-/better-sqlite3-12.11.1.tgz",
++            "integrity": "sha512-dq9AtApgg5PGFtBzPFSBl3HZQjHok5gaQCM6zh2Yk0aSmDCs1CbnVI8/HgASQkNKsWFpseIO9beg5xxpYhbIfA==",
+             "hasInstallScript": true,
+             "license": "MIT",
+             "dependencies": {
+@@ -10363,7 +10363,7 @@
+                 "prebuild-install": "^7.1.1"
+             },
+             "engines": {
+-                "node": "20.x || 22.x || 23.x || 24.x || 25.x"
++                "node": "20.x || 22.x || 23.x || 24.x || 25.x || 26.x"
+             }
+         },
+         "node_modules/big.js": {
+diff --git a/package.json b/package.json
+index 2c07792f..9023e10c 100644
+--- a/package.json
++++ b/package.json
+@@ -98,7 +98,7 @@
+         "@electron/remote": "2.1.3",
+         "@fortawesome/fontawesome-free": "^6.6.0",
+         "angular-split": "14.1.0",
+-        "better-sqlite3": "12.5.0",
++        "better-sqlite3": "12.11.1",
+         "cheerio": "1.0.0-rc.12",
+         "discord-rpc": "4.0.1",
+         "electron-log": "4.4.8",
