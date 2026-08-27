@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchgit,
+  fetchpatch2,
   expat,
   fontconfig,
   freetype,
@@ -38,6 +39,15 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "ee20d565acb08dece4a32e3f209cdd41119015ca";
     hash = "sha256-0LiFK/8873gei70iVhNGRlcFeGIp7tjDEfxTBz1LYv8=";
   };
+
+  patches = [
+    # A tiny patch to fix build errors on loongarch64-linux using GCC (Clang works fine).
+    # https://skia-review.googlesource.com/c/skia/+/1199836
+    (fetchpatch2 {
+      url = "https://salsa.debian.org/fonts-team/libskia/-/raw/6574ca599eab076a9cd5b8667f81aef0f67b3eeb/debian/patches/loong-build";
+      hash = "sha256-6dUCQixmll2K8fqRGwhay7ee8gvdRq1NJjUHBHxIFvo=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace BUILD.gn \
@@ -84,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
           "i686" = "x86";
           "arm" = "arm";
           "aarch64" = "arm64";
+          "loongarch64" = "loong64";
         }
         .${stdenv.hostPlatform.parsed.cpu.name};
     in
@@ -168,7 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://skia.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fgaz ];
-    platforms = with lib.platforms; arm ++ aarch64 ++ x86 ++ x86_64;
+    platforms = with lib.platforms; arm ++ aarch64 ++ x86 ++ x86_64 ++ loongarch64;
     pkgConfigModules = [ "skia" ];
   };
 })

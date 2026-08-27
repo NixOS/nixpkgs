@@ -2,59 +2,52 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  yarn-berry_4,
+  pnpm_11,
+  pnpmBuildHook,
+  pnpmConfigHook,
+  fetchPnpmDeps,
   nodejs,
-  nodejs_22,
   makeBinaryWrapper,
   nix-update-script,
+  versionCheckHook,
+  runCommand,
 }:
 
 let
-  # rollup 2.x breaks on nodejs 24.15+ require.extensions regression. https://github.com/nodejs/node/issues/62786
-  yarn-berry = yarn-berry_4.override { nodejs = nodejs_22; };
+  pnpm = pnpm_11;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "katex";
-  version = "0.16.28";
+  version = "0.18.4";
 
   src = fetchFromGitHub {
     owner = "katex";
     repo = "katex";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-M9PqzSQkMcnfuL2n/eLwxnk3E9gSEVu0t6Tahiw7niI=";
+    hash = "sha256-Z458Crgd7o68C1pKE9qf5nJhMAs5D+uyK4nbbtJO/lg=";
   };
 
-  patches = [
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/KaTeX/KaTeX/blob/main/package.json#L58
-    ./yarn-4.14-support.patch
-  ];
-
-  offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src patches;
-    hash = "sha256-6DxF+TtUOqW14ivBHETUMXzDspP/54k1OzbKeIJqDAQ=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-9AZj9prk8vbt7qNCKo2yiKCvyvRbhfyFjdDU/+jNFiM=";
   };
 
   nativeBuildInputs = [
-    yarn-berry.yarnBerryConfigHook
-    yarn-berry
-    nodejs_22
     makeBinaryWrapper
+    nodejs
+    pnpm
+    pnpmConfigHook
+    pnpmBuildHook
   ];
-
-  buildPhase = ''
-    runHook preBuild
-
-    yarn build
-
-    runHook postBuild
-  '';
 
   installPhase = ''
     runHook preInstall
 
-    yarn config set nodeLinker "node-modules"
-    yarn install --mode=skip-build --inline-builds
+    CI=true pnpm --ignore-scripts --prod prune
+
+    rm -r test website fonts
     mkdir -p $out/lib/node_modules/katex/
     mkdir $out/bin
     mv * $out/lib/node_modules/katex/
@@ -65,7 +58,25 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+
+    tests = {
+      mathml =
+        runCommand "simple-mathml-output-test"
+          {
+            nativeBuildInputs = [ finalAttrs.finalPackage ];
+          }
+          ''
+            echo "1+2" | katex -F mathml --output test.html
+            grep -q "<semantics><mrow><mn>1</mn><mo>+</mo><mn>2</mn></mrow>" test.html
+            touch $out
+          '';
+    };
+  };
 
   meta = {
     changelog = "https://github.com/KaTeX/KaTeX/releases/tag/v${finalAttrs.version}";

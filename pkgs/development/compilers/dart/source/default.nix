@@ -1,5 +1,4 @@
 {
-  bintools,
   buildPackages,
   callPackage,
   cacert,
@@ -8,7 +7,6 @@
   debug ? false,
   fetchurl,
   fetchpatch,
-  gn,
   gitMinimal,
   gitSetupHook,
   icu,
@@ -17,12 +15,9 @@
   nix-update,
   pax-utils,
   pkg-config,
-  python312,
+  python3,
   ripgrep,
-  runCommand,
-  samurai,
   stdenv,
-  versionCheckHook,
   writableTmpDirAsHomeHook,
   writeShellScript,
   writeText,
@@ -48,7 +43,7 @@ let
 
   buildArchInfo = getArchInfo stdenv.buildPlatform;
 
-  python3 = python312.withPackages (
+  pythonEnv = python3.withPackages (
     ps: with ps; [
       httplib2
       six
@@ -95,7 +90,7 @@ let
         target_cpu = ['x64', 'arm64', 'riscv64']
         target_cpu_only = True
       ''} .gclient
-      export PATH=${python3}/bin:$PATH:${tools.depot_tools}
+      export PATH=${pythonEnv}/bin:$PATH:${tools.depot_tools}
       python3 ${tools.depot_tools}/gclient.py sync --no-history --nohooks --noprehooks
       find sdk -name ".versions" -type d -exec rm -rf {} +
       rm --recursive --force sdk/buildtools/sysroot
@@ -131,7 +126,7 @@ dart-bin.overrideAttrs (oldAttrs: {
   nativeBuildInputs = [
     gitMinimal
     gitSetupHook
-    python312
+    python3
     ripgrep
     pkg-config
   ];
