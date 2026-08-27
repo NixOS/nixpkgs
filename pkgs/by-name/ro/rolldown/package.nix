@@ -10,7 +10,7 @@
   cargo,
   rustc,
   cmake,
-  version ? "1.0.0",
+  version ? "1.2.5",
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "rolldown";
@@ -22,13 +22,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rolldown";
     repo = "rolldown";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EbxZe2JBj69F6bpPn4X7BTRE/dTb/mUIvvqw7oqhAe8=";
+    hash = "sha256-RxLsRweonRva98zr7Q0HUgmbEL712Ow2+S8Oen/euUQ=";
   };
   cargoDeps = rustPlatform.fetchCargoVendor {
     pname = "rolldown";
     version = finalAttrs.version;
     src = finalAttrs.src;
-    hash = "sha256-VDDbS45Lefs/4x0fU1rULgBtjzZJgL1t2lYwENPknEE=";
+    hash = "sha256-7PFphDUSqwTTpc16eThM/17pcKT5xat7RjjF/LqeVDY=";
   };
   pnpmDeps = fetchPnpmDeps {
     pname = "rolldown";
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     src = finalAttrs.src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-pq94ZI0WW9XJFzecdiM/PaOUp7DSSOWWjRO91rd8Xs4=";
+    hash = "sha256-qd+2s53+HGUVHKM2fbKN3GkepmIEauLTdPombv50+UA=";
   };
 
   # cmake is only needed for Rust build (mimalloc-sys), not for a top-level configure
@@ -55,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    pnpm run --filter "@rolldown/pluginutils" build
     pnpm run --filter rolldown build-native:release
 
     runHook postBuild
@@ -78,10 +77,11 @@ stdenv.mkDerivation (finalAttrs: {
     cp packages/rolldown/dist/*.node "$outPath/dist/" 2>/dev/null || true
     cp packages/rolldown/src/rolldown-binding.*.node "$outPath/dist/" 2>/dev/null || true
 
-    # Install @rolldown/pluginutils (rolldown's runtime dependency; only built output, no node_modules)
+    # Install rolldown's runtime dependencies, dereferencing pnpm's symlinks.
+    mkdir -p "$nodeModules/@oxc-project"
+    cp -rL packages/rolldown/node_modules/@oxc-project/types "$nodeModules/@oxc-project/types"
     mkdir -p "$nodeModules/@rolldown/pluginutils"
-    cp packages/pluginutils/package.json "$nodeModules/@rolldown/pluginutils/"
-    [[ -d packages/pluginutils/dist ]] && cp -r packages/pluginutils/dist "$nodeModules/@rolldown/pluginutils/"
+    cp -rL packages/rolldown/node_modules/@rolldown/pluginutils/. "$nodeModules/@rolldown/pluginutils/"
 
     runHook postInstall
   '';
