@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.rtl-tcp;
@@ -30,7 +35,12 @@ in
     extraArgs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ ];
-      example = [ "-g" "29" "-b" "16" ];
+      example = [
+        "-g"
+        "29"
+        "-b"
+        "16"
+      ];
       description = "Additional command-line arguments to pass to rtl_tcp.";
     };
   };

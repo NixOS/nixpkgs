@@ -28578,6 +28578,14 @@
     githubId = 70479099;
     matrix = "@eyes1238:matrix.org";
   };
+  the-bober = {
+    email = "rares.dobrisan@gmail.com";
+    github = "the-bober";
+    name = "Dobrisan Rares Florin";
+    githubId = 57683192;
+    matrix = "@bobe:tchncs.de";
+    keys = [ { fingerprint = "0C15 3680 68EC D1B3 B324 9E99 01DC 0D38 7CA1 7B2A"; } ];
+  };
   theaninova = {
     name = "Thea Schöbl";
     email = "dev@theaninova.de";
