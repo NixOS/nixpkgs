@@ -386,14 +386,12 @@ in
       moduleParams = lib.mkOption {
         type = lib.types.attrsOf (lib.types.attrsOf lib.types.raw);
         default = { };
-        example = ''
-          {
-            nvidia = {
-              NVreg_UsePageAttributeTable = 1;
-              NVreg_RegistryDwords = "EnableBrightnessControl=1"
-            };
-          }
-        '';
+        example = {
+          nvidia = {
+            NVreg_UsePageAttributeTable = 1;
+            NVreg_RegistryDwords = "EnableBrightnessControl=1";
+          };
+        };
         description = "Additional parameters to pass to the NVIDIA kernel module.";
       };
     };
