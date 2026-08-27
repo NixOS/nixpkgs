@@ -92,7 +92,6 @@ in
         ProtectKernelLogs = true;
         ProtectControlGroups = true;
         ProtectKernelModules = true;
-        RestrictNamespaces = true;
         ProtectHostname = true;
         ProtectKernelTunables = true;
         PrivateUsers = true;
@@ -104,15 +103,24 @@ in
           "AF_INET6"
           "AF_UNIX" # Required for JS os.homedir() function
         ];
+        RestrictNamespaces = [
+          # user, pid and net are required for the chromium-internal sandbox
+          "~uts"
+          "~mnt"
+          "~cgroup"
+          "~ipc"
+        ];
         CapabilityBoundingSet = null;
         LockPersonality = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = [
+          # @privileged and @mount are required for the chromium-internal sandbox
           "@system-service"
+          "@mount"
           "~@resources"
-          "~@privileged"
         ];
-        UMask = "077";
+        SystemCallErrorNumber = "EPERM";
+        UMask = "0077";
       };
     };
   };
