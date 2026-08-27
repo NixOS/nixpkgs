@@ -114,7 +114,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     updateScript = nix-update-script { };
 
     withPlugins = plugins: callPackage ./with-plugins.nix { inherit plugins; };
-    tests.withPlugins = callPackage ./plugins/test-with-plugins.nix { };
+    tests = {
+      withPlugins = callPackage ./plugins/test-with-plugins.nix { };
+      pluginCompat = callPackage ./plugins/test-plugin-compat.nix { };
+    };
   };
 
   meta = {

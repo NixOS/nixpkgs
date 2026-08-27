@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "nu_plugin_net";
     # "Plugin `net` is compiled for nushell version 0.104.0, which is not
-    # compatible with version 0.105.1"
+    # compatible with version 0.115.1"
     broken = true;
   };
 })
