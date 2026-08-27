@@ -3,6 +3,7 @@
   fetchurl,
   fetchgit,
   fetchpatch2,
+  fetchFromGitHub,
   fetchFromGitLab,
   lib,
   pam,
@@ -340,7 +341,15 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libreoffice";
   inherit version;
 
-  src = srcsAttributes.main { inherit fetchurl fetchgit; };
+  src = srcsAttributes.main { inherit fetchurl fetchgit fetchFromGitHub; };
+
+  setSourceRoot =
+    if variant == "collabora-coda" then
+      ''
+        sourceRoot=$(echo */engine)
+      ''
+    else
+      null;
 
   postUnpack = ''
     mkdir -v $sourceRoot/${tarballPath}
@@ -367,19 +376,21 @@ stdenv.mkDerivation (finalAttrs: {
       ''
   );
 
-  patches = [
+  patches = lib.optionals (variant != "collabora-coda") [
     # Skip some broken tests:
     # - tdf160386 does not fall back to a CJK font properly for some reason
     # - the remaining tests have notes in the patches
     # FIXME: get rid of this ASAP
     ./skip-broken-tests.patch
+  ]
+  ++ [
     (./skip-broken-tests- + variant + ".patch")
-
+  ]
+  ++ [
     # Don't detect Qt paths from qmake, so our patched-in onese are used
     ./dont-detect-qt-paths-from-qmake.patch
-
   ]
-  ++ lib.optionals (variant != "stable") [
+  ++ lib.optionals (variant != "stable" && variant != "collabora-coda") [
     # Fix build with Poppler 26.01
     (fetchpatch2 {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-2/fix_build_with_poppler_26.01.0.patch";
@@ -412,7 +423,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Revert part of https://github.com/LibreOffice/core/commit/6f60670877208612b5ea320b3677480ef6508abb that broke zlib linking
     ./readd-explicit-zlib-link.patch
   ]
-  ++ lib.optionals (variant == "collabora" || variant == "collabora-coda") [
+  ++ lib.optionals (variant == "collabora") [
     # Backport patch to fix build with Poppler 25.09
     (fetchpatch2 {
       url = "https://github.com/LibreOffice/core/commit/7848e02819c007026952a3fdc9da0961333dc079.patch";
@@ -583,13 +594,13 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optionals withJava [
       jre'
     ]
-    ++ optionals (variant == "collabora" || variant == "collabora-coda") [
+    ++ optionals (variant == "collabora") [
       fast-float
       liborcus_0_19
       mdds_2_1
       md4c
     ]
-    ++ optionals (variant == "stable") [
+    ++ optionals (variant == "stable" || variant == "collabora-coda") [
       fast-float
       liborcus
       md4c
