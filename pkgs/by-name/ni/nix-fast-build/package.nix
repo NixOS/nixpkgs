@@ -24,7 +24,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   build-system = [ python3Packages.setuptools ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${
+    "--prefix"
+    "PATH"
+    ": ${
       lib.makeBinPath (
         [
           nix-eval-jobs
