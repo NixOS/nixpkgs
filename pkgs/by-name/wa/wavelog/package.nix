@@ -10,6 +10,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "wavelog";
   version = "3.1.0";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "wavelog";
     repo = "wavelog";
