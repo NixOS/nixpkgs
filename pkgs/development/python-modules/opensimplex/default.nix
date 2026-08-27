@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromForgejo,
+  setuptools,
   numpy,
   pytestCheckHook,
 }:
@@ -9,7 +10,7 @@
 buildPythonPackage (finalAttrs: {
   pname = "opensimplex";
   version = "0.4.5.1";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -22,7 +23,9 @@ buildPythonPackage (finalAttrs: {
     sha256 = "sha256-pM/vazhFfMip4G31Zj6jv02lEGVYymYCpCVz6sGBwVw=";
   };
 
-  propagatedBuildInputs = [ numpy ];
+  build-system = [ setuptools ];
+
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [ pytestCheckHook ];
   enabledTestPaths = [ "tests/test_opensimplex.py" ];
