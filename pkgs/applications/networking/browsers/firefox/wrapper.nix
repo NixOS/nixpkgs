@@ -11,8 +11,8 @@
   writeText,
 
   ## various stuff that can be plugged in
-  ffmpeg_7,
   ffmpeg_8,
+  ffmpeg_9,
   libxxf86vm,
   libxxf86dga,
   libxt,
@@ -91,9 +91,10 @@ let
       ffmpegSupport = browser.ffmpegSupport or false;
       # Firefox dlopens libavcodec by hardcoded soname, so each ffmpeg major needs
       # explicit browser support; keep versioned pins here (never the ffmpeg alias)
-      # and add a tier when a release gains the next ABI. 146 added libavcodec 62
-      # (https://bugzilla.mozilla.org/show_bug.cgi?id=1962139), not uplifted to ESR 140.
-      ffmpegPackage = if lib.versionAtLeast browser.version "146" then ffmpeg_8 else ffmpeg_7;
+      # and add a tier when a release gains the next ABI.
+      # libavcodec 62: 146 (bug 1962139), uplifted to ESR 140.10.2 (bug 2036244).
+      # libavcodec 63: 154 (bug 2057577), uplifted to ESR 153.1 (bug 2057577).
+      ffmpegPackage = if lib.versionAtLeast browser.version "153.1" then ffmpeg_9 else ffmpeg_8;
       gssSupport = browser.gssSupport or false;
       alsaSupport = browser.alsaSupport or false;
       pipewireSupport = browser.pipewireSupport or false;

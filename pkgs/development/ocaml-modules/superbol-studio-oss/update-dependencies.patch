@@ -1,0 +1,442 @@
+--- a/src/autofonce/autofonce_config/ezToml.ml
++++ b/src/autofonce/autofonce_config/ezToml.ml
+@@ -44,21 +44,21 @@ module EZ = struct
+     match Toml.Parser.from_filename filename with
+     | `Ok content -> content
+     | `Error (s, loc) ->
+-      Printf.kprintf failwith "Could not parse %S: %s at %s" filename s
++      Printf.ksprintf failwith "Could not parse %S: %s at %s" filename s
+         (string_of_location loc)
+ 
+   let from_string_exn content =
+     match Toml.Parser.from_string content with
+     | `Ok content -> content
+     | `Error (s, loc) ->
+-      Printf.kprintf failwith "Could not parse toml content: %s at %s" s
++      Printf.ksprintf failwith "Could not parse toml content: %s at %s" s
+         (string_of_location loc)
+ end
+ 
+ open TYPES
+ include EZ
+ 
+-let failwith fmt = Printf.kprintf failwith fmt
++let failwith fmt = Printf.ksprintf failwith fmt
+ 
+ let key2str key = String.concat "." key
+ 
+--- a/src/autofonce/autofonce_lib/logging.ml
++++ b/src/autofonce/autofonce_lib/logging.ml
+@@ -30,7 +30,7 @@ let indents =  Array.init 10 (fun i -> String.make i ' ')
+ let log_header ?(indent=0) state fmt =
+   let b = state.state_buffer in
+   let indent = indents.( indent ) in
+-  Printf.kprintf (fun s ->
++  Printf.ksprintf (fun s ->
+       Printf.bprintf b "\n%s#######################################\n" indent;
+       Printf.bprintf b    "%s#\n%s#          %50s\n%s#\n" indent indent s indent;
+       Printf.bprintf b "%s#######################################\n\n" indent;
+--- a/src/autofonce/autofonce_lib/runner_common.ml
++++ b/src/autofonce/autofonce_lib/runner_common.ml
+@@ -82,7 +82,7 @@ let spaces = String.make 80 ' '
+ 
+ let test_status ter fmt =
+   let t = ter.tester_test in
+-  Printf.kprintf (fun s ->
++  Printf.ksprintf (fun s ->
+       let len = String.length s in
+       let status_len = if len > status_len then len else status_len in
+       let test_id = Printf.sprintf "%04d" t.test_id in
+@@ -114,7 +114,7 @@ let commented s =
+   "# " ^ String.concat "\n# " (EzString.split s '\n')
+ 
+ let output state fmt =
+-  Printf.kprintf (fun s ->
++  Printf.ksprintf (fun s ->
+       Terminal.move_bol ();
+       Terminal.erase Eol;
+       Terminal.printf [] "%s\n%!" s;
+@@ -194,7 +194,7 @@ let exec_action_no_check ter action =
+   | AT_CHECK _
+   | AF_COPY _
+     ->
+-      Printf.kprintf failwith "exec_action: %s not implemented"
++      Printf.ksprintf failwith "exec_action: %s not implemented"
+         ( string_of_action action )
+ 
+ let check_of_AT_XFAIL_IF ter check_step check_loc check_command =
+--- a/src/autofonce/autofonce_m4/m4Lexer.mll
++++ b/src/autofonce/autofonce_m4/m4Lexer.mll
+@@ -123,7 +123,7 @@ rule shell = parse
+       count_newlines lexbuf ;
+       arg lexbuf }
+   | _
+-      { Printf.kprintf failwith "Unexpected char %S" (Lexing.lexeme lexbuf) }
++      { Printf.ksprintf failwith "Unexpected char %S" (Lexing.lexeme lexbuf) }
+ 
+ and end_of_line = parse
+   | [ ^ '\n' '#' ]* as line { line }
+--- a/src/autofonce/autofonce_m4/m4Parser.ml
++++ b/src/autofonce/autofonce_m4/m4Parser.ml
+@@ -14,14 +14,14 @@ open Ez_file.V1
+ open M4Types
+ 
+ let macro_error macro fmt =
+-  Printf.kprintf (fun s ->
++  Printf.ksprintf (fun s ->
+       Autofonce_misc.Misc.error "Error %s at %s, in macro %s" s
+         (M4Printer.string_of_location macro.loc)
+         (M4Printer.string_of_macro macro)
+     ) fmt
+ 
+ let error loc fmt =
+-  Printf.kprintf (fun s -> raise ( Error (s, loc))) fmt
++  Printf.ksprintf (fun s -> raise ( Error (s, loc))) fmt
+ 
+ let unescape ?last s =
+   M4Lexer.unescape ?last ( Lexing.from_string s )
+--- a/src/autofonce/autofonce_misc/misc.ml
++++ b/src/autofonce/autofonce_misc/misc.ml
+@@ -16,22 +16,22 @@ open EzFile.OP
+ exception Error of string
+ 
+ let _TODO_ loc s =
+-  Printf.kprintf failwith "Feature not implemented %s at %s" s loc
++  Printf.ksprintf failwith "Feature not implemented %s at %s" s loc
+ 
+ let set_signal_handle signal handle =
+   ignore (Sys.set_signal signal (Sys.Signal_handle (fun _ -> handle ())))
+ 
+ let error fmt =
+-  Printf.kprintf (fun s -> raise (Error s)) fmt
++  Printf.ksprintf (fun s -> raise (Error s)) fmt
+ 
+ let command fmt =
+-  Printf.kprintf (fun cmd ->
++  Printf.ksprintf (fun cmd ->
+       let retcode = Sys.command cmd in
+       assert ( retcode = 0 )
+     ) fmt
+ 
+ let command_ fmt =
+-  Printf.kprintf (fun cmd ->
++  Printf.ksprintf (fun cmd ->
+       ignore ( Sys.command cmd )
+     ) fmt
+ 
+--- a/src/autofonce/ez_call/v1.ml
++++ b/src/autofonce/ez_call/v1.ml
+@@ -24,14 +24,14 @@ module EzCall = struct
+     let verbose _ = !debug
+   end
+   module ERROR = struct
+-    let raise fmt = Printf.kprintf failwith fmt
++    let raise fmt = Printf.ksprintf failwith fmt
+   end
+ 
+ 
+   (* [BEGIN] The following part is similar to ocamlup:call.ml *)
+ 
+   let command ?on_error fmt =
+-    Printf.kprintf (fun cmd ->
++    Printf.ksprintf (fun cmd ->
+         Printf.eprintf "%s\n%!" cmd;
+         let retcode = Sys.command cmd in
+         if retcode <> 0 then begin
+--- a/src/lsp/cobol_indent/editor.ml
++++ b/src/lsp/cobol_indent/editor.ml
+@@ -71,7 +71,7 @@ let apply_edits ~contents ~range ~config ~filename ~edits ~symbolic =
+     if nbefore > 0 then
+       let c = contents.[pos] in
+       if c = '\n' || c = '\r' then
+-        Printf.kprintf failwith
++        Printf.ksprintf failwith
+           "Cobol_indent.Editor.skip_before: char \\%3d at pos %d, line %d, skipping %d" (int_of_char c) pos line nbefore ;
+ 
+       if c = '\t' then
+--- a/src/lsp/cobol_indent/engine.ml
++++ b/src/lsp/cobol_indent/engine.ml
+@@ -205,7 +205,7 @@ let indent_tokens ~config tokens =
+     | _
+       -> ()
+ (*
+-      Printf.kprintf failwith "No END-%s token"
++      Printf.ksprintf failwith "No END-%s token"
+         ( Misc.string_of_token token )
+ *)
+   in
+--- a/src/lsp/cobol_indent/misc.ml
++++ b/src/lsp/cobol_indent/misc.ml
+@@ -61,7 +61,7 @@ let () =
+ 
+ let log : ( 'a, unit, string, unit) format4 -> 'a =
+   let f fmt =
+-    Printf.kprintf (fun s ->
++    Printf.ksprintf (fun s ->
+         match !oc with
+         | None -> ()
+         | Some oc ->
+--- a/src/lsp/cobol_lsp/lsp_diagnostics.ml
++++ b/src/lsp/cobol_lsp/lsp_diagnostics.ml
+@@ -43,7 +43,7 @@ let translate_one ?focus_on_main_doc ~rootdir ~uri (diag: DIAG.t) =
+           | DIAG.Unused -> Lsp.Types.DiagnosticTag.Unnecessary
+           | Deprecated -> Deprecated
+         ) (DIAG.tags diag) with [] -> None | tags -> Some tags)
+-      ~message:Pretty.(to_string "%a" DIAG.pp_msg diag)
++      ~message:(`String Pretty.(to_string "%a" DIAG.pp_msg diag))
+   in
+   URIMap.singleton uri [diag]
+ 
+--- a/src/lsp/cobol_lsp/lsp_server.ml
++++ b/src/lsp/cobol_lsp/lsp_server.ml
+@@ -242,7 +242,7 @@ let start_watching_config_of ~project registry ~pattern_kind =
+           | `any ->
+               `RelativePattern (RelativePattern.create
+                                   ~pattern:"**/superbol.toml"
+-                                  ~baseUri:(`URI rooturi))
++                                  ~baseUri:())
+           | `absolute ->                (* assume root path is ok as a pattern *)
+               `Pattern (DocumentUri.to_path rooturi ^ "/superbol.toml")
+         in
+@@ -445,7 +445,7 @@ let request_n_use_client_config_for ~project
+     await_response registry
+       ~request:(WorkspaceConfiguration
+                   { items = [ ConfigurationItem.create ()
+-                                ~scopeUri:(Lsp.Uri.to_string uri)
++                                ~scopeUri:uri
+                                 ~section:"superbol.cobol" ] })
+       ~f:(use_client_config_for ~project)
+   end
+--- a/src/lsp/ebcdic_lib/ebcdic.ml
++++ b/src/lsp/ebcdic_lib/ebcdic.ml
+@@ -680,7 +680,7 @@ let read_gnucobol_collation_file filename =
+       if len > 0 && line.[0] <> '#' then
+         let items = String.split_on_char ' ' line in
+         if List.length items <> 16 then
+-          Printf.kprintf failwith "Wrong number of items on line %S" line;
++          Printf.ksprintf failwith "Wrong number of items on line %S" line;
+         let items = List.map (fun hh ->
+             int_of_string ( "0x" ^ hh )
+           ) items in
+--- a/src/lsp/grammarware/recover/gen_recover.ml
++++ b/src/lsp/grammarware/recover/gen_recover.ml
+@@ -52,12 +52,11 @@ let () =
+               (st' :> int)
+           ) (Lr1.transitions st);
+         fprintf ppf "Reductions:\n";
+-        List.iter (fun (t,ps) ->
+-            let p : production = List.hd ps in
++        List.iter (fun (t,p) ->
+             fprintf ppf " - on %a, reduce %d:\n  %a\n"
+               Print.terminal t
+-              (p :> int) Print.production p
+-          ) (Lr1.reductions st);
++              (Production.to_int p) Print.production p
++          ) (Lr1.get_reductions st);
+       );
+     Production.iter (fun (p : production) ->
+         fprintf ppf "\n# Production p%d\n%a"
+--- a/src/lsp/grammarware/recover/synthesis.ml
++++ b/src/lsp/grammarware/recover/synthesis.ml
+@@ -129,13 +129,11 @@ struct
+             ) [] (Lr1.transitions st)
+         in
+         let cost = List.fold_left
+-            (fun acc (_, prods) ->
+-               List.fold_left (fun acc prod ->
+-                   if Production.rhs prod = [||] && Production.lhs prod = n then
+-                     min_float (cost_of_prod prod) acc
+-                   else acc
+-                 ) acc prods
+-            ) infinity (Lr1.reductions st)
++            (fun acc (_, prod) ->
++               if Production.rhs prod = [||] && Production.lhs prod = n then
++                 min_float (cost_of_prod prod) acc
++               else acc
++            ) infinity (Lr1.get_reductions st)
+         in
+         if cost < infinity || acc <> [] then
+           (fun v -> List.fold_left (fun cost f -> min_float cost (f v)) cost acc)
+@@ -210,13 +208,11 @@ struct
+             ) acc (Lr1.transitions st)
+         in
+         let acc = List.fold_left
+-            (fun acc (_, prods) ->
+-               List.fold_left (fun acc prod ->
+-                   if Production.rhs prod = [||] && Production.lhs prod = n then
+-                     select (Reduce prod) acc
+-                   else acc
+-                 ) acc prods
+-            ) acc (Lr1.reductions st)
++            (fun acc (_, prod) ->
++               if Production.rhs prod = [||] && Production.lhs prod = n then
++                 select (Reduce prod) acc
++               else acc
++            ) acc (Lr1.get_reductions st)
+         in
+         [acc]
+ 
+--- a/src/lsp/ppx_cobcflags/flag.ml
++++ b/src/lsp/ppx_cobcflags/flag.ml
+@@ -57,6 +57,7 @@ let extension_flag =
+                       (value_binding
+                          ~pat:(ppat_var __')
+                          ~expr:(pexp_tuple __)
++                         ~constraint_:none
+                       ^::nil)
+                     ^:: nil))
+     (expand_flag false)
+@@ -70,6 +71,7 @@ let extension_flag_on =
+                       (value_binding
+                          ~pat:(ppat_var __')
+                          ~expr:(pexp_tuple __)
++                         ~constraint_:none
+                       ^::nil)
+                     ^:: nil))
+     (expand_flag true)
+--- a/src/lsp/ppx_cobcflags/flag_rq.ml
++++ b/src/lsp/ppx_cobcflags/flag_rq.ml
+@@ -129,6 +129,7 @@ let extension_flag_rq =
+                       (value_binding
+                          ~pat:(ppat_constraint (ppat_var __') __')
+                          ~expr:(pexp_tuple __)
++                         ~constraint_:none
+                       ^::nil)
+                     ^:: nil))
+     expand_flag_rq
+--- a/src/lsp/pretty/pretty.ml
++++ b/src/lsp/pretty/pretty.ml
+@@ -65,7 +65,7 @@ let pp_set_margin ppf margin =
+ 
+ (** Sends right margin to virtual infinity *)
+ let blast_margin ppf =   (* see https://github.com/ocaml/ocaml/issues/10592 *)
+-  pp_set_margin ppf max_int
++  pp_set_margin ppf 1000000000
+ 
+ (** Version of {!Format.asprintf} with virtually no right margin *)
+ let to_string: ('a, string) func = fun fmt ->
+--- a/src/lsp/sql_preproc/misc.ml
++++ b/src/lsp/sql_preproc/misc.ml
+@@ -19,7 +19,7 @@ let loc_of_edit ~filename e =
+   }
+ 
+ let error ?loc fmt =
+-  Printf.kprintf
++  Printf.ksprintf
+     (fun s ->
+       Printf.eprintf "Error";
+       begin
+@@ -33,7 +33,7 @@ let error ?loc fmt =
+     fmt
+ 
+ let warning ?loc fmt =
+-  Printf.kprintf
++  Printf.ksprintf
+     (fun s ->
+       Printf.eprintf "Warning";
+       begin
+--- a/src/lsp/superbol_free_lib/call.ml
++++ b/src/lsp/superbol_free_lib/call.ml
+@@ -19,14 +19,14 @@ module GLOBALS = struct
+   let verbose _ = !debug
+ end
+ module ERROR = struct
+-  let raise fmt = Printf.kprintf failwith fmt
++  let raise fmt = Printf.ksprintf failwith fmt
+ end
+ 
+ 
+ (* [BEGIN] The following part is similar to ocamlup:call.ml *)
+ 
+ let command ?on_error fmt =
+-  Printf.kprintf (fun cmd ->
++  Printf.ksprintf (fun cmd ->
+       Printf.eprintf "%s\n%!" cmd;
+       let retcode = Sys.command cmd in
+       if retcode <> 0 then begin
+--- a/src/lsp/superbol_free_lib/command_texi2rst.ml
++++ b/src/lsp/superbol_free_lib/command_texi2rst.ml
+@@ -48,7 +48,7 @@ module INPUT = struct
+   let close_in ic = close_in ic.ic
+ 
+   let error ?ic fmt =
+-    Printf.kprintf (fun s ->
++    Printf.ksprintf (fun s ->
+         begin
+           match ic with
+           | Some ic ->
+@@ -61,7 +61,7 @@ module INPUT = struct
+       ) fmt
+ 
+   let warning ic fmt =
+-    Printf.kprintf (fun s ->
++    Printf.ksprintf (fun s ->
+         Printf.eprintf "Warning at %s:%d: %s\n%!"
+                 ic.filename ic.line s;
+       ) fmt
+--- a/src/lsp/superbol_free_lib/misc.ml
++++ b/src/lsp/superbol_free_lib/misc.ml
+@@ -14,7 +14,7 @@
+ open Ez_file.V1
+ 
+ let error fmt =
+-  Printf.kprintf (fun s ->
++  Printf.ksprintf (fun s ->
+       Printf.eprintf "Error: %s\n%!" s;
+       exit 2
+     ) fmt
+--- a/src/vendor/ez_toml/internal_printer.ml
++++ b/src/vendor/ez_toml/internal_printer.ml
+@@ -58,7 +58,7 @@ let bprint_key_path b key_path =
+       else
+       if String.contains key '"' then
+         if String.contains key '\'' then
+-          Printf.kprintf failwith
++          Printf.ksprintf failwith
+             "Key %S cannot contain both simple and double quotes" key
+         else
+           Printf.bprintf b "'%s'" key
+--- a/src/vscode/vscode-json/ezjsonm.ml
++++ b/src/vscode/vscode-json/ezjsonm.ml
+@@ -165,7 +165,7 @@ let to_channel ?minify oc json = value_to_channel ?minify oc (json :> value)
+ exception Parse_error of value * string
+ 
+ let parse_error t fmt =
+-  Printf.kprintf (fun msg ->
++  Printf.ksprintf (fun msg ->
+       raise (Parse_error (t, msg))
+     ) fmt
+ 
+--- a/src/vscode/vscode-json/main.ml
++++ b/src/vscode/vscode-json/main.ml
+@@ -70,7 +70,7 @@ type state = {
+ }
+ 
+ let add_error ?(error=true) state fmt =
+-  Printf.kprintf (fun s ->
++  Printf.ksprintf (fun s ->
+       if error then
+         state.errors <- s :: state.errors
+       else
+--- a/test/testsuite_utils/testsuite_utils.ml
++++ b/test/testsuite_utils/testsuite_utils.ml
+@@ -26,7 +26,7 @@ let find_dir anchor =
+     else
+       let path' = Filename.dirname path in
+       if path = path' then
+-        Printf.kprintf failwith "Anchor %S not found from %s" anchor curdir;
++        Printf.ksprintf failwith "Anchor %S not found from %s" anchor curdir;
+       iter path'
+   in
+   iter curdir
+--- a/vendors/ANSITerminal/src/ANSITerminal_win.ml
++++ b/vendors/ANSITerminal/src/ANSITerminal_win.ml
+@@ -121,7 +121,7 @@ let print ch styles txt =
+ let print_string = print stdout
+ let prerr_string = print stderr
+ 
+-let printf style = kprintf (print_string style)
++let printf style = ksprintf (print_string style)
+ 
+ let eprintf style = ksprintf (prerr_string style)
+ 

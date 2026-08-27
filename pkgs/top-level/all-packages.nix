@@ -2692,8 +2692,6 @@ with pkgs;
 
   pdfminer = with python3Packages; toPythonApplication pdfminer-six;
 
-  pdfium-binaries-v8 = pdfium-binaries.override { withV8 = true; };
-
   pdsh = callPackage ../tools/networking/pdsh {
     rsh = true; # enable internal rsh implementation
     ssh = openssh;
@@ -2846,6 +2844,8 @@ with pkgs;
   spglib = callPackage ../development/libraries/spglib {
     inherit (llvmPackages) openmp;
   };
+
+  spice-gtk = callPackage ../by-name/sp/spice-glib/package.nix { withGtk = true; };
 
   # to match naming of other package repositories
   spire-agent = spire.agent;

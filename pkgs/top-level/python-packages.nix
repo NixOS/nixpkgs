@@ -10828,6 +10828,8 @@ self: super: with self; {
 
   miniupnpc = callPackage ../development/python-modules/miniupnpc { };
 
+  mintotp = callPackage ../development/python-modules/mintotp { };
+
   mip = callPackage ../development/python-modules/mip { };
 
   mir-eval = callPackage ../development/python-modules/mir-eval { };
@@ -11899,50 +11901,6 @@ self: super: with self; {
   netapp-lib = callPackage ../development/python-modules/netapp-lib { };
 
   netapp-ontap = callPackage ../development/python-modules/netapp-ontap { };
-
-  netbox-attachments =
-    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-attachments/package.nix
-      { };
-
-  netbox-bgp = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-bgp/package.nix { };
-
-  netbox-contextmenus =
-    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-contextmenus/package.nix
-      { };
-
-  netbox-contract = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-contract/package.nix { };
-
-  netbox-dns = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-dns/package.nix { };
-
-  netbox-documents = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-documents/package.nix { };
-
-  netbox-floorplan-plugin =
-    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-floorplan-plugin/package.nix
-      { };
-
-  netbox-interface-synchronization =
-    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-interface-synchronization/package.nix
-      { };
-
-  netbox-napalm-plugin =
-    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-napalm-plugin/package.nix
-      { };
-
-  netbox-plugin-prometheus-sd =
-    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-plugin-prometheus-sd/package.nix
-      { };
-
-  netbox-qrcode = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-qrcode/package.nix { };
-
-  netbox-reorder-rack =
-    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-reorder-rack/package.nix
-      { };
-
-  netbox-routing = callPackage ../by-name/ne/netbox_4_5/plugins/netbox-routing/package.nix { };
-
-  netbox-topology-views =
-    callPackage ../by-name/ne/netbox_4_5/plugins/netbox-topology-views/package.nix
-      { };
 
   netcdf4 = callPackage ../development/python-modules/netcdf4 { };
 
@@ -14701,6 +14659,8 @@ self: super: with self; {
 
   pydantic-settings = callPackage ../development/python-modules/pydantic-settings { };
 
+  pydantic-xml = callPackage ../development/python-modules/pydantic-xml { };
+
   pydantic-zarr = callPackage ../development/python-modules/pydantic-zarr { };
 
   pydantic_1 = callPackage ../development/python-modules/pydantic/1.nix { };
@@ -17203,8 +17163,6 @@ self: super: with self; {
   python-uinput = callPackage ../development/python-modules/python-uinput { };
 
   python-ulid = callPackage ../development/python-modules/python-ulid { };
-
-  python-unrar = callPackage ../development/python-modules/python-unrar { inherit (pkgs) unrar; };
 
   python-utils = callPackage ../development/python-modules/python-utils { };
 
@@ -20973,6 +20931,8 @@ self: super: with self; {
 
   trafilatura = callPackage ../development/python-modules/trafilatura { };
 
+  trailbase = callPackage ../development/python-modules/trailbase { inherit (pkgs) trailbase; };
+
   trailrunner = callPackage ../development/python-modules/trailrunner { };
 
   trainer = callPackage ../development/python-modules/trainer { };
@@ -21951,6 +21911,8 @@ self: super: with self; {
   unix-ar = callPackage ../development/python-modules/unix-ar { };
 
   unpaddedbase64 = callPackage ../development/python-modules/unpaddedbase64 { };
+
+  unrar = callPackage ../development/python-modules/unrar { inherit (pkgs) unrar; };
 
   unrardll = callPackage ../development/python-modules/unrardll { };
 

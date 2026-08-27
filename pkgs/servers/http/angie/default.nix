@@ -39,12 +39,13 @@ callPackage ../nginx/generic.nix args rec {
 
   meta = {
     description = "Angie is an efficient, powerful, and scalable web server that was forked from nginx";
-    homepage = "https://angie.software/en/";
+    homepage = "https://en.angie.software/";
+    mainProgram = "angie";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ izorkin ];
-    knownVulnerabilities = [
-      "angie is insufficiently maintained in nixpkgs. Security updates are frequently delayed. Please consider stepping up as maintainer or switching to an alternative."
+    maintainers = with lib.maintainers; [
+      izorkin
+      suorcd
     ];
   };
 }
