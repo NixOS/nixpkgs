@@ -3,33 +3,40 @@
   anthropic,
   backoff,
   buildPythonPackage,
+  claude-agent-sdk,
   distro,
+  fastmcp,
   fetchFromGitHub,
   freezegun,
+  google-genai,
+  langchain,
+  mcp,
   mock,
-  monotonic,
   openai,
+  opentelemetry-exporter-otlp-proto-http,
+  opentelemetry-sdk,
   parameterized,
   pytest-asyncio,
+  pytest-bdd,
   pytestCheckHook,
   python-dateutil,
   pythonAtLeast,
   requests,
   setuptools,
-  six,
   typing-extensions,
+  zstandard,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "posthog";
-  version = "7.11.0";
+  version = "7.44.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PostHog";
     repo = "posthog-python";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-GmwFI23HUp9/p6o+UFCES7WwvnexrBrVTDhLd/YYWOs=";
+    tag = "posthog-v${finalAttrs.version}";
+    hash = "sha256-co2Q6eW9Z0fcP7b5Uc6hCYsKOUZcgvWMMKnU5mMNo1U=";
   };
 
   build-system = [ setuptools ];
@@ -37,22 +44,35 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     backoff
     distro
-    monotonic
     python-dateutil
     requests
-    six
     typing-extensions
   ];
 
+  optional-dependencies = {
+    langchain = [ langchain ];
+    otel = [
+      opentelemetry-sdk
+      opentelemetry-exporter-otlp-proto-http
+    ];
+    zstd = [ zstandard ];
+  };
+
   nativeCheckInputs = [
     anthropic
+    claude-agent-sdk
+    fastmcp
     freezegun
+    google-genai
+    mcp
     mock
     openai
     parameterized
     pytest-asyncio
+    pytest-bdd
     pytestCheckHook
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "posthog" ];
 
