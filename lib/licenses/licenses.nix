@@ -736,11 +736,6 @@ lib.mapAttrs mkLicense (
       url = "https://www.schristiancollins.com/generaluser.php"; # license included in sources
     };
 
-    gfl = {
-      fullName = "GUST Font License";
-      url = "https://www.gust.org.pl/projects/e-foundry/licenses/GUST-FONT-LICENSE.txt";
-    };
-
     gfsl = {
       fullName = "GUST Font Source License";
       url = "https://www.gust.org.pl/projects/e-foundry/licenses/GUST-FONT-SOURCE-LICENSE.txt";
