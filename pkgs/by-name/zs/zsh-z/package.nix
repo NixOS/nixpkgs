@@ -8,6 +8,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zsh-z";
   version = "2.0.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "agkozak";
     repo = "zsh-z";
@@ -26,6 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "Jump quickly to directories that you have visited frequently in the past, or recently";
     homepage = "https://github.com/agkozak/zsh-z";
+    changelog = "https://github.com/agkozak/zsh-z/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.evalexpr ];
