@@ -1,4 +1,7 @@
-{ eapCerts }:
+{
+  eapCerts,
+  wifi ? null,
+}:
 { config, pkgs, ... }:
 let
   radiusDir =
@@ -143,5 +146,41 @@ in
     debug = true;
   };
 
-  systemd.services.hostapd = wiredHostapdService;
+  services.hostapd = lib.mkIf (wifi != null) {
+    enable = true;
+    radios.${wifi.interface} = {
+      channel = 1;
+      networks.${wifi.interface} = {
+        inherit (wifi) ssid;
+        authentication.mode = "none";
+        settings = {
+          ieee8021x = true;
+          wpa = 2;
+          wpa_key_mgmt = "WPA-EAP";
+          rsn_pairwise = "CCMP";
+          eap_reauth_period = 3600;
+          own_ip_addr = "127.0.0.1";
+          nas_identifier = "ap.example.com";
+          auth_server_addr = "127.0.0.1";
+          auth_server_port = 1812;
+          auth_server_shared_secret = "insecure";
+        };
+      };
+    };
+  };
+
+  systemd.services.hostapd =
+    if wifi == null then
+      wiredHostapdService
+    else
+      {
+        after = [
+          "freeradius.service"
+          "vwifi-client.service"
+        ];
+        wants = [
+          "freeradius.service"
+          "vwifi-client.service"
+        ];
+      };
 }
