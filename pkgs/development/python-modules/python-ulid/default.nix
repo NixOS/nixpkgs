@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-ulid";
   version = "3.1.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mdomke";
     repo = "python-ulid";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-13yGd6vYnwzTi+KGJgoQ/z6Cy67FKVC4popaj2uPOlQ=";
   };
 
@@ -36,16 +36,16 @@ buildPythonPackage rec {
     freezegun
     pytestCheckHook
   ]
-  ++ optional-dependencies.pydantic;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "ulid" ];
 
   meta = {
     description = "ULID implementation for Python";
-    mainProgram = "ulid";
     homepage = "https://github.com/mdomke/python-ulid";
-    changelog = "https://github.com/mdomke/python-ulid/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/mdomke/python-ulid/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
+    mainProgram = "ulid";
   };
-}
+})
