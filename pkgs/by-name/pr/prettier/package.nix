@@ -1,6 +1,7 @@
 {
   fetchFromGitHub,
   fetchPnpmDeps,
+  symlinkJoin,
   lib,
   fetchurl,
   makeBinaryWrapper,
@@ -10,7 +11,15 @@
   stdenv,
   versionCheckHook,
   yarn-berry,
+
+  # providing prettier plugins (can be used in combination):
+  # adding plugins that can be loaded by name via `.prettierrc` config
+  # works better with other non-nix prettier users
+  # e.g. `prettier.override { plugins = [ pkgs.prettier-plugin-go-template ]; }`
   plugins ? [ ],
+  # adding plugins via the `--plugin` flag which will auto load them
+  # e.g. prettier.override { plugins-always-on = [ pkgs.prettier-plugin-go-template ]; }
+  plugins-always-on ? [ ],
 }:
 let
   ## Blame NodeJS
@@ -130,6 +139,12 @@ let
       license = "MIT";
     };
   });
+
+  # plugin dir used for NIXPKGS_PRETTIER_PLUGINS_PATH
+  prettierPlugins = symlinkJoin {
+    name = "prettier-plugins";
+    paths = plugins;
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prettier";
@@ -146,6 +161,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove after upstream updates to Yarn 4.14
     # https://github.com/prettier/prettier/blob/main/package.json#L265
     ./yarn-4.14-support.patch
+
+    # allow us to point to and load plugins from nixpkgs
+    ./load-plugins-from-nixpkgs.patch
   ];
 
   missingHashes = ./missing-hashes.json;
@@ -187,10 +205,21 @@ stdenv.mkDerivation (finalAttrs: {
     makeBinaryWrapper "${lib.getExe nodejs}" "$out/bin/prettier" \
       --add-flags "$out/lib/node_modules/prettier/bin/prettier.cjs"
   ''
-  + lib.optionalString (builtins.length plugins > 0) ''
-    wrapProgram $out/bin/prettier --add-flags "${
-      builtins.concatStringsSep " " (lib.map (plugin: "--plugin=${nodeEntryPointOf plugin}") plugins)
-    }";
+  + lib.optionalString ((builtins.length plugins > 0) || (builtins.length plugins-always-on > 0)) ''
+    wrapProgram $out/bin/prettier ${
+      lib.concatStringsSep " " (
+        lib.optional (
+          builtins.length plugins > 0
+        ) "--set NIXPKGS_PRETTIER_PLUGINS_PATH \"${prettierPlugins}/lib/node_modules\""
+        ++
+          lib.optional (builtins.length plugins-always-on > 0)
+            "--add-flags \"${
+              builtins.concatStringsSep " " (
+                lib.map (plugin: "--plugin=${nodeEntryPointOf plugin}") plugins-always-on
+              )
+            }\""
+      )
+    }
   ''
   + ''
     runHook postInstall
@@ -210,6 +239,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       l0b0
       S0AndS0
+      jk
     ];
   };
 })

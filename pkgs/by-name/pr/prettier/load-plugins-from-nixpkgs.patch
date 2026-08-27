@@ -1,0 +1,32 @@
+diff --git a/src/main/plugins/load-plugin.js b/src/main/plugins/load-plugin.js
+index f98d17242..592a944d6 100644
+--- a/src/main/plugins/load-plugin.js
++++ b/src/main/plugins/load-plugin.js
+@@ -1,3 +1,4 @@
++import fs from "node:fs";
+ import path from "node:path";
+ import { pathToFileURL } from "node:url";
+ import { isUrl, toPath } from "url-or-path";
+@@ -19,6 +20,22 @@ async function importPlugin(name, cwd) {
+   }
+ 
+   try {
++    // try load plugins we provide from nixpkgs
++    try {
++      const isDirectory = (path) => {
++        try {
++          return fs.statSync(path).isDirectory();
++        } catch {
++          return false;
++        }
++      };
++      const nppp = process.env.NIXPKGS_PRETTIER_PLUGINS_PATH;
++      if (nppp && isDirectory(nppp)) {
++        return importFromDirectory(name, nppp);
++      }
++    } catch {
++      // nothing
++    }
+     // try local files
+     return await import(pathToFileURL(path.resolve(name)).href);
+   } catch {
