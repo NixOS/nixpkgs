@@ -4,13 +4,13 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   writeText,
-  ocamlPackages,
+  ocaml-ng,
   ledit,
   bash,
 }:
 
 let
-  inherit (ocamlPackages)
+  inherit (ocaml-ng.ocamlPackages_5_4)
     ocaml
     findlib
     zarith

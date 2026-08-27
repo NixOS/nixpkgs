@@ -50,7 +50,7 @@
   lz4,
   lzip,
   mono,
-  ocaml,
+  ocaml-ng,
   odt2txt,
   oggvideotools,
   openssh,
@@ -231,7 +231,7 @@ python.pkgs.buildPythonApplication rec {
         libcaca
         llvm
         mono
-        ocaml
+        ocaml-ng.ocamlPackages_5_4.ocaml
         odt2txt
         oggvideotools
         openssh
