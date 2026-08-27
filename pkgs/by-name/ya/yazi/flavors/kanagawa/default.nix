@@ -1,9 +1,9 @@
 {
   lib,
   fetchFromGitHub,
-  mkYaziPlugin,
+  mkYaziFlavor,
 }:
-mkYaziPlugin {
+mkYaziFlavor {
   pname = "kanagawa.yazi";
   version = "0-unstable-2026-01-02";
 
