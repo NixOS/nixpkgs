@@ -5,7 +5,6 @@
   dotnetCorePackages,
   fetchFromGitHub,
   makeWrapper,
-  avalonia,
   # Runtime dependencies
   libglvnd,
   # passthru
@@ -13,13 +12,13 @@
 }:
 buildDotnetModule (finalAttrs: {
   pname = "wheelwizard";
-  version = "2.4.11";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "TeamWheelWizard";
     repo = "WheelWizard";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8Dex2PDgwnxKguf0jtC1T0+jm7bA7jDfvspwkiqJgUg";
+    hash = "sha256-lLGtzdE5MFfwwlGm5eA+MKYiY9oQhohtiVTqtmglols=";
   };
   postPatch = ''
     rm .config/dotnet-tools.json
@@ -27,18 +26,13 @@ buildDotnetModule (finalAttrs: {
 
   projectFile = "WheelWizard";
   buildType = "Release";
-  dotnet-sdk = dotnetCorePackages.sdk_8_0-bin;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0-bin;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0-bin;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0-bin;
   nugetDeps = ./deps.json;
-  mapNuGetDependencies = true;
 
   nativeBuildInputs = [
     makeWrapper
     desktop-file-utils
-  ];
-
-  buildInputs = [
-    avalonia
   ];
 
   runtimeDeps = [
@@ -49,7 +43,7 @@ buildDotnetModule (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/lib/wheelwizard $out/bin
-    cp -r WheelWizard/bin/Release/net8.0/*/* $out/lib/wheelwizard/
+    cp -r WheelWizard/bin/Release/net10.0/*/* $out/lib/wheelwizard/
 
     makeWrapper $out/lib/wheelwizard/WheelWizard $out/bin/WheelWizard \
       --prefix PATH : ${lib.makeBinPath [ finalAttrs.dotnet-runtime ]}
