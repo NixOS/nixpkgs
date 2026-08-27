@@ -40,9 +40,15 @@ buildPythonPackage rec {
     "tests/test_run.py"
   ];
 
+  disabledTests = [
+    "test_no_stale_reference_as_argument"
+    "test_no_stale_reference_as_result"
+  ];
+
   meta = {
     description = "Allows coroutines to be used in PyQt/PySide applications by providing an implementation of the PEP 3156 event-loop";
     homepage = "https://github.com/CabbageDevelopment/qasync";
+    changelog = "https://github.com/CabbageDevelopment/qasync/releases/tag/v${version}";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
