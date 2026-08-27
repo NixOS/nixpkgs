@@ -70,14 +70,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "paperless-ngx";
-  version = "3.0.5";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ByITplmCoZNt38gZXDc2DPlo5B+bjDpxsfby0TbWB5M=";
+    hash = "sha256-SipdhPxnGpCM/U0K5O59fdaKUuMLWiaXRE+XS3lpb/c=";
   };
 
   postPatch = ''
@@ -98,9 +98,8 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "django-filter"
     "drf-spectacular-sidecar"
     "redis"
+    "regex"
     "torch"
-    "zxing-cpp"
-    "zxing-cpp"
     # requested by maintainer
     "imap-tools"
     "ocrmypdf"
