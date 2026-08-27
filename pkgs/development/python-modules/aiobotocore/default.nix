@@ -1,37 +1,41 @@
 {
   lib,
-  buildPythonPackage,
-  fetchFromGitHub,
   aiohttp,
   aioitertools,
-  botocore,
-  python-dateutil,
-  jmespath,
-  multidict,
-  urllib3,
-  wrapt,
   anyio,
-  dill,
-  moto,
-  time-machine,
-  werkzeug,
   awscli,
   boto3,
+  botocore,
+  buildPythonPackage,
+  dill,
+  fetchFromGitHub,
+  hatch-fancy-pypi-readme,
+  hatchling,
   httpx,
-  setuptools,
+  jmespath,
+  moto,
+  multidict,
+  pytest-mock,
   pytestCheckHook,
+  python-dateutil,
+  time-machine,
+  tiny-proxy,
+  trustme,
+  urllib3,
+  werkzeug,
+  wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "aiobotocore";
-  version = "3.1.1";
+  version = "3.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiobotocore";
     tag = version;
-    hash = "sha256-/Yf2rt/5FH1WiD2VV2hEksM1XleEl4YRBqGQI4GVa8Q=";
+    hash = "sha256-VlQS47FmjFHq3Q2VGa4nGPPnG7qhFgEVxovhCuh7rxI=";
   };
 
   # Relax version constraints: aiobotocore works with newer botocore versions
@@ -39,7 +43,8 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "botocore" ];
 
   build-system = [
-    setuptools
+    hatch-fancy-pypi-readme
+    hatchling
   ];
 
   dependencies = [
@@ -63,9 +68,12 @@ buildPythonPackage rec {
     anyio
     dill
     moto
-    time-machine
-    werkzeug
+    pytest-mock
     pytestCheckHook
+    time-machine
+    tiny-proxy
+    trustme
+    werkzeug
   ]
   ++ moto.optional-dependencies.server;
 
