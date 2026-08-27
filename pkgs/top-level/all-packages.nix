@@ -2223,8 +2223,6 @@ with pkgs;
 
   indexed-bzip2 = with python3Packages; toPythonApplication indexed-bzip2;
 
-  infisical = callPackage ../development/tools/infisical { };
-
   internetarchive = with python3Packages; toPythonApplication internetarchive;
 
   iocextract = with python3Packages; toPythonApplication iocextract;
