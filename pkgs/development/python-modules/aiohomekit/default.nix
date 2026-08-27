@@ -17,7 +17,7 @@
   zeroconf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiohomekit";
   version = "4.0.1";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Jc2k";
     repo = "aiohomekit";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ozVIT9JGi4rcW3LRcp1QR1kj0gl5APLv9y4Imqe99yE=";
   };
 
@@ -63,9 +63,9 @@ buildPythonPackage rec {
       Homekit accessories.
     '';
     homepage = "https://github.com/Jc2k/aiohomekit";
-    changelog = "https://github.com/Jc2k/aiohomekit/releases/tag/${src.tag}";
+    changelog = "https://github.com/Jc2k/aiohomekit/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "aiohomekitctl";
   };
-}
+})
