@@ -7,6 +7,7 @@
       tomfitzhenry
       rnhmjoj
     ];
+    platforms = lib.platforms.linux;
   };
 
   nodes.machine =
