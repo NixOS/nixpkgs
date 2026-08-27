@@ -6,7 +6,7 @@
   pkg-config,
   libuuid,
   sane-backends,
-  podofo0,
+  podofo,
   libjpeg,
   djvulibre,
   libxmlxx3,
@@ -40,13 +40,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gimagereader";
-  version = "5aff249fdc119caa1464af9405259799b4f69d8b";
+  version = "3.4.3";
 
   src = fetchFromGitHub {
     owner = "manisandro";
     repo = "gImageReader";
-    rev = "${finalAttrs.version}";
-    sha256 = "sha256-xS63iGY1yf0NEnGuss0sme1vSYd2L3sOUd/g8yyPn1k=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-sNAQfTJYL5um65UmCyzIH/0qkF3lF7CnrVQ+dLfYf2Q=";
   };
 
   nativeBuildInputs = [
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     libzip
     libuuid
     sane-backends
-    podofo0
+    podofo
     libjpeg
     djvulibre
     tesseract
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Simple Gtk/Qt front-end to tesseract-ocr";
     mainProgram = if withQt6 then "gImageReader-qt6" else "gImageReader";
     homepage = "https://github.com/manisandro/gImageReader";
-    changelog = "https://github.com/manisandro/gImageReader/blob/${finalAttrs.version}/NEWS";
+    changelog = "https://github.com/manisandro/gImageReader/blob/v${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ teto ];
     platforms = lib.platforms.linux;
