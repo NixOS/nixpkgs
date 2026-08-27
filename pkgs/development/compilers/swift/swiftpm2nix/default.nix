@@ -8,7 +8,8 @@
 }:
 
 stdenv.mkDerivation {
-  name = "swiftpm2nix";
+  pname = "swiftpm2nix";
+  version = "0";
 
   nativeBuildInputs = [ makeWrapper ];
 
