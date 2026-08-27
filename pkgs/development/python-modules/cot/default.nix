@@ -4,7 +4,6 @@
   colorlog,
   fetchPypi,
   mock,
-  pyopenssl,
   pytest-mock,
   pytestCheckHook,
   pyvmomi,
@@ -21,7 +20,7 @@
 buildPythonPackage (finalAttrs: {
   pname = "cot";
   version = "2.2.1";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -36,14 +35,13 @@ buildPythonPackage (finalAttrs: {
     versioneer
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     colorlog
     distutils
     pyvmomi
     requests
     standard-pkg-resources
     verboselogs
-    pyopenssl
   ];
 
   nativeCheckInputs = [
@@ -63,7 +61,6 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Many tests require network access and/or ovftool (https://code.vmware.com/web/tool/ovf)
     # try enabling these tests with ovftool once/if it is added to nixpkgs
-    "HelperGenericTest"
     "TestCOTAddDisk"
     "TestCOTAddFile"
     "TestCOTEditHardware"
@@ -79,8 +76,6 @@ buildPythonPackage (finalAttrs: {
     "test_help"
     # Failing TestCOTDeployESXi tests
     "test_serial_fixup_stubbed"
-    "test_serial_fixup_stubbed_create"
-    "test_serial_fixup_stubbed_vm_not_found"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_serial_fixup_invalid_host" ];
 
