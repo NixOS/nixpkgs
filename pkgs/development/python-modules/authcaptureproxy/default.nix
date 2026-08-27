@@ -53,6 +53,9 @@ buildPythonPackage rec {
     "test_return_timer_countdown_refresh_html"
     # AttributeError: 'NoneType' object has no attribute 'get'
     "test_replace_empty_action_urls"
+    # AttributeError: 'MockProtocol' object has no attribute 'resume_reading'
+    "test_cross_request_header_contamination"
+    "test_json_parsing"
   ];
 
   pythonImportsCheck = [ "authcaptureproxy" ];
