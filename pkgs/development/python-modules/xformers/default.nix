@@ -122,6 +122,8 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     scipy
     timm
     transformers
+  ]
+  ++ lib.optionals cudaSupport [
     triton
   ];
 
@@ -145,6 +147,10 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     # Those tests require access to the GPU and should be tagged accordingly:
     # https://github.com/facebookresearch/xformers/pull/1385
     "tests/test_fwbw_overlap.py"
+  ]
+  ++ lib.optionals (!cudaSupport) [
+    # AttributeError: module 'torch._C' has no attribute '_set_print_stack_traces'
+    "tests/test_multiprocessing_utils.py"
   ];
 
   disabledTests =
