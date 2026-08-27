@@ -12,6 +12,7 @@
   requests,
   distutils,
   setuptools,
+  standard-pkg-resources,
   stdenv,
   verboselogs,
   versioneer,
@@ -37,9 +38,9 @@ buildPythonPackage rec {
     distutils
     pyvmomi
     requests
+    standard-pkg-resources
     verboselogs
     pyopenssl
-    setuptools
   ];
 
   nativeCheckInputs = [
