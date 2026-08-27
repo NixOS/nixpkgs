@@ -1,21 +1,23 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchFromForgejo,
   numpy,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "opensimplex";
-  version = "0.4.5";
+  version = "0.4.5.1";
   format = "setuptools";
 
-  src = fetchFromGitHub {
+  src = fetchFromForgejo {
+    domain = "code.larus.se";
     owner = "lmas";
     repo = "opensimplex";
     rev = "v${version}";
-    sha256 = "sha256-pxPak0H6Rh9KwhIsrnMvBFm1uF5XKb4B3H9cN6DM0g4=";
+    forceFetchGit = true;
+    sha256 = "sha256-pM/vazhFfMip4G31Zj6jv02lEGVYymYCpCVz6sGBwVw=";
   };
 
   propagatedBuildInputs = [ numpy ];
