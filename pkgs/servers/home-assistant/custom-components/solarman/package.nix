@@ -1,33 +1,42 @@
 {
+  aiofiles,
+  aiohttp,
   buildHomeAssistantComponent,
   fetchFromGitHub,
   lib,
-  pysolarmanv5,
+  propcache,
   pyyaml,
 }:
 
 buildHomeAssistantComponent rec {
-  owner = "StephanJoubert";
+  owner = "davidrapan";
   domain = "solarman";
-  version = "1.5.1";
+  version = "25.08.16";
 
   src = fetchFromGitHub {
-    owner = "StephanJoubert";
-    repo = "home_assistant_solarman";
-    tag = version;
-    hash = "sha256-+znRq7LGIxbxMEypIRqbIMgV8H4OyiOakmExx1aHEl8=";
+    owner = "davidrapan";
+    repo = "ha-solarman";
+    tag = "v${version}";
+    hash = "sha256-SsUObH3g3i9xQ4JvRDcCm1Fg2giH+MN3rC3NMPYO5m0=";
   };
 
   dependencies = [
-    pysolarmanv5
+    aiofiles
+    aiohttp
+    propcache
     pyyaml
   ];
 
   meta = {
-    description = "Home Assistant component for Solarman collectors used with a variety of inverters";
-    changelog = "https://github.com/StephanJoubert/home_assistant_solarman/releases/tag/${version}";
-    homepage = "https://github.com/StephanJoubert/home_assistant_solarman";
+    description = "Home Assistant component for Solarman Stick Loggers";
+    changelog = "https://github.com/davidrapan/ha-solarman/releases/tag/${version}";
+    homepage = "https://github.com/davidrapan/ha-solarman";
     maintainers = with lib.maintainers; [ Scrumplex ];
-    license = lib.licenses.asl20;
+    # `license` and `custom_components/solarman/pysolarman/license` are MIT
+    # `custom_components/solarman/pysolarman/umodbus/license` is MPL 2.0
+    license = with lib.licenses; [
+      mit
+      mpl20
+    ];
   };
 }

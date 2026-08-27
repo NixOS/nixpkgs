@@ -153,7 +153,7 @@ let
           config
           overlays
           ;
-      } res self super;
+      } self;
 
       conflictingAttrs = lib.intersectAttrs res super;
     in
