@@ -69,7 +69,9 @@ in
       );
     };
 
-    environment.etc."xdg/gtklock/config.ini".source = configFormat.generate "config.ini" cfg.config;
+    environment.etc."xdg/gtklock/config.ini" = lib.mkIf (cfg.config != { }) {
+      source = configFormat.generate "config.ini" cfg.config;
+    };
 
     environment.systemPackages = [ cfg.package ];
 
