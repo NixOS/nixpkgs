@@ -14,7 +14,7 @@ assert
 
 buildGoModule (finalAttrs: {
   pname = "open-policy-agent";
-  version = "1.19.0";
+  version = "1.19.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -23,7 +23,7 @@ buildGoModule (finalAttrs: {
     owner = "open-policy-agent";
     repo = "opa";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AHDCiJOXvJe+2sd1mK6quUDIGuRSecY8CwiA078DNrE=";
+    hash = "sha256-P1ppqfCoQtpNFdSvJpYRmwLYdDi1oV+ipt5BBPXNZeE=";
   };
 
   vendorHash = "sha256-ElqyT5dllacm49PEdxAVvEO7aV5W0ga1N0tb3qIy/cA=";
