@@ -122,7 +122,7 @@ buildPythonPackage rec {
     "test_multiprocessing.py"
     # Failed: async def functions are not natively supported.
     "test_touchup.py"
-    # Test is outdated 
+    # Test is outdated
     "test_websockets.py"
   ];
 
