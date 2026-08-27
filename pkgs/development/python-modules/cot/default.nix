@@ -23,6 +23,8 @@ buildPythonPackage (finalAttrs: {
   version = "2.2.1";
   format = "setuptools";
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
     pname = "cot";
     inherit (finalAttrs) version;
