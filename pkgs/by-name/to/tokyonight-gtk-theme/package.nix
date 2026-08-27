@@ -123,7 +123,6 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants lib
         garaiza-93
         d3vil0p3r
       ];
-      platforms = lib.platforms.unix;
+      platforms = lib.platforms.linux;
     };
   }
-  
