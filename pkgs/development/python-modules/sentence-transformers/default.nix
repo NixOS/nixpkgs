@@ -34,7 +34,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sentence-transformers";
-  version = "6.0.0";
+  version = "5.7.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -42,7 +42,7 @@ buildPythonPackage (finalAttrs: {
     owner = "huggingface";
     repo = "sentence-transformers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uT/3TxhKJKeTz/xBho/YjJJPk9BdCM4PPPNiHruHg/U=";
+    hash = "sha256-0H/sgSxEcDnZkDEtAroSV9zVLfLF04AsjSV0m0Csyk0=";
   };
 
   build-system = [ setuptools ];
