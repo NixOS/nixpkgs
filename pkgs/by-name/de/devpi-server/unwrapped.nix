@@ -5,7 +5,7 @@
   versionCheckHook,
 
   # build-system
-  setuptools,
+  setuptools_80,
 
   # dependencies
   aiohttp,
@@ -42,14 +42,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "devpi-server";
-  version = "6.19.2";
+  version = "6.20.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "devpi";
     repo = "devpi";
     tag = "server-${finalAttrs.version}";
-    hash = "sha256-rAku3oHcmzFNA/MP/64382gCTgqopwjjy4S4HTEFZiY=";
+    hash = "sha256-6OoINJu8DoDCZzu/umdINH0UQXh19pQ2e6XQjJpdAYc=";
   };
 
   postPatch = ''
@@ -57,11 +57,9 @@ buildPythonPackage (finalAttrs: {
       --replace-fail '"setuptools_changelog_shortener",' ""
   '';
 
-  sourceRoot = "${finalAttrs.src.name}/server";
+  pythonRelaxDeps = [ "cryptography" ];
 
-  build-system = [
-    setuptools
-  ];
+  sourceRoot = "${finalAttrs.src.name}/server";
 
   dependencies = [
     aiohttp
@@ -79,7 +77,7 @@ buildPythonPackage (finalAttrs: {
     py
     pyramid
     repoze-lru
-    setuptools
+    setuptools_80
     strictyaml
     waitress
   ]
@@ -102,26 +100,28 @@ buildPythonPackage (finalAttrs: {
     export PATH=$PATH:$out/bin
     export HOME=$TMPDIR
   '';
+
   pytestFlags = [
     "-rfsxX"
   ];
+
   enabledTestPaths = [
     "./test_devpi_server"
   ];
+
   disabledTestPaths = [
     "test_devpi_server/test_nginx_replica.py"
     "test_devpi_server/test_streaming_nginx.py"
     "test_devpi_server/test_streaming_replica_nginx.py"
   ];
+
   disabledTests = [
     "test_fetch_later_deleted" # incompatible with newer pytest
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "devpi_server"
-  ];
+  pythonImportsCheck = [ "devpi_server" ];
 
   passthru.tests = {
     devpi-server = nixosTests.devpi-server;
@@ -137,7 +137,6 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     homepage = "http://doc.devpi.net";
-    description = "Github-style pypi index server and packaging meta tool";
     changelog = "https://github.com/devpi/devpi/blob/${finalAttrs.src.tag}/server/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
