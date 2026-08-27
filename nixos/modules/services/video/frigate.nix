@@ -802,5 +802,10 @@ in
         ProtectProc = "invisible";
       };
     };
+
+    systemd.tmpfiles.settings."frigate" = {
+      # prevent gc of multiprocessing forkserver socket due to default systemd tmpfiles rules
+      "/tmp/systemd-private-%b-${config.systemd.services.frigate.name}-*/tmp/pymp-*".x = { };
+    };
   };
 }
