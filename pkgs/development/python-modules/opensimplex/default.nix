@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "opensimplex";
   version = "0.4.5.1";
   format = "setuptools";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     domain = "code.larus.se";
     owner = "lmas";
     repo = "opensimplex";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     forceFetchGit = true;
     sha256 = "sha256-pM/vazhFfMip4G31Zj6jv02lEGVYymYCpCVz6sGBwVw=";
   };
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emilytrau ];
   };
-}
+})
