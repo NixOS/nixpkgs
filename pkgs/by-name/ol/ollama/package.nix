@@ -111,12 +111,12 @@ let
   # vendored in-tree. Pre-stage the pin (tracks upstream's
   # `LLAMA_CPP_VERSION` file) so the FetchContent step uses our copy
   # instead of trying to clone over the network in the sandbox.
-  llamaCppVersion = "b10488";
+  llamaCppVersion = "b10630";
   llamaCppSrc = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = llamaCppVersion;
-    hash = "sha256-5noPIcSD9Ki1D3J7b6JofeXiPO1RdL/Q8z+E0ZCwceY=";
+    hash = "sha256-h7D/vn/tu2DyzvqhJauWJ+a2TMcjnW527Gv28YrB80I=";
   };
 
   wrapperOptions = [
@@ -152,13 +152,13 @@ let
 in
 goBuild (finalAttrs: {
   pname = "ollama";
-  version = "0.32.15";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BpN3y1unf6Yd1RBura2S4O5jLSkImzi1Guo6GWbNZI8=";
+    hash = "sha256-63Zjqaw+c+8ppShhy4vnJofjG1WzVLIUq7JgO+4eehY=";
   };
 
   vendorHash = "sha256-HMwoaFBMbpoy8f0I+O+i7kIa9BslLu3FcVWeaIOkpvs=";
@@ -233,7 +233,7 @@ goBuild (finalAttrs: {
     chmod -R +w $TMPDIR/llama-cpp-src
     ( cd $TMPDIR/llama-cpp-src && \
       cmake -DPATCH_DIR=$NIX_BUILD_TOP/source/llama/compat \
-        -P $NIX_BUILD_TOP/source/llama/compat/apply-patch.cmake )
+        -P $NIX_BUILD_TOP/source/cmake/apply-git-patches.cmake )
   '';
 
   overrideModAttrs = _: _: {
