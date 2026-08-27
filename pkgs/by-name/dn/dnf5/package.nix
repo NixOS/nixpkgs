@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   appstream,
   cmake,
   createrepo_c,
@@ -9,6 +10,7 @@
   gettext,
   help2man,
   pkg-config,
+  python3,
   python3Packages,
   cppunit,
   fmt,
@@ -35,7 +37,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnf5";
-  version = "5.4.2.1";
+  version = "5.4.4.0";
 
   outputs = [
     "out"
@@ -46,8 +48,16 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rpm-software-management";
     repo = "dnf5";
     tag = finalAttrs.version;
-    hash = "sha256-Z+k47LC3gaBQ3y3090MLsSvPKlwPUVrYEBboKhskTik=";
+    hash = "sha256-l0wdC2XMl8CevKtq4VINoCZ4p/KEMCKaKTQ8bjskb3M=";
   };
+
+  patches = [
+    # fmt 12.2.0 no longer includes <cstring> transitively.
+    (fetchpatch {
+      url = "https://github.com/rpm-software-management/dnf5/commit/10b3ea5df53349511df179eee8dbe3b7a77e8ba4.patch";
+      hash = "sha256-vhkEqoFtB/hk1vhHo6qpzrqbEVrn5eVdsDsnNsb70uM=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -95,6 +105,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_RUBY" false)
     (lib.cmakeBool "WITH_SYSTEMD" false)
     (lib.cmakeBool "WITH_PLUGIN_RHSM" false) # Red Hat Subscription Manager plugin
+    # doc/atp.py preprocesses manpages, but upstream only runs
+    # find_package(Python3) from targets gated on WITH_PYTHON3.
+    (lib.cmakeFeature "Python3_EXECUTABLE" (lib.getExe python3))
     # the cmake package does not handle absolute CMAKE_INSTALL_INCLUDEDIR correctly
     # (setting it to an absolute path causes include files to go to $out/$out/include,
     #  because the absolute path is interpreted with root at $out).
