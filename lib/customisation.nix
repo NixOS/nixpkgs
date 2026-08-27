@@ -775,26 +775,61 @@ rec {
     # Inputs
 
     `extendMkDerivation`-specific configurations
-    : `constructDrv` (required)
-      : Base build helper, the `mkDerivation`-like build helper to extend.
+      - Core configurations
+        `constructDrv` (required)
+        : Base build helper, the `mkDerivation`-like build helper to extend.
 
-      `excludeDrvArgNames` (default to `[ ]`)
-      : Argument names not to pass from the input fixed-point arguments to `constructDrv`.
-        It doesn't apply to the updating arguments returned by `extendDrvArgs`.
+        `excludeDrvArgNames` (default to `[ ]`)
+        : Argument names not to pass from the input fixed-point arguments to `constructDrv`.
+          It doesn't apply to the updating arguments returned by `extendDrvArgs`.
 
-      `excludeFunctionArgNames` (default to `[ ]`)
-      : `__functionArgs` attribute names to remove from the result build helper.
-        `excludeFunctionArgNames` is useful for argument deprecation while avoiding ellipses.
+        `extendDrvArgs` (required)
+        : An extension (overlay) of the argument set, like the one taken by [`overrideAttrs`](#sec-pkg-overrideAttrs) but applied before passing to `constructDrv`.
 
-      `extendDrvArgs` (required)
-      : An extension (overlay) of the argument set, like the one taken by [`overrideAttrs`](#sec-pkg-overrideAttrs) but applied before passing to `constructDrv`.
+        `transformDrv` (default to `lib.id`)
+        : Function to apply to the result derivation.
 
-      `inheritFunctionArgs` (default to `true`)
-      : Whether to inherit `__functionArgs` from the base build helper.
-        Set `inheritFunctionArgs` to `false` when `extendDrvArgs`'s `args` set pattern does not contain an ellipsis.
+      - `__functionArgs` configurations
 
-      `transformDrv` (default to `lib.id`)
-      : Function to apply to the result derivation.
+        `excludeFunctionArgNames` (default to `[ ]`)
+        : `__functionArgs` attribute names to remove from the result build helper.
+          `excludeFunctionArgNames` is useful for argument deprecation while avoiding ellipses.
+
+        `inheritFunctionArgs` (default to `true`)
+        : Whether to inherit `__functionArgs` from the base build helper.
+          Set `inheritFunctionArgs` to `false` when `extendDrvArgs`'s `args` set pattern does not contain an ellipsis.
+
+    # Outputs
+
+    - The result callable set
+
+      `extendMkDerivation` returns a callable set with `__functionArgs`,
+      which takes both fixed-point arguments and a plain argument set.
+
+      Considering only the core configurations, the `extendMkDerivation` (as a function) behaves like:
+
+      ```nix
+      {
+        constructDrv,
+        excludeDrvArgNames ? [ ],
+        extendDrvArgs,
+        transformDrv ? lib.id,
+      }:
+      fpargs:
+      transformDrv (
+        constructDrv (
+          final:
+          let
+            previous = if lib.isFunction fpargs then fpargs final else fpargs;
+          in
+          removeAttrs previous excludeDrvArgNames // extendDrvArgs final previous
+        )
+      )
+      ```
+
+    - Additional callable set attributes
+
+      `extendMkDerivation` add/pass additional attributes to the result callable set, including the core configurations.
 
     # Type
 
