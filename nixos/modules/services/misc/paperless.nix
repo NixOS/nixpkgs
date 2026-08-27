@@ -375,6 +375,21 @@ in
       description = "Domain under which paperless will be available.";
     };
 
+    extraDomains = lib.mkOption {
+      type = with lib.types; listOf str;
+      default = [ ];
+      example = [
+        "paperless-alt-domain.example.com"
+        "paperless-another-domain.example.com"
+      ];
+      description = ''
+        Extra domains under which paperless will be available.
+
+        The primary {option}`services.paperless.domain` doesn't need
+        to be repeated here, but it needs to be set.
+      '';
+    };
+
     exporter = {
       enable = lib.mkEnableOption "regular automatic document exports";
 
@@ -434,6 +449,10 @@ in
             assertion = cfg.configureNginx -> cfg.domain != null;
             message = "${opt.configureNginx} requires ${opt.domain} to be configured.";
           }
+          {
+            assertion = (cfg.extraDomains != [ ]) -> cfg.domain != null;
+            message = "${opt.extraDomains} requires ${opt.domain} to be configured.";
+          }
         ];
 
         services.paperless.manage = manage;
@@ -444,6 +463,7 @@ in
           upstreams.paperless.servers."${cfg.address}:${toString cfg.port}" = { };
           virtualHosts.${cfg.domain} = {
             forceSSL = lib.mkDefault true;
+            serverAliases = cfg.extraDomains;
             locations = {
               "/".proxyPass = "http://paperless";
               "/static/" = {
@@ -476,6 +496,14 @@ in
         services.paperless.settings = lib.mkMerge [
           (lib.mkIf (cfg.domain != null) {
             PAPERLESS_URL = "https://${cfg.domain}";
+          })
+          (lib.mkIf (cfg.extraDomains != [ ]) {
+            PAPERLESS_CSRF_TRUSTED_ORIGINS = lib.mkDefault (
+              lib.concatMapStringsSep "," (d: "https://${d}") cfg.extraDomains
+            );
+            PAPERLESS_CORS_ALLOWED_HOSTS = lib.mkDefault (
+              lib.concatMapStringsSep "," (d: "https://${d}") cfg.extraDomains
+            );
           })
           (lib.mkIf cfg.database.createLocally {
             PAPERLESS_DBENGINE = "postgresql";
