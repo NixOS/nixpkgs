@@ -52,12 +52,6 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "gflanguages" ];
 
-  disabledTests = [
-    # AssertionError
-    "test_exemplars_are_in_script"
-    "test_sample_texts_are_in_script"
-  ];
-
   meta = {
     description = "Python library for Google Fonts language metadata";
     homepage = "https://github.com/googlefonts/lang";
