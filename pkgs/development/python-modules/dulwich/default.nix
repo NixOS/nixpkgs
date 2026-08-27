@@ -16,11 +16,12 @@
   paramiko,
   pytestCheckHook,
   rich,
-  rustPlatform,
   rustc,
-  setuptools,
+  rustPlatform,
   setuptools-rust,
+  setuptools,
   urllib3,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -74,6 +75,7 @@ buildPythonPackage (finalAttrs: {
     glibcLocales
     openssh # for ssh-keygen
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
@@ -83,10 +85,6 @@ buildPythonPackage (finalAttrs: {
     # Depends on setuid which is not available in sandboxed environments
     "SharedRepositoryTests"
   ];
-
-  preCheck = ''
-    export TMPDIR=$(mktemp -d)
-  '';
 
   disabledTestPaths = [
     # AssertionError: GPGMEError not raised
