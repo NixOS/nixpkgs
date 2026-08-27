@@ -269,6 +269,8 @@ in
     wrapQtAppsHook = recurseIntoAttrs pkgs.qt6.wrapQtAppsHook.passthru.tests;
   };
 
+  skillspector = callPackage ./skillspector { };
+
   srcOnly = callPackage ../build-support/src-only/tests.nix { };
 
   systemd = callPackage ./systemd { };
