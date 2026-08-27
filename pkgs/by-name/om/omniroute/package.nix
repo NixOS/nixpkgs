@@ -7,6 +7,14 @@
   bun,
   makeWrapper,
   nodejs,
+  stdenv,
+  playwright-driver,
+  playwright-test,
+  # Some providers (e.g. the Cloudflare AI Playground, Gemini web and the
+  # ChatGPT web executors) drive a headless Chromium via Playwright. Upstream
+  # expects `npx playwright install`, which cannot work in the sandbox, so the
+  # nixpkgs Playwright and its matching browsers are wired in instead.
+  withBrowser ? lib.meta.availableOn stdenv.hostPlatform playwright-driver,
   nix-update-script,
 }:
 
@@ -51,6 +59,16 @@ buildNpmPackage (finalAttrs: {
     rm -r @omniroute/opencode-plugin
   '';
 
+  # Playwright only launches browsers matching the revisions pinned in its own
+  # browsers.json, so replace the locked copy with the nixpkgs one, for which
+  # playwright-driver provides the browsers.
+  preBuild = ''
+    for pkg in playwright playwright-core; do
+      rm -r "node_modules/$pkg"
+      cp -r --no-preserve=mode ${playwright-test}/lib/node_modules/$pkg "node_modules/$pkg"
+    done
+  '';
+
   nativeBuildInputs = [
     pkg-config
     bun
@@ -67,13 +85,18 @@ buildNpmPackage (finalAttrs: {
     # Remove broken symlink
     rm -v $out/lib/node_modules/omniroute/node_modules/@omniroute/browser-pool
 
+    # Replace playwright in the output (after npm pack) again
+    for pkg in playwright playwright-core; do
+      rm -r "$out/lib/node_modules/omniroute/node_modules/$pkg"
+      ln -s ${playwright-test}/lib/node_modules/$pkg "$out/lib/node_modules/omniroute/node_modules/$pkg"
+    done
+
     # Provide required runtime binaries
     wrapProgram $out/bin/omniroute \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          nodejs
-        ]
-      }
+      --prefix PATH : ${lib.makeBinPath [ nodejs ]} ${lib.optionalString withBrowser ''
+        \
+             --set-default PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD 1 \
+             --set-default PLAYWRIGHT_BROWSERS_PATH ${playwright-driver.browsers}''}
   '';
 
   passthru.updateScript = nix-update-script { };
