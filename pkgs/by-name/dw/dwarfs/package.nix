@@ -33,14 +33,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dwarfs";
-  version = "0.14.0";
+  version = "0.15.7";
 
   src = fetchFromGitHub {
     owner = "mhx";
     repo = "dwarfs";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-4Ec1AqumTSPZpPEi528OaO3bOU1Soc8ZHuuKXIDvCUA=";
+    hash = "sha256-oC5Ki0Fc8c+PD39rRTzc2WErXkxEBZM+k9Ac5Xptats=";
   };
 
   cmakeFlags = [
@@ -108,13 +108,15 @@ stdenv.mkDerivation (finalAttrs: {
         "dwarfs/tools_test.end_to_end/*"
         "dwarfs/tools_test.mutating_and_error_ops/*"
         "dwarfs/tools_test.categorize/*"
+
         # Requires a working FUSE device and fusermount3, unavailable in sandbox.
-        "tools_test.timestamps_fuse*"
-        "tools_test.dwarfs_automount*"
-        "tools_test.dwarfs_fsname_and_subtype*"
+        "dwarfs/fuse_driver_test*"
+        "tools_test.dwarfs_obsolete_options*"
+
         "sparse_files_test.random_large_files*"
         "sparse_files_test.random_small_files_fuse*"
         "sparse_files_test.huge_holes_fuse*"
+
         # Requires xattr support unavailable in sandbox.
         "xattr_test.portable_xattr"
       ];
