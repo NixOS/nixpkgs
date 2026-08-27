@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
 
   # build-system
   setuptools,
@@ -24,35 +23,24 @@ buildPythonPackage rec {
     hash = "sha256-Gdta0g4mRQGo7mTj4VejdmpedEFw5Uzuy05coJsIZVo=";
   };
 
-  patches = [
-    # Starting with Python 3.14, both `-X` and `--xxx` are surrounded
-    # by ANSI color codes in the argparse help text.
-    (fetchpatch {
-      url = "https://github.com/nose-devs/nose2/commit/2043fdfa264dc04e379e11c227e63a5704cb0185.patch";
-      hash = "sha256-OWzBInMI0ef9g0H3muka7J7FP01IZEFkuzJfaku78bI=";
-    })
-  ];
-
   build-system = [ setuptools ];
 
   optional-dependencies = {
     coverage_plugin = [ coverage ];
   };
 
+  nativeCheckInputs = [ unittestCheckHook ];
+
   pythonImportsCheck = [ "nose2" ];
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
-
   meta = {
-    changelog = "https://github.com/nose-devs/nose2/blob/${version}/docs/changelog.rst";
     description = "Test runner for Python";
-    mainProgram = "nose2";
     homepage = "https://github.com/nose-devs/nose2";
+    changelog = "https://github.com/nose-devs/nose2/blob/${version}/docs/changelog.rst";
     license = lib.licenses.bsd0;
     maintainers = [ ];
+    mainProgram = "nose2";
   };
 }
