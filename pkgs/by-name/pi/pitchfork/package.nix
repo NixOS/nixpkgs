@@ -7,7 +7,6 @@
   pnpmConfigHook,
   rustPlatform,
   stdenv,
-  ...
 }:
 
 let
