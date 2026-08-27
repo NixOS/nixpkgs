@@ -4,24 +4,21 @@
   fetchFromGitHub,
 }:
 let
-  version = "1.2.17";
+  version = "1.2.20";
 in
 python3Packages.buildPythonApplication {
   pname = "mktxp";
   inherit version;
-  pyproject = false;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "akpw";
     repo = "mktxp";
     tag = "v${version}";
-    hash = "sha256-SFnLLmtRF5JT1a78R0lwB+9XTJXW0fLyVJkN5xD3NIw=";
+    hash = "sha256-xYVIaO60ih3P/oV11QljSCF5iRYf2fK3EjEhhdPFIzo=";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    pypaInstallHook
-    setuptoolsBuildHook
-  ];
+  build-system = with python3Packages; [ setuptools ];
 
   dependencies = with python3Packages; [
     prometheus-client
@@ -34,6 +31,18 @@ python3Packages.buildPythonApplication {
     packaging
     pyyaml
   ];
+
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+    pytest-mock
+  ];
+
+  # tests create the mktxp config under $HOME
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  pythonImportsCheck = [ "mktxp" ];
 
   meta = {
     homepage = "https://github.com/akpw/mktxp";
