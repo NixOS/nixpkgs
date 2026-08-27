@@ -114,6 +114,8 @@ buildPythonPackage (finalAttrs: {
     "test_execution_state"
     # AssertionError
     "test_check_version"
+    # Flaky; updated timestamp can be equal to old timestamp
+    "test_created_timestamp"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # attempts to use trashcan, build env doesn't allow this
