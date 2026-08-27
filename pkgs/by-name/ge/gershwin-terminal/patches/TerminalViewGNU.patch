@@ -1,0 +1,15 @@
+diff --git a/TerminalView.m b/TerminalView.m
+index ce6ee16..522d4b9 100644
+--- a/TerminalView.m
++++ b/TerminalView.m
+@@ -44,9 +44,6 @@
+ #  include <termios.h>
+ #  include <util.h>
+ #  include <sys/ioctl.h>
+-#elif defined (__GNU__)
+-#else
+-#  include <termio.h>
+ #endif
+ 
+ #include <sys/time.h>
+
