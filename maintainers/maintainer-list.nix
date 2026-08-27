@@ -26208,6 +26208,11 @@
     githubId = 5512096;
     name = "Sébastien Guimmara";
   };
+  sh0rtround = {
+    github = "Sh0rtRound-wq";
+    githubId = 97189175;
+    name = "Sh0rtRound";
+  };
   shadaj = {
     github = "shadaj";
     githubId = 543055;
