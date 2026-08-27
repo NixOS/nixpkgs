@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zsh-z";
-  version = "0-unstable-2021-02-15";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "agkozak";
     repo = "zsh-z";
-    rev = "595c883abec4682929ffe05eb2d088dd18e97557";
-    sha256 = "sha256-HnwUWqzwavh/Qox+siOe5lwTp7PBdiYx+9M0NMNFx00=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-r12crTTTYRYztuTCz7/59d4ig/O1x+I7lvf4r+b2fFM=";
   };
 
   strictDeps = true;
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.evalexpr ];
   };
-}
+})
