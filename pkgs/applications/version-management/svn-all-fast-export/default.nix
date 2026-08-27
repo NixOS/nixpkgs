@@ -36,6 +36,9 @@ stdenv.mkDerivation {
     "VERSION=${version}"
     "APR_INCLUDE=${apr.dev}/include/apr-1"
     "SVN_INCLUDE=${subversion.dev}/include/subversion-1"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "CONFIG-=app_bundle"
   ];
 
   env.NIX_LDFLAGS = "-lsvn_fs-1";
