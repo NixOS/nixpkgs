@@ -54,7 +54,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/rtl_tcp -a ${cfg.listenAddress} -p ${toString cfg.port} ${lib.escapeShellArgs cfg.extraArgs}";
+        ExecStart = "${cfg.package}/bin/rtl_tcp -a ${cfg.listenAddress} -p ${toString cfg.port} ${utils.escapeSystemdExecArgs cfg.extraArgs}";
         Restart = "on-failure";
         RestartSec = "5s";
         DynamicUser = true;
