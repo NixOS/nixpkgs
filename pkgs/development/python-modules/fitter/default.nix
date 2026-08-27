@@ -57,6 +57,13 @@ buildPythonPackage (finalAttrs: {
     pytest-xdist
   ];
 
+  env = {
+    # Use the non-interactive matplotlib backend Agg.
+    # Matplotlib doesn't switch backends smartly on Darwin builders
+    # and aborts in the sandbox after WindowServer connection failed.
+    MPLBACKEND = "Agg";
+  };
+
   pythonImportsCheck = [
     "fitter"
   ];
