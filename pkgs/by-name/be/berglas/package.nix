@@ -35,16 +35,16 @@ in
 
 buildGoModule (finalAttrs: {
   pname = "berglas";
-  version = "2.0.13";
+  version = "2.0.16";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "berglas";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-p+HWZCyFouy+FycCPesKLV7UIeMogz9oKX+mynzBTKw";
+    sha256 = "sha256-I69p9xEWjIZAh5/1sk3G7ARuk0N5DCPTy2cnAA/9QB8=";
   };
 
-  vendorHash = "sha256-Bz+4hlT5ZqpDnquGirooyFMG8FNUU2NO60Ih3Et3Y3o";
+  vendorHash = "sha256-LOIQTUYippMd5P3m0mORJaTKhN89g9D6wksNPteG/NI=";
 
   ldflags = [
     "-s"
@@ -52,12 +52,7 @@ buildGoModule (finalAttrs: {
     "-X github.com/GoogleCloudPlatform/berglas/v2/internal/version.version=${finalAttrs.version}"
   ];
 
-  postPatch = skipTestsCommand + ''
-    substituteInPlace go.mod \
-              --replace-fail \
-                "go 1.26.3" \
-                "go 1.26"
-  '';
+  postPatch = skipTestsCommand;
 
   passthru.tests = {
     version = testers.testVersion {
