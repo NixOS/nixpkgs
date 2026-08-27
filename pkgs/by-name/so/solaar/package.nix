@@ -129,6 +129,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       ysndr
       oxalica
       ilkecan
+      Svenum
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
