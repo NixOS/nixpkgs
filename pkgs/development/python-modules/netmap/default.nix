@@ -5,12 +5,13 @@
   replaceVars,
   nmap,
   python,
+  setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "netmap";
   version = "0.7.0.2";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -20,6 +21,10 @@ buildPythonPackage (finalAttrs: {
     rev = finalAttrs.version;
     sha256 = "1a44zz9zsxy48ahlpjjrddpyfi7cnfknicfcp35hi588qm430mag";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   patches = [
     (replaceVars ./nmap-path.patch {
