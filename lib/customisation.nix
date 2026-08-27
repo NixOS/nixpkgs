@@ -904,8 +904,10 @@ rec {
             final:
             let
               previous = if isFunction fpargs then fpargs final else fpargs;
+              background =
+                if excludeDrvArgNames == [ ] then previous else removeAttrs previous excludeDrvArgNames;
             in
-            removeAttrs previous excludeDrvArgNames // extendDrvArgs final previous
+            background // extendDrvArgs final previous
           )
         );
 
