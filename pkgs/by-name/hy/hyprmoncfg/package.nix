@@ -11,7 +11,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "hyprmoncfg";
-  version = "1.9.1";
+  version = "1.16.1";
 
   __structuredAttrs = true;
 
@@ -19,7 +19,7 @@ buildGoModule (finalAttrs: {
     owner = "crmne";
     repo = "hyprmoncfg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LCZ1F30Ix4NnWYPI3WkL03jke9XW1cB5CWxmVSrdYYI=";
+    hash = "sha256-7wyghP1S7vauC2yJozaEg8ZfPgUNdgtaI4vq5XcTqGE=";
   };
 
   vendorHash = "sha256-gQbjvdKtO0hCXrs9RnWo1s0YeHf5W9t+8AgS2ELXlPo=";
@@ -53,6 +53,8 @@ buildGoModule (finalAttrs: {
       --replace-fail '#!/bin/sh' '#!${lib.getExe bash}'
     substituteInPlace internal/hypr/client_test.go \
       --replace-fail '#!/usr/bin/env bash' '#!${lib.getExe bash}'
+    substituteInPlace internal/omarchywatch/owner_test.go \
+      --replace-fail '#!/bin/sh' '#!${lib.getExe bash}'
   '';
 
   preCheck = ''
@@ -62,6 +64,8 @@ buildGoModule (finalAttrs: {
   postInstall = ''
     install -Dm644 packaging/applications/hyprmoncfg.desktop \
       $out/share/applications/hyprmoncfg.desktop
+    install -Dm644 packaging/applications/hyprmoncfg-omarchy.desktop \
+      $out/share/applications/hyprmoncfg-omarchy.desktop
     install -Dm644 packaging/icons/hyprmoncfg.svg \
       $out/share/icons/hicolor/scalable/apps/hyprmoncfg.svg
     substituteInPlace packaging/systemd/hyprmoncfgd.service \
