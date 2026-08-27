@@ -17,7 +17,7 @@ skawarePackages.buildPackage {
     maintainers = [ lib.maintainers.somasis ];
   };
 
-  description = "Set of tiny general Unix utilities optimized for simplicity and small size";
+  meta.description = "Set of tiny general Unix utilities optimized for simplicity and small size";
 
   outputs = [
     "bin"
@@ -26,13 +26,16 @@ skawarePackages.buildPackage {
     "out"
   ];
 
+  buildInputs = [ skalibs ];
+
   configureFlags = [
-    "--bindir=\${bin}/bin"
-    "--includedir=\${dev}/include"
+    "--libdir=${placeholder "out"}/lib"
+    "--dynlibdir=${placeholder "out"}/lib"
+    "--libexecdir=${placeholder "out"}/libexec"
+    "--bindir=${placeholder "bin"}/bin"
+    "--includedir=${placeholder "dev"}/include"
+    "--pkgconfdir=${placeholder "dev"}/lib/pkgconfig"
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
-    "--with-include=${skalibs.dev}/include"
-    "--with-lib=${skalibs.lib}/lib"
-    "--with-dynlib=${skalibs.lib}/lib"
   ];
 
   postInstall = ''

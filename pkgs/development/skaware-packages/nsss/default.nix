@@ -5,18 +5,18 @@ skawarePackages.buildPackage {
   version = "0.2.1.3";
   sha256 = "sha256-FNpESoNtJLaihvrIilAr2qKWpNMo8J1Sl1aK07PgJoU=";
 
-  description = "Implementation of a subset of the pwd.h, group.h and shadow.h family of functions";
+  meta.description = "Implementation of a subset of the pwd.h, group.h and shadow.h family of functions";
 
-  # TODO: nsss support
+  buildInputs = [ skalibs ];
+
   configureFlags = [
-    "--libdir=\${lib}/lib"
-    "--dynlibdir=\${lib}/lib"
-    "--bindir=\${bin}/bin"
-    "--includedir=\${dev}/include"
+    "--libdir=${placeholder "lib"}/lib"
+    "--dynlibdir=${placeholder "out"}/lib"
+    "--libexecdir=${placeholder "lib"}/libexec"
+    "--bindir=${placeholder "bin"}/bin"
+    "--includedir=${placeholder "dev"}/include"
+    "--pkgconfdir=${placeholder "dev"}/lib/pkgconfig"
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
-    "--with-include=${skalibs.dev}/include"
-    "--with-lib=${skalibs.lib}/lib"
-    "--with-dynlib=${skalibs.lib}/lib"
   ];
 
   postInstall = ''
