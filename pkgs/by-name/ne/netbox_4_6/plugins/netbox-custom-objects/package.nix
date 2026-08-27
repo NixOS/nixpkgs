@@ -10,14 +10,14 @@ buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "netbox-custom-objects";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "netboxlabs";
     repo = "netbox-custom-objects";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HnA2CJL0EOJctQpsu/G+9fULBIa8rrrYNiT0aaDw/rI=";
+    hash = "sha256-3ftZQWymD23+k29t6s6IE12JMvfGBcqaGZaFyaEWwrE=";
   };
 
   build-system = [ setuptools ];
