@@ -4,6 +4,7 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   lib,
+  nixosTests,
 }:
 let
   version = "14.9.0";
@@ -40,6 +41,10 @@ buildGoModule (finalAttrs: {
     wrapProgram $out/bin/yopass-server \
       --add-flags "--asset-path ${website}"
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) yopass;
+  };
 
   meta = {
     description = "Secure sharing of secrets, passwords and files";
