@@ -11,7 +11,7 @@ let
     owner = "jhaals";
     repo = "yopass";
     tag = version;
-    hash = "sha256-YZeSGcQcAsOmIwhhVpGN7bxlNGsWIJNAwUBxJM/7314=";
+    hash = "sha256-QGa6T0XNQaYIKyhGSnBNMjEaJk9JgEldxdv974lMtBU=";
   };
 
   website = callPackage ./website.nix { inherit src version; };
@@ -23,7 +23,7 @@ buildGoModule (finalAttrs: {
   __structuredAttrs = true;
   strictDeps = true;
 
-  vendorHash = "sha256-mR17QPGZNJ9Vx6y6mExvZDKReVxdUif8aQ6VMfKVgcM=";
+  vendorHash = "sha256-CFo/rI6M7pbjVK0AtL92UyehNgobfWkw61tDNvqpCLY=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
