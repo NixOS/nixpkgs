@@ -20,6 +20,13 @@
 }:
 
 let
+  # `patches` here touch `configure.in`/`configure.ac`, so the generated
+  # `configure` the tarball ships has to be rebuilt. Only the platforms
+  # that get such a patch pay for it: `win` everywhere, and `unix` for
+  # 8.6 on Cygwin, which is the only branch missing the import library.
+  needsAutoreconf =
+    stdenv.hostPlatform.isWindows || (stdenv.hostPlatform.isCygwin && lib.versionOlder version "9.0");
+
   baseInterp = stdenv.mkDerivation rec {
     pname = "tcl";
     inherit version src;
@@ -68,14 +75,9 @@ let
       ++ lib.optionals (stdenv.hostPlatform.isWindows && stdenv.buildPlatform != stdenv.hostPlatform) [
         buildPackages.tcl
       ]
-      # `patches` touches `configure.in`/`configure.ac` only, so the generated
-      # `configure` the tarball ships has to be rebuilt. The default hook is
-      # the newest autoconf that works for both, 8.6's 2.59-era
-      # `configure.in` included.
-      #
-      # TODO make unconditional, which means `preAutoreconf` must `cd unix`
-      # too. Only `win` needs regenerating today.
-      ++ lib.optionals stdenv.hostPlatform.isWindows [
+      # The default hook is the newest autoconf that works for every tree we
+      # regenerate, 8.6's 2.59-era `configure.in` included.
+      ++ lib.optionals needsAutoreconf [
         autoreconfHook
       ];
 
@@ -87,25 +89,25 @@ let
     # `unix` but with its own `Makefile.in` and a smaller set of options. Cygwin
     # is not Windows for this purpose: it is POSIX enough for the `unix` one.
     #
-    # Whichever phase reaches it first does the `cd`; on Windows that is
-    # `autoreconfPhase`, below.
-    preConfigure = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
-      cd unix
+    # Whichever phase reaches it first does the `cd`; where we regenerate
+    # `configure` that is `autoreconfPhase`, below.
+    preConfigure = lib.optionalString (!needsAutoreconf) ''
+      cd ${if stdenv.hostPlatform.isWindows then "win" else "unix"}
     '';
 
     # `null`, not `""`: an empty string is still a variable, and adding one to
     # every other platform's derivation is a mass rebuild for nothing.
     preAutoreconf =
-      if stdenv.hostPlatform.isWindows then
+      if needsAutoreconf then
         ''
-          cd win
+          cd ${if stdenv.hostPlatform.isWindows then "win" else "unix"}
         ''
       else
         null;
 
     # No `--install`: there is no automake here, and letting `autoreconf`
     # regenerate `aclocal.m4` would lose the `tcl.m4` the build depends on.
-    autoreconfFlags = if stdenv.hostPlatform.isWindows then "--force --verbose" else null;
+    autoreconfFlags = if needsAutoreconf then "--force --verbose" else null;
 
     # Note: pre-9.0 flags are temporarily interspersed to avoid a mass rebuild.
     configureFlags =
@@ -194,17 +196,19 @@ let
         # files, so `tclsh86.exe` rather than `tclsh8.6`.
         infix =
           if stdenv.hostPlatform.isWindows then lib.replaceStrings [ "." ] [ "" ] release else release;
-        # On Cygwin, shared libs are in the bin directory. TODO dedup
-        # with this other packages, consider doing the same or Mingw.
-        # See #431820.
-        linkDir = if !stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isCygwin then "bin" else "lib";
-        linkExtension = if stdenv.hostPlatform.isWindows then "${dllExtension}.a" else dllExtension;
-        # Tcl 9 names its Cygwin DLL the way that platform does, `cygtcl9.0.dll`;
-        # 8.6 called it `libtcl8.6.dll`. See the Cygwin `SHLIB_LD` in 9.0's
-        # `unix/tcl.m4`, which rewrites `cyg%.dll` to `lib%.dll` for the import
-        # library. Only the DLL is affected, not the static or import library.
-        dllPrefix =
-          if stdenv.hostPlatform.isCygwin && lib.versionAtLeast version "9.0" then "cyg" else "lib";
+        # On PE platforms --- Mingw and Cygwin alike --- the DLL lives in
+        # `bin` and the thing one links against is the import library in
+        # `lib`, so that is what the unversioned name should point at.
+        #
+        # The import library is always `lib`-prefixed, even where the DLL
+        # is not: Tcl 9 names its Cygwin DLL the way that platform does,
+        # `cygtcl9.0.dll`, and 9.0's Cygwin `SHLIB_LD` in `unix/tcl.m4`
+        # rewrites `cyg%.dll` to `lib%.dll.a` for the import library.
+        linkExtension =
+          if stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin then
+            "${dllExtension}.a"
+          else
+            dllExtension;
       in
       ''
         make install-private-headers
@@ -213,7 +217,7 @@ let
           ln -s $out/lib/libtcl${infix}${staticExtension} $out/lib/libtcl${staticExtension}
         fi
         ${lib.optionalString (!stdenv.hostPlatform.isStatic) ''
-          ln -s $out/${linkDir}/${dllPrefix}tcl${infix}${linkExtension} $out/lib/libtcl${linkExtension}
+          ln -s $out/lib/libtcl${infix}${linkExtension} $out/lib/libtcl${linkExtension}
         ''}
       '';
 
