@@ -37,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
   ];
 
+  strictDeps = true;
+
   doCheck = false;
 
   checkPhase = ''
