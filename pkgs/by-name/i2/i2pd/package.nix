@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "i2pd";
-  version = "2.60.0";
+  version = "2.61.0";
 
   src = fetchFromGitHub {
     owner = "PurpleI2P";
     repo = "i2pd";
     tag = finalAttrs.version;
-    hash = "sha256-oVC31GpygznXbmjQ3qv3XZ58jZ9l6ibBoueuBM5Hk0M=";
+    hash = "sha256-dfCeY64TGRoTMNvKZk5jrhyRc8b8K03KM7YV5w/pbUM=";
   };
 
   postPatch = lib.optionalString (!stdenv.hostPlatform.isx86) ''

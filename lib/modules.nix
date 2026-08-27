@@ -722,10 +722,9 @@ let
       # a module will resolve strictly the attributes used as argument but
       # not their values.  The values are forwarding the result of the
       # evaluation of the option.
-      context = name: ''while evaluating the module argument `${name}' in "${key}":'';
       extraArgs = mapAttrs (
         name: _:
-        addErrorContext (context name) (
+        addErrorContext ''while evaluating the module argument `${name}' in "${key}":'' (
           args.${name} or (addErrorContext
             "noting that argument `${name}` is not externally provided, so querying `_module.args` instead, requiring `config`"
             config._module.args.${name}
