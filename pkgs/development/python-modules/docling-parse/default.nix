@@ -32,7 +32,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "docling-parse";
-  version = "7.8.1";
+  version = "7.16.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -40,7 +40,7 @@ buildPythonPackage (finalAttrs: {
     owner = "docling-project";
     repo = "docling-parse";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WTXWIJWwxfBdPnoCvo1sq7o9itG/MUX3FNz1GGtvaVo=";
+    hash = "sha256-BQ6gimrsGlBpxuBlXgPth0Jh3A2wm1ssKc2UEQZ8m8A=";
   };
 
   # cibuildwheel and delocate are listed as build-system dependencies but are only used in CI to
