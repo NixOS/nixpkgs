@@ -78,7 +78,9 @@ in
     environment = lib.mkMerge [
       {
         systemPackages = [ cfg.package ];
-        etc."xdg/foot/foot.ini".source = settingsFormat.generate "foot.ini" cfg.settings;
+        etc."xdg/foot/foot.ini" = lib.mkIf (cfg.settings != { }) {
+          source = settingsFormat.generate "foot.ini" cfg.settings;
+        };
       }
       (lib.mkIf cfg.xdg.serverAutostart {
         etc."xdg/autostart/foot-server.desktop".source =
