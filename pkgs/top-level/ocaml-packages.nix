@@ -1420,6 +1420,8 @@ let
 
         mustache = callPackage ../development/ocaml-modules/mustache { };
 
+        mybuild = callPackage ../development/ocaml-modules/mybuild { };
+
         ### N ###
 
         name_matcher_parser = callPackage ../development/ocaml-modules/name_matcher_parser { };
