@@ -1,0 +1,19 @@
+---
+ SConstruct | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/SConstruct b/SConstruct
+index b95491cc..962ab7f1 100755
+--- a/SConstruct
++++ b/SConstruct
+@@ -225,7 +225,6 @@ default_env.Append(
+         os.path.join(project_root_path, "include"),
+         os.path.join(project_root_path, "framework"),
+         os.path.join(project_root_path, "ext_tools"),
+-        os.path.join(project_root_path, "ext_tools", "qcbor", "inc"),
+         os.path.join(project_root_path, "build", "ext_tools", "libsodium", "include"),
+     ]
+ )
+-- 
+2.54.0
+
