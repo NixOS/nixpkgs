@@ -13,15 +13,20 @@
 
 buildPythonPackage rec {
   pname = "librouteros";
-  version = "4.1.1";
+  version = "4.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "luqasz";
     repo = "librouteros";
     tag = version;
-    hash = "sha256-iqpaHSA+1AuN+VBfDfpxSjl5/g24yjbPmZd+dG32izQ=";
+    hash = "sha256-Xn/mXNfgC41MR12PpYgDwMfHyn9iyKt4tSbEWI340Dc=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.8.18,<0.12.0" "uv_build"
+  '';
 
   build-system = [ uv-build ];
 
@@ -35,14 +40,12 @@ buildPythonPackage rec {
     stamina
   ];
 
-  disabledTests = [
+  disabledTestPaths = [
     # Disable tests which require QEMU to run
-    "test_login"
-    "test_long_word"
-    "test_query"
-    "test_add_then_remove"
-    "test_add_then_update"
-    "test_generator_ditch"
+    "tests/integration/test_config.py"
+    "tests/integration/test_general.py"
+    "tests/integration/test_generator.py"
+    "tests/integration/test_path.py"
   ];
 
   pythonImportsCheck = [ "librouteros" ];
