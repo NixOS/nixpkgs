@@ -6,13 +6,13 @@
   libsecret,
   bun,
   makeWrapper,
-  nodejs-slim,
+  nodejs,
   nix-update-script,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "omniroute";
-  version = "3.8.49";
+  version = "3.8.50";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -20,10 +20,11 @@ buildNpmPackage (finalAttrs: {
     owner = "diegosouzapw";
     repo = "OmniRoute";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nRLziV4NWPoa0ev57DV7jmAvLpL/1MP1EMZO2/drrTU=";
+    hash = "sha256-+2FMc9wrvPtQS3+mGsBVvKrd5RprYe/r/GJvjAVMBpc=";
   };
 
-  npmDepsHash = "sha256-R0u93MLUUWC8xFgq4S0Aj/7wg4pygTKwxP/eWkWMgCw=";
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-wa5vQMYugA8E7lXOh4lgNH7JNbKOinNaW6Zk8Mw2e8k=";
 
   # Prevent onnxruntime-node to download GPU support files
   env.ONNXRUNTIME_NODE_INSTALL = "skip";
@@ -53,12 +54,15 @@ buildNpmPackage (finalAttrs: {
 
   npmBuildScript = "build:cli";
 
-  # Provide required runtime binaries
   postInstall = ''
+    # Remove broken symlink
+    rm -v $out/lib/node_modules/omniroute/node_modules/@omniroute/browser-pool
+
+    # Provide required runtime binaries
     wrapProgram $out/bin/omniroute \
       --prefix PATH : ${
         lib.makeBinPath [
-          nodejs-slim
+          nodejs
         ]
       }
   '';
