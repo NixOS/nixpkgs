@@ -88,14 +88,14 @@ let
 
   generic = stdenv.mkDerivation (finalAttrs: {
     pname = "ardour";
-    version = "9.7";
+    version = "9.8";
 
     # We can't use `fetchFromGitea` here, as attempting to fetch release archives from git.ardour.org
     # result in an empty archive. See https://tracker.ardour.org/view.php?id=7328 for more info.
     src = fetchgit {
       url = "git://git.ardour.org/ardour/ardour.git";
       tag = finalAttrs.version;
-      hash = "sha256-6gtlnk/oPXWJcN5tcb1r7dXyLpHPTSJwd8VfOjjFnWQ=";
+      hash = "sha256-h+JS3T2pr/VOtR9E2NMY4gd3IxL0leWATUV52u459iM=";
     };
 
     patches = [
@@ -294,15 +294,6 @@ let
       majorVersion = lib.versions.major finalAttrs.version;
     in
     {
-      patches = finalAttrs.patches ++ [
-        (fetchpatch {
-          # TODO: Remove with the next release of Ardour
-          url = "https://github.com/Ardour/ardour/commit/bff1ebbca2f50f1a0d2285efcf6e0c8237a07d8f.diff";
-          hash = "sha256-Ye22S2bmRt+c/GrrvgWCDlzUqSwaOdAh5vFuJb/BqV8=";
-          name = "fix-path-to-mo-files.diff";
-        })
-      ];
-
       postPatch = finalAttrs.postPatch + ''
         substituteInPlace wscript \
           --replace-fail '-DMAC_OS_X_VERSION_MAX_ALLOWED=110000' '-DMAC_OS_X_VERSION_MAX_ALLOWED=140000' \
