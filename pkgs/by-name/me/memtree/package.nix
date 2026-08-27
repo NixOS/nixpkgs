@@ -20,6 +20,8 @@ python3Packages.buildPythonApplication rec {
     postFetch = "rm -r $out/.* $out/flake.* $out/bors.toml";
   };
 
+  pythonRelaxDeps = [ "rich" ];
+
   build-system = with python3Packages; [ poetry-core ];
 
   dependencies = with python3Packages; [ rich ];
