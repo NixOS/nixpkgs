@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
 
     substituteInPlace masterpdfeditor4.desktop \
-      --replace 'Exec=/opt/master-pdf-editor-4' "Exec=$out/bin" \
-      --replace 'Path=/opt/master-pdf-editor-4' "Path=$out/bin" \
-      --replace 'Icon=/opt/master-pdf-editor-4' "Icon=masterpdfeditor4"
+      --replace-fail 'Exec=/opt/master-pdf-editor-4/' "Exec=" \
+      --replace-fail 'Path=/opt/master-pdf-editor-4' "" \
+      --replace-fail 'Icon=/opt/master-pdf-editor-4/masterpdfeditor4.png' "Icon=masterpdfeditor4"
 
     install -Dm644 -t $out/share/icons/hicolor/128x128/apps masterpdfeditor4.png
     install -Dm644 -t $out/share/applications masterpdfeditor4.desktop
