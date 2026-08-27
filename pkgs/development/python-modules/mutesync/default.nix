@@ -4,12 +4,13 @@
   async-timeout,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "mutesync";
   version = "0.0.2";
-  format = "setuptools";
+  pyproject = true;
 
   __structuredAttrs = true;
 
@@ -19,7 +20,11 @@ buildPythonPackage (finalAttrs: {
     sha256 = "1lz3q3q9lw8qxxb8jyrak77v6hkxwi39akyx96j8hd5jjaq2k5qc";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     aiohttp
     async-timeout
   ];
