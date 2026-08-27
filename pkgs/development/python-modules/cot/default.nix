@@ -18,13 +18,14 @@
   versioneer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cot";
   version = "2.2.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "cot";
+    inherit (finalAttrs) version;
     hash = "sha256-9LNVNBX5DarGVvidPoLnmz11F5Mjm7FzpoO0zAzrJjU=";
   };
 
@@ -95,4 +96,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ evanjs ];
   };
-}
+})
