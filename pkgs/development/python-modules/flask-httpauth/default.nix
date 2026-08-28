@@ -1,36 +1,40 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  flask,
   pytestCheckHook,
   setuptools,
-  flask,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flask-httpauth";
   version = "4.8.1";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "Flask-HTTPAuth";
-    version = version;
-    hash = "sha256-iEmbIvE1OJN0PDzWjyylYcStnvdc1rzH9iEWHNDoB0Q=";
+  src = fetchFromGitHub {
+    owner = "miguelgrinberg";
+    repo = "Flask-HTTPAuth";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KFG4rPhQMZfM/X0XJBOz6N1Ph560ALtla899JIPl7Ns=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ flask ];
+  dependencies = [ flask ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ flask.optional-dependencies.async;
 
   pythonImportsCheck = [ "flask_httpauth" ];
-
-  nativeCheckInputs = [ pytestCheckHook ] ++ flask.optional-dependencies.async;
 
   meta = {
     description = "Extension that provides HTTP authentication for Flask routes";
     homepage = "https://github.com/miguelgrinberg/Flask-HTTPAuth";
-    changelog = "https://github.com/miguelgrinberg/Flask-HTTPAuth/blob/v${version}/CHANGES.md";
+    changelog = "https://github.com/miguelgrinberg/Flask-HTTPAuth/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
