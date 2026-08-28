@@ -11852,6 +11852,13 @@
     githubId = 12761234;
     name = "Ida Bzowska";
   };
+  idkdontaskm3 = {
+    name = "idkdontaskm3";
+    email = "idkdontaskm3@proton.me";
+    github = "idkdontaskm3";
+    githubId = 252943539;
+    matrix = "@idkdontaskm3:matrix.org";
+  };
   idlip = {
     name = "Dilip";
     email = "igoldlip@gmail.com";
