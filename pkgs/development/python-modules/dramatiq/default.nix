@@ -101,6 +101,7 @@ buildPythonPackage rec {
     description = "Background Processing for Python 3";
     homepage = "https://github.com/Bogdanp/dramatiq";
     license = lib.licenses.lgpl3Plus;
+    changelog = "https://github.com/Bogdanp/dramatiq/releases/tag/v${version}";
     maintainers = with lib.maintainers; [ traxys ];
   };
 }
