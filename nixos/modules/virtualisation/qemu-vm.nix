@@ -350,8 +350,14 @@ let
         "$@"
   '';
 
-  regInfo = hostPkgs.closureInfo { rootPaths = config.virtualisation.additionalPaths; };
-  regInfoPath = "/nix/.ro-store/${baseNameOf regInfo}/registration";
+  inherit
+    (import ../../lib/store-registration-info.nix {
+      inherit hostPkgs;
+      rootPaths = config.virtualisation.additionalPaths;
+    })
+    regInfo
+    regInfoPath
+    ;
   regInfoParam = optionalString (
     cfg.useNixStoreImage || cfg.mountHostNixStore
   ) " regInfo=${regInfoPath}";

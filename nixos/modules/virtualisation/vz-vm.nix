@@ -13,8 +13,14 @@ let
 
   hostPkgs = cfg.host.pkgs;
 
-  regInfo = hostPkgs.closureInfo { rootPaths = cfg.additionalPaths; };
-  regInfoPath = "/nix/.ro-store/${baseNameOf regInfo}/registration";
+  inherit
+    (import ../../lib/store-registration-info.nix {
+      inherit hostPkgs;
+      rootPaths = cfg.additionalPaths;
+    })
+    regInfo
+    regInfoPath
+    ;
 
   # Host-built erofs store image, named by closure hash so only a changed guest rebuilds it.
   # A derivation is not an option: it would need the Linux builder this VM provides.
