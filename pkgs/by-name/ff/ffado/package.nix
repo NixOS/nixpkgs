@@ -5,7 +5,7 @@
   dbus,
   dbus_cplusplus,
   fetchurl,
-  glibmm,
+  glibmm_2_4,
   libavc1394,
   libconfig,
   libiec61883,
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     dbus
     dbus_cplusplus
-    glibmm
+    glibmm_2_4
     libavc1394
     libconfig
     libiec61883

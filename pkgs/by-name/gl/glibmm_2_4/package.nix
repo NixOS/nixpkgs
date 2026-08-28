@@ -42,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "glibmm";
+      attrPath = "glibmm_2_4";
       versionPolicy = "odd-unstable";
       freeze = true;
     };
