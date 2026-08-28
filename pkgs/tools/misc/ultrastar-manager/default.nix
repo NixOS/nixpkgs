@@ -3,12 +3,9 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  wrapQtAppsHook,
+  qt5,
   symlinkJoin,
-  qmake,
   diffPlugins,
-  qtbase,
-  qtmultimedia,
   taglib,
   libmediainfo,
   libzen,
@@ -20,8 +17,8 @@ let
   rev = "ef4524e2239ddbb60f26e05bfba1f4f28cb7b54f";
   sha256 = "0dl2qp686vbs160b3i9qypb7sv37phy2wn21kgzljbk3wnci3yv4";
   buildInputs = [
-    qtbase
-    qtmultimedia
+    qt5.qtbase
+    qt5.qtmultimedia
     taglib
     libmediainfo
     libzen
@@ -51,7 +48,7 @@ let
       name = "${src.name}-patched";
       inherit src;
 
-      nativeBuildInputs = [ wrapQtAppsHook ];
+      nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
       dontInstall = true;
 
@@ -87,9 +84,9 @@ let
       name = "ultrastar-manager-${name}-plugin-${version}";
       src = patchedSrc;
 
-      nativeBuildInputs = [ wrapQtAppsHook ];
+      nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
-      buildInputs = [ qmake ] ++ buildInputs;
+      buildInputs = [ qt5.qmake ] ++ buildInputs;
 
       postPatch = ''
         sed -e "s|DESTDIR = .*$|DESTDIR = $out|" \
@@ -141,7 +138,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     pkg-config
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
 
   inherit buildInputs;
