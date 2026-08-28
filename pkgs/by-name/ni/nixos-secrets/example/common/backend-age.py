@@ -65,7 +65,11 @@ def list_host_secrets():
 
 
 def get_secret(generator, file, out_path):
-    identity = config["generators"][generator]["identity"]["host"]
+    if generator in config["generators"]:
+        identity = config["generators"][generator]["identity"]["host"]
+    else:
+        identity = config["identity"]["host"]
+
     command = [
         "age",
         "--decrypt",
@@ -83,8 +87,13 @@ def set_secret(generator, filename, in_path):
     out_path = host_secret_path(generator, filename)
     out_path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
 
+    if generator in config["generators"]:
+        pub_keys = config["generators"][generator]["publicKeys"]
+    else:
+        pub_keys = config["publicKeys"]
+
     command = ["age", "--encrypt", "--output", out_path]
-    for pub_key in config["generators"][generator]["publicKeys"]:
+    for pub_key in pub_keys:
         command += ["--recipient", pub_key]
     command += [in_path]
 
