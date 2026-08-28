@@ -102,7 +102,6 @@ in
   geocode-glib = callInstalledTest ./geocode-glib.nix { };
   gjs = callInstalledTest ./gjs.nix { };
   glib-networking = callInstalledTest ./glib-networking.nix { };
-  gnome-photos = callInstalledTest ./gnome-photos.nix { };
   graphene = callInstalledTest ./graphene.nix { };
   gsconnect = callInstalledTest ./gsconnect.nix { };
   json-glib = callInstalledTest ./json-glib.nix { };

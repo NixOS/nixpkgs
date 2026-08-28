@@ -10,6 +10,7 @@
   darwin,
   nodejs,
   electron,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -122,6 +123,8 @@ stdenv.mkDerivation (finalAttrs: {
       startupWMClass = "draw.io";
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Desktop version of draw.io for creating diagrams";

@@ -5,24 +5,26 @@
   pkg-config,
   openssl,
   nettle,
+  libmysqlclient,
+  libpq,
+  cacert,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proxyauth";
-  version = "0.8.0";
+  version = "1.0.3";
 
   src = fetchFromForgejo {
     domain = "git.proxyauth.app";
     owner = "ProxyAuth";
     repo = "ProxyAuth";
-    rev = "13b353e4a8b34fc1736c834cfcaa9afe06e8abf8";
-    # Tags were not replicated from GitHub to git.proxyauth.app
-    hash = "sha256-cVjD91tBCGyslLsYUSP1Gy7KuMQZDVxQXU7fQkWeWyM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hdLkDM1xNqQnaTKcBDRzLCc0hocHiIwLNPxIEU2MYIE=";
   };
 
-  cargoHash = "sha256-YhFOh60D014Tb/Gi3u+tpmXbaaIFIB5HU4X8rhWPV40=";
+  cargoHash = "sha256-IwIOlo5OyjvQBhgUZiRJy7fiNQshMgMHcl9MA6ju1h8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -31,10 +33,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     openssl
     nettle
+    libmysqlclient
+    libpq
   ];
 
   __structuredAttrs = true;
   strictDeps = true;
+
+  nativeCheckInputs = [
+    cacert
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook
