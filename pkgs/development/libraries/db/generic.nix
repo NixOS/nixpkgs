@@ -31,6 +31,8 @@ stdenv.mkDerivation (
     # which causes configure checks to work incorrectly with clang 16.
     nativeBuildInputs = lib.optionals stdenv.cc.isClang [ autoconf269 ] ++ [ autoreconfHook ];
 
+    strictDeps = true;
+
     patches = [
       (fetchpatch {
         name = "gcc15.patch";
