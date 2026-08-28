@@ -10,6 +10,9 @@
   enableCETRuntimeDefault ? false,
   pkgsBuildBuild,
   libgcc,
+  coreutils,
+  replaceVars,
+  libidn2,
 }:
 
 let
@@ -33,7 +36,7 @@ in
     + lib.optionalString withGd "-gd"
     + lib.optionalString (stdenv.cc.isGNU && libgcc == null) "-nolibgcc";
 }).overrideAttrs
-  (previousAttrs: {
+  (finalAttrs: previousAttrs: {
 
     # Note:
     # Things you write here override, and do not add to,
@@ -212,6 +215,127 @@ in
       (previousAttrs.passthru or { })
       // lib.optionalAttrs (libgcc != null) {
         inherit libgcc;
+      }
+      // {
+        tests.withCheck = finalAttrs.finalPackage.overrideAttrs (attrs: {
+          doInstallCheck = true;
+
+          env = attrs.env // {
+            NIX_CFLAGS_COMPILE =
+              (attrs.env.NIX_CFLAGS_COMPILE or "") + lib.optionalString stdenv.cc.isGNU " -Wno-attributes";
+
+            BASH_SHELL = "";
+          };
+
+          patches = (attrs.patches or [ ]) ++ [
+            # Match common.nix patch to libidn2
+            (replaceVars ./fix-libidn2-path-tests.patch { libidn2 = lib.getLib libidn2; })
+            # elf/Makefile is missing the LD_LIBRARY_PATH environment needed for tst-ptrguard-static-dlopen
+            ./fix-tst-ptrguard-static-dlopen.patch
+          ];
+
+          installCheckInputs = (attrs.installCheckInputs or [ ]) ++ lib.optionals (libgcc != null) [ libgcc ];
+
+          installCheckFlags = [
+            # Tests fail to build with:
+            # msgfmt: Cannot convert from "ISO-8859-1" to "UTF-8". msgfmt relies on iconv(), and iconv() does not support this conversion.
+            # This allows tests to build but tests relying on message catalogs need to be disabled
+            "MSGFMT=:"
+
+            # Disable tests incompatible with the build sandbox
+            (
+              "tests-unsupported += "
+              + builtins.concatStringsSep " " [
+                # Fail to build with
+                # copy relocation against non-copyable protected symbol  ...
+                "tst-protected1a"
+                "tst-protected1b"
+                "vismain"
+
+                # Issue with message catalogs
+                "tst-strerror"
+                "tst-strsignal"
+
+                # Mismatch between sandbox /dev mount-layout and test assumptions
+                "tst-support_descriptors"
+
+                # Requires suid
+                "tst-setuid3"
+                "tst-chmod"
+                "tst-spawn4"
+                "tst-spawn4-compat"
+                "tst-spawn4-pidfd"
+
+                # Test is too resource heavy and might timeout
+                "tst-malloc-too-large-malloc-hugetlb2"
+
+                # Flaky tests (can't reproduce failure in a consistent manner to debug)
+                "tst-sched_setattr"
+                "tst-sched_setattr-thread"
+                "tst-sched1"
+
+                # Depend on /etc/ld.so.cache which is removed from the packaging
+                "tst-tunconf1"
+                "tst-rtld-dash-dash"
+                "tst-rtld-does-not-exist"
+              ]
+            )
+
+            # Skip all tests-container
+            # Rely on building and testing a chroot environment with /etc/ld.so.cache, which is removed from this packaging
+            "tests-container="
+          ];
+
+          preInstallCheck = ''
+            patchShebangs ../scripts ../iconv
+
+            # Un-hiding __nss_files_fopen in common.nix makes its internal callers reach it through
+            # the PLT, which the elf/check-localplt test flags as an "Extra PLT
+            # reference". Whitelist it as optional in expected PLT data so the test
+            # still passes.
+            find ../sysdeps -name localplt.data -exec \
+              sed -i -e '$a\libc.so: __nss_files_fopen ?' {} +
+
+            # cat (coreutils)
+            substituteInPlace \
+              ../stdio-common/test-popen.c \
+              ../stdio-common/tstscanf.c \
+              ../stdio-common/xbug.c \
+              --replace-fail "/bin/cat" "${lib.getExe' coreutils "cat"}"
+
+            # pwd (coreutils)
+            substituteInPlace \
+              ../posix/tst-spawn-chdir.c \
+              --replace-fail "/bin/pwd" "${lib.getExe' coreutils "pwd"}"
+
+            # Check Nix store instead of non-existing /usr directory (just basic directory permission checks)
+            substituteInPlace \
+              ../posix/tst-execveat.c \
+              --replace-fail '"/usr"' "\"$NIX_STORE\""
+
+            # check-abi-libc diffs the static reference abilist (sysdeps/**/libc.abilist)
+            # against this build's real symbols. _nl_default_dirname is set to LOCALEDIR.
+            # Upstream's abilist assumes a short FHS path (e.g. "/usr/lib64/locale", sizeof 0x12),
+            # but Nix store paths are much longer, so the compiled array's size differs here.
+            # Patch every arch's abilist to the real size for this build , i.e. `$out/share/locale`
+            localedirSuffix="/share/locale"
+            localedirSize=$(( ''${#out} + ''${#localedirSuffix} + 1 ))
+            localedirHex=$(printf '0x%x' "$localedirSize")
+            find ../sysdeps -name 'libc.abilist' -exec \
+              sed -i -E "s/(_nl_default_dirname D )0x[0-9a-fA-F]+/\1$localedirHex/" {} +
+
+            # Hack to disable "format" hardening only for building tests
+            local oldHardeningFlags="$NIX_HARDENING_ENABLE"
+            export NIX_HARDENING_ENABLE="$(echo "$NIX_HARDENING_ENABLE" | sed -e 's/\bformat\b//')"
+          '';
+
+          postInstallCheck = ''
+            # Restore the original hardening flags after the install check
+            export NIX_HARDENING_ENABLE="$oldHardeningFlags"
+          '';
+
+          installCheckTarget = "check";
+        });
       };
 
     meta = (previousAttrs.meta or { }) // {
