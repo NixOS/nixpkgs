@@ -11,6 +11,7 @@
   oauthlib,
 
   # tests
+  django-ninja,
   djangorestframework,
   pytest-cov-stub,
   pytest-django,
@@ -20,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django-oauth-toolkit";
-  version = "3.3.0";
+  version = "3.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-oauth-toolkit";
     tag = finalAttrs.version;
-    hash = "sha256-eRQzAFUvSgoDiP7LW/+hMrNxHuXVxY+wc/E3VU/zeXo=";
+    hash = "sha256-UsnfGOyVk5w0grG6cTgMmfo+HyrZtsER338YobLyk08=";
   };
 
   build-system = [ setuptools ];
@@ -41,6 +42,10 @@ buildPythonPackage (finalAttrs: {
 
   preCheck = ''
     export DJANGO_SETTINGS_MODULE=tests.settings
+    # See below about xdist
+    substituteInPlace pyproject.toml \
+      --replace-fail '    "-n", "auto",' "" \
+      --replace-fail '    "--dist", "loadfile",' ""
   '';
 
   # xdist is disabled right now because it can cause race conditions on high core machines
@@ -49,6 +54,7 @@ buildPythonPackage (finalAttrs: {
     djangorestframework
     pytest-cov-stub
     pytest-django
+    django-ninja
     # pytest-xdist
     pytest-mock
     pytestCheckHook
