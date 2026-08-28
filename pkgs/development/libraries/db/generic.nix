@@ -114,6 +114,8 @@ stdenv.mkDerivation (
       make examples_c examples_cxx
     '';
 
+    __structuredAttrs = true;
+
     meta = {
       homepage = "https://www.oracle.com/database/technologies/related/berkeleydb.html";
       description = "Berkeley DB";
