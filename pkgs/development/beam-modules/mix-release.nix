@@ -20,6 +20,7 @@
   mixBuildDirHook,
   mixCompileHook,
   mixEscriptSetupHook,
+  mixFodDepsSetupHook,
   mixReleaseSetupHook,
 }@inputs:
 
@@ -124,7 +125,8 @@ lib.extendMkDerivation {
           ]
         ++ lib.optionals (escriptBinName != null) [ mixEscriptSetupHook ]
         ++ lib.optionals (escriptBinName == null) [ mixReleaseSetupHook ]
-        ++ (builtins.attrValues mixNixDeps);
+        ++ (builtins.attrValues mixNixDeps)
+        ++ lib.optionals (mixFodDeps != null) [ mixFodDepsSetupHook ];
 
       buildInputs = [
         bashNonInteractive
@@ -163,16 +165,6 @@ lib.extendMkDerivation {
       }
       // (attrs.env or { });
 
-      postUnpack = ''
-        ${lib.optionalString (mixFodDeps != null) ''
-          # Compilation of the dependencies will require that the dependency path is
-          # writable, thus a copy to the $TEMPDIR is inevitable here.
-          export MIX_DEPS_PATH="$TEMPDIR/deps"
-          cp --no-preserve=mode -R "${mixFodDeps}" "$MIX_DEPS_PATH"
-        ''}
-      ''
-      + (attrs.postUnpack or "");
-
       configurePhase =
         attrs.configurePhase or ''
           runHook preConfigure
@@ -196,12 +188,6 @@ lib.extendMkDerivation {
                 ln -sv ${dep}/src $dep_path
               fi
             '') mixNixDeps}
-          ''}
-
-          # Symlink deps to build root. Similar to above, but allows for mixFodDeps
-          # Phoenix projects to find javascript assets.
-          ${lib.optionalString (mixFodDeps != null) ''
-            ln -s "$MIX_DEPS_PATH" ./deps
           ''}
 
           runHook postConfigure
