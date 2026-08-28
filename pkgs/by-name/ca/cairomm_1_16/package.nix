@@ -15,6 +15,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "cairomm";
   version = "1.18.0";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   outputs = [
     "out"
     "dev"
