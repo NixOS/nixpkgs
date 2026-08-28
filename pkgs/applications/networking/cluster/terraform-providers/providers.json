@@ -62,6 +62,15 @@
     "spdx": "AGPL-3.0",
     "vendorHash": "sha256-ODWfCshaO9JiZ1/tz7yR9iNHZNMVmCshCyBVUY89A/s="
   },
+  "archessmn_powerdns": {
+    "hash": "sha256-1bjQFu3k0ERBga94pQ8HZjbfu3qlxnMQLjSkDU6Vp/I=",
+    "homepage": "https://registry.terraform.io/providers/archessmn/powerdns",
+    "owner": "archessmn",
+    "repo": "terraform-provider-powerdns",
+    "rev": "v1.0.6",
+    "spdx": "MPL-2.0",
+    "vendorHash": null
+  },
   "argoproj-labs_argocd": {
     "hash": "sha256-lczk1JomkRySV3OAwHxA+EaWFSiWN7Mvm4lVneCG2O8=",
     "homepage": "https://registry.terraform.io/providers/argoproj-labs/argocd",
