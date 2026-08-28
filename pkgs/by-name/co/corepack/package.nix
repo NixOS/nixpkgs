@@ -15,13 +15,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "corepack";
-  version = "0.35.0";
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "corepack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VgiQ4k6HiRxemtizItL0zkTDpgTnL0ScfSOfgjMpokI=";
+    hash = "sha256-oa/4Zjw1UIOt/mTPiBGSKhokDMoBMwhrKi7l3qcKqkI=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       missingHashes
       src
       ;
-    hash = "sha256-Q7vUJrFUr8ZbDdaMZq8fnJFfIgEFYkHQiUoo2xILaKo=";
+    hash = "sha256-LAzlLQUmjdxg/NNHgCwVK499RM6p/8csrHow6UAMJUY=";
   };
 
   postPatch = ''
