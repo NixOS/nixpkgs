@@ -122,6 +122,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "-install_name libR.dylib" "-install_name $out/lib/R/lib/libR.dylib"
     substituteInPlace tests/Examples/Makefile.in \
       --replace-fail "test-Examples: test-Examples-Base" "test-Examples:" # do not test the examples
+    substituteInPlace tests/reg-tests-1e.R \
+      --replace-fail 'require("tcltk")' 'F'
   '';
 
   dontDisableStatic = static;
