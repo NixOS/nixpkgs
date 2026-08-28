@@ -974,6 +974,11 @@ in
   };
   kernel-generic = handleTest ./kernel-generic { };
   kernel-latest-ath-user-regd = runTest ./kernel-latest-ath-user-regd.nix;
+  kernel-module-verification = runTest ./kernel-module-verification.nix;
+  kernel-module-verification-latest = runTest {
+    imports = [ ./kernel-module-verification.nix ];
+    _module.args.latestKernel = true;
+  };
   kernel-rust = handleTest ./kernel-rust.nix { };
   keter = runTest ./keter.nix;
   kexec = runTest ./kexec.nix;
