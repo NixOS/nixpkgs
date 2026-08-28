@@ -11841,6 +11841,8 @@ self: super: with self; {
 
   nc-dnsapi = callPackage ../development/python-modules/nc-dnsapi { };
 
+  nc_py_api = callPackage ../development/python-modules/nc_py_api { };
+
   nccl4py = callPackage ../development/python-modules/nccl4py { };
 
   ncclient = callPackage ../development/python-modules/ncclient { };
