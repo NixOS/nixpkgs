@@ -256,6 +256,7 @@ let
         both
         not
         derivation
+        enum
         ;
       platforms = listOf (either str attrs); # see lib.meta.platformMatch
     in
@@ -279,6 +280,12 @@ let
       maintainers = listOf attrs; # TODO use the maintainer type from lib/tests/maintainer-module.nix
       nonTeamMaintainers = listOf attrs; # TODO use the maintainer type from lib/tests/maintainer-module.nix
       teams = listOf attrs; # TODO similar to maintainers, use a teams type
+      categories =
+        let
+          flatten = x: builtins.filter isAttrs (builtins.concatLists ( map attrValues (attrValues x) ));
+          categoriesType = enum (flatten (import ../../../lib/categories.nix));
+        in
+        either categoriesType (listOf categoriesType);
       priority = int;
       pkgConfigModules = listOf str;
       inherit platforms;
