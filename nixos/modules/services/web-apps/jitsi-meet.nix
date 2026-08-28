@@ -323,6 +323,7 @@ in
       ];
       extraPluginPaths = [ "${pkgs.jitsi-meet-prosody}/share/prosody-plugins" ];
       extraConfig = lib.mkMerge [
+        (mkBefore "component_admins_as_room_owners = true")
         (mkAfter ''
           Component "focus.${cfg.hostName}" "client_proxy"
             target_address = "focus@auth.${cfg.hostName}"
