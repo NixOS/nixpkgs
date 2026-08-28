@@ -43,7 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
     ''
   );
 
-  patches = [
+  # Both are the same upstream change, which is in the GCC 16 release branch:
+  # the backport itself, and the hand-edit of the generated `aclocal.m4` that
+  # `fetchpatch` cannot carry. GCC 16 already includes `../config/gthr.m4`
+  # there.
+  patches = lib.optionals (lib.versionOlder release_version "16") [
     (fetchpatch {
       name = "custom-threading-model.patch";
       url = "https://github.com/gcc-mirror/gcc/commit/e5d853bbe9b05d6a00d98ad236f01937303e40c4.diff";

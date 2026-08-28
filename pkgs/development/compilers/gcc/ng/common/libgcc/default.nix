@@ -127,44 +127,49 @@ stdenv.mkDerivation (finalAttrs: {
   # library's own headers, and `libgcc_s` links against it.
   buildInputs = lib.optional (threads != null) threads;
 
-  patches = [
-    (fetchpatch {
-      name = "delete-MACHMODE_H.patch";
-      url = "https://github.com/gcc-mirror/gcc/commit/493aae4b034d62054d5e7e54dc06cd9a8be54e29.diff";
-      hash = "sha256-oEk0lnI96RlpALWpb7J+GnrtgQsFVqDO57I/zjiqqTk=";
-    })
-    (fetchpatch {
-      name = "custom-threading-model.patch";
-      url = "https://github.com/gcc-mirror/gcc/commit/e5d853bbe9b05d6a00d98ad236f01937303e40c4.diff";
-      hash = "sha256-92LIttIXdh12/lRhivb2JTPpqUmGBRn+uKmR5pzuveo=";
-      includes = [
-        "config/*"
-        "libgcc/configure.ac"
-      ];
-    })
-    (fetchpatch {
-      name = "no-pie-cflags.patch";
-      url = "https://github.com/gcc-mirror/gcc/commit/77144dd3b6736e0166156bb509590d924375a4f1.diff";
-      hash = "sha256-QlxlTkWAK1dB7JiU5wz2iOW24gj3bFaeBpwb90oWwns=";
-      includes = [
-        "gcc/Makefile.in"
-        "gcc/configure.ac"
-        "libgcc/Makefile.in"
-        "libgcc/configure.ac"
-      ];
-    })
-    (fetchpatch {
-      name = "no-target-system-root.patch";
-      url = "https://github.com/gcc-mirror/gcc/commit/9947930b7ae923010c5061fd8fa6b1ec4f22f161.diff";
-      hash = "sha256-BZmpHpJuuyDmQMwpQhSgCZO0Rg7kXt8rTiJAT+e0sUw=";
-    })
-    (fetchpatch {
-      name = "regular-libdir-includedir.patch";
-      url = "https://inbox.sourceware.org/gcc-patches/20250717174911.1536129-1-git@JohnEricson.me/raw";
-      hash = "sha256-Cn7rvg1FI7H/26GzSe4pv5VW/gvwbwGqivAqEeawkwk=";
-    })
-    (getVersionFile "libgcc/force-regular-dirs.patch")
-  ];
+  patches =
+    # Backports of commits that are in the GCC 16 release branch already.
+    lib.optionals (lib.versionOlder release_version "16") [
+      (fetchpatch {
+        name = "delete-MACHMODE_H.patch";
+        url = "https://github.com/gcc-mirror/gcc/commit/493aae4b034d62054d5e7e54dc06cd9a8be54e29.diff";
+        hash = "sha256-oEk0lnI96RlpALWpb7J+GnrtgQsFVqDO57I/zjiqqTk=";
+      })
+      (fetchpatch {
+        name = "custom-threading-model.patch";
+        url = "https://github.com/gcc-mirror/gcc/commit/e5d853bbe9b05d6a00d98ad236f01937303e40c4.diff";
+        hash = "sha256-92LIttIXdh12/lRhivb2JTPpqUmGBRn+uKmR5pzuveo=";
+        includes = [
+          "config/*"
+          "libgcc/configure.ac"
+        ];
+      })
+      (fetchpatch {
+        name = "no-pie-cflags.patch";
+        url = "https://github.com/gcc-mirror/gcc/commit/77144dd3b6736e0166156bb509590d924375a4f1.diff";
+        hash = "sha256-QlxlTkWAK1dB7JiU5wz2iOW24gj3bFaeBpwb90oWwns=";
+        includes = [
+          "gcc/Makefile.in"
+          "gcc/configure.ac"
+          "libgcc/Makefile.in"
+          "libgcc/configure.ac"
+        ];
+      })
+      (fetchpatch {
+        name = "no-target-system-root.patch";
+        url = "https://github.com/gcc-mirror/gcc/commit/9947930b7ae923010c5061fd8fa6b1ec4f22f161.diff";
+        hash = "sha256-BZmpHpJuuyDmQMwpQhSgCZO0Rg7kXt8rTiJAT+e0sUw=";
+      })
+    ]
+    # Not upstream anywhere yet.
+    ++ [
+      (fetchpatch {
+        name = "regular-libdir-includedir.patch";
+        url = "https://inbox.sourceware.org/gcc-patches/20250717174911.1536129-1-git@JohnEricson.me/raw";
+        hash = "sha256-Cn7rvg1FI7H/26GzSe4pv5VW/gvwbwGqivAqEeawkwk=";
+      })
+      (getVersionFile "libgcc/force-regular-dirs.patch")
+    ];
 
   autoreconfFlags = "--install --force --verbose . libgcc";
 

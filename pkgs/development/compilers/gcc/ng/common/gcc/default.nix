@@ -59,92 +59,98 @@ stdenv.mkDerivation (finalAttrs: {
     "info"
   ];
 
-  patches = [
-    (fetchpatch {
-      name = "for_each_path-functional-programming.patch";
-      url = "https://github.com/gcc-mirror/gcc/commit/f23bac62f46fc296a4d0526ef54824d406c3756c.diff";
-      hash = "sha256-J7SrypmVSbvYUzxWWvK2EwEbRsfGGLg4vNZuLEe6Xe0=";
-    })
-    (fetchpatch {
-      name = "find_a_program-separate-from-find_a_file.patch";
-      url = "https://github.com/gcc-mirror/gcc/commit/948eb02800777d0318ee2a38bf32076afee739f2.diff";
-      hash = "sha256-doXak3VfdWR/BP9XiJaU7uJz7rex78N1oaW6CqYwKaQ=";
-    })
-    (fetchpatch {
-      name = "simplify-find_a_program-and-find_a_file.patch";
-      url = "https://github.com/gcc-mirror/gcc/commit/073b4656d07e40f83a1db7f4462ab2d68b1875a2.diff";
-      hash = "sha256-kW6ZHyMzsn7snUBuDx4XLriaFGWZ1fixNc9UH8O5els=";
-    })
-    (fetchpatch {
-      name = "for_each_path-fix-uninitialized-ret-PR121806.patch";
-      url = "https://github.com/gcc-mirror/gcc/commit/6b008944e7bc3a342a734c4fcf1001d63fd0a6f8.diff";
-      hash = "sha256-preG5DdRX+a0NIebsapAVnqiLYtPjsR4H5BkAXL/65g=";
-    })
-    (fetchpatch {
-      name = "for_each_path-pass-machine-specific.patch";
-      url = "https://github.com/gcc-mirror/gcc/commit/f62f68e7c4bde0385fbd2dba3e926586dd2f1281.diff";
-      hash = "sha256-NsgGnTMQTnz1c4urr6jeoGOzQ4xeJ/p+F53osNDYDCA=";
-    })
-    (fetchpatch {
-      name = "find_a_program-search-with-machine-prefix.patch";
-      url = "https://github.com/gcc-mirror/gcc/commit/a514707ffd7d58b140686036c2dece43ecb7d33c.diff";
-      hash = "sha256-54/HzM+aeWq8CTkQu8Pualqc/LgRLS0+8EY8uPUsD+s=";
-    })
+  patches =
+    # Backports of commits that are in the GCC 16 release branch already.
+    lib.optionals (lib.versionOlder release_version "16") [
+      (fetchpatch {
+        name = "for_each_path-functional-programming.patch";
+        url = "https://github.com/gcc-mirror/gcc/commit/f23bac62f46fc296a4d0526ef54824d406c3756c.diff";
+        hash = "sha256-J7SrypmVSbvYUzxWWvK2EwEbRsfGGLg4vNZuLEe6Xe0=";
+      })
+      (fetchpatch {
+        name = "for_each_path-fix-uninitialized-ret-PR121806.patch";
+        url = "https://github.com/gcc-mirror/gcc/commit/6b008944e7bc3a342a734c4fcf1001d63fd0a6f8.diff";
+        hash = "sha256-preG5DdRX+a0NIebsapAVnqiLYtPjsR4H5BkAXL/65g=";
+      })
 
-    # Make --disable-fixinclude compatible with Cygwin
-    (fetchpatch {
-      name = "mingw-drop-obsolete-STMP_FIXINC-override.patch";
-      url = "https://github.com/gcc-mirror/gcc/commit/7fb73dd7bb8aabab1416f0b28e6df45131a8e8ab.diff";
-      hash = "sha256-FmFJISfXt+/TCRcd4rYfwacBiTqu+/OKw0VvLh46Hz0=";
-    })
+      # Make --disable-fixinclude compatible with Cygwin
+      (fetchpatch {
+        name = "mingw-drop-obsolete-STMP_FIXINC-override.patch";
+        url = "https://github.com/gcc-mirror/gcc/commit/7fb73dd7bb8aabab1416f0b28e6df45131a8e8ab.diff";
+        hash = "sha256-FmFJISfXt+/TCRcd4rYfwacBiTqu+/OKw0VvLh46Hz0=";
+      })
+    ]
+    # Backports of commits that are on trunk only, and so are still needed for
+    # GCC 16.
+    ++ [
+      (fetchpatch {
+        name = "find_a_program-separate-from-find_a_file.patch";
+        url = "https://github.com/gcc-mirror/gcc/commit/948eb02800777d0318ee2a38bf32076afee739f2.diff";
+        hash = "sha256-doXak3VfdWR/BP9XiJaU7uJz7rex78N1oaW6CqYwKaQ=";
+      })
+      (fetchpatch {
+        name = "simplify-find_a_program-and-find_a_file.patch";
+        url = "https://github.com/gcc-mirror/gcc/commit/073b4656d07e40f83a1db7f4462ab2d68b1875a2.diff";
+        hash = "sha256-kW6ZHyMzsn7snUBuDx4XLriaFGWZ1fixNc9UH8O5els=";
+      })
+      (fetchpatch {
+        name = "for_each_path-pass-machine-specific.patch";
+        url = "https://github.com/gcc-mirror/gcc/commit/f62f68e7c4bde0385fbd2dba3e926586dd2f1281.diff";
+        hash = "sha256-NsgGnTMQTnz1c4urr6jeoGOzQ4xeJ/p+F53osNDYDCA=";
+      })
+      (fetchpatch {
+        name = "find_a_program-search-with-machine-prefix.patch";
+        url = "https://github.com/gcc-mirror/gcc/commit/a514707ffd7d58b140686036c2dece43ecb7d33c.diff";
+        hash = "sha256-54/HzM+aeWq8CTkQu8Pualqc/LgRLS0+8EY8uPUsD+s=";
+      })
 
-    # Not upstream yet; a follow-up to the series above (drop the `/raw` to
-    # read them). They extend that series' `<target>-as` preference to `PATH`,
-    # where we put the cross toolchain, so a cross compiler finds its tools
-    # the way a native one does. See below for the problems `--with-as` and
-    # `--with-ld` cause, and thus why we want to avoid them.
-    (fetchpatch {
-      name = "driver-factor-out-env-path-parsing.patch";
-      url = "https://inbox.sourceware.org/gcc-patches/20260810065714.2215299-1-git@JohnEricson.me/raw";
-      hash = "sha256-2qUUMWuyxX4mVaBPeNnHIiMl/aN7ejWM5stTSFWxD7g=";
-    })
-    (fetchpatch {
-      name = "driver-search-PATH-ourselves.patch";
-      url = "https://inbox.sourceware.org/gcc-patches/20260810065714.2215299-2-git@JohnEricson.me/raw";
-      # The posted patch is against trunk, which spells this cast with the C++
-      # operator.  GCC 15 still uses the CONST_CAST macro, and the line is
-      # context rather than a change, so it cannot fuzz-match.  Rewrite it
-      # here rather than keeping a forked copy of the whole patch.
-      postFetch = ''
-        substituteInPlace "$out" \
-          --replace-fail 'string, const_cast<char **> (commands[i].argv),' \
-                         'string, CONST_CAST (char **, commands[i].argv),'
-      '';
-      hash = "sha256-uD8xJxQus2qyNgNDN/63WnURNuUJFDkhaXPph7g/DIk=";
-    })
-    (fetchpatch {
-      name = "driver-search-PATH-machine-prefix.patch";
-      url = "https://inbox.sourceware.org/gcc-patches/20260810065714.2215299-3-git@JohnEricson.me/raw";
-      hash = "sha256-Q5CJpJKD11kadIKselQdHgNe26GqojpyAAmlAyHnsB0=";
-    })
+      # Not upstream yet; a follow-up to the series above (drop the `/raw` to
+      # read them). They extend that series' `<target>-as` preference to `PATH`,
+      # where we put the cross toolchain, so a cross compiler finds its tools
+      # the way a native one does. See below for the problems `--with-as` and
+      # `--with-ld` cause, and thus why we want to avoid them.
+      (fetchpatch {
+        name = "driver-factor-out-env-path-parsing.patch";
+        url = "https://inbox.sourceware.org/gcc-patches/20260810065714.2215299-1-git@JohnEricson.me/raw";
+        hash = "sha256-2qUUMWuyxX4mVaBPeNnHIiMl/aN7ejWM5stTSFWxD7g=";
+      })
+      (fetchpatch {
+        name = "driver-search-PATH-ourselves.patch";
+        url = "https://inbox.sourceware.org/gcc-patches/20260810065714.2215299-2-git@JohnEricson.me/raw";
+        # The posted patch is against trunk, which spells this cast with the C++
+        # operator.  GCC 15 still uses the CONST_CAST macro, and the line is
+        # context rather than a change, so it cannot fuzz-match.  Rewrite it
+        # here rather than keeping a forked copy of the whole patch.
+        postFetch = ''
+          substituteInPlace "$out" \
+            --replace-fail 'string, const_cast<char **> (commands[i].argv),' \
+                           'string, CONST_CAST (char **, commands[i].argv),'
+        '';
+        hash = "sha256-uD8xJxQus2qyNgNDN/63WnURNuUJFDkhaXPph7g/DIk=";
+      })
+      (fetchpatch {
+        name = "driver-search-PATH-machine-prefix.patch";
+        url = "https://inbox.sourceware.org/gcc-patches/20260810065714.2215299-3-git@JohnEricson.me/raw";
+        hash = "sha256-Q5CJpJKD11kadIKselQdHgNe26GqojpyAAmlAyHnsB0=";
+      })
 
-    (getVersionFile "gcc/fix-collect2-paths.diff")
+      (getVersionFile "gcc/fix-collect2-paths.diff")
 
-    # From the posting to gcc-patches, which covers every component that links
-    # libbacktrace. Take only this component's non-generated files: the
-    # generated ones are rebuilt by `autoreconfHook269` below, against a GCC
-    # slightly different from the one the patch was made against.
-    (fetchpatch {
-      name = "system-libbacktrace.patch";
-      url = "https://inbox.sourceware.org/gcc-patches/20260814013206.3818461-1-git@JohnEricson.me/raw";
-      includes = [
-        "config/libbacktrace.m4"
-        "gcc/configure.ac"
-        "gcc/Makefile.in"
-      ];
-      hash = "sha256-i+J4B5f+zrXERPqJxwjEm/JHZhDsV6Gmxx/n9+G0shM=";
-    })
-  ];
+      # From the posting to gcc-patches, which covers every component that links
+      # libbacktrace. Take only this component's non-generated files: the
+      # generated ones are rebuilt by `autoreconfHook269` below, against a GCC
+      # slightly different from the one the patch was made against.
+      (fetchpatch {
+        name = "system-libbacktrace.patch";
+        url = "https://inbox.sourceware.org/gcc-patches/20260814013206.3818461-1-git@JohnEricson.me/raw";
+        includes = [
+          "config/libbacktrace.m4"
+          "gcc/configure.ac"
+          "gcc/Makefile.in"
+        ];
+        hash = "sha256-i+J4B5f+zrXERPqJxwjEm/JHZhDsV6Gmxx/n9+G0shM=";
+      })
+    ];
 
   enableParallelBuilding = true;
 
