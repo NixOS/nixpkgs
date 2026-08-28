@@ -100,7 +100,7 @@ let
   # but those translations are not versioned/stable. For that reason
   # we take them from the nearest release tarball instead:
   locales = fetchzip {
-    url = "https://ftp.gnu.org/gnu/grub/grub-${version}.tar.gz";
+    url = "mirror://gnu/grub/grub-${version}.tar.gz";
     hash = "sha256-NUlE6l8Ul3i1Si9mZgND6lnvFqc74EGptHV2iCtu+As=";
   };
 
