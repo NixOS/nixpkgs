@@ -1,12 +1,14 @@
 {
   lib,
   stdenv,
+  _experimental-update-script-combinators,
   alsa-lib,
   alsa-plugins,
   autoPatchelfHook,
   fetchFromGitHub,
   freetype,
   installShellFiles,
+  libGL,
   libGLU,
   libpulseaudio,
   libx11,
@@ -24,6 +26,7 @@
   scons,
   testers,
   udev,
+  writeScriptBin,
   yasm,
   zlib,
 }:
@@ -177,12 +180,32 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
     };
 
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "(3\\..*)-stable"
-      ];
-    };
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script {
+        extraArgs = [
+          "--version-regex"
+          "(3\\..*)-stable"
+        ];
+      })
+      ./mono/update-glue-version.sh
+    ];
+
+    patch-godot-bin =
+      let
+        libPath = lib.makeLibraryPath [
+          libxcursor
+          libxinerama
+          libxext
+          libxrandr
+          libxrender
+          libx11
+          libxi
+          libGL
+        ];
+      in
+      writeScriptBin "patch-godot-bin" ''
+        patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" --set-rpath "${libPath}" "$1"
+      '';
   };
 
   meta = {
