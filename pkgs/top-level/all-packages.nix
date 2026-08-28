@@ -6312,7 +6312,6 @@ with pkgs;
   opencv = opencv4;
 
   openexr = callPackage ../development/libraries/openexr/3.nix { };
-  openexr_2 = callPackage ../development/libraries/openexr/2.nix { };
 
   openstackclient = with python313Packages; toPythonApplication python-openstackclient;
   openstackclient-full = openstackclient.overridePythonAttrs (oldAttrs: {
