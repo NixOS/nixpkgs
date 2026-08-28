@@ -38,6 +38,9 @@ buildPythonPackage rec {
     "test_unicode_path"
     # fails to import itself after modifying the environment
     "test_environment"
+    # timing sensitive due to strict timeouts
+    "test_done_callback_no_deadlock"
+    "test_timeout_overstep"
     # timing sensitive through usage of sleep(1) and signal handling
     # https://github.com/amoffat/sh/issues/684
     "test_general_signal"
