@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "cmaes";
-  version = "0.13.0";
+  version = "0.13.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CyberAgentAILab";
     repo = "cmaes";
     tag = "v${version}";
-    hash = "sha256-sH5iJ9iSWLniIRzKsUC9ODlmifIuJoIAkOPpmAQ6Hrs=";
+    hash = "sha256-GzBAymSb6frMXvHtd1Xl5gK62pYuXKd3XU9TLhe+sJ4=";
   };
 
   nativeBuildInputs = [ setuptools ];
