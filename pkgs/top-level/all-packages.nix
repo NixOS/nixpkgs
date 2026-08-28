@@ -8642,7 +8642,7 @@ with pkgs;
 
   gimpPlugins = recurseIntoAttrs (callPackage ../applications/graphics/gimp/plugins { });
 
-  gtk-pipe-viewer = perlPackages.callPackage ../applications/video/pipe-viewer { withGtk3 = true; };
+  gtk-pipe-viewer = pipe-viewer.override { withGtk3 = true; };
 
   jetbrains = (
     recurseIntoAttrs (
@@ -8953,8 +8953,6 @@ with pkgs;
   pijuice = with python3Packages; toPythonApplication pijuice;
 
   pinegrow6 = pinegrow.override { pinegrowVersion = "6"; };
-
-  pipe-viewer = perlPackages.callPackage ../applications/video/pipe-viewer { };
 
   pleroma-bot = python3Packages.callPackage ../development/python-modules/pleroma-bot { };
 
