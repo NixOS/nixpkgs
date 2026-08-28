@@ -181,6 +181,7 @@
   ./programs/bazecor.nix
   ./programs/bcc.nix
   ./programs/benchexec.nix
+  ./programs/brave.nix
   ./programs/browserpass.nix
   ./programs/calls.nix
   ./programs/captive-browser.nix
