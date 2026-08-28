@@ -9,7 +9,7 @@ let
 in
 {
   imports = [
-    "${modulesPath}/security/secrets.nix"
+    "${modulesPath}/security/secrets"
     ../common/backend-plain.nix
     ../common/backend-age.nix
     ../common/backend-prompt-simple.nix
