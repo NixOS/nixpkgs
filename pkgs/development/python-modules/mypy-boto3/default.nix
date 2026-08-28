@@ -275,8 +275,8 @@ in
       "sha256-YnE8vRO1bzaGSCHM102N3ChinXrxj2/+vnHqst4pPbo=";
 
   mypy-boto3-codedeploy =
-    buildMypyBoto3Package "codedeploy" "1.43.0"
-      "sha256-lFLE/ggwLC/ZI1f5woZTJadm5T1XBDWd2BmuqK92hC8=";
+    buildMypyBoto3Package "codedeploy" "1.43.82"
+      "sha256-WpKfZ0zeDn0qXnw98ATlOrBpyjWTx4YnGt11bNqVh84=";
 
   mypy-boto3-codeguru-reviewer =
     buildMypyBoto3Package "codeguru-reviewer" "1.43.0"
