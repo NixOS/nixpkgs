@@ -5,4 +5,4 @@ set -euo pipefail
 
 nix-update silverbullet --src-only --override-filename
 update-source-version silverbullet --source-key=frontend.npmDeps --ignore-same-version
-update-source-version silverbullet --source-key=goModules --ignore-same-version
+update-source-version silverbullet --source-key=cargoDeps.vendorStaging --ignore-same-version

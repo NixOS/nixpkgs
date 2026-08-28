@@ -159,8 +159,8 @@ jobs:
         run: ln -s "$PWD/trusted/ci/github-script/node_modules" untrusted/ci/github-script/node_modules
         working-directory: nixpkgs
 
-      - name: Type-check ci/github-script
-        run: tsc --build
+      - name: Check ci/github-script
+        run: npm test
         working-directory: nixpkgs/untrusted/ci/github-script
 
   owners:

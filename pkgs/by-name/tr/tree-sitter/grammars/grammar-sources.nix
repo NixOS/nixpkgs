@@ -907,10 +907,10 @@
   };
 
   ghostty = {
-    version = "1.3.1-unstable-2026-07-07";
+    version = "1.3.1-unstable-2026-08-23";
     url = "github:bezhermoso/tree-sitter-ghostty";
-    rev = "1f47dfd4da0faab5321b47518ce2faa4be163580";
-    hash = "sha256-tpTm4e3f+hjy9Mi91fSm1qojJLB6A8KsN/iEsiOdxsw=";
+    rev = "a2075c3761a41449bb4faf69794c902dfef6d70e";
+    hash = "sha256-p1zAClid50miSiBHur9NvCCUWjgiDvrhN75sREkRLHs=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -2024,10 +2024,10 @@
   };
 
   nu = {
-    version = "0-unstable-2026-04-22";
+    version = "0-unstable-2026-07-01";
     url = "github:nushell/tree-sitter-nu";
-    rev = "348b787d8b0409091d85fe9d4eb007fe9f3406bb";
-    hash = "sha256-OL3fqHjimJ9VrR2UoeIdLxKKcsA1J80A9T8GSBO9KwE=";
+    rev = "d694570aa26b53d0d642460a0430e8aa07dcbea0";
+    hash = "sha256-eWHAcV8bPCnL9y4PtPn6cJRylGQ2KMxCUoUGwDVigkg=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -2898,9 +2898,9 @@
   };
 
   sshclientconfig = rec {
-    version = "2026.8.13";
+    version = "2026.8.27";
     url = "github:metio/tree-sitter-ssh-client-config?ref=${version}";
-    hash = "sha256-a4tkU01oJ7x9rfVJRB3F9y8O3gmCVy0gLV6RieTrLLc=";
+    hash = "sha256-yTdEinKdEmWPiw6+fBq15tXe8GsoC7PFk2pVaDSFCYA=";
     meta = {
       license = lib.licenses.cc0;
       maintainers = with lib.maintainers; [
