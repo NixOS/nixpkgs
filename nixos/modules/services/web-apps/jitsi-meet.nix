@@ -449,7 +449,7 @@ in
         EnvironmentFile = [ "/var/lib/jitsi-meet/secrets-env" ];
         SupplementaryGroups = [ "jitsi-meet" ];
       };
-      reloadIfChanged = true;
+      reloadIfChanged = false;
     };
 
     users.groups.jitsi-meet = { };
