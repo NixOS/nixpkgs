@@ -7,6 +7,10 @@ in
   name = "rush";
   meta = { inherit (pkgs.rush.meta) maintainers platforms; };
 
+  defaults = {
+    nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
+  };
+
   nodes = {
     client =
       { ... }:

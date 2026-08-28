@@ -109,6 +109,34 @@ let
       ];
     };
 
+  /**
+    The test framework as exposed through its [other entrypoints] has defaults
+    that are most suitable for external usage.
+
+    This module adjusts it for the particular, important use case of
+    NixOS *as packaged in the nixpkgs repo*.
+
+    [other entrypoints]: https://nixos.org/manual/nixos/stable/#sec-calling-nixos-tests
+  */
+  localTestOverrides =
+    { lib, ... }:
+    {
+      _class = "nixosTest";
+      # for error messages, pseudo-url in no particular format
+      _file = "nixpkgs/nixos/tests/all-tests.nix#localTestOverrides";
+      imports = [
+        ./read-only-pkgs.nix
+      ];
+      extraBaseModules = {
+        _file = "nixpkgs/nixos/tests/all-tests.nix#localTestOverrides-extraBaseModules";
+        # tag(no-nix-by-default): we exclude nix from the tests *here* to keep a
+        #   small reverse closure for nix package updates among other things.
+        #   Out-of-tree usages get nix by default as usual.
+        #   See https://nixos.org/manual/nixos/unstable/#sec-call-nixos-test-outside-nixos
+        config.nix.enable = lib.mkDefault false;
+      };
+    };
+
   inherit
     (rec {
       doRunTest =
@@ -116,7 +144,7 @@ let
         ((import ../lib/testing-python.nix { inherit system pkgs; }).evalTest {
           imports = [
             arg
-            ./read-only-pkgs.nix
+            localTestOverrides
           ];
         }).config.result;
       findTests =
@@ -418,6 +446,10 @@ in
   containers-macvlans = runTest ./containers-macvlans.nix;
   containers-names = runTest ./containers-names.nix;
   containers-nested = runTest ./containers-nested.nix;
+  containers-nested-nix = runTest {
+    imports = [ ./containers-nested.nix ];
+    params.nix = true;
+  };
   containers-physical_interfaces = runTest ./containers-physical_interfaces.nix;
   containers-portforward = runTest ./containers-portforward.nix;
   containers-reloadable = runTest ./containers-reloadable.nix;
