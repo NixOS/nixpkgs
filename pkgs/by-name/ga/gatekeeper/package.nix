@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gatekeeper";
-  version = "3.23.0";
+  version = "3.23.1";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "gatekeeper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3aXyXIiwx6pSvYQ4YY4lnuk+0oRG2S6TxrSJNmLRM9c=";
+    hash = "sha256-fLhZzmblWBMFvrrcVl/GI0z+wcbyTMnQnz9+ySoqOyU=";
   };
 
-  vendorHash = "sha256-zhkPJc23cux0NCp81Iv2QSczbdD6banqS0qQt9FBELY=";
+  vendorHash = "sha256-9AhVxJmZsekAR4M0xWYMYBCP1Ue9OWS4lGVa89zqnN4=";
 
   nativeBuildInputs = [
     installShellFiles
