@@ -92,7 +92,7 @@ let
     ''
   );
 
-  nspawnExtraVethArgs = (name: cfg: "--network-veth-extra=${name}");
+  nspawnExtraVethArgs = (name: cfg: "--network-veth-extra=${cfg.hostInterfaceName}:${name}");
 
   startScript = cfg: ''
     # Declare root explicitly to avoid shellcheck warnings, it comes from the env
@@ -242,7 +242,9 @@ let
     fi
 
     ${concatStringsSep "\n" (
-      mapAttrsToList (name: cfg: "ip link del dev ${name} 2> /dev/null || true ") cfg.extraVeths
+      mapAttrsToList (
+        name: cfg: "ip link del dev ${cfg.hostInterfaceName} 2> /dev/null || true "
+      ) cfg.extraVeths
     )}
   '';
 
@@ -263,25 +265,25 @@ let
         name: cfg:
         if cfg.hostBridge != null then
           ''
-            # Add ${name} to bridge ${cfg.hostBridge}
-            ip link set dev "${name}" master "${cfg.hostBridge}" up
+            # Add ${cfg.hostInterfaceName} to bridge ${cfg.hostBridge}
+            ip link set dev "${cfg.hostInterfaceName}" master "${cfg.hostBridge}" up
           ''
         else
           ''
-            echo "Bring ${name} up"
-            ip link set dev "${name}" up
-            # Set IPs and routes for ${name}
+            echo "Bring ${cfg.hostInterfaceName} up"
+            ip link set dev "${cfg.hostInterfaceName}" up
+            # Set IPs and routes for ${cfg.hostInterfaceName}
             ${optionalString (cfg.hostAddress != null) ''
-              ip addr add ${cfg.hostAddress} dev "${name}"
+              ip addr add ${cfg.hostAddress} dev "${cfg.hostInterfaceName}"
             ''}
             ${optionalString (cfg.hostAddress6 != null) ''
-              ip -6 addr add ${cfg.hostAddress6} dev "${name}"
+              ip -6 addr add ${cfg.hostAddress6} dev "${cfg.hostInterfaceName}"
             ''}
             ${optionalString (cfg.localAddress != null) ''
-              ip route add ${cfg.localAddress} dev "${name}"
+              ip route add ${cfg.localAddress} dev "${cfg.hostInterfaceName}"
             ''}
             ${optionalString (cfg.localAddress6 != null) ''
-              ip -6 route add ${cfg.localAddress6} dev "${name}"
+              ip -6 route add ${cfg.localAddress6} dev "${cfg.hostInterfaceName}"
             ''}
           '';
     in
@@ -818,9 +820,27 @@ in
               extraVeths = mkOption {
                 type =
                   with types;
-                  attrsOf (submodule {
-                    options = networkOptions;
-                  });
+                  attrsOf (
+                    submodule (
+                      { name, ... }:
+                      {
+                        options = networkOptions // {
+                          hostInterfaceName = mkOption {
+                            type = types.str;
+                            default = name;
+                            description = ''
+                              The name of the veth interface on the host side.
+                              This must be unique across the *entire host*.
+
+                              Set this explicitly when the attribute name isn't
+                              host-unique (e.g. several containers share the same
+                              `extraVeths` name.)
+                            '';
+                          };
+                        };
+                      }
+                    )
+                  );
                 default = { };
                 description = ''
                   Extra veth-pairs to be created for the container.
