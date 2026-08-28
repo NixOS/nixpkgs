@@ -14,6 +14,15 @@
     }
   ];
 
+  # Only present under `../16`, so a `gitRelease` build -- whose version
+  # directory is `../git` -- has to be pointed here too.
+  "libatomic/no-gcc-objdir-install.patch" = [
+    {
+      after = "16";
+      path = ../16;
+    }
+  ];
+
   # In Git: https://github.com/Ericson2314/gcc/tree/regular-dirs-in-libgcc-15
   "libgcc/force-regular-dirs.patch" = [
     {
