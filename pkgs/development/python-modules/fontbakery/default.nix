@@ -169,6 +169,9 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/fonttools/fontbakery/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     mainProgram = "fontbakery";
-    maintainers = with lib.maintainers; [ danc86 ];
+    maintainers = with lib.maintainers; [
+      danc86
+      jopejoe1
+    ];
   };
 })
