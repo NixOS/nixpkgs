@@ -138,7 +138,7 @@ let
     if lib.isBool cfgZfs.requestEncryptionCredentials then
       {
         hasKeys = cfgZfs.requestEncryptionCredentials;
-        command = "${cfgZfs.package}/sbin/zfs list -rHo name,keylocation,keystatus -t volume,filesystem ${pool}";
+        command = "${cfgZfs.package}/sbin/zfs list -rHo name,keylocation,keystatus,canmount -t volume,filesystem ${pool}";
       }
     else
       let
@@ -146,7 +146,7 @@ let
       in
       {
         hasKeys = keys != [ ];
-        command = "${cfgZfs.package}/sbin/zfs list -Ho name,keylocation,keystatus -t volume,filesystem ${toString keys}";
+        command = "${cfgZfs.package}/sbin/zfs list -Ho name,keylocation,keystatus,canmount -t volume,filesystem ${toString keys}";
       };
 
   createImportService =
@@ -212,9 +212,17 @@ let
 
 
             ${lib.optionalString keyLocations.hasKeys ''
-              ${keyLocations.command} | while IFS=$'\t' read -r ds kl ks; do
+              ${keyLocations.command} | while IFS=$'\t' read -r ds kl ks cm; do
                 {
                 if [[ "$ks" != unavailable ]]; then
+                  continue
+                fi
+                # Don't load keys for datasets that are not going to be mounted
+                # automatically anyway (canmount=noauto or canmount=off). This
+                # avoids blocking boot on a passphrase prompt for volumes that
+                # are not needed for boot, such as encrypted backups where the
+                # target host will never see the key.
+                if [[ "$cm" == noauto || "$cm" == off ]]; then
                   continue
                 fi
                 case "$kl" in
