@@ -10,7 +10,7 @@
   flac,
   game-music-emu,
   gtk3,
-  libappindicator,
+  libayatana-appindicator,
   libnotify,
   libopenmpt,
   librsvg,
@@ -93,7 +93,6 @@ python3Packages.buildPythonApplication {
     flac
     game-music-emu
     gtk3
-    libappindicator
     libnotify
     libopenmpt
     librsvg
@@ -141,6 +140,7 @@ python3Packages.buildPythonApplication {
       lib.makeLibraryPath (
         [
           game-music-emu
+          libayatana-appindicator
           libopenmpt
           pulseaudio
         ]
