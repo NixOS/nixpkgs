@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libstemmer";
-  version = "2.2.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "snowballstem";
     repo = "snowball";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qXrypwv/I+5npvGHGsHveijoui0ZnoGYhskCfLkewVE=";
+    hash = "sha256-FpvV2brpjl0/l/EmrHN9tWFrXUUz9BDUH548MAjiTa8=";
   };
 
   nativeBuildInputs = [ perl ];
@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Snowball Stemming Algorithms";
     homepage = "https://snowballstem.org/";
+    changelog = "https://github.com/snowballstem/snowball/blob/v${finalAttrs.version}/NEWS";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fpletz ];
     platforms = lib.platforms.all;
