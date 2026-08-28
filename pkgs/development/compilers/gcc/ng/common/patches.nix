@@ -23,6 +23,14 @@
     }
   ];
 
+  # As above: only under `../16`, so name it for `gitRelease` builds too.
+  "libgomp/uid-buffer-size.patch" = [
+    {
+      after = "16";
+      path = ../16;
+    }
+  ];
+
   # In Git: https://github.com/Ericson2314/gcc/tree/regular-dirs-in-libgcc-15
   "libgcc/force-regular-dirs.patch" = [
     {

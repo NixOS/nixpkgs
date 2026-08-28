@@ -58,6 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
     cd $sourceRoot
   '';
 
+  patches = lib.optionals (lib.versionAtLeast release_version "16") [
+    (getVersionFile "libgomp/uid-buffer-size.patch")
+  ];
+
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
