@@ -15,6 +15,7 @@
   mbuffer,
   msmtp,
   nix-update-script,
+  nixosTests,
   nodejs_22,
   openssh,
   samba,
@@ -75,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
   disallowedRequisites = [ finalAttrs.offlineCache ];
 
   passthru.updateScript = nix-update-script { };
+
+  passthru.tests = { inherit (nixosTests) cockpit-zfs; };
 
   passthru.cockpitPath = [
     acl
