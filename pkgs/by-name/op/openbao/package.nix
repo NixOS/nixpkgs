@@ -61,7 +61,7 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     ui = callPackage ./ui.nix { };
-    tests = { inherit (nixosTests) openbao; };
+    tests = { inherit (nixosTests) openbao openbao-agent; };
     updateScript = nix-update-script {
       extraArgs = [
         "--subpackage"
