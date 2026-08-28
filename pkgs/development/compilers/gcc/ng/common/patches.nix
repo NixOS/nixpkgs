@@ -1,6 +1,13 @@
 {
   # TODO: fix up and send to upstream
   "gcc/fix-collect2-paths.diff" = [
+    # GCC 16 spells one context line with the C++ `const_cast` operator rather
+    # than the `CONST_CAST2` macro, and excludes one more linker (`wild`) from
+    # the target-prefixed names, so the patch had to be rebased.
+    {
+      after = "16";
+      path = ../16;
+    }
     {
       after = "15";
       path = ../15;
@@ -30,6 +37,12 @@
   ];
   # In Git: https://github.com/Ericson2314/gcc/tree/libgfortran-force-regular-dirs-15
   "libgfortran/force-regular-dirs.patch" = [
+    # GCC 16 grew a second coarray library, `libcaf_shmem`, sharing the
+    # `cafexeclib` prefix this removes, so the patch had to be rebased.
+    {
+      after = "16";
+      path = ../16;
+    }
     {
       after = "15";
       path = ../15;

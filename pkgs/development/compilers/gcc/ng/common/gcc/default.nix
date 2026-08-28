@@ -114,20 +114,33 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://inbox.sourceware.org/gcc-patches/20260810065714.2215299-1-git@JohnEricson.me/raw";
         hash = "sha256-2qUUMWuyxX4mVaBPeNnHIiMl/aN7ejWM5stTSFWxD7g=";
       })
-      (fetchpatch {
-        name = "driver-search-PATH-ourselves.patch";
-        url = "https://inbox.sourceware.org/gcc-patches/20260810065714.2215299-2-git@JohnEricson.me/raw";
-        # The posted patch is against trunk, which spells this cast with the C++
-        # operator.  GCC 15 still uses the CONST_CAST macro, and the line is
-        # context rather than a change, so it cannot fuzz-match.  Rewrite it
-        # here rather than keeping a forked copy of the whole patch.
-        postFetch = ''
-          substituteInPlace "$out" \
-            --replace-fail 'string, const_cast<char **> (commands[i].argv),' \
-                           'string, CONST_CAST (char **, commands[i].argv),'
-        '';
-        hash = "sha256-uD8xJxQus2qyNgNDN/63WnURNuUJFDkhaXPph7g/DIk=";
-      })
+      (fetchpatch (
+        {
+          name = "driver-search-PATH-ourselves.patch";
+          url = "https://inbox.sourceware.org/gcc-patches/20260810065714.2215299-2-git@JohnEricson.me/raw";
+        }
+        // (
+          if lib.versionOlder release_version "16" then
+            {
+              # The posted patch is against trunk, which spells this cast with
+              # the C++ operator.  GCC 15 still uses the CONST_CAST macro, and
+              # the line is context rather than a change, so it cannot
+              # fuzz-match.  Rewrite it here rather than keeping a forked copy
+              # of the whole patch.
+              postFetch = ''
+                substituteInPlace "$out" \
+                  --replace-fail 'string, const_cast<char **> (commands[i].argv),' \
+                                 'string, CONST_CAST (char **, commands[i].argv),'
+              '';
+              hash = "sha256-uD8xJxQus2qyNgNDN/63WnURNuUJFDkhaXPph7g/DIk=";
+            }
+          else
+            {
+              # 16 switched to the C++ operator, so the patch is taken as posted.
+              hash = "sha256-ILH3oHsnPXZmwPWfZ7Pt5MfLs00ZBJ+vFHw3MRRh4Dw=";
+            }
+        )
+      ))
       (fetchpatch {
         name = "driver-search-PATH-machine-prefix.patch";
         url = "https://inbox.sourceware.org/gcc-patches/20260810065714.2215299-3-git@JohnEricson.me/raw";
