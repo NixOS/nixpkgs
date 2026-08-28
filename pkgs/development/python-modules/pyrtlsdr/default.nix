@@ -9,14 +9,14 @@
 buildPythonPackage rec {
   pname = "pyrtlsdr";
   version = "0.5.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-I9EevRtoCz5qKpJrc95P/ocssf/thwHyV80cRtGoQKw=";
   };
 
-  propagatedBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   postPatch = ''
     sed "s|driver_files =.*|driver_files = ['${lib.getLib rtl-sdr}/lib/librtlsdr.so']|" -i rtlsdr/librtlsdr.py
