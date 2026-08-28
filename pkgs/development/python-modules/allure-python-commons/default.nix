@@ -1,13 +1,12 @@
 {
   lib,
-  fetchPypi,
-  buildPythonPackage,
-  attrs,
-  pluggy,
-  six,
   allure-python-commons-test,
-  setuptools-scm,
+  attrs,
+  buildPythonPackage,
+  fetchPypi,
+  pluggy,
   python,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
