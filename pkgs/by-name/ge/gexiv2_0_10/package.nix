@@ -77,6 +77,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
+      attrPath = "gexiv2_0_10";
       packageName = pname;
       versionPolicy = "odd-unstable";
       freeze = true;

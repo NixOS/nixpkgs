@@ -13,7 +13,7 @@
   fwupd,
   gdk-pixbuf,
   geoclue2,
-  gexiv2,
+  gexiv2_0_10,
   glib,
   gnome-settings-daemon,
   gobject-introspection,
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     fwupd
     gdk-pixbuf
     geoclue2
-    gexiv2
+    gexiv2_0_10
     glib
     gnome-settings-daemon # org.gnome.settings-daemon.* gschema
     gtk3

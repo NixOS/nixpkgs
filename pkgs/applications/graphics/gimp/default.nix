@@ -57,7 +57,7 @@
   json-glib,
   libmypaint,
   llvmPackages,
-  gexiv2,
+  gexiv2_0_10,
   harfbuzz,
   makeFontsConf,
   mypaint-brushes,
@@ -158,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     pango
     cairo
     libarchive
-    gexiv2
+    gexiv2_0_10
     harfbuzz
     isocodes
     freetype
@@ -220,7 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
     gegl
     cairo
     pango
-    gexiv2
+    gexiv2_0_10
   ];
 
   strictDeps = true;
