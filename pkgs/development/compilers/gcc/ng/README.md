@@ -64,3 +64,23 @@ Both are packaged from the same sources and, for now, the same version: `gccNGPa
 Nothing selects GGN NG yet by default.
 The plan is for very exotic package sets to switch to this first.
 The main tier-1 native Linux package sets cached on `cache.nixos.org` will come later.
+
+### Patches the monolithic set has and this one does not
+
+None of `../patches/default.nix` is applied here.
+Some of it this set does not need, some of it is a real gap; the ones that have been looked at:
+
+| patch | verdict | why |
+|---|---|---|
+| `gcc-12-no-sys-dirs.patch`, `13/no-sys-dirs-riscv.patch` | needed | Needed for a native build, not a cross one. `cppdefault.cc` drops `LOCAL_INCLUDE_DIR` and `NATIVE_SYSTEM_HEADER_DIR` by itself when `CROSS_DIRECTORY_STRUCTURE` is defined and no sysroot is, and `/lib/` and `/usr/lib/` reach `startfile_prefixes` only under `*cross_compile == '0' \|\| target_system_root`. We pass no sysroot, so a cross compiler is already clean and a native one searches all four. |
+| `13/mangle-NIX_STORE-in-__FILE__.patch` | needed | `cc-wrapper` sets `useMacroPrefixMap = !isGNU`, and this set's `gcc` is `isGNU`, so nothing else keeps store paths out of `__FILE__`. |
+| `cfi_startproc-reorder-label-14-1.diff` | needed, in `libgcc` | Needed on aarch64, and belongs to `libgcc` rather than `gcc`: it patches `libgcc/config/aarch64/lse.S`, whose output clang 18 and later refuse to assemble. |
+| `libstdc-fix-compilation-in-freestanding-win32.patch` | believed unnecessary | Only takes effect under `!_GLIBCXX_HOSTED`, and `libstdcxx` is built against a real libc here. The monolithic set needs it because its `withoutTargetLibc` stage builds a freestanding libstdc++. |
+| the Darwin set (`iains` and Homebrew) | needed | Darwin is in scope; it is just not tested yet. Two of the three are `libgcc` patches rather than `gcc` ones, as `cfi_startproc` was: `libgcc-darwin-fix-reexport` (`libgcc/config/t-slibgcc-darwin`) and `libgcc-darwin-detection` (`libgcc/config.host`). Only the large `gcc-16-darwin-aarch64-support` diff belongs to `gcc`. |
+| `c++tools-dont-check-enable-default-pie.patch` | needed | `--enable-default-pie` is about the target, but `c++tools` is built for the host, so it should follow `--enable-host-pie` instead. We pass `--enable-default-pie` and we do build `c++tools` -- there is a `g++-mapper-server` in the output -- so the mis-scoped flag applies here too. Upstream only in 14 and 15, and 15 is the default here, so this does not go away soon. |
+| `ppc-musl.patch` | needed | Needed on powerpc+musl, and `no-sys-dirs` does not subsume it: that one `#undef`s `LOCAL_INCLUDE_DIR` in `cppdefault.cc`, but `rs6000/sysv4.h` tests the macro earlier, where it builds `INCLUDE_DEFAULTS_MUSL_LOCAL`, so `/usr/local/include` survives there. |
+| `gcc-12-gfortran-driving.patch` | needed | Needed wherever libtool parses `gfortran -v`, which `libgfortran` does. Gate it on `langFortran` as the monolithic set does. |
+| the two Cygwin patches | needed, but elsewhere | Neither is upstream in 15 or 16. They belong with whatever enables Cygwin here rather than with this set's own bootstrap. |
+| `libssp-noshared-musl32.patch` | undecided | Makes `LINK_SSP_SPEC` link `-lssp_nonshared` unconditionally, which is an Alpine assumption about what the libc ships, and this set builds its own `libssp`. Worth settling against a real musl x86_32 target rather than on paper. |
+
+All four apply cleanly to 15.3.0 and 16.2.0; none is applied here yet.
