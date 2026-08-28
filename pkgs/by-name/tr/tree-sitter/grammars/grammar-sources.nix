@@ -3037,10 +3037,10 @@
   };
 
   tact = {
-    version = "1.6.0-unstable-2025-05-01";
+    version = "1.6.0-unstable-2026-07-08";
     url = "github:tact-lang/tree-sitter-tact";
-    rev = "a6267c2091ed432c248780cec9f8d42c8766d9ad";
-    hash = "sha256-2AUN/VYor3K0hkneLYa6+LjE+V8EJogFqBTgdfvOiKM=";
+    rev = "1c689f0a8bbe5910db628a62bfc26d37f54bf9be";
+    hash = "sha256-SA33We0hOBc97iBom7m2tBfcquopJs1hi/QsJFb7XBw=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
