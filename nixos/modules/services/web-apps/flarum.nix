@@ -195,6 +195,25 @@ in
         Only set this to true if you are certain you are working with a fresh, empty database.
       '';
     };
+
+    adoptConfig = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to let this module manage a pre-existing config.php,
+        such as a hand-maintained one (typically with
+        {option}`createDatabaseLocally` = false).
+
+        By default, a config.php this module didn't create is left alone:
+        {option}`baseUrl` and {option}`database` are not applied to it, so
+        real settings can't get silently overwritten by their defaults.
+
+        Before enabling this, make sure {option}`baseUrl` and
+        {option}`database` already match the file's real values. Once
+        enabled, config.php is regenerated from these options on every
+        activation, and anything in the file not covered by them is lost.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -287,6 +306,16 @@ in
         cp -f ${cfg.package}/share/php/flarum/{extend.php,site.php,flarum} .
         ln -sf ${cfg.package}/share/php/flarum/vendor .
         ln -sf ${cfg.package}/share/php/flarum/public/index.php public/
+
+        ${optionalString cfg.adoptConfig "touch .flarum-installed"}
+
+        # config.php with no marker means we didn't write it, so leave it alone.
+        # This check must come before the guard below: that guard also touches
+        # the marker, which would make this check pass for the wrong reason.
+        if [ ! -f .flarum-installed ] && [ -f config.php ]; then
+          echo "flarum-install: config.php exists but wasn't written by this module; leaving it untouched." >&2
+          echo "flarum-install: set services.flarum.adoptConfig = true to adopt it." >&2
+        else
       ''
       + optionalString (cfg.createDatabaseLocally && cfg.database.driver == "mysql") ''
         if [ ! -f .flarum-installed ]; then
@@ -306,14 +335,18 @@ in
         fi
       ''
       + ''
-        install -m 0600 ${configPhpFile} config.php
-        ${optionalString (cfg.databasePasswordFile != null) ''
-          ${pkgs.replace-secret}/bin/replace-secret '@databasePassword@' \
-            ${escapeShellArg cfg.databasePasswordFile} config.php
-        ''}
+          touch .flarum-installed
+          install -m 0600 ${configPhpFile} config.php
+          ${optionalString (cfg.databasePasswordFile != null) ''
+            ${pkgs.replace-secret}/bin/replace-secret '@databasePassword@' \
+              ${escapeShellArg cfg.databasePasswordFile} config.php
+          ''}
+        fi
 
-        php flarum migrate
-        php flarum cache:clear
+        if [ -f config.php ]; then
+          php flarum migrate
+          php flarum cache:clear
+        fi
       '';
     };
   };

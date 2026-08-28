@@ -28,9 +28,6 @@ mkKdeDerivation {
 
   extraCmakeFlags = [
     "-DDATABASE_BACKEND=${lib.toUpper backend}"
-    # FIXME: depends on kcoreaddons typesystem info, we need
-    # a Shiboken wrapper to propagate this properly.
-    "-DBUILD_PYTHON_BINDINGS=OFF"
   ]
   ++ lib.optionals (backend == "mysql") [
     "-DMYSQLD_SCRIPTS_PATH=${lib.getBin mariadb}/bin"
@@ -38,6 +35,8 @@ mkKdeDerivation {
   ++ lib.optionals (backend == "postgres") [
     "-DPOSTGRES_PATH=${lib.getBin libpq}/bin"
   ];
+
+  hasPythonBindings = true;
 
   extraNativeBuildInputs = [
     qttools
@@ -54,7 +53,6 @@ mkKdeDerivation {
   ++ lib.optionals (backend == "sqlite") [ sqlite ];
 
   # Hardcoded as a QString, which is UTF-16 so Nix can't pick it up automatically
-
   postFixup = ''
     mkdir -p $out/nix-support
   ''

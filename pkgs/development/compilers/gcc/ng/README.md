@@ -44,10 +44,18 @@ Given that, the sysroot is derived from `stdenv.cc.libc` too, so it cannot disag
 
 ## Threading
 
-Which threading model is available is a property of the libc, so the libc declares it as `passthru.threadModel`; `libgcc` reads it from there, and `libstdcxx` takes both the model and the generated `gthr-default.h` from `libgcc`.
+The threading model comes from whatever provides the threads, which declares it as `passthru.threadModel`; `libgcc` reads it from there, and `libstdcxx` takes both the model and the generated `gthr-default.h` from `libgcc`.
+
+Usually that is the libc.
+Where the libc's own threading is not what we want, a separate library supplies it, and `libgcc` is given it as the `threads` argument, which takes precedence.
+MinGW is the case in point: its libc offers only `win32`, so we build against `windows.mcfgthreads` and get `mcf`, the same choice the monolithic `gcc` makes through `threadsCross`.
+Unlike `threadsCross`, the model is not spelled out at the use site — the package declares its own, exactly as a libc does.
+
+That library is built with `windows.crossThreadsStdenv`, which on a `useGccNG` platform is stage 3 of the bootstrap chain — the same compiler that then builds the threaded `libgcc`.
+Being plain C with no threading model of its own, it does not mind that stage 3's libgcc has none, and that is what keeps the arrangement from being circular.
 
 Reading it from the compiler instead, with `$CC -v | sed -n 's/^Thread model: //p'`, reports the wrong component: in this set the compiler is configured separately from libgcc, so the two can disagree.
-A platform whose libc declares nothing gets `single`.
+A platform with nothing to declare a model gets `single`.
 
 ## Relationship to the monolithic set
 
