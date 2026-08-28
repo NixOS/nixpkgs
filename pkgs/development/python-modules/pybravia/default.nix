@@ -7,7 +7,7 @@
   pyprojectVersionPatchHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pybravia";
   version = "0.5.3";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Drafteed";
     repo = "pybravia";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dHc1jmwmLRXpxxIKPMyscDtyWB/UU8xyL7Uv4ioi2TY=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for remote control of Sony Bravia TVs 2013 and newer";
     homepage = "https://github.com/Drafteed/pybravia";
-    changelog = "https://github.com/Drafteed/pybravia/releases/tag/${src.tag}";
+    changelog = "https://github.com/Drafteed/pybravia/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
