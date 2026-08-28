@@ -1888,6 +1888,7 @@ mapAliases {
   openconnect_gnutls = throw "'openconnect_gnutls' has been renamed to/replaced by 'openconnect'"; # Converted to throw 2025-10-27
   opendrop = throw "'opendrop' has been removed as it was unmaintained upstream"; # Added 2026-05-24
   openexr_3 = throw "'openexr_3' has been renamed to/replaced by 'openexr'"; # Converted to throw 2025-10-27
+  openexrid-unstable = throw "'openxrid-unstable' has been removed as it had several insecure dependencies and had minimal upstream maintainence"; # Added 2026-08-28
   opengfw = throw "'opengfw' has been removed because the upstream repository was deleted"; # Added 2026-03-16
   openhmd = throw "'openhmd' has been removed due to being unmaintained upstream"; # Added 2025-11-05
   openimageio2 = throw "'openimageio2' has been renamed to/replaced by 'openimageio'"; # Converted to throw 2025-10-27
