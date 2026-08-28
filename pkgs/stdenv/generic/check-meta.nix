@@ -414,6 +414,7 @@ let
       isGutenprint = bool;
 
       # Used for the original location of the maintainer and team attributes to assist with pings.
+      # Deprecated, use `attributePositionInformation.meta.{maintainers,teams}.__pos`
       maintainersPosition = any;
       teamsPosition = any;
 
