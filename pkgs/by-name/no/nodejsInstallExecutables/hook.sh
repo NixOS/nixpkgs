@@ -5,15 +5,10 @@ nodejsInstallExecutables() {
 
     local -r packageOut="$out/lib/node_modules/$(@jq@ --raw-output '.name' package.json)"
 
-    # Based on code from Python's buildPythonPackage wrap.sh script, for
-    # supporting both the case when makeWrapperArgs is an array and a
-    # IFS-separated string.
-    #
-    # TODO: remove the string branch when __structuredAttrs are used.
-    if [[ "${makeWrapperArgs+defined}" == "defined" && "$(declare -p makeWrapperArgs)" =~ ^'declare -a makeWrapperArgs=' ]]; then
-        local -a user_args=("${makeWrapperArgs[@]}")
-    else
-        local -a user_args="(${makeWrapperArgs:-})"
+    local -a user_args=()
+
+    if [[ -v makeWrapperArgs ]]; then
+      concatTo user_args makeWrapperArgs
     fi
 
     while IFS=" " read -ra bin; do
