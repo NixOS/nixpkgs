@@ -6,7 +6,7 @@
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
-  electron_41,
+  electron_43,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
@@ -18,20 +18,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "picgo";
-  version = "3.0.0";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "Molunerfinn";
     repo = "PicGo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ruTgNgZsjpdu2Cc2Q4HxPdoQHUww1UTbvLazglaz75c=";
+    hash = "sha256-wT9CfPchNbD2CzSVA9kZAYsstpc2mvgqAl305rmrUdo=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) version src;
     inherit pnpm;
     pname = "picgo";
-    hash = "sha256-IAuTtI0Ljm4+xCeMGIQAf7lK37CQ6qf7PJsksLIti7Q=";
+    hash = "sha256-a08WFoWcjo0mV1eu8oOQgbOiu/xfpoMxx3v17Eltsbk=";
     fetcherVersion = 3; # lockfileVersion 9.0 corresponds to fetcherVersion 3
   };
 
@@ -48,6 +48,15 @@ stdenv.mkDerivation (finalAttrs: {
     NODE_ENV = "development";
   };
 
+  postPatch = ''
+    # Maximizing a hidden BrowserWindow makes it visible on Linux. Defer restoring
+    # the maximized state until the main window is explicitly shown.
+    # https://github.com/Molunerfinn/PicGo/blob/4676326eb88d087432989366d71e61e17a039e98/src/main/apis/app/window/windowList.ts#L83-L94
+    substituteInPlace src/main/apis/app/window/windowList.ts \
+      --replace-fail "      window.maximize()" \
+        "      window.once('show', () => window.maximize())"
+  '';
+
   buildPhase = ''
     runHook preBuild
 
@@ -57,12 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postBuild = ''
-    cp -r src/renderer/public/. dist_electron/renderer/
-
-    # Renderer assets are loaded from a file:// URL, so root-relative paths like
-    # /squareLogo.png resolve to the filesystem root. Copy the renderer public assets
-    # next to index.html and rewrite those references to relative paths.
-    # https://github.com/Molunerfinn/PicGo/blob/dev/src/renderer/components/independent-window/mini/picgo-mini-page.tsx
+    # Renderer assets are loaded from a file:// URL, so the mini window logo must
+    # use a path relative to its index.html.
     substituteInPlace dist_electron/renderer/assets/mini-*.js \
       --replace-fail '"/squareLogo.png"' '"./squareLogo.png"'
   '';
@@ -92,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     # ELECTRON_FORCE_IS_PACKAGED makes PicGo use its production resource path,
     # but with the nixpkgs Electron wrapper process.resourcesPath points to Electron
     # itself, so point PicGo at the installed public assets
-    makeWrapper ${lib.getExe electron_41} $out/bin/picgo \
+    makeWrapper ${lib.getExe electron_43} $out/bin/picgo \
       --add-flags "--class=picgo" \
       --add-flags "$out/lib/picgo/.launcher.cjs" \
       --set NODE_ENV production \
