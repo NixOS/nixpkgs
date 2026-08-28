@@ -75,5 +75,7 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = [ ];
     mainProgram = "fab";
+    # https://github.com/fabric/fabric/issues/2376
+    broken = lib.versionAtLeast invoke.version "3";
   };
 }
