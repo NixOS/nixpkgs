@@ -3122,6 +3122,8 @@ self: super: with self; {
 
   citeproc-py = callPackage ../development/python-modules/citeproc-py { };
 
+  citeproc-py-styles = callPackage ../development/python-modules/citeproc-py-styles { };
+
   cjkwrap = callPackage ../development/python-modules/cjkwrap { };
 
   ckcc-protocol = callPackage ../development/python-modules/ckcc-protocol { };
