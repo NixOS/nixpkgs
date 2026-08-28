@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "shfmt";
-  version = "3.13.1";
+  version = "3.14.0";
 
   src = fetchFromGitHub {
     owner = "mvdan";
     repo = "sh";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-NNK8fD9cmuRM1YAYagS6AEu2IOJVaoQmDX8Dm3geRQw=";
+    hash = "sha256-W0/40VfqHxKsdIZQzjv3T4Vc/BVgLl9aMuwSUycvclE=";
   };
 
-  vendorHash = "sha256-M5EJHBE2qjlRFtc3L941qxg0KO5IbVTMpiJSJ6WNLVE=";
+  vendorHash = "sha256-OfdXhgPyRRifRK4CylmOqWh0qmZ80mNAhBZtqJlwPPY=";
 
   patches = [
     (replaceVars ./version.patch {
