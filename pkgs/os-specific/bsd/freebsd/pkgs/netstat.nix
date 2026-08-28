@@ -18,6 +18,5 @@ mkDerivation {
     libnetgraph
   ];
 
-  meta.platforms = lib.platforms.freebsd;
   meta.mainProgram = "netstat";
 }

@@ -12,5 +12,4 @@ mkDerivation {
   ];
 
   meta.mainProgram = "fstat";
-  meta.platforms = lib.platforms.freebsd;
 }

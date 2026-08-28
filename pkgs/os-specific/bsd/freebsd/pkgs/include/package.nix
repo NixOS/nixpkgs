@@ -45,5 +45,4 @@ mkDerivation {
 
   MK_HESIOD = "yes";
 
-  meta.platforms = lib.platforms.freebsd;
 }
