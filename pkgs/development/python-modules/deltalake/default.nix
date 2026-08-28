@@ -1,65 +1,92 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  nix-update-script,
+
+  # build-system
   rustPlatform,
-  arro3-core,
-  pyarrow,
+
+  # nativeBuildInputs
+  pkg-config,
+
+  # buildInputs
   openssl,
-  stdenv,
-  libiconv,
+
+  # dependencies
+  arro3-core,
+  deprecated,
+
+  # optional-dependencies
+  pandas,
+  pyarrow,
+
+  # tests
+  arro3-io,
+  azure-storage-blob,
+  cacert,
   opentelemetry-api,
   opentelemetry-sdk,
-  pkg-config,
   polars,
   pytestCheckHook,
   pytest-benchmark,
   pytest-cov-stub,
   pytest-mock,
   pytest-timeout,
-  pandas,
-  deprecated,
-  azure-storage-blob,
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "deltalake";
-  version = "1.4.2";
+  version = "1.6.2";
   pyproject = true;
+  __structuredAttrs = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-lX5SYk4dzuNfCSCGjj0Vof6rQPzQ/NRoIjGjPaPUQto=";
+  src = fetchFromGitHub {
+    owner = "delta-io";
+    repo = "delta-rs";
+    tag = "python-v${finalAttrs.version}";
+    hash = "sha256-m6VeJ0zsAxSfmkDnMeOEObZYjVsIMoumv2CQWi9hOrQ=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    hash = "sha256-z7Qv/YGH2o5rQVeDs1m8fqJd6hgvGvf+TldUvAR7CGY=";
+  sourceRoot = "${finalAttrs.src.name}/python";
+  cargoRoot = "..";
+
+  # Upstream does not commit `Cargo.lock`.
+  # Regenerate it with `cargo generate-lockfile` at the root of the repository.
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "buoyant_kernel-0.24.0" = "sha256-axaOU2JLSOPwK6Ia3bS0Vw4hZplkdJlyNoIYES8CkXs=";
+    };
   };
+
+  postPatch =
+    # Only `sourceRoot` is made writable, but the lock file belongs to the workspace root and the
+    # test suite copies (mode-preserving) fixtures from `../crates/test/tests/data`.
+    ''
+      chmod -R u+w ..
+      ln -s ${./Cargo.lock} ../Cargo.lock
+    '';
 
   env.OPENSSL_NO_VENDOR = 1;
 
-  dependencies = [
-    arro3-core
-    deprecated
-  ];
-
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
-
   nativeBuildInputs = [
     pkg-config # openssl-sys needs this
-    writableTmpDirAsHomeHook
   ]
   ++ (with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
   ]);
+
+  buildInputs = [
+    openssl
+  ];
+
+  dependencies = [
+    arro3-core
+    deprecated
+  ];
 
   optional-dependencies = {
     pandas = [ pandas ];
@@ -69,6 +96,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "deltalake" ];
 
   nativeCheckInputs = [
+    arro3-io
     azure-storage-blob
     opentelemetry-api
     opentelemetry-sdk
@@ -78,21 +106,35 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-mock
     pytest-timeout
+    writableTmpDirAsHomeHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
-  preCheck = ''
-    # For paths in test to work, we have to be in python dir
-    cd python
+  preCheck =
+    # In tests we want to use the deltalake that we have built
+    ''
+      rm -rf deltalake
+    ''
+    # `rustls-platform-verifier` panics when it cannot load any CA certificate,
+    # even for object stores that never hit the network (`tests/test_opendal.py`)
+    + ''
+      export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+    '';
 
-    # In tests we want to use deltalake that we have built
-    rm -rf deltalake
-  '';
+  # Upstream also collects doctests from the (removed) `deltalake` source directory
+  enabledTestPaths = [ "tests" ];
+
+  # The repository also holds `rust-v*` tags for the Rust crates
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex=python-v(.*)"
+    ];
+  };
 
   meta = {
     description = "Native Rust library for Delta Lake, with bindings into Python";
     homepage = "https://github.com/delta-io/delta-rs";
-    changelog = "https://github.com/delta-io/delta-rs/blob/python-v${version}/CHANGELOG.md";
+    changelog = "https://github.com/delta-io/delta-rs/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       kfollesdal
@@ -101,4 +143,4 @@ buildPythonPackage rec {
       andershus
     ];
   };
-}
+})
