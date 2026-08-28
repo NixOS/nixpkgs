@@ -1621,6 +1621,8 @@ self: super: with self; {
 
   autograd-gamma = callPackage ../development/python-modules/autograd-gamma { };
 
+  autoinject = callPackage ../development/python-modules/autoinject { };
+
   autoit-ripper = callPackage ../development/python-modules/autoit-ripper { };
 
   autologging = callPackage ../development/python-modules/autologging { };
