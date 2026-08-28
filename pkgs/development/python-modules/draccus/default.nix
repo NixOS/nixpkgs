@@ -66,6 +66,7 @@ buildPythonPackage rec {
   meta = {
     description = "Framework for simple dataclass-based configurations based on Pyrallis";
     homepage = "https://github.com/dlwh/draccus";
+    changelog = "https://github.com/marin-community/draccus/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
