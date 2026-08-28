@@ -6,9 +6,13 @@ import type { GitHub } from '@actions/github/lib/utils'
 // They do seem quite similar, but this needs to run after eval,
 // and prepare.js obviously doesn't.
 
-const { classify, split } = require('../supportedBranches.js')
+const { split } = require('../supportedBranches.js')
 const { readFile } = require('node:fs/promises')
 const { postReview, dismissReviews } = require('./reviews.js')
+const {
+  evaluateTargetBranchPolicy,
+  getTargetBranchPolicy,
+} = require('./check-target-branch-policy.ts')
 
 const reviewKey = 'check-target-branch'
 
@@ -40,6 +44,92 @@ type ChangedPaths = {
   rebuildsByPlatform: Record<string, string[]>
 }
 
+type TargetBranchReviewFacts = {
+  github: InstanceType<typeof GitHub>
+  context: typeof actionsContext
+  core: typeof actionsCore
+  dry: boolean
+  base: string
+  maxRebuildCount: number
+}
+
+function getStagingBranch(base: string) {
+  const version = split(base).version
+  return version ? `staging-${version}` : 'staging'
+}
+
+async function postMassRebuildReview(facts: TargetBranchReviewFacts) {
+  const { github, context, core, dry, base, maxRebuildCount } = facts
+  const desiredBranch = getStagingBranch(base)
+  const body = [
+    `The PR's base branch is set to \`${base}\`, but this PR causes ${maxRebuildCount} rebuilds.`,
+    'It is therefore considered a mass rebuild.',
+    `Please [change the base branch](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/changing-the-base-branch-of-a-pull-request) to [the right base branch for your changes](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#branch-conventions) (probably \`${desiredBranch}\`).`,
+  ].join('\n')
+
+  await postReview({
+    github,
+    context,
+    core,
+    dry,
+    body,
+    event: 'REQUEST_CHANGES',
+    reviewKey,
+  })
+}
+
+async function postNixosRebuildReview(facts: TargetBranchReviewFacts) {
+  const { github, context, core, dry, base, maxRebuildCount } = facts
+  let branchText: string
+  if (base === 'master' && maxRebuildCount >= 500) {
+    branchText = '(probably either `staging-nixos` or `staging`)'
+  } else if (base === 'master') {
+    branchText = '(probably `staging-nixos`)'
+  } else if (maxRebuildCount >= 500) {
+    branchText = `(probably either \`staging-nixos-${split(base).version}\` or \`staging-${split(base).version}\`)`
+  } else {
+    branchText = `(probably \`staging-nixos-${split(base).version}\`)`
+  }
+  const body = [
+    `The PR's base branch is set to \`${base}\`, but this PR rebuilds all NixOS tests.`,
+    base === 'master' && maxRebuildCount >= 500
+      ? `Since this PR also causes ${maxRebuildCount} rebuilds, it may also be considered a mass rebuild.`
+      : '',
+    `Please [change the base branch](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/changing-the-base-branch-of-a-pull-request) to [the right base branch for your changes](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#branch-conventions) ${branchText}.`,
+  ].join('\n')
+
+  await postReview({
+    github,
+    context,
+    core,
+    dry,
+    body,
+    event: 'REQUEST_CHANGES',
+    reviewKey,
+  })
+}
+
+async function postPossibleMassRebuildReview(facts: TargetBranchReviewFacts) {
+  const { github, context, core, dry, base, maxRebuildCount } = facts
+  const stagingBranch = getStagingBranch(base)
+  const body = [
+    `The PR's base branch is set to \`${base}\`, and this PR causes ${maxRebuildCount} rebuilds.`,
+    `Please consider whether this PR causes a mass rebuild according to [our conventions](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#branch-conventions).`,
+    `If it does cause a mass rebuild, please [change the base branch](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/changing-the-base-branch-of-a-pull-request) to [the right base branch for your changes](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#branch-conventions) (probably \`${stagingBranch}\`).`,
+    `If it does not cause a mass rebuild, this message can be ignored.`,
+  ].join('\n')
+
+  await postReview({
+    github,
+    context,
+    core,
+    dry,
+    body,
+    event: 'REQUEST_CHANGES',
+    reviewKey,
+  })
+}
+
 async function checkTargetBranch({
   github,
   context,
@@ -69,41 +159,7 @@ async function checkTargetBranch({
   ).data
   const base = prInfo.base.ref
   const head = prInfo.head.ref
-  const baseClassification = classify(base)
-  const headClassification = classify(head)
-
-  // Don't run on, e.g., staging-nixos to master merges.
-  if (headClassification.type.includes('development')) {
-    core.info(
-      `Skipping checkTargetBranch: PR is from a development branch (${head})`,
-    )
-
-    await dismissReviews({
-      github,
-      context,
-      core,
-      dry,
-      reviewKey,
-    })
-
-    return
-  }
-  // Don't run on PRs against staging branches, wip branches, haskell-updates, etc.
-  if (!baseClassification.type.includes('primary')) {
-    core.info(
-      `Skipping checkTargetBranch: PR is against a non-primary base branch (${base})`,
-    )
-
-    await dismissReviews({
-      github,
-      context,
-      core,
-      dry,
-      reviewKey,
-    })
-
-    return
-  }
+  const { shouldCheckMassRebuild } = getTargetBranchPolicy({ base, head })
 
   const maxRebuildCount = Math.max(
     ...Object.values(changed.rebuildCountByKernel),
@@ -112,25 +168,28 @@ async function checkTargetBranch({
     changed.attrdiff.changed.includes('nixosTests.simple-container') ||
     changed.attrdiff.changed.includes('nixosTests.simple-vm')
 
-  // https://github.com/NixOS/nixpkgs/pull/521157
-  // These should go to master and release-xx.xx when backported
-  let isExemptKernelUpdate = false
-  if (prInfo.changed_files === 1) {
+  let onlyChangedFile: string | null = null
+  if (shouldCheckMassRebuild && prInfo.changed_files === 1) {
     const changedFiles = (
       await github.rest.pulls.listFiles({
         ...context.repo,
         pull_number,
       })
     ).data
-    isExemptKernelUpdate =
-      changedFiles.length === 1 &&
-      changedFiles[0].filename ===
-        'pkgs/os-specific/linux/kernel/xanmod-kernels.nix'
+    onlyChangedFile =
+      changedFiles.length === 1 ? changedFiles[0].filename : null
   }
 
-  // https://github.com/NixOS/nixpkgs/pull/483194#issuecomment-3793393218
-  const isExemptHomeAssistantUpdate =
-    maxRebuildCount <= 1500 && head === 'wip-home-assistant'
+  const {
+    decision,
+    details: { isExemptKernelUpdate, isExemptHomeAssistantUpdate },
+  } = evaluateTargetBranchPolicy({
+    base,
+    head,
+    maxRebuildCount,
+    rebuildsAllTests,
+    onlyChangedFile,
+  })
 
   core.info(
     [
@@ -142,90 +201,45 @@ async function checkTargetBranch({
     ].join('\n'),
   )
 
-  if (
-    maxRebuildCount >= 1000 &&
-    !isExemptHomeAssistantUpdate &&
-    !isExemptKernelUpdate
-  ) {
-    const desiredBranch =
-      base === 'master' ? 'staging' : `staging-${split(base).version}`
-    const body = [
-      `The PR's base branch is set to \`${base}\`, but this PR causes ${maxRebuildCount} rebuilds.`,
-      'It is therefore considered a mass rebuild.',
-      `Please [change the base branch](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/changing-the-base-branch-of-a-pull-request) to [the right base branch for your changes](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#branch-conventions) (probably \`${desiredBranch}\`).`,
-    ].join('\n')
+  const reviewFacts: TargetBranchReviewFacts = {
+    github,
+    context,
+    core,
+    dry,
+    base,
+    maxRebuildCount,
+  }
 
-    await postReview({
-      github,
-      context,
-      core,
-      dry,
-      body,
-      event: 'REQUEST_CHANGES',
-      reviewKey,
-    })
-  } else if (rebuildsAllTests && !isExemptKernelUpdate) {
-    let branchText: string
-    if (base === 'master' && maxRebuildCount >= 500) {
-      branchText = '(probably either `staging-nixos` or `staging`)'
-    } else if (base === 'master') {
-      branchText = '(probably `staging-nixos`)'
-    } else if (maxRebuildCount >= 500) {
-      branchText = `(probably either \`staging-nixos-${split(base).version}\` or \`staging-${split(base).version}\`)`
-    } else {
-      branchText = `(probably \`staging-nixos-${split(base).version}\`)`
-    }
-    const body = [
-      `The PR's base branch is set to \`${base}\`, but this PR rebuilds all NixOS tests.`,
-      base === 'master' && maxRebuildCount >= 500
-        ? `Since this PR also causes ${maxRebuildCount} rebuilds, it may also be considered a mass rebuild.`
-        : '',
-      `Please [change the base branch](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/changing-the-base-branch-of-a-pull-request) to [the right base branch for your changes](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#branch-conventions) ${branchText}.`,
-    ].join('\n')
+  if (decision === 'mass-rebuild') {
+    await postMassRebuildReview(reviewFacts)
+    return
+  }
 
-    await postReview({
-      github,
-      context,
-      core,
-      dry,
-      body,
-      event: 'REQUEST_CHANGES',
-      reviewKey,
-    })
-  } else if (
-    maxRebuildCount >= 500 &&
-    !isExemptKernelUpdate &&
-    !isExemptHomeAssistantUpdate
-  ) {
-    const stagingBranch =
-      base === 'master' ? 'staging' : `staging-${split(base).version}`
-    const body = [
-      `The PR's base branch is set to \`${base}\`, and this PR causes ${maxRebuildCount} rebuilds.`,
-      `Please consider whether this PR causes a mass rebuild according to [our conventions](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#branch-conventions).`,
-      `If it does cause a mass rebuild, please [change the base branch](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/changing-the-base-branch-of-a-pull-request) to [the right base branch for your changes](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#branch-conventions) (probably \`${stagingBranch}\`).`,
-      `If it does not cause a mass rebuild, this message can be ignored.`,
-    ].join('\n')
+  if (decision === 'nixos-rebuild') {
+    await postNixosRebuildReview(reviewFacts)
+    return
+  }
 
-    await postReview({
-      github,
-      context,
-      core,
-      dry,
-      body,
-      event: 'REQUEST_CHANGES',
-      reviewKey,
-    })
+  if (decision === 'possible-mass-rebuild') {
+    await postPossibleMassRebuildReview(reviewFacts)
+    return
+  }
+
+  if (decision === 'skip-development-merge') {
+    core.info(
+      `Skipping checkTargetBranch: PR merges the development branch ${head} into ${base}`,
+    )
   } else {
     core.info('checkTargetBranch: this PR is against an appropriate branch.')
-
-    await dismissReviews({
-      github,
-      context,
-      core,
-      dry,
-      reviewKey,
-    })
   }
+
+  await dismissReviews({
+    github,
+    context,
+    core,
+    dry,
+    reviewKey,
+  })
 }
 
 module.exports = checkTargetBranch
