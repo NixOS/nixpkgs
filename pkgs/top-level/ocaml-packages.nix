@@ -58,7 +58,9 @@ let
 
         ao = callPackage ../development/ocaml-modules/ao { };
 
-        apron = callPackage ../development/ocaml-modules/apron { };
+        apron = callPackage ../development/ocaml-modules/apron {
+          inherit (pkgs) flint;
+        };
 
         apronext = callPackage ../development/ocaml-modules/apronext { };
 
@@ -1381,6 +1383,7 @@ let
 
         mopsa = callPackage ../development/ocaml-modules/mopsa {
           inherit (pkgs.llvmPackages_19) clang libclang libllvm;
+          inherit (pkgs) flint;
         };
 
         morbig = callPackage ../development/ocaml-modules/morbig {
