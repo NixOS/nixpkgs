@@ -1,0 +1,4 @@
+[registries]
+regA = { index = "sparse+http://127.0.0.1:18080/regA/" }
+regB = { index = "sparse+http://127.0.0.1:18080/regB/" }
+regC = { index = "sparse+http://127.0.0.1:18080/regC/" }
