@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   buildGoModule,
 }:
 
@@ -8,8 +8,8 @@ buildGoModule (finalAttrs: {
   pname = "captive-browser";
   version = "0-unstable-2025-11-05";
 
-  src = fetchFromGitHub {
-    owner = "pacoorozco";
+  src = fetchFromCodeberg {
+    owner = "pakus";
     repo = "captive-browser";
     rev = "ca6f74e132ecf298c87936d4c946fd551aefbbf7";
     sha256 = "sha256-wojx28GFg9whfkNxUbOVDVNHp8M7SLsmRBTP/Jh8nLQ=";
@@ -24,6 +24,7 @@ buildGoModule (finalAttrs: {
   ];
 
   meta = {
+    mainProgram = "captive-browser";
     description = "Dedicated Chrome instance to log into captive portals without messing with DNS settings";
     homepage = "https://blog.filippo.io/captive-browser";
     license = lib.licenses.mit;
