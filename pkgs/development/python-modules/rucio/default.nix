@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
 
   # build-system
   packaging,
@@ -53,9 +52,6 @@ buildPythonPackage {
   pname = "rucio";
   inherit version src;
   pyproject = true;
-
-  # future-1.0.0 not supported for interpreter python3.13
-  disabled = pythonAtLeast "3.13";
 
   pythonRelaxDeps = true;
 
