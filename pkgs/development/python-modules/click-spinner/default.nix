@@ -2,45 +2,37 @@
   lib,
   buildPythonPackage,
   click,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
   setuptools,
-  six,
-  versioneer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "click-spinner";
   version = "0.2.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ATcVUFlrwY8eFUa7KVZ0Xu04cjUjXmZLyW+MxnW31ug=";
+  src = fetchFromGitHub {
+    owner = "click-contrib";
+    repo = "click-spinner";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-v7mOC7pKBT6hejSZ4XPiogZ6LxPrui4npFe0picvYGY=";
   };
 
-  postPatch = ''
-    rm versioneer.py
-  '';
-
-  build-system = [
-    setuptools
-    versioneer
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     click
     pytestCheckHook
-    six
   ];
 
   pythonImportsCheck = [ "click_spinner" ];
 
   meta = {
-    description = "Add support for showwing that command line app is active to Click";
+    description = "Add support for showing that command line app is active to Click";
     homepage = "https://github.com/click-contrib/click-spinner";
-    changelog = "https://github.com/click-contrib/click-spinner/releases/tag/v${version}";
+    changelog = "https://github.com/click-contrib/click-spinner/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
