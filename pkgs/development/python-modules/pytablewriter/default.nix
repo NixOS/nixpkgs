@@ -19,6 +19,7 @@
   typepy,
   xlsxwriter,
   xlwt,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -33,7 +34,10 @@ buildPythonPackage rec {
     hash = "sha256-YuuSMKTSG3oybvA6TDWNnGg4EiDAw2tRlM0S9mBQlkc=";
   };
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    setuptools-scm
+    pythonRelaxDepsHook
+  ];
 
   dependencies = [
     dataproperty
@@ -99,6 +103,10 @@ buildPythonPackage rec {
     "test/writer/binary/test_excel_writer.py"
     "test/writer/binary/test_sqlite_writer.py"
     "test/writer/test_elasticsearch_writer.py"
+  ];
+
+  pythonRelaxDeps = [
+    "typepy"
   ];
 
   meta = {
