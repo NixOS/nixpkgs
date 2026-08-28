@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytest-skip-slow";
-  version = "1.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "okken";
     repo = "pytest-skip-slow";
     tag = finalAttrs.version;
-    hash = "sha256-Pn8GEHUvBJUoXrCxSxcG8H+Cm6ITmOcY1JsVj07U0jw=";
+    hash = "sha256-6S41EjP8o9MRl7XMDF/P4MrTh6AMaQ9HsPDTm345NbA=";
   };
 
   build-system = [ flit-core ];
