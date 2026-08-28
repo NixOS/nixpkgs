@@ -289,7 +289,13 @@ stdenv.mkDerivation rec {
       binaryBytecode
       binaryNativeCode
     ];
-    platforms = lib.platforms.linux;
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+      "aarch64-linux"
+      "armv6l-linux"
+      "armv7l-linux"
+    ];
     maintainers = with lib.maintainers; [
       antono
       auntie
