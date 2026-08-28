@@ -22,6 +22,7 @@
   openssl,
   pkg-config,
   scons,
+  testers,
   udev,
   yasm,
   zlib,
@@ -171,11 +172,17 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "(3\\..*)-stable"
-    ];
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "(3\\..*)-stable"
+      ];
+    };
   };
 
   meta = {
