@@ -457,6 +457,7 @@ mapAliases {
   c0 = throw "'c0' has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
   caddyfile-language-server = throw "'caddyfile-language-server' has been removed as it is unmaintained upstream"; # Added 2026-06-17
   caido = warnAlias "'caido' has been split into 'caido-cli' and 'caido-desktop'." caido-desktop; # Added 2026-03-03
+  cairomm = throw "'cairomm' attribute has been removed from nixpkgs. Use a 'cairomm_*' attribute with an explicit ABI version instead."; # Added 2026-08-28
   calculix = throw "'calculix' has been renamed to/replaced by 'calculix-ccx'"; # Converted to throw 2025-10-27
   calligra = throw "'calligra' has been renamed to/replaced by 'kdePackages.calligra'"; # Converted to throw 2025-10-27
   callPackage_i686 = throw "'callPackage_i686' has been renamed to/replaced by 'pkgsi686Linux.callPackage'"; # Converted to throw 2025-10-27

@@ -6,7 +6,7 @@
   dpkg,
   atkmm,
   cairo,
-  cairomm,
+  cairomm_1_0,
   gtk3,
   gtkmm3,
   libnotify,
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     atkmm
     cairo
-    cairomm
+    cairomm_1_0
     gtk3
     gtkmm3
     libnotify

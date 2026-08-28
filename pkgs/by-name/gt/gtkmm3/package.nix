@@ -8,7 +8,7 @@
   python3,
   gtk3,
   glibmm,
-  cairomm,
+  cairomm_1_0,
   pangomm,
   atkmm,
   libepoxy,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     glibmm
     gtk3
     atkmm
-    cairomm
+    cairomm_1_0
     pangomm
   ];
 
