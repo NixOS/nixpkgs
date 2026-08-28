@@ -13,6 +13,9 @@ buildPythonPackage rec {
   version = "1.0.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchPypi {
     inherit version;
     pname = "txZMQ";
