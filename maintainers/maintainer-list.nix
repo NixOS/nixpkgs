@@ -9340,6 +9340,12 @@
     githubId = 41450706;
     name = "fin-w";
   };
+  fin444 = {
+    email = "fin444_dev@proton.me";
+    github = "fin444";
+    githubId = 24360839;
+    name = "fin444";
+  };
   findus = {
     email = "findus-nix@trsk.cc";
     github = "findus";
@@ -13380,6 +13386,12 @@
     github = "jjacke13";
     githubId = 156372486;
     name = "Vaios Karastathis";
+  };
+  jjba23 = {
+    email = "jjbigorra@gmail.com";
+    github = "jjba23";
+    githubId = 42377845;
+    name = "Josep Bigorra";
   };
   jjjollyjim = {
     email = "jamie@kwiius.com";

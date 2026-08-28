@@ -8,13 +8,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "discordchatexporter-cli";
-  version = "2.47.3";
+  version = "2.48";
 
   src = fetchFromGitHub {
     owner = "tyrrrz";
     repo = "discordchatexporter";
     tag = finalAttrs.version;
-    hash = "sha256-B/2krGBYp/6qgINRyX/38tHlEy9JxmQMAIPsDNjZF5k=";
+    hash = "sha256-8t9T5H2ELoduvvHpxhNbVkjlx18T4dG7Vtuj935ysAo=";
   };
 
   projectFile = "DiscordChatExporter.Cli/DiscordChatExporter.Cli.csproj";
