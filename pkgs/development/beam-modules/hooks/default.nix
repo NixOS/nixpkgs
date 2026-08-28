@@ -33,6 +33,11 @@
     meta.license = lib.licenses.mit;
   } ./mix-escript-setup-hook.sh;
 
+  mixReleaseSetupHook = makeSetupHook {
+    name = "mix-release-setup-hook.sh";
+    meta.license = lib.licenses.mit;
+  } ./mix-release-setup-hook.sh;
+
   rebar3CompileHook = makeSetupHook {
     name = "rebar3-compile-hook.sh";
     meta.license = lib.licenses.mit;
