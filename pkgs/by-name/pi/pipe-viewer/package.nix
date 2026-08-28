@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   perl,
-  buildPerlModule,
   makeWrapper,
   wrapGAppsHook3,
   withGtk3 ? false,
@@ -11,8 +10,7 @@
   wget,
   xdg-utils,
   yt-dlp,
-  TestPod,
-  Gtk3,
+  perlPackages,
 }:
 let
   perlEnv = perl.withPackages (
@@ -43,7 +41,7 @@ let
     ]
   );
 in
-buildPerlModule rec {
+perlPackages.buildPerlModule rec {
   pname = "pipe-viewer";
   version = "0.5.8";
 
@@ -60,7 +58,7 @@ buildPerlModule rec {
     perlEnv
   ]
   # Can't be in perlEnv for wrapGAppsHook3 to work correctly
-  ++ lib.optional withGtk3 Gtk3;
+  ++ lib.optional withGtk3 perlPackages.Gtk3;
 
   # Not supported by buildPerlModule
   # and the Perl code fails anyway
@@ -72,7 +70,7 @@ buildPerlModule rec {
   '';
 
   nativeCheckInputs = [
-    TestPod
+    perlPackages.TestPod
   ];
 
   dontWrapGApps = true;
