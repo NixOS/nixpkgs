@@ -101,8 +101,8 @@ let
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       path = [ pkgs.getent ];
-      startLimitIntervalSec = 60;
-      startLimitBurst = 3;
+      startLimitIntervalSec = lib.mkDefault 60;
+      startLimitBurst = lib.mkDefault 3;
       serviceConfig = {
         User = instance.user;
         Group = instance.group;
