@@ -32150,6 +32150,12 @@
     githubId = 48529745;
     name = "ZariTen";
   };
+  zatevakhin = {
+    email = "zatevaxin.ivan+nixpkgs@gmail.com";
+    github = "zatevakhin";
+    githubId = 12279112;
+    name = "Ivan Zatevakhin";
+  };
   zatm8 = {
     email = "maxis1191@gmail.com";
     github = "mourogurt";
