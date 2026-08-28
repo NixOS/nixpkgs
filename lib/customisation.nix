@@ -799,6 +799,22 @@ rec {
         : Whether to inherit `__functionArgs` from the base build helper.
           Set `inheritFunctionArgs` to `false` when `extendDrvArgs`'s `args` set pattern does not contain an ellipsis.
 
+      - `expectDrvArgs` configurations
+
+        `calculateExpectDrvArgs` (default to `false`)
+        : Calculate the expected arguments passing down to the bottom build helper (usually `stdenv.mkDerivation`).
+
+        `expectDrvArgs` (default to `null`)
+        : Manually specify the `expectDrvArgs` attribute value.
+
+          The default value `null` means not manually specifying `expectDrvArgs`.
+
+        `expectDrvArgsExtraArgs` (default to `null`)
+        : Manual update to the pseudo `args` to calculate `expectDrvArgs`,
+          which will be appended to the automatically-generated pseudo `args` from the result build helper's __functionArgs (before `excludeFunctionArgNames` exclusion).
+
+          The default value `null` means `{ derivationArgs = { }; }` if the function takes `derivationArgs` else `{ }`.
+
     # Outputs
 
     - The result callable set
@@ -839,6 +855,14 @@ rec {
         from the bottom-most `constructDrv` to the current configuration.
         That is, `lib.extendMkDerivation (cfg // cumulation)` is equivalent to `lib.extendMkDerivation cfg`,
         while `cumulation.constructDrv` is usually a variation of `stdenv.mkDerivation`.
+
+      - `expectDrvArgs`
+
+          An attribute set whose attribute names include all arguments possibly passed to the bottom `constructDrv` (`cumulation.constructDrv`),
+          with their values indicating whether each arguments will always pass to `cumulation.constructDrv`.
+
+          `expectDrvArgs` will be attached to the result build helper
+          if `calculateExpectDrvArgs == true` or `expectDrvArgs != null`.
 
     # Type
 
@@ -897,9 +921,12 @@ rec {
   */
   extendMkDerivation =
     {
+      calculateExpectDrvArgs ? false,
       constructDrv,
       excludeDrvArgNames ? [ ],
       excludeFunctionArgNames ? [ ],
+      expectDrvArgs ? null,
+      expectDrvArgsExtraArgs ? null,
       extendDrvArgs,
       inheritFunctionArgs ? true,
       transformDrv ? id,
@@ -942,6 +969,14 @@ rec {
               in
               background // extendDrvArgs final previous;
           };
+
+      finalAttrsStub = { };
+
+      faAll =
+        # Inherit the __functionArgs from the base build helper
+        optionalAttrs inheritFunctionArgs (removeAttrs (functionArgs constructDrv) excludeDrvArgNames)
+        # Recover the __functionArgs from the derived build helper
+        // functionArgs (extendDrvArgs finalAttrsStub);
     in
     {
       # Adds the fixed-point style support
@@ -957,12 +992,7 @@ rec {
           )
         );
 
-      __functionArgs = removeAttrs (
-        # Inherit the __functionArgs from the base build helper
-        optionalAttrs inheritFunctionArgs (removeAttrs (functionArgs constructDrv) excludeDrvArgNames)
-        # Recover the __functionArgs from the derived build helper
-        // functionArgs (extendDrvArgs { })
-      ) excludeFunctionArgNames;
+      __functionArgs = removeAttrs faAll excludeFunctionArgNames;
 
       inherit
         # Expose to the result build helper.
@@ -972,6 +1002,35 @@ rec {
         extendDrvArgs
         transformDrv
         ;
+
+      ${if calculateExpectDrvArgs || expectDrvArgs != null then "expectDrvArgs" else null} =
+        let
+          faRequired = lib.filterAttrs (n: v: !v) faAll;
+          argsStubAll = faAll // expectDrvArgsExtraArgs';
+          argsStubRequired = faRequired // expectDrvArgsExtraArgs';
+          expectDrvArgsExtraArgs' =
+            if expectDrvArgsExtraArgs != null then
+              expectDrvArgsExtraArgs
+            else if faAll ? derivationArgs then
+              { derivationArgs = { }; }
+            else
+              { };
+        in
+        if expectDrvArgs != null then
+          expectDrvArgs
+        else if constructDrv ? expectDrvArgs then
+          # Take efficiency advantage of constructDrv.expectDrvArgs when available.
+          lib.zipAttrsWith (_: lib.any lib.id) [
+            constructDrv.expectDrvArgs
+            (lib.mapAttrs (n: _: false) (extendDrvArgs finalAttrsStub argsStubAll).derivationArgs or { })
+            (lib.mapAttrs (n: _: true) (extendDrvArgs finalAttrsStub argsStubRequired).derivationArgs or { })
+          ]
+        else
+          lib.zipAttrsWith (_: lib.any lib.id) [
+            (lib.mapAttrs (n: v: !v) (removeAttrs faAll cumulation.excludeDrvArgNames))
+            (lib.mapAttrs (n: _: false) (cumulation.extendDrvArgs finalAttrsStub argsStubAll))
+            (lib.mapAttrs (n: _: true) (cumulation.extendDrvArgs finalAttrsStub argsStubRequired))
+          ];
     };
 
   /**
