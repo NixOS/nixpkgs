@@ -119,14 +119,38 @@ rec {
         text,
         executable ? false,
         destination ? "",
-        checkPhase ? "",
         meta ? { },
         passthru ? { },
         allowSubstitutes ? false,
         preferLocalBuild ? true,
         derivationArgs ? { },
         pos ? builtins.unsafeGetAttrPos "name" args,
+
+        # Deprecated arguments
+        checkPhase ? "",
       }@args:
+      let
+        getDeprecatedPhase =
+          n: alt:
+          let
+            handle =
+              if finalAttrs.passthru.__getDeprecatedCheckPhase-forceThrow then
+                throw
+              else if lib.oldestSupportedReleaseIsAtLeast 2611 then
+                throw
+              else if lib.oldestSupportedReleaseIsAtLeast 2605 then
+                lib.warn
+              else
+                message: val: val;
+            pos = lib.unsafeGetAttrPos n finalAttrs;
+          in
+          lib.optionalString (finalAttrs ? ${n} && finalAttrs.${n} != "" && finalAttrs.${n} != null) (
+            handle ''
+              ${finalAttrs.passthru.__getDeprecatedCheckPhase-constructorName}: ${name}: Deprecated ${n} found at ${pos.file}:${toString pos.line}
+                Use ${alt} instead.
+            '' finalAttrs.${n}
+          );
+      in
       {
         inherit
           pos
@@ -151,7 +175,9 @@ rec {
         __structuredAttrs = true;
         strictDeps = true;
 
-        buildCommand = ''
+        installPhase = ''
+          runHook preInstall
+
           target=$out$destination
           mkdir -p "$(dirname "$target")"
 
@@ -165,7 +191,23 @@ rec {
             chmod +x "$target"
           fi
 
-          eval "$checkPhase"
+          runHook postInstall
+        '';
+
+        doInstallCheck = derivationArgs.doInstallCheck or true;
+        installCheckPhase = ''
+          runHook preInstallCheck
+          ${lib.replaceStrings [ "runHook preCheck" "runHook postCheck" ] [ "" "" ] (
+            getDeprecatedPhase "checkPhase" "installCheckPhase"
+          )}
+          runHook postInstallCheck
+        '';
+        preInstallCheck = getDeprecatedPhase "preCheck" "preInstallCheck";
+        postInstallCheck = getDeprecatedPhase "postCheck" "postInstallCheck";
+
+        buildCommand = ''
+          runPhase installPhase
+          runPhase installCheckPhase
         '';
 
         meta =
@@ -178,7 +220,17 @@ rec {
           }
           // meta
           // derivationArgs.meta or { };
-        passthru = passthru // derivationArgs.passthru or { };
+        passthru = {
+          # Configure the checkPhase copatibility layer.
+          # Enable us to test the error-throwing behaviour (and the corresponding mitigations) before turning it on globally.
+          # TODO(@ShamrockLee): Remove after throwing is turned on globally.
+          __getDeprecatedCheckPhase-forceThrow = false;
+          # Facilitate derived build helpers' access to the deprecated checkPhase
+          # TODO(@ShamrockLee) Remove after `checkPhase` is fully deprecated and no longer handled.
+          __getDeprecatedCheckPhase = getDeprecatedPhase "checkPhase" "installCheckPhase";
+        }
+        // passthru
+        // derivationArgs.passthru or { };
       }
       // removeAttrs derivationArgs removedDerivationNames;
 
