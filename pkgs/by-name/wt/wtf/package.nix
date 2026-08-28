@@ -26,10 +26,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "source/src";
 
-  cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
-  ];
-
   installPhase = ''
     runHook preInstall
 
