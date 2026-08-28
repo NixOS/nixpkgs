@@ -87,6 +87,7 @@ makeScopeWithSplicing' {
         mixCompileHook
         mixEscriptSetupHook
         mixFodDepsSetupHook
+        mixNixDepsSetupHook
         mixReleaseSetupHook
         rebar3CompileHook
         rebarDevendorPatchHook
