@@ -351,6 +351,11 @@ let
   '';
 
   regInfo = hostPkgs.closureInfo { rootPaths = config.virtualisation.additionalPaths; };
+  regInfoPath =
+    if cfg.useNixStoreImage || cfg.mountHostNixStore then
+      "/nix/.ro-store/${baseNameOf regInfo}/registration"
+    else
+      "${regInfo}/registration";
 
   # Use well-defined and persistent filesystem labels to identify block devices.
   rootFilesystemLabel = "nixos";
@@ -1314,7 +1319,7 @@ in
         mkIf cfg.directBoot.enable [
           "-kernel \${NIXPKGS_QEMU_KERNEL_${sanitizeShellIdent config.system.name}:-${config.system.build.toplevel}/kernel}"
           "-initrd ${cfg.directBoot.initrd}"
-          ''-append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${consoles} $QEMU_KERNEL_PARAMS"''
+          ''-append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfoPath} ${consoles} $QEMU_KERNEL_PARAMS"''
         ]
       )
       (mkIf cfg.useEFIBoot [

@@ -14,6 +14,7 @@ let
   hostPkgs = cfg.host.pkgs;
 
   regInfo = hostPkgs.closureInfo { rootPaths = cfg.additionalPaths; };
+  regInfoPath = "/nix/.ro-store/${baseNameOf regInfo}/registration";
 
   # Host-built erofs store image, named by closure hash so only a changed guest rebuilds it.
   # A derivation is not an option: it would need the Linux builder this VM provides.
@@ -31,7 +32,7 @@ let
     # Virtualization.framework offers a virtio console
     "console=hvc0"
     "init=${toplevel}/init"
-    "regInfo=${regInfo}/registration"
+    "regInfo=${regInfoPath}"
   ]
   ++ config.boot.kernelParams;
 
