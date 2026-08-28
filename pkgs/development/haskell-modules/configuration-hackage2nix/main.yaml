@@ -225,6 +225,8 @@ package-maintainers:
     - located-base
   iblech:
     - Agda
+  ilkecan:
+    - enummapset
   jb55:
     # - bson-lens
     - cased
