@@ -57,6 +57,7 @@ let
         consoleMode
         graceful
         editor
+        keepBootedSystemEntry
         rebootForBitlocker
         ;
 
@@ -241,6 +242,17 @@ in
 
         `null` means no limit i.e. all generations
         that have not been garbage collected yet.
+      '';
+    };
+
+    keepBootedSystemEntry = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to add a last booted entry to the boot menu.
+
+        If set, the currently booted system when activating this system will be added
+        to the systemd-boot boot menu.
       '';
     };
 
