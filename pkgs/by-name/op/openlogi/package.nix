@@ -93,8 +93,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoBuildFlags = [
     "--package=openlogi"
     "--package=openlogi-gui"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
     "--package=openlogi-agent"
   ];
 
@@ -121,7 +119,28 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     mkdir -p "$out/Applications" "$out/bin"
     mv "$app_path" "$out/Applications/"
+
+    # The GUI can only auto-start the agent from a login-item helper nested in
+    # its own bundle, resolved relative to its own executable (the layout
+    # upstream's `xtask macos bundle` assembles for the DMG).
+    helper="$out/Applications/OpenLogi.app/Contents/Library/LoginItems/OpenLogiAgent.app"
+
     install -Dm755 "$release_target/openlogi" "$out/bin/openlogi"
+    install -Dm755 "$release_target/openlogi-agent" "$helper/Contents/MacOS/openlogi-agent"
+    ln -s "$helper/Contents/MacOS/openlogi-agent" "$out/bin/openlogi-agent"
+
+    # Upstream's own packaging inputs, installed verbatim rather than
+    # re-authored here (they are what `xtask macos bundle` puts in the DMG).
+    install -Dm644 crates/openlogi-gui/bundle/agent-release/Info.plist \
+      "$helper/Contents/Info.plist"
+
+    # The plist ships a 0.0.0 version sentinel (xtask stamps it at bundle
+    # time); stamp the package version instead.
+    substituteInPlace "$helper/Contents/Info.plist" \
+      --replace-fail "<string>0.0.0</string>" "<string>${finalAttrs.version}</string>"
+
+    install -Dm644 crates/openlogi-gui/icon/AppIcon.icns \
+      "$helper/Contents/Resources/AppIcon.icns"
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm755 "$release_target/openlogi" "$out/bin/openlogi"
