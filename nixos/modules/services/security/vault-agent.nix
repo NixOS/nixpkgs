@@ -101,6 +101,9 @@ let
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       path = [ pkgs.getent ];
+      # A consumer that also sets `stopIfChanged = false` would otherwise wait
+      # for its secrets while this agent is still stopped. nginx does this.
+      stopIfChanged = false;
       startLimitIntervalSec = 60;
       startLimitBurst = 3;
       serviceConfig = {
