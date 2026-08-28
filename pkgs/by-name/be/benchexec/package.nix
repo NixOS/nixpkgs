@@ -10,23 +10,17 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "benchexec";
-  version = "3.27";
+  version = "3.35";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sosy-lab";
     repo = "benchexec";
     tag = finalAttrs.version;
-    hash = "sha256-lokz7klAQAascij0T/T43/PrbMh6ZUAvFnIqg13pVUk=";
+    hash = "sha256-qYBSpDZqKBPiGkftjTVxVah+eS8NaAt9q0UEaara+iE=";
   };
 
-  pyproject = true;
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'setuptools ==' 'setuptools >='
-  '';
-
-  nativeBuildInputs = with python3.pkgs; [ setuptools ];
+  build-system = with python3.pkgs; [ setuptools ];
 
   # NOTE: CPU Energy Meter is not added,
   # because BenchExec should call the wrapper configured
@@ -35,7 +29,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   # capabilities to access MSR.
   # If we add `cpu-energy-meter` here, BenchExec will instead call an executable
   # without `CAP_SYS_RAWIO` and fail.
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     coloredlogs
     lxml
     pystemd
