@@ -164,6 +164,16 @@ with haskellLib;
   # Test suite issues
   #
 
+  # Tests import containers internals which changed in containers-0.8
+  # https://github.com/Mikolaj/enummapset/issues/28
+  enummapset = appendPatches [
+    (pkgs.fetchpatch {
+      name = "enummapset-containers-0.8.patch";
+      url = "https://github.com/Mikolaj/enummapset/commit/601e862fbf93cf03ed297016920fa0c0110a5e4c.patch";
+      hash = "sha256-pxLW78lDB8ieoh0ZnR50NrZNUyTDkMaqzyy3V5PhlBo=";
+    })
+  ] super.enummapset;
+
   # Fails to compile with GHC 9.14 https://github.com/snoyberg/mono-traversable/pull/261
   mono-traversable = dontCheck super.mono-traversable;
   # doctests broke with GHC 9.14, something to do with error messages
