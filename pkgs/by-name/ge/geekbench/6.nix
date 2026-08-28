@@ -11,19 +11,19 @@
 
 let
   inherit (stdenv.hostPlatform.uname) processor;
-  version = "7.0.0";
+  version = "6.7.1";
   sources = {
     "x86_64-linux" = {
       url = "https://cdn.geekbench.com/Geekbench-${version}-Linux.tar.gz";
-      hash = "sha256-lhoArArEMv+mh0dk6GxZ0uCY//ZbWzmLuTgb9/xGyBs=";
+      hash = "sha256-Ddypd9622dtL2GZIX5QI5y4oadDeoHN7GNS/5HKFis4=";
     };
     "aarch64-linux" = {
       url = "https://cdn.geekbench.com/Geekbench-${version}-LinuxARMPreview.tar.gz";
-      hash = "sha256-R2/o8XatHnZZr6fKuKW4jMx442ulLfiUe6K2D1zey5w=";
+      hash = "sha256-blmsuD5t6jZx4uKVNl/DfED90oDNvd1QrPJIkQ4UoOM=";
     };
     "riscv64-linux" = {
       url = "https://cdn.geekbench.com/Geekbench-${version}-LinuxRISCVPreview.tar.gz";
-      hash = "sha256-AKESobr64A9bgMIb12ej2k+t6c2cEO9BBwv0uGHcBRw=";
+      hash = "sha256-TByNeLqqHrnrLcX/meXNy6Evvebf0/xWnUohd/TwiAk=";
     };
   };
   geekbench_avx2 = lib.optionalString stdenv.hostPlatform.isx86_64 "geekbench_avx2";
@@ -32,12 +32,9 @@ stdenv.mkDerivation {
   inherit version;
   pname = "geekbench";
 
-  __structuredAttrs = true;
-
   src = fetchurl (
     sources.${stdenv.system} or (throw "unsupported system ${stdenv.hostPlatform.system}")
   );
-  strictDeps = true;
 
   dontConfigure = true;
   dontBuild = true;
@@ -53,9 +50,9 @@ stdenv.mkDerivation {
     runHook preInstall
 
     mkdir -p $out/bin
-    cp -r geekbench.plxr geekbench-workload.plxr geekbench7 geekbench_${processor} ${geekbench_avx2} $out/bin
+    cp -r geekbench.plar geekbench-workload.plar geekbench6 geekbench_${processor} ${geekbench_avx2} $out/bin
 
-    for f in geekbench7 geekbench_${processor} ${geekbench_avx2} ; do
+    for f in geekbench6 geekbench_${processor} ${geekbench_avx2} ; do
       wrapProgram $out/bin/$f \
         --prefix LD_LIBRARY_PATH : "${
           lib.makeLibraryPath [
@@ -79,6 +76,6 @@ stdenv.mkDerivation {
       asininemonkey
     ];
     platforms = builtins.attrNames sources;
-    mainProgram = "geekbench7";
+    mainProgram = "geekbench6";
   };
 }
