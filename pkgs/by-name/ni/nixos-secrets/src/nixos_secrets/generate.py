@@ -1,7 +1,6 @@
 import os
 import tempfile
 import subprocess
-import functools
 from pathlib import Path
 from .args import SecretsArgs
 from .config import SecretsConfig, SecretsSecret
@@ -24,6 +23,30 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
             raise SecretsError(f"Invalid secret name '{gen_name}'")
 
     order = rebuild_order(args, config, order_seed)
+
+    # Bubblewrap requires usernamespaces to be enabled, so it won't work (by
+    # default) in places like Ubuntu. At @Qubasa's suggestion, I have thus made it
+    # so a very simple bwrap invocation is used to "test the waters" before running
+    # the actual generator scripts inside a sandbox.
+    if not args.disable_sandbox:
+        try:
+            subprocess.run(
+                [
+                    "bwrap",
+                    "--ro-bind",
+                    "/",
+                    "/",
+                    "echo",
+                ],
+                capture_output=True,
+                check=True,
+                text=True,
+                timeout=1,
+            )
+        except subprocess.CalledProcessError, subprocess.TimeoutExpired:
+            raise SecretsError(
+                "Bubblewrap is not available. Either get bubblewrap working or retry with --no-sandbox."
+            )
 
     # NOTE: we are going to run the scripts inside bubblewrap, thus sharing a
     # single temporary directory is not a concern.
@@ -90,7 +113,7 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
                     env["out"] = out_dir
                     env["prompts"] = prompt_in_dir
 
-                    if args.disable_sandbox or not bwrap_is_available():
+                    if args.disable_sandbox:
                         subprocess.run(
                             [binary],
                             env=env,
@@ -179,30 +202,3 @@ def set_files_from_dir(
             raise SecretsError(
                 f"Error setting '{generator.name}/{file.name}': {e.stderr}"
             )
-
-
-# Bubblewrap requires usernamespaces to be enabled, so it won't work (by
-# default) in places like Ubuntu. At @Qubasa's suggestion, I have thus made it
-# so a very simple bwrap invocation is used to "test the waters" before running
-# the actual generator scripts inside a sandbox.
-@functools.cache
-def bwrap_is_available() -> bool:
-    try:
-        subprocess.run(
-            [
-                "bwrap",
-                "--ro-bind",
-                "/",
-                "/",
-                "echo",
-            ],
-            capture_output=True,
-            check=True,
-            text=True,
-            timeout=1,
-        )
-
-        return True
-    except subprocess.CalledProcessError, subprocess.TimeoutExpired:
-        print("Bubblewrap not avaiable. Running without a sandbox!")
-        return False
