@@ -5,14 +5,19 @@
     maintainers = pkgs.lib.teams.jitsi.members;
   };
 
+  node.pkgsReadOnly = false;
+
   nodes = {
     client =
       { nodes, pkgs, ... }:
       {
       };
     server =
-      { config, pkgs, ... }:
+      { config, ... }:
       {
+        # jitsi-meet inherits olm's known vulnerabilities
+        nixpkgs.config.permittedInsecurePackages = [ pkgs.jitsi-meet.name ];
+
         services.jitsi-meet = {
           enable = true;
           hostName = "server";
