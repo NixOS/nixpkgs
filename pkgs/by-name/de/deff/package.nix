@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deff";
-  version = "0.2.4";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "flamestro";
     repo = "deff";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CZl9KDeBVo8qgYZNgQST8ThBwA7C6WjG3Dn1IE2nw7g=";
+    hash = "sha256-dB3j6seUSGG3hrl3gY6EIjQLDUbHiXJGeVDq9dmAanw=";
   };
 
-  cargoHash = "sha256-rjt4513Cs3tDM3XJ+Qx4E2ECCowGBq6zAqaxRtvGNVg=";
+  cargoHash = "sha256-agNQs0X2o8qQdeRkwMbYdvReNPSFCnIlYDnSxBvnduo=";
 
   passthru.updateScript = nix-update-script { };
 
