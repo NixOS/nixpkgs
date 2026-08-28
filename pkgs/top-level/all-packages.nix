@@ -759,6 +759,11 @@ with pkgs;
   mkShell = callPackage ../build-support/mkshell { };
   mkShellNoCC = mkShell.override { stdenv = stdenvNoCC; };
 
+  mkSignedPackages = callPackage ../misc/signed-packages { };
+  testSignedPackages = recurseIntoAttrs (
+    callPackage ../misc/signed-packages/test-signed-packages.nix { }
+  );
+
   nixBufferBuilders = import ../applications/editors/emacs/build-support/buffer.nix {
     inherit lib writeText;
     inherit (emacs.pkgs) inherit-local;
