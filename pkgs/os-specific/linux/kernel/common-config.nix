@@ -857,7 +857,9 @@ let
       HW_RANDOM = yes;
 
       MODULE_SIG = yes;
-      MODULE_SIG_ALL = no;
+      # We use kmodigest to produce a deterministic single‐module
+      # certificate for each module. This prevents the kernel from
+      # generating its own ephemeral module signing key at build time.
       MODULE_SIG_KEY = freeform "";
 
       # Support ECDSA and ML‐DSA module signatures.
