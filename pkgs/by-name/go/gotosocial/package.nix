@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGo125Module,
+  buildGoModule,
   fetchFromCodeberg,
   fetchYarnDeps,
   nodejs,
@@ -21,7 +21,7 @@
   # See: https://docs.gotosocial.org/en/latest/advanced/builds/nowasm/
   withWasm ? stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch64,
 }:
-buildGo125Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "gotosocial";
   version = "0.22.1";
 

@@ -13,9 +13,9 @@
   ufo2ft,
   gftools,
   fontbakery,
-  diffenator2,
   chevron,
   sh,
+  font-v,
   ninja,
 }:
 
@@ -54,6 +54,7 @@ buildPythonPackage {
     fontbakery
     chevron
     sh
+    font-v
   ]
   ++ gftools.optional-dependencies.qa;
 

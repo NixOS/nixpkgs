@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     changelog = "https://github.com/element-hq/element-call/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/element-hq/element-call";
-    description = "Group calls powered by Matrix";
+    description = "Matrix client for group calls on the web";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       bartoostveen

@@ -11,7 +11,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "primp";
-  version = "1.3.1";
+  version = "2.0.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -20,14 +20,14 @@ buildPythonPackage (finalAttrs: {
     owner = "deedy5";
     repo = "primp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VNb/U68NXmfH7eY8JOEk0z2yOUD4R/kFI1IShWS0pU4=";
+    hash = "sha256-5a+L51565v1R29qq9na4R0+HcrFu10ImK2YbODnwm/I=";
   };
 
   buildAndTestSubdir = "crates/primp-python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-fnOCsxR0/6AnVO7n2M92WIA6kbyOkI6fwQh5QLnsxSc=";
+    hash = "sha256-TatQkEMLjrdPli+FQUNw4qcqidgI3x5Gq1H7rjxgnYM=";
   };
 
   nativeBuildInputs = [
