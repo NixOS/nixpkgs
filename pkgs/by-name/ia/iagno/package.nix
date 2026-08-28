@@ -23,6 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "iagno";
   version = "50.0";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchurl {
     url = "mirror://gnome/sources/iagno/${lib.versions.major finalAttrs.version}/iagno-${finalAttrs.version}.tar.xz";
     hash = "sha256-/f1i0YdEGuofHWoOy71OJ3B/XI3cB5cUHKdQ3TBdyII=";
