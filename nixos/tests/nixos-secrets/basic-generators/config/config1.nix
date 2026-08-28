@@ -1,26 +1,23 @@
-{ lib, modulesPath, ... }:
+{ lib, ... }:
 {
-  imports = [
-    ./backend.nix
-    "${modulesPath}/security/secrets.nix"
-  ];
+  imports = [ ./common.nix ];
 
   secrets = {
-    store.example = {
-      prompts.example.description = "Your name";
+    store.greeting = {
+      prompts.name.description = "Your name";
 
-      files.example = { };
+      files.greeting = { };
       generate =
         pkgs:
-        pkgs.writeScript "gen-example" ''
+        pkgs.writeScript "gen-greeting" ''
           #!/bin/sh
           export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"
-          echo "Hewwo $(cat "$prompts/example")!" > $out/example
+          echo "Hewwo $(cat "$prompts/name")!" > $out/greeting
         '';
     };
 
     store.derived = {
-      dependencies = [ "example" ];
+      dependencies = [ "greeting" ];
       files.derived = { };
       generate =
         pkgs:
@@ -32,7 +29,7 @@
               pkgs.cowsay
             ]
           }"
-          cat $in/example/example | cowsay > $out/derived
+          cat $in/greeting/greeting | cowsay > $out/derived
         '';
     };
   };
