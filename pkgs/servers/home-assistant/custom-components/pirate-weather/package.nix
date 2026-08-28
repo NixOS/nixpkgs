@@ -12,13 +12,13 @@
 buildHomeAssistantComponent rec {
   owner = "Pirate-Weather";
   domain = "pirateweather";
-  version = "1.9.0";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "pirate-weather-ha";
     tag = "v${version}";
-    hash = "sha256-LIlKYrKoSElZkU9To8XZrposweAYRhu2x59h1p4av44=";
+    hash = "sha256-mtvIwcngkbmaRLGTr3iaDY62SboSUQpYUTobHhT8S58=";
   };
 
   nativeCheckInputs = [
