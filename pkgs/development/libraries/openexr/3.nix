@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openexr";
-  version = "3.4.13";
+  version = "3.4.15";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "openexr";
     rev = "v${version}";
-    hash = "sha256-uzeppRB8vpTjAuqlpvoTehdGL/ng1rTm7kbYdaQHKUw=";
+    hash = "sha256-Z2o2ooDqAof5rnR5lX3RfWnklyD/c98HuwWF6uZA+78=";
   };
 
   outputs = [
