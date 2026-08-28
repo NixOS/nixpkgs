@@ -74,11 +74,14 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper $out/bin/.fiji-launcher-hack $out/bin/fiji \
       --prefix PATH : ${lib.makeBinPath [ jdk11 ]} \
       --set JAVA_HOME ${jdk11.home} \
-      ''${gappsWrapperArgs[@]}
 
     ln $out/fiji/images/icon.png $out/share/icons/hicolor/256x256/apps/fiji.png
 
     runHook postInstall
+  '';
+
+  preFixup = ''
+    wrapProgram $out/bin/fiji ''${gappsWrapperArgs[@]}
   '';
 
   meta = {
