@@ -450,6 +450,9 @@ let
   #   meta = checkMeta.commonMeta hostPlatform { inherit validity attrs pos references; };
   #   validity = checkMeta.assertValidity hostPlatform { inherit meta attrs; };
   commonMeta =
+    let
+      completeMetaProblems' = completeMetaProblems config;
+    in
     hostPlatform:
     let
       hasUnsupportedPlatform' = hasUnsupportedPlatform hostPlatform;
@@ -595,7 +598,7 @@ let
       unsupported = hasUnsupportedPlatform' attrs;
       insecure = isMarkedInsecure attrs;
 
-      problems = completeMetaProblems config attrs;
+      problems = completeMetaProblems' attrs;
 
       available =
         validity.valid != "no"
