@@ -15,14 +15,16 @@ set -e
 gdversion=$1
 
 # Download and extract the official stable 64-bit X11 mono build of Godot.
-gddir="$(mktemp -d)"
-trap 'rm -rf -- "$gddir"' EXIT
+tmpdir="$(mktemp -d)"
+trap 'rm -rf -- "$tmpdir"' EXIT
+gddir="$tmpdir"/gd
+gluedir="$tmpdir"/glue
+mkdir -p "$gddir" "$gludir"
+
 wget -O "$gddir"/Godot_v$gdversion-stable_mono_x11_64.zip "https://downloads.godotengine.org/?version=$gdversion&flavor=stable&slug=mono_x11_64.zip&platform=linux.64"
 unzip "$gddir"/Godot_v$gdversion-stable_mono_x11_64.zip -d "$gddir"
 
 # Generate the mono glue from the official build.
-gluedir="$(mktemp -d)"
-trap 'rm -rf -- "$gluedir"' EXIT
 steam-run "$gddir"/Godot_v$gdversion-stable_mono_x11_64/Godot_v$gdversion-stable_mono_x11.64 --generate-mono-glue "$gluedir"
 
 # Extract the glue version.
