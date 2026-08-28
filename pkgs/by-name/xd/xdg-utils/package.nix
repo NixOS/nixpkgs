@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchFromGitLab,
+  fetchpatch,
   runCommand,
   writeText,
   # docs deps
@@ -142,7 +143,6 @@ let
         "ktraderclient" # KDE 3
         "ktradertest" # KDE 3
         "mimetype" # alternative tool for file, pulls in perl, avoid
-        "qtpaths" # Plasma
         "qtxdg-mat" # LXQT
       ];
       fix."/usr/bin/file" = true;
@@ -315,6 +315,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./allow-forcing-portal-use.patch
     #  Enable build of xdg-terminal
     ./enable-xdg-terminal.patch
+    # Get rid of qtpaths runtime dependency (can be dropped in next release)
+    (fetchpatch {
+      url = "https://cgit.freedesktop.org/xdg/xdg-utils/patch/?id=e6a6e4f1fbcb029bac0cb8eecdeb2879694e1ba8";
+      hash = "sha256-toSFzIaw7gCWZH/kvIalWDQYL1xecOsRBAHvpbBlsY8=";
+    })
   ];
 
   # just needed when built from git
@@ -367,7 +372,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.freedesktop.org/wiki/Software/xdg-utils/";
     description = "Set of command line tools that assist applications with a variety of desktop integration tasks";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      tmarkus
+    ];
     platforms = lib.platforms.all;
   };
 })
