@@ -474,6 +474,12 @@
     githubId = 2258953;
     name = "Aaron Schif";
   };
+  aaronwuerth = {
+    email = "aaron.wuerth@posteo.de";
+    github = "aaronwuerth";
+    githubId = 24791405;
+    name = "Aaron Würth";
+  };
   aaschmid = {
     email = "service@aaschmid.de";
     github = "aaschmid";
