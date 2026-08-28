@@ -15,8 +15,8 @@
 }:
 
 let
-  sabctoolsVersion = "9.4.0";
-  sabctoolsHash = "sha256-JkRRtZnzp83dMKXiuqOXaTm8UOpkkhmjH2ysS8TY0DI=";
+  sabctoolsVersion = "9.6.3";
+  sabctoolsHash = "sha256-+qzSDV7JER45yBMmyh5Jor4rJLlcE8KPguPnrBmMkSk=";
 
   pythonEnv = python3.withPackages (
     ps: with ps; [
@@ -73,14 +73,14 @@ let
   ];
 in
 stdenv.mkDerivation rec {
-  version = "5.0.4";
+  version = "5.1.2";
   pname = "sabnzbd";
 
   src = fetchFromGitHub {
     owner = "sabnzbd";
     repo = "sabnzbd";
     rev = version;
-    hash = "sha256-Fi42ctRVNv3fJwNF/5CW/EJjdrjgotJS5sD2jHoc7/I=";
+    hash = "sha256-7U9SbvA3AGQmx99ayiBrPxx4HrCpKCSc6Qz/zpPFd0E=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
