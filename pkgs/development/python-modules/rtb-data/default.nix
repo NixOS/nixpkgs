@@ -2,30 +2,35 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
+  hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rtb-data";
-  version = "1.1.0";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ruxPqOs/hN6Kfb7ory+Er7CBll+ysUVxyy0EiUa+mJw=";
+    pname = "rtb_data";
+    inherit (finalAttrs) version;
+    hash = "sha256-RNdaiszJjnAxIe1Hi13zYE9G0JyinipwQy0pO6zSd2w=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ hatchling ];
+
+  # Tests are shipped with PyPI releases
+  doCheck = false;
 
   pythonImportsCheck = [ "rtbdata" ];
 
   meta = {
     description = "Data files for the Robotics Toolbox for Python";
-    homepage = "https://pypi.org/project/rtb-data/";
+    homepage = "https://github.com/petercorke/robotics-toolbox-python";
+    changelog = "https://github.com/petercorke/robotics-toolbox-python/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       djacu
       a-camarillo
     ];
   };
-}
+})
