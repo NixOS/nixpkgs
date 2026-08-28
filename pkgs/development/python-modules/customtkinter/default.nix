@@ -10,7 +10,7 @@
 }:
 let
   pname = "customtkinter";
-  version = "5.2.2";
+  version = "6.0.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -20,7 +20,7 @@ buildPythonPackage {
     owner = "TomSchimansky";
     repo = "CustomTkinter";
     tag = "v${version}";
-    hash = "sha256-1g2wdXbUv5xNnpflFLXvU39s16kmwvuegKWd91E3qm4=";
+    hash = "sha256-rRkqyyWxWmJqXS9dT/T5K99+AGY6xDjtrKLRG/Yo7tc=";
   };
 
   build-system = [
