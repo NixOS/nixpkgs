@@ -15,6 +15,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "glibmm";
   version = "2.88.1";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   outputs = [
     "out"
     "dev"
