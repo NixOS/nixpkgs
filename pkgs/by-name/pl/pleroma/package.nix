@@ -158,7 +158,7 @@ beamPackages.mixRelease rec {
           vips
           glib.dev
         ];
-        VIX_COMPILATION_MODE = "PLATFORM_PROVIDED_LIBVIPS";
+        env.VIX_COMPILATION_MODE = "PLATFORM_PROVIDED_LIBVIPS";
       };
 
       # This needs a different version (1.0.14 -> 1.0.18) to build properly with
