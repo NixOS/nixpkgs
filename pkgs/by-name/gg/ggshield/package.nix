@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ggshield";
-  version = "1.53.0";
+  version = "1.54.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "ggshield";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1LyO5zcd5ueiWSZcwel5JqhdS9UKtESoNxYyY9z+Rbc=";
+    hash = "sha256-8U8kY8IiYM1NXL30cRHrh3Sy5UWIiS8eATKhiugHVik=";
   };
 
   pythonRelaxDeps = true;
@@ -42,6 +42,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     rich
     sigstore
     tomli
+    tomlkit
     truststore
     typing-extensions
     unearth
@@ -89,6 +90,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "test_get_file_sha_in_ref"
     # Generated hooks config references pytest binary, instead of ggshield CLI. Odd!
     "test_install_cursor_local_fresh"
+    "test_install_vibe_global"
   ];
 
   meta = {
