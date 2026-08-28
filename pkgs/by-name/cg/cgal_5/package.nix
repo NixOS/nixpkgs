@@ -17,6 +17,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-FcdDyzldGghVuQYlJfOuDNQEhkiaz+fOFFfDcQqzQRE=";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   # note: optional component libCGAL_ImageIO would need zlib and opengl;
   #   there are also libCGAL_Qt{3,4} omitted ATM
   buildInputs = [
