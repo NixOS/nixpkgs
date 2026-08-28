@@ -1,12 +1,15 @@
 {
   lib,
   buildPythonPackage,
+  citeproc-py-styles,
   fetchPypi,
-  git,
+  gitMinimal,
+  jsonschema,
   lxml,
-  rnc2rng,
   pytestCheckHook,
+  rnc2rng,
   setuptools,
+  versioneer,
 }:
 
 buildPythonPackage rec {
@@ -20,24 +23,35 @@ buildPythonPackage rec {
     hash = "sha256-uWkzyTiu4G/3RZDN9ouuZXwE4vsp1s0uaTqg2X3je8I=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    versioneer
+  ];
 
   buildInputs = [ rnc2rng ];
 
   dependencies = [ lxml ];
 
   nativeCheckInputs = [
-    git
+    citeproc-py-styles
+    gitMinimal
+    jsonschema
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "citeproc" ];
 
+  disabledTestPaths = [
+    # FileNotFoundError: [Errno 2] No such file or directory
+    "citeproc/data/schema/tests/schemas/input/test_json.py"
+  ];
+
   meta = {
-    homepage = "https://github.com/citeproc-py/citeproc-py";
     description = "Citation Style Language (CSL) parser for Python";
-    mainProgram = "csl_unsorted";
+    homepage = "https://github.com/citeproc-py/citeproc-py";
+    changelog = "https://github.com/citeproc-py/citeproc-py/releases/tag/v${version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ bcdarwin ];
+    mainProgram = "csl_unsorted";
   };
 }
