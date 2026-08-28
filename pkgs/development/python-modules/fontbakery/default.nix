@@ -14,7 +14,6 @@
   freetype-py,
   gflanguages,
   gfsubsets,
-  gitMinimal,
   glyphsets,
   installShellFiles,
   jinja2,
@@ -104,7 +103,6 @@ buildPythonPackage (finalAttrs: {
   ++ fonttools.optional-dependencies.ufo;
 
   nativeCheckInputs = [
-    gitMinimal
     pytestCheckHook
     pytest-xdist
     ufolint
@@ -167,38 +165,12 @@ buildPythonPackage (finalAttrs: {
   preCheck = ''
     # Let the tests invoke 'fontbakery' command.
     export PATH="$out/bin:$PATH"
-    # font-v tests assume they are running from a git checkout, although they
-    # don't care which one. Create a dummy git repo to satisfy the tests:
-    git init -b main
-    git config user.email test@example.invalid
-    git config user.name Test
-    git commit --allow-empty --message 'Dummy commit for tests'
   '';
 
   disabledTests = [
     # These require network access
     "test_check_axes_match"
-    "test_check_description_broken_links"
-    "test_check_description_family_update"
-    "test_check_metadata_designer_profiles"
-    "test_check_metadata_has_tags"
-    "test_check_metadata_includes_production_subsets"
-    "test_check_vertical_metrics"
     "test_check_vertical_metrics_regressions"
-    "test_check_cjk_vertical_metrics"
-    "test_check_cjk_vertical_metrics_regressions"
-    "test_check_fontbakery_version_live_apis"
-    "test_command_check_googlefonts"
-    # AssertionError
-    "test_check_shape_languages"
-    "test_command_config_file"
-    "test_config_override"
-  ];
-
-  disabledTestPaths = [
-    # ValueError: Check 'googlefonts/glyphsets/shape_languages' not found
-    "tests/test_checks_filesize.py"
-    "tests/test_checks_googlefonts_overrides.py"
   ];
 
   postInstall = ''
