@@ -13,13 +13,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "homer";
-  version = "26.4.2";
+  version = "26.08.2";
 
   src = fetchFromGitHub {
     owner = "bastienwirtz";
     repo = "homer";
     rev = "v${version}";
-    hash = "sha256-XQjXRckrZ9LhAFp/v/OUJJ80odS5mXhQserPNx0mvwM=";
+    hash = "sha256-0C7SFjdGJuv/eNEymbpLw7Rd+5k8GxGh67nwhtGG8V4=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation rec {
       ;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-rDKnaIE1ZQ2I83RdlHWtgoMcDoFe7tE102LP2+SPmFg=";
+    hash = "sha256-z9rR5o+f+ASvjRa8vPEBeJZHsfuLntNSHQHIt/DW39k=";
   };
 
   nativeBuildInputs = [
