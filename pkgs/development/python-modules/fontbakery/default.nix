@@ -10,8 +10,8 @@
   collidoscope,
   defcon,
   dehinter,
-  fetchPypi,
   font-v,
+  fetchFromGitHub,
   fonttools,
   freetype-py,
   gflanguages,
@@ -45,14 +45,16 @@
   vharfbuzz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fontbakery";
   version = "1.1.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-cLQNjrpk8m3Rm1VBC4FNGB7e/E+hjIqcStFSDqfVIk4=";
+  src = fetchFromGitHub {
+    owner = "fonttools";
+    repo = "fontbakery";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IkGcaRW8RjwR/foACR38HtCuETyXTyCjpIUaY+awMQo=";
   };
 
   env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
@@ -164,9 +166,9 @@ buildPythonPackage rec {
   meta = {
     description = "Tool for checking the quality of font projects";
     homepage = "https://github.com/googlefonts/fontbakery";
-    changelog = "https://github.com/fonttools/fontbakery/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/fonttools/fontbakery/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     mainProgram = "fontbakery";
     maintainers = with lib.maintainers; [ danc86 ];
   };
-}
+})
