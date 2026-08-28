@@ -420,8 +420,8 @@ in
   # - backport every security critical fix release e.g. 3.0.y -> 3.0.y+1 but no new version, e.g. 3.1 -> 3.2
 
   openssl_3 = common {
-    version = "3.0.21";
-    hash = "sha256-YX4pr45CH0ZklISkk35IxoXkf0ZIgWfJgviLxOwdUi8=";
+    version = "3.0.22";
+    hash = "sha256-Z+vKflDRc4MCgEVIZlNJIZW4PblfhVhwlwG7R7XB74E=";
 
     patches = [
       # Support for NIX_SSL_CERT_FILE, motivation:
