@@ -11,6 +11,7 @@
   tpm2-openssl,
   tpm2-tss,
   nix-update-script,
+  _experimental-update-script-combinators,
 }:
 let
   version = "0.67.3";
@@ -58,7 +59,22 @@ stdenvNoCC.mkDerivation {
     }
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script {
+      extraArgs = [
+        "--system"
+        "x86_64-linux"
+      ];
+    })
+    (nix-update-script {
+      extraArgs = [
+        "--system"
+        "aarch64-linux"
+        "--version"
+        "skip"
+      ];
+    })
+  ];
 
   meta = {
     description = "step-agent is an automated certificate management agent plugin for step-cli";
