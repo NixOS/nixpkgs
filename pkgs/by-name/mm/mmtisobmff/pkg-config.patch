@@ -1,0 +1,23 @@
+From c4faec1c717fb9d2edd2c967c180c3a3f6b4c268 Mon Sep 17 00:00:00 2001
+From: jopejoe1 <jopejoe1@missing.ninja>
+Date: Fri, 31 Jul 2026 10:34:31 +0200
+Subject: [PATCH] fix pkgconfig generation when install dirs are absolute paths
+
+This makes the .pc files work correctly on destibutions like NixOS and GUIX
+---
+ mmtisobmff.pc.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/mmtisobmff.pc.in b/mmtisobmff.pc.in
+index 752c038..4c0f4ee 100644
+--- a/mmtisobmff.pc.in
++++ b/mmtisobmff.pc.in
+@@ -1,6 +1,6 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+ 
+ Name: @PROJECT_NAME@
+ Description: @PROJECT_DESCRIPTION@
