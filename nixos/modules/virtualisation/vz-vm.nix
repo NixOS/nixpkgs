@@ -255,8 +255,9 @@ in
         };
       }
       // lib.optionalAttrs (!cfg.writableStoreUseTmpfs && vzCfg.diskImage != null) {
-        # Second disk, hence /dev/vdb: store image is always first.
-        "/nix/.rw-store" = lib.mkVMOverride {
+        # Second disk, hence /dev/vdb: store image is always first. Mount all of
+        # /nix so the Nix database persists together with the writable store.
+        "/nix" = lib.mkVMOverride {
           device = "/dev/vdb";
           fsType = "ext4";
           autoFormat = true;
