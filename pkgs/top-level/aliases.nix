@@ -2117,6 +2117,7 @@ mapAliases {
   qMasterPassword-wayland = warnAlias "'qMasterPassword-wayland' has been renamed to/replaced by 'qmasterpassword-wayland'" qmasterpassword-wayland; # Added 2026-02-01
   qmenumodel = warnAlias "'qmenumodel' has been renamed to 'libsForQt5.qmenumodel'" libsForQt5.qmenumodel; # Added 2026-03-26
   qnial = throw "'qnial' has been removed due to failing to build and being unmaintained"; # Added 2025-06-26
+  qobuz-player = throw "'qobuz-player' has been renamed to 'qobine'";
   qrscan = throw "qrscan has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-19
   qscintilla = throw "'qscintilla' has been renamed to/replaced by 'libsForQt5.qscintilla'"; # Converted to throw 2025-10-27
   qscintilla-qt6 = throw "'qscintilla-qt6' has been renamed to/replaced by 'qt6Packages.qscintilla'"; # Converted to throw 2025-10-27

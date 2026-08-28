@@ -9,12 +9,12 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "qobuz-player";
+  pname = "qobine";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "SofusA";
-    repo = "qobuz-player";
+    repo = "qobine";
     tag = "v${finalAttrs.version}";
     hash = "sha256-uslU/HQognLMNz/w9hMdtpzby2neE+VC8Y+RV2XMd7Q=";
   };
@@ -36,8 +36,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Tui, web and rfid player for Qobuz";
-    homepage = "https://github.com/SofusA/qobuz-player";
-    changelog = "https://github.com/SofusA/qobuz-player/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/SofusA/qobine";
+    changelog = "https://github.com/SofusA/qobine/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       felixsinger
