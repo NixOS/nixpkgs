@@ -16372,6 +16372,12 @@
     githubId = 667272;
     name = "Lincoln Lee";
   };
+  LingLambda = {
+    email = "abc1514671906@163.com";
+    name = "ling";
+    github = "LingLambda";
+    githubId = 101567686;
+  };
   linj = {
     name = "Lin Jian";
     email = "me@linj.tech";
