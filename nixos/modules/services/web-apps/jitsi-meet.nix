@@ -262,6 +262,8 @@ in
           allowners_muc = cfg.prosody.allowners_muc;
           roomLocking = false;
           roomDefaultPublicJids = true;
+          # muc_meeting_id loads jitsi_permissions for moderator features
+          extraModules = [ "muc_meeting_id" ];
           extraConfig = ''
             restrict_room_creation = true
             storage = "memory"
@@ -273,6 +275,7 @@ in
           name = "Jitsi Meet Breakout MUC";
           roomLocking = false;
           roomDefaultPublicJids = true;
+          extraModules = [ "muc_meeting_id" ];
           extraConfig = ''
             restrict_room_creation = true
             storage = "memory"
