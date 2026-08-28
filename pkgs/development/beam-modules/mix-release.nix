@@ -17,6 +17,7 @@
   gnugrep,
   gawk,
   mixBuildDirHook,
+  mixEscriptSetupHook,
 }@inputs:
 
 lib.extendMkDerivation {
@@ -106,20 +107,17 @@ lib.extendMkDerivation {
             erlang
             elixir
             hex
+
+            bbe
+            findutils
             git
+            makeWrapper
+            ripgrep
+
             mixBuildDirHook
           ]
-        ++
-          # Mix deps
-          (builtins.attrValues mixNixDeps)
-        ++
-          # other compile-time deps
-          [
-            findutils
-            ripgrep
-            bbe
-            makeWrapper
-          ];
+        ++ lib.optionals (escriptBinName != null) [ mixEscriptSetupHook ]
+        ++ (builtins.attrValues mixNixDeps);
 
       buildInputs = [
         bashNonInteractive
@@ -216,10 +214,6 @@ lib.extendMkDerivation {
 
           mix compile --no-deps-check ${lib.concatStringsSep " " compileFlags}
 
-          ${lib.optionalString (escriptBinName != null) ''
-            mix escript.build --no-deps-check
-          ''}
-
           runHook postBuild
         '';
 
@@ -227,17 +221,7 @@ lib.extendMkDerivation {
         attrs.installPhase or ''
           runHook preInstall
 
-          ${
-            if (escriptBinName != null) then
-              ''
-                mkdir -p $out/bin
-                cp ${escriptBinName} $out/bin
-              ''
-            else
-              ''
-                mix release ${mixReleaseName} --no-deps-check --path "$out"
-              ''
-          }
+          mix release ${mixReleaseName} --no-deps-check --path "$out"
 
           runHook postInstall
         '';
