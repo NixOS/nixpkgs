@@ -5,7 +5,6 @@
   fetchFromGitHub,
   hatchling,
   pytestCheckHook,
-  setuptools
 }:
 
 buildPythonPackage rec {
