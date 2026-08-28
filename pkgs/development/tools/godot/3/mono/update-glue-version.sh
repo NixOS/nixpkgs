@@ -1,5 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p steam-run unzip wget
+# shellcheck shell=bash
 
 # This script updates the hard-coded glue_version in:
 #
