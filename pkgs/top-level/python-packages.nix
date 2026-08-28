@@ -19935,8 +19935,6 @@ self: super: with self; {
 
   stop-words = callPackage ../development/python-modules/stop-words { };
 
-  stopit = callPackage ../development/python-modules/stopit { };
-
   storage3 = callPackage ../development/python-modules/storage3 { };
 
   stp = toPythonModule (pkgs.stp.override { python3 = self.python; });
