@@ -23,6 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-XYQ0cR0gdiX7GePqpMDG/Ml0CK+SBcNbsNB99FZ/D3I=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11,<0.12" "uv_build"
+  '';
+
   build-system = [ uv-build ];
 
   dependencies = [
@@ -43,9 +48,10 @@ buildPythonPackage rec {
 
   meta = {
     description = "Simple Scheduler for Dramatiq Task Queue";
-    mainProgram = "periodiq";
     homepage = "https://gitlab.com/bersace/periodiq";
+    changelog = "https://gitlab.com/bersace/periodiq/-/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ traxys ];
+    mainProgram = "periodiq";
   };
 }
