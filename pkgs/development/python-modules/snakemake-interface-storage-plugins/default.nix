@@ -8,7 +8,6 @@
 
   # dependencies
   humanfriendly,
-  reretry,
   snakemake-interface-common,
   tenacity,
   throttler,
@@ -40,7 +39,6 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     humanfriendly
-    reretry
     snakemake-interface-common
     tenacity
     throttler
