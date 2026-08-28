@@ -36,6 +36,7 @@ buildPythonPackage rec {
   meta = {
     description = "Common engine for all modules. It is useful for make integration with your homemade frameworks";
     homepage = "https://github.com/allure-framework/allure-python";
+    changelog = "https://github.com/allure-framework/allure-python/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ evanjs ];
   };
