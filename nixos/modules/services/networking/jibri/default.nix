@@ -91,7 +91,13 @@ let
 in
 {
   options.services.jibri = with types; {
-    enable = mkEnableOption "Jitsi BRoadcasting Infrastructure. Currently Jibri must be run on a host that is also running {option}`services.jitsi-meet.enable`, so for most use cases it will be simpler to run {option}`services.jitsi-meet.jibri.enable`";
+    enable = mkEnableOption "Jitsi BRoadcasting Infrastructure" // {
+      description = ''
+        Whether to enable Jibri.
+        Jibri must run on a host where {option}`services.jitsi-meet.enable` is enabled.
+        It installs a system-wide Chromium policy that disables security warnings for every Chromium user.
+      '';
+    };
     config = mkOption {
       type = format.type;
       default = { };
@@ -432,10 +438,6 @@ in
     environment.etc."chromium/policies/managed/managed_policies.json".text = builtins.toJSON {
       CommandLineFlagSecurityWarningsEnabled = false;
     };
-    warnings = [
-      "All security warnings for Chromium have been disabled. This is necessary for Jibri, but it also impacts all other uses of Chromium on this system."
-    ];
-
     boot = {
       extraModprobeConfig = ''
         options snd-aloop enable=1,1,1,1,1,1,1,1
