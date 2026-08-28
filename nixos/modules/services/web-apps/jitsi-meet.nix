@@ -457,6 +457,20 @@ in
       "d '/var/lib/jitsi-meet' 0750 root jitsi-meet - -"
     ];
 
+    systemd.services.jicofo = mkIf (cfg.jicofo.enable && cfg.prosody.enable) {
+      partOf = [ "prosody.service" ];
+      after = [ "prosody.service" ];
+    };
+    systemd.services.jibri =
+      mkIf ((config.services.jibri.enable || cfg.jibri.enable) && cfg.prosody.enable)
+        {
+          partOf = [ "prosody.service" ];
+          after = [
+            "jicofo.service"
+            "prosody.service"
+          ];
+        };
+
     systemd.services.jitsi-meet-init-secrets = {
       wantedBy = [ "multi-user.target" ];
       before = [
