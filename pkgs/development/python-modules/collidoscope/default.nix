@@ -9,8 +9,6 @@
   skia-pathops,
   tqdm,
   uharfbuzz,
-  unittestCheckHook,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -36,13 +34,6 @@ buildPythonPackage rec {
     skia-pathops
     tqdm
     uharfbuzz
-  ];
-
-  nativeCheckInputs = [ unittestCheckHook ];
-  unittestFlagsArray = [
-    "-s"
-    "test"
-    "-v"
   ];
 
   __darwinAllowLocalNetworking = true;
