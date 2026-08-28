@@ -892,7 +892,7 @@ let
                     # the debug output which could carry references, but
                     # that's "normal". Notably it symlinks to the source.
                     # So disable reference checking for the debug output
-                    if separateDebugInfo' && name == "debug" then
+                    if raw != { } && separateDebugInfo' && name == "debug" then
                       removeAttrs raw referenceCheckingAttrsToRemove
                     else
                       raw;
