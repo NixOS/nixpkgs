@@ -1,7 +1,6 @@
 {
   lib,
   axisregistry,
-  babelfont,
   beautifulsoup4,
   beziers,
   buildPythonPackage,
@@ -10,7 +9,6 @@
   collidoscope,
   defcon,
   dehinter,
-  font-v,
   fetchFromGitHub,
   fonttools,
   freetype-py,
@@ -40,9 +38,15 @@
   toml,
   ufo2ft,
   ufolint,
-  ufomerge,
   unicodedata2,
+  uharfbuzz,
   vharfbuzz,
+  myst-parser,
+  sphinx,
+  sphinx-rtd-theme,
+  pytest-cov-stub,
+  pylint,
+  black,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -76,48 +80,89 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
-    axisregistry
-    babelfont
-    beautifulsoup4
     beziers
     cmarkgfm
-    collidoscope
     defcon
     dehinter
-    font-v
     fonttools
     freetype-py
-    gflanguages
-    gfsubsets
-    glyphsets
     jinja2
-    lxml
     munkres
     opentypespec
     ots-python
     packaging
     pip-api
-    protobuf
     pyyaml
     requests
     rich
-    shaperglot
-    stringbrewer
     toml
     ufo2ft
     ufolint
-    ufomerge
-    unicodedata2
+    uharfbuzz
     vharfbuzz
-  ];
+  ]
+  ++ fonttools.optional-dependencies.ufo;
 
   nativeCheckInputs = [
     gitMinimal
     pytestCheckHook
     pytest-xdist
-    requests-mock
     ufolint
-  ];
+    pytest-cov-stub
+    requests-mock
+    pylint
+    black
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.all;
+
+  optional-dependencies = {
+    beautifulsoup4 = [ beautifulsoup4 ];
+    shaperglot = [ shaperglot ];
+    googlefontsalwayslatest = [
+      axisregistry
+      gflanguages
+      gfsubsets
+      glyphsets
+      shaperglot
+    ];
+    adobefonts = [ ];
+    fontval = [ lxml ];
+    fontwerk = finalAttrs.passthru.optional-dependencies.googlefonts;
+    googlefonts = [
+      collidoscope
+      fonttools
+      protobuf
+      stringbrewer
+      unicodedata2
+    ]
+    ++ fonttools.optional-dependencies.lxml
+    ++ fonttools.optional-dependencies.unicode
+    ++ finalAttrs.passthru.optional-dependencies.beautifulsoup4
+    ++ finalAttrs.passthru.optional-dependencies.googlefontsalwayslatest
+    ++ finalAttrs.passthru.optional-dependencies.shaperglot;
+    iso15008 = [ ];
+    microsoft = [ ];
+    notofonts = finalAttrs.passthru.optional-dependencies.googlefonts;
+    typenetwork = [
+      unicodedata2
+    ]
+    ++ finalAttrs.passthru.optional-dependencies.beautifulsoup4
+    ++ finalAttrs.passthru.optional-dependencies.shaperglot;
+    docs = [
+      myst-parser
+      sphinx
+      sphinx-rtd-theme
+    ];
+    all =
+      finalAttrs.passthru.optional-dependencies.docs
+      ++ finalAttrs.passthru.optional-dependencies.adobefonts
+      ++ finalAttrs.passthru.optional-dependencies.fontval
+      ++ finalAttrs.passthru.optional-dependencies.fontwerk
+      ++ finalAttrs.passthru.optional-dependencies.googlefonts
+      ++ finalAttrs.passthru.optional-dependencies.iso15008
+      ++ finalAttrs.passthru.optional-dependencies.notofonts
+      ++ finalAttrs.passthru.optional-dependencies.typenetwork;
+  };
 
   preCheck = ''
     # Let the tests invoke 'fontbakery' command.
