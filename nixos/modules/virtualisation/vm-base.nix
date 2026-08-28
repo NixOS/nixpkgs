@@ -143,7 +143,11 @@ in
         "nix-daemon.socket"
         "nix-daemon.service"
       ];
-      after = [ "local-fs.target" ];
+      after = [
+        "local-fs.target"
+        "systemd-tmpfiles-setup.service"
+      ];
+      requires = [ "systemd-tmpfiles-setup.service" ];
       conflicts = [ "shutdown.target" ];
       restartIfChanged = false;
       serviceConfig = {
