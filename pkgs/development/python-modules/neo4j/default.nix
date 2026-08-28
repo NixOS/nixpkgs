@@ -11,19 +11,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "neo4j";
-  version = "6.2.0";
+  version = "6.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "neo4j";
     repo = "neo4j-python-driver";
     tag = finalAttrs.version;
-    hash = "sha256-M1bBZJOo4GS71Gt4vfRYfLduh/X8XFABgycQNVPsWSs=";
+    hash = "sha256-9ehfq8CuhaSMmDz9o/2litchyg18CfXNpQRZpikLMXg=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools == 82.0.1" "setuptools" \
+      --replace-fail "setuptools == 84.0.0" "setuptools" \
       --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
   '';
 
