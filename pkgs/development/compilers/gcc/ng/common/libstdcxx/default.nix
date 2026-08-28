@@ -57,6 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
       cp libgcc/gthr*.h "$out/libgcc"
       cp libgcc/unwind-pe.h "$out/libgcc"
 
+    ''
+    # Target-specific `gthr` headers live under `libgcc/config/<cpu>/` rather
+    # than at the top of `libgcc`, and libstdc++'s `gthr-default.h` rule names
+    # them by path relative to the tree root, so reproduce that layout.
+    + ''
+      cp --parents libgcc/config/*/gthr*.h "$out"
+
       cp -r libstdc++-v3 "$out"
 
       cp -r libiberty "$out"

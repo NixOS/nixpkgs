@@ -8,13 +8,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.11.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-SP5Huefj35PHvVzqS8R/DGSBci/hCHoueEb5RupGVqY=";
+    hash = "sha256-W3RzBYUtI32Ft1Nw5JM7Z/mgYELNAlFCJmrNa2Wnhu4=";
   };
 
   # we need datasets_3 for SpeechT5 embeddings
@@ -35,7 +35,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-9Wa6gP0asGPCoBJh8ufpweOg4zNf7onzBu08iQwgqis=";
+    npmDepsHash = "sha256-5W/IMa23b0afAlw5Md8KvJYQmRen8u1dfUG2RAKDOn0=";
 
     npmFlags = [ "--force" ];
 
@@ -168,6 +168,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pymysql
       pypandoc
       pypdf
+      python-docx
       python-dotenv
       python-mimeparse
       python-multipart
@@ -220,7 +221,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       azure-search-documents
       colbert-ai
       elasticsearch
-      moto
       oracledb
       pinecone
       playwright
@@ -231,8 +231,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ]
     ++ finalAttrs.passthru.optional-dependencies.mariadb
     ++ finalAttrs.passthru.optional-dependencies.postgres
-    ++ finalAttrs.passthru.optional-dependencies.unstructured
-    ++ moto.optional-dependencies.s3;
+    ++ finalAttrs.passthru.optional-dependencies.unstructured;
   };
 
   pythonImportsCheck = [ "open_webui" ];
