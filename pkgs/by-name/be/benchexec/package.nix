@@ -7,6 +7,7 @@
   testers,
   benchexec,
 }:
+
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "benchexec";
   version = "3.27";
@@ -41,7 +42,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     pyyaml
   ];
 
-  makeWrapperArgs = [ "--set-default LIBSECCOMP ${lib.getLib libseccomp}/lib/libseccomp.so" ];
+  makeWrapperArgs = [
+    "--set-default"
+    "LIBSECCOMP"
+    "${lib.getLib libseccomp}/lib/libseccomp.so"
+  ];
 
   passthru.tests =
     let
