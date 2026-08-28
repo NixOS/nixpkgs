@@ -23,7 +23,12 @@ let
       ))
     ];
 
-    inherit (cfg) hostDirectory targetDirectory;
+    inherit (cfg)
+      hostDirectory
+      targetDirectory
+      identity
+      publicKeys
+      ;
   };
 
   # We bake the configuration and required command into the script that calls

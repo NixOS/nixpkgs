@@ -279,45 +279,6 @@ def execution_order(config: SecretsConfig) -> List[str]:
         raise SecretsError(f"Dependency cycle detected in configuration:\n{e}")
 
 
-# Returns a sublist of execution_order which only contains the generators
-# that need to be rebuilt.
-#
-# Optionally accepts a list of generators that must forcefully be included in
-# the returned list.
-def rebuild_order(
-    args: SecretsArgs,
-    config: SecretsConfig,
-    regenerate: List[str],
-) -> List[str]:
-    order = []
-
-    print("Rebuild order:")
-    for item in execution_order(config):
-        generator = config.generators[item]
-
-        if item in regenerate:
-            print(f"- '{item}' (forced)")
-            order.append(item)
-            continue
-
-        for dep in generator.dependencies:
-            if dep in order:
-                print(f"- '{item}' (dependency '{dep}' has changed)")
-                order.append(item)
-                break
-        else:
-            for file in generator.files.values():
-                backend = config.storeBackends[generator.backend]
-                if not file_exists(args, backend, generator, file):
-                    print(f"- '{item}' (file '{file.name}' is missing)")
-                    order.append(item)
-                    break
-            else:
-                print(f"- Skipping '{item}'")
-
-    return order
-
-
 def fixup_all(args: SecretsArgs, config: SecretsConfig):
     print("Running fixup scripts:")
 

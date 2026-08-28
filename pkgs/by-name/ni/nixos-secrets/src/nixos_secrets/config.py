@@ -6,6 +6,7 @@ import re
 
 
 safe_name_regex = re.compile("^[a-zA-Z0-9:_\\.-]+$")
+meta_file_name = ".nixos-secrets-metadata"  # In this file to prevent cyclic imports
 
 
 @dataclass
@@ -64,13 +65,16 @@ class SecretsStoreBackend:
 @dataclass
 class SecretsFile:
     name: str
-    deploy: bool
+    deploy: bool = False
 
     def from_json(name: str, json: Any) -> Self:
         if safe_name_regex.search(name) is None:
             raise SecretsError(
                 f"File '{name}' does not have a valid name. Currently, only alphanumeric characters, dashes, underscores, and dots are allowed."
             )
+
+        if name == meta_file_name:
+            raise SecretsError(f"Files cannot use the reserved name '{meta_file_name}'")
 
         return SecretsFile(name=name, deploy=json["deploy"])
 

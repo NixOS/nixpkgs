@@ -1,28 +1,33 @@
 import os
 import tempfile
 import subprocess
+from uuid import uuid4
 from pathlib import Path
+from typing import Mapping
+
 from .args import SecretsArgs
 from .config import SecretsConfig, SecretsSecret
+from .meta import SecretsMetadata, VersionID, get_meta, set_meta
 from .exec import (
-    rebuild_order,
+    execution_order,
     build_binary,
     get_secret,
     set_secret,
     fixup_all,
     run_prompt,
     reset_terminal_state,
+    file_exists,
 )
 from .error import SecretsError
 
 
 def generate_secrets(args: SecretsArgs, config: SecretsConfig):
-    order_seed = args.generators + list(args.set.keys())
-    for gen_name in order_seed:
+    forced_regens = set(args.generators + list(args.set.keys()))
+    for gen_name in forced_regens:
         if gen_name not in config.generators:
             raise SecretsError(f"Invalid secret name '{gen_name}'")
 
-    order = rebuild_order(args, config, order_seed)
+    order = execution_order(config)
 
     # Bubblewrap requires usernamespaces to be enabled, so it won't work (by
     # default) in places like Ubuntu. At @Qubasa's suggestion, I have thus made it
@@ -53,7 +58,62 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
     with tempfile.TemporaryDirectory() as temp:
         temp = Path(temp)
 
+        up_to_date_meta = {}
         for entry in order:
+            generator = config.generators[entry]
+
+            # The regeneration logic goes as follows:
+            # - we regenerate if the user tells us to (via --set or --generate)...
+            # - ...or if any dependencies were added/removed...
+            # - ...or if any of the dependencies have themselves changed...
+            # - ...or if any of the files are missing
+
+            regen = False
+            meta = get_meta(args, config, generator)
+            if entry in forced_regens:
+                print(f"Regenerating '{entry}' (forced)")
+                regen = True
+            elif meta:
+                meta_deps = set(meta.dependencies.keys())
+                config_deps = set(generator.dependencies)
+                removed_deps = meta_deps - config_deps
+                added_deps = config_deps - meta_deps
+                if removed_deps:
+                    dep_str = ", ".join(sorted(removed_deps))
+                    print(f"Regenerating '{entry}' (removed dependencies: {dep_str})")
+                    regen = True
+                elif added_deps:
+                    dep_str = ", ".join(sorted(added_deps))
+                    print(f"Regenerating '{entry}' (added dependencies: {dep_str})")
+                    regen = True
+                else:
+                    changed_deps = set()
+                    for dep, id in meta.dependencies.items():
+                        if id != up_to_date_meta[dep].id:
+                            changed_deps.add(dep)
+                    if changed_deps:
+                        dep_str = ", ".join(sorted(changed_deps))
+                        print(
+                            f"Regenerating '{entry}' (dependencies changed: {dep_str})"
+                        )
+                        regen = True
+            else:
+                print(f"Regenerating '{entry}' (missing metadata)")
+                regen = True
+
+            if not regen:
+                for file in generator.files.values():
+                    backend = config.storeBackends[generator.backend]
+                    if not file_exists(args, backend, generator, file):
+                        print(f"Regenerating '{entry}' (file '{file.name}' is missing)")
+                        regen = True
+                        break
+
+            if not regen:
+                print(f"Skipping '{entry}'")
+                up_to_date_meta[entry] = meta
+                continue
+
             in_dir = temp / "generators" / entry / "in"
             os.makedirs(in_dir)
 
@@ -63,7 +123,6 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
             prompt_in_dir = temp / "generators" / entry / "prompts"
             os.makedirs(prompt_in_dir)
 
-            generator = config.generators[entry]
             if generator.prompts and entry not in args.set:
                 print(f"Evaluating prompts for '{entry}':")
                 for prompt in generator.prompts.values():
@@ -177,6 +236,15 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
                 raise SecretsError(
                     f"Secret '{entry}' has no generator script, and no corresponding --set argument was found."
                 )
+
+            new_id = str(uuid4())
+            dep_ids: Mapping[str, VersionID] = {}
+            for dep_name in generator.dependencies:
+                dep_ids[dep_name] = up_to_date_meta[dep_name].id
+            meta = SecretsMetadata(new_id, dep_ids)
+
+            set_meta(args, config, generator, meta)
+            up_to_date_meta[entry] = meta
 
     print(f"Successfully updated {len(order)} secret(s).")
 
