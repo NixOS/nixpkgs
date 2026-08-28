@@ -2260,10 +2260,10 @@
   };
 
   php-only = {
-    version = "0.24.2-unstable-2026-03-19";
+    version = "0.24.2-unstable-2026-07-20";
     url = "github:tree-sitter/tree-sitter-php";
-    rev = "3f2465c217d0a966d41e584b42d75522f2a3149e";
-    hash = "sha256-RV6wHYVTOFdRYMqXdPw2Ryk3FadJJ4jcJVFjsJG8Ri0=";
+    rev = "3fda2fb9577166c6399834917f9844f30370beea";
+    hash = "sha256-JnDMQx4S3Z/BMuxa9Trv2pV9QQzpUoVLHzAGppuqbN4=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
