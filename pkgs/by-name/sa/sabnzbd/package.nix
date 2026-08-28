@@ -31,6 +31,7 @@ let
       ct3
       feedparser
       guessit
+      hachoir
       jaraco-classes
       jaraco-collections
       jaraco-context
