@@ -51,6 +51,9 @@ buildPythonPackage rec {
     description = "Python library to detect glyph collisions in fonts";
     homepage = "https://github.com/googlefonts/collidoscope";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ danc86 ];
+    maintainers = with lib.maintainers; [
+      danc86
+      jopejoe1
+    ];
   };
 }
