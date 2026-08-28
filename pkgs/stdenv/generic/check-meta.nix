@@ -18,6 +18,7 @@ let
     isFunction
     isString
     length
+    mapAttrsToList
     mutuallyExclusive
     optional
     optionalString
@@ -25,6 +26,7 @@ let
     unsafeGetAttrPos
     warn
     all
+    groupBy
     ;
 
   inherit (lib.lists)
@@ -468,6 +470,17 @@ let
       hasOutput = out: elem out outputs;
       maintainersPosition = unsafeGetAttrPos "maintainers" (attrs.meta or { });
       teamsPosition = unsafeGetAttrPos "teams" (attrs.meta or { });
+
+      problems = completeMetaProblems' attrs;
+      problemsGroupedByKind = groupBy (p: p.name) (
+        mapAttrsToList (name: problem: {
+          inherit name;
+          inherit problem;
+        }) problems
+      );
+
+      problemsByKind = kind: problemsGroupedByKind.${kind} or [ ];
+      hasProblemKind = kind: (problemsByKind kind) != [ ];
     in
     {
       # `name` derivation attribute includes cross-compilation cruft,
@@ -594,11 +607,11 @@ let
 
       # Expose the result of the checks for everyone to see.
       unfree = hasUnfreeLicense attrs;
-      broken = isMarkedBroken attrs;
+      broken = isMarkedBroken attrs || hasProblemKind "broken";
       unsupported = hasUnsupportedPlatform' attrs;
       insecure = isMarkedInsecure attrs;
 
-      problems = completeMetaProblems' attrs;
+      inherit problems;
 
       available =
         validity.valid != "no"
