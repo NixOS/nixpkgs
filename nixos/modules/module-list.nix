@@ -1955,6 +1955,7 @@
   ./system/activation/bootspec.nix
   ./system/activation/nixos-init.nix
   ./system/activation/pre-switch-check.nix
+  ./system/activation/restrict-activation-scripts.nix
   ./system/activation/specialisation.nix
   ./system/activation/switchable-system.nix
   ./system/activation/top-level.nix
