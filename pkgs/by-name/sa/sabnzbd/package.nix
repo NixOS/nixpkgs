@@ -31,6 +31,7 @@ let
       cryptography
       feedparser
       guessit
+      hachoir
       jaraco-classes
       jaraco-collections
       jaraco-context
