@@ -94,6 +94,7 @@ buildPythonPackage rec {
       tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_success
       tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_with_exception
       tempest.tests.lib.cli.test_execute.TestExecute.test_execute_with_prefix
+      tempest.tests.lib.common.test_rest_client.TestRestClientServiceToken.test_log_request_full_omits_service_token
     ")
   '';
 
