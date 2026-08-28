@@ -18,6 +18,7 @@
   libxrandr,
   libxrender,
   makeWrapper,
+  nix-update-script,
   openssl,
   pkg-config,
   scons,
@@ -169,6 +170,13 @@ stdenv.mkDerivation (finalAttrs: {
       udev
     ]
   );
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "(3\\..*)-stable"
+    ];
+  };
 
   meta = {
     homepage = "https://godotengine.org";
