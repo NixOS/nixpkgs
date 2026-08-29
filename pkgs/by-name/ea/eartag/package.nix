@@ -22,7 +22,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "eartag";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = false;
 
   src = fetchFromGitLab {
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "World";
     repo = "eartag";
     tag = finalAttrs.version;
-    hash = "sha256-Iwfk0SqxYF2bzkKZNqGonJh8MQ2c+K1wN0o4GECR/Rw=";
+    hash = "sha256-XyVKqkeaxy8bhrN6AhbnJpUSYETbY4DGHU7s2O71Wpc=";
   };
 
   postPatch = ''
