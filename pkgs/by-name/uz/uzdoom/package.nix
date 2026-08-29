@@ -105,8 +105,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://github.com/UZDoom/UZDoom";
-    description = "Modder-friendly OpenGL and Vulkan source port based on the DOOM engine";
+    homepage = "https://zdoom.org";
+    changelog = "https://github.com/UZDoom/UZDoom/releases/tag/${finalAttrs.version}";
+    description = "Modern, feature-rich source port for the classic game DOOM";
     mainProgram = "uzdoom";
     longDescription = ''
       UZDoom is a feature centric port for all Doom engine games, based on
