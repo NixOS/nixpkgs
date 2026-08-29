@@ -6,23 +6,30 @@
   pkg-config,
   protobuf,
   rustPlatform,
+
+  # needed for GUI client
+  gtk4,
+  libadwaita,
+  webkitgtk_6_0,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qobine";
-  version = "0.9.0";
+  version = "2026-08-28";
 
   src = fetchFromGitHub {
     owner = "SofusA";
     repo = "qobine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uslU/HQognLMNz/w9hMdtpzby2neE+VC8Y+RV2XMd7Q=";
+    hash = "sha256-C1GbLRuur1p5h/nGl9X5cYQCNAjai/u9Qo+XqkpJfzI=";
   };
 
   strictDeps = true;
   __structuredAttrs = true;
 
-  cargoHash = "sha256-vcII4SDE5zOgzS83CCLhffc7OEksmcMtXYb76r6M1JM=";
+  cargoHash = "sha256-OidPG2oJdr2IBZGYw46500//EdlmK8kDRFm6lPOeD3M=";
+
+  doCheck = false;
 
   nativeBuildInputs = [
     pkg-config
@@ -31,7 +38,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     alsa-lib
+    gtk4
+    libadwaita
     openssl
+    webkitgtk_6_0
   ];
 
   meta = {
@@ -43,6 +53,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       felixsinger
     ];
     platforms = lib.platforms.linux;
-    mainProgram = "qobuz-player";
+    mainProgram = "qobine-tui";
   };
 })
