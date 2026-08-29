@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  options,
   pkgs,
   utils,
   ...
@@ -117,7 +118,11 @@ in
         };
       };
 
-      music-assistant.providers = cfg.package.providersBuiltins;
+      music-assistant = {
+        # do not loose --config default flag when supplying custom flags and loose the database
+        extraOptions = options.services.music-assistant.extraOptions.default;
+        providers = cfg.package.providersBuiltins;
+      };
     };
 
     systemd.services.music-assistant = {
