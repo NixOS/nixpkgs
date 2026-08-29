@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jupyter-docprovider";
-  version = "3.0.0";
+  version = "3.0.2";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "jupyter_docprovider";
     inherit (finalAttrs) version;
-    hash = "sha256-LYtcIBTLTXrzgOZ4VbcSzWBLTuSBdJCCbmX/NTsZNtk=";
+    hash = "sha256-9eyW7hKsTzT/pIvVdiYrJLUlkA+MzKK9cjTrzHGxM78=";
   };
 
   build-system = [
