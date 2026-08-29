@@ -10492,12 +10492,12 @@ with self;
     };
   };
 
-  DBIxSearchBuilder = buildPerlPackage {
+  DBIxSearchBuilder = buildPerlPackage rec {
     pname = "DBIx-SearchBuilder";
-    version = "1.82";
+    version = "1.85";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BP/BPS/DBIx-SearchBuilder-1.82.tar.gz";
-      hash = "sha256-3IDX5PRVdt4/2Ui2slD+3FAM/QCrzTC2qLLXeJV2uPE=";
+      url = "mirror://cpan/authors/id/B/BP/BPS/DBIx-SearchBuilder-${version}.tar.gz";
+      hash = "sha256-5iqwesIdGH5QRGkuSq2BaexO8u980ehxTrREoWpwOPc=";
     };
     buildInputs = [ DBDSQLite ];
     propagatedBuildInputs = [
