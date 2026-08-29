@@ -128,8 +128,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   disabledTests = [
     # ERROR: The install method you used for conda--probably either `pip install conda`
     # or `easy_install conda`--is not compatible with using conda as an application.
-    "test_conda_"
-    "test_local_conda_"
+    "test_conda_language"
+    "test_conda_additional_deps"
 
     # /build/pytest-of-nixbld/pytest-0/test_install_ruby_with_version0/rbenv-2.7.2/libexec/rbenv-init:
     # /usr/bin/env: bad interpreter: No such file or directory
@@ -137,10 +137,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     # network
     "test_additional_dependencies_roll_forward"
-    "test_additional_golang_dependencies_installed"
-    "test_additional_node_dependencies_installed"
-    "test_additional_rust_cli_dependencies_installed"
-    "test_additional_rust_lib_dependencies_installed"
     "test_automatic_toolchain_switching"
     "test_coursier_hook"
     "test_coursier_hook_additional_dependencies"
@@ -168,12 +164,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_perl_additional_dependencies"
     "test_r_hook"
     "test_r_inline"
-    "test_r_inline_hook"
-    "test_r_local_with_additional_dependencies_hook"
-    "test_r_with_additional_dependencies_hook"
-    "test_run_a_node_hook_default_version"
     "test_run_lib_additional_dependencies"
-    "test_run_versioned_node_hook"
     "test_rust_cli_additional_dependencies"
     "test_swift_language"
     "test_run_example_executable"
@@ -199,11 +190,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_unhealthy_unexpected_pyvenv"
     "test_unhealthy_with_version_change"
 
-    # i don't know why these fail
-    "test_install_existing_hooks_no_overwrite"
-    "test_installed_from_venv"
-    "test_uninstall_restores_legacy_hooks"
-    "test_dotnet_"
+    # R required
     "test_health_check_"
 
     # Expects `git commit` to fail when `pre-commit` is not in the `$PATH`,
@@ -211,9 +198,17 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_environment_not_sourced"
 
     # Docker required
-    "test_docker_"
+    "test_docker_fallback_user"
+    "test_docker_hook"
+    "test_docker_image_"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "test_install_existing_hooks_no_overwrite"
+    "test_uninstall_restores_legacy_hooks"
   ]
   ++ lib.optionals i686Linux [
+    # i686-linux: dotnet-sdk not available
+    "test_dotnet_"
     # From coursier_test.py:
     "test_error_if_no_deps_or_channel"
     # From node_test.py:
