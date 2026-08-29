@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyprproxlock";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "Da4ndo";
     repo = "hyprproxlock";
     tag = finalAttrs.version;
-    hash = "sha256-EoMxYMQBRP1fDfUorrkrgKDrVI88Ctusp2+1a7tnSU0=";
+    hash = "sha256-v0EiUMOmyKyVwskit5Wp3lu0kwOscDbVgGldcP6xfek=";
   };
 
-  cargoHash = "sha256-rBZ3acHStmUzEU+lsFhNYvLVPeeZe6P+4OHyxHRe4CU=";
+  cargoHash = "sha256-jpLNgqwQq58M+mbPK4sdlm5Lf1Pgywr8A8Z1bEU3DOw=";
 
   nativeBuildInputs = [
     pkg-config
