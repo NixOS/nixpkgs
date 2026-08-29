@@ -11938,6 +11938,13 @@
     githubId = 52052910;
     name = "iivusly";
   };
+  iJustLeyxo = {
+    name = "Leo";
+    github = "iJustLeyxo";
+    githubId = 92861073;
+    email = "nix@l-pf.link";
+    matrix = "@ijustleyxo:matrix.org";
+  };
   ik-nz = {
     email = "me@igk.nz";
     github = "ik-nz";
