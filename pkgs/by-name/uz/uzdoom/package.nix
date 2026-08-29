@@ -27,6 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "uzdoom";
   version = "5.0.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "UZDoom";
     repo = "UZDoom";
