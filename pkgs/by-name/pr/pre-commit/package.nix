@@ -96,14 +96,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     export GIT_AUTHOR_NAME=test GIT_COMMITTER_NAME=test \
            GIT_AUTHOR_EMAIL=test@example.com GIT_COMMITTER_EMAIL=test@example.com \
            PRE_COMMIT_NO_CONCURRENCY=1
+
+    # Some CLI tests expect to run in a Git repository.
+    git init
   ''
   + lib.optionalString (!i686Linux) ''
     # Resolve `.NET location: Not found` errors for dotnet tests
     export DOTNET_ROOT="${dotnet-sdk}/share/dotnet"
-  ''
-  + ''
-    # Some CLI tests expect to run in a Git repository.
-    git init
   '';
 
   disabledTests = [
