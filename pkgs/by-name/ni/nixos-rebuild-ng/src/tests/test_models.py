@@ -205,19 +205,16 @@ def test_flake_from_arg(
         ) == m.Flake("/path/to", 'nixosConfigurations."remote-hostname"')
 
 
-@patch("pathlib.Path.mkdir", autospec=True)
-def test_profile_from_arg(mock_mkdir: Mock) -> None:
+def test_profile_from_arg() -> None:
     assert m.Profile.from_arg("system") == m.Profile(
         "system",
         Path("/nix/var/nix/profiles/system"),
     )
-    mock_mkdir.assert_not_called()
 
     assert m.Profile.from_arg("something") == m.Profile(
         "something",
         Path("/nix/var/nix/profiles/system-profiles/something"),
     )
-    mock_mkdir.assert_called_once()
 
 
 def test_grouped_nix_args_flake_build_flags() -> None:

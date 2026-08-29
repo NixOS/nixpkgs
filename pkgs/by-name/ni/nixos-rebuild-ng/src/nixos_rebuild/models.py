@@ -212,5 +212,4 @@ class Profile:
                 return cls(name, Path("/nix/var/nix/profiles/system"))
             case _:
                 path = Path("/nix/var/nix/profiles/system-profiles") / name
-                path.parent.mkdir(mode=0o755, parents=True, exist_ok=True)
                 return cls(name, path)
