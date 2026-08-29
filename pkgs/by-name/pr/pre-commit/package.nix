@@ -18,6 +18,7 @@
 
   # passthru
   callPackage,
+  pkgsi686Linux,
   pre-commit,
 }:
 
@@ -213,9 +214,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     makeWrapperArgs+=(--suffix PATH : ${lib.makeBinPath [ gitMinimal ]})
   '';
 
-  passthru.tests = callPackage ./tests.nix {
-    inherit gitMinimal pre-commit;
-  };
+  passthru.tests =
+    callPackage ./tests.nix {
+      inherit gitMinimal pre-commit;
+    }
+    // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
+      i686 = pkgsi686Linux.pre-commit;
+    };
 
   meta = {
     description = "Framework for managing and maintaining multi-language pre-commit hooks";
