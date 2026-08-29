@@ -14393,6 +14393,8 @@ self: super: with self; {
 
   pyasn1 = callPackage ../development/python-modules/pyasn1 { };
 
+  pyasn1-alt-modules = callPackage ../development/python-modules/pyasn1-alt-modules { };
+
   pyasn1-modules = callPackage ../development/python-modules/pyasn1-modules { };
 
   pyasuswrt = callPackage ../development/python-modules/pyasuswrt { };
