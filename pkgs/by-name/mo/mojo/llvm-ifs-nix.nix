@@ -16,6 +16,17 @@ stdenv.mkDerivation {
   dontBuild = true;
   dontFixup = true;
 
+  passAsFile = [ "bazelBuild" ];
+
+  # Keep this out of a bash heredoc so nixfmt can format the file.
+  bazelBuild = ''
+    filegroup(
+        name = "llvm-ifs",
+        srcs = glob(["**"]),
+        visibility = ["//visibility:public"],
+    )
+  '';
+
   installPhase = ''
     runHook preInstall
 
@@ -25,13 +36,7 @@ stdenv.mkDerivation {
       ln -s "${clangLinux}/bin/llvm-readtapi" "$out/tools/$plat/llvm-readtapi.stripped"
     done
 
-    cat >"$out/BUILD.bazel" <<'EOF'
-filegroup(
-    name = "llvm-ifs",
-    srcs = glob(["**"]),
-    visibility = ["//visibility:public"],
-)
-EOF
+    cp "$bazelBuildPath" "$out/BUILD.bazel"
     : >"$out/REPO.bazel"
 
     runHook postInstall

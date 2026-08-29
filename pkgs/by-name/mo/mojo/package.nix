@@ -720,6 +720,8 @@ let
         dontBuild = true;
         dontPatchELF = true;
         dontStrip = true;
+        strictDeps = true;
+        __structuredAttrs = true;
 
         nativeBuildInputs = [ makeWrapper ];
 
