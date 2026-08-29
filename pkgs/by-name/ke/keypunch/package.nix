@@ -70,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "keypunch";
     maintainers = with lib.maintainers; [
       tomasajt
-      getchoo
     ];
     teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
