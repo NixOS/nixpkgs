@@ -23,14 +23,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "curtail";
-  version = "1.16.1";
+  version = "1.16.2";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Huluti";
     repo = "Curtail";
     tag = finalAttrs.version;
-    hash = "sha256-vegtuuGyjfr0vJgaGLTkws/BysxHeVod/C9bz8lnJpo=";
+    hash = "sha256-Z4XY2/24FBdvPB3MeT7PPSXprf5HHlL1OdB6rknsL/w=";
   };
 
   nativeBuildInputs = [
