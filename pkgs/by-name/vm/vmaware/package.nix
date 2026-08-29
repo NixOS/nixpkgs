@@ -22,10 +22,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-  ];
-
   passthru.updateScript = nix-update-script { };
 
   meta = {

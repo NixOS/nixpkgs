@@ -72,7 +72,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "perfetto";
-  version = "58.2";
+  version = "58.3";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google";
     repo = "perfetto";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ipr86zH0iGjMzz9ZM3QEvtA6FlAN4lhkiDgySSeNj5c=";
+    hash = "sha256-73aE+qoHOkdD2Br3NmUE48BM6uE6uIBdug0+ZR2nn94=";
   };
 
   patches = [

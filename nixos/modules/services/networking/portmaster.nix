@@ -8,7 +8,6 @@
 
 let
   inherit (lib)
-    boolToString
     concatMapStringsSep
     concatStringsSep
     escapeRegex
@@ -670,18 +669,6 @@ in
       '';
     };
 
-    system.activationScripts.portmaster-cleanup = ''
-      if ${boolToString (!managesConfig)}; then
-        if [ -e ${escapeShellArg runtimeConfigManagedMarkerPath} ]; then
-          ${getExe' pkgs.coreutils "rm"} -f ${escapeShellArg runtimeConfigPath} ${escapeShellArg runtimeConfigManagedMarkerPath}
-        fi
-      fi
-
-      if ${boolToString (!profilesEnabled)}; then
-        ${getExe' pkgs.coreutils "rm"} -f ${escapeShellArg profilesApiKeyPath}
-      fi
-    '';
-
     environment.systemPackages = [ cfg.package ];
 
     boot.kernelModules = [ "nfnetlink_queue" ];
@@ -714,9 +701,18 @@ in
         wantedBy = [ "multi-user.target" ];
         requires = [ "systemd-tmpfiles-setup.service" ];
 
-        preStart = lib.optionalString managesConfig ''
-          ${mergeConfig}
-        '';
+        preStart =
+          lib.optionalString (!managesConfig) ''
+            if [ -e ${escapeShellArg runtimeConfigManagedMarkerPath} ]; then
+              ${getExe' pkgs.coreutils "rm"} -f ${escapeShellArg runtimeConfigPath} ${escapeShellArg runtimeConfigManagedMarkerPath}
+            fi
+          ''
+          + lib.optionalString (!profilesEnabled) ''
+            ${getExe' pkgs.coreutils "rm"} -f ${escapeShellArg profilesApiKeyPath}
+          ''
+          + lib.optionalString managesConfig ''
+            ${mergeConfig}
+          '';
 
         serviceConfig =
           let
