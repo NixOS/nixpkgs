@@ -104,6 +104,8 @@ lib.makeScope newScope (self: {
 
   mame2016 = self.callPackage ./cores/mame2016.nix { };
 
+  m2000 = self.callPackage ./cores/m2000.nix { };
+
   melonds = self.callPackage ./cores/melonds.nix { };
 
   melondsds = self.callPackage ./cores/melondsds.nix { };
