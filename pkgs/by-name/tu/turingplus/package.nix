@@ -3,6 +3,7 @@
   stdenv,
   callPackage,
   fetchFromGitHub,
+  turingplus,
   bootstrap ? callPackage ./bootstrap.nix { },
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -47,6 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkFlags = [ "-C test" ];
   checkTarget = "all";
+
+  # Try to compile Turing+ itself using the Nix-built version of the compiler.
+  # Note that `turingplus.override` has to be used since `finalPackage.override`
+  # does not exist
+  passthru.tests.bootstrap = turingplus.override {
+    bootstrap = finalAttrs.finalPackage;
+  };
 
   installPhase = ''
     runHook preInstall
