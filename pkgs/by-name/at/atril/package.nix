@@ -12,6 +12,7 @@
   glib,
   libxml2,
   libarchive,
+  libgepub,
   libsecret,
   poppler,
   mate-desktop,
@@ -33,14 +34,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "atril";
-  version = "1.28.6";
+  version = "1.28.7";
 
   src = fetchFromGitHub {
     owner = "mate-desktop";
     repo = "atril";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-d5wkMsO3iR3qudL6JXmybDWkdvRgc53FFuf9S6wPEtU=";
+    hash = "sha256-fzmB3OKxbR1Wv7jVEGkDjqVxxDiKPEjyBVu9+RwW3v8=";
   };
 
   nativeBuildInputs = [
@@ -66,18 +67,17 @@ stdenv.mkDerivation (finalAttrs: {
     texlive.bin.core # for synctex, used by the pdf back-end
   ]
   ++ lib.optionals enableDjvu [ djvulibre ]
-  ++ lib.optionals enableEpub [ webkitgtk_4_1 ]
+  ++ lib.optionals enableEpub [
+    webkitgtk_4_1
+    libgepub
+  ]
   ++ lib.optionals enablePostScript [ libspectre ]
   ++ lib.optionals enableXps [ libgxps ];
 
   configureFlags =
     [ ]
     ++ lib.optionals enableDjvu [ "--enable-djvu" ]
-    ++ lib.optionals enableEpub [
-      # FIXME: We ship this with non-existent fallback mathjax-directory
-      # because `MathJax.js` is only available in MathJax 2.7.x.
-      "--enable-epub"
-    ]
+    ++ lib.optionals enableEpub [ "--enable-epub" ]
     ++ lib.optionals enablePostScript [ "--enable-ps" ]
     ++ lib.optionals enableXps [ "--enable-xps" ]
     ++ lib.optionals enableImages [ "--enable-pixbuf" ];
