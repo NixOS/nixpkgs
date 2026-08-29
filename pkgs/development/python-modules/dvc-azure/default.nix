@@ -4,7 +4,7 @@
   azure-identity,
   buildPythonPackage,
   dvc-objects,
-  fetchPypi,
+  fetchFromGitHub,
   knack,
   setuptools-scm,
   setuptools,
@@ -15,9 +15,11 @@ buildPythonPackage (finalAttrs: {
   version = "3.1.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-2y+bBp5o0buuZ/lTo3Pr3kLUBNbH6JTZXVl8itdTpmA=";
+  src = fetchFromGitHub {
+    owner = "treeverse";
+    repo = "dvc-azure";
+    tag = finalAttrs.version;
+    hash = "sha256-DiqRUlYbsRcFUOtQLWC7o3v7I+/nlYliWtl7H1adBCc=";
   };
 
   # Prevent circular dependency
