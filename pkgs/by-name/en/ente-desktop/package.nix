@@ -1,38 +1,24 @@
 {
-  stdenv,
   lib,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  nodejs,
-  electron_41,
-  yarnConfigHook,
-  copyDesktopItems,
-  vips,
-  ffmpeg,
-  makeWrapper,
+  stdenv,
+
   autoPatchelfHook,
+  buildNpmPackage,
+  copyDesktopItems,
+  fetchFromGitHub,
+  fetchNpmDeps,
   makeDesktopItem,
-  imagemagick,
-  wasm-pack,
   rustPlatform,
-  cargo,
-  rustc,
-  wasm-bindgen-cli_0_2_121,
-  binaryen,
+
+  electron_42,
+  ente-web,
+  ffmpeg,
+  imagemagick,
+  makeWrapper,
+  vips,
 }:
 let
-  electron = electron_41;
-
-  resourcesDir =
-    if stdenv.hostPlatform.isDarwin then
-      "$out/Applications/ente.app/Contents/Resources"
-    else
-      "$out/share/ente-desktop/resources";
-in
-
-stdenv.mkDerivation (finalAttrs: {
-  pname = "ente-desktop";
-  version = "1.7.24";
+  version = "1.7.27";
 
   src = fetchFromGitHub {
     owner = "ente";
@@ -43,48 +29,52 @@ stdenv.mkDerivation (finalAttrs: {
       "web"
       "rust"
     ];
-    tag = "photosd-v${finalAttrs.version}";
-    hash = "sha256-/dO9qLJKbqR5h/GEJW9rLO1jNTa5GkqnJ9ORPSf5R8o=";
+
+    tag = "photos-desktop-v${version}";
+    hash = "sha256-H6ac1xcoQsxftREukIHpcYc8lFxnvmyxS9xNcr8H3/U=";
   };
+
+  electron = electron_42;
+
+  resourcesDir =
+    if stdenv.hostPlatform.isDarwin then
+      "$out/Applications/ente.app/Contents/Resources"
+    else
+      "$out/share/ente-desktop/resources";
+
+  webCargoDeps = rustPlatform.fetchCargoVendor {
+    inherit src;
+    name = "ente-desktop-web-cargo-deps";
+    sourceRoot = "${src.name}/rust";
+    hash = "sha256-RWemVZmH/NAQ+yDv2jwLhpHZpcp8BK3lZ4GjHMVLGLA=";
+  };
+
+  webNpmDeps = fetchNpmDeps {
+    inherit src;
+    name = "ente-desktop-web-npm-deps";
+    sourceRoot = "${src.name}/web";
+    hash = "sha256-iSqxANhb/DC/57Ltw4F9YKjTlJaAeZG3K4NrUN/+omA=";
+  };
+
+  webApp = ente-web.overrideAttrs {
+    inherit version src;
+    npmDeps = webNpmDeps;
+    cargoDeps = webCargoDeps;
+
+    _ENTE_IS_DESKTOP = "1";
+  };
+in
+buildNpmPackage (finalAttrs: {
+  pname = "ente-desktop";
+  inherit version src;
 
   sourceRoot = "${finalAttrs.src.name}/desktop";
-  cargoRoot = "../rust";
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs)
-      pname
-      version
-      src
-      sourceRoot
-      cargoRoot
-      ;
-    hash = "sha256-F+g/6mcMnplOkTlR/vedS3MhimFAbXFZi6CTJ/cqoU0=";
-  };
-  offlineCache = fetchYarnDeps {
-    name = "ente-desktop-${finalAttrs.version}-offline-cache";
-    inherit (finalAttrs) src sourceRoot;
-    hash = "sha256-ne3gyI6psDpYzCPpepIIWao0yBiiv9qXQ+Iri3ELK/U=";
-  };
-  webOfflineCache = fetchYarnDeps {
-    name = "ente-desktop-${finalAttrs.version}-web-offline-cache";
-    inherit (finalAttrs) src;
-    sourceRoot = "${finalAttrs.src.name}/web";
-    hash = "sha256-MqsmOHVyPz+YiwNmrs447wrQ/Nk+t5TrLMsbDITM8p0=";
-  };
+  npmDepsHash = "sha256-qhimZHLD6mTUomZylLCyWWwPPi/m0VgjkMXGu2Wdkis=";
 
   nativeBuildInputs = [
-    nodejs
-    yarnConfigHook
-    makeWrapper
     imagemagick
-
-    wasm-pack
-    rustPlatform.cargoSetupHook
-    cargo
-    rustc
-    rustc.llvmPackages.lld
-    wasm-bindgen-cli_0_2_121
-    binaryen
+    makeWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook # for onnxruntime
@@ -101,38 +91,25 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "process.resourcesPath" "\"${resourcesDir}\""
   '';
 
-  postConfigure = ''
-    chmod u+w -R ..
+  preConfigure = ''
+    cp -R ${webApp}/ out/
 
-    pushd ../web
-    offlineCache=$webOfflineCache yarnConfigHook
-    rm -rf node_modules/wasm-pack node_modules/.bin/wasm-pack
-    popd
-
-    cp -r ${electron.dist} ./electron_dist
-    chmod u+w -R ./electron_dist
+    cp -R ${electron.dist} ./electron_dist
+    chmod -R u+w ./electron_dist
   '';
 
-  buildPhase = ''
-    runHook preBuild
+  npmBuildScript = "build-main";
 
-    pushd ../web
-    _ENTE_IS_DESKTOP=1 yarn build
-    popd
-    cp -r ../web/apps/photos/out out
-
-    yarn run tsc
-    yarn run electron-builder -- \
-      --dir \
-      --c.electronDist=./electron_dist \
-      --c.electronVersion=${electron.version} \
-      ${lib.optionalString stdenv.hostPlatform.isDarwin ''
-        --c.mac.identity=null \
-        --c.mac.notarize=false \
-      ''}
-
-    runHook postBuild
-  '';
+  npmBuildFlags = [
+    "--"
+    "--dir"
+    "--c.electronDist=./electron_dist"
+    "--c.electronVersion=${electron.version}"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--c.mac.identity=null"
+    "--c.mac.notarize=false"
+  ];
 
   installPhase = ''
     runHook preInstall
