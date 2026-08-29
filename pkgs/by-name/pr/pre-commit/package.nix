@@ -66,7 +66,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ]
   ++ (with python3Packages; [
     pytest-env
-    pytest-forked
     pytest-xdist
     re-assert
   ])
@@ -92,10 +91,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     patchShebangs pre_commit/resources/hook-tmpl
   '';
-
-  pytestFlags = [
-    "--forked"
-  ];
 
   preCheck = ''
     export GIT_AUTHOR_NAME=test GIT_COMMITTER_NAME=test \
