@@ -202,6 +202,10 @@ stdenv.mkDerivation rec {
     "-DGRASS_PREFIX${gmajor}=${grass}/grass${gmajor}${gminor}"
   );
 
+  postInstall = ''
+    install -Dm644 -t "$out/share/mime/packages" "$src/debian/qgis.xml"
+  '';
+
   qtWrapperArgs = [
     "--set QT_QPA_PLATFORM_PLUGIN_PATH ${qtbase}/${qtbase.qtPluginPrefix}/platforms"
   ];
