@@ -4,16 +4,28 @@
   cmake,
   config,
   cudaSupport ? config.cudaSupport,
+  rocmSupport ? config.rocmSupport,
   fetchFromGitHub,
   nanobind,
   ninja,
   setuptools,
   torch,
   comfyui,
+  symlinkJoin,
 }:
 
 let
   inherit (torch) cudaPackages;
+  inherit (torch) rocmPackages;
+  rocm-sdk = symlinkJoin {
+    name = "rocm-merged";
+    paths = with rocmPackages; [
+      clr
+      rocm-comgr
+      rocm-device-libs
+      rocm-runtime
+    ];
+  };
 in
 buildPythonPackage (finalAttrs: {
   pname = "comfy-kitchen";
@@ -28,13 +40,15 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-apa7N9Y0bt4fpbMTP0qRUC0QnMuJvoxoCOeWONWCExo=";
   };
 
-  buildInputs = lib.optionals cudaSupport (
-    with cudaPackages;
-    [
-      cuda_cudart
-      libcublas
-    ]
-  );
+  buildInputs =
+    lib.optionals cudaSupport (
+      with cudaPackages;
+      [
+        cuda_cudart
+        libcublas
+      ]
+    )
+    ++ lib.optionals rocmSupport [ rocm-sdk ];
 
   build-system = [
     cmake
@@ -48,18 +62,25 @@ buildPythonPackage (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   pypaBuildFlags =
-    if cudaSupport then
-      [
+    if cudaSupport || rocmSupport then
+      lib.optionals cudaSupport [
         ''--config-setting=--cuda-archs="${
           lib.concatMapStringsSep ";" cudaPackages.flags.dropDots torch.cudaCapabilities
         }"''
       ]
+      ++ lib.optionals rocmSupport [
+        "-C--global-option=--hip"
+      ]
     else
       [ "-C--global-option=--no-cuda" ];
 
-  env = lib.optionalAttrs cudaSupport {
-    CUDA_HOME = cudaPackages.cuda_nvcc;
-  };
+  env =
+    lib.optionalAttrs cudaSupport {
+      CUDA_HOME = cudaPackages.cuda_nvcc;
+    }
+    // lib.optionalAttrs rocmSupport {
+      ROCM_HOME = rocm-sdk;
+    };
 
   # Upstream tests exercise the CUDA/Triton kernel backends; this build
   # might use BUILD_NO_CUDA = True, so those backends would be unavailable
