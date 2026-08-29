@@ -25,7 +25,6 @@
   rsync,
 
   appName ? "vanillatd",
-  CMAKE_BUILD_TYPE ? "RelWithDebInfo", # "Choose the type of build, recommended options are: Debug Release RelWithDebInfo"
 }:
 assert lib.assertOneOf "appName" appName [
   "vanillatd"
@@ -69,7 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_VANILLARA" (appName == "vanillara"))
     (lib.cmakeBool "BUILD_REMASTERTD" (appName == "remastertd"))
     (lib.cmakeBool "BUILD_REMASTERRA" (appName == "remasterra"))
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" CMAKE_BUILD_TYPE)
   ];
 
   # TODO: Fix this from the upstream
