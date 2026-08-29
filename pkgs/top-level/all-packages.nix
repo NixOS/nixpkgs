@@ -3942,7 +3942,7 @@ with pkgs;
   buildNimSbom = callPackage ../build-support/build-nim-sbom.nix { };
   nimOverrides = callPackage ./nim-overrides.nix { };
 
-  nextpnrWithGui = libsForQt5.callPackage ../by-name/ne/nextpnr/package.nix {
+  nextpnrWithGui = callPackage ../by-name/ne/nextpnr/package.nix {
     enableGui = true;
   };
 
