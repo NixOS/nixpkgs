@@ -617,6 +617,11 @@ document.addEventListener("DOMContentLoaded", createObserver);
 def _to_base26(n: int) -> str:
     return (_to_base26(n // 26) if n > 26 else "") + chr(ord("A") + n % 26)
 
+_NON_ALNUM = re.compile(r"[^a-z0-9]+")
+def _id_segment(fname: str) -> str:
+    stem = fname.removesuffix(".md").lower()
+    return _NON_ALNUM.sub("-", stem).strip("-")
+
 @dataclass
 class ConfigLeaf:
     file: str
@@ -627,6 +632,9 @@ class ConfigGroup:
     label: str
     children: list["ConfigNode"]
     id: str | None = None
+    # migration support for 'auto-id-prefix'
+    # id-prefix can only be set on a group, matching the legacy "includes" behavior
+    id_prefix: str | None = None
 
 ConfigNode = ConfigLeaf | ConfigGroup
 
@@ -725,7 +733,10 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
         gid = item.get('id')
         if gid is not None and (not isinstance(gid, str) or not gid):
             raise SrcError(src=src, description=f"{where}: 'id' must be a non-empty string")
-        return ConfigGroup(label=label, children=self._parse_config_nodes(children, where, src), id=gid)
+        id_prefix = item.get('id-prefix')
+        if id_prefix is not None and (not isinstance(id_prefix, str)):
+            raise SrcError(src=src, description=f"{where}: 'id-prefix' must be a string when being set")
+        return ConfigGroup(label=label, children=self._parse_config_nodes(children, where, src), id=gid, id_prefix=id_prefix)
 
     def _prepend_config(self, infile: Path, tokens: list[Token]) -> None:
         if self._config is None:
@@ -737,21 +748,22 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
         # a change to the preamble must change this index too.
         tokens[6:6] = [include]
 
-    def _build_config_include(self, nodes: list[ConfigNode], config_file: Path) -> Token:
-        included = [self._build_config_item(node, config_file) for node in nodes]
+    def _build_config_include(self, nodes: list[ConfigNode], config_file: Path, id_prefix: str | None = None) -> Token:
+        included = [self._build_config_item(node, config_file, id_prefix) for node in nodes]
         token = Token('included_page', '', 0, map=[0, 1])
         token.meta['included'] = included
         token.meta['include-args'] = {}
         return token
 
-    def _build_config_item(self, node: ConfigNode, config_file: Path) -> tuple[list[Token], Path]:
+    def _build_config_item(self, node: ConfigNode, config_file: Path, id_prefix: str | None = None) -> tuple[list[Token], Path]:
         if isinstance(node, ConfigLeaf):
             path = (config_file.parent / node.file).resolve()
             leaf_src = path.read_text()
+            prefix = f"{id_prefix}-{_id_segment(node.file)}" if id_prefix is not None else None
             self._base_paths.append(path)
             self._current_type.append('page')
             try:
-                fragment = self._parse(leaf_src)
+                fragment = self._parse(leaf_src, auto_id_prefix=prefix)
             finally:
                 self._current_type.pop()
                 self._base_paths.pop()
@@ -761,7 +773,11 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
 
         # TocEntry._collect_entries reads nav-label and nav-id.
         # it builds the sidebar group from them.
-        group = self._build_config_include(node.children, config_file)
+        group = self._build_config_include(
+            node.children,
+            config_file,
+            # use the current id_prefix if set; otherwise inherit whatever the parent defined
+            node.id_prefix if node.id_prefix is not None else id_prefix)
         group.meta['nav-label'] = node.label
         if node.id is not None:
             group.meta['nav-id'] = node.id
