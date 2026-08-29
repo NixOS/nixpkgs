@@ -62,7 +62,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     go
     nodejs
     perl
-    versionCheckHook
     writableTmpDirAsHomeHook
   ]
   ++ (with python3Packages; [
@@ -81,6 +80,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # i686-linux: dotnet-sdk not available
     dotnet-sdk
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   postPatch = ''
     substituteInPlace pre_commit/resources/hook-tmpl \
