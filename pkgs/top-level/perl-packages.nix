@@ -16373,6 +16373,31 @@ with self;
     };
   };
 
+  HTMLQuery = buildPerlPackage rec {
+    pname = "HTML-Query";
+    version = "0.09";
+
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KA/KAMELKEV/HTML-Query-${version}.tar.gz";
+      hash = "sha256-HZocn4rE8YmmOi3JWDg7Y0kf2/Ap7gZYoJtVqu+vMIk=";
+    };
+
+    propagatedBuildInputs = with perlPackages; [
+      Badger
+      HTMLTree
+    ];
+
+    meta = {
+      changelog = "https://metacpan.org/dist/HTML-Query/changes";
+      description = "jQuery-like selection queries for HTML::Element";
+      homepage = "https://metacpan.org/pod/HTML::Query";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   HTMLQuoted = buildPerlPackage {
     pname = "HTML-Quoted";
     version = "0.04";
