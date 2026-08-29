@@ -2305,6 +2305,26 @@ with self;
     };
   };
 
+  Badger = buildPerlPackage rec {
+    pname = "Badger";
+    version = "0.16";
+
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AB/ABW/Badger-${version}.tar.gz";
+      hash = "sha256-tL6Z4I3evcvalYONiqGvEgrB7OB71dszM1+7PzLDqqc=";
+    };
+
+    meta = {
+      changelog = "https://metacpan.org/dist/Badger/changes";
+      description = "Perl Application Programming Toolkit";
+      homepage = "https://github.com/abw/Badger";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   BarcodeZBar = buildPerlPackage {
     pname = "Barcode-ZBar";
     version = "0.04pre";
