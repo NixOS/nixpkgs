@@ -17,7 +17,7 @@ buildNpmPackage {
 
   sourceRoot = "${headlamp-server.src.name}/app";
 
-  npmDepsHash = "sha256-gZr+ni3dmrjqHDwoFxgGM0/Kf3R1Qy2SZetLtGtDY+0=";
+  npmDepsHash = "sha256-zhz1axVtLffWw7/ui7kqeFZj/kaMHxkD4lIma4CQFME=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
