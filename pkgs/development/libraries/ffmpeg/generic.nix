@@ -116,6 +116,7 @@
   withOpenal ? withFullDeps, # OpenAL 1.1 capture support
   withOpenapv ? withHeadlessDeps && lib.versionAtLeast version "8.0", # APV encoding support
   withOpencl ? withHeadlessDeps,
+  withOpenColorIO ? withFullDeps && lib.versionAtLeast version "8.1", # Color Managment
   withOpencoreAmrnb ? withFullDeps && withVersion3, # AMR-NB de/encoder
   withOpencoreAmrwb ? withFullDeps && withVersion3, # AMR-WB decoder
   withOpengl ? withFullDeps && !stdenv.hostPlatform.isDarwin, # OpenGL rendering
@@ -329,6 +330,7 @@
   openal,
   openapv,
   opencl-headers, # OpenCL headers
+  opencolorio,
   opencore-amr,
   openh264,
   openjpeg,
@@ -701,6 +703,11 @@ stdenv.mkDerivation (
     ]
     ++ [
       (enableFeature withOpencl "opencl")
+    ]
+    ++ lib.optionals (versionAtLeast version "8.1") [
+      (enableFeature withOpenColorIO "libopencolorio")
+    ]
+    ++ [
       (enableFeature withOpencoreAmrnb "libopencore-amrnb")
       (enableFeature withOpencoreAmrwb "libopencore-amrwb")
       (enableFeature withOpengl "opengl")
@@ -931,6 +938,7 @@ stdenv.mkDerivation (
         ocl-icd
         opencl-headers
       ]
+      ++ optionals withOpenColorIO [ opencolorio ]
       ++ optionals (withOpencoreAmrnb || withOpencoreAmrwb) [ opencore-amr ]
       ++ optionals withOpengl [
         libGL
