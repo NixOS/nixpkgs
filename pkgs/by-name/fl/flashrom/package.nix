@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flashrom";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchurl {
     url = "https://download.flashrom.org/releases/flashrom-v${finalAttrs.version}.tar.xz";
-    hash = "sha256-Qyis6YM/fv58M0vdc0gs3oKGgZgmzAAUnoP7qWvzq08=";
+    hash = "sha256-ZUycYXRcJQzTtczQ5W/EPudpgPkqXgeEIEIGOdZpdaI=";
   };
 
   nativeBuildInputs = [
