@@ -173,6 +173,7 @@ buildNpmPackage (finalAttrs: {
       pinpox
       yuka
       Br1ght0ne
+      wrench-exile-legacy
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
