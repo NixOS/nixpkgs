@@ -2,40 +2,23 @@
   appimageTools,
   fetchurl,
   lib,
-  syncthing,
 }:
 
 let
   pname = "wordhunter";
-  version = "1.0.6";
+  version = "1.1.0";
 
   src = fetchurl {
     url = "https://github.com/Ironship/WordHunter/releases/download/WordHunter${version}/WordHunter-${version}-x86_64.AppImage";
-    hash = "sha256-ARlLOghVz9THbmeXe0vS60qiM8OTy9rxe3qam9AJ2z8=";
+    hash = "sha256-e+dduzoxYahFHKitLcEWGSHA7XkagQj0iGl4HuLKMCI=";
   };
 
-  appimageContents = appimageTools.extract {
-    inherit pname version src;
-
-    postExtract = ''
-      rm "$out/usr/bin/syncthing"
-      test ! -e "$out/usr/bin/syncthing"
-    '';
-  };
-
-  syncthingExecutable = lib.getExe syncthing;
-  wrapperProfile = ''
-    export WORDHUNTER_SYNCTHING="${syncthingExecutable}"
-  '';
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 (appimageTools.wrapAppImage {
   inherit pname version;
 
   src = appimageContents;
-
-  extraPkgs = _pkgs: [ syncthing ];
-
-  profile = wrapperProfile;
 
   extraInstallCommands = ''
     install -m 444 -D \
@@ -51,21 +34,12 @@ in
       "$out/share/metainfo/com.wordhunter.app.metainfo.xml"
     substituteInPlace "$out/share/metainfo/com.wordhunter.app.metainfo.xml" \
       --replace-fail \
-        '<launchable type="desktop-id">Word Hunter.desktop</launchable>' \
-        '<launchable type="desktop-id">com.wordhunter.app.desktop</launchable>' \
-      --replace-fail \
         '<binary>word-hunter-rustified</binary>' \
         '<binary>wordhunter</binary>'
   '';
 
   passthru = {
-    inherit
-      appimageContents
-      src
-      syncthingExecutable
-      wrapperProfile
-      ;
-    systemSyncthing = syncthing;
+    inherit appimageContents src;
   };
 
   meta = {
