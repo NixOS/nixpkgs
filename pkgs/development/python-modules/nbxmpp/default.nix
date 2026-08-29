@@ -16,7 +16,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nbxmpp";
-  version = "7.3.0";
+  version = "7.4.0";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -24,7 +24,7 @@ buildPythonPackage (finalAttrs: {
     owner = "gajim";
     repo = "python-nbxmpp";
     tag = finalAttrs.version;
-    hash = "sha256-UsWCZ5g7LJImqc32kBfyLaGrT3DKsl8/muWUbPufmXs=";
+    hash = "sha256-Xg2RFEUbvshVDjWftnAx4nbOor1q8naeG2vvukDFwHY=";
   };
 
   nativeBuildInputs = [
