@@ -23,6 +23,7 @@
   callPackage,
   symlinkJoin,
   rsync,
+  unstableGitUpdater,
 
   appName ? "vanillatd",
 }:
@@ -40,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     # FIXME: This version has format-security
     rev = "ebc8083d5d149f98abc20f460a512a2d16fdc59f";
     hash = "sha256-iUF9UFc0FMvOwLkGqSyLYGy5E8YqNySqDp5VVUa+u4o=";
+
   };
   # TODO: Remove this. Just add this flag to ignore the format-security error temporarily.
   env.NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
@@ -123,6 +125,13 @@ stdenv.mkDerivation (finalAttrs: {
     in
     {
       inherit packages;
+
+      updateScript = unstableGitUpdater {
+        # A 'latest' tag exists,
+        # but it appears to be there only for upstream to provide builds
+        # and might move around.
+        hardcodeZeroVersion = true;
+      };
 
       withPackages =
         cb:
