@@ -122,6 +122,9 @@ lib.extendMkDerivation {
 
       buildInputs = buildInputs ++ lib.optionals (escriptBinName != null) [ erlang ];
 
+      __structuredAttrs = true;
+      strictDeps = true;
+
       __darwinAllowLocalNetworking = true;
 
       env = {
