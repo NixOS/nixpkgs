@@ -11,13 +11,13 @@
 ;;;; Tests that can be run in a batch Emacs
 
 (ert-deftest with-packages-requested-packages-are-available ()
-  (should (require 'dash nil t))
-  (should (require 'flx-ido nil t)))
+  (should (package-installed-p 'dash))
+  (should (package-installed-p 'flx-ido)))
 
 (ert-deftest with-packages-deps-of-requested-packages-are-available ()
   "Test https://github.com/NixOS/nixpkgs/issues/388829."
-  (should (require 'flx nil t))
-  (should (require 'flx-ido nil t)))
+  (should (package-installed-p 'flx))
+  (should (package-installed-p 'flx-ido)))
 
 (ert-deftest with-packages-info-manual-of-requested-packages-is-available ()
   "Test https://debbugs.gnu.org/cgi/bugreport.cgi?bug=81105."
