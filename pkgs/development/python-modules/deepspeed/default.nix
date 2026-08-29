@@ -51,7 +51,7 @@ in
 
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "deepspeed";
-  version = "0.19.5";
+  version = "0.19.6";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -60,7 +60,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     repo = "DeepSpeed";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-OIy8AehiwKhbdWrWslwc3yimAH4QYobhgg/inkHDx/U=";
+    hash = "sha256-ospqxEo/UVt9eRolFZkNKnNnG02I+LWpEKXXJvjrH6Q=";
   };
 
   postPatch = ''
