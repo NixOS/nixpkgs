@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  testers,
   nix-update-script,
   fetchFromGitLab,
   meson,
@@ -70,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (gst_all_1) gst-plugins-good gst-plugins-bad gst-plugins-ugly;
       inherit gnuradio vips;
       qt6-qtmultimedia = qt6.qtmultimedia;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
 
     updateScript = nix-update-script { };
@@ -79,6 +81,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Oil Runtime Compiler";
     homepage = "https://gstreamer.freedesktop.org/projects/orc.html";
     changelog = "https://gitlab.freedesktop.org/gstreamer/orc/-/blob/${finalAttrs.version}/RELEASE";
+    pkgConfigModules = map (name: "${name}-${lib.versions.majorMinor finalAttrs.version}") [
+      "orc"
+      "orc-test"
+    ];
     # The source code implementing the Marsenne Twister algorithm is licensed
     # under the 3-clause BSD license. The rest is 2-clause BSD license.
     license = with lib.licenses; [
