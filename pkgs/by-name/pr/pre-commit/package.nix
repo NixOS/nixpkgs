@@ -216,6 +216,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/pre-commit/pre-commit/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      booxter
       borisbabic
       savtrip
     ];
