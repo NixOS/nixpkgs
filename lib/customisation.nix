@@ -829,7 +829,16 @@ rec {
 
     - Additional callable set attributes
 
-      `extendMkDerivation` add/pass additional attributes to the result callable set, including the core configurations.
+      `extendMkDerivation` add/pass additional attributes to the result callable set, including
+
+      - Core configurations
+
+      - `cumulation`
+
+        The cumulated version of the core configurations
+        from the bottom-most `constructDrv` to the current configuration.
+        That is, `lib.extendMkDerivation (cfg // cumulation)` is equivalent to `lib.extendMkDerivation cfg`,
+        while `cumulation.constructDrv` is usually a variation of `stdenv.mkDerivation`.
 
     # Type
 
@@ -894,7 +903,44 @@ rec {
       extendDrvArgs,
       inheritFunctionArgs ? true,
       transformDrv ? id,
-    }:
+    }@cfg:
+    let
+      cumulation =
+        if constructDrv ? cumulation then
+          {
+            inherit (constructDrv.cumulation) constructDrv;
+            excludeDrvArgNames = lib.uniqueStrings (
+              constructDrv.cumulation.excludeDrvArgNames ++ excludeDrvArgNames
+            );
+            extendDrvArgs =
+              final: previous:
+              constructDrv.cumulation.extendDrvArgs final (
+                # Absorb `excludeDrvArgNames`'s functionality.
+                (if excludeDrvArgNames == [ ] then previous else removeAttrs previous excludeDrvArgNames)
+                // extendDrvArgs final previous
+              );
+            transformDrv =
+              if cfg ? transformDrv then
+                drv: transformDrv (constructDrv.cumulation.transformDrv drv)
+              else
+                constructDrv.cumulation.transformDrv;
+          }
+        else
+          {
+            inherit
+              constructDrv
+              excludeDrvArgNames
+              transformDrv
+              ;
+            extendDrvArgs =
+              final: previous:
+              let
+                background =
+                  if excludeDrvArgNames != [ ] then removeAttrs previous excludeDrvArgNames else previous;
+              in
+              background // extendDrvArgs final previous;
+          };
+    in
     {
       # Adds the fixed-point style support
       __functor =
@@ -920,6 +966,7 @@ rec {
       inherit
         # Expose to the result build helper.
         constructDrv
+        cumulation
         excludeDrvArgNames
         extendDrvArgs
         transformDrv
