@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "eartag";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-Iwfk0SqxYF2bzkKZNqGonJh8MQ2c+K1wN0o4GECR/Rw=";
   };
 
@@ -60,7 +60,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     libadwaita
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     aiofiles
     aiohttp
     pygobject3
@@ -86,12 +86,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://gitlab.gnome.org/World/eartag";
     description = "Simple music tag editor";
     changelog = "https://gitlab.gnome.org/World/eartag/-/releases/${finalAttrs.version}";
-    # This seems to be using ICU license but we're flagging it to MIT license
-    # since ICU license is a modified version of MIT and to prevent it from
-    # being incorrectly identified as unfree software.
     license = lib.licenses.mit;
     mainProgram = "eartag";
-    maintainers = [ ];
     teams = [ lib.teams.gnome-circle ];
   };
 })
