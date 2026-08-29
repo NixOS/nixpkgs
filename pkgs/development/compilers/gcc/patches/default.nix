@@ -133,8 +133,8 @@ optionals noSysDirs (
       # Patches from https://github.com/iains/gcc-16-branch
       (fetchpatch {
         name = "gcc-16-darwin-aarch64-support.patch";
-        url = "https://raw.githubusercontent.com/Homebrew/homebrew-core/70e2a9e1d072fa3bc34cf41d97f4b65bede2b01e/Patches/gcc/gcc-16.1.0.diff";
-        hash = "sha256-dXfozKH//TRjAph7hUok7850hOdujTTi/iFM2HFA8fw=";
+        url = "https://raw.githubusercontent.com/Homebrew/homebrew-core/f236c82e26ee095ff098966820e40a8566f1704e/Patches/gcc/gcc-16.2.0.diff";
+        hash = "sha256-RqJfcA4mL17Wu+alLSu5SzZuPhfY6n5htufuof7xhKQ=";
       })
       # Fixes detection of Darwin deployment target.
       ./14/libgcc-darwin-detection.patch
