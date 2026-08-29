@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keypunch";
-  version = "6.3";
+  version = "7.0";
 
   src = fetchFromGitHub {
     owner = "bragefuglseth";
     repo = "keypunch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NjPC7WbzOk0tDjM8la+TKGy+U2NNT2kwcrSkaG7TylQ=";
+    hash = "sha256-I6nHobhQqcUdfTXDP9oIx+0BJz/VKaQb/OD77VQsWek=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
