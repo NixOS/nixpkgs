@@ -127462,11 +127462,11 @@
   "repo": "swift-emacs/swift-mode",
   "unstable": {
    "version": [
-    20260801,
-    1244
+    20260827,
+    1241
    ],
-   "commit": "610b2c24433c11c30a39a6799af69b10cd3bec97",
-   "sha256": "1qjkka6fx9sw14gzjqmyiny0z1mvcyyzmr74a96vndfbx576i9xp"
+   "commit": "bb4ef3a344a04ec97c8707ad8c5aadc2f446ad02",
+   "sha256": "1kv2m8lbdv71p7b6nqwfi5cbmda29faf24lx9hn472lkil95x5sx"
   },
   "stable": {
    "version": [
