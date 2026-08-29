@@ -10,6 +10,7 @@
   withPlymouth ? false,
   plymouth,
   qrencode,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,6 +40,13 @@ stdenv.mkDerivation (finalAttrs: {
     qrencode
   ]
   ++ lib.optional withPlymouth plymouth;
+
+  passthru.tests = {
+    inherit (nixosTests.tpm2-totp) cli;
+  }
+  // lib.optionalAttrs withPlymouth {
+    inherit (nixosTests.tpm2-totp) plymouth;
+  };
 
   meta = {
     description = "Attest the trustworthiness of a device against a human using time-based one-time passwords";
