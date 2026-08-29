@@ -11,6 +11,7 @@
   pulseSupport ? stdenv.hostPlatform.isLinux,
   alsa-lib,
   autoreconfHook,
+  fmt,
   jack2,
   libpulseaudio,
   libsidplayfp,
@@ -77,6 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
           ]
         )
       }"
+  ''
+  # Ensure we don't accidentally fall back to the vendored fmt
+  + ''
+    rm -vr libs/fmt_internal
   '';
 
   strictDeps = true;
@@ -88,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    fmt
     libsidplayfp
   ]
   ++ lib.optionals alsaSupport [
@@ -98,6 +104,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals pulseSupport [
     libpulseaudio
+  ];
+
+  configureFlags = [
+    (lib.strings.withFeature true "system-fmt")
   ];
 
   enableParallelBuilding = true;
