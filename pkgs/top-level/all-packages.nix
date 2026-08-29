@@ -7892,9 +7892,7 @@ with pkgs;
     kernel = null;
   }; # sysdig is a client, for a driver look at linuxPackagesFor
 
-  sysprof = callPackage ../development/tools/profiling/sysprof { };
-
-  libsysprof-capture = callPackage ../development/tools/profiling/sysprof/capture.nix { };
+  libsysprof-capture = callPackage ../by-name/sy/sysprof/capture.nix { };
 
   systemd = callPackage ../os-specific/linux/systemd {
     # break some cyclic dependencies
