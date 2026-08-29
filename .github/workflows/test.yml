@@ -85,6 +85,7 @@ jobs:
               'ci/github-script/prepare.js',
               'ci/github-script/reviewers.js',
               'ci/github-script/reviews.js',
+              'ci/github-script/stale-conflict.js',
               'ci/github-script/supportedSystems.js',
               'ci/github-script/withRateLimit.js',
               'ci/pinned.json',
