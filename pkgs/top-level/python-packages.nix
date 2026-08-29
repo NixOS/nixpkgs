@@ -75,6 +75,8 @@ self: super: with self; {
 
   adal = callPackage ../development/python-modules/adal { };
 
+  adaptix = callPackage ../development/python-modules/adaptix { };
+
   adax = callPackage ../development/python-modules/adax { };
 
   adax-local = callPackage ../development/python-modules/adax-local { };
@@ -4043,8 +4045,6 @@ self: super: with self; {
   databricks-sql-connector = callPackage ../development/python-modules/databricks-sql-connector { };
 
   dataclass-csv = callPackage ../development/python-modules/dataclass-csv { };
-
-  dataclass-factory = callPackage ../development/python-modules/dataclass-factory { };
 
   dataclass-wizard = callPackage ../development/python-modules/dataclass-wizard { };
 
