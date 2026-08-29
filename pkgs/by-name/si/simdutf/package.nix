@@ -22,6 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+
+    # Enabling C++20 to get atomic support
+    (lib.cmakeFeature "SIMDUTF_CXX_STANDARD" "20")
+    (lib.cmakeBool "SIMDUTF_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "SIMDUTF_ATOMIC_BASE64_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   nativeBuildInputs = [
@@ -32,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libiconv
   ];
+
+  doCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };
