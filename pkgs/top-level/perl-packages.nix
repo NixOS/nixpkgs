@@ -37743,13 +37743,13 @@ with self;
 
   URI = buildPerlPackage {
     pname = "URI";
-    version = "5.21";
+    version = "5.36";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/URI-5.21.tar.gz";
-      hash = "sha256-liZYYM1hveFuhBXc+/EIBW3hYsqgrDf4HraVydLgq3c=";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/URI-5.36.tar.gz";
+      hash = "sha256-MnGeV0E9tuGEkuEEcHuVwiEN9jdhTFEuc2jJ7DwveDs=";
     };
+    propagatedBuildInputs = [ MIMEBase32 ];
     buildInputs = [
-      TestFatal
       TestNeeds
       TestWarnings
     ];
