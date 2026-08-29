@@ -10,6 +10,7 @@
   lomiri-action-api,
   lomiri-content-hub,
   lomiri-ui-toolkit,
+  mesa,
   pkg-config,
   qtbase,
   qtdeclarative,
@@ -68,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   nativeCheckInputs = [
+    mesa.llvmpipeHook # ShapeMaterial needs an OpenGL context: https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/issues/35
     qtdeclarative # qmltestrunner
     xvfb-run
   ];
@@ -78,8 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [ (lib.cmakeBool "ENABLE_AUTOPILOT" false) ];
 
-  # Only test segfaults in Nix sandbox, see LSS for details
-  doCheck = false;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   preCheck =
     let
