@@ -19398,6 +19398,8 @@ self: super: with self; {
 
   specfile = callPackage ../development/python-modules/specfile { };
 
+  specialized-turbo = callPackage ../development/python-modules/specialized-turbo { };
+
   spectra = callPackage ../development/python-modules/spectra { };
 
   spectral-cube = callPackage ../development/python-modules/spectral-cube { };
