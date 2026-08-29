@@ -51,7 +51,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     identify
     nodeenv
     pyyaml
-    toml
     virtualenv
   ];
 
