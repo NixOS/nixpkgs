@@ -54,6 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ libadwaita ];
 
+  # Required to avoid building with development assets.
+  # See https://github.com/bragefuglseth/keypunch/blob/v7.0/meson.build#L18-L21
+  mesonBuildType = "release";
+
   passthru = {
     updateScript = nix-update-script { };
   };
