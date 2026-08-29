@@ -18,7 +18,8 @@ in
       package = lib.mkPackageOption pkgs "step-ca" { };
       address = lib.mkOption {
         type = lib.types.str;
-        example = "127.0.0.1";
+        default = "127.0.0.1";
+        example = "192.168.1.1";
         description = ''
           The address (without port) the certificate authority should listen at.
           This combined with {option}`services.step-ca.port` overrides {option}`services.step-ca.settings.address`.
@@ -85,7 +86,12 @@ in
       systemd.packages = [ cfg.package ];
 
       # configuration file indirection is needed to support reloading
-      environment.etc."smallstep/ca.json".source = configFile;
+      environment = {
+        etc."smallstep/ca.json".source = configFile;
+        systemPackages = [
+          pkgs.step-cli
+        ];
+      };
 
       systemd.services."step-ca" = {
         wantedBy = [ "multi-user.target" ];
