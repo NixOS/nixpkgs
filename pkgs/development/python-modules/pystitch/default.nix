@@ -5,12 +5,10 @@
   setuptools,
   pytestCheckHook,
 }:
-let
+
+buildPythonPackage (finalAttrs: {
   pname = "pystitch";
   version = "1.0.1";
-in
-buildPythonPackage {
-  inherit pname version;
   pyproject = true;
 
   src = fetchFromGitHub {
