@@ -610,7 +610,7 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
 @patch("subprocess.run", autospec=True)
 @patch("uuid.uuid4", autospec=True)
 @patch(get_qualified_name(nr.services.cleanup_ssh), autospec=True)
-def test_execute_nix_switch_build_target_host(
+def test_execute_nix_switch_build_target_host_custom_profile(
     mock_cleanup_ssh: Mock,
     mock_uuid4: Mock,
     mock_run: Mock,
@@ -654,10 +654,12 @@ def test_execute_nix_switch_build_target_host(
             "nixos-config=./configuration.nix",
             "-I",
             "nixpkgs=$HOME/.nix-defexpr/channels/pinned_nixpkgs",
+            "--profile-name",
+            "custom-profile",
         ]
     )
 
-    assert mock_run.call_count == 12
+    assert mock_run.call_count == 13
     mock_run.assert_has_calls(
         [
             call(
@@ -802,9 +804,27 @@ def test_execute_nix_switch_build_target_host(
                     "-c",
                     """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
+                    "mkdir",
+                    "-p",
+                    "/nix/var/nix/profiles/system-profiles",
+                ],
+                check=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "ssh",
+                    *nr.process.SSH_DEFAULT_OPTS,
+                    "user@target-host",
+                    "--",
+                    "sudo",
+                    "/bin/sh",
+                    "-c",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
+                    "sh",
                     "nix-env",
                     "-p",
-                    "/nix/var/nix/profiles/system",
+                    "/nix/var/nix/profiles/system-profiles/custom-profile",
                     "--set",
                     str(config_path),
                 ],
