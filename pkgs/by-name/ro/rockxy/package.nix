@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  undmg,
+  _7zz,
   versionCheckHook,
   writeShellScript,
   re-plistbuddy,
@@ -36,7 +36,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontBuild = true;
   dontFixup = true;
 
-  nativeBuildInputs = [ undmg ];
+  # Rockxy's DMG uses APFS, which is unsupported by undmg.
+  # Preserve symlinks and ignore Apple extended-attribute streams so they are
+  # not extracted as files that would invalidate the signed app bundle.
+  unpackCmd = "7zz x -snld -xr'!*:com.apple.*' $curSrc";
+
+  nativeBuildInputs = [ _7zz ];
 
   sourceRoot = ".";
 
