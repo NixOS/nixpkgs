@@ -14888,6 +14888,12 @@
     githubId = 59027018;
     name = "Andrey Khorokhorin";
   };
+  khssnv = {
+    email = "a.khssnv@gmail.com";
+    github = "khssnv";
+    githubId = 833019;
+    name = "Alisher Khassanov";
+  };
   khumba = {
     email = "bog@khumba.net";
     github = "khumba";
