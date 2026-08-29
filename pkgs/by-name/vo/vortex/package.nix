@@ -187,6 +187,12 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/main/package.json \
       --replace-fail '"version": "1.0.0"' '"version": "${finalAttrs.version}"'
 
+    # Packaged NXM handler is vortex-nxm.desktop; do not write a user-local one.
+    substituteInPlace src/renderer/src/util/protocolRegistration/linux/nxm.ts \
+      --replace-fail \
+        'return process.defaultApp === true || process.env.NODE_ENV === "development";' \
+        'return false;'
+
     # Generic Linux Proton binaries need NixOS' FHS runner.
     substituteInPlace src/renderer/src/util/linux/proton.ts \
       --replace-fail \
@@ -346,7 +352,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open-source mod manager from Nexus Mods";
     homepage = "https://github.com/Nexus-Mods/Vortex";
     changelog = "https://github.com/Nexus-Mods/Vortex/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl3Only;
+    license = with lib.licenses; [
+      gpl3Only
+      unfreeRedistributable
+    ];
     mainProgram = "vortex";
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [
