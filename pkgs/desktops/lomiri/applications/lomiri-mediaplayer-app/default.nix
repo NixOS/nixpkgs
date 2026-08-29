@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-mediaplayer-app";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-mediaplayer-app";
     tag = finalAttrs.version;
-    hash = "sha256-A1tAXQXDwVZ3ILFcJKCtbOm1iNxPFOXQIS6p7fPbqwM=";
+    hash = "sha256-1RamS4cOIxi1vGy0tldMYtgbtJ86r2K54DTOJqKMLuE=";
   };
 
   postPatch = ''
