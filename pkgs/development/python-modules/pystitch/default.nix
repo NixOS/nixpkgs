@@ -14,7 +14,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "inkstitch";
     repo = "pystitch";
-    rev = "8fc0b113e02ea81d9a507bfad3f7fd624a8895bd";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fVJ2RvrCrGl2k8YMjr6wTShqB8iSZBN5WaYdQ4F/iWc=";
   };
 
