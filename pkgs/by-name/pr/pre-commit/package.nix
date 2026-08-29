@@ -96,26 +96,21 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "--forked"
   ];
 
-  preCheck =
-    lib.optionalString (!(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64)) ''
-      # Disable outline atomics for rust tests on aarch64-linux.
-      export RUSTFLAGS="-Ctarget-feature=-outline-atomics"
-    ''
-    + ''
-      export GIT_AUTHOR_NAME=test GIT_COMMITTER_NAME=test \
-             GIT_AUTHOR_EMAIL=test@example.com GIT_COMMITTER_EMAIL=test@example.com \
-             VIRTUALENV_NO_DOWNLOAD=1 PRE_COMMIT_NO_CONCURRENCY=1
-    ''
-    + lib.optionalString (!i686Linux) ''
-      # Resolve `.NET location: Not found` errors for dotnet tests
-      export DOTNET_ROOT="${dotnet-sdk}/share/dotnet"
-    ''
-    + ''
-      git init -b master
+  preCheck = ''
+    export GIT_AUTHOR_NAME=test GIT_COMMITTER_NAME=test \
+           GIT_AUTHOR_EMAIL=test@example.com GIT_COMMITTER_EMAIL=test@example.com \
+           VIRTUALENV_NO_DOWNLOAD=1 PRE_COMMIT_NO_CONCURRENCY=1
+  ''
+  + lib.optionalString (!i686Linux) ''
+    # Resolve `.NET location: Not found` errors for dotnet tests
+    export DOTNET_ROOT="${dotnet-sdk}/share/dotnet"
+  ''
+  + ''
+    git init -b master
 
-      python -m venv --system-site-packages venv
-      source "$PWD/venv/bin/activate"
-    '';
+    python -m venv --system-site-packages venv
+    source "$PWD/venv/bin/activate"
+  '';
 
   postCheck = ''
     deactivate
