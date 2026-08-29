@@ -33,7 +33,7 @@ assert lib.assertOneOf "appName" appName [
 ];
 stdenv.mkDerivation (finalAttrs: {
   pname = appName;
-  version = "0.0.0";
+  version = "0-unstable-2024-06-27";
 
   src = fetchFromGitHub {
     owner = "TheAssemblyArmada";
