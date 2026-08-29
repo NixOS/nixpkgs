@@ -6631,6 +6631,13 @@
     githubId = 47667941;
     name = "Daylin Morgan";
   };
+  dazor = {
+    email = "dazorplasma@proton.me";
+    github = "DazorPlasma";
+    githubId = 134785336;
+    name = "Dazor Plasma";
+    keys = [ { fingerprint = "AB41 757C A4E2 249C 2D20  F07C 4413 7CF1 DD8E 5336"; } ];
+  };
   dbalan = {
     email = "nix@dbalan.in";
     github = "dbalan";
