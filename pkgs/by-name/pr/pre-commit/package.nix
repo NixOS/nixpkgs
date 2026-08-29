@@ -59,6 +59,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     cargo
     gitMinimal
     go
+    nodejs
     perl
     versionCheckHook
     writableTmpDirAsHomeHook
@@ -78,11 +79,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     coursier
     # i686-linux: dotnet-sdk not available
     dotnet-sdk
-    # nodejs can be moved back to the main nativeCheckInputs list once this
-    # issue is fixed: <https://github.com/NixOS/nixpkgs/issues/387658>. When nodejs gets
-    # moved back to the main nativeCheckInputs list, don’t forget to re-enable the
-    # Node.js-related tests that are currently disabled on i686-linux.
-    nodejs
   ];
 
   postPatch = ''
@@ -211,11 +207,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_dotnet_"
     # From coursier_test.py:
     "test_error_if_no_deps_or_channel"
-    # From node_test.py:
-    "test_healthy_system_node"
-    "test_unhealthy_if_system_node_goes_missing"
-    "test_node_hook_system"
-    "test_node_with_user_config_set"
   ];
 
   pythonImportsCheck = [
