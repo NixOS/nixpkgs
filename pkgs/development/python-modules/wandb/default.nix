@@ -5,7 +5,7 @@
   pythonAtLeast,
 
   ## wandb-core
-  buildGoModule,
+  buildGo127Module,
   gitMinimal,
   writableTmpDirAsHomeHook,
   versionCheckHook,
@@ -33,8 +33,8 @@
   requests,
   sentry-sdk,
   setproctitle,
-  pythonOlder,
   typing-extensions,
+  xxhash,
 
   # tests
   azure-containerregistry,
@@ -80,12 +80,12 @@
 }:
 
 let
-  version = "0.28.2";
+  version = "0.29.0";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-kmgLHb+1NjStqcjMOYPPU2v2js4m8O3b2OpM6BiSbXI=";
+    hash = "sha256-5YkJB5uS9GalNKL+MPf5GVQX/jgWM62nxMVmdnzOXGs=";
   };
 
   wandb-xpu = rustPlatform.buildRustPackage {
@@ -143,7 +143,7 @@ let
     __darwinAllowLocalNetworking = true;
   };
 
-  wandb-core = buildGoModule {
+  wandb-core = buildGo127Module {
     pname = "wandb-core";
     inherit src version;
 
@@ -247,9 +247,8 @@ buildPythonPackage (finalAttrs: {
     requests
     sentry-sdk
     setproctitle
-  ]
-  ++ lib.optionals (pythonOlder "3.12") [
     typing-extensions
+    xxhash
   ];
 
   __darwinAllowLocalNetworking = true;
