@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitLab,
+  blueprint-compiler,
   meson,
   ninja,
   pkg-config,
@@ -20,7 +21,7 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "iotas";
-  version = "2026.6";
+  version = "2026.7";
   pyproject = false;
 
   src = fetchFromGitLab {
@@ -28,10 +29,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "World";
     repo = "iotas";
     tag = finalAttrs.version;
-    hash = "sha256-Zsfp5O6k8VMjF6Hl3lT+u9JingGq3XgCzc8h9PVAhLg=";
+    hash = "sha256-qJI1C5G8DGdIOHXVPiky7JK+Re+0WY18c868LY8/h4k=";
   };
 
   nativeBuildInputs = [
+    blueprint-compiler
     meson
     ninja
     pkg-config
