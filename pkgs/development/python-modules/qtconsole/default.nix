@@ -23,6 +23,7 @@ buildPythonPackage (finalAttrs: {
   pname = "qtconsole";
   version = "5.7.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jupyter";
