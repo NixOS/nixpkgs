@@ -1,109 +1,69 @@
 {
   lib,
-  buildGoModule,
-  fetchFromGitHub,
-  fetchPnpmDeps,
-  pnpm_10,
-  pnpmConfigHook,
-  nodejs,
-  stdenv,
-  testers,
+  stdenvNoCC,
+  fetchurl,
+  versionCheckHook,
 }:
+
 let
-  version = "1.43.0";
-  websiteRev = "159c0ac611e85ec85ffe0a8c8bf2c4a0330bdb38";
-
-  src = fetchFromGitHub {
-    owner = "inngest";
-    repo = "inngest";
-    tag = "v${version}";
-    hash = "sha256-4/xKqjSeRV11kGi7MJFCRmm3+86vxmzj9QEQD144KJk=";
+  platforms = {
+    x86_64-linux = "linux_amd64";
+    aarch64-linux = "linux_arm64";
+    aarch64-darwin = "darwin_arm64";
   };
-
-  website = fetchFromGitHub {
-    owner = "inngest";
-    repo = "website";
-    rev = websiteRev;
-    hash = "sha256-EkTIv8jgcqzurz2M7PC6Kfh6x2Zxu7UmIhpTjlj8o88=";
-  };
-
-  ui = stdenv.mkDerivation (finalAttrs: {
-    inherit version src;
-    pname = "inngest-ui";
-
-    nativeBuildInputs = [
-      nodejs
-      pnpm_10
-      pnpmConfigHook
-    ];
-
-    pnpmDeps = fetchPnpmDeps {
-      inherit (finalAttrs) pname version src;
-      pnpm = pnpm_10;
-      sourceRoot = "${finalAttrs.src.name}/ui";
-      fetcherVersion = 4;
-      hash = "sha256-9Aud9JUj2C/Bow7lB+P/BgniQXJa2MVqI7TcPICgxrI=";
-    };
-    pnpmRoot = "ui";
-
-    buildPhase = ''
-      runHook preBuild
-      pnpm --filter dev-server-ui build
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/dist
-      cp -r ui/apps/dev-server-ui/dist/. $out/dist/
-      runHook postInstall
-    '';
-  });
 in
-buildGoModule (finalAttrs: {
-  inherit version src;
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "inngest";
+  version = "1.44.0";
 
   __structuredAttrs = true;
+  strictDeps = true;
 
-  vendorHash = null;
+  src = finalAttrs.passthru.sources.${stdenvNoCC.hostPlatform.system};
+  sourceRoot = ".";
 
-  preBuild = ''
-    cp -r ${ui}/dist/. ./pkg/devserver/static/
-    cp -r ${website}/. ./internal/embeddocs/website/
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm755 inngest $out/bin/inngest
+
+    runHook postInstall
   '';
 
-  postInstall = ''
-    mv $out/bin/cmd $out/bin/inngest
-  '';
-
-  ldflags = [
-    "-s"
-    "-w"
-    "-X github.com/inngest/inngest/pkg/inngest/version.Version=${version}"
-  ];
-
-  env.CGO_ENABLED = 0;
-
-  subPackages = [ "cmd" ];
+  doInstallCheck = stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru = {
-    inherit ui website websiteRev;
-    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+    sources = lib.mapAttrs (
+      system: platform:
+      fetchurl {
+        url = "https://github.com/inngest/inngest/releases/download/v${finalAttrs.version}/inngest_${finalAttrs.version}_${platform}.tar.gz";
+        hash =
+          {
+            x86_64-linux = "sha256-vvtgP/PNefRpgM+TCdZbNe3NMj3rAAsjfpTGto2PW+I=";
+            aarch64-linux = "sha256-nCi7lDjidvcN3+CRTMNKlgMS7vN8iFd7SyHGSxLdCis=";
+            aarch64-darwin = "sha256-1Cbs7Y//XwUA10rUEeU0AdL5dtdSFAmzSQj3zVaN2mk=";
+          }
+          .${system};
+      }
+    ) platforms;
     updateScript = ./update.sh;
   };
 
   meta = {
     description = "CLI and dev server for Inngest durable workflows";
     homepage = "https://github.com/inngest/inngest";
-    changelog = "https://github.com/inngest/inngest/releases/tag/${finalAttrs.src.tag}";
+    downloadPage = "https://github.com/inngest/inngest/releases";
+    changelog = "https://github.com/inngest/inngest/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.sspl;
-    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
       albertchae
       kikos0
     ];
     mainProgram = "inngest";
-    platforms = lib.lists.remove "x86_64-darwin" lib.platforms.all;
+    platforms = builtins.attrNames platforms;
   };
 })
