@@ -15838,6 +15838,30 @@ with self;
     };
   };
 
+  HashMergeExtra = buildPerlPackage rec {
+    pname = "Hash-Merge-Extra";
+    version = "0.06";
+
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIXAS/Hash-Merge-Extra-${version}.tar.gz";
+      hash = "sha256-5q8ro1eubr1T2BBHeAClyN8ZJD8y/ZSs3OkBM43KtFE=";
+    };
+
+    propagatedBuildInputs = with perlPackages; [
+      HashMerge
+    ];
+
+    meta = {
+      changelog = "https://github.com/mr-mixas/Hash-Merge-Extra.pm/blob/v${version}/Changes";
+      description = "Collection of extra behaviors for Hash::Merge";
+      homepage = "https://metacpan.org/pod/Hash::Merge::Extra";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   HashMergeSimple = buildPerlPackage {
     pname = "Hash-Merge-Simple";
     version = "0.051";
