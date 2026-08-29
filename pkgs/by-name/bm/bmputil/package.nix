@@ -11,16 +11,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "bmputil";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromCodeberg {
     owner = "blackmagic-debug";
     repo = "bmputil";
     tag = "v${version}";
-    hash = "sha256-ZD/JXsx52U+O3FazRc9xnShx34fxTXcD2zhW5mgSYtU=";
+    hash = "sha256-WX26rDFLWtEG/BvVwPjsY3X1ebvNseEpdgJRGMynyBo=";
   };
 
-  cargoHash = "sha256-/I1chzqnhgky/+cKGhFrdgZvoLGM9P75ga5UDTMOI3Q=";
+  cargoHash = "sha256-Uj+TLD1SGx5lFFhSDKRr6iMg4QnjgE1+1KbXTi/5iCI=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -32,8 +32,6 @@ rustPlatform.buildRustPackage rec {
     install -Dm 444 ${blackmagic.src}/driver/99-blackmagic-plugdev.rules $out/lib/udev/rules.d/99-blackmagic-plugdev.rules
   '';
 
-  doCheck = false; # fails at least 1 test
-
   nativeInstallCheckInputs = [
     versionCheckHook
     udevCheckHook
@@ -41,8 +39,8 @@ rustPlatform.buildRustPackage rec {
   doInstallCheck = true;
 
   meta = {
-    description = "Black Magic Probe Firmware Manager";
-    homepage = "https://github.com/blackmagic-debug/bmputil";
+    description = "Black Magic Probe companion utility";
+    homepage = "https://codeberg.org/blackmagic-debug/bmputil";
     license = with lib.licenses; [
       mit
       asl20
