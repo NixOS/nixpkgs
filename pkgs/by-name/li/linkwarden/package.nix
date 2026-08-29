@@ -4,6 +4,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   yarn-berry,
+  substitute,
   makeBinaryWrapper,
   nixosTests,
   stdenv,
@@ -75,7 +76,23 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "linkwarden";
     repo = "linkwarden";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mcdLOHGm0UyNDCBA5aheUAfsUONL/Q/KeVtwXTVcsxQ=";
+    hash = "sha256-smLHl1ebY/OwakiDKUDiItqNTn3isoBOUY0ScIppdsU=";
+
+    # Remove after upstream updates to Yarn 4.15
+    # https://github.com/linkwarden/linkwarden/blob/main/package.json#L3
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry.lockfileVersion
+          ];
+        })
+      }
+    '';
   };
 
   patches = [
@@ -89,16 +106,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
        pkgs/by-name/ne/nextjs-ollama-llm-ui/0002-use-local-google-fonts.patch
     */
     ./01-localfont.patch
-
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/linkwarden/linkwarden/blob/main/package.json#L3
-    ./02-yarn-4.14-support.patch
   ];
 
   missingHashes = ./missing-hashes.json;
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-riijYhsnIUXwl5AHYfhTiKHZFPc+ORDTLO2GUY7Yl+g=";
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-JlE47JzeQPw0nXoqWikc4EgNOhbiRpiDzKiUdvsA8eA=";
   };
 
   nativeBuildInputs = [

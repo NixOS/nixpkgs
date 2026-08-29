@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  substitute,
   fetchurl,
   nodejs,
   git,
@@ -50,7 +51,23 @@ stdenv.mkDerivation rec {
     owner = "bitfocus";
     repo = "companion";
     tag = "v${version}";
-    hash = "sha256-ojSXiWaRKFCjHmAMs/RtzNhgSNUy7RKTZ4CE/wCxEaI=";
+    hash = "sha256-01zW6IrUgubxDSiGffGajZnWlssNsh8kO5FljVcjyL0=";
+
+    # Remove when updating since upstream updated Yarn
+    # https://github.com/bitfocus/companion/commit/d2ad585c510f328f4bf111b7e489225925882354
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry.lockfileVersion
+          ];
+        })
+      }
+    '';
   };
 
   passthru.updateScript = nix-update-script { };
@@ -100,15 +117,13 @@ stdenv.mkDerivation rec {
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit src missingHashes;
-    hash = "sha256-XDXxv+LSr9fYhVhwkcvmd56fAL6gY9FK6kiQlXxTWXo=";
+    hash = "sha256-LKIDfngn7Yia9oRwb8Ze0FOiZqreUMa6vuolqSz2hWo=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
     SKIP_LAUNCH_CHECK = true;
     ELECTRON = 0;
-    # prevent yarn >= 4.14 from triggering a lockfile refresh for v8 lockfiles
-    YARN_LOCKFILE_VERSION_OVERRIDE = 8;
   };
 
   # with dontConfigure it doesn't seem to retrieve node_modules, so empty configurePhase instead

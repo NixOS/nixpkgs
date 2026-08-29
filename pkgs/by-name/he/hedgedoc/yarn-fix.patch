@@ -1,8 +1,11 @@
 diff --git a/.yarnrc.yml b/.yarnrc.yml
 --- a/.yarnrc.yml
 +++ b/.yarnrc.yml
-@@ -1 +1,4 @@
--yarnPath: .yarn/releases/yarn-4.4.1.cjs
+@@ -4,4 +4,7 @@ enableGlobalCache: false
+ 
+ nodeLinker: node-modules
+ 
+-yarnPath: .yarn/releases/yarn-4.13.0.cjs
 +approvedGitRepositories:
 +  - "**"
 +
@@ -15,6 +18,6 @@ diff --git a/yarn.lock b/yarn.lock
  
  __metadata:
 -  version: 8
-+  version: 9
-   cacheKey: 10c0
++  version: YARN_LOCKFILE_VERSION_PLACEHOLDER
+   cacheKey: 10
  

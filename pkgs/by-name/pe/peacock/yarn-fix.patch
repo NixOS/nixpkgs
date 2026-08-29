@@ -1,5 +1,4 @@
 diff --git a/yarn.lock b/yarn.lock
-index 365f8b4d..ffa89a3d 100644
 --- a/yarn.lock
 +++ b/yarn.lock
 @@ -2,7 +2,7 @@
@@ -7,7 +6,7 @@ index 365f8b4d..ffa89a3d 100644
  
  __metadata:
 -  version: 8
-+  version: 9
-   cacheKey: 10c0
++  version: YARN_LOCKFILE_VERSION_PLACEHOLDER
+   cacheKey: 10
  
  "@aashutoshrathi/word-wrap@npm:^1.2.3":

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  substitute,
   nodejs,
   gnutar,
   makeBinaryWrapper,
@@ -16,14 +17,24 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jdalrymple";
     repo = "gitbeaker";
     tag = finalAttrs.version;
-    hash = "sha256-EVxDUEuxCnMiqqsKFs9JpRVJ86d9hW22K4a4we8eoJA=";
-  };
+    hash = "sha256-zGcSilIQUKn7iMGFkDZuvPZZM9UcZadczelB7JgVYb4=";
 
-  patches = [
-    # Remove this when updating since upstream migrated to pnpm
-    # https://github.com/jdalrymple/gitbeaker/blob/main/package.json#L59
-    ./yarn-4.14-support.patch
-  ];
+    # Remove when updating since upstream migrated to pnpm
+    # https://github.com/jdalrymple/gitbeaker/blob/main/package.json#L61
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry_4.lockfileVersion
+          ];
+        })
+      }
+    '';
+  };
 
   nativeBuildInputs = [
     nodejs
@@ -36,8 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-RTgdHicbfbJbToif51TchLCfdIPZynvT0n/KwrydLYU=";
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-OMsa/4pRyZVjgYPfYsaj1D+auKOHRAXKtEDYWenI33I=";
   };
 
   buildPhase = ''

@@ -1,22 +1,19 @@
 --- a/.yarnrc.yml
 +++ b/.yarnrc.yml
-@@ -12,3 +12,8 @@ npmPreapprovedPackages:
+@@ -12,3 +12,6 @@ npmPreapprovedPackages:
  npmAuditIgnoreAdvisories:
    - "1113517" # GHSA-mw96-cpmx-2vgc rollup <2.80.0 path traversal (workbox-build, build-time)
    - "1113686" # GHSA-5c6j-r48x-rmvq serialize-javascript RCE (@rollup/plugin-terser, build-time)
 +
 +approvedGitRepositories:
 +  - "**"
-+
-+enableScripts: true
 --- a/yarn.lock
 +++ b/yarn.lock
-@@ -2,7 +2,7 @@
+@@ -2,6 +2,6 @@
  # Manual changes might be lost - proceed with caution!
  
  __metadata:
 -  version: 8
-+  version: 9
++  version: YARN_LOCKFILE_VERSION_PLACEHOLDER
    cacheKey: 10c0
  
- "@antfu/install-pkg@npm:^1.1.0":

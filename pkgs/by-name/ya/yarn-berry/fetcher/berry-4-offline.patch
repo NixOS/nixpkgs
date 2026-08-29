@@ -6,7 +6,7 @@ index 90ba55349..ef5368c1b 100644
  
          for (const rule of LOCKFILE_MIGRATION_RULES) {
            if (rule.selector(lockfileLastVersion) && typeof configuration.sources.get(rule.name) === `undefined`) {
-+            throw new Error(`Tried to use yarn-berry_4.yarnConfigHook (nixpkgs) which expects lockfile version 8, but found lockfile version ${lockfileLastVersion}`);
++            throw new Error(`Tried to use yarn-berry_4.yarnConfigHook (nixpkgs) which expects lockfile version @YARN_LOCKFILE_VERSION_PLACEHOLDER@, but found lockfile version ${lockfileLastVersion}`);
              configuration.use(`<compat>`, {[rule.name]: rule.value}, project.cwd, {overwrite: true});
              newSettings[rule.name] = rule.value;
            }

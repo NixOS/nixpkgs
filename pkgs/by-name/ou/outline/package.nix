@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  substitute,
   makeWrapper,
   nodejs,
   nixosTests,
@@ -16,14 +17,24 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "outline";
     repo = "outline";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-6w4Pso7I0ojbsbACEZrYuJsW9J2W38jY9uiErMQNeXE=";
-  };
+    hash = "sha256-msFMfjNkpXaJisbTpJMQowyD0KZ5zfvSgTutEeLp9Vk=";
 
-  patches = [
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/outline/outline/blob/main/package.json#L398
-    ./yarn-4.14-support.patch
-  ];
+    # Remove after upstream updates to Yarn 4.15
+    # https://github.com/outline/outline/blob/main/package.json#L393
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry_4.lockfileVersion
+          ];
+        })
+      }
+    '';
+  };
 
   missingHashes = ./missing-hashes.json;
 
@@ -34,8 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-7nREE+sGd6ZUGfZ+YSIIGUaysMSEdap189koFQcV+hs=";
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-bEsnu4NL/Dgv6yPXXvV/4uMvQ7Sc9eDfeAD2fhFCB98=";
   };
 
   buildPhase = ''
