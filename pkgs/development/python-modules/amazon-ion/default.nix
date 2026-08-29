@@ -10,7 +10,7 @@
   tabulate,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "amazon-ion";
   version = "0.14.6";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "amazon-ion";
     repo = "ion-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     # Test vectors require git submodule
     fetchSubmodules = true;
     leaveDotGit = true; # During ion-c submodule build git history/hash used to infer version
@@ -70,7 +70,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of Amazon Ion";
     homepage = "https://github.com/amazon-ion/ion-python";
-    changelog = "https://github.com/amazon-ion/ion-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/amazon-ion/ion-python/releases/tag/${finalAttrs.src.tag}";
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryNativeCode
@@ -78,4 +78,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ terlar ];
   };
-}
+})
