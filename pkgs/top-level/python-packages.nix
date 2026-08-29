@@ -14174,6 +14174,8 @@ self: super: with self; {
 
   py-bip39-bindings = callPackage ../development/python-modules/py-bip39-bindings { };
 
+  py-build-cmake = callPackage ../development/python-modules/py-build-cmake { };
+
   py-canary = callPackage ../development/python-modules/py-canary { };
 
   py-ccm15 = callPackage ../development/python-modules/py-ccm15 { };
