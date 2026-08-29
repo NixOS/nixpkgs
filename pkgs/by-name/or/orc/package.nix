@@ -6,10 +6,8 @@
   fetchFromGitLab,
   meson,
   ninja,
-  # FIXME: hotdoc errors out due to issues discovering libclang paths
-  # See https://github.com/NixOS/nixpkgs/issues/514723
   hotdoc,
-  buildDevDoc ? false,
+  buildDevDoc ? true,
 
   # for passthru.tests
   gnuradio,
@@ -28,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional buildDevDoc "devdoc";
   outputBin = "dev"; # compilation tools
+  outputDoc = lib.optionalString buildDevDoc "devdoc";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
