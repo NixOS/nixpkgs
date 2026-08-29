@@ -398,6 +398,10 @@ let
       feature = "build packages with ROCm support by default";
     };
 
+    metalSupport = mkMassRebuild {
+      feature = "build packages with Metal support by default";
+    };
+
     showDerivationWarnings = mkOption {
       type = types.listOf (types.enum [ "maintainerless" ]);
       default = [ ];
