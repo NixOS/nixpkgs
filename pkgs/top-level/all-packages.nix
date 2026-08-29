@@ -8455,7 +8455,7 @@ with pkgs;
 
   gauche = callPackage ../development/interpreters/gauche { };
 
-  gimagereader-qt = qt6Packages.callPackage ../by-name/gi/gimagereader/package.nix {
+  gimagereader-qt = gimagereader.override {
     withQt6 = true;
   };
 
