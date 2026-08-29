@@ -1,8 +1,8 @@
 {
-  "packageVersion": "154.0.1-2",
+  "packageVersion": "154.0.1-3",
   "source": {
-    "rev": "154.0.1-2",
-    "hash": "sha256-cwPJzF9kvbVGAB8lBJSTCoP26k1EKQUKGbngsKmdtt0="
+    "rev": "154.0.1-3",
+    "hash": "sha256-IPV+/5NCyoLYaRD5N6bu4doI6R4yxs4cBw8UrJP3E4U="
   },
   "firefox": {
     "version": "154.0.1",
