@@ -71,7 +71,8 @@ buildPythonPackage {
   # It is only usable from the wrapped bin/nitropy
   makeWrapperArgs = [
     "--set"
-    "LIBNK_PATH ${lib.makeLibraryPath [ libnitrokey ]}"
+    "LIBNK_PATH"
+    (lib.makeLibraryPath [ libnitrokey ])
   ];
 
   pythonImportsCheck = [ "pynitrokey" ];

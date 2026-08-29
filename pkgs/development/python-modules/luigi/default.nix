@@ -46,8 +46,8 @@ buildPythonPackage (finalAttrs: {
   makeWrapperArgs = [
     "--prefix"
     "PYTHONPATH"
-    "."
     ":"
+    "."
   ];
 
   meta = {
