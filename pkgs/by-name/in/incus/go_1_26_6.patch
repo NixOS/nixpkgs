@@ -1,0 +1,12 @@
+diff --git i/go.mod w/go.mod
+index 0fd8ca7b49..9b7b05b433 100644
+--- i/go.mod
++++ w/go.mod
+@@ -1,6 +1,6 @@
+ module github.com/lxc/incus/v7
+ 
+-go 1.26.7
++go 1.26.6
+ 
+ require (
+ 	github.com/FuturFusion/vsock v0.0.0-20260219213046-d78a7104f821
