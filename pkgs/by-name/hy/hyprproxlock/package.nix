@@ -32,6 +32,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     dbus
   ];
 
+  preCheck = ''
+    patchShebangs --build tests/mocks
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
