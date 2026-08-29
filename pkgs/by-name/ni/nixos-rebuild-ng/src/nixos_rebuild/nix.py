@@ -690,9 +690,9 @@ def set_profile(
             ).strip()
             raise NixOSRebuildError(msg)
 
-    # Using custom profile, the target profile directory may not exist so we
-    # need to create it first
-    if profile.name != "system":
+    if profile.is_custom():
+        # Using custom profile, the target profile directory may not exist yet,
+        # so we need to create it first
         run_wrapper(
             ["mkdir", "-p", profile.path.parent],
             remote=target_host,

@@ -217,6 +217,11 @@ def test_profile_from_arg() -> None:
     )
 
 
+def test_profile_is_custom() -> None:
+    assert not m.Profile("system", Path()).is_custom()
+    assert m.Profile("something", Path()).is_custom()
+
+
 def test_grouped_nix_args_flake_build_flags() -> None:
     """Test that flake_build_flags excludes evaluation-only flags."""
     from argparse import Namespace
