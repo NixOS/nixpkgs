@@ -1,22 +1,22 @@
 {
   stdenv,
   lib,
-  python3Packages,
   fetchFromGitHub,
   nixosTests,
   fetchYarnDeps,
   python3,
+  python3Packages,
   nodejs,
   yarnBuildHook,
   yarnConfigHook,
 }:
 let
-  version = "5.4.1";
+  version = "5.5.0";
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${version}";
-    hash = "sha256-Xomq2i1t1POgggcAR8FAWf+Lr0y6YOKGvANFOv/BH20=";
+    hash = "sha256-NR4TooBjE9hTZOm830MRtebUtSZFxVsVwswPz1w8k48=";
   };
 
   mail-templates = stdenv.mkDerivation {
@@ -29,7 +29,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/src/mail/yarn.lock";
-      hash = "sha256-miA1ysqNSaBZSb2B2uqTx1rea9R5/AgRfuCPr5X0bx8=";
+      hash = "sha256-x3zcoOfb5vTBreswjZUcJstbXvbDHBBG/u0N4L7T1uI=";
     };
 
     nativeBuildInputs = [
@@ -40,6 +40,23 @@ let
 
     dontInstall = true;
   };
+
+  python3Packages' = python3Packages.overrideScope (
+    self: super: {
+      django-treebeard = super.django-treebeard.overridePythonAttrs (
+        finalAttrs: { src, ... }: {
+          version = "4.8.0";
+          src = src.override {
+            hash = "sha256-DrjI0HlrJhNqrYul3SO0xkkFwjWRn94OgvTA/Z3wv84=";
+          };
+        }
+      );
+    }
+  );
+in
+let
+  # Prevent using the wrong one.
+  python3Packages = python3Packages';
 in
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -57,11 +74,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # They use a old version of mistralai which exported a class
   # at the top level
   postPatch = ''
-    substituteInPlace core/services/ai_services/legacy.py \
-      --replace-fail \
-        "from mistralai import Mistral" \
-        "from mistralai.client import Mistral"
-
     substituteInPlace pyproject.toml \
       --replace-fail "uv_build>=0.11.9,<0.12" "uv_build"
   ''
@@ -95,6 +107,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       django-lasuite
       django-parler
       django-redis
+      django-silk
       django-storages
       django-timezone-field
       django-treebeard
