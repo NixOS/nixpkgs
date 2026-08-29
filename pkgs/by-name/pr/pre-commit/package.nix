@@ -26,14 +26,14 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pre-commit";
-  version = "4.5.1";
+  version = "4.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = "pre-commit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3E/haU7TzTr+Qj3KadC7BYwuECZPa2Q+NvG5e4SSKSA=";
+    hash = "sha256-aCEN9dVz/3lB2gy7U+6dVj3jSM7cmVsstOp+LHvYRsU=";
   };
 
   patches = [
@@ -165,6 +165,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_lua_additional_dependencies"
     "test_node_additional_deps"
     "test_node_hook_versions"
+    "test_npm_install_succeeds_with_build"
     "test_perl_additional_dependencies"
     "test_r_hook"
     "test_r_inline"
