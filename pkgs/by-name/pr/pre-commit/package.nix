@@ -107,7 +107,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     export DOTNET_ROOT="${dotnet-sdk}/share/dotnet"
   ''
   + ''
-    git init -b master
+    # Some CLI tests expect to run in a Git repository.
+    git init
   '';
 
   disabledTests = [
