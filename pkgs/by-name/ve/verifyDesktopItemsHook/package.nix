@@ -2,6 +2,7 @@
   lib,
   makeSetupHook,
   buildPackages,
+  callPackage,
 }:
 
 makeSetupHook {
@@ -11,6 +12,8 @@ makeSetupHook {
     desktopFileValidate = lib.getExe' buildPackages.desktop-file-utils "desktop-file-validate";
     standardIconNames = ./standard-icon-names.txt;
   };
+
+  passthru.tests.default = callPackage ./test.nix { };
 
   meta = {
     description = "Verify that installed desktop items reference an existing executable and icon";
