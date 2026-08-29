@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  nix-update-script,
   pkg-config,
   runCommand,
   writeText,
@@ -104,14 +105,14 @@ let
 in
 effectiveBuildPythonApplication rec {
   pname = "xpra";
-  version = "6.4.4";
+  version = "6.5.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Xpra-org";
     repo = "xpra";
     tag = "v${version}";
-    hash = "sha256-zDI6xksviTjsfsh5OJdkif24BGPW9zfDsxATC98eeX0=";
+    hash = "sha256-UDKnkynWoS1feUBRRHXl7emksUmufBL16gmVFslMHpM=";
   };
 
   patches = [
@@ -120,7 +121,7 @@ effectiveBuildPythonApplication rec {
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace xpra/platform/posix/features.py \
+    substituteInPlace xpra/scripts/config.py \
       --replace-fail "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open"
 
     patchShebangs --build fs/bin/build_cuda_kernels.py
@@ -290,7 +291,7 @@ effectiveBuildPythonApplication rec {
 
   passthru = {
     inherit xf86videodummy;
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
   meta = {
