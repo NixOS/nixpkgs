@@ -10,13 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "whatsie";
-  version = "5.0.0";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "keshavbhatt";
     repo = "whatsie";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GVXwZZFfPqAmBrP95zleHc2PpMMBj/8xZdW4JpFdYVs=";
+    fetchSubmodules = true;
+    hash = "sha256-tSBbEwc5+tALBmqB8E9kW25hdS8pXtjIgee8+SDMrSY=";
   };
 
   buildInputs = [
