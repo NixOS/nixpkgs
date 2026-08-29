@@ -9,17 +9,17 @@
   libsndfile,
   libvpx,
   libwebp,
+  libx11,
   makeWrapper,
+  moltenvk,
   mpg123,
   ninja,
   openal,
   pkg-config,
   python3,
   sdl2-compat,
-  vulkan-loader,
-  moltenvk,
   vulkan-headers,
-  libx11,
+  vulkan-loader,
   zlib,
 }:
 
@@ -27,8 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "uzdoom";
   version = "5.0.0";
 
-  strictDeps = true;
   __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "UZDoom";
@@ -38,6 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   outputs = [ "out" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "doc" ];
+
+  postPatch = ''
+    substituteInPlace cmake/UpdateRevision.cmake \
+      --replace-fail "unknown" "${finalAttrs.src.tag}"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -65,11 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     moltenvk
     vulkan-headers
   ];
-
-  postPatch = ''
-    substituteInPlace cmake/UpdateRevision.cmake \
-      --replace-fail "unknown" "${finalAttrs.src.tag}"
-  '';
 
   cmakeFlags = [
     (lib.cmakeBool "DYN_OPENAL" false)
@@ -108,19 +108,19 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://zdoom.org";
-    changelog = "https://github.com/UZDoom/UZDoom/releases/tag/${finalAttrs.version}";
     description = "Modern, feature-rich source port for the classic game DOOM";
-    mainProgram = "uzdoom";
     longDescription = ''
       UZDoom is a feature centric port for all Doom engine games, based on
       GZDoom, adding an advanced renderer and powerful scripting capabilities
     '';
+    homepage = "https://zdoom.org";
+    changelog = "https://github.com/UZDoom/UZDoom/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [
       Gliczy
       keenanweaver
     ];
+    platforms = with lib.platforms; linux ++ darwin;
+    mainProgram = "uzdoom";
   };
 })
