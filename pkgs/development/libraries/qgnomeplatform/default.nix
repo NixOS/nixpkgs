@@ -9,13 +9,20 @@
   adwaita-qt6,
   glib,
   gtk3,
-  qtbase,
-  qtwayland,
+  qt5,
+  qt6,
   replaceVars,
   gsettings-desktop-schemas,
   useQt6 ? false,
 }:
 
+let
+  qt = if useQt6 then qt6 else qt5;
+  inherit (qt)
+    qtbase
+    qtwayland
+    ;
+in
 stdenv.mkDerivation rec {
   pname = "qgnomeplatform";
   version = "0.8.4";
