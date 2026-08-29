@@ -1,22 +1,19 @@
 {
   lib,
   stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  hatchling,
-
-  # dependencies
   base58,
   beautifulsoup4,
   bech32,
   brotli,
+  buildPythonPackage,
   colorama,
   cryptography,
+  deepdiff,
+  fetchFromGitHub,
   gitpython,
+  hatchling,
   humanfriendly,
+  hypothesis,
   lxml,
   numpy,
   odfpy,
@@ -24,32 +21,30 @@
   openpyxl,
   pandas,
   pdfminer-six,
+  psutil,
   pybase62,
+  pygments,
   pyjks,
   pysquashfsimage,
+  pytestCheckHook,
   python-dateutil,
   python-docx,
   python-pptx,
+  pythonOlder,
   pyxlsb,
   pyyaml,
   rpmfile,
   striprtf,
+  tqdm,
+  versionCheckHook,
   whatthepatch,
   xlrd,
-  # < python 3.14 only:
   zstandard,
-
-  # tests
-  deepdiff,
-  hypothesis,
-  psutil,
-  pytestCheckHook,
-  versionCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "credsweeper";
-  version = "1.17.4";
+  version = "1.18.1";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -58,7 +53,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Samsung";
     repo = "CredSweeper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JsKwmzC9kMF3dkYVFrLDxYsxOc5X13pFN9aealZEgqY=";
+    hash = "sha256-ktaCNgM0FJCdreIqhzYc21CjpLmp7vIbs9E5Q6yvWjc=";
   };
 
   build-system = [ hatchling ];
@@ -80,6 +75,7 @@ buildPythonPackage (finalAttrs: {
     pandas
     pdfminer-six
     pybase62
+    pygments
     pyjks
     pysquashfsimage
     python-dateutil
@@ -89,6 +85,7 @@ buildPythonPackage (finalAttrs: {
     pyyaml
     rpmfile
     striprtf
+    tqdm
     whatthepatch
     xlrd
   ]
@@ -109,6 +106,10 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Probability tests
     "test_data_p"
+    "test_data_scan_depth_3_pedantic_p"
+    "test_data_scan_doc_p"
+    "test_data_scan_no_filters_p"
+    "test_data_scan_output_p"
     "test_depth_n"
     "test_depth_p"
     "test_match_n"

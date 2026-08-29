@@ -160,14 +160,17 @@ let
 
     # Deploy pre-generated relay and authority keys before Tor starts.
     # This ensures the relay fingerprint matches what's in DirAuthority lines.
-    system.activationScripts.tor-keys = lib.stringAfter [ "users" "groups" ] ''
-      mkdir -p /var/lib/tor/keys
-      cp ${daKeysets.${name}}/keys/* /var/lib/tor/keys/
-      touch /var/lib/tor/sr-state
-      chown -R tor:tor /var/lib/tor
-      chmod 700 /var/lib/tor /var/lib/tor/keys
-      chmod 600 /var/lib/tor/keys/*
-    '';
+    # Runs as root (`+` prefix) so it can chown to tor:tor.
+    systemd.services.tor.serviceConfig.ExecStartPre = lib.mkBefore [
+      "+${pkgs.writeShellScript "tor-keys-${name}" ''
+        mkdir -p /var/lib/tor/keys
+        cp ${daKeysets.${name}}/keys/* /var/lib/tor/keys/
+        touch /var/lib/tor/sr-state
+        chown -R tor:tor /var/lib/tor
+        chmod 700 /var/lib/tor /var/lib/tor/keys
+        chmod 600 /var/lib/tor/keys/*
+      ''}"
+    ];
 
     services.tor = {
       enable = true;
