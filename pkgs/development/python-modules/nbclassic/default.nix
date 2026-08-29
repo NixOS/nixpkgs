@@ -20,13 +20,13 @@
   nodejs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nbclassic";
   version = "1.3.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Q0Iodj+M7nVDGM1t+kI3DbGRr2MNq6uOMLr8jBqj7uY=";
   };
 
@@ -81,4 +81,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyter/nbclassic";
     license = lib.licenses.bsd3;
   };
-}
+})
