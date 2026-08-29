@@ -10642,8 +10642,6 @@ with pkgs;
     hasktags = haskellPackages.hasktags;
   };
 
-  terraform = callPackage ../applications/networking/cluster/terraform { };
-
   terraform-providers = recurseIntoAttrs (
     callPackage ../applications/networking/cluster/terraform-providers { }
   );
