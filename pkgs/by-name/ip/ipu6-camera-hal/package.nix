@@ -46,7 +46,6 @@ stdenv.mkDerivation {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"

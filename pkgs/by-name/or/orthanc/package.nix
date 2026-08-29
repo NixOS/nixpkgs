@@ -77,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeFeature "DCMTK_DICTIONARY_DIR_AUTO" "${dcmtk}/share/dcmtk-${dcmtk.version}")
     (lib.cmakeFeature "DCMTK_LIBRARIES" "dcmjpls;oflog;ofstd")
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
 
     (lib.cmakeBool "BUILD_CONNECTIVITY_CHECKS" false)
     (lib.cmakeBool "UNIT_TESTS_WITH_HTTP_CONNEXIONS" false)
