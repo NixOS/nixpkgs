@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  nix-update-script,
+  fetchFromGitLab,
   meson,
   ninja,
   # FIXME: hotdoc errors out due to issues discovering libclang paths
@@ -27,9 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional buildDevDoc "devdoc";
   outputBin = "dev"; # compilation tools
 
-  src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/orc/orc-${finalAttrs.version}.tar.xz";
-    hash = "sha256-gjlOIOXE3/6LReqFJcYt1OPovn8lOsEcGSl7p+pUc+A=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "gstreamer";
+    repo = "orc";
+    tag = finalAttrs.version;
+    hash = "sha256-Ec6TmkazDSvZLYBIZm9tXvD9Z9FWvvJqrIdYb4zfFjM=";
   };
 
   postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
@@ -61,10 +65,14 @@ stdenv.mkDerivation (finalAttrs: {
       && lib.versionAtLeast stdenv.cc.version "12"
     );
 
-  passthru.tests = {
-    inherit (gst_all_1) gst-plugins-good gst-plugins-bad gst-plugins-ugly;
-    inherit gnuradio vips;
-    qt6-qtmultimedia = qt6.qtmultimedia;
+  passthru = {
+    tests = {
+      inherit (gst_all_1) gst-plugins-good gst-plugins-bad gst-plugins-ugly;
+      inherit gnuradio vips;
+      qt6-qtmultimedia = qt6.qtmultimedia;
+    };
+
+    updateScript = nix-update-script { };
   };
 
   meta = {
