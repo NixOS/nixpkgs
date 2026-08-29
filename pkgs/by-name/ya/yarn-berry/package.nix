@@ -6,6 +6,7 @@
   stdenv,
   testers,
   yarn,
+  git,
   callPackage,
   berryVersion ? 4,
 }:
@@ -15,11 +16,14 @@ let
   version_3 = "3.8.7";
   hash_4 = "sha256-0UnU5jRSUFMw+WowvXqYqaaN1ZbZAdLLJ6LPyuK6iCc=";
   hash_3 = "sha256-vRrk+Fs/7dZha3h7yI5NpMfd1xezesnigpFgTRCACZo=";
+  lockfileVersion_4 = "9";
+  lockfileVersion_3 = "6";
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yarn-berry";
   version = if berryVersion == 4 then version_4 else version_3;
+  lockfileVersion = if berryVersion == 4 then lockfileVersion_4 else lockfileVersion_3;
 
   src = fetchFromGitHub {
     owner = "yarnpkg";
@@ -35,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     yarn
+    git
   ];
 
   strictDeps = true;
@@ -47,6 +52,28 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
+  # Confirms that lockfileVersion matches the one defined above
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+
+    YARN_JS_PATH=$(pwd)/packages/yarnpkg-cli/bundles/yarn.js
+    TEST_DIR=$(mktemp -d)
+    export HOME=$(mktemp -d)
+    git config --global user.name nixbld
+    git config --global user.email nixbld@localhost
+    cd $TEST_DIR
+
+    node $YARN_JS_PATH config set --home enableTelemetry 0
+    node $YARN_JS_PATH init
+    node $YARN_JS_PATH install # Yarn 3 doesn't run install during init
+    grep -Pzq '\n__metadata:\n  version: ${finalAttrs.lockfileVersion}\n' yarn.lock
+
+    cd -
+
+    runHook postCheck
+  '';
+
   installPhase = ''
     runHook preInstall
     install -Dm 755 ./packages/yarnpkg-cli/bundles/yarn.js "$out/bin/yarn"
@@ -54,6 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    lockfileVersion = finalAttrs.lockfileVersion;
+
     updateScript = ./update.sh;
 
     tests =
