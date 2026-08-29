@@ -28,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-AkH3i9egklFm8z+0M46jFx9VubGWsRGwN1eLkrwkgfs=";
   };
 
+  __structuredAttrs = true;
   strictDeps = true;
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [
@@ -66,6 +67,9 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "swaylock";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ wineee ];
+    maintainers = with lib.maintainers; [
+      wineee
+      yvnth
+    ];
   };
 })
