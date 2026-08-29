@@ -8,6 +8,7 @@
   pkg-config,
   wrapGAppsHook3,
   libepoxy,
+  verifyDesktopItemsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,11 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     install -D $out/share/pixmaps/xcpc.png -t $out/share/icons/hicolor/64x64/apps
     rm -r $out/share/pixmaps
-    substituteInPlace $out/share/applications/xcpc.desktop --replace-fail \
-      "$out/bin/" ""
-    substituteInPlace $out/share/applications/xcpc.desktop --replace-fail \
-      "$out/share/pixmaps/" ""
+    substituteInPlace $out/share/applications/xcpc.desktop \
+      --replace-fail "$out/bin/" "" \
+      --replace-fail "$out/share/pixmaps/xcpc.png" "xcpc"
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ verifyDesktopItemsHook ];
 
   meta = {
     description = "Portable Amstrad CPC 464/664/6128 emulator written in C";
