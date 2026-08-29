@@ -33,14 +33,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "godot3";
-  version = "3.6.2";
+  version = "3.6.3";
   godotBuildDescription = "X11 tools";
 
   src = fetchFromGitHub {
     owner = "godotengine";
     repo = "godot";
     rev = "${finalAttrs.version}-stable";
-    hash = "sha256-loNjE+NmHniZ827Eb9MHSNo27F2LrURhWURjUq4d8xw=";
+    hash = "sha256-5MerJVY+SAri85mo2dbqxjDftpJJXzjsMAvlwidGEs4=";
   };
 
   # Fix PIE hardening: https://github.com/godotengine/godot/pull/50737
