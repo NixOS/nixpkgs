@@ -8,18 +8,20 @@
   protobuf_21,
   pkg-config,
   cmake,
+  tor,
+  fmt_9,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ricochet-refresh";
-  version = "3.0.39";
+  version = "3.0.44";
 
   src = fetchFromGitHub {
     owner = "blueprint-freespeech";
     repo = "ricochet-refresh";
     tag = "v${finalAttrs.version}-release";
     fetchSubmodules = true;
-    hash = "sha256-bKleUuR3dnvZETnMx7FSpVflPB8rcijMhJbuH/MuTWE=";
+    hash = "sha256-tOOv+VGKBJ1PBoTvhsse0bQzDIuRH1qVygvOEsJjStU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
@@ -35,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
       qtwayland
     ])
     ++ [
+      fmt_9
       openssl
       protobuf_21
     ];
@@ -53,7 +56,11 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/blueprint-freespeech/ricochet-refresh/blob/main/BUILDING.md
   cmakeFlags = [
     (lib.cmakeBool "RICOCHET_REFRESH_INSTALL_DESKTOP" true)
-    (lib.cmakeBool "USE_SUBMODULE_FMT" true)
+    (lib.cmakeBool "USE_SUBMODULE_FMT" false)
+  ];
+
+  qtWrapperArgs = [
+    "--prefix PATH : ${lib.makeBinPath [ tor ]}"
   ];
 
   meta = {
