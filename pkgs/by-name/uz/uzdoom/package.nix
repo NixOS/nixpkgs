@@ -4,29 +4,34 @@
   fetchFromGitHub,
   bzip2,
   cmake,
-  gtk3,
+  glib,
   libGL,
+  libsndfile,
   libvpx,
   libwebp,
   makeWrapper,
+  mpg123,
   ninja,
   openal,
   pkg-config,
-  SDL2,
+  python3,
+  sdl2-compat,
   vulkan-loader,
+  moltenvk,
+  vulkan-headers,
+  libx11,
   zlib,
-  zmusic,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uzdoom";
-  version = "4.14.3";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "UZDoom";
     repo = "UZDoom";
     tag = finalAttrs.version;
-    hash = "sha256-vMynousxc2k7jSa6ScYNeZ9/ozRnDXTyKwgcYQcf87M=";
+    hash = "sha256-iNPpkAV1ED+BRqa2WmB6R0PFaCqpmTWDCZT9USbmZuY=";
   };
 
   outputs = [ "out" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "doc" ];
@@ -36,33 +41,42 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     ninja
     pkg-config
+    python3
   ];
 
   buildInputs = [
     bzip2
-    gtk3
+    glib
     libGL
     libvpx
     libwebp
     openal
-    SDL2
+    sdl2-compat
     vulkan-loader
     zlib
-    zmusic
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libx11
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    moltenvk
+    vulkan-headers
   ];
 
   postPatch = ''
-    substituteInPlace tools/updaterevision/UpdateRevision.cmake \
+    substituteInPlace cmake/UpdateRevision.cmake \
       --replace-fail "unknown" "${finalAttrs.src.tag}"
   '';
 
   cmakeFlags = [
-    (lib.cmakeBool "DYN_GTK" false)
     (lib.cmakeBool "DYN_OPENAL" false)
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeFeature "OPENAL_INCLUDE_DIR" "${openal}/include/AL")
     (lib.cmakeFeature "OPENAL_LIBRARY" "${openal}/lib/libopenal.dylib")
+    (lib.cmakeFeature "Vulkan_INCLUDE_DIR" "${vulkan-headers}/include")
+    (lib.cmakeFeature "Vulkan_MoltenVK_INCLUDE_DIR" "${lib.getDev moltenvk}/include")
+    (lib.cmakeFeature "Vulkan_MoltenVK_LIBRARY" "${moltenvk}/lib/libMoltenVK.dylib")
     (lib.cmakeBool "HAVE_VULKAN" true)
     (lib.cmakeBool "HAVE_GLES2" false)
   ];
@@ -81,7 +95,13 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     mv $out/bin/uzdoom $out/share/games/uzdoom/uzdoom
     makeWrapper $out/share/games/uzdoom/uzdoom $out/bin/uzdoom \
-      --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}
+      --set LD_LIBRARY_PATH ${
+        lib.makeLibraryPath [
+          libsndfile
+          mpg123
+          vulkan-loader
+        ]
+      }
   '';
 
   meta = {
