@@ -33,18 +33,15 @@ assert lib.assertOneOf "appName" appName [
 ];
 stdenv.mkDerivation (finalAttrs: {
   pname = appName;
-  version = "0-unstable-2024-06-27";
+  version = "0-unstable-2026-07-16";
 
   src = fetchFromGitHub {
     owner = "TheAssemblyArmada";
     repo = "Vanilla-Conquer";
-    # FIXME: This version has format-security
-    rev = "ebc8083d5d149f98abc20f460a512a2d16fdc59f";
-    hash = "sha256-iUF9UFc0FMvOwLkGqSyLYGy5E8YqNySqDp5VVUa+u4o=";
+    rev = "ce83b59edd99cccac6cebaae054ca04962c744b7";
+    hash = "sha256-jjiqW3J1XQr4+cNd86yXO0dFpt5VEKmxtMywBjTceTc=";
 
   };
-  # TODO: Remove this. Just add this flag to ignore the format-security error temporarily.
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
 
   buildInputs = [
     SDL2
