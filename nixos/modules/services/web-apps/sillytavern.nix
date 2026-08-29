@@ -95,6 +95,7 @@ in
       description = "Silly Tavern";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      restartTriggers = [ cfg.configFile ];
       # required by sillytavern's extension manager
       path = [ pkgs.gitMinimal ];
       environment.XDG_DATA_HOME = "%S";
