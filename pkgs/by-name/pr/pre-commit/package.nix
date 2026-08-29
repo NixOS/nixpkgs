@@ -108,13 +108,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ''
   + ''
     git init -b master
-
-    python -m venv --system-site-packages venv
-    source "$PWD/venv/bin/activate"
-  '';
-
-  postCheck = ''
-    deactivate
   '';
 
   disabledTests = [
