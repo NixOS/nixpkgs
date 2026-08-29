@@ -16168,6 +16168,13 @@
     githubId = 4238928;
     name = "liberodark";
   };
+  libewa = {
+    email = "linus@libewa.xyz";
+    github = "libewa";
+    githubId = 67926131;
+    name = "Linus Warnatz";
+    keys = [ { fingerprint = "EBD0 29E0 73D2 959A 9DC1  A74A 7BCA 3874 C2A0 475C"; } ];
+  };
   libjared = {
     email = "jared@perrycode.com";
     github = "hypevhs";
