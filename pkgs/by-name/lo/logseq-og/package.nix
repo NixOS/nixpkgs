@@ -21,15 +21,12 @@
   xcbuild,
   zip,
 
-  electron_39,
+  electron_43,
   git,
 }:
 
 let
-  # upstream bumped the electron version in the used unstable revision to electron_41
-  # however, plugin loading was not actually fixed
-  # See: https://github.com/logseq/og/issues/32
-  electron = electron_39;
+  electron = electron_43;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "logseq-og";
@@ -61,8 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./electron-forge-package-instead-of-make.patch
     ./electron-forge-disable-signing.patch
 
-    # zip extraction fails on newer nodejs versions without this fix
-    ./bump-yauzl.patch
+    # See: https://github.com/logseq/og/issues/32
+    # See: https://github.com/logseq/og/pull/50
+    ./fix-electron-40-and-above.patch
   ];
 
   mavenRepo = stdenv.mkDerivation {
@@ -108,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
   yarnOfflineCacheRoot = fetchYarnDeps {
     name = "logseq-og-${finalAttrs.version}-yarn-deps-root";
     inherit (finalAttrs) src patches;
-    hash = "sha256-dYzozo2wo4lZRi3R7S/f5yqVlLlF/TmrwkD4/xsGQAE=";
+    hash = "sha256-BHf63Y19W9Zl/r5rHQ77voBQykQL1s3gR8SJZRxexZs=";
   };
 
   # ./static and ./resources are combined into ./static by the build process
@@ -117,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     name = "logseq-og-${finalAttrs.version}-yarn-deps-static-resources";
     inherit (finalAttrs) src patches;
     postPatch = "cd ./static";
-    hash = "sha256-aqQwKwRxR8OPI/EnKVy9HgpuQx5MQGvXwoTCyWwrB7U=";
+    hash = "sha256-nxTsE63pw1m2YE4WJhEAg4lQRPKBjnu/8r2WjvgfQGQ=";
   };
 
   yarnOfflineCacheAmplify = fetchYarnDeps {
@@ -132,6 +130,14 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) src patches;
     postPatch = "cd ./tldraw";
     hash = "sha256-CtMl3MPlyO5nWfFhCC1SLb/+1HUM3YfFATAPqJg3rUo=";
+  };
+
+  # this and related code below is only needed for regenerating lsplugin.*.js
+  yarnOfflineCacheLibs = fetchYarnDeps {
+    name = "logseq-og-${finalAttrs.version}-yarn-deps-libs";
+    inherit (finalAttrs) src patches;
+    postPatch = "cd ./libs";
+    hash = "sha256-m5ZwYpRrTUeSFfbeViBcABaP2bAhY6p/ZQptmU4YxFY=";
   };
 
   strictDeps = true;
@@ -193,6 +199,10 @@ stdenv.mkDerivation (finalAttrs: {
     popd
     popd
 
+    pushd libs
+    yarnOfflineCache="$yarnOfflineCacheLibs" yarnConfigHook
+    popd
+
     # this has to be done after everything is set up, because for some reason
     # the shebangs somehow get unpatched... I don't know why...
     patchShebangs node_modules
@@ -200,6 +210,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs packages/amplify/node_modules
     patchShebangs tldraw/node_modules
     patchShebangs tldraw/apps/tldraw-logseq/node_modules
+    patchShebangs libs/node_modules
 
     yarn --offline --cwd tldraw postinstall
 
@@ -210,7 +221,31 @@ stdenv.mkDerivation (finalAttrs: {
 
     export npm_config_nodedir=${electron.headers}
 
+    # make sure we're using the files regenerated from the .ts files
+    rm resources/js/lsplugin.*.js
+
+    pushd libs
+
+    # if we don't remove this, it will wait for Ctrl+C to terminate
+    substituteInPlace webpack.config.core.js \
+      --replace-fail "config.plugins.push(new BundleAnalyzerPlugin())" ""
+
+    npm run build
+    npm run build:core
+    mv dist/lsplugin.*.js ../resources/js/
+
+    popd
+
     pushd static
+
+    # don't use prebuilt binaries for better-sqlite3
+    pushd node_modules/better-sqlite3
+    rm -r prebuilds
+    npm run build-release
+    shopt -s extglob
+    rm -r build/Release/!(better_sqlite3.node)
+    shopt -u extglob
+    popd
 
     # we want to use our own git, don't try downloading it
     substituteInPlace node_modules/dugite/package.json \
