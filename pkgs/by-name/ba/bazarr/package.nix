@@ -1,29 +1,16 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchNpmDeps,
-  nodejs,
-  npmHooks,
+  buildNpmPackage,
   dart-sass,
-  makeBinaryWrapper,
-  python313,
+  fetchFromGitHub,
   ffmpeg,
-  unar,
-  nixosTests,
+  lib,
   nix-update-script,
+  nixosTests,
+  nodejs_22,
+  python313Packages,
+  unar,
 }:
-let
-  python = python313.withPackages (ps: [
-    ps.lxml
-    ps.numpy
-    ps.pillow
-    ps.psycopg2
-    ps.setuptools
-    ps.webrtcvad
-  ]);
-in
-stdenv.mkDerivation (finalAttrs: {
+python313Packages.buildPythonApplication (finalAttrs: {
   pname = "bazarr";
   version = "1.6.0";
 
@@ -34,41 +21,28 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-r3H0JEcGYzQOTHVR/zONmtOIF+LnJd+qn2pcAj8vdOA=";
   };
 
-  npmRoot = "frontend";
-  npmDeps = fetchNpmDeps {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
-    inherit (finalAttrs) src;
-    sourceRoot = "${finalAttrs.src.name}/frontend";
-    hash = "sha256-cb++eqVtKZer9B1rwJ9WR4mZImnASeFU2MojgXAPWf4=";
-  };
-
-  nativeBuildInputs = [
-    nodejs
-    npmHooks.npmConfigHook
-    dart-sass
-    makeBinaryWrapper
+  dependencies = with python313Packages; [
+    lxml
+    numpy
+    pillow
+    psycopg2
+    setuptools
+    webrtcvad
   ];
 
-  buildPhase = ''
-    runHook preBuild
-    pushd frontend
-    # sass-embedded's bundled Dart compiler won't run in the sandbox; use nixpkgs' dart-sass.
-    # https://github.com/sass/embedded-host-node/issues/334
-    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
-      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["dart-sass"];'
-    npm run build
-    popd
-    runHook postBuild
-  '';
+  __structuredAttrs = true;
+  dontBuild = true;
+  dontWrapPythonPrograms = true;
+  pyproject = false;
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/bazarr/frontend
-    cp -r bazarr bazarr.py custom_libs libs migrations $out/share/bazarr/
-    cp -r frontend/build $out/share/bazarr/frontend/build
+    mkdir -p $out/lib/bazarr/frontend
+    cp -r bazarr bazarr.py custom_libs libs migrations $out/lib/bazarr/
+    cp -r ${finalAttrs.passthru.frontend} $out/lib/bazarr/frontend/build
 
-    printf '%s' "${finalAttrs.version}" > $out/share/bazarr/VERSION
+    printf '%s' "${finalAttrs.version}" > $out/lib/bazarr/VERSION
 
     printf '%s' "${
       lib.generators.toKeyValue { } {
@@ -77,29 +51,62 @@ stdenv.mkDerivation (finalAttrs: {
         packageversion = finalAttrs.version;
         packageauthor = "nixpkgs";
       }
-    }" > $out/share/bazarr/package_info
+    }" > $out/lib/bazarr/package_info
 
-    makeWrapper ${lib.getExe python} $out/bin/bazarr \
-      --add-flags $out/share/bazarr/bazarr.py \
+    makeWrapper ${lib.getExe python313Packages.python} $out/bin/bazarr \
+      --add-flags $out/lib/bazarr/bazarr.py \
       --prefix PATH : ${
         lib.makeBinPath [
           ffmpeg
           unar
         ]
-      }
+      } \
+      --prefix PYTHONPATH : ${python313Packages.makePythonPath finalAttrs.passthru.dependencies} \
+      --set PYTHONNOUSERSITE true
 
     runHook postInstall
   '';
 
   passthru = {
+    frontend = buildNpmPackage {
+      inherit (finalAttrs) src version;
+      pname = "${finalAttrs.pname}-frontend";
+
+      sourceRoot = "${finalAttrs.src.name}/frontend";
+
+      nodejs = nodejs_22;
+
+      npmDepsHash = "sha256-cb++eqVtKZer9B1rwJ9WR4mZImnASeFU2MojgXAPWf4=";
+
+      nativeBuildInputs = [ dart-sass ];
+
+      # sass-embedded's bundled Dart compiler won't run in the sandbox; use nixpkgs' dart-sass.
+      # https://github.com/sass/embedded-host-node/issues/334
+      preBuild = ''
+        substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+          --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["dart-sass"];'
+      '';
+
+      installPhase = ''
+        runHook preInstall
+        mv build $out
+        runHook postInstall
+      '';
+
+      dontFixup = true;
+    };
+
     tests.smoke-test = nixosTests.bazarr;
-    updateScript = nix-update-script { };
+
+    updateScript = nix-update-script {
+      extraArgs = lib.cli.toCommandLineGNU { } { subpackage = "frontend"; };
+    };
   };
 
   meta = {
     description = "Subtitle manager for Sonarr and Radarr";
     homepage = "https://www.bazarr.media/";
-    changelog = "https://github.com/morpheus65535/bazarr/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/morpheus65535/bazarr/releases/tag/${finalAttrs.src.tag}";
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
