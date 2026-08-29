@@ -1282,6 +1282,7 @@
   ./services/networking/iodine.nix
   ./services/networking/iperf3.nix
   ./services/networking/ircd-hybrid/default.nix
+  ./services/networking/iroh-relay.nix
   ./services/networking/iscsi/initiator.nix
   ./services/networking/iscsi/root-initiator.nix
   ./services/networking/iscsi/target.nix
