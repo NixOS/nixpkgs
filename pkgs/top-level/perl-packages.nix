@@ -7968,6 +7968,35 @@ with self;
     };
   };
 
+  CSSInliner = buildPerlPackage rec {
+    pname = "CSS-Inliner";
+    version = "4027";
+
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KA/KAMELKEV/CSS-Inliner-${version}.tar.gz";
+      hash = "sha256-Gg8EvQmdctFcI0PTRcSsF/b7B7gPCeLckGtMIv4jKYo=";
+    };
+
+    buildInputs = with perlPackages; [
+      TestLWPUserAgent
+    ];
+
+    propagatedBuildInputs = with perlPackages; [
+      HTMLQuery
+      HTMLTree
+    ];
+
+    meta = {
+      changelog = "https://github.com/kamelkev/CSS-Inliner/blob/${version}/ChangeLog";
+      description = "Library for converting CSS <style> blocks to inline styles";
+      homepage = "https://github.com/kamelkev/CSS-Inliner";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   CSSMinifier = buildPerlPackage {
     pname = "CSS-Minifier";
     version = "0.01";
