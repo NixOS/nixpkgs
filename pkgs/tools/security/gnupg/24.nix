@@ -30,16 +30,18 @@
   withTpm2Tss ? !stdenv.hostPlatform.isDarwin && !enableMinimal,
   tpm2-tss,
   nixosTests,
+  runtimeShell,
+  gawk,
 }:
 
 assert guiSupport -> !enableMinimal;
 
-stdenv.mkDerivation rec {
-  pname = "gnupg";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "gnupg" + lib.optionalString enableMinimal "-minimal";
   version = "2.4.9";
 
   src = fetchurl {
-    url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
+    url = "mirror://gnupg/gnupg/gnupg-${finalAttrs.version}.tar.bz2";
     hash = "sha256-3RerLpoE/XnTnYU/WZy8hSBi3bmrUqTd60F2/YswKWQ=";
   };
 
@@ -103,7 +105,7 @@ stdenv.mkDerivation rec {
     # in the patch file.
     ./static.patch
   ]
-  ++ lib.map (v: "${freepgPatches}/STABLE-BRANCH-2-4-freepg/" + v) [
+  ++ lib.map (v: "${finalAttrs.freepgPatches}/STABLE-BRANCH-2-4-freepg/" + v) [
     "0002-gpg-accept-subkeys-with-a-good-revocation-but-no-sel.patch"
     "0003-gpg-allow-import-of-previously-known-keys-even-witho.patch"
     "0004-tests-add-test-cases-for-import-without-uid.patch"
@@ -143,6 +145,17 @@ stdenv.mkDerivation rec {
         --replace-fail "hkps://keyserver.ubuntu.com"  "hkps://keys.openpgp.org"
       substituteInPlace doc/gnupg.info-1 doc/dirmngr.texi \
         --replace-fail "https://keyserver.ubuntu.com" "https://keys.openpgp.org"
+      # Patch executables' paths in services
+      substituteInPlace doc/examples/systemd-user/*.service \
+        --replace-fail "/usr/bin" "$out/bin"
+      substituteInPlace doc/examples/systemd-user/keyboxd.service \
+        --replace-fail "/usr/lib/gnupg" "$out/libexec"
+      substituteInPlace doc/examples/systemd-user/gpg-agent-ssh.socket \
+        --replace-fail "=sh" "=${runtimeShell}" \
+        --replace-fail "gpgconf" "$out/bin/gpgconf" \
+        --replace-fail "awk" "${lib.getExe gawk}"
+      substituteInPlace doc/examples/systemd-user/gpg-agent.service \
+        --replace-fail "gpg-agent.socket" "sockets.target"
     ''
     + lib.optionalString (stdenv.hostPlatform.isLinux && withPcsc) ''
       sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
@@ -192,6 +205,8 @@ stdenv.mkDerivation rec {
           if [[ "$(basename $f)" == "gpg-wks-client" ]]; then continue; fi
           ln -s $f $out/bin/$(basename $f)
         done
+
+        install -Dm644 -t $out/lib/systemd/user doc/examples/systemd-user/*.{service,socket}
       '';
 
   enableParallelBuilding = true;
@@ -206,7 +221,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://gnupg.org";
-    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=${pname}.git;a=blob;f=NEWS;hb=refs/tags/${pname}-${version}";
+    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gnupg.git;a=blob;f=NEWS;hb=refs/tags/gnupg-${finalAttrs.version}";
     description = "Modern release of the GNU Privacy Guard, a GPL OpenPGP implementation";
     license = lib.licenses.gpl3Plus;
     longDescription = ''
@@ -227,6 +242,6 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.security-review ];
     platforms = lib.platforms.all;
     mainProgram = "gpg";
-    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnupg" version;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnupg" finalAttrs.version;
   };
-}
+})
