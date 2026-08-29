@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   meson,
   ninja,
   # FIXME: hotdoc errors out due to issues discovering libclang paths
@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "orc";
-  version = "0.4.42";
+  version = "0.4.44";
 
   outputs = [
     "out"
@@ -27,9 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional buildDevDoc "devdoc";
   outputBin = "dev"; # compilation tools
 
-  src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/orc/orc-${finalAttrs.version}.tar.xz";
-    hash = "sha256-fskSq1mvPMl4dMRWpWqK4e7FIMOF7ER+ihArK9EiyQw=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "gstreamer";
+    repo = "orc";
+    tag = finalAttrs.version;
+    hash = "sha256-/fWXR9LuINXwVMXCAGVm4H6I+Lut1u43rz+xmV+5cVs=";
   };
 
   postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
