@@ -68,7 +68,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pytest-env
     pytest-forked
     pytest-xdist
-    pytestCheckHook
     re-assert
   ])
   ++ lib.optionals (!i686Linux) [
