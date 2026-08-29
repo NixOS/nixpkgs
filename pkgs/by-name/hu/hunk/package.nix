@@ -10,13 +10,13 @@
 
 let
   pname = "hunk";
-  version = "0.19.0";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "modem-dev";
     repo = "hunk";
     tag = "v${version}";
-    hash = "sha256-PWblqDS86PaSl5ToFawCNGTxmrWcmoBAfq8R5lMDbyk=";
+    hash = "sha256-QPo9lPxbTUfBuWEzk2YViYSaJ8/7hTC+fAnTEnI0Y20=";
   };
 
   node_modules = stdenv.mkDerivation {
@@ -56,7 +56,7 @@ let
 
     dontFixup = true;
 
-    outputHash = "sha256-Ixsv2wXb39kSRck9ZbjJjRlzn4KS2fkfl3v4MEeD7cE=";
+    outputHash = "sha256-S8YE1Er15as5Z9Rmqxf7GcvfC5B+neddSbdsxe4/2mk=";
     outputHashMode = "recursive";
   };
 in
@@ -74,7 +74,7 @@ stdenv.mkDerivation {
   # Teach `hunk skill path` to find the FHS layout under share/skills/$pname
   # (https://github.com/NixOS/nixpkgs/issues/547426) instead of $out/skills.
   postPatch = ''
-    substituteInPlace src/core/paths.ts \
+    substituteInPlace src/core/run/paths.ts \
       --replace-fail \
         'join("node_modules", "hunkdiff", skillRelativePath),' \
         'join("node_modules", "hunkdiff", skillRelativePath),
