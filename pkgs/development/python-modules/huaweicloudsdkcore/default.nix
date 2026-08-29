@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "huaweicloudsdkcore";
-  version = "3.1.211";
+  version = "3.1.212";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huaweicloud";
     repo = "huaweicloud-sdk-python-v3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UcuWHYMnsgxMbB/RcBZkZYbRzZYEPP8Q8Ccur7iWrZk=";
+    hash = "sha256-/JqI+0KYcBx8nJ+6TkNWNGCrZM5W7YxFAX+Mrg62fas=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/huaweicloud-sdk-core";
