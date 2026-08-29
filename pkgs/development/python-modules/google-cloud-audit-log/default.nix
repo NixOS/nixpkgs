@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-audit-log";
-  version = "0.6.1";
+  version = "0.6.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_audit_log";
     inherit version;
-    hash = "sha256-SrpytF3BU0TaGy2JgTIAUP45z+gEMvOOcxiqLkd8W/I=";
+    hash = "sha256-6l3IkrGFjTRa7wxVY6coU0+odb0DiHZTkVdNPFf9jw4=";
   };
 
   build-system = [ setuptools ];
