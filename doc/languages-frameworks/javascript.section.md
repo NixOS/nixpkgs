@@ -377,7 +377,7 @@ In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `
 
 #### pnpmConfigHook {#javascript-pnpm-pnpmConfigHook}
 
-`pnpmConfigHook` supports adding additional `pnpm install` flags via `pnpmInstallFlags` which can be set to a Nix string array:
+`pnpmConfigHook` supports adding additional `pnpm install` flags via `pnpmInstallFlags`:
 
 ```nix
 {
@@ -391,25 +391,16 @@ In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `
 }
 ```
 
-If needed, set `dontPnpmConfigure = true;` to fully disable `pnpmConfigHook` without removing it from inputs manually.
+If you need to disable `pnpmConfigHook`, set `dontPnpmConfigure = true;`.
 
-Installing `node_modules` into an output would make a package unreproducible, because pnpm records install state inside it.
-Specifically, `.modules.yaml` stores where the pnpm store was (a temporary directory during a Nix build) and when it was written; `.pnpm-workspace-state-v1.json` stores a validation timestamp:
+By default, `pnpmConfigHook` deletes all instances of `.modules.yaml` and `.pnpm-workspace-state-v1.json` (these contain a build timestamp and path, either of which prevents a reproducible build).
 
-```console
-$ grep -E 'storeDir|prunedAt' result/lib/tsx/node_modules/.modules.yaml
-  "prunedAt": "Fri, 10 Jul 2026 13:19:13 GMT",
-  "storeDir": "/build/tmp.U0hlwviO2V/v10",
-```
+You can set `dontPnpmStripInstallState = true;` to keep the state files.
 
-`pnpmConfigHook` deletes every file with either name from every output after `fixupPhase`, and once more after `installCheckPhase`, because a check that runs pnpm writes them again.
-Packages no longer need to delete the files after their own `pnpm prune`.
-A deletion made before `pnpm prune` is different: pnpm reads `.modules.yaml` to decide how to prune, so those deletions stay in the package.
-Set `dontPnpmStripInstallState = true;` to keep the state files; `dontPnpmConfigure = true;` also disables this cleanup along with the rest of the hook.
+::: {.note}
+When using `makeWrapper` to call `pnpm run`:
 
-A package that starts its program through a `pnpm run` wrapper at runtime, like `misskey`, needs its wrapper adjusted.
-Since version 11, pnpm checks at startup whether `node_modules` is up to date and reinstalls the dependencies if not.
-In a built output the check cannot pass, and the attempted reinstall fails against the read-only Nix store.
+Since version 11, pnpm checks at startup whether `node_modules` is up to date and reinstalls dependencies if not.
 Point pnpm at a writable store directory and disable the check:
 
 ```nix
@@ -427,6 +418,7 @@ Point pnpm at a writable store directory and disable the check:
   '';
 }
 ```
+:::
 
 #### Dealing with `sourceRoot` {#javascript-pnpm-sourceRoot}
 
