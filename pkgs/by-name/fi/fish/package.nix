@@ -254,14 +254,16 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # Trailing space in 'awk ' to avoid matching store paths that coincidentally
+    # contain the string 'awk'. (Yes, this has happened before!)
     for cur in share/functions/*.fish; do
       substituteInPlace "$cur" \
         --replace-quiet '/usr/bin/getent' '${lib.getExe getent}' \
-        --replace-quiet 'awk' '${lib.getExe' gawk "awk"}'
+        --replace-quiet 'awk ' '${lib.getExe' gawk "awk"} '
     done
     for cur in share/completions/*.fish; do
       substituteInPlace "$cur" \
-        --replace-quiet 'awk' '${lib.getExe' gawk "awk"}'
+        --replace-quiet 'awk ' '${lib.getExe' gawk "awk"} '
     done
   ''
   + ''
