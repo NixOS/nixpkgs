@@ -6,8 +6,7 @@
   optype,
   scipy,
 }:
-
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scipy-stubs";
   version = "1.17.0.1";
   pyproject = true;
@@ -15,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scipy";
     repo = "scipy-stubs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wzXRnTaSYOePt3XvZ/OeBOQCKObuCL1rWrVDo73yM1I=";
   };
 
@@ -48,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jolars ];
   };
-}
+})
