@@ -405,7 +405,7 @@ in
           '') cfg.xmppEnvironments
         ))
         + ''
-          ${pkgs.jdk11_headless}/bin/java -Djava.util.logging.config.file=${./logging.properties-journal} -Dconfig.file=${configFile} -jar ${pkgs.jibri}/opt/jitsi/jibri/jibri.jar --config /var/lib/jibri/jibri.json
+          ${getExe pkgs.jdk17_headless} -Dwebdriver.chrome.driver=${getExe pkgs.chromedriver} -Djava.util.logging.config.file=${./logging.properties-journal} -Dconfig.file=${configFile} -jar ${pkgs.jibri}/opt/jitsi/jibri/jibri.jar --config /var/lib/jibri/jibri.json
         '';
 
       environment.HOME = "/var/lib/jibri";
