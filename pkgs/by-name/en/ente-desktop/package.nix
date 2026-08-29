@@ -194,6 +194,7 @@ buildNpmPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       pinpox
       Br1ght0ne
+      wrench-exile-legacy
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
