@@ -101,6 +101,16 @@ import ./generic.nix {
       url = "https://raw.githubusercontent.com/zabbly/incus/8834ea357ab4f0fd546077fa7630bd75762a485d/patches/incus-0002-incusd-project-Enforce-isolated-restriction-when-idm.patch?full_index=1";
       hash = "sha256-KIrSDgD4AI5F72YySAlPosBEQTZEfSQmkrSn3VUVtLs=";
     })
+    # incusd/images: Check access before reusing cross-project image
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/83682ab16af5777b2a5650bb7c9878d57d0187f9.patch?full_index=1";
+      hash = "sha256-Tz7e1/kHF5uhuTWJWeV74trhTkx8hLjfKuOCM1hpmXo=";
+    })
+    # client/images: Prevent path traversal in downloaded image name
+    (fetchpatch2 {
+      url = "https://github.com/lxc/incus/commit/9e188e31e43c21fa8f2a4cac265aa246d4c947f2.patch?full_index=1";
+      hash = "sha256-KFYKB9PJK/U4/jSe3rmMeR9FWevvvi47BRy055Zj8Io=";
+    })
 
   ];
   lts = true;

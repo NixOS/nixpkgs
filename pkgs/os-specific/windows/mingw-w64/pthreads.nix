@@ -16,4 +16,10 @@ stdenv.mkDerivation {
   preConfigure = ''
     cd mingw-w64-libraries/winpthreads
   '';
+
+  # Supplies the pthreads API MinGW itself lacks, so a libgcc built against it
+  # gets the "posix" threading model rather than the bare libc's "win32". Same
+  # attribute a libc uses to declare what it provides; see `threadModel` in
+  # pkgs/development/compilers/gcc/ng/common/libgcc/default.nix.
+  passthru.threadModel = "posix";
 }

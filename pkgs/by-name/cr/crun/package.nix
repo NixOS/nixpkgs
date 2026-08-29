@@ -5,13 +5,13 @@
   autoreconfHook,
   go-md2man,
   pkg-config,
+  json_c,
   libcap,
   libkrun,
   libkrun-sev,
   libseccomp,
   python3,
   systemdMinimal,
-  yajl,
   nixosTests,
   criu,
   versionCheckHook,
@@ -45,13 +45,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "crun";
-  version = "1.27.1";
+  version = "1.29.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "crun";
     tag = finalAttrs.version;
-    hash = "sha256-cuzw0YbbV4LU5nOP2DZghLAIYhkSY3Qf1bdm+JskHZA=";
+    hash = "sha256-KmwkiExekHozW84dmkcC8OW8AP11Fsqj2t/n+ZGXpB4=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -70,10 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     criu
+    json_c
     libcap
     libseccomp
     systemdMinimal
-    yajl
   ]
   ++ lib.optionals withLibkrun [
     libkrun

@@ -58,7 +58,9 @@ let
 
         ao = callPackage ../development/ocaml-modules/ao { };
 
-        apron = callPackage ../development/ocaml-modules/apron { };
+        apron = callPackage ../development/ocaml-modules/apron {
+          inherit (pkgs) flint;
+        };
 
         apronext = callPackage ../development/ocaml-modules/apronext { };
 
@@ -688,6 +690,10 @@ let
         };
 
         flex = callPackage ../development/ocaml-modules/flex { };
+
+        flint = callPackage ../development/ocaml-modules/flint {
+          flint-c = pkgs.flint;
+        };
 
         fmt = callPackage ../development/ocaml-modules/fmt { };
 
@@ -1367,6 +1373,8 @@ let
 
         mlbdd = callPackage ../development/ocaml-modules/mlbdd { };
 
+        mlcuddidl = callPackage ../development/ocaml-modules/mlcuddidl { };
+
         mldoc = callPackage ../development/ocaml-modules/mldoc { };
 
         mlgmpidl = callPackage ../development/ocaml-modules/mlgmpidl { };
@@ -1381,6 +1389,7 @@ let
 
         mopsa = callPackage ../development/ocaml-modules/mopsa {
           inherit (pkgs.llvmPackages_19) clang libclang libllvm;
+          inherit (pkgs) flint;
         };
 
         morbig = callPackage ../development/ocaml-modules/morbig {

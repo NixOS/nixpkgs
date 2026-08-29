@@ -258,7 +258,7 @@
       ++
         lib.optionals
           (
-            stdenv.hostPlatform.isRiscV64
+            (stdenv.hostPlatform.isRiscV64 || stdenv.hostPlatform.isLoongArch64)
             && lib.versionAtLeast version "9.10"
             && lib.versionOlder version "9.12"
           )
@@ -339,6 +339,20 @@
           hash = "sha256-pv4NDyQ6FlZgmTYZ4Ghis4qggt7nCDMhqGaFxTxVPac=";
           includes = [ "rts/rts.cabal" ];
         })
+      ]
+
+      # Enable GHCi on LoongArch64 (not in upstream's hardcoded platform list)
+      ++ lib.optionals stdenv.targetPlatform.isLoongArch64 [
+        (
+          if lib.versionOlder version "9.10" then
+            ./ghc-9.6-hadrian-Enable-GHCi-on-all-platforms.patch
+          else if lib.versionOlder version "9.12" then
+            ./ghc-9.10-hadrian-Enable-GHCi-on-all-platforms.patch
+          else if lib.versionOlder version "9.14" then
+            ./ghc-9.12-hadrian-Enable-GHCi-on-all-platforms.patch
+          else
+            null
+        )
       ]
 
       ++ (import ./common-llvm-patches.nix { inherit lib version fetchpatch; });

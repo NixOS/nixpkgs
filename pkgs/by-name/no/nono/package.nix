@@ -15,7 +15,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nono";
-  version = "0.71.0";
+  version = "0.74.0";
 
   __darwinAllowLocalNetworking = true; # required for tests
 
@@ -23,9 +23,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "nolabs-ai";
     repo = "nono";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Xrqd8Do1R2kCwTAmju2VmOLAf329eoOSslfa8i9ogJc=";
+    hash = "sha256-Njfs0kkoNj3VjLd6ziz5WAgI+HLMZ+djqxjbXabEdzg=";
   };
-  cargoHash = "sha256-bMGrLh3DEA3yJsyb62Xdt+SfhzFY5VXawai4V6xttpI=";
+  cargoHash = "sha256-+JLE0hBmsxqDnTwkFRVxphA6HdA/EgkWHIAJiExsxp4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -46,17 +46,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "test_all_profiles_signal_mode_resolves"
       "test_restrict_execute_does_not_break_rename_into_new_subdir"
       # panic
-      "build_run_profile_patch_adds_override_deny_for_sensitive_file"
       "build_run_profile_patch_merges_read_and_write_to_allow_file"
       "prepare_profile_save_from_patch_updates_existing_user_profile"
-      "would_shadow_builtin_allows_update_of_existing_user_override"
-      "would_shadow_builtin_flags_known_builtin_names"
       "create_audit_state_creates_session_when_enabled"
 
       # audit_attestation
       # needs /bin/pwd
       "audit_verify_reports_signed_attestation_with_pinned_public_key"
       "rollback_signed_session_verifies_from_audit_dir_bundle"
+
+      # audit_ledger
+      # needs /bin/pwd
+      "corrupt_audit_ledger_downgrades_only_a_clean_exit"
+      "corrupt_audit_ledger_is_reported_on_every_run_and_left_untouched"
+
+      # execution_strategy_run
+      # needs /usr/bin/env
+      "direct_workdir_overrides_untrusted_host_pwd"
+      "direct_workdir_sets_child_pwd_from_uncovered_launch_dir"
+      "supervised_workdir_overrides_untrusted_host_pwd"
+      "supervised_workdir_sets_child_pwd_from_uncovered_launch_dir"
 
       # nono-cli
       # wants a script `scripts/test-list-aliases.sh`, `git`, and `.git` history

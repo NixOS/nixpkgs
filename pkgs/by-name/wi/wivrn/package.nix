@@ -177,6 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   dontWrapQtApps = true;
+  separateDebugInfo = true;
 
   preFixup = lib.optionalString (!clientLibOnly) ''
     wrapProgram "$out/bin/wivrn-server" \

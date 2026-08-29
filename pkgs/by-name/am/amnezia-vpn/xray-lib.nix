@@ -1,20 +1,20 @@
 {
   fetchFromGitHub,
-  buildGo126Module,
+  buildGoModule,
 }:
 
-buildGo126Module rec {
+buildGoModule rec {
   pname = "amnezia-xray";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amnezia-xray-bindings";
     tag = "v${version}";
-    hash = "sha256-HZ6qHHDMev8FoOIplWAaPOlCSfikpgKClvbxl+877S0=";
+    hash = "sha256-kGtRw5Ic/++1ehwLToZ96WfC3ULp+DIsPYArqjL06ck=";
   };
 
-  vendorHash = "sha256-ac+wJrwdTtLFJG+Ka1Ksb1P+3lI7sFwCh4Nr5+fPgq0=";
+  vendorHash = "sha256-JAHpQUMQT6tJKwGld0QCobDxgLVujA4KHkhOLXHS65w=";
 
   env.CGO_ENABLED = 1;
 
@@ -30,7 +30,7 @@ buildGo126Module rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm444 build/amnezia_xray.a -t $out/lib/
+    install -Dm444 build/amnezia_xray.a $out/lib/libamnezia_xray.a
     install -Dm444 build/amnezia_xray.h -t $out/include/
 
     runHook postInstall

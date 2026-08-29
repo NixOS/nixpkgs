@@ -59,6 +59,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/espressif/esp-idf-size";
     changelog = "https://github.com/espressif/esp-idf-size/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ hexa ];
+    maintainers = [ ];
   };
 }

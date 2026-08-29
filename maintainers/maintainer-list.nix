@@ -9340,6 +9340,12 @@
     githubId = 41450706;
     name = "fin-w";
   };
+  fin444 = {
+    email = "fin444_dev@proton.me";
+    github = "fin444";
+    githubId = 24360839;
+    name = "fin444";
+  };
   findus = {
     email = "findus-nix@trsk.cc";
     github = "findus";
@@ -11846,6 +11852,13 @@
     githubId = 12761234;
     name = "Ida Bzowska";
   };
+  idkdontaskm3 = {
+    name = "idkdontaskm3";
+    email = "idkdontaskm3@proton.me";
+    github = "idkdontaskm3";
+    githubId = 252943539;
+    matrix = "@idkdontaskm3:matrix.org";
+  };
   idlip = {
     name = "Dilip";
     email = "igoldlip@gmail.com";
@@ -13380,6 +13393,12 @@
     github = "jjacke13";
     githubId = 156372486;
     name = "Vaios Karastathis";
+  };
+  jjba23 = {
+    email = "jjbigorra@gmail.com";
+    github = "jjba23";
+    githubId = 42377845;
+    name = "Josep Bigorra";
   };
   jjjollyjim = {
     email = "jamie@kwiius.com";

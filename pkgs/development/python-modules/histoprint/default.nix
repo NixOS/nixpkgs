@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "histoprint";
-  version = "2.7.0";
+  version = "2.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "histoprint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RIW3azlQH1+F7MIygHIUiBj4Yr1iVEeamUPNGHC605c=";
+    hash = "sha256-yYPFGFrw4JV5Abu2kbNcwsnVtCNvnqhCl4cbX95wzQ8=";
   };
 
   build-system = [

@@ -14,7 +14,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cramjam";
-  version = "2.12.0";
+  version = "2.12.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
     owner = "milesgranger";
     repo = "cramjam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Sjb1YBFJ26or4RiTA1G0UmVD6tyi9hNwBrde7E/WOes=";
+    hash = "sha256-aiXe19cDl4dsWJQO2z+PBXN8svGsHsykoLR6vKr8q0U=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

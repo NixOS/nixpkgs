@@ -41,7 +41,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "huggingface-hub";
-  version = "1.28.0";
+  version = "1.27.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -49,7 +49,7 @@ buildPythonPackage (finalAttrs: {
     owner = "huggingface";
     repo = "huggingface_hub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nUdBUBLM2NivmQiumY36GfUYREl+4hRszlJEM6ryj1w=";
+    hash = "sha256-AJglCIJZPeabIjgx+qeEpKM2HhX2hr4xx4SWpghDrhE=";
   };
 
   build-system = [ setuptools ];

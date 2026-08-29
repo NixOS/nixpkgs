@@ -23,6 +23,8 @@ in
       services."AmneziaVPN" = {
         wantedBy = [ "multi-user.target" ];
         path = with pkgs; [
+          gawk
+          iptables
           procps
           iproute2
           sudo

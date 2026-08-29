@@ -1,0 +1,151 @@
+diff --git a/backend/classes/backup.js b/backend/classes/backup.js
+index 981b7d6..c6b4124 100644
+--- a/backend/classes/backup.js
++++ b/backend/classes/backup.js
+@@ -15,7 +15,9 @@ const postgresPassword = process.env.POSTGRES_PASSWORD;
+ const postgresIp = process.env.POSTGRES_IP;
+ const postgresPort = process.env.POSTGRES_PORT;
+ const postgresDatabase = process.env.POSTGRES_DB || "jfstat";
+-const backupfolder = "backup-data";
++const backupfolder = process.env.JS_BACKUP_DIR
++  ? path.resolve(process.env.JS_BACKUP_DIR)
++  : path.join(__dirname, "..", "backup-data");
+ 
+ function checkFolderWritePermission(folderPath) {
+   try {
+@@ -51,7 +53,7 @@ async function backup(refLog) {
+ 
+   try {
+     let now = dayjs();
+-    const backuppath = "./" + backupfolder;
++    const backuppath = backupfolder;
+ 
+     if (!fs.existsSync(backuppath)) {
+       fs.mkdirSync(backuppath);
+@@ -79,7 +81,7 @@ async function backup(refLog) {
+     }
+ 
+     // const backupPath = `../backup-data/backup_${now.format('YYYY-MM-DD HH-mm-ss')}.json`;
+-    const directoryPath = path.join(__dirname, "..", backupfolder, `backup_${now.format("YYYY-MM-DD HH-mm-ss")}.json`);
++    const directoryPath = path.join(backupfolder, `backup_${now.format("YYYY-MM-DD HH-mm-ss")}.json`);
+     refLog.logData.push({ color: "yellow", Message: "Begin Backup " + directoryPath });
+     const stream = fs.createWriteStream(directoryPath, { flags: "a" });
+     stream.on("error", async (error) => {
+@@ -105,7 +107,7 @@ async function backup(refLog) {
+ 
+     //Cleanup excess backups
+     let deleteCount = 0;
+-    const directoryPathDelete = path.join(__dirname, "..", backupfolder);
++    const directoryPathDelete = backupfolder;
+ 
+     const files = await new Promise((resolve, reject) => {
+       fs.readdir(directoryPathDelete, (err, files) => {
+@@ -132,7 +134,7 @@ async function backup(refLog) {
+     fileData = fileData.sort((a, b) => new Date(b.datecreated) - new Date(a.datecreated)).slice(5);
+ 
+     for (var oldBackup of fileData) {
+-      const oldBackupFile = path.join(__dirname, "..", backupfolder, oldBackup.name);
++      const oldBackupFile = path.join(backupfolder, oldBackup.name);
+ 
+       await new Promise((resolve, reject) => {
+         fs.unlink(oldBackupFile, (err) => {
+diff --git a/backend/classes/env.js b/backend/classes/env.js
+index afb76e7..5863934 100644
+--- a/backend/classes/env.js
++++ b/backend/classes/env.js
+@@ -16,7 +16,12 @@ async function writeEnvVariables() {
+   const envContent = `window.env = ${JSON.stringify(envVariables, null, 2)};`;
+ 
+   // Define the output file path
+-  const outputPath = path.join(__dirname, "..", "..", "dist", "env.js");
++  const envDir = process.env.JS_ENV_DIR ? path.resolve(process.env.JS_ENV_DIR) : path.join(__dirname, "..", "..", "dist");
++  const outputPath = path.join(envDir, "env.js");
++
++  if (process.env.JS_ENV_DIR) {
++    fs.mkdirSync(envDir, { recursive: true });
++  }
+ 
+   // Write the environment variables to the file
+   fs.writeFile(outputPath, envContent, "utf8", (err) => {
+diff --git a/backend/routes/backup.js b/backend/routes/backup.js
+index cfc3d3f..12d9b32 100644
+--- a/backend/routes/backup.js
++++ b/backend/routes/backup.js
+@@ -25,7 +25,9 @@ const postgresPort = process.env.POSTGRES_PORT;
+ const postgresDatabase = process.env.POSTGRES_DB || "jfstat";
+ const postgresSslRejectUnauthorized = process.env.POSTGRES_SSL_REJECT_UNAUTHORIZED === undefined ? true : process.env.POSTGRES_SSL_REJECT_UNAUTHORIZED === "true";
+ 
+-const backupfolder = "backup-data";
++const backupfolder = process.env.JS_BACKUP_DIR
++  ? path.resolve(process.env.JS_BACKUP_DIR)
++  : path.join(__dirname, "..", "backup-data");
+ 
+ // Restore function
+ 
+@@ -187,7 +189,7 @@ router.get("/restore/:filename", async (req, res) => {
+     Logging.insertLog(uuid, triggertype.Manual, taskName.restore);
+ 
+     const filename = sanitizeFilename(req.params.filename);
+-    const filePath = path.join(__dirname, "..", backupfolder, filename);
++    const filePath = path.join(backupfolder, filename);
+ 
+     await restore(filePath, refLog);
+     Logging.updateLog(uuid, refLog.logData, taskstate.SUCCESS);
+@@ -202,7 +204,7 @@ router.get("/restore/:filename", async (req, res) => {
+ 
+ router.get("/files", (req, res) => {
+   try {
+-    const directoryPath = path.join(__dirname, "..", backupfolder);
++    const directoryPath = backupfolder;
+     fs.readdir(directoryPath, (err, files) => {
+       if (err) {
+         res.status(500).send("Unable to read directory");
+@@ -229,7 +231,7 @@ router.get("/files", (req, res) => {
+ //download backup file
+ router.get("/files/:filename", (req, res) => {
+   const filename = sanitizeFilename(req.params.filename);
+-  const filePath = path.join(__dirname, "..", backupfolder, filename);
++  const filePath = path.join(backupfolder, filename);
+   res.download(filePath);
+ });
+ 
+@@ -237,7 +239,7 @@ router.get("/files/:filename", (req, res) => {
+ router.delete("/files/:filename", (req, res) => {
+   try {
+     const filename = sanitizeFilename(req.params.filename);
+-    const filePath = path.join(__dirname, "..", backupfolder, filename);
++    const filePath = path.join(backupfolder, filename);
+ 
+     fs.unlink(filePath, (err) => {
+       if (err) {
+@@ -256,7 +258,7 @@ router.delete("/files/:filename", (req, res) => {
+ 
+ const storage = multer.diskStorage({
+   destination: function (req, file, cb) {
+-    cb(null, path.join(__dirname, "..", backupfolder)); // Set the destination folder for uploaded files
++    cb(null, backupfolder); // Set the destination folder for uploaded files
+   },
+   filename: function (req, file, cb) {
+     cb(null, file.originalname); // Set the file name
+diff --git a/backend/server.js b/backend/server.js
+index d70975d..1898ec6 100644
+--- a/backend/server.js
++++ b/backend/server.js
+@@ -106,6 +106,17 @@ const findFile = (dir, fileName) => {
+ 
+ const root = path.join(__dirname, "..", "dist");
+ 
++// When JS_ENV_DIR is set, env.js is written outside of `root` (e.g. because
++// `root` lives on a read-only filesystem), so serve it explicitly from
++// there instead of relying on the findFile() lookup below, which only
++// searches under `root`.
++if (process.env.JS_ENV_DIR) {
++  const envDir = path.resolve(process.env.JS_ENV_DIR);
++  app.get(/\/env\.js$/, (req, res) => {
++    res.sendFile(path.join(envDir, "env.js"));
++  });
++}
++
+ //hacky middleware to handle basename changes for UI
+ 
+ app.use((req, res, next) => {

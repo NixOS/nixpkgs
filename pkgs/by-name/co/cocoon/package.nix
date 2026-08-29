@@ -8,13 +8,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "cocoon";
-  version = "0.10";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "haileyok";
     repo = "cocoon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SvLXtn4Nr8zcvvjGarNLYeKqyniI6eg50cnqV6Q+3/s=";
+    hash = "sha256-Iq+BLljHbJFKVNYkLN1emTvMSPR660iysptFeMqKfEI=";
   };
 
   ldflags = [

@@ -2,7 +2,6 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_22,
   pkg-config,
   node-gyp,
   vips,
@@ -12,13 +11,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "librechat";
-  version = "0.8.6";
+  version = "0.8.7";
 
   src = fetchFromGitHub {
     owner = "danny-avila";
     repo = "LibreChat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cWgjsLN7NnJNJ1hYPo0h3lh+W4wi9qqttevNfNrYdXg=";
+    hash = "sha256-egnmkYpQS/AshMmXP5C8qhwA+7TPZYnu0ct552HFjGg=";
   };
 
   patches = [
@@ -35,10 +34,7 @@ buildNpmPackage (finalAttrs: {
   ];
 
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-Y+oC9eigwzL8jei5Hs4YOf32oFgULPmHrSDApxPKh+0=";
-
-  # npm dependency install fails with nodejs_24: https://github.com/NixOS/nixpkgs/issues/474535
-  nodejs = nodejs_22;
+  npmDepsHash = "sha256-U2DzvfzKCmAYLFG0FbFcng5goj1mYCjTpJuQ36fVNuA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -61,7 +57,12 @@ buildNpmPackage (finalAttrs: {
 
   # npmConfigHook only patches the root node_modules
   postConfigure = ''
-    patchShebangs client/node_modules
+    patchShebangs $(find "$PWD" -type d -name node_modules -prune ! -path "$PWD/node_modules" -print)
+  '';
+
+  preInstall = ''
+    # not sure why this is something npm pack tries to keep
+    rm -rf ./packages/data-schemas/node_modules/winston-transport/.nyc_output
   '';
 
   # For reasons beyond my understanding, the api and client directory disappears after the build finishes.

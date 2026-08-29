@@ -19,7 +19,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiohomematic";
-  version = "2026.8.2";
+  version = "2026.8.5";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
     owner = "SukramJ";
     repo = "aiohomematic";
     tag = finalAttrs.version;
-    hash = "sha256-5jsIc/1zgDjHBlHtTQv23it+KbmQu3wEyCpWXdXe9ro=";
+    hash = "sha256-AmtDusw8pz+7OK6DMujlOcBn5yQ8K21YImb2aSohp78=";
   };
 
   build-system = [ setuptools ];

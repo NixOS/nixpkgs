@@ -13,6 +13,7 @@
   ninja,
   nodejs,
   npmHooks,
+  numen,
   pkg-config,
   qt6,
   stdenv,
@@ -24,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vicinae";
-  version = "0.26.3";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Of1YU59mj9BZwQi7lbj/+XGaCs+MTGFCZ12bgcNbEu0=";
+    hash = "sha256-iCTDb94QUz4mE8IuQOf/27kn4NLBi9A/AN7pRDc5iBE=";
   };
 
   apiDeps = fetchNpmDeps {
@@ -47,9 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
     "VICINAE_GIT_TAG" = "v${finalAttrs.version}";
     "VICINAE_PROVENANCE" = "nix";
     "INSTALL_NODE_MODULES" = "OFF";
-    "INSTALL_BROWSER_NATIVE_HOST" = "OFF";
     "USE_SYSTEM_CMARK_GFM" = "ON";
     "USE_SYSTEM_GLAZE" = "ON";
+    "USE_SYSTEM_NUMEN" = "ON";
     "USE_SYSTEM_KF6" = "ON";
     "USE_SYSTEM_QT_KEYCHAIN" = "ON";
     "BUNDLE_SOULVER_CORE" = "OFF";
@@ -81,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     libqalculate
     minizip
     nodejs
+    numen
     qt6.qtbase
     qt6.qtdeclarative
     qt6.qtimageformats

@@ -91,6 +91,10 @@ with lib.maintainers;
     shortName = "Blockchains";
   };
 
+  boot-security = {
+    github = "boot-security";
+  };
+
   budgie = {
     members = [
       bobby285271

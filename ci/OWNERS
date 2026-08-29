@@ -199,7 +199,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 /doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn @wolfgangwalther
 /maintainers/scripts/haskell                  @sternenseemann @maralorn @wolfgangwalther
 /pkgs/development/compilers/ghc               @sternenseemann @maralorn @wolfgangwalther
-/pkgs/development/compilers/ghc/9.6.6-debian-binary.nix  @sternenseemann @maralorn @wolfgangwalther @OPNA2608 @liberodark
+/pkgs/development/compilers/ghc/9.6.6-debian-binary.nix  @sternenseemann @maralorn @wolfgangwalther @OPNA2608 @liberodark @NixOS/loongarch64
 /pkgs/development/haskell-modules             @sternenseemann @maralorn @wolfgangwalther
 /pkgs/test/haskell                            @sternenseemann @maralorn @wolfgangwalther
 /pkgs/top-level/release-haskell.nix           @sternenseemann @maralorn @wolfgangwalther
@@ -528,3 +528,7 @@ pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @4evy @johnrtitor
 /nixos/lib/testing                                          @NixOS/test-driver
 /nixos/tests/nixos-test-driver                              @NixOS/test-driver
 /nixos/modules/virtualisation/nspawn-container/run-nspawn   @NixOS/test-driver
+
+# Boot security
+/pkgs/by-name/au/autopen    @NixOS/boot-security
+/pkgs/misc/signed-packages  @NixOS/boot-security

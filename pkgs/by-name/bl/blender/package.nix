@@ -119,12 +119,12 @@ in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "5.2.0";
+  version = "5.2.1";
 
   src = fetchzip {
     name = "source";
     url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-V2+Oc7GT31JvWccffzUaingEs8CtSFaazgQ+YdZUB7M=";
+    hash = "sha256-LXdJZDJoO9/yjkxn6qT42jv0YRpiwCiIWWGKubs3VLI=";
   };
 
   patches = [

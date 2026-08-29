@@ -10,18 +10,19 @@
   darwin,
   nodejs,
   electron,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drawio";
-  version = "31.3.1";
+  version = "31.3.2";
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-7Wtmh6K9qLkSUjiZI2/+Z+AoD0oHJKq6nlO7kHUcj9s=";
+    hash = "sha256-qjc+fAC4+aoqp3mlgocgCY+Af5csy9v1IORM8ux3iPI=";
   };
 
   # `@electron/fuses` tries to run `codesign` and fails. Disable and use autoSignDarwinBinariesHook instead
@@ -32,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = fetchNpmDeps {
     src = finalAttrs.src;
-    hash = "sha256-mG2FsdxXC+VTRHLgAsx9h2qCyrkSway8W/D4Eipp+go=";
+    hash = "sha256-ET1BZBRrVYl7T9BVNxH91WU7J8RHWGw0MahGtRRUGU0=";
   };
 
   nativeBuildInputs = [
@@ -122,6 +123,8 @@ stdenv.mkDerivation (finalAttrs: {
       startupWMClass = "draw.io";
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Desktop version of draw.io for creating diagrams";

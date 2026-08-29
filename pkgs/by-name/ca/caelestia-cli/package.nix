@@ -74,7 +74,6 @@ python3.pkgs.buildPythonApplication rec {
         --replace-fail '"qs", "-c", "caelestia"' '"caelestia-shell"'
 
     substituteInPlace src/caelestia/subcommands/toggle.py \
-        --replace-fail 'discord' 'discord' \
         --replace-fail '["todoist"]' '["todoist.desktop"]'
   '';
 
@@ -83,7 +82,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   meta = {
-    description = "The main control script for the Caelestia dotfiles";
+    description = "The main control script for the Caelestia Shell";
     homepage = "https://github.com/caelestia-dots/cli";
     license = lib.licenses.gpl3Only;
     mainProgram = "caelestia";
