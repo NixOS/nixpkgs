@@ -6,13 +6,11 @@
   lib,
 }:
 let
-  pname = "capacities";
-  version = "1.65.13";
+  inherit (lib.importJSON ./version.json) version url sha256;
 
-  src = fetchurl {
-    url = "https://web.archive.org/web/20260518194627/https://2vks4.upcloudobjects.com/capacities-desktop-app/Capacities-1.65.13.AppImage";
-    hash = "sha256-ATiX1h9hXmKMFtY6OEyZEoJ/SxJGgbj5/QZwFF1sfFQ=";
-  };
+  pname = "capacities";
+
+  src = fetchurl { inherit url sha256; };
 
   appimageContents = appimageTools.extract {
     inherit
@@ -35,26 +33,28 @@ appimageTools.wrapType2 {
       --add-flags "--ozone-platform-hint=auto"
 
     # Check for required desktop file
-    if [ ! -f ${appimageContents}/capacities.desktop ]; then
+    if [ ! -f ${appimageContents}/io.capacities.app.desktop ]; then
       echo "Error: Missing .desktop file in ${appimageContents}"
       exit 1
     else
       # Install and modify the desktop file
-      install -m 444 -D ${appimageContents}/capacities.desktop $out/share/applications/capacities.desktop
-      substituteInPlace $out/share/applications/capacities.desktop \
+      install -m 444 -D ${appimageContents}/io.capacities.app.desktop $out/share/applications/io.capacities.app.desktop
+      substituteInPlace $out/share/applications/io.capacities.app.desktop \
         --replace-fail "Exec=AppRun" "Exec=capacities"
     fi
 
     # Check for required icon file
-    if [ ! -f ${appimageContents}/capacities.png ]; then
+    if [ ! -f ${appimageContents}/capacities.svg ]; then
       echo "Error: Missing icon file in ${appimageContents}"
       exit 1
     else
       # Resize and install the icon
-      ${lib.getExe imagemagick} ${appimageContents}/capacities.png -resize 512x512 capacities_512.png
+      ${lib.getExe imagemagick} ${appimageContents}/capacities.svg -resize 512x512 capacities_512.png
       install -m 444 -D capacities_512.png $out/share/icons/hicolor/512x512/apps/capacities.png
     fi
   '';
+
+  passthru.updateScript = ./update.py;
 
   meta = {
     description = "Calm place to make sense of the world and create amazing things";

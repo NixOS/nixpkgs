@@ -2,9 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  qmake,
-  qtbase,
-  qttools,
+  qt6,
   subversion,
   apr,
 }:
@@ -24,19 +22,23 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    qmake
-    qttools
+    qt6.qmake
+    qt6.qttools
   ];
   buildInputs = [
     apr.dev
     subversion.dev
-    qtbase
+    qt6.qtbase
+    qt6.qt5compat
   ];
 
   qmakeFlags = [
     "VERSION=${version}"
     "APR_INCLUDE=${apr.dev}/include/apr-1"
     "SVN_INCLUDE=${subversion.dev}/include/subversion-1"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "CONFIG-=app_bundle"
   ];
 
   env.NIX_LDFLAGS = "-lsvn_fs-1";
