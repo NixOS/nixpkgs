@@ -694,6 +694,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     changelog = "https://github.com/vllm-project/vllm/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/vllm-project/vllm";
     license = lib.licenses.asl20;
+    mainProgram = "vllm";
     maintainers = with lib.maintainers; [
       happysalada
       lach
