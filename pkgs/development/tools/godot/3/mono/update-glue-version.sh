@@ -4,7 +4,7 @@
 
 # This script updates the hard-coded glue_version in:
 #
-#    patches/gen_cs_glue_version.py/hardcodeGlueVersionFor{version}.patch
+#    patches/gen_cs_glue_version.py/hardcodeGlueVersionFor.patch
 #
 # It does so by pulling it from the official build.
 
@@ -33,13 +33,9 @@ patch-godot-bin "$gddir"/Godot_v$gdversion-stable_mono_x11_64/Godot_v$gdversion-
 # Extract the glue version.
 glueversion=$(grep -Po '(?<=get_cs_glue_version\(\) \{ return )[0-9]+(?=; \})' "$gluedir"/mono_glue.gen.cpp)
 
-patchdir="$(dirname "${BASH_SOURCE[0]}")"/patches/gen_cs_glue_version.py/
-patchprefix=hardcodeGlueVersion_
-newpatchname=$patchprefix$gdversion.patch
+patch="$(dirname "${BASH_SOURCE[0]}")"/patches/gen_cs_glue_version.py/hardcodeGlueVersion.patch
 
 # Update the patch with the obtained glue version.
-sed -i "s/^+    glue_version = [0-9]\+$/+    glue_version = $glueversion/" $patchdir/$patchprefix*.patch
+sed -i "s/^+    glue_version = [0-9]\+$/+    glue_version = $glueversion/" "$patch"
 
-mv $patchdir/$patchprefix*.patch $patchdir/$patchprefix$gdversion.patch
-
-echo "Updated $patchdir/$patchprefix$gdversion.patch with glue_version: $glueversion"
+echo "Updated $patch with glue_version: $glueversion"
