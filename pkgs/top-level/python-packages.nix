@@ -11001,7 +11001,9 @@ self: super: with self; {
     }
   );
 
-  mlx = callPackage ../development/python-modules/mlx { };
+  mlx = callPackage ../development/python-modules/mlx {
+    inherit (pkgs.darwin) metal-cpp metal-toolchain;
+  };
 
   mlx-lm = callPackage ../development/python-modules/mlx-lm { };
 
