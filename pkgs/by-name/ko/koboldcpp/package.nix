@@ -99,19 +99,19 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out/bin"
+    mkdir -p "$out/bin/embd_res"
 
     install -Dm755 koboldcpp.py "$out/bin/koboldcpp.unwrapped"
     cp *.so "$out/bin"
-    cp embd_res/*.embd "$out/bin"
+    cp -r embd_res/* "$out/bin/embd_res/"
 
     ${lib.optionalString metalSupport ''
       cp *.metal "$out/bin"
     ''}
 
     ${lib.optionalString (!koboldLiteSupport) ''
-      rm "$out/bin/kcpp_docs.embd"
-      rm "$out/bin/klite.embd"
+      rm "$out/bin/embd_res/kcpp_docs.embd"
+      rm "$out/bin/embd_res/klite.embd"
     ''}
 
     runHook postInstall
