@@ -80,9 +80,12 @@ then
     + ''
       cat >> $dev/nix-support/setup-hook <<-'EOF'
         override-pkg-config-gir-variables() {
-          PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_SCANNER="$(type -p g-ir-scanner)"
-          PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_COMPILER="$(type -p g-ir-compiler)"
-          PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_GENERATE="$(type -p g-ir-generate)"
+          # `|| true` because this hook also reaches packages that never put
+          # gobject-introspection on PATH, it is propagated to anything
+          # depending on e.g. pygobject3.
+          PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_SCANNER="$(type -p g-ir-scanner || true)"
+          PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_COMPILER="$(type -p g-ir-compiler || true)"
+          PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_GENERATE="$(type -p g-ir-generate || true)"
           export PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_SCANNER
           export PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_COMPILER
           export PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_GENERATE
