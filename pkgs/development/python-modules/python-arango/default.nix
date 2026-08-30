@@ -29,24 +29,24 @@ let
   };
 in
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-arango";
-  version = "8.3.3";
+  version = "8.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "arangodb";
     repo = "python-arango";
-    tag = version;
-    hash = "sha256-4nDMu0n6O0C9QMPDXCA2TkN56zqajn8qQqB6ma+JvAA=";
+    tag = finalAttrs.version;
+    hash = "sha256-yciuZy/xyRtyrK11CCfOBDI45kPZZ1Lb5P7aVQ1gx8s=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     importlib-metadata
     requests
     requests-toolbelt
@@ -150,8 +150,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python Driver for ArangoDB";
     homepage = "https://github.com/ArangoDB-Community/python-arango";
-    changelog = "https://github.com/ArangoDB-Community/python-arango/releases/tag/${src.tag}";
+    changelog = "https://github.com/ArangoDB-Community/python-arango/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jsoo1 ];
   };
-}
+})

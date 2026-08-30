@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "x42-avldrums";
-  version = "0.7.4";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "x42";
     repo = "avldrums.lv2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4/orNlNTPSGdCBmb35i77i9L/rsuFDyWLKTG6h4zE0k=";
+    hash = "sha256-9I/6zHISoH8+4NpASSyu6A5dSGtj+m7kc9NGp6KuIsI=";
     fetchSubmodules = true;
   };
 

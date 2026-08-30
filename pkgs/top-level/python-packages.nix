@@ -2000,6 +2000,10 @@ self: super: with self; {
     callPackage ../development/python-modules/azure-mgmt-resource-deploymentstacks
       { };
 
+  azure-mgmt-resource-subscriptions =
+    callPackage ../development/python-modules/azure-mgmt-resource-subscriptions
+      { };
+
   azure-mgmt-resource-templatespecs =
     callPackage ../development/python-modules/azure-mgmt-resource-templatespecs
       { };
@@ -14388,6 +14392,8 @@ self: super: with self; {
   pyasn = callPackage ../development/python-modules/pyasn { };
 
   pyasn1 = callPackage ../development/python-modules/pyasn1 { };
+
+  pyasn1-alt-modules = callPackage ../development/python-modules/pyasn1-alt-modules { };
 
   pyasn1-modules = callPackage ../development/python-modules/pyasn1-modules { };
 
