@@ -503,9 +503,32 @@ in
 
     environment.systemPackages = [ cfg.pihole ];
 
-    services.logrotate.settings.pihole-ftl = {
-      enable = true;
-      files = [ "${cfg.logDirectory}/FTL.log" ];
+    services.logrotate.settings = {
+      pihole-dnsmasq = {
+        files = [ "${cfg.logDirectory}/pihole.log" ];
+        frequency = "daily";
+        create = "640 ${cfg.user} ${cfg.group}";
+        rotate = 5;
+        compress = true;
+        delaycompress = true;
+        nomail = true;
+        postrotate = ''
+          ${getExe' pkgs.systemd "systemctl"} kill --kill-whom=main --signal=USR2 pihole-ftl.service 2>/dev/null || true
+        '';
+      };
+
+      pihole-ftl = {
+        files = [
+          "${cfg.logDirectory}/FTL.log"
+          "${cfg.logDirectory}/webserver.log"
+        ];
+        frequency = "weekly";
+        create = "640 ${cfg.user} ${cfg.group}";
+        rotate = 3;
+        compress = true;
+        delaycompress = true;
+        nomail = true;
+      };
     };
   };
 
