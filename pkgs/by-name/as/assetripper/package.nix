@@ -73,6 +73,7 @@ buildDotnetModule (finalAttrs: {
   meta = {
     description = "Tool for extracting assets from Unity serialized files and asset bundles";
     homepage = "https://github.com/AssetRipper/AssetRipper";
+    changelog = "https://github.com/AssetRipper/AssetRipper/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     mainProgram = "AssetRipper";
     maintainers = with lib.maintainers; [
