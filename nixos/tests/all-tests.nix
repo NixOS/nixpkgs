@@ -1609,6 +1609,7 @@ in
   send = runTest ./send.nix;
   service-runner = runTest ./service-runner.nix;
   servo = runTest ./servo.nix;
+  sforzando = runTestOn [ "x86_64-linux" ] ./sforzando.nix;
   sftpgo = runTest ./sftpgo.nix;
   sfxr-qt = runTest ./sfxr-qt.nix;
   sgt-puzzles = runTest ./sgt-puzzles.nix;

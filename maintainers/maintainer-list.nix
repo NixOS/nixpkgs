@@ -12170,6 +12170,11 @@
     github = "Inarizxc";
     githubId = 128096405;
   };
+  Incand = {
+    github = "Incand";
+    githubId = 11589690;
+    name = "Armin Schaare";
+  };
   inclyc = {
     email = "i@lyc.dev";
     github = "inclyc";
