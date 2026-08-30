@@ -84,7 +84,8 @@ stdenv.mkDerivation rec {
   desktopItems = [ desktopItem ];
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
+    broken =
+      stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "JavaFx application to visualize and modify the scenegraph of running JavaFx applications";
     mainProgram = "scenic-view";
     longDescription = ''
