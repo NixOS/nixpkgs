@@ -23,7 +23,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "rq";
-  version = "2.10";
+  version = "2.12";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
     owner = "rq";
     repo = "rq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D5K9N5egGdysskfyjriANgytHWK0E+JMvyEpJt9QJyo=";
+    hash = "sha256-EGgOeATfuRONPxfbgBqrgK8tk4Ehg9El7bTGOVX4cLY=";
   };
 
   build-system = [ hatchling ];
