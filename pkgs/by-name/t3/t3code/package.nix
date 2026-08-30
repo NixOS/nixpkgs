@@ -1,8 +1,11 @@
 {
   lib,
   callPackage,
+  stdenv,
   symlinkJoin,
   makeBinaryWrapper,
+  desktop-file-utils,
+  xdg-utils,
   enableAzureDevOps ? false,
   azure-cli,
   azure-cli-extensions,
@@ -62,6 +65,15 @@ let
       "--set-default"
       "T3CODE_RESOURCE_MONITOR_PATH"
       (lib.getExe t3code-resource-monitor)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "--prefix"
+      "PATH"
+      ":"
+      (lib.makeBinPath [
+        desktop-file-utils
+        xdg-utils
+      ])
     ];
 
 in
@@ -75,11 +87,15 @@ symlinkJoin {
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  postBuild = lib.optionalString (wrapperArgs != [ ]) ''
-    for program in "$out/bin"/*; do
-      wrapProgram "$program" ${lib.escapeShellArgs wrapperArgs}
-    done
-  '';
+  postBuild =
+    lib.optionalString (wrapperArgs != [ ]) ''
+      for program in "$out/bin"/*; do
+        wrapProgram "$program" ${lib.escapeShellArgs wrapperArgs}
+      done
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      wrapProgram "$out/bin/t3code-desktop" --set T3CODE_DESKTOP_EXECUTABLE "$out/bin/t3code-desktop"
+    '';
 
   passthru = {
     unwrapped = t3code-unwrapped;
