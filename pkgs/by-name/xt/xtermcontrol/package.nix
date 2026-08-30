@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.10";
+  version = "3.11";
   pname = "xtermcontrol";
 
   src = fetchurl {
     url = "https://thrysoee.dk/xtermcontrol/xtermcontrol-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-Prl7HZ2KrhutT+LEHKOj27ENLWfmykWZqh9jGkBQPe4=";
+    sha256 = "sha256-SeptPtoNvPh1Njdjzv4YGM5nhrmRAlXqZB2Xhr2v1Ew=";
   };
 
   meta = {
