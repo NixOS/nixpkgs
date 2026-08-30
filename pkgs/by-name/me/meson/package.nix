@@ -12,6 +12,7 @@
   replaceVars,
   writeShellScriptBin,
   zlib,
+  jq,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -173,7 +174,10 @@ python3.pkgs.buildPythonApplication rec {
       --replace "python3 -c " "${python3.interpreter} -c "
   '';
 
-  setupHook = ./setup-hook.sh;
+  setupHook = replaceVars ./setup-hook.sh {
+    jqExe = lib.getExe jq;
+    hostPlatform = null;
+  };
   env.hostPlatform = stdenv.targetPlatform.system;
 
   meta = {
