@@ -1,6 +1,7 @@
 # Test printing via CUPS.
 {
   pkgs,
+  testName,
   socket ? true, # whether to use socket activation
   listenTcp ? true, # whether to open port 631 on client
   ...
@@ -11,7 +12,7 @@ let
 in
 
 {
-  name = "printing";
+  name = testName;
   meta = {
     maintainers = [ ];
   };
