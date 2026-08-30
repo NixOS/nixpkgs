@@ -1,0 +1,41 @@
+{
+  lib,
+  buildGoModule,
+  fetchgit,
+  writeShellScript,
+  unstableGitUpdater,
+  sd,
+}:
+
+buildGoModule (finalAttrs: {
+  pname = "goperf";
+  version = "0-unstable-2026-08-13";
+
+  src = fetchgit {
+    url = "https://go.googlesource.com/perf";
+    rev = "fd4a688df89207abdabe0a0cf5b2cd9ccfd376d2";
+    hash = "sha256-YgMIIF9DAjyAPpZJtVoOKSatNhRPg/nPOYr0P06Fi5s=";
+  };
+
+  vendorHash = "sha256-AZx9tPzsPvjc5kpmiBa6eYKtrw0hczYi0sbcd/lkiiA=";
+
+  passthru.updateScript = writeShellScript "update-goperf" ''
+    export UPDATE_NIX_ATTR_PATH=goperf
+    ${lib.escapeShellArgs (unstableGitUpdater {
+      inherit (finalAttrs.src) url;
+    })}
+    set -x
+    oldhash="$(nix-instantiate . --eval --strict -A "goperf.goModules.drvAttrs.outputHash" | cut -d'"' -f2)"
+    newhash="$(nix-build -A goperf.goModules --no-out-link 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo || true)"
+    fname="$(nix-instantiate --eval -E 'with import ./. {}; (builtins.unsafeGetAttrPos "version" goperf).file' | cut -d'"' -f2)"
+    ${lib.getExe sd} --string-mode "$oldhash" "$newhash" "$fname"
+  '';
+
+  meta = {
+    description = "Tools and packages for analyzing Go benchmark results";
+    homepage = "https://cs.opensource.google/go/x/perf";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ pbsds ];
+  };
+})

@@ -1,0 +1,26 @@
+diff --git a/kBuild/units/qt6.kmk b/kBuild/units/qt6.kmk
+index 28d61005..d65205cf 100644
+--- a/kBuild/units/qt6.kmk
++++ b/kBuild/units/qt6.kmk
+@@ -1131,9 +1131,14 @@ else
+  ifeq ($(bld_trg),win)
+   $(eval $(target)_LIBS    += $(foreach module,$(qt_modules), $(PATH_SDK_QT6_LIB)/$(qt_prefix)Qt6$(module)$(qt_infix)$(SUFF_LIB)) )
+  else
+-  $(eval $(target)_LIBS    += $(foreach module,$(qt_modules), $(PATH_SDK_QT6_LIB)/lib$(qt_prefix)Qt6$(module)$(qt_infix)$(SUFF_DLL)) )
++  $(eval $(target)_LIBS    += $(foreach module,$(qt_modules), \
++                                $(if $(filter Help,$(module)),$(PATH_QT6_TOOLS_LIB), \
++                                  $(if $(filter StateMachine,$(module)),$(PATH_QT6_SCXML_LIB), \
++                                    $(PATH_SDK_QT6_LIB)))/lib$(qt_prefix)Qt6$(module)$(qt_infix)$(SUFF_DLL)) \
++                               )
+  endif
+- $(eval $(target)_INCS     += $(addprefix $(PATH_SDK_QT6_INC)/Qt,$(qt_modules)) $(PATH_SDK_QT6_INC) )
++ $(eval $(target)_INCS     += $(addprefix $(PATH_SDK_QT6_INC)/Qt,$(qt_modules)) \
++                                $(PATH_SDK_QT6_INC) $(PATH_QT6_TOOLS_INC) $(PATH_QT6_SCXML_INC)/QtStateMachine )
+ endif
+ $(eval $(target)_DEFS      += $(foreach module,$(toupper $(qt_modules)), QT_$(module)_LIB) )
+ 
+@@ -1238,4 +1243,3 @@ unit-qt6-show-vars:
+ 	@$(ECHO) '  TOOL_QT6_RCC           = "$(TOOL_QT6_RCC)"'
+ 	@$(ECHO) '  TOOL_QT6_LRC           = "$(TOOL_QT6_LRC)"'
+ 	@$(ECHO) '  TOOL_QT6_LUPDATE       = "$(TOOL_QT6_LUPDATE)"'
+-

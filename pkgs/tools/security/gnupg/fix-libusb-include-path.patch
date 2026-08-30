@@ -1,0 +1,12 @@
+--- a/configure
++++ b/configure
+@@ -9281,8 +9281,7 @@ fi
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking libusb include dir" >&5
+ $as_echo_n "checking libusb include dir... " >&6; }
+    usb_incdir_found="no"
+-   for _incdir in "" "/usr/include/libusb-1.0" \
+-       "/usr/local/include/libusb-1.0" "/usr/pkg/include/libusb-1.0"; do
++   for _incdir in "$($PKG_CONFIG --variable=includedir libusb-1.0)/libusb-1.0"; do
+      _libusb_save_cppflags=$CPPFLAGS
+      if test -n "${_incdir}"; then
+        CPPFLAGS="-I${_incdir} ${CPPFLAGS}"

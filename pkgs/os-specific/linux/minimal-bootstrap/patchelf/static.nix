@@ -1,0 +1,80 @@
+{
+  lib,
+  buildPlatform,
+  hostPlatform,
+  fetchurl,
+  bash,
+  gcc,
+  binutils,
+  gnumake,
+  gnused,
+  gnugrep,
+  gawk,
+  diffutils,
+  findutils,
+  gnutar,
+  gzip,
+}:
+let
+  pname = "patchelf-static";
+  version = "0.19.1";
+
+  src = fetchurl {
+    url = "https://github.com/NixOS/patchelf/releases/download/${version}/patchelf-${version}.tar.gz";
+    sha256 = "sha256-SREIco8SDOBbU5k0tBp1AjUDGm34q8a0flev994VCU0=";
+  };
+in
+bash.runCommand "${pname}-${version}"
+  {
+    inherit pname version;
+
+    nativeBuildInputs = [
+      gcc
+      binutils
+      gnumake
+      gnused
+      gnugrep
+      gawk
+      diffutils
+      findutils
+      gnutar
+      gzip
+    ];
+
+    disallowedReferences = [ gcc ];
+
+    passthru.tests.get-version =
+      result:
+      bash.runCommand "${pname}-get-version-${version}" { } ''
+        ${result}/bin/patchelf --version
+        mkdir $out
+      '';
+
+    meta = {
+      description = "A small utility to modify the dynamic linker and RPATH of ELF executables";
+      homepage = "https://github.com/NixOS/patchelf";
+      license = lib.licenses.gpl3Plus;
+      platforms = lib.platforms.unix;
+      teams = [ lib.teams.minimal-bootstrap ];
+    };
+  }
+  ''
+    # Unpack
+    tar xf ${src}
+    cd patchelf-${version}
+
+    # Configure
+    bash ./configure \
+      --prefix=$out \
+      --build=${buildPlatform.config} \
+      --host=${hostPlatform.config} \
+      --disable-dependency-tracking \
+      CXXFLAGS="-g0 -O2 -DNDEBUG -ffile-prefix-map=${gcc}=. -fmacro-prefix-map=${gcc}=."
+
+    # Build
+    make -j $NIX_BUILD_CORES
+
+    # Install
+    make -j $NIX_BUILD_CORES install-strip
+    rm -rf $out/share
+  ''

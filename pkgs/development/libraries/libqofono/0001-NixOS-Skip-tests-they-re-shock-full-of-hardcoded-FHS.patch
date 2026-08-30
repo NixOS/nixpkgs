@@ -1,0 +1,29 @@
+From 8b508d427c4fd472639ba8d4a0d3b8ab69e3f2e3 Mon Sep 17 00:00:00 2001
+From: Samuel Dionne-Riel <samuel@dionne-riel.com>
+Date: Tue, 30 Mar 2021 16:37:52 -0400
+Subject: [PATCH] [NixOS] Skip tests, they're shock-full of hardcoded FHS paths
+
+---
+ libqofono.pro | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/libqofono.pro b/libqofono.pro
+index 60d0b89..638a4a8 100644
+--- a/libqofono.pro
++++ b/libqofono.pro
+@@ -1,5 +1,5 @@
+ TEMPLATE = subdirs
+-SUBDIRS += src plugin test ofonotest
++SUBDIRS += src plugin
+ OTHER_FILES += \
+   rpm/libqofono-qt5.spec \
+   TODO \
+@@ -7,5 +7,3 @@ OTHER_FILES += \
+ 
+ src.target = src-target
+ plugin.depends = src-target
+-test.depends = src-target
+-ofonotest.depends = src-target
+-- 
+2.28.0
+

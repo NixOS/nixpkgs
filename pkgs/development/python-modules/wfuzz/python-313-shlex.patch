@@ -1,0 +1,29 @@
+Replace removed `pipes` stdlib module with `shlex` in screenshot plugin.
+
+`pipes` was deprecated in Python 3.11 (PEP 594) and removed in 3.13;
+`shlex.quote` is the documented stdlib replacement and behaves identically
+for the single argument used here.
+
+Reported upstream: https://github.com/xmendez/wfuzz/issues/380
+
+diff --git a/src/wfuzz/plugins/scripts/screenshot.py b/src/wfuzz/plugins/scripts/screenshot.py
+--- a/src/wfuzz/plugins/scripts/screenshot.py
++++ b/src/wfuzz/plugins/scripts/screenshot.py
+@@ -3,7 +3,7 @@ from wfuzz.externals.moduleman.plugin import moduleman_plugin
+
+ import subprocess
+ import tempfile
+-import pipes
++import shlex
+ import os
+ import re
+
+@@ -42,7 +42,7 @@ class screenshot(BasePlugin):
+         subprocess.call(
+             [
+                 "cutycapt",
+-                "--url=%s" % pipes.quote(fuzzresult.url),
++                "--url=%s" % shlex.quote(fuzzresult.url),
+                 "--out=%s" % filename,
+                 "--insecure",
+                 "--print-backgrounds=on",

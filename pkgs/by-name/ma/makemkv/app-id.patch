@@ -1,0 +1,14 @@
+diff --git a/makemkvgui/src/main.cpp b/makemkvgui/src/main.cpp
+index 73ce457..71f822c 100644
+--- a/makemkvgui/src/main.cpp
++++ b/makemkvgui/src/main.cpp
+@@ -65,6 +65,9 @@ int qMain(int argc, char **argv)
+ #if (QT_VERSION > 0x050000)
+     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+ #endif
++    // Ensure the app-id ('makemkv') is set, so that GNOME can show
++    // the correct icon in the dash.
++    QGuiApplication::setDesktopFileName("makemkv");
+ 
+     CApClient::ITransport*  p_trans = NULL;
+ 

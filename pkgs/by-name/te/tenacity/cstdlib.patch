@@ -1,0 +1,26 @@
+From f523f6a4272910417da6d8f02597a560a9c594e4 Mon Sep 17 00:00:00 2001
+From: Ethan Carter Edwards <ethan@ethancedwards.com>
+Date: Wed, 31 Dec 2025 21:17:39 -0500
+Subject: [PATCH] fix compilation for gcc 15
+
+Link: https://github.com/NixOS/nixpkgs/issues/475574
+
+Signed-off-by: Ethan Carter Edwards <ethan@ethancedwards.com>
+---
+ libraries/lib-utility/MemoryX.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/libraries/lib-utility/MemoryX.h b/libraries/lib-utility/MemoryX.h
+index 2c96af17b..58bf67127 100644
+--- a/libraries/lib-utility/MemoryX.h
++++ b/libraries/lib-utility/MemoryX.h
+@@ -5,6 +5,7 @@
+ #include <iterator>
+ #include <memory>
+ #include <new> // align_val_t and hardware_destructive_interference_size
+ #include <cstdlib> // Needed for free.
++#include <cstdint>
+ #ifndef safenew
+ #define safenew new
+-- 
+2.47.3

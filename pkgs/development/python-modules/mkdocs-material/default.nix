@@ -1,0 +1,97 @@
+{
+  lib,
+  babel,
+  backrefs,
+  buildPythonPackage,
+  cairosvg,
+  colorama,
+  fetchFromGitHub,
+  hatch-nodejs-version,
+  hatch-requirements-txt,
+  hatchling,
+  jinja2,
+  markdown,
+  mkdocs,
+  mkdocs-git-revision-date-localized-plugin,
+  mkdocs-material-extensions,
+  mkdocs-minify-plugin,
+  mkdocs-redirects,
+  mkdocs-rss-plugin,
+  paginate,
+  pillow,
+  pygments,
+  pymdown-extensions,
+  regex,
+  requests,
+  trove-classifiers,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "mkdocs-material";
+  version = "9.7.6";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "squidfunk";
+    repo = "mkdocs-material";
+    tag = finalAttrs.version;
+    hash = "sha256-qQtVnWNSh7rJhVyufkebEq6n4lpBI3tZxHRT07AIZFA=";
+  };
+
+  build-system = [
+    hatch-requirements-txt
+    hatch-nodejs-version
+    hatchling
+    trove-classifiers
+  ];
+
+  dependencies = [
+    babel
+    backrefs
+    colorama
+    jinja2
+    markdown
+    mkdocs
+    mkdocs-material-extensions
+    paginate
+    pygments
+    pymdown-extensions
+    regex
+    requests
+  ];
+
+  pythonRelaxDeps = [ "backrefs" ];
+
+  optional-dependencies = {
+    recommended = [
+      mkdocs-minify-plugin
+      mkdocs-redirects
+      mkdocs-rss-plugin
+    ];
+    git = [
+      # TODO: gmkdocs-git-committers-plugin
+      mkdocs-git-revision-date-localized-plugin
+    ];
+    imaging = [
+      cairosvg
+      pillow
+    ];
+  };
+
+  # No tests for python
+  doCheck = false;
+
+  pythonImportsCheck = [ "mkdocs" ];
+
+  meta = {
+    changelog = "https://github.com/squidfunk/mkdocs-material/blob/${finalAttrs.src.tag}/CHANGELOG";
+    description = "Material for mkdocs";
+    downloadPage = "https://github.com/squidfunk/mkdocs-material";
+    homepage = "https://squidfunk.github.io/mkdocs-material/";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      dandellion
+      jaysa68
+    ];
+  };
+})

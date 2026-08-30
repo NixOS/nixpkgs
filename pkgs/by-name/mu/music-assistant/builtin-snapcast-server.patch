@@ -1,0 +1,47 @@
+diff --git a/music_assistant/providers/snapcast/constants.py b/music_assistant/providers/snapcast/constants.py
+index 8c897c72..d89a0cd2 100644
+--- a/music_assistant/providers/snapcast/constants.py
++++ b/music_assistant/providers/snapcast/constants.py
+@@ -46,7 +46,8 @@
+ MASS_STREAM_PREFIX = "Music Assistant - "
+ MASS_ANNOUNCEMENT_POSTFIX = " (announcement)"
+ SNAPWEB_DIR = pathlib.Path(__file__).parent.resolve().joinpath("snapweb")
+-CONTROL_SCRIPT = pathlib.Path(__file__).parent.resolve().joinpath("control.py")
++CONTROL_SCRIPT_DIR = pathlib.Path(__file__).parent.resolve()
++CONTROL_SCRIPT = CONTROL_SCRIPT_DIR.joinpath("control.py")
+ 
+ DEFAULT_SNAPCAST_FORMAT = AudioFormat(
+     content_type=ContentType.PCM_S16LE,
+diff --git a/music_assistant/providers/snapcast/provider.py b/music_assistant/providers/snapcast/provider.py
+index 049fb934..316b6cf8 100644
+--- a/music_assistant/providers/snapcast/provider.py
++++ b/music_assistant/providers/snapcast/provider.py
+@@ -35,6 +35,7 @@
+     CONF_STREAM_IDLE_THRESHOLD,
+     CONF_USE_EXTERNAL_SERVER,
+     CONTROL_SCRIPT,
++    CONTROL_SCRIPT_DIR,
+     DEFAULT_SNAPSERVER_CONFIG_FILE,
+     DEFAULT_SNAPSERVER_PLUGIN_DIR,
+     DEFAULT_SNAPSERVER_PORT,
+@@ -270,6 +271,10 @@ async def _builtin_server_runner(self) -> None:
+ 
+         args = [
+             "snapserver",
++            # defaults to /etc/snapcast.conf but needs
++            # to exist in order for snapserver to start
++            # https://github.com/badaix/snapcast/issues/1402
++            "--config=/dev/null",
+             # config settings taken from
+             # https://raw.githubusercontent.com/badaix/snapcast/86cd4b2b63e750a72e0dfe6a46d47caf01426c8d/server/etc/snapserver.conf
+             f"--config={self._snapcast_server_config_file}",
+@@ -286,8 +291,7 @@ async def _builtin_server_runner(self) -> None:
+             f"--stream.send_to_muted={str(self._snapcast_server_send_to_muted).lower()}",
+             f"--streaming_client.initial_volume={self._snapcast_server_initial_volume}",
+         ]
+-        loop = asyncio.get_running_loop()
+-        plugin_dir = await loop.run_in_executor(None, self._setup_controlscript)
++        plugin_dir = CONTROL_SCRIPT_DIR
+         if plugin_dir is not None:
+             args.append(f"--stream.plugin_dir={plugin_dir}")
+             self._controlscript_available = True

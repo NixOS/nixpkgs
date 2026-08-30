@@ -1,0 +1,35 @@
+Enabling Swift support is normally intended for building an overlay for a
+Swift SDK, which changes the installation layout. Prevent this.
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -287,7 +287,7 @@ configure_file("${PROJECT_SOURCE_DIR}/cmake/config.h.in"
+ add_compile_definitions($<$<OR:$<COMPILE_LANGUAGE:C>,$<COMPILE_LANGUAGE:CXX>>:HAVE_CONFIG_H>)
+ 
+ 
+-if(ENABLE_SWIFT)
++if(0)
+   set(INSTALL_TARGET_DIR "${CMAKE_INSTALL_LIBDIR}/swift$<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:_static>/$<LOWER_CASE:${CMAKE_SYSTEM_NAME}>" CACHE PATH "Path where the libraries will be installed")
+   set(INSTALL_DISPATCH_HEADERS_DIR "${CMAKE_INSTALL_LIBDIR}/swift$<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:_static>/dispatch" CACHE PATH "Path where the headers will be installed for libdispatch")
+   set(INSTALL_BLOCK_HEADERS_DIR "${CMAKE_INSTALL_LIBDIR}/swift$<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:_static>/Block" CACHE PATH "Path where the headers will be installed for the blocks runtime")
+--- a/man/CMakeLists.txt
++++ b/man/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ 
+ # TODO(compnerd) add symlinks
+-if(NOT ENABLE_SWIFT)
++if(1)
+   install(FILES
+             dispatch.3
+             dispatch_after.3
+--- a/src/swift/CMakeLists.txt
++++ b/src/swift/CMakeLists.txt
+@@ -47,7 +47,7 @@ get_swift_host_arch(swift_arch)
+ install(FILES
+   ${CMAKE_CURRENT_BINARY_DIR}/swift/Dispatch.swiftmodule
+   ${CMAKE_CURRENT_BINARY_DIR}/swift/Dispatch.swiftdoc
+-  DESTINATION ${INSTALL_TARGET_DIR}/${swift_arch})
++  DESTINATION ${INSTALL_TARGET_DIR}/swift)
+ set_property(GLOBAL APPEND PROPERTY DISPATCH_EXPORTS swiftDispatch)
+ install(TARGETS swiftDispatch
+   EXPORT dispatchExports

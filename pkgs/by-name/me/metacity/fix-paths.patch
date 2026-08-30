@@ -1,0 +1,11 @@
+--- a/src/core/util.c
++++ b/src/core/util.c
+@@ -424,7 +424,7 @@
+                                  g_slist_length (columns)*2 +
+                                  g_slist_length (entries)));
+ 
+-  argvl[i++] = "zenity";
++  argvl[i++] = "@zenity@/bin/zenity";
+   argvl[i++] = type;
+   argvl[i++] = "--display";
+   argvl[i++] = display;

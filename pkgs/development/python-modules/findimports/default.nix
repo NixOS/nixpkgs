@@ -1,0 +1,38 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
+}:
+
+buildPythonPackage rec {
+  pname = "findimports";
+  version = "3.0.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "mgedmin";
+    repo = "findimports";
+    tag = version;
+    hash = "sha256-3MYHl35FfStmyhBNvedIHIZQYTyBuRyg5OI3d3Mi57I=";
+  };
+
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "findimports" ];
+
+  meta = {
+    description = "Module for the analysis of Python import statements";
+    homepage = "https://github.com/mgedmin/findimports";
+    changelog = "https://github.com/mgedmin/findimports/blob/${src.tag}/CHANGES.rst";
+    license = with lib.licenses; [
+      gpl2Only # or
+      gpl3Only
+    ];
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "findimports";
+  };
+}

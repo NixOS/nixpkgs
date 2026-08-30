@@ -1,0 +1,138 @@
+From 079877486d9bbe170de2fbc3cba37713d11ab224 Mon Sep 17 00:00:00 2001
+From: Mikael Voss <mvs@nyantec.com>
+Date: Wed, 23 Jul 2025 17:33:04 +0200
+Subject: [PATCH 1/2] Avoid unnecessary copy of argv[0]
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The programme is copying the contents of *argv[0] into a fixed‐size
+buffer of 512 bytes using strcpy(). This might result in a buffer
+overflow and is unnecessary as the contents are never modified.
+---
+ prctl.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
+
+diff --git a/prctl.c b/prctl.c
+index 38cbcd1..b8cb85b 100644
+--- a/prctl.c
++++ b/prctl.c
+@@ -51,13 +51,13 @@ struct option longopts[] = {
+ int verbose=0;
+ 
+ void
+-print_version(char *progname)
++print_version(char const *progname)
+ {
+ 	printf("%s version %s\n", progname, VERSION);
+ }
+ 
+ void
+-usage(char *progname)
++usage(char const *progname)
+ {
+ 	print_version(progname);
+ 	printf("Usage: %s [-v] [-h|--help] [--version]\n", progname);
+@@ -273,8 +273,7 @@ int
+ main(int argc, char **argv)
+ {
+ 	int opt, cmd_start;
+-	char *progname;
+-	char fullpath[512];
++	char const *progname;
+ 	char shellname[128];
+ 	int unaligned_val = -99;
+ 	int fpemu_val = -99;
+@@ -284,11 +283,10 @@ main(int argc, char **argv)
+ 	int display_all = 0;
+ 	int umask;
+ 
+-	strcpy(fullpath, argv[0]);
+-	if ((progname = strrchr(fullpath, '/')) != NULL) {
++	if ((progname = strrchr(argv[0], '/')) != NULL) {
+ 		progname++;
+ 	} else {
+-		progname = fullpath;
++		progname = argv[0];
+ 	}
+ 
+ 	/*
+
+From c233d083cec389e10dc9e85b3a835cf81246c275 Mon Sep 17 00:00:00 2001
+From: Mikael Voss <mvs@nyantec.com>
+Date: Wed, 23 Jul 2025 17:57:59 +0200
+Subject: [PATCH 2/2] Avoid unnecessary copy of shell path
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The programme tries getenv("SHELL") and getpwuid(getuid())->pw_shell to
+determine the preferred shell, falling back to DEFAULT_SHELL, and
+copies the contents pointed to into a fixed‐sized buffer of 128 bytes
+using strcpy().
+
+This could result in a buffer overflow and is not necessary: While both
+getenv() and getpwuid() return pointers to locations which might get
+modified by subsequent calls to their respective function families,
+they are only called once, so that these pointers can be aliased safely.
+
+In addition, getenv("SHELL") would return a null pointer if the variable
+is unset in the environment, resulting in a null pointer dereference in
+the enclosing strcpy() call.
+---
+ prctl.c | 22 +++++++++-------------
+ 1 file changed, 9 insertions(+), 13 deletions(-)
+
+diff --git a/prctl.c b/prctl.c
+index b8cb85b..342419c 100644
+--- a/prctl.c
++++ b/prctl.c
+@@ -274,7 +274,7 @@ main(int argc, char **argv)
+ {
+ 	int opt, cmd_start;
+ 	char const *progname;
+-	char shellname[128];
++	char const *shellname;
+ 	int unaligned_val = -99;
+ 	int fpemu_val = -99;
+ 	int mcekill_val = -99;
+@@ -443,31 +443,27 @@ main(int argc, char **argv)
+ 		}
+ 
+ 		printf("Starting a shell\n");
+-		strcpy(shellname, getenv("SHELL"));
+-		
++		shellname = getenv("SHELL");
++
+ 		/*
+ 		 * Make sure SHELL environment variable is not unset. If it
+-		 * is, start bash.
++		 * is, start user login shell or bash.
+ 		 */
+-		if (shellname[0] == 0) {
++		if (shellname == NULL) {
+ 			struct passwd *pwd_entry;
+ 
+ 			pwd_entry = getpwuid(getuid());
+-			if (pwd_entry == NULL) {
+-				strcpy(shellname, DEFAULT_SHELL);
++			if (pwd_entry != NULL && pwd_entry->pw_shell != NULL) {
++				shellname = pwd_entry->pw_shell;
+ 			} else {
+-				if (pwd_entry->pw_shell != NULL) {
+-					strcpy(shellname, pwd_entry->pw_shell);
+-				} else {
+-					strcpy(shellname, DEFAULT_SHELL);
+-				}
++				shellname = DEFAULT_SHELL;
+ 			}
+ 		}
+ 
+ 		/*
+ 		 * Now exec the shell
+ 		 */
+-		if (execlp(shellname, (char *)shellname, (char *) 0) == -1) {
++		if (execlp(shellname, shellname, (char *) 0) == -1) {
+ 			fprintf(stderr, "Failed to exec the shell: %s\n",
+ 				strerror(errno));
+ 			exit(1);

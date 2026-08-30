@@ -1,0 +1,72 @@
+{
+  stdenv,
+  lib,
+  fetchurl,
+  mkJetBrainsProduct,
+  libdbm,
+  fsnotifier,
+  libgcc,
+  runCommand,
+  R,
+}:
+let
+  system = stdenv.hostPlatform.system;
+  # update-script-start: urls
+  urls = {
+    x86_64-linux = {
+      url = "https://download.jetbrains.com/python/dataspell-2026.1.3.tar.gz";
+      hash = "sha256-57ExydRnfCiYCQj61Xo/omKAIbKZFykjqDSOuEdkgGg=";
+    };
+    aarch64-linux = {
+      url = "https://download.jetbrains.com/python/dataspell-2026.1.3-aarch64.tar.gz";
+      hash = "sha256-bcgJWYryfh9vEf2xjemGEU15+SfZRMQxEivLh+PPoww=";
+    };
+    aarch64-darwin = {
+      url = "https://download.jetbrains.com/python/dataspell-2026.1.3-aarch64.dmg";
+      hash = "sha256-EFkZRmtvsdJB8QP4hn6mUrSTyNBIK7UUkn4N3m0jGtY=";
+    };
+  };
+  # update-script-end: urls
+in
+mkJetBrainsProduct {
+  inherit libdbm fsnotifier;
+
+  pname = "dataspell";
+
+  wmClass = "jetbrains-dataspell";
+  product = "DataSpell";
+
+  # update-script-start: version
+  version = "2026.1.3";
+  buildNumber = "261.26222.84";
+  # update-script-end: version
+
+  src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
+
+  # NOTE: This `lib.optionals` is only here because the old Darwin builder ignored `buildInputs`.
+  #       DataSpell may need these, even on Darwin!
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    libgcc
+    (runCommand "libR" { } ''
+      mkdir -p $out/lib
+      ln -s ${R}/lib/R/lib/libR.so $out/lib/libR.so
+    '')
+  ];
+
+  # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed
+  meta = {
+    homepage = "https://www.jetbrains.com/dataspell/";
+    description = "Data science IDE from JetBrains";
+    longDescription = ''
+      DataSpell is an IDE from JetBrains built for Data Scientists.
+      Mainly it integrates Jupyter notebooks in the IntelliJ platform.
+    '';
+    maintainers = with lib.maintainers; [ leona ];
+    license = lib.licenses.unfree;
+    sourceProvenance =
+      if stdenv.hostPlatform.isDarwin then
+        [ lib.sourceTypes.binaryNativeCode ]
+      else
+        [ lib.sourceTypes.binaryBytecode ];
+  };
+}

@@ -1,0 +1,16 @@
+diff --git a/setup.py b/setup.py
+index d7f9bb0..7707e38 100644
+--- a/setup.py
++++ b/setup.py
+@@ -21,11 +21,6 @@ def read(fname):
+       description = "Thread-based interface to file system observation primitives.",
+       long_description = "\n\n".join((read('README.rst'), read('CHANGES.rst'))),
+       license = "BSD",
+-      data_files = [("", [
+-          "compat.h",
+-          "LICENSE.txt",
+-          "CHANGES.rst"
+-      ])],
+       author = "Malthe Borch",
+       author_email = "mborch@gmail.com",
+       url = 'https://github.com/malthe/macfsevents',

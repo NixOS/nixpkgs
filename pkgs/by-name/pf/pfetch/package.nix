@@ -1,0 +1,47 @@
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gitUpdater,
+  versionCheckHook,
+}:
+
+stdenvNoCC.mkDerivation rec {
+  pname = "pfetch";
+  version = "1.11.0";
+
+  src = fetchFromGitHub {
+    owner = "Un1q32";
+    repo = "pfetch";
+    tag = version;
+    hash = "sha256-QxHbk27A45awUqLGS/HZmOLOi0sQ1DVfwCFhyOlSCKk=";
+  };
+
+  dontBuild = true;
+
+  installPhase = ''
+    install -Dm755 -t $out/bin pfetch
+  '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = gitUpdater { };
+  };
+
+  meta = {
+    description = "Pretty system information tool written in POSIX sh";
+    homepage = "https://github.com/Un1q32/pfetch";
+    changelog = "https://github.com/Un1q32/pfetch/releases/tag/${version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
+      equirosa
+      phanirithvij
+    ];
+    mainProgram = "pfetch";
+  };
+}
