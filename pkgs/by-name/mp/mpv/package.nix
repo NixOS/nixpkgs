@@ -3,6 +3,7 @@
   buildEnv,
   lib,
   makeBinaryWrapper,
+  makeFontsConf,
   mpvScripts,
   mpv-unwrapped,
   symlinkJoin,
@@ -14,6 +15,10 @@
   # to have a `scriptName` passthru attribute that points to the name of the
   # script that would reside in the script's derivation's
   # `$out/share/mpv/scripts/`.
+  #
+  # A script that comes with fonts (e.g. icon font used by OSC replacement)
+  # can provide `passthru.fontDirectories` with a list of dirs.
+  # They will be merged into fontconfig for the wrapper.
   #
   # A script can optionally also provide `passthru.extraWrapperArgs`
   # attribute.
@@ -70,6 +75,24 @@ let
       ":"
       fallbackBinPath
     ]
+    ++ (
+      let
+        fontDirectories = lib.concatMap (script: script.fontDirectories or [ ]) scripts;
+      in
+      lib.optionals (fontDirectories != [ ]) (
+        [
+          "--set"
+          "FONTCONFIG_FILE"
+          (toString (makeFontsConf {
+            inherit fontDirectories;
+          }))
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          "--add-flags"
+          "--osd-font-provider=fontconfig"
+        ]
+      )
+    )
     ++ (lib.lists.flatten (
       map
         # For every script in the `scripts` argument, add the necessary flags to the wrapper

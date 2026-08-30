@@ -7,21 +7,21 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyprobeplus";
-  version = "1.1.2";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pantherale0";
     repo = "pyprobeplus";
-    tag = version;
-    hash = "sha256-CJbQs0xZHdXNPX71G1KrrHHV58gXaQsUHGcX9P8E+iY=";
+    tag = finalAttrs.version;
+    hash = "sha256-ezBf+ynSz/3r3UXgDOtFwLg6mT8wv+YQ6J55SSVyYUI=";
   };
 
   postPatch = ''
     substituteInPlace pyprobeplus/__init__.py \
-      --replace-fail "1.0.1" "${version}"
+      --replace-fail "1.0.1" "${finalAttrs.version}"
   '';
 
   build-system = [ setuptools ];
@@ -37,10 +37,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/pantherale0/pyprobeplus/releases/tag/${src.tag}";
+    changelog = "https://github.com/pantherale0/pyprobeplus/releases/tag/${finalAttrs.src.tag}";
     description = "Generic library to interact with a Probe Plus BLE device";
     homepage = "https://github.com/pantherale0/pyprobeplus";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

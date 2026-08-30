@@ -1112,9 +1112,7 @@ with pkgs;
 
   gitRepo = git-repo;
 
-  svn-all-fast-export =
-    libsForQt5.callPackage ../applications/version-management/svn-all-fast-export
-      { };
+  svn-all-fast-export = callPackage ../applications/version-management/svn-all-fast-export { };
 
   inherit (haskellPackages) git-annex;
 
@@ -7885,9 +7883,7 @@ with pkgs;
     kernel = null;
   }; # sysdig is a client, for a driver look at linuxPackagesFor
 
-  sysprof = callPackage ../development/tools/profiling/sysprof { };
-
-  libsysprof-capture = callPackage ../development/tools/profiling/sysprof/capture.nix { };
+  libsysprof-capture = callPackage ../by-name/sy/sysprof/capture.nix { };
 
   systemd = callPackage ../os-specific/linux/systemd {
     # break some cyclic dependencies
@@ -8416,19 +8412,14 @@ with pkgs;
     emacs31-nox
     emacs31-pgtk
 
-    emacs30
-    emacs30-gtk3
-    emacs30-nox
-    emacs30-pgtk
-
     emacs30-macport
     ;
 
   emacs-macport = emacs30-macport;
-  emacs = emacs30;
-  emacs-gtk = emacs30-gtk3;
-  emacs-nox = emacs30-nox;
-  emacs-pgtk = emacs30-pgtk;
+  emacs = emacs31;
+  emacs-gtk = emacs31-gtk3;
+  emacs-nox = emacs31-nox;
+  emacs-pgtk = emacs31-pgtk;
 
   emacsPackagesFor =
     emacs:

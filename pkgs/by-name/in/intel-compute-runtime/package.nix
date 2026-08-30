@@ -1,13 +1,14 @@
 {
   lib,
-  stdenv,
-  fetchFromGitHub,
   cmake,
-  pkg-config,
+  fetchFromGitHub,
   intel-gmmlib,
   intel-graphics-compiler,
   level-zero,
   libva,
+  nix-update-script,
+  pkg-config,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -73,6 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
     } \
       $out/lib/intel-opencl/libigdrcl.so
   '';
+
+  passthru = {
+    updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+  };
 
   meta = {
     description = "Intel Graphics Compute Runtime oneAPI Level Zero and OpenCL, supporting 12th Gen and newer";

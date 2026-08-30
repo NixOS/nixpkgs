@@ -35,21 +35,15 @@
 
   # dependencies
   aioprometheus,
-  apache-tvm-ffi,
-  amd-aiter,
-  amd-quark,
-  amdsmi,
   anthropic,
   bitsandbytes,
   blake3,
   cachetools,
   cbor2,
   compressed-tensors,
-  datasets,
   depyf,
   einops,
   fastapi,
-  gguf,
   grpcio,
   grpcio-reflection,
   ijson,
@@ -73,8 +67,8 @@
   outlines,
   pandas,
   partial-json-parser,
-  peft,
   prometheus-fastapi-instrumentator,
+  psutil,
   py-cpuinfo,
   pyarrow,
   pybase64,
@@ -86,25 +80,30 @@
   sentencepiece,
   setproctitle,
   tiktoken,
-  timm,
   tokenizers,
-  tokenspeed-mla,
   torch,
   torchaudio,
   torchvision,
   transformers,
   uvicorn,
-  xformers,
   xgrammar,
   # linux-only
-  psutil,
   py-libnuma,
   # cuda-only
   cupy,
   flashinfer-python,
   nvidia-ml-py,
+  tokenspeed-mla,
+  # cuda or rocm only
+  xformers,
   # rocm-only
+  amd-aiter,
+  amd-quark,
+  amdsmi,
   bash,
+  datasets,
+  peft,
+  timm,
 
   # optional-dependencies
   # audio
@@ -431,13 +430,12 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   pythonRelaxDeps = true;
 
   pythonRemoveDeps = [
+    # Not packaged in nixpkgs.
     "flashinfer-cubin"
     "nvidia-cudnn-frontend"
+    "apache-tvm-ffi" # vllm does not depend on it directly, its version is only pinned for compatibility with tilelang (also removed).
     "tilelang"
     "fastsafetensors"
-
-    # Optional on ROCm
-    "tokenspeed-mla"
 
     # QuACK and Cutlass DSL seem to be added only for FA4
     # which in our case handles its own deps
@@ -529,8 +527,6 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
 
   dependencies = [
     aioprometheus
-    apache-tvm-ffi
-    amd-quark
     anthropic
     bitsandbytes
     blake3
@@ -540,7 +536,6 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     depyf
     einops
     fastapi
-    gguf
     grpcio
     grpcio-reflection
     ijson
@@ -565,6 +560,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     pandas
     partial-json-parser
     prometheus-fastapi-instrumentator
+    psutil
     py-cpuinfo
     pyarrow
     pybase64
@@ -584,13 +580,11 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     torchvision
     transformers
     uvicorn
-    xformers
     xgrammar
   ]
   ++ uvicorn.optional-dependencies.standard
   ++ aioprometheus.optional-dependencies.starlette
   ++ lib.optionals stdenv.targetPlatform.isLinux [
-    psutil
     py-libnuma
   ]
   ++ lib.optionals cudaSupport [
@@ -599,8 +593,12 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     nvidia-ml-py
     tokenspeed-mla
   ]
+  ++ lib.optionals (cudaSupport || rocmSupport) [
+    xformers # Only depended on by Pixtral. Removed in vllm-project/vllm#52185.
+  ]
   ++ lib.optionals rocmSupport [
     amd-aiter
+    amd-quark
     rocmPackages.rocminfo
     amdsmi
     datasets
@@ -696,6 +694,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     changelog = "https://github.com/vllm-project/vllm/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/vllm-project/vllm";
     license = lib.licenses.asl20;
+    mainProgram = "vllm";
     maintainers = with lib.maintainers; [
       happysalada
       lach

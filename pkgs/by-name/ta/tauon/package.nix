@@ -28,12 +28,12 @@
   withDiscordRPC ? true,
 }:
 let
-  version = "11.1.1";
+  version = "12.0.0";
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "Tauon";
     tag = "v${version}";
-    hash = "sha256-/E8+c8FX8JnSaYgaXRKE2u6eIWjkL4yGU1WQTluGWjY=";
+    hash = "sha256-IefyP/sKdalt6HZR8SirFnVP+qZY6U843Jr2OoZW+xU=";
   };
 
   lrclib-solver = rustPlatform.buildRustPackage {
@@ -69,6 +69,10 @@ python3Packages.buildPythonApplication {
   postPatch = ''
     substituteInPlace src/tauon/t_modules/t_phazor.py \
       --replace-fail 'base_path = Path(pctl.install_directory).parent.parent / "build"' 'base_path = Path("${placeholder "out"}/${python3Packages.python.sitePackages}")'
+
+    substituteInPlace pyproject.toml \
+      --replace-fail '/usr/include/pipewire-0.3' '${pipewire.dev}/include/pipewire-0.3' \
+      --replace-fail '/usr/include/spa-0.2' '${pipewire.dev}/include/spa-0.2'
   '';
 
   pythonRemoveDeps = [

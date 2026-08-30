@@ -8654,6 +8654,12 @@
     github = "eripa";
     githubId = 1429673;
   };
+  ErmitaVulpe = {
+    name = "Emily Wilczek";
+    email = "emily.wilczek@proton.me";
+    github = "ErmitaVulpe";
+    githubId = 34629570;
+  };
   ern775 = {
     email = "eren.demir2479090@gmail.com";
     github = "ern775";
@@ -19213,6 +19219,12 @@
     github = "MMesch";
     githubId = 2597803;
     name = "Matthias Meschede";
+  };
+  mmfallacy = {
+    name = "Michael M.";
+    github = "mmfallacy";
+    githubId = 31348500;
+    email = "nixpkgs@mnstrl.xyz";
   };
   mmilata = {
     email = "martin@martinmilata.cz";

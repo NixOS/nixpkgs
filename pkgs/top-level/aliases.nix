@@ -756,6 +756,10 @@ mapAliases {
   elixir_1_19 = warnAlias "'elixir_1_19' is deprecated in favor of using the beamPackages sets. Use 'beamPackages.elixir_1_19' instead." beamPackages.elixir_1_19; # added 2026-06-15
   elixir_ls = throw "'elixir_ls' has been renamed to/replaced by 'elixir-ls'"; # Converted to throw 2025-10-27
   elm-github-install = throw "'elm-github-install' has been removed as it is abandoned upstream and only supports Elm 0.18.0"; # Added 2025-08-25
+  emacs30 = throw "'emacs30' has been superseded by 'emacs' on august 2026"; # Added 2026-08-25
+  emacs30-gtk3 = throw "'emacs30-gtk3' has been superseded by 'emacs-gtk3' on august 2026"; # Added 2026-08-25
+  emacs30-nox = throw "'emacs30-nox' has been superseded by 'emacs-nox' on august 2026"; # Added 2026-08-25
+  emacs30-pgtk = throw "'emacs30-pgtk' has been superseded by 'emacs-pgtk' on august 2026"; # Added 2026-08-25
   emacsMacport = throw "'emacsMacport' has been renamed to/replaced by 'emacs-macport'"; # Converted to throw 2025-10-27
   emacsNativeComp = throw "'emacsNativeComp' has been renamed to/replaced by 'emacs'"; # Converted to throw 2025-10-27
   emanote = throw "'emanote' has been removed due to lack of a Nixpkgs maintainer"; # Added 2025-09-18

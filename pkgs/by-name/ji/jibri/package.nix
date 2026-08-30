@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   dpkg,
-  jdk11_headless,
+  jdk17_headless,
   makeWrapper,
   writeText,
   xorg-server,
@@ -24,10 +24,10 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jibri";
-  version = "8.0-183-g7b406bf";
+  version = "8.0-205-g206e038";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/jibri_${finalAttrs.version}-1_all.deb";
-    sha256 = "QF7BkLizAsEzjC6PdTyPFAFf82AzukTnxHxLHyz5Kco=";
+    hash = "sha256-DJyBNjCgesg0P1SSU8mi3vVN9TK5sU/eLS1PLzEsIRE=";
   };
 
   dontBuild = true;
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     cat '${xorgModulePaths}' >> $out/etc/jitsi/jibri/xorg-video-dummy.conf
 
-    makeWrapper ${jdk11_headless}/bin/java $out/bin/jibri --add-flags "-jar $out/opt/jitsi/jibri/jibri.jar"
+    makeWrapper ${lib.getExe jdk17_headless} $out/bin/jibri --add-flags "-jar $out/opt/jitsi/jibri/jibri.jar"
 
     runHook postInstall
   '';
