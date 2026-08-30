@@ -28,6 +28,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   version = "1.0.1";
 
   __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "LLNL";
@@ -42,19 +43,21 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ./python312.patch
   ];
 
-  nativeBuildInputs = [ cmake ] ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ]
+  ++ lib.optionals enableFortran [ gfortran ]
+  ++ lib.optionals enablePython (
+    with python3Packages;
+    [
+      cython
+      numpy
+      python
+    ]
+  );
 
-  buildInputs =
-    lib.optionals enableCuda [ cudaPackages.cuda_cudart ]
-    ++ lib.optionals enableFortran [ gfortran ]
-    ++ lib.optionals enablePython (
-      with python3Packages;
-      [
-        cython
-        numpy
-        python
-      ]
-    );
+  buildInputs = lib.optionals enableCuda [ cudaPackages.cuda_cudart ];
 
   propagatedBuildInputs = lib.optionals (enableOpenMP && effectiveStdenv.cc.isClang) [
     llvmPackages.openmp
