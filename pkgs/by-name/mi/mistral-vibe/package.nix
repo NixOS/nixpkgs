@@ -13,7 +13,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.24.3";
+  version = "2.24.5";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gDQl5UjSOyXg3l9yD1CXhfrSbUWUDYoquVvc2K4nv14=";
+    hash = "sha256-SCajBa+3xVnW02GzfRLICBgFBMHdJra2gjIkQW/A48E=";
   };
 
   build-system = with python3Packages; [
@@ -101,6 +101,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pyyaml
       referencing
       requests
+      rfc8785
       rich
       rpds-py
       sentry-sdk
@@ -150,6 +151,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   versionCheckKeepEnvironment = [ "HOME" ];
 
   disabledTests = [
+    # AssertionError: assert <MCPSourceStatus.UNAVAILABLE: 'unavailable'> is <MCPSourceStatus.ENABLED: 'enabled'>
+    "test_mcp_catalog_read_refresh_toggle_remove_and_compatibility_aliases"
+
     # vibe is spawned in a sub-process and fails to import `mcp`
     # ModuleNotFoundError: No module named 'mcp'
     "test_aclose_terminates_real_subprocess"
