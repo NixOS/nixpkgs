@@ -25969,6 +25969,11 @@
     name = "Otto Sabart";
     keys = [ { fingerprint = "0AF6 4C3B 1F12 14B3 8C8C  5786 1FA2 DBE6 7438 7CC3"; } ];
   };
+  sebfried = {
+    name = "Sebastian W. Friedrich";
+    github = "sebfried";
+    githubId = 35170732;
+  };
   sebimarkgraf = {
     email = "sebastian-markgraf@t-online.de";
     github = "sebimarkgraf";
