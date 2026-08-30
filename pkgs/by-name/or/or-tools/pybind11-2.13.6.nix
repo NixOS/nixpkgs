@@ -96,6 +96,8 @@ buildPythonPackage (finalAttrs: {
     "tests/extra_python_package/test_files.py"
     # tests that try to parse setuptools stdout
     "tests/extra_setuptools/test_setuphelper.py"
+    # pytest change
+    "tests/test_operator_overloading.py"
   ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
