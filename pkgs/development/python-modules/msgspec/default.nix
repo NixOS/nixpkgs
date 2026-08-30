@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   attrs,
   coverage,
   furo,
@@ -36,6 +37,19 @@ buildPythonPackage rec {
     # https://github.com/NixOS/nixpkgs/issues/84312
     hash = "sha256-mjABnKhZeLLbSQPelZmi+UKZDEIiXi3c9shC8EG6tfE=";
   };
+
+  patches = [
+    # Ext.code is backed by a long, not an int. int (with sizeof(int) < sizeof(long)) makes it return the high half
+    # of the long on big-endian, so every code turns 0 or -1 when read.
+    # Fixes TestExt suite, and runtime usage of msgpack.Ext(), on big-endian.
+    # https://github.com/msgspec/msgspec/pull/1135
+    # Remove when version >= 0.22.0
+    (fetchpatch {
+      name = "0001-msgspec-Fix-backing-type-declaration-of-Ext.code.patch";
+      url = "https://github.com/msgspec/msgspec/commit/c24bc7025cbf153edc7d32256ea1279f49f422ea.patch";
+      hash = "sha256-JypmnX55s+wbWzBDsZjsQbkqpE6Cg61GpJ9lSvNrAgY=";
+    })
+  ];
 
   build-system = [
     setuptools
