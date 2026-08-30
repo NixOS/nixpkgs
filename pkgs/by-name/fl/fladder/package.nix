@@ -24,13 +24,13 @@ let
   flutter = flutter335;
   sourceBuild = flutter.buildFlutterApplication (finalAttrs: {
     pname = "fladder";
-    version = "0.10.3";
+    version = "0.11.0";
 
     src = fetchFromGitHub {
       owner = "DonutWare";
       repo = "Fladder";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-0eFHylRi2UVaKRG7K3tDZVscgoiL5xFrtFhZiJxj4Mk=";
+      hash = "sha256-oE1nlKH//FFVuOXGByX8cL+q6TA29VPJuoKoz2HLO8g=";
     };
 
     inherit targetFlutterPlatform;
