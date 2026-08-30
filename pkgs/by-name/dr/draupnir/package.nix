@@ -2,7 +2,9 @@
   lib,
   fetchFromGitHub,
   makeBinaryWrapper,
-  nodejs_24,
+  # use nodejs_22 as there is currently an upstream bug in nodejs_24.19
+  # see https://github.com/nodejs/node/issues/65446
+  nodejs_22,
   matrix-sdk-crypto-nodejs,
   python3,
   sqlite,
@@ -16,7 +18,7 @@
   fetchpatch2,
 }:
 let
-  nodeSources = srcOnly nodejs_24;
+  nodeSources = srcOnly nodejs_22;
 in
 
 buildNpmPackage (finalAttrs: {
@@ -81,7 +83,7 @@ buildNpmPackage (finalAttrs: {
     rm $out/lib/node_modules/draupnir/node_modules/draupnir
 
     # Create wrapper executable
-    makeWrapper ${lib.getExe nodejs_24} $out/bin/draupnir \
+    makeWrapper ${lib.getExe nodejs_22} $out/bin/draupnir \
       --add-flags "--enable-source-maps" \
       --add-flags "$out/lib/node_modules/draupnir/dist/index.js"
 
