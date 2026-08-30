@@ -13874,6 +13874,8 @@ self: super: with self; {
 
   prefect = callPackage ../development/python-modules/prefect { };
 
+  prefect-redis = callPackage ../development/python-modules/prefect-redis { };
+
   prefixed = callPackage ../development/python-modules/prefixed { };
 
   preggy = callPackage ../development/python-modules/preggy { };
