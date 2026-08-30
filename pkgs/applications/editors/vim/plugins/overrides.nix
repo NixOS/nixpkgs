@@ -3982,10 +3982,6 @@ assertNoAdditions {
     };
   });
 
-  range-highlight-nvim = super.range-highlight-nvim.overrideAttrs {
-    dependencies = [ self.cmd-parser-nvim ];
-  };
-
   ranger-nvim = super.ranger-nvim.overrideAttrs {
     runtimeDeps = [
       ranger
