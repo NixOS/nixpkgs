@@ -3,6 +3,7 @@
   fetchFromGitLab,
   rustPlatform,
   rustc,
+  writableTmpDirAsHomeHook,
   binaryen,
 }:
 
@@ -22,13 +23,14 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [
     binaryen
     rustc.llvmPackages.lld
+    writableTmpDirAsHomeHook
   ];
 
   buildPhase = ''
     runHook preBuild
 
-    HOME=$(mktemp -d) cargo build --profile release \
-    --target wasm32-unknown-unknown --features wasm_rendering
+    cargo build --profile release \
+      --target wasm32-unknown-unknown --features wasm_rendering
 
     runHook postBuild
   '';
