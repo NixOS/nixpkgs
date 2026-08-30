@@ -306,7 +306,18 @@ if [[ -z $noBootLoader ]]; then
     echo "installing the boot loader..."
     # Grub needs an mtab.
     ln -sfn /proc/mounts "$mountPoint"/etc/mtab
-    export mountPoint
+    # Resolve mount/umount from nixos-install's own PATH before entering the chroot.
+    # nixos-enter runs bash --login which sources the target's /etc/profile, resetting
+    # PATH to NixOS profile paths. On a running NixOS system, mount lives at
+    # /run/wrappers/bin/mount (a suid wrapper created by wrappers.service at first
+    # boot). That service has not run during installation, so the chroot cannot find
+    # mount, and the heredoc exits immediately with "mount: command not found".
+    # Exporting the resolved absolute store paths sidesteps the issue: they survive
+    # the --login PATH reset and are accessible inside the chroot because nixos-enter
+    # bind-mounts the Nix store.
+    mountBin="$(command -v mount)"
+    umountBin="$(command -v umount)"
+    export mountPoint mountBin umountBin
     NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root "$mountPoint" -c "$(cat <<'EOF'
       set -e
       # Clear the cache for executable locations. They were invalidated by the chroot.
@@ -316,11 +327,10 @@ if [[ -z $noBootLoader ]]; then
       # the root with `nixos-enter`.
       # Without this the bootloader installation may fail due to options that
       # contain paths referenced during evaluation, like initrd.secrets.
-      # when not root, re-execute the script in an unshared namespace
-      mount --rbind --mkdir / "$mountPoint"
-      mount --make-rslave "$mountPoint"
+      "$mountBin" --rbind --mkdir / "$mountPoint"
+      "$mountBin" --make-rslave "$mountPoint"
       /run/current-system/bin/switch-to-configuration boot
-      umount -R "$mountPoint" && (rmdir "$mountPoint" 2>/dev/null || true)
+      "$umountBin" -R "$mountPoint" && (rmdir "$mountPoint" 2>/dev/null || true)
 EOF
 )"
 fi
