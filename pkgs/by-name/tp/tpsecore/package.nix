@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitLab,
+  nix-update-script,
   rustPlatform,
   rustc,
   writableTmpDirAsHomeHook,
@@ -47,6 +48,8 @@ rustPlatform.buildRustPackage {
   '';
 
   doCheck = false;
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Self contained toolkit for creating, editing, and previewing TPSE files";
