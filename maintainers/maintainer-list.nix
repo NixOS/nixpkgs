@@ -11766,6 +11766,12 @@
     name = "Iago Manoel Brito";
     keys = [ { fingerprint = "DF90 9D58 BEE4 E73A 1B8C  5AF3 35D3 9F9A 9A1B C8DA"; } ];
   };
+  iainlane = {
+    email = "iain@orangesquash.org.uk";
+    github = "iainlane";
+    githubId = 321014;
+    name = "Iain Lane";
+  };
   iamanaws = {
     email = "iamanaws@httpd.dev";
     github = "iamanaws";
