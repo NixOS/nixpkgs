@@ -1,0 +1,22 @@
+diff --git a/tests/test_discovery.py b/tests/test_discovery.py
+index 56a8be905c..395da5a26b 100644
+--- a/tests/test_discovery.py
++++ b/tests/test_discovery.py
+@@ -73,7 +73,7 @@
+ 
+     state = stoat.State()
+     state.setup(parser=stoat.Parser(state=state))
+-    client = stoat.DiscoveryClient(base_url='http://127.0.0.1:5103/', state=state)
++    client = stoat.DiscoveryClient(base_url='http://127.0.0.1:5101/', state=state)
+ 
+     page = await client.bots()
+     assert len(page.bots) == 21
+@@ -136,7 +136,7 @@
+ 
+     state = stoat.State()
+     state.setup(parser=stoat.Parser(state=state))
+-    client = stoat.DiscoveryClient(base_url='http://127.0.0.1:5103/', state=state)
++    client = stoat.DiscoveryClient(base_url='http://127.0.0.1:5102/', state=state)
+ 
+     page = await client.servers()
+ 
