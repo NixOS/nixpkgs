@@ -122,6 +122,11 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # Failed: DID NOT RAISE <class 'tornado.web.HTTPError'>
     "test_copy_big_dir"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # AssertionError
+    # assert datetime.datetime(2026, 8, 30, 8, 46, 39, 807851, tzinfo=datetime.timezone.utc) > datetime.datetime(2026, 8, 30, 8, 46, 39, 807851, tzinfo=datetime.timezone.utc)
+    "test_created_timestamp"
   ];
 
   disabledTestPaths = [
