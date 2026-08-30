@@ -172,10 +172,6 @@ package-maintainers:
     - universe
     - universe-some
     - warp
-  Anton-Latukha:
-    - hnix
-    - hnix-store-core
-    - hnix-store-remote
   artem:
     - BNFC-meta
     - alex-meta
@@ -187,8 +183,6 @@ package-maintainers:
     - smtlib-backends-process
     - smtlib-backends-tests
     - vector-hashtables
-  arturcygan:
-    - hevm
   athas:
     - futhark
   auscyber:
@@ -200,19 +194,9 @@ package-maintainers:
     - arch-web
     - uusi
   cdepillabout:
-    - cloudy
-    - password
-    - password-instances
-    - pretty-simple
-    - stack
     - termonad
   centromere:
     - nfc
-  dalpd:
-    - dhall-lsp-server
-    - ghc-vis
-    - patat
-    - svgcairo
   danielrolls:
     - aws-spend-summary
     - byte-count-reader
@@ -231,64 +215,16 @@ package-maintainers:
     - elynx-seq
     - elynx-tools
     - elynx-tree
-    - glasso
     - mcmc
     - pava
     - slynx
     - tlynx
-    - xmonad
-    - xmonad-contrib
   erictapen:
     - hakyll
-  Gabriella439:
-    - annah
-    - bench
-    - break
-    - dhall-bash
-    - dhall-docs
-    - dhall-json
-    - dhall-lsp-server
-    - dhall-nix
-    - dhall-nixpkgs
-    - dhall-openapi
-    - dhall-text
-    - dhall-yaml
-    - dhall
-    - dirstream
-    - errors
-    - foldl
-    - index-core
-    - lens-tutorial
-    - list-transformer
-    - managed
-    - mmorph
-    - morte
-    - mvc-updates
-    - mvc
-    - nix-derivation
-    - nix-diff
-    - optional-args
-    - optparse-generic
-    - pipes-bytestring
-    - pipes-concurrency
-    - pipes-csv
-    - pipes-extras
-    - pipes-group
-    - pipes-http
-    - pipes-parse
-    - pipes-safe
-    - pipes
-    - server-generic
-    - total
-    - turtle
-    - typed-spreadsheet
   gridaphobe:
     - located-base
   iblech:
     - Agda
-  ivanbrennan:
-    - xmonad
-    - xmonad-contrib
   jb55:
     # - bson-lens
     - cased
@@ -385,30 +321,8 @@ package-maintainers:
     - agda2hs
     - irc-client
     - shake
-  nomeata:
-    - cabal-plan-bounds
-    - lhs2tex
-    - rec-def
-    - tasty-expected-failure
-  peti:
-    - cabal2spec
-    - funcmp
-    - git-annex
-    - hledger-interest
-    - hopenssl
-    - hsdns
-    - hsemail
-    - hsyslog
-    - logging-facade-syslog
-    - nix-paths
-    - structured-haskell-mode
-    - titlecase
-    - xmonad
-    - xmonad-contrib
   phijor:
     - cornelis
-  poscat:
-    - hinit
   psibi:
     - path-pieces
     - persistent
