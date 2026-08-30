@@ -12,6 +12,7 @@
   blueprint-compiler,
   evolution-data-server-gtk4,
   glib-networking,
+  gpgme,
   gst_all_1,
   libportal-gtk4,
   libpsl,
@@ -20,7 +21,7 @@
 
 stdenv.mkDerivation {
   pname = "stamp";
-  version = "0-unstable-2026-07-13";
+  version = "0-unstable-2026-08-24";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -28,8 +29,8 @@ stdenv.mkDerivation {
     domain = "gitlab.gnome.org";
     owner = "jbrummer";
     repo = "stamp";
-    rev = "9bce220c9e094c4d616009ebc87499a68ffc14aa";
-    hash = "sha256-mplowqsBTT9ibLxD8pbaIeLSd1pindgXLSPKBjseul8=";
+    rev = "7b40424fd5e3bb97b7be0fd8be3f2b1759ccefd4";
+    hash = "sha256-1RpYMe30ymkb9iy9RwYNahsYqAxPlGrDYy3HfYn/7nM=";
   };
 
   dontUseCmakeConfigure = true;
@@ -46,6 +47,7 @@ stdenv.mkDerivation {
   buildInputs = [
     evolution-data-server-gtk4
     glib-networking
+    gpgme
     gst_all_1.gstreamer
     libadwaita
     libportal-gtk4

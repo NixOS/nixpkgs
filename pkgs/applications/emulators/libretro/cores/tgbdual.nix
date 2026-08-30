@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "tgbdual";
-  version = "0-unstable-2026-05-11";
+  version = "0-unstable-2026-08-23";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "tgbdual-libretro";
-    rev = "bf816b096f1dca55ea805337d7c9e78d6b98d839";
-    hash = "sha256-HpvgFN37lPZpJqwUdM8qFSGcqUkYsqSCKCLMFHD6ggM=";
+    rev = "0392c9c469e653205e471114c7949c07c83bfce9";
+    hash = "sha256-Wv4QsfhLckApBwK4PPiTpEeAbq3q1MwKXdYm44d+Ykk=";
   };
 
   makefile = "Makefile";

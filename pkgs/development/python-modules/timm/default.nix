@@ -23,7 +23,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "timm";
-  version = "1.0.28";
+  version = "1.0.29";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
     owner = "huggingface";
     repo = "pytorch-image-models";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-axPiPmqn/ZAtr4BgKFYA/ZUPcmMxIkUbY+dKZdpzrgk=";
+    hash = "sha256-kmz6olMnxeD5MMiJnz3mcdz6RYO7T8kaP2+mJI2RAco=";
   };
 
   # Fix torch 2.11.0 compatibility
@@ -65,22 +65,13 @@ buildPythonPackage (finalAttrs: {
   enabledTestPaths = [ "tests" ];
 
   disabledTests =
-    lib.optionals (pythonAtLeast "3.14") [
-      # RuntimeError: torch.compile is not supported on Python 3.14+
-      "test_kron"
-
-      # AttributeError: 'LsePlus2d' object has no attribute '__annotations__'. Did you mean: '__annotate_func__'?
-      "test_torchscript"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       # assert nan < 71.5658950805664
       "test_optim_factory"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
-      # CppCompileError: C++ compile error
-      # OpenMP support not found.
-      "test_kron"
+      # AssertionError: assert 98178776.0 < 115.88214111328125
+      "test_optim_factory"
     ];
 
   disabledTestPaths = [

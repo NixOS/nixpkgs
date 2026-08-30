@@ -1689,7 +1689,22 @@ in
   swapspace = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./swapspace.nix { };
   sway = runTest ./sway.nix;
   swayfx = runTest ./swayfx.nix;
-  switchTest = runTest ./switch-test.nix;
+  switchTest = runTest {
+    imports = [ ./switch-test.nix ];
+    _module.args.part = "services";
+  };
+  switchTest-basics = runTest {
+    imports = [ ./switch-test.nix ];
+    _module.args.part = "basics";
+  };
+  switchTest-units = runTest {
+    imports = [ ./switch-test.nix ];
+    _module.args.part = "units";
+  };
+  switchTest-user = runTest {
+    imports = [ ./switch-test.nix ];
+    _module.args.part = "user";
+  };
   sx = runTest ./sx.nix;
   sympa = runTest ./sympa.nix;
   syncthing = runTest ./syncthing/main.nix;
