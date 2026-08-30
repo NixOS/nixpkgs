@@ -58,14 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     # fix i686-linux build
     # https://bitbucket.org/multicoreware/x265_git/issues/1030
     ./fix-plt-rel.patch
-  ]
-  # TODO: remove after update to version 4.2
-  ++ lib.optionals (stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.isLinux) [
-    (fetchpatch2 {
-      url = "https://bitbucket.org/multicoreware/x265_git/commits/ddb1933598736394b646cb0f78da4a4201ffc656/raw";
-      hash = "sha256-ZH+jbVtfNJ+CwRUEgsnzyPVzajR/+4nDnUDz5RONO6c=";
-      stripLen = 1;
-    })
   ];
 
   sourceRoot = "x265_${finalAttrs.version}/source";
