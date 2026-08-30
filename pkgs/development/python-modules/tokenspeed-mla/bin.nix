@@ -61,7 +61,7 @@ buildPythonPackage (finalAttrs: {
     # libtvm_ffi.so
     addAutoPatchelfSearchPath "${apache-tvm-ffi}/${python.sitePackages}/tvm_ffi/lib"
     # libcute_dsl_runtime.so
-    addAutoPatchelfSearchPath "${nvidia-cutlass-dsl-libs-base}/${python.sitePackages}/nvidia_cutlass_dsl/lib"
+    addAutoPatchelfSearchPath "${nvidia-cutlass-dsl-libs-base}/${python.sitePackages}/nvidia_cutlass_dsl"/cu*/lib
   '';
 
   pythonImportsCheck = [ "tokenspeed_mla" ];

@@ -11,6 +11,7 @@ buildPythonPackage (finalAttrs: {
   pname = "nvidia-cutlass-dsl";
   inherit (nvidia-cutlass-dsl-libs-base) version;
   format = "wheel";
+  __structuredAttrs = true;
 
   # Universal metadata-only wheel that just pulls in `nvidia-cutlass-dsl-libs-base`
   # (which actually ships the Python code and the bundled MLIR/CUDA runtime libs).
@@ -20,9 +21,14 @@ buildPythonPackage (finalAttrs: {
     format = "wheel";
     python = "py3";
     dist = "py3";
-    hash = "sha256-mN/UD6vGwNthDu6upAPwu54q7AvGma4M30dfpKVHEMo=";
+    hash = "sha256-+W41wTk6ivqaIMraGqCP3KFtZzhS8ydBROPoFpPxOhQ=";
   };
 
+  pythonRemoveDeps = [
+    # Bundled in nvidia-cutlass-dsl-libs-base
+    "nvidia-cutlass-dsl-libs-cu12"
+    "nvidia-cutlass-dsl-libs-cu13"
+  ];
   dependencies = [
     nvidia-cutlass-dsl-libs-base
   ];
