@@ -1272,23 +1272,6 @@ with haskellLib;
     preCheck = ''export PATH="$PWD/dist/build/alex:$PATH"'';
   }) super.alex;
 
-  dhall = appendPatches [
-    # Required for the patch below to apply
-    (pkgs.fetchpatch {
-      name = "dhall-quickcheck-2.17.patch";
-      url = "https://github.com/dhall-lang/dhall-haskell/commit/1a075b919d135685b3ed666051e14febc7479bf0.patch";
-      sha256 = "sha256-SGcyOvCg5E5z6gFQLuIfVUcYjfEWxuUAmESt1159TYQ=";
-      relative = "dhall";
-    })
-
-    # Allow http-client-tls-0.4, which can't be jailbroken, because it's behind a flag.
-    (pkgs.fetchpatch {
-      name = "dhall-http-client-tls-0.4.patch";
-      url = "https://github.com/dhall-lang/dhall-haskell/commit/03b40e85d0c677350ad2a2f75ef92627d5952cee.patch";
-      sha256 = "sha256-BrW1z90nSuFjux8atbBSS8xl82hWkH9+KNbWZohVGxQ=";
-      relative = "dhall";
-    })
-  ] super.dhall;
   # 2025-01-27: allow aeson >= 2.2, 9.8 versions of text and bytestring
   dhall-json = doJailbreak super.dhall-json;
   # 2025-02-10: jailbreak due to aeson < 2.2, hnix < 0.17, transformers < 0.6, turtle < 1.6
