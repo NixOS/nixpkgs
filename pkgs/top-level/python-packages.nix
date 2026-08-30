@@ -2000,6 +2000,10 @@ self: super: with self; {
     callPackage ../development/python-modules/azure-mgmt-resource-deploymentstacks
       { };
 
+  azure-mgmt-resource-subscriptions =
+    callPackage ../development/python-modules/azure-mgmt-resource-subscriptions
+      { };
+
   azure-mgmt-resource-templatespecs =
     callPackage ../development/python-modules/azure-mgmt-resource-templatespecs
       { };
