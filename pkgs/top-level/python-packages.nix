@@ -10279,6 +10279,8 @@ self: super: with self; {
 
   lunatone-rest-api-client = callPackage ../development/python-modules/lunatone-rest-api-client { };
 
+  lunr = callPackage ../development/python-modules/lunr { };
+
   lupa = callPackage ../development/python-modules/lupa { };
 
   lupupy = callPackage ../development/python-modules/lupupy { };
