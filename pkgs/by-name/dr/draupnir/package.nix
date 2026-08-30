@@ -78,7 +78,7 @@ buildNpmPackage (finalAttrs: {
     mkdir -p $out/lib/node_modules/draupnir
     mkdir $out/bin
     # Install outputs
-    mv ./node_modules ./packages ./apps/draupnir/dist ./apps/draupnir/version.txt ./apps/draupnir/package.json $out/lib/node_modules/draupnir
+    mv ./node_modules ./packages ./apps/draupnir/dist ./apps/draupnir/branch.txt ./apps/draupnir/version.txt ./apps/draupnir/package.json $out/lib/node_modules/draupnir
     # Fix dangling symlink pointing to relative path ../apps/draupnir
     rm $out/lib/node_modules/draupnir/node_modules/draupnir
 
