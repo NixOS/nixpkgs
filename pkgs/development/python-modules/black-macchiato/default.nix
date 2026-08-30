@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
     owner = "wbolster";
     repo = "black-macchiato";
     rev = finalAttrs.version;
-    sha256 = "0lc9w50nlbmlzj44krk7kxcia202fhybbnwfh77xixlc7vb4rayl";
+    hash = "sha256-1KtM1j6M9tjPgY7btTx0AggVWZ9n5kmI/LQuakHhiVE=";
   };
 
   patches = [

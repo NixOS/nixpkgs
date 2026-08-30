@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "zalando-stups";
     repo = "stups-cli-support";
     rev = version;
-    sha256 = "sha256-/UsQzV1Ljd+K8AIj55UmiVXAshX+rUbYxFeSK7YGgn8=";
+    hash = "sha256-/UsQzV1Ljd+K8AIj55UmiVXAshX+rUbYxFeSK7YGgn8=";
   };
 
   build-system = [ setuptools ];

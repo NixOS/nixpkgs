@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "smdebug_rulesconfig";
-    sha256 = "1mpwjfvpmryqqwlbyf500584jclgm3vnxa740yyfzkvb5vmyc6bs";
+    hash = "sha256-ehnm6y5rz++8B+SobveojzJJUAGgOL8ox9jnereT/NY=";
   };
 
   doCheck = false;

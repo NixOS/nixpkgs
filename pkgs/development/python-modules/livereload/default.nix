@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "lepture";
     repo = "python-livereload";
     tag = "v${version}";
-    sha256 = "sha256-WFpPCUjvyGT826EkIuqAB4jcJOEqoohJY9Xw/EJrk6c=";
+    hash = "sha256-WFpPCUjvyGT826EkIuqAB4jcJOEqoohJY9Xw/EJrk6c=";
   };
 
   buildInputs = [ django ];

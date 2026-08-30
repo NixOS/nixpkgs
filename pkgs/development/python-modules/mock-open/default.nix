@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "nivbend";
     repo = "mock-open";
     rev = "v${version}";
-    sha256 = "0qlz4y8jqxsnmqg03yp9f87rmnjrvmxm5qvm6n1218gm9k5dixbm";
+    hash = "sha256-dfXYykz1oSCCNXXjUnvdWdqaD3Lp+gEerlZ3LJEnn2I=";
   };
 
   meta = {

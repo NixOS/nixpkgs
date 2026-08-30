@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "connection_pool";
     inherit version;
-    sha256 = "bf429e7aef65921c69b4ed48f3d48d3eac1383b05d2df91884705842d974d0dc";
+    hash = "sha256-v0Keeu9lkhxptO1I89SNPqwTg7BdLfkYhHBYQtl00Nw=";
   };
 
   doCheck = false; # no tests

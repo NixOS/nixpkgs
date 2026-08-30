@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchzip {
     url = "mirror://pypi/p/${pname}/${pname}-${version}.zip";
-    sha256 = "1nj55hvyvzax4lxq7vkyfbw91pianzr3hp7ka7j12pgjxccac50g";
+    hash = "sha256-DxSmGOvyXRHkUfNcOPK3Kt6Q+HJ+7oM7JV397TcsRdo=";
     stripRoot = false;
   };
 

@@ -27,7 +27,7 @@ buildPythonPackage {
     repo = "rainbowstream";
     # Request for tagging, https://github.com/orakaro/rainbowstream/issues/314
     rev = "96141fac10675e0775d703f65a59c4477a48c57e";
-    sha256 = "0j0qcc428lk9b3l0cr2j418gd6wd5k4160ham2zn2mmdmxn5bldg";
+    hash = "sha256-r9FVbK+tVmG/qAoCE8gsjZv2UCBSZAboWGlSJAhjGEg=";
   };
 
   buildInputs = [

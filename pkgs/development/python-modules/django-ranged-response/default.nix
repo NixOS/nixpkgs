@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11gr3jpmb5rvg3scv026kjwwkmnxwivgq5ypxadnnc9p58szy7zp";
+    hash = "sha256-9x//NSo3MWub6tcX/Hbk3dbJuZxGgM30eDuXVa8c+YU=";
   };
 
   # tests not included in PyPi package, github source is not up to date with 0.2.0

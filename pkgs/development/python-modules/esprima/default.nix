@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "Kronuz";
     repo = "esprima-python";
     rev = "v${version}";
-    sha256 = "WtkPCReXhxyr6pOzE9gsdIeBlLk+nSnbxkS3OowEaHo=";
+    hash = "sha256-WtkPCReXhxyr6pOzE9gsdIeBlLk+nSnbxkS3OowEaHo=";
   };
 
   nativeCheckInputs = [ pytest8_3CheckHook ];

@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "axiacore";
     repo = "py-expression-eval";
     rev = "v${version}";
-    sha256 = "YxhZd8V6ofphcNdcbBbrT5mc37O9c6W1mfhsvFVC+KM=";
+    hash = "sha256-YxhZd8V6ofphcNdcbBbrT5mc37O9c6W1mfhsvFVC+KM=";
   };
 
   meta = {

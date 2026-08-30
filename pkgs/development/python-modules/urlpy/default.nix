@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "nexB";
     repo = "urlpy";
     rev = "v${version}";
-    sha256 = "962jLyx+/GS8wrDPzG2ONnHvtUG5Pqe6l1Z5ml63Cmg=";
+    hash = "sha256-962jLyx+/GS8wrDPzG2ONnHvtUG5Pqe6l1Z5ml63Cmg=";
   };
 
   dontConfigure = true;

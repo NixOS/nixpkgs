@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "taskcluster";
     repo = "slugid.py";
     rev = "v${version}";
-    sha256 = "McBxGRi8KqVhe2Xez5k4G67R5wBCCoh41dRsTKW4xMA=";
+    hash = "sha256-McBxGRi8KqVhe2Xez5k4G67R5wBCCoh41dRsTKW4xMA=";
   };
 
   doCheck = false; # has no tests

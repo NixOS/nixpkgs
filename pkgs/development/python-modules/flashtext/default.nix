@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1kq5idfp9skqkjdcld40igxn2yqjly8jpmxawkp0skwxw29jpgm1";
+    hash = "sha256-ob4rk+CdTw3u5KrXK5GnEnth+4uANMqanHjqdF2LBc8=";
   };
 
   # json files that tests look for don't exist in the pypi dist
