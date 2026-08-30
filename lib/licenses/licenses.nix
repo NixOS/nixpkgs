@@ -555,6 +555,12 @@ lib.mapAttrs mkLicense (
       fullName = "curl License";
     };
 
+    cwe-tou = {
+      url = "https://cwe.mitre.org/about/termsofuse.html";
+      fullName = "CWE Terms of Use";
+      free = false;
+    };
+
     dec3Clause = {
       spdxId = "DEC-3-Clause";
       fullName = "DEC 3-Clause License";
