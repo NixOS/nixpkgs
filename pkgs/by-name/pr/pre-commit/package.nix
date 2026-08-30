@@ -13,7 +13,6 @@
   versionCheckHook,
   writableTmpDirAsHomeHook,
   coursier,
-  dotnet-sdk,
   nodejs,
 
   # passthru
@@ -77,8 +76,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # moved back to the main nativeCheckInputs list, don’t forget to re-enable the
     # coursier-related test that is currently disabled on i686-linux.
     coursier
-    # i686-linux: dotnet-sdk not available
-    dotnet-sdk
     # nodejs can be moved back to the main nativeCheckInputs list once this
     # issue is fixed: <https://github.com/NixOS/nixpkgs/issues/387658>. When nodejs gets
     # moved back to the main nativeCheckInputs list, don’t forget to re-enable the
@@ -110,10 +107,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       export GIT_AUTHOR_NAME=test GIT_COMMITTER_NAME=test \
              GIT_AUTHOR_EMAIL=test@example.com GIT_COMMITTER_EMAIL=test@example.com \
              VIRTUALENV_NO_DOWNLOAD=1 PRE_COMMIT_NO_CONCURRENCY=1
-    ''
-    + lib.optionalString (!i686Linux) ''
-      # Resolve `.NET location: Not found` errors for dotnet tests
-      export DOTNET_ROOT="${dotnet-sdk}/share/dotnet"
     ''
     + ''
       git init -b master
