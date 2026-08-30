@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3c47c66fbfbd268ef46269673a0516a039539b0972b8ed2ec9cfee44c4b65523";
+    hash = "sha256-PEfGb7+9Jo70YmlnOgUWoDlTmwlyuO0uyc/uRMS2VSM=";
   };
 
   buildInputs = [ django ];

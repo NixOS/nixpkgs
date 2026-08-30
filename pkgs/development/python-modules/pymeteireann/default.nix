@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "DylanGore";
     repo = "PyMetEireann";
     tag = version;
-    sha256 = "sha256-b59I2h9A3QoXEBUYhbR0vsGGpQpOvFrqhHZnVCS8fLo=";
+    hash = "sha256-b59I2h9A3QoXEBUYhbR0vsGGpQpOvFrqhHZnVCS8fLo=";
   };
 
   build-system = [

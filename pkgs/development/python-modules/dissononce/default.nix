@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "tgalal";
     repo = "dissononce";
     rev = version;
-    sha256 = "0hn64qfr0d5npmza6rjyxwwp12k2z2y1ma40zpl104ghac6g3mbs";
+    hash = "sha256-etXxDFPwERDo/YCoGrz4YopwOe9eZqN+vbY0kB0mxkI=";
   };
 
   nativeCheckInputs = [ pytest ];

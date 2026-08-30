@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "rfc3339_validator";
     inherit version;
-    sha256 = "0srg0b89aikzinw72s433994k5gv5lfyarq1adhas11kz6yjm2hk";
+    hash = "sha256-E4oqvfkzBK1gUwFn5R0t+5VJUhqDaHG4jX9GldACL2s=";
   };
 
   propagatedBuildInputs = [ six ];

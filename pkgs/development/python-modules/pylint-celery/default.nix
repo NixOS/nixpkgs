@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = "pylint-celery";
     rev = version;
-    sha256 = "05fhwraq12c2724pn4py1bjzy5rmsrb1x68zck73nlp5icba6yap";
+    hash = "sha256-V3mjFovlUjvOZB+ZHlbWNRf/5Qr+EnuJOIKJgFXm0BU=";
   };
 
   propagatedBuildInputs = [ pylint-plugin-utils ];

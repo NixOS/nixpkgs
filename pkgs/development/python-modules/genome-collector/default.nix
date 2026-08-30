@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "genome_collector";
     inherit version;
-    sha256 = "0023ihrz0waxbhq28xh1ymvk51ih882y9psg4glm6s9d1zmqvdph";
+    hash = "sha256-8LaN6w8taVPpI0/f5AVCMIYyd/UBdiQwXF1x8DOMQwA=";
   };
 
   postPatch = ''

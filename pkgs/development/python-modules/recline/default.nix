@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "NetApp";
     repo = "recline";
     tag = "v${version}";
-    sha256 = "sha256-xEH6fEq84nD3X6bPj1Yw36mjwHKlFKsVaMh4Iogzl18=";
+    hash = "sha256-xEH6fEq84nD3X6bPj1Yw36mjwHKlFKsVaMh4Iogzl18=";
   };
 
   build-system = [ setuptools ];

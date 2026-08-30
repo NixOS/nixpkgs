@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "cedadev";
     repo = "ndg_httpsclient";
     rev = version;
-    sha256 = "0lhsgs4am4xyjssng5p0vkfwqncczj1dpa0vss4lrhzq86mnn5rz";
+    hash = "sha256-Pxdrq0H4w0yJ1huo24L8jFnM3dzglme1lr6Tqoh+GlI=";
   };
 
   propagatedBuildInputs = [

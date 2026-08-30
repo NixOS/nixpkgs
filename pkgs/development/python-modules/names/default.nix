@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "treyhunner";
     repo = "names";
     rev = version;
-    sha256 = "0jfn11bl05k3qkqw0f4vi2i2lhllxdrbb1732qiisdy9fbvv8611";
+    hash = "sha256-IRi093LJNx0jFuOEtXLrlEIqooibOMDxxGMWQFcI1kk=";
   };
 
   nativeCheckInputs = [ pytest ];

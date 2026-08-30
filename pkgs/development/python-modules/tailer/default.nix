@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "six8";
     repo = "pytailer";
     rev = version;
-    sha256 = "1s5p5m3q9k7r1m0wx5wcxf20xzs0rj14qwg1ydwhf6adr17y2w5y";
+    hash = "sha256-vnDhT8hNGQd58+FxTILMQP8OhOuMl85BDfnMhEctt+g=";
   };
 
   checkPhase = ''

@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "xmikos";
     repo = "reparser";
     rev = "v${version}";
-    sha256 = "04v7h52wny0j2qj37501nk33j0s4amm134kagdicx2is49zylzq1";
+    hash = "sha256-AX/qfyI6is5ie2qSEWpVRAM5xrQBlDMkFhJ4y0WBZxM=";
   };
 
   # no tests implemented

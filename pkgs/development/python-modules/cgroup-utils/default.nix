@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "peo3";
     repo = "cgroup-utils";
     rev = "v${version}";
-    sha256 = "0qnbn8cnq8m14s8s1hcv25xjd55dyb6yy54l5vc7sby5xzzp11fq";
+    hash = "sha256-2IVw/+/FL33YLpQU783yrZQmexGbwaCRJqEibBmyy2I=";
   };
 
   postPatch = ''

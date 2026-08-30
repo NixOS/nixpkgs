@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "byroot";
     repo = "pysrt";
     rev = "v${version}";
-    sha256 = "1f5hxyzlh5mdvvi52qapys9qcinffr6ghgivb6k4jxa92cbs3mfg";
+    hash = "sha256-z9WhFxNJdUmmWTs++Ex2zkaGk/ZXYVHi3q0WSL/vsLg=";
   };
 
   patches = [

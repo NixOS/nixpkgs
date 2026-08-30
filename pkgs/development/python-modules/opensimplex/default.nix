@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "lmas";
     repo = "opensimplex";
     rev = "v${version}";
-    sha256 = "sha256-pxPak0H6Rh9KwhIsrnMvBFm1uF5XKb4B3H9cN6DM0g4=";
+    hash = "sha256-pxPak0H6Rh9KwhIsrnMvBFm1uF5XKb4B3H9cN6DM0g4=";
   };
 
   propagatedBuildInputs = [ numpy ];

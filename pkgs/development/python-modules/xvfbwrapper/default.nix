@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "cgoldberg";
     repo = "xvfbwrapper";
     tag = version;
-    sha256 = "sha256-iqWDXDzoGAs6Ze1XHrM3HzeqTHbiYU2/CpeZQNzwl0s=";
+    hash = "sha256-iqWDXDzoGAs6Ze1XHrM3HzeqTHbiYU2/CpeZQNzwl0s=";
   };
 
   build-system = [ setuptools ];

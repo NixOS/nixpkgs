@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "getsentry";
     repo = "raven-python";
     rev = version;
-    sha256 = "16x9ldl8cy7flw5kh7qmgbmflqyf210j3q6ac2lw61sgwajsnvw8";
+    hash = "sha256-iG+rpeJPB8OpYMrgIUEQzmPq6noVHzgLp+54hmijqZs=";
   };
 
   # requires outdated dependencies which have no official support for python 3.4

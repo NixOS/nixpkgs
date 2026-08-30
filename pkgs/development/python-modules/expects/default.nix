@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "jaimegildesagredo";
     repo = "expects";
     rev = "v${version}";
-    sha256 = "0mk1mhh8n9ly820krkhazn1w96f10vmgh21y2wr44sn8vwr4ngyy";
+    hash = "sha256-3j9LMt/IakIyFz4I+OoGwZnEg/0KzjyBQJ4miyCsYVY=";
   };
 
   # mamba is used as test runner. Not available and should not be used as

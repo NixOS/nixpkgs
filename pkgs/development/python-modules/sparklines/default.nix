@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "deeplook";
     repo = "sparklines";
     tag = "v${version}";
-    sha256 = "sha256-jiMrxZMWN+moap0bDH+uy66gF4XdGst9HJpnboJrQm4=";
+    hash = "sha256-jiMrxZMWN+moap0bDH+uy66gF4XdGst9HJpnboJrQm4=";
   };
 
   propagatedBuildInputs = [

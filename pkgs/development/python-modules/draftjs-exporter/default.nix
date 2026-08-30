@@ -17,7 +17,7 @@ buildPythonPackage rec {
     repo = "draftjs_exporter";
     owner = "springload";
     tag = "v${version}";
-    sha256 = "sha256-AR8CK75UdtEThE68WSE6DFSqryI509GTW1fBl1SL29w=";
+    hash = "sha256-AR8CK75UdtEThE68WSE6DFSqryI509GTW1fBl1SL29w=";
   };
 
   optional-dependencies = {
