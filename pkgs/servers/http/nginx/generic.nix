@@ -39,6 +39,7 @@ outer@{
   nativeBuildInputs ? [ ],
   buildInputs ? [ ],
   extraPatches ? [ ],
+  applyCrossPatches ? true,
   fixPatch ? p: p,
   postPatch ? null,
   preConfigure ? "",
@@ -231,7 +232,7 @@ stdenv.mkDerivation {
       # Upstream may be against cross-compilation patches.
       # https://trac.nginx.org/nginx/ticket/2240 https://trac.nginx.org/nginx/ticket/1928#comment:6
       # That dev quit the project in 2024 so the stance could be different now.
-      ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      ++ lib.optionals (applyCrossPatches && stdenv.hostPlatform != stdenv.buildPlatform) [
         (fetchpatch {
           url = "https://raw.githubusercontent.com/openwrt/packages/c057dfb09c7027287c7862afab965a4cd95293a3/net/nginx/patches/102-sizeof_test_fix.patch";
           sha256 = "0i2k30ac8d7inj9l6bl0684kjglam2f68z8lf3xggcc2i5wzhh8a";
