@@ -2637,6 +2637,18 @@
     meta.license = lib.licenses.mit;
   };
 
+  rocq = {
+    version = "0.2.0";
+    url = "github:aruzdh/tree-sitter-rocq";
+    hash = "sha256-RZ7BGoBrHi+2Sn727L/6LEt/jh4+WphFIh1DP4Ul1Jo=";
+    meta = {
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        stepbrobd
+      ];
+    };
+  };
+
   ron = {
     version = "0.2.0-unstable-2024-05-05";
     url = "github:tree-sitter-grammars/tree-sitter-ron";
