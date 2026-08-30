@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-o8P+Uu/9jiS/PKf9FmiXthreK+MYa1nPi4eQB648hcE=";
   };
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     cargo
     docutils # rst2man
