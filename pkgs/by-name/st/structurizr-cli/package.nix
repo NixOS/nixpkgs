@@ -7,12 +7,14 @@
   findutils,
   gnused,
   jre,
-  gradle,
+  gradle_8,
   makeBinaryWrapper,
   gitMinimal,
   versionCheckHook,
 }:
-
+let
+  gradle = gradle_8;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "structurizr-cli";
   version = "2025.05.28";
