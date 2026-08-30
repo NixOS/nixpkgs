@@ -42,22 +42,22 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lancedb";
-  version = "0.36.0";
+  version = "0.37.1";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
-    tag = "python-v${finalAttrs.version}";
-    hash = "sha256-JOUrLHoVBZs4B8UGYFZIs00kzBnxFFAkTXFIz2bOZ7w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ibyiZeZDSI7W7Cog+6N5zp7jr2Rm0Ql0BfePngucPW0=";
   };
 
   buildAndTestSubdir = "python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-KEczUf/e3+Eb53pouOzajp+yVjWctDUNbdVEgQVoCZE=";
+    hash = "sha256-aBc77iHWrFJhygwtcZaIu6ScHNnDXxn+QKHmvjRYLWg=";
   };
 
   # `lance-linalg`'s AVX-512 VNNI u8-distance kernels call `_mm512_dpbusd_epi32` /
@@ -68,7 +68,7 @@ buildPythonPackage (finalAttrs: {
   # dependencies), so they are never codegen'd and runtime dispatch falls back to the equivalent
   # AVX2 / scalar kernels.
   postPatch = ''
-    lanceDistance="$cargoDepsCopy/source-registry-0/lance-linalg-9.0.0/src/distance"
+    lanceDistance=("$cargoDepsCopy"/source-registry-0/lance-linalg-*/src/distance)
 
     substituteInPlace "$lanceDistance/dot_u8.rs" \
       --replace-fail "return |a, b| unsafe { x86::dot_u8_avx512_vnni(a, b) };" ""
@@ -169,12 +169,7 @@ buildPythonPackage (finalAttrs: {
     "test_remote_db.py"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "python-v(.*)"
-    ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Developer-friendly, serverless vector database for AI applications";
