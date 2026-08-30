@@ -31,6 +31,9 @@ buildGoModule (finalAttrs: {
   # i/o timeout
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+  # Skip e2e tests that require a Docker daemon.
+  excludedPackages = [ "tests/e2e" ];
+
   doInstallCheck = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
