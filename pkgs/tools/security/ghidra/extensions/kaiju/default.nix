@@ -4,7 +4,7 @@
   fetchFromGitHub,
   buildGhidraExtension,
   z3,
-  gradle,
+  gradle_8,
 }:
 let
   ghidraPlatformName =
@@ -15,6 +15,9 @@ let
     }
     .${stdenv.hostPlatform.system}
       or (throw "${stdenv.hostPlatform.system} is an unsupported platform");
+
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
 
   z3_lib = (
     z3.override {
