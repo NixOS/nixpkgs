@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  gradle,
+  gradle_8,
   jdk,
   jre,
   graphviz,
@@ -11,7 +11,9 @@
   versionCheckHook,
   nix-update-script,
 }:
-
+let
+  gradle = gradle_8;
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "plantuml";
   version = "1.2026.6";
