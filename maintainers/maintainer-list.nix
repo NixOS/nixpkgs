@@ -20255,6 +20255,12 @@
     githubId = 74260683;
     name = "Nuno David";
   };
+  ndenissov = {
+    email = "n.denissov@proton.me";
+    github = "ndenissov";
+    githubId = 70575593;
+    name = "Nikita Denissov";
+  };
   ndl = {
     email = "ndl@endl.ch";
     github = "ndl";
