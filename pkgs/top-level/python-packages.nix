@@ -19863,6 +19863,8 @@ self: super: with self; {
 
   starlette-context = callPackage ../development/python-modules/starlette-context { };
 
+  starlette-exporter = callPackage ../development/python-modules/starlette-exporter { };
+
   starlette-wtf = callPackage ../development/python-modules/starlette-wtf { };
 
   starline = callPackage ../development/python-modules/starline { };
