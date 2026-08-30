@@ -5,9 +5,12 @@
   fetchFromGitHub,
   jre_headless,
   makeWrapper,
-  gradle,
+  gradle_8,
 }:
-
+let
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ktfmt";
   version = "0.63";
