@@ -6011,6 +6011,8 @@ self: super: with self; {
 
   ffcv = callPackage ../development/python-modules/ffcv { };
 
+  ffmpeg-normalize = callPackage ../development/python-modules/ffmpeg-normalize { };
+
   ffmpeg-progress-yield = callPackage ../development/python-modules/ffmpeg-progress-yield { };
 
   ffmpeg-python = callPackage ../development/python-modules/ffmpeg-python { };
@@ -8542,6 +8544,8 @@ self: super: with self; {
   iso3166 = callPackage ../development/python-modules/iso3166 { };
 
   iso4217 = callPackage ../development/python-modules/iso4217 { };
+
+  iso639-lang = callPackage ../development/python-modules/iso639-lang { };
 
   iso8601 = callPackage ../development/python-modules/iso8601 { };
 
@@ -13398,6 +13402,8 @@ self: super: with self; {
 
   pgspecial = callPackage ../development/python-modules/pgspecial { };
 
+  pgsrip = callPackage ../development/python-modules/pgsrip { };
+
   pgvector = callPackage ../development/python-modules/pgvector { };
 
   phart = callPackage ../development/python-modules/phart { };
@@ -18043,6 +18049,8 @@ self: super: with self; {
   retrying = callPackage ../development/python-modules/retrying { };
 
   returns = callPackage ../development/python-modules/returns { };
+
+  reusables = callPackage ../development/python-modules/reusables { };
 
   reuse = callPackage ../development/python-modules/reuse { };
 
