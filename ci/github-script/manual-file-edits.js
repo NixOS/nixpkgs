@@ -1,5 +1,6 @@
-const { classify } = require('./supportedBranches.js')
-const { getCommitDetailsForPR } = require('./get-pr-commit-details')
+import { getCommitDetailsForPR } from './get-pr-commit-details.js'
+import { dismissReviews, postReview } from './reviews.js'
+import { classify } from './supportedBranches.js'
 
 /**
  * @param {{
@@ -10,8 +11,13 @@ const { getCommitDetailsForPR } = require('./get-pr-commit-details')
  *  dry: boolean,
  * }} CheckManualFileEditsProps
  */
-async function checkManualFileEdits({ github, context, core, repoPath, dry }) {
-  const { dismissReviews, postReview } = require('./reviews.js')
+export default async function checkManualFileEdits({
+  github,
+  context,
+  core,
+  repoPath,
+  dry,
+}) {
   const reviewKey = 'manual-file-edits'
 
   const pull_number = context.payload.pull_request?.number
@@ -90,5 +96,3 @@ async function checkManualFileEdits({ github, context, core, repoPath, dry }) {
     })
   }
 }
-
-module.exports = checkManualFileEdits

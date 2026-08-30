@@ -1,18 +1,17 @@
+import { readFile } from 'node:fs/promises'
 import type * as actionsCore from '@actions/core'
 import type { context as actionsContext } from '@actions/github'
 import type { GitHub } from '@actions/github/lib/utils'
+import {
+  evaluateTargetBranchPolicy,
+  getTargetBranchPolicy,
+} from './check-target-branch-policy.ts'
+import { dismissReviews, postReview } from './reviews.js'
+import { split } from './supportedBranches.js'
 
 // TODO: should this be combined with the branch checks in prepare.js?
 // They do seem quite similar, but this needs to run after eval,
 // and prepare.js obviously doesn't.
-
-const { split } = require('./supportedBranches.js')
-const { readFile } = require('node:fs/promises')
-const { postReview, dismissReviews } = require('./reviews.js')
-const {
-  evaluateTargetBranchPolicy,
-  getTargetBranchPolicy,
-} = require('./check-target-branch-policy.ts')
 
 const reviewKey = 'check-target-branch'
 
@@ -130,7 +129,7 @@ async function postPossibleMassRebuildReview(facts: TargetBranchReviewFacts) {
   })
 }
 
-async function checkTargetBranch({
+export async function checkTargetBranch({
   github,
   context,
   core,
@@ -241,5 +240,3 @@ async function checkTargetBranch({
     reviewKey,
   })
 }
-
-module.exports = checkTargetBranch

@@ -1,9 +1,10 @@
 // @ts-nocheck
-module.exports = async ({ github, context, core, dry, cherryPicks }) => {
-  const { execFileSync } = require('node:child_process')
-  const { classify } = require('./supportedBranches.js')
-  const withRateLimit = require('./withRateLimit.js')
-  const { dismissReviews, postReview } = require('./reviews.js')
+import { execFileSync } from 'node:child_process'
+import { dismissReviews, postReview } from './reviews.js'
+import { classify } from './supportedBranches.js'
+import withRateLimit from './withRateLimit.js'
+
+export default async ({ github, context, core, dry, cherryPicks }) => {
   const reviewKey = 'check-commits'
 
   await withRateLimit({ github, core }, async (stats) => {
