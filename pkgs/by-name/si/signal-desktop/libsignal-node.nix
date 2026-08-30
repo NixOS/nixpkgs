@@ -15,23 +15,23 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "libsignal-node";
-  version = "0.99.3";
+  version = "0.100.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "libsignal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/DoQZv5tB1q1Zah/sr/pv5bBvM5PQsZH/OWzgkjP0Z4=";
+    hash = "sha256-ATK0wnTbT3b8lFAwXSm5j31LXywCh70iOTgUL6Pfd+Q=";
   };
 
-  cargoHash = "sha256-WRHlUnQSrJ5VHfeqzTp6x3fKIFlOPtusAkRJRKvdYb8=";
+  cargoHash = "sha256-OuJdAi2TbtpQlXSr7PpLuBqeHYx0l2ax5byoEZ5PGj8=";
 
   npmRoot = "node";
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-npm-deps";
     inherit (finalAttrs) version src;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
-    hash = "sha256-K/iINhZBBGtquEchcwOniYNz5fNcAux6/eOY8RJUrqA=";
+    hash = "sha256-MCiZpADREPVqqkaLh/lf3vIDQOOyGZ5oWZ/FxaZA+KQ=";
   };
 
   nativeBuildInputs = [
