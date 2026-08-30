@@ -12737,6 +12737,10 @@ self: super: with self; {
     callPackage ../development/python-modules/opentelemetry-instrumentation
       { };
 
+  opentelemetry-instrumentation-aio-pika =
+    callPackage ../development/python-modules/opentelemetry-instrumentation-aio-pika
+      { };
+
   opentelemetry-instrumentation-aiohttp-client =
     callPackage ../development/python-modules/opentelemetry-instrumentation-aiohttp-client
       { };
