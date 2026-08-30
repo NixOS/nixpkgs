@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A Vietnamese input method addon for Fcitx5";
+    description = "Vietnamese input method addon for Fcitx5";
     homepage = "https://github.com/xhkzeroone/ArecaIME";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ justanoobcoder ];
