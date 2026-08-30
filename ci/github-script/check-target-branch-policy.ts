@@ -1,4 +1,4 @@
-const { classify, split } = require('./supportedBranches.js')
+import { classify, split } from './supportedBranches.js'
 
 type TargetBranchPolicyFacts = {
   base: string
@@ -23,7 +23,13 @@ type TargetBranchPolicyResult = {
   }
 }
 
-function getTargetBranchPolicy({ base, head }: { base: string; head: string }) {
+export function getTargetBranchPolicy({
+  base,
+  head,
+}: {
+  base: string
+  head: string
+}) {
   const baseClassification = classify(base)
   const headClassification = classify(head)
   const isPrimaryBase = baseClassification.type.includes('primary')
@@ -42,7 +48,7 @@ function getTargetBranchPolicy({ base, head }: { base: string; head: string }) {
   }
 }
 
-function evaluateTargetBranchPolicy({
+export function evaluateTargetBranchPolicy({
   base,
   head,
   maxRebuildCount,
@@ -105,5 +111,3 @@ function evaluateTargetBranchPolicy({
     shouldSkipDevelopmentMerge ? 'skip-development-merge' : 'dismiss',
   )
 }
-
-module.exports = { evaluateTargetBranchPolicy, getTargetBranchPolicy }

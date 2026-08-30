@@ -29,7 +29,7 @@ jobs:
         with:
           persist-credentials: false
           sparse-checkout: |
-            ci/github-script/supportedSystems.js
+            ci/github-script
 
       - id: prepare
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
@@ -38,8 +38,8 @@ jobs:
           TARGET_SHA: ${{ inputs.targetSha }}
         with:
           script: |
-            const { classify } = require('./ci/github-script/supportedBranches.js')
-            const supportedSystems = require('./ci/github-script/supportedSystems.js')
+            const { classify } = await import('${{ github.workspace }}/ci/github-script/supportedBranches.js')
+            const { default: supportedSystems } = await import('${{ github.workspace }}/ci/github-script/supportedSystems.js')
 
             const baseBranch = (
               context.payload.merge_group?.base_ref ??
