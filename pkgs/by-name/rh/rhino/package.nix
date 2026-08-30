@@ -2,9 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gradle,
+  gradle_8,
 }:
-
+let
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rhino";
   version = "1.8.0";
