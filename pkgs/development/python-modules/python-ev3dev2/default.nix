@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "ev3dev";
     repo = "ev3dev-lang-python";
     rev = version;
-    sha256 = "XxsiQs3k5xKb+3RewARbvBbxaztdvdq3w5ZMgTq+kRc=";
+    hash = "sha256-XxsiQs3k5xKb+3RewARbvBbxaztdvdq3w5ZMgTq+kRc=";
     fetchSubmodules = true;
   };
 

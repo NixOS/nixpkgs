@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "rtfd";
     repo = "recommonmark";
     rev = version;
-    sha256 = "0kwm4smxbgq0c0ybkxfvlgrfb3gq9amdw94141jyykk9mmz38379";
+    hash = "sha256-6Qw0fq1pTu9lIIEk3qpK+I3l8qPb9bk8YAC/1asmlU8=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

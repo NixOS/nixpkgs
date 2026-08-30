@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "sdgathman";
     repo = "pyspf";
     rev = "pyspf-${version}";
-    sha256 = "0bmimlmwrq9glnjc4i6pwch30n3y5wyqmkjfyayxqxkfrixqwydi";
+    hash = "sha256-sXmOe8xudty98k7Oij0vflgwIOPXRMKkpS/hzCutsS4=";
   };
 
   propagatedBuildInputs = [ py3dns ];

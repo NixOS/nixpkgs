@@ -12,7 +12,7 @@ buildPythonPackage {
     owner = "mkalinski";
     repo = "morphys";
     rev = "0642a71126c32cd26b3a443a5cac27e4e1f7240f";
-    sha256 = "1da8s04m5wwih9cvkrks3ymb8v082lia47f274hxmfhi6ma3qc8b";
+    hash = "sha256-CzE8VDURutohOcIdoiIVCGy0qh965rlZgpHzUgnQSLU=";
   };
 
   pythonImportsCheck = [ "morphys" ];

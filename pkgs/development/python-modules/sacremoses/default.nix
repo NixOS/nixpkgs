@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
     owner = "hplt-project";
     repo = "sacremoses";
     tag = finalAttrs.version;
-    sha256 = "sha256-ked6/8oaGJwVW1jvpjrWtJYfr0GKUHdJyaEuzid/S3M=";
+    hash = "sha256-ked6/8oaGJwVW1jvpjrWtJYfr0GKUHdJyaEuzid/S3M=";
   };
 
   build-system = [ setuptools ];

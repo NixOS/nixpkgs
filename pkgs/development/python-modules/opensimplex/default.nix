@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
     repo = "opensimplex";
     rev = "v${finalAttrs.version}";
     forceFetchGit = true;
-    sha256 = "sha256-pM/vazhFfMip4G31Zj6jv02lEGVYymYCpCVz6sGBwVw=";
+    hash = "sha256-pM/vazhFfMip4G31Zj6jv02lEGVYymYCpCVz6sGBwVw=";
   };
 
   build-system = [ setuptools ];

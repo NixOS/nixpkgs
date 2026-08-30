@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PySocks";
     inherit version;
-    sha256 = "184sg65mbmih6ljblfsxcmq5js5l7dj3gpn618w9q5dy3rbh921z";
+    hash = "sha256-P4gEVx6+FZw4CsbeN2Q7tGhZcGVdO7okNTDWVYt5mqA=";
   };
 
   doCheck = false;

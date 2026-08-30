@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "Iotic-Labs";
     repo = "py-ubjson";
     rev = "v${version}";
-    sha256 = "1frn97xfa88zrfmpnvdk1pc03yihlchhph99bhjayvzlfcrhm5v3";
+    hash = "sha256-Y5cKM3P0b68kXCnBCyGjMPoB2A2zbXuryx8h5fpJNrs=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

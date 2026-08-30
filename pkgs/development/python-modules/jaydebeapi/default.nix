@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "JayDeBeApi";
     inherit version;
-    sha256 = "f25e9307fbb5960cb035394c26e37731b64cc465b197c4344cee85ec450ab92f";
+    hash = "sha256-8l6TB/u1lgywNTlMJuN3MbZMxGWxl8Q0TO6F7EUKuS8=";
   };
 
   propagatedBuildInputs = [ jpype1 ];
