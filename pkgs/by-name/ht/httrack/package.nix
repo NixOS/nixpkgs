@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Easy-to-use offline browser / website mirroring utility";
     homepage = "https://www.httrack.com";
     changelog = "https://github.com/xroche/httrack/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ tbutter ];
     platforms = with lib.platforms; unix;
   };
