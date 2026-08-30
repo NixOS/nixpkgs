@@ -5,7 +5,9 @@
   pkgs,
   ...
 }:
-
+let
+  cfg = config.services.gnome.gnome-remote-desktop;
+in
 {
   meta = {
     teams = [ lib.teams.gnome ];
@@ -15,11 +17,12 @@
   options = {
     services.gnome.gnome-remote-desktop = {
       enable = lib.mkEnableOption "Remote Desktop support using Pipewire";
+      openFirewall = lib.mkEnableOption "opening the default RDP port (3389) in the firewall";
     };
   };
 
   ###### implementation
-  config = lib.mkIf config.services.gnome.gnome-remote-desktop.enable {
+  config = lib.mkIf cfg.enable {
     services.pipewire.enable = true;
     services.dbus.packages = [ pkgs.gnome-remote-desktop ];
     security.polkit = {
@@ -40,6 +43,11 @@
         home = "/var/lib/gnome-remote-desktop";
       };
       groups.gnome-remote-desktop = { };
+    };
+
+    networking.firewall = lib.mkIf cfg.openFirewall {
+      allowedTCPPorts = [ 3389 ];
+      allowedUDPPorts = [ 3389 ];
     };
   };
 }
