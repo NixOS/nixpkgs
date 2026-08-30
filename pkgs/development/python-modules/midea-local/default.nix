@@ -6,24 +6,24 @@
   aiofiles,
   aiohttp,
   colorlog,
-  commonregex,
   defusedxml,
-  deprecated,
   ifaddr,
   pycryptodome,
   platformdirs,
+  typing-extensions,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "midea-local";
-  version = "7.0.0";
+  version = "10.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "midea-lan";
     repo = "midea-local";
-    tag = "midea-local-v${finalAttrs.version}";
-    hash = "sha256-Z/zycW57/hmDIQVBWZmREtsMLaXSJTqDfuUUyf+tpUI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aCQsA9N6s4r2x466DNTUFqxRP4dfXZBSD9rrC9Bvrb4=";
   };
 
   build-system = [ setuptools ];
@@ -32,13 +32,14 @@ buildPythonPackage (finalAttrs: {
     aiofiles
     aiohttp
     colorlog
-    commonregex
     defusedxml
-    deprecated
     ifaddr
     pycryptodome
     platformdirs
+    typing-extensions
   ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "midealocal" ];
 
