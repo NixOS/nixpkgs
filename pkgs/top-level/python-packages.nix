@@ -19041,6 +19041,8 @@ self: super: with self; {
 
   skidl = callPackage ../development/python-modules/skidl { };
 
+  skillspector = callPackage ../development/python-modules/skillspector { };
+
   skl2onnx = callPackage ../development/python-modules/skl2onnx { };
 
   sklearn-compat = callPackage ../development/python-modules/sklearn-compat { };
