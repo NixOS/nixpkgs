@@ -27,7 +27,9 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/Applications
-    cp -r *.app $out/Applications
+    # The DMG mounts as a single volume directory named after the version
+    # (e.g. "LM Studio 0.4.23+1-arm64/"), with the app bundle inside it.
+    cp -r */*.app $out/Applications
 
     # Bypass the /Applications path check in the main index.js
     # LM Studio verifies the app is running from /Applications and shows an
