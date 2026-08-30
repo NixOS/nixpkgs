@@ -135,17 +135,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tree-sitter";
-  version = "0.26.11";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YXnmVM90sEH8kqgqCygpeCAyvggMIsv+oXi0SJOvMRM=";
+    hash = "sha256-X5Hd0zcw7hxj7w7Jp1QBxLzsRSH9NgV2KquEvGdo3pE=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-kHDjPRhBUYlxLWYSv6cn6U1QDIWwCgHeIz2A5yCi1yo=";
+  cargoHash = "sha256-sQetVibUhzCV8bbiqP7ihiAav0BRQo5KxtRC+hU8rek=";
 
   cargoBuildFeatures = lib.optionals wasmSupport [ "wasm" ];
 
