@@ -7,14 +7,14 @@
   spdlog,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "catch2";
   version = "3.16.0";
 
   src = fetchFromGitHub {
     owner = "catchorg";
     repo = "Catch2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vvPZTQzLNGIcdDbuo0w6sQvxzLdKFCl2LNwcHu0d5I8=";
   };
 
@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCATCH_DEVELOPMENT_BUILD=ON"
-    "-DCATCH_BUILD_TESTING=${if doCheck then "ON" else "OFF"}"
+    "-DCATCH_BUILD_TESTING=${if finalAttrs.doCheck then "ON" else "OFF"}"
     "-DCATCH_ENABLE_WERROR=OFF"
   ]
-  ++ lib.optionals (stdenv.cc.isClang && doCheck) [
+  ++ lib.optionals (stdenv.cc.isClang && finalAttrs.doCheck) [
     # test has a faulty path normalization technique that won't work in
     # our darwin/LLVM build environment https://github.com/catchorg/Catch2/issues/1691
     "-DCMAKE_CTEST_ARGUMENTS=-E;ApprovalTests"
@@ -63,9 +63,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Modern, C++-native, test framework for unit-tests";
     homepage = "https://github.com/catchorg/Catch2";
-    changelog = "https://github.com/catchorg/Catch2/blob/${src.tag}/docs/release-notes.md";
+    changelog = "https://github.com/catchorg/Catch2/blob/${finalAttrs.src.tag}/docs/release-notes.md";
     license = lib.licenses.boost;
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = with lib.platforms; unix ++ windows;
   };
-}
+})
