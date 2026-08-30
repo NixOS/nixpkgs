@@ -29,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libgcc";
   inherit (gcc.cc) src version;
 
+  env.NIX_LDFLAGS = "-z,noexecstack";
+
   outputs = [
     "out"
     "dev"
