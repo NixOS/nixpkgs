@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gogdl";
-  version = "1.2.1";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     repo = "heroic-gogdl";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-qYarDcwrVrTpLHQYdWQvXL5+V1wMyL06+n5t6LXKBHI=";
+    hash = "sha256-tTd41ufxPObXwLpA1F0HXNEROnJwHt4WpojsRnNLml0=";
   };
 
   build-system = with python3Packages; [
