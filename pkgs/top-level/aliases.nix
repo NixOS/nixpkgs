@@ -1664,6 +1664,7 @@ mapAliases {
   microcodeAmd = throw "'microcodeAmd' has been renamed to/replaced by 'microcode-amd'"; # Converted to throw 2025-10-27
   microcodeIntel = throw "'microcodeIntel' has been renamed to/replaced by 'microcode-intel'"; # Converted to throw 2025-10-27
   microsoft_gsl = throw "'microsoft_gsl' has been renamed to/replaced by 'microsoft-gsl'"; # Converted to throw 2025-10-27
+  midisheetmusic = throw "'midisheetmusic' has been removed because it relies on gtk2"; # Added 2026-08-29
   MIDIVisualizer = throw "'MIDIVisualizer' has been renamed to/replaced by 'midivisualizer'"; # Converted to throw 2025-10-27
   midori = throw "'midori' original project has been abandoned upstream and the package was broken for a while in nixpkgs"; # Added 2025-05-19
   midori-unwrapped = throw "'midori' original project has been abandoned upstream and the package was broken for a while in nixpkgs"; # Added 2025-05-19
