@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   cymem,
@@ -128,6 +129,12 @@ buildPythonPackage (finalAttrs: {
     # AssertionError: confection has different version in setup.cfg and in requirements.txt:
     # >=1.3.2,<2.0.0 and >=1.1.0,<2.0.0 respectively
     "test_build_dependencies"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # AssertionError:
+    #   assert eval["nel_macro_f"] > 0
+    #   assert 0.0 > 0
+    "test_overfitting_IO_with_ner"
   ];
 
   pythonImportsCheck = [ "spacy" ];
