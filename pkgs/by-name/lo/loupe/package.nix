@@ -25,16 +25,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "loupe";
-  version = "50.0";
+  version = "51.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/loupe/${lib.versions.major finalAttrs.version}/loupe-${finalAttrs.version}.tar.xz";
-    hash = "sha256-euT7rl4ZMWqmQMVvgNxaeRRIpi3Y8P8G4ppYutgTqZQ=";
+    hash = "sha256-73VUCKEvOeouUKlYjN8RP/evcGW4HNwN6C11JCDD+rk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-I4z5qjX10AUuwk+JdX/1ZU0uCAVPQj8HkEc+n9aMczE=";
+    hash = "sha256-6dTUvSUC6du8v9x+GLtNV4c+8rTBqoU9ddaoS3O+X6c=";
   };
 
   postPatch = ''
