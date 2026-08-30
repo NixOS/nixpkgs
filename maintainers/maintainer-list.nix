@@ -7417,6 +7417,11 @@
     githubId = 699961;
     name = "Dmytro Kyrychuk";
   };
+  dnncha = {
+    github = "dnncha";
+    githubId = 5190258;
+    name = "Donncha O'Toole";
+  };
   dnr = {
     email = "dnr@dnr.im";
     github = "dnr";
