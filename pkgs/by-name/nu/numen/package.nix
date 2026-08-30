@@ -4,18 +4,19 @@
   fetchFromGitHub,
   catch2_3,
   cmake,
+  glibcLocales,
   ninja,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "numen";
-  version = "0.4.1";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "vicinaehq";
     repo = "numen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j+Y331tYcnCTnQ9NdqqwDME6PLQU/1Xtid/8CKfdSC4=";
+    hash = "sha256-cUly+bzaPwj9fiUmC+Gh7gwKAZjINCKZKGf/gPMhJJg=";
   };
 
   __structuredAttrs = true;
@@ -34,8 +35,15 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SYSTEM_CATCH" true)
   ];
 
-  doCheck = true;
+  # needs /etc/localtime
+  doCheck = !stdenv.hostPlatform.isDarwin;
   checkInputs = [ catch2_3 ];
+  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [ glibcLocales ];
+
+  # sandbox has no locale data
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+  };
 
   meta = {
     description = "Natural language calculator library";
