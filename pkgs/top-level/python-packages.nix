@@ -5872,6 +5872,8 @@ self: super: with self; {
 
   fast-colorthief = callPackage ../development/python-modules/fast-colorthief { };
 
+  fast-depends = callPackage ../development/python-modules/fast-depends { };
+
   fast-histogram = callPackage ../development/python-modules/fast-histogram { };
 
   fast-query-parsers = callPackage ../development/python-modules/fast-query-parsers { };
