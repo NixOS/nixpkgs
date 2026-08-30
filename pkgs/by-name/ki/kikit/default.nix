@@ -4,7 +4,6 @@
   lib,
   bats,
   fetchFromGitHub,
-  fetchpatch2,
   buildPythonApplication,
   callPackage,
   kicad,
@@ -28,14 +27,14 @@ let
 in
 buildPythonApplication (finalAttrs: {
   pname = "kikit";
-  version = "1.8.0";
+  version = "1.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yaqwsx";
     repo = "KiKit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QhtdQgMgHaB0xj2hQ4MCptr5DDgCOfRClUSyYzrFQis=";
+    hash = "sha256-kwZ+lhC0rdmz6kCdjHvnz+lhYtN9y7xNtmHPMhOwwVI=";
     # Upstream uses versioneer, which relies on gitattributes substitution.
     # This leads to non-reproducible archives on GitHub.
     # See
@@ -46,20 +45,6 @@ buildPythonApplication (finalAttrs: {
       rm "$out/kikit/_version.py"
     '';
   };
-
-  patches = [
-    # Remove when new release is tagged
-    # NOTE: not bumping the above with a `rev = latest git commit`
-    # because versioneer doesn't handle non-semver versions
-    # packaging.version.InvalidVersion: Invalid version: '1.8.0-unstable-2026-07-23'
-    # https://github.com/yaqwsx/KiKit/issues/925
-    # NOTE: .patch doesn't apply so using diff
-    (fetchpatch2 {
-      name = "fix-zone-duplication-on-kicad-10.0.5-and-numpy2-stencil-arc.diff";
-      url = "https://github.com/yaqwsx/KiKit/compare/6eb4e7aed72165c0179af485a1a1de2d98abfe95..054ac1a5be281e8d74052d3195ad5fb0a701a2ec.diff";
-      hash = "sha256-uN6FjhqCLgfZnyGLGg7j1FxHo/nUWYQ6rYVx7kUXh7g=";
-    })
-  ];
 
   build-system = [
     setuptools
