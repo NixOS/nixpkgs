@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "adscan";
-  version = "11.1.0";
+  version = "11.2.0";
   pyproject = true;
 
   __structuredAttrs = true;

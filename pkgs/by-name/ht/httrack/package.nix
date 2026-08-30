@@ -10,14 +10,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.49.22";
+  version = "3.49.24";
   pname = "httrack";
 
   src = fetchFromGitHub {
     owner = "xroche";
     repo = "httrack";
     tag = finalAttrs.version;
-    hash = "sha256-e7OvdvHphTP8vnZZkCVhonLkK/yNsaMToA2jnzNPZHE=";
+    hash = "sha256-dfPb1h3aeoNKtj+W6ue6RqRJX8+aiCZdEPYZWsvoNRY=";
     fetchSubmodules = true;
   };
 
@@ -35,7 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Easy-to-use offline browser / website mirroring utility";
     homepage = "https://www.httrack.com";
-    license = lib.licenses.gpl3;
+    changelog = "https://github.com/xroche/httrack/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ tbutter ];
     platforms = with lib.platforms; unix;
   };
