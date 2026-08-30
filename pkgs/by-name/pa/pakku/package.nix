@@ -2,14 +2,16 @@
   jre,
   lib,
   stdenv,
-  gradle,
+  gradle_8,
   makeWrapper,
   fetchFromGitHub,
   versionCheckHook,
   installShellFiles,
   stripJavaArchivesHook,
 }:
-
+let
+  gradle = gradle_8;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pakku";
   version = "1.5.0";
