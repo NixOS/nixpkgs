@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "x42-plugins";
-  version = "20260420";
+  version = "20260829";
 
   src = fetchurl {
     url = "https://gareus.org/misc/x42-plugins/${pname}-${version}.tar.xz";
-    hash = "sha256-wBl+lp2ZcVohlukjuOwhAaoYnEx/D9FktMW9kjmwflE=";
+    hash = "sha256-nQktYESMsVmFonk2gsys5sPDjLe+frEaRjUHqDj6Ulg=";
   };
 
   nativeBuildInputs = [ pkg-config ];
