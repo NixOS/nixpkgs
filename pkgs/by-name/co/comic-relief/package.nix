@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -14,14 +15,14 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-lvkMfaQvLMZ8F0Q5JnpmMsIAkR+XfihoHIoS4z5QEvA=";
   };
 
+  nativeBuildInputs = [ installFonts ];
+
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/etc/fonts/conf.d
     mkdir -p $out/share/doc/${pname}-${version}
-    mkdir -p $out/share/fonts/truetype
     cp -v ${./comic-sans-ms-alias.conf}     $out/etc/fonts/conf.d/30-comic-sans-ms.conf
-    cp *.ttf      -d $out/share/fonts/truetype
     cp FONTLOG.txt -d $out/share/doc/${pname}-${version}
 
     runHook postInstall

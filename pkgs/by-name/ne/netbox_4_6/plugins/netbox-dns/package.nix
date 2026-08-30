@@ -9,14 +9,14 @@ buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "netbox-plugin-dns";
-  version = "1.5.10";
+  version = "1.5.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "peteeckel";
     repo = "netbox-plugin-dns";
     tag = finalAttrs.version;
-    hash = "sha256-wxTW/qiwp+1CXUeCDJnllEW2oCTjlFVUot7JfWPooaw=";
+    hash = "sha256-9YMUrxqjyp9qixETAf/MpSTKO4HnItPH1qQ1MqGPcv4=";
   };
 
   build-system = [ setuptools ];
