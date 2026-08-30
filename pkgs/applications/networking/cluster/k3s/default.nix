@@ -21,7 +21,6 @@ in
   };
 
   k3s_1_36 = (common (import ./1_36/versions.nix) extraArgs).overrideAttrs {
-    __structuredAttrs = true;
     patches = [ ./go_runc_require.patch ];
   };
 }
