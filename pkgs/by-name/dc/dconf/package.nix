@@ -27,7 +27,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dconf";
-  version = "0.49.0";
+  version = "51.rc";
 
   outputs = [
     "out"
@@ -37,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withDocs "devdoc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/dconf/${lib.versions.majorMinor finalAttrs.version}/dconf-${finalAttrs.version}.tar.xz";
-    sha256 = "FqR+SaWBVtu5ZXjhcIMlKZ5MGe6pvhKNW9Ev0JY9bDY=";
+    url = "mirror://gnome/sources/dconf/${lib.versions.major finalAttrs.version}/dconf-${finalAttrs.version}.tar.xz";
+    sha256 = "cddc5z4ZM13XidMLIv5l4sbD+9j/aC1JYmcRgcBEwtA=";
   };
 
   nativeBuildInputs = [
