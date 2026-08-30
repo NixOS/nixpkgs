@@ -120,6 +120,97 @@ in
                   example = "/var/lib/headplane";
                 };
 
+                proxy_auth = mkOption {
+                  type = types.nullOr (
+                    types.submodule {
+                      options = {
+                        enabled =
+                          mkEnableOption ''
+                            delegating Headplane authentication to a trusted reverse proxy
+                            instead of logging in through Headplane directly. Identity
+                            headers are only trusted on requests whose client IP matches
+                            `allowed_cidrs`; all Headscale API calls then use
+                            `headscale.api_key_path`
+                          ''
+                          // {
+                            default = false;
+                          };
+
+                        allowed_cidrs = mkOption {
+                          type = types.listOf types.str;
+                          default = [
+                            "127.0.0.1/32"
+                            "::1/128"
+                          ];
+                          description = ''
+                            Client CIDRs allowed to authenticate via the configured proxy
+                            headers.
+                          '';
+                          example = [ "10.0.0.0/8" ];
+                        };
+
+                        trusted_proxy_cidrs = mkOption {
+                          type = types.listOf types.str;
+                          default = [
+                            "127.0.0.1/32"
+                            "::1/128"
+                          ];
+                          description = ''
+                            Direct proxy CIDRs trusted to supply `ip_header`.
+                          '';
+                          example = [ "127.0.0.1/32" ];
+                        };
+
+                        ip_header = mkOption {
+                          type = types.nullOr types.str;
+                          default = null;
+                          description = ''
+                            Header containing the original client IP, such as
+                            `X-Forwarded-For` or `X-Real-IP`. Only read when the direct
+                            socket peer matches `trusted_proxy_cidrs`.
+                          '';
+                          example = "X-Forwarded-For";
+                        };
+
+                        user_header = mkOption {
+                          type = types.str;
+                          default = "Remote-User";
+                          description = ''
+                            Header containing the stable authenticated user identity.
+                          '';
+                          example = "Remote-User";
+                        };
+
+                        email_header = mkOption {
+                          type = types.nullOr types.str;
+                          default = null;
+                          description = "Optional header containing the authenticated user's email address.";
+                          example = "Remote-Email";
+                        };
+
+                        name_header = mkOption {
+                          type = types.nullOr types.str;
+                          default = null;
+                          description = "Optional header containing the authenticated user's display name.";
+                          example = "Remote-Name";
+                        };
+
+                        picture_header = mkOption {
+                          type = types.nullOr types.str;
+                          default = null;
+                          description = "Optional header containing the authenticated user's profile picture URL.";
+                          example = "Remote-Picture";
+                        };
+                      };
+                    }
+                  );
+                  default = null;
+                  description = ''
+                    Delegate Headplane authentication to a trusted reverse proxy. See the
+                    upstream [Proxy Authentication docs](https://github.com/tale/headplane/blob/main/docs/features/proxy-auth.md).
+                  '';
+                };
+
               };
             };
             default = { };
@@ -443,6 +534,18 @@ in
           agentSettings == null || !agentSettings.enabled || cfg.settings.headscale.api_key_path != null;
         message = ''
           services.headplane.settings.headscale.api_key_path must be set when the agent is enabled.
+        '';
+      }
+      {
+        assertion =
+          cfg.settings.server.proxy_auth == null
+          || !cfg.settings.server.proxy_auth.enabled
+          || cfg.settings.headscale.api_key_path != null;
+        message = ''
+          services.headplane.settings.headscale.api_key_path must be set
+          when services.headplane.settings.server.proxy_auth.enabled is true.
+          Proxy authentication requires a Headscale API key to make Headscale
+          API calls on behalf of proxy-authenticated users.
         '';
       }
     ];
