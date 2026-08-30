@@ -13,7 +13,7 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "jupyter-themes";
+  pname = "jupyterthemes";
   version = "0.20.0";
   pyproject = true;
 
