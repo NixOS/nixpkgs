@@ -9892,6 +9892,11 @@
     name = "Max Emil Yoon Blomstervall";
     keys = [ { fingerprint = "D14A 78F2 AAC5 9A1B 3E1F  0547 044B 046E 5745 CC2B"; } ];
   };
+  Fumesover = {
+    github = "Fumesover";
+    githubId = 24977217;
+    name = "Albin Parou";
+  };
   funkeleinhorn = {
     email = "git@funkeleinhorn.com";
     github = "funkeleinhorn";
