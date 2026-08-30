@@ -36,14 +36,14 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "2.4.1";
+  version = "2.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = "poetry";
     tag = version;
-    hash = "sha256-Mb1etVmBm542q7FrcMU6pzXdMUDQSpI8DFg/gbOiG4U=";
+    hash = "sha256-/U3XZfGRPabE8xY8yPf/yol1BueqZ+theG0vXI1s2OA=";
   };
 
   patches = [
