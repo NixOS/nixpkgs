@@ -1,6 +1,5 @@
 {
   cmake,
-  cudatoolkit,
   fetchFromGitHub,
   gfortran,
   lib,
@@ -43,10 +42,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ./python312.patch
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ];
 
   buildInputs =
-    lib.optionals enableCuda [ cudatoolkit ]
+    lib.optionals enableCuda [ cudaPackages.cuda_cudart ]
     ++ lib.optionals enableFortran [ gfortran ]
     ++ lib.optionals enablePython (
       with python3Packages;
