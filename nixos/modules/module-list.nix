@@ -1159,6 +1159,7 @@
   ./services/networking/3proxy.nix
   ./services/networking/acme-dns.nix
   ./services/networking/adguardhome.nix
+  ./services/networking/albyhub.nix
   ./services/networking/alice-lg.nix
   ./services/networking/amuled.nix
   ./services/networking/anubis.nix
