@@ -2,12 +2,16 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gradle,
+  gradle_8,
   makeBinaryWrapper,
   jre_headless,
   zulu11,
   nix-update-script,
 }:
+let
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gradle-dependency-tree-diff";
   version = "1.2.1";
