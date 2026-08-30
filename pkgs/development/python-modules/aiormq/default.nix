@@ -9,22 +9,20 @@
 
 buildPythonPackage rec {
   pname = "aiormq";
-  version = "9.6.4";
+  version = "7.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "aiormq";
     tag = version;
-    hash = "sha256-GFeOwjSQ1+nxP9hgNoELoEInTmhhO0JnNeoe2qfWNcg=";
+    hash = "sha256-pSiue6DS+YvU3OS3Kyxqt/duGhZaBaDnFqP5CJZTgzk=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "uv_build>=0.10.4,<0.11.0" uv_build
+      --replace "uv_build>=0.10.4,<0.12" uv_build
   '';
-
-  pythonRelaxDeps = [ "pamqp" ];
 
   build-system = [ uv-build ];
 
