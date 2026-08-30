@@ -13,6 +13,7 @@
   python-barbicanclient,
   python-cinderclient,
   python-designateclient,
+  python-gnocchiclient,
   python-heatclient,
   python-ironicclient,
   python-keystoneclient,
@@ -102,6 +103,7 @@ buildPythonPackage (finalAttrs: {
       osc-placement
       python-barbicanclient
       python-designateclient
+      python-gnocchiclient
       python-heatclient
       python-ironicclient
       python-magnumclient
