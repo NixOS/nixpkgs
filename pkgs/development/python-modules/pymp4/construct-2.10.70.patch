@@ -1,0 +1,16 @@
+--- a/src/pymp4/parser.py
++++ b/src/pymp4/parser.py
+@@ -16,0 +17 @@
++from io import BytesIO
+@@ -643,0 +645,8 @@
++class RelativePrefixed(Prefixed):
++    def _parse(self, stream, context, path):
++        length = self.lengthfield._parsereport(stream, context, path)
++        if self.includelength:
++            length -= self.lengthfield._sizeof(context, path)
++        data = stream_read(stream, length, path)
++        return self.subcon._parsereport(BytesIO(data), context, path)
++
+@@ -645 +654 @@
+-Box = Prefixed(Int32ub, Struct(
++Box = RelativePrefixed(Int32ub, Struct(

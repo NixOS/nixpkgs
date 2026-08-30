@@ -1,0 +1,14 @@
+diff --git a/bindings/python/CMakeLists.txt b/bindings/python/CMakeLists.txt
+index 07678691f..1d85e5eb2 100644
+--- a/bindings/python/CMakeLists.txt
++++ b/bindings/python/CMakeLists.txt
+@@ -31,6 +31,9 @@ execute_process(
+   OUTPUT_STRIP_TRAILING_WHITESPACE
+   OUTPUT_VARIABLE nanobind_ROOT
+ )
++if(NOT Python_VERSION AND Python3_VERSION)
++  set(Python_VERSION ${Python3_VERSION})
++endif()
+ find_package(nanobind CONFIG)
+ cmake_policy(POP)
+ if(NOT nanobind_FOUND)

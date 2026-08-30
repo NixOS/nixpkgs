@@ -1,0 +1,72 @@
+diff --git a/go.mod b/go.mod
+new file mode 100644
+index 0000000..64972bc
+--- /dev/null
++++ b/go.mod
+@@ -0,0 +1,20 @@
++module github.com/ipstatic/surfboard_exporter
++
++go 1.22
++
++require (
++	github.com/prometheus/client_golang v0.8.1-0.20160916180340-5636dc67ae77
++	github.com/prometheus/common v0.0.0-20160928123818-e35a2e33a50a
++	golang.org/x/net v0.0.0-20161019184016-3bafa3320efd
++)
++
++require (
++	github.com/Sirupsen/logrus v0.10.1-0.20160829202321-3ec0642a7fb6 // indirect
++	github.com/beorn7/perks v0.0.0-20160804104726-4c0e84591b9a // indirect
++	github.com/golang/protobuf v0.0.0-20160926185624-87c000235d3d // indirect
++	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
++	github.com/prometheus/client_model v0.0.0-20150212101744-fa8ad6fec335 // indirect
++	github.com/prometheus/procfs v0.0.0-20160411190841-abf152e5f3e9 // indirect
++	github.com/stretchr/testify v1.9.0 // indirect
++	golang.org/x/sys v0.26.0 // indirect
++)
+diff --git a/vendor/modules.txt b/vendor/modules.txt
+new file mode 100644
+index 0000000..d7c6fa3
+--- /dev/null
++++ b/vendor/modules.txt
+@@ -0,0 +1,40 @@
++# github.com/Sirupsen/logrus v0.10.1-0.20160829202321-3ec0642a7fb6
++## explicit
++github.com/Sirupsen/logrus
++# github.com/beorn7/perks v0.0.0-20160804104726-4c0e84591b9a
++## explicit
++github.com/beorn7/perks/quantile
++# github.com/golang/protobuf v0.0.0-20160926185624-87c000235d3d
++## explicit
++github.com/golang/protobuf/proto
++# github.com/matttproud/golang_protobuf_extensions v1.0.1
++## explicit
++github.com/matttproud/golang_protobuf_extensions/pbutil
++# github.com/prometheus/client_golang v0.8.1-0.20160916180340-5636dc67ae77
++## explicit
++github.com/prometheus/client_golang/prometheus
++# github.com/prometheus/client_model v0.0.0-20150212101744-fa8ad6fec335
++## explicit
++github.com/prometheus/client_model/go
++# github.com/prometheus/common v0.0.0-20160928123818-e35a2e33a50a
++## explicit
++github.com/prometheus/common/expfmt
++github.com/prometheus/common/internal/bitbucket.org/ww/goautoneg
++github.com/prometheus/common/log
++github.com/prometheus/common/model
++github.com/prometheus/common/version
++# github.com/prometheus/procfs v0.0.0-20160411190841-abf152e5f3e9
++## explicit
++github.com/prometheus/procfs
++# github.com/stretchr/testify v1.9.0
++## explicit; go 1.17
++# golang.org/x/net v0.0.0-20161019184016-3bafa3320efd
++## explicit
++golang.org/x/net/html
++golang.org/x/net/html/atom
++# golang.org/x/sys v0.26.0
++## explicit; go 1.18
++golang.org/x/sys/unix
++golang.org/x/sys/windows
++golang.org/x/sys/windows/registry
++golang.org/x/sys/windows/svc/eventlog

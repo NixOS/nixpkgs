@@ -1,0 +1,38 @@
+{
+  buildPythonPackage,
+  case-converter,
+  fetchFromGitHub,
+  jinja2,
+  lib,
+  systemrdl-compiler,
+  uv-build,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "peakrdl-rust";
+  version = "0.7.4";
+
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "darsor";
+    repo = "PeakRDL-rust";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Liv492gA+TQGs/+yMjjJkG/im69IJJUu0yr/19jVY0w=";
+  };
+
+  build-system = [ uv-build ];
+
+  dependencies = [
+    case-converter
+    jinja2
+    systemrdl-compiler
+  ];
+
+  meta = {
+    description = "Generate a Rust crate from SystemRDL for accessing control/status registers";
+    homepage = "https://peakrdl-rust.readthedocs.io/";
+    license = lib.licenses.lgpl21Only;
+    maintainers = [ lib.maintainers.jmbaur ];
+  };
+})

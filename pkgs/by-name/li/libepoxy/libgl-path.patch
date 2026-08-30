@@ -1,0 +1,24 @@
+diff --git a/src/dispatch_common.c b/src/dispatch_common.c
+index b3e4f5f..303e8f5 100644
+--- a/src/dispatch_common.c
++++ b/src/dispatch_common.c
+@@ -310,6 +310,19 @@ get_dlopen_handle(void **handle, const char *lib_name, bool exit_on_fail, bool l
+             flags |= RTLD_NOLOAD;
+ 
+         *handle = dlopen(lib_name, flags);
++#ifdef LIBGL_PATH
++        if (!*handle) {
++          char pathbuf[sizeof(LIBGL_PATH) + 1 + 1024 + 1];
++          int l = snprintf(pathbuf, sizeof(pathbuf), "%s/%s", LIBGL_PATH, lib_name);
++          if (l < 0 || l >= sizeof(pathbuf)) {
++            // This really shouldn't happen
++            fprintf(stderr, "Error prefixing library pathname\n");
++            exit(1);
++          }
++          *handle = dlopen(pathbuf, flags);
++        }
++#endif
++
+         if (!*handle) {
+             if (exit_on_fail) {
+                 fprintf(stderr, "Couldn't open %s: %s\n", lib_name, dlerror());

@@ -1,0 +1,11 @@
+--- a/subprojects/libovf-glib/govf/meson.build
++++ b/subprojects/libovf-glib/govf/meson.build
+@@ -39,7 +39,7 @@ govf_lib = shared_library('govf-' + api_version,
+   govf_sources,
+   dependencies: govf_deps,
+   install: true,
+-  install_dir: libdir
++  install_dir: get_option ('prefix') / libdir
+ )
+ 
+ govf_dep = declare_dependency(

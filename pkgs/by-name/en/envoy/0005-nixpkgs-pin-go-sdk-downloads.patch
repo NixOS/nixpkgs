@@ -1,0 +1,79 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Daniel Baker <dan@djacu.dev>
+Date: Thu, 30 Apr 2026 08:42:44 -0700
+Subject: [PATCH] nixpkgs: pin Go SDK downloads
+
+Pin Go SDK downloads to avoid fetching the mutable version listing from
+https://go.dev/dl/?mode=json&include=all. Without explicit sdks, each
+go_download_sdk call downloads that listing (which changes with every Go
+release) and caches it in repository_cache, causing the deps hash to
+drift. See: io_bazel_rules_go/go/private/sdk.bzl lines 74-93 (rules_go
+v0.50.0)
+
+Signed-off-by: Daniel Baker <dan@djacu.dev>
+---
+ bazel/dependency_imports.bzl | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
+
+diff --git a/bazel/dependency_imports.bzl b/bazel/dependency_imports.bzl
+index 90e49d5ceb0024b57481b816518990f58fc2ad5f..26091a877ea3951bfe69944ab8580857e787bb64 100644
+--- a/bazel/dependency_imports.bzl
++++ b/bazel/dependency_imports.bzl
+@@ -27,6 +27,18 @@ load("@rules_rust//rust:repositories.bzl", "rules_rust_dependencies", "rust_regi
+ # go version for rules_go
+ GO_VERSION = "1.24.6"
+ 
++# Pin Go SDK downloads to avoid fetching the mutable version listing from
++# https://go.dev/dl/?mode=json&include=all. Without explicit sdks, each
++# go_download_sdk call downloads that listing (which changes with every Go
++# release) and caches it in repository_cache, causing the deps hash to drift.
++# See: io_bazel_rules_go/go/private/sdk.bzl lines 74-93 (rules_go v0.50.0)
++_GO_SDKS = {
++    "linux_amd64": ["go" + GO_VERSION + ".linux-amd64.tar.gz", "bbca37cc395c974ffa4893ee35819ad23ebb27426df87af92e93a9ec66ef8712"],
++    "linux_arm64": ["go" + GO_VERSION + ".linux-arm64.tar.gz", "124ea6033a8bf98aa9fbab53e58d134905262d45a022af3a90b73320f3c3afd5"],
++    "darwin_amd64": ["go" + GO_VERSION + ".darwin-amd64.tar.gz", "4a8d7a32052f223e71faab424a69430455b27b3fff5f4e651f9d97c3e51a8746"],
++    "darwin_arm64": ["go" + GO_VERSION + ".darwin-arm64.tar.gz", "4e29202c49573b953be7cc3500e1f8d9e66ddd12faa8cf0939a4951411e09a2a"],
++}
++
+ JQ_VERSION = "1.7"
+ YQ_VERSION = "4.24.4"
+ 
+@@ -46,7 +58,8 @@ def envoy_dependency_imports(
+         register_preinstalled_tools=True,  # use host tools (default)
+     )
+     go_rules_dependencies()
+-    go_register_toolchains(go_version)
++    go_download_sdk(name = "go_sdk", version = go_version, sdks = _GO_SDKS)
++    go_register_toolchains()
+     if go_version != "host":
+         envoy_download_go_sdks(go_version)
+     gazelle_dependencies(go_sdk = "go_sdk")
+@@ -218,24 +231,28 @@ def envoy_download_go_sdks(go_version):
+         goos = "linux",
+         goarch = "amd64",
+         version = go_version,
++        sdks = _GO_SDKS,
+     )
+     go_download_sdk(
+         name = "go_linux_arm64",
+         goos = "linux",
+         goarch = "arm64",
+         version = go_version,
++        sdks = _GO_SDKS,
+     )
+     go_download_sdk(
+         name = "go_darwin_amd64",
+         goos = "darwin",
+         goarch = "amd64",
+         version = go_version,
++        sdks = _GO_SDKS,
+     )
+     go_download_sdk(
+         name = "go_darwin_arm64",
+         goos = "darwin",
+         goarch = "arm64",
+         version = go_version,
++        sdks = _GO_SDKS,
+     )
+ 
+ def crates_repositories():

@@ -1,0 +1,23 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    asmrepl (1.2.0)
+      fisk (~> 2.3.1)
+    fisk (2.3.2)
+    logger (1.7.0)
+    racc (1.8.1)
+    rbs (3.10.3)
+      logger
+      tsort
+    tsort (0.2.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  asmrepl
+  racc (~> 1.8)
+  rbs (~> 3.9)
+
+BUNDLED WITH
+   2.7.2

@@ -1,0 +1,13 @@
+diff --git a/WikipediaCleaner/build.xml b/WikipediaCleaner/build.xml
+index 9437c1dd6..37a33509f 100644
+--- a/WikipediaCleaner/build.xml
++++ b/WikipediaCleaner/build.xml
+@@ -172,7 +172,7 @@
+   </taskdef>
+ 
+   <!-- Build WPCleaner -->
+-  <target name="main" description="Build WPCleaner" depends="init,clean,main-i18n,javadoc">
++  <target name="main" description="Build WPCleaner" depends="init,clean,main-i18n">
+ 
+     <!-- Initialize -->
+     <input message="Please enter Password for keystore:" addproperty="WPCleaner.keystore.password" />

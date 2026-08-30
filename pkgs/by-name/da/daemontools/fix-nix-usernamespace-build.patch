@@ -1,0 +1,10 @@
+--- admin.org/daemontools-0.76/src/chkshsgr.c	2001-07-12 17:49:49.000000000 +0100
++++ admin/daemontools-0.76/src/chkshsgr.c	2017-05-31 23:54:56.662174028 +0100
+@@ -4,6 +4,7 @@
+ 
+ int main()
+ {
++  return 0;
+   short x[4];
+ 
+   x[0] = x[1] = 0;

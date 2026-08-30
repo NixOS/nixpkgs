@@ -1,0 +1,19 @@
+diff --git a/bindings/python/iio.py b/bindings/python/iio.py
+index b91260cc..04bcfa7f 100644
+--- a/bindings/python/iio.py
++++ b/bindings/python/iio.py
+@@ -218,13 +218,7 @@ _ChannelPtr = _POINTER(_Channel)
+ _BufferPtr = _POINTER(_Buffer)
+ _DataFormatPtr = _POINTER(DataFormat)
+ 
+-if "Windows" in _system():
+-    _iiolib = "libiio.dll"
+-else:
+-    # Non-windows, possibly Posix system
+-    _iiolib = "iio"
+-
+-_lib = _cdll(find_library(_iiolib), use_errno=True, use_last_error=True)
++_lib = _cdll("@libiio@", use_errno=True, use_last_error=True)
+ 
+ _get_backends_count = _lib.iio_get_backends_count
+ _get_backends_count.restype = c_uint

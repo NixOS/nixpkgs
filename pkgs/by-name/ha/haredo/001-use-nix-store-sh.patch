@@ -1,0 +1,20 @@
+diff --git a/src/haredo.ha b/src/haredo.ha
+index c2e56e6..304c9ad 100644
+--- a/src/haredo.ha
++++ b/src/haredo.ha
+@@ -280,12 +280,12 @@ fn try_do(
+ 	const tmpfilepath = strings::concat(ctx.tmpdir, "/", tmpfilename);
+ 
+ 	const cmd = if (ctx.verbose) {
+-		fmt::errorln("* sh -ev", dopaths.do, dopaths.target,
++		fmt::errorln("* @bash@/bin/sh -ev", dopaths.do, dopaths.target,
+ 			dopaths.basename, tmpfilepath)?;
+-		yield exec::cmd("sh", "-ev", dopaths.do, dopaths.target,
++		yield exec::cmd("@bash@/bin/sh", "-ev", dopaths.do, dopaths.target,
+ 			dopaths.basename, tmpfilepath)?;
+ 	} else {
+-		yield exec::cmd("sh", "-e", dopaths.do, dopaths.target,
++		yield exec::cmd("@bash@/bin/sh", "-e", dopaths.do, dopaths.target,
+ 			dopaths.basename, tmpfilepath)?;
+ 	};
+ 

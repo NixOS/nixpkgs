@@ -1,0 +1,26 @@
+Fix broken Makefile:
+
+* fix syntax error (missing '\' to continue line):
+    Makefile:19: *** recipe commences before first target.  Stop.
+* Get portaudio library flags from pkg-config (to get -Lpath/to/portaudio/lib etc.)
+
+Author: Bjørn Forsman
+diff -uNr espeakedit-1.48.03.orig/src/Makefile espeakedit-1.48.03/src/Makefile
+--- espeakedit-1.48.03.orig/src/Makefile	2013-03-13 15:52:02.000000000 +0100
++++ espeakedit-1.48.03/src/Makefile	2014-07-22 15:34:17.524114822 +0200
+@@ -12,12 +12,11 @@
+ 
+ WX_LIBS = -pthread   `wx-config --libs`
+ 
+-LIBS=-lstdc++ -lportaudio
++LIBS=-lstdc++ `pkg-config --libs portaudio-2.0`
+ #LIBS=-lstdc++ /usr/lib/x86_64-linux-gnu/libportaudio.so.2
+ 
+-CPPFLAGS =  -Wall -g -fexceptions `wx-config --cflags`
+-	-I/usr/include/wx-2.8 \
+-	-DGTK_NO_CHECK_CASTS -D__WXGTK__ -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES
++CPPFLAGS =  -Wall -g -fexceptions `wx-config --cflags` \
++	-DGTK_NO_CHECK_CASTS -D__WXGTK__ -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES \
+ 	-D_LARGEFILE_SOURCE=1 -DNO_GCC_PRAGMA -D_ESPEAKEDIT
+ 
+ CXXFLAGS = -O2  -Wall -fexceptions `wx-config --cflags` \

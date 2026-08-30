@@ -1,0 +1,12 @@
+Replaces the legacy DES crypt hash used in tests with a stronger
+bcrypt function, as crypt() in pkgs.perl no longer supports DES
+
+# htpasswd -nbB admin s3cr3t
+
+diff --git a/t/Plack-Middleware/htpasswd b/t/Plack-Middleware/htpasswd
+index b597da8..f80461d 100644
+--- a/t/Plack-Middleware/htpasswd
++++ b/t/Plack-Middleware/htpasswd
+@@ -1,1 +1,1 @@
+-admin:6iSeSVcVHgNQw
++admin:$2y$05$qO4lTUQMcE5mU6KI0t7j9uCjcTkpf6sAp0cv6oZiemD0MI8keeKPa

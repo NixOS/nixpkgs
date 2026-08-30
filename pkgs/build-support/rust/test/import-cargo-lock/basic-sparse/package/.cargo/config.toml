@@ -1,0 +1,5 @@
+[registries.sparse-crates-io]
+index = "sparse+https://index.crates.io/"
+
+[registries.crates-io]
+protocol = "git"

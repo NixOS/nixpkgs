@@ -1,0 +1,12 @@
+diff --git a/qt6/src/platformtheme/kdeplatformtheme.cpp b/qt6/src/platformtheme/kdeplatformtheme.cpp
+index fea04b5..7efafd1 100644
+--- a/qt6/src/platformtheme/kdeplatformtheme.cpp
++++ b/qt6/src/platformtheme/kdeplatformtheme.cpp
+@@ -551,6 +551,7 @@ bool KdePlatformTheme::checkIfThemeExists(const QString &themePath)
+     // QML_IMPORT_PATH is the new one, but QML2_IMPORT_PATH is still used
+     checkEnvironmentVariable("QML2_IMPORT_PATH");
+     checkEnvironmentVariable("QML_IMPORT_PATH");
++    checkEnvironmentVariable("NIXPKGS_QT6_QML_IMPORT_PATH");
+ 
+     for (const QString &path : moduleSearchPaths) {
+         if (QDir(path + themePath).exists()) {

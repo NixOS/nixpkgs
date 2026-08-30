@@ -1,0 +1,15 @@
+diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
+index ddf8750c..655c9a7d 100644
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -160,8 +160,8 @@ importers:
+         specifier: ^26.0.1
+         version: 26.0.1
+       '@types/react':
+-        specifier: 18.3.1
+-        version: 18.3.1
++        specifier: 19.1.0
++        version: 19.1.0
+       '@types/react-dom':
+         specifier: 18.3.1
+         version: 18.3.1

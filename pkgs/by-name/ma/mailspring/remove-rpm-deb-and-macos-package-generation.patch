@@ -1,0 +1,54 @@
+From e1210102ab3f7bff24d9dfa38ad87b3fe04d0f5e Mon Sep 17 00:00:00 2001
+From: wrench-exile-legacy <user@wrench-exile-legacy.site>
+Date: Wed, 22 Jul 2026 10:38:53 +0100
+Subject: [PATCH] remove rpm, deb and macos package generation
+
+---
+ app/build/build.js | 17 -----------------
+ 1 file changed, 17 deletions(-)
+
+diff --git a/app/build/build.js b/app/build/build.js
+index 2e90d5624..d07244d75 100644
+--- a/app/build/build.js
++++ b/app/build/build.js
+@@ -365,12 +365,6 @@ async function createMacZip() {
+   }
+   const arch = process.env.OVERRIDE_TO_INTEL ? 'x64' : process.arch;
+   const cwd = path.join(outputDir, `Mailspring-darwin-${arch}`);
+-  await spawn({
+-    cmd: 'zip',
+-    args: ['-9', '-y', '-r', '-9', '-X', zipPath, 'Mailspring.app'],
+-    opts: { cwd },
+-  });
+-  console.log(`>> Created ${zipPath}`);
+ }
+ 
+ function writeFromTemplate(filePath, data) {
+@@ -415,11 +409,6 @@ async function createDebInstaller() {
+   writeFromTemplate(path.join(linuxAssetsDir, 'mailspring.metainfo.xml.in'), data);
+ 
+   const icon = path.join(appDir, 'build', 'resources', 'linux', 'icons', '512.png');
+-  await spawn({
+-    cmd: path.join(appDir, 'script', 'mkdeb'),
+-    args: [packageJSON.version, linuxArch, icon, linuxAssetsDir, contentsDir, outputDir],
+-  });
+-  console.log(`Created ${outputDir}/mailspring-${packageJSON.version}-${linuxArch}.deb`);
+ }
+ 
+ async function createRpmInstaller() {
+@@ -446,12 +435,6 @@ async function createRpmInstaller() {
+   writeFromTemplate(path.join(linuxAssetsDir, 'redhat', 'mailspring.spec.in'), templateData);
+   writeFromTemplate(path.join(linuxAssetsDir, 'Mailspring.desktop.in'), templateData);
+   writeFromTemplate(path.join(linuxAssetsDir, 'mailspring.metainfo.xml.in'), templateData);
+-
+-  await spawn({
+-    cmd: path.join(appDir, 'script', 'mkrpm'),
+-    args: [outputDir, contentsDir, linuxAssetsDir],
+-  });
+-  console.log(`Created rpm package in ${rpmDir}`);
+ }
+ 
+ async function main() {
+-- 
+2.54.0
+

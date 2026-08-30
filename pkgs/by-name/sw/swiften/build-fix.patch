@@ -1,0 +1,42 @@
+diff -wbBur swift-4.0.2/Swift/QtUI/UserSearch/QtUserSearchWindow.h swift-4.0.2.my/Swift/QtUI/UserSearch/QtUserSearchWindow.h
+--- swift-4.0.2/Swift/QtUI/UserSearch/QtUserSearchWindow.h	2018-04-06 13:06:46.000000000 +0300
++++ swift-4.0.2.my/Swift/QtUI/UserSearch/QtUserSearchWindow.h	2019-10-08 20:52:23.171475337 +0300
+@@ -9,6 +9,7 @@
+ #include <set>
+ 
+ #include <QWizard>
++#include <QAbstractItemModel>
+ 
+ #include <Swiften/Base/Override.h>
+ 
+diff -wbBur swift-4.0.2/Swiften/Network/PlatformNATTraversalWorker.cpp swift-4.0.2.my/Swiften/Network/PlatformNATTraversalWorker.cpp
+--- swift-4.0.2/Swiften/Network/PlatformNATTraversalWorker.cpp	2018-04-06 13:06:46.000000000 +0300
++++ swift-4.0.2.my/Swiften/Network/PlatformNATTraversalWorker.cpp	2019-10-08 21:12:25.284754131 +0300
+@@ -157,7 +157,7 @@
+         miniUPnPInterface = new MiniUPnPInterface();
+         miniUPnPSupported = miniUPnPInterface->isAvailable();
+     }
+-    SWIFT_LOG(debug) << "UPnP NAT traversal supported: " << miniUPnPSupported << std::endl;
++//    SWIFT_LOG(debug) << "UPnP NAT traversal supported: " << miniUPnPSupported << std::endl;
+     if (miniUPnPSupported) {
+         return miniUPnPInterface;
+     }
+@@ -168,7 +168,7 @@
+         natPMPInterface = new NATPMPInterface();
+         natPMPSupported = natPMPInterface->isAvailable();
+     }
+-    SWIFT_LOG(debug) << "NAT-PMP NAT traversal supported: " << natPMPSupported << std::endl;
++//    SWIFT_LOG(debug) << "NAT-PMP NAT traversal supported: " << natPMPSupported << std::endl;
+     if (natPMPSupported) {
+         return natPMPInterface;
+     }
+--- a/Swift/Controllers/ShowProfileController.h
++++ b/Swift/Controllers/ShowProfileController.h
+@@ -12,6 +12,7 @@
+ 
+ #pragma once
+ 
++#include <map>
+ #include <Swiften/Elements/ErrorPayload.h>
+ #include <Swiften/Elements/VCard.h>
+ #include <Swiften/JID/JID.h>

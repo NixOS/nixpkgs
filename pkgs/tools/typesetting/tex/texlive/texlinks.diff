@@ -1,0 +1,9 @@
+@@ -157,7 +157,7 @@
+       verbose_echo "skipped ConTeXtish symlink $src -> $dest (special case)"
+       ;;
+     *)
+-      test ! -f "$src" &&
++      test "x$src" != "x`(ls -ld $src | awk '{print $NF}') 2>/dev/null`" &&
+         rm -f "$src"
+   
+       if test -f "$src"; then

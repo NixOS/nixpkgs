@@ -1,0 +1,43 @@
+diff '--color=auto' -u -r a/lrslib.c b/lrslib.c
+--- a/lrslib.c
++++ b/lrslib.c
+@@ -84,10 +84,10 @@
+ /* signals handling            */
+ /*******************************/
+ #ifndef SIGNALS
+-static void checkpoint ();
+-static void die_gracefully ();
++static void checkpoint (int);
++static void die_gracefully (int);
+ static void setup_signals (void);
+-static void timecheck ();
++static void timecheck (int);
+ #endif
+ 
+ /*******************************/
+@@ -6368,7 +6368,7 @@
+ }
+ 
+ static void
+-timecheck ()
++timecheck (int)
+ {
+   lrs_dump_state ();
+   errcheck ("signal", signal (SIGALRM, timecheck));
+@@ -6376,14 +6376,14 @@
+ }
+ 
+ static void
+-checkpoint ()
++checkpoint (int)
+ {
+   lrs_dump_state ();
+   errcheck ("signal", signal (SIGUSR1, checkpoint));
+ }
+ 
+ static void
+-die_gracefully ()
++die_gracefully (int)
+ {
+   lrs_dump_state ();
+ 

@@ -1,0 +1,30 @@
+From aada568827c9f619dabfab8bbc6522acc8f234f3 Mon Sep 17 00:00:00 2001
+From: Petr Portnov <mrjarviscraft@gmail.com>
+Date: Sun, 16 Aug 2026 17:19:49 +0300
+Subject: [PATCH] Issue #21241: Drop `nexus-codehaus-snapshot` plugin
+ repository
+
+---
+ pom.xml | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/pom.xml b/pom.xml
+index f78f97d802398a882ee99e2f3bf88e200c2094bd..3bc4fcf62de207acce7b5a4bdbe47f4c30bccb6e 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -529,15 +529,6 @@
+     </dependency>
+   </dependencies>
+ 
+-  <!-- that repositories are required for testing plugin's snapshot version -->
+-  <pluginRepositories>
+-    <pluginRepository>
+-      <id>nexus-codehaus-snapshot</id>
+-      <name>Codehaus Snapshots</name>
+-      <url>https://oss.sonatype.org/content/repositories/codehaus-snapshots/</url>
+-    </pluginRepository>
+-  </pluginRepositories>
+-
+   <build>
+     <pluginManagement>
+       <plugins>

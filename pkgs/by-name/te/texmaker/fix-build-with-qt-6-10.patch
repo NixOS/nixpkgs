@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ef6a4e6..b564be8 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -386,7 +386,7 @@ set(CMAKE_CXX_STANDARD 17)
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ set(CMAKE_AUTORCC ON)
+ 
+-find_package(Qt6 REQUIRED COMPONENTS Gui Concurrent Core Core5Compat Network PrintSupport Qml Widgets Xml LinguistTools)
++find_package(Qt6 REQUIRED COMPONENTS Gui Concurrent Core CorePrivate Core5Compat Network PrintSupport Qml Widgets Xml LinguistTools)
+ 
+ qt_standard_project_setup()
+ 

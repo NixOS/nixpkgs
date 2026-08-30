@@ -1,0 +1,12 @@
+diff --git a/media/gpu/sandbox/hardware_video_decoding_sandbox_hook_linux.cc b/media/gpu/sandbox/hardware_video_decoding_sandbox_hook_linux.cc
+index 58ab0db508f73dbac36a84cb71ffdad972b3fc3c..b5b97f6c6b22a79fd5e4e53393859a107cc0f399 100644
+--- a/media/gpu/sandbox/hardware_video_decoding_sandbox_hook_linux.cc
++++ b/media/gpu/sandbox/hardware_video_decoding_sandbox_hook_linux.cc
+@@ -7,6 +7,7 @@
+ #include <dlfcn.h>
+ #include <sys/stat.h>
+ 
++#include "base/logging.h"
+ #include "base/process/process_metrics.h"
+ #include "base/strings/stringprintf.h"
+ #include "build/build_config.h"

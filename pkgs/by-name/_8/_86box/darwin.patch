@@ -1,0 +1,15 @@
+diff --git a/src/qt/qt_platform.cpp b/src/qt/qt_platform.cpp
+index 824f71023..1f38e4b5f 100644
+--- a/src/qt/qt_platform.cpp
++++ b/src/qt/qt_platform.cpp
+@@ -673,6 +673,10 @@ plat_init_rom_paths(void)
+         rom_add_path(QDir(path).filePath("86Box/roms").toUtf8().constData());
+ #endif
+     }
++
++    #ifdef __APPLE__
++    rom_add_path("@out@/share/86Box/roms/");
++    #endif
+ }
+ 
+ void

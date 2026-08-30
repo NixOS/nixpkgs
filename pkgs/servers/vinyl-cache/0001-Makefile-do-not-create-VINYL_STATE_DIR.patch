@@ -1,0 +1,26 @@
+From 51ee9140e547eccfae99c6ee0846b8d1023d463e Mon Sep 17 00:00:00 2001
+From: Oliver Schmidt <os@flyingcircus.io>
+Date: Tue, 19 May 2026 23:31:18 +0200
+Subject: [PATCH] Makefile: do not create VINYL_STATE_DIR
+
+In the nix expression, we continue to hardcode /var/run
+as a statedirectory. But trying to create that  top-level
+directory from within the build sandbox fails (and is
+a wrong move anyways).
+
+An upstream solution would need to be more nuanced though.
+
+diff --git a/Makefile.in b/Makefile.in
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -44,7 +44,6 @@ AM_DISTCHECK_CONFIGURE_FLAGS += --with-unwind
+ endif
+ 
+ install-data-local:
+-	$(install_sh) -d -m 0755 "${VINYL_STATE_DIR}"
+ 
+ distclean-local:
+ 	-find . '(' -name '*.gcda' -o -name '*.gcda' ')' -exec rm '{}' ';'
+-- 
+2.51.2
+

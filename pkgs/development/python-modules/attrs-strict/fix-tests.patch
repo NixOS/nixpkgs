@@ -1,0 +1,73 @@
+diff --git a/tests/test_auto_attribs__py3.py b/tests/test_auto_attribs__py3.py
+index 67b3ff8..8241f9d 100644
+--- a/tests/test_auto_attribs__py3.py
++++ b/tests/test_auto_attribs__py3.py
+@@ -28,9 +28,13 @@ from attrs_strict import type_validator
+             None,
+             0xBAD,
+             "Value of value 2989 is not of type {}".format(
+-                "typing.Optional[str]"
+-                if sys.version_info == (2, 7) or sys.version_info > (3, 9)
+-                else "typing.Union[str, NoneType]"
++                "str | None"
++                if sys.version_info >= (3, 14)
++                else (
++                    "typing.Optional[str]"
++                    if sys.version_info == (2, 7) or sys.version_info > (3, 9)
++                    else "typing.Union[str, NoneType]"
++                )
+             ),
+         ),
+     ],
+@@ -75,9 +79,13 @@ def test_recursive():
+     Self(Self())
+     Self(Self(None))
+     type_repr = (
+-        "typing.Optional[test_auto_attribs__py3.Self]"
+-        if sys.version_info == (2, 7) or sys.version_info > (3, 9)
+-        else "typing.Union[test_auto_attribs__py3.Self, NoneType]"
++        "test_auto_attribs__py3.Self | None"
++        if sys.version_info >= (3, 14)
++        else (
++            "typing.Optional[test_auto_attribs__py3.Self]"
++            if sys.version_info == (2, 7) or sys.version_info > (3, 9)
++            else "typing.Union[test_auto_attribs__py3.Self, NoneType]"
++        )
+     )
+     msg = f"Value of parent 17 is not of type {type_repr}"
+     with pytest.raises(ValueError, match=re.escape(msg)):
+diff --git a/tests/test_union.py b/tests/test_union.py
+index e1b11a9..49d7c20 100644
+--- a/tests/test_union.py
++++ b/tests/test_union.py
+@@ -16,16 +16,26 @@ from attrs_strict import type_validator
+         (
+             2.0,
+             Union[int, str],
+-            "Value of foo 2.0 is not of type typing.Union[int, str]",
++            (
++                "Value of foo 2.0 is not of type {}".format(
++                    "int | str"
++                    if sys.version_info >= (3, 14)
++                    else "typing.Union[int, str]"
++                )
++            ),
+         ),
+         (
+             [1, 2, "p"],
+             List[Union[None, int]],
+             (
+                 "Value of foo p is not of type {} in [1, 2, 'p']".format(
+-                    "typing.Optional[int]"
+-                    if sys.version_info >= (3, 9)
+-                    else "typing.Union[NoneType, int]"
++                    "None | int"
++                    if sys.version_info >= (3, 14)
++                    else (
++                        "typing.Optional[int]"
++                        if sys.version_info >= (3, 9)
++                        else "typing.Union[NoneType, int]"
++                    )
+                 )
+             ),
+         ),

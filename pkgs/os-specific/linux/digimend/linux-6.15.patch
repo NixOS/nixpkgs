@@ -1,0 +1,34 @@
+From 011686d1018e18c7c5cf5c2468ac43f275ecec82 Mon Sep 17 00:00:00 2001
+From: Dominik Kummer <devel@arkades.org>
+Date: Sat, 14 Feb 2026 10:13:46 +0100
+Subject: [PATCH] add conditional function definition based on kernel version
+ for backwards compability
+
+---
+ hid-uclogic-core.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/hid-uclogic-core.c b/hid-uclogic-core.c
+index 72680dd..75e7882 100644
+--- a/hid-uclogic-core.c
++++ b/hid-uclogic-core.c
+@@ -25,6 +25,10 @@
+ #include "compat.h"
+ #include <linux/version.h>
+ 
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 1, 84)
++#define timer_delete_sync del_timer_sync
++#endif
++
+ /**
+  * uclogic_inrange_timeout - handle pen in-range state timeout.
+  * Emulate input events normally generated when pen goes out of range for
+@@ -491,7 +495,7 @@ static void uclogic_remove(struct hid_device *hdev)
+ {
+ 	struct uclogic_drvdata *drvdata = hid_get_drvdata(hdev);
+ 
+-	del_timer_sync(&drvdata->inrange_timer);
++	timer_delete_sync(&drvdata->inrange_timer);
+ 	hid_hw_stop(hdev);
+ 	kfree(drvdata->desc_ptr);
+ 	uclogic_params_cleanup(&drvdata->params);

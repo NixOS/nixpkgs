@@ -1,0 +1,24 @@
+diff --git a/test/integration/extent.sh b/test/integration/extent.sh
+index 39fb0a73..ee9f3ed4 100644
+--- a/test/integration/extent.sh
++++ b/test/integration/extent.sh
+@@ -1,5 +1,19 @@
+ #!/bin/sh
+ 
++# With active profiling, xallocx may decline to grow non-page-aligned
++# allocations.  On platforms with real decommit/commit, this can make this
++# test observe a successful decommit without the matching commit.
++case ",${MALLOC_CONF_ALL}," in
++  *,prof:true,*)
++    case ",${MALLOC_CONF_ALL}," in
++      *,prof_active:false,*)
++        ;;
++      *)
++        return 1
++        ;;
++    esac
++esac
++
+ if [ "x${enable_fill}" = "x1" ] ; then
+   export MALLOC_CONF="junk:false"
+ fi

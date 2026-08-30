@@ -1,0 +1,22 @@
+diff --git a/configure.in b/configure.ac
+similarity index 90%
+rename from configure.in
+rename to configure.ac
+index 3ad98ca11da..8fad378faf4 100644
+--- a/configure.in
++++ b/configure.ac
+@@ -1,13 +1,8 @@
+ AC_INIT(interface/interface.c)
+ 
+-cp $srcdir/configure.guess $srcdir/config.guess
+-cp $srcdir/configure.sub $srcdir/config.sub
+-
+ AC_CANONICAL_HOST
+ 
+-if test -z "$CC"; then
+-	AC_PROG_CC	
+-fi
++AC_PROG_CC
+ AC_PROG_RANLIB
+ AC_CHECK_PROG(AR,ar,ar)
+ AC_CHECK_PROG(INSTALL,install,install)

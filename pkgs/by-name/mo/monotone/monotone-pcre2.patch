@@ -1,0 +1,482 @@
+Switch to PCRE2
+
+--- mtn-src/m4/library.m4	2026-08-05 23:04:45.393285992 +0200
++++ mtn-src/m4/library.m4	2026-08-05 23:04:53.120785844 +0200
+@@ -216,42 +216,20 @@
+   ])
+ ])
+ 
+-AC_DEFUN([MTN_FIND_PCRE],
+-[MTN_CHECK_MODULE([pcre], [7.4],
++AC_DEFUN([MTN_FIND_PCRE2],
++[MTN_CHECK_MODULE([pcre2-8], [7.4],
+   [AC_LANG_PROGRAM(
+-    [#include <pcre.h>
+-     #if PCRE_MAJOR < 7 || (PCRE_MAJOR == 7 && PCRE_MINOR < 4)
+-     #error out of date
+-     #endif],
++    [#define PCRE2_CODE_UNIT_WIDTH 8
++     #include <pcre2.h>
++     ],
+     [const char *e;
+      int dummy;
+      int o;
+      /* Make sure some definitions are present. */
+-     dummy = PCRE_NEWLINE_CR;
+-     dummy = PCRE_DUPNAMES;
+-     pcre *re = pcre_compile("foo", 0, &e, &o, 0);])
++     dummy = PCRE2_NEWLINE_CR;
++     dummy = PCRE2_DUPNAMES;
++     pcre2_code *re = pcre2_compile("foo", 0, &e, &o, 0);])
+   ])
+-  save_CPPFLAGS="$CPPFLAGS"
+-  CPPFLAGS="$CPPFLAGS $pcre_CFLAGS"
+-  AC_CACHE_CHECK([if pcre.h uses real_pcre8_or_16], mtn_ac_cv_pcre_uses_8_or_16,
+-  [
+-  AC_LANG_PUSH([C++])
+-  AC_COMPILE_IFELSE(
+-    [AC_LANG_PROGRAM(
+-    [#include <pcre.h>],
+-    [const char *e;
+-     int o;
+-     struct real_pcre8_or_16 *re = pcre_compile("foo", 0, &e, &o, 0);])
+-    ],
+-    [mtn_ac_cv_pcre_uses_8_or_16=yes],
+-    [mtn_ac_cv_pcre_uses_8_or_16=no])]
+-  )
+-  AC_LANG_POP([C++])
+-  if test $mtn_ac_cv_pcre_uses_8_or_16 = yes; then
+-    AC_DEFINE_UNQUOTED(PCRE_USES_8_OR_16, 1,
+-      [Define if <pcre.h> uses real_pcre8_or_16. ])
+-  fi
+-  CPPFLAGS="$save_CPPFLAGS"
+ ])
+ 
+ AC_DEFUN([MTN_FIND_SQLITE],
+
+--- mtn-src/src/mt_version.cc	2026-08-05 23:49:07.580588987 +0200
++++ mtn-src/src/mt_version.cc	2026-08-05 23:52:24.163973748 +0200
+@@ -21,8 +21,9 @@
+ /* Include third party headers needed for version info */
+ #include <botan/version.h>
+ #include <sqlite3.h>
+-// Lua assumed included by lua.hh
+-#include <pcre.h>
++
++#define PCRE2_CODE_UNIT_WIDTH 8
++#include <pcre2.h>
+ 
+ #include "app_state.hh"
+ #include "lua.hh"
+@@ -55,6 +56,8 @@
+   get_version(base_version);
+   string flavour;
+   get_system_flavour(flavour);
++  char pcre_version [128];
++  pcre2_config(PCRE2_CONFIG_VERSION, pcre_version);
+   out = (F("%s\n"
+            "Running on          : %s\n"
+            "C++ compiler        : %s\n"
+@@ -72,7 +75,7 @@
+          % BOOST_LIB_VERSION
+          % sqlite3_libversion() % SQLITE_VERSION
+          % LUA_VERSION
+-         % pcre_version() % PCRE_MAJOR % PCRE_MINOR
++         % pcre_version % PCRE2_MAJOR % PCRE2_MINOR
+          % Botan::version_major() % Botan::version_minor() % Botan::version_patch()
+          % BOTAN_VERSION_MAJOR % BOTAN_VERSION_MINOR % BOTAN_VERSION_PATCH
+          % string(package_full_revision_constant))
+
+--- mtn-src/src/pcrewrap.hh	2026-08-05 23:49:09.600171041 +0200
++++ mtn-src/src/pcrewrap.hh	2026-08-06 00:39:53.759161556 +0200
+@@ -18,12 +18,8 @@
+ // definitions and so we don't actually expose it here. Unfortunately, this
+ // means we have to hope this pair of forward declarations will not change...
+ 
+-#if PCRE_USES_8_OR_16
+-#define real_pcre real_pcre8_or_16
+-#endif
+-
+-struct real_pcre;
+-struct pcre_extra;
++struct pcre2_real_code_8;
++struct pcre2_real_match_context_8;
+ 
+ namespace pcre
+ {
+@@ -65,8 +61,8 @@
+     regex & operator=(regex const &);
+ 
+     // data
+-    struct real_pcre const * basedat;
+-    struct pcre_extra const * extradat;
++    const struct pcre2_real_code_8 * basedat;
++    struct pcre2_real_match_context_8 * extradat;
+ 
+     // used by constructors
+     void init(char const *, pcre::flags);
+
+--- mtn-src/src/pcrewrap.cc	2026-08-05 23:51:00.236884698 +0200
++++ mtn-src/src/pcrewrap.cc	2026-08-06 01:23:14.728332978 +0200
+@@ -15,11 +15,8 @@
+ #include <map>
+ #include <vector>
+ 
+-// This dirty trick is necessary to prevent the 'pcre' typedef defined by
+-// pcre.h from colliding with namespace pcre.
+-#define pcre pcre_t
+-#include "pcre.h"
+-#undef pcre
++#define PCRE2_CODE_UNIT_WIDTH 8
++#include "pcre2.h"
+ 
+ using std::make_pair;
+ using std::map;
+@@ -27,10 +24,9 @@
+ using std::string;
+ using std::vector;
+ 
+-static NORETURN(void pcre_compile_error(int errcode, char const * err,
+-                                        int erroff, char const * pattern,
++static NORETURN(void pcre_compile_error(int errcode, PCRE2_UCHAR8 const * err,
++                                        size_t erroff, char const * pattern,
+                                         origin::type caused_by));
+-static NORETURN(void pcre_study_error(char const * err, char const * pattern));
+ static NORETURN(void pcre_exec_error(int errcode,
+                                      origin::type subject_from));
+ 
+@@ -38,11 +34,10 @@
+ flags_to_internal(pcre::flags f)
+ {
+   using namespace pcre;
+-#define C(f_, x) (((f_) & (x)) ? PCRE_##x : 0)
++#define C(f_, x) (((f_) & (x)) ? PCRE2_##x : 0)
+   unsigned int i = 0;
+-  i |= C(f, NEWLINE_CR);
+-  i |= C(f, NEWLINE_LF);
+-  // NEWLINE_CRLF == NEWLINE_CR|NEWLINE_LF and so is handled above
++  // NEWLINE configuration is more complicated in PCRE2
++  // Nothing in Monotone seems to use it
+   i |= C(f, ANCHORED);
+   i |= C(f, NOTBOL);
+   i |= C(f, NOTEOL);
+@@ -63,8 +58,8 @@
+ get_capturecount(void const * bd)
+ {
+   unsigned int cc;
+-  int err = pcre_fullinfo(static_cast<pcre_t const *>(bd), 0,
+-                          PCRE_INFO_CAPTURECOUNT,
++  int err = pcre2_pattern_info(static_cast<pcre2_code const *>(bd),
++                          PCRE2_INFO_CAPTURECOUNT,
+                           static_cast<void *>(&cc));
+   I(err == 0);
+   return cc;
+@@ -73,7 +68,7 @@
+ namespace pcre
+ {
+   typedef map<char const *,
+-              pair<struct real_pcre const *, struct pcre_extra const *> >
++              pair<pcre2_code const *, pcre2_match_context *> >
+               regex_cache;
+ 
+   class regex_cache_manager
+@@ -85,7 +80,7 @@
+       }
+ 
+     void store(char const * pattern,
+-               pair<struct real_pcre const *, struct pcre_extra const *>
++               pair<pcre2_code const *, pcre2_match_context *>
+                data)
+       {
+         cache[pattern] = data;
+@@ -103,10 +98,10 @@
+              ++iter)
+           {
+             if (iter->second.first)
+-              pcre_free(const_cast<pcre_t *>(iter->second.first));
++              pcre2_code_free(const_cast<pcre2_code *>(iter->second.first));
+ 
+             if (iter->second.second)
+-              pcre_free(const_cast<pcre_extra *>(iter->second.second));
++              pcre2_match_context_free(const_cast<pcre2_match_context *>(iter->second.second));
+           }
+       }
+ private:
+@@ -118,8 +113,9 @@
+   void regex::init(char const * pattern, flags options)
+   {
+     int errcode;
+-    int erroff;
+-    char const * err;
++    size_t erroff;
++    const int err_msg_max = 2048;
++    PCRE2_UCHAR8 err[err_msg_max+1];
+     // use the cached data if we have it
+     regex_cache::const_iterator iter = compiled.find(pattern);
+     if (iter != compiled.end())
+@@ -129,29 +125,23 @@
+         return;
+       }
+     // not in cache - compile them then store in cache
+-    basedat = pcre_compile2(pattern, flags_to_internal(options),
+-                            &errcode, &err, &erroff, 0);
+-    if (!basedat)
++    basedat = pcre2_compile((PCRE2_UCHAR8*)pattern, PCRE2_ZERO_TERMINATED,
++                            flags_to_internal(options),
++                            &errcode, &erroff, 0);
++    if (!basedat) {
++      pcre2_get_error_message(errcode, err, err_msg_max);
+       pcre_compile_error(errcode, err, erroff, pattern, made_from);
+-
+-    pcre_extra *ed = pcre_study(basedat, 0, &err);
+-    if (err)
+-      pcre_study_error(err, pattern);
+-    if (!ed)
+-      {
+-        // I resent that C++ requires this cast.
+-        ed = (pcre_extra *)pcre_malloc(sizeof(pcre_extra));
+-        std::memset(ed, 0, sizeof(pcre_extra));
+-      }
++    }
+ 
+     // We set a fairly low recursion depth to avoid stack overflow.
+-    // Per pcrestack(3), one should assume 500 bytes per recursion;
++    // Per pcre2api(3), it should be a few hundreds bytes per call.
+     // it should be safe to let pcre have a megabyte of stack, so
+     // that's a depth of 2000, give or take.  (For reference, the
+     // default stack limit on Linux is 8MB.)
+-    ed->flags |= PCRE_EXTRA_MATCH_LIMIT_RECURSION;
+-    ed->match_limit_recursion = 2000;
++    pcre2_match_context * ed = pcre2_match_context_create(NULL);
++    pcre2_set_depth_limit(ed, 2000);
+     extradat = ed;
++
+     // store in cache
+     compiled.store(pattern, make_pair(basedat, extradat));
+   }
+@@ -176,12 +166,15 @@
+   regex::match(string const & subject, origin::type subject_origin,
+                flags options) const
+   {
+-    int rc = pcre_exec(basedat, extradat,
+-                       subject.data(), subject.size(),
+-                       0, flags_to_internal(options), 0, 0);
+-    if (rc == 0)
++    pcre2_match_data * matchdata = pcre2_match_data_create_from_pattern(basedat, NULL);
++    int rc = pcre2_match(basedat, 
++                   (PCRE2_UCHAR8*)subject.data(), subject.size(),
++                   0, flags_to_internal(options), 
++                   matchdata, extradat);
++    pcre2_match_data_free(matchdata);
++    if (rc > 0)
+       return true;
+-    else if (rc == PCRE_ERROR_NOMATCH)
++    else if (rc == PCRE2_ERROR_NOMATCH || rc == 0)
+       return false;
+     else
+       pcre_exec_error(rc, subject_origin);
+@@ -193,51 +186,49 @@
+   {
+     matches.clear();
+ 
+-    // retrieve the capture count of the pattern from pcre_fullinfo,
+-    // because pcre_exec might not signal trailing unmatched subpatterns
++    // retrieve the capture count of the pattern from pcre2_pattern_info,
++    // because pcre2_match might not signal trailing unmatched subpatterns
+     // i.e. if "abc" matches "(abc)(de)?", the match count is two, not
+     // the expected three
+-    int cap_count = 0;
+-    int rc = pcre_fullinfo(basedat, extradat, PCRE_INFO_CAPTURECOUNT, &cap_count);
+-    I(rc == 0);
++    size_t cap_count = get_capturecount(basedat);
+ 
+     // the complete regex is captured as well
+     cap_count += 1;
+ 
+     int worksize = cap_count * 3;
+ 
+-    // "int ovector[worksize]" is C99 only (not valid C++, but allowed by gcc/clang)
+-    // boost::shared_array is I think not plannned to be part of C++0x
+-    class xyzzy {
+-      int *data;
+-    public:
+-      xyzzy(int len) : data(new int[len]) {}
+-      ~xyzzy() { delete[] data; }
+-      operator int*() { return data; }
+-    } ovector(worksize);
+-
+-    rc = pcre_exec(basedat, extradat,
+-                   subject.data(), subject.size(),
+-                   0, flags_to_internal(options), ovector, worksize);
++    pcre2_match_data * matchdata = pcre2_match_data_create_from_pattern(basedat, NULL);
++    int rc = pcre2_match(basedat, 
++                   (PCRE2_UCHAR8*)subject.data(), subject.size(),
++                   0, flags_to_internal(options), 
++                   matchdata, extradat);
+ 
+     // since we dynamically set the work size, we should
+     // always get either a negative (error) or >= 1 match count
+     I(rc != 0);
+ 
+-    if (rc == PCRE_ERROR_NOMATCH)
++    if (rc == PCRE2_ERROR_NOMATCH)
+       return false;
+     else if (rc < 0)
+       pcre_exec_error(rc, subject_origin); // throws
+ 
+-    for (int i=0; i < cap_count; ++i)
++    PCRE2_SIZE * ovector = pcre2_get_ovector_pointer(matchdata);
++    size_t ovector_size = pcre2_get_ovector_count(matchdata);
++
++    for (size_t i=0; i < cap_count; ++i)
+       {
+         string match;
++
++        //enough captures
++        if(i<ovector_size)
+         // not an empty match
+-        if (ovector[2*i] != -1 && ovector[2*i+1] != -1)
++        if (ovector[2*i] != PCRE2_UNSET && ovector[2*i+1] != PCRE2_UNSET && ovector[2*i+1] > ovector[2*i])
+           match.assign(subject, ovector[2*i], ovector[2*i+1] - ovector[2*i]);
+         matches.push_back(match);
+       }
+ 
++    pcre2_match_data_free(matchdata);
++
+     return true;
+   }
+ } // namespace pcre
+@@ -245,39 +236,30 @@
+ // When the library returns an error, these functions discriminate between
+ // bugs in monotone and user errors in regexp writing.
+ static void
+-pcre_compile_error(int errcode, char const * err,
+-                   int erroff, char const * pattern,
++pcre_compile_error(int errcode, PCRE2_UCHAR8 const * err,
++                   size_t erroff, char const * pattern,
+                    origin::type caused_by)
+ {
+-  // One of the more entertaining things about the PCRE API is that
+-  // while the numeric error codes are documented, they do not get
+-  // symbolic names.
+-
+   switch (errcode)
+     {
+-    case 21: // failed to get memory
++    case PCRE2_ERROR_NOMEMORY: // failed to get memory
+       throw std::bad_alloc();
+ 
+-    case 10: // [code allegedly not in use]
+-    case 11: // internal error: unexpected repeat
+-    case 16: // erroffset passed as NULL
+-    case 17: // unknown option bit(s) set
+-    case 19: // [code allegedly not in use]
+-    case 23: // internal error: code overflow
+-    case 33: // [code allegedly not in use]
+-    case 50: // [code allegedly not in use]
+-    case 52: // internal error: overran compiling workspace
+-    case 53: // internal error: previously-checked referenced subpattern
+-             // not found
++    case PCRE2_ERROR_INTERNAL_UNEXPECTED_REPEAT:
++    case PCRE2_ERROR_NULL_ERROROFFSET:
++    case PCRE2_ERROR_BAD_OPTIONS:
++    case PCRE2_ERROR_INTERNAL_CODE_OVERFLOW:
++    case PCRE2_ERROR_INTERNAL_OVERRAN_WORKSPACE:
++    case PCRE2_ERROR_INTERNAL_MISSING_SUBPATTERN:
+       throw oops((F("while compiling regex '%s': %s") % pattern % err)
+                  .str().c_str());
+ 
+     default:
+       // PCRE fails to distinguish between errors at no position and errors at
+       // character offset 0 in the pattern, so in practice we give the
+-      // position-ful variant for all errors, but I'm leaving the == -1 check
+-      // here in case PCRE gets fixed.
+-      E(false, caused_by, (erroff == -1
++      // position-ful variant for all errors, 
++      // and now PCRE2 uses unsigned so the API mistake is unfixable
++      E(false, caused_by, (erroff == ((size_t) -1)
+                            ? (F("error in regex '%s': %s")
+                               % pattern % err)
+                            : (F("error near char %d of regex '%s': %s")
+@@ -287,18 +269,6 @@
+ }
+ 
+ static void
+-pcre_study_error(char const * err, char const * pattern)
+-{
+-  // This interface doesn't even *have* error codes.
+-  // If the error is not out-of-memory, it's a bug.
+-  if (!std::strcmp(err, "failed to get memory"))
+-    throw std::bad_alloc();
+-  else
+-    throw oops((F("while studying regex '%s': %s") % pattern % err)
+-               .str().c_str());
+-}
+-
+-static void
+ pcre_exec_error(int errcode,
+                 origin::type subject_from)
+ {
+@@ -306,26 +276,55 @@
+   // But it doesn't provide string versions of them.  As most of them
+   // indicate bugs in monotone, it's not worth defining our own strings.
+ 
++    const int err_msg_max = 2048;
++    PCRE2_UCHAR8 err[err_msg_max+1];
++
++    pcre2_get_error_message(errcode, err, err_msg_max);
++
+   switch(errcode)
+     {
+-    case PCRE_ERROR_NOMEMORY:
++    case PCRE2_ERROR_NOMEMORY:
+       throw std::bad_alloc();
+ 
+-    case PCRE_ERROR_MATCHLIMIT:
++    case PCRE2_ERROR_MATCHLIMIT:
+       E(false, subject_from,
+         F("backtrack limit exceeded in regular expression matching"));
+ 
+-    case PCRE_ERROR_RECURSIONLIMIT:
++    case PCRE2_ERROR_DEPTHLIMIT:
++      E(false, subject_from,
++        F("depth limit exceeded in regular expression matching"));
++
++    case PCRE2_ERROR_JIT_STACKLIMIT:
+       E(false, subject_from,
+-        F("recursion limit exceeded in regular expression matching"));
++        F("JIT stack limit exceeded in regular expression matching"));
+ 
+-    case PCRE_ERROR_BADUTF8:
+-    case PCRE_ERROR_BADUTF8_OFFSET:
++    case PCRE2_ERROR_UTF8_ERR1:
++    case PCRE2_ERROR_UTF8_ERR2:
++    case PCRE2_ERROR_UTF8_ERR3:
++    case PCRE2_ERROR_UTF8_ERR4:
++    case PCRE2_ERROR_UTF8_ERR5:
++    case PCRE2_ERROR_UTF8_ERR6:
++    case PCRE2_ERROR_UTF8_ERR7:
++    case PCRE2_ERROR_UTF8_ERR8:
++    case PCRE2_ERROR_UTF8_ERR9:
++    case PCRE2_ERROR_UTF8_ERR10:
++    case PCRE2_ERROR_UTF8_ERR11:
++    case PCRE2_ERROR_UTF8_ERR12:
++    case PCRE2_ERROR_UTF8_ERR13:
++    case PCRE2_ERROR_UTF8_ERR14:
++    case PCRE2_ERROR_UTF8_ERR15:
++    case PCRE2_ERROR_UTF8_ERR16:
++    case PCRE2_ERROR_UTF8_ERR17:
++    case PCRE2_ERROR_UTF8_ERR18:
++    case PCRE2_ERROR_UTF8_ERR19:
++    case PCRE2_ERROR_UTF8_ERR20:
++    case PCRE2_ERROR_UTF8_ERR21:
++    case PCRE2_ERROR_BADUTFOFFSET:
+       E(false, subject_from,
+         F("invalid UTF-8 sequence found during regular expression matching"));
+ 
+     default:
+-      throw oops((F("pcre_exec returned %d") % errcode)
++      throw oops((F("pcre2_match returned %d [%s]") % errcode % err)
+                  .str().c_str());
+     }
+ }

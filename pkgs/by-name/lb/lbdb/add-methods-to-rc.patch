@@ -1,0 +1,11 @@
+--- a/lbdb.rc.in
++++ b/lbdb.rc.in
+@@ -40,7 +40,7 @@
+ # - m_vcf        search a vcard (according to RFC2426) file.
+ # - m_khard      search a CardDAV address book via khard
+ 
+-METHODS="m_inmail m_passwd m_finger"
++METHODS="@MODULES@"
+ 
+ 
+ #

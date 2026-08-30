@@ -1,0 +1,20 @@
+--- a/CMakeLists.txt 2026-02-25 19:30:35.568736249 -0800
++++ b/CMakeLists.txt      2026-02-25 19:31:26.709567839 -0800
+@@ -124,6 +124,17 @@
+       DESTINATION ${INSTALL_CONFIGDIR}
+     )
+
++    write_basic_package_version_file(
++      "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
++      VERSION 4.3.11
++      COMPATIBILITY SameMajorVersion
++    )
++
++    install(FILES
++      "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
++      DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/nanobench"
++    )
++
+     # Install headers
+     install(FILES src/include/nanobench.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+ else()

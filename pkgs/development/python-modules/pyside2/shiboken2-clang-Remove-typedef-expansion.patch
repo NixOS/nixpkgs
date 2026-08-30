@@ -1,0 +1,101 @@
+From: Friedemann Kleint <Friedemann.Kleint@qt.io>
+Date: Thu, 20 Apr 2023 11:16:15 +0200
+Subject: shiboken2/clang: Remove typedef expansion
+
+The functionality will be re-added by a subsequent change
+expanding elaborated types.
+
+Task-number: PYSIDE-2288
+Pick-to: 6.5 5.15
+Change-Id: I3245c6dccba7de0ed1ce0e7820e1edb4567ca3c2
+Reviewed-by: Christian Tismer <tismer@stackless.com>
+(cherry picked from commit 24742dca014109bd3c2a9775fc15ca306ab22c9c)
+---
+ .../ApiExtractor/clangparser/clangbuilder.cpp      | 39 ----------------------
+ 1 file changed, 39 deletions(-)
+
+diff --git a/sources/shiboken2/ApiExtractor/clangparser/clangbuilder.cpp b/sources/shiboken2/ApiExtractor/clangparser/clangbuilder.cpp
+index 1b4c81c..332f1da 100644
+--- a/sources/shiboken2/ApiExtractor/clangparser/clangbuilder.cpp
++++ b/sources/shiboken2/ApiExtractor/clangparser/clangbuilder.cpp
+@@ -140,7 +140,6 @@ static bool isSigned(CXTypeKind kind)
+ class BuilderPrivate {
+ public:
+     using CursorClassHash = QHash<CXCursor, ClassModelItem>;
+-    using CursorTypedefHash = QHash<CXCursor, TypeDefModelItem>;
+     using TypeInfoHash = QHash<CXType, TypeInfo>;
+ 
+     explicit BuilderPrivate(BaseVisitor *bv) : m_baseVisitor(bv), m_model(new CodeModel)
+@@ -197,9 +196,6 @@ public:
+     QString cursorValueExpression(BaseVisitor *bv, const CXCursor &cursor) const;
+     void addBaseClass(const CXCursor &cursor);
+ 
+-    template <class Item>
+-    void qualifyTypeDef(const CXCursor &typeRefCursor, const QSharedPointer<Item> &item) const;
+-
+     bool visitHeader(const char *cFileName) const;
+ 
+     void setFileName(const CXCursor &cursor, _CodeModelItem *item);
+@@ -213,7 +209,6 @@ public:
+     // classes can be correctly parented in case of forward-declared inner classes
+     // (QMetaObject::Connection)
+     CursorClassHash m_cursorClassHash;
+-    CursorTypedefHash m_cursorTypedefHash;
+ 
+     mutable TypeInfoHash m_typeInfoHash; // Cache type information
+     mutable QHash<QString, TemplateTypeAliasModelItem> m_templateTypeAliases;
+@@ -561,7 +556,6 @@ void BuilderPrivate::addTypeDef(const CXCursor &cursor, const CXType &cxType)
+     item->setType(createTypeInfo(cxType));
+     item->setScope(m_scope);
+     m_scopeStack.back()->addTypeDef(item);
+-    m_cursorTypedefHash.insert(cursor, item);
+ }
+ 
+ void BuilderPrivate::startTemplateTypeAlias(const CXCursor &cursor)
+@@ -703,31 +697,6 @@ static inline CXCursor definitionFromTypeRef(const CXCursor &typeRefCursor)
+     return clang_getTypeDeclaration(clang_getCursorType(typeRefCursor));
+ }
+ 
+-// Qualify function arguments or fields that are typedef'ed from another scope:
+-// enum ConversionFlag {};
+-// typedef QFlags<ConversionFlag> ConversionFlags;
+-// class QTextCodec {
+-//      enum ConversionFlag {};
+-//      typedef QFlags<ConversionFlag> ConversionFlags;
+-//      struct ConverterState {
+-//          explicit ConverterState(ConversionFlags);
+-//                                  ^^ qualify to QTextCodec::ConversionFlags
+-//          ConversionFlags m_flags;
+-//                          ^^ ditto
+-
+-template <class Item> // ArgumentModelItem, VariableModelItem
+-void BuilderPrivate::qualifyTypeDef(const CXCursor &typeRefCursor, const QSharedPointer<Item> &item) const
+-{
+-    TypeInfo type = item->type();
+-    if (type.qualifiedName().size() == 1) { // item's type is unqualified.
+-        const auto it = m_cursorTypedefHash.constFind(definitionFromTypeRef(typeRefCursor));
+-        if (it != m_cursorTypedefHash.constEnd() && !it.value()->scope().isEmpty()) {
+-            type.setQualifiedName(it.value()->scope() + type.qualifiedName());
+-            item->setType(type);
+-        }
+-    }
+-}
+-
+ void BuilderPrivate::setFileName(const CXCursor &cursor, _CodeModelItem *item)
+ {
+     const SourceRange range = getCursorRange(cursor);
+@@ -1120,14 +1089,6 @@ BaseVisitor::StartTokenResult Builder::startToken(const CXCursor &cursor)
+     }
+         break;
+     case CXCursor_TypeRef:
+-        if (!d->m_currentFunction.isNull()) {
+-            if (d->m_currentArgument.isNull())
+-                d->qualifyTypeDef(cursor, d->m_currentFunction); // return type
+-            else
+-                d->qualifyTypeDef(cursor, d->m_currentArgument);
+-        } else if (!d->m_currentField.isNull()) {
+-            d->qualifyTypeDef(cursor, d->m_currentField);
+-        }
+         break;
+     case CXCursor_CXXFinalAttr:
+          if (!d->m_currentFunction.isNull())

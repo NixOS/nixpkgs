@@ -1,0 +1,14 @@
+Index: yasr-0.6.9/yasr/tts.c
+===================================================================
+--- yasr-0.6.9.orig/yasr/tts.c	2008-02-03 00:10:07.000000000 +1100
++++ yasr-0.6.9/yasr/tts.c	2012-02-05 10:59:06.059007839 +1100
+@@ -281,6 +281,9 @@
+   char *p = synth[tts.synth].unspeakable;
+ 
+   if (ch < 32) return 1;
++  /* characters with high bit set cause DECTALK to crash */
++  if (tts.synth == TTS_DECTALK && ch & 0x80)
++    return 1;
+   while (*p)
+   {
+     if (*p++ == ch) return 1;

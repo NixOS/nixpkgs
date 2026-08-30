@@ -1,0 +1,61 @@
+diff -ru3 source.old/src/lib/udev/google_nvme_id source.new/src/lib/udev/google_nvme_id
+--- source.old/src/lib/udev/google_nvme_id	1970-01-01 03:00:01.000000000 +0300
++++ source.new/src/lib/udev/google_nvme_id	2022-02-05 13:30:00.986242869 +0300
+@@ -17,7 +17,7 @@
+ # the metadata server
+ 
+ # Locations of the script's dependencies
+-readonly nvme_cli_bin=/usr/sbin/nvme
++readonly nvme_cli_bin=@nvme@
+ 
+ # Bash regex to parse device paths and controller identification
+ readonly NAMESPACE_NUMBER_REGEX="/dev/nvme[[:digit:]]+n([[:digit:]]+).*"
+diff -ru3 source.old/src/lib/udev/rules.d/64-gce-disk-removal.rules source.new/src/lib/udev/rules.d/64-gce-disk-removal.rules
+--- source.old/src/lib/udev/rules.d/64-gce-disk-removal.rules	1970-01-01 03:00:01.000000000 +0300
++++ source.new/src/lib/udev/rules.d/64-gce-disk-removal.rules	2022-02-05 13:27:42.635300567 +0300
+@@ -14,4 +14,4 @@
+ #
+ # When a disk is removed, unmount any remaining attached volumes.
+ 
+-ACTION=="remove", SUBSYSTEM=="block", KERNEL=="sd*|vd*|nvme*", RUN+="/bin/sh -c '/bin/umount -fl /dev/$name && /usr/bin/logger -p daemon.warn -s WARNING: hot-removed /dev/$name that was still mounted, data may have been corrupted'"
++ACTION=="remove", SUBSYSTEM=="block", KERNEL=="sd*|vd*|nvme*", RUN+="@sh@ -c '@umount@ -fl /dev/$name && @logger@ -p daemon.warn -s WARNING: hot-removed /dev/$name that was still mounted, data may have been corrupted'"
+diff -ru3 source.old/src/lib/udev/rules.d/65-gce-disk-naming.rules source.new/src/lib/udev/rules.d/65-gce-disk-naming.rules
+--- source.old/src/lib/udev/rules.d/65-gce-disk-naming.rules	1970-01-01 03:00:01.000000000 +0300
++++ source.new/src/lib/udev/rules.d/65-gce-disk-naming.rules	2022-02-05 13:27:05.053107964 +0300
+@@ -21,11 +21,11 @@
+ KERNEL=="sd*|vd*", IMPORT{program}="scsi_id --export --whitelisted -d $tempnode"
+ 
+ # NVME Local SSD naming
+-KERNEL=="nvme*n*", ATTRS{model}=="nvme_card", PROGRAM="/bin/sh -c 'nsid=$$(echo %k|sed -re s/nvme[0-9]+n\([0-9]+\).\*/\\1/); echo $$((nsid-1))'", ENV{ID_SERIAL_SHORT}="local-nvme-ssd-%c"
++KERNEL=="nvme*n*", ATTRS{model}=="nvme_card", PROGRAM="@sh@ -c 'nsid=$$(echo %k|sed -re s/nvme[0-9]+n\([0-9]+\).\*/\\1/); echo $$((nsid-1))'", ENV{ID_SERIAL_SHORT}="local-nvme-ssd-%c"
+ KERNEL=="nvme*", ATTRS{model}=="nvme_card", ENV{ID_SERIAL}="Google_EphemeralDisk_$env{ID_SERIAL_SHORT}"
+ 
+ # NVME Persistent Disk Naming
+-KERNEL=="nvme*n*", ATTRS{model}=="nvme_card-pd", IMPORT{program}="google_nvme_id -d $tempnode"
++KERNEL=="nvme*n*", ATTRS{model}=="nvme_card-pd", IMPORT{program}="@out@/lib/udev/google_nvme_id -d $tempnode"
+ 
+ # Symlinks
+ KERNEL=="sd*|vd*|nvme*", ENV{DEVTYPE}=="disk", SYMLINK+="disk/by-id/google-$env{ID_SERIAL_SHORT}"
+diff -ru3 source.old/src/sbin/google-dhclient-script source.new/src/sbin/google-dhclient-script
+--- source.old/src/sbin/google-dhclient-script	1970-01-01 03:00:01.000000000 +0300
++++ source.new/src/sbin/google-dhclient-script	2022-02-05 13:29:37.430058984 +0300
+@@ -31,7 +31,6 @@
+ # This script is found in EL 7 and used to fix local routing in EL 6.
+ # ----------
+ 
+-PATH=/bin:/usr/bin:/sbin
+ # scripts in dhclient.d/ use $SAVEDIR (#833054)
+ SAVEDIR=/var/lib/dhclient
+ 
+@@ -58,9 +57,9 @@
+     if need_hostname; then
+         status=1
+         if [ -n "${new_ip_address}" ]; then
+-            eval $(/bin/ipcalc --silent --hostname ${new_ip_address} ; echo "status=$?")
++            eval $(ipcalc --silent --hostname ${new_ip_address} ; echo "status=$?")
+         elif [ -n "${new_ip6_address}" ]; then
+-            eval $(/bin/ipcalc --silent --hostname ${new_ip6_address} ; echo "status=$?")
++            eval $(ipcalc --silent --hostname ${new_ip6_address} ; echo "status=$?")
+         fi
+ 
+         if [ ${status} -eq 0 ]; then

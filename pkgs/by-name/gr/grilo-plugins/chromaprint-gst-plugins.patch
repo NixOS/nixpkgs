@@ -1,0 +1,13 @@
+diff --git a/src/chromaprint/grl-chromaprint.c b/src/chromaprint/grl-chromaprint.c
+index 5a3598b..8979291 100644
+--- a/src/chromaprint/grl-chromaprint.c
++++ b/src/chromaprint/grl-chromaprint.c
+@@ -111,6 +111,8 @@
+ 
+   gst_init (NULL, NULL);
+ 
++  @load_plugins@
++
+   source = grl_chromaprint_source_new ();
+   grl_registry_register_source (registry,
+                                 plugin,

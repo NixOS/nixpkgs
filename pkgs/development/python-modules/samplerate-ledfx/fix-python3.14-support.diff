@@ -1,0 +1,38 @@
+diff --git a/src/samplerate.cpp b/src/samplerate.cpp
+index f0eba25..04f16fd 100644
+--- a/src/samplerate.cpp
++++ b/src/samplerate.cpp
+@@ -268,7 +268,9 @@ class Resampler {
+     // create a shorter view of the array
+     if ((size_t)output_frames_gen < new_size) {
+       out_shape[0] = output_frames_gen;
+-      output.resize(out_shape);
++      return py::array_t<float, py::array::c_style>(
++        out_shape, outbuf.strides, static_cast<float *>(outbuf.ptr),
++        output);
+     } else if ((size_t)output_frames_gen >= new_size) {
+       // This means our fudge factor is too small.
+       throw std::runtime_error("Generated more output samples than expected!");
+@@ -434,7 +436,10 @@ class CallbackResampler {
+     // create a shorter view of the array
+     if (output_frames_gen < frames) {
+       out_shape[0] = output_frames_gen;
+-      output.resize(out_shape);
++      auto strides = std::vector<py::ssize_t>(output.strides(),
++                                              output.strides() + output.ndim());
++      return py::array_t<float, py::array::c_style>(
++        out_shape, strides, static_cast<float *>(outbuf.ptr), output);
+     }
+ 
+     return output;
+@@ -561,7 +566,9 @@ py::array_t<float, py::array::c_style> resample(
+   // create a shorter view of the array
+   if ((size_t)output_frames_gen < new_size) {
+     out_shape[0] = output_frames_gen;
+-    output.resize(out_shape);
++    auto base = output;
++    output = py::array_t<float, py::array::c_style>(
++      out_shape, outbuf.strides, static_cast<float *>(outbuf.ptr), base);
+   } else if ((size_t)output_frames_gen >= new_size) {
+     // This means our fudge factor is too small.
+     throw std::runtime_error("Generated more output samples than expected!");
