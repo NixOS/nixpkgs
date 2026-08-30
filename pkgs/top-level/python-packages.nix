@@ -12140,8 +12140,6 @@ self: super: with self; {
 
   nplusone = callPackage ../development/python-modules/nplusone { };
 
-  nptyping = callPackage ../development/python-modules/nptyping { };
-
   npyscreen = callPackage ../development/python-modules/npyscreen { };
 
   nrf-ota = callPackage ../development/python-modules/nrf-ota { };

@@ -8,6 +8,7 @@
   cmake,
   pkg-config,
   fetchFromGitHub,
+  fetchurl,
   python3,
   _experimental-update-script-combinators,
   common-updater-scripts,
@@ -27,6 +28,18 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "e02e35f0254bb033fab73d1df99fc34123e31d56";
     sha256 = "sha256-ZnVSQTETrMeU+pkqy50ldAe8g1pbnG7VS1utcUy28ls=";
   };
+
+  postPatch = ''
+    cp ${
+      fetchurl {
+        url = "https://raw.githubusercontent.com/rhasspy/rhasspy-speech/8a7bcc977d9c12fed89ab990089ed64524e54d2a/kaldi/src/online2bin/online2-cli-nnet3-decode-faster.cc";
+        hash = "sha256-eKItaomBw3xE9unVuMSmzUwJfnpfLExxusKW+bhvaJI=";
+      }
+    } src/online2bin/online2-cli-nnet3-decode-faster.cc
+
+    substituteInPlace src/online2bin/Makefile \
+      --replace-fail "ivector-randomize" "ivector-randomize online2-cli-nnet3-decode-faster"
+  '';
 
   cmakeFlags = [
     "-DKALDI_BUILD_TEST=off"

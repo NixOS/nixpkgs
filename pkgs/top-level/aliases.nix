@@ -1664,6 +1664,7 @@ mapAliases {
   microcodeAmd = throw "'microcodeAmd' has been renamed to/replaced by 'microcode-amd'"; # Converted to throw 2025-10-27
   microcodeIntel = throw "'microcodeIntel' has been renamed to/replaced by 'microcode-intel'"; # Converted to throw 2025-10-27
   microsoft_gsl = throw "'microsoft_gsl' has been renamed to/replaced by 'microsoft-gsl'"; # Converted to throw 2025-10-27
+  midisheetmusic = throw "'midisheetmusic' has been removed because it relies on gtk2"; # Added 2026-08-29
   MIDIVisualizer = throw "'MIDIVisualizer' has been renamed to/replaced by 'midivisualizer'"; # Converted to throw 2025-10-27
   midori = throw "'midori' original project has been abandoned upstream and the package was broken for a while in nixpkgs"; # Added 2025-05-19
   midori-unwrapped = throw "'midori' original project has been abandoned upstream and the package was broken for a while in nixpkgs"; # Added 2025-05-19
@@ -2365,6 +2366,7 @@ mapAliases {
   sublime-music = throw "`sublime-music` has been removed because upstream has announced it is no longer maintained. Upstream suggests using `supersonic` instead."; # Added 2025-09-20
   substituteAll = throw "`substituteAll` has been removed. Use `replaceVars` instead."; # Added 2025-05-23
   substituteAllFiles = throw "`substituteAllFiles` has been removed. Use `replaceVars` for each file instead."; # Added 2025-05-23
+  subtitleedit = throw "'subtitleedit' has been removed, as it relies on gtk2 libraries"; # Added 2026-08-30
   suitesparse_4_2 = throw "'suitesparse_4_2' has been removed as it was unmaintained upstream"; # Added 2025-05-17
   suitesparse_4_4 = throw "'suitesparse_4_4' has been removed as it was unmaintained upstream"; # Added 2025-05-17
   sumaclust = throw "'sumaclust' has been removed as it was archived upstream and broken with GCC 14"; # Added 2025-06-14
