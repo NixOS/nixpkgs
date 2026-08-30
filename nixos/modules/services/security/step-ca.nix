@@ -16,6 +16,16 @@ in
       enable = lib.mkEnableOption "the smallstep certificate authority server";
       openFirewall = lib.mkEnableOption "opening the certificate authority server port";
       package = lib.mkPackageOption pkgs "step-ca" { };
+      user = lib.mkOption {
+        type = lib.types.nonEmptyStr;
+        default = "step-ca";
+        description = "User to run step-ca as.";
+      };
+      group = lib.mkOption {
+        type = lib.types.nonEmptyStr;
+        default = "step-ca";
+        description = "Primary group for the step-ca user.";
+      };
       address = lib.mkOption {
         type = lib.types.str;
         example = "127.0.0.1";
@@ -95,8 +105,8 @@ in
         };
         serviceConfig = {
           Type = "notify";
-          User = "step-ca";
-          Group = "step-ca";
+          User = cfg.user;
+          Group = cfg.group;
           UMask = "0077";
           Environment = "HOME=%S/step-ca";
           WorkingDirectory = ""; # override upstream
@@ -126,13 +136,17 @@ in
         };
       };
 
-      users.users.step-ca = {
-        home = "/var/lib/step-ca";
-        group = "step-ca";
-        isSystemUser = true;
+      users.users = lib.mkIf (cfg.user == "step-ca") {
+        step-ca = {
+          home = "/var/lib/step-ca";
+          group = "step-ca";
+          isSystemUser = true;
+        };
       };
 
-      users.groups.step-ca = { };
+      users.groups = lib.mkIf (cfg.group == "step-ca") {
+        step-ca = { };
+      };
 
       networking.firewall = lib.mkIf cfg.openFirewall {
         allowedTCPPorts = [ cfg.port ];
