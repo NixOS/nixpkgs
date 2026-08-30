@@ -6,8 +6,9 @@
   gnutar,
   makeBinaryWrapper,
   yarn-berry_4,
+  nodejsInstallManuals,
+  nodejsInstallExecutables,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "gitbeaker-cli";
   version = "43.8.0";
@@ -25,12 +26,17 @@ stdenv.mkDerivation (finalAttrs: {
     ./yarn-4.14-support.patch
   ];
 
+  # Set for the `nodejsInstall` hooks
+  npmWorkspace = "@gitbeaker/cli";
+
   nativeBuildInputs = [
     nodejs
     yarn-berry_4.yarnBerryConfigHook
     yarn-berry_4
     makeBinaryWrapper
     gnutar
+    nodejsInstallManuals
+    nodejsInstallExecutables
   ];
 
   missingHashes = ./missing-hashes.json;
@@ -52,23 +58,37 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/bin
-    mkdir -p $out/lib
-    cp -r packages $out/lib/packages
-    cp -r node_modules/ $out/lib/node_modules
-    # Remove dev dependencies
-    rm -rf $out/lib/node_modules/{.bin,tsup,typescript,@auto-it,@codecov,@swc,#types,@typescript-eslint,jest*,nx,prettier*,eslint*}
+    mkdir -p $out/lib/node_modules/@gitbeaker/cli
+    export yarnTmpDir=$(mktemp -d)
+    export yarnPack=$yarnTmpDir/yarn-pack.tgz
+    export packageRoot=$out/lib/node_modules/@gitbeaker
+    export nodeModPath=$out/lib/node_modules/@gitbeaker/cli/node_modules
+
+    # Basically yarnInstallHook
+    pushd packages
+    cp -r ./* "$packageRoot"/
+    pushd cli
+    nodejsInstallExecutables ./package.json
+    nodejsInstallManuals ./package.json
+    popd
+    popd
+    yarn workspaces focus --production @gitbeaker/cli
+    find node_modules -maxdepth 1 -type d -empty -delete
+    rm -rf node_modules/.bin
+    cp -r ./node_modules $nodeModPath
+    pushd $packageRoot
+    ln -s $nodeModPath core/node_modules
+    ln -s $nodeModPath requester-utils/node_modules
+    ln -s $nodeModPath rest/node_modules
+    popd
+    unlink $nodeModPath/@gitbeaker/cli
+    unlink $nodeModPath/@gitbeaker/core
+    unlink $nodeModPath/@gitbeaker/requester-utils
+    unlink $nodeModPath/@gitbeaker/rest
+    rm -rrf $nodeModPath/@gitbeaker
+    ln -s $packageRoot $nodeModPath
 
     runHook postInstall
-  '';
-
-  postFixup = ''
-    chmod +x $out/lib/node_modules/@gitbeaker/cli/dist/index.mjs
-    patchShebangs $out/lib/node_modules/@gitbeaker/cli/dist/index.mjs
-
-    makeWrapper $out/lib/node_modules/@gitbeaker/cli/dist/index.mjs $out/bin/gb \
-      --prefix PATH : ${lib.makeBinPath [ nodejs ]}
-
-    ln -s $out/bin/gb $out/bin/gitbeaker
   '';
 
   passthru.updateScript = ./update.sh;
