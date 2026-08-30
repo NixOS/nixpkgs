@@ -6,7 +6,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "poetry-plugin-poeblix";
+  pname = "poeblix";
   version = "0.10.0";
   pyproject = true;
 
