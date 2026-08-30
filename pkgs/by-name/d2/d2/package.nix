@@ -22,6 +22,8 @@ buildGoModule (finalAttrs: {
   pname = "d2";
   version = "0.8.1";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "d2lang";
     repo = "d2";
