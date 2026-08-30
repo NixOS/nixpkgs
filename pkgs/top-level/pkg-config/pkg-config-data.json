@@ -209,11 +209,6 @@
         "freetype"
       ]
     },
-    "gdk-2.0": {
-      "attrPath": [
-        "gtk2"
-      ]
-    },
     "gdk-3.0": {
       "attrPath": [
         "gtk3"
@@ -222,11 +217,6 @@
     "gdk-pixbuf-2.0": {
       "attrPath": [
         "gdk-pixbuf"
-      ]
-    },
-    "gdk-x11-2.0": {
-      "attrPath": [
-        "gtk2-x11"
       ]
     },
     "gdk-x11-3.0": {
@@ -314,19 +304,9 @@
         "glib"
       ]
     },
-    "gtk+-2.0": {
-      "attrPath": [
-        "gtk2"
-      ]
-    },
     "gtk+-3.0": {
       "attrPath": [
         "gtk3"
-      ]
-    },
-    "gtk+-x11-2.0": {
-      "attrPath": [
-        "gtk2-x11"
       ]
     },
     "gtksourceview-3.0": {

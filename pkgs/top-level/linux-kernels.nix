@@ -357,12 +357,6 @@ in
 
         hyperv-daemons = callPackage ../os-specific/linux/hyperv-daemons { };
 
-        e1000e =
-          if lib.versionOlder kernel.version "4.10" then
-            callPackage ../os-specific/linux/e1000e { }
-          else
-            null;
-
         iio-utils =
           if lib.versionAtLeast kernel.version "4.1" then
             callPackage ../os-specific/linux/iio-utils { }

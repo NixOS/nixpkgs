@@ -164,11 +164,11 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "microsoft-edge";
-  version = "150.0.4078.105";
+  version = "152.0.4191.53";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_${finalAttrs.version}-1_amd64.deb";
-    hash = "sha256-cRQZLix+jBKu7LYEsnMjVeklcWA1cp6/igr+aJXNwBs=";
+    hash = "sha256-szIkRfvmzh4Lz/hOu+Dt6jZeDq9Jix72E23aUt6m46c=";
   };
 
   # With strictDeps on, some shebangs were not being patched correctly
@@ -246,9 +246,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
       --add-flags "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
-
-    # Make sure that libGL and libvulkan are found by ANGLE libGLESv2.so
-    patchelf --set-rpath $rpath $out/share/microsoft/$appname/lib*GL*
 
     # Edge specific set liboneauth
     patchelf --set-rpath $rpath $out/share/microsoft/$appname/liboneauth.so

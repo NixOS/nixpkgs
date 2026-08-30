@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
         lib.licenses.unfree # https://github.com/ValleyBell/libvgm/issues/43
       else
         lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ OPNA2608 ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     pkgConfigModules = [
       "vgm-utils"
