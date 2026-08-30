@@ -7,7 +7,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "testkube";
-  version = "2.12.2";
+  version = "2.13.1";
 
   __structuredAttrs = true;
 
@@ -15,10 +15,10 @@ buildGoModule (finalAttrs: {
     owner = "kubeshop";
     repo = "testkube";
     tag = finalAttrs.version;
-    hash = "sha256-5nKlOpSkr5YkocbfSZ/Zx19X3QSucSZV2UoNUAi09dI=";
+    hash = "sha256-mwles/jGwyQ447gmhfMrojMJ6rFtVNzvjhfmYGg3PZY=";
   };
 
-  vendorHash = "sha256-ppSf2NWtxF72W+aS83Hvs6jw3TZoXkN/qwMpAcV/224=";
+  vendorHash = "sha256-v19tJhevIRD1GWByZViuHPQ6fYiLgXNLe1DksUQb59o=";
 
   ldflags = [
     "-X main.version=${finalAttrs.version}"
