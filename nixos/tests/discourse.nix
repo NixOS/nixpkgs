@@ -23,7 +23,7 @@ let
   };
 in
 {
-  name = "discourse";
+  name = "discourse-${package.version}";
   meta.maintainers = with lib.maintainers; [ talyz ];
 
   nodes.discourse =

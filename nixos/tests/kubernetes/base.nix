@@ -84,7 +84,7 @@ let
               # https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/
               featureGates = {
                 AllowParsingUserUIDFromCertAuth = true;
-                ClusterTrustBundle = false;
+                ContextualLogging = false;
               };
               masterAddress = "${masterName}.${config.networking.domain}";
             };
