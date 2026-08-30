@@ -3,6 +3,7 @@
   buildDunePackage,
   fetchFromCodeberg,
   nix-update-script,
+  nixosTests,
   cmdliner,
   bytesrw,
   fmt,
@@ -70,7 +71,12 @@ buildDunePackage (finalAttrs: {
     csexp
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = {
+      inherit (nixosTests) kapla;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "ERIS block storage and transport";
