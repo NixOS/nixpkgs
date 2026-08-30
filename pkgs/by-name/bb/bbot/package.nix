@@ -77,7 +77,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   meta = {
     description = "OSINT automation for hackers";
     homepage = "https://github.com/blacklanternsecurity/bbot";
-    changelog = "https://github.com/blacklanternsecurity/bbot/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/blacklanternsecurity/bbot/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       fab
