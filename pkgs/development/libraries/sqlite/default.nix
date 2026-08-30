@@ -106,7 +106,8 @@ stdenv.mkDerivation (finalAttrs: {
   # on a per-output basis.
   setOutputFlags = false;
 
-  env.TCLLIBDIR = "${placeholder "out"}/lib";
+  # Follow other Tcl modules.
+  env.TCLLIBDIR = "${placeholder "out"}/lib/sqlite${version}";
 
   configureFlags = [
     "--bindir=${placeholder "bin"}/bin"
