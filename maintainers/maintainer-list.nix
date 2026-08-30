@@ -27156,6 +27156,13 @@
     githubId = 53029739;
     name = "Joshua Ortiz";
   };
+  sopyb = {
+    name = ''A. "Sopy" Soponar'';
+    email = "contact@sopy.one";
+    matrix = "sopyb:catgirl.cloud";
+    github = "sopyb";
+    githubId = 32602702;
+  };
   sorki = {
     email = "srk@48.io";
     github = "sorki";
