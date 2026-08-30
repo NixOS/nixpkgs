@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gradle,
+  gradle_8,
   jre,
   runtimeShell,
 
@@ -11,6 +11,9 @@
   html2text,
   txt2man,
 }:
+let
+  gradle = gradle_8;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "simple-binary-encoding";
   version = "1.39.0";
