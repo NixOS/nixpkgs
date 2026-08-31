@@ -1,0 +1,17 @@
+--- a/wordfence/util/library.py	2022-01-01 00:00:00.000000000 +0000
++++ b/wordfence/util/library.py	2022-01-01 00:00:00.000000000 +0000
+@@ -8,7 +8,12 @@
+
+
+ def load_library(name: str) -> CDLL:
+-    pathname = find_library(name)
++    if name == "pcre":
++        pathname = "@PCRE_OUT@/lib/libpcre.so"
++    elif name == "hs":
++        pathname = "@HS_OUT@/lib/libhs.so"
++    else:
++        pathname = find_library(name)
+     if pathname is None:
+         raise LibraryNotAvailableException()
+     try:
+
