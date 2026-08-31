@@ -61,9 +61,9 @@ jobs:
               '.github/workflows/lint.yml',
               '.github/workflows/merge-group.yml',
               '.github/workflows/test.yml',
+              'ci/github-script/supportedBranches.js',
               'ci/github-script/supportedSystems.js',
               'ci/pinned.json',
-              'ci/supportedBranches.js',
               'pkgs/top-level/release-supported-systems.json',
             ].includes(file))) core.setOutput('merge-group', true)
 
@@ -85,10 +85,10 @@ jobs:
               'ci/github-script/prepare.js',
               'ci/github-script/reviewers.js',
               'ci/github-script/reviews.js',
+              'ci/github-script/supportedBranches.js',
               'ci/github-script/supportedSystems.js',
               'ci/github-script/withRateLimit.js',
               'ci/pinned.json',
-              'ci/supportedBranches.js',
               'pkgs/top-level/release-supported-systems.json',
             ].includes(file))) core.setOutput('pr', true)
 

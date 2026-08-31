@@ -6,7 +6,7 @@ import type { GitHub } from '@actions/github/lib/utils'
 // They do seem quite similar, but this needs to run after eval,
 // and prepare.js obviously doesn't.
 
-const { split } = require('../supportedBranches.js')
+const { split } = require('./supportedBranches.js')
 const { readFile } = require('node:fs/promises')
 const { postReview, dismissReviews } = require('./reviews.js')
 const {

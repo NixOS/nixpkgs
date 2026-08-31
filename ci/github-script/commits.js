@@ -1,7 +1,7 @@
 // @ts-nocheck
 module.exports = async ({ github, context, core, dry, cherryPicks }) => {
   const { execFileSync } = require('node:child_process')
-  const { classify } = require('../supportedBranches.js')
+  const { classify } = require('./supportedBranches.js')
   const withRateLimit = require('./withRateLimit.js')
   const { dismissReviews, postReview } = require('./reviews.js')
   const reviewKey = 'check-commits'

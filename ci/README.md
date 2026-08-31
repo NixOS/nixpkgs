@@ -104,7 +104,7 @@ For the purposes of CI, branches in the NixOS/nixpkgs repository are classified 
 
 Some branches also have a version component, which is either `unstable` or `YY.MM`.
 
-`ci/supportedBranches.js` is a script imported by CI to classify the base and head branches of a Pull Request.
+`ci/github-script/supportedBranches.js` is a script imported by CI to classify the base and head branches of a Pull Request.
 This classification will then be used to skip certain jobs.
 This script can also be run locally to print basic test cases.
 
