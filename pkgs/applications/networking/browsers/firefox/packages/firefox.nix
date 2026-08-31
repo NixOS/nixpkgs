@@ -30,6 +30,12 @@ buildMozillaMach rec {
     maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
     license = lib.licenses.mpl20;
     mainProgram = "firefox";
+    identifiers.cpeParts = {
+      inherit version;
+      product = "firefox";
+      update = "*";
+      vendor = "mozilla";
+    };
   };
   tests = {
     inherit (nixosTests) firefox;
