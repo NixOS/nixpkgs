@@ -220,14 +220,21 @@ rec {
         resource "random_id" "test" {}
       '';
       terraform = terraform_1.withPlugins (p: [ p.hashicorp_random ]);
-      test = runCommand "terraform-plugin-test" { buildInputs = [ terraform ]; } ''
-        set -e
-        # make it fail outside of sandbox
-        export HTTP_PROXY=http://127.0.0.1:0 HTTPS_PROXY=https://127.0.0.1:0
-        cp ${mainTf} main.tf
-        terraform init
-        touch $out
-      '';
+      test =
+        runCommand "terraform-plugin-test"
+          {
+            pname = "terraform-plugin-test";
+            inherit (terraform) version;
+            buildInputs = [ terraform ];
+          }
+          ''
+            set -e
+            # make it fail outside of sandbox
+            export HTTP_PROXY=http://127.0.0.1:0 HTTPS_PROXY=https://127.0.0.1:0
+            cp ${mainTf} main.tf
+            terraform init
+            touch $out
+          '';
     in
     test;
 
