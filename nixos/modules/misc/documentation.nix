@@ -18,6 +18,7 @@ let
     concatMapStringsSep
     evalModules
     functionArgs
+    getBin
     hasSuffix
     isAttrs
     isDerivation
@@ -132,6 +133,7 @@ let
       in
       pkgs.runCommand "lazy-options.json"
         rec {
+          nativeBuildInputs = [ (getBin config.nix.package) ];
           libPath = filter (pkgs.path + "/lib");
           pkgsLibPath = filter (pkgs.path + "/pkgs/pkgs-lib");
           nixosPath = filteredModules + "/nixos";
@@ -152,7 +154,7 @@ let
           printf "%s" "$modules" > "$modulesPath"
           export NIX_STORE_DIR=$TMPDIR/store
           export NIX_STATE_DIR=$TMPDIR/state
-          ${pkgs.buildPackages.nix}/bin/nix-instantiate \
+          nix-instantiate \
             --show-trace \
             --eval --json --strict \
             --argstr libPath "$libPath" \
