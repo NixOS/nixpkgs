@@ -17,7 +17,7 @@ callPackage ./build.nix rec {
   inherit gambit-support;
   gambit-params = gambit-support.unstable-params;
   # These are available in pkgs.gambit-unstable.passthru.git-version, etc.
-  gambit-git-version = "4.9.5-78-g8b18ab69";
-  gambit-stampYmd = "20231029";
-  gambit-stampHms = "163035";
+  gambit-git-version = "v4.9.8-3-g2c1accee";
+  gambit-stampYmd = "20260815";
+  gambit-stampHms = "191450";
 }
