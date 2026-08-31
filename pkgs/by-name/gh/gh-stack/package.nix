@@ -5,6 +5,7 @@
   versionCheckHook,
   nix-update-script,
   gitMinimal,
+  installAgentSkills,
 }:
 
 buildGoModule (finalAttrs: {
@@ -22,17 +23,16 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-0Xtr/MOpX4u5GnbRdNxKPA0GpSzi8PIbVc9MmP05De4=";
 
-  nativeCheckInputs = [ gitMinimal ];
-
   ldflags = [
     "-s"
-    "-w"
     "-X=github.com/github/gh-stack/cmd.Version=${finalAttrs.version}"
   ];
 
-  postInstall = ''
-    install -Dm444 skills/gh-stack/SKILL.md $out/share/skills/gh-stack/gh-stack/SKILL.md
-  '';
+  nativeBuildInputs = [
+    installAgentSkills
+  ];
+
+  nativeCheckInputs = [ gitMinimal ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
