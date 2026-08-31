@@ -7,7 +7,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sftpman";
-  version = "2.1.1";
+  version = "2.1.2";
 
   passthru.updateScript = nix-update-script { };
 
@@ -15,10 +15,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "spantaleev";
     repo = "sftpman-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-spI+MAjBT+FFD7X+G0ea9Me8wf+8Gn3kids+Dt6OO+w=";
+    hash = "sha256-kFh47UmKumEq6bL+bKaYjNHkW3EWPLeFgpqvPglDpEU=";
   };
 
-  cargoHash = "sha256-fx3uC9M9q0rXPrakZ5NYLNVQzhKZgqdjjZLQ90TNvqQ=";
+  cargoHash = "sha256-0BSkHVe/sO/ucShv/oKK1ibO1bZ16nbZR/2kNA0Q9aQ=";
 
   meta = {
     homepage = "https://github.com/spantaleev/sftpman-rs";
