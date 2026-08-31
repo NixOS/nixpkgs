@@ -68,6 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withLibbsd libbsd
   ++ lib.optional withTcb tcb;
 
+  strictDeps = true;
+
   patches = [
     # Don't set $PATH to /bin:/usr/bin but inherit the $PATH of the caller.
     ./keep-path.patch
