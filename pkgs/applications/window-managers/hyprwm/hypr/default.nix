@@ -22,7 +22,10 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hypr";
-  version = "unstable-2023-01-26";
+  version = "1.1.3-unstable-2023-01-26";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "hyprwm";
