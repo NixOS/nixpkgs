@@ -19400,6 +19400,12 @@
     githubId = 42215704;
     name = "Moritz Böhme";
   };
+  mornepousse = {
+    email = "mornepousse.untitled262@passmail.com";
+    github = "mornepousse";
+    githubId = 48982737;
+    name = "Mae PUGIN";
+  };
   mortenmunk = {
     email = "mortenmunk97@gmail.com";
     github = "MortenMunk";
