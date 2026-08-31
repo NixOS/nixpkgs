@@ -1,9 +1,10 @@
 {
   callPackage,
   lib,
-  zig_0_14,
+  zig_0_16,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   fcft,
   pixman,
   pkg-config,
@@ -12,18 +13,26 @@
   wayland-protocols,
 }:
 let
-  zig = zig_0_14;
+  zig = zig_0_16;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "creek";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "nmeum";
     repo = "creek";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5TANQt/VWafm6Lj4dYViiK0IMy/chGr/Gzq0S66HZqI=";
+    hash = "sha256-573tuXZLbn/A/IQGbu26Tw3jShpahNeeFz5UMz72+WE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "0000-consume-status-line-delimiter-and-reset-the-status-buffer.patch";
+      url = "https://github.com/nmeum/creek/commit/037d2d0a3b382743e5fd0a1a913b9c7df0921b81.patch";
+      hash = "sha256-eJ30s1QS/v+g8VjxXkrCGaXkOEyw3EfpBngIHoGfML0=";
+    })
+  ];
 
   depsBuildBuild = [ pkg-config ];
 
