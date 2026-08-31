@@ -23,6 +23,9 @@
   desktop-file-utils,
   libxml2,
   libsecret,
+  gnome,
+  librsvg,
+  webp-pixbuf-loader,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,6 +53,20 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   mesonBuildType = "release";
+
+  # Euphonica caches album art as WebP, and gdk-pixbuf's default loaders.cache
+  # doesn't include a WebP loader, causing covers to fail to load repeatedly.
+  # https://github.com/NixOS/nixpkgs/issues/557510
+  postInstall = ''
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          librsvg
+          webp-pixbuf-loader
+        ];
+      }
+    }"
+  '';
 
   nativeBuildInputs = [
     cargo

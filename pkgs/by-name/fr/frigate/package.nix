@@ -6,6 +6,7 @@
   callPackage,
   python313Packages,
   fetchFromGitHub,
+  rustPlatform,
   fetchurl,
   ffmpeg-headless,
   sqlite-vec,
@@ -40,6 +41,30 @@ let
           hash = "sha256-95xtUzzIxxvDtpHX/5uCHnTQTB8Fc08DZGUOR/SdKLs=";
         };
       });
+
+      # transformers 4.* is not compatible with the latest tokenizers
+      tokenizers = super.tokenizers.overridePythonAttrs (
+        oldAttrs:
+        let
+          version = "0.22.1";
+          src = fetchFromGitHub {
+            owner = "huggingface";
+            repo = "tokenizers";
+            tag = "v${version}";
+            hash = "sha256-1ijP16Fw/dRgNXXX9qEymXNaamZmlNFqbfZee82Qz6c=";
+          };
+          sourceRoot = "${src.name}/bindings/python";
+        in
+        {
+          inherit version src sourceRoot;
+
+          cargoDeps = rustPlatform.fetchCargoVendor {
+            inherit (oldAttrs) pname;
+            inherit version src sourceRoot;
+            hash = "sha256-CKbnFtwsEtJ11Wnn8JFpHd7lnUzQMTwJ1DmmB44qciM=";
+          };
+        }
+      );
 
       huggingface-hub = super.huggingface-hub_0;
       transformers = super.transformers_4;
