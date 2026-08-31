@@ -1,0 +1,23 @@
+--- a/src/gui/analyzer.rs	2025-07-23 20:30:32.660865318 +0900
++++ b/src/gui/analyzer.rs	2025-07-23 20:12:18.706705622 +0900
+@@ -1,6 +1,7 @@
+ use atomic_float::AtomicF32;
+ use nih_plug::prelude::*;
+-use nih_plug_vizia::vizia::{cache::BoundingBox, prelude::*, vg};
++use nih_plug_vizia::vizia::{prelude::*, vg};
++use nih_plug_vizia::vizia::prelude::BoundingBox;
+ use realfft::num_complex::Complex;
+ use std::sync::{atomic::Ordering, Arc, Mutex};
+ use triple_buffer::Output;
+@@ -39,9 +40,9 @@
+     }
+ 
+     fn draw_analyzer(&self, cx: &mut DrawContext, canvas: &mut Canvas, bounds: BoundingBox) {
+-        let line_width = cx.style.dpi_factor as f32 * 1.5;
++        let line_width = cx.scale_factor() as f32 * 1.5;
+         let line_paint =
+-            vg::Paint::color(cx.font_color().cloned().unwrap_or(Color::white()).into())
++            vg::Paint::color(cx.font_color().into())
+                 .with_line_width(line_width);
+ 
+         let mut path = vg::Path::new();
