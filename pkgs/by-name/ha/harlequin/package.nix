@@ -13,7 +13,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "harlequin";
-  version = "2.12.0";
+  version = "2.12.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "tconbeer";
     repo = "harlequin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5nBR3PRTGTWXfPhXVrkWCkQsz0fF492GnYyJJTQFs7I=";
+    hash = "sha256-fMVoS2SXfQ4BTeMX6MiCEVgAzc/uQrCYkjdC2lYZ7TY=";
   };
 
   build-system = with python3Packages; [ hatchling ];
