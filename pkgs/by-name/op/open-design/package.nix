@@ -10,6 +10,8 @@
   python3,
   pkg-config,
   nix-update-script,
+  cctools,
+  xcbuild,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "open-design";
@@ -74,6 +76,10 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     python3
     pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+    xcbuild
   ];
 
   env = {
