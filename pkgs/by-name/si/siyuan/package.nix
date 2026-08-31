@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "siyuan-note";
     repo = "siyuan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9eUfwnVV2Rkc10BbQzHgmtgUb/sCFHR2jJHwPl5myNw=";
+    hash = "sha256-MzsfeAWApHLDt4+aC9/O+5Dl8OD8p0l+/8tb2ZZyTos=";
   };
 
   kernel = buildGoModule {
