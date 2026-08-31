@@ -17,13 +17,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "evdi";
-  version = "1.14.15";
+  version = "1.14.16";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = "evdi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tms+UNws+oBmwLvDFaDSIa/bUdSpK+CADodbsip3tRg=";
+    hash = "sha256-5FDXVW9SfD123g//sylGiYkFTccjVbrK27VYlphX4i4=";
   };
 
   prePatch = ''
