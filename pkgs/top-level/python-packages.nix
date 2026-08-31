@@ -16275,6 +16275,8 @@ self: super: with self; {
 
   pysquashfsimage = callPackage ../development/python-modules/pysquashfsimage { };
 
+  pysqlite3 = callPackage ../development/python-modules/pysqlite3 { };
+
   pysqueezebox = callPackage ../development/python-modules/pysqueezebox { };
 
   pysrdaligateway = callPackage ../development/python-modules/pysrdaligateway { };
