@@ -22,7 +22,7 @@ let
     mkOption (
       removeAttrs args [ "feature" ]
       // {
-        type = args.type or (types.uniq types.bool);
+        type = args.type or types.bool;
         default = args.default or false;
         description = (
           (args.description or ''
@@ -95,13 +95,11 @@ let
     };
 
     fetchedSourceNameDefault = mkOption {
-      type = types.uniq (
-        types.enum [
-          "source"
-          "versioned"
-          "full"
-        ]
-      );
+      type = types.enum [
+        "source"
+        "versioned"
+        "full"
+      ];
       default = "source";
       description = ''
         This controls the default derivation `name` attribute set by the
@@ -422,13 +420,11 @@ let
     };
 
     recursionMode = mkOption {
-      type = types.uniq (
-        types.enum [
-          "hydra"
-          "eval"
-          "search"
-        ]
-      );
+      type = types.enum [
+        "hydra"
+        "eval"
+        "search"
+      ];
       default = "eval";
       description = ''
         In which way to recurse through Nixpkgs. In most cases you want keep this as the default.
