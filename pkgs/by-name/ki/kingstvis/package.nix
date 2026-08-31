@@ -20,11 +20,11 @@
 
 buildFHSEnv (finalAttrs: {
   pname = "kingstvis";
-  version = "3.6.1";
+  version = "3.6.6";
 
   src = fetchzip {
     url = "http://res.kingst.site/kfs/KingstVIS_v${finalAttrs.version}.tar.gz";
-    hash = "sha256-eZJ3RZWdmNx/El3Hh5kUf44pIwdvwOEkRysYBgUkS18=";
+    hash = "sha256-41tIOUaPOkyLAowf0M+hnZC6b5wVKVAD/DTjnE7nbOQ=";
   };
 
   targetPkgs = pkgs: [
