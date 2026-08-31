@@ -357,12 +357,6 @@ in
 
         hyperv-daemons = callPackage ../os-specific/linux/hyperv-daemons { };
 
-        e1000e =
-          if lib.versionOlder kernel.version "4.10" then
-            callPackage ../os-specific/linux/e1000e { }
-          else
-            null;
-
         iio-utils =
           if lib.versionAtLeast kernel.version "4.1" then
             callPackage ../os-specific/linux/iio-utils { }
@@ -581,12 +575,6 @@ in
         vmm_clock = callPackage ../os-specific/linux/vmm_clock { };
 
         vmware = callPackage ../os-specific/linux/vmware { };
-
-        wireguard =
-          if lib.versionOlder kernel.version "5.6" then
-            callPackage ../os-specific/linux/wireguard { }
-          else
-            null;
 
         x86_energy_perf_policy = callPackage ../os-specific/linux/x86_energy_perf_policy { };
 

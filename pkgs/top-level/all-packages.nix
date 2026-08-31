@@ -9886,7 +9886,7 @@ with pkgs;
 
   ultrastar-creator = callPackage ../tools/misc/ultrastar-creator { };
 
-  ultrastar-manager = libsForQt5.callPackage ../tools/misc/ultrastar-manager { };
+  ultrastar-manager = callPackage ../tools/misc/ultrastar-manager { };
 
   # To ensure vdrift's code is built on hydra
   vdrift-bin = vdrift.bin;

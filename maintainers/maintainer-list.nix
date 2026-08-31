@@ -6631,6 +6631,12 @@
     githubId = 47667941;
     name = "Daylin Morgan";
   };
+  db8le = {
+    name = "Leonard Fischer";
+    github = "db8le";
+    githubId = 200116483;
+    email = "db8le@darc.de";
+  };
   dbalan = {
     email = "nix@dbalan.in";
     github = "dbalan";
@@ -14375,6 +14381,12 @@
     github = "jurraca";
     githubId = 5124422;
     name = "Julien Urraca";
+  };
+  justanoobcoder = {
+    email = "syaorancode@gmail.com";
+    github = "justanoobcoder";
+    githubId = 57614330;
+    name = "Nguyen Hong Hiep";
   };
   justanotherariel = {
     email = "ariel@ebersberger.io";
@@ -22660,6 +22672,12 @@
     github = "piegamesde";
     githubId = 14054505;
   };
+  pierreborine = {
+    email = "nixpkgs@thecakeis.top";
+    github = "PierreBorine";
+    githubId = 85021467;
+    name = "Pierre Borine";
+  };
   pierrechevalier83 = {
     email = "pierrechevalier83@gmail.com";
     github = "pierrechevalier83";
@@ -25573,6 +25591,12 @@
     githubId = 107703;
     name = "Samuel Rivas";
   };
+  samuelskovbakke = {
+    email = "samuel@skovbakke.dk";
+    github = "samuelskovbakke";
+    githubId = 25748723;
+    name = "Samuel Skovbakke";
+  };
   samueltardieu = {
     email = "nixpkgs@sam.rfc1149.net";
     github = "samueltardieu";
@@ -25968,6 +25992,11 @@
     githubId = 212597;
     name = "Otto Sabart";
     keys = [ { fingerprint = "0AF6 4C3B 1F12 14B3 8C8C  5786 1FA2 DBE6 7438 7CC3"; } ];
+  };
+  sebfried = {
+    name = "Sebastian W. Friedrich";
+    github = "sebfried";
+    githubId = 35170732;
   };
   sebimarkgraf = {
     email = "sebastian-markgraf@t-online.de";
@@ -27151,6 +27180,13 @@
     githubId = 53029739;
     name = "Joshua Ortiz";
   };
+  sopyb = {
+    name = ''A. "Sopy" Soponar'';
+    email = "contact@sopy.one";
+    matrix = "sopyb:catgirl.cloud";
+    github = "sopyb";
+    githubId = 32602702;
+  };
   sorki = {
     email = "srk@48.io";
     github = "sorki";
@@ -27480,12 +27516,6 @@
     githubId = 2754700;
     name = "Leigh Capili";
     keys = [ { fingerprint = "05E7 89C9 142C DD05 8261  4EF8 5943 2144 444F B382"; } ];
-  };
-  steamwalker = {
-    email = "steamwalker@xs4all.nl";
-    github = "steamwalker";
-    githubId = 94006354;
-    name = "steamwalker";
   };
   Stebalien = {
     email = "steven@stebalien.com";
