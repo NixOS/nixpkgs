@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 
@@ -108,24 +109,31 @@ in
       description = "xautolock service";
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
-      serviceConfig = with lib; {
-        ExecStart = strings.concatStringsSep " " (
+      serviceConfig = {
+        ExecStart = utils.escapeSystemdExecArgs (
           [
-            "${pkgs.xautolock}/bin/xautolock"
+            (getExe pkgs.xautolock)
             "-noclose"
-            "-time ${toString cfg.time}"
-            "-locker '${cfg.locker}'"
+            "-time"
+            (toString cfg.time)
+            "-locker"
+            cfg.locker
           ]
           ++ optionals cfg.enableNotifier [
-            "-notify ${toString cfg.notify}"
-            "-notifier '${cfg.notifier}'"
+            "-notify"
+            (toString cfg.notify)
+            "-notifier"
+            cfg.notifier
           ]
           ++ optionals (cfg.nowlocker != null) [
-            "-nowlocker '${cfg.nowlocker}'"
+            "-nowlocker"
+            cfg.nowlocker
           ]
           ++ optionals (cfg.killer != null) [
-            "-killer '${cfg.killer}'"
-            "-killtime ${toString cfg.killtime}"
+            "-killer"
+            cfg.killer
+            "-killtime"
+            (toString cfg.killtime)
           ]
           ++ cfg.extraOptions
         );
