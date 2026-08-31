@@ -2115,12 +2115,12 @@ final: prev: {
 
   bluloco-nvim = buildVimPlugin {
     pname = "bluloco.nvim";
-    version = "1.4.0-unstable-2026-08-22";
+    version = "1.5.0";
     src = fetchFromGitHub {
       owner = "uloco";
       repo = "bluloco.nvim";
-      rev = "8973f4b595a96ceb45b3885d533f287182a73c20";
-      hash = "sha256-nBZCvS9LU/09cs8u92a+FBhMaMuG2LGldGxO+IfFMHo=";
+      tag = "1.5.0";
+      hash = "sha256-1zS8Ero6JAjB2yyTmRbZuMIjxeiWdmZ1Ak0qBW8u8C4=";
     };
     meta.homepage = "https://github.com/uloco/bluloco.nvim/";
     meta.license = getLicenseFromSpdxId "LGPL-3.0-only";
