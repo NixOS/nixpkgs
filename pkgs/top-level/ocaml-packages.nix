@@ -113,6 +113,8 @@ let
           inherit (pkgs.llvmPackages) llvm;
         };
 
+        base32 = callPackage ../development/ocaml-modules/base32 { };
+
         base64 = callPackage ../development/ocaml-modules/base64 { };
 
         batteries = callPackage ../development/ocaml-modules/batteries { };
@@ -248,6 +250,8 @@ let
         cascade = callPackage ../development/ocaml-modules/cascade { };
 
         cbor = callPackage ../development/ocaml-modules/cbor { };
+
+        cborl = callPackage ../development/ocaml-modules/cborl { };
 
         cfstream = callPackage ../development/ocaml-modules/cfstream { };
 
@@ -601,6 +605,8 @@ let
         eqaf = callPackage ../development/ocaml-modules/eqaf { };
 
         eqaf-cstruct = callPackage ../development/ocaml-modules/eqaf/cstruct.nix { };
+
+        eris = callPackage ../development/ocaml-modules/eris { };
 
         erm_xml = callPackage ../development/ocaml-modules/erm_xml { };
 
@@ -1057,6 +1063,8 @@ let
           cmdliner = cmdliner_1;
         };
 
+        kapla = callPackage ../development/ocaml-modules/kapla { };
+
         kcas = callPackage ../development/ocaml-modules/kcas { };
 
         kdf = callPackage ../development/ocaml-modules/kdf { };
@@ -1384,6 +1392,8 @@ let
         mm = callPackage ../development/ocaml-modules/mm { };
 
         mmap = callPackage ../development/ocaml-modules/mmap { };
+
+        monocypher = callPackage ../development/ocaml-modules/monocypher { };
 
         monolith = callPackage ../development/ocaml-modules/monolith { };
 

@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "gotify-server";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "gotify";
     repo = "server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Eh5G2QUlVvQkwn6wl9Tc7fWRL81FAj5x8M4lGc3imJQ=";
+    hash = "sha256-s3oU6mEvhbguLHcLUaavDlR44EX7sDnd0SxrtbMCeyI=";
   };
 
   vendorHash = "sha256-ERRPIRZFhJN+QKEwBbZVUKTaTOLrlC+cb8yQNGHgMxg=";
