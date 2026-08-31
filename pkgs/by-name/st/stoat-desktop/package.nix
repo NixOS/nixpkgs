@@ -9,32 +9,27 @@
   makeWrapper,
   removeReferencesTo,
   copyDesktopItems,
-  pnpm_10,
+  pnpm_11,
   nodejs,
-  electron_42,
+  electron_43,
   zip,
   nix-update-script,
 }:
 let
-  electron = electron_42;
+  electron = electron_43;
   stdenv = stdenvNoCC;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stoat-desktop";
-  version = "1.4.2";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "stoatchat";
     repo = "for-desktop";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Qfny57ZwSk19R4fnz+IQoEhbVG76yJhx06QPDpLM7fM=";
+    hash = "sha256-UKMuMtBTfiA31K2i1buCFOtL9lf9xbv6BXVD5m4TARo=";
   };
-
-  patches = [
-    # zip extraction fails on newer nodejs versions without this fix
-    ./bump-yauzl.patch
-  ];
 
   postPatch = ''
     # Disable auto-updates
@@ -51,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     copyDesktopItems
     nodejs
-    pnpm_10
+    pnpm_11
     zip
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -63,11 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
       pname
       version
       src
-      patches
       ;
-    fetcherVersion = 3;
-    pnpm = pnpm_10;
-    hash = "sha256-0v+MHYFgnIN4FvzFkv5D3Bqc7538763yCIWu05XR+fA=";
+    fetcherVersion = 4;
+    pnpm = pnpm_11;
+    hash = "sha256-4h0aTRMY2Y9+cl2WA+zc7I38bh8yr7fIwj6wDxxfGto=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
