@@ -28,10 +28,12 @@ version="$(github "$api/releases/latest" | jq -er '.tag_name | ltrimstr("v") | s
   exit 1
 }
 
-# llama.cpp reads the build number from git, which the release tarball does not ship.
+# llama.cpp reads the build number and commit from git, which the release tarball does not ship.
 # Every release carries the matching nightly tag as an asset.
 build_number="$(github "https://github.com/$repo/releases/download/v$version/nightly-tag.txt")"
+build_commit="$(github -H "Accept: application/vnd.github.sha" "$api/commits/v$version")"
 
 cd "$(git rev-parse --show-toplevel)"
 nix-update "${UPDATE_NIX_ATTR_PATH:-llama-cpp}" --version "$version"
 set_attr buildNumber "${build_number#b}"
+set_attr buildCommit "${build_commit:0:7}"
