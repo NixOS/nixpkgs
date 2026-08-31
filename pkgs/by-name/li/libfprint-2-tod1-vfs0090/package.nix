@@ -2,8 +2,8 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   pkg-config,
-  libfprint,
   libfprint-tod,
   gusb,
   udev,
@@ -31,6 +31,20 @@ stdenv.mkDerivation {
     ./0001-vfs0090-add-missing-explicit-dependencies-in-meson.b.patch
     # TODO remove once https://gitlab.freedesktop.org/3v1n0/libfprint-tod-vfs0090/-/merge_requests/2 is merged
     ./0002-vfs0090-add-missing-linux-limits.h-include.patch
+    # Fix build against libfprint-tod >= 1.94: fpi_ssm_next_state_delayed
+    # lost its GCancellable argument
+    (fetchpatch {
+      url = "https://github.com/speed785/validity-vfs0090-linux-driver/commit/c97588da41e431716987fe07a662530869d4dd24.patch";
+      hash = "sha256-AJQOHoRRZF3zloSKWVgibVBBxXJajU0rSgNhlzgOS5A=";
+    })
+    # Compute the TLS record HMAC via OpenSSL instead of NSS PK11:
+    # PK11_GetBestSlot can return NULL on current systems, crashing fprintd
+    # during verification
+    (fetchpatch {
+      url = "https://github.com/speed785/validity-vfs0090-linux-driver/commit/c047812b9356829c958ce9a3b717a3e6f27893cc.patch";
+      hash = "sha256-Xs/bu+Jp1XZOocVxDpUx8p40I4Az8+XueP5PAtwiwZY=";
+      excludes = [ "README.md" ];
+    })
   ];
 
   nativeBuildInputs = [
@@ -38,8 +52,13 @@ stdenv.mkDerivation {
     meson
     ninja
   ];
+  # Note: mainline libfprint must NOT be in buildInputs. Both it and
+  # libfprint-tod install include/libfprint-2/fp-device.h, but their
+  # FpDeviceType enums are ordered differently (mainline inserted
+  # FP_DEVICE_TYPE_UDEV before _USB in 1.94). Compiled against the mainline
+  # header, the driver loads but is silently skipped during device matching
+  # because cls->type does not equal libfprint-tod's FP_DEVICE_TYPE_USB.
   buildInputs = [
-    libfprint
     libfprint-tod
     glib
     gusb
@@ -66,8 +85,5 @@ stdenv.mkDerivation {
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ valodim ];
-    # Does not compile against libfprint-tod, hasn't seen any maintenance
-    # since 2020.
-    broken = true;
   };
 }
