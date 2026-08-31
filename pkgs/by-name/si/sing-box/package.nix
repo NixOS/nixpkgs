@@ -19,7 +19,7 @@ assert lib.assertMsg (
 buildGoModule (finalAttrs: {
   pname = "sing-box";
   # NOTE: also update cronet-go
-  version = "1.13.19";
+  version = "1.13.21";
 
   __structuredAttrs = true;
 
@@ -28,10 +28,10 @@ buildGoModule (finalAttrs: {
     owner = "SagerNet";
     repo = "sing-box";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gXl4fW7iwWylxFBdipU2fKM4yYtfPjI/Hv/19XxkuXA=";
+    hash = "sha256-+sFpijsCxsA2yGtaDFpKKmGhInbkN95jS6TE5++eSOQ=";
   };
 
-  vendorHash = "sha256-nNFqDOvM8bwCRNG399dU24XO+mmal+YAE7EoPghUaZo=";
+  vendorHash = "sha256-JCLpqLphEPZ9xkgh+xeKX2MUdDJySALwtOp6wHZfKR8=";
 
   tags = [
     "with_gvisor"
