@@ -344,14 +344,20 @@ stdenv.mkDerivation (finalAttrs: {
     # The plugin API is not a function of any targets. Expose it separately,
     # currently only used by LLVM for enabling BFD to do LTO with LLVM bitcode.
     # (Tar will exit with an error if there are no matches).
-    plugin-api-header = runCommand "libbfd-plugin-api-header" { } ''
-      mkdir -p $out
-      tar --directory=$out \
-      --extract \
-      --file=${finalAttrs.src} \
-      --strip-components=1 \
-        --wildcards '*'/include/plugin-api.h
-    '';
+    plugin-api-header =
+      runCommand "libbfd-plugin-api-header"
+        {
+          strictDeps = true;
+          __structuredAttrs = true;
+        }
+        ''
+          mkdir -p $out
+          tar --directory=$out \
+          --extract \
+          --file=${finalAttrs.src} \
+          --strip-components=1 \
+            --wildcards '*'/include/plugin-api.h
+        '';
   };
 
   __structuredAttrs = true;
