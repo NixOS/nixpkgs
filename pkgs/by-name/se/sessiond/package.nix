@@ -11,14 +11,14 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
   pname = "sessiond";
-  version = "0.2.0";
+  version = "0.2.1";
 
-  cargoHash = "sha256-QM5eDBSBahobqsJKFAG9eR/FvYrpVuQ3L1CXmhlIBFY=";
+  cargoHash = "sha256-qKhqteERy38UEx0T9PilmNCZnKL7s910twTd44sUc8E=";
 
   src = fetchFromTangled {
     did = "did:plc:vj3bxta3i3cp26nn46yideoh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kygJ/Hw/5tBjGCxsRLrti3L1Zcpm8y5gLpGPGsqV0VI=";
+    hash = "sha256-aIQ6E2N7hbu71X6LzBfyzRYEDngC875F7PzoatR2BFY=";
   };
 
   nativeBuildInputs = [
