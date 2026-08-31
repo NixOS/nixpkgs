@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     libiconv
   ];
 
+  strictDeps = true;
+
   doCheck = true;
 
   passthru = {
