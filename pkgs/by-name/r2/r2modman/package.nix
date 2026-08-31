@@ -69,6 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     pnpm quasar build --mode electron --skip-pkg
 
+    # Remove unecessary devDependencies only required at build time.
+    pnpm prune --prod
+
     runHook postBuild
   '';
 
