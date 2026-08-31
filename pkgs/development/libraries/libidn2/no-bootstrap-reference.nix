@@ -18,6 +18,9 @@ runCommandLocal "${libidn2.pname}-${libidn2.version}"
       inherit (libidn2) out info devdoc; # no need to touch these store paths
     };
     inherit (libidn2) meta pname version;
+
+    strictDeps = true;
+    __structuredAttrs = true;
   }
   ''
     cp -r '${libidn2.bin}' "$bin"
