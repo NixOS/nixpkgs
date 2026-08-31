@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-mpower8-vector")
   ];
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://simdjson.org/";
     changelog = "https://github.com/simdjson/simdjson/releases/tag/${finalAttrs.src.tag}";
