@@ -26306,12 +26306,12 @@ final: prev: {
 
   zk-nvim = buildVimPlugin {
     pname = "zk-nvim";
-    version = "0.5.1";
+    version = "0.5.2";
     src = fetchFromGitHub {
       owner = "zk-org";
       repo = "zk-nvim";
-      tag = "v0.5.1";
-      hash = "sha256-wht9e3/KDLv6yrqH7TWCKP4dRDG1evnWwDKXGxrQz7k=";
+      tag = "v0.5.2";
+      hash = "sha256-KZIQXjEvFsJCkGxGILcKzSYJpBL+wa39mI28tccPlDg=";
     };
     meta.homepage = "https://github.com/zk-org/zk-nvim/";
     meta.license = getLicenseFromSpdxId "GPL-3.0-only";
