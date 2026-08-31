@@ -76,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/share/r2modman
+    yarn workspaces focus --production
     cp -r dist/electron/UnPackaged/. node_modules $out/share/r2modman
 
     (
