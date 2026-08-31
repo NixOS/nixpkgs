@@ -11,21 +11,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "metadata";
-  version = "0.1.12";
+  version = "0.1.13";
 
   src = fetchFromGitHub {
     owner = "zmwangx";
     repo = "metadata";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gDOYqPwrWUfUTCx+p+ZpwsP8XxUufDCGem/WzW5cQPc=";
+    hash = "sha256-E9UL10RYHibbaLIHbgMxuOAz7RLKGcZgyfvS1HDFZjE=";
   };
 
-  cargoPatches = [
-    # bump ffmpeg-next 8.0.0 -> 8.1.0 for ffmpeg 8.1 enum variants
-    ./ffmpeg-next-8.1.patch
-  ];
+  cargoHash = "sha256-oVP9DXnVU1uZrGkJuELRtExpQnYqrzhjxGpIDWDbbbA=";
 
-  cargoHash = "sha256-TgF88oaf6567Xk20TkqbtE+H+nEKTiUSyswvxvCNFVI=";
+  env.FFMPEG_DIR = ffmpeg.dev;
 
   nativeBuildInputs = [
     pkg-config
@@ -34,25 +31,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustPlatform.bindgenHook
   ];
 
-  postBuild = ''
-    a2x --doctype manpage --format manpage man/metadata.1.adoc
-  '';
-  postInstall = ''
-    installManPage man/metadata.1
-  '';
-
   buildInputs = [
     ffmpeg
     glib
   ];
 
-  env.FFMPEG_DIR = ffmpeg.dev;
+  postBuild = ''
+    a2x --doctype manpage --format manpage man/metadata.1.adoc
+  '';
 
-  checkFlags = [
-    # "AAC (HE-AAC v2)" is reported as "AAC (LC)" in newer ffmpeg
-    # https://github.com/zmwangx/metadata/issues/13
-    "--skip=aac_he_aac"
-  ];
+  postInstall = ''
+    installManPage man/metadata.1
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
