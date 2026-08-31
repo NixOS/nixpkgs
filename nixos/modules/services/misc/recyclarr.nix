@@ -147,6 +147,8 @@ in
       wantedBy = [ "timers.target" ];
       partOf = [ "recyclarr.service" ];
 
+      restartTriggers = [ configPath ];
+
       timerConfig = {
         OnCalendar = cfg.schedule;
         Persistent = true;
