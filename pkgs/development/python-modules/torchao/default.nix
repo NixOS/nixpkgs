@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
+  fetchpatch,
   replaceVars,
 
   # build-system
@@ -53,11 +53,14 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-Mry6jsZKkoC8dq3fYNsRyGbL4+S8ZYuHpkETNDy5qsg=";
   };
 
-  # AttributeError: 'typing.Union' object has no attribute '__module__' and no __dict__ for setting
-  # new attributes. Did you mean: '__reduce__'?
-  disabled = pythonAtLeast "3.14";
-
-  patches = lib.optionals isAarch64Darwin [
+  patches = [
+    # Fix Python 3.14 compatibility
+    (fetchpatch {
+      url = "https://github.com/pytorch/ao/commit/5e92da482ba8f2e3aa64d74fbfa7131c259b693d.patch";
+      hash = "sha256-OZKPy92Fy+09SDx4wSnGBH/4QbbRsYJOu8d/oX2NkkA=";
+    })
+  ]
+  ++ lib.optionals isAarch64Darwin [
     ./use-system-cpuinfo.patch
     (replaceVars ./use-llvm-openmp.patch {
       inherit (llvmPackages) openmp;
