@@ -16719,6 +16719,11 @@
     matrix = "@lostmsu:matrix.org";
     name = "Victor Nova";
   };
+  lothan = {
+    name = "Joe Lothan";
+    github = "lothan";
+    githubId = 18651528;
+  };
   loucass003 = {
     name = "Lucas Lelievre";
     email = "loucass003@gmail.com";
