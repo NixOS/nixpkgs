@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fatou";
-  version = "0.15.0";
+  version = "0.18.0";
 
   __structuredAttrs = true;
 
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "jolars";
     repo = "fatou";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bh+8+0Y5wNs39q+1gAwCjLU2N/65GPoBzCdNWmUFmaY=";
+    hash = "sha256-sM6JfEVCgVbEVuwM/DjxDdrdptZByEEKksTPzGJWIrg=";
   };
 
-  cargoHash = "sha256-qf9Q607UZYR/zVBmrZ5rjqYi2sc5kQzECdsA8OS28tc=";
+  cargoHash = "sha256-SHp+mXPXjcA0FiyhN+V/DDvrEG1VI8swOmj7ySQJrEk=";
 
   nativeBuildInputs = [
     installShellFiles
