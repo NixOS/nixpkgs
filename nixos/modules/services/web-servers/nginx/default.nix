@@ -531,6 +531,7 @@ let
           ''}
 
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
+          ${optionalString (vhost.index != null) "index ${vhost.index};"}
 
           ${optionalString (vhost.globalRedirect != null) ''
             location / {
