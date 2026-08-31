@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "simdutf";
     repo = "simdutf";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PKL495sfkRKjHfN4RroW1dwudJV2JWN7ogB8hyDxj5Y=";
   };
 
@@ -49,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Unicode routines validation and transcoding at billions of characters per second";
