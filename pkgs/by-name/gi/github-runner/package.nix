@@ -369,7 +369,6 @@ buildDotnetModule (finalAttrs: {
       kfollesdal
       aanderse
       zimbatm
-      schmittlauch
       osnyx
     ];
     platforms = [
