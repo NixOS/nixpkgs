@@ -55,6 +55,7 @@ let
     cmakeBool
     cmakeFeature
     optionals
+    optionalString
     ;
 
   cudaBuildInputs = with cudaPackages; [
@@ -188,14 +189,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeBool "LLAMA_METAL_EMBED_LIBRARY" true)
   ];
 
-  # upstream plans on adding targets at the cmakelevel, remove those
-  # additional steps after that
-  postInstall = ''
-    mkdir -p $out/include
-    cp $src/include/llama.h $out/include/
-
-  ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd llama-server --bash <($out/bin/llama-server --completion-bash)
   '';
 
