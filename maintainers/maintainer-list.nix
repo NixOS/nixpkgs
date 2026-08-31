@@ -5373,6 +5373,11 @@
     githubId = 22559310;
     name = "Clara Rostock";
   };
+  clay53 = {
+    github = "clay53";
+    githubId = 16981283;
+    name = "Clayton Hickey";
+  };
   claymorwan = {
     name = "claymorwan";
     github = "claymorwan";
