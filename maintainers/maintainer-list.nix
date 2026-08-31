@@ -3687,6 +3687,11 @@
     githubId = 28444296;
     name = "Benjamin Hougland";
   };
+  bigflipbot = {
+    name = "bigflipbot";
+    github = "bigflipbot";
+    githubId = 57315276;
+  };
   billewanick = {
     email = "bill@ewanick.com";
     github = "billewanick";
