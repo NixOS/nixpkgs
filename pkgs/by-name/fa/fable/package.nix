@@ -7,9 +7,9 @@
 
 buildDotnetGlobalTool (finalAttrs: {
   pname = "fable";
-  version = "5.13.0";
+  version = "5.15.0";
 
-  nugetHash = "sha256-5Ann8sD07LhtRkW0fpm4P90cjVfujyeb8LW4ffZ/EBI=";
+  nugetHash = "sha256-HnUVyhoT+MhSzuNGVkQTHB4DqTvtpMRWc6tiPVxarxE=";
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
   dotnet-runtime = dotnetCorePackages.runtime_10_0;
