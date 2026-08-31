@@ -17,10 +17,16 @@ stdenv.mkDerivation {
     hash = "sha256-oi9WOzt3o+5QpfHeosCnbvDmLirE7jXaQUJ5ADd3LY4=";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  buildInputs = [
+    qt6.qttools
+  ];
+
   nativeBuildInputs = [
     cmake
     qt6.wrapQtAppsHook
-    qt6.qttools
   ];
 
   meta = {
