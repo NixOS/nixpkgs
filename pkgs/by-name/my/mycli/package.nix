@@ -7,20 +7,30 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mycli";
-  version = "1.44.2";
+  version = "2.7.0";
   pyproject = true;
+
+  # test_ssh_tunnel.py binds to localhost to find a free port; the darwin
+  # sandbox blocks loopback networking unless this is enabled
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "dbcli";
     repo = "mycli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7G7Yy0jdULzBiQr4JACWuBG4XdXDYZ8IyfbzGQKF428=";
+    hash = "sha256-CzBnMOWcshNi7calQSdxko3OkbM+dfS6U3KaUcmvqbw=";
   };
 
   pythonRelaxDeps = [
-    "sqlglot" # https://github.com/dbcli/mycli/issues/1696
+    "pygments"
+    "pymysql"
+    "wcwidth"
+    "sqlglot" # nixpkgs sqlglot is at 28.x, mycli requires ~=30.7
+    "sqlglotc"
     "sqlparse"
     "click"
+    "cryptography"
+    "cli_helpers"
   ];
 
   build-system = with python3Packages; [
@@ -33,25 +43,42 @@ python3Packages.buildPythonApplication (finalAttrs: {
     [
       cli-helpers
       click
+      clickdc
       configobj
       cryptography
+      keyring
       llm
-      paramiko
       prompt-toolkit
       pycryptodomex
       pygments
       pymysql
       pyperclip
+      rapidfuzz
       sqlglot
       sqlparse
       pyfzf
+      wcwidth
     ]
-    ++ cli-helpers.optional-dependencies.styles;
+    ++ cli-helpers.optional-dependencies.styles
+    ++ [ yaspin ];
 
-  nativeCheckInputs = [ writableTmpDirAsHomeHook ] ++ (with python3Packages; [ pytestCheckHook ]);
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ]
+  ++ (with python3Packages; [
+    pytestCheckHook
+    pytest-random-order
+  ]);
 
   disabledTestPaths = [
-    "mycli/packages/paramiko_stub/__init__.py"
+    "test/pytests/test_polars_transform.py"
+  ];
+
+  pytestFlags = [
+    # environment-specific completion keyword differences
+    "--deselect=test/pytests/test_smart_completion_public_schema_only.py::test_backticked_column_completion_three_character"
+    "--deselect=test/pytests/test_smart_completion_public_schema_only.py::test_backticked_column_completion_two_character"
+    "--deselect=test/pytests/test_naive_completion.py::test_function_name_completion"
   ];
 
   meta = {
