@@ -28,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [ zlib ];
 
+  strictDeps = true;
+
   passthru.tests = {
     static = pkgsStatic.libdeflate;
     pkg-config = testers.hasPkgConfigModules {
