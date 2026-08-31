@@ -70,14 +70,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "paperless-ngx";
-  version = "3.1.0";
+  version = "3.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SipdhPxnGpCM/U0K5O59fdaKUuMLWiaXRE+XS3lpb/c=";
+    hash = "sha256-IOGwlATlS4T90dXufxkwI/MJGFGLXmlbqNB/OJbPLrY=";
   };
 
   postPatch = ''
@@ -272,19 +272,17 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     # FileNotFoundError(2, 'No such file or directory'): /build/tmp...
     "test_script_with_output"
     "test_script_exit_non_zero"
-    # Something broken with new Tesseract and inline RTL/LTR overrides?
-    "test_rtl_language_detection"
-    # Favicon tests fail due to static file handling in the test environment
-    # https://github.com/NixOS/nixpkgs/issues/421393
-    "test_favicon_view"
-    "test_favicon_view_missing_file"
-    # Requires DNS
+    # Requires internet
     "test_send_webhook_data_or_json"
-    # execnet.gateway_base.DumpError: can't serialize <class 'pathlib._local.PosixPath'>
-    # https://github.com/pytest-dev/pytest-xdist/issues/384
-    "test_subdirectory_upload"
-    # AssertionError: 4 != 3
-    "testNormalOperation"
+  ];
+
+  disabledTestPaths = [
+    # flaky test
+    #   AssertionError: Expected 'apply_async' to not have been called.
+    "src/documents/tests/test_management_consumer.py::TestCommandWatchEdgeCases::test_handles_deleted_before_stable"
+    # flaky test:
+    #   ValueError: Failed to open file for read: 'FileDoesNotExist("meta.json")'
+    "src/documents/tests/test_permission_filtering_security.py::TestTrashRestorePermissionBoundary::test_restore_allows_document_with_explicit_delete_permission"
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
