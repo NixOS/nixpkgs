@@ -5049,6 +5049,12 @@
     githubId = 18648043;
     name = "Daniel Cartwright";
   };
+  chickenchunk = {
+    email = "rhys@tumelty.co.uk";
+    name = "Rhys Tumelty";
+    github = "ChickenChunk579";
+    githubId = 87714759;
+  };
   Chili-Man = {
     email = "dr.elhombrechile@gmail.com";
     name = "Diego Rodriguez";
