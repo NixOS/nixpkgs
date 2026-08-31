@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "twingate";
-  version = "2026.160.6555";
+  version = "2026.239.6882";
 
   src = fetchurl {
     url = "https://binaries.twingate.com/client/linux/DEB/x86_64/${version}/twingate-amd64.deb";
-    hash = "sha256-Sk2pALZtcraNpca6wkDiPCvWgU0hYlSeiwwszfZeKeM=";
+    hash = "sha256-BLPXDW21LeidOAbwuTd+LrZo/hF3Zp6F56F015CXPm4=";
   };
 
   buildInputs = [
@@ -49,14 +49,16 @@ stdenv.mkDerivation rec {
     mv usr/sbin/* $out/bin
     mv usr/lib $out/lib
     mv usr/share $out/share
+    # Expose the user-facing `twingate` command (no update-alternatives under Nix).
+    ln -s twingate-classic $out/bin/twingate
   '';
 
   passthru.tests = { inherit (nixosTests) twingate; };
 
-  meta = {
+  meta = with lib; {
     description = "Twingate Client";
     homepage = "https://twingate.com";
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
   };
 }
