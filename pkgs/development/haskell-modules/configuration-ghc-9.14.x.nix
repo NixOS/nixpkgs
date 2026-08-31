@@ -96,6 +96,25 @@ with haskellLib;
   primitive = doJailbreak (dontCheck super.primitive); # base <4.22 and a lot of dependencies on packages not yet working.
   splitmix = doJailbreak super.splitmix; # base <4.22
 
+  Cabal_3_14_2_0 =
+    overrideCabal
+      (drv: {
+        # avoid the GHC profiling compiler panic: GHC.StgToCmm.Env: variable not found
+        enableLibraryProfiling = false;
+        # https://github.com/haskell/cabal/pull/10814
+        # https://github.com/haskell/cabal/pull/11127
+        postPatch = (drv.postPatch or "") + ''
+          substituteInPlace Cabal.cabal \
+            --replace-fail "containers >= 0.5.8.0  && < 0.8" "containers >= 0.5.8.0  && < 0.9" \
+            --replace-fail "time       >= 1.4.0.1  && < 1.15" "time       >= 1.4.0.1  && < 1.16"
+        '';
+      })
+      (
+        super.Cabal_3_14_2_0.override {
+          # containers <0.8 and time <1.15
+          Cabal-syntax = doJailbreak super.Cabal-syntax_3_14_2_0;
+        }
+      );
   # https://github.com/phadej/boring/issues/48
   boring = doJailbreak super.boring;
   # https://github.com/haskellari/indexed-traversable/issues/49
