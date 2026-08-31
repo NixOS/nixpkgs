@@ -82,6 +82,7 @@ let
       extraPolicies ? { },
       extraPoliciesFiles ? [ ],
       extraAutoConfig ? "",
+      isMail ? false,
       libName ? browser.libName or applicationName, # Important for tor package or the like
       nixExtensions ? null,
       hasMozSystemDirPatch ? (lib.hasPrefix "firefox" pname && !lib.hasSuffix "-bin" pname),
@@ -236,7 +237,7 @@ let
           terminal = false;
         }
         // (
-          if lib.strings.hasPrefix "thunderbird" libName then
+          if isMail then
             {
               genericName = "Email Client";
               comment = "Read and write e-mails or RSS feeds, or manage tasks on calendars.";
