@@ -10,8 +10,6 @@ let
   cfg = config.services.flood;
 in
 {
-  meta.maintainers = with lib.maintainers; [ thiagokokada ];
-
   options.services.flood = {
     enable = lib.mkEnableOption "flood";
     package = lib.mkPackageOption pkgs "flood" { };
@@ -29,6 +27,11 @@ in
       description = "Host to bind webserver.";
       default = "localhost";
       example = "::";
+    };
+    dataDir = lib.mkOption {
+      type = lib.types.str;
+      description = "Directory for `flood` config and db.";
+      default = "/var/lib/flood";
     };
     extraArgs = lib.mkOption {
       type = with lib.types; listOf str;
@@ -56,7 +59,8 @@ in
             cfg.host
             "--port"
             (toString cfg.port)
-            "--rundir=/var/lib/flood"
+            "--rundir"
+            cfg.dataDir
           ]
           ++ cfg.extraArgs
         );
@@ -85,7 +89,8 @@ in
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
-        StateDirectory = "flood";
+        StateDirectory = baseNameOf cfg.dataDir;
+        StateDirectoryMode = lib.mkDefault 775;
         SystemCallArchitectures = "native";
         SystemCallFilter = [
           "@system-service"
@@ -99,4 +104,9 @@ in
       cfg.port
     ];
   };
+
+  meta.maintainers = with lib.maintainers; [
+    thiagokokada
+    unazikx
+  ];
 }
