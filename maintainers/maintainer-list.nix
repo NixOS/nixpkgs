@@ -27096,6 +27096,11 @@
     githubId = 1437166;
     name = "Xia Bin";
   };
+  so1omon563 = {
+    github = "so1omon563";
+    githubId = 43015107;
+    name = "Jedidiah Foster";
+  };
   sochotnicky = {
     email = "stanislav+github@ochotnicky.com";
     github = "sochotnicky";
