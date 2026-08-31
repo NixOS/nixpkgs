@@ -4378,6 +4378,12 @@
     githubId = 1001709;
     name = "William Bezuidenhout";
   };
+  burntpineapple12 = {
+    email = "burntpineapple123@posteo.com";
+    github = "burntpineapple12";
+    githubId = 291952771;
+    name = "BurntPineapple123";
+  };
   buurro = {
     email = "marcoburro98@gmail.com";
     github = "buurro";
