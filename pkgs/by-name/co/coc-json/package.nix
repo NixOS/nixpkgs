@@ -7,16 +7,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "coc-json";
-  version = "1.9.3";
+  version = "1.9.8";
 
   src = fetchFromGitHub {
     owner = "neoclide";
     repo = "coc-json";
     tag = finalAttrs.version;
-    hash = "sha256-iYGhjU9qaRh7Jlc/LLbZIvfPsJR+2FMy2L3weVn2rFA=";
+    hash = "sha256-xEKIoYTEkwVuVvrk9kGXP7511ZMEL0WiEJxPhM8TOxc=";
   };
 
-  npmDepsHash = "sha256-ois2uyIrF8dRgSGt5NhjYoWw8OqFPRmlG5y952boj1Y=";
+  npmDepsHash = "sha256-Y51mHIWJoxl4H6mo3ACllSgUOhmr8HqqthvcuTmNr1Y=";
 
   npmBuildScript = "prepare";
 
