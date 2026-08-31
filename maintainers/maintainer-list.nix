@@ -12616,6 +12616,11 @@
     githubId = 45084216;
     keys = [ { fingerprint = "1BF9 8D10 E0D0 0B41 5723  5836 4C13 3A84 E646 9228"; } ];
   };
+  jacobwinters = {
+    name = "Jacob Winters";
+    github = "jacobwinters";
+    githubId = 28678931;
+  };
   JacoMalan1 = {
     name = "Jaco Malan";
     email = "jacom@codelog.co.za";
