@@ -22,18 +22,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   src =
     if monorepoSrc != null then
-      runCommand "lld-src-${version}" {
-        inherit (monorepoSrc) passthru;
-        strictDeps = true;
-        __structuredAttrs = true;
-      } ''
-        mkdir -p "$out"
-        cp -r ${monorepoSrc}/cmake "$out"
-        cp -r ${monorepoSrc}/lld "$out"
-        mkdir -p "$out/libunwind"
-        cp -r ${monorepoSrc}/libunwind/include "$out/libunwind"
-        mkdir -p "$out/llvm"
-      ''
+      runCommand "lld-src-${version}"
+        {
+          inherit (monorepoSrc) passthru;
+          strictDeps = true;
+          __structuredAttrs = true;
+        }
+        ''
+          mkdir -p "$out"
+          cp -r ${monorepoSrc}/cmake "$out"
+          cp -r ${monorepoSrc}/lld "$out"
+          mkdir -p "$out/libunwind"
+          cp -r ${monorepoSrc}/libunwind/include "$out/libunwind"
+          mkdir -p "$out/llvm"
+        ''
     else
       src;
 

@@ -87,25 +87,27 @@ stdenv.mkDerivation (
 
     src =
       if monorepoSrc != null then
-        runCommand "llvm-src-${version}" {
-          inherit (monorepoSrc) passthru;
-          strictDeps = true;
-          __structuredAttrs = true;
-        } (
-          ''
-            mkdir -p "$out"
-            cp -r ${monorepoSrc}/llvm "$out"
-            cp -r ${monorepoSrc}/cmake "$out"
-            cp -r ${monorepoSrc}/third-party "$out"
-          ''
-          + lib.optionalString enablePolly ''
-            chmod u+w "$out/llvm/tools"
-            cp -r ${monorepoSrc}/polly "$out/llvm/tools"
-          ''
-          + lib.optionalString (lib.versionAtLeast release_version "21") ''
-            cp -r ${monorepoSrc}/libc "$out"
-          ''
-        )
+        runCommand "llvm-src-${version}"
+          {
+            inherit (monorepoSrc) passthru;
+            strictDeps = true;
+            __structuredAttrs = true;
+          }
+          (
+            ''
+              mkdir -p "$out"
+              cp -r ${monorepoSrc}/llvm "$out"
+              cp -r ${monorepoSrc}/cmake "$out"
+              cp -r ${monorepoSrc}/third-party "$out"
+            ''
+            + lib.optionalString enablePolly ''
+              chmod u+w "$out/llvm/tools"
+              cp -r ${monorepoSrc}/polly "$out/llvm/tools"
+            ''
+            + lib.optionalString (lib.versionAtLeast release_version "21") ''
+              cp -r ${monorepoSrc}/libc "$out"
+            ''
+          )
       else
         src;
 

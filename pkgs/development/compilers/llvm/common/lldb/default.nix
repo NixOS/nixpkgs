@@ -46,21 +46,23 @@ stdenv.mkDerivation (
 
     src =
       if monorepoSrc != null then
-        runCommand "lldb-src-${version}" {
-          inherit (monorepoSrc) passthru;
-          strictDeps = true;
-          __structuredAttrs = true;
-        } (
-          ''
-            mkdir -p "$out"
-            cp -r ${monorepoSrc}/cmake "$out"
-            cp -r ${monorepoSrc}/lldb "$out"
-          ''
-          + lib.optionalString (lib.versionAtLeast release_version "19" && enableManpages) ''
-            mkdir -p "$out/llvm"
-            cp -r ${monorepoSrc}/llvm/docs "$out/llvm/docs"
-          ''
-        )
+        runCommand "lldb-src-${version}"
+          {
+            inherit (monorepoSrc) passthru;
+            strictDeps = true;
+            __structuredAttrs = true;
+          }
+          (
+            ''
+              mkdir -p "$out"
+              cp -r ${monorepoSrc}/cmake "$out"
+              cp -r ${monorepoSrc}/lldb "$out"
+            ''
+            + lib.optionalString (lib.versionAtLeast release_version "19" && enableManpages) ''
+              mkdir -p "$out/llvm"
+              cp -r ${monorepoSrc}/llvm/docs "$out/llvm/docs"
+            ''
+          )
       else
         src;
 

@@ -23,20 +23,23 @@ stdenv.mkDerivation (finalAttrs: {
   inherit version;
 
   # Blank llvm dir just so relative path works
-  src = runCommand "bolt-src-${finalAttrs.version}" {
-    inherit (monorepoSrc) passthru;
-    strictDeps = true;
-    __structuredAttrs = true;
-  } ''
-    mkdir $out
-    cp -r ${monorepoSrc}/cmake "$out"
-    cp -r ${monorepoSrc}/${finalAttrs.pname} "$out"
-    cp -r ${monorepoSrc}/third-party "$out"
+  src =
+    runCommand "bolt-src-${finalAttrs.version}"
+      {
+        inherit (monorepoSrc) passthru;
+        strictDeps = true;
+        __structuredAttrs = true;
+      }
+      ''
+        mkdir $out
+        cp -r ${monorepoSrc}/cmake "$out"
+        cp -r ${monorepoSrc}/${finalAttrs.pname} "$out"
+        cp -r ${monorepoSrc}/third-party "$out"
 
-    # BOLT re-runs tablegen against LLVM sources, so needs them available.
-    cp -r ${monorepoSrc}/llvm/ "$out"
-    chmod -R +w $out/llvm
-  '';
+        # BOLT re-runs tablegen against LLVM sources, so needs them available.
+        cp -r ${monorepoSrc}/llvm/ "$out"
+        chmod -R +w $out/llvm
+      '';
 
   sourceRoot = "${finalAttrs.src.name}/bolt";
 

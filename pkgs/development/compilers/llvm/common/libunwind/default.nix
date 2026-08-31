@@ -23,22 +23,24 @@ stdenv.mkDerivation (finalAttrs: {
 
   src =
     if monorepoSrc != null then
-      runCommand "libunwind-src-${version}" {
-        inherit (monorepoSrc) passthru;
-        strictDeps = true;
-        __structuredAttrs = true;
-      } ''
-        mkdir -p "$out"
-        cp -r ${monorepoSrc}/cmake "$out"
-        cp -r ${monorepoSrc}/libunwind "$out"
-        mkdir -p "$out/libcxx"
-        cp -r ${monorepoSrc}/libcxx/cmake "$out/libcxx"
-        cp -r ${monorepoSrc}/libcxx/utils "$out/libcxx"
-        mkdir -p "$out/llvm"
-        cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
-        cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
-        cp -r ${monorepoSrc}/runtimes "$out"
-      ''
+      runCommand "libunwind-src-${version}"
+        {
+          inherit (monorepoSrc) passthru;
+          strictDeps = true;
+          __structuredAttrs = true;
+        }
+        ''
+          mkdir -p "$out"
+          cp -r ${monorepoSrc}/cmake "$out"
+          cp -r ${monorepoSrc}/libunwind "$out"
+          mkdir -p "$out/libcxx"
+          cp -r ${monorepoSrc}/libcxx/cmake "$out/libcxx"
+          cp -r ${monorepoSrc}/libcxx/utils "$out/libcxx"
+          mkdir -p "$out/llvm"
+          cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
+          cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
+          cp -r ${monorepoSrc}/runtimes "$out"
+        ''
     else
       src;
 

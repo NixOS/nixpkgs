@@ -67,23 +67,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   src =
     if monorepoSrc != null then
-      runCommand "compiler-rt-src-${version}" {
-        inherit (monorepoSrc) passthru;
-        strictDeps = true;
-        __structuredAttrs = true;
-      } (
-        ''
-          mkdir -p "$out"
-          cp -r ${monorepoSrc}/cmake "$out"
-        ''
-        + lib.optionalString (lib.versionAtLeast release_version "21") ''
-          cp -r ${monorepoSrc}/third-party "$out"
-        ''
-        + ''
-          cp -r ${monorepoSrc}/compiler-rt "$out"
-          cp -r ${monorepoSrc}/llvm "$out"
-        ''
-      )
+      runCommand "compiler-rt-src-${version}"
+        {
+          inherit (monorepoSrc) passthru;
+          strictDeps = true;
+          __structuredAttrs = true;
+        }
+        (
+          ''
+            mkdir -p "$out"
+            cp -r ${monorepoSrc}/cmake "$out"
+          ''
+          + lib.optionalString (lib.versionAtLeast release_version "21") ''
+            cp -r ${monorepoSrc}/third-party "$out"
+          ''
+          + ''
+            cp -r ${monorepoSrc}/compiler-rt "$out"
+            cp -r ${monorepoSrc}/llvm "$out"
+          ''
+        )
     else
       src;
 

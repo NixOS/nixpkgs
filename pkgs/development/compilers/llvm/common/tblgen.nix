@@ -38,23 +38,25 @@ let
 
   src' =
     if monorepoSrc != null then
-      runCommand "${pname}-src-${version}" {
-        strictDeps = true;
-        __structuredAttrs = true;
-      } (
-        ''
-          mkdir -p "$out"
-          cp -r ${monorepoSrc}/cmake "$out"
-          cp -r ${monorepoSrc}/third-party "$out"
-          cp -r ${monorepoSrc}/llvm "$out"
-          cp -r ${monorepoSrc}/clang "$out"
-          cp -r ${monorepoSrc}/clang-tools-extra "$out"
-          cp -r ${monorepoSrc}/mlir "$out"
-        ''
-        + lib.optionalString (lib.versionAtLeast version "23") ''
-          cp -r ${monorepoSrc}/libc "$out"
-        ''
-      )
+      runCommand "${pname}-src-${version}"
+        {
+          strictDeps = true;
+          __structuredAttrs = true;
+        }
+        (
+          ''
+            mkdir -p "$out"
+            cp -r ${monorepoSrc}/cmake "$out"
+            cp -r ${monorepoSrc}/third-party "$out"
+            cp -r ${monorepoSrc}/llvm "$out"
+            cp -r ${monorepoSrc}/clang "$out"
+            cp -r ${monorepoSrc}/clang-tools-extra "$out"
+            cp -r ${monorepoSrc}/mlir "$out"
+          ''
+          + lib.optionalString (lib.versionAtLeast version "23") ''
+            cp -r ${monorepoSrc}/libc "$out"
+          ''
+        )
     else
       src;
 
