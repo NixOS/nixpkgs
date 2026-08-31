@@ -167,6 +167,15 @@
   "inkscape-plugins": [
     "index.html#inkscape-plugins"
   ],
+  "installAgentSkills": [
+    "index.html#installAgentSkills"
+  ],
+  "installAgentSkills-installSkill": [
+    "index.html#installAgentSkills-installSkill"
+  ],
+  "installAgentSkills-installSkill-exampleusage": [
+    "index.html#installAgentSkills-installSkill-exampleusage"
+  ],
   "installfonts": [
     "index.html#installfonts"
   ],

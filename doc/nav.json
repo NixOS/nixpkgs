@@ -248,6 +248,9 @@
               "file": "hooks/haredo.section.md"
             },
             {
+              "file": "hooks/installAgentSkills.section.md"
+            },
+            {
               "file": "hooks/installShellFiles.section.md"
             },
             {
