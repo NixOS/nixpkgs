@@ -7,6 +7,10 @@
   meta.maintainers = with lib.maintainers; [ nikstur ];
 
   nodes.machine = {
+    # - nix.enable gates nix.channel.enable behaviors
+    # - disabled by default. See all-tests.nix / tag(no-nix-by-default)
+    nix.enable = true;
+
     nix.channel.enable = true;
   };
 

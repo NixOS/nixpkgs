@@ -8,6 +8,8 @@ let
         adminAddr = "foo@example.org";
       };
       networking.firewall.allowedTCPPorts = [ 80 ];
+
+      nix.enable = false; # disabled by default on the test's host. See all-tests.nix / tag(no-nix-by-default)
     };
   };
 

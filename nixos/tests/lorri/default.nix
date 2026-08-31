@@ -6,6 +6,8 @@
     {
       imports = [ ../../modules/profiles/minimal.nix ];
       environment.systemPackages = [ pkgs.lorri ];
+
+      nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
     };
 
   testScript = ''

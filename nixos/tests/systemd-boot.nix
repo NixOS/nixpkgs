@@ -41,6 +41,8 @@ let
       boot.loader.efi.canTouchEfiVariables = true;
       environment.systemPackages = [ pkgs.efibootmgr ];
       system.switch.enable = true;
+      nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
+
       # Needed for machine-id to be persisted between reboots.
       # Must be a valid (non-zero) ID, otherwise sd_id128_get_machine()
       # returns -ENOMEDIUM and dbus-broker refuses to start.

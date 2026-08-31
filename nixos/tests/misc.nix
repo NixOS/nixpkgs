@@ -66,6 +66,7 @@ in
       boot.kernel.sysctl."vm.swappiness" = 1;
       boot.kernelParams = [ "vsyscall=emulate" ];
       system.extraDependencies = [ foo ];
+      nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
     };
 
   testScript = ''

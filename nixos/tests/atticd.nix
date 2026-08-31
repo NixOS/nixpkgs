@@ -15,6 +15,8 @@ in
 
   nodes = {
     local = {
+      nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
+
       services.atticd = {
         enable = true;
 
@@ -27,6 +29,8 @@ in
     };
 
     s3 = {
+      nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
+
       services.atticd = {
         enable = true;
         settings = {
