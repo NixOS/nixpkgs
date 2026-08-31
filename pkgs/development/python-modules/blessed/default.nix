@@ -14,7 +14,7 @@
 buildPythonPackage {
   pname = "blessed";
   # We need https://github.com/jquast/blessed/pull/311 to fix 3.13
-  version = "1.25-unstable-2025-12-05";
+  version = "1.25";
   pyproject = true;
 
   src = fetchFromGitHub {
