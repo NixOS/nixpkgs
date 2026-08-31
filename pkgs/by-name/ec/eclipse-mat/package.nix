@@ -37,6 +37,16 @@ stdenvNoCC.mkDerivation (
 
     inherit (stdenvNoCC.hostPlatform) system;
     source = sources.${system} or (throw "Unsupported system: ${system}");
+
+    launcherArgs = lib.concatStringsSep "\n" [
+      "-data"
+      "@user.home/.eclipse-mat/${finalAttrs.version}/workspace"
+      "-configuration"
+      "@user.home/.eclipse-mat/${finalAttrs.version}/configuration"
+      "-vm"
+      (lib.getExe' jdk "java")
+      "-vmargs"
+    ];
   in
   {
     pname = "eclipse-mat";
@@ -69,12 +79,17 @@ stdenvNoCC.mkDerivation (
       gtk3
     ];
 
-    # Keep the .app's notarized upstream signature valid
-    dontPatchShebangs = stdenvNoCC.hostPlatform.isDarwin;
-
     # The bundle ships JNA natives for every OS, so auditTmpdir finds Linux ELF
     # objects and calls patchelf, which does not exist on Darwin.
     noAuditTmpdir = stdenvNoCC.hostPlatform.isDarwin;
+
+    # Finder launches bypass the wrapper, so the paths and the JVM go in the
+    # ini. That invalidates the bundle's resource seal but not the executable's
+    # own signature, which is all an unquarantined store path needs.
+    postPatch = lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+      substituteInPlace MemoryAnalyzer.app/Contents/Eclipse/MemoryAnalyzer.ini \
+        --replace-fail '-vmargs' ${lib.escapeShellArg launcherArgs}
+    '';
 
     desktopItems = lib.optionals stdenvNoCC.hostPlatform.isLinux [
       (makeDesktopItem {
@@ -88,6 +103,7 @@ stdenvNoCC.mkDerivation (
           "Development"
           "Profiling"
         ];
+        startupWMClass = "Eclipse Memory Analyzer";
       })
     ];
 
@@ -99,10 +115,10 @@ stdenvNoCC.mkDerivation (
           mkdir -p $out/Applications
           cp -R MemoryAnalyzer.app $out/Applications/
 
-          makeWrapper $out/Applications/MemoryAnalyzer.app/Contents/MacOS/MemoryAnalyzer $out/bin/eclipse-mat \
-            --prefix PATH : ${lib.makeBinPath [ jdk ]} \
-            --set JAVA_HOME ${jdk.home} \
-            --add-flags "-configuration \$HOME/.eclipse-mat/${finalAttrs.version}/configuration"
+          # Not a symlink: the launcher finds its ini and startup jar relative
+          # to its own path, and fails silently when reached through one.
+          makeWrapper $out/Applications/MemoryAnalyzer.app/Contents/MacOS/MemoryAnalyzer \
+            $out/bin/eclipse-mat
 
           runHook postInstall
         ''
@@ -129,7 +145,8 @@ stdenvNoCC.mkDerivation (
               ]
             } \
             --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-            --add-flags "-configuration \$HOME/.eclipse-mat/${finalAttrs.version}/configuration"
+            --add-flags "-configuration \$HOME/.eclipse-mat/${finalAttrs.version}/configuration" \
+            --add-flags "-data \$HOME/.eclipse-mat/${finalAttrs.version}/workspace"
 
           unzip -j -q mat/plugins/org.eclipse.mat.ui.rcp_*.jar "icons/memory_analyzer_*.png" -d icons
           for size in 32 48 64 128 256; do
