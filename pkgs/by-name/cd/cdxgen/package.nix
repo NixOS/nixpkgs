@@ -3,63 +3,56 @@
   fetchFromGitHub,
   lib,
   makeWrapper,
-  node-gyp,
   nodejs,
-  pnpm_10,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
-  python3,
   stdenv,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdxgen";
-  version = "11.10.0";
+  version = "13.0.1";
 
   src = fetchFromGitHub {
     owner = "cdxgen";
     repo = "cdxgen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RmgR6OfNrZUYFyn36zTHERIHlzszaFqTX8b4Rf2TF/U=";
+    hash = "sha256-wnvAeZprSUDCFO5UXyycrF2cZ+a/E70k5V8CM6IJ0NM=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    node-gyp # required for sqlite3 bindings
     pnpmConfigHook
-    pnpm_10
-    python3 # required for sqlite3 bindings
+    pnpm_11
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin cctools.libtool;
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
-    fetcherVersion = 3;
-    hash = "sha256-o7u/ZZS/5PgOtWd07zO4a01mUWZowUTL+JDJ2442mGc=";
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-hVa6Um0WkcsI8MwwkqwFwOqESTMzR2Ox9DSmESzEDfQ=";
   };
-
-  buildPhase = ''
-    runHook preBuild
-
-    pushd node_modules/sqlite3
-    node-gyp rebuild
-    popd
-
-    runHook postBuild
-  '';
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin $out/lib
     cp -r * $out/lib
+
     makeWrapper ${nodejs}/bin/node "$out/bin/cdxgen" --add-flags "$out/lib/bin/cdxgen.js"
-    makeWrapper ${nodejs}/bin/node "$out/bin/cdxgen-evinse" --add-flags "$out/lib/bin/evinse.js"
-    makeWrapper ${nodejs}/bin/node "$out/bin/cdxgen-repl" --add-flags "$out/lib/bin/repl.js"
-    makeWrapper ${nodejs}/bin/node "$out/bin/cdxgen-verify" --add-flags "$out/lib/bin/verify.js"
+
+    for name in audit convert evinse hbom repl sign tracebom validate verify; do
+      makeWrapper ${nodejs}/bin/node "$out/bin/cdxgen-$name" --add-flags "$out/lib/bin/$name.js"
+    done
 
     runHook postInstall
+  '';
+
+  preFixup = ''
+    # Remove broken development symlinks
+    find $out -xtype l -print -delete
   '';
 
   meta = {
@@ -70,5 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       quincepie
     ];
+    teams = with lib.teams; [ ngi ];
   };
 })
