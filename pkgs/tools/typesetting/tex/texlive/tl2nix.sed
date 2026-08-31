@@ -70,6 +70,7 @@ $a}
       s/"collection"/"free"/g   # used for collections of individual packages with distinct licenses. As TeXlive only contains free software, we can use "free" as a catchall
       s/"eupl"/"eupl12"/g
       s/"fdl"/"fdl13Only"/g
+      s/"gfl"/"lppl13c"/g       # gfl just some fancy text saying you should use lppl13c+
       s/"gpl"/"gpl1Only"/g
       s/"gpl([1-3])"/"gpl\1Only"/g
       s/"gpl2\+"/"gpl2Plus"/g
