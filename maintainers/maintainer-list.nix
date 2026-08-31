@@ -21443,6 +21443,11 @@
     github = "oaksoaj";
     githubId = 103952141;
   };
+  oati = {
+    github = "oati";
+    githubId = 79354991;
+    name = "Erin Kim";
+  };
   ob7 = {
     name = "ob7";
     email = "dev@ob7.us";
