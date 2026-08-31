@@ -4,7 +4,7 @@ module.exports = async ({ github, context, core, dry }) => {
   const { DefaultArtifactClient } = await import('@actions/artifact')
   const { readFile, writeFile } = require('node:fs/promises')
   const withRateLimit = require('./withRateLimit.js')
-  const { classify } = require('../supportedBranches.js')
+  const { classify } = require('./supportedBranches.js')
   const { handleMerge } = require('./merge.js')
   const { handleReviewers } = require('./reviewers.js')
 

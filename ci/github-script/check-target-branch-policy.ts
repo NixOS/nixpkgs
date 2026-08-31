@@ -1,4 +1,4 @@
-const { classify, split } = require('../supportedBranches.js')
+const { classify, split } = require('./supportedBranches.js')
 
 type TargetBranchPolicyFacts = {
   base: string

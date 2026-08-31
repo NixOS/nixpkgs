@@ -38,7 +38,7 @@ jobs:
           TARGET_SHA: ${{ inputs.targetSha }}
         with:
           script: |
-            const { classify } = require('./ci/supportedBranches.js')
+            const { classify } = require('./ci/github-script/supportedBranches.js')
             const supportedSystems = require('./ci/github-script/supportedSystems.js')
 
             const baseBranch = (

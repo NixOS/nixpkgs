@@ -1,4 +1,4 @@
-const { classify } = require('../supportedBranches.js')
+const { classify } = require('./supportedBranches.js')
 const { getCommitDetailsForPR } = require('./get-pr-commit-details.js')
 
 /** @typedef {import('./get-pr-commit-details.js').Commit} Commit */
