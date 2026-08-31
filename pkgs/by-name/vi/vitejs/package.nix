@@ -7,17 +7,18 @@
   makeWrapper,
   pnpmConfigHook,
   fetchPnpmDeps,
+  autoPatchelfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vitejs";
-  version = "7.3.1";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "vitejs";
     repo = "vite";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ewtFvWeNFb6LowvA83p53+ilsMDugLzXK1I63lhZUAU=";
+    hash = "sha256-jcDrGPxTTIQ1mv1wZj5fAqZcfzcXUPoNjeOGg3LHrM8=";
   };
 
   nativeBuildInputs = [
@@ -25,6 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs_24
     pnpmConfigHook
     pnpm_10
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
   ];
 
   pnpmWorkspaces = [ "vite" ];
@@ -36,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
       pnpmWorkspaces
       ;
     fetcherVersion = 3;
-    hash = "sha256-02s37dcEvxFlaGO+RNxTMPuTV0/sx7hiX1Nzc3A/qro=";
+    hash = "sha256-b1JixDkowPI2cl1NSUD+rSyGH5oA7kU07Of1Yi/qPbM=";
   };
 
   buildPhase = ''
