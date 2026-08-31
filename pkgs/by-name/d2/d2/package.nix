@@ -11,7 +11,9 @@
   libgbm,
   makeWrapper,
   playwright-driver,
+  tala,
   withImageSupport ? lib.meta.availableOn stdenv.hostPlatform libdrm,
+  withTala ? false,
 }:
 
 assert lib.assertMsg (
@@ -55,10 +57,13 @@ buildGoModule (finalAttrs: {
   postInstall = ''
     installManPage ci/release/template/man/d2.1
   ''
-  # Wrap the d2 executable to set LD_LIBRARY_PATH for Playwright
-  + lib.optionalString withImageSupport ''
-    wrapProgram $out/bin/d2 \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs}
+  # Wrap the d2 executable to set LD_LIBRARY_PATH for Playwright and add tala to PATH
+  + lib.optionalString (withImageSupport || withTala) ''
+    makeWrapperArgs=(
+      ${lib.optionalString withImageSupport "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs}"}
+      ${lib.optionalString withTala "--prefix PATH : ${lib.makeBinPath [ tala ]}"}
+    )
+    wrapProgram $out/bin/d2 "''${makeWrapperArgs[@]}"
   '';
 
   preCheck = ''
