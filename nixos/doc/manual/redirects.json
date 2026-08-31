@@ -2925,5 +2925,20 @@
   ],
   "sec-release-13.10": [
     "release-notes.html#sec-release-13.10"
+  ],
+  "module-garm": [
+    "index.html#module-garm"
+  ],
+  "module-garm-secrets": [
+    "index.html#module-garm-secrets"
+  ],
+  "module-garm-providers": [
+    "index.html#module-garm-providers"
+  ],
+  "module-garm-reachability": [
+    "index.html#module-garm-reachability"
+  ],
+  "module-garm-setup": [
+    "index.html#module-garm-setup"
   ]
 }
