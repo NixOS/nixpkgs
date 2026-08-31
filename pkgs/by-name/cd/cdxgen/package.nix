@@ -8,6 +8,10 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   stdenv,
+
+  # tests
+  runCommand,
+  testers,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdxgen";
@@ -54,6 +58,24 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove broken development symlinks
     find $out -xtype l -print -delete
   '';
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+
+    sbom =
+      runCommand "${finalAttrs.pname}-${finalAttrs.version}-test-sbom"
+        {
+          nativeBuildInputs = [ finalAttrs.finalPackage ];
+        }
+        ''
+          pushd ${finalAttrs.src}/test/repotests/npm-smoke
+          cdxgen -t npm -o $out/bom.json .
+          grep -q '"bomFormat"' "$out/bom.json"
+          popd
+        '';
+  };
 
   meta = {
     description = "Creates CycloneDX Software Bill-of-Materials (SBOM) for your projects from source and container images";
