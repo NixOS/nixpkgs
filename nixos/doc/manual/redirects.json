@@ -271,6 +271,9 @@
   "sec-test-vm-ssh-access": [
     "index.html#sec-test-vm-ssh-access"
   ],
+  "sect-nixos-systemd-overriding-vendored-units": [
+    "index.html#sect-nixos-systemd-overriding-vendored-units"
+  ],
   "ssec-all-machine-objects": [
     "index.html#ssec-all-machine-objects"
   ],

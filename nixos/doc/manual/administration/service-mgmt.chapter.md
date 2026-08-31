@@ -171,3 +171,45 @@ example illustrates this:
   };
 }
 ```
+
+### Overriding a package-provided unit {#sect-nixos-systemd-overriding-vendored-units}
+
+When a unit of the same name is provided both by a package in
+[](#opt-systemd.packages) and by `systemd.services`/`systemd.sockets`/etc.,
+NixOS does not replace the package's unit file by default.
+With the default `overrideStrategy` of `asDropinIfExists`, it instead places
+its own unit fragment in `<unit-name>.d/overrides.conf`, a systemd
+[drop-in file](https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html#id-1.14.3).
+systemd loads the vendored unit file first, then merges each drop-in on top
+of it.
+
+Drop-ins only *replace* single-value directives, such as `Description=`.
+For directives that may be listed multiple times, such as `ExecStart=`,
+`Environment=`, `After=`, or `CapabilityBoundingSet=`, each assignment
+*adds* to the ones already collected from the vendored unit and from
+earlier drop-ins, rather than replacing them.
+So setting e.g. `serviceConfig.ExecStart` in a NixOS module does not
+replace the package's `ExecStart=`, but rather adds a second one to the
+list.
+
+To fully replace such a directive instead of extending it, assign an
+empty string as the first list element.
+This resets the directive, discarding every value collected so far,
+before the following elements are collected into it again:
+
+```nix
+{
+  systemd.packages = [ pkgs.someDaemon ];
+
+  systemd.services.someDaemon.serviceConfig = {
+    # Discard the package's ExecStart= and replace it with our own.
+    ExecStart = [
+      ""
+      "${lib.getExe pkgs.someDaemon} --config /etc/someDaemon.conf"
+    ];
+
+    # Discard the package's EnvironmentFile= entirely.
+    EnvironmentFile = [ "" ];
+  };
+}
+```
