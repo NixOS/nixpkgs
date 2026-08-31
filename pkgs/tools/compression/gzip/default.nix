@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  makeShellWrapper,
   updateAutotoolsGnuConfigScriptsHook,
   runtimeShellPackage,
   # Tests
@@ -26,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    ./0001-Don-t-add-timestamps-when-GZIP_NO_TIMESTAMPS-is-set.patch
     ./CVE-2026-41991.patch
     ./CVE-2026-41992.patch
   ];
@@ -38,10 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [
-    updateAutotoolsGnuConfigScriptsHook
-    makeShellWrapper
-  ];
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
   buildInputs = [ runtimeShellPackage ];
 
   strictDeps = true;
@@ -78,13 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isCygwin ''
     mv $out/bin/{,.}gzip.exe
     ln -s .gzip.exe $out/bin/gzip
-  ''
-  # run gzip with "-n" when $GZIP_NO_TIMESTAMPS (set by stdenv's setup.sh) is set to stop gzip from adding timestamps
-  # to archive headers: https://github.com/NixOS/nixpkgs/issues/86348
-  # if changing so that there's no longer a .gzip-wrapped then update copy in make-bootstrap-tools.nix
-  + ''
-    wrapProgram $out/bin/gzip \
-      --add-flags "\''${GZIP_NO_TIMESTAMPS:+-n}"
   '';
 
   passthru.tests.makecheck = gzip.overrideAttrs { doCheck = true; };
