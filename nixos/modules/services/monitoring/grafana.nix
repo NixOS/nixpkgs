@@ -2082,8 +2082,9 @@ in
     systemd.services.grafana = {
       description = "Grafana Service Daemon";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [
-        "network.target"
+        "network-online.target"
       ]
       ++ lib.optional usePostgresql "postgresql.target"
       ++ lib.optional useMysql "mysql.service";
