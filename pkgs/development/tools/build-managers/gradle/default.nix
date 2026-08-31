@@ -371,8 +371,8 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_9 = mkGradle {
-    version = "9.5.1";
-    hash = "sha256-uvwUG2Ga1jUP2XX8kDFW3VwVGZjMiwWOjBBEq197Ax8=";
+    version = "9.7.1";
+    hash = "sha256-rNU/HtrwLxqP+Zh5+KNLMCZhoFfZsGOunjW1UvgE0go=";
     defaultJava = jdk25;
     updateScriptMajorVersion = "9";
   };
