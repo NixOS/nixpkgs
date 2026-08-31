@@ -204,7 +204,7 @@ in
     meta = {
       description = "End-to-end OpenPGP for webmail";
       homepage = "https://github.com/paulhenry46/pgp-plugin";
-      license = lib.licenses.gpl3OrLater;
+      license = lib.licenses.gpl3Plus;
       maintainers = with lib.maintainers; [ Cameo007 ];
     };
   });
