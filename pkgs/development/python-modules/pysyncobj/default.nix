@@ -7,14 +7,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pysyncobj";
-  version = "0.3.16";
+  version = "0.3.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bakwc";
     repo = "PySyncObj";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/+vWvUe5oMdEJhqwmK89SE/P9zvpdhuB4qPTjgTR1kM=";
+    hash = "sha256-p4Jmyf/Y/pyHFn0lAACqaZCqXWdmmDMJwgyM5DDNJd4=";
   };
 
   build-system = [ setuptools ];
