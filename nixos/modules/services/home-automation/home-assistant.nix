@@ -1012,7 +1012,7 @@ in
           User = "hass";
           Group = "hass";
           WorkingDirectory = cfg.configDir;
-          Restart = "on-failure";
+          Restart = "always";
 
           # Signal handling
           # homeassistant/helpers/signal.py
