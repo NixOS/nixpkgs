@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
-  # Beware: non-bootstrap libidn2 is overridden by ./hack.nix
+  # Beware: non-bootstrap libidn2 is overridden by ./no-bootstrap-reference.nix
   outputs = [
     "bin"
     "dev"
