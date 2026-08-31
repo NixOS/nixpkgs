@@ -3157,7 +3157,7 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  inherit (coqPackages_9_0) compcert;
+  inherit (rocqPackages_9_0) compcert;
 
   corretto11 = javaPackages.compiler.corretto11;
   corretto17 = javaPackages.compiler.corretto17;
@@ -10182,20 +10182,6 @@ with pkgs;
     rocqPackages
     rocq-core
     ;
-
-  inherit (rocqPackages) coq;
-
-  # Deprecated aliases
-
-  coqPackages = rocqPackages;
-  coqPackages_9_0 = rocqPackages_9_0;
-  coq_9_0 = rocqPackages_9_0.coq;
-  coqPackages_9_1 = rocqPackages_9_1;
-  coq_9_1 = rocqPackages_9_1.coq;
-  coqPackages_9_2 = rocqPackages_9_2;
-  coq_9_2 = rocqPackages_9_2.coq;
-  coqPackages_9_3 = rocqPackages_9_3;
-  coq_9_3 = rocqPackages_9_3.coq;
 
   inherit
     (callPackage ./coq-packages.nix {

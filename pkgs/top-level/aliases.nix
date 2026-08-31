@@ -600,6 +600,16 @@ mapAliases {
   copilot-cli = throw "'copilot-cli' was removed due to upstream end-of-life."; # Added 2026-05-11
   copilot-language-server-fhs = warnAlias "The package set `copilot-language-server-fhs` has been renamed to `copilot-language-server`." copilot-language-server; # Added 2025-09-07
   copper = throw "'copper' has been removed, as it was broken since 22.11"; # Added 2025-08-22
+  coq = warnAlias "'coq' is deprecated, use 'rocqPackages.coq' instead, or 'rocq-core' if you do not need the Coq compatibility binaries" rocqPackages.coq; # Added 2026-08-26
+  coq_9_0 = warnAlias "'coq_9_0' is deprecated, use 'rocqPackages_9_0.coq' instead, or 'rocq-core_9_0' if you do not need the Coq compatibility binaries" rocqPackages_9_0.coq; # Added 2026-08-26
+  coq_9_1 = warnAlias "'coq_9_1' is deprecated, use 'rocqPackages_9_1.coq' instead, or 'rocq-core_9_1' if you do not need the Coq compatibility binaries" rocqPackages_9_1.coq; # Added 2026-08-26
+  coq_9_2 = warnAlias "'coq_9_2' is deprecated, use 'rocqPackages_9_2.coq' instead, or 'rocq-core_9_2' if you do not need the Coq compatibility binaries" rocqPackages_9_2.coq; # Added 2026-08-26
+  coq_9_3 = warnAlias "'coq_9_3' is deprecated, use 'rocqPackages_9_3.coq' instead, or 'rocq-core_9_3' if you do not need the Coq compatibility binaries" rocqPackages_9_3.coq; # Added 2026-08-26
+  coqPackages = warnAlias "'coqPackages' is deprecated, use 'rocqPackages' instead" rocqPackages; # Added 2026-08-26
+  coqPackages_9_0 = warnAlias "'coqPackages_9_0' is deprecated, use 'rocqPackages_9_0' instead" rocqPackages_9_0; # Added 2026-08-26
+  coqPackages_9_1 = warnAlias "'coqPackages_9_1' is deprecated, use 'rocqPackages_9_1' instead" rocqPackages_9_1; # Added 2026-08-26
+  coqPackages_9_2 = warnAlias "'coqPackages_9_2' is deprecated, use 'rocqPackages_9_2' instead" rocqPackages_9_2; # Added 2026-08-26
+  coqPackages_9_3 = warnAlias "'coqPackages_9_3' is deprecated, use 'rocqPackages_9_3' instead" rocqPackages_9_3; # Added 2026-08-26
   cordless = throw "'cordless' has been removed due to being archived upstream. Consider using 'discordo' instead."; # Added 2025-06-07
   coreboot-configurator = throw "'coreboot-configurator' has been removed because it was discontinued.  All settings are now found in BIOS."; # Added 2026-07-28
   corepack_20 = nodejs_20;
