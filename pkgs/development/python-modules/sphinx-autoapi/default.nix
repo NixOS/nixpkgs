@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "sphinx-autoapi";
-  version = "3.8.0";
+  version = "3.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "readthedocs";
     repo = "sphinx-autoapi";
     tag = "v${version}";
-    hash = "sha256-pEfyVwvAqIg/1F5kX7WLlhdD+5tq3422u8N6nBizRcA=";
+    hash = "sha256-WvatLBJGTqQJbRV9wnac7oBRX+Az3mEHLkbCqNFQIYk=";
   };
 
   build-system = [ flit-core ];
