@@ -3420,13 +3420,13 @@ with haskellLib;
 # Manually maintained
 // (
   let
-    version = "1.12.0";
+    version = "1.12.1";
 
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "e3609f93799354c50e4126d6423ede6dd317e2f2";
-      hash = "sha256-AOhHyBEk8LOiAU9tgmNJPJAKKUVDQFzTNSLe62FPxpY=";
+      tag = "v${version}";
+      hash = "sha256-OUB6hPlFBB9FRdZgZXSye4lDOg+fbrqKe8ePv2IM7NY=";
     };
   in
   {
