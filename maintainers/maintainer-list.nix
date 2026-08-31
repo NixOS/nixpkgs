@@ -12113,6 +12113,12 @@
     githubId = 510202;
     name = "Ismaël Bouya";
   };
+  immanuwell = {
+    email = "focused.ethan@gmail.com";
+    github = "immanuwell";
+    githubId = 122638311;
+    name = "Immanuel Tikhonov";
+  };
   impl = {
     email = "noah@noahfontes.com";
     matrix = "@impl:matrix.org";
