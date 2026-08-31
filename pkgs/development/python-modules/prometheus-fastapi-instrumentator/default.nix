@@ -22,7 +22,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "prometheus-fastapi-instrumentator";
-  version = "8.0.2";
+  version = "8.1.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
     owner = "trallnag";
     repo = "prometheus-fastapi-instrumentator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fTJjAM1jUZXfhjLo9xqlu45LaoqZ330ogOA6x7aByqw=";
+    hash = "sha256-oSP0KH5niST0MICTxVyAdZmH08RTx3cgXQrOT83qBsM=";
   };
 
   build-system = [
