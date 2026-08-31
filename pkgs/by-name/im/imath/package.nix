@@ -18,6 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  strictDeps = true;
+
   meta = {
     description = "C++ and python library of 2D and 3D vector, matrix, and math operations for computer graphics";
     homepage = "https://github.com/AcademySoftwareFoundation/Imath";
