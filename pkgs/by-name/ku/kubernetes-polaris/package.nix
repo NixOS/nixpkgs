@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubernetes-polaris";
-  version = "10.1.7";
+  version = "10.2.0";
 
   src = fetchFromGitHub {
     owner = "FairwindsOps";
     repo = "polaris";
-    rev = finalAttrs.version;
-    sha256 = "sha256-0uz5Q7RvPTDIo6R6YIsK2jr1UIq1OJN0+IjyWciyA28=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BSKJEZDXwGHIo7L8kJtf+MAMS3qLJRreCR0/WRw2egc=";
   };
 
-  vendorHash = "sha256-M+/Jtw+SiLY+G3UKtRCFX1j6tH35FIQMX33YgacJAec=";
+  vendorHash = "sha256-t01aJVVq4CgazCEsy7nSkfUa4InTY8xrJhjxARd7o0g=";
 
   nativeBuildInputs = [ installShellFiles ];
 
