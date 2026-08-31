@@ -3,8 +3,6 @@
   stdenv,
   fetchurl,
   autoreconfHook,
-  autoconf,
-  automake,
   libtool,
   pkg-config,
   # libs
@@ -13,6 +11,7 @@
   gmp,
   libxml2,
   ncurses,
+  unixodbc,
   # docs
   help2man,
   texinfo,
@@ -47,18 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     texinfo
     texliveBasic
-  ]
-  ++ (
-    if stdenv.hostPlatform.isDarwin then
-      # autoreconf runs aclocal before autoconf, which messes up some compiler
-      # definition and causes many tests to fail (with segfaults)
-      [
-        automake
-        autoconf
-      ]
-    else
-      [ autoreconfHook ]
-  );
+    autoreconfHook
+  ];
 
   buildInputs = [
     cjson
@@ -66,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     gmp
     libxml2
     ncurses
+    unixodbc
   ];
 
   outputs = [
@@ -94,13 +84,14 @@ stdenv.mkDerivation (finalAttrs: {
              AT_SKIP_IF(\[true\])' tests/testsuite.src/run_file.at
   '';
 
+  preAutoreconf = ''
+    gettextize --force
+  '';
+
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    autoconf
-    aclocal
-    automake
     # when building with nix on darwin, configure will use GNU strip,
     # which fails due to using --strip-unneeded, which is not supported
-    substituteInPlace configure --replace-fail '"GNU strip"' 'FAKE GNU strip'
+    substituteInPlace configure --replace-fail '"GNU strip"' '"FAKE GNU strip"'
   '';
 
   # GCC 15 changed some warnings to errors, particularly around function pointer types
@@ -108,12 +99,19 @@ stdenv.mkDerivation (finalAttrs: {
   # until gnucobol is updated to compile cleanly with GCC 15+/latest LLVM.
   # See: https://gcc.gnu.org/gcc-15/porting_to.html
   env.CFLAGS = "-std=gnu17";
+  env.CPPFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-DREAD_WRITE_NEEDS_FLUSH";
   enableParallelBuilding = true;
+
+  configureFlags = [
+    "--enable-cobc-internal-checks"
+    "--enable-hardening"
+    "--with-db"
+    "--with-indexed=db"
+    "--with-obdc"
+  ];
 
   installFlags = [
     "localedir=$out/share/locale"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
     "install-pdf"
     "install-html"
   ];
