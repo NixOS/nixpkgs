@@ -129,6 +129,8 @@ stdenv.mkDerivation (finalAttrs: {
     stdenv.buildPlatform != stdenv.hostPlatform
   ) stdenv.shellPackage;
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://github.com/shadow-maint/shadow";
     description = "Suite containing authentication-related tools such as passwd and su";
