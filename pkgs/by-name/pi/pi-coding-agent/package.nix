@@ -69,7 +69,14 @@ buildNpmPackage (finalAttrs: {
     npm run build --workspace=packages/coding-agent
 
     pushd packages/coding-agent
-    bun build --compile --no-compile-autoload-bunfig --target=bun-linux-x64-baseline \
+    bun build --compile --no-compile-autoload-bunfig --target=${
+      if stdenvNoCC.hostPlatform.isDarwin then
+        if stdenvNoCC.hostPlatform.isAarch64 then "bun-darwin-arm64" else "bun-darwin-x64"
+      else if stdenvNoCC.hostPlatform.isAarch64 then
+        "bun-linux-arm64"
+      else
+        "bun-linux-x64-baseline"
+    } \
       ./dist/bun/cli.js ./src/utils/image-resize-worker.ts \
       --outfile $TMPDIR/pi
     popd
