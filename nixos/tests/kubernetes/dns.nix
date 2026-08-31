@@ -147,6 +147,8 @@ let
 
       # check dns inside the container
       machine1.succeed("kubectl exec probe -- /bin/host redis.default.svc.cluster.local")
+
+      machine1.fail("journalctl --unit etcd.service --boot MESSAGE='Failed to start etcd key-value store.' --grep=.")
     '';
   };
 
@@ -189,6 +191,8 @@ let
 
       # check dns inside the container
       machine1.succeed("kubectl exec probe -- /bin/host redis.default.svc.cluster.local")
+
+      machine1.fail("journalctl --unit etcd.service --boot MESSAGE='Failed to start etcd key-value store.' --grep=.")
     '';
   };
 in
