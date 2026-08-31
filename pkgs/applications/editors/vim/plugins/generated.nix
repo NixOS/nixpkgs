@@ -1107,12 +1107,12 @@ final: prev: {
 
   astrotheme = buildVimPlugin {
     pname = "astrotheme";
-    version = "4.12.0";
+    version = "4.13.0";
     src = fetchFromGitHub {
       owner = "AstroNvim";
       repo = "astrotheme";
-      tag = "v4.12.0";
-      hash = "sha256-jDj0rDfGifyC9aTxhN0Ps9OD/s0U2Wvkgfk7mqTFG0Q=";
+      tag = "v4.13.0";
+      hash = "sha256-1VppLnCIrkos3x5NYq6PONbe7pbAfNUWGbZvHtYd8cM=";
     };
     meta.homepage = "https://github.com/AstroNvim/astrotheme/";
     meta.license = getLicenseFromSpdxId "GPL-3.0-only";
