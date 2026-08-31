@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "gassist-text";
-  version = "0.0.14";
+  version = "0.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tronikos";
     repo = "gassist_text";
     tag = version;
-    hash = "sha256-Nk2GwqColX/d1nUL+YvolLH/1g1FTDZbExhBGot/EV0=";
+    hash = "sha256-KrlStBYsE8PwAH7C7WzLezLffBFcmj/1cA0YJq/hkkU=";
   };
 
   nativeBuildInputs = [ setuptools ];
