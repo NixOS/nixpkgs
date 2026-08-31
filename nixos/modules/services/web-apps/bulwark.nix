@@ -787,6 +787,9 @@ in
         PORT = toString cfg.port;
         ADMIN_STATE_DIR = cfg.admin_state_dir;
         VERSION_CHECK_DATA_DIR = cfg.version_check_data_dir;
+        # Read (and created) even with telemetry off to resolve consent state;
+        # otherwise falls back to <package>/data/telemetry in the store.
+        TELEMETRY_DATA_DIR = cfg.telemetry.data_dir;
         BULWARK_UPDATE_CHECK = if cfg.updateCheck.enabled then "on" else "off";
         BULWARK_TELEMETRY = if cfg.telemetry.enabled then "on" else "off";
       }
@@ -799,9 +802,6 @@ in
       }
       // optionalAttrs cfg.updateCheck.enabled {
         BULWARK_UPDATE_CHECK_URL = cfg.updateCheck.url;
-      }
-      // optionalAttrs cfg.telemetry.enabled {
-        TELEMETRY_DATA_DIR = cfg.telemetry.data_dir;
       };
     };
   };

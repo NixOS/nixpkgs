@@ -22,5 +22,8 @@
 
     status = machine.succeed("curl -f http://localhost:3000/api/health")
     assert json.loads(status)["status"] == "healthy", "The fetched config does not match"
+
+    machine.wait_until_succeeds("journalctl -u bulwark | grep -q 'scheduler not started'")
+    machine.fail("journalctl -u bulwark | grep -q 'init skipped'")
   '';
 }
