@@ -45,13 +45,13 @@
     "vendorHash": "sha256-DTPaRkNWitoriOE0G+RctMIHAdSPK4wq410a+XxLnOY="
   },
   "aliyun_alicloud": {
-    "hash": "sha256-n7hozRcovw62f1KjH7/VncHyqD4c5w3f3RMpi7pbLcI=",
+    "hash": "sha256-YxrscU2ukv/lLi0cKeZVza694oLR/duKsPHEvyGaXNQ=",
     "homepage": "https://registry.terraform.io/providers/aliyun/alicloud",
     "owner": "aliyun",
     "repo": "terraform-provider-alicloud",
-    "rev": "v1.289.0",
+    "rev": "v1.290.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-667c573g6E6srr0UgkeiozikiemrFEAJ5sF0Zg2ahnE="
+    "vendorHash": "sha256-bJcVf4Yj70VwKn0p6RN+/dc5J+K6xFJcifVei9dK2bA="
   },
   "aminueza_minio": {
     "hash": "sha256-2NbI/ANAuCogB4H31N2k5dPpg8jqRULFdWD0+NxQD5c=",
@@ -1247,13 +1247,13 @@
     "vendorHash": "sha256-skswuFKhN4FFpIunbom9rM/FVRJVOFb1WwHeAIaEjn8="
   },
   "spacelift-io_spacelift": {
-    "hash": "sha256-9Z2X6r+r82ZrUPbWaPVTw37rRSUTIosvn/Zfv3XpqfA=",
+    "hash": "sha256-YII7lvargOUDhw+pBFcKNrSyjDHhyk3AErN9N9LFrpE=",
     "homepage": "https://registry.terraform.io/providers/spacelift-io/spacelift",
     "owner": "spacelift-io",
     "repo": "terraform-provider-spacelift",
-    "rev": "v1.53.5",
+    "rev": "v1.54.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-gva4QLCNANCaDSjv84N2oFv9VlsU8oUZOUTx6nTRIcA="
+    "vendorHash": "sha256-Yg4EcYUckcnAeADgCo1U1pdsltDVrH0Uma7u9vU3nE8="
   },
   "splunk-terraform_signalfx": {
     "hash": "sha256-KoPLEVzR/MtMTrufqvxrOuVsfjCUXQ9UMbqjosAy2oc=",
