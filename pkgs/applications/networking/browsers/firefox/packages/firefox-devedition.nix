@@ -7,12 +7,11 @@
   buildMozillaMach,
 }:
 
-buildMozillaMach rec {
+(buildMozillaMach rec {
   pname = "firefox-devedition";
   binaryName = "firefox-devedition";
   version = "155.0b5";
   applicationName = "Firefox Developer Edition";
-  requireSigning = false;
   branding = "browser/branding/aurora";
   src = fetchurl {
     url = "mirror://mozilla/devedition/releases/${version}/source/firefox-${version}.source.tar.xz";
@@ -52,4 +51,7 @@ buildMozillaMach rec {
     versionSuffix = "b[0-9]*";
     baseUrl = "https://archive.mozilla.org/pub/devedition/releases/";
   };
-}
+}).override
+  {
+    enableAddonSigning = false;
+  }
