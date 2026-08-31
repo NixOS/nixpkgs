@@ -56,6 +56,10 @@
     "PersianCalendar@oxygenws.com",
     "persian-calendar@iamrezamousavi.gmail.com"
   ],
+  "power-menu": [
+    "power-menu@dodog.github.io",
+    "power-menu@e6ad2020"
+  ],
   "proxy-switcher": [
     "ProxySwitcher@flannaghan.com",
     "proxy-switcher@seydef"
@@ -70,6 +74,10 @@
     "system-monitor@axet.github.com",
     "system-monitor@gnome-shell-extensions.gcampax.github.com",
     "system-monitor@jtourteau"
+  ],
+  "system-monitor-panel": [
+    "system-monitor-panel@gnome-shell-extensions",
+    "system-monitor-panel@naimur"
   ],
   "systemquest": [
     "system-rpg@conan513",

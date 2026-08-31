@@ -47,6 +47,9 @@
   "persian-calendar@iamrezamousavi.gmail.com" = "persian-calendar-2";
   "PersianCalendar@oxygenws.com" = "persian-calendar";
 
+  "power-menu@e6ad2020" = "power-menu";
+  "power-menu@dodog.github.io" = "power-menu-2";
+
   "ProxySwitcher@flannaghan.com" = "proxy-switcher";
   "proxy-switcher@seydef" = "proxy-switcher-2";
 
@@ -58,6 +61,9 @@
   "system-monitor@axet.github.com" = "system-monitor-3";
   "sysmonitor@talhasiddique7" = "system-monitor-4";
   "system-monitor@jtourteau" = "system-monitor-5";
+
+  "system-monitor-panel@naimur" = "system-monitor-panel";
+  "system-monitor-panel@gnome-shell-extensions" = "system-monitor-panel-2";
 
   "system-rpg@conan513" = "systemquest";
   "system-rpg@gnome-rpg.local" = "systemquest-2";
