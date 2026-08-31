@@ -5,7 +5,9 @@
   rustPlatform,
   gitMinimal,
   installShellFiles,
+  installAgentSkills,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
   nix-update-script,
 }:
 
@@ -30,21 +32,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
+    installAgentSkills
+    writableTmpDirAsHomeHook
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    # wt reads config from $HOME; provide a throwaway dir so it doesn't fail.
-    export HOME="$(mktemp -d)"
+  dontInstallAgentSkills = true;
 
+  postInstall = ''
+    installSkill skills/worktrunk worktrunk
+    installSkill skills/wt-switch-create worktrunk
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+
+    # wt reads config from $HOME; provide a throwaway dir so it doesn't fail.
     installShellCompletion --cmd wt \
       --bash <($out/bin/wt config shell completions bash) \
       --fish <($out/bin/wt config shell completions fish) \
       --nushell <($out/bin/wt config shell completions nu) \
       --zsh <($out/bin/wt config shell completions zsh)
-
-    # -L dereferences symlinks (e.g. skills/worktrunk/reference/README.md → repo
-    # root), so no dangling symlinks end up in $out.
-    cp -RL ${finalAttrs.src}/skills $out/
   '';
 
   nativeCheckInputs = [ gitMinimal ];
