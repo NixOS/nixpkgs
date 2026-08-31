@@ -19808,6 +19808,8 @@ self: super: with self; {
 
   stackit-resourcemanager = callPackage ../development/python-modules/stackit-resourcemanager { };
 
+  stackit-ske = callPackage ../development/python-modules/stackit-ske { };
+
   stackprinter = callPackage ../development/python-modules/stackprinter { };
 
   stamina = callPackage ../development/python-modules/stamina { };

@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tether";
-  version = "0.2.18";
+  version = "0.2.19";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "zackb";
     repo = "tether";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ygevoa/gEt80HyRYeWmVGDIwi4Eyl8XVz/RABcGK03Q=";
+    hash = "sha256-3184+dHzgqh+QrdaCCBtQEzNmoJq03rl6wf0FTK1TTc=";
   };
 
   postPatch = ''
