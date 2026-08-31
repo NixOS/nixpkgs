@@ -378,6 +378,7 @@ buildDotnetModule (finalAttrs: {
       aanderse
       zimbatm
       schmittlauch
+      osnyx
     ];
     platforms = [
       "x86_64-linux"
