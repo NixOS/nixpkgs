@@ -28297,6 +28297,14 @@
     githubId = 1552853;
     name = "Vincent Ambo";
   };
+  tb148 = {
+    name = "Tony Brown";
+    github = "tb148";
+    githubId = 28220642;
+    email = "me@tb148.net";
+    matrix = "@me:tb148.net";
+    keys = [ { fingerprint = "19FE 8C36 96B7 60FE 647D  7FF8 4E51 2749 E5D2 792E"; } ];
+  };
   tbaldwin = {
     email = "trent.baldwin@proton.me";
     matrix = "@tbaldwin:matrix.org";
