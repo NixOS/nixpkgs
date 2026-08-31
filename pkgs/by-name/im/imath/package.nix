@@ -12,13 +12,15 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "imath";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kmWj9g6PnvgEOojjiWYpJ9+lXwT1svpezYDsCns4NP0=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   strictDeps = true;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "C++ and python library of 2D and 3D vector, matrix, and math operations for computer graphics";
