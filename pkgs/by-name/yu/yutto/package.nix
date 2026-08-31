@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "yutto";
-  version = "2.3.0";
+  version = "2.3.1";
   pyproject = true;
 
   pythonRelaxDeps = true;
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "yutto-dev";
     repo = "yutto";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1k4VqnOKozlPrSebVp0vdaJI/Ra+v7akV6zLZMYMJ88=";
+    hash = "sha256-TofIXOqeUbIL8iW3SnEspQlSsr21YbDl/dFPzgPFmKo=";
   };
 
   cargoRoot = "rust";
@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       src
       cargoRoot
       ;
-    hash = "sha256-9KJlEaOLKVNTz+OsiX3p7Bbv1wFzoi6UaLKksrXMbdw=";
+    hash = "sha256-qiLjCAUrRe8vm0uZuToA1AbfJjF/Yhs1V+lUC6hLNCM=";
   };
 
   build-system = with rustPlatform; [
