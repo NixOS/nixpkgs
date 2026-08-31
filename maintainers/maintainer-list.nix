@@ -2600,6 +2600,11 @@
     name = "Mariia Holovata";
     keys = [ { fingerprint = "409D 201E 9450 8732 A49E  D0FC 6BDA F874 0068 08DF"; } ];
   };
+  ashuttl = {
+    github = "ashuttl";
+    githubId = 2095936;
+    name = "Andrew Shuttleworth Fowler";
+  };
   asiantuntija = {
     github = "asiantuntija";
     githubId = 8327991;
