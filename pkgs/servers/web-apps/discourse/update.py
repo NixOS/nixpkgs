@@ -279,7 +279,7 @@ def update(rev):
     # update the sass-embedded override
     # must run *after* the gemfile update!
     dart_sass_ver = _nix_eval('discourse.rubyEnv.gemset.sass-embedded.version')
-    for platform in ["x64", "arm64"]:
+    for platform in ["x64", "arm64", "riscv64"]:
         prev_hash = _nix_eval(f'discourse.rubyEnv.dart-{platform}-hash')
         new_hash = subprocess.check_output([
             "nurl",
