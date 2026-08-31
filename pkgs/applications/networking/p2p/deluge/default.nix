@@ -30,6 +30,11 @@ let
         hash = "sha256-ubonK1ukKq8caU5sKWKKuBbMGnAKN7rAiqy1JXFgas0=";
       };
 
+      patches = [
+        # https://github.com/deluge-torrent/deluge/pull/501
+        ./use-importlib-for-ui-entrypoints.patch
+      ];
+
       propagatedBuildInputs =
         with pypkgs;
         [
