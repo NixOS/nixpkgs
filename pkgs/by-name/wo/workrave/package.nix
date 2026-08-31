@@ -3,9 +3,7 @@
   stdenv,
   fetchFromGitHub,
   wrapGAppsHook3,
-  autoconf,
-  autoconf-archive,
-  automake,
+  cmake,
   gettext,
   intltool,
   libtool,
@@ -18,6 +16,7 @@
   glib,
   glibmm,
   gtkmm3,
+  gtk4,
   atk,
   pango,
   pangomm,
@@ -29,23 +28,26 @@
   libsigcxx,
   boost,
   python3Packages,
+  wayland,
+  wayland-scanner,
+  libayatana-appindicator,
+  fmt,
+  spdlog,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "workrave";
-  version = "1.10.54";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     repo = "workrave";
     owner = "rcaelers";
     rev = "v" + lib.concatStringsSep "_" (lib.splitVersion finalAttrs.version);
-    sha256 = "sha256-pbMkzwxgKc4vjFhBeOf513hFytYiTPST19L8Nq4CVTg=";
+    sha256 = "sha256-NfGgcJyTKokcAIffO7YrW3Zs8AHFJGyRaXOvw+n5KZk=";
   };
 
   nativeBuildInputs = [
-    autoconf
-    autoconf-archive
-    automake
+    cmake
     gettext
     intltool
     libtool
@@ -53,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
     python3Packages.jinja2
     gobject-introspection
+    wayland-scanner
+    spdlog
   ];
 
   buildInputs = [
@@ -63,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     glibmm
     gtkmm3
+    gtk4
     atk
     pango
     pangomm
@@ -75,13 +80,35 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-good
     libsigcxx
     boost
+    wayland
+    libayatana-appindicator
+    fmt
   ];
 
-  preConfigure = "./autogen.sh";
+  cmakeFlags = [
+    "-DWITH_GNOME45=ON"
+    "-DHAVE_WAYLAND:BOOL=TRUE"
+    "-DLOCALINSTALL:BOOL=TRUE"
+    "-DGSETTINGS_COMPILE:BOOL=ON"
+  ];
+
+  patches = [ ./fix-workrave-paths.patch ];
+
+  postPatch = ''
+    substituteInPlace ui/applets/gnome-shell-45/src/extension.js \
+       ui/applets/gnome-shell-45/src/prelude_window.js \
+       --subst-var-by workrave_typelib_path "$out/lib/girepository-1.0"
+
+    substituteInPlace libs/config/src/GSettingsConfigurator.cc \
+       ui/applets/common/src/control.c \
+       ui/applets/common/src/timerbox.c \
+       ui/applets/indicator/src/indicator-workrave.c \
+       --subst-var-by workrave_schema_path ${glib.makeSchemaPath "$out" "${finalAttrs.pname}-${finalAttrs.version}"}
+  '';
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Program to help prevent Repetitive Strain Injury";
     mainProgram = "workrave";
     longDescription = ''
@@ -91,8 +118,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "http://www.workrave.org/";
     downloadPage = "https://github.com/rcaelers/workrave/releases";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ prikhi ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ prikhi ];
+    platforms = platforms.linux;
   };
 })
