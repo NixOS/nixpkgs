@@ -24,6 +24,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ python3 ];
 
+  strictDeps = true;
+
   installPhase = ''
     mkdir -p $out/bin
     cp -r * $out/
