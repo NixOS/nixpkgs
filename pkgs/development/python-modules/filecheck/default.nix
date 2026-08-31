@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "filecheck";
-  version = "1.0.3";
+  version = "1.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AntonLydike";
     repo = "filecheck";
     tag = "v${version}";
-    hash = "sha256-oOGQIEPIHL4xQRVKOw+8Z8QSowXlavVnck+IOWA9qd8=";
+    hash = "sha256-p6EgpY+DhRBnLCGVowHwqVhVyipaE/dQhoTuCgEDSoU=";
   };
 
   build-system = [ poetry-core ];
