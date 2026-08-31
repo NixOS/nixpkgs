@@ -31109,6 +31109,12 @@
     github = "wilsonehusin";
     githubId = 14004487;
   };
+  wilsonsk0 = {
+    email = "skwilson03@proton.me";
+    github = "wilsonsk0";
+    githubId = 145277297;
+    name = "Sam Wilson";
+  };
   wineee = {
     email = "lhongxu@outlook.com";
     github = "wineee";
