@@ -8,13 +8,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "js-beautify";
-  version = "1.15.4";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "beautifier";
     repo = "js-beautify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7heFAt8ArwBox0R2UFAYyzqyARPLnVtlWmPr0txuxOM=";
+    hash = "sha256-Qp9ZYHEdWgjTwvnPScCQOId/SQU/d1z+75UY61Kj8kc=";
   };
 
   dontNpmBuild = true;
@@ -34,7 +34,7 @@ buildNpmPackage (finalAttrs: {
     runHook postBuild
   '';
 
-  npmDepsHash = "sha256-Tr8kYawvPBt+jC7SW8dnKJVWynQyOpKbRD8yd+qbvIs=";
+  npmDepsHash = "sha256-TyercBuuaZWVg+F89s90eOvDCMloDWPMnUQwoPG4Ixg=";
 
   passthru.updateScript = nix-update-script { };
 
