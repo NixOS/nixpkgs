@@ -20941,6 +20941,8 @@ self: super: with self; {
 
   traceback2 = callPackage ../development/python-modules/traceback2 { };
 
+  traceback-with-variables = callPackage ../development/python-modules/traceback-with-variables { };
+
   tracerite = callPackage ../development/python-modules/tracerite { };
 
   trackers = callPackage ../development/python-modules/trackers { };
