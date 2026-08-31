@@ -31918,6 +31918,12 @@
     name = "Alvaro Viejo";
     matrix = "@yoquec.com:matrix.org";
   };
+  yordilorenzo = {
+    email = "yordilorenzo@gmail.com";
+    github = "YordiLorenzo";
+    githubId = 7012112;
+    name = "Yordi de Kleijn";
+  };
   yorickvp = {
     email = "yorickvanpelt@gmail.com";
     matrix = "@yorickvp:matrix.org";
