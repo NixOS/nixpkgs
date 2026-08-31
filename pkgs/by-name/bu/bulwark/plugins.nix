@@ -1,36 +1,60 @@
 {
   lib,
   stdenvNoCC,
+  buildNpmPackage,
   fetchFromGitHub,
   fetchzip,
+  nix-update,
   nix-update-script,
+  writeShellScript,
+  curl,
+  jq,
+  coreutils,
 }:
 let
+  # Store bundles ship a prebuilt index.js. Source checkouts (with
+  # npmDepsHash) need to be built with npm first.
   mkBulwarkPlugin =
     f:
-    stdenvNoCC.mkDerivation (
+    let
+      fromSource = (lib.fix f) ? npmDepsHash;
+      builder = if fromSource then buildNpmPackage else stdenvNoCC.mkDerivation;
+    in
+    builder (
       finalAttrs:
       let
-        inherit (f finalAttrs) pname version src;
+        attrs = f finalAttrs;
       in
-      {
-        pluginName = lib.removePrefix "bulwark-plugin-" pname;
+      attrs
+      // rec {
+        pluginName = lib.removePrefix "bulwark-plugin-" attrs.pname;
 
-        inherit pname version src;
-
-        __structuredAttrs = true;
         strictDeps = true;
 
         installPhase = ''
           runHook preInstall
 
-          mkdir -p $out
-          cp -r * $out
+          install -Dm644 -t $out manifest.json ${if fromSource then "dist/" else ""}index.js
+          if [ -d media ]; then
+            cp -r media $out/
+          fi
 
           runHook postInstall
         '';
 
-        passthru.updateScript = nix-update-script { };
+        # nix-update cannot discover versions on the extension store, so ask
+        # its API for the latest one and let nix-update fix the hashes.
+        passthru.updateScript =
+          if fromSource then
+            nix-update-script { }
+          else
+            writeShellScript "update-${attrs.pname}" ''
+              set -euo pipefail
+              version=$(${lib.getExe curl} -sSf https://extensions.bulwarkmail.org/api/v1/extension/${pluginName} \
+                | ${lib.getExe jq} -r '.data.versions[].version' \
+                | ${coreutils}/bin/sort -V | ${coreutils}/bin/tail -n1)
+              exec ${lib.getExe nix-update} bulwark-plugins.${pluginName} --version="$version"
+            '';
       }
     );
 in
@@ -159,6 +183,7 @@ in
       tag = "v${finalAttrs.version}";
       hash = "sha256-/n5FroXla8MvkVZJvPDIZcxm498hIInCJRIbAt9/LMQ=";
     };
+    npmDepsHash = "sha256-rIPl4HIETiZjnfDwORf/lauqN/nbVjLy0a29nm3+bHo=";
     meta = {
       description = "End-to-end OpenPGP (GnuPG-compatible) for webmail";
       homepage = "https://github.com/samuelmiller36/bulwark-gpg";
@@ -175,6 +200,7 @@ in
       tag = finalAttrs.version;
       hash = "sha256-VFX6kiOf0UclAT1Tntg3vmfBUK5Kevh0Vq57XEizcWA=";
     };
+    npmDepsHash = "sha256-O84i5VyIJ+MlhQAJhXRjmlzmwPl910HTFwFWg/vzrUE=";
     meta = {
       description = "End-to-end OpenPGP for webmail";
       homepage = "https://github.com/paulhenry46/pgp-plugin";
@@ -207,9 +233,8 @@ in
       extension = "zip";
       stripRoot = false;
     };
-    hash = "sha256-BGOOkZu3EHCo4uM+g4B81B+6BoXGLlq++hfbevfpWVc=";
     meta = {
-      description = "End-to-end S/MIME for webmail:";
+      description = "End-to-end S/MIME for webmail";
       homepage = "https://extensions.bulwarkmail.org/extension/smime";
       license = lib.licenses.agpl3Only;
       maintainers = with lib.maintainers; [ Cameo007 ];
@@ -224,7 +249,6 @@ in
       extension = "zip";
       stripRoot = false;
     };
-    hash = "sha256-JmT/r4Xhn9NiiAnPfya6EqWvpW3wpJFXjNpzmznMDcE=";
     meta = {
       description = "Adds a Spam Analysis section to a message's \"More details\" panel";
       homepage = "https://extensions.bulwarkmail.org/extension/spam-score";
