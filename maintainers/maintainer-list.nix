@@ -11060,6 +11060,12 @@
     name = "Martin Hardselius";
     keys = [ { fingerprint = "3F35 E4CA CBF4 2DE1 2E90  53E5 03A6 E6F7 8693 6619"; } ];
   };
+  harehare = {
+    email = "harehare1110@gmail.com";
+    github = "harehare";
+    githubId = 533078;
+    name = "Takahiro Sato";
+  };
   HarisDotParis = {
     name = "Haris";
     email = "git@haris.paris";
