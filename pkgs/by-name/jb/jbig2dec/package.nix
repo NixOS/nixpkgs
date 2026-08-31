@@ -46,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [ python3 ];
   doCheck = true;
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.jbig2dec.com/";
     description = "Decoder implementation of the JBIG2 image compression format";
