@@ -17731,7 +17731,7 @@ self: super: with self; {
 
   rapt-ble = callPackage ../development/python-modules/rapt-ble { };
 
-  rarfile = callPackage ../development/python-modules/rarfile { inherit (pkgs) libarchive; };
+  rarfile = callPackage ../development/python-modules/rarfile { inherit (pkgs) libarchive unrar; };
 
   raspyrfm-client = callPackage ../development/python-modules/raspyrfm-client { };
 
