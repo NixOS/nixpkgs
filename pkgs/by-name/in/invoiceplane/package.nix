@@ -11,7 +11,7 @@
   fetchzip,
 }:
 let
-  version = "1.7.1";
+  version = "1.7.2";
   # Fetch release tarball which contains language files
   # https://github.com/InvoicePlane/InvoicePlane/issues/1170
   languages = fetchzip {
@@ -27,13 +27,13 @@ php.buildComposerProject2 (finalAttrs: {
     owner = "InvoicePlane";
     repo = "InvoicePlane";
     tag = "v${version}";
-    hash = "sha256-Nci5GaCMYIjewq0W5emE6TDgc6JPz4bVVF3okNtHUag=";
+    hash = "sha256-LC/c1wdVNguv8BrrY7ysVwomgG8uTPoY1Fw8/EPFk2I=";
   };
 
   # Composer.lock validation currently fails for unknown reason
   composerStrictValidation = true;
 
-  vendorHash = "sha256-adKvKWo55SSbEKpgMJzR9vJQA8DnNXOTfSzp7t8s2Nk=";
+  vendorHash = "sha256-BRNglvJMREFD9iHPqXycw1WYlxuV9fL8/Zoba2Z3p8w=";
 
   nativeBuildInputs = [
     yarnConfigHook
@@ -45,7 +45,7 @@ php.buildComposerProject2 (finalAttrs: {
 
   offlineCache = fetchYarnDeps {
     inherit (finalAttrs) src patches;
-    hash = "sha256-rJlOYMnzFKui+caIFD4d82Q/RcDYnadeJ1G56fcNNQY=";
+    hash = "sha256-faEq9sVsE5xcqL07IIEmXcavcWPZicb7asmuhuBI+h4=";
   };
 
   postBuild = ''
@@ -57,7 +57,7 @@ php.buildComposerProject2 (finalAttrs: {
     chmod -R u+w $out/share
     mv $out/share/php/invoiceplane/* $out/
     cp -r ${languages}/application/language $out/application/
-    rm -r $out/{composer.json,composer.lock,CONTRIBUTING.md,docker-compose.yml,Gruntfile.js,package.json,node_modules,yarn.lock,share}
+    rm -r $out/{composer.json,composer.lock,docker-compose.yml,Gruntfile.js,package.json,node_modules,yarn.lock,share}
   '';
 
   passthru.tests = {
