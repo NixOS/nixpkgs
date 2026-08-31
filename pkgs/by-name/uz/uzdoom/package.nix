@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  alsa-lib,
   bzip2,
   cmake,
   glib,
@@ -64,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
     libx11
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

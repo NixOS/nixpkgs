@@ -14382,6 +14382,12 @@
     githubId = 5124422;
     name = "Julien Urraca";
   };
+  justanoobcoder = {
+    email = "syaorancode@gmail.com";
+    github = "justanoobcoder";
+    githubId = 57614330;
+    name = "Nguyen Hong Hiep";
+  };
   justanotherariel = {
     email = "ariel@ebersberger.io";
     github = "justanotherariel";
@@ -25584,6 +25590,12 @@
     github = "samuelrivas";
     githubId = 107703;
     name = "Samuel Rivas";
+  };
+  samuelskovbakke = {
+    email = "samuel@skovbakke.dk";
+    github = "samuelskovbakke";
+    githubId = 25748723;
+    name = "Samuel Skovbakke";
   };
   samueltardieu = {
     email = "nixpkgs@sam.rfc1149.net";

@@ -34,7 +34,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sentence-transformers";
-  version = "5.7.0";
+  version = "6.0.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -42,7 +42,7 @@ buildPythonPackage (finalAttrs: {
     owner = "huggingface";
     repo = "sentence-transformers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0H/sgSxEcDnZkDEtAroSV9zVLfLF04AsjSV0m0Csyk0=";
+    hash = "sha256-uT/3TxhKJKeTz/xBho/YjJJPk9BdCM4PPPNiHruHg/U=";
   };
 
   build-system = [ setuptools ];
@@ -93,12 +93,17 @@ buildPythonPackage (finalAttrs: {
     "test_dimension_exceeds_model_dimension_raises_error"
     "test_dimensions_sorted_descending"
     "test_empty_matryoshka_dims_raises_error"
+    "test_encode_document_with_lambda_pooling"
+    "test_encode_document_with_pooling_kwarg"
+    "test_encode_document_with_pooling_shrinks_token_counts"
     "test_forward"
     "test_initialization_with_embedding_dim"
     "test_initialization_with_embedding_weights"
     "test_loading_model2vec"
+    "test_metrics_are_independent_of_corpus_chunk_size"
     "test_mine_hard_negatives_with_prompt"
     "test_model_card_base"
+    "test_model_card_renders_query_and_document_lengths"
     "test_model_card_reuse"
     "test_model_dimension_not_in_dims_warns"
     "test_mse_loss_matryoshka"
@@ -106,8 +111,14 @@ buildPythonPackage (finalAttrs: {
     "test_negative_dimension_raises_error"
     "test_pairwise_angle_sim_even_and_odd_sparse_embeddings"
     "test_paraphrase_mining"
+    "test_pooling_pools_queries_when_opted_in"
     "test_pooling_prompt_attention_mask_respects_include_prompt"
+    "test_pooling_prompt_exclusion_is_idempotent"
+    "test_pooling_respects_include_prompt"
+    "test_pooling_skips_queries"
     "test_pretrained_model"
+    "test_real_query_token_slice_with_query_expansion"
+    "test_real_query_token_slice_with_query_prompt"
     "test_router_as_middle_module"
     "test_router_backwards_compatibility"
     "test_router_encode"
@@ -141,6 +152,9 @@ buildPythonPackage (finalAttrs: {
     "test_hf_argument_parser"
     "test_hf_argument_parser_incorrect_string_arguments"
 
+    # `datasets` still imports `torchvision.io.VideoReader`, removed in torchvision 0.27
+    "test_formatted_train_dataset_raises_clear_error"
+    "test_max_list_length_truncates_tensor_labels_in_step"
   ]
   ++ lib.optionals (pythonAtLeast "3.14") [
     # TypeError: Pickler._batch_setitems() takes 2 positional arguments but 3 were given
@@ -152,7 +166,16 @@ buildPythonPackage (finalAttrs: {
     "test_round_robin_batch_sampler"
     "test_round_robin_batch_sampler_vallue_error"
   ]
-  ++ lib.optionals (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
+    # RuntimeError: Failed to initialize cpuinfo!
+    "test_hps_collapses_spurious_ties"
+    "test_low_precision_scores_match_float32_reference"
+    "test_pairwise_scores_are_float32_for_low_precision_inputs"
+    "test_pooling_supports_low_precision_dtypes"
+    "test_scores_are_float32_for_low_precision_inputs"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     # These sparse tests also time out, on x86_64-darwin.
     "sim_sparse"
   ];
@@ -166,10 +189,12 @@ buildPythonPackage (finalAttrs: {
     "tests/cross_encoder/evaluation/test_reranking.py"
     "tests/cross_encoder/losses/test_cached_multiple_negatives_ranking.py"
     "tests/cross_encoder/losses/test_misc.py"
-    "tests/cross_encoder/losses/test_misc.py"
     "tests/cross_encoder/test_model.py"
     "tests/cross_encoder/test_model_card.py"
     "tests/cross_encoder/test_train_stsb.py"
+    "tests/multi_vector_encoder/test_evaluators.py"
+    "tests/multi_vector_encoder/test_model.py"
+    "tests/multi_vector_encoder/test_multi_process.py"
     "tests/sentence_transformer/evaluation/test_binary_classification_evaluator.py"
     "tests/sentence_transformer/losses/test_adaptive_layer.py"
     "tests/sentence_transformer/losses/test_cached_gist_embed.py"
@@ -178,13 +203,15 @@ buildPythonPackage (finalAttrs: {
     "tests/sentence_transformer/losses/test_denoising_auto_encoder.py"
     "tests/sentence_transformer/losses/test_embed_distill.py"
     "tests/sentence_transformer/losses/test_gradcache.py"
-    "tests/sentence_transformer/losses/test_gradcache.py"
     "tests/sentence_transformer/losses/test_mega_batch_margin.py"
+    "tests/sentence_transformer/losses/test_merged_forward.py"
     "tests/sentence_transformer/test_compute_embeddings.py"
     "tests/sentence_transformer/test_model.py"
     "tests/sentence_transformer/test_model_card.py"
     "tests/sentence_transformer/test_model_card_data.py"
     "tests/sparse_encoder/losses/test_cached_splade.py"
+    "tests/sparse_encoder/losses/test_merged_forward.py"
+    "tests/sparse_encoder/losses/test_sparse_distill_kl_div.py"
     "tests/sparse_encoder/modules/test_csr.py"
     "tests/sparse_encoder/modules/test_sparse_static_embedding.py"
     "tests/sparse_encoder/test_model.py"
