@@ -49,9 +49,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Media metadata parser and formatter designed for human consumption, powered by FFmpeg";
-    maintainers = [ ];
     license = lib.licenses.mit;
     homepage = "https://github.com/zmwangx/metadata";
     mainProgram = "metadata";
+    maintainers = with lib.maintainers; [
+      debtquity
+    ];
   };
 })
