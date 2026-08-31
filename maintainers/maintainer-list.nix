@@ -725,6 +725,12 @@
     githubId = 63286;
     name = "Adam Hose";
   };
+  adithayyil = {
+    email = "adithayyil@proton.me";
+    github = "adithayyil";
+    githubId = 90326965;
+    name = "Adithya Thayyil";
+  };
   adjacentresearch = {
     email = "nate@adjacentresearch.xyz";
     github = "0xperp";
