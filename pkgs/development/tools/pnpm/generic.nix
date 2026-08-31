@@ -65,6 +65,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       cp -R . $out/libexec/pnpm
       ln -s $out/libexec/pnpm/bin/pnpm.${ext} $out/bin/pnpm
       ln -s $out/libexec/pnpm/bin/pnpx.${ext} $out/bin/pnpx
+      ln -s $out/libexec/pnpm/bin/pnpm.${ext} $out/bin/pn
+      ln -s $out/libexec/pnpm/bin/pnpx.${ext} $out/bin/pnx
 
       runHook postInstall
     '';
