@@ -114,7 +114,15 @@ def retry(
     """Call the given function repeatedly, with a one second interval between
     retries, until it returns True or a timeout is reached.
 
-    Note that the timeout shown will include the time of the last attempted run.
+    ``timeout`` is a *total budget*: no further attempt is started once it has
+    elapsed. It is not a bound on a single attempt. ``retry`` calls ``fn`` and
+    cannot interrupt it, so a probe that can block has to bound itself -- see
+    ``_AttemptBudget``, which is how the ``wait_for_*`` helpers do it.
+
+    One final attempt runs after the budget is spent, called with ``True`` so
+    that it can report what it last saw. Its duration is therefore on top of
+    ``timeout``, which is why the timeout reported on failure covers the last
+    attempted run as well.
 
     Has a default timeout of 15 minutes which can be modified.
     The ``timeout_seconds`` argument is deprecated. Use ``timeout`` instead.
@@ -147,6 +155,38 @@ def retry(
             f"action timed out after {elapsed().total_seconds():.2f} seconds "
             f"(timeout={timeout.total_seconds()})"
         )
+
+
+class _AttemptBudget:
+    """Derives the bound for a single `retry` attempt from a total budget.
+
+    The `wait_for_*` helpers take two distinct quantities:
+
+    -   `timeout`, the total budget handed to `retry`, and
+    -   `attempt_timeout`, how long any one probe may block before it is
+        abandoned and retried.
+
+    `retry` only enforces the first, so the probe has to enforce the second on
+    itself. This does that bookkeeping: `next_attempt` returns the bound for the
+    attempt that is about to start, which is the per-attempt allowance clamped
+    to what is left of the budget.
+
+    Once the budget is spent -- which is when `retry` runs its one final
+    attempt -- the full allowance is handed out again rather than nothing, so
+    that final attempt still gets a fair chance to succeed and to report what it
+    saw.
+    """
+
+    def __init__(self, total: Duration, attempt: Duration | None = None) -> None:
+        budget = as_timedelta(total)
+        self.attempt = budget if attempt is None else as_timedelta(attempt)
+        self.deadline = time.monotonic() + budget.total_seconds()
+
+    def next_attempt(self) -> dt.timedelta:
+        remaining = dt.timedelta(seconds=self.deadline - time.monotonic())
+        if remaining <= dt.timedelta(0):
+            return self.attempt
+        return min(self.attempt, remaining)
 
 
 class QemuStartCommand:
@@ -346,7 +386,12 @@ class BaseMachine(ABC):
         """Shutdown the machine gracefully, waiting for it to exit."""
         ...
 
-    def systemctl(self, q: str, user: str | None = None) -> tuple[int, str]:
+    def systemctl(
+        self,
+        q: str,
+        user: str | None = None,
+        timeout: Duration | None = dt.timedelta(minutes=15),
+    ) -> tuple[int, str]:
         """
         Runs `systemctl` commands with optional support for
         `systemctl --user`
@@ -359,38 +404,51 @@ class BaseMachine(ABC):
         # `systemctl --user list-jobs --no-pager`
         machine.systemctl("list-jobs --no-pager", "any-user")
         ```
+
+        See `execute` for details on `timeout`.
         """
         if user is not None:
             q = q.replace("'", "\\'")
             return self.execute(
                 f"su -l {user} --shell /bin/sh -c "
                 "$'XDG_RUNTIME_DIR=/run/user/`id -u` "
-                f"systemctl --user {q}'"
+                f"systemctl --user {q}'",
+                timeout=timeout,
             )
-        return self.execute(f"systemctl {q}")
+        return self.execute(f"systemctl {q}", timeout=timeout)
 
     def wait_for_unit(
         self,
         unit: str,
         user: str | None = None,
         timeout: Duration = dt.timedelta(minutes=15),
+        attempt_timeout: Duration | None = None,
     ) -> None:
         """
         Wait for a systemd unit to get into "active" state.
         Throws exceptions on "failed" and "inactive" states as well as after
         timing out.
+
+        `timeout` is the total budget for the wait. `attempt_timeout` bounds a
+        single `systemctl` call, and defaults to the whole of `timeout`.
         """
         _warn_if_numeric_duration(timeout, "wait_for_unit")
+        _warn_if_numeric_duration(attempt_timeout, "wait_for_unit")
+        budget = _AttemptBudget(timeout, attempt_timeout)
 
         def check_active(_last_try: bool) -> bool:
-            state = self.get_unit_property(unit, "ActiveState", user)
+            state = self.get_unit_property(
+                unit, "ActiveState", user, timeout=budget.next_attempt()
+            )
             if state == "failed":
                 raise RequestedAssertionFailed(f'unit "{unit}" reached state "{state}"')
 
             if state == "inactive":
-                status, jobs = self.systemctl("list-jobs --full 2>&1", user)
+                status, jobs = self.systemctl(
+                    "list-jobs --full 2>&1", user, timeout=budget.next_attempt()
+                )
                 if "No jobs" in jobs:
-                    info = self.get_unit_info(unit, user)
+                    info = self.get_unit_info(unit, user, timeout=budget.next_attempt())
                     if info["ActiveState"] == state:
                         raise RequestedAssertionFailed(
                             f'unit "{unit}" is inactive and there are no pending jobs'
@@ -404,11 +462,18 @@ class BaseMachine(ABC):
         ):
             retry(check_active, as_timedelta(timeout))
 
-    def get_unit_info(self, unit: str, user: str | None = None) -> dict[str, str]:
+    def get_unit_info(
+        self,
+        unit: str,
+        user: str | None = None,
+        timeout: Duration | None = dt.timedelta(minutes=15),
+    ) -> dict[str, str]:
         """
         Get a dictionary of systemd unit properties, as obtained via `systemctl show`.
+
+        See `execute` for details on `timeout`.
         """
-        status, lines = self.systemctl(f'--no-pager show "{unit}"', user)
+        status, lines = self.systemctl(f'--no-pager show "{unit}"', user, timeout)
         if status != 0:
             raise RequestedAssertionFailed(
                 f'retrieving systemctl info for unit "{unit}"'
@@ -434,13 +499,17 @@ class BaseMachine(ABC):
         unit: str,
         property: str,
         user: str | None = None,
+        timeout: Duration | None = dt.timedelta(minutes=15),
     ) -> str:
         """
         Get the string value of a single systemd unit property
+
+        See `execute` for details on `timeout`.
         """
         status, lines = self.systemctl(
             f'--no-pager show "{unit}" --property="{property}"',
             user,
+            timeout,
         )
         if status != 0:
             raise RequestedAssertionFailed(
@@ -514,7 +583,10 @@ class BaseMachine(ABC):
         return output
 
     def wait_until_succeeds(
-        self, command: str, timeout: Duration = dt.timedelta(minutes=15)
+        self,
+        command: str,
+        timeout: Duration = dt.timedelta(minutes=15),
+        attempt_timeout: Duration | None = None,
     ) -> str:
         """
         Repeat a shell command on 1-second intervals until it succeeds.
@@ -528,13 +600,28 @@ class BaseMachine(ABC):
         A bare number is still accepted and interpreted as a number of seconds.
         See `execute` for details on command execution.
         Throws an exception on timeout.
+
+        `timeout` is the total budget for the wait. `attempt_timeout` bounds a
+        single run of `command`, and defaults to the whole of `timeout` -- so by
+        default one run that blocks consumes the budget on its own and the
+        command is effectively tried once. Pass `attempt_timeout` for a command
+        that can hang:
+            ```py
+            wait_until_succeeds(
+                cmd,
+                timeout=dt.timedelta(minutes=2),
+                attempt_timeout=dt.timedelta(seconds=5),
+            )
+            ```
         """
         _warn_if_numeric_duration(timeout, "wait_until_succeeds")
+        _warn_if_numeric_duration(attempt_timeout, "wait_until_succeeds")
+        budget = _AttemptBudget(timeout, attempt_timeout)
         output = ""
 
         def check_success(_last_try: bool) -> bool:
             nonlocal output
-            status, output = self.execute(command, timeout=timeout)
+            status, output = self.execute(command, timeout=budget.next_attempt())
             return status == 0
 
         with self.nested(f"waiting for success: {command}"):
@@ -542,17 +629,22 @@ class BaseMachine(ABC):
             return output
 
     def wait_until_fails(
-        self, command: str, timeout: Duration = dt.timedelta(minutes=15)
+        self,
+        command: str,
+        timeout: Duration = dt.timedelta(minutes=15),
+        attempt_timeout: Duration | None = None,
     ) -> str:
         """
         Like `wait_until_succeeds`, but repeating the command until it fails.
         """
         _warn_if_numeric_duration(timeout, "wait_until_fails")
+        _warn_if_numeric_duration(attempt_timeout, "wait_until_fails")
+        budget = _AttemptBudget(timeout, attempt_timeout)
         output = ""
 
         def check_failure(_last_try: bool) -> bool:
             nonlocal output
-            status, output = self.execute(command, timeout=timeout)
+            status, output = self.execute(command, timeout=budget.next_attempt())
             return status != 0
 
         with self.nested(f"waiting for failure: {command}"):
@@ -582,15 +674,25 @@ class BaseMachine(ABC):
         self.succeed(f"sleep {as_seconds(duration)}")
 
     def wait_for_file(
-        self, filename: str, timeout: Duration = dt.timedelta(minutes=15)
+        self,
+        filename: str,
+        timeout: Duration = dt.timedelta(minutes=15),
+        attempt_timeout: Duration | None = None,
     ) -> None:
         """
         Waits until the file exists in the machine's file system.
+
+        `timeout` is the total budget for the wait. `attempt_timeout` bounds a
+        single check, and defaults to the whole of `timeout`.
         """
         _warn_if_numeric_duration(timeout, "wait_for_file")
+        _warn_if_numeric_duration(attempt_timeout, "wait_for_file")
+        budget = _AttemptBudget(timeout, attempt_timeout)
 
         def check_file(_last_try: bool) -> bool:
-            status, _ = self.execute(f"test -e {filename}")
+            status, _ = self.execute(
+                f"test -e {filename}", timeout=budget.next_attempt()
+            )
             return status == 0
 
         with self.nested(f"waiting for file '{filename}'"):
@@ -601,15 +703,25 @@ class BaseMachine(ABC):
         port: int,
         addr: str = "localhost",
         timeout: Duration = dt.timedelta(minutes=15),
+        attempt_timeout: Duration | None = None,
     ) -> None:
         """
         Wait until a process is listening on the given TCP port and IP address
         (default `localhost`).
+
+        `timeout` is the total budget for the wait. `attempt_timeout` bounds a
+        single probe, and defaults to the whole of `timeout`. A probe against an
+        address that silently drops packets blocks until the kernel gives up on
+        the connection, so a short `attempt_timeout` is worth setting there.
         """
         _warn_if_numeric_duration(timeout, "wait_for_open_port")
+        _warn_if_numeric_duration(attempt_timeout, "wait_for_open_port")
+        budget = _AttemptBudget(timeout, attempt_timeout)
 
         def port_is_open(_last_try: bool) -> bool:
-            status, _ = self.execute(f"nc -z {addr} {port}")
+            status, _ = self.execute(
+                f"nc -z {addr} {port}", timeout=budget.next_attempt()
+            )
             return status == 0
 
         with self.nested(f"waiting for TCP port {port} on {addr}"):
@@ -620,12 +732,18 @@ class BaseMachine(ABC):
         addr: str,
         is_datagram: bool = False,
         timeout: Duration = dt.timedelta(minutes=15),
+        attempt_timeout: Duration | None = None,
     ) -> None:
         """
         Wait until a process is listening on the given UNIX-domain socket
         (default to a UNIX-domain stream socket).
+
+        `timeout` is the total budget for the wait. `attempt_timeout` bounds a
+        single probe, and defaults to the whole of `timeout`.
         """
         _warn_if_numeric_duration(timeout, "wait_for_open_unix_socket")
+        _warn_if_numeric_duration(attempt_timeout, "wait_for_open_unix_socket")
+        budget = _AttemptBudget(timeout, attempt_timeout)
 
         nc_flags = [
             "-z",
@@ -633,7 +751,9 @@ class BaseMachine(ABC):
         ]
 
         def socket_is_open(_last_try: bool) -> bool:
-            status, _ = self.execute(f"nc {' '.join(nc_flags)} {addr}")
+            status, _ = self.execute(
+                f"nc {' '.join(nc_flags)} {addr}", timeout=budget.next_attempt()
+            )
             return status == 0
 
         with self.nested(
@@ -646,15 +766,23 @@ class BaseMachine(ABC):
         port: int,
         addr: str = "localhost",
         timeout: Duration = dt.timedelta(minutes=15),
+        attempt_timeout: Duration | None = None,
     ) -> None:
         """
         Wait until nobody is listening on the given TCP port and IP address
         (default `localhost`).
+
+        `timeout` is the total budget for the wait. `attempt_timeout` bounds a
+        single probe, and defaults to the whole of `timeout`.
         """
         _warn_if_numeric_duration(timeout, "wait_for_closed_port")
+        _warn_if_numeric_duration(attempt_timeout, "wait_for_closed_port")
+        budget = _AttemptBudget(timeout, attempt_timeout)
 
         def port_is_closed(_last_try: bool) -> bool:
-            status, _ = self.execute(f"nc -z {addr} {port}")
+            status, _ = self.execute(
+                f"nc -z {addr} {port}", timeout=budget.next_attempt()
+            )
             return status != 0
 
         with self.nested(f"waiting for TCP port {port} on {addr} to be closed"):
@@ -939,26 +1067,40 @@ class QemuMachine(BaseMachine):
                 break
         return "".join(output_buffer)
 
-    def get_tty_text(self, tty: str) -> str:
+    def get_tty_text(
+        self, tty: str, timeout: Duration | None = dt.timedelta(minutes=15)
+    ) -> str:
         """
         Get the output printed to a given TTY.
+
+        See `execute` for details on `timeout`.
         """
         status, output = self.execute(
-            f"fold -w$(stty -F /dev/tty{tty} size | awk '{{print $2}}') /dev/vcs{tty}"
+            f"fold -w$(stty -F /dev/tty{tty} size | awk '{{print $2}}') /dev/vcs{tty}",
+            timeout=timeout,
         )
         return output
 
     def wait_until_tty_matches(
-        self, tty: str, regexp: str, timeout: Duration = dt.timedelta(minutes=15)
+        self,
+        tty: str,
+        regexp: str,
+        timeout: Duration = dt.timedelta(minutes=15),
+        attempt_timeout: Duration | None = None,
     ) -> None:
         """Wait until the visible output on the chosen TTY matches regular
         expression. Throws an exception on timeout.
+
+        `timeout` is the total budget for the wait. `attempt_timeout` bounds a
+        single read of the TTY, and defaults to the whole of `timeout`.
         """
         _warn_if_numeric_duration(timeout, "wait_until_tty_matches")
+        _warn_if_numeric_duration(attempt_timeout, "wait_until_tty_matches")
+        budget = _AttemptBudget(timeout, attempt_timeout)
         matcher = re.compile(regexp)
 
         def tty_matches(last_try: bool) -> bool:
-            text = self.get_tty_text(tty)
+            text = self.get_tty_text(tty, timeout=budget.next_attempt())
             if last_try:
                 self.log(
                     f"Last chance to match /{regexp}/ on TTY{tty}, "
@@ -1122,15 +1264,25 @@ class QemuMachine(BaseMachine):
                 self.send_key(char, delay, log=False)
 
     def wait_for_file(
-        self, filename: str, timeout: Duration = dt.timedelta(minutes=15)
+        self,
+        filename: str,
+        timeout: Duration = dt.timedelta(minutes=15),
+        attempt_timeout: Duration | None = None,
     ) -> None:
         """
         Waits until the file exists in the machine's file system.
+
+        `timeout` is the total budget for the wait. `attempt_timeout` bounds a
+        single check, and defaults to the whole of `timeout`.
         """
         _warn_if_numeric_duration(timeout, "wait_for_file")
+        _warn_if_numeric_duration(attempt_timeout, "wait_for_file")
+        budget = _AttemptBudget(timeout, attempt_timeout)
 
         def check_file(_last_try: bool) -> bool:
-            status, _ = self.execute(f"test -e {filename}")
+            status, _ = self.execute(
+                f"test -e {filename}", timeout=budget.next_attempt()
+            )
             return status == 0
 
         with self.nested(f"waiting for file '{filename}'"):
@@ -1465,43 +1617,63 @@ class QemuMachine(BaseMachine):
         self.send_key("ctrl-alt-delete")
         self.connected = False
 
-    def wait_for_x(self, timeout: Duration = dt.timedelta(minutes=15)) -> None:
+    def wait_for_x(
+        self,
+        timeout: Duration = dt.timedelta(minutes=15),
+        attempt_timeout: Duration | None = None,
+    ) -> None:
         """
         Wait until it is possible to connect to the X server.
+
+        `timeout` is the total budget for the wait. `attempt_timeout` bounds a
+        single check, and defaults to the whole of `timeout`.
         """
         _warn_if_numeric_duration(timeout, "wait_for_x")
+        _warn_if_numeric_duration(attempt_timeout, "wait_for_x")
+        budget = _AttemptBudget(timeout, attempt_timeout)
 
         def check_x(_last_try: bool) -> bool:
             cmd = (
                 "journalctl -b SYSLOG_IDENTIFIER=systemd | "
                 + 'grep "Reached target Current graphical"'
             )
-            status, _ = self.execute(cmd)
+            status, _ = self.execute(cmd, timeout=budget.next_attempt())
             if status != 0:
                 return False
-            status, _ = self.execute("[ -e /tmp/.X11-unix/X0 ]")
+            status, _ = self.execute(
+                "[ -e /tmp/.X11-unix/X0 ]", timeout=budget.next_attempt()
+            )
             return status == 0
 
         with self.nested("waiting for the X11 server"):
             retry(check_x, as_timedelta(timeout))
 
-    def get_window_names(self) -> list[str]:
+    def get_window_names(self, timeout: Duration | None = None) -> list[str]:
         return self.succeed(
-            r"xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'"
+            r"xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'",
+            timeout=timeout,
         ).splitlines()
 
     def wait_for_window(
-        self, regexp: str, timeout: Duration = dt.timedelta(minutes=15)
+        self,
+        regexp: str,
+        timeout: Duration = dt.timedelta(minutes=15),
+        attempt_timeout: Duration | None = None,
     ) -> None:
         """
         Wait until an X11 window has appeared whose name matches the given
         regular expression, e.g., `wait_for_window("Terminal")`.
+
+        `timeout` is the total budget for the wait. `attempt_timeout` bounds a
+        single attempt, and defaults to the whole of `timeout`.
         """
         _warn_if_numeric_duration(timeout, "wait_for_window")
+        _warn_if_numeric_duration(attempt_timeout, "wait_for_window")
+        budget = _AttemptBudget(timeout, attempt_timeout)
         pattern = re.compile(regexp)
 
         def window_is_visible(last_try: bool) -> bool:
-            names = self.get_window_names()
+            names = self.get_window_names(timeout=budget.next_attempt())
             if last_try:
                 self.log(
                     f"Last chance to match {regexp} on the window list,"
