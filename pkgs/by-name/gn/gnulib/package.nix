@@ -41,6 +41,8 @@ stdenv.mkDerivation {
     memcpy-fix-backport-250512 = ./memcpy-fix-backport-250512.patch;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Central location for code to be shared among GNU packages";
     homepage = "https://www.gnu.org/software/gnulib/";
