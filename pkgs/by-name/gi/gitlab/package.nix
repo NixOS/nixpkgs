@@ -123,7 +123,7 @@ let
               cp Cargo.lock $out
             '';
           };
-          hash = "sha256-ikizLu1B+stdk+HDGjrACOpgptg0jfbHcoqfrJtUpEY=";
+          hash = "sha256-zRw3eNj17kHVazqeuXp4CxNl1FWaXufINb3yzvVcQS0=";
         };
 
         dontBuild = false;
@@ -176,7 +176,7 @@ let
             cp Cargo.lock $out
           '';
 
-          hash = "sha256-v0XIAyBqwFpO4n6EUgXaE7/yuyYAva8arv4unVPqqN4=";
+          hash = "sha256-v6Wd0FPgL4zyAbW9iarpU6R9d45fQMOo7yt9vccXbgc=";
         };
 
         postPatch = ''
@@ -237,7 +237,7 @@ let
               cp Cargo.lock $out
             '';
           };
-          hash = "sha256-lhD8vlqK9a38ZLBD6YagWnJ/DQ8YqbC1NxEyzYnoLh8=";
+          hash = "sha256-pEgmtBnvLjc2xG26hdLQnJOJDFv8YaYlOW/OYqJL98I=";
         };
 
         nativeBuildInputs = [
