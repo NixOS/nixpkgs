@@ -59,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "C port or High Dynamic Range (HDR) Histogram";
     homepage = "https://github.com/HdrHistogram/HdrHistogram_c";
