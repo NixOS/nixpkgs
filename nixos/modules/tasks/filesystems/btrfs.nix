@@ -15,11 +15,12 @@ let
     mkIf
     optionals
     mkDefault
-    nameValuePair
-    listToAttrs
     filterAttrs
     mapAttrsToList
     foldl'
+    getExe
+    escape
+    versionOlder
     ;
 
   inInitrd = config.boot.initrd.supportedFilesystems.btrfs or false;
@@ -149,66 +150,84 @@ in
           )
         );
 
-      # TODO: Did not manage to do it via the usual btrfs-scrub@.timer/.service
-      # template units due to problems enabling the parameterized units,
-      # so settled with many units and templating via nix for now.
-      # https://github.com/NixOS/nixpkgs/pull/32496#discussion_r156527544
-      systemd.timers =
-        let
-          scrubTimer =
-            fs:
-            let
-              fs' = utils.escapeSystemdPath fs;
-            in
-            nameValuePair "btrfs-scrub-${fs'}" {
-              description = "regular btrfs scrub timer on ${fs}";
+      systemd.services."btrfs-scrub@" = {
+        description = "btrfs scrub on %f";
+        documentation = [ "man:btrfs-scrub(8)" ];
+        # scrub prevents suspend2ram or proper shutdown on linux < 6.19
+        conflicts = optionals (versionOlder config.boot.kernelPackages.kernel.version "6.19") [
+          "shutdown.target"
+          "sleep.target"
+        ];
+        before = optionals (versionOlder config.boot.kernelPackages.kernel.version "6.19") [
+          "shutdown.target"
+          "sleep.target"
+        ];
 
-              wantedBy = [ "timers.target" ];
-              timerConfig = {
-                OnCalendar = cfgScrub.interval;
-                AccuracySec = "1d";
-                Persistent = true;
-              };
-            };
-        in
-        listToAttrs (map scrubTimer cfgScrub.fileSystems);
+        unitConfig.RequiresMountsFor = "%f";
 
-      systemd.services =
-        let
-          scrubService =
-            fs:
-            let
-              fs' = utils.escapeSystemdPath fs;
-            in
-            nameValuePair "btrfs-scrub-${fs'}" {
-              description = "btrfs scrub on ${fs}";
-              documentation = [ "man:btrfs-scrub(8)" ];
-              # scrub prevents suspend2ram or proper shutdown on linux < 6.19
-              conflicts = lib.optionals (lib.versionOlder config.boot.kernelPackages.kernel.version "6.19") [
-                "shutdown.target"
-                "sleep.target"
-              ];
-              before = lib.optionals (lib.versionOlder config.boot.kernelPackages.kernel.version "6.19") [
-                "shutdown.target"
-                "sleep.target"
-              ];
+        serviceConfig =
+          let
+            btrfsCmd = getExe pkgs.btrfs-progs;
+            btrfsCancelCmd = pkgs.writers.writePython3 "btrfs-scrub-maybe-cancel" { } ''
+              import subprocess
+              import sys
 
-              serviceConfig = {
-                # simple and not oneshot, otherwise ExecStop is not used
-                Type = "simple";
-                Nice = 19;
-                IOSchedulingClass = "idle";
-                ExecStart = "${pkgs.btrfs-progs}/bin/btrfs scrub start -B ${
-                  lib.optionalString (cfgScrub.limit != null) "--limit ${cfgScrub.limit}"
-                } ${fs}";
-                # if the service is stopped before scrub end, cancel it
-                ExecStop = pkgs.writeShellScript "btrfs-scrub-maybe-cancel" ''
-                  (${pkgs.btrfs-progs}/bin/btrfs scrub status ${fs} | ${pkgs.gnugrep}/bin/grep finished) || ${pkgs.btrfs-progs}/bin/btrfs scrub cancel ${fs}
-                '';
-              };
-            };
-        in
-        listToAttrs (map scrubService cfgScrub.fileSystems);
+              btrfs = "${escape [ "\"" "\\" ] btrfsCmd}"
+              result = subprocess.run(
+                  [btrfs, "scrub", "cancel"] + sys.argv[1:],
+                  stderr=subprocess.PIPE,
+                  check=False,
+                  shell=False
+              )
+
+              # ignore errors if there was no running scrub to cancel
+              if result.returncode == 2:
+                  sys.exit(0)
+
+              sys.stderr.buffer.write(result.stderr)
+              sys.exit(result.returncode)
+            '';
+            additionalScrubArgs = optionals (cfgScrub.limit != null) [
+              "--limit"
+              cfgScrub.limit
+            ];
+          in
+          {
+            # simple and not oneshot, otherwise ExecStop is not used
+            Type = "simple";
+            Nice = 19;
+            CPUSchedulingPolicy = "idle";
+            IOSchedulingClass = "idle";
+            ExecStart = "${
+              utils.escapeSystemdExecArgs (
+                [
+                  btrfsCmd
+                  "scrub"
+                  "start"
+                  "-B"
+                ]
+                ++ additionalScrubArgs
+              )
+            } %f";
+            # if the service is stopped before scrub end, cancel it
+            ExecStop = "${utils.escapeSystemdExecArg btrfsCancelCmd} %f";
+          };
+      };
+
+      systemd.timers."btrfs-scrub@" = {
+        description = "Regular btrfs scrub on %f";
+        documentation = [ "man:btrfs-scrub(8)" ];
+
+        timerConfig = {
+          OnCalendar = cfgScrub.interval;
+          AccuracySec = "1d";
+          Persistent = true;
+        };
+      };
+
+      systemd.targets.timers.wants = map (
+        fs: "btrfs-scrub@${utils.escapeSystemdPath fs}.timer"
+      ) cfgScrub.fileSystems;
     })
   ];
 }
