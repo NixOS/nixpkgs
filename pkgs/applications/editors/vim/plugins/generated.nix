@@ -1919,12 +1919,12 @@ final: prev: {
 
   blink-cmp-npm-nvim = buildVimPlugin {
     pname = "blink-cmp-npm.nvim";
-    version = "0.3.0";
+    version = "0.4.0";
     src = fetchFromGitHub {
       owner = "alexandre-abrioux";
       repo = "blink-cmp-npm.nvim";
-      tag = "v0.3.0";
-      hash = "sha256-0j8CljfXsEoZ+FkxB/YrT2YHvg87j1eyuhGgjxh+Dg0=";
+      tag = "v0.4.0";
+      hash = "sha256-zxE+99DEv32dUSGq+KiI4+gkVP2U07XoW8TOYLcoMc8=";
     };
     meta.homepage = "https://github.com/alexandre-abrioux/blink-cmp-npm.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
