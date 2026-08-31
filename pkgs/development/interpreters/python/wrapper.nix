@@ -24,7 +24,7 @@ let
   env =
     let
       paths = requiredPythonModules extraLibs ++ [
-        (runCommand "bin"
+        (runCommand "${python.name}-env-bin"
           {
             strictDeps = true;
             __structuredAttrs = true;
