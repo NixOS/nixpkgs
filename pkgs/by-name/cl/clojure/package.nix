@@ -9,8 +9,8 @@
   jdk,
   rlwrap,
   makeWrapper,
-  writeScript,
   versionCheckHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -85,23 +85,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = writeScript "update-clojure" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl common-updater-scripts jq
-
-    set -euo pipefail
-    shopt -s inherit_errexit
-
-    # `jq -r '.[0].name'` results in `v0.0`
-    latest_version="$(curl \
-      ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
-      -fsL "https://api.github.com/repos/clojure/brew-install/tags" \
-      | jq -r '.[1].name')"
-
-    update-source-version clojure "$latest_version"
-  '';
-
-  passthru.jdk = jdk;
+  passthru = {
+    inherit jdk;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Lisp dialect for the JVM";
