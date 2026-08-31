@@ -2512,8 +2512,7 @@ with pkgs;
 
   ioskeley-mono = recurseIntoAttrs (callPackage ../data/fonts/ioskeley-mono { });
 
-  # Not in aliases because it wouldn't get picked up by callPackage
-  netbox = netbox_4_6;
+  netbox_4_6 = netbox;
 
   netboxPlugins = recurseIntoAttrs netbox.plugins;
 
@@ -7140,6 +7139,8 @@ with pkgs;
   apacheHttpdPackages = apacheHttpdPackages_2_4;
 
   appdaemon = callPackage ../servers/home-assistant/appdaemon.nix { };
+
+  bulwark-plugins = recurseIntoAttrs (callPackage ../by-name/bu/bulwark/plugins.nix { });
 
   cassandra_4 = callPackage ../servers/nosql/cassandra/4.nix {
     # Effective Cassandra 4.0.2 there is full Java 11 support

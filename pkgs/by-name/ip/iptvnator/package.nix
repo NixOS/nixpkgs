@@ -17,28 +17,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iptvnator";
-  version = "0.22.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "4gray";
     repo = "iptvnator";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LKLM9SQ7TJCmsH2cDN4GAkTbvMtEfsDA3y40i4dGqJs=";
+    hash = "sha256-JHEiazpC4rbbUELn7m2koVFXr6XzNJCCZt/s+AVtc24=";
   };
-
-  patches = [
-    # better-sqlite3 13.0.3 is needed to build against Electron 43; hand-ported
-    # because upstream's equivalent change (https://github.com/4gray/iptvnator/pull/1415)
-    # does not apply to the v0.22.0 manifests.
-    ./better-sqlite3-13.patch
-  ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    inherit (finalAttrs) patches;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-b6v8hCZy/H06n4RceS/x3xFACdP0czAokwRl8xXQ1gI=";
+    hash = "sha256-Gs10M9mejtfKf/uBw+ojx726EMBRWQGByUQvjrUu3PM=";
   };
 
   __structuredAttrs = true;
@@ -97,17 +89,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postBuild = ''
-    # Override electron-builder config: use local electron dist, pin version, dir-only for linux
+    # --config disables discovery of the repo's electron-builder.json
     jq --arg dist "$HOME/.electron-dist" \
        --arg ver "${electron_43.version}" \
        '. + {electronDist: $dist, electronVersion: $ver}
         | .linux.target = [{"target": "dir", "arch": ["x64"]}]
-        | .files = [
-            {"from": "dist/apps/remote-control-web", "to": "remote-control-web", "filter": ["**/*"]},
-            {"from": "dist/apps/electron-backend", "to": "electron-backend", "filter": ["**/*"]},
-            {"from": "dist/apps/web", "to": "web", "filter": ["**/*"]},
-            "!**/*.map"
-          ]' \
+        | .afterPack = null
+        | (["**/*", "!**/*.map"] as $packFilter
+           | .files = (["package.json"] + (["remote-control-web", "electron-backend", "web"] | map({from: "dist/apps/\(.)", to: ., filter: $packFilter}))))' \
        electron-builder.json > dist/electron-builder.nix.json
 
     npm exec electron-builder -- \
@@ -133,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set ELECTRON_FORCE_IS_PACKAGED 1 \
       --set ELECTRON_IS_DEV 0 \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc.lib ]} \
       --inherit-argv0
 
     for s in 16 32 48 64 128 1024; do
