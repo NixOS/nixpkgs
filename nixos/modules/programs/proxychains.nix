@@ -163,7 +163,7 @@ in
   config = lib.mkIf cfg.enable {
 
     assertions = lib.singleton {
-      assertion = cfg.chain.type != "random" && cfg.chain.length == null;
+      assertion = cfg.chain.length == null || cfg.chain.type == "random";
       message = ''
         Option `programs.proxychains.chain.length`
         only makes sense with `programs.proxychains.chain.type` = "random".
