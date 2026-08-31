@@ -2,8 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  versionCheckHook,
   nix-update-script,
-  testers,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -20,12 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-1ZzaJVjDoDwtq4koabwq1/p2TRUBdob7IvG6UBqrZzk=";
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Interactive TUI scratchpad for building shell pipelines";
