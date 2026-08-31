@@ -161,6 +161,7 @@ let
                       ++ service.registrationFlags
                       ++ optional (service.buildsDir != null) "--builds-dir ${service.buildsDir}"
                       ++ optional (service.cloneUrl != null) "--clone-url ${service.cloneUrl}"
+                      ++ optional (service.outputLimit != null) "--output-limit ${toString service.outputLimit}"
                       ++ optional (
                         service.preGetSourcesScript != null
                       ) "--pre-get-sources-script ${service.preGetSourcesScript}"
@@ -576,6 +577,13 @@ in
               ];
               description = ''
                 Whitelist allowed privileged services.
+              '';
+            };
+            outputLimit = mkOption {
+              type = types.nullOr types.int;
+              default = null;
+              description = ''
+                Maximum build log size in kilobytes. Default is 4096 (4 MB).
               '';
             };
             preGetSourcesScript = mkOption {
