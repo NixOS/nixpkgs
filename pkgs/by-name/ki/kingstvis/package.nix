@@ -18,17 +18,14 @@
   zlib,
 }:
 
-let
+buildFHSEnv (finalAttrs: {
   pname = "kingstvis";
   version = "3.6.1";
+
   src = fetchzip {
-    url = "http://res.kingst.site/kfs/KingstVIS_v${version}.tar.gz";
+    url = "http://res.kingst.site/kfs/KingstVIS_v${finalAttrs.version}.tar.gz";
     hash = "sha256-eZJ3RZWdmNx/El3Hh5kUf44pIwdvwOEkRysYBgUkS18=";
   };
-in
-
-buildFHSEnv {
-  inherit pname version;
 
   targetPkgs = pkgs: [
     dbus
@@ -48,11 +45,11 @@ buildFHSEnv {
   ];
 
   extraInstallCommands = ''
-    install -Dvm644 ${src}/Driver/99-Kingst.rules \
+    install -Dvm644 ${finalAttrs.src}/Driver/99-Kingst.rules \
       $out/lib/udev/rules.d/99-Kingst.rules
   '';
 
-  runScript = "${src}/KingstVIS";
+  runScript = "${finalAttrs.src}/KingstVIS";
 
   meta = {
     description = "Kingst Virtual Instruments Studio, software for logic analyzers";
@@ -62,4 +59,4 @@ buildFHSEnv {
     maintainers = [ lib.maintainers.luisdaranda ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})
