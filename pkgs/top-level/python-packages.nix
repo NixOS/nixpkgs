@@ -10651,6 +10651,8 @@ self: super: with self; {
 
   memory-tempfile = callPackage ../development/python-modules/memory-tempfile { };
 
+  mempalace = callPackage ../development/python-modules/mempalace { };
+
   memray = callPackage ../development/python-modules/memray { };
 
   meraki = callPackage ../development/python-modules/meraki { };
