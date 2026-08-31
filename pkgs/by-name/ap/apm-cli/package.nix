@@ -78,11 +78,33 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "apm_cli"
   ];
 
+  postInstall = ''
+    install -Dm755 -t "$out/share/apm-cli/scripts/runtime" scripts/runtime/*
+    install -Dm755 -t "$out/share/apm-cli/scripts" scripts/github-token-helper.sh
+  '';
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
 
   doInstallCheck = true;
+
+  postInstallCheck = ''
+        test -f "$out/share/apm-cli/scripts/runtime/setup-common.sh"
+        test -f "$out/share/apm-cli/scripts/github-token-helper.sh"
+
+        ${python3Packages.python.interpreter} - <<'PY'
+    from apm_cli.runtime.manager import RuntimeManager
+
+    manager = RuntimeManager()
+
+    assert manager.get_common_script()
+    assert manager.get_token_helper_script()
+
+    for runtime_info in manager.supported_runtimes.values():
+        assert manager.get_embedded_script(runtime_info["script"])
+    PY
+  '';
 
   meta = {
     description = "Agent Package Manager";
