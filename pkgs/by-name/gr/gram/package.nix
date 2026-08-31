@@ -26,6 +26,7 @@
   writableTmpDirAsHomeHook,
 
   buildRemoteServer ? true,
+  buildExtensionCli ? true,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -37,6 +38,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals buildRemoteServer [
     "remote_server"
+  ]
+  ++ lib.optionals buildExtensionCli [
+    "extension_cli"
   ];
 
   src = fetchFromCodeberg {
@@ -89,7 +93,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package=gram"
     "--package=cli"
   ]
-  ++ lib.optionals buildRemoteServer [ "--package=remote_server" ];
+  ++ lib.optionals buildRemoteServer [ "--package=remote_server" ]
+  ++ lib.optionals buildExtensionCli [ "--package=extension_cli" ];
 
   env = {
     ALLOW_MISSING_LICENSES = true;
@@ -157,6 +162,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ''
   + lib.optionalString buildRemoteServer ''
     install -Dm755 $release_target/remote_server $remote_server/bin/${finalAttrs.remoteServerExecutableName}
+  ''
+  + lib.optionalString buildExtensionCli ''
+    install -Dm755 $release_target/gram-extension $extension_cli/bin/gram-extension
   ''
   + ''
     runHook postInstall
