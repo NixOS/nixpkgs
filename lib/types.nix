@@ -695,7 +695,7 @@ rec {
               else
                 /. + builtins.unsafeDiscardStringContext x
             );
-            isAbsolute = substring 0 1 (toString x) == "/";
+            isAbsolute = x.type or null == "derivation" || substring 0 1 (toString x) == "/";
             isExpectedType = (
               if inStore == null || inStore then isStringLike x else isString x # Do not allow a true path, which could be copied to the store later on.
             );
