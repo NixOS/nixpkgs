@@ -3,17 +3,24 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  symlinkJoin,
 
   # nativeBuildInputs
   pkg-config,
 
   # buildInputs
-  # FIXME: unpin when upstream supports ffmpeg 9
-  ffmpeg_8,
+  ffmpeg,
+  libavif,
+  libheif,
+  libjpeg,
+  libpng,
+  libwebp,
 
   # build-system
   cmake,
-  setuptools,
+  ninja,
+  pybind11,
+  scikit-build-core,
   torch,
 
   # tests
@@ -26,10 +33,23 @@
 
 let
   inherit (torch) cudaCapabilities cudaPackages;
+
+  # Unlike the other image codecs, upstream's CMake has no `find_package` path for libavif: it
+  # unconditionally FetchContent-downloads a prebuilt tarball from S3.
+  # Point FetchContent at our own libavif instead, which it expects to find as `include/` and
+  # `lib/libavif.so.16` under a single root.
+  # https://github.com/meta-pytorch/torchcodec/blob/v0.16.0/src/torchcodec/_core/fetch_avif_from_s3.cmake
+  libavif-root = symlinkJoin {
+    name = "libavif-root";
+    paths = [
+      (lib.getDev libavif)
+      (lib.getLib libavif)
+    ];
+  };
 in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "torchcodec";
-  version = "0.14.0";
+  version = "0.16.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -37,7 +57,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     owner = "meta-pytorch";
     repo = "torchcodec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eGof2Rk/dGYPlKVRSuJ+ZeeMh2u4K6/qXmROo187HTA=";
+    hash = "sha256-eXe86DQqXWePWn9UcMVLdJTaO0YQZIQaQ4o1ao/5dH8=";
   };
 
   postPatch = ''
@@ -46,17 +66,17 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
       test/test_encoders.py \
       --replace-fail \
         '"ffprobe"' \
-        '"${lib.getExe' ffmpeg_8 "ffprobe"}"'
+        '"${lib.getExe' ffmpeg "ffprobe"}"'
 
     substituteInPlace test/test_encoders.py \
       --replace-fail \
         '"ffmpeg"' \
-        '"${lib.getExe ffmpeg_8}"'
+        '"${lib.getExe ffmpeg}"'
 
     substituteInPlace test/test_transform_ops.py \
       --replace-fail \
         'ffmpeg_cli = "ffmpeg"' \
-        'ffmpeg_cli = "${lib.getExe ffmpeg_8}"'
+        'ffmpeg_cli = "${lib.getExe ffmpeg}"'
   '';
 
   nativeBuildInputs = [
@@ -70,7 +90,12 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   ];
 
   buildInputs = [
-    ffmpeg_8
+    ffmpeg
+    libavif
+    libheif
+    libjpeg
+    libpng
+    libwebp
   ]
   ++ lib.optionals cudaSupport (
     with cudaPackages;
@@ -81,12 +106,15 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
       libcusolver # cusolverDn.h
       libcusparse # cusparse.h
       libnpp # nppicc
+      libnvjpeg # nvjpeg.h
     ]
   );
 
   build-system = [
     cmake
-    setuptools
+    ninja
+    pybind11
+    scikit-build-core
     torch
   ];
   dontUseCmakeConfigure = true;
@@ -101,6 +129,10 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     I_CONFIRM_THIS_IS_NOT_A_LICENSE_VIOLATION = true;
 
     ENABLE_CUDA = cudaSupport;
+
+    CMAKE_ARGS = toString [
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_AVIF_S3" libavif-root.outPath)
+    ];
   }
   // lib.optionalAttrs cudaSupport {
     TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" cudaCapabilities}";
@@ -109,7 +141,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     ROCM_PATH = torch.rocmtoolkit_joined;
     ROCM_SOURCE_DIR = torch.rocmtoolkit_joined;
     PYTORCH_ROCM_ARCH = torch.gpuTargetString;
-    CMAKE_CXX_FLAGS = "-I${torch.rocmtoolkit_joined}/include";
+    CMAKE_CXX_FLAGS = "-I${lib.getInclude torch.rocmtoolkit_joined}/include";
   };
 
   pythonImportsCheck = [ "torchcodec" ];
@@ -117,6 +149,11 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   nativeCheckInputs = [
     pytestCheckHook
     torchvision
+  ];
+
+  disabledTestPaths = [
+    # Shells out to `pip install` to set up a plugin package
+    "test/plugin/test_plugins.py"
   ];
 
   disabledTests =
