@@ -5,6 +5,8 @@
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
+  installAgentSkills,
+  installShellFiles,
   writableTmpDirAsHomeHook,
 }:
 
@@ -68,6 +70,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     bun
+    installAgentSkills
+    installShellFiles
     writableTmpDirAsHomeHook
   ];
 
@@ -106,12 +110,13 @@ stdenv.mkDerivation {
     runHook postBuild
   '';
 
+  dontInstallAgentSkills = true;
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 hunk $out/bin/hunk
-    mkdir -p $out/share/skills/hunk
-    cp -R skills/hunk-review skills/hunk-extensions $out/share/skills/hunk/
+    installBin hunk
+    installSkill skills/hunk-extensions hunk
+    installSkill skills/hunk-review hunk
 
     runHook postInstall
   '';
