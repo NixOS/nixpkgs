@@ -2577,8 +2577,6 @@ with pkgs;
 
   ophcrack-cli = ophcrack.override { enableGui = false; };
 
-  open-interpreter = with python3Packages; toPythonApplication open-interpreter;
-
   openntpd_nixos = openntpd.override {
     privsepUser = "ntp";
     privsepPath = "/var/empty";

@@ -12471,8 +12471,6 @@ self: super: with self; {
 
   open-hypergraphs = callPackage ../development/python-modules/open-hypergraphs { };
 
-  open-interpreter = callPackage ../development/python-modules/open-interpreter { };
-
   open-meteo = callPackage ../development/python-modules/open-meteo { };
 
   openai = callPackage ../development/python-modules/openai { };
