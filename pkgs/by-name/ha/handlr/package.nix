@@ -6,17 +6,20 @@
   shared-mime-info,
   libiconv,
   installShellFiles,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage {
   pname = "handlr";
-  version = "unstable-2021-08-29";
+  version = "0.6.4-unstable-2021-08-28";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "chmln";
     repo = "handlr";
     rev = "90e78ba92d0355cb523abf268858f3123fd81238";
-    sha256 = "sha256-wENhlUBwfNg/r7yMKa1cQI1fbFw+qowwK8EdO912Yys=";
+    hash = "sha256-wENhlUBwfNg/r7yMKa1cQI1fbFw+qowwK8EdO912Yys=";
   };
 
   cargoHash = "sha256-/Kk2vuFkgtHarLrjqc5PkRZL2pV1Y7Gb02mWwtaVpDI=";
@@ -27,9 +30,7 @@ rustPlatform.buildRustPackage {
   ];
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  preCheck = ''
-    export HOME=$TEMPDIR
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   postInstall = ''
     installShellCompletion \
