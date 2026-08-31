@@ -10,6 +10,7 @@
   fd,
   makeBinaryWrapper,
   stdenvNoCC,
+  bun,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "pi-coding-agent";
@@ -49,6 +50,7 @@ buildNpmPackage (finalAttrs: {
 
   nativeBuildInputs = [
     makeBinaryWrapper
+    bun
   ];
 
   # Build workspace dependencies in order, then the coding-agent, using the
@@ -57,6 +59,12 @@ buildNpmPackage (finalAttrs: {
     runHook preBuild
 
     npm run build:offline
+
+    pushd packages/coding-agent
+    bun build --compile --no-compile-autoload-bunfig --target=bun-linux-x64-baseline \
+      ./dist/bun/cli.js ./src/utils/image-resize-worker.ts \
+      --outfile $TMPDIR/pi
+    popd
 
     runHook postBuild
   '';
@@ -93,6 +101,16 @@ buildNpmPackage (finalAttrs: {
 
     # Clean up now-dangling .bin symlinks
     find "$nm/.bin" -xtype l -delete
+
+    # bun binary replaces node wrapper — bun-only
+    install -Dm755 $TMPDIR/pi $out/bin/pi
+
+    # bun binary needs package.json next to PI_PACKAGE_DIR for VERSION
+    mkdir -p $out/share/pi
+    cp packages/coding-agent/package.json $out/share/pi/package.json
+    cp -r packages/coding-agent/dist/modes/interactive/theme $out/share/pi/theme 2>/dev/null || true
+    cp -r packages/coding-agent/dist/modes/interactive/assets $out/share/pi/assets 2>/dev/null || true
+    cp -r packages/coding-agent/dist/core/export-html $out/share/pi/export-html 2>/dev/null || true
   ''
   + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
     # Remove foreign Linux binaries that make audit-tmpdir try to inspect ELF
@@ -109,6 +127,7 @@ buildNpmPackage (finalAttrs: {
         fd
       ]
     } \
+      --set PI_PACKAGE_DIR $out/share/pi \
       --set-default PI_SKIP_VERSION_CHECK 1 \
       --set-default PI_TELEMETRY 0
   '';
