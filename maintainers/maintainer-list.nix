@@ -28354,6 +28354,12 @@
     githubId = 2389333;
     name = "Andy Tockman";
   };
+  tdback = {
+    name = "Tyler Dunneback";
+    github = "tdback";
+    githubId = 98326106;
+    email = "tyler@tdback.net";
+  };
   teatwig = {
     email = "nix@teatwig.net";
     name = "tea";
