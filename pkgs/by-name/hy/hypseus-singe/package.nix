@@ -8,29 +8,31 @@
   pkg-config,
 
   bash,
-  SDL2,
-  SDL2_image,
-  SDL2_ttf,
-  SDL2_mixer,
   libmpeg2,
   libvorbis,
-  libzip,
   libx11,
+  libzip,
+  sdl3,
+  sdl3-image,
+  sdl3-mixer,
+  sdl3-ttf,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hypseus-singe";
-  version = "2.12.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "DirtBagXon";
     repo = "hypseus-singe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H9ogg01Szp5ab8reFnL108QhnkqkHdBFZo6YziNMzms=";
+    hash = "sha256-IRM64kLE13a84l9q+kUtVjqu3oBAo5/9GPqvCJgQ5uA=";
   };
 
   patches = [ ./use-shared-mpeg2.patch ];
 
+  __structuredAttrs = true;
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -41,22 +43,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     bash
-    SDL2
-    SDL2_image
-    SDL2_ttf
-    SDL2_mixer
     libmpeg2
     libvorbis
     libzip
+    sdl3
+    sdl3-image
+    sdl3-mixer
+    sdl3-ttf
+    zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
-  ];
-
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-I${lib.getDev SDL2_image}/include/SDL2"
-    "-I${lib.getDev SDL2_ttf}/include/SDL2"
-    "-I${lib.getDev SDL2_mixer}/include/SDL2"
   ];
 
   preConfigure = ''
@@ -72,8 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 scripts/singe.sh $out/bin/singe
 
     substituteInPlace $out/bin/{hypseus,singe} \
-        --replace-fail "/bin/cat" "cat" \
-        --replace-fail hypseus.bin $out/bin/hypseus.bin
+      --replace-fail "/bin/cat" "cat" \
+      --replace-fail hypseus.bin $out/bin/hypseus.bin
 
     runHook postInstall
   '';
