@@ -2027,7 +2027,11 @@ with pkgs;
   gawk-with-extensions = callPackage ../tools/text/gawk/gawk-with-extensions.nix {
     extensions = gawkextlib.full;
   };
-  gawkextlib = callPackage ../tools/text/gawk/gawkextlib.nix { };
+  gawkextlib =
+    (callPackage ../tools/text/gawk/gawkextlib.nix { })
+    // lib.optionalAttrs config.allowAliases {
+      timex = throw "'gawkextlib.timex' has been removed because the funcionality is available in the core 'time' extension"; # Added 2026-08-15
+    };
 
   gawkInteractive = gawk.override { interactive = true; };
 
