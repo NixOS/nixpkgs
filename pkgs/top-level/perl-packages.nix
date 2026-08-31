@@ -33477,7 +33477,7 @@ with self;
     checkPhase = ''
       patchShebangs ./t ./scripts/yath
       export AUTOMATED_TESTING=1
-      ./scripts/yath test -j $NIX_BUILD_CORES
+      ./scripts/yath test -j ${if stdenv.hostPlatform.isDarwin then "1" else "$NIX_BUILD_CORES"}
     '';
 
     # The t/integration/preload.t test is broken on riscv64 & powerpc64
