@@ -5,7 +5,7 @@ echo "Sourcing unittest-check-hook"
 
 unittestCheckPhase() {
     echo "Executing unittestCheckPhase"
-    runHook preCheck
+    runHook preInstallCheck
 
     local -a flagsArray=()
 
@@ -21,11 +21,11 @@ unittestCheckPhase() {
     echoCmd 'unittest flags' "${flagsArray[@]}"
     @pythonCheckInterpreter@ -m unittest "${flagsArray[@]}"
 
-    runHook postCheck
+    runHook postInstallCheck
     echo "Finished executing unittestCheckPhase"
 }
 
 if [[ -z "${dontUseUnittestCheck-}" ]] && [[ -z "${installCheckPhase-}" ]]; then
     echo "Using unittestCheckPhase"
-    appendToVar preDistPhases unittestCheckPhase
+    installCheckPhase=unittestCheckPhase
 fi

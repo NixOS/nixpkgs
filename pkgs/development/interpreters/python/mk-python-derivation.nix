@@ -104,6 +104,9 @@ let
   bootstrappedRuntimeDepsCheckHook = pythonRuntimeDepsCheckHook.override {
     inherit (python.pythonOnBuildForHost.pkgs.bootstrap) packaging;
   };
+
+  appendToNonEmptyString =
+    prefix: string: if lib.isString string && string != "" then prefix + string else string;
 in
 
 lib.extendMkDerivation {
@@ -112,10 +115,11 @@ lib.extendMkDerivation {
   excludeDrvArgNames = [
     "disabled"
     "checkPhase"
+    "preCheck"
+    "postCheck"
     "checkInputs"
     "nativeCheckInputs"
     "doCheck"
-    "doInstallCheck"
     "pyproject"
     "format"
     "stdenv"
@@ -137,7 +141,7 @@ lib.extendMkDerivation {
       buildInputs ? [ ],
 
       # Dependencies needed for running the checkPhase.
-      # These are added to buildInputs when doCheck = true.
+      # These are added to buildInputs when doInstallCheck = true.
       checkInputs ? [ ],
       nativeCheckInputs ? [ ],
 
@@ -205,7 +209,7 @@ lib.extendMkDerivation {
 
       meta ? { },
 
-      doCheck ? true,
+      doInstallCheck ? true,
 
       ...
     }@attrs:
@@ -397,7 +401,21 @@ lib.extendMkDerivation {
 
       # Python packages don't have a checkPhase, only an installCheckPhase
       doCheck = false;
-      doInstallCheck = attrs.doCheck or true;
+      doInstallCheck =
+        if attrs ? doCheck then
+          if attrs ? doInstallCheck then
+            let
+              pos = lib.unsafeGetAttrPos "doCheck" attrs;
+            in
+            lib.warn ''
+              buildPythonPackage: $name: Both doInstallCheck and doCheck specified, taking only `doInstallCheck`.
+                The check -> installCheck mapping is being deprecated in favour of specifying the installCheck arguments.
+                At ${pos.file}:${toString pos.line}
+            '' doInstallCheck
+          else
+            attrs.doCheck
+        else
+          doInstallCheck;
       nativeInstallCheckInputs = nativeCheckInputs ++ attrs.nativeInstallCheckInputs or [ ];
       installCheckInputs = checkInputs ++ attrs.installCheckInputs or [ ];
 
@@ -440,11 +458,38 @@ lib.extendMkDerivation {
         isBuildPythonPackage = python.meta.platforms;
       }
       // meta;
-    }
-    // optionalAttrs (attrs ? checkPhase) {
       # If given use the specified checkPhase, otherwise use the setup hook.
       # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
-      installCheckPhase = attrs.checkPhase;
+      installCheckPhase =
+        if lib.defaultTo "" attrs.checkPhase or null != "" then
+          if lib.defaultTo "" attrs.installCheckPhase or null != "" then
+            lib.warn ''
+              buildPythonPackgae: Both `installCheckPhase` and `checkPhase` are specified, taking only `installCheckPhase`.
+                The check -> installCheck mapping is being deprecated in favour of specifying the installCheck arguments.
+            '' attrs.installCheckPhase
+          else
+            lib.replaceStrings
+              [ "runHook preCheck\n" "runHook postCheck\n" ]
+              [ "runHook preInstallCheck\n" "runHook postInstallCheck\n" ]
+              (lib.defaultTo "" attrs.checkPhase or null)
+        else
+          lib.defaultTo "" attrs.installCheckPhase or null;
+      preInstallCheck =
+        appendToNonEmptyString "\n" (lib.defaultTo "" attrs.preCheck or null)
+        + lib.defaultTo "" attrs.preInstallCheck or null
+        # Backward compatibility to user-defined preCheckHooks
+        # TODO(@ShamrockLee): Remove after Nixpkgs 26.05 EOL.
+        + ''
+          runHook preCheck
+        '';
+      postInstallCheck =
+        appendToNonEmptyString "\n" (lib.defaultTo "" attrs.postCheck or null)
+        + lib.defaultTo "" attrs.postInstallCheck or null
+        # Backward compatibility to user-defined postCheckHooks
+        # TODO(@ShamrockLee): Remove after Nixpkgs 26.05 EOL.
+        + ''
+          runHook postCheck
+        '';
     }
     // (
       let
