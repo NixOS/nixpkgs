@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ebiggers";
     repo = "libdeflate";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2TiV3kmFs9j4aYetoYeWg3+MoZ542/0zaD0hwn9b8ZA=";
   };
 
@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   doCheck = true;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Fast DEFLATE/zlib/gzip compressor and decompressor";
