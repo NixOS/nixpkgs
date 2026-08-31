@@ -37,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     libtool
   ];
 
+  strictDeps = true;
+
   # `autogen.sh` runs `configure`, and expects that any flags needed
   # by `configure` (like `--host`) are passed to `autogen.sh`.
   configureScript = "./autogen.sh";
