@@ -4,6 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   zig_0_15,
+  installAgentSkills,
   installShellFiles,
   cctools,
   xcbuild,
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     zig_0_15.hook
+    installAgentSkills
     installShellFiles
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -55,11 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     chmod -R u+w "$ZIG_GLOBAL_CACHE_DIR/p"
   '';
 
-  postInstall = ''
-    mkdir --parents "$out"/share/herdr/skills/herdr
-    "$out"/bin/herdr --skill > "$_"/SKILL.md
-  ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd herdr \
       --bash <("$out/bin/herdr" completion bash) \
       --fish <("$out/bin/herdr" completion fish) \
