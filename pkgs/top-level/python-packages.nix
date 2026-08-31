@@ -3130,6 +3130,8 @@ self: super: with self; {
 
   ciscoconfparse2 = callPackage ../development/python-modules/ciscoconfparse2 { };
 
+  ciscoisesdk = callPackage ../development/python-modules/ciscoisesdk { };
+
   ciscomobilityexpress = callPackage ../development/python-modules/ciscomobilityexpress { };
 
   ciso8601 = callPackage ../development/python-modules/ciso8601 { };
@@ -8626,6 +8628,8 @@ self: super: with self; {
   iwlib = callPackage ../development/python-modules/iwlib { };
 
   ixia = callPackage ../development/python-modules/ixia { };
+
+  ixnetwork-restpy = callPackage ../development/python-modules/ixnetwork-restpy { };
 
   j2cli = callPackage ../development/python-modules/j2cli { };
 
@@ -19904,6 +19908,8 @@ self: super: with self; {
   statsd = callPackage ../development/python-modules/statsd { };
 
   statsmodels = callPackage ../development/python-modules/statsmodels { };
+
+  stcrestclient = callPackage ../development/python-modules/stcrestclient { };
 
   std-uritemplate = callPackage ../development/python-modules/std-uritemplate { };
 
