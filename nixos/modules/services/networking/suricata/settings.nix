@@ -150,7 +150,7 @@ in
             };
 
             port-groups = mkOption {
-              type = with types; nullOr (attrsOf str);
+              type = types.nullOr (types.attrsOf types.str);
               default = {
                 HTTP_PORTS = "80";
                 SHELLCODE_PORTS = "!80";
@@ -178,9 +178,8 @@ in
     };
 
     stats = mkOption {
-      type =
-        with types;
-        nullOr (submodule {
+      type = types.nullOr (
+        types.submodule {
           options = {
             enable = mkEnableOption "suricata global stats";
 
@@ -218,7 +217,8 @@ in
               '';
             };
           };
-        });
+        }
+      );
       default = null; # do not add to config unless specified
       description = ''
         Engine statistics such as packet counters, memory use counters and others can be logged in several ways. A separate text log 'stats.log' and an EVE record type 'stats' are enabled by default.
@@ -226,7 +226,7 @@ in
     };
 
     plugins = mkOption {
-      type = with types; nullOr (listOf path);
+      type = types.nullOr (types.listOf types.path);
       default = null;
       description = ''
         Plugins -- Experimental -- specify the filename for each plugin shared object.
@@ -234,18 +234,18 @@ in
     };
 
     outputs = mkOption {
-      type =
-        with types;
-        nullOr (
-          listOf (
-            attrsOf (submodule {
+      type = types.nullOr (
+        types.listOf (
+          types.attrsOf (
+            types.submodule {
               freeformType = yaml.type;
               options = {
                 enabled = mkEnableOption "<NAME>";
               };
-            })
+            }
           )
-        );
+        )
+      );
       default = null;
       example = literalExpression ''
         [
@@ -422,10 +422,9 @@ in
     };
 
     "af-packet" = mkOption {
-      type =
-        with types;
-        nullOr (
-          listOf (submodule {
+      type = types.nullOr (
+        types.listOf (
+          types.submodule {
             freeformType = yaml.type;
             options = {
               interface = mkOption {
@@ -436,8 +435,9 @@ in
                 '';
               };
             };
-          })
-        );
+          }
+        )
+      );
       default = null;
       description = ''
         Linux high speed capture support.
@@ -445,10 +445,9 @@ in
     };
 
     "af-xdp" = mkOption {
-      type =
-        with types;
-        nullOr (
-          listOf (submodule {
+      type = types.nullOr (
+        types.listOf (
+          types.submodule {
             freeformType = yaml.type;
             options = {
               interface = mkOption {
@@ -459,8 +458,9 @@ in
                 '';
               };
             };
-          })
-        );
+          }
+        )
+      );
       default = null;
       description = ''
         Linux high speed af-xdp capture support, see
@@ -469,22 +469,20 @@ in
     };
 
     "dpdk" = mkOption {
-      type =
-        with types;
-        nullOr (submodule {
+      type = types.nullOr (
+        types.submodule {
           options = {
             eal-params.proc-type = mkOption {
-              type = with types; nullOr str;
+              type = types.nullOr types.str;
               default = null;
               description = ''
                 dpdk eal-params.proc-type, see [data plane development kit docs](https://doc.dpdk.org/guides/linux_gsg/linux_eal_parameters.html#multiprocessing-related-options).
               '';
             };
             interfaces = mkOption {
-              type =
-                with types;
-                nullOr (
-                  listOf (submodule {
+              type = types.nullOr (
+                types.listOf (
+                  types.submodule {
                     freeformType = yaml.type;
                     options = {
                       interface = mkOption {
@@ -495,15 +493,17 @@ in
                         '';
                       };
                     };
-                  })
-                );
+                  }
+                )
+              );
               default = null;
               description = ''
                 See upstream docs: [docs/capture-hardware/dpdk](https://docs.suricata.io/en/suricata-7.0.7/capture-hardware/dpdk.html) and [docs/configuration/suricata-yaml.html#data-plane-development-kit-dpdk](https://docs.suricata.io/en/suricata-7.0.7/configuration/suricata-yaml.html#data-plane-development-kit-dpdk).
               '';
             };
           };
-        });
+        }
+      );
       default = null;
       description = ''
         Data Plane Development Kit is a framework for fast packet processing in data plane applications running on a wide variety of CPU architectures. DPDK's Environment Abstraction Layer (EAL) provides a generic interface to low-level resources. It is a unique way how DPDK libraries access NICs. EAL creates an API for an application to access NIC resources from the userspace level. In DPDK, packets are not retrieved via interrupt handling. Instead, the application polls the NIC for newly received packets.
@@ -513,11 +513,73 @@ in
       '';
     };
 
+    # set defaults according to upstream suricata.yaml.in
+    "nfq" = mkOption {
+      type = types.nullOr (
+        types.submodule {
+          options = {
+            mode = mkOption {
+              type = types.enum [
+                "accept"
+                "repeat"
+                "route"
+              ];
+              default = "accept";
+              description = ''
+                The mode determines how packets are handled.
+                - `accept`: Suricata accepts or rejects the packet, and does not send it back through the kernel network stack.
+                - `repeat`: Suricata sends packets back through the kernel network stack after processing.
+                - `route`: Suricata sends packets to another netfilter queue.
+              '';
+            };
+            repeat-mark = mkOption {
+              type = types.ints.u32;
+              default = 1;
+              description = "Firewall mark to apply to packets in repeat mode.";
+            };
+            repeat-mask = mkOption {
+              type = types.ints.u32;
+              default = 1;
+              description = "Firewall mark mask to apply to packets in repeat mode.";
+            };
+            bypass-mark = mkOption {
+              type = types.ints.u32;
+              default = 1;
+              description = "Firewall mark to apply to packets in bypass mode.";
+            };
+            bypass-mask = mkOption {
+              type = types.ints.u32;
+              default = 1;
+              description = "Firewall mark mask to apply to packets in bypass mode";
+            };
+            route-queue = mkOption {
+              type = types.ints.u16;
+              default = 2;
+              description = "Netfilter queue to route packets to in route mode.";
+            };
+            batchcount = mkOption {
+              type = types.int;
+              default = 1;
+              description = "Process this many packets before sending a verdict (worker runmode only).";
+            };
+            fail-open = mkOption {
+              type = types.bool;
+              default = true;
+              description = "Whether to accept packets if Suricata is not able to keep pace.";
+            };
+          };
+        }
+      );
+      default = null;
+      description = ''
+        NFQUEUE settings, see [upstream docs](https://docs.suricata.io/en/latest/configuration/suricata-yaml.html#nfq) and [upstream defaults](https://github.com/OISF/suricata/blob/main/suricata.yaml.in). Incompatible with the layer 2 packet capture modes (af-packet, af-xdp, dpdk). Requires a queue rule in the firewall.
+      '';
+    };
+
     "pcap" = mkOption {
-      type =
-        with types;
-        nullOr (
-          listOf (submodule {
+      type = types.nullOr (
+        types.listOf (
+          types.submodule {
             freeformType = yaml.type;
             options = {
               interface = mkOption {
@@ -528,8 +590,9 @@ in
                 '';
               };
             };
-          })
-        );
+          }
+        )
+      );
       default = null;
       description = ''
         Cross platform libpcap capture support.
@@ -554,9 +617,8 @@ in
     };
 
     "app-layer" = mkOption {
-      type =
-        with types;
-        nullOr (submodule {
+      type = types.nullOr (
+        types.submodule {
           options = {
             "error-policy" = mkOption {
               type = types.enum [
@@ -576,10 +638,9 @@ in
               '';
             };
             protocols = mkOption {
-              type =
-                with types;
-                nullOr (
-                  attrsOf (submodule {
+              type = types.nullOr (
+                types.attrsOf (
+                  types.submodule {
                     freeformType = yaml.type;
                     options = {
                       enabled = mkOption {
@@ -596,15 +657,17 @@ in
                         '';
                       };
                     };
-                  })
-                );
+                  }
+                )
+              );
               default = null;
               description = ''
                 app-layer protocols, see [upstream docs](https://docs.suricata.io/en/latest/rules/app-layer.html).
               '';
             };
           };
-        });
+        }
+      );
       default = null; # do not add to config unless specified
       description = ''
         app-layer configuration, see [upstream docs](https://docs.suricata.io/en/latest/rules/app-layer.html).
@@ -640,9 +703,8 @@ in
     };
 
     "unix-command" = mkOption {
-      type =
-        with types;
-        nullOr (submodule {
+      type = types.nullOr (
+        types.submodule {
           options = {
             enabled = mkOption {
               type = types.either types.bool (types.enum [ "auto" ]);
@@ -659,7 +721,8 @@ in
               '';
             };
           };
-        });
+        }
+      );
       default = { };
       description = ''
         Unix command socket that can be used to pass commands to Suricata.
@@ -728,7 +791,7 @@ in
     };
 
     includes = mkOption {
-      type = with types; nullOr (listOf path);
+      type = types.nullOr (types.listOf types.path);
       default = null;
       description = ''
         Files to include in the suricata configuration. See

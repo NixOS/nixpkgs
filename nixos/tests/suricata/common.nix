@@ -1,6 +1,6 @@
 { lib, pkgs, ... }:
 {
-  name = "suricata";
+  # shared configuration module for suricata tests. it not a NixOS test by itself.
   meta.maintainers = with lib.maintainers; [ felbinger ];
 
   nodes = {
@@ -27,7 +27,6 @@
           vars.address-groups.HOME_NET = "192.168.1.0/24";
           unix-command.enabled = true;
           outputs = [ { fast.enabled = true; } ];
-          af-packet = [ { interface = "eth1"; } ];
           classification-file = "${pkgs.suricata}/etc/suricata/classification.config";
         };
       };
@@ -38,7 +37,7 @@
       ];
     };
     helper = {
-      imports = [ ../modules/profiles/minimal.nix ];
+      imports = [ ../../modules/profiles/minimal.nix ];
 
       networking.interfaces.eth1 = {
         useDHCP = false;
@@ -59,21 +58,4 @@
       networking.firewall.allowedTCPPorts = [ 80 ];
     };
   };
-
-  testScript = ''
-    start_all()
-
-    # check that configuration has been applied correctly with suricatasc
-    with subtest("suricata configuration test"):
-        ids.wait_for_unit("suricata.service")
-        assert '1' in ids.succeed("suricatasc -c 'iface-list' | ${pkgs.jq}/bin/jq .message.count")
-
-    # test detection of events based on a static ruleset (output of id command)
-    with subtest("suricata rule test"):
-        helper.wait_for_unit("nginx.service")
-        ids.wait_for_unit("suricata.service")
-
-        ids.succeed("curl http://192.168.1.1/id/")
-        assert "id check returned root [**] [Classification: Potentially Bad Traffic]" in ids.succeed("tail -n 1 /var/log/suricata/fast.log"), "Suricata didn't detect the output of id comment"
-  '';
 }
