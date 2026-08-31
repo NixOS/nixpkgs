@@ -31959,6 +31959,15 @@
     githubId = 85800291;
     email = "yes@ysnt.live";
   };
+  ytg123 = {
+    name = "YTG123";
+    github = "YTG1234";
+    githubId = 54103478;
+
+    email = "ytg1234@pm.me";
+    matrix = "@ytg1234:matrix.org";
+    keys = [ { fingerprint = "B10F 2589 CB25 5F02 1FCF  A5A7 2C0F 50BE 5583 2C81"; } ];
+  };
   yuannan = {
     email = "brandon@emergence.ltd";
     github = "yuannan";
