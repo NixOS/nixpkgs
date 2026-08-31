@@ -653,7 +653,6 @@
   ./services/display-managers/regreet.nix
   ./services/display-managers/sddm.nix
   ./services/editors/emacs.nix
-  ./services/editors/haste.nix
   ./services/editors/infinoted.nix
   ./services/finance/libeufin/bank.nix
   ./services/finance/libeufin/module.nix
