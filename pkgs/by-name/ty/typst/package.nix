@@ -73,6 +73,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     packages = callPackage ./typst-packages.nix { };
     wrapper = callPackage ./wrapper.nix { };
     withPackages = ps: finalAttrs.passthru.wrapper { packages = ps; };
+    tests = {
+      transitive-deps = callPackage ./tests/transitive-deps.nix { };
+    };
   };
 
   meta = {

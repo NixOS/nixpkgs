@@ -17,9 +17,24 @@ lib.makeOverridable (
     inherit (typst) meta;
     name = "${typst.name}-env";
 
-    paths = lib.foldl' (acc: p: acc ++ lib.singleton p ++ p.propagatedBuildInputs) [ ] (
-      packages typstPkgs
-    );
+    paths =
+      let
+        selected = packages typstPkgs;
+      in
+      map (e: e.pkg) (
+        builtins.genericClosure {
+          startSet = map (p: {
+            key = p.outPath;
+            pkg = p;
+          }) selected;
+          operator =
+            { pkg, ... }:
+            map (d: {
+              key = d.outPath;
+              pkg = d;
+            }) (pkg.propagatedBuildInputs or [ ]);
+        }
+      );
 
     pathsToLink = [ "/lib/typst-packages" ];
 
