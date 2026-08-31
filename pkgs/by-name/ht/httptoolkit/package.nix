@@ -10,14 +10,14 @@
   makeWrapper,
   xcbuild,
 
-  electron_41,
+  electron_42,
   httptoolkit-server,
 }:
 
 let
-  electron = electron_41;
+  electron = electron_42;
 in
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "httptoolkit";
 
   # update together with httptoolkit-server
@@ -27,7 +27,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "httptoolkit";
     repo = "httptoolkit-desktop";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WEl0DGYdq1qa5zNEVO6L8TW6lgNTI0NdL0YXeR3Z0BI=";
   };
 
@@ -103,7 +103,7 @@ buildNpmPackage rec {
       terminal = false;
       icon = "httptoolkit";
       startupWMClass = "HTTP Toolkit";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       categories = [ "Development" ];
       startupNotify = true;
     })
@@ -117,4 +117,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ tomasajt ];
     platforms = electron.meta.platforms;
   };
-}
+})
