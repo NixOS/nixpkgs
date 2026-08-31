@@ -136,6 +136,8 @@ stdenv.mkDerivation (finalAttrs: {
         '';
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://graphviz.org";
     changelog = "https://gitlab.com/graphviz/graphviz/-/blob/${finalAttrs.src.tag}/CHANGELOG.md";
