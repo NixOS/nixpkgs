@@ -6,25 +6,23 @@
   imagemagick,
   libimagequant,
   luajit,
-  makeBinaryWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cwal";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "nitinbhat972";
     repo = "cwal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hQ2N/lSUp1FduYG0tPOVP68QeOQyi7luEkys3A697LU=";
+    hash = "sha256-n9v2EiW1wRMsYoNk+m20qQao52vvmD6NDM8Z/oEyjbU=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
     pkgconf
-    makeBinaryWrapper
   ];
 
   buildInputs = [
@@ -50,11 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
     ./nob install
     runHook postInstall
-  '';
-
-  postFixup = ''
-    wrapProgram $out/bin/cwal \
-      --prefix XDG_DATA_DIRS : $out/share
   '';
 
   meta = {
