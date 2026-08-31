@@ -175,9 +175,14 @@ rec {
     # This breaks the override pattern.
     # In case this turns out to be a problem, we can still add more magic
     else
-      pkgs.runCommandLocal name { } ''
-        ln -s ${inner}/bin/${name} $out
-      '';
+      pkgs.runCommandLocal name
+        {
+          strictDeps = true;
+          __structuredAttrs = true;
+        }
+        ''
+          ln -s ${inner}/bin/${name} $out
+        '';
 
   /**
     `makeBinWriter` returns a derivation which compiles the given script into an executable format.
