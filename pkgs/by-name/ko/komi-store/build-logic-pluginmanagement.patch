@@ -1,0 +1,17 @@
+--- a/build-logic/settings.gradle.kts
++++ b/build-logic/settings.gradle.kts
+@@ -2,6 +2,14 @@
+ 
+ rootProject.name = "build-logic"
+ 
++pluginManagement {
++    repositories {
++        gradlePluginPortal()
++        google()
++        mavenCentral()
++    }
++}
++
+ dependencyResolutionManagement {
+     repositories {
+         google()
