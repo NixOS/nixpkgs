@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  bashNonInteractive,
   openssl,
   windows,
 }:
@@ -21,11 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
+    bashNonInteractive
     openssl
   ]
   ++ lib.optionals stdenv.hostPlatform.isMinGW [
     windows.pthreads
   ];
+
+  strictDeps = true;
 
   patches = [
   ]
