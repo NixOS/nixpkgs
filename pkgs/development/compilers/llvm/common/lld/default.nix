@@ -22,7 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   src =
     if monorepoSrc != null then
-      runCommand "lld-src-${version}" { inherit (monorepoSrc) passthru; } ''
+      runCommand "lld-src-${version}" {
+        inherit (monorepoSrc) passthru;
+        strictDeps = true;
+        __structuredAttrs = true;
+      } ''
         mkdir -p "$out"
         cp -r ${monorepoSrc}/cmake "$out"
         cp -r ${monorepoSrc}/lld "$out"

@@ -23,7 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
   inherit version;
 
   # Blank llvm dir just so relative path works
-  src = runCommand "bolt-src-${finalAttrs.version}" { inherit (monorepoSrc) passthru; } ''
+  src = runCommand "bolt-src-${finalAttrs.version}" {
+    inherit (monorepoSrc) passthru;
+    strictDeps = true;
+    __structuredAttrs = true;
+  } ''
     mkdir $out
     cp -r ${monorepoSrc}/cmake "$out"
     cp -r ${monorepoSrc}/${finalAttrs.pname} "$out"

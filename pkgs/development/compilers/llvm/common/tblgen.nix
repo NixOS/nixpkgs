@@ -38,7 +38,10 @@ let
 
   src' =
     if monorepoSrc != null then
-      runCommand "${pname}-src-${version}" { } (
+      runCommand "${pname}-src-${version}" {
+        strictDeps = true;
+        __structuredAttrs = true;
+      } (
         ''
           mkdir -p "$out"
           cp -r ${monorepoSrc}/cmake "$out"

@@ -30,7 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   src =
     if monorepoSrc != null then
-      runCommand "openmp-src-${version}" { inherit (monorepoSrc) passthru; } ''
+      runCommand "openmp-src-${version}" {
+        inherit (monorepoSrc) passthru;
+        strictDeps = true;
+        __structuredAttrs = true;
+      } ''
         mkdir -p "$out"
         cp -r ${monorepoSrc}/cmake "$out"
         cp -r ${monorepoSrc}/openmp "$out"

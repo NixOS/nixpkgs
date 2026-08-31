@@ -18,7 +18,10 @@
 let
   pname = "libc";
 
-  src' = runCommand "${pname}-src-${version}" { } (
+  src' = runCommand "${pname}-src-${version}" {
+    strictDeps = true;
+    __structuredAttrs = true;
+  } (
     ''
       mkdir -p "$out"
       cp -r ${monorepoSrc}/cmake "$out"

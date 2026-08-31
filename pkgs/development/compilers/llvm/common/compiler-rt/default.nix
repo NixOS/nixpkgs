@@ -67,7 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   src =
     if monorepoSrc != null then
-      runCommand "compiler-rt-src-${version}" { inherit (monorepoSrc) passthru; } (
+      runCommand "compiler-rt-src-${version}" {
+        inherit (monorepoSrc) passthru;
+        strictDeps = true;
+        __structuredAttrs = true;
+      } (
         ''
           mkdir -p "$out"
           cp -r ${monorepoSrc}/cmake "$out"

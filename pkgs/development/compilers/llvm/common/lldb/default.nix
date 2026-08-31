@@ -46,7 +46,11 @@ stdenv.mkDerivation (
 
     src =
       if monorepoSrc != null then
-        runCommand "lldb-src-${version}" { inherit (monorepoSrc) passthru; } (
+        runCommand "lldb-src-${version}" {
+          inherit (monorepoSrc) passthru;
+          strictDeps = true;
+          __structuredAttrs = true;
+        } (
           ''
             mkdir -p "$out"
             cp -r ${monorepoSrc}/cmake "$out"

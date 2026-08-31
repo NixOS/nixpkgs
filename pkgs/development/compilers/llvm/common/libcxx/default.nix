@@ -112,7 +112,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   src =
     if monorepoSrc != null then
-      runCommand "libcxx-src-${version}" { inherit (monorepoSrc) passthru; } (
+      runCommand "libcxx-src-${version}" {
+        inherit (monorepoSrc) passthru;
+        strictDeps = true;
+        __structuredAttrs = true;
+      } (
         ''
           mkdir -p "$out/llvm"
           cp -r ${monorepoSrc}/cmake "$out"
