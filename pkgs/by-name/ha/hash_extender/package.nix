@@ -8,13 +8,16 @@
 
 stdenv.mkDerivation {
   pname = "hash_extender";
-  version = "unstable-2020-03-24";
+  version = "0-unstable-2020-03-24";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "iagox86";
     repo = "hash_extender";
     rev = "cb8aaee49f93e9c0d2f03eb3cafb429c9eed723d";
-    sha256 = "1fj118566hr1wv03az2w0iqknazsqqkak0mvlcvwpgr6midjqi9b";
+    hash = "sha256-K0UsW6wmv8s3o7uCqSbG+is7cQRcfDXA5iFDYwoKQbo=";
   };
 
   patches = [
