@@ -2,10 +2,24 @@
 
 let
   inherit (lib)
-    genAttrs
     isString
-    mapAttrs
-    removeAttrs
+    ;
+
+  inherit (lib.attrsets)
+    genAttrs
+    ;
+
+  inherit (lib.lists)
+    filter
+    ;
+
+  inherit (lib.trivial)
+    isFunction
+    warn
+    ;
+
+  inherit (lib.derivations)
+    warnOnInstantiate
     ;
 
   showMaybeAttrPosPre =
@@ -221,9 +235,7 @@ in
   /**
     Wrap a derivation such that instantiating it produces a warning.
 
-    All attributes will be wrapped with `lib.warn` except from `.meta`, `.name`,
-    and `.type` which are used by `nix search`, and `.outputName` which avoids
-    double warnings with `nix-instantiate` and `nix-build`.
+    The `drvPath`, `outPath`, and `shellPath` attributes will be wrapped with `lib.warn` in the derivation and its outputs.
 
     # Inputs
 
@@ -254,19 +266,17 @@ in
   warnOnInstantiate =
     msg: drv:
     let
-      drvToWrap = removeAttrs drv [
-        "meta"
-        "name"
-        "type"
-        "outputName"
+      paths = filter (name: drv ? ${name}) [
+        "drvPath"
+        "outPath"
+        "shellPath"
       ];
     in
     drv
-    // mapAttrs (_: lib.warn msg) drvToWrap
-    // (
-      if drv ? overrideAttrs && builtins.isFunction drv.overrideAttrs then
-        { overrideAttrs = x: lib.derivations.warnOnInstantiate msg (drv.overrideAttrs x); }
-      else
-        { }
-    );
+    // genAttrs paths (name: warn msg drv.${name})
+    // genAttrs (drv.outputs or [ ]) (name: warnOnInstantiate msg drv.${name})
+    // {
+      ${if isFunction (drv.overrideAttrs or null) then "overrideAttrs" else null} =
+        args: warnOnInstantiate msg (drv.overrideAttrs args);
+    };
 }
