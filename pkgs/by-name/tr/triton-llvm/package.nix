@@ -25,6 +25,11 @@
   buildTests ? true,
   llvmTargetsToBuild ? [ "NATIVE" ], # "NATIVE" resolves into x86 or aarch64 depending on stdenv
   llvmProjectsToBuild ? [
+    # Required for building the GSan runtime in triton>=3.8.0, which needs a `clang++` inside the
+    # LLVM prefix (`find_program` uses `NO_DEFAULT_PATH`):
+    # https://github.com/triton-lang/triton/blob/v3.8.0/third_party/nvidia/CMakeLists.txt#L11
+    "clang"
+
     # Required for building triton>=3.5.0
     # https://github.com/triton-lang/triton/blob/c3c476f357f1e9768ea4e45aa5c17528449ab9ef/third_party/amd/CMakeLists.txt#L6
     "lld"
@@ -68,7 +73,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "triton-llvm";
-  version = "23.0.0-unstable-2026-06-16"; # See https://github.com/llvm/llvm-project/blob/main/cmake/Modules/LLVMVersion.cmake
+  version = "23.0.0-unstable-2026-08-17"; # See https://github.com/llvm/llvm-project/blob/main/cmake/Modules/LLVMVersion.cmake
 
   __structuredAttrs = true;
 
@@ -82,12 +87,14 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  # See https://github.com/triton-lang/triton/blob/v3.7.1/cmake/llvm-hash.txt
+  # Triton pins its LLVM in `cmake/llvm-info.json`. For the 3.8 release, this is not an upstream
+  # commit but a `triton-lang/llvm-project` branch carrying SLP vectorizer and AMDGPU backports:
+  # https://github.com/triton-lang/triton/blob/release/3.8.x/cmake/llvm-info.json
   src = fetchFromGitHub {
-    owner = "llvm";
+    owner = "triton-lang";
     repo = "llvm-project";
-    rev = "1f126a6dea50d185c0781743a667390037ae88bd";
-    hash = "sha256-U14/YrUkTsjtEWoaegASN0oyQ08E11sTRs6DuNeqxnE=";
+    rev = "5f07f818b51b786b0a87b4e514882600ecba112f";
+    hash = "sha256-1sWaezAmvrPbrYVh2CLgtPEjkDiZBQkNymp18Eosbd0=";
   };
 
   nativeBuildInputs = [
@@ -142,6 +149,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "LLVM_INCLUDE_TESTS" buildTests)
     (lib.cmakeBool "MLIR_INCLUDE_TESTS" buildTests)
     (lib.cmakeBool "LLVM_BUILD_TESTS" buildTests)
+    # clang is only shipped so triton can compile its GSan runtime, so don't pull
+    # its suite into `check-all`; scan-build, plugin and HIP tests fail in the sandbox
+    (lib.cmakeBool "CLANG_INCLUDE_TESTS" false)
     # Cross compilation code taken/modified from LLVM 16 derivation
   ]
   ++ lib.optionals (!isNative) (
