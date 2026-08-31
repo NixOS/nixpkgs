@@ -1,4 +1,5 @@
 {
+  lib,
   stdenvNoCC,
 }:
 
@@ -24,5 +25,6 @@ stdenvNoCC.mkDerivation {
   meta = {
     description = "Dummy package for the libretro package set";
     platforms = [ ];
+    teams = [ lib.teams.libretro ];
   };
 }
