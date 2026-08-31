@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  bashNonInteractive,
   elixir,
   erlang,
   hex,
@@ -120,7 +121,13 @@ lib.extendMkDerivation {
             makeWrapper
           ];
 
-      buildInputs = buildInputs ++ lib.optionals (escriptBinName != null) [ erlang ];
+      buildInputs = [
+        bashNonInteractive
+      ]
+      ++ buildInputs
+      ++ lib.optionals (escriptBinName != null) [
+        erlang
+      ];
 
       __structuredAttrs = true;
       strictDeps = true;

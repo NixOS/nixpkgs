@@ -2,8 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  # other
-  gitMinimal,
   withPcap ? true,
   withXclip ? stdenv.hostPlatform.isLinux,
   xclip,
@@ -13,14 +11,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "visidata";
-  version = "3.3";
+  version = "3.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "saulpw";
     repo = "visidata";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-y+HqRww/Fm+YeiNYH0a2TcUYOc72qL+9tC0PRudptrA=";
+    hash = "sha256-h5utXfafQP6uZ7vXQAYXfV26y0qHbk6vulPl6DXbVX4=";
   };
 
   propagatedBuildInputs =
@@ -66,6 +64,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       sh
       psutil
       numpy
+      shapely
 
       #requests_cache
       beautifulsoup4
@@ -87,10 +86,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     )
     ++ lib.optional withXclip xclip;
 
-  nativeCheckInputs = [
-    gitMinimal
-  ];
-
   # check phase uses the output bin, which is not possible when cross-compiling
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
@@ -98,23 +93,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
     runHook preCheck
 
     # disable some tests which require access to the network
-    rm -f tests/load-http.vd            # http
-    rm -f tests/graph-cursor-nosave.vd  # http
-    rm -f tests/messenger-nosave.vd     # dns
+    rm tests/load-http-flaky.vd       # http
+    rm tests/messenger-nosave.vd      # dns
 
     # tests to disable because we don't have a package to load such files
-    rm -f tests/load-conllu.vdj         # no 'pyconll'
-    rm -f tests/load-sav.vd             # no 'savReaderWriter'
-    rm -f tests/load-fec.vdj            # no 'fecfile'
+    rm tests/load-conllu.vdj          # no 'pyconll'
+    rm tests/load-fec.vdj             # no 'fecfile'
 
-    # tests use git to compare outputs to references
-    git init -b "test-reference"
-    git config user.name "nobody"
-    git config user.email "no@where"
-    git add .
-    git commit -m "test reference"
-
-    substituteInPlace dev/test.sh --replace "bin/vd" "$out/bin/vd"
+    patchShebangs tests/
+    substituteInPlace tests/test-vdx.sh --replace-fail "bin/vd" "$out/bin/vd"
     bash dev/test.sh
     runHook postCheck
   '';

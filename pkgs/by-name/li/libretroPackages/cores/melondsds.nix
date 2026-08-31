@@ -125,7 +125,7 @@ mkLibretroCore rec {
         })}
 
         src=$(nix-build --no-out-link -A "$UPDATE_NIX_ATTR_PATH.src")
-        core_file="pkgs/applications/emulators/libretro/cores/melondsds.nix"
+        core_file="pkgs/by-name/li/libretroPackages/cores/melondsds.nix"
 
         # find lines in the format:
         #   fetch_dependency(name url rev)
