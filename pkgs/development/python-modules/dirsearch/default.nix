@@ -1,122 +1,84 @@
 {
   lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  python,
-  pytestCheckHook,
-  # deps
-  /*
-    ntlm-auth is in the requirements.txt, however nixpkgs tells me
-    > ntlm-auth has been removed, because it relies on the md4 implementation provided by openssl. Use pyspnego instead.
-    Not sure if pyspnego is a drop in replacement.
-    The simple functionality dirsearch seems not to depend on this package.
-  */
-  #ntlm-auth,
-  #pyspnego,
   beautifulsoup4,
-  certifi,
-  cffi,
-  chardet,
-  charset-normalizer,
+  buildPythonPackage,
   colorama,
   cryptography,
+  defusedcsv,
   defusedxml,
-  idna,
+  fetchFromGitHub,
+  httpx-ntlm,
+  httpx,
   jinja2,
-  markupsafe,
+  mysql-connector-python,
+  psycopg2-binary,
   pyopenssl,
-  pyparsing,
   pysocks,
-  requests,
+  pytestCheckHook,
   requests-ntlm,
+  requests-toolbelt,
+  requests,
   setuptools,
   urllib3,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "dirsearch";
-  version = "0.4.3";
+  version = "0.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maurosoria";
     repo = "dirsearch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eXB103qUB3m7V/9hlq2xv3Y3bIz89/pGJsbPZQ+AZXs=";
+    hash = "sha256-WKQjtJ5fMVLzX92gOFLqmBLkeM4o2XfVYW9Wz4OmjP4=";
   };
 
-  # setup.py does some weird stuff with mktemp
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail 'os.chdir(env_dir)' "" \
-      --replace-fail 'shutil.copytree(os.path.abspath(os.getcwd()), os.path.join(env_dir, "dirsearch"))' ""
-  '';
+  pythonRelaxDeps = true;
 
-  pyproject = true;
   build-system = [ setuptools ];
 
   dependencies = [
-    # maybe needed, see above
-    #pyspnego
-    #ntlm-auth
     beautifulsoup4
-    certifi
-    cffi
-    chardet
-    charset-normalizer
     colorama
-    cryptography
+    defusedcsv
     defusedxml
-    idna
+    httpx
+    httpx-ntlm
     jinja2
-    markupsafe
     pyopenssl
-    pyparsing
     pysocks
     requests
     requests-ntlm
+    requests-toolbelt
     setuptools
-    urllib3
   ];
 
-  # the library files get installed in the wrong location
-  # and dirsearch.py, __init__.py and db/ are missing
-  postInstall = ''
-    dirsearchpath=$out/lib/python${lib.versions.majorMinor python.version}/site-packages/
-    mkdir -p $dirsearchpath/dirsearch
-    mv $dirsearchpath/{lib,dirsearch}
-    cp $src/{dirsearch,__init__}.py $dirsearchpath/dirsearch
-    cp -r $src/db $dirsearchpath/dirsearch
-  '';
+  optional-dependencies = {
+    db = [
+      mysql-connector-python
+      psycopg2-binary
+    ];
+    mysql = [ mysql-connector-python ];
+    postgresql = [ psycopg2-binary ];
+  };
 
-  # tests
   nativeCheckInputs = [
     pytestCheckHook
-  ];
-  disabledTestPaths = [
-    # needs network?
-    "tests/reports/test_reports.py"
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
+
   disabledTests = [
-    # failing for unknown reason
+    # AssertionError: 'http' != 'https'
     "test_detect_scheme"
   ];
-  pythonRemoveDeps = [
-    # not available, see above
-    "ntlm_auth"
-  ];
-  pythonRelaxDeps = [
-    # version checker doesn't recognize 0.8.0.rc2 as >=0.7.0
-    "defusedxml"
-    # probably not but we don't have old charset-normalizer versions in nixpkgs
-    # and requests also depends on it so we can't just override it with an
-    # older version due to package duplication
-    "charset_normalizer"
-  ];
+
+  pythonImportsCheck = [ "dirsearch" ];
 
   meta = {
-    changelog = "https://github.com/maurosoria/dirsearch/releases/tag/${finalAttrs.src.tag}";
     description = "Command-line tool for brute-forcing directories and files in webservers, AKA a web path scanner";
     homepage = "https://github.com/maurosoria/dirsearch";
+    changelog = "https://github.com/maurosoria/dirsearch/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     mainProgram = "dirsearch";
     maintainers = with lib.maintainers; [ quantenzitrone ];
