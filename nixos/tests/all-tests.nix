@@ -1227,6 +1227,7 @@ in
   nix-local-store = runTest ./nix-local-store.nix;
   nix-misc = handleTest ./nix/misc.nix { };
   nix-required-mounts = runTest ./nix-required-mounts;
+  nix-secret-bridge = handleTest ./nix-secret-bridge.nix { };
   nix-serve = runTest ./nix-serve.nix;
   nix-serve-ssh = runTest ./nix-serve-ssh.nix;
   nix-store-veritysetup = runTest ./nix-store-veritysetup.nix;
