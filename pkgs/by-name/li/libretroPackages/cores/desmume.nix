@@ -10,13 +10,13 @@
 }:
 mkLibretroCore {
   core = "desmume";
-  version = "0-unstable-2026-05-16";
+  version = "0-unstable-2026-08-23";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "desmume";
-    rev = "ae0f7f51f96d9b5741b47b425505a4a4224b91fa";
-    hash = "sha256-M8Z2Zk9wjEuOOg++Tk68A8hgCmE63nh9+oJhu4fsQsk=";
+    rev = "8f6b32cb9a5e310bd38520e7087ce7fa14765f15";
+    hash = "sha256-u1YTW7thPzmcse0XDs7WOu3foL7kf+urplOufQqawW8=";
   };
 
   extraBuildInputs = [
