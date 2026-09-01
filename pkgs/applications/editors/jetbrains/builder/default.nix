@@ -8,7 +8,6 @@
   jdk,
 
   vmopts ? null,
-  forceWayland ? false,
 }:
 let
   baseBuilder = if stdenv.hostPlatform.isDarwin then ./darwin.nix else ./linux.nix;
@@ -16,7 +15,7 @@ in
 # Makes a JetBrains IDE
 lib.extendMkDerivation {
   constructDrv = callPackage baseBuilder {
-    inherit vmopts jdk forceWayland;
+    inherit vmopts jdk;
     # Args to not pass to mkDerivation in the base builders. Since both get the same args
     # passed in, both have the same list of args to ignore, even if they don't both use
     # all of them.
