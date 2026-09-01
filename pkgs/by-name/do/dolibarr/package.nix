@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   nixosTests,
   stateDir ? "/var/lib/dolibarr",
 }:
@@ -16,6 +17,17 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-YJKTaLGaILhCFREtAgmX+vzhXIKp0DIj6jn7TtqtFB4=";
   };
+
+  patches = [
+    # Remove when updating to Dolibarr 24.0.0 or a 23.x release containing 24b1b99c89c7.
+    ./CVE-2026-81728.patch
+    # Remove when updating to Dolibarr 24.0.0 or a 23.x release containing fd478850f823.
+    (fetchpatch {
+      name = "CVE-2026-82633.patch";
+      url = "https://github.com/Dolibarr/dolibarr/commit/fd478850f823e27c672300acb4b02baeef79aef1.patch";
+      hash = "sha256-OkkQh06r9vnyP/02VIg7ZexT4AQit3rYEgiUC/qnXbg=";
+    })
+  ];
 
   dontBuild = true;
 
