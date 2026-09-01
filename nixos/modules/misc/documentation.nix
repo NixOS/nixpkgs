@@ -152,7 +152,7 @@ let
           printf "%s" "$modules" > "$modulesPath"
           export NIX_STORE_DIR=$TMPDIR/store
           export NIX_STATE_DIR=$TMPDIR/state
-          ${pkgs.buildPackages.nix}/bin/nix-instantiate \
+          ${config.nix.package}/bin/nix-instantiate \
             --show-trace \
             --eval --json --strict \
             --argstr libPath "$libPath" \
