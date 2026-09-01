@@ -49,8 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    yarn workspaces focus --production
+
     mkdir -p $out/bin $out/share/outline
     mv build server public node_modules $out/share/outline/
+    find $out/share/outline/node_modules -name "*.map" -delete
+    find $out/share/outline/node_modules -name "*.d.ts" -delete
 
     node_modules=$out/share/outline/node_modules
     build=$out/share/outline/build

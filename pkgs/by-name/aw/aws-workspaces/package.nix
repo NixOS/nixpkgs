@@ -4,7 +4,7 @@
   writeShellApplication,
   buildFHSEnv,
   webkitgtk_4_1,
-  ffmpeg_7,
+  ffmpeg_8,
   gtk4,
   libepoxy,
   wayland,
@@ -39,7 +39,7 @@ let
           exit 1
       fi
 
-      echo "Release: 22.04"
+      echo "Release: 24.04"
     '';
   };
 in
@@ -59,7 +59,7 @@ buildFHSEnv {
     libepoxy
     libxcb
     libxi
-    ffmpeg_7
+    ffmpeg_8
     pango
     atk
     cairo
