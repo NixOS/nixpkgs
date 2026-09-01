@@ -40,6 +40,18 @@ let
         fi
       '';
 
+  hiddenDesktopEntry =
+    pkgs.runCommand "cups-hidden-desktop-entry"
+      {
+        preferLocalBuild = true;
+      }
+      ''
+        install -D -m 644 \
+          ${cups.out}/share/applications/cups.desktop \
+          $out/share/applications/cups.desktop
+        echo 'Hidden=true' >> $out/share/applications/cups.desktop
+      '';
+
   # Here we can enable additional backends, filters, etc. that are not
   # part of CUPS itself, e.g. the SMB backend is part of Samba.  Since
   # we can't update ${cups.out}/lib/cups itself, we create a symlink tree
@@ -373,13 +385,20 @@ in
       groups.lpadmin = { };
     };
 
-    # We need xdg-open (part of xdg-utils) for the desktop-file to proper open the users default-browser when opening "Manage Printing"
-    # https://github.com/NixOS/nixpkgs/pull/237994#issuecomment-1597510969
-    environment.systemPackages = [
-      cups.out
-      xdg-utils
-    ]
-    ++ optional polkitEnabled cups-pk-helper;
+    environment.systemPackages =
+      (
+        if cfg.webInterface then
+          [
+            # We need xdg-open (part of xdg-utils) for the desktop-file to proper open the users default-browser when opening "Manage Printing"
+            xdg-utils
+          ]
+        else
+          [
+            hiddenDesktopEntry
+          ]
+      )
+      ++ [ cups.out ]
+      ++ optional polkitEnabled cups-pk-helper;
     environment.etc.cups.source = "/var/lib/cups";
 
     services.dbus.packages = [ cups.out ] ++ optional polkitEnabled cups-pk-helper;
