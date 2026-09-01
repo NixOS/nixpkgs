@@ -16,6 +16,11 @@ let
     "ghc902Binary"
     "ghc966DebianBinary"
     "ghc984Binary"
+    # `ghc/ng`. Two reasons: these are assembled by `ghc/ng/assemble.nix`, which
+    # takes no `enableNativeBignum` to override, and they are built with
+    # `-fbignum-native` already -- there is no gmp flavour to choose between.
+    "ghcNG-9_14"
+    "ghcNG-head"
   ];
 
   haskellLibUncomposable = import ../development/haskell-modules/lib {
