@@ -21,6 +21,7 @@ materia-theme.overrideAttrs {
     platforms = lib.platforms.all;
     maintainers = [
       lib.maintainers.corbinwunderlich
+      lib.maintainers.marrobHD
     ];
   };
 }
