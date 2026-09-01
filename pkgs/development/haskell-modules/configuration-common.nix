@@ -481,18 +481,6 @@ with haskellLib;
     sha256 = "sha256-b29AVDiEMcShceRJyKEauK/411UkOh3ME9AnKEYvcEs=";
   }) super.lifted-base;
 
-  leveldb-haskell = overrideCabal (drv: {
-    version = "2024-05-05-unstable";
-    # Fix tests on mtl ≥ 2.3
-    # https://github.com/kim/leveldb-haskell/pull/42
-    src = pkgs.fetchFromGitHub {
-      owner = "kim";
-      repo = "leveldb-haskell";
-      rev = "3a505f3a7de0f5d14463538d7c2c9a9881a60eb9";
-      sha256 = "sha256-okUn5ZuWcj8vPr0GWXvO1LygNCrDfttkDaUoOt+FLA0=";
-    };
-  }) super.leveldb-haskell;
-
   # 2025-08-08: Allow QuickCheck >= 2.15 in selective's test-suite
   # https://github.com/snowleopard/selective/pull/81
   selective = doJailbreak super.selective;
@@ -3515,13 +3503,13 @@ with haskellLib;
 # Manually maintained
 // (
   let
-    version = "1.12.0";
+    version = "1.12.1";
 
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "e3609f93799354c50e4126d6423ede6dd317e2f2";
-      hash = "sha256-AOhHyBEk8LOiAU9tgmNJPJAKKUVDQFzTNSLe62FPxpY=";
+      tag = "v${version}";
+      hash = "sha256-OUB6hPlFBB9FRdZgZXSye4lDOg+fbrqKe8ePv2IM7NY=";
     };
   in
   {

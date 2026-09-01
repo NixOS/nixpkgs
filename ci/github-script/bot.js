@@ -1,13 +1,13 @@
 // @ts-nocheck
-module.exports = async ({ github, context, core, dry }) => {
-  const path = require('node:path')
-  const { DefaultArtifactClient } = await import('@actions/artifact')
-  const { readFile, writeFile } = require('node:fs/promises')
-  const withRateLimit = require('./withRateLimit.js')
-  const { classify } = require('../supportedBranches.js')
-  const { handleMerge } = require('./merge.js')
-  const { handleReviewers } = require('./reviewers.js')
+import { readFile, writeFile } from 'node:fs/promises'
+import path from 'node:path'
+import { DefaultArtifactClient } from '@actions/artifact'
+import { handleMerge } from './merge.js'
+import { handleReviewers } from './reviewers.js'
+import { classify } from './supportedBranches.js'
+import withRateLimit from './withRateLimit.js'
 
+export default async ({ github, context, core, dry }) => {
   const artifactClient = new DefaultArtifactClient()
 
   // Detect if running in a fork (not NixOS/nixpkgs)

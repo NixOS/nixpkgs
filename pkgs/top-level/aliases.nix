@@ -1067,6 +1067,8 @@ mapAliases {
   graalvm-oracle = throw "'graalvm-oracle' has been renamed to/replaced by 'graalvmPackages.graalvm-oracle'"; # Converted to throw 2025-10-27
   graalvmCEPackages = throw "'graalvmCEPackages' has been renamed to/replaced by 'graalvmPackages'"; # Converted to throw 2025-10-27
   gradience = throw "`gradience` has been removed because it was archived upstream."; # Added 2025-09-20
+  gradle_7 = throw "Gradle 7 has been removed because it is end-of-life. Please upgrade to a newer version of Gradle: https://docs.gradle.org/current/userguide/upgrading_version_7.html"; # Added 2026-01-22
+  gradle_7-unwrapped = throw "Gradle 7 has been removed because it is end-of-life. Please upgrade to a newer version of Gradle: https://docs.gradle.org/current/userguide/upgrading_version_7.html"; # Added 2026-01-22
   gradleGen = throw "'gradleGen' has been moved to `gradle-packages.mkGradle`."; # Added 2025-11-02
   grafana_reporter = throw "'grafana_reporter' has been renamed to/replaced by 'grafana-reporter'"; # Converted to throw 2025-10-27
   graphia = throw "'graphia' has been removed due to being unmaintained and broken"; # Added 2026-05-05
@@ -1747,6 +1749,10 @@ mapAliases {
   neocities-cli = throw "'neocities-cli' has been renamed to/replaced by 'neocities'"; # Converted to throw 2025-10-27
   neofetch = throw "'neofetch' has been removed because it was unmaintained upstream. Consider using the updated fork 'neowofetch' provided by the 'hyfetch' package or the alternative 'fastfetch' instead."; # Added 2026-03-02
   netbox_4_1 = throw "netbox 4.1 series has been removed as it was EOL"; # Added 2025-10-14
+  netbox_4_2 = throw "netbox 4.2 series has been removed as it was EOL"; # Added 2026-08-24
+  netbox_4_3 = throw "netbox 4.3 series has been removed as it was EOL"; # Added 2026-08-24
+  netbox_4_4 = throw "netbox 4.4 series has been removed as it was EOL"; # Added 2026-08-24
+  netbox_4_5 = throw "netbox 4.5 series has been removed as it was EOL"; # Added 2026-08-24
   netbsdCross = throw "'netbsdCross' has been renamed to/replaced by 'netbsd'"; # Converted to throw 2025-10-27
   netsurf.browser = throw "'netsurf.browser' has been renamed to/replaced by 'netsurf-browser'"; # Converted to throw 2025-10-27
   netsurf.buildsystem = throw "'netsurf.buildsystem' has been renamed to/replaced by 'netsurf-buildsystem'"; # Converted to throw 2025-10-27

@@ -45,7 +45,10 @@
 }:
 
 let
-  buildNumber = "10566";
+  # Upstream reads these from git, which the release tarball does not ship.
+  # They are purely informational: `llama-server --version`, `/props`, and the web UI.
+  buildNumber = "10621";
+  buildCommit = "c1d0e7a";
 
   # It's necessary to consistently use backendStdenv when building with CUDA support,
   # otherwise we get libstdc++ errors downstream.
@@ -55,6 +58,7 @@ let
     cmakeBool
     cmakeFeature
     optionals
+    optionalString
     ;
 
   cudaBuildInputs = with cudaPackages; [
@@ -80,7 +84,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "0.2.0";
+  version = "0.3.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -94,12 +98,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6cK5BMCCEUWL+590+WbrRInH3eEnsZ/S5m71IIBgDsA=";
-    leaveDotGit = true;
-    postFetch = ''
-      git -C "$out" rev-parse --short HEAD > $out/COMMIT
-      find "$out" -name .git -print0 | xargs -0 rm -rf
-    '';
+    hash = "sha256-vVq7+eUN6NXZuqm7Jwlr4iFDV1PjNzQ6nK9AR2zvZYM=";
   };
 
   patches = [ ];
@@ -141,7 +140,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   };
 
   preConfigure = ''
-    prependToVar cmakeFlags "-DLLAMA_BUILD_COMMIT:STRING=$(cat COMMIT)"
     pushd ${finalAttrs.npmRoot}
     LLAMA_BUILD_NUMBER=${buildNumber} npm run build
     popd
@@ -163,6 +161,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeBool "GGML_RPC" rpcSupport)
     (cmakeBool "GGML_VULKAN" vulkanSupport)
     (cmakeFeature "LLAMA_BUILD_NUMBER" buildNumber)
+    (cmakeFeature "LLAMA_BUILD_COMMIT" buildCommit)
   ]
   ++ optionals cpuArchDynamicDispatch [
     # Build all CPU backend variants for runtime dynamic dispatch.
@@ -188,14 +187,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeBool "LLAMA_METAL_EMBED_LIBRARY" true)
   ];
 
-  # upstream plans on adding targets at the cmakelevel, remove those
-  # additional steps after that
-  postInstall = ''
-    mkdir -p $out/include
-    cp $src/include/llama.h $out/include/
-
-  ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd llama-server --bash <($out/bin/llama-server --completion-bash)
   '';
 

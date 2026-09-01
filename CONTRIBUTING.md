@@ -587,9 +587,9 @@ CI [enforces](./.github/workflows/lint.yml) all Nix files to be formatted using 
 
 You can ensure this locally using either of these commands:
 ```
-nix-shell --run treefmt
-nix develop --command treefmt
 nix fmt
+nix develop --command treefmt
+nix-shell --run treefmt
 ```
 
 If you're starting your editor in `nix-shell` or `nix develop`, you can also set it up to automatically run `treefmt` on save.

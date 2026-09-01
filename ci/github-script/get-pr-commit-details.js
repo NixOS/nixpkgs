@@ -1,6 +1,7 @@
-// @ts-nocheck
-const { promisify } = require('node:util')
-const execFile = promisify(require('node:child_process').execFile)
+import { execFile as nodeExecFile } from 'node:child_process'
+import { promisify } from 'node:util'
+
+const execFile = promisify(nodeExecFile)
 
 /**
  * @typedef {{
@@ -41,13 +42,13 @@ async function runGit({ args, repoPath, core, quiet }) {
  *
  * @param {{
  *  core: typeof import('@actions/core'),
- *  pr: Awaited<ReturnType<InstanceType<import('@actions/github/lib/utils').GitHub>["rest"]["pulls"]["get"]>>["data"]
+ *  pr: Awaited<ReturnType<InstanceType<typeof import('@actions/github/lib/utils').GitHub>["rest"]["pulls"]["get"]>>["data"]
  *  repoPath?: string,
  * }} GetCommitMessagesForPRProps
  *
  * @returns {Promise<Commit[]>}
  */
-async function getCommitDetailsForPR({ core, pr, repoPath }) {
+export async function getCommitDetailsForPR({ core, pr, repoPath }) {
   await runGit({
     args: ['fetch', `--depth=1`, 'origin', pr.base.sha],
     repoPath,
@@ -113,5 +114,3 @@ async function getCommitDetailsForPR({ core, pr, repoPath }) {
     }),
   )
 }
-
-module.exports = { getCommitDetailsForPR }

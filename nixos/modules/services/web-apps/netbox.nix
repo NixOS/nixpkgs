@@ -122,7 +122,7 @@ in
       [ "services" "netbox" "ldapConfigPath" ]
       [ "services" "netbox" "ldapConfigFile" ]
     )
-    (mkRemovedOptionModule [ "services" "nginx" "gunicornArgs" ] ''
+    (mkRemovedOptionModule [ "services" "netbox" "gunicornArgs" ] ''
       Removed in favor of `services.netbox.gunicorn.extraArgs`, an attribute set passed to `lib.cli.toCommandLineGNU`.
     '')
   ];

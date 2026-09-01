@@ -14,23 +14,21 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scs";
-  version = "3.2.11";
+  version = "3.3.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "cvxgrp";
     repo = "scs";
     tag = finalAttrs.version;
-    hash = "sha256-hF5BxCLscyUmNXIVFIAAjY0GDbcH7WjODC4116aQfIs=";
+    hash = "sha256-5Mq/mi2pW9DHXjhUEjflBeZMjJN+aJZRenVlRlloBcw=";
   };
 
-  # Actually link and add libgfortran to the rpath
-  postPatch = ''
-    substituteInPlace scs.mk \
-      --replace-fail "# -lgfortran" "-lgfortran" \
-      --replace-fail "gcc" "cc"
-  '';
-
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ];
 
   buildInputs = [
     blas

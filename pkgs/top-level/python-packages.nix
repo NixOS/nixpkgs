@@ -5148,6 +5148,8 @@ self: super: with self; {
 
   doxmlparser = callPackage ../development/python-modules/doxmlparser { };
 
+  dpapi-ng = callPackage ../development/python-modules/dpapi-ng { };
+
   dparse = callPackage ../development/python-modules/dparse { };
 
   dparse2 = callPackage ../development/python-modules/dparse2 { };
@@ -12560,6 +12562,8 @@ self: super: with self; {
 
   openevsewifi = callPackage ../development/python-modules/openevsewifi { };
 
+  openexr = callPackage ../development/python-modules/openexr { };
+
   openfga-sdk = callPackage ../development/python-modules/openfga-sdk { };
 
   openhomedevice = callPackage ../development/python-modules/openhomedevice { };
@@ -19808,6 +19812,8 @@ self: super: with self; {
 
   stackit-resourcemanager = callPackage ../development/python-modules/stackit-resourcemanager { };
 
+  stackit-ske = callPackage ../development/python-modules/stackit-ske { };
+
   stackprinter = callPackage ../development/python-modules/stackprinter { };
 
   stamina = callPackage ../development/python-modules/stamina { };
@@ -19942,6 +19948,8 @@ self: super: with self; {
   stix2-validator = callPackage ../development/python-modules/stix2-validator { };
 
   stm32loader = callPackage ../development/python-modules/stm32loader { };
+
+  stockfish = callPackage ../development/python-modules/stockfish { inherit (pkgs) stockfish; };
 
   stomp-py = callPackage ../development/python-modules/stomp-py { };
 

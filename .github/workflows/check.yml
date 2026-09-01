@@ -76,7 +76,8 @@ jobs:
           github-token: ${{ steps.app-token.outputs.token || github.token }}
           script: |
             const targetsStable = JSON.parse(process.env.TARGETS_STABLE)
-            require('./trusted/ci/github-script/commits.js')({
+            const { default: commits } = await import('${{ github.workspace }}/trusted/ci/github-script/commits.js')
+            await commits({
               github,
               context,
               core,
@@ -121,7 +122,8 @@ jobs:
         with:
           github-token: ${{ steps.app-token.outputs.token || github.token }}
           script: |
-            require('./trusted/ci/github-script/manual-file-edits.js')({
+            const { default: checkManualFileEdits } = await import('${{ github.workspace }}/trusted/ci/github-script/manual-file-edits.js')
+            await checkManualFileEdits({
               github,
               context,
               core,

@@ -6,12 +6,12 @@
 
 buildGoModule rec {
   pname = "godef";
-  version = "1.1.2";
+  version = "1.2.0";
   rev = "v${version}";
 
   subPackages = [ "." ];
 
-  vendorHash = null;
+  vendorHash = "sha256-WjOPmkzOZC0cXOJKAU6iU/Y+NzBv6fHB8xwNMKDnhvY=";
 
   doCheck = false;
 
@@ -19,7 +19,7 @@ buildGoModule rec {
     inherit rev;
     owner = "rogpeppe";
     repo = "godef";
-    sha256 = "0rhhg73kzai6qzhw31yxw3nhpsijn849qai2v9am955svmnckvf4";
+    sha256 = "sha256-0qmKn0TIrRH3B54/7/XB1zjaVA4R3LbbsPzLByfEJuo=";
   };
 
   meta = {
