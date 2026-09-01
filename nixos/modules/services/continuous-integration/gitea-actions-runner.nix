@@ -96,9 +96,13 @@ in
             type = nullOr (either str path);
             default = null;
             description = ''
-              Path to an environment file, containing the `TOKEN` environment
-              variable, that holds a token to register at the configured
+              Path to a file containing a token to register at the configured
               Gitea/Forgejo instance.
+
+              For backwards compatibility, the file may instead be a
+              systemd-style environment file containing a `TOKEN` assignment,
+              but this format is deprecated: a warning is emitted at runtime,
+              and support will be removed in the future.
             '';
           };
 
@@ -209,10 +213,7 @@ in
               "multi-user.target"
             ];
             environment =
-              optionalAttrs (instance.token != null) {
-                TOKEN = "${instance.token}";
-              }
-              // optionalAttrs wantsPodman {
+              optionalAttrs wantsPodman {
                 DOCKER_HOST = "unix:///run/podman/podman.sock";
               }
               // {
@@ -243,7 +244,18 @@ in
               ExecStartPre = [
                 (pkgs.writeShellScript "gitea-register-runner-${name}" ''
                   # force reregistration on changed token or labels
-                  export TOKEN_HASH_CURRENT="$(printf '%s' "$TOKEN" | sha256sum | cut -d' ' -f1)"
+
+                  if grep -q -m1 -E '^[[:space:]]*TOKEN=' "$CREDENTIALS_DIRECTORY/token"; then
+                    echo "gitea-actions-runner: providing 'tokenFile' as an environment file with a TOKEN= assignment is deprecated." >&2
+                    echo "please provide the raw token as the file's content instead." >&2
+
+                    sed -n -E 's/^[[:space:]]*TOKEN=//p' "$CREDENTIALS_DIRECTORY/token" | tail -n1 > "$RUNTIME_DIRECTORY/token"
+                    export TOKEN_FILE="$RUNTIME_DIRECTORY/token"
+                  else
+                    export TOKEN_FILE="$CREDENTIALS_DIRECTORY/token"
+                  fi
+
+                  export TOKEN_HASH_CURRENT="$(sha256sum "$TOKEN_FILE" | cut -d' ' -f1)"
                   export TOKEN_HASH_STORED="$(cat "$TOKEN_HASH_FILE" 2>/dev/null || echo "")"
                   export LABELS_WANTED="$(echo ${escapeShellArg (concatStringsSep "\n" instance.labels)} | sort)"
                   export LABELS_CURRENT="$(cat $LABELS_FILE 2>/dev/null || echo 0)"
@@ -255,7 +267,7 @@ in
                     # perform the registration
                     ${getExe cfg.package} register --no-interactive \
                       --instance ${escapeShellArg instance.url} \
-                      --token "$TOKEN" \
+                      --token-file "$TOKEN_FILE" \
                       --name ${escapeShellArg instance.name} \
                       --labels ${escapeShellArg (concatStringsSep "," instance.labels)} \
                       --config ${configFile}
@@ -275,9 +287,18 @@ in
                 ++ optionals wantsPodman [
                   "podman"
                 ];
-            }
-            // optionalAttrs (instance.tokenFile != null) {
-              EnvironmentFile = instance.tokenFile;
+
+              LoadCredential =
+                let
+                  tokenCredentialSource =
+                    if instance.tokenFile != null then
+                      instance.tokenFile
+                    else
+                      pkgs.writeText "gitea-runner-${name}-token" instance.token;
+                in
+                "token:${tokenCredentialSource}";
+              RuntimeDirectory = "gitea-runner/${name}";
+              RuntimeDirectoryMode = "0700";
             };
           };
       in
