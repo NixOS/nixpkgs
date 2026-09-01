@@ -326,6 +326,32 @@ let
         '';
       };
 
+      endpointDNS = mkOption {
+        default = null;
+        example = "1.1.1.1";
+        type = with types; nullOr str;
+        description = ''
+          The dns nameserver to use when resolving the peer endpoint
+          When null the configured nameservers in /etc/resolv.conf will be used
+
+          ::: {.note}
+          If this peer is used for routing, DNS queries will also be routed through it
+          Consider adding a route for the nameserver, or using namespaces to avoid this
+          See [documentation](https://www.wireguard.com/netns/).
+          :::
+        '';
+      };
+
+      endpointDNSNamespace = mkOption {
+        default = null;
+        example = "container";
+        type = with types; nullOr str;
+        description = ''
+          The pre-existing network namespace to use when resolving this peers endpoint
+          When `null` dns resolution occurs in the same namespace as the wireguard interface
+        '';
+      };
+
       dynamicEndpointRefreshSeconds = mkOption {
         default = null;
         defaultText = literalExpression "config.networking.wireguard.interfaces.<name>.dynamicEndpointRefreshSeconds";
@@ -471,6 +497,8 @@ let
       path = with pkgs; [
         iproute2
         wgPackages.${interfaceCfg.type}
+        ipcalc # for testing if the endpoint is a domain and should be resolved
+        dig # for resolving peer endpoints if the endpoint is a domain
       ];
 
       serviceConfig =
@@ -504,7 +532,6 @@ let
           wg_setup = concatStringsSep " " (
             [ ''${wg} set ${interfaceName} peer "${peer.publicKey}"'' ]
             ++ optional (psk != null) ''preshared-key "${psk}"''
-            ++ optional (peer.endpoint != null) ''endpoint "${peer.endpoint}"''
             ++ optional (
               peer.persistentKeepalive != null
             ) ''persistent-keepalive "${toString peer.persistentKeepalive}"''
@@ -518,18 +545,66 @@ let
               }''
             ) peer.allowedIPs
           );
+          endpointSplit = lib.splitString ":" peer.endpoint;
+          domain = head endpointSplit;
+          port = last endpointSplit;
+          # if peer.endpointDNSNamespace is null, use the interfaceNamespace for endpoint resolution
+          digNamespace = if peer.endpointDNSNamespace == null then dst else peer.endpointDNSNamespace;
+          # if digNamespace is null (when both endpointDNSNamespace and interfaceNamespace are null) use the socketNamespace
+          # nsWrap falls back to the init namespace when all are null, this ensures that dig is always run in either endpointDNSNamespace,
+          # or if endpointDNSNamespace is null, the namespace that the wireguard interface is in
+          digCmd =
+            "${nsWrap "dig" src digNamespace} "
+            + "+short " # only return resolved address
+            + "+retry=0" # don't retry on failure
+            + optionalString (peer.endpointDNS != null) "@${peer.endpointDNS}"; # use provided nameserver if set
         in
         ''
           ${wg_setup}
+          ${optionalString (peer.endpoint != null) ''
+            # check with ipcalc if endpoint is a domain or ip address
+            if ipcalc -c "${domain}" 2> /dev/null; then
+              # if endpoint is an ip addr just directly use wg to set peer endpoint without resolving
+              ${wg} set '${interfaceName}' peer '${peer.publicKey}' endpoint '${peer.endpoint}'
+            else
+              # if endpoint is a domain, attempt to resolve it
+              if res=$(${digCmd} '${domain}'); then
+                # if resolving works, set peer endpoint
+                ${wg} set '${interfaceName}' peer '${peer.publicKey}' endpoint "$res:${port}"
+              else
+                # if resolving fails, log to stderr and don't set endpoint
+                # dig prints errors to stdout, not stderr so this is needed
+                echo "$res" >&2
+              fi
+            fi
+          ''}
           ${route_setup}
 
           ${optionalString (dynamicEndpointRefreshSeconds != 0) ''
-            # Re-execute 'wg' periodically to notice DNS / hostname changes.
-            # Note this will not time out on transient DNS failures such as DNS names
-            # because we have set 'WG_ENDPOINT_RESOLUTION_RETRIES=infinity'.
-            # Also note that 'wg' limits its maximum retry delay to 20 seconds as of writing.
-            while ${wg_setup}; do
+            # Run dig in configured namespace periodically to notice DNS / hostname changes.
+            # Using dig allows setting a custom nameserver per peer, useful if the peer is used for system dns
+            # in which case if the peer endpoint changes the system dns would no longer work
+            # Being able to set a namespace for dns resolution is needed for similar reasons
+            # if the init namespace is fully routed through this peer then dns resolution would fail
+            while true; do
               sleep "${toString dynamicEndpointRefreshSeconds}";
+              ${optionalString (peer.endpoint != null) ''
+                # check with ipcalc if endpoint is a domain or ip address
+                if ipcalc -c "${domain}" 2> /dev/null; then
+                  # if endpoint is an ip addr just directly use wg to set peer endpoint without resolving
+                  ${wg} set '${interfaceName}' peer '${peer.publicKey}' endpoint '${peer.endpoint}'
+                else
+                  # if endpoint is a domain, attempt to resolve it
+                  if res=$(${digCmd} '${domain}'); then
+                    # if resolving works, set peer endpoint
+                    ${wg} set '${interfaceName}' peer '${peer.publicKey}' endpoint "$res:${port}"
+                  else
+                    # if resolving fails, log to stderr
+                    # dig prints errors to stdout, not stderr so this is needed
+                    echo "$res" >&2
+                  fi
+                fi
+              ''}
             done
           ''}
         '';
