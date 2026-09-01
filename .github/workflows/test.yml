@@ -35,7 +35,8 @@ jobs:
           #   https://github.com/octokit/plugin-retry.js/blob/9a2443746c350b3beedec35cf26e197ea318a261/src/index.ts#L14
           retry-exempt-status-codes: 400,401,403,404
           script: |
-            require('./ci/github-script/prepare.js')({
+            const { default: prepare } = await import('${{ github.workspace }}/ci/github-script/prepare.js')
+            await prepare({
               github,
               context,
               core,
@@ -61,9 +62,11 @@ jobs:
               '.github/workflows/lint.yml',
               '.github/workflows/merge-group.yml',
               '.github/workflows/test.yml',
+              'ci/github-script/package.json',
+              'ci/github-script/package-lock.json',
+              'ci/github-script/supportedBranches.js',
               'ci/github-script/supportedSystems.js',
               'ci/pinned.json',
-              'ci/supportedBranches.js',
               'pkgs/top-level/release-supported-systems.json',
             ].includes(file))) core.setOutput('merge-group', true)
 
@@ -82,13 +85,15 @@ jobs:
               'ci/github-script/get-pr-commit-details.js',
               'ci/github-script/lint-commits.js',
               'ci/github-script/merge.js',
+              'ci/github-script/package.json',
+              'ci/github-script/package-lock.json',
               'ci/github-script/prepare.js',
               'ci/github-script/reviewers.js',
               'ci/github-script/reviews.js',
+              'ci/github-script/supportedBranches.js',
               'ci/github-script/supportedSystems.js',
               'ci/github-script/withRateLimit.js',
               'ci/pinned.json',
-              'ci/supportedBranches.js',
               'pkgs/top-level/release-supported-systems.json',
             ].includes(file))) core.setOutput('pr', true)
 

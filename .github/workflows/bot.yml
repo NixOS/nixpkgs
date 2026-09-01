@@ -76,7 +76,8 @@ jobs:
           github-token: ${{ steps.app-token.outputs.token || github.token }}
           retries: 3
           script: |
-            require('./ci/github-script/bot.js')({
+            const { default: bot } = await import('${{ github.workspace }}/ci/github-script/bot.js')
+            await bot({
               github,
               context,
               core,

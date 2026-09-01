@@ -1,9 +1,12 @@
 // @ts-nocheck
-module.exports = async ({ github, context, core, dry, cherryPicks }) => {
-  const { execFileSync } = require('node:child_process')
-  const { classify } = require('../supportedBranches.js')
-  const withRateLimit = require('./withRateLimit.js')
-  const { dismissReviews, postReview } = require('./reviews.js')
+import { execFileSync } from 'node:child_process'
+import { dismissReviews, postReview } from './reviews.js'
+import { classify } from './supportedBranches.js'
+import withRateLimit from './withRateLimit.js'
+
+const dirname = import.meta.dirname
+
+export default async ({ github, context, core, dry, cherryPicks }) => {
   const reviewKey = 'check-commits'
 
   await withRateLimit({ github, core }, async (stats) => {
@@ -93,7 +96,7 @@ module.exports = async ({ github, context, core, dry, cherryPicks }) => {
     function diff({ sha, commit, original_sha }) {
       const diff = execFileSync('git', [
         '-C',
-        __dirname,
+        dirname,
         'range-diff',
         '--no-color',
         '--ignore-all-space',
@@ -120,7 +123,7 @@ module.exports = async ({ github, context, core, dry, cherryPicks }) => {
 
       const colored_diff = execFileSync('git', [
         '-C',
-        __dirname,
+        dirname,
         'range-diff',
         '--color',
         '--no-notes',
@@ -159,7 +162,7 @@ module.exports = async ({ github, context, core, dry, cherryPicks }) => {
       // Fetching all commits we need for diff at once is much faster than any other method.
       execFileSync('git', [
         '-C',
-        __dirname,
+        dirname,
         'fetch',
         '--depth=2',
         'origin',
