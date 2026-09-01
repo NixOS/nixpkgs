@@ -15,18 +15,24 @@
   fmt,
   alcotest,
   crowbar,
+  ppx_expect,
 }:
 
 buildDunePackage (finalAttrs: {
   pname = "cohttp";
-  version = if lib.versionAtLeast ocaml.version "4.13" then "6.2.1" else "5.3.1";
-
-  minimalOCamlVersion = "4.08";
+  version =
+    if lib.versionAtLeast ocaml.version "5.2" then
+      "6.3.0"
+    else if lib.versionAtLeast ocaml.version "4.13" then
+      "6.2.1"
+    else
+      "5.3.1";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-cohttp/releases/download/v${finalAttrs.version}/cohttp-${finalAttrs.version}.tbz";
     hash =
       {
+        "6.3.0" = "sha256-MRMPaKnwpc2NcbVfBCRW5tNb+LeranGrbXvX29tgeyQ=";
         "6.2.1" = "sha256-ZQgCR3Y0QtHcPNkGeLgjO3mHcvA2rIHNHqreH11mpl8=";
         "5.3.1" = "sha256-9eJz08Lyn/R71+Ftsj4fPWzQGkC+ACCJhbxDTIjUV2s=";
       }
@@ -34,7 +40,7 @@ buildDunePackage (finalAttrs: {
   };
 
   postPatch = ''
-    substituteInPlace cohttp/src/dune --replace 'bytes base64' 'base64'
+    substituteInPlace cohttp/src/dune --replace-warn 'bytes base64' 'base64'
   '';
 
   buildInputs = [
@@ -61,8 +67,8 @@ buildDunePackage (finalAttrs: {
     fmt
     alcotest
   ]
-  ++ lib.optionals (lib.versionOlder finalAttrs.version "6.0.0") [
-    crowbar
+  ++ [
+    (if lib.versionOlder finalAttrs.version "6.0.0" then crowbar else ppx_expect)
   ];
 
   meta = {
