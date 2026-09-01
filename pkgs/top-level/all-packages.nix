@@ -2943,6 +2943,7 @@ with pkgs;
 
   voxtype-vulkan = callPackage ../by-name/vo/voxtype/package.nix { vulkanSupport = true; };
   voxtype-onnx = callPackage ../by-name/vo/voxtype/package.nix { onnxSupport = true; };
+  voxtype-hip = callPackage ../by-name/vo/voxtype/package.nix { hipSupport = true; };
 
   openconnectPackages = {
     inherit openconnect openconnect_openssl;
