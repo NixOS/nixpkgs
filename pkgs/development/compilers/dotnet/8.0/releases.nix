@@ -52,6 +52,7 @@ let
   ];
 
   hostPackages = {
+    linux-riscv64 = [ ];
     linux-arm = [
       (fetchNupkg {
         pname = "Microsoft.NETCore.App.Crossgen2.linux-arm";
@@ -172,6 +173,7 @@ let
   };
 
   targetPackages = {
+    linux-riscv64 = [ ];
     linux-arm = [
       (fetchNupkg {
         pname = "Microsoft.AspNetCore.App.Runtime.linux-arm";
@@ -628,6 +630,10 @@ rec {
   aspnetcore_8_0 = buildAspNetCore {
     version = "8.0.30";
     srcs = {
+      linux-riscv64 = {
+        url = "https://github.com/liberodark/dotnet_riscv/releases/download/8.0.130/dotnet-sdk-8.0.130-linux-riscv64.tar.gz";
+        hash = "sha512-Wy9bhKmSiRZNUqxx0+i1hqWOhsDNIOIhwKQYXouDG5LnjrPpd2f236h3lqGWX9a3rZUHTxzAZVEOXvJh7iEAEQ==";
+      };
       linux-arm = {
         url = "https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/8.0.30/aspnetcore-runtime-8.0.30-linux-arm.tar.gz";
         hash = "sha512-1n1IhT7KriFvuwKIE9cAMBMAR+QkWB1Fi17pg7rUsQsClh+ErNhOnsMIP5N7IsjY2LsCIjfEV+xru3TtYJDwpg==";
@@ -666,6 +672,10 @@ rec {
   runtime_8_0 = buildNetRuntime {
     version = "8.0.30";
     srcs = {
+      linux-riscv64 = {
+        url = "https://github.com/liberodark/dotnet_riscv/releases/download/8.0.130/dotnet-sdk-8.0.130-linux-riscv64.tar.gz";
+        hash = "sha512-Wy9bhKmSiRZNUqxx0+i1hqWOhsDNIOIhwKQYXouDG5LnjrPpd2f236h3lqGWX9a3rZUHTxzAZVEOXvJh7iEAEQ==";
+      };
       linux-arm = {
         url = "https://builds.dotnet.microsoft.com/dotnet/Runtime/8.0.30/dotnet-runtime-8.0.30-linux-arm.tar.gz";
         hash = "sha512-pDlq9mts7ub5U1TxNRlGMJHeR0kzBQcUYJhM4Jv7sa6+x5B7LqAfHbEiXk8ZRIHD0X3QXxc1wCgbnRd4spVChQ==";
@@ -745,6 +755,10 @@ rec {
   sdk_8_0_1xx = buildNetSdk {
     version = "8.0.130";
     srcs = {
+      linux-riscv64 = {
+        url = "https://github.com/liberodark/dotnet_riscv/releases/download/8.0.130/dotnet-sdk-8.0.130-linux-riscv64.tar.gz";
+        hash = "sha512-Wy9bhKmSiRZNUqxx0+i1hqWOhsDNIOIhwKQYXouDG5LnjrPpd2f236h3lqGWX9a3rZUHTxzAZVEOXvJh7iEAEQ==";
+      };
       linux-arm = {
         url = "https://builds.dotnet.microsoft.com/dotnet/Sdk/8.0.130/dotnet-sdk-8.0.130-linux-arm.tar.gz";
         hash = "sha512-P3Bz0urrJh025M+03V9DpGJuw17CLci5zHrE1ukQ6l6gsKfJxnG3/v0EARDnURUlzHt+VG8Kd25NTeek8WDQkw==";
