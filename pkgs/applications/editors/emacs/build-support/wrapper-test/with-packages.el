@@ -22,6 +22,9 @@
 
 (ert-deftest with-packages-info-manual-of-requested-packages-is-available ()
   "Test https://debbugs.gnu.org/cgi/bugreport.cgi?bug=81105."
+  ;; `package-activate-all' makes package info manuals available.
+  ;; It is called at startup normally, but not in batch mode.
+  ;; We call it if needed to emulate the "normal" case.
   (unless package--activated
     (package-activate-all))
   (should (Info-find-file "dash" t)))
