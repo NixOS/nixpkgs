@@ -3,6 +3,8 @@
 #!nix-shell -i node -p nodejs
 */
 // @ts-nocheck
+import { resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 const typeConfig = {
   master: ['development', 'primary'],
@@ -45,10 +47,13 @@ function classify(branch) {
   }
 }
 
-module.exports = { classify, split }
+export { classify, split }
 
 // If called directly via CLI, runs the following tests:
-if (!module.parent) {
+if (
+  process.argv[1] &&
+  fileURLToPath(import.meta.url) === resolve(process.argv[1])
+) {
   console.log('split(branch)')
   function testSplit(branch) {
     console.log(branch, split(branch))
