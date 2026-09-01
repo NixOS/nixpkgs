@@ -1097,5 +1097,7 @@ rec {
     outputHashMode = "recursive";
     outputHash = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
     preferLocalBuild = true;
+    strictDeps = true;
+    __structuredAttrs = true;
   } "mkdir $out";
 }
