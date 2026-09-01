@@ -42,14 +42,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gajim";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitLab {
     domain = "dev.gajim.org";
     owner = "gajim";
     repo = "gajim";
     tag = finalAttrs.version;
-    hash = "sha256-3/HQNizXLjeQpCdEK14LMflyNUKF1BI8eli3BGxiH40=";
+    hash = "sha256-VxsfHZvS3m+j/xcd9BFcNZactAzG8kBdv1jDnkCghV4=";
   };
 
   pyproject = true;
