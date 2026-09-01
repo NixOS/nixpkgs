@@ -16,7 +16,7 @@ in
       kavita = {
         services.kavita = {
           enable = true;
-          tokenKeyFile = builtins.toFile "kavita.key" key;
+          settings.TokenKey = key;
         };
       };
       has_template =
@@ -27,7 +27,7 @@ in
         {
           services.kavita = {
             enable = true;
-            tokenKeyFile = builtins.toFile "kavita.key" key;
+            settings.TokenKey = key;
           };
           systemd.tmpfiles.rules = [
             "d ${emailTemplDir} 0750 ${u} ${u} - -"
