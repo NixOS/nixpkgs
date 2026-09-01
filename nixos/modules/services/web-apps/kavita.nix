@@ -78,6 +78,16 @@ in
         };
       };
     };
+
+    useDefaultEmailTemplates = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        Whether or not to copy default e-mail templates [1] from upstream to `${cfg.dataDir}/EmailTemplates`
+
+        [1]: https://github.com/Kareadita/Kavita/tree/develop/Kavita.Server/EmailTemplates
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -103,6 +113,9 @@ in
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}'        0750 ${cfg.user} ${cfg.user} - -"
       "d '${cfg.dataDir}/config' 0750 ${cfg.user} ${cfg.user} - -"
+    ]
+    ++ lib.optionals cfg.useDefaultEmailTemplates [
+      "L+ '${cfg.dataDir}/EmailTemplates' - - - - ${cfg.package}/lib/kavita/backend/EmailTemplates/"
     ];
 
     users = {
