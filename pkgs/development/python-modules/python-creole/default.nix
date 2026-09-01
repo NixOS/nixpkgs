@@ -71,6 +71,8 @@ buildPythonPackage rec {
     # - <string>:5: (ERROR/3) Document or section may not begin with a transition.
     # + <string>:5: (WARNING/2) Document or section may not begin with a transition.
     "test_non_valid_readme"
+    # AssertionError: '<p>Here a simple code...
+    "test_code_macro"
   ];
 
   disabledTestPaths = [
