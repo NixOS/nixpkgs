@@ -4,6 +4,7 @@
   fetchCrate,
   fetchurl,
   cacert,
+  gitMinimal,
   jq,
   sops,
   nix-update-script,
@@ -11,21 +12,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "secretspec";
-  version = "0.19.1";
+  version = "0.20.0";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-hntOPTOrCfVWE4MaNmXfPQ4WAlOG1CFG5/ykSyviJ3A=";
+    hash = "sha256-UuXCDQ/DiC1xDs63+kbJNC01ZQfsh2j5/qRP76MVle8=";
   };
 
-  cargoHash = "sha256-KRC3b6AqSYxjSInULchYNQGm9hw97lDws0+stFZasmc=";
+  cargoHash = "sha256-41UxtnzpDMYpWshpopXLIXyz6rzikJkqKbvxHVua1oo=";
 
   postPatch = ''
     mkdir -p ../tests/fixtures
     cp ${
       fetchurl {
         url = "https://raw.githubusercontent.com/cachix/secretspec/v${finalAttrs.version}/tests/fixtures/bw-shim.sh";
-        hash = "sha256-Xg1d8h2DOA6p0Hn9xP9TYzFN1863Wyk3QuQlFk+Y0ME=";
+        hash = "sha256-wHXeJk3KYu01J73BEdll9lCcjOD4+8g8rlWUw93Cyok=";
       }
     } ../tests/fixtures/bw-shim.sh
     chmod +x ../tests/fixtures/bw-shim.sh
@@ -33,12 +34,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   nativeCheckInputs = [
+    gitMinimal
     jq
     sops
   ];
 
   preCheck = ''
     export HOME="$TMPDIR"
+    export NO_COLOR=1
     export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
   '';
 
