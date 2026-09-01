@@ -24,6 +24,7 @@ in
   blas = addToBuildInputsWithPkgConfig pkgs.blas;
   breadline = addToBuildInputs pkgs.readline;
   espeak = addToBuildInputsWithPkgConfig pkgs.espeak-ng;
+  ezxdisp = addToBuildInputsWithPkgConfig pkgs.libx11;
   icu = addToBuildInputsWithPkgConfig pkgs.icu;
   # The egg bundles the leptonica headers it needs, but not the library.
   leptonic = addToBuildInputs pkgs.leptonica;
@@ -63,6 +64,4 @@ in
   # tarball does not contain. It only fails here because the egg is built and
   # installed by two separate chicken-install runs. Upstream is deprecating it.
   feathers = broken;
-  transducers = broken; # unresolved identifiers in the transducers.numbers module
-  generalized-arrays = broken; # depends on transducers
 }
