@@ -418,6 +418,59 @@ def test_execute_nix_build_vm(mock_run: Mock, tmp_path: Path) -> None:
 
 @patch.dict(os.environ, {}, clear=True)
 @patch("subprocess.run", autospec=True)
+def test_execute_nix_build_vm_with_bootloader_and_specialisation(
+    mock_run: Mock, tmp_path: Path
+) -> None:
+    config_path = tmp_path / "test"
+    config_path.touch()
+
+    def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
+        if args[0] == "nix-build":
+            return CompletedProcess([], 0, str(config_path))
+        elif args[0] == "nix-instantiate":
+            return CompletedProcess([], 1)
+        else:
+            return CompletedProcess([], 0)
+
+    mock_run.side_effect = run_side_effect
+
+    nr.execute(
+        [
+            "nixos-rebuild",
+            "build-vm-with-bootloader",
+            "--specialisation",
+            "custom-specialisation",
+            "--no-flake",
+            "--no-reexec",
+        ]
+    )
+
+    assert mock_run.call_count == 2
+    mock_run.assert_has_calls(
+        [
+            call(
+                ["nix-instantiate", "--find-file", "nixos-system"],
+                check=False,
+                capture_output=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "nix-build",
+                    "<nixpkgs/nixos>",
+                    "--attr",
+                    "config.specialisation.custom-specialisation.configuration.system.build.vmWithBootLoader",
+                ],
+                check=True,
+                stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
+            ),
+        ]
+    )
+
+
+@patch.dict(os.environ, {}, clear=True)
+@patch("subprocess.run", autospec=True)
 def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
