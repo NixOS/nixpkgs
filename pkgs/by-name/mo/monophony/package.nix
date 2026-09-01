@@ -12,14 +12,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "monophony";
-  version = "4.4.6";
+  version = "4.4.11";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "zehkira";
     repo = "monophony";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aDtz1VKOx+HvZxzXVEkFe2JMwMfdXmSJKq6ilI24TnI=";
+    hash = "sha256-Ghtx74Zl18OdhtdVOM52W6yVqEHjaMkPEDnmCwoa+AE=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/source";
