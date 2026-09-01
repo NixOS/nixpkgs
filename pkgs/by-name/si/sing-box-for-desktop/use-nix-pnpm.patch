@@ -1,0 +1,24 @@
+diff --git a/dashboard/package.json b/dashboard/package.json
+index df5d21c..53df0ac 100644
+--- a/dashboard/package.json
++++ b/dashboard/package.json
+@@ -3,7 +3,6 @@
+   "private": true,
+   "version": "0.1.0",
+   "type": "module",
+-  "packageManager": "pnpm@11.13.0",
+   "exports": {
+     ".": "./src/App.tsx",
+     "./tray": "./src/TrayMenu.tsx",
+diff --git a/package.json b/package.json
+index 4a97225..2ec1c95 100644
+--- a/package.json
++++ b/package.json
+@@ -17,7 +17,6 @@
+     "url": "git+https://github.com/SagerNet/sing-box-for-desktop.git"
+   },
+   "type": "module",
+-  "packageManager": "pnpm@11.13.0",
+   "engines": {
+     "node": "26.7.0"
+   },

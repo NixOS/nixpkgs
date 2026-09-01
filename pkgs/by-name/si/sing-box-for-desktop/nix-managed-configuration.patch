@@ -1,0 +1,72 @@
+diff --git a/src/main/index.ts b/src/main/index.ts
+--- a/src/main/index.ts
++++ b/src/main/index.ts
+@@ -30,6 +30,7 @@ import { settingsDatabase } from "./database";
+ import { developmentRendererURL, developmentSwitchValue } from "./development";
+ import { applyDisplayScaleFactor } from "./displayScale";
+ import { hasLoginItemArgument, migrateLoginItem, wasOpenedAtLogin } from "./loginItem";
++import { applyManagedConfiguration } from "./managedConfiguration";
+ import { registerNotifications } from "./notifications";
+ import { registerPreferences } from "./preferences";
+ import { registerOpenConnectBrowser } from "./openConnectBrowser";
+@@ -459,6 +460,7 @@ if (!singleInstanceLock) {
+       callback(permission === "clipboard-sanitized-write");
+     });
+     settingsDatabase();
++    applyManagedConfiguration();
+     archiveNativeCrashDumps();
+     terminalWindows = registerTerminalWindows(maybeQuitAfterWindowClosed);
+     profileEditorWindows = registerProfileEditorWindows(maybeQuitAfterWindowClosed);
+diff --git a/src/main/loginItem.ts b/src/main/loginItem.ts
+--- a/src/main/loginItem.ts
++++ b/src/main/loginItem.ts
+@@ -6,6 +6,7 @@
+ export const LOGIN_ITEM_ARGUMENT = "--start-at-login";
+ 
+ const LINUX_LOGIN_ITEM_NAME = "sing-box.desktop";
++const MANAGED_OPEN_AT_LOGIN_ENVIRONMENT = "SING_BOX_MANAGED_OPEN_AT_LOGIN";
+ 
+ function linuxLoginItemPath(): string {
+   const environmentConfigHome = process.env.XDG_CONFIG_HOME;
+@@ -23,6 +24,17 @@
+     : app.getPath("exe");
+ }
+ 
++function managedOpenAtLogin(): boolean | null {
++  const value = process.env[MANAGED_OPEN_AT_LOGIN_ENVIRONMENT];
++  if (value === "true") {
++    return true;
++  }
++  if (value === "false") {
++    return false;
++  }
++  return null;
++}
++
+ function linuxLoginItemEnabled(): boolean {
+   const loginItemPath = linuxLoginItemPath();
+   if (!existsSync(loginItemPath)) {
+@@ -74,6 +86,10 @@
+ }
+ 
+ export function openAtLogin(): boolean {
++  const managed = managedOpenAtLogin();
++  if (managed !== null) {
++    return managed;
++  }
+   if (process.platform === "linux") {
+     return linuxLoginItemEnabled();
+   }
+@@ -81,6 +97,12 @@
+ }
+ 
+ export function setOpenAtLogin(value: boolean) {
++  if (managedOpenAtLogin() !== null) {
++    if (process.platform === "linux") {
++      rmSync(linuxLoginItemPath(), { force: true });
++    }
++    return;
++  }
+   if (process.platform === "linux") {
+     setLinuxOpenAtLogin(value);
+     return;

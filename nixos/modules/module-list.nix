@@ -325,6 +325,7 @@
   ./programs/sedutil.nix
   ./programs/shadow.nix
   ./programs/sharing.nix
+  ./programs/sing-box-for-desktop.nix
   ./programs/singularity.nix
   ./programs/skim.nix
   ./programs/slock.nix

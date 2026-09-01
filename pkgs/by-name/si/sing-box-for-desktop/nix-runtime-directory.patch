@@ -1,0 +1,27 @@
+diff --git a/build/sing-box-daemon.service b/build/sing-box-daemon.service
+--- a/build/sing-box-daemon.service
++++ b/build/sing-box-daemon.service
+@@ -7,8 +7,10 @@ Type=simple
+ Type=simple
+ StateDirectory=sing-box-daemon
+ StateDirectoryMode=0700
++RuntimeDirectory=sing-box-daemon
++RuntimeDirectoryMode=0755
+ UMask=0077
+-ExecStart=/opt/sing-box/resources/daemon/sing-box-daemon run --working-directory /var/lib/sing-box-daemon --socket /run/sing-box.socket
++ExecStart=/opt/sing-box/resources/daemon/sing-box-daemon run --working-directory /var/lib/sing-box-daemon --socket /run/sing-box-daemon/sing-box.socket
+ Restart=always
+ RestartSec=5
+ 
+diff --git a/src/main/daemon.ts b/src/main/daemon.ts
+--- a/src/main/daemon.ts
++++ b/src/main/daemon.ts
+@@ -19,7 +19,7 @@ if (process.platform === "win32" && app.isPackaged) {
+     process.platform === "win32"
+       ? "\\\\.\\pipe\\ProtectedPrefix\\Administrators\\sing-box"
+       : process.platform === "linux"
+-        ? "/run/sing-box.socket"
++        ? "/run/sing-box-daemon/sing-box.socket"
+         : null;
+   const socketPath = developmentSwitchValue("daemon-socket") || defaultSocketPath;
+   if (!socketPath) {

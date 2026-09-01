@@ -1624,6 +1624,7 @@ in
   simple-container = runTest ./simple-container.nix;
   simple-vm = runTest ./simple-vm.nix;
   sing-box = runTest ./sing-box.nix;
+  sing-box-for-desktop = runTest ./sing-box-for-desktop.nix;
   sks = runTest ./sks.nix;
   slimserver = runTest ./slimserver.nix;
   slipshow = runTest ./slipshow.nix;

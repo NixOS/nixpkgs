@@ -1,0 +1,37 @@
+diff --git a/src/main/repair.ts b/src/main/repair.ts
+index c6b924a..9d4fa6f 100644
+--- a/src/main/repair.ts
++++ b/src/main/repair.ts
+@@ -1,6 +1,6 @@
+ import { app, ipcMain } from "electron";
+ import { execFile } from "node:child_process";
+-import { join } from "node:path";
++import { dirname, join } from "node:path";
+ 
+ import { SETUP_CALL } from "../shared/ipc";
+ import type { ProfilesResult } from "../shared/ipc";
+@@ -15,7 +15,7 @@ export function daemonBinaryPath(): string {
+   const binaryName =
+     process.platform === "win32" ? "sing-box-daemon.exe" : "sing-box-daemon";
+   if (app.isPackaged) {
+-    return join(process.resourcesPath, "daemon", binaryName);
++    return join(dirname(app.getAppPath()), "daemon", binaryName);
+   }
+   return join(app.getAppPath(), "bin", binaryName);
+ }
+diff --git a/src/main/resources.ts b/src/main/resources.ts
+index 9c2198f..d18a5e4 100644
+--- a/src/main/resources.ts
++++ b/src/main/resources.ts
+@@ -1,9 +1,9 @@
+ import { app } from "electron";
+-import { join } from "node:path";
++import { dirname, join } from "node:path";
+ 
+ export function resourcePath(...segments: string[]): string {
+   if (app.isPackaged) {
+-    return join(process.resourcesPath, ...segments);
++    return join(dirname(app.getAppPath()), ...segments);
+   }
+   return join(app.getAppPath(), "resources", ...segments);
+ }

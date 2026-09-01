@@ -1,0 +1,39 @@
+diff --git a/src/main/loginItem.ts b/src/main/loginItem.ts
+--- a/src/main/loginItem.ts
++++ b/src/main/loginItem.ts
+@@ -16,6 +16,13 @@ function linuxLoginItemPath(): string {
+   return join(configHome, "autostart", LINUX_LOGIN_ITEM_NAME);
+ }
+ 
++function linuxLoginItemExecutable(): string {
++  const nixLauncher = process.env.SING_BOX_LAUNCHER;
++  return nixLauncher && isAbsolute(nixLauncher)
++    ? nixLauncher
++    : app.getPath("exe");
++}
++
+ function linuxLoginItemEnabled(): boolean {
+   const loginItemPath = linuxLoginItemPath();
+   if (!existsSync(loginItemPath)) {
+@@ -48,7 +55,7 @@ function setLinuxOpenAtLogin(value: boolean) {
+       "Type=Application",
+       "Version=1.0",
+       "Name=sing-box",
+-      `Exec=${escapeDesktopExecArgument(app.getPath("exe"))} ${LOGIN_ITEM_ARGUMENT}`,
++      `Exec=${escapeDesktopExecArgument(linuxLoginItemExecutable())} ${LOGIN_ITEM_ARGUMENT}`,
+       "Icon=sing-box",
+       "Terminal=false",
+       "StartupNotify=false",
+@@ -85,6 +92,12 @@ export function setOpenAtLogin(value: boolean) {
+ }
+ 
+ export function migrateLoginItem() {
++  if (process.platform === "linux") {
++    if (linuxLoginItemEnabled()) {
++      setLinuxOpenAtLogin(true);
++    }
++    return;
++  }
+   if (process.platform !== "win32") {
+     return;
+   }
