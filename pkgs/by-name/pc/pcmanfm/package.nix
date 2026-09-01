@@ -12,6 +12,7 @@
   wrapGAppsHook3,
   adwaita-icon-theme,
   gtk3,
+  ffmpegthumbnailer,
   gettext,
   nix-update-script,
 }:
@@ -41,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     pango
     adwaita-icon-theme
+    ffmpegthumbnailer
   ];
 
   env.ACLOCAL = "aclocal -I ${gettext}/share/gettext/m4";
