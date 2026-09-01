@@ -2,75 +2,15 @@
   lib,
   callPackage,
   fetchFromGitHub,
-  stdenv,
-  nodejs_24,
-  pnpm_10,
-  fetchPnpmDeps,
-  pnpmConfigHook,
-  buildGoModule,
+  buildGo127Module,
   mage,
-  dart-sass,
   writeShellScriptBin,
   nixosTests,
   nix-update-script,
 }:
 
 let
-  version = "2.5.0";
-  src = fetchFromGitHub {
-    owner = "go-vikunja";
-    repo = "vikunja";
-    rev = "v${version}";
-    hash = "sha256-qI4mkgcN9yYRmh5V+KzIHupX7uWsszV4Xb31OYvukxQ=";
-  };
-
-  frontend = stdenv.mkDerivation (finalAttrs: {
-    pname = "vikunja-frontend";
-    inherit version src;
-
-    sourceRoot = "${finalAttrs.src.name}/frontend";
-
-    pnpmDeps = fetchPnpmDeps {
-      inherit (finalAttrs)
-        pname
-        version
-        src
-        sourceRoot
-        ;
-      pnpm = pnpm_10;
-      fetcherVersion = 3;
-      hash = "sha256-xZBgE4GM59Ihl5a3qgcmkjR4Q3wYlcsiDapiNEzBQOg=";
-    };
-
-    nativeBuildInputs = [
-      nodejs_24
-      dart-sass
-      pnpmConfigHook
-      pnpm_10
-    ];
-
-    postPatch = ''
-      substituteInPlace src/version.json \
-        --replace-fail '"dev"' '"${finalAttrs.version}"'
-    '';
-
-    doCheck = true;
-
-    postBuild = ''
-      # Force sass-embedded to use our dart-sass instead of bundled binaries.
-      substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
-        --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
-      pnpm run build
-    '';
-
-    checkPhase = ''
-      pnpm run test:unit --run
-    '';
-
-    installPhase = ''
-      cp -r dist/ $out
-    '';
-  });
+  buildGoModule = buildGo127Module;
 
   # Injects a `t.Skip()` into a given test since there's apparently no other way to skip tests here.
   skipTest =
@@ -85,14 +25,21 @@ let
     '';
 in
 buildGoModule (finalAttrs: {
-  inherit src version;
   pname = "vikunja";
+  version = "2.6.0";
+
+  src = fetchFromGitHub {
+    owner = "go-vikunja";
+    repo = "vikunja";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Xh1ozUTOVqywk0i8xQWkG/bPRgPH9EABjRW8p4do1mE=";
+  };
 
   nativeBuildInputs =
     let
       fakeGit = writeShellScriptBin "git" ''
         if [[ $@ = "describe --tags --always --abbrev=10" ]]; then
-            echo "${version}"
+            echo "${finalAttrs.version}"
         else
             >&2 echo "Unknown command: $@"
             exit 1
@@ -104,13 +51,19 @@ buildGoModule (finalAttrs: {
       mage
     ];
 
-  vendorHash = "sha256-bn+bcGzeB0/KkhPNkbjK/EgKQG3iqVlJxtt6betGUNE=";
+  vendorHash = "sha256-R6M5UyF10pIdoAvjWnS6Dqe/U6LTxmS6OwRTgmxfU4g=";
 
-  inherit frontend;
-  veans = callPackage ./veans.nix { inherit (finalAttrs) src version meta; };
+  frontend = callPackage ./frontend.nix {
+    inherit (finalAttrs) src version;
+  };
+
+  veans = callPackage ./veans.nix {
+    inherit (finalAttrs) src version meta;
+    inherit buildGoModule;
+  };
 
   prePatch = ''
-    cp -r ${frontend} frontend/dist
+    cp -r ${finalAttrs.frontend} frontend/dist
   '';
 
   postConfigure = ''
@@ -144,8 +97,11 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru = {
+    # used by vikuna-desktop
+    inherit (finalAttrs) frontend;
+
     tests.vikunja = nixosTests.vikunja;
-    frontend = frontend;
+
     updateScript = nix-update-script {
       extraArgs = [
         "--subpackage"
@@ -157,7 +113,7 @@ buildGoModule (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/go-vikunja/vikunja/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/go-vikunja/vikunja/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Todo-app to organize your life";
     homepage = "https://vikunja.io/";
     license = lib.licenses.agpl3Plus;
