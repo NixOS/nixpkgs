@@ -200,10 +200,10 @@ in
               "network-online.target"
             ]
             ++ optionals wantsDocker [
-              "docker.service"
+              "docker.socket"
             ]
             ++ optionals wantsPodman [
-              "podman.service"
+              "podman.socket"
             ];
             wantedBy = [
               "multi-user.target"
