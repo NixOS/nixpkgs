@@ -8,6 +8,7 @@
   fetchFromGitHub,
   grpcio,
   hightime,
+  nitypes,
   numpy,
   poetry-core,
   protobuf,
@@ -16,6 +17,7 @@
   sphinx-rtd-theme,
   sphinx,
   toml,
+  typing-extensions,
   tzlocal,
 }:
 
@@ -37,9 +39,11 @@ buildPythonPackage rec {
     click
     deprecation
     hightime
+    nitypes
     numpy
     python-decouple
     requests
+    typing-extensions
     tzlocal
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
