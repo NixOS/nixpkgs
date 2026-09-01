@@ -1,0 +1,44 @@
+diff --git a/modules/hw/nvdec/nvdec_gl.c b/modules/hw/nvdec/nvdec_gl.c
+--- a/modules/hw/nvdec/nvdec_gl.c
++++ b/modules/hw/nvdec/nvdec_gl.c
+@@ -142,6 +142,7 @@ static void tc_nvdec_gl_close(struct vlc_gl_interop *interop)
+ {
+     converter_sys_t *p_sys = interop->priv;
+     vlc_decoder_device_Release(p_sys->device);
++    free(p_sys);
+ }
+
+ static int Open(struct vlc_gl_interop *interop)
+@@ -153,7 +154,7 @@ static int Open(struct vlc_gl_interop *interop)
+     if (device == NULL || device->type != VLC_DECODER_DEVICE_NVDEC)
+         return VLC_EGENERIC;
+
+-    converter_sys_t *p_sys = vlc_obj_malloc(VLC_OBJECT(interop), sizeof(*p_sys));
++    converter_sys_t *p_sys = malloc(sizeof(*p_sys));
+     if (unlikely(p_sys == NULL))
+     {
+         vlc_decoder_device_Release(device);
+@@ -185,6 +186,7 @@ static int Open(struct vlc_gl_interop *interop)
+     if (result < 0)
+     {
+         vlc_decoder_device_Release(device);
++        free(p_sys);
+         return result;
+     }
+
+@@ -199,6 +201,7 @@ static int Open(struct vlc_gl_interop *interop)
+         if (result != VLC_SUCCESS)
+         {
+             vlc_decoder_device_Release(device);
++            free(p_sys);
+             return result;
+         }
+     }
+@@ -211,6 +214,7 @@ static int Open(struct vlc_gl_interop *interop)
+     if (desc == NULL)
+     {
+         vlc_decoder_device_Release(device);
++        free(p_sys);
+         return VLC_EGENERIC;
+     }
+     p_sys->pixel_size = desc->pixel_size;
