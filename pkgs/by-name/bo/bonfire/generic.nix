@@ -89,6 +89,10 @@ beamPkgs.mixRelease (
               RUSTLER_BUILD_ALL = "true";
             };
             preBuild = "";
+            # Explanation: `rustPlatform.buildRustPackage`
+            # generates `lib/lib<name>.so`
+            # but `rustler` expects `priv/native/<name>.so`
+            # hence remove the `lib` prefix.
             preConfigure = ''
               mkdir -p priv/native
               for lib in ${finalBeam.passthru.native}/lib/*
@@ -98,7 +102,7 @@ beamPkgs.mixRelease (
                 then
                   dest="''${dest%.dylib}.so"
                 fi
-                ln -s "$lib" "priv/native/$dest"
+                ln -s "$lib" "priv/native/''${dest#lib}"
               done
             '';
             passthru = previousBeam.passthru or { } // {
@@ -405,24 +409,19 @@ beamPkgs.mixRelease (
 
                   config :lumis,
                           Lumis.Native,
-                          skip_compilation?: true,
-                          load_from: {:lumis, "priv/native/liblumis_nif"}
+                          skip_compilation?: true
                   config :decent,
                           Decent.Native,
-                          skip_compilation?: true,
-                          load_from: {:decent, "priv/native/libdecent"}
+                          skip_compilation?: true
                   config :mdex_native,
                           MDExNative.Native,
-                          skip_compilation?: true,
-                          load_from: {:mdex_native, "priv/native/libmdex_native_nif"}
+                          skip_compilation?: true
                   config :mjml,
                           Mjml.Native,
-                          skip_compilation?: true,
-                          load_from: {:mjml, "priv/native/libmjml_nif"}
+                          skip_compilation?: true
                   config :tokenizers,
                           Tokenizers.Native,
-                          skip_compilation?: true,
-                          load_from: {:tokenizers, "priv/native/libex_tokenizers"}
+                          skip_compilation?: true
                   EOF
                 ''
               ]
@@ -870,7 +869,8 @@ beamPkgs.mixRelease (
         '') (lib.attrNames finalAttrs.passthru.yarnOfflineCaches))
 
         # Explanation: same but for yarn-berry assets.
-        # Note that /src is used instead of .src to be sure to have any patch applied.
+        # Note that /src is used instead of .src to be sure to have any patch applied,
+        # to replace `deps/${dep}/` which must be… writable.
         (lib.concatMapStringsSep "\n" (dep: ''
           rm -rf deps/${dep}
           cp --no-preserve=mode -r \
