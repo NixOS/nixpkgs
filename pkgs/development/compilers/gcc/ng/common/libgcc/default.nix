@@ -127,9 +127,44 @@ stdenv.mkDerivation (finalAttrs: {
   # library's own headers, and `libgcc_s` links against it.
   buildInputs = lib.optional (threads != null) threads;
 
+  # Move `.cfi_startproc` after the function label in the aarch64 LSE helpers.
+  # clang 18 and later refuse to assemble the output otherwise, which is what
+  # stops LLVM building against this libgcc. Not upstream in 16. Held back on
+  # Darwin as the monolithic set does.
   patches =
+    lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      ./cfi_startproc-reorder-label.diff
+    ]
+    # Darwin is in scope but untested here. `darwin-detection` is paired by
+    # version in the monolithic set -- 14's variant for 16, 15's for 15 --
+    # which is what `getVersionFile` resolves to.
+    #
+    # The third is Iain Sandoe's branch, taken from Homebrew as the monolithic
+    # set takes it. It spans the monorepo, so this is only the part that lives
+    # here; `gcc` and `libsanitizer` take theirs the same way. It is also what
+    # makes `cfi_startproc-reorder-label` above redundant on Darwin: it drops
+    # `STARTFN` for an `ENTRY` macro that already writes the label ahead of
+    # `.cfi_startproc`.
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      ./darwin-fix-reexport.patch
+      (getVersionFile "libgcc/darwin-detection.patch")
+      (fetchpatch {
+        name = "darwin-aarch64-support.patch";
+        url =
+          if lib.versionAtLeast release_version "16" then
+            "https://raw.githubusercontent.com/Homebrew/homebrew-core/70e2a9e1d072fa3bc34cf41d97f4b65bede2b01e/Patches/gcc/gcc-16.1.0.diff"
+          else
+            "https://raw.githubusercontent.com/Homebrew/homebrew-core/70e2a9e1d072fa3bc34cf41d97f4b65bede2b01e/Patches/gcc/gcc-15.3.0.diff";
+        includes = [ "libgcc/*" ];
+        hash =
+          if lib.versionAtLeast release_version "16" then
+            "sha256-hDtEL/xAtavikWa1JYNbJLkyydc5H/iu2W7lvz+mRG0="
+          else
+            "sha256-5ctdSqxRJ445SSNao29WVurZsPbmgrCN+RmCAIEyUXw=";
+      })
+    ]
     # Backports of commits that are in the GCC 16 release branch already.
-    lib.optionals (lib.versionOlder release_version "16") [
+    ++ lib.optionals (lib.versionOlder release_version "16") [
       (fetchpatch {
         name = "delete-MACHMODE_H.patch";
         url = "https://github.com/gcc-mirror/gcc/commit/493aae4b034d62054d5e7e54dc06cd9a8be54e29.diff";

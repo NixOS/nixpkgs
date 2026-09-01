@@ -60,8 +60,84 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches =
+    # Kept out of the version-dependent blocks below because they are about
+    # nixpkgs rather than about any GCC version, and applied first so that the
+    # driver series, which rewrites much of `gcc.cc`, does not move their
+    # context out from under them.
+    [
+      # Do not look for headers and libraries in `/usr/local/include`, `/lib`
+      # and `/usr/lib`. GCC drops these itself for a cross compiler with no
+      # sysroot, which is what most of this set is, but not for a native one.
+      ./no-sys-dirs.patch
+      ./no-sys-dirs-riscv.patch
+
+      # Keep store hashes out of `__FILE__`, which would otherwise put `-dev`
+      # outputs in runtime closures. `cc-wrapper` leaves this to the compiler
+      # for GNU: it sets `useMacroPrefixMap = !isGNU`, so nothing else covers
+      # it. See <https://gcc.gnu.org/PR111527>.
+      ./mangle-NIX_STORE-in-__FILE__.patch
+
+      # `rs6000/sysv4.h` builds its own `INCLUDE_DEFAULTS` for musl, testing
+      # `LOCAL_INCLUDE_DIR` before the `#undef` above is reached, so
+      # `/usr/local/include` survives there without this.
+      ./ppc-musl.patch
+
+    ]
+    # Keep `-l` and its argument together in the `Driving:` line, which is
+    # what libtool parses out of `gfortran -v`.
+    ++ lib.optionals langFortran [
+      ./gfortran-driving.patch
+    ]
+    # `--enable-default-pie` is a target option, but `c++tools` is built for
+    # the host and should follow `--enable-host-pie`. We pass the former and
+    # do build `c++tools`. Fixed upstream in 16.
+    ++ lib.optionals (lib.versionOlder release_version "16") [
+      ./c++tools-dont-check-enable-default-pie.patch
+    ]
+    # Cygwin's `abort` comes in through `windows.h` and collides with the
+    # `tsystem.h` macro on the `inhibit_libc` path, which this set's bootstrap
+    # goes through by design; and `unix` should be defined the conforming way.
+    # Neither is upstream in 15 or 16.
+    #
+    # Iain Sandoe's Darwin branch, as the monolithic set takes it: from
+    # Homebrew, because GitHub's compare API gives unstable diffs. It spans
+    # the monorepo, so each package takes the files it builds -- `libgcc` and
+    # `libsanitizer` take theirs the same way.
+    ++ lib.optionals stdenv.targetPlatform.isDarwin [
+      (fetchpatch {
+        name = "darwin-aarch64-support.patch";
+        url =
+          if lib.versionAtLeast release_version "16" then
+            "https://raw.githubusercontent.com/Homebrew/homebrew-core/70e2a9e1d072fa3bc34cf41d97f4b65bede2b01e/Patches/gcc/gcc-16.1.0.diff"
+          else
+            "https://raw.githubusercontent.com/Homebrew/homebrew-core/70e2a9e1d072fa3bc34cf41d97f4b65bede2b01e/Patches/gcc/gcc-15.3.0.diff";
+        includes = [
+          "gcc/*"
+          "fixincludes/*"
+          "configure"
+          "configure.ac"
+        ];
+        hash =
+          if lib.versionAtLeast release_version "16" then
+            "sha256-iaWuT6zNxmGH/8hwlzZZTGO4EiozNFGRr8o80dmKY3U="
+          else
+            "sha256-W4O+cRcuKpRKG3JW5CZf20pXbKeugVQYVFgPnDzQO+E=";
+      })
+    ]
+    ++ lib.optionals stdenv.targetPlatform.isCygwin [
+      (fetchpatch {
+        name = "cygwin-fix-compilation-with-inhibit_libc.patch";
+        url = "https://inbox.sourceware.org/gcc-patches/20250926170154.2222977-1-corngood@gmail.com/raw";
+        hash = "sha256-mgzMRvgPdhj+Q2VRsFhpE2WQzg0CvWsc5/FRAsSU1Es=";
+      })
+      (fetchpatch {
+        name = "cygwin-use-builtin_define_std-for-unix.patch";
+        url = "https://inbox.sourceware.org/gcc-patches/20250922182808.2599390-3-corngood@gmail.com/raw";
+        hash = "sha256-8I2G4430gkYoWgUued4unqhk8ZCajHf1dcivAeuLZ0E=";
+      })
+    ]
     # Backports of commits that are in the GCC 16 release branch already.
-    lib.optionals (lib.versionOlder release_version "16") [
+    ++ lib.optionals (lib.versionOlder release_version "16") [
       (fetchpatch {
         name = "for_each_path-functional-programming.patch";
         url = "https://github.com/gcc-mirror/gcc/commit/f23bac62f46fc296a4d0526ef54824d406c3756c.diff";
@@ -146,9 +222,16 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://inbox.sourceware.org/gcc-patches/20260810065714.2215299-3-git@JohnEricson.me/raw";
         hash = "sha256-Q5CJpJKD11kadIKselQdHgNe26GqojpyAAmlAyHnsB0=";
       })
-
+    ]
+    # Held back on Darwin, like `cfi_startproc-reorder-label` in `libgcc`:
+    # Iain's branch below carries the same change -- `is_cross_compiler`, the
+    # extra `post_ld_pass` argument, dropping the `CROSS_DIRECTORY_STRUCTURE`
+    # guard on `target_machine` -- so all this would add there is deleting the
+    # loop his version leaves behind, and it does not apply on top of it.
+    ++ lib.optionals (!stdenv.targetPlatform.isDarwin) [
       (getVersionFile "gcc/fix-collect2-paths.diff")
-
+    ]
+    ++ [
       # From the posting to gcc-patches, which covers every component that links
       # libbacktrace. Take only this component's non-generated files: the
       # generated ones are rebuilt by `autoreconfHook269` below, against a GCC

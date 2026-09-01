@@ -31,6 +31,19 @@
     }
   ];
 
+  # Paired by version, as the monolithic set pairs them: 14's variant for 16,
+  # 15's for 15.
+  "libgcc/darwin-detection.patch" = [
+    {
+      after = "16";
+      path = ../16;
+    }
+    {
+      after = "15";
+      path = ../15;
+    }
+  ];
+
   # In Git: https://github.com/Ericson2314/gcc/tree/regular-dirs-in-libgcc-15
   "libgcc/force-regular-dirs.patch" = [
     {
