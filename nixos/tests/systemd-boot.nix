@@ -187,6 +187,9 @@ let
       withBootCounting ? false,
       ...
     }:
+    let
+      bootCountingTries = 3;
+    in
     runTest (
       { lib, ... }:
       {
@@ -195,14 +198,40 @@ let
         meta.maintainers = with lib.maintainers; [ julienmalka ];
 
         nodes = {
-          inherit common;
+          common =
+            { pkgs, ... }:
+            {
+              imports = [ common ];
+              boot.initrd.extraFiles."/etc/generation-marker".source =
+                pkgs.writeText "generation-marker" "generation 1";
+              boot.loader.systemd-boot.bootCounting = {
+                enable = withBootCounting;
+                tries = bootCountingTries;
+              };
+            };
           machine =
             { nodes, ... }:
             {
               imports = [ common ];
 
-              boot.loader.systemd-boot.bootCounting.enable = withBootCounting;
+              boot.loader.systemd-boot.bootCounting = {
+                enable = withBootCounting;
+                tries = bootCountingTries;
+              };
               boot.loader.systemd-boot.memtest86.enable = true;
+
+              # Keep the current entry counted until the test explicitly
+              # allows systemd-bless-boot to mark it successful.
+              systemd.services.hold-boot-complete = lib.mkIf withBootCounting {
+                requiredBy = [ "boot-complete.target" ];
+                before = [ "boot-complete.target" ];
+                serviceConfig.Type = "oneshot";
+                script = ''
+                  while [[ ! -e /run/allow-boot-complete ]]; do
+                    sleep 0.1
+                  done
+                '';
+              };
 
               # These are configs for different nodes, but we'll use them here in `machine`
               system.extraDependencies = [
@@ -223,18 +252,128 @@ let
             machine.succeed("nix-env -p /nix/var/nix/profiles/system --set ${baseSystem}")
             machine.succeed("nix-env -p /nix/var/nix/profiles/system --delete-generations 1")
 
-            conf_file = check_generation(1)[0]
-            new_conf_file = conf_file.replace(".conf", "+1-3.conf")
-
-            # At this point generation 1 has already been marked as good so we reintroduce counters artificially
             ${lib.optionalString withBootCounting ''
-              machine.succeed(f"mv {conf_file} {new_conf_file}")
+              import base64
+              import re
+              import shlex
+
+              boot_count_variable = (
+                  "/sys/firmware/efi/efivars/"
+                  "LoaderBootCountPath-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f"
+              )
+              def read_boot_count_path() -> str:
+                  return base64.b64decode(
+                      machine.succeed(f"base64 -w0 {boot_count_variable}")
+                  )[4:].decode("utf-16-le").rstrip("\0")
+
+              def entry_boot_files(conf_file: str) -> set[str]:
+                  contents = machine.succeed(
+                      f"cat -- {shlex.quote(conf_file)}"
+                  )
+                  boot_files = set()
+                  for line in contents.splitlines():
+                      field, separator, value = line.partition(" ")
+                      if separator and field in {"linux", "initrd", "devicetree"}:
+                          boot_files.add(f"/boot/{value.lstrip('/')}")
+                  assert boot_files, contents
+                  return boot_files
+
+              boot_count_path = read_boot_count_path()
+              match = re.fullmatch(
+                  r"\\loader\\entries\\(?P<prefix>nixos-[0-9a-f]{64})"
+                  r"\+(?P<left>[0-9]+)(?:-(?P<done>[0-9]+))?\.conf",
+                  boot_count_path,
+              )
+              assert match is not None, boot_count_path
+              entry_prefix = match.group("prefix")
+              done = match.group("done")
+              done_suffix = f"-{done}" if done is not None else ""
+              counted_conf = "/boot" + boot_count_path.replace("\\", "/")
+              successful_conf = f"/boot/loader/entries/{entry_prefix}.conf"
+              failed_conf = (
+                  f"/boot/loader/entries/{entry_prefix}+0{done_suffix}.conf"
+              )
+              stale_conf = f"/boot/loader/entries/{entry_prefix}+1-999.conf"
+
+              machine.succeed(f"test -e {shlex.quote(counted_conf)}")
+              referenced_boot_files = entry_boot_files(counted_conf)
+
+              # Only the current, successful, and failed forms of the booted
+              # entry are valid GC roots. Another counted form remains stale.
+              machine.succeed(
+                  f"cp -- {shlex.quote(counted_conf)} {shlex.quote(failed_conf)}"
+              )
+              machine.succeed(
+                  f"cp -- {shlex.quote(counted_conf)} {shlex.quote(stale_conf)}"
+              )
+              machine.succeed(
+                  f"cp -- {shlex.quote(counted_conf)} {shlex.quote(successful_conf)}"
+              )
+              machine.succeed(
+                  f"echo '# hash mismatch' >> {shlex.quote(successful_conf)}"
+              )
+              machine.succeed("${baseSystem}/bin/switch-to-configuration boot")
+              machine.succeed(f"test -e {shlex.quote(counted_conf)}")
+              machine.succeed(f"test -e {shlex.quote(failed_conf)}")
+              machine.fail(f"test -e {shlex.quote(stale_conf)}")
+              machine.fail(f"test -e {shlex.quote(successful_conf)}")
+              generation_2_conf = check_generation(
+                  2, tries_left=${toString bootCountingTries}
+              )[0]
+              generation_1_only_files = referenced_boot_files.difference(
+                  entry_boot_files(generation_2_conf)
+              )
+              assert generation_1_only_files, referenced_boot_files
+              for boot_file in sorted(generation_1_only_files):
+                  machine.succeed(f"test -e {shlex.quote(boot_file)}")
+
+              # Blessing still succeeds after the booted generation falls
+              # outside the configured generation limit.
+              machine.succeed("touch /run/allow-boot-complete")
+              machine.wait_for_unit("systemd-bless-boot.service")
+              machine.fail(f"test -e {shlex.quote(counted_conf)}")
+              machine.succeed(f"test -e {shlex.quote(successful_conf)}")
+
+              # The successful form and its boot files remain protected on a
+              # later online update during the same firmware boot.
+              machine.succeed("${baseSystem}/bin/switch-to-configuration boot")
+              machine.succeed(f"test -e {shlex.quote(successful_conf)}")
+              for boot_file in sorted(generation_1_only_files):
+                  machine.succeed(f"test -e {shlex.quote(boot_file)}")
+
+              generation_2_prefix = generation_2_conf.rsplit("/", 1)[1].removesuffix(
+                  "+${toString bootCountingTries}.conf"
+              )
+
+              machine.shutdown()
+              machine.start()
+              machine.wait_for_unit("multi-user.target")
+
+              new_boot_count_path = read_boot_count_path()
+              assert new_boot_count_path != boot_count_path
+              assert new_boot_count_path.startswith(
+                  f"\\loader\\entries\\{generation_2_prefix}+"
+              )
+
+              # The EFI variable now identifies generation 2, so the old
+              # entry can be garbage-collected by the next boot loader update.
+              machine.succeed("${baseSystem}/bin/switch-to-configuration boot")
+              machine.fail(
+                  "grep --files-with-matches 'version Generation 1 NixOS' /boot/loader/entries/nixos-*.conf"
+              )
+              for boot_file in sorted(generation_1_only_files):
+                  machine.fail(f"test -e {shlex.quote(boot_file)}")
+              machine.succeed("touch /run/allow-boot-complete")
+              machine.wait_for_unit("systemd-bless-boot.service")
+              check_generation(2)
             ''}
-            machine.succeed("${baseSystem}/bin/switch-to-configuration boot")
-            machine.fail(
-              "grep --files-with-matches 'version Generation 1 NixOS' /boot/loader/entries/nixos-*.conf"
-            )
-            check_generation(2)
+            ${lib.optionalString (!withBootCounting) ''
+              machine.succeed("${baseSystem}/bin/switch-to-configuration boot")
+              machine.fail(
+                  "grep --files-with-matches 'version Generation 1 NixOS' /boot/loader/entries/nixos-*.conf"
+              )
+              check_generation(2)
+            ''}
           '';
       }
     );
