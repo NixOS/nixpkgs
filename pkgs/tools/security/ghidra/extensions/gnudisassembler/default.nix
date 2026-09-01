@@ -6,8 +6,8 @@
   ghidra,
   flex,
   bison,
+  gnumake,
   texinfo,
-  perl,
   zlib,
   xcbuild,
 }:
@@ -20,6 +20,13 @@ let
     url = "mirror://gnu/binutils/binutils-${binutils-version}.tar.bz2";
     sha256 = "sha256-9mOQpmH6oRfQD6suec8tydCXtCzClr8/hnfR57RS3Do=";
   };
+  gdisPlatform =
+    if stdenv.hostPlatform.isDarwin then
+      if stdenv.hostPlatform.isAarch64 then "mac_arm_64" else "mac_x86_64"
+    else if stdenv.hostPlatform.isAarch64 then
+      "linux_arm_64"
+    else
+      "linux_x86_64";
 in
 buildGhidraExtension {
   pname = "gnudisassembler";
@@ -27,23 +34,29 @@ buildGhidraExtension {
 
   src = "${ghidra}/lib/ghidra/Extensions/Ghidra/${ghidra.distroPrefix}_GnuDisassembler.zip";
 
+  patches = [ ./fix-platform-build.patch ];
+
   postPatch = ''
     ln -s ${binutils-src} binutils-${binutils-version}.tar.bz2
+
     substituteInPlace build.gradle \
       --replace-fail 'ext.binutils = "binutils-2.41"' 'ext.binutils = "binutils-${binutils-version}"'
+
+    substituteInPlace buildGdis.gradle \
+      --replace-fail "ext.supportedPlatforms = ['mac_x86_64', 'mac_arm_64', 'linux_x86_64', 'linux_arm_64']" \
+                     "ext.supportedPlatforms = ['${gdisPlatform}']" \
+      --replace-fail '@gdis-platform@' '${gdisPlatform}'
   '';
 
   # Don't modify ELF stub resources
   dontPatchELF = true;
   dontStrip = true;
 
-  __darwinAllowLocalNetworking = true;
-
   nativeBuildInputs = [
     flex
     bison
+    gnumake
     texinfo
-    perl
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
