@@ -50,7 +50,7 @@ let
         ;
       inherit (releaseInfo) release_version;
       # `9.14`, or `head` for an in-development snapshot. Underscored elsewhere
-      # (`ghcNG_9_14`) because attribute paths in `pkgs` may not contain dots.
+      # (`ghcNG-9_14`) because attribute paths in `pkgs` may not contain dots.
       attrName =
         args.name or (if gitRelease != null then "head" else lib.versions.majorMinor release_version);
     in

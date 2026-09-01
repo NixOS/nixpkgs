@@ -72,6 +72,36 @@ let
     microhs_0_15 = sets.microhs_0_15_4_0;
     microhs = sets.microhs_0_15;
   };
+
+  # The `ghc/ng` ladders, evaluated once each so `compiler.*` and `packages.*`
+  # name the same one. See ../development/compilers/ghc/ng/README.md.
+  #
+  # `stage2Pkgs` *is* the package set: it starts from an ordinary Hackage set
+  # and layers the GHC-tree packages and the pinned core versions on as
+  # overlays, so `base` and `rts` are real derivations there rather than the
+  # `null`s a `configuration-ghc-*.nix` would leave. `compiler` is assembled
+  # out of it.
+  ghcNG =
+    args:
+    callPackage ../development/compilers/ghc/ng/make-ghc.nix (
+      {
+        bootPkgs = pkgsBuildBuild.haskell.packages.ghc9103;
+        # The host-indexed set, so a cross build gives stage2 a cross stdenv.
+        # Identical to `bootPkgs` natively.
+        hostBootPkgs = pkgs.haskell.packages.ghc9103;
+        haskellLib = haskellLibUncomposable.compose;
+      }
+      // args
+    );
+
+  ghcNGLadders = {
+    "ghcNG-9_14" = ghcNG {
+      ghcVersion = (pkgs.callPackages ../development/compilers/ghc/ng { })."9.14";
+    };
+    "ghcNG-head" = ghcNG {
+      ghcVersion = (pkgs.callPackages ../development/compilers/ghc/ng { }).head;
+    };
+  };
 in
 {
   lib = haskellLibUncomposable;
@@ -211,27 +241,11 @@ in
       # configured by ghc-toolchain rather than autoconf. See
       # ../development/compilers/ghc/ng/README.md.
       #
-      # `ng` exposes the rungs of the ladder rather than a single
-      # derivation, because a compiler here is assembled out of packages
-      # rather than being one build. `compiler.ghcNG_*` is the assembled
-      # result; the intermediate sets are reachable through it.
-      ghcNG_9_14 =
-        (callPackage ../development/compilers/ghc/ng/make-ghc.nix {
-          ghcVersion = (pkgs.callPackages ../development/compilers/ghc/ng { })."9.14";
-          bootPkgs = bb.packages.ghc9103;
-          # The host-indexed set, so a cross build gives stage2 a cross stdenv.
-          # Identical to `bootPkgs` natively.
-          hostBootPkgs = pkgs.haskell.packages.ghc9103;
-          haskellLib = haskellLibUncomposable.compose;
-        }).compiler;
-
-      ghcNG_head =
-        (callPackage ../development/compilers/ghc/ng/make-ghc.nix {
-          ghcVersion = (pkgs.callPackages ../development/compilers/ghc/ng { }).head;
-          bootPkgs = bb.packages.ghc9103;
-          hostBootPkgs = pkgs.haskell.packages.ghc9103;
-          haskellLib = haskellLibUncomposable.compose;
-        }).compiler;
+      # Thin aliases into the ladders bound above. The package set is the
+      # primary thing here -- `packages.ghcNG-*` -- and this is the compiler
+      # assembled out of it.
+      "ghcNG-9_14" = ghcNGLadders."ghcNG-9_14".compiler;
+      "ghcNG-head" = ghcNGLadders."ghcNG-head".compiler;
 
       # Starting from GHC 9, integer-{simple,gmp} is replaced by ghc-bignum
       # with "native" and "gmp" backends.
@@ -333,6 +347,18 @@ in
         ghc = bh.compiler.ghcHEAD;
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.16.x.nix { };
       };
+
+      # The `ghc/ng` sets. These are not built by `../development/haskell-modules`
+      # like the others: the ladder in `ghc/ng/make-ghc.nix` produces them, and
+      # `stage2Pkgs` *is* the set -- an ordinary Hackage package set with the
+      # GHC-tree packages and the pinned core versions layered on as overlays.
+      #
+      # So `base`, `rts`, `ghc` and the rest are real derivations here, where a
+      # `configuration-ghc-*.nix` set would leave `null`s on the premise that the
+      # compiler ships them. That premise is what this package set exists to
+      # break: it is where they are built.
+      "ghcNG-9_14" = ghcNGLadders."ghcNG-9_14".stage2Pkgs;
+      "ghcNG-head" = ghcNGLadders."ghcNG-head".stage2Pkgs;
 
       native-bignum =
         let

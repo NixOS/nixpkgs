@@ -225,7 +225,7 @@ let
   };
 
   # Attached to the compiler rather than returned separately so it is reachable
-  # as `nix-build -A haskell.compiler.ghcNG_9_14.testsuite`, which is what the
+  # as `nix-build -A haskell.compiler."ghcNG-9_14".testsuite`, which is what the
   # top level exposes. In `passthru`, so running it is never a condition of
   # building a compiler.
   testsuite = callPackage ./common/testsuite.nix {
