@@ -3,6 +3,7 @@
 This chapter contains information about how to use and maintain the Nix expressions for a number of specific packages, such as the Linux kernel or X.org.
 
 ```{=include=} sections
+authpass.section.md
 citrix.section.md
 darwin-builder.section.md
 dlib.section.md

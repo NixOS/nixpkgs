@@ -4643,6 +4643,9 @@
   "chap-packages": [
     "index.html#chap-packages"
   ],
+  "sec-authpass": [
+    "index.html#sec-authpass"
+  ],
   "sec-citrix": [
     "index.html#sec-citrix"
   ],
