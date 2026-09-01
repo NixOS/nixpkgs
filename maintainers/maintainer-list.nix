@@ -215,6 +215,12 @@
     github = "21eleven";
     githubId = 8813855;
   };
+  _27Aaron = {
+    name = "Aaron";
+    email = "niceboy@duck.com";
+    github = "27Aaron";
+    githubId = 85681241;
+  };
   _2gn = {
     name = "Hiram Tanner";
     github = "2gn";
@@ -2656,10 +2662,10 @@
     name = "Astavie";
   };
   asterismono = {
-    email = "cmiki@amono.me";
+    email = "i@nvirellia.im";
     github = "AsterisMono";
     githubId = 54884471;
-    name = "Chatnoir Miki";
+    name = "Noa Virellia";
     matrix = "@mikiiki:matrix.org";
   };
   astratagem = {
