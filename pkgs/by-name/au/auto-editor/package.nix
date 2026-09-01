@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildNimPackage,
   fetchFromGitHub,
 
@@ -10,6 +11,7 @@
   x264,
   dav1d,
   zlib,
+  alsa-lib,
 
   python3,
   python3Packages,
@@ -17,25 +19,26 @@
 
 buildNimPackage rec {
   pname = "auto-editor";
-  version = "31.0.0";
+  version = "31.5.0";
 
   src = fetchFromGitHub {
     owner = "WyattBlue";
     repo = "auto-editor";
     tag = version;
-    hash = "sha256-25xzVaG9seu4hE5rc776lvNucf8lsEDvjkQPbFzjgII=";
+    hash = "sha256-wQ77NW8xtGZ4Yf4UPl+wyTuY29Bz/UzkeI8aw31qiKY=";
   };
 
   lockFile = ./lock.json;
 
   buildInputs = [
     ffmpeg-full
-    lame
+    lame # Upstream uses a minimal, unpackaged fork of `lame` named `lamer`.
     libopus
     x264
     dav1d
     zlib
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib;
 
   env = {
     # Nothing should be dynamically linked, as ffmpeg should already link it.
