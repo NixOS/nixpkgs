@@ -79,7 +79,7 @@ buildPythonPackage rec {
     # requires poetry_publish
     "creole/publish.py"
     "creole/tests/test_project_setup.py"
-    # rendering differencenes, likely docutils version mismatch
+    # rendering differences, likely docutils version mismatch
     "creole/tests/test_cross_compare_rest.py"
     "creole/tests/test_rest2html.py"
     # fixture mismatch after docutils update
