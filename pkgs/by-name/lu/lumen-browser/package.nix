@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , makeWrapper
 , electron
+, kubo
+, nodejs
 }:
 
 buildNpmPackage rec {
@@ -29,6 +31,8 @@ buildNpmPackage rec {
 
     mkdir -p $out/bin
     makeWrapper ${electron}/bin/electron $out/bin/lumen-browser \
+      --set ELECTRON_OVERRIDE_DIST_PATH "${electron}/bin" \
+      --prefix PATH : "${lib.makeBinPath [ kubo nodejs ]}" \
       --add-flags "$out/lib/node_modules/lumen-browser/electron/main.cjs" \
       --add-flags "\$@"
   '';
