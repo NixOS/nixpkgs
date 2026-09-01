@@ -3193,10 +3193,10 @@
   };
 
   tolk = {
-    version = "0-unstable-2025-07-14";
+    version = "nightly-unstable-2026-06-30";
     url = "github:ton-blockchain/ton-language-server";
-    rev = "e90dbb89f8ec8fbf8a16b61a31d6cc19a840de4f";
-    hash = "sha256-EeCp7i8ao+KCm8OAx4ALCDg7Nj0GAZbcC1ecyw76qZQ=";
+    rev = "342d87c26b5fab1e300015bf2831cafa59fda457";
+    hash = "sha256-XmGahz5ezNIAaZTec0apAorXGveWKHvbm2fNkDRrwSw=";
     location = "server/src/languages/tolk/tree-sitter-tolk";
     meta.license = lib.licenses.mit;
   };
