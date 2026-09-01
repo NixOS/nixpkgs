@@ -1,30 +1,41 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
   django,
+  pytestCheckHook,
+  pytest-django,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "django-classy-tags";
   version = "4.1.0";
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-yNnRqi+m5xxNhm303RHSOmm40lu7dQskkKF7Fhd07lk=";
+  src = fetchFromGitHub {
+    owner = "django-cms";
+    repo = "django-classy-tags";
+    tag = finalAttrs.version;
+    hash = "sha256-JC8z3Y39hYUXCrnN+Bi3w5DYhPGegloLo9LZfe0MtIM=";
   };
 
-  propagatedBuildInputs = [ django ];
+  build-system = [ setuptools ];
 
-  # pypi version doesn't include runtest.py, needed to run tests
-  doCheck = false;
+  dependencies = [ django ];
+
+  env.DJANGO_SETTINGS_MODULE = "tests.settings";
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-django
+  ];
 
   pythonImportsCheck = [ "classytags" ];
 
   meta = {
     description = "Class based template tags for Django";
-    homepage = "https://github.com/divio/django-classy-tags";
+    homepage = "https://django-classy-tags.readthedocs.io";
     changelog = "https://github.com/django-cms/django-classy-tags/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
