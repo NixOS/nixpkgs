@@ -1,6 +1,5 @@
 {
   stdenv,
-  darwin,
   lib,
   pkg-config,
   autoreconfHook,
@@ -27,12 +26,7 @@
   freezeUpdateScript ? false,
 }:
 
-let
-  # libxml2 is a dependency of xcbuild. Avoid an infinite recursion by using a bootstrap stdenv
-  # that does not propagate xcrun.
-  stdenv' = if stdenv.hostPlatform.isDarwin then darwin.bootstrapStdenv else stdenv;
-in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   inherit
     version
     src
