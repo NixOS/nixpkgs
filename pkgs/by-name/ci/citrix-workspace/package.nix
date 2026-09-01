@@ -119,9 +119,15 @@ stdenv.mkDerivation (finalAttrs: {
 
     message = ''
       In order to use Citrix Workspace, you need to comply with the Citrix EULA and download
-      the 64-bit binaries, .tar.gz from:
+      the x86_64 tarball (.tar.gz) of the "GCC 11" technical preview from:
 
       https://www.citrix.com/downloads/workspace-app/betas-and-tech-previews/workspace-app-tp-gcc11-for-linux.html
+
+      Note: the tarball offered on the regular "Workspace app for Linux" download page is
+      NOT compatible with this package. That mainline build is linked against libsoup 2 and
+      bundles a legacy WebKitGTK 4.0 stack which crashes on Nixpkgs (selfservice fails with
+      "The authentication service could not be contacted"). nixpkgs packages the GCC 11
+      technical-preview line (libsoup 3 / WebKitGTK 4.1) exclusively.
 
       (if you do not find version ${finalAttrs.version} there, try at
       https://www.citrix.com/downloads/workspace-app/)
