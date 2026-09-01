@@ -68,8 +68,8 @@ beamPkgs.mixRelease (
     buildPhase = ''
       mix local.hex --force --if-missing
       mix local.rebar --force --if-missing
-      mix deps.get --only ${packageAttrs.mixEnv}
-      mix deps.nix --env ${packageAttrs.mixEnv}
+      mix deps.get --only prod
+      mix deps.nix --env prod
       nixfmt deps.nix
     '';
     installPhase = ''

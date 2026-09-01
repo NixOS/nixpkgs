@@ -472,7 +472,6 @@ beamPkgs.mixRelease (
                 # Explanation: let the dependency inherit the environment variables
                 # because some are used in `config/`.
                 env = finalAttrs.env // previousArgs.env or { };
-                inherit (finalAttrs) mixEnv;
                 postConfigure = previousArgs.postConfigure or "" + ''
                   cp --no-preserve=mode -r ${finalAttrs.passthru.bonfire-setup}/extensions .
                 '';
@@ -788,7 +787,6 @@ beamPkgs.mixRelease (
                   );
             };
       };
-      mixEnv = "prod";
       # Explanation: incompatible with `surface`.
       # Issue: https://github.com/surface-ui/surface/issues/762
       erlangDeterministicBuilds = false;
@@ -909,7 +907,7 @@ beamPkgs.mixRelease (
         ''
           rm -rf priv/repo/*
           mkdir -p priv/repo/migrations/
-          for file in _build/${finalAttrs.mixEnv}/lib/bonfire_*/priv/repo/migrations/*; do
+          for file in _build/prod/lib/bonfire_*/priv/repo/migrations/*; do
             cp -ft priv/repo/migrations/ "$file"
           done
         ''
