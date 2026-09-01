@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cmarkit";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchurl {
     url = "https://erratique.ch/software/cmarkit/releases/cmarkit-${version}.tbz";
-    hash = "sha256-RouM5iU7VeTT0+4yhBgdEmxROeP/X31iqDjd1VI7z5c=";
+    hash = "sha256-15C1aYXp5JBXUeb1KatPXphs/iBHXSiZ2tgO8FVf/jc=";
   };
 
   nativeBuildInputs = [
