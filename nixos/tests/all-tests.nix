@@ -1083,7 +1083,11 @@ in
   mobilizon = runTest ./mobilizon.nix;
   mod_perl = runTest ./mod_perl.nix;
   modular-service-etc = runTest ./modular-service-etc/test.nix;
-  modularService = pkgs.callPackage ../modules/system/service/systemd/test.nix {
+  modularService = pkgs.callPackage ../modules/system/service/systemd/system/test.nix {
+    inherit evalSystem;
+  };
+  modularUserService = runTest ./modular-user-service.nix;
+  modularUserServiceUnit = pkgs.callPackage ../modules/system/service/systemd/user/test.nix {
     inherit evalSystem;
   };
   moduleStateRevisions = pkgs.callPackage ./moduleStateRevisions.nix { };

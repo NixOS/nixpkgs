@@ -2027,8 +2027,8 @@
   ./system/boot/zram-as-tmp.nix
   ./system/boot/zswap.nix
   ./system/etc/etc-activation.nix
-  ./system/service/systemd/system.nix
-  ./system/service/systemd/user.nix
+  ./system/service/systemd/system
+  ./system/service/systemd/user
   ./tasks/auto-upgrade.nix
   ./tasks/bcache.nix
   ./tasks/cpu-freq.nix

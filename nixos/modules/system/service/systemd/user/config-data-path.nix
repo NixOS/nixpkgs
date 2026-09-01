@@ -1,5 +1,10 @@
-# Tests in: ../../tests/modular-service-etc/test.nix
-# This module sets the path for configData entries in systemd services
+# Analogous to ../system/config-data-path.nix but scoped per user.
+# Usage: import ./config-data-path.nix userName
+#
+# configData paths land under the per-user profile:
+#   /etc/profiles/per-user/$USER/etc/xdg/user-services/...
+# which is in $XDG_CONFIG_DIRS (boot/systemd/user.nix wires this in).
+userName:
 let
   setPathsModule =
     prefix:
@@ -11,14 +16,13 @@ let
     {
       _class = "service";
       options = {
-        # Extend portable configData option
         configData = mkOption {
           type = types.lazyAttrsOf (
             types.submodule (
               { config, ... }:
               {
                 config = {
-                  path = lib.mkDefault "/etc/system-services/${servicePrefix}/${config.name}";
+                  path = lib.mkDefault "/etc/profiles/per-user/${userName}/etc/xdg/user-services/${servicePrefix}/${config.name}";
                 };
               }
             )
