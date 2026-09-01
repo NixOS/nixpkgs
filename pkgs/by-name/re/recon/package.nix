@@ -2,7 +2,9 @@
   lib,
   flutter347,
   fetchFromGitHub,
+  copyDesktopItems,
   nix-update-script,
+  makeDesktopItem,
 }:
 
 flutter347.buildFlutterApplication (finalAttrs: {
@@ -18,7 +20,25 @@ flutter347.buildFlutterApplication (finalAttrs: {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
+  nativeBuildInputs = [ copyDesktopItems ];
+
   passthru.updateScript = nix-update-script { };
+
+  postInstall = ''
+    install -Dm644 assets/images/logo512.png "$out/share/icons/hicolor/512x512/apps/recon.png"
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "recon";
+      icon = "recon";
+      exec = "recon %u";
+      terminal = false;
+      desktopName = "Recon";
+      comment = "Contacts app for Resonite, built with flutter";
+      categories = [ "Utility" ];
+    })
+  ];
 
   meta = {
     description = "Contacts app for Resonite, built with flutter";
