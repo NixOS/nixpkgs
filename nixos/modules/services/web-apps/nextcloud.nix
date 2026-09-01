@@ -1640,6 +1640,20 @@ in
 
         services.nginx.enable = lib.mkDefault true;
 
+        services.nginx.appendHttpConfig = ''
+          map $arg_v $nextcloud_v_immutable {
+            "" "";
+            default ", immutable";
+          }
+          map $uri $nextcloud_chunk_immutable {
+            "~\.chunk\.(?:css|js|mjs)$" ", immutable";
+            default "";
+          }
+        '';
+
+        # The checker does not understand add_header_inherit.
+        services.nginx.validateConfigFile = false;
+
         services.nginx.virtualHosts.${cfg.hostName} = {
           root = webroot;
           locations = {
@@ -1709,8 +1723,11 @@ in
             "~ \\.(?:css|js|mjs|svg|gif|ico|jpg|jpeg|png|webp|wasm|tflite|map|html|ttf|bcmap|mp4|webm|ogg|flac)$".extraConfig =
               ''
                 try_files $uri /index.php$request_uri;
-                expires 6M;
                 access_log off;
+
+                add_header Cache-Control "public, max-age=31536000$nextcloud_v_immutable$nextcloud_chunk_immutable";
+                add_header_inherit merge;
+
                 location ~ \.mjs$ {
                   default_type text/javascript;
                 }
