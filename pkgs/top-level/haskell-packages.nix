@@ -16,11 +16,18 @@ let
     "ghc902Binary"
     "ghc966DebianBinary"
     "ghc984Binary"
-    # `ghc/ng`. Two reasons: these are assembled by `ghc/ng/assemble.nix`, which
+    # `ghc/ng`. Two reasons: these are assembled by `ghc/ng/compiler.nix`, which
     # takes no `enableNativeBignum` to override, and they are built with
     # `-fbignum-native` already -- there is no gmp flavour to choose between.
+    #
+    # The `-tools` and `-stage1` rungs are here for the same reason; they are
+    # bootstrap scaffolding, not something to offer a bignum choice for.
     "ghcNG-9_14"
+    "ghcNG-9_14-stage1"
+    "ghcNG-9_14-tools"
     "ghcNG-head"
+    "ghcNG-head-stage1"
+    "ghcNG-head-tools"
   ];
 
   haskellLibUncomposable = import ../development/haskell-modules/lib {
@@ -78,35 +85,24 @@ let
     microhs = sets.microhs_0_15;
   };
 
-  # The `ghc/ng` ladders, evaluated once each so `compiler.*` and `packages.*`
-  # name the same one. See ../development/compilers/ghc/ng/README.md.
+  # The `ghc/ng` releases. Just the source trees and version metadata; the
+  # rungs of the bootstrap are ordinary entries in `compiler` and `packages`
+  # below, referring to each other through `pkgs.haskell` like everything else.
   #
-  # `stage2Pkgs` *is* the package set: it starts from an ordinary Hackage set
-  # and layers the GHC-tree packages and the pinned core versions on as
-  # overlays, so `base` and `rts` are real derivations there rather than the
-  # `null`s a `configuration-ghc-*.nix` would leave. `compiler` is assembled
-  # out of it.
-  ghcNG =
+  # Deliberately not a `let`-bound chain of stages: that would bind each rung's
+  # compiler at construction, so nothing downstream could re-bind it -- and
+  # `.extend` drops `override`, closing the set entirely. Going through the
+  # fixpoint is what keeps it late-bound, and gives the build/host indexing for
+  # cross for free.
+  ngReleases = pkgs.callPackages ../development/compilers/ghc/ng { };
+
+  ngPackageSet =
     args:
-    callPackage ../development/compilers/ghc/ng/make-ghc.nix (
-      {
-        bootPkgs = pkgsBuildBuild.haskell.packages.ghc9103;
-        # The host-indexed set, so a cross build gives stage2 a cross stdenv.
-        # Identical to `bootPkgs` natively.
-        hostBootPkgs = pkgs.haskell.packages.ghc9103;
-        haskellLib = haskellLibUncomposable.compose;
-      }
-      // args
+    callPackage ../development/compilers/ghc/ng/package-set.nix (
+      { haskellLib = haskellLibUncomposable.compose; } // args
     );
 
-  ghcNGLadders = {
-    "ghcNG-9_14" = ghcNG {
-      ghcVersion = (pkgs.callPackages ../development/compilers/ghc/ng { })."9.14";
-    };
-    "ghcNG-head" = ghcNG {
-      ghcVersion = (pkgs.callPackages ../development/compilers/ghc/ng { }).head;
-    };
-  };
+  ngCompiler = args: callPackage ../development/compilers/ghc/ng/compiler.nix args;
 in
 {
   lib = haskellLibUncomposable;
@@ -246,11 +242,58 @@ in
       # configured by ghc-toolchain rather than autoconf. See
       # ../development/compilers/ghc/ng/README.md.
       #
-      # Thin aliases into the ladders bound above. The package set is the
-      # primary thing here -- `packages.ghcNG-*` -- and this is the compiler
-      # assembled out of it.
-      "ghcNG-9_14" = ghcNGLadders."ghcNG-9_14".compiler;
-      "ghcNG-head" = ghcNGLadders."ghcNG-head".compiler;
+      # `ghc/ng`. The stage1 compilers are "weird" entries in the same sense as
+      # the binary GHCs above: nobody would choose one, they exist because the
+      # boot libraries cannot be built by the bootstrap compiler. See
+      # ../development/compilers/ghc/ng/README.md.
+      #
+      # Each is assembled from the rung of the same name in `packages`. Note
+      # which side of the build/host line each argument comes from:
+      #
+      #   packages   the rung itself, *host*-indexed -- the shipped compiler
+      #              runs on the host, so its driver must be a host binary.
+      #   toolsPkgs  always build-hosted: `ghc-toolchain-bin` probes the target
+      #              but runs here, and stage1's `unlit` likewise.
+      #
+      # That is the `_wrappers` off-by-one, spelled out.
+      "ghcNG-9_14-stage1" = ngCompiler {
+        ghcVersion = ngReleases."9.14";
+        stage = "stage1";
+        packages = packages."ghcNG-9_14-stage1";
+        toolsPkgs = buildPackages.haskell.packages."ghcNG-9_14-tools";
+      };
+      "ghcNG-head-stage1" = ngCompiler {
+        ghcVersion = ngReleases.head;
+        stage = "stage1";
+        packages = packages."ghcNG-head-stage1";
+        toolsPkgs = buildPackages.haskell.packages."ghcNG-head-tools";
+      };
+
+      "ghcNG-9_14" = ngCompiler {
+        ghcVersion = ngReleases."9.14";
+        stage = "stage2";
+        packages = packages."ghcNG-9_14";
+        toolsPkgs = buildPackages.haskell.packages."ghcNG-9_14-tools";
+        # The shipped `ghc-pkg` is a host binary; on a cross build it cannot run
+        # here, so the database is maintained with the stage1 compiler's copy,
+        # which is build-hosted and the same GHC version.
+        buildGhcPkg =
+          if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+            null
+          else
+            buildPackages.haskell.compiler."ghcNG-9_14-stage1";
+      };
+      "ghcNG-head" = ngCompiler {
+        ghcVersion = ngReleases.head;
+        stage = "stage2";
+        packages = packages."ghcNG-head";
+        toolsPkgs = buildPackages.haskell.packages."ghcNG-head-tools";
+        buildGhcPkg =
+          if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+            null
+          else
+            buildPackages.haskell.compiler."ghcNG-head-stage1";
+      };
 
       # Starting from GHC 9, integer-{simple,gmp} is replaced by ghc-bignum
       # with "native" and "gmp" backends.
@@ -353,17 +396,60 @@ in
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.16.x.nix { };
       };
 
-      # The `ghc/ng` sets. These are not built by `../development/haskell-modules`
-      # like the others: the ladder in `ghc/ng/make-ghc.nix` produces them, and
-      # `stage2Pkgs` *is* the set -- an ordinary Hackage package set with the
-      # GHC-tree packages and the pinned core versions layered on as overlays.
+      # `ghc/ng`: the rungs of the bootstrap, as ordinary package sets. Each is
+      # an ordinary Hackage set with the GHC-tree packages and the pinned core
+      # versions layered on as overlays -- `base`, `rts` and `ghc` are real
+      # derivations here, where a `configuration-ghc-*.nix` set would leave
+      # `null`s on the premise that the compiler ships them. This is where they
+      # are built.
       #
-      # So `base`, `rts`, `ghc` and the rest are real derivations here, where a
-      # `configuration-ghc-*.nix` set would leave `null`s on the premise that the
-      # compiler ships them. That premise is what this package set exists to
-      # break: it is where they are built.
-      "ghcNG-9_14" = ghcNGLadders."ghcNG-9_14".stage2Pkgs;
-      "ghcNG-head" = ghcNGLadders."ghcNG-head".stage2Pkgs;
+      # The `-tools` and `-stage1` sets are "weird" in the same sense as the
+      # binary GHCs in `compiler`: bootstrap scaffolding rather than something
+      # to use. Each rung takes its compiler from `buildPackages`, one rung
+      # down, which is the whole chain:
+      #
+      #   -tools, -stage1   built by the bootstrap compiler (ghc9103)
+      #   (unsuffixed)      built by `compiler."ghcNG-X-stage1"`
+      "ghcNG-9_14-tools" = ngPackageSet {
+        ghcVersion = ngReleases."9.14";
+        stage = "tools";
+        basePkgs = packages.ghc9103;
+      };
+      "ghcNG-9_14-stage1" = ngPackageSet {
+        ghcVersion = ngReleases."9.14";
+        stage = "stage1";
+        basePkgs = packages.ghc9103;
+        toolsPkgs = bh.packages."ghcNG-9_14-tools";
+      };
+      "ghcNG-9_14" = ngPackageSet {
+        ghcVersion = ngReleases."9.14";
+        stage = "stage2";
+        # Host-indexed, so a cross build gives these a cross `stdenv` -- and so
+        # `generic-builder` an `isCross` of true, and Cabal a `--with-gcc`
+        # naming the cross compiler rather than the bare `gcc` on `PATH`.
+        basePkgs = packages.ghc9103;
+        toolsPkgs = bh.packages."ghcNG-9_14-tools";
+        ghc = bh.compiler."ghcNG-9_14-stage1";
+      };
+
+      "ghcNG-head-tools" = ngPackageSet {
+        ghcVersion = ngReleases.head;
+        stage = "tools";
+        basePkgs = packages.ghc9103;
+      };
+      "ghcNG-head-stage1" = ngPackageSet {
+        ghcVersion = ngReleases.head;
+        stage = "stage1";
+        basePkgs = packages.ghc9103;
+        toolsPkgs = bh.packages."ghcNG-head-tools";
+      };
+      "ghcNG-head" = ngPackageSet {
+        ghcVersion = ngReleases.head;
+        stage = "stage2";
+        basePkgs = packages.ghc9103;
+        toolsPkgs = bh.packages."ghcNG-head-tools";
+        ghc = bh.compiler."ghcNG-head-stage1";
+      };
 
       native-bignum =
         let
