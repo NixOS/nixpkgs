@@ -5,6 +5,7 @@
 (require 'ert)
 (eval-when-compile (require 'cl-lib))
 (require 'server)
+(require 'info)
 
 ;; Try to make tests cause no side-effects.
 
@@ -23,10 +24,6 @@
   "Test https://debbugs.gnu.org/cgi/bugreport.cgi?bug=81105."
   (unless package--activated
     (package-activate-all))
-  ;; Also `require' info at compile time
-  ;; to suppress the compile warning about unknown function `Info-find-file'.
-  (eval-and-compile
-    (require 'info))
   (should (Info-find-file "dash" t)))
 
 (defun with-packages--nix-store-dir ()
