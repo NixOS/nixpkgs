@@ -4,9 +4,15 @@
   bash,
   runCommand,
   runCommandCC,
+  stdenv,
 }:
 let
   clang = rust-bindgen-unwrapped.clang;
+  targetFlag =
+    if stdenv.targetPlatform != stdenv.hostPlatform then
+      "--target=${stdenv.targetPlatform.config}"
+    else
+      "";
   self =
     runCommand "rust-bindgen-${rust-bindgen-unwrapped.version}"
       {
@@ -49,6 +55,7 @@ let
           --replace-fail "@bash@" "${bash}" \
           --replace-fail "@cxxincludes@" "$cxxincludes" \
           --replace-fail "@cincludes@" "$cincludes" \
+          --replace-fail "@targetFlag@" "${targetFlag}" \
           --replace-fail "@unwrapped@" "${rust-bindgen-unwrapped}"
         chmod +x $out/bin/bindgen
       '';
