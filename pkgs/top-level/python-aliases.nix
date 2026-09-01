@@ -641,6 +641,7 @@ mapAliases {
   qscintilla-qt5 = warnAlias "'qscintilla-qt5' has been renamed to 'qscintilla'" qscintilla; # added 2026-07-24
   qscintilla-qt6 = warnAlias "'qscintilla-qt6' has been renamed to 'pyqt6-qscintilla'" pyqt6-qscintilla; # added 2026-07-24
   Quandl = throw "'Quandl' has been renamed to/replaced by 'quandl'"; # Converted to throw 2025-10-29
+  quaternion = numpy-quaternion; # Added 2026-08-31
   querystring_parser = throw "'querystring_parser' has been renamed to/replaced by 'querystring-parser'"; # Converted to throw 2025-10-29
   radian = throw "radian has been promoted to a top-level attribute name: `pkgs.radian`"; # added 2025-05-02
   radicale_infcloud = throw "'radicale_infcloud' has been renamed to/replaced by 'radicale-infcloud'"; # Converted to throw 2025-10-29
