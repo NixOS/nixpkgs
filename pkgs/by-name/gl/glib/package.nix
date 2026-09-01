@@ -313,7 +313,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Conditional necessary to break infinite recursion with passthru.tests
-  preCheck = lib.optionalString finalAttrs.finalPackage.doCheck or config.doCheckByDefault or false ''
+  preCheck = lib.optionalString finalAttrs.finalPackage.doCheck or config.doCheckByDefault ''
     export LD_LIBRARY_PATH="$NIX_BUILD_TOP/glib-${finalAttrs.version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     export TZDIR="${tzdata}/share/zoneinfo"
     export XDG_CACHE_HOME="$TMP"
