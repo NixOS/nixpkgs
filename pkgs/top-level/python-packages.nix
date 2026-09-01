@@ -17659,8 +17659,6 @@ self: super: with self; {
 
   quart-trio = callPackage ../development/python-modules/quart-trio { };
 
-  quaternion = callPackage ../development/python-modules/quaternion { };
-
   qudida = callPackage ../development/python-modules/qudida { };
 
   querystring-parser = callPackage ../development/python-modules/querystring-parser { };
