@@ -4,6 +4,8 @@ import { dismissReviews, postReview } from './reviews.js'
 import { classify } from './supportedBranches.js'
 import withRateLimit from './withRateLimit.js'
 
+const dirname = import.meta.dirname
+
 export default async ({ github, context, core, dry, cherryPicks }) => {
   const reviewKey = 'check-commits'
 
@@ -94,7 +96,7 @@ export default async ({ github, context, core, dry, cherryPicks }) => {
     function diff({ sha, commit, original_sha }) {
       const diff = execFileSync('git', [
         '-C',
-        __dirname,
+        dirname,
         'range-diff',
         '--no-color',
         '--ignore-all-space',
@@ -121,7 +123,7 @@ export default async ({ github, context, core, dry, cherryPicks }) => {
 
       const colored_diff = execFileSync('git', [
         '-C',
-        __dirname,
+        dirname,
         'range-diff',
         '--color',
         '--no-notes',
@@ -160,7 +162,7 @@ export default async ({ github, context, core, dry, cherryPicks }) => {
       // Fetching all commits we need for diff at once is much faster than any other method.
       execFileSync('git', [
         '-C',
-        __dirname,
+        dirname,
         'fetch',
         '--depth=2',
         'origin',
