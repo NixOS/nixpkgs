@@ -223971,6 +223971,7 @@ self: {
       ];
       description = "IntMap and IntSet with Enum keys/elements";
       license = lib.licenses.bsd3;
+      maintainers = [ lib.maintainers.ilkecan ];
     }
   ) { };
 
