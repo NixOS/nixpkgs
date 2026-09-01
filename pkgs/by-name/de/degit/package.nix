@@ -129,7 +129,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Make copies of git repositories";
     homepage = "https://github.com/Rich-Harris/degit";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kidonng ];
+    maintainers = with lib.maintainers; [
+      eljamm
+      kidonng
+    ];
     mainProgram = "degit";
   };
 })
