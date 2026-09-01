@@ -1086,6 +1086,8 @@ rec {
     outputHash = "sha256-d6xi4mKdjkX2JFicDIv5niSzpyI0m/Hnm8GGAIU04kY=";
     outputHashMode = "recursive";
     preferLocalBuild = true;
+    strictDeps = true;
+    __structuredAttrs = true;
   } "touch $out";
 
   # TODO: move docs to Nixpkgs manual
