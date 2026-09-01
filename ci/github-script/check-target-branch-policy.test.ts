@@ -1,8 +1,6 @@
-const assert = require('node:assert/strict')
-const test = require('node:test')
-const {
-  evaluateTargetBranchPolicy,
-} = require('./check-target-branch-policy.ts')
+import assert from 'node:assert/strict'
+import test from 'node:test'
+import { evaluateTargetBranchPolicy } from './check-target-branch-policy.ts'
 
 type DecisionFacts = {
   base: string
