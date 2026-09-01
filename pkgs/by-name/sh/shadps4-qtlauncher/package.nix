@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  clangStdenv,
   fetchFromGitHub,
 
   cmake,
@@ -10,28 +10,30 @@
   fmt,
   sdl3,
   toml11,
+  zarchive,
+  zstd,
 
   shadps4,
 }:
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "shadps4-qtlauncher";
-  version = "224";
+  version = "0-unstable-2026-08-18";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadps4-qtlauncher";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-lRZH9fokUKN/n3m/ZkTsRHwkwZZ04buvqBMXYLrqqLE=";
+    rev = "a30486c3e0a17460c44cf1caf15559c6f3331e57";
+    hash = "sha256-uVTy+0JvJUREY0qt+hkggSjyN1swGdG9aAYQvWNiNs4=";
 
     postCheckout = ''
-      cd "$out"
+      git -C "$out" rev-parse --short=8 HEAD > $out/COMMIT
+      date -u -d "@$(git -C "$out" log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
 
-      git rev-parse --short=8 HEAD > $out/COMMIT
-      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
-
-      git -C externals submodule update --init --recursive \
+      git -C "$out/externals" submodule update --init --recursive \
         volk \
-        json
+        json \
+        openal-soft \
+        spdlog
     '';
   };
 
@@ -62,6 +64,9 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "@shadps4-qt@" "$out"
   '';
 
+  # System Zstd is not linked by default
+  env.NIX_LDFLAGS = "-lzstd";
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -72,6 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
     fmt
     sdl3
     toml11
+    zarchive
+    zstd
     qt6.qtbase
     qt6.qttools
     qt6.qtmultimedia
@@ -92,13 +99,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     inherit (shadps4.meta)
+      homepage
+      downloadPage
+      donationPage
       platforms
       license
       maintainers
       ;
 
     description = shadps4.meta.description + " (Qt UI)";
-    homepage = "https://github.com/shadps4-emu/shadps4-qtlauncher";
     mainProgram = "shadPS4QtLauncher";
   };
 })
