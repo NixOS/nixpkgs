@@ -11,6 +11,7 @@
   makeWrapper,
   nodejs_26,
   nodejs-slim_26,
+  nixosTests,
   pnpm_11,
   pnpmConfigHook,
 }:
@@ -215,6 +216,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit daemon dashboardPnpmDeps;
+    tests = {
+      inherit (nixosTests) sing-box-for-desktop;
+    };
     sourceRevision = finalAttrs.src.rev;
     dashboardRevision = "564dd76b2382af2fb72aee9fcc95af75db693d1a";
   };
