@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "llama-index-readers-database";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_readers_database";
     inherit version;
-    hash = "sha256-LDxPRKd+i4zwGArLW8b8URtBc9Y+id/uKEybnsW4c5U=";
+    hash = "sha256-5Ffw3Ro7+vmskRI8xr1gRTxgEyMCn7GWHn6I4mEcnoY=";
   };
 
   build-system = [ hatchling ];
