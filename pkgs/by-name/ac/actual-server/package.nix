@@ -90,6 +90,31 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Disable the install script for sharp to prevent it from trying to download binaries
     cat <<< $(${lib.getExe jq} '.dependenciesMeta."sharp".built = false' ./package.json) > ./package.json
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Nix may rename `themes` to avoid a collision with `Themes` on
+    # case-insensitive Darwin filesystems.
+    themesDir=packages/component-library/src/themes
+    caseHackThemesDir=$(find packages/component-library/src -maxdepth 1 -type d -name 'themes~nix~case~hack~*' -print -quit)
+    if [ -n "$caseHackThemesDir" ]; then
+      themesDir=$caseHackThemesDir
+      if [ ! -e packages/component-library/src/themes ]; then
+        ln -s "$(basename "$caseHackThemesDir")" packages/component-library/src/themes
+      fi
+    fi
+
+    mkdir -p packages/desktop-client/src/style/themes
+    cp \
+      "$themesDir"/dark.css \
+      "$themesDir"/light.css \
+      "$themesDir"/midnight.css \
+      "$themesDir"/palette.css \
+      packages/desktop-client/src/style/themes/
+    substituteInPlace packages/desktop-client/src/style/theme.tsx \
+      --replace-fail "@actual-app/components/themes/dark.css?inline" "./themes/dark.css?inline" \
+      --replace-fail "@actual-app/components/themes/light.css?inline" "./themes/light.css?inline" \
+      --replace-fail "@actual-app/components/themes/midnight.css?inline" "./themes/midnight.css?inline" \
+      --replace-fail "@actual-app/components/themes/palette.css?inline" "./themes/palette.css?inline"
   '';
 
   buildPhase = ''
