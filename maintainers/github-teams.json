@@ -734,7 +734,7 @@
     "description": "Manage the current nixpkgs/NixOS release",
     "id": 3620128,
     "maintainers": {
-      "jopejoe1": 34899572,
+      "Scrumplex": 11587657,
       "yayayayaka": 73759599
     },
     "members": {},
@@ -960,7 +960,6 @@
     },
     "members": {
       "andir": 638836,
-      "leona-ya": 11006031,
       "pyrox0": 35778371
     },
     "name": "Security review"

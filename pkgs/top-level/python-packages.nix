@@ -5148,6 +5148,8 @@ self: super: with self; {
 
   doxmlparser = callPackage ../development/python-modules/doxmlparser { };
 
+  dpapi-ng = callPackage ../development/python-modules/dpapi-ng { };
+
   dparse = callPackage ../development/python-modules/dparse { };
 
   dparse2 = callPackage ../development/python-modules/dparse2 { };
@@ -12559,6 +12561,8 @@ self: super: with self; {
   openerz-api = callPackage ../development/python-modules/openerz-api { };
 
   openevsewifi = callPackage ../development/python-modules/openevsewifi { };
+
+  openexr = callPackage ../development/python-modules/openexr { };
 
   openfga-sdk = callPackage ../development/python-modules/openfga-sdk { };
 

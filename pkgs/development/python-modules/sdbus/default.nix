@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sdbus";
-  version = "0.14.2";
+  version = "0.14.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-sdbus";
     repo = "python-sdbus";
     tag = finalAttrs.version;
-    hash = "sha256-vRz7RTSI5QjI48YnaC20mbOKl6+yXk/TrFicQ0MDR9Q=";
+    hash = "sha256-oITFtQg97JFyyBgsYlm4KmKhcDxdkedVbdVn0HBuDBA=";
   };
 
   build-system = [ setuptools ];

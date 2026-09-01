@@ -12,21 +12,15 @@
 
 buildPythonPackage rec {
   pname = "biopandas";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BioPandas";
     repo = "biopandas";
     tag = "v${version}";
-    hash = "sha256-dUeGjDDz9VA1NrFLGKy0ebaa+MU4c1tHi5YYkAspLRk=";
+    hash = "sha256-lHzezrx8WmkFdALDDZm7aaY5v8ELoofPrU/SlF7aS+I=";
   };
-
-  postPatch = ''
-    substituteInPlace biopandas/mmtf/pandas_mmtf.py --replace-fail \
-      'int(np.argwhere(np.array(model_indices) > ch_idx)[0]) + 1' \
-      'int(np.argwhere(np.array(model_indices) > ch_idx)[0][0]) + 1'
-  '';
 
   pythonRelaxDeps = [ "looseversion" ];
 

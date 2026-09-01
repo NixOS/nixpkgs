@@ -1,7 +1,7 @@
 // @ts-nocheck
-module.exports = async ({ github, core, maxConcurrent = 1 }, callback) => {
-  const Bottleneck = require('bottleneck')
+import Bottleneck from 'bottleneck'
 
+export default async ({ github, core, maxConcurrent = 1 }, callback) => {
   const stats = {
     issues: 0,
     prs: 0,
