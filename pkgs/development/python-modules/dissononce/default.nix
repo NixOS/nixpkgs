@@ -3,7 +3,8 @@
   fetchFromGitHub,
   lib,
   setuptools,
-  pytest,
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
   cryptography,
   transitions,
 }:
@@ -24,14 +25,14 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytest ];
-  checkPhase = ''
-    HOME=$(mktemp -d) py.test tests/
-  '';
-
   dependencies = [
     cryptography
     transitions
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [ "dissononce" ];
