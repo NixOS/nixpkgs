@@ -5,15 +5,15 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ergo";
-  version = "2.16.0";
+  version = "2.17.0";
 
   src = fetchFromGitHub {
     owner = "ergochat";
     repo = "ergo";
-    rev = "v${version}";
-    sha256 = "sha256-AUXuH7YjC/yG5Ocs+kAOF8bAR4UVgfx96VDSHEqmqgg=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-ajLecAgE74Et7XRGtpGoA9DAcSzBEtRzLm47nHn1Amo=";
   };
 
   vendorHash = null;
@@ -21,7 +21,7 @@ buildGoModule rec {
   passthru.tests.ergochat = nixosTests.ergochat;
 
   meta = {
-    changelog = "https://github.com/ergochat/ergo/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/ergochat/ergo/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Modern IRC server (daemon/ircd) written in Go";
     mainProgram = "ergo";
     homepage = "https://github.com/ergochat/ergo";
@@ -32,4 +32,4 @@ buildGoModule rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

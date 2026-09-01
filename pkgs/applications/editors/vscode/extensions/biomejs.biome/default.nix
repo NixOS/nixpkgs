@@ -11,8 +11,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "biome";
     publisher = "biomejs";
-    version = "2025.10.241456";
-    hash = "sha256-tihEFcDDYr/khLIcJbR5VSC/RujEvp/gcnWlokAqNBc=";
+    version = "2026.7.60717";
+    hash = "sha256-GXvmC0vn3rImuGx7Jz5UdEijamH8+FN6Q43Z3KPbAbA=";
   };
 
   postInstall = ''

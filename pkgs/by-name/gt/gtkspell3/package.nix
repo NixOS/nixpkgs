@@ -12,7 +12,7 @@
   vala,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtkspell";
   version = "3.0.10";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://sourceforge/gtkspell/gtkspell3-${version}.tar.xz";
+    url = "mirror://sourceforge/gtkspell/gtkspell3-${finalAttrs.version}.tar.xz";
     sha256 = "0cjp6xdcnzh6kka42w9g0w2ihqjlq8yl8hjm9wsfnixk6qwgch5h";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

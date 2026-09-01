@@ -1,8 +1,8 @@
 diff --git a/build.gradle b/build.gradle
-index 6f3bc6f..16fc51b 100644
+index 48da640..bca1958 100644
 --- a/build.gradle
 +++ b/build.gradle
-@@ -55,16 +55,8 @@ else {
+@@ -84,16 +84,8 @@ tasks.register("installStandaloneDeps") {
  repositories {
  	mavenLocal()
  	mavenCentral()
@@ -10,12 +10,12 @@ index 6f3bc6f..16fc51b 100644
 -		name = "boricj's binary-file-toolkit"
 -		url = uri("https://maven.pkg.github.com/boricj/binary-file-toolkit")
 -		credentials(HttpHeaderCredentials) {
--            name = "Authorization"
--            value = "Bearer " + project.findProperty("githubToken") as String ?: System.getenv("GITHUB_TOKEN")
+-			name = "Authorization"
+-			value = "Bearer " + project.findProperty("githubToken") as String ?: System.getenv("GITHUB_TOKEN")
 -		}
--        authentication {
--            header(HttpHeaderAuthentication)
--        }
+-		authentication {
+-			header(HttpHeaderAuthentication)
+-		}
 +	flatDir {
 +		dirs "@binary-file-toolkit@"
  	}

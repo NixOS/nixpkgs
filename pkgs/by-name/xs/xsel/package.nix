@@ -4,8 +4,8 @@
   fetchFromGitHub,
   pkg-config,
   autoreconfHook,
-  libX11,
-  libXt,
+  libx11,
+  libxt,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,8 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
   ];
   buildInputs = [
-    libX11
-    libXt
+    libx11
+    libxt
   ];
 
   meta = {

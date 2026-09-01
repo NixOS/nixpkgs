@@ -6,14 +6,14 @@
   llvmPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cppe";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "maxscheurer";
     repo = "cppe";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-guM7+ZWDJLcAUJtPkKLvC4LYSA2eBvER7cgwPZ7FxHw=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

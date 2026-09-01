@@ -5,7 +5,6 @@
   busylight-core,
   fastapi,
   fetchFromGitHub,
-  hatchling,
   hidapi,
   httpx,
   loguru,
@@ -14,26 +13,27 @@
   pytestCheckHook,
   typer,
   udevCheckHook,
+  uv-build,
   uvicorn,
   webcolors,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "busylight-for-humans";
-  version = "0.45.3";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JnyJny";
     repo = "busylight";
-    tag = "v${version}";
-    hash = "sha256-EP+2jWOrXQE8sZQYclMMbpfr+FmPHIbZ35NNbfCTnUk=";
+    tag = "busylight-cli/v${finalAttrs.version}";
+    hash = "sha256-h+YPrcf32SgzdQDYCeQlh4enzsXfsHr470W3tiFBO7g=";
+    rootDir = "packages/busylight";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ uv-build ];
 
   dependencies = [
-    bitvector-for-humans
     busylight-core
     hidapi
     loguru
@@ -43,6 +43,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+    web = [ fastapi ];
     webapi = [
       fastapi
       uvicorn
@@ -52,12 +53,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     httpx
     pytestCheckHook
-    pytest-mock
     udevCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
-
-  disabledTestPaths = [ "tests/test_pydantic_models.py" ];
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "busylight" ];
 
@@ -69,12 +67,9 @@ buildPythonPackage rec {
   meta = {
     description = "Control USB connected presence lights from multiple vendors via the command-line or web API";
     homepage = "https://github.com/JnyJny/busylight";
-    changelog = "https://github.com/JnyJny/busylight/releases/tag/${src.tag}";
+    changelog = "https://github.com/JnyJny/busylight/blob/${finalAttrs.src.tag}/${finalAttrs.src.rootDir}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      das_j
-      helsinki-Jo
-    ];
+    maintainers = with lib.maintainers; [ helsinki-Jo ];
     mainProgram = "busylight";
   };
-}
+})

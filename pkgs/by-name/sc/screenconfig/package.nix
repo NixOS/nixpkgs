@@ -7,7 +7,7 @@
   feh,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "screenconfig";
   version = "0.1.0";
   pyproject = true;
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jceb";
     repo = "screenconfig";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-X1Mz8UbOOW/4LM9IZoG/kbwv2G0EppTsacKapQMChkc=";
   };
   build-system = [ python3.pkgs.setuptools ];
@@ -37,4 +37,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ jceb ];
     mainProgram = "screenconfig";
   };
-}
+})

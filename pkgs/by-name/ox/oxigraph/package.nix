@@ -9,21 +9,22 @@ let
   features = [
     "rustls-webpki"
     "geosparql"
+    "rdf-12"
   ];
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxigraph";
-  version = "0.5.3";
+  version = "0.5.10";
 
   src = fetchFromGitHub {
     owner = "oxigraph";
     repo = "oxigraph";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hIB4/6D7AogEpNYyB95nDotspUyaiOW8X6KuVgyjj5Y=";
+    hash = "sha256-2mThlPqjUJ3FuqzGRTfrN8af1NupSgdbWomyL5aMJTA=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-EhJQgYeeSln1bLLH3nEUFJ7q+PWA/DHAswh4ei4bHWY=";
+  cargoHash = "sha256-iDt9wHJr6PMXGuCvLJqK9bRb3Y5gjuuSYdPhQofeJFQ=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -58,6 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       astro
       tnias
+      videl
     ];
     license = with lib.licenses; [
       asl20

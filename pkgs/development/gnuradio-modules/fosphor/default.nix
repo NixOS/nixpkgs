@@ -37,6 +37,12 @@ mkDerivation {
   };
   disabled = gnuradioOlder "3.9" || gnuradioAtLeast "3.11";
 
+  # Boost 1.89 removed the boost_system stub library.
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'COMPONENTS system chrono thread' 'COMPONENTS chrono thread'
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config

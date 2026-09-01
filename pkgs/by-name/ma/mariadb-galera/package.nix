@@ -10,15 +10,15 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mariadb-galera";
-  version = "26.4.24";
+  version = "26.4.27";
 
   src = fetchFromGitHub {
-    owner = "codership";
+    owner = "mariadb-corporation";
     repo = "galera";
-    tag = "release_${version}";
-    hash = "sha256-mpf+YY0m+UwvemdZt6SfRP9IJlq5IZtlOJMucADc1oM=";
+    tag = "release_${finalAttrs.version}";
+    hash = "sha256-Z1UtNM7HPcbFMr35JVJZCxPl43ZQxy+eBkiQFoVmFhY=";
     fetchSubmodules = true;
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

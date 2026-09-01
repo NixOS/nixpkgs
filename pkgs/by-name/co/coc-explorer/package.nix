@@ -40,6 +40,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Explorer for coc.nvim";
     homepage = "https://github.com/weirongxu/coc-explorer";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

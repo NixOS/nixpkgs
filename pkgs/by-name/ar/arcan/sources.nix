@@ -1,6 +1,6 @@
 {
   fetchFromGitHub,
-  fetchFromGitea,
+  fetchFromCodeberg,
 }:
 
 {
@@ -10,8 +10,7 @@
         pname = "arcan";
         version = "0.7.1";
 
-        src = fetchFromGitea {
-          domain = "codeberg.org";
+        src = fetchFromCodeberg {
           owner = "letoram";
           repo = "arcan";
           tag = self.version;

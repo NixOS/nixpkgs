@@ -5,7 +5,6 @@
 
   # build-system
   pbr,
-  setuptools,
 
   # dependencies
   testtools,
@@ -32,13 +31,14 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pbr
-    setuptools
   ];
 
   propagatedBuildInputs = [
     pbr
     testtools
   ];
+
+  doCheck = false; # tests not compatible with teststools 2.8
 
   checkPhase = ''
     runHook preCheck

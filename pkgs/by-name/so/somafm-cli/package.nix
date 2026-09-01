@@ -8,14 +8,14 @@
   mpv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "somafm-cli";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "rockymadden";
     repo = "somafm-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1h5p9qsczgfr450sklh2vkllcpzb7nicbs8ciyvkavh3d7hds0yy";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "somafm";
   };
-}
+})

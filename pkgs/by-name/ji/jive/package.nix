@@ -5,12 +5,12 @@
   makeWrapper,
   jre,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jive";
   version = "7.46";
 
   src = fetchurl {
-    url = "https://repo.maven.apache.org/maven2/org/tango-controls/Jive/${version}/Jive-${version}-jar-with-dependencies.jar";
+    url = "https://repo.maven.apache.org/maven2/org/tango-controls/Jive/${finalAttrs.version}/Jive-${finalAttrs.version}-jar-with-dependencies.jar";
     hash = "sha256-AbxTRFi5dCsN/HENTI/o3hBQKZM+cFtJxT3A8RKpQM4=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.gilice ];
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
   };
-}
+})

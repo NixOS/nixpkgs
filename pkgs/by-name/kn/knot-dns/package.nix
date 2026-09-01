@@ -32,13 +32,13 @@
   runCommandLocal,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "knot-dns";
-  version = "3.5.3";
+  version = "3.5.7";
 
   src = fetchurl {
-    url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "e003ad1eef229c4e65a6cac876ee773e25a06177ecdc83795a26617a6eebe471";
+    url = "https://knot-dns.nic.cz/release/knot-${finalAttrs.version}.tar.xz";
+    sha256 = "0e363e9160895e2b83d02b0a7488c3a566b605b92edac85d03be3ebce94b8214";
   };
 
   outputs = [
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   strictDeps = true;
 
-  CFLAGS = [
+  env.CFLAGS = toString [
     "-O2"
     "-DNDEBUG"
   ];
@@ -136,10 +136,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Authoritative-only DNS server from .cz domain registry";
     homepage = "https://knot-dns.cz";
-    changelog = "https://gitlab.nic.cz/knot/knot-dns/-/releases/v${version}";
+    changelog = "https://gitlab.nic.cz/knot/knot-dns/-/releases/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.vcunat ];
     mainProgram = "knotd";
   };
-}
+})

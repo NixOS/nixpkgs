@@ -4,7 +4,7 @@
   fetchurl,
   desktop-file-utils,
   gtk3,
-  libX11,
+  libx11,
   cmake,
   imagemagick,
   pkg-config,
@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sgt-puzzles";
-  version = "20251220.ecb576f";
+  version = "20260720.3c36322";
 
   src = fetchurl {
-    url = "http://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${finalAttrs.version}.tar.gz";
-    hash = "sha256-hgh3q9qACtlcfOkH2anesQKYREuwcLfiucUMg+p5xWs=";
+    url = "https://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${finalAttrs.version}.tar.gz";
+    hash = "sha256-z0OuMD8IXEp7TAcR4xKXVanGiev78+pVvyc9lgIiOAY=";
   };
 
   sgt-puzzles-menu = fetchurl {
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gtk3
-    libX11
+    libx11
   ];
 
   postInstall = ''
@@ -79,11 +79,11 @@ stdenv.mkDerivation (finalAttrs: {
     tests.sgt-puzzles = nixosTests.sgt-puzzles;
     updateScript = writeScript "update-sgt-puzzles" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -eu -o pipefail
 
-      version="$(curl -sI 'https://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles.tar.gz' | grep -Fi Location: | pcregrep -o1 'puzzles-([0-9a-f.]*).tar.gz')"
+      version="$(curl -sI 'https://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles.tar.gz' | grep -Fi Location: | pcre2grep -o1 'puzzles-([0-9a-f.]*).tar.gz')"
       update-source-version sgt-puzzles "$version"
     '';
   };

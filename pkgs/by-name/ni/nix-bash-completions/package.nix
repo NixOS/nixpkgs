@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.6.8";
   pname = "nix-bash-completions";
 
   src = fetchFromGitHub {
     owner = "hedning";
     repo = "nix-bash-completions";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1n5zs6xcnv4bv1hdaypmz7fv4j7dsr4a0ifah99iyj4p5j85i1bc";
   };
 
@@ -60,11 +60,8 @@ stdenv.mkDerivation rec {
     description = "Bash completions for Nix, NixOS, and NixOps";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
-      hedning
-      ncfavier
-    ];
+    maintainers = with lib.maintainers; [ ncfavier ];
     # Set a lower priority such that Nix wins in case of conflicts.
     priority = 10;
   };
-}
+})

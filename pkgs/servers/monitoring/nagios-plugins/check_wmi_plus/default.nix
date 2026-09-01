@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   pname = "check-wmi-plus";
   version = "1.65";
 
-  # Upstream has been moved from Github to tarballs on the author's website.
+  # Upstream has been moved from GitHub to tarballs on the author's website.
   # See https://edcint.co.nz/checkwmiplus/releases/
   src = fetchFromGitHub {
     owner = "speartail";

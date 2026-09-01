@@ -13,7 +13,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libx11";
-  version = "1.8.12";
+  version = "1.8.13";
 
   outputs = [
     "out"
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://xorg/individual/lib/libX11-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+gJvm7AST01sgI+a70BXqtZeezXY/0OVHO8Kvga7mpo=";
+    hash = "sha256-aWBvSFwsB8FO9k91t7sybUhYevM3ldmrPmB8C1+U8Rw=";
   };
 
   strictDeps = true;

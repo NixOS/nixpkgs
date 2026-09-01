@@ -15,13 +15,15 @@
   libuv,
   gnutls,
   lmdb,
+  # optionals, in principle
   jemalloc,
   systemdMinimal,
   libcap_ng,
   dns-root-data,
-  nghttp2, # optionals, in principle
+  nghttp2,
+  ngtcp2-gnutls,
   fstrm,
-  protobufc, # more optionals
+  protobufc,
   # test-only deps.
   cmocka,
   which,
@@ -34,11 +36,11 @@ let
   # TODO: we could cut the `let` short here, but it would de-indent everything.
   unwrapped = stdenv.mkDerivation (finalAttrs: {
     pname = "knot-resolver_6";
-    version = "6.1.0";
+    version = "6.4.2";
 
     src = fetchurl {
-      url = "https://secure.nic.cz/files/knot-resolver/knot-resolver-${finalAttrs.version}.tar.xz";
-      hash = "sha256-eSHfdQcobZBXS79a5mSopTeAXOQLX6ixX10NM+LEONA=";
+      url = "https://knot-resolver.nic.cz/release/knot-resolver-${finalAttrs.version}.tar.xz";
+      hash = "sha256-hUrSM2e6tmOS99dPFC8iGeMJCugRJrY1Qw/OexkW8aM=";
     };
 
     outputs = [
@@ -92,6 +94,7 @@ let
     ++ [
       jemalloc
       nghttp2
+      ngtcp2-gnutls
       # dnstap support
       fstrm
       protobufc
@@ -118,6 +121,7 @@ let
       rm -r "$out"/lib/sysusers.d/ # ATM more likely to harm than help
     '';
 
+    __darwinAllowLocalNetworking = true;
     doInstallCheck = with stdenv; hostPlatform == buildPlatform;
     nativeInstallCheckInputs = [
       which

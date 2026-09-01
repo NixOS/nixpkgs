@@ -5,7 +5,6 @@
   libiconv,
   bashNonInteractive,
   updateAutotoolsGnuConfigScriptsHook,
-  gnulib,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -13,20 +12,19 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gettext";
-  version = "0.25.1";
+  version = "1.0";
 
   src = fetchurl {
-    url = "mirror://gnu/gettext/${pname}-${version}.tar.gz";
-    hash = "sha256-dG+VXULXHrac52OGnLkmgvCaQGZSjQGLbKej9ICJoIU=";
+    url = "mirror://gnu/gettext/gettext-${finalAttrs.version}.tar.gz";
+    hash = "sha256-hdmbecmBpASHTALgNCF2z3XHaY4rUf5BAxz2Um2XTxo=";
   };
   patches = [
     ./absolute-paths.diff
     # fix reproducibile output, in particular in the grub2 build
     # https://savannah.gnu.org/bugs/index.php?59658
     ./0001-msginit-Do-not-use-POT-Creation-Date.patch
-    ./memory-safety.patch
   ];
 
   outputs = [
@@ -47,6 +45,10 @@ stdenv.mkDerivation rec {
     "gl_cv_func_wcwidth_works=yes"
   ];
 
+  makeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "CFLAGS=-D_FORTIFY_SOURCE=0"
+  ];
+
   postPatch = ''
     # Older versions of gettext come with a copy of `extern-inline.m4` that is not compatible with clang 18.
     # When a project uses gettext + autoreconfPhase, autoreconfPhase will invoke `autopoint -f`, which will
@@ -55,13 +57,13 @@ stdenv.mkDerivation rec {
     # Fixing this requires replacing all the older copies of the problematic file with a new one.
     #
     # This is ugly, but it avoids requiring workarounds in every package using gettext and autoreconfPhase.
-    declare -a oldFiles=($(tar tf gettext-tools/misc/archive.dir.tar | grep '^gettext-0\.[19].*/extern-inline.m4'))
+    declare -a oldFiles=($(tar tf gettext-tools/autotools/archive.dir.tar | grep '^gettext-0\.[19].*/extern-inline.m4'))
     oldFilesDir=$(mktemp -d)
     for oldFile in "''${oldFiles[@]}"; do
       mkdir -p "$oldFilesDir/$(dirname "$oldFile")"
       cp -a gettext-tools/gnulib-m4/extern-inline.m4 "$oldFilesDir/$oldFile"
     done
-    tar uf gettext-tools/misc/archive.dir.tar --owner=0 --group=0 --numeric-owner -C "$oldFilesDir" "''${oldFiles[@]}"
+    tar uf gettext-tools/autotools/archive.dir.tar --owner=0 --group=0 --numeric-owner -C "$oldFilesDir" "''${oldFiles[@]}"
 
     substituteAllInPlace gettext-runtime/src/gettext.sh.in
     substituteInPlace gettext-tools/projects/KDE/trigger --replace "/bin/pwd" pwd
@@ -70,20 +72,6 @@ stdenv.mkDerivation rec {
   ''
   + lib.optionalString stdenv.hostPlatform.isMinGW ''
     sed -i "s/@GNULIB_CLOSE@/1/" */*/unistd.in.h
-  ''
-  + lib.optionalString stdenv.hostPlatform.isCygwin ''
-    for gnulib in \
-      ./libtextstyle/lib \
-      ./gettext-tools/libgettextpo \
-      ./gettext-tools/gnulib-lib \
-      ./gettext-runtime/libasprintf/gnulib-lib \
-      ./gettext-runtime/intl/gnulib-lib \
-      ./gettext-runtime/gnulib-lib
-    do
-      cd "$gnulib"
-      patch -p2 < ${gnulib.patches.memcpy-fix}
-      cd -
-    done
   '';
 
   strictDeps = true;
@@ -119,6 +107,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   enableParallelChecking = false; # fails sometimes
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Well integrated set of translation tools and documentation";
 
@@ -147,8 +137,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
   };
-}
-
-// lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-  makeFlags = [ "CFLAGS=-D_FORTIFY_SOURCE=0" ];
-}
+})

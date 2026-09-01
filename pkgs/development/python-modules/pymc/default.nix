@@ -11,6 +11,7 @@
   arviz,
   cachetools,
   cloudpickle,
+  matplotlib,
   numpy,
   pandas,
   pytensor,
@@ -18,20 +19,19 @@
   scipy,
   threadpoolctl,
   typing-extensions,
-
-  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymc";
-  version = "5.27.0";
+  version = "6.3.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pymc";
-    tag = "v${version}";
-    hash = "sha256-wBeWydrHrF+wNZnqWa2k8tCaUvjcoiSrmY85LUhrQds=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-laLj0Dts4E/7cuhQt/1mekfi/P1L7TiOcypiADs0JAc=";
   };
 
   build-system = [
@@ -39,10 +39,16 @@ buildPythonPackage rec {
     versioneer
   ];
 
+  pythonRelaxDeps = [
+    "cachetools"
+  ];
   dependencies = [
     arviz
     cachetools
     cloudpickle
+    # `matplotlib` is an undeclared runtime dependency: the default (`progressbar = True`) sampling
+    # path imports it in `pymc/progress_bar/rich_progress.py`.
+    matplotlib
     numpy
     pandas
     pytensor
@@ -50,13 +56,6 @@ buildPythonPackage rec {
     scipy
     threadpoolctl
     typing-extensions
-  ];
-
-  nativeBuildInputs = [
-    # Arviz (imported by pymc) wants to write a stamp file to the homedir at import time.
-    # Without $HOME being writable, `pythonImportsCheck` fails.
-    # https://github.com/arviz-devs/arviz/commit/4db612908f588d89bb5bfb6b83a08ada3d54fd02
-    writableTmpDirAsHomeHook
   ];
 
   # The test suite is computationally intensive and test failures are not
@@ -68,10 +67,10 @@ buildPythonPackage rec {
   meta = {
     description = "Bayesian estimation, particularly using Markov chain Monte Carlo (MCMC)";
     homepage = "https://github.com/pymc-devs/pymc";
-    changelog = "https://github.com/pymc-devs/pymc/releases/tag/v${version}";
+    changelog = "https://github.com/pymc-devs/pymc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       nidabdella
     ];
   };
-}
+})

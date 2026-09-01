@@ -7,15 +7,15 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gcfflasher";
-  version = "4.11.0";
+  version = "4.12.1";
 
   src = fetchFromGitHub {
     owner = "dresden-elektronik";
     repo = "gcfflasher";
-    tag = "v${version}";
-    hash = "sha256-nYLGKem4+Ty2QyhDQIyo9wLEKrbumYKuoGIA9Ore7XM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-L0BelCcwYmPDfWPCjXQQ0Lmk/C1BHuQKk3dLRfo2OMc=";
   };
 
   nativeBuildInputs = [
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "GCFFlasher";
   };
-}
+})

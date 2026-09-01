@@ -5,16 +5,16 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "genemichaels";
-  version = "0.9.5";
+  version = "0.12.4";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-KaGG2amPk/+fL7xLAfZw4SmCzXc+hS/9IkBG7G6sngI=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-0D2MkbqkrWkieZzfmGD2RtmoXMnmiCMeX9A/CMq1HYc=";
   };
 
-  cargoHash = "sha256-RkGKzE/EKA1VUkVTTMdMKhtUrs3kmy4uDAHq2hJs5yk=";
+  cargoHash = "sha256-dngajxpcn5azLwc8hyttCnr014J7xE1KnQCElKIosdU=";
 
   passthru.updateScript = nix-update-script { };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ djacu ];
     mainProgram = "genemichaels";
   };
-}
+})

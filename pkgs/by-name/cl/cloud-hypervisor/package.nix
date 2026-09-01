@@ -6,40 +6,51 @@
   pkg-config,
   dtc,
   openssl,
+  zstd,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cloud-hypervisor";
-  version = "50.0";
+  version = "53.0";
 
   src = fetchFromGitHub {
     owner = "cloud-hypervisor";
     repo = "cloud-hypervisor";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-U2jNKdc+CWB/Z9TvAC0xfHDipfe4dhWjL9VXbBVaNJE=";
+    hash = "sha256-fPTGf8bAITDA8QwllWbbGXA7tJ6p/SxRDfcBQVRvCTI=";
   };
 
-  cargoHash = "sha256-M1jVvFo9Bo/ZFqaFtzwp2rusl1T1m7jAkEobOF0cnlA=";
+  cargoHash = "sha256-+RbW/9ap/69MyODUk/bHBlH6ZuqYYIyKaarYSMQ2G7w=";
+
+  patches = [
+    ./musl-1.2.6.patch
+  ];
 
   separateDebugInfo = true;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = lib.optional stdenv.hostPlatform.isAarch64 dtc;
-  checkInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    zstd
+  ]
+  ++ lib.optional stdenv.hostPlatform.isAarch64 dtc;
 
   env.OPENSSL_NO_VENDOR = true;
+  env.ZSTD_SYS_USE_PKG_CONFIG = true;
 
   cargoTestFlags = [
     "--workspace"
-    "--bins"
-    "--lib" # Integration tests require root.
     "--exclude"
     "hypervisor" # /dev/kvm
     "--exclude"
     "net_util" # /dev/net/tun
     "--exclude"
     "vmm" # /dev/kvm
+    "--"
+    # io_uring syscalls are blocked by the Lix sandbox
+    "--skip=formats"
+    "--skip=io_impl::async_io::uring_data_io"
   ];
 
   nativeInstallCheckInputs = [
@@ -57,8 +68,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     mainProgram = "cloud-hypervisor";
     maintainers = with lib.maintainers; [
-      offline
       qyliss
+      phip1611
     ];
     platforms = [
       "aarch64-linux"

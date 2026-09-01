@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "types-html5lib";
-  version = "1.1.11.20251117";
+  version = "1.1.11.20260518";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_html5lib";
     inherit version;
-    hash = "sha256-Gmo6xTlKoSv1R/rl1e/5Hc7sRrbQfENn2bOaN/QvIBo=";
+    hash = "sha256-TzPAh8sRGdZcTIDspDI8K1Afnq+K+WFri3Mu1Njq6Po=";
   };
 
   build-system = [ setuptools ];

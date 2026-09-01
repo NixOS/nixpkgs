@@ -9,14 +9,14 @@
   readline,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sdcv";
   version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "Dushistov";
     repo = "sdcv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-EyvljVXhOsdxIYOGTzD+T16nvW7/RNx3DuQ2OdhjXJ4=";
   };
 
@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://dushistov.github.io/sdcv/";
     description = "Console version of StarDict";
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
     mainProgram = "sdcv";
   };
-}
+})

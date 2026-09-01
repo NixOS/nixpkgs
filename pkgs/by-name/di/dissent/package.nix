@@ -13,14 +13,14 @@
   wrapGAppsHook4,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dissent";
   version = "0.0.37";
 
   src = fetchFromGitHub {
     owner = "diamondburned";
     repo = "dissent";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xrNWMLZMZiJv08hsnc/aDe8e/aytngHKD/EhFVcF5PU=";
   };
 
@@ -71,4 +71,4 @@ buildGoModule rec {
       aleksana
     ];
   };
-}
+})

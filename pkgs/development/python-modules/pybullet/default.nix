@@ -5,7 +5,7 @@
   setuptools,
   libGLU,
   libGL,
-  xorg,
+  libx11,
   numpy,
 }:
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   buildInputs = [
     libGLU
     libGL
-    xorg.libX11
+    libx11
   ];
 
   propagatedBuildInputs = [ numpy ];

@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteAll "${./abuse.sh}" $out/bin/abuse
     chmod +x $out/bin/abuse
 
-    install -Dm644 ${finalAttrs.data}/doc/abuse.png $out/share/pixmaps/abuse.png
+    install -Dm644 ${finalAttrs.data}/doc/abuse.png -t $out/share/icons/hicolor/32x32/apps
   '';
 
   env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL2}/include/SDL2";

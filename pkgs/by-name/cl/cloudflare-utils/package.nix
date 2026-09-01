@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cloudflare-utils";
   version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "Cyb3r-Jak3";
     repo = "cloudflare-utils";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-/vausJEe5g6Txgq1z7oUUku0w6sd/mmYcZQ8D7dZ03E=";
   };
 
@@ -22,4 +22,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ yelite ];
   };
-}
+})

@@ -23,7 +23,8 @@ let
   '';
 in
 symlinkJoin {
-  name = "run-npush-${npush.version}";
+  pname = "run-npush";
+  inherit (npush) version;
 
   paths = [
     npush

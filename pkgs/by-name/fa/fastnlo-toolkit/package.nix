@@ -13,12 +13,12 @@
   withPython ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fastnlo-toolkit";
   version = "2.5.0-2826";
 
   src = fetchurl {
-    url = "https://fastnlo.hepforge.org/code/v25/fastnlo_toolkit-${version}.tar.gz";
+    url = "https://fastnlo.hepforge.org/code/v25/fastnlo_toolkit-${finalAttrs.version}.tar.gz";
     hash = "sha256-7aIMYCOkHC/17CHYiEfrxvtSJxTDivrS7BQ32cGiEy0=";
   };
 
@@ -48,13 +48,11 @@ stdenv.mkDerivation rec {
   ++ lib.optional withPython python
   ++ lib.optional (withPython && python.isPy3k) ncurses;
 
-  propagatedNativeBuildInputs = lib.optional withPython [ swig ];
+  propagatedNativeBuildInputs = lib.optional withPython swig;
   propagatedBuildInputs = [
     zlib
   ]
-  ++ lib.optional withPython [
-    python.pkgs.distutils
-  ];
+  ++ lib.optional withPython python.pkgs.distutils;
 
   preConfigure = ''
     substituteInPlace ./fastnlotoolkit/Makefile.in \
@@ -107,4 +105,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

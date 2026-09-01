@@ -9,23 +9,30 @@
   libvirt,
   withQemu ? false,
   qemu,
+  socket-vmnet,
+  withVfkit ? false,
+  vfkit,
   makeWrapper,
+  writableTmpDirAsHomeHook,
   OVMF,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "minikube";
-  version = "1.37.0";
+  version = "1.38.1";
 
-  vendorHash = "sha256-xPTJMxKnEwZKKCc6QZxeL+03qM0oldOIKY4sPjSw3Ak=";
+  __structuredAttrs = true;
+
+  vendorHash = "sha256-Oy8cM/foZKC83PxqkJW+o8vVYJhszKxXs9l2eks7FN4=";
 
   doCheck = false;
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "minikube";
-    rev = "v${version}";
-    sha256 = "sha256-qyeGBL952YIloB/69W+QWosXxwIrazE0OMdVO6LshPk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1unwbu2pJviHXukQKalJLgrkHpjf0sRR2nCm2gKv2VU=";
   };
   postPatch = ''
     substituteInPlace Makefile \
@@ -34,14 +41,14 @@ buildGoModule rec {
   + (lib.optionalString (withQemu && stdenv.hostPlatform.isDarwin) ''
     substituteInPlace \
       pkg/minikube/registry/drvs/qemu2/qemu2.go \
-      --replace "/usr/local/opt/qemu/share/qemu" "${qemu}/share/qemu" \
-      --replace "/opt/homebrew/opt/qemu/share/qemu" "${qemu}/share/qemu"
+      --replace-fail "/usr/local/opt/qemu/share/qemu" "${lib.getLib qemu}/share/qemu" \
+      --replace-fail "/opt/homebrew/opt/qemu/share/qemu" "${lib.getLib qemu}/share/qemu"
   '')
   + (lib.optionalString (withQemu && stdenv.hostPlatform.isLinux) ''
     substituteInPlace \
       pkg/minikube/registry/drvs/qemu2/qemu2.go \
-      --replace "/usr/share/OVMF/OVMF_CODE.fd" "${OVMF.firmware}" \
-      --replace "/usr/share/AAVMF/AAVMF_CODE.fd" "${OVMF.firmware}"
+      --replace-fail "/usr/share/OVMF/OVMF_CODE.fd" "${OVMF.firmware}" \
+      --replace-fail "/usr/share/AAVMF/AAVMF_CODE.fd" "${OVMF.firmware}"
   '');
 
   nativeBuildInputs = [
@@ -49,25 +56,58 @@ buildGoModule rec {
     pkg-config
     which
     makeWrapper
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libvirt ];
 
   buildPhase = ''
-    make COMMIT=${src.rev}
+    runHook preBuild
+
+    make COMMIT=${finalAttrs.src.rev}
+
+    runHook postBuild
   '';
 
   installPhase = ''
-    install out/minikube -Dt $out/bin
+    runHook preInstall
 
-    wrapProgram $out/bin/minikube --set MINIKUBE_WANTUPDATENOTIFICATION false
-    export HOME=$PWD
+    installBin out/minikube
 
-    for shell in bash zsh fish; do
-      $out/bin/minikube completion $shell > minikube.$shell
-      installShellCompletion minikube.$shell
-    done
+    wrapProgram $out/bin/minikube --set MINIKUBE_WANTUPDATENOTIFICATION false \
+      --prefix PATH : ${
+        lib.makeBinPath (
+          lib.optionals withQemu [ qemu ]
+          ++ lib.optionals (withQemu && stdenv.hostPlatform.isDarwin) [ socket-vmnet ]
+          ++ lib.optionals (withVfkit && stdenv.hostPlatform.isDarwin) [ vfkit ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [ libvirt ]
+        )
+      } \
+      ${
+        lib.optionalString (
+          withQemu && stdenv.hostPlatform.isDarwin
+        ) ''--set MINIKUBE_SOCKET_VMNET_CLIENT_PATH "${lib.getExe' socket-vmnet "socket_vmnet_client"}"''
+      } \
+      ${lib.optionalString stdenv.hostPlatform.isLinux "--prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [ libvirt ]
+      }"}
+    ln -sv $out/bin/minikube $out/bin/kubectl
+
+    installShellCompletion --cmd minikube \
+      --bash <($out/bin/minikube completion bash) \
+      --fish <($out/bin/minikube completion fish) \
+      --zsh <($out/bin/minikube completion zsh)
+
+    runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://minikube.sigs.k8s.io";
@@ -80,4 +120,4 @@ buildGoModule rec {
       Chili-Man
     ];
   };
-}
+})

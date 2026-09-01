@@ -5,22 +5,22 @@
   enableGUI ? false, # upstream working in progress
   pkg-config,
   glfw,
-  xorg,
-  libXcursor,
-  libXrandr,
-  libXinerama,
+  libxft,
+  libxcursor,
+  libxrandr,
+  libxinerama,
   xinput,
-  libXi,
-  libXxf86vm,
+  libxi,
+  libxxf86vm,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bepass";
   version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "bepass-org";
     repo = "bepass";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ruOhPWNs1WWM3r6X+6ch0HoDCu/a+IkBQiCr0Wh6yS8=";
   };
 
@@ -33,13 +33,13 @@ buildGoModule rec {
   nativeBuildInputs = lib.optionals enableGUI [ pkg-config ];
   buildInputs = lib.optionals enableGUI [
     glfw
-    xorg.libXft
-    libXcursor
-    libXrandr
-    libXinerama
-    libXi
+    libxft
+    libxcursor
+    libxrandr
+    libxinerama
+    libxi
     xinput
-    libXxf86vm
+    libxxf86vm
   ];
 
   ldflags = [
@@ -59,4 +59,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ oluceps ];
     broken = enableGUI;
   };
-}
+})

@@ -13,33 +13,24 @@ in
 python.pkgs.toPythonModule (
   python.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2026-01-11";
+    version = "0-unstable-2026-08-22";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "cf74e1d9e9ad662aef450ddd79aedee43554dc3c";
-      hash = "sha256-hKnfZBPr8rJyZAYBtVXpyzXwBQqg2DPFwqzH08qCITs=";
+      rev = "9fea41204fdfa7a5cfa15b0ebd12904c520478ce";
+      hash = "sha256-eirAuVDRGe2htZYbRcFmBtZ7Bg2xAHtmHbM8ELEMoik=";
     };
 
     nativeBuildInputs = with python.pkgs; [ pythonRelaxDepsHook ];
 
-    pythonRelaxDeps = [
-      "certifi"
-      "flask"
-      "flask-babel"
-      "httpx-socks"
-      "lxml"
-      "msgspec"
-      "typer-slim"
-      "whitenoise"
-    ];
+    pythonRelaxDeps = true;
 
     preBuild =
       let
         versionString = lib.concatStringsSep "." (
-          builtins.tail (lib.splitString "-" (lib.removePrefix "0-" version))
+          map (lib.removePrefix "0") (builtins.tail (lib.splitString "-" (lib.removePrefix "0-" version)))
         );
         commitAbbrev = builtins.substring 0 8 src.rev;
       in
@@ -62,7 +53,7 @@ python.pkgs.toPythonModule (
       [
         babel
         certifi
-        fasttext-predict
+        cloudscraper
         flask
         flask-babel
         httpx
@@ -76,7 +67,7 @@ python.pkgs.toPythonModule (
         python-dateutil
         pyyaml
         sniffio
-        typer-slim
+        typer
         typing-extensions
         valkey
         whitenoise

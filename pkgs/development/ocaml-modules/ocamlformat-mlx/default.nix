@@ -7,7 +7,6 @@
 }:
 buildDunePackage {
   pname = "ocamlformat-mlx";
-  minimalOcamlVersion = "4.08";
 
   inherit (ocamlformat-mlx-lib) version src meta;
 

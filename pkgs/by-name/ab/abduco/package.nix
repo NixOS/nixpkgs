@@ -29,6 +29,11 @@ stdenv.mkDerivation {
 
   installFlags = [ "install-completion" ];
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   patches = [
     # https://github.com/martanne/abduco/pull/22
     (fetchpatch {

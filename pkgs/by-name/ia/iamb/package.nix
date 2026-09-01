@@ -19,6 +19,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-nvEOtV1Y5K9E1Lj+bPnQ6k1AneDM9OT3RbV3Urm/1Qs=";
   };
 
+  patches = [
+    ./0001-increase-recursion-limit-to-fix-matrix-sdk-sqlite.patch
+  ];
+
   cargoHash = "sha256-uWYNFNoCiqw6gYuHZWmZmZVs7lKNvhzjwEyxgcbvv+8=";
 
   nativeBuildInputs = [

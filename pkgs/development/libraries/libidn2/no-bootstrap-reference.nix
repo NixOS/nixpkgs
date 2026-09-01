@@ -4,7 +4,6 @@
   libidn2,
   libunistring,
   runCommandLocal,
-  patchelf,
 }:
 # Construct a copy of libidn2.* where all (transitive) libc references (in .bin)
 # get replaced by a new one, so that there's no reference to bootstrap tools.
@@ -18,7 +17,7 @@ runCommandLocal "${libidn2.pname}-${libidn2.version}"
     passthru = {
       inherit (libidn2) out info devdoc; # no need to touch these store paths
     };
-    inherit (libidn2) meta;
+    inherit (libidn2) meta pname version;
   }
   ''
     cp -r '${libidn2.bin}' "$bin"

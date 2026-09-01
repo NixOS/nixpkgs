@@ -1,12 +1,12 @@
 {
   lib,
   replaceVars,
-  fetchurl,
   fetchFromGitHub,
   rustPlatform,
   buildNpmPackage,
   openapi-generator-cli,
   nixosTests,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (
   finalAttrs:
@@ -20,9 +20,7 @@ rustPlatform.buildRustPackage (
 
       patches = [ ./web-ui-package-json.patch ];
 
-      npmDepsHash = "sha256-jgsNF93DkEVgPGzdi192HKoSHPYhdrtog28jZvOLK6E=";
-      # Fix peer dependency conflicts with ESLint 9.
-      npmFlags = [ "--legacy-peer-deps" ];
+      npmDepsHash = "sha256-McQI5EmTfrbdcWnYRsoRHjhZphrZVaV/fN9i9MX8XF0=";
 
       nativeBuildInputs = [ openapi-generator-cli ];
 
@@ -37,19 +35,20 @@ rustPlatform.buildRustPackage (
   in
   {
     pname = "warpgate";
-    version = "0.18.0";
+    version = "0.26.1";
 
     src = fetchFromGitHub {
       owner = "warp-tech";
       repo = "warpgate";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-GLY/VGEKB6gFNTbBlbhpmqQZ62pk2wd6JwWwy4Tz0FE=";
+      hash = "sha256-1Dg7bzhBQNe+u90Tw+kcmVaxV5IK0/t505HZr18qP5I=";
     };
 
-    cargoHash = "sha256-hwAtj8tTDsYgzuDobMg97wepKKIpohSVClyRiaDd+8w=";
+    cargoHash = "sha256-A5rRLrqlAZV/3ID8F+wUO8OP3Ocivg7vYrNDiMqRKik=";
 
     patches = [
       (replaceVars ./hardcode-version.patch { inherit (finalAttrs) version; })
+      ./remove-nightly-rustflags.patch
     ];
 
     env.RUSTFLAGS = "--cfg tokio_unstable";
@@ -68,13 +67,20 @@ rustPlatform.buildRustPackage (
     # skip check, project included tests require python stuff and docker
     doCheck = false;
 
-    passthru.tests = {
-      inherit (nixosTests) warpgate;
+    passthru = {
+      inherit warpgate-web;
+      tests = {
+        inherit (nixosTests) warpgate;
+      };
+      updateScript = nix-update-script {
+        extraArgs = [ "--subpackage=warpgate-web" ];
+      };
     };
 
     meta = {
       description = "Smart SSH, HTTPS, MySQL and Postgres bastion that requires no additional client-side software";
       homepage = "https://warpgate.null.page";
+      changelog = "https://github.com/warp-tech/warpgate/releases/tag/v${finalAttrs.version}";
       license = lib.licenses.asl20;
       platforms = lib.platforms.linux ++ lib.platforms.darwin;
       mainProgram = "warpgate";

@@ -6,12 +6,12 @@
   unzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xlslib";
   version = "2.5.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xlslib/xlslib-package-${version}.zip";
+    url = "mirror://sourceforge/xlslib/xlslib-package-${finalAttrs.version}.zip";
     sha256 = "1wx3jbpkz2rvgs45x6mwawamd1b2llb0vn29b5sr0rfxzx9d1985";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

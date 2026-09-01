@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  xorg,
+  libxtst,
   pkg-config,
   wrapGAppsHook3,
   go,
@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-bamboo";
-  version = "0.8.4-rc6";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "BambooEngine";
     repo = pname;
     rev = "v" + lib.toUpper version;
-    sha256 = "sha256-8eBrgUlzrfQkgzr0/Nz/0FQ98UBdV0GQcZhJVbmyOg0=";
+    sha256 = "sha256-1qj1Fx8RDdA1qEGWn+/nQCAu4HCei+YbF7SHDzuFw2I=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    xorg.libXtst
+    libxtst
   ];
 
   preConfigure = ''

@@ -14,7 +14,7 @@
   wafHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "hamster";
   version = "3.0.3";
 
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "projecthamster";
     repo = "hamster";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-cUmUvJP9Y3de5OaNgIxvigDsX2ww7NNRY5son/gg+WI=";
   };
 
@@ -52,7 +52,7 @@ python3Packages.buildPythonApplication rec {
     dbus-python
   ];
 
-  PYTHONDIR = "${placeholder "out"}/${python3Packages.python.sitePackages}";
+  env.PYTHONDIR = "${placeholder "out"}/${python3Packages.python.sitePackages}";
 
   dontWrapGApps = true;
 
@@ -62,7 +62,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   postFixup = ''
-    wrapPythonProgramsIn $out/libexec "$out $pythonPath"
+    wrapPythonProgramsIn $out/libexec "$out ''${pythonPath[*]}"
   '';
 
   meta = {
@@ -73,4 +73,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.fabianhauser ];
   };
-}
+})

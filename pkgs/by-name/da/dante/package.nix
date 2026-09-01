@@ -15,12 +15,12 @@ let
   remove_getaddrinfo_checks =
     stdenv.hostPlatform.isMips64 || !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dante";
   version = "1.4.4";
 
   src = fetchurl {
-    url = "https://www.inet.no/dante/files/${pname}-${version}.tar.gz";
+    url = "https://www.inet.no/dante/files/dante-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-GXPHcy8fnwpMDM8sHORix8JQYLJWQ+qQ+bmPU6gT+uw=";
   };
 
@@ -37,7 +37,10 @@ stdenv.mkDerivation rec {
     if !stdenv.hostPlatform.isDarwin then
       [ "--with-libc=libc.so.6" ]
     else
-      [ "--with-libc=libc${stdenv.hostPlatform.extensions.sharedLibrary}" ];
+      [
+        "--with-libc=libc${stdenv.hostPlatform.extensions.sharedLibrary}"
+        "CFLAGS=-std=gnu17"
+      ];
 
   dontAddDisableDepTrack = stdenv.hostPlatform.isDarwin;
 
@@ -65,4 +68,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsdOriginal;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

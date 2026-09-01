@@ -5,22 +5,23 @@
   fetchpatch,
   zlib,
   ncurses,
-  fuse,
+  fuse3,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wiimms-iso-tools";
   version = "3.05a";
 
   src = fetchurl {
-    url = "https://download.wiimm.de/source/wiimms-iso-tools/wiimms-iso-tools.source-${version}.txz";
+    url = "https://download.wiimm.de/source/wiimms-iso-tools/wiimms-iso-tools.source-${finalAttrs.version}.txz";
     hash = "sha256-5aikiPJkZf9OwD8QmQ7ijhBOtFQpkIErvb6gOvEu2L0=";
   };
 
   buildInputs = [
     zlib
     ncurses
-    fuse
+    fuse3
   ];
 
   patches = [
@@ -42,13 +43,19 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace gcc "$CC"
   '';
 
-  INSTALL_PATH = "$out";
+  env.INSTALL_PATH = "$out";
 
   installPhase = ''
     mkdir "$out"
     patchShebangs install.sh
     ./install.sh --no-sudo
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/wit";
 
   meta = {
     homepage = "https://wit.wiimm.de";
@@ -57,4 +64,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ nilp0inter ];
   };
-}
+})

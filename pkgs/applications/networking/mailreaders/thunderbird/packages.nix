@@ -4,30 +4,11 @@
   buildMozillaMach,
   callPackage,
   fetchurl,
-  icu77,
-  icu78,
   fetchpatch2,
   config,
 }:
 
 let
-  patchICU =
-    icu:
-    icu.overrideAttrs (attrs: {
-      # standardize vtzone output
-      # Work around ICU-22132 https://unicode-org.atlassian.net/browse/ICU-22132
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1790071
-      patches = attrs.patches ++ [
-        (fetchpatch2 {
-          url = "https://hg.mozilla.org/mozilla-central/raw-file/fb8582f80c558000436922fb37572adcd4efeafc/intl/icu-patches/bug-1790071-ICU-22132-standardize-vtzone-output.diff";
-          stripLen = 3;
-          hash = "sha256-MGNnWix+kDNtLuACrrONDNcFxzjlUcLhesxwVZFzPAM=";
-        })
-      ];
-    });
-  icu77' = patchICU icu77;
-  icu78' = patchICU icu78;
-
   common =
     {
       version,
@@ -47,16 +28,31 @@ let
       extraPatches = [
         # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
         (if lib.versionOlder version "140" then ./no-buildconfig.patch else ./no-buildconfig-tb140.patch)
-      ];
-      extraPassthru = {
-        icu77 = icu77';
-        icu78 = icu78';
-      };
+      ]
+      ++
+        lib.optional (lib.versionAtLeast version "154" && lib.versionOlder version "154.0.1")
+          (fetchpatch2 {
+            # Fix Success macros colliding: https://bugzilla.mozilla.org/show_bug.cgi?id=2065007
+            url = "https://github.com/mozilla-firefox/firefox/commit/f0b76eba072821d62e74ebdbd8da9243a2ce3b84.patch";
+            hash = "sha256-PCTmv1ZO7ce4q5fp+WPmy5Wga5OMY4hNzqIZ7iYCcp4=";
+          });
+      # FIXME: let's hope that upstream will fix this soon and we can drop this hack again.
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=2040877
+      extraPostPatch =
+        lib.optionalString (lib.versionAtLeast version "151" && lib.versionOlder version "152") ''
+          echo https://hg.mozilla.org/releases/comm-release/rev/becfb8fb2c70f1603882a2787e2170d5d8013949 >> sourcestamp.txt
+          echo https://hg.mozilla.org/releases/mozilla-release/rev/fc12dc911f904307729760a817deb829cbf8feb4 >> sourcestamp.txt
+        ''
+        # https://bugzilla.mozilla.org/show_bug.cgi?id=2006630
+        + lib.optionalString (lib.versionAtLeast version "140.8" && lib.versionOlder version "151") ''
+          find . -name .cargo-checksum.json | xargs sed 's/"[^"]*\.gitmodules":"[a-z0-9]*",//g' -i
+        '';
 
       meta = {
         changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
         description = "Full-featured e-mail client";
-        homepage = "https://thunderbird.net/";
+        homepage = "https://www.thunderbird.net/";
+        donationPage = "https://www.thunderbird.net/donate/";
         mainProgram = "thunderbird";
         maintainers = with lib.maintainers; [
           booxter # darwin
@@ -71,23 +67,26 @@ let
         license = lib.licenses.mpl20;
       };
     }).override
-      {
-        geolocationSupport = false;
-        webrtcSupport = false;
+      (
+        {
+          geolocationSupport = false;
+          webrtcSupport = false;
 
-        pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
-
-        icu77 = icu77';
-        icu78 = icu78';
-      };
+          pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
+        }
+        // lib.optionalAttrs (lib.versionAtLeast version "149") {
+          # https://bugzilla.mozilla.org/show_bug.cgi?id=2025767
+          crashreporterSupport = false;
+        }
+      );
 
 in
 rec {
   thunderbird = thunderbird-latest;
 
   thunderbird-latest = common {
-    version = "146.0.1";
-    sha512 = "8a3b2de246c7c597574fce596836c7ef7b24bd21573feb15c308003f34b82335ad865aa0f81b24d1669c8023c0448c0e273a63019aab13356b023c2e8adc2c47";
+    version = "154.0";
+    sha512 = "aebdc5f0f4788124128a77b8a329767fa0f6d1d46c41ca6fd45889368e4e964a7a82a41f5367e825da0d544eff61d4da07dff2e6eb13f72c935bed79a184c5a8";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-latest";
@@ -95,13 +94,26 @@ rec {
   };
 
   # Eventually, switch to an updateScript without versionPrefix hardcoded...
-  thunderbird-esr = thunderbird-140;
+  thunderbird-esr = thunderbird-153;
+
+  thunderbird-153 = common {
+    applicationName = "Thunderbird ESR";
+
+    version = "153.1.0esr";
+    sha512 = "3d6c82e1489b906e6cf73c3eeb7d7e23de6901a75c704176b996d183a889f24275214999155992789a57a713e6cd073e2752120c3b281136ed34f36f289fbcb4";
+
+    updateScript = callPackage ./update.nix {
+      attrPath = "thunderbirdPackages.thunderbird-153";
+      versionPrefix = "153";
+      versionSuffix = "esr";
+    };
+  };
 
   thunderbird-140 = common {
     applicationName = "Thunderbird ESR";
 
-    version = "140.7.0esr";
-    sha512 = "92746d87ca2d5a59082c25aa3c3a816e5bf24ae3e095f8ec478a60c5cd890faea392ff98b5b510cc9a89b155240dce9d06c7ddd0f17f564722acc65105fb6cd2";
+    version = "140.14.0esr";
+    sha512 = "4c95b1ca3fc7f6429b2360a7e732635bdfb60927622a7da4d8af9ca2abd550611b91763c587cddad5d51c0dd4e905ba8e106da3cd21591a1bec3dba1b9a2502d";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-140";

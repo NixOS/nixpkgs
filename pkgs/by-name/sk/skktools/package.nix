@@ -16,17 +16,17 @@
 #   dependencies on a Ruby interpreter etc.
 # - We for the moment do not package them to keep the dependencies slim.
 #   Probably, shall package the newer tools as skktools-extra in the future.
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "skktools";
   version = "1.3.4";
   src = fetchFromGitHub {
     owner = "skk-dev";
     repo = "skktools";
-    rev = "skktools-${lib.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "skktools-${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     sha256 = "1zway8jsm18279xq8zlpr84iqiw373x3v0ysay74n9bjqxbl234a";
   };
   # # See "12.2. Package naming"
-  # name = "skktools-unstable-${version}";
+  # name = "skktools-unstable-${finalAttrs.version}";
   # version = "2017-03-05";
   # src = fetchFromGitHub {
   #   owner = "skk-dev";
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ yuriaisaka ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

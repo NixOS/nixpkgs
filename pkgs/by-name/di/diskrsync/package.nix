@@ -6,14 +6,14 @@
   makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "diskrsync";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "dop251";
     repo = "diskrsync";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-hM70WD+M3jwze0IG84WTFf1caOUk2s9DQ7pR+KNIt1M=";
   };
 
@@ -37,4 +37,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
   };
-}
+})

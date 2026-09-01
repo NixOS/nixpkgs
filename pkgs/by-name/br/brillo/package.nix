@@ -8,14 +8,14 @@
   udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "brillo";
   version = "1.4.13";
 
   src = fetchFromGitLab {
     owner = "cameronnemo";
     repo = "brillo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+BUyM3FFnsk87NFaD9FBwdLqf6wsNhX+FDB7nqhgAmM=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.alexarice ];
   };
-}
+})

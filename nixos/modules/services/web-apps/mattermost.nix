@@ -27,9 +27,9 @@ let
 
   inherit (lib.modules)
     mkRenamedOptionModule
+    mkRemovedOptionModule
     mkMerge
     mkIf
-    mkDefault
     ;
 
   inherit (lib.trivial) warnIf throwIf;
@@ -55,10 +55,13 @@ let
   # Ensure that it's inside mutableDataDir since it can get rather large.
   tempDir = "${mutableDataDir}/tmp";
 
+  # Database supported by Mattermost.
+  databaseDriverName = "postgres";
+
   # Creates a database URI.
   mkDatabaseUri =
     {
-      scheme,
+      scheme ? databaseDriverName,
       user ? null,
       password ? null,
       escapeUserAndPassword ? true,
@@ -105,54 +108,24 @@ let
     let
       hostIsPath = hasInfix "/" cfg.database.host;
     in
-    if cfg.database.driver == "postgres" then
-      if cfg.database.peerAuth then
-        mkDatabaseUri {
-          scheme = cfg.database.driver;
-          inherit (cfg.database) user;
-          path = escapeURL cfg.database.name;
-          query = {
-            host = cfg.database.socketPath;
-          }
-          // cfg.database.extraConnectionOptions;
+    if cfg.database.peerAuth then
+      mkDatabaseUri {
+        inherit (cfg.database) user;
+        path = escapeURL cfg.database.name;
+        query = {
+          host = cfg.database.socketPath;
         }
-      else
-        mkDatabaseUri {
-          scheme = cfg.database.driver;
-          inherit (cfg.database) user password;
-          host = if hostIsPath then null else cfg.database.host;
-          port = if hostIsPath then null else cfg.database.port;
-          path = escapeURL cfg.database.name;
-          query =
-            optionalAttrs hostIsPath { host = cfg.database.host; } // cfg.database.extraConnectionOptions;
-        }
-    else if cfg.database.driver == "mysql" then
-      if cfg.database.peerAuth then
-        mkDatabaseUri {
-          scheme = null;
-          inherit (cfg.database) user;
-          escapeUserAndPassword = false;
-          host = "unix(${cfg.database.socketPath})";
-          escapeHost = false;
-          path = escapeURL cfg.database.name;
-          query = cfg.database.extraConnectionOptions;
-        }
-      else
-        mkDatabaseUri {
-          scheme = null;
-          inherit (cfg.database) user password;
-          escapeUserAndPassword = false;
-          host =
-            if hostIsPath then
-              "unix(${cfg.database.host})"
-            else
-              "tcp(${cfg.database.host}:${toString cfg.database.port})";
-          escapeHost = false;
-          path = escapeURL cfg.database.name;
-          query = cfg.database.extraConnectionOptions;
-        }
+        // cfg.database.extraConnectionOptions;
+      }
     else
-      throw "Invalid database driver: ${cfg.database.driver}";
+      mkDatabaseUri {
+        inherit (cfg.database) user password;
+        host = if hostIsPath then null else cfg.database.host;
+        port = if hostIsPath then null else cfg.database.port;
+        path = escapeURL cfg.database.name;
+        query =
+          optionalAttrs hostIsPath { host = cfg.database.host; } // cfg.database.extraConnectionOptions;
+      };
 
   mattermostPluginDerivations = map (
     plugin:
@@ -213,7 +186,7 @@ let
       EnableSecurityFixAlert = cfg.telemetry.enableSecurityAlerts;
     };
     TeamSettings.SiteName = cfg.siteName;
-    SqlSettings.DriverName = cfg.database.driver;
+    SqlSettings.DriverName = databaseDriverName;
     SqlSettings.DataSource =
       if cfg.database.fromEnvironment then
         null
@@ -358,6 +331,11 @@ in
         "dataDir"
       ]
     )
+    (mkRemovedOptionModule [ "services" "mattermost" "database" "driver" ] ''
+      services.mattermost.database.driver has been removed, as the only option is '${databaseDriverName}' in v11+.
+      If you were using MySQL, please migrate to Postgres:
+      https://docs.mattermost.com/deployment-guide/manual-postgres-migration.html
+    '')
   ];
 
   options = {
@@ -558,22 +536,11 @@ in
       };
 
       database = {
-        driver = mkOption {
-          type = types.enum [
-            "postgres"
-            "mysql"
-          ];
-          default = "postgres";
-          description = ''
-            The database driver to use (Postgres or MySQL).
-          '';
-        };
-
         create = mkOption {
           type = types.bool;
           default = true;
           description = ''
-            Create a local PostgreSQL or MySQL database for Mattermost automatically.
+            Create a local PostgreSQL database for Mattermost automatically.
           '';
         };
 
@@ -591,13 +558,9 @@ in
 
         socketPath = mkOption {
           type = types.path;
-          default =
-            if cfg.database.driver == "postgres" then "/run/postgresql" else "/run/mysqld/mysqld.sock";
-          defaultText = ''
-            if config.services.mattermost.database.driver == "postgres" then "/run/postgresql" else "/run/mysqld/mysqld.sock";
-          '';
+          default = "/run/postgresql";
           description = ''
-            The database (Postgres or MySQL) socket path.
+            The database socket path.
           '';
         };
 
@@ -630,11 +593,8 @@ in
 
         port = mkOption {
           type = types.port;
-          default = if cfg.database.driver == "postgres" then 5432 else 3306;
-          defaultText = ''
-            if config.services.mattermost.database.type == "postgres" then 5432 else 3306
-          '';
-          example = 3306;
+          default = 5432;
+          example = 1234;
           description = ''
             Port to use for the database.
           '';
@@ -660,34 +620,15 @@ in
 
         extraConnectionOptions = mkOption {
           type = with types; attrsOf (either int str);
-          default =
-            if cfg.database.driver == "postgres" then
-              {
-                sslmode = "disable";
-                connect_timeout = 60;
-              }
-            else if cfg.database.driver == "mysql" then
-              {
-                charset = "utf8mb4";
-                writeTimeout = "60s";
-                readTimeout = "60s";
-              }
-            else
-              throw "Invalid database driver ${cfg.database.driver}";
+          default = {
+            sslmode = "disable";
+            connect_timeout = 60;
+          };
           defaultText = ''
-            if config.mattermost.database.driver == "postgres" then
-              {
-                sslmode = "disable";
-                connect_timeout = 60;
-              }
-            else if config.mattermost.database.driver == "mysql" then
-              {
-                charset = "utf8mb4";
-                writeTimeout = "60s";
-                readTimeout = "60s";
-              }
-            else
-              throw "Invalid database driver";
+            {
+              sslmode = "disable";
+              connect_timeout = 60;
+            }
           '';
           description = ''
             Extra options that are placed in the connection URI's query parameters.
@@ -756,7 +697,7 @@ in
         };
       };
 
-      services.postgresql = mkIf (cfg.database.driver == "postgres" && cfg.database.create) {
+      services.postgresql = mkIf cfg.database.create {
         enable = true;
         ensureDatabases = singleton cfg.database.name;
         ensureUsers = singleton {
@@ -769,26 +710,6 @@ in
               ''
               cfg.database.user;
           ensureDBOwnership = true;
-        };
-      };
-
-      services.mysql = mkIf (cfg.database.driver == "mysql" && cfg.database.create) {
-        enable = true;
-        package = mkDefault pkgs.mariadb;
-        ensureDatabases = singleton cfg.database.name;
-        ensureUsers = singleton {
-          name = cfg.database.user;
-          ensurePermissions = {
-            "${cfg.database.name}.*" = "ALL PRIVILEGES";
-          };
-        };
-        settings = rec {
-          mysqld = {
-            collation-server = mkDefault "utf8mb4_general_ci";
-            init-connect = mkDefault "SET NAMES utf8mb4";
-            character-set-server = mkDefault "utf8mb4";
-          };
-          mysqld_safe = mysqld;
         };
       };
 
@@ -840,8 +761,7 @@ in
         wantedBy = [ "multi-user.target" ];
         after = mkMerge [
           [ "network.target" ]
-          (mkIf (cfg.database.driver == "postgres" && cfg.database.create) [ "postgresql.target" ])
-          (mkIf (cfg.database.driver == "mysql" && cfg.database.create) [ "mysql.service" ])
+          (mkIf cfg.database.create [ "postgresql.target" ])
         ];
         requires = after;
 
@@ -945,8 +865,7 @@ in
         ];
 
         unitConfig.JoinsNamespaceOf = mkMerge [
-          (mkIf (cfg.database.driver == "postgres" && cfg.database.create) [ "postgresql.target" ])
-          (mkIf (cfg.database.driver == "mysql" && cfg.database.create) [ "mysql.service" ])
+          (mkIf cfg.database.create [ "postgresql.target" ])
         ];
       };
 
@@ -964,13 +883,6 @@ in
           message = ''
             services.mattermost.host should not include a port. Use services.mattermost.host for the address
             or hostname, and services.mattermost.port to specify the port separately.
-          '';
-        }
-        {
-          # Can't use MySQL on version 11.
-          assertion = versionAtLeast cfg.package.version "11" -> cfg.database.driver == "postgres";
-          message = ''
-            Only Postgres is supported as the database driver in Mattermost 11 and later.
           '';
         }
       ];

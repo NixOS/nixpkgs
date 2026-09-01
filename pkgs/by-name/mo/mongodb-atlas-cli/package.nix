@@ -9,26 +9,26 @@
   mongodb-atlas-cli,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mongodb-atlas-cli";
-  version = "1.51.1";
+  version = "1.58.2";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongodb-atlas-cli";
-    tag = "atlascli/v${version}";
-    hash = "sha256-z2m+DcQoPn+o/U4NOM3PTyp31fae8Odb4CkJGZJn4wA=";
+    tag = "atlascli/v${finalAttrs.version}";
+    hash = "sha256-WBKgzKkUczr4N82gH2e+BfT3YNO7Gzl1Ns5RILkn4uc=";
   };
 
-  vendorHash = "sha256-dp9/v7tIyKm6nc1iEM9pEtcC5aYFnJeY2wS4qRU1IIA=";
+  vendorHash = "sha256-TBP4SoU3UHCYZcD1I/3dcADmTw7w/3NmB4VZTpPnNX0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/mongodb/mongodb-atlas-cli/atlascli/internal/version.GitCommit=${src.rev}"
-    "-X github.com/mongodb/mongodb-atlas-cli/atlascli/internal/version.Version=v${version}"
+    "-X github.com/mongodb/mongodb-atlas-cli/atlascli/internal/version.GitCommit=${finalAttrs.src.rev}"
+    "-X github.com/mongodb/mongodb-atlas-cli/atlascli/internal/version.Version=v${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd/atlas" ];
@@ -46,19 +46,18 @@ buildGoModule rec {
     };
     tests.version = testers.testVersion {
       package = mongodb-atlas-cli;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
   meta = {
     description = "CLI utility to manage MongoDB Atlas from the terminal";
     homepage = "https://github.com/mongodb/mongodb-atlas-cli";
-    changelog = "https://www.mongodb.com/docs/atlas/cli/current/atlas-cli-changelog/#atlas-cli-${version}";
+    changelog = "https://www.mongodb.com/docs/atlas/cli/current/atlas-cli-changelog/#atlas-cli-${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      aduh95
       iamanaws
     ];
     mainProgram = "atlas";
   };
-}
+})

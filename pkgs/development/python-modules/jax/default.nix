@@ -6,7 +6,6 @@
   lapack,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   cudaSupport ? config.cudaSupport,
 
   # build-system
@@ -23,7 +22,9 @@
   jax-cuda12-plugin,
 
   # tests
+  absl-py,
   cloudpickle,
+  flatbuffers,
   hypothesis,
   matplotlib,
   pytestCheckHook,
@@ -39,32 +40,25 @@
 let
   usingMKL = blas.implementation == "mkl" || lapack.implementation == "mkl";
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jax";
-  version = "0.8.2";
+  version = "0.11.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
-    tag = "jax-v${version}";
-    hash = "sha256-WKdFEhOxJPLjOXOChZbLRGcw0GFeg/TT/FT6M72C6bo=";
+    tag = "jax-v${finalAttrs.version}";
+    hash = "sha256-OiH4qhVK7T6o+lYtP1e2UqtSitxVdzUWC5YXbaNMZsQ=";
   };
-
-  patches = [
-    # https://github.com/jax-ml/jax/pull/32840
-    (fetchpatch2 {
-      url = "https://github.com/Prince213/jax/commit/af5c211d49f3b99447db2252d2cc2b8e0fb54d1c.patch?full_index=1";
-      hash = "sha256-ijEd+MDe91qyYfE+aMzR5rNmTeGadin6Io8PIfJWc3o=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
   # The version is automatically set to ".dev" if this variable is not set.
   # https://github.com/google/jax/commit/e01f2617b85c5bdffc5ffb60b3d8d8ca9519a1f3
-  JAX_RELEASE = "1";
+  env.JAX_RELEASE = "1";
 
   dependencies = [
     jaxlib
@@ -73,17 +67,18 @@ buildPythonPackage rec {
     opt-einsum
     scipy
   ]
-  ++ lib.optionals cudaSupport optional-dependencies.cuda;
+  ++ lib.optionals cudaSupport finalAttrs.passthru.optional-dependencies.cuda;
 
-  optional-dependencies = rec {
+  optional-dependencies = lib.fix (self: {
     cuda = [ jax-cuda12-plugin ];
-    cuda12 = cuda;
-    cuda12_pip = cuda;
-    cuda12_local = cuda;
-  };
+    cuda12 = self.cuda;
+    cuda12_local = self.cuda;
+  });
 
   nativeCheckInputs = [
+    absl-py
     cloudpickle
+    flatbuffers
     hypothesis
     matplotlib
     pytestCheckHook
@@ -106,22 +101,6 @@ buildPythonPackage rec {
     "tests/"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
-    # reported at: https://github.com/jax-ml/jax/issues/26106
-    "tests/pjit_test.py::PJitErrorTest::testAxisResourcesMismatch"
-    "tests/shape_poly_test.py::ShapePolyTest"
-    "tests/tree_util_test.py::TreeTest"
-
-    # Mostly AssertionError on numerical tests failing since 0.7.0
-    # https://github.com/jax-ml/jax/issues/31428
-    "tests/export_back_compat_test.py"
-    "tests/lax_numpy_test.py"
-    "tests/lax_scipy_test.py"
-    "tests/lax_test.py"
-    "tests/linalg_test.py"
-  ];
-
   # Prevents `tests/export_back_compat_test.py::CompatTest::test_*` tests from failing on darwin with
   # PermissionError: [Errno 13] Permission denied: '/tmp/back_compat_testdata/test_*.py'
   # See https://github.com/google/jax/blob/jaxlib-v0.4.27/jax/_src/internal_test_util/export_back_compat_test_util.py#L240-L241
@@ -133,6 +112,13 @@ buildPythonPackage rec {
   disabledTests = [
     # Exceeds tolerance when the machine is busy
     "test_custom_linear_solve_aux"
+
+    # pytest-xdist/execnet cannot serialize the numpy `type` objects this test passes to
+    # self.subTest(dtype=...) when shipping subtest reports between workers.
+    # The assertions themselves pass; the failure is a harness artifact of running with
+    # --numprocesses.
+    # New test in jax 0.10.2 (tests/random_impl_test.py).
+    "test_random_bits"
   ]
   ++ lib.optionals usingMKL [
     # See
@@ -143,22 +129,16 @@ buildPythonPackage rec {
     "test_custom_root_with_aux"
     "testEigvalsGrad_shape"
   ]
-  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-    # Fails on some hardware due to some numerical error
-    # See https://github.com/google/jax/issues/18535
-    "testQdwhWithOnRankDeficientInput5"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
-    # reported at: https://github.com/jax-ml/jax/issues/26106
-    "testInAxesPyTreePrefixMismatchError"
-    "testInAxesPyTreePrefixMismatchErrorKwargs"
-    "testOutAxesPyTreePrefixMismatchError"
-    "test_tree_map"
-    "test_tree_prefix_error"
-    "test_vjp_rule_inconsistent_pytree_structures_error"
-    "test_vmap_in_axes_tree_prefix_error"
-    "test_vmap_mismatched_axis_sizes_error_message_issue_705"
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    # The Mosaic GPU interpreter emulates tcgen05 MMA on the CPU backend and compares the
+    # result with `assert_array_equal`. On x86_64 the two sides contract differently and
+    # disagree by a single float32 ULP (max relative difference 5.5e-07).
+    # Passes on aarch64-linux and aarch64-darwin.
+    "test_async_copy_tmem_with_mma"
+    "test_can_commit_mma_to_multiple_barriers"
+    "test_can_deallocate_tmem_while_mma_active_on_different_tmem"
+    "test_can_pipeline_with_multiple_children"
+    "test_can_pipeline_with_multiple_parents"
   ];
 
   pythonImportsCheck = [ "jax" ];
@@ -186,7 +166,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Source-built JAX frontend: differentiate, compile, and transform Numpy code";
-    homepage = "https://github.com/google/jax";
+    homepage = "https://github.com/jax-ml/jax";
     changelog = "https://docs.jax.dev/en/latest/changelog.html";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
@@ -194,4 +174,4 @@ buildPythonPackage rec {
       samuela
     ];
   };
-}
+})

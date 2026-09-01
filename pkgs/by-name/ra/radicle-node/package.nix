@@ -14,17 +14,23 @@
   stdenv,
   xdg-utils,
   versionCheckHook,
+
+  version ? "1.10.2",
+  srcHash ? "sha256-dlF1aoWqqGsSCTarT/8xl/WH8Hs9vAlk0BSQoGj1TR0=",
+  cargoHash ? "sha256-X+/SWtRToZHjJ1Eha3bbYNYAzEvJdX4bAOrl5G5vYU8=",
+  updateScript ? ./update.sh,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  inherit version cargoHash;
+
   pname = "radicle-node";
-  version = "1.6.1";
 
   src = fetchFromRadicle {
-    seed = "seed.radicle.xyz";
+    seed = "seed.radicle.dev";
     repo = "z3gqcJUoA1n9HaHKufZs5FCSGazv5";
     tag = "releases/${finalAttrs.version}";
-    hash = "sha256-7kwtWuYdYG3MDHThCkY5OZmx4pWaQXMYoOlJszmV2rM=";
+    hash = srcHash;
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse HEAD > $out/.git_head
@@ -33,7 +39,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  cargoHash = "sha256-59RyfSUJNoQ7EtQK3OSYOIO/YVEjeeM9ovbojHFX4pI=";
+  strictDeps = true;
+  __structuredAttrs = true;
 
   env.RADICLE_VERSION = finalAttrs.version;
 
@@ -79,6 +86,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=tests::e2e::test_connection_crossing"
     # https://radicle.zulipchat.com/#narrow/stream/369277-heartwood/topic/Clone.20Partial.20Fail.20Flake
     "--skip=rad_clone_partial_fail"
+    "--skip=commands::patch::rad_patch_merge_unauthorized_branch"
   ];
 
   postInstall = ''
@@ -112,34 +120,45 @@ rustPlatform.buildRustPackage (finalAttrs: {
     done
   '';
 
-  passthru.updateScript = ./update.sh;
-  passthru.tests = {
-    basic =
-      runCommand "radicle-node-basic-test"
-        {
-          nativeBuildInputs = [
-            jq
-            openssh
-            finalAttrs.finalPackage
-          ];
-        }
-        ''
-          set -e
-          export RAD_HOME="$PWD/.radicle"
-          mkdir -p "$RAD_HOME/keys"
-          ssh-keygen -t ed25519 -N "" -f "$RAD_HOME/keys/radicle" > /dev/null
-          jq -n '.node.alias |= "nix"' > "$RAD_HOME/config.json"
+  passthru = {
+    inherit updateScript;
+    tests = {
+      basic =
+        runCommand "radicle-node-basic-test"
+          {
+            nativeBuildInputs = [
+              jq
+              openssh
+              finalAttrs.finalPackage
+            ];
+          }
+          ''
+            set -e
+            export RAD_HOME="$PWD/.radicle"
+            mkdir -p "$RAD_HOME/keys"
+            ssh-keygen -t ed25519 -N "" -f "$RAD_HOME/keys/radicle" > /dev/null
+            jq -n '.node.alias |= "nix"' > "$RAD_HOME/config.json"
 
-          rad config > /dev/null
-          rad debug | jq -e '
-              (.sshVersion | contains("${openssh.version}"))
-            and
-              (.gitVersion | contains("${gitMinimal.version}"))
-          '
+            rad config > /dev/null
+            rad debug | jq -e '
+                (.sshVersion | contains("${openssh.version}"))
+              and
+                (.gitVersion | contains("${gitMinimal.version}"))
+            '
 
-          touch $out
-        '';
-    nixos-run = nixosTests.radicle;
+            touch $out
+          '';
+      nixos-run = nixosTests.radicle.extendNixOS {
+        module = {
+          services.radicle.package = finalAttrs.finalPackage;
+        };
+      };
+      ci-broker = nixosTests.radicle-ci-broker.extendNixOS {
+        module = {
+          services.radicle.package = finalAttrs.finalPackage;
+        };
+      };
+    };
   };
 
   meta = {
@@ -149,17 +168,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
       Unlike centralized code hosting platforms, there is no single entity controlling the network.
       Repositories are replicated across peers in a decentralized manner, and users are in full control of their data and workflow.
     '';
-    homepage = "https://radicle.xyz";
+    homepage = "https://radicle.dev";
+    changelog = "https://radicle.network/nodes/seed.radicle.dev/rad:z3gqcJUoA1n9HaHKufZs5FCSGazv5/tree/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
     ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      amesgen
-      lorenzleutgeb
-      defelo
-    ];
+    teams = [ lib.teams.radicle ];
     mainProgram = "rad";
   };
 })

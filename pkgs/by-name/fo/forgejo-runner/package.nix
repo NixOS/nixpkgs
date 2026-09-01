@@ -8,58 +8,36 @@
   nix-update-script,
   gitMinimal,
   makeWrapper,
+  writableTmpDirAsHomeHook,
 }:
 
 let
-  # tests which assume network access in some form
   disabledTests = [
-    "Test_runCreateRunnerFile"
-    "Test_ping"
-
-    # The following tests were introduced in 9.x with the inclusion of act
-    # the pkgs/by-name/ac/act/package.nix just sets doCheck = false;
-
-    # Requires running Docker daemon
-    "TestDocker"
-    "TestJobExecutor"
-    "TestRunExec"
-    "TestRunner"
-    "Test_validateCmd"
-
-    # Docker network request for image
-    "TestImageExistsLocally"
-
-    # Reaches out to different websites
-    "TestFindGitRemoteURL"
-    "TestGitFindRef"
-    "TestClone"
-    "TestCloneIfRequired"
-    "TestActionCache"
-    "TestRunContext_GetGitHubContext"
-    "TestSetJobResult_SkipsBannerInChildReusableWorkflow"
-
-    # These tests rely on outbound IP address
+    # requires network
     "TestHandler"
-    "TestHandler_gcCache"
+    "TestClone"
+    "TestRunner_ReusableWorkflowGitHubInstance"
   ]
-  ++ lib.optionals stdenv.isDarwin [
-    # Uses docker-specific options, unsupported on Darwin
-    "TestMergeJobOptions"
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # listen tcp 127.0.0.1:0: bind: operation not permitted
+    "TestNewClient"
+    # httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted
+    "TestNewEndpointHonoursTLSEnv"
   ];
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "forgejo-runner";
-  version = "12.6.0";
+  version = "13.1.0";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
-    rev = "v${version}";
-    hash = "sha256-Otvv8NSGfze/WKN78nipVWkycqHh94ReHkVjYR8L0/E=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-0LVia4B9n2zuuHDGFnBVM1mrbI7XBhMfy25kRSN5/WQ=";
   };
 
-  vendorHash = "sha256-fvSiEIE4XSJ8Ot4Tcmt8chD11fHVsECD2/8xrgIKhJs=";
+  vendorHash = "sha256-2QwltVOR6MJO8rLNgktN1ulvP0YrnqQorNnfJXzRmJs=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -73,12 +51,25 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X code.forgejo.org/forgejo/runner/v12/internal/pkg/ver.version=${src.rev}"
+    "-X code.forgejo.org/forgejo/runner/v13/internal/pkg/ver.version=${finalAttrs.src.rev}"
   ];
 
   checkFlags = [
     "-skip ${lib.concatStringsSep "|" disabledTests}"
   ];
+
+  # Upstream offers '-args -features "-"' as go test flag to skip tests that require either lxc or docker.
+  # Unfortunately, we cannot use this without patching buildGoModule, as -args passes the remainder of the
+  # command line to the test binary, and checkFlags are templated between go test and $dir, causing $dir (e.g.
+  # ./...) to be discarded, which in turn causes all tests to be skipped.
+  # TODO: Make our buildGoModule (go/module.nix) template $dir before checkFlags to allow use of -arg
+  # https://code.forgejo.org/forgejo/runner/pulls/1591
+  # https://pkg.go.dev/cmd/go/internal/test#:~:text=%2Dargs
+  preCheck = ''
+    substituteInPlace testutils/test_main.go \
+      --replace-fail 'TestFeatureDocker: {},' '// TestFeatureDocker: {},' \
+      --replace-fail 'TestFeatureLXC:    {},' '// TestFeatureLXC:    {},'
+  '';
 
   postInstall = ''
     # Fix up go-specific executable naming derived from package name, upstream
@@ -92,11 +83,14 @@ buildGoModule rec {
     ln -s $out/bin/forgejo-runner $out/bin/act_runner
   '';
 
-  nativeCheckInputs = [ gitMinimal ];
+  nativeCheckInputs = [
+    gitMinimal
+    writableTmpDirAsHomeHook
+  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
 
   passthru = {
     updateScript = nix-update-script { };
@@ -109,10 +103,10 @@ buildGoModule rec {
   meta = {
     description = "Runner for Forgejo based on act";
     homepage = "https://code.forgejo.org/forgejo/runner";
-    changelog = "https://code.forgejo.org/forgejo/runner/releases/tag/${src.rev}";
+    changelog = "https://code.forgejo.org/forgejo/runner/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ nrabulinski ];
     teams = [ lib.teams.forgejo ];
     mainProgram = "forgejo-runner";
   };
-}
+})

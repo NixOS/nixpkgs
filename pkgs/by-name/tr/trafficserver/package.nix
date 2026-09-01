@@ -46,12 +46,12 @@
   enableWCCP ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "trafficserver";
   version = "9.2.11";
 
   src = fetchzip {
-    url = "mirror://apache/trafficserver/trafficserver-${version}.tar.bz2";
+    url = "mirror://apache/trafficserver/trafficserver-${finalAttrs.version}.tar.bz2";
     hash = "sha256-WFABr7+JsUbQagLFK0OXZ20t4QCuYrozeaV4fKO/c2s=";
   };
 
@@ -183,7 +183,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://trafficserver.apache.org";
-    changelog = "https://raw.githubusercontent.com/apache/trafficserver/${version}/CHANGELOG-${version}";
+    changelog = "https://raw.githubusercontent.com/apache/trafficserver/${finalAttrs.version}/CHANGELOG-${finalAttrs.version}";
     description = "Fast, scalable, and extensible HTTP caching proxy server";
     longDescription = ''
       Apache Traffic Server is a high-performance web proxy cache that improves
@@ -198,4 +198,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ midchildan ];
     platforms = lib.platforms.unix;
   };
-}
+})

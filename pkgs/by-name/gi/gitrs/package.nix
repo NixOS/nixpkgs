@@ -9,14 +9,14 @@
   libz,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitrs";
   version = "v0.3.6";
 
   src = fetchFromGitHub {
     owner = "mccurdyc";
     repo = "gitrs";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-+43XJroPNWmdUC6FDL84rZWrJm5fzuUXfpDkAMyVQQg=";
   };
 
@@ -41,4 +41,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ mccurdyc ];
     mainProgram = "gitrs";
   };
-}
+})

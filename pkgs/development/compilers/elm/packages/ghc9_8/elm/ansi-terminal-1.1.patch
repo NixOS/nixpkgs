@@ -1,0 +1,30 @@
+commit d42c9fb8023dd00b0cd17d1de9bdbf492f2d7551
+Author: Matt McHenry <github@matt.mchenryfamily.org>
+Date:   Tue Jul 7 22:20:19 2026
+
+    stub out support for new underlining modes in ansi-terminal 1.1
+
+diff --git a/compiler/src/Reporting/Doc.hs b/compiler/src/Reporting/Doc.hs
+index ccfb0d19..3ee16900 100644
+--- a/compiler/src/Reporting/Doc.hs
++++ b/compiler/src/Reporting/Doc.hs
+@@ -363,6 +363,9 @@ isUnderline underlining =
+   case underlining of
+     Ansi.SingleUnderline -> True
+     Ansi.DoubleUnderline -> False
++    Ansi.CurlyUnderline -> False
++    Ansi.DottedUnderline -> False
++    Ansi.DashedUnderline -> False
+     Ansi.NoUnderline -> False
+ 
+ 
+@@ -372,6 +375,9 @@ toColor layer intensity color =
+     Ansi.Background ->
+       Nothing
+ 
++    Ansi.Underlining ->
++      Nothing
++
+     Ansi.Foreground ->
+       let
+         pick dull vivid =

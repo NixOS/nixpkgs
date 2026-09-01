@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "cs50";
-  version = "9.4.0";
+  version = "9.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cs50";
     repo = "python-cs50";
     tag = "v${version}";
-    hash = "sha256-g7ws5ikzLt2ciS0QTPTJDRAqePyYPDCYIpJuwnWHJNQ=";
+    hash = "sha256-jJji5EyvKfJ9vkzETsh0CJ9WIi7hWF2amHrOvf4/JbI=";
   };
 
   build-system = [

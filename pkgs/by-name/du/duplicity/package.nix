@@ -75,20 +75,17 @@ let
       glib
     ];
 
-    pythonPath =
-      with python3.pkgs;
-      [
-        b2sdk
-        boto3
-        idna
-        pygobject3
-        fasteners
-        paramiko
-        pexpect
-        # Currently marked as broken.
-        # pydrive2
-      ]
-      ++ paramiko.optional-dependencies.invoke;
+    pythonPath = with python3.pkgs; [
+      b2sdk
+      boto3
+      idna
+      pygobject3
+      fasteners
+      paramiko
+      pexpect
+      # Currently marked as broken.
+      # pydrive2
+    ];
 
     nativeCheckInputs = [
       gnupg # Add 'gpg' to PATH.
@@ -143,7 +140,7 @@ let
       # tests need writable $HOME
       HOME=$PWD/.home
 
-      wrapPythonProgramsIn "$PWD/testing/overrides/bin" "$pythonPath"
+      wrapPythonProgramsIn "$PWD/testing/overrides/bin" "''${pythonPath[*]}"
     '';
 
     doCheck = true;

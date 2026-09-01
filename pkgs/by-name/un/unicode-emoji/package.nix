@@ -49,7 +49,8 @@ let
 in
 
 symlinkJoin {
-  name = "unicode-emoji-${version}";
+  inherit version;
+  pname = "unicode-emoji";
 
   paths = lib.attrValues srcs;
 
@@ -58,7 +59,7 @@ symlinkJoin {
   meta = {
     description = "Unicode Emoji Data Files";
     homepage = "https://home.unicode.org/emoji/";
-    license = lib.licenses.unicode-dfs-2016;
+    license = lib.licenses.unicode-30;
     platforms = lib.platforms.all;
   };
 }

@@ -9,7 +9,7 @@
   perl,
   fmt,
   hiredis,
-  xxHash,
+  xxhash,
   zstd,
   bashInteractive,
   doctest,
@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccache";
-  version = "4.12.2";
+  version = "4.13.6";
 
   src = fetchFromGitHub {
     owner = "ccache";
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
         exit 1
       fi
     '';
-    hash = "sha256-oWzVCrNgYtOeN4+KJmIynT3jiFZfxrsLkoIm0lK3MBo=";
+    hash = "sha256-A0n+DO6IznETsAFUNIpBkQI6A3UilgEUbuyP3sqKDTk=";
   };
 
   outputs = [
@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    patchShebangs --build doc/scripts
     patchShebangs --build test/fake-compilers
   '';
 
@@ -76,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fmt
     hiredis
-    xxHash
+    xxhash
     zstd
   ];
 
@@ -98,8 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   disabledTests = [
-    "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
     "test.fileclone" # flaky on hydra, also seems to fail on zfs
+    "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "test.basedir"
@@ -119,7 +120,11 @@ stdenv.mkDerivation (finalAttrs: {
           isClang = unwrappedCC.isClang or false;
           isGNU = unwrappedCC.isGNU or false;
           isCcache = true;
-        };
+        }
+        // builtins.intersectAttrs {
+          hardeningUnsupportedFlagsByTargetPlatform = null;
+          hardeningUnsupportedFlags = null;
+        } unwrappedCC;
         lib = lib.getLib unwrappedCC;
         nativeBuildInputs = [ makeWrapper ];
         # Unwrapped clang does not have a targetPrefix because it is multi-target

@@ -8,19 +8,19 @@
   alsa-lib,
   speex,
   libusbmuxd,
-  libappindicator-gtk3,
+  libappindicator,
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "droidcam";
-  version = "2.1.4";
+  version = "2.1.5";
 
   src = fetchFromGitHub {
-    owner = "aramg";
-    repo = "droidcam";
-    rev = "v${version}";
-    sha256 = "sha256-z/SteW3jYR/VR+HffvTetdGs5oz4qWBNkaqLYiP1V8c=";
+    owner = "dev47apps";
+    repo = "droidcam-linux-client";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-22lRmtXumjR/83Fg1edBisM1GjNZvNUvPs1Yg7Na1xw=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     speex
     libusbmuxd
-    libappindicator-gtk3
+    libappindicator
   ];
 
   postPatch = ''
@@ -62,9 +62,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Linux client for DroidCam app";
-    homepage = "https://github.com/aramg/droidcam";
+    homepage = "https://github.com/dev47apps/droidcam-linux-client";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.suhr ];
     platforms = lib.platforms.linux;
   };
-}
+})

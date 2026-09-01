@@ -27,6 +27,11 @@ let
       cmake
     ];
 
+    env = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+      # Required for gcc-15 compatibility
+      NIX_CFLAGS_COMPILE = "-std=gnu17";
+    };
+
     cmakeFlags = [
       "-DBLAS_LIBRARIES=${blas}/lib"
       "-DBLA_STATIC=OFF"

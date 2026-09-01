@@ -160,7 +160,7 @@ Once approved, the team will have the right privileges to be pinged and requeste
 > [!TIP]
 > The team name should be as short as possible; because it is nested under the maintainers group, no -maintainers suffix is needed.
 
-After the first [weekly team sync](../.github/workflows/team-sync.yml) with the new team, it's then also possible to link it to the entry in `team-list.nix` by setting its `github` field to the GitHub team name.
+After the first [weekly team sync](../.github/workflows/teams.yml) with the new team, it's then also possible to link it to the entry in `team-list.nix` by setting its `github` field to the GitHub team name.
 
 # Maintainer scripts
 
@@ -169,7 +169,7 @@ See its [README](./scripts/README.md) for further information.
 
 # nixpkgs-merge-bot
 
-To streamline autoupdates, leverage the nixpkgs-merge-bot by commenting `@NixOS/nixpkgs-merge-bot merge` if the package resides in pkgs-by-name, the commenter is among the package maintainers, and the pull request author is @r-ryantm or a Nixpkgs committer.
+To streamline autoupdates, leverage the nixpkgs-merge-bot by commenting `@NixOS/nixpkgs-merge-bot merge` if the package resides in `pkgs/by-name`, the commenter is among the package maintainers, and the pull request author is @r-ryantm or a Nixpkgs committer.
 The bot ensures that all ofborg checks, except for darwin, are successfully completed before merging the pull request.
 Should the checks still be underway, the bot patiently waits for ofborg to finish before attempting the merge again.
 

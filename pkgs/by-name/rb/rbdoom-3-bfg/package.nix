@@ -14,21 +14,21 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rbdoom-3-bfg";
   version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "RobertBeckebans";
     repo = "rbdoom-3-bfg";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9BZEFO+e5IG6hv9+QI9OJecQ84rLTWBDz4k0GU6SeDE=";
     fetchSubmodules = true;
   };
 
   postPatch = ''
-    substituteInPlace neo/extern/nvrhi/tools/shaderCompiler/CMakeLists.txt \
-      --replace "AppleClang" "Clang"
+    substituteInPlace neo/extern/ShaderMake/CMakeLists.txt \
+      --replace-fail "AppleClang" "Clang"
   '';
 
   nativeBuildInputs = [
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ Zaechus ];
     platforms = lib.platforms.unix;
   };
-}
+})

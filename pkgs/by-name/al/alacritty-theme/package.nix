@@ -5,15 +5,15 @@
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation (self: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "alacritty-theme";
-  version = "0-unstable-2025-11-16";
+  version = "0-unstable-2026-07-10";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = "alacritty-theme";
-    rev = "f82c742634b5e840731dd7c609e95231917681a5";
-    hash = "sha256-L5Sfex+9DGMLd4Be0w+BzNKdFCVXPBtnyBHQ6O0wPaU=";
+    rev = "03cce642656759f440c97bb99ce65fc1c5b064a1";
+    hash = "sha256-JfvBUsmw3lRxOj2lb9yVmkRwfUpjJwjBujwztoXtgMY=";
     sparseCheckout = [ "themes" ];
   };
 
@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation (self: {
   dontBuild = true;
   preferLocalBuild = true;
 
-  sourceRoot = "${self.src.name}/themes";
+  sourceRoot = "${finalAttrs.src.name}/themes";
   installPhase = ''
     runHook preInstall
     install -Dt $out/share/alacritty-theme *.toml

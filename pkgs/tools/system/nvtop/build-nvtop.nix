@@ -4,10 +4,10 @@
   fetchFromGitHub,
   cmake,
   gtest,
-  cudatoolkit,
+  cudaPackages,
   libdrm,
   ncurses,
-  testers,
+  versionCheckHook,
   udev,
   addDriverRunpath,
   amd ? false,
@@ -20,6 +20,9 @@
   ascend ? false,
   v3d ? false,
   tpu ? false,
+  rockchip ? false,
+  metax ? false,
+  enflame ? false,
 }:
 
 let
@@ -39,15 +42,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nvtop";
-  version = "3.2.0";
+  version = "3.3.2";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   # between generation of multiple update PRs for each package flavor and manual updates I choose manual updates
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "Syllo";
     repo = "nvtop";
-    rev = finalAttrs.version;
-    hash = "sha256-8iChT55L2NSnHg8tLIry0rgi/4966MffShE0ib+2ywc=";
+    tag = finalAttrs.version;
+    hash = "sha256-w3g/9VbZz1qrEMaBBHEf9Y93z0vo8LbWnENL2wEEaSw=";
   };
 
   cmakeFlags = with lib.strings; [
@@ -63,11 +69,14 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ASCEND_SUPPORT" ascend)
     (cmakeBool "V3D_SUPPORT" v3d)
     (cmakeBool "TPU_SUPPORT" tpu) # requires libtpuinfo which is not packaged yet
+    (cmakeBool "ROCKCHIP_SUPPORT" rockchip)
+    (cmakeBool "METAX_SUPPORT" metax)
+    (cmakeBool "ENFLAME_SUPPORT" enflame)
   ];
   nativeBuildInputs = [
     cmake
   ]
-  ++ lib.optionals finalAttrs.doCheck [
+  ++ lib.optionals finalAttrs.finalPackage.doCheck [
     gtest
   ]
   ++ lib.optional nvidia addDriverRunpath;
@@ -76,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux udev
-  ++ lib.optional nvidia cudatoolkit
+  ++ lib.optional nvidia cudaPackages.cuda_nvml_dev
   ++ lib.optional needDrm libdrm;
 
   # this helps cmake to find <drm.h>
@@ -90,13 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/Syllo/nvtop/commit/33ec008e26a00227a666ccb11321e9971a50daf8
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  passthru = {
-    tests.version = testers.testVersion {
-      inherit (finalAttrs) version;
-      package = finalAttrs.finalPackage;
-      command = "nvtop --version";
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "htop-like task monitor for AMD, Adreno, Intel and NVIDIA GPUs";

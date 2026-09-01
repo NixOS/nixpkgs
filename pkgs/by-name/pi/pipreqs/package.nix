@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pipreqs";
   version = "0.4.13";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-oX8WeIC2khvjdTPOTIHdxuIrRlwQeq1VfbQ7Gt1WqZs=";
   };
 
@@ -33,4 +33,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ psyanticy ];
     mainProgram = "pipreqs";
   };
-}
+})

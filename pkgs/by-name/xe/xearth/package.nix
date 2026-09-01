@@ -4,16 +4,16 @@
   fetchurl,
   imake,
   gccmakedep,
-  libXt,
-  libXext,
+  libxt,
+  libxext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xearth";
   version = "1.1";
 
   src = fetchurl {
-    url = "http://xearth.org/${pname}-${version}.tar.gz";
+    url = "https://xearth.org/xearth-${finalAttrs.version}.tar.gz";
     hash = "sha256-vLFAfMNbP23TYGssYHInO2qRLL2e0a4i+y0maUVBMJw=";
   };
 
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libXt
-    libXext
+    libxt
+    libxext
   ];
 
   installFlags = [
@@ -50,11 +50,9 @@ stdenv.mkDerivation rec {
       By default, xearth updates the displayed image every  five  minutes.
     '';
     maintainers = with lib.maintainers; [ mafo ];
-    license = {
-      fullName = "xearth license";
-      url = "https://xearth.org/copyright.html";
-      free = true;
-    };
+    # https://xearth.org/copyright.html
+    # > for non-commercial and not-for-profit purposes
+    license = lib.licenses.unfreeRedistributable;
     platforms = lib.platforms.unix;
   };
-}
+})

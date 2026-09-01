@@ -4,22 +4,22 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "doc2go";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "abhinav";
     repo = "doc2go";
-    rev = "v${version}";
-    hash = "sha256-gJQ0cs8R1fbGpFd9k2L53khnQ9M5U18DOtS2bn0lGig=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-q3er94/WLCqXIOQaj7Kdty7yIuaLO7qXt6GiGxIxrPQ=";
   };
-  vendorHash = "sha256-lMoEbNeSQFrMG8hCMaFRvyzt6kaPVP7Kse0i7NJY10I=";
+  vendorHash = "sha256-4s9gVjx+qiBRmL4abBN3FPuH4iMUapIQr1nwN40VmRQ=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main._version=${version}"
+    "-X main._version=${finalAttrs.version}"
   ];
 
   subPackages = [ "." ];
@@ -38,7 +38,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/abhinav/doc2go";
-    changelog = "https://github.com/abhinav/doc2go/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/abhinav/doc2go/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Your Go project's documentation, to-go";
     mainProgram = "doc2go";
     longDescription = ''
@@ -54,4 +54,4 @@ buildGoModule rec {
     ];
     maintainers = with lib.maintainers; [ jk ];
   };
-}
+})

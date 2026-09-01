@@ -41,6 +41,8 @@ buildPythonPackage rec {
     hash = "sha256-cEpvkSqe/wRCxEajmM148jbo6a346x2t81pMRpKEJyE=";
   };
 
+  env.PYO3_USE_ABI3_FORWARD_COMPATIBILITY = 1;
+
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook

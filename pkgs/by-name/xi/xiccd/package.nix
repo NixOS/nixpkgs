@@ -4,7 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
-  libXrandr,
+  libxrandr,
   glib,
   colord,
 }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libXrandr
+    libxrandr
     glib
     colord
   ];

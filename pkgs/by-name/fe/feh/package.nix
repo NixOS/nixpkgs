@@ -3,7 +3,9 @@
   stdenv,
   fetchFromGitHub,
   makeWrapper,
-  xorg,
+  libxt,
+  libxinerama,
+  libx11,
   imlib2Full,
   libjpeg,
   libpng,
@@ -16,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "feh";
-  version = "3.11.2";
+  version = "3.12.3";
 
   src = fetchFromGitHub {
     owner = "derf";
     repo = "feh";
     rev = finalAttrs.version;
-    hash = "sha256-bwp/hzkuwQTgPakE0zkNtBWrNUkVWt9btTD8MVx+Xq4=";
+    hash = "sha256-mPXr/X3rBYT/RtPyGJyBbiV8Xpntck43UxHe8vLG6Mc=";
   };
 
   outputs = [
@@ -34,9 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [
-    xorg.libXt
-    xorg.libX11
-    xorg.libXinerama
+    libxt
+    libx11
+    libxinerama
     imlib2Full
     libjpeg
     libpng
@@ -46,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
+    "VERSION=${finalAttrs.version}"
     "exif=1"
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin "verscmp=0"

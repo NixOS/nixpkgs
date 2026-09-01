@@ -36,7 +36,19 @@
   stdenv,
   systemd,
   xdg-utils,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxshmfence,
+  libxkbfile,
   zlib,
 }:
 
@@ -69,29 +81,29 @@ let
     pango
     stdenv.cc.cc
     systemd
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libxkbfile
-    xorg.libxshmfence
+    libx11
+    libxscrnsaver
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxtst
+    libxkbfile
+    libxshmfence
     zlib
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "appgate-sdp";
-  version = "6.4.2";
+  version = "6.5.4";
 
   src = fetchurl {
-    url = "https://bin.appgate-sdp.com/${lib.versions.majorMinor version}/client/appgate-sdp_${version}_amd64.deb";
-    sha256 = "sha256-xFpBC6X95C01wUfzJ3a0kMz898k6BItkpJLcUmfd7oY=";
+    url = "https://bin.appgate-sdp.com/${lib.versions.majorMinor finalAttrs.version}/client/appgate-sdp_${finalAttrs.version}_amd64.deb";
+    hash = "sha256-tVHGAP90C4Jxz+Ur1hmlCmQ2tOtaSuIvAUQAqu6BKRw=";
   };
 
   # just patch interpreter
@@ -164,4 +176,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ymatsiuk ];
     mainProgram = "appgate";
   };
-}
+})

@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Streamlined interface for interacting with the local API of APsystems EZ1 Microinverters";
     homepage = "https://github.com/SonnenladenGmbH/APsystems-EZ1-API";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 }

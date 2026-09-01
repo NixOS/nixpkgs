@@ -12,7 +12,7 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "farstream";
   version = "0.2.9";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/farstream/releases/farstream/${pname}-${version}.tar.gz";
+    url = "https://www.freedesktop.org/software/farstream/releases/farstream/farstream-${finalAttrs.version}.tar.gz";
     sha256 = "0yzlh9jf47a3ir40447s7hlwp98f9yr8z4gcm0vjwz6g6cj12zfb";
   };
 
@@ -57,8 +57,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.freedesktop.org/wiki/Software/Farstream";
-    description = "Audio/Video Communications Framework formely known as farsight";
+    description = "Audio/Video Communications Framework formerly known as farsight";
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl21;
   };
-}
+})

@@ -12,14 +12,14 @@
   netcat,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "twa";
   version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "twa";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-B+UwH7oCtediLzurjYuLp56IxiKNAqyoW5QkwXX72MA=";
   };
 
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ avaq ];
     platforms = lib.platforms.unix;
   };
-}
+})

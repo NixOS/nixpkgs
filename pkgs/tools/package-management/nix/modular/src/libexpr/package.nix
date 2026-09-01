@@ -12,6 +12,7 @@
   nix-fetchers,
   boost,
   boehmgc,
+  libcpuid,
   nlohmann_json,
   toml11,
 
@@ -37,6 +38,10 @@ mkMesonLibrary (finalAttrs: {
 
   workDir = ./.;
 
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isMusl [
+    "fortify"
+  ];
+
   nativeBuildInputs = [
     bison
     flex
@@ -45,7 +50,8 @@ mkMesonLibrary (finalAttrs: {
 
   buildInputs = [
     toml11
-  ];
+  ]
+  ++ lib.optional ((lib.versionAtLeast version "2.35pre") && stdenv.hostPlatform.isx86_64) libcpuid;
 
   propagatedBuildInputs = [
     nix-util

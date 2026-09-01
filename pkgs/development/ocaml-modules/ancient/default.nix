@@ -37,6 +37,6 @@ buildDunePackage (finalAttrs: {
     homepage = "https://github.com/OCamlPro/ocaml-ancient";
     changelog = "https://raw.githubusercontent.com/OCamlPro/ocaml-ancient/refs/tags/${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = [ ];
   };
 })

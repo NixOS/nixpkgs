@@ -12,7 +12,7 @@
   appstream-glib,
   gtk4,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "conjure";
   version = "0.1.2";
 
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "nate-xyz";
     repo = "conjure";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-qWeqUQxTTnmJt40Jm1qDTGGuSQikkurzOux8sZsmDQk=";
   };
 
@@ -70,4 +70,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ sund3RRR ];
   };
-}
+})

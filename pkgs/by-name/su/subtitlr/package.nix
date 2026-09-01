@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "Subtitlr";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "yoanbernabeu";
     repo = "Subtitlr";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-PbeQzNkFj4eSg/zhk8bXij36DvJ9+g22kF5TqdX5O04=";
   };
 
@@ -42,4 +42,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ qjoly ];
     mainProgram = "Subtitlr";
   };
-}
+})

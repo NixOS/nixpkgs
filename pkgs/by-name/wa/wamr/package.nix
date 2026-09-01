@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.4.4";
 
   src = fetchFromGitHub {
-    owner = "bytecodealliance";
+    owner = "wasm-micro-runtime";
     repo = "wasm-micro-runtime";
     tag = "WAMR-${finalAttrs.version}";
     hash = "sha256-pNudBKnhdR/Ye0m2tVZB/wSfJZYK8+gdCpCp0rDp0o4=";
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "WebAssembly Micro Runtime";
-    homepage = "https://github.com/bytecodealliance/wasm-micro-runtime";
+    homepage = "https://github.com/wasm-micro-runtime/wasm-micro-runtime";
     license = lib.licenses.asl20;
     mainProgram = "iwasm";
     maintainers = with lib.maintainers; [ ereslibre ];

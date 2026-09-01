@@ -1,8 +1,8 @@
 diff --git a/tmux-fingers.tmux b/tmux-fingers.tmux
-index f15b509..a14e312 100755
+index c62915a..eb065e7 100755
 --- a/tmux-fingers.tmux
 +++ b/tmux-fingers.tmux
-@@ -1,35 +1,4 @@
+@@ -1,36 +1,5 @@
  #!/usr/bin/env bash
  
 -CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -36,6 +36,13 @@ index f15b509..a14e312 100755
 -  fi
 -fi
 -
--tmux run "$FINGERS_BINARY load-config"
-+tmux run "@tmuxFingersDir@/tmux-fingers load-config"
+ if [[ "$TERM" == "dumb" ]]; then
+   # force term value to get proper colors in systemd and tmux 3.6a
+   # https://github.com/Morantron/tmux-fingers/issues/143
+@@ -39,5 +8,5 @@ else
+   FINGERS_TERM="$TERM"
+ fi
+ 
+-tmux run "TERM=$FINGERS_TERM $FINGERS_BINARY load-config"
++tmux run "TERM=$FINGERS_TERM @tmuxFingersDir@/tmux-fingers load-config"
  exit $?

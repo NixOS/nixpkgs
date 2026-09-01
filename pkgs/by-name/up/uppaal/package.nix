@@ -64,7 +64,8 @@ stdenvNoCC.mkDerivation rec {
     makeWrapper $out/lib/uppaal/uppaal $out/bin/uppaal \
       --set JAVA_HOME ${jdk17} \
       --set PATH $out/lib/uppaal:$PATH \
-      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
+      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp" \
+      --set _JAVA_AWT_WM_NONREPARENTING 1 # Java Swing renders a blank window on Wayland without this
 
     runHook postInstall
   '';

@@ -9,14 +9,14 @@
   freetype,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cicero-tui";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "eyeplum";
     repo = "cicero-tui";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-2raSkIycXCdT/TSlaQviI6Eql7DONgRVsPP2B2YuW8U=";
   };
 
@@ -35,9 +35,8 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Unicode tool with a terminal user interface";
     homepage = "https://github.com/eyeplum/cicero-tui";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ shamilton ];
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "cicero";
   };
-}
+})

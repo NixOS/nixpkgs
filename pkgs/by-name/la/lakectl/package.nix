@@ -1,24 +1,24 @@
 {
   lib,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "lakectl";
-  version = "1.65.2";
+  version = "1.86.0";
 
   src = fetchFromGitHub {
     owner = "treeverse";
     repo = "lakeFS";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X7cjNa9PQFUuvCN8/i8p9kqsvHqc3IGFWL++Mj0KdfY=";
+    hash = "sha256-8C0XK1qs7z/1MCSPzDP2elJtJRxLcypZbtDYUpEe4g4=";
   };
 
   subPackages = [ "cmd/lakectl" ];
   proxyVendor = true;
-  vendorHash = "sha256-JEAVAXWscq/u+ABvYThlWkpaVRQd2e2gtmYoLDjVx/s=";
+  vendorHash = "sha256-Gcmv1b8NwmkGIgMCmLp0E7ZBSWm2PziQWhhUXI3Y3es=";
 
   ldflags = [
     "-s"

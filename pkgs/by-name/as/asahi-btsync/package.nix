@@ -2,19 +2,29 @@
   lib,
   fetchCrate,
   rustPlatform,
+  nix-update-script,
+  pkg-config,
+  dbus,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asahi-btsync";
-  version = "0.2.0";
+  version = "0.2.5";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-jp05WcwY1cWh4mBQj+3jRCZoG32OhDvTB84hOAGemX8=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-lAfbr2D6dITdlFCbz++OVz2SxYGapiZtrNjeBruBDJ8=";
   };
 
-  cargoHash = "sha256-gGWhi0T7xDIsbzfw/KL3TSneLvQaiz/2xbpHeZt1i3I=";
-  cargoDepsName = pname;
+  cargoHash = "sha256-80B47vRUgb+QWYoxqPWk1gCdWFM5bIxq0tR5FpssRQ4=";
+  cargoDepsName = finalAttrs.pname;
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ dbus ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Tool to sync Bluetooth pairing keys with macos on ARM Macs";
@@ -24,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "asahi-btsync";
     platforms = lib.platforms.linux;
   };
-}
+})

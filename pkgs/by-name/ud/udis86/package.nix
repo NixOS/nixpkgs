@@ -2,29 +2,20 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   autoreconfHook,
   python3,
 }:
 
 stdenv.mkDerivation {
   pname = "udis86";
-  version = "unstable-2014-12-25";
+  version = "1.7.2-unstable-2022-10-13";
 
   src = fetchFromGitHub {
-    owner = "vmt";
+    owner = "canihavesomecoffee";
     repo = "udis86";
-    rev = "56ff6c87c11de0ffa725b14339004820556e343d";
-    hash = "sha256-bmm1rgzZeStQJXEmcT8vnplsnmgN3LJlYs7COmqsDU8=";
+    rev = "5336633af70f3917760a6d441ff02d93477b0c86";
+    hash = "sha256-HifdUQPGsKQKQprByeIznvRLONdOXeolOsU5nkwIv3g=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "support-python3-for-building";
-      url = "https://github.com/vmt/udis86/commit/3c05ce60372cb2eba39d6eb87ac05af8a664e1b1.patch";
-      hash = "sha256-uF4Cwt7UMkyd0RX6cCMQt9xvkkUNQvTDH/Z/6nHtVT8=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -43,7 +34,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    homepage = "https://udis86.sourceforge.net";
+    homepage = "https://github.com/canihavesomecoffee/udis86";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ timor ];
     mainProgram = "udcli";

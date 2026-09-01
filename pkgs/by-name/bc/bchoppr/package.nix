@@ -4,27 +4,31 @@
   fetchFromGitHub,
   pkg-config,
   cairo,
-  libX11,
+  libx11,
   lv2,
+  libsndfile,
+  cpio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bchoppr";
-  version = "1.12.6";
+  version = "1.12.8";
 
   src = fetchFromGitHub {
     owner = "sjaehn";
     repo = "bchoppr";
-    tag = version;
-    hash = "sha256-/aLoLUpWu66VKd9lwjli+FZZctblrZUPSEsdYH85HwQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-zbRriQ5pcoQ1Hi1gux2kM260kGxFzng251og/niUiLQ=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     cairo
-    libX11
+    libx11
     lv2
+    libsndfile
+    cpio
   ];
 
   installFlags = [ "PREFIX=$(out)" ];
@@ -38,4 +42,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;
   };
-}
+})

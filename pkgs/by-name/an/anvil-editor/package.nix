@@ -11,7 +11,10 @@
   libxkbcommon,
   vulkan-headers,
   libGL,
-  xorg,
+  libxfixes,
+  libxcursor,
+  libx11,
+  libxcb,
 }:
 
 buildGoModule (finalAttrs: {
@@ -57,10 +60,10 @@ buildGoModule (finalAttrs: {
     libxkbcommon
     vulkan-headers
     libGL
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXcursor
-    xorg.libXfixes
+    libx11
+    libxcb
+    libxcursor
+    libxfixes
   ];
 
   # Got different result in utf8 char length?

@@ -4,13 +4,13 @@
   system ? builtins.currentSystem,
   config ? { },
   pkgs ? import ../.. { inherit system config; },
-  systemdStage1 ? false,
+  systemdStage1,
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
 
 makeTest {
-  name = "hibernate";
+  name = "hibernate" + pkgs.lib.optionalString systemdStage1 "-systemd-stage-1";
 
   nodes = {
     machine =
@@ -25,7 +25,7 @@ makeTest {
           ./common/auto-format-root-device.nix
         ];
 
-        systemd.services.backdoor.conflicts = [ "sleep.target" ];
+        powerManagement.powerDownCommands = "systemctl --no-block stop backdoor.service";
         powerManagement.resumeCommands = "systemctl --no-block restart backdoor.service";
 
         virtualisation.emptyDiskImages = [ (2 * config.virtualisation.memorySize) ];

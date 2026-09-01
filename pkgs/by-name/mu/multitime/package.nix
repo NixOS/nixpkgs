@@ -5,14 +5,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "multitime";
   version = "1.5";
 
   src = fetchFromGitHub {
     owner = "ltratt";
     repo = "multitime";
-    rev = "multitime-${version}";
+    rev = "multitime-${finalAttrs.version}";
     sha256 = "sha256-oLtBUJbu+tVhzsUv+toz2oLeXCVLYKHQXUNsqpCZBGc=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "multitime";
   };
-}
+})

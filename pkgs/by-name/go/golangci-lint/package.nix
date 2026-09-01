@@ -4,7 +4,7 @@
   # rather than buildGoLatestModule.
   # This can be bumped when the release notes of golangci-lint detail support for
   # new version of go.
-  buildGo125Module,
+  buildGo127Module,
   buildPackages,
   fetchFromGitHub,
   installShellFiles,
@@ -12,18 +12,18 @@
   stdenv,
 }:
 
-buildGo125Module (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "golangci-lint";
-  version = "2.8.0";
+  version = "2.13.2";
 
   src = fetchFromGitHub {
     owner = "golangci";
     repo = "golangci-lint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-w6MAOirj8rPHYbKrW4gJeemXCS64fNtteV6IioqIQTQ=";
+    hash = "sha256-RbWKPIG+UK82S9W9tp/CciZ669vudh95VOfHfdQWx3M=";
   };
 
-  vendorHash = "sha256-/Vqo/yrmGh6XipELQ9NDtlMEO2a654XykmvnMs0BdrI=";
+  vendorHash = "sha256-R83GeyfuZ+w30jZqFGYi0yua8E1Ey2q7/OlVmw8zDCg=";
 
   subPackages = [ "cmd/golangci-lint" ];
 

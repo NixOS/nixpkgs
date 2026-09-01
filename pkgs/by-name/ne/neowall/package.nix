@@ -4,8 +4,8 @@
   fetchFromGitHub,
   lib,
   libGL,
-  libX11,
-  libXrandr,
+  libx11,
+  libxrandr,
   libpng,
   libjpeg,
   wayland,
@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "neowall";
-  version = "0.4.5";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "1ay1";
     repo = "neowall";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dgego9hcYCqnky7hvCubOZWHA1HxKDY9E9F/7YIwj+I=";
+    hash = "sha256-ZJyWvq9Ro5nbkTk0nd+gMFGOQm7jB7Q75Y19W0kl9hg=";
   };
 
   nativeBuildInputs = [
@@ -37,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     wayland
     wayland-protocols
-    libX11
-    libXrandr
+    libx11
+    libxrandr
     libGL
     libpng
     libjpeg

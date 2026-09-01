@@ -1,0 +1,24 @@
+diff --git a/src/sage/doctest/test.py b/src/sage/doctest/test.py
+index 812f8167c12..38e553ad5bd 100644
+--- a/src/sage/doctest/test.py
++++ b/src/sage/doctest/test.py
+@@ -468,6 +468,7 @@ Test the ``--debug`` option::
+         s...: b = 5
+         s...: a + b
+         8
++    ...
+     sage:
+     <BLANKLINE>
+     Returning to doctests...
+diff --git a/src/sage/tests/cmdline.py b/src/sage/tests/cmdline.py
+index 56fc16a205c..be2ae2a1b3d 100644
+--- a/src/sage/tests/cmdline.py
++++ b/src/sage/tests/cmdline.py
+@@ -327,6 +327,7 @@ be ignored. In Pdb, we run the ``help`` command::
+     **********************************************************************
+     Previously executed commands:
+         s...: assert True is False
++    ...
+     sage:
+     <BLANKLINE>
+     Returning to doctests...

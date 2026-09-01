@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
@@ -56,6 +57,9 @@ buildPythonPackage (finalAttrs: {
   enabledTestPaths = [
     "test"
   ];
+
+  # Trace/BPT Trap 5 calling `pytest` on darwin.
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = {
     description = "Python fast on-disk dictionary / RocksDB & SpeeDB Python binding";

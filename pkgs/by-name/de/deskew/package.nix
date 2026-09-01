@@ -6,7 +6,7 @@
   fpc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "deskew";
   version = "1.30";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "galfar";
     repo = "deskew";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xghVOEMkQ/mXpOzJqMaT3SII7xneMNoFqRlqjtzmDnA=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     mainProgram = "deskew";
   };
 
-}
+})

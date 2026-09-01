@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2_image
   ];
   # From some reason, this is needed as otherwise SDL.h is not found
-  NIX_CFLAGS_COMPILE = "-I${lib.getInclude SDL2}/include/SDL2";
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getInclude SDL2}/include/SDL2";
 
   outputs = [
     "out"
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "Simplistic SDL2 GUI framework in early developement";
+    description = "Simplistic SDL2 GUI framework in early development";
     mainProgram = "libwtk-sdl2-test";
     homepage = "https://github.com/muesli4/libwtk-sdl2";
     # See: https://github.com/muesli4/mpd-touch-screen-gui/tree/master/LICENSES

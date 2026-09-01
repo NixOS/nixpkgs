@@ -17,12 +17,12 @@
   gdk-pixbuf,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtkmm";
   version = "3.24.10";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtkmm/${lib.versions.majorMinor version}/gtkmm-${version}.tar.xz";
+    url = "mirror://gnome/sources/gtkmm/${lib.versions.majorMinor finalAttrs.version}/gtkmm-${finalAttrs.version}.tar.xz";
     sha256 = "erfiJmgIcW4mw5kkrOH7RtqGwX7znZiWJMQjFLMrWnY=";
   };
 
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -12,11 +12,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "plasticscm-client-core-unwrapped";
-  version = "11.0.16.9872";
+  version = "11.0.16.10371";
 
   src = fetchurl {
     url = "https://www.plasticscm.com/plasticrepo/stable/debian/amd64/plasticscm-client-core_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-5V1x21+Dal6JDI8KBEFr9PXH1k12LutVWbaMOuDL954=";
+    hash = "sha256-iDfepwChkVewk0l+znR13AOBIIOzCHTgmNAytAgr+tQ=";
     nativeBuildInputs = [ dpkg ];
     downloadToTemp = true;
     recursiveHash = true;

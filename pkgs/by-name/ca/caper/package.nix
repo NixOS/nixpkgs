@@ -6,14 +6,14 @@
   gnum4,
   fetchFromGitLab,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "caper";
   version = "0.9";
 
   src = fetchFromGitLab {
     owner = "niksu";
     repo = "caper";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TSryjz0NrGdkc+6vmfBqsuVpV3N9FvteTFsVqpUcm0w=";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ willow_ch ];
     mainProgram = "caper";
   };
-}
+})

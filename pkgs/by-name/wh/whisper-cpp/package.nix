@@ -31,7 +31,7 @@
 
   withSDL ? true,
 
-  withFFmpegSupport ? false,
+  withFFmpegSupport ? stdenv.hostPlatform.isLinux,
 }:
 
 assert metalSupport -> stdenv.hostPlatform.isDarwin;
@@ -50,8 +50,15 @@ let
     optionals
     ;
 
+  inherit (effectiveStdenv.hostPlatform)
+    isStatic
+    isLinux
+    isAarch64
+    isx86
+    ;
+
   cudaBuildInputs = with cudaPackages; [
-    cuda_cccl # <nv/target>
+    cccl # <nv/target>
 
     # A temporary hack for reducing the closure size, remove once cudaPackages
     # have stopped using lndir: https://github.com/NixOS/nixpkgs/issues/271792
@@ -74,13 +81,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "whisper-cpp";
-  version = "1.8.3";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "whisper.cpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TeS1lGKEzkHOoBemy/tMGtIsy0iouj9DTYIgTjUNcQk=";
+    hash = "sha256-tW3UkERd/4PLpjSObBkZVqJPzue70oGeLDNiQDTDwSU=";
   };
 
   # The upstream download script tries to download the models to the
@@ -88,15 +95,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   # inside the nix store. This patch changes the script to download
   # the models to the current directory of where it is being run from.
   patches = [ ./download-models.patch ];
-
-  postPatch = ''
-    for target in examples/{bench,command,cli,quantize,server,stream,talk-llama}/CMakeLists.txt; do
-      if ! grep -q -F 'install('; then
-        echo 'install(TARGETS ''${TARGET} RUNTIME)' >> $target
-        ${lib.optionalString stdenv.isDarwin "echo 'install(TARGETS whisper.coreml LIBRARY)' >> src/CMakeLists.txt"}
-      fi
-    done
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -125,12 +123,12 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeBool "WHISPER_SDL2" withSDL)
     (cmakeBool "GGML_LTO" true)
     (cmakeBool "GGML_NATIVE" false)
-    (cmakeBool "BUILD_SHARED_LIBS" (!effectiveStdenv.hostPlatform.isStatic))
+    (cmakeBool "BUILD_SHARED_LIBS" (!isStatic))
   ]
-  ++ optionals effectiveStdenv.hostPlatform.isLinux [
-    (cmakeBool "WHISPER_FFMPEG" withFFmpegSupport)
+  ++ optionals isLinux [
+    (cmakeBool "WHISPER_COMMON_FFMPEG" withFFmpegSupport)
   ]
-  ++ optionals (effectiveStdenv.hostPlatform.isx86 && !effectiveStdenv.hostPlatform.isStatic) [
+  ++ optionals (isx86 && !isStatic) [
     (cmakeBool "GGML_BACKEND_DL" true)
     (cmakeBool "GGML_CPU_ALL_VARIANTS" true)
     (cmakeFeature "GGML_BACKEND_DIR" "${placeholder "out"}/lib")
@@ -145,7 +143,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     # Build all targets supported by rocBLAS. When updating search for TARGET_LIST_ROCM
     # in https://github.com/ROCmSoftwarePlatform/rocBLAS/blob/develop/CMakeLists.txt
     # and select the line that matches the current nixpkgs version of rocBLAS.
-    "-DAMDGPU_TARGETS=${rocmGpuTargets}"
+    (cmakeFeature "AMDGPU_TARGETS" rocmGpuTargets)
   ]
   ++ optionals coreMLSupport [
     (cmakeBool "WHISPER_COREML" true)
@@ -170,11 +168,15 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   requiredSystemFeatures = optionals rocmSupport [ "big-parallel" ]; # rocmSupport multiplies build time by the number of GPU targets, which takes arround 30 minutes on a 16-cores system to build
 
-  doInstallCheck = true;
+  # libcuda.so is provided by the driver at runtime and is not available in the sandbox
+  # /nix/store/...-whisper-cpp-1.8.3/bin/whisper-cli: error while loading shared libraries: libcuda.so.1: cannot open shared object file: No such file or directory
+  # NOTE: it is unclear why this isn't an issue on x86_64-linux
+  doInstallCheck = !(isLinux && isAarch64 && cudaSupport);
 
   installCheckPhase = ''
     runHook preInstallCheck
     "$out/bin/whisper-cli" --help >/dev/null
+    "$out/bin/parakeet-cli" --help >/dev/null
     runHook postInstallCheck
   '';
 
@@ -192,7 +194,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     badPlatforms = optionals cudaSupport lib.platforms.darwin;
     maintainers = with lib.maintainers; [
-      dit7ya
       hughobrien
       aviallon
     ];

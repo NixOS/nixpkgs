@@ -2,25 +2,31 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  lookyloo-models,
   poetry-core,
+  pydantic,
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylacus";
-  version = "1.21.0";
+  version = "1.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ail-project";
     repo = "PyLacus";
-    tag = "v${version}";
-    hash = "sha256-YTHFA25c9EnXlOKmJd2sdrdYZ+5tAopvpWRfW8IpDpU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MmThqTPM5YvVFv4DBfTCVbbyjFvIaIUmbRci94F8ZQ0=";
   };
 
   build-system = [ poetry-core ];
 
-  dependencies = [ requests ];
+  dependencies = [
+    lookyloo-models
+    pydantic
+    requests
+  ];
 
   # Tests require network access
   doCheck = false;
@@ -30,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to enqueue and query a remote Lacus instance";
     homepage = "https://github.com/ail-project/PyLacus";
-    changelog = "https://github.com/ail-project/PyLacus/releases/tag/${src.tag}";
+    changelog = "https://github.com/ail-project/PyLacus/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

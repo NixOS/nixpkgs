@@ -11,27 +11,31 @@
   dask,
   numpy,
   scipy,
-  pandas,
   pims,
 
   # tests
   pyarrow,
-  pytest-flake8,
   pytestCheckHook,
   scikit-image,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dask-image";
-  version = "2025.11.0";
+  version = "2026.5.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-image";
-    tag = "v${version}";
-    hash = "sha256-+nzYthnobcemunMcAWwRpHOQy6yFtjdib/7VZqWEiqc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SEbabXZx4u+C4IjzfVf81Y/gopxt6m0Jp0ZCN9hx5G8=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "--flake8" ""
+  '';
 
   build-system = [
     setuptools
@@ -41,14 +45,12 @@ buildPythonPackage rec {
   dependencies = [
     dask
     numpy
-    scipy
-    pandas
     pims
+    scipy
   ];
 
   nativeCheckInputs = [
     pyarrow
-    pytest-flake8
     pytestCheckHook
     scikit-image
   ];
@@ -64,13 +66,18 @@ buildPythonPackage rec {
 
     # AssertionError (comparing slices)
     "test_find_objects_with_empty_chunks"
+
+    # scipy compat issue
+    # TypeError: only 0-dimensional arrays can be converted to Python scalars
+    "test_generic_filter_identity"
+    "test_generic_filter_comprehensions"
   ];
 
   meta = {
     description = "Distributed image processing";
     homepage = "https://github.com/dask/dask-image";
-    changelog = "https://github.com/dask/dask-image/releases/tag/v${version}";
+    changelog = "https://github.com/dask/dask-image/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

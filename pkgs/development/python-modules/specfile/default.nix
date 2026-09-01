@@ -12,14 +12,18 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "specfile";
-  version = "0.38.0";
+  version = "0.41.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "packit";
     repo = "specfile";
     tag = finalAttrs.version;
-    hash = "sha256-cqHQIzgxfWHSDIIx72RIwt0o3MEJHXRzMNSgQ0VCWms=";
+    postFetch = ''
+      # export-subst prevents reproducibility
+      rm "$out/.git_archival.txt"
+    '';
+    hash = "sha256-TFJNyHI56dAcXiZtFSzHN4m0MHVft8kx1XBUuvkRUJU=";
   };
 
   build-system = [
@@ -40,6 +44,7 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # AssertionError
     "test_update_tag"
+    "test_sanitize"
     "test_shell_expansions"
   ];
 

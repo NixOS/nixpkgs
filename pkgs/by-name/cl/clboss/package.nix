@@ -11,14 +11,14 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clboss";
-  version = "0.15.1";
+  version = "0.16.3";
 
   # The release tarball includes the pre-generated file `commit_hash.h` that is required for building
   src = fetchzip {
-    url = "https://github.com/ZmnSCPxj/clboss/releases/download/v${version}/clboss-v${version}.tar.gz";
-    hash = "sha256-9wrgJzXVBKGSNB2UbP+CnUmaRwdXgRAnHBZbvm/Am7Q=";
+    url = "https://github.com/ZmnSCPxj/clboss/releases/download/v${finalAttrs.version}/clboss-v${finalAttrs.version}.tar.gz";
+    hash = "sha256-lniKkyynkyzFBJBRTaPiGTVG9semZDhjpCxjyRDzt/g=";
   };
 
   nativeBuildInputs = [
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "clboss";
   };
-}
+})

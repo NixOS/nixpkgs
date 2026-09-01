@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nvmetcfg";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "vifino";
     repo = "nvmetcfg";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-LoQTcHM6czzQ5ZwXcklFXf/7WlRsoJTF61UhQ56aleQ=";
   };
 
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "nvmetcfg";
     platforms = lib.platforms.linux;
   };
-}
+})

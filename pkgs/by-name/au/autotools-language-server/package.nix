@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "autotools-language-server";
   version = "0.0.23";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Freed-Wu";
     repo = "autotools-language-server";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-cehiqxst3iGpR2UnkpN7wVAxd924n0ZNek3aiwEW+ZA=";
   };
 
@@ -36,4 +36,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "autotools-language-server";
   };
-}
+})

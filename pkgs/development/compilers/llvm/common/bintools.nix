@@ -9,17 +9,22 @@
 }:
 
 let
+  pname = "llvm-binutils";
   targetPrefix = lib.optionalString (
     stdenv.hostPlatform != stdenv.targetPlatform
   ) "${stdenv.targetPlatform.config}-";
 in
-runCommand "llvm-binutils-${version}"
+runCommand "${pname}-${version}"
   {
+    inherit pname version;
     preferLocalBuild = true;
     passthru = {
       isLLVM = true;
       inherit targetPrefix;
       inherit llvm lld;
+    };
+    meta = {
+      inherit (llvm.meta) teams;
     };
   }
   ''

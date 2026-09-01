@@ -9,19 +9,20 @@
   pytest-randomly,
   pytest-timeout,
   pytestCheckHook,
+  python-dotenv,
   uv-dynamic-versioning,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "urlscan-python";
-  version = "0.0.1";
+  version = "2026.08.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "urlscan";
     repo = "urlscan-python";
-    tag = "v${version}";
-    hash = "sha256-HkovBmmVvUYA5U43w5TUOcwhZAN/0o0BETd1s9R940w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-N7l4+Izn0fhRuoOejtR4/WHTxfoaQVWM6EdSIB0wm+0=";
   };
 
   build-system = [
@@ -37,15 +38,21 @@ buildPythonPackage rec {
     pytest-randomly
     pytest-timeout
     pytestCheckHook
+    python-dotenv
   ];
 
   pythonImportsCheck = [ "urlscan" ];
 
+  disabledTestPaths = [
+    # Tests require an API key
+    "tests/integration"
+  ];
+
   meta = {
     description = "Python API client for urlscan.io";
     homepage = "https://github.com/urlscan/urlscan-python/";
-    changelog = "https://github.com/urlscan/urlscan-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/urlscan/urlscan-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -14,14 +14,14 @@ let
     qtquickcontrols2
     ;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opensoundmeter";
   version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "psmokotnin";
     repo = "osm";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jM9tkfNjPNHcPOG0n7NeohC/O3E6CUspOF3UTkQ2rs8=";
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace OpenSoundMeter.pro \
-      --replace 'APP_GIT_VERSION = ?' 'APP_GIT_VERSION = ${src.rev}'
+      --replace 'APP_GIT_VERSION = ?' 'APP_GIT_VERSION = ${finalAttrs.src.rev}'
   '';
 
   nativeBuildInputs = [
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

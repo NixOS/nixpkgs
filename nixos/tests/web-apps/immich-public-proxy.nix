@@ -1,10 +1,10 @@
-{ pkgs, lib, ... }:
 {
   name = "immich-public-proxy";
 
   nodes.machine =
-    { pkgs, ... }@args:
+    { pkgs, ... }:
     {
+      virtualisation.memorySize = 2048; # test hits OOM with default 1024
       environment.systemPackages = [
         pkgs.imagemagick
         pkgs.immich-cli

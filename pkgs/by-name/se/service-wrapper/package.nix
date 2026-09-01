@@ -7,11 +7,13 @@
 }:
 
 let
-  name = "service-wrapper-${version}";
+  pname = "service-wrapper";
   version = "19.04"; # Akin to Ubuntu Release
 in
-runCommand name
+runCommand "${pname}-${version}"
   {
+    inherit pname version;
+
     script = replaceVarsWith {
       src = ./service-wrapper.sh;
       isExecutable = true;

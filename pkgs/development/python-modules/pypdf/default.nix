@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   flit-core,
@@ -12,12 +11,12 @@
   sphinx-rtd-theme,
   myst-parser,
 
-  # propagates
-  typing-extensions,
-
   # optionals
+  arabic-reshaper,
   cryptography,
+  fonttools,
   pillow,
+  python-bidi,
 
   # tests
   fpdf2,
@@ -27,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "pypdf";
-  version = "6.6.0";
+  version = "6.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -36,7 +35,7 @@ buildPythonPackage rec {
     tag = version;
     # fetch sample files used in tests
     fetchSubmodules = true;
-    hash = "sha256-C1ZFqqLFtxWOuLUT7KFSfWIE6a9xDPCFtOakzYP4NMY=";
+    hash = "sha256-e39xclCnXlX4oagx4TnFCf99VKdJZeM2Kc3set1KXuo=";
   };
 
   outputs = [
@@ -57,12 +56,15 @@ buildPythonPackage rec {
     myst-parser
   ];
 
-  dependencies = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
-
   optional-dependencies = rec {
-    full = crypto ++ image;
+    full = crypto ++ fonts ++ image ++ rtl_text;
     crypto = [ cryptography ];
+    fonts = [ fonttools ];
     image = [ pillow ];
+    rtl_text = [
+      arabic-reshaper
+      python-bidi
+    ];
   };
 
   pythonImportsCheck = [ "pypdf" ];

@@ -41,8 +41,8 @@ in
 
               <Proxy balancer://cluster>
                 Require all granted
-                BalancerMember http://${nodes.backend1.config.networking.hostName} retry=0
-                BalancerMember http://${nodes.backend2.config.networking.hostName} retry=0
+                BalancerMember http://${nodes.backend1.networking.hostName} retry=0
+                BalancerMember http://${nodes.backend2.networking.hostName} retry=0
               </Proxy>
 
               ProxyStatus       full

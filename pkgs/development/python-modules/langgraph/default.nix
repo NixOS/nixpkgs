@@ -25,6 +25,7 @@
   langgraph-checkpoint-sqlite,
   langsmith,
   psycopg,
+  pycryptodome,
   pytest-asyncio,
   pytest-mock,
   pytest-repeat,
@@ -38,16 +39,17 @@
   # passthru
   nix-update-script,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langgraph";
-  version = "1.0.5";
+  version = "1.2.10";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = version;
-    hash = "sha256-QvnBb69JxOVfZ/22igX+WVatJNAUrHUrh3aIpztYmmc=";
+    tag = finalAttrs.version;
+    hash = "sha256-2P/JsZYQyXIselQaJVuyWTdkRQN7K1TW7w28D7BecRk=";
   };
 
   postgresqlTestSetupPost = ''
@@ -57,7 +59,7 @@ buildPythonPackage rec {
       --replace-fail "DEFAULT_POSTGRES_URI = \"postgres://postgres:postgres@localhost:5442/\"" "DEFAULT_POSTGRES_URI = \"postgres:///$PGDATABASE\""
   '';
 
-  sourceRoot = "${src.name}/libs/langgraph";
+  sourceRoot = "${finalAttrs.src.name}/libs/langgraph";
 
   build-system = [ hatchling ];
 
@@ -95,6 +97,7 @@ buildPythonPackage rec {
     langsmith
     psycopg
     psycopg.pool
+    pycryptodome
     pydantic
     pytest-asyncio
     pytest-mock
@@ -121,6 +124,7 @@ buildPythonPackage rec {
     "test_no_modifier"
     "test_pending_writes_resume"
     "test_remove_message_via_state_update"
+    "test_interrupt_functional_pydantic"
   ];
 
   disabledTestPaths = [
@@ -130,11 +134,17 @@ buildPythonPackage rec {
     "tests/test_large_cases_async.py"
     "tests/test_pregel.py"
     "tests/test_pregel_async.py"
+    "tests/test_subgraph_persistence.py"
+    "tests/test_subgraph_persistence_async.py"
+    "tests/test_time_travel.py"
+    "tests/test_time_travel_async.py"
+
+    # Race condition
+    "tests/test_retry.py::test_error_handler_resumes_after_crash_multiple_nodes"
   ];
 
   # Since `langgraph` is the only unprefixed package, we have to use an explicit match
   passthru = {
-    # python updater script sets the wrong tag
     skipBulkUpdate = true;
     updateScript = nix-update-script {
       extraArgs = [
@@ -147,8 +157,8 @@ buildPythonPackage rec {
   meta = {
     description = "Build resilient language agents as graphs";
     homepage = "https://github.com/langchain-ai/langgraph";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

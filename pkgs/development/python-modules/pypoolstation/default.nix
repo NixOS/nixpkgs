@@ -5,20 +5,20 @@
   buildPythonPackage,
   fetchPypi,
   importlib-metadata,
-  poetry-core,
+  hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pypoolstation";
-  version = "0.5.8";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-GIRx66esht82tKBJDhCDrwPkxsdBPi1w9tSQ7itF0qQ=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-wg7bFdK5FkTqKoGXRdBD9MKwLRm9mHvBVVne/CONb1k=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
@@ -32,9 +32,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pypoolstation" ];
 
   meta = {
-    description = "Python library to interact the the Poolstation platform";
+    description = "Python library to interact with the Poolstation platform";
     homepage = "https://github.com/cibernox/PyPoolstation";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

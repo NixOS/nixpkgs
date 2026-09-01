@@ -6,12 +6,12 @@
   coreutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "renameutils";
   version = "0.12.0";
 
   src = fetchurl {
-    url = "mirror://savannah/renameutils/renameutils-${version}.tar.gz";
+    url = "mirror://savannah/renameutils/renameutils-${finalAttrs.version}.tar.gz";
     sha256 = "18xlkr56jdyajjihcmfqlyyanzyiqqlzbhrm6695mkvw081g1lnb";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
   };
-}
+})

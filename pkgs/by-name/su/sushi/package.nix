@@ -24,13 +24,13 @@
   libepoxy,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sushi";
-  version = "46.0";
+  version = "50.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/sushi/${lib.versions.major version}/sushi-${version}.tar.xz";
-    hash = "sha256-lghbqqQwqyFCxgaqtcR+L7sv0+two1ITfmXFmlig8sY=";
+    url = "mirror://gnome/sources/sushi/${lib.versions.major finalAttrs.version}/sushi-${finalAttrs.version}.tar.xz";
+    hash = "sha256-qyUXeQjVzMWFaHaageubTzIwZ4bmxzYYGT6/YaEn7gA=";
   };
 
   nativeBuildInputs = [
@@ -62,6 +62,11 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-ugly
   ];
 
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace-fail "gjs = find_program('gjs', 'gjs-console')" "gjs = find_program('${lib.getExe gjs}')"
+  '';
+
   # See https://github.com/NixOS/nixpkgs/issues/31168
   postInstall = ''
     for file in $out/libexec/org.gnome.NautilusPreviewer
@@ -77,13 +82,15 @@ stdenv.mkDerivation rec {
     };
   };
 
+  strictDeps = true;
+
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/sushi";
-    changelog = "https://gitlab.gnome.org/GNOME/sushi/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/sushi/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Quick previewer for Nautilus";
     mainProgram = "sushi";
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

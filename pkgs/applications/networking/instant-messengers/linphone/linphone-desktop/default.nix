@@ -3,6 +3,7 @@
   bc-soci,
   bctoolbox,
   belcard,
+  cacert,
   belle-sip,
   belr,
   boost,
@@ -11,13 +12,14 @@
   fetchFromGitLab,
   lib,
   liblinphone,
-  libsForQt5,
   lime,
+  linphoneSdkVersion,
   mediastreamer2,
   minizip-ng,
   msopenh264,
   python3,
   python3Packages,
+  qt6Packages,
   stdenv,
   symlinkJoin,
   xercesc,
@@ -39,23 +41,25 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "linphone-desktop";
-  version = "5.3.1";
+  version = "6.2.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
     repo = "linphone-desktop";
-    rev = finalAttrs.version;
-    hash = "sha256-TO9JNsOnx4sTJEkai0nDKNyZWcLuGoWfuKLBM79tQvs=";
+    tag = finalAttrs.version;
+    hash = "sha256-JtNYeMu174afzuWSVIuLyI5M16iC5XGr2qTcTsixRg8=";
   };
 
   patches = [
-    ./require-finding-packages.patch
-    ./remove-bc-versions.patch
     ./do-not-override-install-prefix.patch
-    ./fix-translation-dirs.patch
-    ./unset-qml-dir.patch
+    ./do-not-manually-compute-sdk-version.patch
+    ./always-install-desktop-files.patch
+    ./use-absolute-resource-paths.patch
+    # Linphone creates a broken desktop file.
+    # See: https://github.com/NixOS/nixpkgs/issues/551204
+    ./no-user-desktop-file.patch
 
     # .mkv recordings are broken in NixOS and other distros (see
     # https://github.com/NixOS/nixpkgs/issues/219551), and simply changing the
@@ -67,7 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     # Made by BC
     bctoolbox
-    belcard
     belle-sip
     belr
     liblinphone
@@ -79,11 +82,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     xercesc
     minizip-ng
-    libsForQt5.qtgraphicaleffects
-    libsForQt5.qtmultimedia
-    libsForQt5.qtquickcontrols2
+    qt6Packages.qtbase
+    qt6Packages.qtnetworkauth
+    qt6Packages.qtkeychain
     zxing-cpp
     boost
+    cacert
 
     python3Packages.pystache
     python3Packages.six
@@ -91,8 +95,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    libsForQt5.qttools
-    libsForQt5.wrapQtAppsHook
+    qt6Packages.qttools
+    qt6Packages.wrapQtAppsHook
     python3
     doxygen
   ];
@@ -106,32 +110,38 @@ stdenv.mkDerivation (finalAttrs: {
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
 
-    # Requires EQt5Keychain
-    "-DENABLE_QT_KEYCHAIN=OFF"
-
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DLINPHONEAPP_VERSION=${finalAttrs.version}"
     "-DLINPHONE_QT_ONLY=ON"
     "-DLINPHONEAPP_INSTALL_PREFIX=${placeholder "out"}"
-    "-DLINPHONE_QML_DIR=${placeholder "out"}/${libsForQt5.qtbase.qtQmlPrefix}/ui"
+    "-DLINPHONE_QML_DIR=${placeholder "out"}/${qt6Packages.qtbase.qtQmlPrefix}/ui"
+    "-DLINPHONESDK_VERSION=${linphoneSdkVersion}"
 
     # normally set by the custom find modules, which we have disabled
     "-DLibLinphone_TARGET=liblinphone"
     "-DLinphoneCxx_TARGET=liblinphone++"
     "-DISpell_SOURCE_DIR=${bc-ispell.src}"
+
+    # used in Linphone's CMakeLists.txt
+    "-DLINPHONEAPP_VERSION=${finalAttrs.version}"
+
+    # Disable update check
+    "-DENABLE_UPDATE_CHECK=OFF"
   ];
+
+  # error: invalid conversion from 'int' to 'const char*'
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
 
   preConfigure = ''
     # custom "find" modules are causing issues during build,
     # as they are blinding cmake to nix dependencies
-    rm -rf linphone-app/cmake
+    rm -rf cmake/Modules
   '';
 
   preInstall = ''
     mkdir -p $out/share/linphone
-    mkdir -p $out/share/sounds/linphone
     mkdir -p $out/share/belr
   '';
 
@@ -147,6 +157,15 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${msopenh264}/lib/mediastreamer/plugins/* $out/lib/mediastreamer/plugins/
     ln -s ${mediastreamer2}/lib/mediastreamer/plugins/* $out/lib/mediastreamer/plugins/
     ln -s ${grammars} $out/share/belr/grammars
+
+    # linphone looks for the TLS root CA bundle at `<dataResourcesDir>/rootca.pem`
+    # (with `<dataResourcesDir>` made absolute by `use-absolute-resource-paths.patch`).
+    # Provide nixpkgs' cacert bundle there instead of shipping the stale one
+    # bundled with linphone-sdk.
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/linphone/rootca.pem
+
+    mkdir -p $out/share/sounds/linphone/
+    ln -s ${liblinphone}/share/sounds/linphone/rings $out/share/sounds/linphone/rings
 
     wrapProgram $out/bin/linphone \
       --unset QML2_IMPORT_PATH \

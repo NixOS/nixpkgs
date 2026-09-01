@@ -50,7 +50,7 @@ python3Packages.buildPythonPackage rec {
 
   postInstall = ''
     install -Dm644 nwg-clipman.desktop -t $out/share/applications/
-    install -Dm644 nwg-clipman.svg -t $out/share/pixmaps/
+    install -Dm644 nwg-clipman.svg -t $out/share/icons/hicolor/scalable/apps/
   '';
 
   strictDeps = true;

@@ -10,15 +10,15 @@
   withGeolocation ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "goaccess";
-  version = "1.9.4";
+  version = "1.11";
 
   src = fetchFromGitHub {
     owner = "allinurl";
     repo = "goaccess";
-    tag = "v${version}";
-    hash = "sha256-KevxuZuIrMybNlPZgVDLO0zQe4LfAKxfVBbHnyTUC/o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9Z57T0MPs3ytwi32fMF67j8h7ml20cw4Hf+/DEg5AQY=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -45,10 +45,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Real-time web log analyzer and interactive viewer that runs in a terminal in *nix systems";
     homepage = "https://goaccess.io";
-    changelog = "https://github.com/allinurl/goaccess/raw/v${version}/ChangeLog";
+    changelog = "https://github.com/allinurl/goaccess/raw/v${finalAttrs.version}/ChangeLog";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ederoyd46 ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "goaccess";
   };
-}
+})

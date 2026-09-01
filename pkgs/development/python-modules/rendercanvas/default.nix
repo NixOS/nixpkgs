@@ -31,7 +31,7 @@ buildPythonPackage rec {
   '';
 
   env = {
-    # This relaxes the timeing assertions thus making the tests less flaky
+    # This relaxes the timing assertions thus making the tests less flaky
     CI = "1";
   };
 

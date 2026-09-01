@@ -4,26 +4,38 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_11,
   nodejs,
+  nodejs-slim_latest,
   nix-update-script,
   makeBinaryWrapper,
 }:
+let
+  # Fix pnpm issue on darwin https://github.com/NixOS/nixpkgs/issues/525627.
+  pnpm = pnpm_11.override {
+    nodejs-slim = nodejs-slim_latest;
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vue-language-server";
-  version = "3.2.2";
+  version = "3.3.10";
 
   src = fetchFromGitHub {
     owner = "vuejs";
     repo = "language-tools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-oVIWRCnJkJK1CsgNp7l95uuILeXv2XuwwfGElGnOEyU=";
+    hash = "sha256-3x3idLqfh3SiyyMWaCUencgvY82yjP2nTeOFASEBFbM=";
   };
 
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-lxRify3uJnqYH6btmXU9yaO8LJDGBZcyONLUHv2rLqg=";
+    inherit (finalAttrs)
+      pname
+      src
+      version
+      ;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-aUxUw3PjlSyUATb2FFQstpq+3P3ymPGZnmdiuYUQ3AE=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     find packages.dontpruneme/**/node_modules -xtype l -delete
     mv packages.dontpruneme packages
 
-    find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
+    find -type f \( -name "*.ts" ! -name "*.d.ts" -o -name "*.map" \) -exec rm -rf {} +
 
     # https://github.com/pnpm/pnpm/issues/3645
     find node_modules packages/language-server/node_modules -xtype l -delete

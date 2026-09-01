@@ -2,32 +2,38 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  gzip,
+  makeBinaryWrapper,
   pkg-config,
   openssl,
-  gzip,
   gitMinimal,
+  python3,
   nix-update-script,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fresh";
-  version = "0.1.88";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "sinelaw";
     repo = "fresh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aGGLqtvJ/kaGZtbpzLUQ40wPMp+g8+WCxXk9t+fQR7M=";
+    hash = "sha256-jL8msC8YTmrD/FHcGHbyuBGqnZmYkYr+pZb3HKYrvQw=";
   };
 
-  cargoHash = "sha256-67XM9j3dZ+4TKVYsM4mTuKHZcxc4EcvlHjxSNRIz9y0=";
+  cargoHash = "sha256-hWFGKvob0DuIX2rP20Iq15nTSTpUBxLURiVwI5LNBII=";
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
-    pkg-config
     gzip
+    makeBinaryWrapper
+    pkg-config
   ];
 
   nativeCheckInputs = [
+    python3
     gitMinimal
     rustPlatform.bindgenHook
   ];
@@ -41,6 +47,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall = ''
+    wrapProgram $out/bin/${finalAttrs.meta.mainProgram} \
+      --add-flags "--no-upgrade-check" \
+      --prefix PATH : ${lib.makeBinPath [ python3 ]}
     rm -rf $out/bin/fresh.dSYM
   '';
 
@@ -76,7 +85,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [
       fromSource
-      binaryNativeCode # librusty_v8.a
     ];
   };
 })

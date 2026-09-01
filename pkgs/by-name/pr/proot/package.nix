@@ -12,14 +12,14 @@
   enablePython ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "proot";
   version = "5.4.0";
 
   src = fetchFromGitHub {
     repo = "proot";
     owner = "proot-me";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Z9Y7ccWp5KEVuo9xfHcgo58XqYVdFo7ck1jH7cnT2KA=";
   };
 
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "proot";
   };
-}
+})

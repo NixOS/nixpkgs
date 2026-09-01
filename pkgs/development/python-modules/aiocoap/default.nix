@@ -15,7 +15,7 @@
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiocoap";
   version = "0.4.17";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chrysn";
     repo = "aiocoap";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-l9MChfvBTJn/ABTqrw4i+YUNGJnDZmOJS/kumImaa/s=";
   };
 
@@ -70,8 +70,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python CoAP library";
     homepage = "https://aiocoap.readthedocs.io/";
-    changelog = "https://github.com/chrysn/aiocoap/blob/${src.tag}/NEWS";
+    changelog = "https://github.com/chrysn/aiocoap/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

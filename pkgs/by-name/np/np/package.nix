@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "np";
   version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "leesoh";
     repo = "np";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4krjQi/zEC4a+CjacgbnQIMKKFVr6H2FSwRVB6pkHf0=";
   };
 
@@ -25,9 +25,9 @@ buildGoModule rec {
   meta = {
     description = "Tool to parse, deduplicate, and query multiple port scans";
     homepage = "https://github.com/leesoh/np";
-    changelog = "https://github.com/leesoh/np/releases/tag/v${version}";
+    changelog = "https://github.com/leesoh/np/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "np";
   };
-}
+})

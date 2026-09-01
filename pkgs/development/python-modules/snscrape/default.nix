@@ -53,7 +53,7 @@ buildPythonPackage rec {
     description = "Social networking service scraper";
     homepage = "https://github.com/JustAnotherArchivist/snscrape";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ivan ];
+    maintainers = [ ];
     mainProgram = "snscrape";
   };
 }

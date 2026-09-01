@@ -10,14 +10,14 @@
   opencv,
   makeWrapper,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tplay";
   version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "maxcurzi";
     repo = "tplay";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-JVkezG2bs99IFOTONeZZRljjbi0EhFf+DMxcfiWI4p4=";
   };
 
@@ -59,4 +59,4 @@ rustPlatform.buildRustPackage rec {
       colemickens
     ];
   };
-}
+})

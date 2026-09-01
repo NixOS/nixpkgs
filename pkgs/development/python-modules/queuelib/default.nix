@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "queuelib";
-  version = "1.8.0";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WCvGVRRIEQCwU5vWcdprNVuHiGnPx32Sxjt1/MnPjic=";
+    hash = "sha256-BjyCHDKFmui9zizJ50FWZFwHQhikZPgmLimjuN6Dlzc=";
   };
 
   build-system = [ hatchling ];

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyperlink";
   version = "0.1.35";
 
   src = fetchFromGitHub {
     owner = "untitaker";
     repo = "hyperlink";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-sx1OW056s40uhwwgGtNKiPkKSUy7/ZzSYGnjc0UKh/E=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ samueltardieu ];
     mainProgram = "hyperlink";
   };
-}
+})

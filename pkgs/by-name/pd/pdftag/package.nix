@@ -11,14 +11,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pdftag";
   version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "arrufat";
     repo = "pdftag";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1paj8hs27akzsivn01a30fl3zx5gfn1h89wxg2m72fd806hk0hql";
   };
 
@@ -36,8 +36,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Edit metadata found in PDFs";
+    homepage = "https://github.com/arrufat/pdftag";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
     mainProgram = "pdftag";
   };
-}
+})

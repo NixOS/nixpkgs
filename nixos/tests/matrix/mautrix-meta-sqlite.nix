@@ -4,7 +4,7 @@ let
   homeserverUrl = "http://server:8008";
   username = "alice";
   instagramBotUsername = "instagrambot";
-  facebookBotUsername = "facebookbot";
+  metaBotUsername = "metabot";
 in
 {
   name = "mautrix-meta-sqlite";
@@ -60,7 +60,16 @@ in
             appservice = {
               port = 8009;
 
-              bot.username = facebookBotUsername;
+              bot = {
+                username = metaBotUsername;
+                avatar = "";
+              };
+            };
+
+            encryption = {
+              allow = false;
+              default = false;
+              require = false;
             };
 
             bridge.permissions."@${username}:server" = "user";
@@ -79,7 +88,16 @@ in
             appservice = {
               port = 8010;
 
-              bot.username = instagramBotUsername;
+              bot = {
+                username = instagramBotUsername;
+                avatar = "";
+              };
+            };
+
+            encryption = {
+              allow = false;
+              default = false;
+              require = false;
             };
 
             bridge.permissions."@${username}:server" = "user";
@@ -136,16 +154,17 @@ in
               import functools
               import asyncio
 
-              from nio import AsyncClient, RoomMessageNotice, RoomCreateResponse, RoomInviteResponse
+              from nio import AsyncClient, RoomMessageText, RoomCreateResponse, RoomInviteResponse
 
 
-              async def message_callback(matrix: AsyncClient, msg: str, _r, e):
+              async def message_callback(matrix: AsyncClient, expected_msg: str, expected_sender: str, _r, e):
                   print("Received matrix text message: ", e)
-                  assert msg in e.body
-                  exit(0)  # Success!
+                  if getattr(e, "sender", "") == expected_sender and expected_msg in getattr(e, "body", ""):
+                      print("Success!")
+                      exit(0)  # Success!
 
 
-              async def run(username: str, bot_username: str, homeserver: str):
+              async def run(username: str, bot_username: str, homeserver: str, expected_msg: str):
                   matrix = AsyncClient(homeserver, f"@{username}:${homeserverDomain}")
 
                   response = await matrix.login("foobar")
@@ -161,16 +180,16 @@ in
                   assert isinstance(response, RoomInviteResponse)
 
                   callback = functools.partial(
-                      message_callback, matrix, "Hello, I'm an Instagram bridge bot."
+                      message_callback, matrix, expected_msg, f"@{bot_username}:${homeserverDomain}"
                   )
-                  matrix.add_event_callback(callback, RoomMessageNotice)
+                  matrix.add_event_callback(callback, RoomMessageText)
 
                   print("Waiting for matrix message...")
                   await matrix.sync_forever(timeout=30000)
 
 
               if __name__ == "__main__":
-                  asyncio.run(run(sys.argv[1], sys.argv[2], sys.argv[3]))
+                  asyncio.run(run(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]))
             ''
           )
         ];
@@ -181,11 +200,10 @@ in
     def extract_token(data):
         stdout = data[1]
         stdout = stdout.strip()
-        line = stdout.split('\n')[-1]
-        return line.split(':')[-1].strip("\" '\n")
+        return stdout.split(':')[-1].strip("\" '\n")
 
     def get_token_from(token, file):
-        data = server.execute(f"cat {file} | grep {token}")
+        data = server.execute(f"grep -E '^\\s*{token}:' {file}")
         return extract_token(data)
 
     def get_as_token_from(file):
@@ -216,8 +234,8 @@ in
         client.succeed("register_user ${username} ${homeserverUrl} >&2")
 
     with subtest("ensure messages can be exchanged"):
-        client.succeed("do_test ${username} ${facebookBotUsername} ${homeserverUrl} >&2")
-        client.succeed("do_test ${username} ${instagramBotUsername} ${homeserverUrl} >&2")
+        client.succeed("do_test ${username} ${metaBotUsername} ${homeserverUrl} \"Hello, I'm a Facebook Messenger bridge bot.\" >&2")
+        client.succeed("do_test ${username} ${instagramBotUsername} ${homeserverUrl} \"Hello, I'm a Instagram bridge bot.\" >&2")
 
     with subtest("ensure as_token and hs_token stays same after restart"):
         generated_as_token_facebook = get_as_token_from(config_yaml)
@@ -252,7 +270,7 @@ in
         assert generated_hs_token_facebook == new_hs_token_facebook, f"hs_token should stay the same after restart inside the registration file (is: {new_hs_token_facebook}, was: {generated_hs_token_facebook})"
 
     with subtest("ensure messages can be exchanged after restart"):
-        client.succeed("do_test ${username} ${instagramBotUsername} ${homeserverUrl} >&2")
-        client.succeed("do_test ${username} ${facebookBotUsername} ${homeserverUrl} >&2")
+        client.succeed("do_test ${username} ${instagramBotUsername} ${homeserverUrl} \"Hello, I'm a Instagram bridge bot.\" >&2")
+        client.succeed("do_test ${username} ${metaBotUsername} ${homeserverUrl} \"Hello, I'm a Facebook Messenger bridge bot.\" >&2")
   '';
 }

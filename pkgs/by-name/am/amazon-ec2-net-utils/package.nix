@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "amazon-ec2-net-utils";
-  version = "2.7.1";
+  version = "2.7.6";
 
   src = fetchFromGitHub {
     owner = "amazonlinux";
     repo = "amazon-ec2-net-utils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9dhTQLmWIOm0q51l/BgkxTFcUjub7w9Yk+QdvuZi/3k=";
+    hash = "sha256-R21CxvGxVHKE65C0maII+KOiFZs2wtrzf6oDiq15juo=";
   };
 
   strictDeps = true;

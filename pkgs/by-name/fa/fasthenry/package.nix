@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Wno-error=implicit-function-declaration"
     "-Wno-error=implicit-int"
     "-Wno-error=return-mismatch"
+    # gcc15
+    "-std=gnu17"
   ];
 
   makeFlags = [ "all" ]; # need "all" to be explicitely set

@@ -2,6 +2,7 @@
   stdenv,
   lib,
   callPackage,
+  installFonts,
 }:
 let
   src = (callPackage ./sources.nix { }).stable;
@@ -13,14 +14,14 @@ stdenv.mkDerivation {
   sourceRoot = "wine-${src.version}/fonts";
   inherit src;
 
-  installPhase = ''
-    install *.ttf -Dt $out/share/fonts/wine
-  '';
+  nativeBuildInputs = [
+    installFonts
+  ];
 
   meta = {
     description = "Microsoft replacement fonts by the Wine project";
     homepage = "https://wiki.winehq.org/Create_Fonts";
-    license = with lib.licenses; [ lgpl21Plus ];
+    license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       avnik

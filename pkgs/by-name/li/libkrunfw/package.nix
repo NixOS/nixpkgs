@@ -21,23 +21,25 @@ assert lib.elem variant [
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkrunfw" + lib.optionalString (variant != null) "-${variant}";
-  version = "4.10.0";
-
-  src = fetchFromGitHub {
-    owner = "containers";
-    repo = "libkrunfw";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-mq2gw0+xL6qUZE/fk0vLT3PEpzPV8p+iwRFJHXVOMnk=";
-  };
+  version = "5.5.0";
 
   kernelSrc = fetchurl {
-    url = "mirror://kernel/linux/kernel/v6.x/linux-6.12.34.tar.xz";
-    hash = "sha256-p/P+OB9n7KQXLptj77YaFL1/nhJ44DYD0P9ak/Jwwk0=";
+    url = "mirror://kernel/linux/kernel/v6.x/linux-6.12.91.tar.xz";
+    hash = "sha256-D/KrnhafnxlIVXRx+7RQ0wGPjFt3yvKI4aOYJYJZeWk=";
+  };
+
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "libkrun";
+    repo = "libkrunfw";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MF1oDqhS4xqyQJIntl4DBfDBvuqCxQn9Zdws82Tn5Gg=";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace 'curl $(KERNEL_REMOTE) -o $(KERNEL_TARBALL)' 'ln -s $(kernelSrc) $(KERNEL_TARBALL)'
+      --replace-fail 'curl $(KERNEL_REMOTE) -o $(KERNEL_TARBALL)' 'ln -s ${finalAttrs.kernelSrc} $(KERNEL_TARBALL)'
   '';
 
   nativeBuildInputs = [
@@ -65,13 +67,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Fixes https://github.com/containers/libkrunfw/issues/55
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.targetPlatform.isAarch64 "-march=armv8-a+crypto";
+  env = lib.optionalAttrs stdenv.targetPlatform.isAarch64 {
+    NIX_CFLAGS_COMPILE = "-march=armv8-a+crypto";
+  };
 
   enableParallelBuilding = true;
 
   meta = {
     description = "Dynamic library bundling the guest payload consumed by libkrun";
-    homepage = "https://github.com/containers/libkrunfw";
+    homepage = "https://github.com/libkrun/libkrunfw";
     license = with lib.licenses; [
       lgpl2Only
       lgpl21Only
@@ -81,6 +85,12 @@ stdenv.mkDerivation (finalAttrs: {
       RossComputerGuy
       nrabulinski
     ];
-    platforms = [ "x86_64-linux" ] ++ lib.optionals (variant == null) [ "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+    ]
+    ++ lib.optionals (variant == null) [
+      "aarch64-linux"
+      "riscv64-linux"
+    ];
   };
 })

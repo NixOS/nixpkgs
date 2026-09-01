@@ -3,12 +3,12 @@
   stdenv,
   fetchFromGitHub,
   dash,
-  libX11,
-  libXext,
-  libXft,
-  libXinerama,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxext,
+  libxft,
+  libxinerama,
+  libxrandr,
+  libxrender,
   libixp,
   pkg-config,
   txt2tags,
@@ -57,12 +57,12 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     dash
-    libX11
-    libXext
-    libXft
-    libXinerama
-    libXrandr
-    libXrender
+    libx11
+    libxext
+    libxft
+    libxinerama
+    libxrandr
+    libxrender
     libixp
     txt2tags
     which

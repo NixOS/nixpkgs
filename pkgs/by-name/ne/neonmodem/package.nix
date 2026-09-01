@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "neonmodem";
-  version = "1.0.7";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "mrusme";
     repo = "neonmodem";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gwhQG8H1OnGQmawPQ3m6VKVooBh8rZaNr6FDl6fgZXc=";
+    hash = "sha256-O12zkygenzSMNwV5gqJuW5/vCblU/ebbT/0JotrfNiQ=";
   };
 
-  vendorHash = "sha256-zqQtuyFrsDB1xRdl4cbaTsCawMrBvcu78zXgU2jUwHI=";
+  vendorHash = "sha256-PAtt72mGPDyS1wZMHOwrO8crC0mJ1GPAIm3i5T16xQY=";
 
   passthru.updateScript = nix-update-script { };
 
@@ -44,7 +44,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://neonmodem.com";
     downloadPage = "https://github.com/mrusme/neonmodem/releases";
     changelog = "https://github.com/mrusme/neonmodem/releases/tag/v${finalAttrs.version}";
+
+    # license is expected to change with the next release (commit: b3b5ff2)
     license = lib.licenses.gpl3Only;
+
     maintainers = with lib.maintainers; [ acuteaangle ];
     mainProgram = "neonmodem";
   };

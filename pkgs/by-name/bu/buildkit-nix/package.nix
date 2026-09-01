@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "buildkit-nix";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "reproducible-containers";
     repo = "buildkit-nix";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-i8KQLLL36iP26jIj10fZLtYpS57Xni4eIQEJG4ixWy8=";
   };
 
@@ -32,4 +32,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ lesuisse ];
     mainProgram = "buildkit-nix";
   };
-}
+})

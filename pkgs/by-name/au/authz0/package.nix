@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "authz0";
   version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "hahwul";
     repo = "authz0";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-NrArxuhzd57NIdM4d9p/wfCB1e6l83pV+cjjCgZ9YtM=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

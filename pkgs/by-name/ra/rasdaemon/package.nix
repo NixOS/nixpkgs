@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rasdaemon";
-  version = "0.8.4";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "mchehab";
     repo = "rasdaemon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rk4CZrWQRe2wsx8/eXP0BIeaU/Gxmcb+Kry5F8t4YKQ=";
+    hash = "sha256-CN9fSo7CQFkbpxPRwFSNJovTJBAjqEhqQzwHfYirGmo=";
   };
 
   strictDeps = true;
@@ -122,6 +122,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     changelog = "${finalAttrs.meta.homepage}/releases/tag/v${finalAttrs.version}";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.zowoq ];
   };
 })

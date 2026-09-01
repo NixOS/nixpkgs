@@ -8,12 +8,12 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "remarkable2-toolchain";
   version = "3.1.2";
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/remarkable-codex-toolchain/codex-x86_64-cortexa7hf-neon-rm11x-toolchain-${version}.sh";
+    url = "https://storage.googleapis.com/remarkable-codex-toolchain/codex-x86_64-cortexa7hf-neon-rm11x-toolchain-${finalAttrs.version}.sh";
     sha256 = "sha256-JKMDRbkvoxwHiTm/o4JdLn3Mm2Ld1LyxTnCCwvnxk4c=";
     executable = true;
   };
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ tadfisher ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

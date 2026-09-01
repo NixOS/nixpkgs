@@ -5,9 +5,10 @@
   fetchpatch,
   asciidoc,
   libxcb,
-  xcbutil,
-  xcbutilkeysyms,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-keysyms,
+  libxcb-wm,
+  versionCheckHook,
   nixosTests,
 }:
 
@@ -18,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "baskerville";
     repo = "sxhkd";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-kbjbTzYL2dz/RpG+SgBYy+XS3W9PBEWkg6ocqAFG3VQ=";
   };
 
@@ -34,14 +35,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcb
-    xcbutil
-    xcbutilkeysyms
-    xcbutilwm
+    libxcb-util
+    libxcb-keysyms
+    libxcb-wm
   ];
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.tests = {
     inherit (nixosTests) startx;

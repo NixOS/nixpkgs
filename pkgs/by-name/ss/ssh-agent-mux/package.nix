@@ -5,14 +5,14 @@
   openssh,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ssh-agent-mux";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "overhacked";
     repo = "ssh-agent-mux";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-tIGrENlZcT9fGke6MRnsLsmm+kb0Mm3C6DckkZi8hpE=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.kalbasit ];
     mainProgram = "ssh-agent-mux";
   };
-}
+})

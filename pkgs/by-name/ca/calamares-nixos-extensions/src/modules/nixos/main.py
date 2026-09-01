@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import configparser
+import json
 import libcalamares
 import os
 import subprocess
@@ -19,9 +20,10 @@ _ = gettext.translation(
 # The following strings contain pieces of a nix-configuration file.
 # They are adapted from the default config generated from the nixos-generate-config command.
 
-cfghead = """# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
+cfghead = """\
+# Edit this configuration file to define what should be installed on
+# your system. Help is available in the configuration.nix(5) man page, on
+# https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
 { config, pkgs, ... }:
 
@@ -32,20 +34,23 @@ cfghead = """# Edit this configuration file to define what should be installed o
     ];
 
 """
-cfgbootefi = """  # Bootloader.
+cfgbootefi = """\
+  # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
 """
 
-cfgbootbios = """  # Bootloader.
+cfgbootbios = """\
+  # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "@@bootdev@@";
   boot.loader.grub.useOSProber = true;
 
 """
 
-cfgbootbiosbtrfs = """  # Bootloader.
+cfgbootbiosbtrfs = """\
+  # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "@@bootdev@@";
   boot.loader.grub.useOSProber = true;
@@ -54,12 +59,14 @@ cfgbootbiosbtrfs = """  # Bootloader.
 
 """
 
-cfgbootnone = """  # Disable bootloader.
+cfgbootnone = """\
+  # Disable bootloader.
   boot.loader.grub.enable = false;
 
 """
 
-cfgbootgrubcrypt = """  # Setup keyfile
+cfgbootgrubcrypt = """\
+  # Setup keyfile
   boot.initrd.secrets = {
     "/boot/crypto_keyfile.bin" = null;
   };
@@ -68,7 +75,8 @@ cfgbootgrubcrypt = """  # Setup keyfile
 
 """
 
-cfgnetwork = """  networking.hostName = "@@hostname@@"; # Define your hostname.
+cfgnetwork = """\
+  networking.hostName = "@@hostname@@"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -77,32 +85,38 @@ cfgnetwork = """  networking.hostName = "@@hostname@@"; # Define your hostname.
 
 """
 
-cfgnetworkmanager = """  # Enable networking
+cfgnetworkmanager = """\
+  # Enable networking
   networking.networkmanager.enable = true;
 
 """
 
-cfgconnman = """  # Enable networking
+cfgconnman = """\
+  # Enable networking
   services.connman.enable = true;
 
 """
 
-cfgnmapplet = """  # Enable network manager applet
+cfgnmapplet = """\
+  # Enable network manager applet
   programs.nm-applet.enable = true;
 
 """
 
-cfgtime = """  # Set your time zone.
+cfgtime = """\
+  # Set your time zone.
   time.timeZone = "@@timezone@@";
 
 """
 
-cfglocale = """  # Select internationalisation properties.
+cfglocale = """\
+  # Select internationalisation properties.
   i18n.defaultLocale = "@@LANG@@";
 
 """
 
-cfglocaleextra = """  i18n.extraLocaleSettings = {
+cfglocaleextra = """\
+  i18n.extraLocaleSettings = {
     LC_ADDRESS = "@@LC_ADDRESS@@";
     LC_IDENTIFICATION = "@@LC_IDENTIFICATION@@";
     LC_MEASUREMENT = "@@LC_MEASUREMENT@@";
@@ -116,16 +130,15 @@ cfglocaleextra = """  i18n.extraLocaleSettings = {
 
 """
 
-cfggnome = """  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
+cfggnome = """\
   # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
 
 """
 
-cfgplasma6 = """  # Enable the X11 windowing system.
+cfgplasma6 = """\
+  # Enable the X11 windowing system.
   # You can disable this if you're only using the Wayland session.
   services.xserver.enable = true;
 
@@ -135,7 +148,8 @@ cfgplasma6 = """  # Enable the X11 windowing system.
 
 """
 
-cfgxfce = """  # Enable the X11 windowing system.
+cfgxfce = """\
+  # Enable the X11 windowing system.
   services.xserver.enable = true;
 
   # Enable the XFCE Desktop Environment.
@@ -144,7 +158,8 @@ cfgxfce = """  # Enable the X11 windowing system.
 
 """
 
-cfgpantheon = """  # Enable the X11 windowing system.
+cfgpantheon = """\
+  # Enable the X11 windowing system.
   services.xserver.enable = true;
 
   # Enable the Pantheon Desktop Environment.
@@ -153,7 +168,8 @@ cfgpantheon = """  # Enable the X11 windowing system.
 
 """
 
-cfgcinnamon = """  # Enable the X11 windowing system.
+cfgcinnamon = """\
+  # Enable the X11 windowing system.
   services.xserver.enable = true;
 
   # Enable the Cinnamon Desktop Environment.
@@ -162,7 +178,8 @@ cfgcinnamon = """  # Enable the X11 windowing system.
 
 """
 
-cfgmate = """  # Enable the X11 windowing system.
+cfgmate = """\
+  # Enable the X11 windowing system.
   services.xserver.enable = true;
 
   # Enable the MATE Desktop Environment.
@@ -171,7 +188,8 @@ cfgmate = """  # Enable the X11 windowing system.
 
 """
 
-cfgenlightenment = """  # Enable the X11 windowing system.
+cfgenlightenment = """\
+  # Enable the X11 windowing system.
   services.xserver.enable = true;
 
   # Enable the Enlightenment Desktop Environment.
@@ -183,7 +201,8 @@ cfgenlightenment = """  # Enable the X11 windowing system.
 
 """
 
-cfglxqt = """  # Enable the X11 windowing system.
+cfglxqt = """\
+  # Enable the X11 windowing system.
   services.xserver.enable = true;
 
   # Enable the LXQT Desktop Environment.
@@ -192,7 +211,8 @@ cfglxqt = """  # Enable the X11 windowing system.
 
 """
 
-cfglumina = """  # Enable the X11 windowing system.
+cfglumina = """\
+  # Enable the X11 windowing system.
   services.xserver.enable = true;
 
   # Enable the Lumina Desktop Environment.
@@ -201,7 +221,8 @@ cfglumina = """  # Enable the X11 windowing system.
 
 """
 
-cfgbudgie = """  # Enable the X11 windowing system.
+cfgbudgie = """\
+  # Enable the X11 windowing system.
   services.xserver.enable = true;
 
   # Enable the Budgie Desktop environment.
@@ -210,19 +231,22 @@ cfgbudgie = """  # Enable the X11 windowing system.
 
 """
 
-cfgkeymap = """  # Configure keymap in X11
+cfgkeymap = """\
+  # Configure keymap in X11
   services.xserver.xkb = {
     layout = "@@kblayout@@";
     variant = "@@kbvariant@@";
   };
 
 """
-cfgconsole = """  # Configure console keymap
+cfgconsole = """\
+  # Configure console keymap
   console.keyMap = "@@vconsole@@";
 
 """
 
-cfgmisc = """  # Enable CUPS to print documents.
+cfgmisc = """\
+  # Enable CUPS to print documents.
   services.printing.enable = true;
 
   # Enable sound with pipewire.
@@ -236,17 +260,17 @@ cfgmisc = """  # Enable CUPS to print documents.
     # If you want to use JACK applications, uncomment this
     #jack.enable = true;
 
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
+    # Use the WirePlumber session manager
+    #wireplumber.enable = true;
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
+  # services.libinput.enable = true;
 
 """
-cfgusers = """  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.@@username@@ = {
+cfgusers = """\
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users."@@username@@" = {
     isNormalUser = true;
     description = "@@fullname@@";
     extraGroups = [ @@groups@@ ];
@@ -255,43 +279,43 @@ cfgusers = """  # Define a user account. Don't forget to set a password with ‘
 
 """
 
-cfgfirefox = """  # Install firefox.
+cfgfirefox = """\
+  # Install firefox.
   programs.firefox.enable = true;
 
 """
 
-cfgautologin = """  # Enable automatic login for the user.
+cfgautologin = """\
+  # Enable automatic login for the user.
   services.displayManager.autoLogin.enable = true;
   services.displayManager.autoLogin.user = "@@username@@";
 
 """
 
-cfgautologingdm = """  # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
-  systemd.services."getty@tty1".enable = false;
-  systemd.services."autovt@tty1".enable = false;
-
-"""
-
-cfgautologintty = """  # Enable automatic login for the user.
+cfgautologintty = """\
+  # Enable automatic login for the user.
   services.getty.autologinUser = "@@username@@";
 
 """
 
-cfgunfree = """  # Allow unfree packages
+cfgunfree = """\
+  # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
 """
 
-cfgpkgs = """  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
-  ];
+cfgpkgs = """\
+  # List packages installed in system profile.
+  # You can use https://search.nixos.org/ to find more packages (and options).
+  # environment.systemPackages = with pkgs; [
+  #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+  #   wget
+  # ];
 
 """
 
-cfgtail = """  # Some programs need SUID wrappers, can be configured further or are
+cfgtail = """\
+  # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
   # programs.gnupg.agent = {
@@ -310,18 +334,35 @@ cfgtail = """  # Some programs need SUID wrappers, can be configured further or 
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  # Copy the NixOS configuration file and link it from the resulting system
+  # (/run/current-system/configuration.nix). This is useful in case you
+  # accidentally delete configuration.nix.
+  # system.copySystemConfiguration = true;
+
+  # This option defines the first version of NixOS you have installed on this particular machine,
+  # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
+  #
+  # Most users should NEVER change this value after the initial install, for any reason,
+  # even if you've upgraded your system to a new NixOS release.
+  #
+  # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
+  # so changing it will NOT upgrade your system - see https://nixos.org/manual/nixos/stable/#sec-upgrading for how
+  # to actually do that.
+  #
+  # This value being lower than the current NixOS release does NOT mean your system is
+  # out of date, out of support, or vulnerable.
+  #
+  # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
+  # and migrated your data accordingly.
+  #
+  # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "@@nixosversion@@"; # Did you read the comment?
 
 }
 """
 
-cfglatestkernel = """  # Use latest kernel.
+cfglatestkernel = """\
+  # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
 """
@@ -409,12 +450,160 @@ def fix_btrfs_subvolumes(hardware_config, partitions):
     return hardware_config
 
 
+# nix internal-json activity/result types
+_ACT_COPY_PATH = 100
+_ACT_COPY_PATHS = 103
+_ACT_BUILDS = 104
+_RES_PROGRESS = 105
+
+
+class NixProgress:
+    """Parse nix internal-json output and track build/copy progress."""
+
+    def __init__(self):
+        self._builds_done = 0
+        self._builds_expected = 0
+        self._copies_done = 0
+        self._copies_expected = 0
+        self._per_act_progress = {}
+        self._copy_bytes = {}
+        self._activities = {}
+        self.fraction = 0.0
+        self._floor = 0.0
+        self._floor_done = 0
+        self.log_messages = []
+
+    def handle(self, line):
+        """Process one line. Returns True for @nix lines, False for plain text."""
+        line = line.strip()
+        if not line:
+            return True
+        if not line.startswith("@nix "):
+            return False
+        try:
+            msg = json.loads(line[5:])
+        except (json.JSONDecodeError, ValueError):
+            return False
+
+        action = msg.get("action")
+        if action == "start":
+            self._on_start(msg)
+        elif action == "stop":
+            self._on_stop(msg)
+        elif action == "result":
+            self._on_result(msg)
+        elif action == "msg":
+            level = msg.get("level", 0)
+            text = msg.get("msg", "")
+            if level <= 1 and text:
+                self.log_messages.append(text)
+
+        self._update()
+        return True
+
+    def _on_start(self, msg):
+        act_id = msg["id"]
+        act_type = msg.get("type", 0)
+        self._activities[act_id] = act_type
+        text = msg.get("text", "")
+        if text and msg.get("level", 5) <= 3:
+            self.log_messages.append(text)
+
+    def _on_stop(self, msg):
+        act_id = msg["id"]
+        self._activities.pop(act_id, None)
+        self._copy_bytes.pop(act_id, None)
+
+    def _on_result(self, msg):
+        act_id = msg["id"]
+        res_type = msg.get("type", 0)
+        fields = msg.get("fields", [])
+        act_type = self._activities.get(act_id, 0)
+
+        if res_type != _RES_PROGRESS or len(fields) < 2:
+            return
+        if act_type == _ACT_BUILDS:
+            self._per_act_progress[(act_type, act_id)] = (
+                "builds",
+                fields[0],
+                fields[1],
+            )
+            self._recompute_counts()
+        elif act_type == _ACT_COPY_PATHS:
+            self._per_act_progress[(act_type, act_id)] = (
+                "copies",
+                fields[0],
+                fields[1],
+            )
+            self._recompute_counts()
+        elif act_type == _ACT_COPY_PATH:
+            self._copy_bytes[act_id] = (fields[0], max(fields[1], 1))
+
+    def _update(self):
+        count_total = self._builds_expected + self._copies_expected
+        count_done = self._builds_done + self._copies_done
+        if count_total <= 0:
+            return
+
+        # Prevents the channel copy (1 path) from dominating the
+        # entire progress bar before the main build starts.
+        effective_total = max(count_total, 3)
+        count_frac = count_done / effective_total
+
+        # large single-path copies move the bar.
+        total_bytes = sum(t for _, t in self._copy_bytes.values())
+        done_bytes = sum(d for d, _ in self._copy_bytes.values())
+        if total_bytes > 0:
+            byte_sub = done_bytes / total_bytes
+            step = len(self._copy_bytes) / effective_total
+            raw = count_frac + byte_sub * step
+        else:
+            raw = count_frac
+        raw = max(0.0, min(1.0, raw))
+
+        # When the denominator grows (e.g. main build discovers hundreds
+        # of new paths), remap remaining work into remaining bar space.
+        if raw >= self._floor:
+            self._floor = raw
+            self._floor_done = count_done
+        else:
+            new_items = count_done - self._floor_done
+            remaining = effective_total - self._floor_done
+            if remaining > 0 and new_items >= 0:
+                raw = self._floor + (new_items / remaining) * (1.0 - self._floor)
+            else:
+                raw = self._floor
+            raw = max(0.0, min(1.0, raw))
+            if raw > self._floor:
+                self._floor = raw
+                self._floor_done = count_done
+
+        self.fraction = raw
+
+    def _recompute_counts(self):
+        bd = be = cd = ce = 0
+        for kind, done, expected in self._per_act_progress.values():
+            if kind == "builds":
+                bd += done
+                be += expected
+            else:
+                cd += done
+                ce += expected
+        self._builds_done = bd
+        self._builds_expected = be
+        self._copies_done = cd
+        self._copies_expected = ce
+
+
 def run():
     """NixOS Configuration."""
 
+    INSTALL_PROGRESS_START = 0.1
+    INSTALL_PROGRESS_END = 1.0
+
     global status
     status = _("Configuring NixOS")
-    libcalamares.job.setprogress(0.1)
+    libcalamares.job.setprogress(0.01)
 
     ngc_cfg = configparser.ConfigParser()
     ngc_cfg["Defaults"] = { "Kernel": "lts" }
@@ -491,7 +680,7 @@ def run():
     ):
         cfg += cfgbootgrubcrypt
         status = _("Setting up LUKS")
-        libcalamares.job.setprogress(0.15)
+        libcalamares.job.setprogress(0.02)
         try:
             libcalamares.utils.host_env_process_output(
                 ["mkdir", "-p", root_mount_point + "/boot"], None
@@ -576,7 +765,7 @@ def run():
                     )
 
     status = _("Configuring NixOS")
-    libcalamares.job.setprogress(0.18)
+    libcalamares.job.setprogress(0.03)
 
     cfg += cfgnetwork
     if gs.value("packagechooser_packagechooser") == "enlightenment":
@@ -731,8 +920,6 @@ def run():
             and gs.value("packagechooser_packagechooser") != ""
         ):
             cfg += cfgautologin
-            if gs.value("packagechooser_packagechooser") == "gnome":
-                cfg += cfgautologingdm
         elif gs.value("autoLoginUser") is not None:
             cfg += cfgautologintty
 
@@ -781,7 +968,7 @@ def run():
         cfg = cfg.replace(pattern, str(variables[key]))
 
     status = _("Generating NixOS configuration")
-    libcalamares.job.setprogress(0.25)
+    libcalamares.job.setprogress(0.05)
 
     try:
         # Generate hardware.nix with mounted swap device
@@ -861,7 +1048,7 @@ def run():
     libcalamares.utils.host_env_process_output(["cp", "/dev/stdin", config], None, cfg)
 
     status = _("Installing NixOS")
-    libcalamares.job.setprogress(0.3)
+    libcalamares.job.setprogress(INSTALL_PROGRESS_START)
 
     try:
         subprocess.check_output(
@@ -880,6 +1067,8 @@ def run():
             "--no-root-passwd",
             "--root",
             root_mount_point,
+            "--log-format",
+            "internal-json",
             # Nix requires its build directory to have no
             # world-writable parent directories. The chroot store that
             # nixos-install uses will use the state dir in the chroot
@@ -892,7 +1081,8 @@ def run():
         ]
     )
 
-    # Install customizations
+    progress = NixProgress()
+
     try:
         output = ""
         proc = subprocess.Popen(
@@ -902,14 +1092,34 @@ def run():
         )
         while True:
             line = proc.stdout.readline().decode("utf-8")
-            output += line
-            libcalamares.utils.debug("nixos-install: {}".format(line.strip()))
             if not line:
                 break
+
+            was_json = progress.handle(line)
+
+            # Keep output for error reporting
+            if not was_json:
+                output += line
+            for log_line in progress.log_messages:
+                output += log_line + "\n"
+
+            mapped = INSTALL_PROGRESS_START + progress.fraction * (
+                INSTALL_PROGRESS_END - INSTALL_PROGRESS_START
+            )
+            libcalamares.job.setprogress(mapped)
+
+            for log_line in progress.log_messages:
+                libcalamares.utils.debug("nixos-install: {}".format(log_line))
+            progress.log_messages.clear()
+
+            if not was_json:
+                libcalamares.utils.debug("nixos-install: {}".format(line.strip()))
+
         exit = proc.wait()
         if exit != 0:
             return (_("nixos-install failed"), _(output))
     except:
         return (_("nixos-install failed"), _("Installation failed to complete"))
 
+    libcalamares.job.setprogress(INSTALL_PROGRESS_END)
     return None

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-playwright";
-  version = "0.7.2";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "playwright-pytest";
     tag = "v${version}";
-    hash = "sha256-FAG+lpo4cdfHSqQ1k0U2U0agTpUkEUIV+4veFijwR9A=";
+    hash = "sha256-R8I22TzfkXgNi6SEv149xdbyeUwXUNjwsOHlcieCLwQ=";
   };
 
   postPatch = ''

@@ -23,7 +23,7 @@
 
 assert withAppleSpell -> stdenv.hostPlatform.isDarwin;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "enchant";
   version = "2.6.9";
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://github.com/rrthomas/enchant/releases/download/v${version}/enchant-${version}.tar.gz";
+    url = "https://github.com/rrthomas/enchant/releases/download/v${finalAttrs.version}/enchant-${finalAttrs.version}.tar.gz";
     hash = "sha256-2aWhDcmzikOzoPoix27W67fgnrU1r/YpVK/NvUDv/2s=";
   };
 
@@ -91,4 +91,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jtojnar ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -16,11 +17,9 @@ stdenvNoCC.mkDerivation {
     rootDir = "ofl/inconsolata";
   };
 
-  installPhase = ''
-    runHook preInstall
-    install -m644 --target $out/share/fonts/truetype/inconsolata -D static/*.ttf *.ttf
-    runHook postInstall
-  '';
+  nativeBuildInputs = [
+    installFonts
+  ];
 
   meta = {
     homepage = "https://www.levien.com/type/myfonts/inconsolata.html";

@@ -5,26 +5,30 @@
   fetchFromGitHub,
   dotnetCorePackages,
   wrapGAppsHook3,
+  glib,
   glew,
   gtk3,
-  xorg,
+  libxrandr,
+  libxi,
+  libsecret,
+  libxcursor,
   nix-update-script,
 }:
 
 buildDotnetModule rec {
   pname = "libation";
-  version = "13.1.3";
+  version = "14.0.0";
 
   src = fetchFromGitHub {
     owner = "rmcrackan";
     repo = "Libation";
     tag = "v${version}";
-    hash = "sha256-gK0UZ+3EZGVEiy+O47GhU4wsHmdPIbrHWyHnUOtWrm8=";
+    hash = "sha256-sTZCcGFYdShTf4tgJS8D7qVu4ML2zHAQXDFnz72pAA8=";
   };
 
   sourceRoot = "${src.name}/Source";
 
-  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0_1xx;
 
   dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
@@ -47,11 +51,15 @@ buildDotnetModule rec {
   runtimeDeps = [
     # For Avalonia UI
     glew
-    xorg.libXrandr
-    xorg.libXi
-    xorg.libXcursor
+    libxrandr
+    libxi
+    libxcursor
     # For file dialogs
     gtk3
+    # For web view (login dialog); loaded via P/Invoke at runtime
+    glib
+    # For encrypting secrets
+    libsecret
   ];
 
   postInstall = ''

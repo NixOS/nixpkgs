@@ -5,15 +5,15 @@
   xsel,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yank";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "mptre";
     repo = "yank";
-    rev = "v${version}";
-    sha256 = "sha256-sZiZki2Zl0Tfmls5KrLGxT94Bdf9TA9EwoaLoFOX9B4=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-JSkUBKQKl5TlpA2MSk6Lt2n1L8MdhLKzH/urYkOqlJo=";
   };
 
   installFlags = [ "PREFIX=$(out)" ];
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     mainProgram = "yank";
   };
 
-}
+})

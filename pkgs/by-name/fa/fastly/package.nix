@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchurl,
   fetchFromGitHub,
   installShellFiles,
   buildGoModule,
@@ -10,15 +9,15 @@
   viceroy,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fastly";
-  version = "13.3.0";
+  version = "16.0.0";
 
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "cli";
-    tag = "v${version}";
-    hash = "sha256-DQPZUp5UYx8GSOC8SeERwmOJ6N1ZH23YHI+Na5BWLFU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gVKlAbiznaRKwDpiyap4Q3mIhn/ZbnUIFwG3l01ZXQ8=";
     # The git commit is part of the `fastly version` original output;
     # leave that output the same in nixpkgs. Use the `.git` directory
     # to retrieve the commit SHA, and remove the directory afterwards,
@@ -35,7 +34,7 @@ buildGoModule rec {
     "cmd/fastly"
   ];
 
-  vendorHash = "sha256-wMpMV2jTr4zc8uOmI5itLJLvtbfeSOI8XggZKeEJ/+s=";
+  vendorHash = "sha256-U2Ix8ZKGCDrWUJFFXJaL+1EBTbqblWp8slhruHhouIc=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -47,22 +46,15 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/fastly/cli/pkg/revision.AppVersion=v${version}"
+    "-X github.com/fastly/cli/pkg/revision.AppVersion=v${finalAttrs.version}"
     "-X github.com/fastly/cli/pkg/revision.Environment=release"
     "-X github.com/fastly/cli/pkg/revision.GoHostOS=${go.GOHOSTOS}"
     "-X github.com/fastly/cli/pkg/revision.GoHostArch=${go.GOHOSTARCH}"
   ];
-  preBuild =
-    let
-      cliConfigToml = fetchurl {
-        url = "https://web.archive.org/web/20240910172801/https://developer.fastly.com/api/internal/cli-config";
-        hash = "sha256-r4ahroyU4hyTN88UK02FvXU8OTQ6OoNInt9WrzZk7Bk=";
-      };
-    in
-    ''
-      cp ${cliConfigToml} ./pkg/config/config.toml
-      ldflags+=" -X github.com/fastly/cli/pkg/revision.GitCommit=$(cat COMMIT)"
-    '';
+  preBuild = ''
+    cp ./.fastly/config.toml ./pkg/config/config.toml
+    ldflags+=" -X github.com/fastly/cli/pkg/revision.GitCommit=$(cat COMMIT)"
+  '';
 
   preFixup = ''
     wrapProgram $out/bin/fastly --prefix PATH : ${lib.makeBinPath [ viceroy ]} \
@@ -79,11 +71,11 @@ buildGoModule rec {
   meta = {
     description = "Command line tool for interacting with the Fastly API";
     homepage = "https://github.com/fastly/cli";
-    changelog = "https://github.com/fastly/cli/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/fastly/cli/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       ereslibre
     ];
     mainProgram = "fastly";
   };
-}
+})

@@ -16,13 +16,13 @@
 #  -  Included plugins dependencies: dot, ditaa, dia, any other?
 #  -  pyxdg: Need to make it work first (see setupPyInstallFlags).
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "zim";
   version = "0.76.3";
   pyproject = true;
 
   src = fetchurl {
-    url = "https://zim-wiki.org/downloads/zim-${version}.tar.gz";
+    url = "https://zim-wiki.org/downloads/zim-${finalAttrs.version}.tar.gz";
     hash = "sha256-St8J6z8HcTj+Vb8m8T5sTZk2Fv5CSnmdG6a+CYzk6wU=";
   };
 
@@ -86,10 +86,10 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Desktop wiki";
     homepage = "https://zim-wiki.org/";
-    changelog = "https://github.com/zim-desktop-wiki/zim-desktop-wiki/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/zim-desktop-wiki/zim-desktop-wiki/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ pSub ];
     mainProgram = "zim";
     broken = stdenv.hostPlatform.isDarwin; # https://github.com/NixOS/nixpkgs/pull/52658#issuecomment-449565790
   };
-}
+})

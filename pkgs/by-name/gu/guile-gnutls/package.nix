@@ -10,13 +10,13 @@
   texinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-gnutls";
-  version = "5.0.1";
+  version = "5.0.2";
 
   src = fetchurl {
-    url = "mirror://gnu/gnutls/guile-gnutls-${version}.tar.gz";
-    hash = "sha256-zABn8+60IbwXJHFAlipJCG31RQ8NPnHFW/VBotK57ys=";
+    url = "mirror://gnu/gnutls/guile-gnutls-${finalAttrs.version}.tar.gz";
+    hash = "sha256-droqD0ft3n/S9YP8EWLtHOgzm9r36dnMOTh/zJX7k1s=";
   };
 
   strictDeps = true;
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = guile.meta.platforms;
   };
-}
+})

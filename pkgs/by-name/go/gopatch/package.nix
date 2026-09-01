@@ -6,14 +6,14 @@
   gopatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gopatch";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "uber-go";
     repo = "gopatch";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zP5zC71icrVvzKzBBlxfX9h5JlKd89cf32Q6eZatX44=";
   };
 
@@ -26,7 +26,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main._version=${version}"
+    "-X=main._version=${finalAttrs.version}"
   ];
 
   passthru.tests = {
@@ -39,8 +39,8 @@ buildGoModule rec {
     description = "Refactoring and code transformation tool for Go";
     mainProgram = "gopatch";
     homepage = "https://github.com/uber-go/gopatch";
-    changelog = "https://github.com/uber-go/gopatch/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/uber-go/gopatch/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

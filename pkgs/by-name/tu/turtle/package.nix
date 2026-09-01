@@ -9,7 +9,7 @@
   meld,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "turtle";
   version = "0.14";
   pyproject = true;
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "philippun1";
     repo = "turtle";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-+XDDscw5xBUp39tbZLqZWK+wsRDi401mRDjx+VR6Cu0=";
   };
 
@@ -85,4 +85,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.unix;
   };
-}
+})

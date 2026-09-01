@@ -11,15 +11,15 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "slirp4netns";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "rootless-containers";
     repo = "slirp4netns";
-    rev = "v${version}";
-    sha256 = "sha256-dPhUr9GdujTpUsnfvZDp8eOBQwlzqwtwziII2QWD4JA=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-/ZnlWv5kSkYMiO2mTs6mY70QGBm0FsIDyd+gGaVK9rs=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +37,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   strictDeps = true;
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   passthru.tests = { inherit (nixosTests) podman; };
 
   meta = {
@@ -48,4 +53,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "slirp4netns";
   };
-}
+})

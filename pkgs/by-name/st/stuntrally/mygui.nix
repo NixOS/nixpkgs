@@ -10,7 +10,7 @@
   libuuid,
   ois,
   ogre-next,
-  libX11,
+  libx11,
 }:
 stdenv.mkDerivation {
   pname = "mygui";
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     libuuid
     ois
     ogre-next
-    libX11
+    libx11
   ];
 
   cmakeFlags = [

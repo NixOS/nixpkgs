@@ -10,15 +10,15 @@
   pango,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "x42-avldrums";
-  version = "0.7.3";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "x42";
     repo = "avldrums.lv2";
-    tag = "v${version}";
-    hash = "sha256-AZKHjzgw0TtLHh4TF+yOUSa+GlNVwyHCpJWAZikXTy4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9I/6zHISoH8+4NpASSyu6A5dSGtj+m7kc9NGp6KuIsI=";
     fetchSubmodules = true;
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

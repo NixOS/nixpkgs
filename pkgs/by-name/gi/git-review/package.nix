@@ -5,19 +5,19 @@
   gitUpdater,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-review";
   version = "2.5.0";
-  format = "setuptools";
+  pyproject = true;
 
   # Manually set version because pbr wants to get it from the git
   # upstream repository (and we are installing from tarball instead)
-  PBR_VERSION = version;
+  env.PBR_VERSION = finalAttrs.version;
 
   # fetchFromGitea fails trying to download archive file
   src = fetchgit {
     url = "https://opendev.org/opendev/git-review";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-RE5XAUS46Y/jtI0/csR59B9l1gYpHuwGQkbWqoTfxPk=";
   };
 
@@ -26,7 +26,8 @@ python3Packages.buildPythonApplication rec {
     "man"
   ];
 
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
     pbr
   ];
 
@@ -47,9 +48,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Tool to submit code to Gerrit";
     homepage = "https://opendev.org/opendev/git-review";
-    changelog = "https://docs.opendev.org/opendev/git-review/latest/releasenotes.html#relnotes-${version}";
+    changelog = "https://docs.opendev.org/opendev/git-review/latest/releasenotes.html#relnotes-${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ kira-bruneau ];
     mainProgram = "git-review";
   };
-}
+})

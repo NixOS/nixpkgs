@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  argp-standalone,
   fetchFromGitHub,
 }:
 
@@ -14,6 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "af573b9e067e8b6cbcc4825946e7e636b30c748f";
     hash = "sha256-1NmqG73sP25Uqf7DiSPgt7drONOg9ZkrtCS0tYVjSU0=";
   };
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    argp-standalone
+  ];
 
   # Don't blow up on warnings; it makes upgrading the compiler difficult.
   postPatch = ''

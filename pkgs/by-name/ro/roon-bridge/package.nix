@@ -11,8 +11,8 @@
   zlib,
 }:
 let
-  version = "1.8-1125";
-  urlVersion = builtins.replaceStrings [ "." "-" ] [ "00" "0" ] version;
+  version = "2.60.1501";
+  urlVersion = builtins.replaceStrings [ "." ] [ "0" ] version;
   host = stdenv.hostPlatform.system;
   system =
     if host == "x86_64-linux" then
@@ -22,12 +22,12 @@ let
     else
       throw "Unsupported platform ${host}";
   src = fetchurl {
-    url = "https://download.roonlabs.com/updates/stable/RoonBridge_${system}_${urlVersion}.tar.bz2";
+    url = "https://download.roonlabs.com/updates/production/RoonBridge_${system}_${urlVersion}.tar.bz2";
     hash =
       if system == "linuxx64" then
-        "sha256-DbtKPFEz2WIoKTxP+zoehzz+BjfsLZ2ZQk/FMh+zFBM="
+        "sha256-7flBDwWeHU0VPDsgV7ut+nwRv3PoJ4KxbFOXcAXE1No="
       else if system == "linuxarmv8" then
-        "sha256-+przEj96R+f1z4ewETFarF4oY6tT2VW/ukSTgUBLiYk="
+        "sha256-UbwvTQ8ted/PaUpE6deEaaSLaPl45HSslOWzXQloWKk="
       else
         throw "Unsupported platform ${host}";
   };
@@ -93,13 +93,18 @@ stdenv.mkDerivation {
       runHook postInstall
     '';
 
+  passthru.updateScript = ./update.py;
+
   meta = {
     description = "Music player for music lovers";
     changelog = "https://community.roonlabs.com/c/roon/software-release-notes/18";
     homepage = "https://roonlabs.com";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ lovesegfault ];
+    maintainers = with lib.maintainers; [
+      lovesegfault
+      edgarpost
+    ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

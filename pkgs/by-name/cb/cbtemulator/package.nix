@@ -7,20 +7,20 @@
   google-cloud-bigtable-tool,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cbtemulator";
   version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-go";
-    rev = "bigtable/v${version}";
+    rev = "bigtable/v${finalAttrs.version}";
     hash = "sha256-prDwy65pxWDrIJOURe2JHo4sY4yP8IE1Rp1pLUL/IAA=";
   };
 
   # There's a go.{mod,sum} in the root and in the "bigtable" subdir.
   # We only ever use things in that subdir.
-  sourceRoot = "${src.name}/bigtable";
+  sourceRoot = "${finalAttrs.src.name}/bigtable";
   env.GOWORK = "off";
 
   vendorHash = "sha256-EDfxT56LKEu/iXPp5RJXb4UIRV2jFFNxh3ZINPbwKTM=";
@@ -64,10 +64,10 @@ buildGoModule rec {
 
   meta = {
     description = "In-memory Google Cloud Bigtable server";
-    homepage = "https://github.com/googleapis/google-cloud-go/blob/bigtable/v${version}/bigtable/cmd/emulator/cbtemulator.go";
+    homepage = "https://github.com/googleapis/google-cloud-go/blob/bigtable/v${finalAttrs.version}/bigtable/cmd/emulator/cbtemulator.go";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.flokli ];
     mainProgram = "cbtemulator";
     platforms = lib.platforms.all;
   };
-}
+})

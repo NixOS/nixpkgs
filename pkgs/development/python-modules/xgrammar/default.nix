@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "xgrammar";
-  version = "0.1.24";
+  version = "0.1.33";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     repo = "xgrammar";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-K+GCHuWKF449JaGWr7FQrDeJS3pxmVKnGf68L53LrK0=";
+    hash = "sha256-mliAmFBY3eLnUP+2HCRGX36KPUjaxn0Eb+2aKyDwdaM=";
   };
 
   patches = [
@@ -58,10 +58,13 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
     triton
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    mlx-lm
   ];
+
+  optional-dependencies = {
+    metal = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      mlx-lm
+    ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -70,10 +73,12 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isLinux (toString [
-    # xgrammar hardcodes -flto=auto while using static linking, which can cause linker errors without this additional flag.
-    "-ffat-lto-objects"
-  ]);
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    NIX_CFLAGS_COMPILE = toString [
+      # xgrammar hardcodes -flto=auto while using static linking, which can cause linker errors without this additional flag.
+      "-ffat-lto-objects"
+    ];
+  };
 
   disabledTests = [
     # You are trying to access a gated repo.
@@ -94,6 +99,12 @@ buildPythonPackage rec {
     "test_json_schema_converter"
   ];
 
+  disabledTestPaths = [
+    # Requires internet access
+    "tests/python/test_structural_tag_converter.py"
+    "tests/python/test_structural_tag_for_model.py"
+  ];
+
   pythonImportsCheck = [ "xgrammar" ];
 
   meta = {
@@ -101,9 +112,5 @@ buildPythonPackage rec {
     homepage = "https://xgrammar.mlc.ai";
     changelog = "https://github.com/mlc-ai/xgrammar/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    badPlatforms = [
-      # error: ‘operator delete’ called on unallocated object ‘result’ [-Werror=free-nonheap-object]
-      "aarch64-linux"
-    ];
   };
 }

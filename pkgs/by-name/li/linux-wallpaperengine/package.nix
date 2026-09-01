@@ -10,19 +10,21 @@
   SDL2,
   SDL2_mixer,
   cef-binary,
+  dbus,
   egl-wayland,
   ffmpeg,
   fftw,
+  freetype,
   glew,
   glfw,
   glm,
   gmp,
   kissfftFloat,
-  libXau,
-  libXdmcp,
-  libXpm,
-  libXrandr,
-  libXxf86vm,
+  libxau,
+  libxdmcp,
+  libxpm,
+  libxrandr,
+  libxxf86vm,
   libdecor,
   libffi,
   libglut,
@@ -30,6 +32,7 @@
   libpulseaudio,
   lz4,
   mpv,
+  pulseaudio,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -39,7 +42,7 @@
 
 let
   cef = cef-binary.override {
-    version = "135.0.17"; # follow upstream. https://github.com/Almamu/linux-wallpaperengine/blob/b39f12757908eda9f4c1039613b914606568bb84/CMakeLists.txt#L47
+    version = "135.0.17"; # follow upstream. https://github.com/Almamu/linux-wallpaperengine/blob/a8ce9b6aa14cc10f0396bbb74a16ca12ed3990dc/CMakeLists.txt#L47
     gitRevision = "cbc1c5b";
     chromiumVersion = "135.0.7049.52";
 
@@ -51,14 +54,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "linux-wallpaperengine";
-  version = "0-unstable-2025-09-19";
+  version = "0.0.1-unstable-2026-06-09";
 
   src = fetchFromGitHub {
     owner = "Almamu";
     repo = "linux-wallpaperengine";
-    rev = "b39f12757908eda9f4c1039613b914606568bb84";
+    rev = "b016d7d1fdcf4e5fd2f9c9fa420a8aaa07fee02d";
     fetchSubmodules = true;
-    hash = "sha256-Lm4BixK+PBCN/I+ecoYfoD96zS9UysEDOfponFy3SDU=";
+    hash = "sha256-ExWAYdSFW5plPuS3/jxTPMXIly6zVb5GojE3e37imZM=";
   };
 
   nativeBuildInputs = [
@@ -72,19 +75,21 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     SDL2_mixer
+    dbus
     egl-wayland
     ffmpeg
     fftw
+    freetype
     glew
     glfw
     glm
     gmp
     kissfftFloat
-    libXau
-    libXdmcp
-    libXpm
-    libXrandr
-    libXxf86vm
+    libxau
+    libxdmcp
+    libxpm
+    libxrandr
+    libxxf86vm
     libdecor
     libffi
     libglut
@@ -92,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     lz4
     mpv
+    pulseaudio
     wayland
     wayland-protocols
     wayland-scanner
@@ -123,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Almamu/linux-wallpaperengine";
     license = lib.licenses.gpl3Plus;
     mainProgram = "linux-wallpaperengine";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.tadomika_ari ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

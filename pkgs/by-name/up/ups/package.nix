@@ -3,14 +3,14 @@
   fetchFromGitHub,
   lib,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ups";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "rameshvarun";
     repo = "ups";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7AuZ1gyp8tAWHM0Ry54tKucPJ3enaGDtvrM1J8uBIT8=";
   };
 
@@ -22,4 +22,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ruby0b ];
   };
-}
+})

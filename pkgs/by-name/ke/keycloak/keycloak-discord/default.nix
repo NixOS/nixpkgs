@@ -1,40 +1,36 @@
 {
-  stdenv,
   maven,
   lib,
   fetchFromGitHub,
+  nix-update-script,
 }:
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "keycloak-discord";
-  version = "0.6.1";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
-    owner = "wadahiro";
+    owner = "iForged";
     repo = "keycloak-discord";
-    tag = "v${version}";
-    hash = "sha256-BA7x28k/aMI3VPQmEgNhKD9N34DdYqadAD/m4cxLSYg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xTGXETkE5Ct+h3mYbj3VUoQhi5Wx5oZqz3G1uN0pDns=";
   };
 
-  mvnHash =
-    let
-      mvnHashes = {
-        "aarch64-darwin" = "sha256-Or7VOZwz4NfDtb0kmHbbTYE/avAc+H8+Y6JPw+HGjxs=";
-        "x86_64-darwin" = "sha256-sX10vYlb2hWArTLZsPTcKYHHsPffQKtBxpcI42wcZZA=";
-        "aarch64-linux" = "sha256-I5qjhfAXPXMb+1SPG29t/IKH/zBQqdnu3U7dYSQhTL8=";
-        "x86_64-linux" = "sha256-uhm++MGgTN32/xbHNd+Z3Hes9Q5tl8ztIQ92LxMWKjg=";
-      };
-    in
-    mvnHashes.${stdenv.hostPlatform.system}
-      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  mvnHash = "sha256-bLGIq9wDfppYbzLT9U3E+IPTjzCiAPRCVsjBfsNvgD8=";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   installPhase = ''
     runHook preInstall
-    install -Dm444 target/keycloak-discord-${version}.jar "$out/keycloak-discord-${version}.jar"
+    install -Dm444 -t "$out" target/keycloak-discord-${finalAttrs.version}.jar
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    homepage = "https://github.com/wadahiro/keycloak-discord";
+    homepage = "https://github.com/iForged/keycloak-discord";
+    changelog = "https://github.com/iForged/keycloak-discord/releases/tag/v${finalAttrs.version}";
     description = "Keycloak Identity Provider extension for Discord";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
@@ -42,4 +38,4 @@ maven.buildMavenPackage rec {
       anish
     ];
   };
-}
+})

@@ -10,15 +10,15 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-template";
   version = "0.4.1";
 
   src = fetchFromGitHub {
-    name = "${pname}-${version}-src";
+    name = "${finalAttrs.pname}-${finalAttrs.version}-src";
     owner = "jonringer";
     repo = "nix-template";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-42u5FmTIKHpfQ2zZQXIrFkAN2/XvU0wWnCRrQkQzcNI=";
   };
 
@@ -48,9 +48,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Make creating nix expressions easy";
     homepage = "https://github.com/jonringer/nix-template/";
-    changelog = "https://github.com/jonringer/nix-template/releases/tag/v${version}";
+    changelog = "https://github.com/jonringer/nix-template/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.cc0;
     maintainers = [ ];
     mainProgram = "nix-template";
   };
-}
+})

@@ -27,7 +27,7 @@
   atk,
   # For Adding additional GRC blocks
   extraPackages ? [ ],
-  # For Adding additional python packaages
+  # For Adding additional python packages
   extraPythonPackages ? [ ],
   soapysdr, # For it's passthru.searchPath
   # soapysdr plugins we add by default. Ideally, we should have a
@@ -56,6 +56,7 @@
   ],
   # Allow to add whatever you want to the wrapper
   extraMakeWrapperArgs ? [ ],
+  packageOverrides ? (self: super: { }),
 }:
 
 let
@@ -191,7 +192,12 @@ let
   );
 
   packages = import ../../../top-level/gnuradio-packages.nix {
-    inherit lib stdenv newScope;
+    inherit
+      lib
+      stdenv
+      newScope
+      packageOverrides
+      ;
     gnuradio = unwrapped;
   };
   passthru = unwrapped.passthru // {

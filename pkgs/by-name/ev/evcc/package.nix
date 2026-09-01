@@ -1,12 +1,12 @@
 {
   lib,
   stdenv,
-  buildGo125Module,
+  buildGo127Module,
   fetchFromGitHub,
   fetchNpmDeps,
   cacert,
   git,
-  go_1_25,
+  go_1_27,
   gokrazy,
   enumer,
   mockgen,
@@ -17,42 +17,30 @@
 }:
 
 let
-  version = "0.300.4";
+  version = "0.315.0";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
     tag = version;
-    hash = "sha256-f2whzEq0LOyvNVLjSNvA19azbtJnOMJqu5EJQXnzZyg=";
+    hash = "sha256-lnFsLTEz5tC07fyx95zYnvBfx3FGKKlGLbi0RsTpDBY=";
   };
 
-  vendorHash = "sha256-IB3DqaUbdrqnYQpyHtnvY37xjbRvTvNOV39b8wciuTA=";
+  vendorHash = "sha256-JUJFOQQpbPkb4aI2SjRaTbZzTxWpV1wbWJH7EgGqmHY=";
 
   commonMeta = {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-
-  decorate = buildGo125Module {
-    pname = "evcc-decorate";
-    inherit version src vendorHash;
-
-    subPackages = "cmd/decorate";
-
-    meta = commonMeta // {
-      description = "EVCC decorate helper";
-      homepage = "https://github.com/evcc-io/evcc/tree/master/cmd/decorate";
-    };
-  };
 in
 
-buildGo125Module rec {
+buildGo127Module rec {
   pname = "evcc";
   inherit version src vendorHash;
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-AXsF0rkaf6giDhJT2f/MMyCd6Ozgepx8do7fpl/CyNs=";
+    hash = "sha256-iSYPUjggHm1KdDAMZuJIVDQx+Sw7gRCmTtoiUp7yRUM=";
   };
 
   nativeBuildInputs = [
@@ -62,9 +50,8 @@ buildGo125Module rec {
 
   overrideModAttrs = _: {
     nativeBuildInputs = [
-      decorate
       enumer
-      go_1_25
+      go_1_27
       gokrazy
       git
       cacert
@@ -78,7 +65,6 @@ buildGo125Module rec {
 
   tags = [
     "release"
-    "test"
   ];
 
   ldflags = [
@@ -88,6 +74,8 @@ buildGo125Module rec {
   ];
 
   preBuild = ''
+    export PATH="$PWD/node_modules/.bin:$PATH"
+    export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
     make ui
   '';
 
@@ -97,15 +85,19 @@ buildGo125Module rec {
     let
       skippedTests = [
         # network access
-        "TestOctopusConfigParse"
-        "TestTemplates"
         "TestOcpp"
+        "TestOctopusConfigParse"
+        "TestSessionHandlerTimezoneFilter"
+        "TestTemplates"
+        # network access: mdns fails to start Avahi provider
+        "TestControlBoxGridGuardHeartbeat"
+        "TestEEBus"
+        "TestShipPairing"
       ];
     in
     [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru = {
-    inherit decorate;
     tests = {
       inherit (nixosTests) evcc;
     };

@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "drive";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "odeke-em";
     repo = "drive";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-mNOeOB0Tn5eqULFJZuE18PvLoHtnspv4AElmgEQKXcU=";
   };
 
@@ -40,4 +40,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "drive";
   };
-}
+})

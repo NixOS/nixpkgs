@@ -4,12 +4,14 @@
   aiomqtt,
   buildPythonPackage,
   cachetools,
+  cryptography,
   defusedxml,
   docker,
   fetchFromGitHub,
   orjson,
   pkg-config,
   pycountry,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-codspeed,
   pytestCheckHook,
@@ -20,41 +22,43 @@
   xz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "deebot-client";
-  version = "17.0.1";
+  version = "18.5.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.13";
+  disabled = pythonOlder "3.14";
 
   src = fetchFromGitHub {
     owner = "DeebotUniverse";
     repo = "client.py";
-    tag = version;
-    hash = "sha256-evd0wqID9kEBzhJgRSpcd95ALp9LPSb5RM3wEIKuY0Y=";
+    tag = finalAttrs.version;
+    hash = "sha256-7edi2hTn4K+lJDKJbMmu4JY86fhmSUcRvxr1ZzaurSU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-cLNFUDT74NrBgUL6vGC6lbFy2A2W1jYF7A8H3BQ/s8A=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-j70hY9MskVKrfWYtQKj13LVdC8WbHdPe9w/88BWPvlM=";
   };
-
-  pythonRelaxDeps = [
-    "aiohttp"
-  ];
 
   nativeBuildInputs = [
     pkg-config
+    pyprojectVersionPatchHook
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
 
   buildInputs = [ xz ];
 
+  pythonRelaxDeps = [
+    "cryptography"
+  ];
+
   dependencies = [
     aiohttp
     aiomqtt
     cachetools
+    cryptography
     defusedxml
     orjson
   ];
@@ -93,8 +97,8 @@ buildPythonPackage rec {
   meta = {
     description = "Deebot client library";
     homepage = "https://github.com/DeebotUniverse/client.py";
-    changelog = "https://github.com/DeebotUniverse/client.py/releases/tag/${version}";
+    changelog = "https://github.com/DeebotUniverse/client.py/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

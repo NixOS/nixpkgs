@@ -41,7 +41,7 @@ if diff "$DEFAULT_NIX" "$WORKING_NIX"; then
   exit 0
 fi
 
-# update sha hash (convenietly provided)
+# update sha hash (conveniently provided)
 sed -i "s@hash.* = .*;@hash = \"sha512-$SHA512\";@g" "$WORKING_NIX"
 
 # update the changelog ("just" increment the number)

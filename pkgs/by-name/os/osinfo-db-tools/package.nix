@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.12.0";
 
   src = fetchurl {
-    url = "https://releases.pagure.org/libosinfo/osinfo-db-tools-${finalAttrs.version}.tar.xz";
+    url = "https://gitlab.com/api/v4/projects/libosinfo%2Fosinfo-db-tools/packages/generic/release-assets/v${finalAttrs.version}/osinfo-db-tools-${finalAttrs.version}.tar.xz";
     hash = "sha256-8zFfZ10Ydw8l3qjtBLILj8gO+wD2DDfuXoFfnDd25/M=";
   };
 

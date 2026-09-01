@@ -5,7 +5,7 @@
   ...
 }:
 let
-  pcmciaUtils = pkgs.pcmciaUtils.overrideAttrs {
+  pcmciautils = pkgs.pcmciautils.overrideAttrs {
     inherit (config.hardware.pcmcia) firmware config;
   };
 in
@@ -48,9 +48,9 @@ in
 
     boot.kernelModules = [ "pcmcia" ];
 
-    services.udev.packages = [ pcmciaUtils ];
+    services.udev.packages = [ pcmciautils ];
 
-    environment.systemPackages = [ pcmciaUtils ];
+    environment.systemPackages = [ pcmciautils ];
 
   };
 

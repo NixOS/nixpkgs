@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libscrypt";
   version = "1.22";
 
   src = fetchFromGitHub {
     owner = "technion";
     repo = "libscrypt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-QWWqC10bENemG5FYEog87tT7IxDaBJUDqu6j/sO3sYE=";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ davidak ];
     platforms = lib.platforms.unix;
   };
-}
+})

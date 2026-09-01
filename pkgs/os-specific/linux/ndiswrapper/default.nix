@@ -7,12 +7,11 @@
   kmod,
   elfutils,
 }:
-let
+
+stdenv.mkDerivation (finalAttrs: {
+  name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
+  pname = "ndiswrapper";
   version = "1.63";
-in
-stdenv.mkDerivation {
-  name = "ndiswrapper-${version}-${kernel.version}";
-  inherit version;
 
   hardeningDisable = [ "pic" ];
 
@@ -38,7 +37,7 @@ stdenv.mkDerivation {
   '';
 
   src = fetchurl {
-    url = "mirror://sourceforge/ndiswrapper/files/stable/ndiswrapper-${version}.tar.gz";
+    url = "mirror://sourceforge/ndiswrapper/files/stable/ndiswrapper-${finalAttrs.version}.tar.gz";
     sha256 = "1v6b66jhisl110jfl00hm43lmnrav32vs39d85gcbxrjqnmcx08g";
   };
 
@@ -57,4 +56,4 @@ stdenv.mkDerivation {
     ];
     broken = lib.versionAtLeast kernel.version "5.8";
   };
-}
+})

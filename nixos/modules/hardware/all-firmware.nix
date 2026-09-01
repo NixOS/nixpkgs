@@ -73,7 +73,7 @@ in
         with pkgs;
         [
           linux-firmware
-          intel2200BGFirmware
+          ipw2200-firmware
           rtl8192su-firmware
           rt5677-firmware
           rtl8761b-firmware
@@ -91,7 +91,7 @@ in
           broadcom-bt-firmware
           b43Firmware_5_1_138
           b43Firmware_6_30_163_46
-          xow_dongle-firmware
+          xone-dongle-firmware
         ]
         ++ lib.optionals pkgs.stdenv.hostPlatform.isx86 [
           facetimehd-calibration

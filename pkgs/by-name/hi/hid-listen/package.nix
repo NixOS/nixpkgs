@@ -3,13 +3,13 @@
   stdenv,
   fetchzip,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hid-listen";
   version = "1.01";
 
   src = fetchzip {
-    name = "hid_listen_${version}";
-    url = "https://www.pjrc.com/teensy/hid_listen_${version}.zip";
+    name = "hid_listen_${finalAttrs.version}";
+    url = "https://www.pjrc.com/teensy/hid_listen_${finalAttrs.version}.zip";
     sha256 = "0sd4dvi39fl4vy880mg531ryks5zglfz5mdyyqr7x6qv056ffx9w";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "hid_listen";
   };
-}
+})

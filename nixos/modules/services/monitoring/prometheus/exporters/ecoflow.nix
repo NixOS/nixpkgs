@@ -27,7 +27,7 @@ in
     };
     ecoflowAccessKeyFile = mkOption {
       type = types.path;
-      default = /etc/ecoflow-access-key;
+      default = "/etc/ecoflow-access-key";
       description = ''
         Path to the file with your personal api access string from the Ecoflow development website <https://developer-eu.ecoflow.com>.
         Do to share or commit your plaintext scecrets to a public repo use: agenix or soaps.
@@ -35,7 +35,7 @@ in
     };
     ecoflowSecretKeyFile = mkOption {
       type = types.path;
-      default = /etc/ecoflow-secret-key;
+      default = "/etc/ecoflow-secret-key";
       description = ''
         Path to the file with your personal api secret string from the Ecoflow development website <https://developer-eu.ecoflow.com>.
         Do to share or commit your plaintext scecrets to a public repo use: agenix or soaps.
@@ -43,7 +43,7 @@ in
     };
     ecoflowEmailFile = mkOption {
       type = types.path;
-      default = /etc/ecoflow-email;
+      default = "/etc/ecoflow-email";
       description = ''
         Path to the file with your personal ecoflow app login email address.
         Do to share or commit your plaintext scecrets to a public repo use: agenix or soaps.
@@ -51,7 +51,7 @@ in
     };
     ecoflowPasswordFile = mkOption {
       type = types.path;
-      default = /etc/ecoflow-password;
+      default = "/etc/ecoflow-password";
       description = ''
         Path to the file with your personal ecoflow app login email password.
         Do to share or commit your plaintext passwords to a public repo use: agenix or soaps here!
@@ -59,7 +59,7 @@ in
     };
     ecoflowDevicesFile = mkOption {
       type = types.path;
-      default = /etc/ecoflow-devices;
+      default = "/etc/ecoflow-devices";
       description = ''
         File must contain one line, example: R3300000,R3400000,NC430000,....
         The list of devices serial numbers separated by comma. For instance: SN1,SN2,SN3.
@@ -69,7 +69,7 @@ in
     };
     ecoflowDevicesPrettyNamesFile = mkOption {
       type = types.path;
-      default = /etc/ecoflow-devices-pretty-names;
+      default = "/etc/ecoflow-devices-pretty-names";
       description = ''
         File must contain one line, example: {"R3300000":"Delta 2","R3400000":"Delta Pro",...}
         The key/value map of custom names for your devices. Key is a serial number, value is a device name you want

@@ -3,15 +3,12 @@
   buildPythonPackage,
   callPackage,
   fetchPypi,
-  pythonOlder,
 
   # build-system
   setuptools,
 
   # dependencies
-  packaging,
-  typing-extensions,
-  tomli,
+  vcs-versioning,
 
   # optional-dependencies
   rich,
@@ -19,32 +16,23 @@
 
 buildPythonPackage rec {
   pname = "setuptools-scm";
-  version = "9.0.1";
+  version = "10.0.5";
   pyproject = true;
 
   src = fetchPypi {
     pname = "setuptools_scm";
     inherit version;
-    hash = "sha256-RuHPfooJZSthP5uk/ptV8vSW56Iz5OANJafLQflMPAs=";
+    hash = "sha256-u7qP51RRbN79AX9EVnIXdebvlmK9eIf7Uq4mgT1IOMM=";
   };
 
-  postPatch =
-    if (pythonOlder "3.11") then
-      ''
-        substituteInPlace pyproject.toml \
-          --replace-fail 'tomli<=2.0.2' 'tomli'
-      ''
-    else
-      null;
+  postPatch = null;
 
-  build-system = [ setuptools ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  build-system = [ setuptools ];
 
   dependencies = [
-    packaging
     setuptools
-    typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+    vcs-versioning
+  ];
 
   optional-dependencies = {
     rich = [ rich ];

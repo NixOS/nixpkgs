@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   version = "0.4.4.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/pdfchain/pdfchain-${version}/pdfchain-${version}.tar.gz";
     hash = "sha256-Hu4Pk9voyc75+f5OwKEOCkXKjN5nzWzv+izmyEN1Lz0=";
   };
 
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     description = "Graphical user interface for the PDF Toolkit (PDFtk)";
     homepage = "https://pdfchain.sourceforge.io";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ hqurve ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "pdfchain";
   };

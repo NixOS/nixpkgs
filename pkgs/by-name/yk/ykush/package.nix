@@ -6,7 +6,7 @@
   runCommand,
   versionCheckHook,
 }:
-stdenv.mkDerivation (final: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ykushcmd";
   version = "1.4.0";
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation (final: {
   src = fetchFromGitHub {
     owner = "yepkit";
     repo = "ykush";
-    tag = "v${final.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+ssr1QHKjEdK8pFkmyHYwG9tY7YHaYcIIJUqaEXixOg=";
   };
 
@@ -33,8 +33,8 @@ stdenv.mkDerivation (final: {
 
   passthru.tests = {
     # We can't run any actual tests without hardware, but we can at least check the binary.
-    run-only = runCommand "${final.pname}-test" ''
-      ${final}/bin/ykushcmd -h | grep YKUSHCMD
+    run-only = runCommand "${finalAttrs.pname}-test" ''
+      ${finalAttrs}/bin/ykushcmd -h | grep YKUSHCMD
     '';
   };
 

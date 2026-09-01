@@ -15,12 +15,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-user-dirs";
-  version = "0.19";
+  version = "0.20";
 
   src = fetchurl {
     url = "https://user-dirs.freedesktop.org/releases/xdg-user-dirs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-6S3rkpwQ1LKTKTl6+KJYUQEkf35hd6xvHSjoITDtjBk=";
+    hash = "sha256-uONChiePT+8+G/6WhcOVzMDrUMFNOi+0lT3QD7/Trzk=";
   };
+
+  outputs = [
+    "out"
+    "lib"
+    "man"
+  ];
 
   nativeBuildInputs = [
     meson
@@ -37,15 +43,18 @@ stdenv.mkDerivation (finalAttrs: {
     libintl
   ];
 
-  NIX_LDFLAGS = if stdenv.isDarwin then "-liconv" else null;
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-liconv";
+  };
 
   preFixup = ''
     # fallback values need to be last
     wrapProgram "$out/bin/xdg-user-dirs-update" \
       --suffix XDG_CONFIG_DIRS : "$out/etc/xdg"
 
-    substituteInPlace "$out/lib/systemd/user/xdg-user-dirs.service" \
-      --replace-fail "/usr/bin/xdg-user-dirs-update" "$out/bin/xdg-user-dirs-update"
+    # Autostart, because the installed service is never explicitly enabled in NixOS
+    substituteInPlace "$out/etc/xdg/autostart/xdg-user-dirs.desktop" \
+      --replace-fail "X-systemd-skip=true" "X-systemd-skip=false"
   '';
 
   meta = {

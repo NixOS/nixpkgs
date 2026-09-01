@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "deadbeef-lyricbar-plugin";
-  version = "unstable-2019-01-29";
+  version = "0.1-unstable-2019-01-29";
 
   src = fetchFromGitHub {
     owner = "C0rn3j";
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     libxmlxx3
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types";
 
   buildFlags = [ "gtk3" ];
 

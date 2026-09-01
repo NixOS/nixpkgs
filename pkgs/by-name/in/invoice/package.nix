@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "invoice";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "maaslalani";
     repo = "invoice";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-WtQ4nF31uIoplY18GZNs41ZOCxmbIu71YpEGk8aTGww=";
   };
 
@@ -26,7 +26,7 @@ buildGoModule rec {
     description = "Command line invoice generator";
     homepage = "https://github.com/maaslalani/invoice";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
     mainProgram = "invoice";
   };
-}
+})

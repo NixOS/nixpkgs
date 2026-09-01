@@ -2,7 +2,9 @@
   lib,
   stdenv,
   fetchsvn,
-  xorg,
+  libx11,
+  imake,
+  gccmakedep,
 }:
 
 stdenv.mkDerivation {
@@ -15,11 +17,11 @@ stdenv.mkDerivation {
     sha256 = "1gadlcp32s179kd7ypxr8cymd6s060p6z4c2vnx94i8bmiw3nn8h";
   };
 
-  nativeBuildInputs = with xorg; [
+  nativeBuildInputs = [
     imake
     gccmakedep
   ];
-  buildInputs = [ xorg.libX11 ];
+  buildInputs = [ libx11 ];
 
   hardeningDisable = [ "format" ];
   installPhase = ''

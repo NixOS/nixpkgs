@@ -168,6 +168,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    services.displayManager.enable = true;
     # Inspired by https://gitlab.gnome.org/World/Phosh/phosh/-/blob/main/data/phosh.service
     # Parts taken from nixos/modules/services/wayland/cage.nix
     systemd.services.phosh = {
@@ -232,6 +233,12 @@ in
     systemd.packages = [ cfg.package ];
 
     programs.feedbackd.enable = true;
+
+    # Without this, the stevia OSK does not function when selecting text fields.
+    i18n.inputMethod = {
+      type = "ibus";
+      ibus.waylandFrontend = true;
+    };
 
     security.pam.services.phosh = { };
 

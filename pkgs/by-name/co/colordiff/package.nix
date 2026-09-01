@@ -10,14 +10,14 @@
   diffutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "colordiff";
   version = "1.0.22";
 
   src = fetchFromGitHub {
     owner = "daveewart";
     repo = "colordiff";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-ZFxBY/QrKlRC7glEGWpB/79Jup0e4RCnS82Ct6lhK4Y=";
   };
 
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "colordiff";
   };
-}
+})

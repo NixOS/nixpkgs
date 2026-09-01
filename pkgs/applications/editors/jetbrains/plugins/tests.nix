@@ -6,38 +6,32 @@
   fetchzip,
   fetchurl,
   # If not set, all IDEs are tested.
-  ideName ? null,
+  ide ? null,
 }:
 
 let
   ides =
-    if ideName == null then
+    if ide == null then
       with jetbrains;
       [
-        aqua
         clion
         datagrip
         dataspell
         gateway
         goland
-        idea-community-src
-        idea-community-bin
         idea-oss
         idea
         mps
         phpstorm
-        pycharm-community-src
-        pycharm-community-bin
         pycharm-oss
         pycharm
         rider
         ruby-mine
         rust-rover
         webstorm
-        writerside
       ]
     else
-      [ (jetbrains.${ideName}) ];
+      [ ide ];
 in
 {
   # Check to see if the process for adding plugins is breaking anything, instead of the plugins themselves

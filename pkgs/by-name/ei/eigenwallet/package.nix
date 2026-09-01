@@ -4,6 +4,7 @@
   stdenv,
   dpkg,
   autoPatchelfHook,
+  wrapGAppsHook3,
   cairo,
   gdk-pixbuf,
   webkitgtk_4_1,
@@ -12,16 +13,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eigenwallet";
-  version = "3.6.6";
+  version = "4.13.3";
 
   src = fetchurl {
     url = "https://github.com/eigenwallet/core/releases/download/${finalAttrs.version}/eigenwallet_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-2K1sls8YYvDirk9knVDoL5KDfjlxD7UbeKLIe+Z+wrc=";
+    hash = "sha256-nVrl3XY6fN8lA/RUL2P/NzMaOdPUIFxsEYbROk7keTA=";
   };
 
   nativeBuildInputs = [
     dpkg
     autoPatchelfHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

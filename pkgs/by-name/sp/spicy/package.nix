@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "spicy";
   version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "trhodeos";
     repo = "spicy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-TodMm4UbnLB+LiyfPVXT7bcVLbyBFbGoOYQSsz3IMfM=";
   };
 
@@ -32,4 +32,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ _414owen ];
   };
-}
+})

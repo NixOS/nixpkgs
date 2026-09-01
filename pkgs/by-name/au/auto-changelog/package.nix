@@ -49,6 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/cookpete/auto-changelog/blob/master/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "auto-changelog";
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

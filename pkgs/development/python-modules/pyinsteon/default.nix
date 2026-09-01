@@ -10,7 +10,6 @@
   pyserial,
   pyserial-asyncio-fast,
   pytestCheckHook,
-  pythonAtLeast,
   setuptools,
   voluptuous,
 }:
@@ -26,6 +25,11 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-iC0qeiTHtrdzQtJ3R01nJDCfdBKBg0jw1v49ZII24/4=";
   };
+
+  patches = [
+    # https://github.com/pyinsteon/pyinsteon/pull/440
+    ./python-3.14.diff
+  ];
 
   build-system = [ setuptools ];
 
@@ -55,7 +59,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/pyinsteon/pyinsteon";
     changelog = "https://github.com/pyinsteon/pyinsteon/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "insteon_tools";
   };

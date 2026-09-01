@@ -6,12 +6,12 @@
   jre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tlaplus";
   version = "1.8.0";
 
   src = fetchurl {
-    url = "https://github.com/tlaplus/tlaplus/releases/download/v${version}/tla2tools.jar";
+    url = "https://github.com/tlaplus/tlaplus/releases/download/v${finalAttrs.version}/tla2tools.jar";
     sha256 = "sha256-OXgpd1xuyvhveunlybBi/N6jnxtp/J8Kmp8PYX3eSZ4=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
       mgregson
     ];
   };
-}
+})

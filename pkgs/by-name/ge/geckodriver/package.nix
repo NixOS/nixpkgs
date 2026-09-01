@@ -6,18 +6,18 @@
   libiconv,
 }:
 
-rustPlatform.buildRustPackage rec {
-  version = "0.36.0";
+rustPlatform.buildRustPackage (finalAttrs: {
+  version = "0.37.1";
   pname = "geckodriver";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "geckodriver";
-    tag = "v${version}";
-    sha256 = "sha256-rqJ6+QKfEhdHGZBT9yEWtsBlETxz4XeEZXisXf7RdIE=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-LnfJmiV4SJpFBXDAJmwbHKv6RvO40e7/3Lm6Jc6YA40=";
   };
 
-  cargoHash = "sha256-wFRZhQzFBwwNfiszwr7XK3e8tfqqFG6DIe7viWvB5vg=";
+  cargoHash = "sha256-zNwlQ2CsDHQnFog59jKFAxVaNK0/8hUts6NRkFVKCGk=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ jraygauthier ];
     mainProgram = "geckodriver";
   };
-}
+})

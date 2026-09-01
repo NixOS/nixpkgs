@@ -2,11 +2,12 @@
   lib,
   mkDerivation,
   fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
 mkDerivation {
   pname = "1lab";
-  version = "unstable-2025-07-01";
+  version = "0-unstable-2025-07-01";
 
   src = fetchFromGitHub {
     owner = "the1lab";
@@ -24,6 +25,8 @@ mkDerivation {
     files=(src/**/*.@(agda|lagda.md))
     sed -Ei '/OPTIONS/s/ -v ?[^ #]+//g' "''${files[@]}"
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Formalised, cross-linked reference resource for mathematics done in Homotopy Type Theory ";

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ndpi";
-  version = "4.10";
+  version = "5.0";
 
   src = fetchFromGitHub {
     owner = "ntop";
     repo = "nDPI";
     tag = finalAttrs.version;
-    hash = "sha256-iXqvDMJsOXcg9YkqKFgInLLfH6j/HEp4bEaIl6dpVtc=";
+    hash = "sha256-Elnj6qDuT8UWDxmasiHOt5DxC7GcH5zgrp3J3LYcl0c=";
   };
 
   nativeBuildInputs = [

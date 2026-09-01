@@ -7,15 +7,15 @@
   python3,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "professor";
-  version = "2.4.2";
+  version = "2.5.8";
 
   src = fetchFromGitLab {
     owner = "hepcedar";
     repo = "professor";
-    tag = "professor-2.4.2";
-    hash = "sha256-z2Ub7SUTz4Hj3ajnzOV/QXZ+cH2v6zJv9UZM2M2y1Hg=";
+    tag = "professor-${finalAttrs.version}";
+    hash = "sha256-q1OxYnsr4xE7NSZekQq9AeMFPv1B+/VMu6ZttKPQsBs=";
     # workaround unpacking to case-sensitive filesystems
     postFetch = ''
       rm -rf $out/[Dd]ocker
@@ -23,15 +23,24 @@ stdenv.mkDerivation {
   };
 
   postPatch = ''
+    substituteInPlace configure \
+      --replace-fail '$(which $PYTHON 2> /dev/null)' '$(command -v $PYTHON)' \
+      --replace-fail '$(which $CYTHON 2> /dev/null)' '$(command -v $CYTHON)' \
+      --replace-fail '$(which $ROOTCONFIG 2> /dev/null)' '$(command -v $ROOTCONFIG)'
     substituteInPlace Makefile \
-      --replace-fail 'pip install ' 'pip install --prefix $(out) '
+      --replace-fail 'pip wheel' 'pip wheel --no-build-isolation'
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile \
       --replace-fail '-shared -o' '-shared -install_name "$(out)/$@" -o'
   '';
 
+  configureFlags = [ "--with-eigen=${eigen}" ];
+
+  env.PYTHON = "python3";
+
   nativeBuildInputs = [
+    python3
     python3.pkgs.cython
     python3.pkgs.pip
     python3.pkgs.setuptools
@@ -49,9 +58,6 @@ stdenv.mkDerivation {
     yoda
   ];
 
-  CPPFLAGS = [ "-I${eigen}/include/eigen3" ];
-  PREFIX = placeholder "out";
-
   postInstall = ''
     for prog in "$out"/bin/*; do
       wrapProgram "$prog" --set PYTHONPATH "$PYTHONPATH:$(toPythonPath "$out")"
@@ -68,4 +74,4 @@ stdenv.mkDerivation {
     maintainers = [ lib.maintainers.veprbl ];
     platforms = lib.platforms.unix;
   };
-}
+})

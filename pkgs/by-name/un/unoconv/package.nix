@@ -9,18 +9,21 @@
   installSymlinks ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unoconv";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "unoconv";
     repo = "unoconv";
-    rev = version;
+    tag = finalAttrs.version;
     sha256 = "1akx64686in8j8arl6vsgp2n3bv770q48pfv283c6fz6wf9p8fvr";
   };
 
-  patches = [ ./0001-Remove-compatibility-fixes-for-very-old-LO-OO.patch ];
+  patches = [
+    ./0001-Remove-compatibility-fixes-for-very-old-LO-OO.patch
+    ./remove-unohelper-absolutize-usage.diff
+  ];
 
   nativeBuildInputs = [
     asciidoc
@@ -48,4 +51,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "unoconv";
   };
-}
+})

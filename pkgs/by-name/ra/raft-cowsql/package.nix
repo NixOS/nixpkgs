@@ -10,14 +10,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "raft-cowsql";
   version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "cowsql";
     repo = "raft";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aGw/ATu8Xdjfqa0qWg8Sld9PKCmQsMtZhuNBwagER7M=";
   };
 
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.lxc ];
   };
-}
+})

@@ -6,7 +6,7 @@
   automake,
   zlib,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.5.3";
   pname = "wiiload";
 
@@ -19,9 +19,14 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "devkitPro";
     repo = "wiiload";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-pZdZzCAPfAVucuiV/q/ROY3cz/wxQWep6dCTGNn2fSo=";
   };
+
+  patches = [
+    # https://github.com/devkitPro/wiiload/pull/4
+    ./fix-gcc15.patch
+  ];
 
   preConfigure = "./autogen.sh";
 
@@ -32,4 +37,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ tomsmeets ];
   };
-}
+})

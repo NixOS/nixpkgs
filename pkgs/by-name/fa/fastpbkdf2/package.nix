@@ -5,14 +5,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fastpbkdf2";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "ctz";
     repo = "fastpbkdf2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "09ax0h4ik3vhvp3s98lic93l3g9f4v1jkr5k6z4g1lvm7s3lrha2";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [ ledif ];
   };
-}
+})

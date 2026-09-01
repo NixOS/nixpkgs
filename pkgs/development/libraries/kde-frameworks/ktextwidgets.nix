@@ -1,5 +1,6 @@
 {
   mkDerivation,
+  cmake,
   extra-cmake-modules,
   qttools,
   kcompletion,
@@ -15,7 +16,10 @@
 
 mkDerivation {
   pname = "ktextwidgets";
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
   buildInputs = [
     kcompletion
     kconfig

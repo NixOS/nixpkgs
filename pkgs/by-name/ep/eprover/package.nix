@@ -17,9 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ which ];
 
-  preConfigure = ''
-    sed -e 's/ *CC *= *gcc$//' -i Makefile.vars
-  '';
+  patches = [
+    ./fix-cross-toolchains.patch
+  ];
+
+  configurePlatforms = [ ];
 
   configureFlags = [
     "--exec-prefix=$(out)"
@@ -28,6 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableHO [
     "--enable-ho"
   ];
+
+  # need to directly insert into makeFlagsArray as the makefile expects the binary
+  # in the AR variable to already be passed the `rcs` flags, which requires us to
+  # specify them. As this requires spaces, we need makeFlagsArray, as makeFlags
+  # will just make the make script see the `rcs` as a target
+  preBuild = ''
+    makeFlagsArray+=(CC="${stdenv.cc.targetPrefix}cc" AR="${stdenv.cc.targetPrefix}ar rcs")
+  '';
 
   meta = {
     description = "Automated theorem prover for full first-order logic with equality";

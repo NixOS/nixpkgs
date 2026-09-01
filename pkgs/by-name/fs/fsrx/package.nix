@@ -6,14 +6,14 @@
   fsrx,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fsrx";
   version = "1.0.2";
 
   src = fetchFromGitHub {
-    owner = "thatvegandev";
+    owner = "jrnxf";
     repo = "fsrx";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-hzfpjunP20WCt3erYu7AO7A3nz+UMKdFzWUA5jASbVA=";
   };
 
@@ -27,9 +27,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Flow state reader in the terminal";
-    homepage = "https://github.com/thatvegandev/fsrx";
+    homepage = "https://github.com/jrnxf/fsrx";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ MoritzBoehme ];
     mainProgram = "fsrx";
   };
-}
+})

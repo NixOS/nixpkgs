@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "aiomqtt";
-  version = "2.5.0";
+  version = "2.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sbtinstruments";
     repo = "aiomqtt";
     tag = "v${version}";
-    hash = "sha256-S18jHHM1r077du/EO3WvCwLaYF70tIGdHatFxuTPhBs=";
+    hash = "sha256-f9m+mdlSADOixsKymxsKiVxgWF7JBc3kjVU+rOkC+yM=";
   };
 
   build-system = [ hatchling ];

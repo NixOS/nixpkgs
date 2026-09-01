@@ -10,14 +10,14 @@
   guile-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-hall";
   version = "0.4.1";
 
   src = fetchFromGitLab {
     owner = "a-sassmannshausen";
     repo = "guile-hall";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-TUCN8kW44X6iGbSJURurcz/Tc2eCH1xgmXH1sMOMOXs=";
   };
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     runHook preInstallCheck
     export HOME=$TMPDIR
-    $out/bin/hall --version | grep ${version} > /dev/null
+    $out/bin/hall --version | grep ${finalAttrs.version} > /dev/null
     runHook postInstallCheck
   '';
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = guile.meta.platforms;
   };
-}
+})

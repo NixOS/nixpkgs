@@ -32,6 +32,6 @@ buildGoModule {
     description = "Tool that allows users to use Tailscale Whois authentication with NGINX as a reverse proxy";
     license = lib.licenses.bsd3;
     mainProgram = "tailscale.nginx-auth";
-    maintainers = with lib.maintainers; [ phaer ];
+    maintainers = [ ];
   };
 }

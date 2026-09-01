@@ -3,19 +3,22 @@
   buildPythonPackage,
   cryptography,
   fetchPypi,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiobroadlink";
   version = "0.1.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-uTUtDhL9VtWZE+Y6ZJY4prmlE+Yh2UrCg5+eSyAQzMk=";
   };
 
-  propagatedBuildInputs = [ cryptography ];
+  build-system = [ setuptools ];
+
+  dependencies = [ cryptography ];
 
   # Project has no tests
   doCheck = false;
@@ -26,7 +29,7 @@ buildPythonPackage rec {
     description = "Python module to control various Broadlink devices";
     mainProgram = "aiobroadlink";
     homepage = "https://github.com/frawau/aiobroadlink";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

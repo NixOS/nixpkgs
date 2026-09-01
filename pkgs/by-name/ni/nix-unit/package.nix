@@ -17,17 +17,17 @@ let
   # We pin the nix version to a known working one here as upgrades can likely break the build.
   # Since the nix language is rather stable we don't always need to have the latest and greatest for unit tests
   # On each update of nix unit we should re-evaluate what version we need.
-  nixComponents = nixVersions.nixComponents_2_30;
+  nixComponents = nixVersions.nixComponents_2_35;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nix-unit";
-  version = "2.30.0";
+  version = "2.35.1";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-unit";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yQ7HqzfrG7B6Sq1iGBI7QJsbkI/07Ccz42bqWJW4NJA=";
+    hash = "sha256-jZ6YOb5L7FShPUcq63qDKT3W83mVzAaM2y1V4CLcdq8=";
   };
 
   buildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     # nlohmann_json can be only discovered via cmake files
     cmake
   ]
-  ++ lib.optional stdenv.cc.isClang [ clang-tools ];
+  ++ lib.optional stdenv.cc.isClang clang-tools;
 
   postInstall = ''
     wrapProgram "$out/bin/nix-unit" --prefix PATH : ${difftastic}/bin

@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  buildPackages,
   fetchurl,
   zlib,
   libtasn1,
@@ -9,7 +8,6 @@
   pkg-config,
   perl,
   gmp,
-  automake,
   libidn2,
   libiconv,
   texinfo,
@@ -60,13 +58,13 @@ let
   util-linux = util-linuxMinimal;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnutls";
-  version = "3.8.11";
+  version = "3.8.13";
 
   src = fetchurl {
-    url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
-    hash = "sha256-kb0jxKhuvGFS6BMD0gz2zq65e8j4QmbQ+uxuKfF7qiA=";
+    url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor finalAttrs.version}/gnutls-${finalAttrs.version}.tar.xz";
+    hash = "sha256-/+2Owb8JwkJtTxSq43feR1O1PlN9aF5gTpmosWypyX4=";
   };
 
   outputs = [
@@ -85,11 +83,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./nix-ssl-cert-file.patch
-
-    # Fixes test-float failure on ppc64 with C23
-    # https://lists.gnu.org/archive/html/bug-gnulib/2025-07/msg00021.html
-    # Multiple upstream commits squashed with adjustments, see header
-    ./gnulib-float-h-tests-port-to-C23-PowerPC-GCC.patch
   ];
 
   # Skip some tests:
@@ -135,6 +128,10 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       "--enable-ktls"
     ]
+    ++ lib.optionals stdenv.hostPlatform.isMusl [
+      # https://lists.gnu.org/archive/html/bug-gnulib/2026-05/msg00061.html
+      "gl_cv_func_free_preserves_errno=yes"
+    ]
     ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
       "--disable-doc"
     ]
@@ -168,10 +165,6 @@ stdenv.mkDerivation rec {
     pkg-config
     texinfo
   ]
-  ++ [
-    buildPackages.autoconf269
-    automake
-  ]
   ++ lib.optionals doCheck [
     which
     net-tools
@@ -179,6 +172,8 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [ nettle ];
+
+  strictDeps = true;
 
   inherit doCheck;
   # stdenv's `NIX_SSL_CERT_FILE=/no-cert-file.crt` breaks tests.
@@ -222,6 +217,8 @@ stdenv.mkDerivation rec {
     static = pkgsStatic.gnutls;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "GNU Transport Layer Security Library";
 
@@ -243,5 +240,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ vcunat ];
     platforms = lib.platforms.all;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" finalAttrs.version;
   };
-}
+})

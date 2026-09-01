@@ -4,25 +4,25 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bee";
-  version = "2.6.0";
+  version = "2.8.2";
 
   src = fetchFromGitHub {
     owner = "ethersphere";
     repo = "bee";
-    rev = "v${version}";
-    hash = "sha256-Yz23iVYGZ4PS1jbV5zFaCEsQOoAbHBpePml0zp5GSkQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Q35N6sTsv4o6S6Q2qbbzURP4rGujzPsKqBqYZe5QFG0=";
   };
 
-  vendorHash = "sha256-0czsloD2EhSWKQbj7NJ4IqGgKM9+Vp8gSIhOKWg/onA=";
+  vendorHash = "sha256-77I/8z82MsDpyLGKNJQkYX7eerLOQ2iJEoNBCGIupKY=";
 
   subPackages = [ "cmd/bee" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/ethersphere/bee/v2.version=${version}"
+    "-X github.com/ethersphere/bee/v2.version=${finalAttrs.version}"
     "-X github.com/ethersphere/bee/v2/pkg/api.Version=5.2.0"
     "-X github.com/ethersphere/bee/v2/pkg/api.DebugVersion=4.1.1"
     "-X github.com/ethersphere/bee/v2/pkg/p2p/libp2p.reachabilityOverridePublic=false"
@@ -51,7 +51,7 @@ buildGoModule rec {
 
       Bee is a Swarm node implementation, written in Go.
     '';
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

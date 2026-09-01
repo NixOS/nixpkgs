@@ -47,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/FontManager/font-manager/commit/cc0c148d90741e39615e3380d283f684a052dd94.patch";
       hash = "sha256-bRn+jVjBu6ZqmQCErgcqxv6OyFa4hkPYB5bvK7rEibA=";
     })
+    # TODO: drop this patch when merged upstream and released, see https://github.com/FontManager/font-manager/pull/468
+    ./fix-compilation-error-with-newer-vala-versions.patch
   ];
 
   nativeBuildInputs = [

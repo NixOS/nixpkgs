@@ -2,30 +2,30 @@
   lib,
   stdenv,
   fetchurl,
+  installFonts,
   unzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "line-awesome";
   version = "1.3.0";
 
   src = fetchurl {
-    url = "https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/${version}/line-awesome-${version}.zip";
+    url = "https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/${finalAttrs.version}/line-awesome-${finalAttrs.version}.zip";
     sha256 = "07qkz8s1wjh5xwqlq1b4lpihr1zah3kh6bnqvfwvncld8l9wjqfk";
   };
 
-  nativeBuildInputs = [ unzip ];
+  sourceRoot = "${finalAttrs.version}/fonts";
 
-  sourceRoot = "${version}/fonts";
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
-  installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    mkdir -p $out/share/fonts/woff
-    mkdir -p $out/share/fonts/woff2
-    cp *.ttf $out/share/fonts/truetype
-    cp *.woff $out/share/fonts/woff
-    cp *.woff2 $out/share/fonts/woff2
-  '';
+  nativeBuildInputs = [
+    unzip
+    installFonts
+  ];
 
   meta = {
     description = "Replace Font Awesome with modern line icons";
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ puzzlewolf ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -21,6 +21,23 @@
   # are, so long as it provides some builtins.
   doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD,
 
+  # Whether to build the set of __atomic_* routines that would typically
+  # be provided by libatomic in gcc environments.
+  withAtomics ?
+    stdenv.hostPlatform.useLLVM
+    && ((stdenv.cc.libc != null) || !stdenv.hostPlatform.hasSharedLibraries),
+  # If withAtomics is enabled, setting this to true ships those routines
+  # in a separate DSO (aliased as libatomic to match gcc's) rather than
+  # making them part of builtins.a. Unless no dynamic linking is used at
+  # all, this is the correct setup as it ensures the locks are unique in
+  # memory.
+  withAtomicsLib ? stdenv.hostPlatform.hasSharedLibraries,
+  # If withAtomics is enabled, this selects the pthreads-based
+  # implementation of the routines instead of the implementation
+  # using ad-hoc mutexes (which doesn't depend on libc at all).
+  # Use of pthreads helps code play better with sanitizers.
+  withAtomicsPthread ? lib.versionAtLeast release_version "19" && stdenv.cc.libc != null,
+
   # In recent releases, the compiler-rt build seems to produce
   # many `libclang_rt*` libraries, but not a single unified
   # `libcompiler_rt` library, at least under certain configurations. Some
@@ -89,6 +106,12 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (lib.strings.versionOlder (lib.versions.major release_version) "20") (fetchpatch {
     url = "https://github.com/llvm/llvm-project/commit/59978b21ad9c65276ee8e14f26759691b8a65763.patch";
     hash = "sha256-ys5SMLfO3Ay9nCX9GV5yRCQ6pLsseFu/ZY6Xd6OL4p0=";
+    relative = "compiler-rt";
+  })
+  # Linux removed `linux/scc.h`, which breaks building compiler-rt. Upstream LLVM has fixed it in LLVM 22 and 23.
+  ++ lib.optional (lib.strings.versionOlder version "22.1.5") (fetchpatch {
+    url = "https://github.com/llvm/llvm-project/commit/3dc4fd6dd41100f051a63642f449b16324389c96.patch?full_index=1";
+    hash = "sha256-Av6CN95XjdUagIKh3AAjD0UK8r01fDz0cD0BLjZ70dg=";
     relative = "compiler-rt";
   });
 
@@ -190,6 +213,11 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optional (stdenv.hostPlatform.isAarch64 && !haveLibc)
       # Fixes https://github.com/NixOS/nixpkgs/issues/393603
       (lib.cmakeBool "COMPILER_RT_DISABLE_AARCH64_FMV" true)
+  ++ lib.optionals withAtomics [
+    (lib.cmakeBool "COMPILER_RT_EXCLUDE_ATOMIC_BUILTIN" (!withAtomicsLib))
+    (lib.cmakeBool "COMPILER_RT_BUILD_STANDALONE_LIBATOMIC" withAtomicsLib)
+    (lib.cmakeBool "COMPILER_RT_LIBATOMIC_USE_PTHREAD" withAtomicsPthread)
+  ]
   ++ devExtraCmakeFlags;
 
   outputs = [
@@ -262,6 +290,11 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + lib.optionalString forceLinkCompilerRt ''
       ln -s $out/lib/*/libclang_rt.builtins-*.a $out/lib/libcompiler_rt.a
+    ''
+    + lib.optionalString (withAtomics && withAtomicsLib) ''
+      ln -s $out/lib/*/libclang_rt.atomic-*.so $out/lib/libatomic.so
+      # create a link with the original soname as well, so it's found at runtime
+      ln -s $out/lib/*/libclang_rt.atomic-*.so $out/lib/
     '';
 
   meta = llvm_meta // {

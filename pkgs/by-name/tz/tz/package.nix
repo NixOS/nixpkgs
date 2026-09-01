@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tz";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "oz";
     repo = "tz";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-OpftKCEoAltvQw0bB3SyFeXUDiGjVHNDrrKsdRH6zl4=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ siraben ];
     mainProgram = "tz";
   };
-}
+})

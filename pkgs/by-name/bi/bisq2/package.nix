@@ -13,6 +13,8 @@
   zip,
   gnupg,
   coreutils,
+  gnugrep,
+  gnused,
 
   # Used by the bundled webcam-app
   libv4l,
@@ -24,16 +26,22 @@
 }:
 
 let
-  version = "2.1.7";
+  version = "2.1.12";
 
   jdk = zulu25.override { enableJavaFX = true; };
+
+  argumentFile = builtins.toFile "app.args" ''
+    -Djpackage.app-version=${version}
+    -classpath
+    @out@/lib/app/desktop-app-launcher.jar:@classpath@
+  '';
 
   bisq-launcher =
     args:
     writeShellScript "bisq-launcher" ''
       rm -fR $HOME/.local/share/Bisq2/tor
 
-      exec "${lib.getExe jdk}" -Djpackage.app-version=@version@ -classpath @out@/lib/app/desktop-app-launcher.jar:@out@/lib/app/* ${args} bisq.desktop_app_launcher.DesktopAppLauncher "$@"
+      exec "${lib.getExe jdk}" @@out@/lib/app.args ${args} bisq.desktop_app_launcher.DesktopAppLauncher "$@"
     '';
 
   # A given release will be signed by either Alejandro Garcia or Henrik Jannsen
@@ -61,7 +69,7 @@ let
     libv4l
   ];
 in
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit version;
 
   pname = "bisq2";
@@ -69,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   # nixpkgs-update: no auto update
   src = fetchurl {
     url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/Bisq-${version}.deb";
-    hash = "sha256-kNQbTZoHFR2qFw/Jjc9iaEews/oUOYoJanmbVH/vs44=";
+    hash = "sha256-oLNvCc52lkp/efh7ehnV/0JjkY5+oKv0A2Dj0xtBK7Y=";
 
     # Verify the upstream Debian package prior to extraction.
     # See https://bisq.wiki/Bisq_2#Installation
@@ -83,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: rec {
       export GNUPGHOME=./gnupg
       mkdir -m 700 -p $GNUPGHOME
       ln -s $downloadedFile ./Bisq-${version}.deb
-      ln -s ${signature} ./signature.asc
+      ln -s ${finalAttrs.signature} ./signature.asc
       gpg --import ${publicKey."E222AA02"}
       gpg --import ${publicKey."387C8307"}
       gpg --batch --verify signature.asc Bisq-${version}.deb
@@ -94,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   signature = fetchurl {
     url = "https://github.com/bisq-network/bisq2/releases/download/v${version}/Bisq-${version}.deb.asc";
-    hash = "sha256-Cl9EIp+ycD8Tp/bx5dXQK206jZzrYJkI/U9ItfXDRWw=";
+    hash = "sha256-dydNfzk8EMUPGP9W6GI5H0iZA+SCP9PHw+RbWCmMlTM=";
   };
 
   nativeBuildInputs = [
@@ -104,6 +112,8 @@ stdenv.mkDerivation (finalAttrs: rec {
     makeBinaryWrapper
     zip
     gnupg
+    gnugrep
+    gnused
   ];
 
   desktopItems = [
@@ -150,6 +160,10 @@ stdenv.mkDerivation (finalAttrs: rec {
 
     mkdir -p $out/lib $out/bin
     cp -r opt/bisq2/lib/app $out/lib
+
+    export classpath=$(ls -1 $out/lib/app/ | grep -v desktop-app-launcher.jar | sort | sed -e 's/^/@out@\/lib\/app\//g' | tr '\n' ':')
+    cp -L ${argumentFile} $out/lib/app.args
+    substituteAllInPlace $out/lib/app.args
 
     install -D -m 777 ${bisq-launcher ""} $out/bin/bisq2
     substituteAllInPlace $out/bin/bisq2

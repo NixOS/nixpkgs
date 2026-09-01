@@ -41,7 +41,10 @@ in
 
     strictDeps = true;
 
-    CSC_OPTIONS = lib.concatStringsSep " " cscOptions;
+    env = {
+      CSC_OPTIONS = lib.concatStringsSep " " cscOptions;
+    }
+    // (args.env or { });
 
     buildPhase = ''
       runHook preBuild

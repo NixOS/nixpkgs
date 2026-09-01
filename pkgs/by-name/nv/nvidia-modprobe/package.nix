@@ -4,15 +4,15 @@
   fetchFromGitHub,
   gnum4,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nvidia-modprobe";
-  version = "590.48.01";
+  version = "595.71.05";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvidia-modprobe";
-    rev = version;
-    hash = "sha256-Vtp5FDDmzbwtDe11O0w/S8Mptpp8Li21/gBfJzfE0/g=";
+    rev = finalAttrs.version;
+    hash = "sha256-XVWvnUZkEqEh3UjPIU6DaZuYU9DvjfIMsWbLJ78jJWs=";
   };
 
   nativeBuildInputs = [ gnum4 ];
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
   };
-}
+})

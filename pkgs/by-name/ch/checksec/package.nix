@@ -9,29 +9,29 @@
   checksec,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "checksec";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "slimm609";
     repo = "checksec";
-    tag = version;
-    hash = "sha256-LsVK+ufSUGXWHpPk1iAFD6Lxh5hEp1WmTAy9hZMEiKk=";
+    tag = finalAttrs.version;
+    hash = "sha256-vvfr5JsCTq1NWUfOOlHIjf+ToNNzP5Xps09XPLlG1zc=";
   };
 
-  vendorHash = "sha256-GzSliyKxBfATA7BaHO/4HyReEwT7dYTpRuyjADNtJuc=";
+  vendorHash = "sha256-sW2C39xhMQCyR8S1m0ZplVQxu42w+tNqjxH7VO5stGw=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   passthru.tests = {
     version = testers.testVersion {
       package = checksec;
-      inherit version;
+      inherit (finalAttrs) version;
     };
   };
 
@@ -46,4 +46,4 @@ buildGoModule rec {
       sdht0
     ];
   };
-}
+})

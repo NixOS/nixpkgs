@@ -17,7 +17,14 @@
   libxkbcommon,
   alsa-lib,
   expat,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxkbfile,
+  libxcb,
   libgbm,
   systemd,
   libGL,
@@ -39,14 +46,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     (lib.getLib stdenv.cc.cc)
-    xorg.libX11
-    xorg.libXext
-    xorg.libxcb
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libxkbfile
+    libx11
+    libxext
+    libxcb
+    libxcomposite
+    libxdamage
+    libxfixes
+    libxrandr
+    libxkbfile
     glib
     at-spi2-atk
     cairo

@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-sharing";
-  version = "8.0.2";
+  version = "8.0.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = "switchboard-plug-sharing";
-    rev = version;
-    hash = "sha256-XTgUHgvBSzZeuUup0gT6sbhyT4FGGG7o+qbPmfeRVQE=";
+    repo = "settings-sharing";
+    tag = version;
+    hash = "sha256-TNLnSFvjJFUfDkhYSKgqgpmpZggIw3LcBqmkXIzZ3nk=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Switchboard Sharing Plug";
-    homepage = "https://github.com/elementary/switchboard-plug-sharing";
+    homepage = "https://github.com/elementary/settings-sharing";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.pantheon ];

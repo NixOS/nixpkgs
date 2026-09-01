@@ -9,11 +9,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "hentai-at-home";
-  version = "1.6.4";
+  version = "1.6.5";
 
   src = fetchzip {
     url = "https://repo.e-hentai.org/hath/HentaiAtHome_${finalAttrs.version}_src.zip";
-    hash = "sha512-dcHWZiU0ySLlEhZeK1n2T/dyO6Wk9eS7CpZRSfzY3KvHrPBthQnaFrarSopPXJan1+zWROu1pEff1WSr5+HO4Q==";
+    hash = "sha512-oKyvzHZTPwSTcjsNOQ0LIl6rV+b7JDnuWbYKFogWWkyKcR/xDcNPNhUrKv8QLH6a1AQ2T8DYkxcJYnjhgsaovA==";
     stripRoot = false;
   };
 
@@ -22,10 +22,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  LANG = "en_US.UTF-8";
-  LOCALE_ARCHIVE = lib.optionalString (
-    stdenvNoCC.buildPlatform.libc == "glibc"
-  ) "${buildPackages.glibcLocales}/lib/locale/locale-archive";
+  env = {
+    LANG = "en_US.UTF-8";
+  }
+  // lib.optionalAttrs (stdenvNoCC.buildPlatform.libc == "glibc") {
+    LOCALE_ARCHIVE = "${buildPackages.glibcLocales}/lib/locale/locale-archive";
+  };
 
   makeFlags = [ "all" ];
   enableParallelBuilding = false;

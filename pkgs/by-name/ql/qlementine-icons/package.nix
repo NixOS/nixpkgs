@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "qlementine-icons";
-  version = "1.14.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "oclero";
     repo = "qlementine-icons";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-29XiD3t+KKEe8KRs5LwTN11gEFBJt/Ws6geq6bdH8KA=";
+    hash = "sha256-dnKl245hLBfENAh0ICQ/OX+3KDC2RE3t7uboiUc1XGY=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
       standard, and vastly expands it, in 16×16 pixels.
 
       The icons are in SVG format, so can be scaled to any size without
-      loosing any quality. However, they've been designed to be used in
+      losing any quality. However, they've been designed to be used in
       `16×16` pixels, to be pixel-perfect.
     '';
     homepage = "https://github.com/oclero/qlementine-icons";

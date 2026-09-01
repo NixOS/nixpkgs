@@ -11,21 +11,28 @@
   libpng,
   uthash,
   which,
-  xnee,
-  xorg,
+  libxrender,
+  libxrandr,
+  libxpm,
+  libxmu,
+  libxft,
+  libx11,
+  xdotool,
+  xeyes,
+  xprop,
   python3Packages,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.7.1";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.8.0";
 
   pname = "alttab";
 
   src = fetchFromGitHub {
     owner = "sagb";
     repo = "alttab";
-    tag = "v${version}";
-    sha256 = "sha256-1+hk0OeSriXPyefv3wOgeiW781PL4VP5Luvt+RS5jmg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ICVP2kxGTLzo77DTn+5gbxdyWSO6RH9EgolfrM3cBVQ=";
   };
 
   nativeBuildInputs = [
@@ -40,12 +47,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libpng
     uthash
-    xorg.libX11
-    xorg.libXft
-    xorg.libXmu
-    xorg.libXpm
-    xorg.libXrandr
-    xorg.libXrender
+    libx11
+    libxft
+    libxmu
+    libxpm
+    libxrandr
+    libxrender
   ];
 
   enableParallelBuilding = true;
@@ -57,9 +64,9 @@ stdenv.mkDerivation rec {
     procps
     python3Packages.xvfbwrapper
     which
-    xnee
-    xorg.xeyes
-    xorg.xprop
+    xdotool
+    xeyes
+    xprop
   ];
 
   meta = {
@@ -70,4 +77,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "alttab";
   };
-}
+})

@@ -8,14 +8,14 @@
   libnl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "horst";
   version = "5.1";
 
   src = fetchFromGitHub {
     owner = "br101";
     repo = "horst";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "140pyv6rlsh4c745w4b59pz3hrarr39qq3mz9z1lsd3avc12nx1a";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "horst";
   };
-}
+})

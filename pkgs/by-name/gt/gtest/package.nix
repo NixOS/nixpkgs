@@ -4,6 +4,9 @@
   fetchFromGitHub,
   cmake,
   ninja,
+  withAbseil ? false,
+  abseil-cpp,
+  re2,
   # Enable C++17 support
   #     https://github.com/google/googletest/issues/3081
   # Projects that require a higher standard can override this package.
@@ -24,7 +27,7 @@
   static ? stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtest";
   version = "1.17.0";
 
@@ -36,7 +39,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "googletest";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HIHMxAUR4bjmFLoltJeIAVSulVQ6kVuIT2Ku+lwAx/4=";
   };
 
@@ -47,20 +50,29 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     ninja
+  ]
+  ++ lib.optionals withAbseil [
+    abseil-cpp
+    re2
   ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
   ]
   ++ lib.optionals (cxx_standard != null) [
     "-DCMAKE_CXX_STANDARD=${cxx_standard}"
-  ];
+  ]
+  ++ lib.optional withAbseil "-DGTEST_HAS_ABSL=ON";
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Google's framework for writing C++ tests";
     homepage = "https://github.com/google/googletest";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ivan-tkatchev ];
+    maintainers = [ ];
   };
-}
+})

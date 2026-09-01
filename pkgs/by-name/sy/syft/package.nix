@@ -6,15 +6,15 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "syft";
-  version = "1.40.1";
+  version = "1.51.1";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "syft";
-    tag = "v${version}";
-    hash = "sha256-zvLUvBaGI6HXzpsPJSZaF4ni6tbEdZizY7KNSpzYXUo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ezxZf+zZtcstn3sxjC4x/Gf9DjGKP8FKZduNLB/yG2c=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -29,7 +29,7 @@ buildGoModule rec {
   # hash mismatch with darwin
   proxyVendor = true;
 
-  vendorHash = "sha256-xIy3cVGx8wJektv7b+3YtR2jIBDF920762y7Gsc22nI=";
+  vendorHash = "sha256-iyQ2OsjpNj6q+nrxvWFkFtjdXsMhjhAQIWTg6xm+RgA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -38,8 +38,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
-    "-X=main.gitDescription=v${version}"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.gitDescription=v${finalAttrs.version}"
     "-X=main.gitTreeState=clean"
   ];
 
@@ -69,7 +69,7 @@ buildGoModule rec {
     runHook preInstallCheck
 
     $out/bin/syft --help
-    $out/bin/syft version | grep "${version}"
+    $out/bin/syft version | grep "${finalAttrs.version}"
 
     runHook postInstallCheck
   '';
@@ -77,13 +77,13 @@ buildGoModule rec {
   meta = {
     description = "CLI tool and library for generating a Software Bill of Materials from container images and filesystems";
     homepage = "https://github.com/anchore/syft";
-    changelog = "https://github.com/anchore/syft/releases/tag/v${version}";
+    changelog = "https://github.com/anchore/syft/releases/tag/v${finalAttrs.version}";
     longDescription = ''
       A CLI tool and Go library for generating a Software Bill of Materials
       (SBOM) from container images and filesystems. Exceptional for
       vulnerability detection when used with a scanner tool like Grype.
     '';
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       developer-guy
       jk
@@ -91,4 +91,4 @@ buildGoModule rec {
     ];
     mainProgram = "syft";
   };
-}
+})

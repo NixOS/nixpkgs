@@ -7,7 +7,7 @@
   nix,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aws-c-compression";
   # nixpkgs-update: no auto update
   version = "0.3.1";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-compression";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-gpru+hnppgLHhcPfVBOaMdcT6e8wUjZmY7Caaa/KAW4=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ r-burns ];
   };
-}
+})

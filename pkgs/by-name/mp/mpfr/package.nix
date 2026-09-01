@@ -12,14 +12,14 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "4.2.2";
   pname = "mpfr";
 
   src = fetchurl {
     urls = [
-      "https://www.mpfr.org/${pname}-${version}/${pname}-${version}.tar.xz"
-      "mirror://gnu/mpfr/${pname}-${version}.tar.xz"
+      "https://www.mpfr.org/mpfr-${finalAttrs.version}/mpfr-${finalAttrs.version}.tar.xz"
+      "mirror://gnu/mpfr/mpfr-${finalAttrs.version}.tar.xz"
     ];
     hash = "sha256-tnugOD736KhWNzTi6InvXsPDuJigHQD6CmhprYHGzgE=";
   };
@@ -60,16 +60,18 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = writeScript "update-mpfr" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -eu -o pipefail
 
       # Expect the text in format of '<title>GNU MPFR version 4.1.1</title>'
       new_version="$(curl -s https://www.mpfr.org/mpfr-current/ |
-          pcregrep -o1 '<title>GNU MPFR version ([0-9.]+)</title>')"
-      update-source-version ${pname} "$new_version"
+          pcre2grep -o1 '<title>GNU MPFR version ([0-9.]+)</title>')"
+      update-source-version ${finalAttrs.pname} "$new_version"
     '';
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.mpfr.org/";
@@ -87,9 +89,9 @@ stdenv.mkDerivation rec {
       floating-point arithmetic (53-bit mantissa).
     '';
 
-    license = lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl3Plus;
 
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

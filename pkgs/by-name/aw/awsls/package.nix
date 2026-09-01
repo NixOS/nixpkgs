@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "awsls";
   version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "jckuester";
     repo = "awsls";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-iy9tohmVUtNXYVfe6pZ+pbbLlcK6Fu1GgzTWMD+3xP0=";
   };
 
@@ -24,8 +24,8 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${t}.version=${version}"
-      "-X ${t}.commit=${src.rev}"
+      "-X ${t}.version=${finalAttrs.version}"
+      "-X ${t}.commit=${finalAttrs.src.rev}"
       "-X ${t}.date=unknown"
     ];
 
@@ -38,4 +38,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.markus1189 ];
     mainProgram = "awsls";
   };
-}
+})

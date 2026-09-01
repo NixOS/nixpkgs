@@ -6,82 +6,64 @@
   callPackage,
 
   jdk,
-  fontconfig,
-  libGL,
-  libX11,
 
   vmopts ? null,
   forceWayland ? false,
 }:
 let
   baseBuilder = if stdenv.hostPlatform.isDarwin then ./darwin.nix else ./linux.nix;
-  mkJetBrainsProductCore = callPackage baseBuilder { inherit vmopts; };
 in
 # Makes a JetBrains IDE
-{
-  pname,
-  src,
-  version,
-  buildNumber,
-  wmClass,
-  product,
-  productShort ? product,
-  meta,
-
-  libdbm,
-  fsnotifier,
-
-  extraWrapperArgs ? [ ],
-  extraLdPath ? [ ],
-  buildInputs ? [ ],
-  passthru ? { },
-}:
-mkJetBrainsProductCore {
-  inherit
-    pname
-    extraLdPath
-    jdk
-    src
-    version
-    buildNumber
-    wmClass
-    product
-    productShort
-    libdbm
-    fsnotifier
-    ;
-
-  buildInputs =
-    buildInputs
-    ++ [ stdenv.cc.cc ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      fontconfig
-      libGL
-      libX11
+lib.extendMkDerivation {
+  constructDrv = callPackage baseBuilder {
+    inherit vmopts jdk forceWayland;
+    # Args to not pass to mkDerivation in the base builders. Since both get the same args
+    # passed in, both have the same list of args to ignore, even if they don't both use
+    # all of them.
+    excludeDrvArgNames = [
+      "product"
+      "productShort"
+      "buildNumber"
+      "wmClass"
+      "libdbm"
+      "fsnotifier"
+      "extraLdPath"
+      "extraWrapperArgs"
     ];
+  };
 
-  extraWrapperArgs =
-    extraWrapperArgs
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && forceWayland) [
-      ''--add-flags "\''${WAYLAND_DISPLAY:+-Dawt.toolkit.name=WLToolkit}"''
-    ];
+  extendDrvArgs =
+    # NOTE: See linux.nix and darwin.nix for additional specific arguments
+    finalAttrs:
+    {
+      buildNumber,
+      product,
 
-  passthru = lib.recursiveUpdate passthru {
-    inherit
-      buildNumber
-      product
-      libdbm
-      fsnotifier
-      ;
+      libdbm,
+      fsnotifier,
 
-    updateScript = ../updater/main.py;
+      meta ? { },
+      passthru ? { },
+      ...
+    }:
+    {
+      passthru = passthru // {
+        inherit
+          buildNumber
+          product
+          libdbm
+          fsnotifier
+          ;
 
-    tests = {
-      plugins = callPackage ../plugins/tests.nix { ideName = pname; };
+        updateScript = ../updater/main.py;
+
+        tests = {
+          plugins = callPackage ../plugins/tests.nix { ide = finalAttrs.finalPackage; };
+        };
+      };
+
+      meta = meta // {
+        teams = [ lib.teams.jetbrains ];
+      };
     };
-  };
-
-  meta = meta // {
-    teams = [ lib.teams.jetbrains ];
-  };
 }

@@ -47,9 +47,9 @@
   xz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "evolution";
-  version = "3.58.2";
+  version = "3.60.2";
 
   outputs = [
     "out"
@@ -57,8 +57,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-uhvDtXKKMbjJ6qDaHuiulG7dzFRO6CQtzMIJ2W3KozA=";
+    url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor finalAttrs.version}/evolution-${finalAttrs.version}.tar.xz";
+    hash = "sha256-IYpJ+lBoFV29vTWjDRCi8jfHJGX7HQ4Kp4iJ8DnC7Y8=";
   };
 
   nativeBuildInputs = [
@@ -157,4 +157,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

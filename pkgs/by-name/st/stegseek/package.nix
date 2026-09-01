@@ -10,14 +10,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stegseek";
   version = "0.6";
 
   src = fetchFromGitHub {
     owner = "RickdeJager";
     repo = "stegseek";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-B5oJffYOYfsH0YRq/Bq0ciIlCsCONyScFBjP7a1lIzo=";
   };
 
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
       used to extract hidden data from files.
     '';
     homepage = "https://github.com/RickdeJager/stegseek";
-    license = with lib.licenses; [ gpl2Only ];
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "stegseek";
   };
-}
+})

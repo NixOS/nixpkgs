@@ -4,13 +4,13 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sway-assign-cgroups";
   version = "0.4.1";
   src = fetchFromGitHub {
     owner = "alebastr";
     repo = "sway-systemd";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-AJ87/sPy8IVJgb5YehfUfNTOFEDithLfiTxgZfZf238=";
   };
   pyproject = false;
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     i3ipc
     psutil
     tenacity
-    xlib
+    python-xlib
   ];
 
   installPhase = ''
@@ -44,8 +44,9 @@ python3Packages.buildPythonApplication rec {
       Therefore it's recommended to supplement the script with use of systemd user
       services for such background apps.
     '';
+    homepage = "https://github.com/alebastr/sway-systemd";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ nickhu ];
   };
-}
+})

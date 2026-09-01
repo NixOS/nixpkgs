@@ -2,9 +2,9 @@
   lib,
   stdenv,
   dockapps-sources,
-  libX11,
-  libXext,
-  libXpm,
+  libx11,
+  libxext,
+  libxpm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,15 +15,15 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/cputnik/src";
 
   buildInputs = [
-    libX11
-    libXpm
-    libXext
+    libx11
+    libxpm
+    libxext
   ];
 
   preBuild = ''
     makeFlagsArray+=(
-      INCS="-I${libX11.dev}/include -I${libXext.dev}/include -I${libXpm.dev}/include"
-      LIBS="-L${libX11}/lib -L${libXext}/lib -L${libXpm}/lib -lX11 -lXpm -lXext"
+      INCS="-I${libx11.dev}/include -I${libxext.dev}/include -I${libxpm.dev}/include"
+      LIBS="-L${libx11}/lib -L${libxext}/lib -L${libxpm}/lib -lX11 -lXpm -lXext"
     )
   '';
 

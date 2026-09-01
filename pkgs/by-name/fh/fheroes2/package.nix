@@ -16,15 +16,15 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fheroes2";
-  version = "1.1.13";
+  version = "1.1.17";
 
   src = fetchFromGitHub {
     owner = "ihhub";
     repo = "fheroes2";
-    rev = version;
-    hash = "sha256-ct58Rkc6ORXldINQZVzMuObMl0BMk6QG88oU4tT0WcE=";
+    rev = finalAttrs.version;
+    hash = "sha256-th5XWNpVweVdfxdNK0XaPL8L3UbuafnIdENRYIgfcXw=";
   };
 
   nativeBuildInputs = [ imagemagick ];
@@ -90,4 +90,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

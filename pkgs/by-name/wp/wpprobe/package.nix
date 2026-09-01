@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "wpprobe";
-  version = "0.8.0";
+  version = "0.12.11";
 
   src = fetchFromGitHub {
     owner = "Chocapikk";
     repo = "wpprobe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Cu0Bs9oDD/OAKASLXsLPve0e92PoHUaLmk6C+VDIaCU=";
+    hash = "sha256-DEDbLnQRAYex6OAHoXRHxE6SQ5C/uTznk7klTosiauk=";
   };
 
-  vendorHash = "sha256-pAKFrdja+rH0kiJH6hToZwLjE8lLBHFAUCjnCLbgxVo=";
+  vendorHash = "sha256-0l7n6u2iODxoVR1fIMyUBaQj7cYk0Q5VnXUePaqOHXc=";
 
   nativeCheckInputs = [
     versionCheckHook
@@ -27,14 +27,14 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/Chocapikk/wpprobe/internal/utils.Version=v${finalAttrs.version}"
+    "-X=github.com/Chocapikk/wpprobe/internal/version.Version=v${finalAttrs.version}"
   ];
 
   doInstallCheck = true;
 
   checkFlags = [
-    # Test requires network access
-    "-skip=TestUpdateWordfence"
+    # Tests require network access
+    "-skip=TestUpdateWordfence|TestAPI_Scan|TestAPI_ScanWithContext|TestAPI_ScanWithProgress|TestAPI_UpdateDatabases"
   ];
 
   meta = {

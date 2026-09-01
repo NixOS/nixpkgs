@@ -25,7 +25,7 @@ in
 
   meta = {
     doc = ./pantheon.md;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 
   imports = [
@@ -197,6 +197,7 @@ in
         pantheon.gnome-settings-daemon
         pantheon.elementary-session-settings
         pantheon.elementary-settings-daemon
+        pantheon.pantheon-agent-polkit
       ];
       programs.dconf.enable = true;
       networking.networkmanager.enable = mkDefault true;
@@ -208,20 +209,17 @@ in
         "org.gnome.SettingsDaemon.XSettings.service"
       ];
 
-      # https://github.com/elementary/settings-daemon/issues/217
-      systemd.user.services.elementary-settings-daemon = {
-        description = "elementary Settings Daemon";
+      systemd.user.services."io.elementary.settings-daemon" = {
+        # https://github.com/NixOS/nixpkgs/issues/81138
         wantedBy = [ "gnome-session-initialized.target" ];
-        after = [ "gnome-session-initialized.target" ];
-
         # The daemon might launch external applications via g_app_info_launch.
         environment.PATH = lib.mkForce null;
+      };
 
-        serviceConfig = {
-          Slice = "session.slice";
-          ExecStart = "${pkgs.pantheon.elementary-settings-daemon}/bin/io.elementary.settings-daemon";
-          Restart = "on-failure";
-        };
+      systemd.user.services."io.elementary.desktop.agent-polkit" = {
+        # Same as above.
+        wantedBy = [ "gnome-session-initialized.target" ];
+        environment.PATH = lib.mkForce null;
       };
 
       # Global environment
@@ -285,8 +283,7 @@ in
         ++ (with pkgs.pantheon; [
           elementary-files
           elementary-settings-daemon
-          # https://github.com/elementary/portals/issues/157
-          # xdg-desktop-portal-pantheon
+          xdg-desktop-portal-pantheon
         ])
       ) config.environment.pantheon.excludePackages;
 

@@ -15,7 +15,7 @@
 }:
 let
   pname = "quantulum3";
-  version = "0.9.2";
+  version = "0.10.0";
 in
 buildPythonPackage {
   inherit version pname;

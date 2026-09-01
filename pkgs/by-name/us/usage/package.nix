@@ -6,22 +6,33 @@
   installShellFiles,
   nix-update-script,
   nodejs,
+  bashInteractive,
   usage,
   testers,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "usage";
-  version = "2.11.0";
+  version = "6.4.1";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "usage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AFfI843y1fKdw2f4alz7WoeMQR2IPWDJ3SofCCMJVpQ=";
+    hash = "sha256-6m2nD4f6dcRRbWCt3YB3hxh8khC7tQuvFTdAS8/wHxs=";
   };
 
-  cargoHash = "sha256-WC/q9yd1XJT/EtC9ES5fw6j45gyRo3k2eNEDwGmvDWo=";
+  cargoHash = "sha256-4Zu1lPRYO53kCLGuLN69XlGUpRH4o88ccaiU6A40DiY=";
+
+  # Upstream's releases ship only the `usage` binary.
+  cargoBuildFlags = [
+    "-p"
+    "usage-cli"
+  ];
+  cargoTestFlags = [
+    "-p"
+    "usage-cli"
+  ];
 
   postPatch = ''
     substituteInPlace ./examples/*.sh \
@@ -33,14 +44,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeCheckInputs = [
     # for some tests
     nodejs
+    bashInteractive
   ];
 
-  checkFlags = [
-    # has --include-bash-completion-lib so requires external lib downloaded on runtime
-    "--skip=test_bash_completion_integration"
-  ];
-
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
+    installManPage ./cli/assets/usage.1
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd usage \
       --bash <($out/bin/usage --completions bash) \
       --fish <($out/bin/usage --completions fish) \

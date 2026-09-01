@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdbook-pagetoc";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "slowsage";
     repo = "mdbook-pagetoc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-B94lIgOJC83cIkuggmfopTDEi9CUQ3nJJpzF9LdImUA=";
   };
 
@@ -26,4 +26,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

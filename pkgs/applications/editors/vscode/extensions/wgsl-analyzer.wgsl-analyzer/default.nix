@@ -10,8 +10,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "wgsl-analyzer";
     publisher = "wgsl-analyzer";
-    version = "0.11.141";
-    hash = "sha256-egd9B5mS5pqzDWVry3dEQKfnxT4zI0RdLMJ/x5n6Nek=";
+    version = "0.11.318";
+    hash = "sha256-px6lKME6aapi9L9Owb3zhbEMoKmA9GpBQrHtb8Kg0XI=";
   };
 
   nativeBuildInputs = [

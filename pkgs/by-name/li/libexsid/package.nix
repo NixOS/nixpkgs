@@ -10,14 +10,14 @@
   libftdi1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libexsid";
   version = "2.1";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "exsid-driver";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1qbiri549fma8c72nmj3cpz3sn1vc256kfafnygkmkzg7wdmgi7r";
   };
 
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ OPNA2608 ];
     platforms = lib.platforms.all;
   };
-}
+})

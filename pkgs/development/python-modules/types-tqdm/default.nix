@@ -6,15 +6,16 @@
   types-requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "types-tqdm";
-  version = "4.67.0.20250809";
+  version = "4.70.0.20260805";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "types_tqdm";
-    inherit version;
-    hash = "sha256-Ar96uRJWCAucTGP58RtRnCe6r1Jxjl/auelgbaFo1QA=";
+    inherit (finalAttrs) version;
+    hash = "sha256-Vp79D9iypGDm5lSGNOwlPBNi7YkH+LDarPCgfqsgSiY=";
   };
 
   build-system = [ setuptools ];
@@ -30,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

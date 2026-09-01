@@ -7,14 +7,14 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cert-viewer";
   version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "mgit-at";
     repo = "cert-viewer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6IPr2BG3y/7cmc2WkeeFDpQ59GNU1eOhhm49HE2w0cA=";
   };
 
@@ -44,4 +44,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.mkg20001 ];
     mainProgram = "cert-viewer";
   };
-}
+})

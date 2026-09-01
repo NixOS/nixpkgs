@@ -10,17 +10,16 @@
 
 maven.buildMavenPackage rec {
   pname = "filius";
-  version = "2.9.4";
+  version = "2.13.0";
 
   src = fetchFromGitLab {
     owner = "filius1";
     repo = "filius";
-    # they seem to have stopped using the "v" prefix since 2.9.3
-    tag = version;
-    hash = "sha256-nQyDPLDQe5kFH3PhCmLqAt8kVnitPwX5K3xLnyntF5k=";
+    tag = "v${version}";
+    hash = "sha256-u4X6jrlNzgm1vWyRFSzVjoQ3dtZUK9pAHSMxUHsSV84=";
   };
 
-  mvnHash = "sha256-6Qq/7vgA9bWQK+k66qORNwvLKMR1U5yb95DJMWaDq/k=";
+  mvnHash = "sha256-0xc/gnodgBo6gOkvz7Oe/5AQyjh2xMgyWEeEyktFqEA=";
   mvnParameters = "-Plinux";
 
   # tests want to create an X11 window which isn't often feasible
@@ -56,8 +55,10 @@ maven.buildMavenPackage rec {
   postInstall = ''
     install -Dm444 src/deb/application-filius-project.xml $out/share/mime/packages/application-filius-project.xml
 
-    install -Dm444 src/deb/filius32.png $out/share/icons/hicolor/80x56/mimetypes/filius.png
-    install -Dm444 src/deb/filius32.png $out/share/icons/hicolor/80x56/apps/filius.png
+    for size in {32,64,96}; do
+      install -Dm444 src/deb/icons/hicolor/"$size"x"$size"/apps/filius.png $out/share/icons/hicolor/"$size"x"$size"/apps/filius.png
+      install -Dm444 src/deb/icons/hicolor/"$size"x"$size"/apps/filius.png $out/share/icons/hicolor/"$size"x"$size"/mimetypes/filius.png
+    done
 
     mkdir -p $out/share/man/man1/
     cp src/deb/filius.1 $out/share/man/man1/

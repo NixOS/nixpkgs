@@ -12,7 +12,7 @@
   libglvnd,
   vulkan-headers,
   vulkan-loader,
-  xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libglvnd
     vulkan-headers
     vulkan-loader
-    xorg.libX11
+    libx11
   ]
   ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libdrm) [ libdrm ];
 

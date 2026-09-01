@@ -7,14 +7,14 @@
   pciutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "biosdevname";
   version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "dell";
     repo = "biosdevname";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "19wbb79x9h79k55sgd4dylvdbhhrvfaiaknbw9s1wvfmirkxa1dz";
   };
 
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Udev helper for naming devices per BIOS names";
+    homepage = "https://github.com/dell/biosdevname";
     license = lib.licenses.gpl2Only;
     platforms = [
       "x86_64-linux"
@@ -39,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "biosdevname";
   };
-}
+})

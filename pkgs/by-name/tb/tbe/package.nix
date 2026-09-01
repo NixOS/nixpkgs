@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.9.3.1";
 
   src = fetchFromGitHub {
-    owner = "kaa-ching";
+    owner = "the-butterfly-effect";
     repo = "tbe";
     tag = "v${finalAttrs.version}";
     hash = "sha256-UnvFr/ofk6CgtBv6ua8XjZAWScFGfeNx+is5Q8Zl4qk=";

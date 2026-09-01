@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  libX11,
+  libx11,
   libGL,
   libGLU,
   libglut,
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [
-    libX11
+    libx11
     libGLU
     libGL
     libglut
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://www.antiprism.com";
     description = "Collection of programs for generating, manipulating, transforming and viewing polyhedra";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 })

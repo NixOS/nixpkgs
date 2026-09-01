@@ -8,7 +8,10 @@
   libGL,
   libxkbcommon,
   wayland,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
   makeDesktopItem,
   copyDesktopItems,
   nix-update-script,
@@ -16,16 +19,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "par-lang";
-  version = "0-unstable-2026-01-18";
+  version = "0-unstable-2026-08-29";
 
   src = fetchFromGitHub {
-    owner = "faiface";
+    owner = "par-team";
     repo = "par-lang";
-    rev = "e10c1e4be92162fefdb515f321a2699c73726005";
-    hash = "sha256-/Rz0D7zAxjJgm/61/M3iGZ6XwHEHGT6tTmispUjSbW4=";
+    rev = "f538c71ca7986b22e393517d0e311ff76158ff44";
+    hash = "sha256-BDg43BIb2NAEDEjjB+t85dK/Dih8gp8OVW7p6IrXxHc=";
   };
 
-  cargoHash = "sha256-sW+gAIp/DjlTo44QDXpP6COrCK/CcDlx3no284MEQJo=";
+  cargoHash = "sha256-wRgSLBFQKsv8mJL0mdwkcHJqMKhuVj0rcfqvm6JNlSM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -40,22 +43,22 @@ rustPlatform.buildRustPackage {
         libGL
         libxkbcommon
         wayland
-        xorg.libX11
-        xorg.libXcursor
-        xorg.libXi
-        xorg.libXrandr
+        libx11
+        libxcursor
+        libxi
+        libxrandr
       ];
     in
     lib.optionalString stdenv.hostPlatform.isLinux ''
-      patchelf --add-rpath ${lib.makeLibraryPath runtimeDependencies} $out/bin/par-lang
+      patchelf --add-rpath ${lib.makeLibraryPath runtimeDependencies} $out/bin/par
     '';
 
   doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
 
-    echo 'def Main = Console.Open.print("Hello, World!").close' > test.par
-    diff -U3 --color=auto <($out/bin/par-lang run test.par) <(echo 'Hello, World!')
+    $out/bin/par new hello
+    diff -U3 --color=auto <($out/bin/par run --package hello 2>&1) <(echo 'Hello, World!')
 
     runHook postInstallCheck
   '';
@@ -66,7 +69,7 @@ rustPlatform.buildRustPackage {
       desktopName = "Par Playground";
       genericName = "Experimental concurrent programming language";
       categories = [ "Development" ];
-      exec = "par-lang playground %f";
+      exec = "par playground %f";
     })
   ];
 
@@ -74,9 +77,9 @@ rustPlatform.buildRustPackage {
 
   meta = {
     description = "Experimental concurrent programming language";
-    homepage = "https://github.com/faiface/par-lang";
+    homepage = "https://github.com/par-team/par-lang";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
-    mainProgram = "par-lang";
+    mainProgram = "par";
   };
 }

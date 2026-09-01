@@ -5,18 +5,18 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "routedns";
-  version = "0.1.130";
+  version = "0.1.237";
 
   src = fetchFromGitHub {
     owner = "folbricht";
     repo = "routedns";
-    rev = "v${version}";
-    hash = "sha256-eYtFfRi+w+0xnIZi/OXc+dt/HI/SQxoZphgduK6eETU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-X4N+7P8GwzhDQwjctmfenhMYprjzYxknSzEBRib22kw=";
   };
 
-  vendorHash = "sha256-woInU618JPwVxGDJDZQ6+j9wY6qNSB5Xu8wXf7s2qvQ=";
+  vendorHash = "sha256-w8rZue6/cc8wg40Ey+P216cQGhbCznjSsLi1G4YfRsI=";
 
   subPackages = [ "./cmd/routedns" ];
 
@@ -34,4 +34,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ jsimonetti ];
     mainProgram = "routedns";
   };
-}
+})

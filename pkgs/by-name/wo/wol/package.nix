@@ -6,12 +6,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wol";
   version = "0.7.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/wake-on-lan/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/wake-on-lan/wol-${finalAttrs.version}.tar.gz";
     sha256 = "08i6l5lr14mh4n3qbmx6kyx7vjqvzdnh3j9yfvgjppqik2dnq270";
   };
 
@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
     ./gcc-15.patch
     ./macos-10_7-getline.patch
   ];
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    # wol's bundled gettext sources do not compile as gnu23 with clang.
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  };
 
   nativeBuildInputs = [
     perl # for pod2man in order to get a manpage
@@ -36,4 +41,4 @@ stdenv.mkDerivation rec {
     mainProgram = "wol";
     platforms = lib.platforms.unix;
   };
-}
+})

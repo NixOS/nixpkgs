@@ -23,15 +23,15 @@ let
     ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gef";
-  version = "2025.01";
+  version = "2026.01";
 
   src = fetchFromGitHub {
     owner = "hugsy";
     repo = "gef";
-    rev = version;
-    sha256 = "sha256-JM9zH1wWEdjpBafnxMIFtePjXWf3UOXhBSWZCXEOzKw=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-KHPX4mGo+yy56Rmjd5yx8U5doXrACV2/ZCh+NeQxB0Y=";
   };
 
   dontBuild = true;
@@ -87,4 +87,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ freax13 ];
   };
-}
+})

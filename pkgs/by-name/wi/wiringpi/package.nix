@@ -7,12 +7,12 @@
 }:
 
 let
-  version = "3.16";
+  version = "3.18";
   srcAll = fetchFromGitHub {
     owner = "WiringPi";
     repo = "WiringPi";
     tag = version;
-    hash = "sha256-NBHmRA+6Os6/IpW8behbgpVjtN8QF9gkffXU2ZVC8ts=";
+    hash = "sha256-7zDknn2UUR2Dt3BUJ9YI0LAjRedVyUPJAiIBiRyyphQ=";
   };
   mkSubProject =
     {

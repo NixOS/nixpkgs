@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "enchive";
   version = "3.5";
   src = fetchFromGitHub {
     owner = "skeeto";
     repo = "enchive";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0fdrfc5l42lj2bvmv9dmkmhmm7qiszwk7cmdvnqad3fs7652g0qa";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.nico202 ];
   };
-}
+})

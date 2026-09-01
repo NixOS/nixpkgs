@@ -1,3 +1,4 @@
+import datetime as dt
 import json
 import logging
 import os
@@ -74,15 +75,19 @@ class QMPSession:
         else:
             raise QMPAPIError(evt_or_result)
 
-    def wait_for_event(self, timeout: int = 10) -> dict[str, Any]:
+    def wait_for_event(
+        self, timeout: dt.timedelta = dt.timedelta(seconds=10)
+    ) -> dict[str, Any]:
         while self.pending_events.empty():
             self.read_pending_messages()
 
-        return self.pending_events.get(timeout=timeout)
+        return self.pending_events.get(timeout=timeout.total_seconds())
 
-    def events(self, timeout: int = 10) -> Iterator[dict[str, Any]]:
+    def events(
+        self, timeout: dt.timedelta = dt.timedelta(seconds=10)
+    ) -> Iterator[dict[str, Any]]:
         while not self.pending_events.empty():
-            yield self.pending_events.get(timeout=timeout)
+            yield self.pending_events.get(timeout=timeout.total_seconds())
 
     def send(self, cmd: str, args: dict[str, str] = {}) -> dict[str, str]:
         self.read_pending_messages()

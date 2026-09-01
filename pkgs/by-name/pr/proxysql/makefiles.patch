@@ -151,7 +151,7 @@ index 87d2a20e..505e069a 100644
  	cd mariadb-client-library && tar -zxf mariadb-connector-c-3.3.8-src.tar.gz
  	cd mariadb-client-library/mariadb_client && patch -p0 < ../plugin_auth_CMakeLists.txt.patch
 -	cd mariadb-client-library/mariadb_client && cmake . -Wno-dev -DCMAKE_BUILD_TYPE=RelWithDebInfo -DOPENSSL_ROOT_DIR=$(SSL_IDIR) -DOPENSSL_LIBRARIES=$(SSL_LDIR) -DICONV_LIBRARIES=$(brew --prefix libiconv)/lib -DICONV_INCLUDE=$(brew --prefix libiconv)/include .
-+	cd mariadb-client-library/mariadb_client && cmake . -Wno-dev -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DOPENSSL_ROOT_DIR=$(SSL_IDIR) -DOPENSSL_LIBRARIES=$(SSL_LDIR) -DICONV_LIBRARIES=$(brew --prefix libiconv)/lib -DICONV_INCLUDE=$(brew --prefix libiconv)/include .
++	cd mariadb-client-library/mariadb_client && cmake . -Wno-dev -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_C_FLAGS=-std=gnu17 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DOPENSSL_ROOT_DIR=$(SSL_IDIR) -DOPENSSL_LIBRARIES=$(SSL_LDIR) -DICONV_LIBRARIES=$(brew --prefix libiconv)/lib -DICONV_INCLUDE=$(brew --prefix libiconv)/include .
  ifeq ($(PROXYDEBUG),1)
  	cd mariadb-client-library/mariadb_client && patch -p0 < ../ma_context.h.patch
  else ifeq ($(USEVALGRIND),1)

@@ -17,6 +17,8 @@ python.pkgs.buildPythonApplication rec {
   pyproject = true;
 
   pythonRelaxDeps = [
+    "huggingface-hub"
+    "insightface"
     "numpy"
     "pillow"
     "pydantic-settings"

@@ -5,8 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  jupyter-packaging,
-  setuptools,
+  hatchling,
 
   # dependencies
   narwhals,
@@ -36,29 +35,23 @@
   xarray,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plotly";
-  version = "6.5.0";
+  version = "6.8.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "plotly.py";
-    tag = "v${version}";
-    hash = "sha256-JWb5bAu74j63E5tp8wmLjuWZqFAMpkg8utxM74VaGqA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bXMFCRieoWNQZZA9eDTcZqO1vu71CMIk4+TlL0R9+5A=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"hatch", ' "" \
-      --replace-fail "jupyter_packaging~=0.10.0" jupyter_packaging
-  '';
 
   env.SKIP_NPM = true;
 
   build-system = [
-    setuptools
-    jupyter-packaging
+    hatchling
   ];
 
   dependencies = [
@@ -90,7 +83,7 @@ buildPythonPackage rec {
     which
     xarray
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTests = [
     # failed pinning test, sensitive to dep versions
@@ -117,7 +110,7 @@ buildPythonPackage rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fails to launch kaleido subprocess
     "tests/test_optional/test_kaleido"
-    # requiress access to osascript, which is not available while building
+    # requires access to osascript, which is not available while building
     "tests/test_plot.py::test_plot[plotly-psnr-rgb]"
     # numpy2 related error, RecursionError
     # See: https://github.com/plotly/plotly.py/issues/4852
@@ -151,4 +144,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

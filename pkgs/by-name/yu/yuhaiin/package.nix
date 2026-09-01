@@ -5,14 +5,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "yuhaiin";
   version = "0.3.8";
 
   src = fetchFromGitHub {
     owner = "yuhaiin";
     repo = "yuhaiin";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9vrq2qKbBLObANzVWrP73BuhQdY0JSEdPci420lj3Fg=";
   };
 
@@ -28,8 +28,11 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${module}/version.Version=v${version}"
-      "-X ${module}/version.GitCommit=${src.rev}"
+      # pkg/net/proxy/websocket/x uses //go:linkname to access net/http.putBufioWriter,
+      # which Go 1.23+ restricts without a matching linkname on the stdlib side.
+      "-checklinkname=0"
+      "-X ${module}/version.Version=v${finalAttrs.version}"
+      "-X ${module}/version.GitCommit=${finalAttrs.src.rev}"
       "-X ${module}/version.BuildDate=unknown"
     ];
 
@@ -40,9 +43,9 @@ buildGoModule rec {
   meta = {
     description = "Proxy kit for Linux/Windows/MacOS";
     homepage = "https://github.com/yuhaiin/yuhaiin";
-    changelog = "https://github.com/yuhaiin/yuhaiin/releases/tag/v${version}";
+    changelog = "https://github.com/yuhaiin/yuhaiin/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ oluceps ];
     mainProgram = "yuhaiin";
   };
-}
+})

@@ -1,6 +1,6 @@
 {
   "extraArgs": {
-    "biocVersion": "3.22"
+    "biocVersion": "3.23"
   },
   "packages": {
     "AHCytoBands": {
@@ -737,8 +737,8 @@
     },
     "BioMartGOGeneSets": {
       "name": "BioMartGOGeneSets",
-      "version": "0.99.11",
-      "sha256": "1ack8v1q0zg15gs816n9f4pwrzrpsv4va6j0r8847pw0pvavwpiq",
+      "version": "0.99.12",
+      "sha256": "11x00v18vd5ppm9asg120dmhmqamzsacy64v3kmmxfn7rhxl25b2",
       "depends": ["GenomicRanges", "S4Vectors"]
     },
     "CENTREannotation": {
@@ -749,8 +749,8 @@
     },
     "CTCF": {
       "name": "CTCF",
-      "version": "0.99.12",
-      "sha256": "0c9s6hb7vac0yirqfyf7k9xnf45qpcj39q37jzsmxdvj2xf7cwd4",
+      "version": "0.99.14",
+      "sha256": "06nyz5758mq04hzvc7bl0ld2d173zabs9xyhva01y92b19yy8nfp",
       "depends": []
     },
     "ChemmineDrugs": {
@@ -887,14 +887,14 @@
     },
     "GO_db": {
       "name": "GO.db",
-      "version": "3.22.0",
-      "sha256": "1liyl1ic2d08an0h6yxllggkv9n8vyp1bfjwvqzk5ana17lzmimf",
+      "version": "3.23.1",
+      "sha256": "0ays2n3jivigpr7m3y3rba8gjyqr7g3qxdslppww0z0zzm4m808z",
       "depends": ["AnnotationDbi"]
     },
     "GeneSummary": {
       "name": "GeneSummary",
-      "version": "0.99.6",
-      "sha256": "0h6afrjb00afrcw6mwslxp7cmwfzp4qfxh0aa4f41kfjd3cymmp5",
+      "version": "0.99.7",
+      "sha256": "0pl843r230cgq0nh5pwp19zz823dwdv789kfcgdhylijx3h2ymfk",
       "depends": []
     },
     "GenomeInfoDbData": {
@@ -1031,14 +1031,14 @@
     },
     "IlluminaHumanMethylationEPICv2anno_20a1_hg38": {
       "name": "IlluminaHumanMethylationEPICv2anno.20a1.hg38",
-      "version": "1.0.0",
-      "sha256": "0vp4m3a7qal4d8qc9xaj7z3x484i33ix4c67qlbw0kskdir7rq5a",
+      "version": "1.0.1",
+      "sha256": "18y92h02dh3pcc27dn1m9jr4m6srwv7w25a4wg3c6jlrggnm5210",
       "depends": ["minfi"]
     },
     "IlluminaHumanMethylationEPICv2manifest": {
       "name": "IlluminaHumanMethylationEPICv2manifest",
-      "version": "1.0.0",
-      "sha256": "1z4b15x8cai27cqhl2lhl02nx0lv8q5c1774vdvvdajx2hivn77l",
+      "version": "1.0.1",
+      "sha256": "0dwynwhjf3dnbw6975fxvncrqk5si22vrcyf6wivvgak1zim9bjl",
       "depends": ["minfi"]
     },
     "IlluminaHumanMethylationMSAanno_ilm10a1_hg38": {
@@ -1241,8 +1241,8 @@
     },
     "Orthology_eg_db": {
       "name": "Orthology.eg.db",
-      "version": "3.22.0",
-      "sha256": "14wng7izmr7wx3yimjlvmk87vf1z3z0n88y2nghn8a2iqci1rl3s",
+      "version": "3.23.0",
+      "sha256": "0640jwylw67cw8sylmyfcqm8cak5i2bx9k925bwm0bjmayxl8yw3",
       "depends": ["AnnotationDbi"]
     },
     "PANTHER_db": {
@@ -1521,6 +1521,12 @@
       "sha256": "0bmbp7kydvviczw8axgxq2wdlwq6fdas90jk9bg56avjq5syws2g",
       "depends": ["AnnotationDbi", "GenomicFeatures"]
     },
+    "TxDb_Hsapiens_UCSC_hg19_refGene": {
+      "name": "TxDb.Hsapiens.UCSC.hg19.refGene",
+      "version": "3.22.0",
+      "sha256": "0l2fpmyacyf644pkrrf35gsdpfplk4i9009miqbfg6p09gm5815p",
+      "depends": ["AnnotationDbi", "GenomicFeatures"]
+    },
     "TxDb_Hsapiens_UCSC_hg38_knownGene": {
       "name": "TxDb.Hsapiens.UCSC.hg38.knownGene",
       "version": "3.22.0",
@@ -1561,6 +1567,12 @@
       "name": "TxDb.Mmusculus.UCSC.mm10.knownGene",
       "version": "3.10.0",
       "sha256": "0xs9npnhbwll7p62hibs02y4ac23jchdcr25i6a7qwq1kms82qk9",
+      "depends": ["AnnotationDbi", "GenomicFeatures"]
+    },
+    "TxDb_Mmusculus_UCSC_mm39_knownGene": {
+      "name": "TxDb.Mmusculus.UCSC.mm39.knownGene",
+      "version": "3.22.0",
+      "sha256": "1apn7prr57njqdc61y1zkw6l4f151dixq1k458gbmgg4pyvlk4jy",
       "depends": ["AnnotationDbi", "GenomicFeatures"]
     },
     "TxDb_Mmusculus_UCSC_mm39_refGene": {
@@ -1661,8 +1673,8 @@
     },
     "UniProtKeywords": {
       "name": "UniProtKeywords",
-      "version": "0.99.7",
-      "sha256": "10id2lk2mbccay7p44pk58zhkiqc58x237qr76plivgpcc8xhjzq",
+      "version": "0.99.8",
+      "sha256": "1mhbhar70acwgjmlfkfrqc2hskqvbgsaf9xlzv8ph66x6gvbyqb7",
       "depends": []
     },
     "XtraSNPlocs_Hsapiens_dbSNP144_GRCh37": {
@@ -2081,8 +2093,8 @@
     },
     "excluderanges": {
       "name": "excluderanges",
-      "version": "0.99.10",
-      "sha256": "0j9njpnbh731ffimr1sbvix3wsivnh9nwxg6sbrpwp8gl0pnl7r0",
+      "version": "0.99.11",
+      "sha256": "1czr9hr84hzwa7fyzm51425nphy0b9h5yfvgkij5v8qgq565w02a",
       "depends": ["GenomicRanges"]
     },
     "fitCons_UCSC_hg19": {
@@ -2501,8 +2513,8 @@
     },
     "hpAnnot": {
       "name": "hpAnnot",
-      "version": "1.1.1",
-      "sha256": "0bkfcj9igi7ylhf3arszqnqzaxsxvfv2gn2smzx6ymzq5a8sc0yg",
+      "version": "1.1.3",
+      "sha256": "0gnir407flzzkkljxf2brqrw2kaycl8azi0wc5yn1fhl7x5zidq1",
       "depends": ["AnnotationHub"]
     },
     "hs25kresogen_db": {
@@ -3737,20 +3749,20 @@
     },
     "org_Hs_eg_db": {
       "name": "org.Hs.eg.db",
-      "version": "3.22.0",
-      "sha256": "0bia1ppxnyjpw4p3rk19q1l8rrcraccpz4w69f3ja0q0im0xrgfi",
+      "version": "3.23.1",
+      "sha256": "1zlwsk1hq40xi8xd7wc974jp8gky6x7icc9788ch77glbik201j7",
       "depends": ["AnnotationDbi"]
     },
     "org_Mm_eg_db": {
       "name": "org.Mm.eg.db",
-      "version": "3.22.0",
-      "sha256": "16liabdbkfqzhna3rw1zgf777r3xm8knrbvy0181c2nsn2jkxsv3",
+      "version": "3.23.0",
+      "sha256": "0i252737v6wk0im41gnksz4qkzf286kwgfq60yqc1mfva77m8yjh",
       "depends": ["AnnotationDbi"]
     },
     "org_Mmu_eg_db": {
       "name": "org.Mmu.eg.db",
-      "version": "3.22.0",
-      "sha256": "0ga0c9635pkigmr0l9vazh3qdpyxki1y8l7mbgcp1y8sfkyjn33c",
+      "version": "3.23.0",
+      "sha256": "08l4bckvn42yjgpkcmq87c1c2z4g8cfjc9jm5ibb84v5ffjw92ij",
       "depends": ["AnnotationDbi"]
     },
     "org_Mxanthus_db": {
@@ -3767,14 +3779,14 @@
     },
     "org_Pt_eg_db": {
       "name": "org.Pt.eg.db",
-      "version": "3.22.0",
-      "sha256": "1i67vccx3a6zak34nwdhrbhm7hkjz9qbai9jvwrlql6z8xc6n6q0",
+      "version": "3.23.0",
+      "sha256": "1hfvrv2n9gc0h4s6ql4lv8q8qjf75c4y5p2hlplhphzi38j54vhl",
       "depends": ["AnnotationDbi"]
     },
     "org_Rn_eg_db": {
       "name": "org.Rn.eg.db",
-      "version": "3.22.0",
-      "sha256": "0vqpmbivxd1yvapa5gz9mrxlk6ivrzak55dw2sfjm8sl308rmaj4",
+      "version": "3.23.0",
+      "sha256": "1j1gs8bk1a247shhs5z41s4pk6hw4ssy7405fv5q16m5ilpwgc1g",
       "depends": ["AnnotationDbi"]
     },
     "org_Sc_sgd_db": {
@@ -3785,14 +3797,14 @@
     },
     "org_Ss_eg_db": {
       "name": "org.Ss.eg.db",
-      "version": "3.22.0",
-      "sha256": "03qlbkvxfmdgpl8dwx72msd9asx12izvq2vmidqfyipyr7r79cbm",
+      "version": "3.23.0",
+      "sha256": "0ijn7dfh485lww1d9bp8j40fcjr1lx8vdnlq6ydwq3ni4bifkzqp",
       "depends": ["AnnotationDbi"]
     },
     "org_Xl_eg_db": {
       "name": "org.Xl.eg.db",
-      "version": "3.22.0",
-      "sha256": "1h8jvdzhpp9d4zaaczhmg6hk32p77l63v3095ln58rhy9m18pg0f",
+      "version": "3.23.0",
+      "sha256": "1w856a5hkp9a5g41nd69xwvzaf1nmq7zqjsn7w5p1i2zsxv1i1k1",
       "depends": ["AnnotationDbi"]
     },
     "paeg1acdf": {
@@ -5099,8 +5111,8 @@
     },
     "reactome_db": {
       "name": "reactome.db",
-      "version": "1.94.0",
-      "sha256": "0a6gx6iss43innhkhydqmv4jpnwkkjfdl32zxr4kjvm57xb2k4p0",
+      "version": "1.96.0",
+      "sha256": "0b43ri3clg6ynp197vy24936n762k0f43v9m51g1lar2w4qc2zhb",
       "depends": ["AnnotationDbi"]
     },
     "rgu34a_db": {
@@ -6397,13 +6409,6 @@
       "version": "0.99.21",
       "sha256": "19j5h0dgxd2iw35p6fblj8b3z2d92zmmp60khw5zs70scd5fs9pb",
       "depends": ["BiocGenerics", "BSgenome", "GenomeInfoDb", "GenomicRanges", "IRanges", "S4Vectors"],
-      "broken": true
-    },
-    "TxDb_Mmusculus_UCSC_mm39_knownGene": {
-      "name": "TxDb.Mmusculus.UCSC.mm39.knownGene",
-      "version": "3.21.0",
-      "sha256": "18ckr0sn8ff6ga2rzaxicbbfynvbpx56kl4949fnrgaygxgnlf9p",
-      "depends": ["AnnotationDbi", "GenomicFeatures"],
       "broken": true
     },
     "XtraSNPlocs_Hsapiens_dbSNP141_GRCh38": {

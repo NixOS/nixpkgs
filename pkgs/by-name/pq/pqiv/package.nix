@@ -10,11 +10,15 @@
   libspectre,
   libwebp,
   poppler,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pqiv";
   version = "2.13.3";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "phillipberndt";
@@ -36,6 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   prePatch = "patchShebangs .";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Powerful image viewer with minimal UI";

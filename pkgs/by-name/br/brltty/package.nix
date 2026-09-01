@@ -20,13 +20,13 @@
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "brltty";
-  version = "6.8";
+  version = "6.9.1";
 
   src = fetchurl {
-    url = "https://brltty.app/archive/brltty-${version}.tar.gz";
-    sha256 = "sha256-MoDYjHU6aJY9e5cgjm9InOEDGCs+jvlEurMWg9wo4RY=";
+    url = "https://brltty.app/archive/brltty-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-gi3iyHtECf3wLWFU0bRoVsNTnT6onGWu80MPJ3Nnf3Y=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -121,7 +121,9 @@ stdenv.mkDerivation rec {
       sed "/^Environment=\"BRLTTY_EXECUTABLE_ARGUMENTS.*/a Environment=\"BRLTTY_EXECUTABLE_PATH=$out/bin/brltty\"" -i systemd/system/brltty@.service
       substituteInPlace systemd/system/brltty-device@.service \
         --replace '/usr/bin/true' '${coreutils}/bin/true'
-      substituteInPlace udev/rules.d/90-brltty-uinput.rules \
+      substituteInPlace udev/rules.d/90-brltty-beeper.rules \
+        --replace '/usr/bin/setfacl' '${acl}/bin/setfacl'
+       substituteInPlace udev/rules.d/90-brltty-uinput.rules \
         --replace '/usr/bin/setfacl' '${acl}/bin/setfacl'
       substituteInPlace udev/rules.d/90-brltty-hid.rules \
         --replace '/usr/bin/setfacl' '${acl}/bin/setfacl'
@@ -141,4 +143,4 @@ stdenv.mkDerivation rec {
        --replace 'logger' "${util-linux}/bin/logger" \
        --replace 'udevadm' "${systemdMinimal}/bin/udevadm"
   '';
-}
+})

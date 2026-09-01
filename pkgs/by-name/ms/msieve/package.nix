@@ -7,13 +7,13 @@
   ecm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "msieve";
   version = "1056";
 
   src = fetchsvn {
     url = "svn://svn.code.sf.net/p/msieve/code/trunk";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-6ErVn4pYPMG5VFjOQURLsHNpN0pGdp55+rjY8988onU=";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     ecm
   ];
 
-  ECM = if ecm == null then "0" else "1";
+  env.ECM = if ecm == null then "0" else "1";
 
   # Doesn't hurt Linux but lets clang-based platforms like Darwin work fine too
   makeFlags = [
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.roconnor ];
     platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
   };
-}
+})

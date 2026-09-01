@@ -16,7 +16,7 @@
   wrapGAppsHook4,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ticketbooth";
   version = "1.2.0";
   pyproject = false;
@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "aleiepure";
     repo = "ticketbooth";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eP5wYNusBcQLMu4MljfcO9QLY74v5Sb8gITx5dDVLpM=";
   };
 
@@ -58,7 +58,7 @@ python3Packages.buildPythonApplication rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/aleiepure/ticketbooth/releases/tag/${src.tag}";
+    changelog = "https://github.com/aleiepure/ticketbooth/releases/tag/${finalAttrs.src.tag}";
     description = "Keep track of your favorite shows";
     homepage = "https://github.com/aleiepure/ticketbooth";
     license = lib.licenses.gpl3Plus;
@@ -66,4 +66,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ lib.maintainers.dotlambda ];
     platforms = lib.platforms.linux;
   };
-}
+})

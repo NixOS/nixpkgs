@@ -10,10 +10,12 @@
   numpy,
   pybind11,
   setuptools,
+  setuptools-scm,
   torch,
 
   # dependencies
   cloudpickle,
+  hoptorch,
   packaging,
   pyvers,
   tensordict,
@@ -45,6 +47,7 @@
   vllm,
   # marl
   pettingzoo,
+  vmas,
   # offline-data
   h5py,
   huggingface-hub,
@@ -71,16 +74,17 @@
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "torchrl";
-  version = "0.10.1";
+  version = "0.13.3";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "rl";
-    tag = "v${version}";
-    hash = "sha256-Vd/w11P4NVrx2xki+VYlXQaM8F+vpdokke8ZAHg6h0Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GdiGZZlx8olRMzl4CJD11S1+q0+pOeCD2wrDPcji5p0=";
   };
 
   postPatch = ''
@@ -94,16 +98,18 @@ buildPythonPackage rec {
     numpy
     pybind11
     setuptools
+    setuptools-scm
     torch
   ];
   dontUseCmakeConfigure = true;
 
   dependencies = [
     cloudpickle
+    hoptorch
     numpy
     packaging
-    tensordict
     pyvers
+    tensordict
     torch
   ];
 
@@ -139,7 +145,7 @@ buildPythonPackage rec {
     marl = [
       # dm-meltingpot (unpackaged)
       pettingzoo
-      # vmas (unpackaged)
+      vmas
     ];
     offline-data = [
       h5py
@@ -154,6 +160,9 @@ buildPythonPackage rec {
     ];
     open-spiel = [
       # open-spiel (unpackaged)
+    ];
+    procgen = [
+      # procgen (unpackaged)
     ];
     rendering = [ moviepy ];
     replay-buffer = [ torch ];
@@ -191,12 +200,21 @@ buildPythonPackage rec {
     scipy
     torchvision
   ]
-  ++ optional-dependencies.atari
-  ++ optional-dependencies.gym-continuous
-  ++ optional-dependencies.llm
-  ++ optional-dependencies.rendering;
+  ++ finalAttrs.passthru.optional-dependencies.atari
+  ++ finalAttrs.passthru.optional-dependencies.gym-continuous
+  ++ finalAttrs.passthru.optional-dependencies.llm
+  ++ finalAttrs.passthru.optional-dependencies.rendering;
 
   disabledTests = [
+    # mujoco.FatalError: an OpenGL platform library has not been loaded into this process, this most
+    # likely means that a valid OpenGL context has not been created before mjr_makeContext was
+    # called
+    "test_from_pixels_spec_and_rollout"
+
+    # Hang forever
+    "test_pixels_only_drops_observation_key"
+    "test_render_method"
+
     # Require network
     "test_create_or_load_dataset"
     "test_from_text_env_tokenizer"
@@ -257,7 +275,7 @@ buildPythonPackage rec {
     "test_trans_serial_env_check"
     "test_transform_env"
 
-    # undeterministic
+    # nondeterministic
     "test_distributed_collector_updatepolicy"
     "test_timeit"
 
@@ -284,13 +302,16 @@ buildPythonPackage rec {
     # which is not the same as the test file we want to collect:
     #   /build/source/test/smoke_test.py
     "test/llm"
+
+    # Hang indefinitely
+    "test/services/test_services.py"
   ];
 
   meta = {
     description = "Modular, primitive-first, python-first PyTorch library for Reinforcement Learning";
     homepage = "https://github.com/pytorch/rl";
-    changelog = "https://github.com/pytorch/rl/releases/tag/v${version}";
+    changelog = "https://github.com/pytorch/rl/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

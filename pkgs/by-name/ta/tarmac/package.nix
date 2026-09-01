@@ -6,14 +6,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tarmac";
   version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "Roblox";
     repo = "tarmac";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WBkdC5YzZPtqQ9khxmvSFBHhZzfjICWkFcdi1PNsj5g=";
   };
 
@@ -31,9 +31,9 @@ rustPlatform.buildRustPackage rec {
       It helps enable hermetic place builds when used with tools like Rojo.
     '';
     homepage = "https://github.com/Roblox/tarmac";
-    downloadPage = "https://github.com/Roblox/tarmac/releases/tag/v${version}";
-    changelog = "https://github.com/Roblox/tarmac/raw/v${version}/CHANGELOG.md";
+    downloadPage = "https://github.com/Roblox/tarmac/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/Roblox/tarmac/raw/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

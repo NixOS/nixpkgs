@@ -1,6 +1,7 @@
 {
   lib,
   buildGoModule,
+  applyPatches,
   fetchFromGitHub,
   pkg-config,
   libde265,
@@ -10,14 +11,19 @@ let
   pname = "matrix-media-repo";
   version = "1.3.8";
 
-  src = fetchFromGitHub {
-    owner = "t2bot";
-    repo = "matrix-media-repo";
-    rev = "v${version}";
-    hash = "sha256-KP1ZyHqeATxk1PCLuM6lPk+GB4Rd0f7ppKVETIURx28=";
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "t2bot";
+      repo = "matrix-media-repo";
+      rev = "v${version}";
+      hash = "sha256-KP1ZyHqeATxk1PCLuM6lPk+GB4Rd0f7ppKVETIURx28=";
+    };
+    patches = [
+      ./libheif-bump.patch
+    ];
   };
 
-  vendorHash = "sha256-+sHy4Lgufs5jdN/V9W06U4dOZrsPiX87zmR1UwGHhQg=";
+  vendorHash = "sha256-AzWZGhqJlHC9MI2jv6Z54C8OqGZIZm8CPqoaLwbtyA8=";
 
   asset-compiler = buildGoModule {
     pname = "${pname}-compile_assets";

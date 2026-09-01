@@ -12,22 +12,24 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "influxdb3-python";
-  version = "0.16.0";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "InfluxCommunity";
     repo = "influxdb3-python";
-    tag = "v${version}";
-    hash = "sha256-o4w1+srucPlRq/NqICvdRNxmghxEBoXH05m3m0GQJFM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wSPsuER4YPH6wX5i1o1T4uEwoEdes3fJJrGVmZfV+jU=";
   };
 
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=82.0.1" "setuptools"
     # Upstream falls back to a default version if not in a GitHub Actions
     substituteInPlace setup.py \
-      --replace-fail "version=get_version()," "version = '${version}',"
+      --replace-fail "version=get_version()," "version = '${finalAttrs.version}',"
   '';
 
   build-system = [ setuptools ];
@@ -62,8 +64,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module that provides a simple and convenient way to interact with InfluxDB 3.0";
     homepage = "https://github.com/InfluxCommunity/influxdb3-python";
-    changelog = "https://github.com/InfluxCommunity/influxdb3-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/InfluxCommunity/influxdb3-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

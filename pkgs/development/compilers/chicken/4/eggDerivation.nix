@@ -5,7 +5,7 @@
   makeWrapper,
 }:
 {
-  name,
+  name ? "${args.pname}-${args.version}",
   src,
   buildInputs ? [ ],
   chickenInstallFlags ? [ ],
@@ -26,10 +26,13 @@ stdenv.mkDerivation (
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ chicken ];
 
-    CSC_OPTIONS = lib.concatStringsSep " " cscOptions;
+    env = {
+      CSC_OPTIONS = lib.concatStringsSep " " cscOptions;
 
-    CHICKEN_REPOSITORY = libPath;
-    CHICKEN_INSTALL_PREFIX = "$out";
+      CHICKEN_REPOSITORY = libPath;
+      CHICKEN_INSTALL_PREFIX = "$out";
+    }
+    // (args.env or { });
 
     installPhase = ''
       runHook preInstall

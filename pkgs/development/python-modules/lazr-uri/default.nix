@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "lazr-uri";
-  version = "1.0.7";
+  version = "1.0.8";
   pyproject = true;
 
   src = fetchPypi {
     pname = "lazr_uri";
     inherit version;
-    hash = "sha256-7Qz28zPkUBFHUq+xzgwpnDasSxCQY+tQNUxPh/glo+4=";
+    hash = "sha256-DkWFTrImh5WN+4B2Vf9+CVsXZb5kniTMxYGTTQM307Q=";
   };
 
   build-system = [ setuptools ];

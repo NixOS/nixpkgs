@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gophernotes";
   version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "gopherdata";
     repo = "gophernotes";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-cGlYgay/t6XIl0U9XvrHkqNxZ6BXtXi0TIANY1WdZ3Y=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.costrouc ];
     mainProgram = "gophernotes";
   };
-}
+})

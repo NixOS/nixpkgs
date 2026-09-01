@@ -9,6 +9,7 @@
   libglut,
   lib,
   fetchurl,
+  fetchpatch,
   cmake,
   pkg-config,
   lua5_1,
@@ -51,6 +52,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-xcGHfAuuE1THXSuVJ7b5qfeemZMuXQix9vfeFwgGYTA=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "hedgewars-ffmpeg-9.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/hedgewars/-/raw/1b03bb9764d38fa6020552174676a9e024d8b18e/ffmpeg-9.patch?inline=false";
+      hash = "sha256-J8W8WvQgcteKoUUVDxBINVhMzmec+UuWWltKZ2aq9Go=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -78,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DNOSERVER=${if withServer then "OFF" else "ON"}"
   ];
 
-  NIX_LDFLAGS = lib.concatMapStringsSep " " (e: "-rpath ${e}/lib") [
+  env.NIX_LDFLAGS = lib.concatMapStringsSep " " (e: "-rpath ${e}/lib") [
     SDL2.out
     SDL2_image
     SDL2_mixer
@@ -93,14 +102,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath [
-        libGL
-        libGLU
-        libglut
-        physfs
-      ]
-    }"
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath [
+      libGL
+      libGLU
+      libglut
+      physfs
+    ])
   ];
 
   meta = {

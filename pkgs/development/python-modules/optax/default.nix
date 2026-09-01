@@ -8,7 +8,6 @@
 
   # dependencies
   absl-py,
-  chex,
   jax,
   jaxlib,
   numpy,
@@ -17,16 +16,16 @@
   callPackage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "optax";
-  version = "0.2.6";
+  version = "0.2.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = "optax";
-    tag = "v${version}";
-    hash = "sha256-+9Q/Amb60m65ZiJsmH93e6tQmpJlMyzVUL0A7q3mS8Y=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dVmMacQx6V5lv0z4nWUTlekuEDqtIZlxJazAeA9UR+E=";
   };
 
   outputs = [
@@ -38,7 +37,6 @@ buildPythonPackage rec {
 
   dependencies = [
     absl-py
-    chex
     jax
     jaxlib
     numpy
@@ -61,8 +59,8 @@ buildPythonPackage rec {
   meta = {
     description = "Gradient processing and optimization library for JAX";
     homepage = "https://github.com/deepmind/optax";
-    changelog = "https://github.com/deepmind/optax/releases/tag/v${version}";
+    changelog = "https://github.com/deepmind/optax/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };
-}
+})

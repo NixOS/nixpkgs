@@ -10,7 +10,10 @@
 
 stdenv.mkDerivation {
   pname = "guile-xcb";
-  version = "unstable-2017-05-29";
+  version = "1.3-unstable-2017-05-28";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mwitmer";
@@ -19,13 +22,19 @@ stdenv.mkDerivation {
     hash = "sha256-zbIsEIPwNJ1YXMZTDw2DfzufC+IZWfcWgZHbuv7bhJs=";
   };
 
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail "2.0 2.2" "2.0 2.2 3.0"
+  '';
+
   nativeBuildInputs = [
     autoreconfHook
+    guile
     pkg-config
+    texinfo
   ];
   buildInputs = [
     guile
-    texinfo
   ];
 
   configureFlags = [

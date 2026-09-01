@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "MailHog";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "mailhog";
     repo = "MailHog";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-flxEp9iXLLm/FPP8udlnpbHQpGnqxAhgyOIUUJAJgog=";
   };
 
@@ -27,7 +27,7 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   passthru.tests = {
@@ -38,10 +38,10 @@ buildGoModule rec {
     description = "Web and API based SMTP testing";
     mainProgram = "MailHog";
     homepage = "https://github.com/mailhog/MailHog";
-    changelog = "https://github.com/mailhog/MailHog/releases/tag/v${version}";
+    changelog = "https://github.com/mailhog/MailHog/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       jojosch
     ];
     license = lib.licenses.mit;
   };
-}
+})

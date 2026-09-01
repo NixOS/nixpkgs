@@ -20,14 +20,14 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 buildPythonPackage rec {
   pname = "cvxopt";
-  version = "1.3.2";
+  version = "1.3.3";
   format = "setuptools";
 
   disabled = isPyPy; # hangs at [translation:info]
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NGH6QsGyJAuk2h2YXKc1A5FBV/xMd0FzJ+1tfYWs2+Y=";
+    hash = "sha256-gFnO9B8fEVyHvJt1/sn4bblefwr88DpS1hm6Qz5EO8s=";
   };
 
   buildInputs = [
@@ -45,7 +45,6 @@ buildPythonPackage rec {
     CVXOPT_BUILD_DSDP = "0";
     CVXOPT_SUITESPARSE_LIB_DIR = "${lib.getLib suitesparse}/lib";
     CVXOPT_SUITESPARSE_INC_DIR = "${lib.getDev suitesparse}/include";
-    SETUPTOOLS_SCM_PRETEND_VERSION = version;
   }
   // lib.optionalAttrs withGsl {
     CVXOPT_BUILD_GSL = "1";

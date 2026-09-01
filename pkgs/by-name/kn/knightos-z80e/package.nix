@@ -8,15 +8,15 @@
   SDL2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "z80e";
-  version = "0.5.3";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "KnightOS";
     repo = "z80e";
-    rev = version;
-    sha256 = "sha256-FQMYHxKxHEP+x98JbGyjaM0OL8QK/p3epsAWvQkv6bc=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-OJgz6tF5LsGVQ4sDy6Uww1CHH6g9r8Ve9ceguceVZP8=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ siraben ];
     platforms = lib.platforms.unix;
   };
-}
+})

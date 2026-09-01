@@ -6,7 +6,7 @@ import subprocess
 import sys
 from abc import ABC, abstractmethod
 
-from remote_pdb import RemotePdb  # type:ignore
+from remote_pdb import RemotePdb
 
 from test_driver.logger import AbstractLogger
 
@@ -42,12 +42,12 @@ class Debug(DebugAbstract):
         self.logger.log_test_error(
             f"Breakpoint reached, run 'sudo {self.attach} {pattern}'"
         )
-        os.environ["bashInteractive"] = shutil.which("bash")  # type:ignore
+        os.environ["bashInteractive"] = shutil.which("bash")  # ty: ignore[invalid-assignment]
         if os.fork() == 0:
             subprocess.run(["sleep", pattern])
         else:
             # RemotePdb writes log messages to both stderr AND the logger,
             # which is the same here. Hence, disabling the remote_pdb logger
             # to avoid duplicate messages in the build log.
-            logging.root.manager.loggerDict["remote_pdb"].disabled = True  # type:ignore
+            logging.root.manager.loggerDict["remote_pdb"].disabled = True  # ty: ignore[invalid-assignment]
             RemotePdb(host=host, port=port).set_trace(sys._getframe().f_back)

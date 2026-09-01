@@ -1,8 +1,13 @@
-module.exports = async ({ github, context, core, dry, cherryPicks }) => {
-  const { execFileSync } = require('node:child_process')
-  const { classify } = require('../supportedBranches.js')
-  const withRateLimit = require('./withRateLimit.js')
-  const { dismissReviews, postReview } = require('./reviews.js')
+// @ts-nocheck
+import { execFileSync } from 'node:child_process'
+import { dismissReviews, postReview } from './reviews.js'
+import { classify } from './supportedBranches.js'
+import withRateLimit from './withRateLimit.js'
+
+const dirname = import.meta.dirname
+
+export default async ({ github, context, core, dry, cherryPicks }) => {
+  const reviewKey = 'check-commits'
 
   await withRateLimit({ github, core }, async (stats) => {
     stats.prs = 1
@@ -91,7 +96,7 @@ module.exports = async ({ github, context, core, dry, cherryPicks }) => {
     function diff({ sha, commit, original_sha }) {
       const diff = execFileSync('git', [
         '-C',
-        __dirname,
+        dirname,
         'range-diff',
         '--no-color',
         '--ignore-all-space',
@@ -118,7 +123,7 @@ module.exports = async ({ github, context, core, dry, cherryPicks }) => {
 
       const colored_diff = execFileSync('git', [
         '-C',
-        __dirname,
+        dirname,
         'range-diff',
         '--color',
         '--no-notes',
@@ -157,7 +162,7 @@ module.exports = async ({ github, context, core, dry, cherryPicks }) => {
       // Fetching all commits we need for diff at once is much faster than any other method.
       execFileSync('git', [
         '-C',
-        __dirname,
+        dirname,
         'fetch',
         '--depth=2',
         'origin',
@@ -193,7 +198,7 @@ module.exports = async ({ github, context, core, dry, cherryPicks }) => {
     // An empty results array will always trigger this condition, which is helpful
     // to clean up reviews created by the prepare step when on the wrong branch.
     if (results.every(({ severity }) => severity === 'info')) {
-      await dismissReviews({ github, context, dry })
+      await dismissReviews({ github, context, dry, reviewKey })
       return
     }
 
@@ -316,6 +321,6 @@ module.exports = async ({ github, context, core, dry, cherryPicks }) => {
     // Posting a review could fail for very long comments. This can only happen with
     // multiple commits all hitting the truncation limit for the diff. If you ever hit
     // this case, consider just splitting up those commits into multiple PRs.
-    await postReview({ github, context, core, dry, body })
+    await postReview({ github, context, core, dry, body, reviewKey })
   })
 }

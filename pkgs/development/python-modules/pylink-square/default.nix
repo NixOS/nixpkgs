@@ -13,6 +13,7 @@
   # tests
   mock,
   pytestCheckHook,
+  pyocd,
 }:
 
 buildPythonPackage rec {
@@ -52,6 +53,10 @@ buildPythonPackage rec {
     "test_jlink_restarted"
     "test_set_log_file_success"
   ];
+
+  passthru.tests = {
+    inherit pyocd;
+  };
 
   meta = {
     description = "Python interface for the SEGGER J-Link";

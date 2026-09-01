@@ -15,6 +15,7 @@
   cryptography,
   noiseprotocol,
   protobuf,
+  tzdata,
   tzlocal,
   zeroconf,
 
@@ -26,22 +27,31 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioesphomeapi";
-  version = "43.13.0";
+  version = "45.12.0"; # must track the major version that home-assistant pins
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "aioesphomeapi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ffpXmZcDd0L1wY+S3pzkenlart9jSRSeeJdwd2GGu2w=";
+    hash = "sha256-ZpIkpRYZJjPhR23f5OkQSxIZ12a2PGw6ExtgEZ79brQ=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=83.0.0" setuptools \
+      --replace-fail "Cython>=3.2.9" Cython
+  '';
 
   build-system = [
     setuptools
     cython
   ];
 
-  pythonRelaxDeps = [ "cryptography" ];
+  pythonRelaxDeps = [
+    "aiohappyeyeballs"
+    "cryptography"
+  ];
 
   dependencies = [
     aiohappyeyeballs
@@ -50,6 +60,7 @@ buildPythonPackage (finalAttrs: {
     cryptography
     noiseprotocol
     protobuf
+    tzdata
     tzlocal
     zeroconf
   ];
@@ -61,7 +72,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   # Lack of network sandboxing leads to conflicting listeners when testing
-  # this package e.g. in nixpkgs-review on the two suppoted python package sets.
+  # this package e.g. in nixpkgs-review on the two supported python package sets.
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTestPaths = [

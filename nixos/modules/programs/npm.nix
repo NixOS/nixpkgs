@@ -16,9 +16,7 @@ in
     programs.npm = {
       enable = lib.mkEnableOption "{command}`npm` global config";
 
-      package = lib.mkPackageOption pkgs [ "nodePackages" "npm" ] {
-        example = "nodePackages_13_x.npm";
-      };
+      package = lib.mkPackageOption pkgs "nodejs" { };
 
       npmrc = lib.mkOption {
         type = lib.types.lines;

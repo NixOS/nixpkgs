@@ -5,17 +5,18 @@
   tcl,
   tk,
   m4,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netgen";
-  version = "1.5.315";
+  version = "1.5.323";
 
   src = fetchFromGitHub {
     owner = "RTimothyEdwards";
     repo = "netgen";
     tag = finalAttrs.version;
-    hash = "sha256-dXCZm5zVwn23y7DLPSUrTKGMcu/FjdVKsyry59lEt7U=";
+    hash = "sha256-L8DJdk5lkb/qh5GbZK9eDNq1eZPEQq4ZZsBQPDJcKJ0=";
   };
 
   strictDeps = true;
@@ -41,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     sed -i "1s|#!/bin/bash|#!${stdenv.shell}|" $out/bin/netgen
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "LVS tool for VLSI circuit netlists";

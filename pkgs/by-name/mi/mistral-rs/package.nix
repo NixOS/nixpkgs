@@ -20,7 +20,6 @@
 
   versionCheckHook,
 
-  testers,
   mistral-rs,
   nix-update-script,
 
@@ -35,6 +34,7 @@
 
 let
   inherit (stdenv) hostPlatform;
+  rustc = rustPlatform.callPackage ({ rustc }: rustc) { };
 
   accelIsValid = builtins.elem acceleration [
     null
@@ -48,7 +48,7 @@ let
     assert accelIsValid;
     (acceleration == "cuda") || (config.cudaSupport && acceleration == null);
 
-  minRequiredCudaCapability = "6.1"; # build fails with 6.0
+  minRequiredCudaCapability = "8.0"; # build fails with 7.5
   inherit (cudaPackages.flags) cudaCapabilities;
   cudaCapabilityString =
     if cudaCapability == null then
@@ -74,20 +74,63 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mistral-rs";
-  version = "0.5.0";
+  version = "0.9.2";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";
     repo = "mistral.rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mkxgssJUBtM1DYOhFfj8YKlW61/gd0cgPtMze7YZ9L8=";
+    hash = "sha256-T7CKIQOCvJXAdYpwLzQ7oFs/xu30OIuxqa8GpYWLK9U=";
   };
 
   patches = [
     ./no-native-cpu.patch
   ];
 
-  cargoHash = "sha256-YGGtS8gJJQKIgXxMWjO05ikSVdfVNs+cORbJ+Wf88y4=";
+  postPatch =
+    # LTO significantly increases the build time (12m -> 1h)
+    ''
+      substituteInPlace Cargo.toml \
+        --replace-fail \
+          "lto = true" \
+          "lto = false"
+
+    ''
+    # LLVM 21 cannot select the VPDPBUSD intrinsic because its argument types are incorrect.
+    # Fixed by https://github.com/rust-lang/llvm-project/commit/94e2c19f86a699d7a19ff0f4130b696699189c8d.
+    + lib.optionalString (hostPlatform.isx86_64 && lib.versionOlder rustc.llvm.version "22") ''
+      substituteInPlace "$cargoDepsCopy/source-git-0/candle-core-0.11.0/src/quantized/mod.rs" \
+        --replace-fail \
+          '#[cfg(target_arch = "x86_64")]' \
+          '#[cfg(any())]' \
+        --replace-fail \
+          '#[cfg(not(any(target_arch = "aarch64", target_arch = "x86_64")))]' \
+          '#[cfg(not(target_arch = "aarch64"))]'
+
+      substituteInPlace "$cargoDepsCopy/source-git-0/candle-core-0.11.0/src/quantized/repack.rs" \
+        --replace-fail \
+          '#[cfg(target_arch = "x86_64")]' \
+          '#[cfg(any())]' \
+        --replace-fail \
+          '#[cfg(not(any(target_arch = "aarch64", target_arch = "x86_64")))]' \
+          '#[cfg(not(target_arch = "aarch64"))]'
+    ''
+    # Prevent build scripts from attempting to clone cutlass (which would fail in the sandbox anyway).
+    # Instead, we provide cutlass in buildInputs.
+    + lib.optionalString cudaSupport ''
+      substituteInPlace mistralrs-flash-attn/build.rs \
+        --replace-fail \
+          ".with_cutlass(Some(&cutlass_commit))" \
+          ""
+
+      substituteInPlace mistralrs-quant/build.rs \
+        --replace-fail \
+          "builder = builder.with_cutlass(Some(&cutlass_commit));" \
+          ""
+    '';
+
+  cargoHash = "sha256-7Vp9nNvVbC8McJwQuiIMJWGfU42xtr6rL1/H8WJ1wkQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -107,11 +150,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
   ]
   ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_cccl
+    cudaPackages.cccl
     cudaPackages.cuda_cudart
     cudaPackages.cuda_nvrtc
     cudaPackages.libcublas
     cudaPackages.libcurand
+
+    # For compiling kernels
+    cudaPackages.cutlass
   ]
   ++ lib.optionals mklSupport [ mkl ];
 
@@ -121,18 +167,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ++ lib.optionals (hostPlatform.isDarwin && metalSupport) [ "metal" ];
 
   env = {
+    # metal (proprietary) is not available in the darwin sandbox.
+    # Hence, we must disable metal precompilation.
+    MISTRALRS_METAL_PRECOMPILE = 0;
+
     SWAGGER_UI_DOWNLOAD_URL =
       let
         # When updating:
         # - Look for the version of `utoipa-swagger-ui` at:
-        #   https://github.com/EricLBuehler/mistral.rs/blob/v<MISTRAL-RS-VERSION>/mistralrs-server/Cargo.toml
+        #   https://github.com/EricLBuehler/mistral.rs/blob/v<MISTRAL-RS-VERSION>/Cargo.toml
         # - Look at the corresponding version of `swagger-ui` at:
         #   https://github.com/juhaku/utoipa/blob/utoipa-swagger-ui-<UTOPIA-SWAGGER-UI-VERSION>/utoipa-swagger-ui/build.rs#L21-L22
-        swaggerUiVersion = "5.17.12";
+        swaggerUiVersion = "5.17.14";
 
         swaggerUi = fetchurl {
           url = "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v${swaggerUiVersion}.zip";
-          hash = "sha256-HK4z/JI+1yq8BTBJveYXv9bpN/sXru7bn/8g5mf2B/I=";
+          hash = "sha256-SBJE0IEgl7Efuu73n3HZQrFxYX+cn5UU5jrL4T5xzNw=";
         };
       in
       "file://${swaggerUi}";
@@ -155,7 +205,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   # swagger-ui will once more be copied in the target directory during the check phase
-  # See https://github.com/juhaku/utoipa/blob/utoipa-swagger-ui-7.1.0/utoipa-swagger-ui/build.rs#L168
+  # See https://github.com/juhaku/utoipa/blob/utoipa-swagger-ui-9.0.2/utoipa-swagger-ui/build.rs#L168
   # Not deleting the existing unpacked archive leads to a `PermissionDenied` error
   preCheck = ''
     rm -rf target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/build/
@@ -166,23 +216,40 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # - `cargo check ... --features=metal` (on darwin) requires the sandbox to be completely disabled
   checkFeatures = [ ];
 
-  # Try to access internet
   checkFlags = [
+    # Try to access internet
     "--skip=gguf::gguf_tokenizer::tests::test_encode_decode_gpt2"
     "--skip=gguf::gguf_tokenizer::tests::test_encode_decode_llama"
     "--skip=util::tests::test_parse_image_url"
+    "--skip=utils::tiktoken::tests::test_tiktoken_conversion"
+
+    # Spawn a nested sandbox (bubblewrap-like) which fails inside the nix build sandbox
+    "--skip=callbacks_outlive_manager_executor_tempdir"
+    "--skip=sandboxed_session_can_execute_python"
+    "--skip=sandboxed_session_default_policy_can_execute_python"
+
+    # Upstream's v0.9.2 bump updated the version example in the generated CLI reference page
+    # but not in the clap doc comment it is generated from, so this golden test fails at the tag.
+    "--skip=docgen::cli_reference_matches_committed"
+
+    # Linux namespace / seccomp tests require capabilities the nix build sandbox blocks
+    "--skip=network_none_blocks_socket"
+    "--skip=rlimit_nproc_caps_processes"
+    "--skip=seccomp_blocks_ptrace"
+    "--skip=unshare_is_denied_inside_child"
   ];
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgram = "${placeholder "out"}/bin/mistralrs-server";
-  doInstallCheck = true;
+  # When started, mistralrs tries to load libcuda.so from the driver which is not available in the sandbox
+  # mistralrs: error while loading shared libraries: libcuda.so.1: cannot open shared object file: No such file or directory
+  doInstallCheck = !cudaSupport;
+
+  __darwinAllowLocalNetworking = true;
 
   passthru = {
     tests = {
-      version = testers.testVersion { package = mistral-rs; };
-
       withMkl = lib.optionalAttrs (hostPlatform.isLinux && hostPlatform.isx86_64) (
         mistral-rs.override { acceleration = "mkl"; }
       );
@@ -200,7 +267,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/EricLBuehler/mistral.rs/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
-    mainProgram = "mistralrs-server";
+    mainProgram = "mistralrs";
     platforms =
       if cudaSupport then
         lib.platforms.linux

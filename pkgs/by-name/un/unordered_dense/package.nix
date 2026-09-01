@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "unordered_dense";
-  version = "4.8.1";
+  version = "4.9.2";
 
   src = fetchFromGitHub {
     owner = "martinus";
     repo = "unordered_dense";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JdPlyShWnAcdgixDHRaroFg7YWdPtD4Nl1PmpcQ1SAk=";
+    hash = "sha256-ksAcGi3gbs809kuWkug9FYRXoOkvmI6XO9NdLmxFpVg=";
   };
 
   nativeBuildInputs = [ cmake ];

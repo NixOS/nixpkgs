@@ -38,7 +38,7 @@
   contents ? [ ],
 
   # mksquashfs options
-  squashfsTools ? pkgs.squashfsTools,
+  squashfsTools ? pkgs.squashfs-tools,
   squash-compression ? "xz -Xdict-size 100%",
   squash-block-size ? "1M",
 }:
@@ -87,9 +87,9 @@ let
     };
 in
 
-assert lib.assertMsg (lib.all (
-  u: lib.hasPrefix pname u.name
-) units) "Unit names must be prefixed with the service name";
+assert
+  lib.all (u: lib.hasPrefix pname u.name) units
+  || throw "Unit names must be prefixed with the service name";
 
 stdenv.mkDerivation {
   pname = "${pname}-img";

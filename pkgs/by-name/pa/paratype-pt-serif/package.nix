@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -16,13 +17,7 @@ stdenvNoCC.mkDerivation {
     rootDir = "ofl/ptserif";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm644 *.ttf -t $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://www.paratype.ru/catalog/font/pt/pt-serif";

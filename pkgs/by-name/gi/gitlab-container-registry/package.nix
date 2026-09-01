@@ -1,12 +1,12 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitLab,
 }:
 
-buildGo124Module rec {
+buildGoModule rec {
   pname = "gitlab-container-registry";
-  version = "4.34.0";
+  version = "4.41.0";
   rev = "v${version}-gitlab";
 
   # nixpkgs-update: no auto update
@@ -14,10 +14,14 @@ buildGo124Module rec {
     owner = "gitlab-org";
     repo = "container-registry";
     inherit rev;
-    hash = "sha256-KGw9kVsAePhEQ+kINgcMhGw7pSioOnqNWFnjQKu/XmY=";
+    hash = "sha256-i/bC+vZxm4jMFwVvtOUk+Q5IX25vYtr5x6Ejc3kqk/8=";
   };
 
-  vendorHash = "sha256-g4h1m7b7dkdTcSfwTZH4Z5P9RBKme441Ucg4aPIqLSY=";
+  vendorHash = "sha256-AFJqc3Fdk6mYSacA2VWFY9TCl7DEcsL7VkpRodlwbxQ=";
+
+  excludedPackages = [
+    "devvm/*"
+  ];
 
   checkFlags =
     let
@@ -36,6 +40,7 @@ buildGo124Module rec {
 
   meta = {
     description = "GitLab Docker toolset to pack, ship, store, and deliver content";
+    homepage = "https://gitlab.com/gitlab-org/container-registry";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ e1mo ];
     teams = with lib.teams; [ gitlab ];

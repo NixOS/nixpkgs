@@ -2,13 +2,16 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
+  setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage {
   pname = "trampoline";
   version = "0.1.2";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   # only wheel on pypi, no tags on git
   src = fetchFromGitLab {
@@ -17,6 +20,8 @@ buildPythonPackage {
     rev = "1d98f39c3015594e2ac8ed48dccc2f393b4dd82b";
     hash = "sha256-A/tuR+QW9sKh76Qjwn1uQxlVJgWrSFzXeBRDdnSi2o4=";
   };
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "trampoline" ];
 

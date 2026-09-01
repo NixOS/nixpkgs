@@ -24,12 +24,12 @@
   libpq,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgda";
   version = "5.2.10";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libgda/${lib.versions.majorMinor version}/libgda-${version}.tar.xz";
+    url = "mirror://gnome/sources/libgda/${lib.versions.majorMinor finalAttrs.version}/libgda-${finalAttrs.version}.tar.xz";
     hash = "sha256-b2zfe4BT9VO5B+DIimBk60jPJ1GFLrJDI9zwJ3kjNMg=";
   };
 
@@ -47,6 +47,9 @@ stdenv.mkDerivation rec {
 
     # Fix configure detection of features with c99.
     ./0001-gcc14-fix.patch
+
+    # Fix K&R-style MD5 definitions that fail under C23.
+    ./0002-c23-md5c.patch
 
     # Fix build with gettext 0.25
     (fetchpatch {
@@ -129,4 +132,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.bot-wxt1221 ];
     platforms = lib.platforms.unix;
   };
-}
+})

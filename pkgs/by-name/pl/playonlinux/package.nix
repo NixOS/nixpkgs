@@ -11,7 +11,7 @@
   mesa-demos,
   netcat-gnu,
   p7zip,
-  python3,
+  python312,
   unzip,
   wget,
   wine,
@@ -22,7 +22,7 @@
   which,
   curl,
   jq,
-  xorg,
+  libx11,
   libGL,
   steam-run,
   # needed for avoiding crash on file selector
@@ -66,11 +66,11 @@ let
   libs =
     pkgs:
     lib.makeLibraryPath [
-      xorg.libX11
+      libx11
       libGL
     ];
 
-  python = python3.withPackages (
+  python = python312.withPackages (
     ps: with ps; [
       wxpython
       setuptools
@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    xorg.libX11
+    libx11
     libGL
     python
     gsettings-desktop-schemas

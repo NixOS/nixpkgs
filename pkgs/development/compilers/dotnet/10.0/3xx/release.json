@@ -1,0 +1,11 @@
+{
+  "release": "10.0.11",
+  "channel": "10.0",
+  "tag": "v10.0.303",
+  "sdkVersion": "10.0.303",
+  "runtimeVersion": "10.0.11",
+  "aspNetCoreVersion": "10.0.11",
+  "sourceRepository": "https://github.com/dotnet/dotnet",
+  "sourceVersion": "e730f1db756d11c93f246830ba7b94ee6fcf4b94",
+  "officialBuildId": "20260727.3"
+}

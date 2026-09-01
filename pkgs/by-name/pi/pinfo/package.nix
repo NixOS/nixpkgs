@@ -10,14 +10,14 @@
   texinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pinfo";
   version = "0.6.13";
 
   src = fetchFromGitHub {
     owner = "baszoetekouw";
     repo = "pinfo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "173d2p22irwiabvr4z6qvr6zpr6ysfkhmadjlyhyiwd7z62larvy";
   };
 
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pinfo";
   };
-}
+})

@@ -8,14 +8,14 @@
   opencloud-desktop-shell-integration-resources,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opencloud-desktop-shell-integration-dolphin";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "opencloud-eu";
     repo = "desktop-shell-integration-dolphin";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+Bu/kN4RvR/inWQHYcfWOF6BWHTFm5jlea/QeT4NhFQ=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     mainProgram = "opencloud-desktop-shell-integration-dolphin";
     platforms = lib.platforms.all;
   };
-}
+})

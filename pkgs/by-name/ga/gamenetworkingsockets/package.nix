@@ -11,14 +11,14 @@
 let
   protobuf = protobuf_21;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "GameNetworkingSockets";
   version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "GameNetworkingSockets";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "12741wmpvy7mcvqqmjg4a7ph75rwliwgclhk4imjijqf2qkvsphd";
   };
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     description = "GameNetworkingSockets is a basic transport layer for games";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     maintainers = [ lib.maintainers.sternenseemann ];
   };
-}
+})

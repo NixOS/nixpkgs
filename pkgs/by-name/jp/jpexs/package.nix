@@ -7,12 +7,12 @@
   jdk8,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jpexs";
   version = "24.1.0";
 
   src = fetchzip {
-    url = "https://github.com/jindrapetrik/jpexs-decompiler/releases/download/version${version}/ffdec_${version}.zip";
+    url = "https://github.com/jindrapetrik/jpexs-decompiler/releases/download/version${finalAttrs.version}/ffdec_${finalAttrs.version}.zip";
     hash = "sha256-k6cnyiRyU4B5UdsVnY9LpzTO/o7Q9/aRS0Il2jV4PQ0=";
     stripRoot = false;
   };
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     cp ffdec.jar $out/share/ffdec
     cp -r lib $out/share/ffdec
     cp icon.png $out/share/icons/hicolor/512x512/apps/ffdec.png
-    cp -r ${desktopItem}/share/applications $out/share
+    cp -r ${finalAttrs.desktopItem}/share/applications $out/share
 
     makeWrapper ${jdk8}/bin/java $out/bin/ffdec \
       --add-flags "-jar $out/share/ffdec/ffdec.jar"
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     icon = name;
     desktopName = "JPEXS Free Flash Decompiler";
     genericName = "Flash Decompiler";
-    comment = meta.description;
+    comment = finalAttrs.meta.description;
     categories = [
       "Development"
       "Java"
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
       xrtxn
     ];
   };
-}
+})

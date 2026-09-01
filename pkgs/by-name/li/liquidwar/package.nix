@@ -3,15 +3,15 @@
   stdenv,
   fetchurl,
   xorgproto,
-  libX11,
-  libXrender,
+  libx11,
+  libxrender,
   gmp,
   libjpeg,
   libpng,
   expat,
   gettext,
   perl,
-  guile_2_0,
+  guile,
   SDL,
   SDL_image,
   SDL_mixer,
@@ -30,20 +30,39 @@
   libGLU,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liquidwar6";
   version = "0.6.3902";
 
   src = fetchurl {
-    url = "mirror://gnu/liquidwar6/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/liquidwar6/liquidwar6-${finalAttrs.version}.tar.gz";
     sha256 = "1976nnl83d8wspjhb5d5ivdvdxgb8lp34wp54jal60z4zad581fn";
   };
 
+  postPatch =
+    # configure: Liquid War 6 needs Guile 1.8 or 2.0
+    ''
+      substituteInPlace configure \
+        --replace-fail "guile/2.0" "guile/3.0" \
+        --replace-fail "guile-2.0" "guile-3.0" \
+        --replace-fail "LIBGUILE2" "LIBGUILE3"
+    ''
+    # error: 'SCM_LIST0' undeclared (first use in this function)
+    + ''
+      substituteInPlace src/lib/lw6-funcs{ldr,gui,pil,sys}.c \
+        --replace-fail "SCM_LIST0" "SCM_EOL"
+    ''
+    # ATTENTION! script returned false, something is wrong
+    + ''
+      substituteInPlace script/liquidwar6.scm \
+        --replace-fail "(lazy-catch #t" "(catch #t"
+    '';
+
   buildInputs = [
     xorgproto
-    libX11
+    libx11
     gmp
-    guile_2_0
+    guile
     libjpeg
     libpng
     expat
@@ -58,7 +77,7 @@ stdenv.mkDerivation rec {
     libogg
     libvorbis
     csound
-    libXrender
+    libxrender
     libcaca
     cunit
     libtool
@@ -95,4 +114,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

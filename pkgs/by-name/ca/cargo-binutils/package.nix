@@ -4,12 +4,12 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-binutils";
   version = "0.4.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-AF1MRBH8ULnHNHT2FS/LxMH+b06QMTIZMIR8mmkn17c=";
   };
 
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
       In order for this to work, you either need to run `rustup component add llvm-tools` or install the `llvm-tools` component using your Nix library (e.g. fenix or rust-overlay)
     '';
     homepage = "https://github.com/rust-embedded/cargo-binutils";
-    changelog = "https://github.com/rust-embedded/cargo-binutils/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/rust-embedded/cargo-binutils/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
@@ -32,4 +32,4 @@ rustPlatform.buildRustPackage rec {
       newam
     ];
   };
-}
+})

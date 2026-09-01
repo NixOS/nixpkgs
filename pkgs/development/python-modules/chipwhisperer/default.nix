@@ -4,7 +4,6 @@
   fetchFromGitHub,
 
   # build
-  pythonAtLeast,
   setuptools,
   setuptools-scm,
   cython,
@@ -15,7 +14,6 @@
   ecpy,
   fastdtw,
   libusb1,
-  numpy,
   pyserial,
   tqdm,
 
@@ -108,5 +106,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/newaetech/chipwhisperer/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.krishnans2006 ];
+    broken = true; # Requires NumPy 1.26.4 (unsupported by nixpkgs)
   };
 }

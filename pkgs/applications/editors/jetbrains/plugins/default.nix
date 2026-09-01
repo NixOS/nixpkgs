@@ -16,15 +16,15 @@
     let
       processPlugin =
         plugin:
-        # We can remove this check and just asume plugins to be derivations starting with 26.11.
+        # We can remove this check and just assume plugins to be derivations starting with 26.11.
         lib.throwIfNot (lib.isDerivation plugin)
           "addPlugins no longer supports resolving plugins by name or id strings. Please supply a derivation instead"
           plugin;
 
       plugins = map processPlugin unprocessedPlugins;
     in
-    stdenv.mkDerivation rec {
-      pname = meta.mainProgram + "-with-plugins";
+    stdenv.mkDerivation (finalAttrs: {
+      pname = finalAttrs.meta.mainProgram + "-with-plugins";
       version = ide.version;
       src = ide;
       dontInstall = true;
@@ -45,7 +45,8 @@
       buildPhase =
         let
           appDir = lib.optionalString stdenv.hostPlatform.isDarwin "Applications/${lib.escapeShellArg ide.product}.app";
-          rootDir = if stdenv.hostPlatform.isDarwin then "${appDir}/Contents" else meta.mainProgram;
+          rootDir =
+            if stdenv.hostPlatform.isDarwin then "${appDir}/Contents" else finalAttrs.meta.mainProgram;
         in
         ''
           cp -r ${ide} $out
@@ -74,5 +75,5 @@
             done
           )
         '';
-    };
+    });
 }

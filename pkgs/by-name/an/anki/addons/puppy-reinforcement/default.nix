@@ -2,7 +2,6 @@
   lib,
   anki-utils,
   fetchFromGitHub,
-  nix-update-script,
 }:
 anki-utils.buildAnkiAddon (finalAttrs: {
   pname = "puppy-reinforcement";
@@ -14,7 +13,6 @@ anki-utils.buildAnkiAddon (finalAttrs: {
     hash = "sha256-y52AjmYrFTcTwd4QAcJzK5R9wwxUSlvnN3C2O/r5cHk=";
   };
   sourceRoot = "${finalAttrs.src.name}/src/puppy_reinforcement";
-  passthru.updateScript = nix-update-script { };
   meta = {
     description = "Encourage learners with pictures of cute puppies";
     longDescription = ''

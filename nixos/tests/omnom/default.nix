@@ -28,18 +28,18 @@
 
       def open_omnom():
         # Add-ons Manager
-        server.succeed("xdotool mousemove --sync 960 90 click 1")
+        server.succeed("xdotool mousemove --sync 1221 83 click 1")
         server.sleep(10)
         # omnom
-        server.succeed("xdotool mousemove --sync 700 190 click 1")
+        server.succeed("xdotool mousemove --sync 877 184 click 1")
         server.sleep(10)
 
 
-      service_url = "http://127.0.0.1:${toString port}"
+      service_url = "http://127.0.0.1:${port}/"
 
       server.start()
       server.wait_for_unit("omnom.service")
-      server.wait_for_open_port(${toString port})
+      server.wait_for_open_port(${port})
       server.succeed(f"curl -sf '{service_url}'")
 
       output = server.succeed("omnom create-user user user@example.com")
@@ -59,23 +59,23 @@
       open_omnom()
 
       # token
-      server.succeed("xdotool mousemove --sync 700 350 click 1")
+      server.succeed("xdotool mousemove --sync 943 345 click 1")
       server.succeed(f"xdotool type {token}")
       server.sleep(10)
 
       # url
-      server.succeed("xdotool mousemove --sync 700 470 click 1")
+      server.succeed("xdotool mousemove --sync 943 452 click 1")
       server.succeed(f"xdotool type '{service_url}'")
       server.sleep(10)
 
       # submit
-      server.succeed("xdotool mousemove --sync 900 520 click 1")
+      server.succeed("xdotool mousemove --sync 1156 485 click 1")
       server.sleep(10)
 
       open_omnom()
 
       # save
-      server.succeed("xdotool mousemove --sync 900 520 click 1")
+      server.succeed("xdotool mousemove --sync 1151 459 click 1")
       server.sleep(10)
 
       # refresh
@@ -85,19 +85,19 @@
       server.screenshot("home.png")
 
       # view bookmarks
-      server.succeed("xdotool mousemove --sync 300 130 click 1")
+      server.succeed("xdotool mousemove --sync 377 133 click 1")
       server.sleep(10)
 
       # view snapshot
-      server.succeed("xdotool mousemove --sync 970 230 click 1")
+      server.succeed("xdotool mousemove --sync 414 307 click 1")
       server.sleep(10)
-      server.succeed("xdotool mousemove --sync 160 340 click 1")
+      server.succeed("xdotool mousemove --sync 993 510 click 1")
       server.sleep(10)
 
       server.screenshot("screenshot.png")
 
       # view details
-      server.succeed("xdotool mousemove --sync 290 200 click 1")
+      server.succeed("xdotool mousemove --sync 400 230 click 1")
       server.sleep(10)
 
       server.screenshot("snapshot_details.png")

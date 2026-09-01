@@ -2,9 +2,14 @@
   lib,
   stdenv,
   buildPythonPackage,
+  common-updater-scripts,
+  curl,
   fetchFromGitHub,
-  replaceVars,
+  nix,
+  nix-update,
   nanobind,
+  perl,
+  writeShellApplication,
 
   # build-system
   cmake,
@@ -12,10 +17,8 @@
   typing-extensions,
 
   # buildInputs
-  apple-sdk,
   fmt,
   nlohmann_json,
-  pybind11,
   # linux-only
   openblas,
 
@@ -41,24 +44,20 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "mlx";
-  version = "0.30.3";
+  version = "0.32.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ml-explore";
     repo = "mlx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y4RTkGcDCZ9HLyflN0qYhPt/oVOsBhF1mHnKM4n1/ys=";
+    hash = "sha256-yHpTyRf9FOPbdyDWSM7b6VC72STnUpgCMLbDxLbdaqs=";
   };
 
   patches = [
-    # Use system nanobind instead of fetching its sources
-    ./dont-fetch-nanobind.patch
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    (replaceVars ./darwin-build-fixes.patch {
-      sdkVersion = apple-sdk.version;
-    })
+    # Use nix packages instead of fetching their sources
+    ./dont-fetch-json.patch
   ];
 
   postPatch = ''
@@ -75,9 +74,6 @@ buildPythonPackage (finalAttrs: {
     export MAKEFLAGS+="''${enableParallelBuilding:+-j$NIX_BUILD_CORES}"
   '';
 
-  # updates the wrong fetcher rev attribute
-  passthru.skipBulkUpdate = true;
-
   env = {
     PYPI_RELEASE = 1;
     CMAKE_ARGS = toString [
@@ -88,10 +84,8 @@ buildPythonPackage (finalAttrs: {
       (lib.cmakeBool "MLX_BUILD_METAL" false)
       (lib.cmakeBool "USE_SYSTEM_FMT" true)
       (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_GGUFLIB" "${gguf-tools}")
-      (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_JSON" "${nlohmann_json.src}")
-
-      # Cmake cannot find nanobind-config.cmake by itself
-      (lib.cmakeFeature "nanobind_DIR" "${nanobind}/${python.sitePackages}/nanobind/cmake")
+      (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_NANOBIND" "${nanobind.src}")
+      (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-I${lib.getDev nlohmann_json}/include/nlohmann")
     ];
   };
 
@@ -103,9 +97,7 @@ buildPythonPackage (finalAttrs: {
 
   buildInputs = [
     fmt
-    gguf-tools
     nlohmann_json
-    pybind11
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     openblas
@@ -123,14 +115,21 @@ buildPythonPackage (finalAttrs: {
     "python/tests/"
   ];
 
-  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
-    # Segmentation fault
-    "test_lapack"
-    "test_multivariate_normal"
-    "test_orthogonal"
-    "test_vmap_inverse"
-    "test_vmap_svd"
-  ];
+  disabledTests =
+    lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+      # Segmentation fault
+      "test_lapack"
+      "test_multivariate_normal"
+      "test_orthogonal"
+      "test_vmap_inverse"
+      "test_vmap_svd"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # M1 Accelerate bug, to be fixed in macOS:
+      # https://github.com/ml-explore/mlx/issues/3200
+      # https://github.com/ml-explore/mlx/pull/3563#issuecomment-4784288696
+      "test_gather_qmm_sorted"
+    ];
 
   disabledTestPaths = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
     # Segmentation fault
@@ -149,24 +148,40 @@ buildPythonPackage (finalAttrs: {
 
   # Additional testing by executing the example Python scripts supplied with mlx
   # using the version of the library we've built.
-  passthru.tests = {
-    mlxTest =
-      runCommand "run-mlx-examples"
-        {
-          buildInputs = [ mlx ];
-          nativeBuildInputs = [ python ];
-        }
-        ''
-          cp ${finalAttrs.src}/examples/python/logistic_regression.py .
-          ${python.interpreter} logistic_regression.py
-          rm logistic_regression.py
+  passthru = {
+    inherit gguf-tools;
 
-          cp ${finalAttrs.src}/examples/python/linear_regression.py .
-          ${python.interpreter} linear_regression.py
-          rm linear_regression.py
+    tests = {
+      mlxTest =
+        runCommand "run-mlx-examples"
+          {
+            buildInputs = [ mlx ];
+            nativeBuildInputs = [ python ];
+          }
+          ''
+            cp ${finalAttrs.src}/examples/python/logistic_regression.py .
+            ${python.interpreter} logistic_regression.py
+            rm logistic_regression.py
 
-          touch $out
-        '';
+            cp ${finalAttrs.src}/examples/python/linear_regression.py .
+            ${python.interpreter} linear_regression.py
+            rm linear_regression.py
+
+            touch $out
+          '';
+    };
+
+    updateScript = lib.getExe (writeShellApplication {
+      name = "mlx-update";
+      runtimeInputs = [
+        common-updater-scripts
+        curl
+        nix
+        nix-update
+        perl
+      ];
+      text = builtins.readFile ./update.sh;
+    });
   };
 
   meta = {
@@ -175,14 +190,9 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/ml-explore/mlx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      Gabriella439
       booxter
       cameronyule
       viraptor
-    ];
-    badPlatforms = [
-      # Building for x86_64 on macOS is not supported
-      "x86_64-darwin"
     ];
   };
 })

@@ -6,6 +6,7 @@
   ninja,
   pkg-config,
   libpng,
+  checkPhaseThreadLimitHook,
   glib, # just passthru
 
   # for passthru.tests
@@ -13,8 +14,7 @@
   qemu,
   scribus,
   tigervnc,
-  wlroots_0_17,
-  wlroots_0_18,
+  wlroots_0_19,
   xwayland,
 
   gitUpdater,
@@ -47,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    checkPhaseThreadLimitHook
     __flattenIncludeHackHook
   ];
 
@@ -62,11 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dneon=disabled"
   ];
 
-  preConfigure = ''
-    # https://gitlab.freedesktop.org/pixman/pixman/-/issues/62
-    export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 184 ? 184 : NIX_BUILD_CORES))
-  '';
-
   enableParallelBuilding = true;
 
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -78,8 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
         qemu
         scribus
         tigervnc
-        wlroots_0_17
-        wlroots_0_18
+        wlroots_0_19
         xwayland
         ;
       pkg-config = testers.hasPkgConfigModules {

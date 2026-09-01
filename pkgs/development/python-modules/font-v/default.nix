@@ -6,22 +6,25 @@
   gitMinimal,
   gitpython,
   pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "font-v";
   version = "2.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   # PyPI source tarballs omit tests, fetch from Github instead
   src = fetchFromGitHub {
     owner = "source-foundry";
     repo = "font-v";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ceASyYcNul5aWPAPGajCQrqsQ3bN1sE+nMbCbj7f35w=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     fonttools
     gitpython
   ];
@@ -30,6 +33,7 @@ buildPythonPackage rec {
     gitMinimal
     pytestCheckHook
   ];
+
   preCheck = ''
     # Many tests assume they are running from a git checkout, although they
     # don't care which one. Create a dummy git repo to satisfy the tests:
@@ -38,6 +42,7 @@ buildPythonPackage rec {
     git config user.name Test
     git commit --allow-empty --message 'Dummy commit for tests'
   '';
+
   disabledTests = [
     # These tests assume they are actually running from a font-v git checkout,
     # so just skip them:
@@ -46,9 +51,10 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python utility for manipulating font version headers";
+    changelog = "https://github.com/source-foundry/font-v/blob/v${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "font-v";
     homepage = "https://github.com/source-foundry/font-v";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ danc86 ];
   };
-}
+})

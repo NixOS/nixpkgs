@@ -10,8 +10,8 @@
   libxslt,
   pkg-config,
   wrapGAppsHook3,
-  gtk2-x11,
-  libX11,
+  gtk3,
+  libx11,
   polkit,
   vala,
 }:
@@ -39,8 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gtk2-x11
-    libX11
+    gtk3
+    libx11
     polkit
     vala
   ];
@@ -49,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-man"
     "--disable-buildin-clipboard"
     "--disable-buildin-polkit"
+    "--enable-gtk3"
   ];
 
   postPatch = ''
@@ -61,7 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wiki.lxde.org/en/LXSession";
     description = "Classic LXDE session manager";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.shamilton ];
     platforms = lib.platforms.linux;
     mainProgram = "lxsession";
   };

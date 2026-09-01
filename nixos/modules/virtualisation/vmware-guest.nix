@@ -18,7 +18,6 @@ let
     types
     ;
   cfg = config.virtualisation.vmware.guest;
-  xf86inputvmmouse = pkgs.xorg.xf86inputvmmouse;
 in
 {
   imports = [
@@ -94,7 +93,7 @@ in
     environment.etc.vmware-tools.source = "${cfg.package}/etc/vmware-tools/*";
 
     services.xserver = mkIf (!cfg.headless) {
-      modules = optionals pkgs.stdenv.hostPlatform.isx86 [ xf86inputvmmouse ];
+      modules = optionals pkgs.stdenv.hostPlatform.isx86 [ pkgs.xf86-input-vmmouse ];
 
       config = optionalString (pkgs.stdenv.hostPlatform.isx86) ''
         Section "InputClass"

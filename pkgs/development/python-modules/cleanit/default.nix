@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build dependencies
   poetry-core,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   version = "0.4.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
   src = fetchFromGitHub {
     owner = "ratoaq2";
     repo = "cleanit";
@@ -46,10 +43,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  pythonRelaxDeps = [
-    "click"
-    "jsonschema"
-  ];
+  pythonRelaxDeps = [ "chardet" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

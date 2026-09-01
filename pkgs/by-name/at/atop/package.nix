@@ -14,13 +14,13 @@
   withAtopgpu ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "atop";
-  version = "2.12.1";
+  version = "2.13.0";
 
   src = fetchurl {
-    url = "https://www.atoptool.nl/download/atop-${version}.tar.gz";
-    hash = "sha256-T9vmfF36+JQFY54YWZ9OrneXgHP/pU88eMNoq1S9EvY=";
+    url = "https://www.atoptool.nl/download/atop-${finalAttrs.version}.tar.gz";
+    hash = "sha256-6hgvhMn1LKki5a9PF9/5f/QkQApPL5I5Mxemr2bmqHQ=";
   };
 
   nativeBuildInputs = [
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # Remove extra files we don't need
-    rm -r $out/{var,etc} $out/bin/atop{sar,}-${version}
+    rm -r $out/{var,etc} $out/bin/atop{sar,}-${finalAttrs.version}
   ''
   + (
     if withAtopgpu then
@@ -107,4 +107,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     downloadPage = "http://atoptool.nl/downloadatop.php";
   };
-}
+})

@@ -7,6 +7,7 @@
   docbook_xml_dtd_412,
   docbook-xsl-nons,
   fetchFromGitHub,
+  fetchpatch,
   gtk-doc,
   libevdev,
   libtool,
@@ -17,9 +18,9 @@
   upower,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "thermald";
-  version = "2.5.10";
+  version = "2.5.12";
 
   outputs = [
     "out"
@@ -29,9 +30,23 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "thermal_daemon";
-    rev = "v${version}";
-    sha256 = "sha256-+dk3lOlI8kaf8NvcWQSvTxSqVGPCgvVnTB9nltqQHrU=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-pppza3HVKl27K/dM4G5h9095N9Fw4a/7FZD95/2Llu8=";
   };
+
+  patches = [
+    # Fix "[ERR]Non mobile platform, exiting.." issue.
+    # https://github.com/intel/thermal_daemon/issues/589
+    # (Will be included in the next release).
+    #
+    # NOTES:
+    # - https://github.com/NixOS/nixos-hardware/issues/208
+    (fetchpatch {
+      name = "demote-fatal-error-to-warning-for-non-mobile-platform.patch";
+      url = "https://github.com/panchoh/thermal_daemon/commit/7f2a5d09010c1ffa9ce53c4fe0e673bcc504ea67.patch";
+      hash = "sha256-XQM6OfIg/2SZxhxB/NrCUEiWxBl/AtI4Y/jdcXBVoJM=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoconf
@@ -78,4 +93,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "thermald";
   };
-}
+})

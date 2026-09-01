@@ -2,9 +2,10 @@
   stdenvNoCC,
   lib,
   fetchFromGitHub,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "merriweather-sans";
   version = "1.008";
 
@@ -18,12 +19,13 @@ stdenvNoCC.mkDerivation rec {
   # TODO: it would be nice to build this from scratch, but lots of
   # Python dependencies to package (fontmake, gftools)
 
-  installPhase = ''
-    install -m444 -Dt $out/share/fonts/truetype/${pname} fonts/ttfs/*.ttf
-    install -m444 -Dt $out/share/fonts/woff/${pname} fonts/woff/*.woff
-    install -m444 -Dt $out/share/fonts/woff2/${pname} fonts/woff2/*.woff2
-    # TODO: install variable version?
-  '';
+  # TODO: packaging with python allow update and usage of variable/otf fonts
+  nativeBuildInputs = [ installFonts ];
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   meta = {
     homepage = "https://github.com/SorkinType/Merriweather-Sans";

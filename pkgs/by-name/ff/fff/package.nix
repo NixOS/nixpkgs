@@ -11,14 +11,14 @@
   xdotool,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fff";
   version = "2.2";
 
   src = fetchFromGitHub {
     owner = "dylanaraps";
     repo = "fff";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "14ymdw6l6phnil0xf1frd5kgznaiwppcic0v4hb61s1zpf4wrshg";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

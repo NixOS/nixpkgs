@@ -22,37 +22,36 @@ index 570af425..f2e7b2c8 100644
 -set(STB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/stb PARENT_SCOPE)
 +# Nix: set STB_INCLUDE_DIR in cmake flags
 diff --git a/scwx-qt/scwx-qt.cmake b/scwx-qt/scwx-qt.cmake
-index 4833b9c2..641fc637 100644
+index f73d70da..ed40e428 100644
 --- a/scwx-qt/scwx-qt.cmake
 +++ b/scwx-qt/scwx-qt.cmake
-@@ -13,14 +13,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+@@ -13,13 +13,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
  
  OPTION(SCWX_DISABLE_CONSOLE "Disables the Windows console in release mode" ON)
  
 -find_package(Boost)
-+find_package(Boost REQUIRED COMPONENTS json timer atomic)
++find_package(Boost REQUIRED COMPONENTS json timer atomic program_options)
  find_package(Fontconfig)
 -find_package(geographiclib)
 +find_package(GeographicLib)
  find_package(geos)
  find_package(glm)
- find_package(OpenGL)
+ find_package(JPEG)
+ find_package(OpenGL REQUIRED)
++find_package(PNG)
  find_package(Python COMPONENTS Interpreter)
  find_package(SQLite3)
-+find_package(PNG)
- 
- find_package(QT NAMES Qt6
-              COMPONENTS Gui
-@@ -789,6 +790,7 @@ target_link_libraries(scwx-qt PUBLIC Qt${QT_VERSION_MAJOR}::Widgets
+ find_package(TIFF)
+@@ -872,6 +873,7 @@ target_link_libraries(scwx-qt PUBLIC Qt${QT_VERSION_MAJOR}::Widgets
                                       qt6ct-common
                                       qt6ct-widgets
                                       SQLite::SQLite3
 +                                     PNG::PNG
+                                      TIFF::TIFF
                                       wxdata)
  
- target_link_libraries(supercell-wx PRIVATE scwx-qt
 diff --git a/wxdata/wxdata.cmake b/wxdata/wxdata.cmake
-index 451efc13..86cbb42b 100644
+index 07fe8464..0624971d 100644
 --- a/wxdata/wxdata.cmake
 +++ b/wxdata/wxdata.cmake
 @@ -4,7 +4,8 @@ project(scwx-data)
@@ -60,8 +59,8 @@ index 451efc13..86cbb42b 100644
  include(CheckCXXSymbolExists)
  
 -find_package(Boost)
-+find_package(Boost REQUIRED COMPONENTS iostreams)
++find_package(Boost REQUIRED COMPONENTS iostreams url)
 +find_package(BZip2)
  find_package(cpr)
  find_package(LibXml2)
- find_package(OpenSSL)
+ find_package(libzip)

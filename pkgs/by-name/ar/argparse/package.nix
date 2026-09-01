@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "argparse";
   version = "3.2";
 
   src = fetchFromGitHub {
     owner = "p-ranav";
     repo = "argparse";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-w4IU8Yr+zPFOo7xR4YMHlqNJcEov4KU/ppDYrgsGlxM=";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
   };
-}
+})

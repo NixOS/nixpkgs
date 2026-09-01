@@ -6,17 +6,17 @@
   ginkgo,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ginkgo";
-  version = "2.27.5";
+  version = "2.32.1";
 
   src = fetchFromGitHub {
     owner = "onsi";
     repo = "ginkgo";
-    rev = "v${version}";
-    sha256 = "sha256-e4iEMRzWTnMoY/tjN/w2T0Rq3zGd0sOxoe9vgUouxf8=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-mXfY+txLg8z+DxPfB8D0SqZMTXNJrDBhPcSVTirkgxg=";
   };
-  vendorHash = "sha256-Vmcva/iMaOszQi87avO7utD0ahlB2gFBmVEI86hvnyQ=";
+  vendorHash = "sha256-lj8b9f5q9hbPML7uLca74lTCadNOCtGIDmvP+CUwJx4=";
 
   # integration tests expect more file changes
   # types tests are missing CodeLocation
@@ -54,4 +54,4 @@ buildGoModule rec {
       jk
     ];
   };
-}
+})

@@ -9,7 +9,7 @@
   texinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-gcrypt";
   version = "0.5.0";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     domain = "notabug.org";
     owner = "cwebber";
     repo = "guile-gcrypt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-YPzOKFwKxEbu4+tW1Pu6EeALArTUEfM/bSQPth5eBX4=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     platforms = guile.meta.platforms;
   };
-}
+})

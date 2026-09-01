@@ -7,14 +7,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lcm";
   version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "lcm-proj";
     repo = "lcm";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-72fytJY+uXEHGdZ7N+0g+JK7ALb2e2ZtJuvhiGIMHiA=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ kjeremy ];
     platforms = lib.platforms.unix;
   };
-}
+})

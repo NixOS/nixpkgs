@@ -9,7 +9,7 @@
   libimobiledevice-glue,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libirecovery";
   version = "1.3.1";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = "libirecovery";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-CSDG8mOLvKAIpxmZnNLMKY1HvQIqk66/rkjmzq7F8vY=";
   };
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
 
   preAutoreconf = ''
-    export RELEASE_VERSION=${version}
+    export RELEASE_VERSION=${finalAttrs.version}
   '';
 
   # Packager note: Not clear whether this needs a NixOS configuration,
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     mainProgram = "irecovery";
     platforms = lib.platforms.unix;
   };
-}
+})

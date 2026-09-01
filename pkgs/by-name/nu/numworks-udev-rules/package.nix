@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
     description = "Udev rules for Numworks calculators";
     homepage = "https://numworks.com";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ shamilton ];
     platforms = lib.platforms.linux;
   };
 }

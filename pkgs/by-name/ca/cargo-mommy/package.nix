@@ -4,12 +4,12 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-mommy";
   version = "0.3.1";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-2WR6xUYL/bLgZlI4ADbPAtdLq0y4MoVP8Loxdu/58Wc=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [ GoldsteinE ];
   };
-}
+})

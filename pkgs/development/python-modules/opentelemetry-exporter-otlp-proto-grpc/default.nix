@@ -36,6 +36,12 @@ buildPythonPackage {
 
   enabledTestPaths = [ "tests" ];
 
+  disabledTests = [
+    # Timing-sensitive
+    "test_retry_info_is_respected"
+    "test_timeout_set_correctly"
+  ];
+
   pythonImportsCheck = [ "opentelemetry.exporter.otlp.proto.grpc" ];
 
   __darwinAllowLocalNetworking = true;

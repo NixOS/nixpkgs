@@ -5,13 +5,13 @@
   updateAutotoolsGnuConfigScriptsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lzo";
   version = "2.10";
 
   src = fetchurl {
-    url = "https://www.oberhumer.com/opensource/lzo/download/${pname}-${version}.tar.gz";
-    sha256 = "0wm04519pd3g8hqpjqhfr72q8qmbiwqaxcs3cndny9h86aa95y60";
+    url = "https://www.oberhumer.com/opensource/lzo/download/lzo-${finalAttrs.version}.tar.gz";
+    hash = "sha256-wPiSlDIIJm+bZUOzrjCPq2KExckOYnkxRG+0m0IhoHI=";
   };
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
@@ -23,6 +23,14 @@ stdenv.mkDerivation rec {
   doCheck = true; # not cross;
 
   strictDeps = true;
+
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Real-time data (de)compression library";
@@ -41,4 +49,4 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.all;
   };
-}
+})

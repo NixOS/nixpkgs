@@ -1,6 +1,7 @@
 {
   mkDerivation,
   lib,
+  cmake,
   extra-cmake-modules,
   boost,
   kactivities,
@@ -10,7 +11,10 @@
 
 mkDerivation {
   pname = "kactivities-stats";
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
   buildInputs = [
     boost
     kactivities

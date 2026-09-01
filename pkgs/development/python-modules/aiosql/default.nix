@@ -8,7 +8,6 @@
   pytest-asyncio,
   pytest-postgresql,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   sphinx-rtd-theme,
@@ -63,7 +62,7 @@ buildPythonPackage rec {
     description = "Simple SQL in Python";
     homepage = "https://nackjicholson.github.io/aiosql/";
     changelog = "https://github.com/nackjicholson/aiosql/releases/tag/${src.tag}";
-    license = with lib.licenses; [ bsd2 ];
+    license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ kaction ];
   };
 }

@@ -11,14 +11,14 @@ let
   # https://github.com/daniruiz/flat-remix-gnome/blob/20250926/Makefile#L38
   fake-dconf = writeScriptBin "dconf" "echo -n";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flat-remix-gnome";
   version = "20250926";
 
   src = fetchFromGitHub {
     owner = "daniruiz";
     repo = "flat-remix-gnome";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-6K/BQqVOeDeJuUi0+NgCFeerX5sSy+nKapYxIQfbKFQ=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.vanilla ];
   };
-}
+})

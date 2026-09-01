@@ -9,7 +9,7 @@
   gtksourceview3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "genxword";
   version = "2.2.0";
   pyproject = true;
@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "riverrun";
     repo = "genxword";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vzzkXfMnkeTFQmTNAfCIKqVVNm1I6GSfRV1lwGmLj6Y=";
   };
 
@@ -57,4 +57,4 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "genxword";
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

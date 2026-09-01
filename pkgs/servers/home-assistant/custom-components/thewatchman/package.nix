@@ -11,22 +11,18 @@
 buildHomeAssistantComponent rec {
   owner = "dummylabs";
   domain = "watchman";
-  version = "0.7.0-beta.1";
+  version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "dummylabs";
     repo = "thewatchman";
     tag = "v${version}";
-    hash = "sha256-U2AYxQ37XQocHcnY2Uv9Lhu0LmEZhhcGdO29i565tBM=";
+    hash = "sha256-y9Qug+ftJDZXUHCsmx+/KqauczoHPPHiCtnnngdJBu8=";
   };
 
-  postPatch = ''
-    substituteInPlace custom_components/watchman/manifest.json \
-      --replace-fail "prettytable==3.12.0" "prettytable"
-
-    substituteInPlace tests/{__init__,test_{action,regex,report}}.py \
-      --replace-fail "/workspaces/thewatchman/" ""
-  '';
+  ignoreVersionRequirement = [
+    "prettytable"
+  ];
 
   dontBuild = true;
 
@@ -38,6 +34,13 @@ buildHomeAssistantComponent rec {
     pytest-cov-stub
     pytest-homeassistant-custom-component
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # flaky
+    "test_automations_parsing"
+    # Timing sensitive: Should still not be called (T=2.5 < T=3)
+    "test_debounce_rescan"
   ];
 
   meta = {

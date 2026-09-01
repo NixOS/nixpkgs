@@ -15,11 +15,8 @@
   pytestCheckHook,
   python-dotenv,
   pythonAtLeast,
-  pythonOlder,
   rich-click,
   sybil,
-  tomli,
-  typing-extensions,
 }:
 buildPythonPackage rec {
   pname = "typed-settings";
@@ -33,8 +30,6 @@ buildPythonPackage rec {
   };
 
   build-system = [ hatchling ];
-
-  dependencies = lib.optionals (pythonOlder "3.11") [ tomli ];
 
   optional-dependencies = {
     all = [
@@ -66,8 +61,7 @@ buildPythonPackage rec {
     rich-click
     sybil
   ]
-  ++ (lib.optional (pythonOlder "3.11") typing-extensions)
-  ++ (lib.concatAttrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   enabledTestPaths = [ "tests" ];
 

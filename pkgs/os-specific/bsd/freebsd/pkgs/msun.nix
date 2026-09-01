@@ -1,4 +1,6 @@
 {
+  lib,
+  stdenv,
   mkDerivation,
   include,
   libcMinimal,
@@ -10,6 +12,9 @@ mkDerivation {
   path = "lib/msun";
   extraPaths = [
     "lib/libc" # wants arch headers
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [
+    "contrib/arm-optimized-routines"
   ];
 
   outputs = [

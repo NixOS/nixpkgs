@@ -10,7 +10,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "kustomize";
-  version = "5.8.0";
+  version = "5.8.1";
 
   ldflags =
     let
@@ -26,13 +26,13 @@ buildGoModule (finalAttrs: {
     owner = "kubernetes-sigs";
     repo = "kustomize";
     rev = "kustomize/v${finalAttrs.version}";
-    hash = "sha256-BOM0m/bigELUf6xHjLbI8wzSscF0lhwCjIxa87xBbWM=";
+    hash = "sha256-IFof+h6GBlI19ygufNvQ6HgwGbmS0xR5CmrFafknHf0=";
   };
 
   # avoid finding test and development commands
   modRoot = "kustomize";
   proxyVendor = true;
-  vendorHash = "sha256-kwvfxHXL189PSK7+PnOr+1TSjuX3uHkV4VnG3gSW5v0=";
+  vendorHash = "sha256-0nlI8QmZCzSZXlQKs5ZkAwrRMKaQUoFpDuj60gURlf8=";
 
   nativeBuildInputs = [ installShellFiles ];
 

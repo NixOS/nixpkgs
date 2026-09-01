@@ -9,11 +9,11 @@ let
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
 in
 
-buildDotnetGlobalTool rec {
+buildDotnetGlobalTool (finalAttrs: {
   pname = "csharp-ls";
-  version = "0.21.0";
+  version = "0.27.0";
 
-  nugetHash = "sha256-XFzTJ7UWaFQEmFmdY/zY4zjKZaKK9aUq4Zbt3h+19bg=";
+  nugetHash = "sha256-pJo01GZOT7pHgctQ1TfvrRdxOTgoNw4y7OP+deK87a8=";
 
   inherit dotnet-sdk;
   dotnet-runtime = dotnet-sdk;
@@ -29,15 +29,9 @@ buildDotnetGlobalTool rec {
     description = "Roslyn-based LSP language server for C#";
     mainProgram = "csharp-ls";
     homepage = "https://github.com/razzmatazz/csharp-language-server";
-    changelog = "https://github.com/razzmatazz/csharp-language-server/releases/tag/v${version}";
+    changelog = "https://github.com/razzmatazz/csharp-language-server/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ GaetanLepage ];
-    badPlatforms = [
-      # Crashes immediately at runtime
-      # terminated by signal SIGKILL (Forced quit)
-      # https://github.com/razzmatazz/csharp-language-server/issues/211
-      "aarch64-darwin"
-    ];
   };
-}
+})

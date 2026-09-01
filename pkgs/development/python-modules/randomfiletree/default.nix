@@ -4,14 +4,14 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "randomfiletree";
   version = "1.2.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "RandomFileTree";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-OpLhLsvwk9xrP8FAXGkDDtMts6ikpx8ockvTR/TEmvw=";
   };
 
@@ -24,4 +24,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ twitchy0 ];
   };
-}
+})

@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "mdbook-plantuml";
-  version = "0.8.0-unstable-2022-12-28";
+  version = "v2.0.0";
 
   src = fetchFromGitHub {
     owner = "sytsereitsma";
     repo = "mdbook-plantuml";
-    rev = "c156b53aad6d7bce8479e5406a4a3465c12714ef";
-    hash = "sha256-5/6NQO++MsV7GS69jGkdpkiRhadtQyYZeHreft4h6hQ=";
+    rev = "dae70cfd3deb8438127cc369a92ecefe24acb6a2";
+    hash = "sha256-PNVWeXbYDX/PYFCSPKKeqdbhLl9hmDOK7i7lWQlbEK0=";
   };
 
-  cargoHash = "sha256-LzzAaWLDODbqGNVeEULLOgrpyLGKzaknIbLjKyF2zBw=";
+  cargoHash = "sha256-8DKnINclcX0WwRtCTv7DUBx/6omRvda3qg3a1g1lyFA=";
 
   nativeBuildInputs = [ pkg-config ];
 

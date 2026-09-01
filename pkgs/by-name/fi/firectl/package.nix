@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "firectl";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "firecracker-microvm";
     repo = "firectl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3MNNgFRq4goWdHFyqWNMAl2K0eKfd03BF05i82FIzNE=";
   };
 
@@ -27,4 +27,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ xrelkd ];
     mainProgram = "firectl";
   };
-}
+})

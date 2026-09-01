@@ -4,28 +4,33 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  typing-extensions,
   libopus,
   pynacl,
+  pytestCheckHook,
+  pytest-asyncio,
+  looptime,
   withVoice ? true,
   ffmpeg,
 }:
 
 buildPythonPackage rec {
   pname = "disnake";
-  version = "2.10.1";
+  version = "2.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DisnakeDev";
     repo = "disnake";
     tag = "v${version}";
-    hash = "sha256-MQxYkUA3uclmY2cKBr4DsBg79ovsH1EsMOjiVPGaLVE=";
+    hash = "sha256-pwhUX5lzqSPik/rPsT42M3AMjzWWeqFN+0mVHA84cCo=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
+    typing-extensions
   ]
   ++ lib.optionals withVoice [
     libopus
@@ -40,8 +45,16 @@ buildPythonPackage rec {
       --replace-fail 'executable: str = "ffmpeg"' 'executable: str="${ffmpeg}/bin/ffmpeg"'
   '';
 
-  # Only have integration tests with discord
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    looptime
+  ];
+
+  pytestFlags = [
+    # DeprecationWarning: There is no current event loop
+    "-Wignore::DeprecationWarning"
+  ];
 
   pythonImportsCheck = [
     "disnake"
@@ -57,7 +70,7 @@ buildPythonPackage rec {
   meta = {
     description = "API wrapper for Discord written in Python";
     homepage = "https://disnake.dev/";
-    changelog = "https://github.com/DisnakeDev/disnake/blob/v${version}/docs/whats_new.rst";
+    changelog = "https://github.com/DisnakeDev/disnake/blob/${src.tag}/docs/whats_new.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ infinidoge ];
   };

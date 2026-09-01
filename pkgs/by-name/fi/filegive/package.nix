@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "filegive";
-  version = "unstable-2022-05-29";
+  version = "0.8.0-unstable-2022-05-29";
   rev = "5b28e7087a";
 
   src = fetchurl {
-    url = "https://viric.name/cgi-bin/filegive/tarball/${rev}/filegive-${rev}.tar.gz";
+    url = "https://viric.name/cgi-bin/filegive/tarball/${finalAttrs.rev}/filegive-${finalAttrs.rev}.tar.gz";
     hash = "sha256-A69oys59GEysZvQLaYsfoX/X2ENMMH2BGfJqXohQjpc=";
   };
 
@@ -28,4 +28,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "filegive";
   };
-}
+})

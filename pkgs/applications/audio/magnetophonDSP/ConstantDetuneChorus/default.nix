@@ -5,14 +5,14 @@
   faust2jaqt,
   faust2lv2,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "constant-detune-chorus";
   version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "magnetophon";
     repo = "constant-detune-chorus";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     sha256 = "1sipmc25fr7w7xqx1r0y6i2zwfkgszzwvhk1v15mnsb3cqvk8ybn";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.magnetophon ];
   };
-}
+})

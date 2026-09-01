@@ -8,21 +8,23 @@ let
   root = ./.;
   updateScript = ./update.py;
 
-  mkYaziPlugin =
-    args@{
-      pname,
-      src,
-      meta ? { },
-      installPhase ? null,
-      ...
-    }:
-    let
-      # Extract the plugin name from pname (removing .yazi suffix if present)
-      pluginName = lib.removeSuffix ".yazi" pname;
-    in
-    stdenvNoCC.mkDerivation (
-      args
-      // {
+  mkYaziPlugin = lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
+
+    extendDrvArgs =
+      finalAttrs:
+      {
+        pname,
+        src,
+        meta ? { },
+        installPhase ? null,
+        ...
+      }@args:
+      let
+        # Extract the plugin name from pname (removing .yazi suffix if present)
+        pluginName = lib.removeSuffix ".yazi" pname;
+      in
+      {
         installPhase =
           if installPhase != null then
             installPhase
@@ -66,8 +68,8 @@ let
             supportedFeatures = [ "commit" ];
           };
         };
-      }
-    );
+      };
+  };
 
   call = name: callPackage (root + "/${name}") { inherit mkYaziPlugin; };
 in

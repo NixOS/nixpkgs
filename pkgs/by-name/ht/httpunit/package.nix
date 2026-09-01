@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "httpunit";
   version = "1.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/httpunit/httpunit-${version}.zip";
+    url = "mirror://sourceforge/httpunit/httpunit-${finalAttrs.version}.zip";
     sha256 = "09gnayqgizd8cjqayvdpkxrc69ipyxawc96aznfrgdhdiwv8l5zf";
   };
 
@@ -22,4 +22,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
   };
-}
+})

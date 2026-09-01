@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "ansi2html";
-  version = "1.9.2";
+  version = "1.9.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NFO/h1NdN7gnsFJF+qp1bbq07D1pkl41K2MZw8lVwKU=";
+    hash = "sha256-GQs/xl8FRf7GRCUn+PVRMZSUEP6XwVrEKkQfHpZyb1c=";
   };
 
   nativeBuildInputs = [

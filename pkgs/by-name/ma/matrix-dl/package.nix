@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "matrix-dl";
   version = "0-unstable-2020-07-14";
   pyproject = true;
@@ -27,9 +27,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Download backlogs from Matrix as raw text";
     mainProgram = "matrix-dl";
-    homepage = src.meta.homepage;
+    homepage = finalAttrs.src.meta.homepage;
     license = lib.licenses.gpl1Plus;
     maintainers = with lib.maintainers; [ aw ];
     platforms = lib.platforms.unix;
   };
-}
+})

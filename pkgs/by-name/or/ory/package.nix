@@ -6,15 +6,15 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ory";
-  version = "0.3.4";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "ory";
     repo = "cli";
-    tag = "v${version}";
-    hash = "sha256-q7+Fpttgx62GbKxCCiEDlX//e/pNO24e7KhhBeGRDH0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+Q+5HYb+Bi/mc9rt44FsxPojaiee7P1VbQYFq9QFI34=";
   };
 
   nativeBuildInputs = [
@@ -25,16 +25,21 @@ buildGoModule rec {
 
   env.CGO_ENABLED = 1;
 
+  ldflags = [
+    "-X=github.com/ory/cli/buildinfo.Version=v${finalAttrs.version}"
+    "-X=github.com/ory/cli/buildinfo.GitHash=${finalAttrs.src.rev}"
+  ];
+
   tags = [
     "sqlite"
   ];
 
-  vendorHash = "sha256-B0y1JVjJmC5eitn7yIcDpl+9+xaBDJBMdvm+7N/ZxTk=";
-
+  vendorHash = "sha256-LeCZqTABbYEU4l0XOEgXXkkgIlLB0OjLw763sEbXaQM=";
   postInstall = ''
     mv $out/bin/cli $out/bin/ory
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    export version=v${finalAttrs.version}
     installShellCompletion --cmd ory \
       --bash <($out/bin/ory completion bash) \
       --fish <($out/bin/ory completion fish) \
@@ -49,6 +54,7 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       luleyleo
       nicolas-goudry
+      debtquity
     ];
   };
-}
+})

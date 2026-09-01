@@ -10,7 +10,6 @@ stdenv.mkDerivation {
   nativeCheckInputs = [ postgresql ];
   dontUnpack = true;
   doCheck = true;
-  passAsFile = [ "sql" ];
   sql = ''
     CREATE TABLE hello (
       message text
@@ -23,6 +22,8 @@ stdenv.mkDerivation {
   '';
   checkPhase = ''
     runHook preCheck
+    sqlPath=$TMPDIR/test.sql
+    printf "%s" "$sql" > $sqlPath
     psql <$sqlPath | grep 'it worked'
     TEST_RAN=1
     runHook postCheck
@@ -31,4 +32,5 @@ stdenv.mkDerivation {
     [[ $TEST_RAN == 1 && $TEST_POST_HOOK_RAN == 1 ]]
     touch $out
   '';
+  __structuredAttrs = true;
 }

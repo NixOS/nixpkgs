@@ -11,7 +11,7 @@
   libogg,
   libpng,
   libtheora,
-  libX11,
+  libx11,
   lua5_4,
   minizip,
   openal,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     libogg
     libpng
     libtheora
-    libX11
+    libx11
     lua5_4
     minizip
     openal
@@ -60,7 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeDir = "../src";
   cmakeFlags = [
     (lib.cmakeBool "CROSS_COMPILE32" false)
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeBool "BUILD_DEDSERVER" true)
     (lib.cmakeBool "BUILD_CLIENT" true)
     (lib.cmakeBool "BUILD_ETMAIN_MOD" true)
@@ -77,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Improved Wolfenstein: Enemy Territory Engine";
     homepage = "https://github.com/etfdevs/ETe";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       ashleyghooper
       drupol

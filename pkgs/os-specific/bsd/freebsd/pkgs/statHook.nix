@@ -1,4 +1,5 @@
 {
+  lib,
   makeSetupHook,
   writeText,
   stat,
@@ -9,8 +10,13 @@
 # breaks stdenv.  Work around that with a hook that will point
 # NetBSD's build system and NetBSD stat without including it in
 # PATH.
-makeSetupHook { name = "netbsd-stat-hook"; } (
-  writeText "netbsd-stat-hook-impl" ''
-    makeFlagsArray+=(TOOL_STAT=${stat}/bin/stat)
-  ''
-)
+makeSetupHook
+  {
+    name = "netbsd-stat-hook";
+    meta.license = lib.licenses.mit;
+  }
+  (
+    writeText "netbsd-stat-hook-impl" ''
+      makeFlagsArray+=(TOOL_STAT=${stat}/bin/stat)
+    ''
+  )

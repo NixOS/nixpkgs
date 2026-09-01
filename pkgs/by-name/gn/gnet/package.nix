@@ -9,7 +9,7 @@
   libtool,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnet";
   version = "2.0.8";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "Archive";
     repo = "gnet";
-    rev = "GNET_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "GNET_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-B2H8s1JWNrvVR8qn6UFfAaCXQd0zEpNaLUPET99Ex7M=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pSub ];
   };
-}
+})

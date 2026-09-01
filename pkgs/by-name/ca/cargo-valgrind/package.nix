@@ -6,18 +6,18 @@
   makeWrapper,
   valgrind,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-valgrind";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "jfrimmel";
     repo = "cargo-valgrind";
-    tag = version;
-    sha256 = "sha256-sVW3zNe0a9iQQ0vRWJofqG4gwUJ/w0U4ugVyMNtWX98=";
+    tag = finalAttrs.version;
+    sha256 = "sha256-ImZ0EHg/guPfx3vOfdi1nPz0MG0+61iZCFiVhNglZbs=";
   };
 
-  cargoHash = "sha256-sRJGnbQFCk+SJtG/hnde+8ggZuutrdk0279ziickmnA=";
+  cargoHash = "sha256-tH1RF3Uw9KkykgbPtXNY88uTvQ0f++aCP95Sd6Zexc8=";
 
   passthru = {
     updateScript = nix-update-script { };
@@ -33,9 +33,9 @@ rustPlatform.buildRustPackage rec {
   '';
 
   checkFlags = [
-    "--skip tests_are_runnable"
-    "--skip default_cargo_project_reports_no_violations"
-    "--skip empty_tests_not_leak_in_release_mode"
+    "--skip=tests_are_runnable"
+    "--skip=default_cargo_project_reports_no_violations"
+    "--skip=empty_tests_not_leak_in_release_mode"
   ];
 
   meta = {
@@ -52,4 +52,4 @@ rustPlatform.buildRustPackage rec {
       chrjabs
     ];
   };
-}
+})

@@ -33,14 +33,14 @@
   gtk4-layer-shell,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "swaysettings";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
     repo = "SwaySettings";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XP0Q3Q40cvAl3MEqShY+VMWjlCtqs9e91nkxocVNQQQ=";
   };
 
@@ -101,4 +101,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.aacebedo ];
   };
-}
+})

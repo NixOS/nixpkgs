@@ -6,14 +6,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "musl-fts";
   version = "1.2.7";
 
   src = fetchFromGitHub {
     owner = "void-linux";
     repo = "musl-fts";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "Azw5qrz6OKDcpYydE6jXzVxSM5A8oYWAztrHr+O/DOE=";
   };
 
@@ -22,7 +22,11 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/void-linux/musl-fts";
@@ -31,4 +35,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.pjjw ];
   };
-}
+})

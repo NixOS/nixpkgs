@@ -7,7 +7,7 @@
   ninja,
   wayland,
   obs-studio,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation {
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   buildInputs = [
     wayland
     obs-studio
-    libX11
+    libx11
   ];
 
   meta = {

@@ -6,18 +6,18 @@
   nix-update-script,
   versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sqruff";
-  version = "0.34.0";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "quarylabs";
     repo = "sqruff";
-    tag = "v${version}";
-    hash = "sha256-fkk7PB2O657J2ZjDdo40gByleGDiFGbgvfrk4Tk4kQo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8BMEqeh4wxRtZ1Pggd+kGWJyVT3oXCOcTGmhcxtBNRQ=";
   };
 
-  cargoHash = "sha256-4bYoKtvtUtOfwM3X+/+du5zvukWSvS08wmeXRaOG4lA=";
+  cargoHash = "sha256-BLNvVxSIfoEeaYa8FcQKd+dWd7Sed+aBOh3MW2xIOsM=";
 
   # Disable the `python` feature which doesn't work on Nix yet
   buildNoDefaultFeatures = true;
@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage rec {
       crates/cli/tests/fix_parse_errors.rs \
       crates/cli/tests/fix_return_code.rs \
       crates/cli/tests/ignore_data_directory.rs \
+      crates/cli/tests/none_format.rs \
       crates/cli/tests/verbose_logging_ignore.rs \
       crates/cli/tests/ui_github.rs \
       crates/cli/tests/ui_json.rs \
@@ -51,7 +52,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Fast SQL formatter/linter";
     homepage = "https://github.com/quarylabs/sqruff";
-    changelog = "https://github.com/quarylabs/sqruff/releases/tag/${version}";
+    changelog = "https://github.com/quarylabs/sqruff/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "sqruff";
     maintainers = with lib.maintainers; [
@@ -59,4 +60,4 @@ rustPlatform.buildRustPackage rec {
       pyrox0
     ];
   };
-}
+})

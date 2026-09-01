@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   libjpeg,
   libpng,
   giflib,
@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "meh";
-  version = "unstable-2018-10-22";
+  version = "0.3-unstable-2018-10-22";
 
   src = fetchFromGitHub {
     owner = "jhawthorn";
@@ -28,8 +28,8 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    libXext
-    libX11
+    libxext
+    libx11
     libjpeg
     libpng
     giflib

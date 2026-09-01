@@ -31,21 +31,25 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-openai";
-  version = "1.1.6";
+  version = "1.4.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-openai==${version}";
-    hash = "sha256-Y+GV48rlqMfT4TrmoJFGqbHKfc8gxq61NhcUpwSsOwk=";
+    tag = "langchain-openai==${finalAttrs.version}";
+    hash = "sha256-ELiQJQ8tuQX246ZOr/+iYj/vJRtIX5Cr5PIn4Ul0E8c=";
   };
 
-  sourceRoot = "${src.name}/libs/partners/openai";
+  sourceRoot = "${finalAttrs.src.name}/libs/partners/openai";
 
   build-system = [ hatchling ];
+
+  # The python3Packages.openai update has to go through staging, so be open to newer versions
+  pythonRelaxDeps = [ "openai" ];
 
   dependencies = [
     langchain-core
@@ -87,6 +91,7 @@ buildPythonPackage rec {
     "test_load_openai_llm"
     "test_loads_openai_chat"
     "test_load_openai_chat"
+    "test_format_message_content"
   ];
 
   pythonImportsCheck = [ "langchain_openai" ];
@@ -96,11 +101,12 @@ buildPythonPackage rec {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-openai==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     description = "Integration package connecting OpenAI and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/openai";
     license = lib.licenses.mit;
@@ -109,4 +115,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

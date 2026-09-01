@@ -3,7 +3,12 @@
   stdenv,
   fetchFromGitLab,
   SDL2,
-  xorg,
+  libxscrnsaver,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxcursor,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,12 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libXfixes
-    xorg.libXext
-    xorg.libXi
-    xorg.libXScrnSaver
+    libxcursor
+    libxrandr
+    libxfixes
+    libxext
+    libxi
+    libxscrnsaver
   ];
 
   # upstream is an error-prone make/build script

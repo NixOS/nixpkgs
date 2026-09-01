@@ -14,7 +14,6 @@ version=$(curl -fsSL https://api.gitkraken.dev/releases/production/linux/x64/REL
 # Hardcoded URLs to compute hashes
 declare -A tarballs=(
   ["x86_64-linux"]="https://api.gitkraken.dev/releases/production/linux/x64/${version}/gitkraken-amd64.tar.gz"
-  ["x86_64-darwin"]="https://api.gitkraken.dev/releases/production/darwin/x64/${version}/GitKraken-v${version}.zip"
   ["aarch64-darwin"]="https://api.gitkraken.dev/releases/production/darwin/arm64/${version}/GitKraken-v${version}.zip"
 )
 

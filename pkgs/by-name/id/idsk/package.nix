@@ -6,14 +6,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "idsk";
   version = "0.20";
 
   src = fetchFromGitHub {
     owner = "cpcsdk";
     repo = "idsk";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-rYClWq1Nl3COoG+eOJyFDTvBSzpHpGminU4bndZs6xc=";
   };
 
@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Manipulating CPC dsk images and files";
     homepage = "https://github.com/cpcsdk/idsk";
-    changelog = "https://github.com/cpcsdk/idsk/releases/tag/${src.rev}";
+    changelog = "https://github.com/cpcsdk/idsk/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     mainProgram = "iDSK";
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.all;
   };
-}
+})

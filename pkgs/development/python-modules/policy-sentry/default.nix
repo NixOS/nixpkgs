@@ -6,27 +6,30 @@
   fetchFromGitHub,
   hatchling,
   orjson,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
   pyyaml,
   requests,
   schema,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "policy-sentry";
-  version = "0.15.1";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "salesforce";
     repo = "policy_sentry";
-    tag = version;
-    hash = "sha256-G7V3BqgJs9nyvhZ9xzNwP50yz+2SZfps/gsW6U8eisk=";
+    tag = finalAttrs.version;
+    hash = "sha256-oR8/hrntE4XzZHdbde+NoKWdsLs9jJ3RLIv8YsoDFt4=";
   };
 
   pythonRelaxDeps = [ "beautifulsoup4" ];
 
   build-system = [ hatchling ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     beautifulsoup4
@@ -44,9 +47,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for generating IAM least privilege policies";
     homepage = "https://github.com/salesforce/policy_sentry";
-    changelog = "https://github.com/salesforce/policy_sentry/releases/tag/${src.tag}";
+    changelog = "https://github.com/salesforce/policy_sentry/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "policy_sentry";
   };
-}
+})

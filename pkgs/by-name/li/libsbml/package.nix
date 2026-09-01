@@ -10,14 +10,14 @@
   python ? null,
   withPython ? false,
 }:
-stdenv.mkDerivation (attrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libsbml";
   version = "5.20.4";
 
   src = fetchFromGitHub {
     owner = "sbmlteam";
     repo = "libsbml";
-    rev = "v${attrs.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-qWTN033YU4iWzt+mXQaP5W/6IF5nebF4PwNVkyL8wTg=";
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation (attrs: {
   ]
   ++ lib.optional withPython "-DWITH_PYTHON=ON";
 
-  postInstall = lib.optional withPython ''
+  postInstall = lib.optionalString withPython ''
     mv $out/${python.sitePackages}/libsbml/libsbml.py $out/${python.sitePackages}/libsbml/__init__.py
   '';
 

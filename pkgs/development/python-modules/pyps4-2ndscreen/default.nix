@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  pythonOlder,
   setuptools,
   aiohttp,
   click,
@@ -44,14 +43,14 @@ buildPythonPackage rec {
     pycryptodomex
   ];
 
+  # All require asynctest, which is unsupported on 3.11+
+  doCheck = false;
+
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
     asynctest
   ];
-
-  # Disable tests for Python 3.11+ since they all require asynctest
-  doCheck = pythonOlder "3.11";
 
   pythonImportsCheck = [ "pyps4_2ndscreen" ];
 

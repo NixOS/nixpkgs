@@ -9,14 +9,14 @@
   scowl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "halfempty";
   version = "0.40";
 
   src = fetchFromGitHub {
     owner = "googleprojectzero";
     repo = "halfempty";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-YGq6fneAMo2jCpLPrjzRJ0eeOsStKaK5L+lwQfqcfpY=";
   };
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     mainProgram = "halfempty";
     homepage = "https://github.com/googleprojectzero/halfempty/";
     maintainers = with lib.maintainers; [ fpletz ];
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
   };
-}
+})

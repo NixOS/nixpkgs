@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "h5glance";
   version = "0.9";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "European-XFEL";
     repo = "h5glance";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-20gSaNZrH3AeFTGLho6sbWljfqln9SQEVdvEVe/WaYY=";
   };
 
@@ -36,9 +36,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Explore HDF5 files in terminal & HTML views";
     homepage = "https://github.com/European-XFEL/h5glance";
-    changelog = "https://github.com/European-XFEL/h5glance/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/European-XFEL/h5glance/blob/${finalAttrs.src.rev}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "h5glance";
   };
-}
+})

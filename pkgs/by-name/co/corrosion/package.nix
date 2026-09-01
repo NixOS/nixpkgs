@@ -2,22 +2,31 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cargo,
   cmake,
   rustc,
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "corrosion";
   version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "corrosion-rs";
     repo = "corrosion";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ppuDNObfKhneD9AlnPAvyCRHKW3BidXKglD1j/LE9CM=";
   };
+  patches = [
+    # Fix for this hard to debug issue in dependent packages:
+    # https://github.com/corrosion-rs/corrosion/issues/588
+    (fetchpatch {
+      url = "https://github.com/corrosion-rs/corrosion/commit/7dab832903ddfb0f644cbd014252d477e692012b.patch";
+      hash = "sha256-T9ILTfAd/i63v45YJQsz8F/P3NBwrP1mL2bKNU0NaLw=";
+    })
+  ];
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
@@ -62,8 +71,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tool for integrating Rust into an existing CMake project";
     homepage = "https://github.com/corrosion-rs/corrosion";
-    changelog = "https://github.com/corrosion-rs/corrosion/blob/${src.rev}/RELEASES.md";
+    changelog = "https://github.com/corrosion-rs/corrosion/blob/${finalAttrs.src.rev}/RELEASES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

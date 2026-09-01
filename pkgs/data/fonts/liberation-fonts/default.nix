@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fontforge,
+  installFonts,
   python3,
 }:
 let
@@ -10,6 +11,7 @@ let
 
   commonNativeBuildInputs = [
     fontforge
+    installFonts
     python3
   ];
   common =
@@ -34,12 +36,14 @@ let
       inherit nativeBuildInputs postPatch;
 
       installPhase = ''
-        find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/truetype {} \;
+        runHook preInstall
 
         for i in ${toString docsToInstall}; do
           # not all docs exist in all versions
           install -m444 -Dt $out/share/doc/${pname}-${version} $i || true
         done
+
+        runHook postInstall
       '';
 
       meta = {

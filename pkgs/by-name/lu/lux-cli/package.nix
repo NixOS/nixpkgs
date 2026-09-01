@@ -1,10 +1,11 @@
 {
+  stdenv,
+  buildPackages,
   fetchFromGitHub,
   gnupg,
   gpgme,
   installShellFiles,
   lib,
-  libgit2,
   libgpg-error,
   lua5_4,
   makeWrapper,
@@ -18,18 +19,18 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lux-cli";
 
-  version = "0.22.4";
+  version = "0.42.1";
 
   src = fetchFromGitHub {
     owner = "lumen-oss";
     repo = "lux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-f0FNl7VAG5e1rlmVYQci6jBA5udiXQpmI2cFnp6g8DI=";
+    hash = "sha256-wjEci3i1auW76bssZ97IwY4AMG+wyvik5ZC/IMkXcGg=";
   };
 
   buildAndTestSubdir = "lux-cli";
 
-  cargoHash = "sha256-tf92/GIKCA+KRmN/l5/Sw7qew9oiWna38WgfjRwnQlk=";
+  cargoHash = "sha256-EquC8//qIAY3qFZ11jxvJFlSXARLSFWGnLlxj4k8t5o=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -47,33 +48,44 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     gnupg
     gpgme
-    libgit2
     libgpg-error
     lua5_4
     openssl
   ];
 
   env = {
-    LIBGIT2_NO_VENDOR = 1;
     LIBSSH2_SYS_USE_PKG_CONFIG = 1;
     LUX_SKIP_IMPURE_TESTS = 1; # Disable impure unit tests
   };
 
-  cargoTestFlags = "--lib"; # Disable impure integration tests
+  cargoTestFlags = [
+    "--lib" # Disable impure integration tests
+  ];
 
   nativeCheckInputs = [
     lua5_4
     nix
   ];
 
-  postBuild = ''
-    cargo xtask dist-man
-    cargo xtask dist-completions
-  '';
-
   postInstall = ''
-    installManPage target/dist/lx.1
-    installShellCompletion target/dist/lx.{bash,fish} --zsh target/dist/_lx
+    ${
+      # Using lx to generate man pages and completions is faster than xtask
+      if stdenv.hostPlatform.emulatorAvailable buildPackages then
+        let
+          lx = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/lx";
+        in
+        ''
+          ${lx} util man --target-dir="target/dist"
+          ${lx} util completion --target-dir="target/dist"
+        ''
+      else
+        ''
+          cargo xtask dist-man
+          cargo xtask dist-completions
+        ''
+    }
+      installManPage target/dist/*.1
+      installShellCompletion target/dist/lx.{bash,fish} --zsh target/dist/_lx
   '';
 
   meta = {
@@ -88,6 +100,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [
       mrcjkb
+      ALameLlama
     ];
     platforms = lib.platforms.all;
     mainProgram = "lx";

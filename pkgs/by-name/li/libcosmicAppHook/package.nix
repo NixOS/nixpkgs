@@ -15,7 +15,10 @@
   cosmic-settings,
   libGL,
   libxkbcommon,
-  xorg,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
   wayland,
   vulkan-loader,
 
@@ -36,10 +39,10 @@ makeSetupHook {
     [
       libGL
       libxkbcommon
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libxcb
+      libx11
+      libxcursor
+      libxi
+      libxcb
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       wayland
@@ -88,5 +91,6 @@ makeSetupHook {
   meta = {
     description = "Setup hook for configuring and wrapping applications based on libcosmic";
     teams = [ lib.teams.cosmic ];
+    license = lib.licenses.mit;
   };
 } ./libcosmic-app-hook.sh

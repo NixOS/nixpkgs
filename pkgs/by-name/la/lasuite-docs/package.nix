@@ -1,28 +1,22 @@
 {
   stdenv,
   lib,
-  python3,
   fetchFromGitHub,
   nixosTests,
   fetchYarnDeps,
+  python3,
+  python3Packages,
   nodejs,
   yarnBuildHook,
   yarnConfigHook,
 }:
 let
-  python = python3.override {
-    self = python3;
-    packageOverrides = self: super: {
-      django = super.django_5;
-    };
-  };
-
-  version = "4.4.0";
+  version = "5.5.0";
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${version}";
-    hash = "sha256-Cm/Ch7dBKInQYPFGfSlSMLgj8uQR6E3S+6gCFUyvFSU=";
+    hash = "sha256-NR4TooBjE9hTZOm830MRtebUtSZFxVsVwswPz1w8k48=";
   };
 
   mail-templates = stdenv.mkDerivation {
@@ -35,7 +29,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/src/mail/yarn.lock";
-      hash = "sha256-g71OGg0PAo60h0bC+oOyvLvPOCg0pYXuYD8vsR5X9/k=";
+      hash = "sha256-x3zcoOfb5vTBreswjZUcJstbXvbDHBBG/u0N4L7T1uI=";
     };
 
     nativeBuildInputs = [
@@ -46,30 +40,63 @@ let
 
     dontInstall = true;
   };
+
+  python3Packages' = python3Packages.overrideScope (
+    self: super: {
+      django-treebeard = super.django-treebeard.overridePythonAttrs (
+        finalAttrs: { src, ... }: {
+          version = "4.8.0";
+          src = src.override {
+            hash = "sha256-DrjI0HlrJhNqrYul3SO0xkkFwjWRn94OgvTA/Z3wv84=";
+          };
+        }
+      );
+    }
+  );
+in
+let
+  # Prevent using the wrong one.
+  python3Packages = python3Packages';
 in
 
-python.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "lasuite-docs";
   pyproject = true;
   inherit version src;
 
-  sourceRoot = "source/src/backend";
+  sourceRoot = "${finalAttrs.src.name}/src/backend";
 
   patches = [
-    # Support configuration throught environment variables for SECURE_*
+    # Support configuration through environment variables for SECURE_*
     ./secure_settings.patch
-    # Fix creation of unsafe C function in postgresql migrations
-    ./postgresql_fix.patch
   ];
 
-  build-system = with python.pkgs; [ setuptools ];
+  # They use a old version of mistralai which exported a class
+  # at the top level
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11.9,<0.12" "uv_build"
+  ''
+  # Otherwise fails with:
+  # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace impress/settings.py \
+      --replace-fail \
+        "gethostname()" \
+        "gethostname() + '.local'"
+  '';
+  __darwinAllowLocalNetworking = true;
+
+  build-system = with python3Packages; [ uv-build ];
 
   dependencies =
-    with python.pkgs;
+    with python3Packages;
     [
       beautifulsoup4
       boto3
       celery
+      emoji
+      dj-database-url
       django
       django-configurations
       django-cors-headers
@@ -80,9 +107,11 @@ python.pkgs.buildPythonApplication rec {
       django-lasuite
       django-parler
       django-redis
+      django-silk
       django-storages
       django-timezone-field
       django-treebeard
+      django-waffle
       djangorestframework
       drf-spectacular
       drf-spectacular-sidecar
@@ -94,17 +123,21 @@ python.pkgs.buildPythonApplication rec {
       langfuse
       lxml
       markdown
+      mistralai
       mozilla-django-oidc
       nested-multipart-parser
       openai
+      posthog
       psycopg
       pycrdt
+      pydantic-ai-slim
       pyjwt
       pyopenssl
       python-magic
       redis
       requests
       sentry-sdk
+      uvicorn
       whitenoise
     ]
     ++ celery.optional-dependencies.redis
@@ -115,12 +148,12 @@ python.pkgs.buildPythonApplication rec {
 
   postBuild = ''
     export DATA_DIR=$(pwd)/data
-    ${python.pythonOnBuildForHost.interpreter} manage.py collectstatic --no-input --clear
+    ${python3.pythonOnBuildForHost.interpreter} manage.py collectstatic --no-input --clear
   '';
 
   postInstall =
     let
-      pythonPath = python.pkgs.makePythonPath dependencies;
+      pythonPath = python3Packages.makePythonPath finalAttrs.passthru.dependencies;
     in
     ''
       mkdir -p $out/{bin,share}
@@ -131,13 +164,15 @@ python.pkgs.buildPythonApplication rec {
 
       makeWrapper $out/bin/.manage.py $out/bin/docs \
         --prefix PYTHONPATH : "${pythonPath}"
-      makeWrapper ${lib.getExe python.pkgs.celery} $out/bin/celery \
-        --prefix PYTHONPATH : "${pythonPath}:$out/${python.sitePackages}"
-      makeWrapper ${lib.getExe python.pkgs.gunicorn} $out/bin/gunicorn \
-        --prefix PYTHONPATH : "${pythonPath}:$out/${python.sitePackages}"
+      makeWrapper ${lib.getExe python3Packages.celery} $out/bin/celery \
+        --prefix PYTHONPATH : "${pythonPath}:$out/${python3.sitePackages}"
+      makeWrapper ${lib.getExe python3Packages.gunicorn} $out/bin/gunicorn \
+        --prefix PYTHONPATH : "${pythonPath}:$out/${python3.sitePackages}"
 
-      mkdir -p $out/${python.sitePackages}/core/templates
-      ln -sv ${mail-templates}/ $out/${python.sitePackages}/core/templates/mail
+      mkdir -p $out/${python3.sitePackages}/core/templates
+      ln -sv ${mail-templates}/ $out/${python3.sitePackages}/core/templates/mail
+
+      cp -r impress/configuration $out/${python3.sitePackages}/impress/configuration
     '';
 
   passthru.tests = {
@@ -147,10 +182,13 @@ python.pkgs.buildPythonApplication rec {
   meta = {
     description = "Collaborative note taking, wiki and documentation platform that scales. Built with Django and React. Opensource alternative to Notion or Outline";
     homepage = "https://github.com/suitenumerique/docs";
-    changelog = "https://github.com/suitenumerique/docs/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/suitenumerique/docs/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ soyouzpanda ];
+    maintainers = with lib.maintainers; [
+      soyouzpanda
+      ma27
+    ];
     mainProgram = "docs";
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.linux;
   };
-}
+})

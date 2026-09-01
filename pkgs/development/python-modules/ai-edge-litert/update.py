@@ -6,7 +6,7 @@ import httpx
 import re
 import subprocess
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Optional
 from collections import defaultdict
 
 
@@ -29,19 +29,33 @@ def get_hash(url) -> str:
     return sri_hash
 
 
-def get_platform(platform: str) -> str:
-    result = re.match(r"^(?P<target>macosx|manylinux)[\d+_]+(?P<arch>x86_64|aarch64)", platform)
+def get_platform(platform: str) -> Optional[str]:
+    result = re.match(
+        r"^(?P<platform>macosx|manylinux|win)(?:)[\d_]+(?P<arch>x86_64|aarch64|amd64|arm64)",
+        platform,
+    )
     if not result:
         raise RuntimeError(f"Unable to parse platform string: {platform}")
 
-    target = {
+    platform = result.group("platform")
+    if platform == "win":
+        return
+
+    system = {
         "macosx": "darwin",
         "manylinux": "linux",
-    }[result.group("target")]
+    }[platform]
 
-    arch = result.group("arch")
+    try:
+        arch = {
+            "amd64": "x86_64",
+            "arm64": "aarch64",
+        }[result.group("arch")]
+    except KeyError:
+        arch = result.group("arch")
 
-    return f"{arch}-{target}"
+    return f"{arch}-{system}"
+
 
 def get_python_version(python: str) -> str:
     result = re.match(r"^cp(?P<major>\d)(?P<minor>\d+)$", python)
@@ -84,6 +98,9 @@ def main(package: str):
             raise RuntimeError(f"Unable to disect wheel filename: {filename}")
 
         platform = get_platform(result.group("platform"))
+        if not platform:
+            continue
+
         python_version = get_python_version(release["python_version"])
 
         out["src"][platform][python_version] = {

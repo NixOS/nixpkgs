@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   curl,
   expat,
@@ -12,14 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newsraft";
-  version = "0.35";
+  version = "0.37";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "newsraft";
     repo = "newsraft";
     rev = "newsraft-${finalAttrs.version}";
-    hash = "sha256-c1IlPs+GxwDeUCpyQ6oy9iLC3YNLCJpjkj1gnwY7lxA=";
+    hash = "sha256-vbAS/iN6cfsjsx7IZebDLzdV0DH18uzjXGolIHPIuNI=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -40,10 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://codeberg.org/newsraft/newsraft";
     changelog = "https://codeberg.org/newsraft/newsraft/releases/tag/newsraft-${finalAttrs.version}";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [
-      arthsmn
-      luftmensch-luftmensch
-    ];
+    maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "newsraft";
     platforms = lib.platforms.all;
   };

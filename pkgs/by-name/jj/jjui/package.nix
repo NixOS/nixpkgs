@@ -8,16 +8,18 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "jjui";
-  version = "0.9.10";
+  version = "0.10.9";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "idursun";
     repo = "jjui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Hsuyf5VcSZcNi2gmubXS47uRarL17oPEtorisY75bbM=";
+    hash = "sha256-D/ZBH9bsiWO26+xxixD8RKgnoA3x74YdYAIoRznsBTQ=";
   };
 
-  vendorHash = "sha256-jte0g+aUiGNARLi8DyfsX6wYYJnodHnILzmid6KvMiA=";
+  vendorHash = "sha256-BldmFVYpRPdnyeswPKGspH4oZ2mjvFS5VbTu3DN5bJg=";
 
   ldflags = [ "-X main.Version=${finalAttrs.version}" ];
 
@@ -37,6 +39,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/idursun/jjui/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      adamcstephens
       adda
     ];
     mainProgram = "jjui";

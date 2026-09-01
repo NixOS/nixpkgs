@@ -5,12 +5,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libhugetlbfs";
   version = "2.24";
 
   src = fetchurl {
-    url = "https://github.com/libhugetlbfs/libhugetlbfs/releases/download/${version}/libhugetlbfs-${version}.tar.gz";
+    url = "https://github.com/libhugetlbfs/libhugetlbfs/releases/download/${finalAttrs.version}/libhugetlbfs-${finalAttrs.version}.tar.gz";
     hash = "sha256-1QHfqRyOrREGlno9OCnyunOMP6wKZcs1jtKrOHDdxe8=";
   };
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/libhugetlbfs/libhugetlbfs";
-    changelog = "https://github.com/libhugetlbfs/libhugetlbfs/blob/${version}/NEWS";
+    changelog = "https://github.com/libhugetlbfs/libhugetlbfs/blob/${finalAttrs.version}/NEWS";
     description = "Library and utilities for Linux hugepages";
     maintainers = with lib.maintainers; [ qyliss ];
     license = lib.licenses.lgpl21Plus;
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
       lib.systems.inspect.patterns.isMusl
     ];
   };
-}
+})

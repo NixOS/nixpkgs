@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   callPackage,
-  pythonOlder,
   fetchPypi,
   writeText,
 
@@ -12,11 +11,9 @@
 
   # dependencies
   attrs,
-  exceptiongroup,
   iniconfig,
   packaging,
   pluggy,
-  tomli,
 
   # optional-dependencies
   argcomplete,
@@ -52,10 +49,6 @@ buildPythonPackage rec {
     packaging
     pluggy
     pygments
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
-    tomli
   ];
 
   optional-dependencies = {

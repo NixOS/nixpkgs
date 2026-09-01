@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "imgcat";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "trashhalo";
     repo = "imgcat";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-L2Yvp+UR6q45ctKsi0v45lKkSE7eJsUPvG7lpX8M6nQ=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "imgcat";
   };
-}
+})

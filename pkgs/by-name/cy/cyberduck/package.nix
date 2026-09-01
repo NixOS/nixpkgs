@@ -6,8 +6,7 @@
   makeBinaryWrapper,
   versionCheckHook,
   writeShellScript,
-  coreutils,
-  xcbuild,
+  re-plistbuddy,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cyberduck";
@@ -36,8 +35,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = writeShellScript "version-check" ''
-    marketing_version=$(${xcbuild}/bin/PlistBuddy -c "Print :CFBundleShortVersionString" "$1" | ${coreutils}/bin/tr -d '"')
-    build_version=$(${xcbuild}/bin/PlistBuddy -c "Print :CFBundleVersion" "$1")
+    marketing_version=$(${lib.getExe' re-plistbuddy "PlistBuddy"} -c "Print :CFBundleShortVersionString" "$1")
+    build_version=$(${lib.getExe' re-plistbuddy "PlistBuddy"} -c "Print :CFBundleVersion" "$1")
 
     echo $marketing_version.$build_version
   '';

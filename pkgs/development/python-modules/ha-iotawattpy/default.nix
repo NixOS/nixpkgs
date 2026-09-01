@@ -1,28 +1,37 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   httpx,
-  setuptools,
+  hatchling,
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-cov-stub,
+  respx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ha-iotawattpy";
-  version = "0.1.2";
+  version = "0.2.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-eMsBEbmENjbJME9Gzo4O9LbGo1i0MP0IuwLUAYqxbI8=";
+  src = fetchFromGitHub {
+    owner = "home-assistant-libs";
+    repo = "iotawattpy";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yPWQisSBeAGx5bTCXq6HeJmH06Frk7zlP+9kpoOHTOo=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [ httpx ];
+  dependencies = [ httpx ];
 
-  # Project doesn't tag releases or ship the tests with PyPI
-  # https://github.com/gtdiehl/iotawattpy/issues/14
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    pytest-cov-stub
+    respx
+  ];
 
   pythonImportsCheck = [ "iotawattpy" ];
 
@@ -32,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

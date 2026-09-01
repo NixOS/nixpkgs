@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "tlsh";
-  version = "4.12.0";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trendmicro";
     repo = "tlsh";
     tag = version;
-    hash = "sha256-Ht4LkcNmxPEvzFHXeS/XhPt/xo+0sE4RBcLCn9N/zwE=";
+    hash = "sha256-cYvXZrd+8ZC5LfucguFFNlEX8FR+AkchmCFButYoiMg=";
   };
 
   patches = [
@@ -23,16 +23,21 @@ buildPythonPackage rec {
     ./cmake-4-compat.patch
   ];
 
+  postPatch = ''
+    substituteInPlace py_ext/setup.py \
+      --replace-fail "4.5.0" "${version}"
+  '';
+
   nativeBuildInputs = [ cmake ];
+
+  postConfigure = ''
+    cd ../py_ext
+  '';
 
   build-system = [ setuptools ];
 
   # no test data
   doCheck = false;
-
-  postConfigure = ''
-    cd ../py_ext
-  '';
 
   pythonImportsCheck = [ "tlsh" ];
 

@@ -18,7 +18,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfd";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "app";
     repo = "xfd";
     tag = "xfd-${finalAttrs.version}";
-    hash = "sha256-8kkoJILNlVgDIV029mF3err6es5V001FQqUnTtD9/LQ=";
+    hash = "sha256-mdDnS6315po8/DafpGJDzGJTPV0HsRbSLlqSaN11d6o=";
   };
 
   strictDeps = true;
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=xfd-(.*)" ]; };
 
   meta = {
-    description = "X font display utility, using either the X11 core protocol or libXft2.";
+    description = "X font display utility, using either the X11 core protocol or libxft.";
     homepage = "https://gitlab.freedesktop.org/xorg/app/xfd";
     license = lib.licenses.mitOpenGroup;
     mainProgram = "xfd";

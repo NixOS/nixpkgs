@@ -24,10 +24,10 @@
   wayland-scanner,
   which,
   xcb-imdkit,
-  xcbutil,
-  xcb-util-cursor,
-  xcbutilkeysyms,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-cursor,
+  libxcb-keysyms,
+  libxcb-wm,
   xcbutilxrm,
   waylandSupport ? true,
   x11Support ? true,
@@ -47,10 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure = ''
     patchShebangs "script"
-
-    # root not present in build /etc/passwd
-    substituteInPlace test/helper-expand.c \
-      --replace-fail "~root" "~nobody"
   '';
 
   depsBuildBuild = [
@@ -87,10 +83,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals x11Support [
     libxcb
     xcb-imdkit
-    xcbutil
-    xcb-util-cursor
-    xcbutilkeysyms
-    xcbutilwm
+    libxcb-util
+    libxcb-cursor
+    libxcb-keysyms
+    libxcb-wm
     xcbutilxrm
   ];
 
@@ -100,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "xcb" x11Support)
   ];
 
-  doCheck = false;
+  doCheck = true;
 
   nativeInstallCheckInputs = [
     versionCheckHook

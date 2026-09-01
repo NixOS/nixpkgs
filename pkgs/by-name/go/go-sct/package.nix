@@ -2,13 +2,16 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  xorg,
+  libxrandr,
+  libx11,
   wayland,
 }:
 
 buildGoModule {
   pname = "go-sct";
-  version = "unstable-2022-01-32";
+  version = "1.0-unstable-2022-01-31";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "d4l3k";
@@ -25,8 +28,8 @@ buildGoModule {
   vendorHash = "sha256-Rx5/oORink2QtRcD+JqbyFroWYhuYmuYDzZ391R4Jsw=";
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXrandr
+    libx11
+    libxrandr
     wayland.dev
   ];
 

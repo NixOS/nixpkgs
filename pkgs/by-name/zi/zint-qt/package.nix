@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = lib.optionalString withGUI ''
     install -Dm644 -t $out/share/applications $src/zint-qt.desktop
-    install -Dm644 -t $out/share/pixmaps $src/zint-qt.png
+    install -Dm644 -t $out/share/icons/hicolor/48x48/apps $src/zint-qt.png
     install -Dm644 -t $out/share/icons/hicolor/scalable/apps $src/frontend_qt/images/scalable/zint-qt.svg
   '';
 

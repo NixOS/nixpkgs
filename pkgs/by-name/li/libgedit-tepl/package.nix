@@ -18,7 +18,7 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgedit-tepl";
   version = "6.14.0";
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     group = "World";
     owner = "gedit";
     repo = "libgedit-tepl";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-KtmExJCEfa4c6alrtWOLNSKZUs65tZ7p9zcT9f8ZC+k=";
   };
 
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -4,7 +4,7 @@
   fetchFromGitea,
   fetchpatch,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bootspec-lix";
   version = "1.0.0";
 
@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     domain = "git.lix.systems";
     owner = "lix-community";
     repo = "bootspec";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-5IGSMHeL0eKfl7teDejAckYQjc8aeLwfwIQSzQ8YaAg=";
   };
 
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.raitobezarius ];
     platforms = lib.platforms.unix;
   };
-}
+})

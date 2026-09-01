@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "frece";
   version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "YodaEmbedding";
     repo = "frece";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-CAiIqT5KuzrqbV9FVK3nZUe8MDs2KDdsKplJMI7rN9w=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

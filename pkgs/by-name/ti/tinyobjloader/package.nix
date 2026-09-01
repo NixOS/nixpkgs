@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tinyobjloader";
   version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "tinyobjloader";
     repo = "tinyobjloader";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-BNffbicnLTGK2GQ2/bB328LFU9fqHxrpAVj2hJaekWc=";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

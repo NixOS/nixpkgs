@@ -9,14 +9,14 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-quickfix";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "siedentop";
     repo = "git-quickfix";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-IAjet/bDG/Hf/whS+yrEQSquj8s5DEmFis+5ysLLuxs=";
   };
 
@@ -44,4 +44,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "git-quickfix";
   };
-}
+})

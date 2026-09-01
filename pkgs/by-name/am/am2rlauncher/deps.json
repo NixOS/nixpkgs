@@ -1,53 +1,53 @@
 [
   {
     "pname": "AtkSharp",
-    "version": "3.24.24.34",
-    "hash": "sha256-GrOzO4YDMKJNHAnqLF+c44iGYlvazGTOuRLUnuLbwco="
+    "version": "3.24.24.95",
+    "hash": "sha256-NgdWbXToBHhEVbvPrFcwXeit5iaqbBmNPQiC0jPKlnQ="
   },
   {
     "pname": "CairoSharp",
-    "version": "3.24.24.34",
-    "hash": "sha256-/80xbYSPU8+6twoXRjES8PtV7dKB6fQoe6EqBmawzV8="
+    "version": "3.24.24.95",
+    "hash": "sha256-ycdgmQyQ1uSshI/9uMaqn5OBxRF8RADf4Tn/TptE2BU="
   },
   {
     "pname": "Eto.Forms",
-    "version": "2.7.1",
-    "hash": "sha256-OdGDlkKST1qlO4p/jIrX6qVfyywK7wqiY97+Yqtt68M="
+    "version": "2.11.0",
+    "hash": "sha256-VxNpNQEiO73A6IKvOk5AAr10PXNP7HZiunXGz3ze43A="
   },
   {
     "pname": "Eto.Platform.Gtk",
-    "version": "2.7.1",
-    "hash": "sha256-2msf/Dxo+rxVmJBl57ofWd9cON4YDH8eLl4icXRBPyY="
+    "version": "2.11.0",
+    "hash": "sha256-9ST2LKb2h2mbsszeul1Cwl8H0ijlGQJ+C9OtZ8JwFIM="
   },
   {
     "pname": "GdkSharp",
-    "version": "3.24.24.34",
-    "hash": "sha256-pQOp2jft19vVN+gSjD0tHfNGucss7ruy1xyys6IHHWQ="
+    "version": "3.24.24.95",
+    "hash": "sha256-NYjADgZG9TUQDIZiSSXDAxj5PyX/B7oKRo9f8Oyb4vI="
   },
   {
     "pname": "GioSharp",
-    "version": "3.24.24.34",
-    "hash": "sha256-/fZBfaKXlrdBuNh1/h0s1++5Ek4OnznXvzJx0uTbHQo="
+    "version": "3.24.24.95",
+    "hash": "sha256-5THx4af5PghPnQxXdnsC+wtVcoslh+0636WkB1FaPYg="
   },
   {
     "pname": "GLibSharp",
-    "version": "3.24.24.34",
-    "hash": "sha256-eAYUYNHF37nIJnk7aRffzBj8b/rluqXERYy358YAd08="
+    "version": "3.24.24.95",
+    "hash": "sha256-1pDRkKoUI9fLJBcTA2DBlpVccJl2GyAdL+VKjsFbttA="
   },
   {
     "pname": "GtkSharp",
-    "version": "3.24.24.34",
-    "hash": "sha256-i0XZfzUt9GNaZD1uXNd8x+pb1mPJqYrxQd15XOuHSAA="
+    "version": "3.24.24.95",
+    "hash": "sha256-sBvk5Ecf2i6c2fYVjMBVoXz0I6IlucOWeE2czZH9QHg="
   },
   {
     "pname": "LibGit2Sharp",
-    "version": "0.27.0",
-    "hash": "sha256-/4Vr5pXvq1J+5kb4jvd7JkFQ5aiUF1InOViSe53KDFk="
+    "version": "0.31.0",
+    "hash": "sha256-AvvsA3dsDbcGNjpxWXO5F1iw8bhrctaWQ0MD2oJSyJA="
   },
   {
     "pname": "LibGit2Sharp.NativeBinaries",
-    "version": "2.0.319",
-    "hash": "sha256-jvbiwXrsqzzqnMiUQa3oqGshXeDT1miIKFug4NG1pnY="
+    "version": "2.0.323",
+    "hash": "sha256-0qFqyNC0u05UF+DJ/LNvng5Sur1ryci+wIEGhVU/7rE="
   },
   {
     "pname": "log4net",
@@ -56,8 +56,8 @@
   },
   {
     "pname": "Microsoft.NETCore.Platforms",
-    "version": "2.0.0",
-    "hash": "sha256-IEvBk6wUXSdyCnkj6tHahOJv290tVVT8tyemYcR0Yro="
+    "version": "1.1.0",
+    "hash": "sha256-FeM40ktcObQJk4nMYShB61H/E8B7tIKfl9ObJ0IOcCM="
   },
   {
     "pname": "Microsoft.NETCore.Platforms",
@@ -75,9 +75,24 @@
     "hash": "sha256-N9EVZbl5w1VnMywGXyaVWzT9lh84iaJ3aD48hIBk1zA="
   },
   {
+    "pname": "NETStandard.Library",
+    "version": "2.0.3",
+    "hash": "sha256-Prh2RPebz/s8AzHb2sPHg3Jl8s31inv9k+Qxd293ybo="
+  },
+  {
     "pname": "PangoSharp",
-    "version": "3.24.24.34",
-    "hash": "sha256-/KdH3SA/11bkwPe/AXRph4v4a2cjbUjDvo4+OhkJEOQ="
+    "version": "3.24.24.95",
+    "hash": "sha256-YhltIz1jisJqR2ZxvbYy0ybi4oGw6qR2SkjF/2aWiBQ="
+  },
+  {
+    "pname": "System.Buffers",
+    "version": "4.4.0",
+    "hash": "sha256-KTxAhYawFG2V5VX1jw3pzx3IrQXRgn1TsvgjPgxAbqA="
+  },
+  {
+    "pname": "System.Buffers",
+    "version": "4.5.1",
+    "hash": "sha256-wws90sfi9M7kuCPWkv1CEYMJtCqx9QB/kj0ymlsNaxI="
   },
   {
     "pname": "System.ComponentModel.Annotations",
@@ -98,6 +113,31 @@
     "pname": "System.Drawing.Common",
     "version": "6.0.0",
     "hash": "sha256-/9EaAbEeOjELRSMZaImS1O8FmUe8j4WuFUw1VOrPyAo="
+  },
+  {
+    "pname": "System.Memory",
+    "version": "4.5.0",
+    "hash": "sha256-YOz1pCR4RpP1ywYoJsgXnVlzsWtC2uYKQJTg0NnFXtE="
+  },
+  {
+    "pname": "System.Memory",
+    "version": "4.5.4",
+    "hash": "sha256-3sCEfzO4gj5CYGctl9ZXQRRhwAraMQfse7yzKoRe65E="
+  },
+  {
+    "pname": "System.Numerics.Vectors",
+    "version": "4.4.0",
+    "hash": "sha256-auXQK2flL/JpnB/rEcAcUm4vYMCYMEMiWOCAlIaqu2U="
+  },
+  {
+    "pname": "System.Runtime.CompilerServices.Unsafe",
+    "version": "4.5.0",
+    "hash": "sha256-g9jIdQtXSAhY+ezQtYNgHEUoQR3HzznHs3JMzD9bip4="
+  },
+  {
+    "pname": "System.Runtime.CompilerServices.Unsafe",
+    "version": "4.5.3",
+    "hash": "sha256-lnZMUqRO4RYRUeSO8HSJ9yBHqFHLVbmenwHWkIU20ak="
   },
   {
     "pname": "System.Security.AccessControl",

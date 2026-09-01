@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rucredstash";
   version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "psibi";
     repo = "rucredstash";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-trupBiinULzD8TAy3eh1MYXhQilO08xu2a4yN7wwhwk=";
   };
 
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ psibi ];
     mainProgram = "rucredstash";
   };
-}
+})

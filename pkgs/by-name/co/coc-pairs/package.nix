@@ -27,6 +27,6 @@ buildNpmPackage (finalAttrs: {
     description = "Basic auto pairs extension for coc.nvim";
     homepage = "https://github.com/neoclide/coc-pairs";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

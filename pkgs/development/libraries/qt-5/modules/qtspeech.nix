@@ -8,7 +8,6 @@
 
 qtModule {
   pname = "qtspeech";
-  propagatedBuildInputs = [ ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ speechd-minimal ];
   nativeBuildInputs = [ pkg-config ];
   outputs = [

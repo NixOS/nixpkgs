@@ -42,22 +42,43 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lancedb";
-  version = "0.26.1";
+  version = "0.37.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
-    tag = "python-v${finalAttrs.version}";
-    hash = "sha256-yx4cwO7qRH9/1rW0UFz17HkvJ8utJynYoAHnN+wPpKw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ibyiZeZDSI7W7Cog+6N5zp7jr2Rm0Ql0BfePngucPW0=";
   };
 
   buildAndTestSubdir = "python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-ymoA/KKL7oLgp5u/NcXxbYfOueiKH+bpLxLcO+mn0Eo=";
+    hash = "sha256-aBc77iHWrFJhygwtcZaIu6ScHNnDXxn+QKHmvjRYLWg=";
   };
+
+  # `lance-linalg`'s AVX-512 VNNI u8-distance kernels call `_mm512_dpbusd_epi32` /
+  # `_mm512_dpwssd_epi32`. With the current toolchain, stdarch's signature for these intrinsics
+  # mismatches LLVM's `llvm.x86.avx512.vpdpbusd.512`, so the crate fails to compile.
+  # Drop the AVX-512 VNNI dispatch branch: the kernels then become dead code (their module is
+  # crate-private and otherwise only used from `#[cfg(test)]`, which is not built for
+  # dependencies), so they are never codegen'd and runtime dispatch falls back to the equivalent
+  # AVX2 / scalar kernels.
+  postPatch = ''
+    lanceDistance=("$cargoDepsCopy"/source-registry-0/lance-linalg-*/src/distance)
+
+    substituteInPlace "$lanceDistance/dot_u8.rs" \
+      --replace-fail "return |a, b| unsafe { x86::dot_u8_avx512_vnni(a, b) };" ""
+
+    substituteInPlace "$lanceDistance/l2_u8.rs" \
+      --replace-fail "return |a, b| unsafe { x86::l2_u8_avx512_vnni(a, b) };" ""
+
+    substituteInPlace "$lanceDistance/cosine_u8.rs" \
+      --replace-fail "return |a, b| unsafe { x86::cosine_u8_accum_avx512_vnni(a, b) };" ""
+  '';
 
   build-system = [ rustPlatform.maturinBuildHook ];
 
@@ -106,18 +127,37 @@ buildPythonPackage (finalAttrs: {
 
   disabledTestMarks = [ "slow" ];
 
-  disabledTests =
-    lib.optionals (pythonAtLeast "3.14") [
-      # TypeError: Converting Pydantic type to Arrow Type: unsupported type
-      # <class 'test_pydantic.test_optional_nested_model.<locals>.WALocation'>.
-      "test_optional_nested_model"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Flaky (even when the sandbox is disabled):
-      # FileNotFoundError: [Errno 2] Cannot delete directory '/nix/var/nix/builds/nix-41395-654732360/.../test.lance/_indices/fts':
-      # Cannot get information for path '/nix/var/nix/builds/nix-41395-654732360/.../test.lance/_indices/fts/.tmppyKXfw'
-      "test_create_index_from_table"
-    ];
+  disabledTests = [
+    # Requires internet access
+    # RuntimeError: lance error: LanceError(IO): Generic S3 error
+    "test_bucket_without_dots_is_not_rejected"
+
+    # lance_namespace.errors.UnsupportedOperationError: Not supported: create_empty_table
+    "TestAsyncNamespaceConnection"
+    "TestNamespaceConnection"
+
+    # Failed: DID NOT RAISE <class 'Exception'>
+    "test_merge_insert"
+
+    # TypeError: FFILanceTableProvider.__datafusion_table_provider__() missing 1 required positional
+    # argument: 'session'
+    "test_sql_query"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # TypeError: Converting Pydantic type to Arrow Type: unsupported type
+    # <class 'test_pydantic.test_optional_nested_model.<locals>.WALocation'>.
+    "test_optional_nested_model"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Flaky (even when the sandbox is disabled):
+    # FileNotFoundError: [Errno 2] Cannot delete directory '/nix/var/nix/builds/nix-41395-654732360/.../test.lance/_indices/fts':
+    # Cannot get information for path '/nix/var/nix/builds/nix-41395-654732360/.../test.lance/_indices/fts/.tmppyKXfw'
+    "test_create_index_from_table"
+  ]
+  ++ lib.optionals ((pythonAtLeast "3.14") && stdenv.hostPlatform.isDarwin) [
+    # Failed: DID NOT RAISE <class 'Exception'>
+    "test_merge_insert"
+  ];
 
   disabledTestPaths = [
     # touch the network
@@ -129,12 +169,7 @@ buildPythonPackage (finalAttrs: {
     "test_remote_db.py"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "python-v(.*)"
-    ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Developer-friendly, serverless vector database for AI applications";

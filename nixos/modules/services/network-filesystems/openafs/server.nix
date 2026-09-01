@@ -357,11 +357,16 @@ in
         unitConfig.ConditionPathExists = [
           "|/etc/openafs/server/KeyFileExt"
         ];
-        preStart = ''
-          mkdir -m 0755 -p /var/openafs
-          ${optionalString (netInfo != null) "cp ${netInfo} /var/openafs/netInfo"}
-        '';
         serviceConfig = {
+          ExecStartPre = [
+            "${lib.getExe' pkgs.coreutils "mkdir"} -m 0755 -p /var/openafs"
+          ]
+          ++ lib.optionals (netInfo != null) [
+            "${lib.getExe' pkgs.coreutils "cp"} ${netInfo} /var/openafs/netInfo"
+          ]
+          ++ lib.optionals useBuCellServDB [
+            "${lib.getExe' pkgs.coreutils "cp"} ${buCellServDB}"
+          ];
           ExecStart = "${openafsBin}/bin/bosserver -nofork";
           ExecStop = "${openafsBin}/bin/bos shutdown localhost -wait -localauth";
         };

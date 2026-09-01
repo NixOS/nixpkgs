@@ -3,28 +3,35 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  replaceVars,
   scdoc,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "shfmt";
-  version = "3.12.0";
+  version = "3.14.0";
 
   src = fetchFromGitHub {
     owner = "mvdan";
     repo = "sh";
-    rev = "v${version}";
-    hash = "sha256-3a0N5GsqZvJVx1qhsTzwtC2SBtexdXJMalerM+joNIc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-W0/40VfqHxKsdIZQzjv3T4Vc/BVgLl9aMuwSUycvclE=";
   };
 
-  vendorHash = "sha256-jvsX0nn9cHq2cZUrD9E1eMtOiy5I4wfpngAc+6qUbEE=";
+  vendorHash = "sha256-OfdXhgPyRRifRK4CylmOqWh0qmZ80mNAhBZtqJlwPPY=";
+
+  patches = [
+    (replaceVars ./version.patch {
+      inherit (finalAttrs) version;
+    })
+  ];
 
   subPackages = [ "cmd/shfmt" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
   ];
 
   nativeBuildInputs = [
@@ -37,8 +44,13 @@ buildGoModule rec {
     installManPage shfmt.1
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
   meta = {
     homepage = "https://github.com/mvdan/sh";
+    changelog = "https://github.com/mvdan/sh/releases/tag/v${finalAttrs.version}";
     description = "Shell parser and formatter";
     longDescription = ''
       shfmt formats shell programs. It can use tabs or any number of spaces to indent.
@@ -51,4 +63,4 @@ buildGoModule rec {
     ];
     mainProgram = "shfmt";
   };
-}
+})

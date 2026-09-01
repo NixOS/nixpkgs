@@ -26,12 +26,12 @@
   tinysparql,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-notes";
   version = "40.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/bijiben/${lib.versions.major version}/bijiben-${version}.tar.xz";
+    url = "mirror://gnome/sources/bijiben/${lib.versions.major finalAttrs.version}/bijiben-${finalAttrs.version}.tar.xz";
     hash = "sha256-siERvAaVa+81mqzx1u3h5So1sADIgROTZjL4rGztzmc=";
   };
 
@@ -86,4 +86,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
   };
-}
+})

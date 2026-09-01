@@ -8,40 +8,38 @@
   mbedtls,
   libev,
   c-ares,
-  pcre,
+  pcre2,
   asciidoc,
   xmlto,
   docbook_xml_dtd_45,
   docbook_xsl,
   libxslt,
+  nixosTests,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+  strictDeps = true;
+
   pname = "shadowsocks-libev";
-  version = "3.3.5";
+  version = "3.3.6";
 
   # Git tag includes CMake build files which are much more convenient.
   src = fetchFromGitHub {
     owner = "shadowsocks";
     repo = "shadowsocks-libev";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vDmzQ8N3uDpiKCNB8CtR6SbfMjevKwR6WI2UMTusF8c=";
+    hash = "sha256-XrS/qi4oAchdisvicrGmpe3jeDgYDACsvVU6iXQyQCM=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/shadowsocks/shadowsocks-libev/commit/9afa3cacf947f910be46b69fc5a7a1fdd02fd5e6.patch";
-      hash = "sha256-rpWXe8f95UU1DjQpbKMVMwA6r5yGVaDHwH/iWxW7wcw=";
-    })
-  ];
 
   buildInputs = [
     libsodium
     mbedtls
     libev
     c-ares
-    pcre
+    pcre2
   ];
   nativeBuildInputs = [
     cmake
@@ -53,29 +51,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DWITH_STATIC=OFF"
-    "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
+    (lib.cmakeBool "WITH_STATIC" false)
+    (lib.cmakeBool "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR" true)
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
-    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    (lib.cmakeBool "-DCMAKE_SKIP_BUILD_RPATH" true)
   ];
 
   postPatch = ''
-    # cmake 4 compatibility
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)"
-
-    # https://github.com/shadowsocks/shadowsocks-libev/issues/2901
-    substituteInPlace CMakeLists.txt \
-      --replace-fail '# pkg-config' \
-                '# pkg-config
-                 include(GNUInstallDirs)'
     substituteInPlace cmake/shadowsocks-libev.pc.cmake \
-      --replace-fail @prefix@ @CMAKE_INSTALL_PREFIX@ \
-      --replace-fail '$'{prefix}/@CMAKE_INSTALL_BINDIR@ @CMAKE_INSTALL_FULL_BINDIR@ \
-      --replace-fail '$'{exec_prefix}/@CMAKE_INSTALL_FULL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace-fail '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
       --replace-fail '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@ \
-      --replace-fail '$'{prefix}/@CMAKE_INSTALL_DATAROOTDIR@ @CMAKE_INSTALL_FULL_DATAROOTDIR@ \
-      --replace-fail '$'{prefix}/@CMAKE_INSTALL_MANDIR@ @CMAKE_INSTALL_FULL_MANDIR@
 
     # https://github.com/dcreager/libcork/issues/173 but needs a different patch (yay vendoring)
     substituteInPlace libcork/src/libcork.pc.in \
@@ -87,6 +72,13 @@ stdenv.mkDerivation (finalAttrs: {
     cp lib/* $out/lib
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = lib.recurseIntoAttrs {
+      inherit (nixosTests.shadowsocks) basic-libev v2ray-plugin-libev;
+    };
+  };
+
   meta = {
     description = "Lightweight secured SOCKS5 proxy";
     longDescription = ''
@@ -95,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/shadowsocks/shadowsocks-libev";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ hmenke ];
     platforms = lib.platforms.all;
   };
 })

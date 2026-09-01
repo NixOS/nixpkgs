@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "addic7ed-cli";
   version = "1.4.6";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "182cpwxpdybsgl1nps850ysvvjbqlnx149kri4hxhgm58nqq0qf5";
   };
 
@@ -35,4 +35,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.unix;
     mainProgram = "addic7ed";
   };
-}
+})

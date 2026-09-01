@@ -10,7 +10,7 @@
   mbedtls,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "librist";
   version = "0.2.11";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     domain = "code.videolan.org";
     owner = "rist";
     repo = "librist";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xWqyQl3peB/ENReMcDHzIdKXXCYOJYbhhG8tcSh36dY=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ raphaelr ];
     platforms = lib.platforms.all;
   };
-}
+})

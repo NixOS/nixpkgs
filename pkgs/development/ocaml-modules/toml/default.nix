@@ -23,7 +23,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ iso8601 ];
 
   meta = {
-    description = "Implementation in OCaml of the Toml minimal langage";
+    description = "Implementation in OCaml of the Toml minimal language";
     homepage = "http://ocaml-toml.github.io/To.ml";
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.vbgl ];

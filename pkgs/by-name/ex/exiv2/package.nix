@@ -18,9 +18,9 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "exiv2";
-  version = "0.28.7";
+  version = "0.28.9";
 
   outputs = [
     "out"
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "exiv2";
     repo = "exiv2";
-    tag = "v${version}";
-    hash = "sha256-a7nPjDjTcwsQeypARvy2rRsv9jpasSSxSyCTLWNDDtA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ESRiiBBckGIhnhSOMmcF/m1PYi2sLGv1xxE0b22nl5M=";
   };
 
   nativeBuildInputs = [
@@ -115,4 +115,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ wegank ];
   };
-}
+})

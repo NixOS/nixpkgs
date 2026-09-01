@@ -6,25 +6,25 @@
   kube-router,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kube-router";
-  version = "2.6.3";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "cloudnativelabs";
     repo = "kube-router";
-    rev = "v${version}";
-    hash = "sha256-0UuUDIIDedHDo2gVNg/4Ilcyw7BzUCJFdhn/GOi5QNs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-lTc3uo30byCu+Bm/Yy9OTgx1KLGncIEiQ9iweLIFC0k=";
   };
 
-  vendorHash = "sha256-fXZ6jRlFdjYPV5wqSdWAMlHj1dkkEpbCtcKMuuoje1U=";
+  vendorHash = "sha256-XdCqwOfOUAjiNeNNto/x2KqjfdW/mjzSIiHNAdLfFiw=";
 
   env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/cloudnativelabs/kube-router/v2/pkg/version.Version=${version}"
+    "-X github.com/cloudnativelabs/kube-router/v2/pkg/version.Version=${finalAttrs.version}"
     "-X github.com/cloudnativelabs/kube-router/v2/pkg/version.BuildDate=Nix"
   ];
 
@@ -40,4 +40,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ johanot ];
     platforms = lib.platforms.linux;
   };
-}
+})

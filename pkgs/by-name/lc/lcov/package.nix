@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lcov";
-  version = "2.3.2";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "linux-test-project";
     repo = "lcov";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-msttwM5QlSkeruKoVwZYpymz5JOJRb6QoSeF19AkEGI=";
+    hash = "sha256-fGuOqo8Bj1kDxx7Isu3aaAIBDjoMBr7WuZ+tlErjR4Y=";
   };
 
   nativeBuildInputs = [
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/linux-test-project/lcov/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
 
-    maintainers = with lib.maintainers; [ dezgeg ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

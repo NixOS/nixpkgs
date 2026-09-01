@@ -25,14 +25,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "glymur";
-  version = "0.14.4";
+  version = "0.14.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "quintusdias";
     repo = "glymur";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9CvsknpvBIHe2HEqwN43RRhRxh8D0eHQ/T9W3/eVJlQ=";
+    hash = "sha256-tcc37By5xukcN/C+RxA+B8fmFRlGQDl0aSkkT3zE9ws=";
   };
 
   patches = [

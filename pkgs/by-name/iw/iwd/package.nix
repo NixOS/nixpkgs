@@ -15,12 +15,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iwd";
-  version = "3.10";
+  version = "3.12";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     tag = finalAttrs.version;
-    hash = "sha256-qzqBNGy67/VvRZh7n0W2ZPYwoyX/lP6k1sF57lL6v7c=";
+    hash = "sha256-78Zw/i2dXecvC+DDSunPlUzqJj0FFYf7Sm6iN5VXBbA=";
   };
 
   patches = [

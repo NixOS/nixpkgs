@@ -5,18 +5,18 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "livekit";
-  version = "1.9.11";
+  version = "1.13.6";
 
   src = fetchFromGitHub {
     owner = "livekit";
     repo = "livekit";
-    rev = "v${version}";
-    hash = "sha256-mmDTY4nWUowSHPTSlvfVaNlv0Rp176H5FvJsYrNnt/8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-sUAx6ooeEUUqot5xuZv7xiQa3DdRFVULteTwYgFUzCI=";
   };
 
-  vendorHash = "sha256-yEAIfef7Ryepcpq9Te+Iamod1SfqXZoluhFaYGYcsVc=";
+  vendorHash = "sha256-nOGSmoNuQQm/sIVI1HojsiS4GkbhA68uYMQ6X7d4a5Q=";
 
   subPackages = [ "cmd/server" ];
 
@@ -33,4 +33,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ mgdelacroix ];
     mainProgram = "livekit-server";
   };
-}
+})

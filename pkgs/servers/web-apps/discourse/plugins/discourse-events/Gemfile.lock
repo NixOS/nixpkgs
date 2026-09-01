@@ -1,7 +1,6 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    discourse_subscription_client (0.1.11)
     icalendar (2.8.0)
       ice_cube (~> 0.16)
     icalendar-recurrence (1.1.3)
@@ -9,16 +8,31 @@ GEM
       ice_cube (~> 0.16)
     ice_cube (0.16.4)
     iso-639 (0.3.5)
+    omnievent (0.1.0.pre11)
+    omnievent-api (0.1.0.pre5)
+      omnievent
+    omnievent-google (0.1.0.pre8)
+      omnievent
+      omnievent-api
+    omnievent-icalendar (0.1.0.pre9)
+      omnievent
+    omnievent-outlook (0.1.0.pre11)
+      omnievent
+      omnievent-api
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  discourse_subscription_client (= 0.1.11)
   icalendar (= 2.8.0)
   icalendar-recurrence (= 1.1.3)
   ice_cube (= 0.16.4)
   iso-639 (= 0.3.5)
+  omnievent (= 0.1.0.pre11)
+  omnievent-api (= 0.1.0.pre5)
+  omnievent-google (= 0.1.0.pre8)
+  omnievent-icalendar (= 0.1.0.pre9)
+  omnievent-outlook (= 0.1.0.pre11)
 
 BUNDLED WITH
-   2.5.22
+   2.7.2

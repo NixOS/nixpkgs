@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "ufo2ft";
-  version = "3.7.0";
+  version = "3.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "ufo2ft";
     tag = "v${version}";
-    hash = "sha256-PHd4l3kbWdJmtZMF9gKbz5DtdaaO3C/Rldw3pdMJJC0=";
+    hash = "sha256-McMhpGIvQHpsOe3jza6E3b72cKiY8gr8W9OY2Mg9JvE=";
   };
 
   build-system = [
@@ -71,6 +71,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googlefonts/ufo2ft";
     changelog = "https://github.com/googlefonts/ufo2ft/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ jopejoe1 ];
   };
 }

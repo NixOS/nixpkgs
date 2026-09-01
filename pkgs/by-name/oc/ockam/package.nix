@@ -9,17 +9,14 @@
   dbus,
 }:
 
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ockam";
   version = "0.157.0";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "build-trust";
     repo = "ockam";
-    rev = "ockam_v${version}";
+    rev = "ockam_v${finalAttrs.version}";
     hash = "sha256-o895VPlUGmLUsIeOnShjCetKoS/4x0nbEKxipEbuBu4=";
   };
 
@@ -46,4 +43,4 @@ rustPlatform.buildRustPackage {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

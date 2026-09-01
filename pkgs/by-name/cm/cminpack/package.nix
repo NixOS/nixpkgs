@@ -8,14 +8,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cminpack";
   version = "1.3.11";
 
   src = fetchFromGitHub {
     owner = "devernay";
     repo = "cminpack";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-GF9HiITX/XV8hXrp5lJw2XM0Zyb/CBkMZkRFBbQj03A=";
   };
 
@@ -46,9 +46,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Software for solving nonlinear equations and nonlinear least squares problems";
     homepage = "http://devernay.free.fr/hacks/cminpack/";
-    changelog = "https://github.com/devernay/cminpack/blob/v${version}/README.md#history";
+    changelog = "https://github.com/devernay/cminpack/blob/v${finalAttrs.version}/README.md#history";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

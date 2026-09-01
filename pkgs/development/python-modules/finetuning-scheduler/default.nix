@@ -13,18 +13,20 @@
 
   # tests
   pytestCheckHook,
+  pythonAtLeast,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "finetuning-scheduler";
-  version = "2.9.2";
+  version = "2.13.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "speediedan";
     repo = "finetuning-scheduler";
-    tag = "v${version}";
-    hash = "sha256-+LJ36LzFamC5Mv5ec+uUtMWZt0WMjuHKZlA73rZqoxw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-K3+a+/tSLdlzm0T3wIcJiw0RIlMUf41vRPxQXSW4GH4=";
   };
 
   build-system = [ setuptools ];
@@ -47,6 +49,11 @@ buildPythonPackage rec {
     # AssertionError: assert 'lightning @ git+' in 'lightning>=2.5.0,<2.5.6'
     "test_get_lightning_requirement"
   ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # RuntimeError: torch.compile is not supported on Python 3.14+
+    "test_fts_dynamo_enforce_p0"
+    "test_fts_dynamo_resume"
+  ]
   ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
     # slightly exceeds numerical tolerance on aarch64-linux:
     "test_fts_frozen_bn_track_running_stats"
@@ -59,8 +66,8 @@ buildPythonPackage rec {
   meta = {
     description = "PyTorch Lightning extension for foundation model experimentation with flexible fine-tuning schedules";
     homepage = "https://finetuning-scheduler.readthedocs.io";
-    changelog = "https://github.com/speediedan/finetuning-scheduler/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/speediedan/finetuning-scheduler/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

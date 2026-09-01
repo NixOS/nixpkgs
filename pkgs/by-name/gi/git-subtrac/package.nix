@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "git-subtrac";
   version = "0.04";
 
   src = fetchFromGitHub {
     owner = "apenwarr";
     repo = "git-subtrac";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3Z1AbPPsTBa3rqfvNAMBz7CIRq/zc9q5/TcLJWYSNlw=";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "git-subtrac";
   };
-}
+})

@@ -18,163 +18,234 @@
   e2fsprogs,
   python3,
   autoPatchelfHook,
-  vmopts ? null,
   glibcLocales,
+  fontconfig,
+  libGL,
+  libx11,
+
+  # bundled jcef-plugin
+  alsa-lib,
+  at-spi2-atk,
+  at-spi2-core,
+  atk,
+  cairo,
+  cups,
+  dbus,
+  libgbm,
+  libxcb,
+  libxcomposite,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxkbcommon,
+  libxrandr,
+  nspr,
+  nss,
+  pango,
+
+  jdk,
+  vmopts ? null,
+  forceWayland ? null,
+  excludeDrvArgNames,
 }:
 
-{
-  pname,
-  product,
-  productShort,
-  version,
-  src,
-  wmClass,
-  jdk,
-  meta,
-  passthru,
+lib.extendMkDerivation {
+  inherit excludeDrvArgNames;
 
-  libdbm,
-  fsnotifier,
+  constructDrv = stdenv.mkDerivation;
 
-  extraLdPath ? [ ],
-  extraWrapperArgs ? [ ],
-  buildInputs ? [ ],
-  ...
-}@args:
+  extendDrvArgs =
+    finalAttrs:
+    {
+      pname,
+      product,
+      productShort ? product,
+      wmClass,
 
-let
-  loName = lib.toLower productShort;
-  hiName = lib.toUpper productShort;
-  vmoptsName = loName + lib.optionalString stdenv.hostPlatform.is64bit "64" + ".vmoptions";
-in
+      libdbm,
+      fsnotifier,
 
-with stdenv;
-lib.makeOverridable mkDerivation (
-  rec {
-    inherit
-      pname
-      version
-      src
-      buildInputs
-      passthru
-      ;
-    meta = args.meta // {
-      mainProgram = pname;
-    };
+      extraLdPath ? [ ],
+      extraWrapperArgs ? [ ],
+      buildInputs ? [ ],
+      nativeBuildInputs ? [ ],
+      meta ? { },
+      postPatch ? "",
+      ...
+    }:
 
-    desktopItem = makeDesktopItem {
-      name = pname;
-      exec = pname;
-      comment = lib.trim (lib.replaceString "\n" " " meta.longDescription);
-      desktopName = product;
-      genericName = meta.description;
-      categories = [ "Development" ];
-      icon = pname;
-      startupWMClass = wmClass;
-    };
+    let
+      loName = lib.toLower productShort;
+      hiName = lib.toUpper productShort;
+      vmoptsName = loName + lib.optionalString stdenv.hostPlatform.is64bit "64" + ".vmoptions";
+      finalExtraWrapperArgs =
+        extraWrapperArgs
+        ++ lib.optionals forceWayland [
+          ''--add-flags "\''${WAYLAND_DISPLAY:+-Dawt.toolkit.name=WLToolkit}"''
+        ];
 
-    vmoptsIDE = if hiName == "WEBSTORM" then "WEBIDE" else hiName;
-    vmoptsFile = lib.optionalString (vmopts != null) (writeText vmoptsName vmopts);
+      desktopItem = makeDesktopItem {
+        name = finalAttrs.pname;
+        exec = finalAttrs.meta.mainProgram;
+        comment = lib.trim (lib.replaceString "\n" " " finalAttrs.meta.longDescription);
+        desktopName = product;
+        genericName = finalAttrs.meta.description;
+        categories = [ "Development" ];
+        icon = pname;
+        startupWMClass = wmClass;
+      };
 
-    nativeBuildInputs = [
-      makeWrapper
-      patchelf
-      unzip
-      autoPatchelfHook
-    ];
+      vmoptsIDE = if hiName == "WEBSTORM" then "WEBIDE" else hiName;
+      vmoptsFile = lib.optionalString (vmopts != null) (writeText vmoptsName vmopts);
+    in
+    {
+      inherit desktopItem vmoptsIDE vmoptsFile;
 
-    postPatch = ''
-      rm -rf jbr
-      # When using the IDE as a remote backend using gateway, it expects the jbr directory to contain the jdk
-      ln -s ${jdk.home} jbr
+      buildInputs = buildInputs ++ [
+        stdenv.cc.cc
+        fontconfig
+        libGL
+        libx11
+        # required for the bundled jcef-plugin
+        udev
+        alsa-lib
+        at-spi2-atk
+        at-spi2-core
+        atk
+        cairo
+        cups
+        dbus
+        libgbm
+        libxcb
+        libxcomposite
+        libxdamage
+        libxext
+        libxfixes
+        libxkbcommon
+        libxrandr
+        nspr
+        nss
+        pango
+      ];
 
-      if [ -d "plugins/remote-dev-server" ]; then
-        patch -F3 -p1 < ${../patches/jetbrains-remote-dev.patch}
-      fi
+      nativeBuildInputs = nativeBuildInputs ++ [
+        makeWrapper
+        patchelf
+        unzip
+        autoPatchelfHook
+      ];
 
-      vmopts_file=bin/linux/${vmoptsName}
-      if [[ ! -f $vmopts_file ]]; then
-        vmopts_file=bin/${vmoptsName}
-        if [[ ! -f $vmopts_file ]]; then
-          echo "ERROR: $vmopts_file not found"
-          exit 1
+      postPatch = ''
+        rm -rf jbr
+        # When using the IDE as a remote backend using gateway, it expects the jbr directory to contain the jdk
+        ln -s ${jdk.home} jbr
+
+        if [ -d "plugins/remote-dev-server" ]; then
+          patch -F3 -p1 < ${../patches/jetbrains-remote-dev.patch}
         fi
-      fi
-      echo -Djna.library.path=${
-        lib.makeLibraryPath [
-          libsecret
-          e2fsprogs
-          libnotify
-          # Required for Help -> Collect Logs
-          # in at least rider and goland
-          udev
-        ]
-      } >> $vmopts_file
-    '';
 
-    installPhase = ''
-      runHook preInstall
+        # The bundled libraries of the remote dev server are not used (see the patch above),
+        # so drop them. This has to happen before autoPatchelfHook runs, otherwise their
+        # directory ends up in the RPATH of unrelated binaries, see below.
+        rm -rf plugins/remote-dev-server/selfcontained
 
-      mkdir -p $out/{bin,$pname,share/pixmaps,share/icons/hicolor/scalable/apps}
-      cp -a . $out/$pname
-      [[ -f $out/$pname/bin/${loName}.png ]] && ln -s $out/$pname/bin/${loName}.png $out/share/pixmaps/${pname}.png
-      [[ -f $out/$pname/bin/${loName}.svg ]] && ln -s $out/$pname/bin/${loName}.svg $out/share/pixmaps/${pname}.svg \
-        && ln -s $out/$pname/bin/${loName}.svg $out/share/icons/hicolor/scalable/apps/${pname}.svg
-      cp ${libdbm}/lib/libdbm.so $out/$pname/bin/libdbm.so
-      cp ${fsnotifier}/bin/fsnotifier $out/$pname/bin/fsnotifier
+        # libjcef.so has "." in its RPATH. autoPatchelfHook follows the RPATHs of the
+        # libraries it indexes and resolves that "." against the build directory, which
+        # makes it prefer bundled copies of libraries over the ones from nixpkgs and
+        # bake build-time-only paths into the RPATHs it writes.
+        if [ -e plugins/jcef-plugin/jcef/libjcef.so ]; then
+          patchelf --set-rpath '$ORIGIN' plugins/jcef-plugin/jcef/libjcef.so
+        fi
 
-      jdk=${jdk.home}
-      item=${desktopItem}
+        vmopts_file=bin/linux/${vmoptsName}
+        if [[ ! -f $vmopts_file ]]; then
+          vmopts_file=bin/${vmoptsName}
+          if [[ ! -f $vmopts_file ]]; then
+            echo "ERROR: $vmopts_file not found"
+            exit 1
+          fi
+        fi
+        echo -Djna.library.path=${
+          lib.makeLibraryPath [
+            libsecret
+            e2fsprogs
+            libnotify
+            # Required for Help -> Collect Logs
+            # in at least rider and goland
+            udev
+          ]
+        } >> $vmopts_file
+      ''
+      + postPatch;
 
-      needsWrapping=()
+      installPhase = ''
+        runHook preInstall
 
-      if [ -f "$out/$pname/bin/${loName}" ]; then
-        needsWrapping+=("$out/$pname/bin/${loName}")
-      fi
-      if [ -f "$out/$pname/bin/${loName}.sh" ]; then
-        needsWrapping+=("$out/$pname/bin/${loName}.sh")
-      fi
+        mkdir -p $out/{bin,$pname,share/icons/hicolor/scalable/apps,share/icons/hicolor/128x128/apps}
+        cp -a . $out/$pname
+        [[ -f $out/$pname/bin/${loName}.png ]] && ln -s $out/$pname/bin/${loName}.png $out/share/icons/hicolor/128x128/apps/${pname}.png
+        [[ -f $out/$pname/bin/${loName}.svg ]] && ln -s $out/$pname/bin/${loName}.svg $out/share/icons/hicolor/scalable/apps/${pname}.svg
+        cp ${libdbm}/lib/libdbm.so $out/$pname/bin/libdbm.so
+        cp ${fsnotifier}/bin/fsnotifier $out/$pname/bin/fsnotifier
 
-      for launcher in "''${needsWrapping[@]}"
-      do
-        wrapProgram  "$launcher" \
-          --prefix PATH : "${
-            lib.makeBinPath [
-              jdk
-              coreutils
-              gnugrep
-              which
-              git
-            ]
-          }" \
-          --suffix PATH : "${lib.makeBinPath [ python3 ]}" \
-          --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath extraLdPath}" \
-          ${lib.concatStringsSep " " extraWrapperArgs} \
-          --set-default JDK_HOME "$jdk" \
-          --set-default ANDROID_JAVA_HOME "$jdk" \
-          --set-default JAVA_HOME "$jdk" \
-          --set-default JETBRAINS_CLIENT_JDK "$jdk" \
-          --set-default ${hiName}_JDK "$jdk" \
-          --set-default LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive" \
-          --set-default ${vmoptsIDE}_VM_OPTIONS ${vmoptsFile}
-      done
+        jdk=${jdk.home}
+        item=${desktopItem}
 
-      launcher="$out/$pname/bin/${loName}"
-      if [ ! -e "$launcher" ]; then
-        launcher+=.sh
-      fi
+        needsWrapping=()
 
-      ln -s "$launcher" $out/bin/$pname
-      rm -rf $out/$pname/plugins/remote-dev-server/selfcontained/
-      echo -e '#!/usr/bin/env bash\n'"$out/$pname/bin/remote-dev-server.sh"' "$@"' > $out/$pname/bin/remote-dev-server-wrapped.sh
-      chmod +x $out/$pname/bin/remote-dev-server-wrapped.sh
-      ln -s "$out/$pname/bin/remote-dev-server-wrapped.sh" $out/bin/$pname-remote-dev-server
-      ln -s "$item/share/applications" $out/share
+        if [ -f "$out/$pname/bin/${loName}" ]; then
+          needsWrapping+=("$out/$pname/bin/${loName}")
+        fi
+        if [ -f "$out/$pname/bin/${loName}.sh" ]; then
+          needsWrapping+=("$out/$pname/bin/${loName}.sh")
+        fi
 
-      runHook postInstall
-    '';
-  }
-  // lib.optionalAttrs (!(meta.license.free or true)) {
-    preferLocalBuild = true;
-  }
-)
+        for launcher in "''${needsWrapping[@]}"
+        do
+          wrapProgram  "$launcher" \
+            --prefix PATH : "${
+              lib.makeBinPath [
+                jdk
+                coreutils
+                gnugrep
+                which
+                git
+              ]
+            }" \
+            --suffix PATH : "${lib.makeBinPath [ python3 ]}" \
+            --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath extraLdPath}" \
+            ${lib.concatStringsSep " " finalExtraWrapperArgs} \
+            --set-default JDK_HOME "$jdk" \
+            --set-default ANDROID_JAVA_HOME "$jdk" \
+            --set-default JAVA_HOME "$jdk" \
+            --set-default JETBRAINS_CLIENT_JDK "$jdk" \
+            --set-default ${hiName}_JDK "$jdk" \
+            --set-default LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive" \
+            --set-default ${vmoptsIDE}_VM_OPTIONS ${vmoptsFile}
+        done
+
+        launcher="$out/$pname/bin/${loName}"
+        if [ ! -e "$launcher" ]; then
+          launcher+=.sh
+        fi
+
+        ln -s "$launcher" $out/bin/$pname
+        echo -e '#!/usr/bin/env bash\n'"$out/$pname/bin/remote-dev-server.sh"' "$@"' > $out/$pname/bin/remote-dev-server-wrapped.sh
+        chmod +x $out/$pname/bin/remote-dev-server-wrapped.sh
+        ln -s "$out/$pname/bin/remote-dev-server-wrapped.sh" $out/bin/$pname-remote-dev-server
+        ln -s "$item/share/applications" $out/share
+
+        runHook postInstall
+      '';
+
+      preFixup = ''
+        addAutoPatchelfSearchPath "${jdk.home}/lib"
+      '';
+
+      preferLocalBuild = !(finalAttrs.meta.license.free or true);
+
+      meta = meta // {
+        mainProgram = pname;
+      };
+    };
+}

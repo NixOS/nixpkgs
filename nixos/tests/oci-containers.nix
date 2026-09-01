@@ -88,7 +88,7 @@ let
               isSystemUser = true;
               group = "redis";
               home = "/var/lib/redis";
-              linger = type == "healthy";
+              linger = true;
               createHome = true;
               uid = 2342;
               subUidRanges = [

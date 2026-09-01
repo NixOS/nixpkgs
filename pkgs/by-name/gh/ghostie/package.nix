@@ -8,14 +8,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ghostie";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "attriaayush";
     repo = "ghostie";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-lEjJLmBA3dlIVxc8E+UvR7u154QGeCfEbxdgUxAS3Cw=";
   };
 
@@ -40,10 +40,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Github notifications in your terminal";
     homepage = "https://github.com/attriaayush/ghostie";
-    changelog = "https://github.com/attriaayush/ghostie/releases/tag/v${version}";
+    changelog = "https://github.com/attriaayush/ghostie/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     broken = stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin;
     mainProgram = "ghostie";
   };
-}
+})

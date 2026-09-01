@@ -86,7 +86,7 @@ update_attr() {
 repo_root=$(git rev-parse --show-toplevel)
 
 generate_hash() {
-  nurl --expr "(import ${repo_root} {}).terraform-providers.${provider}.$1"
+  nurl --expr "(import ${repo_root} {}).terraform-providers.\"${provider}\".$1"
 }
 
 echo_provider() {
@@ -167,7 +167,7 @@ fi
 # Check that the provider builds
 if [[ ${build} == 1 ]]; then
   echo_provider "building"
-  nix-build --no-out-link "${repo_root}" -A "terraform-providers.${provider}"
+  nix-build --no-out-link "${repo_root}" -A "terraform-providers.\"${provider}\""
 fi
 
 popd >/dev/null

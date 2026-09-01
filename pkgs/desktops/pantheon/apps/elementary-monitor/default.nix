@@ -18,7 +18,7 @@
   libadwaita,
   libgee,
   libgtop,
-  libX11,
+  libx11,
   linuxPackages,
   live-chart,
   pciutils,
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     libgee
     libgtop
-    libX11
+    libx11
     linuxPackages.nvidia_x11.settings.libXNVCtrl
     live-chart
     pciutils

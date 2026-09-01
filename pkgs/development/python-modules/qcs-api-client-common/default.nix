@@ -17,22 +17,19 @@
 
 buildPythonPackage rec {
   pname = "qcs-api-client-common";
-  version = "0.11.8";
+  version = "0.15.0";
   pyproject = true;
-
-  # error: the configured Python interpreter version (3.13) is newer than PyO3's maximum supported version (3.12)
-  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "qcs-api-client-rust";
     tag = "common/v${version}";
-    hash = "sha256-IJaclIGuLWyTaVnnK1MblSZjIqjaMjLCFfY1CLn6Rao=";
+    hash = "sha256-ksB71Vd9PbKAHll2Y5VrCspsyUyhXwthHl2yVl6MQ7U=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-luLg4VR7Nwm6g1UYckKmN9iy1MvNezYh9g21ADMX/yU=";
+    hash = "sha256-QvMeCzpHGMVjqYs0i3gpzY6Zk4rGiXyTopzaQMLWBcA=";
   };
 
   buildAndTestSubdir = "qcs-api-client-common";
@@ -52,8 +49,6 @@ buildPythonPackage rec {
 
   preCheck = ''
     cd ${buildAndTestSubdir}
-    # import from $out
-    rm -r qcs_api_client_common
   '';
 
   nativeCheckInputs = [
@@ -61,6 +56,11 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     syrupy
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # asyncio.Future() in sync fixture has no implicit event loop on 3.14
+    "test_refresh_interceptor"
   ];
 
   meta = {

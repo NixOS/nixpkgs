@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools-scm,
   setuptools,
   toml,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "ctypesgen";
   version = "1.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "ctypesgen";

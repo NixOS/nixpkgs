@@ -14,6 +14,9 @@
   xmlto,
   meson,
   ninja,
+  gnome,
+  librsvg,
+  makeWrapper,
 
   acl,
   appstream,
@@ -42,6 +45,11 @@
   attr,
 }:
 
+let
+  gdkPixbufLoadersCache = gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+    extraLoaders = [ librsvg ];
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "flatpak-builder";
   version = "1.4.4";
@@ -95,6 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     pkg-config
     xmlto
+    makeWrapper
   ];
 
   buildInputs = [
@@ -132,6 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
       for file in ${installed_testdir}/{test-builder.sh,test-builder-python.sh,test-builder-deprecated.sh}; do
         patchShebangs $file
       done
+      wrapProgram $out/bin/flatpak-builder --set GDK_PIXBUF_MODULE_FILE ${gdkPixbufLoadersCache}
     '';
 
   passthru = {
@@ -154,7 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "flatpak-builder";
     homepage = "https://github.com/flatpak/flatpak-builder";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ arthsmn ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

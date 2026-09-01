@@ -6,26 +6,30 @@
   fetchPypi,
   pytestCheckHook,
   pytest-cov-stub,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "tld";
-  version = "0.13.1";
-  format = "setuptools";
+  version = "0.13.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dewAk2y89WT2c2HEFxM2NEC2xO8PDBWStbD75ywXo1A=";
+    hash = "sha256-2YP6krnXF0AHQvyoROKdXhgnEHnHvPq/ZtAbObShQ0U=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov-stub
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     factory-boy
     faker
+    pytest-cov-stub
+    pytestCheckHook
   ];
 
   doCheck = false; # missing pytest-codeblock
@@ -41,7 +45,6 @@ buildPythonPackage rec {
 
   meta = {
     description = "Extracts the top level domain (TLD) from the URL given";
-    mainProgram = "update-tld-names";
     homepage = "https://github.com/barseghyanartur/tld";
     changelog = "https://github.com/barseghyanartur/tld/blob/${version}/CHANGELOG.rst";
     # https://github.com/barseghyanartur/tld/blob/master/README.rst#license
@@ -52,5 +55,6 @@ buildPythonPackage rec {
       gpl2Only
     ];
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "update-tld-names";
   };
 }

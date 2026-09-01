@@ -1,24 +1,25 @@
 {
   lib,
-  stdenv,
-  fetchFromGitHub,
   cmake,
-  pkg-config,
+  fetchFromGitHub,
   intel-gmmlib,
   intel-graphics-compiler,
   level-zero,
   libva,
+  nix-update-script,
+  pkg-config,
+  stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "intel-compute-runtime";
-  version = "26.01.36711.4";
+  version = "26.31.39395.13";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
-    tag = version;
-    hash = "sha256-77fVA2T6niK2a9i6v6sAR98fHnExbHqRdHexKBkqd7M=";
+    tag = finalAttrs.version;
+    hash = "sha256-/rZvPEI5EFhkeW2h7ebhtZnrU48N54mCAfkRgM3b1L4=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,8 @@ stdenv.mkDerivation rec {
     # disable spectre mitigations (already mitigated in the kernel)
     # https://bugs.launchpad.net/ubuntu/+source/intel-compute-runtime/+bug/2110131
     (lib.cmakeBool "NEO_DISABLE_MITIGATIONS" true)
+    # install ocloc without a version suffix
+    (lib.cmakeBool "NEO_BUILD_UNVERSIONED_OCLOC" true)
   ];
 
   outputs = [
@@ -72,11 +75,15 @@ stdenv.mkDerivation rec {
       $out/lib/intel-opencl/libigdrcl.so
   '';
 
+  passthru = {
+    updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+  };
+
   meta = {
     description = "Intel Graphics Compute Runtime oneAPI Level Zero and OpenCL, supporting 12th Gen and newer";
     mainProgram = "ocloc";
     homepage = "https://github.com/intel/compute-runtime";
-    changelog = "https://github.com/intel/compute-runtime/releases/tag/${version}";
+    changelog = "https://github.com/intel/compute-runtime/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = [
       "x86_64-linux"
@@ -84,4 +91,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

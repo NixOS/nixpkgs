@@ -5,7 +5,7 @@
   fontconfig,
   installShellFiles,
   libGL,
-  libX11,
+  libx11,
   libxcb,
   libxkbcommon,
   ncurses,
@@ -19,27 +19,28 @@
   vulkan-loader,
   wayland,
   wezterm,
-  xcbutil,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilwm,
+  libxcb-util,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-wm,
   zlib,
+  rcodesign,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wezterm";
-  version = "0-unstable-2026-01-09";
+  version = "0-unstable-2026-08-23";
 
   src = fetchFromGitHub {
     owner = "wezterm";
     repo = "wezterm";
-    rev = "6e02c91e6b4f14d8df81d2819807212807cc5d5f";
+    rev = "f93d90350075d3e42566e0557ca36e82ffdcbec1";
     fetchSubmodules = true;
-    hash = "sha256-5KGSAhblAyBT1ppMaGlI94wMGl4/NpLHK7VFMYF+FV4=";
+    hash = "sha256-er8IRmDZ65Axr+9qKDrqba6Qbj9MVdiBEH52xmp2ZHo=";
   };
 
   postPatch = ''
-    echo ${version} > .tag
+    echo ${finalAttrs.version} > .tag
 
     # hash does not work well with NixOS
     substituteInPlace assets/shell-integration/wezterm.sh \
@@ -58,7 +59,7 @@ rustPlatform.buildRustPackage rec {
   # https://github.com/wezterm/wezterm/blob/main/nix/flake.nix#L134
   auditable = false;
 
-  cargoHash = "sha256-am5i7Bsoiu1a4RWDy+dpuHgyZpQvKOlEMzCP8QxbeaQ=";
+  cargoHash = "sha256-R47aufhkCuHDSKSV8A7n3eGz0S3s0/HP2Sw0keaEX5s=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -66,7 +67,10 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     python3
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin perl;
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    perl
+    rcodesign
+  ];
 
   buildInputs = [
     fontconfig
@@ -74,21 +78,21 @@ rustPlatform.buildRustPackage rec {
     zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
+    libx11
     libxcb
     libxkbcommon
     wayland
-    xcbutil
-    xcbutilimage
-    xcbutilkeysyms
-    xcbutilwm # contains xcb-ewmh among others
+    libxcb-util
+    libxcb-image
+    libxcb-keysyms
+    libxcb-wm # contains xcb-ewmh among others
   ];
 
   buildFeatures = [ "distro-defaults" ];
 
   postInstall = ''
     mkdir -p $out/nix-support
-    echo "${passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
+    echo "${finalAttrs.passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
 
     install -Dm644 assets/icon/terminal.png $out/share/icons/hicolor/128x128/apps/org.wezfurlong.wezterm.png
     install -Dm644 assets/wezterm.desktop $out/share/applications/org.wezfurlong.wezterm.desktop
@@ -115,14 +119,20 @@ rustPlatform.buildRustPackage rec {
       OUT_APP="$out/Applications/WezTerm.app"
       cp -r assets/macos/WezTerm.app "$OUT_APP"
       rm $OUT_APP/*.dylib
-      cp -r assets/shell-integration/* "$OUT_APP"
+      # macos codesigning requires a specific directory structure
+      # see also: https://github.com/wezterm/wezterm/blob/76b606ec597a3c0263fa60321548637451c0a547/ci/deploy.sh#L31
+      mkdir -p $OUT_APP/Contents/{MacOS,Resources}
+      cp -r assets/shell-integration/* $OUT_APP/Contents/Resources/
       # https://github.com/wezterm/wezterm/pull/6886
       # macOS will only recognize our application bundle
       # if the binaries are inside of it. Move them there
       # and create symbolic links for them in bin/.
-      mv $out/bin/{wezterm,wezterm-mux-server,wezterm-gui,strip-ansi-escapes} "$OUT_APP"
-      ln -s "$OUT_APP"/{wezterm,wezterm-mux-server,wezterm-gui,strip-ansi-escapes} "$out/bin"
+      mv $out/bin/{wezterm,wezterm-mux-server,wezterm-gui,strip-ansi-escapes} $OUT_APP/Contents/MacOS/
+      ln -s $OUT_APP/Contents/MacOS/{wezterm,wezterm-mux-server,wezterm-gui,strip-ansi-escapes} $out/bin
     '';
+
+  # notifications require that the app bundle be codesigned (beyond the linker-signing that happens automatically for the executable)
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin "rcodesign sign $out/Applications/WezTerm.app";
 
   passthru = {
     # the headless variant is useful when deploying wezterm's mux server on remote severs
@@ -142,7 +152,7 @@ rustPlatform.buildRustPackage rec {
         }
         ''
           mkdir -p $out/share/terminfo $out/nix-support
-          tic -x -o $out/share/terminfo ${src}/termwiz/data/wezterm.terminfo
+          tic -x -o $out/share/terminfo ${finalAttrs.src}/termwiz/data/wezterm.terminfo
         '';
 
     tests = {
@@ -160,8 +170,8 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     mainProgram = "wezterm";
     maintainers = with lib.maintainers; [
-      mimame
       SuperSandro2000
+      yvnth
     ];
   };
-}
+})

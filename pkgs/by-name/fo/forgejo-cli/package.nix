@@ -2,7 +2,7 @@
   lib,
   stdenv,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   installShellFiles,
   writableTmpDirAsHomeHook,
@@ -10,20 +10,22 @@
   oniguruma,
   openssl,
   zlib,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "forgejo-cli";
-  version = "0.4.0";
+  version = "0.6.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  __structuredAttrs = true;
+
+  src = fetchFromCodeberg {
     owner = "forgejo-contrib";
     repo = "forgejo-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EJr/7me2wiOBSFw0VFSxyqnQKy3kpOMGJmxD7wxmWPc=";
+    hash = "sha256-XG7IPfl5yLToDQ+P0JkMxhfqsGd3cGWYCNrmlFf9j2Y=";
   };
 
-  cargoHash = "sha256-DpQt76o3ZnIJwHR1DQ/mn9f8XiWHKVB4h3NNbvCIMZ8=";
+  cargoHash = "sha256-+7WiOmYBjTMEsIGaqnMVTIHhzTpm8ObnljNXFnDazhI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -49,6 +51,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --fish <($out/bin/fj completion fish) \
       --zsh <($out/bin/fj completion zsh)
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
 
   meta = {
     description = "CLI application for interacting with Forgejo";

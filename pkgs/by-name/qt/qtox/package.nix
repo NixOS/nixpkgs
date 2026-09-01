@@ -7,9 +7,9 @@
   perl,
   kdePackages,
   libtoxcore,
-  libpthreadstubs,
-  libXdmcp,
-  libXScrnSaver,
+  libpthread-stubs,
+  libxdmcp,
+  libxscrnsaver,
   ffmpeg,
   filter-audio,
   libexif,
@@ -17,29 +17,28 @@
   libopus,
   libvpx,
   openal,
-  pcre,
   qrencode,
   qt6,
   sqlcipher,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qtox";
-  version = "1.18.3";
+  version = "1.18.5";
 
   src = fetchFromGitHub {
     owner = "TokTok";
     repo = "qTox";
-    tag = "v${version}";
-    hash = "sha256-5pH39NsJdt4+ldlbpkvA0n/X/LkEUEv4UL1K/W3BqmM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-A+jHcvK/8aDTcKluaBKFgEQbxDhE3DdGu233nYLIgmc=";
   };
 
   buildInputs = [
     kdePackages.sonnet
     libtoxcore
-    libpthreadstubs
-    libXdmcp
-    libXScrnSaver
+    libpthread-stubs
+    libxdmcp
+    libxscrnsaver
     ffmpeg
     filter-audio
     libexif
@@ -47,7 +46,6 @@ stdenv.mkDerivation rec {
     libsodium
     libvpx
     openal
-    pcre
     qrencode
     qt6.qtbase
     qt6.qtsvg
@@ -63,7 +61,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ perl ];
 
   cmakeFlags = [
-    "-DGIT_DESCRIBE=v${version}"
+    "-DGIT_DESCRIBE=v${finalAttrs.version}"
     "-DTIMESTAMP=1"
   ];
 
@@ -79,4 +77,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

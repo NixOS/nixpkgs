@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "culvert";
-  version = "0.4.0.unstable-2024-10-17";
+  version = "0.4.0-unstable-2024-10-18";
 
   src = fetchFromGitHub {
     owner = "amboar";

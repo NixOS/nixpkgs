@@ -1,0 +1,81 @@
+Skip workspace-wide `pnpm install` when JS deps are already installed.
+
+Nixpkgs installs the filtered admin UI workspace via pnpmConfigHook.
+A second install walks every workspace member and fails offline.
+
+--- a/crates/build/src/lib.rs
++++ b/crates/build/src/lib.rs
+@@ -92,39 +92,43 @@
+     Ok("TRUE") | Ok("true") | Ok("1")
+   );
+ 
+-  // Note that `--frozen-lockfile` and `-ignore-workspace` are practically exclusive
+-  // Because ignoring the workspace one, will require to create a new lockfile.
+-  let out_dir = std::env::var("OUT_DIR").unwrap();
+-  let build_result = if out_dir.contains("target/package") {
+-    // When we build cargo packages, we cannot rely on the workspace itself and prior installs.
+-    pnpm_run(&["--dir", &path, "install", "--ignore-workspace"])
+-  } else {
+-    // `trailbase-assets` and `trailbase-js` both build JS packages. We've seen issues with
+-    // parallel installs in the past. Our current approach is to recommend installing workspace
+-    // JS deps upfront in combination with `--prefer-offline`. We used to use plain `--offline`,
+-    // however this adds an extra mandatory step when vendoring trailbase for framework use-cases.
+-    let args = if strict_offline {
+-      ["--dir", &path, "install", "--frozen-lockfile", "--offline"]
++  // Packagers such as Nixpkgs install JS deps before `cargo build`.
++  // Skip the extra workspace-wide install in that case.
++  if std::env::var_os("TRAILBASE_SKIP_PNPM_INSTALL").is_none() {
++    // Note that `--frozen-lockfile` and `-ignore-workspace` are practically exclusive
++    // Because ignoring the workspace one, will require to create a new lockfile.
++    let out_dir = std::env::var("OUT_DIR").unwrap();
++    let build_result = if out_dir.contains("target/package") {
++      // When we build cargo packages, we cannot rely on the workspace itself and prior installs.
++      pnpm_run(&["--dir", &path, "install", "--ignore-workspace"])
+     } else {
+-      [
+-        "--dir",
+-        &path,
+-        "install",
+-        "--prefer-frozen-lockfile",
+-        "--prefer-offline",
+-      ]
++      // `trailbase-assets` and `trailbase-js` both build JS packages. We've seen issues with
++      // parallel installs in the past. Our current approach is to recommend installing workspace
++      // JS deps upfront in combination with `--prefer-offline`. We used to use plain `--offline`,
++      // however this adds an extra mandatory step when vendoring trailbase for framework use-cases.
++      let args = if strict_offline {
++        ["--dir", &path, "install", "--frozen-lockfile", "--offline"]
++      } else {
++        [
++          "--dir",
++          &path,
++          "install",
++          "--prefer-frozen-lockfile",
++          "--prefer-offline",
++        ]
++      };
++      let build_result = pnpm_run(&args);
++      if build_result.is_err() {
++        error!(
++          "`pnpm {}` failed. Make sure to install all JS deps first using `pnpm install`",
++          args.join(" ")
++        )
++      }
++      build_result
+     };
+-    let build_result = pnpm_run(&args);
+-    if build_result.is_err() {
+-      error!(
+-        "`pnpm {}` failed. Make sure to install all JS deps first using `pnpm install`",
+-        args.join(" ")
+-      )
+-    }
+-    build_result
+-  };
+ 
+-  let _ = build_result?;
++    let _ = build_result?;
++  }
+ 
+   // Enable source maps for debug builds:
+   // let build_output = pnpm_run(&["--dir", &path, "build", "--sourcemap", "inline"]);

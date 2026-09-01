@@ -24,13 +24,14 @@ buildPythonPackage (finalAttrs: {
   pname = "scs";
   inherit (pkgs.scs) version;
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bodono";
     repo = "scs-python";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-ZB1A6613ZgwGsZ97MpK9c1vUfNe+0RkUULtzQxGKd88=";
+    hash = "sha256-k6G336VZPnbYU1GfZrS+f0vEshMKhSJMWcH2dgD0CaY=";
   };
 
   postPatch = ''

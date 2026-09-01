@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
+  hatchling,
 
   # dependencies
   colorama,
@@ -13,20 +13,20 @@
   sympy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "onnxslim";
-  version = "0.1.78";
+  version = "0.1.93";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "inisis";
     repo = "OnnxSlim";
-    tag = "v${version}";
-    hash = "sha256-xLT00z9zeO4o5JN9W+5AfpANjc2+qAtFNnncLJptCoA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RnUBOTRlxtyy2QaAFaAHA664CzLNoBUwfYkhPysYOJo=";
   };
 
   build-system = [
-    setuptools
+    hatchling
   ];
 
   dependencies = [
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/onnxslim/";
     license = lib.licenses.mit;
   };
-}
+})

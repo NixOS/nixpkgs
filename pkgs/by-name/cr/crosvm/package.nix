@@ -21,18 +21,18 @@
 
 rustPlatform.buildRustPackage {
   pname = "crosvm";
-  version = "0-unstable-2025-11-24";
+  version = "0-unstable-2026-08-03";
 
   src = fetchgit {
     url = "https://chromium.googlesource.com/chromiumos/platform/crosvm";
-    rev = "18bc84d003e04108d973a5233f0c6f3b2039d756";
-    hash = "sha256-7nm9QSmDkiUoTMcM1oMK1/QwSAnLAgvuYPoxTaJWMpQ=";
+    rev = "b4a952843aea56f36b1cdccea3cc3b92edc078b8";
+    hash = "sha256-yQZ+Sf/pRScIGERyA8J4V9ukCwD0bjbi2QIhIzUHQwA=";
     fetchSubmodules = true;
   };
 
   separateDebugInfo = true;
 
-  cargoHash = "sha256-NeyJLsE/Uvcg/kNzS1SXEBjExKwbjcHkkhT2jSQjxx4=";
+  cargoHash = "sha256-wZm3bjXQJXHOgRVq5+AxMA0DJpEp96xvgwxzKBeI9HU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -56,8 +56,10 @@ rustPlatform.buildRustPackage {
     patchShebangs third_party/minijail/tools/*.py
   '';
 
-  CROSVM_USE_SYSTEM_MINIGBM = true;
-  CROSVM_USE_SYSTEM_VIRGLRENDERER = true;
+  env = {
+    CROSVM_USE_SYSTEM_MINIGBM = true;
+    CROSVM_USE_SYSTEM_VIRGLRENDERER = true;
+  };
 
   buildFeatures = [ "virgl_renderer" ];
 

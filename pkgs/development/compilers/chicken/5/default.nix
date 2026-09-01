@@ -9,6 +9,8 @@ let
   # these invalid dependencies.
   invalidDependencies = [
     "srfi-4"
+    "cond-expand"
+    "http-curl"
   ];
 in
 lib.makeScope newScope (self: {
@@ -56,6 +58,7 @@ lib.makeScope newScope (self: {
                 "agpl" = lib.licenses.agpl3Only;
                 "artistic" = lib.licenses.artistic2;
                 "bsd" = lib.licenses.bsd3;
+                "bsd-0-clause" = lib.licenses.bsd0;
                 "bsd-1-clause" = lib.licenses.bsd1;
                 "bsd-2-clause" = lib.licenses.bsd2;
                 "bsd-3" = lib.licenses.bsd3;
@@ -73,6 +76,7 @@ lib.makeScope newScope (self: {
                 "lgpl-2.1-or-later" = lib.licenses.lgpl21Plus;
                 "lgpl-3" = lib.licenses.lgpl3Only;
                 "lgplv3" = lib.licenses.lgpl3Only;
+                "lgpl-3.0-or-later" = lib.licenses.lgpl3Plus;
                 "public-domain" = lib.licenses.publicDomain;
                 "srfi" = lib.licenses.bsd3;
                 "unicode" = lib.licenses.ucd;

@@ -5,19 +5,19 @@
   wails,
   scdoc,
   installShellFiles,
-  xorg,
+  libx11,
   gtk3,
   # webkitgtk_4_0,
   snippetexpanderd,
   snippetexpanderx,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   inherit (snippetexpanderd) src version;
 
   pname = "snippetexpandergui";
 
-  vendorHash = "sha256-2nLO/b6XQC88VXE+SewhgKpkRtIHsva+fDudgKpvZiY=";
+  vendorHash = "sha256-1ofkbbitCzrLxugi769jbjOD2iN0Z6kYC5d7X2GYNIg=";
 
   proxyVendor = true;
 
@@ -31,7 +31,7 @@ buildGoModule rec {
   ];
 
   buildInputs = [
-    xorg.libX11
+    libx11
     gtk3
     # webkitgtk_4_0
     snippetexpanderd
@@ -41,7 +41,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X 'main.version=${src.rev}'"
+    "-X 'main.version=${finalAttrs.src.rev}'"
   ];
 
   tags = [
@@ -77,4 +77,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "snippetexpandergui";
   };
-}
+})

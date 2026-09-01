@@ -4,6 +4,7 @@
   fetchFromGitHub,
   hatchling,
   pytestCheckHook,
+  pyprojectVersionPatchHook,
 }:
 
 buildPythonPackage rec {
@@ -19,6 +20,8 @@ buildPythonPackage rec {
   };
 
   build-system = [ hatchling ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

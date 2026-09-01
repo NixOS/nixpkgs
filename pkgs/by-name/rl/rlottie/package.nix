@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
+  unstableGitUpdater,
   meson,
   ninja,
   pkg-config,
@@ -10,13 +11,13 @@
 
 stdenv.mkDerivation {
   pname = "rlottie";
-  version = "0.2-unstable-2025-10-01";
+  version = "0.2-unstable-2026-09-01";
 
   src = fetchFromGitHub {
     owner = "Samsung";
     repo = "rlottie";
-    rev = "671c561130ead1c6e44805a7ec1263573a3440fd";
-    hash = "sha256-od3zatv4ZxUIoLkwy0TT8lAsDcjoPS4plci+ZDyz34Y=";
+    rev = "25648aef19187b3f87f4d9420b8d761453ad4630";
+    hash = "sha256-sLjunpnQh1HCy5VLB8EpCTaGuBRPGCLhDovTzAAjAK0=";
   };
 
   nativeBuildInputs = [
@@ -25,9 +26,18 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
+  patches = [
+    # rename format to run-clang-format to avoid conflict
+    ./rename_format_to_run-clang-format.patch
+  ];
+
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
     stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
   ) "-U__ARM_NEON__";
+
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = {
     homepage = "https://github.com/Samsung/rlottie";

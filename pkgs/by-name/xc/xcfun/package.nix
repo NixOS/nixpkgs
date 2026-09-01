@@ -7,14 +7,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xcfun";
   version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "dftlibs";
     repo = "xcfun";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1bj70cnhbh6ziy02x988wwl7cbwaq17ld7qwhswqkgnnx8rpgxid";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

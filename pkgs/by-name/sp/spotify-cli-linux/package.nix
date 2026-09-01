@@ -4,7 +4,7 @@
   fetchFromGitHub,
   dbus,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "spotify-cli-linux";
   version = "1.9.1";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pwittchen";
     repo = "spotify-cli-linux";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Ko/as7wiBHawmyag9jFZqpPUZhb3p1+oYcl+26XyBZk=";
   };
 
@@ -39,4 +39,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
   };
-}
+})

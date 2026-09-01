@@ -9,7 +9,7 @@
 
 let
   pname = "notesnook";
-  version = "3.3.5";
+  version = "3.4.6";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -18,7 +18,6 @@ let
     {
       x86_64-linux = "linux_x86_64.AppImage";
       aarch64-linux = "linux_arm64.AppImage";
-      x86_64-darwin = "mac_x64.dmg";
       aarch64-darwin = "mac_arm64.dmg";
     }
     .${system} or throwSystem;
@@ -27,15 +26,18 @@ let
     url = "https://github.com/streetwriters/notesnook/releases/download/v${version}/notesnook_${suffix}";
     hash =
       {
-        x86_64-linux = "sha256-jvQph74dMQgino3K1ZFLT/fsJVdTHVqMQaW0RQhfci0=";
-        aarch64-linux = "sha256-jrKmZmdx1T1wrlM0y195Z2MsI1XpFn0gyFyf7N/aUzo=";
-        x86_64-darwin = "sha256-bJ+sq6/lZcLcM7R2KAigemdpRDqSiExfcSunNQ7cGw0=";
-        aarch64-darwin = "sha256-DTY0gq62aXOanZvYletyXl5xmcs30vWTKE4nZujRCq0=";
+        x86_64-linux = "sha256-2XJAmJ6lqAs4BvTNZHqLkdpoZtl/kujloFfvgkSgVPs=";
+        aarch64-linux = "sha256-D2WkILFoeguKD7UuW/724ywvHrlbnHEr6A5vWnRvgto=";
+        aarch64-darwin = "sha256-GgXHOwiZV934f0HHwbgLfJVELytLnk5IpXX+KU5yN8I=";
       }
       .${system} or throwSystem;
   };
 
-  appimageContents = appimageTools.extractType2 {
+  passthru = {
+    updateScript = ./update.sh;
+  };
+
+  appimageContents = appimageTools.extract {
     inherit pname version src;
   };
 
@@ -49,13 +51,10 @@ let
     '';
     homepage = "https://notesnook.com";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      keysmashes
-    ];
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     mainProgram = "notesnook";
@@ -67,6 +66,7 @@ let
       version
       src
       meta
+      passthru
       ;
 
     nativeBuildInputs = [ makeWrapper ];
@@ -79,7 +79,7 @@ let
       wrapProgram $out/bin/notesnook \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
       install -Dm444 ${appimageContents}/notesnook.desktop -t $out/share/applications
-      install -Dm444 ${appimageContents}/notesnook.png -t $out/share/pixmaps
+      install -Dm444 ${appimageContents}/notesnook.png -t $out/share/icons
       substituteInPlace $out/share/applications/notesnook.desktop \
         --replace 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
     '';
@@ -91,11 +91,12 @@ let
       version
       src
       meta
+      passthru
       ;
 
     nativeBuildInputs = [ _7zz ];
 
-    sourceRoot = "Notesnook.app";
+    sourceRoot = "Install Notesnook/Notesnook.app";
 
     # 7zz did not unpack in setup hook for some reason, done manually here
     unpackPhase = ''

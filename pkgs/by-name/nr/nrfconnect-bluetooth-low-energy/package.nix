@@ -16,7 +16,7 @@ let
     name = "${pname}-${version}.AppImage";
   };
 
-  appimageContents = appimageTools.extractType2 {
+  appimageContents = appimageTools.extract {
     inherit pname version src;
   };
 

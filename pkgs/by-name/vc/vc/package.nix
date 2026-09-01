@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "Vc";
   version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "VcDevel";
     repo = "Vc";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-A2qUzjXv50unFcoZp2nRVinkph+CoHyiU7AgOphDphM=";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

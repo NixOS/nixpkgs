@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yew-fmt";
   version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "its-the-shrimp";
     repo = "yew-fmt";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bhguDpLRn51NWL/N2CT9tsNS8+RbaL37liCBeUe0ZyY=";
   };
 
@@ -25,8 +25,8 @@ rustPlatform.buildRustPackage rec {
     description = "Code formatter for the Yew framework";
     mainProgram = "yew-fmt";
     homepage = "https://github.com/its-the-shrimp/yew-fmt";
-    changelog = "https://github.com/its-the-shrimp/yew-fmt/releases/tag/v${version}";
+    changelog = "https://github.com/its-the-shrimp/yew-fmt/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dandedotdev ];
   };
-}
+})

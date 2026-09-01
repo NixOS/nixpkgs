@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "zhong-hong-hvac";
-  version = "1.0.13";
+  version = "1.0.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "crhan";
     repo = "ZhongHongHVAC";
     tag = "v${version}";
-    hash = "sha256-WLSmzvRydfYhLBZZW4EZDCFXZYqowA6vS0GJUl2UadQ=";
+    hash = "sha256-MRtjQ2l5w/iDungzfNNWPGC4lTkmz+aWiny4kqG/Y3A=";
   };
 
   build-system = [ poetry-core ];

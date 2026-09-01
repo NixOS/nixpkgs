@@ -5,7 +5,7 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "updog";
   version = "2.0.1";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "sc0tfree";
     repo = "updog";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-EFAqxlKrQ9HBMHBdmstY+RZPqK0kWY5Ws6WMFHlMyM0=";
   };
 
@@ -43,8 +43,8 @@ python3Packages.buildPythonApplication rec {
     description = "Replacement for Python's SimpleHTTPServer";
     mainProgram = "updog";
     homepage = "https://github.com/sc0tfree/updog";
-    changelog = "https://github.com/sc0tfree/updog/releases/tag/v${version}";
+    changelog = "https://github.com/sc0tfree/updog/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
   };
-}
+})

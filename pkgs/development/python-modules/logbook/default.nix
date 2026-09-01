@@ -2,7 +2,7 @@
   lib,
   brotli,
   buildPythonPackage,
-  cython,
+  cargo,
   execnet,
   fetchFromGitHub,
   jinja2,
@@ -10,26 +10,40 @@
   pytest-rerunfailures,
   pyzmq,
   redis,
+  rustc,
+  rustPlatform,
   setuptools,
+  setuptools-rust,
   sqlalchemy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "logbook";
-  version = "1.8.2";
-  format = "setuptools";
+  version = "1.9.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getlogbook";
     repo = "logbook";
-    tag = version;
-    hash = "sha256-21323iXtjyUAxAEFMsU6t1/nNLEN5G3jHcubNCEYQ3c=";
+    tag = finalAttrs.version;
+    hash = "sha256-/oaBUIMsDwyxjQU57BpwXQfDMBNSDAI7fqtem/4QqKw=";
   };
 
-  nativeBuildInputs = [
-    cython
+  build-system = [
     setuptools
+    setuptools-rust
   ];
+
+  nativeBuildInputs = [
+    cargo
+    rustc
+    rustPlatform.cargoSetupHook
+  ];
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-xIjcK69rwtE86DfvD9qXEn8MDIvU0Dl+d4Fmw9BUuCM=";
+  };
 
   optional-dependencies = {
     execnet = [ execnet ];
@@ -52,7 +66,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-rerunfailures
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
@@ -67,8 +81,8 @@ buildPythonPackage rec {
   meta = {
     description = "Logging replacement for Python";
     homepage = "https://logbook.readthedocs.io/";
-    changelog = "https://github.com/getlogbook/logbook/blob/${src.tag}/CHANGES";
+    changelog = "https://github.com/getlogbook/logbook/blob/${finalAttrs.src.tag}/CHANGES";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

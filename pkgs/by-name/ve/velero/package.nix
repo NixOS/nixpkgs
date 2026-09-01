@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "velero";
-  version = "1.17.2";
+  version = "1.18.2";
 
   src = fetchFromGitHub {
-    owner = "vmware-tanzu";
+    owner = "velero-io";
     repo = "velero";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cDOsLwSp7VtHeylgDGhotBn1VN2HzBEq1kZsx7wN2r8=";
+    hash = "sha256-rW9OiVFGI1ZO0UmZLVZ/7gXclOmqKBPh6P/Bd54QjZY=";
   };
 
   ldflags = [
@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
     "-X github.com/vmware-tanzu/velero/pkg/buildinfo.GitSHA=none"
   ];
 
-  vendorHash = "sha256-1ikbyWXK3jL4I+FxiqOsvPvqk+/DIndc4myTajDxFko=";
+  vendorHash = "sha256-yoTl5kmM4VKrLgvEUNaKYCiNbspd4VgG8CbulKjnoJE=";
 
   excludedPackages = [
     "issue-template-gen"
@@ -35,7 +35,7 @@ buildGoModule (finalAttrs: {
     "velero-restic-restore-helper"
   ];
 
-  doCheck = false; # Tests expect a running cluster see https://github.com/vmware-tanzu/velero/tree/main/test/e2e
+  doCheck = false; # Tests expect a running cluster see https://github.com/velero-io/velero/tree/main/test/e2e
   doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/velero version --client-only | grep ${finalAttrs.version} > /dev/null
@@ -51,7 +51,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Utility for managing disaster recovery, specifically for your Kubernetes cluster resources and persistent volumes";
     homepage = "https://velero.io/";
-    changelog = "https://github.com/vmware-tanzu/velero/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/velero-io/velero/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       mbode

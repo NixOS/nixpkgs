@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "prepares X11 cursor sets for use with libXcursor";
+    description = "prepares X11 cursor sets for use with libxcursor";
     homepage = "https://gitlab.freedesktop.org/xorg/app/xcursorgen";
     license = lib.licenses.hpndSellVariant;
     mainProgram = "xcursorgen";

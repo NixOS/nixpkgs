@@ -12,14 +12,14 @@
   gtk3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "deadbeef-headerbar-gtk3-plugin";
   version = "1.2";
 
   src = fetchFromGitHub {
     owner = "saivert";
     repo = "ddb_misc_headerbar_GTK3";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1v1schvnps7ypjqgcbqi74a45w8r2gbhrawz7filym22h1qr9wn0";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.jtojnar ];
     platforms = lib.platforms.linux;
   };
-}
+})

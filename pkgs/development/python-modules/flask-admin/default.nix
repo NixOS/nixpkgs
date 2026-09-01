@@ -3,18 +3,18 @@
   fetchFromGitHub,
   flit-core,
   lib,
-  pythonOlder,
   # dependencies
   flask,
   jinja2,
   markupsafe,
   werkzeug,
   wtforms,
-  typing-extensions,
   # optional dependencies
   # sqlalchemy
   flask-sqlalchemy,
   sqlalchemy,
+  # sqlalchemy-lite
+  flask-sqlalchemy-lite,
   # sqlalchemy-with-utils
   arrow,
   colour,
@@ -52,14 +52,14 @@
 
 buildPythonPackage rec {
   pname = "flask-admin";
-  version = "2.0.2";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "flask-admin";
     repo = "flask-admin";
     tag = "v${version}";
-    hash = "sha256-HjK+ddMtT8QJ/KSFj9v28jflf2f6M+Gx1rJjCdWUUFM=";
+    hash = "sha256-lRLyGvCat6nBixFKkrn4NxeVF52Hl32admAL37mf9wc=";
   };
 
   build-system = [ flit-core ];
@@ -70,15 +70,15 @@ buildPythonPackage rec {
     markupsafe
     werkzeug
     wtforms
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    typing-extensions
   ];
 
   optional-dependencies = {
     sqlalchemy = [
       flask-sqlalchemy
       sqlalchemy
+    ];
+    sqlalchemy-lite = [
+      flask-sqlalchemy-lite
     ];
     sqlalchemy-with-utils = optional-dependencies.sqlalchemy ++ [
       arrow
@@ -126,6 +126,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ]
   ++ lib.flatten [
+    optional-dependencies.sqlalchemy-lite
     optional-dependencies.sqlalchemy-with-utils
     optional-dependencies.mongoengine
     optional-dependencies.peewee

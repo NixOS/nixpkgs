@@ -12,14 +12,14 @@
   librsvg,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ymuse";
   version = "0.22";
 
   src = fetchFromGitHub {
     owner = "yktoo";
     repo = "ymuse";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-WbIeqOAhdqxU8EvHEsG7ASwy5xZG1domZKT5ccOggHg=";
   };
 
@@ -72,4 +72,4 @@ buildGoModule rec {
     mainProgram = "ymuse";
     platforms = lib.platforms.unix;
   };
-}
+})

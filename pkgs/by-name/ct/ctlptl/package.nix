@@ -6,18 +6,18 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ctlptl";
-  version = "0.9.0";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "tilt-dev";
     repo = "ctlptl";
-    rev = "v${version}";
-    hash = "sha256-y957JaHg2SnDC6yvwI/0fBFjbEKOfKFsNqOOrqQe+TU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-q7RQupB9rfWkloLd4Cgp8i4kSL/OE4qmFltUu0MdBaM=";
   };
 
-  vendorHash = "sha256-gJiarW1uYr5vl9nt+JN6/yRyYr9J0sfDVZcNLLcwPJY=";
+  vendorHash = "sha256-dGdKVC3WDin+EvfqI2YORty64etrBwzEG2m13jyyeFs=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -26,7 +26,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -42,4 +42,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ svrana ];
   };
-}
+})

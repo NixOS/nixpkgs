@@ -1,12 +1,10 @@
 {
   lib,
-  async-timeout,
   buildPythonPackage,
   fetchFromGitLab,
   flit-core,
   ifaddr,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -23,7 +21,7 @@ buildPythonPackage rec {
 
   build-system = [ flit-core ];
 
-  dependencies = [ ifaddr ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  dependencies = [ ifaddr ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

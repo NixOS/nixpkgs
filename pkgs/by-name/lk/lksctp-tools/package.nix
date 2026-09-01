@@ -5,14 +5,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lksctp-tools";
   version = "1.0.21";
 
   src = fetchFromGitHub {
     owner = "sctp";
     repo = "lksctp-tools";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+vbdNvHuJLYp901QgtBzMejlbzMyr9Z1eXxR3Zy7eAE=";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     ]; # library is lgpl21
     platforms = lib.platforms.linux;
   };
-}
+})

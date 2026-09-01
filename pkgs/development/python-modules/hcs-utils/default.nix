@@ -40,6 +40,6 @@ buildPythonPackage {
     description = "Library collecting some useful snippets";
     homepage = "https://gitlab.com/hcs/hcs_utils";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
   };
 }

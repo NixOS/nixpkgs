@@ -6,10 +6,6 @@ in
 {
   name = "pgbackrest-sftp";
 
-  meta = {
-    maintainers = with lib.maintainers; [ wolfgangwalther ];
-  };
-
   nodes.primary =
     {
       pkgs,

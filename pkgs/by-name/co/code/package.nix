@@ -11,18 +11,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "code";
-  version = "0.6.49";
+  version = "0.6.171";
 
   src = fetchFromGitHub {
     owner = "just-every";
     repo = "code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iklIQPs44SjJlQq+qkuyuCQLfv+xcmvmBDSIweFsSTs=";
+    hash = "sha256-cMqfmo1HtCyB9tNpGLXa80Gwt00enVzTS3MeEQ/J5VA=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/code-rs";
 
-  cargoHash = "sha256-Yo8g9GavX9lrIHGoTs8YzMJkVyABflaRa3ni0xf7EvQ=";
+  cargoHash = "sha256-PRiXU6ZPruHpIBNEg9FmYPOWuMpMal7W8ChfTBgXztQ=";
 
   nativeBuildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
     pkg-config

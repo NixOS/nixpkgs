@@ -10,6 +10,7 @@
   iproute2,
   jinja2,
   networkmanager,
+  packaging,
   proton-core,
   proton-vpn-local-agent,
   pycairo,
@@ -27,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "proton-vpn-api-core";
-  version = "4.14.1";
+  version = "5.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-api-core";
     rev = "v${version}";
-    hash = "sha256-xyCjzcSasLGm2DMMViI1wpzcLd0mmaBvIyI1HrtW+Gg=";
+    hash = "sha256-OGbms0FP0UjHjqvzlFpJIZo3bPFirVcwtVgvAvA9QZA=";
   };
 
   postPatch = ''
@@ -61,6 +62,7 @@ buildPythonPackage rec {
     distro
     fido2
     jinja2
+    packaging
     proton-core
     proton-vpn-local-agent
     pycairo
@@ -119,7 +121,6 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       anthonyroussel
-      sebtm
       rapiteanu
     ];
   };

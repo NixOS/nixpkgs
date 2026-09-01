@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchzip,
   gitUpdater,
   tk,
   tclPackages,
@@ -16,14 +16,11 @@
 
 tcl.mkTclDerivation rec {
   pname = "remind";
-  version = "06.02.02";
+  version = "06.02.10";
 
-  src = fetchFromGitea {
-    domain = "git.skoll.ca";
-    owner = "Skollsoft-Public";
-    repo = "Remind";
-    rev = version;
-    hash = "sha256-SkQT651LjHCZJRtb4Itbzqhq9x5p05jYUam1XiYT4os=";
+  src = fetchzip {
+    url = "https://dianne.skoll.ca/projects/remind/download/remind-${version}.tar.gz";
+    hash = "sha256-R6kceXLzg5CRMYAgMyhnmKxWT49ayXIFm/IpXuDgl8I=";
   };
 
   propagatedBuildInputs = lib.optionals withGui [

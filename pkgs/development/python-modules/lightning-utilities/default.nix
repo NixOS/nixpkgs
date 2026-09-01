@@ -4,12 +4,11 @@
   fetchFromGitHub,
 
   # build-system
+  packaging,
   setuptools,
 
   # dependencies
   jsonargparse,
-  looseversion,
-  packaging,
   tomlkit,
   typing-extensions,
 
@@ -18,28 +17,25 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lightning-utilities";
-  version = "0.15.2";
+  version = "0.15.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "utilities";
-    tag = "v${version}";
-    hash = "sha256-0unIL5jylunxTJxFTN+Q4aCFtD5zIHRNWEAWSbw+Fsk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-j997nvn6iRFvJeI8wJbickUDPc5Zyi1Lj4yG2JbaLU8=";
   };
 
-  postPatch = ''
-    substituteInPlace src/lightning_utilities/install/requirements.py \
-      --replace-fail "from distutils.version import LooseVersion" "from looseversion import LooseVersion"
-  '';
-
-  build-system = [ setuptools ];
+  build-system = [
+    packaging
+    setuptools
+  ];
 
   dependencies = [
     jsonargparse
-    looseversion
     packaging
     tomlkit
     typing-extensions
@@ -74,10 +70,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/Lightning-AI/utilities/releases/tag/v${version}";
+    changelog = "https://github.com/Lightning-AI/utilities/releases/tag/${finalAttrs.src.tag}";
     description = "Common Python utilities and GitHub Actions in Lightning Ecosystem";
     homepage = "https://github.com/Lightning-AI/utilities";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

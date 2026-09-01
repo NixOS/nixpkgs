@@ -6,7 +6,7 @@
   fetchFromGitHub,
   ffmpeg_7,
   gettext,
-  wxGTK32,
+  wxwidgets_3_2,
   gtk3,
   libGLU,
   libGL,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     sfml_2
     zip
     zlib
-    wxGTK32
+    wxwidgets_3_2
     gtk3
     gsettings-desktop-schemas
   ];

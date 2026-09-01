@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchzip {
     url = "https://github.com/yuru7/PlemolJP/releases/download/v${finalAttrs.version}/PlemolJP_HS_v${finalAttrs.version}.zip";
-    hash = "sha256-V21T8ktNZE4nq3SH6aN9iIJHmGTkZuMsvT84yHbwSqI=";
+    hash = "sha256-ebBPun8CVHBOxs3c9SNHvT8lP1YqUH4DhBLAZk6NOrE=";
   };
 
   installPhase = ''

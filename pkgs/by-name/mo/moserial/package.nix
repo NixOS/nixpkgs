@@ -15,7 +15,7 @@
   lrzsz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "moserial";
   version = "3.0.21";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "moserial";
-    rev = "moserial_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "moserial_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     sha256 = "sha256-wfdI51ECqVNcUrIVjYBijf/yqpiwSQeMiKaVJSSma3k=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "moserial";
   };
-}
+})

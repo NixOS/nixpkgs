@@ -10,14 +10,14 @@
   re2c,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.9.6";
   pname = "aspcud";
 
   src = fetchFromGitHub {
     owner = "potassco";
     repo = "aspcud";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-PdRfpmH7zF5dn+feoijtzdSUjaYhjHwyAUfuYoWCL9E=";
   };
 
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.hakuch ];
     license = lib.licenses.gpl3Plus;
   };
-}
+})

@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "powerhub";
   version = "2.0.10";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "AdrianVollmer";
     repo = "PowerHub";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-vZIdYjP7F7lUauOCkouwUpR/gO0gEjFR8HLqD3ZjS3E=";
   };
 
@@ -57,9 +57,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Post exploitation tool based on a web application, focusing on bypassing endpoint protection and application whitelisting";
     homepage = "https://github.com/AdrianVollmer/PowerHub";
-    changelog = "https://github.com/AdrianVollmer/PowerHub/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/AdrianVollmer/PowerHub/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "powerhub";
   };
-}
+})

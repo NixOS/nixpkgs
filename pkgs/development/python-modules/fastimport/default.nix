@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "fastimport";
-  version = "0.9.14";
+  version = "0.9.16";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6ac99dda4e7b0b3ae831507b6d0094802e6dd95891feafde8cc5c405b6c149ca";
+    sha256 = "sha256-agpvtWqjYH3nGtTnq9VRr+m9rJS6uNLddNjg+Y9S414=";
   };
 
   nativeCheckInputs = [ unittestCheckHook ];

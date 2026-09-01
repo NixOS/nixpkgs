@@ -1,0 +1,34 @@
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Tue, 24 Feb 2026 20:19:45 +0900
+Subject: errno-list: filter out EFSBADCRC and EFSCORRUPTED
+
+These are introduced in kernel v7.0.
+
+(cherry picked from commit 3cfb16998808a6ec8012a6120d0a82f0e1a0c8bb)
+(cherry picked from commit f870952f69c453aeef0b4022d32bba4769d84238)
+(cherry picked from commit 73e2fa308cfa49f599e104e599e1a479fd3d21e3)
+---
+ src/basic/generate-errno-list.sh | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/src/basic/generate-errno-list.sh b/src/basic/generate-errno-list.sh
+index f756b2e..491fa1b 100755
+--- a/src/basic/generate-errno-list.sh
++++ b/src/basic/generate-errno-list.sh
+@@ -3,9 +3,13 @@
+ set -eu
+ set -o pipefail
+
+-# In kernel's arch/parisc/include/uapi/asm/errno.h, ECANCELLED and EREFUSED are defined as aliases of
+-# ECANCELED and ECONNREFUSED, respectively. Let's drop them.
++# In kernel's arch/parisc/include/uapi/asm/errno.h, The following aliases are defined:
++# ECANCELLED → ECANCELED
++# EREFUSED → ECONNREFUSED
++# EFSBADCRC → EBADMSG
++# EFSCORRUPTED → EUCLEAN
++# Let's drop them.
+
+ ${1:?} -dM -include errno.h - </dev/null | \
+-       grep -Ev '^#define[[:space:]]+(ECANCELLED|EREFUSED)' | \
++       grep -Ev '^#define[[:space:]]+(ECANCELLED|EREFUSED|EFSBADCRC|EFSCORRUPTED)' | \
+        awk '/^#define[ \t]+E[^ _]+[ \t]+/ { print $2; }'

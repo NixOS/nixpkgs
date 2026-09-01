@@ -2,17 +2,15 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy27,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-jsmath";
   version = "1.0.1";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "a9925e4a4587247ed2191a22df5f6970656cb8ca2bd6284309578f2153e0c4b8";
   };
 
@@ -26,4 +24,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/sphinx-doc/sphinxcontrib-jsmath";
     license = lib.licenses.bsd0;
   };
-}
+})

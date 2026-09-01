@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kiterunner";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "assetnote";
     repo = "kiterunner";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vIYPpkbqyk0zH10DGp2FF0aI4lFpsZavulBIiR/3kiA=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/assetnote/kiterunner/cmd/kiterunner/cmd.Version=${version}"
+    "-X github.com/assetnote/kiterunner/cmd/kiterunner/cmd.Version=${finalAttrs.version}"
   ];
 
   subPackages = [ "./cmd/kiterunner" ];
@@ -37,7 +37,7 @@ buildGoModule rec {
       and endpoints in modern applications.
     '';
     homepage = "https://github.com/assetnote/kiterunner";
-    license = with lib.licenses; [ agpl3Only ];
+    license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

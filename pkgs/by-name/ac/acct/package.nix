@@ -5,12 +5,12 @@
   fetchpatch2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "acct";
   version = "6.6.4";
 
   src = fetchurl {
-    url = "mirror://gnu/acct/acct-${version}.tar.gz";
+    url = "mirror://gnu/acct/acct-${finalAttrs.version}.tar.gz";
     sha256 = "0gv6m8giazshvgpvwbng98chpas09myyfw1zr2y7hqxib0mvy5ac";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.linux;
   };
-}
+})

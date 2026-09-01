@@ -1,6 +1,6 @@
 {
   buildPythonPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   lib,
   poetry-core,
   pycountry,
@@ -11,18 +11,21 @@
 
 buildPythonPackage rec {
   pname = "psnawp";
-  version = "3.0.1";
+  version = "3.0.3";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "YoshikageKira";
     repo = "psnawp";
     tag = "v${version}";
-    hash = "sha256-qENKZC5U4jedl2RvmIGk52r0Vd/oMLEcp6DERYLctAs=";
+    hash = "sha256-vAz1HDvPRWgrWMKwWNMA2nhA2wLCN92lDb06ZQiZnO0=";
   };
 
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [
+    "pycountry"
+  ];
 
   dependencies = [
     pycountry

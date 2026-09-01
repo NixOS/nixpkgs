@@ -3,7 +3,6 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "aioairzone-cloud";
   version = "0.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Noltari";

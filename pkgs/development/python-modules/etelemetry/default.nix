@@ -9,7 +9,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "etelemetry";
   version = "0.3.1";
   pyproject = true;
@@ -17,13 +17,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sensein";
     repo = "etelemetry-client";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UaE5JQhv2AtzXKY7YD2/g6Kj1igKhmnY3zlf1P9B/iQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  postPatch = ''
+    substituteInPlace setup.py --replace-fail "versioneer.get_version()" "'${finalAttrs.version}'"
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     ci-info
     ci-py
     requests
@@ -37,11 +43,19 @@ buildPythonPackage rec {
     "etelemetry.config"
   ];
 
+  disabledTests = [
+    # RuntimeError: Connection to server could not be made
+    # due to external network access
+    "test_etrequest"
+    "test_get_project"
+    "test_check_available"
+  ];
+
   meta = {
     description = "Lightweight python client to communicate with the etelemetry server";
     homepage = "https://github.com/sensein/etelemetry-client";
-    changelog = "https://github.com/sensein/etelemetry-client/releases/tag/v${version}";
+    changelog = "https://github.com/sensein/etelemetry-client/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

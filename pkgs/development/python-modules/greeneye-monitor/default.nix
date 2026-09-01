@@ -3,9 +3,9 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  poetry-core,
   pytest-socket,
   pytestCheckHook,
-  setuptools,
   siobrultech-protocols,
 }:
 
@@ -21,7 +21,19 @@ buildPythonPackage rec {
     hash = "sha256-7EDuQ+wECcTzxkEufMpg3WSzosWeiwfxcVIVtQi+0BI=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    cat >> pyproject.toml << EOF
+    [build-system]
+    requires = ["poetry-core"]
+    build-backend = "poetry.core.masonry.api"
+    EOF
+  '';
+
+  build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [
+    "siobrultech-protocols"
+  ];
 
   dependencies = [
     aiohttp

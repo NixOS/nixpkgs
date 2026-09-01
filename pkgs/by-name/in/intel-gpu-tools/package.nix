@@ -12,7 +12,7 @@
   meson,
   ninja,
   pkg-config,
-  utilmacros,
+  util-macros,
 
   # runtime
   alsa-lib,
@@ -27,10 +27,10 @@
   liboping,
   libpciaccess,
   libunwind,
-  libX11,
-  libXext,
-  libXrandr,
-  libXv,
+  libx11,
+  libxext,
+  libxrandr,
+  libxv,
   openssl,
   peg,
   procps,
@@ -41,16 +41,16 @@
   xorgproto,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "intel-gpu-tools";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "drm";
     repo = "igt-gpu-tools";
-    tag = "v${version}";
-    hash = "sha256-Lt/mqx13nHyD5QiDl8oWGiYIiK006uQvbbzHH44LB/0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CkVBImPPM93Q2SVpKzRAREd7cK+SmUgySiuq3LfO2O8=";
   };
 
   nativeBuildInputs = [
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    utilmacros
+    util-macros
   ];
 
   buildInputs = [
@@ -78,10 +78,10 @@ stdenv.mkDerivation rec {
     liboping
     libpciaccess
     libunwind
-    libX11
-    libXext
-    libXrandr
-    libXv
+    libx11
+    libxext
+    libxrandr
+    libxv
     openssl
     peg
     procps
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "bindnow" ];
 
   meta = {
-    changelog = "https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/blob/v${version}/NEWS";
+    changelog = "https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/blob/v${finalAttrs.version}/NEWS";
     homepage = "https://drm.pages.freedesktop.org/igt-gpu-tools/";
     description = "Tools for development and testing of the Intel DRM driver";
     license = lib.licenses.mit;
@@ -107,6 +107,9 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = with lib.maintainers; [ pSub ];
+    maintainers = with lib.maintainers; [
+      pSub
+      ilkecan
+    ];
   };
-}
+})

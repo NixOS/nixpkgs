@@ -23,6 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-eo9Mk2c0hrBarCrzwmkXha3Qt4Bl1qR7Lhl9EkUx96E=";
   };
 
+  postPatch = ''
+    substituteInPlace pyvis/_version.py \
+      --replace-fail "__version__ = '0.2.0'" "__version__ = '${version}'"
+  '';
+
   nativeBuildInputs = [ setuptools ];
 
   dependencies = [

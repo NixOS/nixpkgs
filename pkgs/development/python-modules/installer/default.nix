@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonAtLeast,
   fetchFromGitHub,
   pytestCheckHook,
   flit-core,
@@ -11,27 +10,21 @@
 
 buildPythonPackage rec {
   pname = "installer";
-  version = "0.7.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "installer";
     rev = version;
-    hash = "sha256-thHghU+1Alpay5r9Dc3v7ATRFfYKV8l9qR0nbGOOX/A=";
+    hash = "sha256-GkHLZfzHfTcBL8wQmIGlNkVodEw9Pih4i1SS36mSfBo=";
   };
 
-  patches =
-    lib.optionals (pythonAtLeast "3.13") [
-      # Fix compatibility with Python 3.13
-      # https://github.com/pypa/installer/pull/201
-      ./python313-compat.patch
-    ]
-    ++ [
-      # Add -m flag to installer to correctly support cross
-      # https://github.com/pypa/installer/pull/258
-      ./cross.patch
-    ];
+  patches = [
+    # Add -m flag to installer to correctly support cross
+    # https://github.com/pypa/installer/pull/258
+    ./cross.patch
+  ];
 
   nativeBuildInputs = [ flit-core ];
 

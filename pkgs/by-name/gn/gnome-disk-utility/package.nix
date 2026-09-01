@@ -29,12 +29,12 @@
   xz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-disk-utility";
   version = "46.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-disk-utility/${lib.versions.major version}/gnome-disk-utility-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-disk-utility/${lib.versions.major finalAttrs.version}/gnome-disk-utility-${finalAttrs.version}.tar.xz";
     hash = "sha256-wk6UOaBNcLz640nKE0xwBUNf4rb0UhFN+Hi/8Libv/4=";
   };
 
@@ -82,4 +82,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "gnome-disks";
   };
-}
+})

@@ -8,15 +8,15 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plaid-python";
-  version = "36.1.0";
+  version = "43.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "plaid_python";
-    inherit version;
-    hash = "sha256-3TQ6jGsf+2ebYnAxRTKs4JrijDf3ojyfS4iBAMAG8FU=";
+    inherit (finalAttrs) version;
+    hash = "sha256-zcoKgWHeOYD75J/oCBUE9jvdoZCTkVd20fsG0g6oLHo=";
   };
 
   build-system = [ setuptools ];
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     changelog = "https://github.com/plaid/plaid-python/blob/master/CHANGELOG.md";
     license = lib.licenses.mit;
   };
-}
+})

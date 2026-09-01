@@ -22,7 +22,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/moshez/rfc7464";
     description = "RFC 7464 is a proposed standard for streaming JSON documents";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ shlevy ];
   };
 }

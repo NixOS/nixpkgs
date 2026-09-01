@@ -5,13 +5,13 @@
   rocmUpdateScript,
   cmake,
   rocm-cmake,
-  llvm,
   clr,
   rocminfo,
   python3,
   hipify,
   gitMinimal,
   gtest,
+  jemalloc,
   zstd,
   buildTests ? false,
   buildExamples ? false,
@@ -34,7 +34,9 @@
     ]
   ),
 }:
-
+let
+  projectRoot = "projects/composablekernel";
+in
 stdenv.mkDerivation (finalAttrs: {
   preBuild = ''
     echo "This derivation isn't intended to be built directly and only exists to be overridden and built in chunks";
@@ -42,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   pname = "composable_kernel_base";
-  version = "7.0.2";
+  version = "7.2.3";
 
   outputs = [
     "out"
@@ -56,10 +58,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "composable_kernel";
+    repo = "rocm-libraries";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-Wql7PD3kg85AFXn7UaTKxhURyDPfVe/OUbR+udrqDc8=";
+    sparseCheckout = [
+      projectRoot
+      "shared"
+    ];
+    hash = "sha256-Zs6wwPmys1kUlgDD4XzKKw273nH/Ur3HtuYxJjvjDs0=";
   };
+  sourceRoot = "${finalAttrs.src.name}/${projectRoot}";
 
   nativeBuildInputs = [
     # Deliberately not using ninja
@@ -83,6 +90,9 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   enableParallelBuilding = true;
   env.ROCM_PATH = clr;
+  # Speed up build by ~7% with jemalloc (template torture test workload means allocation heavy clang invocations)
+  env.LD_PRELOAD = "${jemalloc}/lib/libjemalloc.so";
+  env.MALLOC_CONF = "background_thread:true,metadata_thp:auto,dirty_decay_ms:10000,muzzy_decay_ms:10000";
 
   cmakeFlags = [
     (lib.cmakeBool "MIOPEN_REQ_LIBS_ONLY" miOpenReqLibsOnly)
@@ -124,7 +134,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-DGOOGLETEST_DIR=${gtest.src}" # Custom linker names
   ];
 
-  # No flags to build selectively it seems...
+  patches = [
+    # Hacky fix for failure for some targets when all targets are selected out
+    # for a non-optional at link time kernel
+    ./fix-empty-offload-targets.diff
+  ];
+
   postPatch =
     # Reduce configure time by preventing thousands of clang-tidy targets being added
     # We will never call them
@@ -166,11 +181,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit gpuTargets miOpenReqLibsOnly;
-    updateScript = rocmUpdateScript {
-      name = finalAttrs.pname;
-      inherit (finalAttrs.src) owner;
-      inherit (finalAttrs.src) repo;
-    };
+    composable_kernel_src = "${finalAttrs.src}/${projectRoot}";
+
+    updateScript = rocmUpdateScript { inherit finalAttrs; };
     anyGfx9Target = lib.lists.any (lib.strings.hasPrefix "gfx9") gpuTargets;
     anyMfmaTarget =
       (lib.lists.intersectLists gpuTargets [
@@ -183,8 +196,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Performance portable programming model for machine learning tensor operators";
-    homepage = "https://github.com/ROCm/composable_kernel";
-    license = with lib.licenses; [ mit ];
+    homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/composablekernel";
+    license = lib.licenses.mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
     broken = true; # this base package shouldn't be built directly

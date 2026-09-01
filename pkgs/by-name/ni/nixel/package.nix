@@ -6,14 +6,14 @@
   nixel,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixel";
   version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "kamadorueda";
     repo = "nixel";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-dQ3wzBTjteqk9rju+FMAO+ydimnGu24Y2DEDLX/P+1A=";
   };
 
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ kamadorueda ];
   };
-}
+})

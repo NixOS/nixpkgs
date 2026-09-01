@@ -20,7 +20,7 @@
   freetype,
   libjpeg,
   libpng,
-  libX11,
+  libx11,
   portmidi,
   SDL2_image,
   SDL2_mixer,
@@ -31,6 +31,9 @@ buildPythonPackage rec {
   pname = "pygame";
   version = "2.6.1";
   pyproject = true;
+
+  # https://github.com/NixOS/nixpkgs/pull/475917
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "pygame";
@@ -64,8 +67,7 @@ buildPythonPackage rec {
     # mixer queue test returns busy queue when it shouldn't
     ./skip-mixer-test.patch
 
-    # Can be removed with the next SDL3 bump.
-    ./skip-rle-tests.patch
+    ./skip-failing-tests.patch
 
     # https://github.com/pygame/pygame/pull/4497
     ./0001-Use-SDL_HasSurfaceRLE-when-available.patch
@@ -95,7 +97,7 @@ buildPythonPackage rec {
     freetype
     libjpeg
     libpng
-    libX11
+    libx11
     portmidi
     SDL2
     (SDL2_image.override { enableSTB = false; })

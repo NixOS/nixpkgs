@@ -1,5 +1,5 @@
 diff --git a/dolphin/mat2.desktop b/dolphin/mat2.desktop
-index 41c8de4..11df258 100644
+index 19d50c6..f26a9bb 100644
 --- a/dolphin/mat2.desktop
 +++ b/dolphin/mat2.desktop
 @@ -8,6 +8,6 @@ Type=Service
@@ -13,19 +13,10 @@ index 41c8de4..11df258 100644
 +Exec=@kdialog@ --yesno  "$( @mat2@ -s %F )" --title "Clean Metadata?" && @mat2@ %U
 +Exec[de]=@kdialog@ --yesno  "$( @mat2@ -s %F )" --title "Metadaten löschen?" && @mat2@ %U
 diff --git a/libmat2/exiftool.py b/libmat2/exiftool.py
-index 2b91ac2..5fcf6e5 100644
+index 5953318..7e5b3d5 100644
 --- a/libmat2/exiftool.py
 +++ b/libmat2/exiftool.py
-@@ -1,8 +1,6 @@
--import functools
- import json
- import logging
- import os
--import shutil
- import subprocess
- from typing import Union, Set, Dict
- 
-@@ -67,14 +65,5 @@ class ExiftoolParser(abstract.AbstractParser):
+@@ -56,14 +56,5 @@ class ExiftoolParser(abstract.AbstractParser):
              return False
          return True
  
@@ -42,17 +33,10 @@ index 2b91ac2..5fcf6e5 100644
 -    raise RuntimeError("Unable to find exiftool")
 +    return '@exiftool@'
 diff --git a/libmat2/video.py b/libmat2/video.py
-index 39059c5..82fe1e7 100644
+index 70a6e28..8f86ce0 100644
 --- a/libmat2/video.py
 +++ b/libmat2/video.py
-@@ -1,6 +1,4 @@
- import subprocess
--import functools
--import shutil
- import logging
- 
- from typing import Union, Dict
-@@ -135,10 +133,5 @@ class MP4Parser(AbstractFFmpegParser):
+@@ -128,10 +128,5 @@ class MP4Parser(AbstractFFmpegParser):
      }
  
  

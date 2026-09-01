@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lhasa";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchurl {
-    url = "https://soulsphere.org/projects/lhasa/lhasa-${version}.tar.gz";
-    sha256 = "sha256-v4eFxwYJ0h62K32ueJTxOIiPiJ086Xho1QL24Tp5Kxw=";
+    url = "https://soulsphere.org/projects/lhasa/lhasa-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-mEAVQ2f3Pp2cMZb5RKEhq005jYTpIcj+j8qKkxJ0rtc=";
   };
 
   meta = {
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     mainProgram = "lha";
     platforms = lib.platforms.unix;
   };
-}
+})

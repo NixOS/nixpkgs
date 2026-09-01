@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "nmcli";
-  version = "1.7.0";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ushiboy";
     repo = "nmcli";
     tag = "v${version}";
-    hash = "sha256-OQwvSg8IzBsZJgAAjoKvHyXBE/gSyhcvFLuEidqstzI=";
+    hash = "sha256-x3P+bayBG8SKnMxacIE9UQSE6GFqCX47Z4xtrFJOoRg=";
   };
 
   build-system = [

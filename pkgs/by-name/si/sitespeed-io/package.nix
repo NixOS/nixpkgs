@@ -10,7 +10,7 @@
   procps,
   python3,
   versionCheckHook,
-  xorg,
+  xorg-server,
   nix-update-script,
 
   # chromedriver is more efficient than geckodriver, but is available on less platforms.
@@ -27,13 +27,13 @@ assert
   (!withFirefox && !withChromium) -> throw "Either `withFirefox` or `withChromium` must be enabled.";
 buildNpmPackage (finalAttrs: {
   pname = "sitespeed-io";
-  version = "39.3.1";
+  version = "42.6.0";
 
   src = fetchFromGitHub {
     owner = "sitespeedio";
     repo = "sitespeed.io";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Qgw1rqUZ/2znTmvqSCSyTyzQWpHtxsG/tHNXDphT/Ng=";
+    hash = "sha256-tyEa28WmMa+t55k/CHBZNXno9pTyKJZed47OA5VN5U4=";
   };
 
   env = {
@@ -49,7 +49,7 @@ buildNpmPackage (finalAttrs: {
 
   dontNpmBuild = true;
   npmInstallFlags = [ "--omit=dev" ];
-  npmDepsHash = "sha256-/SzoscPVDhOlAPKSCNkGnAbXjCXVD6KRD1MglM3ExAQ=";
+  npmDepsHash = "sha256-NFhsVh3Hu/PFE1pPLPBYWswSWUqJmSriCaDn1KFM054=";
 
   postInstall = ''
     mv $out/bin/sitespeed{.,-}io
@@ -85,7 +85,7 @@ buildNpmPackage (finalAttrs: {
             ]))
             ffmpeg-headless
             imagemagick_light
-            xorg.xorgserver
+            xorg-server
             procps
             coreutils
           ]

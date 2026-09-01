@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "scooby";
-  version = "0.11.0";
+  version = "0.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "banesullivan";
     repo = "scooby";
     tag = "v${version}";
-    hash = "sha256-krExDVT9evG9ODZjTGpX+S1ygh7lMob06fzOwhh/hzA=";
+    hash = "sha256-PP54hFyoM+QdKik9Gj0H6JhF8Ypqnh9yO/Z42O6NO4A=";
   };
 
   build-system = [ setuptools-scm ];

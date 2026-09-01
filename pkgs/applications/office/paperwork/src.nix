@@ -27,6 +27,12 @@ rec {
           hash = "sha256-VUT86kF0ZHLGK457ZrrIBMeiZqg/rPRpbkBA/ua9rU8=";
         }
       )
+      # remove usage of deprecated pkg_resources
+      # remove on next release
+      (fetchpatch {
+        url = "https://gitlab.gnome.org/World/OpenPaperwork/paperwork/-/commit/ab244d9c483b23f53e2548b73236d7fe4b94cb3f.patch";
+        hash = "sha256-Wd6OK0BdyTcjLy1NhkLp9N2oOcQWB6geEPOlYDTBsHw=";
+      })
     ];
   };
 

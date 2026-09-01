@@ -37,7 +37,8 @@ in
 
       user = mkOption {
         type = types.str;
-        default = "nginx";
+        default = config.services.nginx.user;
+        defaultText = lib.literalExpression "config.services.nginx.user";
         description = ''
           User account under which both the service and the web-application run.
         '';
@@ -122,10 +123,10 @@ in
   config = mkIf cfg.enable {
     services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
       ${poolName} = {
-        user = "nginx";
+        user = config.services.nginx.user;
         settings = mapAttrs (name: mkDefault) {
-          "listen.owner" = "nginx";
-          "listen.group" = "nginx";
+          "listen.owner" = config.services.nginx.user;
+          "listen.group" = config.services.nginx.group;
           "listen.mode" = "0600";
           "pm" = "dynamic";
           "pm.max_children" = 75;
@@ -139,11 +140,13 @@ in
     };
 
     systemd.services.selfoss-config = {
-      serviceConfig.Type = "oneshot";
+      serviceConfig = {
+        Type = "oneshot";
+        StateDirectory = [ (baseNameOf dataDir) ];
+        StateDirectoryMode = "0755";
+        WorkingDirectory = dataDir;
+      };
       script = ''
-        mkdir -m 755 -p ${dataDir}
-        cd ${dataDir}
-
         # Delete all but the "data" folder
         ls | grep -v data | while read line; do rm -rf $line; done || true
 
@@ -163,6 +166,7 @@ in
     systemd.services.selfoss-update = {
       serviceConfig = {
         ExecStart = "${pkgs.php83}/bin/php ${dataDir}/cliupdate.php";
+        StateDirectory = [ (baseNameOf dataDir) ];
         User = "${cfg.user}";
       };
       startAt = "hourly";

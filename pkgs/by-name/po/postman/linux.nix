@@ -17,17 +17,17 @@
   gdk-pixbuf,
   glib,
   gtk3,
-  libX11,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXScrnSaver,
-  libXtst,
+  libx11,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxscrnsaver,
+  libxtst,
   libdrm,
   libgbm,
   libGL,
@@ -38,7 +38,8 @@
   nss,
   pango,
   udev,
-  xorg,
+  libxshmfence,
+  libxcb,
   bintools,
   makeDesktopItem,
   # It's unknown which version of openssl that postman expects but it seems that
@@ -124,24 +125,24 @@ stdenv.mkDerivation {
           libGL
           libsecret
           libuuid
-          libX11
-          libXcomposite
-          libXcursor
-          libXdamage
-          libXext
-          libXfixes
-          libXi
-          libXrandr
-          libXrender
-          libXScrnSaver
+          libx11
+          libxcomposite
+          libxcursor
+          libxdamage
+          libxext
+          libxfixes
+          libxi
+          libxrandr
+          libxrender
+          libxscrnsaver
           libxkbcommon
-          libXtst
+          libxtst
           nspr
           nss
           pango
           udev
-          xorg.libxcb
-          xorg.libxshmfence
+          libxcb
+          libxshmfence
         ]
       }" $file
     done

@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "termsnap";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "tomcur";
     repo = "termsnap";
-    rev = "termsnap-v${version}";
+    rev = "termsnap-v${finalAttrs.version}";
     hash = "sha256-bYqhrMmgkEAiA1eiDbIOwH/PktwtIfxmYJRwDrFsNIc=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ yash-garg ];
     mainProgram = "termsnap";
   };
-}
+})

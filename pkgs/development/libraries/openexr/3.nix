@@ -9,17 +9,18 @@
   pkg-config,
   libjxl,
   pkgsCross,
+  python3Packages,
 }:
 
 stdenv.mkDerivation rec {
   pname = "openexr";
-  version = "3.3.5";
+  version = "3.4.13";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "openexr";
     rev = "v${version}";
-    hash = "sha256-J1SButHDPy0gGkVOZKfemaMF0MY/lifB5n39+3GRKR8=";
+    hash = "sha256-uzeppRB8vpTjAuqlpvoTehdGL/ng1rTm7kbYdaQHKUw=";
   };
 
   outputs = [
@@ -78,16 +79,26 @@ stdenv.mkDerivation rec {
     "OpenEXR.testSampleImages"
     "OpenEXR.testSharedFrameBuffer"
     "OpenEXR.testTiledRgba"
+
+    # Lack of proper endianness handling in OpenJPH
+    # https://github.com/aous72/OpenJPH/issues/266
+    # "ojph error 0x00050041 at ojph_params.cpp:687: error reading SIZ marker", and similar errors
+    "OpenEXR.testConversion"
+    "OpenEXR.testExistingStreams"
+    "OpenEXR.testLargeDataWindowOffsets"
+    "OpenEXR.testTiledCompression"
   ];
 
   passthru.tests = {
     inherit libjxl;
     musl = pkgsCross.musl64.openexr;
+    python = python3Packages.openexr;
   };
 
   meta = {
     description = "High dynamic-range (HDR) image file format";
     homepage = "https://www.openexr.com";
+    changelog = "https://github.com/AcademySoftwareFoundation/OpenEXR/blob/v${version}/CHANGES.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ paperdigits ];
     platforms = lib.platforms.all;

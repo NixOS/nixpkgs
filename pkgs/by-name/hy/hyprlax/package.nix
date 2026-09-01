@@ -9,15 +9,15 @@
   libGL,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlax";
-  version = "2.2.0";
+  version = "2.2.5";
 
   src = fetchFromGitHub {
     owner = "sandwichfarm";
     repo = "hyprlax";
-    tag = "v${version}";
-    hash = "sha256-RIeMsQt6MxSTI7TunIxk7wd08sYmr3EvjAQifr+M4e8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pI+JEuUOuUh4ZBT4YhIxc6FU3rMwau6qacypDrQG+dg=";
   };
 
   nativeBuildInputs = [
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers._6543 ];
     mainProgram = "hyprlax";
   };
-}
+})

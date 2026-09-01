@@ -58,3 +58,16 @@ index eefb9ae..623a77f 100644
  class ReadGroupList {
  public:
    const std::string &getReadGroupName(const uint16_t idx) const {
+
+diff --git a/stubs/dragen/src/host/metrics/public/run_stats.hpp b/stubs/dragen/src/host/metrics/public/run_stats.hpp
+index 998fe4e..9561b0b 100644
+--- a/stubs/dragen/src/host/metrics/public/run_stats.hpp
++++ b/stubs/dragen/src/host/metrics/public/run_stats.hpp
+@@ -10,6 +10,7 @@
+ #include <string>
+ #include <vector>
+ #include <memory>
++#include <cstdint>
+ //
+ // RP: HA! HA! HA! That's what you get when you write code logging to cout all
+ // over the place!

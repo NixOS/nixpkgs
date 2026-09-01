@@ -4,14 +4,14 @@
   fetchurl,
   autoPatchelfHook,
   alsa-lib,
-  libX11,
+  libx11,
   pcsclite,
   testers,
 }:
 
 let
-  version = "4.19.0";
-  buildNum = "4005";
+  version = "4.20.0";
+  buildNum = "4284";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tlclient";
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.cendio.com/downloads/clients/tl-${finalAttrs.version}-client-linux-dynamic-x86_64.tar.gz";
-    hash = "sha256-shlhu0m+TPgw3ndR70QdJ6Z0AyJdI/xmHJv+ZbFVokE=";
+    hash = "sha256-iq1OUFyMZwYWqEI57zSwj1RDh5OZ8qNu8knpe6Hbdeo=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     alsa-lib
-    libX11
+    libx11
     pcsclite
   ];
 

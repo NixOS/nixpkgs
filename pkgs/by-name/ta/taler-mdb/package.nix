@@ -17,13 +17,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-mdb";
-  version = "1.0.0";
+  version = "1.3.0";
 
   src = fetchgit {
-    url = "https://git.taler.net/taler-mdb.git";
+    url = "https://git-www.taler.net/taler-mdb.git";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-AAFnF8bN2Pnhy8OZbgA6CRHBIC6iP785HpVjPEVu+IQ=";
+    hash = "sha256-bslsC/m75kt8JoIQPp53u64SxghwZloOHehctphpNwI=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   meta = {
-    homepage = "https://git.taler.net/taler-mdb.git";
+    homepage = "https://git-www.taler.net/taler-mdb.git";
     description = "Sales integration with the Multi-Drop-Bus of Snack machines, NFC readers and QR code display";
     license = lib.licenses.agpl3Plus;
     teams = with lib.teams; [ ngi ];

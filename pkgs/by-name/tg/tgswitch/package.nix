@@ -3,14 +3,14 @@
   lib,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tgswitch";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "warrensbox";
     repo = "tgswitch";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-Q3Cef3B7hfVHLvW8Rx6IdH9g/3luDhpUMZ8TXVpb8gQ=";
   };
 
@@ -33,4 +33,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ psibi ];
   };
-}
+})

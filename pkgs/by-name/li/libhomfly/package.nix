@@ -7,15 +7,15 @@
   boehmgc,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.03";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.04";
   pname = "libhomfly";
 
   src = fetchFromGitHub {
     owner = "miguelmarco";
     repo = "libhomfly";
-    rev = version;
-    hash = "sha256-lav/c5i4TXiQSp4r376sy7s+xLO85GutTb/UZJ70gh8=";
+    rev = finalAttrs.version;
+    hash = "sha256-ND2ZBKwHlRYTqxC+ltkCQ2lolNAkhZZm5hriIaOLqC4=";
   };
 
   buildInputs = [
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.all;
   };
-}
+})

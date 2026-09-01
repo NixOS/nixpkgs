@@ -10,14 +10,14 @@
   speedtest-rs,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "speedtest-rs";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "nelsonjchen";
     repo = "speedtest-rs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1FAFYiWDD/KG/7/UTv/EW6Nj2GnU0GZFFq6ouMc0URA=";
   };
 
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Command line internet speedtest tool written in rust";
     homepage = "https://github.com/nelsonjchen/speedtest-rs";
-    changelog = "https://github.com/nelsonjchen/speedtest-rs/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/nelsonjchen/speedtest-rs/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       asl20
@@ -49,4 +49,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "speedtest-rs";
   };
-}
+})

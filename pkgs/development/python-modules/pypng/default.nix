@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pypng";
-  version = "0.20231004.0";
+  version = "0.20250521.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "drj11";
     repo = "pypng";
     tag = "pypng-${version}";
-    hash = "sha256-xNUI3yGfwmaccCxgljIZzgJ6YgNxcuOzCXDE7RFJP2I=";
+    hash = "sha256-Q1LXSHMM6pUKM0ZiuS1nYnlR4QKmXcN/K4raXTHr0Tg=";
   };
 
   build-system = [ setuptools ];

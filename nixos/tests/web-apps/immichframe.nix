@@ -1,9 +1,20 @@
+{
+  lib,
+  ...
+}:
+
 let
   apiKeyFile = "/tmp/immich-api.key";
   customInterval = 5;
+  user = "alice";
 in
 {
   name = "immichframe";
+
+  meta.maintainers = with lib.maintainers; [
+    numinit
+    jfly
+  ];
 
   enableOCR = true;
 
@@ -15,11 +26,22 @@ in
       ...
     }:
     {
-      imports = [ ../common/x11.nix ];
+      imports = [
+        ../common/user-account.nix
+        ../common/x11.nix
+      ];
 
-      # When setting this to 2500 I got "Kernel panic - not syncing: Out of
+      # When setting memory to 2500 I got "Kernel panic - not syncing: Out of
       # memory: compulsory panic_on_oom is enabled".
-      virtualisation.memorySize = 3000;
+      # Setting cores to 1 (the default) also makes immich take a long time to start up.
+      # If this breaks, keep synced with the immich test.
+      virtualisation = {
+        memorySize = 4096;
+        cores = 2;
+      };
+      hardware.graphics.enable = true;
+      environment.variables.XAUTHORITY = "/home/${user}/.Xauthority";
+      test-support.displayManager.auto.user = user;
 
       environment.systemPackages = with pkgs; [
         imagemagick
@@ -69,6 +91,7 @@ in
 
     custom_interval = ${toString customInterval}
 
+    machine.wait_for_x()
     machine.wait_for_unit("immich-server.service")
     machine.wait_for_open_port(2283)
 
@@ -133,11 +156,7 @@ in
     assert len(assets) == 2, assets
 
     # Wait for a photo to be displayed.
-    machine.wait_for_x()
-    machine.execute("xterm -e 'firefox --kiosk http://localhost:8002' >&2 &")
-    machine.wait_for_window("immichFrame")
-    _, active_window = machine.execute("xdotool getactivewindow")
-    machine.succeed(f"xdotool windowsize {quote(active_window.strip())} 100% 100%")
+    machine.execute("su - ${user} -c 'firefox --kiosk http://localhost:8002' >&2 & disown")
     machine.wait_for_text('reproduce this moment')
     machine.wait_for_text('with NixOS tests')
     machine.screenshot("screen")

@@ -4,7 +4,7 @@
   autoreconfHook,
   fetchFromGitHub,
   libGLU,
-  libX11,
+  libx11,
   pkg-config,
   stdenv,
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libGLU
-    libX11
+    libx11
     SDL2
   ];
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       and direct access to various host resources including sound, disk drives,
       optical storage devices (CD/DVD-ROMs), parallel port and more.
     '';
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     mainProgram = "aranym";
     maintainers = [ ];
     platforms = lib.platforms.unix;

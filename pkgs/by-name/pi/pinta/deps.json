@@ -1,78 +1,78 @@
 [
   {
     "pname": "GirCore.Adw-1",
-    "version": "0.6.3",
-    "hash": "sha256-wV4zTybD7yJldzQORBK2iI/77Fv3C9kjZvtj/S6v48k="
+    "version": "0.7.0",
+    "hash": "sha256-7bnrJnNJJLiz5dGMX2pACJbmMoAaqQdN3ZGePZq/Z54="
   },
   {
     "pname": "GirCore.Cairo-1.0",
-    "version": "0.6.3",
-    "hash": "sha256-IJLzVmWkuCzdyiIqlzXyl8/ZDC6hmnh/bf4+i2HOpLw="
+    "version": "0.7.0",
+    "hash": "sha256-w8Uh7RQXphqsXT/5POMgMpVO0u0vNtGL+Tu043jKptc="
   },
   {
     "pname": "GirCore.FreeType2-2.0",
-    "version": "0.6.3",
-    "hash": "sha256-CsH4zQkZukyVw653sphDf5eveuvzY3HVphoO6fvjZiA="
+    "version": "0.7.0",
+    "hash": "sha256-UHfYBDyrliB32VF/SJ+KsLx8ZCBVDKAwfhcLRaqxfv4="
   },
   {
     "pname": "GirCore.Gdk-4.0",
-    "version": "0.6.3",
-    "hash": "sha256-3R7ikDBuQJ1iaVb8yuewdLggZ1IVecLuhmjaw1Hzm0s="
+    "version": "0.7.0",
+    "hash": "sha256-lPipLMR86A3QvYH6OzxKGj29Vn8lpHM/MRtpKyUgVRA="
   },
   {
     "pname": "GirCore.GdkPixbuf-2.0",
-    "version": "0.6.3",
-    "hash": "sha256-HZr3YmNLumXTGIN2CvxYZS9mHzvOvpMhUVJ1/DJlWN4="
+    "version": "0.7.0",
+    "hash": "sha256-dS4ZmahrGO/2Poin7PltVt4JXpW7mKnKwj1fQPGBpVc="
   },
   {
     "pname": "GirCore.Gio-2.0",
-    "version": "0.6.3",
-    "hash": "sha256-pYc13vCSAH9Or7plQYffBzB/9b83oPNRBf5+HDeT/7w="
+    "version": "0.7.0",
+    "hash": "sha256-nktBWddrIwA+4Ibjc/IMWnCi/OL3bMp7UGMRAUEF9r0="
   },
   {
     "pname": "GirCore.GLib-2.0",
-    "version": "0.6.3",
-    "hash": "sha256-Lsl44qroh+ENO7yBFoySrNgxs8FBeT0nH6PKJ5u+LAI="
+    "version": "0.7.0",
+    "hash": "sha256-u3jwn7fQONG4M4i4gX6glR1zKn2JNI05QieFf1Gsays="
   },
   {
     "pname": "GirCore.GObject-2.0",
-    "version": "0.6.3",
-    "hash": "sha256-+gerXQbv8HNcFjA76AvtzAG3d+CRb7pPYDaAL+iUPz4="
+    "version": "0.7.0",
+    "hash": "sha256-bmCHh0NyjG8YumCCI2zR8lrb6lhD6uF3MsA9tE1aWIA="
   },
   {
     "pname": "GirCore.GObject-2.0.Integration",
-    "version": "0.6.3",
-    "hash": "sha256-ujkhIzrqeKOcwdwjgzMh3eTcZ2N5PfgvItfyNj7Kc3s="
+    "version": "0.7.0",
+    "hash": "sha256-kDLz5+dEtGxqmkNV42wqjX3mRAiBO1PFLtBDwjpBKCU="
   },
   {
     "pname": "GirCore.Graphene-1.0",
-    "version": "0.6.3",
-    "hash": "sha256-+pDFEj94WNbXD7Fso1xuxkkETjej/O/d1JNW8eV6UPA="
+    "version": "0.7.0",
+    "hash": "sha256-onPgy8jEf8LRL/xaG+t7OFfXEg5LraGQruLRSBR0K28="
   },
   {
     "pname": "GirCore.Gsk-4.0",
-    "version": "0.6.3",
-    "hash": "sha256-vV66rP1vVloB+DA1xPL2iSrJwEmdUDdl209RcRpNP9Q="
+    "version": "0.7.0",
+    "hash": "sha256-lDvFt1HIVNekOjChHw4JkfjHBQas9qxp5KuQxPApctM="
   },
   {
     "pname": "GirCore.Gtk-4.0",
-    "version": "0.6.3",
-    "hash": "sha256-unQkwxnaoIihD+FWKnJgJNAR4i99qcTcN78SG8WhrZk="
+    "version": "0.7.0",
+    "hash": "sha256-PFkomZCs+gPQbNF0WYGskIJT7kkMypBL5zjeZL7+Lwg="
   },
   {
     "pname": "GirCore.HarfBuzz-0.0",
-    "version": "0.6.3",
-    "hash": "sha256-8I7+SMTeXBNe6Q/rE7R6WiAYRPuLjfSeDjwllP/n9tM="
+    "version": "0.7.0",
+    "hash": "sha256-tUEqdvad1bqtpuXwkOmzRg2WdxwqUA//69OGFN7oOXQ="
   },
   {
     "pname": "GirCore.Pango-1.0",
-    "version": "0.6.3",
-    "hash": "sha256-4qPtnqcd1gjt/bz6vyq7L4iA8TyDYTlqkkDD6H150Hs="
+    "version": "0.7.0",
+    "hash": "sha256-rAGq1CAOl0k3l2BN/b6r6Q0Upq6GHGAM8P42eYabgLQ="
   },
   {
     "pname": "GirCore.PangoCairo-1.0",
-    "version": "0.6.3",
-    "hash": "sha256-O8SVg5F8OBazisAwxDB66zlup2hB6hvmO7ubdpSJXpI="
+    "version": "0.7.0",
+    "hash": "sha256-d3RbSDFmB8UosYsQGzhHFBCZ5hcPtIpdmQcylYVSLe4="
   },
   {
     "pname": "Microsoft.CodeAnalysis.Analyzers",
@@ -436,8 +436,8 @@
   },
   {
     "pname": "System.CommandLine",
-    "version": "2.0.0-beta4.22272.1",
-    "hash": "sha256-zSO+CYnMH8deBHDI9DHhCPj79Ce3GOzHCyH1/TiHxcc="
+    "version": "2.0.1",
+    "hash": "sha256-NDBiPUt/ZZIMBcLHpF/6IMX/UpfsC/XnH3p4i4MHCFw="
   },
   {
     "pname": "System.Diagnostics.Debug",
@@ -726,7 +726,7 @@
   },
   {
     "pname": "Tmds.DBus",
-    "version": "0.21.2",
-    "hash": "sha256-1rxUexOuj0raH8FvvUKeGdcWr3u8KmuAySe/4isy6S0="
+    "version": "0.22.0",
+    "hash": "sha256-rrI1KUW9CTWEZOPJA2aoe+6hSvyOFoqP+vl6lyaZtuI="
   }
 ]

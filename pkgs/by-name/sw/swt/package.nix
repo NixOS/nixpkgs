@@ -30,8 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
     ppc64le-linux.hash = "sha256-lKAB2aCI3dZdt3pE7uSvSfxc8vc3oMSTCx5R+71Aqdk=";
     riscv64-linux.platform = "gtk-linux-riscv64";
     riscv64-linux.hash = "sha256-lKAB2aCI3dZdt3pE7uSvSfxc8vc3oMSTCx5R+71Aqdk=";
-    x86_64-darwin.platform = "cocoa-macosx-x86_64";
-    x86_64-darwin.hash = "sha256-Uns3fMoetbZAIrL/N0eVd42/3uygXakDdxpaxf5SWDI=";
     aarch64-darwin.platform = "cocoa-macosx-aarch64";
     aarch64-darwin.hash = "sha256-jvxmoRFGquYClPgMqWi2ylw26YiGSG5bONnM1PcjlTM=";
   };
@@ -76,19 +74,24 @@ stdenv.mkDerivation (finalAttrs: {
     libGLU
   ];
 
-  SWT_JAVA_HOME = jdk;
-  AWT_LIB_PATH = "${jdk}/lib/openjdk/lib";
-  # Used by the makefile which is responsible for the shared objects only
-  OUTPUT_DIR = "${placeholder "out"}/lib";
   # GTK4 is not supported yet. See:
   # https://github.com/eclipse-platform/eclipse.platform.swt/issues/652
   makeFlags = lib.optionals stdenv.hostPlatform.isLinux [ "gtk3" ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isLinux "-std=gnu17";
+  env = {
+    SWT_JAVA_HOME = jdk;
+    AWT_LIB_PATH = "${jdk}/lib/openjdk/lib";
+    # Used by the makefile which is responsible for the shared objects only
+    OUTPUT_DIR = "${placeholder "out"}/lib";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  };
+
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux "substituteInPlace library/make_linux.mak --replace-fail 'CFLAGS += -Werror' ''";
   preBuild = lib.optionalString stdenv.hostPlatform.isLinux ''
     cd library
-    mkdir -p ${finalAttrs.OUTPUT_DIR}
+    mkdir -p $OUTPUT_DIR
   '';
 
   # Build the jar (Linux only, Darwin uses prebuilt)

@@ -8,15 +8,15 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fuse-overlayfs";
-  version = "1.16";
+  version = "1.18";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "fuse-overlayfs";
-    rev = "v${version}";
-    hash = "sha256-FwAv5PmiBz25PNH/IEIV6cHjhlE+1mDTrgvR2vN++ZY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Us7FKKJrZH5l+NRIEw2b3RTAGw08YfsIBauwH866P8E=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ma9e ];
     teams = [ lib.teams.podman ];
     platforms = lib.platforms.linux;
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     mainProgram = "fuse-overlayfs";
   };
-}
+})

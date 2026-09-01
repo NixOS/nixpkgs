@@ -12,12 +12,12 @@
   react,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "dap";
   version = "1.0.6";
   duneVersion = "3";
   src = fetchurl {
-    url = "https://github.com/hackwaly/ocaml-dap/releases/download/${version}/dap-${version}.tbz";
+    url = "https://github.com/hackwaly/ocaml-dap/releases/download/${finalAttrs.version}/dap-${finalAttrs.version}.tbz";
     sha256 = "1zq0f8429m38a4x3h9n3rv7n1vsfjbs72pfi5902a89qwyilkcp0";
   };
 
@@ -42,4 +42,4 @@ buildDunePackage rec {
     homepage = "https://github.com/hackwaly/ocaml-dap";
     license = lib.licenses.mit;
   };
-}
+})

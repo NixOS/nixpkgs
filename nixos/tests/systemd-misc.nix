@@ -60,5 +60,10 @@ in
     machine.succeed("systemctl status example.service | grep 'Active: active'")
 
     machine.succeed("systemctl show --property TasksMax --value user-1000.slice | grep 100")
+
+    with subtest("modprobe@ services work"):
+      modprobe_service_status = machine.succeed("systemctl show --property ExecMainStatus modprobe@configfs.service")
+      print(modprobe_service_status)
+      t.assertEqual("ExecMainStatus=0\n", modprobe_service_status)
   '';
 }

@@ -8,16 +8,16 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "developer-disk-image";
-  version = "0.2.0";
+  version = "0.3.0";
   pyproject = true;
 
   # GitHub archive is way too large
   src = fetchPypi {
     pname = "developer_disk_image";
-    inherit version;
-    hash = "sha256-21aLIuwznYtWsprptCAjDq4yL+ab50zZn9Dv+w7y4o8=";
+    inherit (finalAttrs) version;
+    hash = "sha256-H7mEHcxc+B5pe24KnBSQnAWcGJPWdbODmKkcCMt7qLw=";
   };
 
   build-system = [
@@ -35,11 +35,11 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/doronz88/DeveloperDiskImage/releases/tag/v${version}";
+    changelog = "https://github.com/doronz88/DeveloperDiskImage/releases/tag/v${finalAttrs.version}";
     description = "Download DeveloperDiskImage ans Personalized images from GitHub";
     homepage = "https://github.com/doronz88/DeveloperDiskImage";
     license = lib.licenses.gpl3Plus;
     mainProgram = "developer_disk_image";
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

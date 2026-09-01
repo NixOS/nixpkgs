@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   python3Packages,
   wrapGAppsHook4,
   gobject-introspection,
@@ -9,28 +9,33 @@
   ninja,
   pkg-config,
   desktop-file-utils,
+  libxml2,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "censor";
-  version = "0.3.0";
+  version = "0.10.1";
   pyproject = false;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "censor";
     repo = "Censor";
-    tag = "v${version}";
-    hash = "sha256-16Cy9yNOLvdVZ234kTB8fa585eI4f7yVnbMoPcHtGHk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cNUokMWbvwPIq6gdnwkPwMWBlqo3HjqLeSyPyEDYrts=";
   };
 
+  postPatch = ''
+    patchShebangs po/build.sh
+  '';
+
   nativeBuildInputs = [
+    desktop-file-utils
+    gobject-introspection
+    libxml2 # xmllint
     meson
     ninja
     pkg-config
-    gobject-introspection
     wrapGAppsHook4
-    desktop-file-utils
   ];
 
   buildInputs = [
@@ -55,4 +60,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ onny ];
     mainProgram = "censor";
   };
-}
+})

@@ -5,7 +5,7 @@ This article makes the following assumptions:
 2. The Linux kernel running is modern enough to support your GPU out of the box
 3. The desired driver is `i915` -- modify as needed for other drivers
 
-> Note: at the time of writing, the author was using an Intel Arc A770 in k3s. The majority of this guide likely should work on other Kubernetes distributions, and will likely work identically for integrated graphics capabilities.
+> Note: at the time of writing, the author was using an Intel Arc A770 in k3s. The majority of this guide should work on other Kubernetes distributions, and will likely work identically for integrated graphics capabilities.
 
 ### Enable the Intel driver in NixOS
 
@@ -15,13 +15,13 @@ Add the following NixOS configuration to enable the Intel driver (necessary on h
 services.xserver.videoDrivers = [ "i915" ];
 ```
 
-After rebuilding the configuration, reboot the host for the GPU driver to be assigned to the GPU. Use the following command to ensure the GPU is using the i915 kernel:
+After rebuilding the configuration, reboot the host for the driver to be assigned to the GPU. Use the following command to ensure the GPU is using the i915 kernel:
 
 ```
 sudo lspci -k
 ```
 
-i.e. the output looks like this on a host with the Intel Arc A770:
+For example, the output looks like this on a host with the Intel Arc A770:
 
 ```
 ❯ sudo lspci -k | grep -A 3 'Arc'
@@ -117,7 +117,7 @@ Verify the number has been applied like so:
 kubectl get nodes -o yaml | grep gpu.intel.com/i915 | sort -u
 ```
 
-i.e. in this configuration, up to 10 pods can use the GPU:
+For example, in this configuration, up to 10 pods can use the GPU:
 
 ```
 ❯ kubectl get nodes -o yaml | grep gpu.intel.com/i915 | sort -u

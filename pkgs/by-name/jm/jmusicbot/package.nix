@@ -6,12 +6,12 @@
   jre_headless,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "JMusicBot";
   version = "0.4.3";
 
   src = fetchurl {
-    url = "https://github.com/jagrosh/MusicBot/releases/download/${version}/JMusicBot-${version}.jar";
+    url = "https://github.com/jagrosh/MusicBot/releases/download/${finalAttrs.version}/JMusicBot-${finalAttrs.version}.jar";
     sha256 = "sha256-7CHFc94Fe6ip7RY+XJR9gWpZPKM5JY7utHp8C3paU9s=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     inherit (jre_headless.meta) platforms;
     mainProgram = "JMusicBot";
   };
-}
+})

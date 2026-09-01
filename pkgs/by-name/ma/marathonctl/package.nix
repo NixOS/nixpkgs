@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "marathonctl";
   version = "0.0.7";
 
   src = fetchFromGitHub {
     owner = "shoenig";
     repo = "marathonctl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-MigmvOwYa0uYPexchS4MP74I1Tp6QHYuQVSOh1+FrMg=";
   };
 
@@ -28,4 +28,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     mainProgram = "marathonctl";
   };
-}
+})

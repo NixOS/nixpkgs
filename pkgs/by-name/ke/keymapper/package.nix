@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   dbus,
-  libX11,
+  libx11,
   libusb1,
   pkg-config,
   udev,
@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keymapper";
-  version = "5.3.1";
+  version = "5.7.2";
 
   src = fetchFromGitHub {
     owner = "houmain";
     repo = "keymapper";
     tag = finalAttrs.version;
-    hash = "sha256-YKfKgsrjDrskLEoYCSRMYco7+7E/sgXFAMEwwm7rs7w=";
+    hash = "sha256-bhw106vW7l6lVPu8G+Y6Ub+qWcSCb6av0lyu3tL9v/I=";
   };
 
   # all the following must be in nativeBuildInputs
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     wayland
     wayland-scanner
-    libX11
+    libx11
     udev
     libusb1
     libxkbcommon
@@ -47,9 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/houmain/keymapper";
     license = lib.licenses.gpl3Only;
     mainProgram = "keymapper";
-    maintainers = with lib.maintainers; [
-      dit7ya
-    ];
+    maintainers = with lib.maintainers; [ anntoin ];
     platforms = lib.platforms.linux;
   };
 })

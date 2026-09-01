@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
+  setuptools_80,
   zope-interface,
   pytestCheckHook,
 }:
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-rs6yYW5Rtz8yf78SxOwrfXZwy4IL1eT2hRIV+3lsAtw=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   dependencies = [ zope-interface ];
 

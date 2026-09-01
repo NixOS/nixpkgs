@@ -6,12 +6,12 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "preserves-tools";
   version = "4.996.1";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Uyh5mXCypX3TDxxJtnTe6lBoVI8aqdG56ywn7htDGUY=";
   };
 
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.asl20;
     mainProgram = "preserves-tool";
   };
-}
+})

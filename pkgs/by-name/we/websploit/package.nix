@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "websploit";
   version = "4.0.4";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "f4rih";
     repo = "websploit";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-LpDfJmH2FbL37Fk86CAC/bxFqM035DBN6c6FPfGpaIw=";
   };
 
@@ -35,9 +35,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "High level MITM framework";
     homepage = "https://github.com/f4rih/websploit";
-    changelog = "https://github.com/f4rih/websploit/releases/tag/${version}";
+    changelog = "https://github.com/f4rih/websploit/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emilytrau ];
     mainProgram = "websploit";
   };
-}
+})

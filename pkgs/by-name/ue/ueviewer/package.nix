@@ -6,7 +6,7 @@
   unstableGitUpdater,
   libGL,
   libpng,
-  libX11,
+  libx11,
   perl,
   SDL2,
   zlib,
@@ -64,7 +64,7 @@ gccStdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!gccStdenv.hostPlatform.isDarwin) [
     libGL
-    libX11
+    libx11
     SDL2
   ];
 

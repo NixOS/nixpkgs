@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     # consumers of the CMake config file to fail at the configuration step.
     # Explicitly disabling unwind support sidesteps the issue.
     "-DWITH_UNWIND=OFF"
+    # Enable pkg-config support so that a `.pc` file is generated.
+    "-DWITH_PKGCONFIG=ON"
   ];
 
   doCheck = true;
@@ -69,18 +71,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkPhase =
     let
-      excludedTests =
-        lib.optionals stdenv.hostPlatform.isDarwin [
-          "mock-log"
-        ]
-        ++ [
-          "logging" # works around segfaults for now
-        ]
-        ++ lib.optionals (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian) [
-          # CHECK_STREQ failed: symbol == "non_inline_func" ((/build/source/build/symbolize_unittest+0x1000b840) vs. non_inline_func)
-          # TestWithPCInsideNonInlineFunction doesn't use TEST(), so can't exclude via GTEST_FILTER
-          "symbolize"
-        ];
+      excludedTests = [
+        "logging" # works around segfaults for now
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isGnu [
+        # Test appears to make strong assumptions about compiler optimizations
+        # that appear to be broken under GCC 16.
+        "stacktrace"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        "mock-log"
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian) [
+        # CHECK_STREQ failed: symbol == "non_inline_func" ((/build/source/build/symbolize_unittest+0x1000b840) vs. non_inline_func)
+        # TestWithPCInsideNonInlineFunction doesn't use TEST(), so can't exclude via GTEST_FILTER
+        "symbolize"
+      ];
       excludedTestsRegex = lib.optionalString (
         excludedTests != [ ]
       ) "(${lib.concatStringsSep "|" excludedTests})";

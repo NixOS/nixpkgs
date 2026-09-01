@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/youpie/Iconic";
-    description = "Easilly add images on top of folders";
+    description = "Easily add images on top of folders";
     mainProgram = "folder_icon";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;

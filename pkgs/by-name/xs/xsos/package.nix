@@ -23,14 +23,14 @@ let
   ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xsos";
   version = "0.7.33";
 
   src = fetchFromGitHub {
     owner = "ryran";
     repo = "xsos";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-VEOY422/+4veMlN9HOtPB/THDiFLNnRfbUJpKjc/cqE=";
   };
 
@@ -55,6 +55,6 @@ stdenv.mkDerivation rec {
       "i686-linux"
       "x86_64-linux"
     ];
-    maintainers = [ lib.maintainers.nixinator ];
+    maintainers = [ ];
   };
-}
+})

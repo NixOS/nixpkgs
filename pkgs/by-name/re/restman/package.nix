@@ -1,28 +1,37 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   buildGoModule,
   testers,
   restman,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "restman";
-  version = "0.3.0";
+  version = "0.4.9";
 
   src = fetchFromGitHub {
     repo = "restman";
     owner = "jackMort";
-    rev = "v${version}";
-    hash = "sha256-KN3iahDdPSHPnGEacsmaVMRNI3mV9qrH3HyJOTtB2hA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-advp7w9SbMKcuvQhR7pF95VV4J6hUl8rV+9Uu4EaGpc=";
   };
 
-  vendorHash = "sha256-hXd7E6yowuY3+ZpGyCzlcqwFqFrQzXBWYRMjsrxBlwI=";
+  patches = [
+    (fetchpatch {
+      # fix for tests committed shortly after 0.4.9
+      url = "https://github.com/jackMort/Restman/commit/2d5edd4e4faa0499bf93741fed250f8f13efa9c3.patch";
+      hash = "sha256-Mv7+eAKczR4YZDdevK60I1WZrmEumqsXhXMQVwu1zLo=";
+    })
+  ];
+
+  vendorHash = "sha256-+qjJhDQvZi+SstE2uo+2hsoG2MTRdI6d79Vga3/7gTY=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   doInstallCheck = true;
@@ -30,7 +39,7 @@ buildGoModule rec {
   passthru.tests = {
     version = testers.testVersion {
       package = restman;
-      version = "restman version ${version}";
+      version = "restman version ${finalAttrs.version}";
       command = "restman --version";
     };
   };
@@ -42,4 +51,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ kashw2 ];
     mainProgram = "restman";
   };
-}
+})

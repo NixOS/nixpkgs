@@ -9,7 +9,6 @@
 
   # dependencies
   attrs,
-  exceptiongroup,
   idna,
   outcome,
   sniffio,
@@ -36,14 +35,14 @@ let
 in
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.32.0";
+  version = "0.33.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-trio";
     repo = "trio";
     tag = "v${version}";
-    hash = "sha256-kZKP5TFg9M+NCx9V9B0qNbGiwZtBPtgVKgZYjX5w1ok=";
+    hash = "sha256-juqlTJPcXpLdzO5OBCcwVR7rckABza9TAhPs9ta5c8U=";
   };
 
   build-system = [ setuptools ];
@@ -54,8 +53,7 @@ buildPythonPackage rec {
     outcome
     sniffio
     sortedcontainers
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
+  ];
 
   __darwinAllowLocalNetworking = true;
 

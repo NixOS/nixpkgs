@@ -6,13 +6,13 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nspr";
-  version = "4.38.2";
+  version = "4.40";
 
   src = fetchurl {
-    url = "mirror://mozilla/nspr/releases/v${version}/src/nspr-${version}.tar.gz";
-    hash = "sha256-5Akvrqt3vcmzLbERPkIVlI7naOJsRmbbO1pgs18skQU=";
+    url = "mirror://mozilla/nspr/releases/v${finalAttrs.version}/src/nspr-${finalAttrs.version}.tar.gz";
+    hash = "sha256-wMGITGJ/Pbeng/fHMUxpUiayBDaWeR0VUZ5+BXjBm9w=";
   };
 
   patches = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     substituteInPlace configure.in --replace '@executable_path/' "$out/lib/"
   '';
 
-  HOST_CC = "cc";
+  env.HOST_CC = "cc";
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   configureFlags = [
     "--enable-optimize"
@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
+    changelog = "https://github.com/mozilla/nspr/releases/tag/NSPR_${lib.concatStringsSep "_" (lib.splitVersion finalAttrs.version)}_RTM";
     homepage = "https://firefox-source-docs.mozilla.org/nspr/index.html";
     description = "Netscape Portable Runtime, a platform-neutral API for system-level and libc-like functions";
     maintainers = with lib.maintainers; [
@@ -62,4 +63,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     license = lib.licenses.mpl20;
   };
-}
+})

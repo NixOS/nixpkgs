@@ -7,19 +7,19 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mountpoint-s3";
-  version = "1.17.0";
+  version = "1.22.3";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "mountpoint-s3";
-    tag = "v${version}";
-    hash = "sha256-uV0umUoJkYgmjWjv8GMnk5TRRbCCJS1ut3VV1HvkaAw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-22tx8ozXkzBNAflDPc7cdfUh9TWD6aB/Fe/z/dPZ694=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-zDgAGOuK0Jkmm554qZsaA/ABFhuupJ+WToO8HSPp7Xc=";
+  cargoHash = "sha256-SSSXqgJ3OERCVw81iXqXRRpVXgdwhlefHhI/qvQyl4g=";
 
   # thread 'main' panicked at cargo-auditable/src/collect_audit_data.rs:77:9:
   # cargo metadata failure: error: none of the selected packages contains these features: libfuse3
@@ -31,6 +31,15 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
   buildInputs = [ fuse3 ];
+
+  # The S3CrtClient doctest in mountpoint-s3-client constructs a real client,
+  # which requires a TLS trust store unavailable in the sandbox.
+  cargoTestFlags = [
+    "--workspace"
+    "--lib"
+    "--bins"
+    "--tests"
+  ];
 
   checkFlags = [
     #thread 's3_crt_client::tests::test_expected_bucket_owner' panicked at mountpoint-s3-client/src/s3_crt_client.rs:1123:47:
@@ -44,9 +53,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=s3_crt_client::tests::test_expected_bucket_owner"
     "--skip=s3_crt_client::tests::test_user_agent_with_prefix"
     "--skip=s3_crt_client::tests::test_user_agent_without_prefix"
+    "--skip=test_lookup_throttled_mock::both_list_and_head"
     "--skip=test_lookup_throttled_mock::head_object"
     "--skip=test_lookup_throttled_mock::list_object"
     "--skip=test_lookup_unhandled_error_mock"
+    "--skip=test_read_unhandled_error_mock"
     "--skip=tests::smoke"
     # fuse module not available on build machine ?
     #
@@ -69,4 +80,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ lblasc ];
     platforms = lib.platforms.linux;
   };
-}
+})

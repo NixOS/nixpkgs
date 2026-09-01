@@ -9,14 +9,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "handlr-regex";
   version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "Anomalocaridid";
     repo = "handlr-regex";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7psjlu0qyoZYTVwq2JYJJkB76ejlmMtmstDw+liMcj8=";
   };
 
@@ -51,4 +51,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ anomalocaris ];
     mainProgram = "handlr";
   };
-}
+})

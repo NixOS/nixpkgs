@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  libX11,
+  libx11,
   vst2-sdk,
 }:
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "VSTSDK_PATH=${vst2-sdk}" ];
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   installPhase = ''
     mkdir -p $out/lib/lxvst

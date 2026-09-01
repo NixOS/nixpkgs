@@ -4,13 +4,13 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "zsh-history-to-fish";
   version = "0.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-expPuffZttyXNRreplPC5Ee/jfWAyOnmjTIMXONtrnw=";
   };
 
@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Bring your ZSH history to Fish shell";
     homepage = "https://github.com/rsalmei/zsh-history-to-fish";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ alanpearce ];
+    maintainers = with lib.maintainers; [ alinnow ];
     mainProgram = "zsh-history-to-fish";
   };
-}
+})

@@ -7,15 +7,15 @@
   gcc-unwrapped,
 }:
 
-stdenv.mkDerivation rec {
-  version = "5.1";
+stdenv.mkDerivation (finalAttrs: {
+  version = "5.2";
   pname = "messer-slim";
 
   src = fetchFromGitHub {
     owner = "MesserLab";
     repo = "SLiM";
-    rev = "v${version}";
-    hash = "sha256-E1GxHdzY/5bxy8+ur3+/dheDOrmWaOrNcYDNSaY9cMU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-gZd++3puztnjFjnc0GlkpZWG2oZlzY4I+8fOW5G8vWY=";
   };
 
   nativeBuildInputs = [
@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Evolutionary simulation framework";
     homepage = "https://messerlab.org/slim/";
-    license = with lib.licenses; [ gpl3 ];
+    license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ bzizou ];
     platforms = lib.platforms.all;
   };
-}
+})

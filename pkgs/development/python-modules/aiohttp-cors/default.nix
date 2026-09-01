@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   aiohttp,
   pytestCheckHook,
   pytest-aiohttp,
@@ -19,6 +20,15 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-AbMuUeCNM8+oZj/hutG3zxHOwYN8uZlLFBeYTlu1fh4=";
   };
+
+  patches = [
+    # https://github.com/aio-libs/aiohttp-cors/pull/563
+    (fetchpatch {
+      name = "replace-deprecated-asyncio.iscoroutinefunction-with-its-counterpart-from-inspect.patch";
+      url = "https://github.com/aio-libs/aiohttp-cors/commit/efafc0f780a494377910f2328057f83e95f8bf74.patch";
+      hash = "sha256-BvE5qqAx83+084khkHt4zjXgR7Bu/ceqMOOh/6fe5TA=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

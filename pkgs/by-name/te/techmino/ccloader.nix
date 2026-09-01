@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    gcc -shared cold_clear_wrapper.c -lcold_clear -lluajit-${luajit.luaversion} -o CCLoader.so
+    $CC -shared cold_clear_wrapper.c -o CCLoader.so -lcold_clear -lluajit-${luajit.luaversion}
 
     runHook postBuild
   '';

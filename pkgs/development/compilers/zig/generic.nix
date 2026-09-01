@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   cmake,
   llvmPackages,
   xcbuild,
@@ -22,8 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "zig";
   inherit version;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "ziglang";
     repo = "zig";
     rev = finalAttrs.version;
@@ -67,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+
+  __structuredAttrs = true;
 
   # On Darwin, Zig calls std.zig.system.darwin.macos.detect during the build,
   # which parses /System/Library/CoreServices/SystemVersion.plist and
@@ -156,13 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/ziglang/zig/issues/14281#issuecomment-1624220653
     zig_default_cpu_flag = "-Dcpu=baseline";
 
-    zig_default_optimize_flag =
-      if lib.versionAtLeast finalAttrs.version "0.12" then
-        "--release=safe"
-      else if lib.versionAtLeast finalAttrs.version "0.11" then
-        "-Doptimize=ReleaseSafe"
-      else
-        "-Drelease-safe=true";
+    zig_default_optimize_flag = "--release=safe";
   };
 
   setupHook = ./setup-hook.sh;
@@ -175,8 +170,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "General-purpose programming language and toolchain for maintaining robust, optimal, and reusable software";
     homepage = "https://ziglang.org/";
     changelog = "https://ziglang.org/download/${finalAttrs.version}/release-notes.html";
+    donationPage = "https://ziglang.org/zsf/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ andrewrk ];
+    maintainers = [ ];
     teams = [ lib.teams.zig ];
     mainProgram = "zig";
     platforms = lib.platforms.unix;

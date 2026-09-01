@@ -24,14 +24,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mlx-lm";
-  version = "0.30.4";
+  version = "0.31.3";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ml-explore";
     repo = "mlx-lm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ncDg7C84d1tAgk1300N7wY6kD1BocNNIqDUl0xBLhqY=";
+    hash = "sha256-DPOJfsIucG8mWt4ZKenymCJo/i9Jw+a+iuIygIIYkA8=";
   };
 
   build-system = [
@@ -84,9 +85,5 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/ml-explore/mlx-lm";
     changelog = "https://github.com/ml-explore/mlx-lm/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    badPlatforms = [
-      # Building for x86_64 on macOS is not supported by mlx (dependency)
-      "x86_64-darwin"
-    ];
   };
 })

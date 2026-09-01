@@ -4,6 +4,7 @@
   buildDotnetModule,
   dotnetCorePackages,
   nix-update-script,
+  stdenv,
   versionCheckHook,
 }:
 
@@ -13,13 +14,13 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname dotnet-sdk;
-  version = "2025-12-13";
+  version = "2026-02-08";
 
   src = fetchFromGitHub {
     owner = "artempyanykh";
     repo = "marksman";
     tag = finalAttrs.version;
-    hash = "sha256-HgRovSdalRRG1Gx0vNYhRDTbYO/vpz4hB1pgqcVjWF4=";
+    hash = "sha256-xebt55WKHOKwA6QIkW5mnvqUGHeGRzINCWfViA4cfJ0=";
   };
 
   projectFile = "Marksman/Marksman.fsproj";
@@ -29,6 +30,12 @@ buildDotnetModule (finalAttrs: {
 
   doCheck = true;
   testProjectFile = "Tests/Tests.fsproj";
+  # __darwinAllowLocalNetworking is not working with IPv4-mapped IPv6.
+  # See: https://github.com/NixOS/nix/pull/11270#issuecomment-3936740134
+  dotnetTestFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--environment"
+    "DOTNET_SYSTEM_NET_DISABLEIPV6=1"
+  ];
 
   nugetDeps = ./deps.json;
 
@@ -62,6 +69,6 @@ buildDotnetModule (finalAttrs: {
       plusgut
     ];
     platforms = dotnet-sdk.meta.platforms;
-    mainProgram = pname;
+    mainProgram = "marksman";
   };
 })

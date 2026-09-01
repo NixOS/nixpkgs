@@ -79,7 +79,7 @@
 
     Most commonly used in overrides files on a callPackage-provided attribute set of packages.
 
-    NOTE: We typically use platfromAssertions instead of brokenAssertions because the presence of packages set to null
+    NOTE: We typically use platformAssertions instead of brokenAssertions because the presence of packages set to null
     means evaluation will fail if package attributes are accessed without checking for null first. OfBorg evaluation
     sets allowBroken to true, which means we can't rely on brokenAssertions to prevent evaluation of a package with
     missing dependencies.

@@ -21,7 +21,6 @@
   libxml2,
   libglut,
   libsamplerate,
-  pcre,
   libevent,
   libedit,
   yajl,
@@ -29,8 +28,8 @@
   openssl,
   glfw,
   pkg-config,
-  libpthreadstubs,
-  libXdmcp,
+  libpthread-stubs,
+  libxdmcp,
   libmemcached,
 }:
 
@@ -39,7 +38,7 @@ stdenv.mkDerivation {
   version = "2019.05.22-alpha";
 
   src = fetchFromGitHub {
-    owner = "stevedekorte";
+    owner = "IoLanguage";
     repo = "io";
     tag = "2019.05.22-alpha";
     fetchSubmodules = true;
@@ -81,14 +80,13 @@ stdenv.mkDerivation {
     libxml2
     libglut
     libsamplerate
-    pcre
     libevent
     libedit
     yajl
     glfw
     openssl
-    libpthreadstubs
-    libXdmcp
+    libpthread-stubs
+    libxdmcp
     libmemcached
     python3
   ];

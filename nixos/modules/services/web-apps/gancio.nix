@@ -20,7 +20,6 @@ let
     concatMapStringsSep
     getExe
     mkMerge
-    mkDefault
     ;
 in
 {

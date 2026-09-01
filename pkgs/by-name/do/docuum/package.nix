@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "docuum";
-  version = "0.26.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "stepchowfun";
     repo = "docuum";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZfC0z/oaf+HQR33DDtixp9LwLD3v+eZ1tP3WvXqNnFY=";
+    hash = "sha256-Avd+37mY9E28kfqRI8W3Lx5O/RrxuHFwBnXZqqdrkNQ=";
   };
 
-  cargoHash = "sha256-0vNhZTIRpZ72hiU6GvlbWlo2U//AdJmowXVuaI/5wB8=";
+  cargoHash = "sha256-VrCtfE4WvTlKeLsJVm73kNvo3lH90nt+imG2Yqse8K0=";
 
   checkFlags = [
     # fails, no idea why

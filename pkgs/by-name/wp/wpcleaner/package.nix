@@ -24,12 +24,12 @@ let
 in
 stdenv.mkDerivation {
   pname = "wpcleaner";
-  version = "2.0.5-unstable-2025-04-25";
+  version = "2.0.5-unstable-2026-05-11";
   src = fetchFromGitHub {
     owner = "WPCleaner";
     repo = "wpcleaner";
-    rev = "7fd357cf26349658183517658139870dd45eaedc";
-    hash = "sha256-iaAP/5Z+ghvMAn4ke7lhRqKov/3jXr0LMwbPDZ052j0=";
+    rev = "5d94f34e8aeb1d8353ec1981083acbc50eca10ee";
+    hash = "sha256-sUtaDGxoNF3EBvnDSRmFeGhceqLZxboQzU3H7MYOxP4";
   };
 
   dontConfigure = true;

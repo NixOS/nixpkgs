@@ -4,8 +4,6 @@
   hatchling,
   lib,
   packaging,
-  pythonOlder,
-  tomli,
   twisted,
 }:
 
@@ -24,7 +22,7 @@ let
 
     build-system = [ hatchling ];
 
-    dependencies = [ packaging ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+    dependencies = [ packaging ];
 
     # escape infinite recursion with twisted
     doCheck = false;

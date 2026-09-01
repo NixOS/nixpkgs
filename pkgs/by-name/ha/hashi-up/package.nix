@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hashi-up";
   version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "jsiebens";
     repo = "hashi-up";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-PdZ8X2pJ5TfT0bJ4/P/XbMTv+yyL5/1AxIFHnL/qNcg=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lucperkins ];
   };
-}
+})

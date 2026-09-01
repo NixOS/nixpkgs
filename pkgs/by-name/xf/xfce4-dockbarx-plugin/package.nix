@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
     chmod +x $out/share/dockbarx/xfce4-panel-plug
-    wrapPythonProgramsIn "$out/share/dockbarx" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/share/dockbarx" "$out ''${pythonPath[*]}"
   '';
 
   meta = {

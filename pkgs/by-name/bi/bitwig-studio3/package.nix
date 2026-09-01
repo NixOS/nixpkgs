@@ -9,7 +9,12 @@
   glib,
   gtk3,
   lib,
-  xorg,
+  libxcb-util,
+  libxcb-wm,
+  libxtst,
+  libxcursor,
+  libx11,
+  libxcb,
   libglvnd,
   libjack2,
   ffmpeg,
@@ -39,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontBuild = true;
   dontWrapGApps = true; # we only want $gappsWrapperArgs here
 
-  buildInputs = with xorg; [
+  buildInputs = [
     alsa-lib
     cairo
     freetype
@@ -47,16 +52,16 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk3
     libxcb
-    xcbutil
-    xcbutilwm
+    libxcb-util
+    libxcb-wm
     zlib
-    libXtst
+    libxtst
     libxkbcommon
     pulseaudio
     libjack2
-    libX11
+    libx11
     libglvnd
-    libXcursor
+    libxcursor
     (lib.getLib stdenv.cc.cc)
   ];
 

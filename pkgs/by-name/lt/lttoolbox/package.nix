@@ -2,10 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
-  autoconf,
-  automake,
+  cmake,
   pkg-config,
   utf8cpp,
   libtool,
@@ -16,19 +13,17 @@
 
 stdenv.mkDerivation rec {
   pname = "lttoolbox";
-  version = "3.7.6";
+  version = "3.8.2";
 
   src = fetchFromGitHub {
     owner = "apertium";
     repo = "lttoolbox";
     tag = "v${version}";
-    hash = "sha256-T92TEhrWwPYW8e49rc0jfM0C3dmNYtuexhO/l5s+tQ0=";
+    hash = "sha256-g9mWHd9MzVKg/6zF7Fh7owFM3uX9vOQzX0IkrEzr5LY=";
   };
 
   nativeBuildInputs = [
-    autoreconfHook
-    autoconf
-    automake
+    cmake
     pkg-config
     utf8cpp
     libtool
@@ -40,12 +35,19 @@ stdenv.mkDerivation rec {
   buildFlags = [
     "CPPFLAGS=-I${utf8cpp}/include/utf8cpp"
   ];
+  cmakeFlags = [
+  ];
+
+  # Workaround based on
+  # https://github.com/NixOS/nixpkgs/issues/144170#issuecomment-1423195220
+  # for https://github.com/apertium/lttoolbox/issues/207
+  preInstall = ''
+    sed -i.tmp 's,[$$]{\(exec_\)*prefix}//nix/store,/nix/store,' ./lttoolbox.pc
+    rm ./lttoolbox.pc.tmp
+  '';
 
   nativeCheckInputs = [ python3 ];
   doCheck = true;
-  checkPhase = ''
-    python3 tests/run_tests.py
-  '';
 
   meta = {
     description = "Finite state compiler, processor and helper tools used by apertium";

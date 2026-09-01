@@ -21,15 +21,15 @@
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ring-doorbell";
-  version = "0.9.13";
+  version = "0.9.14";
   pyproject = true;
 
   src = fetchPypi {
     pname = "ring_doorbell";
-    inherit version;
-    hash = "sha256-M8lHODHdWXLvrDbQMeEgGaQMYCXicHTQta+XjJxSQlM=";
+    inherit (finalAttrs) version;
+    hash = "sha256-M99nwMuo0OziuJpNzuZgK69HtE+/wbOgheij1UwBaRc=";
   };
 
   patches = [
@@ -75,9 +75,9 @@ buildPythonPackage rec {
   meta = {
     description = "Library to communicate with Ring Door Bell";
     homepage = "https://github.com/tchellomello/python-ring-doorbell";
-    changelog = "https://github.com/tchellomello/python-ring-doorbell/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/tchellomello/python-ring-doorbell/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ graham33 ];
     mainProgram = "ring-doorbell";
   };
-}
+})

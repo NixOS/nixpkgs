@@ -13,12 +13,12 @@ let
     }:
     stdenv.mkDerivation {
       pname = "hunspell-dict-${shortName}-chromium";
-      version = "115.0.5790.170";
+      version = "145.0.7632.45";
 
       src = fetchgit {
         url = "https://chromium.googlesource.com/chromium/deps/hunspell_dictionaries";
-        rev = "41cdffd71c9948f63c7ad36e1fb0ff519aa7a37e";
-        hash = "sha256-67mvpJRFFa9eMfyqFMURlbxOaTJBICnk+gl0b0mEHl8=";
+        rev = "cccf64a8acc951afe3f47fee023908e55699bc58";
+        hash = "sha256-mYDPXa64IOKLMNiBiMqDrQMR7gDPI+vdyVc+M7E+ddc=";
       };
 
       dontBuild = true;

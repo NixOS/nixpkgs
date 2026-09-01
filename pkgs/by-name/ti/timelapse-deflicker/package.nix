@@ -7,14 +7,14 @@
   perlPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "timelapse-deflicker";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "cyberang3l";
     repo = "timelapse-deflicker";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0bbfnrdycrpyz7rqrql5ib9qszny7z5xpqp65c1mxqd2876gv960";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ valeriangalliat ];
     platforms = lib.platforms.unix;
   };
-}
+})

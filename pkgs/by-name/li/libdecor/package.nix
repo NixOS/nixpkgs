@@ -12,9 +12,10 @@
   dbus,
   pango,
   gtk3,
+  evdev-proto,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdecor";
   version = "0.2.5";
 
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "libdecor";
     repo = "libdecor";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-sUktv/k+4IdJ55uH3F6z8XqaAOTic6miuyZ9U+NhtQQ=";
   };
 
@@ -51,13 +52,14 @@ stdenv.mkDerivation rec {
     dbus
     pango
     gtk3
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isFreeBSD evdev-proto;
 
   meta = {
     homepage = "https://gitlab.freedesktop.org/libdecor/libdecor";
     description = "Client-side decorations library for Wayland clients";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
     maintainers = with lib.maintainers; [ artturin ];
   };
-}
+})

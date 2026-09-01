@@ -29,8 +29,8 @@ buildPythonPackage rec {
     # https://github.com/pyexcel/pyexcel-ods/pull/45
     (fetchpatch2 {
       name = "nose-to-pytest.patch";
-      url = "https://github.com/pyexcel/pyexcel-ods/compare/661d4f0b484ed281128c72e1a2701e2d33fc1879...838b410e800a86c147644568aaa8b2c005d13491.patch";
-      hash = "sha256-1a52VM8yGDEjSFXTq3Di74xwv10d/QskpctOnz9zW1w=";
+      url = "https://github.com/pyexcel/pyexcel-ods/compare/661d4f0b484ed281128c72e1a2701e2d33fc1879...838b410e800a86c147644568aaa8b2c005d13491.diff?full_index=1";
+      hash = "sha256-voBdAjSJIsLEn7Tr44aagJy1FU9vWnBs1bM48zYxujA=";
     })
   ];
 

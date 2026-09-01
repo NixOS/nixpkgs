@@ -5,14 +5,18 @@
   autoreconfHook,
   go-md2man,
   pkg-config,
+  json_c,
   libcap,
+  libkrun,
+  libkrun-sev,
   libseccomp,
   python3,
   systemdMinimal,
-  yajl,
   nixosTests,
   criu,
   versionCheckHook,
+  withLibkrun ? lib.meta.availableOn stdenv.hostPlatform libkrun,
+  withLibkrunSEV ? false,
 }:
 
 let
@@ -41,13 +45,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "crun";
-  version = "1.26";
+  version = "1.29.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "crun";
     tag = finalAttrs.version;
-    hash = "sha256-h9X9UNPXNLSN+b9ka1kXMfApxkU4j5zU3yyyBQyYmwE=";
+    hash = "sha256-KmwkiExekHozW84dmkcC8OW8AP11Fsqj2t/n+ZGXpB4=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -66,10 +70,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     criu
+    json_c
     libcap
     libseccomp
     systemdMinimal
-    yajl
+  ]
+  ++ lib.optionals withLibkrun [
+    libkrun
+  ]
+  ++ lib.optionals withLibkrunSEV [
+    libkrun-sev
+  ];
+
+  configureFlags = lib.optionals withLibkrun [
+    "--with-libkrun"
   ];
 
   enableParallelBuilding = true;
@@ -88,6 +102,14 @@ stdenv.mkDerivation (finalAttrs: {
     ${lib.concatMapStringsSep "\n" (
       e: "substituteInPlace Makefile.am --replace-fail 'tests/${e}' ''"
     ) disabledTests}
+  ''
+  + lib.optionalString withLibkrun ''
+    substituteInPlace src/libcrun/handlers/krun.c \
+      --replace-fail '"libkrun.so.1"' '"${libkrun}/lib/libkrun.so.1"'
+  ''
+  + lib.optionalString withLibkrunSEV ''
+    substituteInPlace src/libcrun/handlers/krun.c \
+      --replace-fail '"libkrun-sev.so.1"' '"${libkrun-sev}/lib/libkrun-sev.so.1"'
   '';
 
   doCheck = true;

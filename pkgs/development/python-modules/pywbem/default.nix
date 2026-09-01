@@ -26,12 +26,12 @@
 
 buildPythonPackage rec {
   pname = "pywbem";
-  version = "1.8.1";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-P+/sNPckpVHkLKOJ0ILQKf7QO0/xSsyO9cfLkv3aE1s=";
+    hash = "sha256-ZcH/lyzqLwF7BnlfR8CtdEL4Q0/2Q6VEBQwQcmcE9qs=";
   };
 
   postPatch = ''

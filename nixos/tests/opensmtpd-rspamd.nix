@@ -3,7 +3,7 @@ import ./make-test-python.nix {
 
   nodes = {
     smtp1 =
-      { pkgs, ... }:
+      { config, pkgs, ... }:
       {
         imports = [ common/user-account.nix ];
         networking = {
@@ -26,7 +26,7 @@ import ./make-test-python.nix {
           serverConfiguration = ''
             listen on 0.0.0.0
             action dovecot_deliver mda \
-              "${pkgs.dovecot}/libexec/dovecot/deliver -d %{user.username}"
+              "${config.services.dovecot2.package}/libexec/dovecot/deliver -d %{user.username}"
             match from any for local action dovecot_deliver
 
             action relay_smtp2 relay host "smtp://192.168.1.2"
@@ -35,14 +35,20 @@ import ./make-test-python.nix {
         };
         services.dovecot2 = {
           enable = true;
-          enableImap = true;
-          mailLocation = "maildir:~/mail";
-          protocols = [ "imap" ];
+          enablePAM = true;
+          settings = {
+            dovecot_config_version = "2.4.3";
+            dovecot_storage_version = config.services.dovecot2.package.version;
+            mail_driver = "maildir";
+            mail_path = "~/mail";
+            protocols.imap = true;
+            auth_allow_cleartext = true;
+          };
         };
       };
 
     smtp2 =
-      { pkgs, ... }:
+      { config, pkgs, ... }:
       {
         imports = [ common/user-account.nix ];
         networking = {
@@ -72,15 +78,21 @@ import ./make-test-python.nix {
             filter rspamd proc-exec "${pkgs.opensmtpd-filter-rspamd}/bin/filter-rspamd"
             listen on 0.0.0.0 filter rspamd
             action dovecot_deliver mda \
-              "${pkgs.dovecot}/libexec/dovecot/deliver -d %{user.username}"
+              "${config.services.dovecot2.package}/libexec/dovecot/deliver -d %{user.username}"
             match from any for local action dovecot_deliver
           '';
         };
         services.dovecot2 = {
           enable = true;
-          enableImap = true;
-          mailLocation = "maildir:~/mail";
-          protocols = [ "imap" ];
+          enablePAM = true;
+          settings = {
+            dovecot_config_version = "2.4.3";
+            dovecot_storage_version = config.services.dovecot2.package.version;
+            mail_driver = "maildir";
+            mail_path = "~/mail";
+            protocols.imap = true;
+            auth_allow_cleartext = true;
+          };
         };
       };
 
@@ -146,7 +158,7 @@ import ./make-test-python.nix {
     smtp1.wait_for_unit("opensmtpd")
     smtp2.wait_for_unit("opensmtpd")
     smtp2.wait_for_unit("rspamd")
-    smtp2.wait_for_unit("dovecot2")
+    smtp2.wait_for_unit("dovecot")
 
     # To prevent sporadic failures during daemon startup, make sure
     # services are listening on their ports before sending requests

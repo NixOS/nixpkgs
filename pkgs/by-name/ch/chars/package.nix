@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "chars";
   version = "0.7.0";
 
   src = fetchFromGitHub {
-    owner = "antifuchs";
+    owner = "boinkor-net";
     repo = "chars";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-mBtwdPzIc6RgEFTyReStFlhS4UhhRWjBTKT6gD3tzpQ=";
   };
 
@@ -25,8 +25,8 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Commandline tool to display information about unicode characters";
     mainProgram = "chars";
-    homepage = "https://github.com/antifuchs/chars";
+    homepage = "https://github.com/boinkor-net/chars";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bbigras ];
   };
-}
+})

@@ -8,14 +8,14 @@
   libva,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cmrt";
   version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "cmrt";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-W6MQI41J9CKeM1eILCkvmW34cbCC8YeEF2mE+Ci8o7s=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ tadfisher ];
     platforms = lib.platforms.linux;
   };
-}
+})

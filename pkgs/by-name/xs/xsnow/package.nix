@@ -6,16 +6,19 @@
   libxml2,
   wrapGAppsHook3,
   gtk3-x11,
-  xorg,
+  libxt,
+  libxtst,
+  libxpm,
+  libx11,
   libxkbcommon,
   gsl,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xsnow";
   version = "3.9.0";
 
   src = fetchurl {
-    url = "https://ratrabbit.nl/downloads/xsnow/xsnow-${version}.tar.gz";
+    url = "https://ratrabbit.nl/downloads/xsnow/xsnow-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-PMZsxZUmVHZwU6+KBPMq8sjyt42jlrXazgk7DGc9bvo=";
   };
 
@@ -28,13 +31,11 @@ stdenv.mkDerivation rec {
     libxkbcommon
     libxml2
     gsl
-  ]
-  ++ (with xorg; [
-    libX11
-    libXpm
-    libXt
-    libXtst
-  ]);
+    libx11
+    libxpm
+    libxt
+    libxtst
+  ];
 
   makeFlags = [ "gamesdir=$(out)/bin" ];
 
@@ -53,4 +54,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

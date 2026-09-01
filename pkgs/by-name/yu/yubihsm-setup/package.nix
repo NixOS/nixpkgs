@@ -7,14 +7,14 @@
   yubihsm-shell,
 }:
 
-rustPlatform.buildRustPackage (finalPackage: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yubihsm-setup";
   version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubihsm-setup";
-    tag = finalPackage.version;
+    tag = finalAttrs.version;
     hash = "sha256-ScpcEDNWLhywtcPPG84vZyIAQ5lF07udmGsmsyc3+iU=";
   };
 

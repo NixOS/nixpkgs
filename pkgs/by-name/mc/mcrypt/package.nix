@@ -21,6 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./segv.patch
     ./sprintf_CVE-2012-4527.patch
     ./malloc_to_stdlib.patch
+    ./gcc15.patch
   ];
 
   buildInputs = [

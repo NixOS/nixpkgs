@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "django-cache-url";
-  version = "3.4.5";
+  version = "3.4.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "epicserve";
     repo = "django-cache-url";
     tag = "v${version}";
-    hash = "sha256-SjTcBYaFMD8XwIlqOgoJrc30FLrpX+M2ZcvZzA9ou6g=";
+    hash = "sha256-nXn/aDTMla4Pi6v93LoElxCpL6AFbbWKTd4TMFaK+Nk=";
   };
 
   build-system = [ setuptools ];

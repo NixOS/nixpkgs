@@ -15,26 +15,31 @@
     internal = true;
   };
 
-  config.result =
-    pkgs.runCommand config.name
-      {
-        nativeBuildInputs = [ pkgs.makeBinaryWrapper ];
-        env = {
-          inherit (config) configFile;
-          binPath = lib.makeBinPath config.runtimeInputs;
-        };
-        passthru = {
-          inherit (config) runtimeInputs;
-          inherit config options;
-        };
-        inherit (config.package) meta version;
-      }
+  config.result = pkgs.symlinkJoin (finalAttrs: {
+    pname = config.name;
+    inherit (config.package) meta version;
+    nativeBuildInputs = [ pkgs.makeBinaryWrapper ];
+    paths = [ config.package ];
+    env = {
+      inherit (config) configFile;
+      binPath = lib.makeBinPath config.runtimeInputs;
+    };
+    passthru = {
+      inherit (config) runtimeInputs;
+      inherit config options;
+      check = pkgs.callPackage ../check-wrapper.nix {
+        wrapper = finalAttrs.finalPackage;
+      };
+    };
+    postBuild =
+      let
+        wrapPrefixPathArgument = lib.optionalString (
+          config.runtimeInputs != [ ]
+        ) "--prefix PATH : \"$binPath\"";
+      in
       ''
-        mkdir -p $out/bin
-        makeWrapper \
-          ${lib.getExe config.package} \
-          $out/bin/treefmt \
-          --prefix PATH : "$binPath" \
-          --add-flags "--config-file $configFile"
+        wrapProgram "$out/bin/treefmt" \
+          --add-flags "--config-file $configFile " ${wrapPrefixPathArgument}
       '';
+  });
 }

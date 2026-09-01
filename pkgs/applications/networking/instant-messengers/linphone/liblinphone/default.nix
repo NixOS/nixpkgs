@@ -11,7 +11,7 @@
   python3,
   sqlite,
   xercesc,
-  zxing-cpp,
+  bc-zxing-cpp,
   mkLinphoneDerivation,
 }:
 mkLinphoneDerivation {
@@ -39,7 +39,7 @@ mkLinphoneDerivation {
     libxml2
     sqlite
     xercesc
-    zxing-cpp
+    bc-zxing-cpp
   ];
 
   propagatedBuildInputs = [

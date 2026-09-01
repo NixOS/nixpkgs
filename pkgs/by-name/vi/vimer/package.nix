@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.2.0";
   pname = "vimer";
 
   src = fetchFromGitHub {
     owner = "susam";
     repo = "vimer";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "01qhr3i7wasbaxvms39c81infpry2vk0nzh7r5m5b9p713p0phsi";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     mainProgram = "vimer";
   };
 
-}
+})

@@ -4,12 +4,12 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tuifeed";
   version = "0.4.2";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-CL6cd9OfvnA5N4W3rGl7XLcnlSrh3kcqA7idxexkjA4=";
   };
 
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     description = "Terminal feed reader with a fancy UI";
     mainProgram = "tuifeed";
     homepage = "https://github.com/veeso/tuifeed";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ devhell ];
   };
-}
+})

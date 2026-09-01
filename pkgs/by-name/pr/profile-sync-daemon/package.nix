@@ -6,14 +6,14 @@
   coreutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "profile-sync-daemon";
   version = "6.50";
 
   src = fetchFromGitHub {
     owner = "graysky2";
     repo = "profile-sync-daemon";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Wb9YLxuu9i9s/Y6trz5NZDU9WRywe3138cp5Q2gWbxM=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.prikhi ];
     platforms = lib.platforms.linux;
   };
-}
+})

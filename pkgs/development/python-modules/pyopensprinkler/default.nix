@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyopensprinkler";
-  version = "0.7.15";
+  version = "0.7.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vinteo";
     repo = "py-opensprinkler";
     rev = version;
-    hash = "sha256-OfC3YYP2GeoiJh+3Ti35dmjtjg4xpN7KXPy/5BA3pPs=";
+    hash = "sha256-1WbGHn2GyZPqnCVdcqPCorGdTQvLyRK4cw6sobhawJ0=";
   };
 
   build-system = [ setuptools ];

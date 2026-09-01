@@ -55,13 +55,13 @@
       # Make a screenshot and save the result:
       machine.screenshot("tinywl_foot")
       print(machine.succeed("cat /tmp/test-wayland.out"))
-      machine.copy_from_vm("/tmp/test-wayland.out")
+      machine.copy_from_machine("/tmp/test-wayland.out")
 
       # Terminate cleanly:
       machine.send_key("alt-esc")
       machine.wait_until_fails("pgrep foot")
       machine.wait_until_fails("pgrep tinywl")
       machine.wait_for_file("/tmp/tinywl-exit-ok")
-      machine.copy_from_vm("/tmp/tinywl.log")
+      machine.copy_from_machine("/tmp/tinywl.log")
     '';
 }

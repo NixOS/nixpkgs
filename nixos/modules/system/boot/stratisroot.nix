@@ -76,7 +76,6 @@ in
       ]
       ++ [
         "aes"
-        "aes_generic"
         "blowfish"
         "twofish"
         "serpent"

@@ -12,6 +12,7 @@
 buildPythonPackage {
   pname = "lightning";
   pyproject = true;
+  __structuredAttrs = true;
 
   inherit (pytorch-lightning)
     version

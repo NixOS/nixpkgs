@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hcl2json";
-  version = "0.6.8";
+  version = "0.6.9";
 
   src = fetchFromGitHub {
     owner = "tmccombs";
     repo = "hcl2json";
-    rev = "v${version}";
-    sha256 = "sha256-jE106vWj1uVPmN9iofg/sWZCpSYDyh2/SHwPg5xHatE=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-CiF5xbRov28xWWygSI9JIG1t/irUyuUxM2vzGnbazGg=";
   };
 
-  vendorHash = "sha256-W5SKD0q3AdIE9Hihnwu6MGoXk1EgBo6ipZaQ73u2tLU=";
+  vendorHash = "sha256-bQFm3BmYxvSe5NRbh1+tG6wWP5C3DSr3g+E36oqk5oY=";
 
   subPackages = [ "." ];
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "hcl2json";
   };
-}
+})

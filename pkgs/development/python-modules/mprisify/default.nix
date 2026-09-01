@@ -9,14 +9,14 @@
 }:
 buildPythonPackage rec {
   pname = "mprisify";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "zehkira";
     repo = "mprisify";
     tag = "v${version}";
-    hash = "sha256-05i3N61cqRgGaBjYOEhxeCSV2wDh9yMaXTvEZ/JGrZo=";
+    hash = "sha256-ir/zv6GGU1TMPoUB05oqWUNt4eEcFzfQ9gShlKYdUfc=";
   };
 
   build-system = [ setuptools ];

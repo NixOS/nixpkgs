@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
   sphinx,
   sphinxcontrib-programoutput,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "idstools";
   version = "0.6.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "jasonish";

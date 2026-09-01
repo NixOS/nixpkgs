@@ -4,20 +4,21 @@
   fetchurl,
   buildPackages,
   fixDarwinDylibNames,
+  fetchpatch,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "build2-bootstrap";
-  version = "0.17.0";
+  version = "0.18.1";
   src = fetchurl {
-    url = "https://download.build2.org/${version}/build2-toolchain-${version}.tar.xz";
-    hash = "sha256-NyKonqht90JTnQ+Ru0Qp/Ua79mhVOjUHgKY0EbZIv10=";
+    url = "https://download.build2.org/${finalAttrs.version}/build2-toolchain-${finalAttrs.version}.tar.xz";
+    hash = "sha256-pfPqudRSK8InBImVk91scBM0mhuMNyeMiyMhBz4l/xY=";
   };
   patches = [
     # Pick up sysdirs from NIX_LDFLAGS
     ./nix-ldflags-sysdirs.patch
   ];
 
-  sourceRoot = "build2-toolchain-${version}/build2";
+  sourceRoot = "build2-toolchain-${finalAttrs.version}/build2";
   makefile = "bootstrap.gmake";
   enableParallelBuilding = true;
 
@@ -36,13 +37,13 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkPhase = ''
     runHook preCheck
-    build2/b-boot --version
+    b/b-boot --version
     runHook postCheck
   '';
 
   installPhase = ''
     runHook preInstall
-    install -D build2/b-boot $out/bin/b
+    install -D b/b-boot $out/bin/b
     runHook postInstall
   '';
 
@@ -75,4 +76,4 @@ stdenv.mkDerivation rec {
       r-burns
     ];
   };
-}
+})

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "1.33";
 
   src = fetchurl {
-    url = "https://sourceforge.net/projects/dgen/files/dgen/${version}/${pname}-${version}.tar.gz";
+    url = "https://sourceforge.net/projects/dgen/files/dgen/${version}/dgen-sdl-${version}.tar.gz";
     hash = "sha256-meLAYBfCKHPHf4gYbrzAmGckTrbgQsdjuwlLArje9h4=";
   };
 

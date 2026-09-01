@@ -9,21 +9,21 @@
   withUdisks ? stdenv.hostPlatform.isLinux,
   udisks,
   glib,
-  libX11,
+  libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "usbimager";
   version = "1.0.10";
 
   src = fetchFromGitLab {
     owner = "bztsrc";
     repo = "usbimager";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-HTFopc2xrhp0XYubQtOwMKWTQ+3JSKAyL4mMyQ82kAs=";
   };
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   nativeBuildInputs = [
     pkg-config
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       udisks
       glib
     ]
-    ++ lib.optional (!withLibui) libX11
+    ++ lib.optional (!withLibui) libx11
     ++ lib.optional withLibui gtk3;
   # libui is bundled with the source of usbimager as a compiled static library
 
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     mainProgram = "usbimager";
   };
-}
+})

@@ -6,7 +6,7 @@
   pkg-config,
   bison,
   libiconv,
-  pcre,
+  pcre2,
   libgcrypt,
   libxcrypt-legacy,
   json_c,
@@ -23,7 +23,7 @@
   tlsSupport ? false,
   openssl,
   pythonSupport ? false,
-  python310,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,6 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./mysql-compat.patch
+    # pcre2 support, vendored from the upstream maintainer's release prep
+    # branch, which is rebased regularly and so unsuitable for fetchpatch:
+    # https://github.com/amotzkau/ldmud/commit/421ae90e611b3a4816bf52d84abfdcc73bf999b7
+    # Remove when updating to the next release.
+    ./pcre2.patch
   ];
 
   sourceRoot = "${finalAttrs.src.name}/src";
@@ -52,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libgcrypt
     libxcrypt-legacy
-    pcre
+    pcre2
     json_c
     libxml2
   ]
@@ -61,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional postgresSupport libpq
   ++ lib.optional sqliteSupport sqlite
   ++ lib.optional tlsSupport openssl
-  ++ lib.optional pythonSupport python310
+  ++ lib.optional pythonSupport python3
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   # To support systems without autoconf LD puts its configure.ac in a non-default
@@ -93,6 +98,10 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       export LDFLAGS="$LDFLAGS -L${libiconv}/lib -liconv"
     '';
+
+  env.NIX_CFLAGS_COMPILE =
+    # Required for legacy C code in source
+    "-std=gnu99";
 
   installTargets = [
     "install-driver"

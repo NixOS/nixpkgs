@@ -17,7 +17,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lasso";
   version = "2.9.0";
 
@@ -25,14 +25,14 @@ stdenv.mkDerivation rec {
     domain = "git.entrouvert.org";
     owner = "entrouvert";
     repo = "lasso";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fDMM9DJBzxz6DX4cNK3DEE28FBT8gCF9C9DQfUNNFaY=";
   };
 
   postPatch =
     let
       printVersion = writeShellScript "print-version" ''
-        echo -n ${lib.escapeShellArg version}
+        echo -n ${lib.escapeShellArg finalAttrs.version}
       '';
     in
     ''
@@ -67,9 +67,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://lasso.entrouvert.org/";
     description = "Liberty Alliance Single Sign-On library";
-    changelog = "https://git.entrouvert.org/entrouvert/lasso/raw/tag/v${version}/NEWS";
+    changelog = "https://git.entrouvert.org/entrouvert/lasso/raw/tag/v${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ womfoo ];
   };
-}
+})

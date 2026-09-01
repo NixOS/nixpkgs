@@ -9,15 +9,15 @@
   enableExperimental ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lprint";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "michaelrsweet";
     repo = "lprint";
-    rev = "v${version}";
-    hash = "sha256-1OOLGQ8S4oRNSJanX/AzJ+g5F+jYnE/+o+ie5ucY22U=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-r5mOwkU828btDdt0y7JrEl6KSim8VaF/y4R58zPX3eI=";
   };
 
   outputs = [
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pandapip1 ];
   };
-}
+})

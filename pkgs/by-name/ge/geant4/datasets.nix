@@ -59,15 +59,15 @@ builtins.listToAttrs (
 
       {
         pname = "G4EMLOW";
-        version = "8.6.1";
-        sha256 = "sha256-SpNYjSYIDOHTNrlPdvravkkF+48cuiQVeVAj1s2PSoo=";
+        version = "8.8";
+        sha256 = "sha256-tgz9YxdvXRYQfiols1sjUVUDLRc110lnDKUP7eEmJM8=";
         envvar = "LE";
       }
 
       {
         pname = "G4PhotonEvaporation";
-        version = "6.1";
-        sha256 = "sha256-X/wfmagdUMkCAYbVmHSvc8U7okwYQrO4KzGIIjuyRvI=";
+        version = "6.1.2";
+        sha256 = "sha256-AhScCrkdiO4k54UyVYd345oGi5/N0ZkTYQH/WOY150I=";
         envvar = "LEVELGAMMA";
       }
 
@@ -87,8 +87,8 @@ builtins.listToAttrs (
 
       {
         pname = "G4PARTICLEXS";
-        version = "4.1";
-        sha256 = "sha256-B64eBI6ayOf5H2aWSX3VW9UMzIItl68aC56SMhKm19E=";
+        version = "4.2";
+        sha256 = "sha256-xSu/hqqlibeKuoCxarCt8QQeowDeU5WGW5f87m61WFE=";
         envvar = "PARTICLEXS";
       }
 
@@ -101,8 +101,8 @@ builtins.listToAttrs (
 
       {
         pname = "G4INCL";
-        version = "1.2";
-        sha256 = "sha256-+ICxYHPuCpLXSU8ydqbVLU3h02d6DUx8WHADlu0OGn4=";
+        version = "1.3";
+        sha256 = "sha256-5LPb5SrO9TU2RU4iRDCRIShDghvSNiju2EbSmVmfO/k=";
         envvar = "INCL";
       }
 
@@ -136,8 +136,8 @@ builtins.listToAttrs (
 
       {
         pname = "G4CHANNELING";
-        version = "1.0";
-        sha256 = "sha256-ID48aZhMoJrNGBodMamw76+tS8EubGCPCwXmlRINZ/I=";
+        version = "2.0";
+        sha256 = "sha256-ZiFZKIZE4Ht51/4JHvvrulK1lUaz3G9dKFuXatEvLQY=";
         envvar = "CHANNELING";
       }
 

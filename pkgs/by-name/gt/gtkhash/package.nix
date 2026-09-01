@@ -15,14 +15,14 @@
   libgcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtkhash";
   version = "1.5";
 
   src = fetchFromGitHub {
     repo = "gtkhash";
     owner = "gtkhash";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-XpgTolpTSsW3i0xk19tt4cn9qANoeiq7YnBBR6g8ioU=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     mainProgram = "gtkhash";
     platforms = lib.platforms.unix;
   };
-}
+})

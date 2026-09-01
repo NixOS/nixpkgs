@@ -5,12 +5,12 @@
   libressl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "geomyidae";
   version = "0.99";
 
   src = fetchurl {
-    url = "gopher://bitreich.org/9/scm/geomyidae/tag/geomyidae-v${version}.tar.gz";
+    url = "gopher://bitreich.org/9/scm/geomyidae/tag/geomyidae-v${finalAttrs.version}.tar.gz";
     hash = "sha256-QnAUqvyi+b14kIjqnreY6adFl62glRiuX9QiVamR6zw=";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.athas ];
     platforms = lib.platforms.unix;
   };
-}
+})

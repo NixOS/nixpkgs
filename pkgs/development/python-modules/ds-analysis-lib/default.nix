@@ -10,6 +10,9 @@
   appthreat-vulnerability-db,
   custom-json-diff,
   cvss,
+  ds-xbom-lib,
+  jsonschema,
+  referencing,
   rich,
   toml,
 
@@ -34,6 +37,9 @@ buildPythonPackage rec {
     appthreat-vulnerability-db
     custom-json-diff
     cvss
+    ds-xbom-lib
+    jsonschema
+    referencing
     rich
     toml
   ];

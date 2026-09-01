@@ -6,14 +6,14 @@
   systemd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qmk_hid";
   version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "FrameworkComputer";
     repo = "qmk_hid";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-wJi7FQrvMbdTwvbbjBnzmxupMbEuM8TeZ0JIK5ulQKI=";
   };
 
@@ -35,8 +35,8 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Commandline tool for interactng with QMK devices over HID";
     homepage = "https://github.com/FrameworkComputer/qmk_hid";
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = [ ];
     mainProgram = "qmk_hid";
   };
-}
+})

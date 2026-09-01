@@ -9,14 +9,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gebaar-libinput";
   version = "0.0.5";
 
   src = fetchFromGitHub {
     owner = "Coffee2CodeNL";
     repo = "gebaar-libinput";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "1kqcgwkia1p195xr082838dvj1gqif9d63i8a52jb0lc32zzizh6";
     fetchSubmodules = true;
   };
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
       lovesegfault
     ];
   };
-}
+})

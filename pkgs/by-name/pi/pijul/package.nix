@@ -5,33 +5,38 @@
   rustPlatform,
   installShellFiles,
   pkg-config,
+  dbus,
   libsodium,
   openssl,
-  xxHash,
+  xxhash,
   gitImportSupport ? true,
   libgit2 ? null,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "pijul";
-  version = "1.0.0-beta.9";
+  version = "1.0.0-beta.21";
 
   src = fetchCrate {
-    inherit version pname;
-    hash = "sha256-jy0mzgLw9iWuoWe2ictMTL3cHnjJ5kzs6TAK+pdm28g=";
+    inherit (finalAttrs) version pname;
+    hash = "sha256-IC47l6FzlopoiVZmKojPzIQzBS6UzdgE397no6GzrR4=";
   };
 
-  cargoHash = "sha256-d2IlBtR3j6SF8AAagUQftCOqTqN70rDMlHkA9byxXyk=";
+  cargoHash = "sha256-Ldb+CpKiVvNOeMhdD/hfQfAAMwdwUy/npY85VBPBq5k=";
 
+  # Tests require a TTY, which the Nix sandbox does not provide.
   doCheck = false;
   nativeBuildInputs = [
     installShellFiles
     pkg-config
   ];
   buildInputs = [
+    dbus
     openssl
     libsodium
-    xxHash
+    xxhash
   ]
   ++ (lib.optionals gitImportSupport [ libgit2 ]);
 
@@ -47,7 +52,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Distributed version control system";
     homepage = "https://pijul.org";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       gal_bolle
       dywedir
@@ -55,4 +60,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "pijul";
   };
-}
+})

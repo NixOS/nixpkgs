@@ -8,10 +8,10 @@
   wayland-scanner,
   libdrm,
   minimal ? false,
-  libX11,
+  libx11,
   libxcb,
-  libXext,
-  libXfixes,
+  libxext,
+  libxfixes,
   wayland,
   libffi,
   libGL,
@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libva" + lib.optionalString minimal "-minimal";
-  version = "2.23.0";
+  version = "2.24.1";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "libva";
     rev = finalAttrs.version;
-    sha256 = "sha256-ePtzZPzBnkhV0cV3Nw/pgOnKnzDkk7U2Svzo0e1YMbc=";
+    sha256 = "sha256-kgFvqyUlBZApc8D2i3BX6bHkUVNon5bL4asZ9myhQEM=";
   };
 
   outputs = [
@@ -54,10 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     libdrm
   ]
   ++ lib.optionals (!minimal) [
-    libX11
+    libx11
     libxcb
-    libXext
-    libXfixes
+    libxext
+    libxfixes
     wayland
     libffi
     libGL

@@ -8,12 +8,12 @@
   SDL_ttf,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "quantumminigolf";
   version = "1.1.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/quantumminigolf/quantumminigolf/${version}/quantumminigolf-${version}.src.tar.gz";
+    url = "mirror://sourceforge/project/quantumminigolf/quantumminigolf/${finalAttrs.version}/quantumminigolf-${finalAttrs.version}.src.tar.gz";
     sha256 = "sha256-Y3LUGk6pAuNGVOYkc0WYDbgJFtwJJn+aLRHmCKY7W5k=";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     # never built on aarch64-linux since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
-}
+})

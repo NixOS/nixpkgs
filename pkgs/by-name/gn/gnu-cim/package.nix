@@ -4,7 +4,7 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnu-cim";
   version = "5.1";
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnu/cim/cim-${version}.tar.gz";
+    url = "mirror://gnu/cim/cim-${finalAttrs.version}.tar.gz";
     hash = "sha256-uQcXtm7EAFA73WnlN+i38+ip0QbDupoIoErlc2mgaak=";
   };
 
@@ -44,8 +44,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.gnu.org/software/cim/";
     license = lib.licenses.gpl2;
-    platforms = lib.platforms.all;
-    badPlatforms = [ "aarch64-darwin" ];
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

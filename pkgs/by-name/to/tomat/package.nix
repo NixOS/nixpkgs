@@ -7,18 +7,18 @@
   alsa-lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tomat";
-  version = "2.8.1";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "jolars";
     repo = "tomat";
-    tag = "v${version}";
-    hash = "sha256-91/yCWjuLOpeY0APJviElhLBWDM4a8ytUEYkp0oKuRk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UJcUvTaFaR0I12T1MtMlXM/lFNEps8eOfaqR66OeNBI=";
   };
 
-  cargoHash = "sha256-/EYSk7bsCnKNRGe/f6RH0L2h0KKU2uEQPSKgqi2a58g=";
+  cargoHash = "sha256-b6b5fIjortiVhCgzU3Qn1w3ccsTZsuuyY6Me+ZuuUHk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -48,10 +48,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Pomodoro timer for status bars";
     homepage = "https://github.com/jolars/tomat";
-    changelog = "https://github.com/jolars/tomat/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/jolars/tomat/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jolars ];
     mainProgram = "tomat";
     platforms = lib.platforms.linux;
   };
-}
+})

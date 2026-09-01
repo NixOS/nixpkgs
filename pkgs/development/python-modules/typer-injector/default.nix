@@ -5,19 +5,19 @@
   hatchling,
   lib,
   pytestCheckHook,
-  typer-slim,
+  typer,
 }:
 
 buildPythonPackage rec {
   pname = "typer-injector";
-  version = "0.2.0";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BenjyWiener";
     repo = "typer-injector";
     tag = "v${version}";
-    hash = "sha256-nwEYFw+4jeF/SoaZWR51VWRezqBFjGoLiVgJWdPNoIk=";
+    hash = "sha256-rhYeTNQh1DZuQ7/yNleZPMMBiF29OrcT0vr/yb5HJXk=";
   };
 
   build-system = [
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    typer-slim
+    typer
   ];
 
   pythonImportsCheck = [ "typer_injector" ];

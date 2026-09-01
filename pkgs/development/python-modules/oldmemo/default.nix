@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "oldmemo";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Syndace";
     repo = "python-oldmemo";
     tag = "v${version}";
-    hash = "sha256-upgpyNoyBUg4IskF2DeQGOwm2h+hydO9lBoIHgwho28=";
+    hash = "sha256-p2VgSNarmVSAj8cuvTKzlIQE0SRJ1BkV91DOv+2B7ek=";
   };
 
   build-system = [

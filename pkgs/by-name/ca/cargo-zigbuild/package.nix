@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-zigbuild";
-  version = "0.21.1";
+  version = "0.23.2";
 
   src = fetchFromGitHub {
-    owner = "messense";
+    owner = "rust-cross";
     repo = "cargo-zigbuild";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1SzwJlYLuOuu1cZgPMjVF0ibgXI7Mcnmj/aaqi83U9s=";
+    hash = "sha256-Woa8lcx9D5U2NyxHqLE9nIkgtvLc35lo+H+Cp+NOHKg=";
   };
 
-  cargoHash = "sha256-6HOls1aoAWDqE6+YyXyIldkck2AXqpIfZKfyhmAtZ4M=";
+  cargoHash = "sha256-Q/Hf9fHxA/3EhnbWapyMak4nyZt/5HTL8osE7Nit6g0=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -37,8 +37,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Tool to compile Cargo projects with zig as the linker";
     mainProgram = "cargo-zigbuild";
-    homepage = "https://github.com/messense/cargo-zigbuild";
-    changelog = "https://github.com/messense/cargo-zigbuild/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/rust-cross/cargo-zigbuild";
+    changelog = "https://github.com/rust-cross/cargo-zigbuild/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.progrm_jarvis ];
   };

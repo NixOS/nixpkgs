@@ -8,18 +8,18 @@
   sq,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sq";
-  version = "0.48.10";
+  version = "0.54.1";
 
   src = fetchFromGitHub {
     owner = "neilotoole";
     repo = "sq";
-    rev = "v${version}";
-    hash = "sha256-5JlvG179rZHXsJWg+5uz//7QGdkwdNGULkK/DLCifus=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-k5BoJGEgLE2GZYOjK5DvI0uRo2++X76SpdTo1Nzyc90=";
   };
 
-  vendorHash = "sha256-UP9+KtFuibwb9fnUcflnIpcf0Ow54D7db9F07PLhBN4=";
+  vendorHash = "sha256-XrgM+qe9BWRsbsBUydy6IAjbqHgKHL0TLy55KhS8lx0=";
 
   proxyVendor = true;
 
@@ -30,30 +30,30 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-w"
-    "-X=github.com/neilotoole/sq/cli/buildinfo.Version=v${version}"
+    "-X=github.com/neilotoole/sq/cli/buildinfo.Version=v${finalAttrs.version}"
+    "-X=github.com/neilotoole/sq/cli/buildinfo.Commit=${finalAttrs.src.rev}"
+    "-X=github.com/neilotoole/sq/cli/buildinfo.Timestamp=1970-01-01T00:00:00Z"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd sq \
-      --bash <($out/bin/sq completion bash) \
-      --fish <($out/bin/sq completion fish) \
-      --zsh <($out/bin/sq completion zsh)
+    for sh in bash fish zsh; do
+      installShellCompletion --cmd sq --$sh <($out/bin/sq completion $sh)
+    done
   '';
 
   passthru.tests = {
     version = testers.testVersion {
       package = sq;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
   meta = {
     description = "Swiss army knife for data";
-    mainProgram = "sq";
     homepage = "https://sq.io/";
+    changelog = "https://github.com/neilotoole/sq/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ raitobezarius ];
+    maintainers = with lib.maintainers; [ iamanaws ];
+    mainProgram = "sq";
   };
-}
+})

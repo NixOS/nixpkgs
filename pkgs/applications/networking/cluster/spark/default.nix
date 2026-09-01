@@ -8,7 +8,7 @@
   RSupport ? true,
   R,
   nixosTests,
-  # needeed in situations where hadoop's jdk version is too old
+  # needed in situations where hadoop's jdk version is too old
   jdk21_headless,
 }:
 
@@ -89,7 +89,6 @@ let
         platforms = lib.platforms.all;
         maintainers = with lib.maintainers; [
           thoughtpolice
-          offline
           kamilchm
           illustris
         ];

@@ -18,14 +18,14 @@
 let
   self = buildPythonPackage rec {
     pname = "jupyter-server-terminals";
-    version = "0.5.3";
+    version = "0.5.4";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "jupyter-server";
       repo = "jupyter_server_terminals";
       tag = "v${version}";
-      hash = "sha256-af7jBscGkbekXgfDxwAfrJSY1uEuIGfzzSsjaPdlYcY=";
+      hash = "sha256-gVR34Ajfv567isVmbP7Zx4AiptrdNqd032QxdMBpsTE=";
     };
 
     nativeBuildInputs = [ hatchling ];
@@ -48,7 +48,7 @@ let
     };
 
     meta = {
-      changelog = "https://github.com/jupyter-server/jupyter_server_terminals/releases/tag/v${version}";
+      changelog = "https://github.com/jupyter-server/jupyter_server_terminals/releases/tag/${src.tag}";
       description = "Jupyter Server Extension Providing Support for Terminals";
       homepage = "https://github.com/jupyter-server/jupyter_server_terminals";
       license = lib.licenses.bsd3;

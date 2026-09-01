@@ -8,14 +8,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wifish";
   version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "bougyman";
     repo = "wifish";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-eTErN6CfKDey/wV+9o9cBVaG5FzCRBiA9UicrMz3KBc=";
   };
 
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
-}
+})

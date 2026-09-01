@@ -3,14 +3,14 @@
   fetchFromGitHub,
   rustPlatform,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "espmonitor";
   version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "espmonitor";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "hWFdim84L2FfG6p9sEf+G5Uq4yhp5kv1ZMdk4sMHa+4=";
   };
 
@@ -22,4 +22,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ xanderio ];
   };
-}
+})

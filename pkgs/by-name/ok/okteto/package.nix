@@ -4,21 +4,22 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  writableTmpDirAsHomeHook,
   testers,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "okteto";
-  version = "3.15.0";
+  version = "3.22.0";
 
   src = fetchFromGitHub {
     owner = "okteto";
     repo = "okteto";
     tag = finalAttrs.version;
-    hash = "sha256-EXkHA8/YIhEmxMezLzXC1dpaBSMKywaN7XnCOqhNPLs=";
+    hash = "sha256-PuJag9/qQG23mU+TE1LboYF+/1od5nVmgXpAaTJKlIg=";
   };
 
-  vendorHash = "sha256-OMrQf8TRH/zd+OmA6TQBs/dHrUujoifSz1ex/oqAVsA=";
+  vendorHash = "sha256-zEdhWfbZv088CXN2+3FQdCPcz3lJOf5iJPeublmVJyM=";
 
   postPatch = ''
     # Disable some tests that need file system & network access.
@@ -31,6 +32,7 @@ buildGoModule (finalAttrs: {
   excludedPackages = [
     "integration"
     "samples"
+    "tools"
   ];
 
   ldflags = [
@@ -45,9 +47,7 @@ buildGoModule (finalAttrs: {
     "static_build"
   ];
 
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   checkFlags =
     let

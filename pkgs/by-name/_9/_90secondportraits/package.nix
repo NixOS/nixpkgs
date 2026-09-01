@@ -70,15 +70,16 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     install -Dm444 90secondportraits.love $out/share/games/lovegames/90secondportraits.love
-    makeWrapper ${love}/bin/love $out/bin/90secondportraits \
+    makeWrapper ${lib.getExe love} $out/bin/90secondportraits \
       --add-flags $out/share/games/lovegames/90secondportraits.love
     runHook postInstall
   '';
 
   meta = {
     description = "Silly speed painting game";
+    homepage = "https://github.com/SimonLarsen/90-Second-Portraits";
     mainProgram = "90secondportraits";
-    platforms = lib.platforms.linux;
+    platforms = love.meta.platforms;
     license = with lib.licenses; [
       zlib
       cc-by-sa-40

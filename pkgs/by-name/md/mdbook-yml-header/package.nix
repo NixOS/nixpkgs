@@ -5,15 +5,12 @@
   nix-update-script,
 }:
 
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdbook-yml-header";
   version = "0.1.5";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-QlclxqH6cKo9QZyUBFCcujT9liTc8lmEheyjFKK7N58=";
   };
 
@@ -29,4 +26,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "mdbook-yml-header";
     maintainers = [ lib.maintainers.pinage404 ];
   };
-}
+})

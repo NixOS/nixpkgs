@@ -7,14 +7,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "boxxy";
   version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "queer";
     repo = "boxxy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6pb3yyC4/kpe8S67B3pzsSu3PfQyOWpiYi0JTBQk3lU=";
   };
 
@@ -36,11 +36,10 @@ rustPlatform.buildRustPackage rec {
     description = "Puts bad Linux applications in a box with only their files";
     homepage = "https://github.com/queer/boxxy";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      dit7ya
+    maintainers = [
     ];
     platforms = lib.platforms.linux;
     broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "boxxy";
   };
-}
+})

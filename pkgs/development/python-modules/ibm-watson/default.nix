@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "ibm-watson";
-  version = "11.1.0";
+  version = "11.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "watson-developer-cloud";
     repo = "python-sdk";
     tag = "v${version}";
-    hash = "sha256-6xifendLRHekTOXDGEpyYxzucg9hRf85gwxS1FyBkCc=";
+    hash = "sha256-z+sGfYbPZcHQh6JGdVC2DDFHd0VIgC2GmvGvN+hrXU0=";
   };
 
   build-system = [ setuptools ];

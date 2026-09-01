@@ -2,7 +2,6 @@
 {
   name = "freshrss-pgsql";
   meta.maintainers = with lib.maintainers; [
-    etu
     stunkymonkey
   ];
 

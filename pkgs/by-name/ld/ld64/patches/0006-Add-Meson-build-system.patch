@@ -35,7 +35,7 @@ index 0000000..cd4e8da
 +    license : 'APSL-2.0',
 +    license_files : 'APPLE_LICENSE',
 +    meson_version : '>=1.6.0',
-+    version : '954.16',
++    version : '956.6',
 +)
 +
 +add_project_arguments(

@@ -11,9 +11,9 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glibmm";
-  version = "2.86.0";
+  version = "2.88.1";
 
   outputs = [
     "out"
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glibmm/${lib.versions.majorMinor version}/glibmm-${version}.tar.xz";
-    hash = "sha256-OcDp9toEbWeTkHdO/bmtVkQ2I2c23C94JeYUstQIeCY=";
+    url = "mirror://gnome/sources/glibmm/${lib.versions.majorMinor finalAttrs.version}/glibmm-${finalAttrs.version}.tar.xz";
+    hash = "sha256-wTn5YrFXXIgnzTnRrCG3o2e+O9oUCcDH4hopCQ83FQY=";
   };
 
   nativeBuildInputs = [
@@ -52,8 +52,7 @@ stdenv.mkDerivation rec {
     description = "C++ interface to the GLib library";
     homepage = "https://gtkmm.org/";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ raskin ];
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };
-}
+})

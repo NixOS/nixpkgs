@@ -7,24 +7,24 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "doggo";
-  version = "1.1.4";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "mr-karan";
     repo = "doggo";
-    rev = "v${version}";
-    hash = "sha256-yKEjTaDwJVycsGeoJTVMjN9D4AzRLXZAY5fVIp+B14c=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-BU32Ewfpuao7UwveIenla2ZFEbqh3qoBP86ia3AWNTE=";
   };
 
-  vendorHash = "sha256-ybI17J5EKvigBapt8Ed2FuMEzGUVzEpJ6OTVYWXVOOc=";
+  vendorHash = "sha256-8lww9fzS5o25OGk9aI/E0FBNw1J7RQ7OGJaGqHmAKKg=";
   nativeBuildInputs = [ installShellFiles ];
   subPackages = [ "cmd/doggo" ];
 
   ldflags = [
     "-s"
-    "-X main.buildVersion=v${version}"
+    "-X main.buildVersion=v${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -50,4 +50,4 @@ buildGoModule rec {
       ma27
     ];
   };
-}
+})

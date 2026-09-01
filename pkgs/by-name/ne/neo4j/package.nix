@@ -10,13 +10,13 @@
   bashNonInteractive,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "neo4j";
-  version = "2025.10.1";
+  version = "2026.07.0";
 
   src = fetchurl {
-    url = "https://neo4j.com/artifact.php?name=neo4j-community-${version}-unix.tar.gz";
-    hash = "sha256-aa3hZeM0ehMt6mZk/Of9qG85GnrvsasA8hzpQOppLwk=";
+    url = "https://neo4j.com/artifact.php?name=neo4j-community-${finalAttrs.version}-unix.tar.gz";
+    hash = "sha256-ANpBduUqBM+60704P34N/dfsBOtL0liPcRBVPxx5rgU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     description = "Highly scalable, robust (fully ACID) native graph database";
     homepage = "https://neo4j.com/";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

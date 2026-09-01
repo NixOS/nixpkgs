@@ -5,17 +5,17 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "randomX";
-  version = "1.2.1";
+  version = "1.2.3";
 
   nativeBuildInputs = [ cmake ];
 
   src = fetchFromGitHub {
     owner = "tevador";
     repo = "randomX";
-    rev = "v${version}";
-    sha256 = "sha256-dfImzwbEfJQcaPZCoWypHiI6dishVRdqS/r+n3tfjvM=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-H5tsmvCeMYMpLd+XHe5365QRMaXaUF7GkXk21ZH2W1E=";
   };
 
   meta = {
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
   };
 
-}
+})

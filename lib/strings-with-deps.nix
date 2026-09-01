@@ -77,7 +77,7 @@ rec {
     # Type
 
     ```
-    textClosureList :: { ${phase} :: { deps :: [String]; text :: String; } | String; } -> [String] -> [String]
+    textClosureList :: { [String] :: { deps :: [String]; text :: String; } | String; } -> [String] -> [String]
     ```
 
     # Examples

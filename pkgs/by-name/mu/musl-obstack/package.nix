@@ -6,14 +6,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "musl-obstack";
   version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "void-linux";
     repo = "musl-obstack";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-oydS7FubUniMHAUWfg84OH9+CZ0JCrTXy7jzwOyJzC8=";
   };
 
@@ -26,7 +26,11 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/void-linux/musl-obstack";
@@ -35,4 +39,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = [ lib.maintainers.pjjw ];
   };
-}
+})

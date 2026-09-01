@@ -9,7 +9,6 @@
   pytest-cov-stub,
   pytest-freezer,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
   yarl,
 }:
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "energyzero";
   version = "4.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
@@ -55,7 +52,7 @@ buildPythonPackage rec {
     description = "Module for getting the dynamic prices from EnergyZero";
     homepage = "https://github.com/klaasnicolaas/python-energyzero";
     changelog = "https://github.com/klaasnicolaas/python-energyzero/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

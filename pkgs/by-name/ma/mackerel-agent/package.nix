@@ -8,33 +8,33 @@
   net-tools,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mackerel-agent";
-  version = "0.85.2";
+  version = "0.87.0";
 
   src = fetchFromGitHub {
     owner = "mackerelio";
     repo = "mackerel-agent";
-    rev = "v${version}";
-    sha256 = "sha256-3A3x32JytJGXebgZeJcToHXNqRB+rbyziT5Zwgc9rEM=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-4a1rOfm4hDwIQBiLJVzwbognv7iPzZOKDSBcqX4cR5E=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ net-tools ];
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ iproute2 ];
 
-  vendorHash = "sha256-Ubk/ms/3FwH1ZqZ5uTy0MubXhrKBoeaC85Y1KKH5cIw=";
+  vendorHash = "sha256-Je8yd551MXmx/VQl1Qu1P8i3GvDiJKr1aK2b5OotZrM=";
 
   subPackages = [ "." ];
 
   ldflags = [
-    "-X=main.version=${version}"
-    "-X=main.gitcommit=v${version}"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.gitcommit=v${finalAttrs.version}"
   ];
 
   postInstall = ''
     wrapProgram $out/bin/mackerel-agent \
-      --prefix PATH : "${lib.makeBinPath buildInputs}"
+      --prefix PATH : "${lib.makeBinPath finalAttrs.buildInputs}"
   '';
 
   doCheck = true;
@@ -46,4 +46,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ midchildan ];
   };
-}
+})

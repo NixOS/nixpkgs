@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 let
-  version = "2.8";
+  version = "26.1.2";
 in
 python3.pkgs.buildPythonApplication {
   pname = "novelwriter";
@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication {
     owner = "vkbo";
     repo = "novelWriter";
     tag = "v${version}";
-    hash = "sha256-6OIDsmPVbpU90bbj4O2CO5YXNtz0bCrG2ygruxsl9Ec=";
+    hash = "sha256-nxItDobCQX3rnYzSkilFdW+A9P/2imJ8Pb+QZRy3Tng=";
   };
 
   nativeBuildInputs = [ qt6.wrapQtAppsHook ];
@@ -36,7 +36,6 @@ python3.pkgs.buildPythonApplication {
     mkdir -p $out/share/icons
     cp -r setup/data/hicolor $out/share/icons
 
-    install -Dm644 setup/data/novelwriter.png -t $out/share/pixmaps
     install -Dm644 setup/data/novelwriter.desktop -t $out/share/applications
     install -Dm644 setup/data/x-novelwriter-project.xml -t $out/share/mime/packages
   '';
@@ -59,7 +58,7 @@ python3.pkgs.buildPythonApplication {
     description = "Open source plain text editor designed for writing novels";
     homepage = "https://novelwriter.io";
     changelog = "https://github.com/vkbo/novelWriter/blob/main/CHANGELOG.md";
-    license = with lib.licenses; [ gpl3Only ];
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ pluiedev ];
     mainProgram = "novelwriter";
 

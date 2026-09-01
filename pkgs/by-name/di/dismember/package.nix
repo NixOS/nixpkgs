@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dismember";
   version = "0.0.1";
 
   src = fetchFromGitHub {
     owner = "liamg";
     repo = "dismember";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-myoBXoi7VqHOLmu/XrvnlfBDlEnXm+0fp8WQec+3EJY=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "dismember";
   };
-}
+})

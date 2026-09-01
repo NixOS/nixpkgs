@@ -19,11 +19,12 @@ buildPythonPackage rec {
     hash = "sha256-+mviKtCLlJhYV576Q07kcFJvtls5qohKSrqZtBqE/s4=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace-fail 'bidict = "^0.21.4"' 'bidict = "^0.23"'
-  '';
-
   nativeBuildInputs = [ poetry-core ];
+
+  pythonRelaxDeps = [
+    "bidict"
+    "bubop"
+  ];
 
   propagatedBuildInputs = [
     bidict
@@ -37,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bergercookie/item_synchronizer";
     changelog = "https://github.com/bergercookie/item_synchronizer/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ raitobezarius ];
+    maintainers = [ ];
   };
 }

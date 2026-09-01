@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Default set of cursor themes for use with libXcursor.";
+    description = "Default set of cursor themes for use with libxcursor.";
     homepage = "https://gitlab.freedesktop.org/xorg/data/cursors";
     license = lib.licenses.x11;
     maintainers = [ ];

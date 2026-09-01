@@ -8,18 +8,27 @@
 
 buildGoModule (finalAttrs: {
   pname = "resterm";
-  version = "0.19.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "unkn0wn-root";
     repo = "resterm";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-vpFwiVLF3ekPgjxTEl4UlY/oGK03prHRtt15k5i+M6I=";
+    hash = "sha256-rK6GFQKtl25TGpG7cqLHMice34/w05oxeG502W876BM=";
   };
 
-  vendorHash = "sha256-E/Y4kW5xy7YamUP5bxFmDCAK6RqiqGN7DpEPG1MaCHc=";
+  vendorHash = "sha256-My77YKJLMMnTGsaW1IoMF0nT77yN+AtIJSC7nMeP2ic=";
+
+  # modernc.org/libc (via modernc.org/sqlite) tries to read /etc/protocols
+  modPostBuild = ''
+    substituteInPlace vendor/modernc.org/libc/honnef.co/go/netdb/netdb.go \
+      --replace-fail '!os.IsNotExist(err)' '!os.IsNotExist(err) && !os.IsPermission(err)'
+  '';
 
   subPackages = [ "cmd/resterm" ];
+
+  # for tests binding 127.0.0.1:0 on darwin
+  __darwinAllowLocalNetworking = true;
 
   ldflags = [
     "-s"

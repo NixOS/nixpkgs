@@ -3,7 +3,6 @@
   gpgme,
   isLuaJIT,
   lib,
-  libgit2,
   libgpg-error,
   lua,
   lux-cli,
@@ -13,6 +12,7 @@
   pkg-config,
   rustPlatform,
   toLuaModule,
+  stdenv,
 }:
 let
   luaMajorMinor = lib.take 2 (lib.splitVersion lua.version);
@@ -42,7 +42,6 @@ toLuaModule (
     buildInputs = [
       gnupg
       gpgme
-      libgit2
       libgpg-error
       openssl
     ];
@@ -59,9 +58,10 @@ toLuaModule (
     ];
 
     env = {
-      LIBGIT2_NO_VENDOR = 1;
       LIBSSH2_SYS_USE_PKG_CONFIG = 1;
       LUX_SKIP_IMPURE_TESTS = 1; # Disable impure unit tests
+      # Allow undefined symbols on Darwin - they must be provided by the Lua runtime
+      RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-arg=-undefined -C link-arg=dynamic_lookup";
     };
 
     buildPhase = ''
@@ -80,7 +80,9 @@ toLuaModule (
       runHook postInstall
     '';
 
-    cargoTestFlags = "--lib"; # Disable impure integration tests
+    cargoTestFlags = [
+      "--lib" # Disable impure integration tests
+    ];
 
     meta = {
       description = "Lua API for the Lux package manager";

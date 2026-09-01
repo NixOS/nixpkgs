@@ -30,7 +30,6 @@ let
       );
       postBootCommands = pkgs.writeText "local-cmds" ''
         ${config.boot.postBootCommands}
-        ${config.powerManagement.powerUpCommands}
       '';
     };
   };

@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ukmm";
-  version = "0.15.0";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "NiceneNerd";
     repo = "ukmm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NZN+T2N+N+oxrjBRvVbRWbB2KY5im9SN7gPHzfvovl8=";
+    hash = "sha256-1qhBBa6Mzo8XqvzwiHKnP0W9Oo26nvMiwZTzRAnLtfs=";
   };
 
-  cargoHash = "sha256-eDYCF+bYh0T/SSrQKjCqZvSd28CSxvGkpHgmBCHLoig=";
+  cargoHash = "sha256-I39SPTBH4JUx5z65eD2w2ntWKfjWSxweSco6QE9V5sM=";
 
   nativeBuildInputs = [
     cmake
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Force linking to libEGL, which is always dlopen()ed, and to
   # libwayland-client & libxkbcommon, which is dlopen()ed based on the
   # winit backend.
-  NIX_LDFLAGS = [
+  env.NIX_LDFLAGS = toString [
     "--push-state"
     "--no-as-needed"
     "-lEGL"

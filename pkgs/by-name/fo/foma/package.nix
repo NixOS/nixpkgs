@@ -9,7 +9,7 @@
   readline,
   zlib,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "foma";
   version = "0.10.0alpha-unstable-2025-09-10";
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-CXRZNcEgsjD/9PowNynPyfLVbk8KDe3T52UetYMwC6w=";
   };
 
-  sourceRoot = "${src.name}/foma";
+  sourceRoot = "${finalAttrs.src.name}/foma";
 
   outputs = [
     "out"
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.tckmn ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "acquire";
-  version = "3.21";
+  version = "3.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "acquire";
     tag = version;
-    hash = "sha256-CVwPMMQFGqvyxm5tK7JMEX8/dgiF25wwRNaLNfLLWto=";
+    hash = "sha256-CtzVHnQALqA5D0wJQ74lAw9HunVFZEkKvij6RQaQrBE=";
   };
 
   build-system = [

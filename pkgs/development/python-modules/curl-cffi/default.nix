@@ -11,11 +11,15 @@
   cryptography,
   fastapi,
   httpx,
+  litestar,
   proxy-py,
   pytest-asyncio,
   pytest-trio,
   pytestCheckHook,
+  python,
   python-multipart,
+  rich,
+  stdenv,
   trustme,
   uvicorn,
   websockets,
@@ -23,14 +27,14 @@
 }:
 buildPythonPackage rec {
   pname = "curl-cffi";
-  version = "0.14.0";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lexiforest";
     repo = "curl_cffi";
     tag = "v${version}";
-    hash = "sha256-5Q9oHAOjefihxj6xU1UGVTl6Ib31XqhrxLtOgI5VABs=";
+    hash = "sha256-VqfJS6vztIBIkOW+ZrY7JSiuJsxBBqxRbqeQyWR7bTo=";
   };
 
   patches = [ ./use-system-libs.patch ];
@@ -45,6 +49,7 @@ buildPythonPackage rec {
   dependencies = [
     cffi
     certifi
+    rich
   ];
 
   pythonImportsCheck = [ "curl_cffi" ];
@@ -55,6 +60,7 @@ buildPythonPackage rec {
     cryptography
     fastapi
     httpx
+    litestar
     proxy-py
     pytest-asyncio
     pytest-trio

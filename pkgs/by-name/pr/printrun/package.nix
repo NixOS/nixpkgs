@@ -7,7 +7,7 @@
   wrapGAppsHook3,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "printrun";
   version = "2.2.0";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kliment";
     repo = "Printrun";
-    tag = "printrun-${version}";
+    tag = "printrun-${finalAttrs.version}";
     hash = "sha256-INJNGAmghoPIiivQp6AV1XmhyIu8SjfKqL8PTpi/tkY=";
   };
 
@@ -66,6 +66,6 @@ python3Packages.buildPythonApplication rec {
     description = "Pronterface, Pronsole, and Printcore - Pure Python 3d printing host software";
     homepage = "https://github.com/kliment/Printrun";
     license = lib.licenses.gpl3Plus;
-    changelog = "https://github.com/kliment/Printrun/releases/tag/${src.tag}";
+    changelog = "https://github.com/kliment/Printrun/releases/tag/${finalAttrs.src.tag}";
   };
-}
+})

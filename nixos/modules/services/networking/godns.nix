@@ -29,10 +29,8 @@ in
       };
 
       description = ''
-        Configuration for GoDNS. Refer to the [configuration section](1) in the
+        Configuration for GoDNS. Refer to the [configuration section](https://github.com/TimothyYe/godns?tab=readme-ov-file#configuration) in the
         GoDNS GitHub repository for details.
-
-        [1]: https://github.com/TimothyYe/godns?tab=readme-ov-file#configuration
       '';
 
       example = {

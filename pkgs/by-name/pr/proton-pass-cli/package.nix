@@ -8,17 +8,24 @@
   jq,
   keyutils,
   libgcc,
+  makeBinaryWrapper,
   versionCheckHook,
   writeShellScript,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "proton-pass-cli";
-  version = "1.3.5";
+  version = "2.3.2";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = finalAttrs.passthru.sources.${stdenv.hostPlatform.system};
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
   ];
 
@@ -37,29 +44,28 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  nativeCheckInputs = [
+  postFixup = ''
+    wrapProgram $out/bin/pass-cli --set PROTON_PASS_NO_UPDATE_CHECK 1
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgram = "${placeholder "out"}/bin/pass-cli";
-  versionCheckProgramArg = "--version";
 
   passthru = {
     sources = {
       "aarch64-darwin" = fetchurl {
         url = "https://proton.me/download/pass-cli/${finalAttrs.version}/pass-cli-macos-aarch64";
-        hash = "sha256-I+QYefg6ECxxb68RDyjw0dK4+vSOvu8qQ2kPhuPoabU=";
+        hash = "sha256-+/ierVv7KGbZmdaHDmOnmW3rg/UQAhlDoWCwYw5RbEI=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://proton.me/download/pass-cli/${finalAttrs.version}/pass-cli-linux-aarch64";
-        hash = "sha256-ohKFj+d75hYev6jwn7WLtf2exNJJN2cFeGkwgFHvx1E=";
-      };
-      "x86_64-darwin" = fetchurl {
-        url = "https://proton.me/download/pass-cli/${finalAttrs.version}/pass-cli-macos-x86_64";
-        hash = "sha256-7TMcen4iX9nr0rxmF7vFWJ19tkNN5d7YqImL0LF9jkw=";
+        hash = "sha256-tgEzTMePTdsSVwjG1kuLUJ5agqM3u4vq0Lwvht2cq/8=";
       };
       "x86_64-linux" = fetchurl {
         url = "https://proton.me/download/pass-cli/${finalAttrs.version}/pass-cli-linux-x86_64";
-        hash = "sha256-LerztCDNQ63wYUOfiULdvY2zQDUlVXNcDsf13SDaIg8=";
+        hash = "sha256-+VxrObRdlrZw8knMu1awazoX1FeTV9LQTErGTk/77/c=";
       };
     };
     updateScript = writeShellScript "update-proton-pass-cli" ''
@@ -85,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Command-line interface for managing your Proton Pass vaults, items, and secrets";
     homepage = "https://github.com/protonpass/pass-cli";
-    license = lib.licenses.unfree;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "pass-cli";
     maintainers = with lib.maintainers; [ delafthi ];
     platforms = lib.attrNames finalAttrs.passthru.sources;

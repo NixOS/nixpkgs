@@ -2,13 +2,25 @@
   lib,
   buildPythonPackage,
   marisa,
+  setuptools,
   swig,
 }:
 
 buildPythonPackage {
   pname = "marisa";
-  format = "setuptools";
   inherit (marisa) src version;
+  pyproject = true;
+
+  patches = marisa.patches or [ ];
+
+  # fix The 'marisa' derivation has version '0.3.1' but .dist-info/METADATA specifies version '0.0.0'.
+  postPatch = ''
+    substituteInPlace bindings/python/setup.py --replace-fail \
+      'setup(name = "marisa",' \
+      'setup(name = "marisa", version = "${marisa.version}"',
+  '';
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [ swig ];
 

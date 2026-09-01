@@ -1,50 +1,148 @@
 {
   lib,
-  rustPlatform,
+  stdenv,
   fetchFromGitHub,
+  fetchPnpmDeps,
+  pnpm_11,
+  pnpmConfigHook,
+  pnpmBuildHook,
+  nodejs_24,
+  nodejs-slim_24,
+  rustPlatform,
+  cargo,
+  rustc,
   cmake,
   makeBinaryWrapper,
   nix-update-script,
   rust-jemalloc-sys,
   tsgolint,
   versionCheckHook,
+  darwin,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+let
+  pnpm = pnpm_11;
+in
+# Build with pnpm instead of buildRustPackage because the upstream npm CLI is the
+# JS-plugin-capable runtime. The standalone Rust `oxlint` binary intentionally
+# runs without an external linter, which leaves `jsPlugins` configs inert.
+stdenv.mkDerivation (finalAttrs: {
   pname = "oxlint";
-  version = "1.39.0";
+  version = "1.80.0";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "oxc";
     tag = "oxlint_v${finalAttrs.version}";
-    hash = "sha256-Sg9NtXRuQ0ZruK8a8k5EkeDOJ9v6uzpNzEQ/FY56ioY=";
+    hash = "sha256-SDpRiNJICbe9PPye2NbvMCOnSepZH0DhKZaw7wg9DDA=";
   };
 
-  cargoHash = "sha256-sgIarCuUmSTAVPVr82rp4dQwzDMWESIbGgkCYEExz6o=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-3WbThEKOjZys5pOl5uyd43wHewg8LN7geVS9iNVqFgo=";
+  };
+
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-BkoWCB92nr25QwKyWUnJz7kkrs8sdTiJbGAtARlyJy8=";
+  };
+
+  dontUseCmakeConfigure = true;
+
+  pnpmWorkspaces = [ "oxlint-app" ];
 
   nativeBuildInputs = [
+    cargo
     cmake
     makeBinaryWrapper
+    nodejs_24
+    pnpmConfigHook
+    pnpmBuildHook
+    pnpm
+    rustPlatform.cargoSetupHook
+    rustc
   ];
-  buildInputs = [
-    rust-jemalloc-sys
-  ];
+
+  buildInputs = [ rust-jemalloc-sys ];
 
   env.OXC_VERSION = finalAttrs.version;
 
-  cargoBuildFlags = [
-    "--bin=oxlint"
-  ];
-  cargoTestFlags = finalAttrs.cargoBuildFlags;
+  # @napi-rs/cli >= 3.8 reads the process start time via `/bin/ps` while
+  # acquiring its filesystem reconciliation lock. The Darwin build sandbox
+  # denies that exec; Node raises it as a synchronous `spawn EPERM` from
+  # execFile, which escapes napi's callback-based error handling. Point the
+  # lookup at a store `ps` so the sandbox allows it. The result is only used
+  # to detect stale lock files.
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    for cli in node_modules/.pnpm/@napi-rs+cli@*/node_modules/@napi-rs/cli/dist/cli.js; do
+      substituteInPlace "$cli" \
+        --replace-fail '"/bin/ps"' '"${darwin.adv_cmds}/bin/ps"'
+    done
+  '';
 
-  postFixup = ''
-    wrapProgram $out/bin/oxlint \
+  installPhase = ''
+    runHook preInstall
+
+    local -r packageRoot="$out/lib/oxlint"
+    mkdir -p "$packageRoot/bin"
+
+    cp npm/oxlint/configuration_schema.json "$packageRoot/"
+    cp npm/oxlint/bin/oxlint "$packageRoot/bin/oxlint"
+    cp -r apps/oxlint/dist "$packageRoot/dist"
+
+    chmod +x "$packageRoot/bin/oxlint"
+
+    makeBinaryWrapper "${lib.getExe nodejs-slim_24}" "$out/bin/oxlint" \
+      --add-flags "$packageRoot/bin/oxlint" \
       --prefix PATH : "${lib.makeBinPath [ tsgolint ]}"
+
+    runHook postInstall
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    expectFail() {
+      local needle="$1"; shift
+      local output
+      output="$("$@" 2>&1)" && {
+        printf 'expected `%s` to fail\n%s\n' "$*" "$output" >&2
+        exit 1
+      }
+      grep -Fq "$needle" <<<"$output"
+    }
+
+    cd "$(mktemp -d)"
+
+    cat >plugin.mjs <<'EOF'
+    export default {
+      meta: { name: "smoke-plugin" },
+      rules: {
+        "always-error": {
+          create: (context) => ({
+            Program(node) {
+              context.report({ node, message: "plugin-smoke-ok" });
+            },
+          }),
+        },
+      },
+    };
+    EOF
+    echo '{"jsPlugins":["./plugin.mjs"],"rules":{"smoke-plugin/always-error":"error"}}' >plugin.jsonc
+    echo 'void 0;' >plugin.js
+    expectFail plugin-smoke-ok "$out/bin/oxlint" -c plugin.jsonc plugin.js
+
+    echo 'const s: string = ""; const _: string = s as string;' >type-aware.ts
+    expectFail no-unnecessary-type-assertion \
+      "$out/bin/oxlint" -D typescript/no-unnecessary-type-assertion --type-aware type-aware.ts
+
+    runHook postInstallCheck
+  '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version-regex=^oxlint_v([0-9.]+)$" ];
@@ -57,5 +155,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ iamanaws ];
     mainProgram = "oxlint";
+    inherit (nodejs-slim_24.meta) platforms;
   };
 })

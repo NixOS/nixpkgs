@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "recipe-scrapers";
-  version = "15.11.0";
+  version = "15.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hhursev";
     repo = "recipe-scrapers";
     tag = finalAttrs.version;
-    hash = "sha256-S0/RPVeEr/lAPJZSUwCippuXyirYnmaAuesWGYwg6kE=";
+    hash = "sha256-ME5/I2qnuTalgsiI34hQ45AyFqfol6dfLnc/S9vJ6tc=";
   };
 
   build-system = [ setuptools ];

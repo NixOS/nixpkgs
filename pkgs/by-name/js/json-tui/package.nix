@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch2,
   fetchFromGitHub,
 
   cmake,
@@ -16,22 +15,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "json-tui";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "ArthurSonzogni";
     repo = "json-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qS2EbCxH8sUUJMu5hwm1+Nu6SsJRfLReX56YSd1RZU4=";
+    hash = "sha256-PXiTlTwF/qL/Nq1PSf8PHgKa0MD6QrA0tSWiFfm93Gk=";
   };
-
-  patches = [
-    # fixes tests - https://github.com/ArthurSonzogni/json-tui/pull/37
-    (fetchpatch2 {
-      url = "https://github.com/ArthurSonzogni/json-tui/commit/645060a016c1e1ca84b9e1dc638a926415aaa5fe.patch?full_index=1";
-      hash = "sha256-8AZEZgU8HHyaasb/7LegSwRAMo1iyonv3XUY284nYKg=";
-    })
-  ];
 
   strictDeps = true;
 
@@ -47,9 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
+  env.NIX_CFLAGS_COMPILE = "-fexceptions";
+
   cmakeFlags = [
     "-Wno-dev" # suppress cmake warning about deprecated usage
-    (lib.cmakeBool "JSON_TUI_BUILD_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "JSON_TUI_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_GOOGLETEST" "${gtest.src}")
   ];
 

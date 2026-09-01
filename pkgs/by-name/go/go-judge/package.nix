@@ -4,18 +4,18 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-judge";
-  version = "1.11.3";
+  version = "1.12.3";
 
   src = fetchFromGitHub {
     owner = "criyle";
     repo = "go-judge";
-    rev = "v${version}";
-    hash = "sha256-+NqBAxes9xnuyTN0ITrEDlRC8EvgUGBulF3EQx5XSDQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-uRwB6Ir1A+RmSqeOp6rCdFnJgRqrrbatRFgKHzFtF9o=";
   };
 
-  vendorHash = "sha256-2yuWsNa4jyJEFAox0KMfTYAnwVv622hHErEd2RtJgl4=";
+  vendorHash = "sha256-jbV58oJX9Bddq5aqi9rfpkrPdGmlyMM6CKrQf1C9ZgI=";
 
   tags = [
     "nomsgpack"
@@ -25,7 +25,7 @@ buildGoModule rec {
   subPackages = [ "cmd/go-judge" ];
 
   preBuild = ''
-    echo v${version} > ./cmd/go-judge/version/version.txt
+    echo v${finalAttrs.version} > ./cmd/go-judge/version/version.txt
   '';
 
   env.CGO_ENABLED = 0;
@@ -37,4 +37,4 @@ buildGoModule rec {
     mainProgram = "go-judge";
     maintainers = with lib.maintainers; [ criyle ];
   };
-}
+})

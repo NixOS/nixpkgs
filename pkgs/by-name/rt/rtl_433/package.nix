@@ -9,14 +9,14 @@
   soapysdr-with-plugins,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "25.12";
   pname = "rtl_433";
 
   src = fetchFromGitHub {
     owner = "merbanan";
     repo = "rtl_433";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-VDNXLx6OUBQkflKFHp1LP8N5g15o6vYg3P9XWgIoYIg=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "rtl_433";
   };
-}
+})

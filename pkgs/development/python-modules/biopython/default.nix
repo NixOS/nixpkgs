@@ -2,19 +2,28 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch,
   setuptools,
   numpy,
 }:
 
 buildPythonPackage rec {
   pname = "biopython";
-  version = "1.85";
+  version = "1.86";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Xa+rdAWd5OePSfa1aE7drm585G8Jz6BZwdEznoseoKY=";
+    hash = "sha256-k6ULWGpNLOxoqy+Z0D71g8V2HY+6VTXLjoHaeB0Nkv8=";
   };
+
+  patches = [
+    # Numpy 2.4 compatibility
+    (fetchpatch {
+      url = "https://github.com/biopython/biopython/pull/5161.patch";
+      hash = "sha256-oN0nNlhvshIgNrmm+tIeCAJx1U/OqhdL4tj51DV2CHU=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

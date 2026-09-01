@@ -11,19 +11,18 @@ let
       pytest-randomly = super.pytest-randomly.overridePythonAttrs {
         doCheck = false;
       };
-      sqlalchemy = self.sqlalchemy_1_4;
     }
   );
 in
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "quark-engine";
   version = "25.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "quark-engine";
+    owner = "ev-flow";
     repo = "quark-engine";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DAD37fzswY3c0d+ubOCYImxs4qyD4fhC3m2l0iD977A=";
   };
 
@@ -58,8 +57,8 @@ pythonPackages.buildPythonApplication rec {
   meta = {
     description = "Android malware (analysis and scoring) system";
     homepage = "https://quark-engine.readthedocs.io/";
-    changelog = "https://github.com/quark-engine/quark-engine/releases/tag/${src.tag}";
-    license = with lib.licenses; [ gpl3Only ];
+    changelog = "https://github.com/ev-flow/quark-engine/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

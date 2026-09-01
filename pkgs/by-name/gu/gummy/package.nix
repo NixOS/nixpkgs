@@ -1,14 +1,14 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   testers,
   cmake,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   sdbus-cpp,
   udev,
-  xcbutilimage,
+  libxcb-image,
   coreutils,
   cli11,
   ddcutil,
@@ -23,8 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "gummy";
   version = "0.6.1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "fusco";
     repo = "gummy";
     rev = finalAttrs.version;
@@ -40,13 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
     cli11
     ddcutil
     fmt
-    libX11
-    libXext
+    libx11
+    libxext
     nlohmann_json
     sdbus-cpp
     spdlog
     udev
-    xcbutilimage
+    libxcb-image
   ];
 
   cmakeFlags = [

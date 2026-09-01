@@ -5,28 +5,46 @@
   versionCheckHook,
   nix-update-script,
   runCommand,
+  jotdown,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jaq";
-  version = "2.3.0";
+  version = "3.1.1";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "01mf02";
     repo = "jaq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZVTDbJ5RPgQeB4ntnNQcbbWquPFL7q4WYyQ5ihCVB64=";
+    hash = "sha256-/yAwLcPwfW5UH+PCCrsFaM0Nuk1S5QONLsNgvVCBLX8=";
   };
 
-  cargoHash = "sha256-hEILrjIJK/8CrQv5QcHu+AtPV7KcPdmw6422MyNoPwo=";
+  cargoHash = "sha256-5+IBUOTO7XNWogQBNEt8XydLZ1xTvldvx5lIfh7K0QA=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   doInstallCheck = true;
 
+  nativeBuildInputs = [
+    jotdown # for manpage
+  ];
+
+  postBuild = ''
+    pushd docs || true
+    make jaq.1
+    popd
+  '';
+
+  postInstall = ''
+    install -D docs/jaq.1 -t $out/share/man/man1
+  '';
+
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex=^v(\\d+\\.\\d+\\.\\d+)$" ];
+    };
     tests.simple =
       runCommand "jaq-test"
         {
@@ -67,7 +85,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Jq clone focused on correctness, speed and simplicity";
     homepage = "https://github.com/01mf02/jaq";
-    changelog = "https://github.com/01mf02/jaq/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/01mf02/jaq/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     teams = [ lib.teams.ngi ];
     maintainers = with lib.maintainers; [

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
 
   # build-system
   hatchling,
@@ -21,19 +22,20 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyter-collaboration";
-  version = "4.2.0";
+  version = "5.0.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jupyterlab";
     repo = "jupyter-collaboration";
-    tag = "v${version}";
-    hash = "sha256-KXD5RRRh8cwZWZUpJrkS7RAfaeTjAHajKLl8c5MuhrA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Gho8ndF8SU1AWJUlcuw2a/kHD2zu7vH/z4QV8drDrP0=";
   };
 
-  sourceRoot = "${src.name}/projects/jupyter-collaboration";
+  sourceRoot = "${finalAttrs.src.name}/projects/jupyter-collaboration";
 
   build-system = [ hatchling ];
 
@@ -60,13 +62,17 @@ buildPythonPackage rec {
     "-pno:cacheprovider"
   ];
 
-  preCheck = ''
-    appendToVar enabledTestPaths "$src/tests"
-  '';
+  enabledTestPaths = [
+    "../../tests"
+  ];
 
   disabledTests = [
     # Failed: Timeout (>300.0s) from pytest-timeout
     "test_document_ttl_from_settings"
+  ]
+  ++ lib.optionals (pythonOlder "3.14") [
+    # pytest.PytestUnraisableExceptionWarning: Exception ignored in: None
+    "test_dirty"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -74,8 +80,8 @@ buildPythonPackage rec {
   meta = {
     description = "JupyterLab Extension enabling Real-Time Collaboration";
     homepage = "https://github.com/jupyterlab/jupyter_collaboration";
-    changelog = "https://github.com/jupyterlab/jupyter_collaboration/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jupyterlab/jupyter_collaboration/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.jupyter ];
   };
-}
+})

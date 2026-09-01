@@ -6,12 +6,15 @@
   importlib-resources,
   poetry-core,
   pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "cmudict";
   version = "1.1.3";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "prosegrinder";
@@ -31,6 +34,10 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "cmudict" ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Python wrapper package for The CMU Pronouncing Dictionary data files";

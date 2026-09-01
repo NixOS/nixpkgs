@@ -4,13 +4,13 @@
   z3,
   cmake,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "z3-tptp";
   version = z3.version;
 
   src = z3.src;
 
-  sourceRoot = "${src.name}/examples/tptp";
+  sourceRoot = "${finalAttrs.src.name}/examples/tptp";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ z3 ];
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     description = "TPTP wrapper for Z3 prover";
     maintainers = z3.meta.maintainers ++ [ lib.maintainers.raskin ];
   };
-}
+})

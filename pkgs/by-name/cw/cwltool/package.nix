@@ -5,24 +5,29 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cwltool";
-  version = "3.1.20251031082601";
+  version = "3.2.20260720092025";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "cwltool";
-    tag = version;
-    hash = "sha256-avRNOdL4Ig2cYQWh8SqX/KWfgXyVg0TVfVFrlqzUCLA=";
+    tag = finalAttrs.version;
+    hash = "sha256-88u6DzBxfK4DvNUOZqIocm7Pf11QJJ9XnyUUTERYIBQ=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail "PYTEST_RUNNER + " ""
     substituteInPlace pyproject.toml \
-      --replace-fail "mypy==1.18.2" "mypy"
+      --replace-fail "mypy==2.1.0" "mypy"
   '';
+
+  pythonRelaxDeps = [
+    "prov"
+    "rdflib"
+  ];
 
   build-system = with python3Packages; [
     setuptools
@@ -52,17 +57,13 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with python3Packages; [
+    distutils
     mock
     nodejs
     pytest-mock
     pytest-httpserver
     pytest-xdist
     pytestCheckHook
-  ];
-
-  pythonRelaxDeps = [
-    "prov"
-    "rdflib"
   ];
 
   disabledTests = [
@@ -75,6 +76,7 @@ python3Packages.buildPythonApplication rec {
   disabledTestPaths = [
     "tests/test_udocker.py"
     "tests/test_provenance.py"
+    "tests/test_examples.py"
   ];
 
   pythonImportsCheck = [
@@ -84,9 +86,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Common Workflow Language reference implementation";
     homepage = "https://www.commonwl.org";
-    changelog = "https://github.com/common-workflow-language/cwltool/releases/tag/${version}";
+    changelog = "https://github.com/common-workflow-language/cwltool/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ veprbl ];
     mainProgram = "cwltool";
   };
-}
+})

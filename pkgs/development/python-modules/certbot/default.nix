@@ -22,19 +22,19 @@
   writeShellScriptBin,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "certbot";
-  version = "5.1.0";
+  version = "5.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
-    tag = "v${version}";
-    hash = "sha256-jKhdclLBeWv6IxIZQtD8VWbSQ3SDZePA/kTxjiBXJ4o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-knaEk4bjC0cdnMiO4ENvaDm/i/3tn6ZOJPdyqJxLKOs=";
   };
 
-  postPatch = "cd certbot"; # using sourceRoot would interfere with patches
+  sourceRoot = "${finalAttrs.src.name}/certbot";
 
   build-system = [ setuptools ];
 
@@ -87,19 +87,23 @@ buildPythonPackage rec {
     let
       pythonEnv = python.withPackages f;
     in
-    runCommand "certbot-with-plugins" { } ''
-      mkdir -p $out/bin
-      cd $out/bin
-      ln -s ${pythonEnv}/bin/certbot
-    '';
+    runCommand "certbot-with-plugins-${finalAttrs.version}"
+      {
+        inherit (finalAttrs) pname version;
+      }
+      ''
+        mkdir -p $out/bin
+        cd $out/bin
+        ln -s ${pythonEnv}/bin/certbot
+      '';
 
   meta = {
     homepage = "https://github.com/certbot/certbot";
-    changelog = "https://github.com/certbot/certbot/blob/${src.tag}/certbot/CHANGELOG.md";
+    changelog = "https://github.com/certbot/certbot/blob/${finalAttrs.src.tag}/certbot/CHANGELOG.md";
     description = "ACME client that can obtain certs and extensibly update server configurations";
     platforms = lib.platforms.unix;
     mainProgram = "certbot";
-    maintainers = [ ];
-    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ miniharinn ];
+    license = lib.licenses.asl20;
   };
-}
+})

@@ -6,6 +6,7 @@
   fetchpatch,
   poetry-core,
   pytestCheckHook,
+  pytest-cov-stub,
   requests,
   requests-mock,
 }:
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     requests-mock
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   patches = [
@@ -43,17 +45,12 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'pytest-cov = "^2.8.1"' ""
-  '';
-
   pythonImportsCheck = [ "openevsewifi" ];
 
   meta = {
     description = "Module for communicating with the wifi module from OpenEVSE";
     homepage = "https://github.com/miniconfig/python-openevse-wifi";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

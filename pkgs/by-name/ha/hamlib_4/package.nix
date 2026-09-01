@@ -1,9 +1,10 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   perl,
   swig,
+  autoreconfHook,
   gd,
   ncurses,
   python311,
@@ -21,13 +22,15 @@
 let
   python3 = python311; # needs distutils and imp
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hamlib";
-  version = "4.6.2";
+  version = "4.7.2";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/hamlib/hamlib-${version}.tar.gz";
-    hash = "sha256-sqxz9E3RFh6V/e5slSdhRHV2R7+S1/2zae4v5B7Ueug=";
+  src = fetchFromGitHub {
+    owner = "Hamlib";
+    repo = "Hamlib";
+    tag = finalAttrs.version;
+    hash = "sha256-t1GgCYH+AJE5UZKQu+9uqx7fJDv4zuT0OzWxicZFfdQ=";
   };
 
   strictDeps = true;
@@ -36,6 +39,7 @@ stdenv.mkDerivation rec {
     swig
     pkg-config
     libtool
+    autoreconfHook
   ]
   ++ lib.optionals pythonBindings [ python3 ]
   ++ lib.optionals tclBindings [ tcl ]
@@ -78,7 +82,10 @@ stdenv.mkDerivation rec {
       lgpl2Plus
     ];
     homepage = "https://hamlib.sourceforge.net";
-    maintainers = with lib.maintainers; [ relrod ];
+    maintainers = with lib.maintainers; [
+      relrod
+      fstracke
+    ];
     platforms = with lib.platforms; unix;
   };
-}
+})

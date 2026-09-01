@@ -2,16 +2,16 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xosview2";
-  version = "2.3.4";
+  version = "2.3.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/xosview/xosview2-${finalAttrs.version}.tar.gz";
-    hash = "sha256-tNBZdhCy8jpbTA19T8hxCO2c+wxy03EJ9ar3GAjOpcU=";
+    hash = "sha256-aQugI9rL0N1qLxUrUvwP7Gk2z3v+PC/+BNVlINqvT8g=";
   };
 
   outputs = [
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   meta = {
     homepage = "https://xosview.sourceforge.net/index.html";
@@ -47,6 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "xosview2";
     maintainers = [ ];
-    inherit (libX11.meta) platforms;
+    inherit (libx11.meta) platforms;
   };
 })

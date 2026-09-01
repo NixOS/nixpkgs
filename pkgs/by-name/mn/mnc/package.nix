@@ -4,7 +4,7 @@
   fetchFromSourcehut,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mnc";
   version = "0.5";
 
@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromSourcehut {
     owner = "~anjan";
     repo = "mnc";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-eCj7wmHxPF2j2x4yHKN7TE122TCv1++azgdoQArabBM=";
   };
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ wentam ];
     mainProgram = "mnc";
   };
-}
+})

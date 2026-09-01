@@ -6,7 +6,7 @@
   maven,
   jdk17,
   jre,
-  xorg,
+  libxxf86vm,
   gitUpdater,
   libGL,
 }:
@@ -23,7 +23,7 @@ maven.buildMavenPackage rec {
   };
 
   mvnJdk = jdk17;
-  mvnHash = "sha256-FpfHtGIfo84z6v9/nzc47+JeIM43MR9mWhVOPSi0xhM=";
+  mvnHash = "sha256-OI+m2xJZPnyPXM/HlAsaBJ/z/NCcRSP7+PW5CQOsPiY=";
 
   desktop = makeDesktopItem {
     name = "RuneLite";
@@ -53,7 +53,7 @@ maven.buildMavenPackage rec {
     makeWrapper ${jre}/bin/java $out/bin/runelite \
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
-          xorg.libXxf86vm
+          libxxf86vm
           libGL
         ]
       }" \

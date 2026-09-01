@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pygmt";
-  version = "0.18.0";
+  version = "0.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GenericMappingTools";
     repo = "pygmt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yWB/IRu5B6hnu8e1TvpAaLehr1TMqvnDc5sRgyMw2mM=";
+    hash = "sha256-XuJuSma2EVqEYpJlz/rS01gQeI+DgJSifLs2Wj2pdiI=";
   };
 
   postPatch = ''

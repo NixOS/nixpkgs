@@ -37,10 +37,11 @@ rustPlatform.buildRustPackage rec {
 
   # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
-  RUSTY_V8_ARCHIVE = callPackage ./librusty_v8.nix { };
+  env.RUSTY_V8_ARCHIVE = callPackage ./librusty_v8.nix { };
 
   cargoTestFlags = [
-    "-- --skip=query_planner::tests::missing_typename_and_fragments_in_requires"
+    "--"
+    "--skip=query_planner::tests::missing_typename_and_fragments_in_requires"
   ];
 
   passthru = {
@@ -52,6 +53,11 @@ rustPlatform.buildRustPackage rec {
     description = "Configurable, high-performance routing runtime for Apollo Federation";
     homepage = "https://www.apollographql.com/docs/router/";
     license = lib.licenses.elastic20;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     maintainers = [ lib.maintainers.bbigras ];
   };
 }

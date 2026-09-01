@@ -3,15 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   filelock,
-  ghidra-bridge,
-  jfx-bridge,
   networkx,
   platformdirs,
   ply,
   prompt-toolkit,
   psutil,
   pycparser,
-  pyhidra,
+  pyghidra,
   pytestCheckHook,
   setuptools,
   toml,
@@ -24,35 +22,33 @@ let
   binaries = fetchFromGitHub {
     owner = "binsync";
     repo = "bs-artifacts";
-    rev = "514c2d6ef1875435c9d137bb5d99b6fc74063817";
+    tag = "514c2d6ef1875435c9d137bb5d99b6fc74063817";
     hash = "sha256-P7+BTJgdC9W8cC/7xQduFYllF+0ds1dSlm59/BFvZ2g=";
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "libbs";
-  version = "2.16.5";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "binsync";
     repo = "libbs";
-    tag = "v${version}";
-    hash = "sha256-JE/eDs9vOiislIrsgBUx36XFenxgcoLtHA/veOMj2IY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Xe47JZPkbROHFlqc2o/htqvZWjknsv5KekJBqXA44O4=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     filelock
-    ghidra-bridge
-    jfx-bridge
     networkx
     platformdirs
     ply
     prompt-toolkit
     psutil
     pycparser
-    pyhidra
+    pyghidra
     toml
     tqdm
   ];
@@ -81,8 +77,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for writing plugins in any decompiler: includes API lifting, common data formatting, and GUI abstraction";
     homepage = "https://github.com/binsync/libbs";
-    changelog = "https://github.com/binsync/libbs/releases/tag/${src.tag}";
+    changelog = "https://github.com/binsync/libbs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ scoder12 ];
   };
-}
+})

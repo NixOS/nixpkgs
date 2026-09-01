@@ -1,30 +1,31 @@
 {
-  fetchPypi,
   lib,
-  nb-cli,
+  fetchFromGitHub,
   python3,
+  nb-cli,
   testers,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "nb-cli";
-  version = "1.6.0";
+  version = "1.7.4";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "nb_cli";
-    inherit version;
-    hash = "sha256-IbYyPZuhTkr4RInIR1lpMzl2+VYzu4IFQt2pOko92ZQ=";
+  src = fetchFromGitHub {
+    owner = "nonebot";
+    repo = "nb-cli";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Vo+MmbaC+i/FZfrZywb2vgNQotafLyXpdBo6pDlZeaE=";
   };
 
-  pythonRelaxDeps = [
-    "watchfiles"
-    "noneprompt"
-  ];
+  pythonRemoveDeps = [ "pip" ];
 
-  build-system = [
-    python3.pkgs.babel
-    python3.pkgs.pdm-backend
+  # too strict
+  pythonRelaxDeps = true;
+
+  build-system = with python3.pkgs; [
+    babel
+    pdm-backend
   ];
 
   dependencies = with python3.pkgs; [
@@ -68,9 +69,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "CLI for nonebot2";
     homepage = "https://cli.nonebot.dev";
-    changelog = "https://github.com/nonebot/nb-cli/releases/tag/v${version}";
+    changelog = "https://github.com/nonebot/nb-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "nb";
   };
-}
+})

@@ -15,13 +15,13 @@ in
 # Based on the libretro parallel-n64 derivation with slight tweaks
 libretro.mkLibretroCore (finalAttrs: {
   core = "parallel-n64-next";
-  version = "2.27.1";
+  version = "2.28.0";
 
   src = fetchFromGitLab {
     owner = "parallel-launcher";
     repo = "parallel-n64";
     tag = reformatVersion finalAttrs.version;
-    hash = "sha256-u4F6CbC1NEU3OWtcqMIi/teX+SS4Jq9v5M2qc9z5bXg=";
+    hash = "sha256-o5zF100TzAO7XQXau4rglr1rO+roJao43SSFhYPCPO0=";
   };
 
   extraNativeBuildInputs = [
@@ -44,6 +44,10 @@ libretro.mkLibretroCore (finalAttrs: {
     "SYSTEM_ZLIB=1"
     "ARCH=${stdenv.hostPlatform.parsed.cpu.name}"
   ];
+
+  # Fix build with GCC 15
+  # Upstream issue: https://gitlab.com/parallel-launcher/parallel-n64/-/issues/18
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
     sed -i -e '1 i\CPUFLAGS += -DARM_FIX -DNO_ASM -DARM_ASM -DDONT_WANT_ARM_OPTIMIZATIONS -DARM64' Makefile \

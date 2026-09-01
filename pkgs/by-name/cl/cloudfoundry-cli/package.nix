@@ -6,17 +6,17 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cloudfoundry-cli";
-  version = "8.17.0";
+  version = "8.19.0";
 
   src = fetchFromGitHub {
     owner = "cloudfoundry";
     repo = "cli";
-    rev = "v${version}";
-    sha256 = "sha256-OnUqREa2rYx/3yW+yZC69GTx/i7wtK4pLubAlGyYNSI=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-fSt3OyeXK6YAbKem/s+fvhm/BxTve65GSEk4htjzBAI=";
   };
-  vendorHash = "sha256-FcymGl2dzCaZGEDpXyebffE3NbIgold8nKaZ+CW1p2o=";
+  vendorHash = "sha256-cDiYny1BiikrzLRkFmDQefOVTOvzbM86N1Uted3m9Mg=";
 
   subPackages = [ "." ];
 
@@ -33,7 +33,7 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X code.cloudfoundry.org/cli/version.binaryBuildDate=1970-01-01"
-    "-X code.cloudfoundry.org/cli/version.binaryVersion=${version}"
+    "-X code.cloudfoundry.org/cli/version.binaryVersion=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -48,4 +48,4 @@ buildGoModule rec {
     mainProgram = "cf";
     license = lib.licenses.asl20;
   };
-}
+})

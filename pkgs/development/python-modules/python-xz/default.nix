@@ -2,23 +2,32 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
+  pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "python-xz";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-oYjwQ26BFFXxvaYdzp2+bw/BQwM0v/n1r9DmaLs1R3Q=";
+    inherit version;
+    pname = "python_xz";
+    hash = "sha256-yNxRBweZ7p533dndIHoRzJFw6SmFQvgecYcHLg1UNHg=";
   };
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
-  # Module has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [ "xz" ];
 

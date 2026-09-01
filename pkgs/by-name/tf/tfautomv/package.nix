@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tfautomv";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "busser";
     repo = "tfautomv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-/bwCP8HViGQr3kLVQxHOg7bhNwe2D+wif96IdcHD4nk=";
   };
 
@@ -32,4 +32,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ qjoly ];
   };
-}
+})

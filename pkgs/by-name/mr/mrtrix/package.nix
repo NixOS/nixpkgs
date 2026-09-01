@@ -14,8 +14,8 @@
   qt5,
   libGL,
   libGLU,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   less,
   withGui ? true,
 }:
@@ -51,8 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withGui [
     libGL
     libGLU
-    libX11
-    libXext
+    libx11
+    libxext
     qt5.qtbase
     qt5.qtsvg
   ];

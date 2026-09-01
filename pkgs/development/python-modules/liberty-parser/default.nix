@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   setuptools,
   lark,
   numpy,
@@ -14,8 +14,7 @@ buildPythonPackage rec {
   version = "0.0.29";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "tok";
     repo = "liberty-parser";
     tag = version;

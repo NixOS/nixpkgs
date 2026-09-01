@@ -9,14 +9,14 @@
   libpcap,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cowpatty";
   version = "4.8";
 
   src = fetchFromGitHub {
     owner = "joswr1ght";
     repo = "cowpatty";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "0fvwwghhd7wsx0lw2dj9rdsjnirawnq3c6silzvhi0yfnzn5fs0s";
   };
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

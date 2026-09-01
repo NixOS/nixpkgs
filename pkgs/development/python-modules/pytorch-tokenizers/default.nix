@@ -20,7 +20,7 @@
 }:
 
 let
-  # https://github.com/meta-pytorch/tokenizers/blob/v1.0.1/CMakeLists.txt#L174-L175
+  # https://github.com/meta-pytorch/tokenizers/blob/v<VERSION>/CMakeLists.txt#L174-L175
   pybind11-src = fetchFromGitHub {
     owner = "pybind";
     repo = "pybind11";
@@ -28,17 +28,18 @@ let
     hash = "sha256-SNLdtrOjaC3lGHN9MAqTf51U9EzNKQLyTMNPe0GcdrU=";
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytorch-tokenizers";
-  version = "1.0.1";
+  version = "1.4.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "meta-pytorch";
     repo = "tokenizers";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-1BGazimbauNBN/VfLiuhk21VEhbP07GEpPc+GAfKTQY=";
+    hash = "sha256-r/o8+hyFoL01zuymgYED17yQHWwYgSxN2+Q8hnWeDYo=";
   };
 
   patches = [
@@ -61,6 +62,17 @@ buildPythonPackage rec {
     setuptools
   ];
   dontUseCmakeConfigure = true;
+
+  # pkgs/by-name/cm/cmake/setup-hook.sh
+  preBuild = ''
+    if ! [[ -v enableParallelBuilding ]]; then
+        enableParallelBuilding=1
+        echo "cmake: enabled parallel building"
+    fi
+    if [[ "$enableParallelBuilding" -ne 0 ]]; then
+        export CMAKE_BUILD_PARALLEL_LEVEL=$NIX_BUILD_CORES
+    fi
+  '';
 
   dependencies = [
     sentencepiece
@@ -90,7 +102,8 @@ buildPythonPackage rec {
   meta = {
     description = "C++ implementations for various tokenizers (sentencepiece, tiktoken, etc.)";
     homepage = "https://github.com/meta-pytorch/tokenizers";
+    changelog = "https://github.com/meta-pytorch/tokenizers/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

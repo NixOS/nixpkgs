@@ -17,10 +17,10 @@
   openal,
   qt6Packages,
   wayland,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilrenderutil,
-  xcbutilwm,
+  libxcb-image,
+  libxcb-keysyms,
+  libxcb-render-util,
+  libxcb-wm,
 }:
 let
   version = "6.0.6";
@@ -45,10 +45,10 @@ let
     qt6Packages.qtwebsockets
     qt6Packages.qtwebview
     wayland
-    xcbutilimage
-    xcbutilkeysyms
-    xcbutilrenderutil
-    xcbutilwm
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
   ];
 
   meta = {

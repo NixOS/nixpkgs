@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "fertilizer";
-  version = "0.3.0";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "moleculekayak";
+    owner = "molecular-labs";
     repo = "fertilizer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sDoAjEiKxHf+HtFLZr6RwuXN+rl0ZQnFUoQ09QiE6Xc=";
+    hash = "sha256-dPTR3GfofXBV1gwQ8Xdl8Dyz23CU9qBLAahwpxj8z+Q=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -34,8 +34,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "Cross-seeding tool for music";
-    homepage = "https://github.com/moleculekayak/fertilizer";
-    changelog = "https://github.com/moleculekayak/fertilizer/releases";
+    homepage = "https://github.com/molecular-labs/fertilizer";
+    changelog = "https://github.com/molecular-labs/fertilizer/releases";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ambroisie ];
     mainProgram = "fertilizer";

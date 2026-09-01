@@ -18,7 +18,12 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
     hash = "sha256-1wwzN/JPS6daj1vDFuEN5z20tMdLfMvEKti0sxCVlHA=";
   };
-
+  patches = [
+    # Fix type_traits_test assumptions about char signedness on platforms
+    # where char is unsigned by default (e.g. aarch64-linux).
+    # Reported upstream: https://github.com/atcoder/ac-library/issues/191
+    ./fix-char-signedness-tests.patch
+  ];
   outputs = [
     "dev"
     "out"
@@ -54,13 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  # We don't need -fno-strict-overflow because it will break UBSanitize's overflow check especially when the operation number is static definded.
+  # We don't need -fno-strict-overflow because it will break UBSanitize's overflow check especially when the operation number is static defined.
   hardeningDisable = [ "strictoverflow" ];
 
   env = {
     NIX_CFLAGS_COMPILE = toString [
       "-Wno-error=array-bounds"
-      "-Wno-character-conversion"
     ];
   };
 

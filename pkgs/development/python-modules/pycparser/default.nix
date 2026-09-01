@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   gitUpdater,
@@ -9,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pycparser";
-  version = "2.23";
+  version = "3.00";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eliben";
     repo = "pycparser";
     tag = "release_v${version}";
-    hash = "sha256-dkteM8VizYf9ZLPOe8od5CZgg7a3fs4Hy+t8bGLV/GI=";
+    hash = "sha256-6eKc+p3xLyRPo3oCWP/dbMpHlkBXLy8XiGR0gTEHI2E=";
   };
 
   build-system = [ setuptools ];
@@ -25,6 +26,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
+  preCheck = ''
+    substituteInPlace examples/using_gcc_E_libc.py \
+      --replace-fail "'gcc'" "'${stdenv.cc.targetPrefix}cc'"
+  '';
   unittestFlagsArray = [
     "-s"
     "tests"

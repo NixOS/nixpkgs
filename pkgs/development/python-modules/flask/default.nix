@@ -29,13 +29,18 @@
 
 buildPythonPackage rec {
   pname = "flask";
-  version = "3.1.2";
+  version = "3.1.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-v2VsFcgBkO1iitCM39Oqo1vrCHhV4vSUkQqjd0zE/Yc=";
+    hash = "sha256-DvDlK4qc2TKFU3kZfdj5QEezWcoKeGlRRDBMtF+Hyes=";
   };
+
+  patches = [
+    # https://github.com/pallets/flask/issues/6071
+    ./pytest-9.1-compat.patch
+  ];
 
   build-system = [ flit-core ];
 
@@ -53,6 +58,11 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
+
+  disabledTests = [
+    # https://github.com/pallets/flask/issues/6092#issuecomment-4952497033
+    "test_bad_environ_raises_bad_request"
+  ];
 
   passthru.tests = {
     inherit

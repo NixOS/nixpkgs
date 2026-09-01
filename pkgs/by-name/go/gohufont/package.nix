@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  xorg,
+  mkfontscale,
+  fonttosfnt,
   bdf2psf,
   bdftopcf,
   libfaketime,
@@ -20,10 +21,10 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    xorg.mkfontscale
+    mkfontscale
     bdf2psf
     bdftopcf
-    xorg.fonttosfnt
+    fonttosfnt
     libfaketime
   ];
 

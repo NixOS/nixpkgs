@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/desktop-frameworks/utils";
     changelog = "https://gitlab.com/desktop-frameworks/utils/-/blob/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ arthsmn ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

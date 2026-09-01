@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     zig
   ];
 
-  postPatch = ''
+  postConfigure = ''
     ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
   '';
 

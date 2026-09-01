@@ -17,13 +17,17 @@ stdenv.mkDerivation {
     hash = "sha256-5kJj3SJfzrQ3n9r1YOn5xt0KO9WcEf0YpNMjiZEYMEo=";
   };
 
+  patches = [
+    # `del_timer_sync` was renamed to `timer_delete_sync` in Linux 6.2.
+    # The `del_timer_sync` compatibility wrapper was removed in Linux 6.15.
+    # Upstream PR: https://github.com/DIGImend/digimend-kernel-drivers/pull/729
+    ./linux-6.15.patch
+  ];
+
   postPatch = ''
     sed 's/udevadm /true /' -i Makefile
     sed 's/depmod /true /' -i Makefile
   '';
-
-  # Fix build on Linux kernel >= 5.18
-  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=implicit-fallthrough" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 

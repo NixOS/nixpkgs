@@ -18,18 +18,20 @@
   pkg-config,
   testers,
   python3,
+  libxml2,
+  zlib,
 }:
 
 let
-  nixComponents = nixVersions.nixComponents_2_30;
+  nixComponents = nixVersions.nixComponents_2_34;
   common = rec {
-    version = "2.8.2";
+    version = "2.9.2";
 
     src = fetchFromGitHub {
       owner = "nix-community";
       repo = "nixd";
       tag = version;
-      hash = "sha256-rlV3ZAe7HKdt1SlPS6xy+vAxhddKhjn7XvoDnbq2AnE=";
+      hash = "sha256-rjLF0nTRuPKVyxXjNlkHG6k4SdcSwjNOW26u/qlP8uA=";
     };
 
     nativeBuildInputs = [
@@ -54,7 +56,6 @@ let
         inclyc
         Ruixi-rebirth
         aleksana
-        redyf
       ];
       platforms = lib.platforms.unix;
     };
@@ -145,9 +146,15 @@ in
         llvmPackages.llvm
         gtest
         boost
+        libxml2
+        zlib
       ];
 
       nativeBuildInputs = common.nativeBuildInputs ++ [ cmake ];
+
+      mesonFlags = [ (lib.mesonBool "llvm_static" true) ];
+
+      disallowedRequisites = [ (lib.getLib llvmPackages.llvm) ];
 
       # See https://github.com/nix-community/nixd/issues/519
       doCheck = false;

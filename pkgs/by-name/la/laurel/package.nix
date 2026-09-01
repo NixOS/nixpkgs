@@ -5,18 +5,18 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "laurel";
-  version = "0.7.3";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "threathunters-io";
     repo = "laurel";
-    tag = "v${version}";
-    hash = "sha256-4LIv9rdYTPPERgMT8mF6Ymdur9f4tzNkkkMHBePtAH0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Z457Ht8533DYuak2gSLE+q8pUlZja7F1QdltKH+za4w=";
   };
 
-  cargoHash = "sha256-AgyCiCsP3iuk0mRXkFAPDbXG12jE7uXfcGblpALbpMA=";
+  cargoHash = "sha256-SBhhRw+gx3iNyEPSHTRHXZq194otxoxeHG7/vE/g+J4=";
 
   postPatch = ''
     # Upstream started to redirect aarch64-unknown-linux-gnu to aarch64-linux-gnu-gcc
@@ -39,9 +39,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Transform Linux Audit logs for SIEM usage";
     homepage = "https://github.com/threathunters-io/laurel";
-    changelog = "https://github.com/threathunters-io/laurel/releases/tag/${src.tag}";
+    changelog = "https://github.com/threathunters-io/laurel/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ emilylange ];
     platforms = lib.platforms.linux;
   };
-}
+})

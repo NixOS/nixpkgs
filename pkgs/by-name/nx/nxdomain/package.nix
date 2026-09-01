@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nxdomain";
   version = "1.0.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "0va7nkbdjgzrf7fnbxkh1140pbc62wyj86rdrrh5wmg3phiziqkb";
   };
 
@@ -34,4 +34,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ zopieux ];
   };
-}
+})

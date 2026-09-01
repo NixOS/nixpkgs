@@ -10,16 +10,16 @@
 
 buildNpmPackage rec {
   pname = "google-chat-linux";
-  version = "5.39.24-1";
+  version = "5.39.27-1";
 
   src = fetchFromGitHub {
     owner = "squalou";
     repo = "google-chat-linux";
     tag = version;
-    hash = "sha256-yQBnqGyTCUr/t+PCCSTsUhKvlT5wV/F/OvCXrgeiceA=";
+    hash = "sha256-4wSOjxCZqz+7Ep3JM0uF76EWgCPr7R2g5JyxWj798hM=";
   };
 
-  npmDepsHash = "sha256-8eZAn8zIDcMDKi30AiG1di4T/3xVoCewJ/e4qf7n9nY=";
+  npmDepsHash = "sha256-hpTTI9k9HlNwyFHXltskTmG2V72S7zwOOXJOmSO7nOQ=";
   dontNpmBuild = true;
 
   nativeBuildInputs = [

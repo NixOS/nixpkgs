@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-criterion";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "bheisler";
     repo = "cargo-criterion";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-RPix9DM6E32PhObvV3xPGrnXrrVHn3auxLUhysP8GM0=";
   };
 
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

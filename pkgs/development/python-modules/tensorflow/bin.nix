@@ -19,7 +19,7 @@
   google-pasta,
   grpcio,
   h5py,
-  libclang,
+  clang,
   numpy,
   opt-einsum,
   packaging,
@@ -51,20 +51,17 @@ let
   inherit (cudaPackages) cudatoolkit cudnn;
 
   isCudaJetson = cudaSupport && cudaPackages.flags.isJetsonBuild;
+
+  pyVerNoDot = lib.strings.stringAsChars (x: lib.optionalString (x != ".") x) python.pythonVersion;
+  cuda = lib.optionalString cudaSupport (if isCudaJetson then "_jetson" else "_gpu");
+  key = "${stdenv.system}_${pyVerNoDot}${cuda}";
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tensorflow" + lib.optionalString cudaSupport "-gpu";
   version = packages."${"version" + lib.optionalString isCudaJetson "_jetson"}";
   format = "wheel";
 
-  src =
-    let
-      pyVerNoDot = lib.strings.stringAsChars (x: lib.optionalString (x != ".") x) python.pythonVersion;
-      platform = stdenv.system;
-      cuda = lib.optionalString cudaSupport (if isCudaJetson then "_jetson" else "_gpu");
-      key = "${platform}_${pyVerNoDot}${cuda}";
-    in
-    fetchurl (packages.${key} or (throw "tensorflow-bin: unsupported configuration: ${key}"));
+  src = fetchurl (packages.${key} or (throw "tensorflow-bin: unsupported configuration: ${key}"));
 
   buildInputs = [ llvmPackages.openmp ];
 
@@ -73,9 +70,20 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs =
-    lib.optionals cudaSupport [ addDriverRunpath ]
-    ++ lib.optionals isCudaJetson [ cudaPackages.autoAddCudaCompatRunpath ];
+    lib.optionals cudaSupport [
+      addDriverRunpath
+    ]
+    ++ lib.optionals isCudaJetson [
+      cudaPackages.autoAddCudaCompatRunpath
+    ];
 
+  pythonRemoveDeps = [
+    "libclang"
+    "keras"
+  ];
+  pythonRelaxDeps = [
+    "h5py"
+  ];
   dependencies = [
     absl-py
     astunparse
@@ -84,7 +92,7 @@ buildPythonPackage rec {
     google-pasta
     grpcio
     h5py
-    libclang
+    clang
     ml-dtypes
     numpy
     opt-einsum
@@ -120,13 +128,13 @@ buildPythonPackage rec {
     # Then, in each package requiring `tensorflow`, our pythonRuntimeDepsCheck will fail with:
     # importlib.metadata.PackageNotFoundError: No package metadata was found for tensorflow
     # Hence, we manually rename the package to `tensorflow`.
-    lib.optionalString ((builtins.match ".*tensorflow_cpu.*" src.url) != null) ''
+    lib.optionalString ((builtins.match ".*tensorflow_cpu.*" finalAttrs.src.url) != null) ''
       (
         cd $out/${python.sitePackages}
 
-        dest="tensorflow-${version}.dist-info"
+        dest="tensorflow-${finalAttrs.version}.dist-info"
 
-        mv tensorflow_cpu-${version}.dist-info "$dest"
+        mv tensorflow_cpu-${finalAttrs.version}.dist-info "$dest"
 
         (
           cd "$dest"
@@ -164,18 +172,23 @@ buildPythonPackage rec {
         # TODO: Create this list programmatically, and remove paths that aren't
         # actually needed.
         rrPathArr=(
-          "$out/${python.sitePackages}/tensorflow/"
+          "$out/${python.sitePackages}/tensorflow.libs"
+          "$out/${python.sitePackages}/tensorflow"
+          "$out/${python.sitePackages}/tensorflow/compiler/mlir/lite/python"
+          "$out/${python.sitePackages}/tensorflow/compiler/mlir/quantization/tensorflow/python"
+          "$out/${python.sitePackages}/tensorflow/compiler/mlir/stablehlo"
+          "$out/${python.sitePackages}/tensorflow/compiler/mlir/tensorflow_to_stablehlo/python"
+          "$out/${python.sitePackages}/tensorflow/compiler/tf2tensorrt"
+          "$out/${python.sitePackages}/tensorflow/compiler/tf2xla/ops"
           "$out/${python.sitePackages}/tensorflow/core/kernels"
-          "$out/${python.sitePackages}/tensorflow/compiler/mlir/stablehlo/"
-          "$out/${python.sitePackages}/tensorflow/compiler/tf2tensorrt/"
-          "$out/${python.sitePackages}/tensorflow/compiler/tf2xla/ops/"
-          "$out/${python.sitePackages}/tensorflow/include/external/ml_dtypes/"
-          "$out/${python.sitePackages}/tensorflow/lite/experimental/microfrontend/python/ops/"
-          "$out/${python.sitePackages}/tensorflow/lite/python/analyzer_wrapper/"
-          "$out/${python.sitePackages}/tensorflow/lite/python/interpreter_wrapper/"
-          "$out/${python.sitePackages}/tensorflow/lite/python/metrics/"
-          "$out/${python.sitePackages}/tensorflow/lite/python/optimize/"
-          "$out/${python.sitePackages}/tensorflow/python/"
+          "$out/${python.sitePackages}/tensorflow/include/external/ml_dtypes"
+          "$out/${python.sitePackages}/tensorflow/lite/experimental/microfrontend/python/ops"
+          "$out/${python.sitePackages}/tensorflow/lite/python"
+          "$out/${python.sitePackages}/tensorflow/lite/python/analyzer_wrapper"
+          "$out/${python.sitePackages}/tensorflow/lite/python/interpreter_wrapper"
+          "$out/${python.sitePackages}/tensorflow/lite/python/metrics"
+          "$out/${python.sitePackages}/tensorflow/lite/python/optimize"
+          "$out/${python.sitePackages}/tensorflow/python"
           "$out/${python.sitePackages}/tensorflow/python/autograph/impl/testing"
           "$out/${python.sitePackages}/tensorflow/python/client"
           "$out/${python.sitePackages}/tensorflow/python/data/experimental/service"
@@ -186,9 +199,9 @@ buildPythonPackage rec {
           "$out/${python.sitePackages}/tensorflow/python/platform"
           "$out/${python.sitePackages}/tensorflow/python/profiler/internal"
           "$out/${python.sitePackages}/tensorflow/python/saved_model"
+          "$out/${python.sitePackages}/tensorflow/python/tpu"
           "$out/${python.sitePackages}/tensorflow/python/util"
           "$out/${python.sitePackages}/tensorflow/tsl/python/lib/core"
-          "$out/${python.sitePackages}/tensorflow.libs/"
           "${rpath}"
         )
 
@@ -212,14 +225,6 @@ buildPythonPackage rec {
       ln -s ${cudaPackages.cuda_nvcc} "$out/${python.sitePackages}/tensorflow/cuda"
     '';
 
-  # Upstream has a pip hack that results in bin/tensorboard being in both tensorflow
-  # and the propagated input tensorboard, which causes environment collisions.
-  # Another possibility would be to have tensorboard only in the buildInputs
-  # See https://github.com/NixOS/nixpkgs/pull/44381 for more information.
-  postInstall = ''
-    rm $out/bin/tensorboard
-  '';
-
   pythonImportsCheck = [
     "tensorflow"
     "tensorflow.python"
@@ -232,8 +237,7 @@ buildPythonPackage rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.asl20;
     maintainers = [ ];
-    badPlatforms = [ "x86_64-darwin" ];
     # unsupported combination
-    broken = stdenv.hostPlatform.isDarwin && cudaSupport;
+    broken = stdenv.hostPlatform.isDarwin && cudaSupport || !(packages ? ${key});
   };
-}
+})

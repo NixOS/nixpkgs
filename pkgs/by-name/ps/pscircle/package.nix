@@ -8,14 +8,14 @@
   cairo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pscircle";
   version = "1.4.0";
 
   src = fetchFromGitLab {
     owner = "mildlyparallel";
     repo = "pscircle";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-bqbQBNscNfoqXprhoFUnUQO88YQs9xDhD4d3KHamtG0=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.ldesgoui ];
     platforms = lib.platforms.linux;
   };
-}
+})

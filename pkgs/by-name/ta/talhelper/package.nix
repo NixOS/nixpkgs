@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "talhelper";
-  version = "3.1.1";
+  version = "3.1.17";
 
   src = fetchFromGitHub {
     owner = "budimanjojo";
     repo = "talhelper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2CuMGYzJV1kfOjAl9eniyzIUJGAeg32Jro5f8Y5m7cs=";
+    hash = "sha256-y3rYIzGBYq02bS/C43PSDKOrOLFbcrEe079fQpEAR0Q=";
   };
 
-  vendorHash = "sha256-AkCUKg5oA2XvvDtE0m9fQdeqowx5A1SnnimF7F/CORg=";
+  vendorHash = "sha256-mczxEYnlhY0MVtuust/ymRzTpLeJHH68CpQDVvgpYPU=";
 
   ldflags = [
     "-s"
@@ -54,7 +54,10 @@ buildGoModule (finalAttrs: {
     '';
     homepage = "https://github.com/budimanjojo/talhelper";
     mainProgram = "talhelper";
-    maintainers = with lib.maintainers; [ madeddie ];
+    maintainers = with lib.maintainers; [
+      madeddie
+      nevivurn
+    ];
     license = lib.licenses.bsd3;
   };
 })

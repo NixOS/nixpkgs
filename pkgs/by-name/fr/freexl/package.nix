@@ -9,12 +9,12 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freexl";
   version = "2.0.0";
 
   src = fetchurl {
-    url = "https://www.gaia-gis.it/gaia-sins/freexl-${version}.tar.gz";
+    url = "https://www.gaia-gis.it/gaia-sins/freexl-${finalAttrs.version}.tar.gz";
     hash = "sha256-F2cF8d5Yq3we679cbeRqt2/Ni4VlCNvSj1ZI98bhp/A=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ sikmir ];
   };
-}
+})

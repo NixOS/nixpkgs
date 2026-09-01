@@ -20,8 +20,6 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-H4N9Z8aK/xV5gCCdsL+oiR+XQfYtCfBRBGLqvuztX+o=";
   };
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
-
   build-system = [
     setuptools
     setuptools-scm

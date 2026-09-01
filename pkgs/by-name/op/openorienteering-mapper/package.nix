@@ -14,14 +14,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "OpenOrienteering-Mapper";
   version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "OpenOrienteering";
     repo = "mapper";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JfjQe7t3F/9/ik7b+6UUbsYIcpkSDxHBgnbQEYyDTMI=";
   };
 
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.openorienteering.org/apps/mapper/";
     description = "Orienteering mapmaking program";
-    changelog = "https://github.com/OpenOrienteering/mapper/releases/tag/v${version}";
+    changelog = "https://github.com/OpenOrienteering/mapper/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       mpickering
@@ -95,4 +95,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; unix;
     mainProgram = "Mapper";
   };
-}
+})

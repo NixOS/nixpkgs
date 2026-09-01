@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch,
   swig,
   cmake,
   ninja,
@@ -18,6 +19,15 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-U6T/aXy0JTC1ptL5oBmch0ytSPmIkRA8XOi31NpArnI=";
   };
+
+  patches = [
+    # https://github.com/realthunder/slvs_py/pull/11
+    (fetchpatch {
+      name = "cmake-4.patch";
+      url = "https://github.com/realthunder/slvs_py/compare/ab95814...ad0e1f7.patch";
+      hash = "sha256-LqDDx7uWq5VOkbE/aRu1JAau/DVfr40KK+L8PbBeGoU=";
+    })
+  ];
 
   pyproject = true;
 

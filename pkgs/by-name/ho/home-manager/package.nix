@@ -13,20 +13,19 @@
   ncurses,
   nixos-option,
   stdenvNoCC,
-  unixtools,
   unstableGitUpdater,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "home-manager";
-  version = "0-unstable-2026-01-07";
+  version = "0-unstable-2026-08-06";
 
   src = fetchFromGitHub {
     name = "home-manager-source";
     owner = "nix-community";
     repo = "home-manager";
-    rev = "4fee4bd14b5e4178855ad0041df89fa44f3f2bea";
-    hash = "sha256-DRhbz2dZaEmj5MgLFMXjEPfmKYfMG6LwNT9Bv8zeLPQ=";
+    rev = "7834e82588860aaf780cec1366524456a70898d7";
+    hash = "sha256-TIDlLTLI1/pB7IqgjzcKQjpODQsZE2oII4XGG9B6KjI=";
   };
 
   nativeBuildInputs = [
@@ -94,7 +93,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.mit;
     mainProgram = "home-manager";
-    maintainers = with lib.maintainers; [ bryango ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

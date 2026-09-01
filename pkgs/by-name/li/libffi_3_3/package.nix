@@ -2,21 +2,30 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
 
   doCheck ? true, # test suite depends on dejagnu which cannot be used during bootstrapping
   dejagnu,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libffi";
   version = "3.3";
 
   src = fetchurl {
-    url = "https://github.com/libffi/libffi/releases/download/v${version}/${pname}-${version}.tar.gz";
+    url = "https://github.com/libffi/libffi/releases/download/v${finalAttrs.version}/libffi-${finalAttrs.version}.tar.gz";
     hash = "sha256-cvunkicD3fp6Ao1ROsFahcjVTI1n9V+lpIAohdxlIFY=";
   };
 
-  patches = [ ];
+  patches = [
+    # Backport gcc-15 fix:
+    #   https://github.com/libffi/libffi/pull/861
+    (fetchpatch {
+      name = "gcc-15.patch";
+      url = "https://github.com/libffi/libffi/commit/0859f8431242d5adff21420b9cab538d2af527b5.patch";
+      hash = "sha256-Py4ZAhVyXsfLxr4pnYAH7/lcsQOmpToFgvjQvLg9XVc=";
+    })
+  ];
 
   outputs = [
     "out"
@@ -73,4 +82,4 @@ stdenv.mkDerivation rec {
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
-}
+})

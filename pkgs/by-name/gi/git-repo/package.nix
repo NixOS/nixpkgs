@@ -1,9 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitiles,
   makeWrapper,
-  nix-update-script,
   python3,
   git,
   gnupg,
@@ -11,15 +10,14 @@
   openssh,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "git-repo";
-  version = "2.59";
+  version = "2.66.1";
 
-  src = fetchFromGitHub {
-    owner = "android";
-    repo = "tools_repo";
-    rev = "v${version}";
-    hash = "sha256-5ffk5B4ZA/Wy2bQNahFaXPFRSZdKz5t6TaGbN00mfxo=";
+  src = fetchFromGitiles {
+    url = "https://android.googlesource.com/tools/repo";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-x4Tsl5tCVmmTAcmuZw5AUyaBq++8j31xkoJMs82L9Ew=";
   };
 
   # Fix 'NameError: name 'ssl' is not defined'
@@ -57,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = ./update.sh;
   };
 
   meta = {
@@ -70,8 +68,11 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://android.googlesource.com/tools/repo";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ otavio ];
+    maintainers = with lib.maintainers; [
+      otavio
+      ungeskriptet
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "repo";
   };
-}
+})

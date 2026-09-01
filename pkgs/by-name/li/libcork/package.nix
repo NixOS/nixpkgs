@@ -6,22 +6,22 @@
   pkg-config,
   check,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcork";
   version = "1.0.0--rc3";
 
   src = fetchFromGitHub {
     owner = "dcreager";
     repo = "libcork";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "152gqnmr6wfmflf5l6447am4clmg3p69pvy3iw7yhaawjqa797sk";
   };
 
   postPatch = ''
     # N.B. We need to create this file, otherwise it tries to use git to
     # determine the package version, which we do not want.
-    echo "${version}" > .version-stamp
-    echo "${version}" > .commit-stamp
+    echo "${finalAttrs.version}" > .version-stamp
+    echo "${finalAttrs.version}" > .commit-stamp
 
     # N.B. We disable tests by force, since their build is broken.
     sed -i '/add_subdirectory(tests)/d' ./CMakeLists.txt
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ lovesegfault ];
   };
-}
+})

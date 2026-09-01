@@ -5,39 +5,35 @@
   nix-update-script,
   makeWrapper,
   glib,
-  gtk2,
   gtk3,
   ant,
   jdk,
-  libXtst,
+  libxtst,
   coreutils,
   gnugrep,
   zulu,
-  preferGtk3 ? true,
-  preferZulu ? true,
+  preferZulu ? false,
 }:
 
 let
   jre' = (if preferZulu then zulu else jdk).override { enableJavaFX = true; };
-  gtk' = if preferGtk3 then gtk3 else gtk2;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "davmail";
-  version = "6.4.0";
+  version = "6.8.1";
 
   src = fetchFromGitHub {
     owner = "mguessan";
     repo = "davmail";
     tag = finalAttrs.version;
-    hash = "sha256-dj+7e0b8GcyoDzEWGG1SEMijqRBo1IJUFtgxkt9XNRU=";
+    hash = "sha256-kIDAMVenUzc7tIC49yzc1MzqNa9B7nNlX1bzwpG8Vp0=";
   };
 
   buildPhase = ''
     runHook preBuild
 
-    ant compile prepare-dist
-    cp -Rv dist/{lib,davmail{,.jar}} .
-    sed -i -e '/^JAVA_OPTS/d' davmail
+    ant prepare-dist
+    sed -i -e '/^JAVA_OPTS/d' ./dist/davmail
 
     runHook postBuild
   '';
@@ -55,10 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/share/davmail
-    cp -vR ./{lib,davmail{,.jar}} $out/share/davmail
+    cp -R ./dist/{lib,davmail{,.jar}} $out/share/davmail
     chmod +x $out/share/davmail/davmail
     makeWrapper $out/share/davmail/davmail $out/bin/davmail \
-      --set-default JAVA_OPTS "-Xmx512M -Dsun.net.inetaddr.ttl=60 -Djdk.gtk.version=${lib.versions.major gtk'.version}" \
+      --set-default JAVA_OPTS "-Xmx512M -Dsun.net.inetaddr.ttl=60 -Djdk.gtk.version=${lib.versions.major gtk3.version}" \
       --prefix PATH : ${
         lib.makeBinPath [
           jre'
@@ -69,8 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
           glib
-          gtk'
-          libXtst
+          gtk3
+          libxtst
         ]
       }
 
@@ -83,7 +79,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Java application which presents a Microsoft Exchange server as local CALDAV, IMAP and SMTP servers";
     homepage = "https://davmail.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ peterhoeg ];
+    maintainers = with lib.maintainers; [
+      peterhoeg
+      doronbehar
+      shymega
+    ];
     platforms = lib.platforms.all;
     mainProgram = "davmail";
   };

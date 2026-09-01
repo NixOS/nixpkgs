@@ -2,18 +2,21 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "texttable";
   version = "1.7.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-LSBo+1URWAfTrHekymj6SIA+hOuw7iNA+FgQejZSJjg=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

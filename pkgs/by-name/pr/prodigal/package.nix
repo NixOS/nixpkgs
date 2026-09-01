@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "prodigal";
   version = "2.6.3";
 
   src = fetchFromGitHub {
     repo = "Prodigal";
     owner = "hyattpd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1fs1hqk83qjbjhrvhw6ni75zakx5ki1ayy3v6wwkn3xvahc9hi5s";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ luispedro ];
   };
-}
+})

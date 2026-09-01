@@ -2,10 +2,11 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
-  name = "quinze";
+  pname = "quinze";
   version = "2018-09-22";
 
   src = fetchzip {
@@ -14,13 +15,7 @@ stdenvNoCC.mkDerivation {
     stripRoot = false;
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -m444 -Dt $out/share/fonts/truetype *.ttf
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Narrow monospaced font, designed to fit a fifteen pixel bitmap";

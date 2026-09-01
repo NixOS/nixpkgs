@@ -18,14 +18,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "moocore";
-  version = "0.2.0";
+  version = "0.3.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "multi-objective";
     repo = "moocore";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a0UA06no7pZd+8WQIUUrB5u87T3PoPv7dldBChEh4bw=";
+    hash = "sha256-R4CqhvmaMyCKJnF+SfD2HSv5tnsCIC6CMmLTaMBJZIw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python";

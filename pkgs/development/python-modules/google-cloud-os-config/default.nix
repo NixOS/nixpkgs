@@ -12,16 +12,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-os-config";
-  version = "1.22.0";
+  version = "1.25.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_os_config";
     inherit version;
-    hash = "sha256-15oxD2+hznRwqqCExw443AXZhTH0aPghs6Um5NM6cOQ=";
+    hash = "sha256-LgJxfWoNq+j26/e5s36yi19w4zWL18rwzdvPhDswPaE=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core

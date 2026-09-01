@@ -3,21 +3,22 @@
   fetchFromGitHub,
   mkYaziPlugin,
 }:
-mkYaziPlugin {
+mkYaziPlugin (finalAttrs: {
   pname = "compress.yazi";
-  version = "0-unstable-2026-01-10";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "KKV9";
     repo = "compress.yazi";
-    rev = "e6007f7c3f364cdb7146f5b6b282790948fb0bd6";
-    hash = "sha256-m5FfN2gnTHsbwP2aYaE+K6kNGfAC7HBVtCyy6HzNRrE=";
+    tag = "0.6";
+    hash = "sha256-Mby185FCJY6nqHcHDQu+D5SLk+wGcyeUHK8yAvrd4TM=";
   };
 
   meta = {
     description = "Yazi plugin that compresses selected files to an archive";
     homepage = "https://github.com/KKV9/compress.yazi";
+    changelog = "https://github.com/KKV9/compress.yazi/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eljamm ];
   };
-}
+})

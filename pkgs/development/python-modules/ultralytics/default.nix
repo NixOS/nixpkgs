@@ -34,15 +34,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ultralytics";
-  version = "8.4.6";
+  version = "8.4.51";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ultralytics";
     repo = "ultralytics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kNOldJvJlyBkV7VeETtxQJdtToJyGID2dEIq1z0Fg1c=";
+    hash = "sha256-vaedx45NlFi2RbrQj16M0bAWuSz+ZlVL8Ivykp54mQU=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail '"setuptools>=70.0.0,<=82.0.1"' '"setuptools"'
+  '';
 
   build-system = [ setuptools ];
 
@@ -134,6 +138,9 @@ buildPythonPackage (finalAttrs: {
     description = "Train YOLO models for computer vision tasks";
     mainProgram = "yolo";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ osbm ];
+    maintainers = with lib.maintainers; [
+      osbm
+      mana-byte
+    ];
   };
 })

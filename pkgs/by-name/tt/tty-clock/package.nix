@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "tty-clock";
-  version = "2.3+unstable=2021-04-07";
+  version = "2.3-unstable-2021-04-07";
 
   src = fetchFromGitHub {
     owner = "xorg62";

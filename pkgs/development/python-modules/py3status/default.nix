@@ -20,19 +20,20 @@
   setuptools,
   tzlocal,
   wrapGAppsHook3,
-  xorg,
+  xset,
+  setxkbmap,
   glib,
   gobject-introspection,
 }:
 
 buildPythonPackage rec {
   pname = "py3status";
-  version = "3.63";
+  version = "3.64";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k9zkbkgw+rD/0JxQyxT5xdEgdDmY/y7zCw6wGo+2Xhg=";
+    hash = "sha256-7hafyW7jq/8Xk4POAohX6sNViJ+Azuqs5/0i1JqCqr0=";
   };
 
   nativeBuildInputs = [
@@ -64,8 +65,8 @@ buildPythonPackage rec {
     sed -i -e "s|'i3-nagbar|'${i3}/bin/i3-nagbar|" py3status/modules/pomodoro.py
     sed -i -e "s|'free|'${procps}/bin/free|" py3status/modules/sysdata.py
     sed -i -e "s|'sensors|'${lm_sensors}/bin/sensors|" py3status/modules/sysdata.py
-    sed -i -e "s|'setxkbmap|'${xorg.setxkbmap}/bin/setxkbmap|" py3status/modules/keyboard_layout.py
-    sed -i -e "s|'xset|'${xorg.xset}/bin/xset|" py3status/modules/keyboard_layout.py
+    sed -i -e "s|'setxkbmap|'${setxkbmap}/bin/setxkbmap|" py3status/modules/keyboard_layout.py
+    sed -i -e "s|'xset|'${xset}/bin/xset|" py3status/modules/keyboard_layout.py
   '';
 
   dontWrapGApps = true;

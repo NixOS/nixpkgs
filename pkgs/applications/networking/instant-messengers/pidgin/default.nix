@@ -13,13 +13,12 @@
   gst_all_1,
   gtk2,
   gtk2-x11,
-  gtkspell2,
   intltool,
   lib,
-  libICE,
-  libSM,
-  libXScrnSaver,
-  libXext,
+  libice,
+  libsm,
+  libxscrnsaver,
+  libxext,
   libgcrypt,
   libgnt,
   libidn,
@@ -74,10 +73,10 @@ let
         gst_all_1.gst-plugins-base
         gst_all_1.gst-plugins-good
         gst_all_1.gstreamer
-        libICE
-        libSM
-        libXScrnSaver
-        libXext
+        libice
+        libsm
+        libxscrnsaver
+        libxext
         libgnt
         libidn
         libstartup_notification
@@ -94,7 +93,6 @@ let
       ]
       ++ lib.optionals stdenv.hostPlatform.isLinux [
         gtk2
-        gtkspell2
         farstream
       ]
       ++ lib.optional stdenv.hostPlatform.isDarwin gtk2-x11;
@@ -126,16 +124,14 @@ let
       "--disable-nm"
       "--disable-tcl"
       "--disable-gevolution"
+      "--disable-gtkspell"
     ]
     ++ lib.optionals withCyrus_sasl [ "--enable-cyrus-sasl=yes" ]
     ++ lib.optionals withGnutls [
       "--enable-gnutls=yes"
       "--enable-nss=no"
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "--disable-gtkspell"
-      "--disable-vv"
-    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--disable-vv" ]
     ++ lib.optionals stdenv.cc.isClang [ "CFLAGS=-Wno-error=int-conversion" ];
 
     enableParallelBuilding = true;
@@ -175,7 +171,7 @@ let
       homepage = "https://pidgin.im/";
       license = lib.licenses.gpl2Plus;
       platforms = lib.platforms.unix;
-      maintainers = [ lib.maintainers.lucasew ];
+      maintainers = [ ];
     };
   };
 

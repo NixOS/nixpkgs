@@ -2,6 +2,14 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  callPackage,
+  python,
+
+  # gateware (FPGA toolchain)
+  nextpnr,
+  trellis,
+  which,
+  yosys,
 
   # build-system
   setuptools,
@@ -25,17 +33,23 @@
   pytestCheckHook,
   udevCheckHook,
 }:
-buildPythonPackage rec {
-  pname = "cynthion";
-  version = "0.2.4";
-  pyproject = true;
+let
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "cynthion";
     tag = version;
-    hash = "sha256-ebd2L7o6GO57TpwJ7+MOhVSb+I/E8kD7d7DqPj4B3FM=";
+    hash = "sha256-Ju01eqBVZ7CD0pw4nIFML4LcCPXzC78dLpQru3a+5bU=";
   };
+
+  # Moondancer SoC firmware, required for `cynthion flash facedancer`.
+  moondancer = callPackage ./moondancer.nix { inherit src version; };
+in
+buildPythonPackage {
+  pname = "cynthion";
+  inherit version src;
+  pyproject = true;
 
   sourceRoot = "${src.name}/cynthion/python";
 
@@ -45,12 +59,19 @@ buildPythonPackage rec {
       --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [ udevCheckHook ];
+  nativeBuildInputs = [
+    udevCheckHook
 
-  build-system = [
-    setuptools
+    # Used by the gateware build in postInstall.
+    nextpnr
+    trellis
+    which
+    yosys
   ];
 
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [ "pygreat" ];
   pythonRemoveDeps = [ "future" ];
 
   dependencies = [
@@ -69,18 +90,34 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  # Build the per-revision FPGA bitstreams in parallel (see build_gateware.py).
+  enableParallelBuilding = true;
 
   pythonImportsCheck = [ "cynthion" ];
 
-  # Make udev rules available for NixOS option services.udev.packages
-  postInstall = ''
-    install -Dm444 \
-      -t $out/lib/udev/rules.d \
-      build/lib/cynthion/assets/54-cynthion.rules
-  '';
+  postInstall =
+    let
+      assets = "$out/${python.sitePackages}/cynthion/assets";
+    in
+    ''
+      # Build a bitstream set per hardware revision into assets/, where
+      # `cynthion flash` looks for them.
+      export BUILD_GATEWARE_MAX_WORKERS="''${NIX_BUILD_CORES:-1}"
+      PYTHONPATH="$out/${python.sitePackages}''${PYTHONPATH:+:$PYTHONPATH}" \
+        python ${./build_gateware.py} "${assets}"
+
+      # Install the moondancer SoC firmware for `cynthion flash facedancer`.
+      install -Dm444 ${moondancer}/bin/moondancer.bin "${assets}/moondancer.bin"
+
+      # Make udev rules available for NixOS option services.udev.packages
+      install -Dm444 \
+        -t $out/lib/udev/rules.d \
+        build/lib/cynthion/assets/54-cynthion.rules
+    '';
+
+  passthru = { inherit moondancer; };
 
   meta = {
     description = "Python package and utilities for the Great Scott Gadgets Cynthion USB Test Instrument";

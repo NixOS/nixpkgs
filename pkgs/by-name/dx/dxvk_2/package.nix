@@ -11,6 +11,7 @@
   spirv-headers,
   vulkan-headers,
   SDL2,
+  sdl3,
   glfw,
   gitUpdater,
   sdl2Support ? (!stdenv.hostPlatform.isWindows),
@@ -37,13 +38,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dxvk";
-  version = "2.6.1";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "doitsujin";
     repo = "dxvk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-edu9JQAKu8yUZLh+37RB1s1A3+s8xeUYQ5Oibdes9ZI=";
+    hash = "sha256-c4QlFCUH5SdXT4J3jTGQBAgFXFD8waTjvLUePLAdpFs=";
     fetchSubmodules = true; # Needed for the DirectX headers and libdisplay-info
   };
 
@@ -75,7 +76,10 @@ stdenv.mkDerivation (finalAttrs: {
     spirv-headers
     vulkan-headers
   ]
-  ++ lib.optionals sdl2Support [ SDL2 ]
+  ++ lib.optionals sdl2Support [
+    SDL2
+    sdl3
+  ]
   ++ lib.optionals glfwSupport [ glfw ]
   ++ lib.optionals hostPlatform.isWindows [ windows.pthreads ];
 

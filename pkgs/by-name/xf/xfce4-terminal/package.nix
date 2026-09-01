@@ -13,7 +13,7 @@
   gtk3,
   gtk-layer-shell,
   libutempter,
-  libX11,
+  libx11,
   libxfce4ui,
   pcre2,
   vte,
@@ -24,14 +24,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-terminal";
-  version = "1.1.5";
+  version = "1.2.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "apps";
     repo = "xfce4-terminal";
     tag = "xfce4-terminal-${finalAttrs.version}";
-    hash = "sha256-qNXrxUjmuY6+k95/zcOu1/CUfhb1u0Ca91aFD3c4uoc=";
+    hash = "sha256-2zlx9pt9srMT6iKy89oKKdvh7YALOkyQTy7hRH60AOw=";
   };
 
   strictDeps = true;
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     gtk-layer-shell
     libutempter
-    libX11
+    libx11
     libxfce4ui
     pcre2
     vte

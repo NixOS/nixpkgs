@@ -3,11 +3,11 @@
   stdenv,
   fetchFromGitHub,
   libGL,
-  libX11,
-  libXext,
-  libXrandr,
-  libXinerama,
-  libXcursor,
+  libx11,
+  libxext,
+  libxrandr,
+  libxinerama,
+  libxcursor,
   freetype,
   alsa-lib,
   cmake,
@@ -34,11 +34,11 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libGL
-    libX11
-    libXext
-    libXrandr
-    libXinerama
-    libXcursor
+    libx11
+    libxext
+    libxrandr
+    libxinerama
+    libxcursor
     freetype
     alsa-lib
   ];

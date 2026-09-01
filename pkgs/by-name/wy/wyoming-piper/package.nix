@@ -5,16 +5,16 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "wyoming-piper";
-  version = "2.1.2";
+  version = "2.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "rhasspy";
+    owner = "OHF-Voice";
     repo = "wyoming-piper";
-    tag = "v${version}";
-    hash = "sha256-j6QvGChAkASKdD+4XqIwC6UWdhi5oMDfYmSk6kvRrNE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5jYV2DZcUe6RzigRMId8DybvhRnOhHcwN32aVKgEZDo=";
   };
 
   build-system = with python3Packages; [
@@ -37,30 +37,35 @@ python3Packages.buildPythonApplication rec {
     ]
     ++ wyoming.optional-dependencies.zeroconf;
 
+  optional-dependencies = with python3Packages; {
+    http = wyoming.optional-dependencies.http;
+    # We do not follow the dependency dance upstream does as that would require overrideAttrs.
+    # omnivoice = [ omnivoice ]; # not packaged, yet
+    web = [ flask ];
+    zeroconf = wyoming.optional-dependencies.zeroconf;
+    zh = piper-tts.optional-dependencies.zh;
+  };
+
   pythonImportsCheck = [
     "wyoming_piper"
   ];
 
-  doCheck = false; # only test requires network
-
   nativeCheckInputs = with python3Packages; [
-    numpy
     pytest-asyncio
     pytestCheckHook
-    python-speech-features
   ];
 
-  disabledTests = [
-    # network access
-    "test_piper"
+  disabledTestPaths = [
+    # requires network access
+    "tests/test_piper.py"
   ];
 
   meta = {
-    changelog = "https://github.com/rhasspy/wyoming-piper/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/OHF-Voice/wyoming-piper/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Wyoming Server for Piper";
     mainProgram = "wyoming-piper";
-    homepage = "https://github.com/rhasspy/wyoming-piper";
+    homepage = "https://github.com/OHF-Voice/wyoming-piper";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

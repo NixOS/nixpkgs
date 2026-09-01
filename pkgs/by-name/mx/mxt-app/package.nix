@@ -6,15 +6,15 @@
   libtool,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.46";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.52";
   pname = "mxt-app";
 
   src = fetchFromGitHub {
     owner = "atmel-maxtouch";
     repo = "mxt-app";
-    rev = "v${version}";
-    sha256 = "sha256-SeP48xdZ43dL28tg7mo8SmObUt3R+8oyETst6yKkhnU=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-CW2iWkYuI0joTQJXt271XLO70Qq/Yg8eX9f56XnJht8=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "mxt-app";
   };
-}
+})

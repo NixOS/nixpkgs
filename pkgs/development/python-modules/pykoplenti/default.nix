@@ -7,28 +7,26 @@
   prompt-toolkit,
   pycryptodome,
   pydantic,
-  setuptools,
+  hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pykoplenti";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stegm";
     repo = "pykoplenti";
-    tag = "v${version}";
-    hash = "sha256-vsqbjNj5x7X0VGbTq+CdZ9rPXVDypBkgaCI6MImloLo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Mwh6QOdsvf32U09ebleEKL7vt3xz8tjiftVVxKL/lO4=";
   };
 
   pythonRelaxDeps = [ "pydantic" ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     pycryptodome
     pydantic
@@ -48,10 +46,10 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python REST client API for Kostal Plenticore Inverters";
-    mainProgram = "pykoplenti";
     homepage = "https://github.com/stegm/pykoplenti/";
-    changelog = "https://github.com/stegm/pykoplenti/releases/tag/v${version}";
-    license = with lib.licenses; [ asl20 ];
+    changelog = "https://github.com/stegm/pykoplenti/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "pykoplenti";
   };
-}
+})

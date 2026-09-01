@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bird";
-  version = "2.17.3";
+  version = "2.19.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.nic.cz";
     owner = "labs";
     repo = "bird";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Uwvb5u12Hwsv0uouEpGQiTgMgprWUpghbwD3TmKBoOM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5C7hVUWy5QOD2r0Qcu2b2j+xxRek8NsYoWgeRm2Exis=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./dont-create-sysconfdir-2.patch
   ];
 
-  CPP = "${stdenv.cc.targetPrefix}cpp -E";
+  env.CPP = "${stdenv.cc.targetPrefix}cpp -E";
 
   configureFlags = [
     "--localstatedir=/var"

@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  fetchpatch,
   fetchurl,
   replaceVars,
   vpnc,
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
   version = "1.4.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/NetworkManager-vpnc/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/NetworkManager-vpnc/${lib.versions.majorMinor version}/NetworkManager-vpnc-${version}.tar.xz";
     sha256 = "47KpiIAnWht1FUvDF6eGQ8/fnqfnDfTu2WSPKeolNzA=";
   };
 
@@ -31,6 +32,8 @@ stdenv.mkDerivation rec {
     (replaceVars ./fix-paths.patch {
       inherit vpnc kmod;
     })
+    # https://gitlab.gnome.org/GNOME/NetworkManager-vpnc/-/merge_requests/19
+    ./export_nm_vpn_editor_factory_vpnc.patch
   ];
 
   nativeBuildInputs = [

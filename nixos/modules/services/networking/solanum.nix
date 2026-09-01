@@ -12,7 +12,6 @@ let
     mkOption
     types
     ;
-  inherit (pkgs) solanum util-linux;
   cfg = config.services.solanum;
 
   configFile = pkgs.writeText "solanum.conf" cfg.config;
@@ -43,6 +42,10 @@ in
           listen {
             host = "0.0.0.0";
             port = 6667;
+          };
+
+          class "users" {
+            number_per_ip = 3;
           };
 
           auth {
@@ -100,12 +103,28 @@ in
             configFile
           ];
           serviceConfig = {
-            ExecStart = "${solanum}/bin/solanum -foreground -logfile /dev/stdout -configfile /etc/solanum/ircd.conf -pidfile /run/solanum/ircd.pid";
-            ExecReload = "${util-linux}/bin/kill -HUP $MAINPID";
+            ExecStart = toString [
+              (lib.getExe pkgs.solanum)
+              "-foreground"
+              "-logfile"
+              "/dev/stdout"
+              "-configfile"
+              "/etc/solanum/ircd.conf"
+              "-pidfile"
+              "/run/solanum/ircd.pid"
+            ];
+            ExecReload = toString [
+              (lib.getExe' pkgs.util-linux "kill")
+              "-HUP"
+              "$MAINPID"
+            ];
             DynamicUser = true;
             User = "solanum";
             StateDirectory = "solanum";
+            StateDiectoryMode = "0750";
             RuntimeDirectory = "solanum";
+            RuntimeDirectoryMode = "0700";
+            UMask = "0027";
             LimitNOFILE = "${toString cfg.openFilesLimit}";
           };
         };

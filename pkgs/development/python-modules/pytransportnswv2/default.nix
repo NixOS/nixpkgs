@@ -3,22 +3,22 @@
   buildPythonPackage,
   fetchPypi,
   gtfs-realtime-bindings,
+  hatchling,
   httpx,
   requests,
-  setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pytransportnswv2";
-  version = "2.2.1";
+  version = "3.3.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-tTbwbT1320kdr4pm9KyPXIdrZknJENPzPrbzEuCxb2k=";
+    hash = "sha256-QlPaqeBRQm3dLMY0kX/Uq2hxNrp2pTMJHiKi71WVfpY=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     gtfs-realtime-bindings

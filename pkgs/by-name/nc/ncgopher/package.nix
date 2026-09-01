@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Gopher and gemini client for the modern internet";
     homepage = "https://github.com/jansc/ncgopher";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ shamilton ];
+    maintainers = with lib.maintainers; [ jrrom ];
     platforms = lib.platforms.linux;
     mainProgram = "ncgopher";
   };

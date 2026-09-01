@@ -7,34 +7,32 @@
   stdenv,
   withSixel ? false,
   libsixel,
-  xorg,
+  libxrandr,
+  libx11,
   withSki ? true,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "menyoki";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "menyoki";
-    rev = "v${version}";
-    sha256 = "sha256-owP3G1Rygraifdc4iPURQ1Es0msNhYZIlfrtj0CSU6Y=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2l4umaJVsDCR/avrRGkBz+3zlkf7m6G7b3+dcEo4Wyw=";
   };
 
-  cargoHash = "sha256-6FRc/kEhGJXIZ+6GXeYj5j7QVmvZgIQgtDPvt94hlho=";
+  cargoHash = "sha256-EC7viho1Tv015MjbLPdia8b64sw2+6/7vRwNjP5Mvyg=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional stdenv.hostPlatform.isLinux pkg-config;
 
   buildInputs =
     lib.optional withSixel libsixel
-    ++ lib.optionals stdenv.hostPlatform.isLinux (
-      with xorg;
-      [
-        libX11
-        libXrandr
-      ]
-    );
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libx11
+      libxrandr
+    ];
 
   buildNoDefaultFeatures = !withSki;
   buildFeatures = lib.optional withSixel "sixel";
@@ -52,9 +50,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Screen{shot,cast} and perform ImageOps on the command line";
     homepage = "https://menyoki.cli.rs/";
-    changelog = "https://github.com/orhun/menyoki/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/orhun/menyoki/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
     mainProgram = "menyoki";
   };
-}
+})

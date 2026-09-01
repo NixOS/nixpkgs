@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pysmb";
-  version = "1.2.13";
+  version = "1.2.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miketeo";
     repo = "pysmb";
     tag = "pysmb-${version}";
-    hash = "sha256-CLjpUkDCtAZyneM+KFTE1G1Q3NIRRw2sIytIv30ZUgI=";
+    hash = "sha256-Unc5CfLOyaoy25x7vhe3wqO2+bocvCbu3yrDwX3K06U=";
   };
 
   build-system = [ setuptools ];

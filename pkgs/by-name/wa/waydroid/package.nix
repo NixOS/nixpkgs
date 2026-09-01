@@ -22,14 +22,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "waydroid";
-  version = "1.6.1";
+  version = "1.6.3";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "waydroid";
     repo = "waydroid";
     tag = version;
-    hash = "sha256-2ywAgWYMQ7N2P4x/0maNUSn3pdaRAWyATaraRAGafxI=";
+    hash = "sha256-1YYNSqIW+0vkCRZ+vemqu0CXhU6aOGvpMzdswvlAc84=";
   };
 
   nativeBuildInputs = [

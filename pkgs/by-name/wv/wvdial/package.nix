@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "wvdial";
-  version = "unstable-2016-06-15";
+  version = "0-unstable-2016-06-15";
 
   src = fetchFromGitea {
     domain = "gitea.osmocom.org";

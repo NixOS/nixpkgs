@@ -6,6 +6,8 @@
   perl,
   nixosTests,
   autoreconfHook,
+  buildPackages,
+  runtimeShellPackage,
   brotliSupport ? false,
   brotli,
   c-aresSupport ? false,
@@ -48,8 +50,6 @@
   rtmpdump,
   scpSupport ? zlibSupport && !stdenv.hostPlatform.isSunOS && !stdenv.hostPlatform.isCygwin,
   libssh2,
-  wolfsslSupport ? false,
-  wolfssl,
   rustlsSupport ? false,
   rustls-ffi,
   zlibSupport ? true,
@@ -80,14 +80,16 @@ assert
     (lib.count (x: x) [
       gnutlsSupport
       opensslSupport
-      wolfsslSupport
       rustlsSupport
     ]) > 1
   );
 
+let
+  isCross = !lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.17.0";
+  version = "8.21.0";
 
   src = fetchurl {
     urls = [
@@ -96,15 +98,43 @@ stdenv.mkDerivation (finalAttrs: {
         builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
       }/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-lV9ucprWs1ZiYOj+9oYg52ujwxrPChhSRBahhaz3eZI=";
+    hash = "sha256-qhtmpw6s6D3GJFCHRWRsCK5WHeUSq0A63/uTrIf8cuY=";
   };
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
   postPatch = ''
     substituteInPlace ./config.guess --replace-fail /usr/bin/uname uname
-    patchShebangs scripts
-  '';
+  ''
+  # `wcurl` is the one thing in `scripts` that is installed, so it is the one
+  # whose shebang has to suit the host platform. The rest are only used during
+  # the build, and want this platform's shell. Say which is which rather than
+  # patch them all one way and correct it afterwards.
+  #
+  # Where the host has no shell at all, `patchShebangs --host` finds nothing
+  # and leaves the shebang as shipped, which is the best available answer.
+  #
+  # TODO: take the first branch unconditionally --- in the spirit of strictDeps,
+  # it is good to always be defensive rather than do something unnecessarily
+  # that we can only get away with when build == host.
+  + (
+    if isCross then
+      ''
+        local f flag
+        for f in scripts/*; do
+          if [[ "$f" == scripts/wcurl ]]; then
+            flag=--host
+          else
+            flag=--build
+          fi
+          patchShebangs "$flag" "$f"
+        done
+      ''
+    else
+      ''
+        patchShebangs scripts
+      ''
+  );
 
   outputs = [
     "bin"
@@ -118,8 +148,13 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   strictDeps = true;
+  __structuredAttrs = true;
 
-  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic) {
+  env = {
+    CXX = "${stdenv.cc.targetPrefix}c++";
+    CXXCPP = "${stdenv.cc.targetPrefix}c++ -E";
+  }
+  // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic) {
     # Not having this causes curl’s `configure` script to fail with static builds on Darwin because
     # some of curl’s propagated inputs need libiconv.
     NIX_LDFLAGS = "-liconv";
@@ -156,7 +191,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional pslSupport libpsl
     ++ lib.optional rtmpSupport rtmpdump
     ++ lib.optional scpSupport libssh2
-    ++ lib.optional wolfsslSupport wolfssl
     ++ lib.optional rustlsSupport rustls-ffi
     ++ lib.optional zlibSupport zlib
     ++ lib.optional zstdSupport zstd;
@@ -188,7 +222,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeatureAs idnSupport "libidn2" (lib.getDev libidn2))
     (lib.withFeatureAs opensslSupport "openssl" (lib.getDev openssl))
     (lib.withFeatureAs scpSupport "libssh2" (lib.getDev libssh2))
-    (lib.withFeatureAs wolfsslSupport "wolfssl" (lib.getDev wolfssl))
   ]
   ++ lib.optional gssSupport "--with-gssapi=${lib.getDev libkrb5}"
   # For the 'urandom', maybe it should be a cross-system option
@@ -199,7 +232,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-ca-bundle"
     "--without-ca-path"
   ]
-  ++ lib.optionals (!gnutlsSupport && !opensslSupport && !wolfsslSupport && !rustlsSupport) [
+  ++ lib.optionals (!gnutlsSupport && !opensslSupport && !rustlsSupport) [
     "--without-ssl"
   ]
   ++ lib.optionals (rustlsSupport && !stdenv.hostPlatform.isDarwin) [
@@ -208,9 +241,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (gnutlsSupport && !stdenv.hostPlatform.isDarwin) [
     "--with-ca-path=/etc/ssl/certs"
   ];
-
-  CXX = "${stdenv.cc.targetPrefix}c++";
-  CXXCPP = "${stdenv.cc.targetPrefix}c++ -E";
 
   # takes 14 minutes on a 24 core and because many other packages depend on curl
   # they cannot be run concurrently and are a bottleneck
@@ -244,7 +274,28 @@ stdenv.mkDerivation (finalAttrs: {
     ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}
     ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}.4
     ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}.4.4.0
+  ''
+  # `postPatch` above should have pointed everything installed at the host's
+  # shell already. Do it again over what was installed, defensively.
+  + lib.optionalString isCross ''
+    patchShebangs --host "''${!outputBin}/bin"
   '';
+
+  # Whether we patch the shebangs in the installed script or not, we should not
+  # have build platform software in the final runtime closure.
+  outputChecks.bin.disallowedReferences = lib.optional isCross buildPackages.runtimeShellPackage;
+  outputChecks.out.disallowedReferences = lib.optional isCross buildPackages.runtimeShellPackage;
+
+  # Some hosts have no shell for the scripts to point at: MinGW is the one in
+  # tree, where `bash` is marked unsupported because it needs a POSIX layer. We
+  # cannot patch shebangs in that case.
+  #
+  # TODO: drop the isCross part of the condition --- in the spirit of
+  # `strictDeps` it is good to have the dep (when it is available), even if it
+  # is gratuitous in the `build = host` case.
+  buildInputs = lib.optional (
+    isCross && lib.meta.availableOn stdenv.hostPlatform runtimeShellPackage
+  ) runtimeShellPackage;
 
   passthru =
     let
@@ -280,15 +331,17 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://curl.se/ch/${finalAttrs.version}.html";
     description = "Command line tool for transferring files with URL syntax";
     homepage = "https://curl.se/";
+    donationPage = "https://curl.se/donation.html";
     license = lib.licenses.curl;
     maintainers = with lib.maintainers; [
-      lovek323
       Scrumplex
     ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.all;
-    # Fails to link against static brotli or gss
-    broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport);
+    # Fails to link against static gss
+    broken = stdenv.hostPlatform.isStatic && gssSupport;
     pkgConfigModules = [ "libcurl" ];
     mainProgram = "curl";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "haxx" finalAttrs.version;
   };
 })

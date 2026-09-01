@@ -6,12 +6,12 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bridge-utils";
   version = "1.7.1";
 
   src = fetchurl {
-    url = "https://kernel.org/pub/linux/utils/net/bridge-utils/bridge-utils-${version}.tar.xz";
+    url = "https://kernel.org/pub/linux/utils/net/bridge-utils/bridge-utils-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-ph2L5PGhQFxgyO841UTwwYwFszubB+W0sxAzU2Fl5g4=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

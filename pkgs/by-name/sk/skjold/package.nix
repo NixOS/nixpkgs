@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "skjold";
   version = "0.6.2";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "twu";
     repo = "skjold";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/ltaRs2WZXbrG3cVez+QIwupJrsV550TjOALbHX9Z0I=";
   };
 
@@ -56,8 +56,8 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to Python dependencies against security advisory databases";
     homepage = "https://github.com/twu/skjold";
-    changelog = "https://github.com/twu/skjold/releases/tag/v${version}";
+    changelog = "https://github.com/twu/skjold/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

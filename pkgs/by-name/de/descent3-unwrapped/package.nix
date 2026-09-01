@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "DescentDevelopers";
     repo = "Descent3";
-    rev = "937e649ea616b7b732211443c5c7378d144cd39c";
+    rev = "156cba8aafd997d27deb0902ba6026bcdcc1cfaf";
     leaveDotGit = true;
     # Descent 3 is supposed to display its Git commit hash in the bottom right
     # corner of the main menu. That feature only works if either the .git
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       git rev-parse --verify HEAD | tr --delete '\n' > git-hash.txt
       rm -r .git
     '';
-    hash = "sha256-WGjIHBGpV0j7K3LHRNv4qkZkSrZTEQGryixl6i0BK8U=";
+    hash = "sha256-NsZPGgIzI2mE3mJ7eoczaNDkGZUpMUMBRLK2qt2WPgk=";
   };
 
   hardeningDisable = [ "format" ];

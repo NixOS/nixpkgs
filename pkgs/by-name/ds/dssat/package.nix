@@ -23,14 +23,14 @@ let
     hash = "sha256-WwJR5lnWtR3aYWZmk8pBC0/qaRqY0UrWHIaYp2ajImE=";
   };
 in
-stdenv.mkDerivation (final: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dssat";
   version = "4.8.2.12";
 
   src = fetchFromGitHub {
     owner = "DSSAT";
     repo = "dssat-csm-os";
-    tag = "v${final.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8OaTM7IXFZjlelx5O4O+bVNQj4dIhGzIk2iCfpqI8uA=";
   };
 

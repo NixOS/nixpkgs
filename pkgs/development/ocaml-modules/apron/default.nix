@@ -31,13 +31,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     gmp
-    mpfr
     ppl
-    camlidl
     flint
     pplite
   ];
-  propagatedBuildInputs = [ mlgmpidl ];
+  propagatedBuildInputs = [
+    camlidl
+    mlgmpidl
+    mpfr
+  ];
 
   outputs = [
     "out"

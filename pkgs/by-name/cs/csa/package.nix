@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "csa";
   version = "0.5.100810";
 
   src = fetchurl {
-    url = "mirror://sourceforge/csa/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/csa/csa-${finalAttrs.version}.tar.gz";
     sha256 = "1syg81dzdil0dyx1mlx1n7if3qsf2iz243p2zv34a1acfqm509r3";
   };
 
@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
     longDescription = ''
       CSA means : Contrôle Signal Audio.
       It contains the following plugins:
-      Emphazised Limiter, Cellular Leveler, Simple right/left amplifier. Blind Peak Meter.
+      Emphasised Limiter, Cellular Leveler, Simple right/left amplifier. Blind Peak Meter.
     '';
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.unix;
   };
-}
+})

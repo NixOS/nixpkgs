@@ -13,22 +13,22 @@
   ufo2ft,
   gftools,
   fontbakery,
-  diffenator2,
   chevron,
   sh,
+  font-v,
   ninja,
 }:
 
 buildPythonPackage {
   pname = "notobuilder";
-  version = "0-unstable-2026-01-09";
+  version = "0-unstable-2026-06-26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "notofonts";
     repo = "notobuilder";
-    rev = "424667c0603ecae86424961ad7f8dee97e6b134c";
-    hash = "sha256-FzxYm602w2h58g8D9rk8cJAYWgxMJNMngeWUWnpRfdA=";
+    rev = "5b55818eb3f535481135a5f57a337eec6d28cda0";
+    hash = "sha256-pdfWl8rp4tizgb7j0UR7hOW/Ae2dPhTSw1IHljM15LE=";
   };
 
   postPatch = ''
@@ -52,9 +52,9 @@ buildPythonPackage {
     ufo2ft
     gftools
     fontbakery
-    diffenator2
     chevron
     sh
+    font-v
   ]
   ++ gftools.optional-dependencies.qa;
 

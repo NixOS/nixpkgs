@@ -8,21 +8,21 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "open-isns";
   version = "0.103";
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "open-isns";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-buqQMsoxRCbWiBDq0XAg93J7bjbdxeIernV8sDVxCAA=";
   };
 
   # The location of /var/lib is not made configurable in the meson.build file
   postPatch = ''
     substituteInPlace meson.build \
-        --replace-fail "/var/lib" "$out/var/lib" \
+        --replace-fail "/var/lib" "$out/var/lib"
   '';
 
   nativeBuildInputs = [
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.markuskowa ];
   };
-}
+})

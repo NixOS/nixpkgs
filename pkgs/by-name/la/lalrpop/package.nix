@@ -6,14 +6,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lalrpop";
   version = "0.22.2";
 
   src = fetchFromGitHub {
     owner = "lalrpop";
     repo = "lalrpop";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-/mk4sTgwxBrB+LEBbWv4OQEEh2P2KVSh6v5ry9/Et4s=";
   };
 
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "LR(1) parser generator for Rust";
     homepage = "https://github.com/lalrpop/lalrpop";
-    changelog = "https://github.com/lalrpop/lalrpop/blob/${src.rev}/RELEASES.md";
+    changelog = "https://github.com/lalrpop/lalrpop/blob/${finalAttrs.src.rev}/RELEASES.md";
     license = with lib.licenses; [
       asl20 # or
       mit
@@ -44,4 +44,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "lalrpop";
     maintainers = with lib.maintainers; [ chayleaf ];
   };
-}
+})

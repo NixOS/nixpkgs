@@ -1,8 +1,8 @@
 diff --git a/src-script/script-util.js b/src-script/script-util.js
-index 1897c2b8..aaf9a08b 100644
+index fb8fe7a8589f..2b2a43f46053 100644
 --- a/src-script/script-util.js
 +++ b/src-script/script-util.js
-@@ -196,23 +194,6 @@ async function rebuildBackendIfNeeded() {
+@@ -237,28 +237,6 @@ async function rebuildBackendIfNeeded() {
   * ads the timestamp and saves it into .version.json
   */
  async function stampVersion() {
@@ -18,7 +18,12 @@ index 1897c2b8..aaf9a08b 100644
 -    version.date = d
 -    version.zapVersion = result.version
 -    let versionFile = path.join(__dirname, '../.version.json')
--    console.log(`🔍 Git commit: ${version.hash} from ${version.date}`)
+-    console.log(
+-      env.formatEmojiMessage(
+-        '🔍',
+-        `Git commit: ${version.hash} from ${version.date}`
+-      )
+-    )
 -    await fsp.writeFile(versionFile, JSON.stringify(version))
 -  } catch (err) {
 -    console.log(`Error retrieving version: ${err}`)

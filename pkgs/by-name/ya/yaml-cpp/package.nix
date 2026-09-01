@@ -8,14 +8,14 @@
   static ? stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yaml-cpp";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "jbeder";
     repo = "yaml-cpp";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-J87oS6Az1/vNdyXu3L7KmUGWzU0IAkGrGMUUha+xDXI=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ OPNA2608 ];
   };
-}
+})

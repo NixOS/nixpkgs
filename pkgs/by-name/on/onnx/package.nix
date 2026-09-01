@@ -33,13 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "onnx";
-  version = "1.20.1";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XZJXD6sBvVJ6cLPyDkKOW8oSkjqcw9whUqDWd7dxY3c=";
+    hash = "sha256-eF6BdTwTuHh6ckuLGN1d6z2GLU47lPqtzu4zIv8+cTs=";
   };
 
   outputs = [
@@ -71,11 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
     # NOTE: Darwin requires a static build; otherwise, tests fail in the Python package.
     BUILD_SHARED_LIBS = if stdenv.hostPlatform.isDarwin then "0" else "1";
     ONNX_BUILD_PYTHON = "1";
-    ONNX_BUILD_TESTS = if finalAttrs.doCheck then "1" else "0";
-    # ONNX_ML is enabled by default, so we must explicitly disable it.
+    ONNX_BUILD_TESTS = if finalAttrs.finalPackage.doCheck then "1" else "0";
+    # ONNX_ML is enabled by default.
     # See: https://github.com/onnx/onnx/blob/b751946c3d59a3c8358abcc0569b59e6ddb08cdd/CMakeLists.txt#L66-L73
-    # NOTE: If this is `true`, onnx-tensorrt fails to build due to missing protobuf files.
-    ONNX_ML = "0";
+    ONNX_ML = "1";
     ONNX_NAMESPACE = "onnx";
     ONNX_USE_PROTOBUF_SHARED_LIBS = "1";
 
@@ -88,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     export MAX_JOBS=$NIX_BUILD_CORES
   '';
 
-  # Leave the CMake bulid directory, export the `cmakeFlags` environment variable as CMAKE_ARGS so setup.py will pick
+  # Leave the CMake build directory, export the `cmakeFlags` environment variable as CMAKE_ARGS so setup.py will pick
   # them up, do the python build from the top-level, then resume the C++ build.
   preBuild = ''
     pushd ..

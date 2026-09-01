@@ -5,7 +5,7 @@
 }:
 mkYaziPlugin {
   pname = "jump-to-char.yazi";
-  version = "25.5.31-unstable-2025-06-18";
+  version = "0-unstable-2025-06-18";
 
   src = fetchFromGitHub {
     owner = "yazi-rs";

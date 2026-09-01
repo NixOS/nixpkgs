@@ -5,7 +5,7 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "doona";
   version = "0-unstable-2019-03-08";
 
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -r ${src}/bedmod $out/bin/bedmod
-    cp ${src}/doona.pl $out/bin/doona
+    cp -r ${finalAttrs.src}/bedmod $out/bin/bedmod
+    cp ${finalAttrs.src}/doona.pl $out/bin/doona
     chmod +x $out/bin/doona
   '';
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ pamplemousse ];
   };
-}
+})

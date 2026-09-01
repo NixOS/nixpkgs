@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  garth,
+  garminconnect,
   importlib-resources,
   lxml,
   poetry-core,
@@ -10,27 +10,29 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "withings-sync";
-  version = "5.3.0";
+  version = "6.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jaroslawhartman";
     repo = "withings-sync";
-    tag = "v${version}";
-    hash = "sha256-Q9zOXQIdl4jpCK6a5Xp4kZK67MqudX0thDAkRmdL3AQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-z0rVUFBbPff6xfItLQqbt+uN5Qe/BbVLAH1xMVUSfpA=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "1.0.0.dev1" "${version}"
+      --replace-fail "1.0.0.dev1" "${finalAttrs.version}"
   '';
+
+  pythonRelaxDeps = [ "garminconnect" ];
 
   build-system = [ poetry-core ];
 
   dependencies = [
-    garth
+    garminconnect
     importlib-resources
     lxml
     python-dotenv
@@ -42,9 +44,9 @@ buildPythonPackage rec {
   meta = {
     description = "Synchronisation of Withings weight";
     homepage = "https://github.com/jaroslawhartman/withings-sync";
-    changelog = "https://github.com/jaroslawhartman/withings-sync/releases/tag/${src.tag}";
+    changelog = "https://github.com/jaroslawhartman/withings-sync/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "withings-sync";
   };
-}
+})

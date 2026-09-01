@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   version = "1.7.18";
   pname = "ossutil";
 
   src = fetchFromGitHub {
     owner = "aliyun";
     repo = "ossutil";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-M7Jh3rmWdUlsvj+P0UKazjQoe0zLDro882f/l8wFZGQ=";
   };
 
@@ -23,9 +23,9 @@ buildGoModule rec {
   meta = {
     description = "User friendly command line tool to access Alibaba Cloud OSS";
     homepage = "https://github.com/aliyun/ossutil";
-    changelog = "https://github.com/aliyun/ossutil/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/aliyun/ossutil/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jpetrucciani ];
     mainProgram = "ossutil";
   };
-}
+})

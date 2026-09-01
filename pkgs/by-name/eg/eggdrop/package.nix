@@ -2,19 +2,23 @@
   lib,
   stdenv,
   fetchurl,
+  openssl,
   tcl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eggdrop";
-  version = "1.9.5";
+  version = "1.10.1";
 
   src = fetchurl {
-    url = "https://ftp.eggheads.org/pub/eggdrop/source/${lib.versions.majorMinor version}/eggdrop-${version}.tar.gz";
-    hash = "sha256-4mkY6opk2YV1ecW2DGYaM38gdz7dgwhrNWUlvrWBc2o=";
+    url = "https://ftp.eggheads.org/pub/eggdrop/source/${lib.versions.majorMinor finalAttrs.version}/eggdrop-${finalAttrs.version}.tar.gz";
+    hash = "sha256-pc33RE14HC/09dC+FCAvXQlx4AOHGBpJtyUFf+lTEtU=";
   };
 
-  buildInputs = [ tcl ];
+  buildInputs = [
+    openssl
+    tcl
+  ];
 
   hardeningDisable = [ "format" ];
 
@@ -37,5 +41,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     homepage = "https://www.eggheads.org";
     description = "Internet Relay Chat (IRC) bot";
+    maintainers = with lib.maintainers; [ EpicEric ];
   };
-}
+})

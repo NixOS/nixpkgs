@@ -4,7 +4,6 @@
   meta = with pkgs.lib.maintainers; {
     maintainers = [
       diogotcorreia
-      ma27
     ];
   };
 

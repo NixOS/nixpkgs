@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "zdns";
   version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "zmap";
     repo = "zdns";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-e01+TjJETpWNrdtG+lHHGmS9ZS9RijOo5wRnEv6w5jk=";
   };
 
@@ -27,7 +27,7 @@ buildGoModule rec {
     description = "CLI DNS lookup tool";
     mainProgram = "zdns";
     homepage = "https://github.com/zmap/zdns";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

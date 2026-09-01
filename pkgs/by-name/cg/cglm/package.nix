@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cglm";
   version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "recp";
     repo = "cglm";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-caDw9Sqf4hS2JNbNxG/xaFIvO6oIlvT+hZQhdX37BKw=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -5,14 +5,14 @@
   libmrss,
 }:
 
-stdenv.mkDerivation (final: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rsstail";
   version = "2.2";
 
   src = fetchFromGitHub {
     owner = "folkertvanheusden";
     repo = "rsstail";
-    rev = "v${final.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-wbdf9zhwMN7QhJ5WoJo1Csu0EcKUTON8Q2Ic5scbn7I=";
   };
 

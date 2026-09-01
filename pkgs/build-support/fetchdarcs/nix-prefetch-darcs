@@ -27,7 +27,7 @@ usage() {
 while [ $# -gt 0 ]; do
 	case "$1" in
 		--quiet)
-		  quiet=1; shift 1 ;;
+			quiet=1; shift 1 ;;
 		--name)
 			name="$2"; shift 2 ;;
 		--repo)
@@ -127,11 +127,7 @@ if [ -z "$final_path" ]; then
 
 	cd "$tmp_clone"
 	# Do not print Darcs progress to stdout (else stdout isn’t parsable JSON)
-	if [ -t 1 ]; then
-		darcs clone $clone_args "$repository" "$name" >/dev/tty
-	else
-		darcs clone $clone_args "$repository" "$name" >/dev/null
-	fi
+	darcs clone "$clone_args" "$repository" "$name" 1>&2
 	# Will put the current Darcs context into the store.
 	new_context="$tmp_clone/${name}-context.txt"
 	darcs log --repodir="$tmp_clone/$name" --context > "$new_context"

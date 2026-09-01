@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.3.1";
   pname = "snore";
 
   src = fetchFromGitHub {
-    owner = "clamiax";
+    owner = "bitsmanent";
     repo = "snore";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-bKPGSePzp4XEZFY0QQr37fm3R1v3hLD6FeySFd7zNJc=";
   };
 
@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "'sleep' with feedback";
-    homepage = "https://github.com/clamiax/snore";
+    homepage = "https://github.com/bitsmanent/snore";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cafkafk ];
     platforms = lib.platforms.unix;
     mainProgram = "snore";
   };
-}
+})

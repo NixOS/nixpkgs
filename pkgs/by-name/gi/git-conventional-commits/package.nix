@@ -7,7 +7,7 @@
 }:
 
 let
-  version = "2.7.2";
+  version = "2.9.0";
 in
 buildNpmPackage {
   pname = "git-conventional-commits";
@@ -17,10 +17,10 @@ buildNpmPackage {
     owner = "qoomon";
     repo = "git-conventional-commits";
     tag = "v${version}";
-    hash = "sha256-3X5AnpIzqszKjMqFgUr9wzyzDpnRJ94hcBJpQ8J9H/c=";
+    hash = "sha256-Mt99QTrWv+uuThL7tyM2wyOFj6/MrSKXg5ai0RNyyDE=";
   };
 
-  npmDepsHash = "sha256-XUDWvoJTpOQZCUyYbijD/hA1HVseHO19vAheJrPd1Gk=";
+  npmDepsHash = "sha256-6Dgf6wx0G0Ev8IPrgHU/dTdRNvrtKa+Shdvv1IJolN4=";
 
   dontNpmBuild = true;
 

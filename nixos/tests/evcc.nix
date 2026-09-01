@@ -7,7 +7,7 @@ in
   name = "evcc";
   meta.maintainers = with lib.maintainers; [ hexa ];
 
-  nodes = {
+  containers = {
     machine = {
       services.evcc = {
         enable = true;

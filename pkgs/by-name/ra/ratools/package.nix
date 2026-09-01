@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ratools";
   version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "danrl";
     repo = "ratools";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "07m45bn9lzgbfihmxic23wqp73nxg5ihrvkigr450jq6gzvgwawq";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.fpletz ];
   };
-}
+})

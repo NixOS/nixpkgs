@@ -10,16 +10,16 @@
   typing-utils,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ossapi";
-  version = "5.3.2";
+  version = "5.3.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Liam-DeVoe";
     repo = "ossapi";
-    tag = "v${version}";
-    hash = "sha256-sLzw/0RsA0PGxxQeVz4TGIpTMMlrZ0i4ZGolrz5S16E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XppjM3WNdu4r3K0oARk/krPfPMiiCxwz2CYRCx8LphA=";
   };
 
   build-system = [ setuptools ];
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for the osu! API";
     homepage = "https://github.com/Liam-DeVoe/ossapi";
-    changelog = "https://github.com/Liam-DeVoe/ossapi/releases/tag/${src.tag}";
+    changelog = "https://github.com/Liam-DeVoe/ossapi/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ wulpine ];
   };
-}
+})

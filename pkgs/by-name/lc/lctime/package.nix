@@ -2,7 +2,7 @@
   lib,
   stdenv,
   python3Packages,
-  fetchFromGitea,
+  fetchFromCodeberg,
   runCommand,
   lctime,
   ngspice,
@@ -14,8 +14,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "0.0.28";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "librecell";
     repo = "lctime";
     tag = finalAttrs.version;

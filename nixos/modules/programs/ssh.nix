@@ -356,7 +356,7 @@ in
         "GlobalKnownHostsFile ${builtins.concatStringsSep " " knownHostsFiles}"
       ]
       ++ lib.optional (!config.networking.enableIPv6) "AddressFamily inet"
-      ++ lib.optional cfg.setXAuthLocation "XAuthLocation ${pkgs.xorg.xauth}/bin/xauth"
+      ++ lib.optional cfg.setXAuthLocation "XAuthLocation ${pkgs.xauth}/bin/xauth"
       ++ lib.optional (cfg.forwardX11 != null) "ForwardX11 ${lib.boolToYesNo cfg.forwardX11}"
       ++ lib.optional (
         cfg.pubkeyAcceptedKeyTypes != [ ]

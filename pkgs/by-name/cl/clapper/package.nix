@@ -3,7 +3,7 @@
   clapper-unwrapped,
   wrapGAppsHook4,
   gobject-introspection,
-  xorg,
+  lndir,
   clapper-enhancers,
 }:
 
@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [
     wrapGAppsHook4
     gobject-introspection
-    xorg.lndir
+    lndir
   ];
 
   buildInputs = [ clapper-unwrapped ] ++ clapper-unwrapped.buildInputs;

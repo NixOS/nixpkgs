@@ -13,17 +13,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "omnom";
-  version = "0.7.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "asciimoo";
     repo = "omnom";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-auujlRG3RKJYYTi/iptx0Y3Yzqmt6i9AlfjVcqn5YPc=";
+    hash = "sha256-cG+cAsarbDqi3BLrIiSnH4VQS0fdfyMgkvbQvzKUXNw=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-0usbfvGz+9chLGyHHUUStUh7x91ZGfr/+gAXXVA5iNc=";
+  vendorHash = "sha256-meToyr93nmKLZ//h8Gc0rp2hc4vOV9ULU+FbBXmbDv8=";
 
   passthru.updateScript = nix-update-script { };
 
@@ -51,7 +51,7 @@ buildGoModule (finalAttrs: {
       pname = "omnom-addons";
       inherit (finalAttrs) version src;
 
-      npmDepsHash = "sha256-sUn5IvcHWJ/yaqeGz9SGvGx9HHAlrcnS0lJxIxUVS6M=";
+      npmDepsHash = "sha256-CIzp6/mBTuSaEFv0lk3d/GZyq1VRDvCSoqrujz4AG/E=";
       sourceRoot = "${finalAttrs'.src.name}/ext";
       npmPackFlags = [ "--ignore-scripts" ];
 
@@ -85,7 +85,9 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Webpage bookmarking and snapshotting service";
-    homepage = "https://github.com/asciimoo/omnom";
+    homepage = "https://omnom.zone/";
+    downloadPage = "https://github.com/asciimoo/omnom";
+    changelog = "https://github.com/asciimoo/omnom/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     teams = [ lib.teams.ngi ];
     mainProgram = "omnom";

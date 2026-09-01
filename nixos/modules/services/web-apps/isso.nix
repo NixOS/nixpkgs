@@ -37,6 +37,8 @@ in
 
           See [Isso Server Configuration](https://posativ.org/isso/docs/configuration/server/)
           for supported values.
+          You can set secrets using the secretFile option with environment variables following
+          [the documentation](https://isso-comments.de/docs/reference/server-config/#environment-variables).
         '';
 
         type = types.submodule {
@@ -51,6 +53,16 @@ in
           }
         '';
       };
+
+      secretFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          A file containing secrets as environment variables that will be used in the configuration.
+          See [the documentation](https://isso-comments.de/docs/reference/server-config/#environment-variables) for details.
+        '';
+        example = "/run/secrets/isso.env";
+      };
     };
   };
 
@@ -64,6 +76,8 @@ in
       serviceConfig = {
         User = "isso";
         Group = "isso";
+
+        EnvironmentFile = mkIf (cfg.secretFile != null) [ cfg.secretFile ];
 
         DynamicUser = true;
 

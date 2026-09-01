@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "goflow";
   version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "goflow";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-dNu/z48wzUExGsfpKSWmLwhtqbs/Xi+4PFKRjTxt9DI=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ heph2 ];
     platforms = lib.platforms.all;
   };
-}
+})

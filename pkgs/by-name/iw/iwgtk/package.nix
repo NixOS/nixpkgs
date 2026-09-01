@@ -11,14 +11,14 @@
   qrencode,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iwgtk";
   version = "0.9";
 
   src = fetchFromGitHub {
     owner = "j-lentz";
     repo = "iwgtk";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-/Nxti4PfYVLnIiBgtAuR3KGI8dULszuSdTp+2DzBfbs=";
   };
 
@@ -45,10 +45,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Lightweight, graphical wifi management utility for Linux";
     homepage = "https://github.com/j-lentz/iwgtk";
-    changelog = "https://github.com/j-lentz/iwgtk/blob/v${version}/CHANGELOG";
+    changelog = "https://github.com/j-lentz/iwgtk/blob/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "iwgtk";
   };
-}
+})

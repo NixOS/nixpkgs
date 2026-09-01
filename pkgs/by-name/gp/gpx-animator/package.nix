@@ -58,7 +58,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     longDescription = ''
       GPX Animator generates video from GPX files, it supports:
 
-      - Multiple GPX tracks with mutliple track segments
+      - Multiple GPX tracks with multiple track segments
       - Skipping idle parts
       - Configurable color, label, width and time offset per track
       - Configurable video size, fps and speedup or total video time

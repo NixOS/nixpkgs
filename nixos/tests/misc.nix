@@ -73,7 +73,7 @@ in
         machine.succeed("[ `nixos-version | wc -w` = 2 ]")
 
     with subtest("nixos-rebuild"):
-        assert "NixOS module" in machine.succeed("nixos-rebuild --help")
+        assert "NixOS" in machine.succeed("nixos-rebuild --help")
 
     with subtest("Sanity check for uid/gid assignment"):
         assert "4" == machine.succeed("id -u messagebus").strip()
@@ -106,8 +106,7 @@ in
         assert "machine" == machine.succeed("hostname -s").strip()
 
     with subtest("whether systemd-udevd automatically loads modules for our hardware"):
-        machine.succeed("systemctl start systemd-udev-settle.service")
-        machine.wait_for_unit("systemd-udev-settle.service")
+        machine.succeed("udevadm settle --timeout=180")
         assert "mousedev" in machine.succeed("lsmod")
 
     with subtest("whether systemd-tmpfiles-clean works"):

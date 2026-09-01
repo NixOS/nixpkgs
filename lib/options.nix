@@ -29,6 +29,7 @@ let
     ;
   inherit (lib.attrsets)
     attrByPath
+    catAttrs
     optionalAttrs
     showAttrPath
     ;
@@ -71,7 +72,7 @@ rec {
     # Type
 
     ```
-    isOption :: a -> Bool
+    isOption :: Any -> Bool
     ```
   */
   isOption = lib.isType "option";
@@ -90,12 +91,12 @@ rec {
       `defaultText`
       : Substitute for documenting the `default`, if evaluating the default value during documentation rendering is not possible.
       : Can be any nix value that evaluates.
-      : Usage with `lib.literalMD` or `lib.literalExpression` is supported
+      : Usage with `lib.literalMD`, `lib.literalExpression`, or `lib.literalCode` is supported
 
       `example`
       : Optional example value used in the manual.
       : Can be any nix value that evaluates.
-      : Usage with `lib.literalMD` or `lib.literalExpression` is supported
+      : Usage with `lib.literalMD`, `lib.literalExpression`, or `lib.literalCode` is supported
 
       `description`
       : Optional string describing the option. This is required if option documentation is generated.
@@ -258,7 +259,7 @@ rec {
     # Type
 
     ```
-    mkPackageOption :: pkgs -> (string|[string]) -> { nullable? :: bool, default? :: string|[string], example? :: null|string|[string], extraDescription? :: string, pkgsText? :: string } -> option
+    mkPackageOption :: Pkgs -> (String | [String]) -> { nullable? :: Bool; default? :: String | [String]; example? :: Null | String | [String]; extraDescription? :: String; pkgsText? :: String; } -> Option
     ```
 
     # Examples
@@ -468,7 +469,7 @@ rec {
     : 3\. Function argument
   */
   mergeUniqueOption =
-    args@{
+    {
       message,
       # WARNING: the default merge function assumes that the definition is a valid (option) value. You MUST pass a merge function if the return value needs to be
       #   - type checked beyond what .check does (which should be very little; only on the value head; not attribute values, etc)
@@ -525,7 +526,7 @@ rec {
     # Type
 
     ```
-    getValues :: [ { value :: a; } ] -> [a]
+    getValues :: [{ value :: a; ... }] -> [a]
     ```
 
     # Examples
@@ -539,7 +540,7 @@ rec {
 
     :::
   */
-  getValues = map (x: x.value);
+  getValues = catAttrs "value";
 
   /**
     Extracts values of all `file` keys of the given list
@@ -547,7 +548,7 @@ rec {
     # Type
 
     ```
-    getFiles :: [ { file :: a; } ] -> [a]
+    getFiles :: [{ file :: a; ... }] -> [a]
     ```
 
     # Examples
@@ -561,7 +562,7 @@ rec {
 
     :::
   */
-  getFiles = map (x: x.file);
+  getFiles = catAttrs "file";
 
   # Generate documentation template from the list of option declaration like
   # the set generated with filterOptionSets.
@@ -589,11 +590,25 @@ rec {
             renderOptionValue opt.example
           );
         }
-        // optionalAttrs (opt ? defaultText || opt ? default) {
-          default = builtins.addErrorContext "while evaluating the ${
-            if opt ? defaultText then "defaultText" else "default value"
-          } of option `${name}`" (renderOptionValue (opt.defaultText or opt.default));
-        }
+        //
+          optionalAttrs
+            (
+              opt ? defaultText
+              || opt ? default
+              # Render emptyValue-based defaults, but only for types without
+              # submodules (e.g. types.submodule). Submodules may evaluate to
+              # error without user defs, and their sub-options are documented
+              # individually, so best to skip those here.
+              || ((opt.type or { }).emptyValue or { }) ? value && (opt.type or { }).getSubModules or null == null
+            )
+            {
+              default =
+                builtins.addErrorContext
+                  "while evaluating the ${
+                    if opt ? defaultText then "defaultText" else "default value"
+                  } of option `${name}`"
+                  (renderOptionValue (opt.defaultText or opt.default or opt.type.emptyValue.value));
+            }
         // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) {
           inherit (opt) relatedPackages;
         };
@@ -885,7 +900,7 @@ rec {
     # Type
 
     ```
-    showDefsSep :: { files :: [ String ]; loc :: [ String ]; ... } -> string
+    showOptionWithDefLocs :: { files :: [String]; loc :: [String]; ... } -> String
     ```
   */
   showOptionWithDefLocs = opt: ''

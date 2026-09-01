@@ -4,18 +4,18 @@
   lib,
   nixosTests,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nar-serve";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "nar-serve";
-    rev = "v${version}";
-    hash = "sha256-8QuMS00EutmqzAIPxyJEPxM8EHiWlSKs6E2Htoh3Kes=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-C9MBCN/ResbYjmRkT65m8XnNbquoZ0PC/zx/Y7QFXkA=";
   };
 
-  vendorHash = "sha256-td9NYHGYJYPlIj2tnf5I/GnJQOOgODc6TakHFwxyvLQ=";
+  vendorHash = "sha256-BP14jmOZ2MCugeTgbDR8wSZ8sRWt4QUWrH3+e2FBgqU=";
 
   doCheck = false;
 
@@ -31,4 +31,4 @@ buildGoModule rec {
       zimbatm
     ];
   };
-}
+})

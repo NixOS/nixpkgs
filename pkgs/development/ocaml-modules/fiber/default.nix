@@ -7,12 +7,12 @@
   stdune,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "fiber";
   version = "3.7.0";
 
   src = fetchurl {
-    url = "https://github.com/ocaml-dune/fiber/releases/download/${version}/fiber-lwt-${version}.tbz";
+    url = "https://github.com/ocaml-dune/fiber/releases/download/${finalAttrs.version}/fiber-lwt-${finalAttrs.version}.tbz";
     hash = "sha256-hkihWuk/5pQpmc42iHQpo5E7YoKcRxTlIMwOehw7loI=";
   };
 
@@ -33,4 +33,4 @@ buildDunePackage rec {
     maintainers = [ ];
     license = lib.licenses.mit;
   };
-}
+})

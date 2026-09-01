@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gitless";
   version = "0.9.17";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "goldstar611";
     repo = "gitless";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-XDB1i2b1reMCM6i1uK3IzTnsoLXO7jldYtNlYUo1AoQ=";
   };
 
@@ -41,4 +41,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.all;
     mainProgram = "gl";
   };
-}
+})

@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "svxlink";
-  version = "25.05.1";
+  version = "26.05.1";
 
   src = fetchFromGitHub {
     owner = "sm0svx";
     repo = "svxlink";
     tag = finalAttrs.version;
-    hash = "sha256-OyAR/6heGX6J53p6x+ZPXY6nzSv22umMTg0ISlWcjp8=";
+    hash = "sha256-qpIVMERl+mZIRf90CVSRitlqnZrXPXgFDLErFnejfNc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
@@ -39,6 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "RTLSDR_LIBRARIES" "${lib.getLib rtl-sdr}/lib/librtlsdr.so")
     (lib.cmakeFeature "RTLSDR_INCLUDE_DIRS" "${lib.getInclude rtl-sdr}/include")
   ];
+
+  postPatch = ''
+    # match jsoncpp's c++17 ABI (string_view overloads); upstream pins c++11
+    substituteInPlace cmake/Modules/FindSIGC2.cmake \
+      --replace-fail '"--std=c++11"' '"--std=c++17"'
+  '';
 
   dontWrapQtApps = true;
 
@@ -78,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
       GUI, Qtel - The Qt EchoLink client
     '';
     homepage = "https://www.svxlink.org/";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ zaninime ];
     platforms = lib.platforms.linux;
   };

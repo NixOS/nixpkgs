@@ -10,7 +10,6 @@
   ocamlPackages,
   python3,
   libxml2,
-  fuse,
   fuse3,
   gnutls,
   autoreconfHook,
@@ -21,7 +20,7 @@ stdenv.mkDerivation rec {
   version = "1.22.5";
 
   src = fetchurl {
-    url = "https://download.libguestfs.org/libnbd/${lib.versions.majorMinor version}-stable/${pname}-${version}.tar.gz";
+    url = "https://download.libguestfs.org/libnbd/${lib.versions.majorMinor version}-stable/libnbd-${version}.tar.gz";
     hash = "sha256-y/Ria/R8jC+Zu5bHnlqM7JozNzyt6i/Bu/4E5uFbbjw=";
   };
 
@@ -41,7 +40,6 @@ stdenv.mkDerivation rec {
   );
 
   buildInputs = [
-    fuse
     fuse3
     gnutls
     libxml2

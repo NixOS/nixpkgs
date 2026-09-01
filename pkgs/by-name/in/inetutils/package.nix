@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch,
   ncurses,
   perl,
   help2man,
@@ -9,26 +10,53 @@
   libxcrypt,
   util-linux,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "inetutils";
-  version = "2.6";
+  version = "2.7";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-aL7b/q9z99hr4qfZm8+9QJPYKfUncIk5Ga4XTAsjV8o=";
+    url = "mirror://gnu/inetutils/inetutils-${finalAttrs.version}.tar.gz";
+    hash = "sha256-oVa+HN48XA/+/CYhgNk2mmBIQIeQeqVUxieH0vQOwIY=";
   };
 
   outputs = [
     "out"
     "apparmor"
+    "info"
+    "man"
   ];
 
   patches = [
     # https://git.congatec.com/yocto/meta-openembedded/commit/3402bfac6b595c622e4590a8ff5eaaa854e2a2a3
     ./inetutils-1_9-PATH_PROCNET_DEV.patch
 
-    ./tests-libls.sh.patch
+    (if stdenv.hostPlatform.isDarwin then ./tests-libls-2.sh.patch else ./tests-libls.sh.patch)
+
+    (fetchpatch {
+      name = "CVE-2026-24061_1.patch";
+      url = "https://codeberg.org/inetutils/inetutils/commit/fd702c02497b2f398e739e3119bed0b23dd7aa7b.patch";
+      hash = "sha256-d/FdQyLD0gYr+erFqKDr8Okf04DFXknFaN03ls2aonQ=";
+    })
+    (fetchpatch {
+      name = "CVE-2026-24061_2.patch";
+      url = "https://codeberg.org/inetutils/inetutils/commit/ccba9f748aa8d50a38d7748e2e60362edd6a32cc.patch";
+      hash = "sha256-ws+ed5vb7kVMHEbqK7yj6FUT355pTv2RZEYuXs5M7Io=";
+    })
+    (fetchpatch {
+      name = "CVE-2026-28372.patch";
+      url = "https://codeberg.org/inetutils/inetutils/commit/4db2f19f4caac03c7f4da6363c140bd70df31386.patch";
+      excludes = [
+        "NEWS.md"
+        "THANKS"
+      ];
+      hash = "sha256-ASgcaNC+yo3Hth4M32IVbD3jFt8mxcGtLfl+ULNt4Ag=";
+    })
+    (fetchpatch {
+      name = "CVE-2026-32746.patch";
+      url = "https://codeberg.org/inetutils/inetutils/commit/6864598a29b652a6b69a958f5cd1318aa2b258af.patch";
+      excludes = [ "NEWS.md" ];
+      hash = "sha256-gQH4BZG9rkyGtOQjBqItx+fEBda/Wgg9f46VYPV8HLw=";
+    })
   ];
 
   strictDeps = true;
@@ -63,6 +91,8 @@ stdenv.mkDerivation rec {
     "--disable-rexec"
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-servers";
+
+  ${if stdenv.hostPlatform.isDarwin then "hardeningDisable" else null} = [ "format" ];
 
   doCheck = true;
 
@@ -110,4 +140,4 @@ stdenv.mkDerivation rec {
     */
     priority = (util-linux.meta.priority or lib.meta.defaultPriority) + 1;
   };
-}
+})

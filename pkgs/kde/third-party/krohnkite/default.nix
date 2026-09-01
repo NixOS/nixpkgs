@@ -2,7 +2,7 @@
   lib,
   nix-update-script,
   buildNpmPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
   nodejs_22,
   kwin,
   kpackage,
@@ -12,8 +12,7 @@ buildNpmPackage (finalAttrs: {
   pname = "krohnkite";
   version = "0.9.9.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "anametologin";
     repo = "Krohnkite";
     rev = finalAttrs.version;

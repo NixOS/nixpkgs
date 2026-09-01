@@ -23,8 +23,9 @@
   gnome,
   vala,
   shared-mime-info,
-  # Requires building a cdylib.
-  withPixbufLoader ? !stdenv.hostPlatform.isStatic,
+  # Requires building a cdylib and running a target binary
+  withPixbufLoader ?
+    !stdenv.hostPlatform.isStatic && stdenv.hostPlatform.emulatorAvailable buildPackages,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
@@ -49,7 +50,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "librsvg";
-  version = "2.61.3";
+  version = "2.62.3";
 
   outputs = [
     "out"
@@ -61,13 +62,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/librsvg/${lib.versions.majorMinor finalAttrs.version}/librsvg-${finalAttrs.version}.tar.xz";
-    hash = "sha256-pW0sgNdErS8nGPhd9Gb+cdJP8fm8Pl71iL3k1+h4FfI=";
+    hash = "sha256-frRJsnIqdoAhNW9m3+4yAsIptU7U5qcM5AwJDpf/FvI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "librsvg-deps-${finalAttrs.version}";
-    hash = "sha256-5uNkjfZhETuG8Sjw66zapYXOj4dgz9Ziry2kAV+pvZQ=";
+    hash = "sha256-9ubfIl9R2BdcAWn7i050KBbb4cMdlakvrKdnjpZCQjA=";
     dontConfigure = true;
   };
 

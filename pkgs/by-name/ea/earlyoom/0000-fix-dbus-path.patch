@@ -1,11 +1,19 @@
 --- a/kill.c
 +++ b/kill.c
-@@ -55,7 +55,7 @@ static void notify(const char* summary, const char* body)
+@@ -153,7 +153,7 @@ static void notify_spawn_subprocess(const char* script, char* const argv[], cons
      }
-     // Complete command line looks like this:
-     // dbus-send --system / net.nuetzlich.SystemNotifications.Notify 'string:summary text' 'string:and body text'
--    execl("/usr/bin/dbus-send", "dbus-send", "--system", "/", "net.nuetzlich.SystemNotifications.Notify",
-+    execlp("dbus-send", "dbus-send", "--system", "/", "net.nuetzlich.SystemNotifications.Notify",
-         summary2, body2, NULL);
-     warn("notify: exec failed: %s\n", strerror(errno));
+ 
+     debug("%s: exec %s\n", __func__, script);
+-    execv(script, argv);
++    execvp(script, argv);
+     warn("%s: exec %s failed: %s\n", __func__, script, strerror(errno));
      exit(1);
+ }
+@@ -177,7 +177,7 @@ static void notify_dbus(const char* body)
+         body2,
+         NULL
+     };
+-    const char* dbus_send_path = "/usr/bin/dbus-send";
++    const char* dbus_send_path = "dbus-send";
+     notify_spawn_subprocess(dbus_send_path, argv, NULL, 0);
+ }

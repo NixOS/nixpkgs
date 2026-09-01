@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "zfxtop";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "ssleert";
     repo = "zfxtop";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-7qeTC9CIx4K2fLRM/pYrSU1NHv9TFMsl7TT0W5Uph60=";
   };
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ wozeparrot ];
     mainProgram = "zfxtop";
   };
-}
+})

@@ -4,25 +4,27 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage {
   pname = "jsonld-cli";
-  version = "2.0.0";
+  version = "2.0.0-unstable-2026-03-23";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "digitalbazaar";
     repo = "jsonld-cli";
-    rev = "v${version}";
-    hash = "sha256-GandTCcRYd0c0SlSdsCAcaTKfwD4g1cwHuoxA62aD74=";
+    rev = "ab35bc8b00dedcd119904f56a8904721188094b1";
+    hash = "sha256-Bk89v4ze3Wquz+TA5WoTJmgG9W0a/L278QxegK3X0lU=";
   };
 
-  postPatch = "cp ${./package-lock.json} package-lock.json";
-  npmDepsHash = "sha256-6oQKHeX5P2UsXRFK7ZwmJYasuNT5Ch/bYCIUAXq5zUM=";
+  npmDepsHash = "sha256-+cZX28z4aGlCQzVEBqbCNuwLhEkBjrK/gDkJ7vZdhUI=";
+
   dontNpmBuild = true;
 
   meta = {
     description = "JSON-LD command line interface tool";
     homepage = "https://github.com/digitalbazaar/jsonld-cli";
-    changelog = "https://github.com/digitalbazaar/jsonld-cli/blob/main/CHANGELOG.md";
+    changelog = "https://github.com/digitalbazaar/jsonld-cli/blob/ab35bc8b00dedcd119904f56a8904721188094b1/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ msladecek ];
     mainProgram = "jsonld";

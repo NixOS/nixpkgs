@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pbr,
-  requests,
 }:
 
 buildPythonPackage rec {
@@ -18,11 +16,6 @@ buildPythonPackage rec {
     hash = "sha256-PnBcGiUvftz/KYg9Qd2GaIcF3OW4lYH301uI5/M5CBI=";
   };
 
-  propagatedBuildInputs = [
-    pbr
-    requests
-  ];
-
   # Project has no tests
   doCheck = false;
   pythonImportsCheck = [ "icmplib" ];
@@ -30,7 +23,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of the ICMP protocol";
     homepage = "https://github.com/ValentinBELYN/icmplib";
-    license = with lib.licenses; [ lgpl3Plus ];
+    license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

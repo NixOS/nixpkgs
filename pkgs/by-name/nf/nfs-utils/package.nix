@@ -38,13 +38,13 @@ let
   ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nfs-utils";
-  version = "2.8.4";
+  version = "2.9.2";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/nfs-utils/${version}/nfs-utils-${version}.tar.xz";
-    hash = "sha256-EcTMWYpDTX00C60+Byo3O6HcwsSfhV1EsgIiK3js2/U=";
+    url = "mirror://kernel/linux/utils/nfs-utils/${finalAttrs.version}/nfs-utils-${finalAttrs.version}.tar.xz";
+    hash = "sha256-4d2KnJWvFUkgZZQsw7UrEzn/1Ya6oigO2GydPcQJfow=";
   };
 
   # libnfsidmap is built together with nfs-utils from the same source,
@@ -192,9 +192,10 @@ stdenv.mkDerivation rec {
       daemons.
     '';
 
+    changelog = "https://www.kernel.org/pub/linux/utils/nfs-utils/${finalAttrs.version}/${finalAttrs.version}-Changelog";
     homepage = "https://linux-nfs.org/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

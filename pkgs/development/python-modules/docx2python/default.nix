@@ -7,19 +7,20 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
+  types-lxml,
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "docx2python";
-  version = "3.3.0";
+  version = "3.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ShayHill";
     repo = "docx2python";
-    tag = version;
-    hash = "sha256-u1zOMfYMhmBsvUcfG7UEMvKT9U5XEkBalGtMOgN8RCU=";
+    tag = finalAttrs.version;
+    hash = "sha256-1/v8slL7EYwXM8ybcJKIdjLBKNBxHgdF4gQHDYyJg6w=";
   };
 
   build-system = [
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   dependencies = [
     lxml
     paragraphs
+    types-lxml
     typing-extensions
   ];
 
@@ -40,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Extract docx headers, footers, (formatted) text, footnotes, endnotes, properties, and images";
     homepage = "https://github.com/ShayHill/docx2python";
-    changelog = "https://github.com/ShayHill/docx2python/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/ShayHill/docx2python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   cymem,
@@ -33,6 +34,7 @@
   spacy-lookups-data,
 
   # tests
+  pytest-xdist,
   pytestCheckHook,
   hypothesis,
   mock,
@@ -45,16 +47,17 @@
   callPackage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spacy";
-  version = "3.8.11";
+  version = "3.8.16";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "spaCy";
-    tag = "release-v${version}";
-    hash = "sha256-pLn3fq6SDstkRIv+1fj1yEGTlAd1IAiVgRu25CnEV8E=";
+    tag = "release-v${finalAttrs.version}";
+    hash = "sha256-EFzzb9hMBjFh3hD+xId7uxkTVsg92WNiUaCKBRa0bnw=";
   };
 
   build-system = [
@@ -96,6 +99,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    pytest-xdist
     pytestCheckHook
     hypothesis
     mock
@@ -109,6 +113,9 @@ buildPythonPackage rec {
   disabledTestMarks = [ "slow" ];
 
   disabledTests = [
+    # ValueError: [E002] Can't find factory for 'assert_sents' for language English (en).
+    "test_annotating_components_from_config"
+
     # touches network
     "test_download_compatibility"
     "test_validate_compatibility_table"
@@ -118,6 +125,16 @@ buildPythonPackage rec {
     # Tests for presence of outdated (and thus missing) spacy models
     # https://github.com/explosion/spaCy/issues/13856
     "test_registry_entries"
+
+    # AssertionError: confection has different version in setup.cfg and in requirements.txt:
+    # >=1.3.2,<2.0.0 and >=1.1.0,<2.0.0 respectively
+    "test_build_dependencies"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # AssertionError:
+    #   assert eval["nel_macro_f"] > 0
+    #   assert 0.0 > 0
+    "test_overfitting_IO_with_ner"
   ];
 
   pythonImportsCheck = [ "spacy" ];
@@ -147,9 +164,9 @@ buildPythonPackage rec {
   meta = {
     description = "Industrial-strength Natural Language Processing (NLP)";
     homepage = "https://github.com/explosion/spaCy";
-    changelog = "https://github.com/explosion/spaCy/releases/tag/${src.tag}";
+    changelog = "https://github.com/explosion/spaCy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
     mainProgram = "spacy";
   };
-}
+})

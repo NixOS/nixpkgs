@@ -6,14 +6,14 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ianny";
   version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "zefr0x";
     repo = "ianny";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-CPtVk8sG3LcJBgmPc/kYZZXW0Lt2OPJGzkLKac+/1ZI=";
   };
 
@@ -41,4 +41,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ max-amb ];
     platforms = lib.platforms.linux;
   };
-}
+})

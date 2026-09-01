@@ -1,62 +1,56 @@
 {
   lib,
-  python3Packages,
-  python3,
   fetchFromGitHub,
-  makeWrapper,
+  buildGo126Module,
+  buildNpmPackage,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  version = "3.0.0";
+
   pname = "discord-rich-presence-plex";
-  version = "2.16.0";
-  pyproject = false;
+
   src = fetchFromGitHub {
     owner = "phin05";
     repo = "discord-rich-presence-plex";
-    tag = "v${version}";
-    hash = "sha256-e1r0w72IOEY5XsjANkAHbfPYEf1B8n6KYVLMWFSLs0g=";
+    rev = "v${version}";
+    hash = "sha256-RvsS47059YdxKSo6sy+zglY1YxzyJmZTmo/DIKX1xqU=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
-  dontBuild = true;
-  dontUseSetuptoolsBuild = true;
-  dontUseSetuptoolsCheck = true;
-
-  dependencies = with python3Packages; [
-    requests
-    pillow
-    plexapi
-    pyyaml
-    websocket-client
-  ];
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/lib/discord-rich-presence-plex
-    cp -r * $out/lib/discord-rich-presence-plex/
-
-    mkdir -p $out/bin
-    makeWrapper ${lib.getExe python3} \
-      $out/bin/discord-rich-presence-plex \
-      --add-flags "$out/lib/discord-rich-presence-plex/main.py" \
-      --prefix PYTHONPATH : "$out/lib/discord-rich-presence-plex:$PYTHONPATH" \
-      --set DRPP_NO_PIP_INSTALL "true"
-
-    runHook postInstall
+  webAssets = buildNpmPackage {
+    pname = "${pname}-web";
+    inherit version src;
+    sourceRoot = "${src.name}/web";
+    npmDepsHash = "sha256-7cp4LeXUAiIHGvLfwsIWpdqjUzemlCKVCsBZxTnPlDk=";
+    installPhase = ''
+      cp -r dist $out
+    '';
+  };
+in
+buildGo126Module {
+  inherit version src pname;
+  subPackages = [ "server/main" ];
+  env.GOEXPERIMENT = "jsonv2";
+  vendorHash = "sha256-B1XHMqyih3eBlRsU6s5HcGv9WY8OcXj2yGwB2jpP9HI=";
+  preBuild = ''
+    mkdir -p web/dist
+    cp -r ${webAssets}/* web/dist/
   '';
 
-  # No tests
-  doCheck = false;
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
+  postInstall = ''
+    mv $out/bin/main $out/bin/drpp
+  '';
   meta = {
     homepage = "https://github.com/phin05/discord-rich-presence-plex";
-    changelog = "https://github.com/phin05/discord-rich-presence-plex/releases/tag/v${version}";
-    license = lib.licenses.gpl3Only;
     description = "Displays your Plex status on Discord using Rich Presence";
-    maintainers = with lib.maintainers; [ hogcycle ];
+    license = lib.licenses.gpl3Only;
     mainProgram = "discord-rich-presence-plex";
+    maintainers = with lib.maintainers; [ hogcycle ];
   };
 }

@@ -32,9 +32,14 @@ let
         );
       getSubModules = elemType.getSubModules;
       substSubModules = mod: matrixOf n m (elemType.substSubModules mod);
-      functor = (lib.defaultFunctor name) // {
-        wrapped = elemType;
-      };
+      functor = (
+        lib.types.elemTypeFunctor "attrsWith" {
+          inherit
+            elemType
+            name
+            ;
+        }
+      );
     };
 
   profileModule = lib.types.submodule {
@@ -327,7 +332,7 @@ in
                     echo "Unknown profle: $AUTORANDR_CURRENT_PROFILE"
                     exit 1
                 esac
-                echo "Xft.dpi: $DPI" | ''${pkgs.xorg.xrdb}/bin/xrdb -merge
+                echo "Xft.dpi: $DPI" | ''${pkgs.xrdb}/bin/xrdb -merge
               ''';
             };
           }

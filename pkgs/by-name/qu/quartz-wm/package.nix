@@ -2,15 +2,16 @@
   lib,
   clangStdenv,
   fetchgit,
+  fetchpatch,
   autoreconfHook,
   pixman,
   pkg-config,
   util-macros,
-  libXinerama,
-  libAppleWM,
+  libxinerama,
+  libapplewm,
   xorgproto,
-  libXrandr,
-  libXext,
+  libxrandr,
+  libxext,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {
@@ -23,6 +24,13 @@ clangStdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1+KZNeR4Gq2uWBHTN53PTITHuly1Z4buR+grzdVNwhs=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/xorg/app/quartz-wm/-/commit/2f7b5957ffb05dfbf9182f1f2a1ad13069802946.patch";
+      hash = "sha256-z6jd4Q6deMnawIF6wsztJmHWfK5ZGCyyW09cZzLOx00=";
+    })
+  ];
+
   configureFlags = [ "--enable-xplugin-dock-support" ];
   nativeBuildInputs = [
     autoreconfHook
@@ -30,18 +38,19 @@ clangStdenv.mkDerivation (finalAttrs: {
     util-macros
   ];
   buildInputs = [
-    libXinerama
-    libAppleWM
+    libxinerama
+    libapplewm
     xorgproto
-    libXrandr
-    libXext
+    libxrandr
+    libxext
     pixman
   ];
 
   meta = {
+    homepage = "https://gitlab.freedesktop.org/xorg/app/quartz-wm";
     license = lib.licenses.apple-psl20;
     platforms = lib.platforms.darwin;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.booxter ];
     mainProgram = "quartz-wm";
   };
 })

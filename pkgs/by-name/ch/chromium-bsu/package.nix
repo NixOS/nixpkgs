@@ -18,12 +18,12 @@
   quesoglc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chromium-bsu";
   version = "0.9.16.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/chromium-bsu/Chromium%20B.S.U.%20source%20code/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/project/chromium-bsu/Chromium%20B.S.U.%20source%20code/chromium-bsu-${finalAttrs.version}.tar.gz";
     hash = "sha256-ocFBo00ZpZYHroEWahmGTrjITPhrFVRi/tMabVbhYko=";
   };
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    install -D misc/chromium-bsu.png $out/share/pixmaps/chromium-bsu.png
+    install -D misc/chromium-bsu.png -t $out/share/icons/hicolor/64x64/apps
     install -D misc/chromium-bsu.desktop $out/share/applications/chromium-bsu.desktop
   '';
 
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

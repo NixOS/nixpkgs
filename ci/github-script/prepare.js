@@ -1,7 +1,11 @@
-const { classify } = require('../supportedBranches.js')
-const { postReview } = require('./reviews.js')
+// @ts-nocheck
+import { dismissReviews, postReview } from './reviews.js'
+import { classify } from './supportedBranches.js'
+import supportedSystems from './supportedSystems.js'
 
-module.exports = async ({ github, context, core, dry }) => {
+const reviewKey = 'prepare'
+
+export default async ({ github, context, core, dry }) => {
   const pull_number = context.payload.pull_request.number
 
   for (const retryInterval of [5, 10, 20, 40, 80]) {
@@ -46,7 +50,7 @@ module.exports = async ({ github, context, core, dry }) => {
         `Please target \`${correctBranch}\` instead.`,
       ].join('\n')
 
-      await postReview({ github, context, core, dry, body })
+      await postReview({ github, context, core, dry, body, reviewKey })
 
       throw new Error('The PR targets a channel branch.')
     }
@@ -62,7 +66,7 @@ module.exports = async ({ github, context, core, dry }) => {
       // commits between that base and head is the real base. We can query for this via GitHub's
       // REST API. There can be multiple candidates for the real base with the same number of
       // commits. In this case we pick the "best" candidate by a fixed ordering of branches,
-      // as defined in ci/supportedBranches.js.
+      // as defined in ci/github-script/supportedBranches.js.
       //
       // These requests take a while, when comparing against the wrong release - they need
       // to look at way more than 10k commits in that case. Thus, we try to minimize the
@@ -170,9 +174,17 @@ module.exports = async ({ github, context, core, dry }) => {
           '  ```',
         ].join('\n')
 
-        await postReview({ github, context, core, dry, body })
-
-        throw new Error(`The PR contains commits from a different base.`)
+        await postReview({
+          github,
+          context,
+          core,
+          dry,
+          body,
+          event: 'REQUEST_CHANGES',
+          reviewKey,
+        })
+      } else {
+        await dismissReviews({ github, context, core, dry, reviewKey })
       }
     }
 
@@ -206,7 +218,8 @@ module.exports = async ({ github, context, core, dry }) => {
     core.setOutput('mergedSha', mergedSha)
     core.setOutput('targetSha', targetSha)
 
-    core.setOutput('systems', require('../supportedSystems.json'))
+    const systems = await supportedSystems({ github, context, targetSha })
+    core.setOutput('systems', systems)
 
     const files = (
       await github.paginate(github.rest.pulls.listFiles, {

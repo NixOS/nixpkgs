@@ -3,7 +3,7 @@
   python3Packages,
   fetchFromGitHub,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dpt-rp1-py";
   version = "0.1.19";
   pyproject = true;
@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "janten";
     repo = "dpt-rp1-py";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-cJ9dc8TRuduIka6T/MQsetDAjIhb+i2U9F8Qm9h29d8=";
   };
 
@@ -42,4 +42,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ mt-caret ];
     mainProgram = "dptrp1";
   };
-}
+})

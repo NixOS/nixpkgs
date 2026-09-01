@@ -7,12 +7,12 @@
   updateAutotoolsGnuConfigScriptsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dejagnu";
   version = "1.6.3";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/dejagnu/dejagnu-${finalAttrs.version}.tar.gz";
     sha256 = "1qx2cv6qkxbiqg87jh217jb62hk3s7dmcs4cz1llm2wmsynfznl7";
   };
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
   configureScript = "../configure";
 
-  doCheck = !(with stdenv; isDarwin && isAarch64);
+  doCheck = !(with stdenv.hostPlatform; isDarwin && isAarch64);
 
   # Note: The test-suite *requires* /dev/pts among the `build-chroot-dirs' of
   # the build daemon when building in a chroot.  See
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

@@ -123,7 +123,6 @@ let
     pathExists
     seq
     typeOf
-    nixVersion
     ;
 
   inherit (lib.lists)
@@ -138,7 +137,6 @@ let
 
   inherit (lib.strings)
     isStringLike
-    versionOlder
     ;
 
   inherit (lib.filesystem)
@@ -862,7 +860,7 @@ in
     # but removing a subdirectory using file set functions
     difference
       (fromSource (lib.sources.sourceByRegex ./. [
-        "^README\.md$"
+        "^README\\.md$"
         # This regex includes everything in ./doc
         "^doc(/.*)?$"
       ])

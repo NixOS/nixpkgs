@@ -2,14 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy27,
 }:
 
 buildPythonPackage rec {
   pname = "py-sonic";
   version = "1.0.3";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

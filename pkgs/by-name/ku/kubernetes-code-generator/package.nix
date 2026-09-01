@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "code-generator";
   version = "0.25.4";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "code-generator";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-GKF6DXvyZujInOZbV0ePUu71BEl1s/chNTN1PucdIYw=";
   };
 
@@ -24,9 +24,9 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/kubernetes/code-generator";
-    changelog = "https://github.com/kubernetes/code-generator/releases/tag/v${version}";
+    changelog = "https://github.com/kubernetes/code-generator/releases/tag/v${finalAttrs.version}";
     description = "Kubernetes code generation";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

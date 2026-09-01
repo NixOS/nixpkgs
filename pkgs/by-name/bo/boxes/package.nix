@@ -9,14 +9,14 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "boxes";
   version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "ascii-boxes";
     repo = "boxes";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dvhb5KWBQt7g4n0ZTQMcJQljIfavV3g8i+P3PWB6Gwk=";
   };
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ waiting-for-dev ];
     platforms = lib.platforms.unix;
   };
-}
+})

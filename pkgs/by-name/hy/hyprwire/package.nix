@@ -1,6 +1,6 @@
 {
   lib,
-  gcc15Stdenv,
+  gcc16Stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -9,15 +9,15 @@
   pugixml,
 }:
 
-gcc15Stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprwire";
-  version = "0.2.1";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprwire";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-INI9AVrQG5nJZFvGPSiUZ9FEUZJLfGdsqjF1QSak7Gc=";
+    hash = "sha256-AKPaKeLDy0QXRBk/XzR7RktX7CV63ejYsTUgsPdXKvg=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +30,9 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     libffi
     pugixml
   ];
+
+  cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
 
   meta = {
     inherit (finalAttrs.src.meta) homepage;

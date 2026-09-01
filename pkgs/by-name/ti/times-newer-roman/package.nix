@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -14,20 +15,13 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-wO4rxyJNQyhRLpswCYKXdeiXy5G+iWyxulYCHZb60QM=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/opentype
-    cp *.otf $out/share/fonts/opentype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Font that looks just like Times New Roman, except each character is 5-10% wider";
     homepage = "https://timesnewerroman.com/";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pancaek ];
     platforms = lib.platforms.all;
   };
 }

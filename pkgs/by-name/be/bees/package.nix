@@ -14,14 +14,14 @@
   coreutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bees";
   version = "0.11";
 
   src = fetchFromGitHub {
     owner = "Zygo";
     repo = "bees";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-qaiRWRd9+ElJ40QGOS3AxT2NvF3phQCyPnVz6RfTt8c=";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   preBuild = ''
-    git() { if [[ $1 = describe ]]; then echo ${version}; else command git "$@"; fi; }
+    git() { if [[ $1 = describe ]]; then echo ${finalAttrs.version}; else command git "$@"; fi; }
     export -f git
   '';
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     "SHELL=bash"
     "PREFIX=$(out)"
     "ETC_PREFIX=$(out)/etc"
-    "BEES_VERSION=${version}"
+    "BEES_VERSION=${finalAttrs.version}"
     "SYSTEMD_SYSTEM_UNIT_DIR=$(out)/etc/systemd/system"
   ];
 
@@ -79,6 +79,6 @@ stdenv.mkDerivation rec {
     longDescription = "Best-Effort Extent-Same: bees finds not just identical files, but also identical extents within files that differ";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ chaduffy ];
+    maintainers = [ ];
   };
-}
+})

@@ -9,7 +9,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.1.0";
+  version = "3.3.0";
   pname = "conjure-python-client";
   pyproject = true;
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "palantir";
     repo = "conjure-python-client";
     tag = version;
-    hash = "sha256-dfoP0/v0yFAyBo4wADDGGTggVuFBoG53e5WTBvKQaS0=";
+    hash = "sha256-z6+790fFpI7uYI6O4MXnCOZc/o96r2f8ttj+IsXStYI=";
   };
 
   # https://github.com/palantir/conjure-python-client/blob/3.0.0/setup.py#L57

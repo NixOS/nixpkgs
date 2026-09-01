@@ -2,8 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchFromGitLab,
-  fetchpatch,
+  blueprint-compiler,
   cargo,
   desktop-file-utils,
   meson,
@@ -20,41 +19,23 @@
   pango,
   pipewire,
   wireplumber,
+  nix-update-script,
 }:
 
-let
-  wireplumber_0_4 = wireplumber.overrideAttrs (attrs: rec {
-    version = "0.4.17";
-    src = fetchFromGitLab {
-      domain = "gitlab.freedesktop.org";
-      owner = "pipewire";
-      repo = "wireplumber";
-      tag = version;
-      hash = "sha256-vhpQT67+849WV1SFthQdUeFnYe/okudTQJoL3y+wXwI=";
-    };
-
-    patches = [
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/wireplumber/-/commit/f4f495ee212c46611303dec9cd18996830d7f721.patch";
-        hash = "sha256-dxVlXFGyNvWKZBrZniFatPPnK+38pFGig7LGAsc6Ydc=";
-      })
-    ];
-  });
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pwvucontrol";
-  version = "0.5.1";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "saivert";
     repo = "pwvucontrol";
     tag = finalAttrs.version;
-    hash = "sha256-21TBVDzjrBzNIPkAURGs2ngI8Vj6o/RL3Ael4wwE2Lk=";
+    hash = "sha256-Y5O/KkYYNDysZ3H0vk0qj2DOkmx/Z4vJELr9oydxpt8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-FrPpLbfqM/DtjYu20pwr1AMUHaAuTEt60I3JlFZO4RI=";
+    hash = "sha256-pw7UrD4EFd04mxy8Cz3tif+lzlnemIjFkB7VVOnAA1E=";
   };
 
   postPatch = ''
@@ -64,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
+    blueprint-compiler
     cargo
     desktop-file-utils
     meson
@@ -83,19 +65,23 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     pango
     pipewire
-    wireplumber_0_4
+    wireplumber
   ];
 
   # For https://github.com/saivert/pwvucontrol/blob/7bf43c746cd49fffbfb244ac4474742c6b3737a9/src/meson.build#L45-L46
   env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Pipewire Volume Control";
     homepage = "https://github.com/saivert/pwvucontrol";
+    changelog = "https://github.com/saivert/pwvucontrol/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       Guanran928
       johnrtitor
+      ilkecan
     ];
     mainProgram = "pwvucontrol";
     platforms = lib.platforms.linux;

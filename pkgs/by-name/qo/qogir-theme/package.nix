@@ -3,11 +3,7 @@
   stdenv,
   fetchFromGitHub,
   gitUpdater,
-  gdk-pixbuf,
-  gnome-themes-extra,
-  gtk-engine-murrine,
   jdupes,
-  librsvg,
   sassc,
   which,
   themeVariants ? [ ], # default: blue
@@ -47,18 +43,8 @@ lib.checkListOfEnum "${pname}: theme variants" [ "default" "manjaro" "ubuntu" "a
       which
     ];
 
-    buildInputs = [
-      gdk-pixbuf # pixbuf engine for Gtk2
-      gnome-themes-extra # adwaita engine for Gtk2
-      librsvg # pixbuf loader for svg
-    ];
-
-    propagatedUserEnvPkgs = [
-      gtk-engine-murrine # murrine engine for Gtk2
-    ];
-
     postPatch = ''
-      patchShebangs install.sh clean-old-theme.sh
+      patchShebangs install.sh
     '';
 
     installPhase = ''

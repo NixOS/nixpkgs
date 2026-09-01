@@ -8,14 +8,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "myrddin";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     repo = "mc";
     owner = "oridb";
-    rev = "r${version}";
+    rev = "r${finalAttrs.version}";
     sha256 = "7ImjiG/rIKGPHq3Vh/mftY7pqw/vfOxD3LJeT87HmCk=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     broken =
       (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin;
   };
-}
+})

@@ -2,10 +2,16 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 stdenvNoCC.mkDerivation {
   pname = "mitimasu";
   version = "0-unstable-2023-10-24";
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   src = fetchFromGitHub {
     owner = "kemomimi-no-sato";
@@ -14,16 +20,7 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-yiAnIVZY9DoIborO/s2KSlt6Zq1kAjKewLd30qBQqio=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -m444 -Dt $out/share/fonts/truetype fonts/mitimasu.ttf
-    install -m444 -Dt $out/share/fonts/eot fonts/mitimasu.eot
-    install -m444 -Dt $out/share/fonts/woff fonts/mitimasu.woff
-    install -m444 -Dt $out/share/fonts/woff2 fonts/mitimasu.woff2
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Mitimasu webfont";

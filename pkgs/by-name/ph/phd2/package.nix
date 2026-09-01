@@ -16,22 +16,22 @@
   gtk3,
   libnova,
   libusb1,
-  wxGTK32,
+  wxwidgets_3_2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "phd2";
   version = "2.6.13";
 
   src = fetchFromGitHub {
     owner = "OpenPHDGuiding";
     repo = "phd2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-GnT/tyk975caqESBSu4mdX5IWGi5O+RljLSd+CwoGWo=";
   };
 
   # fixes build error because of missing include
-  # is in masster, should be removed with next release
+  # is in master, should be removed with next release
   patches = [
     (fetchpatch2 {
       url = "https://github.com/OpenPHDGuiding/phd2/commit/0927de6c8943fae7161457008b989bf72a05c638.patch?full_index=1";
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     gtk3
     libnova
     libusb1
-    wxGTK32
+    wxwidgets_3_2
   ];
 
   cmakeFlags = [
@@ -76,11 +76,11 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://openphdguiding.org/";
     description = "Telescope auto-guidance application";
-    changelog = "https://github.com/OpenPHDGuiding/phd2/releases/tag/v${version}";
+    changelog = "https://github.com/OpenPHDGuiding/phd2/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       returntoreality
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

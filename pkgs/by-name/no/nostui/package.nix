@@ -4,18 +4,18 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nostui";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "akiomik";
     repo = "nostui";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7i76JPg6MAk4/sO8/JI4ody4iYFJPeLkD2SWncFhT4o=";
   };
 
-  GIT_HASH = "000000000000000000000000000000000000000000000000000";
+  env.GIT_HASH = "000000000000000000000000000000000000000000000000000";
 
   checkFlags = [
     # skip failing test due to nix build timestamps
@@ -32,4 +32,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.unix;
     mainProgram = "nostui";
   };
-}
+})

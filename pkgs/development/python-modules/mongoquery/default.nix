@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   six,
-  isPy27,
 }:
 
 buildPythonPackage rec {
   pname = "mongoquery";
   version = "1.4.3";
   format = "setuptools";
-
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
@@ -25,7 +22,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of mongodb queries";
     homepage = "https://github.com/kapouille/mongoquery";
-    license = with lib.licenses; [ unlicense ];
+    license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ misuzu ];
   };
 }

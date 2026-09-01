@@ -185,7 +185,7 @@ in
             ${optionalString (cfg.fileTransferIP != null) "filetransfer_ip=${cfg.fileTransferIP}"} \
             ${optionalString (cfg.queryIP != null) "query_ip=${cfg.queryIP}"} \
             ${optionalString (cfg.queryIP != null) "query_ssh_ip=${cfg.queryIP}"} \
-            ${optionalString (cfg.queryIP != null) "query_http_ip=${cfg.queryIP}"} \
+            ${optionalString (cfg.queryIP != null) "query_http_ip=${cfg.queryIP}"}
         '';
         WorkingDirectory = cfg.dataDir;
         User = user;

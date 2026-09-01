@@ -6,8 +6,8 @@
   SDL,
   SDL_ttf,
   SDL_image,
-  libSM,
-  libICE,
+  libsm,
+  libice,
   libGLU,
   libGL,
   libpng,
@@ -17,14 +17,14 @@
   mesa,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gravit";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "gak";
     repo = "gravit";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-JuqnLLD5+Ec8kQI0SK98V1O6TTbGM6+yKn5KCHe85eM=";
   };
 
@@ -46,8 +46,8 @@ stdenv.mkDerivation rec {
     SDL_image
     lua5
     libpng
-    libSM
-    libICE
+    libsm
+    libice
   ];
 
   nativeBuildInputs = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-DSDL_INCLUDE_GLU_H"
   ];
 
@@ -88,4 +88,4 @@ stdenv.mkDerivation rec {
     inherit (mesa.meta) platforms;
     hydraPlatforms = lib.platforms.linux; # darwin times out
   };
-}
+})

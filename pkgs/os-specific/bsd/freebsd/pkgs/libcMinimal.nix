@@ -1,4 +1,6 @@
 {
+  lib,
+  stdenv,
   mkDerivation,
   include,
   rpcgen,
@@ -9,6 +11,7 @@
   i18n,
   libsys,
   llvmPackages,
+  libcompiler_rt,
   extraSrc ? [ ],
 }:
 
@@ -39,6 +42,9 @@ mkDerivation {
     "include/paths.h"
     "include/gssapi"
   ]
+  ++ lib.optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [
+    "contrib/arm-optimized-routines"
+  ]
   ++ extraSrc;
 
   outputs = [
@@ -52,6 +58,7 @@ mkDerivation {
   buildInputs = [
     include
     libsys
+    libcompiler_rt
   ];
 
   extraNativeBuildInputs = [

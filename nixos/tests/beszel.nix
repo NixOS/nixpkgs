@@ -114,6 +114,6 @@
         agentHost.succeed("/run/current-system/specialisation/agent/bin/switch-to-configuration switch")
         agentHost.wait_for_unit("beszel-agent.service")
         agentHost.wait_until_succeeds("journalctl -eu beszel-agent --grep 'SSH connection established'")
-        agentHost.wait_until_succeeds(f'curl -H \'Authorization: {user["token"]}\' -f ${agentCfg.environment.HUB_URL}/api/collections/systems/records | grep agentHost')
+        agentHost.wait_until_succeeds(f'curl -H \'Authorization: {user["token"]}\' -f ${agentCfg.environment.HUB_URL}/api/collections/systems/records | jq -e \'.items[].status == "up"\' ')
     '';
 }

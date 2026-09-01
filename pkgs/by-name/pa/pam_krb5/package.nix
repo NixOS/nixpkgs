@@ -6,12 +6,12 @@
   libkrb5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pam-krb5";
   version = "4.11";
 
   src = fetchurl {
-    url = "https://archives.eyrie.org/software/kerberos/pam-krb5-${version}.tar.gz";
+    url = "https://archives.eyrie.org/software/kerberos/pam-krb5-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-UDy+LLGv9L39o7z3+T+U+2ulLCbXCJNOcDmyGC/hCyA=";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
   };
-}
+})

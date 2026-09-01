@@ -64,4 +64,69 @@ lib.recurseIntoAttrs {
     assert lib.all (p: p.stdenv.buildPlatform == p.stdenv.hostPlatform) pkgsLocal;
     assert lib.all (p: p.stdenv.buildPlatform != p.stdenv.hostPlatform) pkgsCross;
     pkgs.emptyFile;
+
+  # appendOverlays must preserve splicing so that cross-compilation
+  # works in NixOS modules (which go through appendOverlays via nixpkgs.nix).
+  appendOverlaysPreservesSplicing =
+    let
+      cross = nixpkgsFun {
+        localSystem = {
+          system = "x86_64-linux";
+        };
+        crossSystem = {
+          system = "aarch64-linux";
+        };
+      };
+      appended = cross.appendOverlays [ ];
+    in
+    assert cross.makeWrapper ? __spliced;
+    assert appended.makeWrapper ? __spliced;
+    pkgs.emptyFile;
+
+  replaceStdenv =
+    let
+      replacedPkgs = nixpkgsFun {
+        localSystem = {
+          inherit (pkgs.stdenv.buildPlatform) system;
+        };
+        config.replaceStdenv =
+          { pkgs }:
+          assert !(pkgs.config ? replaceStdenv);
+          pkgs.stdenv
+          // {
+            wasReplaced = true;
+          };
+      };
+    in
+    assert replacedPkgs.stdenv.wasReplaced;
+    pkgs.emptyFile;
+
+  replaceStdenvIgnoredForCross =
+    let
+      crossPkgs = nixpkgsFun {
+        localSystem = {
+          system = "x86_64-linux";
+        };
+        crossSystem = {
+          system = "aarch64-linux";
+        };
+        config.replaceStdenv = _: throw "replaceStdenv must be ignored when cross compiling";
+      };
+    in
+    assert crossPkgs.stdenv.buildPlatform != crossPkgs.stdenv.hostPlatform;
+    pkgs.emptyFile;
+
+  massRebuildVariantComposition =
+    let
+      variants = [
+        "pkgsChecked"
+        "pkgsParallel"
+        "pkgsStrict"
+        "pkgsStructured"
+      ];
+      all = lib.getAttrFromPath variants pkgs;
+      all-reversed = lib.getAttrFromPath (lib.reverseList variants) pkgs;
+    in
+    assert pkgs.config.allowVariants -> (all.hello == all-reversed.hello);
+    pkgs.emptyFile;
 }

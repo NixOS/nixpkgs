@@ -12,18 +12,18 @@ let
     mapAttrsToList
     ;
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pomerium-cli";
-  version = "0.31.0";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "cli";
-    rev = "v${version}";
-    sha256 = "sha256-m/qiNpkNQdQLC2vBbN5aj3oWTWZeFdplcXQCa0PiOKk=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-tXB7iEg29Wzp/CHrWCWrxwwdp22wtFlt2oX1pp5xtYE=";
   };
 
-  vendorHash = "sha256-a1E9pLMJ7JynV+YLANuO3iJ0IzkdEy0KBRUhsfz3D+U=";
+  vendorHash = "sha256-Jr+sGTjFB/6cNggdbCL3PqwVaHqr/hWrVLLjdPbL82Y=";
 
   subPackages = [
     "cmd/pomerium-cli"
@@ -34,7 +34,7 @@ buildGoModule rec {
       # Set a variety of useful meta variables for stamping the build with.
       setVars = {
         "github.com/pomerium/cli/version" = {
-          Version = "v${version}";
+          Version = "v${finalAttrs.version}";
           BuildMeta = "nixpkgs";
           ProjectName = "pomerium-cli";
           ProjectURL = "github.com/pomerium/cli";
@@ -69,4 +69,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ lukegb ];
     platforms = lib.platforms.unix;
   };
-}
+})

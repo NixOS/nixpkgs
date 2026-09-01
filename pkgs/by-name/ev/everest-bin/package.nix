@@ -8,15 +8,15 @@
 
 let
   pname = "everest";
-  version = "6129";
+  version = "6485";
   phome = "$out/lib/Celeste";
 in
 stdenvNoCC.mkDerivation {
   inherit pname version;
   src = fetchzip {
-    url = "https://github.com/EverestAPI/Everest/releases/download/stable-1.6129.0/main.zip";
+    url = "https://github.com/EverestAPI/Everest/releases/download/stable-1.6485.0/main.zip";
     extension = "zip";
-    hash = "sha256-6Pvnvt7ZVQRIKpyBZt18rcqy8DL42WGhR7IF2O9zFLc=";
+    hash = "sha256-x0YHGI9x7YFMwPUJ4W2oUdDyWYLDC/+OkQg3G+zel9A=";
   };
   buildInputs = [
     icu
@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation {
   '';
   meta = {
     description = "Celeste mod loader (don't install; use celestegame instead)";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ulysseszhan ];
     homepage = "https://everestapi.github.io";
     platforms = [ "x86_64-linux" ];

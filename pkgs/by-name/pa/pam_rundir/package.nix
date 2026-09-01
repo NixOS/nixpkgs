@@ -4,12 +4,12 @@
   fetchurl,
   pam,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pam_rundir";
   version = "1.0.0";
 
   src = fetchurl {
-    url = "https://jjacky.com/pam_rundir/pam_rundir-${version}.tar.gz";
+    url = "https://jjacky.com/pam_rundir/pam_rundir-${finalAttrs.version}.tar.gz";
     hash = "sha256-x3m2me0jd3o726h7f2ftOV/pV/PJYTj67kX4eie8wCA=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ aanderse ];
   };
-}
+})

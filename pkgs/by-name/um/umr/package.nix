@@ -19,7 +19,7 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "umr";
   version = "1.0.10";
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "tomstdenis";
     repo = "umr";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-i0pTcg1Y+G/nGZSbMtlg37z12gF4heitEl5L4gfVO9c=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ Flakebi ];
     platforms = lib.platforms.linux;
   };
-}
+})

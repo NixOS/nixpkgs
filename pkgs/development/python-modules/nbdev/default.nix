@@ -1,29 +1,34 @@
 {
   lib,
+  astunparse,
   build,
   buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  ipywidgets,
-  fastcore,
-  astunparse,
-  watchdog,
   execnb,
+  fastcore,
+  fastgit,
+  fetchPypi,
   ghapi,
+  ipywidgets,
   pyyaml,
+  setuptools,
+  watchdog,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nbdev";
-  version = "2.4.7";
+  version = "3.3.12";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-SonqSaW/xmM91Cy0aLAkVUrXuNnkjg+ZphZF3I5ZGvQ=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-D5je848qb6oYy60LwZGAbJAmt1GMiBSnXYsPPquWfaE=";
   };
 
-  pythonRelaxDeps = [ "ipywidgets" ];
+  pythonRelaxDeps = [
+    "fastgit"
+    "ghapi"
+    "ipywidgets"
+  ];
 
   build-system = [
     build
@@ -34,6 +39,7 @@ buildPythonPackage rec {
     astunparse
     execnb
     fastcore
+    fastgit
     ghapi
     ipywidgets
     pyyaml
@@ -46,10 +52,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "nbdev" ];
 
   meta = {
-    homepage = "https://github.com/fastai/nbdev";
+    homepage = "https://github.com/AnswerDotAI/nbdev";
     description = "Create delightful software with Jupyter Notebooks";
-    changelog = "https://github.com/fastai/nbdev/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/AnswerDotAI/nbdev/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rxiao ];
   };
-}
+})

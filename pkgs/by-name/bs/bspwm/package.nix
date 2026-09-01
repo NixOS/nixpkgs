@@ -3,33 +3,40 @@
   stdenv,
   fetchFromGitHub,
   libxcb,
-  libXinerama,
-  xcbutil,
-  xcbutilkeysyms,
-  xcbutilwm,
+  libxinerama,
+  libxcb-util,
+  libxcb-keysyms,
+  libxcb-wm,
+  versionCheckHook,
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bspwm";
   version = "0.9.12";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "baskerville";
     repo = "bspwm";
-    tag = version;
-    sha256 = "sha256-sEheWAZgKVDCEipQTtDLNfDSA2oho9zU9gK2d6W6WSU=";
+    tag = finalAttrs.version;
+    hash = "sha256-sEheWAZgKVDCEipQTtDLNfDSA2oho9zU9gK2d6W6WSU=";
   };
 
   buildInputs = [
     libxcb
-    libXinerama
-    xcbutil
-    xcbutilkeysyms
-    xcbutilwm
+    libxinerama
+    libxcb-util
+    libxcb-keysyms
+    libxcb-wm
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.tests = {
     inherit (nixosTests) startx;
@@ -45,4 +52,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
   };
-}
+})

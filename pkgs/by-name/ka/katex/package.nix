@@ -2,48 +2,52 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  yarn-berry,
+  pnpm_11,
+  pnpmBuildHook,
+  pnpmConfigHook,
+  fetchPnpmDeps,
   nodejs,
   makeBinaryWrapper,
   nix-update-script,
+  versionCheckHook,
+  runCommand,
 }:
 
+let
+  pnpm = pnpm_11;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "katex";
-  version = "0.16.27";
+  version = "0.18.4";
 
   src = fetchFromGitHub {
     owner = "katex";
     repo = "katex";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bw5W8TkM31aeqQ6eJae8voW75RvvUjeTdu7aPQ+lAa0=";
+    hash = "sha256-Z458Crgd7o68C1pKE9qf5nJhMAs5D+uyK4nbbtJO/lg=";
   };
 
-  offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src;
-    hash = "sha256-bRzYuiYDAz9LTcaUgI0dvfxU/eo0uTSz0pPP7dH5XW8=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-9AZj9prk8vbt7qNCKo2yiKCvyvRbhfyFjdDU/+jNFiM=";
   };
 
   nativeBuildInputs = [
-    yarn-berry.yarnBerryConfigHook
-    yarn-berry
-    nodejs
     makeBinaryWrapper
+    nodejs
+    pnpm
+    pnpmConfigHook
+    pnpmBuildHook
   ];
-
-  buildPhase = ''
-    runHook preBuild
-
-    yarn build
-
-    runHook postBuild
-  '';
 
   installPhase = ''
     runHook preInstall
 
-    yarn config set nodeLinker "node-modules"
-    yarn install --mode=skip-build --inline-builds
+    CI=true pnpm --ignore-scripts --prod prune
+
+    rm -r test website fonts
     mkdir -p $out/lib/node_modules/katex/
     mkdir $out/bin
     mv * $out/lib/node_modules/katex/
@@ -54,7 +58,25 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+
+    tests = {
+      mathml =
+        runCommand "simple-mathml-output-test"
+          {
+            nativeBuildInputs = [ finalAttrs.finalPackage ];
+          }
+          ''
+            echo "1+2" | katex -F mathml --output test.html
+            grep -q "<semantics><mrow><mn>1</mn><mo>+</mo><mn>2</mn></mrow>" test.html
+            touch $out
+          '';
+    };
+  };
 
   meta = {
     changelog = "https://github.com/KaTeX/KaTeX/releases/tag/v${finalAttrs.version}";

@@ -7,6 +7,7 @@
   cmake,
   just,
   cosmic-randr,
+  dav1d,
   libinput,
   linux-pam,
   udev,
@@ -19,21 +20,29 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-greeter";
-  version = "1.0.3";
+  version = "1.6.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-greeter";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-ivFs/AOUXhzd6I9H+Zw3CS97qFQ/FeiAnlDuzRMneQI=";
+    hash = "sha256-hDVdl2+7NVLA+YxO2HToni57IEr0i4OGTsYDc3YGTuw=";
   };
 
-  cargoHash = "sha256-4yRBgFrH4RBpuvChTED+ynx+PyFumoT2Z+R1gXxF4Xc=";
+  postPatch = ''
+    substituteInPlace src/greeter.rs --replace-fail '/usr/bin/env' '${lib.getExe' coreutils "env"}'
+    substituteInPlace src/greeter.rs --replace-fail '/usr/bin/orca' '${lib.getExe orca}'
+  '';
 
-  env.VERGEN_GIT_SHA = finalAttrs.src.tag;
+  cargoHash = "sha256-vHR9go8/iVUT7oBV8h+mmBvhi2oSKNBKtV0uoDOr6go=";
 
   cargoBuildFlags = [ "--all" ];
+
+  separateDebugInfo = true;
+  __structuredAttrs = true;
+
+  env.VERGEN_GIT_SHA = finalAttrs.src.tag;
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -44,6 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     cosmic-randr
+    dav1d
     libinput
     linux-pam
     udev
@@ -61,11 +71,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "cargo-target-dir"
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
-
-  postPatch = ''
-    substituteInPlace src/greeter.rs --replace-fail '/usr/bin/env' '${lib.getExe' coreutils "env"}'
-    substituteInPlace src/greeter.rs --replace-fail '/usr/bin/orca' '${lib.getExe orca}'
-  '';
 
   preFixup = ''
     libcosmicAppWrapperArgs+=(

@@ -4,26 +4,26 @@
   cmake,
   fetchFromGitHub,
   fetchpatch,
+  python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sptk";
-  version = "4.2";
+  version = "4.4";
 
   src = fetchFromGitHub {
     owner = "sp-nitech";
     repo = "SPTK";
-    rev = "v${version}";
-    hash = "sha256-lIyOcN2AR3ilUZ9stpicjbwlredbwgGPwmMICxZEijU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-QdaXIFsFXL9/CtUJlOaUKOTmG/nm6ibBEsVfzW9pT/U=";
   };
 
   patches = [
-    # Fix gcc-13 build failure:
-    #   https://github.com/sp-nitech/SPTK/pull/57
+    # fix dangling symlinks: https://github.com/sp-nitech/SPTK/pull/90
     (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/sp-nitech/SPTK/commit/060bc2ad7a753c1f9f9114a70d4c4337b91cb7e0.patch";
-      hash = "sha256-QfzpIS63LZyTHAaMGUZh974XLRNZLQG3om7ZJJ4RlgE=";
+      name = "fix-dangling.patch";
+      url = "https://github.com/sp-nitech/SPTK/commit/8798c94d19e930c0947a7d1d0bc9e59a02aab567.patch";
+      hash = "sha256-G7yyJ0uiVzcP6wQVwiDpWVZOJmOpKZRfNyoETt3xam4=";
     })
   ];
 
@@ -31,13 +31,21 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
+  buildInputs = [
+    (python3.withPackages (ps: [
+      ps.numpy
+      ps.plotly
+      ps.scipy
+    ]))
+  ];
+
   doCheck = true;
 
   meta = {
-    changelog = "https://github.com/sp-nitech/SPTK/releases/tag/v${version}";
+    changelog = "https://github.com/sp-nitech/SPTK/releases/tag/v${finalAttrs.version}";
     description = "Suite of speech signal processing tools";
     homepage = "https://github.com/sp-nitech/SPTK";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

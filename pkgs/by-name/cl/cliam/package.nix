@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cliam";
   version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "securisec";
     repo = "cliam";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-59nPoH0+k1umMwFg95hQHOr/SRGKqr1URFG7xtVRiTs=";
   };
 
@@ -26,7 +26,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/securisec/cliam/cli/version.Version=${version}"
+    "-X github.com/securisec/cliam/cli/version.Version=${finalAttrs.version}"
   ];
 
   postBuild = ''
@@ -48,4 +48,4 @@ buildGoModule rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

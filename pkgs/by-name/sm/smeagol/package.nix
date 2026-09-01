@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "smeagol";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "AustinWise";
     repo = "smeagol";
     tag = finalAttrs.version;
-    hash = "sha256-ILZ4TRL5yRGZuyyNPIpMgnlBGQAwbtTFlTaN3UYb5ls=";
+    hash = "sha256-9TjYiVqz+Lxp0VaeQB3p/wpeRWbMFCJLGnQPMGafSyc=";
   };
 
-  cargoHash = "sha256-5OSrxm+NpuimE8Jwl5/VScKjuYNROX50KNiyBMZqCOw=";
+  cargoHash = "sha256-cd8PotJPNdwpXKpuHbMQ4aJeNewDhyRvctAHimVdLS8=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

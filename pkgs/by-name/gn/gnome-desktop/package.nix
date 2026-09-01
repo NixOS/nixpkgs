@@ -18,19 +18,19 @@
   meson,
   wayland,
   libseccomp,
-  systemd,
+  systemdLibs,
   udev,
   bubblewrap,
   gobject-introspection,
   gtk-doc,
   docbook-xsl-nons,
   gsettings-desktop-schemas,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-desktop";
-  version = "44.4";
+  version = "44.5";
 
   outputs = [
     "out"
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-desktop/${lib.versions.major finalAttrs.version}/gnome-desktop-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-HYy5xqMo62ibDBJpz1ODTMhNhR1+cZcM2ruoJwa0SYQ=";
+    sha256 = "sha256-IOCZWm46A+jBAmxaJ7w/Reaf/MOSrXQ9yrYQelQdIy8=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
   ]
   ++ lib.optionals withSystemd [
-    systemd
+    systemdLibs
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     bubblewrap
@@ -110,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl2Plus
     ];
     platforms = lib.platforms.unix;
+    badPlatforms = lib.platforms.darwin;
     teams = [ lib.teams.gnome ];
   };
 })

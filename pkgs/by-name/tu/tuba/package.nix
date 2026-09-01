@@ -35,14 +35,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tuba";
   version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Tuba";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-uMfxHQOjL1bnKAz0MUUEv2IR4aRiR4UhIM5aHPspJDU=";
   };
 
@@ -119,11 +119,11 @@ stdenv.mkDerivation rec {
     homepage = "https://tuba.geopjr.dev/";
     mainProgram = "dev.geopjr.Tuba";
     license = lib.licenses.gpl3Only;
-    changelog = "https://github.com/GeopJr/Tuba/releases/tag/v${version}";
+    changelog = "https://github.com/GeopJr/Tuba/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       chuangzhu
       donovanglover
     ];
     teams = [ lib.teams.gnome-circle ];
   };
-}
+})

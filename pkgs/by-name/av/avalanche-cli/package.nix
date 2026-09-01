@@ -26,10 +26,12 @@ buildGoModule (finalAttrs: {
   proxyVendor = true;
   vendorHash = "sha256-0+YwlCHjiU46y333RSuaha4pLKFTYlj+M9+TFAALamY=";
 
-  # Fix error: 'Caught SIGILL in blst_cgo_init'
-  # https://github.com/bnb-chain/bsc/issues/1521
-  CGO_CFLAGS = "-O -D__BLST_PORTABLE__";
-  CGO_CFLAGS_ALLOW = "-O -D__BLST_PORTABLE__";
+  env = {
+    # Fix error: 'Caught SIGILL in blst_cgo_init'
+    # https://github.com/bnb-chain/bsc/issues/1521
+    CGO_CFLAGS = "-O -D__BLST_PORTABLE__";
+    CGO_CFLAGS_ALLOW = "-O -D__BLST_PORTABLE__";
+  };
 
   ldflags = [
     "-s"

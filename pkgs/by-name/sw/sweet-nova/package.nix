@@ -5,9 +5,9 @@
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sweet-nova";
-  version = "unstable-2023-09-30";
+  version = "0-unstable-2023-09-30";
 
   src = fetchFromGitHub {
     owner = "EliverLara";
@@ -49,4 +49,4 @@ stdenvNoCC.mkDerivation {
     maintainers = [ lib.maintainers.dr460nf1r3 ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -4,9 +4,7 @@
   fetchFromGitHub,
   installShellFiles,
   testers,
-  nixosTests,
   opentelemetry-collector-builder,
-  pkgs,
   go,
   git,
   cacert,
@@ -17,16 +15,14 @@ let
   builder = "${opentelemetry-collector-builder}/bin/ocb";
 
   # Keep the version in sync with the builder.
-  rev = opentelemetry-collector-builder.src.rev;
-
-  version = lib.removePrefix "cmd/builder/v" rev;
+  version = "0.155.0";
 
   # This is a weird meta-repo where all the open-telemetry collectors are.
-  src = fetchFromGitHub {
+  releasesSrc = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector-releases";
     rev = "v${version}";
-    hash = "sha256-/I6kYm/j2hO2OAZaWVIRYI1ejBTGMI3PzTjRLcmwziQ=";
+    hash = "sha256-w4J5Q7cztSQyjqHH5L0blDUiFO6+fK4/dLoQT+ftUSE=";
   };
 
   # Then from this src, we use the tool to generate some go code, including
@@ -39,7 +35,10 @@ let
       hash,
     }:
     stdenv.mkDerivation {
-      inherit name;
+      # Inherit the version from the builder, so that updates there trigger
+      # a rebuild here.
+      inherit version;
+      pname = "${name}-src";
 
       nativeBuildInputs = [
         cacert
@@ -47,7 +46,7 @@ let
         go
       ];
 
-      inherit src;
+      src = releasesSrc;
 
       outputHash = hash;
       outputHashMode = "recursive";
@@ -117,11 +116,16 @@ let
             --zsh <($out/bin/${name} completion zsh)
         '';
 
-        passthru.tests = {
-          version = testers.testVersion {
-            inherit package version;
-            command = "${name} -v";
+        passthru = {
+          tests = {
+            version = testers.testVersion {
+              inherit package version;
+              command = "${name} -v";
+            };
           };
+          # The updatescript for the builder updates the releases
+          updateScript = null;
+          inherit releasesSrc;
         };
 
         meta = {
@@ -148,26 +152,26 @@ in
 lib.recurseIntoAttrs {
   otelcol = mkDistribution {
     name = "otelcol";
-    sourceHash = "sha256-XGQIHkRfCSdEnZlhodN38BKZGkgOPuUnxveG4yX0rMw=";
-    vendorHash = "sha256-0i+eHVBwYvEKf4kXfyOuN/gEkDk2/5s7+3HQjYCtI94=";
+    sourceHash = "sha256-JY/jg5SeZ90lVLo+t6MuxZAMZ5IpNwEQEz9kC2uYc+8=";
+    vendorHash = "sha256-tEA2wCtk2Pm7YJem5jOB/1Iz7K1jKKl/N9VKSumC+WA=";
   };
 
   otelcol-contrib = mkDistribution {
     name = "otelcol-contrib";
-    sourceHash = "sha256-87VmiafluGem4p5hRP+UmPuSJeXdXjZkubWzqhXtyJg=";
-    vendorHash = "sha256-/qSXvt8oQ0C3V49an7TNUw0bcNVnXd5Qmz5oCRp+KTE=";
+    sourceHash = "sha256-ANIyUa0bibTYRWC1RZbvYFitaEkmLOiubQxFfmzj4kQ=";
+    vendorHash = "sha256-dPaDmhO4XASQ1y3NyetxnJuTr+pIDwF/rwrN5QkBBCA=";
     proxyVendor = true; # hash mismatch between linux and darwin
   };
 
   otelcol-k8s = mkDistribution {
     name = "otelcol-k8s";
-    sourceHash = "sha256-B5NbbQBIz3RZ/+jSxNhuY+zpfhHlg26cvUlMqlYXtq0=";
-    vendorHash = "sha256-2dGNrsskrCh76bTMuPYcRH+bMl/sE+KVn2mOqcF2PeI=";
+    sourceHash = "sha256-cZ+ok52ceYkQE9bG+FFTFYONUQfsC8kbJk5SLZ8IIYU=";
+    vendorHash = "sha256-qwlZr0LoXZWf72flpORf19PAkHdITY8bxJGkacG2j+A=";
   };
 
   otelcol-otlp = mkDistribution {
     name = "otelcol-otlp";
-    sourceHash = "sha256-c83fzhC4XbvRHZ3XwXQgwsyW1TDiDs0T/bX3h53n2RE=";
-    vendorHash = "sha256-QVNQFsaACvlByQWwpl2emSIrL+how78WtU51YJ2AvAU=";
+    sourceHash = "sha256-W1QHjHMn6xWVN08FpJi2YcKzkpxTPbq9MYIbdQxVHHY=";
+    vendorHash = "sha256-gX1D+RPCwcp9UMpzAzEYHDsBrn2KdfN/4RxcgKHViYQ=";
   };
 }

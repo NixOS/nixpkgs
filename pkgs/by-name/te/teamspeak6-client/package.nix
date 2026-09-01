@@ -26,16 +26,21 @@
   pipewire,
   udev,
   libGL,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxfixes,
+  libxdamage,
+  libx11,
+  libxshmfence,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "teamspeak6-client";
-  version = "6.0.0-beta3.4";
+  version = "6.0.0-beta4.1";
 
   src = fetchurl {
     url = "https://files.teamspeak-services.com/pre_releases/client/${finalAttrs.version}/teamspeak-client.tar.gz";
-    hash = "sha256-ubpAigtYFwzjI4T8i7pWgAhA1pS9MQBQy63QkkbUvyc=";
+    hash = "sha256-7f0VQQLa4Gg7qgXMVfoPYPazPRA9uYeX251j3mHaSLo=";
   };
 
   sourceRoot = ".";
@@ -59,12 +64,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     libvdpau
     nss
     pipewire
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXdamage
-    xorg.libXfixes
-    xorg.libxshmfence
-    xorg.libXtst
+    libx11
+    libxscrnsaver
+    libxdamage
+    libxfixes
+    libxshmfence
+    libxtst
   ];
 
   nativeBuildInputs = [
@@ -104,6 +109,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeWrapper $out/share/teamspeak6-client/TeamSpeak $out/bin/TeamSpeak \
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
+          gcc-unwrapped.lib
           udev
           libGL
           libpulseaudio

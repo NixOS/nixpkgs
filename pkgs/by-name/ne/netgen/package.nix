@@ -17,7 +17,7 @@
   zlib,
   tcl,
   tk,
-  xorg,
+  libxmu,
   libjpeg,
   ffmpeg,
   catch2,
@@ -35,13 +35,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "netgen";
-  version = "6.2.2505";
+  version = "6.2.2605";
 
   src = fetchFromGitHub {
     owner = "ngsolve";
     repo = "netgen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MPnibhDzNjqmpW5C76KdeYoZGfKLU0KJ20EnjrK1S+Y=";
+    hash = "sha256-067PzJymS6ayVoenaXEdvK3fraLTKPJTC54Aok1UUtg=";
   };
 
   patches = [
@@ -61,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "${patchSource}/include_stdlib.patch";
       hash = "sha256-W+NgGBuy/UmzVbPTSqR8FRUlyN/9dl9l9e9rxKklmIc=";
     })
+    ./ensure_python_before_getting_gil.patch
+    ./macos_use_tk_default_color_map.patch
   ];
 
   # when generating python stub file utilizing system python pybind11_stubgen module
@@ -79,6 +81,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace ng/Togl2.1/CMakeLists.txt \
       --replace-fail "/usr/bin/gcc" "$CC"
+
+    # Fix UB when size == 0, otherwise test_archive will fail when hardening enable glibcxxassertions
+    substituteInPlace libsrc/core/archive.hpp \
+      --replace-fail "Do(&v[0], size);" "Do(v.data(), size);"
   ''
   + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
     # mesh generation differs on x86_64 and aarch64 platform
@@ -102,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     tcl
     tk
     libGLU
-    xorg.libXmu
+    libxmu
     libjpeg
     ffmpeg
     mpi
@@ -135,6 +141,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doInstallCheck)
     (lib.cmakeBool "ENABLE_UNIT_TESTS" finalAttrs.finalPackage.doInstallCheck)
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (
+    stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux
+  ) "-flax-vector-conversions";
 
   __darwinAllowLocalNetworking = true;
 

@@ -7,14 +7,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asuka";
   version = "0.8.5";
 
   src = fetchFromSourcehut {
     owner = "~julienxx";
     repo = "asuka";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-+rj6P3ejc4Qb/uqbf3N9MqyqDT7yg9JFE0yfW/uzd6M=";
   };
 
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ sikmir ];
   };
-}
+})

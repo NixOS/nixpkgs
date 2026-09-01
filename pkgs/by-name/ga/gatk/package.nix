@@ -7,12 +7,12 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gatk";
-  version = "4.6.2.0";
+  version = "4.7.0.0";
   src = fetchzip {
-    url = "https://github.com/broadinstitute/gatk/releases/download/${version}/gatk-${version}.zip";
-    sha256 = "sha256-I2p7BLh4q0i8qn1fTbzsaKVnCkMrPIxEpBUjOxNxgxI=";
+    url = "https://github.com/broadinstitute/gatk/releases/download/${finalAttrs.version}/gatk-${finalAttrs.version}.zip";
+    sha256 = "sha256-tOiI2O2Ey5fz/I+FbiqqbnXcZXnJ5k0efI7MQ1tRie0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    install -m755 -D $src/gatk-package-${version}-local.jar $out/bin/
-    install -m755 -D $src/gatk-package-${version}-spark.jar $out/bin/
+    install -m755 -D $src/gatk-package-${finalAttrs.version}-local.jar $out/bin/
+    install -m755 -D $src/gatk-package-${finalAttrs.version}-spark.jar $out/bin/
     install -m755 -D $src/gatk $out/bin/
   '';
   postFixup = ''
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
       genome data from any organism, with any level of ploidy.
     '';
   };
-}
+})

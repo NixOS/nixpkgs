@@ -19,18 +19,20 @@
   gnugrep,
   gnused,
   gnutar,
-  gtk2,
+  gtk3,
   glib,
   gzip,
   fontsConf,
   fontconfig,
   freetype,
-  libX11,
-  libXext,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
+  libGL,
+  libsecret,
+  libx11,
+  libxext,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
   makeFontsConf,
   makeWrapper,
   ncurses5,
@@ -51,11 +53,11 @@
 }:
 
 let
-  drvName = "${pname}-${version}";
   filename = "asfp-${versionPrefix}-${version}-linux.deb";
 
   androidStudioForPlatform = stdenv.mkDerivation {
-    name = "${drvName}-unwrapped";
+    pname = "${pname}-unwrapped";
+    inherit version;
 
     src = fetchurl {
       url = "https://dl.google.com/android/asfp/${filename}";
@@ -107,21 +109,24 @@ let
             # Crash at startup without these
             fontconfig
             freetype
-            libXext
-            libXi
-            libXrender
-            libXtst
-            libX11
+            libxext
+            libxi
+            libxrender
+            libxtst
+            libx11
 
             # Support multiple monitors
-            libXrandr
+            libxrandr
 
             # For GTKLookAndFeel
-            gtk2
+            gtk3
             glib
 
             # For Soong sync
             e2fsprogs
+
+            libsecret
+            libGL
           ]
         }"
     '';
@@ -145,7 +150,7 @@ let
   # (e.g. `mksdcard`) have `/lib/ld-linux.so.2` set as the interpreter. An FHS
   # environment is used as a work around for that.
   fhsEnv = buildFHSEnv {
-    pname = "${drvName}-fhs-env";
+    pname = "${pname}-fhs-env";
     inherit version;
     multiPkgs = pkgs: [
       zlib
@@ -158,11 +163,12 @@ let
     '';
   };
 in
-runCommand drvName
+runCommand "${pname}-${version}"
   {
+    inherit pname version;
     startScript = ''
       #!${bash}/bin/bash
-      ${fhsEnv}/bin/${drvName}-fhs-env ${androidStudioForPlatform}/bin/studio.sh "$@"
+      ${lib.getExe fhsEnv} ${androidStudioForPlatform}/bin/studio.sh "$@"
     '';
     preferLocalBuild = true;
     allowSubstitutes = false;

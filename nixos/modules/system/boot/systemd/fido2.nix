@@ -27,6 +27,8 @@ in
       "${cfg.package}/lib/udev/fido_id"
       "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-fido2.so"
       "${pkgs.libfido2}/lib/libfido2.so.1"
+      # dlopened by the libpcsclite.so.1 shim, invisible to make-initrd-ng
+      "${lib.getLib pkgs.pcsclite}/lib/libpcsclite_real.so.1"
     ];
   };
 }

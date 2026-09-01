@@ -2,34 +2,94 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   nix-update-script,
   cmake,
+
+  # docs
+  doxygen,
+  graphviz,
+  ghostscript,
+  pdf2svg,
+  pkg-config,
+  texliveBasic,
+  writableTmpDirAsHomeHook,
+
+  # tests
+  catch2_3,
+  cppad,
+  gmp,
+  matio,
+  mpfr,
+  python3Packages,
+  simde,
+  suitesparse,
 }:
+
+let
+  doxygenTexlive = texliveBasic.withPackages (ps: [
+    ps.newunicodechar
+    ps.stmaryrd
+    ps.xcolor
+  ]);
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jrl-cmakemodules";
-  version = "1.1.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "jrl-umi3218";
     repo = "jrl-cmakemodules";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WQiAAexshQ4zgaBNo/CD91XV+PAeoPZatmehSA14aPM=";
+    hash = "sha256-PjEE/JIb6gegW5fqKiFgN0th8Fi58Pe0u5qrdIz2Rm8=";
   };
-
-  patches = [
-    # ref. https://github.com/jrl-umi3218/jrl-cmakemodules/pull/783
-    (fetchpatch {
-      name = "fix-permissions.patch";
-      url = "https://github.com/jrl-umi3218/jrl-cmakemodules/commit/defed70c8a7c5e4bd5b26006bef26e3fb22c3b26.patch";
-      hash = "sha256-muO6DwQhNPCv6DPmnHnEHjsh/FSj0ljgNCb+ZowLRaY=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
 
-  passthru.updateScript = nix-update-script { };
+  cmakeFlags = [
+    (lib.cmakeBool "JRL_CMAKEMODULES_GENERATE_API_DOC" true)
+    (lib.cmakeBool "JRL_CMAKEMODULES_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+  ];
+
+  doCheck = true;
+
+  checkInputs = [
+    catch2_3
+    cppad
+    gmp
+    matio
+    mpfr
+    python3Packages.boost
+    python3Packages.nanobind
+    python3Packages.numpy
+    python3Packages.pytest
+    simde
+    suitesparse
+  ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+    docsNativeBuildInputs = [
+      cmake
+      doxygen
+      doxygenTexlive
+      graphviz
+      ghostscript
+      pdf2svg
+      pkg-config
+      writableTmpDirAsHomeHook
+    ];
+    docsCmakeFlags = [
+      (lib.cmakeFeature "DOXYGEN_FORMULA_FONTSIZE" "13")
+      (lib.cmakeFeature "DOXYGEN_HTML_FORMULA_FORMAT" "svg")
+      (lib.cmakeFeature "DOXYGEN_HTML_OUTPUT" "doxygen-html")
+      (lib.cmakeBool "DOXYGEN_USE_MATHJAX" false)
+      (lib.cmakeBool "JRL_CMAKEMODULES_ENABLE_TEST_CPPAD" true)
+      (lib.cmakeBool "JRL_CMAKEMODULES_ENABLE_TEST_CPPADCG" false) # wait for #390728
+      (lib.cmakeBool "JRL_CMAKEMODULES_ENABLE_TEST_GMP" true)
+      (lib.cmakeBool "JRL_CMAKEMODULES_ENABLE_TEST_MPFR" true)
+    ];
+  };
 
   meta = {
     description = "CMake utility toolbox";

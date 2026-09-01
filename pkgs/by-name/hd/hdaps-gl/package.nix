@@ -8,13 +8,13 @@
   libGLU,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hdaps-gl";
   version = "0.0.7";
   src = fetchFromGitHub {
     owner = "linux-thinkpad";
     repo = "hdaps-gl";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0jywsrcr1wzkjig5cvz014c3r026sbwscbkv7zh1014lkjm0kyyh";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.symphorien ];
     mainProgram = "hdaps-gl";
   };
-}
+})

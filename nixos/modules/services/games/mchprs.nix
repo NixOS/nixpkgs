@@ -200,7 +200,7 @@ in
         default = { };
 
         description = ''
-          Configuration for MCHPRS via `Config.toml`.
+          Configuration for MCHPRS via {file}`Config.toml`.
           See <https://github.com/MCHPR/MCHPRS/blob/master/README.md> for documentation.
         '';
       };
@@ -210,7 +210,7 @@ in
           type = lib.types.bool;
           default = false;
           description = ''
-            Whether or not the whitelist (in `whitelist.json`) shoud be enabled.
+            Whether or not the whitelist (in {file}`whitelist.json`) shoud be enabled.
             Only has effect when {option}`services.mchprs.declarativeSettings` is `true`.
           '';
         };

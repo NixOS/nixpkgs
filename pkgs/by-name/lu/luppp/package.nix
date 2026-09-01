@@ -13,14 +13,14 @@
   ntk,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "luppp";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "openAVproductions";
     repo = "openAV-Luppp";
-    rev = "release-${version}";
+    rev = "release-${finalAttrs.version}";
     sha256 = "1ncbn099fyfnr7jw2bp3wf2g9k738lw53m6ssw6wji2wxwmghv78";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "luppp";
   };
-}
+})

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "httplab";
   version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "qustavo";
     repo = "httplab";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-UL1i8JpgofXUB+jtW2EtSR1pM/Fdqnbg2EXPJAjc0H0=";
   };
 
@@ -28,4 +28,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     mainProgram = "httplab";
   };
-}
+})

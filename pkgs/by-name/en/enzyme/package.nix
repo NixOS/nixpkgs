@@ -7,13 +7,13 @@
 }:
 llvmPackages.stdenv.mkDerivation rec {
   pname = "enzyme";
-  version = "0.0.238";
+  version = "0.0.290";
 
   src = fetchFromGitHub {
     owner = "EnzymeAD";
     repo = "Enzyme";
     rev = "v${version}";
-    hash = "sha256-n++71Ibt4+nnyx56ICovObJx9CH12fxH+WXsAByIyJA=";
+    hash = "sha256-DiGvbBEML3IHogdgyrcRSvGbMfjvufoIcVPeOLw3CPE=";
   };
 
   postPatch = ''

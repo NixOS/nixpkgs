@@ -14,15 +14,15 @@
   transcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "transcrypt";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "elasticdog";
     repo = "transcrypt";
-    rev = "v${version}";
-    sha256 = "sha256-s95EnEmcdd5mFAKvtZ88aXxkrRLSZUP0VBrCy5PR4fo=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-OWLkgvhnQ9BqN+OTXnvAI3BWsO4RdzmJeWDYyFhfcJs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   passthru.tests.version = testers.testVersion {
     package = transcrypt;
     command = "transcrypt --version";
-    version = "transcrypt ${version}";
+    version = "transcrypt ${finalAttrs.version}";
   };
 
   meta = {
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/elasticdog/transcrypt";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.elasticdog ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

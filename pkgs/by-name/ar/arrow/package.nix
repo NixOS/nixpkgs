@@ -6,11 +6,11 @@
   alsa-lib,
   libGL,
   libpulseaudio,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
+  libxrandr,
   udev,
   vulkan-loader,
   autoPatchelfHook,
@@ -55,11 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     libGL
     libpulseaudio
-    libX11
-    libXcursor
-    libXext
-    libXi
-    libXrandr
+    libx11
+    libxcursor
+    libxext
+    libxi
+    libxrandr
     udev
     vulkan-loader
   ];

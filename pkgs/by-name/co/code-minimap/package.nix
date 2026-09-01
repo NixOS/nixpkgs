@@ -6,14 +6,14 @@
   libiconv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "code-minimap";
   version = "0.6.8";
 
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = "code-minimap";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-unf7gFc/tQiUw3VqQ0KC96Srxn1E27WsmJviSggaCF4=";
   };
 
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ bsima ];
     mainProgram = "code-minimap";
   };
-}
+})

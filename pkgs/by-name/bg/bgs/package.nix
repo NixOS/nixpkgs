@@ -3,12 +3,12 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  libX11,
-  libXinerama,
+  libx11,
+  libxinerama,
   imlib2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "bgs";
   version = "0.8";
@@ -16,15 +16,15 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Gottox";
     repo = "bgs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "V8GP+xLSiCvaYZt8Bi3/3KlTBaGnMYQUeNCHwH6Ejzo=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libX11
-    libXinerama
+    libx11
+    libxinerama
     imlib2
   ];
 
@@ -32,9 +32,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Extremely fast and small background setter for X";
+    homepage = "https://github.com/Gottox/bgs";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pSub ];
     mainProgram = "bgs";
   };
-}
+})

@@ -2,17 +2,21 @@
   lib,
   buildDunePackage,
   dune-site,
-  fetchzip,
+  fetchFromGitLab,
   frama-c,
 }:
 
 buildDunePackage (finalAttrs: {
   pname = "frama-c-lannotate";
-  version = "0.2.4";
+  version = "0.2.6";
 
-  src = fetchzip {
-    url = "https://git.frama-c.com/pub/ltest/lannotate/-/archive/${finalAttrs.version}/lannotate-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-JoD2M3R3/DcUMt33QOvwqHg4eToCgjB8riKc09TWdyc=";
+  src = fetchFromGitLab {
+    domain = "git.frama-c.com";
+    group = "pub";
+    owner = "ltest";
+    repo = "lannotate";
+    rev = finalAttrs.version;
+    hash = "sha256-F08YrRtRdRZXNfGqdIc0ATOfWN8Kw0RXYY579da9Xuw=";
   };
 
   propagatedBuildInputs = [

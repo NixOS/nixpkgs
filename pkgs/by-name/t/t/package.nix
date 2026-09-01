@@ -16,7 +16,6 @@ bundlerApp {
     homepage = "http://sferik.github.io/t/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      offline
       nicknovitski
     ];
     platforms = lib.platforms.unix;

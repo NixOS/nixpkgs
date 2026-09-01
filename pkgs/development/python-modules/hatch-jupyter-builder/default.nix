@@ -5,12 +5,10 @@
   hatchling,
   pytest-mock,
   pytestCheckHook,
-  tomli,
   twine,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hatch-jupyter-builder";
   version = "0.9.1";
   pyproject = true;
@@ -18,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyterlab";
     repo = "hatch-jupyter-builder";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QDWHVdjtexUNGRL+dVehdBwahSW2HmNkZKkQyuOghyI=";
   };
 
@@ -30,8 +28,7 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     twine
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   disabledTests = [
     # tests pip install, which unsurprisingly fails
@@ -39,11 +36,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/jupyterlab/hatch-jupyter-builder/releases/tag/v${version}";
+    changelog = "https://github.com/jupyterlab/hatch-jupyter-builder/releases/tag/v${finalAttrs.version}";
     description = "Hatch plugin to help build Jupyter packages";
     mainProgram = "hatch-jupyter-builder";
     homepage = "https://github.com/jupyterlab/hatch-jupyter-builder";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

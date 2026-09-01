@@ -10,24 +10,21 @@
   pytest-aiohttp,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   voluptuous,
   typing-extensions,
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioguardian";
-  version = "2025.02.0";
+  version = "2026.01.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "aioguardian";
-    tag = version;
-    hash = "sha256-RoVD2O/OAk4l96kYEq7ZM/2QuckcPxDluf1MT4HdKc4=";
+    tag = finalAttrs.version;
+    hash = "sha256-55jMGJ4pRMjvSAYsXIclzzMcz+PqS/334Fd7hoY8YTk=";
   };
 
   postPatch = ''
@@ -71,8 +68,8 @@ buildPythonPackage rec {
       Guardian line of water valves and sensors from Elexa.
     '';
     homepage = "https://github.com/bachya/aioguardian";
-    changelog = "https://github.com/bachya/aioguardian/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/bachya/aioguardian/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -3,7 +3,7 @@
   lib,
   fetchhg,
   libepoxy,
-  xorg,
+  libx11,
   libGLU,
   glm,
   pkg-config,
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libepoxy
-    xorg.libX11
+    libx11
     libGLU
     glm
     imagemagick
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "OpenGL/X11 application for GNU/Linux consisting of a single window that shows simple 3D scene of a textured rectangle with applied vertex and fragment shaders (GLSL)";
     homepage = "https://graphics.globalcode.info/v_0/shader-shark.xhtml";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.lucasew ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

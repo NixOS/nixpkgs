@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "harsh";
-  version = "0.13.1";
+  version = "0.14.5";
 
   src = fetchFromGitHub {
     owner = "wakatara";
     repo = "harsh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QaHZg/qssHuxp+flSXqwlbTtB8H/zsfwn+yaw0tOb9o=";
+    hash = "sha256-C3er23ibNCZB1eQSAHPpGBrlJk7DiYD6WTAAEU4JElk=";
   };
 
-  vendorHash = "sha256-cjlpCTIugNjgY4RKrjJZd4TSM5BqgSKwpd2HJP6V9i4=";
+  vendorHash = "sha256-0Nux4EIYscqem1xAbdj0hAP3MNmSM55pJ3xr/fEd3Ns=";
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 

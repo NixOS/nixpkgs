@@ -7,14 +7,14 @@
   wrapGAppsHook3,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-query-tree-viewer";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "cdepillabout";
     repo = "nix-query-tree-viewer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Lc9hfjybnRrkd7PZMa2ojxOM04bP4GJyagkZUX2nVwY=";
   };
 
@@ -33,8 +33,8 @@ rustPlatform.buildRustPackage rec {
     description = "GTK viewer for the output of `nix store --query --tree`";
     mainProgram = "nix-query-tree-viewer";
     homepage = "https://github.com/cdepillabout/nix-query-tree-viewer";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cdepillabout ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -8,12 +8,12 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nvi";
   version = "1.81.6";
 
   src = fetchurl {
-    url = "https://deb.debian.org/debian/pool/main/n/nvi/nvi_${version}.orig.tar.gz";
+    url = "https://deb.debian.org/debian/pool/main/n/nvi/nvi_${finalAttrs.version}.orig.tar.gz";
     hash = "sha256-i8NIiJFZo0zyaPgHILJvRZ29cjtWFhB9NnOdAH5Ml40=";
   };
 
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
       aleksana
     ];
   };
-}
+})

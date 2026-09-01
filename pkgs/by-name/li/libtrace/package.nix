@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtrace";
-  version = "4.0.29-1";
+  version = "4.0.34-1";
 
   src = fetchFromGitHub {
     owner = "LibtraceTeam";
     repo = "libtrace";
     tag = finalAttrs.version;
-    hash = "sha256-Gt7mGs1/ltVRON5mmltDI6ukZ+LquTnUSFF/QHG9ocI=";
+    hash = "sha256-vVhLUc2IddslHmXtzduYs4MLwWA+vYE/q5qpZIORdbY=";
   };
 
   strictDeps = true;

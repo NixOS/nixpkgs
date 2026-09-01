@@ -33,14 +33,14 @@ let
     activate = 1
   '';
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "evil-winrm";
   version = "3.7";
 
   src = fetchFromGitHub {
     owner = "Hackplayers";
     repo = "evil-winrm";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jr8glS732UvSt+qFkhhLFZUB7OIRpRj3SzXm6mVikrE=";
   };
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     description = "WinRM shell for hacking/pentesting";
     mainProgram = "evil-winrm";
     homepage = "https://github.com/Hackplayers/evil-winrm";
-    changelog = "https://github.com/Hackplayers/evil-winrm/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Hackplayers/evil-winrm/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.lgpl3Plus;
   };
-}
+})

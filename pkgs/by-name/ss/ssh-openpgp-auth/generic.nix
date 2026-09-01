@@ -3,7 +3,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   just,
   rust-script,
@@ -23,8 +23,7 @@
 rustPlatform.buildRustPackage {
   inherit pname version;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "wiktor";
     repo = "ssh-openpgp-auth";
     # See also: https://codeberg.org/wiktor/ssh-openpgp-auth/pulls/92#issuecomment-1635274

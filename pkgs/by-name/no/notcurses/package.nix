@@ -15,14 +15,14 @@
   qrcodegen,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "notcurses";
   version = "3.0.17";
 
   src = fetchFromGitHub {
     owner = "dankamongmen";
     repo = "notcurses";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-HbyQmuxwfEWlSe/y6w0ZRui0NCFYb0SJh7YA6PC3jdY=";
   };
 
@@ -82,4 +82,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     inherit (ncurses.meta) platforms;
   };
-}
+})

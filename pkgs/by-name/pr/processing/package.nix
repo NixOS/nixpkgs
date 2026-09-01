@@ -2,63 +2,21 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchurl,
-  ant,
-  unzip,
   makeWrapper,
+  gradle_8,
   jdk17,
   jogl,
   rsync,
-  ffmpeg,
-  batik,
   stripJavaArchivesHook,
   wrapGAppsHook3,
   libGL,
+  libxxf86vm,
 }:
 let
+  # Force use of JDK 17, see https://github.com/processing/processing4/issues/1043
+  gradle = gradle_8.override { java = jdk17; };
   jdk = jdk17;
   buildNumber = "1310";
-  vaqua = fetchurl {
-    name = "VAqua9.jar";
-    url = "https://violetlib.org/release/vaqua/9/VAqua9.jar";
-    sha256 = "cd0b82df8e7434c902ec873364bf3e9a3e6bef8b59cbf42433130d71bf1a779c";
-  };
-
-  jna = fetchurl {
-    name = "jna-5.10.0.zip";
-    url = "https://github.com/java-native-access/jna/archive/5.10.0.zip";
-    sha256 = "B5CakOQ8225xNsk2TMV8CbK3RcsLlb+pHzjaY5JNwg0=";
-  };
-
-  flatlaf = fetchurl {
-    name = "flatlaf-2.4.jar";
-    url = "mirror://maven/com/formdev/flatlaf/2.4/flatlaf-2.4.jar";
-    sha256 = "NVMYiCd+koNCJ6X3EiRx1Aj+T5uAMSJ9juMmB5Os+zc=";
-  };
-
-  lsp4j = fetchurl {
-    name = "org.eclipse.lsp4j-0.19.0.jar";
-    url = "mirror://maven/org/eclipse/lsp4j/org.eclipse.lsp4j/0.19.0/org.eclipse.lsp4j-0.19.0.jar";
-    sha256 = "sha256-1DI5D9KW+GL4gT1qjwVZveOl5KVOEjt6uXDwsFzi8Sg=";
-  };
-
-  lsp4j-jsonrpc = fetchurl {
-    name = "org.eclipse.lsp4j.jsonrpc-0.19.0.jar";
-    url = "mirror://maven/org/eclipse/lsp4j/org.eclipse.lsp4j.jsonrpc/0.19.0/org.eclipse.lsp4j.jsonrpc-0.19.0.jar";
-    sha256 = "sha256-ozYTkvv7k0psCeX/PbSM3/Bl17qT3upX3trt65lmM9I=";
-  };
-
-  gson = fetchurl {
-    name = "gson-2.9.1.jar";
-    url = "mirror://maven/com/google/code/gson/gson/2.9.1/gson-2.9.1.jar";
-    sha256 = "sha256-N4U04znm5tULFzb7Ort28cFdG+P0wTzsbVNkEuI9pgM=";
-  };
-
-  arch =
-    {
-      x86_64 = "amd64";
-    }
-    .${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name;
 in
 stdenv.mkDerivation rec {
   pname = "processing";
@@ -71,11 +29,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-u2wQl/VGCNJPd+k3DX2eW7gkA/RARMTSNGcoQuS/Oh8=";
   };
 
-  patches = [ ./fix-ant-build.patch ];
+  patches = [
+    # Compose Multiplatform generates its createDistributable target too late, and we don't need it anyway
+    ./skip-distributable.patch
+
+    # dirPermissions: Without this, some gradle tasks (e.g. includeJdk) fail to copy contents of read-only subfolders within the nix store
+    ./fix-permissions.patch
+
+    # Use jogl from nixpkgs instead of downloading from maven
+    ./use-nixpkgs-jogl.patch
+  ];
 
   nativeBuildInputs = [
-    ant
-    unzip
+    gradle
     makeWrapper
     stripJavaArchivesHook
     wrapGAppsHook3
@@ -83,37 +49,47 @@ stdenv.mkDerivation rec {
   buildInputs = [
     jdk
     jogl
-    ant
     rsync
-    ffmpeg
-    batik
+    libGL
+    libxxf86vm
   ];
 
+  mitmCache = gradle.fetchDeps {
+    inherit pname;
+    data = ./deps.json;
+  };
+
+  gradleFlags = [ "-Dfile.encoding=utf-8" ];
+
+  gradleBuildTask = "createDistributable";
+  gradleUpdateTask = "createDistributable";
+  enableParallelUpdating = false;
+
+  # Need to run the entire createDistributable task, otherwise the buildPhase fails at the compose checkRuntime step
+  gradleUpdateScript = ''
+    runHook preBuild
+    runHook preGradleUpdate
+
+    gradle createDistributable
+
+    runHook postGradleUpdate
+  '';
+
   dontWrapGApps = true;
+
+  postPatch = ''
+    substituteInPlace app/build.gradle.kts \
+      --replace-fail "https://github.com/processing/processing-examples/archive/refs/heads/main.zip" "https://github.com/processing/processing-examples/archive/b10c9e9a05a0d6c20d233ca7f30d315b5047720e.zip" \
+      --replace-fail "https://github.com/processing/processing-website/archive/refs/heads/main.zip" "https://github.com/processing/processing-website/archive/f11676d1b7464291a23ae834f2ef6ab00baaed8e.zip"
+
+    substituteInPlace core/build.gradle.kts \
+      --replace-fail "@@joglPath@@" "${jogl}"
+  '';
 
   buildPhase = ''
     runHook preBuild
 
-    echo "tarring jdk"
-    tar --checkpoint=10000 -czf build/linux/jdk-17.0.8-${arch}.tgz ${jdk}
-    mkdir -p app/lib core/library
-    cp ${ant.home}/lib/{ant.jar,ant-launcher.jar} app/lib/
-    ln -s ${jogl}/share/java/* core/library/
-    ln -s ${vaqua} app/lib/VAqua9.jar
-    ln -s ${flatlaf} app/lib/flatlaf.jar
-    ln -s ${lsp4j} java/mode/org.eclipse.lsp4j.jar
-    ln -s ${lsp4j-jsonrpc} java/mode/org.eclipse.lsp4j.jsonrpc.jar
-    ln -s ${gson} java/mode/gson.jar
-    unzip -qo ${jna} -d app/lib/
-    mv app/lib/{jna-5.10.0/dist/jna.jar,}
-    mv app/lib/{jna-5.10.0/dist/jna-platform.jar,}
-    ln -sf ${batik}/* java/libraries/svg/library/
-    cp java/libraries/svg/library/share/java/batik-all-${batik.version}.jar java/libraries/svg/library/batik.jar
-    echo "tarring ffmpeg"
-    tar --checkpoint=10000 -czf build/shared/tools/MovieMaker/ffmpeg-5.0.1.gz ${ffmpeg}
-    cd build
-    ant build
-    cd ..
+    gradle assemble
 
     runHook postBuild
   '';
@@ -121,24 +97,33 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/
+    gradle createDistributable
+
+    mkdir -p $out/lib
+    cp -dpr app/build/compose/binaries/main/app/Processing/lib/* $out/lib/
+    cp -dpr app/build/compose/binaries/main/app/Processing/bin $out/unwrapped
+
     mkdir -p $out/share/applications/
     cp -dp build/linux/${pname}.desktop $out/share/applications/
-    cp -dpr build/linux/work $out/share/${pname}
-    rmdir $out/share/${pname}/java
-    ln -s ${jdk} $out/share/${pname}/java
+
+    rm -r $out/lib/app/resources/jdk
+    ln -s ${jdk}/lib/openjdk $out/lib/app/resources/jdk
+
+    makeWrapper $out/unwrapped/Processing $out/bin/Processing \
+      ''${gappsWrapperArgs[@]} \
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          libGL
+          libxxf86vm
+        ]
+      }" \
+      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
+
     runHook postInstall
   '';
 
-  preFixup = ''
-    makeWrapper $out/share/${pname}/processing $out/bin/processing \
-      "''${gappsWrapperArgs[@]}" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
-      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
-    makeWrapper $out/share/${pname}/processing-java $out/bin/processing-java \
-      "''${gappsWrapperArgs[@]}" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
-      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
+  postFixup = ''
+    ln -s $out/bin/Processing $out/bin/processing
   '';
 
   meta = {
@@ -148,7 +133,12 @@ stdenv.mkDerivation rec {
       gpl2Only
       lgpl21Only
     ];
+    mainProgram = "Processing";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ evan-goode ];
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
   };
 }

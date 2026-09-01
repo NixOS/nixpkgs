@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  nixosTests,
 }:
 let
   db = fetchurl {
@@ -10,12 +11,12 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hddtemp";
   version = "0.3-beta15";
 
   src = fetchurl {
-    url = "mirror://savannah/hddtemp/hddtemp-${version}.tar.bz2";
+    url = "mirror://savannah/hddtemp/hddtemp-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-YYVBWEBUCT1TvootnoHJcXTzDwCvkcuHAKl+RC1571s=";
   };
 
@@ -41,6 +42,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  passthru.tests.nixos = nixosTests.hddtemp;
+
   meta = {
     description = "Tool for displaying hard disk temperature";
     homepage = "https://savannah.nongnu.org/projects/hddtemp/";
@@ -49,4 +55,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "hddtemp";
   };
-}
+})

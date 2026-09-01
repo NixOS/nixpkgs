@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "perkeep";
   version = "0.12";
 
   src = fetchFromGitHub {
     owner = "perkeep";
     repo = "perkeep";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-mAVzgHDtCCYTds65qKzIJ+oqLbUQhhSdp6Sq0DA8zOA=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X perkeep.org/pkg/buildinfo.GitInfo=v${version}"
+    "-X perkeep.org/pkg/buildinfo.GitInfo=v${finalAttrs.version}"
   ];
 
   subPackages = [
@@ -40,4 +40,4 @@ buildGoModule rec {
       gador
     ];
   };
-}
+})

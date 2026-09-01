@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out ''${pythonPath[*]}"
     patchPythonScript "$out/lib/budgie-desktop/plugins/budgie-media-player-applet/applet.py"
   '';
 

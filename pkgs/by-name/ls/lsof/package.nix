@@ -17,13 +17,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "lsof";
-  version = "4.99.5";
+  version = "4.99.7";
 
   src = fetchFromGitHub {
     owner = "lsof-org";
     repo = "lsof";
-    rev = version;
-    hash = "sha256-zn09cwFFz5ZNJu8GwGGSSGNx5jvXbKLT6/+Lcmn1wK8=";
+    tag = version;
+    hash = "sha256-o95osjMQvpOVx2b0lCXVp61x2GHQV+HW1iaamVhevng=";
   };
 
   postPatch = ''
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   # Stop build scripts from searching global include paths
-  LSOF_INCLUDE = "${lib.getDev stdenv.cc.libc}/include";
+  env.LSOF_INCLUDE = "${lib.getDev stdenv.cc.libc}/include";
   configurePhase =
     let
       genericFlags = "LSOF_CC=$CC LSOF_AR=\"$AR cr\" LSOF_RANLIB=$RANLIB";
@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/lsof-org/lsof";
+    changelog = "https://github.com/lsof-org/lsof/releases/tag/${src.tag}";
     description = "Tool to list open files";
     mainProgram = "lsof";
     longDescription = ''
@@ -88,7 +89,7 @@ stdenv.mkDerivation rec {
       from it).
     '';
     license = lib.licenses.lsof;
-    maintainers = with lib.maintainers; [ dezgeg ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

@@ -6,14 +6,19 @@
   fetchpatch2,
   openssl,
   python3,
-  enableNpm ? true,
 }:
 
 let
-  buildNodejs = callPackage ./nodejs.nix {
-    inherit openssl;
-    python = python3;
-  };
+  buildNodejs = callPackage ./nodejs.nix (
+    {
+      inherit openssl;
+      python = python3;
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      # libcxx21 makes FD tracking unreliable on Darwin. Pinning to libcxx20:
+      stdenv = buildPackages.llvmPackages_20.libcxxStdenv;
+    }
+  );
 
   gypPatches =
     if stdenv.buildPlatform.isDarwin then
@@ -24,23 +29,13 @@ let
       [ ];
 in
 buildNodejs {
-  inherit enableNpm;
-  version = "24.13.0";
-  sha256 = "320fe909cbb347dcf516201e4964ef177b8138df9a7f810d0d54950481b3158b";
+  version = "24.19.0";
+  sha256 = "f6d95e10a0431ee1067fc6aabe9f762908b4716dd35324e1ddb4b1466b76659f";
   patches =
-    (
-      if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
-        [
-          ./configure-emulator.patch
-        ]
-      else
-        [
-          (fetchpatch2 {
-            url = "https://raw.githubusercontent.com/buildroot/buildroot/2f0c31bffdb59fb224387e35134a6d5e09a81d57/package/nodejs/nodejs-src/0003-include-obj-name-in-shared-intermediate.patch";
-            hash = "sha256-3g4aS+NmmUYNOYRNc6UMJKYoaTlpP5Knt9UHegx+o0Y=";
-          })
-        ]
-    )
+    (lib.optional (!(stdenv.hostPlatform.emulatorAvailable buildPackages)) (fetchpatch2 {
+      url = "https://raw.githubusercontent.com/buildroot/buildroot/2f0c31bffdb59fb224387e35134a6d5e09a81d57/package/nodejs/nodejs-src/0003-include-obj-name-in-shared-intermediate.patch";
+      hash = "sha256-3g4aS+NmmUYNOYRNc6UMJKYoaTlpP5Knt9UHegx+o0Y=";
+    }))
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD) [
       # This patch is concerning.
       # https://github.com/nodejs/node/issues/54576
@@ -58,6 +53,18 @@ buildNodejs {
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
+
+      # TODO: remove when support for Ada 4.x has landed upstream
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/eb1a49b0aec9e05cbb59f093d38f0a92818b7de1.patch?full_index=1";
+        hash = "sha256-LmLbsRZKkOGXzqDQxNrK/B8TGIrsr4pXIUEv3P6C9Sc=";
+        excludes = [ "deps/*" ];
+      })
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/064e2eee1ec7b17c4bc6e36befc2935eee80d0f7.patch?full_index=1";
+        hash = "sha256-RcmWiTpWYwA952nNmhaiq4zw/iuVAXFnuTeuB6ltR1U=";
+        includes = [ "test/fixtures/wpt/url/resources/urltestdata.json" ];
+      })
     ]
     ++ gypPatches
     ++ lib.optionals (!stdenv.buildPlatform.isDarwin) [
@@ -68,10 +75,8 @@ buildNodejs {
         revert = true;
       })
     ]
-    ++ lib.optionals stdenv.is32bit [
+    ++ lib.optionals stdenv.hostPlatform.is32bit [
       # see: https://github.com/nodejs/node/issues/58458
       ./v24-32bit.patch
-      # see: https://github.com/nodejs/node/issues/61025
-      ./sab-test-32bit.patch
     ];
 }

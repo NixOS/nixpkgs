@@ -64,6 +64,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Run any open-source LLMs, such as Llama 3.1, Gemma, as OpenAI compatible API endpoint in the cloud";
     homepage = "https://github.com/bentoml/OpenLLM";
     changelog = "https://github.com/bentoml/OpenLLM/releases/tag/${finalAttrs.src.tag}";
+    knownVulnerabilities = [
+      "CVE-2026-15035"
+    ];
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       happysalada

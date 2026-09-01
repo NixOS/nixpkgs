@@ -3,7 +3,7 @@
   fetchYarnDeps,
   fixup-yarn-lock,
   callPackage,
-  nodejs_20,
+  nodejs_22,
   yarn,
 }:
 let
@@ -22,8 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     fixup-yarn-lock
-    nodejs_20
-    (yarn.override { nodejs = nodejs_20; })
+    nodejs_22
+    (yarn.override { nodejs = nodejs_22; })
   ];
 
   configurePhase = ''

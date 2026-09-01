@@ -3,20 +3,23 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch2,
+  setuptools,
   mock,
   pytestCheckHook,
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vdf";
   version = "3.4";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ValvePython";
     repo = "vdf";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6ozglzZZNKDtADkHwxX2Zsnkh6BE8WbcRcC9HkTTgPU=";
   };
 
@@ -27,6 +30,8 @@ buildPythonPackage rec {
       hash = "sha256-kLAbbB0WHjxq4rokLoGTPx43BU44EshteR59Ey9JnXo=";
     })
   ];
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     mock
@@ -45,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kira-bruneau ];
   };
-}
+})

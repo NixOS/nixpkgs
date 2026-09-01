@@ -18,6 +18,7 @@
   libnotify,
   libxkbcommon,
   libgbm,
+  libGL,
   nspr,
   nss,
   openssl,
@@ -29,15 +30,22 @@
   vulkan-loader,
   wrapGAppsHook3,
   xdg-utils,
-  xorg,
+  libxtst,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxcb,
 }:
 stdenv.mkDerivation rec {
   pname = "plasticity";
-  version = "25.2.11";
+  version = "26.1.4";
 
   src = fetchurl {
     url = "https://github.com/nkallen/plasticity/releases/download/v${version}/Plasticity-${version}-1.x86_64.rpm";
-    hash = "sha256-aqc6CDR3yBOGaRr+VjXQrTXZKvr9kqzaqcu5y30clCA=";
+    hash = "sha256-paBF0lk8rvuY4lnl5v7nOXaFsZQuNkTtXCoW53xBiMU=";
   };
 
   passthru.updateScript = ./update.sh;
@@ -77,14 +85,14 @@ stdenv.mkDerivation rec {
     systemd
     libglvnd
     vulkan-loader # may help with nvidia users
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libXtst
+    libx11
+    libxcb
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxtst
   ];
 
   dontUnpack = true;
@@ -115,9 +123,17 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  #--use-gl=egl for it to use hardware rendering it seems. Otherwise there are terrible framerates
   preFixup = ''
-    gappsWrapperArgs+=(--add-flags "--use-gl=egl")
+    patchelf --add-needed libGL.so.1 \
+      --set-rpath "${
+        lib.makeLibraryPath [
+          libGL
+        ]
+      }" \
+      $out/bin/Plasticity
+
+    rm "$out/lib/Plasticity/libvulkan.so.1"
+    ln -s -t "$out/lib/Plasticity" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
   '';
 
   meta = {
@@ -126,7 +142,10 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     mainProgram = "Plasticity";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ imadnyc ];
+    maintainers = with lib.maintainers; [
+      imadnyc
+      bearfm
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

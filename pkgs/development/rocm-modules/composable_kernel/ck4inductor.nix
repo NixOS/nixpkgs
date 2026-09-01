@@ -14,7 +14,9 @@ buildPythonPackage {
     setuptools
     setuptools-scm
   ];
-  inherit (composable_kernel) version src;
+  inherit (composable_kernel) version src sourceRoot;
+  # Upstream uses the distribution name "rocm-composable-kernel".
+  dontCheckPythonMetadata = true;
   pythonImportsCheck = [
     "ck4inductor"
     "ck4inductor.universal_gemm.gen_instances"
@@ -34,8 +36,8 @@ buildPythonPackage {
   '';
   meta = {
     description = "Pytorch inductor backend which uses composable_kernel universal GEMM implementations";
-    homepage = "https://github.com/ROCm/composable_kernel";
-    license = with lib.licenses; [ mit ];
+    homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/composablekernel";
+    license = lib.licenses.mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

@@ -10,11 +10,16 @@ unittestCheckPhase() {
     local -a flagsArray=()
 
     # Compatibility layer to the obsolete unittestFlagsArray
+    if [[ -z "${dontUseUnittestDiscover-}" ]]; then
+      flagsArray+=("discover")
+    fi
+
     eval "flagsArray+=(${unittestFlagsArray[*]-})"
 
     concatTo flagsArray unittestFlags
+
     echoCmd 'unittest flags' "${flagsArray[@]}"
-    @pythonCheckInterpreter@ -m unittest discover "${flagsArray[@]}"
+    @pythonCheckInterpreter@ -m unittest "${flagsArray[@]}"
 
     runHook postCheck
     echo "Finished executing unittestCheckPhase"

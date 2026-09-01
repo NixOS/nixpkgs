@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix QML install path
     substituteInPlace CMakeLists.txt \
       --replace-fail 'QT_IMPORTS_DIR "/lib/''${ARCH_TRIPLET}"' 'QT_IMPORTS_DIR "''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"' \
-      --replace-fail "\''${QT_IMPORTS_DIR}/\''${PLUGIN}" "\''${QT_IMPORTS_DIR}" \
+      --replace-fail "\''${QT_IMPORTS_DIR}/\''${PLUGIN}" "\''${QT_IMPORTS_DIR}"
   '';
 
   strictDeps = true;

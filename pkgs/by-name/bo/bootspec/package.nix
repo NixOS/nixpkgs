@@ -4,14 +4,14 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bootspec";
   version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "bootspec";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-FeNBn/HeOanvFSCH9gNBCwlSJx1EhhEdrgX2rbXdZgI=";
   };
 
@@ -26,4 +26,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.cole-h ];
     platforms = lib.platforms.unix;
   };
-}
+})

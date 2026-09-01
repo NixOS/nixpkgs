@@ -134,15 +134,15 @@ assert unitTestsSupport -> curl != null && coreutils != null;
 assert vp9HighbitdepthSupport -> (vp9DecoderSupport || vp9EncoderSupport);
 assert isCygwin -> unitTestsSupport && webmIOSupport && libyuvSupport;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libvpx";
-  version = "1.15.2";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "webmproject";
     repo = "libvpx";
-    rev = "v${version}";
-    hash = "sha256-1F5Zlue2DY1yJXwfDfGeh3KcFTQVo9voHcGkgItKgh0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-z1Ov3BHnAGuayeY4D86oTRiDfuZ2Wpc4ZD7pXGaakVI=";
   };
 
   postPatch = ''
@@ -249,7 +249,7 @@ stdenv.mkDerivation rec {
       curl
     ];
 
-  NIX_LDFLAGS = [
+  env.NIX_LDFLAGS = toString [
     "-lpthread" # fixes linker errors
   ];
 
@@ -265,9 +265,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "WebM VP8/VP9 codec SDK";
     homepage = "https://www.webmproject.org/";
-    changelog = "https://github.com/webmproject/libvpx/raw/v${version}/CHANGELOG";
+    changelog = "https://github.com/webmproject/libvpx/raw/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ codyopel ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

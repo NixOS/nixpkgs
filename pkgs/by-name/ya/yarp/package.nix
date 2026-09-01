@@ -8,14 +8,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yarp";
-  version = "3.12.2";
+  version = "4.0.0";
   src = fetchFromGitHub {
     owner = "robotology";
     repo = "yarp";
-    rev = "v${version}";
-    hash = "sha256-Lx9ZCTFrSvO/PCB9lrz3f0avBzDAzEZINoqzlH2F6Xw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-na823w5nRNbxcmdmaceoTIuUbCBNPIEjWMMMReKRTUg=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.nico202 ];
   };
-}
+})

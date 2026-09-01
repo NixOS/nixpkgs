@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wagyu";
   version = "0.6.3";
 
   src = fetchFromGitHub {
-    owner = "AleoHQ";
+    owner = "howardwu";
     repo = "wagyu";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-5n8BmETv5jUvgu0rskAPYaBgYyNL2QU2t/iUb3hNMMw=";
   };
 
@@ -21,12 +21,12 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Rust library for generating cryptocurrency wallets";
-    homepage = "https://github.com/AleoHQ/wagyu";
+    homepage = "https://github.com/howardwu/wagyu";
     license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = [ lib.maintainers.offline ];
+    maintainers = [ ];
     mainProgram = "wagyu";
   };
-}
+})

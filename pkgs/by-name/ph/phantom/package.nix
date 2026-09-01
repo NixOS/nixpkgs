@@ -1,6 +1,6 @@
 {
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   qt6,
   cmark-gfm,
   cmake,
@@ -12,8 +12,7 @@ stdenv.mkDerivation {
   pname = "phantom";
   version = "0.0.0-unstable-2025-12-22";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "ItsZariep";
     repo = "Phantom";
     rev = "7bba1e0a2d9b33d881fb999bb543324d14355505";
@@ -36,18 +35,20 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
+    mkdir -p $out/bin $out/share/applications $out/share/icons/hicolor/scalable/app
     cp phantom-qt $out/bin
+    cp ../src/phantom-qt.desktop $out/share/applications
+    cp ../src/phantom.svg $out/share/icons/hicolor/scalable/app
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Markdown editor with support for multi-tab";
     homepage = "https://codeberg.org/ItsZariep/Phantom";
-    license = licenses.gpl3Only;
-    mainProgram = "phantom";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ reylak ];
+    license = lib.licenses.gpl3Only;
+    mainProgram = "phantom-qt";
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ reylak ];
   };
 }

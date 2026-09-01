@@ -27,6 +27,8 @@ in
 
       package = lib.mkPackageOption pkgs "calibre-web" { };
 
+      calibrePackage = lib.mkPackageOption pkgs "calibre" { };
+
       listen = {
         ip = mkOption {
           type = types.str;
@@ -80,6 +82,14 @@ in
           default = null;
           description = ''
             Path to Calibre library.
+          '';
+        };
+
+        calibreSplitBookDirectory = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+          description = ''
+            Path to directory to store ebook files.
           '';
         };
 
@@ -148,9 +158,13 @@ in
           ++ optional (
             cfg.options.calibreLibrary != null
           ) "config_calibre_dir = '${cfg.options.calibreLibrary}'"
+          ++ optionals (cfg.options.calibreSplitBookDirectory != null) [
+            "config_calibre_split = true"
+            "config_calibre_split_dir = '${cfg.options.calibreSplitBookDirectory}'"
+          ]
           ++ optionals cfg.options.enableBookConversion [
-            "config_converterpath = '${pkgs.calibre}/bin/ebook-convert'"
-            "config_binariesdir = '${pkgs.calibre}/bin/'"
+            "config_converterpath = '${cfg.calibrePackage}/bin/ebook-convert'"
+            "config_binariesdir = '${cfg.calibrePackage}/bin/'"
           ]
           ++ optional cfg.options.enableKepubify "config_kepubifypath = '${pkgs.kepubify}/bin/kepubify'"
         );
@@ -177,6 +191,9 @@ in
             + optionalString (cfg.options.calibreLibrary != null) ''
               test -f "${cfg.options.calibreLibrary}/metadata.db" || { echo "Invalid Calibre library"; exit 1; }
             ''
+            + optionalString (cfg.options.calibreSplitBookDirectory != null) ''
+              test -d "${cfg.options.calibreSplitBookDirectory}" || { echo "Invalid Calibre split book directory"; exit 1; }
+            ''
           );
 
           ExecStart = "${calibreWebCmd} -i ${cfg.listen.ip}";
@@ -184,6 +201,51 @@ in
 
           CacheDirectory = "calibre-web";
           CacheDirectoryMode = "0750";
+
+          NoNewPrivileges = true;
+          ProtectSystem = "strict";
+          ReadWritePaths =
+            lib.optional (lib.hasPrefix "/" cfg.dataDir) cfg.dataDir
+            ++ lib.optional (cfg.options.calibreLibrary != null) cfg.options.calibreLibrary
+            ++ lib.optional (
+              cfg.options.calibreSplitBookDirectory != null
+            ) cfg.options.calibreSplitBookDirectory;
+          PrivateTmp = true;
+          PrivateDevices = true;
+          PrivateIPC = true;
+          ProtectHostname = true;
+          ProtectClock = true;
+          ProtectKernelTunables = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          RestrictSUIDSGID = true;
+          ProtectHome = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          RestrictRealtime = true;
+          SystemCallArchitectures = "native";
+          RestrictNamespaces = true;
+          RemoveIPC = true;
+          CapabilityBoundingSet = "";
+          AmbientCapabilities = "";
+          ProtectKernelModules = true;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+            "AF_NETLINK"
+          ];
+          SystemCallFilter = [
+            "~@obsolete"
+            "~@privileged"
+            "~@raw-io"
+            "~@resources"
+            "~@mount"
+            "~@debug"
+            "~@cpu-emulation"
+          ];
         }
         // lib.optionalAttrs (!(lib.hasPrefix "/" cfg.dataDir)) {
           StateDirectory = cfg.dataDir;
@@ -206,5 +268,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ pborzenkov ];
+  meta.maintainers = [ ];
 }

@@ -8,14 +8,14 @@
   fftwFloat,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libspecbleach";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "lucianodato";
     repo = "libspecbleach";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-s8eHryJfLz63m08O7l3r2iXOAgFqiuVTEcD774C3iXE=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.unix;
   };
-}
+})

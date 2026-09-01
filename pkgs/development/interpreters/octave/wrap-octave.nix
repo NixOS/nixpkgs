@@ -1,4 +1,5 @@
 {
+  lib,
   octave,
   makeSetupHook,
   makeWrapper,
@@ -13,4 +14,5 @@ makeSetupHook {
   propagatedBuildInputs = [ makeWrapper ];
   substitutions.executable = octave.interpreter;
   substitutions.octave = octave;
+  meta.license = lib.licenses.mit;
 } ./wrap.sh

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bootimage";
   version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "rust-osdev";
     repo = "bootimage";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "12p18mk3l473is3ydv3zmn6s7ck8wgjwavllimcpja3yjilxm3zg";
   };
 
@@ -26,4 +26,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [ dbeckwith ];
   };
-}
+})

@@ -13,7 +13,8 @@
 }:
 
 stdenvNoCC.mkDerivation {
-  name = "nixos-option";
+  pname = "nixos-option";
+  version = lib.trivial.release;
 
   src = ./nixos-option.sh;
 

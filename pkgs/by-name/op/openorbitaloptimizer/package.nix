@@ -10,15 +10,15 @@
   nlohmann_json,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openorbitaloptimizer";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "susilehtola";
     repo = "openorbitaloptimizer";
-    tag = "v${version}";
-    hash = "sha256-naZwe56c1wsng4L/Q1waPiACeEiEAMhvzr5XMwC1uoY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bX+pJXZsAdPuWjJi/BynvQt8JnWQAd8NcXTWSH7bi40=";
   };
 
   nativeBuildInputs = [
@@ -39,9 +39,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Common orbital optimisation algorithms for quantum chemistry";
-    license = [ lib.licenses.mpl20 ];
+    license = lib.licenses.mpl20;
     homepage = "https://github.com/susilehtola/OpenOrbitalOptimizer";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

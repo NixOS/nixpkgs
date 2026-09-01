@@ -4,18 +4,18 @@
   fetchurl,
   libGLU,
   libGL,
-  libX11,
+  libx11,
   xorgproto,
   tcl,
   libglut,
   freetype,
   sfml_2,
-  libXi,
-  libXmu,
-  libXext,
-  libXt,
-  libSM,
-  libICE,
+  libxi,
+  libxmu,
+  libxext,
+  libxt,
+  libsm,
+  libice,
   libpng,
   pkg-config,
   gettext,
@@ -38,18 +38,18 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libGLU
     libGL
-    libX11
+    libx11
     xorgproto
     tcl
     libglut
     freetype
     sfml_2
-    libXi
-    libXmu
-    libXext
-    libXt
-    libSM
-    libICE
+    libxi
+    libxmu
+    libxext
+    libxt
+    libsm
+    libice
     libpng
     gettext
   ];

@@ -3,7 +3,13 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  xorg,
+  libxrender,
+  libxrandr,
+  libxinerama,
+  libxext,
+  libxcursor,
+  libxcomposite,
+  libx11,
   freetype,
   alsa-lib,
   curl,
@@ -26,13 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXext
-    xorg.libXinerama
-    xorg.libXrender
-    xorg.libXrandr
+    libx11
+    libxcomposite
+    libxcursor
+    libxext
+    libxinerama
+    libxrender
+    libxrandr
     freetype
     alsa-lib
     curl
@@ -43,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   nativeBuildInputs = [ pkg-config ];
 
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     "-DHAVE_LROUND"
     "-fpermissive"
   ];
@@ -64,6 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace src/common/load_save.cpp \
       --replace-fail "/usr/share/" "$out/share/"
+
+    substituteInPlace JUCE/modules/juce_audio_formats/codecs/flac/libFLAC/cpu.c \
+      --replace-fail "__sigemptyset(&sigill_sse.sa_mask);" "sigemptyset(&sigill_sse.sa_mask);"
   '';
 
   meta = {

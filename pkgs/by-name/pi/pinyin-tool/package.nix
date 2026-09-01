@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pinyin-tool";
   version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "briankung";
     repo = "pinyin-tool";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1gwqwxlvdrm4sdyqkvpvvfi6jh6qqn6qybn0z66wm06k62f8zj5b";
   };
 
@@ -23,4 +23,4 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/briankung/pinyin-tool";
     license = lib.licenses.mit;
   };
-}
+})

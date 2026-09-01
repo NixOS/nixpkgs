@@ -6,18 +6,20 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "6.0.1";
   pname = "coan";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/coan2/v${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/project/coan2/v${finalAttrs.version}/coan-${finalAttrs.version}.tar.gz";
     sha256 = "1d041j0nd1hc0562lbj269dydjm4rbzagdgzdnmwdxr98544yw44";
   };
 
   patches = [
     # fix compile error in configure.ac
     ./fix-big-endian-config-check.diff
+    # Fix GCC 15 build: path::operator+ calls a nonexistent append() member.
+    ./fix-path-operator-plus.diff
   ];
 
   nativeBuildInputs = [
@@ -49,4 +51,4 @@ stdenv.mkDerivation rec {
     # The last successful Darwin Hydra build was in 2024
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

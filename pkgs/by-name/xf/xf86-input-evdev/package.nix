@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "xf86-input-evdev";
   version = "2.11.0";
 
-  # to get rid of xorgserver.dev; man is tiny
+  # to get rid of xorg-server.dev; man is tiny
   outputs = [
     "out"
     "dev"
@@ -64,7 +64,9 @@ stdenv.mkDerivation (finalAttrs: {
       hpndSellVariant
       mit
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
     pkgConfigModules = [ "xorg-evdev" ];
     platforms = lib.platforms.unix;
   };

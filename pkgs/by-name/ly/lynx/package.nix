@@ -11,16 +11,16 @@
   nukeReferences,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lynx";
-  version = "2.9.2";
+  version = "2.9.3";
 
   src = fetchurl {
     urls = [
-      "https://invisible-island.net/archives/lynx/tarballs/lynx${version}.tar.bz2"
-      "https://invisible-mirror.net/archives/lynx/tarballs/lynx${version}.tar.bz2"
+      "https://invisible-island.net/archives/lynx/tarballs/lynx${finalAttrs.version}.tar.bz2"
+      "https://invisible-mirror.net/archives/lynx/tarballs/lynx${finalAttrs.version}.tar.bz2"
     ];
-    hash = "sha256-c3S4mTbZkWaeEB9Ol/LJWSA24ejNqnuvwlmnerb7B84=";
+    hash = "sha256-F0t/KGamDzJHunX1x9uxCxJK7eShNZMS3hXzv+vSBQ8=";
   };
 
   enableParallelBuilding = true;
@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
+    changelog = "https://lynx.invisible-island.net/lynx${finalAttrs.version}/CHANGES.html";
     description = "Text-mode web browser";
     homepage = "https://lynx.invisible-island.net/";
     mainProgram = "lynx";
@@ -60,4 +61,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

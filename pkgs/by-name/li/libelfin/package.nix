@@ -6,7 +6,7 @@
   replaceVars,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libelfin";
   version = "0.3-unstable-2024-03-11";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     (replaceVars ./0001-Don-t-detect-package-version-with-Git.patch {
-      inherit version;
+      inherit (finalAttrs) version;
     })
   ];
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;
   };
-}
+})

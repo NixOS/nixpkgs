@@ -13,7 +13,7 @@
   SDL_audiolib,
   simpleini,
   flac,
-  fmt,
+  fmt_11,
   libogg,
   libpng,
   libtiff,
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     bzip2
     flac
-    fmt
+    fmt_11
     libogg
     libpng
     libtiff

@@ -22,16 +22,16 @@
   scikit-image,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rawpy";
-  version = "0.25.1";
+  version = "0.27.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "letmaik";
     repo = "rawpy";
-    tag = "v${version}";
-    hash = "sha256-d3TxPW3GdCQT8bBbnveSxtWHkf5zinM8nSy4m/P7m7Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zM6S1oCOy6AWpaGgdgAqOUGW3rQ0Q9CxKMJoQTJPJIA=";
   };
 
   build-system = [
@@ -55,6 +55,12 @@ buildPythonPackage rec {
   env = {
     RAWPY_USE_SYSTEM_LIBRAW = 1;
   };
+
+  # cmake is only needed to build libraw when `RAWPY_USE_SYSTEM_LIBRAW` is disabled
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"cmake",' ""
+  '';
 
   pythonImportsCheck = [
     "rawpy"
@@ -88,4 +94,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

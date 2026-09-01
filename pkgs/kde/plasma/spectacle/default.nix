@@ -1,13 +1,19 @@
 {
   mkKdeDerivation,
+  pkg-config,
   qtwayland,
   qtmultimedia,
   opencv,
+  tesseractLanguages ? [ ],
+  tesseract5,
 }:
 mkKdeDerivation {
   pname = "spectacle";
 
+  extraNativeBuildInputs = [ pkg-config ];
+
   extraBuildInputs = [
+    (tesseract5.override { enableLanguages = tesseractLanguages; })
     qtwayland
     qtmultimedia
     (opencv.override {
@@ -19,5 +25,6 @@ mkKdeDerivation {
       runAccuracyTests = false; # tests will fail because of missing plugins but that's okay
     })
   ];
+
   meta.mainProgram = "spectacle";
 }

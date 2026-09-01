@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "crypto-tracker";
   version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "Nox04";
     repo = "crypto-tracker";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8tTaXpHZWcDq0Jfa9Hf258VYwfimLhYjCAzD4X/Ow0s=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ tiredofit ];
     mainProgram = "crypto-tracker";
   };
-}
+})

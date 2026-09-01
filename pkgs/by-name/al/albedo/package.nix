@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "albedo";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "coreruleset";
     repo = "albedo";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-H/ViMVzuuQYORDiNXBgs7imy+c4IaL2pY5KVN6ecJoo=";
   };
 
@@ -25,9 +25,9 @@ buildGoModule rec {
   meta = {
     description = "HTTP reflector and black hole";
     homepage = "https://github.com/coreruleset/albedo";
-    changelog = "https://github.com/coreruleset/albedo/releases/tag/v${version}";
+    changelog = "https://github.com/coreruleset/albedo/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "albedo";
   };
-}
+})

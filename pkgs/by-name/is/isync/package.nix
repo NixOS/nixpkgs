@@ -8,7 +8,6 @@
   db,
   cyrus_sasl,
   zlib,
-  perlPackages,
   autoreconfHook,
   # Disabled by default as XOAUTH2 is an "OBSOLETE" SASL mechanism and this relies
   # on a package that isn't really maintained anymore:
@@ -42,13 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ]
   ++ lib.optionals withCyrusSaslXoauth2 [ makeWrapper ];
+
   buildInputs = [
-    perlPackages.TimeDate
     openssl
     db
     cyrus_sasl
     zlib
   ];
+
+  doCheck = true;
 
   postInstall = lib.optionalString withCyrusSaslXoauth2 ''
     wrapProgram "$out/bin/mbsync" \
@@ -61,8 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "http://isync.sourceforge.net/";
-    # https://sourceforge.net/projects/isync/
+    homepage = "https://isync.sourceforge.io";
     changelog = "https://sourceforge.net/p/isync/isync/ci/v${finalAttrs.version}/tree/NEWS";
     description = "Free IMAP and MailDir mailbox synchronizer";
     longDescription = ''
@@ -72,7 +72,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      Necoro
+    ];
     mainProgram = "mbsync";
   };
 })

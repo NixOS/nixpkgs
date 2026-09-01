@@ -9,13 +9,13 @@
   libpng,
   fontconfig,
   freetype,
-  libX11,
-  libXext,
-  libXinerama,
-  libXfixes,
-  libXcursor,
-  libXft,
-  libXrender,
+  libx11,
+  libxext,
+  libxinerama,
+  libxfixes,
+  libxcursor,
+  libxft,
+  libxrender,
 
   withGL ? true,
   libGL,
@@ -59,6 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs documentation/make_*
+  ''
+  # https://github.com/fltk/fltk/commit/dd819a118cfaa889bec6563b6a8e1e969b91f7ee
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace CMake/setup.cmake \
+      --replace-fail 'set (FLTK_CONFIG_PATH FLTK.framework/Resources/CMake)' 'set (FLTK_CONFIG_PATH ''${FLTK_DATADIR}/fltk)'
   '';
 
   nativeBuildInputs = [
@@ -91,13 +96,13 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
   ]
   ++ lib.optionals withXorg [
-    libX11
-    libXext
-    libXinerama
-    libXfixes
-    libXcursor
-    libXft
-    libXrender
+    libx11
+    libxext
+    libxinerama
+    libxfixes
+    libxcursor
+    libxft
+    libxrender
   ]
   ++ lib.optionals withCairo [
     cairo
@@ -156,9 +161,6 @@ stdenv.mkDerivation (finalAttrs: {
       mv bin/{test,examples}/* $bin/bin/
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Library/Frameworks
-      mv $out{,/Library/Frameworks}/FLTK.framework
-
       moveAppBundles() {
         echo "Moving and symlinking $1"
         appname="$(basename "$1")"
