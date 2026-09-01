@@ -57,12 +57,10 @@ let
         + ''
           with subtest("atop.service should write some data to /var/log/atop"):
 
-              def has_data_files(last: bool) -> bool:
+              def has_data_files(_remaining: float | None) -> bool:
                   files = int(machine.succeed("ls -1 /var/log/atop | wc -l"))
                   if files == 0:
                       machine.log("Did not find at least one 1 data file")
-                      if not last:
-                          machine.log("Will retry...")
                       return False
                   return True
 
@@ -82,12 +80,10 @@ let
 
           with subtest("atopacct.service should write data to /run/pacct_shadow.d"):
 
-              def has_data_files(last: bool) -> bool:
+              def has_data_files(_remaining: float | None) -> bool:
                   files = int(machine.succeed("ls -1 /run/pacct_shadow.d | wc -l"))
                   if files == 0:
                       machine.log("Did not find at least one 1 data file")
-                      if not last:
-                          machine.log("Will retry...")
                       return False
                   return True
 
