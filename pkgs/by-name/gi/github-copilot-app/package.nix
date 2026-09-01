@@ -95,7 +95,8 @@ stdenv.mkDerivation {
         cp -r *.app $out/Applications/
 
         mkdir -p $out/bin
-        ln -s "$out/Applications/"*.app/Contents/MacOS/* $out/bin/github-copilot-app
+        ln -s "$out/Applications/"*.app/Contents/MacOS/git-credential-copilot "$out"/bin/git-credential-copilot
+        ln -s "$out/Applications/"*.app/Contents/MacOS/github "$out"/bin/github-copilot-app
       ''
     else
       ''
