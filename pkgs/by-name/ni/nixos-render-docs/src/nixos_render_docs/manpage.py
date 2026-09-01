@@ -85,6 +85,9 @@ class ManpageRenderer(Renderer):
     _do_parbreak_stack: list[bool]
     _list_stack: list[List]
     _font_stack: list[str]
+    _in_table_cell: bool
+    _table_cell_content: Optional[str]
+    _table_row_cells: list[str]
 
     def __init__(self, manpage_urls: Mapping[str, str], href_targets: dict[str, str]):
         super().__init__(manpage_urls)
@@ -93,11 +96,21 @@ class ManpageRenderer(Renderer):
         self._do_parbreak_stack = []
         self._list_stack = []
         self._font_stack = []
+        self._in_table_cell = False
+        self._table_cell_content = None
+        self._table_row_cells = []
 
     def _join_block(self, ls: Iterable[str]) -> str:
         return "\n".join([ l for l in ls if len(l) ])
     def _join_inline(self, ls: Iterable[str]) -> str:
         return _normalize_space(super()._join_inline(ls))
+
+    def renderInline(self, tokens: Sequence[Token]) -> str:
+        result = super().renderInline(tokens)
+        if self._in_table_cell:
+            self._table_cell_content = result
+            return ""
+        return result
 
     def _enter_block(self) -> None:
         self._do_parbreak_stack.append(False)
@@ -286,3 +299,51 @@ class ManpageRenderer(Renderer):
     def ordered_list_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         self._list_stack.pop()
         return ""
+    def table_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        aligns = []
+        for j in range(i + 1, len(tokens)):
+            if tokens[j].type == 'thead_close':
+                break
+            elif tokens[j].type == 'th_open':
+                style = cast(str, tokens[j].attrs.get('style', 'left')).removeprefix('text-align:')
+                aligns.append({'left': 'l', 'center': 'c', 'right': 'r'}[style])
+        header_spec = " ".join(f"{a}b" for a in aligns)
+        body_spec = " ".join(aligns)
+        return (
+            ".RS 4\n"
+            ".TS\n"
+            "allbox;\n"
+            f"{header_spec}\n"
+            f"{body_spec} ."
+        )
+    def table_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return ".TE\n.RE"
+    def thead_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return ""
+    def thead_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return ""
+    def tbody_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return ""
+    def tbody_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return ""
+    def tr_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        self._table_row_cells = []
+        return ""
+    def tr_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "\t".join(self._table_row_cells) or "\\&"
+    def _table_cell_open(self) -> str:
+        self._in_table_cell = True
+        self._table_cell_content = None
+        return ""
+    def _table_cell_close(self) -> str:
+        self._in_table_cell = False
+        self._table_row_cells.append(self._table_cell_content or "")
+        return ""
+    def th_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return self._table_cell_open()
+    def th_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return self._table_cell_close()
+    def td_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return self._table_cell_open()
+    def td_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return self._table_cell_close()

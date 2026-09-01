@@ -26,6 +26,7 @@ class CommonMarkRenderer(Renderer):
     _parstack: list[Par]
     _link_stack: list[str]
     _list_stack: list[List]
+    _table_header_count: int
 
     def __init__(self, manpage_urls: Mapping[str, str], admonition_style: AdmonitionStyle = AdmonitionStyle.PLAIN):
         super().__init__(manpage_urls)
@@ -228,3 +229,29 @@ class CommonMarkRenderer(Renderer):
         if title := cast(str, token.attrs.get('title', '')):
             title = ' "' + title.replace('"', '\\"') + '"'
         return f'![{token.content}]({token.attrs["src"]}{title})'
+    # Markdown tables aren't supported in base CommonMark,
+    # but raw HTML tables are for some inexplicable reason
+    def table_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "\n<table>\n"
+    def table_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "</table>\n"
+    def thead_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "<thead>\n"
+    def thead_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "</thead>\n"
+    def tr_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "<tr>\n"
+    def tr_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "</tr>\n"
+    def th_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "<th>"
+    def th_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "</th>\n"
+    def tbody_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "<tbody>\n"
+    def tbody_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "</tbody>\n"
+    def td_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "<td>"
+    def td_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "</td>\n"
