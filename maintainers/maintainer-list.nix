@@ -2244,6 +2244,11 @@
     githubId = 59250656;
     matrix = "@vegardbm:matrix.org";
   };
+  araucaria223 = {
+    name = "Max Allfrey";
+    github = "araucaria223";
+    githubId = 105236839;
+  };
   arbel-arad = {
     email = "arbel@spacetime.technology";
     github = "arbel-arad";
