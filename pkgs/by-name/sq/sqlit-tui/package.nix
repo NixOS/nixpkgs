@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sqlit-tui";
-  version = "1.6.1";
+  version = "1.6.3";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "Maxteabag";
     repo = "sqlit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xKlL6Q32v7lD9RCwlkJidYmtwXqNiXLf9W57c7hxjFI=";
+    hash = "sha256-KV89xPmyTDL/VaViyPn9bosTQsnBER5AeGaiFWLU1Xc=";
   };
 
   build-system = with python3Packages; [
@@ -25,6 +25,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     setuptools-scm
   ];
 
+  pythonRelaxDeps = [
+    "textual-fastdatatable"
+  ];
   dependencies = with python3Packages; [
     docker
     duckdb

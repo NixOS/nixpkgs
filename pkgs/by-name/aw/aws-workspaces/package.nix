@@ -16,6 +16,9 @@
   gdk-pixbuf,
   protobufc,
   cyrus_sasl,
+  pcsclite,
+  libfido2,
+  lz4,
 }:
 
 let
@@ -64,6 +67,9 @@ buildFHSEnv {
     protobufc
     cyrus_sasl
     wayland
+    pcsclite
+    libfido2
+    lz4
   ];
 
   extraBwrapArgs = [
