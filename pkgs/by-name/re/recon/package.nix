@@ -1,19 +1,19 @@
 {
   lib,
-  flutter338,
+  flutter347,
   fetchFromGitHub,
   nix-update-script,
 }:
 
-flutter338.buildFlutterApplication rec {
+flutter347.buildFlutterApplication (finalAttrs: {
   pname = "recon";
-  version = "0.12.1-beta";
+  version = "0.12.2-beta";
 
   src = fetchFromGitHub {
     owner = "Nutcake";
     repo = "Recon";
-    tag = "v${version}";
-    hash = "sha256-21fnYTjv4IWeR2kWzSIks1jZLpYJe3JAJbcMuKzCUSc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-y1dW8Llf3/5d5Tx6x0NCERowsSlsIntchWhCGvtfw6Y=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -28,4 +28,4 @@ flutter338.buildFlutterApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ bddvlpr ];
   };
-}
+})
