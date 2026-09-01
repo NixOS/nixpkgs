@@ -7,7 +7,6 @@
 }:
 let
   cfg = config.virtualisation.virtualbox.guest;
-  kernel = config.boot.kernelPackages;
 
   mkVirtualBoxUserService = serviceArgs: verbose: {
     description = "VirtualBox Guest User Services ${serviceArgs}";
@@ -25,7 +24,7 @@ let
     preStart = "${pkgs.bash}/bin/bash -c \"if [ -z $DISPLAY ]; then exit 1; fi\"";
     serviceConfig = {
       ExecStart =
-        "@${kernel.virtualboxGuestAdditions}/bin/VBoxClient"
+        "@${cfg.package}/bin/VBoxClient"
         + (lib.strings.optionalString verbose " --verbose")
         + " --foreground ${serviceArgs}";
       # Wait after a failure, hoping that the display environment is ready after waiting
@@ -65,6 +64,8 @@ in
       type = lib.types.bool;
       description = "Whether to enable the VirtualBox service and other guest additions.";
     };
+
+    package = lib.mkPackageOption config.boot.kernelPackages "virtualboxGuestAdditions" { };
 
     clipboard = lib.mkOption {
       default = true;
@@ -115,9 +116,9 @@ in
           }
         ];
 
-        environment.systemPackages = [ kernel.virtualboxGuestAdditions ];
+        environment.systemPackages = [ cfg.package ];
 
-        boot.extraModulePackages = lib.mkIf cfg.use3rdPartyModules [ kernel.virtualboxGuestAdditions ];
+        boot.extraModulePackages = lib.mkIf cfg.use3rdPartyModules [ cfg.package ];
 
         systemd.services.virtualbox = {
           description = "VirtualBox Guest Services";
@@ -128,7 +129,7 @@ in
 
           unitConfig.ConditionVirtualization = "oracle";
 
-          serviceConfig.ExecStart = "@${kernel.virtualboxGuestAdditions}/bin/VBoxService VBoxService --foreground";
+          serviceConfig.ExecStart = "@${cfg.package}/bin/VBoxService VBoxService --foreground";
         };
 
         users.groups.vboxuserdev = { };
