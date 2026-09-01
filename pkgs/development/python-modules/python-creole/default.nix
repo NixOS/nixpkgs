@@ -12,6 +12,7 @@
   docutils,
 
   # tests
+  pytest-cov-stub,
   pytestCheckHook,
   readme-renderer,
   textile,
@@ -43,8 +44,6 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace Makefile \
       --replace "/bin/bash" "${runtimeShell}"
-
-    sed -i "/-cov/d" pytest.ini
   '';
 
   propagatedBuildInputs = [ docutils ];
@@ -52,6 +51,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "creole" ];
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytestCheckHook
     readme-renderer
     textile
