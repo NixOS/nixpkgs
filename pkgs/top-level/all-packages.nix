@@ -8247,7 +8247,7 @@ with pkgs;
     patches = config."2bwm".patches or [ ];
   };
 
-  inherit (qt6Packages.callPackage ../applications/office/activitywatch { })
+  inherit (callPackage ../applications/office/activitywatch { })
     aw-qt
     aw-notify
     aw-server-rust
