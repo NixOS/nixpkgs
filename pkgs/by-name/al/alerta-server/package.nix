@@ -50,5 +50,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     mainProgram = "alertad";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    knownVulnerabilities = [
+      "CVE-2026-34400: vulnerable to SQL injection via the Postgres query parser, which built WHERE clauses by interpolating user-supplied search terms directly into SQL strings via f-strings. This issue has been patched in version 9.1.0." # 505619 in nixpkgs
+    ];
   };
 })
