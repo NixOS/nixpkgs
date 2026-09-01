@@ -4,12 +4,7 @@
   fetchurl,
   makeFontsConf,
   appimageTools,
-  qtbase,
-  qtsvg,
-  qtmultimedia,
-  qtwebsockets,
-  qtimageformats,
-  wrapQtAppsHook,
+  qt5,
   autoPatchelfHook,
   desktop-file-utils,
   imagemagick,
@@ -45,18 +40,18 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
     desktop-file-utils
     imagemagick
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
   buildInputs = [
     libsodium
     libopus
     libGL
     alsa-lib
-    qtbase
-    qtsvg
-    qtmultimedia
-    qtwebsockets
-    qtimageformats
+    qt5.qtbase
+    qt5.qtsvg
+    qt5.qtmultimedia
+    qt5.qtwebsockets
+    qt5.qtimageformats
     libx11
     libxscrnsaver
     libxcursor
