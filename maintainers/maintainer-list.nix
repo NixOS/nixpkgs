@@ -23674,6 +23674,12 @@
     github = "rachalaraj";
     githubId = 124191100;
   };
+  raducu427 = {
+    name = "Marius Raducan";
+    email = "marius-catalin.raducan@tuta.io";
+    github = "raducu427";
+    githubId = 32168993;
+  };
   RadxaYuntian = {
     # This is the work account for @MakiseKurisu
     name = "ZHANG Yuntian";
