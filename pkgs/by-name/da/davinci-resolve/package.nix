@@ -372,9 +372,29 @@ buildFHSEnv {
         writeShellScript name ''
           exec "$(dirname "$0")/${execName}" ${bin} "$@"
         '';
-      wrappers = {
+      # The BRAW tools bundle their own Qt (5.9) under BlackmagicRAWPlayer/lib
+      # and .../plugins. The shared davinci-wrapper forces Resolve's Qt (5.15)
+      # via LD_LIBRARY_PATH/QT_PLUGIN_PATH, which segfaults these apps in
+      # QGraphicsView/QFileDialog. Re-enter the FHS env but point those vars at
+      # the app's own Qt before exec'ing.
+      mkBrawWrapper =
+        name: bin:
+        let
+          appDir =
+            if builtins.hasPrefix "BlackmagicRAWPlayer" bin
+            then "${davinci}/BlackmagicRAWPlayer"
+            else "${davinci}/BlackmagicRAWSpeedTest";
+        in
+        writeShellScript name ''
+          export LD_LIBRARY_PATH="${appDir}/lib"
+          export QT_PLUGIN_PATH="${appDir}/plugins"
+          exec "$(dirname "$0")/${execName}" ${bin} "$@"
+        '';
+      brawWrappers = {
         "blackmagicraw-player" = "${davinci}/BlackmagicRAWPlayer/BlackmagicRAWPlayer";
         "blackmagicraw-speedtest" = "${davinci}/BlackmagicRAWSpeedTest/BlackmagicRAWSpeedTest";
+      };
+      wrappers = {
         "davinci-control-panels-setup" =
           ''"${davinci}/DaVinci Control Panels Setup/DaVinci Control Panels Setup"'';
         "davinci-fairlight-studio-utility" =
@@ -404,6 +424,12 @@ buildFHSEnv {
         lib.mapAttrsToList (name: bin: ''
           ln -s ${mkWrapper name bin} $out/bin/${name}
         '') wrappers
+      )}
+      # BRAW tools need their own Qt (5.9); install them with the dedicated wrapper
+      ${lib.concatStringsSep "\n" (
+        lib.mapAttrsToList (name: bin: ''
+          ln -s ${mkBrawWrapper name bin} $out/bin/${name}
+        '') brawWrappers
       )}
 
       # MIME type definitions for .drp, .braw, etc.
