@@ -4,6 +4,9 @@
   stdenv,
   chicken,
   makeWrapper,
+
+  # Release-specific arguments, supplied by the per-release directory.
+  overridesFile,
 }:
 {
   src,
@@ -24,8 +27,7 @@ let
       assert nameVersionAssertion (args ? name && !args ? version);
       lib.getName args.name;
   version = if args ? version then args.version else lib.getVersion args.name;
-  name = if args ? name then args.name else "${args.pname}-${args.version}";
-  overrides = callPackage ./overrides.nix { };
+  overrides = callPackage overridesFile { };
   override = if builtins.hasAttr pname overrides then builtins.getAttr pname overrides else lib.id;
 in
 (stdenv.mkDerivation (
@@ -48,7 +50,18 @@ in
 
     buildPhase = ''
       runHook preBuild
+
+      # From CHICKEN 6 on, chicken-install takes a lock in its egg cache even
+      # when building an egg from the current directory, and the cache defaults
+      # to a location under HOME, which is not writable in the sandbox. The
+      # cache itself stays empty: with -cached, chicken-install builds the
+      # unpacked egg in place. The install phase runs in the same shell, so it
+      # inherits this.
+      export CHICKEN_EGG_CACHE="$NIX_BUILD_TOP/chicken-egg-cache"
+      mkdir -p "$CHICKEN_EGG_CACHE"
+
       chicken-install -cached -no-install -host ${lib.escapeShellArgs chickenInstallFlags}
+
       runHook postBuild
     '';
 
@@ -59,7 +72,10 @@ in
       export CHICKEN_INSTALL_REPOSITORY=$out/lib/chicken/${toString chicken.binaryVersion}
       chicken-install -cached -host ${lib.escapeShellArgs chickenInstallFlags}
 
-      # Patching generated .egg-info instead of original .egg to work around https://bugs.call-cc.org/ticket/1855
+      # Patching the generated .egg-info instead of the original .egg to work
+      # around https://bugs.call-cc.org/ticket/1855, which is unfixed as of
+      # CHICKEN 6.0.0: eggs whose .egg carries no version property are
+      # installed without one.
       csi -e "(write (cons '(version \"${version}\") (read)))" < "$CHICKEN_INSTALL_REPOSITORY/${pname}.egg-info" > "${pname}.egg-info.new"
       mv "${pname}.egg-info.new" "$CHICKEN_INSTALL_REPOSITORY/${pname}.egg-info"
 
