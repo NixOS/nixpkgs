@@ -2656,10 +2656,10 @@
     name = "Astavie";
   };
   asterismono = {
-    email = "cmiki@amono.me";
+    email = "i@nvirellia.im";
     github = "AsterisMono";
     githubId = 54884471;
-    name = "Chatnoir Miki";
+    name = "Noa Virellia";
     matrix = "@mikiiki:matrix.org";
   };
   astratagem = {
