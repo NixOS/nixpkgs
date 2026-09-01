@@ -1213,6 +1213,9 @@ let
         SCSI_LOWLEVEL_PCMCIA = yes;
         SCSI_SAS_ATA = yes; # added to enable detection of hard drive
 
+        # Required for booting our ISO in qemu's IBM pSeries machine emulation mode via '-cdrom'.
+        SCSI_IBMVSCSI = lib.mkIf (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian) yes;
+
         SPI = yes; # needed for many devices
         SPI_MASTER = yes;
 
