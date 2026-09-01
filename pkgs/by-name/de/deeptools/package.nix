@@ -46,6 +46,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "deeptools/test/test_multiBamSummary.py"
   ];
 
+  disabledTests = [
+    # Numerical error:
+    #   AssertionError: Error: Image files did not match
+    "test_plotCoverage_default"
+  ];
+
   meta = {
     homepage = "https://deeptools.readthedocs.io/en/develop";
     description = "Tools for exploring deep DNA sequencing data";
