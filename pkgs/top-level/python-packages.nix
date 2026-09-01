@@ -15813,16 +15813,7 @@ self: super: with self; {
 
   pyqt-builder = callPackage ../development/python-modules/pyqt-builder { };
 
-  pyqt3d = pkgs.libsForQt5.callPackage ../development/python-modules/pyqt3d {
-    inherit (self)
-      buildPythonPackage
-      pyqt5
-      pyqt-builder
-      python
-      setuptools
-      sip
-      ;
-  };
+  pyqt3d = callPackage ../development/python-modules/pyqt3d { };
 
   pyqt5 = callPackage ../development/python-modules/pyqt/5.x.nix { inherit (pkgs) mesa; };
 
