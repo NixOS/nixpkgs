@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation {
   pname = "ggmorse";
-  version = "0-unstable-2024-05-31";
+  version = "0-unstable-2026-08-24";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "ggmorse";
-    rev = "8fb433d6cd6a71940f51b5724663ec0c75bf0b62";
-    hash = "sha256-6GhyPhzNNAx1DSomfIfejbnLTckKa7/+VUZhSaGvGtI=";
+    rev = "7b4822a8cfdbb1addfe497f3ae8186f142a4ee79";
+    hash = "sha256-cxWGcMvqUtdgtQUPnqBMaSmACXPg7lx1AgW2cJbUGQQ=";
   };
 
   postPatch = ''

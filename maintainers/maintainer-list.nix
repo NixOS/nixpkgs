@@ -349,6 +349,12 @@
     githubId = 43320117;
     name = "Sebastian Marquardt";
   };
+  _81reap = {
+    email = "prayag.bhakar@gmail.com";
+    github = "81reap";
+    githubId = 20740005;
+    name = "Prayag Bhakar";
+  };
   _9999years = {
     email = "rbt@fastmail.com";
     github = "9999years";
@@ -7248,6 +7254,12 @@
     matrix = "@dimitarnestorov:matrix.org";
     github = "DimitarNestorov";
     githubId = 8790386;
+  };
+  dinckelman = {
+    name = "Ivan Sosnov";
+    email = "ivanmsosnov@gmail.com";
+    github = "dinckelman";
+    githubId = 12545914;
   };
   diogomdp = {
     email = "me@diogodp.dev";

@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "runpodctl";
-  version = "2.9.0";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "runpod";
     repo = "runpodctl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0QMDJ7xdVfm3kPYgJcNgyyInSY8UWbbzQI0bT69x1us=";
+    hash = "sha256-tQ7xOSG47BZbCieeKjBNgjBciwiIuyaC/dZvHbkmDnc=";
   };
 
   vendorHash = "sha256-aCrN521urP1FioTmbcR1BNKg+OCith1mabyayuC9FtI=";
