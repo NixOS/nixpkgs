@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Proxy Authentication Token - Fast authentication gateway for backend APIs";
+    description = "Edge reverse proxy for OIDC/API authentication and dashboards";
     homepage = "https://git.proxyauth.app/ProxyAuth/ProxyAuth";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ liberodark ];
