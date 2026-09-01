@@ -1,32 +1,43 @@
 { lib
-, stdenv
+, buildNpmPackage
 , fetchFromGitHub
-,
+, makeWrapper
+, electron
 }:
 
-stdenv.mkDerivation {
+buildNpmPackage rec {
   pname = "lumen-browser";
   version = "0.9.9";
 
   src = fetchFromGitHub {
     owner = "network-lumen";
     repo = "browser";
-    rev = "v0.9.9";
-    sha256 = "sha256-soVW0Wj5Jf/GUoUc5xzGC2OROacChRMj0FR9dzqqjwk=";
+    rev = "v${version}";
+    hash = "sha256-soVW0Wj5Jf/GUoUc5xzGC2OROacChRMj0FR9dzqqjwk=";
   };
 
-  installPhase = ''
+  npmDepsHash = "sha256-OtwQkkGzbqC9Z4qgg5A9xfFUoOsbjr7t2wGsZnNsCNY=";
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  npmFlags = [ "--ignore-scripts" ];
+
+  dontNpmBuild = false;
+
+  postInstall = ''
+    cp -r . $out/lib/node_modules/lumen-browser/
+
     mkdir -p $out/bin
-    echo "Installing lumen-browser from source..."
-    # Add actual build/install steps here once source structure is verified
-    touch $out/bin/lumen-browser
-    chmod +x $out/bin/lumen-browser
+    makeWrapper ${electron}/bin/electron $out/bin/lumen-browser \
+      --add-flags "$out/lib/node_modules/lumen-browser/electron/main.cjs" \
+      --add-flags "\$@"
   '';
 
   meta = with lib; {
     description = "Native browser for the Lumen ecosystem providing direct access to on-chain state and IPFS";
     homepage = "https://github.com/network-lumen/browser";
-    license = licenses.unfree;
+    license = licenses.mit;
     platforms = [ "x86_64-linux" ];
+    mainProgram = "lumen-browser";
   };
 }
