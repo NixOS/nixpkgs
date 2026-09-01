@@ -26,4 +26,4 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [ rokuroo171 ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})
