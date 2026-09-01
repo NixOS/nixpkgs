@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
+  unstableGitUpdater,
   meson,
   ninja,
   pkg-config,
@@ -33,6 +34,10 @@ stdenv.mkDerivation {
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
     stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
   ) "-U__ARM_NEON__";
+
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = {
     homepage = "https://github.com/Samsung/rlottie";
