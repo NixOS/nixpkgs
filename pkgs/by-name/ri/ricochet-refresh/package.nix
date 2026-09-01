@@ -86,5 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/blueprint-freespeech/ricochet-refresh/releases";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
+    teams = with lib.teams; [ ngi ];
   };
 })
