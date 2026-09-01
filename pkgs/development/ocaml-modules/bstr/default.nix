@@ -6,19 +6,22 @@
 
 buildDunePackage (finalAttrs: {
   pname = "bstr";
-  version = "0.0.2";
+  version = "0.0.4";
 
   minimalOCamlVersion = "4.13";
 
   src = fetchurl {
     url = "https://github.com/robur-coop/bstr/releases/download/v${finalAttrs.version}/bstr-${finalAttrs.version}.tbz";
-    hash = "sha256-/zvzCBzT014OesTmxGBDB98ZRU++YNDLUZ8uaDK3keM=";
+    hash = "sha256-ZAg28VstVVvfI2b213g5JuEVmK1+lFV7Fnx4WyVfSFY=";
   };
 
   meta = {
     description = "A simple library for bigstrings";
     homepage = "https://git.robur.coop/robur/bstr";
-    license = lib.licenses.mit;
+    license = [
+      lib.licenses.mit
+      lib.licenses.isc
+    ];
     maintainers = [ lib.maintainers.vbgl ];
   };
 })
