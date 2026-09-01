@@ -7,6 +7,8 @@
   setuptools,
   pyasn1,
   unittestCheckHook,
+  gssapi,
+  withGssapi ? false,
 }:
 
 buildPythonPackage rec {
@@ -41,7 +43,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ pyasn1 ];
+  dependencies = [ pyasn1 ] ++ lib.optional withGssapi gssapi;
 
   nativeCheckInputs = [ unittestCheckHook ];
 

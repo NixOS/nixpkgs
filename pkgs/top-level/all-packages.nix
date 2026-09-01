@@ -9105,8 +9105,6 @@ with pkgs;
 
   ringboard-wayland = callPackage ../by-name/ri/ringboard/package.nix { displayServer = "wayland"; };
 
-  ripcord = qt5.callPackage ../applications/networking/instant-messengers/ripcord { };
-
   inherit (callPackage ../applications/networking/cluster/rke2 { })
     rke2_1_33
     rke2_1_34
