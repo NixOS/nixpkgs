@@ -24871,6 +24871,12 @@
     githubId = 129837916;
     name = "Rohith S";
   };
+  rokuroo171 = {
+    email = "mrakkakhairilazwar@gmail.com";
+    github = "rokuroo171";
+    githubId = 238833795;
+    name = "Rakka";
+  };
   rolfschr = {
     email = "rolf.schr@posteo.de";
     github = "rolfschr";
