@@ -27063,6 +27063,11 @@
     github = "snapdgn";
     githubId = 85608760;
   };
+  snemeow = {
+    github = "SugarNekoE";
+    githubId = 25338540;
+    name = "Asai Neko";
+  };
   snglth = {
     email = "illia@ishestakov.com";
     github = "snglth";
