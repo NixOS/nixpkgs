@@ -23538,6 +23538,11 @@
     githubId = 39232833;
     name = "Jonas";
   };
+  q00 = {
+    github = "Q00";
+    githubId = 31264094;
+    name = "Q00";
+  };
   q3k = {
     email = "q3k@q3k.org";
     github = "q3k";
