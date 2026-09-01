@@ -23,6 +23,8 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-KrlStBYsE8PwAH7C7WzLezLffBFcmj/1cA0YJq/hkkU=";
   };
 
+  __darwinAllowLocalNetworking = true;
+
   build-system = [ setuptools ];
 
   dependencies = [
