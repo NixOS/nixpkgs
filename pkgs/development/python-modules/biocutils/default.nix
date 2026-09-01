@@ -42,6 +42,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Miscellaneous utilities for BiocPy, mostly to mimic base functionality in R";
     homepage = "https://github.com/BiocPy/BiocUtils";
+    changelog = "https://github.com/BiocPy/biocutils/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ b-rodrigues ];
   };
