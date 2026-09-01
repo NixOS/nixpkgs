@@ -28102,6 +28102,12 @@
     githubId = 5991987;
     name = "Alexander Sosedkin";
   };
+  t4ce = {
+    email = "jonasb@post.com";
+    github = "t4ce";
+    githubId = 7328864;
+    name = "Jonas Baethke";
+  };
   t4ccer = {
     email = "t4ccer@gmail.com";
     github = "t4ccer";
