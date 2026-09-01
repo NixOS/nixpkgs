@@ -7830,6 +7830,10 @@ with pkgs;
 
   nushellPlugins = recurseIntoAttrs (callPackage ../by-name/nu/nushell/plugins { });
 
+  nushellCustomCompletions = recurseIntoAttrs {
+    claude = callPackage ../by-name/nu/nushell-custom-completion-claude/package.nix { };
+  };
+
   net-tools =
     # some platforms refer back to this from unixtools, so this is needed to
     # break the cycle
