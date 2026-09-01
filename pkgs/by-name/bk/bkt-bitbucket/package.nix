@@ -9,6 +9,8 @@ buildGoModule (finalAttrs: {
   pname = "bkt-bitbucket";
   version = "0.33.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "avivsinai";
     repo = "bitbucket-cli";
