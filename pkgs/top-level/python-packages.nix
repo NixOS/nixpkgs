@@ -12036,6 +12036,8 @@ self: super: with self; {
 
   nitrokey = callPackage ../development/python-modules/nitrokey { };
 
+  nitypes = callPackage ../development/python-modules/nitypes { };
+
   niworkflows = callPackage ../development/python-modules/niworkflows { };
 
   nix-kernel = callPackage ../development/python-modules/nix-kernel { inherit (pkgs) nix; };
