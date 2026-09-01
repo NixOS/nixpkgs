@@ -69,10 +69,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
       "$out/share/man/man1/kotonoha.1"
   '';
 
-  # Python's wrapper is a shell script, so wrapQtAppsHook does not detect it.
+  # Pass Qt's wrapper arguments to Python's generated launcher directly.
+  # This avoids wrapping the same script a second time.
   dontWrapQtApps = true;
-  postFixup = ''
-    wrapQtApp "$out/bin/kotonoha"
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   pythonImportsCheck = [
