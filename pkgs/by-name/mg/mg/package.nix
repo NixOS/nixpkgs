@@ -2,45 +2,35 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pkg-config,
-  ncurses,
-  buildPackages,
+  autoreconfHook,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mg";
-  version = "7.3-unstable-2024-06-04";
+  version = "4.0";
 
   src = fetchFromGitHub {
-    owner = "ibara";
+    owner = "troglobit";
     repo = "mg";
-    rev = "4d4abcfc793554dbd4effdba8a3cc28ce2654c33";
-    hash = "sha256-+sp8Edu5UWv73TCNVZTeH5rl2Q5XarYrlTYHuQsroVs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Ja6z/aFdsdlqAoWsevCOUySIE8At4yS3wsmDbjbU0dk=";
   };
 
-  postPatch = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-    substituteInPlace configure --replace "./conftest" "echo"
-  '';
+  nativeBuildInputs = [ autoreconfHook ];
 
   enableParallelBuilding = true;
+  strictDeps = true;
+  __structuredAttrs = true;
 
-  makeFlags = [
-    "PKG_CONFIG=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
-  ];
-
-  installPhase = ''
-    install -m 555 -Dt $out/bin mg
-    install -m 444 -Dt $out/share/man/man1 mg.1
-  '';
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [ ncurses ];
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Micro GNU/emacs, a portable version of the mg maintained by the OpenBSD team";
-    homepage = "https://man.openbsd.org/OpenBSD-current/man1/mg.1";
+    description = "Micro (GNU) Emacs-like text editor";
+    homepage = "https://github.com/troglobit/mg";
+    maintainers = with lib.maintainers; [ cve ];
     license = lib.licenses.publicDomain;
     mainProgram = "mg";
     platforms = lib.platforms.all;
   };
-}
+})
