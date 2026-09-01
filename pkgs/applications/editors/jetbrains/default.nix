@@ -28,7 +28,11 @@ let
       // extras
     );
 
-  _idea-oss = mkSrcIde ./ides/idea-oss.nix { };
+  _idea-oss = mkSrcIde ./ides/idea-oss.nix {
+    mkJetBrainsSource = callPackage ./source/build.nix {
+      jbr = jetbrains.jdk-no-jcef;
+    };
+  };
 
   # The binary builds use the same libdbm and fsnotifier as the current idea-oss source build.
   mkBinIde =
