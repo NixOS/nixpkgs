@@ -114,11 +114,11 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
-      preStart = "ln -sf ${pkgs.writeText "config.js" configJsData} ${dataDir}/config.js";
       environment.THELOUNGE_PACKAGES = mkIf (cfg.plugins != [ ]) "${plugins}";
       serviceConfig = {
         User = "thelounge";
         StateDirectory = baseNameOf dataDir;
+        ExecStartPre = "${lib.getExe' pkgs.coreutils "ln"} -sf ${pkgs.writeText "config.js" configJsData} ${dataDir}/config.js";
         ExecStart = "${getExe cfg.package} start";
       };
     };
