@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "1.3.1";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kludex";
     repo = "starlette";
     tag = version;
-    hash = "sha256-0eby4cDIU2bPUv+1qSTnZtfo4kkgMDIDYnZ9wp2wtoI=";
+    hash = "sha256-Cp6wkRxbDdC+Yf3z4TvRF5xrchJ+PAo36qHbBg+FcXw=";
   };
 
   build-system = [ hatchling ];
