@@ -217,6 +217,9 @@ in
               }
               // {
                 HOME = "/var/lib/gitea-runner/${name}";
+                INSTANCE_DIR = "/var/lib/gitea-runner/${name}";
+                TOKEN_HASH_FILE = "/var/lib/gitea-runner/${name}/.token-hash";
+                LABELS_FILE = "/var/lib/gitea-runner/${name}/.labels";
               };
             path =
               with pkgs;
@@ -227,8 +230,11 @@ in
             serviceConfig = {
               DynamicUser = true;
               User = "gitea-runner";
-              StateDirectory = "gitea-runner";
-              WorkingDirectory = "-/var/lib/gitea-runner/${name}";
+              StateDirectory = [
+                "gitea-runner"
+                "gitea-runner/${name}"
+              ];
+              WorkingDirectory = "/var/lib/gitea-runner/${name}";
 
               # gitea-runner might fail when gitea is restarted during upgrade.
               Restart = "on-failure";
@@ -236,15 +242,9 @@ in
 
               ExecStartPre = [
                 (pkgs.writeShellScript "gitea-register-runner-${name}" ''
-                  export INSTANCE_DIR="$STATE_DIRECTORY/${name}"
-                  mkdir -vp "$INSTANCE_DIR"
-                  cd "$INSTANCE_DIR"
-
                   # force reregistration on changed token or labels
-                  export TOKEN_HASH_FILE="$INSTANCE_DIR/.token-hash"
                   export TOKEN_HASH_CURRENT="$(printf '%s' "$TOKEN" | sha256sum | cut -d' ' -f1)"
                   export TOKEN_HASH_STORED="$(cat "$TOKEN_HASH_FILE" 2>/dev/null || echo "")"
-                  export LABELS_FILE="$INSTANCE_DIR/.labels"
                   export LABELS_WANTED="$(echo ${escapeShellArg (concatStringsSep "\n" instance.labels)} | sort)"
                   export LABELS_CURRENT="$(cat $LABELS_FILE 2>/dev/null || echo 0)"
 
