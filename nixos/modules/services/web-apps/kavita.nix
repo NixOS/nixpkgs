@@ -103,6 +103,7 @@ in
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}'        0750 ${cfg.user} ${cfg.user} - -"
       "d '${cfg.dataDir}/config' 0750 ${cfg.user} ${cfg.user} - -"
+      "L '${cfg.dataDir}/EmailTemplates' - - - - ${cfg.package}/lib/kavita/backend/EmailTemplates/"
     ];
 
     users = {
