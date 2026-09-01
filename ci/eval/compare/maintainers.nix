@@ -50,29 +50,33 @@ let
 
   anyMatchingFiles = files: lib.any anyMatchingFile files;
 
+  isIgnoredFile = file: lib.hasPrefix "pkgs/top-level/" file;
+
   relevantFilenames =
     drv:
-    (lib.unique (
-      map (pos: lib.removePrefix nixpkgsRoot pos.file) (
-        lib.filter (x: x != null) [
-          (drv.meta.maintainersPosition or null)
-          (drv.meta.teamsPosition or null)
-          (lib.unsafeGetAttrPos "src" drv)
-          (lib.unsafeGetAttrPos "pname" drv)
-          (lib.unsafeGetAttrPos "version" drv)
-        ]
-        ++ lib.optionals (drv ? meta.position) [
-          # Use ".meta.position" for cases when most of the package is
-          # defined in a "common" section and the only place where
-          # reference to the file with a derivation the "pos"
-          # attribute.
-          #
-          # ".meta.position" has the following form:
-          #   "pkgs/tools/package-management/nix/default.nix:155"
-          # We transform it to the following:
-          #   { file = "pkgs/tools/package-management/nix/default.nix"; }
-          { file = lib.head (lib.splitString ":" drv.meta.position); }
-        ]
+    (lib.filter (file: !(isIgnoredFile file)) (
+      lib.unique (
+        map (pos: lib.removePrefix nixpkgsRoot pos.file) (
+          lib.filter (x: x != null) [
+            (drv.meta.maintainersPosition or null)
+            (drv.meta.teamsPosition or null)
+            (lib.unsafeGetAttrPos "src" drv)
+            (lib.unsafeGetAttrPos "pname" drv)
+            (lib.unsafeGetAttrPos "version" drv)
+          ]
+          ++ lib.optionals (drv ? meta.position) [
+            # Use ".meta.position" for cases when most of the package is
+            # defined in a "common" section and the only place where
+            # reference to the file with a derivation the "pos"
+            # attribute.
+            #
+            # ".meta.position" has the following form:
+            #   "pkgs/tools/package-management/nix/default.nix:155"
+            # We transform it to the following:
+            #   { file = "pkgs/tools/package-management/nix/default.nix"; }
+            { file = lib.head (lib.splitString ":" drv.meta.position); }
+          ]
+        )
       )
     ));
 
