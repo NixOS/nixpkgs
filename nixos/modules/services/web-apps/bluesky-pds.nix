@@ -33,7 +33,7 @@ let
           ${getExe pkgs.bluesky-pdsadmin} "$@"
     '';
 in
-# All defaults are from https://github.com/bluesky-social/pds/blob/0b5cd1179f4fcf2643e5ead5cf4ac56c5cdeda3b/installer.sh
+# All defaults are from https://github.com/bluesky-social/pds/blob/1010a4a9a8576678f6e840fe3e43561b922a8035/installer.sh
 {
   imports = [
     (lib.mkRenamedOptionModule [ "services" "pds" "enable" ] [ "services" "bluesky-pds" "enable" ])
@@ -74,7 +74,7 @@ in
 
           PDS_BLOB_UPLOAD_LIMIT = mkOption {
             type = types.str;
-            default = "104857600";
+            default = "314572800";
             description = "Size limit of uploaded blobs in bytes";
           };
 
