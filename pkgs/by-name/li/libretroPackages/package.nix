@@ -15,19 +15,20 @@ stdenvNoCC.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
-    echo >&2 "'libretroPackages' is a package set, not an installable package."
-    echo >&2 "Use an individual core instead, e.g., 'libretro.mgba'."
-    exit 1
+    runHook preInstall
+
+    mkdir -p $out
+
+    runHook postInstall
   '';
 
   meta = {
     description = "Dummy package for the libretro package set";
-    hydraPlatforms = [ ];
     # XXX: nixpkgs-merge-bot needs this package to evaluate clearly to allow
     # the individual cores to be merged, and that members that want to merge
     # via bot to be added to this list instead of each individual core.
     platforms = lib.platforms.all;
     teams = [ lib.teams.libretro ];
-    members = [ ];
+    maintainers = [ ];
   };
 }

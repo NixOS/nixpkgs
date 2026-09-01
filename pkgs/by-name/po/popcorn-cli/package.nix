@@ -10,13 +10,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "popcorn-cli";
-  version = "1.3.30";
+  version = "1.3.31";
 
   src = fetchFromGitHub {
     owner = "gpu-mode";
     repo = "popcorn-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8bP9oQiAoCqtUsqaMVUa6Y59wNw0hCszczbRSLraLg0=";
+    hash = "sha256-GX5uspmQIff9BeF4RIp6xpP/n08ZXIpFosBmM2vNjh0=";
   };
 
   cargoHash = "sha256-hVmsLNBZLXP6fqc30Q6ZAVYlLTIJKWujNStuEPFDeYk=";

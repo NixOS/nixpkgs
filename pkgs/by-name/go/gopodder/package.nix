@@ -7,17 +7,17 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "gopodder";
-  version = "1.2.3";
+  version = "1.2.4";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cbrgm";
     repo = "gopodder";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vW2LaAyAcuN5FI81vF2goHt6JZLN3WlXxqcVkJ5Vy6c=";
+    hash = "sha256-OXjtaWm1A/y5RQt/RvwDhRi9eVCZ+mvNRx23XjrK6XM=";
   };
 
-  vendorHash = "sha256-3/RmfX0hsw9ynMi1eUKKvD/C+enf7UPUkqy+sAiFAiY=";
+  vendorHash = "sha256-MHgh84kzztPLETf3O24lNcfVuOKntKYidczqG8qEyzE=";
 
   ldflags = [
     "-s"
