@@ -15841,16 +15841,7 @@ self: super: with self; {
     inherit (pkgs) mesa;
   };
 
-  pyqtchart = pkgs.libsForQt5.callPackage ../development/python-modules/pyqtchart {
-    inherit (self)
-      buildPythonPackage
-      pyqt5
-      pyqt-builder
-      python
-      setuptools
-      sip
-      ;
-  };
+  pyqtchart = callPackage ../development/python-modules/pyqtchart { };
 
   pyqtdarktheme = callPackage ../development/python-modules/pyqtdarktheme { };
 
