@@ -72,7 +72,7 @@ in
       type = lib.types.str;
       default = "/var/lib/secrets-ng-ng-age/host/${config.networking.hostName}";
       description = ''
-        The directory where the age backend will store encrypted variables on the
+        The directory where the age backend will store encrypted secrets on the
         host machine.
       '';
     };
@@ -81,7 +81,7 @@ in
       type = lib.types.str;
       default = "/var/lib/secrets-ng-ng-age/target";
       description = ''
-        The directory where the age backend will store encrypted variables on the
+        The directory where the age backend will store encrypted secrets on the
         target machine.
       '';
     };
