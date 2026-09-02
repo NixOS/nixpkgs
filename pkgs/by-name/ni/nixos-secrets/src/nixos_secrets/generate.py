@@ -28,6 +28,7 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
             raise SecretsError(f"Invalid secret name '{gen_name}'")
 
     order = execution_order(config)
+    updated = 0
 
     # Bubblewrap requires usernamespaces to be enabled, so it won't work (by
     # default) in places like Ubuntu. At @Qubasa's suggestion, I have thus made it
@@ -245,8 +246,9 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
 
             set_meta(args, config, generator, meta)
             up_to_date_meta[entry] = meta
+            updated += 1
 
-    print(f"Successfully updated {len(order)} secret(s).")
+    print(f"Successfully updated {updated} secret(s).")
 
     fixup_all(args, config)
 

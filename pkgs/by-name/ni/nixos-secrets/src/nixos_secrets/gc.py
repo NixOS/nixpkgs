@@ -1,5 +1,5 @@
 from .args import SecretsArgs
-from .config import SecretsConfig
+from .config import SecretsConfig, meta_file_name
 from .exec import list_secrets, delete_secret, fixup_all
 
 
@@ -23,6 +23,9 @@ def collect_garbage(args: SecretsArgs, config: SecretsConfig):
 
         print(f"Backend '{backend.name}':")
         for gen_name, file_name in sorted(unspecified):
+            if file_name == meta_file_name:
+                continue
+
             if args.dry_run:
                 print(f"- Would delete '{gen_name}/{file_name}'")
             else:
