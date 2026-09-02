@@ -1606,6 +1606,7 @@ in
   searx = runTest ./searx.nix;
   seatd = runTest ./seatd.nix;
   seerr = runTest ./seerr.nix;
+  selfoss = runTest ./selfoss.nix;
   send = runTest ./send.nix;
   service-runner = runTest ./service-runner.nix;
   servo = runTest ./servo.nix;
