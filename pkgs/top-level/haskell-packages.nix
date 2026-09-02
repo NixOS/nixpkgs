@@ -102,6 +102,26 @@ let
       { haskellLib = haskellLibUncomposable.compose; } // args
     );
 
+  # The `-tools` and `-stage1` rungs are build-hosted by definition: they are
+  # the programs that *build* a compiler, not anything a target ever runs.
+  #
+  # Splicing nonetheless insists on a host-indexed instance of every attribute
+  # in `haskell.packages` and `haskell.compiler`, and merely naming
+  # `buildPackages.haskell.compiler."ghcNG-X-stage1"` forces it. On a cross
+  # build that instance would need a bootstrap GHC running on the *host*, which
+  # hadrian refuses outright:
+  #
+  #     GHC >= 9.6 can't be cross-compiled.
+  #
+  # There is no aarch64-hosted `unlit` anyone would want, so rather than define
+  # a nonsense rung and let it throw, the host instance simply *is* the build
+  # one. Natively the two coincide and this is the identity.
+  ngBuildHosted =
+    get: mk: name: args:
+    if stdenv.buildPlatform == stdenv.hostPlatform then mk args else get buildPackages.haskell name;
+  ngToolRung = ngBuildHosted (h: name: h.packages.${name}) ngPackageSet;
+  ngToolCompiler = ngBuildHosted (h: name: h.compiler.${name}) ngCompiler;
+
   ngCompiler = args: callPackage ../development/compilers/ghc/ng/compiler.nix args;
 in
 {
@@ -256,13 +276,13 @@ in
       #              but runs here, and stage1's `unlit` likewise.
       #
       # That is the `_wrappers` off-by-one, spelled out.
-      "ghcNG-9_14-stage1" = ngCompiler {
+      "ghcNG-9_14-stage1" = ngToolCompiler "ghcNG-9_14-stage1" {
         ghcVersion = ngReleases."9.14";
         stage = "stage1";
         packages = packages."ghcNG-9_14-stage1";
         toolsPkgs = buildPackages.haskell.packages."ghcNG-9_14-tools";
       };
-      "ghcNG-head-stage1" = ngCompiler {
+      "ghcNG-head-stage1" = ngToolCompiler "ghcNG-head-stage1" {
         ghcVersion = ngReleases.head;
         stage = "stage1";
         packages = packages."ghcNG-head-stage1";
@@ -410,12 +430,12 @@ in
       #
       #   -tools, -stage1   built by the bootstrap compiler (ghc9103)
       #   (unsuffixed)      built by `compiler."ghcNG-X-stage1"`
-      "ghcNG-9_14-tools" = ngPackageSet {
+      "ghcNG-9_14-tools" = ngToolRung "ghcNG-9_14-tools" {
         ghcVersion = ngReleases."9.14";
         stage = "tools";
         basePkgs = packages.ghc9103;
       };
-      "ghcNG-9_14-stage1" = ngPackageSet {
+      "ghcNG-9_14-stage1" = ngToolRung "ghcNG-9_14-stage1" {
         ghcVersion = ngReleases."9.14";
         stage = "stage1";
         basePkgs = packages.ghc9103;
@@ -432,12 +452,12 @@ in
         ghc = bh.compiler."ghcNG-9_14-stage1";
       };
 
-      "ghcNG-head-tools" = ngPackageSet {
+      "ghcNG-head-tools" = ngToolRung "ghcNG-head-tools" {
         ghcVersion = ngReleases.head;
         stage = "tools";
         basePkgs = packages.ghc9103;
       };
-      "ghcNG-head-stage1" = ngPackageSet {
+      "ghcNG-head-stage1" = ngToolRung "ghcNG-head-stage1" {
         ghcVersion = ngReleases.head;
         stage = "stage1";
         basePkgs = packages.ghc9103;
