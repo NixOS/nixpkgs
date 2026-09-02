@@ -1,0 +1,3 @@
+[Mount]
+What=/dev/ventoy
+Where=/run/ventoy
