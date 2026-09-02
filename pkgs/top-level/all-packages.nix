@@ -5425,7 +5425,7 @@ with pkgs;
     boost191
     ;
 
-  boost = boost189;
+  boost = boost191;
 
   botanEsdm = botan3.override { withEsdm = true; };
 
