@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  options,
   pkgs,
   ...
 }:
@@ -406,7 +407,7 @@ in
 
           ln -s ${kernelPath} $out/kernel
           ln -s ${config.system.modulesTree} $out/kernel-modules
-          ${optionalString (config.hardware.deviceTree.package != null) ''
+          ${optionalString (options ? hardware.deviceTree && config.hardware.deviceTree.package != null) ''
             ln -s ${config.hardware.deviceTree.package} $out/dtbs
           ''}
 

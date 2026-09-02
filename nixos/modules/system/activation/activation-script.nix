@@ -278,7 +278,7 @@ in
       "D /var/empty 0555 root root -"
       "h /var/empty - - - - +i"
     ]
-    ++ lib.optionals config.nix.enable [
+    ++ lib.optionals (config.nix.enable or false) [
       # Prevent the current configuration from being garbage-collected.
       "d /nix/var/nix/gcroots -"
       "L+ /nix/var/nix/gcroots/current-system - - - - /run/current-system"

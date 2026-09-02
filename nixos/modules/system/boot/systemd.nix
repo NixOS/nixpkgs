@@ -68,7 +68,7 @@ let
     "systemd-udevd-varlink.socket"
     "systemd-udevd.service"
   ]
-  ++ (optional (!config.boot.isContainer) "systemd-udev-trigger.service")
+  ++ (optional (!(config.boot.isContainer or false)) "systemd-udev-trigger.service")
   ++ [
     # hwdb.bin is managed by NixOS
     # "systemd-hwdb-update.service"
@@ -100,7 +100,7 @@ let
     "dev-mqueue.mount"
     "sys-fs-fuse-connections.mount"
   ]
-  ++ (optional (!config.boot.isContainer) "sys-kernel-config.mount")
+  ++ (optional (!(config.boot.isContainer or false)) "sys-kernel-config.mount")
   ++ [
     "sys-kernel-debug.mount"
     "sys-kernel-tracing.mount"
@@ -248,7 +248,7 @@ let
     "factory-reset.target.wants"
   ];
 
-  proxy_env = config.networking.proxy.envVars;
+  proxy_env = config.networking.proxy.envVars or { };
 
   json = pkgs.formats.json { };
 
@@ -741,7 +741,7 @@ in
         config.system.fsPackages
         ++ [ cfg.package.util-linux ]
         # systemd-ssh-generator needs sshd in PATH
-        ++ lib.optional config.services.openssh.enable config.services.openssh.package
+        ++ lib.optional (config.services.openssh.enable or false) config.services.openssh.package
       );
       LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
       TZDIR = "/etc/zoneinfo";
@@ -888,7 +888,7 @@ in
     # permission to run the command. This next part is only enabled if polkit is enabled because the
     # error that we’re trying to avoid can’t possibly happen if polkit isn’t enabled. When polkit isn’t
     # enabled, run0 will fail before it even tries to run the command.
-    security.pam.services = mkIf config.security.polkit.enable {
+    security.pam.services = mkIf (config.security.polkit.enable or false) {
       systemd-run0 = {
         # Upstream config: https://github.com/systemd/systemd/blob/main/src/run/systemd-run0.in
         setLoginUid = true;
@@ -899,7 +899,7 @@ in
     # the systemd vmspawn credential dropin executes sshd and expects ExecSearchPath to be set, see:
     # https://github.com/systemd/systemd/blob/v259.3/src/vmspawn/vmspawn.c#L2662
     # this service is used, for example, when NixOS is started via systemd-vmspawn
-    systemd.services."sshd-vsock@" = mkIf config.services.openssh.enable {
+    systemd.services."sshd-vsock@" = mkIf (config.services.openssh.enable or false) {
       serviceConfig.ExecSearchPath = "${config.services.openssh.package}/bin";
       overrideStrategy = "asDropin";
     };
@@ -907,7 +907,7 @@ in
     # Fix paths in sshd-vsock.socket
     # https://github.com/systemd/systemd/blob/v259.3/src/ssh-generator/ssh-generator.c#L239
     # this socket is used, for example, when NixOS is started via systemd-vmspawn
-    systemd.sockets.sshd-vsock = mkIf config.services.openssh.enable {
+    systemd.sockets.sshd-vsock = mkIf (config.services.openssh.enable or false) {
       overrideStrategy = "asDropin";
       socketConfig.ExecStartPost = [
         ""
