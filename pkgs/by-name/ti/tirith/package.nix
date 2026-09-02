@@ -5,6 +5,7 @@
   stdenv,
   installShellFiles,
   versionCheckHook,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (final: {
   pname = "tirith";
@@ -78,6 +79,8 @@ rustPlatform.buildRustPackage (final: {
       --zsh <("$out/bin/tirith" completions zsh) \
       --fish <("$out/bin/tirith" completions fish)
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Shell security tool that guards against homograph URL attacks, pipe-to-shell exploits, and other command-line threats before they execute";
