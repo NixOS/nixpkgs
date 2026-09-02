@@ -18,6 +18,8 @@ buildGoModule (finalAttrs: {
   pname = "typescript-go";
   version = "7.0.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "typescript";
