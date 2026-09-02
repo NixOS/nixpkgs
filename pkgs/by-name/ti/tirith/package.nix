@@ -8,19 +8,24 @@
 }:
 rustPlatform.buildRustPackage (final: {
   pname = "tirith";
-  version = "0.3.3";
+  version = "0.4.1";
   src = fetchFromGitHub {
     owner = "sheeki03";
     repo = "tirith";
     tag = "v${final.version}";
-    hash = "sha256-kU/HeCW4QNS1Ica69YZkdSgL3gsbDOJVGTyINZOnHUQ=";
+    hash = "sha256-WyLcLKQ75UVaE6WtT0CaxfDS4qY/ShO9roMxQJPp5qE=";
   };
 
-  cargoHash = "sha256-r13gquMmfJhR5N8Vu3/R+3SWUyVWyJFE6fiJbqbE5n4=";
+  cargoHash = "sha256-MYYAltyAFFt1BSkOwWpMEKw5rzQfduzDG7JcBEzKbOg=";
 
   cargoBuildFlags = [
     "-p"
     "tirith"
+  ];
+
+  # crates/tirith/tests/* needs git, a PTY, network, or a writable home
+  cargoTestFlags = [
+    "--bins"
   ];
 
   postPatch = ''
@@ -42,6 +47,22 @@ rustPlatform.buildRustPackage (final: {
     "--skip=init_zsh_output"
     # fails with: no such file or directory
     "--skip=cli::checkpoint::tests::restore_checkpoint_nonzero_on_partial_failure"
+    "--skip=cli::checkpoint::tests::run_command_preserves_multiple_argv_boundaries"
+    # nix sandbox: /bin/sh is not root-owned, no POSIX ACLs, HOME=/homeless-shelter, no ptrace
+    "--skip=cli::capsule::"
+    "--skip=cli::capsule_child::"
+    "--skip=cli::install::tests::"
+    "--skip=cli::selfupdate::tests::extract_tirith_binary"
+    "--skip=cli::selfupdate::tests::hermes_install_proof"
+    "--skip=cli::selfupdate::tests::lost_hermes_reproof"
+    "--skip=cli::setup::fs_helpers::tests::cli_runner"
+    "--skip=cli::setup::run_impl::tests::generated_tirith_bin"
+    "--skip=cli::setup::tools::tests::"
+    "--skip=cli::task_receipt_keys::"
+    "--skip=cli::fetch::tests::human_renderer_neutralizes_untrusted_terminal_controls"
+    "--skip=cli::gateway::tests::exact_launch_"
+    # tirith-threatdb-compile: needs a git checkout
+    "--skip=git_source_revision_and_tracked_cleanliness_are_enforced"
   ];
 
   nativeBuildInputs = lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
