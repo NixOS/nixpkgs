@@ -9100,7 +9100,6 @@ with pkgs;
   ringboard-wayland = callPackage ../by-name/ri/ringboard/package.nix { displayServer = "wayland"; };
 
   inherit (callPackage ../applications/networking/cluster/rke2 { })
-    rke2_1_33
     rke2_1_34
     rke2_1_35
     rke2_1_36
