@@ -2099,7 +2099,7 @@ mapAliases {
   purple-plugin-pack = throw "'purple-plugin-pack' has been renamed to/replaced by 'pidginPackages.purple-plugin-pack'"; # Converted to throw 2025-10-27
   purple-slack = throw "'purple-slack' has been renamed to/replaced by 'pidginPackages.purple-slack'"; # Converted to throw 2025-10-27
   purple-vk-plugin = throw "'purple-vk-plugin' has been removed as upstream repository was deleted and no active forks are found."; # Added 2025-09-17
-  purple-xmpp-http-upload = throw "'purple-xmpp-http-upload' has been renamed to/replaced by 'pidginPackages.purple-xmpp-http-upload'"; # Converted to throw 2025-10-27
+  purple-xmpp-http-upload = throw "'purple-xmpp-http-upload' has been removed because it is no longer maintained upstream."; # Added 2026-09-02
   pyca = throw "'pyca' was removed, because it was hard to maintain and not required by anything"; # Added 2026-07-31
   pyCA = warnAlias "'pyCA' was renamed to 'pyca'" pyca; # Added 2026-02-12
   pylint-exit = throw "'pylint-exit' was removed as it dependent on m2r which was removed."; # Added 2026-05-27
