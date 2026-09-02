@@ -28,6 +28,7 @@
   nixos-rebuild-ng,
   colmena,
   nix-update,
+  nix-update-script,
   nix-init,
   nurl,
 
@@ -190,23 +191,7 @@ lib.makeExtensible (
     lix_2_94 = self.makeLixScope {
       attrName = "lix_2_94";
 
-      lix-args = rec {
-        version = "2.94.2";
-
-        src = fetchFromGitea {
-          domain = "git.lix.systems";
-          owner = "lix-project";
-          repo = "lix";
-          rev = version;
-          hash = "sha256-Nmqsl/YCnBW5U3TUfFWHGVUbyS2/Ll655BAE3qZilC4=";
-        };
-
-        cargoDeps = rustPlatform.fetchCargoVendor {
-          name = "lix-${version}";
-          inherit src;
-          hash = "sha256-APm8m6SVEAO17BBCka13u85/87Bj+LePP7Y3zHA3Mpg=";
-        };
-
+      lix-args = (import ./2.94.nix { inherit fetchFromGitea rustPlatform; }) // {
         patches = [
           lixMdbookPatch
         ];
@@ -216,23 +201,7 @@ lib.makeExtensible (
     lix_2_95 = self.makeLixScope {
       attrName = "lix_2_95";
 
-      lix-args = rec {
-        version = "2.95.3";
-
-        src = fetchFromGitea {
-          domain = "git.lix.systems";
-          owner = "lix-project";
-          repo = "lix";
-          rev = version;
-          hash = "sha256-rEhhsqccghnnJHjsqCCBzdD7PyF/ibDe8zadnajBmjI=";
-        };
-
-        cargoDeps = rustPlatform.fetchCargoVendor {
-          name = "lix-${version}";
-          inherit src;
-          hash = "sha256-a5XtutX+NS4wOqxeqbscWZMs99teKick5+cQfbCRGxQ=";
-        };
-
+      lix-args = (import ./2.95.nix { inherit fetchFromGitea rustPlatform nix-update-script; }) // {
         patches = [
           lixFunctional2TimeoutPatch
         ];
@@ -242,23 +211,7 @@ lib.makeExtensible (
     git = self.makeLixScope {
       attrName = "git";
 
-      lix-args = rec {
-        version = "2.96.0-pre-20260408_${builtins.substring 0 12 src.rev}";
-
-        src = fetchFromGitea {
-          domain = "git.lix.systems";
-          owner = "lix-project";
-          repo = "lix";
-          rev = "bc9fb560ac2d36cd317a856ee96785ea2055fbff";
-          hash = "sha256-bONRPjhk5OZdnkQZexZNJzlvwIPg31Gy7fNiwGoX3BQ=";
-        };
-
-        cargoDeps = rustPlatform.fetchCargoVendor {
-          name = "lix-${version}";
-          inherit src;
-          hash = "sha256-a5XtutX+NS4wOqxeqbscWZMs99teKick5+cQfbCRGxQ=";
-        };
-      };
+      lix-args = import ./git.nix { inherit fetchFromGitea rustPlatform; };
     };
 
     latest = self.lix_2_95;

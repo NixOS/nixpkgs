@@ -10,6 +10,7 @@
   docCargoDeps ? null,
   patches ? [ ],
   knownVulnerabilities ? [ ],
+  updateScript ? null,
 }@args:
 
 assert lib.assertMsg (
@@ -504,6 +505,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit aws-sdk-cpp boehmgc;
+    inherit updateScript;
     tests = {
       misc = nixosTests.nix-misc.default.passthru.override { nixPackage = finalAttrs.finalPackage; };
       installer = nixosTests.installer.simple.override { selectNixPackage = _: finalAttrs.finalPackage; };
