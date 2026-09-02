@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   nodejs,
-  pnpm_10,
+  pnpm_10_latest,
   pnpmConfigHook,
   fetchPnpmDeps,
   makeWrapper,
@@ -33,6 +33,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       pnpmInstallFlags
       pnpmWorkspaces
       ;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 3;
     hash = "sha256-1DaR4q1QH07UR+EchfDI92bTdRY4C2IaGIRj426DURI=";
   };
@@ -47,7 +48,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    pnpm_10
+    pnpm_10_latest
     pnpmConfigHook
     makeWrapper
   ];

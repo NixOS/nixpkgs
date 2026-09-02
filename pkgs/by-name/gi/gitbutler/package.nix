@@ -19,7 +19,7 @@
   pkg-config,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_10_latest,
   rust,
   rustPlatform,
   turbo,
@@ -28,7 +28,7 @@
   dart-sass,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitbutler";

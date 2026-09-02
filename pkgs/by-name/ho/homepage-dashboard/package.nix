@@ -3,7 +3,7 @@
   node-gyp-build,
   makeBinaryWrapper,
   nodejs,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   python3,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       ;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 3;
     hash = "sha256-suevJNExlktuuCXRYEi8603qrxeEPLYaYp9MO2hnLEk=";
   };
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeBinaryWrapper
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
 

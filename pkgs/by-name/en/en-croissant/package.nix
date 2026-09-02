@@ -6,7 +6,7 @@
   fetchPnpmDeps,
 
   nodejs,
-  pnpm_10,
+  pnpm_10_latest,
   pnpmConfigHook,
   cargo-tauri,
   jq,
@@ -23,7 +23,7 @@
 }:
 
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "en-croissant";

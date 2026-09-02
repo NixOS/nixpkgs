@@ -9,7 +9,7 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_10_latest,
   prisma_7,
   prisma-engines_7,
   openssl,
@@ -20,7 +20,7 @@
   basePath ? "",
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 
   sources = lib.importJSON ./sources.json;
 

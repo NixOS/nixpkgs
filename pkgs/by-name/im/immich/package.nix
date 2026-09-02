@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_10_latest,
   python3,
   nodejs,
   node-gyp,
@@ -37,7 +37,7 @@
   buildPackages,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 
   esbuild' = buildPackages.esbuild.override {
     buildGoModule =

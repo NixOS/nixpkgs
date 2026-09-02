@@ -5,13 +5,13 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_10_latest,
   makeBinaryWrapper,
   versionCheckHook,
   nix-update-script,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "conventional-changelog-cli";

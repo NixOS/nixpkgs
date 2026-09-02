@@ -10,7 +10,7 @@
   fd,
   jq,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_10_latest,
   which,
 
   # runtime
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 3;
     hash = "sha256-qrx8JtIAmn0JEsFwptrHlOL0IaYPJPLzjuDWNs7XFfc=";
   };
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     fd
     jq
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
     nodejs_24
     which
   ];

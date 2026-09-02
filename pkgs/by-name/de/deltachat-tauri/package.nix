@@ -13,7 +13,7 @@
   openssl,
   perl,
   pkg-config,
-  pnpm_10,
+  pnpm_10_latest,
   pnpmConfigHook,
   python3,
   rustPlatform,
@@ -24,7 +24,7 @@
 }:
 
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deltachat-tauri";

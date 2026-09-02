@@ -17,6 +17,11 @@ let
         "CVE-2026-50017"
         "CVE-2026-50573"
         "CVE-2026-55699"
+        "CVE-2026-59194"
+        "CVE-2026-59195"
+        "CVE-2026-59196"
+        "CVE-2026-82392"
+        "CVE-2026-82393"
       ];
     };
     "9" = {
@@ -30,6 +35,11 @@ let
         "CVE-2026-50017"
         "CVE-2026-50573"
         "CVE-2026-55699"
+        "CVE-2026-59194"
+        "CVE-2026-59195"
+        "CVE-2026-59196"
+        "CVE-2026-82392"
+        "CVE-2026-82393"
       ];
     };
     # 10.29.3 made a breaking change: https://github.com/pnpm/pnpm/issues/10601.
@@ -38,6 +48,7 @@ let
     "10_29_2" = {
       version = "10.29.2";
       hash = "sha256-hAL2daH0zJ1PJ7v6s1wtSi4dfrATHfA9rQlhnoZnTQw=";
+      enableUpdateScript = false;
       knownVulnerabilities = [
         "CVE-2026-48995"
         "CVE-2026-50014"
@@ -46,11 +57,34 @@ let
         "CVE-2026-50017"
         "CVE-2026-50573"
         "CVE-2026-55699"
+        "CVE-2026-59194"
+        "CVE-2026-59195"
+        "CVE-2026-59196"
+        "CVE-2026-82392"
+        "CVE-2026-82393"
       ];
     };
+    # 10.34.1 tightened remote tarball integrity checks, which can break existing lockfiles.
+    # Keep the compatibility variant at 10.34.0 for out-of-tree consumers.
     "10" = {
       version = "10.34.0";
       hash = "sha256-WOFDJYhx31FYm2UcBiBdq+xIdmpdu6PCWZm2m1C+WY4=";
+      enableUpdateScript = false;
+      knownVulnerabilities = [
+        "CVE-2026-55487"
+        "CVE-2026-55698"
+        "CVE-2026-55180"
+        "CVE-2026-55697"
+        "CVE-2026-59194"
+        "CVE-2026-59195"
+        "CVE-2026-59196"
+        "CVE-2026-82392"
+        "CVE-2026-82393"
+      ];
+    };
+    "10_latest" = {
+      version = "10.34.5";
+      hash = "sha256-zLXEecqxsAYhMlv+fUyaioAx56Ul1ySeJ17L7IGwjbI=";
     };
     "11" = {
       version = "11.21.0";
@@ -59,15 +93,21 @@ let
   };
 
   callPnpm =
-    variant:
+    packageAttrName: variant:
     callPackage ./generic.nix (
       variant
       // {
+        inherit packageAttrName;
         #FIXME: remove this hack in a future version.
         nodejs = null; # Passing null to detect out-of-tree overrides
       }
     );
 
-  mkPnpm = versionSuffix: variant: nameValuePair "pnpm_${versionSuffix}" (callPnpm variant);
+  mkPnpm =
+    versionSuffix: variant:
+    let
+      packageAttrName = "pnpm_${versionSuffix}";
+    in
+    nameValuePair packageAttrName (callPnpm packageAttrName variant);
 in
 mapAttrs' mkPnpm variants

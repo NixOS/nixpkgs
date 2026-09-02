@@ -13,7 +13,7 @@
   nodejs,
   openssl,
   pkg-config,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   replaceVars,
@@ -76,7 +76,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 3;
     hash = "sha256-jggr8RPEdBS0s5mNF4rGk+G0jeOWhLU0O7+SUIuNRrA=";
   };
@@ -89,7 +89,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nodejs
     pkg-config
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     makeBinaryWrapper

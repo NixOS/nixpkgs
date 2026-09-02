@@ -15,7 +15,7 @@
   pango,
   pixman,
   pkg-config,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   python3,
@@ -24,7 +24,7 @@
 }:
 
 let
-  pnpm = pnpm_10.override { nodejs-slim = nodejs-slim_22; };
+  pnpm = pnpm_10_latest.override { nodejs-slim = nodejs-slim_22; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sharkey";
@@ -39,11 +39,20 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  # This upstream release's lockfile lacks integrity fields required by pnpm >= 10.34.1.
+  # Remove this packaging patch when updating to a source lockfile that includes them.
+  patches = [ ./add-pnpm-tarball-integrity.patch ];
+
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
+    inherit (finalAttrs)
+      patches
+      pname
+      src
+      version
+      ;
     pnpm = pnpm;
     fetcherVersion = 3;
-    hash = "sha256-wrA5Huv7b/P+5MNbScN9KzNwdHMtuceHu+Lw/C9lKlI=";
+    hash = "sha256-zB8Ho0mRr5Zc72zkqwDbmy2D7DrpdxQ5fG0Fv6YVbHE=";
   };
 
   nativeBuildInputs = [

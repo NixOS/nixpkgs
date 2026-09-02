@@ -7,7 +7,7 @@
   copyDesktopItems,
   nodejs,
   pkg-config,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   wails,
@@ -42,7 +42,7 @@ let
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
-      pnpm_10
+      pnpm_10_latest
     ];
 
     pnpmDeps = fetchPnpmDeps {
@@ -52,7 +52,7 @@ let
         src
         sourceRoot
         ;
-      pnpm = pnpm_10;
+      pnpm = pnpm_10_latest;
       fetcherVersion = 3;
       hash = "sha256-gr6XIhLKWSOJ4LWiliOvMoA9QbPiohrCPmvObz49/pw=";
     };

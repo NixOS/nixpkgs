@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_10,
+  pnpm_10_latest,
   pnpmConfigHook,
   fetchPnpmDeps,
   nodejs,
@@ -10,7 +10,7 @@
 }:
 
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 
   # Separately build matrix-js-sdk, as upstream expects to 'pnpm i && pnpm build' in the dependency's directory
   # Keep this in sync with upstream locked version (likely a stable release, but not always latest)

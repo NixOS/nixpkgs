@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   nodejs-slim_24,
-  pnpm_10,
+  pnpm_10_latest,
   pnpmConfigHook,
   jq,
   fetchFromGitHub,
@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 3;
     hash = "sha256-CJE8fZEgde06Mm3sg9tRfbU/5jHT9caP67ODWCjQyJI=";
   };
@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs-slim_24
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
     jq
     makeWrapper
   ];

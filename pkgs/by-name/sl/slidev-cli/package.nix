@@ -3,13 +3,13 @@
   stdenv,
   fetchFromGitHub,
   fetchPnpmDeps,
-  pnpm_10,
+  pnpm_10_latest,
   nodejs,
   pnpmConfigHook,
   nix-update-script,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "slidev-cli";
