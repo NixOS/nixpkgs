@@ -3,6 +3,7 @@
   emacs,
   writeText,
   cowsay,
+  replaceVars,
 }:
 
 let
@@ -20,7 +21,9 @@ runCommand "test-emacs-withPackages-wrapper"
       (emacs.pkgs.withPackages (epkgs: [
         epkgs.dash
         epkgs.flx-ido
-        (mkEpkg "with-packages" ./with-packages.el epkgs.melpaBuild)
+        (mkEpkg "with-packages" (replaceVars ./with-packages.el {
+          inherit (builtins) storeDir;
+        }) epkgs.melpaBuild)
         (mkEpkg "early-default" ./early-default.el epkgs.melpaBuild)
         (mkEpkg "default" ./default.el epkgs.melpaBuild)
         cowsay

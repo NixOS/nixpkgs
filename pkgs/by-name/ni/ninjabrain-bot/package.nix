@@ -58,6 +58,7 @@ maven.buildMavenPackage (finalAttrs: {
 
     install -Dm444 target/ninjabrainbot-${finalAttrs.version}-jar-with-dependencies.jar $out/share/java/ninjabrain-bot.jar
 
+    install -Dm644 src/main/resources/icon.png $out/share/icons/hicolor/512x512/apps/ninjabrain-bot.png
     install -Dm644 src/main/resources/icon.png $out/share/icons/hicolor/640x640/apps/ninjabrain-bot.png
 
     # Swing text rendering varies outside full desktop environments.
