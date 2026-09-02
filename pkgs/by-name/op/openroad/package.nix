@@ -43,14 +43,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openroad";
-  version = "26Q2";
+  version = "26Q3";
 
   src = fetchFromGitHub {
     owner = "The-OpenROAD-Project";
     repo = "OpenROAD";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-dB9PfPlp6vZ9+Th8LJE65BW9YeuUL0G4JtjzQxg6UpQ=";
+    hash = "sha256-jElAb8mM2lhGwa8wTONfQgs7esL9p1beAReJXAWns9o=";
   };
 
   nativeBuildInputs = [
@@ -103,22 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-W9USjqp/hL1s3w3nKVMo/a5aSkeQ4Lp7gqASbZSlo9Y=";
       stripLen = 1;
       extraPrefix = "src/sta/";
-    })
-    # Feature-test std::from_chars to fix aarch64-darwin build where
-    # libcxx marks from_chars unavailable (macOS 26.0).
-    # https://github.com/The-OpenROAD-Project/OpenSTA/commit/a5921d1ca
-    (fetchpatch {
-      url = "https://github.com/The-OpenROAD-Project/OpenSTA/commit/a5921d1ca964971ada83be2c7c65bb84504fe179.patch";
-      hash = "sha256-j9BneXSIya/euYiol16swmrFkXTDZNTQwq3tPFkCLH0=";
-      stripLen = 1;
-      extraPrefix = "src/sta/";
-    })
-    # Replace deprecated sprintf with snprintf in Logger::error.
-    # macOS Apple SDK 14.4+ marks sprintf as deprecated, breaking -Werror builds.
-    # https://github.com/The-OpenROAD-Project/OpenROAD/pull/10127
-    (fetchpatch {
-      url = "https://github.com/The-OpenROAD-Project/OpenROAD/commit/2a9191bc5b2841a0c357886a2a1bc3ac0fe5271a.patch";
-      hash = "sha256-lxFZvybfG0Qpg1TyKdfZhKLYI3DSCYDE54ta6EnDBDo=";
     })
   ];
 
