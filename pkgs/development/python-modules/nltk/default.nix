@@ -113,6 +113,8 @@ buildPythonPackage (finalAttrs: {
     dataDir = pkgs.callPackage ./data-dir.nix { };
   };
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Natural Language Processing ToolKit";
     mainProgram = "nltk";
