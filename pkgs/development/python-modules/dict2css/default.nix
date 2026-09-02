@@ -1,10 +1,12 @@
 {
-  buildPythonPackage,
-  fetchPypi,
-  whey,
-  cssutils,
   lib,
+  buildPythonPackage,
+  domdf-python-tools,
+  fetchPypi,
+  tinycss2,
+  whey,
 }:
+
 buildPythonPackage rec {
   pname = "dict2css";
   version = "0.6.0";
@@ -18,13 +20,17 @@ buildPythonPackage rec {
 
   build-system = [ whey ];
 
-  dependencies = [ cssutils ];
+  dependencies = [
+    domdf-python-tools
+    tinycss2
+  ];
 
   pythonImportsCheck = [ "dict2css" ];
 
   meta = {
     description = "μ-library for constructing cascading style sheets from Python dictionaries";
     homepage = "https://github.com/sphinx-toolbox/dict2css";
+    changelog = "https://github.com/sphinx-toolbox/dict2css/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
