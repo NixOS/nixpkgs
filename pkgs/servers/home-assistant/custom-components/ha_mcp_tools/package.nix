@@ -1,5 +1,4 @@
 {
-  lib,
   buildHomeAssistantComponent,
   ha-mcp,
   nix-update-script,
@@ -12,6 +11,7 @@ buildHomeAssistantComponent {
   inherit (ha-mcp.src) owner;
 
   dependencies = [
+    ha-mcp
     ruamel-yaml
   ];
 
