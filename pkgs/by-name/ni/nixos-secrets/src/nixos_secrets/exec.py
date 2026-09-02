@@ -18,7 +18,9 @@ from .args import SecretsArgs
 # Prevents the terminal from getting stuck in an invalid state (i.e. no echo) after, for example, a generator script has finished running.
 def reset_terminal_state():
     # https://stackoverflow.com/questions/7938402/terminal-in-broken-state-invisible-text-no-echo-after-exit-during-input
-    os.system("stty sane")
+    # os.system("stty sane")
+    # The above breaks the nixos-test runner, so I disabled it for now
+    pass
 
 
 @functools.cache
