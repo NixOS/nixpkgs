@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchPnpmDeps,
-  nodejs_24,
+  nodejs_22,
   pnpm_10,
   pnpmConfigHook,
   makeWrapper,
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    nodejs_24
+    nodejs_22
     pnpm_10
     pnpmConfigHook
     makeWrapper
@@ -90,9 +90,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    export npm_config_nodedir=${nodejs_24}
+    export npm_config_nodedir=${nodejs_22}
     export npm_config_build_from_source=true
-    export PATH="${nodejs_24}/lib/node_modules/npm/bin/node-gyp-bin:$PATH"
+    export PATH="${nodejs_22}/lib/node_modules/npm/bin/node-gyp-bin:$PATH"
 
     bsq_dir=$(find node_modules/.pnpm -mindepth 2 -maxdepth 4 \
       -type d -path '*/better-sqlite3@*/node_modules/better-sqlite3' \
@@ -201,7 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf $out/lib/open-design/shells 2>/dev/null || true
 
     chmod +x $out/lib/open-design/apps/daemon/dist/cli.js
-    makeWrapper ${lib.getExe nodejs_24} $out/bin/od \
+    makeWrapper ${lib.getExe nodejs_22} $out/bin/od \
       --add-flags $out/lib/open-design/apps/daemon/dist/cli.js \
       --set NODE_ENV production \
       --run 'if [ -z "$OD_DATA_DIR" ]; then export OD_DATA_DIR="$HOME/.od"; fi'
