@@ -16,7 +16,7 @@
   kcoreaddons,
   lz4,
   xxhash,
-  ffmpeg_6,
+  ffmpeg,
   protobuf,
   openal-soft,
   minizip-ng-compat,
@@ -29,6 +29,7 @@
   boost,
   ada,
   cmark-gfm,
+  libfido2,
   libavif,
   libheif,
   libjxl,
@@ -46,14 +47,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop-unwrapped";
-  version = "7.0.2";
+  version = "7.0.9";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-G/A5J2m1sXHD50zDmMD9ehnorAGRjnQ+YGMv6DEiJcQ=";
+    hash = "sha256-zpGfubIZtTmLjAgxYGcMy2N3Xlf9NOppcxsMSUS/KEA=";
   };
 
   nativeBuildInputs = [
@@ -72,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtsvg
     lz4
     xxhash
-    ffmpeg_6
+    ffmpeg
     openal-soft
     minizip-ng-compat
     range-v3
@@ -83,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     ada
     cmark-gfm
+    libfido2
     (tdlib.override { tde2eOnly = true; })
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
