@@ -125,7 +125,7 @@ in
       type = lib.types.bool;
       default = true;
       description = ''
-        Whether or not to copy default e-mail templates [1] from upstream to `${cfg.dataDir}/EmailTemplates`
+        Whether or not to copy default e-mail templates [1] from upstream to `''${cfg.dataDir}/EmailTemplates`
 
         [1] https://github.com/Kareadita/Kavita/tree/develop/Kavita.Server/EmailTemplates
       '';
