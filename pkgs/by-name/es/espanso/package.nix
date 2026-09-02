@@ -6,6 +6,7 @@
   pkg-config,
   kdePackages,
   dbus,
+  kdotool,
   libx11,
   libxcb,
   libxi,
@@ -125,6 +126,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
                 setxkbmap
               ]
               ++ lib.optionals waylandSupport [
+                kdotool
                 wl-clipboard
               ]
               ++ lib.optionals x11Support [
