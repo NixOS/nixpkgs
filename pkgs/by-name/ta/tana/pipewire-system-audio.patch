@@ -1,0 +1,50 @@
+diff --git a/usr/lib/tana/resources/app/build/nix-pipewire-system-audio.js b/usr/lib/tana/resources/app/build/nix-pipewire-system-audio.js
+new file mode 100644
+index 0000000..ef4e521
+--- /dev/null
++++ b/usr/lib/tana/resources/app/build/nix-pipewire-system-audio.js
+@@ -0,0 +1,41 @@
++const childProcess = require("child_process");
++const stream = require("stream");
++
++function getSystemAudioPermission() {
++  return "authorized";
++}
++
++async function requestSystemAudioPermission() {
++  return "authorized";
++}
++
++async function recordSystemAudio() {
++  const output = new stream.PassThrough();
++  const recorder = childProcess.spawn(
++    "@pipewire@/bin/pw-record",
++    ["--raw", "--format", "f32", "--rate", "48000", "--channels", "2", "-"],
++    { stdio: ["ignore", "pipe", "pipe"] }
++  );
++
++  recorder.stdout.pipe(output);
++  recorder.stderr.on("data", data =>
++    console.warn("pw-record:", data.toString().trim())
++  );
++  recorder.on("error", error => output.emit("error", error));
++  recorder.on("close", (code, signal) => {
++    if (code && code !== 0) {
++      output.emit(
++        "error",
++        new Error("pw-record exited " + code + (signal ? " signal " + signal : ""))
++      );
++    } else {
++      output.end();
++    }
++  });
++  output.on("close", () => {
++    if (!recorder.killed) recorder.kill("SIGTERM");
++  });
++
++  return output;
++}
++
++exports.getSystemAudioPermission = getSystemAudioPermission;
++exports.requestSystemAudioPermission = requestSystemAudioPermission;
++exports.recordSystemAudio = recordSystemAudio;
