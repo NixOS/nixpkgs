@@ -43,6 +43,7 @@ let
     { hyprgrass = import ./hyprgrass.nix; }
     { hyprspace = import ./hyprspace.nix; }
     { hyprsplit = import ./hyprsplit.nix; }
+    { hyprslidr = import ./hyprslidr.nix; }
     (import ./hyprland-plugins.nix)
     { imgborders = import ./imgborders.nix; }
     (lib.optionalAttrs config.allowAliases {

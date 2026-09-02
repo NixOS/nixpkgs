@@ -1,0 +1,16 @@
+diff --git a/src/Slider.cpp b/src/Slider.cpp
+index 78fb8a1..2567403 100644
+--- a/src/Slider.cpp
++++ b/src/Slider.cpp
+@@ -48,6 +48,11 @@ void WinStack::focusWindow(PHLWINDOW w) {
+     }
+ }
+ 
++bool WinStack::toggleFullscreenActiveWindow() {
++    g_pCompositor->setWindowFullscreenInternal(stack[act_idx], FSMODE_FULLSCREEN);
++    return stack[act_idx]->isFullscreen();
++}
++
+ bool WinStack::isFullscreenActiveWindow() {
+     return stack[act_idx]->isFullscreen();
+ }
