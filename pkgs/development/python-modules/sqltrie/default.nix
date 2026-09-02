@@ -20,9 +20,9 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-sBu82SDOBqlQLONYgQ4eCw6MVFsLIs5/LfevP4cUDTo=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     orjson
     pygtrie
