@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unqlite";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "symisc";
     repo = "unqlite";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-HXhI+IEnBBsWzI+EriGqqkJmeyOF+Y/NJzu4rMd0eY0=";
   };
 
@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     '';
     maintainers = [ ];
     license = lib.licenses.bsd2;
+    priority = 10;
   };
-}
+})
