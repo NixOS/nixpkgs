@@ -4,13 +4,13 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   writeText,
-  ocaml-ng,
+  ocamlPackages,
   ledit,
   bash,
 }:
 
 let
-  inherit (ocaml-ng.ocamlPackages_5_4)
+  inherit (ocamlPackages)
     ocaml
     findlib
     zarith
@@ -37,18 +37,16 @@ in
 
 stdenv.mkDerivation {
   pname = "hol_light";
-  version = "0-unstable-2026-05-19";
+  version = "0-unstable-2026-09-02";
 
   src = fetchFromGitHub {
     owner = "jrh13";
     repo = "hol-light";
-    rev = "9b510bc76da4cecf6e509be44d327c9236ec273f";
-    hash = "sha256-QaTDrGHpHvEde2AK/SD7eM+bAC9vN5o+dQqW1oau1Yo=";
+    rev = "72f2059e632021b940636156925a7500a3f253fd";
+    hash = "sha256-oLIqXHwukYyJBgbglIWVcY6S5fJoWnefxMQmcwoOpek=";
   };
 
   patches = [
-    # Accept camlp5 8.05 in the pa_j chooser; submitted upstream.
-    ./0001-pa_j-accept-camlp5-8.05-for-OCaml-5.4.patch
     # Link findlib into ocaml-hol so `#use "topfind"` works in the sandbox.
     ./0002-link-findlib-into-ocaml-hol.patch
   ];
