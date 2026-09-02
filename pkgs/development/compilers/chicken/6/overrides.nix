@@ -15,6 +15,12 @@ let
   addToPropagatedBuildInputs = pkg: old: {
     propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ lib.toList pkg;
   };
+  addToCheckInputs = pkg: old: {
+    checkInputs = (old.checkInputs or [ ]) ++ lib.toList pkg;
+  };
+  addToNativeCheckInputs = pkg: old: {
+    nativeCheckInputs = (old.nativeCheckInputs or [ ]) ++ lib.toList pkg;
+  };
   addPkgConfig = old: {
     nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.pkg-config ];
   };
@@ -39,6 +45,10 @@ in
       '';
     };
 
+  address-info = {
+    # Tests require internet access
+    doCheck = false;
+  };
   # Eggs binding to a native library.
   blas = addToBuildInputsWithPkgConfig pkgs.blas;
   breadline = addToBuildInputs pkgs.readline;
@@ -82,6 +92,14 @@ in
           --replace-fail '(compile-file "crypt.import.scm" #:options `("-s" "-O2"))' ""
       '';
     };
+  crunch = {
+    # Tests fail
+    doCheck = false;
+  };
+  egg-tarballs = {
+    # To make tests look for the compiled program in PATH instead of at the same directory as csi
+    env.SALMONELLA_RUNNING = true;
+  };
   espeak = addToBuildInputsWithPkgConfig pkgs.espeak-ng;
   ezxdisp = addToBuildInputsWithPkgConfig pkgs.libx11;
   icu = addToBuildInputsWithPkgConfig pkgs.icu;
@@ -90,10 +108,17 @@ in
   # The egg bundles the leptonica headers it needs, but not the library.
   leptonic = addToBuildInputs pkgs.leptonica;
   leveldb = addToBuildInputs pkgs.leveldb;
+  lowdown = addToNativeCheckInputs [
+    pkgs.perl
+    pkgs.html-tidy
+  ];
+  memcached = addToNativeCheckInputs pkgs.memcached;
   mpi =
     old:
     (addToBuildInputs pkgs.openmpi old)
+    // (addToNativeCheckInputs pkgs.openmpi old)
     // {
+
       preBuild = ''
         mkdir -p $NIX_BUILD_TOP/mpi-dir
         ln -sf ${lib.getDev pkgs.openmpi}/include $NIX_BUILD_TOP/mpi-dir/include
@@ -101,16 +126,40 @@ in
         export MPI_DIR=$NIX_BUILD_TOP/mpi-dir
       '';
       env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
+      # Some tests fail due to number parsing precision changes in CHICKEN 6.1.0
+      doCheck = false;
     };
-  openssl = addToBuildInputs pkgs.openssl;
+  openssl =
+    old:
+    (addToBuildInputsWithPkgConfig pkgs.openssl old)
+    // (addToNativeCheckInputs pkgs.openssl old)
+    // {
+      preCheck = ''
+        export TMPDIR=$NIX_BUILD_TOP/tmp
+        mkdir -p $TMPDIR
+      '';
+      # Tests fail due to a bug in C6.
+      # Error: (file-mkstemps) cannot create temporary file - Invalid argument: "/build/tmp/tempXXXXXX.conf"
+      doCheck = false;
+    };
+  pdfa = {
+    # Warning: error in group outside of tests
+    #
+    # Error: (write-pdfa-document) document does not conform to PDF/A-1b:
+    #   no output intent: call set-output-intent! with an ICC profile (6.2.2)
+    doCheck = false;
+  };
   postgresql = addToBuildInputsWithPkgConfig pkgs.libpq;
   raylib = addToBuildInputsWithPkgConfig pkgs.raylib;
+  salt = {
+    # Tests reference deprecated chicken-home
+    doCheck = false;
+  };
   sqlite3 = addToBuildInputs pkgs.sqlite;
   uuid-lib = addToBuildInputs pkgs.libuuid;
 
   # Missing dependencies in the upstream eggs.
-  # s9fes.draw-tree imports srfi-13.
-  s9fes-char-graphics = addToPropagatedBuildInputs chickenEggs.srfi-13;
   # chicken.blob is no longer part of CHICKEN 6, but is provided by the
   # chicken-blob egg.
   aes = addToPropagatedBuildInputs chickenEggs.chicken-blob;
@@ -143,6 +192,20 @@ in
       "-L -lTKBO"
     ] old);
 
+  nutils =
+    old:
+    # nutils calls mempcpy, which is a GNU extension that Darwin's libc does not provide, and tkgui
+    # depends on nutils.
+    (brokenOnDarwin old)
+    // (addToCheckInputs chickenEggs.test old)
+    // {
+      # Tests currently broken
+      doCheck = false;
+    };
+
+  # pdf-font.scm imports srfi-69, which is no longer a builtin unit in CHICKEN 6.
+  pdf = addToBuildInputs chickenEggs.srfi-69;
+
   # Unlike the CHICKEN 5 egg, which hardcoded /usr/include/subversion-1, this one
   # asks pkg-config for everything.
   svn-client = addToBuildInputsWithPkgConfig [
@@ -151,10 +214,51 @@ in
     pkgs.aprutil
   ];
 
-  # Mark broken.
-  # nutils calls mempcpy, which is a GNU extension that Darwin's libc does not
-  # provide, and tkgui depends on nutils.
-  nutils = brokenOnDarwin;
+  srfi-19 = {
+    # Some tests fail for unknown reasons
+    doCheck = false;
+  };
+
+  srfi-69-weak = {
+    # Some tests fail for unknown reasons
+    doCheck = false;
+  };
+
+  srfi-160 = {
+    # Some tests fail for unknown reasons
+    doCheck = false;
+  };
+
+  srfi-180 = {
+    # See https://lists.nongnu.org/archive/html/chicken-users/2026-11/msg00018.html
+    postPatch = ''
+      rm tests/files/i_number_huge_exp.json
+    '';
+  };
+
+  srfi-253 = {
+    # Tests cannot be run with chicken-install -test (breaks the same way in salmonella)
+    doCheck = false;
+  };
+
+  tick =
+    old:
+    (addToNativeCheckInputs pkgs.git old)
+    // {
+      preCheck = ''
+        export GIT_CONFIG_GLOBAL="$NIX_BUILD_TOP/.gitconfig"
+        git config --global user.email "nix@example.com"
+        git config --global user.name "Nix Build"
+        git config --global init.defaultBranch master
+      '';
+      postInstall = ''
+        wrapProgram $out/bin/tick --prefix PATH : ${pkgs.git}/bin
+      '';
+    };
+
+  utf8 = addToCheckInputs chickenEggs.test;
+
+  # Transitively broken via nutils
   tkgui = brokenOnDarwin;
 
   # "Error: extension is not targeted for this system: \"inotify\""
@@ -166,8 +270,6 @@ in
   # ld: library not found for -lrt
   posix-shm = brokenOnDarwin;
 
-  # Unresolved identifiers: the egg is not CHICKEN 6 compatible.
-  spiffy-uri-match = broken;
   # chicken.compiler.support#read/source-info no longer exists.
   begin-syntax = broken;
   # chicken-home is no longer exported by chicken.platform.
