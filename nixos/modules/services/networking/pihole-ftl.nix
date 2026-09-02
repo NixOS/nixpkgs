@@ -511,6 +511,8 @@ in
         rotate = 5;
         compress = true;
         delaycompress = true;
+        # FTL keeps this log open; SIGUSR2 closes and reopens it after rotation.
+        # https://docs.pi-hole.net/ftldns/signals/#sigusr2
         postrotate = ''
           ${getExe' pkgs.systemd "systemctl"} kill --kill-whom=main --signal=USR2 pihole-ftl.service 2>/dev/null || true
         '';
