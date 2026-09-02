@@ -4,15 +4,14 @@
   backoff,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   importlib-metadata,
   parameterized,
-  poetry-core,
-  pytest-mock,
   pytest-cov-stub,
+  pytest-mock,
   pytestCheckHook,
-  pythonAtLeast,
-  requests,
   requests-mock,
+  requests,
   responses,
   rich,
   writableTmpDirAsHomeHook,
@@ -20,17 +19,17 @@
 
 buildPythonPackage rec {
   pname = "censys";
-  version = "2.2.19";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "censys";
     repo = "censys-python";
     tag = "v${version}";
-    hash = "sha256-3eQtGCIKtjpDWfyrIEPZnA6xLMNl0cg61wh0nuwNwh4=";
+    hash = "sha256-GBFsAVecUN49vousqnB6enqRsAg1aBrjaA/Q7XXnOUE=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     argcomplete
@@ -54,13 +53,6 @@ buildPythonPackage rec {
   preCheck = ''
     mkdir -p $HOME
   '';
-
-  disabledTests = lib.optionals (pythonAtLeast "3.14") [
-    # argparse usage prefix uses the actual prog (python3.14 -m pytest) instead of sys.argv[0]
-    "test_default_help"
-    "test_help"
-    "test_search_help"
-  ];
 
   pythonImportsCheck = [ "censys" ];
 
