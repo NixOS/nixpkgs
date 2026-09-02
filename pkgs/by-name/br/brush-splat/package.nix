@@ -9,7 +9,6 @@
   stdenv,
   wayland,
   nix-update-script,
-  versionCheckHook,
   libx11,
   libxcursor,
   libxi,
@@ -18,16 +17,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "brush-splat";
-  version = "0.3.0";
+  # Temporary until new stable version releases
+  version = "0.3.0-unstable-2026-07-01";
 
   src = fetchFromGitHub {
     owner = "ArthurBrussee";
     repo = "brush";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-xVYZrQUgHxaefAMmSXG/rrVlCr0H5lRmyyXtRmOtbTU=";
+    rev = "3b80985709e2ec04fd6c8622a40e36473647a8e0";
+    hash = "sha256-yyfnBz6NqoNBF4X087c4VoRiIUp7qgskemlHu0yRUls=";
   };
 
-  cargoHash = "sha256-KBgE0fiaUEsGuAYGhBjqMX7ftj5JnGggH86brxq6280=";
+  cargoHash = "sha256-+X2Kub/+6DZ6Un9FzAAlCMtQ7VCGqElqgtyTyjxpCRM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -57,13 +57,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
         wayland
         libxkbcommon
       ]
-    }" $out/bin/brush_app
+    }" $out/bin/brush
   '';
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  doInstallCheck = true;
+  # nativeInstallCheckInputs = [
+  #   versionCheckHook
+  # ];
+  # doInstallCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };
@@ -76,6 +76,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ matthewcroughan ];
-    mainProgram = "brush_app";
+    mainProgram = "brush";
   };
 })
