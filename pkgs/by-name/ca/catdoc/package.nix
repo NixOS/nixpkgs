@@ -16,8 +16,40 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (fetchpatch {
-      url = "https://sources.debian.org/data/main/c/catdoc/1:0.95-4.1/debian/patches/05-CVE-2017-11110.patch";
+      url = "https://sources.debian.org/data/main/c/catdoc/1:0.95-6/debian/patches/01-amd64_fixes.patch";
+      sha256 = "sha256-aIbtmYm291mo4Sfm1KaucnvmUi9RgbXGexInfOQxxug=";
+    })
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/c/catdoc/1:0.95-6/debian/patches/02-Makefile_fixes.patch";
+      sha256 = "sha256-cOeuAdjD707FEdwep+slzmDcjjF1MDm59E3drv+mWd0=";
+    })
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/c/catdoc/1:0.95-6/debian/patches/03-Type_fixes.patch";
+      sha256 = "sha256-tu34+p0d21w7vjH7WBusfffish3edObqPplKs90Ms9U=";
+    })
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/c/catdoc/1:0.95-6/debian/patches/04-XLS_parsing_improvements.patch";
+      sha256 = "sha256-ePkvLxUE/rA1/iMhX7k2zh91N5zgCgbHo2xlPCVVmCI=";
+    })
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/c/catdoc/1:0.95-6/debian/patches/05-CVE-2017-11110.patch";
       sha256 = "1ljnwvssvzig94hwx8843b88p252ww2lbxh8zybcwr3kwwlcymx7";
+    })
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/c/catdoc/1:0.95-6/debian/patches/06-Fix_OLENAMELENGTH.patch";
+      sha256 = "sha256-p64iQlXlhwRjJ4XGyvju+gTSmSOOxOcv4sgzQXGDYsE=";
+    })
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/c/catdoc/1:0.95-6/debian/patches/0007-Added-guards-against-a-signed-text-length-when-parsi.patch";
+      sha256 = "sha256-7N5frjh2ggxBhNqumeLW56D/rxINqoO9PRIfqSVIhNw=";
+    })
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/c/catdoc/1:0.95-6/debian/patches/0008-Added-a-guard-against-a-product-overflow-when-proces.patch";
+      sha256 = "sha256-Cfo7muRZfyCvZiJ4s9u7+tZKQtCLj/wSQUPz3MWUg4Y=";
+    })
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/c/catdoc/1:0.95-6/debian/patches/0009-Added-guards-against-invalid-sector-sizes-when-tryin.patch";
+      sha256 = "sha256-TCU+aixaXQolZ6h0QKO0p/mWj6yTFZqfcwVDsaVGl8Q=";
     })
   ];
 
