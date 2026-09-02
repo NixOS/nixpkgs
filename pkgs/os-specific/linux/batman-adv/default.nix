@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
       philiptaron
     ];
     platforms = with lib.platforms; linux;
+    broken = lib.versionOlder kernel.version cfg.minKernelVersion;
   };
 }
