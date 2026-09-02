@@ -55,6 +55,18 @@ buildDunePackage (self: {
     patchShebangs test
   '';
 
+  outputs = [
+    "bin"
+    "lib"
+    "out"
+  ];
+
+  installPhase = ''
+    runHook preInstall
+    dune install --prefix=$bin --libdir=$lib/lib/ocaml/${ocaml.version}/site-lib odoc
+    runHook postInstall
+  '';
+
   meta = {
     description = "Documentation generator for OCaml";
     mainProgram = "odoc";
