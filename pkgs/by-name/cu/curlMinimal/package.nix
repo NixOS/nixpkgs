@@ -46,8 +46,6 @@
   openssl,
   pslSupport ? false,
   libpsl,
-  rtmpSupport ? false,
-  rtmpdump,
   scpSupport ? zlibSupport && !stdenv.hostPlatform.isSunOS && !stdenv.hostPlatform.isCygwin,
   libssh2,
   rustlsSupport ? false,
@@ -178,7 +176,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional ldapSupport openldap
     ++ lib.optional opensslSupport openssl
     ++ lib.optional pslSupport libpsl
-    ++ lib.optional rtmpSupport rtmpdump
     ++ lib.optional scpSupport libssh2
     ++ lib.optional rustlsSupport rustls-ffi
     ++ lib.optional zlibSupport zlib
@@ -202,7 +199,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature opensslSupport "ca-fallback")
     (lib.withFeature http3Support "nghttp3")
     (lib.withFeature http3Support "ngtcp2")
-    (lib.withFeature rtmpSupport "librtmp")
     (lib.withFeature rustlsSupport "rustls")
     (lib.withFeature zstdSupport "zstd")
     (lib.withFeature pslSupport "libpsl")
@@ -318,6 +314,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.curl;
     maintainers = with lib.maintainers; [
       Scrumplex
+      tmarkus
     ];
     teams = [ lib.teams.security-review ];
     platforms = lib.platforms.all;
