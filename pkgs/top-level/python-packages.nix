@@ -2790,6 +2790,8 @@ self: super: with self; {
 
   cachetools = callPackage ../development/python-modules/cachetools { };
 
+  cachetools-async = callPackage ../development/python-modules/cachetools-async { };
+
   cachey = callPackage ../development/python-modules/cachey { };
 
   cachier = callPackage ../development/python-modules/cachier { };
