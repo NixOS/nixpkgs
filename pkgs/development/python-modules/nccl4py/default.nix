@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
   pname = "nccl4py";
   # `nccl4py` is versioned independently of `nccl` and should be the same as the contents of
   # `${cudaPackages.nccl.src}/bindings/nccl4py/nccl/_version.py`
-  version = "0.4.1";
+  version = "0.5.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
     owner = "NVIDIA";
     repo = "nccl";
     tag = "nccl4py-v${finalAttrs.version}";
-    hash = "sha256-p9z4NlccBdI0auMRzTJtK8VbAOSunLdwKKU0Wn5c6c0=";
+    hash = "sha256-f9hOqRJSC/tuRUAN6qKRaItHR62dG7mu1rtw9nJQhic=";
   };
   sourceRoot = "${finalAttrs.src.name}/bindings/nccl4py";
 
