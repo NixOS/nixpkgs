@@ -58,6 +58,7 @@
               "file": "functions.md"
             },
             {
+              "id-prefix": "auto-generated",
               "file": "functions/library.md"
             },
             {
@@ -449,6 +450,7 @@
                   "file": "packages/treefmt.section.md"
                 },
                 {
+                  "id-prefix": "auto-generated-treefmt-functions",
                   "file": "packages/treefmt-functions.section.md"
                 }
               ]
