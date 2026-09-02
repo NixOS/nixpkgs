@@ -24,5 +24,5 @@ mkDerivation {
     transformers
   ];
   description = "Utility for managing GHC target toolchains";
-  license = "unknown";
+  license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
 }

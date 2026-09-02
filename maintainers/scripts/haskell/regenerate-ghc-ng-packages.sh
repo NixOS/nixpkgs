@@ -32,6 +32,9 @@ ROOT="$(git rev-parse --show-toplevel)"
 # expression against a 9.15 tree builds the wrong thing.
 if [ "$VERSION" = head ]; then DIR=head; else DIR="$VERSION"; fi
 OUT="$ROOT/pkgs/development/compilers/ghc/ng/$DIR/packages"
+# Patches that are not diffs against a particular release live here and apply
+# to every version; see `patchesFor` in `common/overlay.nix`.
+COMMON="$ROOT/pkgs/development/compilers/ghc/ng/common/packages"
 
 echo "Realising the GHC $VERSION source tree..." >&2
 SRC=$(nix-build --no-out-link \
@@ -139,11 +142,15 @@ for entry in "${PACKAGES[@]}"; do
   # `build-depends`; every other patched package generates identically either
   # way. So the tree is copied and patched here rather than read in place.
   pkgdir="$SRC/$dir"
-  if compgen -G "$OUT/$name/*.patch" > /dev/null; then
+  # Version-independent patches live beside the overrides in `common/packages`;
+  # everything else is a diff against this release's sources. Both are applied,
+  # in that order, exactly as `patchesFor` in the overlay does.
+  if compgen -G "$COMMON/$name/*.patch" > /dev/null || compgen -G "$OUT/$name/*.patch" > /dev/null; then
     work="$(mktemp -d)"
     cp -r "$SRC/$dir/." "$work/"
     chmod -R u+w "$work"
-    for p in "$OUT/$name"/*.patch; do
+    for p in "$COMMON/$name"/*.patch "$OUT/$name"/*.patch; do
+      [ -e "$p" ] || continue
       if ! patch -d "$work" -p1 --silent < "$p"; then
         echo "  FAIL $name (patch $(basename "$p") does not apply)" >&2
         rm -rf "$work"
