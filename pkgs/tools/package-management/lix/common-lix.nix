@@ -527,6 +527,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://lix.systems";
     license = lib.licenses.lgpl21Plus;
     teams = [ lib.teams.lix ];
+    maintainers = [ lib.maintainers.tyceherrman ];
     platforms = lib.platforms.unix;
     outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
     mainProgram = "nix";
