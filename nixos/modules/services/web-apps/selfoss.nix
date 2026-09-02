@@ -4,33 +4,75 @@
   pkgs,
   ...
 }:
-with lib;
+
 let
+  inherit (lib)
+    mapAttrs
+    mkDefault
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    ;
+
   cfg = config.services.selfoss;
 
   poolName = "selfoss_pool";
 
   dataDir = "/var/lib/selfoss";
 
-  selfoss-config =
-    let
-      db_type = cfg.database.type;
-      default_port = if (db_type == "mysql") then 3306 else 5342;
-    in
-    pkgs.writeText "selfoss-config.ini" ''
-      [globals]
-      ${lib.optionalString (db_type != "sqlite") ''
-        db_type=${db_type}
-        db_host=${cfg.database.host}
-        db_database=${cfg.database.name}
-        db_username=${cfg.database.user}
-        db_password=${cfg.database.password}
-        db_port=${toString (if (cfg.database.port != null) then cfg.database.port else default_port)}
-      ''}
-      ${cfg.extraConfig}
-    '';
+  settingsFormat = pkgs.formats.iniWithGlobalSection {
+    mkKeyValue = lib.generators.mkKeyValueDefault {
+      mkValueString =
+        v:
+        if v == null then
+          ""
+        else if v == true then
+          "1"
+        else if v == false then
+          "0"
+        else
+          lib.generators.mkValueStringDefault { } v;
+    } "=";
+  };
+
+  selfoss-config = settingsFormat.generate "config.ini" { globalSection = cfg.settings; };
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "services" "selfoss" "database" "type" ]
+      [ "services" "selfoss" "settings" "db_type" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "selfoss" "database" "host" ]
+      [ "services" "selfoss" "settings" "db_host" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "selfoss" "database" "name" ]
+      [ "services" "selfoss" "settings" "db_database" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "selfoss" "database" "username" ]
+      [ "services" "selfoss" "settings" "db_user" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "selfoss" "database" "password" ]
+      [ "services" "selfoss" "settings" "db_password" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "selfoss" "database" "port" ]
+      [ "services" "selfoss" "settings" "db_port" ]
+    )
+    (lib.mkRemovedOptionModule [ "services" "selfoss" "extraConfig" ] ''
+      Use services.selfoss.settings instead.
+
+      This is part of the general move to use structured settings instead of raw
+      text for config as introduced by RFC0042:
+      https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md
+    '')
+  ];
+
   options = {
     services.selfoss = {
       enable = mkEnableOption "selfoss";
@@ -54,67 +96,75 @@ in
         '';
       };
 
-      database = {
-        type = mkOption {
-          type = types.enum [
-            "pgsql"
-            "mysql"
-            "sqlite"
-          ];
-          default = "sqlite";
-          description = ''
-            Database to store feeds. Supported are sqlite, pgsql and mysql.
-          '';
+      settings = lib.mkOption {
+        type = lib.types.submodule {
+          # Only single level of config supported
+          freeformType = types.attrsOf settingsFormat.lib.types.atom;
+
+          options = {
+            db_type = mkOption {
+              type = types.enum [
+                "pgsql"
+                "mysql"
+                "sqlite"
+              ];
+              default = "sqlite";
+              description = ''
+                Database to store feeds. Supported are sqlite, pgsql and mysql.
+              '';
+            };
+
+            db_host = mkOption {
+              type = types.str;
+              default = "localhost";
+              description = ''
+                Host of the database (has no effect if type is "sqlite").
+              '';
+            };
+
+            db_database = mkOption {
+              type = types.str;
+              default = "tt_rss";
+              description = ''
+                Name of the existing database (has no effect if type is "sqlite").
+              '';
+            };
+
+            db_user = mkOption {
+              type = types.str;
+              default = "tt_rss";
+              description = ''
+                The database user. The user must exist and has access to
+                the specified database (has no effect if type is "sqlite").
+              '';
+            };
+
+            db_password = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = ''
+                The database user's password (has no effect if type is "sqlite").
+              '';
+            };
+
+            db_port = mkOption {
+              type = types.nullOr types.port;
+              default = null;
+              description = ''
+                The database's port. If not set, the default ports will be
+                provided (5432 and 3306 for pgsql and mysql respectively)
+                (has no effect if type is "sqlite").
+              '';
+            };
+          };
         };
 
-        host = mkOption {
-          type = types.str;
-          default = "localhost";
-          description = ''
-            Host of the database (has no effect if type is "sqlite").
-          '';
-        };
+        default = { };
 
-        name = mkOption {
-          type = types.str;
-          default = "tt_rss";
-          description = ''
-            Name of the existing database (has no effect if type is "sqlite").
-          '';
-        };
-
-        user = mkOption {
-          type = types.str;
-          default = "tt_rss";
-          description = ''
-            The database user. The user must exist and has access to
-            the specified database (has no effect if type is "sqlite").
-          '';
-        };
-
-        password = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          description = ''
-            The database user's password (has no effect if type is "sqlite").
-          '';
-        };
-
-        port = mkOption {
-          type = types.nullOr types.port;
-          default = null;
-          description = ''
-            The database's port. If not set, the default ports will be
-            provided (5432 and 3306 for pgsql and mysql respectively)
-            (has no effect if type is "sqlite").
-          '';
-        };
-      };
-      extraConfig = mkOption {
-        type = types.lines;
-        default = "";
         description = ''
-          Extra configuration added to config.ini
+          Configuration for selfoss, see
+          <https://selfoss.aditu.de/docs/administration/options/>
+          for supported values.
         '';
       };
     };
@@ -123,7 +173,7 @@ in
   config = mkIf cfg.enable {
     services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
       ${poolName} = {
-        user = config.services.nginx.user;
+        user = mkDefault config.services.nginx.user;
         settings = mapAttrs (name: mkDefault) {
           "listen.owner" = config.services.nginx.user;
           "listen.group" = config.services.nginx.group;
