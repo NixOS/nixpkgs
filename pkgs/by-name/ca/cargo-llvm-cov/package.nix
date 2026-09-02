@@ -18,7 +18,7 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  llvmPackages_19,
+  llvmPackages_22,
   gitMinimal,
   writableTmpDirAsHomeHook,
 }:
@@ -30,7 +30,7 @@ let
   owner = "taiki-e";
   homepage = "https://github.com/${owner}/${pname}";
 
-  inherit (llvmPackages_19) llvm;
+  inherit (llvmPackages_22) llvm;
 in
 
 rustPlatform.buildRustPackage (finalAttrs: {
