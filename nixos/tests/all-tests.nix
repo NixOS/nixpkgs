@@ -324,6 +324,7 @@ in
   btrbk-doas = runTest ./btrbk-doas.nix;
   btrbk-no-timer = runTest ./btrbk-no-timer.nix;
   btrbk-section-order = runTest ./btrbk-section-order.nix;
+  btrfs-autoscrub = runTest ./btrfs-autoscrub.nix;
   budgie = runTest ./budgie.nix;
   buildbot = runTest ./buildbot.nix;
   buildkite-agents = runTest ./buildkite-agents.nix;
