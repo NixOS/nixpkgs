@@ -470,6 +470,7 @@ mapAliases {
   pam = throw "'pam' has been renamed to/replaced by 'python-pam'"; # Converted to throw 2025-10-29
   pandas-ta = throw "pandas-ta has been removed: abandoned upstream"; # added 2026-07-20
   paramz = throw "'paramz' has been removed as it is incompatible with Numpy 2"; # added 2025-11-10
+  paranoid-crypto = throw "'paranoid-crypto' has been removed because Google archived the unmaintained project."; # Added 2026-09-02
   parselmouth = praat-parselmouth; # added 2026-07-26
   password-entropy = warnAlias "'password-entropy' has been renamed to 'data-password-entropy'" data-password-entropy; # Added 2026-07-26
   PasteDeploy = throw "'PasteDeploy' has been renamed to/replaced by 'pastedeploy'"; # Converted to throw 2025-10-29
