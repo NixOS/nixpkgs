@@ -18523,6 +18523,10 @@ self: super: with self; {
 
   scenedetect = callPackage ../development/python-modules/scenedetect { };
 
+  # Kept for dvr-scan, which is not yet compatible with scenedetect 0.7. Remove
+  # once dvr-scan is updated to a release that supports scenedetect 0.7.
+  scenedetect_0_6 = callPackage ../development/python-modules/scenedetect/0.6.nix { };
+
   schedula = callPackage ../development/python-modules/schedula { };
 
   schedule = callPackage ../development/python-modules/schedule { };
