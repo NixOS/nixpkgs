@@ -15,6 +15,7 @@ let
     mkPackageOption
     mkOption
     types
+    versionAtLeast
     ;
   inherit (utils) escapeSystemdExecArgs;
   cfg = config.services.routinator;
@@ -53,7 +54,17 @@ in
             description = ''
               The path where the collected RPKI data is stored.
             '';
-            default = "/var/lib/routinator/rpki-cache";
+            default =
+              if versionAtLeast config.system.stateVersion "26.11" then
+                "/var/cache/routinator/rpki-cache"
+              else
+                "/var/lib/routinator/rpki-cache";
+            defaultText = ''
+              if versionAtLeast config.system.stateVersion "26.11" then
+                "/var/cache/routinator/rpki-cache"
+              else
+                "/var/lib/routinator/rpki-cache";
+            '';
           };
           log-level = mkOption {
             type = types.nullOr (
@@ -180,7 +191,8 @@ in
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
-        StateDirectory = "routinator";
+        CacheDirectory = mkIf (versionAtLeast config.system.stateVersion "26.11") "routinator";
+        StateDirectory = mkIf (!(versionAtLeast config.system.stateVersion "26.11")) "routinator";
         SystemCallArchitectures = "native";
         SystemCallErrorNumber = "EPERM";
         SystemCallFilter = "@system-service";
