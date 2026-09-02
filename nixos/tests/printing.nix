@@ -67,11 +67,13 @@ in
 
     start_all()
 
-    with subtest("Make sure that cups is up on both sides and printers are set up"):
-        server.wait_for_unit("ensure-printers.service")
-        client.wait_for_unit("ensure-printers.service")
+    with subtest("Make sure that cups is up on both sides"):
+        server.wait_for_unit("cups.${if socket then "socket" else "service"}")
+        client.wait_for_unit("cups.${if socket then "socket" else "service"}")
 
     assert "scheduler is running" in client.succeed("lpstat -r")
+
+    client.wait_until_succeeds("journalctl -u cups.service --grep 'CUPS provisioning complete'")
 
     with subtest("UNIX socket is used for connections"):
         assert "/var/run/cups/cups.sock" in client.succeed("lpstat -H")

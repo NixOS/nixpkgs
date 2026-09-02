@@ -21,103 +21,11 @@ let
     submodule
     ;
 
-  ensurePrinter =
-    p:
-    let
-      args = lib.cli.toCommandLineShellGNU { } (
-        {
-          p = p.name;
-          v = p.deviceUri;
-          m = p.model;
-        }
-        // lib.optionalAttrs (p.location != null) {
-          L = p.location;
-        }
-        // lib.optionalAttrs (p.description != null) {
-          D = p.description;
-        }
-        // lib.optionalAttrs (p.ppdOptions != { }) {
-          o = lib.mapAttrsToList (name: value: "${name}=${value}") p.ppdOptions;
-        }
-      );
-    in
-    ''
-      # shellcheck disable=SC2016
-      ${pkgs.cups}/bin/lpadmin ${args} -E
-    '';
-
-  ensureDefaultPrinter = name: ''
-    ${pkgs.cups}/bin/lpadmin -d '${name}'
-  '';
-
   # "graph but not # or /" can't be implemented as regex alone due to missing lookahead support
   noInvalidChars = str: lib.all (c: c != "#" && c != "/") (lib.stringToCharacters str);
   printerName = (lib.types.addCheck (lib.types.strMatching "[[:graph:]]+") noInvalidChars) // {
     description = "printable string without spaces, # and /";
   };
-
-  getPrinters =
-    class:
-    lib.uniqueStrings (
-      lib.concatLists (
-        lib.textClosureList (lib.mapAttrs (
-          _:
-          {
-            classes ? [ ],
-            printers ? [ ],
-            ...
-          }:
-          {
-            deps = classes;
-            text = printers;
-          }
-        ) cfg.ensureClasses) [ class ]
-      )
-    );
-
-  mkClass = name: ''
-    lpadmin -p _tmp -v file:/dev/null
-    lpadmin -p _tmp -c ${escapeShellArg name}
-    lpadmin -x _tmp
-  '';
-
-  populateClass =
-    name:
-    {
-      description ? null,
-      location ? null,
-      ...
-    }:
-    lib.concatStringsSep "\n" [
-      (lib.optionalString (location != null) ''
-        lpadmin -p ${escapeShellArg name} -L ${escapeShellArg location}
-      '')
-
-      (lib.optionalString (description != null) ''
-        lpadmin -p ${escapeShellArg name} -D ${escapeShellArg description}
-      '')
-    ];
-
-  addPrintersToClass =
-    className: class:
-    let
-      printers = getPrinters className;
-      addToClass = printer: ''
-        lpadmin -p ${escapeShellArg printer} -c ${escapeShellArg className}
-      '';
-    in
-    map addToClass printers;
-
-  enableClass = className: ''
-    cupsenable ${escapeShellArg className}
-    cupsaccept ${escapeShellArg className}
-  '';
-
-  # if CUPS is configured only to start when it's needed, we can kill the service
-  # once the printer setup is done. However, if stateless is configured then we
-  # can't shut down the servive without losing the printers (and classes) we
-  # *just* configured.
-  ultimatelyStopCups = with config.services.printing; startWhenNeeded && !stateless;
 in
 {
   options = {
@@ -360,84 +268,121 @@ in
     )
   ];
 
-  config.systemd.services.ensure-printer-classes =
-    lib.mkIf (cfg.ensureClasses != { } && config.services.printing.enable)
-      {
-        description = "Ensure NixOS-configured CUPS classes";
-        wantedBy = [ "multi-user.target" ];
-        wants = [
-          "cups.service"
-        ];
-        after = [
-          "cups.service"
-          "ensure-printers.service"
-        ];
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-        };
-        path = with pkgs; [ cups ];
-        script =
+  config.systemd.services = lib.mkIf config.services.printing.enable {
+    cups = {
+      serviceConfig = {
+        ExecStartPost =
           let
-            attrMap = fn: l: map fn (builtins.attrNames l);
-            classDefs = lib.pipe cfg.ensureClasses [
-              (attrMap mkClass)
-              concatLines
-            ];
-            classAdds = lib.pipe cfg.ensureClasses [
-              (lib.mapAttrsToList addPrintersToClass)
-              lib.flatten
-              concatLines
-            ];
-            populatedClasses = lib.pipe cfg.ensureClasses [
-              (lib.mapAttrsToList populateClass)
-              concatLines
-            ];
-            enables = lib.pipe cfg.ensureClasses [
-              (attrMap enableClass)
-              concatLines
-            ];
+            getPrinters =
+              class:
+              lib.uniqueStrings (
+                lib.concatLists (
+                  lib.textClosureList (lib.mapAttrs (
+                    _:
+                    {
+                      classes ? [ ],
+                      printers ? [ ],
+                      ...
+                    }:
+                    {
+                      deps = classes;
+                      text = printers;
+                    }
+                  ) cfg.ensureClasses) [ class ]
+                )
+              );
+
+            classNames = builtins.attrNames cfg.ensureClasses;
+
+            lpadmin =
+              args:
+              let
+                # -d, -p and -x are subcommands that must be specified at the start.
+                argsDpx = lib.intersectAttrs {
+                  d = true;
+                  p = true;
+                  x = true;
+                } args;
+                argsWoDpx = lib.removeAttrs args [
+                  "d"
+                  "p"
+                  "x"
+                ];
+              in
+              "lpadmin ${lib.cli.toCommandLineShellGNU { } argsDpx} ${
+                lib.cli.toCommandLineShellGNU { } argsWoDpx
+              }";
+
+            postExecScript = pkgs.writeShellApplication {
+              name = "cups-provisioning.sh";
+              runtimeInputs = [ pkgs.cups ];
+              text = ''
+                #### ADDING PRINTERS ####
+                ${lib.concatMapStringsSep "\n" (
+                  p:
+                  lpadmin {
+                    p = p.name;
+                    v = p.deviceUri;
+                    m = p.model;
+                    L = p.location;
+                    D = p.description;
+                    o = lib.mapAttrsToList (name: value: "${name}=${value}") p.ppdOptions;
+                    E = true;
+                  }
+                ) cfg.ensurePrinters}
+
+                #### SETTING DEFAULT PRINTER ####
+                ${lib.optionalString (cfg.ensureDefaultPrinter != null) (lpadmin {
+                  d = cfg.ensureDefaultPrinter;
+                })}
+
+                #### CLASS DEFINITIONS ####
+                lpadmin -p _tmp -v file:/dev/null
+                ${lib.concatMapStringsSep "\n" (
+                  className:
+                  lpadmin {
+                    p = "_tmp";
+                    c = className;
+                  }
+                ) classNames}
+                lpadmin -x _tmp
+
+                #### ADDING PRINTERS TO CLASSES ####
+                ${lib.concatMapStringsSep "\n" (
+                  className:
+                  lib.concatMapStringsSep "\n" (
+                    printer:
+                    lpadmin {
+                      p = printer;
+                      c = className;
+                    }
+                  ) (getPrinters className)
+                ) classNames}
+
+                #### POPULATING CLASSES ####
+                ${lib.concatStringsSep "\n" (
+                  lib.mapAttrsToList (
+                    className: class:
+                    lpadmin {
+                      p = className;
+                      L = class.location;
+                      D = class.description;
+                    }
+                  ) cfg.ensureClasses
+                )}
+
+                #### ENABLING CLASSES ####
+                ${lib.concatMapStrings (className: ''
+                  cupsenable ${escapeShellArg className}
+                  cupsaccept ${escapeShellArg className}
+                '') classNames}
+
+                echo "CUPS provisioning complete."
+              '';
+            };
           in
-          ''
-            #### CLASS DEFINITIONS ####
-            ${classDefs}
-
-            #### ADDING PRINTERS TO CLASSES ####
-            ${classAdds}
-
-            #### POPULATING CLASSES ####
-            ${populatedClasses}
-
-            #### ENABLING CLASSES ####
-            ${enables}
-
-            ${lib.optionalString ultimatelyStopCups "systemctl stop cups.service"}
-          '';
+          lib.getExe postExecScript;
       };
-
-  config.systemd.services.ensure-printers =
-    lib.mkIf (cfg.ensurePrinters != [ ] && config.services.printing.enable)
-      {
-        description = "Ensure NixOS-configured CUPS printers";
-        wantedBy = [ "multi-user.target" ];
-        wants = [ "cups.service" ];
-        after = [ "cups.service" ];
-
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-        };
-
-        script = lib.concatStringsSep "\n" [
-          (lib.concatMapStrings ensurePrinter cfg.ensurePrinters)
-          (lib.optionalString (cfg.ensureDefaultPrinter != null) (
-            ensureDefaultPrinter cfg.ensureDefaultPrinter
-          ))
-          # Let ensure-printer-classes.service kill cups because it is called
-          # after this service.
-          (lib.optionalString (
-            ultimatelyStopCups && !(config.systemd.services ? ensure-printer-classes)
-          ) "systemctl stop cups.service")
-        ];
-      };
+    };
+  };
 }
