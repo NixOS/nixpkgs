@@ -1,18 +1,39 @@
-# An example plain-text secret backend written in Bash. The current
-# implementation of deploy.local deviates from the spec by not parsing the
-# input and deploying possibly stale files. The plan is to rewrite this in
-# Python soon.
-{ lib, config, ... }:
+# An example plain-text secret backend written in Python.
+{ config, lib, ... }:
 let
   cfg = config.secrets.settings.store.plain;
 
-  mkScript =
-    name: text: pkgs:
-    pkgs.lib.getExe (
-      pkgs.writeShellApplication {
-        inherit name text;
-        runtimeInputs = [ pkgs.coreutils ];
-        checkPhase = "";
+  # We bake the configuration and required command into the script that calls
+  # the CLI. I'm not sure if doing it this way is better than overriding the
+  # Python writer directly. I guess this method shared the original Python
+  # script derivation, but that might not be meaningful for such a small script.
+  backendScript =
+    pkgs: command:
+    let
+      backendJSONConfig = pkgs.writeText "plain.json" (
+        builtins.toJSON {
+          inherit (cfg) hostDirectory targetDirectory;
+        }
+      );
+
+      scriptSource = builtins.readFile ./backend-plain.py;
+
+      raw = pkgs.writers.writePython3Bin "secrets-plain-backend" {
+        flakeIgnore = [
+          "W191"
+          "E501"
+        ];
+      } scriptSource;
+    in
+    lib.getExe (
+      pkgs.symlinkJoin {
+        name = "secrets-plain-backend";
+        paths = [ raw ];
+        buildInputs = [ pkgs.makeWrapper ];
+        postBuild = ''
+          wrapProgram $out/bin/secrets-plain-backend \
+            --add-flags "${backendJSONConfig} ${command}"
+        '';
       }
     );
 in
@@ -22,8 +43,8 @@ in
       type = lib.types.str;
       default = "/var/lib/secrets-ng-ng-plain/host/${config.networking.hostName}";
       description = ''
-        The directory where the plain backend will store variables on the host
-        machine.
+        The directory where the plain backend will store the secrets on the
+        host machine.
       '';
     };
 
@@ -31,73 +52,24 @@ in
       type = lib.types.str;
       default = "/var/lib/secrets-ng-ng-plain/target";
       description = ''
-        The directory where the age backend will store variables on the target
-        machine.
+        The directory where the plain backend will store the secrets on the
+        target machine.
       '';
     };
   };
 
   config.secrets.backends.store.plain = {
-    get = mkScript "get" ''
-      out=''${out:?} # Make shellcheck happy
-      cat ${cfg.hostDirectory}/generators/"$1"/files/"$2" > "$out"
-    '';
-    set = mkScript "set" ''
-      in=''${in:?} # Make shellcheck happy
-      mkdir -p ${cfg.hostDirectory}/generators/"$1"/files/
-      cat "$in" > ${cfg.hostDirectory}/generators/"$1"/files/"$2"
-    '';
-    exists = mkScript "exists" ''
-      if [[ ! -f ${cfg.hostDirectory}/generators/"$1"/files/"$2" ]]; then
-        exit 42
-      fi
-    '';
-
-    delete = mkScript "delete" ''
-      rm -rf ${cfg.hostDirectory}/generators/"$1"/files/"$2"
-    '';
-
-    # This example showcases that scripts can be written in any language
-    list =
-      pkgs:
-      pkgs.writers.writePython3 "list" { } ''
-        from pathlib import Path
-        base = Path("${cfg.hostDirectory}/generators")
-        if base.exists():
-            for generator in base.iterdir():
-                for file in (generator / "files").iterdir():
-                    print(f"{generator.name} {file.name}")
-      '';
-
-    deploy.local = mkScript "deploy-local" ''
-      # NOTE: this script will not parse the input file list (my bash-fu is
-      # not strong enough...). It will instead push all the secrets to the
-      # target machine :p
-
-      if [[ ! -d "$1" ]]; then
-        echo "System root not found" 1>&2
-        exit 1
-      fi
-
-      if [[ -d "${cfg.hostDirectory}/generators" ]]; then
-        for generator in "${cfg.hostDirectory}/generators"/*; do
-          [[ -d "$generator" ]] || continue
-          files="$generator/files"
-          [[ -d "$files" ]] || continue
-          for file in "$files"/*; do
-            [[ -e "$file" ]] || continue
-            dir="$1/${cfg.targetDirectory}/$(basename "$generator")"
-            mkdir -p "$dir"
-            cp "$file" "$dir/$(basename "$file")"
-          done
-        done
-      fi
-    '';
+    get = pkgs: backendScript pkgs "get";
+    set = pkgs: backendScript pkgs "set";
+    exists = pkgs: backendScript pkgs "exists";
+    list = pkgs: backendScript pkgs "list";
+    delete = pkgs: backendScript pkgs "delete";
+    deploy.local = pkgs: backendScript pkgs "deploy-local";
 
     fileModule =
-      { generator, name, ... }:
+      { secret, name, ... }:
       {
-        path = "${cfg.targetDirectory}/${generator.name}/${name}";
+        path = "${cfg.targetDirectory}/${secret.name}/${name}";
       };
   };
 }
