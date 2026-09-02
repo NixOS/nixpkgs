@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://alisw.github.io/alibuild/";
     description = "Build tool for ALICE experiment software";
     changelog = "https://github.com/alisw/alibuild/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ktf ];
   };
 })
