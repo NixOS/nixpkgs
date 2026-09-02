@@ -90,6 +90,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
   env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  env.YAAK_CLI_NO_UPDATE_CHECK = "1";
 
   # Only auto-patchelf the prebuilt CLI used during the build.
   dontAutoPatchelf = true;
