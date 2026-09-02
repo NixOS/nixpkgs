@@ -1137,6 +1137,9 @@
   "tar-files": [
     "index.html#tar-files"
   ],
+  "verifydesktopitemshook": [
+    "index.html#verifydesktopitemshook"
+  ],
   "writableTmpDirAsHomeHook": [
     "index.html#writableTmpDirAsHomeHook"
   ],
