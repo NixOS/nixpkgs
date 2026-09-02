@@ -14,10 +14,9 @@
   nix-update,
   writeShellScript,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "masterpdfeditor";
-  version = "5.9.98";
+  version = "5.9.99";
 
   src =
     let
@@ -29,8 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
         aarch64-linux = "https://code-industry.net/public/master-pdf-editor-${finalAttrs.version}-qt5.arm64.tar.gz";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-KNAssyWLeMqtMyZQIF6Qr1K/9tioC4cD84lL9c1iMgM=";
-        aarch64-linux = "sha256-+jNXO4fbbkh9Uea0N+0fJbHRMu9zS/d7o8W4D2+7kMI=";
+        x86_64-linux = "sha256-ksVuJyuImstESVwHUmOUv6aERosg6g5bSsRvPSf5EVM=";
+        aarch64-linux = "sha256-IxWYzb1assCMBNjj5VZbfuhkzVrMpU5Oz/N+kd4CxHw=";
       };
     };
 
