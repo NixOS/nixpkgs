@@ -4885,8 +4885,8 @@ let
         mktplcRef = {
           name = "opa";
           publisher = "tsandall";
-          version = "0.24.1";
-          hash = "sha256-wNlZM9/2K32W4vYPKzLiBCTqhV+SqgZzXGRxKoHoIaM=";
+          version = "0.25.0";
+          hash = "sha256-d+INOMEc4ZO3T3326GxQW3PP/UflOwmEPfQOm2weVRY=";
         };
         meta = {
           changelog = "https://github.com/open-policy-agent/vscode-opa/blob/master/CHANGELOG.md";
