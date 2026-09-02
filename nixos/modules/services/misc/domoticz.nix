@@ -29,6 +29,14 @@ in
         description = "Port to bind to for HTTP, set to 0 to disable HTTP.";
       };
 
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Open ports in the firewall for domoticz.
+        '';
+      };
+
     };
 
   };
@@ -50,6 +58,9 @@ in
       };
     };
 
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.port ];
+    };
   };
 
 }
