@@ -11,6 +11,7 @@
 {
   src,
   buildInputs ? [ ],
+  checkInputs ? [ ],
   chickenInstallFlags ? [ ],
   cscOptions ? [ ],
   ...
@@ -29,6 +30,30 @@ let
   version = if args ? version then args.version else lib.getVersion args.name;
   overrides = callPackage overridesFile { };
   override = if builtins.hasAttr pname overrides then builtins.getAttr pname overrides else lib.id;
+  installationHelper = ''
+    install_egg() {
+      local dest=$1
+      local repo=$dest/lib/chicken/${toString chicken.binaryVersion}
+      CHICKEN_INSTALL_PREFIX=$dest \
+      CHICKEN_INSTALL_REPOSITORY=$repo \
+      chicken-install -cached -host ${lib.escapeShellArgs chickenInstallFlags}
+
+      # Patching the generated .egg-info instead of the original .egg to work
+      # around https://bugs.call-cc.org/ticket/1855, which is unfixed as of
+      # CHICKEN 6.0.0: eggs whose .egg carries no version property are
+      # installed without one.
+      csi -e "(write (cons '(version \"${version}\") (read)))" < "$repo/${pname}.egg-info" > "${pname}.egg-info.new"
+      mv "${pname}.egg-info.new" "$repo/${pname}.egg-info"
+
+      for f in $dest/bin/*
+      do
+        wrapProgram $f \
+          --prefix CHICKEN_REPOSITORY_PATH : "$repo:$CHICKEN_REPOSITORY_PATH" \
+          --prefix CHICKEN_INCLUDE_PATH : "$CHICKEN_INCLUDE_PATH:$dest/share" \
+          --prefix PATH : "$dest/bin:${chicken}/bin"
+      done
+    }
+  '';
 in
 (stdenv.mkDerivation (
   {
@@ -65,27 +90,37 @@ in
       runHook postBuild
     '';
 
+    doCheck = true;
+
+    checkPhase = ''
+      runHook preCheck
+
+      ${installationHelper}
+
+      # Install to a temporary location so that tests can load extensions or run programs as if it
+      # was already properly installed.
+      tmpout=$(mktemp -d)
+
+      # Symlink `chicken-install` so that `install_egg` will wrap it with the temporary install
+      # location (just like other programs installed by the egg). This will allow us to run tests
+      # via the `-test` option as if the egg was installed properly (see below).
+      mkdir $tmpout/bin
+      ln -s ${chicken}/bin/chicken-install $tmpout/bin/chicken-install
+
+      install_egg $tmpout
+
+      # Run tests via the wrapped `chicken-install` (see above)
+      $tmpout/bin/chicken-install -cached -host -no-install ${lib.escapeShellArgs chickenInstallFlags} -test
+
+      runHook postCheck
+    '';
+
     installPhase = ''
       runHook preInstall
 
-      export CHICKEN_INSTALL_PREFIX=$out
-      export CHICKEN_INSTALL_REPOSITORY=$out/lib/chicken/${toString chicken.binaryVersion}
-      chicken-install -cached -host ${lib.escapeShellArgs chickenInstallFlags}
+      ${installationHelper}
 
-      # Patching the generated .egg-info instead of the original .egg to work
-      # around https://bugs.call-cc.org/ticket/1855, which is unfixed as of
-      # CHICKEN 6.0.0: eggs whose .egg carries no version property are
-      # installed without one.
-      csi -e "(write (cons '(version \"${version}\") (read)))" < "$CHICKEN_INSTALL_REPOSITORY/${pname}.egg-info" > "${pname}.egg-info.new"
-      mv "${pname}.egg-info.new" "$CHICKEN_INSTALL_REPOSITORY/${pname}.egg-info"
-
-      for f in $out/bin/*
-      do
-        wrapProgram $f \
-          --prefix CHICKEN_REPOSITORY_PATH : "$out/lib/chicken/${toString chicken.binaryVersion}:$CHICKEN_REPOSITORY_PATH" \
-          --prefix CHICKEN_INCLUDE_PATH : "$CHICKEN_INCLUDE_PATH:$out/share" \
-          --prefix PATH : "$out/bin:${chicken}/bin"
-      done
+      install_egg $out
 
       runHook postInstall
     '';

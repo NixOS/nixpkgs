@@ -12,6 +12,9 @@ let
   addToBuildInputs = pkg: old: {
     buildInputs = (old.buildInputs or [ ]) ++ lib.toList pkg;
   };
+  addToCheckInputs = pkg: old: {
+    checkInputs = (old.checkInputs or [ ]) ++ lib.toList pkg;
+  };
   addToPropagatedBuildInputs = pkg: old: {
     propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ lib.toList pkg;
   };
@@ -37,6 +40,14 @@ let
   };
 in
 {
+  address-info = {
+    # Tests require internet access
+    doCheck = false;
+  };
+  awful-static-pages = {
+    # To make tests look for the compiled program in PATH instead of at the same directory as csi
+    env.SALMONELLA_RUNNING = true;
+  };
   breadline = addToBuildInputs pkgs.readline;
   blas = addToBuildInputsWithPkgConfig pkgs.blas;
   blosc = addToBuildInputs pkgs.c-blosc;
@@ -49,7 +60,13 @@ in
       srfi-13
     ]) old);
   cmark = addToBuildInputs pkgs.cmark;
-  crypt = addToBuildInputs pkgs.libxcrypt;
+  crypt =
+    old:
+    (addToBuildInputs pkgs.libxcrypt old)
+    // {
+      # Tests seem to be slightly incompatible with libxcrypt
+      doCheck = false;
+    };
   epoxy =
     old:
     (addToPropagatedBuildInputsWithPkgConfig pkgs.libepoxy old)
@@ -66,7 +83,21 @@ in
     };
   espeak = addToBuildInputsWithPkgConfig pkgs.espeak-ng;
   http-curl = addToBuildInputsWithPkgConfig pkgs.curl;
-  ephem = addToBuildInputs pkgs.libnova;
+  ephem =
+    old:
+    (addToBuildInputs pkgs.libnova old)
+    // {
+      # Some tests fail due to slightly off results - probably caused by changes in libnova
+      doCheck = false;
+    };
+  envsubst = {
+    # Tests broken
+    doCheck = false;
+  };
+  estraier-client = {
+    # Tests require Hyper Estraier which isn't part of nixpkgs
+    doCheck = false;
+  };
   exif = addToBuildInputsWithPkgConfig pkgs.libexif;
   expat =
     old:
@@ -92,6 +123,7 @@ in
   freetype = addToBuildInputsWithPkgConfig pkgs.freetype;
   # requires fuse2
   fuse = broken;
+  ggplot = addToCheckInputs chickenEggs.test;
   isaac =
     old:
     (addToBuildInputsWithPkgConfig pkgs.libffi old)
@@ -121,6 +153,9 @@ in
       ] old
     )
     // (addToBuildInputs pkgs.libglut old);
+  gnuplot-pipe = {
+    nativeCheckInputs = [ pkgs.gnuplot ];
+  };
   hypergiant = addPkgConfig;
   icu = addToBuildInputsWithPkgConfig pkgs.icu;
   imlib2 = addToBuildInputsWithPkgConfig pkgs.imlib2;
@@ -131,6 +166,12 @@ in
     env.NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
   };
   lmdb-ht = addToBuildInputs pkgs.lmdb;
+  lowdown = {
+    nativeCheckInputs = [
+      pkgs.perl
+      pkgs.html-tidy
+    ];
+  };
   magic = addToBuildInputs pkgs.file;
   # requires PCRE
   mdh = broken;
@@ -141,6 +182,7 @@ in
     old:
     (addToBuildInputs pkgs.openmpi old)
     // {
+      nativeCheckInputs = [ pkgs.openmpi ];
       preBuild = ''
         mkdir -p $NIX_BUILD_TOP/mpi-dir
         ln -sf ${lib.getDev pkgs.openmpi}/include $NIX_BUILD_TOP/mpi-dir/include
@@ -160,17 +202,29 @@ in
         sed -i 's/http-curl/http-client/' oauthtoothy.scm oauthtoothy.egg
       '';
     };
-  opencl = addToBuildInputs [
-    pkgs.opencl-headers
-    pkgs.ocl-icd
-  ];
-  openssl = addToBuildInputs pkgs.openssl;
+  opencl =
+    old:
+    (addToBuildInputs [
+      pkgs.opencl-headers
+      pkgs.ocl-icd
+    ] old)
+    // {
+      # Tests don't work in the build sandbox
+      doCheck = false;
+    };
+  openssl =
+    old:
+    (addToBuildInputsWithPkgConfig pkgs.openssl old)
+    // {
+      nativeCheckInputs = [ pkgs.openssl ];
+    };
   orm-db-rqlite = removeBundledEggs "orm-db-rqlite";
   orm-db-sqlite = removeBundledEggs "orm-db-sqlite";
   orm = removeBundledEggs "orm";
   plot = addToBuildInputs pkgs.plotutils;
   postgresql = addToBuildInputsWithPkgConfig pkgs.libpq;
-  pyffi = addToBuildInputsWithPkgConfig pkgs.python3;
+  # Python 3.11 appears to be the highest supported version (tests fail with more recent ones)
+  pyffi = addToBuildInputsWithPkgConfig pkgs.python311;
   rocksdb = addToBuildInputs pkgs.rocksdb_8_3;
   # missing dependency in upstream egg
   s9fes-char-graphics-shapes = addToPropagatedBuildInputs (
@@ -205,6 +259,10 @@ in
       //
         # needed for sdl2-config to be in PATH
         (addToNativeBuildInputs pkgs.SDL2 old)
+      // {
+        # Tests don't work in the build sandbox
+        doCheck = false;
+      }
     );
   sdl2-image =
     old:
@@ -213,6 +271,10 @@ in
       //
         # needed for sdl2-config to be in PATH
         (addToNativeBuildInputs pkgs.SDL2 old)
+      // {
+        # Tests broken
+        doCheck = false;
+      }
     );
   sdl2-ttf =
     old:
@@ -223,7 +285,14 @@ in
         (addToNativeBuildInputs pkgs.SDL2 old)
     );
   soil = addToPropagatedBuildInputsWithPkgConfig pkgs.libepoxy;
+  spock = {
+    # Tests broken
+    doCheck = false;
+  };
   sqlite3 = addToBuildInputs pkgs.sqlite;
+  sqlite3pth = {
+    doCheck = false;
+  };
   stemmer = old: (addToBuildInputs pkgs.libstemmer old) // (addToCscOptions "-L -lstemmer" old);
   stfl =
     old: (addToBuildInputs [ pkgs.ncurses pkgs.stfl ] old) // (addToCscOptions "-L -lncurses" old);
@@ -252,6 +321,18 @@ in
       # needed for tablib-config to be in PATH
       addToNativeBuildInputs pkgs.taglib_1 old
     );
+  tick = {
+    nativeCheckInputs = [ pkgs.git ];
+    preCheck = ''
+      export GIT_CONFIG_GLOBAL="$NIX_BUILD_TOP/.gitconfig"
+      git config --global user.email "nix@example.com"
+      git config --global user.name "Nix Build"
+      git config --global init.defaultBranch master
+    '';
+    postInstall = ''
+      wrapProgram $out/bin/tick --prefix PATH : ${pkgs.git}/bin
+    '';
+  };
   tokyocabinet =
     old:
     (addToBuildInputs pkgs.tokyocabinet old)
@@ -276,7 +357,13 @@ in
   yaml = addToBuildInputs pkgs.libyaml;
   zlib = addToBuildInputs pkgs.zlib;
   zmq = addToBuildInputs pkgs.zeromq;
-  zstd = addToBuildInputs pkgs.zstd;
+  zstd =
+    old:
+    (addToBuildInputs pkgs.zstd old)
+    // {
+      # Test fails due to change in zstd behavior
+      doCheck = false;
+    };
 
   # less trivial fixes, should be upstreamed
   git =
@@ -312,6 +399,8 @@ in
     old:
     (addToBuildInputsWithPkgConfig [ pkgs.dbus ] old)
     // {
+      # Tests require a running dbus daemon
+      doCheck = false;
       # backticks in compiler options
       # aren't supported anymore as of chicken 5.4, it seems.
       preBuild = ''
@@ -321,6 +410,10 @@ in
           --replace-fail '`pkg-config --libs dbus-1`' "$(pkg-config --libs dbus-1)"
       '';
     };
+  egg-tarballs = {
+    # To make tests look for the compiled program in PATH instead of at the same directory as csi
+    env.SALMONELLA_RUNNING = true;
+  };
   math = old: {
     # define-values is used but not imported
     # some breaking change happened now it needs to be done
@@ -330,12 +423,23 @@ in
         --replace-quiet 'only chicken.base' 'only chicken.base define-values'
     '';
   };
+  memcached = {
+    nativeCheckInputs = [ pkgs.memcached ];
+  };
   raylib = addToBuildInputsWithPkgConfig pkgs.raylib;
   socket = old: {
     # chicken-do checks for changes to a file that doesn't exist
     preBuild = ''
       touch socket-config
     '';
+  };
+  srfi-19 = {
+    # Some tests fail for unknown reasons
+    doCheck = false;
+  };
+  srfi-253 = {
+    # Tests cannot be run with chicken-install -test (breaks the same way in salmonella)
+    doCheck = false;
   };
 
   # mark broken
@@ -353,6 +457,8 @@ in
   # cond-expand has no chicken-5 clause any more
   slib-wt-tree = broken;
   srfi-137 = broken;
+  # modules are installed with incorrect filenames for some reason, making them unimportable
+  srfi-227 = broken;
   srfi-38 = broken;
   # depends on srfi-38, which is broken
   magic-pipes = broken;
@@ -366,6 +472,7 @@ in
   gemini-client = broken;
   iup = broken;
   kiwi = broken;
+  pebble = broken;
   qt-light = broken;
   sundials = broken;
   # webkitgtk_4_0 was removed
