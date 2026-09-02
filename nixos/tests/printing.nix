@@ -48,6 +48,7 @@ in
     { lib, ... }:
     {
       services.printing.enable = true;
+      services.printing.cacheProvisioning = true;
       services.printing.startWhenNeeded = socket;
       services.printing.listenAddresses = lib.mkIf (!listenTcp) [ ];
       # Add printer to the client as well, via IPP.
@@ -59,6 +60,7 @@ in
         }
       ];
       hardware.printers.ensureDefaultPrinter = "DeskjetRemote";
+      hardware.printers.cacheProvisioning = true;
     };
 
   testScript = ''
@@ -74,6 +76,11 @@ in
     assert "scheduler is running" in client.succeed("lpstat -r")
 
     client.wait_until_succeeds("journalctl -u cups.service --grep 'CUPS provisioning complete'")
+
+    with subtest("Provisioning gets cached"):
+        client.systemctl("stop cups.service")
+        client.systemctl("start cups.service")
+        client.wait_until_succeeds("journalctl -u cups.service --grep 'CUPS provisioning hash unchanged, skipping provisioning'")
 
     with subtest("UNIX socket is used for connections"):
         assert "/var/run/cups/cups.sock" in client.succeed("lpstat -H")

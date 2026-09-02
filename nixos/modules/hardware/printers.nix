@@ -30,6 +30,16 @@ in
 {
   options = {
     hardware.printers = {
+      cacheProvisioning = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        example = true;
+        description = ''
+          If enabled, the provisioning of printers and classes will short-circuit
+          if the configuration has not changed since the last time it was applied.
+        '';
+      };
+
       ensureDefaultPrinter = lib.mkOption {
         type = lib.types.nullOr printerName;
         default = null;
@@ -270,7 +280,18 @@ in
 
   config.systemd.services = lib.mkIf config.services.printing.enable {
     cups = {
+      environment = {
+        CUPS_PROVISIONING_HASH = lib.hashString "sha256" (
+          lib.toJSON {
+            ensureDefaultPrinter = cfg.ensureDefaultPrinter;
+            ensureClasses = cfg.ensureClasses;
+            ensurePrinters = cfg.ensurePrinters;
+          }
+        );
+      };
       serviceConfig = {
+        CacheDirectory = [ "cups-provisioning" ];
+        EnvironmentFile = [ "-/var/cache/cups-provisioning/hash" ];
         ExecStartPost =
           let
             getPrinters =
@@ -317,6 +338,13 @@ in
               name = "cups-provisioning.sh";
               runtimeInputs = [ pkgs.cups ];
               text = ''
+                ${lib.optionalString cfg.cacheProvisioning ''
+                  if [ "''${CUPS_PROVISIONING_HASH}" = "''${PREV_CUPS_PROVISIONING_HASH:-}" ]; then
+                    printf "CUPS provisioning hash unchanged, skipping provisioning.\n"
+                    exit 0
+                  fi
+                ''}
+
                 #### ADDING PRINTERS ####
                 ${lib.concatMapStringsSep "\n" (
                   p:
@@ -377,7 +405,9 @@ in
                   cupsaccept ${escapeShellArg className}
                 '') classNames}
 
-                echo "CUPS provisioning complete."
+                printf "PREV_CUPS_PROVISIONING_HASH=%s\n" "''${CUPS_PROVISIONING_HASH}" > /var/cache/cups-provisioning/hash
+
+                printf "CUPS provisioning complete.\n"
               '';
             };
           in
