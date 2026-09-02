@@ -106,6 +106,16 @@ stdenv.mkDerivation (finalAttrs: {
     curl
   ];
 
+  # xeus-cpp probes the host `c++` for its include search path and prepends the
+  # result, which shadows the hermetic paths we hand it (Xcode's libc++ and SDK
+  # win on any machine with Xcode). Skip the probe when those paths are supplied.
+  postPatch = ''
+    substituteInPlace src/xinterpreter.cpp --replace-fail \
+      "Cpp::DetectSystemCompilerIncludePaths(CxxSystemIncludes);" \
+      "if (const char* e = std::getenv(\"CPPINTEROP_EXTRA_INTERPRETER_ARGS\"); !e || !*e)
+    Cpp::DetectSystemCompilerIncludePaths(CxxSystemIncludes);"
+  '';
+
   cmakeFlags = [
     (lib.cmakeBool "XEUS_CPP_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
     "-DXEUS_CPP_RESOURCE_DIR=${resourceDir}"
