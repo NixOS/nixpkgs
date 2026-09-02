@@ -18409,6 +18409,12 @@
     name = "Matt Layher";
     keys = [ { fingerprint = "D709 03C8 0BE9 ACDC 14F0  3BFB 77BF E531 397E DE94"; } ];
   };
+  mdnix = {
+    email = "marcodl404@gmail.com";
+    github = "mdnix";
+    githubId = 43579204;
+    name = "Marco De Luca";
+  };
   mdorman = {
     email = "mdorman@jaunder.io";
     github = "mdorman";
