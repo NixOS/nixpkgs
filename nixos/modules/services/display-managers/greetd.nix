@@ -8,7 +8,30 @@
 let
   cfg = config.services.greetd;
   tty = "tty1";
-  settingsFormat = pkgs.formats.toml { };
+
+  # greetd no longer uses TOML for its configuration file: it now uses its own
+  # line-oriented "inish" format, which looks like TOML/INI but doesn't support
+  # TOML features such as multi-line strings, and requires string values to be
+  # escaped and quoted on a single line rather than emitted as-is.
+  # See https://github.com/NixOS/nixpkgs/issues/527565 and
+  # https://lists.sr.ht/~kennylevinsen/greetd-devel/%3C9bf809bb-c941-4672-8868-41d1e1d70b0b@arne.beer%3E
+  escapeGreetdString =
+    builtins.replaceStrings
+      [ "\\" "\"" "\n" "\r" "\t" ]
+      [ "\\\\" "\\\"" "\\n" "\\r" "\\t" ];
+
+  settingsFormat = pkgs.formats.ini {
+    mkKeyValue =
+      k: v:
+      let
+        valueString =
+          if builtins.isString v then
+            ''"${escapeGreetdString v}"''
+          else
+            lib.generators.mkValueStringDefault { } v;
+      in
+      "${lib.escape [ "=" ] k} = ${valueString}";
+  };
 in
 {
   imports = [
@@ -136,7 +159,7 @@ in
       };
 
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} --config ${settingsFormat.generate "greetd.toml" cfg.settings}";
+        ExecStart = "${lib.getExe cfg.package} --config ${settingsFormat.generate "greetd.conf" cfg.settings}";
 
         Restart = lib.mkIf cfg.restart "on-success";
 
