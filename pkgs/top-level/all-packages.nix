@@ -1627,11 +1627,6 @@ with pkgs;
 
   steampipePackages = recurseIntoAttrs (callPackage ../tools/misc/steampipe-packages { });
 
-  inherit (callPackages ../servers/rainloop { })
-    rainloop-community
-    rainloop-standard
-    ;
-
   roundcubePlugins = recurseIntoAttrs (callPackage ../by-name/ro/roundcube/plugins { });
 
   xmlsort = perlPackages.XMLFilterSort;
