@@ -4077,10 +4077,6 @@ with pkgs;
   rust-bindgen-unwrapped = callPackage ../development/tools/rust/bindgen/unwrapped.nix { };
   rust-bindgen = callPackage ../development/tools/rust/bindgen { };
   rustup = callPackage ../development/tools/rust/rustup { };
-  rustup-toolchain-install-master =
-    callPackage ../development/tools/rust/rustup-toolchain-install-master
-      {
-      };
   scala_2_12 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.12"; };
   scala_2_13 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.13"; };
   scala_3 = callPackage ../development/compilers/scala { };
