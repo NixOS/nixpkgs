@@ -28,6 +28,7 @@
   nixos-rebuild-ng,
   colmena,
   nix-update,
+  nix-update-script,
   nix-init,
   nurl,
 
@@ -216,7 +217,7 @@ lib.makeExtensible (
     lix_2_95 = self.makeLixScope {
       attrName = "lix_2_95";
 
-      lix-args = (import ./2.95.nix { inherit fetchFromGitea rustPlatform; }) // {
+      lix-args = (import ./2.95.nix { inherit fetchFromGitea rustPlatform nix-update-script; }) // {
         patches = [
           lixFunctional2TimeoutPatch
         ];

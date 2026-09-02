@@ -1,5 +1,6 @@
 {
   fetchFromGitea,
+  nix-update-script,
   rustPlatform,
 }:
 rec {
@@ -17,5 +18,13 @@ rec {
     name = "lix-${version}";
     inherit src;
     hash = "sha256-a5XtutX+NS4wOqxeqbscWZMs99teKick5+cQfbCRGxQ=";
+  };
+
+  updateScript = nix-update-script {
+    attrPath = "lixPackageSets.lix_2_95.lix";
+    extraArgs = [
+      "--override-filename=pkgs/tools/package-management/lix/2.95.nix"
+      "--version-regex=^(2[.]95[.][0-9]+)$"
+    ];
   };
 }
