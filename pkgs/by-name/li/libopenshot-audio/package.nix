@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libopenshot-audio";
-  version = "0.6.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "libopenshot-audio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-NfwjyX+9OiS4NoB4ubscNF52kF4i3GAVjb4Z/RwkaCI=";
+    hash = "sha256-xpMs3RkPCFvHE/F1bUxWbOh3ZWnHw8h04YtxlbP0PCs=";
   };
 
   nativeBuildInputs = [

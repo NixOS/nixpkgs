@@ -1568,6 +1568,7 @@ mapAliases {
   LPCNet = throw "'LPCNet' has been renamed to/replaced by 'lpcnet'"; # Converted to throw 2025-10-27
   lttv = throw "'lttv' has been removed, as it is broken and unmaintained. Upstream suggests using 'tracecompass' or 'babeltrace2' instead"; # Added 2026-05-04
   luci-go = throw "luci-go has been removed since it was unused and failing to build for 5 months"; # Added 2025-08-27
+  lukesmithx-st = throw "'lukesmithxyz-st' has been removed, as it is unmaintained"; # Added 2026-08-31
   luminanceHDR = throw "'luminanceHDR' has been removed as it depended on EOL qt5 webengine and was unmaintained"; # Added 2026-04-17
   lunarvim = throw "'lunarvim' has been removed since it was abandoned upstream and relied on an older version of 'neovim' to work properly"; # Added 2026-02-05
   lunatic = throw "'lunatic' has been removed, as it is unmaintained"; # Added 2026-05-04
@@ -2337,6 +2338,8 @@ mapAliases {
   springLobby = throw "springLobby has been removed, as it had been broken since 2023"; # Added 2025-09-16
   sqlar = throw "'sqlar' has been removed, as it is umaintained upstream, and depends on fuse2. Consider using the sqlite builtin VACUUM";
   sqlbag = throw "sqlbag has been removed because it has been marked as broken since May 2024."; # Added 2025-10-11
+  sqlitestudio = warnAlias "`sqlitestudio` has been renamed to `letos` by upstream in v4.0.0. See https://github.com/pawelsalawa/letos/issues/5441 for more." letos; # Added 2026-09-01
+  sqlitestudio-plugins = warnAlias "`sqlitestudio-plugins` has been renamed to `letos-plugins` by upstream in v4.0.0. See https://github.com/pawelsalawa/letos/issues/5441 for more." letos-plugins; # Added 2026-09-01
   squashfsTools = squashfs-tools; # Added 2026-07-05
   squirreldisk = throw "'squirreldisk' has been removed as it depended on webkitgtk 4.0"; # Added 2026-06-07
   src = throw "The \"src\" package has been renamed to \"simple-revision-control\". If you encounter this error and did not intend to use that package you may have a falsely constructed overlay."; # Added 2025-11-19
@@ -2605,7 +2608,7 @@ mapAliases {
   warsow-engine = throw "'warsow-engine' has been removed as it is unmaintained and is broken"; # Added 2025-10-09
   wasistlos = throw "'wasistlos' has been removed because it was unmaintained and archived upstream. Consider using 'karere' instead"; # Added 2026-04-13
   wasm3 = throw "'wasm3' has been removed as it is unmaintained upstream and has many known vulnerabilities"; # Added 2026-06-03
-  wasm-bindgen-cli = wasm-bindgen-cli_0_2_121;
+  wasm-bindgen-cli = wasm-bindgen-cli_0_2_127;
   wasm-strip = throw "'wasm-strip' has been removed due to upstream deprecation. Use 'wabt' instead."; # Added 2025-11-06
   wavebox = throw "'wavebox' has been removed due to lack of maintenance in nixpkgs"; # Added 2025-06-24
   wavm = throw "wavm has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10

@@ -63,7 +63,7 @@ let
 in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "executorch";
-  version = "1.4.0";
+  version = "1.4.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -77,7 +77,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     name = "executorch";
 
     fetchSubmodules = true;
-    hash = "sha256-l8Wpjbu+jcuGAlt0kEGvmRQ/Xh4+mrPzTOpChc8g5nA=";
+    hash = "sha256-j43JX/3WLassyiyfwwIfSKO05ZmmS9wGUol4c+BZLEU=";
   };
 
   postPatch =

@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hass-client";
-  version = "1.3.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "python-hass-client";
     tag = finalAttrs.version;
-    hash = "sha256-mrS3kuG/6ZE02B0Ua10AAAsgVBrEDRJxNfmIHT+EHWw=";
+    hash = "sha256-WpsdvwRICAllrmpuhOUEAPq2kdtcKK/XgE+0+PY+lUo=";
   };
 
   nativeBuildInputs = [

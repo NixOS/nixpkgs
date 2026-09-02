@@ -13,7 +13,8 @@ let
   # Only placeholders reach the world-readable Nix store; the install
   # script substitutes the real secrets at runtime.
   dbConfig =
-    cfg.database
+    # `engine` is MySQL-only; omit for other drivers
+    (if cfg.database.driver == "mysql" then cfg.database else removeAttrs cfg.database [ "engine" ])
     // optionalAttrs (cfg.databasePasswordFile != null) {
       password = "@databasePassword@";
     };
@@ -138,36 +139,84 @@ in
     };
 
     database = mkOption {
-      type =
-        with types;
-        attrsOf (oneOf [
-          str
-          bool
-          int
-        ]);
+      type = types.submodule {
+        freeformType =
+          with types;
+          attrsOf (oneOf [
+            str
+            bool
+            int
+          ]);
+        options = {
+          driver = mkOption {
+            type = types.str;
+            default = "mysql";
+            description = "Database driver; i.e. MySQL, MariaDB...";
+          };
+          host = mkOption {
+            type = types.str;
+            default = "localhost";
+            description = "Database server hostname.";
+          };
+          port = mkOption {
+            type = types.port;
+            default = 3306;
+            description = "Database connection port; defaults to 3306 with MySQL.";
+          };
+          database = mkOption {
+            type = types.str;
+            default = "flarum";
+            description = "Database name.";
+          };
+          username = mkOption {
+            type = types.str;
+            default = "flarum";
+            description = "Username for database server access.";
+          };
+          password = mkOption {
+            type = types.str;
+            default = "";
+            description = "Password for database server access.";
+          };
+          charset = mkOption {
+            type = types.str;
+            default = "utf8mb4";
+            description = "Character encoding for the database.";
+          };
+          collation = mkOption {
+            type = types.str;
+            default = "utf8mb4_unicode_ci";
+            description = "Character collation for database sorting and comparison.";
+          };
+          prefix = mkOption {
+            type = types.str;
+            default = "";
+            description = "Table prefix; useful for sharing a database with other services.";
+          };
+          strict = mkOption {
+            type = types.bool;
+            default = false;
+            description = "Enable strict SQL mode.";
+          };
+          engine = mkOption {
+            type = types.str;
+            default = "InnoDB";
+            description = "Storage engine for new tables; MySQL-only.";
+          };
+          prefix_indexes = mkOption {
+            type = types.bool;
+            default = true;
+            description = "Apply table prefix to database index names.";
+          };
+        };
+      };
+      default = { };
       description = ''
         MySQL database parameters.
 
         WARNING: A `password` set here is stored world-readable in the
         Nix store. Use {option}`databasePasswordFile` instead.
       '';
-      default = {
-        # the database driver; i.e. MySQL; MariaDB...
-        driver = "mysql";
-        # the host of the connection; localhost in most cases unless using an external service
-        host = "localhost";
-        # the name of the database in the instance
-        database = "flarum";
-        # database username
-        username = "flarum";
-        # database password
-        password = "";
-        # the prefix for the tables; useful if you are sharing the same database with another service
-        prefix = "";
-        # the port of the connection; defaults to 3306 with MySQL
-        port = 3306;
-        strict = false;
-      };
     };
 
     databasePasswordFile = mkOption {
@@ -291,8 +340,13 @@ in
       before = [ "phpfpm-flarum.service" ];
       requires = [ "mysql.service" ];
       after = [ "mysql.service" ];
+      restartTriggers = [
+        cfg.package
+        configPhpFile
+      ];
       serviceConfig = {
         Type = "oneshot";
+        RemainAfterExit = true;
         User = cfg.user;
         Group = cfg.group;
         # The secret-filled install config is staged in /tmp

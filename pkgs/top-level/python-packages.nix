@@ -5340,6 +5340,8 @@ self: super: with self; {
 
   earn-e-p1 = callPackage ../development/python-modules/earn-e-p1 { };
 
+  earth2studio = callPackage ../development/python-modules/earth2studio { };
+
   easy-thumbnails = callPackage ../development/python-modules/easy-thumbnails { };
 
   easydict = callPackage ../development/python-modules/easydict { };
@@ -15031,6 +15033,8 @@ self: super: with self; {
 
   pygreat = callPackage ../development/python-modules/pygreat { };
 
+  pygrib = callPackage ../development/python-modules/pygrib { };
+
   pygrok = callPackage ../development/python-modules/pygrok { };
 
   pygsl = callPackage ../development/python-modules/pygsl { inherit (pkgs) gsl swig; };
@@ -17662,8 +17666,6 @@ self: super: with self; {
   quart-schema = callPackage ../development/python-modules/quart-schema { };
 
   quart-trio = callPackage ../development/python-modules/quart-trio { };
-
-  quaternion = callPackage ../development/python-modules/quaternion { };
 
   qudida = callPackage ../development/python-modules/qudida { };
 

@@ -215,6 +215,12 @@
     github = "21eleven";
     githubId = 8813855;
   };
+  _27Aaron = {
+    name = "Aaron";
+    email = "niceboy@duck.com";
+    github = "27Aaron";
+    githubId = 85681241;
+  };
   _2gn = {
     name = "Hiram Tanner";
     github = "2gn";
@@ -2656,10 +2662,10 @@
     name = "Astavie";
   };
   asterismono = {
-    email = "cmiki@amono.me";
+    email = "i@nvirellia.im";
     github = "AsterisMono";
     githubId = 54884471;
-    name = "Chatnoir Miki";
+    name = "Noa Virellia";
     matrix = "@mikiiki:matrix.org";
   };
   astratagem = {
@@ -9357,6 +9363,14 @@
     github = "figsoda";
     githubId = 40620903;
     name = "figsoda";
+  };
+  Fijxu = {
+    email = "fijxu@nadeko.net";
+    matrix = "@fijxu:nadeko.net";
+    github = "Fijxu";
+    githubId = 61166695;
+    name = "Fijxu";
+    keys = [ { fingerprint = "F545 E682 9D6B E6B9 2491  845C 32C1 DDF3 33ED A6A4"; } ];
   };
   fin-w = {
     email = "fin-w@tutanota.com";

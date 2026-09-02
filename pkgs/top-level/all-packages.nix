@@ -343,12 +343,12 @@ with pkgs;
   djgpp = djgpp_i586;
   djgpp_i586 = callPackage ../development/compilers/djgpp {
     targetArchitecture = "i586";
-    stdenv = gccStdenv;
+    stdenv = gcc14Stdenv;
   };
   djgpp_i686 = lowPrio (
     callPackage ../development/compilers/djgpp {
       targetArchitecture = "i686";
-      stdenv = gccStdenv;
+      stdenv = gcc14Stdenv;
     }
   );
 
@@ -6503,9 +6503,9 @@ with pkgs;
     useQt6 = true;
   };
 
-  qgnomeplatform = libsForQt5.callPackage ../development/libraries/qgnomeplatform { };
+  qgnomeplatform = callPackage ../development/libraries/qgnomeplatform { };
 
-  qgnomeplatform-qt6 = qt6Packages.callPackage ../development/libraries/qgnomeplatform {
+  qgnomeplatform-qt6 = qgnomeplatform.override {
     useQt6 = true;
   };
 
@@ -8245,7 +8245,7 @@ with pkgs;
     patches = config."2bwm".patches or [ ];
   };
 
-  inherit (qt6Packages.callPackage ../applications/office/activitywatch { })
+  inherit (callPackage ../applications/office/activitywatch { })
     aw-qt
     aw-notify
     aw-server-rust
@@ -9097,8 +9097,6 @@ with pkgs;
   };
 
   ringboard-wayland = callPackage ../by-name/ri/ringboard/package.nix { displayServer = "wayland"; };
-
-  ripcord = qt5.callPackage ../applications/networking/instant-messengers/ripcord { };
 
   inherit (callPackage ../applications/networking/cluster/rke2 { })
     rke2_1_33
