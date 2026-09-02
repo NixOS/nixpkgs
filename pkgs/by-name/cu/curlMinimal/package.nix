@@ -56,8 +56,10 @@
   zlib,
   zstdSupport ? false,
   zstd,
+  echSupport ? false,
 
   # for passthru.tests
+  curl,
   coeurl,
   curlpp,
   haskellPackages,
@@ -83,6 +85,10 @@ assert
       rustlsSupport
     ]) > 1
   );
+
+# Encrypted Client Hello (ECH) support requires at least OpenSSL 4.0 or rustls.
+assert
+  echSupport -> (opensslSupport && lib.versionAtLeast openssl.version "4.0.0") || rustlsSupport;
 
 let
   isCross = !lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform;
@@ -209,6 +215,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature ldapSupport "ldap")
     (lib.enableFeature ldapSupport "ldaps")
     (lib.enableFeature websocketSupport "websockets")
+    (lib.enableFeature echSupport "ech")
     # --with-ca-fallback is only supported for openssl https://github.com/curl/curl/blame/curl-8_16_0/acinclude.m4#L1258
     (lib.withFeature opensslSupport "ca-fallback")
     (lib.withFeature http3Support "nghttp3")
@@ -217,6 +224,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature rustlsSupport "rustls")
     (lib.withFeature zstdSupport "zstd")
     (lib.withFeature pslSupport "libpsl")
+
     (lib.withFeatureAs brotliSupport "brotli" (lib.getDev brotli))
     (lib.withFeatureAs gnutlsSupport "gnutls" (lib.getDev gnutls))
     (lib.withFeatureAs idnSupport "libidn2" (lib.getDev libidn2))
@@ -307,6 +315,11 @@ stdenv.mkDerivation (finalAttrs: {
         withCheck = finalAttrs.finalPackage.overrideAttrs (_: {
           doCheck = true;
         });
+        ech = curl.override {
+          echSupport = true;
+          opensslSupport = false;
+          rustlsSupport = true;
+        };
         fetchpatch = tests.fetchpatch.simple.override {
           fetchpatch = (fetchpatch.override { fetchurl = useThisCurl fetchurl; }) // {
             version = 1;
