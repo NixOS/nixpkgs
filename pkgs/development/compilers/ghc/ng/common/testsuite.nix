@@ -71,46 +71,52 @@ runCommand "ghc-testsuite-${ghc.version}"
       license = lib.licenses.bsd3;
     };
   }
-  ''
+  (
     # The driver writes into the test directories, so the tree must be writable.
-    cp -r ${testsuiteSrc} testsuite
-    chmod -R u+w testsuite
-
+    ''
+      cp -r ${testsuiteSrc} testsuite
+      chmod -R u+w testsuite
+    ''
     # Several tests consult $HOME, and the sandbox has none.
-    export HOME="$PWD/home"
-    mkdir -p "$HOME"
-
-    # NB: no comments inside the command below -- a `#` line between two
-    # backslash continuations silently truncates it, which is how `| tee` went
-    # missing once already.
+    + ''
+      export HOME="$PWD/home"
+      mkdir -p "$HOME"
+    ''
+    # No comments inside the command below: a `#` line between two backslash
+    # continuations silently truncates it, which is how `| tee` went missing
+    # once already.
     #
     # `METRICS_FILE` keeps the performance tests from wanting baselines out of
     # git notes; there is no checkout here to hold any.
-    make -C testsuite${testDirArg} \
-      ${lib.escapeShellArgs makeFlags} \
-      TEST_HC=${ghc}/bin/ghc \
-      GHC_PKG=${ghc}/bin/ghc-pkg \
-      METRICS_FILE=$PWD/metrics.txt \
-      WAYS=${ways} \
-      THREADS=''${NIX_BUILD_CORES:-1} \
-      2>&1 | tee test.log
-
+    + ''
+      make -C testsuite${testDirArg} \
+        ${lib.escapeShellArgs makeFlags} \
+        TEST_HC=${ghc}/bin/ghc \
+        GHC_PKG=${ghc}/bin/ghc-pkg \
+        METRICS_FILE=$PWD/metrics.txt \
+        WAYS=${ways} \
+        THREADS=''${NIX_BUILD_CORES:-1} \
+        2>&1 | tee test.log
+    ''
     # `make` exits 0 even with unexpected failures, so the summary is the
     # verdict. Anything unexpected -- a failure, a pass, or a framework error --
     # fails the derivation.
-    for kind in "unexpected failures" "unexpected passes" \
-                "unexpected stat failures" "caused framework failures"; do
-      n=$(sed -n "s/^ *\([0-9][0-9]*\) $kind\$/\1/p" test.log | tail -1)
-      if [ -z "$n" ]; then
-        echo "error: testsuite printed no '$kind' line; did it run at all?" >&2
-        exit 1
-      fi
-      if [ "$n" != "0" ]; then
-        echo "error: $n $kind" >&2
-        exit 1
-      fi
-    done
-
-    mkdir -p "$out"
-    cp test.log "$out/test.log"
-  ''
+    + ''
+      for kind in "unexpected failures" "unexpected passes" \
+                  "unexpected stat failures" "caused framework failures"; do
+        n=$(sed -n "s/^ *\([0-9][0-9]*\) $kind\$/\1/p" test.log | tail -1)
+        if [ -z "$n" ]; then
+          echo "error: testsuite printed no '$kind' line; did it run at all?" >&2
+          exit 1
+        fi
+        if [ "$n" != "0" ]; then
+          echo "error: $n $kind" >&2
+          exit 1
+        fi
+      done
+    ''
+    + ''
+      mkdir -p "$out"
+      cp test.log "$out/test.log"
+    ''
+  )

@@ -84,9 +84,10 @@ let
     "ghc-compact"
     "ghc-experimental"
     "ghc-platform"
-    # From 9.15 `ghc-boot` and the `ghc` library both depend on it, so it has to
-    # be registered or `ghc-pkg check` reports them broken. Harmless on 9.14,
-    # where nothing depends on it.
+    # `ghc-boot`, `ghc-pkg` and the `ghc` library all depend on it once the
+    # toolchain facts move into `targets/default.target`, so it has to be
+    # registered or `ghc-pkg check` reports them broken. That is true of 9.14
+    # too now that it carries the backport.
     "ghc-toolchain"
     "template-haskell"
     "ghc"

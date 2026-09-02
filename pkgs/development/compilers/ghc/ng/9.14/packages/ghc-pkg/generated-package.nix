@@ -11,6 +11,7 @@
   directory,
   filepath,
   ghc-boot,
+  ghc-toolchain,
   lib,
   process,
   unix,
@@ -30,6 +31,7 @@ mkDerivation {
     directory
     filepath
     ghc-boot
+    ghc-toolchain
     process
     unix
   ];

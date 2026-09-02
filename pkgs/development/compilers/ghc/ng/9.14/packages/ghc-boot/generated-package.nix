@@ -12,6 +12,7 @@
   filepath,
   ghc-boot-th,
   ghc-platform,
+  ghc-toolchain,
   lib,
   unix,
 }:
@@ -34,6 +35,7 @@ mkDerivation {
     filepath
     ghc-boot-th
     ghc-platform
+    ghc-toolchain
     unix
   ];
   description = "Shared functionality between GHC and its boot libraries";

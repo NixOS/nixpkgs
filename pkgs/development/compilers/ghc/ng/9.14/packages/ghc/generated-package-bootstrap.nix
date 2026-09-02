@@ -18,6 +18,7 @@
   ghc-boot,
   ghc-boot-th-next,
   ghc-heap,
+  ghc-toolchain,
   ghci,
   happy,
   hpc,
@@ -56,6 +57,7 @@ mkDerivation {
     ghc-boot
     ghc-boot-th-next
     ghc-heap
+    ghc-toolchain
     ghci
     hpc
     os-string
