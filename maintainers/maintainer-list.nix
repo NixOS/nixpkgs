@@ -19282,6 +19282,12 @@
     githubId = 708570;
     name = "Manuel Mendez";
   };
+  mmulqueen = {
+    email = "michael@mulqueen.me.uk";
+    github = "mmulqueen";
+    githubId = 6616321;
+    name = "Michael Mulqueen";
+  };
   mmusnjak = {
     email = "marko.musnjak@gmail.com";
     github = "mmusnjak";
