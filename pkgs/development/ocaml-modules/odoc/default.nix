@@ -1,6 +1,8 @@
 {
   lib,
+  ocaml,
   buildDunePackage,
+  removeReferencesTo,
   ocaml-crunch,
   astring,
   cmdliner,
@@ -25,6 +27,7 @@ buildDunePackage (self: {
   nativeBuildInputs = [
     cppo
     ocaml-crunch
+    removeReferencesTo
   ];
   buildInputs = [
     astring
@@ -64,6 +67,7 @@ buildDunePackage (self: {
   installPhase = ''
     runHook preInstall
     dune install --prefix=$bin --libdir=$lib/lib/ocaml/${ocaml.version}/site-lib odoc
+    remove-references-to -t ${ocaml} $bin/bin/odoc
     runHook postInstall
   '';
 
