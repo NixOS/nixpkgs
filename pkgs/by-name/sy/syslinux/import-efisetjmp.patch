@@ -1,0 +1,22 @@
+From 68defee52f4eba82eefaeea17f21c7498448dd6b Mon Sep 17 00:00:00 2001
+From: Samuel Dionne-Riel <samuel@dionne-riel.com>
+Date: Mon, 3 Jun 2024 16:16:25 -0400
+Subject: [PATCH] efi/efi.h: Add efisetjmp.h
+
+See https://github.com/ncroxon/gnu-efi/commit/486ba3c3bdd147b7d98159b9e650be60bce0f027
+---
+ efi/efi.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/efi/efi.h b/efi/efi.h
+index c266532f3..e4497574b 100644
+--- a/efi/efi.h
++++ b/efi/efi.h
+@@ -23,6 +23,7 @@
+ #include <efi.h>
+ #include <efilib.h>
+ #include <efistdarg.h>
++#include <efisetjmp.h>
+ 
+ /* Delay for 100 ms */
+ #define EFI_NOMAP_PRINT_DELAY	100

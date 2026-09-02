@@ -1,0 +1,13 @@
+diff --git src/autoconf/configure.ac src/autoconf/configure.ac
+index 156e97f4..6d70bf33 100644
+--- src/autoconf/configure.ac
++++ src/autoconf/configure.ac
+@@ -1410,7 +1410,7 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+ #include <mysql.h>
+ #include <errmsg.h>
+ 
+-struct MYSQL * foo(void)
++struct st_mysql * foo(void)
+ {
+     static MYSQL var;
+     

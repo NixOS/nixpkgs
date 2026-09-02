@@ -1,0 +1,7 @@
+--- a/bindings/xmbind.alias
++++ b/bindings/xmbind.alias
+@@ -62,3 +62,4 @@
+ "Sun Microsystems, Inc."				sun
+ ! "Sun Microsystems, Inc."				sun_at
+ "Tektronix, Inc."					tek
++"The X.Org Foundation"				tpc

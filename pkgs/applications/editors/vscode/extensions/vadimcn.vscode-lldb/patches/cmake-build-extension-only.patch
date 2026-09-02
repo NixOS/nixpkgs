@@ -1,0 +1,56 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3e4f955..2ca59d0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -16,13 +16,6 @@ endif()
+ set(VERSION "${VERSION}${VERSION_SUFFIX}")
+ message("Version ${VERSION}")
+ 
+-set(LLDB_PACKAGE $ENV{LLDB_PACKAGE} CACHE PATH "Zip archive containing LLDB files")
+-if (LLDB_PACKAGE)
+-    message("Using LLDB_PACKAGE=${LLDB_PACKAGE}")
+-else()
+-    message(FATAL_ERROR "LLDB_PACKAGE not set." )
+-endif()
+-
+ set(CMAKE_CTEST_ARGUMENTS "--output-on-failure" CACHE INTERNAL "CTest arguments")
+ 
+ set(TEST_TIMEOUT 5000 CACHE STRING "Test timeout [ms]")
+@@ -120,12 +113,6 @@ configure_file(package.json ${CMAKE_CURRENT_BINARY_DIR}/package.json @ONLY)
+ # We still need to resolve codelldb schema $ref's in it, but we'll do this during the build.
+ file(COPY_FILE ${CMAKE_CURRENT_BINARY_DIR}/package.json ${CMAKE_CURRENT_BINARY_DIR}/package.pre.json)
+ file(COPY_FILE ${CMAKE_CURRENT_SOURCE_DIR}/package-lock.json ${CMAKE_CURRENT_BINARY_DIR}/package-lock.json)
+-# Install node_modules
+-execute_process(
+-    COMMAND ${NPM} install
+-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+-    COMMAND_ERROR_IS_FATAL ANY
+-)
+ # So we can commit any changes
+ file(COPY_FILE ${CMAKE_CURRENT_BINARY_DIR}/package-lock.json ${CMAKE_CURRENT_SOURCE_DIR}/package-lock.json)
+ 
+@@ -133,7 +120,7 @@ file(COPY_FILE ${CMAKE_CURRENT_BINARY_DIR}/package-lock.json ${CMAKE_CURRENT_SOU
+ add_custom_command(
+     OUTPUT ${CMAKE_BINARY_DIR}/package.json ${CMAKE_BINARY_DIR}/generated/codelldb.ts
+     DEPENDS ${CMAKE_SOURCE_DIR}/package.json ${CMAKE_SOURCE_DIR}/src/codelldb-types/src/lib.rs
+-    COMMAND cargo run --package codelldb-types -- ${CMAKE_BINARY_DIR}/codelldb.schema.json
++    COMMAND codelldb-types ${CMAKE_BINARY_DIR}/codelldb.schema.json
+     COMMAND ${WithEnv} NODE_PATH=${CMAKE_CURRENT_BINARY_DIR}/node_modules node ${CMAKE_CURRENT_SOURCE_DIR}/tools/prep-package.js
+             ${CMAKE_CURRENT_BINARY_DIR}/package.pre.json ${CMAKE_CURRENT_BINARY_DIR}/package.json
+     COMMAND ${NPM} run json2ts -- ${CMAKE_BINARY_DIR}/codelldb.schema.json ${CMAKE_BINARY_DIR}/generated/codelldb.ts
+@@ -158,6 +145,7 @@ add_custom_target(update_lockfiles
+ 
+ add_copy_file(PackageFiles ${CMAKE_CURRENT_SOURCE_DIR}/README.md ${CMAKE_CURRENT_BINARY_DIR}/README.md)
+ add_copy_file(PackageFiles ${CMAKE_CURRENT_SOURCE_DIR}/CHANGELOG.md ${CMAKE_CURRENT_BINARY_DIR}/CHANGELOG.md)
++add_copy_file(PackageFiles ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE ${CMAKE_CURRENT_BINARY_DIR}/LICENSE)
+ add_copy_file(PackageFiles ${CMAKE_CURRENT_SOURCE_DIR}/images/lldb.png ${CMAKE_CURRENT_BINARY_DIR}/images/lldb.png)
+ add_copy_file(PackageFiles ${CMAKE_CURRENT_SOURCE_DIR}/images/user.svg ${CMAKE_CURRENT_BINARY_DIR}/images/user.svg)
+ add_copy_file(PackageFiles ${CMAKE_CURRENT_SOURCE_DIR}/images/users.svg ${CMAKE_CURRENT_BINARY_DIR}/images/users.svg)
+@@ -174,6 +162,7 @@ add_custom_target(dev_debugging
+ set(PackagedFilesBootstrap
+     README.md
+     CHANGELOG.md
++    LICENSE
+     extension.js
+     images/*
+     syntaxes/*

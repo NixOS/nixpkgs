@@ -1,0 +1,26 @@
+diff --git a/extension.js b/extension.js
+index ef82bdc..2cdeab7 100644
+--- a/extension.js
++++ b/extension.js
+@@ -731,7 +731,7 @@ const EasyScreenCastIndicator = GObject.registerClass({
+             Lib.TalkativeLog('-*-execute post command');
+ 
+             // launch cmd after registration
+-            const tmpCmd = `/usr/bin/sh -c "${this._settings.getOption('s', Settings.POST_CMD_SETTING_KEY)}"`;
++            const tmpCmd = `/bin/sh -c "${this._settings.getOption('s', Settings.POST_CMD_SETTING_KEY)}"`;
+ 
+             const mapObj = {
+                 _fpath: pathFile,
+diff --git a/prefs.js b/prefs.js
+index 7e21b53..730eec3 100644
+--- a/prefs.js
++++ b/prefs.js
+@@ -834,7 +834,7 @@ const EasyScreenCastSettingsWidget = GObject.registerClass({
+                 refBufferLog.text = '';
+ 
+                 ctx.CtrlExe.Execute(
+-                    'journalctl /usr/bin/gnome-shell --since "15 min ago" --output=cat --no-pager',
++                    'journalctl @gnomeShell@/bin/.gnome-shell-wrapped --since "15 min ago" --output=cat --no-pager',
+                     (result, stdout) => {
+                         Lib.TalkativeLog(`-^-CALLBACK async S= ${result}`);
+                         refBufferLog.text = stdout;

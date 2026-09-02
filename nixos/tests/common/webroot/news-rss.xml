@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:blogChannel="http://backend.userland.com/blogChannelModule" version="2.0">
+ <channel>
+  <title>NixOS News</title><link>https://nixos.org</link>
+  <description>News for NixOS, the purely functional Linux distribution.</description>
+  <image>
+   <title>NixOS</title>
+   <url>https://nixos.org/logo/nixos-logo-only-hires.png</url><link>https://nixos.org/</link>
+  </image>
+  <item>
+   <title>NixOS 18.09 released</title><link>https://nixos.org/news.html</link>
+   <description>
+    <a href="https://github.com/NixOS/nixos-artwork/blob/master/releases/18.09-jellyfish/jellyfish.png">
+     <img class="inline" src="logo/nixos-logo-18.09-jellyfish-lores.png" alt="18.09 Jellyfish logo" with="100" height="87"/>
+    </a>
+      NixOS 18.09 “Jellyfish” has been released, the tenth stable release branch.
+      See the <a href="/nixos/manual/release-notes.html#sec-release-18.09">release notes</a>
+      for details. You can get NixOS 18.09 ISOs and VirtualBox appliances
+      from the <a href="nixos/download.html">download page</a>.
+      For information on how to upgrade from older release branches
+      to 18.09, check out the
+      <a href="/nixos/manual/index.html#sec-upgrading">manual section on upgrading</a>.
+    </description>
+   <pubDate>Sat Oct 06 2018 00:00:00 GMT</pubDate>
+  </item>
+ </channel>
+</rss>

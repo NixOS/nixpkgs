@@ -1,0 +1,13 @@
+diff --git a/configure b/configure
+index ffa407d53d..f3e223cfac 100755
+--- a/configure
++++ b/configure
+@@ -6742,7 +6742,7 @@ if [ -z "$nvccflags" ]; then
+     nvccflags=$nvccflags_default
+ fi
+
+-nvccflags="$nvccflags -std=c++11"
++nvccflags="$nvccflags -std=c++14"
+
+ if enabled x86_64 || enabled ppc64 || enabled aarch64; then
+     nvccflags="$nvccflags -m64"

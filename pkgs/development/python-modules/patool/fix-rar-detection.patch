@@ -1,0 +1,318 @@
+From d10324eac4429ff3d7d38ad24a19210699229e07 Mon Sep 17 00:00:00 2001
+From: Alfred Wingate <parona@protonmail.com>
+Date: Wed, 11 Dec 2024 06:34:36 +0200
+Subject: [PATCH 1/4] Use application/gzip as the preferred mimetype for gzip
+
+Signed-off-by: Alfred Wingate <parona@protonmail.com>
+---
+ patoolib/__init__.py |  1 -
+ patoolib/mime.py     | 16 +++++++++++++---
+ tests/test_mime.py   |  4 ++--
+ 3 files changed, 15 insertions(+), 6 deletions(-)
+
+diff --git a/patoolib/__init__.py b/patoolib/__init__.py
+index d665a28a..2247b615 100644
+--- a/patoolib/__init__.py
++++ b/patoolib/__init__.py
+@@ -127,7 +127,6 @@
+     'application/x-cpio': 'cpio',
+     'application/x-debian-package': 'deb',
+     'application/x-dms': 'dms',
+-    'application/x-gzip': 'gzip',
+     'application/x-iso9660-image': 'iso',
+     'application/x-lz4': 'lz4',
+     'application/x-lzop': 'lzop',
+diff --git a/patoolib/mime.py b/patoolib/mime.py
+index 12405ada..c9d8894b 100644
+--- a/patoolib/mime.py
++++ b/patoolib/mime.py
+@@ -135,9 +135,11 @@ def guess_mime(filename: str) -> tuple[str | None, str | None]:
+ Mime2Encoding: dict[str, str] = dict(
+     [(_val, _key) for _key, _val in Encoding2Mime.items()]
+ )
+-# libmagic before version 5.14 identified .gz files as application/x-gzip
+-Mime2Encoding['application/x-gzip'] = 'gzip'
+ 
++LegacyMimeType: dict[str, str] = {
++    # libmagic before version 5.14 identified .gz files as application/x-gzip
++    'application/x-gzip': "application/gzip",
++}
+ 
+ def guess_mime_mimedb(filename: str) -> tuple[str | None, str | None]:
+     """Guess MIME type from given filename.
+@@ -192,6 +194,10 @@ def guess_mime_file(filename: str) -> tuple[str | None, str | None]:
+         except (OSError, subprocess.CalledProcessError) as err:
+             log_warning(f"error executing {cmd}: {err}")
+             mime2 = None
++
++        if mime2 in LegacyMimeType:
++            mime2 = LegacyMimeType[mime2]
++
+         # Some file(1) implementations return an empty or unknown mime type
+         # when the uncompressor program is not installed, other
+         # implementation return the original file type.
+@@ -227,6 +233,10 @@ def guess_mime_file_mime(
+     except OSError as err:
+         # ignore errors, as file(1) is only a fallback
+         log_warning(f"error executing {cmd}: {err}")
++
++    if mime in LegacyMimeType:
++        mime = LegacyMimeType[mime]
++
+     if mime not in ArchiveMimetypes:
+         mime, encoding = None, None
+     return mime, encoding
+@@ -253,7 +263,7 @@ def get_file_mime_encoding(parts: Sequence[str]) -> str | None:
+     "cpio archive": "application/x-cpio",
+     "ASCII cpio archive": "application/x-cpio",
+     "Debian binary package": "application/x-debian-package",
+-    "gzip compressed data": "application/x-gzip",
++    "gzip compressed data": "application/gzip",
+     "LZMA compressed data": "application/x-lzma",
+     "LRZIP compressed data": "application/x-lrzip",
+     "lzop compressed data": "application/x-lzop",
+diff --git a/tests/test_mime.py b/tests/test_mime.py
+index 40e73edf..3f292dfc 100644
+--- a/tests/test_mime.py
++++ b/tests/test_mime.py
+@@ -81,8 +81,8 @@ def test_mime_file(self):
+         self.mime_test_file("t.cpio.foo", "application/x-cpio")
+         self.mime_test_file("t.deb", "application/x-debian-package")
+         self.mime_test_file("t.deb.foo", "application/x-debian-package")
+-        self.mime_test_file("t.txt.gz", ("application/gzip", "application/x-gzip"))
+-        self.mime_test_file("t.txt.gz.foo", ("application/gzip", "application/x-gzip"))
++        self.mime_test_file("t.txt.gz", "application/gzip")
++        self.mime_test_file("t.txt.gz.foo", "application/gzip")
+         self.mime_test_file("t.jar", "application/zip")
+         self.mime_test_file("t.jar.foo", "application/zip")
+         self.mime_test_file("t.txt.lzma", "application/x-lzma")
+
+From e7501d1c7805696ff5b2ecc779f7a56ab2425c3f Mon Sep 17 00:00:00 2001
+From: Alfred Wingate <parona@protonmail.com>
+Date: Wed, 11 Dec 2024 06:37:54 +0200
+Subject: [PATCH 2/4] Change rar mime type to application/vnd.rar
+
+https://github.com/file/file/commit/d46a1f3dbbf58eb510c1779b8bdcc59d5ee24ab9
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1068700
+
+Signed-off-by: Alfred Wingate <parona@protonmail.com>
+---
+ patoolib/__init__.py |  2 +-
+ patoolib/mime.py     |  9 ++++++---
+ tests/test_mime.py   | 16 ++++++++--------
+ 3 files changed, 15 insertions(+), 12 deletions(-)
+
+diff --git a/patoolib/__init__.py b/patoolib/__init__.py
+index 2247b615..8b13181c 100644
+--- a/patoolib/__init__.py
++++ b/patoolib/__init__.py
+@@ -136,7 +136,6 @@
+     'application/x-lrzip': 'lrzip',
+     'application/x-lzh': 'lzh',
+     'application/x-ms-wim': 'wim',
+-    'application/x-rar': 'rar',
+     'application/x-redhat-package-manager': 'rpm',
+     'application/x-rpm': 'rpm',
+     'application/x-rzip': 'rzip',
+@@ -147,6 +146,7 @@
+     'application/x-xz': 'xz',
+     'application/x-zip-compressed': 'zip',
+     'application/x-zoo': 'zoo',
++    'application/vnd.rar': 'rar',
+     'application/zip': 'zip',
+     'application/zpaq': 'zpaq',
+     "application/zstd": "zstd",
+diff --git a/patoolib/mime.py b/patoolib/mime.py
+index c9d8894b..8de9b180 100644
+--- a/patoolib/mime.py
++++ b/patoolib/mime.py
+@@ -54,8 +54,8 @@ def add_mimedb_data(mimedb: mimetypes.MimeTypes) -> None:
+     add_mimetype(mimedb, 'application/x-lzma', '.lzma')
+     add_mimetype(mimedb, 'application/x-xz', '.xz')
+     add_mimetype(mimedb, 'application/java-archive', '.jar')
+-    add_mimetype(mimedb, 'application/x-rar', '.rar')
+-    add_mimetype(mimedb, 'application/x-rar', '.cbr')
++    add_mimetype(mimedb, 'application/vnd.rar', '.rar')
++    add_mimetype(mimedb, 'application/vnd.rar', '.cbr')
+     add_mimetype(mimedb, 'application/x-7z-compressed', '.7z')
+     add_mimetype(mimedb, 'application/x-7z-compressed', '.cb7')
+     add_mimetype(mimedb, 'application/x-cab', '.cab')
+@@ -139,8 +139,11 @@ def guess_mime(filename: str) -> tuple[str | None, str | None]:
+ LegacyMimeType: dict[str, str] = {
+     # libmagic before version 5.14 identified .gz files as application/x-gzip
+     'application/x-gzip': "application/gzip",
++    # libmagic before version 5.46 identified .rar files as application/x-rar
++    'application/x-rar': "application/vnd.rar",
+ }
+ 
++
+ def guess_mime_mimedb(filename: str) -> tuple[str | None, str | None]:
+     """Guess MIME type from given filename.
+     @return: tuple (mime, encoding)
+@@ -268,7 +271,7 @@ def get_file_mime_encoding(parts: Sequence[str]) -> str | None:
+     "LRZIP compressed data": "application/x-lrzip",
+     "lzop compressed data": "application/x-lzop",
+     "Microsoft Cabinet archive data": "application/vnd.ms-cab-compressed",
+-    "RAR archive data": "application/x-rar",
++    "RAR archive data": "application/vnd.rar",
+     "RPM ": "application/x-redhat-package-manager",
+     "POSIX tar archive": "application/x-tar",
+     "xz compressed data": "application/x-xz",
+diff --git a/tests/test_mime.py b/tests/test_mime.py
+index 3f292dfc..8f3ecb8c 100644
+--- a/tests/test_mime.py
++++ b/tests/test_mime.py
+@@ -91,10 +91,10 @@ def test_mime_file(self):
+         self.mime_test_file("t.txt.lz.foo", "application/x-lzip")
+         self.mime_test_file("t.txt.lzo", "application/x-lzop")
+         self.mime_test_file("t.txt.lzo.foo", "application/x-lzop")
+-        self.mime_test_file("t.rar", "application/x-rar")
+-        self.mime_test_file("t.rar.foo", "application/x-rar")
+-        self.mime_test_file("t.cbr", "application/x-rar")
+-        self.mime_test_file("t.cbr.foo", "application/x-rar")
++        self.mime_test_file("t.rar", "application/vnd.rar")
++        self.mime_test_file("t.rar.foo", "application/vnd.rar")
++        self.mime_test_file("t.cbr", "application/vnd.rar")
++        self.mime_test_file("t.cbr.foo", "application/vnd.rar")
+         self.mime_test_file("t.rpm", "application/x-rpm")
+         self.mime_test_file("t.rpm.foo", "application/x-rpm")
+         self.mime_test_file("t.tar", "application/x-tar")
+@@ -197,8 +197,8 @@ def test_nested_gzip(self):
+         """Test mime detection of archives with double compression"""
+         # We won't extract this with rar, as it doesn't support archives wrapped in gzip
+         # compression, but we will recognize the archive as a gzip-wrapped rar-file
+-        self.mime_test_file("t.rar.gz", "application/x-rar", "gzip")
+-        self.mime_test_file("t.rar.gz.foo", "application/x-rar", "gzip")
++        self.mime_test_file("t.rar.gz", "application/vnd.rar", "gzip")
++        self.mime_test_file("t.rar.gz.foo", "application/vnd.rar", "gzip")
+ 
+     @needs_program('file')
+     @needs_program('gzip')
+@@ -237,7 +237,7 @@ def test_mime_mimedb(self):
+         self.mime_test_mimedb("t .bz2", "application/x-bzip2")
+         self.mime_test_mimedb("t .bz3", "application/x-bzip3")
+         self.mime_test_mimedb("t.cab", "application/x-cab")
+-        self.mime_test_mimedb("t.cbr", ("application/rar", "application/x-rar"))
++        self.mime_test_mimedb("t.cbr", ("application/rar", "application/vnd.rar"))
+         self.mime_test_mimedb("t.cpio", "application/x-cpio")
+         self.mime_test_mimedb("t.deb", "application/x-debian-package")
+         self.mime_test_mimedb("t.gz", "application/gzip")
+@@ -247,7 +247,7 @@ def test_mime_mimedb(self):
+         self.mime_test_mimedb("t.txt.lz", "application/x-lzip")
+         self.mime_test_mimedb("t.txt.lz4", "application/x-lz4")
+         self.mime_test_mimedb("t.lzo", "application/x-lzop")
+-        self.mime_test_mimedb("t.rar", ("application/rar", "application/x-rar"))
++        self.mime_test_mimedb("t.rar", ("application/rar", "application/vnd.rar"))
+         self.mime_test_mimedb(
+             "t.rpm", ("application/x-redhat-package-manager", "application/x-rpm")
+         )
+
+From 85fafd16ec01a7eb793e04011617bb47211d446a Mon Sep 17 00:00:00 2001
+From: Alfred Wingate <parona@protonmail.com>
+Date: Wed, 11 Dec 2024 06:40:41 +0200
+Subject: [PATCH 3/4] Remove references to application/rar
+
+application/vnd.rar is the IANA assigned mime type for rar. libmagic has
+never refered to application/rar either, so there is no use for backwards
+compatibility.
+
+https://www.iana.org/assignments/media-types/application/vnd.rar
+
+Signed-off-by: Alfred Wingate <parona@protonmail.com>
+---
+ patoolib/__init__.py | 1 -
+ tests/test_mime.py   | 4 ++--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/patoolib/__init__.py b/patoolib/__init__.py
+index 8b13181c..51f8b4eb 100644
+--- a/patoolib/__init__.py
++++ b/patoolib/__init__.py
+@@ -110,7 +110,6 @@
+     'application/jar': 'zip',  # reported on older systems such as ubuntu 14.04
+     'application/java-archive': 'zip',
+     'application/vnd.android.package-archive': 'zip',
+-    'application/rar': 'rar',
+     'application/vnd.ms-cab-compressed': 'cab',
+     'application/x-7z-compressed': '7z',
+     'application/x-ace': 'ace',
+diff --git a/tests/test_mime.py b/tests/test_mime.py
+index 8f3ecb8c..287d8208 100644
+--- a/tests/test_mime.py
++++ b/tests/test_mime.py
+@@ -237,7 +237,7 @@ def test_mime_mimedb(self):
+         self.mime_test_mimedb("t .bz2", "application/x-bzip2")
+         self.mime_test_mimedb("t .bz3", "application/x-bzip3")
+         self.mime_test_mimedb("t.cab", "application/x-cab")
+-        self.mime_test_mimedb("t.cbr", ("application/rar", "application/vnd.rar"))
++        self.mime_test_mimedb("t.cbr", "application/vnd.rar")
+         self.mime_test_mimedb("t.cpio", "application/x-cpio")
+         self.mime_test_mimedb("t.deb", "application/x-debian-package")
+         self.mime_test_mimedb("t.gz", "application/gzip")
+@@ -247,7 +247,7 @@ def test_mime_mimedb(self):
+         self.mime_test_mimedb("t.txt.lz", "application/x-lzip")
+         self.mime_test_mimedb("t.txt.lz4", "application/x-lz4")
+         self.mime_test_mimedb("t.lzo", "application/x-lzop")
+-        self.mime_test_mimedb("t.rar", ("application/rar", "application/vnd.rar"))
++        self.mime_test_mimedb("t.rar", "application/vnd.rar")
+         self.mime_test_mimedb(
+             "t.rpm", ("application/x-redhat-package-manager", "application/x-rpm")
+         )
+
+From bab80a04a72941b3c53e5fce1f96f5a2fc531280 Mon Sep 17 00:00:00 2001
+From: Alfred Wingate <parona@protonmail.com>
+Date: Wed, 11 Dec 2024 07:04:19 +0200
+Subject: [PATCH 4/4] Remove references to application/x-redhat-package-manager
+
+libmagic has never referred to x-redhat-package-manager and has had
+x-rpm since 3.30. Red Hat themselves use x-rpm in their mailcap.
+
+https://pagure.io/mailcap/blob/master/f/mime.types
+
+Signed-off-by: Alfred Wingate <parona@protonmail.com>
+---
+ patoolib/__init__.py | 1 -
+ patoolib/mime.py     | 2 +-
+ tests/test_mime.py   | 4 +---
+ 3 files changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/patoolib/__init__.py b/patoolib/__init__.py
+index 51f8b4eb..9d8bc849 100644
+--- a/patoolib/__init__.py
++++ b/patoolib/__init__.py
+@@ -135,7 +135,6 @@
+     'application/x-lrzip': 'lrzip',
+     'application/x-lzh': 'lzh',
+     'application/x-ms-wim': 'wim',
+-    'application/x-redhat-package-manager': 'rpm',
+     'application/x-rpm': 'rpm',
+     'application/x-rzip': 'rzip',
+     'application/x-shar': 'shar',
+diff --git a/patoolib/mime.py b/patoolib/mime.py
+index 8de9b180..ffad9cd0 100644
+--- a/patoolib/mime.py
++++ b/patoolib/mime.py
+@@ -272,7 +272,7 @@ def get_file_mime_encoding(parts: Sequence[str]) -> str | None:
+     "lzop compressed data": "application/x-lzop",
+     "Microsoft Cabinet archive data": "application/vnd.ms-cab-compressed",
+     "RAR archive data": "application/vnd.rar",
+-    "RPM ": "application/x-redhat-package-manager",
++    "RPM ": "application/x-rpm",
+     "POSIX tar archive": "application/x-tar",
+     "xz compressed data": "application/x-xz",
+     "Zip archive data": "application/zip",
+diff --git a/tests/test_mime.py b/tests/test_mime.py
+index 287d8208..a337f87a 100644
+--- a/tests/test_mime.py
++++ b/tests/test_mime.py
+@@ -248,9 +248,7 @@ def test_mime_mimedb(self):
+         self.mime_test_mimedb("t.txt.lz4", "application/x-lz4")
+         self.mime_test_mimedb("t.lzo", "application/x-lzop")
+         self.mime_test_mimedb("t.rar", "application/vnd.rar")
+-        self.mime_test_mimedb(
+-            "t.rpm", ("application/x-redhat-package-manager", "application/x-rpm")
+-        )
++        self.mime_test_mimedb("t.rpm", "application/x-rpm")
+         self.mime_test_mimedb("t.tar", "application/x-tar")
+         self.mime_test_mimedb("t.cbt", "application/x-tar")
+         self.mime_test_mimedb("t.tar.bz2", "application/x-tar", "bzip2")

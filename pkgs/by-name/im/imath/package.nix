@@ -1,0 +1,28 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "imath";
+  version = "3.2.2";
+
+  src = fetchFromGitHub {
+    owner = "AcademySoftwareFoundation";
+    repo = "imath";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-uLGH2kMo5S6iT2gS1091qKkCAxQ/iuQ8xx9507k6SzY=";
+  };
+
+  nativeBuildInputs = [ cmake ];
+
+  meta = {
+    description = "C++ and python library of 2D and 3D vector, matrix, and math operations for computer graphics";
+    homepage = "https://github.com/AcademySoftwareFoundation/Imath";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ paperdigits ];
+    platforms = lib.platforms.all;
+  };
+})

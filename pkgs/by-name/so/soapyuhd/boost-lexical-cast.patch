@@ -1,0 +1,38 @@
+From 8b86a301540566dad533119a4d3fc6ec721e08ab Mon Sep 17 00:00:00 2001
+From: Martin Pluskal <martin@pluskal.org>
+Date: Thu, 18 Jun 2026 19:47:28 +0200
+Subject: [PATCH] Include <boost/lexical_cast.hpp> explicitly
+
+UHDSoapyDevice.cpp and SoapyUHDDevice.cpp use boost::lexical_cast but
+relied on it being pulled in transitively by another boost header.
+Recent Boost no longer does so, breaking the build with
+'lexical_cast is not a member of boost'. Include it directly.
+---
+ SoapyUHDDevice.cpp | 1 +
+ UHDSoapyDevice.cpp | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/SoapyUHDDevice.cpp b/SoapyUHDDevice.cpp
+index 41140a8..673f06c 100644
+--- a/SoapyUHDDevice.cpp
++++ b/SoapyUHDDevice.cpp
+@@ -22,6 +22,7 @@
+ #include <uhd/version.hpp>
+ #include <cctype>
+ #include <iostream>
++#include <boost/lexical_cast.hpp>
+ 
+ /***********************************************************************
+  * Stream wrapper
+diff --git a/UHDSoapyDevice.cpp b/UHDSoapyDevice.cpp
+index 88641c5..8ed6574 100644
+--- a/UHDSoapyDevice.cpp
++++ b/UHDSoapyDevice.cpp
+@@ -37,6 +37,7 @@
+ #include <boost/bind.hpp>
+ #include <boost/weak_ptr.hpp>
+ #include <boost/algorithm/string.hpp>
++#include <boost/lexical_cast.hpp>
+ 
+ #include <algorithm>
+ #include <cctype>

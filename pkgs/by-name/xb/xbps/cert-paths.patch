@@ -1,0 +1,25 @@
+From d13a550dbc8876c35b912fe3e0eadd45b278be27 Mon Sep 17 00:00:00 2001
+From: Will Dietz <w@wdtz.org>
+Date: Fri, 18 May 2018 09:51:48 -0500
+Subject: [PATCH] add certificate path fallbacks
+
+---
+ lib/fetch/common.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/lib/fetch/common.c b/lib/fetch/common.c
+index 94fb2651..79b50115 100644
+--- a/lib/fetch/common.c
++++ b/lib/fetch/common.c
+@@ -1012,6 +1012,8 @@ fetch_ssl_setup_peer_verification(SSL_CTX *ctx, int verbose)
+ 
+ 	if (getenv("SSL_NO_VERIFY_PEER") == NULL) {
+ 		ca_cert_file = getenv("SSL_CA_CERT_FILE");
++		ca_cert_file = ca_cert_file ? ca_cert_file : getenv("NIX_SSL_CERT_FILE");
++		ca_cert_file = ca_cert_file ? ca_cert_file : "/etc/ssl/certs/ca-certificates.crt";
+ 		ca_cert_path = getenv("SSL_CA_CERT_PATH") != NULL ?
+ 		    getenv("SSL_CA_CERT_PATH") : X509_get_default_cert_dir();
+ 		if (verbose) {
+-- 
+2.17.0
+

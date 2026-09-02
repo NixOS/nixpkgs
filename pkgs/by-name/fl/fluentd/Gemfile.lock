@@ -1,0 +1,218 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    addressable (2.9.0)
+      public_suffix (>= 2.0.2, < 8.0)
+    async (2.42.0)
+      console (~> 1.29)
+      fiber-annotation
+      io-event (~> 1.11)
+      metrics (~> 0.12)
+      traces (~> 0.18)
+    async-http (0.95.1)
+      async (>= 2.10.2)
+      async-pool (~> 0.11)
+      io-endpoint (~> 0.14)
+      io-stream (~> 0.6)
+      metrics (~> 0.12)
+      protocol-http (~> 0.62)
+      protocol-http1 (~> 0.39)
+      protocol-http2 (~> 0.26)
+      protocol-url (~> 0.2)
+      traces (~> 0.10)
+    async-pool (0.11.2)
+      async (>= 2.0)
+    aws-eventstream (1.4.0)
+    aws-partitions (1.1267.0)
+    aws-sdk-cloudwatchlogs (1.159.0)
+      aws-sdk-core (~> 3, >= 3.254.0)
+      aws-sigv4 (~> 1.5)
+    aws-sdk-core (3.254.0)
+      aws-eventstream (~> 1, >= 1.3.0)
+      aws-partitions (~> 1, >= 1.992.0)
+      aws-sigv4 (~> 1.9)
+      base64
+      bigdecimal
+      jmespath (~> 1, >= 1.6.1)
+      logger
+    aws-sdk-firehose (1.112.0)
+      aws-sdk-core (~> 3, >= 3.254.0)
+      aws-sigv4 (~> 1.5)
+    aws-sdk-kinesis (1.103.0)
+      aws-sdk-core (~> 3, >= 3.254.0)
+      aws-sigv4 (~> 1.5)
+    aws-sdk-kms (1.130.0)
+      aws-sdk-core (~> 3, >= 3.254.0)
+      aws-sigv4 (~> 1.5)
+    aws-sdk-s3 (1.227.0)
+      aws-sdk-core (~> 3, >= 3.254.0)
+      aws-sdk-kms (~> 1)
+      aws-sigv4 (~> 1.5)
+    aws-sdk-sqs (1.117.0)
+      aws-sdk-core (~> 3, >= 3.254.0)
+      aws-sigv4 (~> 1.5)
+    aws-sigv4 (1.12.1)
+      aws-eventstream (~> 1, >= 1.0.2)
+    base64 (0.3.0)
+    bigdecimal (4.1.2)
+    bson (4.15.0)
+    concurrent-ruby (1.3.7)
+    console (1.36.0)
+      fiber-annotation
+      fiber-local (~> 1.1)
+      json
+    cool.io (1.9.4)
+    csv (3.3.5)
+    digest-crc (0.7.0)
+      rake (>= 12.0.0, < 14.0.0)
+    drb (2.2.3)
+    elastic-transport (8.5.3)
+      faraday (< 3)
+      multi_json
+    elasticsearch (9.4.3)
+      elastic-transport (~> 8.3)
+      elasticsearch-api (= 9.4.3)
+    elasticsearch-api (9.4.3)
+      base64
+      multi_json
+    excon (1.5.0)
+      logger
+    faraday (2.14.3)
+      faraday-net_http (>= 2.0, < 3.5)
+      json
+      logger
+    faraday-excon (2.4.0)
+      excon (>= 1.0.0)
+      faraday (>= 2.11.0, < 3)
+    faraday-net_http (3.4.4)
+      net-http (~> 0.5)
+    fiber-annotation (0.2.0)
+    fiber-local (1.1.0)
+      fiber-storage
+    fiber-storage (1.0.1)
+    fluent-config-regexp-type (1.0.0)
+      fluentd (> 1.0.0, < 2)
+    fluent-plugin-cloudwatch-logs (0.15.0)
+      aws-sdk-cloudwatchlogs (~> 1.0)
+      fluentd (>= 1.8.0)
+    fluent-plugin-concat (2.6.2)
+      fluentd (>= 0.14.0, < 2)
+    fluent-plugin-elasticsearch (6.0.0)
+      elasticsearch
+      excon
+      faraday (>= 2.0.0)
+      faraday-excon (>= 2.0.0)
+      fluentd (>= 0.14.22)
+    fluent-plugin-kafka (0.19.3)
+      fluentd (>= 0.10.58, < 2)
+      ltsv
+      ruby-kafka (>= 1.5.0, < 2)
+    fluent-plugin-kinesis (3.7.0)
+      aws-sdk-firehose (~> 1, != 1.9, != 1.5, != 1.15)
+      aws-sdk-kinesis (~> 1, != 1.5, != 1.4, != 1.14)
+      fluentd (>= 0.14.22, < 2)
+      google-protobuf (~> 4)
+    fluent-plugin-mongo (1.6.3)
+      bigdecimal (~> 4.0)
+      fluentd (>= 0.14.22, < 2)
+      mongo (>= 2.15.0, < 2.19.0)
+    fluent-plugin-record-reformer (0.9.1)
+      fluentd
+    fluent-plugin-rewrite-tag-filter (2.4.0)
+      fluent-config-regexp-type
+      fluentd (>= 0.14.2, < 2)
+    fluent-plugin-s3 (1.8.5)
+      aws-sdk-s3 (~> 1.60)
+      aws-sdk-sqs (~> 1.23)
+      fluentd (>= 0.14.22, < 2)
+    fluent-plugin-webhdfs (1.6.0)
+      fluentd (>= 0.14.22)
+      webhdfs (>= 0.11.0)
+    fluentd (1.19.3)
+      async-http (~> 0.86)
+      base64 (~> 0.2)
+      bundler
+      cool.io (>= 1.4.5, < 2.0.0)
+      csv (~> 3.2)
+      drb (~> 2.2)
+      http_parser.rb (>= 0.5.1, < 0.9.0)
+      logger (~> 1.6)
+      msgpack (>= 1.3.1, < 2.0.0)
+      net-http (~> 0.8)
+      ostruct (~> 0.6)
+      serverengine (>= 2.3.2, < 3.0.0)
+      sigdump (~> 0.2.5)
+      strptime (>= 0.2.4, < 1.0.0)
+      tzinfo (>= 1.0, < 3.0)
+      tzinfo-data (~> 1.0)
+      uri (~> 1.0)
+      webrick (~> 1.4)
+      yajl-ruby (~> 1.0)
+      zstd-ruby (~> 1.5)
+    google-protobuf (4.35.1)
+      bigdecimal
+      rake (~> 13.3)
+    http_parser.rb (0.8.1)
+    io-endpoint (0.17.2)
+    io-event (1.19.1)
+    io-stream (0.13.1)
+    jmespath (1.6.2)
+    json (2.20.0)
+    logger (1.7.0)
+    ltsv (0.1.2)
+    metrics (0.15.0)
+    mongo (2.18.3)
+      bson (>= 4.14.1, < 5.0.0)
+    msgpack (1.8.3)
+    multi_json (1.21.1)
+    net-http (0.9.1)
+      uri (>= 0.11.1)
+    ostruct (0.6.3)
+    protocol-hpack (1.5.1)
+    protocol-http (0.62.2)
+    protocol-http1 (0.39.0)
+      protocol-http (~> 0.62)
+    protocol-http2 (0.26.0)
+      protocol-hpack (~> 1.4)
+      protocol-http (~> 0.62)
+    protocol-url (0.4.0)
+    public_suffix (7.0.5)
+    rake (13.4.2)
+    ruby-kafka (1.5.0)
+      digest-crc
+    serverengine (2.4.0)
+      base64 (~> 0.1)
+      logger (~> 1.4)
+      sigdump (~> 0.2.2)
+    sigdump (0.2.5)
+    strptime (0.2.5)
+    traces (0.18.2)
+    tzinfo (2.0.6)
+      concurrent-ruby (~> 1.0)
+    tzinfo-data (1.2026.3)
+      tzinfo (>= 1.0.0)
+    uri (1.1.1)
+    webhdfs (0.11.0)
+      addressable
+    webrick (1.9.2)
+    yajl-ruby (1.4.3)
+    zstd-ruby (1.5.7.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  fluent-plugin-cloudwatch-logs
+  fluent-plugin-concat
+  fluent-plugin-elasticsearch
+  fluent-plugin-kafka
+  fluent-plugin-kinesis
+  fluent-plugin-mongo
+  fluent-plugin-record-reformer
+  fluent-plugin-rewrite-tag-filter
+  fluent-plugin-s3
+  fluent-plugin-webhdfs
+  fluentd
+
+BUNDLED WITH
+   2.7.2

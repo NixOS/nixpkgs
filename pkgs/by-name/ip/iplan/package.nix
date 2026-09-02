@@ -1,0 +1,58 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cargo,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  libadwaita,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "iplan";
+  version = "1.9.2";
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "iman-salmani";
+    repo = "iplan";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BIoxaE8c3HmvPjgj4wcZK9YFTZ0wr9338AIdYEoAiqs=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-ATEm7RYfW9nYtTDAx580tvokVUIS7BL9mA65aEeJJvk=";
+  };
+
+  nativeBuildInputs = [
+    cargo
+    meson
+    ninja
+    pkg-config
+    rustPlatform.cargoSetupHook
+    rustc
+    wrapGAppsHook4
+    desktop-file-utils
+  ];
+
+  buildInputs = [
+    libadwaita
+  ];
+
+  meta = {
+    description = "Your plan for improving personal life and workflow";
+    homepage = "https://github.com/iman-salmani/iplan";
+    license = lib.licenses.gpl3Plus;
+    mainProgram = "iplan";
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.linux;
+  };
+})

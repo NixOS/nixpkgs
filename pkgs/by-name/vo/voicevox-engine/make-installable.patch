@@ -1,0 +1,26 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 42a636b..209893f 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -23,6 +23,21 @@ dependencies = [
+   "uvicorn>=0.34.0",
+ ]
+ 
++[project.scripts]
++voicevox-engine = "run:main"
++
++[build-system]
++requires = ["hatchling"]
++build-backend = "hatchling.build"
++
++[tool.hatch.build]
++only-include = [
++  "voicevox_engine",
++  "resources",
++  "run.py",
++  "engine_manifest.json",
++]
++
+ [tool.uv]
+ default-groups = []
+ 

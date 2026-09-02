@@ -1,0 +1,3615 @@
+[arvyy-interface]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/gmail.com/nma.arvydas.silanskas/arvyy/interface/1.0.0/arvyy-interface-1.0.0.tgz"
+sha256 = "7e22daa7d0b2e57cc3a34ed0149a2cfc856a6b06c9708dbdb0b49da7573ef290"
+source = "snow-fort"
+synopsis = "Interface abstraction for a set of functions"
+version = "1.0.0"
+
+[arvyy-mustache]
+dependencies = ["akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/gmail.com/nma.arvydas.silanskas/arvyy/mustache/1.0.2/arvyy-mustache-1.0.2.tgz"
+sha256 = "ea8085f6313851249dc41e86a5c455225f73f351046994296fe7fc6144f05d16"
+source = "snow-fort"
+synopsis = "Mustache templating 1.2.1 implementation"
+version = "1.0.2"
+
+[bcaine-defstruct]
+dependencies = ["bcaine-format", "bcaine-misc-util", "chez-srfi", "akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/gmail.com/brian.d.caine/bcaine/defstruct/0.0.1/bcaine-defstruct-0.0.1.tgz"
+sha256 = "a8dc0f55c99b23f2609a8cb8d7861491a8b33e4b45c93cfdb5ed5e94ffac2afc"
+source = "snow-fort"
+synopsis = "A more convenient version of `define-record-type`, inspired by Chicken's `defstruct`, including SRFI-17 setters"
+version = "0.0.1"
+
+[bcaine-format]
+dependencies = ["bcaine-misc-util", "chez-srfi", "chibi-char-set", "akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/gmail.com/brian.d.caine/bcaine/format/0.0.1/bcaine-format-0.0.1.tgz"
+sha256 = "c5629185db68e53bafa5a82c7615c03c2984999c99cc10843b1cd16c7e428b25"
+source = "snow-fort"
+synopsis = "A `format`, `printf` and `sprintf` somewhat in the style of Chicken Scheme"
+version = "0.0.1"
+
+[bcaine-misc-util]
+dependencies = ["chez-srfi", "akku-r7rs", "chibi-show"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/gmail.com/brian.d.caine/bcaine/misc-util/1.0.1/bcaine-misc-util-1.0.1.tgz"
+sha256 = "ca96d13af4602e72309137d20062cdb0fd23e77068adc6f2212a619d07b8d51b"
+source = "snow-fort"
+synopsis = "A collection of miscellaneous utilities I'm used to having. (Mostly from Chicken Scheme.)"
+version = "1.0.1"
+
+[bcaine-obj]
+dependencies = ["bcaine-defstruct", "bcaine-format", "bcaine-misc-util", "chez-srfi", "akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/gmail.com/brian.d.caine/bcaine/obj/0.0.7/bcaine-obj-0.0.7.tgz"
+sha256 = "6257e168626eeafdb2cc951a2f32cba19e30dc0ea15657a94c6bf35b894e6247"
+source = "snow-fort"
+synopsis = "An object system very similar to Chicken's COOPS"
+version = "0.0.7"
+
+[bcaine-sld-stub-expand]
+dependencies = ["bcaine-format", "bcaine-misc-util", "chibi-match", "chibi-pathname", "chez-srfi", "akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/gmail.com/brian.d.caine/bcaine/sld-stub-expand/0.0.1/bcaine-sld-stub-expand-0.0.1.tgz"
+sha256 = "c7b305e067469be7e68f4a46dab6dbf39ff435fc442921274f84ea7ace10de18"
+source = "snow-fort"
+synopsis = "Expands library declarations (`define-unprocessed-library` instead of `define-library`), and generates export statements for all the identifiers in .stub files"
+version = "0.0.1"
+
+[chibi-app]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-config", "chibi-edit-distance", "chibi-string", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/app/0.9.0/chibi-app-0.9.0.tgz"
+sha256 = "b477ea370b1b0bf805fbe7a8c0d0919330da0360e615ea8953d0f6f7e367f3bd"
+source = "snow-fort"
+synopsis = "Unified command-line option parsing and config management"
+version = "0.9.0"
+
+[chibi-assert]
+dependencies = ["chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/assert/0.10.0/chibi-assert-0.10.0.tgz"
+sha256 = "b3901ce23329748eb423fe3f2dcffed63253dc1366a17cb8279025038139b921"
+source = "snow-fort"
+synopsis = "A nice assert macro"
+version = "0.10.0"
+
+[chibi-base64]
+dependencies = ["akku-r7rs", "chibi-string", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/base64/0.9.0/chibi-base64-0.9.0.tgz"
+sha256 = "4f59e38142759554dc417e7b4f132414acd40ae3450a0481b57228a10257fcea"
+source = "snow-fort"
+synopsis = "RFC 3548 base64 encoding and decoding utilities"
+version = "0.9.0"
+
+[chibi-binary-record]
+dependencies = ["akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/binary-record/0.9.0/chibi-binary-record-0.9.0.tgz"
+sha256 = "5d338215b14c981954035bab32b9b99282f9f2b19af105266e79a00bca22ddf9"
+source = "snow-fort"
+version = "0.9.0"
+
+[chibi-bytevector]
+dependencies = ["akku-r7rs", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/bytevector/0.9.0/chibi-bytevector-0.9.0.tgz"
+sha256 = "7b5ee7c108d0272cdef87b82e6c2931f941c7d3654ce115a51db6e639873297d"
+source = "snow-fort"
+synopsis = "Additional bytevector utilities"
+version = "0.9.0"
+
+[chibi-char-set]
+dependencies = ["chibi-iset"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/char-set/0.9.0/chibi-char-set-0.9.0.tgz"
+sha256 = "c88004fb0d8a06efa0993ebe847b4d8ddd5815d29d7f788d0a5ed38f5ae5df7c"
+source = "snow-fort"
+synopsis = "A minimal character set library"
+version = "0.9.0"
+
+[chibi-char-set-boundary]
+dependencies = []
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/char-set/boundary/0.9.0/chibi-char-set-boundary-0.9.0.tgz"
+sha256 = "6a913ae82de56424910491e4d0456fd46fb5914c1634b973df93fb2df96b7f25"
+source = "snow-fort"
+synopsis = "Char-sets used for TR29 word boundaries"
+version = "0.9.0"
+
+[chibi-config]
+dependencies = ["akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/config/0.9.0/chibi-config-0.9.0.tgz"
+sha256 = "c9a6b3fd9a1cfb9a0fa6fcfde31946b492ff1adeb0aca77662fa4c937a2cf7a3"
+source = "snow-fort"
+synopsis = "This is a library for unified configuration management"
+version = "0.9.0"
+
+[chibi-crypto-md5]
+dependencies = ["akku-r7rs", "chibi-bytevector", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/crypto/md5/0.9.0/chibi-crypto-md5-0.9.0.tgz"
+sha256 = "609d538c6621a6b84834967cd60ed3bcfd910d56a67e193ea189f2606aea7c1f"
+source = "snow-fort"
+synopsis = "Implementation of the MD5 (Message Digest) cryptographic hash"
+version = "0.9.0"
+
+[chibi-crypto-rsa]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-bytevector", "chibi-math-prime", "chibi-crypto-sha2", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/crypto/rsa/0.9.0/chibi-crypto-rsa-0.9.0.tgz"
+sha256 = "4eaee568f7898429d744a5ddd95c4d46b3a8402fd6dfe571443e7806ad9ce794"
+source = "snow-fort"
+synopsis = "RSA public key cryptography implementation"
+version = "0.9.0"
+
+[chibi-crypto-sha2]
+dependencies = ["akku-r7rs", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/crypto/sha2/0.9.0/chibi-crypto-sha2-0.9.0.tgz"
+sha256 = "e5d6f3c5d0f5bdfb72d9cb2f1c3d1b2ac691ac0c92826fb4a9c5b7450b5aff85"
+source = "snow-fort"
+synopsis = "Implementation of the SHA-2 (Secure Hash Algorithm) cryptographic hash"
+version = "0.9.0"
+
+[chibi-diff]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-optional", "chibi-term-ansi"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/diff/0.9.1.3/chibi-diff-0.9.1.3.tgz"
+sha256 = "07b62a03d280924f0bd42ca6375c752884a480779984dd7e9889e150f892fbac"
+source = "snow-fort"
+version = "0.9.1"
+
+[chibi-edit-distance]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/edit-distance/0.9.0/chibi-edit-distance-0.9.0.tgz"
+sha256 = "1534158ba2963dbb4a5b37831e94a7a3007afa105a7134c011f710f1afbf36b9"
+source = "snow-fort"
+version = "0.9.0"
+
+[chibi-filesystem]
+dependencies = ["akku-r7rs", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/filesystem/0.9.0/chibi-filesystem-0.9.0.tgz"
+sha256 = "dad608a7fbc00fe8e9929ff6124edad13bedfdc58cc14042be29b33f64c13483"
+source = "snow-fort"
+synopsis = "Interface to the filesystem and file descriptor objects"
+version = "0.9.0"
+
+[chibi-html-parser]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/html-parser/0.5.7/chibi-html-parser-0.5.7.tgz"
+sha256 = "509c4b4b79bde75c97b9f18cdf1a0c3f4ffd482b39439775bfdcae9c4dfa2a3a"
+source = "snow-fort"
+synopsis = "A permissive HTML parser supporting scalable streaming with a tree folding interface"
+version = "0.5.7"
+
+[chibi-irregex]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/irregex/0.9.3/chibi-irregex-0.9.3.tgz"
+sha256 = "50f7bbcb06d6f608aaff1784d63018ae5f5d32a62329eb24785bc922e0a91538"
+source = "snow-fort"
+synopsis = "A portable and efficient R[4567]RS implementation of regular expressions, supporting both POSIX syntax with various (irregular) PCRE extensions, as well as SCSH's SRE syntax"
+version = "0.9.3"
+
+[chibi-iset]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/iset/0.9.0/chibi-iset-0.9.0.tgz"
+sha256 = "33e536d20db603e24f489fdafd4996b3832ff29c7245e0f1bf59e52bac9c95dd"
+source = "snow-fort"
+synopsis = "A space efficient integer set (iset) implementation, optimized for minimal space usage and fast membership lookup"
+version = "0.9.0"
+
+[chibi-locale]
+dependencies = ["akku-r7rs", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/locale/0.1/chibi-locale-0.1.tgz"
+sha256 = "13e7b773189ffec0f480305e1472361a9de310c8136ddffa84485e72846aa4b0"
+source = "snow-fort"
+synopsis = "A lightweight library for representing locale information and serializing to and from strings"
+version = "0.1.0"
+
+[chibi-match]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/match/0.9.1/chibi-match-0.9.1.tgz"
+sha256 = "badcfca91bdfc1a7831aed444a9fe4af317e1429216c725fc1b67e1864111ca4"
+source = "snow-fort"
+synopsis = "A portable hygienic pattern matcher"
+version = "0.9.1"
+
+[chibi-math-linalg]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-assert", "chibi-optional", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/math/linalg/0.3/chibi-math-linalg-0.3.tgz"
+sha256 = "55783898d0668465f3a7adf3102580dc4ad144b3845935539387b2db858994b0"
+source = "snow-fort"
+version = "0.3.0"
+
+[chibi-math-prime]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/math/prime/0.10.0/chibi-math-prime-0.10.0.tgz"
+sha256 = "82628af19ec37dae8189b73ddab540958feba524c61da0e74f0ce0602e042d61"
+source = "snow-fort"
+synopsis = "Prime and number theoretic utilities"
+version = "0.10.0"
+
+[chibi-math-stats]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-optional", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/math/stats/0.1/chibi-math-stats-0.1.tgz"
+sha256 = "861d9c98e6c5aaedf385d459c989b6d9d7dddbbbd966e6f450a6dc8dc21b5856"
+source = "snow-fort"
+synopsis = "Statistics is the branch of mathematics dealing with the collection and analysis of data"
+version = "0.1.0"
+
+[chibi-mecab]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-assert", "chibi-optional", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/mecab/0.1/chibi-mecab-0.1.tgz"
+sha256 = "167b88e4415c0e531ae8ce233536ca2a6288fe5f1a056b95acb294777c628f06"
+source = "snow-fort"
+synopsis = "A wrapper around MeCab, a part-of-speech and morphological analyzer for Japanese"
+version = "0.1.0"
+
+[chibi-mime]
+dependencies = ["akku-r7rs", "chibi-base64", "chibi-quoted-printable", "chibi-string", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/mime/0.9.0/chibi-mime-0.9.0.tgz"
+sha256 = "3f15743a4116eb95368449c0717b476040e6eba8af8bcf551023a19c7fcbcf8f"
+source = "snow-fort"
+synopsis = "A library to parse MIME headers and bodies into SXML"
+version = "0.9.0"
+
+[chibi-monad-environment]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/monad/environment/0.9.0/chibi-monad-environment-0.9.0.tgz"
+sha256 = "ae4abff382dbe3db6d1c8a6e5bcfa237c16f6dd7faeb45f160358acf63a00e22"
+source = "snow-fort"
+synopsis = "A Scheme take on the environment (reader) monad, focusing more on being efficient and convenient than pure"
+version = "0.9.0"
+
+[chibi-net-dns]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-optional", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/net/dns/0.2/chibi-net-dns-0.2.tgz"
+sha256 = "f1f07da380168e9107600760ce9dfee5ec8c1f656f3b6f7fdd5182f13ca41e0a"
+source = "snow-fort"
+synopsis = "Domain Name Service library, with high-level utilities for address, mx and text record lookups"
+version = "0.2.0"
+
+[chibi-net-smtp]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-net-dns", "chibi-optional", "chibi-string", "chibi-regexp", "chibi-pathname", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/net/smtp/0.1/chibi-net-smtp-0.1.tgz"
+sha256 = "b66d31adce32558c658f53d7f564313821a698d6bbd9dc3aec88b3ebbc39b738"
+source = "snow-fort"
+synopsis = "Easy mail interface"
+version = "0.1.0"
+
+[chibi-optional]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/optional/0.9.1.3/chibi-optional-0.9.1.3.tgz"
+sha256 = "30b58c0bbecbe37560fc24086417d2ab908536b74d8775670da55f1eb6971e9c"
+source = "snow-fort"
+synopsis = "Syntax to support optional and named keyword arguments"
+version = "0.9.1"
+
+[chibi-parse]
+dependencies = ["akku-r7rs", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/parse/0.9.0/chibi-parse-0.9.0.tgz"
+sha256 = "66cd0a9d1ca07559f5f1ccbef05939921bfb9967049c2c2691031a43b56e3a17"
+source = "snow-fort"
+synopsis = "A parser combinator library with optional memoization and convenient syntax"
+version = "0.9.0"
+
+[chibi-pathname]
+dependencies = ["chibi-string", "akku-r7rs", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/pathname/0.9.0/chibi-pathname-0.9.0.tgz"
+sha256 = "424aa360577d7cac0ceb4e7e6cbf8943ffe958870338d5b0fef1c22789a07186"
+source = "snow-fort"
+synopsis = "A general, non-filesystem-specific pathname library"
+version = "0.9.0"
+
+[chibi-quoted-printable]
+dependencies = ["akku-r7rs", "chibi-string", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/quoted-printable/0.9.0/chibi-quoted-printable-0.9.0.tgz"
+sha256 = "9f7f9e3013139b36249b594e510feac1a2a4fc2b6a20c1974ebc559ff037a17d"
+source = "snow-fort"
+synopsis = "RFC 2045 quoted printable encoding and decoding utilities"
+version = "0.9.0"
+
+[chibi-regexp]
+dependencies = ["chibi-char-set-boundary", "chez-srfi", "akku-r7rs", "chibi-string", "chibi-match", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/regexp/0.9.0/chibi-regexp-0.9.0.tgz"
+sha256 = "7bfed63982d55c7c272d32ddca295993a6196c37ef426d7bd90eafe3b8856c5e"
+source = "snow-fort"
+synopsis = "A regular expression engine implementing SRFI 115 using a non-backtracking Thompson NFA algorithm"
+version = "0.9.0"
+
+[chibi-scribble]
+dependencies = ["akku-r7rs", "chibi-string", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/scribble/0.9.0/chibi-scribble-0.9.0.tgz"
+sha256 = "0f93bfa2f0267f3557499fdf9023e3a4d772a290fe971898f289327c71e0e7c1"
+source = "snow-fort"
+synopsis = "A library used for parsing \"scribble\" format, introduced by Racket and the format used to write this manual"
+version = "0.9.0"
+
+[chibi-show]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-string", "chibi-monad-environment", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/show/0.7.3.1/chibi-show-0.7.3.1.tgz"
+sha256 = "4a2c64802000eca62d36320de97480bc2f333e62517a987a0ff0af6d9b3d4194"
+source = "snow-fort"
+synopsis = "A library of procedures for formatting Scheme objects to text in various ways, and for easily concatenating, composing and extending these formatters"
+version = "0.7.3"
+
+[chibi-snow-commands]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-bytevector", "chibi-config", "chibi-crypto-md5", "chibi-crypto-rsa", "chibi-crypto-sha2", "chibi-filesystem", "chibi-match", "chibi-pathname", "chibi-regexp", "chibi-show", "chibi-string", "chibi-sxml", "chibi-tar", "chibi-temp-file", "chibi-uri", "chibi-term-edit-line", "chibi-char-set"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/gmail.com/pclouds/chibi/snow/commands/0.0.0/./chibi-snow-commands-0.0.0.tgz"
+sha256 = "c33106b879b787dd282bd6f01d3968e70224ac88fe61b71fca05d8f9bbea16a8"
+source = "snow-fort"
+version = "0.0.0"
+
+[chibi-sqlite3]
+dependencies = ["akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/sqlite3/0.7/chibi-sqlite3-0.7.tgz"
+sha256 = "bd0aeb54c2e88567707c675e481a475d6a7431f5e1959b7e99ec07d361bda92f"
+source = "snow-fort"
+version = "0.7.0"
+
+[chibi-ssl]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/ssl/0.1/chibi-ssl-0.1.tgz"
+sha256 = "85531baae0523140bfda7ebcd971ea30b7e242b6ba0874a1815cec9a7660a13d"
+source = "snow-fort"
+synopsis = "Basic bindings for establishing SSL connections"
+version = "0.1.0"
+
+[chibi-string]
+dependencies = ["akku-r7rs", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/string/0.9.0/chibi-string-0.9.0.tgz"
+sha256 = "86a73c53b2e7a4e1201ff10115a5488890993c0020051b3abe0fc785a077ec11"
+source = "snow-fort"
+synopsis = "A cursor-oriented string library"
+version = "0.9.0"
+
+[chibi-sxml]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/sxml/0.9.0/chibi-sxml-0.9.0.tgz"
+sha256 = "cec4438595978dfcc4ffa5c41b77178d14609490b2d1da4551e42cd960262cc4"
+source = "snow-fort"
+synopsis = "Utilities to convert sxml to xml or plain text"
+version = "0.9.0"
+
+[chibi-tar]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-string", "chibi-binary-record", "chibi-pathname", "chibi-filesystem", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/tar/0.9.0/chibi-tar-0.9.0.tgz"
+sha256 = "86c5248f8206d4f059ba66c91460ef5eb9497d40d6fd90d4258583c71f49cf4a"
+source = "snow-fort"
+version = "0.9.0"
+
+[chibi-temp-file]
+dependencies = ["akku-r7rs", "chibi-filesystem", "chibi-pathname"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/temp-file/0.9.0/chibi-temp-file-0.9.0.tgz"
+sha256 = "c400a25de2c4109a6e569f014eab360844e31041239ae6e2afed5d40e16d1f60"
+source = "snow-fort"
+version = "0.9.0"
+
+[chibi-term-ansi]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/term/ansi/0.9.0/chibi-term-ansi-0.9.0.tgz"
+sha256 = "805e33d6b87c6d54337bf0c89002f13c323e6d836291d2e88a252140d1552599"
+source = "snow-fort"
+synopsis = "A library to use ANSI escape codes to format text and background color, font weigh, and underlining"
+version = "0.9.0"
+
+[chibi-term-edit-line]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/term/edit-line/0.9.0/chibi-term-edit-line-0.9.0.tgz"
+sha256 = "0af16f80400b5d4382117d0ff361681956aa962e4688972b4d4ddaf48a41b385"
+source = "snow-fort"
+version = "0.9.0"
+
+[chibi-test]
+dependencies = ["akku-r7rs", "chibi-diff", "chibi-term-ansi"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/test/0.9.0/chibi-test-0.9.0.tgz"
+sha256 = "86997714be7fb6ade1b094d91727f9c9becd9051a41d1703986643d1ed09865d"
+source = "snow-fort"
+synopsis = "Simple but extensible testing framework with advanced reporting"
+version = "0.9.0"
+
+[chibi-uri]
+dependencies = ["chibi-string", "chibi-pathname", "akku-r7rs", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/uri/0.9.0/chibi-uri-0.9.0.tgz"
+sha256 = "cfec051a399439452c8754ab3ff7440e93b152de35514fa4f4407925de537750"
+source = "snow-fort"
+synopsis = "Library for parsing and constructing URI objects"
+version = "0.9.0"
+
+[chibi-voting]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/voting/0.1/chibi-voting-0.1.tgz"
+sha256 = "a7ef21109198f47310fc5f385a928dcaf178adf8e5fdc52c414babf53169eebe"
+source = "snow-fort"
+synopsis = "Preferential voting utilities to help come to reasonable decisions when there are more than 2 options"
+version = "0.1.0"
+
+[chibi-xgboost]
+dependencies = ["akku-r7rs", "chibi-string", "chez-srfi", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/xgboost/0.1/chibi-xgboost-0.1.tgz"
+sha256 = "82c2d83275436b8fe6c688088fe90193acbc0c64b04b08bfc5eb2c20adc348a5"
+source = "snow-fort"
+version = "0.1.0"
+
+[chibi-xlib]
+dependencies = []
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/chibi/xlib/0.1/chibi-xlib-0.1.tgz"
+sha256 = "bc35e1811909489ea7b2e121c4a2ba34e5cca41e7c9c8082bfd783774651aea2"
+source = "snow-fort"
+synopsis = "Minimal xlib bindings"
+version = "0.1.0"
+
+[chrisoei-cint]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/gmail.com/chris.oei/chrisoei/cint/0.1.0/chrisoei-cint-0.1.0.tgz"
+sha256 = "0f2b8a03afc0be7a27b7a64e808ee8df7d36570e47df3ef7e266c4c631db9b3d"
+source = "snow-fort"
+synopsis = "Compute cint coefficients"
+version = "0.1.0"
+
+[chrisoei-test]
+dependencies = ["akku-r7rs", "chibi-test"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/gmail.com/chris.oei/chrisoei/test/0.0.1/chrisoei-test-0.0.1.tgz"
+sha256 = "2b0f7c600778c88752cf48ab6f5685c5674d9e4aa15c913622eaa9be1ebbcd5a"
+source = "snow-fort"
+synopsis = "Additional testing utilities"
+version = "0.0.1"
+
+[comparators]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/gmail.com/kwortman/comparators/1.0.0/comparators-1.0.0.tgz"
+sha256 = "d5169f6dc6c2d77c410b667b1e3ecb2793920655f4ec133a8dabdf9b6304d8b3"
+source = "snow-fort"
+synopsis = "SRFI 128: Comparators (reduced) reference implementation"
+version = "1.0.0"
+
+[cyclone-iset]
+dependencies = ["akku-r7rs", "cyclone-iset-base", "cyclone-iset-iterators", "cyclone-iset-constructors"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/arthurmaciel/cyclone/iset/1.0/cyclone-iset-1.0.tgz"
+sha256 = "c1c3f2da8ab317baaad61c134e407bc297fa30b959ab449af15ebc9261b8c922"
+source = "snow-fort"
+version = "1.0.0"
+
+[cyclone-iset-base]
+dependencies = ["akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/arthurmaciel/cyclone/iset/base/1.0/cyclone-iset-base-1.0.tgz"
+sha256 = "d3b03eb7c0161eb71ce248226f6cfaf16f1540a66e6ee5838e86152d7bfef056"
+source = "snow-fort"
+version = "1.0.0"
+
+[cyclone-iset-constructors]
+dependencies = ["akku-r7rs", "chez-srfi", "cyclone-iset-base", "cyclone-iset-iterators"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/arthurmaciel/cyclone/iset/constructors/1.0/cyclone-iset-constructors-1.0.tgz"
+sha256 = "b5c723719a348c312dede7c49faf656c72f790fb6532969fba0a1c980a9d7b7e"
+source = "snow-fort"
+version = "1.0.0"
+
+[cyclone-iset-iterators]
+dependencies = ["akku-r7rs", "chez-srfi", "cyclone-iset-base"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/arthurmaciel/cyclone/iset/iterators/1.0/cyclone-iset-iterators-1.0.tgz"
+sha256 = "cff79c0c5839c419526fcc29b347f72f8f518147751874e2d116f3865d1c98f4"
+source = "snow-fort"
+version = "1.0.0"
+
+[cyclone-iset-optimize]
+dependencies = ["akku-r7rs", "chez-srfi", "cyclone-iset-base", "cyclone-iset-iterators", "cyclone-iset-constructors"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/arthurmaciel/cyclone/iset/optimize/1.0/cyclone-iset-optimize-1.0.tgz"
+sha256 = "c24ee986262f9f6119715adb82e2c21ae7cd01a99b943b0ed1b96264955f6e3f"
+source = "snow-fort"
+version = "1.0.0"
+
+[dockerfile]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-match", "unpack-assoc", "shell-quote"]
+dev-dependencies = []
+license = "isc"
+url = "http://snow-fort.org/s/lassi.io/lassi/dockerfile/0.1/dockerfile-0.1.tgz"
+sha256 = "41697d85fcc809fae965d5ba1137e5cdae2d4c87fee16c4ab33004a925830281"
+source = "snow-fort"
+synopsis = "Scheme DSL to build Dockerfiles"
+version = "0.1.0"
+
+[edn]
+dependencies = ["akku-r7rs", "chibi-parse", "chibi-test"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/edwinwatkeys.com/edwin/edn/0.2.0/./edn-0.2.0.tgz"
+sha256 = "7c8e71ed0d1bf248fd15bd1a2ea173afba411b0082a58f107acbe15529ca9249"
+source = "snow-fort"
+synopsis = "EDN is a data format from the Clojure ecosystem"
+version = "0.2.0"
+
+[fisherro-pipe]
+dependencies = ["akku-r7rs", "chibi-test"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/fisher.cx/robert/fisherro/pipe/1.0.0/fisherro-pipe-1.0.0.tgz"
+sha256 = "3e12f1347606c353018bf1a569226d7e0d7a6bd50cf37a9a7f42f155cfb22f65"
+source = "snow-fort"
+synopsis = "Pipelining syntax"
+version = "1.0.0"
+
+[foreign-c]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/foreign/c/0.11.0/foreign-c-0.11.0.tgz"
+sha256 = "5da3b00ff04cee2e73f17f348f62f417703245be235487aae7138a7c46dc68e7"
+source = "snow-fort"
+synopsis = "Portable foreign function interface for R7RS Schemes"
+version = "0.11.0"
+
+[generators]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/gmail.com/kwortman/generators/1.0.2/generators-1.0.2.tgz"
+sha256 = "629ff012704991d4ad34848790313140d71dce5fda36049eb7f5af98cd7b7847"
+source = "snow-fort"
+synopsis = "SRFI 121: Generators reference implementation"
+version = "1.0.2"
+
+[in-progress-hash-bimaps]
+dependencies = ["akku-r7rs", "r6rs-hashtables", "in-progress-hash-tables"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/ccs.neu.edu/will/in-progress/hash/bimaps/0.0.3/in-progress-hash-bimaps-0.0.3.tgz"
+sha256 = "c8f0c936144233ddfae0311cdc188b29ee5a8080390975e660a8a329a009ae34"
+source = "snow-fort"
+synopsis = "Bimaps (HashTablesCowan)"
+version = "0.0.3"
+
+[in-progress-hash-tables]
+dependencies = ["akku-r7rs", "r6rs-hashtables", "chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/ccs.neu.edu/will/in-progress/hash/tables/0.0.3/in-progress-hash-tables-0.0.3.tgz"
+sha256 = "5e81ab5a8b106d0e54bbd501610ecf15d39e4ed0b430c72a3a332208fb83e20c"
+source = "snow-fort"
+synopsis = "Hash tables (HashTablesCowan)"
+version = "0.0.3"
+
+[independentresearch-xattr]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "cc0-1.0"
+url = "http://snow-fort.org/s/gmail.com/lockywolf/independentresearch/xattr/0.2/independentresearch-xattr-0.2.tgz"
+sha256 = "b579f63f541d6a3abfb46c04772c3079faaf1d21637c1d32a10b5543ff616972"
+source = "snow-fort"
+version = "0.2.0"
+
+[jkode-sassy]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-test"]
+dev-dependencies = []
+license = "lgpl-2.1-or-later"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/jkode/sassy/0.2.1/jkode-sassy-0.2.1.tgz"
+sha256 = "c3e3038470986238d40ce98ad6eb0a078d9fb8b7f71cb241bc28a84fb5c79e95"
+source = "snow-fort"
+synopsis = "A portable assembler for x86 processors"
+version = "0.2.1"
+
+[lassik-dockerfile]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-match", "lassik-unpack-assoc", "lassik-shell-quote"]
+dev-dependencies = []
+license = "isc"
+url = "http://snow-fort.org/s/lassi.io/lassi/lassik/dockerfile/0.2/distfiles/lassik-dockerfile-0.2.tgz"
+sha256 = "fbaa87155f3d5910af8bb6b1513464520a526990ca40ed43f423ed27c485c4a0"
+source = "snow-fort"
+synopsis = "Scheme DSL to build Dockerfiles"
+version = "0.2.0"
+
+[lassik-shell-quote]
+dependencies = ["akku-r7rs", "chibi-match"]
+dev-dependencies = []
+license = "isc"
+url = "http://snow-fort.org/s/lassi.io/lassi/lassik/shell-quote/0.2/distfiles/lassik-shell-quote-0.2.tgz"
+sha256 = "e985951f02a17d120e73a4e935a1aa9af9756e42ad72fe143cd5397a549dbc33"
+source = "snow-fort"
+synopsis = "Scheme DSL to build shell command lines"
+version = "0.2.0"
+
+[lassik-string-inflection]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "isc"
+url = "http://snow-fort.org/s/lassi.io/lassi/lassik/string-inflection/0.2/distfiles/lassik-string-inflection-0.2.tgz"
+sha256 = "c9ad9fe11d0c5243609382d365b4ae3d81b9177ddebcb47abe76aaf1a83352ff"
+source = "snow-fort"
+synopsis = "lisp-case under_score CapsUpper capsLower"
+version = "0.2.0"
+
+[lassik-trivial-tar-writer]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "isc"
+url = "http://snow-fort.org/s/lassi.io/lassi/lassik/trivial-tar-writer/0.2/distfiles/lassik-trivial-tar-writer-0.2.tgz"
+sha256 = "dcb512851622b17b7eb6e8bd868f78bb4bcabd33f480a9f7260970196bf4a568"
+source = "snow-fort"
+synopsis = "Simplest way to output uncompressed .tar file"
+version = "0.2.0"
+
+[lassik-unpack-assoc]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "isc"
+url = "http://snow-fort.org/s/lassi.io/lassi/lassik/unpack-assoc/0.2/distfiles/lassik-unpack-assoc-0.2.tgz"
+sha256 = "6e67c4e5c2f0756f38ae4b065c0bfe8dc86f0532373d899cdbff4fbcd9d18302"
+source = "snow-fort"
+synopsis = "Alist/hash-table destructuring case macros"
+version = "0.2.0"
+
+[lightweight-testing]
+dependencies = ["akku-r7rs", "chibi-test"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/tutanota.com/flynn16/lightweight-testing/0.1/lightweight-testing-0.1.tgz"
+sha256 = "17294025cf29ab76f41c51c5b8562961eff3b6a3a1ada2f6221b7f38e4a4223c"
+source = "snow-fort"
+synopsis = "SRFI-78 implemented as a wrapper around (chibi test)"
+version = "0.1.0"
+
+[macduffie-json]
+dependencies = ["akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/gmail.com/taknamay/macduffie/json/0.9.5/macduffie-json-0.9.5.tgz"
+sha256 = "e8dccf8e8c63f088d826b0e92357dbc2998356f616b4390433b438b26a08b4e2"
+source = "snow-fort"
+synopsis = "JSON reader and writer"
+version = "0.9.5"
+
+[nytpu-contracts]
+dependencies = ["akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/nytpu.com/alex/nytpu/contracts/0.1.1/nytpu-contracts-0.1.1.tgz"
+sha256 = "b077e4e751aba7046d9ce66e92e8a3a02d691b2baa7490b8bb2e9a5d4d1f29bd"
+source = "snow-fort"
+synopsis = "Design by Contracts for R7RS"
+version = "0.1.1"
+
+[nytpu-getopt]
+dependencies = ["akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/nytpu.com/alex/nytpu/getopt/1.2.0/nytpu-getopt-1.2.0.tgz"
+sha256 = "ec1396b8885bb7e76b29277d12484a2a9129b6b3e47cbdab2079ce582f10d11a"
+source = "snow-fort"
+synopsis = "POSIX getopt(3), in compliance with POSIX 2008"
+version = "1.2.0"
+
+[okmij-ssax]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-test"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/okmij/ssax/5.4/okmij-ssax-5.4.tgz"
+sha256 = "9a78a099fff4584c10c9444d41b808fe7029b5dfa2d3e5ece4c7a08e5e33b2c1"
+source = "snow-fort"
+synopsis = "Functional XML parsing framework"
+version = "5.4.0"
+
+[pfds-alist]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/alist/1.0.0/pfds-alist-1.0.0.tgz"
+sha256 = "e8c227fcf3c10f355df8d1c22860e0e6c54103c356bd707ed914028b3568b92e"
+source = "snow-fort"
+synopsis = "Convenience functions for working with association lists"
+version = "1.0.0"
+
+[pfds-bitwise]
+dependencies = ["akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/bitwise/1.0.0/pfds-bitwise-1.0.0.tgz"
+sha256 = "8654930f5a5a66df9120f3a8b7276cfa0ca36e65ea4579966b3e711422afab93"
+source = "snow-fort"
+synopsis = "Bitwise arithmetic utilities"
+version = "1.0.0"
+
+[pfds-bounded-balance-tree]
+dependencies = ["akku-r7rs", "pfds-list-helpers"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/bounded-balance-tree/1.0.0/pfds-bounded-balance-tree-1.0.0.tgz"
+sha256 = "7ae6f64b9c5614ee38238b4459b558eaebd267c6824bc66354ab7cb39b2a04d6"
+source = "snow-fort"
+synopsis = "Bounded balance tree"
+version = "1.0.0"
+
+[pfds-deque]
+dependencies = ["akku-r7rs", "pfds-lazy-list", "pfds-list-helpers"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/deque/1.0.0/pfds-deque-1.0.0.tgz"
+sha256 = "a5deddf48523c167649660fc9e41acf2cce77f185525a1f6d4cfa9589f7f868b"
+source = "snow-fort"
+synopsis = "Purely functional deques"
+version = "1.0.0"
+
+[pfds-difference-list]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/difference-list/1.0.0/pfds-difference-list-1.0.0.tgz"
+sha256 = "82a9e6db6f63ac1ab14fd87835e438a0a5486572a450a65c0b8eda0873c72a8c"
+source = "snow-fort"
+synopsis = "Difference lists"
+version = "1.0.0"
+
+[pfds-fector]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/fector/1.0.0/pfds-fector-1.0.0.tgz"
+sha256 = "ff0bb61c97b4a59b51c40f589d4b481a97759c09de197c0891386d6b0fa39f53"
+source = "snow-fort"
+synopsis = "Functional vectors"
+version = "1.0.0"
+
+[pfds-fingertree]
+dependencies = ["akku-r7rs", "pfds-list-helpers"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/fingertree/1.0.0/pfds-fingertree-1.0.0.tgz"
+sha256 = "d2398c150e60b0f9c5214287720fef78b8ce0b9bce6733f67490a388685855b2"
+source = "snow-fort"
+synopsis = "Fingertree: A simple general-purpose data structure"
+version = "1.0.0"
+
+[pfds-hash-array-mapped-trie]
+dependencies = ["akku-r7rs", "pfds-alist", "pfds-bitwise", "pfds-list-helpers", "pfds-vector", "chez-srfi"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/hash-array-mapped-trie/1.0.0/pfds-hash-array-mapped-trie-1.0.0.tgz"
+sha256 = "f549c8715d94b83037af786618b5ab08600d75ce9ffa40a841cb07e8f918931d"
+source = "snow-fort"
+synopsis = "Hash array mapped tries"
+version = "1.0.0"
+
+[pfds-heap]
+dependencies = ["akku-r7rs", "pfds-list-helpers"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/heap/1.0.0/pfds-heap-1.0.0.tgz"
+sha256 = "5b9ec02fd7f9ff022f67aeee6e6aa4109e14bb3a0d096b33512d3d9265f49bb5"
+source = "snow-fort"
+synopsis = "Heap data structure"
+version = "1.0.0"
+
+[pfds-lazy-list]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/lazy-list/1.0.0/pfds-lazy-list-1.0.0.tgz"
+sha256 = "db4fcc889545c34716dff6c0420f9a5fcee2a3dee8f31416c1bc08462b74252f"
+source = "snow-fort"
+synopsis = "Odd lazy lists"
+version = "1.0.0"
+
+[pfds-list-helpers]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/list-helpers/1.0.0/pfds-list-helpers-1.0.0.tgz"
+sha256 = "0eb459e05b775a90f6b2a6a7435d19aa6369f99709b8d501a960149e05e21517"
+source = "snow-fort"
+synopsis = "List utility functions"
+version = "1.0.0"
+
+[pfds-priority-search-queue]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/priority-search-queue/1.0.0/pfds-priority-search-queue-1.0.0.tgz"
+sha256 = "47a90b0983d3c8cf9c5d87a65fba104671adcefa386e76f9db1b05d0206b38dc"
+source = "snow-fort"
+synopsis = "Priority search queues"
+version = "1.0.0"
+
+[pfds-queue]
+dependencies = ["akku-r7rs", "pfds-list-helpers", "pfds-lazy-list"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/queue/1.0.0/pfds-queue-1.0.0.tgz"
+sha256 = "b9da21328abf243ff4efe9215d5720f0fffaf4e552f51a49519993347882c60f"
+source = "snow-fort"
+synopsis = "Purely functional queues"
+version = "1.0.0"
+
+[pfds-sequence]
+dependencies = ["akku-r7rs", "pfds-fingertree", "pfds-list-helpers"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/sequence/1.0.0/pfds-sequence-1.0.0.tgz"
+sha256 = "6ac52b1e000c41406c34220aae9466288824556c0b0d8f4b9bf475d433038cc4"
+source = "snow-fort"
+synopsis = "Purely functional sequences"
+version = "1.0.0"
+
+[pfds-set]
+dependencies = ["akku-r7rs", "pfds-bounded-balance-tree", "pfds-list-helpers"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/set/1.0.0/pfds-set-1.0.0.tgz"
+sha256 = "c71a6da9a21c6994b6801920511141a93c181c741017d0cfb24ec2cde523db7b"
+source = "snow-fort"
+synopsis = "Purely functional sets"
+version = "1.0.0"
+
+[pfds-vector]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/peterlane.info/peter/pfds/vector/1.0.0/pfds-vector-1.0.0.tgz"
+sha256 = "44dcbfec253b1f38f28b4a742e251a8a64daf25235c521b40ba0ad00f742058c"
+source = "snow-fort"
+synopsis = "Some utility functions for working with vectors"
+version = "1.0.0"
+
+[postgresql]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/ymail.com/ktakashi/postgresql/17.09.26/postgresql-17.09.26.tgz"
+sha256 = "d6d800b041ae02ef0c341a47bd23316a94dc26cab819c7d8425ddf84066ba0d1"
+source = "snow-fort"
+synopsis = "R7RS portable PostgreSQL binding"
+version = "17.9.26"
+
+[r6rs-arithmetic-fixnums]
+dependencies = ["akku-r7rs", "r6rs-base"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/arithmetic/fixnums/0.0.1/r6rs-arithmetic-fixnums-0.0.1.tgz"
+sha256 = "a2839d9592f23c3859ace50bd3132dc37c2691702a382e873c76156b782a6378"
+source = "snow-fort"
+synopsis = "Port of (rnrs arithmetic fixnums) to R7RS"
+version = "0.0.1"
+
+[r6rs-base]
+dependencies = []
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/base/0.0.1/r6rs-base-0.0.1.tgz"
+sha256 = "c3b23446ad2d17ff377006e9756a5e27a89dcd1ab65792e49e01efd5424a6c0d"
+source = "snow-fort"
+synopsis = "Port of (rnrs base) to R7RS"
+version = "0.0.1"
+
+[r6rs-bytevectors]
+dependencies = []
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/bytevectors/0.0.1/r6rs-bytevectors-0.0.1.tgz"
+sha256 = "404c59936cd1b67bba8dd58219a535a71fa39d18be034ae7e8b1faad41eb782f"
+source = "snow-fort"
+synopsis = "Port of (rnrs bytevectors) to R7RS"
+version = "0.0.1"
+
+[r6rs-control]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/control/0.0.1/r6rs-control-0.0.1.tgz"
+sha256 = "b38fb48bac18d46a9a84ecd4ba64ca83d272abf3d789307a49a93a4230965a6a"
+source = "snow-fort"
+synopsis = "Port of (rnrs control) to R7RS"
+version = "0.0.1"
+
+[r6rs-enums]
+dependencies = []
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/enums/0.0.1/r6rs-enums-0.0.1.tgz"
+sha256 = "f86c2a234a75fc494f088d831e17cfe23328f5244ea6677bda44dc6451affcbd"
+source = "snow-fort"
+synopsis = "Port of (rnrs enums) to R7RS"
+version = "0.0.1"
+
+[r6rs-eval]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/eval/0.0.1/r6rs-eval-0.0.1.tgz"
+sha256 = "b0e87f14188769d21f5f1c96e4f8a5b4e4dda4d57a8509d313c4da2b6e12f57c"
+source = "snow-fort"
+synopsis = "Port of (rnrs eval) to R7RS"
+version = "0.0.1"
+
+[r6rs-exceptions]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/exceptions/0.0.1/r6rs-exceptions-0.0.1.tgz"
+sha256 = "9555ee076c379a3f622b9ca2812cf3332a9d9afecd115d7e3b2ddda8aaa9b97f"
+source = "snow-fort"
+synopsis = "Port of (rnrs exceptions) to R7RS"
+version = "0.0.1"
+
+[r6rs-files]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/files/0.0.1/r6rs-files-0.0.1.tgz"
+sha256 = "6b674bf8735431e5a1cc809018d0d19b6ffc02ca56781328290de413db5829ef"
+source = "snow-fort"
+synopsis = "Port of (rnrs files) to R7RS"
+version = "0.0.1"
+
+[r6rs-hashtables]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/hashtables/0.0.1/r6rs-hashtables-0.0.1.tgz"
+sha256 = "d93f85d56c7eadb1e1603bf95988302bd1e111e3247bb1ddba7d271148633b12"
+source = "snow-fort"
+synopsis = "Port of (rnrs hashtables) to R7RS"
+version = "0.0.1"
+
+[r6rs-io-simple]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/io/simple/0.0.1/r6rs-io-simple-0.0.1.tgz"
+sha256 = "7f49ae295e3f6fa420e2ccfdbf446dc46cc814bdfb436046191bd8e146346b00"
+source = "snow-fort"
+synopsis = "Port of (rnrs io simple) to R7RS"
+version = "0.0.1"
+
+[r6rs-lists]
+dependencies = []
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/lists/0.0.1/r6rs-lists-0.0.1.tgz"
+sha256 = "46507daa47b2226eeac6e00418301d6e9c46940a744ec9f0e07ac4efb93bb49e"
+source = "snow-fort"
+synopsis = "Port of (rnrs lists) to R7RS"
+version = "0.0.1"
+
+[r6rs-mutable-pairs]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/mutable-pairs/0.0.1/r6rs-mutable-pairs-0.0.1.tgz"
+sha256 = "850c349b4aadeda7c8c52afcf0b9f237b0b641f70d9786f77490cbf4b13e8bf1"
+source = "snow-fort"
+synopsis = "Port of (rnrs mutable-pairs) to R7RS"
+version = "0.0.1"
+
+[r6rs-mutable-strings]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/mutable-strings/0.0.1/r6rs-mutable-strings-0.0.1.tgz"
+sha256 = "c5f3a290e89314f1572cd7f31ab3238bd4e3c8b0883ebf281b56e174b13031a1"
+source = "snow-fort"
+synopsis = "Port of (rnrs mutable-strings) to R7RS"
+version = "0.0.1"
+
+[r6rs-programs]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/programs/0.0.1/r6rs-programs-0.0.1.tgz"
+sha256 = "b10955572de97a44524ce699dbf6c7607c75bb6000ba845051b1e927bd72370b"
+source = "snow-fort"
+synopsis = "Port of (rnrs programs) to R7RS"
+version = "0.0.1"
+
+[r6rs-r5rs]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/r5rs/0.0.1/r6rs-r5rs-0.0.1.tgz"
+sha256 = "a049e687207b76608448460b70eca530d0b495a8348bff5953fa911abf73772a"
+source = "snow-fort"
+synopsis = "Port of (rnrs r5rs) to R7RS"
+version = "0.0.1"
+
+[r6rs-sorting]
+dependencies = []
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/sorting/0.0.1/r6rs-sorting-0.0.1.tgz"
+sha256 = "75235b206c41016a825fbba98d7f6c27ee46a4da089eb13e4585751cfdfb5ef9"
+source = "snow-fort"
+synopsis = "Port of (rnrs sorting) to R7RS"
+version = "0.0.1"
+
+[r6rs-unicode]
+dependencies = []
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/unicode/0.0.1/r6rs-unicode-0.0.1.tgz"
+sha256 = "0da7ecacbc53ef8ce918b7383bc5309d8bb171cfa3db41e9f229a266faf46650"
+source = "snow-fort"
+synopsis = "Port of (rnrs unicode) to R7RS"
+version = "0.0.1"
+
+[r6rs-unicode-reference-unicode0]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/unicode-reference/unicode0/0.0.1/r6rs-unicode-reference-unicode0-0.0.1.tgz"
+sha256 = "1450a1e3defa951e407d4acb9151dc6aca3a5993b620dc7b2c05cd531c8951c4"
+source = "snow-fort"
+synopsis = "Helper library for (rnrs unicode)"
+version = "0.0.1"
+
+[r6rs-unicode-reference-unicode1]
+dependencies = ["akku-r7rs", "r6rs-unicode-reference-unicode0"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/unicode-reference/unicode1/0.0.1/r6rs-unicode-reference-unicode1-0.0.1.tgz"
+sha256 = "ed65f577c1928918c734406431a63b5c31278794793cf40fa8035c339e677fb9"
+source = "snow-fort"
+synopsis = "Helper library for (rnrs unicode)"
+version = "0.0.1"
+
+[r6rs-unicode-reference-unicode2]
+dependencies = ["akku-r7rs", "r6rs-unicode-reference-unicode0", "r6rs-unicode-reference-unicode1"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/unicode-reference/unicode2/0.0.1/r6rs-unicode-reference-unicode2-0.0.1.tgz"
+sha256 = "e46d3fd17c6305c35542ae783a578f5f2324e67d140b6bd84168ddd42190b24c"
+source = "snow-fort"
+synopsis = "Helper library for (rnrs unicode)"
+version = "0.0.1"
+
+[r6rs-unicode-reference-unicode3]
+dependencies = ["akku-r7rs", "r6rs-unicode-reference-unicode0", "r6rs-unicode-reference-unicode1", "r6rs-unicode-reference-unicode2"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/unicode-reference/unicode3/0.0.1/r6rs-unicode-reference-unicode3-0.0.1.tgz"
+sha256 = "62fba6dbb3ddd123b392a538e01aa1db0bff1b8939505a7071619297f0af17ff"
+source = "snow-fort"
+synopsis = "Helper library for (rnrs unicode)"
+version = "0.0.1"
+
+[r6rs-unicode-reference-unicode4]
+dependencies = ["akku-r7rs", "r6rs-unicode-reference-unicode0", "r6rs-unicode-reference-unicode1", "r6rs-unicode-reference-unicode2", "r6rs-unicode-reference-unicode3"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/ccs.neu.edu/will/r6rs/unicode-reference/unicode4/0.0.1/r6rs-unicode-reference-unicode4-0.0.1.tgz"
+sha256 = "85d46c2a686c606aa504245abf55036de6baac5675a809bca74ac469b1a75222"
+source = "snow-fort"
+synopsis = "Helper library for (rnrs unicode)"
+version = "0.0.1"
+
+[rapid-analyze-library]
+dependencies = ["akku-r7rs", "rapid-assume", "rapid-and-let", "rapid-receive", "rapid-comparator", "rapid-set", "rapid-mapping", "rapid-syntax", "rapid-read", "rapid-list", "rapid-vicinity", "rapid-test"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/analyze-library/0.1.0/rapid-analyze-library-0.1.0.tgz"
+sha256 = "4bb64598eb63535d917429c67aa6763b1903e3de125f2b607b07c9a05d019ad4"
+source = "snow-fort"
+synopsis = "Analyze R7RS library definitions"
+version = "0.1.0"
+
+[rapid-and-let]
+dependencies = ["akku-r7rs", "rapid-test"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/and-let/0.1.0/rapid-and-let-0.1.0.tgz"
+sha256 = "d11cd9d2eed4406f7426f9661f6eea71d034417708045373b329c839575cd21d"
+source = "snow-fort"
+synopsis = "And with local bindings compatible with SRFI 2"
+version = "0.1.0"
+
+[rapid-args-fold]
+dependencies = ["akku-r7rs", "rapid-list", "rapid-test"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/args-fold/0.1.0/rapid-args-fold-0.1.0.tgz"
+sha256 = "9aa5859eb01a0708d0170c1e7baca0dfd7d9fd49425f6dfd31c555f61256c606"
+source = "snow-fort"
+synopsis = "A program argument processor compatible with SRFI 37"
+version = "0.1.0"
+
+[rapid-assume]
+dependencies = ["akku-r7rs", "rapid-test"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/assume/0.1.0/rapid-assume-0.1.0.tgz"
+sha256 = "519d46ff8e517d1e4a01ade8355233dbe3befbf7f03f4d3f717de802e974a8a4"
+source = "snow-fort"
+synopsis = "Assumptions compatible with SRFI 145"
+version = "0.1.0"
+
+[rapid-box]
+dependencies = ["akku-r7rs", "rapid-test"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/box/0.1.1/rapid-box-0.1.1.tgz"
+sha256 = "a0e289ae74115c75b40d738776555fc1d36791e76e07f9eb9dce77c998bd5d32"
+source = "snow-fort"
+synopsis = "Boxes compatible with SRFI 111"
+version = "0.1.1"
+
+[rapid-comparator]
+dependencies = ["akku-r7rs", "rapid-test"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/comparator/0.1.1/rapid-comparator-0.1.1.tgz"
+sha256 = "9769cb53680e1c8a0a8993bb267db0856ba1351c437696821e45387878f44426"
+source = "snow-fort"
+synopsis = "Comparators compatible with SRFI 128"
+version = "0.1.1"
+
+[rapid-eliminate-mutable-variables]
+dependencies = ["akku-r7rs", "rapid-analyze-library", "rapid-receive", "rapid-comparator", "rapid-syntax", "rapid-set", "rapid-test"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/eliminate-mutable-variables/0.1.0/rapid-eliminate-mutable-variables-0.1.0.tgz"
+sha256 = "53a6c14289c95f247c4dc6ffb761ce990b64f3abd43cd196c15c000f4df75efd"
+source = "snow-fort"
+synopsis = "Eliminate mutable variables"
+version = "0.1.0"
+
+[rapid-fix-letrec]
+dependencies = ["akku-r7rs", "rapid-list", "rapid-analyze-library", "rapid-and-let", "rapid-receive", "rapid-comparator", "rapid-syntax", "rapid-mapping", "rapid-set", "rapid-graph", "rapid-test"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/fix-letrec/0.1.0/rapid-fix-letrec-0.1.0.tgz"
+sha256 = "8daba123e1fc21f8b75df7231aae1a8686f146ef45c11d284b702308752f12ce"
+source = "snow-fort"
+synopsis = "Fixing letrec"
+version = "0.1.0"
+
+[rapid-format]
+dependencies = ["akku-r7rs", "rapid-assume", "rapid-test"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/format/0.1.0/rapid-format-0.1.0.tgz"
+sha256 = "fa3dc4ea1c85698b3ae98f763d6eccf02566c5c7da2fdf49fd95d9d84e760aed"
+source = "snow-fort"
+synopsis = "Basic format strings compatible with SRFI 28"
+version = "0.1.0"
+
+[rapid-generator]
+dependencies = ["akku-r7rs", "rapid-list", "rapid-test"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/generator/0.1.0/rapid-generator-0.1.0.tgz"
+sha256 = "7bf11c74ef0a52856ad446e6ba2edea993d058c7e703ea1cde905b4b13e41d56"
+source = "snow-fort"
+synopsis = "Generators compatible with SRFI 121"
+version = "0.1.0"
+
+[rapid-graph]
+dependencies = ["akku-r7rs", "rapid-receive", "rapid-list", "rapid-set", "rapid-mapping", "rapid-test", "rapid-comparator"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/graph/0.1.0/rapid-graph-0.1.0.tgz"
+sha256 = "3683420af145d9e9e792ff7f0c35741b85dcba5a72e5e431b86e7c3465e8e199"
+source = "snow-fort"
+synopsis = "Graph algorithms"
+version = "0.1.0"
+
+[rapid-identity]
+dependencies = ["akku-r7rs", "rapid-box", "rapid-test"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/identity/0.1.0/rapid-identity-0.1.0.tgz"
+sha256 = "817924ee4ed96b7a6f85f1dc59d89289cbe9dc5697367c632c33174ca9434aa4"
+source = "snow-fort"
+synopsis = "Unique identities"
+version = "0.1.0"
+
+[rapid-library-definition]
+dependencies = ["akku-r7rs", "rapid-assume", "rapid-and-let", "rapid-receive", "rapid-comparator", "rapid-set", "rapid-mapping", "rapid-syntax", "rapid-read", "rapid-list", "rapid-vicinity", "rapid-test"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/library-definition/0.1.2/rapid-library-definition-0.1.2.tgz"
+sha256 = "87c8bde40d0bf15469d65af98ca5229fffc224780fbe87dec5cd40bd2c9f53bc"
+source = "snow-fort"
+synopsis = "R7RS library definitions"
+version = "0.1.2"
+
+[rapid-list]
+dependencies = ["akku-r7rs", "rapid-receive", "rapid-test"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/list/0.1.0/rapid-list-0.1.0.tgz"
+sha256 = "5ac3af285d859b0bbbf2e95605931d217272cf6e6ab4aa64ab973dc8ea2b20af"
+source = "snow-fort"
+synopsis = "List library compatible with SRFI 1"
+version = "0.1.0"
+
+[rapid-mapping]
+dependencies = ["akku-r7rs", "rapid-list", "rapid-receive", "rapid-comparator", "rapid-assume", "rapid-generator", "rapid-rbtree", "rapid-test"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/mapping/0.1.1/rapid-mapping-0.1.1.tgz"
+sha256 = "6c00a8050b7187ba2ea1bfd774055e74827ba8439baf742a603fdd3dc2106fb6"
+source = "snow-fort"
+synopsis = "Mappings compatible with SRFI 146"
+version = "0.1.1"
+
+[rapid-match]
+dependencies = ["akku-r7rs", "rapid-assume"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/match/0.1.5/rapid-match-0.1.5.tgz"
+sha256 = "51c6b1139c5b9136045be63cfda86ad50044f517296431315faff14cecef881e"
+source = "snow-fort"
+synopsis = "A pattern matcher"
+version = "0.1.5"
+
+[rapid-quasiquote]
+dependencies = ["akku-r7rs", "rapid-test"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/quasiquote/0.1.1/rapid-quasiquote-0.1.1.tgz"
+sha256 = "aa8fe3cb9350b96b790ad2d9f8da2a940c3e92704f485c71bca183c801ed6887"
+source = "snow-fort"
+synopsis = "Extended quasiquotation with ellipses"
+version = "0.1.1"
+
+[rapid-rbtree]
+dependencies = ["akku-r7rs", "rapid-assume", "rapid-and-let", "rapid-receive", "rapid-test"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/rbtree/0.1.0/rapid-rbtree-0.1.0.tgz"
+sha256 = "866ebac0723f6fb23936be5675cc3e24b340789cd6705d7ee2a6a77b0ed0e032"
+source = "snow-fort"
+synopsis = "Red-Black Trees"
+version = "0.1.0"
+
+[rapid-read]
+dependencies = ["akku-r7rs", "rapid-assume", "rapid-and-let", "rapid-receive", "rapid-list", "rapid-format", "rapid-vicinity", "rapid-comparator", "rapid-mapping", "rapid-syntax", "rapid-test"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/read/0.1.3/rapid-read-0.1.3.tgz"
+sha256 = "d66db1043ebdb03f7850229a5c0a1b8be2764777f85e9e8b4635caf2d139aa90"
+source = "snow-fort"
+synopsis = "Scheme reader with source-location information"
+version = "0.1.3"
+
+[rapid-receive]
+dependencies = ["akku-r7rs", "rapid-test"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/receive/0.1.0/rapid-receive-0.1.0.tgz"
+sha256 = "3193a4cba66dbd5122d8a95d4de8c4e7bfb6365215167e2a24e519c7d60b412c"
+source = "snow-fort"
+synopsis = "Binding to multiple values compatible with SRFI 8"
+version = "0.1.0"
+
+[rapid-set]
+dependencies = ["akku-r7rs", "rapid-list", "rapid-receive", "rapid-generator", "rapid-comparator", "rapid-assume", "rapid-mapping", "rapid-test"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/set/0.1.0/rapid-set-0.1.0.tgz"
+sha256 = "d2bcfff9e2502363ae30d11905245b95c05cd728ee6f67db1a103eb57982329f"
+source = "snow-fort"
+synopsis = "Sets and bags compatible with SRFI 113"
+version = "0.1.0"
+
+[rapid-syntax]
+dependencies = ["akku-r7rs", "rapid-quasiquote", "rapid-match", "rapid-format", "rapid-list", "rapid-identity", "rapid-comparator", "rapid-assume", "rapid-receive", "rapid-mapping", "rapid-vicinity", "rapid-test"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/syntax/0.1.2/rapid-syntax-0.1.2.tgz"
+sha256 = "b80e6430fe0b735c76850cd085d0eaba7f02153b808134a0ad1292dfb2a33829"
+source = "snow-fort"
+synopsis = "Syntax objects encapsulating Scheme datums together with source-location information"
+version = "0.1.2"
+
+[rapid-test]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/test/0.1.3/rapid-test-0.1.3.tgz"
+sha256 = "f4c432673e7e11993b602fc04b9ef95083a8bc44e6d6de8de0d6f450328b80cc"
+source = "snow-fort"
+synopsis = "A Scheme API for test suites compatible to SRFI 64"
+version = "0.1.3"
+
+[rapid-vector]
+dependencies = ["akku-r7rs", "rapid-receive", "rapid-test"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/vector/0.1.0/rapid-vector-0.1.0.tgz"
+sha256 = "d0434238f4bc78ee7df4747de2970105a70208d74fd7f48dfb30468fc744ef92"
+source = "snow-fort"
+synopsis = "Vector library compatible with SRFI 133"
+version = "0.1.0"
+
+[rapid-vicinity]
+dependencies = ["akku-r7rs", "rapid-test"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "http://snow-fort.org/s/rapid-scheme.org/marc/rapid/vicinity/0.1.0/rapid-vicinity-0.1.0.tgz"
+sha256 = "87e893f816b306731dd38b8ffe8121fd9d4e1ba5dc2fd5f789c6a0d54c8d2ed1"
+source = "snow-fort"
+synopsis = "Vicinity compatible with SRFI 59"
+version = "0.1.0"
+
+[read-char-if]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/lassi.io/lassi/read-char-if/0.1/read-char-if-0.1.tgz"
+sha256 = "1d432bcf77414b37649f6c5621e74dbbe7be10cf081c98cf639ffa7be33ba714"
+source = "snow-fort"
+version = "0.1.0"
+
+[rebottled-cl-pdf]
+dependencies = ["akku-r7rs", "slib-format", "rebottled-pregexp", "slib-common-list-functions", "robin-statistics"]
+dev-dependencies = []
+license = "bsd-2-clause"
+url = "http://snow-fort.org/s/peterlane.info/peter/rebottled/cl-pdf/1.0.0/rebottled-cl-pdf-1.0.0.tgz"
+sha256 = "9a0a91a9bef0f2311c47ee8fd0c719aafc81ba88bf3e800e4e977608cb7a78df"
+source = "snow-fort"
+synopsis = "Low level functions for generating PDF files"
+version = "1.0.0"
+
+[rebottled-pregexp]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/rebottled/pregexp/20050502/rebottled-pregexp-20050502.tgz"
+sha256 = "dd3e4b6dcdbfdba88827f20f2ef5171251d98526c88764051f64bff88b72e08c"
+source = "snow-fort"
+synopsis = "Dorai Sitaram's portable regular expressions"
+version = "0.0.20050502"
+
+[rebottled-pstk]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "bsd-2-clause"
+url = "http://snow-fort.org/s/peterlane.info/peter/rebottled/pstk/1.7.0/rebottled-pstk-1.7.0.tgz"
+sha256 = "2377f19584f9d6117d83009db07b6cde1e947ed280b25a7acb4d2dfddb383e0d"
+source = "snow-fort"
+synopsis = "Portable Scheme Interface to the Tk GUI Toolkit"
+version = "1.7.0"
+
+[rebottled-schelog]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/rebottled/schelog/20150602/rebottled-schelog-20150602.tgz"
+sha256 = "7da22ea8b90c28a8c1812cf6fa43b0f30bfdf8629d5b8a7863b766f297eca7c5"
+source = "snow-fort"
+synopsis = "Dorai Sitaram's Schelog: logic programming in Scheme"
+version = "0.0.20150602"
+
+[retropikzel-cgi]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/retropikzel/cgi/1.0.1/retropikzel-cgi-1.0.1.tgz"
+sha256 = "05076bc5a8b1a2142d0a68e85e92af182496cc7cab55e195b03257a4dea9c552"
+source = "snow-fort"
+version = "1.0.1"
+
+[retropikzel-gtk-server]
+dependencies = ["akku-r7rs", "foreign-c", "retropikzel-system", "retropikzel-named-pipes"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/retropikzel/gtk-server/0.1.1/retropikzel-gtk-server-0.1.1.tgz"
+sha256 = "856dbd735c018481943345b58d20d8dae87134637767c16fe47e75e51bf0a1a7"
+source = "snow-fort"
+synopsis = "Library for using gtk-server"
+version = "0.1.1"
+
+[retropikzel-hello]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/retropikzel/hello/1.2.3/retropikzel-hello-1.2.3.tgz"
+sha256 = "bee244ee61f5b2766aa654f7dcfe0c2060e6341cb01dc4cf293ed8c3940dbf8c"
+source = "snow-fort"
+version = "1.2.3"
+
+[retropikzel-named-pipes]
+dependencies = ["akku-r7rs", "foreign-c"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/retropikzel/named-pipes/0.1.3/retropikzel-named-pipes-0.1.3.tgz"
+sha256 = "4fdbdcdb4c0e4cc51fda55d935a057f05e230adc2db18be0a864e2bd2687f270"
+source = "snow-fort"
+synopsis = "Library for using named pipes"
+version = "0.1.3"
+
+[retropikzel-requests]
+dependencies = ["akku-r7rs", "foreign-c"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/retropikzel/requests/0.10.2/retropikzel-requests-0.10.2.tgz"
+sha256 = "4be1ddb90765f1a0332d235986b7d31e445337d81c5fe933979968a6c8f84071"
+source = "snow-fort"
+synopsis = "Library for making HTTP Requests"
+version = "0.10.2"
+
+[retropikzel-scgi]
+dependencies = ["akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/retropikzel/scgi/0.3.0/retropikzel-scgi-0.3.0.tgz"
+sha256 = "ef8fee9cf34f38a1929e7007a509dc321b35c26bc3e18d23619b9094e81eae52"
+source = "snow-fort"
+version = "0.3.0"
+
+[retropikzel-system]
+dependencies = ["akku-r7rs", "foreign-c"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/retropikzel/system/1.1.2/retropikzel-system-1.1.2.tgz"
+sha256 = "528b3257b5620054341b5b7636ea11043e102ccb26d26ec7e7b66a82f2ede56a"
+source = "snow-fort"
+synopsis = "Library for running shell commands"
+version = "1.1.2"
+
+[robin-abbrev]
+dependencies = ["akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/peterlane.info/peter/robin/abbrev/1.0.0/robin-abbrev-1.0.0.tgz"
+sha256 = "4f4700313dbea75851051aec7d4bff1d4b3751dc5481639050db778fa6b9f835"
+source = "snow-fort"
+synopsis = "Create unique abbreviations for a list of strings"
+version = "1.0.0"
+
+[robin-directory]
+dependencies = ["akku-r7rs", "slib-filename"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/peterlane.info/peter/robin/directory/1.0.0/robin-directory-1.0.0.tgz"
+sha256 = "11fc58780ddc06fa797a2b7c13e45c9ee99c0ed3edd6f929b6995670c0ffbaac"
+source = "snow-fort"
+synopsis = "Some useful directory functions"
+version = "1.0.0"
+
+[robin-disjoint-set]
+dependencies = ["akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/peterlane.info/peter/robin/disjoint-set/1.0.0/robin-disjoint-set-1.0.0.tgz"
+sha256 = "07417505109644442a1cc449dfe246cb340c41ef441b09d65093f991e0f70027"
+source = "snow-fort"
+synopsis = "A disjoint-set data structure"
+version = "1.0.0"
+
+[robin-logger]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/peterlane.info/peter/robin/logger/1.0.0/robin-logger-1.0.0.tgz"
+sha256 = "664f85a03adf1b2d430f1786619c19aa6588d13485d33cbf31016c22cef3b5ca"
+source = "snow-fort"
+synopsis = "A simple logging library for outputting messages while a program is running"
+version = "1.0.0"
+
+[robin-statistics]
+dependencies = ["akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/peterlane.info/peter/robin/statistics/1.0.0/robin-statistics-1.0.0.tgz"
+sha256 = "83f797df3841d24fb1c812667d2bb0928080beaec96ac2f1c07aa06efeeaf9ba"
+source = "snow-fort"
+synopsis = "A library of functions to compute statistical or other information about sets of data"
+version = "1.0.0"
+
+[robin-text]
+dependencies = ["akku-r7rs", "rebottled-pregexp", "robin-statistics", "slib-soundex", "chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/peterlane.info/peter/robin/text/1.0.0/robin-text-1.0.0.tgz"
+sha256 = "167e0708526084bfd055be88601adce8f869fc42ab67a97cf148ce90e665c4e0"
+source = "snow-fort"
+synopsis = "A collection of functions for working with strings or text documents, including similarity measures, a stemmer and layout"
+version = "1.0.0"
+
+[sdl2]
+dependencies = ["chibi-bytevector", "akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/gmail.com/brian.d.caine/sdl2/1.0.4/sdl2-1.0.4.tgz"
+sha256 = "044c10eb99c861f7fdfac617514684a58d4d524c8a7e1a5adda1937c46aff5ff"
+source = "snow-fort"
+synopsis = "Bindings for SDL2"
+version = "1.0.4"
+
+[sdl2-obj]
+dependencies = ["sdl2", "bcaine-obj", "chez-srfi", "chibi-match"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/gmail.com/brian.d.caine/sdl2/obj/0.0.2/sdl2-obj-0.0.2.tgz"
+sha256 = "c28aed8b40622bf3f455de8c3bade443b312c6807349d58bb6297d854534086f"
+source = "snow-fort"
+synopsis = "OOP bindings for SDL2. Currently a work-in-progress"
+version = "0.0.2"
+
+[sdl2-image]
+dependencies = ["sdl2", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/gmail.com/brian.d.caine/sdl2-image/1.0.1/sdl2-image-1.0.1.tgz"
+sha256 = "3a5106bdd4d9aa8946a1d9cefb3e1606bd78f5987efe4f0dfaee57d264dba498"
+source = "snow-fort"
+synopsis = "Bindings for SDL2_image"
+version = "1.0.1"
+
+[sdl2-mixer]
+dependencies = []
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/gmail.com/brian.d.caine/sdl2-mixer/1.0.0/sdl2-mixer-1.0.0.tgz"
+sha256 = "30ca816089df62dd764d41dcaa7940c5d62cd387fdf14c56a154f114c0607125"
+source = "snow-fort"
+synopsis = "Bindings for SDL2_mixer"
+version = "1.0.0"
+
+[shell-quote]
+dependencies = ["akku-r7rs", "chibi-match"]
+dev-dependencies = []
+license = "isc"
+url = "http://snow-fort.org/s/lassi.io/lassi/shell-quote/0.1/shell-quote-0.1.tgz"
+sha256 = "7394015e8a70da3c369481736cea27ea27c8aaa1b84d1549673d4f145e154d8d"
+source = "snow-fort"
+synopsis = "Little Scheme DSL to build shell command lines"
+version = "0.1.0"
+
+[slib-alist]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/alist/SLIB-3b5-r7rs/slib-alist-SLIB-3b5-r7rs.tgz"
+sha256 = "09a4b313597abc146f89c8bc836e9c00f30c4ccca8562b526f3bad995cbac0cc"
+source = "snow-fort"
+synopsis = "Some functions for working with association lists"
+version = "3.1.5"
+
+[slib-array-for-each]
+dependencies = ["akku-r7rs", "slib-common", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/array-for-each/SLIB-3b5-r7rs/slib-array-for-each-SLIB-3b5-r7rs.tgz"
+sha256 = "e06f684faa4b4207a845c260a94be08acd7bf999494319e093d8c092a52aed1b"
+source = "snow-fort"
+synopsis = "Applicative routines for arrays/matrices"
+version = "3.1.5"
+
+[slib-array-interpolate]
+dependencies = ["akku-r7rs", "slib-array-for-each", "slib-subarray", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/array-interpolate/SLIB-3b5-r7rs/slib-array-interpolate-SLIB-3b5-r7rs.tgz"
+sha256 = "87eb635b0583859bb3a64a9eb2418e2f70e324d5144f4124d9cc21539e90ede4"
+source = "snow-fort"
+synopsis = "Interpolated array access"
+version = "3.1.5"
+
+[slib-byte]
+dependencies = ["akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/byte/SLIB-3b5-r7rs/slib-byte-SLIB-3b5-r7rs.tgz"
+sha256 = "af4560b3df5a0d66398ddabbcfe576d0d073403c2795391718f55c8710ac7c0f"
+source = "snow-fort"
+synopsis = "Arrays of small integers, not necessarily chars"
+version = "3.1.5"
+
+[slib-byte-number]
+dependencies = ["akku-r7rs", "slib-byte", "slib-common", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/byte-number/SLIB-3b5-r7rs/slib-byte-number-SLIB-3b5-r7rs.tgz"
+sha256 = "56e83d15dfdcb7bc651ef5e60925fdd28c7eb63e358235e37d650deeeccf7b4e"
+source = "snow-fort"
+synopsis = "Byte integer and IEEE floating-point conversions"
+version = "3.1.5"
+
+[slib-chapter-order]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/chapter-order/SLIB-3b5-r7rs/slib-chapter-order-SLIB-3b5-r7rs.tgz"
+sha256 = "f1f321f2e00e1779e06adb02c17ab4a1c50a57b1bab92176d4e68b6933745d38"
+source = "snow-fort"
+synopsis = "Chapter ordering"
+version = "3.1.5"
+
+[slib-charplot]
+dependencies = ["akku-r7rs", "slib-array-for-each", "slib-common", "slib-printf", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/charplot/SLIB-3b5-r7rs/slib-charplot-SLIB-3b5-r7rs.tgz"
+sha256 = "5b7e056be7ec3e5f5898e87d9ce8818bdd6f431af65eaeb0ba14404f7a107e8b"
+source = "snow-fort"
+synopsis = "Plotting histograms/graphs in characters"
+version = "3.1.5"
+
+[slib-coerce]
+dependencies = ["akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/coerce/SLIB-3b5-r7rs/slib-coerce-SLIB-3b5-r7rs.tgz"
+sha256 = "3a4dd47d5b061045471fc8e055a2ca43e457bc9a8cb9471ef3364d7e8a5bad6d"
+source = "snow-fort"
+synopsis = "Implementation of COMMON-LISP COERCE and TYPE-OF"
+version = "3.1.5"
+
+[slib-color]
+dependencies = ["akku-r7rs", "slib-color-space", "slib-printf", "slib-scanf", "slib-string-case"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/color/SLIB-3b5-r7rs/slib-color-SLIB-3b5-r7rs.tgz"
+sha256 = "76e9b75bc288e6e3c94c760c4ff5bd8d6b378adc07c5440afc842b957ff0daf2"
+source = "snow-fort"
+synopsis = "Color data type"
+version = "3.1.5"
+
+[slib-color-space]
+dependencies = ["akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/color-space/SLIB-3b5-r7rs/slib-color-space-SLIB-3b5-r7rs.tgz"
+sha256 = "cb2afbb291d44c4389e3e72d82ae1e147970454855a9ea006db50db4a59d8b62"
+source = "snow-fort"
+synopsis = "Color-space conversions"
+version = "3.1.5"
+
+[slib-common]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/common/SLIB-3b5-r7rs/slib-common-SLIB-3b5-r7rs.tgz"
+sha256 = "3f40923df702c9517b9066f30434bccbc6c9fa67d9b6c12f6ab3737eacd3eaf0"
+source = "snow-fort"
+synopsis = "SLIB core functions"
+version = "3.1.5"
+
+[slib-common-lisp-time]
+dependencies = ["akku-r7rs", "slib-common", "slib-time-core", "slib-time-zone"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/common-lisp-time/SLIB-3b5-r7rs/slib-common-lisp-time-SLIB-3b5-r7rs.tgz"
+sha256 = "8aa7b829aa67f19c081937fd3ae682c514c809dde46cc3e49916f17f9cc074b3"
+source = "snow-fort"
+synopsis = "Common-Lisp time conversion routines"
+version = "3.1.5"
+
+[slib-common-list-functions]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/common-list-functions/SLIB-3b5-r7rs/slib-common-list-functions-SLIB-3b5-r7rs.tgz"
+sha256 = "9f58eb7ece12785a4e9ee1f4cc77e85ab1db4854d3cfdeb4f65cbb767950168b"
+source = "snow-fort"
+synopsis = "Some common list functions"
+version = "3.1.5"
+
+[slib-daylight]
+dependencies = ["akku-r7rs", "slib-color-space"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/daylight/SLIB-3b5-r7rs/slib-daylight-SLIB-3b5-r7rs.tgz"
+sha256 = "f08b8e1ed909de19b0b627c66931fb2fd5379aa693a88baa377218eee458a292"
+source = "snow-fort"
+synopsis = "Model of sun and sky colors"
+version = "3.1.5"
+
+[slib-determinant]
+dependencies = ["akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/determinant/SLIB-3b5-r7rs/slib-determinant-SLIB-3b5-r7rs.tgz"
+sha256 = "34a1cdaeb1097f62e686caeb20718a9dd668f97856e82ce409cfe3256a187c7c"
+source = "snow-fort"
+synopsis = "Matrix Algebra"
+version = "3.1.5"
+
+[slib-directory]
+dependencies = ["akku-r7rs", "slib-common", "slib-filename"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/directory/SLIB-3b5-r7rs/slib-directory-SLIB-3b5-r7rs.tgz"
+sha256 = "1fa7ce53dd543eb0b1ee4a24e7f09cdc792a94cd03891384f38b770380c9294c"
+source = "snow-fort"
+synopsis = "Directories"
+version = "3.1.5"
+
+[slib-dynamic]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/dynamic/SLIB-3b5-r7rs/slib-dynamic-SLIB-3b5-r7rs.tgz"
+sha256 = "2df9ed42deee17c638537d0317963546225e341aff83eb01645873be92f0b0c5"
+source = "snow-fort"
+synopsis = "Dynamic data type"
+version = "3.1.5"
+
+[slib-factor]
+dependencies = ["akku-r7rs", "slib-common", "slib-modular", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/factor/SLIB-3b5-r7rs/slib-factor-SLIB-3b5-r7rs.tgz"
+sha256 = "1712e6656c51ab5153e240f0c1154699ef3223d84dc9ffb1f07d7b26b7c98e94"
+source = "snow-fort"
+synopsis = "Factorization, prime test and generation"
+version = "3.1.5"
+
+[slib-filename]
+dependencies = ["akku-r7rs", "slib-common"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/filename/SLIB-3b5-r7rs/slib-filename-SLIB-3b5-r7rs.tgz"
+sha256 = "924adc1bad2f2f2d7f8607caad240ef0575c5b0bcc0f9f935a4ca7e66195b2a1"
+source = "snow-fort"
+synopsis = "String matching for filenames (glob, a la BASH)"
+version = "3.1.5"
+
+[slib-format]
+dependencies = ["akku-r7rs", "slib-common", "slib-pretty-print", "slib-string-case", "slib-string-port"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/format/SLIB-3b5-r7rs/slib-format-SLIB-3b5-r7rs.tgz"
+sha256 = "5fa9e9b5a66ad7fb896fcd37c4b97e1c450c7133b2b7b917ee3d19cddf7d4cbb"
+source = "snow-fort"
+synopsis = "Common LISP text output formatter"
+version = "3.1.5"
+
+[slib-fourier-transform]
+dependencies = ["akku-r7rs", "slib-subarray", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/fourier-transform/SLIB-3b5-r7rs/slib-fourier-transform-SLIB-3b5-r7rs.tgz"
+sha256 = "545b74a2e601d88b9960c0bc6772f1c805b0d8e774af20c831d7bd3bf8596ae1"
+source = "snow-fort"
+synopsis = "Discrete Fourier Transform"
+version = "3.1.5"
+
+[slib-generic-write]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/generic-write/SLIB-3b5-r7rs/slib-generic-write-SLIB-3b5-r7rs.tgz"
+sha256 = "31e2c198c67b4334d45a95011912990bc261013e36a211cdc51670368e93a129"
+source = "snow-fort"
+synopsis = "Generic write"
+version = "3.1.5"
+
+[slib-line-io]
+dependencies = ["akku-r7rs", "slib-common", "slib-filename"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/line-io/SLIB-3b5-r7rs/slib-line-io-SLIB-3b5-r7rs.tgz"
+sha256 = "6b5a434f4ca35cb74916578076778a1d8628dbe8720362ac496b58925d60e5af"
+source = "snow-fort"
+synopsis = "Line oriented input/output functions"
+version = "3.1.5"
+
+[slib-math-integer]
+dependencies = ["akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/math-integer/SLIB-3b5-r7rs-1/slib-math-integer-SLIB-3b5-r7rs-1.tgz"
+sha256 = "af23642e7566b3522f9091288569144c80eef03439ce322dd30ec299484a240c"
+source = "snow-fort"
+synopsis = "Mathematical functions restricted to exact integers"
+version = "3.1.5"
+
+[slib-math-real]
+dependencies = ["akku-r7rs", "slib-common"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/math-real/SLIB-3b5-r7rs-1/slib-math-real-SLIB-3b5-r7rs-1.tgz"
+sha256 = "2ffeb7b868551916d418bdf9f1c947e799f489ab479f534f9ee5ba09addaa380"
+source = "snow-fort"
+synopsis = "Mathematical functions restricted to real numbers"
+version = "3.1.5"
+
+[slib-minimize]
+dependencies = ["akku-r7rs", "slib-common"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/minimize/SLIB-3b5-r7rs/slib-minimize-SLIB-3b5-r7rs.tgz"
+sha256 = "93ca3ffaef94cd90d6d495c2b3c0db750e1a16850aa8443725cb98116754bb14"
+source = "snow-fort"
+synopsis = "Finds minimum value of a function"
+version = "3.1.5"
+
+[slib-modular]
+dependencies = ["akku-r7rs", "slib-common"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/modular/SLIB-3b5-r7rs/slib-modular-SLIB-3b5-r7rs.tgz"
+sha256 = "d45a4c32b22163eef93b74ae42529a52165ca3dea034bd3410c9a46f88d5738e"
+source = "snow-fort"
+synopsis = "Modular fixnum arithmetic"
+version = "3.1.5"
+
+[slib-nbs-iscc]
+dependencies = ["akku-r7rs", "slib-color", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/nbs-iscc/SLIB-3b5-r7rs/slib-nbs-iscc-SLIB-3b5-r7rs.tgz"
+sha256 = "c65be8de29e72af4878583c48e875f48d54833167fe0287757978d4b171e91c5"
+source = "snow-fort"
+synopsis = "NBS/ISCC Color System"
+version = "3.1.5"
+
+[slib-posix-time]
+dependencies = ["akku-r7rs", "slib-time-core", "slib-time-zone"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/posix-time/SLIB-3b5-r7rs/slib-posix-time-SLIB-3b5-r7rs.tgz"
+sha256 = "1d3721a1cd6de2ec183bd7bc107047524baf47389e4886edf2ba6f2eb29f71c3"
+source = "snow-fort"
+synopsis = "POSIX time conversion routines"
+version = "3.1.5"
+
+[slib-pprint-file]
+dependencies = ["akku-r7rs", "slib-common", "slib-pretty-print"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/pprint-file/SLIB-3b5-r7rs/slib-pprint-file-SLIB-3b5-r7rs.tgz"
+sha256 = "ceba258740a178650d21d0c5f5dd60366c472cf93281a669f11556a111e7e587"
+source = "snow-fort"
+synopsis = "Pretty print a Scheme file"
+version = "3.1.5"
+
+[slib-pretty-print]
+dependencies = ["akku-r7rs", "slib-common", "slib-generic-write"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/pretty-print/SLIB-3b5-r7rs/slib-pretty-print-SLIB-3b5-r7rs.tgz"
+sha256 = "ca76f30ada0dc85e99ac1442cb7f2ff72bd203c4917d0c483308e38029c56393"
+source = "snow-fort"
+synopsis = "Pretty printing"
+version = "3.1.5"
+
+[slib-printf]
+dependencies = ["akku-r7rs", "slib-generic-write"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/printf/SLIB-3b5-r7rs/slib-printf-SLIB-3b5-r7rs.tgz"
+sha256 = "c86aa3efe26f514cbd11aeb03ade2ee1b3c6ac028db52c6b2454c20d378ac924"
+source = "snow-fort"
+synopsis = "Implementation of standard C functions"
+version = "3.1.5"
+
+[slib-queue]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/queue/SLIB-3b5-r7rs/slib-queue-SLIB-3b5-r7rs.tgz"
+sha256 = "a0d035502d72b9c8ac5ee23a2445cf94a312408be11e009d52b22b43904631f4"
+source = "snow-fort"
+synopsis = "Queue/Stack data structure"
+version = "3.1.5"
+
+[slib-random-inexact]
+dependencies = ["akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/random-inexact/SLIB-3b5-r7rs/slib-random-inexact-SLIB-3b5-r7rs.tgz"
+sha256 = "ada77b92756718b4867f0a4925ec97f6a39c2089359871a77f2b3176bd9de15d"
+source = "snow-fort"
+synopsis = "Pseudo-Random inexact real numbers"
+version = "3.1.5"
+
+[slib-rationalize]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/rationalize/SLIB-3b5-r7rs/slib-rationalize-SLIB-3b5-r7rs.tgz"
+sha256 = "ad97f49209172ea1be0ec1eb9059bc593349fc1f5d6e17605bffa5721ce61e40"
+source = "snow-fort"
+synopsis = "Find simplest number ratios"
+version = "3.1.5"
+
+[slib-resene]
+dependencies = ["akku-r7rs", "slib-color", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/resene/SLIB-3b5-r7rs/slib-resene-SLIB-3b5-r7rs.tgz"
+sha256 = "d78d83e8ce9d1ad4681fff6284cbb07686d4917f5e5b4c8f0e1e3d435c058fe3"
+source = "snow-fort"
+synopsis = "Resene Color System"
+version = "3.1.5"
+
+[slib-rev2-procedures]
+dependencies = ["akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/rev2-procedures/SLIB-3b5-r7rs/slib-rev2-procedures-SLIB-3b5-r7rs.tgz"
+sha256 = "9a65b6ef513df1fb6c7b3bb1f0e43d2f67736b3880d3937f68a905f87b6d7ef1"
+source = "snow-fort"
+synopsis = "Implementation of some R2RS procedures eliminated in subsequence versions"
+version = "3.1.5"
+
+[slib-saturate]
+dependencies = ["akku-r7rs", "slib-color", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/saturate/SLIB-3b5-r7rs/slib-saturate-SLIB-3b5-r7rs.tgz"
+sha256 = "97d5a99446a70f5f715311a464f6ecc382eeb718e1f9b3e52a32865a784e8d9e"
+source = "snow-fort"
+synopsis = "Saturated Color Dictionary"
+version = "3.1.5"
+
+[slib-scanf]
+dependencies = ["akku-r7rs", "slib-common", "slib-string-port"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/scanf/SLIB-3b5-r7rs/slib-scanf-SLIB-3b5-r7rs.tgz"
+sha256 = "8bbb523308395d2109eba4d29435ed87d34a7b861e0e8ea1ae95cb6b26d064ae"
+source = "snow-fort"
+synopsis = "Implementation of POSIX-style formatted input"
+version = "3.1.5"
+
+[slib-soundex]
+dependencies = ["akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/soundex/SLIB-3b5-r7rs/slib-soundex-SLIB-3b5-r7rs.tgz"
+sha256 = "8d8b3e194c39791adcfcba0347d6d147be3e4969b34856129e96bd903f86d442"
+source = "snow-fort"
+synopsis = "Original Soundex algorithm"
+version = "3.1.5"
+
+[slib-string-case]
+dependencies = ["akku-r7rs", "slib-common"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/string-case/SLIB-3b5-r7rs/slib-string-case-SLIB-3b5-r7rs.tgz"
+sha256 = "d1e81607bd042ef694ff1ddbcc61e6a11e7b0af08dd70e228e23afcb40ac24f8"
+source = "snow-fort"
+synopsis = "String casing functions"
+version = "3.1.5"
+
+[slib-string-port]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/string-port/SLIB-3b5-r7rs/slib-string-port-SLIB-3b5-r7rs.tgz"
+sha256 = "a36d8f1643a41db17fc8e9f1971148d997fcfc4ecf745a9ee4bc007a56c72c83"
+source = "snow-fort"
+synopsis = "Portable string ports"
+version = "3.1.5"
+
+[slib-string-search]
+dependencies = ["akku-r7rs", "slib-alist"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/string-search/SLIB-3b5-r7rs/slib-string-search-SLIB-3b5-r7rs.tgz"
+sha256 = "b32f539326abebc0ac8169a2dd1085944ce244ae8e29eee9ae79c6a886662d7c"
+source = "snow-fort"
+synopsis = "Functions for working with and searching within strings"
+version = "3.1.5"
+
+[slib-subarray]
+dependencies = ["akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/subarray/SLIB-3b5-r7rs/slib-subarray-SLIB-3b5-r7rs.tgz"
+sha256 = "1125a4a2fa9400291c8e3a4e8b68471573f5813ea0aefc0ab3a7ca4ca75dedc7"
+source = "snow-fort"
+synopsis = "Accessing parts of arrays"
+version = "3.1.5"
+
+[slib-time-core]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/time-core/SLIB-3b5-r7rs/slib-time-core-SLIB-3b5-r7rs.tgz"
+sha256 = "3385839c98ab9b1bc68347baee280b8071dd73b1aed3ee3d1547161b9ced3630"
+source = "snow-fort"
+synopsis = "Core time conversion routines"
+version = "3.1.5"
+
+[slib-time-zone]
+dependencies = ["akku-r7rs", "slib-common", "slib-scanf", "slib-time-core", "slib-tzfile"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/time-zone/SLIB-3b5-r7rs/slib-time-zone-SLIB-3b5-r7rs.tgz"
+sha256 = "60bcdd2a1254ff42eda3e5c04a4cc18d7114698b1639a752ec338e448e1dc4f7"
+source = "snow-fort"
+synopsis = "Compute timezones and DST from TZ environment variable"
+version = "3.1.5"
+
+[slib-topological-sort]
+dependencies = ["akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/topological-sort/SLIB-3b5-r7rs/slib-topological-sort-SLIB-3b5-r7rs.tgz"
+sha256 = "8f8039cd024f360b9ab1800e41ef66b1fdb1fc5b3e998e309c0c5186a95ea5b2"
+source = "snow-fort"
+synopsis = "Topological sort"
+version = "3.1.5"
+
+[slib-tree]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/tree/SLIB-3b5-r7rs/slib-tree-SLIB-3b5-r7rs.tgz"
+sha256 = "215900d6e5c6fff4e9f77000c6061b3dc126cb9ac2c6430f343cb589ac073827"
+source = "snow-fort"
+synopsis = "Implementation of COMMON LISP tree functions"
+version = "3.1.5"
+
+[slib-tzfile]
+dependencies = ["akku-r7rs", "slib-byte", "slib-common"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/tzfile/SLIB-3b5-r7rs/slib-tzfile-SLIB-3b5-r7rs.tgz"
+sha256 = "6f77c976ba6e41b0a5d65383d0c2217786fb0fe7fd34ebb5cbc0d5f5c784b8f3"
+source = "snow-fort"
+synopsis = "Read sysV style (binary) timezone file"
+version = "3.1.5"
+
+[slib-uri]
+dependencies = ["akku-r7rs", "slib-coerce", "slib-common", "slib-directory", "slib-printf", "slib-scanf", "slib-string-case", "slib-string-search", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/uri/SLIB-3b5-r7rs/slib-uri-SLIB-3b5-r7rs.tgz"
+sha256 = "dd009379a2b642fab5fb42a13122169bbf044343930cebf05930012bc45aa30f"
+source = "snow-fort"
+synopsis = "Construct and decode Uniform Resource Identifiers"
+version = "3.1.5"
+
+[slib-wt-tree]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/wt-tree/SLIB-3b5-r7rs-1/slib-wt-tree-SLIB-3b5-r7rs-1.tgz"
+sha256 = "2c24d746496b212d590217c35e02aa2cf70da13adee3c2e22780149c1ed60d83"
+source = "snow-fort"
+synopsis = "Weight balanced trees"
+version = "3.1.5"
+
+[slib-xml-parse]
+dependencies = ["akku-r7rs", "slib-common", "slib-rev2-procedures", "slib-string-search", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/slib/xml-parse/SLIB-3b5-r7rs/slib-xml-parse-SLIB-3b5-r7rs.tgz"
+sha256 = "14f514013c32cfa82f3b976c2a40b7d5450f777349ded314c4aeb82ca9ceb291"
+source = "snow-fort"
+synopsis = "XML parsing and conversion to SXML"
+version = "3.1.5"
+
+[srfi-2]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/srfi/2/2025.08.27/srfi-2-2025.08.27.tgz"
+sha256 = "22fba488fff4086855bec542d932b59bf0826b9eb2efb90fc1033a0f419a4386"
+source = "snow-fort"
+synopsis = "SRFI-2"
+version = "2025.8.27"
+
+[srfi-8]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/srfi/8/2025.08.27/srfi-8-2025.08.27.tgz"
+sha256 = "2d609c6b60c427b4e8900da96bf5a9ce57f24ef688625945b9e4a3c580455839"
+source = "snow-fort"
+synopsis = "SRFI-8"
+version = "2025.8.27"
+
+[srfi-11]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/srfi/11/2025.08.27/srfi-11-2025.08.27.tgz"
+sha256 = "adb5d1f3e03b145ae0fe9748c0cd83689a616568529af96ebe31ab006fad29c8"
+source = "snow-fort"
+synopsis = "SRFI-11"
+version = "2025.8.27"
+
+[srfi-19]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "mit"
+url = "http://snow-fort.org/s/opinionatedgeek.com/snow-fort.org/srfi/19/1.0.1/srfi-19-1.0.1.tgz"
+sha256 = "08b5a0340eb153b8005decc4cda0a0b2a2967653f51d2d8b7d7e5b2245f08c6a"
+source = "snow-fort"
+synopsis = "Implementation of SRFI 19 'Time Data Types and Procedures'"
+version = "1.0.1"
+
+[srfi-28]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/lassi.io/lassi/srfi/28/0.9/srfi-28-0.9.tgz"
+sha256 = "9452791e67a806afb10efa202d458a6b2919613008e6b293e97ff8fa412900b0"
+source = "snow-fort"
+synopsis = "SRFI 28: Basic Format Strings"
+version = "0.9.0"
+
+[srfi-39]
+dependencies = []
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/srfi/39/2025.08.27/srfi-39-2025.08.27.tgz"
+sha256 = "74652534407b544466532091a341fb301eb78e0f5175685c5c8c8e86fbd59ac3"
+source = "snow-fort"
+synopsis = "SRFI-39"
+version = "2025.8.27"
+
+[srfi-42]
+dependencies = ["akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/gmail.com/lockywolf/srfi/42/0.1/srfi-42-0.1.tgz"
+sha256 = "809cad22d152218d2bad6ee316e3020968c48f5869beadaa3fc3d0bb783faa87"
+source = "snow-fort"
+version = "0.1.0"
+
+[srfi-60]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/srfi/60/2025.08.27/srfi-60-2025.08.27.tgz"
+sha256 = "4cc9cf567129438a07b889550c377f2fe5e849bcf3b9774a90cc4661c00a9d9e"
+source = "snow-fort"
+synopsis = "SRFI-60"
+version = "2025.8.27"
+
+[srfi-63]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/peterlane.info/peter/srfi/63/1.0.0/srfi-63-1.0.0.tgz"
+sha256 = "0b8a805dd242438a45acbce96aa3c4fc6ce7e15ca7051ea07bd75a3f88cd403f"
+source = "snow-fort"
+synopsis = "Homogeneous and Heterogeneous Arrays"
+version = "1.0.0"
+
+[srfi-64]
+dependencies = []
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/srfi/64/2025.08.27/srfi-64-2025.08.27.tgz"
+sha256 = "ceaa4e37e8d2c3fe5780f1c66a3d1718d35dc6fda858739059c11addcfff7499"
+source = "snow-fort"
+synopsis = "SRFI-64"
+version = "2025.8.27"
+
+[srfi-69]
+dependencies = []
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/srfi/69/2025.08.27/srfi-69-2025.08.27.tgz"
+sha256 = "95bc0111ec37adec966e1a9155ea8e8a5b3e01333e23c7ca18d3e553d5bec136"
+source = "snow-fort"
+synopsis = "SRFI-69"
+version = "2025.8.27"
+
+[srfi-78]
+dependencies = ["chez-srfi", "akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/gmail.com/lockywolf/srfi/78/0.1/srfi-78-0.1.tgz"
+sha256 = "83cb79f0eb3daa004202c23b4d1f69f1b7a76c403f09fb4f37afea666037a32b"
+source = "snow-fort"
+version = "0.1.0"
+
+[srfi-156]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-test"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/fisher.cx/robert/srfi/156/1.0.0/srfi-156-1.0.0.tgz"
+sha256 = "73f53cc757e2fbe59ef48395c2d2ab94cad6b2a7febd8d0db53110e28e664fd1"
+source = "snow-fort"
+synopsis = "Reference implementation of SRFI-156: Syntactic combiners for binary predicates"
+version = "1.0.0"
+
+[srfi-166]
+dependencies = ["chez-srfi", "akku-r7rs", "chibi-optional"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/srfi/166/0.8.0/srfi-166-0.8.0.tgz"
+sha256 = "e132a68c070c157ebfc8291b0be8f84f45ee85b92e4f80ac12faabd0c3872523"
+source = "snow-fort"
+version = "0.8.0"
+
+[srfi-170]
+dependencies = ["akku-r7rs", "foreign-c"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/iki.fi/retropikzel/srfi/170/0.1.1/srfi-170-0.1.1.tgz"
+sha256 = "2431e127601b7f8d9357db65998e9d7da6692adacd7159381f4685d3e2856cd8"
+source = "snow-fort"
+synopsis = "SRFI 170: POSIX"
+version = "0.1.1"
+
+[srfi-175]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/lassi.io/lassi/srfi/175/1.1/srfi-175-1.1.tgz"
+sha256 = "6d96cfe5474f47d1bd24949ae7057c393746ed6624a9691c92e9a607da877c1c"
+source = "snow-fort"
+synopsis = "SRFI 175: ASCII character library"
+version = "1.1.0"
+
+[srfi-179]
+dependencies = ["akku-r7rs", "chez-srfi", "chibi-assert", "chibi-test"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "http://snow-fort.org/s/gmail.com/alexshinn/srfi/179/0.10.0/srfi-179-0.10.0.tgz"
+sha256 = "385a8694e60277d99e9ab9605ccb38616166eedb94a60bed9a38ceb1d482b5a1"
+source = "snow-fort"
+version = "0.10.0"
+
+[srfi-197]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/upr.edu/jantony.velazquez/srfi/197/1.3/srfi-197-1.3.tgz"
+sha256 = "a83a96a7db33f51f6ca747c1cfc109010b96b2972c09c8a3acc6696bf4dba54d"
+source = "snow-fort"
+synopsis = "SRFI 197: Pipeline Operators"
+version = "1.3.0"
+
+[srfi-235]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/upr.edu/jantony.velazquez/srfi/235/1.0/srfi-235-1.0.tgz"
+sha256 = "c5c4bd3121d47de1eb8b6eaa29f754bbf9cee74a1b3719173a18919f45f2d46a"
+source = "snow-fort"
+synopsis = "SRFI 235: Combinators"
+version = "1.0.0"
+
+[string-inflection]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "isc"
+url = "http://snow-fort.org/s/lassi.io/lassi/string-inflection/0.1.1/string-inflection-0.1.1.tgz"
+sha256 = "1f3273ca2ff7b8aa14c6e0aba1b339c7989c201a073508dee7cad83596a57192"
+source = "snow-fort"
+synopsis = "lisp-case under_score CapsUpper capsLower"
+version = "0.1.1"
+
+[tex-parser]
+dependencies = ["akku-r7rs", "read-char-if"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/lassi.io/lassi/tex-parser/0.1/tex-parser-0.1.tgz"
+sha256 = "507e3dc0d04411f9f00db7d835b5270c82103c90a10040d4433de34c44340cbb"
+source = "snow-fort"
+version = "0.1.0"
+
+[thunknyc-expand-braces]
+dependencies = ["akku-r7rs", "chez-srfi"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/poseur.com/edw/thunknyc/expand-braces/0.1.1/thunknyc-expand-braces-0.1.1.tgz"
+sha256 = "eff4b0cabee5608f7d8f706a4eb7d241f816af1e91b7240109d1f474e69a1a4a"
+source = "snow-fort"
+synopsis = "Expand UNIX-shell style brace expressions"
+version = "0.1.1"
+
+[thunknyc-json]
+dependencies = ["akku-r7rs", "chibi-parse"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/poseur.com/edw/thunknyc/json/0.1.3/thunknyc-json-0.1.3.tgz"
+sha256 = "b3d1d01b6a76875e3d1f7bb280e98b6bfd878e53697e9263527d19969617acf8"
+source = "snow-fort"
+synopsis = "Simple JSON parsing library"
+version = "0.1.3"
+
+[trivial-tar-writer]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "isc"
+url = "http://snow-fort.org/s/lassi.io/lassi/trivial-tar-writer/0.1/trivial-tar-writer-0.1.tgz"
+sha256 = "8eab97e5f9205ed12915b14205f65b85443e9627463866436de79f5ec20bf41a"
+source = "snow-fort"
+synopsis = "Simplest way to output uncompressed .tar file"
+version = "0.1.0"
+
+[unpack-assoc]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "isc"
+url = "http://snow-fort.org/s/lassi.io/lassi/unpack-assoc/0.1/unpack-assoc-0.1.tgz"
+sha256 = "5c41ef07d210ddd1424c12cd38b44424afec0d37618c746ece31f2a3831d9e9a"
+source = "snow-fort"
+synopsis = "Alist/hash-table destructuring case macros"
+version = "0.1.0"
+
+[yasos]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "noassertion"
+url = "http://snow-fort.org/s/gmail.com/taknamay/yasos/1.0.1/yasos-1.0.1.tgz"
+sha256 = "5a7c4d8171f98e37e40b4f3af9b5fe3d2ab24dfd6a73f28014f0ba87abfc6f2d"
+source = "snow-fort"
+synopsis = "simple objects"
+version = "1.0.1"
+
+[TerribleTLS]
+dependencies = ["hashing", "industria", "struct-pack", "chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/t/TerribleTLS_1.0.0_repack.tar.xz"
+sha256 = "f845c7a363042199fd1f185a41560f5bc563a00d51d8962632793153a5a18f44"
+source = "akku"
+synopsis = "Inadvisible pure-Scheme TLS 1.2 client"
+version = "1.0.0"
+
+[ac-d-bus]
+dependencies = ["r6rs-pffi", "chibi-match", "packrat", "loko-srfi"]
+dev-dependencies = ["chez-srfi"]
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/a/ac-d-bus_1.0.0-beta.0_repack.tar.xz"
+sha256 = "f16934a16fbec35b86033a240a86c16e09194aa531206c3f8cbd8b213be7e14b"
+source = "akku"
+synopsis = "AC/D-Bus - D-Bus wire protocol"
+version = "1.0.0-beta.0"
+
+[adios]
+dependencies = []
+dev-dependencies = []
+license = "apache-2.0"
+url = "https://archive.akkuscm.org/archive/pkg/a/adios_0.1.0_repack.tar.xz"
+sha256 = "7cabf4a8025c76835098d2636ffcab893773054856e919e14e51df299e719916"
+source = "akku"
+synopsis = "A simple prototype-based object system for Chez Scheme that supports single inheritance"
+version = "0.1.0"
+
+[aeolus]
+dependencies = ["akku-r7rs"]
+dev-dependencies = []
+license = "bsd-2-clause"
+url = "https://archive.akkuscm.org/archive/pkg/a/aeolus_0.0.0-akku.34.2a43103_repack.tar.xz"
+sha256 = "74bab1dfd97c7fda752d2bdc1e126d47a3eeaf63494ddab666063230a6f07d9c"
+source = "akku"
+synopsis = "R7RS cryptographic library"
+version = "0.0.0-akku.34.2a43103"
+
+[agave]
+dependencies = ["dharmalab", "surfage", "xitomatl", "chez-gl"]
+dev-dependencies = []
+license = "apache-2.0"
+url = "https://archive.akkuscm.org/archive/pkg/a/agave_0.0.1-akku.103.f95c7df_repack.tar.xz"
+sha256 = "82beeecc146d03b0f9ec05ad456d30156a2b4e7b5667d39b57d45eb208dcd065"
+source = "akku"
+synopsis = "Low-glycemic OpenGL hacking for R6RS Scheme"
+version = "0.0.1-akku.103.f95c7df"
+
+[akku]
+dependencies = ["chez-srfi", "industria", "spells", "semver", "spdx", "wak-fmt", "wak-riastreams", "wak-foof-loop", "wak-wt-tree", "hashing", "compression", "laesare", "r6rs-pffi", "chibi-match", "akku-r7rs"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "https://archive.akkuscm.org/archive/pkg/a/akku_1.1.0_repack.tar.xz"
+sha256 = "12371ccb0d502b7647e8f00353c1527301b4d8a100fb06fb3e6fac56fda33741"
+source = "akku"
+synopsis = "Language package manager for Scheme"
+version = "1.1.0"
+
+[akku-r7rs]
+dependencies = ["chez-srfi", "laesare"]
+dev-dependencies = []
+license = "cc0-1.0"
+url = "https://archive.akkuscm.org/archive/pkg/a/akku-r7rs_1.0.1_repack.tar.xz"
+sha256 = "dedce2bc5eda6735aa5880741802a5b508b49c3b327d14b40e9fecbdf86353db"
+source = "akku"
+synopsis = "R7RS standard library for Akku.scm"
+version = "1.0.1"
+
+[arew-blake3]
+dependencies = []
+dev-dependencies = []
+license = "cc0"
+url = "https://archive.akkuscm.org/archive/pkg/a/arew-blake3_0.9.0_repack.tar.xz"
+sha256 = "fe6d41bcb9381c7ef102de7b177c8b54c3df140b0112add4bfce8e4a21e7654b"
+source = "akku"
+synopsis = "blake3 cryptographic hashing for Chez Scheme"
+version = "0.9.0"
+
+[arew-json]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "cc0"
+url = "https://archive.akkuscm.org/archive/pkg/a/arew-json_1.0.0-alpha.0_repack.tar.xz"
+sha256 = "d7546a44797d6eb3cc2d38a13478224172aead699200cdd4d1d61750096c5823"
+source = "akku"
+synopsis = "JSON reader and writer for Chez Scheme"
+version = "1.0.0-alpha.0"
+
+[box2d-lite]
+dependencies = ["chez-gl", "agave", "dharmalab", "surfage"]
+dev-dependencies = []
+license = "apache-2.0"
+url = "https://archive.akkuscm.org/archive/pkg/b/box2d-lite_0.0.0-akku.38.56f4ed1_repack.tar.xz"
+sha256 = "f146201b386e01560ce0213949350a802d6ca8b22fee6605e7dd2fab17009526"
+source = "akku"
+synopsis = "Scheme port of the Box2D Lite physics engine"
+version = "0.0.0-akku.38.56f4ed1"
+
+[chez-cmark]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-cmark_1.0.0-alpha.0_repack.tar.xz"
+sha256 = "b5804a728714090002e85a14d1e5aea8d6e967b1d515481689188f71c83a2304"
+source = "akku"
+synopsis = "CommonMark FFI Bindings for Chez"
+version = "1.0.0-alpha.0"
+
+[chez-csv]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-csv_2.0.2-alpha_repack.tar.xz"
+sha256 = "16741d2e98fcf78bb6e040fe853a1153229e897b2c410c831e752cc26bc50ade"
+source = "akku"
+synopsis = "Chez Scheme CSV library."
+version = "2.0.2-alpha"
+
+[chez-docs]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-docs_0.3.2_repack.tar.xz"
+sha256 = "393203fa849c8678f40b160d08f985e10c5a9a590ac44c6627610294985c0c9b"
+source = "akku"
+synopsis = "Access Chez Scheme documentation from the REPL."
+version = "0.3.2"
+
+[chez-gl]
+dependencies = []
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-gl_1.0.0_repack.tar.xz"
+sha256 = "4de5ac8b142749490391941c9174ba5ba2cb5b080ab38fdafeab9fa4f381efa9"
+source = "akku"
+synopsis = "3D library: GL, GLU and GLUT for Chez Scheme"
+version = "1.0.0"
+
+[chez-matrices]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-matrices_0.3.0-alpha.0_repack.tar.xz"
+sha256 = "4472d7253f06b32a4e189d547123f2eb9558d4b8f5913f8113d374083ac744e9"
+source = "akku"
+synopsis = "Implementation of common matrix (tensor) constructions and operatoins."
+version = "0.3.0-alpha.0"
+
+[chez-mit]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-mit_0.0.0-alpha.0_repack.tar.xz"
+sha256 = "a891bbe69a18ff1dde2671436d8e19fc3ef36519448a2ef8d89f1c2549c4a1c0"
+source = "akku"
+synopsis = "A MIT/GNU Scheme compatibility library for Chez Scheme"
+version = "0.0.0-alpha.0"
+
+[chez-scmutils]
+dependencies = ["chez-srfi", "chez-mit"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-scmutils_0.0.0-alpha.0_repack.tar.xz"
+sha256 = "7b6f707f3e0d8fa7fdd46b7ba9e7773398544102943870fec3099348e1809035"
+source = "akku"
+synopsis = "A port of the ‘MIT Scmutils’ library to Chez Scheme"
+version = "0.0.0-alpha.0"
+
+[chez-sockets]
+dependencies = []
+dev-dependencies = []
+license = "0bsd"
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-sockets_0.0.0-akku.13.c3fc663.1_repack.tar.xz"
+sha256 = "f2f8bb67f10201579040907761d9667e11f4800e52b0cf1e302b08d27fe222c9"
+source = "akku"
+synopsis = "Full Blown, portable, and extensible sockets library for Chez Scheme"
+version = "0.0.0-akku.13.c3fc663.1"
+
+[chez-soop]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-soop_1.0.0-alpha.2_repack.tar.xz"
+sha256 = "b6d944f5c6a0442411479a68d87ed0f217e032157e74a8e4bbca1a57c66151a9"
+source = "akku"
+synopsis = "SOOP Library fork from Chez Repository"
+version = "1.0.0-alpha.2"
+
+[chez-srfi]
+dependencies = []
+dev-dependencies = []
+license = ["mit", "bsd-3-clause"]
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-srfi_0.0.0-akku.244.b424440_repack.tar.xz"
+sha256 = "f4968e3d74c30d98297aaff3753b11225de45f99795cc2e3f6233e93f46d7c41"
+source = "akku"
+synopsis = "Portable SRFI collection"
+version = "0.0.0-akku.244.b424440"
+
+[chez-stats]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-stats_0.1.6_repack.tar.xz"
+sha256 = "694ad3200ab1927b35e006d24b838defe28b1a58a4c075153cf93e0b25cb1639"
+source = "akku"
+synopsis = "Read and write delimited text files, compute descriptive statistics, and generate random variates in Chez Scheme."
+version = "0.1.6"
+
+[chez-tk]
+dependencies = ["thunderchez"]
+dev-dependencies = []
+license = "bsd-2-clause"
+url = "https://archive.akkuscm.org/archive/pkg/c/chez-tk_1.8.2_repack.tar.xz"
+sha256 = "6e71bac608970d9e0df3eb03f36d856c3490595a0f5e5debf53e71a5a7f16a07"
+source = "akku"
+synopsis = "A Chez Scheme Interface to the Tk GUI Toolkit"
+version = "1.8.2"
+
+[compression]
+dependencies = ["chez-srfi", "hashing", "struct-pack"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/c/compression_0.1.2_repack.tar.xz"
+sha256 = "68109a1b95d731a95fb762260e4be411fb971363eb2d89075d95fe138008395d"
+source = "akku"
+synopsis = "Decompresses zlib, xz, gzip, lzma, lzma2; extracts tar, zip"
+version = "0.1.2"
+
+[conbot]
+dependencies = ["vterm", "text-mode", "wak-irregex", "chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/c/conbot_0.1.0_repack.tar.xz"
+sha256 = "57bd0d2a8c4dba450ca2761f0aab5a60be912db0c13c32287308b1d69cbed73e"
+source = "akku"
+synopsis = "library to script/automate console applications"
+version = "0.1.0"
+
+[conjure]
+dependencies = ["chez-srfi", "wak-fmt", "wak-irregex", "wak-foof-loop", "spells", "wak-prometheus"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "https://archive.akkuscm.org/archive/pkg/c/conjure_0.1.0-akku.84.19f3aae_repack.tar.xz"
+sha256 = "dc7aeff90c8fe0728db4c7e12d4fff1a86111c4aaba09fb5a44a356e1edf8838"
+source = "akku"
+synopsis = "Scheme make(1) replacement"
+version = "0.1.0-akku.84.19f3aae"
+
+[dataframe]
+dependencies = ["slib-format", "chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/d/dataframe_0.8.0_repack.tar.xz"
+sha256 = "09deaf93e94308379cf2c727ac09667a233db9c356fc73585c2faefeffc6360d"
+source = "akku"
+synopsis = "A dataframe record type for Scheme (R6RS) with procedures to select, drop, and rename columns, and filter, sort, split, bind, append, join, reshape, and aggregate dataframes."
+version = "0.8.0"
+
+[dharmalab]
+dependencies = ["surfage"]
+dev-dependencies = []
+license = ["apache-2.0", "gpl-2.0-or-later"]
+url = "https://archive.akkuscm.org/archive/pkg/d/dharmalab_0.0.0-akku.53.aba65fb_repack.tar.xz"
+sha256 = "ade61c99c49655dd05fa6f5a5f9b287c3ed3789d8cda0eed61110fb1ada74ae2"
+source = "akku"
+synopsis = "Experimental libraries"
+version = "0.0.0-akku.53.aba65fb"
+
+[dollar-sign]
+dependencies = []
+dev-dependencies = []
+license = "0bsd"
+url = "https://archive.akkuscm.org/archive/pkg/d/dollar-sign_1.1.0_repack.tar.xz"
+sha256 = "47fc7c0b3fc5d70c3f4ff0320ba8c609acdc8130f1169653d8f131b3c8b11924"
+source = "akku"
+synopsis = "Adds dollar sign string interpolation"
+version = "1.1.0"
+
+[dorodango]
+dependencies = ["chez-srfi", "wak-foof-loop", "wak-fmt", "wak-irregex", "wak-parscheme", "wak-wt-tree", "spells", "industria", "ocelotl"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "https://archive.akkuscm.org/archive/pkg/d/dorodango_0.0.0-akku.268.4344bea_repack.tar.xz"
+sha256 = "a351bb663de79a9ab24b3de90e838cab11c1a8771745d4e15750373460e909fc"
+source = "akku"
+synopsis = "Package manager for R6RS implementations"
+version = "0.0.0-akku.268.4344bea"
+
+[fectors]
+dependencies = []
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "https://archive.akkuscm.org/archive/pkg/f/fectors_0.1.1-akku.v0.1-5-g6c05617_repack.tar.xz"
+sha256 = "433731db3dd71d7d697fa9e7764785472fcf4967f6368a2d7578039b2886aa05"
+source = "akku"
+synopsis = "Functional Vectors for Scheme"
+version = "0.1.1-akku.v0.1-5-g6c05617"
+
+[fs-fatfs]
+dependencies = ["struct-pack"]
+dev-dependencies = ["wak-fmt", "chez-srfi"]
+license = "lgpl-3.0-or-later"
+url = "https://archive.akkuscm.org/archive/pkg/f/fs-fatfs_0.1.0_repack.tar.xz"
+sha256 = "bde15f8e672d152d0e7bf5b220d8138a8e647cb1d22c9816e6c567842f02157f"
+source = "akku"
+synopsis = "FAT filesystem library"
+version = "0.1.0"
+
+[fs-partitions]
+dependencies = ["struct-pack", "hashing", "uuid"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/f/fs-partitions_1.0.2_repack.tar.xz"
+sha256 = "e336a2635600a5a5a7cb8f3e52346db796c4710733206df65481866582256808"
+source = "akku"
+synopsis = "Disk partition table reader/writer (MBR/GPT)"
+version = "1.0.2"
+
+[gnuplot-pipe]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "https://archive.akkuscm.org/archive/pkg/g/gnuplot-pipe_0.4.0_repack.tar.xz"
+sha256 = "e86566adcfb6dac8b64627a4253d5ed448a554751e81f2ed5b9c4b7630de04f8"
+source = "akku"
+synopsis = "Port of gnuplot-pipe egg for Chicken Scheme to Chez Scheme."
+version = "0.4.0"
+
+[guile-lib]
+dependencies = []
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "https://archive.akkuscm.org/archive/pkg/g/guile-lib_0.2.6_repack.tar.xz"
+sha256 = "9ad68640b9d2f8e44216d45d919afe43447aa1db2beebd29fef8982cb49ef5c6"
+source = "akku"
+synopsis = "Useful code written in Guile Scheme"
+version = "0.2.6"
+
+[hashing]
+dependencies = []
+dev-dependencies = ["chez-srfi"]
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/h/hashing_1.3.0_repack.tar.xz"
+sha256 = "45dc285ed1dbfe24fc54c2417fe5baefc408c3cad502333894d3c111f8255be6"
+source = "akku"
+synopsis = "CRC, HMAC, MD5, SHA-1, SHA-2, xxHash"
+version = "1.3.0"
+
+[http-pixiu]
+dependencies = ["ufo-try", "chibi-uri", "ufo-socket", "ufo-threaded-function", "ufo-coroutines", "chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/h/http-pixiu_1.0.3_repack.tar.xz"
+sha256 = "caa86c8cce1c76423e3586dea1464eb34b440e849b5104721d9c6dd8e5805af5"
+source = "akku"
+synopsis = "A http server based on scheme"
+version = "1.0.3"
+
+[ijputils]
+dependencies = ["wak-foof-loop", "chez-srfi", "spells", "pfds"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "https://archive.akkuscm.org/archive/pkg/i/ijputils_0.0.0-akku.42.1370c75_repack.tar.xz"
+sha256 = "d1e51a65b1d5654a430437ff43c1b25a6d5d7e2f121d4c65b2156afb12522a6d"
+source = "akku"
+synopsis = "A bunch of scheme junk :)"
+version = "0.0.0-akku.42.1370c75"
+
+[image-formats]
+dependencies = ["chez-srfi", "compression", "hashing"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/i/image-formats_0.1.0_repack.tar.xz"
+sha256 = "72a692ccf929ff798e464de611c8d2c70ceb7a07eff93e48a56bc298d4261efa"
+source = "akku"
+synopsis = "Library for reading/writing various image formats"
+version = "0.1.0"
+
+[industria]
+dependencies = ["chez-srfi", "hashing", "ip-address", "struct-pack"]
+dev-dependencies = ["xitomatl", "r6rs-usocket"]
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/i/industria_2.2.0_repack.tar.xz"
+sha256 = "04a3695cb5ce1e0516fb5414bab045b215e64ac302a07e4731cdc4de2c330243"
+source = "akku"
+synopsis = "Cryptography, OTR, SSH, OpenPGP, etc."
+version = "2.2.0"
+
+[influx-client]
+dependencies = ["loko-srfi", "r6rs-usocket", "chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/i/influx-client_1.0.0_repack.tar.xz"
+sha256 = "0762cc45d219186e9ef2a0efdac8af785f38db93fb8dd8c50b3431fad30ae590"
+source = "akku"
+synopsis = "InfluxDB line protocol and client"
+version = "1.0.0"
+
+[ip-address]
+dependencies = []
+dev-dependencies = ["chez-srfi", "struct-pack"]
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/i/ip-address_1.1.0_repack.tar.xz"
+sha256 = "2313fdd9bd3024d6776ad4c1abd22f8386838e46cdfa3163bec7871223483920"
+source = "akku"
+synopsis = "IP address parsing and formatting"
+version = "1.1.0"
+
+[irc-protocol]
+dependencies = ["industria", "chez-srfi", "struct-pack", "hashing", "TerribleTLS", "chibi-match"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/i/irc-protocol_1.0.0_repack.tar.xz"
+sha256 = "10902fd414a75fabae329960bc6d136a895ac5968f6101e2c917734b00953c14"
+source = "akku"
+synopsis = "IRC protocol utilities"
+version = "1.0.0"
+
+[iteratees]
+dependencies = ["monad", "chez-srfi"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "https://archive.akkuscm.org/archive/pkg/i/iteratees_0.0.0-akku.9.e298a57_repack.tar.xz"
+sha256 = "7c5e3b7e468d65745f16b27532bdf1470295a9078a0614f0336a8958b4f15608"
+source = "akku"
+synopsis = "Functional processing of sequential chunked data"
+version = "0.0.0-akku.9.e298a57"
+
+[json-tools]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/j/json-tools_0.1.1-akku.15.7.23_repack.tar.xz"
+sha256 = "a22043ae0ab82ba5f550443d21b47e32efb0b1c823ce3c22a821a6abe182b183"
+source = "akku"
+synopsis = "Collection of JSON utilities"
+version = "0.1.1-akku.15.7.23"
+
+[laesare]
+dependencies = []
+dev-dependencies = ["chez-srfi"]
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/l/laesare_1.0.2_repack.tar.xz"
+sha256 = "b0cc8ccc940995e7bfd01cc30191c55561f8142195749bad945bde73bfa2a18c"
+source = "akku"
+synopsis = "Scheme lexer and reader"
+version = "1.0.2"
+
+[lcs]
+dependencies = []
+dev-dependencies = ["xunit"]
+license = "bsd-3-clause"
+url = "https://archive.akkuscm.org/archive/pkg/l/lcs_0.0.0-akku.3.6f5f5a4_repack.tar.xz"
+sha256 = "430706c5e5fbc0998c8f1438042cfe14d6ab8e56581a142b12eb143e1d3ec267"
+source = "akku"
+synopsis = "Longest Common Subsequence (LCS)"
+version = "0.0.0-akku.3.6f5f5a4"
+
+[linenoise]
+dependencies = ["r6rs-pffi"]
+dev-dependencies = []
+license = "bsd-2-clause"
+url = "https://archive.akkuscm.org/archive/pkg/l/linenoise_1.0.1_repack.tar.xz"
+sha256 = "43ba6d0185465807b1c5dabcf85cb130c5f28340a66e13e12438c0fb103c4534"
+source = "akku"
+synopsis = "Readline replacement via PFFI"
+version = "1.0.1"
+
+[loko-srfi]
+dependencies = ["industria", "ip-address", "struct-pack"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/l/loko-srfi_1.0.1_repack.tar.xz"
+sha256 = "6eb9b0e039007c7f377b85afba6dd6ff443d94b5ca1a0fa6ba7acd4375e83f79"
+source = "akku"
+synopsis = "Extra SRFIs (sockets) for Loko Scheme"
+version = "1.0.1"
+
+[machine-code]
+dependencies = ["struct-pack"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/m/machine-code_2.2.0_repack.tar.xz"
+sha256 = "4012c1ecac3b3f1166810ab398f94db4909f31c396c33ce645a0c3e5a2a73ee5"
+source = "akku"
+synopsis = "Assembler for x86, ELF reader, various disassemblers"
+version = "2.2.0"
+
+[monad]
+dependencies = ["ijputils"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "https://archive.akkuscm.org/archive/pkg/m/monad_0.0.0-akku.12.6f0115f_repack.tar.xz"
+sha256 = "753aef3a2a89394f9cabf3110f8b39a34d8ee5ade46613e771f9918e4b0f0451"
+source = "akku"
+synopsis = "Various monads"
+version = "0.0.0-akku.12.6f0115f"
+
+[mpl]
+dependencies = ["surfage", "dharmalab"]
+dev-dependencies = []
+license = "apache-2.0"
+url = "https://archive.akkuscm.org/archive/pkg/m/mpl_0.0.0-akku.146.3469e3c_repack.tar.xz"
+sha256 = "6279fde860f4eb311b30c2db9cb9e0047b0517cbf342fb4535b1b8919a605deb"
+source = "akku"
+synopsis = "Computer Algebra and Symbolic Computation"
+version = "0.0.0-akku.146.3469e3c"
+
+[mummel]
+dependencies = ["r6rs-protobuf", "TerribleTLS", "struct-pack"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "https://archive.akkuscm.org/archive/pkg/m/mummel_0.1.0-alpha.0_repack.tar.xz"
+sha256 = "b4aff13e655c81519a75cbfa82bf636fa7b0f8add472b7569d1c50fb7d4059b4"
+source = "akku"
+synopsis = "Mumble voice chat protocol"
+version = "0.1.0-alpha.0"
+
+[nanopass]
+dependencies = []
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/n/nanopass_1.9.2_repack.tar.xz"
+sha256 = "94d5fc588b8939c73a5a57ccc372bcded8ba27287190298ac02ef5d2587bc67a"
+source = "akku"
+synopsis = "Nanopass Compiler Infrastructure"
+version = "1.9.2"
+
+[ocelotl]
+dependencies = ["chez-srfi", "spells", "wak-riastreams", "wak-parscheme", "wak-foof-loop", "wak-ssax"]
+dev-dependencies = []
+license = ["bsd-3-clause", "gpl-3.0-or-later"]
+url = "https://archive.akkuscm.org/archive/pkg/o/ocelotl_0.0.0-akku.42.0c6aada_repack.tar.xz"
+sha256 = "9c229d68b3f838cd6b687e61e1b7bee34736d79cddef6061dc8ae5609c5298fd"
+source = "akku"
+synopsis = "Library collection centered around HTTP"
+version = "0.0.0-akku.42.0c6aada"
+
+[oleg]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/o/oleg_0.0.0-akku.2.c682687_repack.tar.xz"
+sha256 = "d378fb66be2748d335cb607606236d5486f752055e330fa841220e017ffac1c0"
+source = "akku"
+synopsis = "Libraries written by Oleg ported to Chez Scheme"
+version = "0.0.0-akku.2.c682687"
+
+[onie-info]
+dependencies = ["hashing", "chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/o/onie-info_0.1.0_repack.tar.xz"
+sha256 = "bf7e97f48b8120924a1b646b3d6c054f73e33bc304438284497b0e01bb1c8630"
+source = "akku"
+synopsis = "ONIE info reader/writer"
+version = "0.1.0"
+
+[packrat]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/p/packrat_0.1.1_repack.tar.xz"
+sha256 = "ba72d6b8081ac5ab4344de026b1cff3a86414c746a979fbb407f2ad05fd66c8c"
+source = "akku"
+synopsis = "Packrat parser library"
+version = "0.1.1"
+
+[pfds]
+dependencies = []
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "https://archive.akkuscm.org/archive/pkg/p/pfds_0.3.0_repack.tar.xz"
+sha256 = "2937e034f9174644941096c0b14d7c00c377a1fdc71a8b824296b7400b19625e"
+source = "akku"
+synopsis = "Purely Functional Data Structures"
+version = "0.3.0"
+
+[quickcheck]
+dependencies = []
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "https://archive.akkuscm.org/archive/pkg/q/quickcheck_0.0.0-akku.10.cc5cc2d_repack.tar.xz"
+sha256 = "e56917236277ebb37eb244338f271cef34656c1b59bf50c717aa54abc08673d7"
+source = "akku"
+synopsis = "A quickcheck-alike"
+version = "0.0.0-akku.10.cc5cc2d"
+
+[r6lint]
+dependencies = []
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/r/r6lint_0.1.0_repack.tar.xz"
+sha256 = "3240edb0411555d3cb9591a4643359e6b3d3bb1078606d1a3351d9d9f0c56854"
+source = "akku"
+synopsis = "Linter for R6RS libraries and programs"
+version = "0.1.0"
+
+[r6rs-ad]
+dependencies = []
+dev-dependencies = []
+license = "gpl-2.0-or-later"
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-ad_0.0.0-akku.160.a1b8db1_repack.tar.xz"
+sha256 = "e688e265055213d38d1dcbe2f6705246185e7c93df451ade81c9e22eed457d06"
+source = "akku"
+synopsis = "Automatic Differentiation and more"
+version = "0.0.0-akku.160.a1b8db1"
+
+[r6rs-clos]
+dependencies = ["surfage"]
+dev-dependencies = []
+license = "xerox"
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-clos_1.0.0_repack.tar.xz"
+sha256 = "f70a7c18c8936e60f9f94c1ed2429712de1cf5d3ba98e6a04ef2610a85b364eb"
+source = "akku"
+synopsis = "Tiny CLOS"
+version = "1.0.0"
+
+[r6rs-coap]
+dependencies = ["ip-address", "packrat"]
+dev-dependencies = ["loko-srfi", "chez-srfi"]
+license = "lgpl-3.0-or-later"
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-coap_0.1.1_repack.tar.xz"
+sha256 = "b5af9f9ea166188ed3b57758879f0081cdf3be3facba0a350acb88f762951ff9"
+source = "akku"
+synopsis = "Constrained Application Protocol (CoAP)"
+version = "0.1.1"
+
+[r6rs-elf]
+dependencies = []
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-elf_0.1.0_repack.tar.xz"
+sha256 = "9e69d118a41a1c5bf95b5e46a2d8e8295eb4f303eab4e78b1262fb581a114c10"
+source = "akku"
+synopsis = "ELF reader and parser in R6RS Scheme"
+version = "0.1.0"
+
+[r6rs-monads]
+dependencies = []
+dev-dependencies = []
+license = "apache-2.0"
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-monads_0.1.0-akku.17.76e857_repack.tar.xz"
+sha256 = "5a9a230cf109756ae223bef934a97bb1644afcee4892b9fef7daeb8ea6748f0d"
+source = "akku"
+synopsis = "Generic syntax for working with monads"
+version = "0.1.0-akku.17.76e857"
+
+[r6rs-mongodb]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "bsd-2-clause"
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-mongodb_0.0.190423_repack.tar.xz"
+sha256 = "530fe61e253d35a7a73ea6f20ff19bcff8732ef6eba2eeb8cb2adc2503ce784f"
+source = "akku"
+synopsis = "MongoDB client and BSON"
+version = "0.0.190423"
+
+[r6rs-msgpack]
+dependencies = []
+dev-dependencies = ["chez-srfi"]
+license = "bsd-2-clause"
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-msgpack_0.5.7_repack.tar.xz"
+sha256 = "a14d84f8596d533dd199b9bf2fbdfe184bbb20f603bf6df7b4956adf8b00f7e7"
+source = "akku"
+synopsis = "MessagePack for R6RS Scheme"
+version = "0.5.7"
+
+[r6rs-pffi]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "bsd-2-clause"
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-pffi_1.6.0_repack.tar.xz"
+sha256 = "ca3f5200598d92af90a4dbcbe7d2f5c5a429393d752b09156747d145bbd4e189"
+source = "akku"
+synopsis = "Portable Foreign Function Interface (2023-01-02)"
+version = "1.6.0"
+
+[r6rs-protobuf]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-protobuf_0.9.0_repack.tar.xz"
+sha256 = "5a186f1806700fbad6aa8bf24fde3abd7299f232b05e875de93db5145e11a8ba"
+source = "akku"
+synopsis = "Protocol Buffers for R6RS Scheme"
+version = "0.9.0"
+
+[r6rs-psystem]
+dependencies = ["r6rs-pffi", "chez-srfi"]
+dev-dependencies = []
+license = "bsd-2-clause"
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-psystem_0.0.181217_repack.tar.xz"
+sha256 = "48ceb008aefc4f97c248023049df5c066611a8c7968a6b896b63ab5d9daec3d9"
+source = "akku"
+synopsis = "OS name and libc-loading for PFFI"
+version = "0.0.181217"
+
+[r6rs-redis]
+dependencies = ["chez-srfi", "r6rs-usocket"]
+dev-dependencies = []
+license = "bsd-2-clause"
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-redis_0.0.190103_repack.tar.xz"
+sha256 = "ba2d75aa993e3629a2476f2e5fe915839de034a6fa4f166eafdc89420a9d34b6"
+source = "akku"
+synopsis = "Client for the Redis key-value store"
+version = "0.0.190103"
+
+[r6rs-slice]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-slice_0.0.0-akku.6.5f41a23_repack.tar.xz"
+sha256 = "7f7e049530f4e4cad3f51801d8b0ed7b4e9456a0f0f0b9a078faffbe0c4e5b9e"
+source = "akku"
+synopsis = "Slice lists, vectors, strings and bytevectors"
+version = "0.0.0-akku.6.5f41a23"
+
+[r6rs-thrift]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-thrift_0.1.0_repack.tar.xz"
+sha256 = "c149e130fb0166aef591dad1cb9f1e9cdedba5ec9db92659a753f0515709ea6f"
+source = "akku"
+synopsis = "Implementation of the Apache Thrift framework"
+version = "0.1.0"
+
+[r6rs-usocket]
+dependencies = ["r6rs-pffi", "r6rs-psystem"]
+dev-dependencies = ["chez-srfi"]
+license = "bsd-2-clause"
+url = "https://archive.akkuscm.org/archive/pkg/r/r6rs-usocket_0.0.200218_repack.tar.xz"
+sha256 = "56033c660a91d0afd7f3e0fd19a80e49ec201ae36d95d3e8b0f3525cdc4c14ea"
+source = "akku"
+synopsis = "portable sockets library"
+version = "0.0.200218"
+
+[racr]
+dependencies = []
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/r/racr_0.0.0-akku.756.c7d3fe0_repack.tar.xz"
+sha256 = "5eb0fde6fe84d6a344cef46c234bb36a5c24dbc06505cad9335a9cb0a1b1b9b7"
+source = "akku"
+synopsis = "Reference Attribute Grammar Controlled Rewriting"
+version = "0.0.0-akku.756.c7d3fe0"
+
+[riastradh]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/r/riastradh_0.0.0-akku.16.9714b5c_repack.tar.xz"
+sha256 = "3a71c9de0e79630f6fdf543b77ed246b5308940ef336297cfd3c58d987b79b8d"
+source = "akku"
+synopsis = "Libraries by Taylor Campbell ported to Chez Scheme"
+version = "0.0.0-akku.16.9714b5c"
+
+[scheme-bytestructures]
+dependencies = ["akku-r7rs", "r6rs-bytevectors"]
+dev-dependencies = []
+license = "gpl-3.0-or-later"
+url = "https://archive.akkuscm.org/archive/pkg/s/scheme-bytestructures_1.0.6-akku.0_repack.tar.xz"
+sha256 = "331ed7f1cadc75a1c4a620ebceb671c3170984b2150b8ca2d04a0bd21b96144c"
+source = "akku"
+synopsis = "Structured access to bytevector contents"
+version = "1.0.6-akku.0"
+
+[scheme-langserver]
+dependencies = ["ufo-timer", "ufo-try", "srfi-180", "ufo-threaded-function", "uuid", "chibi-pathname", "ufo-match", "slib-string-search", "chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/s/scheme-langserver_2.0.3_repack.tar.xz"
+sha256 = "ab9cdf941d985731de7073ed5a125d2cb6e257b0f876b46e131610cfda2e815b"
+source = "akku"
+synopsis = "This package is a language server protocol implementation helping scheme programming."
+version = "2.0.3"
+
+[scheme-specs]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "apache-2.0"
+url = "https://archive.akkuscm.org/archive/pkg/s/scheme-specs_0.0.3_repack.tar.xz"
+sha256 = "450d10c2621d1e5a6d0e0f056d8b022603393e7b21b4459e819d0bb320793fe7"
+source = "akku"
+synopsis = "Ruby-style spec testing library"
+version = "0.0.3"
+
+[semver]
+dependencies = ["chez-srfi", "packrat", "chibi-match"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/s/semver_1.0.4_repack.tar.xz"
+sha256 = "e20046c87741d7af6468422a459c304413a152b765fa674a66addf732273252e"
+source = "akku"
+synopsis = "Semantic Versioning and ranges"
+version = "1.0.4"
+
+[seq]
+dependencies = []
+dev-dependencies = []
+license = "bsd"
+url = "https://archive.akkuscm.org/archive/pkg/s/seq_0.0.1-beta.0_repack.tar.xz"
+sha256 = "4eae88f1282692e82d4d817bb21f6079dd52bee5805e972060fe0e6b6fa6b986"
+source = "akku"
+synopsis = "This library provides tools for efficiently building up complex list structures."
+version = "0.0.1-beta.0"
+
+[spdx]
+dependencies = ["chez-srfi", "packrat"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/s/spdx_1.0.0_repack.tar.xz"
+sha256 = "5e621cb4447c9fb5136002aa01f5600de84f44cd321786262af69de4c6379c66"
+source = "akku"
+synopsis = "SPDX license expressions and such"
+version = "1.0.0"
+
+[spells]
+dependencies = ["chez-srfi", "wak-irregex", "wak-foof-loop", "wak-fmt"]
+dev-dependencies = ["wak-trc-testing"]
+license = "gpl-3.0-or-later"
+url = "https://archive.akkuscm.org/archive/pkg/s/spells_0.0.0-akku.509.1bfe3b8_repack.tar.xz"
+sha256 = "03d8c1bb15e0a31cfbad5f30c5f23146ea0826947f1093d3890ebc44f66bc0f7"
+source = "akku"
+synopsis = "Portability and utility library"
+version = "0.0.0-akku.509.1bfe3b8"
+
+[srfi-180]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/s/srfi-180_1.0.0-alpha.0_repack.tar.xz"
+sha256 = "7a4682649ad97ffdca566b9e0736c67c7fcb7b3347887fbcf07ec19c7ff2c233"
+source = "akku"
+synopsis = "SRFI-180, a JSON library"
+version = "1.0.0-alpha.0"
+
+[struct-pack]
+dependencies = []
+dev-dependencies = ["chez-srfi"]
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/s/struct-pack_1.1.1_repack.tar.xz"
+sha256 = "42d34a4d7052bdda1bddec0dfddd8f1e576bd0a51b483215a4ca3a8ed7b56d09"
+source = "akku"
+synopsis = "Pack/unpack syntax for byte structures"
+version = "1.1.1"
+
+[surfage]
+dependencies = []
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/s/surfage_0.0.0-akku.12.895f16a_repack.tar.xz"
+sha256 = "a7552a73a5e015f8484a515bdade9a99360681c7cd1cd9331b0c65e556a63539"
+source = "akku"
+synopsis = "SRFI collection: (surfage s1 lists), etc"
+version = "0.0.0-akku.12.895f16a"
+
+[swish]
+dependencies = []
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/s/swish_0.0.0-akku.259.842f51f_repack.tar.xz"
+sha256 = "45f47f2619faaf3193a29bcfc86f46701d646f3e0e46e42a16b11a197e278d18"
+source = "akku"
+synopsis = "Swish Concurrency Engine (like Erlang/Node)"
+version = "0.0.0-akku.259.842f51f"
+
+[text-mode]
+dependencies = ["struct-pack", "r6rs-pffi", "chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/t/text-mode_1.1.0_repack.tar.xz"
+sha256 = "bb1967590d0b33ba27f2b0e4be5eed841f97cc5119b504a91577b77211129813"
+source = "akku"
+synopsis = "Text-mode console library (like curses)"
+version = "1.1.0"
+
+[thunderchez]
+dependencies = []
+dev-dependencies = []
+license = ["apache-2.0", "bsd-3-clause", "mit"]
+url = "https://archive.akkuscm.org/archive/pkg/t/thunderchez_0.0.0-akku.121.9d6344a_repack.tar.xz"
+sha256 = "e4d9a15bee40aa661b1d250ad5d1bb190a7ae452bfa8655e27f97b3a214e518c"
+source = "akku"
+synopsis = "Monorepo of various libraries for Chez Scheme"
+version = "0.0.0-akku.121.9d6344a"
+
+[ufo-coroutines]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/u/ufo-coroutines_1.0.3_repack.tar.xz"
+sha256 = "16b8aa3a449ba4cc91bd435ad0a97be9776c9dca24323b31f7f64e1f68c4b342"
+source = "akku"
+synopsis = "This package is a dependable coroutine package for chez scheme."
+version = "1.0.3"
+
+[ufo-match]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/u/ufo-match_1.0.0_repack.tar.xz"
+sha256 = "3200ebeb66a1b030ba244ee048c1ed7c6a256d6f091129a362ef1af53de16383"
+source = "akku"
+synopsis = "This package is a dependable match macro library for chez scheme."
+version = "1.0.0"
+
+[ufo-socket]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/u/ufo-socket_1.0.0_repack.tar.xz"
+sha256 = "4086f72cf355cd207e140be1db14aa29ca5ae1822ac8c9f4472cd071ab902014"
+source = "akku"
+synopsis = "I did not edit Akku.manifest"
+version = "1.0.0"
+
+[ufo-thread-pool]
+dependencies = ["ufo-try", "slib-queue", "chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/u/ufo-thread-pool_1.0.4_repack.tar.xz"
+sha256 = "bbcafe03f57784e85c6a37b99d678670a93c464df2bc14d576e2e608519f90a3"
+source = "akku"
+synopsis = "This package is a dependable thread pool package for chez scheme."
+version = "1.0.4"
+
+[ufo-threaded-function]
+dependencies = ["ufo-thread-pool", "chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/u/ufo-threaded-function_1.0.5_repack.tar.xz"
+sha256 = "a6c9acb6b9e02a4c51c38109eb2aeac0f93c8af5346d9f77d0a4ef34860e8cfe"
+source = "akku"
+synopsis = "This package contains threaded-map, threaded-vector-map and such threaded functions for chez scheme."
+version = "1.0.5"
+
+[ufo-timer]
+dependencies = ["ufo-thread-pool", "chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/u/ufo-timer_1.0.0_repack.tar.xz"
+sha256 = "e145154e8edfbbc47662a4397b3332a1253dc3867e9e59bbf8dcbdcb41a15be5"
+source = "akku"
+synopsis = "This repository is a timer implementation based on Chez Scheme's thread mechanism."
+version = "1.0.0"
+
+[ufo-try]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/u/ufo-try_1.0.0_repack.tar.xz"
+sha256 = "37bab16e0893f771e5f51c005cbd2d8884bb0c07b163c563325acc2a73957f1c"
+source = "akku"
+synopsis = "try-except to handle potential exception"
+version = "1.0.0"
+
+[uuid]
+dependencies = ["hashing", "industria", "struct-pack", "chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/u/uuid_1.0.0-beta.0_repack.tar.xz"
+sha256 = "03a058e7522933c1f7475cd20ab0515016bfbbd8c406d3c7302946b20664431d"
+source = "akku"
+synopsis = "Generate and analyze UUIDs"
+version = "1.0.0-beta.0"
+
+[vterm]
+dependencies = ["chez-srfi", "text-mode"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/v/vterm_0.2.0_repack.tar.xz"
+sha256 = "173532d68edd98f78348e388968cf890e1921130ad38fee428d121fbd37ba2ce"
+source = "akku"
+synopsis = "VTerm parsing, and handling library"
+version = "0.2.0"
+
+[wak-common]
+dependencies = []
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-common_0.1.0-akku.15.6d495fc_repack.tar.xz"
+sha256 = "9c5170c85c885d9e35ce62dcf829597d31cc0b3697b79fe544640bf828c5a22d"
+source = "akku"
+synopsis = "Common infrastructure for the Wak ports"
+version = "0.1.0-akku.15.6d495fc"
+
+[wak-fmt]
+dependencies = ["chez-srfi", "wak-common"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-fmt_0.8.0-akku.10.d5b2a5a_repack.tar.xz"
+sha256 = "807c3b78a2c5d4a89017a8a811a5f58fe3a2c81494107cab710b23d9f1a3a34f"
+source = "akku"
+synopsis = "Combinator Formatting Library"
+version = "0.8.0-akku.10.d5b2a5a"
+
+[wak-foof-loop]
+dependencies = ["chez-srfi", "wak-common", "wak-syn-param", "wak-riastreams"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-foof-loop_0.0.0-akku.4.a7b9cd8_repack.tar.xz"
+sha256 = "4612a0060480d128cb00d7b0f67e7455f5765960bc9b2e95c3471dd14ebf01a4"
+source = "akku"
+synopsis = "Extensible looping library"
+version = "0.0.0-akku.4.a7b9cd8"
+
+[wak-htmlprag]
+dependencies = ["chez-srfi", "wak-common"]
+dev-dependencies = ["wak-testeez"]
+license = "lgpl-3.0-or-later"
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-htmlprag_0.19.0_repack.tar.xz"
+sha256 = "e1432301b0a2b8e2facfab0f3e1951ddd2ce1f00d755c8e3e587c5fbf10919ba"
+source = "akku"
+synopsis = "pragmatic parsing and emitting of HTML using SXML and SHTML"
+version = "0.19.0"
+
+[wak-irregex]
+dependencies = ["wak-common"]
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-irregex_0.8.1_repack.tar.xz"
+sha256 = "097677fcd0d3a7a741729d4b3bad04ea083fff0fc2cd9b0332b44d1e067a9eca"
+source = "akku"
+synopsis = "Portable regular expressions"
+version = "0.8.1"
+
+[wak-parscheme]
+dependencies = ["chez-srfi", "wak-common", "wak-riastreams"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-parscheme_0.0.0-akku.7.e9e25f9_repack.tar.xz"
+sha256 = "5c9c266fe48c3c98a0a1d2b7e435347494530a97343acfc6d07ad831f78d6672"
+source = "akku"
+synopsis = "Parser combinator library"
+version = "0.0.0-akku.7.e9e25f9"
+
+[wak-prometheus]
+dependencies = ["chez-srfi", "wak-common"]
+dev-dependencies = []
+license = "gpl-2.0-or-later"
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-prometheus_2.0.0-akku.6.965fc7e_repack.tar.xz"
+sha256 = "bf99f85e6699fb2e39639d2e6fc56e5927683316b03e6bcd540bbb3718788bc6"
+source = "akku"
+synopsis = "Prototype-based message-passing object system"
+version = "2.0.0-akku.6.965fc7e"
+
+[wak-riastreams]
+dependencies = ["chez-srfi", "wak-common"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-riastreams_0.0.0-akku.5.b444645_repack.tar.xz"
+sha256 = "9d31a6f505db6b8bcdd8d3387c302084e7efa97ba7faded987fbeb2c2f666de8"
+source = "akku"
+synopsis = "Lazy streams"
+version = "0.0.0-akku.5.b444645"
+
+[wak-ssax]
+dependencies = ["chez-srfi", "wak-common"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-ssax_5.1.0-akku.4.1f7fad4_repack.tar.xz"
+sha256 = "dba5d065a8dcea8155b9444fbe5949d2eba6ffe82549ba2bb921d9314c59d04d"
+source = "akku"
+synopsis = "Functional XML parsing framework"
+version = "5.1.0-akku.4.1f7fad4"
+
+[wak-sxml-tools]
+dependencies = ["chez-srfi", "wak-common", "wak-ssax"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-sxml-tools_0.0.0-akku.1.5c14730_repack.tar.xz"
+sha256 = "828bfc298d6d26dc6b9b5d2e59b51c1facbad03f4ac48d805d13786e64cf8813"
+source = "akku"
+synopsis = "Tools for manipulating SXML"
+version = "0.0.0-akku.1.5c14730"
+
+[wak-syn-param]
+dependencies = ["wak-common"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-syn-param_0.0.0-akku.4.8ca3272_repack.tar.xz"
+sha256 = "f81250b57f88336805b43c72f491d5a652fe8221a0f5529361d3401bcd60ec7c"
+source = "akku"
+synopsis = "Operators with extended parameter syntax"
+version = "0.0.0-akku.4.8ca3272"
+
+[wak-testeez]
+dependencies = ["spells", "wak-common"]
+dev-dependencies = []
+license = "lgpl-2.1-or-later"
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-testeez_0.2.0_repack.tar.xz"
+sha256 = "3cbeeaca5df98443589fef0d6fd7c9fddbf65f4b79eb1f4f75948d74b769d221"
+source = "akku"
+synopsis = "Lightweight Unit Test Mechanism"
+version = "0.2.0"
+
+[wak-trc-testing]
+dependencies = ["chez-srfi", "wak-common", "wak-syn-param", "wak-fmt", "wak-foof-loop"]
+dev-dependencies = []
+license = ["lgpl-3.0-or-later", "bsd-3-clause"]
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-trc-testing_0.0.0-akku.6.8168507_repack.tar.xz"
+sha256 = "95ac705fee1e681fc5e580d42bf51f34ce7541a04315c8339a0bb4250dc1d969"
+source = "akku"
+synopsis = "Simple testing facility"
+version = "0.0.0-akku.6.8168507"
+
+[wak-wt-tree]
+dependencies = []
+dev-dependencies = []
+license = "gpl-2.0-or-later"
+url = "https://archive.akkuscm.org/archive/pkg/w/wak-wt-tree_0.0.0-akku.5.2a2c933_repack.tar.xz"
+sha256 = "049871743518fc55bc63e6ba9da651e78d4ec892c852cef2607fc64033fc0a7b"
+source = "akku"
+synopsis = "Weight-balanced trees"
+version = "0.0.0-akku.5.2a2c933"
+
+[xitomatl]
+dependencies = ["chez-srfi"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/x/xitomatl_0.0.0-akku.208.62a8243_repack.tar.xz"
+sha256 = "090a62571c424dd4bb4f13a4f46d57a4f6434960ab3e71d8727b0b8eaf7bce4e"
+source = "akku"
+synopsis = "Monorepo with various libraries"
+version = "0.0.0-akku.208.62a8243"
+
+[xunit]
+dependencies = []
+dev-dependencies = []
+license = "bsd-3-clause"
+url = "https://archive.akkuscm.org/archive/pkg/x/xunit_0.0.0-akku.21.0b4ede2_repack.tar.xz"
+sha256 = "ba53698fb0d468aedb5062d49089002924ba7b1c622b16ed8170810412f4f4d3"
+source = "akku"
+synopsis = "xUnit test utility"
+version = "0.0.0-akku.21.0b4ede2"
+
+[xyz-modem]
+dependencies = ["chez-srfi", "hashing"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/x/xyz-modem_0.0.1_repack.tar.xz"
+sha256 = "97ac3c51936f5a7b4a45a954424949b119eb7f84a65196b49a479f1301dfd764"
+source = "akku"
+synopsis = "This library should contain a x/y/z-modem protocols"
+version = "0.0.1"
+
+[yxskaft]
+dependencies = ["r6rs-pffi", "struct-pack"]
+dev-dependencies = []
+license = "lgpl-3.0-or-later"
+url = "https://archive.akkuscm.org/archive/pkg/y/yxskaft_0.2.0_repack.tar.xz"
+sha256 = "a49d83c503088d5d22b0458ffa85fa64995fb65f2687a87c09f124bcb3b7319f"
+source = "akku"
+synopsis = "Tiny X client library"
+version = "0.2.0"
+
+[zabavno]
+dependencies = ["machine-code"]
+dev-dependencies = []
+license = "mit"
+url = "https://archive.akkuscm.org/archive/pkg/z/zabavno_0.2.0_repack.tar.xz"
+sha256 = "8b663e50b7afe3e59960fcbe5dda69e1e56e940084789dcb2da6eefc934d394e"
+source = "akku"
+synopsis = "80386 real-mode CPU and PC emulator"
+version = "0.2.0"
+
