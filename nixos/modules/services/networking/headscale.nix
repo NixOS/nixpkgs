@@ -31,6 +31,18 @@ in
     services.headscale = {
       enable = lib.mkEnableOption "headscale, Open Source coordination server for Tailscale";
 
+      configPath = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        description = ''
+          Speficy path to the Config file, doing so will ignore most of the settings defined.
+          ::: {.note}
+          Example of the file can be found here: https://github.com/juanfont/headscale/blob/main/config-example.yaml
+          :::
+        '';
+        example = "/etc/headscale_config.yaml";
+        default = null;
+      };
+
       package = lib.mkPackageOption pkgs "headscale" { };
 
       configFile = lib.mkOption {
@@ -683,15 +695,19 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = with cfg.settings; dns.magic_dns -> dns.base_domain != "";
+        assertion = cfg.configPath != null || (with cfg.settings; dns.magic_dns -> dns.base_domain != "");
         message = "dns.base_domain must be set when using MagicDNS";
       }
       {
-        assertion = with cfg.settings; dns.override_local_dns -> dns.nameservers.global != [ ];
+        assertion =
+          cfg.configPath != null
+          || (with cfg.settings; dns.override_local_dns -> dns.nameservers.global != [ ]);
         message = "dns.nameservers.global must be set when overriding local DNS";
       }
       {
-        assertion = with cfg.settings; dns.extra_records_path == null || dns.extra_records == null;
+        assertion =
+          cfg.configPath != null
+          || (with cfg.settings; dns.extra_records_path == null || dns.extra_records == null);
         message = "dns.extra_records and dns.extra_records_path are mutually exclusive";
       }
       (assertRemovedOption [ "settings" "acl_policy_path" ] "Use `policy.path` instead.")
@@ -756,7 +772,9 @@ in
           export HEADSCALE_DATABASE_POSTGRES_PASS="$(head -n1 ${lib.escapeShellArg cfg.settings.database.postgres.password_file})"
         ''}
 
-        exec ${lib.getExe cfg.package} serve --config ${cfg.configFile}
+        exec ${lib.getExe cfg.package} serve --config ${
+          if cfg.configPath != null then cfg.configPath else cfg.configFile
+        }
       '';
 
       serviceConfig =
