@@ -150,13 +150,4 @@ runCommand "ghc-settings-${targetPlatform.config}"
     # the toolchain probe, and it is genuinely standalone.
     ghc-toolchain-bin ${lib.escapeShellArgs flags} --output "$out/default.target"
 
-    # The toolchain-derived subset of `lib/settings`, as JSON. The build-state
-    # entries (`base unit-id`, `RTS ways`, `Relative Global Package DB`, ...)
-    # are added by the assembly step, which merges this with a Nix-authored
-    # object using jq -- inside a derivation, so no import-from-derivation.
-    ghc-toolchain-bin ${lib.escapeShellArgs flags} --output-settings-json \
-      --output "$out/settings.json"
-
-    echo "--- generated settings.json ---"
-    cat "$out/settings.json"
   ''

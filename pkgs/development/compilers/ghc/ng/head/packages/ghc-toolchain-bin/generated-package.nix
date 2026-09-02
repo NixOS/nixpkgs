@@ -2,16 +2,13 @@
 
 {
   mkDerivation,
-  aeson,
   base,
-  bytestring,
   directory,
   filepath,
   ghc-platform,
   ghc-toolchain,
   lib,
   process,
-  text,
   transformers,
 }:
 mkDerivation {
@@ -20,15 +17,12 @@ mkDerivation {
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
-    aeson
     base
-    bytestring
     directory
     filepath
     ghc-platform
     ghc-toolchain
     process
-    text
     transformers
   ];
   description = "Utility for managing GHC target toolchains";

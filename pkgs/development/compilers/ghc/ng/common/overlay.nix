@@ -210,12 +210,22 @@ let
         };
       in
       {
-        # JSON, via `packages/ghc-boot/setup-json-settings.patch`. The old
-        # `HADRIAN_SETTINGS` carried the same map as the `Read` of a
-        # `[(String, String)]`, which meant only a Haskell program could write
-        # it; it is the same string-to-string map as `lib/settings` and gets
-        # the same treatment. The patched `Setup.hs` still accepts both.
-        env.GHC_BOOT_SETTINGS = builtins.toJSON bootSettings;
+        # `read` of a `[(String, String)]`, which is what `Setup.hs` expects.
+        # Writing the format rather than patching `Setup.hs` to accept JSON is
+        # what keeps this a stock tree: every value here is a version component
+        # or an `ArchOS` constructor, so none of them contains a quote or a
+        # backslash and `show` is just the obvious quoting.
+        #
+        # This is *not* `lib/settings.json`. It never reaches the installed
+        # compiler -- it is consumed during this package's build, to generate
+        # `GHC.Version` and `GHC.Platform.Host`, and the keys are hadrian's
+        # own names rather than settings-file names.
+        env.HADRIAN_SETTINGS =
+          "["
+          + lib.concatMapStringsSep "," (n: ''("${n}","${toString bootSettings.${n}}")'') (
+            lib.attrNames bootSettings
+          )
+          + "]";
       };
 
     # `libraries/ghc-internal/configure.ac` probes a header of its own:

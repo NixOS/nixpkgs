@@ -40,7 +40,10 @@
   # empty for stage1, which only ever compiles stage2.
   programs ? [ ],
 
-  # The toolchain-derived half of `lib/settings`, from ./settings.nix.
+  # The `ghc-toolchain` probe, for `lib/targets/default.target`. It contributes
+  # nothing to the settings file any more: every toolchain fact the compiler
+  # needs is read out of the target file instead, so what is left of
+  # `lib/settings.json` is exactly the Nix-authored build-state half.
   toolchainSettings,
 
   # The build-state half, as an attrset. `base unit-id` is deliberately absent:
@@ -175,13 +178,12 @@ runCommand "ghc-${version}"
       if [ -e "$baseConf" ]; then
         baseUnitId=$(sed -n 's/^id: *//p' "$baseConf" | head -1)
         echo "base unit-id: $baseUnitId"
-        jq -s --arg baseUnitId "$baseUnitId" \
-          '.[0] * .[1] * {"base unit-id": $baseUnitId}' \
-          "${toolchainSettings}/settings.json" build-state.json > "$out/lib/settings.json"
+        jq --arg baseUnitId "$baseUnitId" \
+          '. * {"base unit-id": $baseUnitId}' \
+          build-state.json > "$out/lib/settings.json"
       else
         echo "no base registered; keeping the base unit-id from buildStateSettings"
-        jq -s '.[0] * .[1]' \
-          "${toolchainSettings}/settings.json" build-state.json > "$out/lib/settings.json"
+        cp build-state.json "$out/lib/settings.json"
       fi
 
       ${ghcPkgCmd} recache --package-db "$out/lib/package.conf.d"
