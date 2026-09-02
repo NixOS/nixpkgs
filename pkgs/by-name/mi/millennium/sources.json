@@ -1,0 +1,98 @@
+{
+    "millennium-src" : {
+        "owner": "SteamClientHomebrew",
+        "repo": "Millennium",
+        "rev": "50fcda7794bf32c8edbd30222370e70ac511805c",
+        "hash" : "sha256-BhFWModRCeZXaTPcMbuDKH1M4I7iXjdWn0M54SAttUM="
+    },
+    "zlib-src" : {
+        "owner": "zlib-ng",
+        "repo": "zlib-ng",
+        "rev": "2.2.5",
+        "hash" : "sha256-c2RYqHi3hj/ViBzJcYWoNib27GAbq/B1SJUfvG7CPG4="
+    },
+    "luajit-src" : {
+        "owner": "SteamClientHomebrew",
+        "repo": "LuaJIT",
+        "rev": "v2.1",
+        "hash" : "sha256-oYD86MqmlJpiCuEs4LwVtxvarPtz1RPWm8nJqNE0sBs="
+    },
+    "luajson-src" : {
+        "owner": "SteamClientHomebrew",
+        "repo": "LuaJSON",
+        "rev": "0c1fabf07c42f3907287d1e4f729e0620c1fe6fd",
+        "hash" : "sha256-5Mdp4jp+rqz2ufkBa1gMfd8nep+Um+mBdr6+Ut6yz9I="
+    },
+    "minhook-src" : {
+        "owner": "TsudaKageyu",
+        "repo": "minhook",
+        "rev": "v1.3.4",
+        "hash" : "sha256-0eGFfg365bb4zic1WTHMvKHbxuhhGp72/clu8OklHXs="
+    },
+    "mini-src" : {
+        "owner": "metayeti",
+        "repo": "mINI",
+        "rev": "0.9.18",
+        "hash" : "sha256-zBFFOlECbie7+62fTGf+NP4gNmfv2Qddw3ys6xn7o9U="
+    },
+    "websocketpp-src" : {
+        "owner": "zaphoyd",
+        "repo": "websocketpp",
+        "rev": "0.8.2",
+        "hash" : "sha256-9fIwouthv2GcmBe/UPvV7Xn9P2o0Kmn2hCI4jCh0hPM="
+    },
+    "fmt-src" : {
+        "owner": "fmtlib",
+        "repo": "fmt",
+        "rev": "12.0.0",
+        "hash" : "sha256-AZDmIeU1HbadC+K0TIAGogvVnxt0oE9U6ocpawIgl6g="
+    },
+    "json-src" : {
+        "owner": "nlohmann",
+        "repo": "json",
+        "rev": "v3.12.0",
+        "hash" : "sha256-cECvDOLxgX7Q9R3IE86Hj9JJUxraDQvhoyPDF03B2CY="
+    },
+    "libgit2-src" : {
+        "owner": "libgit2",
+        "repo": "libgit2",
+        "rev": "v1.9.1",
+        "hash" : "sha256-/xI3v7LNhpgfjv/m+sZwYDhhYvS6kQYxiiiG3+EF8Mw="
+    },
+    "minizip-src" : {
+        "owner": "zlib-ng",
+        "repo": "minizip-ng",
+        "rev": "4.0.10",
+        "hash" : "sha256-I3CZwtfJMsZYQOMdGhooUN8vssnQj6rCzv8F+rne3vg="
+    },
+    "curl-src" : {
+        "owner": "curl",
+        "repo": "curl",
+        "rev": "curl-8_13_0",
+        "hash" : "sha256-huAGWNm2rYBmgzUuYQ21IYp2skyQECelEkXPMBJY3cE="
+    },
+    "incbin-src" : {
+        "owner": "graphitemaster",
+        "repo": "incbin",
+        "rev": "22061f51fe9f2f35f061f85c2b217b55dd75310d",
+        "hash" : "sha256-vgOfViZnWTKpBB6vDNDJSB3YuuGGVhg++zsi9Ubatno="
+    },
+    "asio-src" : {
+        "owner": "chriskohlhoff",
+        "repo": "asio",
+        "rev": "asio-1-30-0",
+        "hash" : "sha256-8Xo6J6+dTvDtsthjbLMMTInHMDnMMM0rQwzbZu70J/s="
+    },
+    "abseil-src" : {
+        "owner": "abseil",
+        "repo": "abseil-cpp",
+        "rev": "20240722.0",
+        "hash" : "sha256-51jpDhdZ0n+KLmxh8KVaTz53pZAB0dHjmILFX+OLud4="
+    },
+    "re2-src" : {
+        "owner": "google",
+        "repo": "re2",
+        "rev": "2025-11-05",
+        "hash" : "sha256-0J1HVk+eR7VN0ymucW9dNlT36j16XIfCzcs1EVyEIEU="
+    }
+}
