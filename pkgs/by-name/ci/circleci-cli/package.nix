@@ -1,42 +1,55 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildGoModule,
+  buildPackages,
   installShellFiles,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "circleci-cli";
-  version = "0.1.38646";
+  version = "1.0.48571";
 
   src = fetchFromGitHub {
     owner = "CircleCI-Public";
     repo = "circleci-cli";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-n+pt2pGKsRvR4fGDnXypfGB/Xm1euVWjH4fEJSHaHj4=";
+    sha256 = "sha256-doBByvNJG3BIF/+zepBeOm+ZcB+g/nx6W7A8zovJToc=";
   };
 
-  vendorHash = "sha256-K8Nm6lEHergDFMINJuyJn8tw/4cd6gp30nJbddRJCIE=";
+  vendorHash = "sha256-YYyHAGWMiCzjjW1wY9f8IKs0ZICOnA7RWVpruhR9dI8=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  subPackages = [ "cmd/circleci" ];
+
+  nativeBuildInputs = [
+    installShellFiles
+    writableTmpDirAsHomeHook
+  ];
 
   doCheck = false;
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/CircleCI-Public/circleci-cli/version.Version=${finalAttrs.version}"
-    "-X github.com/CircleCI-Public/circleci-cli/version.Commit=${finalAttrs.src.rev}"
-    "-X github.com/CircleCI-Public/circleci-cli/version.packageManager=nix"
+    "-X main.version=${finalAttrs.version}"
   ];
 
-  postInstall = ''
-    mv $out/bin/circleci-cli $out/bin/circleci
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd circleci \
+        --bash <(${emulator} $out/bin/circleci completion bash) \
+        --zsh <(${emulator} $out/bin/circleci completion zsh) \
+        --fish <(${emulator} $out/bin/circleci completion fish)
 
-    installShellCompletion --cmd circleci \
-      --bash <(HOME=$TMPDIR $out/bin/circleci completion bash --skip-update-check) \
-      --zsh <(HOME=$TMPDIR $out/bin/circleci completion zsh --skip-update-check)
-  '';
+      ${emulator} $out/bin/circleci man --output $TMPDIR/circleci.1
+      installManPage $TMPDIR/circleci.1
+    ''
+  );
 
   meta = {
     # Box blurb edited from the AUR package circleci-cli
@@ -47,6 +60,6 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [ stig ];
     mainProgram = "circleci";
     license = lib.licenses.mit;
-    homepage = "https://circleci.com/";
+    homepage = "https://cli.circleci.com";
   };
 })
