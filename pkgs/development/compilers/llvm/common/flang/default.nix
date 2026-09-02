@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
     runCommand "${finalAttrs.pname}-src-${finalAttrs.version}"
       {
         inherit (monorepoSrc) passthru;
+        strictDeps = true;
+        __structuredAttrs = true;
       }
       ''
         mkdir -p "$out"
