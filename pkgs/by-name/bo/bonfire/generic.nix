@@ -74,6 +74,8 @@ beamPkgs.mixRelease (
         # because its way to set `src` requires --allow-import-from-derivation
         overrideAttrsRust =
           {
+            nativeAtom,
+            nativeModule,
             nativeDir,
             outputHashes ? { },
             sourceRoot ? null,
@@ -89,22 +91,31 @@ beamPkgs.mixRelease (
               RUSTLER_BUILD_ALL = "true";
             };
             preBuild = "";
-            # Explanation: `rustPlatform.buildRustPackage`
-            # generates `lib/lib<name>.so`
-            # but `rustler` expects `priv/native/<name>.so`
-            # hence remove the `lib` prefix.
-            preConfigure = ''
-              mkdir -p priv/native
-              for lib in ${finalBeam.passthru.native}/lib/*
-              do
-                dest="$(basename "$lib")"
-                if [[ "''${dest##*.}" = "dylib" ]]
-                then
-                  dest="''${dest%.dylib}.so"
-                fi
-                ln -s "$lib" "priv/native/''${dest#lib}"
-              done
-            '';
+            preConfigure = lib.concatStringsSep "\n" [
+              # Explanation: `rustPlatform.buildRustPackage`
+              # generates `lib/lib<name>.so`
+              # but `rustler` expects `priv/native/<name>.so`
+              # hence remove the `lib` prefix.
+              ''
+                mkdir -p priv/native
+                for lib in ${finalBeam.passthru.native}/lib/*
+                do
+                  dest="$(basename "$lib")"
+                  if [[ "''${dest##*.}" = "dylib" ]]
+                  then
+                    dest="''${dest%.dylib}.so"
+                  fi
+                  ln -s "$lib" "priv/native/''${dest#lib}"
+                done
+              ''
+              ''
+                cat >>config/config.exs <<EOF
+                config :${nativeAtom},
+                        ${nativeModule},
+                        skip_compilation?: true
+                EOF
+              ''
+            ];
             passthru = previousBeam.passthru or { } // {
               inherit nativeDir;
 
@@ -398,32 +409,6 @@ beamPkgs.mixRelease (
                 ''
                   cp --no-preserve=mode --remove-destination --force "$(realpath config/config.exs)" config/config.exs
                 ''
-
-                # Explanation: set skip_compilation? to let nix provide Rust libraries,
-                # and load_from because rustler defaults to priv/native/#{crate}
-                # but deps_nix installs into priv/native/lib#{crate}.
-                #
-                # Issue: https://github.com/code-supply/deps_nix/issues/36
-                ''
-                  cat >>config/config.exs <<EOF
-
-                  config :lumis,
-                          Lumis.Native,
-                          skip_compilation?: true
-                  config :decent,
-                          Decent.Native,
-                          skip_compilation?: true
-                  config :mdex_native,
-                          MDExNative.Native,
-                          skip_compilation?: true
-                  config :mjml,
-                          Mjml.Native,
-                          skip_compilation?: true
-                  config :tokenizers,
-                          Tokenizers.Native,
-                          skip_compilation?: true
-                  EOF
-                ''
               ]
             );
 
@@ -596,6 +581,8 @@ beamPkgs.mixRelease (
                       });
                       decent = previousMixPkgs.decent.overrideAttrs (
                         finalAttrs.passthru.overrideAttrsRust {
+                          nativeAtom = "decent";
+                          nativeModule = "Decent.Native";
                           nativeDir = "decent";
                           sourceRoot = "source/native/decent";
                         }
@@ -675,12 +662,16 @@ beamPkgs.mixRelease (
                       });
                       lumis = previousMixPkgs.lumis.overrideAttrs (
                         finalAttrs.passthru.overrideAttrsRust {
+                          nativeAtom = "lumis";
+                          nativeModule = "Lumis.Native";
                           nativeDir = "lumis_nif";
                           regeneratedCargoLock = true;
                         }
                       );
                       mdex_native = previousMixPkgs.mdex_native.overrideAttrs (
                         finalAttrs.passthru.overrideAttrsRust {
+                          nativeAtom = "mdex_native";
+                          nativeModule = "MDExNative.Native";
                           nativeDir = "mdex_native_nif";
                           # Explanation: MDEx's NIF only builds in the syntax highlighter when told to at compile time,
                           # when using Elixir's `rustler` it's done with:
@@ -703,6 +694,8 @@ beamPkgs.mixRelease (
                       });
                       mjml = previousMixPkgs.mjml.overrideAttrs (
                         finalAttrs.passthru.overrideAttrsRust {
+                          nativeAtom = "mjml";
+                          nativeModule = "Mjml.Native";
                           nativeDir = "mjml_nif";
                         }
                       );
@@ -724,6 +717,8 @@ beamPkgs.mixRelease (
                       tokenizers =
                         (previousMixPkgs.tokenizers.overrideAttrs (
                           finalAttrs.passthru.overrideAttrsRust {
+                            nativeAtom = "tokenizers";
+                            nativeModule = "Tokenizers.Native";
                             nativeDir = "ex_tokenizers";
                           }
                         )).overrideAttrs
