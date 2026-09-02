@@ -2,7 +2,10 @@
 {
   name = "kavita";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ misterio77 ];
+    maintainers = [
+      misterio77
+      debtquity
+    ];
   };
 
   nodes = {

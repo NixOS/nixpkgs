@@ -174,5 +174,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ misterio77 ];
+  meta.maintainers = with lib.maintainers; [
+    misterio77
+    debtquity
+  ];
 }
