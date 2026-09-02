@@ -1,0 +1,16 @@
+diff --git a/ports/servoshell/build.rs b/ports/servoshell/build.rs
+index e59c002d30d..e90aad23aeb 100644
+--- a/ports/servoshell/build.rs
++++ b/ports/servoshell/build.rs
+@@ -74,6 +74,11 @@ fn main() -> Result<(), Box<dyn Error>> {
+         println!("cargo:rustc-link-search=native={}", out.display());
+     }
+ 
++    if std::env::var_os("MOZJS_USE_SYSTEM_ICU").is_some() {
++        println!("cargo:rustc-link-lib=icuuc");
++        println!("cargo:rustc-link-lib=icui18n");
++    }
++
+     match git_sha() {
+         Ok(hash) => println!("cargo:rustc-env=GIT_SHA={}", hash),
+         Err(error) => {

@@ -1,0 +1,39 @@
+diff --git a/build.rs b/build.rs
+index 7e2904394..1e7186804 100644
+--- a/build.rs
++++ b/build.rs
+@@ -27,6 +27,7 @@ const ENV_VARS: &'static [&'static str] = &[
+     "MOZJS_CREATE_ARCHIVE",
+     "MOZJS_FORCE_RERUN",
+     "MOZJS_FROM_SOURCE",
++    "MOZJS_USE_SYSTEM_ICU",
+     "PYTHON",
+     "STLPORT_LIBS",
+ ];
+@@ -457,6 +458,11 @@ fn should_build_from_source() -> bool {
+             "Environment variable MOZJS_CREATE_ARCHIVE is set. Building from source directly."
+         );
+         true
++    } else if env::var_os("MOZJS_USE_SYSTEM_ICU").is_some() {
++        println!(
++            "Environment variable MOZJS_USE_SYSTEM_ICU is set. Building from source directly."
++        );
++        true
+     } else if env::var_os("MOZJS_ARCHIVE").is_some() {
+         false
+     } else if env::var_os("CARGO_FEATURE_DEBUGMOZJS").is_some() {
+diff --git a/makefile.cargo b/makefile.cargo
+index 4dd2c7ad6..ecfdb6a2c 100644
+--- a/makefile.cargo
++++ b/makefile.cargo
+@@ -45,6 +45,10 @@ ifneq (,$(CCACHE))
+ 	CONFIGURE_FLAGS += --with-ccache=$(CCACHE)
+ endif
+ 
++ifneq (,$(MOZJS_USE_SYSTEM_ICU))
++	CONFIGURE_FLAGS += --with-system-icu
++endif
++
+ 
+ ifneq (,$(MACOS_SDK_PATH))
+ 	CONFIGURE_FLAGS += --with-macos-sdk=$(MACOS_SDK_PATH)
