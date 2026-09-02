@@ -35,6 +35,7 @@ buildMozillaMach rec {
     maintainers = with lib.maintainers; [
       jopejoe1
       rhendric
+      yvnth
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.buildPlatform.is32bit;
