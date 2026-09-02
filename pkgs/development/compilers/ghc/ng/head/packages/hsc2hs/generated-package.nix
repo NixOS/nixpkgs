@@ -15,7 +15,7 @@ mkDerivation {
   pname = "hsc2hs";
   version = "0.68.10";
   revision = "3";
-  editedCabalFile = "1br4hfz6xdd5sw8rbir55r10mgl2yqj7g8kzjh1xsyf1yp0dlirc";
+  editedCabalFile = "1c101h4sm3q47zhzanakvz22hilmxkkcmp1i5k9zxjki42npk4r3";
   isLibrary = false;
   isExecutable = true;
   enableSeparateDataOutput = true;

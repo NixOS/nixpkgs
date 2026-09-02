@@ -20,6 +20,7 @@
   mtl,
   parsec,
   QuickCheck,
+  semaphore-compat,
   text,
   transformers,
   unix,
@@ -44,6 +45,7 @@ mkDerivation {
     haddock-library
     mtl
     parsec
+    semaphore-compat
     text
     transformers
     unix

@@ -41,6 +41,8 @@ let
     inherit (ghcVersion) ghcSrc;
   };
 
+  inherit (ghcVersion) typedSettings;
+
   # Facts about the build rather than about the toolchain; see
   # ./common/mk-settings.nix. `base unit-id` is deliberately absent -- it
   # carries a hash Cabal computes at build time, so `assemble.nix` reads it out
@@ -50,6 +52,11 @@ let
     "RTS ways" = "v";
     "Relative Global Package DB" = "package.conf.d";
     "unlit command" = "$topdir/../bin/unlit";
+  }
+  # A tree that reads `settings.json` has had the toolchain facts moved into
+  # `lib/targets/default.target`, so these are no longer read from here at
+  # all. Keeping them would be writing keys nothing looks up.
+  // lib.optionalAttrs (!typedSettings) {
     "cross compiling" = if stdenv.buildPlatform != stdenv.hostPlatform then "YES" else "NO";
     "target has libm" = if stdenv.hostPlatform.isUnix then "YES" else "NO";
     "Use inplace MinGW toolchain" = "NO";
@@ -57,6 +64,11 @@ let
     "RTS expects libdw" = "NO";
     "target RTS linker only supports shared libraries" = "NO";
   };
+
+  # `Use interpreter` is the one boolean the compiler still reads from the
+  # settings file. Typed trees read it with `getRawBooleanSetting`, which
+  # rejects a string outright, so the two spellings are not interchangeable.
+  useInterpreter = b: if typedSettings then b else (if b then "YES" else "NO");
 
   # The libraries the shipped compiler registers. Named rather than taken
   # wholesale, because the set now contains all of Hackage.
@@ -131,7 +143,7 @@ let
       # disagree the link fails with `cannot find -lHSghc-internal-...`.
       version = ghcVersion.ghcSrc.release_version;
       inherit (ghcVersion) ghcSrc;
-      inherit toolchainSettings buildGhcPkg;
+      inherit toolchainSettings buildGhcPkg typedSettings;
       inherit (packages) ghc-bin ghc-pkg;
     }
     // (
@@ -140,7 +152,7 @@ let
           # stage1 ships no libraries, so it has no interpreter and no `base` to
           # take a unit-id from.
           buildStateSettings = buildStateSettings // {
-            "Use interpreter" = "NO";
+            "Use interpreter" = useInterpreter false;
             "base unit-id" = "base";
           };
           # Build-hosted: stage1 only ever runs here.
@@ -149,7 +161,7 @@ let
       else
         {
           buildStateSettings = buildStateSettings // {
-            "Use interpreter" = "YES";
+            "Use interpreter" = useInterpreter true;
             # Replaced at build time from the registered package.conf.
             "base unit-id" = "base";
           };

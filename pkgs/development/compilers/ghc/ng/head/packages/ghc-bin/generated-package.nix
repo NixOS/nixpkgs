@@ -17,7 +17,7 @@
 }:
 mkDerivation {
   pname = "ghc-bin";
-  version = "9.15.20260322";
+  version = "9.15.20260901";
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [

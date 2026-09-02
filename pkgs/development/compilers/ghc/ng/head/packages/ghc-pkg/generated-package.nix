@@ -9,6 +9,7 @@
   Cabal-syntax,
   containers,
   directory,
+  file-io,
   filepath,
   ghc-boot,
   ghc-toolchain,
@@ -18,7 +19,7 @@
 }:
 mkDerivation {
   pname = "ghc-pkg";
-  version = "9.15.20260322";
+  version = "9.15.20260901";
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
@@ -29,6 +30,7 @@ mkDerivation {
     Cabal-syntax
     containers
     directory
+    file-io
     filepath
     ghc-boot
     ghc-toolchain

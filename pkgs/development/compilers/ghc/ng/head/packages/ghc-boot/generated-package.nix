@@ -9,11 +9,13 @@
   containers,
   deepseq,
   directory,
+  file-io,
   filepath,
   ghc-boot-th,
   ghc-platform,
   ghc-toolchain,
   lib,
+  os-string,
   unix,
 }:
 mkDerivation {
@@ -32,10 +34,12 @@ mkDerivation {
     containers
     deepseq
     directory
+    file-io
     filepath
     ghc-boot-th
     ghc-platform
     ghc-toolchain
+    os-string
     unix
   ];
   description = "Shared functionality between GHC and its boot libraries";

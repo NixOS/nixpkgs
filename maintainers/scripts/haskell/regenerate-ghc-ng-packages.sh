@@ -170,6 +170,18 @@ for entry in "${PACKAGES[@]}"; do
   #   -interpreter  stage2, with GHCi's evaluator compiled into the compiler.
   #                 `ghc-bin` then gains `ghci` and `haskeline`; without it
   #                 Template Haskell does not work.
+  #
+  # 9.15 split that second one in two: `internal-interpreter` now only sets
+  # `-DHAVE_INTERNAL_INTERPRETER`, while the GHCi UI and the six dependencies
+  # that come with it moved to a new `interpreter` flag. Hadrian passes both
+  # for a native `ghc-bin` (`Settings.Packages`), so we do too. Detected from
+  # the `.cabal` rather than keyed off the version, since only `ghc-bin` has
+  # the flag and only from 9.15 -- passing it to a tree without it would
+  # silently generate the wrong dependency list.
+  interpreterFlags=(--flag=internal-interpreter)
+  if grep -qiE '^Flag +interpreter *$' "$pkgdir"/*.cabal "$pkgdir"/*.cabal.in 2>/dev/null; then
+    interpreterFlags+=(--flag=interpreter)
+  fi
   case "$name" in
     ghc-boot|ghci|ghc|ghc-boot-th-next)
       if v=$(cabal2nix "${baseFlags[@]}" --flag=bootstrap "$pkgdir" 2>/dev/null); then
@@ -180,7 +192,7 @@ for entry in "${PACKAGES[@]}"; do
   esac
   case "$name" in
     ghc|ghc-bin|ghci)
-      if v=$(cabal2nix "${baseFlags[@]}" --flag=internal-interpreter "$pkgdir" 2>/dev/null); then
+      if v=$(cabal2nix "${baseFlags[@]}" "${interpreterFlags[@]}" "$pkgdir" 2>/dev/null); then
         printf '%s\n' "$v" | writeGenerated "$OUT/$name/generated-package-interpreter.nix"
         echo "  ok   $name (interpreter)" >&2
       fi

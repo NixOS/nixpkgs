@@ -9,7 +9,7 @@
 }:
 mkDerivation {
   pname = "template-haskell";
-  version = "2.24.0.0";
+  version = "2.25.0.0";
   libraryHaskellDepends = [
     base
     ghc-boot-th

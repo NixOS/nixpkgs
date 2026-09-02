@@ -6,6 +6,7 @@
 {
   lib,
   callPackage,
+  fetchpatch,
   ghcVersions ? { },
   ...
 }@packageSetArgs:
@@ -19,11 +20,23 @@ let
     "9.14.1".officialRelease.testsuiteSha256 = "1va5ls4ng32hq8236w2aq5k0gjwxzdmwgfjf6b8z7pgpy0hzrbl4";
 
     "9.15".setupCabalVersion = "3_16_1_0";
+    "9.15".typedSettings = true;
+    # Tree-wide, so it belongs here rather than in `head/packages/`. It is the
+    # change this package set has been carrying as four hand-maintained patches;
+    # taking it from the branch it was submitted on keeps the two in step, and
+    # the snapshot below is pinned to its parent so it applies exactly.
+    "9.15".patches = [
+      (fetchpatch {
+        name = "settings-json-scalars.patch";
+        url = "https://gitlab.haskell.org/obsidiansystems/ghc/-/commit/f6c9436a55f5835702ffe70bf54b89aa98d909ee.diff";
+        hash = "sha256-Tvo951det5L3CpXAPYQBEW27aXwiGaBw4wQgEySX+5E=";
+      })
+    ];
     "9.15".gitRelease = {
-      version = "9.15.20260322";
-      date = "2026-03-22";
-      rev = "44f118f09dcde49f64d03e427312df4732f2d4a4";
-      sha256 = "sha256-xby7HKyK5P1Y5DjKbVe62piDCY4Ujb4pbv8AJ7sQ0HI=";
+      version = "9.15.20260901";
+      date = "2026-09-01";
+      rev = "44d7788f24e7475abd28019833b90ab8eff23ee5";
+      sha256 = "sha256-GdoRLR5mqH/QhDsroQlMmryk0c10WSs6Uc8e8eFTRyc=";
     };
   }
   // ghcVersions;
@@ -35,6 +48,8 @@ let
       gitRelease ? null,
       version ? null,
       setupCabalVersion ? "3_12_1_0",
+      typedSettings ? false,
+      patches ? [ ],
     }@args:
     let
       inherit
@@ -62,6 +77,8 @@ let
             gitRelease
             version
             setupCabalVersion
+            typedSettings
+            patches
             ;
         }
         // packageSetArgs # Allow overrides.

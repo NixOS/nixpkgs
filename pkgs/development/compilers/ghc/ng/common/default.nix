@@ -21,6 +21,15 @@
 
   # See the note on `setupCabalVersion` in ./overlay.nix.
   setupCabalVersion ? "3_12_1_0",
+
+  # Whether this tree reads `lib/settings.json` -- a flat JSON object whose
+  # values carry their types -- rather than the older `lib/settings`, which was
+  # the `show` of a `[(String, String)]` with booleans spelled "YES"/"NO".
+  #
+  # Version-conditional only because the change is newer than 9.14. It also
+  # implies the settings file is *small*: the toolchain half now lives in
+  # `lib/targets/default.target`, so only build-state facts are left here.
+  typedSettings ? false,
   ...
 }:
 
@@ -52,7 +61,7 @@ let
 in
 {
   inherit (releaseInfo) version release_version;
-  inherit versionDir setupCabalVersion;
+  inherit versionDir setupCabalVersion typedSettings;
   inherit ghc_meta;
 
   # The generated expressions for this version. cabal2nix bakes the version

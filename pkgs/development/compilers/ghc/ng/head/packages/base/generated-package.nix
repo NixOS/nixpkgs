@@ -8,7 +8,7 @@
 }:
 mkDerivation {
   pname = "base";
-  version = "4.22.0.0";
+  version = "4.23.0.0";
   libraryHaskellDepends = [
     ghc-internal
     ghc-prim

@@ -49,6 +49,11 @@
   # Reading it at eval time would mean import-from-derivation.
   buildStateSettings,
 
+  # See `typedSettings` in ../default.nix. Such a tree reads `lib/settings.json`
+  # rather than `lib/settings`; the name is part of the format change, so the
+  # two must move together.
+  typedSettings ? false,
+
   jq,
 
   # Libraries to register, as a list of derivations whose package.conf.d
@@ -68,6 +73,7 @@ let
   # unprefixed: it is a compiler for the build platform in its own right.
   ghcPkgCmd =
     if buildGhcPkg == null then "$out/bin/${targetPrefix}ghc-pkg" else "${buildGhcPkg}/bin/ghc-pkg";
+  settingsFile = if typedSettings then "settings.json" else "settings";
 in
 runCommand "ghc-${version}"
   {
@@ -177,11 +183,11 @@ runCommand "ghc-${version}"
         echo "base unit-id: $baseUnitId"
         jq -s --arg baseUnitId "$baseUnitId" \
           '.[0] * .[1] * {"base unit-id": $baseUnitId}' \
-          "${toolchainSettings}/settings.json" build-state.json > "$out/lib/settings"
+          "${toolchainSettings}/settings.json" build-state.json > "$out/lib/${settingsFile}"
       else
         echo "no base registered; keeping the base unit-id from buildStateSettings"
         jq -s '.[0] * .[1]' \
-          "${toolchainSettings}/settings.json" build-state.json > "$out/lib/settings"
+          "${toolchainSettings}/settings.json" build-state.json > "$out/lib/${settingsFile}"
       fi
 
       ${ghcPkgCmd} recache --package-db "$out/lib/package.conf.d"

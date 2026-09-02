@@ -23,8 +23,11 @@
 }:
 mkDerivation {
   pname = "ghc-bin";
-  version = "9.15.20260322";
-  configureFlags = [ "-finternal-interpreter" ];
+  version = "9.15.20260901";
+  configureFlags = [
+    "-finternal-interpreter"
+    "-finterpreter"
+  ];
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
