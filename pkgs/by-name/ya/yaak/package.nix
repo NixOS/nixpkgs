@@ -33,25 +33,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yaak";
-  version = "2026.6.0";
+  version = "2026.7.1";
 
   src = fetchFromGitHub {
     owner = "mountain-loop";
     repo = "yaak";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uMfa1lDJ/F2uqXSQZCKAd8gQR5FwTc2bkGaci9ooldY=";
+    hash = "sha256-SGyfIyYRf47ai3iu2GZOf+sindKRERv7sGbPDtL0/fc=";
   };
 
   npmDeps = fetchNpmDeps {
-    inherit (finalAttrs) src;
-    hash = "sha256-e4Ju4axd08LDDwnISMqMLXX2SuBQY0qSEdPQo1aXcCg=";
+    inherit (finalAttrs) src patches;
+    hash = "sha256-wU+kmNBHgRfCAl31Bw3ztCCekHKM6h42+CQh6kcsuRQ=";
     fetcherVersion = 2;
   };
 
-  cargoHash = "sha256-jkNW5VogUus1lS9z0SiUXnqBXWdex7aUF/89MC52Mjg=";
+  cargoHash = "sha256-CBrbdNbCTiW19Nj7oToJ8luYZK03YTGxjIyPN45UKpo=";
 
   cargoRoot = ".";
   buildAndTestSubdir = "crates-tauri/yaak-app-client";
+
+  patches = [ ./package-lock.patch ];
 
   nativeBuildInputs = [
     cargo-tauri.hook

@@ -1,0 +1,74 @@
+diff --git a/package-lock.json b/package-lock.json
+index 374210c9..537f44d4 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -201,6 +201,8 @@
+     },
+     "apps/yaak-client/node_modules/@types/node": {
+       "version": "24.12.0",
++      "resolved": "https://registry.npmjs.org/@types/node/-/node-24.12.0.tgz",
++      "integrity": "sha512-GYDxsZi3ChgmckRT9HPU0WEhKLP08ev/Yfcq2AstjrDASOYCSXeyjDsHg4v5t4jOj7cyDX3vmprafKlWIG9MXQ==",
+       "dev": true,
+       "license": "MIT",
+       "dependencies": {
+@@ -210,6 +212,8 @@
+     },
+     "apps/yaak-client/node_modules/nanoid": {
+       "version": "5.1.16",
++      "resolved": "https://registry.npmjs.org/nanoid/-/nanoid-5.1.16.tgz",
++      "integrity": "sha512-kVrnsrJqMR8+oLJnGEmSWw9BivK5mt7H3FZatVRjrc5wGqFYuBxX1yG7+A7Gi5AefkX6t/oCkizcQgpu0cY1dQ==",
+       "funding": [
+         {
+           "type": "github",
+@@ -225,11 +229,15 @@
+     },
+     "apps/yaak-client/node_modules/undici-types": {
+       "version": "7.16.0",
++      "resolved": "https://registry.npmjs.org/undici-types/-/undici-types-7.16.0.tgz",
++      "integrity": "sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==",
+       "dev": true,
+       "license": "MIT"
+     },
+     "apps/yaak-client/node_modules/uuid": {
+       "version": "14.0.0",
++      "resolved": "https://registry.npmjs.org/uuid/-/uuid-14.0.0.tgz",
++      "integrity": "sha512-Qo+uWgilfSmAhXCMav1uYFynlQO7fMFiMVZsQqZRMIXp0O7rR7qjkj+cPvBHLgBqi960QCoo/PH2/6ZtVqKvrg==",
+       "funding": [
+         "https://github.com/sponsors/broofa",
+         "https://github.com/sponsors/ctavan"
+@@ -15848,6 +15856,8 @@
+     },
+     "packages/plugin-runtime/node_modules/@types/node": {
+       "version": "24.13.2",
++      "resolved": "https://registry.npmjs.org/@types/node/-/node-24.13.2.tgz",
++      "integrity": "sha512-fRa09kZTgu8o71KFcDjUFuc7F+dEbZYZmkI0mg5YBTRs0yMKjYHsq/c0urDKeDb+D5qVgXOdFcuu+DZPKOITwA==",
+       "dev": true,
+       "license": "MIT",
+       "dependencies": {
+@@ -15856,6 +15866,8 @@
+     },
+     "packages/plugin-runtime/node_modules/undici-types": {
+       "version": "7.18.2",
++      "resolved": "https://registry.npmjs.org/undici-types/-/undici-types-7.18.2.tgz",
++      "integrity": "sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w==",
+       "dev": true,
+       "license": "MIT"
+     },
+@@ -15892,6 +15904,8 @@
+     },
+     "plugins-external/faker/node_modules/@faker-js/faker": {
+       "version": "10.3.0",
++      "resolved": "https://registry.npmjs.org/@faker-js/faker/-/faker-10.3.0.tgz",
++      "integrity": "sha512-It0Sne6P3szg7JIi6CgKbvTZoMjxBZhcv91ZrqrNuaZQfB5WoqYYbzCUOq89YR+VY8juY9M1vDWmDDa2TzfXCw==",
+       "funding": [
+         {
+           "type": "opencollective",
+@@ -15918,6 +15932,8 @@
+     },
+     "plugins-external/httpsnippet/node_modules/@types/node": {
+       "version": "22.19.15",
++      "resolved": "https://registry.npmjs.org/@types/node/-/node-22.19.15.tgz",
++      "integrity": "sha512-F0R/h2+dsy5wJAUe3tAU6oqa2qbWY5TpNfL/RGmo1y38hiyO1w3x2jPtt76wmuaJI4DQnOBu21cNXQ2STIUUWg==",
+       "dev": true,
+       "license": "MIT",
+       "dependencies": {
