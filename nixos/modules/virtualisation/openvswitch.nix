@@ -64,9 +64,22 @@ in
 
       boot.extraModulePackages = [ cfg.package ];
 
+      systemd.sockets.ovsdb = {
+        description = "Open_vSwitch Database Socket";
+        wantedBy = [ "sockets.target" ];
+        before = [ "ovsdb.service" ];
+        socketConfig = {
+          ListenStream = "${runDir}/db.sock";
+          Service = "ovsdb.service";
+          SocketMode = "0770";
+        };
+      };
+
       systemd.services.ovsdb = {
         description = "Open_vSwitch Database Server";
         wantedBy = [ "multi-user.target" ];
+        requires = [ "ovsdb.socket" ];
+        after = [ "ovsdb.socket" ];
         path = [ cfg.package ];
         restartTriggers = [
           db
@@ -95,7 +108,7 @@ in
         serviceConfig = {
           ExecStart = ''
             ${cfg.package}/bin/ovsdb-server \
-              --remote=punix:${runDir}/db.sock \
+              --remote=pfd:3 \
               --private-key=db:Open_vSwitch,SSL,private_key \
               --certificate=db:Open_vSwitch,SSL,certificate \
               --bootstrap-ca-cert=db:Open_vSwitch,SSL,ca_cert \
@@ -119,8 +132,8 @@ in
       systemd.services.ovs-vswitchd = {
         description = "Open_vSwitch Daemon";
         wantedBy = [ "multi-user.target" ];
-        bindsTo = [ "ovsdb.service" ];
-        after = [ "ovsdb.service" ];
+        requires = [ "ovsdb.socket" ];
+        after = [ "ovsdb.socket" ];
         path = [ cfg.package ];
         serviceConfig = {
           ExecStart = ''
