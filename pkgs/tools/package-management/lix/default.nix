@@ -216,23 +216,7 @@ lib.makeExtensible (
     lix_2_95 = self.makeLixScope {
       attrName = "lix_2_95";
 
-      lix-args = rec {
-        version = "2.95.2";
-
-        src = fetchFromGitea {
-          domain = "git.lix.systems";
-          owner = "lix-project";
-          repo = "lix";
-          rev = version;
-          hash = "sha256-nFxJMIdcGTI9NiHAa5HZ2BmcGFLwC2pTq+V4Gjc499I=";
-        };
-
-        cargoDeps = rustPlatform.fetchCargoVendor {
-          name = "lix-${version}";
-          inherit src;
-          hash = "sha256-a5XtutX+NS4wOqxeqbscWZMs99teKick5+cQfbCRGxQ=";
-        };
-
+      lix-args = (import ./2.95.nix { inherit fetchFromGitea rustPlatform; }) // {
         patches = [
           lixFunctional2TimeoutPatch
         ];
