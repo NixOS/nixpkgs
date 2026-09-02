@@ -1,8 +1,11 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildGoModule,
+  buildPackages,
   installShellFiles,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -20,7 +23,10 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "cmd/circleci" ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    writableTmpDirAsHomeHook
+  ];
 
   doCheck = false;
 
@@ -30,15 +36,20 @@ buildGoModule (finalAttrs: {
     "-X main.version=${finalAttrs.version}"
   ];
 
-  postInstall = ''
-    installShellCompletion --cmd circleci \
-      --bash <(HOME=$TMPDIR $out/bin/circleci completion bash) \
-      --zsh <(HOME=$TMPDIR $out/bin/circleci completion zsh) \
-      --fish <(HOME=$TMPDIR $out/bin/circleci completion fish)
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd circleci \
+        --bash <(${emulator} $out/bin/circleci completion bash) \
+        --zsh <(${emulator} $out/bin/circleci completion zsh) \
+        --fish <(${emulator} $out/bin/circleci completion fish)
 
-    HOME=$TMPDIR $out/bin/circleci man --output $TMPDIR/circleci.1
-    installManPage $TMPDIR/circleci.1
-  '';
+      ${emulator} $out/bin/circleci man --output $TMPDIR/circleci.1
+      installManPage $TMPDIR/circleci.1
+    ''
+  );
 
   meta = {
     # Box blurb edited from the AUR package circleci-cli
