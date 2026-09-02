@@ -14,6 +14,11 @@ let
     value = lib.singleton k;
   }) hosts;
 
+  hostsDns = {
+    type = "hosts";
+    tag = "dns:hosts";
+  };
+
   vmessPort = 1080;
   vmessUUID = "bf000d23-0752-40b4-affe-68f7707a9661";
   vmessInbound = {
@@ -255,6 +260,10 @@ in
         services.sing-box = {
           enable = true;
           settings = {
+            dns = {
+              final = hostsDns.tag;
+              servers = [ hostsDns ];
+            };
             inbounds = [
               tunInbound
             ];
@@ -270,6 +279,7 @@ in
               vmessOutbound
             ];
             route = {
+              default_domain_resolver = hostsDns.tag;
               default_interface = "eth1";
               final = "outbound:block";
               rules = [
@@ -314,6 +324,10 @@ in
         services.sing-box = {
           enable = true;
           settings = {
+            dns = {
+              final = hostsDns.tag;
+              servers = [ hostsDns ];
+            };
             inbounds = [
               tunInbound
             ];
@@ -341,6 +355,7 @@ in
               }
             ];
             route = {
+              default_domain_resolver = hostsDns.tag;
               default_interface = "eth1";
               final = "outbound:block";
               rules = [
@@ -386,6 +401,10 @@ in
         services.sing-box = {
           enable = true;
           settings = {
+            dns = {
+              final = hostsDns.tag;
+              servers = [ hostsDns ];
+            };
             inbounds = [
               {
                 tag = "inbound:tproxy";
@@ -407,6 +426,7 @@ in
               vmessOutbound
             ];
             route = {
+              default_domain_resolver = hostsDns.tag;
               default_interface = "eth1";
               final = "outbound:block";
               rules = [
