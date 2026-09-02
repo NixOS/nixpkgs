@@ -16,6 +16,7 @@ cernlib.section.md
 check-phase-thread-limit-hook.section.md
 cmake.section.md
 desktop-file-utils.section.md
+desktop-to-darwin-bundle.md
 gdk-pixbuf.section.md
 gnome.section.md
 haredo.section.md
