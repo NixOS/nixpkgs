@@ -1,0 +1,143 @@
+{
+  alsa-lib,
+  boost,
+  chromaprint,
+  cmake,
+  fetchFromGitHub,
+  fftw,
+  glib-networking,
+  gnutls,
+  gst_all_1,
+  kdsingleapplication,
+  lib,
+  libxdmcp,
+  libcdio,
+  libebur128,
+  libidn2,
+  libmtp,
+  libpthread-stubs,
+  libpulseaudio,
+  libselinux,
+  libsepol,
+  libtasn1,
+  ninja,
+  nix-update-script,
+  p11-kit,
+  pkg-config,
+  qt6,
+  sqlite,
+  stdenv,
+  taglib,
+  util-linux,
+  sparsehash,
+
+  # tests
+  gtest,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "strawberry";
+  version = "1.2.21";
+
+  src = fetchFromGitHub {
+    owner = "strawberrymusicplayer";
+    repo = "strawberry";
+    rev = finalAttrs.finalPackage.version;
+    hash = "sha256-FI+lyVx9x82o2HZ9YysIlPsSAl94YUD8nrHP0HsmO2E=";
+  };
+
+  patches = [
+    # Link tests against missing gstreamer app
+    # https://github.com/strawberrymusicplayer/strawberry/pull/2252
+    ./strawberry-tests-link-gst-app.patch
+  ];
+
+  # the big strawberry shown in the context menu is *very* much in your face, so use the grey version instead
+  postPatch = ''
+    substituteInPlace src/context/contextalbum.cpp \
+      --replace-fail pictures/strawberry.png pictures/strawberry-grey.png
+  '';
+
+  buildInputs = [
+    alsa-lib
+    boost
+    chromaprint
+    fftw
+    gnutls
+    kdsingleapplication
+    libxdmcp
+    libcdio
+    libebur128
+    libidn2
+    libmtp
+    libpthread-stubs
+    libtasn1
+    qt6.qtbase
+    sqlite
+    taglib
+    sparsehash
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libpulseaudio
+    libselinux
+    libsepol
+    p11-kit
+  ]
+  ++ (with gst_all_1; [
+    glib-networking
+    gst-libav
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gst-plugins-rs
+    gstreamer
+  ]);
+
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+    qt6.qttools
+    qt6.wrapQtAppsHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    util-linux
+  ];
+
+  cmakeFlags = [ (lib.cmakeBool "ENABLE_GPOD" false) ];
+
+  checkInputs = [ gtest ];
+  checkTarget = "strawberry_tests";
+  preCheck = ''
+    # defaults to "xcb" otherwise, which requires a display
+    export QT_QPA_PLATFORM=offscreen
+
+    # The waveformloader test calls QStandardPaths::setTestModeEnabled(true) which
+    # expects a writable $HOME
+    # https://doc.qt.io/qt-6/qstandardpaths.html#setTestModeEnabled
+    # https://github.com/strawberrymusicplayer/strawberry/blob/dc831c03bd5863f133dd9f57eba75dafb27e5cf8/tests/src/waveformloader_test.cpp#L67
+    export HOME=$(mktemp -d)
+  '';
+  doCheck = true;
+
+  postInstall = ''
+    qtWrapperArgs+=(
+      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
+      --prefix GIO_EXTRA_MODULES : "${glib-networking.out}/lib/gio/modules"
+    )
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Music player and music collection organizer";
+    homepage = "https://www.strawberrymusicplayer.org/";
+    changelog = "https://raw.githubusercontent.com/jonaski/strawberry/${finalAttrs.finalPackage.version}/Changelog";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    # upstream says darwin should work but they lack maintainers as of 0.6.6
+    platforms = lib.platforms.linux;
+    mainProgram = "strawberry";
+  };
+})

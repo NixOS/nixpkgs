@@ -1,0 +1,29 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1fa4d96..ac4dd0e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -641,7 +641,6 @@ endif()
+ 
+ # Install headers
+ set(CMAKE_INSTALL_INCLUDEDIR ${CMAKE_INSTALL_INCLUDEDIR}/openblas${SUFFIX64})
+-set(CMAKE_INSTALL_FULL_INCLUDEDIR ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR})
+ 
+ message(STATUS "Generating openblas_config.h in ${CMAKE_INSTALL_INCLUDEDIR}")
+ 
+diff --git a/cmake/system.cmake b/cmake/system.cmake
+index f16be31..d75d1ce 100644
+--- a/cmake/system.cmake
++++ b/cmake/system.cmake
+@@ -431,8 +431,10 @@ include("${PROJECT_SOURCE_DIR}/cmake/arch.cmake")
+ include("${PROJECT_SOURCE_DIR}/cmake/cc.cmake")
+ 
+ if (INTERFACE64)
+-  set(SUFFIX64 64)
+-  set(SUFFIX64_UNDERSCORE _64)
++  if (NOT NO_SUFFIX64)
++    set(SUFFIX64 64)
++    set(SUFFIX64_UNDERSCORE _64)
++  endif()
+ endif()
+ 
+ if (NOT NOFORTRAN)

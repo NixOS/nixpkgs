@@ -1,0 +1,62 @@
+From 2f9eeaad3f7bd38518b23a59659ccf02fff19577 Mon Sep 17 00:00:00 2001
+From: florian <florian@harfanglab.fr>
+Date: Thu, 28 Aug 2025 09:57:14 +0200
+Subject: [PATCH] fix: remove delete event_loop fixture
+
+Signed-off-by: florian <florian@harfanglab.fr>
+---
+ .../test_async/test_transport.py              | 20 +++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/test_opensearchpy/test_async/test_transport.py b/test_opensearchpy/test_async/test_transport.py
+index 51388dddb..34ae41b4e 100644
+--- a/test_opensearchpy/test_async/test_transport.py
++++ b/test_opensearchpy/test_async/test_transport.py
+@@ -439,7 +439,9 @@ async def test_sniff_on_fail_failing_does_not_prevent_retires(
+         assert 1 == len(conn_err.calls)
+         assert 1 == len(conn_data.calls)
+ 
+-    async def test_sniff_after_n_seconds(self, event_loop: Any) -> None:
++    async def test_sniff_after_n_seconds(self) -> None:
++        event_loop = asyncio.get_event_loop()
++
+         t: Any = AsyncTransport(
+             [{"data": CLUSTER_NODES}],
+             connection_class=DummyConnection,
+@@ -493,9 +495,7 @@ async def test_transport_close_closes_all_pool_connections(self) -> None:
+         await t2.close()
+         assert all([conn.closed for conn in t2.connection_pool.connections])
+ 
+-    async def test_sniff_on_start_error_if_no_sniffed_hosts(
+-        self, event_loop: Any
+-    ) -> None:
++    async def test_sniff_on_start_error_if_no_sniffed_hosts(self) -> None:
+         t: Any = AsyncTransport(
+             [
+                 {"data": ""},
+@@ -512,9 +512,9 @@ async def test_sniff_on_start_error_if_no_sniffed_hosts(
+             await t._async_call()
+         assert str(e.value) == "TransportError(N/A, 'Unable to sniff hosts.')"
+ 
+-    async def test_sniff_on_start_waits_for_sniff_to_complete(
+-        self, event_loop: Any
+-    ) -> None:
++    async def test_sniff_on_start_waits_for_sniff_to_complete(self) -> None:
++        event_loop = asyncio.get_event_loop()
++
+         t: Any = AsyncTransport(
+             [
+                 {"delay": 1, "data": ""},
+@@ -550,9 +550,9 @@ async def test_sniff_on_start_waits_for_sniff_to_complete(
+         # and then resolved immediately after.
+         assert 1 <= duration < 2
+ 
+-    async def test_sniff_on_start_close_unlocks_async_calls(
+-        self, event_loop: Any
+-    ) -> None:
++    async def test_sniff_on_start_close_unlocks_async_calls(self) -> None:
++        event_loop = asyncio.get_event_loop()
++
+         t: Any = AsyncTransport(
+             [
+                 {"delay": 10, "data": CLUSTER_NODES},

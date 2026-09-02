@@ -1,0 +1,868 @@
+{
+  "hotspot": {
+    "alpine-linux": {
+      "jdk": {
+        "openjdk11": {
+          "packageType": "jdk",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "1dc1d3259fa4ca7a2db43c539a60bfa7fc0ea595f445a71ef36d28120f3094aa",
+            "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32.1%2B1/OpenJDK11U-jdk_x64_alpine-linux_hotspot_11.0.32.1_1.tar.gz",
+            "version": "11.0.32"
+          }
+        },
+        "openjdk17": {
+          "packageType": "jdk",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "0c4fcdefa2737ccd66e049245fdb9dc431f91796182141204cd5f8192cb288e6",
+            "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.20.1%2B1/OpenJDK17U-jdk_x64_alpine-linux_hotspot_17.0.20.1_1.tar.gz",
+            "version": "17.0.20"
+          }
+        },
+        "openjdk21": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "8242627927adc90ac2561d0812dd39890ebc21ef09b550bc2e8b93640b8af4f8",
+            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jdk_aarch64_alpine-linux_hotspot_21.0.12.1_1.tar.gz",
+            "version": "21.0.12"
+          },
+          "packageType": "jdk",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "bd8824214e42b33333c7f55a039ea078ad6ea6be20d7c5b011c801fb2bdb44f0",
+            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jdk_x64_alpine-linux_hotspot_21.0.12.1_1.tar.gz",
+            "version": "21.0.12"
+          }
+        },
+        "openjdk25": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "8d19373d427017d86ac87cf6a47ba49746be864832f60b52b7e3b1531c6b2cb8",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jdk_aarch64_alpine-linux_hotspot_25.0.4.1_1.tar.gz",
+            "version": "25.0.4"
+          },
+          "packageType": "jdk",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "f18648ee5ce45261f50dc9493fdae7ddebaa2a7a857cafda3e2a448a79c03dee",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jdk_x64_alpine-linux_hotspot_25.0.4.1_1.tar.gz",
+            "version": "25.0.4"
+          }
+        },
+        "openjdk26": {
+          "aarch64": {
+            "build": "10",
+            "sha256": "bee481d4ba078ac1aaa741541bb0b99de876d679ccc80f9685710b72bc7b04f1",
+            "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2%2B10/OpenJDK26U-jdk_aarch64_alpine-linux_hotspot_26.0.2_10.tar.gz",
+            "version": "26.0.2"
+          },
+          "packageType": "jdk",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "10",
+            "sha256": "88caf27ab9f2a15a52a114ea18fa20c518ccc325b5ba4bb5fd6c42c56b581498",
+            "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2%2B10/OpenJDK26U-jdk_x64_alpine-linux_hotspot_26.0.2_10.tar.gz",
+            "version": "26.0.2"
+          }
+        },
+        "openjdk8": {
+          "packageType": "jdk",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "7",
+            "sha256": "746bc5577ca2067bf2a96a0ae0f6cf50422f9cb7b5aa58a52e9fceabff5d0619",
+            "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u502-b07/OpenJDK8U-jdk_x64_alpine-linux_hotspot_8u502b07.tar.gz",
+            "version": "8.0.502"
+          }
+        }
+      },
+      "jmods": {
+        "openjdk25": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "b3c364e085bcbd0511aa09998adeeb13ad15b6ae7fd67bd537e8835490846f45",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jmods_aarch64_alpine-linux_hotspot_25.0.4.1_1.tar.gz",
+            "version": "25.0.4"
+          },
+          "packageType": "jmods",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "a1f6aedda39de5f55a4a600dfb1af1456e780d2a3fb672a51f5d9d57fa227257",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jmods_x64_alpine-linux_hotspot_25.0.4.1_1.tar.gz",
+            "version": "25.0.4"
+          }
+        },
+        "openjdk26": {
+          "aarch64": {
+            "build": "10",
+            "sha256": "365d9b76959a386dbec68a1518b7b55b32ebd2885a8326dfced4f8ead543860a",
+            "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2%2B10/OpenJDK26U-jmods_aarch64_alpine-linux_hotspot_26.0.2_10.tar.gz",
+            "version": "26.0.2"
+          },
+          "packageType": "jmods",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "10",
+            "sha256": "0b275f0d5dbc4f0e5f5d65be8bfe73fc9c97d5e1f3391831a929ec9a1bba5cd9",
+            "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2%2B10/OpenJDK26U-jmods_x64_alpine-linux_hotspot_26.0.2_10.tar.gz",
+            "version": "26.0.2"
+          }
+        }
+      },
+      "jre": {
+        "openjdk11": {
+          "packageType": "jre",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "bb9951aab1dcd0f6c2b22d76a46773100a6639ad199f339ff288d360b3217ae2",
+            "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32.1%2B1/OpenJDK11U-jre_x64_alpine-linux_hotspot_11.0.32.1_1.tar.gz",
+            "version": "11.0.32"
+          }
+        },
+        "openjdk17": {
+          "packageType": "jre",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "72423b1464907857f4e7ca854a2b8fd9f7cf6b9dd15bd3ea31ef6cf33b097aea",
+            "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.20.1%2B1/OpenJDK17U-jre_x64_alpine-linux_hotspot_17.0.20.1_1.tar.gz",
+            "version": "17.0.20"
+          }
+        },
+        "openjdk21": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "98e15ae359e1f87160ee4c0abb43336513e41712d439fd4a805a5474af32b2c7",
+            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jre_aarch64_alpine-linux_hotspot_21.0.12.1_1.tar.gz",
+            "version": "21.0.12"
+          },
+          "packageType": "jre",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "7bc7c2f9ba5ffea5f727e14581964bd54294b8edc2be9a79ea6393f8d0799200",
+            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jre_x64_alpine-linux_hotspot_21.0.12.1_1.tar.gz",
+            "version": "21.0.12"
+          }
+        },
+        "openjdk25": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "0200539904de3669dce5c435aa1ef71f530325d6461c76d85fe90d5424e4974e",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jre_aarch64_alpine-linux_hotspot_25.0.4.1_1.tar.gz",
+            "version": "25.0.4"
+          },
+          "packageType": "jre",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "cde9e39d32cab07722cb3218d91980091012f16333f8a298c40896cd05e2ffea",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jre_x64_alpine-linux_hotspot_25.0.4.1_1.tar.gz",
+            "version": "25.0.4"
+          }
+        },
+        "openjdk26": {
+          "aarch64": {
+            "build": "10",
+            "sha256": "700193f55adf1f5c65aba6276e003edd97f7e1b5c6693718afffe7c82ad004cc",
+            "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2%2B10/OpenJDK26U-jre_aarch64_alpine-linux_hotspot_26.0.2_10.tar.gz",
+            "version": "26.0.2"
+          },
+          "packageType": "jre",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "10",
+            "sha256": "fcfa7c2b3502fd8bd256c75320655c50b7114efa0f4931ad3ba8fcbb331fe18c",
+            "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2%2B10/OpenJDK26U-jre_x64_alpine-linux_hotspot_26.0.2_10.tar.gz",
+            "version": "26.0.2"
+          }
+        },
+        "openjdk8": {
+          "packageType": "jre",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "7",
+            "sha256": "39d17b519d925e2a979056d800e712b4d5f8b68112413ab1d06f525c1571c164",
+            "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u502-b07/OpenJDK8U-jre_x64_alpine-linux_hotspot_8u502b07.tar.gz",
+            "version": "8.0.502"
+          }
+        }
+      }
+    },
+    "linux": {
+      "jdk": {
+        "openjdk11": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "f27033e6f7523c1b0b2565a78e9c0e0abe5596a854ce00ca04ec1b06ece7a935",
+            "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32.1%2B1/OpenJDK11U-jdk_aarch64_linux_hotspot_11.0.32.1_1.tar.gz",
+            "version": "11.0.32"
+          },
+          "armv6l": {
+            "build": "1",
+            "sha256": "95cd974d9155650255cb8747a44df8170b00f932ac7f63fec0598bf2ea5706e0",
+            "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32.1%2B1/OpenJDK11U-jdk_arm_linux_hotspot_11.0.32.1_1.tar.gz",
+            "version": "11.0.32"
+          },
+          "armv7l": {
+            "build": "1",
+            "sha256": "95cd974d9155650255cb8747a44df8170b00f932ac7f63fec0598bf2ea5706e0",
+            "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32.1%2B1/OpenJDK11U-jdk_arm_linux_hotspot_11.0.32.1_1.tar.gz",
+            "version": "11.0.32"
+          },
+          "packageType": "jdk",
+          "powerpc64le": {
+            "build": "9",
+            "sha256": "e662ceae8e93c1754f31f444a2fc7089add9a77b62d8aea29af50409ca111cec",
+            "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32%2B9/OpenJDK11U-jdk_ppc64le_linux_hotspot_11.0.32_9.tar.gz",
+            "version": "11.0.32"
+          },
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "5c3f68887c325d36d852ba534303e1f5f1f5cae7d6cc1e951d73e0d8e98a058d",
+            "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32.1%2B1/OpenJDK11U-jdk_x64_linux_hotspot_11.0.32.1_1.tar.gz",
+            "version": "11.0.32"
+          }
+        },
+        "openjdk17": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "457b57af8f9c93ec39080bb8c764f559dc8c89a6da1a39d718a400b7890d3e41",
+            "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.20.1%2B1/OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.20.1_1.tar.gz",
+            "version": "17.0.20"
+          },
+          "armv6l": {
+            "build": "1",
+            "sha256": "e66816375d9ff7e18e622b370f0b523dd45a91ab4c6dcd17d6c8708e17ab80e9",
+            "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.20.1%2B1/OpenJDK17U-jdk_arm_linux_hotspot_17.0.20.1_1.tar.gz",
+            "version": "17.0.20"
+          },
+          "armv7l": {
+            "build": "1",
+            "sha256": "e66816375d9ff7e18e622b370f0b523dd45a91ab4c6dcd17d6c8708e17ab80e9",
+            "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.20.1%2B1/OpenJDK17U-jdk_arm_linux_hotspot_17.0.20.1_1.tar.gz",
+            "version": "17.0.20"
+          },
+          "packageType": "jdk",
+          "powerpc64le": {
+            "build": "1",
+            "sha256": "7e3abe98a131e1e914d0cf50f3435f92c1723e4583377edb5cf8e63c8d125ca8",
+            "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.20.1%2B1/OpenJDK17U-jdk_ppc64le_linux_hotspot_17.0.20.1_1.tar.gz",
+            "version": "17.0.20"
+          },
+          "riscv64": {
+            "build": "8",
+            "sha256": "bc36e8044c88df9f4ec2967c5277d1c8fae572378c12c0bac44dcae15d3af2f7",
+            "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.20%2B8/OpenJDK17U-jdk_riscv64_linux_hotspot_17.0.20_8.tar.gz",
+            "version": "17.0.20"
+          },
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "3808d1d15e3ec6bd5b84057fb5d84c33d8a1536a258146bcea2e603fc726e08e",
+            "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.20.1%2B1/OpenJDK17U-jdk_x64_linux_hotspot_17.0.20.1_1.tar.gz",
+            "version": "17.0.20"
+          }
+        },
+        "openjdk21": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "23e37e026f12f3e706f18938ff611db3032d075b09d0879a25d06718c773e223",
+            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jdk_aarch64_linux_hotspot_21.0.12.1_1.tar.gz",
+            "version": "21.0.12"
+          },
+          "packageType": "jdk",
+          "powerpc64le": {
+            "build": "1",
+            "sha256": "042482fa372f12741ceb721397e277b4e69672182aaa45a1bf7af55d9ba876d6",
+            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jdk_ppc64le_linux_hotspot_21.0.12.1_1.tar.gz",
+            "version": "21.0.12"
+          },
+          "riscv64": {
+            "build": "1",
+            "sha256": "e6cac9a9f74a001bd21644461697be1ad0d06c9c69076b51984dc9f3b1bb2478",
+            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jdk_riscv64_linux_hotspot_21.0.12.1_1.tar.gz",
+            "version": "21.0.12"
+          },
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "ce79869e1307ed8ee1e2baa86a412b1eb5b75d10a01006d788a6f968bcfaee94",
+            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jdk_x64_linux_hotspot_21.0.12.1_1.tar.gz",
+            "version": "21.0.12"
+          }
+        },
+        "openjdk25": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "69df11a02cfa3ef7d7ca645e03edce6778ec090e100f6ae2b42097865730ac52",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jdk_aarch64_linux_hotspot_25.0.4.1_1.tar.gz",
+            "version": "25.0.4"
+          },
+          "packageType": "jdk",
+          "powerpc64le": {
+            "build": "1",
+            "sha256": "b508ca140557322c73da4278d21004b22480b894ffdc67a8795d7814afd8775c",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jdk_ppc64le_linux_hotspot_25.0.4.1_1.tar.gz",
+            "version": "25.0.4"
+          },
+          "riscv64": {
+            "build": "1",
+            "sha256": "8dbef2b12ceaecec9b5f00d7f568309b7e3525137777736abfc65900c054ccf9",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jdk_riscv64_linux_hotspot_25.0.4.1_1.tar.gz",
+            "version": "25.0.4"
+          },
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "dbb698396d478e7fa2b1e50f4103324b2a99b90569ee27c33f2261f9215cf41e",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jdk_x64_linux_hotspot_25.0.4.1_1.tar.gz",
+            "version": "25.0.4"
+          }
+        },
+        "openjdk26": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "9f6ad9856a7dd880061adaf88db3c4da0642113d59b7960a892f0e551c0c948c",
+            "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2.1%2B1/OpenJDK26U-jdk_aarch64_linux_hotspot_26.0.2.1_1.tar.gz",
+            "version": "26.0.2"
+          },
+          "packageType": "jdk",
+          "powerpc64le": {
+            "build": "10",
+            "sha256": "54e5f3a1eaa48650f30a8f189843a96654f5e31db4f0a8495c71adc4ca8f896a",
+            "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2%2B10/OpenJDK26U-jdk_ppc64le_linux_hotspot_26.0.2_10.tar.gz",
+            "version": "26.0.2"
+          },
+          "riscv64": {
+            "build": "10",
+            "sha256": "b247d7cb807d6b2be85c7e7bd2ba2c968cf7cbe2533a63689276c03ce51dc8d4",
+            "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2%2B10/OpenJDK26U-jdk_riscv64_linux_hotspot_26.0.2_10.tar.gz",
+            "version": "26.0.2"
+          },
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "451c12e68747bcfa2fb5a2c16b00483fedb9fa6d77bc962d30957f76ac17044d",
+            "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2.1%2B1/OpenJDK26U-jdk_x64_linux_hotspot_26.0.2.1_1.tar.gz",
+            "version": "26.0.2"
+          }
+        },
+        "openjdk8": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "57b7ed8af9d48542bb49ff7894448040b17bea0a48b41677d11ecaec6129768d",
+            "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u504-b01/OpenJDK8U-jdk_aarch64_linux_hotspot_8u504b01.tar.gz",
+            "version": "8.0.504"
+          },
+          "armv6l": {
+            "build": "9",
+            "sha256": "ac93b4b75d6c0592c83030dbbeeaed46f5fbfccb276cf26c86aab3e49bba090e",
+            "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u492-b09/OpenJDK8U-jdk_arm_linux_hotspot_8u492b09.tar.gz",
+            "version": "8.0.492"
+          },
+          "armv7l": {
+            "build": "9",
+            "sha256": "ac93b4b75d6c0592c83030dbbeeaed46f5fbfccb276cf26c86aab3e49bba090e",
+            "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u492-b09/OpenJDK8U-jdk_arm_linux_hotspot_8u492b09.tar.gz",
+            "version": "8.0.492"
+          },
+          "packageType": "jdk",
+          "powerpc64le": {
+            "build": "7",
+            "sha256": "626e870f411d01d6541fafa11e64b8584d8b737195cec5576256e6d3d34a62ba",
+            "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u502-b07/OpenJDK8U-jdk_ppc64le_linux_hotspot_8u502b07.tar.gz",
+            "version": "8.0.502"
+          },
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "9c70e102f527ac674ac2fe9c7d47b9a04e2d19842ba5ab8e9b33f368bbadfaea",
+            "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u504-b01/OpenJDK8U-jdk_x64_linux_hotspot_8u504b01.tar.gz",
+            "version": "8.0.504"
+          }
+        }
+      },
+      "jmods": {
+        "openjdk25": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "ffd6173fa4cb625b1649f68d9ca260ca5319c312a45d1cd5781664253d249b81",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jmods_aarch64_linux_hotspot_25.0.4.1_1.tar.gz",
+            "version": "25.0.4"
+          },
+          "packageType": "jmods",
+          "powerpc64le": {
+            "build": "1",
+            "sha256": "741195678997234c711a43f55c10f9e316099ec199637333d58be960e5e63f30",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jmods_ppc64le_linux_hotspot_25.0.4.1_1.tar.gz",
+            "version": "25.0.4"
+          },
+          "riscv64": {
+            "build": "1",
+            "sha256": "38831323d381ff969b19f38a32a35c0a1a151ee247a88705b2c9967765a08abc",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jmods_riscv64_linux_hotspot_25.0.4.1_1.tar.gz",
+            "version": "25.0.4"
+          },
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "c51cb1900283b00e7f9b1db1c6e430cc168d43ed240f496eb34b4d5796fdb81d",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jmods_x64_linux_hotspot_25.0.4.1_1.tar.gz",
+            "version": "25.0.4"
+          }
+        },
+        "openjdk26": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "9848917dea420da0224d622a4129a9d5b5ce3e4dc9c48da1fb0ebf75e74a4e3f",
+            "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2.1%2B1/OpenJDK26U-jmods_aarch64_linux_hotspot_26.0.2.1_1.tar.gz",
+            "version": "26.0.2"
+          },
+          "packageType": "jmods",
+          "powerpc64le": {
+            "build": "10",
+            "sha256": "b769da9c6d8cb9a8e8c26a914f0a1cc42cd4882bc0c1274f267fcdf361d82056",
+            "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2%2B10/OpenJDK26U-jmods_ppc64le_linux_hotspot_26.0.2_10.tar.gz",
+            "version": "26.0.2"
+          },
+          "riscv64": {
+            "build": "10",
+            "sha256": "a78a64e904807bb9088e9609b4bd8044f48f007329ad0a1d53d99d9d7f4bfae7",
+            "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2%2B10/OpenJDK26U-jmods_riscv64_linux_hotspot_26.0.2_10.tar.gz",
+            "version": "26.0.2"
+          },
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "b228deac666f049ce67e905bb6831e1762fb7124e40b08d27d0b4673e2b74938",
+            "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2.1%2B1/OpenJDK26U-jmods_x64_linux_hotspot_26.0.2.1_1.tar.gz",
+            "version": "26.0.2"
+          }
+        }
+      },
+      "jre": {
+        "openjdk11": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "0125e0d4911b9d7b11c6268cdf365a263f4794fd923d482e1b1c01b07a68b8b5",
+            "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32.1%2B1/OpenJDK11U-jre_aarch64_linux_hotspot_11.0.32.1_1.tar.gz",
+            "version": "11.0.32"
+          },
+          "armv6l": {
+            "build": "1",
+            "sha256": "44b9c5d95a95c81f96c857212e8b035bcc6c92d5910b7bb2c8b8b0b24d4f09ad",
+            "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32.1%2B1/OpenJDK11U-jre_arm_linux_hotspot_11.0.32.1_1.tar.gz",
+            "version": "11.0.32"
+          },
+          "armv7l": {
+            "build": "1",
+            "sha256": "44b9c5d95a95c81f96c857212e8b035bcc6c92d5910b7bb2c8b8b0b24d4f09ad",
+            "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32.1%2B1/OpenJDK11U-jre_arm_linux_hotspot_11.0.32.1_1.tar.gz",
+            "version": "11.0.32"
+          },
+          "packageType": "jre",
+          "powerpc64le": {
+            "build": "9",
+            "sha256": "3d0ae354c2378f293bc99819be54bd82694640e295f62164a6a9683d1ebeb96d",
+            "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32%2B9/OpenJDK11U-jre_ppc64le_linux_hotspot_11.0.32_9.tar.gz",
+            "version": "11.0.32"
+          },
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "5eb6cf7f45c623272c64b8e7b4934a8051abb7ae73bfd28488a9856da3f4848a",
+            "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32.1%2B1/OpenJDK11U-jre_x64_linux_hotspot_11.0.32.1_1.tar.gz",
+            "version": "11.0.32"
+          }
+        },
+        "openjdk17": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "b8efcd5acc9109fe8d35bed132499643048a257b4f6042906ece37d03c839d77",
+            "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.20.1%2B1/OpenJDK17U-jre_aarch64_linux_hotspot_17.0.20.1_1.tar.gz",
+            "version": "17.0.20"
+          },
+          "armv6l": {
+            "build": "1",
+            "sha256": "f31a2a481a358c67f9a035212e9514ff58b1166f0811635cb127829af1ee40ec",
+            "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.20.1%2B1/OpenJDK17U-jre_arm_linux_hotspot_17.0.20.1_1.tar.gz",
+            "version": "17.0.20"
+          },
+          "armv7l": {
+            "build": "1",
+            "sha256": "f31a2a481a358c67f9a035212e9514ff58b1166f0811635cb127829af1ee40ec",
+            "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.20.1%2B1/OpenJDK17U-jre_arm_linux_hotspot_17.0.20.1_1.tar.gz",
+            "version": "17.0.20"
+          },
+          "packageType": "jre",
+          "powerpc64le": {
+            "build": "1",
+            "sha256": "a84ba93f536d2773a8f086ecf39e6fb56c1690ffbea2ead7b108fe520bf51bf6",
+            "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.20.1%2B1/OpenJDK17U-jre_ppc64le_linux_hotspot_17.0.20.1_1.tar.gz",
+            "version": "17.0.20"
+          },
+          "riscv64": {
+            "build": "8",
+            "sha256": "9c018e609c1f851018f053bb634e14473e8c0b6532aae400a105aa4d52c84d42",
+            "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.20%2B8/OpenJDK17U-jre_riscv64_linux_hotspot_17.0.20_8.tar.gz",
+            "version": "17.0.20"
+          },
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "0b2b640e3046b64c8ec504de0ab9d91bb5610182bda21fad454681ce54d45a62",
+            "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.20.1%2B1/OpenJDK17U-jre_x64_linux_hotspot_17.0.20.1_1.tar.gz",
+            "version": "17.0.20"
+          }
+        },
+        "openjdk21": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "14be1f35ebdbd1f6e8d57eb911a3ffb74d6d9aa255abc5daf2b1302002cf2cf2",
+            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jre_aarch64_linux_hotspot_21.0.12.1_1.tar.gz",
+            "version": "21.0.12"
+          },
+          "packageType": "jre",
+          "powerpc64le": {
+            "build": "1",
+            "sha256": "d2f07f1d97faab23b3add1af92db402b721b5b251cedab7144fdd4b2bf2e2f13",
+            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jre_ppc64le_linux_hotspot_21.0.12.1_1.tar.gz",
+            "version": "21.0.12"
+          },
+          "riscv64": {
+            "build": "1",
+            "sha256": "7b0731083e1f298d2216b266bfbb2ea600482cc025362af4129aaed758afc611",
+            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jre_riscv64_linux_hotspot_21.0.12.1_1.tar.gz",
+            "version": "21.0.12"
+          },
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "2413149700df0f7d440500a84a8f764c535f21e5a5e87d38328b64eec2c5b500",
+            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jre_x64_linux_hotspot_21.0.12.1_1.tar.gz",
+            "version": "21.0.12"
+          }
+        },
+        "openjdk25": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "34828cbb93ed31c281c84ecb31ddab655d11a802f263c1fc019d42e9e0230fed",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jre_aarch64_linux_hotspot_25.0.4.1_1.tar.gz",
+            "version": "25.0.4"
+          },
+          "packageType": "jre",
+          "powerpc64le": {
+            "build": "1",
+            "sha256": "4ab6eca3e092fd63afe8f34b119f169fd434a080c96f8d37f46687389518c4c5",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jre_ppc64le_linux_hotspot_25.0.4.1_1.tar.gz",
+            "version": "25.0.4"
+          },
+          "riscv64": {
+            "build": "1",
+            "sha256": "dcf12c8c5e0b49bbae7978f42ca6671e10671db7509f406a0f0e65e3b3dc65a9",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jre_riscv64_linux_hotspot_25.0.4.1_1.tar.gz",
+            "version": "25.0.4"
+          },
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "1731a34baadec5479258ea0202e4d5d865d2efeee60cb0c7d7eb056fe96ca219",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jre_x64_linux_hotspot_25.0.4.1_1.tar.gz",
+            "version": "25.0.4"
+          }
+        },
+        "openjdk26": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "9e1527681ae4a615044c88435d2c1a9faf1fd5c7baaf9514a4a4207608150087",
+            "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2.1%2B1/OpenJDK26U-jre_aarch64_linux_hotspot_26.0.2.1_1.tar.gz",
+            "version": "26.0.2"
+          },
+          "packageType": "jre",
+          "powerpc64le": {
+            "build": "10",
+            "sha256": "8698a0734da25b9edc552eb80e9db8e69583afbcecbfda291c9f23bac4062f17",
+            "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2%2B10/OpenJDK26U-jre_ppc64le_linux_hotspot_26.0.2_10.tar.gz",
+            "version": "26.0.2"
+          },
+          "riscv64": {
+            "build": "10",
+            "sha256": "781e70f2ae6c82a99d09cd2beeed55fc9f87f9ec998c12fc1bee7378c01d3fbe",
+            "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2%2B10/OpenJDK26U-jre_riscv64_linux_hotspot_26.0.2_10.tar.gz",
+            "version": "26.0.2"
+          },
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "35773116829554fb38e6acf9b92b3ba8bb7856557c3ab885e26e7d61e8c8e1b0",
+            "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2.1%2B1/OpenJDK26U-jre_x64_linux_hotspot_26.0.2.1_1.tar.gz",
+            "version": "26.0.2"
+          }
+        },
+        "openjdk8": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "9ae9c4dd80fc8f3c4081b480c7d42346e9e4cbee5ae58198fca11e0fc1a19163",
+            "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u504-b01/OpenJDK8U-jre_aarch64_linux_hotspot_8u504b01.tar.gz",
+            "version": "8.0.504"
+          },
+          "armv6l": {
+            "build": "9",
+            "sha256": "5f0693c6c8ca0eb8df969bb1053b1926b1e7c57a3f90c6f9e8d493395e76a329",
+            "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u492-b09/OpenJDK8U-jre_arm_linux_hotspot_8u492b09.tar.gz",
+            "version": "8.0.492"
+          },
+          "armv7l": {
+            "build": "9",
+            "sha256": "5f0693c6c8ca0eb8df969bb1053b1926b1e7c57a3f90c6f9e8d493395e76a329",
+            "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u492-b09/OpenJDK8U-jre_arm_linux_hotspot_8u492b09.tar.gz",
+            "version": "8.0.492"
+          },
+          "packageType": "jre",
+          "powerpc64le": {
+            "build": "7",
+            "sha256": "56fbe946d93afefd39353ff3fe0219e227fd4880267159ab48f95ac8ba25482d",
+            "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u502-b07/OpenJDK8U-jre_ppc64le_linux_hotspot_8u502b07.tar.gz",
+            "version": "8.0.502"
+          },
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "52dcd578baca1d3e449ea86768a9129c0ee04d7b22565695498353cc66940c61",
+            "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u504-b01/OpenJDK8U-jre_x64_linux_hotspot_8u504b01.tar.gz",
+            "version": "8.0.504"
+          }
+        }
+      }
+    },
+    "mac": {
+      "jdk": {
+        "openjdk11": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "c487a1c3a56588b3a32d0d07cdd526bf3d401c4b8422be772ca178bfcd647f3f",
+            "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32.1%2B1/OpenJDK11U-jdk_aarch64_mac_hotspot_11.0.32.1_1.tar.gz",
+            "version": "11.0.32"
+          },
+          "packageType": "jdk",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "03de26f0d11ec3e6365e0352d9fcfaff447be35a2b2f36ee1ffb6063980343f5",
+            "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32.1%2B1/OpenJDK11U-jdk_x64_mac_hotspot_11.0.32.1_1.tar.gz",
+            "version": "11.0.32"
+          }
+        },
+        "openjdk17": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "196d13ba5f10414bef7f6a05a9b3f00edacb18ebacef2b99485db9e2ee18f0e8",
+            "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.20.1%2B1/OpenJDK17U-jdk_aarch64_mac_hotspot_17.0.20.1_1.tar.gz",
+            "version": "17.0.20"
+          },
+          "packageType": "jdk",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "c01975da12ed4235250ff891fe8bba73a9e73037d444b269c9d0922b5dbc8e0a",
+            "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.20.1%2B1/OpenJDK17U-jdk_x64_mac_hotspot_17.0.20.1_1.tar.gz",
+            "version": "17.0.20"
+          }
+        },
+        "openjdk21": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "3623232f33a9c3baadf304480b2535f9a3cba8a58d42ecbb438ba267315d9998",
+            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jdk_aarch64_mac_hotspot_21.0.12.1_1.tar.gz",
+            "version": "21.0.12"
+          },
+          "packageType": "jdk",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "44db0f08196daf19a47f90d13388b0c943b67663cb537f998fe29e836fa842ce",
+            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jdk_x64_mac_hotspot_21.0.12.1_1.tar.gz",
+            "version": "21.0.12"
+          }
+        },
+        "openjdk25": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "61979887f7506a24a57439ff99adb8b3a7fc89977d9cfe3b8984f58a981b7b9d",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jdk_aarch64_mac_hotspot_25.0.4.1_1.tar.gz",
+            "version": "25.0.4"
+          },
+          "packageType": "jdk",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "e6229d9504f7922053ab31821b9e6bee8761daf7b026a3476d1a027563009880",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jdk_x64_mac_hotspot_25.0.4.1_1.tar.gz",
+            "version": "25.0.4"
+          }
+        },
+        "openjdk26": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "8c77a069a150c5b1c80280269ba062463053ebb7619ddef38dcfe3921fc60bdd",
+            "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2.1%2B1/OpenJDK26U-jdk_aarch64_mac_hotspot_26.0.2.1_1.tar.gz",
+            "version": "26.0.2"
+          },
+          "packageType": "jdk",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "e1b58af4ef2089f6de66bdadd5c77a661adfad8340d5b8e19771a76ab5f02188",
+            "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2.1%2B1/OpenJDK26U-jdk_x64_mac_hotspot_26.0.2.1_1.tar.gz",
+            "version": "26.0.2"
+          }
+        },
+        "openjdk8": {
+          "packageType": "jdk",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "4b4518a2060c98c0ed195947fa29c8f5aa7f1c608817e8ad1850719517f11ac0",
+            "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u504-b01/OpenJDK8U-jdk_x64_mac_hotspot_8u504b01.tar.gz",
+            "version": "8.0.504"
+          }
+        }
+      },
+      "jmods": {
+        "openjdk25": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "182f3c09df135883f3800bfd5e1e5b65a2cd44172863be8e7db48bb3d8233bd9",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jmods_aarch64_mac_hotspot_25.0.4.1_1.tar.gz",
+            "version": "25.0.4"
+          },
+          "packageType": "jmods",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "340589fb77ddd796a042fc6542e4c5964ba0e83f8f9f0de6cb0498a61284f185",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jmods_x64_mac_hotspot_25.0.4.1_1.tar.gz",
+            "version": "25.0.4"
+          }
+        },
+        "openjdk26": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "77d7ee337d469fb0dce813b33ed78748cba127e31276648e252d3b1a15b5d03c",
+            "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2.1%2B1/OpenJDK26U-jmods_aarch64_mac_hotspot_26.0.2.1_1.tar.gz",
+            "version": "26.0.2"
+          },
+          "packageType": "jmods",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "dbb7a950336b610fd9d823d7ab6169d43e1d1236057815e39b5f9d31058e381f",
+            "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2.1%2B1/OpenJDK26U-jmods_x64_mac_hotspot_26.0.2.1_1.tar.gz",
+            "version": "26.0.2"
+          }
+        }
+      },
+      "jre": {
+        "openjdk11": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "4fb215c85ab144e0bf34e28c6edd126a3d60af9c3e1db33406a3b1d3e8bcec5e",
+            "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32.1%2B1/OpenJDK11U-jre_aarch64_mac_hotspot_11.0.32.1_1.tar.gz",
+            "version": "11.0.32"
+          },
+          "packageType": "jre",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "3f29ec2c7c6eba5ec96680ea9be2413a1af8ca5dae8c0513d3f31d596cfbdb04",
+            "url": "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.32.1%2B1/OpenJDK11U-jre_x64_mac_hotspot_11.0.32.1_1.tar.gz",
+            "version": "11.0.32"
+          }
+        },
+        "openjdk17": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "190480874ccceb358cbc840393207f77ac3e63a4c5f8129d0e23e9518b96ad05",
+            "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.20.1%2B1/OpenJDK17U-jre_aarch64_mac_hotspot_17.0.20.1_1.tar.gz",
+            "version": "17.0.20"
+          },
+          "packageType": "jre",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "333cb81123c36568586646c73c8fa2326dab8badc43f5ea388a90fff59c9df27",
+            "url": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.20.1%2B1/OpenJDK17U-jre_x64_mac_hotspot_17.0.20.1_1.tar.gz",
+            "version": "17.0.20"
+          }
+        },
+        "openjdk21": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "dec50fc6f9fcd4fe3ae8cabf5a5fa68f6afc48841f7698e468e9aa5d54beed84",
+            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jre_aarch64_mac_hotspot_21.0.12.1_1.tar.gz",
+            "version": "21.0.12"
+          },
+          "packageType": "jre",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "6717ec641fd9ce0bb209ca083ee23b42202ac68cb6fcc5753496e0e4a0f41989",
+            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jre_x64_mac_hotspot_21.0.12.1_1.tar.gz",
+            "version": "21.0.12"
+          }
+        },
+        "openjdk25": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "5b02bcc908da092e7e00b9772d4f9bbb87f44a60b7c90f7cf5a91a1d98f37e1b",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jre_aarch64_mac_hotspot_25.0.4.1_1.tar.gz",
+            "version": "25.0.4"
+          },
+          "packageType": "jre",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "099cbc182af99ab454991a4230f0bdbf2b2ee3f61ce462d637aceaa12709380d",
+            "url": "https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jre_x64_mac_hotspot_25.0.4.1_1.tar.gz",
+            "version": "25.0.4"
+          }
+        },
+        "openjdk26": {
+          "aarch64": {
+            "build": "1",
+            "sha256": "63a94b3ba05308063536d60cb0f9bc847900a300fc53630c86eea3efa79313a4",
+            "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2.1%2B1/OpenJDK26U-jre_aarch64_mac_hotspot_26.0.2.1_1.tar.gz",
+            "version": "26.0.2"
+          },
+          "packageType": "jre",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "e69241d54f689e4ac51a6c6d50f91f21cf7672363160a94f322ed7e889e27bd5",
+            "url": "https://github.com/adoptium/temurin26-binaries/releases/download/jdk-26.0.2.1%2B1/OpenJDK26U-jre_x64_mac_hotspot_26.0.2.1_1.tar.gz",
+            "version": "26.0.2"
+          }
+        },
+        "openjdk8": {
+          "packageType": "jre",
+          "vmType": "hotspot",
+          "x86_64": {
+            "build": "1",
+            "sha256": "f06abadad0fa97e04866d7229a2baad53261579ab5d44875ffa8846a28f28d86",
+            "url": "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u504-b01/OpenJDK8U-jre_x64_mac_hotspot_8u504b01.tar.gz",
+            "version": "8.0.504"
+          }
+        }
+      }
+    }
+  }
+}

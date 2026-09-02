@@ -1,0 +1,72 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  makeWrapper,
+  pkg-config,
+  lrzsz,
+  ncurses,
+  libiconv,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "minicom";
+  version = "2.11.1";
+
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "minicom-team";
+    repo = "minicom";
+    rev = finalAttrs.version;
+    sha256 = "sha256-Gj7inEj630krn2IU/XTWql11vIRh3Pl5U73J3BcGYpY=";
+  };
+
+  buildInputs = [
+    ncurses
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
+
+  nativeBuildInputs = [
+    autoreconfHook
+    makeWrapper
+    pkg-config
+  ];
+
+  enableParallelBuilding = true;
+
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--enable-lock-dir=/var/lock"
+  ];
+
+  patches = [ ./xminicom_terminal_paths.patch ];
+
+  preConfigure = ''
+    # Have `configure' assume that the lock directory exists.
+    substituteInPlace configure \
+      --replace 'test -d $UUCPLOCK' true
+  '';
+
+  postInstall = ''
+    for f in $out/bin/*minicom ; do
+      wrapProgram $f \
+        --prefix PATH : ${lib.makeBinPath [ lrzsz ]}:$out/bin
+    done
+  '';
+
+  meta = {
+    description = "Modem control and terminal emulation program";
+    homepage = "https://salsa.debian.org/minicom-team/minicom";
+    license = lib.licenses.gpl2Plus;
+    longDescription = ''
+      Minicom is a menu driven communications program. It emulates ANSI
+      and VT102 terminals. It has a dialing directory and auto zmodem
+      download.
+    '';
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.unix;
+  };
+})

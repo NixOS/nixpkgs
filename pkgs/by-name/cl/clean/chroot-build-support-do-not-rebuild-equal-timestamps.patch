@@ -1,0 +1,21 @@
+The clean command line compiler clm uses timestamps of dcl, icl, abc and o files
+to decide what must be rebuild.  However as for chroot builds, all of the
+library files will have equal timestamps, this leads to clm trying to rebuild
+the library modules distributed with the Clean installation every time a user
+compiles any file, which fails ue to the absence of write permission on the Nix
+store.
+
+This patch changes the freshness check to use less than instead of less than or
+equal to in order to avoid this.
+
+--- b/src/clm/clm.c
++++ a/src/clm/clm.c
+@@ -250,7 +250,7 @@
+ 		|| (t1.dwHighDateTime==t2.dwHighDateTime && (unsigned)(t1.dwLowDateTime)<=(unsigned)(t2.dwLowDateTime)))
+ #else
+ 	typedef unsigned long FileTime;
+-#	define FILE_TIME_LE(t1,t2) (t1<=t2)
++#	define FILE_TIME_LE(t1,t2) (t1<t2)
+ #endif
+ 
+ typedef struct project_node {

@@ -1,0 +1,13 @@
+diff --git a/lib/discourse/safe_exec.rb b/lib/discourse/safe_exec.rb
+index c4b8a5e3ecb..31d6f0d469d 100644
+--- a/lib/discourse/safe_exec.rb
++++ b/lib/discourse/safe_exec.rb
+@@ -5,7 +5,7 @@ require "landlock"
+ module Discourse
+   class SafeExec
+     DEFAULT_READ_PATHS = %w[/bin /etc /lib /lib64 /usr].freeze
+-    DEFAULT_EXECUTE_PATHS = %w[/bin /lib /lib64 /usr].freeze
++    DEFAULT_EXECUTE_PATHS = %w[/bin /lib /lib64 /usr /nix/store].freeze
+ 
+     def self.capture(
+       *command,

@@ -1,0 +1,14 @@
+diff --git a/build.rs b/build.rs
+index cb8d19a..f6dc5dc 100644
+--- a/build.rs
++++ b/build.rs
+@@ -103,9 +103,4 @@ fn embed_themes() {
+         writeln!(out, "    m").unwrap();
+         writeln!(out, "}}").unwrap();
+     }
+-
+-    std::process::Command::new("rustfmt")
+-        .arg(out_path)
+-        .status()
+-        .expect("Failed to run rustfmt");
+ }

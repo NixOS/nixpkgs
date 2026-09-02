@@ -1,0 +1,34 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Tue, 11 Aug 2026 20:12:42 -0400
+Subject: [PATCH] backport-darwin-triple-parsing
+
+---
+ lib/TargetParser/Triple.cpp | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/lib/TargetParser/Triple.cpp b/lib/TargetParser/Triple.cpp
+index 0bbe8a3cedfd..4143c3eac05d 100644
+--- a/lib/TargetParser/Triple.cpp
++++ b/lib/TargetParser/Triple.cpp
+@@ -1253,9 +1253,15 @@ bool Triple::getMacOSXVersion(VersionTuple &Version) const {
+     }
+     if (Version.getMajor() <= 19) {
+       Version = VersionTuple(10, Version.getMajor() - 4);
+-    } else {
+-      // darwin20+ corresponds to macOS 11+.
++    } else if (Version.getMajor() < 25) {
++      // darwin20-24 corresponds to macOS 11-15.
+       Version = VersionTuple(11 + Version.getMajor() - 20);
++    } else if ((Version.getMajor() == 25) || (Version.getMajor() == 26)) {
++      // darwin25-26 corresponds to macOS 26-27.
++      Version = VersionTuple(Version.getMajor() + 1);
++    } else {
++      // Starting with darwin27, it naturally corresponds to the same macOS
++      // version.
+     }
+     break;
+   case MacOSX:
+-- 
+2.54.0
+

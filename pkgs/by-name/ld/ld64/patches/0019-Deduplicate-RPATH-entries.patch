@@ -1,0 +1,72 @@
+From 19919df4055361b5c24458766754dbe01b67df69 Mon Sep 17 00:00:00 2001
+From: Ben Simms <ben@bensimms.moe>
+Date: Wed, 15 Apr 2026 21:53:24 -0400
+Subject: [PATCH] Deduplicate RPATH entries
+
+This is required for MacOS 15.4 and above, which rejects loading
+libraries with duplicate RPATH entries
+---
+ src/ld/HeaderAndLoadCommands.hpp      |   29 +-
+ src/ld/HeaderAndLoadCommands.hpp.orig | 1828 +++++++++++++++++++++++++
+ 2 files changed, 1855 insertions(+), 2 deletions(-)
+ create mode 100644 src/ld/HeaderAndLoadCommands.hpp.orig
+
+diff --git a/src/ld/HeaderAndLoadCommands.hpp b/src/ld/HeaderAndLoadCommands.hpp
+index 55700768df..4001f47c0e 100644
+--- a/src/ld/HeaderAndLoadCommands.hpp
++++ b/src/ld/HeaderAndLoadCommands.hpp
+@@ -472,7 +472,14 @@
+ 	
+ 	if ( _hasRPathLoadCommands ) {
+ 		const std::vector<const char*>& rpaths = _options.rpaths();
++		std::set<std::string> seen;
++
+ 		for (std::vector<const char*>::const_iterator it = rpaths.begin(); it != rpaths.end(); ++it) {
++			std::string it_(*it);
++			if (seen.find(it_) != std::end(seen))
++				continue;
++			seen.insert(it_);
++
+ 			sz += alignedSize(sizeof(macho_rpath_command<P>) + strlen(*it) + 1);
+ 		}
+ 	}
+@@ -581,8 +588,18 @@
+ 	
+ 	count += _dylibLoadCommmandsCount;
+ 
+-	count += _options.rpaths().size();
+-	
++	{
++		const std::vector<const char*>& rpaths = _options.rpaths();
++		std::set<std::string> seen;
++		for (std::vector<const char*>::const_iterator it = rpaths.begin(); it != rpaths.end(); ++it) {
++			std::string it_(*it);
++			if (seen.find(it_) != std::end(seen))
++				continue;
++			seen.insert(it_);
++			++count;
++		}
++	}
++
+ 	if ( _hasSubFrameworkLoadCommand )
+ 		++count;
+ 	
+@@ -1771,7 +1788,15 @@
+ 
+ 	if ( _hasRPathLoadCommands ) {
+ 		const std::vector<const char*>& rpaths = _options.rpaths();
++		std::set<std::string> seen;
++
+ 		for (std::vector<const char*>::const_iterator it = rpaths.begin(); it != rpaths.end(); ++it) {
++			std::string it_(*it);
++			if (seen.find(it_) != std::end(seen))
++				continue;
++
++			seen.insert(it_);
++
+ 			p = this->copyRPathLoadCommand(p, *it);
+ 		}
+ 	}
+-- 
+2.51.2
+

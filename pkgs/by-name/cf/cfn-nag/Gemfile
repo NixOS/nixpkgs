@@ -1,0 +1,5 @@
+source 'https://rubygems.org'
+gem 'cfn-nag'
+gem 'logger'
+gem 'ostruct'
+gem 'syslog'
