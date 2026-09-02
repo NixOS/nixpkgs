@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "apm-cli";
-  version = "0.21.0";
+  version = "0.29.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -15,13 +15,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "microsoft";
     repo = "apm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Wotyqsg/1nbjttMk+4wpGK76+kaL7j6oMH61NwsTuNc=";
+    hash = "sha256-0aVqPRRaVjV3qoE+Fh3L98HUmBlAtu3pMiTSxVDj4Ak=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"llm-github-models>=0.1.0",' ""
-  '';
+  pythonRemoveDeps = [
+    # Not in nixpkgs and the game is not worth the candle for this package.
+    "llm-github-models"
+  ];
 
   build-system = with python3Packages; [
     setuptools
@@ -33,8 +33,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     filelock
     gitpython
     llm
-    # Not in nixpkgs and the game is not worth the candle for this package.
-    # llm-github-models
     python-frontmatter
     pyyaml
     requests
@@ -42,8 +40,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     rich-click
     ruamel-yaml
     toml
-    tomli
+    tomlkit
+    truststore
     watchdog
+    websockets
   ];
 
   optional-dependencies = with python3Packages; {
