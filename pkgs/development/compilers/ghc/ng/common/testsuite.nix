@@ -44,6 +44,10 @@
 assert lib.assertMsg (stdenv.buildPlatform.canExecute stdenv.hostPlatform)
   "ghc/ng: the testsuite runs the programs it compiles, so it is native-only";
 
+let
+  # `null` runs the whole suite, from the testsuite root.
+  testDirArg = lib.optionalString (testDir != null) "/tests/${testDir}";
+in
 runCommand "ghc-testsuite-${ghc.version}"
   {
     nativeBuildInputs = [
@@ -82,7 +86,7 @@ runCommand "ghc-testsuite-${ghc.version}"
     #
     # `METRICS_FILE` keeps the performance tests from wanting baselines out of
     # git notes; there is no checkout here to hold any.
-    make -C testsuite${lib.optionalString (testDir != null) "/tests/${testDir}"} \
+    make -C testsuite${testDirArg} \
       ${lib.escapeShellArgs makeFlags} \
       TEST_HC=${ghc}/bin/ghc \
       GHC_PKG=${ghc}/bin/ghc-pkg \

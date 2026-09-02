@@ -353,6 +353,7 @@ let
         };
         cabalFlagVar = name: "CABAL_FLAG_${lib.replaceStrings [ "-" ] [ "_" ] name}";
         boolToFlag = b: if b then "1" else "0";
+
       in
       final: _: {
         # cabal2nix reads rts.cabal's `extra-libraries: c` as a nixpkgs package
@@ -396,9 +397,17 @@ let
           #
           # Hadrian sidesteps this by generating those headers itself
           # (`Rules.Generate`); we run the script.
-          ${lib.concatStringsSep "\n        " (
-            lib.mapAttrsToList (n: v: "export ${cabalFlagVar n}=${boolToFlag v}") rtsFlags
-          )}
+        ''
+        # `rts/configure.ac` reads these nine directly. Cabal exports them when
+        # *it* runs the script; we run it ourselves, so without them
+        # `AC_DEFINE_UNQUOTED([USE_LIBDW], [$CABAL_FLAG_libdw])` expands to a bare
+        # `#define USE_LIBDW`, and every `#if USE_LIBDW` dies with "#if with no
+        # expression".
+        + lib.concatStringsSep "\n" (
+          lib.mapAttrsToList (n: v: "  export ${cabalFlagVar n}=${boolToFlag v}") rtsFlags
+        )
+        + ''
+
           ./configure ${lib.escapeShellArgs configurePlatformFlags}
 
           # Three headers hadrian generates that neither `rts/configure` nor the

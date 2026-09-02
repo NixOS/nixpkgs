@@ -96,97 +96,102 @@ runCommand "ghc-${version}"
       platforms = lib.platforms.all;
     };
   }
-  ''
-    mkdir -p "$out/bin" "$out/lib"
+  (
+    ''
+      mkdir -p "$out/bin" "$out/lib"
 
-    # Copied, not symlinked. GHC and ghc-pkg locate `$topdir` from their own
-    # executable via /proc/self/exe, which resolves symlinks -- so a symlinked
-    # `$out/bin/ghc-pkg` looks for its settings and package database back in
-    # the ghc-pkg package, not here:
-    #
-    #     ghc-pkg: Settings file doesn't exist: .../ghc-pkg-9.14.1/lib/settings
-    for exe in ${ghc-bin}/bin/* ${ghc-pkg}/bin/* ${unlit}/bin/* ${
-      lib.concatMapStringsSep " " (p: "${p}/bin/*") programs
-    }; do
-      cp "$exe" "$out/bin/$(basename "$exe")"
-    done
-    chmod -R u+w "$out/bin"
+      # Copied, not symlinked. GHC and ghc-pkg locate `$topdir` from their own
+      # executable via /proc/self/exe, which resolves symlinks -- so a symlinked
+      # `$out/bin/ghc-pkg` looks for its settings and package database back in
+      # the ghc-pkg package, not here:
+      #
+      #     ghc-pkg: Settings file doesn't exist: .../ghc-pkg-9.14.1/lib/settings
+      for exe in ${ghc-bin}/bin/* ${ghc-pkg}/bin/* ${unlit}/bin/* ${
+        lib.concatMapStringsSep " " (p: "${p}/bin/*") programs
+      }; do
+        cp "$exe" "$out/bin/$(basename "$exe")"
+      done
+      chmod -R u+w "$out/bin"
 
-    # The external interpreter is `Name: iserv` in the .cabal and produces a
-    # binary called `iserv`, but GHC looks for `$topdir/../bin/ghc-iserv`:
-    #
-    #     ghc-iserv: createProcess: posix_spawnp: does not exist
-    #
-    # hadrian installs it under the `ghc-` name for the same reason. (It also
-    # ships `ghc-iserv-prof` and `-dyn`, which need RTS ways we do not build.)
-    if [ -e "$out/bin/iserv" ]; then
-      cp "$out/bin/iserv" "$out/bin/${targetPrefix}ghc-iserv"
-    fi
+      # The external interpreter is `Name: iserv` in the .cabal and produces a
+      # binary called `iserv`, but GHC looks for `$topdir/../bin/ghc-iserv`:
+      #
+      #     ghc-iserv: createProcess: posix_spawnp: does not exist
+      #
+      # hadrian installs it under the `ghc-` name for the same reason. (It also
+      # ships `ghc-iserv-prof` and `-dyn`, which need RTS ways we do not build.)
+      if [ -e "$out/bin/iserv" ]; then
+        cp "$out/bin/iserv" "$out/bin/${targetPrefix}ghc-iserv"
+      fi
 
-    # Placeholder; the real settings are written after the package database
-    # exists, because `base unit-id` comes out of it.
+      # Placeholder; the real settings are written after the package database
+      # exists, because `base unit-id` comes out of it.
 
-    # GHC 9.15 reads a typed target description alongside the settings file:
-    #
-    #   WARNING: target file doesn't exist ".../lib/targets/default.target"
-    #   cannot know target platform so guessing target == host (native compiler)
-    #
-    # This is the mechanism that lets one compiler serve several targets --
-    # `lib/targets/<triple>/` in stable-haskell's stage3 -- and it is what
-    # cross support will hang off. `ghc-toolchain` already emits it; it just
-    # has to be installed.
-    mkdir -p "$out/lib/targets"
-    cp "${toolchainSettings}/default.target" "$out/lib/targets/default.target"
+      # GHC 9.15 reads a typed target description alongside the settings file:
+      #
+      #   WARNING: target file doesn't exist ".../lib/targets/default.target"
+      #   cannot know target platform so guessing target == host (native compiler)
+      #
+      # This is the mechanism that lets one compiler serve several targets --
+      # `lib/targets/<triple>/` in stable-haskell's stage3 -- and it is what
+      # cross support will hang off. `ghc-toolchain` already emits it; it just
+      # has to be installed.
+      mkdir -p "$out/lib/targets"
+      cp "${toolchainSettings}/default.target" "$out/lib/targets/default.target"
 
-    # `driver/ghc-usage.txt` is read at `--help` time; GHC warns without it.
-    cp ${ghcSrc}/driver/ghc-usage.txt "$out/lib/ghc-usage.txt"
-    cp ${ghcSrc}/driver/ghci-usage.txt "$out/lib/ghci-usage.txt"
+      # `driver/ghc-usage.txt` is read at `--help` time; GHC warns without it.
+      cp ${ghcSrc}/driver/ghc-usage.txt "$out/lib/ghc-usage.txt"
+      cp ${ghcSrc}/driver/ghci-usage.txt "$out/lib/ghci-usage.txt"
 
-    # The global package database. `Relative Global Package DB` in settings
-    # says where to look, relative to the settings file itself.
-    ${ghcPkgCmd} init "$out/lib/package.conf.d"
-
-    ${lib.concatMapStringsSep "\n" (p: ''
+      # The global package database. `Relative Global Package DB` in settings
+      # says where to look, relative to the settings file itself.
+      ${ghcPkgCmd} init "$out/lib/package.conf.d"
+    ''
+    # Copy each library's `.conf` into the database. A library may register more
+    # than one (sublibraries), hence the glob rather than a single file.
+    + lib.concatMapStringsSep "\n" (p: ''
       for conf in ${p}/lib/*/package.conf.d/*.conf; do
         [ -e "$conf" ] || continue
         cp "$conf" "$out/lib/package.conf.d/"
       done
-    '') libraries}
+    '') libraries
+    + ''
 
-    # `base unit-id` is a hash Cabal computed when it built `base`, so the only
-    # honest source for it is the registered package.conf. hadrian gets it the
-    # same way, from `pkgUnitId Stage1 base`. Reading it during evaluation
-    # instead would mean import-from-derivation.
-    printf '%s' "$buildStateJson" > build-state.json
+      # `base unit-id` is a hash Cabal computed when it built `base`, so the only
+      # honest source for it is the registered package.conf. hadrian gets it the
+      # same way, from `pkgUnitId Stage1 base`. Reading it during evaluation
+      # instead would mean import-from-derivation.
+      printf '%s' "$buildStateJson" > build-state.json
 
-    # A compiler that ships `base` takes the unit-id from the registered
-    # package.conf: it carries a hash Cabal computed at build time, and reading
-    # it during evaluation would mean import-from-derivation. hadrian gets it
-    # the same way, from `pkgUnitId Stage1 base`.
-    #
-    # The stage1 compiler ships no libraries at all, so there is nothing to read
-    # and whatever `buildStateSettings` said stands. It only ever compiles
-    # stage2, which names its packages explicitly.
-    baseConf=$(echo "$out/lib/package.conf.d/"base-*.conf)
-    if [ -e "$baseConf" ]; then
-      baseUnitId=$(sed -n 's/^id: *//p' "$baseConf" | head -1)
-      echo "base unit-id: $baseUnitId"
-      jq -s --arg baseUnitId "$baseUnitId" \
-        '.[0] * .[1] * {"base unit-id": $baseUnitId}' \
-        "${toolchainSettings}/settings.json" build-state.json > "$out/lib/settings"
-    else
-      echo "no base registered; keeping the base unit-id from buildStateSettings"
-      jq -s '.[0] * .[1]' \
-        "${toolchainSettings}/settings.json" build-state.json > "$out/lib/settings"
-    fi
+      # A compiler that ships `base` takes the unit-id from the registered
+      # package.conf: it carries a hash Cabal computed at build time, and reading
+      # it during evaluation would mean import-from-derivation. hadrian gets it
+      # the same way, from `pkgUnitId Stage1 base`.
+      #
+      # The stage1 compiler ships no libraries at all, so there is nothing to read
+      # and whatever `buildStateSettings` said stands. It only ever compiles
+      # stage2, which names its packages explicitly.
+      baseConf=$(echo "$out/lib/package.conf.d/"base-*.conf)
+      if [ -e "$baseConf" ]; then
+        baseUnitId=$(sed -n 's/^id: *//p' "$baseConf" | head -1)
+        echo "base unit-id: $baseUnitId"
+        jq -s --arg baseUnitId "$baseUnitId" \
+          '.[0] * .[1] * {"base unit-id": $baseUnitId}' \
+          "${toolchainSettings}/settings.json" build-state.json > "$out/lib/settings"
+      else
+        echo "no base registered; keeping the base unit-id from buildStateSettings"
+        jq -s '.[0] * .[1]' \
+          "${toolchainSettings}/settings.json" build-state.json > "$out/lib/settings"
+      fi
 
-    ${ghcPkgCmd} recache --package-db "$out/lib/package.conf.d"
+      ${ghcPkgCmd} recache --package-db "$out/lib/package.conf.d"
 
-    echo "--- ghc-pkg check ---"
-    ${ghcPkgCmd} check --package-db "$out/lib/package.conf.d"
-
-    ${lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      echo "--- ghc-pkg check ---"
+      ${ghcPkgCmd} check --package-db "$out/lib/package.conf.d"
+    ''
+    # A cross compiler is a host binary; there is nothing to run it on here.
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       echo "--- ghc --version ---"
       "$out/bin/${targetPrefix}ghc" --version
-    ''}
-  ''
+    ''
+  )
