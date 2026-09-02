@@ -134,6 +134,14 @@ in
 
             type = types.submodule {
               freeformType = settingsFormat.type;
+
+              options.cache.external_secret_file = mkOption {
+                type = nullOr (either str path);
+                default = null;
+                description = ''
+                  Path to a file containing the shared secret for an external cache server.
+                '';
+              };
             };
 
             default = { };
@@ -194,7 +202,18 @@ in
             wantsHost = hasHostScheme instance;
             wantsDocker = wantsContainerRuntime && config.virtualisation.docker.enable;
             wantsPodman = wantsContainerRuntime && config.virtualisation.podman.enable;
-            configFile = settingsFormat.generate "config.yaml" instance.settings;
+            configFile =
+              let
+                credentialsDirectory = "/run/credentials/gitea-runner-${escapeSystemdPath name}.service";
+              in
+              settingsFormat.generate "config.yaml" (
+                if instance.settings.cache.external_secret_file != null then
+                  lib.recursiveUpdate instance.settings {
+                    cache.external_secret_file = "${credentialsDirectory}/external-secret";
+                  }
+                else
+                  instance.settings
+              );
           in
           nameValuePair "gitea-runner-${escapeSystemdPath name}" {
             inherit (instance) enable;
@@ -296,7 +315,10 @@ in
                     else
                       pkgs.writeText "gitea-runner-${name}-token" instance.token;
                 in
-                "token:${tokenCredentialSource}";
+                [ "token:${tokenCredentialSource}" ]
+                ++ optionals (instance.settings.cache.external_secret_file != null) [
+                  "external-secret:${instance.settings.cache.external_secret_file}"
+                ];
               RuntimeDirectory = "gitea-runner/${name}";
               RuntimeDirectoryMode = "0700";
             };
