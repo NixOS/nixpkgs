@@ -20,11 +20,12 @@ buildGoModule (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "microsoft";
-    repo = "typescript-go";
-    tag = "typescript/v${finalAttrs.version}";
-    hash = "sha256-fRejdQSwaxSS2pjHrbJO2CQgZS5lWJmBNEM/TgbJTJ8=";
-    fetchSubmodules = false;
+    repo = "typescript";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-j1AY4sf/Jb6uwOah35lrYooc7BnSeaZ2NO6Fx1zMj60=";
   };
+
+  modRoot = "tsc";
 
   vendorHash = "sha256-q6dMb2ab4uZ3GTrcA7v2JzfmOM+ZzBcJN6gKOpLfM/k=";
 
@@ -53,7 +54,7 @@ buildGoModule (finalAttrs: {
       (nix-update-script {
         extraArgs = [
           "--use-github-releases"
-          "--version-regex=^typescript/v([\\d.]+)$"
+          "--version-regex=^v([\\d.]+)$"
           "--src-only"
         ];
       })
@@ -67,7 +68,7 @@ buildGoModule (finalAttrs: {
         ];
         text = ''
           new_src="$(nix-build --attr 'pkgs.typescript-go.src' --no-out-link)"
-          new_go_major_minor="$(grep --only-matching --perl-regexp '^go \K([0-9]+\.[0-9]+)' "$new_src/go.mod")"
+          new_go_major_minor="$(grep --only-matching --perl-regexp '^go \K([0-9]+\.[0-9]+)' "$new_src/tsc/go.mod")"
           sed -i -E "s/buildGo[0-9]+Module/buildGo''${new_go_major_minor//./}Module/g" '${toString ./package.nix}'
         '';
       }))
@@ -81,8 +82,8 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Go implementation of TypeScript";
-    homepage = "https://github.com/microsoft/typescript-go";
-    changelog = "https://github.com/microsoft/typescript-go/releases/tag/typescript/v${finalAttrs.version}";
+    homepage = "https://github.com/microsoft/typescript";
+    changelog = "https://github.com/microsoft/typescript/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       kachick
