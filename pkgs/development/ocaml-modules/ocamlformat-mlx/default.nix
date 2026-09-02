@@ -1,7 +1,6 @@
 {
   buildDunePackage,
   cmdliner,
-  odoc,
   ocamlformat-mlx-lib,
   re,
 }:
@@ -13,7 +12,6 @@ buildDunePackage {
   buildInputs = [
     cmdliner
     re
-    odoc
     ocamlformat-mlx-lib
   ];
 }
