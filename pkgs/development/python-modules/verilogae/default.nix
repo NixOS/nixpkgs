@@ -16,14 +16,14 @@
 
 buildPythonPackage.override { stdenv = llvmPackages.stdenv; } rec {
   pname = "verilogae";
-  version = "24.0.0mob-unstable-2026-08-01";
+  version = "24.0.2mob-unstable-2026-08-25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OpenVAF";
     repo = "OpenVAF-Reloaded";
-    rev = "3369a83f9c626f6d298f9f881379f561ce432e27";
-    hash = "sha256-+7Ni75QPkgHm1jh7ppiP0oRtDhmzV3OpNqpPWtGhVF4=";
+    rev = "fdf2522b70f42793f64b1c72f0195c96dea0cc19";
+    hash = "sha256-XTfi2hxPLT3tWdudrKOJ5VnvyUTfACirMgItmxJ9yjo=";
   };
 
   # upstream's ./configure is an LLVM auto-detection script, not autotools
