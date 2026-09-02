@@ -54,7 +54,7 @@ python3Packages.buildPythonApplication {
     pygobject3
     pillow
     numpy
-    fortune
+    fortune-python
   ];
 
   buildInputs = [
