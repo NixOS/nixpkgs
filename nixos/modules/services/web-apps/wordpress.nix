@@ -555,7 +555,33 @@ in
             before = [ "phpfpm-wordpress-${hostName}.service" ];
             after = optional cfg.database.createLocally "mysql.service";
             script = secretsScript (stateDir hostName);
+            serviceConfig = {
+              Type = "oneshot";
+              User = user;
+              Group = webserver.group;
+            };
+          })
+        ) eachSite)
 
+        (mapAttrs' (
+          hostName: cfg:
+          (nameValuePair "wordpress-migrate-database-${hostName}" {
+            wantedBy = [ "multi-user.target" ];
+            after = [
+              "phpfpm-wordpress-${hostName}.service"
+            ]
+            ++ optional cfg.database.createLocally "mysql.service";
+            script = ''
+              # Auto migrate database after version update
+              versionFile="${stateDir hostName}/src-version"
+              version=$(cat "$versionFile" 2>/dev/null || echo 0)
+              if [[ $version != 0 && $version != ${cfg.package.version} ]]; then
+                echo "Executing database migration"
+                ${lib.getExe pkgs.wp-cli} --path "${cfg.finalPackage}/share/wordpress" \
+                  --skip-plugins --skip-themes core update-db
+              fi
+              echo ${cfg.package.version} > "$versionFile"
+            '';
             serviceConfig = {
               Type = "oneshot";
               User = user;
