@@ -40,6 +40,7 @@ lib.extendMkDerivation {
     finalAttrs:
     {
       src,
+      checkInputs ? [ ],
       chickenInstallFlags ? [ ],
       cscOptions ? [ ],
       # When cross-compiling, this egg built for the build platform, for
@@ -61,16 +62,36 @@ lib.extendMkDerivation {
           lib.getName args.name;
       version = if args ? version then args.version else lib.getVersion args.name;
       allChickenInstallFlags = chickenInstallFlags ++ lib.optional isCross "-target";
+      # Some eggs' tests expect the egg to be installed already so that their
+      # modules can be imported and their programs found in PATH. The `doCheck =
+      # false` override below builds and installs the egg without running its
+      # tests, and the checked derivation takes it as an input. We avoid running
+      # the build twice by disabling the build in the main derivation and
+      # capturing the no-check derivation's build artifacts in a separate output
+      # called "build". The main derivation then restores the build artifacts
+      # from that output in `checkPhase`.
+      noCheckDrv = finalAttrs.finalPackage.overrideAttrs { doCheck = false; };
+      # From CHICKEN 6 on, chicken-install takes a lock in its egg cache even
+      # when building an egg from the current directory, and the cache defaults
+      # to a location under HOME, which is not writable in the sandbox. The
+      # cache itself stays empty: with -cached, chicken-install builds the
+      # unpacked egg in place. The install phase runs in the same shell, so it
+      # inherits this. This snippet is included in all phases which need to run
+      # chicken-install.
+      setupCache = ''
+        export CHICKEN_EGG_CACHE="$NIX_BUILD_TOP/chicken-egg-cache"
+        mkdir -p "$CHICKEN_EGG_CACHE"
+      '';
     in
     {
-      pname = "chicken-${pname}";
+      pname = "chicken-${pname}${lib.optionalString (!finalAttrs.doCheck) "-no-check"}";
       inherit version;
       # Eggs are found in dev, which propagates out and the eggs they depend on.
       outputs =
         args.outputs or [
           "out"
           "dev"
-        ];
+        ] ++ lib.optional (!finalAttrs.doCheck) "build";
       nativeBuildInputs = [
         chicken
         makeWrapper
@@ -79,7 +100,15 @@ lib.extendMkDerivation {
       # The runtime the egg is compiled against and links to, which, with
       # strictDeps, the chicken in nativeBuildInputs does not provide when
       # cross-compiling.
-      buildInputs = [ hostChicken ] ++ args.buildInputs or [ ];
+      buildInputs = [ hostChicken ] ++ args.buildInputs or [ ] ++ lib.optionals finalAttrs.doCheck [
+        noCheckDrv
+      ];
+      nativeCheckInputs = [
+        chicken
+      ]
+      ++ lib.optionals finalAttrs.doCheck [
+        noCheckDrv
+      ];
 
       strictDeps = args.strictDeps or true;
 
@@ -88,20 +117,18 @@ lib.extendMkDerivation {
       }
       // args.env or { };
 
+      dontUnpack = finalAttrs.doCheck;
+      dontPatch = finalAttrs.doCheck;
+      # Disable build when doCheck is true and re-use the build artifacts of the
+      # no-check variant via the "build" output.  This way, we only need to
+      # build the egg once across the no-check and check variants.
+      dontBuild = finalAttrs.doCheck;
+
       buildPhase =
         args.buildPhase or (
           ''
             runHook preBuild
-
-            # From CHICKEN 6 on, chicken-install takes a lock in its egg cache even
-            # when building an egg from the current directory, and the cache defaults
-            # to a location under HOME, which is not writable in the sandbox. The
-            # cache itself stays empty: with -cached, chicken-install builds the
-            # unpacked egg in place. The install phase runs in the same shell, so it
-            # inherits this.
-            export CHICKEN_EGG_CACHE="$NIX_BUILD_TOP/chicken-egg-cache"
-            mkdir -p "$CHICKEN_EGG_CACHE"
-
+            ${setupCache}
           ''
           + lib.optionalString (buildPlatformEgg != null) ''
             # Eggs whose modules are needed while compiling others, such as for
@@ -116,13 +143,37 @@ lib.extendMkDerivation {
           + ''
             chicken-install -cached -no-install ${lib.escapeShellArgs allChickenInstallFlags}
 
+            # Capture sources and build artifacts so we can re-use them in checkPhase
+            cp -r . $build
+
             runHook postBuild
           ''
         );
 
+      doCheck = args.doCheck or true;
+
+      checkPhase = args.checkPhase or lib.optionalString finalAttrs.doCheck ''
+        runHook preCheck
+
+        # Restore build output since buildPhase is disabled when we arrive here
+        cp -r ${noCheckDrv.build}/. .
+        chmod -R +w .
+
+        if [ -e tests/run.scm ]; then
+          (
+            cd tests
+            csi -s run.scm ${pname} "${version}"
+          )
+        fi
+
+        runHook postCheck
+      '';
+
       installPhase =
         args.installPhase or ''
           runHook preInstall
+
+          ${setupCache}
 
           repository=$out/lib/chicken/${binaryVersion}
           export CHICKEN_INSTALL_PREFIX=$out
