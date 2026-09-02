@@ -5,6 +5,12 @@
   # nixpkgs functions
   buildGoModule,
   callPackage,
+  notmuch,
+  w3m,
+  chafa,
+  file,
+  mupdf-headless,
+  zip,
   fetchFromGitHub,
   fetchpatch,
   fetchurl,
@@ -3160,6 +3166,26 @@ assertNoAdditions {
       license = lib.licenses.mit;
     };
   });
+
+  notmuch-nvim = super.notmuch-nvim.overrideAttrs {
+    propagatedBuildInputs = [
+      notmuch
+    ];
+
+    runtimeDeps = [
+      file
+      w3m
+      chafa
+      mupdf-headless
+      pandoc
+      zip
+    ];
+
+    postPatch = ''
+      substituteInPlace lua/notmuch/cnotmuch.lua \
+        --replace 'local nm = ffi.load("notmuch")' 'local nm = ffi.load("${notmuch}/lib/libnotmuch.so")'
+    '';
+  };
 
   NrrwRgn = super.NrrwRgn.overrideAttrs (old: {
     meta = old.meta // {

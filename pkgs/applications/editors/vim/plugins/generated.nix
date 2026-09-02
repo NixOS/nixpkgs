@@ -12380,6 +12380,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  notmuch-nvim = buildVimPlugin {
+    pname = "notmuch.nvim";
+    version = "0.4.0";
+    src = fetchFromGitHub {
+      owner = "yousefakbar";
+      repo = "notmuch.nvim";
+      tag = "v0.4.0";
+      hash = "sha256-A+vlH8fUNd3/lTH++sp90YXRqe3/uTxOTNw43CJQQyc=";
+    };
+    meta.homepage = "https://github.com/yousefakbar/notmuch.nvim/";
+    meta.license = unfree;
+    meta.hydraPlatforms = [ ];
+  };
+
   nterm-nvim = buildVimPlugin {
     pname = "nterm.nvim";
     version = "0-unstable-2022-05-10";
