@@ -28,6 +28,13 @@ let
     rev = "f49f66be674d9857c657930353b867ba94bcbdd7";
     hash = "sha256-B/VmKgMu6f2Y8umE+NgGD5W0FYBIfDcMVwgHocFzreA=";
   };
+
+  prjpeppercorn_src = fetchFromGitHub {
+    owner = "YosysHQ";
+    repo = "prjpeppercorn";
+    rev = "bc3df10ff30ee342b944aff5d85283a26b7de342";
+    hash = "sha256-pz7s1EzZ0iEOJRfOJU80um7QgY5JO3WpDMfQS4E6G5c=";
+  };
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -72,19 +79,20 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeFeature "CURRENT_GIT_VERSION" finalAttrs.src.tag)
     (lib.cmakeFeature "ARCH" "generic;ice40;ecp5;himbaechel")
-    (lib.cmakeBool "BUILD_TESTS" true)
+    (lib.cmakeBool "BUILD_TESTS" false)
     (lib.cmakeFeature "ICESTORM_INSTALL_PREFIX" icestorm.outPath)
     (lib.cmakeFeature "TRELLIS_INSTALL_PREFIX" trellis.outPath)
     (lib.cmakeFeature "TRELLIS_LIBDIR" "${lib.getLib trellis}/lib/trellis")
     (lib.cmakeFeature "GOWIN_BBA_EXECUTABLE" (lib.getExe' python3Packages.apycula "gowin_bba"))
     (lib.cmakeBool "USE_OPENMP" true)
 
-    # gatemate excluded due to non-reproducible build https://github.com/YosysHQ/prjpeppercorn/issues/9
     # xilinx excluded due to needing vivado https://github.com/f4pga/prjxray?tab=readme-ov-file#step-1
-    (lib.cmakeFeature "HIMBAECHEL_UARCH" "example;gowin;ng-ultra")
+    (lib.cmakeFeature "HIMBAECHEL_UARCH" "example;gowin;ng-ultra;gatemate")
 
     (lib.cmakeFeature "HIMBAECHEL_GOWIN_DEVICES" "all")
     (lib.cmakeFeature "HIMBAECHEL_PRJBEYOND_DB" prjbeyond_src.outPath)
+
+    (lib.cmakeFeature "HIMBAECHEL_PEPPERCORN_PATH" prjpeppercorn_src.outPath)
     # https://github.com/YosysHQ/nextpnr/issues/1578
     # `Compatibility with CMake < 3.5 has been removed from CMake.`
     # "CMAKE_POLICY_VERSION_MINIMUM=3.5"
