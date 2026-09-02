@@ -6,13 +6,18 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "alibuild";
-  version = "1.17.42";
+  version = "1.17.43";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-QFNyb6lmTGOaAj4qyDo/mTW7J6LHfALnjo+b0WTllDQ=";
+    hash = "sha256-d/eag9686TSEqJsYnVmwF99vqIjTKoi6tZxhI6s0wak=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools_scm[toml]>=6.2,<10" "setuptools_scm"
+  '';
 
   build-system = with python3Packages; [
     setuptools
