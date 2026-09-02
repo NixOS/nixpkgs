@@ -1,6 +1,6 @@
 {
   lib,
-  flutter341,
+  flutter344,
   fetchFromGitHub,
   cmake,
   copyDesktopItems,
@@ -13,17 +13,18 @@
   libxrandr,
   libxtst,
   sqlite,
+  wayland-scanner,
 }:
 
-flutter341.buildFlutterApplication (finalAttrs: {
+flutter344.buildFlutterApplication (finalAttrs: {
   pname = "windsend";
-  version = "1.7.1";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "doraemonkeys";
     repo = "WindSend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r3D6Uj8buMceqXov6An+OxgOTcNFrX5PwxhphtbeUv0=";
+    hash = "sha256-B66JvMRAJcudS/yqYwS9KJBMqOOgKcPVolqKQHVurqg=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -35,6 +36,7 @@ flutter341.buildFlutterApplication (finalAttrs: {
   nativeBuildInputs = [
     cmake
     copyDesktopItems
+    wayland-scanner
   ];
 
   buildInputs = [

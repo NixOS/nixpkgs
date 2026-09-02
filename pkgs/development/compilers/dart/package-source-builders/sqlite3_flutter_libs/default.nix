@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
 }:
 
@@ -9,7 +10,7 @@ stdenv.mkDerivation {
   inherit version src;
   inherit (src) passthru;
 
-  postPatch = ''
+  postPatch = lib.optionalString (lib.versionOlder version "0.6.0") ''
     cp ${./CMakeLists.txt} linux/CMakeLists.txt
   '';
 
