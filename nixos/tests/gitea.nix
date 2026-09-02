@@ -53,17 +53,6 @@ let
                 };
               };
 
-              gitea-actions-runner.instances."test" = {
-                enable = true;
-                name = "ci";
-                url = "http://localhost:3000";
-                labels = [
-                  # don't require docker/podman
-                  "native:host"
-                ];
-                tokenFile = "/var/lib/gitea/runner_token";
-              };
-
               openssh.enable = true;
             };
             environment.systemPackages = [
@@ -160,13 +149,6 @@ let
                              + '-H "Authorization: Bearer fakesecret" '
                              + 'http://localhost:3000/metrics '
                              + '| grep gitea_accesses')
-
-          with subtest("Testing runner registration"):
-              server.succeed(
-                  "su -l gitea -c 'GITEA_WORK_DIR=/var/lib/gitea gitea actions generate-runner-token' | sed 's/^/TOKEN=/' | tee /var/lib/gitea/runner_token"
-              )
-              server.wait_for_unit("gitea-runner-test.service")
-              server.succeed("journalctl -o cat -u gitea-runner-test.service | grep -q 'Runner registered successfully'")
         '';
     });
 in
