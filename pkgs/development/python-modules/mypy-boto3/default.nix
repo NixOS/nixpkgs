@@ -335,8 +335,8 @@ in
       "sha256-3JYcWKFk0dKJg/qn+EBvxeAO5xh5PXCU3dTEWDr1oXI=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.43.79"
-      "sha256-nup6lqkxN1g/df7cw2mCLKMGHuCm52BeoHhAgSIZzn8=";
+    buildMypyBoto3Package "connect" "1.43.84"
+      "sha256-ydNsiq5TJMyLouSgRMvmuYtQVY1IPFKtQ45awtaOpkg=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.43.79"
@@ -355,16 +355,16 @@ in
       "sha256-bPHo+9k+bZeVrx6ytHiat8ienlPMqmmtei3waof4m4E=";
 
   mypy-boto3-controltower =
-    buildMypyBoto3Package "controltower" "1.43.0"
-      "sha256-TvuQwrUio7zZucfmOwDGJskn5cqZB3Z3I1CELx/ZnG4=";
+    buildMypyBoto3Package "controltower" "1.43.84"
+      "sha256-1UynYUWJBNAR7XluHvtbnVo9GJIP9srcFXuo/f6wGy0=";
 
   mypy-boto3-cur =
     buildMypyBoto3Package "cur" "1.43.0"
       "sha256-pi0hMLpgYGrNU0/infONBg2WmES6NV0tfPgTjuRtWXk=";
 
   mypy-boto3-customer-profiles =
-    buildMypyBoto3Package "customer-profiles" "1.43.40"
-      "sha256-3eL2AWChh+ct7DwLMNlnXyA95vovQ6QO9zlDGB1gII4=";
+    buildMypyBoto3Package "customer-profiles" "1.43.84"
+      "sha256-hCHv3nS06HZXMyQZrgboaNOw++iwDBid1z0BJ0Bpie0=";
 
   mypy-boto3-databrew =
     buildMypyBoto3Package "databrew" "1.43.0"
@@ -710,8 +710,8 @@ in
       "sha256-kgfPSlNO0uj6Az83Bc/p3uyjqI3VMgwK+5/6tRoY4ok=";
 
   mypy-boto3-kafkaconnect =
-    buildMypyBoto3Package "kafkaconnect" "1.43.0"
-      "sha256-FM/OFQLL6E/ikP6PIFF7sMwNjBoVfufLWH99tL/B7xA=";
+    buildMypyBoto3Package "kafkaconnect" "1.43.84"
+      "sha256-HmtmND6m3dv/AffBhlDhiSmHpK2npSttt7RvwtrFnqs=";
 
   mypy-boto3-kendra =
     buildMypyBoto3Package "kendra" "1.43.23"
@@ -726,8 +726,8 @@ in
       "sha256-f36IwT8zw4RvLqbZgGas6euLVdKR5gJJl7eLBF8PjaE=";
 
   mypy-boto3-kinesis =
-    buildMypyBoto3Package "kinesis" "1.43.78"
-      "sha256-VEFubvAX5fQSaoZASKcvdar/DyLiCKVg07nNuUOT4hU=";
+    buildMypyBoto3Package "kinesis" "1.43.84"
+      "sha256-nKymAOSmsdkjHHSonZsGuBu0BJKJkwACqi5OwvNT988=";
 
   mypy-boto3-kinesis-video-archived-media =
     buildMypyBoto3Package "kinesis-video-archived-media" "1.43.0"
@@ -1038,8 +1038,8 @@ in
       "sha256-A8/WYxFn06rUXtcIHsKfs7HxvOBges0wDGskm31NIyw=";
 
   mypy-boto3-pinpoint-sms-voice-v2 =
-    buildMypyBoto3Package "pinpoint-sms-voice-v2" "1.43.37"
-      "sha256-Z9U5ywvzKxkjW1q3IBYSRrGLhOcgjfwYGtdLP2ytqmE=";
+    buildMypyBoto3Package "pinpoint-sms-voice-v2" "1.43.84"
+      "sha256-XGCMvA6cyzMNrJ6uMVV2xSRmZnPA+Kyfjdr68B8LTU0=";
 
   mypy-boto3-pipes =
     buildMypyBoto3Package "pipes" "1.43.0"
@@ -1070,8 +1070,8 @@ in
       "sha256-YrrEKl3aGz//5Z5JGapHhWtk6hBXQ4cuRQmLqGYztzg=";
 
   mypy-boto3-quicksight =
-    buildMypyBoto3Package "quicksight" "1.43.70"
-      "sha256-qMXg+rGG5ubCyKEGZhJyCOtjk1/mz3row6qf09MaDzY=";
+    buildMypyBoto3Package "quicksight" "1.43.84"
+      "sha256-8HQGvA7/CTOtOwi3H4zyfM9CugpMPrAsoGq+2LoRgKs=";
 
   mypy-boto3-ram =
     buildMypyBoto3Package "ram" "1.43.0"
@@ -1170,8 +1170,8 @@ in
       "sha256-T+JIJpHxD7IzAwq8yxgq6zbVMj/btpbhKnylMyfFvvU=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.43.81"
-      "sha256-NHB+6a+NW33Q9rOiQBmZLf08n9QFXurLOHL6j70bVRw=";
+    buildMypyBoto3Package "sagemaker" "1.43.84"
+      "sha256-xyi2fTpdpInnnD0BUvgGdSSu3aSiNAhdupcLce+u1C4=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.43.0"
@@ -1330,8 +1330,8 @@ in
       "sha256-fDjP/Q8H/yJtC4AWYQv1+hm9b6KnWgTP3uy6LKvqikw=";
 
   mypy-boto3-support =
-    buildMypyBoto3Package "support" "1.43.28"
-      "sha256-2smd+BvF4sNeJg7dd/eVzEqL6IXSp/iYyECcqVcMpFs=";
+    buildMypyBoto3Package "support" "1.43.84"
+      "sha256-idAR4rzgGjV373VLw6vB6GBK33GawNjNMVApo6YayUs=";
 
   mypy-boto3-support-app =
     buildMypyBoto3Package "support-app" "1.43.0"
