@@ -175,21 +175,25 @@ let
         packages = lib.unique (map toString ([ udev ] ++ cfg.packages));
       }
       ''
-        mkdir -p etc/udev/hwdb.d
+        mkdir -p $out/etc/udev/hwdb.d
         for i in $packages; do
           echo "Adding hwdb files for package $i"
           for j in $i/{etc,lib}/udev/hwdb.d/*; do
             # This must be a copy, not a symlink, because --root below will chase links within the root argument.
-            cp $j etc/udev/hwdb.d/$(basename $j)
+            cp $j $out/etc/udev/hwdb.d/$(basename $j)
           done
         done
 
         echo "Generating hwdb database..."
         # hwdb --update doesn't return error code even on errors!
-        res="$(${pkgs.buildPackages.systemd}/bin/systemd-hwdb --root=$(pwd) update 2>&1)"
+        # v3 hwdb.bin stores each source filename. $out is a stable prefix;
+        # $(pwd) would embed the build directory (NixOS/nixpkgs#558933).
+        res="$(${pkgs.buildPackages.systemd}/bin/systemd-hwdb --root=$out update 2>&1)"
         echo "$res"
         [ -z "$(echo "$res" | egrep '^Error')" ]
-        mv etc/udev/hwdb.bin $out
+        mv $out/etc/udev/hwdb.bin $NIX_BUILD_TOP/hwdb.bin
+        rm -rf $out
+        mv $NIX_BUILD_TOP/hwdb.bin $out
       '';
 
   compressFirmware =
