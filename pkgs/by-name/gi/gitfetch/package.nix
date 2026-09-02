@@ -27,11 +27,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        gh
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [
+      gh
+    ]}"
   ];
 
   passthru.updateScript = nix-update-script { };
