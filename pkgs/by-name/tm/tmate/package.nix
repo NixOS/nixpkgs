@@ -57,5 +57,9 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ck3d ];
     mainProgram = "tmate";
+    knownVulnerabilities = [
+      "There are no upstream releases since 2019-11."
+      "CVE-2018-19387"
+    ];
   };
 }
