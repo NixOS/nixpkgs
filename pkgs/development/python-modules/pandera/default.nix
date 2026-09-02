@@ -49,7 +49,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pandera";
-  version = "0.33.0";
+  version = "0.33.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -57,7 +57,7 @@ buildPythonPackage (finalAttrs: {
     owner = "unionai-oss";
     repo = "pandera";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QW+od2owqkErtz8fZc+LFVtsVAdMZFtUnR+9eaAXPK4=";
+    hash = "sha256-5sM/iEbv1+ojqwL/E9cVQxJW3u1dlzMQ6iAiKAjV+DI=";
   };
 
   build-system = [
