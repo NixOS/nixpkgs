@@ -1,4 +1,4 @@
-# The GHC source tree, unpacked, patched, templated and autoreconf'd.
+# The GHC source tree, unpacked, patched and templated.
 #
 # Every package in the set builds out of a subdirectory of this, using the idiom
 # `pkgs/development/tools/haskell/hadrian/ghc-toolchain.nix` already uses today:
@@ -32,8 +32,6 @@
   runCommand,
   fetchurl,
   fetchgit,
-  autoconf,
-  automake,
   officialRelease ? null,
   gitRelease ? null,
   version,
@@ -159,16 +157,6 @@ let
     fi
   '';
 
-  # `rts` and `ghc-internal` are `build-type: Configure`, so Cabal -- not us --
-  # runs their configure scripts at build time. We only have to make sure the
-  # scripts exist. The top-level `configure` is regenerated too, because
-  # `rts/configure.ac` and `ghc-internal/configure.ac` pull macros from `m4/`.
-  autoreconfDirs = [
-    "."
-    "rts"
-    "libraries/ghc-internal"
-  ];
-
   # Bound here rather than inline so the testsuite in `passthru` can reuse the
   # very same checkout on a git release, where `testsuite/` sits in the tree.
   upstreamSrc =
@@ -194,11 +182,6 @@ stdenvNoCC.mkDerivation {
     src = upstreamSrc;
     inherit patches;
   };
-
-  nativeBuildInputs = [
-    autoconf
-    automake
-  ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -308,15 +291,6 @@ stdenvNoCC.mkDerivation {
       cp -f "driver/utils/$f" driver/ghci/
     done
 
-    for d in ${lib.escapeShellArgs autoreconfDirs}; do
-      echo "running autoreconf in $d"
-      ( cd "$d" && autoreconf )
-    done
-
-    # autoreconf leaves a `configure~` beside each script it regenerates: dead
-    # weight in the output, and confusing to anyone grepping the tree since it
-    # is a copy of the pre-regeneration script.
-    find . -name 'configure~' -delete
   '';
 
   installPhase = ''
@@ -375,7 +349,7 @@ stdenvNoCC.mkDerivation {
   preferLocalBuild = true;
 
   meta = {
-    description = "GHC ${version} source tree, templated and autoreconf'd";
+    description = "GHC ${version} source tree, patched and templated";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
   };

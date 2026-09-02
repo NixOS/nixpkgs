@@ -39,6 +39,7 @@
   callPackage,
   python3,
   libffi,
+  autoreconfHook,
   ncurses,
   haskellLib,
   ghcSrc,
@@ -248,6 +249,13 @@ let
     ghc-internal = final: _: {
       # Same as rts: `c` is libc, supplied by the stdenv.
       librarySystemDepends = [ ];
+
+      # `build-type: Configure` with a `configure.ac` and no `configure`: the
+      # source tree ships the input, this generates the script. The hook adds
+      # `autoreconfPhase` to `preConfigurePhases`, which `generic-builder`
+      # already uses for `compileBuildDriverPhase`, so it lands before the
+      # `./configure` in `preConfigure` below.
+      libraryToolDepends = [ autoreconfHook ];
 
       preConfigure = ''
         export CPPFLAGS="$CPPFLAGS -I$PWD"
@@ -466,7 +474,16 @@ let
         '';
 
         # `gen_event_types.py` and, indirectly, `deriveConstants`.
-        libraryToolDepends = [ python3 ];
+        #
+        # `autoreconfHook` because `rts` is `build-type: Configure` and the
+        # source tree ships `configure.ac` without a `configure`. The hook adds
+        # `autoreconfPhase` to `preConfigurePhases`, which `generic-builder`
+        # already uses for `compileBuildDriverPhase`, so it lands before the
+        # `./configure` run in `preConfigure` above.
+        libraryToolDepends = [
+          python3
+          autoreconfHook
+        ];
         configureFlags =
           # Must agree with `rtsFlags` above.
           lib.mapAttrsToList (n: v: if v then "-f${n}" else "-f-${n}") rtsFlags

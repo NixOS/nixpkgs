@@ -131,11 +131,13 @@ runCommand "ghc-settings-${targetPlatform.config}"
       platforms = lib.platforms.all;
     };
   }
-  ''
-    mkdir -p "$out"
+  (
+    ''
+      mkdir -p "$out"
 
-    cp "${ghcSrc}/config.sub" .
-    chmod +w config.sub
+      cp "${ghcSrc}/config.sub" .
+      chmod +w config.sub
+    ''
 
     # Upstream ghc-toolchain emits only the typed `Target`. `--output-settings`,
     # which stable-haskell uses to get a `lib/settings` straight out of this
@@ -148,6 +150,8 @@ runCommand "ghc-settings-${targetPlatform.config}"
     # from the layout of the tree being assembled. So `settings` belongs to the
     # assembly step, downstream of the boot libraries; this derivation is just
     # the toolchain probe, and it is genuinely standalone.
-    ghc-toolchain-bin ${lib.escapeShellArgs flags} --output "$out/default.target"
+    + ''
+      ghc-toolchain-bin ${lib.escapeShellArgs flags} --output "$out/default.target"
 
-  ''
+    ''
+  )
