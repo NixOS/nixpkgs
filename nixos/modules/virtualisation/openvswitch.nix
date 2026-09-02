@@ -105,6 +105,7 @@ in
               /var/db/openvswitch/conf.db
           '';
           Restart = "always";
+          RestartMode = "direct";
           RestartSec = 3;
           PIDFile = "/run/openvswitch/ovsdb.pid";
           # Use service type 'forking' to correctly determine when ovsdb-server is ready.
@@ -131,6 +132,7 @@ in
           # Use service type 'forking' to correctly determine when vswitchd is ready.
           Type = "forking";
           Restart = "always";
+          RestartMode = "direct";
           RestartSec = 3;
         };
       };
