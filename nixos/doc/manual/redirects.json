@@ -1,4 +1,13 @@
 {
+  "ex-settings-secrets": [
+    "index.html#ex-settings-secrets"
+  ],
+  "ex-settings-secrets-user": [
+    "index.html#ex-settings-secrets-user"
+  ],
+  "ex-settings-structured-secret": [
+    "index.html#ex-settings-structured-secret"
+  ],
   "module-services-portmaster": [
     "index.html#module-services-portmaster"
   ],
@@ -252,6 +261,12 @@
   ],
   "sec-override-nixos-test": [
     "index.html#sec-override-nixos-test"
+  ],
+  "sec-settings-secrets": [
+    "index.html#sec-settings-secrets"
+  ],
+  "sec-settings-structured-secrets": [
+    "index.html#sec-settings-structured-secrets"
   ],
   "sec-state-revision": [
     "index.html#sec-state-revision"

@@ -861,6 +861,12 @@
   "sec-problems": [
     "index.html#sec-problems"
   ],
+  "sec-secrets": [
+    "index.html#sec-secrets"
+  ],
+  "sec-secrets-configuration-files": [
+    "index.html#sec-secrets-configuration-files"
+  ],
   "sec-using-llvm": [
     "index.html#sec-using-llvm"
   ],

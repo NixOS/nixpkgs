@@ -5,5 +5,6 @@
 
 {
   genJqSecretsReplacement = runTest ./genJqSecretsReplacement.nix;
+  genSecretsReplacement = runTest ./genSecretsReplacement.nix;
   mkStateRevisionOption = callPackage ./mkStateRevisionOption.nix { };
 }
