@@ -1,8 +1,12 @@
 {
   lib,
   buildPythonPackage,
+  coincidence,
   domdf-python-tools,
-  fetchPypi,
+  fetchFromGitHub,
+  pytest-datadir,
+  pytest-regressions,
+  pytestCheckHook,
   tinycss2,
   whey,
 }:
@@ -12,10 +16,11 @@ buildPythonPackage (finalAttrs: {
   version = "0.6.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) version;
-    pname = "dict2css";
-    hash = "sha256-FD5Vy3HJiojHnyxB4IpfpNh1ZZJ1dW95TjHM1pk2zog=";
+  src = fetchFromGitHub {
+    owner = "sphinx-toolbox";
+    repo = "dict2css";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6xVK4NBrg7v7iqbVwPcUGLYpm9Me3GCik1hRzjS0i7A=";
   };
 
   build-system = [ whey ];
@@ -23,6 +28,13 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     domdf-python-tools
     tinycss2
+  ];
+
+  nativeCheckInputs = [
+    coincidence
+    pytest-datadir
+    pytest-regressions
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "dict2css" ];
