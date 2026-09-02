@@ -8,17 +8,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "whisper-cli";
-  version = "0.210.1";
+  version = "0.211.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "whisper-sec";
     repo = "whisper-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W4w8uWkAP91X/XksrLkZImlXRn5/tlegd0U1SZN4ldc=";
+    hash = "sha256-mTq2M05ILi3aJ7yROoyZz3nx8tvqWAgG44Ty77tDsq8=";
   };
 
-  vendorHash = "sha256-igwMhV0vG+B6BzMWaJS1EkmigJZpKXDpi1Y06wENHn0=";
+  vendorHash = "sha256-0il3bPeRFbZG8JOoM/usJtkafW4QpYxCYvW/eYX3hvo=";
 
   subPackages = [ "cmd/whisper" ];
 
