@@ -476,6 +476,7 @@ in
   custom-ca = import ./custom-ca.nix { inherit pkgs runTest; };
   cyrus-imap = runTest ./cyrus-imap.nix;
   dae = runTest ./dae.nix;
+  darling = handleTest ./darling.nix { };
   darling-dmg = runTest ./darling-dmg.nix;
   dashy = runTest ./web-apps/dashy.nix;
   davis = runTest ./davis.nix;
