@@ -5,6 +5,9 @@
   rustPlatform,
   openssl,
   pkg-config,
+  cmake,
+  perl,
+  git,
   nix-update-script,
   versionCheckHook,
   _experimental-update-script-combinators,
@@ -27,8 +30,24 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-tBuPQjjqXkF+vcBRXXyi9+gcBzg8L3QH2jjixBzGODE=";
 
+  # Enable the `render` (HTML rendering/PDF) and `stealth` (anti-bot
+  # evasion) features.
+  buildFeatures = [
+    "render"
+    "stealth"
+  ];
+
   nativeBuildInputs = [
     pkg-config
+    # Sets LIBCLANG_PATH/BINDGEN_EXTRA_CLANG_ARGS for crates using the
+    # `bindgen` crate at build time (e.g. boringssl's rust bindings).
+    rustPlatform.bindgenHook
+    # btls-sys (pulled in via the `render` feature) builds its bundled
+    # BoringSSL checkout with CMake during the build.
+    cmake
+    perl
+    # btls-sys also runs `git init` on the BoringSSL checkout.
+    git
   ];
 
   buildInputs = [
