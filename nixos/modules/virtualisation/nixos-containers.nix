@@ -637,6 +637,12 @@ in
                                       Names containing underscores are not allowed in nixos-containers. Please rename the container '${name}'
                                     '';
                                   }
+                                  {
+                                    assertion = lib.all (name: (lib.stringLength name) <= 15) (lib.attrNames config.extraVeths);
+                                    message = ''
+                                      veth interface names over 15 characters are not allowed in Linux.
+                                    '';
+                                  }
                                 ];
                               };
                             };
