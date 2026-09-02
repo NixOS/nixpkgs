@@ -19,7 +19,6 @@ let
     # `gitRelease` entries need nothing here.
     "9.14.1".officialRelease.testsuiteSha256 = "1va5ls4ng32hq8236w2aq5k0gjwxzdmwgfjf6b8z7pgpy0hzrbl4";
 
-    "9.14.1".typedSettings = true;
     # The same settings-JSON change HEAD takes from upstream, backported onto
     # the 9.14.1 release. Three commits have to come with it, and the order is
     # the interesting part:
@@ -80,7 +79,6 @@ let
         ];
 
     "9.15".setupCabalVersion = "3_16_1_0";
-    "9.15".typedSettings = true;
     # Tree-wide, so it belongs here rather than in `head/packages/`. It is the
     # change this package set has been carrying as four hand-maintained patches;
     # taking it from the branch it was submitted on keeps the two in step, and
@@ -108,7 +106,6 @@ let
       gitRelease ? null,
       version ? null,
       setupCabalVersion ? "3_12_1_0",
-      typedSettings ? false,
       patches ? [ ],
     }@args:
     let
@@ -137,7 +134,6 @@ let
             gitRelease
             version
             setupCabalVersion
-            typedSettings
             patches
             ;
         }

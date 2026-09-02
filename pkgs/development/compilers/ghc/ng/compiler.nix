@@ -41,34 +41,34 @@ let
     inherit (ghcVersion) ghcSrc;
   };
 
-  inherit (ghcVersion) typedSettings;
-
-  # Facts about the build rather than about the toolchain; see
-  # ./common/mk-settings.nix. `base unit-id` is deliberately absent -- it
-  # carries a hash Cabal computes at build time, so `assemble.nix` reads it out
-  # of the registered package.conf rather than guessing during evaluation.
+  # Facts about the build rather than about the toolchain. The toolchain half
+  # lives in `lib/targets/default.target` now, so this is all that is left of
+  # `lib/settings.json` -- writing anything else here would be writing keys
+  # nothing looks up.
+  #
+  # `base unit-id` is deliberately absent: it carries a hash Cabal computes at
+  # build time, so `assemble.nix` reads it out of the registered package.conf
+  # rather than guessing during evaluation, which would mean IFD.
   buildStateSettings = {
     # Only the vanilla way is built; see `threaded` in ./common/overlay.nix.
     "RTS ways" = "v";
     "Relative Global Package DB" = "package.conf.d";
     "unlit command" = "$topdir/../bin/unlit";
-  }
-  # A tree that reads `settings.json` has had the toolchain facts moved into
-  # `lib/targets/default.target`, so these are no longer read from here at
-  # all. Keeping them would be writing keys nothing looks up.
-  // lib.optionalAttrs (!typedSettings) {
-    "cross compiling" = if stdenv.buildPlatform != stdenv.hostPlatform then "YES" else "NO";
-    "target has libm" = if stdenv.hostPlatform.isUnix then "YES" else "NO";
-    "Use inplace MinGW toolchain" = "NO";
-    "Support SMP" = "YES";
-    "RTS expects libdw" = "NO";
-    "target RTS linker only supports shared libraries" = "NO";
-  };
 
-  # `Use interpreter` is the one boolean the compiler still reads from the
-  # settings file. Typed trees read it with `getRawBooleanSetting`, which
-  # rejects a string outright, so the two spellings are not interchangeable.
-  useInterpreter = b: if typedSettings then b else (if b then "YES" else "NO");
+    # Booleans, not "YES"/"NO": 9.14 reads the first two with
+    # `getRawBooleanSetting`, which rejects a string outright.
+    #
+    # This is the full list `hadrian/src/Rules/Generate.hs:generateSettings`
+    # emits, which is the only authority on what belongs here. 9.14 still reads
+    # `target has libm` and `target RTS linker only supports shared libraries`
+    # from this file; on HEAD they have moved into `targets/default.target` and
+    # nothing looks them up, but writing them costs nothing and keeping the two
+    # versions the same beats a conditional.
+    "target has libm" = stdenv.hostPlatform.isUnix;
+    "target RTS linker only supports shared libraries" = false;
+    "Support SMP" = true;
+    "RTS expects libdw" = false;
+  };
 
   # The libraries the shipped compiler registers. Named rather than taken
   # wholesale, because the set now contains all of Hackage.
@@ -144,7 +144,7 @@ let
       # disagree the link fails with `cannot find -lHSghc-internal-...`.
       version = ghcVersion.ghcSrc.release_version;
       inherit (ghcVersion) ghcSrc;
-      inherit toolchainSettings buildGhcPkg typedSettings;
+      inherit toolchainSettings buildGhcPkg;
       inherit (packages) ghc-bin ghc-pkg;
     }
     // (
@@ -153,7 +153,7 @@ let
           # stage1 ships no libraries, so it has no interpreter and no `base` to
           # take a unit-id from.
           buildStateSettings = buildStateSettings // {
-            "Use interpreter" = useInterpreter false;
+            "Use interpreter" = false;
             "base unit-id" = "base";
           };
           # Build-hosted: stage1 only ever runs here.
@@ -162,7 +162,7 @@ let
       else
         {
           buildStateSettings = buildStateSettings // {
-            "Use interpreter" = useInterpreter true;
+            "Use interpreter" = true;
             # Replaced at build time from the registered package.conf.
             "base unit-id" = "base";
           };
