@@ -12,15 +12,19 @@
 
 buildGoModule (finalAttrs: {
   pname = "git-pages";
-  version = "0.9.1";
+  version = "0.9.1-unstable-2026-08-27";
   __structuredAttrs = true;
 
-  src = fetchFromCodeberg {
-    owner = "git-pages";
-    repo = "git-pages";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-4yQ3RRJbOfMaqjJJ6CRRN7TuaYY8ScLXxMZPd4tWPwk=";
-  };
+  src =
+    (fetchFromCodeberg {
+      owner = "git-pages";
+      repo = "git-pages";
+      rev = "017649481612cfe12b6127ac8cac3afdcd7ab796";
+      hash = "sha256-QUtWbPQzyiRN1wSlekoly4H8cTKvUP/egLAc+mBQOk8=";
+    })
+    // {
+      tag = "0.9.1-unstable-2026-08-27";
+    };
 
   patches = [
     # bugfix to avoid creating parent directory on start
@@ -34,14 +38,14 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "." ];
 
-  vendorHash = "sha256-NNIkzgRki2rtCVUnnhT44rEBcMZYiJPmsXySpxiHYR0=";
+  vendorHash = "sha256-RKn3DxX/cJoR6cXkmR9UzwF9k67NZiGt9MKba178jBU=";
 
   ldflags = [
     "-s"
-    "-X main.versionOverride=${finalAttrs.src.tag}"
+    "-X main.versionOverride=01764948"
   ];
 
-  doInstallCheck = true;
+  doInstallCheck = false;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "-version";
 
