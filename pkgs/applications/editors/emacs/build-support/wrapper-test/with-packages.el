@@ -159,6 +159,9 @@ This is a regression test for URL `https://github.com/NixOS/nixpkgs/pull/538964'
   (if (not (native-comp-available-p))
       (list t)
     ;; Give Emacs some time to generate JIT native-comp results.
+    ;; It is possible that this test passes even if there is JIT native-comp
+    ;; because we use a hardcoded time span as the synchronization point.
+    ;; Ideally, we should use a more robust synchronization point.
     (sleep-for 2.5)
     (list (not (cl-loop for buffer being each buffer
                         thereis (string= (buffer-name buffer)
