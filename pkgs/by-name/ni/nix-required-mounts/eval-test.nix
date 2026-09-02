@@ -11,6 +11,7 @@ let
       presets.nvidia-gpu.enable = true;
     };
     fileSystems."/".device = "/dev/null";
+    fileSystems."/".fsType = "none";
     boot.loader.grub.enable = false;
     system.stateVersion = lib.trivial.release;
   };
