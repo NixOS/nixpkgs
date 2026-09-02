@@ -44,6 +44,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Utilities for working with inspect.Signature objects";
     homepage = "https://sigtools.readthedocs.io/";
+    changelog = "https://github.com/epsy/sigtools/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
