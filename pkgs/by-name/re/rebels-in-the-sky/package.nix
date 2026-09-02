@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rebels-in-the-sky";
-  version = "1.7.1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "ricott1";
     repo = "rebels-in-the-sky";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bLyAki9XJuQRwKhO8jiR1wcssfvXTXGftOS4WRyvVe0=";
+    hash = "sha256-RoIHj1UJBQOYiKHAj13NIxROKonO0HBdieOrwyDjl8I=";
   };
 
-  cargoHash = "sha256-PUo9avg1wWgS7D6u3zIBbgv1/eM6N9PbA+EwzdNHC0w=";
+  cargoHash = "sha256-e6tPj6tOuzuwT3Cdtu3Eu8rksBS9WFditpIykED9Wdc=";
 
   patches = lib.optionals (!withRadio) [
     ./disable-radio.patch
