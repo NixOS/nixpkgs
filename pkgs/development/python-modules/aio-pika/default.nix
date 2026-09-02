@@ -3,28 +3,33 @@
   aiormq,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   uv-build,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aio-pika";
-  version = "9.6.2";
+  version = "10.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "aio-pika";
     tag = version;
-    hash = "sha256-N5MjFIolMRTTn4aV1NskBwonB/8FSuEZETumUrAa02Y=";
+    hash = "sha256-IVFZyYogfwEGyu4oysh5XGxVBEzoMT4lKoJKtphm3kE=";
   };
+
+  pythonRelaxDeps = [ "aiormq" ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.9.26,<0.10.0" uv_build
+      --replace-fail "uv_build>=0.9.26,<0.12" uv_build
   '';
 
   build-system = [ uv-build ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiormq
