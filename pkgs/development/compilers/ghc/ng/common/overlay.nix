@@ -883,6 +883,9 @@ in
       # The undecorated version: the conf has to land under the libdir the
       # compiler actually uses, `lib/ghc-<cProjectVersion>`.
       ghcVersion = ghcSrc.release_version;
+      # For `mk/system-cxx-std-lib-1.0.conf.in`, which the `.conf` is
+      # substituted from.
+      inherit ghcSrc;
     };
   };
 

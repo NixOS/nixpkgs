@@ -24,6 +24,7 @@
   stdenv,
   runCommand,
   ghcVersion,
+  ghcSrc,
 }:
 
 let
@@ -33,28 +34,10 @@ let
   cxxLibName = if isLibcxx then "c++" else "stdc++";
 
   libDir = "${lib.getLib cxxLib}/lib";
-
-  conf = ''
-    name:                 system-cxx-std-lib
-    version:              1.0
-    visibility:           public
-    id:                   system-cxx-std-lib-1.0
-    key:                  system-cxx-std-lib-1.0
-    license:              BSD-3-Clause
-    synopsis:             A placeholder for the system's C++ standard library implementation.
-    category:             System
-    abi:                  00000000000000000000000000000000
-    exposed:              True
-    exposed-modules:
-    extra-libraries:      ${cxxLibName}
-    library-dirs:         ${libDir}
-    dynamic-library-dirs: ${libDir}
-  '';
 in
 
 runCommand "system-cxx-std-lib-1.0"
   {
-    inherit conf;
     passthru = {
       inherit cxxLibName libDir;
       # `generic-builder` decides whether a dependency is a Haskell package by
@@ -69,10 +52,26 @@ runCommand "system-cxx-std-lib-1.0"
       platforms = lib.platforms.all;
     };
   }
-  ''
+  (
     # The layout `generic-builder`'s `buildPkgDb` looks for: a `package.conf.d`
     # under the compiler's libdir.
-    d="$out/lib/ghc-${ghcVersion}/package.conf.d"
-    mkdir -p "$d"
-    printf '%s' "$conf" > "$d/system-cxx-std-lib-1.0.conf"
-  ''
+    ''
+      d="$out/lib/ghc-${ghcVersion}/package.conf.d"
+      mkdir -p "$d"
+    ''
+    # The template is upstream's, so the field list tracks the release rather
+    # than a copy here that drifts. 9.15 already added `extra-libraries-static`,
+    # which uses the same variable and so needs nothing from us.
+    #
+    # `--replace-fail` rather than `--replace`: if upstream renames a variable,
+    # failing loudly beats installing a `.conf` with a literal
+    # `@CXX_STD_LIB_LIBS@` in it, which would only surface at link time in some
+    # unrelated package.
+    + ''
+      substitute ${ghcSrc}/mk/system-cxx-std-lib-1.0.conf.in \
+        "$d/system-cxx-std-lib-1.0.conf" \
+        --replace-fail '@CXX_STD_LIB_LIBS@' '${cxxLibName}' \
+        --replace-fail '@CXX_STD_LIB_LIB_DIRS@' '${libDir}' \
+        --replace-fail '@CXX_STD_LIB_DYN_LIB_DIRS@' '${libDir}'
+    ''
+  )
