@@ -10,6 +10,7 @@
   alcotest,
   ca-certs,
   eio_main,
+  ppx_expect,
   tls-eio,
 }:
 
@@ -37,6 +38,7 @@ buildDunePackage {
     alcotest
     ca-certs
     eio_main
+    ppx_expect
     tls-eio
   ];
 
