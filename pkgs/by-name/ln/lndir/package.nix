@@ -48,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Create a shadow directory of symbolic links to another directory tree";
     homepage = "https://gitlab.freedesktop.org/xorg/util/lndir";
