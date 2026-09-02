@@ -3,8 +3,10 @@
   attrs,
   buildPythonPackage,
   fetchFromGitHub,
-  pygtrie,
   orjson,
+  pygtrie,
+  pyinstaller,
+  pytestCheckHook,
   setuptools-scm,
 }:
 
@@ -28,10 +30,17 @@ buildPythonPackage (finalAttrs: {
     pygtrie
   ];
 
-  # nox is not available at the moment
-  doCheck = false;
+  nativeCheckInputs = [
+    pyinstaller
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "sqltrie" ];
+
+  disabledTestPaths = [
+    # Ignoring benchmark tests
+    "tests/benchmarks/test_sqltrie.py"
+  ];
 
   meta = {
     description = "DVC's data management subsystem";
