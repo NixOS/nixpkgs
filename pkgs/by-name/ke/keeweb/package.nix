@@ -80,6 +80,9 @@ let
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = builtins.attrNames srcs;
+    knownVulnerabilities = [
+      "Uses Electron 12, EOL on November 16 2012. Has many known CVEs"
+    ];
   };
 in
 if stdenv.hostPlatform.isDarwin then
