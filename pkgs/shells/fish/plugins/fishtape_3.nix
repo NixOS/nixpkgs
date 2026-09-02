@@ -3,15 +3,14 @@
   buildFishPlugin,
   fetchFromGitHub,
 }:
-
-buildFishPlugin rec {
+buildFishPlugin (finalAttrs: {
   pname = "fishtape";
   version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "jorgebucaran";
     repo = "fishtape";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "072a3qbk1lpxw53bxp91drsffylx8fbywhss3x0jbnayn9m8i7aa";
   };
 
@@ -26,4 +25,4 @@ buildFishPlugin rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ euxane ];
   };
-}
+})
