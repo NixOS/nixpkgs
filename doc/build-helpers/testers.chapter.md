@@ -741,7 +741,7 @@ Notable attributes:
 
 Compliance suite for [modular service](https://nixos.org/manual/nixos/unstable/#modular-services) integrations.
 
-Tests that a service manager integration correctly handles the portable modular services contract: `process.argv`, sub-services, assertions, and warnings.
+Tests that a service manager integration correctly handles the portable modular services contract: `process.argv`, `process.environment` (including `null` values that unset a variable), sub-services, assertions, and warnings.
 
 ### Return value {#tester-modularServiceCompliance-return}
 
