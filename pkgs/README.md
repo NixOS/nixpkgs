@@ -598,6 +598,24 @@ Examples going from bad to best practices:
 >
 > Pushing large amounts of auto generated commits into forks is a practical vector for a denial-of-service attack, and was already [demonstrated against GitHub Actions Beta](https://blog.teddykatz.com/2019/11/12/github-actions-dos.html).
 
+### Using fake user data for download
+
+Some software downloads require user data, such as name or address. When possible, the following data should be used:
+
+```
+First Name: NixOS
+Last Name: Linux
+Email: someone@nixos.org
+Phone: +31 71 452 5670
+Country: Netherlands
+State/Province: Province of Utrecht
+Postcode: 3584CX
+City: Utrecht
+Address: Heidelberglaan 200
+```
+
+This fake data is inspired by the origin of the NixOS project which was started in 2003 as a research project at Utrecht University.
+
 ## Patches
 
 Sometimes, changes are needed to the source to allow building a derivation in nixpkgs, or to get earlier access to an upstream fix or improvement.
