@@ -4394,6 +4394,8 @@ self: super: with self; {
 
   directv = callPackage ../development/python-modules/directv { };
 
+  dirhash = callPackage ../development/python-modules/dirhash { };
+
   dirigera = callPackage ../development/python-modules/dirigera { };
 
   dirsearch = callPackage ../development/python-modules/dirsearch { };
@@ -7466,6 +7468,14 @@ self: super: with self; {
   hanzidentifier = callPackage ../development/python-modules/hanzidentifier { };
 
   hap-python = callPackage ../development/python-modules/hap-python { };
+
+  harbor = callPackage ../development/python-modules/harbor { inherit (pkgs) uv; };
+
+  harbor-atif2otel = callPackage ../development/python-modules/harbor-atif2otel { };
+
+  harbor-langsmith = callPackage ../development/python-modules/harbor-langsmith { };
+
+  harbor-rewardkit = callPackage ../development/python-modules/harbor-rewardkit { };
 
   harlequin-bigquery = callPackage ../development/python-modules/harlequin-bigquery { };
 
