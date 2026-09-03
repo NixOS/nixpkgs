@@ -1148,6 +1148,7 @@ mapAliases {
   icu69 = throw "ICU 69 has been removed as it is obsolete and no longer used by anything in Nixpkgs"; # Added 2026-04-20
   igvm-tooling = throw "'igvm-tooling' has been removed as it is poorly maintained upstream and a dependency has been marked insecure."; # Added 2025-09-03
   ikos = throw "ikos has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
+  ilmbase = throw "'ilmbase' has been removed as it was unmaintained upstream and has several known vulnerabilities"; # Added 2026-08-28
   imagemagick6 = throw "'imagemagick6' was removed because it is outdated. Use 'imagemagick' instead."; # added 2026-02-27
   imagemagick6_light = throw "'imagemagick6_light' was removed because it is outdated. Use 'imagemagick_light' instead."; # added 2026-02-27
   imagemagick6Big = throw "'imagemagick6Big' was removed because it is outdated. Use 'imagemagickBig' instead."; # added 2026-02-27
@@ -1890,7 +1891,9 @@ mapAliases {
   opencolorio_1 = throw "'opencolorio_1' has been removed. Use opencolorio instead"; # Added 2026-01-03
   openconnect_gnutls = throw "'openconnect_gnutls' has been renamed to/replaced by 'openconnect'"; # Converted to throw 2025-10-27
   opendrop = throw "'opendrop' has been removed as it was unmaintained upstream"; # Added 2026-05-24
+  openexr_2 = throw "'openexr_2' has been removed as it was unmaintained upstream and had many known vulnerabilities. Consider migrating to 'openexr' (3.x) instead."; # Added 2026-08-28
   openexr_3 = throw "'openexr_3' has been renamed to/replaced by 'openexr'"; # Converted to throw 2025-10-27
+  openexrid-unstable = throw "'openxrid-unstable' has been removed as it had several insecure dependencies and had minimal upstream maintainence"; # Added 2026-08-28
   opengfw = throw "'opengfw' has been removed because the upstream repository was deleted"; # Added 2026-03-16
   openhmd = throw "'openhmd' has been removed due to being unmaintained upstream"; # Added 2025-11-05
   openimageio2 = throw "'openimageio2' has been renamed to/replaced by 'openimageio'"; # Converted to throw 2025-10-27
