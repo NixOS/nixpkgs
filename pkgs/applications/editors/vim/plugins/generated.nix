@@ -11162,12 +11162,12 @@ final: prev: {
 
   neo-tree-nvim = buildVimPlugin {
     pname = "neo-tree.nvim";
-    version = "3.41.0";
+    version = "3.42.0";
     src = fetchFromGitHub {
       owner = "nvim-neo-tree";
       repo = "neo-tree.nvim";
-      tag = "3.41.0";
-      hash = "sha256-OVYt5QMWHRs/ivFcblHcgbqNkg+xzohG+IifPJBfY3o=";
+      tag = "3.42.0";
+      hash = "sha256-jZOBMPBfyHWPg4pdo7JWrl+pZ3WSxCSLqPFG7VUiDXs=";
     };
     meta.homepage = "https://github.com/nvim-neo-tree/neo-tree.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
