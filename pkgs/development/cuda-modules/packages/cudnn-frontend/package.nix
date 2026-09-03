@@ -35,13 +35,13 @@ backendStdenv.mkDerivation (finalAttrs: {
   name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
 
   pname = "cudnn-frontend";
-  version = "1.27.0";
+  version = "1.28.0";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cudnn-frontend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4KDxORr6vJRgJKYrooIILaWMWkGF6ZDuti1QtrzYTfA=";
+    hash = "sha256-oMsXgbLHhCnU+Q7bItzAPAN0U8LL4ZZCuXJwFKbJpEg=";
   };
 
   # nlohmann_json should be the only vendored dependency.

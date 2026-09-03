@@ -1,10 +1,13 @@
 {
+  # keep-sorted start
+  fetchurl,
+  fetchzip,
   jetbrains,
-  symlinkJoin,
   lib,
   runCommand,
-  fetchzip,
-  fetchurl,
+  symlinkJoin,
+  # keep-sorted end
+
   # If not set, all IDEs are tested.
   ide ? null,
 }:
@@ -14,21 +17,23 @@ let
     if ide == null then
       with jetbrains;
       [
+        # keep-sorted start
         clion
         datagrip
         dataspell
         gateway
         goland
-        idea-oss
         idea
+        idea-oss
         mps
         phpstorm
-        pycharm-oss
         pycharm
+        pycharm-oss
         rider
         ruby-mine
         rust-rover
         webstorm
+        # keep-sorted end
       ]
     else
       [ ide ];

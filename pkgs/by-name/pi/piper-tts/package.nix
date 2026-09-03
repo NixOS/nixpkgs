@@ -10,9 +10,10 @@
   espeak-ng,
 
   # extras
-  withTrain ? true,
-  withHTTP ? true,
   withAlignment ? true,
+  withHTTP ? true,
+  withJapanese ? true,
+  withTrain ? true,
 }:
 
 let
@@ -81,11 +82,21 @@ python3Packages.buildPythonApplication rec {
       onnxruntime
       pathvalidate
     ]
-    ++ lib.optionals withTrain optional-dependencies.train
+    ++ lib.optionals withAlignment optional-dependencies.alignment
     ++ lib.optionals withHTTP optional-dependencies.http
-    ++ lib.optionals withAlignment optional-dependencies.alignment;
+    ++ lib.optionals withJapanese optional-dependencies.ja
+    ++ lib.optionals withTrain optional-dependencies.train;
 
   optional-dependencies = {
+    alignment = with python3Packages; [
+      onnx
+    ];
+    http = with python3Packages; [
+      flask
+    ];
+    ja = with python3Packages; [
+      pyopenjtalk-plus
+    ];
     train =
       with python3Packages;
       [
@@ -99,20 +110,11 @@ python3Packages.buildPythonApplication rec {
         torch
       ]
       ++ jsonargparse.optional-dependencies.signatures;
-    http = with python3Packages; [
-      flask
-    ];
-    alignment = with python3Packages; [
-      onnx
-    ];
     zh = with python3Packages; [
       # g2pw # not packaged
       transformers
       sentence-stream
       unicode-rbnf
-    ];
-    ja = [
-      # pyopenjtalk-plus # not packaged
     ];
   };
 

@@ -1,12 +1,15 @@
 {
+  # keep-sorted start
+  fsnotifier,
+  jetbrains,
   lib,
-  mkJetBrainsProduct,
-  mkJetBrainsSource,
   maven,
+  stdenv,
   zlib,
+  # keep-sorted end
 }:
 let
-  src = mkJetBrainsSource {
+  src = jetbrains.mkJetBrainsSource {
     # update-script-start: source-args
     version = "2025.3.4";
     buildNumber = "253.32098.37";
@@ -35,14 +38,17 @@ let
     # update-script-end: source-args
   };
 in
-mkJetBrainsProduct {
-  inherit src;
+jetbrains.mkJetBrainsProduct {
+  inherit src fsnotifier;
   inherit (src)
     version
     buildNumber
-    libdbm
-    fsnotifier
     ;
+  # this is jetbrains-libdbm but using the sources from the IDE build.
+  jetbrains-libdbm = src.libdbm;
+
+  # the jdk is bundled on Darwin.
+  jdk = if lib.meta.availableOn stdenv.hostPlatform jetbrains.jdk then jetbrains.jdk else null;
 
   pname = "idea-oss";
 
@@ -68,6 +74,7 @@ mkJetBrainsProduct {
       gytis-ivaskevicius
       tymscar
     ];
+    teams = [ lib.teams.jetbrains ];
     license = lib.licenses.asl20;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     knownVulnerabilities = [
