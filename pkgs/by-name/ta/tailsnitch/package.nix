@@ -6,16 +6,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "tailsnitch";
-  version = "1.5";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "Adversis";
     repo = "tailsnitch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5gS9IQfu525ZtNQ74WWLQoqfXPJ2clm3pCz+/Ujmr4Y=";
+    hash = "sha256-b0++CFdOvdD99jszz6KZl7tKxGM0vAajPH9FAN8EIi0=";
   };
 
-  vendorHash = "sha256-khw9K4sKhubhkccoC4f923Aw2Cj9eKpVqLHZICdkTXw=";
+  vendorHash = "sha256-4K3I714F6gIG26W1Z7CpBNIGiJVg2VNfBuUbEN1+R2E=";
 
   ldflags = [
     "-w"

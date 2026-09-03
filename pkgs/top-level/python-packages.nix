@@ -10627,8 +10627,6 @@ self: super: with self; {
 
   mediafile = callPackage ../development/python-modules/mediafile { };
 
-  mediafire-dl = callPackage ../development/python-modules/mediafire-dl { };
-
   mediapy = callPackage ../development/python-modules/mediapy { };
 
   mediawiki-langcodes = callPackage ../development/python-modules/mediawiki-langcodes { };
@@ -15638,6 +15636,8 @@ self: super: with self; {
   pyopengltk = callPackage ../development/python-modules/pyopengltk { };
 
   pyopenjtalk = callPackage ../development/python-modules/pyopenjtalk { };
+
+  pyopenjtalk-plus = callPackage ../development/python-modules/pyopenjtalk-plus { };
 
   pyopensprinkler = callPackage ../development/python-modules/pyopensprinkler { };
 

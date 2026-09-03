@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ruri";
-  version = "3.9.3";
+  version = "3.9.5";
 
   src = fetchFromGitHub {
     owner = "RuriOSS";
     repo = "ruri";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cFHbsaZwxu2ABAln5hGDSOib11M/1/4OeXz2EKXFlZI=";
+    hash = "sha256-eiljz0atD2lmgl4emoCw9xWsqm/cXP8QEj7AfcyHaSE=";
   };
 
   buildInputs = [
