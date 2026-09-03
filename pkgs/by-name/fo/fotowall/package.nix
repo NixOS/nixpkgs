@@ -8,15 +8,15 @@
 
 stdenv.mkDerivation rec {
   pname = "fotowall";
-  version = "1.1.3";
+  version = "1.1.4";
   strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "fotowall";
     repo = "fotowall";
-    rev = "v${version}";
-    hash = "sha256-u3EV8UzfESbhaIDLYimYnjDXiP0j04VKoqqO/NglFLA=";
+    tag = "v${version}";
+    hash = "sha256-9v8ybq+zKGiS5PT/88SYg9lXBclE3bj57FDL3uf4Eqc=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/fotowall/fotowall";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
     mainProgram = "fotowall";
   };
 }
