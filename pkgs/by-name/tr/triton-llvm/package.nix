@@ -68,7 +68,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "triton-llvm";
-  version = "23.0.0-unstable-2026-01-29"; # See https://github.com/llvm/llvm-project/blob/main/cmake/Modules/LLVMVersion.cmake
+  version = "23.0.0-unstable-2026-06-16"; # See https://github.com/llvm/llvm-project/blob/main/cmake/Modules/LLVMVersion.cmake
 
   __structuredAttrs = true;
 
@@ -82,12 +82,12 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  # See https://github.com/triton-lang/triton/blob/main/cmake/llvm-hash.txt
+  # See https://github.com/triton-lang/triton/blob/v3.7.1/cmake/llvm-hash.txt
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "llvm-project";
-    rev = "ac5dc54d509169d387fcfd495d71853d81c46484";
-    hash = "sha256-tA1KcZqyPsgfxQs9tbNhX11oFcNGJefxWmfCpYqdI9M=";
+    rev = "1f126a6dea50d185c0781743a667390037ae88bd";
+    hash = "sha256-U14/YrUkTsjtEWoaegASN0oyQ08E11sTRs6DuNeqxnE=";
   };
 
   nativeBuildInputs = [
