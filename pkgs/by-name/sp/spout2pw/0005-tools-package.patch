@@ -1,0 +1,13 @@
+diff --git a/tools/package.sh b/tools/package.sh
+index 5126089..d80119e 100644
+--- a/tools/package.sh
++++ b/tools/package.sh
+@@ -1,7 +1,7 @@
+ #!/bin/bash
+ set -e
+ 
+-PKGDIR="${MESON_BUILD_ROOT}/pkg"
++PKGDIR="$out/share/spout2pw"
+ 
+ mkdir -p "$PKGDIR"
+ cd "$PKGDIR"
