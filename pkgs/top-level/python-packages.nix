@@ -20494,6 +20494,8 @@ self: super: with self; {
 
   tesla-powerwall = callPackage ../development/python-modules/tesla-powerwall { };
 
+  tesla-protocol = callPackage ../development/python-modules/tesla-protocol { };
+
   tesla-wall-connector = callPackage ../development/python-modules/tesla-wall-connector { };
 
   teslajsonpy = callPackage ../development/python-modules/teslajsonpy { };
