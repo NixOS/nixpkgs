@@ -5,7 +5,8 @@
 }:
 
 stdenvNoCC.mkDerivation rec {
-  name = "usb-blaster-udev-rules";
+  pname = "usb-blaster-udev-rules";
+  version = "0";
 
   udevRules = ./usb-blaster.rules;
   dontUnpack = true;
