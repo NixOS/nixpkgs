@@ -118,7 +118,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (cmakeBool "WHISPER_BUILD_EXAMPLES" true)
     (cmakeBool "GGML_CUDA" cudaSupport)
-    (cmakeBool "GGML_HIPBLAS" rocmSupport)
+    (cmakeBool "GGML_HIP" rocmSupport)
     (cmakeBool "GGML_VULKAN" vulkanSupport)
     (cmakeBool "WHISPER_SDL2" withSDL)
     (cmakeBool "GGML_LTO" true)
