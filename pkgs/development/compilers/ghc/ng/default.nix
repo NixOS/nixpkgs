@@ -85,6 +85,18 @@ let
             rev = "6eb4530e915fd58c41664958139c94ff36f0baef";
             hash = "sha256-4iduZgtYDGUaFI50uZXLbvS+zur1OcMt/E+ysHAYLNc=";
           }
+          # Also independent, and the reason the RTS builds as a Cabal package
+          # at all: `include-dirs: include` leaves out the package root, where
+          # `Jumps.h` and `RtsSymbols.h` live -- two of the headers
+          # `install-includes` promises -- along with `BeginPrivate.h`, which 44
+          # sources under `rts/sm`, `rts/linker` and friends include without
+          # anything on the path resolving it. Hadrian passes `-Irts` itself, so
+          # only a Cabal build notices.
+          {
+            name = "rts-include-dirs-package-root.patch";
+            rev = "7810c131c5358469f7bce68ff1a4f34777fc5991";
+            hash = "sha256-0E+xwNN9xSjNY5qyvs3C1x/6uznWPhzrvwfgwBFfUJI=";
+          }
         ];
 
     "9.15".setupCabalVersion = "3_16_1_0";
@@ -109,6 +121,17 @@ let
         name = "ghc-toolchain-declare-license.patch";
         url = "https://gitlab.haskell.org/obsidiansystems/ghc/-/commit/0e94c15d7f8ec4890a35bd0253ff65b91c87e32c.diff";
         hash = "sha256-4iduZgtYDGUaFI50uZXLbvS+zur1OcMt/E+ysHAYLNc=";
+      })
+      # Likewise on its own branch: `include-dirs: include` leaves out the
+      # package root, where `Jumps.h` and `RtsSymbols.h` live -- two of the
+      # headers `install-includes` promises -- along with `BeginPrivate.h`,
+      # which 44 sources under `rts/sm`, `rts/linker` and friends include
+      # without anything on the path resolving it. Hadrian passes `-Irts`
+      # itself, so only a Cabal build notices.
+      (fetchpatch {
+        name = "rts-include-dirs-package-root.patch";
+        url = "https://gitlab.haskell.org/obsidiansystems/ghc/-/commit/445d3bcb8abd7be291481e24a5246333d5f48c39.diff";
+        hash = "sha256-aslwMC3kxYcyauJydazqG5LsXApuGawoxCJzjeBJMFY=";
       })
     ];
     "9.15".gitRelease = {
