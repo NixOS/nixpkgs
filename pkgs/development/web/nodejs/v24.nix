@@ -53,6 +53,12 @@ buildNodejs {
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
+
+      # TODO: remove when support for OpenSSL 3.6.4 has landed upstream
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/a37601c99d7bde9abb3b3ae57b2fb2bacd81ec9d.patch?full_index=1";
+        hash = "sha256-AdAPMs1RZgqJ0bzNZ6IvChjT97lbW+XV4cRWygzU1qc=";
+      })
     ]
     ++ gypPatches
     ++ lib.optionals (!stdenv.buildPlatform.isDarwin) [
