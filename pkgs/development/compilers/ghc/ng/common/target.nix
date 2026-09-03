@@ -51,21 +51,28 @@ let
   #
   #     Unknown operating system wasip1
   #
-  # nixpkgs says `wasm32-unknown-wasip1` (naming the WASI preview), while GHC
-  # -- like `config.sub` -- knows only `wasi`. The version is not something GHC
-  # models, so collapsing it loses nothing.
+  # nixpkgs names the WASI preview in the kernel field -- `wasm32-unknown-wasip1`
+  # -- while GHC, like `config.sub`, knows only `wasi` and does not model the
+  # preview at all, so collapsing it loses nothing.
   #
-  # Only the OS field is rewritten, and only where the two disagree; everything
-  # else passes through as nixpkgs spells it.
-  ghcOsAliases = {
-    wasip1 = "wasi";
-    wasip2 = "wasi";
-  };
-  tripleParts = lib.splitString "-" stdenv.hostPlatform.config;
-  lastPart = lib.last tripleParts;
+  # Rewriting the *parsed* platform and rendering it back, rather than editing
+  # the triple as a string: `isWasi` is nixpkgs' own predicate and covers every
+  # preview without a table to keep current, and only the kernel name changes.
+  #
+  # Everything else takes `.config` verbatim rather than round-tripping through
+  # `tripleFromSystem`. A platform may set `config` explicitly instead of having
+  # it derived from `parsed`, so re-rendering could quietly hand GHC a different
+  # triple than the rest of nixpkgs uses.
   ghcTriple =
-    if ghcOsAliases ? ${lastPart} then
-      lib.concatStringsSep "-" (lib.init tripleParts ++ [ ghcOsAliases.${lastPart} ])
+    if stdenv.hostPlatform.isWasi then
+      lib.systems.parse.tripleFromSystem (
+        stdenv.hostPlatform.parsed
+        // {
+          kernel = stdenv.hostPlatform.parsed.kernel // {
+            name = "wasi";
+          };
+        }
+      )
     else
       stdenv.hostPlatform.config;
 
