@@ -89,14 +89,28 @@ let
   };
 in
 
-(basePkgs.override (
-  lib.optionalAttrs (toolsPkgs != null) { buildHaskellPackages = toolsPkgs; }
+basePkgs.override (
+  {
+    # These overlays are this rung's `configuration-ghc-*.nix`, so they go in a
+    # slot `make-package-set` already has, composed into one, rather than being
+    # `.extend`ed onto the finished set.
+    #
+    # `haskell-modules/default.nix` composes `compilerConfig`, then
+    # `packageSetConfig`, then `overrides` -- which is
+    # `pkgs.haskell.packageOverrides`, the user's. `.extend` applies after all
+    # three, so configuration here would silently win against a user override,
+    # where every other Haskell set's configuration loses to one.
+    packageSetConfig = composeAll overlaysFor.${stage};
+  }
+  // lib.optionalAttrs (toolsPkgs != null) { buildHaskellPackages = toolsPkgs; }
   // lib.optionalAttrs (ghc != null) { inherit ghc; }
   // lib.optionalAttrs (stage == "stage2") {
     # NOT `configuration-ghc-*.nix`: that nulls the core libraries on the
     # premise that the compiler ships them, which is the premise this rung
     # exists to break. It is where they are built.
+    #
+    # The tools and stage1 rungs keep the base set's, because they *are* built
+    # against the bootstrap compiler's shipped libraries.
     compilerConfig = _: _: { };
   }
-)).extend
-  (composeAll overlaysFor.${stage})
+)
