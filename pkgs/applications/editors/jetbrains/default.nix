@@ -1,102 +1,40 @@
 {
-  lib,
-  config,
-  stdenv,
+  # keep-sorted start
   callPackage,
-
-  python3,
-  jetbrains,
+  config,
+  lib,
+  stdenv,
+  # keep-sorted end
 
   vmopts ? null,
-  forceWayland ? false,
 }:
-
-let
-  jetbrainsBuilder =
-    jdk:
-    callPackage ./builder/default.nix {
-      inherit jdk forceWayland vmopts;
-    };
-
-  mkSrcIde =
-    path: extras:
-    callPackage path (
-      {
-        mkJetBrainsProduct = jetbrainsBuilder jetbrains.jdk;
-        mkJetBrainsSource = callPackage ./source/build.nix { };
-      }
-      // extras
-    );
-
-  _idea-oss = mkSrcIde ./ides/idea-oss.nix { };
-
-  # The binary builds use the same libdbm and fsnotifier as the current idea-oss source build.
-  mkBinIde =
-    path: extras:
-    callPackage path (
-      {
-        mkJetBrainsProduct = jetbrainsBuilder jetbrains.jdk-no-jcef;
-        libdbm = _idea-oss.libdbm;
-        fsnotifier = _idea-oss.fsnotifier;
-      }
-      // extras
-    );
-
-  # Common build overrides, fixes, etc.
-  # TODO: These should eventually be moved outside of this file
-  pyCharmCommonOverrides = (
-    finalAttrs: previousAttrs:
-    lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      buildInputs =
-        with python3.pkgs;
-        (previousAttrs.buildInputs or [ ])
-        ++ [
-          python3
-          setuptools
-        ];
-      preInstall = ''
-        echo "compiling cython debug speedups"
-        if [[ -d plugins/python-ce ]]; then
-            ${python3.interpreter} plugins/python-ce/helpers/pydev/setup_cython.py build_ext --inplace
-        else
-            ${python3.interpreter} plugins/python/helpers/pydev/setup_cython.py build_ext --inplace
-        fi
-      '';
-      # See https://www.jetbrains.com/help/pycharm/2022.1/cython-speedups.html
-    }
-  );
-  patchSharedLibs = lib.optionalString stdenv.hostPlatform.isLinux ''
-    ls -d \
-      $out/*/bin/*/linux/*/lib/liblldb.so \
-      $out/*/bin/*/linux/*/lib/python3.*/lib-dynload/* \
-      $out/*/plugins/*/bin/*/linux/*/lib/liblldb.so \
-      $out/*/plugins/*/bin/*/linux/*/lib/python3.*/lib-dynload/* |
-    xargs patchelf \
-      --replace-needed libssl.so.10 libssl.so \
-      --replace-needed libssl.so.1.1 libssl.so \
-      --replace-needed libcrypto.so.10 libcrypto.so \
-      --replace-needed libcrypto.so.1.1 libcrypto.so \
-      --replace-needed libcrypt.so.1 libcrypt.so \
-      ${lib.optionalString stdenv.hostPlatform.isAarch "--replace-needed libxml2.so.2 libxml2.so"}
-  '';
-in
 {
+  # Builders
+  mkJetBrainsProduct = callPackage ./builder/default.nix {
+    inherit vmopts;
+  };
+  mkJetBrainsSource = callPackage ./source/build.nix { };
+
+  # Hooks
+  cythonDebugSpeedupsHook = callPackage ./hooks/cython-debug-speedups.nix { };
+  sharedLibsHook = callPackage ./hooks/shared-libs.nix { };
+
   # Sorted alphabetically. Deprecated products and aliases are at the very end.
-  clion = mkBinIde ./ides/clion.nix { inherit patchSharedLibs; };
-  datagrip = mkBinIde ./ides/datagrip.nix { };
-  dataspell = mkBinIde ./ides/dataspell.nix { };
-  gateway = mkBinIde ./ides/gateway.nix { };
-  goland = mkBinIde ./ides/goland.nix { };
-  idea = mkBinIde ./ides/idea.nix { };
-  idea-oss = _idea-oss;
-  mps = mkBinIde ./ides/mps.nix { };
-  phpstorm = mkBinIde ./ides/phpstorm.nix { };
-  pycharm = mkBinIde ./ides/pycharm.nix { inherit pyCharmCommonOverrides; };
-  pycharm-oss = mkSrcIde ./ides/pycharm-oss.nix { inherit pyCharmCommonOverrides; };
-  rider = mkBinIde ./ides/rider.nix { inherit patchSharedLibs; };
-  ruby-mine = mkBinIde ./ides/ruby-mine.nix { };
-  rust-rover = mkBinIde ./ides/rust-rover.nix { inherit patchSharedLibs; };
-  webstorm = mkBinIde ./ides/webstorm.nix { };
+  clion = callPackage ./ides/clion.nix { };
+  datagrip = callPackage ./ides/datagrip.nix { };
+  dataspell = callPackage ./ides/dataspell.nix { };
+  gateway = callPackage ./ides/gateway.nix { };
+  goland = callPackage ./ides/goland.nix { };
+  idea = callPackage ./ides/idea.nix { };
+  idea-oss = callPackage ./ides/idea-oss.nix { };
+  mps = callPackage ./ides/mps.nix { };
+  phpstorm = callPackage ./ides/phpstorm.nix { };
+  pycharm = callPackage ./ides/pycharm.nix { };
+  pycharm-oss = callPackage ./ides/pycharm-oss.nix { };
+  rider = callPackage ./ides/rider.nix { };
+  ruby-mine = callPackage ./ides/ruby-mine.nix { };
+  rust-rover = callPackage ./ides/rust-rover.nix { };
+  webstorm = callPackage ./ides/webstorm.nix { };
 
   # Plugins
   plugins = callPackage ./plugins { };
