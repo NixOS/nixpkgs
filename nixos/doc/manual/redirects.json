@@ -1,4 +1,13 @@
 {
+  "module-services-netbird-relay": [
+    "index.html#module-services-netbird-relay"
+  ],
+  "module-services-netbird-relay-quickstart": [
+    "index.html#module-services-netbird-relay-quickstart"
+  ],
+  "module-services-netbird-relay-tls": [
+    "index.html#module-services-netbird-relay-tls"
+  ],
   "module-services-portmaster": [
     "index.html#module-services-portmaster"
   ],
