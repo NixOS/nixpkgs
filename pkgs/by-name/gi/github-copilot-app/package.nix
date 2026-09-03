@@ -23,20 +23,20 @@
 
 let
   pname = "github-copilot-app";
-  version = "1.1.12";
+  version = "1.1.14";
 
   sources = {
     x86_64-linux = fetchurl {
       url = "https://github.com/github/app/releases/download/v${version}/GitHub-Copilot-linux-x64.deb";
-      hash = "sha256-gT8CzKaoyNhykDtNGXQDqYc0yBRvNotjwETxI9VnPoA=";
+      hash = "sha256-0qwltVNjJ4x+S1BTZnbagn4zYjEjMX3MXn6Vb4fgAtA=";
     };
     aarch64-linux = fetchurl {
       url = "https://github.com/github/app/releases/download/v${version}/GitHub-Copilot-linux-arm64.deb";
-      hash = "sha256-bC5Z3ZAhF/YqWWj+YHEYQBki8eOUv35rXH7C+DnGSlg=";
+      hash = "sha256-zWDArkFPGjKH9QwPSeYQ6te/tUnnSqPbd216542FA64=";
     };
     aarch64-darwin = fetchurl {
       url = "https://github.com/github/app/releases/download/v${version}/GitHub-Copilot-darwin-arm64.dmg";
-      hash = "sha256-8cNMYDqgOyMIyMqtZvKOzxWYHQ6+tKmxlaim1Zqn33c=";
+      hash = "sha256-avOISG0qdkLdmmsXA3rAfXmOnCqeUsaBCGzfRkVpi9Q=";
     };
   };
 
@@ -95,7 +95,8 @@ stdenv.mkDerivation {
         cp -r *.app $out/Applications/
 
         mkdir -p $out/bin
-        ln -s "$out/Applications/"*.app/Contents/MacOS/* $out/bin/github-copilot-app
+        ln -s "$out/Applications/"*.app/Contents/MacOS/git-credential-copilot "$out"/bin/git-credential-copilot
+        ln -s "$out/Applications/"*.app/Contents/MacOS/github "$out"/bin/github-copilot-app
       ''
     else
       ''

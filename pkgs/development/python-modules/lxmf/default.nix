@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   # rns optionally depends on lxmf but we can't have two versions of rns in a closure
   propagateRns ? false,
   qrcode,
@@ -12,15 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lxmf";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
   __structuredAttrs = true;
 
-  src = fetchFromGitHub {
-    owner = "markqvist";
-    repo = "lxmf";
-    tag = finalAttrs.version;
-    hash = "sha256-XiBBf9eqW7BWCcRJzgQ0SrItoF9hr33u9nK6VBkSM9Y=";
+  src = fetchPypi {
+    inherit (finalAttrs) version;
+    pname = "lxmf";
+    hash = "sha256-8vfqF9eT/MMsq4JugejpgkQE0CXR/HGxQ74yQtReal4=";
   };
 
   build-system = [ setuptools ];
@@ -45,7 +44,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Lightweight Extensible Message Format for Reticulum";
     homepage = "https://github.com/markqvist/lxmf";
-    changelog = "https://github.com/markqvist/LXMF/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/markqvist/LXMF/releases/tag/${finalAttrs.version}";
     license = lib.licenses.reticulum;
     maintainers = with lib.maintainers; [
       drupol

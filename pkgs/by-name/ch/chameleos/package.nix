@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "chameleos";
-  version = "0.1.2";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "Treeniks";
     repo = "chameleos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zCAYEtDYJm9A+HC9M2XLtz47q+6dcBOVPgh4lmp4z/k=";
+    hash = "sha256-jF4szo4+f7K+luhHVw4DQYte7E9S3A4qfnEzhN9uYyM=";
   };
 
-  cargoHash = "sha256-zBEu/T17W7dwz8jxnXm2NsHaVZo1wDFSW75yiYfRIoY=";
+  cargoHash = "sha256-6LPu5Lvr9Gieu1l78RtsKr4WzxuPQEE3DPnR+01Luew=";
 
   postPatch = ''
     substituteInPlace build.rs --replace-fail '"git"' '"echo"'

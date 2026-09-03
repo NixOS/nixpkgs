@@ -6434,7 +6434,7 @@ self: super: with self; {
 
   fortiosapi = callPackage ../development/python-modules/fortiosapi { };
 
-  fortune = callPackage ../development/python-modules/fortune { };
+  fortune-python = callPackage ../development/python-modules/fortune-python { };
 
   foss-flame = callPackage ../development/python-modules/foss-flame { };
 
@@ -15853,9 +15853,7 @@ self: super: with self; {
     inherit (pkgs) mesa;
   };
 
-  pyqt6-qscintilla = pkgs.qt6Packages.callPackage ../development/python-modules/qscintilla {
-    pythonPackages = self;
-  };
+  pyqt6-qscintilla = callPackage ../development/python-modules/qscintilla { };
 
   pyqt6-sip = callPackage ../development/python-modules/pyqt/pyqt6-sip.nix {
     inherit (pkgs) mesa;
@@ -17611,8 +17609,8 @@ self: super: with self; {
 
   qreactor = callPackage ../development/python-modules/qreactor { };
 
-  qscintilla = pkgs.libsForQt5.callPackage ../development/python-modules/qscintilla {
-    pythonPackages = self;
+  qscintilla = callPackage ../development/python-modules/qscintilla {
+    useQt6 = false;
   };
 
   qstylizer = callPackage ../development/python-modules/qstylizer { };

@@ -96,8 +96,8 @@ stdenv.mkDerivation {
     inherit binaryName;
     applicationName = "LibreWolf";
     libName = "librewolf-bin-${version}";
-    ffmpegSupport = true;
-    gssSupport = true;
+    withFFmpeg = true;
+    withGSSAPI = true;
     gtk3 = gtk3;
     updateScript = ./update.sh;
   };
