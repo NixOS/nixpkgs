@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -17,10 +18,11 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-KRNzKPYCcOOvi7kP6fRMh7LBkMwSssmvUoRlH+jZPu8=";
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  ldflags = [ "-s" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
 
   meta = {
     description = "Tool to detect technologies, WAF, exposed panels and known services";
