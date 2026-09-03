@@ -6717,6 +6717,12 @@
     githubId = 14032;
     name = "Daniel Brockman";
   };
+  dccabanas = {
+    email = "dccabanas-dev@tuta.com";
+    github = "dccabanas";
+    githubId = 156211504;
+    name = "Diogo C. Cabanas";
+  };
   DCsunset = {
     email = "DCsunset@protonmail.com";
     github = "DCsunset";
