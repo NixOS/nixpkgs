@@ -3,12 +3,6 @@
   python3,
   fetchFromGitHub,
   gettext,
-  pango,
-  harfbuzz,
-  librsvg,
-  gdk-pixbuf,
-  glib,
-  gobject-introspection,
   borgbackup,
   writeText,
   postgresqlTestHook,
@@ -40,7 +34,7 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "weblate";
-  version = "2026.8.1";
+  version = "2026.9";
   pyproject = true;
 
   outputs = [
@@ -52,14 +46,20 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "WeblateOrg";
     repo = "weblate";
     tag = "weblate-${finalAttrs.version}";
-    hash = "sha256-QHMl14vrUjGfHkOJIMUAdPA1jUTJlgCT5uEDuJBjwWo=";
+    hash = "sha256-CzbUI6g+AuvKQi2+KSZGXZ2TT8OcDZYLWgMVGpuOyP8=";
   };
 
   postPatch = ''
-    sed -i 's|/bin/true|true|g' weblate/addons/example_pre.py
-
     sed -i 's/"setuptools==.*"/"setuptools"/' pyproject.toml
     sed -i 's/"translate-toolkit==.*"/"translate-toolkit"/' pyproject.toml
+
+    substituteInPlace weblate/addons/example_pre.py \
+      --replace-fail "/bin/true" "true"
+
+    substituteInPlace weblate/vcs/git.py \
+      --replace-fail \
+        '_cmd: ClassVar[str] = "git"' \
+        '_cmd: ClassVar[str] = "${lib.getExe gitSVN}"'
   '';
 
   build-system = with python3Packages; [ setuptools ];
@@ -119,6 +119,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       cryptography
       cssselect
       cyrtranslit
+      cysignals
       dateparser
       diff-match-patch
       disposable-email-domains
@@ -211,7 +212,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   # Commented entries are not packaged yet
   optional-dependencies = with python3Packages; {
-    amazon = [ boto3 ];
+    amazon = [
+      boto3
+      # django-ses
+    ];
     asgi = [ granian ];
     # gelf = [ logging-gelf ];
     # gerrit = [ git-review ];
@@ -321,9 +325,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "weblate/addons/tests.py::WebhooksAddonTest::test_webhook_signature"
     "weblate/addons/tests.py::WebhooksAddonTest::test_webhook_signature_prefix"
 
+
     # Tries to resolve DNS
     "weblate/api/tests.py::ProjectAPITest::test_install_machinery"
     "weblate/addons/tests.py::WebhooksAddonTest::test_form"
+    "weblate/trans/tests/test_component.py::ComponentValidationTest::test_github_app_clears_locked_push_fields"
+    "weblate/trans/tests/test_create.py::CreateTest::test_create_component_github_app_link_survives_discovery"
+    "weblate/trans/tests/test_create.py::CreateTest::test_create_component_existing_github_app_links_repository"
 
     # djangosaml2idp2 is not packaged yet
     "weblate/utils/tests/test_djangosaml2idp.py"
