@@ -29840,6 +29840,12 @@
     matrix = "@ty:tjll.net";
     name = "Tyler Langlois";
   };
+  tylerstyle = {
+    email = "tylerstyle.de@gmail.com";
+    github = "tylerstyle";
+    githubId = 57803;
+    name = "Ronny Terhuerne";
+  };
   tylervick = {
     email = "nix@tylervick.com";
     github = "tylervick";
