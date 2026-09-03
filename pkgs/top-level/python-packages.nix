@@ -7549,6 +7549,8 @@ self: super: with self; {
 
   hdmedians = callPackage ../development/python-modules/hdmedians { };
 
+  headerkit = callPackage ../development/python-modules/headerkit { };
+
   headerparser = callPackage ../development/python-modules/headerparser { };
 
   heapdict = callPackage ../development/python-modules/heapdict { };
