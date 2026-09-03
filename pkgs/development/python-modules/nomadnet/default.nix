@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nomadnet";
-  version = "1.3.0";
+  version = "1.3.1";
   pyproject = true;
 
   __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version pname;
-    hash = "sha256-WbF57unbpvNabzsBgCWJGEodvtuSGUhpPPpw42GTGx4=";
+    hash = "sha256-y7n0sjfq3SWHTIAdKiJm/alUom+nNVoITtIAUJlO7z8=";
   };
 
   build-system = [ setuptools ];

@@ -6,7 +6,7 @@
   boost,
   pkg-config,
   doxygen,
-  qtbase,
+  qt5,
   libharu,
   pango,
   fcgi,
@@ -24,7 +24,7 @@
 
 let
   generic =
-    { version, sha256 }:
+    { version, hash }:
     stdenv.mkDerivation {
       pname = "wt";
       inherit version;
@@ -32,8 +32,8 @@ let
       src = fetchFromGitHub {
         owner = "emweb";
         repo = "wt";
-        rev = version;
-        inherit sha256;
+        tag = version;
+        inherit hash;
       };
 
       nativeBuildInputs = [
@@ -43,7 +43,7 @@ let
       buildInputs = [
         boost
         doxygen
-        qtbase
+        qt5.qtbase
         libharu
         pango
         fcgi
@@ -80,14 +80,14 @@ let
         homepage = "https://www.webtoolkit.eu/wt";
         description = "C++ library for developing web applications";
         platforms = lib.platforms.linux;
-        license = lib.licenses.gpl2;
+        license = lib.licenses.gpl2Only;
         maintainers = with lib.maintainers; [ juliendehos ];
       };
     };
 in
 {
   wt4 = generic {
-    version = "4.13.2";
-    sha256 = "sha256-UK0r99f8ub7YPETiz3Ka/jCkJmF4qc7R8ZLkb/RWQCI=";
+    version = "4.14.1";
+    hash = "sha256-9ABX6ZyZmiTjWskre4slbSVa/OHyvoLGANHtM04LBmY=";
   };
 }

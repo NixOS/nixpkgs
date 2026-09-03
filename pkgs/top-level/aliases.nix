@@ -1041,6 +1041,7 @@ mapAliases {
   gns3Packages = throw "'gns3Packages' has been removed. Use 'gns3-gui' and 'gns3-server' instead."; # Added 2026-01-18
   gnu-cobol = throw "'gnu-cobol' has been renamed to/replaced by 'gnucobol'"; # Converted to throw 2025-10-27
   gnubik = throw "'gnubik' has been removed due to lack of maintenance upstream and its dependency on GTK 2"; # Added 2025-09-16
+  go-neb = throw "'go-neb' has been removed because upstream discontinued and archived the project; use matrix-hookshot or another maintained Matrix bot instead."; # Added 2026-09-02
   go-thumbnailer = throw "'go-thumbnailer' has been renamed to/replaced by 'thud'"; # Converted to throw 2025-10-27
   go-upower-notify = throw "'go-upower-notify' has been renamed to/replaced by 'upower-notify'"; # Converted to throw 2025-10-27
   go_1_23 = throw "Go 1.23 is end-of-life and 'go_1_23' has been removed. Please use a newer Go toolchain."; # Added 2025-08-13
@@ -3055,6 +3056,7 @@ mapAliases {
   zeroadPackages.zeroad-data = throw "'zeroadPackages.zeroad-data' has been renamed to/replaced by 'zeroad-data'"; # Converted to throw 2025-10-27
   zeroadPackages.zeroad-unwrapped = throw "'zeroadPackages.zeroad-unwrapped' has been renamed to/replaced by 'zeroad-unwrapped'"; # Converted to throw 2025-10-27
   zeromq4 = throw "'zeromq4' has been renamed to/replaced by 'zeromq'"; # Converted to throw 2025-10-27
+  zeronet = throw "'zeronet' has been removed because the upstream project is unmaintained and vulnerable. Use 'zeronet-conservancy' instead."; # Added 2026-09-02
   zfs_2_2 = throw "'zfs_2_2' has been removed, upgrade to a newer version instead"; # Added 2025-11-08
   zfsStable = throw "'zfsStable' has been renamed to/replaced by 'zfs'"; # Converted to throw 2025-10-27
   zfsUnstable = throw "'zfsUnstable' has been renamed to/replaced by 'zfs_unstable'"; # Converted to throw 2025-10-27

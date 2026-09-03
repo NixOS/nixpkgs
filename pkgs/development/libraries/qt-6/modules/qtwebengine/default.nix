@@ -117,6 +117,12 @@ qtModule {
 
     # Reproducibility QTBUG-136068
     ./gn-object-sorted.patch
+  ]
+  # Remove once merged with upstream
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ./clang-base-path-from-cmake-compiler.patch
+
+    ./lflags-remove-strip-darwin-isysroot.patch
   ];
 
   postPatch = ''
@@ -158,8 +164,6 @@ qtModule {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/QtToolchainHelpers.cmake \
       --replace-fail "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
-    substituteInPlace cmake/QtToolchainHelpers.cmake \
-      --replace-fail 'clang_base_path="''${QWELibClang_BASE_PATH}"' 'clang_base_path="${stdenv.cc}"'
 
     # xcbuild's xcrun doesn't implement the real (proprietary) Metal shader
     # compiler, so this check always fails. The one build step that actually

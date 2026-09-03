@@ -6729,7 +6729,7 @@ with pkgs;
   wlr-protocols = callPackage ../development/libraries/wlroots/protocols.nix { };
 
   wt = wt4;
-  inherit (libsForQt5.callPackage ../development/libraries/wt { })
+  inherit (callPackage ../development/libraries/wt { })
     wt4
     ;
 
