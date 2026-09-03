@@ -175,5 +175,8 @@ stdenv.mkDerivation {
     maintainers = [ lib.maintainers.mikaelfangel ];
     mainProgram = "nw";
     license = lib.licenses.mit;
+    knownVulnerabilities = [
+      "Uses Chrome 139.0.7258.128, known to have many vulnerabilities."
+    ];
   };
 }
