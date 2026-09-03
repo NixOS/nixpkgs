@@ -36,9 +36,11 @@
 }:
 
 let
-  toolchainSettings = callPackage ./common/settings.nix {
+  # `lib/targets/default.target`: everything the compiler knows about the
+  # toolchain it emits code for. Independent of the GHC sources -- it is a probe
+  # of `stdenv`, nothing more.
+  targetFile = callPackage ./common/target.nix {
     inherit (toolsPkgs) ghc-toolchain-bin;
-    inherit (ghcVersion) ghcSrc;
   };
 
   # Facts about the build rather than about the toolchain. The toolchain half
@@ -144,7 +146,7 @@ let
       # disagree the link fails with `cannot find -lHSghc-internal-...`.
       version = ghcVersion.ghcSrc.release_version;
       inherit (ghcVersion) ghcSrc;
-      inherit toolchainSettings buildGhcPkg;
+      inherit targetFile buildGhcPkg;
       inherit (packages) ghc-bin ghc-pkg;
     }
     // (

@@ -23,7 +23,7 @@
 #
 # Every substituted variable is a pure function of the version string, so this
 # derivation is `stdenvNoCC`, platform-independent, and shared by every host in
-# the set. Toolchain configuration happens per-target in `./settings.nix`, via
+# the set. Toolchain configuration happens per-target in `./target.nix`, via
 # `ghc-toolchain`, which is the whole point of the exercise.
 {
   lib,

@@ -44,7 +44,7 @@
   # nothing to the settings file any more: every toolchain fact the compiler
   # needs is read out of the target file instead, so what is left of
   # `lib/settings.json` is exactly the Nix-authored build-state half.
-  toolchainSettings,
+  targetFile,
 
   # The build-state half, as an attrset. `base unit-id` is deliberately absent:
   # it carries a hash Cabal computes at build time, so it is read out of the
@@ -81,7 +81,7 @@ runCommand "ghc-${version}"
     passthru = {
       inherit
         targetPrefix
-        toolchainSettings
+        targetFile
         libraries
         ;
       # `generic-builder.nix` and `with-packages-wrapper.nix` read these off a
@@ -140,7 +140,7 @@ runCommand "ghc-${version}"
     # installed.
     + ''
       mkdir -p "$out/lib/targets"
-      cp "${toolchainSettings}/default.target" "$out/lib/targets/default.target"
+      cp "${targetFile}/default.target" "$out/lib/targets/default.target"
     ''
     # `driver/ghc-usage.txt` is read at `--help` time; GHC warns without it.
     + ''

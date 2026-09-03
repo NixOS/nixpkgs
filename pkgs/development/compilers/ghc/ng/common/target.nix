@@ -1,8 +1,9 @@
-# GHC's `lib/settings` for one target, produced by `ghc-toolchain`.
+# GHC's `lib/targets/default.target` for one target, produced by
+# `ghc-toolchain`.
 #
 # This is the piece that makes the whole split worthwhile. In the hadrian-based
-# expression, `settings` comes out of autoconf's toolchain probing and is then
-# rewritten after the fact by `ghc-settings-edit` in `postInstall`, so the
+# expression the toolchain description comes out of autoconf's probing and is
+# then rewritten after the fact by `ghc-settings-edit` in `postInstall`, so the
 # compiler derivation is coupled to the C toolchain and every cc change rebuilds
 # GHC. Here it is a small, standalone derivation: `ghc-toolchain-bin` probes the
 # toolchain and writes the file, and the compiler merely picks it up.
@@ -12,27 +13,29 @@
 # will emit code for. That is exactly what a cross `stdenv.cc` is, so the
 # ordinary `stdenv` of the set is the right source for these tools -- no
 # `targetPackages` reach is needed.
+#
+# Which is why the platform described here is `stdenv.hostPlatform`, and
+# deliberately not nixpkgs' `stdenv.targetPlatform`: this package set is indexed
+# by the platform its libraries are built for, so a compiler shipping those
+# libraries emits code for exactly the set's *host*. GHC's target is our host --
+# the `_wrappers` off-by-one of ../README.md, seen from the other end.
 {
   lib,
   stdenv,
-  stdenvNoCC,
-  runCommand,
 
   # Build-platform instance. Named by absolute path below, so splicing does not
   # apply: this must be passed explicitly from the build-host package set.
   ghc-toolchain-bin,
 
-  # Only for `config.sub`. `GHC.Toolchain.NormaliseTriple` runs
-  # `sh config.sub <triple>` and expects to find the script in the working
-  # directory -- in the GHC tree it sits at the top level. Run anywhere else and
-  # the call fails silently to the empty string, and the next step rejects the
-  # result as a "malformed triple".
-  ghcSrc,
-
-  # The triple written into the file and used to name the toolchain. Defaults to
-  # the platform this set's libraries are built for, which is what a compiler
-  # shipping those libraries targets.
-  targetPlatform ? stdenv.hostPlatform,
+  # `GHC.Toolchain.NormaliseTriple` runs `sh config.sub <triple>` and expects to
+  # find the script in the working directory -- in the GHC tree it sits at the
+  # top level. Run anywhere else and the call fails silently to the empty
+  # string, and the next step rejects the result as a "malformed triple".
+  #
+  # nixpkgs' own copy rather than the one vendored in the GHC tree: it is the
+  # same script, kept current by `gnu-config`, and taking it from there is what
+  # leaves this derivation independent of the GHC sources entirely.
+  gnu-config,
 
   # Extra `ghc-toolchain` flags for targets that need them (wasm wants
   # `--merge-objs`, ghcjs `--disable-tables-next-to-code`, and so on).
@@ -58,13 +61,13 @@ let
     wasip1 = "wasi";
     wasip2 = "wasi";
   };
-  tripleParts = lib.splitString "-" targetPlatform.config;
+  tripleParts = lib.splitString "-" stdenv.hostPlatform.config;
   lastPart = lib.last tripleParts;
   ghcTriple =
     if ghcOsAliases ? ${lastPart} then
       lib.concatStringsSep "-" (lib.init tripleParts ++ [ ghcOsAliases.${lastPart} ])
     else
-      targetPlatform.config;
+      stdenv.hostPlatform.config;
 
   cc = stdenv.cc;
   # The *wrapped* bintools, not `cc.bintools.bintools`. nixpkgs GHC records the
@@ -103,55 +106,54 @@ let
     # until a target actually needs it rather than guessed at here.
     "--llvm-triple=${llvmTriple}"
   ]
-  ++ lib.optionals (targetPlatform.isElf or false) [
+  ++ lib.optionals (stdenv.hostPlatform.isElf or false) [
     "--readelf=${bintools}/bin/${prefix}readelf"
   ]
-  ++ lib.optionals targetPlatform.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--otool=${bintools}/bin/${prefix}otool"
     "--install-name-tool=${bintools}/bin/${prefix}install_name_tool"
   ]
-  ++ lib.optionals targetPlatform.isWindows [
+  ++ lib.optionals stdenv.hostPlatform.isWindows [
     "--windres=${bintools}/bin/${prefix}windres"
   ]
   ++ extraFlags;
 in
 
-runCommand "ghc-settings-${targetPlatform.config}"
-  {
-    # The toolchain goes on PATH as well as being named explicitly: ghc-toolchain
-    # probes some tools by name rather than by flag.
-    nativeBuildInputs = [
-      ghc-toolchain-bin
-      cc
-      bintools
-    ];
-    passthru = { inherit flags; };
-    meta = {
-      description = "GHC toolchain settings for ${targetPlatform.config}";
-      platforms = lib.platforms.all;
-    };
-  }
-  (
-    ''
-      mkdir -p "$out"
+stdenv.mkDerivation {
+  name = "ghc-target";
 
-      cp "${ghcSrc}/config.sub" .
-      chmod +w config.sub
-    ''
+  # `stdenv.mkDerivation` rather than `runCommand`, which is `stdenvNoCC`: this
+  # derivation *runs* the C toolchain in order to probe it, so it should get one
+  # the way any other derivation does. That is also why `cc` and `bintools` are
+  # not named here -- listing them would be re-deriving what the stdenv already
+  # puts on PATH. `ghc-toolchain` probes some tools by name rather than by flag,
+  # so PATH matters as well as the absolute paths in `flags`.
+  nativeBuildInputs = [ ghc-toolchain-bin ];
 
-    # Upstream ghc-toolchain emits only the typed `Target`. `--output-settings`,
-    # which stable-haskell uses to get a `lib/settings` straight out of this
-    # step, is an addition on their fork and does not exist here.
-    #
-    # That is not merely a missing flag. `lib/settings` is not a function of the
-    # toolchain alone -- see `hadrian/src/Rules/Generate.hs:generateSettings`,
-    # which fills "RTS ways" from the ways actually built, "base unit-id" from
-    # the unit-id of the `base` that was built, and "Relative Global Package DB"
-    # from the layout of the tree being assembled. So `settings` belongs to the
-    # assembly step, downstream of the boot libraries; this derivation is just
-    # the toolchain probe, and it is genuinely standalone.
-    + ''
-      ghc-toolchain-bin ${lib.escapeShellArgs flags} --output "$out/default.target"
+  passthru = { inherit flags; };
 
-    ''
-  )
+  meta = {
+    description = "GHC toolchain description for ${stdenv.hostPlatform.config}";
+    platforms = lib.platforms.all;
+  };
+
+  buildCommand = ''
+    mkdir -p "$out"
+
+    cp "${gnu-config}/config.sub" .
+    chmod +w config.sub
+  ''
+  # Upstream ghc-toolchain emits only the typed `Target`. `--output-settings`,
+  # which stable-haskell uses to get a `lib/settings` straight out of this
+  # step, is an addition on their fork and does not exist here.
+  #
+  # Nothing is missing as a result. Now that the toolchain facts live in the
+  # target file, what is left of `lib/settings.json` is build state -- which
+  # RTS ways were built, the unit-id `base` ended up with, where the package
+  # database sits -- and that belongs to the assembly step, downstream of the
+  # boot libraries. This derivation is just the toolchain probe, and it is
+  # genuinely standalone.
+  + ''
+    ghc-toolchain-bin ${lib.escapeShellArgs flags} --output "$out/default.target"
+  '';
+}
