@@ -5,15 +5,23 @@
   fetchPnpmDeps,
   makeWrapper,
   nodejs_24,
-  nix-update-script,
   pnpm_10,
   pnpmConfigHook,
   stdenvNoCC,
 }:
 
+let
+  versionData = lib.importJSON ./hashes.json;
+  inherit (versionData)
+    version
+    hash
+    vendorHash
+    pnpmDepsHash
+    ;
+in
 buildGo127Module (finalAttrs: {
   pname = "sub2api";
-  version = "0.1.185";
+  inherit version;
 
   __structuredAttrs = true;
 
@@ -21,12 +29,12 @@ buildGo127Module (finalAttrs: {
     owner = "Wei-Shaw";
     repo = "sub2api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6603gIrlClgBI/3Yu1fOmNKLyaHISsomCLGIJ0FoTeI=";
+    inherit hash;
   };
 
   modRoot = "backend";
   subPackages = [ "cmd/server" ];
-  vendorHash = "sha256-Bnvqp698BPhBYqSlBZ5p7bw+zkA1B/lo58iDAi2Q0nY=";
+  inherit vendorHash;
 
   frontend = stdenvNoCC.mkDerivation (frontendAttrs: {
     pname = "${finalAttrs.pname}-frontend";
@@ -43,7 +51,7 @@ buildGo127Module (finalAttrs: {
         ;
       pnpm = pnpm_10;
       fetcherVersion = 4;
-      hash = "sha256-D6lEnYH90wrum1mYHWYJZ2vGOghADxKnNcYxgKz2/10=";
+      hash = pnpmDepsHash;
     };
 
     nativeBuildInputs = [
@@ -93,12 +101,7 @@ buildGo127Module (finalAttrs: {
         "$out/share/sub2api/resources/model-pricing/model_prices_and_context_window.json"
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "frontend"
-    ];
-  };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "AI API gateway platform for distributing and managing AI subscription API quotas";
