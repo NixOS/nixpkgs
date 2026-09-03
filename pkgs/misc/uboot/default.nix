@@ -780,6 +780,23 @@ in
     filesToInstall = [ "u-boot.bin" ];
   };
 
+  ubootRock3A = buildUBoot {
+    defconfig = "rock-3a-rk3568_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    strictDeps = true;
+    env = {
+      BL31 = "${armTrustedFirmwareRK3568}/bl31.elf";
+      ROCKCHIP_TPL = rkbin.TPL_RK3568;
+    };
+    filesToInstall = [
+      "idbloader.img"
+      "idbloader-spi.img"
+      "u-boot.itb"
+      "u-boot-rockchip.bin"
+      "u-boot-rockchip-spi.bin"
+    ];
+  };
+
   ubootRock3C = buildUBoot {
     defconfig = "rock-3c-rk3566_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
