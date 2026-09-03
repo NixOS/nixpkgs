@@ -26,6 +26,8 @@ buildGo127Module (finalAttrs: {
   outputs = [
     "out"
     "wol" # wake on lan proxy
+    "vllm_wrapper" # helper for using `vllm` with `--enable-sleep-mode`
+    "utils"
   ];
 
   src = fetchFromGitHub {
@@ -88,8 +90,10 @@ buildGo127Module (finalAttrs: {
     "misc/process-cmd-test"
     # benchmark/regression testing tool
     "misc/benchmark-chatcompletion"
+    # testing tool for the performance monitoring code
+    "cmd/monitor-test"
   ]
-  ++ lib.optionals (!canExecute) [
+  ++ lib.optionals finalAttrs.doCheck [
     # some tests expect to execute `simple-something`; if it can't be executed
     # it's unneeded
     "misc/simple-responder"
@@ -126,14 +130,41 @@ buildGo127Module (finalAttrs: {
     mkdir build
     ln -s "$GOPATH/bin/simple-responder" "./build/simple-responder_''${GOOS}_''${GOARCH}"
   '';
+  # doesn't need to be cleaned up outside of the check path as we don't build it
+  # due to `excludedPackages`
   postCheck = ''
     rm "$GOPATH/bin/simple-responder"
   '';
 
-  postInstall = ''
+  # project regularly adds small utility binaries
+  # this `installPhase` means we need to sort them
+  # into outputs or skip building them
+  installPhase = ''
+    runHook preInstall
+
     install -Dm444 -t "$out/share/llama-swap" config.example.yaml
+
+    mkdir -p "$out/bin"
+    mv "$GOPATH/bin/llama-swap" "$out/bin/"
+
     mkdir -p "$wol/bin"
-    mv "$out/bin/wol-proxy" "$wol/bin/"
+    mv "$GOPATH/bin/wol-proxy" "$wol/bin/"
+
+    mkdir -p "$vllm_wrapper/bin"
+    mv "$GOPATH/bin/vllm-wrapper" "$vllm_wrapper/bin/"
+
+    mkdir -p "$utils/bin"
+    mv "$GOPATH/bin/"{fake-model,test-concurrency} "$utils/bin/"
+
+    # log if we don't handle a new executable
+    EXECUTABLES=$(find "$GOPATH/bin" -maxdepth 1 -type f -executable -print -quit)
+    if [ -n "$EXECUTABLES" ]; then
+      echo "Error: Directory '$GOPATH/bin' still contains executables." >&2
+      echo "  $EXECUTABLES" >&2
+      exit 1
+    fi
+
+    runHook postInstall
   '';
 
   doInstallCheck = true;
