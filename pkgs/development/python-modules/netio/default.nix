@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "netio";
-  version = "1.0.13";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "netioproducts";
     repo = "PyNetio";
     tag = "v${version}";
-    hash = "sha256-s/X2WGhQXYsbo+ZPpkVSF/vclaThYYNHu0UY0yCnfPA=";
+    hash = "sha256-OmYSa8boZPAqw1PXc3BmLAxGiNgnAYiXbHTk5QF/5b8=";
   };
 
   nativeBuildInputs = [
