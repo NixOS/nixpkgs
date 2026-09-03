@@ -19,12 +19,6 @@
   # Optional dependencies
   withQemu ? false,
   qemu,
-
-  # Workaround for supporting providing additional package manager
-  # dependencies in the recursive use in the binary path.
-  # This can / should be removed once the `finalAttrs` pattern is
-  # available for Python packages.
-  extraDeps ? [ ],
 }:
 let
   # For systemd features used by mkosi, see
@@ -51,7 +45,6 @@ let
     systemdForMkosi
     util-linux
   ]
-  ++ extraDeps
   ++ lib.optionals withQemu [
     qemu
   ];
