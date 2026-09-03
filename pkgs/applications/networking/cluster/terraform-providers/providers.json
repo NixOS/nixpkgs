@@ -82,13 +82,13 @@
     "vendorHash": "sha256-L9IGENsL8Kibq5O/JOgCxLRUxgS7q9G/NovC/Q7tw48="
   },
   "auth0_auth0": {
-    "hash": "sha256-SpGTMAFEiJVGpXYAIigJQditDvs8sU2Bz57ohanccAM=",
+    "hash": "sha256-t/AdooXhTpu4UXE8u6cvdVPL4HFUQQWOSAjw1RXFs8c=",
     "homepage": "https://registry.terraform.io/providers/auth0/auth0",
     "owner": "auth0",
     "repo": "terraform-provider-auth0",
-    "rev": "v1.55.0",
+    "rev": "v1.56.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-ajl7q+9oA+NA5eqAXA5yjej03qdI5nimRNQW6GoGOq4="
+    "vendorHash": "sha256-ydki+y2A6g94xNGVr7xZkBB/grEbOOD4LRwYGAmzLsc="
   },
   "aviatrixsystems_aviatrix": {
     "hash": "sha256-46djOfAj/5kfeoKLQHbeKefzdGbmlBATR+uN/IaAn8I=",
@@ -1490,13 +1490,13 @@
     "vendorHash": "sha256-GRnVhGpVgFI83Lg34Zv1xgV5Kp8ioKTFV5uaqS80ATg="
   },
   "vpsfreecz_vpsadmin": {
-    "hash": "sha256-T+az9OH9/ZMSJewZpC9VLSXOZ5N/wz00VRnl9Ab4aeI=",
+    "hash": "sha256-1r2SqoRWJJhQej8D3LXHOEXT5RSxE4t6s7QuiNoIqpg=",
     "homepage": "https://registry.terraform.io/providers/vpsfreecz/vpsadmin",
     "owner": "vpsfreecz",
     "repo": "terraform-provider-vpsadmin",
-    "rev": "v1.3.0",
+    "rev": "v1.5.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-98lrEH7j4Fl0oSEoL75e0h+8ySLacPK2k0OehY3jqhA="
+    "vendorHash": "sha256-fbFpENa1/8Qs6RnTUMi0LDATho8+WuKhj4i8S/dG3Yg="
   },
   "vultr_vultr": {
     "hash": "sha256-hK4/Pzj0UtWDLQS3cRMC73ZRr20HCWqI+jUlTUHcHaw=",

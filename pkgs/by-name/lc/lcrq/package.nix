@@ -5,13 +5,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "lcrq";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromCodeberg {
     owner = "librecast";
     repo = "lcrq";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hNH5SdvKhNPUJWs7vpPECcBsRyNdHQF+Ot3LmyX2V3c=";
+    hash = "sha256-1kKWg+GN+WrYx7RTjTLqfGt9qcqeh9vc/TyfZMKsH7A=";
   };
 
   installFlags = [ "PREFIX=$(out)" ];

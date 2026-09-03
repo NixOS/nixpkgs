@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "androidtvremote2";
-  version = "0.3.1";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tronikos";
     repo = "androidtvremote2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W+L1yQ7FAoKIlYtlM7gfPv8Tco/9hCDDUQQ16xg+++s=";
+    hash = "sha256-zyM9s8gtL0lBGd2hkANZRNsG7BEZv+c7Agexpk80OT0=";
   };
 
   build-system = [ setuptools ];
