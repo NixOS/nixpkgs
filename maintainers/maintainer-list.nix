@@ -16896,6 +16896,12 @@
     github = "LucasFA";
     matrix = "@lucasfa:matrix.org";
   };
+  lucasoe = {
+    email = "github@lucasoe.com";
+    github = "LucasOe";
+    githubId = 16548335;
+    name = "Lucas Oelker";
+  };
   lucastso10 = {
     email = "lucastso10@gmail.com";
     github = "lucastso10";
