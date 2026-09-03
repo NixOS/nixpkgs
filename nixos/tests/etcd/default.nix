@@ -24,6 +24,7 @@ let
   testEtcdPkg = pkg: path: testEtcd path { etcd = pkg; };
   testEtcd_3_5 = testEtcdPkg pkgs.etcd_3_5;
   testEtcd_3_6 = testEtcdPkg pkgs.etcd_3_6;
+  testEtcd_3_7 = testEtcdPkg pkgs.etcd_3_7;
 in
 
 {
@@ -34,5 +35,9 @@ in
   "3_6" = {
     multi-node = testEtcd_3_6 ./multi-node.nix;
     single-node = testEtcd_3_6 ./single-node.nix;
+  };
+  "3_7" = {
+    multi-node = testEtcd_3_7 ./multi-node.nix;
+    single-node = testEtcd_3_7 ./single-node.nix;
   };
 }
