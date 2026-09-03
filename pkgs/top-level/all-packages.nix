@@ -4632,6 +4632,7 @@ with pkgs;
     cpp2a-kernel
     xeus-cling
     ;
+  inherit (callPackage ../applications/editors/jupyter-kernels/xeus-cpp { }) xeus-cpp;
 
   dhall = haskell.lib.compose.justStaticExecutables haskellPackages.dhall;
 
