@@ -9,6 +9,21 @@
   # build-time uses.
   buildHaskellPackages,
 
+  # Splice the scope even when `pkgs == buildPackages`, where `splicePackages`
+  # would otherwise short-circuit to the identity.
+  #
+  # That short-circuit assumes the build set and this set coincide whenever the
+  # platforms do. For a set that bootstraps they do not: `ghc/ng`'s stage2 is
+  # built by stage1 and compiles its `Setup.hs` files with the tools rung,
+  # natively as much as cross. Without this, `setupHaskellDepends` and
+  # `libraryToolDepends` resolve to this set's own copies -- libraries the
+  # build compiler cannot read, and tools it would have to build with the
+  # compiler under construction.
+  #
+  # Off by default: forcing it where the indices genuinely coincide buys
+  # nothing and costs an attribute-set merge per package.
+  alwaysSplice ? false,
+
   # package-set used for non-haskell dependencies (all of nixpkgs)
   pkgs,
 
@@ -180,7 +195,7 @@ let
     let
       ps = pkgs.__splicedPackages;
       scopeSpliced =
-        pkgs.splicePackages {
+        (if alwaysSplice then pkgs.splicePackagesAlways else pkgs.splicePackages) {
           pkgsBuildBuild = scope.buildHaskellPackages.buildHaskellPackages;
           pkgsBuildHost = scope.buildHaskellPackages;
           pkgsBuildTarget = { };

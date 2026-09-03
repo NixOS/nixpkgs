@@ -361,7 +361,13 @@ in
           ...
         }@args:
         callPackage ../development/haskell-modules (
-          removeAttrs args [
+          {
+            # Each rung is built by the one below it, so the build set and the
+            # set being built are never the same set -- see `alwaysSplice` in
+            # `../development/haskell-modules/make-package-set.nix`.
+            alwaysSplice = true;
+          }
+          // removeAttrs args [
             "ghcVersion"
             "stage"
             "bootstrapConfig"

@@ -114,6 +114,20 @@ in
 {
   inherit splicePackages;
 
+  # `splicePackages` without the `pkgs != buildPackages` short-circuit.
+  #
+  # That short-circuit is the performance measure described above: when the two
+  # coincide, every cross index of a package is the same package, so there is
+  # nothing for a splice to choose between. That reasoning holds for `pkgs`
+  # itself and not for everything built on top of it. A package set that
+  # bootstraps has a build set distinct from itself whatever `pkgs` is doing --
+  # Haskell's staged GHC sets are built by the *previous* stage, natively as
+  # much as cross -- and there the splice is the whole point.
+  #
+  # Only for such a set. Forcing it where the indices really do coincide buys
+  # nothing and costs an attribute-set merge per package.
+  splicePackagesAlways = args: spliceReal (renameCrossIndexFrom "pkgs" args);
+
   # We use `callPackage' to be able to omit function arguments that can be
   # obtained from `pkgs` or `buildPackages`.
   # Use `newScope' for sets of packages in `pkgs' (see e.g. `gnome' below).
