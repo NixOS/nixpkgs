@@ -60,7 +60,18 @@ stdenv.mkDerivation (finalAttrs: {
     tcl
   ];
 
-  patches = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  patches = [
+    # Make test failures actually fail the build
+    (fetchpatch {
+      name = "0001-sqlite-testrunner-communicate-test-failure-to-make.patch";
+      url = "https://github.com/sqlite/sqlite/commit/4e4962f6b303688412746b54200ff5402c047aee.patch";
+      includes = [
+        "test/testrunner.tcl"
+      ];
+      hash = "sha256-DLV2ML2zzjd1nEVScDF1sFDdZm1CrOWt5M10rRwXYCY=";
+    })
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     # Add a missing `-DBUILD_sqlite` to one place in the makefile
     #
     # TODO(@Ericson2314): drop once a release contains it, and (before that)
