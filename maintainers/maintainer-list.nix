@@ -4303,6 +4303,12 @@
     githubId = 7560938;
     name = "Bas van den Wollenberg";
   };
+  bryanfrd = {
+    name = "Bryan Ferrando";
+    email = "bryanferrando59@gmail.com";
+    github = "BryanFRD";
+    githubId = 20824933;
+  };
   bryango = {
     name = "Bryan Lai";
     email = "bryanlais@gmail.com";
