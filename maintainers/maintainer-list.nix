@@ -7064,6 +7064,12 @@
     github = "Dev380";
     githubId = 49997896;
   };
+  devcheckra1n = {
+    email = "me@actavis.dev";
+    github = "devcheckra1n";
+    githubId = 97061690;
+    name = "mex";
+  };
   developer-guy = {
     name = "Batuhan Apaydın";
     email = "developerguyn@gmail.com";
