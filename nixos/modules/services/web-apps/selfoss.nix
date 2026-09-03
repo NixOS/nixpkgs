@@ -236,6 +236,7 @@ in
 
     systemd.services.selfoss-update = {
       serviceConfig = {
+        Type = "oneshot";
         ExecStart = "${pkgs.php83}/bin/php ${dataDir}/cliupdate.php";
         StateDirectory = [ (baseNameOf dataDir) ];
         User = "${cfg.user}";
@@ -243,7 +244,6 @@ in
       startAt = "hourly";
       after = [ "selfoss-config.service" ];
       wantedBy = [ "multi-user.target" ];
-
     };
 
     services.nginx = mkIf cfg.nginx.enable {
