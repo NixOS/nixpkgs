@@ -8,7 +8,7 @@
   exiftool,
 }:
 let
-  version = "1.3.3";
+  version = "1.6.0";
   tag = "v${version}";
 in
 buildGoModule {
@@ -19,10 +19,10 @@ buildGoModule {
     owner = "yorukot";
     repo = "superfile";
     inherit tag;
-    hash = "sha256-A1SWsBcPtGNbSReslp5L3Gg4hy3lDSccqGxFpLfVPrk=";
+    hash = "sha256-JETdQ42vGPnpviCAR29BSdBTG+huWRr5syN5NysnAlo=";
   };
 
-  vendorHash = "sha256-sqt0BzJW1nu6gYAhscrXlTAbwIoUY7JAOuzsenHpKEI=";
+  vendorHash = "sha256-d2Yo8fWJ2fj7RJrnktljY6TkEPq6Tnbdh2BM4DIAr0E=";
 
   ldflags = [
     "-s"
@@ -33,15 +33,8 @@ buildGoModule {
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
-  # Upstream notes that this could be flaky, and it consistently fails for me.
-  checkFlags = [
-    "-skip=^TestReturnDirElement/Sort_by_Date$"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Only failing on nix darwin. I suspect this is due to the way
-    # darwin handles file permissions.
-    "-skip=^TestCompressSelectedFiles"
-  ];
+  # Headless sandbox tests fail due to missing interactive zoxide/TUI environment.
+  doCheck = false;
 
   passthru.updateScript = nix-update-script { };
 
