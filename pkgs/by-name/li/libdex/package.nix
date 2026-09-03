@@ -53,8 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
   # test-dbus tries to access /etc/machine-id
   postPatch = ''
     substituteInPlace "testsuite/meson.build" --replace-fail \
-      "'test-dbus': {'extra-sources': dbus_foo, 'disable': not have_gdbus_codegen}," \
-      "'test-dbus': {'extra-sources': dbus_foo, 'disable': true},"
+      "'test-dbus': {'extra-sources': dbus_foo, 'disable': not have_gdbus_codegen, 'is_parallel': false}," \
+      "'test-dbus': {'extra-sources': dbus_foo, 'disable': true, 'is_parallel': false},"
   '';
 
   postFixup = ''
