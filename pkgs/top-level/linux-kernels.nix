@@ -626,6 +626,8 @@ in
 
         xpad-noone = callPackage ../os-specific/linux/xpad-noone { };
 
+        slimbook_qc71_laptop = callPackage ../os-specific/linux/slimbook_qc71_laptop { };
+
       }
       // lib.optionalAttrs config.allowAliases {
         zfs = throw "linuxPackages.zfs has been removed, use zfs_* instead, or linuxPackages.\${pkgs.zfs.kernelModuleAttribute}"; # added 2025-01-23
