@@ -2169,6 +2169,7 @@ mapAliases {
   railway-travel = throw "'railway-travel' has been renamed to/replaced by 'diebahn'"; # Converted to throw 2025-10-27
   rambox-pro = throw "'rambox-pro' has been renamed to/replaced by 'rambox'"; # Converted to throw 2025-10-27
   rapidjson-unstable = throw "'rapidjson-unstable' has been renamed to/replaced by 'rapidjson'"; # Converted to throw 2025-10-27
+  rapidsvn = throw "'rapidsvn' has been removed because upstream archived the project after development stopped in August 2021"; # Added 2026-09-02
   rar2fs = throw "'rar2fs' has been removed as it is unmaintained, and depends on the unmaintained fuse2 library"; # Added 2026-05-19
   raycast-beta = throw "'raycast-beta' has been removed because Raycast 2.0 is out of beta. Use 'raycast' instead."; # Added 2026-08-24
   react-native-debugger = throw "'react-native-debugger' has been removed as it was unmaintained upstream and vendoring an EOL version of Electron"; # Added 2026-09-02
