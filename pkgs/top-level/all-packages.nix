@@ -8394,7 +8394,7 @@ with pkgs;
 
   eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse { });
 
-  electrum = libsForQt5.callPackage ../applications/misc/electrum { };
+  electrum = callPackage ../applications/misc/electrum { };
 
   electrum-grs = libsForQt5.callPackage ../applications/misc/electrum/grs.nix { };
 
