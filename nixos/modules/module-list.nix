@@ -323,6 +323,7 @@
   ./programs/screen.nix
   ./programs/seahorse.nix
   ./programs/sedutil.nix
+  ./programs/sforzando.nix
   ./programs/shadow.nix
   ./programs/sharing.nix
   ./programs/singularity.nix
