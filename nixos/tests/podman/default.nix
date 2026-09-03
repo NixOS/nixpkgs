@@ -119,6 +119,15 @@ import ../make-test-python.nix (
           rootful.succeed("podman stop sleeping")
           rootful.succeed("podman rm sleeping")
 
+      with subtest("Run container with --userns=auto"):
+          rootful.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
+          rootful.succeed(
+              "podman run -d --userns=auto --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
+          )
+          rootful.succeed("podman ps | grep sleeping")
+          rootful.succeed("podman stop sleeping")
+          rootful.succeed("podman rm sleeping")
+
       # now without installed runc
       with subtest("Run runc-less container as root with runc"):
           rootful_norunc.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
