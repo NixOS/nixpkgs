@@ -42,6 +42,7 @@
   stb,
   systemdLibs,
   tomlplusplus,
+  tzdata,
   wayland,
   wayland-protocols,
   wireplumber,
@@ -122,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    (lib.mesonEnable "tests" false)
+    (lib.mesonEnable "tests" true)
     (lib.mesonEnable "jemalloc" (!stdenv.hostPlatform.isMusl))
   ];
 
@@ -140,6 +141,13 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/noctalia \
       --prefix PATH : ${lib.makeBinPath [ gitMinimal ]}
   '';
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  nativeCheckInputs = [
+    tzdata
+    gitMinimal
+  ];
 
   passthru.updateScript = nix-update-script { };
 
