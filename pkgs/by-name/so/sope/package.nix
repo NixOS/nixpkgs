@@ -23,6 +23,14 @@ clangStdenv.mkDerivation rec {
     hash = "sha256-0G28qDXygDe/TJ2znNE+NVQry3bkqUO59jqtJm/t2S4=";
   };
 
+  postPatch = ''
+    # Don't record the compile command line in .GCC.command.line sections of
+    # the installed binaries: it embeds the store paths of the whole toolchain
+    # and turns clang, llvm and gcc into runtime dependencies.
+    substituteInPlace general.make \
+      --replace-fail ' $(call cc-option,-frecord-gcc-switches)' ""
+  '';
+
   nativeBuildInputs = lib.optional (libpq != null) libpq.pg_config;
   buildInputs = [
     gnustep-base
