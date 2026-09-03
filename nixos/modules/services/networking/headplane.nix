@@ -47,9 +47,11 @@ in
         See <https://github.com/tale/headplane/blob/main/config.example.yaml>.
       '';
       type = types.submodule {
+        freeformType = settingsFormat.type;
         options = {
           server = mkOption {
             type = types.submodule {
+              freeformType = settingsFormat.type;
               options = {
                 host = mkOption {
                   type = types.str;
@@ -128,6 +130,7 @@ in
 
           headscale = mkOption {
             type = types.submodule {
+              freeformType = settingsFormat.type;
               options = {
                 api_key_path = mkOption {
                   type = types.nullOr types.path;
