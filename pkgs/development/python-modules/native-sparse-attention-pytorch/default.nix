@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   hatchling,
   einops,
   einx,
@@ -10,8 +10,6 @@
   rotary-embedding-torch,
   torch,
   tqdm,
-  wandb,
-  pytest,
   pytestCheckHook,
   nix-update-script,
 }:
@@ -22,10 +20,11 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
   __structuredAttrs = true;
 
-  src = fetchPypi {
-    pname = "native_sparse_attention_pytorch";
-    inherit (finalAttrs) version;
-    hash = "sha256-e5SBu1LuVl1QmIaMc0UoXog0IkiRX/jj5i9/6UW+LaA=";
+  src = fetchFromGitHub {
+    owner = "lucidrains";
+    repo = "native-sparse-attention-pytorch";
+    rev = finalAttrs.version;
+    hash = "sha256-ec9eMHKP67BiybrHympRAZgbtl6pFLFRbNilmzZyQw8=";
   };
 
   build-system = [
@@ -40,17 +39,6 @@ buildPythonPackage (finalAttrs: {
     rotary-embedding-torch
     torch
   ];
-
-  optional-dependencies = {
-    examples = [
-      tqdm
-      wandb
-    ];
-    test = [
-      pytest
-      tqdm
-    ];
-  };
 
   pythonImportsCheck = [
     "native_sparse_attention_pytorch"
@@ -67,8 +55,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Native Sparse Attention";
-    homepage = "https://pypi.org/project/native-sparse-attention-pytorch";
+    homepage = "https://github.com/lucidrains/native-sparse-attention-pytorch";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jlesquembre ];
+    maintainers = with lib.maintainers; [ jherland ];
   };
 })
