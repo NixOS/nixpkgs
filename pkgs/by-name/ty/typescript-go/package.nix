@@ -28,6 +28,13 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-q6dMb2ab4uZ3GTrcA7v2JzfmOM+ZzBcJN6gKOpLfM/k=";
 
+  tags = [
+    # Prevent LSP issues. In embed mode, "Go to Definition" fails for built-in types:
+    #   - https://github.com/microsoft/typescript-go/pull/4197
+    #   - https://github.com/microsoft/typescript-go/pull/3840
+    "noembed"
+  ];
+
   ldflags = [
     "-s"
     "-w"
@@ -39,8 +46,16 @@ buildGoModule (finalAttrs: {
     "cmd/tsgo"
   ];
 
+  # When built with the "noembed" tag, the executable must be under "lib/${pname}/" to resolve its paths.
   postInstall = ''
-    ln -s "$out/bin/tsgo" "$out/bin/tsc"
+    lib_dir="$out/lib/${finalAttrs.pname}"
+    mkdir -p "$lib_dir"
+    cp -r internal/bundled/libs/. "$lib_dir"
+
+    mv "$out/bin/tsgo" "$lib_dir/tsc"
+
+    ln -s "$lib_dir/tsc" "$out/bin/tsc"
+    ln -s "$lib_dir/tsc" "$out/bin/tsgo"
   '';
 
   nativeInstallCheckInputs = [
