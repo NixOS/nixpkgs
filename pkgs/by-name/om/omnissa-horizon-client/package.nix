@@ -24,7 +24,7 @@ let
   # The downloaded archive also contains ARM binaries, but these have not been tested.
 
   # For USB support, ensure that /var/run/omnissa/<YOUR-UID>
-  # exists and is owned by you. Then run omnissa-usbarbitrator as root.
+  # exists and is owned by you. Then run horizon-eucusbarbitrator as root.
 
   mainProgram = "horizon-client";
 
@@ -185,7 +185,7 @@ stdenv.mkDerivation {
     runHook preInstall
     mkdir -p $out/bin
     ln -s ${omnissaFHSUserEnv "horizon-client"}/bin/horizon-client $out/bin/
-    ln -s ${omnissaFHSUserEnv "omnissa-usbarbitrator"}/bin/omnissa-usbarbitrator $out/bin/
+    ln -s ${omnissaFHSUserEnv "horizon-eucusbarbitrator"}/bin/horizon-eucusbarbitrator $out/bin/
     runHook postInstall
   '';
 
