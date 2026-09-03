@@ -2,7 +2,7 @@
   lib,
   stdenv,
 
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   versionCheckHook,
 
@@ -19,9 +19,9 @@
 let
   canExecute = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 in
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "llama-swap";
-  version = "249";
+  version = "262";
 
   outputs = [
     "out"
@@ -32,7 +32,7 @@ buildGoModule (finalAttrs: {
     owner = "mostlygeek";
     repo = "llama-swap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7wXOL8XtcKV6Abdxar25C85ODQ34RYOAGYCTaCXxPpY=";
+    hash = "sha256-DAYaR+N7alGbdLsGlaiDlsHiqxOMg65069i/vHOkLKk=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -45,7 +45,7 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-MhR8B2+Yb/xqrTlIxaVHLoQf1eTOO49c65l72IAuZyU=";
+  vendorHash = "sha256-yelob7FlaGymASUP0DAUkALQm5vnXZnN5ThbnSkH2Ak=";
 
   # Upstream only embeds the UI when this build tag is set.
   tags = lib.optionals withUI [ "embed_ui" ];
@@ -67,6 +67,8 @@ buildGoModule (finalAttrs: {
 
   postPatch = ''
     substituteInPlace internal/process/process_command_forking_test.go \
+      --replace-fail "#!/bin/bash" "#!${lib.getExe bash}"
+    substituteInPlace cmd/vllm-wrapper/main_test.go \
       --replace-fail "#!/bin/bash" "#!${lib.getExe bash}"
   '';
 
