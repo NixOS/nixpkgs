@@ -38,9 +38,9 @@ in
       after = [ "graphical-session-pre.target" ];
 
       serviceConfig = {
-        Type = "dbus";
-        BusName = "de.rumno.v1";
-        ExecStart = "${cfg.package}/bin/rumno daemon --foreground ${lib.escapeShellArgs cfg.extraArgs}";
+        Type = "forking";
+        PIDFile = "/tmp/rumno/rumno.pid";
+        ExecStart = lib.escapeShellArgs ([ "${cfg.package}/bin/rumno-background" ] ++ cfg.extraArgs);
         Restart = "on-failure";
         RestartSec = 1;
 
