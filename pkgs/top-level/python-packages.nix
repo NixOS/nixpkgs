@@ -16666,6 +16666,8 @@ self: super: with self; {
 
   pytest-trio = callPackage ../development/python-modules/pytest-trio { };
 
+  pytest-tripwire = callPackage ../development/python-modules/pytest-tripwire { };
+
   pytest-twisted = callPackage ../development/python-modules/pytest-twisted { };
 
   pytest-unmagic = callPackage ../development/python-modules/pytest-unmagic { };
