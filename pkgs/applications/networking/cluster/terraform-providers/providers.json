@@ -364,11 +364,11 @@
     "vendorHash": null
   },
   "dopplerhq_doppler": {
-    "hash": "sha256-SS2S4JGG1Xu0p4k6lVlTr173Xanwc6hZ0A3osEWGdEg=",
+    "hash": "sha256-3k7leyu/7FCtCzZN7pn6eIhxuYUbi8h3DBSGhrt2XXQ=",
     "homepage": "https://registry.terraform.io/providers/DopplerHQ/doppler",
     "owner": "DopplerHQ",
     "repo": "terraform-provider-doppler",
-    "rev": "v1.21.4",
+    "rev": "v1.21.5",
     "spdx": "Apache-2.0",
     "vendorHash": "sha256-B8mYLd4VdADWoQLWiCM85VQrBfDdlYQ0wkCp9eUBQ4U="
   },
