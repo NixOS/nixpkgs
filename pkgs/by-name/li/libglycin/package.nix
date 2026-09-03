@@ -19,7 +19,6 @@
   libglycin-gtk4,
   fontconfig,
   libseccomp,
-  lcms2,
   gnome,
   replaceVars,
   bubblewrap,
@@ -71,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fontconfig
     libseccomp
-    lcms2
   ];
 
   propagatedBuildInputs = [
@@ -79,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO: these should not be required by .pc file
     fontconfig
     libseccomp
-    lcms2
   ];
 
   mesonFlags = [
@@ -96,8 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs \
       build-aux/crates-version.py
     substituteInPlace libglycin/meson.build --replace-fail \
-      "cargo_output = cargo_target_dir / rust_target" \
-      "cargo_output = cargo_target_dir / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target"
+      "cargo_output = cargo_artifact_dir / rust_target" \
+      "cargo_output = cargo_artifact_dir / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target"
   '';
 
   postFixup = ''
