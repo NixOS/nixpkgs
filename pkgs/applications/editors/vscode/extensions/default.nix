@@ -4885,8 +4885,8 @@ let
         mktplcRef = {
           name = "opa";
           publisher = "tsandall";
-          version = "0.24.1";
-          hash = "sha256-wNlZM9/2K32W4vYPKzLiBCTqhV+SqgZzXGRxKoHoIaM=";
+          version = "0.25.0";
+          hash = "sha256-d+INOMEc4ZO3T3326GxQW3PP/UflOwmEPfQOm2weVRY=";
         };
         meta = {
           changelog = "https://github.com/open-policy-agent/vscode-opa/blob/master/CHANGELOG.md";
@@ -4978,8 +4978,8 @@ let
         mktplcRef = {
           name = "theme-bluloco-light";
           publisher = "uloco";
-          version = "3.7.5";
-          sha256 = "sha256-MDrw0JWioLyg+H0XOCpULsmtM/y7RfV9ruDtskRiT3A=";
+          version = "3.10.0";
+          sha256 = "sha256-dweX1i8nn8qSleeGyhnrzSUXkhA13IXcGwwdkV7WsCI=";
         };
         postInstall = ''
           rm -r $out/share/vscode/extensions/uloco.theme-bluloco-light/screenshots
@@ -5552,8 +5552,8 @@ let
         mktplcRef = {
           name = "markdown-editor";
           publisher = "zaaack";
-          version = "0.1.19";
-          hash = "sha256-W0lL0JMNyEszyJa6I7RbXYLu4cU9DQUh0ZEAOd6eshI=";
+          version = "0.1.20";
+          hash = "sha256-YewK36OeKWgTU/iFRVZHYjF2+ke6TXb6HIggRZt1/nk=";
         };
         meta = {
           description = "Visual Studio Code extension for WYSIWYG markdown editing";

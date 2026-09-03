@@ -6055,8 +6055,6 @@ with pkgs;
 
   libsigcxx30 = callPackage ../development/libraries/libsigcxx/3.0.nix { };
 
-  libsoup_3 = callPackage ../development/libraries/libsoup/3.x.nix { };
-
   libtorrent-rasterbar = libtorrent-rasterbar-2_0_x;
 
   libubox-nossl = libubox.override { with_ustream_ssl = false; };
@@ -6650,8 +6648,6 @@ with pkgs;
   inherit (python3Packages) sphinxHook;
 
   sqlite = lowPrio (callPackage ../development/libraries/sqlite { });
-
-  unqlite = lowPrio (callPackage ../development/libraries/unqlite { });
 
   inherit
     (callPackage ../development/libraries/sqlite/tools.nix {
@@ -8793,7 +8789,6 @@ with pkgs;
   jackmix_jack1 = jackmix.override { jack = jack1; };
 
   inherit (callPackage ../applications/networking/cluster/k3s { })
-    k3s_1_33
     k3s_1_34
     k3s_1_35
     k3s_1_36
