@@ -3055,6 +3055,7 @@ mapAliases {
   zeroadPackages.zeroad-data = throw "'zeroadPackages.zeroad-data' has been renamed to/replaced by 'zeroad-data'"; # Converted to throw 2025-10-27
   zeroadPackages.zeroad-unwrapped = throw "'zeroadPackages.zeroad-unwrapped' has been renamed to/replaced by 'zeroad-unwrapped'"; # Converted to throw 2025-10-27
   zeromq4 = throw "'zeromq4' has been renamed to/replaced by 'zeromq'"; # Converted to throw 2025-10-27
+  zeronet = throw "'zeronet' has been removed because the upstream project is unmaintained and vulnerable. Use 'zeronet-conservancy' instead."; # Added 2026-09-02
   zfs_2_2 = throw "'zfs_2_2' has been removed, upgrade to a newer version instead"; # Added 2025-11-08
   zfsStable = throw "'zfsStable' has been renamed to/replaced by 'zfs'"; # Converted to throw 2025-10-27
   zfsUnstable = throw "'zfsUnstable' has been renamed to/replaced by 'zfs_unstable'"; # Converted to throw 2025-10-27
