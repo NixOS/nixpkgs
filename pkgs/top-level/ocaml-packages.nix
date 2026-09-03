@@ -2200,6 +2200,8 @@ let
 
         twt = callPackage ../development/ocaml-modules/twt { };
 
+        typegist = callPackage ../development/ocaml-modules/typegist { };
+
         type_eq = callPackage ../development/ocaml-modules/type_eq { };
 
         type_id = callPackage ../development/ocaml-modules/type_id { };
