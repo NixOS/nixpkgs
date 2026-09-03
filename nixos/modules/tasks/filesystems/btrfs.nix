@@ -163,6 +163,9 @@ in
           "sleep.target"
         ];
 
+        # prevent problems with MemoryDenyWriteExecute
+        environment.PYTHON_JIT = "0";
+
         unitConfig.RequiresMountsFor = "%f";
 
         serviceConfig =
@@ -211,6 +214,35 @@ in
             } %f";
             # if the service is stopped before scrub end, cancel it
             ExecStop = "${utils.escapeSystemdExecArg btrfsCancelCmd} %f";
+            # hardening
+            # required for starting/cancelling the scrub operation
+            CapabilityBoundingSet = [
+              "CAP_SYS_ADMIN"
+              "CAP_DAC_READ_SEARCH"
+            ];
+            NoNewPrivileges = true;
+            # no ProtectSystem/ProtectHome since the path to be scrubbed can refer to a device,
+            # which in turn might be mounted there and mounting it read-only prevents scrubbing
+            StateDirectory = "btrfs"; # contains progress information
+            PrivateNetwork = true;
+            ProtectHostname = true;
+            ProtectClock = true;
+            ProtectKernelModules = true;
+            ProtectKernelLogs = true;
+            ProtectControlGroups = true;
+            RestrictAddressFamilies = [ "AF_UNIX" ]; # used internally for communication
+            LockPersonality = true;
+            MemoryDenyWriteExecute = true;
+            RestrictRealtime = true;
+            RestrictSUIDSGID = true;
+            PrivateMounts = true;
+            SystemCallFilter = [
+              "@system-service"
+              "~@mount"
+            ];
+            SystemCallArchitectures = "native";
+            # no ProtectKernelTunables since /sys/fs/btrfs access is required
+            # no User= since written files have to be accessible by scrub commands run manually
           };
       };
 
