@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zigimports";
-  version = "0.1.0-unstable-2026-07-25";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "tusharsadhwani";
