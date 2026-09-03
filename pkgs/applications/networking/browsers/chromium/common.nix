@@ -960,9 +960,11 @@ let
         ffmpeg_branding = "Chrome";
       }
       // lib.optionalAttrs stdenv.hostPlatform.isAarch64 {
-        # Enable v4l2 video decoder for hardware acceleratation on aarch64:
+        # Enable v4l2 video decoder for hardware acceleration on aarch64:
         use_vaapi = false;
         use_v4l2_codec = true;
+        # Chromium's Linux default enables this via VA-API, but aarch64 uses V4L2 here.
+        use_av1_hw_decoder = true;
       }
       // {
         use_pulseaudio = true;
