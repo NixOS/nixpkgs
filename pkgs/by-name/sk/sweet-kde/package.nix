@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "sweet-kde";
-  version = "1.0.0";
+  version = "0-unstable-2025-04-25";
 __structuredAttrs = true;
 strictDeps = true;
   src = fetchFromGitHub {
