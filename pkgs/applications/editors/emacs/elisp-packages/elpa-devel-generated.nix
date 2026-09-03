@@ -6613,10 +6613,10 @@
     elpaBuild {
       pname = "org";
       ename = "org";
-      version = "10.0pre0.20260421.184316";
+      version = "10.0pre0.20260830.533";
       src = fetchurl {
-        url = "https://elpa.gnu.org/devel/org-10.0pre0.20260421.184316.tar";
-        sha256 = "0809x9rw2smb5ya3x2272qcjjj6kx6xrj8ajlzzwiz2m1wdhz5w3";
+        url = "https://elpa.gnu.org/devel/org-10.0pre0.20260830.533.tar";
+        sha256 = "0h6lk6fk56n49nw098nbrwvlagafi8vaf6qb0sr9myr263qsryih";
       };
       packageRequires = [ ];
       meta = {
