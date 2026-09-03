@@ -176,6 +176,10 @@ stdenv.mkDerivation (finalAttrs: {
   # When tcl is not available, only run test targets that don't need it.
   checkTarget = lib.optionalString stdenv.hostPlatform.isStatic "fuzztest sourcetest";
 
+  preCheck = lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.cc.isClang) ''
+    export LD_LIBRARY_PATH="${lib.getLib buildPackages.stdenv.cc.cc.libgcc}/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+  '';
+
   passthru = {
     tests = {
       inherit (python3Packages) sqlalchemy;
