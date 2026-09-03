@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  fetchpatch,
   fetchPypi,
   setuptools,
   setuptools-scm,
@@ -30,6 +31,16 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     packaging
     setuptools
+  ];
+
+  patches = [
+    # Backports pyqt5 compile failure fix from upstream
+    # https://github.com/Python-SIP/sip/issues/114
+    (fetchpatch {
+      name = "legacy-api-binding-fix.patch";
+      url = "https://github.com/Python-SIP/sip/commit/09598895c607f3e41f0249ade217ace0a4da6437.patch";
+      hash = "sha256-v0YeHyg0ymB0v32gpVRbMBIUk9U2etjs93VuOGPGg2M=";
+    })
   ];
 
   # There aren't tests
