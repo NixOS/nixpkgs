@@ -21,7 +21,9 @@ let
     isList
     isString
     length
+    mapAttrs'
     match
+    nameValuePair
     toFile
     toShellVars
     warn
@@ -37,7 +39,12 @@ let
   # fetchurl instantiations via environment variables.  This makes the
   # resulting store derivations (.drv files) much smaller, which in
   # turn makes nix-env/nix-instantiate faster.
-  mirrorsListFile = toFile "mirrors-list" (toShellVars mirrors);
+  mirrorsListFile =
+    let
+      # Add a prefix to the names of the mirrors to avoid variable name clashes in the builder
+      mirrorsPrefixed = mapAttrs' (n: v: nameValuePair ("_mirror_" + n) v) mirrors;
+    in
+    toFile "mirrors-list" (toShellVars mirrorsPrefixed);
 
   # Names of the master sites that are mirrored (i.e., "sourceforge",
   # "gnu", etc.).
