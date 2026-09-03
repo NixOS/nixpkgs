@@ -20,6 +20,7 @@
   python3,
   gi-docgen,
   brotli,
+  zstd,
   libnghttp2,
 }:
 
@@ -138,6 +139,7 @@ stdenv.mkDerivation rec {
     libpsl
     glib.out
     brotli
+    zstd
     libnghttp2
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
