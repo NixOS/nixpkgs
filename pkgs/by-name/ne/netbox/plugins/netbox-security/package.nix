@@ -10,14 +10,14 @@ buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "netbox-security";
-  version = "1.5.10";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "andy-shady-org";
     repo = "netbox-security";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DOutzFIF/ey2o9M3sb15rmbGJyzsTXfiwC5Rqks8vxc=";
+    hash = "sha256-0vTMmQjTNSFnEVbVMkI0EOzGY2B0NR0NLbIHheppb6k=";
   };
 
   build-system = [ setuptools ];
