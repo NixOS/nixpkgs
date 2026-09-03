@@ -12,11 +12,12 @@
   langObjC ? stdenv.targetPlatform.isDarwin,
   langObjCpp ? stdenv.targetPlatform.isDarwin,
   langGo ? false,
+  langRust ? false,
+  langCobol ? false,
+  langAlgol68 ? false,
   reproducibleBuild ? true,
   profiledCompiler ? false,
   langJit ? false,
-  langRust ? false,
-  cargo,
   staticCompiler ? false,
   enableShared ? stdenv.targetPlatform.hasSharedLibraries,
   enableDefaultPie ? stdenv.targetPlatform.hasSharedLibraries,
@@ -61,6 +62,7 @@
   apple-sdk_14,
   apple-sdk_15,
   darwin,
+  cargo,
 }:
 
 let
@@ -83,6 +85,9 @@ let
   version = gccVersions.fromMajorMinor majorMinorVersion;
 
   majorVersion = versions.major version;
+  atLeast14 = lib.versionAtLeast version "14";
+  atLeast15 = lib.versionAtLeast version "15";
+  atLeast16 = lib.versionAtLeast version "16";
   is13 = majorVersion == "13";
 
   appleSdk = if langAda && !is13 then apple-sdk_15 else apple-sdk_14;
@@ -155,8 +160,10 @@ let
       isl
       is13
       langAda
+      langAlgol68
       langC
       langCC
+      langCobol
       langFortran
       langGo
       langJit
@@ -197,6 +204,11 @@ assert stdenv.buildPlatform.isDarwin -> gnused != null;
 # The go frontend is written in c++
 assert langGo -> langCC;
 assert langAda -> gnat-bootstrap != null;
+
+# Rust, Cobol and Algol68 support requires libstdc++
+assert langRust -> atLeast14 && langCC;
+assert langCobol -> atLeast15 && langCC;
+assert langAlgol68 -> atLeast16 && langCC;
 
 # threadsCross is just for MinGW
 assert threadsCross != { } -> stdenv.targetPlatform.isWindows;
@@ -400,6 +412,9 @@ pipe
           langAda
           langFortran
           langGo
+          langRust
+          langCobol
+          langAlgol68
           version
           ;
         isGNU = true;
