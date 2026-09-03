@@ -242,20 +242,18 @@ let
 
   # Every `*.patch` beside the generated expression, in sorted order so the
   # result does not depend on directory traversal order.
-  # A patch is version-specific when it is a diff against a particular
-  # `.cabal` or source file, which is the usual case, and it lives in
-  # `<version>/packages/<name>/`. One that is not -- adding a `license:` field
-  # upstream never declared, say -- lives in `common/packages/<name>/` and is
-  # applied to every release, rather than being copied per version.
-  patchesIn =
-    dir:
+  # Patches here are diffs against a particular release's `.cabal` or sources,
+  # so they live with the generated expression in `<version>/packages/`. A
+  # change that is *not* release-specific belongs upstream instead, fetched in
+  # `../default.nix` -- see `ghcToolchainLicense` there.
+  patchesFor =
+    name:
     let
+      dir = packagesDir + "/${name}";
+      entries = builtins.readDir dir;
       isPatch = f: type: type == "regular" && lib.hasSuffix ".patch" f;
-      entries = if builtins.pathExists dir then builtins.readDir dir else { };
     in
     map (f: dir + "/${f}") (lib.naturalSort (lib.attrNames (lib.filterAttrs isPatch entries)));
-
-  patchesFor = name: patchesIn (./packages + "/${name}") ++ patchesIn (packagesDir + "/${name}");
 
   hasGenerated = name: builtins.pathExists (packagesDir + "/${name}/generated-package.nix");
 

@@ -76,6 +76,15 @@ let
             rev = "241c34ffe857cb020377ea5232863f620d14ea8a";
             hash = "sha256-YDH2ZhTNPdiUQwIWuaFoQl8CeVK/V8Iz2uEFM5VJAqM=";
           }
+          # Independent of the above: `ghc-toolchain` and `ghc-toolchain-bin`
+          # are the only packages in the GHC tree that declare no `license:` at
+          # all, so cabal2nix reports them as `license = "unknown"`. Fixing that
+          # upstream beats asserting BSD-3 in an override here.
+          {
+            name = "ghc-toolchain-declare-license.patch";
+            rev = "6eb4530e915fd58c41664958139c94ff36f0baef";
+            hash = "sha256-4iduZgtYDGUaFI50uZXLbvS+zur1OcMt/E+ysHAYLNc=";
+          }
         ];
 
     "9.15".setupCabalVersion = "3_16_1_0";
@@ -88,6 +97,18 @@ let
         name = "settings-json-scalars.patch";
         url = "https://gitlab.haskell.org/obsidiansystems/ghc/-/commit/f6c9436a55f5835702ffe70bf54b89aa98d909ee.diff";
         hash = "sha256-Tvo951det5L3CpXAPYQBEW27aXwiGaBw4wQgEySX+5E=";
+      })
+      # Independent of the above, and on its own branch for that reason:
+      # `ghc-toolchain` and `ghc-toolchain-bin` are the only packages in the GHC
+      # tree that declare no `license:` at all, so cabal2nix reports them as
+      # `license = "unknown"`. The 9.14 list has the cherry-pick of this onto
+      # its own branch; each release takes the commit from the branch it would
+      # actually be proposed on, so amending one cannot silently retarget the
+      # other.
+      (fetchpatch {
+        name = "ghc-toolchain-declare-license.patch";
+        url = "https://gitlab.haskell.org/obsidiansystems/ghc/-/commit/0e94c15d7f8ec4890a35bd0253ff65b91c87e32c.diff";
+        hash = "sha256-4iduZgtYDGUaFI50uZXLbvS+zur1OcMt/E+ysHAYLNc=";
       })
     ];
     "9.15".gitRelease = {
