@@ -56,7 +56,7 @@ let
       addDriverRunpath.driverLink;
 in
 buildPythonPackage (finalAttrs: {
-  version = "0.66.0";
+  version = "0.67.0";
   pname = "numba";
   pyproject = true;
   __structuredAttrs = true;
@@ -73,13 +73,10 @@ buildPythonPackage (finalAttrs: {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' $out/numba/_version.py
     '';
-    hash = "sha256-qkljZWvd+1mwPm4okQBW8w0qCTQnEigM6QkZHN2iwyk=";
+    hash = "sha256-xQFJSO9kcRwyNx/G/ALQXZWE6+4wL1Dz+5kIDXK5Eow=";
   };
 
-  patches = [
-    ./numpy2.5.patch
-  ]
-  ++ lib.optionals cudaSupport [
+  patches = lib.optionals cudaSupport [
     # Hardcode the paths of the NVIDIA libraries which numba looks up at runtime, instead of
     # relying on its discovery heuristics (conda environment, `CUDA_HOME`, `/usr/local/cuda`, ...)
     (replaceVars ./nvidia-libs-paths.patch {
@@ -90,18 +87,6 @@ buildPythonPackage (finalAttrs: {
       libnvvm = nvvmRoot;
     })
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail \
-        'max_numpy_run_version = "2.5"' \
-        'max_numpy_run_version = "2.6"'
-
-    substituteInPlace numba/__init__.py \
-      --replace-fail \
-        "(2, 4)" \
-        "(2, 6)"
-  '';
 
   build-system = [
     setuptools
@@ -114,10 +99,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   buildInputs = lib.optionals cudaSupport [ cudaPackages.cuda_cudart ];
-
-  pythonRelaxDeps = [
-    "numpy"
-  ];
 
   dependencies = [
     numpy
