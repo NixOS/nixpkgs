@@ -8,7 +8,7 @@
 
 buildGoModule rec {
   pname = "panix";
-  version = "0.9.1";
+  version = "0.9.2";
 
   __structuredAttrs = true;
 
@@ -16,7 +16,7 @@ buildGoModule rec {
     owner = "mihakrumpestar";
     repo = "panix";
     rev = "v${version}";
-    hash = "sha256-foGW2i4py/qzPbcnmVGYvOiOB5n1NkCIk84m8OqL9jo=";
+    hash = "sha256-1dHxDPJ76LGxqm8/5qoC8d63J6faPvj//FiUlj8jisg=";
   };
 
   subPackages = [ "cmd/panix" ];
@@ -31,7 +31,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  vendorHash = "sha256-q9pUwV9JGYNIDTemgu28eG2SBH2mNQ2BQO/u73f42xM=";
+  vendorHash = "sha256-c+Qjn/RTZdSOFeqCaANBLaJl3zFeJYe7lIAve35rDkQ=";
 
   nativeBuildInputs =
     pkgs.lib.optionals (pkgs.stdenv.buildPlatform.canExecute pkgs.stdenv.hostPlatform)
