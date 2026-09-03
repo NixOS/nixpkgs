@@ -597,7 +597,9 @@ rec {
     name = "attrs";
     description = "attribute set";
     check = isAttrs;
-    merge = loc: foldl' (res: def: res // def.value) { };
+    merge =
+      loc: defs:
+      if length defs == 1 then (head defs).value else foldl' (res: def: res // def.value) { } defs;
     emptyValue = {
       value = { };
     };
@@ -1015,22 +1017,21 @@ rec {
           let
             evals =
               if lazy then
-                zipAttrsWith (name: defs: mergeDefinitions (loc ++ [ name ]) elemType defs) (pushPositions defs)
+                zipAttrsWith (name: mergeDefinitions (loc ++ [ name ]) elemType) (pushPositions defs)
               else
                 # Filtering makes the merge function more strict
                 # Meaning it is less lazy
                 filterAttrs (n: v: v.optionalValue ? value) (
-                  zipAttrsWith (name: defs: mergeDefinitions (loc ++ [ name ]) elemType defs) (pushPositions defs)
+                  zipAttrsWith (name: mergeDefinitions (loc ++ [ name ]) elemType) (pushPositions defs)
                 );
           in
           {
             headError = checkDefsForError check loc defs;
             value = mapAttrs (
-              n: v:
               if lazy then
-                v.optionalValue.value or elemType.emptyValue.value or v.mergedValue
+                n: v: v.optionalValue.value or elemType.emptyValue.value or v.mergedValue
               else
-                v.optionalValue.value
+                n: v: v.optionalValue.value
             ) evals;
             valueMeta.attrs = mapAttrs (n: v: v.checkedAndMerged.valueMeta) evals;
           };
@@ -1389,6 +1390,36 @@ rec {
   };
 
   submoduleWith =
+    let
+      inherit (lib.modules) evalModules;
+
+      defaultModules = [
+        {
+          # This is a work-around for the fact that some sub-modules,
+          # such as the one included in an attribute set, expects an "args"
+          # attribute to be given to the sub-module. As the option
+          # evaluation does not have any specific attribute name yet, we
+          # provide a default for the documentation and the freeform type.
+          #
+          # This is necessary as some option declaration might use the
+          # "name" attribute given as argument of the submodule and use it
+          # as the default of option declarations.
+          #
+          # We use lookalike unicode single angle quotation marks because
+          # of the docbook transformation the options receive. In all uses
+          # &gt; and &lt; wouldn't be encoded correctly so the encoded values
+          # would be used, and use of `<` and `>` would break the XML document.
+          # It shouldn't cause an issue since this is cosmetic for the manual.
+          _module.args.name = lib.mkOptionDefault "‹name›";
+        }
+      ];
+
+      name = "submodule";
+      check = {
+        __functor = _self: x: isAttrs x || isFunction x || path.check x;
+        isV2MergeCoherent = true;
+      };
+    in
     {
       modules,
       specialArgs ? { },
@@ -1397,57 +1428,26 @@ rec {
       class ? null,
     }@attrs:
     let
-      inherit (lib.modules) evalModules;
-
-      allModules =
-        defs:
-        map (
-          { value, file }:
-          if isAttrs value && shorthandOnlyDefinesConfig then
-            {
-              _file = file;
-              config = value;
-            }
-          else
-            {
-              _file = file;
-              imports = [ value ];
-            }
-        ) defs;
+      allModules = map (
+        { value, file }:
+        if shorthandOnlyDefinesConfig && isAttrs value then
+          {
+            _file = file;
+            config = value;
+          }
+        else
+          {
+            _file = file;
+            imports = [ value ];
+          }
+      );
 
       base = evalModules {
         inherit class specialArgs;
-        modules = [
-          {
-            # This is a work-around for the fact that some sub-modules,
-            # such as the one included in an attribute set, expects an "args"
-            # attribute to be given to the sub-module. As the option
-            # evaluation does not have any specific attribute name yet, we
-            # provide a default for the documentation and the freeform type.
-            #
-            # This is necessary as some option declaration might use the
-            # "name" attribute given as argument of the submodule and use it
-            # as the default of option declarations.
-            #
-            # We use lookalike unicode single angle quotation marks because
-            # of the docbook transformation the options receive. In all uses
-            # &gt; and &lt; wouldn't be encoded correctly so the encoded values
-            # would be used, and use of `<` and `>` would break the XML document.
-            # It shouldn't cause an issue since this is cosmetic for the manual.
-            _module.args.name = lib.mkOptionDefault "‹name›";
-          }
-        ]
-        ++ modules;
+        modules = defaultModules ++ modules;
       };
 
       freeformType = base._module.freeformType;
-
-      name = "submodule";
-
-      check = {
-        __functor = _self: x: isAttrs x || isFunction x || path.check x;
-        isV2MergeCoherent = true;
-      };
     in
     mkOptionType {
       inherit name;
