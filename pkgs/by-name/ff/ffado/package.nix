@@ -37,7 +37,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ffado";
-  version = "2.4.9";
+  version = "2.5.0";
 
   outputs = [
     "out"
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.ffado.org/files/libffado-${version}.tgz";
-    hash = "sha256-xELFL60Ryv1VE7tOhGyFHxAchIT4karFRe0ZDo/U0Q8=";
+    hash = "sha256-JcEtk9U5iPPK+ZZSNu03nxZ6vePqTMYzsTTuYlTYfKE=";
   };
 
   prePatch = ''
