@@ -1345,6 +1345,7 @@
   ./services/networking/nbd.nix
   ./services/networking/ncdns.nix
   ./services/networking/ncps.nix
+  ./services/networking/ncro.nix
   ./services/networking/ndppd.nix
   ./services/networking/nebula-lighthouse-service.nix
   ./services/networking/nebula.nix
