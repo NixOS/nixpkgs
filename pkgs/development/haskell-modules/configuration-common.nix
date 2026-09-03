@@ -99,6 +99,10 @@ with haskellLib;
         cabalInstallOverlay = cself: csuper: {
           Cabal = cself.Cabal_3_18_1_0;
           Cabal-syntax = cself.Cabal-syntax_3_18_1_0;
+
+          # Forbids Cabal >= 3.18
+          # https://github.com/sol/hpack/issues/653
+          hpack = doJailbreak (super.hpack.override { Cabal = cself.Cabal; });
         };
       in
       {
