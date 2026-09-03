@@ -6,6 +6,8 @@
   gnome,
   itstool,
   libxml2,
+  meson,
+  ninja,
   yelp-tools,
 }:
 
@@ -18,10 +20,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-rXb0QIkQ/th/39sLJMYFaK2nFkXr6Rl8q+KzpSHlrWQ=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     gettext
     itstool
     libxml2
+    meson
+    ninja
     yelp-tools
   ];
 
