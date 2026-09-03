@@ -233124,68 +233124,6 @@ self: {
       mkDerivation,
       base,
       bytestring,
-      Cabal,
-      colourista,
-      containers,
-      directory,
-      filepath,
-      ghc-boot-th,
-      hedgehog,
-      hspec,
-      hspec-hedgehog,
-      optparse-applicative,
-      parsec,
-      text,
-    }:
-    mkDerivation {
-      pname = "extensions";
-      version = "0.1.0.2";
-      sha256 = "1ra1qfrsc3icv6lgm06pgrhv77shwb8r7ci2whgnj3hs692ld7gd";
-      revision = "5";
-      editedCabalFile = "04plmhvz94p8dhy5qfykv5p2z9g25mqjrmcdyz6fj3x2p9pfrscd";
-      isLibrary = true;
-      isExecutable = true;
-      libraryHaskellDepends = [
-        base
-        bytestring
-        Cabal
-        containers
-        directory
-        filepath
-        ghc-boot-th
-        parsec
-        text
-      ];
-      executableHaskellDepends = [
-        base
-        colourista
-        containers
-        directory
-        filepath
-        optparse-applicative
-        text
-      ];
-      testHaskellDepends = [
-        base
-        bytestring
-        containers
-        ghc-boot-th
-        hedgehog
-        hspec
-        hspec-hedgehog
-        text
-      ];
-      description = "Parse Haskell Language Extensions";
-      license = lib.meta.getLicenseFromSpdxId "MPL-2.0";
-      mainProgram = "extensions";
-    }
-  ) { };
-
-  extensions_0_1_1_0 = callPackage (
-    {
-      mkDerivation,
-      base,
-      bytestring,
       Cabal-syntax,
       colourista,
       containers,
@@ -233239,7 +233177,6 @@ self: {
       ];
       description = "Parse Haskell Language Extensions";
       license = lib.meta.getLicenseFromSpdxId "MPL-2.0";
-      hydraPlatforms = lib.platforms.none;
       mainProgram = "extensions";
     }
   ) { };
