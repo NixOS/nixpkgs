@@ -6,17 +6,17 @@
 
 buildGoModule rec {
   pname = "serf";
-  version = "0.10.2";
+  version = "0.10.4";
   rev = "a2bba5676d6e37953715ea10e583843793a0c507";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "serf";
     rev = "v${version}";
-    sha256 = "sha256-8kMQu3UYGihlYW7rdh1IkvRR/FgFK/N+iay0y6qOOWE=";
+    sha256 = "sha256-pLcmNrN38yPr0kPkXZkKkKZK8jrtFmzqnYDAT46FgxA=";
   };
 
-  vendorHash = "sha256-aNAbE8yFp8HUgdRtt/3eVz4VAaqSTPB4XKKLl1o7YRc=";
+  vendorHash = "sha256-1tIRZybovsSOig3P0n+4G3KIP7B7opqBCkrPTFoOQLU=";
 
   subPackages = [ "cmd/serf" ];
 
