@@ -60,6 +60,13 @@ buildPythonPackage (finalAttrs: {
     "asynch"
   ];
 
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) asynch;
+    };
+  };
+
   meta = {
     description = "Asyncio driver for ClickHouse with native TCP support";
     homepage = "https://github.com/long2ice/asynch";
