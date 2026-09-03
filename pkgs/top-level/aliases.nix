@@ -1293,6 +1293,7 @@ mapAliases {
   libayatana-indicator-gtk3 = throw "'libayatana-indicator-gtk3' has been renamed to/replaced by 'libayatana-indicator'"; # Converted to throw 2025-10-27
   libbaseencode = throw "'libbaseencode' has been removed because it was deprecated and archived upstream. Consider using 'libcotp' instead"; # Added 2026-01-15
   libbencodetools = throw "'libbencodetools' has been renamed to/replaced by 'bencodetools'"; # Converted to throw 2025-10-27
+  libbpf_0 = throw "'libbpf_0' has been removed since it's EOL for four years"; # Added 2026-09-03
   libbpf_1 = throw "'libbpf_1' has been renamed to/replaced by 'libbpf'"; # Converted to throw 2025-10-27
   libbson = throw "'libbson' has been renamed to/replaced by 'mongoc'"; # Converted to throw 2025-10-27
   libcanberra-gtk2 = throw "'libcanberra-gtk2' has been removed as it depended on the deprecated GTK 2 engine. Consider using 'libcanberra-gtk3' instead."; # Added 2026-08-10
