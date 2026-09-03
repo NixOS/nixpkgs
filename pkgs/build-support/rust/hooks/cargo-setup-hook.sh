@@ -8,6 +8,11 @@ cargoSetupPostUnpackHook() {
     # it writable. If we're using a tarball, the unpackFile hook already handles
     # this for us automatically.
     if [ -z $cargoVendorDir ]; then
+        if [ -z "$cargoDeps" ]; then
+            echo "ERROR: Missing cargoDeps"
+            exit 1
+        fi
+
         if [ -d "$cargoDeps" ]; then
             local dest=$(stripHash "$cargoDeps")
             cp -Lr --reflink=auto -- "$cargoDeps" "$dest"
