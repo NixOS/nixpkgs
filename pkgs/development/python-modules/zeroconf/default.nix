@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "zeroconf";
-  version = "0.150.0";
+  version = "0.151.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jstasiak";
     repo = "python-zeroconf";
     tag = finalAttrs.version;
-    hash = "sha256-Etk8sQZotwmsM6HkArAl2sDZop77wTAcE4aUSIoM1ds=";
+    hash = "sha256-iMWlTX+GnJ7A2roh5aryoEf+9+963W2i4HVjtb5I00Q=";
   };
 
   build-system = [
@@ -44,6 +44,9 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # OSError: [Errno 19] No such device
     "test_close_multiple_times"
+    "test_context_manager_marks_done"
+    "test_default_interface_warns_when_ipv6_requested"
+    "test_open_and_close_cleanly"
     "test_integration_with_listener_ipv6"
     "test_launch_and_close"
     "test_launch_and_close_context_manager"
