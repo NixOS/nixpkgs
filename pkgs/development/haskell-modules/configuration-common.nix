@@ -376,6 +376,16 @@ with haskellLib;
   # 2023-06-28: Test error: https://hydra.nixos.org/build/225565149
   orbits = dontCheck super.orbits;
 
+  # Fix compilation of Setup.hs with Cabal >= 3.18
+  # https://github.com/haskell/entropy/pull/97
+  entropy = appendPatches [
+    (pkgs.fetchpatch {
+      name = "entropy-Cabal-3.18.patch";
+      url = "https://github.com/haskell/entropy/commit/52b0c314d182de512c3293c6ac9b0186efbebc6f.patch";
+      hash = "sha256-5+fLRlbkLp2c5PSVDH1E46tZGZcyTfamOaget5lwlwc=";
+    })
+  ] super.entropy;
+
   # 2025-02-10: Too strict bounds on tasty-quickcheck < 0.11
   tasty-discover = doJailbreak super.tasty-discover;
 
