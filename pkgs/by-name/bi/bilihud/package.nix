@@ -13,9 +13,16 @@
   wayland,
 }:
 
+let
+  versionData = lib.importJSON ./hashes.json;
+  inherit (versionData)
+    version
+    hash
+    ;
+in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bilihud";
-  version = "0.7.0";
+  inherit version;
   pyproject = true;
   __structuredAttrs = true;
 
@@ -23,7 +30,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "locez";
     repo = "bilihud";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-E8EQ25Ofspy0o8iuBiWRGqhPQDug/fGrcvNbgWRrBO4=";
+    inherit hash;
     fetchSubmodules = true;
   };
 
@@ -117,6 +124,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   strictDeps = true;
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Bilibili live-stream danmaku overlay for fullscreen games";
