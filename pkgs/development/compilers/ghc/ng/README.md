@@ -73,6 +73,20 @@ construction. It also lets every set for one GHC version share a single
 
 ## Splicing hazards
 
+These sets pass `alwaysSplice = true`, and depend on it.
+
+`splicePackages` normally short-circuits to the identity when
+`pkgs == buildPackages`: if the platforms coincide, every cross index of a
+package is the same package and there is nothing to choose between. That is a
+fact about `pkgs`, and it does not carry over to a set that bootstraps. Here the
+build set is a *different rung* whatever the platforms are doing -- stage2 is
+built by stage1 and compiles its `Setup.hs` files with the tools rung -- so
+without forcing it, `setupHaskellDepends` and `libraryToolDepends` resolve to
+this rung's own copies: libraries the build compiler cannot read, and tools it
+would have to build with the compiler under construction.
+
+Everything below is what splicing does *not* cover.
+
 `__spliced` is consulted **only** for `mkDerivation` dependency lists
 (`nativeBuildInputs` -> `buildHost`, `buildInputs` -> `hostTarget`, ...). Anything
 used as a *string path* silently gets the host-target instance. `generic-builder`

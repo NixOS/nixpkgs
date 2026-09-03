@@ -224,10 +224,12 @@ let
     # Likewise: `ghc-internal.cabal` also has `extra-libraries: c`.
     ghc-internal.c = null;
 
-    # `libraryToolDepends`: programs run during the build, so they belong to the
-    # build platform. Splicing would give the right instance if the attribute
-    # existed here at all, but these live in the tools set -- stage2 has no
-    # `deriveConstants` -- so `callPackage` cannot resolve them without help.
+    # `libraryToolDepends`: programs run during the build, so they belong to
+    # the build set. The spliced scope would now resolve them anyway -- these
+    # live only in the tools rung, and `spliceReal` unions `buildHost` into the
+    # scope -- but naming them is unconditional and says so outright, where
+    # relying on that union would be relying on the absence of a same-named
+    # attribute here.
     ghc.deriveConstants = final.buildHaskellPackages.deriveConstants;
     ghc.genprimopcode = final.buildHaskellPackages.genprimopcode;
     ghc.alex = final.buildHaskellPackages.alex;
