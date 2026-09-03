@@ -25,6 +25,19 @@ buildMozillaMach rec {
     maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
     license = lib.licenses.mpl20;
     mainProgram = "firefox";
+    identifiers = {
+      cpeParts = {
+        product = "firefox";
+        sw_edition = "esr";
+        update = "*";
+        vendor = "mozilla";
+        version = lib.removeSuffix "esr" version;
+      };
+      purlParts = {
+        type = "generic";
+        spec = "firefox@${lib.removeSuffix "esr" version}";
+      };
+    };
   };
   tests = {
     inherit (nixosTests) firefox-esr-153;
