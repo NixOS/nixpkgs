@@ -56,6 +56,11 @@ let
     url = "https://github.com/CachyOS/CachyOS-PKGBUILDS/raw/d5629d64ac1f9e298c503e407225b528760ffd37/nvidia/nvidia-utils/kernel-6.19.patch";
     hash = "sha256-YuJjSUXE6jYSuZySYGnWSNG5sfVei7vvxDcHx3K+IN4=";
   };
+
+  of_gpio_const_patch = fetchpatch {
+    url = "https://github.com/NVIDIA/open-gpu-kernel-modules/commit/24e68a854f50e2de5b7ead18bd4d28d22566c005.patch";
+    hash = "sha256-T95DwOaCmEbuOp/5CYqveshrxwhMcantXZ+hRJ7XucA=";
+  };
 in
 rec {
   mkDriver = generic;
@@ -86,6 +91,9 @@ rec {
     openSha256 = "sha256-rQHOOOY4KL92Ww3KDwh+j4eGU7oNAH8LutZC5wmFnPo=";
     settingsSha256 = "sha256-ZEMo8I8Zc2Tq6RVDNYpAH+f094dUaZiBqO+5f6lIjRI=";
     persistencedSha256 = "sha256-aXmD2VY1RLlgAnlHhOUMWzvMyhI6JTClcFLm4imF/mA=";
+    patchesOpen = [
+      of_gpio_const_patch
+    ];
   };
 
   beta = generic {
