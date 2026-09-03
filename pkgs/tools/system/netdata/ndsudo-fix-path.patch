@@ -1,0 +1,30 @@
+diff --git a/src/collectors/utils/ndsudo.c b/src/collectors/utils/ndsudo.c
+index 5462a87c3..98359e2bf 100644
+--- a/src/collectors/utils/ndsudo.c
++++ b/src/collectors/utils/ndsudo.c
+@@ -664,12 +664,7 @@ int main(int argc, char *argv[]) {
+         return 2;
+     }
+
+-    char new_path[] =
+-#ifdef __APPLE__
+-        "PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/opt/homebrew/bin:/opt/homebrew/sbin";
+-#else
+-        "PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin";
+-#endif
++    char new_path[] = "PATH=/var/lib/netdata/ndsudo/runtime-dependencies";
+     putenv(new_path);
+
+     // Escalate to root before searching PATH and running the whitelisted
+@@ -724,11 +719,6 @@ int main(int argc, char *argv[]) {
+
+         fprintf(stderr, "\n");
+
+-        if(!privileges_ok)
+-            fprintf(stderr,
+-                    "WARNING: a real run would FAIL before executing this: could not acquire root "
+-                    "privileges (is the binary setuid-root?): %s\n", strerror(privileges_errno));
+-
+         exit(0);
+     }
+     else {

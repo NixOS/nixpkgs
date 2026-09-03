@@ -1,0 +1,138 @@
+diff --git a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@ -152,7 +152,6 @@ CCLINKER    = $(CXX)
+ #CXX         = $(PREFIX)g++-8.1
+ #CCLINKER    = $(CXX)
+ 
+-# macOS: use Homebrew GCC (supports std::execution::par via TBB backend)
+ ifeq ($(UNAME_S),Darwin)
+ CC       = gcc-15
+ CXX      = g++-15
+diff --git a/src/app_components.cpp b/src/app_components.cpp
+--- a/src/app_components.cpp
++++ b/src/app_components.cpp
+@@ -6,7 +6,6 @@
+  */
+ 
+ #include <thread>
+-#include <execution>
+ #include <iostream>
+ #include <fstream>
+ #include <filesystem>
+@@ -162,7 +161,6 @@ void connectedComponentsOfSlices(PostComplex<mvtyp>& pc, bool saveNoncomets, boo
+   */
+   if (potentialsOutputAndStop) {
+     std::for_each(
+-		  std::execution::seq, 
+ 		  potentials.begin(),
+ 		  potentials.end(),
+ 		  [](Rational p)
+@@ -180,7 +178,6 @@ void connectedComponentsOfSlices(PostComplex<mvtyp>& pc, bool saveNoncomets, boo
+ 		  });
+   } else {
+     std::for_each(
+-		  std::execution::par,//fails to trigger parallelism
+ 		  potentials.begin(),
+ 		  potentials.end(),
+ 		  [pc,minConePotential,maxConePotential,saveNoncomets](Rational p)
+diff --git a/src/app_halfopenconecomponents.cpp b/src/app_halfopenconecomponents.cpp
+--- a/src/app_halfopenconecomponents.cpp
++++ b/src/app_halfopenconecomponents.cpp
+@@ -13,6 +13,7 @@
+ 
+ #include <mutex>
+ #include <thread>
++#include <tbb/parallel_for_each.h>
+ 
+ #include "gfanlib_tableau.h"
+ #include "gfanapplication.h"
+@@ -90,7 +91,7 @@ public:
+ 		  atomic_int64_t numberOfNonEmptyCones=0;
+ 		  ThreadSafeSequenceStreamIterator i(inputFileOption.getFreshStreamReference());
+ 		  vector<int> dummy(100);
+-		  std::for_each(std::execution::par, dummy.begin(),dummy.end(),[&i,&numberOfNonEmptyCones,&allowedVertices,&mtx,&connectivityThroughEdges](size_t t)
++		  tbb::parallel_for_each(dummy.begin(),dummy.end(),[&i,&numberOfNonEmptyCones,&allowedVertices,&mtx,&connectivityThroughEdges](size_t t)
+ 				  {
+ 			  std::cerr<<t<<"\n";
+ 			  while(auto s1=i.getNextString())
+@@ -136,7 +137,7 @@ public:
+ 			  ThreadSafeSequenceStreamIterator i(inputFileOption.getFreshStreamReference());
+ 			  std::mutex mtx;
+ 			  vector<int> dummy(100);
+-			  std::for_each(std::execution::par, dummy.begin(),dummy.end(),[&i,&allowedVertices,&classes,&mtx,&connectivityThroughEdges](size_t t)
++			  tbb::parallel_for_each(dummy.begin(),dummy.end(),[&i,&allowedVertices,&classes,&mtx,&connectivityThroughEdges](size_t t)
+ 					  {
+ 				  std::cerr<<t<<"\n";
+ 				  while(auto s1=i.getNextString())
+@@ -185,7 +186,7 @@ public:
+ 		  ThreadSafeSequenceStreamIterator i(inputFileOption.getFreshStreamReference());
+ 		  std::mutex mtx;
+ 		  vector<int> dummy(100);
+-		  std::for_each(std::execution::par, dummy.begin(),dummy.end(),[&i,&I,&classToIndex,&allowedVertices,&classes,&mtx](size_t t)
++		  tbb::parallel_for_each(dummy.begin(),dummy.end(),[&i,&I,&classToIndex,&allowedVertices,&classes,&mtx](size_t t)
+ 				  {
+ 			  std::cerr<<t<<"\n";
+ 			  while(auto s1=i.getNextString())
+diff --git a/src/app_processcomplex.cpp b/src/app_processcomplex.cpp
+--- a/src/app_processcomplex.cpp
++++ b/src/app_processcomplex.cpp
+@@ -14,7 +14,7 @@
+ #include <sstream>
+ #include <mutex>
+ #include <thread>
+-#include <execution>
++#include <tbb/parallel_for_each.h>
+ #include "parser.h"
+ #include "printer.h"
+ #include "polynomial.h"
+@@ -225,7 +225,7 @@ if(0)	  {
+ 			ThreadSafeSequenceStreamIterator i(inputFileOption.getFreshStreamReference(),true);
+ 			  std::mutex mtx;
+ 			  vector<int> dummy(100);
+-			  std::for_each(std::execution::par, dummy.begin(),dummy.end(),[&](size_t t)
++			  tbb::parallel_for_each(dummy.begin(),dummy.end(),[&](size_t t)
+ 					  {
+ 			while(auto s1=i.getNextString())
+ 			{
+diff --git a/src/app_tropicalprevariety.cpp b/src/app_tropicalprevariety.cpp
+--- a/src/app_tropicalprevariety.cpp
++++ b/src/app_tropicalprevariety.cpp
+@@ -11,6 +11,7 @@
+ #include <iostream>
+ #include <fstream>
+ #include <stdlib.h>
++#include <tbb/parallel_for_each.h>
+ #include "parser.h"
+ #include "printer.h"
+ #include "polynomial.h"
+@@ -219,7 +220,7 @@ if(optionRestrictToHalfOpenCones.getValue())
+ 	  std::mutex mtx;
+ 	  vector<int> dummy(100);
+ 	  std::atomic<int> c2=count;
+-	  std::for_each(std::execution::par, dummy.begin(),dummy.end(),[this,&useValuation,&n,&ret,&c2,&mtx](size_t t)
++	  tbb::parallel_for_each(dummy.begin(),dummy.end(),[this,&useValuation,&n,&ret,&c2,&mtx](size_t t)
+ 			  {
+ 		  	  while(c2>0 && !ssi->eof())
+ 		  		  {
+diff --git a/src/gfanlib_hypersurfaceintersection.cpp b/src/gfanlib_hypersurfaceintersection.cpp
+--- a/src/gfanlib_hypersurfaceintersection.cpp
++++ b/src/gfanlib_hypersurfaceintersection.cpp
+@@ -7,7 +7,7 @@
+ 
+ #include <mutex>
+ #include <thread>
+-#include <execution>
++#include <tbb/parallel_for_each.h>
+ #include "gfanlib_hypersurfaceintersection.h"
+ #include "gfanlib_paralleltraverser.h"
+ #include "gfanlib_memoryresource.h"
+@@ -435,7 +435,7 @@ namespace gfan{
+ 
+ 		vector<int> dummy(100);
+ 		mutex mtx;
+-		std::for_each(std::execution::par, dummy.begin(),dummy.end(),[&](size_t t)
++		tbb::parallel_for_each(dummy.begin(),dummy.end(),[&](size_t t)
+ 			{
+ 			StackResource localStackResource1(20160000);
+ 			StackResource localStackResource2(20160000);

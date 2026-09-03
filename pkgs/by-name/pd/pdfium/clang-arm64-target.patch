@@ -1,0 +1,15 @@
+diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
+index 58d3a1788e6d2..38f364c6b471d 100644
+--- a/build/config/compiler/BUILD.gn
++++ b/build/config/compiler/BUILD.gn
+@@ -1349,8 +1349,8 @@ config("compiler_cpu_abi") {
+       ]
+     } else if (current_cpu == "arm64") {
+       if (is_clang && !is_android && !is_fuchsia && !is_chromeos_device) {
+-        cflags += [ "--target=aarch64-linux-gnu" ]
+-        ldflags += [ "--target=aarch64-linux-gnu" ]
++        cflags += [ "--target=aarch64-unknown-linux-gnu" ]
++        ldflags += [ "--target=aarch64-unknown-linux-gnu" ]
+       }
+       if (target_os == "chromeos" && cros_target_cpu_arch != "" &&
+           is_a_target_toolchain) {

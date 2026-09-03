@@ -1,0 +1,155 @@
+From f3fcc2319d96dde3618e3629534d16b4b2d49423 Mon Sep 17 00:00:00 2001
+From: Florian Klink <flokli@flokli.de>
+Date: Tue, 1 Apr 2025 15:46:37 +0100
+Subject: [PATCH 1/2] parser_tests: replace self.assert_ with specific
+ assertions
+
+This function does not exist (anymore?), use assert methods suitable for
+each type of check.
+---
+ tests/parser_tests.py | 54 +++++++++++++++++++++----------------------
+ 1 file changed, 27 insertions(+), 27 deletions(-)
+
+diff --git a/tests/parser_tests.py b/tests/parser_tests.py
+index 12fb9ac..af93fba 100644
+--- a/tests/parser_tests.py
++++ b/tests/parser_tests.py
+@@ -13,14 +13,14 @@ class RedisParserTestCase(unittest.TestCase):
+ 
+     def test_empty_rdb(self):
+         r = load_rdb('empty_database.rdb')
+-        self.assert_('start_rdb' in r.methods_called)
+-        self.assert_('end_rdb' in r.methods_called)
++        self.assertIn('start_rdb', r.methods_called)
++        self.assertIn('end_rdb', r.methods_called)
+         self.assertEquals(len(r.databases), 0, msg = "didn't expect any databases")
+ 
+     def test_multiple_databases(self):
+         r = load_rdb('multiple_databases.rdb')
+-        self.assert_(len(r.databases), 2)
+-        self.assert_(1 not in r.databases)
++        self.assertEqual(len(r.databases), 2)
++        self.assertNotIn(1, r.databases)
+         self.assertEquals(r.databases[0][b"key_in_zeroth_database"], b"zero")
+         self.assertEquals(r.databases[2][b"key_in_second_database"], b"second")
+ 
+@@ -105,9 +105,9 @@ class RedisParserTestCase(unittest.TestCase):
+     def test_ziplist_that_doesnt_compress(self):
+         r = load_rdb('ziplist_that_doesnt_compress.rdb')
+         self.assertEquals(r.lengths[0][b"ziplist_doesnt_compress"], 2)
+-        self.assert_(b"aj2410" in r.databases[0][b"ziplist_doesnt_compress"])
+-        self.assert_(b"cc953a17a8e096e76a44169ad3f9ac87c5f8248a403274416179aa9fbd852344"
+-                        in r.databases[0][b"ziplist_doesnt_compress"])
++        self.assertIn(b"aj2410", r.databases[0][b"ziplist_doesnt_compress"])
++        self.assertIn(b"cc953a17a8e096e76a44169ad3f9ac87c5f8248a403274416179aa9fbd852344",
++                      r.databases[0][b"ziplist_doesnt_compress"])
+ 
+     def test_ziplist_with_integers(self):
+         r = load_rdb('ziplist_with_integers.rdb')
+@@ -121,45 +121,45 @@ class RedisParserTestCase(unittest.TestCase):
+         self.assertEquals(r.lengths[0][b"ziplist_with_integers"], len(expected_numbers))
+         
+         for num in expected_numbers :
+-            self.assert_(num in r.databases[0][b"ziplist_with_integers"], "Cannot find %d" % num)
++            self.assertIn(num, r.databases[0][b"ziplist_with_integers"], "Cannot find %d" % num)
+ 
+     def test_linkedlist(self):
+         r = load_rdb('linkedlist.rdb')
+         self.assertEquals(r.lengths[0][b"force_linkedlist"], 1000)
+-        self.assert_(b"JYY4GIFI0ETHKP4VAJF5333082J4R1UPNPLE329YT0EYPGHSJQ" in r.databases[0][b"force_linkedlist"])
+-        self.assert_(b"TKBXHJOX9Q99ICF4V78XTCA2Y1UYW6ERL35JCIL1O0KSGXS58S" in r.databases[0][b"force_linkedlist"])
++        self.assertIn(b"JYY4GIFI0ETHKP4VAJF5333082J4R1UPNPLE329YT0EYPGHSJQ", r.databases[0][b"force_linkedlist"])
++        self.assertIn(b"TKBXHJOX9Q99ICF4V78XTCA2Y1UYW6ERL35JCIL1O0KSGXS58S", r.databases[0][b"force_linkedlist"])
+ 
+     def test_intset_16(self):
+         r = load_rdb('intset_16.rdb')
+         self.assertEquals(r.lengths[0][b"intset_16"], 3)
+         for num in (0x7ffe, 0x7ffd, 0x7ffc) :
+-            self.assert_(num in r.databases[0][b"intset_16"])
++            self.assertIn(num, r.databases[0][b"intset_16"])
+ 
+     def test_intset_32(self):
+         r = load_rdb('intset_32.rdb')
+         self.assertEquals(r.lengths[0][b"intset_32"], 3)
+         for num in (0x7ffefffe, 0x7ffefffd, 0x7ffefffc) :
+-            self.assert_(num in r.databases[0][b"intset_32"])
++            self.assertIn(num, r.databases[0][b"intset_32"])
+ 
+     def test_intset_64(self):
+         r = load_rdb('intset_64.rdb')
+         self.assertEquals(r.lengths[0][b"intset_64"], 3)
+         for num in (0x7ffefffefffefffe, 0x7ffefffefffefffd, 0x7ffefffefffefffc) :
+-            self.assert_(num in r.databases[0][b"intset_64"])
++            self.assertIn(num, r.databases[0][b"intset_64"])
+ 
+     def test_regular_set(self):
+         r = load_rdb('regular_set.rdb')
+         self.assertEquals(r.lengths[0][b"regular_set"], 6)
+         for member in (b"alpha", b"beta", b"gamma", b"delta", b"phi", b"kappa") :
+-            self.assert_(member in r.databases[0][b"regular_set"], msg=('%s missing' % member))
++            self.assertIn(member, r.databases[0][b"regular_set"], msg=('%s missing' % member))
+ 
+     def test_sorted_set_as_ziplist(self):
+         r = load_rdb('sorted_set_as_ziplist.rdb')
+         self.assertEquals(r.lengths[0][b"sorted_set_as_ziplist"], 3)
+         zset = r.databases[0][b"sorted_set_as_ziplist"]
+-        self.assert_(floateq(zset[b'8b6ba6718a786daefa69438148361901'], 1))
+-        self.assert_(floateq(zset[b'cb7a24bb7528f934b841b34c3a73e0c7'], 2.37))
+-        self.assert_(floateq(zset[b'523af537946b79c4f8369ed39ba78605'], 3.423))
++        self.assertTrue(floateq(zset[b'8b6ba6718a786daefa69438148361901'], 1))
++        self.assertTrue(floateq(zset[b'cb7a24bb7528f934b841b34c3a73e0c7'], 2.37))
++        self.assertTrue(floateq(zset[b'523af537946b79c4f8369ed39ba78605'], 3.423))
+ 
+     def test_filtering_by_keys(self):
+         r = load_rdb('parser_filters.rdb', filters={"keys":"k[0-9]"})
+@@ -169,16 +169,16 @@ class RedisParserTestCase(unittest.TestCase):
+ 
+     def test_filtering_by_type(self):
+         r = load_rdb('parser_filters.rdb', filters={"types":["sortedset"]})
+-        self.assert_(b'z1' in r.databases[0])
+-        self.assert_(b'z2' in r.databases[0])
+-        self.assert_(b'z3' in r.databases[0])
+-        self.assert_(b'z4' in r.databases[0])
++        self.assertIn(b'z1', r.databases[0])
++        self.assertIn(b'z2', r.databases[0])
++        self.assertIn(b'z3', r.databases[0])
++        self.assertIn(b'z4', r.databases[0])
+         self.assertEquals(len(r.databases[0]), 4)
+ 
+     def test_filtering_by_database(self):
+         r = load_rdb('multiple_databases.rdb', filters={"dbs":[2]})
+-        self.assert_(b'key_in_zeroth_database' not in r.databases[0])
+-        self.assert_(b'key_in_second_database' in r.databases[2])
++        self.assertNotIn(b'key_in_zeroth_database', r.databases[0])
++        self.assertIn(b'key_in_second_database', r.databases[2])
+         self.assertEquals(len(r.databases[0]), 0)
+         self.assertEquals(len(r.databases[2]), 1)
+ 
+@@ -195,12 +195,12 @@ class RedisParserTestCase(unittest.TestCase):
+         self.assertEquals(r.databases[0][b'foo'], b'bar')
+         zset = r.databases[0][b"bigset"]
+         self.assertEquals(len(zset), 1000)
+-        self.assert_(floateq(zset[b'finalfield'], 2.718))
++        self.assertTrue(floateq(zset[b'finalfield'], 2.718))
+ 
+     def test_multiple_databases_stream(self):
+         r = load_rdb_stream('multiple_databases.rdb')
+-        self.assert_(len(r.databases), 2)
+-        self.assert_(1 not in r.databases)
++        self.assertEquals(len(r.databases), 2)
++        self.assertNotIn(1, r.databases)
+         self.assertEquals(r.databases[0][b"key_in_zeroth_database"], b"zero")
+         self.assertEquals(r.databases[2][b"key_in_second_database"], b"second")
+ 
+@@ -210,7 +210,7 @@ class RedisParserTestCase(unittest.TestCase):
+ 
+     def test_rdb_version_8_with_module_and_skip(self):
+         r = load_rdb('redis_40_with_module.rdb', {"keys": "bar"}) # skip foo module
+-        self.assert_(b'foo' not in r.databases[0])
++        self.assertNotIn(b'foo', r.databases[0])
+ 
+     def test_rdb_version_9_with_stream(self):
+         r = load_rdb('redis_50_with_streams.rdb')
+-- 
+2.48.1
+

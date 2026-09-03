@@ -1,0 +1,20 @@
+--- a/src/access-daemon/accessDaemon.c	2024-01-10 14:26:18.519538418 +0100
++++ b/src/access-daemon/accessDaemon.c	2024-01-10 14:30:44.090278291 +0100
+@@ -201,7 +201,7 @@
+ static int getNumberOfCPUs()
+ {
+     FILE* fpipe = NULL;
+-    char cmd[1024] = "cat /proc/cpuinfo | grep \"processor\" | sort -u | wc -l";
++    char cmd[1024] = "@coreutils@cat /proc/cpuinfo | @gnugrep@grep \"processor\" | @coreutils@sort -u | @coreutils@wc -l";
+     char buff[1024];
+     if ( !(fpipe = popen(cmd,"r")) )
+     {
+@@ -219,7 +219,7 @@
+ static int getNumberOfSockets()
+ {
+     FILE* fpipe = NULL;
+-    char cmd[1024] = "cat /proc/cpuinfo | grep \"physical id\" | sort -u | wc -l";
++    char cmd[1024] = "@coreutils@cat /proc/cpuinfo | @gnugrep@grep \"physical id\" | @coreutils@sort -u | @coreutils@wc -l";
+     char buff[1024];
+     if ( !(fpipe = popen(cmd,"r")) )
+     {

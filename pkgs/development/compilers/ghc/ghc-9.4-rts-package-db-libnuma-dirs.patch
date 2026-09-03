@@ -1,0 +1,100 @@
+From a0b547f41939304adfc0c430314c342dd69306ae Mon Sep 17 00:00:00 2001
+From: sterni <sternenseemann@systemli.org>
+Date: Thu, 17 Jul 2025 21:21:29 +0200
+Subject: [PATCH] rts: record libnuma include and lib dirs in package conf
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The --with-libnuma-libraries and --with-libnuma-includes flags were
+originally introduced for hadrian in def486c90ef6f37d81d0d9c6df7544
+and curiously never supported by the make build system — even though
+the addition was made in the 9.0 series and even backported to the
+8.10 series.
+
+While the make build system knows when to link against libnuma, it won't
+enforce its specific directories by adding them to rts.conf in the
+package db. This commit implements this retroactively for the make build
+system, modeled after how make does the same sort of thing for Libdw.
+The Libdw logic also affects the bindist configure file in
+distrib/configure.ac which isn't replicate since we don't need it.
+---
+ mk/config.mk.in     | 4 ++++
+ rts/ghc.mk          | 8 ++++++++
+ rts/package.conf.in | 5 +++--
+ rts/rts.cabal.in    | 1 +
+ 4 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/mk/config.mk.in b/mk/config.mk.in
+index 2ff2bea9b6..d95f927dbd 100644
+--- a/mk/config.mk.in
++++ b/mk/config.mk.in
+@@ -324,6 +324,10 @@ LibdwIncludeDir=@LibdwIncludeDir@
+ #     rts/Libdw.c:set_initial_registers()
+ GhcRtsWithLibdw=$(strip $(if $(filter $(TargetArch_CPP),i386 x86_64 s390x),@UseLibdw@,NO))
+ 
++UseLibNuma=@UseLibNuma@
++LibNumaLibDir=@LibNumaLibDir@
++LibNumaIncludeDir=@LibNumaIncludeDir@
++
+ ################################################################################
+ #
+ #		Paths (see paths.mk)
+diff --git a/rts/ghc.mk b/rts/ghc.mk
+index 36a82f9f2c..854bb8e013 100644
+--- a/rts/ghc.mk
++++ b/rts/ghc.mk
+@@ -573,6 +573,14 @@ rts_PACKAGE_CPP_OPTS += -DLIBDW_INCLUDE_DIR=
+ rts_PACKAGE_CPP_OPTS += -DLIBDW_LIB_DIR=
+ endif
+ 
++ifeq "$(UseLibNuma)" "YES"
++rts_PACKAGE_CPP_OPTS += -DLIBNUMA_INCLUDE_DIR=$(LibNumaIncludeDir)
++rts_PACKAGE_CPP_OPTS += -DLIBNUMA_LIB_DIR=$(LibNumaLibDir)
++else
++rts_PACKAGE_CPP_OPTS += -DLIBNUMA_INCLUDE_DIR=
++rts_PACKAGE_CPP_OPTS += -DLIBNUMA_LIB_DIR=
++endif
++
+ # -----------------------------------------------------------------------------
+ # dependencies
+ 
+diff --git a/rts/package.conf.in b/rts/package.conf.in
+index cb5a436f5c..9e5ae48adb 100644
+--- a/rts/package.conf.in
++++ b/rts/package.conf.in
+@@ -18,9 +18,9 @@ hidden-modules:
+ import-dirs:
+ 
+ #if defined(INSTALLING)
+-library-dirs:           LIB_DIR FFI_LIB_DIR LIBDW_LIB_DIR
++library-dirs:           LIB_DIR FFI_LIB_DIR LIBDW_LIB_DIR LIBNUMA_LIB_DIR
+ #else /* !INSTALLING */
+-library-dirs:           TOP"/rts/dist-install/build" FFI_LIB_DIR LIBDW_LIB_DIR
++library-dirs:           TOP"/rts/dist-install/build" FFI_LIB_DIR LIBDW_LIB_DIR LIBNUMA_LIB_DIR
+ #endif
+ 
+ hs-libraries:   "HSrts" FFI_LIB
+@@ -74,6 +74,7 @@ include-dirs:           TOP"/rts/include"
+                         TOP"/rts/dist-install/build/include"
+                         FFI_INCLUDE_DIR
+                         LIBDW_INCLUDE_DIR
++                        LIBNUMA_INCLUDE_DIR
+ #endif
+ 
+ includes:               Rts.h
+diff --git a/rts/rts.cabal.in b/rts/rts.cabal.in
+index a8882268ac..debf2ba0a0 100644
+--- a/rts/rts.cabal.in
++++ b/rts/rts.cabal.in
+@@ -154,6 +154,7 @@ library
+     include-dirs: include
+                   @FFIIncludeDir@
+                   @LibdwIncludeDir@
++                  @LibNumaIncludeDir@
+     includes: Rts.h
+     install-includes: Cmm.h HsFFI.h MachDeps.h Rts.h RtsAPI.h Stg.h
+                       ghcautoconf.h ghcconfig.h ghcplatform.h ghcversion.h
+-- 
+2.50.0
+

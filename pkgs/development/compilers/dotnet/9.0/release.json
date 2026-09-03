@@ -1,0 +1,10 @@
+{
+  "release": "9.0.19",
+  "channel": "9.0",
+  "tag": "v9.0.120",
+  "sdkVersion": "9.0.120",
+  "runtimeVersion": "9.0.19",
+  "aspNetCoreVersion": "9.0.19",
+  "sourceRepository": "https://github.com/dotnet/dotnet",
+  "sourceVersion": "d0558bff3d817c76a12aa6852050b71c5b742c40"
+}

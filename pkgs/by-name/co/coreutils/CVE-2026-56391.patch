@@ -1,0 +1,45 @@
+From d64e35a8a4c0e4608321433e0d84d917e4e36371 Mon Sep 17 00:00:00 2001
+From: Paul Eggert <eggert@cs.ucla.edu>
+Date: Tue, 28 Apr 2026 11:25:00 -0700
+Subject: [PATCH] uniq: fix read overrun with -w
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Problem reported by Michał Majchrowicz.
+* src/uniq.c (find_field): Fix typo.
+* tests/uniq/uniq.pl (add_z_variants): Test for the bug.
+---
+ src/uniq.c         | 4 ++--
+ tests/uniq/uniq.pl | 3 +++
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/src/uniq.c b/src/uniq.c
+index 30463598a5..5834596f98 100644
+--- a/src/uniq.c
++++ b/src/uniq.c
+@@ -285,8 +285,8 @@ find_field (struct linebuffer const *line, idx_t *plen)
+   else
+     {
+       char *ep = lp;
+-      for (idx_t i = check_chars; 0 < i && lp < lim; i--)
+-        ep += mcel_scan (lp, lim).len;
++      for (idx_t i = check_chars; 0 < i && ep < lim; i--)
++        ep += mcel_scan (ep, lim).len;
+       len = ep - lp;
+     }
+ 
+diff --git a/tests/uniq/uniq.pl b/tests/uniq/uniq.pl
+index b558fb3ee2..0df7ec62d7 100755
+--- a/tests/uniq/uniq.pl
++++ b/tests/uniq/uniq.pl
+@@ -234,6 +234,9 @@ ($)
+         "  - 'separate'\n" .
+         "  - 'both'\n" .
+         "Try '$prog --help' for more information.\n"}],
++ # Test for read buffer overrun.
++ do { my $longline = "\360\237\230\200" . "A" x 255 . "\n";
++      ['146', '-w256', {IN  => $longline x 2}, {OUT => $longline}] },
+ );
+ 
+ # Locale related tests

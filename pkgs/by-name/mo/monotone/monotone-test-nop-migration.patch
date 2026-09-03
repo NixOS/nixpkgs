@@ -1,0 +1,13 @@
+Do not expect a nothing-to-do migration to fail on a read-only DB file
+
+--- mtn-src/test/func/fail_cleanly_on_unreadable_db/__driver__.lua	2026-08-05 21:29:54.727038442 +0200
++++ mtn-src/test/func/fail_cleanly_on_unreadable_db/__driver__.lua	2026-08-05 21:30:33.397412828 +0200
+@@ -23,7 +23,7 @@
+ check(mtn("ls", "branches"), 0, false, false)
+ check(mtn("db", "info"), 0, false, false)
+ check(mtn("db", "version"), 0, false, false)
+-check(mtn("db", "migrate"), 1, false, false)
++check(mtn("db", "migrate"), 0, false, false) -- A migration is a NOP, RO is OK
+ check(mtn("commit", "-mfoo"), 1, false, false)
+ check(mtn("db", "load"), 1, false, false)
+ check({"chmod", "a+w", "test.db"})

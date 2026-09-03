@@ -1,0 +1,120 @@
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  pkg-config,
+  buildPackages,
+  cmake,
+  kdePackages,
+  wayland-scanner,
+  cairo,
+  pango,
+  expat,
+  fribidi,
+  wayland,
+  systemd,
+  wayland-protocols,
+  nlohmann_json,
+  isocodes,
+  xkeyboard_config,
+  enchant,
+  gdk-pixbuf,
+  libGL,
+  libuuid,
+  libselinux,
+  libxdmcp,
+  libsepol,
+  libxkbcommon,
+  libthai,
+  libdatrie,
+  libxcb-keysyms,
+  libxcb-util,
+  libxcb-wm,
+  xcb-imdkit,
+  libxkbfile,
+  nixosTests,
+  gettext,
+}:
+let
+  enDictVer = "20121020";
+  enDict = fetchurl {
+    url = "https://download.fcitx-im.org/data/en_dict-${enDictVer}.tar.gz";
+    hash = "sha256-xEpdeEeSXuqeTS0EdI1ELNKN2SmaC1cu99kerE9abOs=";
+  };
+in
+stdenv.mkDerivation rec {
+  pname = "fcitx5";
+  version = "5.1.21";
+
+  src = fetchFromGitHub {
+    owner = "fcitx";
+    repo = pname;
+    rev = version;
+    hash = "sha256-IR5mKOsVJ/GPL2czdztLVXGJTNk1JXnWpzmqC/UIwuw=";
+    fetchSubmodules = true;
+  };
+
+  prePatch = ''
+    ln -s ${enDict} src/modules/spell/$(stripHash ${enDict})
+  '';
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wayland-scanner
+    gettext
+  ];
+
+  buildInputs = [
+    kdePackages.plasma-wayland-protocols
+    kdePackages.extra-cmake-modules
+    expat
+    isocodes
+    cairo
+    enchant
+    pango
+    libthai
+    libdatrie
+    fribidi
+    systemd
+    gdk-pixbuf
+    wayland
+    wayland-protocols
+    nlohmann_json
+    libGL
+    libuuid
+    libselinux
+    libsepol
+    libxdmcp
+    libxkbcommon
+    libxcb-util
+    libxcb-wm
+    libxcb-keysyms
+    xcb-imdkit
+    xkeyboard_config
+    libxkbfile
+  ];
+
+  cmakeFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
+  ];
+
+  strictDeps = true;
+
+  passthru = {
+    updateScript = ./update.py;
+    tests = {
+      inherit (nixosTests) fcitx5;
+    };
+  };
+
+  meta = {
+    description = "Next generation of fcitx";
+    homepage = "https://github.com/fcitx/fcitx5";
+    license = lib.licenses.lgpl21Plus;
+    mainProgram = "fcitx5";
+    maintainers = with lib.maintainers; [ poscat ];
+    platforms = lib.platforms.linux;
+  };
+}

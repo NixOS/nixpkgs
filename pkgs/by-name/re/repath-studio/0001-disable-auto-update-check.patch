@@ -1,0 +1,36 @@
+From 399263410c5edfb6bf1e359db6b9539e86687911 Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Thu, 30 Jul 2026 12:18:28 +0530
+Subject: [PATCH] disable auto update check
+
+Signed-off-by: phanirithvij <phanirithvij2000@gmail.com>
+---
+ src/electron/main.cljs | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/src/electron/main.cljs b/src/electron/main.cljs
+index cdc2a5a0..e86922d6 100644
+--- a/src/electron/main.cljs
++++ b/src/electron/main.cljs
+@@ -5,7 +5,6 @@
+    ["@sentry/electron/main" :as sentry-electron-main]
+    ["electron" :refer [app shell ipcMain BrowserWindow]]
+    ["electron-log/main" :as log]
+-   ["electron-updater" :refer [autoUpdater]]
+    ["electron-window-state" :as window-state-keeper]
+    ["os" :as os]
+    ["path" :as path]
+@@ -148,9 +147,7 @@
+     (register-web-contents-events)
+     (register-ipc-on-events)
+     (register-ipc-handle-events)
+-    (register-window-events)
+-
+-    (.checkForUpdatesAndNotify autoUpdater)))
++    (register-window-events)))
+ 
+ (defn init-loading-window! []
+   (set! (.-allowRendererProcessReuse app) false)
+-- 
+2.55.0
+

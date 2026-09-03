@@ -1,0 +1,18 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 877242f..b5707c0 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -33,10 +33,9 @@ classifiers = [
+ Homepage = "https://docs.openstack.org/python-aodhclient"
+ Repository = "https://opendev.org/openstack/python-aodhclient"
+ 
+-[tool.setuptools]
+-packages = [
+-    "aodhclient"
+-]
++[tool.setuptools.packages.find]
++where = ["."]
++include = ["aodhclient*"]
+ 
+ [project.scripts]
+ aodh = "aodhclient.shell:main"

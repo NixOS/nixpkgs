@@ -1,0 +1,12 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c6b2b2a810..497dcd3d94 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -39,7 +39,6 @@
+ set(CMAKE_INSTALL_DIR lib/cmake/fbthrift CACHE STRING
+     "The subdirectory where CMake package config files should be installed")
+ 
+-set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}")
+ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+ 
+ # Add root dir so qualified includes work, e.g. #include "thrift/compiler/*.h".

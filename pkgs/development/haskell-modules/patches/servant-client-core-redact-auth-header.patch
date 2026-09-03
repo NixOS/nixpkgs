@@ -1,0 +1,75 @@
+diff --git a/servant-client-core.cabal b/servant-client-core.cabal
+index 5789da601..3faf65bb4 100644
+--- a/servant-client-core.cabal
++++ b/servant-client-core.cabal
+@@ -96,6 +96,7 @@ test-suite spec
+   main-is:             Spec.hs
+   other-modules:
+       Servant.Client.Core.Internal.BaseUrlSpec
++      Servant.Client.Core.RequestSpec
+ 
+   -- Dependencies inherited from the library. No need to specify bounds.
+   build-depends:
+diff --git a/src/Servant/Client/Core/Request.hs b/src/Servant/Client/Core/Request.hs
+index 73756e702..0276d46f8 100644
+--- a/src/Servant/Client/Core/Request.hs
++++ b/src/Servant/Client/Core/Request.hs
+@@ -64,8 +64,32 @@ data RequestF body path = Request
+   , requestHeaders     :: Seq.Seq Header
+   , requestHttpVersion :: HttpVersion
+   , requestMethod      :: Method
+-  } deriving (Generic, Typeable, Eq, Show, Functor, Foldable, Traversable)
++  } deriving (Generic, Typeable, Eq, Functor, Foldable, Traversable)
+ 
++instance (Show a, Show b) =>
++           Show (Servant.Client.Core.Request.RequestF a b) where
++    showsPrec p req
++      = showParen
++        (p >= 11)
++        ( showString "Request {requestPath = "
++        . showsPrec 0 (requestPath req)
++        . showString ", requestQueryString = "
++        . showsPrec 0 (requestQueryString req)
++        . showString ", requestBody = "
++        . showsPrec 0 (requestBody req)
++        . showString ", requestAccept = "
++        . showsPrec 0 (requestAccept req)
++        . showString ", requestHeaders = "
++        . showsPrec 0 (redactSensitiveHeader <$> requestHeaders req))
++        . showString ", requestHttpVersion = "
++        . showsPrec 0 (requestHttpVersion req)
++        . showString ", requestMethod = "
++        . showsPrec 0 (requestMethod req)
++        . showString "}"
++       where
++        redactSensitiveHeader :: Header -> Header
++        redactSensitiveHeader ("Authorization", _) = ("Authorization", "<REDACTED>")
++        redactSensitiveHeader h = h
+ instance Bifunctor RequestF where bimap = bimapDefault
+ instance Bifoldable RequestF where bifoldMap = bifoldMapDefault
+ instance Bitraversable RequestF where
+diff --git a/test/Servant/Client/Core/RequestSpec.hs b/test/Servant/Client/Core/RequestSpec.hs
+new file mode 100644
+index 000000000..99a1db7d3
+--- /dev/null
++++ b/test/Servant/Client/Core/RequestSpec.hs
+@@ -0,0 +1,19 @@
++{-# OPTIONS_GHC -fno-warn-orphans #-}
++{-# LANGUAGE OverloadedStrings #-}
++module Servant.Client.Core.RequestSpec (spec) where
++
++
++import           Prelude ()
++import           Prelude.Compat
++import           Control.Monad
++import           Data.List (isInfixOf)
++import           Servant.Client.Core.Request
++import           Test.Hspec
++
++spec :: Spec
++spec = do
++  describe "Request" $ do
++    describe "show" $ do
++      it "redacts the authorization header" $ do
++        let request = void $ defaultRequest { requestHeaders = pure ("authorization", "secret") }
++        isInfixOf "secret" (show request) `shouldBe` False

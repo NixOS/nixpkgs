@@ -1,0 +1,50 @@
+diff --git a/dolphin/mat2.desktop b/dolphin/mat2.desktop
+index 19d50c6..f26a9bb 100644
+--- a/dolphin/mat2.desktop
++++ b/dolphin/mat2.desktop
+@@ -8,6 +8,6 @@ Type=Service
+ Name=Clean metadata
+ Name[de]=Metadaten löschen
+ Name[es]=Limpiar metadatos
+-Icon=/usr/share/icons/hicolor/scalable/apps/mat2.svg
+-Exec=kdialog --yesno  "$( mat2 -s %F )" --title "Clean Metadata?" && mat2 %U
+-Exec[de]=kdialog --yesno  "$( mat2 -s %F )" --title "Metadaten löschen?" && mat2 %U
++Icon=@mat2svg@
++Exec=@kdialog@ --yesno  "$( @mat2@ -s %F )" --title "Clean Metadata?" && @mat2@ %U
++Exec[de]=@kdialog@ --yesno  "$( @mat2@ -s %F )" --title "Metadaten löschen?" && @mat2@ %U
+diff --git a/libmat2/exiftool.py b/libmat2/exiftool.py
+index 5953318..7e5b3d5 100644
+--- a/libmat2/exiftool.py
++++ b/libmat2/exiftool.py
+@@ -56,14 +56,5 @@ class ExiftoolParser(abstract.AbstractParser):
+             return False
+         return True
+ 
+-@functools.lru_cache(maxsize=None)
+ def _get_exiftool_path() -> str:  # pragma: no cover
+-    which_path = shutil.which('exiftool')
+-    if which_path:
+-        return which_path
+-
+-    # Exiftool on Arch Linux has a weird path
+-    if os.access('/usr/bin/vendor_perl/exiftool', os.X_OK):
+-        return '/usr/bin/vendor_perl/exiftool'
+-
+-    raise RuntimeError("Unable to find exiftool")
++    return '@exiftool@'
+diff --git a/libmat2/video.py b/libmat2/video.py
+index 70a6e28..8f86ce0 100644
+--- a/libmat2/video.py
++++ b/libmat2/video.py
+@@ -128,10 +128,5 @@ class MP4Parser(AbstractFFmpegParser):
+     }
+ 
+ 
+-@functools.lru_cache(maxsize=None)
+ def _get_ffmpeg_path() -> str:  # pragma: no cover
+-    which_path = shutil.which('ffmpeg')
+-    if which_path:
+-        return which_path
+-
+-    raise RuntimeError("Unable to find ffmpeg")
++    return '@ffmpeg@'

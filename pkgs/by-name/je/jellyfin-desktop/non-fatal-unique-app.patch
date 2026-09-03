@@ -1,0 +1,19 @@
+--- a/src/shared/UniqueApplication.h
++++ b/src/shared/UniqueApplication.h
+@@ -6,6 +6,7 @@
+ #define KONVERGO_UNIQUEAPPLICATION_H
+ 
+ #include <QObject>
++#include <QDebug>
+ #include "Paths.h"
+ #include "LocalJsonServer.h"
+ #include "LocalJsonClient.h"
+@@ -35,7 +36,7 @@
+     });
+ 
+     if (!m_server->listen())
+-      throw FatalException("Failed to listen to uniqueApp socket: " + m_server->errorString());
++      qWarning() << "Failed to listen to uniqueApp socket: " << m_server->errorString();
+   }
+ 
+   bool ensureUnique()

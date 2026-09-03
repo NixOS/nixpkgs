@@ -1,0 +1,43 @@
+{
+  mkDerivation,
+  cmake,
+  extra-cmake-modules,
+  kbookmarks,
+  kcompletion,
+  kconfig,
+  kconfigwidgets,
+  ki18n,
+  kiconthemes,
+  kio,
+  knewstuff,
+  knotifications,
+  kpackage,
+  kwidgetsaddons,
+  libxcursor,
+  qtx11extras,
+}:
+
+mkDerivation {
+  pname = "frameworkintegration";
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
+  buildInputs = [
+    kbookmarks
+    kcompletion
+    kconfig
+    ki18n
+    kio
+    knewstuff
+    knotifications
+    kpackage
+    kwidgetsaddons
+    libxcursor
+    qtx11extras
+  ];
+  propagatedBuildInputs = [
+    kconfigwidgets
+    kiconthemes
+  ];
+}
