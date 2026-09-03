@@ -1,0 +1,41 @@
+From c29d12fec9d609126d12b33fb09fc39c6fd74ac9 Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Fri, 4 Sep 2026 02:38:07 +0530
+Subject: [PATCH] feat: add allow-retroactive-expiration limit config
+
+Signed-off-by: phanirithvij <phanirithvij2000@gmail.com>
+---
+ src/config.go | 3 +++
+ src/update.go | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/config.go b/src/config.go
+index c446f50..547d4f7 100644
+--- a/src/config.go
++++ b/src/config.go
+@@ -156,6 +156,9 @@ type LimitsConfig struct {
+ 	// must also configure a scheduled job calling `git-pages -site-expire` regularly (perhaps
+ 	// hourly or daily).
+ 	AllowExpiration bool `toml:"allow-expiration" default:"false"`
++	// Whether to allow an expiration date to be retroactively added to an already-uploaded site.
++	// If false, attempting to add an expiration date to a site without one yields an error.
++	AllowRetroactiveExpiration bool `toml:"allow-retroactive-expiration" default:"false"`
+ }
+ 
+ type AuditConfig struct {
+diff --git a/src/update.go b/src/update.go
+index 6f18a76..dfa2522 100644
+--- a/src/update.go
++++ b/src/update.go
+@@ -59,7 +59,7 @@ func Update(
+ 	var storedManifest *Manifest
+ 
+ 	outcome := UpdateError
+-	if oldManifest != nil && oldManifest.ExpiresAt == nil && newManifest.ExpiresAt != nil {
++	if !config.Limits.AllowRetroactiveExpiration && oldManifest != nil && oldManifest.ExpiresAt == nil && newManifest.ExpiresAt != nil {
+ 		err = errExpireExistingSite
+ 	} else if IsManifestEmpty(newManifest) {
+ 		storedManifest, err = newManifest, backend.DeleteManifest(ctx, webRoot, opts)
+-- 
+2.55.0
+

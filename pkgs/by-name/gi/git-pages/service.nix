@@ -75,11 +75,25 @@ in
         ::: {.note}
         Set to `null` to disable cleanup.
 
-        Existing deployments without expiry set, cannot be made to be expired.
+        Existing deployments without expiry set, cannot be made to be expired. Use `allowRetroactiveExpiration` option to allow this.
         :::
       '';
       type = lib.types.nullOr lib.types.str;
       default = null;
+    };
+
+    allowRetroactiveExpiration = lib.mkOption {
+      description = ''
+        Enable this to allow expiring old deployments.
+
+        ::: {.note}
+        Git-pages doesn't allow by default to set the expiry status of a deployment if it isn't already set to expire.
+
+        Warning, this WILL cause data loss, enable this only if your deployments are backed up or unimportant.
+        :::
+      '';
+      type = lib.types.bool;
+      default = false;
     };
 
     settings = lib.mkOption {
@@ -98,6 +112,7 @@ in
   config = {
     git-pages.settings.features = lib.mkIf (cfg.cleanupInterval != null) [ "expiration" ];
     git-pages.settings.limits.allow-expiration = lib.mkIf (cfg.cleanupInterval != null) true;
+    git-pages.settings.limits.allow-retroactive-expiration = cfg.allowRetroactiveExpiration;
     git-pages.settings.storage.fs.root = lib.mkDefault "/var/lib/${name}/data";
 
     process.argv = [

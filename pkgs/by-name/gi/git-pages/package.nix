@@ -12,28 +12,24 @@
 
 buildGoModule (finalAttrs: {
   pname = "git-pages";
-  version = "0.9.1-unstable-2026-08-27";
+  version = "0.9.1-unstable-2026-09-03";
   __structuredAttrs = true;
 
   src =
     (fetchFromCodeberg {
       owner = "git-pages";
       repo = "git-pages";
-      rev = "017649481612cfe12b6127ac8cac3afdcd7ab796";
-      hash = "sha256-QUtWbPQzyiRN1wSlekoly4H8cTKvUP/egLAc+mBQOk8=";
+      rev = "507e57edbcfc0ec933a877bf26b1756ca0a61870";
+      hash = "sha256-H5Fa3zhJ17Mx6ubmkhpajXQjj1CP2XRHoegjjloe9b0=";
     })
     // {
-      tag = "0.9.1-unstable-2026-08-27";
+      tag = "0.9.1-unstable-2026-09-03";
     };
 
   patches = [
-    # bugfix to avoid creating parent directory on start
-    # remove when https://codeberg.org/git-pages/git-pages/pulls/258 is available in the release
-    (fetchpatch {
-      name = "mkdirall-parent-dir-create.patch";
-      url = "https://codeberg.org/git-pages/git-pages/commit/507e57edbcfc0ec933a877bf26b1756ca0a61870.patch";
-      hash = "sha256-1CjU4yGmDOmYsxo3U44Cg2xLJkrmUOX5ZXTycdLs6OE=";
-    })
+    # bugfix to allow expiring existing routes
+    # remove when https://codeberg.org/git-pages/git-pages/pulls/259 is available in the release
+    ./0001-feat-add-allow-retroactive-expiration-limit-config.patch
   ];
 
   subPackages = [ "." ];
@@ -42,7 +38,7 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-X main.versionOverride=01764948"
+    "-X main.versionOverride=507e57ed"
   ];
 
   doInstallCheck = false;

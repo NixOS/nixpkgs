@@ -8,6 +8,7 @@
     system.services.git-pages = {
       imports = [ pkgs.git-pages.services.default ];
       git-pages = {
+        allowRetroactiveExpiration = true;
         cleanupInterval = "weekly";
         settings.server = {
           pages = "tcp/:3000";
@@ -65,6 +66,13 @@
 
       # check expiration works
       machine.succeed("curl -f http://localhost/testsite -X PUT --data-binary @${testSite} --header 'Content-Type: application/x-tar' --header 'Expires: Thu, 01 Jan 1970 00:00:00 GMT'")
+      machine.succeed("test -f /var/lib/git-pages/data/site/localhost/testsite")
+      machine.succeed("systemctl start git-pages-expire.service")
+      machine.fail("test -f /var/lib/git-pages/data/site/localhost/testsite")
+
+      # check site without expiration can be made to expire
+      machine.succeed("curl -f http://localhost:3000/testsite -X PUT --data-binary @${testSite} --header 'Content-Type: application/x-tar'")
+      machine.succeed("curl -f http://localhost:3000/testsite -X PUT --data-binary @${testSite} --header 'Content-Type: application/x-tar' --header 'Expires: Thu, 01 Jan 1970 00:00:00 GMT'")
       machine.succeed("test -f /var/lib/git-pages/data/site/localhost/testsite")
       machine.succeed("systemctl start git-pages-expire.service")
       machine.fail("test -f /var/lib/git-pages/data/site/localhost/testsite")
