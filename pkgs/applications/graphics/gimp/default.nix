@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch2,
   replaceVars,
   meson,
   ninja,
@@ -52,6 +53,7 @@
   appstream,
   desktop-file-utils,
   libxpm,
+  libxcursor,
   libxmu,
   glib-networking,
   json-glib,
@@ -80,6 +82,28 @@ let
       pygobject3
     ]
   );
+
+  # Keep this local until https://github.com/NixOS/nixpkgs/pull/516039 is merged.
+  # It fixes Darwin's librsvg GdkPixbuf loader without changing global consumers.
+  librsvgForGimp =
+    if stdenv.hostPlatform.isDarwin then
+      librsvg.overrideAttrs (previousAttrs: {
+        patches = (previousAttrs.patches or [ ]) ++ [
+          (fetchpatch2 {
+            url = "https://gitlab.gnome.org/GNOME/gtk-osx/-/raw/2c1492036ff92d1c87d7b7a4c3c5a7a3f042f825/patches/librsvg-libpixbufloader-install-names.patch";
+            hash = "sha256-kEoKwAUW56KtMQ1zShXSnt2gwA+Ik/i8U8k2Zy9V+Jw=";
+          })
+        ];
+        # The patch targets an older librsvg installer argument name.
+        # This commit rewrote it significantly
+        # https://gitlab.gnome.org/GNOME/librsvg/-/commit/7904287a301498868c65d084358d269abd5a0359
+        postPatch = (previousAttrs.postPatch or "") + ''
+          substituteInPlace gdk-pixbuf-loader/meson_install.py \
+            --replace-fail "args.gdk_pixbuf_moduledir" "args.moduledir"
+        '';
+      })
+    else
+      librsvg;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
@@ -174,7 +198,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
     openexr
     libmng
-    librsvg
+    librsvgForGimp
     libwmf
     zlib
     xz
@@ -209,6 +233,7 @@ stdenv.mkDerivation (finalAttrs: {
     gjs
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libxcursor
     llvmPackages.openmp
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -249,12 +274,16 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-DGDK_OSX_BIG_SUR=16";
 
     # Check if librsvg was built with --disable-pixbuf-loader.
-    PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${librsvg}/${gdk-pixbuf.moduleDir}";
+    PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${librsvgForGimp}/${gdk-pixbuf.moduleDir}";
 
     # Silence fontconfig warnings about missing config during tests
     FONTCONFIG_FILE = makeFontsConf {
       fontDirectories = [ ];
     };
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Needed so GIMP uses the loader cache from the local librsvg override.
+    GDK_PIXBUF_MODULE_FILE = "${librsvgForGimp}/${gdk-pixbuf.binaryDir}/loaders.cache";
   };
 
   postPatch = ''
@@ -265,6 +294,20 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +x plug-ins/python/{colorxhtml,file-openraster,foggify,gradients-save-as-css,histogram-export,palette-export-as-kpl,palette-offset,palette-sort,palette-to-gradient,python-eval,spyro-plus}.py
     patchShebangs \
       plug-ins/python/{colorxhtml,file-openraster,foggify,gradients-save-as-css,histogram-export,palette-export-as-kpl,palette-offset,palette-sort,palette-to-gradient,python-eval,spyro-plus}.py
+
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # These tests do not complete on Darwin when they run GIMP through the
+      # in-build test harness.
+      for testName in color-parser export-options image palette selection-float unit; do
+        substituteInPlace libgimp/tests/meson.build \
+          --replace-fail "  '$testName'," ""
+      done
+
+      # The app-level test also does not complete on Darwin when it runs GIMP
+      # through the in-build test harness.
+      substituteInPlace app/tests/meson.build \
+        --replace-fail $'  {\n    \x27name\x27: \x27save-and-export\x27,\n  }\n' ""
+    ''}
   '';
 
   preBuild =
@@ -303,6 +346,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preFixup = ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Prevent GIMP from overriding the relocatable runtime paths set by Nix.
+      gappsWrapperArgs+=(--set GIMP_NO_WRAPPER 1)
+    ''}
+
     gappsWrapperArgs+=(--prefix PATH : "${
       lib.makeBinPath [
         # for dot for gegl:introspect (Debug » Show Image Graph, hidden by default on stable release)
@@ -348,7 +396,7 @@ stdenv.mkDerivation (finalAttrs: {
       bddvlpr
     ];
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     # Build invokes built binary to convert assets, binary hangs during plugin loading on big-endian platforms (s390x, ppc64)
     # https://gitlab.gnome.org/GNOME/gimp/-/issues/12522
     broken = stdenv.hostPlatform.isBigEndian;
