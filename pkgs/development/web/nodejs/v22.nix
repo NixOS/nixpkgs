@@ -69,6 +69,12 @@ buildNodejs {
         hash = "sha256-RcmWiTpWYwA952nNmhaiq4zw/iuVAXFnuTeuB6ltR1U=";
         includes = [ "test/fixtures/wpt/url/resources/urltestdata.json" ];
       })
+
+      # TODO: remove when support for OpenSSL 3.6.4 has landed upstream
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/40eac4a32f3676b286fd44435be4514962a40b79.patch?full_index=1";
+        hash = "sha256-zLMd79mQclmZpS1oiTOZ0JOPDSjKGtLl0e4itUNm4og=";
+      })
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
       # Fix builds with shared llhttp
