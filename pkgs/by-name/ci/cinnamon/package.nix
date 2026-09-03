@@ -11,7 +11,7 @@
   evolution-data-server,
   fetchFromGitHub,
   fetchpatch,
-  gcr,
+  gcr_3,
   gdk-pixbuf,
   gettext,
   libgnomekbd,
@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     cjs
     dbus
     evolution-data-server # for calendar-server
-    gcr
+    gcr_3
     gdk-pixbuf
     glib
     graphene

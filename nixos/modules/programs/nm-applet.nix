@@ -39,6 +39,6 @@ in
       serviceConfig.ExecStart = "${cfg.package}/bin/nm-applet ${lib.optionalString cfg.indicator "--indicator"}";
     };
 
-    services.dbus.packages = [ pkgs.gcr ];
+    services.dbus.packages = [ pkgs.gcr_3 ];
   };
 }

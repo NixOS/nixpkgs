@@ -24,7 +24,7 @@
   gnome-desktop,
   gnome-session,
   gnome-shell,
-  gcr,
+  gcr_3,
   pam,
   systemd,
   upower,
@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     evolution-data-server
     pulseaudio
     modemmanager
-    gcr
+    gcr_3
     networkmanager
     polkit
     gmobile

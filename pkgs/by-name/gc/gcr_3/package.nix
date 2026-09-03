@@ -107,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gnome.updateScript {
+      attrPath = "gcr_3";
       packageName = "gcr";
       freeze = true;
     };
