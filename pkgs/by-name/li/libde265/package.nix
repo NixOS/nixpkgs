@@ -43,6 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://github.com/strukturag/libde265";
     changelog = "https://github.com/strukturag/libde265/releases/tag/${finalAttrs.src.tag}";
