@@ -4,17 +4,18 @@
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
+  zsh,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zinit";
-  version = "3.15.0";
+  version = "3.17.0";
 
   src = fetchFromGitHub {
     owner = "zdharma-continuum";
     repo = "zinit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lVdia0iDGy7RDT3Ho4BBslwbng/NpsJWbbVBqgNccCg=";
+    hash = "sha256-5QURQfU0J1zrnJFVlFYM3WNRbQPd5iWTX6MGxManDOs=";
   };
 
   outputs = [
@@ -34,7 +35,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     # Source files
     mkdir -p $out/share/zinit
-    install -m0444 zinit{,-side,-install,-autoload,-additional}.zsh _zinit $out/share/zinit
+    install -m0444 zinit{,-side,-install,-autoload,-additional}.zsh _zinit VERSION $out/share/zinit
     mkdir $out/share/zinit/share
     install -m0555 share/git-process-output.zsh $out/share/zinit/share
     install -m0444 share/rpm2cpio.zsh $out/share/zinit/share
@@ -49,7 +50,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     mkdir -p $doc/share/doc/zinit
     install -m0444 doc/zsdoc/*.adoc $doc/share/doc/zinit
-    install -m0444 doc/HACKING.md $doc/share/doc/zinit
+    install -m0444 CHANGELOG.md doc/HACKING.md $doc/share/doc/zinit
 
     runHook postInstall
   '';
@@ -61,6 +62,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --replace-fail "ZINIT[MAN_DIR]:=\''${ZPFX}/man" "ZINIT[MAN_DIR]:=$man/share/man"
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ zsh ];
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    HOME="$TMPDIR" \
+      ZINIT_DIR="$out/share/zinit" \
+      zsh -dfc '
+        source "$ZINIT_DIR/zinit.zsh"
+        (( $+functions[zinit] ))
+      '
+
+    runHook postInstallCheck
+  '';
+
   passthru = {
     updateScript = nix-update-script { };
   };
@@ -68,7 +84,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/zdharma-continuum/zinit";
     description = "Flexible zsh plugin manager";
-    changelog = "https://github.com/zdharma-continuum/zinit/blob/${finalAttrs.src.rev}/doc/CHANGELOG.md";
+    changelog = "https://github.com/zdharma-continuum/zinit/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
