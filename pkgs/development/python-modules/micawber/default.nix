@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "micawber";
-  version = "0.6.2";
+  version = "0.7.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zATBml4Os2FbjNldWu/a1c3k9SphwS1FBxcn3+Ext2A=";
+    hash = "sha256-/2FYaaEToMGN4USt41fkRmxnds1rY0V1q/Sdy0LGL38=";
   };
 
   propagatedBuildInputs = [ beautifulsoup4 ];
