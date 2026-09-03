@@ -16,7 +16,6 @@
   pkg-config,
   powertop,
   python3Packages,
-  tuna,
   util-linux,
   versionCheckHook,
   virt-what,
@@ -84,10 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
     dbus-python
     pygobject3
     pyinotify
-    pyperf
     python-linux-procfs
     pyudev
-    tuna
   ];
 
   makeFlags = [
