@@ -4,6 +4,7 @@
   fetchFromGitHub,
   git,
   fishtape_3,
+  nix-update-script,
 }:
 buildFishPlugin (finalAttrs: {
   pname = "pure";
@@ -24,6 +25,8 @@ buildFishPlugin (finalAttrs: {
 
     fishtape tests/*.test.fish
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Pretty, minimal and fast Fish prompt, ported from zsh";
