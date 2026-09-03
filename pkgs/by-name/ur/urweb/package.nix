@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
     "-Wno-error=use-after-free"
+    "-Wno-error=discarded-qualifiers"
   ];
 
   # Be sure to keep the statically linked libraries
