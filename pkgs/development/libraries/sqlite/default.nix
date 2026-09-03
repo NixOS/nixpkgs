@@ -60,7 +60,26 @@ stdenv.mkDerivation (finalAttrs: {
     tcl
   ];
 
-  patches = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  patches = [
+    # Make test failures actually fail the build
+    (fetchpatch {
+      name = "0001-sqlite-testrunner-communicate-test-failure-to-make.patch";
+      url = "https://github.com/sqlite/sqlite/commit/4e4962f6b303688412746b54200ff5402c047aee.patch";
+      includes = [
+        "test/testrunner.tcl"
+      ];
+      hash = "sha256-DLV2ML2zzjd1nEVScDF1sFDdZm1CrOWt5M10rRwXYCY=";
+    })
+
+    # Fix fts3corrupt4.test failure on big-endian
+    # https://sqlite.org/forum/forumpost/40492f69f7
+    # Doesn't seem to have been submitted yet :(
+    (fetchurl {
+      url = "https://src.fedoraproject.org/rpms/sqlite/raw/faea37529752d0134154f3678443e2822a105834/f/sqlite-3.53.3-fix-fts3corrupt4-test.patch";
+      hash = "sha256-cfwBOomIjm8szInOqKZfg2lmRM9K663ujKR3wVmAtrE=";
+    })
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     # Add a missing `-DBUILD_sqlite` to one place in the makefile
     #
     # TODO(@Ericson2314): drop once a release contains it, and (before that)
