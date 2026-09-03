@@ -19,33 +19,33 @@
 }:
 
 let
-  version = "9.3.1";
+  version = "9.4.0";
   x2t = callPackage ./x2t.nix { };
   server-src = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "server";
-    tag = "v9.3.1.1";
-    hash = "sha256-uN1L/4I7wrg0BqAAu3zdn8LqtdfJDAHnAMbCvzQnOvI=";
+    tag = "v9.4.0.131";
+    hash = "sha256-tH7DgNJO6FDCBK/lI2vMlUjaZQOcLE441A+btx0jc0k=";
   };
   # This is required but not included in the submodules for some reason.
   # https://github.com/ONLYOFFICE/server/blob/34adaeeb4cc1e032a5cf188924880a25546dc67c/Makefile#L81-L83
   document-templates-src = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "document-templates";
-    tag = "v9.3.1.1";
-    hash = "sha256-+52+MK/8DARJrQRbIpN5nk3j3J9cy6Wd1FDMnCVZKRE=";
+    tag = "v9.4.0.131";
+    hash = "sha256-EMzUjGiKjIPQE/FnMVsTeG+SQ/PJSYtfUDJKj0LbjEM=";
   };
   document-formats-src = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "document-formats";
-    tag = "v9.3.1.1";
+    tag = "v9.4.0.131";
     hash = "sha256-HpGhV+PGbQ5hHH6mPQTAdFpBT3nUni4VtDxTExJypAc=";
   };
   common = buildNpmPackage (finalAttrs: {
     name = "onlyoffice-server-Common";
     src = server-src;
     sourceRoot = "${finalAttrs.src.name}/Common";
-    npmDepsHash = "sha256-zFGqDtnNFzXCwp6uvK04GDMRG6BATv6ti3Wi8ikLjBU=";
+    npmDepsHash = "sha256-0FGqDtnNFzXCwp6uvK04GDMRG6BATv6ti3Wi8ikLjBU=";
     dontNpmBuild = true;
     postPatch = ''
       # https://github.com/ONLYOFFICE/build_tools/blob/ef8153c053bed41909ceb0762b124f8fe7faa0a7/scripts/build_server.py#L34
@@ -65,7 +65,7 @@ let
     buildInputs = [
       vips.dev
     ];
-    npmDepsHash = "sha256-eD7hyeIcSL0nLcmBE5+gDJcjT+LdUaqIZ+g5sPcn8HQ=";
+    npmDepsHash = "sha256-0D7hyeIcSL0nLcmBE5+gDJcjT+LdUaqIZ+g5sPcn8HQ=";
     npmFlags = [ "--loglevel=verbose" ];
     dontNpmBuild = true;
     postInstall = ''
@@ -82,7 +82,7 @@ let
 
     sourceRoot = "${finalAttrs.src.name}/FileConverter";
 
-    npmDepsHash = "sha256-zGLZBbQYV2z0HgQKISKVhclRKbMB8RYEX13H0mB6qJw=";
+    npmDepsHash = "sha256-0GLZBbQYV2z0HgQKISKVhclRKbMB8RYEX13H0mB6qJw=";
 
     dontNpmBuild = true;
 
@@ -147,13 +147,13 @@ let
   # var/www/onlyoffice/documentserver/server/DocService/docservice
   onlyoffice-documentserver = stdenv.mkDerivation {
     pname = "onlyoffice-documentserver";
-    version = "9.3.1";
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "ONLYOFFICE";
       repo = "document-server-package";
-      tag = "v9.3.1.11";
-      hash = "sha256-AUXOiI6yRjbkSyCFbqMchGba5wiwQOVl1ciFXuWUOd4=";
+      tag = "v9.4.0.131";
+      hash = "sha256-1wbrWrjAX7WWtdOm+8Sly8c9Kep1RDlyPSCU3xXC+sQ=";
     };
 
     buildPhase = ''
