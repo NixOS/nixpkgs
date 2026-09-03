@@ -1157,6 +1157,7 @@
   ./services/network-filesystems/webdav.nix
   ./services/network-filesystems/yandex-disk.nix
   ./services/networking/3proxy.nix
+  ./services/networking/3x-ui.nix
   ./services/networking/acme-dns.nix
   ./services/networking/adguardhome.nix
   ./services/networking/alice-lg.nix
