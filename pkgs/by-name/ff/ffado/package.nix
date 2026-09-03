@@ -5,12 +5,11 @@
   dbus,
   dbus_cplusplus,
   fetchurl,
-  glibmm,
   libavc1394,
   libconfig,
   libiec61883,
   libraw1394,
-  libxmlxx3,
+  expat,
   pkg-config,
   python3,
   scons,
@@ -93,17 +92,17 @@ stdenv.mkDerivation rec {
     "BINDIR=${placeholder "bin"}/bin"
     "INCLUDEDIR=${placeholder "dev"}/include"
     "PYTHON_INTERPRETER=${python.interpreter}"
+    "SERIALIZE_USE_EXPAT=True"
   ];
 
   buildInputs = [
     dbus
     dbus_cplusplus
-    glibmm
     libavc1394
     libconfig
     libiec61883
     libraw1394
-    libxmlxx3
+    expat
     python
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isGnu) [
