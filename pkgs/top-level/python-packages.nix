@@ -4557,6 +4557,8 @@ self: super: with self; {
 
   django-autoslug = callPackage ../development/python-modules/django-autoslug { };
 
+  django-avatar = callPackage ../development/python-modules/django-avatar { };
+
   django-axes = callPackage ../development/python-modules/django-axes { };
 
   django-bootstrap3 = callPackage ../development/python-modules/django-bootstrap3 { };
@@ -4695,6 +4697,8 @@ self: super: with self; {
 
   django-js-asset = callPackage ../development/python-modules/django-js-asset { };
 
+  django-js-error-hook = callPackage ../development/python-modules/django-js-error-hook { };
+
   django-js-reverse = callPackage ../development/python-modules/django-js-reverse { };
 
   django-json-widget = callPackage ../development/python-modules/django-json-widget { };
@@ -4712,6 +4716,8 @@ self: super: with self; {
   django-login-required-middleware =
     callPackage ../development/python-modules/django-login-required-middleware
       { };
+
+  django-loginas = callPackage ../development/python-modules/django-loginas { };
 
   django-ltree = callPackage ../development/python-modules/django-ltree { };
 
@@ -4750,6 +4756,8 @@ self: super: with self; {
   django-ninja-cursor-pagination =
     callPackage ../development/python-modules/django-ninja-cursor-pagination
       { };
+
+  django-npm-mjs = callPackage ../development/python-modules/django-npm-mjs { };
 
   django-oauth-toolkit = callPackage ../development/python-modules/django-oauth-toolkit { };
 
@@ -13982,6 +13990,8 @@ self: super: with self; {
 
   prosemirror = callPackage ../development/python-modules/prosemirror { };
 
+  prosemirror-rs = callPackage ../development/python-modules/prosemirror-rs { };
+
   protego = callPackage ../development/python-modules/protego { };
 
   proto-plus = callPackage ../development/python-modules/proto-plus { };
@@ -18774,6 +18784,8 @@ self: super: with self; {
   serverfiles = callPackage ../development/python-modules/serverfiles { };
 
   serverlessrepo = callPackage ../development/python-modules/serverlessrepo { };
+
+  servestatic = callPackage ../development/python-modules/servestatic { };
 
   service-identity = callPackage ../development/python-modules/service-identity { };
 
