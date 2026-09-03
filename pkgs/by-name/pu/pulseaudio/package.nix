@@ -94,6 +94,12 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/commit/ed3d4f0837f670e5e5afb1afa5bcfc8ff05d3407.patch";
       hash = "sha256-fMJ3EYq56sHx+zTrG6osvI/QgnhqLvWiifZxrRLMvns=";
     })
+    # Fix RTP receiver binding on the wrong port (37670 instead of 9875).
+    (fetchpatch2 {
+      name = "rtp-recv-remove-inappropriate-byte-order-conversion.patch";
+      url = "https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/commit/8ef0d597a1561ee9988dc31f04925e4412d69957.patch";
+      hash = "sha256-C5TaK5paV6UGBoa4QA5rj0f5PNBD/F9UwoTkd0ezTLY=";
+    })
   ];
 
   postPatch = ''
