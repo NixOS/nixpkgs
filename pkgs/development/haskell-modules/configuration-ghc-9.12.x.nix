@@ -69,12 +69,6 @@ with haskellLib;
   Win32 = null;
 
   #
-  # Hand pick versions that are compatible with ghc 9.12 and base 4.21
-  #
-
-  extensions = doDistribute self.extensions_0_1_1_0;
-
-  #
   # Jailbreaks
   #
 

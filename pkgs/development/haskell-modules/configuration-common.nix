@@ -185,12 +185,11 @@ with haskellLib;
   # language extensions.
   extensions = doJailbreak (
     super.extensions.override {
-      Cabal =
-        if versionOlder self.ghc.version "9.10" then
-          self.Cabal_3_12_1_0
+      Cabal-syntax =
+        if versionOlder self.ghc.version "9.12" then
+          self.Cabal-syntax_3_14_2_0
         else
           # use GHC bundled version
-          # N.B. for GHC >= 9.12, extensions needs to be upgraded
           null;
     }
   );
