@@ -394,7 +394,7 @@ in
               inherit fileSystems definitionsDirectory mkfsEnv;
             };
           in
-          lib.asserts.checkAssertWarn cfg.assertions cfg.warnings val;
+          lib.asserts.checkAssertWarn cfg.assertions.__flattened cfg.warnings.__flattened val;
 
         assertions = lib.mapAttrsToList (
           fileName: partitionConfig:

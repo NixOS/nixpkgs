@@ -189,7 +189,9 @@ in
       };
     test = lib.lazyDerivation {
       # lazyDerivation improves performance when only passthru items and/or meta are used.
-      derivation = lib.asserts.checkAssertWarn config.assertions config.warnings config.rawTestDerivation;
+      derivation =
+        lib.asserts.checkAssertWarn config.assertions.__flattened config.warnings.__flattened
+          config.rawTestDerivation;
       inherit (config) passthru meta;
     };
 

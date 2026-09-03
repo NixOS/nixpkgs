@@ -452,16 +452,16 @@ in
   config = mkMerge (
     [
       {
-        assertions = [
-          {
+        assertions.services.prometheus.exporters = {
+          ipmi.nonEmptyConfigFile = {
             assertion =
               cfg.ipmi.enable -> (cfg.ipmi.configFile != null) -> (!(lib.hasPrefix "/tmp/" cfg.ipmi.configFile));
             message = ''
               Config file specified in `services.prometheus.exporters.ipmi.configFile' must
                 not reside within /tmp - it won't be visible to the systemd service.
             '';
-          }
-          {
+          };
+          ipmi.nonEmptyWebConfigFile = {
             assertion =
               cfg.ipmi.enable
               -> (cfg.ipmi.webConfigFile != null)
@@ -470,69 +470,69 @@ in
               Config file specified in `services.prometheus.exporters.ipmi.webConfigFile' must
                 not reside within /tmp - it won't be visible to the systemd service.
             '';
-          }
-          {
+          };
+          restic.nonEmptyRepositoryFile = {
             assertion =
               cfg.restic.enable -> ((cfg.restic.repository == null) != (cfg.restic.repositoryFile == null));
             message = ''
               Please specify either 'services.prometheus.exporters.restic.repository'
                 or 'services.prometheus.exporters.restic.repositoryFile'.
             '';
-          }
-          {
+          };
+          snmp.nonEmptyConfiguration = {
             assertion =
               cfg.snmp.enable -> ((cfg.snmp.configurationPath == null) != (cfg.snmp.configuration == null));
             message = ''
               Please ensure you have either `services.prometheus.exporters.snmp.configuration'
                 or `services.prometheus.exporters.snmp.configurationPath' set!
             '';
-          }
-          {
+          };
+          mikrotik.nonEmptyConfiguration = {
             assertion =
               cfg.mikrotik.enable -> ((cfg.mikrotik.configFile == null) != (cfg.mikrotik.configuration == null));
             message = ''
               Please specify either `services.prometheus.exporters.mikrotik.configuration'
                 or `services.prometheus.exporters.mikrotik.configFile'.
             '';
-          }
-          {
+          };
+          mail.nonEmptyConfiguration = {
             assertion = cfg.mail.enable -> ((cfg.mail.configFile == null) != (cfg.mail.configuration == null));
             message = ''
               Please specify either 'services.prometheus.exporters.mail.configuration'
                 or 'services.prometheus.exporters.mail.configFile'.
             '';
-          }
-          {
+          };
+          mysqld.serverEnabledIfRunAsLocalSuperUser = {
             assertion = cfg.mysqld.runAsLocalSuperUser -> config.services.mysql.enable;
             message = ''
               The exporter is configured to run as 'services.mysql.user', but
                 'services.mysql.enable' is set to false.
             '';
-          }
-          {
+          };
+          nextcloud.nonEmptyPassword = {
             assertion =
               cfg.nextcloud.enable -> ((cfg.nextcloud.passwordFile == null) != (cfg.nextcloud.tokenFile == null));
             message = ''
               Please specify either 'services.prometheus.exporters.nextcloud.passwordFile' or
                 'services.prometheus.exporters.nextcloud.tokenFile'
             '';
-          }
-          {
+          };
+          sql.nonEmptyConfiguration = {
             assertion = cfg.sql.enable -> ((cfg.sql.configFile == null) != (cfg.sql.configuration == null));
             message = ''
               Please specify either 'services.prometheus.exporters.sql.configuration' or
                 'services.prometheus.exporters.sql.configFile'
             '';
-          }
-          {
+          };
+          idrac.nonEmptyConfiguration = {
             assertion =
               cfg.idrac.enable -> ((cfg.idrac.configurationPath == null) != (cfg.idrac.configuration == null));
             message = ''
               Please ensure you have either `services.prometheus.exporters.idrac.configuration'
                 or `services.prometheus.exporters.idrac.configurationPath' set!
             '';
-          }
-          {
+          };
+          deluge.nonEmptyPassword = {
             assertion =
               cfg.deluge.enable
               -> ((cfg.deluge.delugePassword == null) != (cfg.deluge.delugePasswordFile == null));
@@ -540,8 +540,8 @@ in
               Please ensure you have either `services.prometheus.exporters.deluge.delugePassword'
                 or `services.prometheus.exporters.deluge.delugePasswordFile' set!
             '';
-          }
-          {
+          };
+          pgbouncer.nonEmptyConnection = {
             assertion =
               cfg.pgbouncer.enable
               -> (xor (cfg.pgbouncer.connectionEnvFile == null) (cfg.pgbouncer.connectionString == null));
@@ -549,30 +549,35 @@ in
               Options `services.prometheus.exporters.pgbouncer.connectionEnvFile` and
               `services.prometheus.exporters.pgbouncer.connectionString` are mutually exclusive!
             '';
-          }
-        ]
-        ++ (flip map (attrNames exporterOpts) (exporter: {
-          assertion = cfg.${exporter}.firewallFilter != null -> cfg.${exporter}.openFirewall;
-          message = ''
-            The `firewallFilter'-option of exporter ${exporter} doesn't have any effect unless
-            `openFirewall' is set to `true'!
-          '';
-        }))
-        ++ config.services.prometheus.exporters.assertions;
-        warnings = [
-          (mkIf
-            (
+          };
+        }
+        // (lib.listToAttrs (
+          map (
+            exporter:
+            lib.nameValuePair exporter {
+              assertion = cfg.${exporter}.firewallFilter != null -> cfg.${exporter}.openFirewall;
+              message = ''
+                The `firewallFilter'-option of exporter ${exporter} doesn't have any effect unless
+                `openFirewall' is set to `true'!
+              '';
+            }
+          ) (attrNames exporterOpts)
+        ))
+        // (removeAttrs config.services.prometheus.exporters.assertions [ "__flattened" ]);
+
+        warnings = {
+          services.prometheus.exporters.idrac.configurationPathOverrides = {
+            condition =
               config.services.prometheus.exporters.idrac.enable
-              && config.services.prometheus.exporters.idrac.configurationPath != null
-            )
-            ''
+              && config.services.prometheus.exporters.idrac.configurationPath != null;
+            message = ''
               Configuration file in `services.prometheus.exporters.idrac.configurationPath` may override
               `services.prometheus.exporters.idrac.listenAddress` and/or `services.prometheus.exporters.idrac.port`.
               Consider using `services.prometheus.exporters.idrac.configuration` instead.
-            ''
-          )
-        ]
-        ++ config.services.prometheus.exporters.warnings;
+            '';
+          };
+        }
+        // config.services.prometheus.exporters.warnings;
       }
     ]
     ++ [

@@ -298,6 +298,12 @@
   "ssec-testing-user-units": [
     "index.html#ssec-testing-user-units"
   ],
+  "test-opt-assertions.__flattened._.assertion": [
+    "index.html#test-opt-assertions.__flattened._.assertion"
+  ],
+  "test-opt-assertions.__flattened._.message": [
+    "index.html#test-opt-assertions.__flattened._.message"
+  ],
   "test-opt-containerDefaults": [
     "index.html#test-opt-containerDefaults"
   ],

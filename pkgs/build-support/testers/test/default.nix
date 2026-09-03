@@ -93,7 +93,12 @@ lib.recurseIntoAttrs {
           { hi, lib, ... }:
           {
             config = {
-              assertions = [ { assertion = hi; } ];
+              assertions = [
+                {
+                  assertion = hi;
+                  message = "hi must be true";
+                }
+              ];
             };
             options = {
               itsProofYay = lib.mkOption { };
