@@ -96,12 +96,6 @@ let
   # cross for free.
   ngReleases = pkgs.callPackages ../development/compilers/ghc/ng { };
 
-  ngPackageSet =
-    args:
-    callPackage ../development/compilers/ghc/ng/package-set.nix (
-      { haskellLib = haskellLibUncomposable.compose; } // args
-    );
-
   # The `-tools` and `-stage1` rungs are build-hosted by definition: they are
   # the programs that *build* a compiler, not anything a target ever runs.
   #
@@ -119,7 +113,6 @@ let
   ngBuildHosted =
     get: mk: name: args:
     if stdenv.buildPlatform == stdenv.hostPlatform then mk args else get buildPackages.haskell name;
-  ngToolRung = ngBuildHosted (h: name: h.packages.${name}) ngPackageSet;
   ngToolCompiler = ngBuildHosted (h: name: h.compiler.${name}) ngCompiler;
 
   ngCompiler = args: callPackage ../development/compilers/ghc/ng/compiler.nix args;
@@ -355,6 +348,36 @@ in
   packages =
     let
       bh = buildPackages.haskell;
+
+      # A `ghc/ng` rung, built the way every other compiler's package set is: a
+      # direct call to `haskell-modules` with a `compilerConfig`. The only thing
+      # peculiar to these is which configuration they get -- see
+      # `../development/haskell-modules/configuration-ghc-ng.nix`.
+      ngPackageSet =
+        {
+          ghcVersion,
+          stage,
+          bootstrapConfig ? (_: _: { }),
+          ...
+        }@args:
+        callPackage ../development/haskell-modules (
+          removeAttrs args [
+            "ghcVersion"
+            "stage"
+            "bootstrapConfig"
+          ]
+          // {
+            compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-ng.nix {
+              inherit ghcVersion stage bootstrapConfig;
+            };
+          }
+        );
+      ngToolRung = ngBuildHosted (h: name: h.packages.${name}) ngPackageSet;
+
+      # The bootstrap compiler's own configuration, shared by the rungs it
+      # builds. Whichever GHC `ghc/ng` boots from, its package set and this have
+      # to name the same one.
+      ngBootstrapConfig = callPackage ../development/haskell-modules/configuration-ghc-9.10.x.nix { };
     in
     {
       ghc902Binary = callPackage ../development/haskell-modules {
@@ -430,45 +453,49 @@ in
       #
       #   -tools, -stage1   built by the bootstrap compiler (ghc9103)
       #   (unsuffixed)      built by `compiler."ghcNG-X-stage1"`
+      # The bootstrap compiler builds the tools and stage1 rungs, so they take
+      # its own configuration too: those really are compiled against the
+      # libraries it ships. stage2 does not -- see `configuration-ghc-ng.nix`.
       "ghcNG-9_14-tools" = ngToolRung "ghcNG-9_14-tools" {
         ghcVersion = ngReleases."9.14";
         stage = "tools";
-        basePkgs = packages.ghc9103;
+        ghc = bh.compiler.ghc9103;
+        buildHaskellPackages = bh.packages.ghc9103;
+        bootstrapConfig = ngBootstrapConfig;
       };
       "ghcNG-9_14-stage1" = ngToolRung "ghcNG-9_14-stage1" {
         ghcVersion = ngReleases."9.14";
         stage = "stage1";
-        basePkgs = packages.ghc9103;
-        toolsPkgs = bh.packages."ghcNG-9_14-tools";
+        ghc = bh.compiler.ghc9103;
+        buildHaskellPackages = bh.packages."ghcNG-9_14-tools";
+        bootstrapConfig = ngBootstrapConfig;
       };
       "ghcNG-9_14" = ngPackageSet {
         ghcVersion = ngReleases."9.14";
         stage = "stage2";
-        # Host-indexed, so a cross build gives these a cross `stdenv` -- and so
-        # `generic-builder` an `isCross` of true, and Cabal a `--with-gcc`
-        # naming the cross compiler rather than the bare `gcc` on `PATH`.
-        basePkgs = packages.ghc9103;
-        toolsPkgs = bh.packages."ghcNG-9_14-tools";
         ghc = bh.compiler."ghcNG-9_14-stage1";
+        buildHaskellPackages = bh.packages."ghcNG-9_14-tools";
       };
 
       "ghcNG-head-tools" = ngToolRung "ghcNG-head-tools" {
         ghcVersion = ngReleases.head;
         stage = "tools";
-        basePkgs = packages.ghc9103;
+        ghc = bh.compiler.ghc9103;
+        buildHaskellPackages = bh.packages.ghc9103;
+        bootstrapConfig = ngBootstrapConfig;
       };
       "ghcNG-head-stage1" = ngToolRung "ghcNG-head-stage1" {
         ghcVersion = ngReleases.head;
         stage = "stage1";
-        basePkgs = packages.ghc9103;
-        toolsPkgs = bh.packages."ghcNG-head-tools";
+        ghc = bh.compiler.ghc9103;
+        buildHaskellPackages = bh.packages."ghcNG-head-tools";
+        bootstrapConfig = ngBootstrapConfig;
       };
       "ghcNG-head" = ngPackageSet {
         ghcVersion = ngReleases.head;
         stage = "stage2";
-        basePkgs = packages.ghc9103;
-        toolsPkgs = bh.packages."ghcNG-head-tools";
         ghc = bh.compiler."ghcNG-head-stage1";
+        buildHaskellPackages = bh.packages."ghcNG-head-tools";
       };
 
       native-bignum =
