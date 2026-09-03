@@ -23,7 +23,7 @@
   docutils,
   gi-docgen,
   # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
-  util-linuxMinimal ? null,
+  util-linuxMinimal,
   buildPackages,
 
   # this is just for tests (not in the closure of any regular package)
@@ -42,8 +42,6 @@
     && lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.isLittleEndian == stdenv.buildPlatform.isLittleEndian,
 }:
-
-assert stdenv.hostPlatform.isLinux -> util-linuxMinimal != null;
 
 let
   glib-untested = glib.overrideAttrs { doCheck = false; };
