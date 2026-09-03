@@ -17,7 +17,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "ivpn-service";
-  version = "3.15.13";
+  version = "3.15.15";
 
   buildInputs = [
     wirelesstools
@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
     owner = "ivpn";
     repo = "desktop-app";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F5MhJ09ioqL4Xf4r2cdXUKmkK8ebj/qRFWfxKuodH3k=";
+    hash = "sha256-CQOmVVTegOZVwWjGzSek6BehdJCQ5ddOR6M9seWqZRw=";
   };
 
   strictDeps = true;
