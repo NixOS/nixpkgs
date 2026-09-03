@@ -55,9 +55,14 @@ let
     inherit (ghcVersion) ghcSrc packagesDir setupCabalVersion;
   };
 
-  # `setupCabal` applies to every rung: `setupHaskellDepends` resolve from
-  # `buildHaskellPackages`, so a package's `Setup.hs` is compiled against the
-  # Cabal of the set that *builds* it, not the one being built.
+  # `setupCabal` applies to the rungs the bootstrap compiler builds. There it is
+  # an ordinary version choice within one set -- those packages and the `Cabal`
+  # they pick are compiled by the same compiler.
+  #
+  # stage2 is not one of them, and must not be: its `Cabal` is stage1-built and
+  # linked into `ghc-pkg`, while its `Setup.hs` files need one the *build*
+  # compiler can load. Those reach it from the tools rung, through
+  # `buildHaskellPackages`, because the scope is spliced -- see `alwaysSplice`.
   overlaysFor = {
     tools = [
       overlays.setupCabal
@@ -70,13 +75,10 @@ let
     ];
     stage2 = [
       # First: make every package in the set name its compiler explicitly.
-      # Splicing is the identity when `pkgs == buildPackages`, so on a native
-      # build a package would otherwise pick up the set's own `alex` and
-      # `happy` -- compiled by the compiler under construction.
+      # `generic-builder` passes `--with-ghc` only when cross-compiling, and
+      # natively Cabal would find the bootstrap compiler on PATH.
       overlays.explicitCompilerEverywhere
-      overlays.setupCabal
       overlays.systemCxxStdLib
-      overlays.buildTools
       overlays.hackageCore
       overlays.stage2
     ];

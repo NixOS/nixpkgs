@@ -378,13 +378,6 @@ let
           preConfigure =
             (drv.preConfigure or "") + (extraAttrs.preConfigure or "") + (fixupAttrs.preConfigure or "");
 
-          # Setup dependencies belong to the build set -- see the note in
-          # `explicitCompilerEverywhere`. It has to be repeated here because
-          # that overlay maps over `prev`, and the overlays defining these
-          # packages are composed afterwards and replace them wholesale.
-          setupHaskellDepends = map (d: final.buildHaskellPackages.${d.pname or ""} or d) (
-            drv.setupHaskellDepends or [ ]
-          );
         }
       )
       (
@@ -587,9 +580,24 @@ in
   #
   # Setup.hs is compiled by the *build* compiler, so this is the bootstrap set's
   # Cabal, and nixpkgs already packages newer ones there.
+  # Which `Cabal` a `Setup.hs` is compiled against, pinned in the *tools* rung
+  # and reaching the rungs above it by the ordinary route: their setup
+  # dependencies resolve through `buildHaskellPackages`, which is this set.
+  #
+  # Pinned here rather than in the sets that consume it, which is where it used
+  # to be. Overriding `Cabal` in a rung replaces the library named `Cabal` for
+  # everything in that rung, and stage2 needs both senses at once -- `ghc-pkg`
+  # links the stage2-built one, while every `Setup.hs` needs the one the *build*
+  # compiler can load. Naming a foreign stage's library in a set is wrong
+  # whenever the two were built by different compilers, which is the whole point
+  # of there being stages.
+  #
+  # Here they were not: the tools rung is built by the bootstrap compiler, and
+  # so is the `Cabal` it selects, so this is an ordinary version choice within
+  # one set.
   setupCabal = final: prev: {
-    Cabal = final.buildHaskellPackages.${"Cabal_${setupCabalVersion}"};
-    Cabal-syntax = final.buildHaskellPackages.${"Cabal-syntax_${setupCabalVersion}"};
+    Cabal = prev."Cabal_${setupCabalVersion}";
+    Cabal-syntax = prev."Cabal-syntax_${setupCabalVersion}";
   };
 
   # Every package in a stage2 set must name the compiler explicitly, not only
@@ -615,35 +623,10 @@ in
 
           preConfigure = (old.preConfigure or "") + (withExplicitCompiler final).preConfigure;
 
-          # `Setup.hs` is compiled and run by the *build* compiler, so its
-          # dependencies must come from the build set -- not from this one,
-          # whose libraries are built by the compiler under construction and
-          # cannot be linked into a Setup binary.
-          #
-          # This matters most for `Cabal`, which stage2 needs in both senses at
-          # once: `ghc-pkg` links the stage1-built one as a library, while every
-          # `Setup.hs` needs the bootstrap-built one. Same attribute name, two
-          # different derivations.
-          setupHaskellDepends = map (d: final.buildHaskellPackages.${d.pname or ""} or d) (
-            old.setupHaskellDepends or [ ]
-          );
         }) drv
       else
         drv
     ) prev;
-
-  # Build tools, taken from the build set rather than built by the stage1
-  # compiler.
-  #
-  # Normally splicing would do this: `libraryToolDepends` become
-  # `nativeBuildInputs`, which resolve through `__spliced.buildHost`. But
-  # `splicePackages` is a no-op when `pkgs == buildPackages` -- that is what
-  # `actuallySplice` tests -- so on a native build these resolve to the set's
-  # own packages. For any ordinary package set that is harmless, because the
-  # set and its build set share a compiler. Here they do not, and the result is
-  # `alex` being compiled by the stage1 GHC.
-  buildTools =
-    final: prev: lib.genAttrs [ "alex" "happy" "happy-lib" ] (name: final.buildHaskellPackages.${name});
 
   hackageCore =
     final: prev:

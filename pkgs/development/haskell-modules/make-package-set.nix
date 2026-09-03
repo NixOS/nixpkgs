@@ -195,14 +195,17 @@ let
     let
       ps = pkgs.__splicedPackages;
       scopeSpliced =
-        (if alwaysSplice then pkgs.splicePackagesAlways else pkgs.splicePackages) {
-          pkgsBuildBuild = scope.buildHaskellPackages.buildHaskellPackages;
-          pkgsBuildHost = scope.buildHaskellPackages;
-          pkgsBuildTarget = { };
-          pkgsHostHost = { };
-          pkgsHostTarget = scope;
-          pkgsTargetTarget = { };
-        }
+        pkgs.splicePackages (
+          {
+            pkgsBuildBuild = scope.buildHaskellPackages.buildHaskellPackages;
+            pkgsBuildHost = scope.buildHaskellPackages;
+            pkgsBuildTarget = { };
+            pkgsHostHost = { };
+            pkgsHostTarget = scope;
+            pkgsTargetTarget = { };
+          }
+          // lib.optionalAttrs alwaysSplice { actuallySplice = true; }
+        )
         // {
           # Don't splice these
           #
