@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "aiogram";
-  version = "3.30.0";
+  version = "3.31.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aiogram";
     repo = "aiogram";
     tag = "v${version}";
-    hash = "sha256-Htj38Qw2G0GR2+pPCrlUgbywRJvYg1wQyNFdxY9SJQI=";
+    hash = "sha256-bW21mt1Vs4nDHopvd/fW7okRVI124CntXOxv1QCFWaY=";
   };
 
   build-system = [ hatchling ];
