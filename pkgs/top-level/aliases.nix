@@ -1747,6 +1747,7 @@ mapAliases {
   near-cli = throw "'near-cli' has been removed as upstream has deprecated it and archived the source code repo"; # Added 2025-11-10
   neardal = throw "neardal has been removed because it has been marked as broken since at least November 2024."; # Added 2025-09-29
   nekoray = lib.warnOnInstantiate "nekoray has been renamed to throne" throne; # Added 2025-11-10
+  nemiver = throw "'nemiver' has been removed due to being archived upstream."; # Added 2026-09-03
   neo4j-desktop = throw "neo4j-desktop has been removed as it was out-of-date"; # Added 2025-11-01
   neocities-cli = throw "'neocities-cli' has been renamed to/replaced by 'neocities'"; # Converted to throw 2025-10-27
   neofetch = throw "'neofetch' has been removed because it was unmaintained upstream. Consider using the updated fork 'neowofetch' provided by the 'hyfetch' package or the alternative 'fastfetch' instead."; # Added 2026-03-02
