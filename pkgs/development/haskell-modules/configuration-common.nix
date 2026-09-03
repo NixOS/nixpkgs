@@ -1493,6 +1493,16 @@ with haskellLib;
     doJailbreak
   ];
 
+  # Tests import containers internals which changed in containers-0.8
+  # https://github.com/Mikolaj/enummapset/issues/28
+  enummapset = appendPatches [
+    (pkgs.fetchpatch {
+      name = "enummapset-containers-0.8.patch";
+      url = "https://github.com/Mikolaj/enummapset/commit/601e862fbf93cf03ed297016920fa0c0110a5e4c.patch";
+      hash = "sha256-pxLW78lDB8ieoh0ZnR50NrZNUyTDkMaqzyy3V5PhlBo=";
+    })
+  ] super.enummapset;
+
   # 2024-03-19: Fix for mtl >= 2.3
   cheapskate = lib.pipe super.cheapskate [
     doJailbreak
