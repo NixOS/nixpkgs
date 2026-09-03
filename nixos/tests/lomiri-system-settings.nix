@@ -29,6 +29,7 @@
         ubuntu-classic
       ];
 
+      services.printing.enable = true;
       services.upower.enable = true;
     };
 
@@ -37,7 +38,7 @@
   testScript =
     let
       settingsPages = [
-        # Base pages
+        # Network
         {
           name = "wifi";
           type = "internal";
@@ -55,6 +56,8 @@
           element = "Add|Manual|Configuration";
           skipOCR = true;
         }
+
+        # Personal
         {
           name = "appearance";
           type = "internal";
@@ -85,6 +88,13 @@
           type = "internal";
           element = "Edge drag";
         }
+
+        # System
+        {
+          name = "printing";
+          type = "internal";
+          element = "no printers configured";
+        }
         {
           name = "mouse";
           type = "internal";
@@ -95,13 +105,10 @@
           type = "internal";
           element = "Time zone|Set the time and date";
         }
-
-        # External plugins
         {
           name = "security-privacy";
-          type = "external";
+          type = "internal";
           element = "Locking|unlocking|permissions";
-          elementLocalised = "Sperren|Entsperren|Berechtigungen";
         }
       ];
     in
