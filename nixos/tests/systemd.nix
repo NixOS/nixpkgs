@@ -35,7 +35,7 @@
         KExecWatchdogSec = "5min";
       };
       systemd.user.settings.Manager.DefaultEnvironment = "\"XXX_USER=bar\"";
-      services.journald.extraConfig = "Storage=volatile";
+      services.journald.settings.Journal.Storage = "volatile";
       test-support.displayManager.auto.user = "alice";
 
       systemd.shutdownRamfs.contents."/etc/systemd/system-shutdown/test".source =

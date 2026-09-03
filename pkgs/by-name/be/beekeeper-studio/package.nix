@@ -159,5 +159,8 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "aarch64-darwin"
     ];
+    knownVulnerabilities = [
+      "Uses Electron 39.8.1, which was EOL on March 13 2026, with several known CVEs"
+    ];
   };
 })

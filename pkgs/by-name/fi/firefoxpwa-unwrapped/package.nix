@@ -99,12 +99,12 @@ rustPlatform.buildRustPackage rec {
     # wrapped similarly to `firefoxRuntime`, and these passthru variables are
     # read when `wrapFirefox` wraps this derivation too.
     inherit (firefoxRuntime)
-      ffmpegSupport
-      gssSupport
-      alsaSupport
-      pipewireSupport
-      sndioSupport
-      jackSupport
+      withALSA
+      withFFmpeg
+      withGSSAPI
+      withJACK
+      withPipewire
+      withSndio
       ;
   };
 
