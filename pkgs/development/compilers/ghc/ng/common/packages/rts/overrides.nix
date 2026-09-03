@@ -99,24 +99,23 @@ final: _: {
   # interpolated into strings, and `__spliced` is only consulted for
   # mkDerivation dependency lists. A bare name would silently give the
   # host-target build of a program that has to run here.
+  # Everything below runs the package's own configure *before* Cabal gets a
+  # look in.
+  #
+  # `build-type: Configure` means Cabal runs `./configure` from its `postConf`
+  # hook -- but its own configure step runs first, and that step checks
+  # `includes: Rts.h`. `Rts.h` pulls in `ghcautoconf.h` and `ghcplatform.h`,
+  # which are `autogen-includes`: they do not exist until `rts/configure` has
+  # assembled them (see the tail of `rts/configure.ac`, which cats
+  # `ghcplatform.h.top` and `ghcautoconf.h.autoconf` into `include/`). Left to
+  # Cabal, the check fails with "Missing (or bad) header file: Rts.h" before
+  # the script that would have created them ever runs.
+  #
+  # Hadrian sidesteps this by generating those headers itself
+  # (`Rules.Generate`); we run the script.
   preConfigure = ''
     export DERIVE_CONSTANTS="${final.buildHaskellPackages.deriveConstants}/bin/deriveConstants"
     export GENAPPLY="${final.buildHaskellPackages.genapply}/bin/genapply"
-
-    # Run the package's own configure *before* Cabal gets a look in.
-    #
-    # `build-type: Configure` means Cabal runs `./configure` from its
-    # `postConf` hook -- but its own configure step runs first, and that
-    # step checks `includes: Rts.h`. `Rts.h` pulls in `ghcautoconf.h` and
-    # `ghcplatform.h`, which are `autogen-includes`: they do not exist
-    # until `rts/configure` has assembled them (see the tail of
-    # `rts/configure.ac`, which cats `ghcplatform.h.top` and
-    # `ghcautoconf.h.autoconf` into `include/`). Left to Cabal, the check
-    # fails with "Missing (or bad) header file: Rts.h" before the script
-    # that would have created them ever runs.
-    #
-    # Hadrian sidesteps this by generating those headers itself
-    # (`Rules.Generate`); we run the script.
   ''
   # `rts/configure.ac` reads these nine directly. Cabal exports them when
   # *it* runs the script; we run it ourselves, so without them
@@ -129,22 +128,25 @@ final: _: {
   + ''
 
     ./configure ${lib.escapeShellArgs configurePlatformFlags}
-
-    # Three headers hadrian generates that neither `rts/configure` nor the
-    # .cabal produce (`Rules.Generate`: `genEventTypes`,
-    # `genPlatformConstantsHeader`). `rts.cabal` lists the first two under
-    # `install-includes` with a bare `-- ^ generated` comment, which is the
-    # only hint in the package that they do not exist yet.
+  ''
+  # Three headers hadrian generates that neither `rts/configure` nor the .cabal
+  # produce (`Rules.Generate`: `genEventTypes`, `genPlatformConstantsHeader`).
+  # `rts.cabal` lists the first two under `install-includes` with a bare
+  # `-- ^ generated` comment, which is the only hint in the package that they
+  # do not exist yet.
+  + ''
     python3 gen_event_types.py --event-types-defines include/rts/EventLogConstants.h
     python3 gen_event_types.py --event-types-array   include/rts/EventTypes.h
-
-    # deriveConstants compiles probe programs that #include PosixSource.h,
-    # which #includes ghcplatform.h -- so this has to come after
-    # ./configure has assembled it. See GHC #18290.
-    # -fcommon because modern gcc defaults to -fno-common, which changes how
-    # deriveConstants' probe symbols are emitted and makes it report
-    # `CONTROL_GROUP_CONST_291 missing!`. hadrian passes it too, in
-    # `Settings.Builders.DeriveConstants.includeCcArgs`.
+  ''
+  # The third of them. deriveConstants compiles probe programs that `#include
+  # PosixSource.h`, which `#include`s `ghcplatform.h` -- so this has to come
+  # after `./configure` has assembled it. See GHC #18290.
+  #
+  # `-fcommon` because modern gcc defaults to `-fno-common`, which changes how
+  # deriveConstants' probe symbols are emitted and makes it report
+  # `CONTROL_GROUP_CONST_291 missing!`. hadrian passes it too, in
+  # `Settings.Builders.DeriveConstants.includeCcArgs`.
+  + ''
     derivedTmp=$(mktemp -d)
     "${final.buildHaskellPackages.deriveConstants}/bin/deriveConstants" \
       --gen-header \
@@ -156,20 +158,22 @@ final: _: {
       --gcc-flag -fcommon \
       --nm-program "$NM" \
       --target-os "${ghcOS stdenv.hostPlatform}"
-
-    # `rts.cabal` lists AutoApply{,_V16,_V32,_V64}.cmm in `cmm-sources`, but
-    # unlike the `Jumps_V*.cmm` beside them those files are not in the tree
-    # -- hadrian generates them with `genapply` from the constants header
-    # (`Rules.Generate`, `Settings.Builders.GenApply`). Without this the
-    # build fails with `<command line>: does not exist: AutoApply.cmm`.
+  ''
+  # `rts.cabal` lists AutoApply{,_V16,_V32,_V64}.cmm in `cmm-sources`, but
+  # unlike the `Jumps_V*.cmm` beside them those files are not in the tree --
+  # hadrian generates them with `genapply` from the constants header
+  # (`Rules.Generate`, `Settings.Builders.GenApply`). Without this the build
+  # fails with `<command line>: does not exist: AutoApply.cmm`.
+  + ''
     genapply='${final.buildHaskellPackages.genapply}/bin/genapply'
     "$genapply" include/DerivedConstants.h > AutoApply.cmm
-
-    # The vector apply thunks. Which of these actually contain code is
-    # decided by `Jumps.h`, which keys off `REG_XMM1`/`REG_YMM1`/`REG_ZMM1`
-    # from the generated `ghcplatform.h` -- so on a target without those
-    # registers they compile to nothing of their own accord, provided
-    # `./configure` was told the right host.
+  ''
+  # The vector apply thunks. Which of these actually contain code is decided by
+  # `Jumps.h`, which keys off `REG_XMM1`/`REG_YMM1`/`REG_ZMM1` from the
+  # generated `ghcplatform.h` -- so on a target without those registers they
+  # compile to nothing of their own accord, provided `./configure` was told the
+  # right host.
+  + ''
     for w in 16 32 64; do
       "$genapply" include/DerivedConstants.h "-V$w" > "AutoApply_V$w.cmm"
     done

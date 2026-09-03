@@ -199,11 +199,12 @@ stdenvNoCC.mkDerivation {
 
   postPatch = ''
     ${lib.concatMapStrings (f: substituteTemplate "${f}.in" f "") projectVersionFiles}
-
-    # `ghc-boot-th` is templated twice from one `.in`, once as itself and once
-    # as `ghc-boot-th-next`. That second copy exists so a stage can use a
-    # newer `ghc-boot-th` than the one its bootstrap compiler ships, without
-    # the two colliding in a package db.
+  ''
+  # `ghc-boot-th` is templated twice from one `.in`, once as itself and once as
+  # `ghc-boot-th-next`. That second copy exists so a stage can use a newer
+  # `ghc-boot-th` than the one its bootstrap compiler ships, without the two
+  # colliding in a package db.
+  + ''
     ${substituteTemplate "libraries/ghc-boot-th/ghc-boot-th.cabal.in"
       "libraries/ghc-boot-th/ghc-boot-th.cabal"
       "--replace-quiet '@Suffix@' '' --replace-quiet '@SourceRoot@' '.'"
@@ -215,16 +216,18 @@ stdenvNoCC.mkDerivation {
       "libraries/ghc-boot-th-next/ghc-boot-th-next.cabal"
       "--replace-quiet '@Suffix@' '-next' --replace-quiet '@SourceRoot@' '../ghc-boot-th'"
     }
-
+  ''
+  + ''
     cp rts/include/ghcversion.h.in rts/include/ghcversion.h
     substituteInPlace rts/include/ghcversion.h \
       --replace-quiet '@ProjectVersion@' ${lib.escapeShellArg release_version} \
       --replace-quiet '@ProjectVersionInt@' ${lib.escapeShellArg projectVersionInt} \
       --replace-quiet '@ProjectPatchLevel1@' ${lib.escapeShellArg projectPatchLevel1} \
       --replace-quiet '@ProjectPatchLevel2@' ${lib.escapeShellArg projectPatchLevel2}
-
-    # Hadrian renders these with `.` replaced by `,`, because the file spells
-    # them as Haskell version tuples.
+  ''
+  # Hadrian renders these with `.` replaced by `,`, because the file spells
+  # them as Haskell version tuples.
+  + ''
     cp compiler/GHC/CmmToLlvm/Version/Bounds.hs.in compiler/GHC/CmmToLlvm/Version/Bounds.hs
     substituteInPlace compiler/GHC/CmmToLlvm/Version/Bounds.hs \
       --replace-quiet '@LlvmMinVersion@' ${
@@ -233,13 +236,13 @@ stdenvNoCC.mkDerivation {
       --replace-quiet '@LlvmMaxVersion@' ${
         lib.escapeShellArg (builtins.replaceStrings [ "." ] [ "," ] llvmMaxVersion)
       }
-
-
-    # Recover the strictness that `--replace-quiet` gave up. A blanket
-    # `@[A-Za-z]*@` sweep is not usable here: `.cabal` descriptions are Haddock,
-    # and `@base@`/`@ghc-experimental@`/`@ghci@` in prose are monospace markup,
-    # not variables. So check for the variables we actually know about, in every
-    # file we templated.
+  ''
+  # Recover the strictness that `--replace-quiet` gave up. A blanket
+  # `@[A-Za-z]*@` sweep is not usable here: `.cabal` descriptions are Haddock,
+  # and `@base@`/`@ghc-experimental@`/`@ghci@` in prose are monospace markup,
+  # not variables. So check for the variables we actually know about, in every
+  # file we templated.
+  + ''
     for f in ${
       lib.escapeShellArgs (
         projectVersionFiles
@@ -257,20 +260,22 @@ stdenvNoCC.mkDerivation {
         exit 1
       fi
     done
-    # The one substantive thing GHC's top-level `configure` does besides
-    # templating: fan a handful of files out to the packages whose .cabal files
-    # claim them as their own sources. `configure.ac:576-609`, in full.
-    #
-    # These are `ln -f` upstream. `compiler/ghc.cabal` explains why hard links
-    # rather than symlinks -- "safer for Windows, where symlinks do not work out
-    # of the box, so we can't just commit some in git" -- and `utils/fs/README`
-    # says the same of its own: "This file is copied across the build-system by
-    # configure." We copy, since the unpacked tree may span devices.
-    #
-    # Miss any of these and the failure is a long way from the cause: a package
-    # reports a missing header that is plainly present elsewhere in the tree.
-
-    # RTS headers the compiler compiles against.
+  ''
+  # The one substantive thing GHC's top-level `configure` does besides
+  # templating: fan a handful of files out to the packages whose .cabal files
+  # claim them as their own sources. `configure.ac:576-609`, in full.
+  #
+  # These are `ln -f` upstream. `compiler/ghc.cabal` explains why hard links
+  # rather than symlinks -- "safer for Windows, where symlinks do not work out
+  # of the box, so we can't just commit some in git" -- and `utils/fs/README`
+  # says the same of its own: "This file is copied across the build-system by
+  # configure." We copy, since the unpacked tree may span devices.
+  #
+  # Miss any of these and the failure is a long way from the cause: a package
+  # reports a missing header that is plainly present elsewhere in the tree.
+  #
+  # First the RTS headers the compiler compiles against.
+  + ''
     cp -f rts/include/rts/Bytecodes.h compiler/
     cp -f rts/include/rts/storage/ClosureTypes.h compiler/
     cp -f rts/include/rts/storage/FunTypes.h compiler/
@@ -279,20 +284,20 @@ stdenvNoCC.mkDerivation {
     for arch in arm32 arm64 loongarch64 ppc riscv64 s390x wasm32 x86; do
       cp -f "rts/include/stg/MachRegs/$arch.h" "compiler/MachRegs/$arch.h"
     done
-
-    # The `fs` shim, shared by everything that does file IO portably.
+  ''
+  # Then the `fs` shim, shared by everything that does file IO portably.
+  + ''
     cp -f utils/fs/fs.c utils/fs/fs.h utils/unlit/
     cp -f utils/fs/fs.c utils/fs/fs.h rts/
     cp -f utils/fs/fs.h libraries/ghc-internal/include/
     cp -f utils/fs/fs.c libraries/ghc-internal/cbits/
-
-    # Driver helpers shared between the wrapper and ghci.
+  ''
+  # And the driver helpers shared between the wrapper and ghci.
+  + ''
     for f in getLocation.c getLocation.h isMinTTY.c isMinTTY.h cwrapper.c cwrapper.h; do
       cp -f "driver/utils/$f" driver/ghci/
     done
-
   '';
-
   installPhase = ''
     runHook preInstall
     cp -r . "$out"

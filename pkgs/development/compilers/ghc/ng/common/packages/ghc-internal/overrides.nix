@@ -34,28 +34,30 @@ final: _: {
 
   preConfigure = ''
     export CPPFLAGS="$CPPFLAGS -I$PWD"
-
-    # Run it here, in the package directory, before Cabal runs it from
-    # `dist/build`. It is not only the *inputs* that are resolved relative
-    # to the working directory -- `AC_CONFIG_FILES([ghc-internal.buildinfo
-    # include/HsIntegerGmp.h])` writes its *outputs* there too, and Cabal
-    # looks for the buildinfo in the package directory. Without this the
-    # package configures happily and then builds nothing at all:
-    #
-    #     Warning: No executables and no library found. Nothing to do.
-    #     Package contains no library to register: ghc-internal-9.1401.0
+  ''
+  # Run configure here, in the package directory, before Cabal runs it from
+  # `dist/build`. It is not only the *inputs* that are resolved relative to
+  # the working directory -- `AC_CONFIG_FILES([ghc-internal.buildinfo
+  # include/HsIntegerGmp.h])` writes its *outputs* there too, and Cabal looks
+  # for the buildinfo in the package directory. Without this the package
+  # configures happily and then builds nothing at all:
+  #
+  #     Warning: No executables and no library found. Nothing to do.
+  #     Package contains no library to register: ghc-internal-9.1401.0
+  + ''
     ./configure ${lib.escapeShellArgs configurePlatformFlags}
-
-    # `GHC.Internal.Prim` and `GHC.Internal.PrimopWrappers` are generated,
-    # not shipped -- hadrian makes them with `genprimopcode` from the
-    # CPP-processed primops table (`Rules.Generate.genPrimopCode`). Without
-    # them Cabal stops at
-    #
-    #     can't find source for GHC/Internal/Prim in src, dist/build/autogen
-    #
-    # The preprocessing matches what `compiler/Setup.hs` does for the
-    # compiler's own `primop-*.hs-incl` files: the Haskell CPP flags from
-    # the settings file, then `-P -x c`.
+  ''
+  # `GHC.Internal.Prim` and `GHC.Internal.PrimopWrappers` are generated, not
+  # shipped -- hadrian makes them with `genprimopcode` from the CPP-processed
+  # primops table (`Rules.Generate.genPrimopCode`). Without them Cabal stops
+  # at
+  #
+  #     can't find source for GHC/Internal/Prim in src, dist/build/autogen
+  #
+  # The preprocessing matches what `compiler/Setup.hs` does for the compiler's
+  # own `primop-*.hs-incl` files: the Haskell CPP flags from the settings
+  # file, then `-P -x c`.
+  + ''
     primopsTxt=$(mktemp)
     "$CC" -E -undef -traditional -P -x c \
       -I../../compiler ../../compiler/GHC/Builtin/primops.txt.pp \
@@ -63,15 +65,17 @@ final: _: {
 
     genprimopcode='${final.buildHaskellPackages.genprimopcode}/bin/genprimopcode'
     mkdir -p src/GHC/Internal
-
-    # `PrimopWrappers` is generated in every version we support.
+  ''
+  # `PrimopWrappers` is generated in every version we support.
+  + ''
     "$genprimopcode" --make-haskell-wrappers < "$primopsTxt" > src/GHC/Internal/PrimopWrappers.hs
-
-    # `Prim` is generated in 9.14 but is a real source file in 9.15, where
-    # `genprimopcode` no longer even has `--make-haskell-source` -- passing
-    # it just prints the usage message and exits. Keyed on whether the file
-    # is already there rather than on a version test, so this needs no
-    # revisiting when it changes again.
+  ''
+  # `Prim` is generated in 9.14 but is a real source file in 9.15, where
+  # `genprimopcode` no longer even has `--make-haskell-source` -- passing it
+  # just prints the usage message and exits. Keyed on whether the file is
+  # already there rather than on a version test, so this needs no revisiting
+  # when it changes again.
+  + ''
     if [ ! -e src/GHC/Internal/Prim.hs ]; then
       "$genprimopcode" --make-haskell-source < "$primopsTxt" > src/GHC/Internal/Prim.hs
     fi
