@@ -73,9 +73,15 @@ with haskellLib;
         )
       );
 
+  Cabal_3_18_1_0 = doDistribute (
+    super.Cabal_3_18_1_0.override {
+      Cabal-syntax = self.Cabal-syntax_3_18_1_0;
+    }
+  );
+
   # Needs matching version of Cabal
   Cabal-hooks = super.Cabal-hooks.override {
-    Cabal = self.Cabal_3_16_1_0;
+    Cabal = self.Cabal_3_18_1_0;
   };
 
   # Needs Cabal>=3.14
@@ -88,31 +94,16 @@ with haskellLib;
   inherit
     (
       let
-        haveSemaphoreCompat200 =
-          # ATTN: we assume that semaphore-compat isn't changed in cabalInstallOverlay!
-          lib.versionAtLeast (self.semaphore-compat.version or "0") "2.0.0"
-          || (
-            lib.versionAtLeast self.ghc.version "9.12.4.20260606" # 9.12.5-rc1
-            && lib.versionOlder self.ghc.version "9.14"
-          )
-          || lib.versionAtLeast self.ghc.version "9.14.1.20260728"; # 9.14.1-rc1
-
+        # TODO(@sternenseemann): make conditional once a GHC release ships Cabal 3.18
         # !!! Use cself/csuper inside for the actual overrides
-        cabalInstallOverlay =
-          cself: csuper:
-          lib.optionalAttrs (haveSemaphoreCompat200 || lib.versionOlder csuper.ghc.version "9.14.1.20260728")
-            {
-              # Waiting on Cabal-3.18 with https://github.com/haskell/cabal/pull/11628
-              Cabal = appendPatches (lib.optionals haveSemaphoreCompat200 [
-                (pkgs.fetchpatch {
-                  name = "Cabal-semaphore-compat-2.0.0.patch";
-                  url = "https://github.com/haskell/cabal/commit/2cac53be5659a2a74f1748fd6ab1e00183a18765.diff?full_index=1";
-                  hash = "sha256-+rcwBQILTc1ezcHb3VDampwMYGEG7S4HF1YKAk7QzUs=";
-                  relative = "Cabal";
-                })
-              ]) cself.Cabal_3_16_1_0;
-              Cabal-syntax = cself.Cabal-syntax_3_16_1_0;
-            };
+        cabalInstallOverlay = cself: csuper: {
+          Cabal = cself.Cabal_3_18_1_0;
+          Cabal-syntax = cself.Cabal-syntax_3_18_1_0;
+
+          # Forbids Cabal >= 3.18
+          # https://github.com/sol/hpack/issues/653
+          hpack = doJailbreak (super.hpack.override { Cabal = cself.Cabal; });
+        };
       in
       {
         cabal-install =
@@ -122,21 +113,9 @@ with haskellLib;
           in
           overrideCabal (
             old:
-            {
-              patches = lib.optionals haveSemaphoreCompat200 [
-                # Waiting on cabal-install-3.18 with https://github.com/haskell/cabal/pull/11628
-                (pkgs.fetchpatch {
-                  name = "cabal-install-semaphore-compat-2.0.0.patch";
-                  url = "https://github.com/haskell/cabal/commit/2cac53be5659a2a74f1748fd6ab1e00183a18765.diff?full_index=1";
-                  hash = "sha256-7unna/3+/MPbD/6f5MBgggvy254YRXhHnHIrFzJoboQ=";
-                  relative = "cabal-install";
-                })
-              ];
-
-            }
             # Some dead code is not properly eliminated on aarch64-darwin, leading
             # to bogus references to some dependencies.
-            // lib.optionalAttrs (pkgs.stdenv.hostPlatform.isDarwin && pkgs.stdenv.hostPlatform.isAarch64) {
+            lib.optionalAttrs (pkgs.stdenv.hostPlatform.isDarwin && pkgs.stdenv.hostPlatform.isAarch64) {
               postInstall = ''
                 ${old.postInstall or ""}
                 remove-references-to -t ${scope.HTTP} "$out/bin/.cabal-wrapped"
@@ -333,6 +312,16 @@ with haskellLib;
   # bound only required when running under WINE: https://github.com/haskell/network/issues/604
   iserv-proxy = doJailbreak super.iserv-proxy;
 
+  # ghc-paths needs a compat patch for Cabal 3.18 until a new version is released
+  # https://github.com/simonmar/ghc-paths/pull/35 krank:ignore-line
+  ghc-paths = appendPatches [
+    (pkgs.fetchpatch {
+      name = "ghc-paths-Cabal-3.18-compat.patch";
+      url = "https://github.com/simonmar/ghc-paths/commit/3b29418f632e6523858fc6441737d923a431a7d8.patch";
+      hash = "sha256-TKbEPGr1Vpaz3RdLwq92dTlp7Y8nKPghukZGVcMXQ6Y=";
+    })
+  ] super.ghc-paths;
+
   # Test ldap server test/ldap.js is missing from sdist
   # https://github.com/supki/ldap-client/issues/18
   ldap-client-og = dontCheck super.ldap-client-og;
@@ -386,6 +375,16 @@ with haskellLib;
 
   # 2023-06-28: Test error: https://hydra.nixos.org/build/225565149
   orbits = dontCheck super.orbits;
+
+  # Fix compilation of Setup.hs with Cabal >= 3.18
+  # https://github.com/haskell/entropy/pull/97
+  entropy = appendPatches [
+    (pkgs.fetchpatch {
+      name = "entropy-Cabal-3.18.patch";
+      url = "https://github.com/haskell/entropy/commit/52b0c314d182de512c3293c6ac9b0186efbebc6f.patch";
+      hash = "sha256-5+fLRlbkLp2c5PSVDH1E46tZGZcyTfamOaget5lwlwc=";
+    })
+  ] super.entropy;
 
   # 2025-02-10: Too strict bounds on tasty-quickcheck < 0.11
   tasty-discover = doJailbreak super.tasty-discover;
