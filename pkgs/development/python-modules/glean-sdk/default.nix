@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   glean-parser,
+  nix-update-script,
   pytest-localserver,
   pytestCheckHook,
   rustPlatform,
@@ -10,22 +11,26 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "glean-sdk";
-  version = "64.0.0";
+  version = "69.0.0";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "glean";
-    rev = "v${version}";
-    hash = "sha256-6UAZkVBxFJ1CWRn9enCLBBidIugAtxP7stbYlhh1ArA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KLYGbnKxuokvV/TBXLl1oplbTJkqMblh14daWalVz0M=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-Ppc+6ex3yLC4xuhbZGZDKLqxDjSdGpgrLDpbbbqMgPY=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-Vmxt8cRvkj0xEOc/WGDUxeQfH0uBvvboKc43ClqqEaQ=";
   };
+
+  dontStrip = true;
 
   build-system = [
     rustPlatform.cargoSetupHook
@@ -55,10 +60,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "glean" ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     broken = true; # fails to build since 2025-12
     description = "Telemetry client libraries and are a part of the Glean project";
     homepage = "https://mozilla.github.io/glean/book/index.html";
+    maintainers = with lib.maintainers; [ choco98 ];
     license = lib.licenses.mpl20;
   };
-}
+})
