@@ -62,9 +62,12 @@ export function evaluateTargetBranchPolicy({
     shouldCheckNixosRebuild,
   } = getTargetBranchPolicy({ base, head })
 
+  // https://github.com/NixOS/nixpkgs/pull/553786#issuecomment-5510286851
+  // kernels-org should go to staging-nixos (or master) and staging-nixos-xx.xx (or release-xx.xx) when backported
   // https://github.com/NixOS/nixpkgs/pull/521157
-  // These should go to master and release-xx.xx when backported
+  // xanmod should go to master and release-xx.xx when backported
   const isExemptKernelUpdate =
+    onlyChangedFile === 'pkgs/os-specific/linux/kernel/kernels-org.json' ||
     onlyChangedFile === 'pkgs/os-specific/linux/kernel/xanmod-kernels.nix'
 
   // https://github.com/NixOS/nixpkgs/pull/483194#issuecomment-3793393218
