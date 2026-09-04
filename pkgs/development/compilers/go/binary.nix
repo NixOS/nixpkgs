@@ -4,6 +4,7 @@
   fetchurl,
   version,
   hashes,
+  bashNonInteractive,
 }:
 let
   platform = with stdenv.hostPlatform.go; "${GOOS}-${if GOARCH == "arm" then "armv6l" else GOARCH}";
@@ -16,8 +17,14 @@ stdenv.mkDerivation {
     sha256 = hashes.${platform} or (throw "Missing Go bootstrap hash for platform ${platform}");
   };
 
+  buildInputs = [
+    bashNonInteractive
+  ];
+
   # We must preserve the signature on Darwin
   dontStrip = stdenv.hostPlatform.isDarwin;
+
+  strictDeps = true;
 
   installPhase = ''
     runHook preInstall
