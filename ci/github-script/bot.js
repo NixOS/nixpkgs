@@ -794,6 +794,7 @@ export default async ({ github, context, core, dry }) => {
         } else {
           // No stats.artifacts++, because this does not allow passing a custom token.
           // Thus, the upload will not happen with the app token, but the default github.token.
+          core.info(`pagination-cursor: ${cursor}`)
           await artifactClient.uploadArtifact(
             'pagination-cursor',
             [uploadPath],
@@ -803,6 +804,8 @@ export default async ({ github, context, core, dry }) => {
             },
           )
         }
+      } else {
+        core.info('pagination-cursor: <n/a>')
       }
 
       // Some items might be in both search results, so filtering out duplicates as well.
