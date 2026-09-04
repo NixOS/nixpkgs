@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://lib.filezilla-project.org/";
     description = "SSH/SFTP library based on libfilezilla";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iedame ];
     pkgConfigModules = [ "libfzssh-client" ];
   };
 })
