@@ -24,7 +24,6 @@
   librsvg,
   webp-pixbuf-loader,
   geoclue2,
-  desktop-file-utils,
   libpulseaudio,
   libical,
   gobject-introspection,
@@ -39,7 +38,6 @@
   libnma-gtk4,
   gnome-desktop,
   gsettings-desktop-schemas,
-  gnome-keyring,
   glib,
   gjs,
   mutter,
@@ -67,6 +65,8 @@
   libsoup_3,
   libxml2,
   webkitgtk_6_0,
+  cairo,
+  libglycin,
 }:
 
 let
@@ -106,10 +106,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Reverts https://gitlab.gnome.org/GNOME/gnome-shell/-/merge_requests/1101
     ./greeter-logo-size.patch
 
-    # Work around failing fingerprint auth
+    # Fixes build: https://gitlab.gnome.org/GNOME/gnome-shell/-/merge_requests/4384
     (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/gnome-shell/raw/dcd112d9708954187e7490564c2229d82ba5326f/f/0001-gdm-Work-around-failing-fingerprint-auth.patch";
-      hash = "sha256-mgXty5HhiwUO1UV3/eDgWtauQKM0cRFQ0U7uocST25s=";
+      url = "https://gitlab.gnome.org/theCapypara/gnome-shell/-/commit/af23da2bbdc5f90d7b33beecf299a570226ea73d.patch";
+      hash = "sha256-klScQaVL71eJzmbzMGAKpc5HtnDFc3074MjeMP1ie6Y=";
     })
   ];
 
@@ -122,7 +122,6 @@ stdenv.mkDerivation (finalAttrs: {
     gi-docgen
     wrapGAppsHook4
     sassc
-    desktop-file-utils
     libxslt.bin
     gobject-introspection
   ];
@@ -130,7 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     systemd
     gsettings-desktop-schemas
-    gnome-keyring
     glib
     gcr_4
     accountsservice
@@ -165,6 +163,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     libsoup_3
     libxml2
+    cairo
+    json-glib
+    libglycin
 
     # recording
     pipewire
@@ -180,7 +181,6 @@ stdenv.mkDerivation (finalAttrs: {
     # for gnome-extension tool
     bash-completion
     gnome-autoar
-    json-glib
 
     # for tools
     pythonEnv
@@ -200,7 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm -f man/gnome-shell.1
     rm data/theme/gnome-shell-{light,dark}.css
 
-    substituteInPlace meson.build subprojects/extensions-app/meson.build \
+    substituteInPlace meson.build \
       --replace-fail "gjs = find_program('gjs')" "gjs = find_program('${lib.getExe gjs}')"
   '';
 
