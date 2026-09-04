@@ -28,6 +28,7 @@
   fetchpatch,
   fetchpatch2,
   replaceVars,
+  versionCheckHook,
 }:
 
 let
@@ -35,6 +36,7 @@ let
     name = "lldb-dap";
     version = "0.2.0";
   };
+  canRunLldb = !enableManpages && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 in
 
 stdenv.mkDerivation (
@@ -152,18 +154,12 @@ stdenv.mkDerivation (
     ++ devExtraCmakeFlags;
 
     doCheck = false;
-    doInstallCheck = false;
+    doInstallCheck = canRunLldb;
 
-    # TODO: cleanup with mass-rebuild
-    installCheckPhase = ''
-      if [ ! -e ''${!outputLib}/${python3.sitePackages}/lldb/_lldb*.so ] ; then
-          echo "ERROR: python files not installed where expected!";
-          return 1;
-      fi
-      if [ ! -e "''${!outputLib}/lib/lua/${lua5_3.luaversion}/lldb.so" ] ; then
-          echo "ERROR: lua files not installed where expected!";
-          return 1;
-      fi
+    nativeInstallCheckInputs = lib.optionals canRunLldb [ versionCheckHook ];
+
+    preVersionCheck = ''
+      version=${release_version}
     '';
 
     postInstall =
