@@ -4,6 +4,8 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   replaceVars,
+  pass,
+  passage,
   age,
   unixtools,
   coreutils,
@@ -36,6 +38,14 @@ stdenv.mkDerivation (finalAttrs: {
     })
     ./set-correct-program-name-for-sleep.patch
   ];
+  postPatch = ''
+    # Since we reuse the pass wrapper the extension will also live in its directory not the passage specific one
+    substituteInPlace Makefile \
+      --replace-fail 's:^SYSTEM_EXTENSION_DIR=.*:SYSTEM_EXTENSION_DIR="$(LIBDIR)/passage/extensions":' "" \
+      --replace-fail '"$(DESTDIR)$(LIBDIR)/passage' '"$(DESTDIR)$(LIBDIR)/password-store'
+    substituteInPlace src/password-store.sh \
+      --replace-fail 'SYSTEM_EXTENSION_DIR=""' 'SYSTEM_EXTENSION_DIR="''${SYSTEM_EXTENSION_DIR:-${placeholder "out"}/lib/password-store/extensions}"'
+  '';
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
@@ -59,7 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Using $0 is bad, it causes --help to mention ".passage-wrapped".
   postInstall = ''
-    substituteInPlace $out/bin/passage --replace 'PROGRAM="''${0##*/}"' 'PROGRAM=passage'
+    substituteInPlace $out/bin/passage \
+              --replace-fail 'AGE="''${PASSAGE_AGE:-age}"' 'AGE=${lib.getExe age}' \
+              --replace-fail 'PROGRAM="''${0##*/}"' 'PROGRAM=passage'
     wrapProgram $out/bin/passage --prefix PATH : $extraPath --argv0 $pname
   '';
 
@@ -67,6 +79,9 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=$(out)"
     "WITH_ALLCOMP=yes"
   ];
+  passthru = {
+    withExtensions = pass.withExtensions.override { pass = passage; };
+  };
 
   meta = {
     description = "Stores, retrieves, generates, and synchronizes passwords securely";
