@@ -14,17 +14,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proxyauth";
-  version = "1.0.3";
+  version = "1.2.0";
 
   src = fetchFromForgejo {
     domain = "git.proxyauth.app";
     owner = "ProxyAuth";
     repo = "ProxyAuth";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hdLkDM1xNqQnaTKcBDRzLCc0hocHiIwLNPxIEU2MYIE=";
+    hash = "sha256-Im6BfBhzxrcbaZ0rvy0+dQ4Dx8L2NQz7zMc1SOY6xnY=";
   };
 
-  cargoHash = "sha256-IwIOlo5OyjvQBhgUZiRJy7fiNQshMgMHcl9MA6ju1h8=";
+  cargoHash = "sha256-q7goMwGtcBnnYXqhylmygQFTEGzTQG6IbgUhuKRiw+8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "Proxy Authentication Token - Fast authentication gateway for backend APIs";
+    description = "Edge reverse proxy for OIDC/API authentication and dashboards";
     homepage = "https://git.proxyauth.app/ProxyAuth/ProxyAuth";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ liberodark ];

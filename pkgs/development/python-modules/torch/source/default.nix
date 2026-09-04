@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   fetchFromGitLab,
+  fetchpatch,
   git-unroll,
   buildPythonPackage,
   python,
@@ -65,10 +66,8 @@
   typing-extensions,
 
   binutils,
-  expecttest,
   hypothesis,
   psutil,
-  types-dataclasses,
   # ROCm build and `torch.compile` requires `triton`
   tritonSupport ? (!stdenv.hostPlatform.isDarwin),
   triton,
@@ -290,7 +289,7 @@ in
 buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.12.0";
+  version = "2.13.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -318,7 +317,20 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   ]
   ++ lib.optionals cudaSupport [
     ./fix-cmake-cuda-toolkit.patch
+
+    # Let CMake find CUPTI through the variables we export in `preConfigure`, so that the
+    # `CUDA::cupti` target kineto requires gets defined
+    ./forward-cupti-env-vars.patch
+
     ./nvtx3-hpp-path-fix.patch
+
+    # Don't emit both `sm_103` and `sm_103f` gencode flags, which nvcc rejects:
+    # https://github.com/pytorch/pytorch/pull/187006
+    (fetchpatch {
+      name = "avoid-duplicate-sm_103-codegen.patch";
+      url = "https://github.com/pytorch/pytorch/commit/94079bfd49e1d8a458a8d7714a8bf7379bba947a.patch";
+      hash = "sha256-PFj8RihqeKTAogoCt59ikTbQ8wwpPJvUXGFlpBs8gE0=";
+    })
   ]
   ++ lib.optionals (lib.getName blas.provider == "mkl") [
     # The CMake install tries to add some hardcoded rpaths, incompatible
@@ -334,9 +346,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=70.1.0,<82" "setuptools"
-    substituteInPlace setup.py \
-      --replace-fail "setuptools<82" setuptools
+      --replace-fail "setuptools>=77.0.0,<82" "setuptools"
   ''
   # Provide path to openssl binary for inductor code cache hash
   # InductorError: FileNotFoundError: [Errno 2] No such file or directory: 'openssl'
@@ -412,8 +422,8 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   preConfigure =
     lib.optionalString cudaSupport ''
       export TORCH_CUDA_ARCH_LIST="${gpuTargetString}"
-      export CUPTI_INCLUDE_DIR=${lib.getDev cudaPackages.cuda_cupti}/include
-      export CUPTI_LIBRARY_DIR=${lib.getLib cudaPackages.cuda_cupti}/lib
+      export CUDAToolkit_CUPTI_INCLUDE_DIR=${lib.getInclude cudaPackages.cuda_cupti}/include
+      export CUDA_cupti_LIBRARY=${lib.getLib cudaPackages.cuda_cupti}/lib/libcupti.so
     ''
     + lib.optionalString (cudaSupport && cudaPackages ? cudnn) ''
       export CUDNN_INCLUDE_DIR=${lib.getLib cudnn}/include

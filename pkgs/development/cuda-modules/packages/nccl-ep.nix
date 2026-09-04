@@ -7,7 +7,6 @@
   lib,
 
   # nativeBuildInputs
-  python3Packages,
   autoAddDriverRunpath,
   cuda_nvcc,
   which,
@@ -76,10 +75,6 @@ backendStdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
-
-  passthru.tests = {
-    inherit (python3Packages) nccl4py;
-  };
 
   meta = {
     description = "Expert-parallelism (MoE dispatch/combine) extension library for NCCL";
