@@ -1020,6 +1020,7 @@ in
   lomiri-mediaplayer-app = runTest ./lomiri-mediaplayer-app.nix;
   lomiri-music-app = runTest ./lomiri-music-app.nix;
   lomiri-system-settings = runTest ./lomiri-system-settings.nix;
+  loops-server = runTest ./loops-server.nix;
   lorri = runTest ./lorri/default.nix;
   luks = runTest ./luks.nix;
   luks-suspend = runTest ./luks-suspend.nix;
