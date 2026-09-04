@@ -30,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ByocNDqkv1ufN3Rr5yrfGkN5zS+Cw1e8QLQ+5opc1K4=";
   };
 
+  __structuredAttrs = true;
   strictDeps = true;
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [
@@ -82,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "swaybg";
     maintainers = with lib.maintainers; [
       ryan4yin
+      yvnth
     ];
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
