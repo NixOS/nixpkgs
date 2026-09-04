@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "dom-toml";
-  version = "2.3.0";
+  version = "2.4.0b1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "domdfcoding";
     repo = "dom_toml";
     tag = "v${version}";
-    hash = "sha256-ukRnQecbgZBdTHhyEBIoHUwGTwQVJxo+u7Dqg4Kjvsw=";
+    hash = "sha256-T6AEof0whW+ncICvOcumGhU1UVqIGHOnHHV5wKRyuOI=";
   };
 
   build-system = [ flit-core ];
