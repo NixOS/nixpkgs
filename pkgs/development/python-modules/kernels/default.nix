@@ -7,14 +7,14 @@
 }:
 buildPythonPackage rec {
   pname = "kernels";
-  version = "0.11.7";
+  version = "0.16.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "kernels";
     tag = "v${version}";
-    hash = "sha256-OUOCC7ViRWqRZIUpK31ItWsNc0F87dBpAg/Lql1LWp4=";
+    hash = "sha256-mrPGykU07PwelebEitr0HDZemZ8WzBhMflBBirQnzAQ=";
   };
 
   build-system = [
