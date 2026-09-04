@@ -11,7 +11,6 @@ let
 
   stateDir = cfg.directory;
   driftFile = "${stateDir}/chrony.drift";
-  keyFile = "${stateDir}/chrony.keys";
   rtcFile = "${stateDir}/chrony.rtc";
 
   configFile = pkgs.writeText "chrony.conf" ''
@@ -31,7 +30,7 @@ let
     ${lib.optionalString cfg.makestep.enable "makestep ${toString cfg.makestep.threshold} ${toString cfg.makestep.limit}"}
 
     driftfile ${driftFile}
-    keyfile ${keyFile}
+    ${lib.optionalString (cfg.keyFile != null && cfg.keyFile != "") "keyfile ${cfg.keyFile}"}
     ${lib.optionalString (cfg.enableRTCTrimming) "rtcfile ${rtcFile}"}
     ${lib.optionalString (cfg.enableNTS) "ntsdumpdir ${stateDir}"}
 
@@ -149,6 +148,26 @@ in
         description = ''
           Whether to enable Network Time Security authentication.
           Make sure it is supported by your selected NTP server(s).
+        '';
+      };
+
+      keyFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
+          Absolute pathname of a file containing NTP packet authentication keys.
+
+          Because these keys are shared secrets, chronyd requires this file to be owned by
+          root (*not* the chrony user), writable only by root, and readable only by root
+          and the chrony group.  Also, it should *not* be stored within chrony's state
+          directory ([](#opt-services.chrony.directory)), because the chrony user can
+          clobber any file in this directory, regardless of ownership.
+
+          ::: {.note}
+          Packet authentication keys have to be shared with all configured NTP servers.
+          If you're not running your own private NTP pool, you probably want the
+          [](#opt-services.chrony.enableNTS) option instead.
+          :::
         '';
       };
 
@@ -271,7 +290,6 @@ in
     systemd.tmpfiles.rules = [
       "d ${stateDir} 0750 chrony chrony - -"
       "f ${driftFile} 0640 chrony chrony - -"
-      "f ${keyFile} 0640 root chrony - -"
     ]
     ++ lib.optionals cfg.enableRTCTrimming [
       "f ${rtcFile} 0640 chrony chrony - -"
