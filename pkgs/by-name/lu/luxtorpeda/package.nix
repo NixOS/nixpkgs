@@ -90,7 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Steam Play compatibility tool to run games using native Linux engines (for use with programs.steam.extraCompatPackages)";
-    homepage = "https://github.com/luxtorpeda-dev/luxtorpeda";
+    homepage = "https://luxtorpeda.org";
+    downloadPage = "https://codeberg.org/luxtorpeda/luxtorpeda";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ neovim-btw ];
     platforms = [ "x86_64-linux" ];
