@@ -25776,6 +25776,12 @@
     githubId = 11632726;
     name = "Arijit Basu";
   };
+  sazardev = {
+    email = "cerberusprogrammer@gmail.com";
+    github = "sazardev";
+    githubId = 66286300;
+    name = "Omar Flores Salazar";
+  };
   sb0 = {
     email = "sb@m-labs.hk";
     github = "sbourdeauducq";
