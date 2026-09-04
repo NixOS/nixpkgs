@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Stateless OpenPGP (SOP) based on rpgp";
     license = with lib.licenses; [
       mit
-      apsl20
+      asl20
       cc0
     ];
     maintainers = with lib.maintainers; [ nikstur ];
