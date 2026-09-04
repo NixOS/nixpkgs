@@ -69,13 +69,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "linkwarden";
-  version = "2.14.0";
+  version = "2.16.2";
 
   src = fetchFromGitHub {
     owner = "linkwarden";
     repo = "linkwarden";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mcdLOHGm0UyNDCBA5aheUAfsUONL/Q/KeVtwXTVcsxQ=";
+    hash = "sha256-4S2/TRZlMa3KHM+tmrWQsqGFk0TZjMbhdS2b1aNTVow=";
   };
 
   patches = [
@@ -98,7 +98,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-riijYhsnIUXwl5AHYfhTiKHZFPc+ORDTLO2GUY7Yl+g=";
+    hash = "sha256-f7xIzxN+0JWZeGfeK/3XTiUbxrnnzErbFEukolMMv/s=";
   };
 
   nativeBuildInputs = [

@@ -55,7 +55,7 @@
 
     machine.succeed(curlCmd + "-X GET http://localhost:3000/api/v1/links")
 
-    machine.wait_for_file("/var/lib/linkwarden/archives/1/1.html")
+    machine.wait_for_file("/var/lib/linkwarden/archives/1/1.html", 10)
     machine.succeed("grep -q '<h1>HELLO LINKWARDEN</h1>' </var/lib/linkwarden/archives/1/1.html")
   '';
 }
