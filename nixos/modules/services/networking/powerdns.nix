@@ -59,12 +59,10 @@ in
 
       serviceConfig = {
         EnvironmentFile = lib.optional (cfg.secretFile != null) cfg.secretFile;
-        ExecStartPre = lib.optional (cfg.secretFile != null) (
-          pkgs.writeShellScript "pdns-pre-start" ''
-            umask 077
-            ${pkgs.envsubst}/bin/envsubst -i "${configDir}/pdns.conf" > ${finalConfigDir}/pdns.conf
-          ''
-        );
+        RuntimeDirectoryMode = "0700";
+        ExecStartPre = lib.optional (
+          cfg.secretFile != null
+        ) "${pkgs.envsubst}/bin/envsubst -i '${configDir}/pdns.conf' -o '${finalConfigDir}/pdns.conf'";
         ExecStart = [
           ""
           "${pkgs.pdns}/bin/pdns_server --config-dir=${finalConfigDir} --guardian=no --daemon=no --disable-syslog --log-timestamp=no --write-pid=no"

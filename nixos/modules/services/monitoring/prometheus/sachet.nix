@@ -70,13 +70,12 @@ in
         "network.target"
         "network-online.target"
       ];
-      script = ''
-        ${pkgs.envsubst}/bin/envsubst -i "${configFile}" > /tmp/sachet.yaml
-        exec ${pkgs.prometheus-sachet}/bin/sachet -config /tmp/sachet.yaml -listen-address ${cfg.address}:${toString cfg.port}
-      '';
 
       serviceConfig = {
         Restart = "always";
+
+        ExecStartPre = "${pkgs.envsubst}/bin/envsubst -i '${configFile}' -o /tmp/sachet.yaml";
+        ExecStart = "${pkgs.prometheus-sachet}/bin/sachet -config /tmp/sachet.yaml -listen-address ${cfg.address}:${toString cfg.port}";
 
         ProtectSystem = "strict";
         ProtectHome = true;

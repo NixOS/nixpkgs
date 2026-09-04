@@ -68,16 +68,14 @@ in
       enable = true;
       wantedBy = [ "multi-user.target" ];
       description = "Turn-rs Server Daemon";
-      preStart =
-        let
-          configFile = format.generate "turn-rs-config.toml" cfg.settings;
-        in
-        ''
-          ${lib.getExe pkgs.envsubst} -i "${configFile}" -o /run/turn-rs/config.toml
-        '';
       serviceConfig = {
         RuntimeDirectory = "turn-rs";
         EnvironmentFile = lib.optional (cfg.secretFile != null) cfg.secretFile;
+        ExecStartPre =
+          let
+            configFile = format.generate "turn-rs-config.toml" cfg.settings;
+          in
+          "${lib.getExe pkgs.envsubst} -i '${configFile}' -o /run/turn-rs/config.toml";
         ExecStart = "${lib.getExe cfg.package} --config=/run/turn-rs/config.toml";
         DynamicUser = true;
       };
