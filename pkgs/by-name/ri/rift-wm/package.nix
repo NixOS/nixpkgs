@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   apple-sdk,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -22,6 +23,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   cargoHash = "sha256-eb3Z5NIUusJApQWa6sDMRP//Y0BOToQsEIhQqqR728o=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tiling window manager for macos";
