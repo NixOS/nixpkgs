@@ -24,17 +24,14 @@
   monorepoSrc ? null,
   enableManpages ? false,
   devExtraCmakeFlags ? [ ],
-  getVersionFile,
-  fetchpatch,
-  fetchpatch2,
-  replaceVars,
   versionCheckHook,
 }:
 
 let
-  vscodeExt = {
+  vscodeExt = rec {
     name = "lldb-dap";
     version = "0.2.0";
+    uniqueId = "llvm-org.${name}-${version}";
   };
   canRunLldb = !enableManpages && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 in
@@ -42,7 +39,6 @@ in
 stdenv.mkDerivation (
   finalAttrs:
   {
-    passthru.monorepoSrc = monorepoSrc;
     pname = "lldb";
     inherit version;
 
@@ -191,14 +187,18 @@ stdenv.mkDerivation (
 
         # Editor support
         # vscode:
-        install -D ${packageJsonPath} $out/share/vscode/extensions/llvm-org.${vscodeExt.name}-${vscodeExt.version}/package.json
-        mkdir -p $out/share/vscode/extensions/llvm-org.${vscodeExt.name}-${vscodeExt.version}/bin
-        ln -s $out/bin/*${vscodeExt.name} $out/share/vscode/extensions/llvm-org.${vscodeExt.name}-${vscodeExt.version}/bin
+        vscodeExtDir="$out/share/vscode/extensions/${vscodeExt.uniqueId}"
+        install -D ${packageJsonPath} "$vscodeExtDir/package.json"
+        mkdir -p "$vscodeExtDir/bin"
+        ln -s $out/bin/*${vscodeExt.name} "$vscodeExtDir/bin"
       '';
 
-    passthru.vscodeExtName = vscodeExt.name;
-    passthru.vscodeExtPublisher = "llvm";
-    passthru.vscodeExtUniqueId = "llvm-org.${vscodeExt.name}-${vscodeExt.version}";
+    passthru = {
+      inherit monorepoSrc;
+      vscodeExtName = vscodeExt.name;
+      vscodeExtPublisher = "llvm";
+      vscodeExtUniqueId = vscodeExt.uniqueId;
+    };
 
     __structuredAttrs = true;
 
