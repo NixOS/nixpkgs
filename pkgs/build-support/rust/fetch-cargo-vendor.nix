@@ -105,6 +105,8 @@ let
       outputHash = hash;
       outputHashAlgo = if hash == "" then "sha256" else null;
       outputHashMode = "recursive";
+
+      __structuredAttrs = true;
     }
     // removeAttrs args removedArgs
   );
@@ -117,6 +119,8 @@ runCommand "${name}-vendor"
       cargo
       replaceWorkspaceValues
     ];
+    strictDeps = true;
+    __structuredAttrs = true;
   }
   ''
     fetch-cargo-vendor-util create-vendor "$vendorStaging" "$out"
