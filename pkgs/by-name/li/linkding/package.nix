@@ -294,6 +294,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/sissbruecker/linkding/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      iedame
       squat
     ];
     platforms = lib.platforms.linux;
