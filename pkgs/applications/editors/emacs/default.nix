@@ -46,5 +46,7 @@ lib.makeScope pkgs.newScope (
     };
 
     emacs30-macport = callPackage (self.sources.emacs30-macport) inheritedArgs;
+
+    emacs31-macport = callPackage (self.sources.emacs31-macport) inheritedArgs;
   }
 )

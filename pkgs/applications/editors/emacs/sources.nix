@@ -166,4 +166,12 @@ in
       })
     ];
   });
+
+  emacs31-macport = import ./make-emacs.nix (mkArgs {
+    pname = "emacs-mac";
+    version = "31.1.50";
+    variant = "macport";
+    rev = "617ada906640ac5694cbec9f5fccf2246b17e21d"; # Tip of emacs-mac-31 as of 2026-09-02
+    hash = "sha256-aZaONqeyLzQk38NlLeKwnQtGup89RbBiZy01+13xvBo=";
+  });
 }
