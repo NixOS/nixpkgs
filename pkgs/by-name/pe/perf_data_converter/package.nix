@@ -14,19 +14,19 @@ let
   registry = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-central-registry";
-    rev = "dc643526b97838ffe421b833dd8b9c95e71702e8";
-    hash = "sha256-SLtrNU5uEt8rRJDUdV/IaI37CujsTHLlE31l2zYoRss=";
+    rev = "6d7a78e3bb927a52e3e2a5087729f9136d35c084";
+    hash = "sha256-qH4MYS12oKni1JMtZEm7KEpK68CSr3/45aWGmxaydEE=";
   };
 in
 buildBazelPackage {
   pname = "perf_data_converter";
-  version = "0-unstable-2026-03-10";
+  version = "0-unstable-2026-09-02";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "perf_data_converter";
-    rev = "e2c2da7494e1c6cb8bb343c1bb3023ee3f37ab38";
-    hash = "sha256-3YaaEQBlNenJihlEkAI3s4WyjOpWpV9rsfLyvubvfMU=";
+    rev = "d4ea56c0c9c0c3f197e26a0161a5a0d9580d5ba7";
+    hash = "sha256-qimXlAB4mk7TagnHWG2n+4aRX1fhtisSXFhbNvQw4UI=";
   };
 
   bazel = bazel_7;
@@ -41,8 +41,8 @@ buildBazelPackage {
     '';
     hash =
       {
-        aarch64-linux = "sha256-BlNTjS78QNuoiyIUFDmY5HeqIRJRVZQfrk5Y7+Q2DGo=";
-        x86_64-linux = "sha256-jOepM+Lor5RRIQEmdkwf3IJ1AAfbVq2VjMuwqjyfOio=";
+        aarch64-linux = "sha256-pcbfXO+6MC/eI+OemDIUFH3o+3Vr6+YWeH36xuZpqd8=";
+        x86_64-linux = "sha256-WcfZxiSKKUi98TjAviqsb4E1QPKa3Hg7RvxR3kXV2QM=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };
@@ -74,7 +74,10 @@ buildBazelPackage {
     description = "Tool to convert Linux perf files to the profile.proto format used by pprof";
     homepage = "https://github.com/google/perf_data_converter";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ hzeller ];
+    maintainers = with lib.maintainers; [
+      hzeller
+      lromor
+    ];
     platforms = lib.platforms.linux;
   };
 }
