@@ -634,6 +634,8 @@ stdenvNoCC.mkDerivation {
     stdenvNoCC.mkDerivation {
       name = "win-dll-hook.sh";
       dontUnpack = true;
+      strictDeps = true;
+      __structuredAttrs = true;
       installPhase =
         if targetPlatform.isCygwin then
           ''
@@ -1042,6 +1044,8 @@ stdenvNoCC.mkDerivation {
     ${if stdenvNoCC.targetPlatform.isDarwin && apple-sdk != null then "fallback_sdk" else null} =
       apple-sdk.__spliced.buildTarget or apple-sdk;
   };
+
+  __structuredAttrs = true;
 
   meta =
     let
