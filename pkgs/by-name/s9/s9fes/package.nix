@@ -12,11 +12,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "s9fes";
-  version = "20181205";
+  version = "20250812";
 
   src = fetchurl {
     url = "https://www.t3x.org/s9fes/s9fes-${finalAttrs.version}.tgz";
-    sha256 = "sha256-Lp/akaDy3q4FmIE6x0fj9ae/SOD7tdsmzy2xdcCh13o=";
+    sha256 = "sha256-M9jaOeH9Sjy06pGMV7COaSY9oMQC+8GmlGpVnY0JAa0=";
   };
 
   # Fix cross-compilation
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
-  # ...-bash-5.2-p15/bin/bash: line 1: ...-s9fes-20181205/bin/s9help: No such file or directory
+  # ...-bash-5.2-p15/bin/bash: line 1: ...-s9fes-20250812/bin/s9help: No such file or directory
   # make: *** [Makefile:157: install-util] Error 1
   enableParallelInstalling = false;
 
