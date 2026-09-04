@@ -7841,7 +7841,6 @@ self: super: with self; {
     huaweicloudsdkaad
     huaweicloudsdkagentarts
     huaweicloudsdkagentidentity
-    huaweicloudsdkaidatalakejobserver
     huaweicloudsdkantiddos
     huaweicloudsdkaom
     huaweicloudsdkaos
@@ -12459,8 +12458,6 @@ self: super: with self; {
   open-garage = callPackage ../development/python-modules/open-garage { };
 
   open-hypergraphs = callPackage ../development/python-modules/open-hypergraphs { };
-
-  open-interpreter = callPackage ../development/python-modules/open-interpreter { };
 
   open-meteo = callPackage ../development/python-modules/open-meteo { };
 
