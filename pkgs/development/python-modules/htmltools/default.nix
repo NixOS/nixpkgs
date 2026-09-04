@@ -8,17 +8,16 @@
   pytestCheckHook,
   syrupy,
 }:
-
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "htmltools";
-  version = "0.6.1";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "py-htmltools";
-    tag = "v${version}";
-    hash = "sha256-psrTSy4NhhsZamB7lQDt+n6LUDiRcHD5+FFqTIIrnZc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Cs/aft5mghyRnMCeLrCMXRs3c5SmAZ/xPG0s7NBf8Yc=";
   };
 
   build-system = [
@@ -40,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Tools for HTML generation and output";
     homepage = "https://github.com/posit-dev/py-htmltools";
-    changelog = "https://github.com/posit-dev/py-htmltools/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/posit-dev/py-htmltools/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})
