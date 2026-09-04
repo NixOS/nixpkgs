@@ -9114,6 +9114,8 @@ self: super: with self; {
 
   kernels = callPackage ../development/python-modules/kernels { };
 
+  kernels-data = callPackage ../development/python-modules/kernels-data { };
+
   kestra = callPackage ../development/python-modules/kestra { };
 
   keyboard = callPackage ../development/python-modules/keyboard { };
