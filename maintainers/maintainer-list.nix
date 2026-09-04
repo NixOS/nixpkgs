@@ -13148,6 +13148,11 @@
     matrix = "@me:jel.gay";
     name = "jel";
   };
+  jeltsch = {
+    name = "Wolfgang Jeltsch";
+    github = "jeltsch";
+    githubId = 5949153;
+  };
   jemand771 = {
     email = "willy@jemand771.net";
     github = "jemand771";
