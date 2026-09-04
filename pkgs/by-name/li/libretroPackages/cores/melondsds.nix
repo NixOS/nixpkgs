@@ -26,14 +26,14 @@ let
   melonDS-src = fetchFromGitHub {
     owner = "JesseTG";
     repo = "melonDS";
-    rev = "f6692dff8c0c53f77639a08e5e746a286312bb41";
-    hash = "sha256-+bMqpjspQzyRci3u0PEpR9oX3S9LBqP223y6VfI2j14=";
+    rev = "7117178c2dd56df32b6534ba6a54ad1f8547e693";
+    hash = "sha256-6bwagPFIv87WtmQ3cl8cDZ/1A8Ab6itLHAr33CJy/Eo=";
   };
   libretro-common-src = fetchFromGitHub {
     owner = "JesseTG";
     repo = "libretro-common";
-    rev = "8e2b884db16711a999a0e46a02a3dc0be294b048";
-    hash = "sha256-NYxi1BADUgMAtLfmYcOIhTAnmJ/LYd0OyfPKx6lorw4=";
+    rev = "ad9124f1ecc5d0092fd285cbf9c4ffac317b1a65";
+    hash = "sha256-YdKpiAZo3ZeJocskowEWnnmqGU1tSW7jxyxcsRNBsUM=";
   };
   embed-binaries-src = fetchFromGitHub {
     owner = "andoalon";
@@ -44,8 +44,8 @@ let
   pntr-src = fetchFromGitHub {
     owner = "robloach";
     repo = "pntr";
-    rev = "650237a524ea4fc953de7223a1587c83f2696794";
-    hash = "sha256-qGWPlHkcW/wavxRN76SHiEKCl2b1VZR+O9YrZOFZL0I=";
+    rev = "922aed03c4c53803466100596211da7549945da7";
+    hash = "sha256-xlr5US4QttUDepp5kIbOALLMQM1fYQtn5mnwzDZq3HQ=";
   };
   yamc-src = fetchFromGitHub {
     owner = "yohhoy";
@@ -66,13 +66,13 @@ let
 in
 mkLibretroCore rec {
   core = "melondsds";
-  version = "0-unstable-2026-03-03";
+  version = "0-unstable-2026-08-22";
 
   src = fetchFromGitHub {
     owner = "JesseTG";
     repo = "melonds-ds";
-    rev = "bac0256dc6a8736c5a228f57c562257e45fd49f3";
-    hash = "sha256-EeXYibPV9BPazC/i5UqXEd4BKlIZbNbPNgpsoo4ws7k=";
+    rev = "bc4e4b67d2d470d7c682810a1e892cafd6f9082b";
+    hash = "sha256-DX08/1YJJD5SLcv7MIc+lkaKB5GVgiSGCRWN9ebZ6OE=";
   };
 
   postPatch = ''
