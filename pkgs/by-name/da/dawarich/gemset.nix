@@ -1410,10 +1410,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "115ll278g3zdvff7b05gfxqc9n74vw9xfzcc8jkv22bkphpkbng4";
+      sha256 = "1mqps8z4ly74hpksfajcfamqk1wb79biy187pn10knmi6zzb26al";
       type = "gem";
     };
-    version = "2.10.3";
+    version = "3.2.0";
   };
   kaminari = {
     dependencies = [
@@ -2617,10 +2617,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1bc3n2h2dpalms230rsh1zw0jr8nnpcm53x97b8in78y1p0f4372";
+      sha256 = "1qfjxabqpcmmnp12frydip5y4l8vdx0riy4vfnndmcjsjx6h8vb2";
       type = "gem";
     };
-    version = "0.7.0";
+    version = "0.7.2";
   };
   resolv-replace = {
     dependencies = [ "resolv" ];
