@@ -1815,6 +1815,7 @@ in
   systemd-varlink = runTest ./systemd-varlink.nix;
   systemtap = handleTest ./systemtap.nix { };
   szurubooru = handleTest ./szurubooru.nix { };
+  tailscale-serve = runTest ./tailscale-serve.nix;
   taler = handleTest ./taler { };
   tandoor-recipes = runTest ./tandoor-recipes.nix;
   tandoor-recipes-media = runTest ./tandoor-recipes-media.nix;
