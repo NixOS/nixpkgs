@@ -3064,6 +3064,7 @@ mapAliases {
   zdoom = throw "'zdoom' has been removed as it was broken and unmaintained upstream. Consider using UZDoom instead."; # Added 2026-04-04
   zeal-qt5 = warnAlias "'zeal-qt5' has been removed from nixpkgs. Please use 'zeal' instead" zeal; # Added 2025-08-31
   zeal-qt6 = warnAlias "'zeal-qt6' has been renamed to 'zeal'" zeal; # Added 2025-08-31
+  zed = throw "'zed' has been removed. Use 'super' instead."; # Added 2026-09-04
   zeroadPackages.zeroad = throw "'zeroadPackages.zeroad' has been renamed to/replaced by 'zeroad'"; # Converted to throw 2025-10-27
   zeroadPackages.zeroad-data = throw "'zeroadPackages.zeroad-data' has been renamed to/replaced by 'zeroad-data'"; # Converted to throw 2025-10-27
   zeroadPackages.zeroad-unwrapped = throw "'zeroadPackages.zeroad-unwrapped' has been renamed to/replaced by 'zeroad-unwrapped'"; # Converted to throw 2025-10-27
@@ -3083,7 +3084,7 @@ mapAliases {
   zotero-beta = throw "'zotero-beta' has been removed. Use 'zotero' instead."; # Added 2026-03-05
   zotero_7 = throw "'zotero_7' has been renamed to/replaced by 'zotero'"; # Added 2025-12-09
   zotify = throw "zotify has been removed due to lack of upstream maintenance"; # Added 2025-09-26
-  zq = throw "zq has been replaced by zed"; # Converted to throw 2025-10-26
+  zq = throw "zq has been replaced by super"; # Converted to throw 2025-10-26
   zscroll = throw "zscroll has been removed due to lack of maintenance."; # Added 2026-05-29
   zsh-git-prompt = throw "zsh-git-prompt was removed as it is unmaintained upstream"; # Added 2025-08-28
   zuki-themes = throw "'zuki-themes' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
