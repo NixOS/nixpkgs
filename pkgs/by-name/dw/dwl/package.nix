@@ -1,55 +1,61 @@
 {
   lib,
   fetchFromCodeberg,
-  installShellFiles,
-  libx11,
   libinput,
+  libx11,
   libxcb,
+  libxcb-wm,
   libxkbcommon,
+  nix-update-script,
+  nixosTests,
   pixman,
   pkg-config,
   stdenv,
-  testers,
-  nixosTests,
+  versionCheckHook,
   wayland,
   wayland-protocols,
   wayland-scanner,
   wlroots_0_20,
   writeText,
-  libxcb-wm,
   xwayland,
   # Boolean flags
   enableXWayland ? true,
-  withCustomConfigH ? (configH != null),
   # Configurable options
-  configH ?
-    if conf != null then
-      lib.warn ''
-        conf parameter is deprecated;
-        use configH instead
-      '' conf
-    else
-      null,
-  # Deprecated options
-  # Remove them before next version of either Nixpkgs or dwl itself
-  conf ? null,
+  configH ? null,
 }:
 
-# If we set withCustomConfigH, let's not forget configH
-assert withCustomConfigH -> (configH != null);
 stdenv.mkDerivation (finalAttrs: {
   pname = "dwl";
   version = "0.9";
 
+  strictDeps = true;
+
+  # required for whitespaces in makeFlags
+  __structuredAttrs = true;
+
   src = fetchFromCodeberg {
     owner = "dwl";
     repo = "dwl";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-PYBOi/A9n1611XBEaZW9PolSfjwe1KWoI2VbVrS2s0Q=";
   };
 
+  postPatch =
+    let
+      configFile =
+        if lib.isDerivation configH || builtins.isPath configH then
+          configH
+        else
+          writeText "config.h" configH;
+    in
+    lib.optionalString (configH != null) "cp ${configFile} config.h";
+
+  outputs = [
+    "out"
+    "man"
+  ];
+
   nativeBuildInputs = [
-    installShellFiles
     pkg-config
     wayland-scanner
   ];
@@ -69,21 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
     xwayland
   ];
 
-  outputs = [
-    "out"
-    "man"
-  ];
-
-  postPatch =
-    let
-      configFile =
-        if lib.isDerivation configH || builtins.isPath configH then
-          configH
-        else
-          writeText "config.h" configH;
-    in
-    lib.optionalString withCustomConfigH "cp ${configFile} config.h";
-
   makeFlags = [
     "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
     "WAYLAND_SCANNER=wayland-scanner"
@@ -95,25 +86,21 @@ stdenv.mkDerivation (finalAttrs: {
     ''XLIBS="xcb xcb-icccm"''
   ];
 
-  strictDeps = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-  # required for whitespaces in makeFlags
-  __structuredAttrs = true;
+  doInstallCheck = true;
+
+  # `dwl -v` emits its version string to stderr and returns 1
+  versionCheckProgramArg = "-v";
 
   passthru = {
-    tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        # `dwl -v` emits its version string to stderr and returns 1
-        command = "dwl -v 2>&1; return 0";
-      };
-      basic = nixosTests.dwl;
-    };
+    tests.basic = nixosTests.dwl;
+    updateScript = nix-update-script { };
   };
 
   meta = {
     homepage = "https://codeberg.org/dwl/dwl";
-    changelog = "https://codeberg.org/dwl/dwl/src/branch/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://codeberg.org/dwl/dwl/src/tag/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Dynamic window manager for Wayland";
     longDescription = ''
       dwl is a compact, hackable compositor for Wayland based on wlroots. It is
