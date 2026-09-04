@@ -90,7 +90,7 @@ lib.extendMkDerivation {
           "--with-sysdep-devurandom=yes"
           (if stdenv.hostPlatform.isDarwin then "--disable-shared" else "--enable-shared")
           # Use pkg-config
-          "--with-pkgconfig=pkg-config"
+          "--with-pkgconfig=${stdenv.cc.targetPrefix}pkg-config"
           "--enable-pkgconfig"
         ]
         # On Darwin, the target triplet from -dumpmachine includes version number,
