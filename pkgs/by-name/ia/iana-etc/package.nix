@@ -5,13 +5,13 @@
   writeText,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "iana-etc";
   version = "20251215";
 
   src = fetchzip {
-    url = "https://github.com/Mic92/iana-etc/releases/download/${version}/iana-etc-${version}.tar.gz";
-    sha256 = "sha256-BUGhVHvWSdFJdqaoPasLt87lTUFVF2B7X7sfigwrJss=";
+    url = "https://github.com/Mic92/iana-etc/releases/download/${finalAttrs.version}/iana-etc-${finalAttrs.version}.tar.gz";
+    hash = "sha256-BUGhVHvWSdFJdqaoPasLt87lTUFVF2B7X7sfigwrJss=";
   };
 
   strictDeps = true;
@@ -25,10 +25,12 @@ stdenvNoCC.mkDerivation rec {
     export NIX_ETC_SERVICES=@out@/etc/services
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://github.com/Mic92/iana-etc";
     description = "IANA protocol and port number assignments (/etc/protocols and /etc/services)";
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
   };
-}
+})
