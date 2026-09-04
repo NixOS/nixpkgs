@@ -9,7 +9,6 @@
   gettext,
   itstool,
   fetchurl,
-  fetchpatch,
   pkg-config,
   libxml2,
   gtk4,
@@ -35,14 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://gnome/sources/gnome-calculator/${lib.versions.major finalAttrs.version}/gnome-calculator-${finalAttrs.version}.tar.xz";
     hash = "sha256-1E4wjJiPiEcHO4I1hngVfQNvHv3Uyz9uhPPlCOeEWx4=";
   };
-
-  patches = [
-    # Fix tests with GNU MPC 1.4.0
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-calculator/-/commit/c9bf69ce3688390a584ca7571ea5fcda5aea8863.patch";
-      hash = "sha256-FoV6SUprVdNcRORpoi+bNMTjzMM8bmXuze+6C9lqF8E=";
-    })
-  ];
 
   nativeBuildInputs = [
     appstream
