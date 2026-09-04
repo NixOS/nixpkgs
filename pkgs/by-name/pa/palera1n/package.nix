@@ -24,10 +24,16 @@ let
     i686-linux = "linux-x86";
     armv7l-linux = "linux-armel";
   };
+  checkra1nHashes = {
+    x86_64-linux = "sha256-UxVNh1lM9nxWZZ8kVH8bW7Uzb4TqWMLULyWnst+BqWQ=";
+    aarch64-linux = "sha256-B4BTwR6aMB8Ocbh7a4VObIppyHlyMl3QyQ3u66HDy3A=";
+    i686-linux = "sha256-VV4aIc5QvtMYJtSc7660vZCZhGzSrAx+4M/mSctYiIc=";
+    armv7l-linux = "sha256-FdwkP8Dn7nepxcWBRmd3DQK+NK4Swtdyk9UG0YsTCrI=";
+  };
   checkra1nName = checkra1nNames.${stdenv.hostPlatform.system};
   checkra1n = fetchurl {
     url = "https://assets.checkra.in/downloads/preview/${checkra1nVersion}/checkra1n-${checkra1nName}";
-    sha256 = "sha256-UxVNh1lM9nxWZZ8kVH8bW7Uzb4TqWMLULyWnst+BqWQ=";
+    hash = checkra1nHashes.${stdenv.hostPlatform.system};
   };
   kpf = fetchurl {
     url = "https://web.archive.org/web/20260305175557id_/https://cdn.nickchan.lol/palera1n/artifacts/kpf/iOS15/checkra1n-kpf-pongo";
