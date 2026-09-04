@@ -4308,8 +4308,6 @@ self: super: with self; {
 
   derivative = callPackage ../development/python-modules/derivative { };
 
-  derpconf = callPackage ../development/python-modules/derpconf { };
-
   desktop-entry-lib = callPackage ../development/python-modules/desktop-entry-lib { };
 
   desktop-notifier = callPackage ../development/python-modules/desktop-notifier { };
