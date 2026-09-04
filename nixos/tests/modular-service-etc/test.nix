@@ -24,7 +24,10 @@
         system.services.webserver = {
           # The python web server is simple enough that it doesn't need a reload signal.
           # Other services may need to receive a signal in order to re-read what's in `configData`.
+          # It reads the files on every request, so the service manager must leave it alone when
+          # they change.
           imports = [ python-http-server ];
+          applyConfigDataChanges = false;
           python-http-server = {
             port = 8080;
           };
@@ -50,6 +53,7 @@
           # Add a sub-service
           services.api = {
             imports = [ python-http-server ];
+            applyConfigDataChanges = false;
             python-http-server = {
               port = 8081;
             };
