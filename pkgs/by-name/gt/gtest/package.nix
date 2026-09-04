@@ -50,8 +50,15 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-  ]
-  ++ lib.optionals withAbseil [
+  ];
+
+  # abseil-cpp/re2 are linked libraries CMake's find_package(absl) needs to
+  # locate via CMAKE_PREFIX_PATH (populated from buildInputs by the cmake
+  # setup-hook) -- nativeBuildInputs doesn't do that, which made
+  # -DGTEST_HAS_ABSL=ON fail configure with "Could not find a package
+  # configuration file provided by absl" for the only caller that enables
+  # withAbseil (or-tools' checkInputs).
+  buildInputs = lib.optionals withAbseil [
     abseil-cpp
     re2
   ];
