@@ -10478,6 +10478,11 @@
     githubId = 19275558;
     name = "Julien Girard-Satabin";
   };
+  gitRaiku = {
+    github = "gitRaiku";
+    githubId = 59704655;
+    name = "Pintilie Sebastian";
+  };
   GKasparov = {
     email = "mizozahr@gmail.com";
     github = "GKasparov";
