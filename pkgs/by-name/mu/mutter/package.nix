@@ -1,6 +1,5 @@
 {
   fetchurl,
-  fetchpatch,
   runCommand,
   lib,
   stdenv,
@@ -41,7 +40,6 @@
   libdisplay-info,
   gsettings-desktop-schemas,
   glib,
-  libglycin,
   atk,
   gtk4,
   fribidi,
@@ -88,12 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   mesonFlags = [
-    "-Degl_device=true"
     "-Dinstalled_tests=false" # TODO: enable these
     "-Dtests=disabled"
-    # For NVIDIA proprietary driver up to 470.
-    # https://src.fedoraproject.org/rpms/mutter/pull-request/49
-    "-Dwayland_eglstream=true"
     "-Dprofiler=true"
     "-Dxwayland_path=${lib.getExe xwayland}"
     # This should be auto detected, but it looks like it manages a false
@@ -132,7 +126,6 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     egl-wayland
     glib
-    libglycin
     gnome-desktop
     gnome-settings-daemon
     gsettings-desktop-schemas
@@ -185,17 +178,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]))
   ];
 
-  patches = [
-    # Fix HDR corruption by reverting this commit. See:
-    # - https://gitlab.gnome.org/GNOME/mutter/-/work_items/4952
-    # - https://gitlab.gnome.org/GNOME/mutter/-/work_items/4967
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/a1ae71798ef1ab2e0d2f753f5c98b38b1039b056.patch";
-      hash = "sha256-J2eKhM3YEFEVmcpMq2SxSOsPeEWrJTv+UcBDO+gRC4M=";
-      revert = true;
-    })
-  ];
-
   postPatch = ''
     patchShebangs src/backends/native/gen-default-modes.py
 
@@ -219,7 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    libmutter_api_version = "18"; # bumped each dev cycle
+    libmutter_api_version = "51"; # bumped each dev cycle
     libdir = "${finalAttrs.finalPackage}/lib/mutter-${finalAttrs.passthru.libmutter_api_version}";
 
     tests = {
