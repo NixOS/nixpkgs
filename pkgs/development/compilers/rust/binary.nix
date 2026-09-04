@@ -176,6 +176,9 @@ rec {
     ]
     ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) gcc.cc.lib;
 
+    strictDeps = true;
+    __structuredAttrs = true;
+
     postPatch = ''
       patchShebangs .
     '';
