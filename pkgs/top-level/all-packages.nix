@@ -1705,7 +1705,8 @@ with pkgs;
 
   geekbench_4 = callPackage ../by-name/ge/geekbench/4.nix { };
   geekbench_5 = callPackage ../by-name/ge/geekbench/5.nix { };
-  geekbench_6 = geekbench;
+  geekbench_6 = callPackage ../by-name/ge/geekbench/6.nix { };
+  geekbench_7 = geekbench;
 
   ghidra = callPackage ../tools/security/ghidra/build.nix {
     protobuf = protobuf_21;
