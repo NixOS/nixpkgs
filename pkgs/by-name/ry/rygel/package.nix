@@ -10,6 +10,7 @@
   gettext,
   libxml2,
   libxslt,
+  docutils,
   gobject-introspection,
   wrapGAppsHook4,
   wrapGAppsNoGuiHook,
@@ -64,9 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     libxml2
     libxslt # for xsltproc
+    docutils # for rst2man
     gobject-introspection
     (if withGtk then wrapGAppsHook4 else wrapGAppsNoGuiHook)
-    python3
+    (python3.withPackages (ps: [
+      ps.pyyaml
+    ]))
   ];
 
   buildInputs = [
