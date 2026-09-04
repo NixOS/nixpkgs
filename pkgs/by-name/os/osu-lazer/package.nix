@@ -7,28 +7,32 @@
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
+  makeBinaryWrapper,
   ffmpeg,
-  alsa-lib,
   SDL2,
   sdl3,
-  lttng-ust,
-  numactl,
   libglvnd,
-  libxi,
-  udev,
   vulkan-loader,
   nix-update-script,
+  icnsify,
   nativeWayland ? false,
+
+  # Linux-only dependencies
+  lttng-ust,
+  alsa-lib,
+  numactl,
+  libxi,
+  udev,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "osu-lazer";
   version = "2026.804.2";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
-    tag = "${version}-lazer";
+    tag = "${finalAttrs.version}-lazer";
     hash = "sha256-1cUR3Z3TCNfnkyNkxlb+rmsFkYZ0WMBBRQwvRqoXUfw=";
   };
 
@@ -39,17 +43,25 @@ buildDotnetModule rec {
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   nativeBuildInputs = [
-    copyDesktopItems
     makeWrapper
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
+    copyDesktopItems
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+    icnsify
+    makeBinaryWrapper
   ];
 
   runtimeDeps = [
     ffmpeg
-    alsa-lib
     SDL2
     sdl3
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
     lttng-ust
     numactl
+    alsa-lib
 
     # needed to avoid:
     # Failed to create SDL window. SDL Error: Could not initialize OpenGL / GLES library
@@ -72,16 +84,73 @@ buildDotnetModule rec {
   fixupPhase = ''
     runHook preFixup
 
+    # OSU_EXTERNAL_UPDATE_PROVIDER prevents osu from rewriting itself on update (nix manages upgrades)
     wrapProgram $out/bin/osu! \
-      ${lib.optionalString nativeWayland "--set SDL_VIDEODRIVER wayland"} \
+      ${
+        lib.optionalString (
+          nativeWayland && stdenvNoCC.hostPlatform.isLinux
+        ) "--set SDL_VIDEODRIVER wayland"
+      } \
       --set OSU_EXTERNAL_UPDATE_PROVIDER 1
 
-    for i in 16 32 48 64 96 128 256 512 1024; do
-      install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu.png
-    done
+    ${lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+      for i in 16 32 48 64 96 128 256 512 1024; do
+        install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu.png
+      done
 
-    ln -sft $out/lib/${pname} ${SDL2}/lib/libSDL2${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
-    ln -sft $out/lib/${pname} ${sdl3}/lib/libSDL3${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
+      ln -sft $out/lib/${finalAttrs.pname} ${SDL2}/lib/libSDL2${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
+      ln -sft $out/lib/${finalAttrs.pname} ${sdl3}/lib/libSDL3${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
+    ''}
+
+    ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+      OSU_CONTENTS="$out/Applications/osu!.app/Contents"
+      mkdir -p "$OSU_CONTENTS/MacOS" "$OSU_CONTENTS/Resources"
+
+      # Move game in but keep a symlink so $out/bin/osu! still resolves
+      mv "$out/lib/osu-lazer" "$OSU_CONTENTS/Frameworks"
+      ln -s "$OSU_CONTENTS/Frameworks" "$out/lib/osu-lazer"
+
+      # Generate a proper macOS Info.plist (osu.iOS/Info.plist is iOS-only with LSRequiresIPhoneOS)
+      cat > "$OSU_CONTENTS/Info.plist" <<EOF
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0"><dict>
+        <key>CFBundleName</key><string>osu!</string>
+        <key>CFBundleDisplayName</key><string>osu!</string>
+        <key>CFBundleIdentifier</key><string>sh.ppy.osu.lazer</string>
+        <key>CFBundleVersion</key><string>${finalAttrs.version}</string>
+        <key>CFBundleShortVersionString</key><string>${finalAttrs.version}</string>
+        <key>CFBundlePackageType</key><string>APPL</string>
+        <key>CFBundleSignature</key><string>????</string>
+        <key>CFBundleExecutable</key><string>osu!</string>
+        <key>CFBundleIconFile</key><string>AppIcon</string>
+        <key>NSHighResolutionCapable</key><true/>
+        <key>LSMinimumSystemVersion</key><string>11.0</string>
+        <key>CFBundleDocumentTypes</key><array>
+          <dict>
+            <key>CFBundleTypeName</key><string>osu! beatmap</string>
+            <key>CFBundleTypeExtensions</key><array><string>osz</string><string>osk</string></array>
+            <key>CFBundleTypeRole</key><string>Viewer</string>
+            <key>LSHandlerRank</key><string>Owner</string>
+          </dict>
+          <dict>
+            <key>CFBundleTypeName</key><string>osu! replay</string>
+            <key>CFBundleTypeExtensions</key><array><string>osr</string></array>
+            <key>CFBundleTypeRole</key><string>Viewer</string>
+            <key>LSHandlerRank</key><string>Owner</string>
+          </dict>
+        </array>
+        <key>CFBundleURLTypes</key><array>
+          <dict><key>CFBundleURLSchemes</key><array><string>osu</string><string>osump</string></array><key>CFBundleTypeRole</key><string>Editor</string></dict>
+        </array>
+      </dict></plist>
+      EOF
+
+      icnsify ./assets/lazer.png --output "$OSU_CONTENTS/Resources/AppIcon.icns"
+
+      # Launch Services refuses to run an app whose executable is a symlink into the Nix store
+      makeBinaryWrapper "$out/bin/osu!" "$OSU_CONTENTS/MacOS/osu!"
+    ''}
 
     runHook postFixup
   '';
@@ -119,7 +188,7 @@ buildDotnetModule rec {
       Guanran928
       philocalyst
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "osu!";
   };
-}
+})
