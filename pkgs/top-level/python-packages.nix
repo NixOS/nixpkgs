@@ -12118,6 +12118,8 @@ self: super: with self; {
 
   nhc = callPackage ../development/python-modules/nhc { };
 
+  nhl-api-py = callPackage ../development/python-modules/nhl-api-py { };
+
   niaaml = callPackage ../development/python-modules/niaaml { };
 
   niaarm = callPackage ../development/python-modules/niaarm { };
