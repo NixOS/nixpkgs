@@ -1,117 +1,104 @@
 {
   lib,
+  callPackage,
   fetchFromGitHub,
   buildPythonPackage,
-  python,
-  pytestCheckHook,
-  # deps
-  /*
-    ntlm-auth is in the requirements.txt, however nixpkgs tells me
-    > ntlm-auth has been removed, because it relies on the md4 implementation provided by openssl. Use pyspnego instead.
-    Not sure if pyspnego is a drop in replacement.
-    The simple functionality dirsearch seems not to depend on this package.
-  */
-  #ntlm-auth,
-  #pyspnego,
+  fetchpatch,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   beautifulsoup4,
-  certifi,
-  cffi,
-  chardet,
-  charset-normalizer,
   colorama,
-  cryptography,
+  defusedcsv,
   defusedxml,
-  idna,
+  httpx,
+  httpx-ntlm,
   jinja2,
-  markupsafe,
   pyopenssl,
-  pyparsing,
   pysocks,
   requests,
   requests-ntlm,
-  setuptools,
-  urllib3,
+  requests-toolbelt,
+
+  # optional dependencies
+  mysql-connector-python,
+  psycopg,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "dirsearch";
-  version = "0.4.3";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "maurosoria";
     repo = "dirsearch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eXB103qUB3m7V/9hlq2xv3Y3bIz89/pGJsbPZQ+AZXs=";
+    hash = "sha256-WKQjtJ5fMVLzX92gOFLqmBLkeM4o2XfVYW9Wz4OmjP4=";
   };
 
-  # setup.py does some weird stuff with mktemp
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail 'os.chdir(env_dir)' "" \
-      --replace-fail 'shutil.copytree(os.path.abspath(os.getcwd()), os.path.join(env_dir, "dirsearch"))' ""
-  '';
+  patches = [
+    # fixes test_detect_scheme not working without network
+    # see https://github.com/maurosoria/dirsearch/issues/1592
+    (fetchpatch {
+      url = "https://github.com/maurosoria/dirsearch/commit/8f2b3cceee0a27c0670ed9471b70dd666c73d6a6.patch";
+      hash = "sha256-KnVYiQftq8DgbSdXPxsCCOTxS1e7vOqf/4sDqYXkX9A=";
+    })
+  ];
 
   pyproject = true;
+
   build-system = [ setuptools ];
 
   dependencies = [
-    # maybe needed, see above
-    #pyspnego
-    #ntlm-auth
     beautifulsoup4
-    certifi
-    cffi
-    chardet
-    charset-normalizer
     colorama
-    cryptography
+    defusedcsv
     defusedxml
-    idna
+    httpx
+    httpx-ntlm
     jinja2
-    markupsafe
     pyopenssl
-    pyparsing
     pysocks
     requests
     requests-ntlm
-    setuptools
-    urllib3
+    requests-toolbelt
   ];
 
-  # the library files get installed in the wrong location
-  # and dirsearch.py, __init__.py and db/ are missing
+  # dirsearch-build-native builds the rust backend when called
+  # this is meant for venvs and doesn't work for the nix package
   postInstall = ''
-    dirsearchpath=$out/lib/python${lib.versions.majorMinor python.version}/site-packages/
-    mkdir -p $dirsearchpath/dirsearch
-    mv $dirsearchpath/{lib,dirsearch}
-    cp $src/{dirsearch,__init__}.py $dirsearchpath/dirsearch
-    cp -r $src/db $dirsearchpath/dirsearch
+    rm $out/bin/dirsearch-build-native
+    rm -r $out/lib/python*/site-packages/dirsearch/native
   '';
 
   # tests
   nativeCheckInputs = [
     pytestCheckHook
-  ];
-  disabledTestPaths = [
-    # needs network?
-    "tests/reports/test_reports.py"
-  ];
-  disabledTests = [
-    # failing for unknown reason
-    "test_detect_scheme"
-  ];
-  pythonRemoveDeps = [
-    # not available, see above
-    "ntlm_auth"
-  ];
-  pythonRelaxDeps = [
-    # version checker doesn't recognize 0.8.0.rc2 as >=0.7.0
-    "defusedxml"
-    # probably not but we don't have old charset-normalizer versions in nixpkgs
-    # and requests also depends on it so we can't just override it with an
-    # older version due to package duplication
-    "charset_normalizer"
-  ];
+  ]
+  ++ lib.flatten (lib.attrValues finalAttrs.passthru.optional-dependencies);
+  pythonImportsCheck = [ "dirsearch" ];
+  __darwinAllowLocalNetworking = true;
+
+  # relax all deps because upstream pins versions "to prevent supply chain attacks"
+  pythonRelaxDeps = true;
+
+  passthru = {
+    dirsearch-native = callPackage ./dirsearch-native.nix {
+      inherit (finalAttrs) src meta;
+    };
+    optional-dependencies = rec {
+      rustbackend = [ finalAttrs.passthru.dirsearch-native ];
+      mysql = [ mysql-connector-python ];
+      postgresql = [ psycopg ];
+      db = mysql ++ postgresql;
+      full = rustbackend ++ db;
+    };
+  };
 
   meta = {
     changelog = "https://github.com/maurosoria/dirsearch/releases/tag/${finalAttrs.src.tag}";
