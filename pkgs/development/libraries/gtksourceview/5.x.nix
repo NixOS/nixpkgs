@@ -20,6 +20,7 @@
   dbus,
   xvfb-run,
   shared-mime-info,
+  glibcLocales,
   testers,
 }:
 
@@ -79,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     xvfb-run
     dbus
+    glibcLocales
   ];
 
   mesonFlags = [
