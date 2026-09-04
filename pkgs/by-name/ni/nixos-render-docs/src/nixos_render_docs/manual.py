@@ -11,7 +11,7 @@ from typing import Any, Callable, ClassVar, Generic, NamedTuple, cast, get_args
 
 from markdown_it.token import Token
 
-from . import md, options
+from . import md, nixdoc, options
 from .html import HTMLRenderer, UnresolvedXrefError
 from .manual_structure import (
     FragmentType,
@@ -38,6 +38,7 @@ class BaseConverter(Converter[md.TR], Generic[md.TR]):
 
     _base_paths: list[Path]
     _current_type: list[TocEntryType]
+    _revision: str
 
     def convert(self, infile: Path, outfile: Path) -> None:
         self._base_paths = [ infile ]
@@ -108,6 +109,12 @@ class BaseConverter(Converter[md.TR], Generic[md.TR]):
                 token.type = 'included_options'
                 self._process_include_args(src, token, args, self.INCLUDE_OPTIONS_ALLOWED_ARGS)
                 self._parse_options(src, token, args)
+            elif typ == 'nixdoc':
+                token.type = 'included_sections'
+                self._process_include_args(src, token, args, self.INCLUDE_FRAGMENT_ALLOWED_ARGS)
+                self._current_type.append('section')
+                self._parse_nixdoc_include(src, token)
+                self._current_type.pop()
             else:
                 fragment_type = typ.removesuffix('s')
                 if fragment_type not in get_args(FragmentType):
@@ -163,6 +170,34 @@ class BaseConverter(Converter[md.TR], Generic[md.TR]):
                     description=f"processing included file {path}",
                     token=lnum,
                 ) from e
+
+    def _parse_nixdoc_include(self, src: str, token: Token) -> None:
+        assert token.map
+        included = token.meta['included'] = []
+        lines = [l.strip() for l in token.content.splitlines() if l.strip()]
+        if len(lines) != 1:
+            raise SrcError(
+                src=src,
+                description="nixdoc include must reference exactly one export JSON file",
+                token=token,
+            )
+        json_path = self._base_paths[-1].parent / lines[0]
+        try:
+            with open(json_path, 'r') as f:
+                data = json.load(f)
+            sections = nixdoc.render_sections(data, self._revision)
+        except (OSError, json.JSONDecodeError, nixdoc.NixdocExportError) as e:
+            raise SrcError(
+                src=src,
+                description=f"processing nixdoc export {json_path}: {e}",
+                token=token,
+            ) from e
+        base = self._base_paths[-1].parent
+        for group_id, group_src in sections:
+            tokens = self._parse(group_src, auto_id_prefix=f"auto-generated-{group_id}")
+            # we must provide some path "location" for error reporting
+            included.append((tokens, base / f"nixdoc:{group_id}"))
+
 
     def _parse_options(self, src: str, token: Token, block_args: dict[str, str]) -> None:
         assert token.map
