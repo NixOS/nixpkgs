@@ -37,7 +37,7 @@ rec {
   test =
     assert
       example.config.meta.maintainers == {
-        ${toString ../meta-maintainers.nix} = [
+        ${toString ../../../lib/modules/generic/meta-maintainers.nix} = [
           lib.maintainers.pierron
           lib.maintainers.roberth
         ];
