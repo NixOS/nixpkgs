@@ -65,8 +65,12 @@ buildPgrxExtension (finalAttrs: {
   };
 
   meta = {
-    # Upstream removed support for PostgreSQL 13 on 0.9.0: https://github.com/timescale/pgvectorscale/releases/tag/0.9.0
-    broken = lib.versionOlder postgresql.version "14";
+    # PostgreSQL 19 is not yet supported
+    # See https://github.com/timescale/pgvectorscale/issues/281
+    # Check after next package update.
+    broken =
+      lib.warnIf (finalAttrs.version != "0.9.1") "Is postgresql19Packages.pgvectorscale still broken?"
+        (lib.versionAtLeast postgresql.version "19");
     homepage = "https://github.com/timescale/pgvectorscale";
     maintainers = [
       lib.maintainers.leona
