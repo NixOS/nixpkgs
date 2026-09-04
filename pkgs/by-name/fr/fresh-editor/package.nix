@@ -13,17 +13,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fresh";
-  version = "0.4.6";
+  version = "0.4.10";
 
   src = fetchFromGitHub {
     owner = "sinelaw";
     repo = "fresh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jL8msC8YTmrD/FHcGHbyuBGqnZmYkYr+pZb3HKYrvQw=";
+    hash = "sha256-TrWsqoFvARUBoSLLm0mHdidIOCzNldBun8U7BsMUHVI=";
   };
 
-  cargoHash = "sha256-hWFGKvob0DuIX2rP20Iq15nTSTpUBxLURiVwI5LNBII=";
+  cargoHash = "sha256-xmsgsSoJ8INa0BE6LpebBSBTXMmjGmqkCPmEZSxYDP0=";
 
+  strictDeps = true;
   __structuredAttrs = true;
 
   nativeBuildInputs = [
@@ -60,6 +61,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     "--skip=e2e::"
     "--skip=services::plugins::embedded::tests::test_extract_plugins"
+    # require network access
+    "--skip=services::release_checker::tests::the_release_feed_override_is_shared_by_check_and_update"
   ];
   cargoTestFlags = [
     "--lib"
@@ -74,7 +77,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Terminal-based text editor with LSP support and TypeScript plugins";
     homepage = "https://github.com/sinelaw/fresh";
-    changelog = "https://github.com/sinelaw/fresh/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/sinelaw/fresh/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       chillcicada
@@ -83,8 +86,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     mainProgram = "fresh";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    sourceProvenance = with lib.sourceTypes; [
-      fromSource
-    ];
   };
 })
