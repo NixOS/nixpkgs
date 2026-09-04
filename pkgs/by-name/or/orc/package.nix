@@ -1,13 +1,13 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  testers,
+  nix-update-script,
+  fetchFromGitLab,
   meson,
   ninja,
-  # FIXME: hotdoc errors out due to issues discovering libclang paths
-  # See https://github.com/NixOS/nixpkgs/issues/514723
   hotdoc,
-  buildDevDoc ? false,
+  buildDevDoc ? true,
 
   # for passthru.tests
   gnuradio,
@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "orc";
-  version = "0.4.42";
+  version = "0.4.43";
 
   outputs = [
     "out"
@@ -26,10 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional buildDevDoc "devdoc";
   outputBin = "dev"; # compilation tools
+  outputDoc = lib.optionalString buildDevDoc "devdoc";
 
-  src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/orc/orc-${finalAttrs.version}.tar.xz";
-    hash = "sha256-fskSq1mvPMl4dMRWpWqK4e7FIMOF7ER+ihArK9EiyQw=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "gstreamer";
+    repo = "orc";
+    tag = finalAttrs.version;
+    hash = "sha256-Ec6TmkazDSvZLYBIZm9tXvD9Z9FWvvJqrIdYb4zfFjM=";
   };
 
   postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
@@ -37,12 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/memcpy_speed/d' testsuite/meson.build
   '';
 
-  mesonFlags = [
-    (lib.mesonEnable "examples" false)
-    (lib.mesonEnable "benchmarks" false)
-    (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
-    (lib.mesonEnable "hotdoc" buildDevDoc)
-  ];
+  mesonFlags = lib.mapAttrsToList lib.mesonEnable {
+    examples = false;
+    benchmarks = false;
+    tests = finalAttrs.finalPackage.doCheck;
+    hotdoc = buildDevDoc;
+    tools = true;
+  };
 
   nativeBuildInputs = [
     meson
@@ -61,22 +66,32 @@ stdenv.mkDerivation (finalAttrs: {
       && lib.versionAtLeast stdenv.cc.version "12"
     );
 
-  passthru.tests = {
-    inherit (gst_all_1) gst-plugins-good gst-plugins-bad gst-plugins-ugly;
-    inherit gnuradio vips;
-    qt6-qtmultimedia = qt6.qtmultimedia;
+  passthru = {
+    tests = {
+      inherit (gst_all_1) gst-plugins-good gst-plugins-bad gst-plugins-ugly;
+      inherit gnuradio vips;
+      qt6-qtmultimedia = qt6.qtmultimedia;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
+
+    updateScript = nix-update-script { };
   };
 
   meta = {
     description = "Oil Runtime Compiler";
     homepage = "https://gstreamer.freedesktop.org/projects/orc.html";
     changelog = "https://gitlab.freedesktop.org/gstreamer/orc/-/blob/${finalAttrs.version}/RELEASE";
+    pkgConfigModules = map (name: "${name}-${lib.versions.majorMinor finalAttrs.version}") [
+      "orc"
+      "orc-test"
+    ];
     # The source code implementing the Marsenne Twister algorithm is licensed
     # under the 3-clause BSD license. The rest is 2-clause BSD license.
     license = with lib.licenses; [
       bsd3
       bsd2
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gstreamer" finalAttrs.version;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ tmarkus ];
   };
