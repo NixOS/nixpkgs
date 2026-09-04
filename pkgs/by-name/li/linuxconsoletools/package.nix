@@ -11,6 +11,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "linuxconsoletools";
   version = "1.8.1";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "mirror://sourceforge/linuxconsole/linuxconsoletools-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-TaKXRceCt9sY9fN8Sed78WMSHdN2Hi/HY2+gy/NcJFY=";
