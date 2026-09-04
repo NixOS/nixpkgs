@@ -136,8 +136,6 @@ let
 
   hasUnfreeLicense = attrs: attrs ? meta.license && isUnfree attrs.meta.license;
 
-  isMarkedBroken = attrs: attrs.meta.broken or false;
-
   # Logical inversion of meta.availableOn for hostPlatform
   hasUnsupportedPlatform =
     if allowUnsupportedSystem then
@@ -607,7 +605,7 @@ let
 
       # Expose the result of the checks for everyone to see.
       unfree = hasUnfreeLicense attrs;
-      broken = isMarkedBroken attrs || hasProblemKind "broken";
+      broken = hasProblemKind "broken";
       unsupported = hasUnsupportedPlatform' attrs;
       insecure = isMarkedInsecure attrs;
 
