@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage {
 
   sourceRoot = "${src.name}/desktopSshAgent/src";
 
-  cargoHash = "sha256-dsrDouDQuPwobnecdHYfXBhAhRK0ckmyoVgWB4ZezGY=";
+  cargoHash = "sha256-TKHr8v5bHPsEkUlvg5KW0FWEnS0mWG1ec0tFeFjH4WY=";
 
   nativeBuildInputs = [ protobuf ];
 

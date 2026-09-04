@@ -20,27 +20,44 @@
   writeText,
 }:
 
+let
+  gradle = gradle_9;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "keyguard";
-  version = "3.0.4";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "AChep";
     repo = "keyguard-app";
-    tag = "r20260819.2";
-    hash = "sha256-NdFkJGXKGohHrBiv9BsHy6Hyu1QP6z4fnFZwCEM6FBU=";
+    tag = "r20260905.2";
+    hash = "sha256-1F35vqG1pFMvsDm8I9f91yS4Oi+YgzukqJtc138hsHQ=";
   };
 
   postPatch = ''
     substituteInPlace desktopApp/build.gradle.kts \
       --replace-fail 'dependsOn(prepareBundledAppResources)' ""
 
-    # okhttp takes its version from a BOM, which the Kotlin Multiplatform metadata
-    # configurations resolved by `nixDownloadDeps` cannot see, so pin it here
-    substituteInPlace gradle/libs.versions.toml \
+    # The Compose repository must not shadow dependencies published by Maven Central.
+    substituteInPlace settings.gradle \
       --replace-fail \
-        'squareup-okhttp = { module = "com.squareup.okhttp3:okhttp" }' \
-        'squareup-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okHttp" }'
+        'maven { url "https://maven.pkg.jetbrains.space/public/p/compose/dev" }' \
+        'maven {
+          url "https://maven.pkg.jetbrains.space/public/p/compose/dev"
+          content {
+            includeGroupByRegex "org[.]jetbrains[.]compose([.].*)?"
+            includeGroupByRegex "org[.]jetbrains[.]androidx([.].*)?"
+          }
+        }'
+    substituteInPlace buildPlugins/settings.gradle.kts \
+      --replace-fail \
+        'maven(url = "https://maven.pkg.jetbrains.space/public/p/compose/dev")' \
+        'maven(url = "https://maven.pkg.jetbrains.space/public/p/compose/dev") {
+          content {
+            includeGroupByRegex("org[.]jetbrains[.]compose([.].*)?")
+            includeGroupByRegex("org[.]jetbrains[.]androidx([.].*)?")
+          }
+        }'
   '';
 
   preBuild = ''
@@ -60,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   gradleInitScript = writeText "empty-init-script.gradle" "";
 
-  mitmCache = gradle_9.fetchDeps {
+  mitmCache = gradle.fetchDeps {
     inherit (finalAttrs) pname;
     data = ./deps.json;
     silent = false;
@@ -69,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    gradle_9
+    gradle
     jetbrains.jdk-no-jcef-21
     stripJavaArchivesHook
   ];

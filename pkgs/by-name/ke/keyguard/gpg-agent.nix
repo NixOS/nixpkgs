@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage {
 
   sourceRoot = "${src.name}/desktopGpgAgent/src";
 
-  cargoHash = "sha256-HGx+5xkL6auib3gtyd6EQQXIAZCDLY0bhnBpeVppKPI=";
+  cargoHash = "sha256-OITT6/aUjPPVlcbJO36zp6fndx3K4hmWzKwewVNMq9c=";
 
   nativeBuildInputs = [ protobuf ];
 

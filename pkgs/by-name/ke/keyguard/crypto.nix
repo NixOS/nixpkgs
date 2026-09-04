@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage {
 
   sourceRoot = "${src.name}/util/crypto/rust";
 
-  cargoHash = "sha256-xb51bzQH75YSwO25P7FShvywqcSbyHLmpF2c29TYGoM=";
+  cargoHash = "sha256-yVdQyGWc1wKkltjBHAPLxOmxZM/55H/t95oKZBnMHOE=";
 
   cargoBuildFlags = [
     "--package"

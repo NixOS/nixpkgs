@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage {
 
   sourceRoot = "${src.name}/desktopLibNative/src";
 
-  cargoHash = "sha256-VxQk7eQPfM4iH65F6yY1AqgcFC3pzlLGxljyVWJKzb4=";
+  cargoHash = "sha256-obdHk2/P8OfOmqMUVslKDjKyTzpMIEAbW7D6zv/Vt6w=";
 
   buildInputs = [ libx11 ];
 
