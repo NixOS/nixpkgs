@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "google-genai";
-  version = "1.67.0";
+  version = "2.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-genai";
     tag = "v${version}";
-    hash = "sha256-1ewVg271kooPkCEtmDm1HHnJY3MkomrXKp1dK9J0RXI=";
+    hash = "sha256-l/vIjWkEFEaPxgVI//3PQ0kSy1waXydbSrOHf6FqFIc=";
   };
 
   build-system = [
@@ -40,6 +40,7 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "google-auth"
     "tenacity"
     "websockets"
   ];
