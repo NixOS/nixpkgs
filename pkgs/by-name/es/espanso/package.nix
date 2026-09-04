@@ -35,13 +35,13 @@ assert stdenv.hostPlatform.isDarwin -> !x11Support;
 assert stdenv.hostPlatform.isDarwin -> !waylandSupport;
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "espanso";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "espanso";
     repo = "espanso";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MCV4v0f7VXwS0ZrphURMb/sZqKR2pwPPCut6zOzWYIE=";
+    hash = "sha256-hfdR0XzZqF/l0jU5Ma4VnnHd4Rfw0d57ufxMyvsEBi4=";
   };
 
   cargoHash = "sha256-JFXCsTV9DAIP5T3QouQ2bzSlVVa+LIgQBOE68Z7UVe4=";
