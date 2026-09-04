@@ -20826,6 +20826,8 @@ self: super: with self; {
 
   torch-c-dlpack-ext = callPackage ../development/python-modules/torch-c-dlpack-ext { };
 
+  torch-checkpointing = callPackage ../development/python-modules/torch-checkpointing { };
+
   torch-cluster = callPackage ../development/python-modules/torch-cluster { };
 
   torch-einops-utils = callPackage ../development/python-modules/torch-einops-utils { };
