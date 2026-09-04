@@ -22,13 +22,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "yacreader";
-  version = "10.0.0";
+  version = "10.2.0";
 
   src = fetchFromGitHub {
     owner = "YACReader";
     repo = "yacreader";
     tag = finalAttrs.version;
-    hash = "sha256-nJ4S4ej/I+ifDNa3CPpusFpDsEwZwYDt0JLaebptjuU=";
+    hash = "sha256-bqOukeAXTOMI/T5zoBsA9ZtEGq+6EV/zRH7c+nWX4Lc=";
   };
 
   patches = [
@@ -42,9 +42,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Pipewire is dlopen'd, so we must tell it where to look
-  preConfigure = ''
-    qtWrapperArgs+=("--prefix" "LD_LIBRARY_PATH" ":" "${lib.makeLibraryPath [ pipewire ]}")
-  '';
+  # So is qtwebapp on macOS
+  preConfigure =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      qtWrapperArgs+=("--prefix" "LD_LIBRARY_PATH" ":" "${lib.makeLibraryPath [ pipewire ]}")
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      qtWrapperArgs+=("--prefix" "DYLD_LIBRARY_PATH" ":" "${lib.makeLibraryPath [ qtwebapp ]}")
+    '';
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -52,7 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     # force unarr backend on all platforms
     (lib.cmakeBool "BUILD_SERVER_STANDALONE" onlyServer)
-    (lib.cmakeFeature "PDF_BACKEND" "poppler")
     (lib.cmakeFeature "DECOMPRESSION_BACKEND" "unarr")
   ];
 
@@ -89,20 +93,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p "$out"/Applications
+    mkdir -p "$out/Applications/YACReader.app/Contents/MacOS/languages"
+    mkdir -p "$out/Applications/YACReaderLibrary.app/Contents/MacOS/languages"
+    mkdir -p "$out/Applications/YACReaderLibraryServer.app/Contents/MacOS/languages"
 
-    cp -r YACReader/YACReader.app "$out"/Applications/
-    cp -r YACReaderLibrary/YACReaderLibrary.app "$out"/Applications/
-    cp -r YACReaderLibraryServer/YACReaderLibraryServer.app "$out"/Applications/
+    cp -r bin/YACReader.app "$out"/Applications/
+    cp -r bin/YACReaderLibrary.app "$out"/Applications/
+    cp -r bin/YACReaderLibraryServer.app "$out"/Applications/
 
-    cp -r release/server "$out"/Applications/YACReaderLibrary.app/Contents/MacOS/
-    cp -r release/server "$out"/Applications/YACReaderLibraryServer.app/Contents/MacOS/
-    cp -r release/languages "$out"/Applications/YACReader.app/Contents/MacOS/
-    cp -r release/languages "$out"/Applications/YACReaderLibrary.app/Contents/MacOS/
-    cp -r release/languages "$out"/Applications/YACReaderLibraryServer.app/Contents/MacOS/
-
-    makeWrapper "$out"/Applications/YACReader.app/Contents/MacOS/YACReader "$out/bin/YACReader"
-    makeWrapper "$out"/Applications/YACReaderLibrary.app/Contents/MacOS/YACReaderLibrary "$out/bin/YACReaderLibrary"
-    makeWrapper "$out"/Applications/YACReaderLibraryServer.app/Contents/MacOS/YACReaderLibraryServer "$out/bin/YACReaderLibraryServer"
+    find . -name "*.qm" ! -name "*_source.qm" -exec cp {} "$out/Applications/YACReader.app/Contents/MacOS/languages/" \;
+    find . -name "*.qm" ! -name "*_source.qm" -exec cp {} "$out/Applications/YACReaderLibrary.app/Contents/MacOS/languages/" \;
+    find . -name "*.qm" ! -name "*_source.qm" -exec cp {} "$out/Applications/YACReaderLibraryServer.app/Contents/MacOS/languages/" \;
 
     runHook postInstall
   '';
