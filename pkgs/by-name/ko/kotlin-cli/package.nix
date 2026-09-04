@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kotlin-cli";
-  version = "0.11.1";
+  version = "0.12.0";
 
   src = fetchurl {
     url = "https://packages.jetbrains.team/maven/p/amper/amper/org/jetbrains/kotlin/kotlin-cli/${finalAttrs.version}/kotlin-cli-${finalAttrs.version}-dist.tgz";
-    hash = "sha256-De0qQ09r8ZOyTiptVsO6RD9CMnIRVaZaqoNyeJQSES8=";
+    hash = "sha256-YmstbodTrXW0sCFE5ZfS9EHdlAeUvlEDNSry6ADk4T4=";
   };
   sourceRoot = ".";
   dontBuild = true;
