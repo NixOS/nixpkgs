@@ -12339,6 +12339,12 @@
     github = "Irgendeinwer";
     githubId = 175053643;
   };
+  irgolic = {
+    name = "Rafael Irgolič";
+    email = "hello@irgolic.com";
+    github = "irgolic";
+    githubId = 24586651;
+  };
   ironicbadger = {
     email = "alexktz@gmail.com";
     github = "ironicbadger";
