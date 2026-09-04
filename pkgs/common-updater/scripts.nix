@@ -90,8 +90,7 @@ stdenvNoCC.mkDerivation {
       runHook postInstall
     '';
 
-  # TODO: fix ShellCheck bugs and enable
-  doCheck = false;
+  doCheck = true;
   nativeCheckInputs = [ shellcheck ];
 
   checkPhase = ''
