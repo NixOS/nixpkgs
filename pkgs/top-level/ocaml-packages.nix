@@ -259,6 +259,8 @@ let
 
         charon = callPackage ../development/ocaml-modules/charon { };
 
+        charrua = callPackage ../development/ocaml-modules/charrua { };
+
         chrome-trace = callPackage ../development/ocaml-modules/chrome-trace { };
 
         cil = callPackage ../development/ocaml-modules/cil { };
