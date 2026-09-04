@@ -1,10 +1,10 @@
 {
   lib,
   pkgs,
-  buildNavidromePlugin,
+  buildNavidromeGoPlugin,
 }:
 
-buildNavidromePlugin rec {
+buildNavidromeGoPlugin rec {
   pname = "apple-music-plugin";
   version = "0.2.0";
 
