@@ -9,18 +9,18 @@
 
 buildPgrxExtension (finalAttrs: {
   pname = "pgvectorscale";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "pgvectorscale";
     tag = finalAttrs.version;
-    hash = "sha256-whGTJI73wifYkleC+aAbDV4nhwls3uFs1xKcB0zLDRo=";
+    hash = "sha256-4i5PhGfvfMPMhkmxfxvaWdIvmGHR1ZkMQzBSTNvqEgw=";
   };
 
   doCheck = false;
 
-  cargoHash = "sha256-uaRKUtsUdZPcrQLAixCiEphXQqdsRhi8nSfh9b3w0ao=";
+  cargoHash = "sha256-2QmOxRKVkC/WBz6BRnxD57hH2E5ANHtNKrp/ytBaILI=";
   cargoPatches = [
     ./add-Cargo.lock.patch
   ];
