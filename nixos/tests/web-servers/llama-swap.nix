@@ -54,6 +54,7 @@ let
           machine =
             { pkgs, ... }:
             {
+              environment.systemPackages = [ pkgs.jq ];
               # running models can be memory intensive but
               # default `virtualisation.memorySize` is fine
 
@@ -118,6 +119,7 @@ let
           ''
             # core tests
             import json
+            import datetime as dt
 
             def get_json(route):
               args = [
@@ -144,7 +146,7 @@ let
           ''
           + lib.optionalString withUI ''
             with subtest('check is serving ui'):
-              machine.succeed('curl --fail http:/localhost:8080/ui/')
+              machine.succeed('curl --fail http://localhost:8080/ui/')
 
           ''
           + ''
@@ -156,7 +158,9 @@ let
           + lib.optionalString useSmollm2-135m ''
             # extended tests using SmolLM2
             with subtest('check `/running` for preloaded smollm2'):
-              machine.wait_until_succeeds('curl --silent --fail http://localhost:8080/running | grep "smollm2"')
+              # wait until quick jq check passes
+              machine.wait_until_succeeds('curl --silent --fail http://localhost:8080/running | jq -e ".running[] | select(.model == \\"smollm2\\" and .state == \\"ready\\")"')
+              # now check granular details
               running_response = get_json('/running')
               assert len(running_response['running']) == 1, f'running doesn\'t have one entry as expected: {running_response}'
               running_model = running_response['running'][0]
@@ -199,7 +203,7 @@ let
                 assert running_model['state'] == 'ready', f'running smollm2 is not ready: {running_response}'
 
             with subtest('check `/running` for smollm2 to timeout'):
-              machine.wait_until_succeeds('curl --silent --fail http://localhost:8080/running | grep -v "smollm2"', timeout=11)
+              machine.wait_until_succeeds('curl --silent --fail http://localhost:8080/running | grep -v "smollm2"', timeout=dt.timedelta(seconds=11))
               running_response = get_json('/running')
               assert len(running_response['running']) == 0, "smollm2 was still running after timeout"
 
