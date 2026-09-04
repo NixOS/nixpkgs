@@ -84,6 +84,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     '';
     homepage = "https://www.thonny.org/";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yvnth ];
     platforms = lib.platforms.unix;
     mainProgram = "thonny";
   };
