@@ -20868,6 +20868,12 @@
     github = "nipeharefa";
     githubId = 12620257;
   };
+  nirvdrum = {
+    name = "Kevin Menard";
+    email = "kevin@nirvdrum.com";
+    github = "nirvdrum";
+    githubId = 12584;
+  };
   NIS = {
     name = "NSC IT Solutions";
     github = "dev-nis";
