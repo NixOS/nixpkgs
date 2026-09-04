@@ -5,11 +5,11 @@
   apple-sdk,
   installShellFiles,
   writeShellScriptBin,
-  zig_0_15,
+  zig_0_16,
   nix-update-script,
 }:
 let
-  zig = zig_0_15;
+  zig = zig_0_16;
 
   sdkRoot = apple-sdk.sdkroot;
   # Ghostty's Zig build asks Zig to discover the native Darwin SDK via
@@ -24,7 +24,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zmx";
-  version = "0.7.1";
+  version = "0.8.0";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -32,13 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "neurosnap";
     repo = "zmx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-n4gdijFcHfXu5Z4BthLVQFE+g3tioiZF7d8xrzMecog=";
+    hash = "sha256-5z7XWEZ+6P4AuzagHQdszr8vWoymbmL8TakVz0N/2DU=";
   };
 
   zigDeps = zig.fetchDeps {
     inherit (finalAttrs) src pname version;
     fetchAll = true;
-    hash = "sha256-w2jTusfDpW5Vk0lVhi2VNEGtir2n0NKQePsKSE2jpmc=";
+    hash = "sha256-W1vKzna0dYSBdTb8evGErec6ukemFy/9Fhz5uSJeaj0=";
   };
 
   postConfigure = ''
