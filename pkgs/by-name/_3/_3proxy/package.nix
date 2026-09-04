@@ -9,6 +9,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "3proxy";
   version = "0.9.6";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "3proxy";
     repo = "3proxy";
@@ -24,12 +27,18 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/usr" ""
   '';
 
+  makefile = "Makefile.Linux";
+
   makeFlags = [
-    "-f Makefile.Linux"
     "INSTALL=install"
     "DESTDIR=${placeholder "out"}"
     "CC:=$(CC)"
   ];
+
+  # Makefile has race conditions between install targets (e.g., install-etc-dir
+  # and install-etc-default-config run in parallel but the latter depends on
+  # directories created by the former)
+  enableParallelInstalling = false;
 
   postInstall = ''
     rm -fr $out/var
