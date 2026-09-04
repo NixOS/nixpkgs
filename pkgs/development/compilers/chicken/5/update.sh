@@ -8,6 +8,8 @@ cd $(nix-prefetch-git --deepClone --quiet \
 echo "# THIS IS A GENERATED FILE.  DO NOT EDIT!" > $_this_dir/deps.toml
 for i, item in */*/*.egg {
   setglobal ENV.EGG_NAME=$(dirname $(dirname $item))
+  setglobal ENV.EGG_FILE=$(basename $item)
+  if test $[ENV.EGG_FILE] != "$[ENV.EGG_NAME].egg" { continue }
   setglobal ENV.EGG_VERSION=$(basename $(dirname $item))
   setglobal ENV.EGG_URL="$[ENV.URL_PREFIX]$[ENV.EGG_NAME]/$[ENV.EGG_NAME]-$[ENV.EGG_VERSION].tar.gz"
   setglobal ENV.EGG_SHA256=$(nix-prefetch-url $[ENV.EGG_URL])
