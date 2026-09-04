@@ -2,17 +2,23 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "types-toml";
   version = "0.10.8.20240310";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "types-toml";
+    inherit (finalAttrs) version;
     hash = "sha256-PUFQEwKXJDamuLI5yFCyZollfiUoG0j/DsBjRbiDAzE=";
   };
+
+  build-system = [ setuptools ];
 
   # Module doesn't have tests
   doCheck = false;
@@ -25,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
