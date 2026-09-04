@@ -46,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.is32bit "-D_FILE_OFFSET_BITS=64";
+
   nativeBuildInputs = [
     cmake
     doxygen
