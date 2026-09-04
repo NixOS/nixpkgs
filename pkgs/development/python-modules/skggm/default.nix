@@ -16,7 +16,6 @@
   tabulate,
   nix-update-script,
   pytestCheckHook,
-  flaky,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -77,7 +76,6 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
-    flaky
   ];
 
   preCheck = ''
@@ -108,7 +106,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
-    "integration_quic_graphical_lasso_ebic"
+    # Uses numpy.in1d which was removed in numpy 2.0
     "test_has_approx_support"
   ];
 
@@ -123,6 +121,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/skggm/skggm";
     changelog = "https://github.com/skggm/skggm/commits/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jlesquembre ];
+    maintainers = with lib.maintainers; [ jherland ];
   };
 })
