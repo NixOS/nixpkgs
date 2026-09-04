@@ -14,6 +14,8 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "sha256-BUGhVHvWSdFJdqaoPasLt87lTUFVF2B7X7sfigwrJss=";
   };
 
+  strictDeps = true;
+
   installPhase = ''
     install -D -m0644 -t $out/etc services protocols
   '';
