@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   passthru.tests = {
@@ -40,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
       libde265 = finalAttrs.finalPackage;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/strukturag/libde265";
