@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "cfv";
-  version = "3.2.0";
+  version = "3.2.0.dev0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cfv-project";
     repo = "cfv";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-vKlnW6Z0Rg2bptU5fxIKDaOY2b+WY/fgaYZQu5tBU44=";
+    sha256 = "sha256-2ESNQJZ3oKSf/xa1PsUd5lQN8CMdfR6cjB9CcAtkvBY=";
   };
 
   build-system = with python3.pkgs; [
