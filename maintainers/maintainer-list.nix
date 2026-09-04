@@ -17094,6 +17094,12 @@
     githubId = 7243615;
     name = "Luna";
   };
+  lunagl = {
+    email = "dev@luna.gl";
+    github = "lunagl";
+    githubId = 88447041;
+    name = "Luna Schwalbe";
+  };
   lunarequest = {
     email = "nullarequest@vivlaid.net";
     github = "Lunarequest";
