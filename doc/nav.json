@@ -1,4 +1,706 @@
 {
   "open": [],
-  "items": []
+  "items": [
+    {
+      "file": "preface.chapter.md"
+    },
+    {
+      "label": "Getting started",
+      "id": "getting-started",
+      "children": [
+        {
+          "file": "getting-started/getting-started.part.md"
+        },
+        {
+          "file": "getting-started/first-package.chapter.md"
+        },
+        {
+          "file": "getting-started/dev-environments.md"
+        }
+      ]
+    },
+    {
+      "label": "Using Nixpkgs",
+      "id": "part-using",
+      "children": [
+        {
+          "file": "using-nixpkgs.md"
+        },
+        {
+          "file": "channels.chapter.md"
+        },
+        {
+          "file": "using/platform-support.chapter.md"
+        },
+        {
+          "file": "using/configuration.chapter.md"
+        },
+        {
+          "file": "using/overlays.chapter.md"
+        },
+        {
+          "file": "using/overrides.chapter.md"
+        }
+      ]
+    },
+    {
+      "label": "Nixpkgs lib",
+      "id": "id-1.4",
+      "children": [
+        {
+          "file": "lib.md"
+        },
+        {
+          "label": "Functions reference",
+          "id": "chap-functions",
+          "children": [
+            {
+              "file": "functions.md"
+            },
+            {
+              "id-prefix": "auto-generated",
+              "file": "functions/library.md"
+            },
+            {
+              "file": "functions/generators.section.md"
+            },
+            {
+              "file": "functions/debug.section.md"
+            },
+            {
+              "file": "functions/prefer-remote-fetch.section.md"
+            },
+            {
+              "file": "functions/nix-gitignore.section.md"
+            }
+          ]
+        },
+        {
+          "file": "module-system/module-system.chapter.md"
+        }
+      ]
+    },
+    {
+      "label": "Standard environment",
+      "id": "part-stdenv",
+      "children": [
+        {
+          "file": "stdenv.md"
+        },
+        {
+          "file": "stdenv/stdenv.chapter.md"
+        },
+        {
+          "file": "stdenv/meta.chapter.md"
+        },
+        {
+          "file": "stdenv/passthru.chapter.md"
+        },
+        {
+          "file": "stdenv/multiple-output.chapter.md"
+        },
+        {
+          "file": "stdenv/cross-compilation.chapter.md"
+        },
+        {
+          "file": "stdenv/platform-notes.chapter.md"
+        }
+      ]
+    },
+    {
+      "label": "Toolchains",
+      "id": "part-toolchains",
+      "children": [
+        {
+          "file": "toolchains.md"
+        },
+        {
+          "file": "toolchains/llvm.chapter.md"
+        }
+      ]
+    },
+    {
+      "label": "Build helpers",
+      "id": "part-builders",
+      "children": [
+        {
+          "file": "build-helpers.md"
+        },
+        {
+          "file": "build-helpers/fixed-point-arguments.chapter.md"
+        },
+        {
+          "file": "build-helpers/fetchers.chapter.md"
+        },
+        {
+          "file": "build-helpers/trivial-build-helpers.chapter.md"
+        },
+        {
+          "file": "build-helpers/testers.chapter.md"
+        },
+        {
+          "file": "build-helpers/dev-shell-tools.chapter.md"
+        },
+        {
+          "label": "Special build helpers",
+          "id": "chap-special",
+          "children": [
+            {
+              "file": "build-helpers/special.md"
+            },
+            {
+              "file": "build-helpers/special/buildenv.section.md"
+            },
+            {
+              "file": "build-helpers/special/fakenss.section.md"
+            },
+            {
+              "file": "build-helpers/special/fhs-environments.section.md"
+            },
+            {
+              "file": "build-helpers/special/makesetuphook.section.md"
+            },
+            {
+              "file": "build-helpers/special/mkshell.section.md"
+            },
+            {
+              "file": "build-helpers/special/vm-tools.section.md"
+            },
+            {
+              "file": "build-helpers/special/checkpoint-build.section.md"
+            }
+          ]
+        },
+        {
+          "label": "Images",
+          "id": "chap-images",
+          "children": [
+            {
+              "file": "build-helpers/images.md"
+            },
+            {
+              "file": "build-helpers/images/appimagetools.section.md"
+            },
+            {
+              "file": "build-helpers/images/dockertools.section.md"
+            },
+            {
+              "file": "build-helpers/images/ocitools.section.md"
+            },
+            {
+              "file": "build-helpers/images/portableservice.section.md"
+            },
+            {
+              "file": "build-helpers/images/makediskimage.section.md"
+            },
+            {
+              "file": "build-helpers/images/binarycache.section.md"
+            }
+          ]
+        },
+        {
+          "label": "Hooks reference",
+          "id": "chap-hooks",
+          "children": [
+            {
+              "file": "hooks/index.md"
+            },
+            {
+              "file": "hooks/autoconf.section.md"
+            },
+            {
+              "file": "hooks/automake.section.md"
+            },
+            {
+              "file": "hooks/autopatchcil.section.md"
+            },
+            {
+              "file": "hooks/autopatchelf.section.md"
+            },
+            {
+              "file": "hooks/aws-c-common.section.md"
+            },
+            {
+              "file": "hooks/bmake.section.md"
+            },
+            {
+              "file": "hooks/breakpoint.section.md"
+            },
+            {
+              "file": "hooks/cernlib.section.md"
+            },
+            {
+              "file": "hooks/check-phase-thread-limit-hook.section.md"
+            },
+            {
+              "file": "hooks/cmake.section.md"
+            },
+            {
+              "file": "hooks/desktop-file-utils.section.md"
+            },
+            {
+              "file": "hooks/gdk-pixbuf.section.md"
+            },
+            {
+              "file": "hooks/gnome.section.md"
+            },
+            {
+              "file": "hooks/haredo.section.md"
+            },
+            {
+              "file": "hooks/installShellFiles.section.md"
+            },
+            {
+              "file": "hooks/installFonts.section.md"
+            },
+            {
+              "file": "hooks/juce.section.md"
+            },
+            {
+              "file": "hooks/julec.section.md"
+            },
+            {
+              "file": "hooks/just.section.md"
+            },
+            {
+              "file": "hooks/libglycin.section.md"
+            },
+            {
+              "file": "hooks/libiconv.section.md"
+            },
+            {
+              "file": "hooks/libxml2.section.md"
+            },
+            {
+              "file": "hooks/memcached-test-hook.section.md"
+            },
+            {
+              "file": "hooks/meson.section.md"
+            },
+            {
+              "file": "hooks/mpi-check-hook.section.md"
+            },
+            {
+              "file": "hooks/ninja.section.md"
+            },
+            {
+              "file": "hooks/nodejs-install-executables.section.md"
+            },
+            {
+              "file": "hooks/nodejs-install-manuals.section.md"
+            },
+            {
+              "file": "hooks/npm-build-hook.section.md"
+            },
+            {
+              "file": "hooks/npm-config-hook.section.md"
+            },
+            {
+              "file": "hooks/npm-install-hook.section.md"
+            },
+            {
+              "file": "hooks/patch-rc-path-hooks.section.md"
+            },
+            {
+              "file": "hooks/perl.section.md"
+            },
+            {
+              "file": "hooks/pkg-config.section.md"
+            },
+            {
+              "file": "hooks/pnpm.section.md"
+            },
+            {
+              "file": "hooks/postgresql-test-hook.section.md"
+            },
+            {
+              "file": "hooks/premake.section.md"
+            },
+            {
+              "file": "hooks/python.section.md"
+            },
+            {
+              "file": "hooks/redis-test-hook.section.md"
+            },
+            {
+              "file": "hooks/scons.section.md"
+            },
+            {
+              "file": "hooks/tauri.section.md"
+            },
+            {
+              "file": "hooks/tetex-tex-live.section.md"
+            },
+            {
+              "file": "hooks/udevCheckHook.section.md"
+            },
+            {
+              "file": "hooks/unzip.section.md"
+            },
+            {
+              "file": "hooks/validatePkgConfig.section.md"
+            },
+            {
+              "file": "hooks/versionCheckHook.section.md"
+            },
+            {
+              "file": "hooks/waf.section.md"
+            },
+            {
+              "file": "hooks/writable-tmpdir-as-home-hook.section.md"
+            },
+            {
+              "file": "hooks/zig.section.md"
+            },
+            {
+              "file": "hooks/xcbuild.section.md"
+            },
+            {
+              "file": "hooks/xfce4-dev-tools.section.md"
+            }
+          ]
+        },
+        {
+          "label": "Packages",
+          "id": "chap-packages",
+          "children": [
+            {
+              "file": "packages/index.md"
+            },
+            {
+              "file": "packages/citrix.section.md"
+            },
+            {
+              "file": "packages/darwin-builder.section.md"
+            },
+            {
+              "file": "packages/dlib.section.md"
+            },
+            {
+              "file": "packages/eclipse.section.md"
+            },
+            {
+              "file": "packages/elm.section.md"
+            },
+            {
+              "file": "packages/emacs.section.md"
+            },
+            {
+              "file": "packages/firefox.section.md"
+            },
+            {
+              "file": "packages/friction-graphics.section.md"
+            },
+            {
+              "file": "packages/fish.section.md"
+            },
+            {
+              "file": "packages/fuse.section.md"
+            },
+            {
+              "file": "packages/geant4.section.md"
+            },
+            {
+              "file": "packages/ibus.section.md"
+            },
+            {
+              "file": "packages/inkscape.section.md"
+            },
+            {
+              "file": "packages/kakoune.section.md"
+            },
+            {
+              "file": "packages/krita.section.md"
+            },
+            {
+              "file": "packages/linux.section.md"
+            },
+            {
+              "file": "packages/lhapdf.section.md"
+            },
+            {
+              "file": "packages/locales.section.md"
+            },
+            {
+              "file": "packages/etc-files.section.md"
+            },
+            {
+              "file": "packages/nginx.section.md"
+            },
+            {
+              "file": "packages/nrfutil.section.md"
+            },
+            {
+              "file": "packages/opengl.section.md"
+            },
+            {
+              "file": "packages/packer.section.md"
+            },
+            {
+              "file": "packages/shell-helpers.section.md"
+            },
+            {
+              "file": "packages/python-tree-sitter.section.md"
+            },
+            {
+              "label": "treefmt",
+              "id": "treefmt",
+              "children": [
+                {
+                  "file": "packages/treefmt.section.md"
+                },
+                {
+                  "id-prefix": "auto-generated-treefmt-functions",
+                  "file": "packages/treefmt-functions.section.md"
+                }
+              ]
+            },
+            {
+              "file": "packages/steam.section.md"
+            },
+            {
+              "file": "packages/cataclysm-dda.section.md"
+            },
+            {
+              "file": "packages/urxvt.section.md"
+            },
+            {
+              "file": "packages/vcpkg.section.md"
+            },
+            {
+              "file": "packages/weechat.section.md"
+            },
+            {
+              "file": "packages/uv.section.md"
+            },
+            {
+              "file": "packages/build-support.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Modules",
+      "id": "modules",
+      "children": [
+        {
+          "file": "modules/index.md"
+        },
+        {
+          "file": "modules/generic.chapter.md"
+        }
+      ]
+    },
+    {
+      "label": "Development of Nixpkgs",
+      "id": "part-development",
+      "children": [
+        {
+          "file": "development.md"
+        },
+        {
+          "file": "development/opening-issues.chapter.md"
+        }
+      ]
+    },
+    {
+      "label": "Contributing to Nixpkgs",
+      "id": "part-contributing",
+      "children": [
+        {
+          "file": "contributing.md"
+        },
+        {
+          "file": "contributing/quick-start.chapter.md"
+        },
+        {
+          "file": "contributing/coding-conventions.chapter.md"
+        },
+        {
+          "file": "contributing/submitting-changes.chapter.md"
+        },
+        {
+          "file": "contributing/vulnerability-roundup.chapter.md"
+        },
+        {
+          "file": "contributing/reviewing-contributions.chapter.md"
+        },
+        {
+          "file": "contributing/contributing-to-documentation.chapter.md"
+        }
+      ]
+    },
+    {
+      "label": "Interoperability Standards",
+      "id": "part-interoperability",
+      "children": [
+        {
+          "file": "interoperability.md"
+        },
+        {
+          "file": "interoperability/cyclonedx.md"
+        }
+      ]
+    },
+    {
+      "label": "Languages and frameworks",
+      "id": "chap-language-support",
+      "children": [
+        {
+          "file": "languages-frameworks/index.md"
+        },
+        {
+          "file": "languages-frameworks/agda.section.md"
+        },
+        {
+          "file": "languages-frameworks/android.section.md"
+        },
+        {
+          "file": "languages-frameworks/astal.section.md"
+        },
+        {
+          "file": "languages-frameworks/beam.section.md"
+        },
+        {
+          "file": "languages-frameworks/chicken.section.md"
+        },
+        {
+          "file": "languages-frameworks/cosmic.section.md"
+        },
+        {
+          "file": "languages-frameworks/crystal.section.md"
+        },
+        {
+          "file": "languages-frameworks/cuda.section.md"
+        },
+        {
+          "file": "languages-frameworks/cuelang.section.md"
+        },
+        {
+          "file": "languages-frameworks/dart.section.md"
+        },
+        {
+          "file": "languages-frameworks/dhall.section.md"
+        },
+        {
+          "file": "languages-frameworks/dlang.section.md"
+        },
+        {
+          "file": "languages-frameworks/dotnet.section.md"
+        },
+        {
+          "file": "languages-frameworks/emscripten.section.md"
+        },
+        {
+          "file": "languages-frameworks/factor.section.md"
+        },
+        {
+          "file": "languages-frameworks/gnome.section.md"
+        },
+        {
+          "file": "languages-frameworks/go.section.md"
+        },
+        {
+          "file": "languages-frameworks/gradle.section.md"
+        },
+        {
+          "file": "languages-frameworks/hare.section.md"
+        },
+        {
+          "file": "languages-frameworks/haskell.section.md"
+        },
+        {
+          "file": "languages-frameworks/hy.section.md"
+        },
+        {
+          "file": "languages-frameworks/idris.section.md"
+        },
+        {
+          "file": "languages-frameworks/idris2.section.md"
+        },
+        {
+          "file": "languages-frameworks/ios.section.md"
+        },
+        {
+          "file": "languages-frameworks/java.section.md"
+        },
+        {
+          "file": "languages-frameworks/javascript.section.md"
+        },
+        {
+          "file": "languages-frameworks/julia.section.md"
+        },
+        {
+          "file": "languages-frameworks/lean4.section.md"
+        },
+        {
+          "file": "languages-frameworks/lisp.section.md"
+        },
+        {
+          "file": "languages-frameworks/lua.section.md"
+        },
+        {
+          "file": "languages-frameworks/maven.section.md"
+        },
+        {
+          "file": "languages-frameworks/nim.section.md"
+        },
+        {
+          "file": "languages-frameworks/ocaml.section.md"
+        },
+        {
+          "file": "languages-frameworks/octave.section.md"
+        },
+        {
+          "file": "languages-frameworks/perl.section.md"
+        },
+        {
+          "file": "languages-frameworks/php.section.md"
+        },
+        {
+          "file": "languages-frameworks/pkg-config.section.md"
+        },
+        {
+          "file": "languages-frameworks/python.section.md"
+        },
+        {
+          "file": "languages-frameworks/qt.section.md"
+        },
+        {
+          "file": "languages-frameworks/r.section.md"
+        },
+        {
+          "file": "languages-frameworks/rocq.section.md"
+        },
+        {
+          "file": "languages-frameworks/ruby.section.md"
+        },
+        {
+          "file": "languages-frameworks/rust.section.md"
+        },
+        {
+          "file": "languages-frameworks/scheme.section.md"
+        },
+        {
+          "file": "languages-frameworks/swift.section.md"
+        },
+        {
+          "file": "languages-frameworks/tcl.section.md"
+        },
+        {
+          "file": "languages-frameworks/texlive.section.md"
+        },
+        {
+          "file": "languages-frameworks/typst.section.md"
+        },
+        {
+          "file": "languages-frameworks/vim.section.md"
+        },
+        {
+          "file": "languages-frameworks/neovim.section.md"
+        }
+      ]
+    }
+  ]
 }
