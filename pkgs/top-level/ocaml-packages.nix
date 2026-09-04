@@ -261,6 +261,8 @@ let
 
         charrua = callPackage ../development/ocaml-modules/charrua { };
 
+        charrua-server = callPackage ../development/ocaml-modules/charrua/server.nix { };
+
         chrome-trace = callPackage ../development/ocaml-modules/chrome-trace { };
 
         cil = callPackage ../development/ocaml-modules/cil { };
