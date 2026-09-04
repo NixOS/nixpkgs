@@ -134,14 +134,18 @@ stdenv.mkDerivation (finalAttrs: {
   desktopItems = [
     (makeDesktopItem {
       name = "vikunja-desktop";
-      exec = executableName;
+      exec = "${executableName} %U";
       icon = "vikunja";
+      terminal = false;
       desktopName = "Vikunja Desktop";
       genericName = "To-Do list app";
       comment = finalAttrs.meta.description;
       categories = [
         "ProjectManagement"
         "Office"
+      ];
+      mimeTypes = [
+        "x-scheme-handler/vikunja-desktop"
       ];
     })
   ];
