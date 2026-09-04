@@ -209,7 +209,6 @@ with haskellLib;
     (
       let
         hls_overlay = lself: lsuper: {
-          # For fourmolu 0.18 and ormolu 0.7.7
           Cabal-syntax = lself.Cabal-syntax_3_14_2_0;
           Cabal = lself.Cabal_3_14_2_0;
           # Jailbreaking cabal-install-parsers to make it pick Cabal 3.14 instead of 3.12.
@@ -240,7 +239,6 @@ with haskellLib;
             })
           ] super.fourmolu;
 
-          # HLS 2.11: Too strict bound on Diff 1.0.
           haskell-language-server = lib.pipe super.haskell-language-server [
             dontCheck
             (
