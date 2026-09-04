@@ -43,6 +43,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
   pname = "xformers";
   version = "0.0.35";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
