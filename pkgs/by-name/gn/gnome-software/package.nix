@@ -31,6 +31,7 @@
   malcontent,
   json-glib,
   glib-networking,
+  glib-testing,
   libsecret,
   valgrind-light,
   docbook-xsl-nons,
@@ -82,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     glib
     glib-networking
+    glib-testing
     packagekit
     appstream
     libsoup_3
