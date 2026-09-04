@@ -35,6 +35,12 @@ buildPythonPackage rec {
     hash = "sha256-iDMmaYnTpREBeKn64weDZ1Rgck0OHvsTsUkB0sZgxVc=";
   };
 
+  patches = [
+    # Fix HTML display performance when user has many features
+    # https://github.com/scikit-learn/scikit-learn/pull/34362
+    ./fix-html-repr-performance.patch
+  ];
+
   postPatch = ''
     substituteInPlace meson.build --replace-fail \
       "run_command('sklearn/_build_utils/version.py', check: true).stdout().strip()," \
