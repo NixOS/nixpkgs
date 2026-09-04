@@ -36,6 +36,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoTestFlags = [ "--no-fail-fast" ];
 
+  # Optimizing test binaries with fat LTO takes over 100 minutes on Hydra,
+  # while the tests themselves finish in about two minutes.
+  checkType = "debug";
+
   checkFlags = [
     # Dials a blackhole address to assert the error is a connect-phase timeout;
     # the sandbox has no route at all, so it fails fast as "network unreachable".
