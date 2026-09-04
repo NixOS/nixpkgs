@@ -23,6 +23,7 @@ let
         fakeSubmodule pkgs.autopush-rs.services.autoconnect;
       "<imports = [ pkgs.autopush-rs.services.autoendpoint ]>" =
         fakeSubmodule pkgs.autopush-rs.services.autoendpoint;
+      "<imports = [ pkgs.backrest.services.default ]>" = fakeSubmodule pkgs.backrest.services.default;
       "<imports = [ pkgs.ghostunnel.services.default ]>" = fakeSubmodule pkgs.ghostunnel.services.default;
       "<imports = [ pkgs.git-pages.services.default ]>" = fakeSubmodule pkgs.git-pages.services.default;
       "<imports = [ pkgs.ktls-utils.services.default ]>" = fakeSubmodule pkgs.ktls-utils.services.default;

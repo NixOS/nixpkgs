@@ -17,6 +17,9 @@
   versionCheckHook,
   nix-update-script,
   _experimental-update-script-combinators,
+  symlinkJoin,
+  bash,
+  nixosTests,
 }:
 let
   pnpm = pnpm_11;
@@ -194,6 +197,17 @@ buildGoModule (finalAttrs: {
       })
       ./update-inlang-plugins.sh
     ];
+    tests = {
+      inherit (nixosTests) backrest-modular;
+    };
+    services.default = {
+      imports = [
+        (lib.modules.importApply ./service.nix {
+          inherit bash symlinkJoin makeBinaryWrapper;
+        })
+      ];
+      backrest.package = finalAttrs.finalPackage;
+    };
   };
 
   meta = {
