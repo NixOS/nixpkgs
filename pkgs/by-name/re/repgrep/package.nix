@@ -11,16 +11,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "repgrep";
-  version = "0.16.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "acheronfail";
     repo = "repgrep";
     tag = finalAttrs.version;
-    hash = "sha256-hLRl8mKRaufneJNBQqPsH+48ZQGxFBNgulXcaK4/6s4=";
+    hash = "sha256-cAk2TUfdp9Qw1MVHYNmBFB5HtrWNTfa5K8ylNZLYjqQ=";
   };
 
-  cargoHash = "sha256-ALp6BQNWpylHPBeLs/4hugN1ulCdctOmgu55Lmt8wjI=";
+  cargoHash = "sha256-nFK285is1AR9ffYNoQUYbZh7TMcsurt4Hb/OPtq0e5c=";
+
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Requires access to a controlling terminal, which is unavailable in the sandbox.
+    "--skip=reads_ui_events_from_tty_when_stdin_is_a_pipe"
+  ];
 
   nativeBuildInputs = [
     asciidoctor
@@ -37,7 +42,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     popd
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    # As it can be seen here: https://github.com/acheronfail/repgrep/blob/0.16.1/.github/workflows/release.yml#L206, the completions are just the same as ripgrep
+    # rgr reuses ripgrep's completions; see
+    # https://github.com/acheronfail/repgrep/blob/${finalAttrs.version}/.github/workflows/release.yml
     installShellCompletion --cmd rgr \
       --bash <(${lib.getExe ripgrep} --generate complete-bash | sed 's/-c rg/-c rgr/') \
       --zsh <(${lib.getExe ripgrep} --generate complete-zsh | sed 's/-c rg/-c rgr/') \
