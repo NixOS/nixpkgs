@@ -44,7 +44,10 @@ stdenv.mkDerivation {
     mainProgram = "pegasus-fe";
     homepage = "https://pegasus-frontend.org/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ tengkuizdihar ];
+    maintainers = with lib.maintainers; [
+      tengkuizdihar
+      irgolic
+    ];
     platforms = lib.platforms.linux;
   };
 }
