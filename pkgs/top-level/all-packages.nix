@@ -2577,8 +2577,6 @@ with pkgs;
 
   ophcrack-cli = ophcrack.override { enableGui = false; };
 
-  open-interpreter = with python3Packages; toPythonApplication open-interpreter;
-
   openntpd_nixos = openntpd.override {
     privsepUser = "ntp";
     privsepPath = "/var/empty";
@@ -3227,10 +3225,12 @@ with pkgs;
       # NOTE: keep this with the "NG" label until we're ready to drop the monolithic GCC
       gccNGPackagesSet = recurseIntoAttrs (callPackages ../development/compilers/gcc/ng { });
       gccNGPackages_15 = gccNGPackagesSet."15";
+      gccNGPackages_16 = gccNGPackagesSet."16";
       gccNGPackages = gccNGPackagesSet.${toString default-gcc-version};
       mkGCCNGPackages = gccNGPackagesSet.mkPackage;
     })
     gccNGPackages_15
+    gccNGPackages_16
     gccNGPackages
     mkGCCNGPackages
     ;
@@ -6314,9 +6314,6 @@ with pkgs;
 
   opencv = opencv4;
 
-  openexr = callPackage ../development/libraries/openexr/3.nix { };
-  openexr_2 = callPackage ../development/libraries/openexr/2.nix { };
-
   openstackclient = with python313Packages; toPythonApplication python-openstackclient;
   openstackclient-full = openstackclient.overridePythonAttrs (oldAttrs: {
     dependencies = oldAttrs.dependencies ++ oldAttrs.optional-dependencies.cli-plugins;
@@ -9290,11 +9287,11 @@ with pkgs;
     wlroots = wlroots_0_20;
   };
 
-  tuxclocker = libsForQt5.callPackage ../applications/misc/tuxclocker {
+  tuxclocker = callPackage ../applications/misc/tuxclocker {
     tuxclocker-plugins = tuxclocker-plugins-with-unfree;
   };
 
-  tuxclocker-without-unfree = libsForQt5.callPackage ../applications/misc/tuxclocker { };
+  tuxclocker-without-unfree = callPackage ../applications/misc/tuxclocker { };
 
   linphonePackages = recurseIntoAttrs (
     callPackage ../applications/networking/instant-messengers/linphone { }

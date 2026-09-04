@@ -1183,6 +1183,12 @@
     githubId = 43479487;
     name = "Titouan Biteau";
   };
+  alberand = {
+    github = "alberand";
+    githubId = 8555162;
+    name = "Andrey Albershteyn";
+    email = "andrey.albershteyn@gmail.com";
+  };
   albertchae = {
     github = "albertchae";
     githubId = 217050;

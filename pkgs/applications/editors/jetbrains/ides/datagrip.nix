@@ -1,11 +1,12 @@
 {
-  stdenv,
-  lib,
+  # keep-sorted start
   fetchurl,
-  mkJetBrainsProduct,
-  libdbm,
   fsnotifier,
-
+  jetbrains,
+  jetbrains-libdbm,
+  lib,
+  stdenv,
+  # keep-sorted end
 }:
 let
   system = stdenv.hostPlatform.system;
@@ -26,8 +27,8 @@ let
   };
   # update-script-end: urls
 in
-mkJetBrainsProduct {
-  inherit libdbm fsnotifier;
+jetbrains.mkJetBrainsProduct {
+  inherit jetbrains-libdbm fsnotifier;
 
   pname = "datagrip";
 
@@ -41,6 +42,13 @@ mkJetBrainsProduct {
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
 
+  # the jdk is bundled on Darwin.
+  jdk =
+    if lib.meta.availableOn stdenv.hostPlatform jetbrains.jdk-no-jcef then
+      jetbrains.jdk-no-jcef
+    else
+      null;
+
   # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed
   meta = {
     homepage = "https://www.jetbrains.com/datagrip/";
@@ -50,6 +58,7 @@ mkJetBrainsProduct {
       It allows you to quickly migrate and refactor relational databases, construct efficient, statically checked SQL queries and much more.
     '';
     maintainers = [ ];
+    teams = [ lib.teams.jetbrains ];
     license = lib.licenses.unfree;
     sourceProvenance =
       if stdenv.hostPlatform.isDarwin then

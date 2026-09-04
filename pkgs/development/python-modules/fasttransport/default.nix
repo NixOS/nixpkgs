@@ -11,7 +11,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fasttransport";
-  version = "0.0.2";
+  version = "0.0.4";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
     owner = "AnswerDotAI";
     repo = "fasttransport";
     tag = finalAttrs.version;
-    hash = "sha256-Vc3RFhIDd/P5lR3+UmyQjzNxsxoHXv3PvapInBfpszk=";
+    hash = "sha256-t0Kc/w6BTQ1l3esnGam0sY1m3/W6C00ruYsmIfNwaWA=";
   };
 
   build-system = [

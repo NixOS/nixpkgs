@@ -333,7 +333,8 @@ mapAliases {
   appthreat-depscan = throw "'appthreat-depscan' has been renamed to/replaced by 'dep-scan'"; # Converted to throw 2025-10-27
   arangodb = throw "arangodb has been removed, as it was unmaintained and the packaged version does not build with supported GCC versions"; # Added 2025-08-12
   arc-browser = throw "arc-browser was removed due to being unmaintained"; # Added 2025-09-03
-  arc_unpacker = throw "'arc_unpacker' has been moved to 'arc-unpacker'"; # Added 2026-07-28
+  arc-unpacker = throw "'arc-unpacker' has been removed because upstream archived the project in April 2022."; # Added 2026-09-02
+  arc_unpacker = throw "'arc_unpacker' has been removed because upstream archived the project in April 2022."; # Added 2026-09-02
   archi = throw "'archi' has been removed, since its upstream maintainers do not want it packaged"; # Added 2025-11-18
   archipelago-minecraft = throw "archipelago-minecraft has been removed, as upstream no longer ships minecraft as a default APWorld."; # Added 2025-07-15
   ArchiSteamFarm = warnAlias "ArchiSteamFarm has been renamed to/replaced by 'archisteamfarm'" archisteamfarm; # Added 2026-01-31
@@ -596,6 +597,7 @@ mapAliases {
   conduktor = throw "'conduktor' has been removed because Conduktor Desktop is now sunset and no longer works: https://docs.conduktor.io/desktop"; # Added 2026-07-23
   conduwuit = throw "'conduwuit' has been removed as the upstream repository has been deleted. Consider migrating to 'matrix-conduit', 'matrix-continuwuity' or 'matrix-tuwunel' instead."; # Added 2025-08-08
   cone = throw "cone has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
+  connman-gtk = throw "'connman-gtk' has been removed because upstream is unmaintained and archived; consider an actively maintained ConnMan frontend instead."; # Added 2026-09-02
   connman-ncurses = throw "'connman-ncurses' has been removed due to lack of maintenance upstream."; # Added 2025-05-27
   copilot-cli = throw "'copilot-cli' was removed due to upstream end-of-life."; # Added 2026-05-11
   copilot-language-server-fhs = warnAlias "The package set `copilot-language-server-fhs` has been renamed to `copilot-language-server`." copilot-language-server; # Added 2025-09-07
@@ -683,6 +685,7 @@ mapAliases {
   devdocs-desktop = throw "'devdocs-desktop' has been removed as it is unmaintained upstream and vendors insecure dependencies"; # Added 2025-06-11
   devmem2 = throw "'devmem2' has been removed due to being broken and lack of maintenance. Consider using the devmem command from 'busybox' or 'toybox'."; # Added 2026-07-24
   dfilemanager = throw "'dfilemanager' has been dropped as it was unmaintained"; # Added 2025-06-03
+  diopser = throw "'diopser' has been removed because upstream archived the project in May 2022. Use 'nih-plug' instead."; # Added 2026-09-02
   discord-screenaudio = throw "discord-screenaudio has been removed because it was archived upstream. Use vesktop instead."; # added 2025-11-29
   disk-inventory-x = throw "disk-inventory-x has been removed as it only supported x86_64-darwin"; # Added 2026-07-12
   DisnixWebService = warnAlias "'DisnixWebService' has been renamed to 'disnix-web-service'" disnix-web-service; # Added 2026-01-14
@@ -802,6 +805,7 @@ mapAliases {
   fabs = throw "'fabs' has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
   falcon = throw "'falcon' has been removed as it is unmaintained and depends on pcre, which is deprecated"; # Added 2026-06-16
   fancontrol-gui = throw "'fancontrol-gui' has been removed due to outdated KF5 dependencies"; # Added 2026-05-01
+  fancy-motd = throw "'fancy-motd' has been removed because upstream archived the project in September 2025."; # Added 2026-09-02
   fasd = throw "'fasd' has been removed because it was archived upstream"; # Added 2026-08-15
   fast-cli = throw "'fast-cli' has been removed because it was unmaintainable in nixpkgs"; # Added 2025-11-17
   fastfetchMinimal = warnAlias "'fastfetchMinimal' has been renamed to 'fastfetch-unwrapped'" fastfetch-unwrapped; # Added 2026-05-18
@@ -1104,6 +1108,8 @@ mapAliases {
   guile-sdl = throw "guile-sdl has been removed, as it was broken"; # Added 2025-08-25
   gupnp = throw "'gupnp' (version 1.4) has been removed as it was unmaintained upstream and depended on libsoup 2.4. Consider using 'gupnp_1_6' instead"; # Added 2026-06-07
   gutenprintBin = gutenprint-bin; # Added 2025-08-21
+  gvolicon = throw "'gvolicon' has been removed because upstream archived the project in January 2018."; # Added 2026-09-02
+  gwc = throw "'gwc' has been removed, as it relies on gtk2"; # Added 2026-09-03
   gwrap = warnAlias "The 'gwrap' alias has been removed. The correct name of the package is 'g-wrap'" g-wrap; # Added 2026-01-25
   gxneur = throw "'gxneur' has been removed due to lack of maintenance and reliance on gnome2 and 2to3."; # Added 2025-08-17
   gyroflow-bin = warnAlias "'gyroflow-bin' has been replaced by 'gyroflow'" gyroflow; # Added 2026-08-02
@@ -1148,6 +1154,7 @@ mapAliases {
   icu69 = throw "ICU 69 has been removed as it is obsolete and no longer used by anything in Nixpkgs"; # Added 2026-04-20
   igvm-tooling = throw "'igvm-tooling' has been removed as it is poorly maintained upstream and a dependency has been marked insecure."; # Added 2025-09-03
   ikos = throw "ikos has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
+  ilmbase = throw "'ilmbase' has been removed as it was unmaintained upstream and has several known vulnerabilities"; # Added 2026-08-28
   imagemagick6 = throw "'imagemagick6' was removed because it is outdated. Use 'imagemagick' instead."; # added 2026-02-27
   imagemagick6_light = throw "'imagemagick6_light' was removed because it is outdated. Use 'imagemagick_light' instead."; # added 2026-02-27
   imagemagick6Big = throw "'imagemagick6Big' was removed because it is outdated. Use 'imagemagickBig' instead."; # added 2026-02-27
@@ -1890,7 +1897,9 @@ mapAliases {
   opencolorio_1 = throw "'opencolorio_1' has been removed. Use opencolorio instead"; # Added 2026-01-03
   openconnect_gnutls = throw "'openconnect_gnutls' has been renamed to/replaced by 'openconnect'"; # Converted to throw 2025-10-27
   opendrop = throw "'opendrop' has been removed as it was unmaintained upstream"; # Added 2026-05-24
+  openexr_2 = throw "'openexr_2' has been removed as it was unmaintained upstream and had many known vulnerabilities. Consider migrating to 'openexr' (3.x) instead."; # Added 2026-08-28
   openexr_3 = throw "'openexr_3' has been renamed to/replaced by 'openexr'"; # Converted to throw 2025-10-27
+  openexrid-unstable = throw "'openxrid-unstable' has been removed as it had several insecure dependencies and had minimal upstream maintainence"; # Added 2026-08-28
   opengfw = throw "'opengfw' has been removed because the upstream repository was deleted"; # Added 2026-03-16
   openhmd = throw "'openhmd' has been removed due to being unmaintained upstream"; # Added 2025-11-05
   openimageio2 = throw "'openimageio2' has been renamed to/replaced by 'openimageio'"; # Converted to throw 2025-10-27
@@ -2040,6 +2049,7 @@ mapAliases {
   polyml57 = throw "'polyml57' has been deprecated in favor of polyml"; # Added 2026-06-01
   polypane = throw "'polypane' has been removed due to lack of maintenance in nixpkgs"; # Added 2025-06-25
   pop-gtk-theme = throw "'pop-gtk-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
+  popcorntime = throw "'popcorntime' has been removed since the upstream project has been forked"; # Added 2026-09-03
   poppler_utils = throw "'poppler_utils' has been renamed to/replaced by 'poppler-utils'"; # Converted to throw 2025-10-27
   popura = throw "'popura' is abandoned upstream and in nixpkgs and has been removed"; # Added 2026-01-15
   posterazor = throw "posterazor was removed due to numerous vulnerabilities in freeimage"; # Added 2025-10-23
@@ -2100,7 +2110,7 @@ mapAliases {
   purple-plugin-pack = throw "'purple-plugin-pack' has been renamed to/replaced by 'pidginPackages.purple-plugin-pack'"; # Converted to throw 2025-10-27
   purple-slack = throw "'purple-slack' has been renamed to/replaced by 'pidginPackages.purple-slack'"; # Converted to throw 2025-10-27
   purple-vk-plugin = throw "'purple-vk-plugin' has been removed as upstream repository was deleted and no active forks are found."; # Added 2025-09-17
-  purple-xmpp-http-upload = throw "'purple-xmpp-http-upload' has been renamed to/replaced by 'pidginPackages.purple-xmpp-http-upload'"; # Converted to throw 2025-10-27
+  purple-xmpp-http-upload = throw "'purple-xmpp-http-upload' has been removed because it is no longer maintained upstream."; # Added 2026-09-02
   pyca = throw "'pyca' was removed, because it was hard to maintain and not required by anything"; # Added 2026-07-31
   pyCA = warnAlias "'pyCA' was renamed to 'pyca'" pyca; # Added 2026-02-12
   pylint-exit = throw "'pylint-exit' was removed as it dependent on m2r which was removed."; # Added 2026-05-27
@@ -2163,6 +2173,7 @@ mapAliases {
   railway-travel = throw "'railway-travel' has been renamed to/replaced by 'diebahn'"; # Converted to throw 2025-10-27
   rambox-pro = throw "'rambox-pro' has been renamed to/replaced by 'rambox'"; # Converted to throw 2025-10-27
   rapidjson-unstable = throw "'rapidjson-unstable' has been renamed to/replaced by 'rapidjson'"; # Converted to throw 2025-10-27
+  rapidsvn = throw "'rapidsvn' has been removed because upstream archived the project after development stopped in August 2021"; # Added 2026-09-02
   rar2fs = throw "'rar2fs' has been removed as it is unmaintained, and depends on the unmaintained fuse2 library"; # Added 2026-05-19
   raycast-beta = throw "'raycast-beta' has been removed because Raycast 2.0 is out of beta. Use 'raycast' instead."; # Added 2026-08-24
   react-native-debugger = throw "'react-native-debugger' has been removed as it was unmaintained upstream and vendoring an EOL version of Electron"; # Added 2026-09-02
@@ -2172,6 +2183,7 @@ mapAliases {
   redoc-cli = throw "'redoc-cli' been removed because it has been marked as broken since at least November 2024. Consider using 'redocly' instead."; # Added 2025-10-01
   redocly-cli = throw "'redocly-cli' has been renamed to/replaced by 'redocly'"; # Converted to throw 2025-10-27
   redpanda = throw "'redpanda' has been renamed to/replaced by 'redpanda-client'"; # Converted to throw 2025-10-27
+  redprl = throw "'redprl' has been removed because upstream archived it after development stopped in November 2019. Consider using 'ocamlPackages.cooltt' instead."; # Added 2026-09-02
   redshift-plasma-applet = throw "'redshift-plasma-applet' has been removed as it is obsolete and lacks maintenance upstream."; # Added 2025-11-09
   reiserfsprogs = throw "'reiserfsprogs' has been removed as ReiserFS has not been actively maintained for many years."; # Added 2025-11-13
   remarshal_0_17 = throw "'remarshal_0_17' has been removed because 'remarshal' supports YAML 1.1 with the `--to yaml-1.1` flag."; # added 2026-07-30

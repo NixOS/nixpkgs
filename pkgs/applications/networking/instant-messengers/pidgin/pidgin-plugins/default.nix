@@ -48,8 +48,6 @@ lib.makeScope newScope (
 
     purple-slack = callPackage ./purple-slack { };
 
-    purple-xmpp-http-upload = callPackage ./purple-xmpp-http-upload { };
-
   }
   // lib.optionalAttrs config.allowAliases {
     tdlib-purple = throw "'pidginPackages.tdlib-purple' has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
@@ -62,5 +60,6 @@ lib.makeScope newScope (
     purple-facebook = throw "'pidginPackages.purple-facebook' has been removed as it is unmaintained and doesn't support e2ee enforced by facebook.";
     pidgin-opensteamworks = throw "'pidginPackages.pidgin-opensteamworks' has been removed as it is unmaintained and no longer works with Steam.";
     purple-vk-plugin = throw "'pidginPackages.purple-vk-plugin' has been removed as upstream repository was deleted and no active forks are found.";
+    purple-xmpp-http-upload = throw "'pidginPackages.purple-xmpp-http-upload' has been removed because it is no longer maintained upstream."; # Added 2026-09-02
   }
 )

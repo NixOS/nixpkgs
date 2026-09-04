@@ -364,11 +364,11 @@
     "vendorHash": null
   },
   "dopplerhq_doppler": {
-    "hash": "sha256-SS2S4JGG1Xu0p4k6lVlTr173Xanwc6hZ0A3osEWGdEg=",
+    "hash": "sha256-3k7leyu/7FCtCzZN7pn6eIhxuYUbi8h3DBSGhrt2XXQ=",
     "homepage": "https://registry.terraform.io/providers/DopplerHQ/doppler",
     "owner": "DopplerHQ",
     "repo": "terraform-provider-doppler",
-    "rev": "v1.21.4",
+    "rev": "v1.21.5",
     "spdx": "Apache-2.0",
     "vendorHash": "sha256-B8mYLd4VdADWoQLWiCM85VQrBfDdlYQ0wkCp9eUBQ4U="
   },
@@ -1409,11 +1409,11 @@
     "vendorHash": "sha256-kM5itT82W2uy/y5uJkZsMH308LjRMSNKBJC09e5k5+8="
   },
   "turbot_turbot": {
-    "hash": "sha256-Az+eTY+eksfH89DGqTd8RVwD8KDztz6Bctm0Mt7GBN4=",
+    "hash": "sha256-VyhK0tnYyKDrtG6ER9uwn4kvo4MrAN+NYVh7hf6bkVM=",
     "homepage": "https://registry.terraform.io/providers/turbot/turbot",
     "owner": "turbot",
     "repo": "terraform-provider-turbot",
-    "rev": "v1.14.0",
+    "rev": "v1.14.1",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },

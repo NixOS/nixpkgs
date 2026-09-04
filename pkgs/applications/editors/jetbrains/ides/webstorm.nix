@@ -1,11 +1,13 @@
 {
-  stdenv,
-  lib,
+  # keep-sorted start
   fetchurl,
-  mkJetBrainsProduct,
-  libdbm,
   fsnotifier,
+  jetbrains,
+  jetbrains-libdbm,
+  lib,
   musl,
+  stdenv,
+  # keep-sorted end
 }:
 let
   system = stdenv.hostPlatform.system;
@@ -26,8 +28,8 @@ let
   };
   # update-script-end: urls
 in
-mkJetBrainsProduct {
-  inherit libdbm fsnotifier;
+jetbrains.mkJetBrainsProduct {
+  inherit jetbrains-libdbm fsnotifier;
 
   pname = "webstorm";
 
@@ -40,6 +42,13 @@ mkJetBrainsProduct {
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
+
+  # the jdk is bundled on Darwin.
+  jdk =
+    if lib.meta.availableOn stdenv.hostPlatform jetbrains.jdk-no-jcef then
+      jetbrains.jdk-no-jcef
+    else
+      null;
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     musl
@@ -54,6 +63,7 @@ mkJetBrainsProduct {
       abaldeau
       tymscar
     ];
+    teams = [ lib.teams.jetbrains ];
     license = lib.licenses.unfree;
     sourceProvenance =
       if stdenv.hostPlatform.isDarwin then
