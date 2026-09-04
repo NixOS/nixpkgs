@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rns-over-icmp"
+version = "0.1.0"
+description = "ICMP tunnel for Reticulum/RNS traffic"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+  { name = "matvik22000" }
+]
+dependencies = [
+  "scapy"
+]
+keywords = ["icmp", "tunnel", "network", "reticulum", "rns", "scapy"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Operating System :: OS Independent",
+  "Topic :: Internet",
+  "Topic :: System :: Networking"
+]
+
+[tool.setuptools]
+py-modules = ["icmp_tunnel", "cli"]
+
+[project.scripts]
+rns-over-icmp = "cli:main"
