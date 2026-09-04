@@ -104,11 +104,11 @@ stdenv'.mkDerivation (finalAttrs: {
 
   doCheck = (stdenv.hostPlatform == stdenv.buildPlatform) && stdenv.hostPlatform.libc != "musl";
   preCheck =
-    lib.optional stdenv.hostPlatform.isDarwin ''
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
       export DYLD_LIBRARY_PATH="$PWD/.libs:$DYLD_LIBRARY_PATH"
     ''
     # cyg prefix doesn't work for python modules
-    ++ lib.optional (stdenv.hostPlatform.isCygwin && pythonSupport) ''
+    + lib.optionalString (stdenv.hostPlatform.isCygwin && pythonSupport) ''
       ln -s cygxml2mod.dll python/.libs/libxml2mod.dll
     '';
 
