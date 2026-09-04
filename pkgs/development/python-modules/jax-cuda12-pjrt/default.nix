@@ -103,6 +103,7 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/jax-ml/jax/tree/main/jax_plugins/cuda";
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     license = lib.licenses.asl20;
+    teams = [ lib.teams.cuda ];
     maintainers = with lib.maintainers; [
       GaetanLepage
       natsukium
