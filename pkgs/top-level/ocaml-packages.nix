@@ -2240,6 +2240,8 @@ let
 
         uring = callPackage ../development/ocaml-modules/uring { };
 
+        utcp = callPackage ../development/ocaml-modules/utcp { };
+
         utop = callPackage ../development/tools/ocaml/utop { };
 
         uucd = callPackage ../development/ocaml-modules/uucd { };
