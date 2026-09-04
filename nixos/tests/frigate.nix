@@ -77,5 +77,7 @@
 
     # wait for a recording to appear
     machine.wait_for_file("/var/cache/frigate/test@*.mp4")
+
+    machine.log(machine.execute("systemd-analyze security frigate.service | grep -v ✓")[1])
   '';
 }

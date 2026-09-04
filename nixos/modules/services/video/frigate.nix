@@ -493,19 +493,6 @@ in
                 }
               '';
           };
-          # frontend uses this to fetch the version
-          "/api/go2rtc/api" = {
-            proxyPass = "http://frigate-go2rtc/api";
-            recommendedProxySettings = true;
-            extraConfig =
-              nginxAuthRequest
-              + nginxProxySettings
-              + ''
-                limit_except GET {
-                    deny  all;
-                }
-              '';
-          };
           # integrationn uses this to add webrtc candidate
           "/api/go2rtc/webrtc" = {
             proxyPass = "http://frigate-go2rtc/api/webrtc";
@@ -541,6 +528,7 @@ in
                 expires off;
 
                 proxy_cache frigate_api_cache;
+                proxy_cache_key "$scheme$proxy_host$request_uri|$role|$groups|$user";
                 proxy_cache_lock on;
                 proxy_cache_use_stale updating;
                 proxy_cache_valid 200 5s;
@@ -557,6 +545,13 @@ in
                 }
 
                 location /api/login {
+                    auth_request off;
+                    rewrite ^/api(/.*)$ $1 break;
+                    proxy_pass http://frigate-api;
+                    ${nginxProxySettings}
+                }
+
+                location /api/logout {
                     auth_request off;
                     rewrite ^/api(/.*)$ $1 break;
                     proxy_pass http://frigate-api;
@@ -747,7 +742,6 @@ in
         ]
         ++ optionals (!stdenv.hostPlatform.isAarch64) [
           # not available on aarch64-linux
-          intel-gpu-tools
           rocmPackages.rocminfo
         ];
       serviceConfig = {
@@ -775,11 +769,10 @@ in
         Group = "frigate";
         SupplementaryGroups = [ "render" ] ++ optionals withCoral [ "coral" ];
 
-        AmbientCapabilities = optionals (elem cfg.vaapiDriver [
-          "i965"
-          "iHD"
-        ]) [ "CAP_PERFMON" ]; # for intel_gpu_top
+        # No capabilities
+        CapabilityBoundingSet = [ "" ];
 
+        # Allow delegating access
         UMask = "0027";
 
         StateDirectory = "frigate";
@@ -797,9 +790,53 @@ in
 
         # Sockets/IPC
         RuntimeDirectory = "frigate";
+        RemoveIPC = true;
 
         # Reduce visible process scope to cgroup
         ProtectProc = "invisible";
+
+        # Allow wide /proc inspection, e.g. for cpuinfo
+        ProcSubset = "all";
+
+        # Protect various system locations/interfaces
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+
+        # No JIT compilation
+        MemoryDenyWriteExecute = true;
+
+        # No ABI personality changes
+        LockPersonality = true;
+
+        # Only IP/Unix sockets
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+
+        # Deny namespace creation
+        RestrictNamespaces = true;
+
+        # No privilege escalation
+        NoNewPrivileges = true;
+        RestrictSUIDSGID = true;
+
+        # No realtime schedulign
+        RestrictRealtime = true;
+
+        # Restrict allowed syscalls
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
+        SystemCallArchitectures = "native";
+        SystemCallErrorNumber = "EPERM";
       };
     };
 

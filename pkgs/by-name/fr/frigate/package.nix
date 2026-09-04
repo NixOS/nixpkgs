@@ -1,47 +1,21 @@
 {
-  lib,
-  stdenv,
-  replaceVars,
   addDriverRunpath,
   callPackage,
-  python313Packages,
   fetchFromGitHub,
   rustPlatform,
-  fetchurl,
   ffmpeg-headless,
-  sqlite-vec,
   frigate,
+  lib,
   nixosTests,
-  go2rtc,
+  python313Packages,
+  replaceVars,
+  sqlite-vec,
+  stdenv,
 }:
 
 let
-  version = "0.17.2";
-
-  src = fetchFromGitHub {
-    name = "frigate-${version}-source";
-    owner = "blakeblackshear";
-    repo = "frigate";
-    tag = "v${version}";
-    hash = "sha256-8ujG5rVGqIJxM+IiQKvudrA0xqfz+3Uisl/zXwARPpY=";
-  };
-
-  frigate-web = callPackage ./web.nix {
-    inherit version src;
-  };
-
   python3Packages = python313Packages.overrideScope (
     self: super: {
-      joserfc = super.joserfc.overridePythonAttrs (oldAttrs: {
-        version = "1.1.0";
-        src = fetchFromGitHub {
-          owner = "authlib";
-          repo = "joserfc";
-          tag = version;
-          hash = "sha256-95xtUzzIxxvDtpHX/5uCHnTQTB8Fc08DZGUOR/SdKLs=";
-        };
-      });
-
       # transformers 4.* is not compatible with the latest tokenizers
       tokenizers = super.tokenizers.overridePythonAttrs (
         oldAttrs:
@@ -72,40 +46,19 @@ let
   );
 
   inherit (python3Packages) python;
-
-  # Tensorflow audio model
-  # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L125
-  tflite_audio_model = fetchurl {
-    url = "https://www.kaggle.com/api/v1/models/google/yamnet/tfLite/classification-tflite/1/download";
-    hash = "sha256-G5cbITJ2AnOl+49dxQToZ4OyeFO7MTXVVa4G8eHjZfM=";
-  };
-
-  # Tensorflow Lite models
-  # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L115-L117
-  tflite_cpu_model = fetchurl {
-    url = "https://github.com/google-coral/test_data/raw/release-frogfish/ssdlite_mobiledet_coco_qat_postprocess.tflite";
-    hash = "sha256-kLszpjTgQZFMwYGapd+ZgY5sOWxNLblSwP16nP/Eck8=";
-  };
-  tflite_edgetpu_model = fetchurl {
-    url = "https://github.com/google-coral/test_data/raw/release-frogfish/ssdlite_mobiledet_coco_qat_postprocess_edgetpu.tflite";
-    hash = "sha256-Siviu7YU5XbVbcuRT6UnUr8PE0EVEnENNV2X+qGzVkE=";
-  };
-
-  # TODO: OpenVino model
-  # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L64-L77
-  # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L120-L123
-  # Convert https://www.kaggle.com/models/tensorflow/ssdlite-mobilenet-v2 with https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/build_ov_model.py into OpenVino IR format
-  coco_91cl_bkgr = fetchurl {
-    url = "https://github.com/openvinotoolkit/open_model_zoo/raw/master/data/dataset_classes/coco_91cl_bkgr.txt";
-    hash = "sha256-5Cj2vEiWR8Z9d2xBmVoLZuNRv4UOuxHSGZQWTJorXUQ=";
-  };
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "frigate";
-  inherit version;
+  version = "0.18.0-rc1";
   pyproject = false;
 
-  inherit src;
+  src = fetchFromGitHub {
+    name = "frigate-${finalAttrs.version}-source";
+    owner = "blakeblackshear";
+    repo = "frigate";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nMlaExkofbUmzRy3nr42Wy8r+yHcgHiyAsdfq/XdF0Q=";
+  };
 
   patches = [
     # Always lookup ffmpeg from config setting
@@ -116,24 +69,27 @@ python3Packages.buildPythonApplication rec {
       inherit (addDriverRunpath) driverLink;
     })
 
-    # Use ai-edge-litert as tensorflow interpreter
-    # https://github.com/blakeblackshear/frigate/pull/21876
-    ./ai-edge-litert.patch
-
     # Disable failing optimization in onnxruntime
     # https://github.com/microsoft/onnxruntime/issues/26717
+    # https://github.com/microsoft/onnxruntime/pull/29196
     ./onnxruntime-compat.patch
 
-    # Fix excessive trailing whitespaces in process commandlines
-    # https://github.com/blakeblackshear/frigate/pull/22089
-    ./proc-cmdline-strip.patch
+    # Reuse EXPORT_DIR in tests
+    ./fix-tests-media-auth-paths.patch
 
     # Fix more granular dtype resolution in Pandas 3.0
     ./pandas3-compat.patch
+
+    # Various fixes for newer library packages, migrates to
+    # - FastAPI lifespan,
+    # - native tz-aware objects,
+    # - Pydantic TypeAdapter
+    # https://github.com/blakeblackshear/frigate/pull/23641
+    ./pr23641.patch
   ];
 
   postPatch = ''
-    echo 'VERSION = "${version}"' > frigate/version.py
+    echo 'VERSION = "${finalAttrs.version}"' > frigate/version.py
 
     substituteInPlace \
       frigate/app.py \
@@ -160,90 +116,94 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace frigate/db/sqlitevecq.py \
       --replace-fail "/usr/local/lib/vec0" "${lib.getLib sqlite-vec}/lib/vec0${stdenv.hostPlatform.extensions.sharedLibrary}"
 
-    # provide default paths for models and maps that are shipped with frigate
+    # hardcoded default models shipped with Frigate
     substituteInPlace frigate/config/config.py \
-      --replace-fail "/cpu_model.tflite" "${tflite_cpu_model}" \
-      --replace-fail "/edgetpu_model.tflite" "${tflite_edgetpu_model}"
+      --replace-fail "/cpu_model.tflite" "${frigate.models.tflite.ssdlite_mobiledet_coco_qat_postprocess}" \
+      --replace-fail "/edgetpu_model.tflite" "${frigate.models.edgetpu.ssdlite_mobiledet_coco_qat_postprocess}" \
+      --replace-fail "/openvino-model/ssdlite_mobilenet_v2.xml" "${frigate.models.openvino.ssdlite_mobilenet_v2_coco.model}" \
+      --replace-fail "/openvino-model/coco_91cl_bkgr.txt" "${frigate.models.openvino.ssdlite_mobilenet_v2_coco.labelmap}"
 
     substituteInPlace frigate/detectors/detector_config.py \
       --replace-fail "/labelmap.txt" "${placeholder "out"}/share/frigate/labelmap.txt"
 
     substituteInPlace frigate/events/audio.py \
-      --replace-fail "/cpu_audio_model.tflite" "${placeholder "out"}/share/frigate/cpu_audio_model.tflite" \
+      --replace-fail "/cpu_audio_model.tflite" "${frigate.models.tflite.yamnet_classification_v1.model}" \
       --replace-fail "/audio-labelmap.txt" "${placeholder "out"}/share/frigate/audio-labelmap.txt"
   '';
 
   dontBuild = true;
 
-  dependencies = with python3Packages; [
-    # docker/main/requirements-wheel.txt
-    # TODO: degirum (no source repo, binary wheels only)
-    ai-edge-litert
-    aiofiles
-    aiohttp
-    appdirs
-    argcomplete
-    click
-    contextlib2
-    cryptography
-    distlib
-    fastapi
-    faster-whisper
-    filelock
-    google-genai
-    importlib-metadata
-    importlib-resources
-    joserfc
-    keras # via tensorflow.keras
-    librosa
-    markupsafe
-    memray
-    netaddr
-    netifaces
-    norfair
-    numpy
-    ollama
-    onnxruntime
-    onvif-zeep-async
-    openai
-    opencv4
-    openvino
-    paho-mqtt
-    pandas
-    pathvalidate
-    peewee
-    peewee-migrate
-    prometheus-client
-    psutil
-    py3nvml
-    pyclipper
-    pydantic
-    python-multipart
-    pytz
-    py-vapid
-    pywebpush
-    pyzmq
-    rapidfuzz
-    requests
-    ruamel-yaml
-    scipy
-    setproctitle
-    shapely
-    sherpa-onnx
-    slowapi
-    soundfile
-    starlette
-    starlette-context
-    tensorflow
-    titlecase
-    transformers
-    tzlocal
-    unidecode
-    uvicorn
-    verboselogs
-    virtualenv
-    ws4py
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      # docker/main/requirements-wheel.txt
+      ai-edge-litert
+      aiofiles
+      aiohttp
+      appdirs
+      argcomplete
+      click
+      contextlib2
+      cryptography
+      distlib
+      fastapi
+      faster-whisper
+      filelock
+      google-genai
+      httpx
+      importlib-metadata
+      importlib-resources
+      joserfc
+      keras # via tensorflow.keras
+      librosa
+      markupsafe
+      memray
+      netaddr
+      netifaces
+      norfair
+      numpy
+      ollama
+      onnxruntime
+      onvif-zeep-async
+      openai
+      opencv4
+      openvino
+      paho-mqtt
+      pandas
+      pathvalidate
+      peewee
+      peewee-migrate
+      prometheus-client
+      psutil
+      py3nvml
+      pyclipper
+      pydantic
+      python-multipart
+      py-vapid
+      pywebpush
+      pyzmq
+      rapidfuzz
+      requests
+      ruamel-yaml
+      scipy
+      setproctitle
+      shapely
+      sherpa-onnx
+      slowapi
+      soundfile
+      starlette
+      starlette-context
+      tensorflow
+      titlecase
+      transformers
+      tzlocal
+      unidecode
+      uvicorn
+      verboselogs
+      virtualenv
+      ws4py
+    ]
+    ++ httpx.optional-dependencies.http2;
 
   installPhase = ''
     runHook preInstall
@@ -254,11 +214,7 @@ python3Packages.buildPythonApplication rec {
     mkdir -p $out/share/frigate
     cp -R {migrations,labelmap.txt,audio-labelmap.txt} $out/share/frigate/
 
-    tar --extract --gzip --file ${tflite_audio_model}
-    cp --no-preserve=mode ./1.tflite $out/share/frigate/cpu_audio_model.tflite
-
-    cp --no-preserve=mode ${coco_91cl_bkgr} $out/share/frigate/coco_91cl_bkgr.txt
-    sed -i 's/truck/car/g' $out/share/frigate/coco_91cl_bkgr.txt
+    ln -s ${frigate.models.tflite.yamnet_classification_v1.model} $out/share/frigate/cpu_audio_model.tflite
 
     runHook postInstall
   '';
@@ -269,9 +225,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   preCheck = ''
-    # Unavailable in the build sandbox
+    # FHS paths are unreachable in the build sandbox
     substituteInPlace frigate/const.py \
-      --replace-fail "/var/lib/frigate" "$TMPDIR/" \
+      --replace-fail "/var/lib/frigate" "$TMPDIR" \
       --replace-fail "/var/cache/frigate" "$TMPDIR"
   '';
 
@@ -286,16 +242,47 @@ python3Packages.buildPythonApplication rec {
   ];
 
   passthru = {
-    web = frigate-web;
-    inherit python;
-    pythonPath = (python3Packages.makePythonPath dependencies) + ":${frigate}/${python.sitePackages}";
+    inherit python python3Packages;
+    pythonPath =
+      (python3Packages.makePythonPath finalAttrs.finalPackage.dependencies)
+      + ":${frigate}/${python.sitePackages}";
+    web = callPackage ./web.nix {
+      inherit (finalAttrs) version src;
+    };
+    models = {
+      # Google Coral Accelerators as Tensorflow Delegate
+      # https://docs.frigate.video/configuration/object_detectors/#edge-tpu-detector
+      edgetpu = lib.recurseIntoAttrs (
+        lib.packagesFromDirectoryRecursive {
+          inherit callPackage;
+          directory = ./models/edgetpu;
+        }
+      );
+      # Intel OpenVINO for CPU/GPU/NPU
+      # https://docs.frigate.video/configuration/object_detectors/#openvino-detector
+      openvino = lib.recurseIntoAttrs (
+        lib.packagesFromDirectoryRecursive {
+          inherit callPackage;
+          directory = ./models/openvino;
+        }
+      );
+      # Tensorflow Lite CPU models
+      # https://docs.frigate.video/configuration/object_detectors/#cpu-detector-not-recommended
+      # https://docs.frigate.video/configuration/audio_detectors/
+      tflite = lib.recurseIntoAttrs (
+        lib.packagesFromDirectoryRecursive {
+          inherit callPackage;
+          directory = ./models/tflite;
+        }
+      );
+    };
     tests = {
       inherit (nixosTests) frigate;
     };
   };
 
   meta = {
-    changelog = "https://github.com/blakeblackshear/frigate/releases/tag/${src.tag}";
+    changelog = "https://github.com/blakeblackshear/frigate/releases/tag/${finalAttrs.src.tag}";
     description = "NVR with realtime local object detection for IP cameras";
     longDescription = ''
       A complete and local NVR designed for Home Assistant with AI
@@ -306,4 +293,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})
