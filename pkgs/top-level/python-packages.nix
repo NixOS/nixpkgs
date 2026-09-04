@@ -8694,6 +8694,8 @@ self: super: with self; {
 
   jax-cuda13-pjrt = callPackage ../development/python-modules/jax-cuda13-pjrt { };
 
+  jax-cuda13-plugin = callPackage ../development/python-modules/jax-cuda13-plugin { };
+
   jax-jumpy = callPackage ../development/python-modules/jax-jumpy { };
 
   jax-tap = callPackage ../development/python-modules/jax-tap { };
