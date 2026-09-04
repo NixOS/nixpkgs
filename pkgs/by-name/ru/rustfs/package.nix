@@ -91,6 +91,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Only build the main rustfs binary
   cargoBuildFlags = "-p rustfs";
 
+  # Restore Cargo's defaults for non-incremental release checks.
+  preCheck = ''
+    export CARGO_PROFILE_RELEASE_LTO=false
+    export CARGO_PROFILE_RELEASE_CODEGEN_UNITS=16
+  '';
+
   useNextest = true;
   cargoTestFlags = [
     "--package"
