@@ -15,7 +15,7 @@
   libsndfile,
   aubio,
   gtk3,
-  gtksourceview,
+  gtksourceview3,
   evince,
   fluidsynth,
   rubberband,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsndfile
     aubio
     gtk3
-    gtksourceview
+    gtksourceview3
     evince
     fluidsynth
     rubberband
