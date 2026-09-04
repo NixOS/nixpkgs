@@ -239,6 +239,10 @@ stdenv.mkDerivation (finalAttrs: {
           runHook postInstall
         '';
 
+        passthru = {
+          inherit (finalAttrs.passthru) updateScript tests;
+        };
+
         meta = {
           inherit (finalAttrs.meta)
             homepage
