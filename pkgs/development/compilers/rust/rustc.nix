@@ -411,6 +411,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optional (!withBundledLLVM) llvmShared.lib
   ++ optional (useLLVM && !withBundledLLVM) llvmPackages.libunwind;
 
+  strictDeps = true;
+
   outputs = [
     "out"
     "man"
