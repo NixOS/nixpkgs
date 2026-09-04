@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gluesql";
-  version = "0.19.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "gluesql";
     repo = "gluesql";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/Yb6ksHxFscB/t7fID11fNHldJ0lDmN9DXbiaG+mUwY=";
+    hash = "sha256-O2OkrUSeQQT7x4Z3chdFjpY1M1m/TAoU9viMgM9hCXg=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     git config --global user.email "nobody@example.com"
   '';
 
-  cargoHash = "sha256-P2YH3mf1Olrjzwl6ldwzO0xMC0yccqA7T2mrWZ5qSKM=";
+  cargoHash = "sha256-U58pcgrFU4Kwz5vm5pOk4LOtEa19LVKEfqVp61G7VjM=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
