@@ -898,6 +898,16 @@ with haskellLib;
     doJailbreak
   ];
 
+  # Update test suite fixtures for latest version of djot
+  pandoc = appendPatches [
+    (pkgs.fetchpatch {
+      name = "pandoc-tests-djot-0.1.4.2.patch";
+      url = "https://github.com/jgm/pandoc/commit/8139d6bc1ca23c3f08b8850d821ad46cf883dd19.patch";
+      hash = "sha256-fCrwSLM2ek1FwIxZ2m7Ki4WpOd/qdiwnU/oIT/DucOE=";
+      includes = [ "test/writer.djot" ];
+    })
+  ] super.pandoc;
+
   # Too strict upper bound on data-default-class (< 0.2)
   # https://github.com/stackbuilders/dotenv-hs/issues/203
   dotenv = doJailbreak super.dotenv;
