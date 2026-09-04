@@ -1,88 +1,98 @@
 {
   alsa-lib,
-  autoPatchelfHook,
-  clang,
   cmake,
   fetchFromGitHub,
-  fontconfig,
-  freetype,
   lib,
-  libglvnd,
   libjack2,
-  libx11,
-  libxcursor,
-  libxi,
-  libxkbcommon,
-  llvmPackages,
-  makeWrapper,
   nasm,
   nix-update-script,
   pipewire, # pw-metadata/pw-dump for bit-perfect sample rate queries and DAC detection
   pkg-config,
   pulseaudio, # pactl for PipeWire device enumeration and sink routing
+  qt6,
   rustPlatform,
-  vulkan-loader,
-  wayland,
+  xdg-utils,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qbz";
-  version = "2.0.2";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "vicrodh";
     repo = "qbz";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zseGL7IcH/fdc4TDVwU3Tml1X6wCvSaYCji5D5RxAuA=";
+    hash = "sha256-yjTrKABYX2/fv8j32JEtEF9DQxjO6ebEto2xR3GsALg=";
   };
 
-  cargoHash = "sha256-FPDyn61rO/hW9gEUU/yo+mXhnamwwXU1mj3wGQpHA3o=";
+  cargoHash = "sha256-6LE7RAworkFknWJ6S5u0qu1HQ2P5ms59zsNEVEjpsUg=";
   cargoRoot = "crates";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  nativeBuildInputs = [
-    makeWrapper
-    pkg-config
-    autoPatchelfHook
+  # Ship both released binaries: the Qt GUI (qbz-qt, installed as `qbz`) and
+  # the headless daemon (qbzd). Upstream releases both.
+  cargoBuildFlags = [
+    "-p"
+    "qbz-qt"
+    "-p"
+    "qbzd"
   ];
 
+  # cmake: cxx-qt-build drives the generated C++ side through it. nasm:
+  # aws-lc-sys (TLS) assembles its primitives with it. qt6.qmake +
+  # wrapQtAppsHook: the 2.1 frontend is Qt Quick, so the build needs qmake and
+  # the wrapper sets the Qt plugin/QML paths the binary loads at run time. (The
+  # 1.x/2.0 Slint build also needed clang; the Qt build does not, so it is
+  # dropped.)
+  nativeBuildInputs = [
+    cmake
+    nasm
+    pkg-config
+    qt6.qmake
+    qt6.wrapQtAppsHook
+  ];
+
+  # cxx-qt needs qtbase + qtdeclarative (the RHI scene items include
+  # <rhi/qrhi.h>). qtsvg is the SVG image plugin; qtwayland the Wayland
+  # platform plugin. wrapQtAppsHook pulls in the rest of Qt's runtime closure.
   buildInputs = [
     alsa-lib
-    fontconfig
-    freetype
     libjack2
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qtsvg
+    qt6.qtwayland
   ];
 
-  runtimeDependencies = [
-    libglvnd
-    libxkbcommon
-    libx11
-    libxcursor
-    libxi
-    vulkan-loader
-    wayland
+  # Runtime helpers QBZ shells out to: pactl/pw-* for device enumeration and
+  # sample-rate control, xdg-open for external links. libjack2 is dlopened by
+  # the JACK backend, so it must be on LD_LIBRARY_PATH; the rest of the runtime
+  # library closure comes from wrapQtAppsHook + buildInputs.
+  qtWrapperArgs = [
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        pipewire
+        pulseaudio
+        xdg-utils
+      ]
+    }"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libjack2 ]}"
   ];
 
-  # The generated Slint UI module is a single very large compilation unit;
-  # running the test profile on top of the build doubles wall time and memory
-  # for no packaging value. Engine crates are tested in upstream CI.
+  # Tests need an offscreen QPA + D-Bus the sandbox does not provide; the
+  # engine crates are covered by upstream CI (test-crates.yml).
   doCheck = false;
 
   postInstall = ''
-    wrapProgram $out/bin/qbz \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          pulseaudio
-          pipewire
-        ]
-      }
-
     install -Dm644 $src/packaging/linux/qbz.desktop \
-      $out/share/applications/qbz.desktop
+      $out/share/applications/com.blitzfc.qbz.desktop
+    install -Dm644 $src/packaging/flatpak/com.blitzfc.qbz.metainfo.xml \
+      $out/share/metainfo/com.blitzfc.qbz.metainfo.xml
     for size in 32 48 64 128 256 512; do
       install -Dm644 $src/packaging/icons/"$size"x"$size".png \
         $out/share/icons/hicolor/"$size"x"$size"/apps/qbz.png
     done
+    install -Dm644 $src/LICENSE $out/share/licenses/qbz/LICENSE
   '';
 
   passthru.updateScript = nix-update-script { };
