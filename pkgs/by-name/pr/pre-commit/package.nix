@@ -40,6 +40,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ./languages-use-the-hardcoded-path-to-python-binaries.patch
     ./hook-tmpl.patch
     ./pygrep-pythonpath.patch
+    ./meta-hooks-pythonpath.patch
   ];
 
   build-system = with python3Packages; [
