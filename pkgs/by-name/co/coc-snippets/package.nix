@@ -7,16 +7,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "coc-snippets";
-  version = "3.4.7";
+  version = "3.4.10";
 
   src = fetchFromGitHub {
     owner = "neoclide";
     repo = "coc-snippets";
     tag = finalAttrs.version;
-    hash = "sha256-xaExEsNy6uuYUTeyXaon4DAoRIF6OpIZis59oetR36c=";
+    hash = "sha256-MbjEp8tn3/45KhID7XvMcIBAXY2bgazu4JQirWcxkz4=";
   };
 
-  npmDepsHash = "sha256-tRyFtfL3Jc+uajELVdJoDteY3lnq0Bx8UQTaz2HtbW0=";
+  npmDepsHash = "sha256-FOFCdlgW0Z34ixVCFbSJcl6dcPaGKiDpMmwF+M09hFU=";
 
   npmBuildScript = "prepare";
 
