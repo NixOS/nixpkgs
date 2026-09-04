@@ -76,7 +76,7 @@ jobs:
           github-token: ${{ steps.app-token.outputs.token || github.token }}
           script: |
             const targetsStable = JSON.parse(process.env.TARGETS_STABLE)
-            const { default: commits } = await import('${{ github.workspace }}/trusted/ci/github-script/commits.js')
+            const { default: commits } = await import('${{ github.workspace }}/trusted/ci/github-script/commits.ts')
             await commits({
               github,
               context,
