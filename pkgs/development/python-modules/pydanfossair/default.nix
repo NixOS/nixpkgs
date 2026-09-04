@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pytestCheckHook,
   setuptools,
 }:
 
@@ -19,8 +20,7 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  # Project has no tests
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pydanfossair" ];
 
