@@ -34,6 +34,8 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     changelog = "https://go.dev/doc/devel/release#go${lib.versions.majorMinor version}";
