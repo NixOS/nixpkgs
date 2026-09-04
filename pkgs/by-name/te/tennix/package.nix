@@ -15,12 +15,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tennix";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchgit {
     url = "git://repo.or.cz/tennix.git";
     tag = "tennix-${finalAttrs.version}";
-    hash = "sha256-siGfnpZPMYMTgYzaPVhNXEuA/OSWmEl891cLhvgGr7o=";
+    hash = "sha256-QKCk7K8uBjk1ybl0yadxuMymDI+yM+3FcrQTSMsjdOE=";
   };
 
   nativeBuildInputs = [ which ];
