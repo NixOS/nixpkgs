@@ -1555,6 +1555,7 @@
   ./services/security/clamav.nix
   ./services/security/crowdsec-firewall-bouncer.nix
   ./services/security/crowdsec.nix
+  ./services/security/duo-desktop.nix
   ./services/security/e-imzo.nix
   ./services/security/endlessh-go.nix
   ./services/security/endlessh.nix
