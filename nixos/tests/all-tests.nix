@@ -1367,6 +1367,8 @@ in
   pam-pgsql = runTest ./pam/pam-pgsql.nix;
   pam-u2f = runTest ./pam/pam-u2f.nix;
   pam-u2f-polkit = runTest ./pam/pam-u2f-polkit.nix;
+  pam-unix-chkpwd-self = runTest ./pam/pam-unix-chkpwd-self.nix;
+  pam-unix-chkpwd-ssh = runTest ./pam/pam-unix-chkpwd-ssh.nix;
   pam-ussh = runTest ./pam/pam-ussh.nix;
   pam-zfs-key = runTest ./pam/zfs-key.nix;
   pangolin = runTest ./pangolin.nix;
