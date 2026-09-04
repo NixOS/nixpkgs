@@ -28,14 +28,14 @@ let
     # https://dldir1.qq.com/weixin/mac/mac-release.xml
     aarch64-darwin =
       let
-        version = "4.1.8.106-37335";
+        version = "4.1.13.59-269627";
         version' = lib.replaceString "-" "_" version;
       in
       {
         inherit version;
         src = fetchurl {
           url = "https://dldir1v6.qq.com/weixin/Universal/Mac/xWeChatMac_universal_${version'}.dmg";
-          hash = "sha256-lygjqWbNqh9fCnhbyfEhnRdKdfQ9MOwPv5unqwJJsvE=";
+          hash = "sha256-45zrtADGKikIfN+BQRMR74Pnmr4VHfXShamWEnOTdOk=";
         };
       };
     # use https://web.archive.org/save to archive the Linux versions
