@@ -19636,6 +19636,8 @@ self: super: with self; {
 
   splunk-sdk = callPackage ../development/python-modules/splunk-sdk { };
 
+  spmd-types = callPackage ../development/python-modules/spmd-types { };
+
   spotapi = callPackage ../development/python-modules/spotapi { };
 
   spotifyaio = callPackage ../development/python-modules/spotifyaio { };
