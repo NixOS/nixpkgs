@@ -27,9 +27,6 @@ let
   finalPackage = cfg.package.override {
     inherit (cfg) providers;
   };
-
-  # YouTube Music needs deno with JIT to solve yt-dlp challenges
-  useYTMusic = lib.elem "ytmusic" cfg.providers;
 in
 
 {
@@ -137,11 +134,11 @@ in
       path =
         with pkgs;
         [
+          finalPackage.ffmpeg
           lsof
         ]
         ++ lib.optionals (lib.elem "airplay" cfg.providers) [
-          cliairplay
-          libraop
+          airplay-cli
         ]
         ++ lib.optionals (lib.elem "airplay_receiver" cfg.providers) [
           shairport-sync
@@ -155,9 +152,9 @@ in
         ++ lib.optionals (lib.elem "snapcast" cfg.providers) [
           snapcast
         ]
-        ++ lib.optionals useYTMusic [
+        # YouTube Music needs deno with JIT to solve yt-dlp challenges
+        ++ lib.optionals (lib.elem "ytmusic" cfg.providers) [
           deno
-          ffmpeg-headless
         ];
 
       serviceConfig = {
@@ -169,8 +166,18 @@ in
         );
         DynamicUser = true;
         StateDirectory = "music-assistant";
-        AmbientCapabilities = "";
-        CapabilityBoundingSet = [ "" ];
+        # AirPlay 2 requires CAP_NET_BIND_SERVICE to bind to UDP ports 319 and 320 for synchronized group playback.
+        # Opening the ports in the firewall is not necessary.
+        # See this older version of the docs:
+        # https://github.com/music-assistant/music-assistant.io/blob/33175c11961beac4c6a27beff6d4cce269f29efe/src/content/docs/player-support/airplay.md#airplay-2-group-synchronization
+        AmbientCapabilities = [
+          ""
+        ]
+        ++ lib.optionals (lib.elem "airplay" cfg.providers) [ "CAP_NET_BIND_SERVICE" ];
+        CapabilityBoundingSet = [
+          ""
+        ]
+        ++ lib.optionals (lib.elem "airplay" cfg.providers) [ "CAP_NET_BIND_SERVICE" ];
         DevicePolicy = "closed";
         LockPersonality = true;
         # breaks pyopenssl's cffi calls, used in remote access feature
@@ -204,7 +211,8 @@ in
           "~@privileged"
           "mbind"
         ]
-        ++ lib.optionals useYTMusic [
+        # YouTube Music needs deno with JIT to solve yt-dlp challenges
+        ++ lib.optionals (lib.elem "ytmusic" cfg.providers) [
           "@pkey"
         ];
         RestrictSUIDSGID = true;
