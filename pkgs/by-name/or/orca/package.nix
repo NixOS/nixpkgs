@@ -4,7 +4,6 @@
   buildPackages,
   pkg-config,
   fetchurl,
-  fetchpatch,
   meson,
   ninja,
   wrapGAppsHook3,
@@ -21,6 +20,9 @@
   dbus,
   xkbcomp,
   procps,
+  cargo,
+  rustc,
+  rustPlatform,
   gsettings-desktop-schemas,
   speechd-minimal,
   brltty,
@@ -40,50 +42,17 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   };
 
   patches = [
-    # Avoid running `cat` and `grep` subshells.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/orca/-/commit/8f47283da2da7a7d34e769d9c129152decf632cb.patch";
-      hash = "sha256-ts/ZCgEaTrnmMM1cUFJB2rDW9icMoi4jV34psD0IDCc=";
-    })
-
-    # Required for fix-paths.patch to apply.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/orca/-/commit/a7b10302b9ff9145a98cb3626f2488d15c558d3e.patch";
-      hash = "sha256-lacy9vIyM3n84s+tbYvAUBKWCT+4nlI9uPVl7UPVS74=";
-      includes = [
-        "src/orca/orca_modifier_manager.py"
-      ];
-    })
-
-    # Fix tests on Python < 3.15
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/orca/-/commit/6c18ba002c6fac3fb80a10791b0daab6ea85f072.patch";
-      hash = "sha256-jTwVN0hPkead7PiVo/KEUrP04XU/05LXnXutvVmyecc=";
-      excludes = [
-        # These do not apply, fixed in fix-mock-typing.patch
-        "src/orca/ax_event_synthesizer.py"
-        "tests/unit_tests/test_flat_review_presenter.py"
-      ];
-    })
-
-    # Fix more tests on Python < 3.15
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/orca/-/commit/0a1271f0d6ed6f6d73d41b227a9f6d84d994c154.patch";
-      hash = "sha256-ry8fmzUjtHR8/0UpB/zXuv6RYDS8z6fWRdb9eci6nLY=";
-      includes = [
-        "src/orca/sound.py"
-      ];
-    })
-
-    # Fix more tests on Python < 3.15
-    # https://gitlab.gnome.org/GNOME/orca/-/work_items/729
-    ./fix-mock-typing.patch
-
     (replaceVars ./fix-paths.patch {
       pgrep = "${procps}/bin/pgrep";
       xkbcomp = "${xkbcomp}/bin/xkbcomp";
     })
   ];
+
+  cargoRoot = "subprojects/mathcat-py";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src cargoRoot;
+    hash = "sha256-MaHjaJAi7JlQ7x0pDKoHrLYyenLeG+w8bhw1GW7IX+g=";
+  };
 
   # needed for cross-compilation
   depsBuildBuild = [ pkg-config ];
@@ -98,6 +67,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     ninja
     wrapGAppsHook3
     pkg-config
+    cargo
+    rustc
+    rustPlatform.cargoSetupHook
     gettext
     yelp-tools
     itstool
