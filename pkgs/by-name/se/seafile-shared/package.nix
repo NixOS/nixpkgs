@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "seafile-shared";
-  version = "9.0.20";
+  version = "9.0.21";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PBoZDhY7GN8UuYUSXBCPZyBHBtlNcYK+0yS/rl66v9I=";
+    hash = "sha256-052MDijFQpgv6tHVGoo1Luejw2u99/Y0IPQlQ9JxYPw=";
   };
 
   postPatch = ''
