@@ -98,7 +98,10 @@ buildPythonPackage {
     homepage = "https://github.com/jax-ml/jax/tree/main/jax_plugins/cuda";
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      natsukium
+    ];
     platforms = lib.attrNames platforms;
     problems =
       lib.optionalAttrs (cudaPackages.cudaMajorVersion != "12") {
