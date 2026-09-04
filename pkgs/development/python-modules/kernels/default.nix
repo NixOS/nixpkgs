@@ -3,7 +3,15 @@
   buildPythonPackage,
   fetchFromGitHub,
   huggingface-hub,
+  kernels-data,
+  packaging,
+  pythonOlder,
+  pyyaml,
   setuptools,
+  sigstore,
+  tomli,
+  tomlkit,
+  typing-extensions,
 }:
 buildPythonPackage rec {
   pname = "kernels";
@@ -17,12 +25,23 @@ buildPythonPackage rec {
     hash = "sha256-mrPGykU07PwelebEitr0HDZemZ8WzBhMflBBirQnzAQ=";
   };
 
+  sourceRoot = "${src.name}/kernels";
+
   build-system = [
     setuptools
   ];
 
   dependencies = [
     huggingface-hub
+    kernels-data
+    packaging
+    pyyaml
+    sigstore
+    tomlkit
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+    typing-extensions
   ];
 
   # Tests require pervasive internet access
