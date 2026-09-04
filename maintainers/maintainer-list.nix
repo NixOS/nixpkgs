@@ -30771,6 +30771,12 @@
     github = "VZstless";
     githubId = 233668878;
   };
+  vysakh = {
+    email = "vysakhpr218@gmail.com";
+    github = "tellmeY18";
+    name = "Vysakh Premkumar";
+    githubId = 84713473;
+  };
   w-lfchen = {
     email = "w-lfchen@posteo.net";
     github = "w-lfchen";
