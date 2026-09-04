@@ -626,6 +626,7 @@ def _id_segment(fname: str) -> str:
 class ConfigLeaf:
     file: str
     label: str | None = None
+    id_prefix: str | None = None
 
 @dataclass
 class ConfigGroup:
@@ -716,6 +717,9 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
         label = item.get('label')
         if label is not None and (not isinstance(label, str) or not label):
             raise SrcError(src=src, description=f"{where}: 'label' must be a non-empty string")
+        id_prefix = item.get('id-prefix')
+        if id_prefix is not None and (not isinstance(id_prefix, str)):
+            raise SrcError(src=src, description=f"{where}: 'id-prefix' must be a string when being set")
         has_file, has_children = 'file' in item, 'children' in item
         if has_file == has_children:
             raise SrcError(
@@ -724,7 +728,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
         if has_file:
             if not isinstance(item['file'], str):
                 raise SrcError(src=src, description=f"{where}: 'file' must be a string")
-            return ConfigLeaf(file=item['file'], label=label)
+            return ConfigLeaf(file=item['file'], label=label, id_prefix=id_prefix)
         children = item['children']
         if not isinstance(children, list) or not children:
             raise SrcError(src=src, description=f"{where}: 'children' must be a non-empty array")
@@ -733,9 +737,6 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
         gid = item.get('id')
         if gid is not None and (not isinstance(gid, str) or not gid):
             raise SrcError(src=src, description=f"{where}: 'id' must be a non-empty string")
-        id_prefix = item.get('id-prefix')
-        if id_prefix is not None and (not isinstance(id_prefix, str)):
-            raise SrcError(src=src, description=f"{where}: 'id-prefix' must be a string when being set")
         return ConfigGroup(label=label, children=self._parse_config_nodes(children, where, src), id=gid, id_prefix=id_prefix)
 
     def _prepend_config(self, infile: Path, tokens: list[Token]) -> None:
@@ -759,7 +760,9 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
         if isinstance(node, ConfigLeaf):
             path = (config_file.parent / node.file).resolve()
             leaf_src = path.read_text()
-            prefix = f"{id_prefix}-{_id_segment(node.file)}" if id_prefix is not None else None
+            # Take the id_prefix from leaf > node
+            resolved = node.id_prefix or id_prefix
+            prefix = f"{resolved}-{_id_segment(node.file)}" if resolved is not None else None
             self._base_paths.append(path)
             self._current_type.append('page')
             try:

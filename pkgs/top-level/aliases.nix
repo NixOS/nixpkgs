@@ -442,6 +442,7 @@ mapAliases {
   breads-ad = throw "'breads-ad' has been removed because its source is no longer available"; # Added 2025-12-20
   break-time = throw "'break-time' has been removed because it is not maintained upstream and has insecure dependencies."; # Added 2025-12-01
   breath-theme = throw "'breath-theme' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
+  brise = throw "'brise' has been removed. Use 'rime-data' instead."; # Added 2026-09-04
   brogue = warnAlias "Use 'brogue-ce' instead of 'brogue' for updated releases" brogue-ce; # Added 2025-10-04
   btanks = throw "'btanks' has been removed as it's been unmaintained since 2010 and fails to build"; # Added 2025-11-29
   buck = throw "'buck' has been removed has it was deprecated and archived upstream. Consider moving to buck2"; # Added 2026-01-16
@@ -2094,6 +2095,7 @@ mapAliases {
   protonvpn-cli = throw "protonvpn-cli source code was removed from upstream. Use proton-vpn-cli instead."; # Added 2025-10-16
   protonvpn-cli_2 = throw "protonvpn-cli_2 has been removed due to being deprecated. Use proton-vpn-cli instead."; # Added 2025-10-16
   protonvpn-gui = warnAlias "'protonvpn-gui' has been renamed to/replaced by 'proton-vpn'" proton-vpn; # Added 2026-02-23
+  prototool = throw "'prototool' has been removed. Use 'buf' instead."; # Added 2026-09-04
   proxmark3-rrg = throw "'proxmark3-rrg' has been renamed to/replaced by 'proxmark3'"; # Converted to throw 2025-10-27
   pscid = throw "'pscid' has been removed because it was unmaintained upstream"; # Added 2025-12-12
   psi = throw "'psi' has been removed as it depended on EOL qt5 webengine. Consider moving to psi-plus, a somewhat more maintained fork."; # Added 2026-04-15
@@ -2165,6 +2167,7 @@ mapAliases {
   qutebrowser-qt5 = lib.warnOnInstantiate "'qutebrowser-qt5' has been removed as it depended on vulnerable and outdated qt5 webengine" qutebrowser; # Added 2026-01-14
   qv2ray = throw "'qv2ray' has been removed as it was unmaintained"; # Added 2025-06-03
   r0vm = throw "'r0vm' has been removed as the binary is provided by 'cargo-risczero'"; # Added 2026-03-25
+  r128gain = throw "'r128gain' has been removed. Use 'rsgain' instead."; # Added 2026-09-04
   ra-multiplex = lib.warnOnInstantiate "'ra-multiplex' has been renamed to/replaced by 'lspmux'" lspmux; # Added 2025-10-27
   rabbit = throw "'rabbit' has been renamed to/replaced by 'rabbit-ng'"; # Added 2026-02-18
   radiance = throw "'radiance' has been removed as it was broken for a long time"; # Added 2026-01-02
@@ -3064,6 +3067,7 @@ mapAliases {
   zdoom = throw "'zdoom' has been removed as it was broken and unmaintained upstream. Consider using UZDoom instead."; # Added 2026-04-04
   zeal-qt5 = warnAlias "'zeal-qt5' has been removed from nixpkgs. Please use 'zeal' instead" zeal; # Added 2025-08-31
   zeal-qt6 = warnAlias "'zeal-qt6' has been renamed to 'zeal'" zeal; # Added 2025-08-31
+  zed = throw "'zed' has been removed. Use 'super' instead."; # Added 2026-09-04
   zeroadPackages.zeroad = throw "'zeroadPackages.zeroad' has been renamed to/replaced by 'zeroad'"; # Converted to throw 2025-10-27
   zeroadPackages.zeroad-data = throw "'zeroadPackages.zeroad-data' has been renamed to/replaced by 'zeroad-data'"; # Converted to throw 2025-10-27
   zeroadPackages.zeroad-unwrapped = throw "'zeroadPackages.zeroad-unwrapped' has been renamed to/replaced by 'zeroad-unwrapped'"; # Converted to throw 2025-10-27
@@ -3083,7 +3087,7 @@ mapAliases {
   zotero-beta = throw "'zotero-beta' has been removed. Use 'zotero' instead."; # Added 2026-03-05
   zotero_7 = throw "'zotero_7' has been renamed to/replaced by 'zotero'"; # Added 2025-12-09
   zotify = throw "zotify has been removed due to lack of upstream maintenance"; # Added 2025-09-26
-  zq = throw "zq has been replaced by zed"; # Converted to throw 2025-10-26
+  zq = throw "zq has been replaced by super"; # Converted to throw 2025-10-26
   zscroll = throw "zscroll has been removed due to lack of maintenance."; # Added 2026-05-29
   zsh-git-prompt = throw "zsh-git-prompt was removed as it is unmaintained upstream"; # Added 2025-08-28
   zuki-themes = throw "'zuki-themes' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
