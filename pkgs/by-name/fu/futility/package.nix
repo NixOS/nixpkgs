@@ -27,6 +27,8 @@ stdenv.mkDerivation {
     nss
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+
   postPatch = ''
     patchShebangs ./scripts
     substituteInPlace ./scripts/getversion.sh \
