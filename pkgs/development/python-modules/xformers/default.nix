@@ -228,6 +228,9 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     homepage = "https://github.com/facebookresearch/xformers";
     changelog = "https://github.com/facebookresearch/xformers/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ happysalada ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      happysalada
+    ];
   };
 })
