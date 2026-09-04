@@ -19800,6 +19800,12 @@
     githubId = 15838537;
     name = "Mugahed Izzeldin";
   };
+  mugiwarix = {
+    email = "mugiwarix@gmail.com";
+    github = "mugiwarix";
+    githubId = 161065638;
+    name = "Lucio De Fusco";
+  };
   mulatta = {
     email = "seungwon@mulatta.io";
     github = "mulatta";
