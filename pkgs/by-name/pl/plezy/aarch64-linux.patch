@@ -1,30 +1,30 @@
 diff --git a/lib/theme/mono_theme.dart b/lib/theme/mono_theme.dart
-index b423b4c6..04834360 100644
+index 5b87737c..3873fe84 100644
 --- a/lib/theme/mono_theme.dart
 +++ b/lib/theme/mono_theme.dart
-@@ -42,7 +42,7 @@ ThemeData monoTheme({required bool dark, bool oled = false}) {
-   );
+@@ -61,7 +61,7 @@ ThemeData _buildMonoTheme({required bool dark, required bool oled, required Targ
  
    final base = ThemeData(
+     platform: platform,
 -    useMaterial3: true,
 +    useMaterial3: true, fontFamily: 'NotoSans',
      brightness: isDark ? Brightness.dark : Brightness.light,
      colorScheme: ColorScheme(
        brightness: isDark ? Brightness.dark : Brightness.light,
-@@ -85,7 +85,7 @@ ThemeData monoTheme({required bool dark, bool oled = false}) {
-       titleTextStyle: TextStyle(color: c.text, fontSize: 18, fontWeight: FontWeight.w700, letterSpacing: -0.2),
+@@ -108,7 +108,7 @@ ThemeData _buildMonoTheme({required bool dark, required bool oled, required Targ
+       titleTextStyle: TextStyle(color: c.text, fontSize: 18, fontWeight: .w700, letterSpacing: -0.2),
      ),
      textTheme: Typography.englishLike2021
 -        .apply(bodyColor: c.text, displayColor: c.text)
 +        .apply(fontFamily: 'NotoSans', bodyColor: c.text, displayColor: c.text)
          .copyWith(
-           displayLarge: const TextStyle(fontWeight: FontWeight.w700, letterSpacing: -0.5),
-           titleMedium: const TextStyle(fontWeight: FontWeight.w600),
+           displayLarge: const TextStyle(fontWeight: .w700, letterSpacing: -0.5),
+           titleMedium: const TextStyle(fontWeight: .w600),
 diff --git a/pubspec.yaml b/pubspec.yaml
-index 8de9f2e3..5b6f1f14 100644
+index 68f20256..419cc1d6 100644
 --- a/pubspec.yaml
 +++ b/pubspec.yaml
-@@ -142,3 +142,8 @@ flutter:
+@@ -152,3 +152,8 @@ flutter:
      - assets/shaders/anime4k/
      - assets/player_icons/
      - assets/rating_icons/
