@@ -622,13 +622,15 @@ in
                 fi
                 echo 'include "${redisConfStore}"' > "${redisConfRun}"
                 ${lib.optionalString (conf.requirePassFile != null) ''
-                  echo "requirepass $(cat ${lib.escapeShellArg conf.requirePassFile})" >> "${redisConfRun}"
+                  echo "requirepass @REQUIRE_PASS@" >> "${redisConfRun}"
+                  ${lib.getExe pkgs.replace-secret} '@REQUIRE_PASS@' ${lib.escapeShellArg conf.requirePassFile} "${redisConfRun}"
                 ''}
                 ${lib.optionalString (conf.masterUser != null) ''
                   echo "masteruser ${conf.masterUser}" >> "${redisConfRun}"
                 ''}
                 ${lib.optionalString (conf.masterAuthFile != null) ''
-                  echo "masterauth $(cat ${lib.escapeShellArg conf.masterAuthFile})" >> "${redisConfRun}"
+                  echo "masterauth @MASTER_AUTH@" >> "${redisConfRun}"
+                  ${lib.getExe pkgs.replace-secret} '@MASTER_AUTH@' ${lib.escapeShellArg conf.masterAuthFile} "${redisConfRun}"
                 ''}
                 ${lib.optionalString (conf.sentinelMasterHost != null) ''
                   sentinel_monitor_line="sentinel monitor ${conf.sentinelMasterName} ${conf.sentinelMasterHost} ${toString conf.sentinelMasterPort} ${toString conf.sentinelMasterQuorum}"
