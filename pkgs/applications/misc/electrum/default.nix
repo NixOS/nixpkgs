@@ -2,13 +2,12 @@
   lib,
   stdenv,
   fetchurl,
-  wrapQtAppsHook,
   python3,
   zbar,
   enableQt ? true,
+  qt5,
   enablePythonEcdsa ? false,
   callPackage,
-  qtwayland,
 
   writableTmpDirAsHomeHook,
 }:
@@ -38,9 +37,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     python3.pkgs.pythonRelaxDepsHook
   ]
   ++ lib.optionals enableQt [
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
-  buildInputs = lib.optional (stdenv.hostPlatform.isLinux && enableQt) qtwayland;
+  buildInputs = lib.optional (stdenv.hostPlatform.isLinux && enableQt) qt5.qtwayland;
 
   dependencies =
     with python3.pkgs;
