@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "drf-standardized-errors";
-  version = "0.15.0";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ghazi-git";
     repo = "drf-standardized-errors";
     tag = "v${version}";
-    hash = "sha256-OM1bTqM3yQSPuerTrq5FKTf5eKpZsF6/QgupMtnnT4Q=";
+    hash = "sha256-M1wJIsrs4cimtG3bJloIycHnogEPFpvDRD+3u7Th9uQ=";
   };
 
   build-system = [ flit-core ];
