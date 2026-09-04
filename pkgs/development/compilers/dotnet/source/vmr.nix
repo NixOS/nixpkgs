@@ -147,6 +147,7 @@ stdenv.mkDerivation {
     ++ lib.optionals (lib.versionOlder version "9") [
       ./fix-aspnetcore-portable-build.patch
       ./vmr-compiler-opt-v8.patch
+      ./vmr8-riscv64-no-crossgen.patch
     ]
     # see passthru.hasCrossTargetBug
     ++ lib.optional (

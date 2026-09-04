@@ -75,7 +75,8 @@ let
           tarballHash
           depsFile
           ;
-        bootstrapSdk = (buildDotnetSdk bootstrapSdkFile).sdk.overrideAttrs (old: {
+        # the bootstrap sdk runs on the build machine
+        bootstrapSdk = (pkgsBuildHost.dotnetCorePackages.buildDotnetSdk bootstrapSdkFile).sdk.overrideAttrs (old: {
           passthru = old.passthru or { } // {
             inherit artifacts;
           };
