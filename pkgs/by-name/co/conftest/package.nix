@@ -11,7 +11,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "conftest";
-  version = "0.63.0";
+  version = "0.69.0";
 
   __darwinAllowLocalNetworking = true; # required for tests
 
@@ -19,14 +19,14 @@ buildGoModule (finalAttrs: {
     owner = "open-policy-agent";
     repo = "conftest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gmfzMup4fdsbdyUufxjcJRPF2faj3RUlvIn2ciyalaQ=";
+    hash = "sha256-kF4kako/88FxV10RZ9zNM7eq/Qlz41tEtnUnTB12KtM=";
   };
-  vendorHash = "sha256-pBUWM6st5FhhOki3n9NIN4/U8JB7Kq3Aph3AtQs+Ogg=";
+  vendorHash = "sha256-vcIY3AZkl/U0l2eyWHZGHrjQyW5TWt9oPDb4BXcNUtY=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/open-policy-agent/conftest/internal/commands.version=${finalAttrs.version}"
+    "-X github.com/open-policy-agent/conftest/internal/version.Version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
@@ -56,6 +56,11 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+
+  versionCheckKeepEnvironment = [ "XDG_DATA_HOME" ];
+  preVersionCheck = ''
+    export XDG_DATA_HOME="$(mktemp -d)"
+  '';
 
   meta = {
     description = "Write tests against structured configuration data";
