@@ -459,6 +459,7 @@ in
   code-server = runTest ./code-server.nix;
   coder = runTest ./coder.nix;
   collectd = runTest ./collectd.nix;
+  comfyui = runTest ./comfyui.nix;
   commafeed = runTest ./commafeed.nix;
   connman = runTest ./connman.nix;
   console = runTest ./console.nix;

@@ -10,6 +10,11 @@ let
   # By default a StateDirectory is used; anything else needs its own directory and a hole in the unit's mount namespace.
   isDefaultDataDir = cfg.dataDir == "/var/lib/comfyui";
 
+  package = cfg.package.override (oldArgs: {
+    extraPackages = ps: (oldArgs.extraPackages or (_: [ ]) ps) ++ (cfg.extraPackages ps);
+    cudaSupport = cfg.acceleration == "cuda";
+  });
+
   modelDrvs = map (m: {
     inherit m;
     drv = pkgs.fetchurl (lib.filterAttrs (n: _: n == "name" || n == "url" || n == "hash") m);
@@ -40,6 +45,32 @@ in
           Any other directory is created with systemd-tmpfiles and bind-mounted into the service.
 
           Existing state is not migrated, you need to move it yourself.
+        '';
+      };
+
+      # The package with all module overrides applied (extraPackages, cudaSupport).
+      # Exposed so tests can inspect the resulting Python environment.
+      finalPackage = lib.mkOption {
+        type = lib.types.package;
+        internal = true;
+        readOnly = true;
+        default = package;
+        description = "The comfyui package with module overrides applied.";
+      };
+
+      acceleration = lib.mkOption {
+        type = lib.types.enum [
+          "cpu"
+          "cuda"
+        ];
+        default = if config.nixpkgs.config.cudaSupport then "cuda" else "cpu";
+        defaultText = lib.literalExpression "if config.nixpkgs.config.cudaSupport then \"cuda\" else \"cpu\"";
+        example = "cuda";
+        description = ''
+          Specifies the device to use for hardware acceleration.
+
+          - `"cpu"`: pass `--cpu` to the server. Not recommended for production use as it is very slow.
+          - `"cuda"`: enable CUDA support on the package; ComfyUI selects the CUDA device automatically.
         '';
       };
 
@@ -145,16 +176,32 @@ in
           because the symlink cannot be created over it.
         '';
       };
+
+      extraPackages = lib.mkOption {
+        type = lib.types.functionTo (lib.types.listOf lib.types.package);
+        default = _: [ ];
+        defaultText = lib.literalExpression "python3Packages: [ ]";
+        example = lib.literalExpression ''
+          python3Packages: with python3Packages; [ flask ]
+        '';
+        description = ''
+          Extra packages to add to ComfyUI's Python environment,
+          typically to satisfy custom node runtime dependencies.
+        '';
+      };
     };
   };
 
   config = lib.mkIf cfg.enable {
-    services.comfyui.extraArgs = lib.mkBefore [
-      "--base-directory=${cfg.dataDir}"
-      "--database-url=sqlite:///${cfg.dataDir}/user/comfyui.db"
-      "--listen=${lib.concatStringsSep "," cfg.listen}"
-      "--port=${toString cfg.port}"
-    ];
+    services.comfyui.extraArgs = lib.mkBefore (
+      [
+        "--base-directory=${cfg.dataDir}"
+        "--database-url=sqlite:///${cfg.dataDir}/user/comfyui.db"
+        "--listen=${lib.concatStringsSep "," cfg.listen}"
+        "--port=${toString cfg.port}"
+      ]
+      ++ lib.optionals (cfg.acceleration == "cpu") [ "--cpu" ]
+    );
 
     # owner read back from the unit, not spelled out: StateDirectory= infers it, this rule has to be told
     systemd.tmpfiles.settings = lib.mkIf (!isDefaultDataDir) {
@@ -193,7 +240,7 @@ in
       '';
 
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} ${lib.escapeShellArgs cfg.extraArgs}";
+        ExecStart = "${lib.getExe cfg.finalPackage} ${lib.escapeShellArgs cfg.extraArgs}";
         Group = "comfyui";
         Restart = "always";
         RestartSec = "5sec"; # don't crash loop immediately
@@ -252,5 +299,8 @@ in
     };
   };
 
-  meta.maintainers = pkgs.comfyui.meta.maintainers;
+  meta = {
+    doc = ./comfyui.md;
+    maintainers = pkgs.comfyui.meta.maintainers;
+  };
 }

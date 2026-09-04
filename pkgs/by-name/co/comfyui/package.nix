@@ -1,16 +1,18 @@
 {
+  config,
   lib,
-  callPackage,
   cudaPackages_13,
   common-updater-scripts,
+  extraPackages ? (ps: [ ]),
+  cudaSupport ? config.cudaSupport,
   fetchFromGitHub,
   gnutar,
   gzip,
   nix-update,
   makeBinaryWrapper,
+  nixosTests,
   python3,
   stdenvNoCC,
-  withManager ? false,
   writeShellApplication,
   yq-go,
 }:
@@ -24,9 +26,11 @@ let
       # older cudaPackages are not supported and actively disabled
       # https://github.com/Comfy-Org/ComfyUI/blob/v0.27.0/comfy/quant_ops.py#L25
       torch = prev.torch.override {
+        inherit cudaSupport;
         cudaPackages = cudaPackages_13;
       };
       triton = prev.triton.override {
+        inherit cudaSupport;
         cudaPackages = cudaPackages_13;
       };
     };
@@ -72,9 +76,7 @@ let
       transformers
       yarl
     ]
-    ++ lib.optionals withManager [
-      ps.comfyui-manager
-    ];
+    ++ (extraPackages ps);
 
   pythonEnv = python.withPackages appDependencies;
 in
@@ -165,11 +167,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         done < "$src/requirements.txt"
       '';
     });
-  }
-  // lib.optionalAttrs (!withManager) {
-    tests.withManager = callPackage ./package.nix {
-      withManager = true;
-    };
+
+    tests.comfyui = nixosTests.comfyui;
   };
 
   meta = {
@@ -180,6 +179,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "comfyui";
     maintainers = with lib.maintainers; [
       caniko
+      knightfemale
       SuperSandro2000
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
