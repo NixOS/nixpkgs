@@ -3,14 +3,25 @@
   callPackage,
   makeRustPlatform,
   nix-update-script,
+  rust,
+  gitMinimal,
 }:
 let
   # Need to use the build platform rustc and Cargo so that
-  # we don't infrec
+  # we don't infrec, as well as Git compiled using the prebuilt packages to
+  # avoid the circular dependency of Git needing Rust needing cargo-auditable
+  # needing Git.
   rustPlatform = makeRustPlatform {
     inherit (buildPackages) rustc;
     cargo = buildPackages.cargo.override {
       auditable = false;
+    };
+    gitMinimal = gitMinimal.override {
+      inherit (rust.packages.prebuilt) cargo rustc;
+
+      # Tests are slow and, since this package won't be exposed to Nixpkgs
+      # users, won't be worthwhile.
+      doInstallCheck = false;
     };
   };
 
