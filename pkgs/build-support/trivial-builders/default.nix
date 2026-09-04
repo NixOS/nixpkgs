@@ -374,27 +374,33 @@ rec {
   # TODO: deduplicate with documentation in doc/build-helpers/trivial-build-helpers.chapter.md
   #       see also https://github.com/NixOS/nixpkgs/pull/249721
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-concatText
-  /*
+  /**
     concat a list of files to the nix store.
     The contents of files are added to the file in the store.
 
-    Example:
+    See also the `concatText` helper function below.
 
-    # Writes my-file to /nix/store/<store path>
+    # Examples
+
+    Writes `my-file` to `/nix/store/<store path>`:
+
+    ```nix
     concatTextFile {
       name = "my-file";
       files = [ drv1 "${drv2}/path/to/file" ];
     }
+    ```
 
-    See also the `concatText` helper function below.
+    Writes executable `my-file` to `/nix/store/<store path>/bin/my-file`:
 
-    # Writes executable my-file to /nix/store/<store path>/bin/my-file
+    ```nix
     concatTextFile {
       name = "my-file";
       files = [ drv1 "${drv2}/path/to/file" ];
       executable = true;
       destination = "/bin/my-file";
     }
+    ```
   */
   concatTextFile =
     {
@@ -432,25 +438,32 @@ rec {
   # TODO: deduplicate with documentation in doc/build-helpers/trivial-build-helpers.chapter.md
   #       see also https://github.com/NixOS/nixpkgs/pull/249721
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-concatText
-  /*
+  /**
     Writes a text file to nix store with no optional parameters available.
 
-    Example:
+    # Example
 
-    # Writes contents of files to /nix/store/<store path>
+    Writes contents of files to `/nix/store/<store path>`:
+
+    ```nix
     concatText "my-file" [ file1 file2 ]
+    ```
   */
   concatText = name: files: concatTextFile { inherit name files; };
 
   # TODO: deduplicate with documentation in doc/build-helpers/trivial-build-helpers.chapter.md
   #       see also https://github.com/NixOS/nixpkgs/pull/249721
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-concatText
-  /*
-    Writes a text file to nix store with and mark it as executable.
+  /**
+    Writes a text file to nix store and marks it as executable.
 
-    Example:
-    # Writes contents of files to /nix/store/<store path>
+    # Example
+
+    Writes contents of files to `/nix/store/<store path>`:
+
+    ```nix
     concatScript "my-file" [ file1 file2 ]
+    ```
   */
   concatScript =
     name: files:
@@ -459,11 +472,10 @@ rec {
       executable = true;
     };
 
-  /*
-    TODO: Deduplicate this documentation.
-    More docs in doc/build-helpers/trivial-build-helpers.chapter.md
-    See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-symlinkJoin
-
+  # TODO: Deduplicate this documentation.
+  #       More docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-symlinkJoin
+  /**
     Create a forest of symlinks to the files in `paths`.
 
     This creates a single derivation that replicates the directory structure
@@ -471,16 +483,23 @@ rec {
 
     BEWARE: it may not "work right" when the passed paths contain symlinks to directories.
 
-    Example:
+    # Examples
 
-    # adds symlinks of hello to current build.
+    Adds symlinks of hello to the current build:
+
+    ```nix
     symlinkJoin { name = "myhello"; paths = [ pkgs.hello ]; }
+    ```
 
-    # adds symlinks of hello and stack to current build and prints "links added"
+    Adds symlinks of hello and stack to the current build and prints "links added":
+
+    ```nix
     symlinkJoin { name = "myexample"; paths = [ pkgs.hello pkgs.stack ]; postBuild = "echo links added"; }
+    ```
 
     This creates a derivation with a directory structure like the following:
 
+    ```
     /nix/store/sglsr5g079a5235hy29da3mq3hv8sjmm-myexample
     |-- bin
     |   |-- hello -> /nix/store/qy93dp4a3rqyn2mz63fbxjg228hffwyw-hello-2.10/bin/hello
@@ -493,39 +512,43 @@ rec {
         |   `-- vendor_completions.d
         |       `-- stack.fish -> /nix/store/6lzdpxshx78281vy056lbk553ijsdr44-stack-2.1.3.1/share/fish/vendor_completions.d/stack.fish
     ...
+    ```
 
     To create a directory structure from a specific subdirectory of input `paths` instead of their full trees,
     you can either append the subdirectory path to each input path, or use the `stripPrefix` argument to
     remove the common prefix during linking.
 
-    Example:
+    Creates symlinks of tmpfiles.d rules from multiple packages:
 
-    # create symlinks of tmpfiles.d rules from multiple packages
+    ```nix
     symlinkJoin { name = "tmpfiles.d"; paths = [ pkgs.lvm2 pkgs.nix ]; stripPrefix = "/lib/tmpfiles.d"; }
+    ```
 
     This creates a derivation with a directory structure like the following:
 
+    ```
     /nix/store/m5s775yicb763hfa133jwml5hwmwzv14-tmpfiles.d
     |-- lvm2.conf -> /nix/store/k6js0l5f0zpvrhay49579fj939j77p2w-lvm2-2.03.29/lib/tmpfiles.d/lvm2.conf
     `-- nix-daemon.conf -> /nix/store/z4v2s3s3y79fmabhps5hakb3c5dwaj5a-nix-1.33.7/lib/tmpfiles.d/nix-daemon.conf
+    ```
 
     By default, packages that don't contain the specified subdirectory are silently skipped.
     Set `failOnMissing = true` to make the build fail if any input package is missing the subdirectory
-    (this is the default behavior when not using stripPrefix).
+    (this is the default behavior when not using `stripPrefix`).
 
-    symlinkJoin and linkFarm are similar functions, but they output
+    `symlinkJoin` and `linkFarm` are similar functions, but they output
     derivations with different structure.
 
-    symlinkJoin is used to create a derivation with a familiar directory
-    structure (top-level bin/, share/, etc), but with all actual files being symlinks to
+    `symlinkJoin` is used to create a derivation with a familiar directory
+    structure (top-level `bin/`, `share/`, etc), but with all actual files being symlinks to
     the files in the input derivations.
 
-    symlinkJoin is used many places in nixpkgs to create a single derivation
+    `symlinkJoin` is used many places in nixpkgs to create a single derivation
     that appears to contain binaries, libraries, documentation, etc from
     multiple input derivations.
 
-    linkFarm is instead used to create a simple derivation with symlinks to
-    other derivations.  A derivation created with linkFarm is often used in CI
+    `linkFarm` is instead used to create a simple derivation with symlinks to
+    other derivations.  A derivation created with `linkFarm` is often used in CI
     as a easy way to build multiple derivations at once.
   */
   symlinkJoin = lib.extendMkDerivation {
@@ -603,33 +626,41 @@ rec {
       };
   };
 
-  # TODO: move linkFarm docs to the Nixpkgs manual
-  /*
+  /**
     Quickly create a set of symlinks to derivations.
 
     This creates a simple derivation with symlinks to all inputs.
 
-    entries can be a list of attribute sets like
+    `entries` can be a list of attribute sets like
 
+    ```nix
     [ { name = "name" ; path = "/nix/store/..."; } ]
+    ```
 
     or an attribute set name -> path like:
 
+    ```nix
     { name = "/nix/store/..."; other = "/nix/store/..."; }
+    ```
 
-    Example:
+    # Example
 
-    # Symlinks hello and stack paths in store to current $out/hello-test and
-    # $out/foobar.
+    Symlinks hello and stack paths in store to the current `$out/hello-test` and
+    `$out/foobar`:
+
+    ```nix
     linkFarm "myexample" [ { name = "hello-test"; path = pkgs.hello; } { name = "foobar"; path = pkgs.stack; } ]
+    ```
 
     This creates a derivation with a directory structure like the following:
 
+    ```
     /nix/store/qc5728m4sa344mbks99r3q05mymwm4rw-myexample
     |-- foobar -> /nix/store/6lzdpxshx78281vy056lbk553ijsdr44-stack-2.1.3.1
     `-- hello-test -> /nix/store/qy93dp4a3rqyn2mz63fbxjg228hffwyw-hello-2.10
+    ```
 
-    See the note on symlinkJoin for the difference between linkFarm and symlinkJoin.
+    See the note on `symlinkJoin` for the difference between `linkFarm` and `symlinkJoin`.
   */
   linkFarm =
     name: entries:
@@ -676,25 +707,29 @@ rec {
         ${lib.concatStrings linkCommands}
       '';
 
-  # TODO: move linkFarmFromDrvs docs to the Nixpkgs manual
-  /*
-    Easily create a linkFarm from a set of derivations.
+  /**
+    Easily create a `linkFarm` from a set of derivations.
 
-    This calls linkFarm with a list of entries created from the list of input
+    This calls `linkFarm` with a list of entries created from the list of input
     derivations.  It turns each input derivation into an attribute set
-    like { name = drv.name ; path = drv }, and passes this to linkFarm.
+    like `{ name = drv.name ; path = drv }`, and passes this to `linkFarm`.
 
-    Example:
+    # Example
 
-    # Symlinks the hello, gcc, and ghc derivations in $out
+    Symlinks the hello, gcc, and ghc derivations in `$out`:
+
+    ```nix
     linkFarmFromDrvs "myexample" [ pkgs.hello pkgs.gcc pkgs.ghc ]
+    ```
 
     This creates a derivation with a directory structure like the following:
 
+    ```
     /nix/store/m3s6wkjy9c3wy830201bqsb91nk2yj8c-myexample
     |-- gcc-wrapper-9.2.0 -> /nix/store/fqhjxf9ii4w4gqcsx59fyw2vvj91486a-gcc-wrapper-9.2.0
     |-- ghc-8.6.5 -> /nix/store/gnf3s07bglhbbk4y6m76sbh42siym0s6-ghc-8.6.5
     `-- hello-2.10 -> /nix/store/k0ll91c4npk4lg8lqhx00glg2m735g74-hello-2.10
+    ```
   */
   linkFarmFromDrvs =
     name: drvs:
@@ -706,8 +741,7 @@ rec {
     in
     linkFarm name (map mkEntryFromDrv drvs);
 
-  # TODO: move onlyBin docs to the Nixpkgs manual
-  /*
+  /**
     Produce a derivation that links to the target derivation's `/bin`,
     and *only* `/bin`.
 
@@ -819,8 +853,7 @@ rec {
         sort ./references >$out
       '';
 
-  # TODO: move writeStringReferencesToFile docs to the Nixpkgs manual
-  /*
+  /**
     Extract a string's references to derivations and paths (its
     context) and write them to a text file, removing the input string
     itself from the dependency graph. This is useful when you want to
@@ -988,27 +1021,27 @@ rec {
     inheritFunctionArgs = false;
   };
 
-  # TODO: move copyPathToStore docs to the Nixpkgs manual
-  /*
+  /**
     Copy a path to the Nix store.
     Nix automatically copies files to the store before stringifying paths.
-    If you need the store path of a file, ${copyPathToStore <path>} can be
-    shortened to ${<path>}.
+    If you need the store path of a file, `${copyPathToStore <path>}` can be
+    shortened to `${<path>}`.
   */
   copyPathToStore = builtins.filterSource (p: t: true);
 
-  # TODO: move copyPathsToStore docs to the Nixpkgs manual
-  # Copy a list of paths to the Nix store.
+  /**
+    Copy a list of paths to the Nix store.
+  */
   copyPathsToStore = map copyPathToStore;
 
-  # TODO: move applyPatches docs to the Nixpkgs manual
-  /*
+  /**
     Applies a list of patches to a source directory.
 
-    Example:
+    # Example
 
-    # Patching nixpkgs:
+    Patching nixpkgs:
 
+    ```nix
     applyPatches {
       src = pkgs.path;
       patches = [
@@ -1018,6 +1051,7 @@ rec {
         })
       ];
     }
+    ```
   */
   applyPatches = lib.extendMkDerivation {
     constructDrv = stdenvNoCC.mkDerivation;
@@ -1080,16 +1114,18 @@ rec {
       };
   };
 
-  # TODO: move docs to Nixpkgs manual
-  # An immutable file in the store with a length of 0 bytes.
+  /**
+    An immutable file in the store with a length of 0 bytes.
+  */
   emptyFile = runCommand "empty-file" {
     outputHash = "sha256-d6xi4mKdjkX2JFicDIv5niSzpyI0m/Hnm8GGAIU04kY=";
     outputHashMode = "recursive";
     preferLocalBuild = true;
   } "touch $out";
 
-  # TODO: move docs to Nixpkgs manual
-  # An immutable empty directory in the store.
+  /**
+    An immutable empty directory in the store.
+  */
   emptyDirectory = runCommand "empty-directory" {
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";

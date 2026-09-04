@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   torch,
@@ -50,6 +51,16 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     fetchSubmodules = true;
     hash = "sha256-UqpRHLN0INpW6sA8DbQCSeL8uhS+IoW60UPVUIh1NY0=";
   };
+
+  patches = [
+    # Fix `IndexError: list assignment index out of range` with torch >= 2.13
+    # https://github.com/facebookresearch/xformers/commit/f06b9a7b0db97a78913ca8dc1652468a0527dc80
+    (fetchpatch {
+      name = "xformers-fix-tests-pytorch-2.13.patch";
+      url = "https://github.com/facebookresearch/xformers/commit/f06b9a7b0db97a78913ca8dc1652468a0527dc80.patch";
+      hash = "sha256-QE3hmwXI3yJBgRWOHKoDUaEsFO+vuqV+DTMW7sjuURU=";
+    })
+  ];
 
   # ModuleNotFoundError: No module named 'xformers.components'
   postPatch = ''

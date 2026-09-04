@@ -15939,6 +15939,13 @@
     github = "langsjo";
     githubId = 104687438;
   };
+  larry0x = {
+    name = "Larry Engineer";
+    email = "nixpkgs@larry.engineer";
+    github = "larry0x";
+    githubId = 26318510;
+    keys = [ { fingerprint = "BF1C 46E2 93BB 3CC3 7155  56ED 5E02 19E0 2D70 E4E2"; } ];
+  };
   larsr = {
     email = "Lars.Rasmusson@gmail.com";
     github = "larsr";
@@ -19280,6 +19287,11 @@
     github = "mmilata";
     githubId = 85857;
     name = "Martin Milata";
+  };
+  mmkamron = {
+    name = "Kamron Mirsamatov";
+    github = "mmkamron";
+    githubId = 30682234;
   };
   mmkaram = {
     name = "Mahdy Karam";
