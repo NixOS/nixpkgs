@@ -105,8 +105,27 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
     platforms = lib.attrNames platforms;
-    # see CUDA compatibility matrix
-    # https://jax.readthedocs.io/en/latest/installation.html#pip-installation-nvidia-gpu-cuda-installed-locally-harder
-    broken = !(lib.versionAtLeast cudaPackages.cudnn.version "9.1");
+    problems =
+      lib.optionalAttrs (cudaPackages.cudaMajorVersion != "12") {
+        unsupported-cuda-version = {
+          message = ''
+            Incompatible cudaPackages version.
+              - Expected: 12
+              - Got: ${cudaPackages.cudaMajorVersion}
+          '';
+          kind = "broken";
+        };
+      }
+      // lib.optionalAttrs (lib.versionAtLeast cudaPackages.cudnn.version "10.0") {
+        unsupported-cudnn-version = {
+          message = ''
+            cudaPackages.cudnn is too new (${cudaPackages.cudnn.version}).
+
+            See CUDA compatibility matrix
+            https://docs.jax.dev/en/latest/installation.html#pip-installation-nvidia-gpu-cuda-installed-locally-harder
+          '';
+          kind = "broken";
+        };
+      };
   };
 })
