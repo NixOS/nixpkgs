@@ -10,6 +10,7 @@
   opencv4,
   pkg-config,
   stdenv,
+  rsync,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nomacs";
@@ -20,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nomacs";
     repo = "nomacs";
     rev = finalAttrs.version;
-    fetchSubmodules = false; # We'll use our own
+    fetchSubmodules = false; # upstream no longer uses submodules
     inherit (finalAttrs) hash;
   };
 
@@ -36,6 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     qt6.wrapQtAppsHook
     pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    rsync
   ];
 
   buildInputs = [
@@ -47,13 +51,21 @@ stdenv.mkDerivation (finalAttrs: {
     # see: https://github.com/NixOS/nixpkgs/pull/314186#issuecomment-2129974277
     (lib.getOutput "cxxdev" opencv4)
 
-    kdePackages.kimageformats
     qt6.qtbase
     qt6.qtimageformats
     qt6.qtsvg
     qt6.qttools
     kdePackages.quazip
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # currently unsupported on darwin, and possibly unneeded?
+    kdePackages.kimageformats
   ];
+
+  prePatch = ''
+    substituteInPlace cmake/MacBuildTarget.cmake \
+      --replace-fail '/Applications' '${placeholder "out"}/Applications'
+  '';
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_OPENCV" true)
@@ -65,15 +77,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p $out/{Applications,lib}
-    mv $out/nomacs.app $out/Applications/nomacs.app
-    mv $out/libnomacsCore.dylib $out/lib/libnomacsCore.dylib
+    # prevent wrapping dylibs
+    find $out/Applications -type f -name "*.dylib" -exec chmod -x {} \;
   '';
+
   # FIXME:
   # why can't we have nomacs look in the "standard" plugin directory???
   # None of the wrap stuff worked...
   # Let's just instead move the plugin dir brute force
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     mv $out/lib/nomacs-plugins $out/bin/plugins
   '';
 
