@@ -24,6 +24,7 @@ buildMozillaMach rec {
     maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
     license = lib.licenses.mpl20;
     mainProgram = "firefox";
+    broken = true; # doesn't build on glibc 2.44
   };
   tests = {
     inherit (nixosTests) firefox-esr-140;
