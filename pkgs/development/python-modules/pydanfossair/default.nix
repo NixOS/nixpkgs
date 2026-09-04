@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pydanfossair";
-  version = "0.3.0";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JonasPed";
     repo = "pydanfoss-air";
     tag = "v${version}";
-    hash = "sha256-ZTairxQbvijNiSomDoeZtmL/Hn3ce1Z5TEOf+0C8cYg=";
+    hash = "sha256-BAzIUiYz5aI9aKbNBKcjq7jJIw06fzqFwKyTp77NLyE=";
   };
 
   build-system = [ setuptools ];
