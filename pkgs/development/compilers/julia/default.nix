@@ -126,6 +126,7 @@ in
         ++ lib.optionals stdenv.hostPlatform.isDarwin [
           ./patches/1.12/0001-zlib-rpath.patch
           ./patches/1.12/0002-lbt-blas-detection.patch
+          ./patches/1.12/0003-gmp-install-names.patch
         ];
       })
       (
