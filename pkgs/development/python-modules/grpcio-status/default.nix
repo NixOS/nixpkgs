@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   googleapis-common-protos,
   grpcio,
   protobuf,
@@ -10,23 +11,22 @@
 # This package should be updated together with the main grpc package and other
 # related python grpc packages.
 # nixpkgs-update: no auto update
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "grpcio-status";
   version = "1.83.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "grpcio_status";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-g3IZxt6a/cy29vcrNLxx4VGiAR7wQEDj+qynRqV+VK4=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'protobuf>=4.21.6' 'protobuf'
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     googleapis-common-protos
     grpcio
     protobuf
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
