@@ -20,4 +20,5 @@ done
 
 for arch in "x86_64-linux" "aarch64-linux"; do
   prefetch "312" "$arch" "jax-cuda12-pjrt"
+  prefetch "312" "$arch" "jax-cuda13-pjrt"
 done
