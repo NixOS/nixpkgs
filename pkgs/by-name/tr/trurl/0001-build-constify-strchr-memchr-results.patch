@@ -1,0 +1,146 @@
+From f081fc506e0e53f671f02ebac8b324f3fd421ee8 Mon Sep 17 00:00:00 2001
+From: Viktor Szakats <commit@vsz.me>
+Date: Sun, 1 Mar 2026 11:39:41 +0100
+Subject: [PATCH] build: constify `strchr()`/`memchr()` results
+
+To fix building with glibc-2.43.
+(also seen with gcc 16 on Fedora rawhide/f44)
+
+Also:
+- scope a variable while there.
+- fix altering the const format buffer on bad syntax.
+
+Reported-by: Gustavo Costa
+Fixes #430
+Reported-by: Michael Ablassmeier
+Fixes #431
+
+Closes #432
+---
+ trurl.c | 37 +++++++++++++++++++------------------
+ 1 file changed, 19 insertions(+), 18 deletions(-)
+
+diff --git a/trurl.c b/trurl.c
+index b5a716c..d150a93 100644
+--- a/trurl.c
++++ b/trurl.c
+@@ -483,7 +483,7 @@ static void pathadd(struct option *o, const char *path)
+ 
+ static char *encodeassign(const char *query)
+ {
+-  char *p = strchr(query, '=');
++  const char *p = strchr(query, '=');
+   char *urle;
+   if(p) {
+     /* URL encode the left and the right side of the '=' separately */
+@@ -600,7 +600,7 @@ static int getarg(struct option *o,
+     gap = false;
+   }
+   else if((flag[0] == '-') && (flag[1] == '-')) {
+-    char *equals = strchr(&flag[2], '=');
++    const char *equals = strchr(&flag[2], '=');
+     if(equals) {
+       arg = (char *)&equals[1];
+       gap = false;
+@@ -861,9 +861,10 @@ static void get(struct option *o, CURLU *uh)
+       else {
+         /* this is meant as a variable to output */
+         const char *start = ptr;
+-        char *end;
+-        char *cl;
++        const char *end;
++        const char *cl;
+         size_t vlen;
++        size_t badlen = 0;
+         bool isquery = false;
+         bool queryall = false;
+         bool strict = false; /* strict mode, fail on URL decode problems */
+@@ -923,7 +924,7 @@ static void get(struct option *o, CURLU *uh)
+             else {
+               /* syntax error */
+               vlen = 0;
+-              end[1] = '\0';
++              badlen = end - start + 1;
+             }
+             break;
+           }
+@@ -938,7 +939,7 @@ static void get(struct option *o, CURLU *uh)
+                    queryall);
+         }
+         else if(!vlen)
+-          errorf(o, ERROR_GET, "Bad --get syntax: %s", start);
++          errorf(o, ERROR_GET, "Bad --get syntax: %.*s", (int)badlen, start);
+         else if(!strncmp(ptr, "url", vlen))
+           showurl(stream, o, mods, uh);
+         else {
+@@ -1022,7 +1023,7 @@ static void get(struct option *o, CURLU *uh)
+ static const struct var *setone(CURLU *uh, const char *setline,
+                                 struct option *o)
+ {
+-  char *ptr = strchr(setline, '=');
++  const char *ptr = strchr(setline, '=');
+   const struct var *v = NULL;
+   if(ptr && (ptr > setline)) {
+     size_t vlen = ptr - setline;
+@@ -1269,9 +1270,9 @@ static bool trim(struct option *o)
+           inslen--;
+       }
+ 
+-      for(i = 0 ; i < nqpairs; i++) {
+-        char *q = qpairs[i].str;
+-        char *sep = strchr(q, '=');
++      for(i = 0; i < nqpairs; i++) {
++        const char *q = qpairs[i].str;
++        const char *sep = strchr(q, '=');
+         size_t qlen;
+         if(sep)
+           qlen = sep - q;
+@@ -1546,10 +1547,9 @@ static bool extractqpairs(CURLU *uh, struct option *o)
+   /* extract the query */
+   if(!curl_url_get(uh, CURLUPART_QUERY, &q, 0)) {
+     char *p = q;
+-    char *amp;
+     while(*p) {
+       size_t len;
+-      amp = strchr(p, o->qsep[0]);
++      char *amp = strchr(p, o->qsep[0]);
+       if(!amp)
+         len = strlen(p);
+       else
+@@ -1684,7 +1684,7 @@ static char *canonical_path(const char *path)
+ {
+   /* split the path per slash, URL decode + encode, then put together again */
+   size_t len = strlen(path);
+-  char *sl;
++  const char *sl;
+   char *dupe = NULL;
+ 
+   do {
+@@ -1810,7 +1810,8 @@ static void singleurl(struct option *o,
+       size_t plen;
+       const char *w;
+       size_t wlen;
+-      char *sep;
++      const char *sep;
++      char *sepw;
+       bool urlencode = true;
+       const struct var *v;
+ 
+@@ -1852,10 +1853,10 @@ static void singleurl(struct option *o,
+         w = iinfo->ptr;
+       }
+ 
+-      sep = strchr(w, ' ');
+-      if(sep) {
+-        wlen = sep - w;
+-        iinfo->ptr = sep + 1; /* next word is here */
++      sepw = strchr(w, ' ');
++      if(sepw) {
++        wlen = sepw - w;
++        iinfo->ptr = sepw + 1; /* next word is here */
+       }
+       else {
+         /* last word */
+-- 
+2.54.0
+

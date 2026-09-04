@@ -53,6 +53,7 @@
 {
   version,
   pinned ? false,
+  broken ? false,
   hash,
   cargoHash ? null,
   patches ? [ ],
@@ -290,6 +291,7 @@ stdenv.mkDerivation (
     };
 
     meta = {
+      inherit broken;
       description = "Display server and Wayland compositor developed by Canonical";
       homepage = "https://mir-server.io";
       changelog = "https://github.com/canonical/mir/releases/tag/v${finalAttrs.version}";
