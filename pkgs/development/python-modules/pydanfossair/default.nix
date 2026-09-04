@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydanfossair";
   version = "1.0.0";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JonasPed";
     repo = "pydanfoss-air";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BAzIUiYz5aI9aKbNBKcjq7jJIw06fzqFwKyTp77NLyE=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface for Danfoss Air HRV systems";
     homepage = "https://github.com/JonasPed/pydanfoss-air";
-    changelog = "https://github.com/JonasPed/pydanfoss-air/releases/tag/v${version}";
+    changelog = "https://github.com/JonasPed/pydanfoss-air/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
