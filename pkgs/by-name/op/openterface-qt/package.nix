@@ -28,13 +28,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openterface-qt";
-  version = "0.5.28";
+  version = "0.5.30";
 
   src = fetchFromGitHub {
     owner = "TechxArtisanStudio";
     repo = "Openterface_QT";
     tag = "${finalAttrs.version}";
-    hash = "sha256-MHmTG/9b/BZFPcIBtCrZrQe4uFQ/tttbQMZUpDCwRuc=";
+    hash = "sha256-7ZgdAEQXy9QS7hRzrHOQEuimllRQ4w+u1/3DWXB3jUc=";
   };
 
   nativeBuildInputs = [
