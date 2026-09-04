@@ -1,0 +1,80 @@
+From 286dd3ff41526b582ef48830de239dffbaa61f90 Mon Sep 17 00:00:00 2001
+From: Karel Zak <kzak@redhat.com>
+Date: Thu, 3 Sep 2026 12:17:14 +0200
+Subject: [PATCH] nsenter: close cgroup.procs fd after join to prevent
+ authority leak [CVE-2026-78408]
+
+The --join-cgroup option opens the target's cgroup.procs while running
+as root and writes nsenter's own PID to migrate itself. The descriptor
+was left open across subsequent namespace transitions, credential drops
+(setgroups/setgid/setuid) and execve().
+
+The kernel performs cgroup migration permission checks using the
+credentials captured at open time (file->f_cred). An open cgroup.procs
+descriptor therefore carries the opener's migration authority regardless
+of later privilege changes. A program executed inside the target
+namespace inherits root's cgroup migration capability even when running
+as an unprivileged user with no capabilities.
+
+Fix this by:
+
+ - closing the temporary /proc/PID/cgroup fd after reading the path
+ - adding O_CLOEXEC to the cgroup.procs open as defense in depth
+ - closing cgroup_procs_fd immediately after the self-migration write
+ - initializing the temporary cgroup fd to -1 instead of 0 to avoid
+   accidentally closing stdin via open_target_fd()
+
+The descriptor has no legitimate use after the single migration write.
+
+Introduced-by: b40650b71a74 ("nsenter: add option -c to join the cgroup of target process")
+References: b0cf1cf0d255 ("nsenter: close cgroup.procs fd after join to prevent authority leak")
+Signed-off-by: Karel Zak <kzak@redhat.com>
+(cherry picked from commit afe067c979b9ba2cbe856f7c6411210120ea62aa)
+---
+ sys-utils/nsenter.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/sys-utils/nsenter.c b/sys-utils/nsenter.c
+index 62ef366d430..f449c65d2b4 100644
+--- a/sys-utils/nsenter.c
++++ b/sys-utils/nsenter.c
+@@ -466,7 +466,7 @@ static int get_ns_ino(const char *path, ino_t *ino)
+ static void open_cgroup_procs(void)
+ {
+ 	char *buf = NULL, *path = NULL, *p;
+-	int cgroup_fd = 0;
++	int cgroup_fd = -1;
+ 	char fdpath[PATH_MAX];
+ 
+ 	open_target_fd(&cgroup_fd, "cgroup", optarg);
+@@ -474,6 +474,8 @@ static void open_cgroup_procs(void)
+ 	if (read_all_alloc(cgroup_fd, &buf) < 1)
+ 		err(EXIT_FAILURE, _("failed to get cgroup path"));
+ 
++	close(cgroup_fd);
++
+ 	p = strtok(buf, "\n");
+ 	if (p)
+ 		path = strrchr(p, ':');
+@@ -483,7 +485,7 @@ static void open_cgroup_procs(void)
+ 
+ 	snprintf(fdpath, sizeof(fdpath), _PATH_SYS_CGROUP "/%s/cgroup.procs", path);
+ 
+-	if ((cgroup_procs_fd = open(fdpath, O_WRONLY | O_APPEND)) < 0)
++	if ((cgroup_procs_fd = open(fdpath, O_WRONLY | O_APPEND | O_CLOEXEC)) < 0)
+ 		err(EXIT_FAILURE, _("failed to open cgroup.procs"));
+ 
+ 	free(buf);
+@@ -923,8 +925,11 @@ int main(int argc, char *argv[])
+ 	}
+ 
+ 	// Join into the target cgroup
+-	if (cgroup_procs_fd >= 0)
++	if (cgroup_procs_fd >= 0) {
+ 		join_into_cgroup();
++		close(cgroup_procs_fd);
++		cgroup_procs_fd = -1;
++	}
+ 
+ 	if (uid_gid_fd >= 0) {
+ 		struct stat st;
