@@ -14543,6 +14543,11 @@
     githubId = 386765;
     matrix = "@k900:0upti.me";
   };
+  kaanreal = {
+    name = "Kaan";
+    github = "kaanreal";
+    githubId = 167336594;
+  };
   kaasboteram = {
     name = "Luuk Machielse";
     github = "kaasboteram";
