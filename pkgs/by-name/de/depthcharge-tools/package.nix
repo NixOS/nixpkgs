@@ -6,7 +6,6 @@
   lib,
   lz4,
   lzop,
-  makeWrapper,
   nix-update-script,
   python3Packages,
   ubootTools,
@@ -16,13 +15,13 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "depthcharge-tools";
-  version = "0.6.4";
+  version = "0.7.0";
   src = fetchFromGitLab {
     domain = "gitlab.postmarketos.org";
     owner = "postmarketOS";
     repo = "depthcharge-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-McnBtc0UpatKO4XBnMOHf2L8xxcrsRM/5DCbmAmfA1o=";
+    hash = "sha256-SaTJjbIoSxNCOY2/177qexLYLVMdEkqLrD3aWvsmTaM=";
   };
 
   pyproject = true;
