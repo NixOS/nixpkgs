@@ -7,6 +7,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   cudaSupport ? config.cudaSupport,
+  cudaPackages,
 
   # build-system
   setuptools,
@@ -20,6 +21,7 @@
 
   # optional-dependencies
   jax-cuda12-plugin,
+  jax-cuda13-plugin,
 
   # tests
   absl-py,
@@ -69,11 +71,25 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.optionals cudaSupport finalAttrs.passthru.optional-dependencies.cuda;
 
-  optional-dependencies = lib.fix (self: {
-    cuda = [ jax-cuda12-plugin ];
-    cuda12 = self.cuda;
-    cuda12_local = self.cuda;
-  });
+  optional-dependencies =
+    let
+      inherit (cudaPackages) cudaMajorVersion;
+      cuda12 = [ jax-cuda12-plugin ];
+      cuda13 = [ jax-cuda13-plugin ];
+    in
+    {
+      cuda =
+        if cudaMajorVersion == "12" then
+          cuda12
+        else if cudaMajorVersion == "13" then
+          cuda13
+        else
+          throw "Unsupported cudaPackages version (${cudaMajorVersion}). Supported versions are 12 and 13.";
+      cuda12 = cuda12;
+      cuda12_local = cuda12;
+      cuda13 = cuda13;
+      cuda13_local = cuda13;
+    };
 
   nativeCheckInputs = [
     absl-py
@@ -101,13 +117,18 @@ buildPythonPackage (finalAttrs: {
     "tests/"
   ];
 
-  # Prevents `tests/export_back_compat_test.py::CompatTest::test_*` tests from failing on darwin with
-  # PermissionError: [Errno 13] Permission denied: '/tmp/back_compat_testdata/test_*.py'
-  # See https://github.com/google/jax/blob/jaxlib-v0.4.27/jax/_src/internal_test_util/export_back_compat_test_util.py#L240-L241
-  # NOTE: this doesn't seem to be an issue on linux
-  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export TEST_UNDECLARED_OUTPUTS_DIR=$(mktemp -d)
-  '';
+  preCheck =
+    # Prevents `tests/export_back_compat_test.py::CompatTest::test_*` tests from failing on darwin with
+    # PermissionError: [Errno 13] Permission denied: '/tmp/back_compat_testdata/test_*.py'
+    # See https://github.com/google/jax/blob/jaxlib-v0.4.27/jax/_src/internal_test_util/export_back_compat_test_util.py#L240-L241
+    # NOTE: this doesn't seem to be an issue on linux
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export TEST_UNDECLARED_OUTPUTS_DIR=$(mktemp -d)
+    ''
+    # Disable CUDA during tests when cudaSupport is enabled but no GPU is available
+    + lib.optionalString cudaSupport ''
+      export JAX_PLATFORMS=cpu
+    '';
 
   disabledTests = [
     # Exceeds tolerance when the machine is busy
@@ -128,6 +149,13 @@ buildPythonPackage (finalAttrs: {
     "test_custom_linear_solve_cholesky"
     "test_custom_root_with_aux"
     "testEigvalsGrad_shape"
+  ]
+  ++ lib.optionals cudaSupport [
+    # AssertionError: 'INFO' not found in "DEBUG:2026-09-05 10:11:42,262:jax._src.path:40: etils.epath was not found...
+    "test_subprocess_stderr_debug_logging"
+
+    # AssertionError: 'INFO' not found in 'I0905 10:11:44.349869   24500 pjrt_api.cc:119] GetPjrtApi was found for cuda at...
+    "test_subprocess_stderr_info_logging"
   ]
   ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     # The Mosaic GPU interpreter emulates tcgen05 MMA on the CPU backend and compares the
