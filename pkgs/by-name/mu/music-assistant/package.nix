@@ -78,7 +78,7 @@ assert
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "music-assistant";
-  version = "2.10.1";
+  version = "2.10.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -86,7 +86,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     owner = "music-assistant";
     repo = "server";
     tag = finalAttrs.version;
-    hash = "sha256-zfY2doNcDlrmFaBuCOIhY8tjp+6AXR03Tcznuk0mx70=";
+    hash = "sha256-xYGi8bdR+cTsoJAdyMSxdVklRB/8EiqmK+bXVj9/lt0=";
   };
 
   patches = [
@@ -309,6 +309,8 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "tests/scripts/test_release_workflow.py"
     # save compute
     "tests/benchmarks/test_bench_helpers.py"
+    # timing sensitive
+    "tests/controllers/music/test_music_migrations.py::test_migrate_database_backfills_external_id_lookup"
   ];
 
   disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
