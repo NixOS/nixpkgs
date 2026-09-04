@@ -4038,8 +4038,6 @@ self: super: with self; {
 
   databases = callPackage ../development/python-modules/databases { };
 
-  databricks-cli = callPackage ../development/python-modules/databricks-cli { };
-
   databricks-connect = callPackage ../development/python-modules/databricks-connect { };
 
   databricks-sdk = callPackage ../development/python-modules/databricks-sdk { };
