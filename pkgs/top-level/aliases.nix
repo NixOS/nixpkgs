@@ -2144,6 +2144,7 @@ mapAliases {
   pzip = throw "`pzip` has been removed because it was unmaintained upstream and insecure."; # Added 2026-07-23
   q2pro = throw "'q2pro' has been removed as upstream repository was deleted and no direct active forks were available."; # Added 2025-12-27
   qcachegrind = throw "'qcachegrind' has been removed, as it depends on KDE Gear 5, which has reached EOL"; # Added 2025-08-20
+  qdjango = throw "'qdjango' has been removed because upstream declared the project unmaintained and archived it; its remaining in-tree consumer vendors its own copy"; # Added 2026-09-02
   qes = throw "'qes' has been removed, as it has been merged into shkd"; # Added 2025-12-21
   qflipper = throw "'qflipper' has been renamed to/replaced by 'qFlipper'"; # Converted to throw 2025-10-27
   qMasterPassword = warnAlias "'qMasterPassword' has been renamed to/replaced by 'qmasterpassword'" qmasterpassword; # Added 2026-02-01
