@@ -14,6 +14,8 @@ else
     {
       nativeBuildInputs = [ makeBinaryWrapper ];
 
+      strictDeps = true;
+
       passthru.tests =
         runCommand "rust-audit-info-test"
           {
@@ -22,6 +24,8 @@ else
           ''
             rust-audit-info ${lib.getBin rust-audit-info}/bin/rust-audit-info > $out
           '';
+
+      __structuredAttrs = true;
 
       meta = cargo-auditable.meta // {
         mainProgram = "cargo";
