@@ -7,7 +7,7 @@ index 1e4550e7..6a2e770c 100644
  
  __metadata:
 -  version: 8
-+  version: 9
++  version: YARN_LOCKFILE_VERSION_PLACEHOLDER
    cacheKey: 10
  
  "7zip-bin@npm:~5.2.0":

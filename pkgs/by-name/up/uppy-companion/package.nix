@@ -3,6 +3,7 @@
   stdenv,
   nodejs,
   fetchFromGitHub,
+  substitute,
   yarn-berry_4,
 }:
 
@@ -14,14 +15,24 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "transloadit";
     repo = "uppy";
     tag = "@uppy/companion@${finalAttrs.version}";
-    hash = "sha256-FF5I4D9obRVJqyjucemnxZiPcNHdQdo3S0z/h96Fe6c=";
-  };
+    hash = "sha256-4Xbw4d0SaLPk4mmvG9QWkUuVX/SM1SmGtuaK85rLihU=";
 
-  patches = [
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/transloadit/uppy/blob/main/package.json#L39
-    ./yarn-4.14-support.patch
-  ];
+    # Remove after upstream updates to Yarn 4.15
+    # https://github.com/transloadit/uppy/blob/main/package.json#L38
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry_4.lockfileVersion
+          ];
+        })
+      }
+    '';
+  };
 
   nativeBuildInputs = [
     nodejs
@@ -36,8 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-vmya3c+ec93T8kNoooUu4risqScY0b4cwML7d2kYz88=";
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-MQTaNbeJuvWDtRajJQYRtuxiMrLGKtlasyB6sKeOIgs=";
   };
 
   buildPhase = ''

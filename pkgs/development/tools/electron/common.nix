@@ -12,6 +12,7 @@
   yarn-berry_4,
   unzip,
   writers,
+  substitute,
 
   libnotify,
   libpulseaudio,
@@ -26,9 +27,16 @@ let
   gclientDeps = gclient2nix.importGclientDeps info.deps;
   yarn-berry = yarn-berry_4;
 
-  # Only apply to old versions after upstream updates to Yarn 4.14
-  # https://github.com/electron/electron/blob/main/package.json#L148
-  yarnPatch = ./yarn-4.14-support.patch;
+  # Only apply to old versions after upstream updates to Yarn 4.15
+  # https://github.com/electron/electron/blob/main/package.json#L152
+  yarnPatch = substitute {
+    src = ./yarn-fix.patch;
+    substitutions = [
+      "--replace-fail"
+      "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+      yarn-berry_4.lockfileVersion
+    ];
+  };
 in
 
 ((chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {

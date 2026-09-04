@@ -1,15 +1,18 @@
 diff --git a/.yarnrc.yml b/.yarnrc.yml
 --- a/.yarnrc.yml
 +++ b/.yarnrc.yml
-@@ -7,4 +7,7 @@ supportedArchitectures:
-     - x64
-     - arm64
+@@ -5,7 +5,10 @@ nodeLinker: node-modules
+ compressionLevel: mixed
+ enableGlobalCache: false
  
--yarnPath: .yarn/releases/yarn-4.13.0.cjs
+-yarnPath: .yarn/releases/yarn-4.9.2.cjs
 +approvedGitRepositories:
 +  - "**"
 +
 +enableScripts: true
+ 
+ logFilters:
+   # Disable useless non-actionable warnings.
 diff --git a/yarn.lock b/yarn.lock
 --- a/yarn.lock
 +++ b/yarn.lock
@@ -18,6 +21,6 @@ diff --git a/yarn.lock b/yarn.lock
  
  __metadata:
 -  version: 8
-+  version: 9
-   cacheKey: 10c0
++  version: YARN_LOCKFILE_VERSION_PLACEHOLDER
+   cacheKey: 10
  

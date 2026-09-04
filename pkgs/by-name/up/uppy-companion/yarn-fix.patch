@@ -1,9 +1,10 @@
 diff --git a/.yarnrc.yml b/.yarnrc.yml
 --- a/.yarnrc.yml
 +++ b/.yarnrc.yml
-@@ -1 +1,6 @@
- nodeLinker: node-modules
-+
+@@ -11,3 +11,7 @@ nodeLinker: node-modules
+ 
+ npmPublishAccess: public
+ 
 +approvedGitRepositories:
 +  - "**"
 +
@@ -16,6 +17,6 @@ diff --git a/yarn.lock b/yarn.lock
  
  __metadata:
 -  version: 8
-+  version: 9
-   cacheKey: 10c0
++  version: YARN_LOCKFILE_VERSION_PLACEHOLDER
+   cacheKey: 10
  

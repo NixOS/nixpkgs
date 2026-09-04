@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  substitute,
   yarn-berry_4,
   nodejs,
   pkg-config,
@@ -27,22 +28,32 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "RocketChat";
     repo = "Rocket.Chat.Electron";
     tag = finalAttrs.version;
-    hash = "sha256-6yFfSZSHWD/RDk2dD1aUWzNM8KOJmmfiz0GWKrTL7mY=";
-  };
+    hash = "sha256-5P4IJbZs+n8oES5FhSjAg/lv9qTej7keBD/AzUXl65s=";
 
-  patches = [
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/RocketChat/Rocket.Chat.Electron/blob/master/package.json#L182
-    ./yarn-4.14-support.patch
-  ];
+    # Remove after upstream updates to Yarn 4.15
+    # https://github.com/RocketChat/Rocket.Chat.Electron/blob/master/package.json#L187
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry.lockfileVersion
+          ];
+        })
+      }
+    '';
+  };
 
   # This might need to be updated between releases.
   # See https://nixos.org/manual/nixpkgs/stable/#javascript-yarnBerry-missing-hashes
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-7zPiu8kgZbp64ugf229hrjpwZujQHHDLwCxlGRVgH4E=";
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-VMCLYLuNAZQzfglLS6ncFCLOcmGsuXPR2J+q+Gn/CP4=";
   };
 
   nativeBuildInputs = [

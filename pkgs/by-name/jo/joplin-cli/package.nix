@@ -3,6 +3,7 @@
   stdenv,
   nodejs,
   fetchFromGitHub,
+  substitute,
   yarn-berry_4,
   python3,
   pkg-config,
@@ -24,15 +25,23 @@ stdenv.mkDerivation (finalAttrs: {
     postFetch = ''
       # there's a file with a weird name that causes a hash mismatch on darwin
       rm $out/packages/app-cli/tests/support/photo*
-    '';
-    hash = "sha256-nWMUvAseKoTOv5ui9uYDUiGlvO+8nNV4ux7JbsnrM5U=";
-  };
 
-  patches = [
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/laurent22/joplin/blob/dev/package.json#L103
-    ./yarn-4.14-support.patch
-  ];
+      # Remove when updating since upstream has updated Yarn
+      # https://github.com/laurent22/joplin/commit/071f205c44da8e2979dcf53a4105648bfa0e7f83
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry_4.lockfileVersion
+          ];
+        })
+      }
+    '';
+    hash = "sha256-LSkiW3Kwtjsk2LLM/MXo6ErR+G8b7IX3LkEtDJlc7ok=";
+  };
 
   missingHashes = ./missing-hashes.json;
 
@@ -40,10 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs)
       src
       missingHashes
-      patches
       postPatch
       ;
-    hash = "sha256-mdDVYLJ4ZN7zJJdf/2Wh+or+p1uJPTrMCyDYWwc04YM=";
+    hash = "sha256-EHHAB20syDakpN4TGuLCc1v2AGEJPc3y7uCpS+PVzzQ=";
   };
 
   nativeBuildInputs = [

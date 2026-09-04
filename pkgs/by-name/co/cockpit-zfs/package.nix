@@ -1,7 +1,6 @@
 {
   acl,
   bash,
-  buildPackages,
   cockpit,
   coreutils,
   fetchFromGitHub,
@@ -15,7 +14,7 @@
   mbuffer,
   msmtp,
   nix-update-script,
-  nodejs_22,
+  nodejs,
   openssh,
   samba,
   shadow,
@@ -27,22 +26,6 @@
   yarn-berry,
   zfs,
 }:
-let
-  # Pin to Node <24.15.0: Yarn Berry's PnP linker breaks `require.cache` on
-  # newer Node, which crashes tailwindcss mid-build (and ESLint, per
-  # yarnpkg/berry#7106). See NixOS/nixpkgs#530137.
-  #
-  # `nodejs` is rebound here (rather than touched at every call site below)
-  # so the rest of this file is unaffected.
-  #
-  # yarn-berry's own `yarn` binary gets patchShebang'd against whatever
-  # `nodejs` *it* was built with, so overriding nativeBuildInputs alone does
-  # nothing - we have to rebuild yarn-berry itself against nodejs_22, for
-  # both the host and build-platform (cross-compilation) variants.
-  nodejs = nodejs_22;
-  yarnBerry = yarn-berry.override { inherit nodejs; };
-  yarnBerryForBuild = buildPackages.yarn-berry.override { nodejs = buildPackages.nodejs_22; };
-in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit-zfs";
@@ -59,17 +42,17 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
 
   # Use buildPackages for cross-compilation support
-  offlineCache = yarnBerryForBuild.fetchYarnBerryDeps {
+  offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
     hash = "sha256-nm3iHf9Rm5JFKzH0HAvglkQPFIV6Fl1e9WvNdqevTug=";
   };
 
   nativeBuildInputs = [
     makeWrapper
-    nodejs_22
+    nodejs
     jq
-    yarnBerry
-    yarnBerryForBuild.yarnBerryConfigHook
+    yarn-berry
+    yarn-berry.yarnBerryConfigHook
   ];
 
   disallowedRequisites = [ finalAttrs.offlineCache ];
@@ -86,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     lsscsi
     mbuffer
     msmtp
-    nodejs_22
+    nodejs
     openssh
     samba
     shadow

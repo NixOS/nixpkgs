@@ -1,9 +1,11 @@
 diff --git a/.yarnrc.yml b/.yarnrc.yml
 --- a/.yarnrc.yml
 +++ b/.yarnrc.yml
-@@ -1 +1,6 @@
- nodeLinker: node-modules
-+
+@@ -7,4 +7,7 @@ supportedArchitectures:
+     - x64
+     - arm64
+ 
+-yarnPath: .yarn/releases/yarn-4.13.0.cjs
 +approvedGitRepositories:
 +  - "**"
 +
@@ -16,6 +18,6 @@ diff --git a/yarn.lock b/yarn.lock
  
  __metadata:
 -  version: 8
-+  version: 9
++  version: YARN_LOCKFILE_VERSION_PLACEHOLDER
    cacheKey: 10c0
  

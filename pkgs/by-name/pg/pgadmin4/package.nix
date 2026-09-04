@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  substitute,
   zlib,
   nixosTests,
   postgresqlTestHook,
@@ -9,24 +10,36 @@
   yarn-berry_4,
   nodejs,
   stdenv,
-  pkgsBuildHost,
   server-mode ? true,
 }:
 
 let
   pname = "pgadmin";
   version = "9.14";
-  yarnHash = "sha256-mJa5L8N40JWogQ8/LllSdX/uJHMzKULCow9+e5gFe/A=";
+  yarnHash = "sha256-uixmtWC588JD6DfM9INeh6LV5L2S9lc+GFNW62FVm+4=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-NQe1ZN8jQEJE5qSpL5MjgLwWLGrGXCIHaCd8zLpsx3s=";
-  };
+    hash = "sha256-ZUJEwTRKG23ztLKAp+hDHKeKxPc6VmC8gnJe4x85R44=";
 
-  # Remove after https://github.com/pgadmin-org/pgadmin4/commit/79e490c5fa6031af7baa83f04f751bdc790dc408 is released
-  yarnPatch = ./yarn-4.14-support.patch;
+    # Remove when updating since upstream has updated Yarn
+    # https://github.com/pgadmin-org/pgadmin4/commit/aad2dfd7251f769ce73dd1bc3e17c76831a019ed#diff-b861012a5dd72b8a9f3281b7cf09f5a779c98569d040b1bbc1db50f1b15e7cceR183
+    postFetch = ''
+      cd $out/web
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry_4.lockfileVersion
+          ];
+        })
+      }
+    '';
+  };
 
   # keep the scope, as it is used throughout the derivation and tests
   # this also makes potential future overrides easier
@@ -53,7 +66,6 @@ pythonPackages.buildPythonApplication rec {
     inherit missingHashes;
     src = src + "/web";
     hash = yarnHash;
-    patches = [ yarnPatch ];
   };
 
   # from Dockerfile
@@ -115,8 +127,6 @@ pythonPackages.buildPythonApplication rec {
     echo Building the web frontend...
     cd web
     (
-      PATH=$PATH:${lib.makeBinPath [ pkgsBuildHost.git ]}
-      git apply ${yarnPatch}
       export LD=$CC # https://github.com/imagemin/optipng-bin/issues/108
       yarnBerryConfigHook
     )

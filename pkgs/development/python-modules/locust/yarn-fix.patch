@@ -1,12 +1,14 @@
 diff --git a/.yarnrc.yml b/.yarnrc.yml
 --- a/.yarnrc.yml
 +++ b/.yarnrc.yml
-@@ -12,5 +12,3 @@ npmPreapprovedPackages:
- httpProxy: "${HTTP_PROXY:-}"
+@@ -1,3 +1,6 @@
+ nodeLinker: node-modules
  
- httpsProxy: "${HTTPS_PROXY:-}"
--
 -yarnPath: .yarn/releases/yarn-4.12.0.cjs
++approvedGitRepositories:
++  - "**"
++
++enableScripts: true
 diff --git a/yarn.lock b/yarn.lock
 --- a/yarn.lock
 +++ b/yarn.lock
@@ -15,6 +17,6 @@ diff --git a/yarn.lock b/yarn.lock
  
  __metadata:
 -  version: 8
-+  version: 9
++  version: YARN_LOCKFILE_VERSION_PLACEHOLDER
    cacheKey: 10c0
  
