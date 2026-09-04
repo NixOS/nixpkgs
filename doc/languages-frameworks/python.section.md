@@ -326,8 +326,8 @@ the packages with the version of the interpreter. Because this is irrelevant for
 applications, the prefix is omitted.
 
 When packaging a Python application with [`buildPythonApplication`](#buildpythonapplication-function), it should be
-called with `callPackage` and passed `python3` or `python3Packages` (possibly
-specifying an interpreter version), like this:
+called with `callPackage` and passed `python3` or `python3Packages` (or possibly
+specifying an interpreter version such as `python313Packages`), like this:
 
 ```nix
 {
