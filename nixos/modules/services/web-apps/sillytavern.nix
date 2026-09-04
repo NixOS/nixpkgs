@@ -43,6 +43,28 @@ in
         '';
       };
 
+      extensions = lib.mkOption {
+        type = lib.types.attrsOf lib.types.pathInStore;
+        default = { };
+        example = lib.literalExpression ''
+          {
+            MyExtension = pkgs.fetchFromGitHub {
+              owner = "";
+              repo = "MyExtension";
+              # ...
+            };
+          }
+        '';
+        description = ''
+          Attrset of extension names to extension paths, for declaratively
+          managing extensions. Ad-hoc extension management via the web UI will
+          no longer function if this is non-empty.
+
+          The name will be used as the extension directory name, and should
+          match the basename of the Git repository URL's pathname.
+        '';
+      };
+
       port = lib.mkOption {
         type = lib.types.nullOr lib.types.port;
         default = null;
@@ -95,6 +117,7 @@ in
       description = "Silly Tavern";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      restartTriggers = [ cfg.configFile ];
       # required by sillytavern's extension manager
       path = [ pkgs.gitMinimal ];
       environment.XDG_DATA_HOME = "%S";
@@ -118,9 +141,19 @@ in
         Group = cfg.group;
         Restart = "always";
         StateDirectory = "SillyTavern";
-        BindPaths = [
-          "%S/SillyTavern/extensions:${cfg.package}/lib/node_modules/sillytavern/public/scripts/extensions/third-party"
-        ];
+        BindPaths =
+          let
+            extensionsPath =
+              if cfg.extensions == { } then
+                "%S/SillyTavern/extensions"
+              else
+                pkgs.linkFarm "sillytavern-extensions" (
+                  lib.mapAttrsToList (name: path: { inherit name path; }) cfg.extensions
+                );
+          in
+          [
+            "${extensionsPath}:${cfg.package}/lib/node_modules/sillytavern/public/scripts/extensions/third-party"
+          ];
 
         # Security hardening
         CapabilityBoundingSet = [ "" ];
@@ -153,13 +186,15 @@ in
         mode = "0700";
         inherit (cfg) user group;
       };
-      "/var/lib/SillyTavern/extensions".d = {
-        mode = "0700";
-        inherit (cfg) user group;
-      };
       "/var/lib/SillyTavern/config.yaml"."L+" = {
         mode = "0600";
         argument = cfg.configFile;
+        inherit (cfg) user group;
+      };
+    }
+    // lib.optionalAttrs (cfg.extensions == { }) {
+      "/var/lib/SillyTavern/extensions".d = {
+        mode = "0700";
         inherit (cfg) user group;
       };
     };
