@@ -30127,6 +30127,11 @@
     githubId = 98685984;
     name = "utopiatopia";
   };
+  uuxyz = {
+    github = "uuxyz";
+    githubId = 51853008;
+    name = "uuxyz";
+  };
   uvnikita = {
     email = "uv.nikita@gmail.com";
     github = "uvNikita";
@@ -30138,11 +30143,6 @@
     github = "uwap";
     githubId = 2212422;
     name = "uwap";
-  };
-  uuxyz = {
-    github = "uuxyz";
-    githubId = 51853008;
-    name = "uuxyz";
   };
   uxodb = {
     name = "uxodb";
