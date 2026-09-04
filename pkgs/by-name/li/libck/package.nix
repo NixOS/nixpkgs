@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
           "COMPILER=gcc"
   '';
 
-  configureFlags = [ "--platform=${stdenv.hostPlatform.parsed.cpu.name}}" ];
+  configureFlags = [ "--platform=${stdenv.hostPlatform.parsed.cpu.name}" ];
 
   dontDisableStatic = true;
 
