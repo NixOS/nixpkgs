@@ -107,6 +107,7 @@ stdenv.mkDerivation (
       libxml2
       libllvm
       python3
+      lua5_3
       # Starting with LLVM 16, the resource dir patch is no longer enough to get
       # libclang into the rpath of the lldb executables. By putting it into
       # buildInputs cc-wrapper will set up rpath correctly for us.
