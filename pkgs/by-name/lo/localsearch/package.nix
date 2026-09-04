@@ -116,6 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     # TODO: tests do not like our sandbox
     "-Dfunctional_tests=false"
+    # avformat (from ffmpeg) and libmediainfo are interchangable
+    "-Dlibmediainfo=disabled"
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     "-Dbattery_detection=none"
