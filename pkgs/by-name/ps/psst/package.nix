@@ -76,7 +76,12 @@ rustPlatform.buildRustPackage {
     install -Dm644 ${desktopItem}/share/applications/* -t $out/share/applications
   '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version=branch"
+      "--version-regex=(0-unstable-.*)"
+    ];
+  };
 
   meta = {
     description = "Spotify client with native GUI written in Rust, without Electron";
