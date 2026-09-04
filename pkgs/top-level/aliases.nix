@@ -1211,6 +1211,7 @@ mapAliases {
   jing = jing-trang; # Added 2025-09-18
   jitsi = throw "'jitsi' has been removed as it relies on gtk2 libraries"; # Added 2026-07-24
   jmtpfs = throw "'jmtpfs' has been removed, as it is unmaintained"; # Added 2026-06-06
+  job-security = throw "'job-security' has been removed. Nushell now provides native job control."; # Added 2026-09-04
   joplin = joplin-cli; # Added 2025-11-03
   jscoverage = throw "jscoverage has been removed, as it was broken"; # Added 2025-08-25
   jsduck = throw "jsduck has been removed, as it was broken and unmaintained upstream."; # Added 2025-12-02
