@@ -25,6 +25,7 @@
   wayland-protocols,
   wlroots_0_20,
 
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -66,6 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     wlroots_0_20
+  ];
+
+  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  versionCheckProgram = "${placeholder "out"}/bin/noctalia-greeter";
+  nativeInstallCheckInputs = [
+    versionCheckHook
   ];
 
   passthru.updateScript = nix-update-script { };
