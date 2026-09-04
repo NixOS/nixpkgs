@@ -8322,6 +8322,8 @@ self: super: with self; {
 
   indexed-zstd = callPackage ../development/python-modules/indexed-zstd { inherit (pkgs) zstd; };
 
+  indicio = callPackage ../development/python-modules/indicio { };
+
   inequality = callPackage ../development/python-modules/inequality { };
 
   inference-gym = callPackage ../development/python-modules/inference-gym { };
@@ -20746,6 +20748,8 @@ self: super: with self; {
 
   tlds = callPackage ../development/python-modules/tlds { };
 
+  tlmviewer = callPackage ../development/python-modules/tlmviewer { };
+
   tlparse = callPackage ../development/python-modules/tlparse { };
 
   tls-client = callPackage ../development/python-modules/tls-client { };
@@ -20877,9 +20881,13 @@ self: super: with self; {
 
   torcheval = callPackage ../development/python-modules/torcheval { };
 
+  torchimplicit = callPackage ../development/python-modules/torchimplicit { };
+
   torchinfo = callPackage ../development/python-modules/torchinfo { };
 
   torchio = callPackage ../development/python-modules/torchio { };
+
+  torchlensmaker = callPackage ../development/python-modules/torchlensmaker { };
 
   torchlibrosa = callPackage ../development/python-modules/torchlibrosa { };
 
