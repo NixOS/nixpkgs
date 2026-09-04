@@ -2,20 +2,21 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "kubeseal";
-  version = "0.38.4";
+  version = "0.39.1";
 
   src = fetchFromGitHub {
     owner = "bitnami";
     repo = "sealed-secrets";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-cg9YEY78miw8BRX9CCIeWqdAeJDsFSr6VvgRJFYzREU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vmvKD6Rk/xCw0hpGmus9JOG2JBStqzTSl09QGYMcOjQ=";
   };
 
-  vendorHash = "sha256-1RATVZIeWZFceLttnqnDgXHyUsjRvkHAnsypABW/WDE=";
+  vendorHash = "sha256-JzBl9jOGYstoimv8bdy2t1DSvchFMl73zdxeY1Vagog=";
 
   subPackages = [ "cmd/kubeseal" ];
 
@@ -24,6 +25,9 @@ buildGoModule (finalAttrs: {
     "-w"
     "-X main.VERSION=${finalAttrs.version}"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Kubernetes controller and tool for one-way encrypted Secrets";
