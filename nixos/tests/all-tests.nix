@@ -175,6 +175,16 @@ in
           touch $out
         '';
     efivars = runTestOn [ "x86_64-linux" ] ./nixos-test-driver/efivars.nix;
+    junit =
+      pkgs.runCommand "junit-xml-has-correct-testcases"
+        {
+          test = runTest ./nixos-test-driver/junit.nix;
+          nativeBuildInputs = [ pkgs.yq-go ];
+        }
+        ''
+          [[ 2 = $(yq '.testsuites.testsuite.+@tests' $test/junit.xml) ]]
+          touch $out
+        '';
   };
 
   # NixOS vm tests and non-vm unit tests
