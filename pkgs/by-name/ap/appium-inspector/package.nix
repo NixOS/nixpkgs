@@ -91,9 +91,13 @@ buildNpmPackage (finalAttrs: {
         PKG_FILE = toString ./package.nix;
       };
       text = ''
+        current_electron_version="$(grep -oP -m 1 "(?<=electron_)(\d+)" "$PKG_FILE")"
         new_src="$(nix-build --attr "pkgs.$PNAME.src" --no-out-link)"
         new_electron_major="$(jq -r '.devDependencies.electron | split(".")[0] | tonumber' "$new_src/package.json")"
-        sed -i -E "s/electron_[0-9]+/electron_$new_electron_major/g" "$PKG_FILE"
+        if (( current_electron_version >= new_electron_major )); then
+          exit 0
+        fi
+        sed -i -E "s/electron_$current_electron_version/electron_$new_electron_major/g" "$PKG_FILE"
       '';
     }))
   ];
