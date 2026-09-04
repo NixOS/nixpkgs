@@ -15434,6 +15434,12 @@
     githubId = 1903418;
     name = "Kovacsics Robert";
   };
+  koyfm = {
+    email = "itzik@koyfman.net";
+    github = "koyfm";
+    githubId = 74200683;
+    name = "Itzik Koyfman";
+  };
   kozm9000 = {
     email = "ubermailbox@protonmail.ch";
     github = "kozm9000";
