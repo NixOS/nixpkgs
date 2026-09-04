@@ -3,7 +3,7 @@
   electrum,
   fetchFromGitHub,
   lib,
-  rocksdb,
+  rocksdb_10_10,
   rust-jemalloc-sys,
   rustPlatform,
   stdenv,
@@ -34,8 +34,8 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     # Dynamically link rocksdb
-    ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
-    ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+    ROCKSDB_INCLUDE_DIR = "${rocksdb_10_10}/include";
+    ROCKSDB_LIB_DIR = "${rocksdb_10_10}/lib";
 
     # External binaries for integration tests are provided via nixpkgs. Skip
     # trying to download them.
