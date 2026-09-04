@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGoLatestModule,
   fetchFromGitHub,
   fetchNpmDeps,
   nodejs,
@@ -9,7 +9,7 @@
   nixosTests,
   nix-update-script,
 }:
-buildGoModule (finalAttrs: {
+buildGoLatestModule (finalAttrs: {
   pname = "sshwifty";
   version = "0.4.8-beta-release";
 
