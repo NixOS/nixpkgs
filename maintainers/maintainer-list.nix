@@ -18927,6 +18927,12 @@
     githubId = 3958340;
     name = "Eshin Kunishima";
   };
+  mikolajkniejski = {
+    email = "mikolajkniejski@tutanota.com";
+    github = "mikolajkniejski";
+    githubId = 64133041;
+    name = "Mikolaj Kniejski";
+  };
   mikroskeem = {
     email = "mikroskeem@mikroskeem.eu";
     github = "mikroskeem";
