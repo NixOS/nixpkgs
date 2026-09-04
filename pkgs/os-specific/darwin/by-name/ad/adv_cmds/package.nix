@@ -99,7 +99,7 @@ mkAppleDerivation {
     description = "Advanced commands package for Darwin";
     license = [
       lib.licenses.apple-psl10
-      lib.licenses.apsl20
+      lib.licenses.apple-psl20
     ];
   };
 }
