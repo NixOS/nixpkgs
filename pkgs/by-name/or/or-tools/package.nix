@@ -100,6 +100,11 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-BNB3KlgjpWcZtb9e68Jkc/4xC4K0c+Iisw0eS6ltYXE=";
     })
     ./0001-Fix-up-broken-CMake-rules-for-bundled-pybind-stuff.patch
+    (fetchpatch {
+      name = "0001-contrib-remove-deprecated-check_dependencies.py.patch";
+      url = "https://github.com/google/or-tools/commit/957379e02204e04acb3da71b5431ea092e8e8a29.diff?full_index=1";
+      hash = "sha256-DPbe1br1EHJ/4F3p53Lr6rUNwAatN64x/Jsl5WZS3kk=";
+    })
   ];
 
   # or-tools normally attempts to build Protobuf for the build platform when
@@ -243,10 +248,5 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "fzn-cp-sat";
     maintainers = with lib.maintainers; [ andersk ];
     platforms = with lib.platforms; linux ++ darwin;
-
-    # Only version 9.15 adds support for Python 3.14: https://github.com/google/or-tools/releases/tag/v9.15
-    # Also this package is tied to pybind 2.13.6, and only 3.0.0 supports Python 3.14: https://github.com/pybind/pybind11/releases/tag/v3.0.0
-    # Also, nix review fails to build python314Packages.ortools
-    broken = python3.pythonAtLeast "3.14";
   };
 })
