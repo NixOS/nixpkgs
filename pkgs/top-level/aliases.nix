@@ -2766,6 +2766,7 @@ mapAliases {
   xmonad_log_applet = warnAlias "'xmonad_log_applet' has been renamed to 'xmonad-log-applet'" xmonad-log-applet; # Added 2026-07-27
   xmonad_log_applet_mate = warnAlias "'xmonad_log_applet_mate' has been renamed to 'xmonad-log-applet-mate'" xmonad-log-applet-mate; # Added 2026-07-27
   xmonad_log_applet_xfce = warnAlias "'xmonad_log_applet_xfce' has been renamed to 'xmonad-log-applet-xfce'" xmonad-log-applet-xfce; # Added 2026-07-27
+  xmpp-bridge = throw "'xmpp-bridge' has been removed as it is unmaintained upstream."; # Added 2026-09-04
   xneur = throw "'xneur' has been removed as it is unmaintained and depends on pcre, which is deprecated"; # Added 2026-06-06
   xo = throw "Use 'dbtpl' instead of 'xo'"; # Added 2025-09-28
   xonsh-unwrapped = throw "'xonsh-unwrapped' has been renamed to/replaced by 'python3Packages.xonsh'"; # Converted to throw 2025-10-27
