@@ -459,8 +459,8 @@ in
       "sha256-02BUkAFhr9sT8ohkJJFPYNni0O9/UI/G0GUee/Kx5Dw=";
 
   mypy-boto3-ecs =
-    buildMypyBoto3Package "ecs" "1.43.83"
-      "sha256-zv9tbfBPI2OWAR3NHyllDRDsoqrQY35kSW/4jZcKXL4=";
+    buildMypyBoto3Package "ecs" "1.43.88"
+      "sha256-ISRYYfs2nEW/dt9uqkVz7ZPshfO6VjZDfw/iDP7hqlQ=";
 
   mypy-boto3-efs =
     buildMypyBoto3Package "efs" "1.43.23"
