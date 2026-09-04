@@ -21107,6 +21107,12 @@
     github = "norpl";
     githubId = 98636020;
   };
+  northbymidwest = {
+    name = "Michael Bryniarski";
+    email = "michael.bryniarski@gmail.com";
+    github = "northbymidwest";
+    githubId = 856836;
+  };
   nosewings = {
     name = "Nicholas Coltharp";
     email = "coltharpnicholas@gmail.com";
