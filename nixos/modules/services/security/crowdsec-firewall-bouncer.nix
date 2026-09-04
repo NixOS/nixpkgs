@@ -231,7 +231,8 @@ in
           after = [ "crowdsec.service" ];
           wants = after;
           script = ''
-            cscli=${lib.getExe' config.services.crowdsec.package "cscli"}
+            # Need to use a `cscli` wrapper which sets `--config` to correct path.
+            cscli=/run/current-system/sw/bin/cscli
             if $cscli bouncers list --output json | ${lib.getExe pkgs.jq} -e -- ${lib.escapeShellArg "any(.[]; .name == \"${cfg.registerBouncer.bouncerName}\")"} >/dev/null; then
               # Bouncer already registered. Verify the API key is still present
               if [ ! -f ${apiKeyFile} ]; then
