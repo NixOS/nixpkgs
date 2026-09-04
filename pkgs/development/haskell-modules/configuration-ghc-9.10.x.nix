@@ -94,6 +94,9 @@ in
   monad-dijkstra = dontCheck super.monad-dijkstra; # needs hlint 3.10
 
   # Workaround https://github.com/haskell/haskell-language-server/issues/4674
-  haskell-language-server = haskellLib.disableCabalFlag "hlint" super.haskell-language-server;
-
+  haskell-language-server = haskellLib.disableCabalFlag "hlint" (super.haskell-language-server.override {
+    apply-refact = null;
+    hlint = null;
+    refact = null;
+  });
 }

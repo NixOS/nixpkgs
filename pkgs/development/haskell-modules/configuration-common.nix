@@ -239,19 +239,7 @@ with haskellLib;
             })
           ] super.fourmolu;
 
-          haskell-language-server = lib.pipe super.haskell-language-server [
-            dontCheck
-            (
-              if versionOlder self.ghc.version "9.10" || versionOlder "9.11" self.ghc.version then
-                addBuildDepends [
-                  self.apply-refact
-                  self.hlint
-                  self.refact
-                ]
-              else
-                lib.id
-            )
-          ];
+          haskell-language-server = dontCheck super.haskell-language-server;
         }
       )
     )
