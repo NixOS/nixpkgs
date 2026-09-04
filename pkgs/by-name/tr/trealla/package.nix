@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   libffi,
+  nix-update-script,
   openssl,
   readline,
   stdenv,
@@ -23,20 +24,20 @@ assert lib.elem lineEditingLibrary [
 ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "trealla";
-  version = "2.106.1";
+  version = "3.9.39";
 
   src = fetchFromGitHub {
     owner = "trealla-prolog";
     repo = "trealla";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-21moIBYPAH9MF6NBfZRrnKMuQsFpLI+gxxe0kkoLDII=";
+    hash = "sha256-yfulQuwR3DgZk7ZUrVdqs09uZOcRmrTkZuU45Sw/f/o=";
   };
 
   postPatch = ''
-    substituteInPlace Makefile \
-      --replace '-I/usr/local/include' "" \
-      --replace '-L/usr/local/lib' "" \
-      --replace 'GIT_VERSION :=' 'GIT_VERSION ?='
+    substituteInPlace GNUmakefile \
+      --replace-fail '-I/usr/local/include' "" \
+      --replace-fail '-I/usr/local/opt/libffi/include' "" \
+      --replace-fail '-L/usr/local/lib' ""
   '';
 
   nativeBuildInputs = [ xxd ];
@@ -50,20 +51,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  env.LC_ALL = if stdenv.hostPlatform.isDarwin then "en_US.UTF-8" else "C.UTF-8";
+
   makeFlags = [
     "GIT_VERSION=\"v${finalAttrs.version}\""
+    "PREFIX=$(out)"
   ]
   ++ lib.optionals (lineEditingLibrary == "isocline") [ "ISOCLINE=1" ]
   ++ lib.optionals (!enableFFI) [ "NOFFI=1" ]
   ++ lib.optionals (!enableSSL) [ "NOSSL=1" ]
-  ++ lib.optionals enableThreads [ "THREADS=1" ];
+  ++ lib.optionals (!enableThreads) [ "NOTHREADS=1" ];
 
   enableParallelBuilding = true;
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 -t $out/bin tpl
-    runHook postInstall
+  postInstall = ''
+    find $out/share/trealla/library -type f \
+      \( -name '*.c' -o -name '*.d' -o -name '*.o' \) -delete
   '';
 
   doCheck = !valgrind.meta.broken;
@@ -71,6 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
   checkFlags = [ "test" ] ++ lib.optionals checkLeaks [ "leaks" ];
 
   passthru = {
+    updateScript = nix-update-script { };
+
     tests = {
       version = testers.testVersion {
         package = finalAttrs.finalPackage;
