@@ -1,15 +1,16 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchurl,
   gi-docgen,
+  glibcLocales,
   meson,
+  ministream,
   ninja,
   pkg-config,
   sassc,
   vala,
   gobject-introspection,
-  appstream,
   fribidi,
   glib,
   gtk4,
@@ -32,12 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   outputBin = "devdoc"; # demo app
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "libadwaita";
-    tag = finalAttrs.version;
-    hash = "sha256-0ikPTLfM5DpaZDuKUnCBe/BB5M7n2Ef6emSlCHtWHKg=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/libadwaita/${lib.versions.majorMinor finalAttrs.version}/libadwaita-${finalAttrs.version}.tar.xz";
+    hash = "sha256-rthyFmnYqg1nPmZkivhg0K8fow4+q1Mlko6Rd8skRTQ=";
   };
 
   depsBuildBuild = [
@@ -63,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    appstream
+    ministream
     fribidi
   ];
 
@@ -73,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     adwaita-icon-theme
+    glibcLocales
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     xvfb-run
