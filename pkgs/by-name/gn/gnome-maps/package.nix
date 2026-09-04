@@ -27,6 +27,7 @@
   geocode-glib_2,
   tzdata,
   writeText,
+  sqlite,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -52,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     desktop-file-utils
     glib
     gtk4
+    sqlite
   ];
 
   buildInputs = [
