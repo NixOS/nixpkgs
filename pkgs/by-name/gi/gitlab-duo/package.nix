@@ -12,7 +12,7 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gitlab-duo";
-  version = "9.6.0";
+  version = "9.17.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "editor-extensions";
     repo = "gitlab-lsp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RhBR/Jpf/utucPvPbjSK7b9Homgqtdu7P1ANFzLJF1I=";
+    hash = "sha256-lW/jp4QBeBLG2gxC20S4/PbUlLxt2ix+5gZ+L0GjHcE=";
   };
 
   # Upstream migrated from npm to bun (bun.lock) in v8.90.0. Vendor the fully
@@ -69,7 +69,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Required: keeping store paths out of the FOD output keeps the hash stable.
     dontFixup = true;
 
-    outputHash = "sha256-a+E4ApBwIjesq6a1KkFfsTUpdQIPy6f3Nbqi4S0/FeA=";
+    outputHash = "sha256-Q2p73DysPH/2ebrSIiM5FwauerJXaRUg5aE1e6LWRHk=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
