@@ -162,6 +162,21 @@ stdenv.mkDerivation (
       version=${release_version}
     '';
 
+    installCheckPhase = ''
+      runHook preInstallCheck
+
+      pythonOutput=$($out/bin/lldb --batch -o 'script print(1000+100+10+1)' 2>&1)
+      echo "$pythonOutput"
+      grep -Fx 1111 <<< "$pythonOutput"
+
+      luaOutput=$($out/bin/lldb --batch --script-language lua \
+        -o 'script io.stdout:write(1000+100+10+1, "\n")' 2>&1)
+      echo "$luaOutput"
+      grep -Fx 1111 <<< "$luaOutput"
+
+      runHook postInstallCheck
+    '';
+
     postInstall =
       let
         # Needed after https://github.com/llvm/llvm-project/commit/5f0f0fcd62227fb864203acc1a57e3ebf7a254a3
