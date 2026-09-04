@@ -113,7 +113,7 @@ buildNpmPackage (finalAttrs: {
     (makeDesktopItem {
       desktopName = "BSManager";
       name = "BSManager";
-      exec = "bs-manager";
+      exec = "bs-manager %U";
       terminal = false;
       type = "Application";
       icon = "bs-manager";
