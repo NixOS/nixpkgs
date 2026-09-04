@@ -10,14 +10,15 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "thonny";
-  version = "4.1.7";
+  version = "5.0.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "thonny";
     repo = "thonny";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RnjnXB5jU13uwRpL/Pn14QY7fRbRkq09Vopc3fv+z+Y=";
+    hash = "sha256-gvYf42QHoMHvowSb1nk2/VQmVWaXK+Cb89zqw0BWljo=";
   };
 
   nativeBuildInputs = [
@@ -39,8 +40,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     })
   ];
 
-  build-system = with python3.pkgs; [ setuptools ];
-
+  build-system = with python3.pkgs; [ uv-build ];
   dependencies =
     with python3.pkgs;
     (
@@ -54,6 +54,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
         pyperclip
         asttokens
         send2trash
+        setuptools
       ]
       ++ lib.optionals stdenv.hostPlatform.isLinux [
         dbus-next
