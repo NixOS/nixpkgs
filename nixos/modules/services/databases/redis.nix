@@ -649,13 +649,14 @@ in
                   fi
                 ''}
                 ${lib.optionalString (conf.sentinelAuthPassFile != null) ''
-                  sentinel_auth_pass_line="sentinel auth-pass ${conf.sentinelMasterName} $(cat ${lib.escapeShellArg conf.sentinelAuthPassFile})"
+                  sentinel_auth_pass_line="sentinel auth-pass ${conf.sentinelMasterName} @SENTINEL_AUTH_PASS@"
                   if grep -qE "^sentinel auth-pass ${conf.sentinelMasterName}\b" "${redisConfVar}"; then
                     sed -i \
                       "s|^sentinel auth-pass ${conf.sentinelMasterName}\b.*|$sentinel_auth_pass_line|" "${redisConfVar}"
                   else
                     echo "$sentinel_auth_pass_line" >> "${redisConfVar}"
                   fi
+                  ${lib.getExe pkgs.replace-secret} '@SENTINEL_AUTH_PASS@' ${lib.escapeShellArg conf.sentinelAuthPassFile} "${redisConfVar}"
                 ''}
               ''
             );
