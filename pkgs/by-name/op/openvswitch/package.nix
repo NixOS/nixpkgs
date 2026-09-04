@@ -24,6 +24,7 @@
   python3,
   sphinxHook,
   tcpdump,
+  unbound,
   util-linux,
   which,
 }:
@@ -74,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     procps
     python3
+    unbound
     util-linux
     which
   ]
@@ -125,6 +127,9 @@ stdenv.mkDerivation (finalAttrs: {
   preCheck = ''
     export TESTSUITEFLAGS="-j$NIX_BUILD_CORES"
     export RECHECK=yes
+
+    # Nix sandbox has no /etc/resolv.conf
+    export OVS_RESOLV_CONF=/dev/null
 
     patchShebangs tests/
   '';
