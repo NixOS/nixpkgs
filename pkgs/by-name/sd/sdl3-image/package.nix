@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3-image";
-  version = "3.4.4";
+  version = "3.4.6";
 
   outputs = [
     "lib"
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsdl-org";
     repo = "SDL_image";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-ttnoe9bTtA8+eUMOs55v58xb+cWpNEiiTDEeX9GBxaw=";
+    hash = "sha256-J2rg2DBcZt47lgivPhRJzeKgrYF6gOCZ0Ep2C9GndGg=";
   };
 
   patches = [
