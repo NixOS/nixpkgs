@@ -18,6 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "SIMDJSON_DEVELOPER_MODE" false)
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
@@ -27,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     # just get a failed build.
     (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-mpower8-vector")
   ];
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://simdjson.org/";
