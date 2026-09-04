@@ -6,23 +6,23 @@
 
 buildGoModule (finalAttrs: {
   pname = "butane";
-  version = "0.29.0";
+  version = "2.27.0";
 
   src = fetchFromGitHub {
     owner = "coreos";
-    repo = "butane";
+    repo = "ignition";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-lijMfxhUBopwbfEP4fEgszXh7zaRz7Xy1Y8PmatXXTE=";
+    hash = "sha256-CjYiBcUdbfrQWpMzvKjFG53SPVkQyxbQ/8coQt7BuH8=";
   };
 
   vendorHash = null;
 
   doCheck = false;
 
-  subPackages = [ "internal" ];
+  subPackages = [ "butane/internal" ];
 
   ldflags = [
-    "-X github.com/coreos/butane/internal/version.Raw=v${finalAttrs.version}"
+    "-X github.com/coreos/ignition/v2/butane/internal/version.Raw=v${finalAttrs.version}"
   ];
 
   postInstall = ''
