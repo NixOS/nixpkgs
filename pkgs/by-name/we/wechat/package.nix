@@ -15,7 +15,10 @@ let
     downloadPage = "https://linux.weixin.qq.com/en";
     license = lib.licenses.unfree;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = with lib.maintainers; [ prince213 ];
+    maintainers = with lib.maintainers; [
+      larry0x
+      prince213
+    ];
     mainProgram = "wechat";
     platforms = [
       "aarch64-darwin"
