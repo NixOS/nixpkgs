@@ -58,7 +58,7 @@ let
       stdenv = vampireStdenv;
       z3' = null;
     }).overrideAttrs
-      (_: {
+      (old: {
         pname = "vampire-for-isabelle";
         version = "4.8";
 
@@ -75,9 +75,8 @@ let
           mv $out/bin/vampire_rel $out/bin/vampire
         '';
 
-        cmakeFlags = [
+        cmakeFlags = old.cmakeFlags ++ [
           (lib.cmakeFeature "CMAKE_BUILD_HOL" "On")
-          (lib.cmakeFeature "CMAKE_DISABLE_FIND_PACKAGE_Z3" "On")
         ];
       });
 
