@@ -12,6 +12,7 @@
   makeBinaryWrapper,
   autoAddDriverRunpath,
   installShellFiles,
+  versionCheckHook,
 
   # libraries
   cairo,
@@ -157,6 +158,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     tzdata
     gitMinimal
+  ];
+
+  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
   ];
 
   passthru.updateScript = nix-update-script { };
