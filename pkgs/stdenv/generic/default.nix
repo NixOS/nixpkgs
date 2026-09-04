@@ -1,19 +1,14 @@
 {
-  defaultConfig ? null,
-}@args:
+  config,
+}:
 let
   lib = import ../../../lib;
 
-  # By taking defaultConfig early, we can cache the result of calling
-  # make-derivation.nix with config, which leads to more memoisation between
-  # bootstrapping stages. We only have to re-call the file with another config
-  # if stdenv-overridable is actually called with config, otherwise we stick to
-  # defaultConfig. No stdenvs currently specify a non-default config, but we
-  # leave it open as a possibility.
-  makeDerivationFile = import ./make-derivation.nix lib;
-  makeDerivationFileWithConfig =
-    assert args ? defaultConfig;
-    makeDerivationFile args.defaultConfig;
+  # By taking `lib` and `config` early, we can cache the result of calling
+  # make-derivation.nix with them. This leads to more memoisation between
+  # bootstrapping stages. We still need to call with the current `stdenv` on
+  # each stage, but that's less important, as we've already cached what matters.
+  makeDerivationFile = import ./make-derivation.nix lib config;
 
   defaultNativeBuildInputs0 = [
     ../../build-support/setup-hooks/no-broken-symlinks.sh
@@ -53,7 +48,6 @@ let
       allowedRequisites ? null,
       extraAttrs ? { },
       overrides ? (self: super: { }),
-      config ? args.defaultConfig,
       disallowedRequisites ? [ ],
 
       # The `fetchurl' to use for downloading curl and its dependencies
@@ -95,12 +89,7 @@ let
 
       # The implementation of `mkDerivation`, parameterized with the final stdenv so we can tie the knot.
       # This is convenient to have as a parameter so the stdenv "adapters" work better
-      mkDerivationFromStdenv ?
-        let
-          makeDerivationWithConfig' =
-            if argsStdenv ? config then makeDerivationFile config else makeDerivationFileWithConfig;
-        in
-        stdenv: (makeDerivationWithConfig' stdenv).mkDerivation,
+      mkDerivationFromStdenv ? stdenv: (makeDerivationFile stdenv).mkDerivation,
     }:
 
     let
