@@ -62,6 +62,16 @@ let
       hash = "sha256-BlyXJtAI7WqXCTT3ylww8zoG0hBxaojJnQDvdQOXJPE=";
     };
   };
+  # libqalculate 5.10.0 makes noctalia segfault, 5.12.0 works
+  libqalculate' = libqalculate.overrideAttrs {
+    version = "5.12.0";
+    src = fetchFromGitHub {
+      owner = "qalculate";
+      repo = "libqalculate";
+      tag = "v5.12.0";
+      hash = "sha256-f9FzFcu2LtBM6B6apYo7uobeR5uZVb02FxX7Kng/rRI=";
+    };
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
@@ -99,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libical
     libjxl
-    libqalculate
+    libqalculate'
     librsvg
     libsecret
     libsndfile
