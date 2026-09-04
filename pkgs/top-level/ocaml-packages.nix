@@ -1349,6 +1349,8 @@ let
 
         mirage-kv = callPackage ../development/ocaml-modules/mirage-kv { };
 
+        mirage-kv-mem = callPackage ../development/ocaml-modules/mirage-kv-mem { };
+
         mirage-logs = callPackage ../development/ocaml-modules/mirage-logs { };
 
         mirage-mtime = callPackage ../development/ocaml-modules/mirage-mtime { };
