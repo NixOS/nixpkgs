@@ -9645,6 +9645,8 @@ self: super: with self; {
     }
   );
 
+  liboqs-python = callPackage ../development/python-modules/liboqs-python { };
+
   libparse-python = callPackage ../development/python-modules/libparse-python/package.nix { };
 
   libpass = callPackage ../development/python-modules/libpass { };
