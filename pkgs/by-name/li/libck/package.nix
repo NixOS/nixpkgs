@@ -2,17 +2,21 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ck";
   version = "0.7.2";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "concurrencykit";
     repo = "ck";
-    rev = finalAttrs.version;
-    sha256 = "sha256-lxJ8WsZ3pBGf4sFYj5+tR37EYDZqpksaoohiIKA4pRI=";
+    tag = finalAttrs.version;
+    hash = "sha256-lxJ8WsZ3pBGf4sFYj5+tR37EYDZqpksaoohiIKA4pRI=";
   };
 
   postPatch = ''
@@ -27,6 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontDisableStatic = true;
 
+  passthru.tests.pkg-config = testers.hasPkgConfigModules {
+    package = finalAttrs.finalPackage;
+    versionCheck = true;
+  };
+
   meta = {
     description = "High-performance concurrency research library";
     longDescription = ''
@@ -36,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       asl20
       bsd2
     ];
+    pkgConfigModules = [ "ck" ];
     homepage = "https://concurrencykit.org/";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
