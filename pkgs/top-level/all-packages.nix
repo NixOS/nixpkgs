@@ -9102,10 +9102,6 @@ with pkgs;
     ;
   rke2 = rke2_stable;
 
-  rofi-pass-wayland = rofi-pass.override {
-    backend = "wayland";
-  };
-
   rstudio-server = rstudio.override { server = true; };
 
   foks-server = foks.server;
