@@ -5368,6 +5368,12 @@
     name = "Christian Kruse";
     keys = [ { fingerprint = "BC5D 9F4E F7FB 4382 6056  E834 B8E0 F342 A99A 9D73"; } ];
   };
+  cktiel = {
+    email = "tiel@tuta.io";
+    github = "cktiel";
+    githubId = 	2486916;
+    name = "Artur Cierocki"
+  };
   clacke = {
     email = "claes.wallin@greatsinodevelopment.com";
     github = "clacke";
