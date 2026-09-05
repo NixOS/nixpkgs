@@ -125,6 +125,21 @@
   "module-services-mautrix-discord-troubleshooting": [
     "index.html#module-services-mautrix-discord-troubleshooting"
   ],
+  "module-services-navidrome": [
+    "index.html#module-services-navidrome"
+  ],
+  "module-services-navidrome-basic-usage": [
+    "index.html#module-services-navidrome-basic-usage"
+  ],
+  "module-services-navidrome-configuration-options": [
+    "index.html#module-services-navidrome-configuration-options"
+  ],
+  "module-services-navidrome-plugins": [
+    "index.html#module-services-navidrome-plugins"
+  ],
+  "module-services-navidrome-secrets": [
+    "index.html#module-services-navidrome-secrets"
+  ],
   "module-services-onedrive": [
     "index.html#module-services-onedrive"
   ],

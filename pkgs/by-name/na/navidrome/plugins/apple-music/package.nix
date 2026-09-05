@@ -1,14 +1,15 @@
 {
   lib,
-  pkgs,
-  buildNavidromePlugin,
+  fetchFromGitHub,
+  buildNavidromeGoPlugin,
 }:
 
-buildNavidromePlugin rec {
+buildNavidromeGoPlugin rec {
   pname = "apple-music-plugin";
+  bundleName = "apple-music";
   version = "0.2.0";
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "navidrome";
     repo = "apple-music-plugin";
     tag = "v${version}";
