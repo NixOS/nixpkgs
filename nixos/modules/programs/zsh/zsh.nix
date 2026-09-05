@@ -21,6 +21,12 @@ let
     )
   );
 
+  compInitArgs =
+    if cfg.disableCompInitDumpFile then
+      " -D"
+    else
+      lib.optionalString (cfg.compInitDumpFile != null) " -d \"${cfg.compInitDumpFile}\"";
+
   zshStartupNotes = ''
     # Note that generated /etc/zprofile and /etc/zshrc files do a lot of
     # non-standard setup to make zsh usable with no configuration by default.
@@ -169,6 +175,26 @@ in
         type = lib.types.bool;
       };
 
+      compInitDumpFile = lib.mkOption {
+        default = null;
+        example = "$XDG_CACHE_HOME/zsh/zcompdump";
+        description = ''
+          Path passed to {command}`compinit` with the
+          `-d` option to set the completion dump file location.
+          If unset, `compinit` uses its default dump file.
+        '';
+        type = lib.types.nullOr lib.types.str;
+      };
+
+      disableCompInitDumpFile = lib.mkOption {
+        default = false;
+        description = ''
+          Disable reading and writing the completion dump file
+          by passing the `-D` option to {command}`compinit`.
+        '';
+        type = lib.types.bool;
+      };
+
       enableLsColors = lib.mkOption {
         default = true;
         description = ''
@@ -265,7 +291,7 @@ in
 
       ${lib.optionalString cfg.enableGlobalCompInit ''
         # Enable autocompletion.
-        autoload -U compinit && compinit
+        autoload -U compinit && compinit${compInitArgs}
       ''}
 
       ${lib.optionalString cfg.enableBashCompletion ''
