@@ -6,11 +6,11 @@
 
 applyPatches (final: {
   pname = "ceph-src";
-  version = "20.2.3";
+  version = "20.2.4";
 
   src = fetchurl {
     url = "https://download.ceph.com/tarballs/ceph-${final.version}.tar.gz";
-    hash = "sha256-y3bZm2lkHiebXYNbZA7jN4VXCLaDEElYvpyuglLISi0=";
+    hash = "sha256-XzRWkkGiiQRGuTHwbNhE+TvKZl90CiBjFCnS1Vsemzc=";
   };
 
   patches = [
