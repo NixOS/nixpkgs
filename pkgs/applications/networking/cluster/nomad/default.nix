@@ -1,6 +1,5 @@
 {
   lib,
-  buildGo125Module,
   buildGo126Module,
   fetchFromGitHub,
   nixosTests,
@@ -96,7 +95,7 @@ rec {
   };
 
   nomad_1_11 = generic {
-    buildGoModule = buildGo125Module;
+    buildGoModule = buildGo126Module;
     version = "1.11.3";
     hash = "sha256-J+w53HlMlrXX5yKjDYhf3rSGt1pmOyNcPlOqyUrkLWE=";
     vendorHash = "sha256-67etQUjcPXz4VVpNXLVusQlEybxEqKfYQcNTNL4X8bA=";
@@ -108,7 +107,7 @@ rec {
   };
 
   nomad_1_10 = generic {
-    buildGoModule = buildGo125Module;
+    buildGoModule = buildGo126Module;
     version = "1.10.5";
     hash = "sha256-NFH++oYWb6vQN6cOPByscI/ZBWDNy4YbcLiBMO3/jVU=";
     vendorHash = "sha256-QcTw9kKwoHIvXZoxfDohFG+sBs8OLvYPeygygDClsn8=";
@@ -120,7 +119,7 @@ rec {
   };
 
   nomad_1_9 = generic {
-    buildGoModule = buildGo125Module;
+    buildGoModule = buildGo126Module;
     version = "1.9.7";
     hash = "sha256-U02H6DPr1friQ9EwqD/wQnE2Fm20OE5xNccPDJfnsqI=";
     vendorHash = "sha256-9GnwqkexJAxrhW9yJFaDTdSaZ+p+/dcMuhlusp4cmyw=";
