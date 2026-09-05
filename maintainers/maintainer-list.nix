@@ -19987,6 +19987,12 @@
     githubId = 52401682;
     name = "myul";
   };
+  Myxogastria0808 = {
+    email = "r.rstudio.c@gmail.com";
+    github = "Myxogastria0808";
+    githubId = 78744619;
+    name = "Yuki Osada";
+  };
   myypo = {
     email = "nikirsmcgl@gmail.com";
     github = "myypo";
