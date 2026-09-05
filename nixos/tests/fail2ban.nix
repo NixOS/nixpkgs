@@ -37,6 +37,9 @@
     serverVersion = machine.succeed("fail2ban-server -V").rstrip()
     t.assertEqual(serverVersion, "${pkgs.fail2ban.version}")
 
+    # Verify that the socket is reachable via the fail2ban group
+    machine.succeed("sudo -u nobody -g fail2ban fail2ban-client ping")
+
     # Verify that fail2ban-client can communicate with the server
     machine.succeed("fail2ban-client ping")
 
