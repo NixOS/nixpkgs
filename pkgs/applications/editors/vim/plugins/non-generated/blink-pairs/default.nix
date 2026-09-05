@@ -9,13 +9,13 @@
   nix-update-script,
 }:
 let
-  version = "0.6.0";
+  version = "0.6.0-unstable-2026-09-04";
 
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.pairs";
-    tag = "v${version}";
-    hash = "sha256-XWrsZAH0tIPyRjr3PnAS2QAGE3+1z00jdnsxkKG0qPE=";
+    rev = "21c2ac9164b36ae5e22f84a2dd0f02eaf107f8fe";
+    hash = "sha256-z+1CnzU/YGLTES2b/B+ELPAZ4+aeChJpgEA3Use94q0=";
   };
 
   blink-pairs-lib = rustPlatform.buildRustPackage {
@@ -72,7 +72,7 @@ vimUtils.buildVimPlugin {
   meta = {
     description = "Rainbow highlighting and intelligent auto-pairs for Neovim";
     homepage = "https://github.com/Saghen/blink.pairs";
-    changelog = "https://github.com/Saghen/blink.pairs/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Saghen/blink.pairs/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       isabelroses
