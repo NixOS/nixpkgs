@@ -1,7 +1,6 @@
 {
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   alsa-lib,
   audacious-bare,
   curl,
@@ -58,18 +57,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./0001-Set-plugindir-to-PREFIX-lib-audacious.patch
-
-    # Remove when version >= 4.6
-    (fetchpatch {
-      name = "0001-audacious-plugins-sid-Use-new-sidplayfp-API.patch";
-      url = "https://github.com/audacious-media-player/audacious-plugins/commit/42c05763a136d6523d611473ff3701e2d9e30bec.patch";
-      hash = "sha256-bTC9nZFNwyo4PsGrLyDiQJDOrHTUDHUQaxEFe/wFPME=";
-    })
-    (fetchpatch {
-      name = "0002-audacious-plugins-sid-Support-version-3.0-of-libsidplayfp-version.patch";
-      url = "https://github.com/audacious-media-player/audacious-plugins/commit/2aaf45bd3840858e23b75d5863129a510299abd6.patch";
-      hash = "sha256-FbGLd3aiKeoJXKgTMIdI/oBEx5EzcqyhL0jWhG6Fyfw=";
-    })
   ];
 
   nativeBuildInputs = [
