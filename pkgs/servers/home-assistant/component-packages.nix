@@ -7369,7 +7369,8 @@
         aiohasupervisor
         aiousbwatcher
         serialx
-      ]; # missing inputs: tonewinner-rs232
+        tonewinner-rs232
+      ];
     "toon" =
       ps: with ps; [
         aiohasupervisor
@@ -9334,6 +9335,7 @@
     "tolo"
     "tomato"
     "tomorrowio"
+    "tonewinner"
     "toon"
     "totalconnect"
     "touchline"
