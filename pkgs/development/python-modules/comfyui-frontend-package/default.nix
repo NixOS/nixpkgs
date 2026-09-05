@@ -8,13 +8,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "comfyui-frontend-package";
-  version = "1.49.6";
+  version = "1.51.9";
   pyproject = true;
 
   src = fetchPypi {
     pname = "comfyui_frontend_package";
     inherit (finalAttrs) version;
-    hash = "sha256-CBChUGNYpF4PHwLAaPn4ISBXmC+A1/IFmuYU563mWNk=";
+    hash = "sha256-sTDW/a4auago5pQ0Z+SrWoD5gYZmZXUbMlxi2yNCBCY=";
   };
 
   build-system = [ setuptools ];
