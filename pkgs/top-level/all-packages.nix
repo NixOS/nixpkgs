@@ -5772,8 +5772,6 @@ with pkgs;
 
   pangomm_2_48 = callPackage ../development/libraries/pangomm/2.48.nix { };
 
-  pangomm_2_42 = callPackage ../development/libraries/pangomm/2.42.nix { };
-
   gtk2-x11 = gtk2.override {
     cairo = cairo.override { x11Support = true; };
     pango = pango.override {
