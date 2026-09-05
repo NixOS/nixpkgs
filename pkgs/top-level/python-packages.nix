@@ -18431,6 +18431,8 @@ self: super: with self; {
     inherit (pkgs) libsamplerate;
   };
 
+  samsung-exlink = callPackage ../development/python-modules/samsung-exlink { };
+
   samsungctl = callPackage ../development/python-modules/samsungctl { };
 
   samsungtvws = callPackage ../development/python-modules/samsungtvws { };
