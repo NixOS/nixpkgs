@@ -1,9 +1,11 @@
 {
   lib,
   fetchFromGitHub,
-  flutter344,
+  flutter347,
   makeDesktopItem,
   copyDesktopItems,
+  git,
+  powershell,
   alsa-lib,
   mpv-unwrapped,
   libplacebo,
@@ -12,11 +14,12 @@
 }:
 
 let
+  flutter = flutter347;
   srcInfo = lib.importJSON ./src-info.json;
   description = "Third-party Bilibili client developed in Flutter";
-  version = "2.1.0";
+  version = "2.1.2.1";
 in
-flutter344.buildFlutterApplication {
+flutter347.buildFlutterApplication {
   pname = "piliplus";
   inherit version;
 
@@ -26,12 +29,23 @@ flutter344.buildFlutterApplication {
     inherit (srcInfo) rev hash;
   };
 
-  patches = [ ./disable-auto-update.patch ];
+  patches = [
+    ./disable-auto-update.patch
+
+    # lib/scripts/patch.ps1 normally deletes material_ui
+    # and runs `flutter pub get` to restore it.
+    # in nix we provide a writable pub cache ourselves
+    ./no-remove-before-patch.patch
+  ];
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   gitHashes = lib.importJSON ./git-hashes.json;
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [
+    git # used extensively in lib/scripts/patch.ps1
+    powershell
+    copyDesktopItems
+  ];
 
   buildInputs = [
     alsa-lib
@@ -41,18 +55,60 @@ flutter344.buildFlutterApplication {
     webkitgtk_4_1
   ];
 
-  # See lib/scripts/build.sh.
   preBuild = ''
-    cat <<EOL > lib/build_config.dart
-    class BuildConfig {
-      static const int versionCode = ${toString srcInfo.revCount};
-      static const String versionName = '${version}';
-
-      static const int buildTime = ${toString srcInfo.commitDate};
-      static const String commitHash = '${srcInfo.rev}';
+    # see lib/scripts/build.ps1
+    cat <<JSON > pili_release.json
+    {
+      "pili.hash": "${srcInfo.rev}",
+      "pili.name": "${version}",
+      "pili.code": ${toString srcInfo.revCount},
+      "pili.time": ${toString srcInfo.commitDate}
     }
-    EOL
+    JSON
+
+    export FLUTTER_ROOT="$PWD/.flutter-sdk"
+    cp -aL '${flutter.sdk}' "$FLUTTER_ROOT"
+    chmod -R u+w "$FLUTTER_ROOT"
+    git -C "$FLUTTER_ROOT" reset --hard HEAD
+
+    export PUB_CACHE="$PWD/.pub-cache"
+    mkdir -p "$PUB_CACHE/hosted/pub.dev"
+
+    # build a writable pub cache with the packages that patch.ps1 patches
+    buildWritablePubCache() {
+      packageDir="$(jq --arg packageName "$1" -r '
+        .packages[]
+        | select(.name == $packageName)
+        | .rootUri
+        | ltrimstr("file://")
+        | rtrimstr("/.")
+      ' .dart_tool/package_config.json)"
+      cacheDir="$PUB_CACHE/hosted/pub.dev/$(basename "$packageDir" | sed 's/^[^-]*-pub-//')"
+      cp -a "$packageDir" "$cacheDir"
+      chmod -R u+w "$cacheDir"
+      echo "$cacheDir"
+    }
+    materialUiCacheDir="$(buildWritablePubCache material_ui)"
+    buildWritablePubCache cupertino_ui > /dev/null
+
+    HOME="$PWD" GITHUB_WORKSPACE="$PWD" pwsh lib/scripts/patch.ps1 Linux
+
+    # point package resolution at the patched Flutter SDK and material_ui.
+    jq --arg flutterRoot "file://$FLUTTER_ROOT" --arg materialRoot "file://$materialUiCacheDir/." '
+      .packages |= map(
+        if (.rootUri | contains("flutter-sdk-")) then
+          if .name == "sky_engine" then .rootUri = "\($flutterRoot)/bin/cache/pkg/sky_engine/."
+          else .rootUri = "\($flutterRoot)/packages/\(.name)/."
+          end
+        elif .name == "material_ui" then .rootUri = $materialRoot
+        else .
+        end
+      )
+    ' .dart_tool/package_config.json > .dart_tool/package_config.json.tmp
+    mv .dart_tool/package_config.json.tmp .dart_tool/package_config.json
   '';
+
+  flutterBuildFlags = [ "--dart-define-from-file=pili_release.json" ];
 
   postInstall = ''
     declare -A sizes=(
