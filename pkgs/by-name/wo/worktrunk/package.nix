@@ -33,6 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
     installAgentSkills
+    # wt reads config from $HOME when generating completions
     writableTmpDirAsHomeHook
   ];
 
@@ -43,8 +44,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installSkill skills/wt-switch-create worktrunk
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-
-    # wt reads config from $HOME; provide a throwaway dir so it doesn't fail.
     installShellCompletion --cmd wt \
       --bash <($out/bin/wt config shell completions bash) \
       --fish <($out/bin/wt config shell completions fish) \
