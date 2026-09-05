@@ -155,7 +155,7 @@ stdenv.mkDerivation {
     homepage = "http://www.brother.com/";
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = [ ];
+    maintainers = [ maintainers.TwoUnderscorez ];
     platforms = [
       "i686-linux"
       "x86_64-linux"
