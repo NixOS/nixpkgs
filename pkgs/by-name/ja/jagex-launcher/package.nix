@@ -40,7 +40,12 @@ let
   };
 in appimageTools.wrapAppImage {
   inherit pname version;
+in
+appimageTools.wrapAppImage {
+  inherit pname version;
   src = appimageContents;
+
+  nativeBuildInputs = [ makeWrapper ];
 
   extraPkgs = pkgs: with pkgs; [ libsecret nss mesa ];
 
