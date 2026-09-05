@@ -69,6 +69,7 @@
   # tests
   imageio,
   pytest-rerunfailures,
+  pytest-xdist,
   pytestCheckHook,
   pyyaml,
   scipy,
@@ -199,11 +200,18 @@ buildPythonPackage (finalAttrs: {
     export XDG_RUNTIME_DIR=$(mktemp -d)
   '';
 
+  pytestFlags = [
+    # Tests memory consumption grows significantly with the number of parallel processes
+    # -> Limit the number of parallel jobs to prevent OOMing
+    "--maxprocesses=16"
+  ];
+
   nativeCheckInputs = [
     gymnasium
     h5py
     imageio
     pytest-rerunfailures
+    pytest-xdist
     pytestCheckHook
     pyyaml
     scipy
