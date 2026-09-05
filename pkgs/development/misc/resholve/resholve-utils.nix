@@ -250,6 +250,8 @@ rec {
         ...
       }@args:
       {
+        strictDeps = true;
+        __structuredAttrs = true;
         pname = "${pname}-unresholved";
         passthru = passthru // {
           # needed to resholve in outer drv
