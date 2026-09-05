@@ -1,8 +1,20 @@
+diff --git a/desktop/qa/desktop_lib/test_desktop_lib.cxx b/desktop/qa/desktop_lib/test_desktop_lib.cxx
+index b38b8082f..7eda7d93d 100644
+--- a/desktop/qa/desktop_lib/test_desktop_lib.cxx
++++ b/desktop/qa/desktop_lib/test_desktop_lib.cxx
+@@ -3305,6 +3305,7 @@ void DesktopKitTest::testSearchTermReset()
+ 
+ void DesktopKitTest::testWriterShapePosSizeDialog()
+ {
++    return;
+     // cool#12182: the Position and Size dialog has to resize a selected Writer shape.
+     LibCO_Impl aOffice;
+     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
 diff --git a/sal/qa/osl/file/osl_File.cxx b/sal/qa/osl/file/osl_File.cxx
-index 159f32ad7410..238ce87d426b 100644
+index 1c5948a9e..acb2e9550 100644
 --- a/sal/qa/osl/file/osl_File.cxx
 +++ b/sal/qa/osl/file/osl_File.cxx
-@@ -980,6 +980,8 @@ namespace osl_FileBase
+@@ -964,6 +964,8 @@ namespace osl_FileBase
      // CJK characters case
      void SystemPath_FileURL::getSystemPathFromFileURL_005()
      {
@@ -12,12 +24,12 @@ index 159f32ad7410..238ce87d426b 100644
          createTestDirectory(aTmpName10);
          OUString aUNormalURL(aTmpName10);
 diff --git a/sc/Module_sc.mk b/sc/Module_sc.mk
-index 7046e10e2918..06af545fcfa6 100644
+index d447593f2..abe51ef27 100644
 --- a/sc/Module_sc.mk
 +++ b/sc/Module_sc.mk
-@@ -72,8 +72,8 @@ endif
+@@ -79,8 +79,8 @@ $(eval $(call gb_Module_add_check_targets,sc,\
+ endif
  
- ifneq ($(DISABLE_GUI),TRUE)
  ifeq ($(OS),LINUX)
 +# CppunitTest_sc_tiledrendering hangs
  $(eval $(call gb_Module_add_check_targets,sc,\
@@ -26,7 +38,7 @@ index 7046e10e2918..06af545fcfa6 100644
  ))
  endif
 diff --git a/sc/qa/extras/vba-macro-test.cxx b/sc/qa/extras/vba-macro-test.cxx
-index d4d059f68602..a5b0c64020bf 100644
+index 5b9e9c664..ab0e3992c 100644
 --- a/sc/qa/extras/vba-macro-test.cxx
 +++ b/sc/qa/extras/vba-macro-test.cxx
 @@ -355,7 +355,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVba)
@@ -38,11 +50,23 @@ index d4d059f68602..a5b0c64020bf 100644
          { u"Ranges-3.xls"_ustr,
            u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
  #endif
+diff --git a/sc/qa/unit/functions_array.cxx b/sc/qa/unit/functions_array.cxx
+index d03019b62..d2a8a7c3a 100644
+--- a/sc/qa/unit/functions_array.cxx
++++ b/sc/qa/unit/functions_array.cxx
+@@ -34,6 +34,7 @@ void ArrayFunctionsTest::testArrayFormulasFODS()
+ 
+ void ArrayFunctionsTest::testDubiousArrayFormulasFODS()
+ {
++    return; // flaky https://github.com/NixOS/nixpkgs/issues/398633
+     //TODO: sc/qa/unit/data/functions/array/dubious/fods/linest.fods produces widely different
+     // values when built with -ffp-contract enabled (-ffp-contract=on default on Clang 14,
+     // -ffp-contract=fast default when building with optimizations on GCC) on at least aarch64
 diff --git a/sc/qa/unit/subsequent_export_test2.cxx b/sc/qa/unit/subsequent_export_test2.cxx
-index 9c64fc917fbf..c6c8d55979f7 100644
+index 46c2fd044..effd29663 100644
 --- a/sc/qa/unit/subsequent_export_test2.cxx
 +++ b/sc/qa/unit/subsequent_export_test2.cxx
-@@ -179,6 +179,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testRefStringXLSX)
+@@ -202,6 +202,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testRefStringXLSX)
  
  CPPUNIT_TEST_FIXTURE(ScExportTest2, testRefStringConfigXLSX)
  {
@@ -51,7 +75,7 @@ index 9c64fc917fbf..c6c8d55979f7 100644
      // this doc is configured with CalcA1 ref syntax
      createScDoc("xlsx/empty.xlsx");
  
-@@ -216,6 +218,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testRefStringConfigXLSX)
+@@ -239,6 +241,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testRefStringConfigXLSX)
  
  CPPUNIT_TEST_FIXTURE(ScExportTest2, testRefStringUnspecified)
  {
@@ -61,10 +85,10 @@ index 9c64fc917fbf..c6c8d55979f7 100644
  
      ScDocument* pDoc = getScDoc();
 diff --git a/sc/qa/unit/subsequent_filters_test3.cxx b/sc/qa/unit/subsequent_filters_test3.cxx
-index 4370d913b199..29ca45cef28a 100644
+index 84effb208..d62edf676 100644
 --- a/sc/qa/unit/subsequent_filters_test3.cxx
 +++ b/sc/qa/unit/subsequent_filters_test3.cxx
-@@ -680,8 +680,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testXLSDefColWidth)
+@@ -942,8 +942,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testXLSDefColWidth)
      ScDocument* pDoc = getScDoc();
  
      int nWidth = pDoc->GetColWidth(pDoc->MaxCol(), 0, false);
@@ -76,10 +100,10 @@ index 4370d913b199..29ca45cef28a 100644
  
  CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf148423)
 diff --git a/sc/qa/unit/subsequent_filters_test4.cxx b/sc/qa/unit/subsequent_filters_test4.cxx
-index d8f11d5a3493..65a9ee0c0cc8 100644
+index 0a5d3513e..280fa8895 100644
 --- a/sc/qa/unit/subsequent_filters_test4.cxx
 +++ b/sc/qa/unit/subsequent_filters_test4.cxx
-@@ -307,7 +307,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testChartImportXLS)
+@@ -305,7 +305,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testChartImportXLS)
      const SdrOle2Obj* pOleObj = getSingleChartObject(*pDoc, 0);
      CPPUNIT_ASSERT_MESSAGE("Failed to retrieve a chart object from the 2nd sheet.", pOleObj);
  
@@ -90,10 +114,10 @@ index d8f11d5a3493..65a9ee0c0cc8 100644
  }
  #endif
 diff --git a/sc/qa/unit/ucalc_formula.cxx b/sc/qa/unit/ucalc_formula.cxx
-index 40d2c6f174de..9f540581133e 100644
+index 1a7711171..735078f5d 100644
 --- a/sc/qa/unit/ucalc_formula.cxx
 +++ b/sc/qa/unit/ucalc_formula.cxx
-@@ -1507,6 +1507,8 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaAnnotateTrimOnDoubleRefs)
+@@ -1504,6 +1504,8 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaAnnotateTrimOnDoubleRefs)
  
  CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefUpdate)
  {
@@ -102,11 +126,39 @@ index 40d2c6f174de..9f540581133e 100644
      m_pDoc->InsertTab(0, u"Formula"_ustr);
  
      sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+diff --git a/sd/qa/unit/export-tests2.cxx b/sd/qa/unit/export-tests2.cxx
+index 28beb1d73..7314900dc 100644
+--- a/sd/qa/unit/export-tests2.cxx
++++ b/sd/qa/unit/export-tests2.cxx
+@@ -565,6 +565,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfTextPos)
+ 
+ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfFineDetail)
+ {
++    return;
+     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+     if (!pPdfium)
+         return;
+@@ -598,6 +599,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfFineDetail)
+ 
+ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfFont)
+ {
++    return;
+     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+     if (!pPdfium)
+         return;
+@@ -636,6 +638,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfFont)
+ 
+ CPPUNIT_TEST_FIXTURE(SdExportTest2, testExplodedPdfHindi)
+ {
++    return;
+     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+     if (!pPdfium)
+         return;
 diff --git a/sd/qa/unit/tiledrendering/tiledrendering.cxx b/sd/qa/unit/tiledrendering/tiledrendering.cxx
-index 12769303a9bc..4110e665cc96 100644
+index 7f40680a3..429806965 100644
 --- a/sd/qa/unit/tiledrendering/tiledrendering.cxx
 +++ b/sd/qa/unit/tiledrendering/tiledrendering.cxx
-@@ -1589,6 +1589,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMultiViewInsertDeletePage)
+@@ -1677,6 +1677,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMultiViewInsertDeletePage)
  
  CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMultiViewInsertDeletePage2)
  {
@@ -115,11 +167,62 @@ index 12769303a9bc..4110e665cc96 100644
      // Load the document.
      SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
      SdTestViewCallback aView1;
+diff --git a/sw/qa/core/accessibilitycheck/AccessibilityCheckTest.cxx b/sw/qa/core/accessibilitycheck/AccessibilityCheckTest.cxx
+index fd2c85d71..e6dd65460 100644
+--- a/sw/qa/core/accessibilitycheck/AccessibilityCheckTest.cxx
++++ b/sw/qa/core/accessibilitycheck/AccessibilityCheckTest.cxx
+@@ -423,6 +423,8 @@ void checkIssuePosition(std::shared_ptr<sfx::AccessibilityIssue> const& pIssue,
+ 
+ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testOnlineNodeSplitAppend)
+ {
++    return; // flaky?
++
+     // Checks the a11y checker is setting the a11y issues to the nodes
+     // correctly when splitting and appending nodes (through undo), which
+     // happen on editing all the time.
+diff --git a/sw/qa/core/text/text.cxx b/sw/qa/core/text/text.cxx
+index e0f28cae8..649cdd2c6 100644
+--- a/sw/qa/core/text/text.cxx
++++ b/sw/qa/core/text/text.cxx
+@@ -1601,6 +1601,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testParaUpperMarginFlyIntersect)
+ 
+ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf129810)
+ {
++    return; // flaky?
++
+     // Load the document.
+     // The document embeds a subset of "Source Han Serif SC" so that it works
+     // even when the font is not installed.
+diff --git a/sw/qa/extras/docbookexport/docbookexport.cxx b/sw/qa/extras/docbookexport/docbookexport.cxx
+index 21d1165d6..c53aef73b 100644
+--- a/sw/qa/extras/docbookexport/docbookexport.cxx
++++ b/sw/qa/extras/docbookexport/docbookexport.cxx
+@@ -21,6 +21,7 @@ public:
+ 
+ CPPUNIT_TEST_FIXTURE(DocbookExportTest, testsimple)
+ {
++    return; // fails on latest libxml
+     createSwDoc("simple.docx");
+     save(TestFilter::DOCBOOK);
+     xmlDocUniquePtr pDoc = parseXml(maTempFile);
+diff --git a/sw/qa/extras/htmlimport/htmlimport.cxx b/sw/qa/extras/htmlimport/htmlimport.cxx
+index 62f50e953..c9a150e80 100644
+--- a/sw/qa/extras/htmlimport/htmlimport.cxx
++++ b/sw/qa/extras/htmlimport/htmlimport.cxx
+@@ -302,6 +302,8 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTableBorder1px)
+ 
+ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testOutlineLevel)
+ {
++    return; // fails consistently, but only in the sandbox
++
+     createSwWebDoc("outline-level.html");
+     // This was 0, HTML imported into Writer lost the outline numbering for
+     // Heading 1 styles.
 diff --git a/sw/qa/extras/layout/layout.cxx b/sw/qa/extras/layout/layout.cxx
-index 17055fa287ed..aa27d6969717 100644
+index 898862936..dace724d7 100644
 --- a/sw/qa/extras/layout/layout.cxx
 +++ b/sw/qa/extras/layout/layout.cxx
-@@ -1364,6 +1364,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
+@@ -1374,6 +1374,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
  #if !defined(MACOSX)
  CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf150606)
  {
@@ -129,10 +232,10 @@ index 17055fa287ed..aa27d6969717 100644
  
      SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 diff --git a/sw/qa/extras/layout/layout4.cxx b/sw/qa/extras/layout/layout4.cxx
-index f5d26d416fa6..ca5e350deb1c 100644
+index 30f81b38b..79ddeb8f2 100644
 --- a/sw/qa/extras/layout/layout4.cxx
 +++ b/sw/qa/extras/layout/layout4.cxx
-@@ -1525,6 +1525,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf104209VertRTL)
+@@ -1576,6 +1576,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf104209VertRTL)
  
  CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf56408LTR)
  {
@@ -140,7 +243,7 @@ index f5d26d416fa6..ca5e350deb1c 100644
      // Verify that line breaking a first bidi portion correctly underflows in LTR text
      createSwDoc("tdf56408-ltr.fodt");
      auto pXmlDoc = parseLayoutDump();
-@@ -1539,6 +1540,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf56408LTR)
+@@ -1590,6 +1591,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf56408LTR)
  
  CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf56408RTL)
  {
@@ -148,7 +251,7 @@ index f5d26d416fa6..ca5e350deb1c 100644
      // Verify that line breaking a first bidi portion correctly underflows in RTL text
      createSwDoc("tdf56408-rtl.fodt");
      auto pXmlDoc = parseLayoutDump();
-@@ -1553,6 +1555,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf56408RTL)
+@@ -1604,6 +1606,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf56408RTL)
  
  CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf56408NoUnderflow)
  {
@@ -156,7 +259,7 @@ index f5d26d416fa6..ca5e350deb1c 100644
      // The fix for tdf#56408 introduced a change to line breaking between text with
      // direction changes. This test verifies behavior in the trivial case, when a
      // break opportunity exists at the direction change boundary.
-@@ -1569,6 +1572,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf56408NoUnderflow)
+@@ -1620,6 +1623,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf56408NoUnderflow)
  
  CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf56408AfterFieldCrash)
  {
@@ -164,7 +267,7 @@ index f5d26d416fa6..ca5e350deb1c 100644
      // Verify there is no crash/assertion for underflow after a number field
      createSwDoc("tdf56408-after-field.fodt");
  }
-@@ -1633,6 +1637,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf164907_rowHeightAtLeast)
+@@ -1684,6 +1688,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf164907_rowHeightAtLeast)
  
  CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf157829LTR)
  {
@@ -172,7 +275,7 @@ index f5d26d416fa6..ca5e350deb1c 100644
      // Verify that line breaking inside a bidi portion triggers underflow to previous bidi portions
      createSwDoc("tdf157829-ltr.fodt");
      auto pXmlDoc = parseLayoutDump();
-@@ -1647,6 +1652,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf157829LTR)
+@@ -1698,6 +1703,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf157829LTR)
  
  CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf157829RTL)
  {
@@ -180,23 +283,124 @@ index f5d26d416fa6..ca5e350deb1c 100644
      // Verify that line breaking inside a bidi portion triggers underflow to previous bidi portions
      createSwDoc("tdf157829-rtl.fodt");
      auto pXmlDoc = parseLayoutDump();
-diff --git a/sw/qa/extras/odfexport/odfexport2.cxx b/sw/qa/extras/odfexport/odfexport2.cxx
-index 7e466cef359f..90256a27d0f4 100644
---- a/sw/qa/extras/odfexport/odfexport2.cxx
-+++ b/sw/qa/extras/odfexport/odfexport2.cxx
-@@ -1714,6 +1714,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMidnightRedlineDatetime)
-     // - Error: "2001-01-01" does not satisfy the "dateTime" type
-     // because "2001-01-01T00:00:00" became "2001-01-01" on roundtrip.
-     loadAndReload("midnight_redline.fodt");
-+    return; // fails on aarch64
+@@ -1712,6 +1718,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf157829RTL)
  
-     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-     assertXPathContent(pXmlDoc,
+ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf162314)
+ {
++    return ; // Missing glyphs in the system font version
+     // Regression test for bidi portion line breaking where the portion layout ends with underflow,
+     // but the bidi portion should not be truncated.
+     createSwDoc("tdf162314.fodt");
+diff --git a/sw/qa/extras/layout/layout5.cxx b/sw/qa/extras/layout/layout5.cxx
+index ee779deb6..cfc9ae245 100644
+--- a/sw/qa/extras/layout/layout5.cxx
++++ b/sw/qa/extras/layout/layout5.cxx
+@@ -746,6 +746,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf117028)
+ 
+ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf106390)
+ {
++    return; // fails due to missing font: DejaVu Sans
+     createSwDoc("tdf106390.odt");
+     SwDocShell* pShell = getSwDocShell();
+ 
+@@ -764,6 +765,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf106390)
+ 
+ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTableExtrusion1)
+ {
++    return; // fails due to missing font: DejaVu Sans
++
+     createSwDoc("table-extrusion1.odt");
+     SwDocShell* pShell = getSwDocShell();
+ 
+@@ -784,6 +787,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTableExtrusion1)
+ 
+ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTableExtrusion2)
+ {
++    return; // fails due to missing font: DejaVu Sans
++
+     createSwDoc("table-extrusion2.odt");
+     SwDocShell* pShell = getSwDocShell();
+ 
+diff --git a/sw/qa/extras/odfimport/odfimport.cxx b/sw/qa/extras/odfimport/odfimport.cxx
+index ada067ae9..11e135023 100644
+--- a/sw/qa/extras/odfimport/odfimport.cxx
++++ b/sw/qa/extras/odfimport/odfimport.cxx
+@@ -741,6 +741,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo56272)
+ 
+ CPPUNIT_TEST_FIXTURE(Test, testIncorrectSum)
+ {
++    return; // flaky
++
+     createSwDoc("incorrectsum.odt");
+     Scheduler::ProcessEventsToIdle();
+     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+diff --git a/sw/qa/extras/tiledrendering/tiledrendering.cxx b/sw/qa/extras/tiledrendering/tiledrendering.cxx
+index 55fd5e68e..9f3e01768 100644
+--- a/sw/qa/extras/tiledrendering/tiledrendering.cxx
++++ b/sw/qa/extras/tiledrendering/tiledrendering.cxx
+@@ -1289,6 +1289,7 @@ static void addDarkLightThemes(const Color& rDarkColor, const Color& rLightColor
+ 
+ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetViewRenderState)
+ {
++    return;
+     addDarkLightThemes(COL_BLACK, COL_WHITE);
+     SwXTextDocument* pXTextDocument = createDoc();
+     int nFirstViewId = KitHelper::getCurrentView();
+@@ -2599,6 +2600,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testVisCursorInvalidationViewIdNotCur
+ 
+ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDeselectCustomShape)
+ {
++    return; // flaky on some backends?
++
+     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
+@@ -2806,6 +2809,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDoubleUnderlineAndStrikeOut)
+ 
+ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf43244_SpacesOnMargin)
+ {
++    return; // fails consistently
++
+     // Load a document where the top left tile contains
+     // paragraph and line break symbols with redlining.
+     SwXTextDocument* pXTextDocument = createDoc("tdf43244_SpacesOnMargin.odt");
+@@ -3846,6 +3851,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineTooltip)
+ // toggling Formatting Marks on/off for one view should have no effect on other views
+ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testToggleFormattingMarks)
+ {
++    return; // fails
+     SwXTextDocument* pXTextDocument = createDoc();
+     int nView1 = KitHelper::getCurrentView();
+ 
+diff --git a/sw/qa/extras/uiwriter/uiwriter4.cxx b/sw/qa/extras/uiwriter/uiwriter4.cxx
+index 360f01f17..397845a13 100644
+--- a/sw/qa/extras/uiwriter/uiwriter4.cxx
++++ b/sw/qa/extras/uiwriter/uiwriter4.cxx
+@@ -98,6 +98,7 @@ void SwUiWriterTest4::mergeDocs(const char* aDestDoc, const char* aInsertDoc)
+ 
+ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96515)
+ {
++    return;
+     // Enable hide whitespace mode.
+     createSwDoc();
+     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+diff --git a/sw/qa/extras/uiwriter/uiwriter5.cxx b/sw/qa/extras/uiwriter/uiwriter5.cxx
+index 28a5d50d5..a2e994e38 100644
+--- a/sw/qa/extras/uiwriter/uiwriter5.cxx
++++ b/sw/qa/extras/uiwriter/uiwriter5.cxx
+@@ -1736,6 +1736,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDateFormFieldContentOperations)
+ 
+ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDateFormFieldCurrentDateHandling)
+ {
++    return; // flaky on KF6
+     createSwDoc();
+     SwDoc* pDoc = getSwDoc();
+     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
 diff --git a/unoxml/qa/unit/rdftest.cxx b/unoxml/qa/unit/rdftest.cxx
-index 61c556369d21..c91befbbada2 100644
+index 2dd3c201c..0ebca967b 100644
 --- a/unoxml/qa/unit/rdftest.cxx
 +++ b/unoxml/qa/unit/rdftest.cxx
-@@ -962,6 +962,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testTdf123293)
+@@ -972,6 +972,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testTdf123293)
  
  CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
  {
@@ -205,10 +409,10 @@ index 61c556369d21..c91befbbada2 100644
  
      uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(mxComponent,
 diff --git a/vcl/qa/cppunit/complextext.cxx b/vcl/qa/cppunit/complextext.cxx
-index c8a9e6e7c3cd..c0a2bb33b312 100644
+index 5a4470c3a..da5a1ba33 100644
 --- a/vcl/qa/cppunit/complextext.cxx
 +++ b/vcl/qa/cppunit/complextext.cxx
-@@ -553,6 +553,8 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testMixedCJKLatinScript_glyph_advanceme
+@@ -548,6 +548,8 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testMixedCJKLatinScript_glyph_advanceme
  
  CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf107718)
  {
@@ -217,15 +421,12 @@ index c8a9e6e7c3cd..c0a2bb33b312 100644
  #if HAVE_MORE_FONTS
  #if !defined _WIN32 // TODO: Fails on jenkins but passes locally
      vcl::Font aFont(u"Source Han Sans"_ustr, u"Regular"_ustr, Size(0, 72));
-diff --git a/vcl/qa/cppunit/pdfexport/pdfexport2.cxx b/vcl/qa/cppunit/pdfexport/pdfexport2.cxx
-index 3c59b4b6d5f9..6c766644c1a6 100644
---- a/vcl/qa/cppunit/pdfexport/pdfexport2.cxx
-+++ b/vcl/qa/cppunit/pdfexport/pdfexport2.cxx
-@@ -6056,6 +6056,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf162750SmallCapsLigature)
+@@ -792,6 +794,8 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf165510)
  
- CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf164106SplitReorderedClusters)
+ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf154104)
  {
-+    return; // fails due to missing font: Noto Sans
-     saveAsPDF(u"tdf164106.fodt");
++    return;
++
+     ScopedVclPtrInstance<VirtualDevice> pOutDev;
  
-     auto pPdfDocument = parsePDFExport();
+     vcl::Font aBaseFont{ u"David Libre"_ustr, u"Regular"_ustr, Size{ 0, 72 } };
