@@ -15,7 +15,7 @@
   libtool_2,
   mpi,
   suitesparse,
-  trilinos,
+  trilinos_16,
   withMPI ? false,
   # for doc
   texliveMedium,
@@ -29,7 +29,7 @@
   enableTests ? true,
 }:
 
-assert withMPI -> trilinos.withMPI;
+assert withMPI -> trilinos_16.withMPI;
 
 let
   version = "7.10.0";
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
     fftw
     lapack
     suitesparse
-    trilinos
+    trilinos_16
   ]
   ++ lib.optionals withMPI [ mpi ];
 
