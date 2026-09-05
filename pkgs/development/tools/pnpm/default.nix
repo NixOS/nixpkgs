@@ -65,5 +65,14 @@ let
     );
 
   mkPnpm = versionSuffix: variant: nameValuePair "pnpm_${versionSuffix}" (callPnpm variant);
+
+  pnpm_12 = callPackage ./next.nix {
+    version = "12.3.4";
+    hash = "sha256-EAF5ZeABBX4Wdn08OVria9zKcTIJ8i9EIjb9gsaCAo4=";
+    cargoHash = "sha256-I54W1Ig6mn3/BsBiL5qc8aUZmSY2IGEY2QSXG0V1W1w=";
+  };
 in
-mapAttrs' mkPnpm variants
+(mapAttrs' mkPnpm variants)
+// {
+  inherit pnpm_12;
+}
