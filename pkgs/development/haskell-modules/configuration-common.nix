@@ -150,6 +150,9 @@ with haskellLib;
     hackage-db-unstable
     ;
 
+  # 2026-09-01: tar < 0.7; also Cabal-syntax etc. for other GHC versions
+  cabal-install-parsers = doJailbreak super.cabal-install-parsers;
+
   stack =
     appendPatches
       [
