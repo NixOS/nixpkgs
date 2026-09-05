@@ -24,7 +24,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "holoviews";
-  version = "1.23.1";
+  version = "1.24.0a0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
     owner = "holoviz";
     repo = "holoviews";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+s7AzER7ipiqjiZL9vmno16MmhSK8Sz9LYLQ2cxNM6Y=";
+    hash = "sha256-BbafM6mQNseITNmIpIi3pGo5dRh8PBxNUrn4vanPJ5o=";
   };
 
   postPatch = ''
