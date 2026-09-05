@@ -8,7 +8,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "types-protobuf";
-  version = "6.32.1.20260221";
+  version = "7.35.1.20260827";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "types_protobuf";
     inherit (finalAttrs) version;
-    hash = "sha256-bV+wYKYWv7B2y7YbSzw5afX8i+xYEPmi9+ZI7ly8v24=";
+    hash = "sha256-WpjBgXfP2WjWoN5V7PxCIaqCnviLzYYQQpjgKFFrBK8=";
   };
 
   build-system = [ setuptools ];
