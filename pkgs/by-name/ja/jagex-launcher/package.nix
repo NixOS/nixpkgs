@@ -47,7 +47,12 @@ appimageTools.wrapAppImage {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  extraPkgs = pkgs: with pkgs; [ libsecret nss mesa ];
+  extraPkgs =
+    pkgs: with pkgs; [ 
+      libsecret
+      nss
+      mesa
+    ];
 
   passthru.updateScript = ./update.sh;
   extraInstallCommands = ''
