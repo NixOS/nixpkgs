@@ -22,13 +22,13 @@ buildNpmPackage (finalAttrs: {
 
   # update together with httptoolkit-server
   # nixpkgs-update: no auto update
-  version = "1.26.0";
+  version = "1.27.1";
 
   src = fetchFromGitHub {
     owner = "httptoolkit";
     repo = "httptoolkit-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WEl0DGYdq1qa5zNEVO6L8TW6lgNTI0NdL0YXeR3Z0BI=";
+    hash = "sha256-6DvfAjMIdLngwnBsUJywlFPUoKM8fgALYrmWu6QT5ow=";
   };
 
   patches = [
@@ -40,7 +40,7 @@ buildNpmPackage (finalAttrs: {
       --replace-fail "@out@" "$out"
   '';
 
-  npmDepsHash = "sha256-fGVxHhJU/1ZsRyX3AnP6jM/jkY0PZHKDA1tb2z06lLs=";
+  npmDepsHash = "sha256-NF1FVh86pQdgqcYzqTHEzjM5x4jJamOqsculkyHyVEM=";
 
   makeCacheWritable = true;
 
