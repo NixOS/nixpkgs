@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fastcrw";
-  version = "0.32.0";
+  version = "0.33.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "us";
     repo = "crw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zk8xjKPPifNiHqx/B01ZG3r9xgoG1p1D1M7LhQoHD5Y=";
+    hash = "sha256-ltZoCLgIR7jBBsyggLwZspwqCNspH4+jqpadyQ2HS/0=";
   };
 
-  cargoHash = "sha256-yVh3B9Xl5yB9YWG0+lDOudnD1qi2VpAWBnItFZiRr3c=";
+  cargoHash = "sha256-G4N82svyVX9MXRHLH9nrPXVl6PQWxVwzr8eRKYwezic=";
 
   # aws-lc-sys drives its C build through cmake and generates its bindings.
   nativeBuildInputs = [
@@ -36,10 +36,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoTestFlags = [ "--no-fail-fast" ];
 
+  # Optimizing test binaries with fat LTO takes over 100 minutes on Hydra,
+  # while the tests themselves finish in about two minutes.
+  checkType = "debug";
+
   checkFlags = [
-    # Dials a blackhole address to assert the error is a connect-phase timeout;
+    # Dial a blackhole address to assert the error is a connect-phase timeout;
     # the sandbox has no route at all, so it fails fast as "network unreachable".
     "--skip=http_only::tests::connection_failure_catches_connect_timeout"
+    "--skip=http_only::tests::is_retriable_error_false_for_connect_timeout"
 
     # The SSRF guard resolves the destination before a request is accepted, so
     # in the sandbox these get "DNS resolution failed" instead of the response
