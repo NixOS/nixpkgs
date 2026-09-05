@@ -78,6 +78,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildFeatures = [
     "native_viewer"
     "web_viewer"
+    "map_view"
     "nasm"
   ];
 
