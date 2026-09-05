@@ -8893,10 +8893,10 @@
   };
   eveeifyeve = {
     name = "Eveeifyeve";
-    github = "Eveeifyeve";
+    github = "eveeifyeve";
     githubId = 88671402;
     matrix = "@eveeifyeve:matrix.org";
-    email = "eveeg1971@gmail.com";
+    email = "open-source@eveeifyeve.dev";
   };
   evenbrenden = {
     email = "packages@anythingexternal.com";
