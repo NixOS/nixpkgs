@@ -4308,8 +4308,6 @@ self: super: with self; {
 
   derivative = callPackage ../development/python-modules/derivative { };
 
-  derpconf = callPackage ../development/python-modules/derpconf { };
-
   desktop-entry-lib = callPackage ../development/python-modules/desktop-entry-lib { };
 
   desktop-notifier = callPackage ../development/python-modules/desktop-notifier { };
@@ -20212,6 +20210,8 @@ self: super: with self; {
 
   syrupy = callPackage ../development/python-modules/syrupy { };
 
+  syrupy_6 = callPackage ../development/python-modules/syrupy/6.nix { };
+
   syslog-rfc5424-formatter = callPackage ../development/python-modules/syslog-rfc5424-formatter { };
 
   sysrsync = callPackage ../development/python-modules/sysrsync { };
@@ -20491,6 +20491,8 @@ self: super: with self; {
   tesla-fleet-api = callPackage ../development/python-modules/tesla-fleet-api { };
 
   tesla-powerwall = callPackage ../development/python-modules/tesla-powerwall { };
+
+  tesla-protocol = callPackage ../development/python-modules/tesla-protocol { };
 
   tesla-wall-connector = callPackage ../development/python-modules/tesla-wall-connector { };
 

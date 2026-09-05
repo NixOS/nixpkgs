@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "controller-tools";
-  version = "0.21.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "controller-tools";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-4IkVnD87/sHZKixDaF9Qz95cdChPfOkEowBQwu7kq9Y=";
+    sha256 = "sha256-sqlvOSZ2sZZFYVq4nWqr9e8c1eaypdrYgGE/2un5Dsw=";
   };
 
-  vendorHash = "sha256-LNjd0PDVa4GMY1rFJ5PFiWAEeA5MMraIIzZmYgkdgJc=";
+  vendorHash = "sha256-WBuqq1fyUBSJ9IPgoiiiJAghRgTnaXp6IhjkdEBFbOQ=";
 
   ldflags = [
     "-s"

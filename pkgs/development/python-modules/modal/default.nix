@@ -39,7 +39,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "modal";
-  version = "1.5.4";
+  version = "1.5.5";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -48,7 +48,7 @@ buildPythonPackage (finalAttrs: {
     owner = "modal-labs";
     repo = "modal-client";
     tag = "py/v${finalAttrs.version}";
-    hash = "sha256-5pWpw2Jb16Rjq/n74KZsclRrxEGzUEAWbmGHxK4H1e4=";
+    hash = "sha256-KHk7NWfcp+xN2VHU/k6YLxJRKGUeJR5erXC7DBDgSYo=";
   };
   sourceRoot = "${finalAttrs.src.name}/py";
 

@@ -21,7 +21,8 @@
   wayland,
 
   mods-dat ? null,
-  versionsJson ? ./versions.json,
+  versions ? null,
+  versionsJson ? null,
   username ? "",
   token ? "", # get/reset token at https://factorio.com/profile
   experimental ? false, # true means to always use the latest branch
@@ -36,7 +37,7 @@ assert
 
 let
 
-  inherit (lib) importJSON;
+  inherit (lib) defaultTo importJSON;
 
   mods = args.mods or [ ];
 
@@ -94,7 +95,8 @@ let
 
   # NB `experimental` directs us to take the latest build, regardless of its branch;
   # hence the (stable, experimental) pairs may sometimes refer to the same distributable.
-  versions = importJSON versionsJson;
+  versionsJson = defaultTo ./versions.json args.versionsJson or null;
+  versions = defaultTo (importJSON versionsJson) args.versions or null;
   binDists = makeBinDists versions;
 
   actual =
@@ -212,7 +214,10 @@ let
         $out/bin/factorio
     '';
 
-    passthru.updateScript = ./update.py;
+    passthru = {
+      updateScript = ./update.py;
+      inherit versionsJson versions;
+    };
 
     meta = {
       description = "Game in which you build and maintain factories";

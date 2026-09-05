@@ -14,15 +14,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-openevse-http";
-  version = "1.0.1";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firstof9";
     repo = "python-openevse-http";
     tag = finalAttrs.version;
-    hash = "sha256-X87nS/h+Lh//rf8pNrlX22HOpT3Bz/6QgWBfQEaDQP8=";
+    hash = "sha256-l4/ZeIi6em5Dmp7O15Wg4brd4J2kTsIxSqLSGFS/Ihs=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools-scm>=10.1.1" setuptools_scm
+  '';
 
   build-system = [
     setuptools

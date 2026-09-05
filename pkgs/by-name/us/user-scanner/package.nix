@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "user-scanner";
-  version = "1.4.3.1";
+  version = "1.5.1";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "kaifcodec";
     repo = "user-scanner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7A4XxxUHyvEcZcAgGWzg79B/X0ePAdIt7yPM+nGsZGc=";
+    hash = "sha256-lBVKCIpvdYRz80BoaSbFcizs2tLEWankcLeOqu9u4iM=";
   };
 
   build-system = with python3Packages; [ flit-core ];
@@ -26,6 +26,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     colorama
     curl-cffi
     httpx
+    mcp
     socksio
   ];
 

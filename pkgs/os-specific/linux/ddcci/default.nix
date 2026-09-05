@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
       --replace depmod \#
   '';
 
+  patches = [
+    ./0001-Use-sysfs_emit-and-field-width-specifier.patch
+  ];
+
   makeFlags = kernelModuleMakeFlags ++ [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "KVER=${kernel.modDirVersion}"

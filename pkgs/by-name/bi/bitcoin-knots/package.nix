@@ -36,12 +36,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = if withGui then "bitcoin-knots" else "bitcoind-knots";
-  version = "29.3.knots20260508";
+  version = "29.4.1.knots20260508";
 
   src = fetchurl {
     url = "https://bitcoinknots.org/files/29.x/${finalAttrs.version}/bitcoin-${finalAttrs.version}.tar.gz";
     # hash retrieved from signed SHA256SUMS
-    hash = "sha256-jjrr2sqzL29rZdkMmKGIlSVToSpXfgtY0TUlv9Wd1jA=";
+    hash = "sha256-2kPox5C+2djEMtB6ECcQhFN9vWHeO6D3vUn5Wa3Lm48=";
   };
 
   nativeBuildInputs = [
@@ -86,18 +86,18 @@ stdenv.mkDerivation (finalAttrs: {
       publicKeys = fetchFromGitHub {
         owner = "bitcoinknots";
         repo = "guix.sigs";
-        rev = "15113e2fe61b31354a6bcc3fddd17f759ce20c4a";
-        sha256 = "sha256-snbs2j88k9CBdv8+s3GaFoIXyJRVWlKoxiKA8R6ek9Y=";
+        rev = "5d1879a10e22934294944eebc2f5f925a29b5ebc";
+        sha256 = "sha256-5xZSk7BnZI8FOiAgONsHqDBztuKpyBHJVp8VpcXhJlo=";
       };
 
       checksums = fetchurl {
         url = "https://bitcoinknots.org/files/${majorVersion}.x/${finalAttrs.version}/SHA256SUMS";
-        hash = "sha256-vFfeObwXowk143DSv9WZ++u+KA0fuHexFU1NizrCiV4=";
+        hash = "sha256-r6vDK1Vu7pjVaJVlDoakOaIwMv5ZsyHPx0YULecAxnI=";
       };
 
       signatures = fetchurl {
         url = "https://bitcoinknots.org/files/${majorVersion}.x/${finalAttrs.version}/SHA256SUMS.asc";
-        hash = "sha256-8pVhrITphjs7rnJZrmxAU92GVgkjVPlkA54ne9iwiIs=";
+        hash = "sha256-2qInQ7g/YpXBgmHz7UtDf8Jherr2O1fIr+atVWBJVK4=";
       };
 
       verifyBuilderKeys =
@@ -149,7 +149,6 @@ stdenv.mkDerivation (finalAttrs: {
     # building with db48 (for legacy wallet support) is broken on Darwin
     (lib.cmakeBool "WITH_BDB" (withWallet && !stdenv.hostPlatform.isDarwin))
     (lib.cmakeBool "WITH_USDT" enableTracing)
-    (lib.cmakeFeature "RDTS_CONSENT" "RUNTIME_WARN")
   ]
   ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
     (lib.cmakeBool "BUILD_TESTS" false)

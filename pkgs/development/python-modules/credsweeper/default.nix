@@ -44,7 +44,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "credsweeper";
-  version = "1.18.1";
+  version = "1.18.2";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -53,7 +53,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Samsung";
     repo = "CredSweeper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ktaCNgM0FJCdreIqhzYc21CjpLmp7vIbs9E5Q6yvWjc=";
+    hash = "sha256-JurMfb4CZGDUDmjkd+dKngoOnv9u2VU8rAst2HijZh0=";
   };
 
   build-system = [ hatchling ];

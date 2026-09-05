@@ -4,12 +4,12 @@
 set -euo pipefail
 
 # so that update bot doesn't try to update renpyMinimal
-if [[ -n "${UPDATE_NIX_ATTR_PATH:-}" ]] && [[ "${UPDATE_NIX_ATTR_PATH:-}" != renpy ]];
+if [[ -n "${UPDATE_NIX_ATTR_PATH:-}" ]] && [[ "${UPDATE_NIX_ATTR_PATH:-}" != renpy ]]; then
   exit
 fi
 
 attr() {
-  nix-instantiate --eval -A renpy.$1 | tr -d '"'
+  nix-instantiate --eval --raw -A renpy."$1"
 }
 
 old_version="$(attr version)"

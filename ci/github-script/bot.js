@@ -689,16 +689,21 @@ export default async ({ github, context, core, dry }) => {
     if (context.payload.pull_request) {
       await handle({ item: context.payload.pull_request, stats })
     } else {
+      // We don't use filters here because that causes GitHub to use an often-outdated index,
+      // resulting in the cursor not being updated, and therefore causing the same PRs
+      // to use up our rate limit over and over again.
       const lastRun = (
         await github.rest.actions.listWorkflowRuns({
           ...context.repo,
           workflow_id: 'bot.yml',
-          event: 'schedule',
-          status: 'success',
-          exclude_pull_requests: true,
-          per_page: 1,
         })
-      ).data.workflow_runs[0]
+      ).data.workflow_runs.find(
+        (run) => run.event === 'schedule' && run.conclusion === 'success',
+      )
+
+      core.info(
+        `Last successful run created at: ${lastRun?.created_at ?? '<n/a>'}`,
+      )
 
       const cutoff = new Date(
         Math.max(
@@ -794,6 +799,7 @@ export default async ({ github, context, core, dry }) => {
         } else {
           // No stats.artifacts++, because this does not allow passing a custom token.
           // Thus, the upload will not happen with the app token, but the default github.token.
+          core.info(`pagination-cursor: ${cursor}`)
           await artifactClient.uploadArtifact(
             'pagination-cursor',
             [uploadPath],
@@ -803,6 +809,8 @@ export default async ({ github, context, core, dry }) => {
             },
           )
         }
+      } else {
+        core.info('pagination-cursor: <n/a>')
       }
 
       // Some items might be in both search results, so filtering out duplicates as well.

@@ -58,5 +58,27 @@
 
       node1.wait_until_succeeds("ping -c1 10.0.0.2", timeout=30)
       node2.wait_until_succeeds("ping -c1 10.0.0.1", timeout=30)
+
+      with subtest("Restarting ovsdb preserves OpenFlow flows"):
+          ovs_ofctl = "ovs-ofctl -O OpenFlow13"
+          marker_cookie = "0x5eed"
+
+          def check_marker_flow():
+              node1.succeed(
+                  f"{ovs_ofctl} dump-flows vs0 | grep -q 'cookie={marker_cookie}'"
+              )
+
+          node1.succeed(
+              f"{ovs_ofctl} add-flow vs0 "
+              f"'cookie={marker_cookie},priority=100,ip,nw_src=192.0.2.1,actions=drop'"
+          )
+          check_marker_flow()
+
+          node1.succeed("systemctl restart ovsdb.service")
+          node1.wait_for_unit("ovsdb.service")
+          node1.wait_for_unit("ovs-vswitchd.service")
+          node1.wait_for_unit("vs0-netdev.service")
+
+          check_marker_flow()
     '';
 }

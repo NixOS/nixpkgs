@@ -1,6 +1,7 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
+  gitMinimal,
   hatchling,
   lib,
   pymodbus,
@@ -12,7 +13,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "modbus-connection";
-  version = "3.9.0";
+  version = "4.10.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -20,7 +21,7 @@ buildPythonPackage (finalAttrs: {
     owner = "home-assistant-libs";
     repo = "modbus-connection";
     tag = finalAttrs.version;
-    hash = "sha256-WmPjIAxC9e6tYxPJSQpvdhUNj2tbYim5e1RP5MIiL9M=";
+    hash = "sha256-7k1JRIbxgN8EGbs6j0BxQiiqiBBq3s3OLUjJ7smd5hc=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +44,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
+    gitMinimal
     pytest-asyncio
     pytestCheckHook
   ]

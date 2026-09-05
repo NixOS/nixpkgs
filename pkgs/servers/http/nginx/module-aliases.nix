@@ -3,6 +3,7 @@
 self: {
   # keep-sorted start case=no numeric=yes block=yes
 
+  auth-a2aclr = throw "auth-a2aclr was removed because its upstream is unmaintained and its pinned arpa2common dependency no longer builds"; # Added 2026-09-02
   fastcgi-cache-purge = throw "fastcgi-cache-purge was renamed to cache-purge";
   fluentd = throw "fluentd was removed due to lack of maintenance"; # Added 2026-08-02
   http_proxy_connect_module_v24 = throw "http_proxy_connect_module_v24 was removed because it was not compatible with any supported nginx version"; # Added 2026-07-29

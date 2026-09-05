@@ -66,7 +66,10 @@ stdenv.mkDerivation rec {
     description = "The open-source terminal agent built for low-cost models";
     homepage = "https://github.com/openinterpreter/openinterpreter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ _2hexed ];
+    maintainers = with maintainers; [
+      _2hexed
+      happysalada
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

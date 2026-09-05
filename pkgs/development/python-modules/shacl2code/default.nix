@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "shacl2code";
-  version = "1.2.0";
+  version = "1.3.2";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
     owner = "JPEWdev";
     repo = "shacl2code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YGZLvJRoA0sMjTvYYChZMWtERjXLWgHe1WgzNEG9xGc=";
+    hash = "sha256-N6coxDngvaDOSZaETT7amjJQtQeorMVfa1qTM45H3gY=";
   };
 
   build-system = [ hatchling ];
