@@ -19660,6 +19660,8 @@ self: super: with self; {
 
   splunk-sdk = callPackage ../development/python-modules/splunk-sdk { };
 
+  spmd-types = callPackage ../development/python-modules/spmd-types { };
+
   spotapi = callPackage ../development/python-modules/spotapi { };
 
   spotifyaio = callPackage ../development/python-modules/spotifyaio { };
@@ -20849,6 +20851,8 @@ self: super: with self; {
   torch-bin = callPackage ../development/python-modules/torch/bin { triton = self.triton-bin; };
 
   torch-c-dlpack-ext = callPackage ../development/python-modules/torch-c-dlpack-ext { };
+
+  torch-checkpointing = callPackage ../development/python-modules/torch-checkpointing { };
 
   torch-cluster = callPackage ../development/python-modules/torch-cluster { };
 
