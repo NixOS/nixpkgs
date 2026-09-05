@@ -5,12 +5,6 @@
   # nixpkgs functions
   buildGoModule,
   callPackage,
-  notmuch,
-  w3m,
-  chafa,
-  file,
-  mupdf-headless,
-  zip,
   fetchFromGitHub,
   fetchpatch,
   fetchurl,
@@ -20,6 +14,8 @@
   yarnConfigHook,
   python3,
   # Misc dependencies
+  notmuch,
+  file,
   charm-freeze,
   code-minimap,
   dailies,
@@ -3168,23 +3164,29 @@ assertNoAdditions {
   });
 
   notmuch-nvim = super.notmuch-nvim.overrideAttrs {
-    propagatedBuildInputs = [
+    checkInputs = [
       notmuch
     ];
 
+    # NOTE: for best user experience, consider installing optional handlers to display attachements within neovim. For instance: [ w3m catimg mupdf-headless pandoc zip ]
+    # See https://github.com/yousefakbar/notmuch.nvim/blob/v0.4.0/lua/notmuch/handlers.lua for supported handlers.
     runtimeDeps = [
       file
-      w3m
-      chafa
-      mupdf-headless
-      pandoc
-      zip
+      notmuch
     ];
 
-    postPatch = ''
-      substituteInPlace lua/notmuch/cnotmuch.lua \
-        --replace 'local nm = ffi.load("notmuch")' 'local nm = ffi.load("${notmuch}/lib/libnotmuch.so")'
-    '';
+    postPatch =
+      let
+        ext = stdenv.hostPlatform.extensions.sharedLibrary;
+        notmuchLib = "${lib.getLib notmuch}/lib/libnotmuch${ext}";
+      in
+      # bash
+      ''
+        substituteInPlace lua/notmuch/cnotmuch.lua \
+          --replace-fail 'ffi.load("notmuch")' 'ffi.load("${notmuchLib}")'
+      '';
+
+    meta.license = lib.licenses.mit;
   };
 
   NrrwRgn = super.NrrwRgn.overrideAttrs (old: {
