@@ -146,6 +146,10 @@ with haskellLib;
   # https://github.com/mitchellwrosen/tasty-hspec/pull/38
   tasty-hspec = doJailbreak super.tasty-hspec;
 
+  # 2026-09-05: containers <0.8
+  # https://github.com/obsidiansystems/dependent-map/issues/59
+  dependent-map = doJailbreak super.dependent-map;
+
   #
   # Test suite issues
   #
