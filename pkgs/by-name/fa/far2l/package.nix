@@ -7,7 +7,6 @@
   cmake,
   ninja,
   pkg-config,
-  m4,
   perl,
   bash,
   xdg-utils,
@@ -16,8 +15,11 @@
   gzip,
   bzip2,
   gnutar,
-  p7zip,
+  _7zz,
   xz,
+  nix-update-script,
+
+  # Backend options
   withTTYX ? true,
   libx11,
   withGUI ? true,
@@ -25,13 +27,13 @@
   withUCD ? true,
   libuchardet,
 
-  # Plugins
+  # Plugins (all are enabled by default)
   withColorer ? true,
   spdlog,
   libxml2,
   withMultiArc ? true,
   libarchive,
-  pcre,
+
   withNetRocks ? true,
   openssl,
   libssh,
@@ -42,57 +44,57 @@
   python3Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "far2l";
-  version = "2.8.0";
+  version = "2.9.0-unstable-27-08-2026";
 
   src = fetchFromGitHub {
     owner = "elfmz";
     repo = "far2l";
-    tag = "v_${version}";
-    hash = "sha256-LP+agJrYxjH6vLAg6cJTU4/9jYGF9iaZzxA7hozDKNY=";
+    rev = "59354e96e366e0bf3a2fcd9d76c45cf5ec6d0c30";
+    hash = "sha256-9mSi3gqZ2jpgUawD3Jr2Pmn1shLpySuFCh4iOZe7CO8=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
     pkg-config
-    m4
     perl
     makeWrapper
   ];
 
-  buildInputs =
-    lib.optional withTTYX libx11
-    ++ lib.optional withGUI wxwidgets_3_2
-    ++ lib.optional withUCD libuchardet
-    ++ lib.optionals withColorer [
-      spdlog
-      libxml2
+  buildInputs = [
+    bash
+  ]
+  ++ lib.optional withTTYX libx11
+  ++ lib.optional withGUI wxwidgets_3_2
+  ++ lib.optional withUCD libuchardet
+  ++ lib.optionals withColorer [
+    spdlog
+    libxml2
+  ]
+  ++ lib.optionals withMultiArc [
+    libarchive
+  ]
+  ++ lib.optionals withNetRocks [
+    openssl
+    libssh
+    libnfs
+    neon
+  ]
+  ++ lib.optional (withNetRocks && !stdenv.hostPlatform.isDarwin) samba # broken on darwin
+  ++ lib.optionals withPython (
+    with python3Packages;
+    [
+      python
+      cffi
+      debugpy
+      pcpp
     ]
-    ++ lib.optionals withMultiArc [
-      libarchive
-      pcre
-    ]
-    ++ lib.optionals withNetRocks [
-      openssl
-      libssh
-      libnfs
-      neon
-    ]
-    ++ lib.optional (withNetRocks && !stdenv.hostPlatform.isDarwin) samba # broken on darwin
-    ++ lib.optionals withPython (
-      with python3Packages;
-      [
-        python
-        cffi
-        debugpy
-        pcpp
-      ]
-    );
+  );
 
   postPatch = ''
-    patchShebangs python/src/prebuild.sh
+    chmod +x far2l/bootstrap/*.sh
     patchShebangs far2l/bootstrap/view.sh
   '';
 
@@ -111,9 +113,9 @@ stdenv.mkDerivation rec {
   ];
 
   runtimeDeps = [
+    bash
     unzip
     zip
-    p7zip
     xz
     gzip
     bzip2
@@ -122,15 +124,23 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/far2l \
-      --prefix PATH : ${lib.makeBinPath runtimeDeps} \
+      --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps} \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+    # Link 7z plugin
+    echo "Linking 7z libraries..."
+    mkdir -p $out/lib/far2l/Plugins/arclite/plug/
+    for file in ${_7zz.lib}/lib/*; do
+      ln -sf "$file" "$out/lib/far2l/Plugins/arclite/plug/"
+    done
   '';
 
+  passthru.updateScript = nix-update-script { extraArgs = "--version=branch=master"; };
+
   meta = {
-    description = "Linux port of FAR Manager v2, a program for managing files and archives in Windows operating systems";
+    description = "Linux port of FAR Manager v2 with enhanced plugin support";
     homepage = "https://github.com/elfmz/far2l";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ smakarov ];
     platforms = lib.platforms.unix;
   };
-}
+})
