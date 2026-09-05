@@ -10,6 +10,7 @@
   nixosTests,
   writeText,
   stdenv,
+  nix-update-script,
 }:
 let
   version = "7.3.0";
@@ -93,7 +94,16 @@ maven.buildMavenPackage {
     runHook postInstall
   '';
 
-  passthru.tests = nixosTests.commafeed;
+  passthru = {
+    inherit frontend;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+      ];
+    };
+    tests = nixosTests.commafeed;
+  };
 
   meta = {
     description = "Google Reader inspired self-hosted RSS reader";
