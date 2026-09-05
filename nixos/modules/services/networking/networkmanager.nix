@@ -474,6 +474,16 @@ in
           '';
         };
       };
+
+      checkForDnsmasq = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to check if both NetworkManager and dnsmasq are enabled
+          simultaneously. This is often a mistake, as NetworkManager runs its
+          own dnsmasq instance, but there are use-cases that need both.
+        '';
+      };
     };
   };
 
@@ -548,6 +558,17 @@ in
         '';
       }
     ];
+
+    warnings =
+      lib.lists.optional
+        (
+          cfg.checkForDnsmasq
+          && cfg.dns == "dnsmasq"
+          && config.services.dnsmasq.enable
+          # setting port to 0 disables DNS functionality, and leaves only DHCP and/or TFTP enabled
+          && lib.toList (config.services.dnsmasq.settings.port or 53) != [ 0 ]
+        )
+        ''You probably don't want to enable both `services.dnsmasq` and `networking.networkmanager.dns = "dnsmasq"` at the same time, as NetworkManager runs its own instance of dnsmasq which may conflict with the systemd unit created by `services.dnsmasq`. You can disable this warning using the `networking.networkmanager.checkForDnsmasq` option.'';
 
     hardware.wirelessRegulatoryDatabase = true;
 
