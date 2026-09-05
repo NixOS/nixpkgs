@@ -173,6 +173,7 @@ runCommand (lib.appendToName "with-packages" emacs).name
           (load "$emacs/share/emacs/site-lisp/site-start" nil t)
           ;; "$out/share/emacs/site-lisp" is added to load-path in wrapper.sh
           ;; "$out/share/emacs/native-lisp" is added to native-comp-eln-load-path in wrapper.sh
+          (setenv "PATH" (concat "$out/bin:" (getenv "PATH"))) ; some packages blindly overwrite exec-path with $PATH
           (add-to-list 'exec-path "$out/bin")
           ;; Also expose extra package binaries via PATH so that subprocesses
           ;; which rebuild their environment from PATH (e.g. direnv/envrc) can
