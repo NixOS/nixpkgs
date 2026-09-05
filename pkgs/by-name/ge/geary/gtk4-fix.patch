@@ -1,0 +1,15 @@
+diff --git a/src/client/accounts/accounts-editor-list-pane.vala b/src/client/accounts/accounts-editor-list-pane.vala
+index 945a09715..ac38e7c27 100644
+--- a/src/client/accounts/accounts-editor-list-pane.vala
++++ b/src/client/accounts/accounts-editor-list-pane.vala
+@@ -393,8 +393,8 @@ private class Accounts.AccountListRow : Adw.ActionRow {
+         drag_widget.append(drag_row);
+         drag_widget.drag_highlight_row(drag_row);
+ 
+-        var drag_icon = new Gtk.DragIcon.get_for_drag(drag);
+-        drag_icon.child = drag_widget;
++        var drag_icon = (Gtk.DragIcon) Gtk.DragIcon.get_for_drag(drag);
++        drag_icon.set_child(drag_widget);
+         drag.set_hotspot((int) this.drag_x, (int) this.drag_y);
+ 
+         // Set a visual hint that the row is being dragged
