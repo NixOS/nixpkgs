@@ -11,7 +11,7 @@
   fmt,
   gettext,
   glew,
-  glibmm,
+  glibmm_2_4,
   glm,
   icu,
   libepoxy,
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     ffmpeg
     fmt
     glew
-    glibmm
+    glibmm_2_4
     glm
     icu
     libepoxy

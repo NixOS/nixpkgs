@@ -13,7 +13,7 @@
   gettext,
   ghostscript,
   glib,
-  glibmm,
+  glibmm_2_4,
   gobject-introspection,
   gsl,
   gspell,
@@ -153,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     gettext
     glib
-    glibmm
+    glibmm_2_4
     gsl
     gtkmm3
     gtksourceview4

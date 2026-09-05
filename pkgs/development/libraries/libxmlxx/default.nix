@@ -4,7 +4,7 @@
   fetchurl,
   pkg-config,
   libxml2,
-  glibmm,
+  glibmm_2_4,
   perl,
   gnome,
 }:
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     libxml2
-    glibmm
+    glibmm_2_4
   ];
 
   passthru = {

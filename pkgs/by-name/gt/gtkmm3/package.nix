@@ -7,7 +7,7 @@
   ninja,
   python3,
   gtk3,
-  glibmm,
+  glibmm_2_4,
   cairomm,
   pangomm,
   atkmm,
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ libepoxy ];
 
   propagatedBuildInputs = [
-    glibmm
+    glibmm_2_4
     gtk3
     atkmm
     cairomm

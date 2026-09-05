@@ -10,7 +10,7 @@
   cairo,
   ffmpeg,
   gettext,
-  glibmm,
+  glibmm_2_4,
   libmng,
   gtk3,
   gtkmm3,
@@ -79,7 +79,7 @@ let
     ];
     buildInputs = [
       ETL
-      glibmm
+      glibmm_2_4
       mlt
       libsigcxx
       libxmlxx
@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     ETL
     synfig
     cairo
-    glibmm
+    glibmm_2_4
     gtk3
     gtkmm3
     imagemagick

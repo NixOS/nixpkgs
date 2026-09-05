@@ -13,7 +13,7 @@
   boost,
   sqlite,
   libgtop,
-  glibmm,
+  glibmm_2_4,
   gtkmm3,
   vte,
   gtksourceview,
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     sqlite
     libgtop
-    glibmm
+    glibmm_2_4
     gtkmm3
     vte
     gtksourceview

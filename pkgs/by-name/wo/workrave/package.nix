@@ -16,7 +16,7 @@
   libxtst,
   gobject-introspection,
   glib,
-  glibmm,
+  glibmm_2_4,
   gtkmm3,
   atk,
   pango,
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxscrnsaver
     libxtst
     glib
-    glibmm
+    glibmm_2_4
     gtkmm3
     atk
     pango
