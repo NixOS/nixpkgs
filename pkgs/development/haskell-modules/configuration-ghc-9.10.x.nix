@@ -101,4 +101,7 @@ in
       refact = null;
     }
   );
+
+  # test-suite uses MultilineStrings, which is only available in GHC 9.12+
+  cabal-add = dontCheck super.cabal-add;
 }
