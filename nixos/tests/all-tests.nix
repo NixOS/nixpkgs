@@ -703,6 +703,7 @@ in
     inherit pkgs runTest;
     inherit (pkgs) lib;
   };
+  gitea-actions-runner = runTest ./gitea-actions-runner.nix;
   github-runner = runTest ./github-runner.nix;
   gitlab = import ./gitlab {
     inherit runTest;

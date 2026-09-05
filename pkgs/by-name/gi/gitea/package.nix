@@ -130,7 +130,9 @@ buildGoModule (finalAttrs: {
       lib.warn "gitea.passthru.data-compressed is deprecated. Use \"compressDrvWeb gitea.data\"."
         (compressDrvWeb gitea.data { });
 
-    tests = nixosTests.gitea;
+    tests = {
+      inherit (nixosTests) gitea gitea-actions-runner;
+    };
   };
 
   meta = {
