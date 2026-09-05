@@ -22,6 +22,16 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-ido3e0hQLDEPT0AmsfAVTPlGbWe5QBkxgRO6Fg1wp/c=";
   };
 
+  patches = [
+    # C++20 changes whether stateless lambdas are default-constructible,
+    # breaking the `bfe` test. As C++20 becomes the default in GCC 16, this
+    # causes pagmo2 to fail to build. We vendor a patch from an open PR to fix
+    # the test to match the new behavior of C++20.
+    # Issue: https://github.com/esa/pagmo2/issues/632
+    # PR: https://github.com/esa/pagmo2/pull/634
+    ./cxx20-bfe-test.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
