@@ -69,13 +69,13 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "servo";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "servo";
     repo = "servo";
-    tag = finalAttrs.version;
-    hash = "sha256-oA6fFvSajUHFxyu5kgT3BZ8oxWNMdkdaov6tVkxgNrE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cJtmh/gzwno1gIqHPFgDsynGi//BvV9UyevuAbllRtg=";
     # Breaks reproducibility depending on whether the picked commit
     # has other ref-names or not, which may change over time, i.e. with
     # "ref-names: HEAD -> main" as long this commit is the branch HEAD
@@ -85,7 +85,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  cargoHash = "sha256-kFuW2RoE37ClYAEcEcRudQoUsRsjbUeEBbz/6d96FPU=";
+  cargoHash = "sha256-zZeHqxBvs5M0/TO/ifM1m5F0mSdT4cTJzoW2ja1+s28=";
 
   # set `HOME` to a temp dir for write access
   # Fix invalid option errors during linking (https://github.com/mozilla/nixpkgs-mozilla/commit/c72ff151a3e25f14182569679ed4cd22ef352328)
