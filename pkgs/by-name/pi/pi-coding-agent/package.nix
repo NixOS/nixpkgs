@@ -121,9 +121,9 @@ buildNpmPackage (finalAttrs: {
     # bun binary needs package.json next to PI_PACKAGE_DIR for VERSION
     mkdir -p $out/share/pi
     cp packages/coding-agent/package.json $out/share/pi/package.json
-    cp -r packages/coding-agent/dist/modes/interactive/theme $out/share/pi/theme 2>/dev/null || true
-    cp -r packages/coding-agent/dist/modes/interactive/assets $out/share/pi/assets 2>/dev/null || true
-    cp -r packages/coding-agent/dist/core/export-html $out/share/pi/export-html 2>/dev/null || true
+    cp -r packages/coding-agent/dist/modes/interactive/theme $out/share/pi/theme
+    cp -r packages/coding-agent/dist/modes/interactive/assets $out/share/pi/assets
+    cp -r packages/coding-agent/dist/core/export-html $out/share/pi/export-html
   ''
   + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
     # Remove foreign Linux binaries that make audit-tmpdir try to inspect ELF
