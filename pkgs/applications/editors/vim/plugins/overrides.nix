@@ -40,6 +40,7 @@
   openssl,
   ranger,
   ripgrep,
+  slang-server,
   sqlite,
   sshfs,
   stylish-haskell,
@@ -4164,6 +4165,10 @@ assertNoAdditions {
   });
 
   slang-server-nvim = super.slang-server-nvim.overrideAttrs {
+    runtimeDeps = [
+      slang-server
+    ];
+
     dependencies = [ self.nui-nvim ];
   };
 
