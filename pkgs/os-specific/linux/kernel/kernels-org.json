@@ -34,11 +34,6 @@
         "hash": "sha256:14c1l9hbqcjlzfl7bssa43yqsg26sycp5plx4wfnzshz24rnz0mf",
         "lts": true
     },
-    "7.1": {
-        "version": "7.1.13",
-        "hash": "sha256:1mqshj3ldn0md1c0am35skznnq5vmz3fvrr0cqmwwp6bzpx9akb1",
-        "lts": false
-    },
     "7.2": {
         "version": "7.2.3",
         "hash": "sha256:00yd1rar9dxgdfx1003c9m5bs90bv6da7j2117pwcgmiwzl5k8lb",
