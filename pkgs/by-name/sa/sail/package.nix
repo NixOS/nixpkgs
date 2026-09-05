@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sail";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "lakehq";
     repo = "sail";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dNR2u3YuSkCtPEvJ4tFNLyPvMOSDKmv35dZxRSl44Eg=";
+    hash = "sha256-UJP2d56IF0h9s/kZhNWVkCp/YfTf1RpQStM1NjzJKK4=";
   };
 
-  cargoHash = "sha256-ArXcrMmcsCvo/gIId3xplmD5Kw43rsDl3AWifzBGmIU=";
+  cargoHash = "sha256-a0NOVMH5dObFpwUaEsB6w66XVSjnWQRiK5i/KylEgAU=";
 
   cargoBuildFlags = [
     "-p"
