@@ -1,0 +1,33 @@
+Use the current working directory as the server data root
+
+The executable directory is read-only in the Nix store
+
+--- a/src/lib/utils/general_purpose/src/paths/mod.rs
++++ b/src/lib/utils/general_purpose/src/paths/mod.rs
+@@ -1,4 +1,3 @@
+-use std::env::current_exe;
+ use std::path::PathBuf;
+-
++
+ #[derive(thiserror::Error, Debug)]
+@@ -12,7 +11,4 @@ pub enum RootPathError {
+-/// Returns the root path of the executable.
+-/// e.g.
+-/// - If the executable is located at "D:/server/ferrumc.exe",
+-///   this function will return "D:/server".
++/// Returns the root path used for server data.
+ ///
+ /// # Examples
+ /// ```rust
+@@ -24,10 +20,5 @@ pub enum RootPathError {
+ /// let favicon_path = root_path.join("icon.png");
+ /// ```
+ pub fn get_root_path() -> PathBuf {
+-    let exe_location = current_exe().expect("Failed to get the current executable location.");
+-    let exe_dir = exe_location
+-        .parent()
+-        .ok_or(RootPathError::NoParent)
+-        .expect("Failed to get the parent directory of the executable.");
+-    exe_dir.to_path_buf()
++    std::env::current_dir().expect("Failed to get the current working directory.")
+ }
