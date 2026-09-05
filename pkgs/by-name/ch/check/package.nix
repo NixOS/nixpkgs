@@ -23,6 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
   # Test can randomly fail: https://hydra.nixos.org/build/7243912
   doCheck = false;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Unit testing framework for C";
 
