@@ -14,6 +14,8 @@
   yarnConfigHook,
   python3,
   # Misc dependencies
+  notmuch,
+  file,
   charm-freeze,
   code-minimap,
   dailies,
@@ -3161,6 +3163,32 @@ assertNoAdditions {
       license = lib.licenses.mit;
     };
   });
+
+  notmuch-nvim = super.notmuch-nvim.overrideAttrs {
+    checkInputs = [
+      notmuch
+    ];
+
+    # NOTE: for best user experience, consider installing optional handlers to display attachements within neovim. For instance: [ w3m catimg mupdf-headless pandoc zip ]
+    # See https://github.com/yousefakbar/notmuch.nvim/blob/v0.4.0/lua/notmuch/handlers.lua for supported handlers.
+    runtimeDeps = [
+      file
+      notmuch
+    ];
+
+    postPatch =
+      let
+        ext = stdenv.hostPlatform.extensions.sharedLibrary;
+        notmuchLib = "${lib.getLib notmuch}/lib/libnotmuch${ext}";
+      in
+      # bash
+      ''
+        substituteInPlace lua/notmuch/cnotmuch.lua \
+          --replace-fail 'ffi.load("notmuch")' 'ffi.load("${notmuchLib}")'
+      '';
+
+    meta.license = lib.licenses.mit;
+  };
 
   NrrwRgn = super.NrrwRgn.overrideAttrs (old: {
     meta = old.meta // {
