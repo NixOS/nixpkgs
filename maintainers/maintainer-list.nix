@@ -24719,6 +24719,12 @@
     githubId = 7221768;
     name = "Andika Demas Riyandi";
   };
+  rizriyz = {
+    email = "rizflagz@gmail.com";
+    github = "RizRiyz";
+    githubId = 2667489;
+    name = "Riz";
+  };
   rjpcasalino = {
     email = "ryan@rjpc.net";
     github = "rjpcasalino";
