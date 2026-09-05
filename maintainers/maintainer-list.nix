@@ -4426,6 +4426,13 @@
     githubId = 8891115;
     name = "Brian Choy";
   };
+  byteflavour = {
+    email = "synapse@byteflavour.dev";
+    github = "byteflavour";
+    githubId = 131113314;
+    matrix = "@synapse:byteflavour.dev";
+    name = "Byte Flavour";
+  };
   ByteSudoer = {
     email = "bytesudoer@gmail.com";
     github = "ByteSudoer";
@@ -8893,10 +8900,10 @@
   };
   eveeifyeve = {
     name = "Eveeifyeve";
-    github = "Eveeifyeve";
+    github = "eveeifyeve";
     githubId = 88671402;
     matrix = "@eveeifyeve:matrix.org";
-    email = "eveeg1971@gmail.com";
+    email = "open-source@eveeifyeve.dev";
   };
   evenbrenden = {
     email = "packages@anythingexternal.com";
@@ -12338,6 +12345,12 @@
     email = "irgendeinwer@proton.me";
     github = "Irgendeinwer";
     githubId = 175053643;
+  };
+  irgolic = {
+    name = "Rafael Irgolič";
+    email = "hello@irgolic.com";
+    github = "irgolic";
+    githubId = 24586651;
   };
   ironicbadger = {
     email = "alexktz@gmail.com";
