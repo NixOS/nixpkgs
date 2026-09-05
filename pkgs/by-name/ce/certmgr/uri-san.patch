@@ -1,0 +1,52 @@
+commit 5c77efdad3f260eeb72431aab99470168249ec1b
+Author: Thomas Dy <thatsmydoing@gmail.com>
+Date:   Tue Feb 4 20:00:46 2025 +0900
+
+    Support certificates using URI SANs
+    
+    URI SANs were silently being stripped and that caused the certs to
+    always be out of sync.
+    
+    The cfssl code was fixed in https://github.com/cloudflare/cfssl/commit/763faa7f5632a49d4d40eb2c282c33ad352e23a6
+
+diff --git a/cert/verification.go b/cert/verification.go
+index 39f255c..baee7d9 100644
+--- a/cert/verification.go
++++ b/cert/verification.go
+@@ -20,11 +20,14 @@ func CertificateMatchesHostname(hosts []string, cert *x509.Certificate) bool {
+ 			a[idx] = ip.String()
+ 		}
+ 	}
+-	b := make([]string, len(cert.DNSNames), len(cert.DNSNames)+len(cert.IPAddresses))
++	b := make([]string, len(cert.DNSNames), len(cert.DNSNames)+len(cert.IPAddresses)+len(cert.URIs))
+ 	copy(b, cert.DNSNames)
+ 	for idx := range cert.IPAddresses {
+ 		b = append(b, cert.IPAddresses[idx].String())
+ 	}
++	for idx := range cert.URIs {
++		b = append(b, cert.URIs[idx].String())
++	}
+ 
+ 	if len(a) != len(b) {
+ 		return false
+diff --git a/vendor/github.com/cloudflare/cfssl/transport/ca/cfssl_provider.go b/vendor/github.com/cloudflare/cfssl/transport/ca/cfssl_provider.go
+index 8541855..421559d 100644
+--- a/vendor/github.com/cloudflare/cfssl/transport/ca/cfssl_provider.go
++++ b/vendor/github.com/cloudflare/cfssl/transport/ca/cfssl_provider.go
+@@ -206,12 +206,15 @@ func (cap *CFSSL) SignCSR(csrPEM []byte) (cert []byte, err error) {
+ 		return nil, err
+ 	}
+ 
+-	hosts := make([]string, len(csr.DNSNames), len(csr.DNSNames)+len(csr.IPAddresses))
++	hosts := make([]string, len(csr.DNSNames), len(csr.DNSNames)+len(csr.IPAddresses)+len(csr.URIs))
+ 	copy(hosts, csr.DNSNames)
+ 
+ 	for i := range csr.IPAddresses {
+ 		hosts = append(hosts, csr.IPAddresses[i].String())
+ 	}
++	for i := range csr.URIs {
++		hosts = append(hosts, csr.URIs[i].String())
++	}
+ 
+ 	sreq := &signer.SignRequest{
+ 		Hosts:   hosts,
