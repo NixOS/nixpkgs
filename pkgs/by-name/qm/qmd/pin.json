@@ -1,0 +1,8 @@
+{
+  "version": "2.8.3",
+  "srcHash": "sha256-/7Z94r/9rXqzKlz/YkB6/nToSCPamV4Dnxm8EhelTDo=",
+  "x86_64-linux": "sha256-YXsyoYh7zaKTX5VCqDH5ATB6r879AoWQpi0fHhnpbHM=",
+  "x86_64-darwin": "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+  "aarch64-darwin": "sha256-v687eUTtJM1tislyzHzq2Z+ZKLM/1BtZWLFm76+jWl8=",
+  "aarch64-linux": "sha256-OIPfzQ+uf7AscCiqB7qicc8i/4DqiWonla01kR2lfeA="
+}
