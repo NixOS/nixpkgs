@@ -14658,6 +14658,12 @@
     githubId = 56224949;
     name = "Mia Kanashi";
   };
+  kanywst = {
+    email = "niwatakuma@icloud.com";
+    github = "kanywst";
+    githubId = 45947799;
+    name = "kt";
+  };
   kaptcha0 = {
     name = "J'C Kabunga";
     github = "kaptcha0";
