@@ -11,6 +11,7 @@
   pkg-config,
   protobuf,
   protobufc,
+  systemdSupport ? stdenv.hostPlatform.isLinux,
   systemdLibs,
   buildPackages,
   epoll-shim,
@@ -52,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     protobuf
     protobufc
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ++ lib.optionals systemdSupport [
     systemdLibs
   ]
   ++ lib.optionals stdenv.hostPlatform.isFreeBSD [

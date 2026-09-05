@@ -168,7 +168,7 @@ in
         default = pkgs.writeText "userlist" (concatMapStrings (x: "${x}\n") cfg.userlist);
         defaultText = literalExpression ''pkgs.writeText "userlist" (concatMapStrings (x: "''${x}\n") cfg.userlist)'';
         description = ''
-          Newline separated list of names to be allowed/denied if {option}`userlistEnable`
+          Newline-separated list of names to be allowed/denied if {option}`userlistEnable`
           is `true`. Meaning see {option}`userlistDeny`.
 
           The default is a file containing the users from {option}`userlist`.

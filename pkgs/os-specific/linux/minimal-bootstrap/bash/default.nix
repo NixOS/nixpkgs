@@ -128,6 +128,6 @@ bootBash.runCommand "${pname}-${version}"
     make -j $NIX_BUILD_CORES SHELL=bash
 
     # Install
-    make -j $NIX_BUILD_CORES install
+    make -j $NIX_BUILD_CORES install SHOBJ_STATUS=unsupported
     ln -s bash $out/bin/sh
   ''

@@ -50,8 +50,8 @@ let
 in
 import ./default.nix
   {
-    rustcVersion = "1.97.1";
-    rustcSha256 = "sha256-YiwrQpxTy/3A3TpR0DVU6RzWPr7BkSwfVwlkDN/vGp0=";
+    rustcVersion = "1.98.0";
+    rustcSha256 = "sha256-siau83X/vp++K4X96Za1BxbVnVUmjiQNBSOWU0t16Sk=";
 
     llvmSharedForBuild = llvmSharedFor pkgsBuildBuild;
     llvmSharedForHost = llvmSharedFor pkgsBuildHost;
@@ -65,30 +65,30 @@ import ./default.nix
     # Note: the version MUST be the same version that we are building. Upstream
     # ensures that each released compiler can compile itself:
     # https://github.com/NixOS/nixpkgs/pull/351028#issuecomment-2438244363
-    bootstrapVersion = "1.97.1";
+    bootstrapVersion = "1.98.0";
 
     # fetch hashes by running `print-hashes.sh ${bootstrapVersion}`
     bootstrapHashes = {
-      i686-unknown-linux-gnu = "914c2702deada0b9cf1d64bb3495d76e55cb3eba07d508472dde8b55a93e3759";
-      x86_64-unknown-linux-gnu = "b4cdbc7cc6b0ee0a2666b1872769fdb2ad8393b28b63952f6493b4b400e4832b";
-      x86_64-unknown-linux-musl = "40dbea28193cf2b488cf3e4a89274ccfb60efa50883f19917a382f84fd05bdc4";
-      arm-unknown-linux-gnueabihf = "ba62fe07ad85b507907705a14adc1e8bc258de5f6177ba41d77bbff9f469a4ce";
-      armv7-unknown-linux-gnueabihf = "e89c5e33aaddc6ef56857000c9117875c2997e9a1a500bd7b16277c9874b002f";
-      aarch64-unknown-linux-gnu = "2f2496c70bd336a66a4c8baf2d303ba161f3552f192444c3639ba903c7c1e2c5";
-      aarch64-unknown-linux-musl = "c5f45b5c6eb7f8fdb277c54c08402b7c931516740fbd4eccc26ba148f7cd5d57";
-      x86_64-apple-darwin = "5f4c84d2bcce7983468642855a45fc4978fba1324cfdd1ea0b182face3ab4ffa";
-      aarch64-apple-darwin = "cbd14c36f039f6f11f38148a6295d8234d18ddf20bea53031c86f119423a8b26";
-      powerpc64-unknown-linux-gnu = "2b507d5eb9b5c4c041b50e93e069db56d094f02e6df103dc74c016155141bfae";
-      powerpc64le-unknown-linux-gnu = "ff524eef5a59d801df09ccad5cdaf9ea1f0a07d75cbed2a7e9f013a9eb76a3c1";
-      powerpc64le-unknown-linux-musl = "15630f33fbea2dd9661f8482b6c612da271549aba40401444aaa53650e646b9b";
-      riscv64gc-unknown-linux-gnu = "59bec35d8febb2ab918fa41cffbaa5b07146a63bdc33f029ff756d70a3151ece";
-      s390x-unknown-linux-gnu = "808268af9e880d41b8cb32b242e38c9bd3ea7aba6409b02fbffa0fbc5370c538";
-      loongarch64-unknown-linux-gnu = "d5a925962854730ae7641420d8337af93988ea4ff47b503a856ec53776c87841";
-      loongarch64-unknown-linux-musl = "3fb653299d228e3e0726afb179b07dd10a51a2ecc3cdfcd740011b1d8420ca97";
-      x86_64-unknown-freebsd = "77866a4c449bcccb40e9d6712bf3eb899d29018ed8e841fd9d8d59370751f152";
+      i686-unknown-linux-gnu = "2706508ca1bc0e2a1205b761d6044d0185bbe322d437225a6c6b74fa917616ab";
+      x86_64-unknown-linux-gnu = "aa30409afa67bd1ada244cefd82c7980e6a65bc113bb978e934b2413c75e3900";
+      x86_64-unknown-linux-musl = "b2cf07e41d4747ddf3b20962ca9de2a08da00646f55ab4c1b51cef99895bae0a";
+      arm-unknown-linux-gnueabihf = "9fcdd10e5855ea8c7af75d5b709f7125e06b0dd653e14235503d5ef885a7350d";
+      armv7-unknown-linux-gnueabihf = "fe4b4ad389108c8b90ae77ed66b62073468a77892483bc11d2be570b64b866db";
+      aarch64-unknown-linux-gnu = "5fbb4282403046d52a4672765c6761a809bf9f33e699b17e6eb7a93ab7770cc3";
+      aarch64-unknown-linux-musl = "c26e37bb6f20e49498c552e53e3f34871ba2f7610c7f8b2cce38a48e3570c7de";
+      x86_64-apple-darwin = "66f4e2e17275753deaba8437380de21072b56b5a083cf954bacb6376df0834fc";
+      aarch64-apple-darwin = "026ec75bec81fb8c10b11df98f1336ee39f4bc11e04d6745dffe9fca81e5c0b5";
+      powerpc64-unknown-linux-gnu = "7ed997cfa306e503362129334e58aebe3b2db9bf2b75a96803636d4098db9ca7";
+      powerpc64le-unknown-linux-gnu = "c20df5c7133492efc4a5e66f9a41aef3dcb50d2a0d8acef98e635ab1c3e49fdb";
+      powerpc64le-unknown-linux-musl = "278b9d213ea3c28e4191bd068ef9d4c722548f775abee90b9d06aefcce6d74f8";
+      riscv64gc-unknown-linux-gnu = "64757537fada45bb7c203ec0d77fda72a11f5d24cf9dcab84cc4168256858a0c";
+      s390x-unknown-linux-gnu = "0c698f9ef09c91e3694149e0f090c8d7ef58d443f89d6dae41c6ca481cc6ec5e";
+      loongarch64-unknown-linux-gnu = "f01c72bff960ae872eb2b809c6243f7b9adf57c7257eb53293f8fe71f526be6e";
+      loongarch64-unknown-linux-musl = "8690a377e5a54b9b42c0f8e35b13c8e22686587995522469a248cbfe326c2bbf";
+      x86_64-unknown-freebsd = "c8d2765c9a3a599c8e475ac8b5b448ac9e2d64a891b6014ce5c07dbfc23ce36c";
     };
 
-    selectRustPackage = pkgs: pkgs.rust_1_97;
+    selectRustPackage = pkgs: pkgs.rust_1_98;
   }
 
   (

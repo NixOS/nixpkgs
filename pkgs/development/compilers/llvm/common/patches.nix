@@ -20,6 +20,17 @@
       path = ../18;
     }
   ];
+  "llvm/backport-darwin-triple-parsing.patch" = [
+    {
+      after = "18";
+      before = "21";
+      path = ../18;
+    }
+    {
+      after = "21";
+      path = ../21;
+    }
+  ];
   "llvm/gnu-install-dirs.patch" = [
     {
       after = "23";

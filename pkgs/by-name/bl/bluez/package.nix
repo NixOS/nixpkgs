@@ -33,6 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./lreadline.patch
+    # https://github.com/bluez/bluez/issues/2282
+    (fetchpatch2 {
+      name = "fix-uuid-discovery-segfault";
+      url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/?id=82af2beafc39510e2c4a439bf44faea711d6503f";
+      hash = "sha256-Zf5J4USdfwKe7DVfivyj2q15LPy2GkUqVUq2tE1bG6M=";
+    })
   ];
 
   buildInputs = [

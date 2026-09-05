@@ -1,7 +1,7 @@
 From 6bb8cde826589777e50ddb78e8e1fe7652194a4f Mon Sep 17 00:00:00 2001
 From: Hraban Luyat <hraban@0brg.net>
 Date: Sat, 13 Apr 2024 14:04:57 -0400
-Subject: [PATCH 1/2] feat: SBCL_DYNAMIC_SPACE_SIZE envvar
+Subject: [PATCH 1/2] feat: NIX_SBCL_DYNAMIC_SPACE_SIZE envvar
 
 ---
  src/runtime/runtime.c | 27 +++++++++++++++++++++++++++
@@ -27,14 +27,14 @@ index 295ee2b3c..5c4560f50 100644
 + */
 +static void
 +read_memsize_from_env(void) {
-+  const char *val = getenv("SBCL_DYNAMIC_SPACE_SIZE");
++  const char *val = getenv("NIX_SBCL_DYNAMIC_SPACE_SIZE");
 +  // The distinction is blurry between setting an envvar to the empty string and
 +  // unsetting it entirely. Depending on the calling environment it can even be
 +  // tricky to properly unset an envvar in the first place. An empty envvar is
 +  // practically always intended to just mean “unset”, so let’s interpret it
 +  // that way.
 +  if (val != NULL && (strcmp(val, "") != 0)) {
-+    dynamic_space_size = parse_size_arg(val, "SBCL_DYNAMIC_SPACE_SIZE");
++    dynamic_space_size = parse_size_arg(val, "NIX_SBCL_DYNAMIC_SPACE_SIZE");
 +  }
 +}
 +

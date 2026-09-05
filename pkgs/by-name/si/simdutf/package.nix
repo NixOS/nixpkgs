@@ -11,17 +11,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "simdutf";
-  version = "9.0.0";
+  version = "9.1.0";
 
   src = fetchFromGitHub {
     owner = "simdutf";
     repo = "simdutf";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-psMMF26+nTwdbtPfFFE3fXkatrh9Bp9qMsrdI/FmrDg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PKL495sfkRKjHfN4RroW1dwudJV2JWN7ogB8hyDxj5Y=";
   };
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+
+    # Enabling C++20 to get atomic support
+    (lib.cmakeFeature "SIMDUTF_CXX_STANDARD" "20")
+    (lib.cmakeBool "SIMDUTF_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "SIMDUTF_ATOMIC_BASE64_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   nativeBuildInputs = [
@@ -33,6 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
     libiconv
   ];
 
+  strictDeps = true;
+
+  doCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
 
@@ -40,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Unicode routines validation and transcoding at billions of characters per second";

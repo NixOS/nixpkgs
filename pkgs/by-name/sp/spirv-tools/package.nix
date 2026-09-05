@@ -2,11 +2,23 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  abseil-cpp,
   cmake,
+  ctestCheckHook,
+  gtest,
   python3,
+  re2,
   spirv-headers,
 }:
 
+let
+  effcee-src = fetchFromGitHub {
+    owner = "google";
+    repo = "effcee";
+    rev = "910ed15722d5d05c9d71ecf36c1a22243cb79b02";
+    hash = "sha256-l6MbPrPHqpeov4QSO/rmIuPcFqnlLJ5kTusNqZM5mFM=";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "spirv-tools";
   version = "1.4.357.0";
@@ -27,6 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
   # description
   ++ lib.optional stdenv.hostPlatform.isStatic ./no-shared-libs.patch;
 
+  # Can't pass this location via flags
+  postPatch = lib.optionalString finalAttrs.finalPackage.doCheck ''
+    ln -vs ${effcee-src} external/effcee
+  '';
+
   outputs = [
     "out"
     "lib"
@@ -38,11 +55,28 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
+  nativeCheckInputs = [
+    ctestCheckHook
+  ];
+
   cmakeFlags = [
     "-DSPIRV-Headers_SOURCE_DIR=${spirv-headers}"
     # Avoid blanket -Werror to evade build failures on less
     # tested compilers.
     "-DSPIRV_WERROR=OFF"
+    (lib.cmakeBool "SPIRV_SKIP_TESTS" (!finalAttrs.finalPackage.doCheck))
+  ]
+  ++ lib.optionals finalAttrs.finalPackage.doCheck [
+    (lib.cmakeFeature "absl_SOURCE_DIR" "${abseil-cpp.src}")
+    (lib.cmakeFeature "GMOCK_DIR" "${gtest.src}")
+    (lib.cmakeFeature "RE2_SOURCE_DIR" "${re2.src}")
+  ];
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  disabledTests = lib.optionals (!stdenv.hostPlatform.isLittleEndian) [
+    # Likely fixed by https://github.com/KhronosGroup/SPIRV-Tools/pull/5302
+    "spirv-tools-test_spirv_unit_test_tools_objdump"
   ];
 
   meta = {

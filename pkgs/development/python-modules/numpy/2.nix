@@ -42,7 +42,7 @@ assert blas.isILP64 == lapack.isILP64;
 
 buildPythonPackage (finalAttrs: {
   pname = "numpy";
-  version = "2.5.1";
+  version = "2.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -50,7 +50,7 @@ buildPythonPackage (finalAttrs: {
     repo = "numpy";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-IriSrnGAZHvJ7m97s12BydNQZDZunCVtRgj/iSgw5Vc=";
+    hash = "sha256-ydxCnoWsWc+1z1GT0BGq1APdUGlDx6fTMFNcJZdH+JM=";
   };
 
   patches = [
@@ -148,12 +148,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
-    # Tries to import numpy.distutils.msvccompiler, removed in setuptools 74.0
-    "test_api_importable"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.13") [
-    # https://github.com/numpy/numpy/issues/26713
-    "test_iter_refcount"
   ]
   ++ lib.optionals stdenv.hostPlatform.isAarch32 [
     # https://github.com/numpy/numpy/issues/24548

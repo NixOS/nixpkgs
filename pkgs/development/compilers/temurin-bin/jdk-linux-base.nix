@@ -2,6 +2,7 @@
   name-prefix ? "temurin",
   brand-name ? "Eclipse Temurin",
   sourcePerArch,
+  jmodsSourcePreArch ? null,
   knownVulnerabilities ? [ ],
 }:
 
@@ -58,9 +59,16 @@ let
 
     version = sourcePerArch.${cpuName}.version or "unsupported";
 
-    src = fetchurl {
-      inherit (sourcePerArch.${cpuName}) url sha256;
-    };
+    srcs = [
+      (fetchurl {
+        inherit (sourcePerArch.${cpuName}) url sha256;
+      })
+    ]
+    ++ lib.optional (jmodsSourcePreArch != null) (fetchurl {
+      inherit (jmodsSourcePreArch.${cpuName}) url sha256;
+    });
+
+    sourceRoot = ".";
 
     buildInputs = [
       alsa-lib # libasound.so wanted by lib/libjsound.so
@@ -85,9 +93,12 @@ let
     dontStrip = 1;
 
     installPhase = ''
-      cd ..
+      # compatible semeru jdk
+      TARGET_SOURCE=$(find . -maxdepth 1 -type d ! -name "." ! -name "*jmods" -print -quit)
 
-      mv $sourceRoot $out
+      mv "$TARGET_SOURCE" $out
+
+      ${lib.optionalString (jmodsSourcePreArch != null) "mv */ $out/jmods"}
 
       # jni.h expects jni_md.h to be in the header search path.
       ln -s $out/include/linux/*_md.h $out/include/

@@ -1,0 +1,48 @@
+From 96c1a24911e6992ab4e98354b7ae9077b852cac3 Mon Sep 17 00:00:00 2001
+From: h7x4 <h7x4@nani.wtf>
+Date: Fri, 7 Aug 2026 16:24:51 +0900
+Subject: [PATCH] Don't add timestamps when `$GZIP_NO_TIMESTAMPS` is set
+
+This patch is a nixpkgs specific change that makes gzip set its `-n`
+flag whenever `$GZIP_NO_TIMESTAMPS` is set. This envvar is typically set
+by stdenv's `setup.sh` to stop gzip from adding timestamps to archive
+headers.
+
+See https://github.com/NixOS/nixpkgs/issues/86348
+
+Co-authored-by: Michael Daniels <mdaniels5757@gmail.com>
+---
+ gzip.c          | 4 ++--
+ tests/timestamp | 1 +
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/gzip.c b/gzip.c
+index 914247d..084b361 100644
+--- a/gzip.c
++++ b/gzip.c
+@@ -586,8 +586,8 @@ int main (int argc, char **argv)
+     /* By default, save name and timestamp on compression but do not
+      * restore them on decompression.
+      */
+-    if (no_time < 0) no_time = decompress;
+-    if (no_name < 0) no_name = decompress;
++    if (no_time < 0) no_time = decompress || getenv("GZIP_NO_TIMESTAMPS") != NULL;
++    if (no_name < 0) no_name = decompress || getenv("GZIP_NO_TIMESTAMPS") != NULL;
+ 
+     file_count = argc - optind;
+ 
+diff --git a/tests/timestamp b/tests/timestamp
+index ab1ca50..3a734ac 100755
+--- a/tests/timestamp
++++ b/tests/timestamp
+@@ -22,6 +22,7 @@
+ TZ=UTC0
+ export TZ
+ oldIFS=$IFS
++unset GZIP_NO_TIMESTAMPS
+ 
+ # On platforms supporting timestamps outside gzip's range,
+ # test that gzip warns when converting them to gzip format.
+-- 
+2.54.0
+

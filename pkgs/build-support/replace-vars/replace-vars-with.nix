@@ -81,6 +81,8 @@ let
     dontUnpack = true;
     preferLocalBuild = true;
     allowSubstitutes = false;
+    strictDeps = true;
+    __structuredAttrs = true;
 
     buildPhase = ''
       runHook preBuild

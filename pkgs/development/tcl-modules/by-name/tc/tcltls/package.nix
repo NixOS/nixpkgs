@@ -6,13 +6,13 @@
   tcl,
 }:
 
-mkTclDerivation rec {
+mkTclDerivation (finalAttrs: {
   pname = "tcltls";
   version = "1.7.22";
 
   src = fetchurl {
-    url = "https://core.tcl-lang.org/tcltls/uv/tcltls-${version}.tar.gz";
-    sha256 = "sha256-6E4reideyCxKqp0bH5eG2+Q1jIFekXU5/+f2Z/9Lw7Q=";
+    url = "https://core.tcl-lang.org/tcltls/uv/tcltls-${finalAttrs.version}.tar.gz";
+    hash = "sha256-6E4reideyCxKqp0bH5eG2+Q1jIFekXU5/+f2Z/9Lw7Q=";
   };
 
   buildInputs = [ openssl ];
@@ -31,4 +31,4 @@ mkTclDerivation rec {
     platforms = lib.platforms.unix;
     broken = tcl.isTcl9;
   };
-}
+})

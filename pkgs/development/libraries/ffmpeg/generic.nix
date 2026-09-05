@@ -468,7 +468,7 @@ stdenv.mkDerivation (
       ++ optionals (lib.versionAtLeast version "5.1") [
         ./nvccflags-cpp14.patch
       ]
-      ++ optionals (lib.versionAtLeast version "8.1.2" && stdenv.hostPlatform.isLoongArch64) [
+      ++ optionals (lib.versionAtLeast version "8.1.2") [
         # https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/23825 (merged, but not backported to 8.1.x or 9.0.x)
         # As git.ffmpeg.org deploys Anubis, we cannot fetch this patch reliably from there.
         # So instead, we fetch it from Debian.

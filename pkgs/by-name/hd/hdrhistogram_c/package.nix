@@ -26,11 +26,13 @@ stdenv.mkDerivation (finalAttrs: {
     ./no-avx2-i386.patch
   ];
 
-  buildInputs = [ zlib ];
   nativeBuildInputs = [
     cmake
     validatePkgConfig
   ];
+  buildInputs = [ zlib ];
+
+  strictDeps = true;
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isStatic [
     (lib.cmakeBool "HDR_HISTOGRAM_BUILD_SHARED" false)
@@ -56,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
       versionCheck = true;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "C port or High Dynamic Range (HDR) Histogram";

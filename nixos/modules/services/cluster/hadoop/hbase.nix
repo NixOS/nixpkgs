@@ -167,7 +167,7 @@ in
       zookeeperQuorum = lib.mkOption {
         description = ''
           This option will set "hbase.zookeeper.quorum" in hbase-site.xml.
-          Comma separated list of servers in the ZooKeeper ensemble.
+          Comma-separated list of servers in the ZooKeeper ensemble.
         '';
         type = with lib.types; nullOr commas;
         example = "zk1.internal,zk2.internal,zk3.internal";

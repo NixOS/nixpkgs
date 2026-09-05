@@ -322,7 +322,7 @@ lib.extendMkDerivation {
               getGoDirs() {
                 local -r type="$1"
 
-                # Support strucuredAttrs, they are not space seperated
+                # Support structuredAttrs, they are not space separated
                 local -a subPackagesArray
                 concatTo subPackagesArray subPackages
 

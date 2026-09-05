@@ -5,14 +5,14 @@
   tcl,
 }:
 
-mkTclDerivation rec {
+mkTclDerivation (finalAttrs: {
   pname = "vectcl";
   version = "0.3";
 
   src = fetchFromGitHub {
     owner = "auriocus";
     repo = "VecTcl";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nPs16Jy6KMEdupWJNhgYqosuW5Dlpb/dxxTrLpRbYf0=";
   };
 
@@ -25,4 +25,4 @@ mkTclDerivation rec {
     license = lib.licenses.tcltk;
     broken = tcl.isTcl9;
   };
-}
+})

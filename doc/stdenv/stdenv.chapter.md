@@ -493,7 +493,7 @@ When using native compilation, `stdenv` is lenient towards incorrect placement o
 
 While convenient for getting to a package quickly, this behavior can break cross-compilation. Adding `strictDeps = true` as a parameter to `mkDerivation` or any of its language specific wrappers disables this behavior.
 
-The specialized `build*` functions for dlang, emacs, go, nim, ocaml, python, and rust enable this option by default.
+The specialized `build*` functions for dlang, emacs, go, nim, ocaml, python, rust, and `tcl.mkTclDerivation` enable this option by default.
 
 ## Attributes {#ssec-stdenv-attributes}
 

@@ -87,21 +87,27 @@ stdenv.mkDerivation (
 
     src =
       if monorepoSrc != null then
-        runCommand "llvm-src-${version}" { inherit (monorepoSrc) passthru; } (
-          ''
-            mkdir -p "$out"
-            cp -r ${monorepoSrc}/llvm "$out"
-            cp -r ${monorepoSrc}/cmake "$out"
-            cp -r ${monorepoSrc}/third-party "$out"
-          ''
-          + lib.optionalString enablePolly ''
-            chmod u+w "$out/llvm/tools"
-            cp -r ${monorepoSrc}/polly "$out/llvm/tools"
-          ''
-          + lib.optionalString (lib.versionAtLeast release_version "21") ''
-            cp -r ${monorepoSrc}/libc "$out"
-          ''
-        )
+        runCommand "llvm-src-${version}"
+          {
+            inherit (monorepoSrc) passthru;
+            strictDeps = true;
+            __structuredAttrs = true;
+          }
+          (
+            ''
+              mkdir -p "$out"
+              cp -r ${monorepoSrc}/llvm "$out"
+              cp -r ${monorepoSrc}/cmake "$out"
+              cp -r ${monorepoSrc}/third-party "$out"
+            ''
+            + lib.optionalString enablePolly ''
+              chmod u+w "$out/llvm/tools"
+              cp -r ${monorepoSrc}/polly "$out/llvm/tools"
+            ''
+            + lib.optionalString (lib.versionAtLeast release_version "21") ''
+              cp -r ${monorepoSrc}/libc "$out"
+            ''
+          )
       else
         src;
 
@@ -250,6 +256,13 @@ stdenv.mkDerivation (
           stripLen = 1;
           hash = "sha256-HHVMVL7ZWiZkbfnD37zYxFWnfvI3LNS0Z2oFHhOaZsU=";
         })
+      ]
+      ++ lib.optionals (lib.versionOlder release_version "23") [
+        # As of macOS 27 (and iOS 27, etc), the Darwin version number is the same as the OS version number.
+        # This change breaks target parsing because `darwin27` is incorrectly interpreted as macOS 28.
+        # This patch is a backport of the target parsing changes in LLVM 23, which fixes the problem.
+        # Hopefully, Apple does not change the version number scheme again any time soon.
+        (getVersionFile "llvm/backport-darwin-triple-parsing.patch")
       ];
 
     nativeBuildInputs = [
@@ -282,6 +295,8 @@ stdenv.mkDerivation (
       which
     ]
     ++ lib.optional stdenv.hostPlatform.isDarwin sysctl;
+
+    strictDeps = true;
 
     postPatch =
       optionalString stdenv.hostPlatform.isDarwin (
@@ -324,16 +339,6 @@ stdenv.mkDerivation (
           ''
             substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
               --replace-fail "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
-          ''
-        +
-          # Fails on macOS ≥ 26 due to the changed OS version scheme.
-          #
-          # This was fixed upstream in LLVM 21 with
-          # 88f041f3e05e26617856cc096d2e2864dfaa1c7b, but it’s too
-          # painful to backport all the way.
-          lib.optionalString (lib.versionOlder release_version "21") ''
-            substituteInPlace unittests/TargetParser/Host.cpp \
-              --replace-fail "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
           ''
         +
           # This test fails with a `dysmutil` crash; have not yet dug into what's
@@ -614,6 +619,9 @@ stdenv.mkDerivation (
     };
 
     requiredSystemFeatures = [ "big-parallel" ];
+
+    __structuredAttrs = true;
+
     meta = llvm_meta // {
       homepage = "https://llvm.org/";
       description = "Collection of modular and reusable compiler and toolchain technologies";

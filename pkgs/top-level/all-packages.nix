@@ -4008,15 +4008,15 @@ with pkgs;
   wrapRustcWith = { rustc-unwrapped, ... }@args: callPackage ../build-support/rust/rustc-wrapper args;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
-  rust_1_97 = callPackage ../development/compilers/rust/1_97.nix { };
-  rust = rust_1_97;
+  rust_1_98 = callPackage ../development/compilers/rust/1_98.nix { };
+  rust = rust_1_98;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { };
 
-  rustPackages_1_97 = rust_1_97.packages.stable;
-  rustPackages = rustPackages_1_97;
+  rustPackages_1_98 = rust_1_98.packages.stable;
+  rustPackages = rustPackages_1_98;
 
   inherit (rustPackages)
     cargo
@@ -5425,7 +5425,7 @@ with pkgs;
     boost191
     ;
 
-  boost = boost189;
+  boost = boost191;
 
   botanEsdm = botan3.override { withEsdm = true; };
 
@@ -5994,10 +5994,15 @@ with pkgs;
       inherit (libc) pname version;
       libcDev = lib.getDev libc;
     in
-    runCommand "${pname}-iconv-${version}" { strictDeps = true; } ''
-      mkdir -p $out/include
-      ln -sv ${libcDev}/include/iconv.h $out/include
-    '';
+    runCommand "${pname}-iconv-${version}"
+      {
+        strictDeps = true;
+        __structuredAttrs = true;
+      }
+      ''
+        mkdir -p $out/include
+        ln -sv ${libcDev}/include/iconv.h $out/include
+      '';
 
   libiconvReal = callPackage ../development/libraries/libiconv { };
 
@@ -6396,7 +6401,7 @@ with pkgs;
 
   # this version should align with the static protobuf version linked into python3.pkgs.tensorflow
   # $ nix-shell -I nixpkgs=$(git rev-parse --show-toplevel) -p python3.pkgs.tensorflow --run "python3 -c 'import google.protobuf; print(google.protobuf.__version__)'"
-  protobuf = protobuf_35;
+  protobuf = protobuf_36;
 
   inherit
     ({
@@ -6947,14 +6952,6 @@ with pkgs;
     ];
   };
 
-  sbcl_2_6_6 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.6.6"; };
-    faslExt = "fasl";
-    flags = [
-      "--dynamic-space-size"
-      "3000"
-    ];
-  };
   sbcl_2_6_7 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.6.7"; };
     faslExt = "fasl";
@@ -6963,7 +6960,15 @@ with pkgs;
       "3000"
     ];
   };
-  sbcl = sbcl_2_6_7;
+  sbcl_2_6_8 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.6.8"; };
+    faslExt = "fasl";
+    flags = [
+      "--dynamic-space-size"
+      "3000"
+    ];
+  };
+  sbcl = sbcl_2_6_8;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 

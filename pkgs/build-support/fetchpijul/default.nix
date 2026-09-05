@@ -33,6 +33,8 @@ lib.makeOverridable (
       ];
       strictDeps = true;
 
+      __structuredAttrs = true;
+
       dontUnpack = true;
       dontConfigure = true;
       dontBuild = true;
@@ -41,7 +43,7 @@ lib.makeOverridable (
         runHook preInstall
 
         success=
-        for remote in $remotes; do
+        for remote in "''${remotes[@]}"; do
           if
             pijul clone \
               ''${change:+--change "$change"} \

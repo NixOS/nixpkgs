@@ -49,6 +49,12 @@ buildNodejs {
       ./use-nix-codesign.patch
 
       ./fix-temporal-integration-with-shared-icu.patch
+
+      # TODO: remove when support for OpenSSL 3.6.4 has landed upstream
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/28b571c38af5631b95e993258764caa3604c3fca.patch?full_index=1";
+        hash = "sha256-fyQICYO3xwTJQKGWUqEcmsflhDy+uQtEFuC5KlZnsus=";
+      })
     ]
     ++ gypPatches;
 }

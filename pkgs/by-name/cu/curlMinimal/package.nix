@@ -46,8 +46,6 @@
   openssl,
   pslSupport ? false,
   libpsl,
-  rtmpSupport ? false,
-  rtmpdump,
   scpSupport ? zlibSupport && !stdenv.hostPlatform.isSunOS && !stdenv.hostPlatform.isCygwin,
   libssh2,
   rustlsSupport ? false,
@@ -89,7 +87,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.21.0";
+  version = "8.22.0";
 
   src = fetchurl {
     urls = [
@@ -98,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
         builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
       }/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-qhtmpw6s6D3GJFCHRWRsCK5WHeUSq0A63/uTrIf8cuY=";
+    hash = "sha256-9+866KIuUh8omAP+k1Q+tkwym1iqc6niJN/ZFaKl9Pc=";
   };
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
@@ -113,28 +111,17 @@ stdenv.mkDerivation (finalAttrs: {
   #
   # Where the host has no shell at all, `patchShebangs --host` finds nothing
   # and leaves the shebang as shipped, which is the best available answer.
-  #
-  # TODO: take the first branch unconditionally --- in the spirit of strictDeps,
-  # it is good to always be defensive rather than do something unnecessarily
-  # that we can only get away with when build == host.
-  + (
-    if isCross then
-      ''
-        local f flag
-        for f in scripts/*; do
-          if [[ "$f" == scripts/wcurl ]]; then
-            flag=--host
-          else
-            flag=--build
-          fi
-          patchShebangs "$flag" "$f"
-        done
-      ''
-    else
-      ''
-        patchShebangs scripts
-      ''
-  );
+  + ''
+    local f flag
+    for f in scripts/*; do
+      if [[ "$f" == scripts/wcurl ]]; then
+        flag=--host
+      else
+        flag=--build
+      fi
+      patchShebangs "$flag" "$f"
+    done
+  '';
 
   outputs = [
     "bin"
@@ -189,7 +176,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional ldapSupport openldap
     ++ lib.optional opensslSupport openssl
     ++ lib.optional pslSupport libpsl
-    ++ lib.optional rtmpSupport rtmpdump
     ++ lib.optional scpSupport libssh2
     ++ lib.optional rustlsSupport rustls-ffi
     ++ lib.optional zlibSupport zlib
@@ -213,7 +199,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature opensslSupport "ca-fallback")
     (lib.withFeature http3Support "nghttp3")
     (lib.withFeature http3Support "ngtcp2")
-    (lib.withFeature rtmpSupport "librtmp")
     (lib.withFeature rustlsSupport "rustls")
     (lib.withFeature zstdSupport "zstd")
     (lib.withFeature pslSupport "libpsl")
@@ -289,13 +274,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Some hosts have no shell for the scripts to point at: MinGW is the one in
   # tree, where `bash` is marked unsupported because it needs a POSIX layer. We
   # cannot patch shebangs in that case.
-  #
-  # TODO: drop the isCross part of the condition --- in the spirit of
-  # `strictDeps` it is good to have the dep (when it is available), even if it
-  # is gratuitous in the `build = host` case.
-  buildInputs = lib.optional (
-    isCross && lib.meta.availableOn stdenv.hostPlatform runtimeShellPackage
-  ) runtimeShellPackage;
+  buildInputs = lib.optional (lib.meta.availableOn stdenv.hostPlatform runtimeShellPackage) runtimeShellPackage;
 
   passthru =
     let
@@ -335,6 +314,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.curl;
     maintainers = with lib.maintainers; [
       Scrumplex
+      tmarkus
     ];
     teams = [ lib.teams.security-review ];
     platforms = lib.platforms.all;

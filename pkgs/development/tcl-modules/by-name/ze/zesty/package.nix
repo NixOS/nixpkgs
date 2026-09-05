@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-mkTclDerivation rec {
+mkTclDerivation (finalAttrs: {
   pname = "zesty";
   version = "0.2";
 
   src = fetchFromGitHub {
     owner = "nico-robert";
     repo = "zesty";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1K3E9rQAXEXegLjp2mZTzwyDXq3lMpDr0DB4I+ACH08=";
   };
 
@@ -38,4 +38,4 @@ mkTclDerivation rec {
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
   };
-}
+})
