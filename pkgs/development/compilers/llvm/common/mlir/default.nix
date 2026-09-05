@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     # workaround in flang's CMakeLists.txt.
 
     # Upstream issue: https://github.com/llvm/llvm-project/issues/150986
-    ./mlir-tablegen-imported-target.patch
+    (getVersionFile "mlir/mlir-tablegen-imported-target.patch")
   ]
   ++ lib.optionals (lib.versionOlder release_version "20") [
     # Fix build with gcc15

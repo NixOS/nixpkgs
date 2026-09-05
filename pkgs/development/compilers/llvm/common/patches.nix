@@ -129,6 +129,21 @@
       path = ../19;
     }
   ];
+  "mlir/mlir-tablegen-imported-target.patch" = [
+    {
+      before = "19";
+      path = ../18;
+    }
+    {
+      after = "19";
+      before = "21";
+      path = ../19;
+    }
+    {
+      after = "21";
+      path = ../21;
+    }
+  ];
   "flang/warn-on-fbuiltin-and-fno-builtin.patch" = [
     {
       after = "20";
