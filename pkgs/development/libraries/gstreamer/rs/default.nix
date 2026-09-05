@@ -55,6 +55,7 @@ let
     streamgrouper = [ ];
     sodium = [ libsodium ];
     threadshare = [ ];
+    inter = [ ];
 
     # net
     aws = [ openssl ];
