@@ -341,6 +341,11 @@ stdenv.mkDerivation (
           lib.optionalString (stdenv.hostPlatform.isx86 && lib.versionOlder release_version "19") ''
             rm test/tools/dsymutil/ARM/obfuscated.test
           ''
+        +
+          # Requires a version of `codesign` that supports signing bundles, which sigtool does not support.
+          lib.optionalString (lib.versionAtLeast release_version "23") ''
+            rm test/tools/dsymutil/codesign.test
+          ''
       )
 
       +
