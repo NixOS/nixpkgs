@@ -20,7 +20,17 @@ A minimal configuration in NixOS appears as follows:
 When using a firewall, set `networking.firewall.checkReversePath` to `"loose"` or `false`.
 NordVPN includes a `kill-switch` feature that blocks all packets not associated with the VPN connection.
 
-Additionally, add your user to the `nordvpn` group.
+If you prefer to use your own user and group, you can do so using
+
+```nix
+{
+  services.nordvpn.user = "SOME-USER";
+  services.nordvpn.group = "SOME-GROUP";
+}
+```
+
+Otherwise, the service creates a `nordvpn` user and group,
+in which case you should add your user to the `nordvpn` group.
 
 ```nix
 {
@@ -31,15 +41,6 @@ Additionally, add your user to the `nordvpn` group.
       "nordvpn"
     ];
   };
-}
-```
-
-If you prefer to use your own user and group, you can do so using
-
-```nix
-{
-  services.nordvpn.user = "SOME-USER";
-  services.nordvpn.group = "SOME-GROUP";
 }
 ```
 
@@ -60,6 +61,13 @@ Additionally, if you prefer to use the friendly GUI,
 ```bash
 nordvpn-gui
 ```
+
+Some notes on where the NixOS nordvpn service differs from upstream:
+
+- `nordvpnd` runs as an unprivileged user
+- `norduserd` spawns as a user service
+- `nordvpnd`'s systemd unit applies additional sandboxing,
+further minimizing its blast radius
 
 **Disclaimer:** NixOS currently does not support meshnet.
 Contributions welcome!
