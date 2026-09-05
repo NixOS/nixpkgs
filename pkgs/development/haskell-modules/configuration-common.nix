@@ -1083,6 +1083,9 @@ with haskellLib;
   # This packages compiles 4+ hours on a fast machine. That's just unreasonable.
   CHXHtml = dontDistribute super.CHXHtml;
 
+  # 2026-09-05: disable tests due to https://github.com/mgsloan/store/issues/186
+  store = dontCheck super.store;
+
   # Test suite won't compile against tasty-hunit 0.10.x.
   binary-parsers = dontCheck super.binary-parsers;
 
