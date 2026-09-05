@@ -2,19 +2,40 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  installShellFiles,
+  versionCheckHook,
 }:
+
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "parallel-disk-usage";
-  version = "0.21.1";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "KSXGitHub";
     repo = "parallel-disk-usage";
-    rev = finalAttrs.version;
-    hash = "sha256-EYveK1p/OWvtY5Q0dDlZwFkVt7u/A0qY0BG/oLgwmfE=";
+    tag = finalAttrs.version;
+    hash = "sha256-fxEiZGdBUYmPcTPDpcwlB8xYcA/zC+HBspNAUpg0Rgg=";
   };
 
-  cargoHash = "sha256-r9lNOElOr4GjzaI1ZZFdc+1i2kC4YVl7n/XR05mdEJA=";
+  cargoHash = "sha256-goPN4O2HfSqyzfvJ8c6NqHSA3+S54tE8SgiYoAaeUW4=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  checkFlags = [
+    "--skip=cross_device_excludes_mount"
+  ];
+
+  postInstall = ''
+    installManPage exports/pdu.1
+
+    installShellCompletion --cmd pdu \
+      --bash exports/completion.bash \
+      --fish exports/completion.fish \
+      --zsh exports/completion.zsh
+  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Highly parallelized, blazing fast directory tree analyzer";
