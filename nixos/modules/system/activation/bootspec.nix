@@ -26,7 +26,7 @@ let
             // {
               "org.nixos.bootspec.v1" = {
                 system = config.boot.kernelPackages.stdenv.hostPlatform.system;
-                label = "${config.system.nixos.distroName} ${config.system.nixos.codeName} ${config.system.nixos.label} (Linux ${config.boot.kernelPackages.kernel.modDirVersion})";
+                label = config.system.nixos.bootEntryLabel;
               }
               // lib.optionalAttrs config.boot.kernel.enable {
                 kernel = "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}";

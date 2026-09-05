@@ -410,7 +410,9 @@ def boot_file(
         profile=" [" + profile + "]" if profile else "",
         specialisation=" (%s)" % specialisation if specialisation else "",
     )
-    description = f"Generation {generation} {bootspec.label}, built on {build_date}"
+    description = bootspec.label.replace("{generation}", str(generation)).replace(
+        "{build_date}", build_date
+    )
     boot_entry = (
         [
             f"title {title}",
