@@ -71,10 +71,12 @@ buildPythonPackage (finalAttrs: {
   # * https://github.com/NixOS/nixpkgs/pull/288829#discussion_r1493852211
   # for more info.
   postInstall = ''
-    mkdir -p $out/${python.sitePackages}/jax_plugins/nvidia/cuda_nvcc/bin
-    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "ptxas"} $out/${python.sitePackages}/jax_plugins/nvidia/cuda_nvcc/bin/ptxas
-    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "nvlink"} $out/${python.sitePackages}/jax_plugins/nvidia/cuda_nvcc/bin/nvlink
-    ln -s ${cudaPackages.cuda_nvcc}/nvvm $out/${python.sitePackages}/jax_plugins/nvidia/cuda_nvcc/nvvm
+    export OUTPATH="$out/${python.sitePackages}/jax_plugins/nvidia/cuda_nvcc/bin"
+    export BINPATH="$OUTPATH/bin"
+    mkdir -p $BINPATH
+    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "ptxas"} $BINPATH/ptxas
+    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "nvlink"} $BINPATH/nvlink
+    ln -s ${cudaPackages.cuda_nvcc}/nvvm $OUTPATH/nvvm
   '';
 
   # jax-cuda12-pjrt contains shared libraries that open other shared libraries via dlopen
