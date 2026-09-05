@@ -1,0 +1,11 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 9496fa46e7..4a3cf3dca1 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -24,3 +24,6 @@
+     "chevron>=0.10.0",
+     "sh>=1.14.1",
+ ]
++
++[project.scripts]
++notobuilder = "notobuilder.__main__:main"
