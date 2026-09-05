@@ -14,9 +14,6 @@ use IPC::Run 'run';
 # 25.11pre-git.
 my $nixpkgsLib = "@lib@";
 
-my $nsenter = "@util-linux@/bin/nsenter";
-my $su = "@su@";
-
 my $configurationDirectory = "@configurationDirectory@";
 my $stateDirectory = "@stateDirectory@";
 
@@ -383,9 +380,9 @@ sub restartContainer {
 # Run a command in the container.
 sub runInContainer {
     my @args = @_;
-    my $leader = getLeader;
-    exec($nsenter, "--all", "-t", $leader, "--", @args);
-    die "cannot run ‘nsenter’: $!\n";
+    exec("systemd-run", "--machine", "root\@$containerName",
+        "--quiet", "--wait", "--collect", "--pipe", "--pty", "--", @args);
+    die "cannot run ‘systemd-run’: $!\n";
 }
 
 sub evalAttribute {
@@ -520,14 +517,14 @@ elsif ($action eq "login") {
 }
 
 elsif ($action eq "root-login") {
-    runInContainer("@su@", "root", "-l");
+    runInContainer("/bin/sh", "-l");
 }
 
 elsif ($action eq "run") {
     shift @ARGV; shift @ARGV;
     # Escape command.
     my $s = join(' ', map { s/'/'\\''/g; "'$_'" } @ARGV);
-    runInContainer("@su@", "root", "-l", "-c", "exec " . $s);
+    runInContainer("/bin/sh", "-l", "-c", "exec " . $s);
 }
 
 elsif ($action eq "show-ip") {
