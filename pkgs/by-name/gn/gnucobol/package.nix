@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "gnucobol";
   version = "3.2";
 
+  __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchurl {
