@@ -2003,6 +2003,7 @@ in
     inherit runTest;
   };
   yggdrasil = runTest ./yggdrasil.nix;
+  yopass = import ./web-apps/yopass.nix { inherit pkgs runTest; };
   your_spotify = runTest ./your_spotify.nix;
   zammad = runTest ./zammad.nix;
   zapret2 = runTest ./zapret2.nix;
