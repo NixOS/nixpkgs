@@ -4,7 +4,7 @@
   yarnConfigHook,
   yarnBuildHook,
   yarnInstallHook,
-  nodejs,
+  nodejs_22,
   fetchFromGitHub,
   fetchYarnDeps,
   matrix-sdk-crypto-nodejs,
@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mjolnir";
-  version = "1.9.2";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "mjolnir";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OxHnCMP6IP0EaAs4YQgmV04tq6IdAYmKQX8O9Q48CPk=";
+    hash = "sha256-PWPtp1KVOBNH7lu99Yy3hmj8wGOZe+YKjPq/SyO7oLM=";
   };
 
   patches = [
@@ -30,14 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-1V7ooONt9j+4hk/3w6Dsv/SdWwa1xsLk97EwhuPegNo=";
+    hash = "sha256-M4gsuzSxKOIDPL4J2HnveRDjviB0RPBmLVYBlTVz788=";
   };
 
   nativeBuildInputs = [
     yarnConfigHook
     yarnBuildHook
     yarnInstallHook
-    nodejs
+    nodejs_22
     makeWrapper
   ];
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf $out/lib/node_modules/mjolnir/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
     ln -s ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs $out/lib/node_modules/mjolnir/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
 
-    makeWrapper ${nodejs}/bin/node "$out/bin/mjolnir" \
+    makeWrapper ${nodejs_22}/bin/node "$out/bin/mjolnir" \
       --add-flags "$out/lib/node_modules/mjolnir/lib/index.js"
   '';
 
