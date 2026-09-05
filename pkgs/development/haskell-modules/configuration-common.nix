@@ -2564,50 +2564,44 @@ with haskellLib;
     lib.pipe
       (super.postgrest.overrideScope (
         self: super: {
-          # 2025-01-19: Upstream is stuck at hasql < 1.7
-          # Jailbreaking for newer postgresql-libpq, which seems to work fine
-          postgresql-binary = dontCheck (doJailbreak super.postgresql-binary_0_13_1_3);
-          hasql = dontCheck (doJailbreak super.hasql_1_6_4_4);
-          # Matching dependencies for hasql < 1.6.x
-          hasql-dynamic-statements = dontCheck super.hasql-dynamic-statements_0_3_1_5;
-          hasql-implicits = dontCheck super.hasql-implicits_0_1_1_3;
-          hasql-notifications = unmarkBroken (dontCheck super.hasql-notifications_0_2_2_2);
-          hasql-pool = dontCheck super.hasql-pool_1_0_1;
-          hasql-transaction = dontCheck super.hasql-transaction_1_1_0_1;
+          # 2026-09-05: Upstream will never update past hasql 1.9.3.1
+          hasql = dontCheck super.hasql_1_9_3_1;
+          # Matching dependencies for hasql 1.9.3.1
+          postgresql-binary = dontCheck super.postgresql-binary_0_14_2;
+          hasql-dynamic-statements = dontCheck super.hasql-dynamic-statements_0_3_1_8;
+          hasql-implicits = dontCheck super.hasql-implicits_0_2_0_1;
+          hasql-notifications = dontCheck super.hasql-notifications_0_2_4_0;
+          hasql-pool = dontCheck super.hasql-pool_1_3_0_4;
+          hasql-transaction = dontCheck super.hasql-transaction_1_2_1;
+          # 2026-09-05: Upstream intends to eventually remove swagger2, so does not care about updating it
           insert-ordered-containers = super.insert-ordered-containers_0_2_7;
-          lawful-conversions = super.lawful-conversions_0_1_7;
           swagger2 = doJailbreak super.swagger2_2_8_10; # jailbreak for QuickCheck 2.16
-          text-builder = super.text-builder_0_6_10;
-          text-builder-dev = super.text-builder-dev_0_3_10;
           # This dependency was removed upstream and replaced with jose-jwt below
           jose = null;
         }
       ))
       [
-        # 2023-12-20: New version needs extra dependencies
+        # 2026-09-05: New version needs extra dependencies
         (addBuildDepends [
-          self.cache
+          self.aeson-jsonpath
           self.extra
           self.focus
           self.fuzzyset_0_2_4
           self.http-client
           self.jose-jwt
           self.neat-interpolation
-          self.prometheus-client
+          self.prometheus-metrics-ghc
           self.some
           self.stm-hamt
-          self.timeit
         ])
-        # 2022-12-02: Too strict bounds.
-        doJailbreak
         # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
         (overrideSrc rec {
-          version = "14.16";
+          version = "16.2";
           src = pkgs.fetchFromGitHub {
             owner = "PostgREST";
             repo = "postgrest";
             rev = "v${version}";
-            hash = "sha256-lIUXBBFrnMN5IIW2cAzaE4WlXPmdiQmpBcYklxS3rI4=";
+            hash = "sha256-smeK6VEKgzopGTiEaax/6H30+uC6P1SeBiFRa9ytsME=";
           };
         })
       ];
