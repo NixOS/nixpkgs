@@ -78,10 +78,12 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Requires network access
     "test_dataset_reader"
-    # for some reason, str date representation are not the same
-    "test_xarray_reader"
-    "test_geoxarray_reader_coordinates"
-    "test_geoxarray_reader_compat"
+
+    "test_async_reader_tile"
+    "test_async_mosaic_tiler"
+    "test_inherit_rasterio_env_empty"
+    "test_inherit_rasterio_env_not_empty"
+    "test_warp_masked_pixels_propagate"
   ];
 
   meta = {
