@@ -49,7 +49,7 @@ jobs:
             ci/github-script
 
       - name: Install dependencies
-        run: npm ci --package-lock-only=false @actions/artifact bottleneck
+        run: npm ci --package-lock-only=false --no-audit @actions/artifact bottleneck
         working-directory: ci/github-script
 
       # Use a GitHub App, because it has much higher rate limits: 12,500 instead of 5,000 req / hour.
