@@ -1,0 +1,62 @@
+diff --git a/main.lua b/main.lua
+index 24e70d74..a49f0ef9 100644
+--- a/main.lua
++++ b/main.lua
+@@ -82,35 +82,6 @@ else
+ 	root = source
+ end
+ 
+-if jit.os == "Windows" then
+-	local winapi = require("winapi")
+-	winapi.putenv("PATH", ("%s;%s"):format(winapi.getenv("PATH"), root .. "/bin/win64"))
+-	winapi.chdir(root)
+-	pkg.addc("bin/win64")
+-elseif jit.os == "Linux" then
+-	local ldlp = os.getenv("LD_LIBRARY_PATH")
+-	if not ldlp or not ldlp:find("bin/linux64") then
+-		ffi.cdef("int setenv(const char *name, const char *value, int overwrite);")
+-		ffi.C.setenv("LD_LIBRARY_PATH", (ldlp or "") .. ":" .. root .. "/bin/linux64", true)
+-		os.execute(("%q %q &"):format(arg[-2], arg[1]))
+-		return os.exit()
+-	end
+-	ffi.cdef("int chdir(const char *path);")
+-	ffi.C.chdir(root)
+-	pkg.addc("bin/linux64")
+-elseif jit.os == "OSX" then
+-	local ldlp = os.getenv("DYLD_FALLBACK_LIBRARY_PATH")
+-	if not ldlp or not ldlp:find("bin/mac64") then
+-		ffi.cdef("int setenv(const char *name, const char *value, int overwrite);")
+-		ffi.C.setenv("DYLD_FALLBACK_LIBRARY_PATH", root .. "/bin/mac64", true)
+-		--os.execute(("%q %q &"):format(arg[-2], arg[1]))
+-		--return os.exit()
+-	end
+-	ffi.cdef("int chdir(const char *path);")
+-	ffi.C.chdir(root)
+-	pkg.addc("bin/mac64")
+-end
+-
+ pkg.export_lua()
+ pkg.export_love()
+ 
+diff --git a/aqua/pkg.lua b/aqua/pkg.lua
+index 4cc2332..d288445 100644
+--- a/aqua/pkg.lua
++++ b/aqua/pkg.lua
+@@ -105,13 +105,13 @@ function pkg.compile_cpath()
+ end
+ 
+ function pkg.export_lua()
+-	package.path = pkg.compile_path()
+-	package.cpath = pkg.compile_cpath()
++	package.path = pkg.compile_path() .. ";" .. package.path
++	package.cpath = pkg.compile_cpath() .. ";" .. package.cpath
+ end
+ 
+ function pkg.export_love()
+-	love.filesystem.setRequirePath(pkg.compile_path())
+-	love.filesystem.setCRequirePath(pkg.compile_cpath())
++	love.filesystem.setRequirePath(pkg.compile_path() .. ";" .. love.filesystem.getRequirePath())
++	love.filesystem.setCRequirePath(pkg.compile_cpath() .. ";" .. love.filesystem.getCRequirePath())
+ end
+ 
+ ---@param package_path string
