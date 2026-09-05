@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   stdenv,
   buildPythonPackage,
@@ -22,6 +23,12 @@
   # linux-only
   openblas,
 
+  # metal support (optional, darwin only)
+  metalSupport ? config.metalSupport,
+  metal-toolchain,
+  metal-cpp,
+  writableTmpDirAsHomeHook,
+
   # tests
   numpy,
   pytestCheckHook,
@@ -40,7 +47,6 @@ let
     rev = "8fa6eb65236618e28fd7710a0fba565f7faa1848";
     hash = "sha256-15FvyPOFqTOr5vdWQoPnZz+mYH919++EtghjozDlnSA=";
   };
-
 in
 buildPythonPackage (finalAttrs: {
   pname = "mlx";
@@ -63,6 +69,18 @@ buildPythonPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace mlx/backend/cpu/jit_compiler.cpp \
       --replace-fail "g++" "${lib.getExe' stdenv.cc "c++"}"
+  ''
+  + lib.optionalString metalSupport ''
+    # Replace xcrun and sw_vers calls with Nix-store equivalents
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "sw_vers -productVersion" "echo ${stdenv.hostPlatform.darwinMinVersion}" \
+      --replace-fail "xcrun -sdk macosx --show-sdk-version" "echo ${stdenv.hostPlatform.darwinSdkVersion}" \
+      --replace-fail "xcrun -sdk macosx metal" "${metal-toolchain}/usr/bin/metal" \
+      --replace-fail "zsh \"-c\"" "bash \"-c\""
+    substituteInPlace cmake/extension.cmake mlx/backend/metal/make_compiled_preamble.sh mlx/backend/metal/kernels/CMakeLists.txt \
+      --replace-fail "xcrun -sdk macosx metal" "${metal-toolchain}/usr/bin/metal"
+    substituteInPlace mlx/distributed/jaccl/lib/CMakeLists.txt \
+      --replace-fail "xcrun --sdk macosx --show-sdk-version" "echo ${stdenv.hostPlatform.darwinSdkVersion}"
   '';
 
   dontUseCmakeConfigure = true;
@@ -76,23 +94,30 @@ buildPythonPackage (finalAttrs: {
 
   env = {
     PYPI_RELEASE = 1;
-    CMAKE_ARGS = toString [
-      # NOTE The `metal` command-line utility used to build the Metal kernels is not open-source.
-      # To build mlx with Metal support in Nix, you'd need to use one of the sandbox escape
-      # hatches which let you interact with a native install of Xcode, such as `composeXcodeWrapper`
-      # or by changing the upstream (e.g., https://github.com/zed-industries/zed/discussions/7016).
-      (lib.cmakeBool "MLX_BUILD_METAL" false)
-      (lib.cmakeBool "USE_SYSTEM_FMT" true)
-      (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_GGUFLIB" "${gguf-tools}")
-      (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_NANOBIND" "${nanobind.src}")
-      (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-I${lib.getDev nlohmann_json}/include/nlohmann")
-    ];
+    CMAKE_ARGS = toString (
+      [
+        (lib.cmakeBool "MLX_BUILD_METAL" metalSupport)
+        (lib.cmakeBool "USE_SYSTEM_FMT" true)
+        (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_GGUFLIB" "${gguf-tools}")
+        (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_NANOBIND" "${nanobind.src}")
+        (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-I${lib.getDev nlohmann_json}/include/nlohmann")
+      ]
+      ++ lib.optionals metalSupport [
+        (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_METAL_CPP" "${metal-cpp}")
+      ]
+    );
   };
 
   build-system = [
     cmake
     setuptools
     typing-extensions
+  ];
+
+  nativeBuildInputs = lib.optionals metalSupport [
+    # The Metal compiler's internal clang writes its module cache to
+    # $HOME/.cache/clang/ModuleCache.
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -104,6 +129,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "mlx" ];
+
+  # Metal-enabled builds require a GPU; tests cannot run in the Nix sandbox.
+  doCheck = !metalSupport;
 
   # Run the mlx Python test suite.
   nativeCheckInputs = [
