@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "opsdroid";
-  version = "0.30.0";
+  version = "0.31.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "opsdroid";
     repo = "opsdroid";
     tag = "v${version}";
-    hash = "sha256-7H44wdhJD4Z6OP1sUmSGlepuvx+LlwKLq7iR8cwqR24=";
+    hash = "sha256-47KTxq2V+2JhV8I9BgKp+S2sAmZsy+hddewjNeWGwiw=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -21,7 +21,6 @@ python3Packages.buildPythonPackage rec {
   dependencies = with python3Packages; [
     aiohttp
     aiohttp-middlewares
-    aioredis
     aiosqlite
     appdirs
     arrow
@@ -36,14 +35,15 @@ python3Packages.buildPythonPackage rec {
     emoji
     get-video-properties
     ibm-watson
+    imagesize
     (matrix-nio.override { withVodozemac = true; })
     mattermostdriver
     motor
     multidict
     nbconvert
     nbformat
-    opsdroid-get-image-size
     parse
+    pkg-resources-backport # for pkg_resources
     puremagic
     pycron
     python-olm
