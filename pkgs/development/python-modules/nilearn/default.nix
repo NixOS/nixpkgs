@@ -40,7 +40,8 @@ buildPythonPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail " --template=maint_tools/templates/index.html" ""
+      --replace-fail " --template=maint_tools/templates/index.html" "" \
+      --replace-fail "scikit-learn>=1.5.0,!=1.7.0,!=1.9.0" "scikit-learn>=1.5.0,!=1.7.0"
   '';
 
   build-system = [

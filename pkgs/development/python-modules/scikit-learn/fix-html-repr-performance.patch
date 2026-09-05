@@ -1,0 +1,359 @@
+From d80f2481bb7dad749edc48a87e7af9b70c66d787 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dea=20Mar=C3=ADa=20L=C3=A9on?= <deamarialeon@gmail.com>
+Date: Mon, 22 Jun 2026 10:43:15 +0200
+Subject: [PATCH 01/10] First try
+
+---
+ sklearn/utils/_repr_html/features.py | 33 +++++++++++++++++++++++-----
+ 1 file changed, 28 insertions(+), 5 deletions(-)
+
+diff --git a/sklearn/utils/_repr_html/features.py b/sklearn/utils/_repr_html/features.py
+index 855f3950fe705..55bb3c693103c 100644
+--- a/sklearn/utils/_repr_html/features.py
++++ b/sklearn/utils/_repr_html/features.py
+@@ -3,6 +3,17 @@
+ 
+ import html
+ 
++_MAX_DISPLAY_FEATURES = 100
++
++
++def _format_count(n):
++    """Format a count with K/M suffixes for readability."""
++    if n >= 1_000_000 and n % 1_000_000 == 0:
++        return f"{n // 1_000_000}M"
++    if n >= 1_000 and n % 1_000 == 0:
++        return f"{n // 1_000}K"
++    return str(n)
++
+ 
+ def _features_html(features, is_fitted_css_class=""):
+     """Generate HTML representation of feature names.
+@@ -10,6 +21,9 @@ def _features_html(features, is_fitted_css_class=""):
+     Creates a collapsible HTML details element containing a table of feature
+     names with a summary line showing the total count. Includes a copy-to-clipboard
+     button for all feature names.
++
++    Only the first ``_MAX_DISPLAY_FEATURES`` features are rendered as table
++    rows to keep the HTML lightweight.
+     """
+     FEATURES_TABLE_TEMPLATE = """
+         <div class="features {is_fitted_css_class}">
+@@ -17,7 +31,7 @@ def _features_html(features, is_fitted_css_class=""):
+             <summary>
+               <div class="arrow"></div>
+               <div>{total_features_line}</div>
+-              <div class="image-container" title="Copy all output features">
++              <div class="image-container" title="Copy table's output features">
+                 <i class="copy-paste-icon"
+                   onclick="
+                   event.stopPropagation();
+@@ -46,14 +60,23 @@ def _features_html(features, is_fitted_css_class=""):
+ 
+     """
+     total_features = len(features)
+-    total_features_line = (
+-        f"{total_features} {'feature' if total_features == 1 else 'features'}"
+-    )
++    display_features = features[:_MAX_DISPLAY_FEATURES]
++    is_truncated = total_features > _MAX_DISPLAY_FEATURES
++
++    if is_truncated:
++        total_features_line = (
++            f"{_MAX_DISPLAY_FEATURES} of {_format_count(total_features)} features"
++        )
++    else:
++        total_features_line = (
++            f"{total_features} {'feature' if total_features == 1 else 'features'}"
++        )
+ 
+     rows = [
+         FEATURES_ROW_TEMPLATE.format(feature=html.escape(feature))
+-        for feature in features
++        for feature in display_features
+     ]
++
+     return FEATURES_TABLE_TEMPLATE.format(
+         total_features_line=total_features_line,
+         is_fitted_css_class=html.escape(is_fitted_css_class),
+
+From c3bd3e60c87d5d4a55c24e11e711956bf8b4b9a0 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dea=20Mar=C3=ADa=20L=C3=A9on?= <deamarialeon@gmail.com>
+Date: Mon, 22 Jun 2026 11:14:26 +0200
+Subject: [PATCH 02/10] remove extra var
+
+---
+ sklearn/utils/_repr_html/features.py | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/sklearn/utils/_repr_html/features.py b/sklearn/utils/_repr_html/features.py
+index 55bb3c693103c..9e7d77385112e 100644
+--- a/sklearn/utils/_repr_html/features.py
++++ b/sklearn/utils/_repr_html/features.py
+@@ -61,9 +61,8 @@ def _features_html(features, is_fitted_css_class=""):
+     """
+     total_features = len(features)
+     display_features = features[:_MAX_DISPLAY_FEATURES]
+-    is_truncated = total_features > _MAX_DISPLAY_FEATURES
+ 
+-    if is_truncated:
++    if total_features > _MAX_DISPLAY_FEATURES:
+         total_features_line = (
+             f"{_MAX_DISPLAY_FEATURES} of {_format_count(total_features)} features"
+         )
+
+From e7be426c766ff54be775bdf4ce51e69a04712b04 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dea=20Mar=C3=ADa=20L=C3=A9on?= <deamarialeon@gmail.com>
+Date: Mon, 22 Jun 2026 14:06:27 +0200
+Subject: [PATCH 03/10] Shorter output number
+
+---
+ sklearn/utils/_repr_html/features.py          | 11 +---------
+ .../utils/_repr_html/tests/test_features.py   | 21 +++++++++++++++++++
+ 2 files changed, 22 insertions(+), 10 deletions(-)
+
+diff --git a/sklearn/utils/_repr_html/features.py b/sklearn/utils/_repr_html/features.py
+index 9e7d77385112e..0e6fb1a06185d 100644
+--- a/sklearn/utils/_repr_html/features.py
++++ b/sklearn/utils/_repr_html/features.py
+@@ -6,15 +6,6 @@
+ _MAX_DISPLAY_FEATURES = 100
+ 
+ 
+-def _format_count(n):
+-    """Format a count with K/M suffixes for readability."""
+-    if n >= 1_000_000 and n % 1_000_000 == 0:
+-        return f"{n // 1_000_000}M"
+-    if n >= 1_000 and n % 1_000 == 0:
+-        return f"{n // 1_000}K"
+-    return str(n)
+-
+-
+ def _features_html(features, is_fitted_css_class=""):
+     """Generate HTML representation of feature names.
+ 
+@@ -64,7 +55,7 @@ def _features_html(features, is_fitted_css_class=""):
+ 
+     if total_features > _MAX_DISPLAY_FEATURES:
+         total_features_line = (
+-            f"{_MAX_DISPLAY_FEATURES} of {_format_count(total_features)} features"
++            f"{_MAX_DISPLAY_FEATURES} of {total_features:.4g} features"
+         )
+     else:
+         total_features_line = (
+diff --git a/sklearn/utils/_repr_html/tests/test_features.py b/sklearn/utils/_repr_html/tests/test_features.py
+index 2b75c9189281a..0a2e8b48bd525 100644
+--- a/sklearn/utils/_repr_html/tests/test_features.py
++++ b/sklearn/utils/_repr_html/tests/test_features.py
+@@ -232,3 +232,24 @@ def test_features_html_structure():
+     assert "</tbody>" in html
+     assert '<i class="copy-paste-icon"' in html
+     assert "copyFeatureNamesToClipboard" in html
++
++
++@pytest.mark.parametrize(
++    "num_features, expected_count",
++    [
++        (200, "200"),
++        (10000, "1e+04"),
++        (123456, "1.235e+05"),
++        (1000000, "1e+06"),
++    ],
++)
++def test_features_html_truncation_format(num_features, expected_count):
++    """Test that large feature counts use .4g formatting in summary."""
++    from sklearn.utils._repr_html.features import _MAX_DISPLAY_FEATURES
++
++    features = [f"feat{i}" for i in range(num_features)]
++    result = _features_html(features)
++
++    assert f"{_MAX_DISPLAY_FEATURES} of {expected_count} features" in result
++    assert f"feat{_MAX_DISPLAY_FEATURES - 1}" in result
++    assert f"feat{_MAX_DISPLAY_FEATURES}" not in result
+
+From 19316fd4449cb288cf47727a16fe13a22dc4c092 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dea=20Mar=C3=ADa=20L=C3=A9on?= <deamarialeon@gmail.com>
+Date: Mon, 22 Jun 2026 14:25:44 +0200
+Subject: [PATCH 04/10] Changed hover message
+
+---
+ sklearn/utils/_repr_html/features.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sklearn/utils/_repr_html/features.py b/sklearn/utils/_repr_html/features.py
+index 0e6fb1a06185d..b4b72381e0714 100644
+--- a/sklearn/utils/_repr_html/features.py
++++ b/sklearn/utils/_repr_html/features.py
+@@ -22,7 +22,7 @@ def _features_html(features, is_fitted_css_class=""):
+             <summary>
+               <div class="arrow"></div>
+               <div>{total_features_line}</div>
+-              <div class="image-container" title="Copy table's output features">
++              <div class="image-container" title="Copy output features (max 100)">
+                 <i class="copy-paste-icon"
+                   onclick="
+                   event.stopPropagation();
+
+From d1c0a08352cdb79d6c0ca62eefbcc3db5d8bac68 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dea=20Mar=C3=ADa=20L=C3=A9on?= <deamarialeon@gmail.com>
+Date: Mon, 22 Jun 2026 14:30:43 +0200
+Subject: [PATCH 05/10] Linter
+
+---
+ sklearn/utils/_repr_html/tests/test_features.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sklearn/utils/_repr_html/tests/test_features.py b/sklearn/utils/_repr_html/tests/test_features.py
+index 0a2e8b48bd525..cd34a580fbbc0 100644
+--- a/sklearn/utils/_repr_html/tests/test_features.py
++++ b/sklearn/utils/_repr_html/tests/test_features.py
+@@ -247,7 +247,7 @@ def test_features_html_truncation_format(num_features, expected_count):
+     """Test that large feature counts use .4g formatting in summary."""
+     from sklearn.utils._repr_html.features import _MAX_DISPLAY_FEATURES
+ 
+-    features = [f"feat{i}" for i in range(num_features)]
++    features = [f"feat{feature_id}" for feature_id in range(num_features)]
+     result = _features_html(features)
+ 
+     assert f"{_MAX_DISPLAY_FEATURES} of {expected_count} features" in result
+
+From b4348b16c0082804f5874ed698a048a8a1a10100 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dea=20Mar=C3=ADa=20L=C3=A9on?= <deamarialeon@gmail.com>
+Date: Mon, 22 Jun 2026 14:38:22 +0200
+Subject: [PATCH 06/10] f string again
+
+---
+ sklearn/utils/_repr_html/features.py | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/sklearn/utils/_repr_html/features.py b/sklearn/utils/_repr_html/features.py
+index b4b72381e0714..683202ef875f7 100644
+--- a/sklearn/utils/_repr_html/features.py
++++ b/sklearn/utils/_repr_html/features.py
+@@ -54,9 +54,7 @@ def _features_html(features, is_fitted_css_class=""):
+     display_features = features[:_MAX_DISPLAY_FEATURES]
+ 
+     if total_features > _MAX_DISPLAY_FEATURES:
+-        total_features_line = (
+-            f"{_MAX_DISPLAY_FEATURES} of {total_features:.4g} features"
+-        )
++        total_features_line = f"{_MAX_DISPLAY_FEATURES} of {total_features:,} features"
+     else:
+         total_features_line = (
+             f"{total_features} {'feature' if total_features == 1 else 'features'}"
+
+From 46c3eb8648f9a1a96cd23e15418f184d8b6c1c65 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dea=20Mar=C3=ADa=20L=C3=A9on?= <deamarialeon@gmail.com>
+Date: Mon, 22 Jun 2026 14:51:04 +0200
+Subject: [PATCH 07/10] tests
+
+---
+ sklearn/utils/_repr_html/tests/test_features.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/sklearn/utils/_repr_html/tests/test_features.py b/sklearn/utils/_repr_html/tests/test_features.py
+index cd34a580fbbc0..d673da02dc4b6 100644
+--- a/sklearn/utils/_repr_html/tests/test_features.py
++++ b/sklearn/utils/_repr_html/tests/test_features.py
+@@ -238,9 +238,9 @@ def test_features_html_structure():
+     "num_features, expected_count",
+     [
+         (200, "200"),
+-        (10000, "1e+04"),
+-        (123456, "1.235e+05"),
+-        (1000000, "1e+06"),
++        (10000, "10,000"),
++        (123456, "123,456"),
++        (1000000, "1,000,000"),
+     ],
+ )
+ def test_features_html_truncation_format(num_features, expected_count):
+
+From 38f00c6ef77cbcb7060e005bf01f7e3568c3c853 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dea=20Mar=C3=ADa=20L=C3=A9on?= <deamarialeon@gmail.com>
+Date: Mon, 22 Jun 2026 17:13:54 +0200
+Subject: [PATCH 08/10] Added 101 and 100 features to test
+
+---
+ sklearn/utils/_repr_html/tests/test_features.py | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/sklearn/utils/_repr_html/tests/test_features.py b/sklearn/utils/_repr_html/tests/test_features.py
+index d673da02dc4b6..df3abcadaa86f 100644
+--- a/sklearn/utils/_repr_html/tests/test_features.py
++++ b/sklearn/utils/_repr_html/tests/test_features.py
+@@ -237,6 +237,7 @@ def test_features_html_structure():
+ @pytest.mark.parametrize(
+     "num_features, expected_count",
+     [
++        (101, "101"),
+         (200, "200"),
+         (10000, "10,000"),
+         (123456, "123,456"),
+@@ -244,7 +245,7 @@ def test_features_html_structure():
+     ],
+ )
+ def test_features_html_truncation_format(num_features, expected_count):
+-    """Test that large feature counts use .4g formatting in summary."""
++    """Test expected feature count in summary."""
+     from sklearn.utils._repr_html.features import _MAX_DISPLAY_FEATURES
+ 
+     features = [f"feat{feature_id}" for feature_id in range(num_features)]
+@@ -253,3 +254,14 @@ def test_features_html_truncation_format(num_features, expected_count):
+     assert f"{_MAX_DISPLAY_FEATURES} of {expected_count} features" in result
+     assert f"feat{_MAX_DISPLAY_FEATURES - 1}" in result
+     assert f"feat{_MAX_DISPLAY_FEATURES}" not in result
++
++
++def test_features_html_at_max_display_limit():
++    """Test that exactly _MAX_DISPLAY_FEATURES features are not truncated."""
++    from sklearn.utils._repr_html.features import _MAX_DISPLAY_FEATURES
++
++    features = [f"feat{feature_id}" for feature_id in range(_MAX_DISPLAY_FEATURES)]
++    result = _features_html(features)
++
++    assert f"{_MAX_DISPLAY_FEATURES} features" in result
++    assert " of " not in result
+
+From 6ebf8868a1e745ad57c0270a7ec0d53409e77f04 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dea=20Mar=C3=ADa=20L=C3=A9on?= <deamarialeon@gmail.com>
+Date: Mon, 22 Jun 2026 17:41:46 +0200
+Subject: [PATCH 09/10] changelog
+
+---
+ doc/whats_new/upcoming_changes/sklearn.utils/34362.fix.rst | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 doc/whats_new/upcoming_changes/sklearn.utils/34362.fix.rst
+
+diff --git a/doc/whats_new/upcoming_changes/sklearn.utils/34362.fix.rst b/doc/whats_new/upcoming_changes/sklearn.utils/34362.fix.rst
+new file mode 100644
+index 0000000000000..72917b4a8c897
+--- /dev/null
++++ b/doc/whats_new/upcoming_changes/sklearn.utils/34362.fix.rst
+@@ -0,0 +1,4 @@
++- The HTML representation of estimators now truncates the output feature list
++  to 100 entries to improve rendering performance for estimators with many
++  output features.
++  By :user:`Dea María Léon <deamarialeon>`.
+
+From 685a4cd769e29d55429f66ab5634e75535b13eb1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dea=20Mar=C3=ADa=20L=C3=A9on?= <deamarialeon@gmail.com>
+Date: Tue, 23 Jun 2026 14:15:19 +0200
+Subject: [PATCH 10/10] align scroll
+
+---
+ sklearn/utils/_repr_html/features.css | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/sklearn/utils/_repr_html/features.css b/sklearn/utils/_repr_html/features.css
+index 8fb3c12b7a38a..105c2d05b72ba 100644
+--- a/sklearn/utils/_repr_html/features.css
++++ b/sklearn/utils/_repr_html/features.css
+@@ -54,7 +54,6 @@
+ }
+ 
+ .features .features-container {
+-  max-width: 15em;
+   max-height: 10em;
+   overflow: auto;
+   scrollbar-width: thin;
