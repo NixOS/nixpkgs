@@ -1,0 +1,38 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d9ba2f0..a353d60 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -67,15 +67,28 @@ if (MINGW OR NOT ZLIB_FOUND)
+     add_library(ZLIB::ZLIB ALIAS zlibstatic)
+ endif (MINGW OR NOT ZLIB_FOUND)
+ 
+-set(IXWEBSOCKET_INSTALL OFF CACHE BOOL "" FORCE)
+-add_subdirectory(IXWebSocket)
+-include_directories(IXWebSocket)
+-target_link_libraries(APCpp ixwebsocket)
+-
+ if (MINGW)
+     target_link_libraries(APCpp -static -static-libstdc++ -static-libgcc)
+ endif(MINGW)
+ 
++# Attempt finding system version of IXWebSocket
++find_package(PkgConfig)
++if (PKGCONFIG_FOUND AND (NOT MINGW) AND (NOT BUNDLED_IXWEBSOCKET))
++    pkg_check_modules(IXWEBSOCKET ixwebsocket)
++    if (IXWEBSOCKET_FOUND)
++        include_directories(${IXWEBSOCKET_INCLUDE_DIRS})
++        target_link_libraries(APCpp ${IXWEBSOCKET_LDFLAGS})
++    endif(IXWEBSOCKET_FOUND)
++endif(PKGCONFIG_FOUND AND (NOT MINGW) AND (NOT BUNDLED_IXWEBSOCKET))
++
++# No system version: Enable bundled
++if((NOT IXWEBSOCKET_FOUND) OR BUNDLED_IXWEBSOCKET)
++    set(IXWEBSOCKET_INSTALL OFF CACHE BOOL "" FORCE)
++    add_subdirectory(IXWebSocket)
++    include_directories(ixwebsocket/include)
++    target_link_libraries(APCpp ixwebsocket_static)
++endif((NOT IXWEBSOCKET_FOUND) OR BUNDLED_IXWEBSOCKET)
++
+ # Attempt finding system version of JsonCpp
+ find_package(PkgConfig)
+ if (PKGCONFIG_FOUND AND (NOT MINGW) AND (NOT BUNDLED_JSONCPP))
