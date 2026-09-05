@@ -73,6 +73,14 @@ lib.trivial.pipe super [
     ];
   }))
 
+  (patchExtension "auto-accent-colour@Wartybix" (old: {
+    patches = [
+      (replaceVars ./extensionOverridesPatches/auto-accent-colour_at_Wartybix.patch {
+        inherit gjs;
+      })
+    ];
+  }))
+
   (patchExtension "caffeine@patapon.info" (old: {
     meta.maintainers = with lib.maintainers; [ eperuffo ];
   }))
