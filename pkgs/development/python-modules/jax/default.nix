@@ -101,11 +101,7 @@ buildPythonPackage (finalAttrs: {
     pytest-xdist
   ];
 
-  # high parallelism will result in the tests getting stuck
-  dontUsePytestXdist = true;
-
   pytestFlags = [
-    "--numprocesses=4"
     "-Wignore::DeprecationWarning"
   ];
 
