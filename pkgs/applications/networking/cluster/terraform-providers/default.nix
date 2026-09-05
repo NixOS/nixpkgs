@@ -57,10 +57,10 @@ let
       ];
       src = mkProviderFetcher {
         name = "source-${rev}";
+        tag = rev;
         inherit
           owner
           repo
-          rev
           hash
           ;
       };
