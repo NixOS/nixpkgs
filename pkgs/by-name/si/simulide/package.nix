@@ -19,15 +19,6 @@ let
         inherit rev;
       };
     };
-    "1.0.0" = rec {
-      release = "SR2";
-      rev = "1449";
-      src = fetchbzr {
-        url = "https://code.launchpad.net/~arcachofo/simulide/1.0.0";
-        sha256 = "sha256-rJWZvnjVzaKXU2ktbde1w8LSNvu0jWkDIk4dq2l7t5g=";
-        inherit rev;
-      };
-    };
     "1.1.0" = rec {
       release = "SR2";
       rev = "28965e3bd6dd118598db1f5639ce1cf2e3c56e36";
@@ -38,14 +29,14 @@ let
         hash = "sha256-Ec72OE4xBlanFFzrrGu0lTY2BEVu7slc1+ZDFr8lUT8=";
       };
     };
-    "1.2.0" = rec {
-      release = "RC1";
-      rev = "da3a925491fab9fa2a8633d18e45f8e1b576c9d2";
+    "2.0.0" = rec {
+      release = "R${rev}";
+      rev = "260501";
       src = fetchFromGitHub {
         owner = "Arcachofo";
         repo = "SimulIDE-dev";
-        hash = "sha256-6Gh0efBizDK1rUNkyU+/ysj7QwkAs3kTA1mQZYFb/pI=";
-        inherit rev;
+        rev = "504bf26c28b7523e9d3e407b324cd8ca1340cb0e";
+        hash = "sha256-8Pt7riSVZT1w7n2H4gdcjJ0JdsJybVV/8o1bgpdwdPo=";
       };
     };
   };
@@ -55,25 +46,18 @@ let
   inherit (versionInfo.${versionNum} or (throw "Unsupported versionNum")) release rev src;
 
   iconPath =
-    if lib.versionOlder versionNum "1.0.0" then
+    if versionNum == "0.4.15" then
       "resources/icons/hicolor/256x256/simulide.png" # upstream had a messed up icon path in this release
     else
       "resources/icons/simulide.png";
 
-  release' = lib.optionalString (lib.versionOlder versionNum "1.2.0") "-" + release;
+  release' = lib.optionalString (lib.versionOlder versionNum "2.0.0") "-" + release;
 in
 
 stdenv.mkDerivation {
   pname = "simulide";
   version = "${versionNum}-${release}";
   inherit src;
-
-  patches = lib.optionals (versionNum == "1.0.0") [
-    # a static field was declared as protected but was accessed
-    # from a place where it would have had to be public
-    # this is only an error when using clang, gcc is more lenient
-    ./clang-fix-protected-field.patch
-  ];
 
   postPatch = ''
     sed -i resources/simulide.desktop \
@@ -84,15 +68,15 @@ stdenv.mkDerivation {
     # Note: the project file hardcodes a homebrew gcc compiler when using darwin
     #       which we don't want, so we just delete the relevant lines
     sed -i SimulIDE.pr* \
-      -e "s|^VERSION = .*$|VERSION = ${versionNum}|" \
-      -e "s|^RELEASE = .*$|RELEASE = ${release'}|" \
-      -e "s|^REV_NO = .*$|REV_NO = ${rev}|" \
-      -e "s|^BUILD_DATE = .*$|BUILD_DATE = ??????|" \
-      -e "/QMAKE_CC/d" \
-      -e "/QMAKE_CXX/d" \
-      -e "/QMAKE_LINK/d"
+      -e "s|^ *VERSION *=.*$|VERSION = ${versionNum}|" \
+      -e "s|^ *RELEASE *=.*$|RELEASE = ${release'}|" \
+      -e "s|^ *REV_NO *=.*$|REV_NO = ${rev}|" \
+      -e "s|^ *BUILD_DATE *=.*$|BUILD_DATE = ??????|" \
+      -e "/^ *QMAKE_CC *=/d" \
+      -e "/^ *QMAKE_CXX *=/d" \
+      -e "/^ *QMAKE_LINK *=/d"
 
-    ${lib.optionalString (lib.versionOlder versionNum "1.0.0") ''
+    ${lib.optionalString (versionNum == "0.4.15") ''
       # GCC 13 needs the <cstdint> header explicitly included
       sed -i src/gpsim/value.h -e '1i #include <cstdint>'
       sed -i src/gpsim/modules/watchdog.h -e '1i #include <cstdint>'
@@ -103,17 +87,19 @@ stdenv.mkDerivation {
     cd build_XX
   '';
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     libsForQt5.qmake
     libsForQt5.wrapQtAppsHook
-  ];
+    libsForQt5.qttools # for lrelease command
 
-  buildInputs = [
+    # qmake needs doesn't seem to find QT modules from buildInputs
     libsForQt5.qtserialport
     libsForQt5.qtmultimedia
-    libsForQt5.qttools
   ]
-  ++ lib.optionals (lib.versionOlder versionNum "1.1.0") [
+  ++ lib.optionals (versionNum == "0.4.15") [
     libsForQt5.qtscript
   ];
 
@@ -121,43 +107,37 @@ stdenv.mkDerivation {
     runHook preInstall
 
     ${lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -Dm644 ../resources/simulide.desktop $out/share/applications/simulide.desktop
-      install -Dm644 ../${iconPath} $out/share/icons/hicolor/256x256/apps/simulide.png
+      install -Dm644 ../resources/simulide.desktop "$out/share/applications/simulide.desktop"
+      install -Dm644 ../${iconPath} "$out/share/icons/hicolor/256x256/apps/simulide.png"
     ''}
 
     pushd executables/SimulIDE_*
     ${
       if stdenv.hostPlatform.isDarwin then
         ''
-          mkdir -p $out/Applications
-          cp -r simulide.app $out/Applications
+          mkdir -p "$out/Applications"
+          cp -r simulide.app "$out/Applications"
         ''
       else if lib.versionOlder versionNum "1.0.0" then
         ''
-          mkdir -p $out/share/simulide $out/bin
-          cp -r share/simulide/* $out/share/simulide
-          cp bin/simulide $out/bin/simulide
+          install -Dm755 bin/simulide -t "$out/bin"
+          mkdir -p "$out/share/simulide"
+          cp -r share/simulide/* "$out/share/simulide"
+        ''
+      else if lib.versionOlder versionNum "2.0.0" then
+        ''
+          install -Dm755 simulide -t "$out/bin"
+          mkdir -p "$out/share/simulide"
+          cp -r data examples "$out/share/simulide"
         ''
       else
         ''
-          mkdir -p $out/share/simulide $out/bin
-          cp -r data examples $out/share/simulide
-          cp simulide $out/bin/simulide
+          install -Dm755 simulide -t "$out/bin"
         ''
     }
     popd
 
     runHook postInstall
-  '';
-
-  # on darwin there are some binaries in the examples directory which
-  # accidentally get wrapped by wrapQtAppsHook so we do the wrapping manually instead
-  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
-
-  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p $out/bin
-    wrapQtApp $out/Applications/simulide.app/Contents/MacOs/simulide
-    ln -s $out/Applications/simulide.app/Contents/MacOs/simulide $out/bin/simulide
   '';
 
   meta = {
@@ -168,8 +148,7 @@ stdenv.mkDerivation {
       It supports PIC, AVR, Arduino and other MCUs and MPUs.
     '';
     homepage = "https://simulide.com/";
-    license =
-      if lib.versionAtLeast versionNum "1.1.0" then lib.licenses.agpl3Only else lib.licenses.gpl3Only;
+    license = if versionNum == "0.4.15" then lib.licenses.gpl3Only else lib.licenses.agpl3Only;
     mainProgram = "simulide";
     maintainers = with lib.maintainers; [
       carloscraveiro
@@ -177,6 +156,9 @@ stdenv.mkDerivation {
     ];
     platforms = [
       "x86_64-linux"
+    ]
+    ++ lib.optionals (lib.versionAtLeast versionNum "2.0.0") [
+      "aarch64-darwin"
     ];
   };
 }
