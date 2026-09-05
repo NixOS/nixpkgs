@@ -10,11 +10,11 @@ let
   platformMeta = {
     x86_64-linux = {
       debArch = "amd64";
-      hash = "sha256-5tq/BEz5zQJ5z+hu+kMWgsGL/AbQYznOBVqqh66HFyc=";
+      hash = "sha256-TSXkoCjHinrpEGg1UcLyNHksxVlefj40k59Zk0KtpEY=";
     };
     aarch64-linux = {
       debArch = "arm64";
-      hash = "sha256-0Omn4kXbMG80PWYw5NSs14JcUysN91wG0iWMgyFoD6E=";
+      hash = "sha256-HcBFWH2AjCB6GenrNw9ukS3X5pZpU6+5PIHZnD/jGOM=";
     };
   };
 
@@ -24,7 +24,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "widevine-cdm";
-  version = "151.0.7922.137";
+  version = "152.0.7977.82";
 
   src = fetchurl {
     url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_${currentPlatform.debArch}.deb";
