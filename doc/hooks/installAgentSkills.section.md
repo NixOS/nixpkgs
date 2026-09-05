@@ -1,6 +1,8 @@
 # `installAgentSkills` {#installAgentSkills}
 
-This hook automatically installs LLM agent skills into the proper location in `$out/share/skills/($pname|$base)/$skill/`. Any consumers (codex, pi-coding-agent, etc.) should be configured to look for skills in this location.
+This hook automatically installs LLM agent skills into the proper location in `$out/share/skills/($pname|$base)/$skill/`.
+
+Agents do not scan package outputs themselves. Expose skills via `environment.pathsToLink = [ "/share/skills" ];` and symlink the wanted `share/skills/<pname>/<skill>` directories into the agent's skill directory (e.g. `~/.claude/skills/`).
 
 The automatic behavior of the hook can be disabled by setting the `dontInstallAgentSkills` variable to true.
 
@@ -38,7 +40,7 @@ Where `skills/skill-xyz` may look like:
 skills/skill-xyz:
   - SKILL.md
   - scripts/
-  - referneces/
+  - references/
   - assets/
   - ...
 ```
