@@ -5371,7 +5371,7 @@
   cktiel = {
     email = "tiel@tuta.io";
     github = "cktiel";
-    githubId = 	2486916;
+    githubId = 2486916;
     name = "Artur Cierocki";
   };
   clacke = {
