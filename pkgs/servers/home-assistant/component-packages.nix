@@ -2139,12 +2139,13 @@
       [
         aiohasupervisor
         aiousbwatcher
+        flexit-modbus
         modbus-connection
         pymodbus
         serialx
         tmodbus
       ]
-      ++ modbus-connection.optional-dependencies.tmodbus; # missing inputs: flexit-modbus
+      ++ modbus-connection.optional-dependencies.tmodbus;
     "flexit_bacnet" =
       ps: with ps; [
         flexit-bacnet
@@ -8613,6 +8614,7 @@
     "fitbit"
     "fivem"
     "fjaraskupan"
+    "flexit"
     "flexit_bacnet"
     "flic"
     "flipr"
