@@ -39,12 +39,27 @@
 }:
 
 let
-  cudatoolkit = cudaPackages.cuda_nvcc;
+  # `libnvvm.so` and `libdevice.10.bc` are bundled in `cuda_nvcc` up to CUDA 12.x, and shipped as a
+  # dedicated redistributable from CUDA 13.0 onwards
+  nvvmRoot =
+    if cudaPackages.cudaOlder "13.0" then
+      "${lib.getLib cudaPackages.cuda_nvcc}/nvvm"
+    else
+      "${lib.getLib cudaPackages.libnvvm}";
+
+  libCudaPath =
+    # Use cuda_compat to provide libcuda.so on pre-Thor Jetsons
+    if (cudaPackages.cuda_compat.meta.available or false) then
+      cudaPackages.cuda_compat
+    # Else, use the host CUDA driver library
+    else
+      addDriverRunpath.driverLink;
 in
 buildPythonPackage (finalAttrs: {
   version = "0.66.0";
   pname = "numba";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "numba";
@@ -65,22 +80,27 @@ buildPythonPackage (finalAttrs: {
     ./numpy2.5.patch
   ]
   ++ lib.optionals cudaSupport [
-    (replaceVars ./cuda_path.patch {
-      cuda_toolkit_path = cudatoolkit;
-      cuda_toolkit_lib_path = lib.getLib cudatoolkit;
+    # Hardcode the paths of the NVIDIA libraries which numba looks up at runtime, instead of
+    # relying on its discovery heuristics (conda environment, `CUDA_HOME`, `/usr/local/cuda`, ...)
+    (replaceVars ./nvidia-libs-paths.patch {
+      libcuda = libCudaPath;
+      libcudart = lib.getLib cudaPackages.cuda_cudart;
+      libcudart_static = lib.getOutput "static" cudaPackages.cuda_cudart;
+      libnvrtc = lib.getLib cudaPackages.cuda_nvrtc;
+      libnvvm = nvvmRoot;
     })
   ];
 
   postPatch = ''
-    substituteInPlace numba/cuda/cudadrv/driver.py \
-      --replace-fail \
-        "dldir = [" \
-        "dldir = [ '${addDriverRunpath.driverLink}/lib', "
-
     substituteInPlace setup.py \
-      --replace-fail 'max_numpy_run_version = "2.5"' 'max_numpy_run_version = "2.6"'
+      --replace-fail \
+        'max_numpy_run_version = "2.5"' \
+        'max_numpy_run_version = "2.6"'
+
     substituteInPlace numba/__init__.py \
-      --replace-fail "(2, 4)" "(2, 6)"
+      --replace-fail \
+        "(2, 4)" \
+        "(2, 6)"
   '';
 
   build-system = [

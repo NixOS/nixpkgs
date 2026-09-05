@@ -3857,6 +3857,8 @@ self: super: with self; {
 
   cuda-bindings = callPackage ../development/python-modules/cuda-bindings { };
 
+  cuda-cccl = callPackage ../development/python-modules/cuda-cccl { };
+
   cuda-core = callPackage ../development/python-modules/cuda-core { };
 
   cuda-pathfinder = callPackage ../development/python-modules/cuda-pathfinder { };
@@ -12183,6 +12185,8 @@ self: super: with self; {
   numato-gpio = callPackage ../development/python-modules/numato-gpio { };
 
   numba = callPackage ../development/python-modules/numba { inherit (pkgs.config) cudaSupport; };
+
+  numba-cuda = callPackage ../development/python-modules/numba-cuda { };
 
   numba-scipy = callPackage ../development/python-modules/numba-scipy { };
 
