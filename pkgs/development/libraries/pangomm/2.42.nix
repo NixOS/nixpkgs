@@ -8,7 +8,7 @@
   python3,
   pango,
   glibmm,
-  cairomm,
+  cairomm_1_0,
   gnome,
 }:
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     pango
     glibmm
-    cairomm
+    cairomm_1_0
   ];
 
   doCheck = true;

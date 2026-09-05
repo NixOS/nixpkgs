@@ -6,7 +6,7 @@
   alsa-lib,
   aubio,
   boost,
-  cairomm,
+  cairomm_1_0,
   cppunit,
   curl,
   dbus,
@@ -120,7 +120,7 @@ stdenv.mkDerivation (
       alsa-lib
       aubio
       boost
-      cairomm
+      cairomm_1_0
       cppunit
       curl
       dbus

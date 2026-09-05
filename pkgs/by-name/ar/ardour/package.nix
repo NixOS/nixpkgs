@@ -8,7 +8,7 @@
   apple-sdk,
   aubio,
   boost,
-  cairomm,
+  cairomm_1_0,
   cppunit,
   curl,
   darwin,
@@ -134,7 +134,7 @@ let
     buildInputs = [
       aubio
       boost
-      cairomm
+      cairomm_1_0
       cppunit
       curl
       ffmpeg

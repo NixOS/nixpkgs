@@ -22,7 +22,7 @@
   pango,
   pangomm,
   cairo,
-  cairomm,
+  cairomm_1_0,
   dbus,
   dbus-glib,
   gst_all_1,
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     pango
     pangomm
     cairo
-    cairomm
+    cairomm_1_0
     dbus
     dbus-glib
     gst_all_1.gstreamer
