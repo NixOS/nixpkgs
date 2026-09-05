@@ -2169,9 +2169,10 @@
       ];
     "flow_it" =
       ps: with ps; [
+        flow-it-api
         ifaddr
         zeroconf
-      ]; # missing inputs: flow-it-api
+      ];
     "flume" =
       ps: with ps; [
         pyflume
@@ -8626,6 +8627,7 @@
     "flic"
     "flipr"
     "flo"
+    "flow_it"
     "flume"
     "fluss"
     "flux"
