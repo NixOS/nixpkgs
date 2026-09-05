@@ -21,6 +21,9 @@
   libsoundio,
   libsndfile,
   libvorbis,
+  libxinerama,
+  libxcursor,
+  libxft,
   lilv,
   lv2,
   perl5,
@@ -75,6 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
     qt5.qttools
     pkg-config
     qt5.wrapQtAppsHook
+  ]
+  ++ lib.optionals withZyn [
+    fltk
   ];
 
   buildInputs = [
@@ -117,9 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withSoundFont [
     fluidsynth
   ]
-  ++ lib.optionals withZyn [
-    fltk
-  ]
   ++ lib.optionals (withSWH || withSID) [
     perl5
     perl5Packages.ListMoreUtils
@@ -139,6 +142,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withWine [
     glibc_multi
     winePackages
+  ]
+  ++ lib.optionals withZyn [
+    libxinerama
+    libxcursor
+    libxft
   ];
 
   patches = [
