@@ -41,6 +41,20 @@
         ];
       };
 
+      ast-grep = {
+        command = lib.getExe pkgs.ast-grep;
+        includes = [ "*.nix" ];
+        options = [
+          "--config=${./ast-grep}/sgconfig.yml"
+          "scan"
+          # A formatter must succeed after applying its fixes.
+          "--warning"
+          "--update-all"
+        ];
+        # Run before nixf-diagnose and nixfmt process the rewritten files.
+        priority = -2;
+      };
+
       biome = {
         command = lib.getExe pkgs.biome;
         excludes = [
