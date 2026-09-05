@@ -84,10 +84,25 @@ with haskellLib;
   # Version upgrades
   #
 
+  ghc-exactprint_1_14_1_0 = addBuildDepends [
+    # cabal2nix drops conditional block: impl (ghc >= 9.14)
+    self.containers
+    self.Diff
+    self.directory
+    self.filepath
+    self.ghc-paths
+    self.silently
+    self.syb
+    self.HUnit
+  ] super.ghc-exactprint_1_14_1_0;
+
   ghc-exactprint = doDistribute self.ghc-exactprint_1_14_1_0;
   ghc-lib = doDistribute self.ghc-lib_9_14_1_20251220;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_14_1_20251220;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_14_2_0;
+
+  ormolu = doDistribute self.ormolu_0_9_0_0;
+  fourmolu = doDistribute self.fourmolu_0_20_1_0;
 
   #
   # Jailbreaks
@@ -121,20 +136,11 @@ with haskellLib;
   # cabal.project: https://github.com/haskell/haskell-language-server/blob/a4cfaa80ca94beded6f01547a161b37be7b33558/cabal.project#L78
   hie-compat = doJailbreak super.hie-compat; # base < 4.22
 
-  ghc-exactprint_1_14_1_0 = addBuildDepends [
-    # cabal2nix drops conditional block: impl (ghc >= 9.14)
-    self.containers
-    self.Diff
-    self.directory
-    self.filepath
-    self.ghc-paths
-    self.silently
-    self.syb
-    self.HUnit
-  ] super.ghc-exactprint_1_14_1_0;
-
-  ormolu = doDistribute self.ormolu_0_9_0_0;
-  fourmolu = doDistribute self.fourmolu_0_20_1_0;
+  # Too strict bound on containers in test suite
+  # https://github.com/jaspervdj/blaze-markup/issues/69
+  blaze-markup = doJailbreak super.blaze-markup;
+  # https://github.com/jaspervdj/blaze-html/issues/151
+  blaze-html = doJailbreak super.blaze-html;
 
   #
   # Test suite issues
@@ -151,11 +157,4 @@ with haskellLib;
       "generic-lens-syb-tree"
     ];
   } super.generic-lens;
-
-  # Too strict bound on containers in test suite
-  # https://github.com/jaspervdj/blaze-markup/issues/69
-  blaze-markup = doJailbreak super.blaze-markup;
-  # https://github.com/jaspervdj/blaze-html/issues/151
-  blaze-html = doJailbreak super.blaze-html;
-
 }
