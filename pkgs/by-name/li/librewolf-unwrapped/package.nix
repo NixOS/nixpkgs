@@ -29,7 +29,6 @@ in
     homepage = "https://librewolf.net/";
     maintainers = with lib.maintainers; [
       azahi
-      dwrege
       fpletz
       hythera
       mBornand
