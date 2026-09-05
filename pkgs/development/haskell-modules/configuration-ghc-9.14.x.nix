@@ -142,6 +142,10 @@ with haskellLib;
   # https://github.com/jaspervdj/blaze-html/issues/151
   blaze-html = doJailbreak super.blaze-html;
 
+  # 2026-09-05: base <4.22
+  # https://github.com/mitchellwrosen/tasty-hspec/pull/38
+  tasty-hspec = doJailbreak super.tasty-hspec;
+
   #
   # Test suite issues
   #
