@@ -125,7 +125,7 @@ stdenvNoCC.mkDerivation {
           pandoc
           perl5Packages.EmailOutlookMessage
           potrace
-          (python3.withPackages (ps: [ ps.markitdown ]))
+          (python3.withPackages (ps: [ ps.markitdown ] ++ ps.markitdown.optional-dependencies.all))
           resvg
           (texliveBasic.withPackages (ps: [
             ps.dvisvgm
