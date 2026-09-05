@@ -15,6 +15,9 @@
   hotdoc,
   directoryListingUpdater,
   apple-sdk_gstreamer,
+
+  # shared GStreamer meta.identifiers.cpeParts
+  gstreamerCpeParts,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -73,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "FFmpeg plugin for GStreamer";
     homepage = "https://gstreamer.freedesktop.org";
     license = lib.licenses.lgpl2Plus;
+    identifiers.cpeParts = gstreamerCpeParts finalAttrs.version;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ tmarkus ];
   };

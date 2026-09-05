@@ -7,6 +7,24 @@
   ipu6epmtl-camera-hal,
 }:
 
+let
+  # From around version 1.12.0 on, there is a single CPE identifier for all of GStreamer.
+  # FIXME: Should gst-plugins-rs follow the main GStreamer versioning or its own deviating version?
+  gstreamerCpeParts = version: {
+    part = "a";
+    vendor = "gstreamer";
+    product = "gstreamer";
+    inherit version;
+    edition = "*";
+    sw_edition = "*";
+    target_sw = "*";
+    target_hw = "*";
+    language = "*";
+    other = "*";
+    update = "*";
+  };
+in
+
 lib.makeScope newScope (
   self:
   let
@@ -15,27 +33,27 @@ lib.makeScope newScope (
   {
     apple-sdk_gstreamer = apple-sdk;
 
-    gstreamer = callPackage ./core { };
+    gstreamer = callPackage ./core { inherit gstreamerCpeParts; };
 
     gstreamermm = callPackage ./gstreamermm { };
 
-    gst-plugins-base = callPackage ./base { };
+    gst-plugins-base = callPackage ./base { inherit gstreamerCpeParts; };
 
-    gst-plugins-good = callPackage ./good { };
+    gst-plugins-good = callPackage ./good { inherit gstreamerCpeParts; };
 
-    gst-plugins-bad = callPackage ./bad { };
+    gst-plugins-bad = callPackage ./bad { inherit gstreamerCpeParts; };
 
-    gst-plugins-ugly = callPackage ./ugly { };
+    gst-plugins-ugly = callPackage ./ugly { inherit gstreamerCpeParts; };
 
     gst-plugins-rs = callPackage ./rs { };
 
-    gst-rtsp-server = callPackage ./rtsp-server { };
+    gst-rtsp-server = callPackage ./rtsp-server { inherit gstreamerCpeParts; };
 
-    gst-libav = callPackage ./libav { };
+    gst-libav = callPackage ./libav { inherit gstreamerCpeParts; };
 
-    gst-devtools = callPackage ./devtools { };
+    gst-devtools = callPackage ./devtools { inherit gstreamerCpeParts; };
 
-    gst-editing-services = callPackage ./ges { };
+    gst-editing-services = callPackage ./ges { inherit gstreamerCpeParts; };
 
     icamerasrc-ipu6 = callPackage ./icamerasrc { };
     icamerasrc-ipu6ep = callPackage ./icamerasrc {

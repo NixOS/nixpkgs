@@ -46,6 +46,9 @@
   hotdoc,
   directoryListingUpdater,
   apple-sdk_gstreamer,
+
+  # shared GStreamer meta.identifiers.cpeParts
+  gstreamerCpeParts,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -238,6 +241,7 @@ stdenv.mkDerivation (finalAttrs: {
       ++ lib.optional (enableGl && enableWayland) "gl-wayland"
       ++ lib.optional (enableGl && enableX11) "gl-x11"
     );
+    identifiers.cpeParts = gstreamerCpeParts finalAttrs.version;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ tmarkus ];
   };

@@ -23,6 +23,9 @@
   directoryListingUpdater,
   gst-plugins-ugly,
   apple-sdk_gstreamer,
+
+  # shared GStreamer meta.identifiers.cpeParts
+  gstreamerCpeParts,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -122,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
       like. The code might be widely known to present patent problems.
     '';
     license = if enableGplPlugins then lib.licenses.gpl2Plus else lib.licenses.lgpl2Plus;
+    identifiers.cpeParts = gstreamerCpeParts finalAttrs.version;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ tmarkus ];
   };

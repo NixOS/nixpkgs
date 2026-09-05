@@ -67,6 +67,9 @@
   gst-plugins-good,
   directoryListingUpdater,
   apple-sdk_gstreamer,
+
+  # shared GStreamer meta.identifiers.cpeParts
+  gstreamerCpeParts,
 }:
 
 let
@@ -304,6 +307,7 @@ stdenv.mkDerivation (finalAttrs: {
       code, LGPL or LGPL-compatible for the supporting library).
     '';
     license = lib.licenses.lgpl2Plus;
+    identifiers.cpeParts = gstreamerCpeParts finalAttrs.version;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ tmarkus ];
   };

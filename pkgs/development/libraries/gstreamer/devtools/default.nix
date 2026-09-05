@@ -23,6 +23,9 @@
   _experimental-update-script-combinators,
   common-updater-scripts,
   apple-sdk_gstreamer,
+
+  # shared GStreamer meta.identifiers.cpeParts
+  gstreamerCpeParts,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -130,6 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Integration testing infrastructure for the GStreamer framework";
     homepage = "https://gstreamer.freedesktop.org";
     license = lib.licenses.lgpl2Plus;
+    identifiers.cpeParts = gstreamerCpeParts finalAttrs.version;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ tmarkus ];
   };

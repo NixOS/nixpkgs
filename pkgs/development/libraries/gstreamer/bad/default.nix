@@ -112,6 +112,9 @@
   guiSupport ? false,
   gst-plugins-bad,
   apple-sdk_gstreamer,
+
+  # shared GStreamer meta.identifiers.cpeParts
+  gstreamerCpeParts,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -441,6 +444,7 @@ stdenv.mkDerivation (finalAttrs: {
       a real live maintainer, or some actual wide use.
     '';
     license = if enableGplPlugins then lib.licenses.gpl2Plus else lib.licenses.lgpl2Plus;
+    identifiers.cpeParts = gstreamerCpeParts finalAttrs.version;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ tmarkus ];
   };
