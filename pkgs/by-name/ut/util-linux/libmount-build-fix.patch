@@ -1,0 +1,35 @@
+From a323dddbcd1ed05a10e7e870b3e1a48b4ed44a43 Mon Sep 17 00:00:00 2001
+From: Karel Zak <kzak@redhat.com>
+Date: Wed, 2 Sep 2026 13:32:27 +0200
+Subject: [PATCH] libmount: add missing fileutils.h include to hook_idmap.c
+
+The hook_idmap.c uses RESOLVE_NO_SYMLINKS (added by commit fb8e26535)
+but does not include fileutils.h, which provides the fallback #define
+for this constant.
+
+On Fedora (glibc 2.40+), this is masked because glibc's
+<bits/fcntl-linux.h> transitively includes <linux/openat2.h>, which
+defines RESOLVE_NO_SYMLINKS. On Ubuntu (and other distros with older
+glibc), <fcntl.h> does not pull in openat2.h, so the build fails:
+
+  hook_idmap.c:335:33: error: 'RESOLVE_NO_SYMLINKS' undeclared
+
+Fixes: fb8e26535 ("libmount: pin source path with openat2() for restricted users")
+Signed-off-by: Karel Zak <kzak@redhat.com>
+(cherry picked from commit 7e2e010874b10b3aabdc3c4c844c9ffc46a4a374)
+---
+ libmount/src/hook_idmap.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/libmount/src/hook_idmap.c b/libmount/src/hook_idmap.c
+index 77494e29810..2c697b17154 100644
+--- a/libmount/src/hook_idmap.c
++++ b/libmount/src/hook_idmap.c
+@@ -23,6 +23,7 @@
+ 
+ #include "strutils.h"
+ #include "all-io.h"
++#include "fileutils.h"
+ #include "namespace.h"
+ 
+ #include "mountP.h"
