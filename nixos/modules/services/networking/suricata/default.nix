@@ -275,7 +275,7 @@ in
               LockPersonality = true;
               MemoryDenyWriteExecute = false; # pcre2 jit
               ProtectHostname = true;
-              ProtectProc = true;
+              ProtectProc = "invisible";
               ProtectKernelLogs = true;
               ProtectKernelModules = true;
               ProtectKernelTunables = true;
