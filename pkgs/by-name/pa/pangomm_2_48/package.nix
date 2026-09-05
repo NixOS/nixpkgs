@@ -16,6 +16,9 @@ stdenv.mkDerivation rec {
   pname = "pangomm";
   version = "2.56.2";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   outputs = [
     "out"
     "dev"
