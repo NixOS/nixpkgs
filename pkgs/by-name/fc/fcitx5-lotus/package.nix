@@ -11,6 +11,7 @@
   hicolor-icon-theme,
   kdePackages,
   libinput,
+  librsvg,
   libx11,
   nix-update-script,
   pkg-config,
@@ -30,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-lotus";
-  version = "3.5.2";
+  version = "3.5.7";
 
   src = fetchFromGitHub {
     owner = "LotusInputMethod";
     repo = "fcitx5-lotus";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-TflLGUtQBYVjJ6a/vTJa7a3HyVKxb6s9Rzh6FyT4010=";
+    hash = "sha256-IQFklfLrccVm/SW8dpcplbWfoYJNoS4nMMdkuOzOgdo=";
     fetchSubmodules = true;
   };
 
@@ -46,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     go
     hicolor-icon-theme
     kdePackages.extra-cmake-modules
+    librsvg
     pkg-config
     qt6.wrapQtAppsHook
   ];
@@ -58,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     pythonEnv
     qt6.qtbase
+    qt6.qtsvg
     udev
   ];
 
@@ -71,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       pname = "fcitx5-lotus-go-modules";
       inherit (finalAttrs) version src;
       modRoot = "bamboo";
-      vendorHash = "sha256-HjVMGil4bNMTFifxFYtHELdkeKhrumHGrde4msbxvJc=";
+      vendorHash = "sha256-Y8sh1PqmBjXko2X9YOxwCrtrGLQ565aewrq4sRvLdpw=";
     }).goModules;
 
   preConfigure = ''
@@ -90,6 +93,15 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace server/lotus-server.cpp \
       --replace-fail 'strcmp(exe_path, "/usr/bin/fcitx5") == 0' \
                      '(strncmp(exe_path, "/nix/store/", 11) == 0 && strlen(exe_path) >= 11 && strcmp(exe_path + strlen(exe_path) - 11, "/bin/fcitx5") == 0)'
+
+    substituteInPlace src/lotus-engine.cpp \
+      --replace-fail '/usr/share/icons/hicolor' '/run/current-system/sw/share/icons/hicolor'
+
+    substituteInPlace settings-gui/i18n.py \
+      --replace-fail 'localedir = "/usr/share/locale"' 'localedir = "'"$out"'/share/locale"'
+
+    substituteInPlace settings-gui/ui/pages/dict_editor.py \
+      --replace-fail '"/usr/share/fcitx5/lotus/vietnamese.cm.dict"' '"'"$out"'/share/fcitx5/lotus/vietnamese.cm.dict"'
   '';
 
   postInstall = ''
@@ -103,7 +115,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     patchShebangs $out/share/fcitx5-lotus/settings-gui
-    wrapQtApp $out/bin/fcitx5-lotus-settings
+    wrapQtApp $out/bin/fcitx5-lotus-settings \
+      --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share"
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -115,7 +128,10 @@ stdenv.mkDerivation (finalAttrs: {
       gpl3Plus
       lgpl21Plus
     ];
-    maintainers = with lib.maintainers; [ imcvampire ];
+    maintainers = with lib.maintainers; [
+      imcvampire
+      justanoobcoder
+    ];
     platforms = lib.platforms.linux;
   };
 })

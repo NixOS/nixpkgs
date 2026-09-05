@@ -5,7 +5,6 @@
   fetchFromGitHub,
   lndir,
   makeWrapper,
-  replaceVars,
   wrapGAppsHook3,
   wrapQtAppsHook,
 
@@ -89,15 +88,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "qgis-unwrapped";
-  version = "4.0.3";
+  version = "4.2.1";
   outputs = [ "out" ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) "man";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-vHKDc+OeIVfi+7Gp1ROUDYon+wKb24Nr5nCVfmhknvc=";
+    hash = "sha256-tdZNSA6kZHwS96YRbN7YF+ODPJrnINa/QGCo8pw196I=";
   };
+
+  postPatch = ''
+    substituteInPlace python/utils.py \
+      --replace-fail '("mod_spatialite", "sqlite3_modspatialite_init")' \
+        '("${libspatialite}/lib/mod_spatialite${stdenv.hostPlatform.extensions.sharedLibrary}", "sqlite3_modspatialite_init")'
+  '';
 
   passthru = {
     inherit pythonBuildInputs;
@@ -160,16 +165,6 @@ stdenv.mkDerivation rec {
   ]
   ++ pythonBuildInputs;
 
-  patches = [
-    (replaceVars ./set-pyqt6-package-dirs.patch {
-      pyQt6PackageDir = "${py.pkgs.pyqt6}/${py.pkgs.python.sitePackages}";
-      qsciPackageDir = "${py.pkgs.pyqt6-qscintilla}/${py.pkgs.python.sitePackages}";
-    })
-    (replaceVars ./spatialite-path.patch {
-      spatialiteLib = "${libspatialite}/lib/mod_spatialite${stdenv.hostPlatform.extensions.sharedLibrary}";
-    })
-  ];
-
   # Add path to Qt platform plugins
   # (offscreen is needed by "${APIS_SRC_DIR}/generate_console_pap.py")
   env.QT_QPA_PLATFORM_PLUGIN_PATH = "${qtbase}/${qtbase.qtPluginPrefix}/platforms";
@@ -184,6 +179,10 @@ stdenv.mkDerivation rec {
 
     # See https://github.com/libspatialindex/libspatialindex/issues/276
     "-DWITH_INTERNAL_SPATIALINDEX=True"
+
+    "-DPYQT6_DIST_INFO=${py.pkgs.pyqt6}/${py.pkgs.python.sitePackages}/pyqt6-${py.pkgs.pyqt6.version}.dist-info"
+    "-DQSCI_DIST_INFO=${py.pkgs.pyqt6-qscintilla}/${py.pkgs.python.sitePackages}/pyqt6_qscintilla-${py.pkgs.pyqt6-qscintilla.version}.dist-info"
+    "-DQSCI_SIP_DIR=${py.pkgs.pyqt6-qscintilla}/${py.pkgs.python.sitePackages}/PyQt6/bindings"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DQGIS_MACAPP_BUNDLE=0"
