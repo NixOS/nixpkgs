@@ -5,7 +5,7 @@
   fetchYarnDeps,
   yarnConfigHook,
   fetchFromGitHub,
-  typescript,
+  typescript_5,
   jq,
   fetchpatch,
 }:
@@ -29,7 +29,7 @@ let
     };
 
     nativeBuildInputs = [
-      typescript
+      typescript_5
       jq
       yarnConfigHook
     ];
