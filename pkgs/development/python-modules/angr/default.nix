@@ -1,107 +1,151 @@
 {
   lib,
-  stdenv,
-  ailment,
+  angr-data,
   archinfo,
   buildPythonPackage,
   cachetools,
   capstone,
+  cargo,
   cffi,
   claripy,
   cle,
-  cppheaderparser,
   cxxheaderparser,
-  dpkt,
   fetchFromGitHub,
   gitpython,
-  itanium-demangler,
+  grpcio-tools,
+  keystone-engine,
+  lmdb,
+  msgspec,
   mulpyplexer,
-  nampa,
   networkx,
-  progressbar2,
+  platformdirs,
   protobuf,
   psutil,
   pycparser,
-  pyformlang,
   pydemumble,
+  pypcode,
   pyvex,
+  python,
+  pythonOlder,
   rich,
-  rpyc,
+  runCommandCC,
+  rustc,
+  rustPlatform,
   setuptools,
+  setuptools-rust,
   sortedcontainers,
   sqlalchemy,
   sympy,
-  unicorn-angr,
-  unique-log-filter,
+  typing-extensions,
+  unicorn,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "angr";
-  version = "9.2.193";
+  # Keep angr-management, angr, archinfo, claripy, cle, and pyvex in sync.
+  # nixpkgs-update: no auto update
+  version = "9.3.3";
   pyproject = true;
+
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = "angr";
-    tag = "v${version}";
-    hash = "sha256-7wBfxHWD5FRin8pfKup4izJBQzFN5N5dQZqIto5y83k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-00F2F8McL4JGWJzD9HjJoAFwMuGROMCN4ALh6qvaDgY=";
   };
 
-  pythonRelaxDeps = [ "capstone" ];
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src pname version;
+    hash = "sha256-+yDP+7EAP2w5VSA1m/wuUEvB7NfCecmDZ8iqXiX8dHw=";
+  };
 
-  build-system = [ setuptools ];
+  # pythonRelaxDeps cannot relax build-system requirements.
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'grpcio-tools~=1.80.0' 'grpcio-tools' \
+      --replace-fail 'protobuf>=6.31.1,<7' 'protobuf>=6.31.1'
+  '';
+
+  pythonRelaxDeps = [ "lmdb" ];
+
+  build-system = [
+    grpcio-tools
+    protobuf
+    pyvex
+    setuptools
+    setuptools-rust
+  ];
+
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   dependencies = [
-    ailment
+    angr-data
     archinfo
     cachetools
     capstone
     cffi
     claripy
     cle
-    cppheaderparser
     cxxheaderparser
-    dpkt
     gitpython
-    itanium-demangler
+    lmdb
+    msgspec
     mulpyplexer
-    nampa
     networkx
-    progressbar2
+    platformdirs
     protobuf
     psutil
     pycparser
-    pyformlang
     pydemumble
+    pypcode
     pyvex
     rich
-    rpyc
     sortedcontainers
     sympy
-    unique-log-filter
+    typing-extensions
   ];
 
   optional-dependencies = {
     angrdb = [ sqlalchemy ];
-    unicorn = [ unicorn-angr ];
+    keystone = [ keystone-engine ];
+    unicorn = [ unicorn ];
   };
 
-  setupPyBuildFlags = lib.optionals stdenv.hostPlatform.isLinux [
-    "--plat-name"
-    "linux"
-  ];
-
-  # Tests have additional requirements, e.g., pypcode and angr binaries
-  # cle is executing the tests with the angr binaries
+  # The full upstream suite requires large external fixtures and optional dependencies.
   doCheck = false;
 
   pythonImportsCheck = [
     "angr"
+    "archinfo"
     "claripy"
     "cle"
+    "pypcode"
     "pyvex"
-    "archinfo"
   ];
+
+  passthru.tests.smoke =
+    runCommandCC "angr-smoke-test"
+      {
+        __structuredAttrs = true;
+        nativeBuildInputs = [
+          (python.withPackages (_: [
+            finalAttrs.finalPackage
+            sqlalchemy
+            unicorn
+          ]))
+        ];
+      }
+      ''
+        cc -O1 ${./tests/fixture.c} -o fixture
+        python ${./tests/smoke.py} "$PWD/fixture" ${finalAttrs.version}
+        touch "$out"
+      '';
 
   meta = {
     description = "Powerful and user-friendly binary analysis platform";
@@ -109,4 +153,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
