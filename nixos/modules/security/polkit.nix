@@ -151,6 +151,17 @@ in
         # ~/.config/Yubico/u2f_keys (the default key file location)
         ProtectHome = "read-only";
       })
+      (mkIf config.security.pam.yubico.enable {
+        # Override upstream PrivateDevices=yes to allow access to /dev/hidraw*
+        PrivateDevices = false;
+        DeviceAllow = [ "char-hidraw rw" ];
+      })
+      (mkIf config.services.fprintd.enable {
+        # Override upstream PrivateDevices=yes to allow access to /dev/bus/usb/**
+        PrivateDevices = false;
+        DeviceAllow = [ "char-usb_device rw" ];
+        RestrictAddressFamilies = [ "AF_NETLINK" ];
+      })
       (mkIf config.security.pam.zfs.enable {
         PrivateDevices = false;
         DeviceAllow = [
