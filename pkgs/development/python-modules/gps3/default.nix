@@ -6,7 +6,7 @@
 
 buildPythonPackage {
   pname = "gps3";
-  version = "unstable-2017-11-01";
+  version = "0.20";
   format = "setuptools";
 
   src = fetchFromGitHub {
