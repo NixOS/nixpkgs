@@ -36,7 +36,8 @@
   # implementation of the routines instead of the implementation
   # using ad-hoc mutexes (which doesn't depend on libc at all).
   # Use of pthreads helps code play better with sanitizers.
-  withAtomicsPthread ? lib.versionAtLeast release_version "19" && stdenv.cc.libc != null,
+  withAtomicsPthread ?
+    lib.versionAtLeast release_version "19" && stdenv.cc.libc != null && !stdenv.hostPlatform.isMinGW,
 
   # In recent releases, the compiler-rt build seems to produce
   # many `libclang_rt*` libraries, but not a single unified
@@ -214,7 +215,7 @@ stdenv.mkDerivation (finalAttrs: {
       # Fixes https://github.com/NixOS/nixpkgs/issues/393603
       (lib.cmakeBool "COMPILER_RT_DISABLE_AARCH64_FMV" true)
   ++ lib.optionals withAtomics [
-    (lib.cmakeBool "COMPILER_RT_EXCLUDE_ATOMIC_BUILTIN" (!withAtomicsLib))
+    (lib.cmakeBool "COMPILER_RT_EXCLUDE_ATOMIC_BUILTIN" withAtomicsLib)
     (lib.cmakeBool "COMPILER_RT_BUILD_STANDALONE_LIBATOMIC" withAtomicsLib)
     (lib.cmakeBool "COMPILER_RT_LIBATOMIC_USE_PTHREAD" withAtomicsPthread)
   ]
@@ -291,11 +292,21 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString forceLinkCompilerRt ''
       ln -s $out/lib/*/libclang_rt.builtins-*.a $out/lib/libcompiler_rt.a
     ''
-    + lib.optionalString (withAtomics && withAtomicsLib) ''
-      ln -s $out/lib/*/libclang_rt.atomic-*.so $out/lib/libatomic.so
-      # create a link with the original soname as well, so it's found at runtime
-      ln -s $out/lib/*/libclang_rt.atomic-*.so $out/lib/
-    '';
+    + lib.optionalString (withAtomics && withAtomicsLib) (
+      let
+        isMinGW = stdenv.hostPlatform.isMinGW;
+        sharedLibrary = stdenv.hostPlatform.extensions.sharedLibrary;
+        linkLibrarySuffix = lib.optionalString isMinGW ".a";
+        runtimeDirectory = if isMinGW then "$out/bin" else "$out/lib";
+        atomicLibrary = "libclang_rt.atomic" + lib.optionalString isMinGW "_dynamic" + "-*${sharedLibrary}";
+      in
+      ''
+        mkdir -p ${runtimeDirectory}
+        ln -s $out/lib/*/${atomicLibrary}${linkLibrarySuffix} $out/lib/libatomic${sharedLibrary}${linkLibrarySuffix}
+        # Link the original runtime name where the loader searches for shared libraries.
+        ln -s $out/lib/*/${atomicLibrary} ${runtimeDirectory}/
+      ''
+    );
 
   meta = llvm_meta // {
     homepage = "https://compiler-rt.llvm.org/";
