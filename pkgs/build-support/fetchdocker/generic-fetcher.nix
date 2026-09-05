@@ -1,5 +1,5 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
   haskellPackages,
   writeText,
@@ -40,7 +40,7 @@ assert (if layerDigest != "" then !lib.hasPrefix "sha256:" layerDigest else true
 let
   layerDigestFlag = lib.optionalString (layerDigest != "") "--layer ${layerDigest}";
 in
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   inherit name;
   builder = writeText "${fetcher}-builder.sh" ''
     echo "${fetcher} exporting to $out"
@@ -86,7 +86,10 @@ stdenv.mkDerivation {
       "${tag}"
   '';
 
-  buildInputs = [ haskellPackages.hocker ];
+  nativeBuildInputs = [ haskellPackages.hocker ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   outputHashAlgo = "sha256";
   outputHashMode = "flat";
