@@ -443,8 +443,8 @@ in
       "sha256-dXNkOcMonYrBh4yzeubd+v3mW42s9XpmpfvgbtgoJgY=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.43.87"
-      "sha256-lWEOo0WCiUxGL+z5qaahIlsuqKjxQZ4WEotCYJzRQQE=";
+    buildMypyBoto3Package "ec2" "1.43.89"
+      "sha256-/Wt/M1RPQNfClwerihpVr4IJpH05+by2CkDooQ5itXI=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.43.0"
@@ -886,8 +886,8 @@ in
       "sha256-8K0Xm6PMo+daS6xt4kBqaVvO2/LruFV7PVvugI7sNDU=";
 
   mypy-boto3-mediatailor =
-    buildMypyBoto3Package "mediatailor" "1.43.67"
-      "sha256-KByjjBZAkDzURyVPfYAgESJXKrHQFwqIKJHfuGbV92c=";
+    buildMypyBoto3Package "mediatailor" "1.43.89"
+      "sha256-K3D0CyrJxS4P6avsEq33xhlpp6Tl/mjEiVl46r6aKBc=";
 
   mypy-boto3-medical-imaging =
     buildMypyBoto3Package "medical-imaging" "1.43.4"
@@ -1230,8 +1230,8 @@ in
       "sha256-UWNKYI0t5AzHph0jUQEc0R4NJT7izkr/pzO7k14LfDg=";
 
   mypy-boto3-service-quotas =
-    buildMypyBoto3Package "service-quotas" "1.43.0"
-      "sha256-m025z2loWJuRtVezRAXMZIKXMu/V/7cFxghxIOSLLQ4=";
+    buildMypyBoto3Package "service-quotas" "1.43.89"
+      "sha256-VGIbYSvDorqsQfAZFpeRB4eDh3lyy1RjXMwQEv+ldg8=";
 
   mypy-boto3-servicecatalog =
     buildMypyBoto3Package "servicecatalog" "1.43.0"
