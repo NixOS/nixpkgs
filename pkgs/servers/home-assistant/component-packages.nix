@@ -2923,7 +2923,8 @@
       ]; # missing inputs: aiohortos
     "hotspring" =
       ps: with ps; [
-      ]; # missing inputs: python-hotspring
+        python-hotspring
+      ];
     "hp_ilo" =
       ps: with ps; [
         python-hpilo
@@ -8738,6 +8739,7 @@
     "homeworks"
     "honeywell"
     "honeywell_string_lights"
+    "hotspring"
     "hr_energy_qube"
     "html5"
     "http"
