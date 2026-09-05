@@ -98,6 +98,17 @@ with haskellLib;
     )
   );
 
+  cabal-install_3_16_1_0 = lib.pipe super.cabal-install_3_16_1_0 [
+    unmarkBroken
+    doDistribute
+    (
+      pkg:
+      pkg.override {
+        cabal-install-solver = self.cabal-install-solver_3_16_1_0;
+      }
+    )
+  ];
+
   # cabal-install needs most recent versions of Cabal and Cabal-syntax,
   # so we need to put some extra work for non-latest GHCs
   inherit
