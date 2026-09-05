@@ -10,6 +10,7 @@
   libwebp,
   libjxl,
   libspectre,
+  openjpeg,
   # imlib2 can load images from ID3 tags.
   libid3tag,
   librsvg,
@@ -23,6 +24,7 @@
   heifSupport ? false,
   jxlSupport ? false,
   psSupport ? false,
+  j2kSupport ? false,
 
   # for passthru.tests
   libcaca,
@@ -68,7 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optional svgSupport librsvg
   ++ optional webpSupport libwebp
   ++ optional jxlSupport libjxl
-  ++ optional psSupport libspectre;
+  ++ optional psSupport libspectre
+  ++ optional j2kSupport openjpeg;
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -80,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     optional stdenv.hostPlatform.isDarwin "--enable-amd64=no"
     ++ optional (!svgSupport) "--without-svg"
     ++ optional (!heifSupport) "--without-heif"
+    ++ optional (!j2kSupport) "--without-j2k"
     ++ optional (!x11Support) "--without-x";
 
   outputs = [
