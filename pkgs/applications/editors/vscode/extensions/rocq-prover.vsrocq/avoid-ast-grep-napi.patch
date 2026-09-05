@@ -1,0 +1,42 @@
+diff --git a/pp-display/vite.config.ts b/pp-display/vite.config.ts
+index bf097fca..cf12971f 100644
+--- a/pp-display/vite.config.ts
++++ b/pp-display/vite.config.ts
+@@ -1,9 +1,35 @@
+ import { defineConfig } from "vite";
+-import { resolve } from "path";
++import { dirname, relative, resolve } from "path";
+ import dts from 'vite-plugin-dts';
+ import react from "@vitejs/plugin-react";
+ import { externalizeDeps } from 'vite-plugin-externalize-deps';
+-import { libInjectCss} from 'vite-plugin-lib-inject-css';
++
++// Stands in for `vite-plugin-lib-inject-css`, which prepends the same import
++// statements but pulls in `@ast-grep/napi` just to parse the chunk and find a
++// spot for them after any leading directive. The only chunk this build produces
++// has no leading directive, so the front of the chunk is that spot.
++//
++// Unlike the plugin, this does not regenerate the chunk's source map, which is
++// only needed when `build.sourcemap` is set.
++const libInjectCss = () => ({
++  name: "lib-inject-css",
++  apply: "build",
++  enforce: "post",
++  // Without css code splitting there is only one `style.css` and
++  // `chunk.viteMetadata.importedCss` stays empty.
++  config: () => ({ build: { cssCodeSplit: true } }),
++  generateBundle(options, bundle) {
++    for (const chunk of Object.values(bundle)) {
++      if (chunk.type !== "chunk" || !chunk.viteMetadata?.importedCss.size) {
++        continue;
++      }
++      for (const cssFileName of chunk.viteMetadata.importedCss) {
++        const cssFilePath = relative(dirname(chunk.fileName), cssFileName);
++        chunk.code = `import './${cssFilePath}';` + chunk.code;
++      }
++    }
++  },
++});
+ 
+ // https://vitejs.dev/config/
+ export default defineConfig( ({mode}) => ({

@@ -4038,22 +4038,7 @@ let
 
       robocorp.robotframework-lsp = callPackage ./robocorp.robotframework-lsp { };
 
-      rocq-prover.vsrocq = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          publisher = "rocq-prover";
-          name = "vsrocq";
-          # When updating the version here, also update the language server vsrocq-language-server
-          version = "2.4.3";
-          hash = "sha256-o9rsSDCDYRWZQBMDA7DtWay50tBI76kw7H7CivrZpKo=";
-        };
-        meta = {
-          description = "VsRocq is an extension for Visual Studio Code with support for the Rocq Prover";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=rocq-prover.vsrocq";
-          homepage = "https://github.com/rocq-prover/vsrocq";
-          license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.Zimmi48 ];
-        };
-      };
+      rocq-prover.vsrocq = callPackage ./rocq-prover.vsrocq { };
 
       roman.ayu-next = buildVscodeMarketplaceExtension {
         mktplcRef = {

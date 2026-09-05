@@ -1,0 +1,18 @@
+diff --git a/src/utilities/toolchain.ts b/src/utilities/toolchain.ts
+index 4989f654..2c124806 100644
+--- a/src/utilities/toolchain.ts
++++ b/src/utilities/toolchain.ts
+@@ -96,7 +96,12 @@ export default class VsRocqToolchainManager implements Disposable {
+     }
+ 
+     private async searchForVsrocqtopInPath () : Promise<string> {        
+-        return await which("vsrocqtop", { nothrow: true }) ?? "";
++        // Fall back to the language server that was built into this extension,
++        // so that VsRocq works out of the box without the extension having to
++        // offer to download and install the server itself. This is only
++        // consulted after the PATH, so any `vsrocqtop` the user already has
++        // stays in charge.
++        return await which("vsrocqtop", { nothrow: true }) ?? "@vsrocqtop@";
+     }
+ 
+     // Launch the vsrocqtop -where command with the found exec and provided args
