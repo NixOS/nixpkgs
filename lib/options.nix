@@ -564,66 +564,172 @@ rec {
   */
   getFiles = catAttrs "file";
 
+  /**
+    Transform a raw module option set into a base documentation attribute set.
+
+    # Inputs
+
+    `opt`
+
+    : An evaluated module option attribute set (e.g. from `evalModules`).
+
+    # Type
+
+    ```
+    optionToDocItem :: Option -> AttrSet
+    ```
+  */
+  optionToDocItem =
+    opt:
+    let
+      name = showOption opt.loc;
+      visible = opt.visible or true;
+    in
+    {
+      description = opt.description or null;
+      declarations = filter (x: x != unknownModule) opt.declarations;
+      internal = opt.internal or false;
+      visible = if isBool visible then visible else visible == "shallow";
+      readOnly = opt.readOnly or false;
+      type = opt.type.description or "unspecified";
+    }
+    // optionalAttrs (opt ? example) {
+      example = builtins.addErrorContext "while evaluating the example of option `${name}`" (
+        renderOptionValue opt.example
+      );
+    }
+    //
+      optionalAttrs
+        (
+          opt ? defaultText
+          || opt ? default
+          # Render emptyValue-based defaults, but only for types without
+          # submodules (e.g. types.submodule). Submodules may evaluate to
+          # error without user defs, and their sub-options are documented
+          # individually, so best to skip those here.
+          || ((opt.type or { }).emptyValue or { }) ? value && (opt.type or { }).getSubModules or null == null
+        )
+        {
+          default =
+            builtins.addErrorContext
+              "while evaluating the ${
+                if opt ? defaultText then "defaultText" else "default value"
+              } of option `${name}`"
+              (renderOptionValue (opt.defaultText or opt.default or opt.type.emptyValue.value));
+        }
+    // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) {
+      inherit (opt) relatedPackages;
+    };
+
+  /**
+    Generic traversal algebra over a module option attribute set hierarchy.
+
+    # Inputs
+
+    `handlers`
+
+    : An attribute set containing optional callback handlers (`onOption`, `onAttrSet`, `empty`).
+
+    # Type
+
+    ```
+    foldOptionSet :: AttrSet -> (OptionSet | Option) -> Any
+    ```
+  */
+  foldOptionSet =
+    {
+      onOption ?
+        doc: subDocs: opt:
+        empty,
+      onAttrSet ? recurse: set: empty,
+      empty ? { },
+      ...
+    }:
+    let
+      recurse =
+        tree:
+        if isOption tree then
+          let
+            doc = optionToDocItem tree;
+            visible = tree.visible or true;
+            ss = tree.type.getSubOptions tree.loc;
+            subDocs = if ss != { } then recurse ss else empty;
+            subVisible = if isBool visible then visible else visible == "transparent";
+          in
+          onOption doc (if subVisible then subDocs else empty) tree
+        else
+          onAttrSet recurse tree;
+    in
+    recurse;
+
   # Generate documentation template from the list of option declaration like
   # the set generated with filterOptionSets.
   optionAttrSetToDocList = optionAttrSetToDocList' [ ];
 
   optionAttrSetToDocList' =
     _: options:
-    concatMap (
-      opt:
-      let
-        name = showOption opt.loc;
-        visible = opt.visible or true;
-        docOption = {
-          loc = opt.loc;
-          inherit name;
-          description = opt.description or null;
-          declarations = filter (x: x != unknownModule) opt.declarations;
-          internal = opt.internal or false;
-          visible = if isBool visible then visible else visible == "shallow";
-          readOnly = opt.readOnly or false;
-          type = opt.type.description or "unspecified";
-        }
-        // optionalAttrs (opt ? example) {
-          example = builtins.addErrorContext "while evaluating the example of option `${name}`" (
-            renderOptionValue opt.example
-          );
-        }
-        //
-          optionalAttrs
-            (
-              opt ? defaultText
-              || opt ? default
-              # Render emptyValue-based defaults, but only for types without
-              # submodules (e.g. types.submodule). Submodules may evaluate to
-              # error without user defs, and their sub-options are documented
-              # individually, so best to skip those here.
-              || ((opt.type or { }).emptyValue or { }) ? value && (opt.type or { }).getSubModules or null == null
-            )
+    foldOptionSet {
+      onOption =
+        doc: subDocs: opt:
+        [
+          (
             {
-              default =
-                builtins.addErrorContext
-                  "while evaluating the ${
-                    if opt ? defaultText then "defaultText" else "default value"
-                  } of option `${name}`"
-                  (renderOptionValue (opt.defaultText or opt.default or opt.type.emptyValue.value));
+              inherit (opt) loc;
+              name = showOption opt.loc;
             }
-        // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) {
-          inherit (opt) relatedPackages;
-        };
+            // doc
+          )
+        ]
+        ++ subDocs;
+      onAttrSet = recurse: set: concatMap recurse (builtins.attrValues set);
+      empty = [ ];
+    } options;
 
-        subOptions =
-          let
-            ss = opt.type.getSubOptions opt.loc;
-          in
-          if ss != { } then optionAttrSetToDocList' opt.loc ss else [ ];
-        subOptionsVisible = if isBool visible then visible else visible == "transparent";
-      in
-      # To find infinite recursion in NixOS option docs:
-      # builtins.trace opt.loc
-      [ docOption ] ++ optionals subOptionsVisible subOptions
-    ) (collect isOption options);
+  /**
+    Generate documentation template as a nested attribute set (tree)
+    preserving module option structure.
+
+    Submodule sub-options are nested directly under the `"*"` wildcard key.
+
+    # Inputs
+
+    `options`
+
+    : Evaluated module options attribute set (e.g. `(evalModules { ... }).options`).
+
+    # Type
+
+    ```
+    optionToDoc :: (OptionSet | Option) -> AttrSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## Generate a nested option documentation tree
+
+    ```nix
+    optionToDoc (evalModules { modules = [ module ]; }).options
+    => {
+      boot = {
+        enable = {
+          default = { _type = "literalExpression"; text = "false"; };
+          description = "Enable boot";
+          type = "boolean";
+        };
+      };
+    }
+    ```
+    :::
+  */
+  optionToDoc =
+    options:
+    foldOptionSet {
+      onOption =
+        doc: subDocs: _:
+        if subDocs != { } then doc // { "*" = subDocs; } else doc;
+      onAttrSet = recurse: set: mapAttrs (_: recurse) set;
+      empty = { };
+    } options;
 
   /**
     This function recursively removes all derivation attributes from
