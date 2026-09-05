@@ -13,6 +13,9 @@ let
     url =
       "https://rs-launcher-updates.runescape.com/production/linux/x64/releases/${version}/jagex-launcher-beta-linux-x86_64.AppImage";
     hash = "sha256-JOSt564lBOSitSBnV307s2D8McMlzvOVz2Q8jVy91F8=";
+  src = fetchurl {
+    url = "https://rs-launcher-updates.runescape.com/production/linux/x64/releases/${version}/jagex-launcher-beta-linux-x86_64.AppImage";
+    hash = "sha256-JOSt564lBOSitSBnV307s2D8McMlzvOVz2Q8jVy91F8=";
   };
 
   appimageContents = appimageTools.extract {
