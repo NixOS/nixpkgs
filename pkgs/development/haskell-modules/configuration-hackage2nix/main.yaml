@@ -72,6 +72,7 @@ extra-packages:
   - Cabal == 3.12.*
   - Cabal == 3.14.*
   - Cabal == 3.16.*                     # version required for cabal-install and other packages
+  - cabal-add < 0.2.1                   # 2026-09-05: required for HLS with GHC <= 9.8
   - cabal-install == 3.14.*             # 2026-07-26: required to match Cabal used when building HLS
   - cabal-install-solver == 3.14.*      # 2026-07-26: required to build cabal-install 3.14
   - Cabal-syntax == 3.6.*               # required for the GHC 9.0.2 package set

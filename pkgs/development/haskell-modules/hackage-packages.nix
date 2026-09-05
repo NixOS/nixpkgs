@@ -126754,6 +126754,69 @@ self: {
     }
   ) { youProbablyWantCapitalCabal = null; };
 
+  cabal-add_0_2 = callPackage (
+    {
+      mkDerivation,
+      base,
+      bytestring,
+      Cabal,
+      cabal-install-parsers,
+      Cabal-syntax,
+      containers,
+      Diff,
+      directory,
+      filepath,
+      mtl,
+      optparse-applicative,
+      process,
+      string-qq,
+      tasty,
+      temporary,
+    }:
+    mkDerivation {
+      pname = "cabal-add";
+      version = "0.2";
+      sha256 = "0fd098gkfmxrhq0k4j1ll5g4xwwzgmhdx0mj9hnp5xanj7z1laxg";
+      revision = "1";
+      editedCabalFile = "03z75dp7mf471mm40mfb157ng2fgp66nkyhaa6fsb3j2qfwg5wz4";
+      isLibrary = true;
+      isExecutable = true;
+      libraryHaskellDepends = [
+        base
+        bytestring
+        Cabal
+        Cabal-syntax
+        containers
+        mtl
+      ];
+      executableHaskellDepends = [
+        base
+        bytestring
+        cabal-install-parsers
+        Cabal-syntax
+        directory
+        filepath
+        optparse-applicative
+        process
+      ];
+      testHaskellDepends = [
+        base
+        bytestring
+        Cabal
+        Diff
+        directory
+        process
+        string-qq
+        tasty
+        temporary
+      ];
+      description = "Extend Cabal build-depends from the command line";
+      license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
+      mainProgram = "cabal-add";
+    }
+  ) { };
+
   cabal-add = callPackage (
     {
       mkDerivation,
