@@ -68,6 +68,7 @@ let
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [
       larry0x
+      moraxyc
       prince213
     ];
     mainProgram = "wechat";
