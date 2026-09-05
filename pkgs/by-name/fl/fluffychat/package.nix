@@ -61,8 +61,6 @@ flutter344.buildFlutterApplication (
         tebriel
         aleksana
       ];
-      # Refer to https://github.com/NixOS/nixpkgs/issues/545995
-      broken = stdenv.hostPlatform.isAarch64;
       badPlatforms = lib.platforms.darwin;
     }
     // lib.optionalAttrs (targetFlutterPlatform == "linux") {
@@ -116,6 +114,32 @@ flutter344.buildFlutterApplication (
             substituteInPlace third_party/CMakeLists.txt \
               --replace-fail "\''${LIBWEBRTC_THIRD_PARTY_DIR}/downloads/\''${LIBWEBRTC_ASSET}.zip" ${libwebrtc}
               ln -s ${libwebrtc} third_party/libwebrtc
+          '';
+
+          installPhase = ''
+            runHook preInstall
+
+            mkdir $out
+            cp -r ./* $out/
+
+            runHook postInstall
+          '';
+        };
+    }
+    // lib.optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
+      native_toolchain_cmake =
+        { version, src, ... }:
+        stdenv.mkDerivation {
+          pname = "native_toolchain_cmake";
+          inherit version src;
+          inherit (src) passthru;
+
+          postPatch = ''
+            substituteInPlace cmake/aarch64-linux-gnu.toolchain.cmake \
+              --replace-fail "aarch64-linux-gnu-gcc" "gcc"
+
+            substituteInPlace cmake/aarch64-linux-gnu.toolchain.cmake \
+              --replace-fail "aarch64-linux-gnu-g++" "g++"
           '';
 
           installPhase = ''
