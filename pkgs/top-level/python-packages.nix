@@ -6343,6 +6343,8 @@ self: super: with self; {
 
   floret = callPackage ../development/python-modules/floret { };
 
+  flow-it-api = callPackage ../development/python-modules/flow-it-api { };
+
   flow-record = callPackage ../development/python-modules/flow-record { };
 
   flower = callPackage ../development/python-modules/flower { };
