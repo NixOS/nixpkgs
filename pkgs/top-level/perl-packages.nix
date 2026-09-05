@@ -2305,6 +2305,26 @@ with self;
     };
   };
 
+  Badger = buildPerlPackage rec {
+    pname = "Badger";
+    version = "0.16";
+
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AB/ABW/Badger-${version}.tar.gz";
+      hash = "sha256-tL6Z4I3evcvalYONiqGvEgrB7OB71dszM1+7PzLDqqc=";
+    };
+
+    meta = {
+      changelog = "https://metacpan.org/dist/Badger/changes";
+      description = "Perl Application Programming Toolkit";
+      homepage = "https://github.com/abw/Badger";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   BarcodeZBar = buildPerlPackage {
     pname = "Barcode-ZBar";
     version = "0.04pre";
@@ -7948,6 +7968,35 @@ with self;
     };
   };
 
+  CSSInliner = buildPerlPackage rec {
+    pname = "CSS-Inliner";
+    version = "4027";
+
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KA/KAMELKEV/CSS-Inliner-${version}.tar.gz";
+      hash = "sha256-Gg8EvQmdctFcI0PTRcSsF/b7B7gPCeLckGtMIv4jKYo=";
+    };
+
+    buildInputs = with perlPackages; [
+      TestLWPUserAgent
+    ];
+
+    propagatedBuildInputs = with perlPackages; [
+      HTMLQuery
+      HTMLTree
+    ];
+
+    meta = {
+      changelog = "https://github.com/kamelkev/CSS-Inliner/blob/${version}/ChangeLog";
+      description = "Library for converting CSS <style> blocks to inline styles";
+      homepage = "https://github.com/kamelkev/CSS-Inliner";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   CSSMinifier = buildPerlPackage {
     pname = "CSS-Minifier";
     version = "0.01";
@@ -10492,12 +10541,12 @@ with self;
     };
   };
 
-  DBIxSearchBuilder = buildPerlPackage {
+  DBIxSearchBuilder = buildPerlPackage rec {
     pname = "DBIx-SearchBuilder";
-    version = "1.82";
+    version = "1.85";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BP/BPS/DBIx-SearchBuilder-1.82.tar.gz";
-      hash = "sha256-3IDX5PRVdt4/2Ui2slD+3FAM/QCrzTC2qLLXeJV2uPE=";
+      url = "mirror://cpan/authors/id/B/BP/BPS/DBIx-SearchBuilder-${version}.tar.gz";
+      hash = "sha256-5iqwesIdGH5QRGkuSq2BaexO8u980ehxTrREoWpwOPc=";
     };
     buildInputs = [ DBDSQLite ];
     propagatedBuildInputs = [
@@ -15789,6 +15838,30 @@ with self;
     };
   };
 
+  HashMergeExtra = buildPerlPackage rec {
+    pname = "Hash-Merge-Extra";
+    version = "0.06";
+
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIXAS/Hash-Merge-Extra-${version}.tar.gz";
+      hash = "sha256-5q8ro1eubr1T2BBHeAClyN8ZJD8y/ZSs3OkBM43KtFE=";
+    };
+
+    propagatedBuildInputs = with perlPackages; [
+      HashMerge
+    ];
+
+    meta = {
+      changelog = "https://github.com/mr-mixas/Hash-Merge-Extra.pm/blob/v${version}/Changes";
+      description = "Collection of extra behaviors for Hash::Merge";
+      homepage = "https://metacpan.org/pod/Hash::Merge::Extra";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
   HashMergeSimple = buildPerlPackage {
     pname = "Hash-Merge-Simple";
     version = "0.051";
@@ -16346,6 +16419,31 @@ with self;
     };
     meta = {
       description = "Generate An HTML Tag Cloud";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  HTMLQuery = buildPerlPackage rec {
+    pname = "HTML-Query";
+    version = "0.09";
+
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KA/KAMELKEV/HTML-Query-${version}.tar.gz";
+      hash = "sha256-HZocn4rE8YmmOi3JWDg7Y0kf2/Ap7gZYoJtVqu+vMIk=";
+    };
+
+    propagatedBuildInputs = with perlPackages; [
+      Badger
+      HTMLTree
+    ];
+
+    meta = {
+      changelog = "https://metacpan.org/dist/HTML-Query/changes";
+      description = "jQuery-like selection queries for HTML::Element";
+      homepage = "https://metacpan.org/pod/HTML::Query";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -37286,12 +37384,12 @@ with self;
     };
   };
 
-  TimeParseDate = buildPerlPackage {
+  TimeParseDate = buildPerlPackage rec {
     pname = "Time-ParseDate";
-    version = "2015.103";
+    version = "2026.033";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MU/MUIR/modules/Time-ParseDate-2015.103.tar.gz";
-      hash = "sha256-LBoGI1v4EYE8qsnqqdqnGvdYZnzfewgstZhjIg/K7tE=";
+      url = "mirror://cpan/authors/id/B/BP/BPS/Time-ParseDate-${version}.tar.gz";
+      hash = "sha256-hGXIFGvRKdO+SkArReG5+cMG9CsPWKHlB7vb1lPyU7c=";
     };
     doCheck = false;
     meta = {
