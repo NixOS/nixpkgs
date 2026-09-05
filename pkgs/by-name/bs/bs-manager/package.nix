@@ -20,13 +20,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "bs-manager";
-  version = "1.5.6";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "Zagrios";
     repo = "bs-manager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hx6ciEz772NYd9+7WjLqTzNNenWMoOq57IneqsDC1Qg=";
+    hash = "sha256-h2ksGQhnf69zPaas1rZZ/l7U66qYYz8vztTJpZBvZPI=";
   };
 
   postPatch = ''
@@ -39,13 +39,13 @@ buildNpmPackage (finalAttrs: {
     ln -s ${finalAttrs.passthru.depotdownloader}/bin/DepotDownloader assets/scripts/DepotDownloader
   '';
 
-  npmDepsHash = "sha256-wmPZv1lqGr31wBGaeLw7LL6ZMzq/x8lkoy/iMxU+M80=";
+  npmDepsHash = "sha256-iyhbqxnIoxq4MH0Qd+h4FRi8/dqg62SvMDe8/XAfKhI=";
 
   extraNpmDeps = fetchNpmDeps {
     name = "bs-manager-${finalAttrs.version}-extra-npm-deps";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/release/app";
-    hash = "sha256-jE/M22QQzuTS0zgcB+tLEL8Ey61HE8MP7H1MTX060gY=";
+    hash = "sha256-jw7vhYF3//GWIpjlvK+iJakzy2c84Xyx0e6XsBJjAlg=";
   };
 
   makeCacheWritable = true;
@@ -113,7 +113,7 @@ buildNpmPackage (finalAttrs: {
     (makeDesktopItem {
       desktopName = "BSManager";
       name = "BSManager";
-      exec = "bs-manager";
+      exec = "bs-manager %U";
       terminal = false;
       type = "Application";
       icon = "bs-manager";
@@ -132,7 +132,12 @@ buildNpmPackage (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--custom-dep"
+        "extraNpmDeps"
+      ];
+    };
     depotdownloader = callPackage ./depotdownloader { };
   };
 
