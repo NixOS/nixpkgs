@@ -229,6 +229,10 @@ rec {
     config = "arc-unknown-linux-gnu";
   };
 
+  hppa = {
+    config = "hppa-unknown-linux-gnu";
+  };
+
   sh4 = {
     config = "sh4-unknown-linux-gnu";
   };

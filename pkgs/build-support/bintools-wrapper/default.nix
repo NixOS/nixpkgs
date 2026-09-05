@@ -138,6 +138,8 @@ let
       "${sharedLibraryLoader}/lib/ld-linux*.so.3"
     else if targetPlatform.system == "aarch64-linux" then
       "${sharedLibraryLoader}/lib/ld-linux-aarch64.so.1"
+    else if targetPlatform.system == "hppa-linux" then
+      "${sharedLibraryLoader}/lib/ld.so.1"
     else if targetPlatform.system == "powerpc-linux" then
       "${sharedLibraryLoader}/lib/ld.so.1"
     else if targetPlatform.system == "s390-linux" then
