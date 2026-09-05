@@ -12,6 +12,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libsigc++";
   version = "3.8.1";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "libsigcplusplus";
     repo = "libsigcplusplus";
