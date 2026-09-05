@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  fetchpatch,
   pythonAtLeast,
   fastmcp,
 
@@ -17,10 +16,12 @@
   exceptiongroup,
   google-genai,
   griffelib,
-  httpx,
+  httpx2,
+  joserfc,
   jsonref,
   jsonschema-path,
   mcp,
+  mcp-types,
   openai,
   openapi-pydantic,
   opentelemetry-api,
@@ -30,13 +31,13 @@
   pydantic,
   pydantic-monty,
   pydantic-settings,
-  pydocket,
   pyjwt,
   pyperclip,
   python-dotenv,
   python-multipart,
   pyyaml,
   rich,
+  starlette,
   typing-extensions,
   uncalled-for,
   uvicorn,
@@ -53,23 +54,13 @@ buildPythonPackage (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/fastmcp_slim";
   pyproject = true;
 
-  patches = [
-    # Fix python 3.14 compatibility (https://github.com/PrefectHQ/fastmcp/pull/4796)
-    # TODO: remove when updating to the next release
-    (fetchpatch {
-      url = "https://github.com/PrefectHQ/fastmcp/commit/6be0ac8e15d35ff8f5121266855bc34c1158c9a1.patch";
-      includes = [ "fastmcp/tools/function_tool.py" ];
-      stripLen = 1;
-      hash = "sha256-zAWIPAH7q9pIOmqWIup5DIDpVk1hOEDxdqQt7QuU8oI=";
-    })
-  ];
-
   build-system = [
     hatchling
     uv-dynamic-versioning
   ];
 
   dependencies = [
+    mcp-types
     platformdirs
     pydantic
     pydantic-settings
@@ -102,15 +93,17 @@ buildPythonPackage (finalAttrs: {
     ];
     mcp = [
       exceptiongroup
-      httpx
+      httpx2
       mcp
       opentelemetry-api
+      starlette
     ];
     openai = [ openai ];
     server = [
       authlib
       cyclopts
       griffelib
+      joserfc
       jsonref
       jsonschema-path
       openapi-pydantic
@@ -128,9 +121,6 @@ buildPythonPackage (finalAttrs: {
     ++ py-key-value-aio.optional-dependencies.filetree
     ++ py-key-value-aio.optional-dependencies.keyring
     ++ py-key-value-aio.optional-dependencies.memory;
-    tasks = [
-      pydocket
-    ];
   };
 
   pythonImportsCheck = [ "fastmcp" ];

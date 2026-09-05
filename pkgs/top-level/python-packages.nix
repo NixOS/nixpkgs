@@ -5948,6 +5948,8 @@ self: super: with self; {
 
   fastmcp-slim = callPackage ../development/python-modules/fastmcp-slim { };
 
+  fastmcp-tasks = callPackage ../development/python-modules/fastmcp-tasks { };
+
   fastmri = callPackage ../development/python-modules/fastmri { };
 
   fastnlo-toolkit = toPythonModule (
@@ -10552,6 +10554,8 @@ self: super: with self; {
   mcdreforged = callPackage ../development/python-modules/mcdreforged { };
 
   mcp = callPackage ../development/python-modules/mcp { };
+
+  mcp-types = callPackage ../development/python-modules/mcp-types { };
 
   mcpadapt = callPackage ../development/python-modules/mcpadapt { };
 
@@ -22992,6 +22996,8 @@ self: super: with self; {
   zenlog = callPackage ../development/python-modules/zenlog { };
 
   zenoh = callPackage ../development/python-modules/zenoh { };
+
+  zensical = toPythonModule (pkgs.zensical.override { python3Packages = self; });
 
   zephyr-python-api = callPackage ../development/python-modules/zephyr-python-api { };
 
