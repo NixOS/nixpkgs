@@ -10,14 +10,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "blesh";
-  version = "0.4.0-devel3-unstable-2026-08-19";
+  version = "0.4.0-devel3-unstable-2026-09-05";
 
   src = fetchFromGitHub {
     owner = "akinomyoga";
     repo = "ble.sh";
-    rev = "63c23e99f1f7133ae57b79f87b16d1f68cd39884";
+    rev = "69ee0587208881d18adc8a63028f714ab81ad94f";
     fetchSubmodules = true;
-    hash = "sha256-zE9ejja5uPrU0fCIofid29EeW9YAyEuTJ5Lja/PiLQY=";
+    hash = "sha256-Hmh/gBPtJEAuUq5K5EYK+QrH4gTr+Y1MNsVmS/IraRY=";
   };
 
   nativeBuildInputs = [
