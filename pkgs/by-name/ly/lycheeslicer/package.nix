@@ -22,7 +22,7 @@ let
     comment = "All-in-one 3D slicer for Resin and Filament";
     desktopName = "LycheeSlicer";
     noDisplay = false;
-    exec = "lycheeslicer";
+    exec = "lycheeslicer %U";
     terminal = false;
     mimeTypes = [ "model/stl" ];
     categories = [ "Graphics" ];
