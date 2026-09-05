@@ -70,9 +70,10 @@ buildPythonPackage {
   # * https://github.com/NixOS/nixpkgs/pull/375186
   # for more info.
   postInstall = ''
-    mkdir -p $out/${python.sitePackages}/jax_cuda12_plugin/cuda/bin
-    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "ptxas"} $out/${python.sitePackages}/jax_cuda12_plugin/cuda/bin
-    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "nvlink"} $out/${python.sitePackages}/jax_cuda12_plugin/cuda/bin
+    export BINPATH="$out/${python.sitePackages}/jax_cuda12_plugin/cuda/bin"
+    mkdir -p $BINPATH
+    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "ptxas"} $BINPATH/ptxas
+    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "nvlink"} $BINPATH/nvlink
   '';
 
   # jax-cuda12-plugin contains shared libraries that open other shared libraries via dlopen
