@@ -24,6 +24,8 @@ in
           APP_KEY_FILE = "/etc/firefly-iii-appkey";
           LOG_CHANNEL = "stdout";
           SITE_OWNER = "mail@example.com";
+          APP_DEBUG = false;
+          SEND_ERROR_MESSAGE = true;
         };
       };
     };
@@ -100,21 +102,33 @@ in
       };
     };
 
-  testScript = ''
-    fireflySqlite.wait_for_unit("phpfpm-firefly-iii.service")
-    fireflySqlite.wait_for_unit("nginx.service")
-    fireflySqlite.succeed("curl -fvvv -Ls http://localhost/ | grep 'Firefly III'")
-    fireflySqlite.succeed("curl -fvvv -Ls http://localhost/v1/js/app.js")
-    fireflySqlite.succeed("systemctl start firefly-iii-cron.service")
-    fireflyPostgresql.wait_for_unit("phpfpm-firefly-iii.service")
-    fireflyPostgresql.wait_for_unit("nginx.service")
-    fireflyPostgresql.wait_for_unit("postgresql.target")
-    fireflyPostgresql.succeed("curl -fvvv -Ls http://localhost/ | grep 'Firefly III'")
-    fireflyPostgresql.succeed("systemctl start firefly-iii-cron.service")
-    fireflyMysql.wait_for_unit("phpfpm-firefly-iii.service")
-    fireflyMysql.wait_for_unit("nginx.service")
-    fireflyMysql.wait_for_unit("mysql.service")
-    fireflyMysql.succeed("curl -fvvv -Ls http://localhost/ | grep 'Firefly III'")
-    fireflyMysql.succeed("systemctl start firefly-iii-cron.service")
-  '';
+  testScript =
+    { nodes, ... }:
+    let
+      cfg = nodes.fireflySqlite.services.firefly-iii;
+    in
+    ''
+      fireflySqlite.wait_for_unit("phpfpm-firefly-iii.service")
+      fireflySqlite.wait_for_unit("nginx.service")
+      fireflySqlite.succeed("""
+        ${cfg.package.phpPackage}/bin/php -r '
+          $config = require "${cfg.dataDir}/cache/config.php";
+          exit($config["app"]["debug"] === false
+            && $config["firefly"]["send_error_message"] === true ? 0 : 1);
+        '
+      """)
+      fireflySqlite.succeed("curl -fvvv -Ls http://localhost/ | grep 'Firefly III'")
+      fireflySqlite.succeed("curl -fvvv -Ls http://localhost/v1/js/app.js")
+      fireflySqlite.succeed("systemctl start firefly-iii-cron.service")
+      fireflyPostgresql.wait_for_unit("phpfpm-firefly-iii.service")
+      fireflyPostgresql.wait_for_unit("nginx.service")
+      fireflyPostgresql.wait_for_unit("postgresql.target")
+      fireflyPostgresql.succeed("curl -fvvv -Ls http://localhost/ | grep 'Firefly III'")
+      fireflyPostgresql.succeed("systemctl start firefly-iii-cron.service")
+      fireflyMysql.wait_for_unit("phpfpm-firefly-iii.service")
+      fireflyMysql.wait_for_unit("nginx.service")
+      fireflyMysql.wait_for_unit("mysql.service")
+      fireflyMysql.succeed("curl -fvvv -Ls http://localhost/ | grep 'Firefly III'")
+      fireflyMysql.succeed("systemctl start firefly-iii-cron.service")
+    '';
 }
