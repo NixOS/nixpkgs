@@ -899,9 +899,14 @@ with haskellLib;
   # 2022-01-29: Tests require package to be in ghc-db.
   aeson-schemas = dontCheck super.aeson-schemas;
 
-  # Too strict bounds on transformers and resourcet
-  # https://github.com/alphaHeavy/lzma-conduit/issues/23 krank:ignore-line
-  lzma-conduit = doJailbreak super.lzma-conduit;
+  lzma-conduit = lib.pipe super.lzma-conduit [
+    # Too strict bounds on transformers and resourcet
+    # https://github.com/alphaHeavy/lzma-conduit/issues/23 krank:ignore-line
+    doJailbreak
+    # Forbid small inputs in test suite which fail an assertion
+    # https://github.com/alphaHeavy/lzma-conduit/issues/25 krank:ignore-line
+    (appendPatch ./patches/lzma-conduit-prevent-flaky-failures.patch)
+  ];
 
   # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
   # 2024-01-15: too strict bound on free < 5.2
