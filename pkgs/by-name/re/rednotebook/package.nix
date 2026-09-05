@@ -6,7 +6,7 @@
   glib,
   gobject-introspection,
   gtk3,
-  gtksourceview,
+  gtksourceview3,
   pango,
   webkitgtk_4_1,
 }:
@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     gdk-pixbuf
     glib
     gtk3
-    gtksourceview
+    gtksourceview3
     pango
     webkitgtk_4_1
   ]

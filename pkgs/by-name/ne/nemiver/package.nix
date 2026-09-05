@@ -16,7 +16,7 @@
   glibmm,
   gtkmm3,
   vte,
-  gtksourceview,
+  gtksourceview3,
   gsettings-desktop-schemas,
   gtksourceviewmm,
   wrapGAppsHook3,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     glibmm
     gtkmm3
     vte
-    gtksourceview
+    gtksourceview3
     gtksourceviewmm
     gsettings-desktop-schemas
   ];
