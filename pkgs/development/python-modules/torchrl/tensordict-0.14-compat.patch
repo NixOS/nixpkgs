@@ -1,0 +1,199 @@
+Subset of https://github.com/pytorch/rl/commit/6e18e35b2c68be1a56afebfb0676d217925114cd
+holding only the tensordict 0.14 compatibility changes: `to_module` now keeps
+`nn.Parameter`/buffer registrations by default, so the call sites that
+deliberately deregister them must opt out with `preserve_module_state=False`.
+
+diff --git a/torchrl/collectors/_base.py b/torchrl/collectors/_base.py
+index 81c1c5459a7..53e1627717b 100644
+--- a/torchrl/collectors/_base.py
++++ b/torchrl/collectors/_base.py
+@@ -808,14 +808,18 @@ def get_original_weights(policy=policy):
+             return td.data
+ 
+         # We need to use ".data" otherwise buffers may disappear from the `get_original_weights` function
+-        with param_and_buf.data.to("meta").to_module(policy):
++        with param_and_buf.data.to("meta").to_module(
++            policy, preserve_module_state=False
++        ):
+             policy_new_device = deepcopy(policy)
+ 
+         param_and_buf_new_device = param_and_buf.apply(
+             functools.partial(_map_weight, policy_device=policy_device),
+             filter_empty=False,
+         )
+-        param_and_buf_new_device.to_module(policy_new_device)
++        param_and_buf_new_device.to_module(
++            policy_new_device, preserve_module_state=False
++        )
+         # Sanity check
+         if set(TensorDict.from_module(policy_new_device).keys(True, True)) != set(
+             get_original_weights().keys(True, True)
+diff --git a/torchrl/collectors/_multi_base.py b/torchrl/collectors/_multi_base.py
+index 19b022a2550..a8b000fc40d 100644
+--- a/torchrl/collectors/_multi_base.py
++++ b/torchrl/collectors/_multi_base.py
+@@ -1365,7 +1344,9 @@ def _run_processes(self) -> None:
+                 else:
+                     policy_to_send = policy
+                     if policy is not None and policy_weights is not None:
+-                        cm = policy_weights.to_module(policy)
++                        cm = policy_weights.to_module(
++                            policy, preserve_module_state=False
++                        )
+                     else:
+                         cm = contextlib.nullcontext()
+             else:
+diff --git a/torchrl/collectors/utils.py b/torchrl/collectors/utils.py
+index f0b6e05adcd..01eb58ed600 100644
+--- a/torchrl/collectors/utils.py
++++ b/torchrl/collectors/utils.py
+@@ -355,7 +355,11 @@ def _make_meta_policy(policy: nn.Module):
+         On exit, the original parameters are restored to the policy.
+     """
+     param_and_buf = TensorDict.from_module(policy, as_module=True)
+-    return param_and_buf.data.to("meta").apply(_cast, param_and_buf).to_module(policy)
++    return (
++        param_and_buf.data.to("meta")
++        .apply(_cast, param_and_buf)
++        .to_module(policy, preserve_module_state=False)
++    )
+ 
+ 
+ @implement_for("torch", None, "2.8")
+diff --git a/torchrl/envs/transforms/module.py b/torchrl/envs/transforms/module.py
+index 7363d170ea6..201d733f68c 100644
+--- a/torchrl/envs/transforms/module.py
++++ b/torchrl/envs/transforms/module.py
+@@ -276,7 +276,7 @@ def _inv_call(self, tensordict: TensorDictBase) -> TensorDictBase:
+                 return self.module(td)
+ 
+     def _update_weights_tensordict(self, params: TensorDictBase) -> None:
+-        params.to_module(self.module)
++        params.to_module(self.module, preserve_module_state=False)
+ 
+     def _update_weights_state_dict(self, state_dict: dict[str, torch.Tensor]) -> None:
+         self.module.load_state_dict(state_dict)
+diff --git a/torchrl/modules/models/multiagent.py b/torchrl/modules/models/multiagent.py
+index b2a158eada3..635353dba30 100644
+--- a/torchrl/modules/models/multiagent.py
++++ b/torchrl/modules/models/multiagent.py
+@@ -85,10 +85,10 @@ def __init__(
+                     )
+             # Remove all parameters
+             TensorDict.from_module(self._empty_net).data.to("meta").to_module(
+-                self._empty_net
++                self._empty_net, preserve_module_state=False
+             )
+         if not self.use_td_params:
+-            self.params.to_module(self._empty_net)
++            self.params.to_module(self._empty_net, preserve_module_state=False)
+ 
+     @property
+     def vmap_randomness(self):
+@@ -121,7 +121,7 @@ def _pre_forward_check(self, inputs):
+     @staticmethod
+     def vmap_func_module(module, *args, **kwargs):
+         def exec_module(params, *input):
+-            with params.to_module(module):
++            with params.to_module(module, preserve_module_state=False):
+                 return module(*input)
+ 
+         return torch.vmap(exec_module, *args, **kwargs)
+@@ -163,7 +163,7 @@ def forward(self, *inputs: tuple[torch.Tensor]) -> torch.Tensor:
+ 
+         # If parameters are shared, agents use the same network
+         else:
+-            with self.params.to_module(self._empty_net):
++            with self.params.to_module(self._empty_net, preserve_module_state=False):
+                 output = self._empty_net(inputs)
+ 
+             if self.centralized:
+@@ -237,7 +237,7 @@ def get_stateful_net(self, copy: bool = True):
+                 ) from err
+         else:
+             net = self._empty_net
+-        self.params.to_module(net)
++        self.params.to_module(net, preserve_module_state=False)
+         return net
+ 
+     def from_stateful_net(self, stateful_net: nn.Module):
+@@ -263,7 +263,7 @@ def from_stateful_net(self, stateful_net: nn.Module):
+ 
+     def __repr__(self):
+         empty_net = self._empty_net
+-        with self.params.to_module(empty_net):
++        with self.params.to_module(empty_net, preserve_module_state=False):
+             module_repr = indent(str(empty_net), 4 * " ")
+         n_agents = indent(f"n_agents={self.n_agents}", 4 * " ")
+         share_params = indent(f"share_params={self.share_params}", 4 * " ")
+@@ -276,7 +276,7 @@ def reset_parameters(self):
+ 
+         def vmap_reset_module(module, *args, **kwargs):
+             def reset_module(params):
+-                with params.to_module(module):
++                with params.to_module(module, preserve_module_state=False):
+                     _reset_parameters_recursive(module)
+                     return params
+ 
+@@ -285,7 +285,7 @@ def reset_module(params):
+         if not self.share_params:
+             vmap_reset_module(self._empty_net, randomness="different")(self.params)
+         else:
+-            with self.params.to_module(self._empty_net):
++            with self.params.to_module(self._empty_net, preserve_module_state=False):
+                 _reset_parameters_recursive(self._empty_net)
+ 
+ 
+diff --git a/torchrl/modules/tensordict_module/rnn.py b/torchrl/modules/tensordict_module/rnn.py
+index f917003a0a9..45759225f1a 100644
+--- a/torchrl/modules/tensordict_module/rnn.py
++++ b/torchrl/modules/tensordict_module/rnn.py
+@@ -962,7 +962,7 @@ def make_python_based(self) -> LSTMModule:
+         )
+         from tensordict import from_module
+ 
+-        from_module(self.lstm).to_module(lstm)
++        from_module(self.lstm).to_module(lstm, preserve_module_state=False)
+         self.lstm = lstm
+         return self
+ 
+@@ -988,7 +988,7 @@ def make_cudnn_based(self) -> LSTMModule:
+         )
+         from tensordict import from_module
+ 
+-        from_module(self.lstm).to_module(lstm)
++        from_module(self.lstm).to_module(lstm, preserve_module_state=False)
+         self.lstm = lstm
+         return self
+ 
+@@ -2415,7 +2415,7 @@ def make_python_based(self) -> GRUModule:
+         )
+         from tensordict import from_module
+ 
+-        from_module(self.gru).to_module(gru)
++        from_module(self.gru).to_module(gru, preserve_module_state=False)
+         self.gru = gru
+         return self
+ 
+@@ -2440,7 +2440,7 @@ def make_cudnn_based(self) -> GRUModule:
+         )
+         from tensordict import from_module
+ 
+-        from_module(self.gru).to_module(gru)
++        from_module(self.gru).to_module(gru, preserve_module_state=False)
+         self.gru = gru
+         return self
+ 
+diff --git a/torchrl/testing/modules.py b/torchrl/testing/modules.py
+index 97b98559310..3514907d1bc 100644
+--- a/torchrl/testing/modules.py
++++ b/torchrl/testing/modules.py
+@@ -284,7 +284,7 @@ def call_value_nets(
+                 "the value at t and t+1 cannot be retrieved in a single call without recurring to vmap when both params and next params are passed."
+             )
+         if params is not None:
+-            with params.to_module(value_net):
++            with params.to_module(value_net, preserve_module_state=False):
+                 value_est = value_net(data_in).get(value_key)
+         else:
+             value_est = value_net(data_in).get(value_key)
