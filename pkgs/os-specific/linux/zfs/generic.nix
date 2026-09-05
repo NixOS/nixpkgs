@@ -16,7 +16,7 @@ let
       # Userspace dependencies
       zlib,
       libuuid,
-      python3,
+      python3Packages,
       attr,
       openssl,
       libtirpc,
@@ -148,6 +148,14 @@ let
           substituteInPlace ./config/zfs-build.m4 \
             --replace-fail "bashcompletiondir=/etc/bash_completion.d" \
               "bashcompletiondir=$out/share/bash-completion/completions"
+
+          # The contrib/pyzfs module uses dlopen to load the ZFS library. Explicitly
+          # specify the search path, as the shared library is not copied into the
+          # Python package:
+          substituteInPlace ./contrib/pyzfs/libzfs_core/bindings/__init__.py \
+            --replace-fail 'self._ffi.dlopen(self._libname' \
+              'self._ffi.dlopen("'$out'/lib/lib" + self._libname + ".so"'
+
         ''
         + lib.optionalString (lib.versionOlder version "2.4.0") ''
           substituteInPlace ./cmd/arc_summary --replace-fail "/sbin/modinfo" "modinfo"
@@ -172,7 +180,8 @@ let
       ++ optionals buildUser [
         pkg-config
         udevCheckHook
-      ];
+      ]
+      ++ optional (buildUser && enablePython) python3Packages.pythonImportsCheckHook;
       buildInputs =
         optionals buildUser [
           zlib
@@ -183,7 +192,12 @@ let
         ]
         ++ optional buildUser openssl
         ++ optional buildUser curl
-        ++ optional (buildUser && enablePython) python3;
+        ++ optional (buildUser && enablePython) [
+          python3Packages.python
+          python3Packages.packaging
+          python3Packages.setuptools
+        ];
+      propagatedBuildInputs = optional (buildUser && enablePython) python3Packages.cffi;
 
       # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
       env.NIX_CFLAGS_LINK = "-lgcc_s";
@@ -197,7 +211,7 @@ let
       configureFlags = [
         "--with-config=${configFile}"
         "--with-tirpc=1"
-        (lib.withFeatureAs (buildUser && enablePython) "python" python3.interpreter)
+        (lib.withFeatureAs (buildUser && enablePython) "python" python3Packages.python.interpreter)
       ]
       ++ optional enableUnsupportedExperimentalKernel "--enable-linux-experimental"
       ++ optionals buildUser [
@@ -212,6 +226,7 @@ let
         "--localstatedir=/var"
         "--enable-systemd"
         "--enable-pam"
+        (lib.optionalString enablePython "--enable-pyzfs")
       ]
       ++ optionals buildKernel (
         [
@@ -232,6 +247,11 @@ let
       ];
 
       preConfigure = ''
+        # Otherwise, the contrib/pyzfs Makefile will attempt to install into the
+        # site-packages in the Python interpreter's derivation:
+        export PYTHON_SITE_PKG="$out/${python3Packages.python.sitePackages}"
+        mkdir -p "$PYTHON_SITE_PKG"
+
         # The kernel module builds some tests during the configurePhase, this envvar controls their parallelism
         export TEST_JOBS=$NIX_BUILD_CORES
         if [ -z "$enableParallelBuilding" ]; then
