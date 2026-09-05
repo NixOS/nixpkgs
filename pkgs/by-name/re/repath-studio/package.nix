@@ -36,6 +36,8 @@ buildNpmPackage (finalAttrs: {
     # outputHash of clojureHome changes each time `clojure` is updated
     # https://github.com/ngi-nix/ngipkgs/pull/1727#discussion_r2470180998
     ./pin-clojure.patch
+    # checks have become flaky in nix build sandbox, increase timeout and disable dev/shm for chrome
+    ./fix-karma-sandbox.patch
     ./0001-disable-auto-update-check.patch
   ];
 

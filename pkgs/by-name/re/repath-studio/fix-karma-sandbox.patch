@@ -1,0 +1,23 @@
+--- a/karma.conf.js
++++ b/karma.conf.js
+@@ -7,7 +7,7 @@
+     customLaunchers: {
+       ChromeHeadlessNoSandbox: {
+         base: 'ChromeHeadless',
+-        flags: ['--no-sandbox']
++        flags: ['--no-sandbox', '--disable-dev-shm-usage']
+       },
+       CustomElectron: {
+         base: 'Electron',
+@@ -42,6 +42,10 @@
+       outputDir: junitOutputDir + '/karma', // results will be saved as outputDir/browserName.xml
+       outputFile: undefined, // if included, results will be saved as outputDir/browserName/outputFile
+       suite: '' // suite will become the package name attribute in xml testsuite element
+-    }
++    },
++
++    browserDisconnectTimeout: 300000,
++    browserNoActivityTimeout: 300000,
++    pingTimeout: 300000
+   })
+ }
