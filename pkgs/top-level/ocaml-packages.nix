@@ -259,6 +259,10 @@ let
 
         charon = callPackage ../development/ocaml-modules/charon { };
 
+        charrua = callPackage ../development/ocaml-modules/charrua { };
+
+        charrua-server = callPackage ../development/ocaml-modules/charrua/server.nix { };
+
         chrome-trace = callPackage ../development/ocaml-modules/chrome-trace { };
 
         cil = callPackage ../development/ocaml-modules/cil { };
@@ -1345,6 +1349,8 @@ let
 
         mirage-kv = callPackage ../development/ocaml-modules/mirage-kv { };
 
+        mirage-kv-mem = callPackage ../development/ocaml-modules/mirage-kv-mem { };
+
         mirage-logs = callPackage ../development/ocaml-modules/mirage-logs { };
 
         mirage-mtime = callPackage ../development/ocaml-modules/mirage-mtime { };
@@ -2233,6 +2239,8 @@ let
         uri-sexp = callPackage ../development/ocaml-modules/uri/sexp.nix { };
 
         uring = callPackage ../development/ocaml-modules/uring { };
+
+        utcp = callPackage ../development/ocaml-modules/utcp { };
 
         utop = callPackage ../development/tools/ocaml/utop { };
 
