@@ -74,7 +74,7 @@ appimageTools.wrapAppImage {
     description = "Official Jagex Launcher for RuneScape game clients";
     homepage = "https://www.runescape.com/";
     downloadPage =
-      "https://rs-launcher-updates.runescape.com/production/linux/x64/latest/";
+    downloadPage = "https://rs-launcher-updates.runescape.com/production/linux/x64/latest/";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "jagex-launcher";
