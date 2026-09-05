@@ -92,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/explicit-link-aws-crt.patch # fix missing symbols from aws-crt-cpp
     # }}}
     ./patches/boost-1.89-compat.patch
+    ./patches/memcpy-cstring.patch
   ];
 
   # This also may be submitted upstream to maplibre-native-qt, which is currently vendored
