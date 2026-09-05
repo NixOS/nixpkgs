@@ -4445,8 +4445,6 @@ let
         meta.license = lib.licenses.lgpl3Only;
       };
 
-      sourcegraph.amp = callPackage ./sourcegraph.amp { };
-
       sourcery.sourcery = callPackage ./sourcery.sourcery { };
 
       spywhere.guides = buildVscodeMarketplaceExtension {

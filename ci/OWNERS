@@ -393,9 +393,9 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /doc/build-helpers/images/dockertools.section.md @roberth @jhol
 
 # Go
-/doc/languages-frameworks/go.section.md @kalbasit @katexochen @Mic92
-/pkgs/build-support/go @kalbasit @katexochen @Mic92
-/pkgs/development/compilers/go @kalbasit @katexochen @Mic92
+/doc/languages-frameworks/go.section.md @kalbasit @Mic92
+/pkgs/build-support/go @kalbasit @Mic92
+/pkgs/development/compilers/go @kalbasit @Mic92
 
 # GNOME
 /pkgs/desktops/gnome                              @NixOS/gnome

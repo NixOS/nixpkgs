@@ -44,6 +44,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/go-critic/go-critic/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     mainProgram = "gocritic";
-    maintainers = with lib.maintainers; [ katexochen ];
+    maintainers = [ ];
   };
 })
