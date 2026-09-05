@@ -104,9 +104,4 @@ with haskellLib;
       export alex_datadir="$(pwd)/data"
     '';
   }) super.alex;
-
-  # Test failure because of GHC bug:
-  #   https://gitlab.haskell.org/ghc/ghc/-/issues/25937
-  #   https://github.com/sol/interpolate/issues/20
-  interpolate = dontCheckIf (lib.versionOlder self.ghc.version "9.12.3") super.interpolate;
 }
