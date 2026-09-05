@@ -21,15 +21,27 @@ const exec = async (...args) => {
   return res
 }
 
-const downloadFileHttps = (fileName, url, expectedHash, verbose, hashType = 'sha1') => {
+const yarnRegistryUrl = 'https://registry.yarnpkg.com/';
+
+function ensureTrailingSlash(str) {
+  return str.endsWith('/') ? str : str + '/';
+}
+
+const downloadFileHttps = (fileName, url, expectedHash, verbose, hashType = 'sha1', mirrorRegistryUrl = null) => {
+
+  const registryUrl =
+    mirrorRegistryUrl && url.startsWith(yarnRegistryUrl)
+      ? url.replace(yarnRegistryUrl, ensureTrailingSlash(mirrorRegistryUrl))
+      : url;
+
   return new Promise((resolve, reject) => {
-    const get = (url, redirects = 0) => https.get(url, (res) => {
+    const get = (registryUrl, redirects = 0) => https.get(registryUrl, (res) => {
       if(redirects > 10) {
         reject('Too many redirects!');
         return;
       }
       if(res.statusCode === 301 || res.statusCode === 302) {
-        const location = new URL(res.headers.location, url);
+        const location = new URL(res.headers.location, registryUrl);
         if (verbose) console.log('following redirect to ' + location);
         return get(location, redirects + 1);
       }
@@ -41,13 +53,13 @@ const downloadFileHttps = (fileName, url, expectedHash, verbose, hashType = 'sha
         file.close()
         const h = hash.read()
         if (expectedHash === undefined){
-          console.log(`Warning: lockfile url ${url} doesn't end in "#<hash>" to validate against. Downloaded file had hash ${h}.`);
-        } else if (h != expectedHash) return reject(new Error(`hash mismatch, expected ${expectedHash}, got ${h} for ${url}`))
+          console.log(`Warning: lockfile url ${registryUrl} doesn't end in "#<hash>" to validate against. Downloaded file had hash ${h}.`);
+        } else if (h != expectedHash) return reject(new Error(`hash mismatch, expected ${expectedHash}, got ${h} for ${registryUrl}`))
         resolve()
       })
       res.on('error', e => reject(e))
     })
-    get(url)
+    get(registryUrl)
   })
 }
 
@@ -90,7 +102,7 @@ const isGitUrl = pattern => {
   return false
 }
 
-const downloadPkg = (pkg, verbose) => {
+const downloadPkg = (pkg, verbose, mirrorUrl = null) => {
   for (let marker of ['@file:', '@link:']) {
     const split = pkg.key.split(marker)
     if (split.length == 2) {
@@ -122,9 +134,9 @@ const downloadPkg = (pkg, verbose) => {
   } else if (url.startsWith('https://')) {
     if (typeof pkg.integrity === 'string' || pkg.integrity instanceof String) {
       const [ type, checksum ] = pkg.integrity.split('-')
-      return downloadFileHttps(fileName, url, Buffer.from(checksum, 'base64').toString('hex'), verbose, type)
+      return downloadFileHttps(fileName, url, Buffer.from(checksum, 'base64').toString('hex'), verbose, type, mirrorUrl)
     }
-    return downloadFileHttps(fileName, url, hash, verbose)
+    return downloadFileHttps(fileName, url, hash, verbose, 'sha1', mirrorUrl)
   } else if (url.startsWith('file:')) {
     console.warn(`ignoring unsupported file:path url "${url}"`)
   } else {
@@ -155,11 +167,11 @@ const uniqueBy = (arr, callback) => {
   return [...map.values()]
 }
 
-const prefetchYarnDeps = async (lockContents, verbose) => {
+const prefetchYarnDeps = async (lockContents, verbose, mirrorUrl) => {
   const lockData = lockfile.parse(lockContents)
   await performParallel(
     uniqueBy(Object.entries(lockData.object), ([_, value]) => value.resolved)
-    .map(([key, value]) => () => downloadPkg({ key, ...value }, verbose))
+    .map(([key, value]) => () => downloadPkg({ key, ...value }, verbose, mirrorUrl))
   )
   await fs.promises.writeFile('yarn.lock', lockContents)
   if (verbose) console.log('Done')
@@ -173,18 +185,23 @@ Options:
   -h --help         Show this help
   -v --verbose      Verbose output
   --builder         Only perform the download to current directory, then exit
+  --mirrorUrl <url> Use the given registry mirror URL in place of the default
+                    yarn registry (${yarnRegistryUrl})
 `)
   process.exit(1)
 }
 
 const main = async () => {
   const args = process.argv.slice(2)
-  let next, lockFile, verbose, isBuilder
+  let next, lockFile, verbose, isBuilder, mirrorUrl
   while (next = args.shift()) {
     if (next == '--builder') {
       isBuilder = true
     } else if (next == '--verbose' || next == '-v') {
       verbose = true
+    } else if (next == '--mirrorUrl') {
+      mirrorUrl = args.shift()
+      if (!mirrorUrl) showUsage()
     } else if (next == '--help' || next == '-h') {
       showUsage()
     } else if (!lockFile) {
@@ -201,13 +218,13 @@ const main = async () => {
   }
 
   if (isBuilder) {
-    await prefetchYarnDeps(lockContents, verbose)
+    await prefetchYarnDeps(lockContents, verbose, mirrorUrl)
   } else {
     const { stdout: tmpDir } = await exec('mktemp', [ '-d' ])
 
     try {
       process.chdir(tmpDir.trim())
-      await prefetchYarnDeps(lockContents, verbose)
+      await prefetchYarnDeps(lockContents, verbose, mirrorUrl)
       const { stdout: hash } = await exec('nix-hash', [ '--type', 'sha256', '--base32', tmpDir.trim() ])
       console.log(hash)
     } finally {
