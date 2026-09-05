@@ -31,6 +31,8 @@ in
 
       environmentFiles = servarr.mkServarrEnvironmentFiles "radarr";
 
+      database.createLocally = servarr.mkServarrPostgresqlOption "Radarr";
+
       user = lib.mkOption {
         type = lib.types.str;
         default = "radarr";
@@ -45,77 +47,85 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    systemd.tmpfiles.settings."10-radarr".${cfg.dataDir}.d = {
-      inherit (cfg) user group;
-      mode = "0700";
-    };
-
-    systemd.services.radarr = {
-      description = "Radarr";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-      environment = servarr.mkServarrSettingsEnvVars "RADARR" cfg.settings;
-
-      serviceConfig = {
-        Type = "simple";
-        User = cfg.user;
-        Group = cfg.group;
-        EnvironmentFile = cfg.environmentFiles;
-        ExecStart = "${cfg.package}/bin/Radarr -nobrowser -data='${cfg.dataDir}'";
-        Restart = "on-failure";
-
-        # Hardening
-        CapabilityBoundingSet = "";
-        NoNewPrivileges = true;
-        ProtectHome = true;
-        ProtectClock = true;
-        ProtectKernelLogs = true;
-        PrivateTmp = true;
-        PrivateDevices = true;
-        PrivateUsers = true;
-        ProtectKernelTunables = true;
-        ProtectKernelModules = true;
-        ProtectControlGroups = true;
-        RestrictSUIDSGID = true;
-        RemoveIPC = true;
-        UMask = "0022";
-        ProtectHostname = true;
-        ProtectProc = "invisible";
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_INET6"
-          "AF_UNIX"
-        ];
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        LockPersonality = true;
-        SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "@system-service"
-          "~@privileged"
-          "~@debug"
-          "~@mount"
-          "@chown"
-        ];
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
+      systemd.tmpfiles.settings."10-radarr".${cfg.dataDir}.d = {
+        inherit (cfg) user group;
+        mode = "0700";
       };
-      unitConfig.RequiresMountsFor = [ cfg.dataDir ];
-    };
 
-    networking.firewall = lib.mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.settings.server.port ];
-    };
+      systemd.services.radarr = {
+        description = "Radarr";
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        environment = servarr.mkServarrSettingsEnvVars "RADARR" cfg.settings;
 
-    users.users = lib.mkIf (cfg.user == "radarr") {
-      radarr = {
-        group = cfg.group;
-        home = cfg.dataDir;
-        uid = config.ids.uids.radarr;
+        serviceConfig = {
+          Type = "simple";
+          User = cfg.user;
+          Group = cfg.group;
+          EnvironmentFile = cfg.environmentFiles;
+          ExecStart = "${cfg.package}/bin/Radarr -nobrowser -data='${cfg.dataDir}'";
+          Restart = "on-failure";
+
+          # Hardening
+          CapabilityBoundingSet = "";
+          NoNewPrivileges = true;
+          ProtectHome = true;
+          ProtectClock = true;
+          ProtectKernelLogs = true;
+          PrivateTmp = true;
+          PrivateDevices = true;
+          PrivateUsers = true;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectControlGroups = true;
+          RestrictSUIDSGID = true;
+          RemoveIPC = true;
+          UMask = "0022";
+          ProtectHostname = true;
+          ProtectProc = "invisible";
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+          ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          LockPersonality = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+            "~@debug"
+            "~@mount"
+            "@chown"
+          ];
+        };
+        unitConfig.RequiresMountsFor = [ cfg.dataDir ];
       };
-    };
 
-    users.groups = lib.mkIf (cfg.group == "radarr") {
-      radarr.gid = config.ids.gids.radarr;
-    };
-  };
+      networking.firewall = lib.mkIf cfg.openFirewall {
+        allowedTCPPorts = [ cfg.settings.server.port ];
+      };
+
+      users.users = lib.mkIf (cfg.user == "radarr") {
+        radarr = {
+          group = cfg.group;
+          home = cfg.dataDir;
+          uid = config.ids.uids.radarr;
+        };
+      };
+
+      users.groups = lib.mkIf (cfg.group == "radarr") {
+        radarr.gid = config.ids.gids.radarr;
+      };
+    })
+    (servarr.mkServarrPostgresqlConfig {
+      inherit cfg;
+      name = "radarr";
+      postgresqlPort = config.services.postgresql.settings.port;
+      user = cfg.user;
+    })
+  ];
 }
