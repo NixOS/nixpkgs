@@ -3433,13 +3433,14 @@
         hassil
         home-assistant-intents
         ifaddr
+        iseo-argo-ble
         mutagen
         pymicro-vad
         pysmlight
         pyspeex-noise
         serialx
         zeroconf
-      ]; # missing inputs: iseo-argo-ble
+      ];
     "iskra" =
       ps: with ps; [
         pyiskra
@@ -8803,6 +8804,7 @@
     "irm_kmi"
     "iron_os"
     "isal"
+    "iseo_argo_ble"
     "iskra"
     "islamic_prayer_times"
     "israel_rail"
