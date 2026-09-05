@@ -9,15 +9,15 @@
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-index-readers-docling";
-  version = "0.4.2";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_readers_docling";
-    inherit version;
-    hash = "sha256-mOZtVcvbWkri9SZeWAfGxjgKS9J8uF3sk/O/ydQgj+s=";
+    inherit (finalAttrs) version;
+    hash = "sha256-Dlk1ccFQGdvTYWeu6Lhr+vpPHHSHGosTOeW3NF9CQ7o=";
   };
 
   build-system = [ hatchling ];
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
