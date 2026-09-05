@@ -1,6 +1,7 @@
 {
   lib,
   stdenvNoCC,
+  installFonts,
   fetchFromGitHub,
 }:
 
@@ -15,11 +16,14 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-yfqVeT/JiAT+fsqkXUxqlz4sEEFwEJUdvFTAzuqejtk=";
   };
 
+  nativeBuildInputs = [ installFonts ];
+
+  preInstall = ''cd "$src/fonts/v2000 - initial glyphs migration/"'';
+
   installPhase = ''
     runHook preInstall
 
-    install -m444 -Dt $out/share/fonts/opentype */v2000\ -\ initial\ glyphs\ migration/OTF/*.otf
-    install -m444 -Dt $out/share/doc/${pname}-${version} README.md FONTLOG.txt
+    install -m444 -Dt $out/share/doc/${pname}-${version} $src/README.md $src/FONTLOG.txt
 
     runHook postInstall
   '';
