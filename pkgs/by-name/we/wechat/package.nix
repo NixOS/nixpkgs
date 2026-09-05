@@ -1,17 +1,62 @@
 {
-  callPackage,
-  fetchurl,
   lib,
+  stdenv,
   stdenvNoCC,
-}:
+  fetchurl,
 
+  # native
+  _7zz,
+  autoPatchelfHook,
+  dpkg,
+  makeShellWrapper,
+  wrapGAppsHook3,
+
+  # runtime
+  alsa-lib,
+  at-spi2-core,
+  bzip2,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  fontconfig,
+  glib,
+  gtk3,
+  libredirect,
+  libice,
+  libsm,
+  libx11,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxrandr,
+  libglvnd,
+  libjack2,
+  libpulseaudio,
+  libxcb,
+  libxcb-keysyms,
+  libxkbcommon,
+  mesa,
+  nspr,
+  nss,
+  pango,
+  pipewire,
+  systemd,
+  util-linuxMinimal,
+  wayland,
+  xkeyboard-config,
+  zlib,
+}@args:
 let
-  inherit (stdenvNoCC.hostPlatform) system;
-
-  sources = lib.importJSON ./sources.json;
-  source = sources.${system} or (throw "Unsupported system: ${system}");
-
   pname = "wechat";
+
+  passthru = {
+    sources = lib.importJSON ./sources.json;
+    updateScript = ./update.py;
+  };
+
   meta = {
     description = "Messaging and calling app";
     homepage = "https://www.wechat.com/en/";
@@ -23,14 +68,10 @@ let
       prince213
     ];
     mainProgram = "wechat";
-    platforms = lib.attrNames sources;
+  };
+
+  args' = args // {
+    inherit pname passthru meta;
   };
 in
-callPackage (if stdenvNoCC.hostPlatform.isDarwin then ./darwin.nix else ./linux.nix) {
-  inherit pname meta;
-  inherit (source) version;
-  src = fetchurl source.src;
-  passthru = {
-    updateScript = ./update.py;
-  };
-}
+if stdenvNoCC.hostPlatform.isDarwin then import ./darwin.nix args' else import ./linux.nix args'
