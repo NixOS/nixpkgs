@@ -13,46 +13,48 @@
 
         services.prometheus = {
           enable = true;
-          globalConfig.scrape_interval = "2s";
+          settings = {
+            global.scrape_interval = "2s";
 
-          alertmanagers = [
-            {
-              scheme = "http";
-              static_configs = [
-                { targets = [ "alertmanager:${toString config.services.prometheus.alertmanager.port}" ]; }
-              ];
-            }
-          ];
+            alerting.alertmanagers = [
+              {
+                scheme = "http";
+                static_configs = [
+                  { targets = [ "alertmanager:${toString config.services.prometheus.alertmanager.port}" ]; }
+                ];
+              }
+            ];
 
-          rules = [
-            ''
-              groups:
-                - name: test
-                  rules:
-                    - alert: InstanceDown
-                      expr: up == 0
-                      for: 5s
-                      labels:
-                        severity: page
-                      annotations:
-                        summary: "Instance {{ $labels.instance }} down"
-            ''
-          ];
+            rule_files = [
+              (pkgs.writeText "prometheus-rules.yml" ''
+                groups:
+                  - name: test
+                    rules:
+                      - alert: InstanceDown
+                        expr: up == 0
+                        for: 5s
+                        labels:
+                          severity: page
+                        annotations:
+                          summary: "Instance {{ $labels.instance }} down"
+              '')
+            ];
 
-          scrapeConfigs = [
-            {
-              job_name = "alertmanager";
-              static_configs = [
-                { targets = [ "alertmanager:${toString config.services.prometheus.alertmanager.port}" ]; }
-              ];
-            }
-            {
-              job_name = "node";
-              static_configs = [
-                { targets = [ "node:${toString config.services.prometheus.exporters.node.port}" ]; }
-              ];
-            }
-          ];
+            scrape_configs = [
+              {
+                job_name = "alertmanager";
+                static_configs = [
+                  { targets = [ "alertmanager:${toString config.services.prometheus.alertmanager.port}" ]; }
+                ];
+              }
+              {
+                job_name = "node";
+                static_configs = [
+                  { targets = [ "node:${toString config.services.prometheus.exporters.node.port}" ]; }
+                ];
+              }
+            ];
+          };
         };
       };
 

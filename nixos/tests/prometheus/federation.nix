@@ -11,42 +11,45 @@
 
         services.prometheus = {
           enable = true;
-          globalConfig.scrape_interval = "2s";
 
-          scrapeConfigs = [
-            {
-              job_name = "federate";
-              honor_labels = true;
-              metrics_path = "/federate";
+          settings = {
+            global.scrape_interval = "2s";
 
-              params = {
-                "match[]" = [
-                  "{job=\"node\"}"
-                  "{job=\"prometheus\"}"
+            scrape_configs = [
+              {
+                job_name = "federate";
+                honor_labels = true;
+                metrics_path = "/federate";
+
+                params = {
+                  "match[]" = [
+                    "{job=\"node\"}"
+                    "{job=\"prometheus\"}"
+                  ];
+                };
+
+                static_configs = [
+                  {
+                    targets = [
+                      "prometheus1:${toString config.services.prometheus.port}"
+                      "prometheus2:${toString config.services.prometheus.port}"
+                    ];
+                  }
                 ];
-              };
-
-              static_configs = [
-                {
-                  targets = [
-                    "prometheus1:${toString config.services.prometheus.port}"
-                    "prometheus2:${toString config.services.prometheus.port}"
-                  ];
-                }
-              ];
-            }
-            {
-              job_name = "prometheus";
-              static_configs = [
-                {
-                  targets = [
-                    "global1:${toString config.services.prometheus.port}"
-                    "global2:${toString config.services.prometheus.port}"
-                  ];
-                }
-              ];
-            }
-          ];
+              }
+              {
+                job_name = "prometheus";
+                static_configs = [
+                  {
+                    targets = [
+                      "global1:${toString config.services.prometheus.port}"
+                      "global2:${toString config.services.prometheus.port}"
+                    ];
+                  }
+                ];
+              }
+            ];
+          };
         };
       };
 
@@ -59,42 +62,45 @@
 
         services.prometheus = {
           enable = true;
-          globalConfig.scrape_interval = "2s";
 
-          scrapeConfigs = [
-            {
-              job_name = "federate";
-              honor_labels = true;
-              metrics_path = "/federate";
+          settings = {
+            global.scrape_interval = "2s";
 
-              params = {
-                "match[]" = [
-                  "{job=\"node\"}"
-                  "{job=\"prometheus\"}"
+            scrape_configs = [
+              {
+                job_name = "federate";
+                honor_labels = true;
+                metrics_path = "/federate";
+
+                params = {
+                  "match[]" = [
+                    "{job=\"node\"}"
+                    "{job=\"prometheus\"}"
+                  ];
+                };
+
+                static_configs = [
+                  {
+                    targets = [
+                      "prometheus1:${toString config.services.prometheus.port}"
+                      "prometheus2:${toString config.services.prometheus.port}"
+                    ];
+                  }
                 ];
-              };
-
-              static_configs = [
-                {
-                  targets = [
-                    "prometheus1:${toString config.services.prometheus.port}"
-                    "prometheus2:${toString config.services.prometheus.port}"
-                  ];
-                }
-              ];
-            }
-            {
-              job_name = "prometheus";
-              static_configs = [
-                {
-                  targets = [
-                    "global1:${toString config.services.prometheus.port}"
-                    "global2:${toString config.services.prometheus.port}"
-                  ];
-                }
-              ];
-            }
-          ];
+              }
+              {
+                job_name = "prometheus";
+                static_configs = [
+                  {
+                    targets = [
+                      "global1:${toString config.services.prometheus.port}"
+                      "global2:${toString config.services.prometheus.port}"
+                    ];
+                  }
+                ];
+              }
+            ];
+          };
         };
       };
 
@@ -107,20 +113,23 @@
 
         services.prometheus = {
           enable = true;
-          globalConfig.scrape_interval = "2s";
 
-          scrapeConfigs = [
-            {
-              job_name = "node";
-              static_configs = [
-                { targets = [ "node1:${toString config.services.prometheus.exporters.node.port}" ]; }
-              ];
-            }
-            {
-              job_name = "prometheus";
-              static_configs = [ { targets = [ "prometheus1:${toString config.services.prometheus.port}" ]; } ];
-            }
-          ];
+          settings = {
+            global.scrape_interval = "2s";
+
+            scrape_configs = [
+              {
+                job_name = "node";
+                static_configs = [
+                  { targets = [ "node1:${toString config.services.prometheus.exporters.node.port}" ]; }
+                ];
+              }
+              {
+                job_name = "prometheus";
+                static_configs = [ { targets = [ "prometheus1:${toString config.services.prometheus.port}" ]; } ];
+              }
+            ];
+          };
         };
       };
 
@@ -133,20 +142,23 @@
 
         services.prometheus = {
           enable = true;
-          globalConfig.scrape_interval = "2s";
 
-          scrapeConfigs = [
-            {
-              job_name = "node";
-              static_configs = [
-                { targets = [ "node2:${toString config.services.prometheus.exporters.node.port}" ]; }
-              ];
-            }
-            {
-              job_name = "prometheus";
-              static_configs = [ { targets = [ "prometheus2:${toString config.services.prometheus.port}" ]; } ];
-            }
-          ];
+          settings = {
+            global.scrape_interval = "2s";
+
+            scrape_configs = [
+              {
+                job_name = "node";
+                static_configs = [
+                  { targets = [ "node2:${toString config.services.prometheus.exporters.node.port}" ]; }
+                ];
+              }
+              {
+                job_name = "prometheus";
+                static_configs = [ { targets = [ "prometheus2:${toString config.services.prometheus.port}" ]; } ];
+              }
+            ];
+          };
         };
       };
 
