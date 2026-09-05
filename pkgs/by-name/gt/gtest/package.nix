@@ -50,8 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-  ]
-  ++ lib.optionals withAbseil [
+  ];
+
+  buildInputs = lib.optionals withAbseil [
     abseil-cpp
     re2
   ];
