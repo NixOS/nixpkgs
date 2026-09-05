@@ -14,14 +14,14 @@ let
   # we want `pkgs.fzf`, not `fishPlugins.fzf`
   inherit (pkgs) fzf;
 in
-buildFishPlugin rec {
+buildFishPlugin (finalAttrs: {
   pname = "fzf.fish";
   version = "11.0";
 
   src = fetchFromGitHub {
     owner = "PatrickF1";
     repo = "fzf.fish";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-H7HgYT+okuVXo2SinrSs+hxAKCn4Q4su7oMbebKd/7s=";
   };
 
@@ -60,7 +60,7 @@ buildFishPlugin rec {
   meta = {
     description = "Augment your fish command line with fzf key bindings";
     homepage = "https://github.com/PatrickF1/fzf.fish";
-    changelog = "https://github.com/PatrickF1/fzf.fish/releases/tag/${src.rev}";
+    changelog = "https://github.com/PatrickF1/fzf.fish/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       euxane
@@ -68,4 +68,4 @@ buildFishPlugin rec {
     ];
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})
