@@ -74,6 +74,5 @@ with haskellLib;
 
   decimal-literals = doJailbreak super.decimal-literals; # base <4.21
   matrix-client = doJailbreak super.matrix-client; # time <1.13
-  patat = doJailbreak super.patat; # time <1.13
   puresat = doJailbreak super.puresat; # base <4.21
 }
