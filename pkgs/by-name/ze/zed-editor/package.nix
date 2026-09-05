@@ -197,6 +197,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ finalAttrs.buildFeatures;
 
   env = {
+    # Installed binaries are stripped during fixup, so delete.
+    CARGO_PROFILE_RELEASE_DEBUG = "false";
+
     ALLOW_MISSING_LICENSES = true;
     OPENSSL_NO_VENDOR = true;
     LIBGIT2_NO_VENDOR = true;

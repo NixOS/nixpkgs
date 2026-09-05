@@ -18462,14 +18462,17 @@ with self;
 
   JSONValidator = buildPerlPackage {
     pname = "JSON-Validator";
-    version = "5.14";
+    version = "5.19";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/JSON-Validator-5.14.tar.gz";
-      hash = "sha256-YISl1AdeQhqTj/su6XuFBPqjXoZtD3tbWBETr17ijhs=";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/JSON-Validator-5.19.tar.gz";
+      hash = "sha256-nx2G9v72OKr2EOO+KNICeuxKSOLcDuulLvjNVkUV4AQ=";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [
+      DataValidateDomain
+      DataValidateIP
       Mojolicious
+      NetIDNEncode
       YAMLLibYAML
     ];
     meta = {
@@ -22824,10 +22827,10 @@ with self;
 
   MojoliciousPluginOpenAPI = buildPerlPackage {
     pname = "Mojolicious-Plugin-OpenAPI";
-    version = "5.09";
+    version = "5.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-OpenAPI-5.09.tar.gz";
-      hash = "sha256-BIJdfOIe20G80Ujrz6Gu+Ek258QOhKOdvyeGcdSaMQY=";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-OpenAPI-5.12.tar.gz";
+      hash = "sha256-la4bC0NKq2FXhNEyjefBRX40CKZYOnlXA9X1W65psRA=";
     };
     propagatedBuildInputs = [
       JSONValidator

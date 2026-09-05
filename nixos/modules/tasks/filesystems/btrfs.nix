@@ -183,12 +183,12 @@ in
             nameValuePair "btrfs-scrub-${fs'}" {
               description = "btrfs scrub on ${fs}";
               documentation = [ "man:btrfs-scrub(8)" ];
-              # scrub prevents suspend2ram or proper shutdown
-              conflicts = [
+              # scrub prevents suspend2ram or proper shutdown on linux < 6.19
+              conflicts = lib.optionals (lib.versionOlder config.boot.kernelPackages.kernel.version "6.19") [
                 "shutdown.target"
                 "sleep.target"
               ];
-              before = [
+              before = lib.optionals (lib.versionOlder config.boot.kernelPackages.kernel.version "6.19") [
                 "shutdown.target"
                 "sleep.target"
               ];

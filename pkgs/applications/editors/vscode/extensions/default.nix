@@ -89,8 +89,8 @@ let
         mktplcRef = {
           publisher = "42Crunch";
           name = "vscode-openapi";
-          version = "5.6.0";
-          hash = "sha256-ISrCEZukzXsQFCn0fAvG9Fuf8ReO/gkn3FX5/G6DRak=";
+          version = "5.9.0";
+          hash = "sha256-sUfug0F0OaoMmKEmcHyXQIXcun35MAFVSGAHbx7xK/8=";
         };
         meta = {
           changelog = "https://github.com/42Crunch/vscode-openapi/blob/v${mktplcRef.version}/CHANGELOG.md";
@@ -262,8 +262,8 @@ let
         mktplcRef = {
           name = "ng-template";
           publisher = "Angular";
-          version = "22.0.1";
-          hash = "sha256-IaaqFb0YLJcVqoV5QT9fZmYd5GbfQCUlK68SF76Y/dY=";
+          version = "22.1.0";
+          hash = "sha256-/PftUvaE9EjsKRc0TnF0lftOgp5fzKmR+KGhocXEMrk=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Angular.ng-template/changelog";
@@ -1982,8 +1982,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "codespaces";
-          version = "1.18.15";
-          hash = "sha256-NcW2XVQ6F7s6k4mIesEXhCkVVRfudwFr3glqB+TjrqM=";
+          version = "1.18.16";
+          hash = "sha256-5TEMMAy9t54WSnfWWHMNHTYbwGieMIG6fCETm3YASHs=";
         };
 
         meta = {
@@ -3908,6 +3908,8 @@ let
           maintainers = [ ];
         };
       };
+
+      quarto.quarto = callPackage ./quarto.quarto { };
 
       quicktype.quicktype = buildVscodeMarketplaceExtension {
         mktplcRef = {
