@@ -19295,6 +19295,12 @@
     githubId = 96266047;
     name = "Miller Clinton";
   };
+  mmarsalko = {
+    email = "mmarsalko+github@protonmail.com";
+    github = "mmarsalko";
+    githubId = 1740924;
+    name = "Matthew Marsalko";
+  };
   mmesch = {
     github = "MMesch";
     githubId = 2597803;
