@@ -9,15 +9,22 @@
   "x86_64-linux": {
     "version": "4.1.13.8",
     "src": {
-      "url": "https://web.archive.org/web/20260818044436if_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_x86_64.AppImage",
-      "hash": "sha256-RX26ArkbAxzdRBLu4HT7v/udnQax5Q/Bgi00hw4RSZA="
+      "url": "https://web.archive.org/web/20260818044438id_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_x86_64.deb",
+      "hash": "sha256-yXZeh+5RM79LtQ1YXBgU+v2ZXj+w2mLF7Qclm0Pa2ns="
     }
   },
   "aarch64-linux": {
     "version": "4.1.13.8",
     "src": {
-      "url": "https://web.archive.org/web/20260818044444if_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_arm64.AppImage",
-      "hash": "sha256-RLHhac3wSS1C9rx3GsA07Tp1EzxSf2LLBMyPtrECnUY="
+      "url": "https://web.archive.org/web/20260818044442id_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_arm64.deb",
+      "hash": "sha256-ptEV0k3+PtG3594Wz2zAKs7431ZoFQ9wKsjYxSVkBfo="
+    }
+  },
+  "loongarch64-linux": {
+    "version": "4.1.13.8",
+    "src": {
+      "url": "https://web.archive.org/web/20260818044434id_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_LoongArch.deb",
+      "hash": "sha256-pfpwbXk23PVc/yrkpZwRzNDgCVIQ1gLDIzyn8UwpG5Q="
     }
   }
 }
