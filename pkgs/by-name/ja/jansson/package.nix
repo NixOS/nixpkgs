@@ -54,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "C library for encoding, decoding and manipulating JSON data";
     homepage = "https://github.com/akheron/jansson";
