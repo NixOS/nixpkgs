@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/stalwartlabs/vandelay/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.OR [
       lib.licenses.mit
-      lib.licenses.apsl20
+      lib.licenses.asl20
     ];
     mainProgram = "vandelay";
     maintainers = with lib.maintainers; [

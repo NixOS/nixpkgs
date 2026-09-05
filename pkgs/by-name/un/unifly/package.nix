@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Elegant UniFi network management CLI & TUI - for humans and agents";
     homepage = "https://hyperb1iss.github.io/unifly";
     changelog = "https://github.com/hyperb1iss/unifly/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.apsl20;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ britter ];
     mainProgram = "unifly";
   };
