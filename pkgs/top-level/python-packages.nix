@@ -7737,6 +7737,62 @@ self: super: with self; {
 
   hpccm = callPackage ../development/python-modules/hpccm { };
 
+  hpp-baxter = toPythonModule (
+    pkgs.hpp-baxter.override {
+      pythonSupport = true;
+      python3Packages = self;
+    }
+  );
+
+  hpp-bezier-com-traj = toPythonModule (
+    pkgs.hpp-bezier-com-traj.override {
+      pythonSupport = true;
+      python3Packages = self;
+    }
+  );
+
+  hpp-centroidal-dynamics = toPythonModule (
+    pkgs.hpp-centroidal-dynamics.override {
+      pythonSupport = true;
+      python3Packages = self;
+    }
+  );
+
+  hpp-doc = toPythonModule (pkgs.hpp-doc.override { python3Packages = self; });
+
+  hpp-environments = toPythonModule (
+    pkgs.hpp-environments.override {
+      pythonSupport = true;
+      python3Packages = self;
+    }
+  );
+
+  hpp-gepetto-viewer = toPythonModule (pkgs.hpp-gepetto-viewer.override { python3Packages = self; });
+
+  hpp-plot = toPythonModule (pkgs.hpp-plot.override { python3Packages = self; });
+
+  hpp-practicals = toPythonModule (pkgs.hpp-practicals.override { python3Packages = self; });
+
+  hpp-python = toPythonModule (pkgs.hpp-python.override { python3Packages = self; });
+
+  hpp-romeo = toPythonModule (
+    pkgs.hpp-romeo.override {
+      pythonSupport = true;
+      python3Packages = self;
+    }
+  );
+
+  hpp-toppra = toPythonModule (pkgs.hpp-toppra.override { python3Packages = self; });
+
+  hpp-tutorial = toPythonModule (pkgs.hpp-tutorial.override { python3Packages = self; });
+
+  hpp-universal-robot = toPythonModule (
+    pkgs.hpp-universal-robot.override {
+      pythonSupport = true;
+      python3Packages = self;
+    }
+  );
+
   hs-dbus-signature = callPackage ../development/python-modules/hs-dbus-signature { };
 
   hsaudiotag3k = callPackage ../development/python-modules/hsaudiotag3k { };
