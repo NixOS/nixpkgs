@@ -897,7 +897,9 @@ in
     ];
     rancherDistro = "k3s";
   };
-  kafka = handleTest ./kafka { };
+  kafka = import ./kafka {
+    inherit runTest pkgs;
+  };
   kaidan = runTest ./kaidan;
   kanboard = runTest ./web-apps/kanboard.nix;
   kanidm = runTest ./kanidm.nix;
