@@ -560,6 +560,17 @@ in
       lfs = mkIf cfg.lfs.enable {
         PATH = cfg.lfs.contentDir;
       };
+
+      # there is no `forgejo admin regenerate principals` to
+      # regenerate `authorized_principals`, but there is an internal
+      # cronjob that does the same. The downside of having it here is
+      # that installations made with `useWizard = true` and using SSH
+      # certificates at the same will still be affected by stale
+      # paths.
+      "cron.resync_all_sshprincipals" = {
+        ENABLED = mkDefault true;
+        RUN_AT_START = mkDefault true;
+      };
     };
 
     services.forgejo.secrets = {
