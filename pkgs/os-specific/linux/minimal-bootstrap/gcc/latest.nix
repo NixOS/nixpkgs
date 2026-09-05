@@ -21,11 +21,11 @@
 }:
 let
   pname = "gcc";
-  version = "15.3.0";
+  version = "16.2.0";
 
   src = fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.xz";
-    hash = "sha256-+lnBvu+JlfJ8TXHB3yJ1hxiTFdPm+v8btDBuYbDFMOs=";
+    hash = "sha256-5nOOKVl/czJwcxqpBgDzf/3ARQed/CfsfoGSzIEIXD4=";
   };
 
   gmpVersion = "6.3.0";
