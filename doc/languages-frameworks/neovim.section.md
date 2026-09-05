@@ -384,6 +384,8 @@ It accepts a single string for a module, or a list of module strings to test.
 When `nvimRequireCheck` is not specified, we will search the plugin's directory for lua modules to attempt loading. This quick smoke test can catch obvious dependency errors that might be missed.
 The check hook will fail the build if any modules cannot be loaded. This encourages inspecting the logs to identify potential issues.
 
+Vim plugins listed in `dependencies` or `checkInputs`, along with their transitive `dependencies` and `requiredLuaModules`, are added to the check environment. Use `checkInputs` for plugins needed only during checks, such as optional integrations.
+
 To only check a specific module, add it manually to the plugin definition [overrides](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vim/plugins/overrides.nix).
 
 ```nix
