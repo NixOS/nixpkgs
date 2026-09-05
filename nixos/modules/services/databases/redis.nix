@@ -622,13 +622,15 @@ in
                 fi
                 echo 'include "${redisConfStore}"' > "${redisConfRun}"
                 ${lib.optionalString (conf.requirePassFile != null) ''
-                  echo "requirepass $(cat ${lib.escapeShellArg conf.requirePassFile})" >> "${redisConfRun}"
+                  echo "requirepass @REQUIRE_PASS@" >> "${redisConfRun}"
+                  ${lib.getExe pkgs.replace-secret} '@REQUIRE_PASS@' ${lib.escapeShellArg conf.requirePassFile} "${redisConfRun}"
                 ''}
                 ${lib.optionalString (conf.masterUser != null) ''
                   echo "masteruser ${conf.masterUser}" >> "${redisConfRun}"
                 ''}
                 ${lib.optionalString (conf.masterAuthFile != null) ''
-                  echo "masterauth $(cat ${lib.escapeShellArg conf.masterAuthFile})" >> "${redisConfRun}"
+                  echo "masterauth @MASTER_AUTH@" >> "${redisConfRun}"
+                  ${lib.getExe pkgs.replace-secret} '@MASTER_AUTH@' ${lib.escapeShellArg conf.masterAuthFile} "${redisConfRun}"
                 ''}
                 ${lib.optionalString (conf.sentinelMasterHost != null) ''
                   sentinel_monitor_line="sentinel monitor ${conf.sentinelMasterName} ${conf.sentinelMasterHost} ${toString conf.sentinelMasterPort} ${toString conf.sentinelMasterQuorum}"
@@ -649,13 +651,14 @@ in
                   fi
                 ''}
                 ${lib.optionalString (conf.sentinelAuthPassFile != null) ''
-                  sentinel_auth_pass_line="sentinel auth-pass ${conf.sentinelMasterName} $(cat ${lib.escapeShellArg conf.sentinelAuthPassFile})"
+                  sentinel_auth_pass_line="sentinel auth-pass ${conf.sentinelMasterName} @SENTINEL_AUTH_PASS@"
                   if grep -qE "^sentinel auth-pass ${conf.sentinelMasterName}\b" "${redisConfVar}"; then
                     sed -i \
                       "s|^sentinel auth-pass ${conf.sentinelMasterName}\b.*|$sentinel_auth_pass_line|" "${redisConfVar}"
                   else
                     echo "$sentinel_auth_pass_line" >> "${redisConfVar}"
                   fi
+                  ${lib.getExe pkgs.replace-secret} '@SENTINEL_AUTH_PASS@' ${lib.escapeShellArg conf.sentinelAuthPassFile} "${redisConfVar}"
                 ''}
               ''
             );
