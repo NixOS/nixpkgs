@@ -5,7 +5,7 @@
   versionCheckHook,
   libiconv,
   pkg-config,
-  stdenv
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
