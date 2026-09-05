@@ -90,9 +90,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoBuildFlags = "-p rustfs";
   cargoTestFlags = "-p rustfs";
 
-  # tests share global state and fail depending on execution order,
-  # upstream uses nexttest to run tests in separate processes
+  # Use nextest for test isolation and debug mode to reduce test compilation time.
   useNextest = true;
+  checkType = "debug";
 
   passthru = {
     tests = {
