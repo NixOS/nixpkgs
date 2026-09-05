@@ -7378,6 +7378,8 @@ with pkgs;
 
   nsdiff = perlPackages.nsdiff;
 
+  opencloud-production = callPackage ../by-name/op/opencloud/production.nix { };
+
   openresty = callPackage ../servers/http/openresty {
     zlib-ng = zlib;
     withPerl = false;
