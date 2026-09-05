@@ -1538,7 +1538,10 @@ in
   readeck = runTest ./readeck.nix;
   realm = runTest ./realm.nix;
   rebuilderd = runTest ./rebuilderd.nix;
-  redis = handleTest ./redis.nix { };
+  redis = runTest {
+    imports = [ ./redis.nix ];
+    _module.args.package = pkgs.redis;
+  };
   redlib = runTest ./redlib.nix;
   redmine = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./redmine.nix { };
   refind = runTest ./refind.nix;
@@ -1919,6 +1922,10 @@ in
   utmp = runTest ./utmp.nix;
   uwsgi = runTest ./uwsgi.nix;
   v2ray = runTest ./v2ray.nix;
+  valkey = runTest {
+    imports = [ ./redis.nix ];
+    _module.args.package = pkgs.valkey;
+  };
   varnish80 = runTest {
     imports = [ ./varnish.nix ];
     _module.args.package = pkgs.varnish80;
