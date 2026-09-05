@@ -730,6 +730,14 @@ def install_bootloader() -> None:
                     boot_order = re.findall(
                         r"BootOrder: ((?:[0-9a-fA-F]{4},?)*)", efibootmgr_output
                     )[0]
+                    normalized_boot_order = boot_order.upper().split(",")
+                    create_options = ["-C"]
+                    if limine_boot_entry.upper() in normalized_boot_order:
+                        create_options = [
+                            "-c",
+                            "--index",
+                            str(normalized_boot_order.index(limine_boot_entry.upper())),
+                        ]
 
                     efibootmgr_output = subprocess.check_output(
                         [
@@ -745,7 +753,7 @@ def install_bootloader() -> None:
                     efibootmgr_output = subprocess.check_output(
                         [
                             efibootmgr,
-                            "-c",
+                            *create_options,
                             "-b",
                             limine_boot_entry,
                             "-d",
@@ -756,8 +764,6 @@ def install_bootloader() -> None:
                             f"\\efi\\limine\\{boot_file}",
                             "-L",
                             "Limine",
-                            "-o",
-                            boot_order,
                         ],
                         stderr=subprocess.STDOUT,
                         universal_newlines=True,

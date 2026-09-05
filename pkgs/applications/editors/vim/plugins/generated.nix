@@ -16397,12 +16397,12 @@ final: prev: {
 
   slang-server-nvim = buildVimPlugin {
     pname = "slang-server.nvim";
-    version = "0-unstable-2026-06-22";
+    version = "0-unstable-2026-09-04";
     src = fetchFromGitHub {
       owner = "hudson-trading";
       repo = "slang-server.nvim";
-      rev = "fedf769c407b4f36335f758d2c152ccae21a928b";
-      hash = "sha256-+Xb0tqhql3/yObLQ/yNtPfYTw9HEy2nWaQp+Or/YZ0Q=";
+      rev = "cdefd0d686fe5bbb7988d0e9f4a47a7a7408d43b";
+      hash = "sha256-P1vDSF/uC1xw29b1b/4U3degOngSxk/vBWZZuitmXeI=";
     };
     meta.homepage = "https://github.com/hudson-trading/slang-server.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
@@ -25571,6 +25571,20 @@ final: prev: {
       hash = "sha256-7k94AyzOx4Iqwu1Vns4i69/NR1uWlwouOB0UL9VsdL0=";
     };
     meta.homepage = "https://github.com/liuchengxu/vista.vim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
+  visual-surround-nvim = buildVimPlugin {
+    pname = "visual-surround.nvim";
+    version = "1.0.1";
+    src = fetchFromGitHub {
+      owner = "NStefan002";
+      repo = "visual-surround.nvim";
+      tag = "v1.0.1";
+      hash = "sha256-R1IuhysQODTJtJYETsWk/23/EWud7hphVM5ufKVUowU=";
+    };
+    meta.homepage = "https://github.com/NStefan002/visual-surround.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };

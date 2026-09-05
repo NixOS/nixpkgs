@@ -29,6 +29,11 @@ buildPythonPackage (finalAttrs: {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "version=version," "version='${finalAttrs.version}',"
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [
