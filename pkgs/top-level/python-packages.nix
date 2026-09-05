@@ -6833,6 +6833,8 @@ self: super: with self; {
 
   gin-config = callPackage ../development/python-modules/gin-config { };
 
+  gio-pyio = callPackage ../development/python-modules/gio-pyio { };
+
   gios = callPackage ../development/python-modules/gios { };
 
   gipc = callPackage ../development/python-modules/gipc { };
