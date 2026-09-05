@@ -1,0 +1,11 @@
+id: optional-list
+valid:
+  - optional condition value
+  - optionals condition [ value ]
+invalid:
+  - optional condition [ value ]
+  - |
+    optional condition [
+      value # Preserve this comment
+    ]
+  - optional (optional condition value) [ value ]

@@ -1,0 +1,71 @@
+id: optional-list
+snapshots:
+  optional (optional condition value) [ value ]:
+    fixed: optionals (optional condition value) [ value ]
+    labels:
+    - source: optional
+      style: primary
+      start: 0
+      end: 8
+    - source: '[ value ]'
+      style: secondary
+      start: 36
+      end: 45
+    - source: optional (optional condition value) [ value ]
+      style: secondary
+      start: 0
+      end: 45
+    - source: optional (optional condition value)
+      style: secondary
+      start: 0
+      end: 35
+  ? |
+    optional condition [
+      value # Preserve this comment
+    ]
+  : fixed: |
+      optionals condition [
+        value # Preserve this comment
+      ]
+    labels:
+    - source: optional
+      style: primary
+      start: 0
+      end: 8
+    - source: |-
+        [
+          value # Preserve this comment
+        ]
+      style: secondary
+      start: 19
+      end: 54
+    - source: |-
+        optional condition [
+          value # Preserve this comment
+        ]
+      style: secondary
+      start: 0
+      end: 54
+    - source: optional condition
+      style: secondary
+      start: 0
+      end: 18
+  optional condition [ value ]:
+    fixed: optionals condition [ value ]
+    labels:
+    - source: optional
+      style: primary
+      start: 0
+      end: 8
+    - source: '[ value ]'
+      style: secondary
+      start: 19
+      end: 28
+    - source: optional condition [ value ]
+      style: secondary
+      start: 0
+      end: 28
+    - source: optional condition
+      style: secondary
+      start: 0
+      end: 18

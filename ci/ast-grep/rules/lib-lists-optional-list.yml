@@ -1,0 +1,21 @@
+id: lib-lists-optional-list
+language: nix
+severity: error
+message: Use lib.lists.optionals when conditionally including a list.
+rule:
+  all:
+    - pattern: lib.lists.optional
+    - nthChild: 1
+    - inside:
+        all:
+          - kind: apply_expression
+          - nthChild: 1
+          - inside:
+              all:
+                - kind: apply_expression
+                - has:
+                    kind: list_expression
+                    stopBy: neighbor
+              stopBy: neighbor
+        stopBy: neighbor
+fix: lib.lists.optionals

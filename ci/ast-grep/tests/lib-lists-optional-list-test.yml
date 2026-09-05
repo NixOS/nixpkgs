@@ -1,0 +1,11 @@
+id: lib-lists-optional-list
+valid:
+  - lib.lists.optional condition value
+  - lib.lists.optionals condition [ value ]
+invalid:
+  - lib.lists.optional condition [ value ]
+  - |
+    lib.lists.optional condition [
+      value # Preserve this comment
+    ]
+  - lib.lists.optional (lib.lists.optional condition value) [ value ]

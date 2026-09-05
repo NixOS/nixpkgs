@@ -1,0 +1,11 @@
+id: lib-optional-list
+valid:
+  - lib.optional condition value
+  - lib.optionals condition [ value ]
+invalid:
+  - lib.optional condition [ value ]
+  - |
+    lib.optional condition [
+      value # Preserve this comment
+    ]
+  - lib.optional (lib.optional condition value) [ value ]

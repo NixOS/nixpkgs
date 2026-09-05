@@ -1,0 +1,71 @@
+id: lib-optional-list
+snapshots:
+  lib.optional (lib.optional condition value) [ value ]:
+    fixed: lib.optionals (lib.optional condition value) [ value ]
+    labels:
+    - source: lib.optional
+      style: primary
+      start: 0
+      end: 12
+    - source: '[ value ]'
+      style: secondary
+      start: 44
+      end: 53
+    - source: lib.optional (lib.optional condition value) [ value ]
+      style: secondary
+      start: 0
+      end: 53
+    - source: lib.optional (lib.optional condition value)
+      style: secondary
+      start: 0
+      end: 43
+  ? |
+    lib.optional condition [
+      value # Preserve this comment
+    ]
+  : fixed: |
+      lib.optionals condition [
+        value # Preserve this comment
+      ]
+    labels:
+    - source: lib.optional
+      style: primary
+      start: 0
+      end: 12
+    - source: |-
+        [
+          value # Preserve this comment
+        ]
+      style: secondary
+      start: 23
+      end: 58
+    - source: |-
+        lib.optional condition [
+          value # Preserve this comment
+        ]
+      style: secondary
+      start: 0
+      end: 58
+    - source: lib.optional condition
+      style: secondary
+      start: 0
+      end: 22
+  lib.optional condition [ value ]:
+    fixed: lib.optionals condition [ value ]
+    labels:
+    - source: lib.optional
+      style: primary
+      start: 0
+      end: 12
+    - source: '[ value ]'
+      style: secondary
+      start: 23
+      end: 32
+    - source: lib.optional condition [ value ]
+      style: secondary
+      start: 0
+      end: 32
+    - source: lib.optional condition
+      style: secondary
+      start: 0
+      end: 22
