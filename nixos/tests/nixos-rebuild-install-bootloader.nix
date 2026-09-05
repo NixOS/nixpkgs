@@ -3,6 +3,11 @@ import ./make-test-python.nix (
   {
     name = "nixos-rebuild-install-bootloader";
 
+    meta = {
+      # NixOS VM tests cannot run on darwin.
+      platforms = lib.platforms.linux;
+    };
+
     nodes = {
       machine =
         { lib, pkgs, ... }:
