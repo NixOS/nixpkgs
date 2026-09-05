@@ -5,7 +5,7 @@
   pkg-config,
   gnum4,
   glib,
-  libsigcxx,
+  libsigcxx_2_0,
   gnome,
   meson,
   ninja,
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   propagatedBuildInputs = [
     glib
-    libsigcxx
+    libsigcxx_2_0
   ];
 
   doCheck = false; # fails. one test needs the net, another /etc/fstab

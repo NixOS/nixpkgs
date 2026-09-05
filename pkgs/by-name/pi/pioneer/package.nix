@@ -11,7 +11,7 @@
   libGL,
   libGLU,
   libpng,
-  libsigcxx,
+  libsigcxx_2_0,
   libvorbis,
   libx11,
   lua5_2,
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libGLU
     libpng
-    libsigcxx
+    libsigcxx_2_0
     libvorbis
     libx11
     lua5_2

@@ -6046,7 +6046,7 @@ with pkgs;
     libprom
     ;
 
-  libsigcxx = callPackage ../development/libraries/libsigcxx { };
+  libsigcxx_2_0 = callPackage ../development/libraries/libsigcxx/2.0.nix { };
 
   libsigcxx30 = callPackage ../development/libraries/libsigcxx/3.0.nix { };
 

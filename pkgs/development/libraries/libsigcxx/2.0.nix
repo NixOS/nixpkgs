@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "libsigc++";
-      attrPath = "libsigcxx";
+      attrPath = "libsigcxx_2_0";
       versionPolicy = "odd-unstable";
       freeze = "2.99.1";
     };
