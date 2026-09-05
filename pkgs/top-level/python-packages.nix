@@ -9621,6 +9621,8 @@ self: super: with self; {
 
   liblistenbrainz = callPackage ../development/python-modules/liblistenbrainz { };
 
+  libloot = callPackage ../development/python-modules/libloot { };
+
   liblp = callPackage ../development/python-modules/liblp { };
 
   liblzfse = callPackage ../development/python-modules/liblzfse { inherit (pkgs) lzfse; };
