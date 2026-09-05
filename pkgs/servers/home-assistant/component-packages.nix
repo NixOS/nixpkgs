@@ -6208,8 +6208,9 @@
       ps: with ps; [
         aiohasupervisor
         aiousbwatcher
+        samsung-exlink
         serialx
-      ]; # missing inputs: samsung-exlink
+      ];
     "samsung_infrared" =
       ps: with ps; [
         infrared-protocols
@@ -9177,6 +9178,7 @@
     "rympro"
     "sabnzbd"
     "saj"
+    "samsung_exlink"
     "samsung_infrared"
     "samsungtv"
     "sanix"
