@@ -155,6 +155,8 @@ let
     builder = "builder";
     system = "system";
   };
+
+  aPathLiteral = ./misc.nix;
 in
 
 runTests {
@@ -1046,7 +1048,7 @@ runTests {
           outPath = "/drv";
           foo = "ignored attribute";
         };
-        path = /path;
+        path = aPathLiteral;
         stringable = {
           __toString = _: "hello toString";
           bar = "ignored attribute";
@@ -1060,7 +1062,7 @@ runTests {
       possibly newlines
       ')
       drv=/drv
-      path=/path
+      path=${aPathLiteral}
       stringable='hello toString'
     '';
   };
