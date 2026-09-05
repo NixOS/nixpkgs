@@ -122,7 +122,7 @@ jobs:
         with:
           github-token: ${{ steps.app-token.outputs.token || github.token }}
           script: |
-            const { default: checkManualFileEdits } = await import('${{ github.workspace }}/trusted/ci/github-script/manual-file-edits.js')
+            const { default: checkManualFileEdits } = await import('${{ github.workspace }}/trusted/ci/github-script/manual-file-edits.ts')
             await checkManualFileEdits({
               github,
               context,

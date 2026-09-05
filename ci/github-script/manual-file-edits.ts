@@ -2,21 +2,18 @@ import { getCommitDetailsForPR } from './get-pr-commit-details.js'
 import { dismissReviews, postReview } from './reviews.js'
 import { classify } from './supportedBranches.js'
 
-/**
- * @param {{
- *  github: InstanceType<typeof import('@actions/github/lib/utils').GitHub>,
- *  context: typeof import('@actions/github').context,
- *  core: typeof import('@actions/core'),
- *  repoPath?: string,
- *  dry: boolean,
- * }} CheckManualFileEditsProps
- */
 export default async function checkManualFileEdits({
   github,
   context,
   core,
   repoPath,
   dry,
+}: {
+  github: InstanceType<typeof import('@actions/github/lib/utils').GitHub>
+  context: typeof import('@actions/github').context
+  core: typeof import('@actions/core')
+  repoPath?: string
+  dry: boolean
 }) {
   const reviewKey = 'manual-file-edits'
 
