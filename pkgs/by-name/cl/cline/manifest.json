@@ -1,0 +1,14 @@
+{
+  "version": "3.0.44",
+  "platforms": {
+    "darwin-arm64": {
+      "hash": "sha256-BxmUpOg+8vZ4oTUgsibamefO6Vny+dSKdeGcwK+YXy8="
+    },
+    "linux-arm64": {
+      "hash": "sha256-dtO6yZZ7J3DhdEopd000ykyFMQP9IAB8kgzRCMQDzCs="
+    },
+    "linux-x64": {
+      "hash": "sha256-cLFWMX5K+aiH050VCr9CWYbvbXi4cNlysbJlTkqP83U="
+    }
+  }
+}
