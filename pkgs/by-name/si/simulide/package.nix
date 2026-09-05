@@ -19,15 +19,6 @@ let
         inherit rev;
       };
     };
-    "1.0.0" = rec {
-      release = "SR2";
-      rev = "1449";
-      src = fetchbzr {
-        url = "https://code.launchpad.net/~arcachofo/simulide/1.0.0";
-        sha256 = "sha256-rJWZvnjVzaKXU2ktbde1w8LSNvu0jWkDIk4dq2l7t5g=";
-        inherit rev;
-      };
-    };
     "1.1.0" = rec {
       release = "SR2";
       rev = "28965e3bd6dd118598db1f5639ce1cf2e3c56e36";
@@ -55,7 +46,7 @@ let
   inherit (versionInfo.${versionNum} or (throw "Unsupported versionNum")) release rev src;
 
   iconPath =
-    if lib.versionOlder versionNum "1.0.0" then
+    if versionNum == "0.4.15" then
       "resources/icons/hicolor/256x256/simulide.png" # upstream had a messed up icon path in this release
     else
       "resources/icons/simulide.png";
@@ -67,13 +58,6 @@ stdenv.mkDerivation {
   pname = "simulide";
   version = "${versionNum}-${release}";
   inherit src;
-
-  patches = lib.optionals (versionNum == "1.0.0") [
-    # a static field was declared as protected but was accessed
-    # from a place where it would have had to be public
-    # this is only an error when using clang, gcc is more lenient
-    ./clang-fix-protected-field.patch
-  ];
 
   postPatch = ''
     sed -i resources/simulide.desktop \
@@ -92,7 +76,7 @@ stdenv.mkDerivation {
       -e "/^ *QMAKE_CXX *=/d" \
       -e "/^ *QMAKE_LINK *=/d"
 
-    ${lib.optionalString (lib.versionOlder versionNum "1.0.0") ''
+    ${lib.optionalString (versionNum == "0.4.15") ''
       # GCC 13 needs the <cstdint> header explicitly included
       sed -i src/gpsim/value.h -e '1i #include <cstdint>'
       sed -i src/gpsim/modules/watchdog.h -e '1i #include <cstdint>'
@@ -115,7 +99,7 @@ stdenv.mkDerivation {
     libsForQt5.qtserialport
     libsForQt5.qtmultimedia
   ]
-  ++ lib.optionals (lib.versionOlder versionNum "1.1.0") [
+  ++ lib.optionals (versionNum == "0.4.15") [
     libsForQt5.qtscript
   ];
 
@@ -164,8 +148,7 @@ stdenv.mkDerivation {
       It supports PIC, AVR, Arduino and other MCUs and MPUs.
     '';
     homepage = "https://simulide.com/";
-    license =
-      if lib.versionAtLeast versionNum "1.1.0" then lib.licenses.agpl3Only else lib.licenses.gpl3Only;
+    license = if versionNum == "0.4.15" then lib.licenses.gpl3Only else lib.licenses.agpl3Only;
     mainProgram = "simulide";
     maintainers = with lib.maintainers; [
       carloscraveiro
