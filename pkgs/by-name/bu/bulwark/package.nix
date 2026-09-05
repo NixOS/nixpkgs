@@ -4,6 +4,7 @@
   fetchFromGitHub,
   google-fonts,
   nodejs,
+  stdenv,
   nix-update-script,
   nixosTests,
 }:
@@ -65,6 +66,12 @@ buildNpmPackage (finalAttrs: {
       --set NEXT_TELEMETRY_DISABLED 1
 
     runHook postInstall
+  '';
+
+  postInstall = ''
+    # sharp picks its native binary by libc (detect-libc), so the copies built
+    # for the other libc can never be loaded.
+    rm -rf $out/node_modules/@img/*-${if stdenv.hostPlatform.isMusl then "linux" else "linuxmusl"}-*
   '';
 
   __structuredAttrs = true;
