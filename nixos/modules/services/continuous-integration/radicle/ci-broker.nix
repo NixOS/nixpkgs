@@ -56,6 +56,16 @@ in
       default = "/var/log/radicle-ci";
     };
 
+    logLevel = lib.mkOption {
+      type = lib.types.str;
+      default = "info";
+      description = ''
+        Log level for radicle-ci-broker, set via the `RUST_LOG` environment variable. See
+        [RUST_LOG](https://docs.rs/env_logger/latest/env_logger/#enabling-logging)
+        for the format.
+      '';
+    };
+
     enableHardening = lib.mkEnableOption "systemd hardening" // {
       default = true;
       example = false;
@@ -191,7 +201,10 @@ in
       bindsTo = [ "radicle-node.service" ];
       after = [ "radicle-node.service" ];
 
-      environment = { inherit RAD_HOME; };
+      environment = {
+        inherit RAD_HOME;
+        RUST_LOG = cfg.logLevel;
+      };
 
       serviceConfig = lib.mkMerge [
         {
