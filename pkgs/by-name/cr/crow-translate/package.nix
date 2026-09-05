@@ -3,25 +3,28 @@
   stdenv,
   fetchFromGitLab,
   cmake,
+  espeak-ng,
   leptonica,
+  pkg-config,
   qt6,
   tesseract,
   testers,
   kdePackages,
   onnxruntime,
   withPiper ? true,
+  withTts ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "crow-translate";
-  version = "4.0.2";
+  version = "4.1.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "office";
     repo = "crow-translate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hrxYC6zdh4aG9AkHZcnOE5jihJSo3xrq0hzBRE8NtRw=";
+    hash = "sha256-A7B/NneWCKLy2BWPOTSXr9CIbSHkL3xih9QMwmEPG34=";
     fetchSubmodules = true;
   };
 
@@ -32,13 +35,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     kdePackages.extra-cmake-modules
     qt6.qttools
     qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
+    kdePackages.kiconthemes
     kdePackages.kwayland
+    espeak-ng
     leptonica
     tesseract
     qt6.qtbase
@@ -52,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "ONNXRuntime_USE_STATIC" false)
     (lib.cmakeBool "WITH_PIPER_TTS" withPiper)
+    (lib.cmakeBool "WITH_TTS" withTts)
+    (lib.cmakeBool "ESPEAKNG_USE_SYSTEM" true)
   ];
   # Necessary for KWin D-BUS authorization for taking screenshots, without
   # which the app falls back to interactive capture, which has some limitations.
