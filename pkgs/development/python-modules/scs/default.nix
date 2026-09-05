@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
     repo = "scs-python";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-k6G336VZPnbYU1GfZrS+f0vEshMKhSJMWcH2dgD0CaY=";
+    hash = "sha256-bwES05yte1fKN1D2NATneBFYpPhurf3ighQMeRPsxr4=";
   };
 
   postPatch = ''

@@ -14,7 +14,7 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scs";
-  version = "3.3.0";
+  version = "3.3.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cvxgrp";
     repo = "scs";
     tag = finalAttrs.version;
-    hash = "sha256-5Mq/mi2pW9DHXjhUEjflBeZMjJN+aJZRenVlRlloBcw=";
+    hash = "sha256-vk9S4ZKuFg/MWNDlO/Wxmvqg9jrJy29YZcoDrL7gwDs=";
   };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
