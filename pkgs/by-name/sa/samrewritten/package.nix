@@ -48,6 +48,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm644 assets/org.samrewritten.SamRewritten.gschema.xml \
       $out/share/glib-2.0/schemas/org.samrewritten.SamRewritten.gschema.xml
     glib-compile-schemas $out/share/glib-2.0/schemas
+    substituteInPlace package/samrewritten.desktop \
+      --replace-fail "/usr/bin/samrewritten" "samrewritten"
+    install -Dm644 package/samrewritten.desktop \
+      $out/share/applications/samrewritten.desktop
   '';
 
   env.PKG_CONFIG_PATH = "${openssl.dev}/lib/pkgconfig";
@@ -60,7 +64,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/PaulCombal/SamRewritten";
     changelog = "https://github.com/PaulCombal/SamRewritten/releases";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ludovicopiero ];
+    maintainers = with lib.maintainers; [
+      ludovicopiero
+      keksnino
+    ];
     platforms = [ "x86_64-linux" ];
   };
 })
