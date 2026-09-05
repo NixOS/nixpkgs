@@ -6686,9 +6686,10 @@
       [
         modbus-connection
         pymodbus
+        sofar-modbus
         tmodbus
       ]
-      ++ modbus-connection.optional-dependencies.tmodbus; # missing inputs: sofar-modbus
+      ++ modbus-connection.optional-dependencies.tmodbus;
     "solaredge" =
       ps: with ps; [
         aiosolaredge
@@ -9241,6 +9242,7 @@
     "snmp"
     "snoo"
     "snooz"
+    "sofar"
     "solaredge"
     "solarlog"
     "solarman"

@@ -19296,6 +19296,8 @@ self: super: with self; {
 
   soco = callPackage ../development/python-modules/soco { };
 
+  sofar-modbus = callPackage ../development/python-modules/sofar-modbus { };
+
   softlayer = callPackage ../development/python-modules/softlayer { };
 
   solaredge-local = callPackage ../development/python-modules/solaredge-local { };
