@@ -38,6 +38,7 @@ assert
   libkrb5,
   openssl,
   curl,
+  lttng-ust,
   lttng-ust_2_12,
   testers,
   runCommand,
@@ -119,7 +120,8 @@ mkWrapper type (
       curl
       xmlstarlet
     ]
-    ++ lib.optional stdenv.hostPlatform.isLinux lttng-ust_2_12;
+    ++ lib.optional stdenv.hostPlatform.isLinux lttng-ust_2_12
+    ++ lib.optional stdenv.hostPlatform.isRiscV64 lttng-ust;
 
     src = fetchurl (
       srcs.${hostRid} or (throw "Missing source (url and hash) for host RID: ${hostRid}")
@@ -208,7 +210,7 @@ mkWrapper type (
       in
       {
         packages = map forceSDKEval (
-          commonPackages ++ hostPackages.${hostRid} ++ targetPackages.${targetRid}
+          commonPackages ++ hostPackages.${hostRid} or [ ] ++ targetPackages.${targetRid} or [ ]
         );
         targetPackages = lib.mapAttrs (_: map forceSDKEval) targetPackages;
         inherit runtime aspnetcore;
