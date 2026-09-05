@@ -35,6 +35,8 @@ in
 
       environmentFiles = servarr.mkServarrEnvironmentFiles "sonarr";
 
+      database.createLocally = servarr.mkServarrPostgresqlOption "Sonarr";
+
       settings = servarr.mkServarrSettingsOptions "sonarr" 8989;
 
       user = lib.mkOption {
@@ -69,78 +71,86 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    systemd.services.sonarr = {
-      description = "Sonarr";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-      environment = servarr.mkServarrSettingsEnvVars "SONARR" cfg.settings;
-      serviceConfig = {
-        Type = "simple";
-        User = cfg.user;
-        Group = cfg.group;
-        EnvironmentFile = cfg.environmentFiles;
-        ExecStart = utils.escapeSystemdExecArgs [
-          (lib.getExe cfg.package)
-          "-nobrowser"
-          "-data=${cfg.dataDir}"
-        ];
-        Restart = "on-failure";
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
+      systemd.services.sonarr = {
+        description = "Sonarr";
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        environment = servarr.mkServarrSettingsEnvVars "SONARR" cfg.settings;
+        serviceConfig = {
+          Type = "simple";
+          User = cfg.user;
+          Group = cfg.group;
+          EnvironmentFile = cfg.environmentFiles;
+          ExecStart = utils.escapeSystemdExecArgs [
+            (lib.getExe cfg.package)
+            "-nobrowser"
+            "-data=${cfg.dataDir}"
+          ];
+          Restart = "on-failure";
 
-        # Hardening
-        CapabilityBoundingSet = "";
-        NoNewPrivileges = true;
-        ProtectHome = true;
-        ProtectClock = true;
-        ProtectKernelLogs = true;
-        PrivateTmp = true;
-        PrivateDevices = true;
-        PrivateUsers = true;
-        ProtectKernelTunables = true;
-        ProtectKernelModules = true;
-        ProtectControlGroups = true;
-        RestrictSUIDSGID = true;
-        RemoveIPC = true;
-        UMask = "0022";
-        ProtectHostname = true;
-        ProtectProc = "invisible";
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_INET6"
-          "AF_UNIX"
-        ];
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        LockPersonality = true;
-        SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "@system-service"
-          "~@privileged"
-          "~@debug"
-          "~@mount"
-          "@chown"
-        ];
-      }
-      // lib.optionalAttrs (cfg.dataDir == "/var/lib/sonarr/.config/NzbDrone") {
-        StateDirectory = "sonarr";
+          # Hardening
+          CapabilityBoundingSet = "";
+          NoNewPrivileges = true;
+          ProtectHome = true;
+          ProtectClock = true;
+          ProtectKernelLogs = true;
+          PrivateTmp = true;
+          PrivateDevices = true;
+          PrivateUsers = true;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectControlGroups = true;
+          RestrictSUIDSGID = true;
+          RemoveIPC = true;
+          UMask = "0022";
+          ProtectHostname = true;
+          ProtectProc = "invisible";
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+          ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          LockPersonality = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+            "~@debug"
+            "~@mount"
+            "@chown"
+          ];
+        }
+        // lib.optionalAttrs (cfg.dataDir == "/var/lib/sonarr/.config/NzbDrone") {
+          StateDirectory = "sonarr";
+        };
+        unitConfig.RequiresMountsFor = [ cfg.dataDir ];
       };
-      unitConfig.RequiresMountsFor = [ cfg.dataDir ];
-    };
 
-    networking.firewall = lib.mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.settings.server.port ];
-    };
-
-    users.users = lib.mkIf (cfg.user == "sonarr") {
-      sonarr = {
-        group = cfg.group;
-        home = cfg.dataDir;
-        uid = config.ids.uids.sonarr;
+      networking.firewall = lib.mkIf cfg.openFirewall {
+        allowedTCPPorts = [ cfg.settings.server.port ];
       };
-    };
 
-    users.groups = lib.mkIf (cfg.group == "sonarr") {
-      sonarr.gid = config.ids.gids.sonarr;
-    };
-  };
+      users.users = lib.mkIf (cfg.user == "sonarr") {
+        sonarr = {
+          group = cfg.group;
+          home = cfg.dataDir;
+          uid = config.ids.uids.sonarr;
+        };
+      };
+
+      users.groups = lib.mkIf (cfg.group == "sonarr") {
+        sonarr.gid = config.ids.gids.sonarr;
+      };
+    })
+    (servarr.mkServarrPostgresqlConfig {
+      inherit cfg;
+      name = "sonarr";
+      postgresqlPort = config.services.postgresql.settings.port;
+      user = cfg.user;
+    })
+  ];
 }
