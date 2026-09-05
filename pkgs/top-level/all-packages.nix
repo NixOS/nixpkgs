@@ -9289,7 +9289,7 @@ with pkgs;
     callPackage ../applications/networking/instant-messengers/linphone { }
   );
 
-  typescript = typescript_5;
+  typescript = typescript_7;
 
   buildTypstPackage = callPackage ../build-support/build-typst-package.nix { };
 
