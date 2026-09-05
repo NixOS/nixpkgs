@@ -5,7 +5,7 @@
   pyqt5,
   pyqt-builder,
   python,
-  qt3d,
+  qt5,
   setuptools,
   sip,
 }:
@@ -46,12 +46,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     sip
-    qt3d
+    qt5.qt3d
     setuptools
     pyqt-builder
   ];
 
-  buildInputs = [ qt3d ];
+  buildInputs = [ qt5.qt3d ];
 
   propagatedBuildInputs = [ pyqt5 ];
 
