@@ -47,7 +47,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sigima";
-  version = "1.1.6";
+  version = "1.2.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -55,7 +55,7 @@ buildPythonPackage (finalAttrs: {
     owner = "DataLab-Platform";
     repo = "Sigima";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Z4U+l2SUqGvKV8+I1/j+OfymmyFKTiBy5Rr6iiz31xY=";
+    hash = "sha256-pKI1xODYR0ZanXEI3r3UhKj2FvrBA8MWVwSpcg+GBls=";
   };
 
   build-system = [
