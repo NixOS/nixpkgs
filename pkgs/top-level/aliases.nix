@@ -2180,6 +2180,8 @@ mapAliases {
   radicale3 = throw "'radicale3' has been renamed to/replaced by 'radicale'"; # Converted to throw 2025-10-27
   ragnarwm = throw "'ragnarwm' has been removed as it was broken"; # Added 2026-04-21
   railway-travel = throw "'railway-travel' has been renamed to/replaced by 'diebahn'"; # Converted to throw 2025-10-27
+  rainloop-community = throw "'rainloop-community' has been removed because RainLoop is archived upstream; consider the maintained SnappyMail successor."; # Added 2026-09-02
+  rainloop-standard = throw "'rainloop-standard' has been removed because RainLoop is archived upstream; consider the maintained SnappyMail successor."; # Added 2026-09-02
   rambox-pro = throw "'rambox-pro' has been renamed to/replaced by 'rambox'"; # Converted to throw 2025-10-27
   rapidjson-unstable = throw "'rapidjson-unstable' has been renamed to/replaced by 'rapidjson'"; # Converted to throw 2025-10-27
   rapidsvn = throw "'rapidsvn' has been removed because upstream archived the project after development stopped in August 2021"; # Added 2026-09-02
