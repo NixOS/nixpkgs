@@ -145,7 +145,7 @@ stdenv.mkDerivation (
     ]
     ++ lib.optionals finalAttrs.finalPackage.doCheck [
       (lib.cmakeFeature "LLDB_TEST_C_COMPILER" "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc")
-      (lib.cmakeFeature "-DLLDB_TEST_CXX_COMPILER" "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++")
+      (lib.cmakeFeature "LLDB_TEST_CXX_COMPILER" "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++")
     ]
     ++ devExtraCmakeFlags;
 
