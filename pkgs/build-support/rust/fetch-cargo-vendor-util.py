@@ -3,6 +3,7 @@ import hashlib
 import json
 import multiprocessing as mp
 import re
+import os
 import shutil
 import subprocess
 import sys
@@ -62,6 +63,17 @@ def download_file_with_checksum(session: requests.Session, url: str, destination
     return checksum
 
 
+# Default crates download mirror. Overridable via the
+# CARGO_VENDOR_CRATES_MIRROR_URL environment variable.
+# Use static.crates.io (CDN) instead of crates.io/api to avoid the 1 req/sec
+# rate limit on the API servers.
+DEFAULT_CRATES_MIRROR_URL = "https://static.crates.io/crates"
+
+
+def get_crates_mirror_url() -> str:
+    return os.environ.get("CARGO_VENDOR_CRATES_MIRROR_URL", DEFAULT_CRATES_MIRROR_URL).rstrip("/")
+
+
 def get_download_url_for_tarball(pkg: dict[str, Any]) -> str:
     # TODO: support other registries
     #       maybe fetch config.json from the registry root and get the dl key
@@ -69,9 +81,7 @@ def get_download_url_for_tarball(pkg: dict[str, Any]) -> str:
     if pkg["source"] != "registry+https://github.com/rust-lang/crates.io-index":
         raise Exception("Only the default crates.io registry is supported.")
 
-    # Use static.crates.io (CDN) instead of crates.io/api to avoid the 1 req/sec
-    # rate limit on the API servers.
-    return f"https://static.crates.io/crates/{pkg["name"]}/{pkg["version"]}/download"
+    return f"{get_crates_mirror_url()}/{pkg["name"]}/{pkg["version"]}/download"
 
 
 def download_tarball(session: requests.Session, pkg: dict[str, Any], out_dir: Path) -> None:
