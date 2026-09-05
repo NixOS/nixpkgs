@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
   makeFlags = [
     "PREFIX=$(out)"
