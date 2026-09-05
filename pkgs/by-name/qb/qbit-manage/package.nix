@@ -8,13 +8,13 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "qbit-manage";
-  version = "4.11.0";
+  version = "4.13.0";
 
   src = fetchFromGitHub {
     owner = "StuffAnThings";
     repo = "qbit_manage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3HYxrFvte38ZKcKJOW86Yp1nGvEvzmflapNkVd9hSGg=";
+    hash = "sha256-Btj6Lavz5vcCURDKy7OTdEonTD5jwBbAwSMzK06lK3o=";
   };
 
   pyproject = true;
@@ -42,7 +42,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [
     "bencode.py"
-    "gitpython"
     "humanize"
   ];
 
