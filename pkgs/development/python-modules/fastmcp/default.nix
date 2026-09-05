@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   writableTmpDirAsHomeHook,
 
   # build-system
@@ -30,7 +29,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fastmcp";
-  version = "3.4.7";
+  version = "4.0.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -38,18 +37,8 @@ buildPythonPackage (finalAttrs: {
     owner = "PrefectHQ";
     repo = "fastmcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EysVbtFbop5ENupc9T5EmtUSZ8osVtQSzpwa6rea/OQ=";
+    hash = "sha256-YW7cd7AkuZbYulaPOWi6GmM6tWeI+Wc1vt2G7nkj2ak=";
   };
-
-  patches = [
-    # Fix python 3.14 compatibility (https://github.com/PrefectHQ/fastmcp/pull/4796)
-    # TODO: remove when updating to the next release
-    (fetchpatch {
-      url = "https://github.com/PrefectHQ/fastmcp/commit/6be0ac8e15d35ff8f5121266855bc34c1158c9a1.patch";
-      includes = [ "fastmcp_slim/fastmcp/tools/function_tool.py" ];
-      hash = "sha256-7N86b5sslWLgoB2dS2Xh3JfZX3oTHeXfeSJOaWKI5b0=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -74,7 +63,7 @@ buildPythonPackage (finalAttrs: {
     code-mode = fastmcp-slim.optional-dependencies.code-mode;
     gemini = fastmcp-slim.optional-dependencies.gemini;
     openai = fastmcp-slim.optional-dependencies.openai;
-    tasks = fastmcp-slim.optional-dependencies.tasks;
+    # tasks = [ fastmcp-tasks ]; # unpackaged (split out of fastmcp-slim in 4.0)
   };
 
   pythonImportsCheck = [ "fastmcp" ];
@@ -100,7 +89,6 @@ buildPythonPackage (finalAttrs: {
   ++ finalAttrs.passthru.optional-dependencies.code-mode
   ++ finalAttrs.passthru.optional-dependencies.gemini
   ++ finalAttrs.passthru.optional-dependencies.openai
-  ++ finalAttrs.passthru.optional-dependencies.tasks
   ++ inline-snapshot.optional-dependencies.dirty-equals;
 
   disabledTests = [
