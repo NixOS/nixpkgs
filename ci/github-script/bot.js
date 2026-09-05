@@ -397,11 +397,11 @@ export default async ({ github, context, core, dry }) => {
         per_page: 100,
       })
 
-      // label llm-assisted PRs accordingly
+      // label llm-assisted PRs accordingly, retaining it if manually set
       const assistedByPattern = /Assisted-by: (?!nix-init)/i
-      evalLabels['llm-assisted'] = prCommits.some((c) =>
-        assistedByPattern.test(c.commit.message),
-      )
+      if (prCommits.some((c) => assistedByPattern.test(c.commit.message))) {
+        evalLabels['llm-assisted'] = true
+      }
 
       const commitSubjects = prCommits.map(
         (c) => c.commit.message.split('\n')[0],
