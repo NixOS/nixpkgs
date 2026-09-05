@@ -4,7 +4,7 @@
   testers,
   wrapGAppsHook3,
   fetchzip,
-  sbcl,
+  sbcl_2_4_6,
   pkg-config,
   libfixposix,
   gobject-introspection,
@@ -18,51 +18,19 @@
   webkitgtk_4_1,
   openssl,
   sqlite,
-  gstreamer,
-  gst-libav,
-  gst-plugins-base,
-  gst-plugins-good,
-  gst-plugins-bad,
-  gst-plugins-ugly,
+  gst_all_1,
   xdg-utils,
   xclip,
   wl-clipboard,
   nix-update-script,
   nixosTests,
+  makeFontsConf,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
-  pname = "nyxt";
-  version = "3.12.0";
+let
+  sbcl = sbcl_2_4_6;
 
-  src = fetchzip {
-    url = "https://github.com/atlas-engineer/nyxt/releases/download/${finalAttrs.version}/nyxt-${finalAttrs.version}-source-with-submodules.tar.xz";
-    hash = "sha256-T5p3OaWp28rny81ggdE9iXffmuh6wt6XSuteTOT8FLI=";
-    stripRoot = false;
-  };
-
-  nativeBuildInputs = [ wrapGAppsHook3 ];
-
-  buildInputs = [
-    sbcl
-    # for groveller
-    pkg-config
-    libfixposix
-    # for gappsWrapper
-    gobject-introspection
-    gsettings-desktop-schemas
-    glib-networking
-    gtk3
-    gstreamer
-    gst-libav
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-    gst-plugins-ugly
-  ];
-
-  # for cffi
-  env.LD_LIBRARY_PATH = lib.makeLibraryPath [
+  nyxtLibs = [
     glib
     gobject-introspection
     gdk-pixbuf
@@ -74,6 +42,44 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     libfixposix
   ];
+in
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "nyxt";
+  version = "3.12.0";
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  src = fetchzip {
+    url = "https://github.com/atlas-engineer/nyxt/releases/download/${finalAttrs.version}/nyxt-${finalAttrs.version}-source-with-submodules.tar.xz";
+    hash = "sha256-T5p3OaWp28rny81ggdE9iXffmuh6wt6XSuteTOT8FLI=";
+    stripRoot = false;
+  };
+
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    gobject-introspection
+    pkg-config
+    sbcl
+  ];
+
+  buildInputs = [
+    # for gappsWrapper
+    gsettings-desktop-schemas
+    glib-networking
+  ]
+  ++ nyxtLibs
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-libav
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+  ]);
+
+  env.LD_LIBRARY_PATH = lib.makeLibraryPath nyxtLibs;
 
   postConfigure = ''
     export CL_SOURCE_REGISTRY="$(pwd)/_build//"
@@ -103,9 +109,18 @@ stdenv.mkDerivation (finalAttrs: {
   dontStrip = true;
 
   passthru = {
-    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = ''
+          env HOME=$TMPDIR \
+              FONTCONFIG_FILE=${makeFontsConf { fontDirectories = [ ]; }} \
+              nyxt --version
+        '';
+      };
+      inherit (nixosTests) nyxt;
+    };
     updateScript = nix-update-script { };
-    tests = { inherit (nixosTests) nyxt; };
   };
 
   meta = {
