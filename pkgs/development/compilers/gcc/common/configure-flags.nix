@@ -23,6 +23,7 @@
   disableGdbPlugin ? !enablePlugin,
   enableShared,
   enableDefaultPie,
+  enableHostPie ? false,
   targetPrefix,
 
   langC,
@@ -289,6 +290,9 @@ let
     ]
     ++ lib.optionals enableDefaultPie [
       "--enable-default-pie"
+    ]
+    ++ lib.optionals enableHostPie [
+      "--enable-host-pie"
     ]
     ++ lib.optionals langJit [
       "--enable-host-shared"
