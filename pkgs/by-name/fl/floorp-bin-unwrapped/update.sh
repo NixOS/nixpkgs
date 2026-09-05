@@ -4,7 +4,9 @@
 set -e
 
 dirname="$(dirname "$0")"
-currentVersion=$(nix eval --raw -f . floorp-bin-unwrapped.version)
+
+pkgName=floorp-bin
+currentVersion=$(nix eval --raw -f . "${pkgName}.version")
 
 owner=Floorp-Projects
 repo=Floorp
@@ -41,3 +43,14 @@ jq '
     )
   }
 ' <<<"$release" > "$dirname/sources.json"
+
+if [ "$latestVersion" != "$currentVersion" ]; then
+  git add "$dirname/sources.json"
+  git commit -m "$pkgName: $currentVersion -> $latestVersion
+
+Release notes: https://blog.floorp.app/en/release/$latestVersion/
+Git changelog: https://github.com/Floorp-Projects/Floorp/compare/v$currentVersion...v$latestVersion
+"
+else
+  echo "floorp-bin already up-to-date"
+fi
