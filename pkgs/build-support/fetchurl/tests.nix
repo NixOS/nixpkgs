@@ -74,6 +74,11 @@ in
     ];
   };
 
+  flag-appending-curlOptsEnv = testFlagAppending {
+    name = "test-fetchurl-flag-appending-env";
+    derivationArgs.env.NIX_CURL_FLAGS = "--foo --bar";
+  };
+
   flag-appending-netrcPhase-curlOpts = testFlagAppending {
     name = "test-fetchurl-flag-appending-netrcPhase-curlOpts";
     netrcPhase = ''
@@ -120,6 +125,47 @@ in
       "0"
     ];
   };
+
+  # Tests that multiple hashedMirrors are handled correctly
+  multipleHashedMirrors =
+    let
+      fetchurlWithBrokenMirror = fetchurl.override (prevArgs: {
+        hashedMirrors = [ "http://brokenMirror" ] ++ prevArgs.hashedMirrors;
+      });
+    in
+    testers.invalidateFetcherByDrvHash fetchurlWithBrokenMirror {
+      # Make sure that we can only download from hashed mirrors
+      url = "http://broken";
+      # A file with this hash is definitely on tarballs.nixos.org
+      sha256 = "1j1y3cq6ys30m734axc0brdm2q9n2as4h32jws15r7w5fwr991km";
+
+      # No chance
+      curlOptsList = [
+        "--retry"
+        "0"
+      ];
+    };
+
+  # Tests that mirrors provided via NIX_HASHED_MIRRORS are handled correctly
+  # and that env.SSL_CERT_FILE is not clobbered
+  hashedMirrorsFromEnv =
+    let
+      fetchurlWithOnlyEnvMirrors = fetchurl.override { hashedMirrors = [ ]; };
+    in
+    testers.invalidateFetcherByDrvHash fetchurlWithOnlyEnvMirrors {
+      # Make sure that we can only download from hashed mirrors
+      url = "http://broken";
+      # A file with this hash is definitely on tarballs.nixos.org
+      sha256 = "1j1y3cq6ys30m734axc0brdm2q9n2as4h32jws15r7w5fwr991km";
+
+      derivationArgs.env.NIX_HASHED_MIRRORS = "http://brokenMirror https://tarballs.nixos.org";
+
+      # No chance
+      curlOptsList = [
+        "--retry"
+        "0"
+      ];
+    };
 
   # Tests that downloadToTemp works with hashedMirrors
   no-skipPostFetch = testers.invalidateFetcherByDrvHash fetchurl {
@@ -169,7 +215,7 @@ in
   };
 
   urls-mirrors = testers.invalidateFetcherByDrvHash fetchurl rec {
-    name = "test-fetchurl-urls-simple";
+    name = "test-fetchurl-urls-mirrors";
     urls = [
       "http://broken"
     ]
@@ -186,4 +232,40 @@ in
       fi
     '';
   };
+
+  urls-env-mirrors =
+    let
+      helloWithTestMirror = hello.overrideAttrs (prevAttrs: {
+        src = prevAttrs.src.overrideAttrs (prevAttrsSrc: {
+          urls = lib.map (lib.replaceString "gnu" "gnutest") prevAttrsSrc.urls;
+        });
+      });
+      NIX_MIRRORS_gnutest = "https://ftp.nluug.nl/pub/gnu/";
+      urls = [ "http://broken" ] ++ helloWithTestMirror.src.urls;
+      # We can't use fetchurl.resolveUrl here because it doesn't allow mirrors that are
+      # not in the mirrorsListFile.
+      resolvedUrls = lib.map (lib.replaceString "mirror://gnutest/" NIX_MIRRORS_gnutest) urls;
+    in
+    testers.invalidateFetcherByDrvHash fetchurl {
+      name = "test-fetchurl-urls-env.mirrors";
+      inherit urls;
+      hash = hello.src.outputHash;
+      derivationArgs.env = { inherit NIX_MIRRORS_gnutest; };
+
+      curlOptsList = [
+        "--retry"
+        "0"
+      ];
+
+      postFetch = hello.postFetch or "" + ''
+        if ! diff -u ${
+          builtins.toFile "urls-resolved-by-hand" (lib.concatStringsSep "\n" resolvedUrls + "\n")
+        } <(printf '%s\n' "''${resolvedUrls[@]}"); then
+          echo "ERROR: fetchurl: build-time-resolved URLs \`urls' differ from the expected URLs." >&2
+          exit 1
+        fi
+        touch $out
+      '';
+    };
+
 }
