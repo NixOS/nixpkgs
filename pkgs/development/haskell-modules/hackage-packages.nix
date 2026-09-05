@@ -770332,50 +770332,6 @@ self: {
   x509-ocsp = callPackage (
     {
       mkDerivation,
-      asn1-encoding,
-      asn1-types,
-      base,
-      bytestring,
-      cryptohash-sha1,
-      crypton-x509,
-      crypton-x509-validation,
-      HUnit,
-      pem,
-    }:
-    mkDerivation {
-      pname = "x509-ocsp";
-      version = "0.4.0.1";
-      sha256 = "0pq1xxa5wl5gprkxjc31112mi9s8q4i5anr698hssziaglh4h13r";
-      revision = "2";
-      editedCabalFile = "19ikss9ln3y4jpwjx7jlqm7wrnhwdscm28z0ll9qa92snrw2vbkq";
-      enableSeparateDataOutput = true;
-      libraryHaskellDepends = [
-        asn1-encoding
-        asn1-types
-        base
-        bytestring
-        cryptohash-sha1
-        crypton-x509
-        crypton-x509-validation
-      ];
-      testHaskellDepends = [
-        asn1-encoding
-        asn1-types
-        base
-        bytestring
-        crypton-x509
-        crypton-x509-validation
-        HUnit
-        pem
-      ];
-      description = "Basic X509 OCSP implementation";
-      license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
-    }
-  ) { };
-
-  x509-ocsp_0_5_2_1 = callPackage (
-    {
-      mkDerivation,
       base,
       bytestring,
       crypton,
@@ -770414,7 +770370,6 @@ self: {
       ];
       description = "Basic X509 OCSP implementation";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
-      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 

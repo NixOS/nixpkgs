@@ -58,8 +58,6 @@ default-package-overrides:
   - rhine-bayes < 1.6
   # 2026-06-24: compatibility with mighttpd2-4.0.9
   - wai-app-file-cgi < 3.2
-  # 2026-02-08: compatibility with crypton-x509* in Stackage LTS 24
-  - x509-ocsp < 0.4.1.0
 # keep-sorted end
 
 # keep-sorted start skip_lines=1 case=no numeric=yes
