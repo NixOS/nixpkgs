@@ -1,0 +1,57 @@
+{
+  "version": "1.0.0",
+  "mblackVersion": "26.5.0",
+  "maxVersion": "26.5.0",
+  "common": {
+    "maxMojoLibs": {
+      "url": "https://files.pythonhosted.org/packages/57/ea/e942472029ecd8058a790663ddaaab3ec4f06c4438da52031dd59fdd18d4/max_mojo_libs-26.5.0-py3-none-any.whl",
+      "hash": "sha256-Vo9cFsQodq59/hkSB5UwDp1NVhgBuI1AOb0NCaQGbnQ="
+    },
+    "mojoCompilerMojoLibs": {
+      "url": "https://files.pythonhosted.org/packages/54/99/ea401ff1db56a4af8607283b95627e01b986fc67f510715b07f100118105/mojo_compiler_mojo_libs-1.0.0-py3-none-any.whl",
+      "hash": "sha256-IKkuN+y9GeLbsaUlYSqN5MnyZvVTbe9VxeKweGMg6LM="
+    },
+    "mblack": {
+      "url": "https://files.pythonhosted.org/packages/f0/36/8147d0627cde9043557f7906eabe64ff6295ec910dade5251e5703f0f6d9/mblack-26.5.0-py3-none-any.whl",
+      "hash": "sha256-ByswRkbCd5eeah0ZsIbvImu3OBgQkC6XXPHDiG0deIM="
+    }
+  },
+  "systems": {
+    "x86_64-linux": {
+      "maxCore": {
+        "url": "https://files.pythonhosted.org/packages/6b/10/c6d6e504cf5a89861691f0efd4e7f281291d90fd16ac767cd4a0ae1148bf/max_core-26.5.0-py3-none-manylinux_2_34_x86_64.whl",
+        "hash": "sha256-z6r/f13ZWPrC3oG7TES/sBaEKL3UtA+J5ArPalR0tEg="
+      },
+      "mojo": {
+        "url": "https://files.pythonhosted.org/packages/c4/89/326637e71282288e7d3a8ef2990dbf9fbfb07c1b3d21b836ffe2ee3111a9/mojo-1.0.0-py3-none-manylinux_2_34_x86_64.whl",
+        "hash": "sha256-cl1rfymlozNOPCJfNfK3Cf1GFRoKMaLCJzixk338g9k="
+      },
+      "mojoCompiler": {
+        "url": "https://files.pythonhosted.org/packages/f0/5f/f38fefe327d1c81e28def69c4a52ae4f75e389cb6e613a2c04ca8d68d582/mojo_compiler-1.0.0-py3-none-manylinux_2_34_x86_64.whl",
+        "hash": "sha256-6eYPljjmnKD0vnKSRoUj/JihQ/WNv5Ak9g7Wi4dKhn4="
+      },
+      "mojoLldbLibs": {
+        "url": "https://files.pythonhosted.org/packages/12/a0/8280a1869d017102d50e0dcf1962e0bc59834f8fe07b435e1a575bb5c923/mojo_lldb_libs-1.0.0-py3-none-manylinux_2_34_x86_64.whl",
+        "hash": "sha256-3hUch/P7TRhKhec16uBb9D+anetMuPKwfPa1nLdp2T8="
+      }
+    },
+    "aarch64-linux": {
+      "maxCore": {
+        "url": "https://files.pythonhosted.org/packages/5a/53/51e6ff16f19c9d7181e5ef338ed3ae76f13ae102c62fbe573d6866c7227f/max_core-26.5.0-py3-none-manylinux_2_34_aarch64.whl",
+        "hash": "sha256-JDimNC0OpwQG4kg07tkzXq48AVTUD9t+FKrm8ZCRXhY="
+      },
+      "mojo": {
+        "url": "https://files.pythonhosted.org/packages/31/e3/d429fb53aa018e592dc378def8a92c67d0978078c8c30d089019195a285f/mojo-1.0.0-py3-none-manylinux_2_34_aarch64.whl",
+        "hash": "sha256-ptsYsoRuxId8XNQ6Lc4VVkAFINwNRFDci0cD2rVp6aI="
+      },
+      "mojoCompiler": {
+        "url": "https://files.pythonhosted.org/packages/a5/f9/cbfe2bf947d0926ad57599513d898f1e02ee0c60af1253b779ecaa810235/mojo_compiler-1.0.0-py3-none-manylinux_2_34_aarch64.whl",
+        "hash": "sha256-OuPrDFiolW9ULjJPc2hm3wri+fh16KJ5y+6pYexOnug="
+      },
+      "mojoLldbLibs": {
+        "url": "https://files.pythonhosted.org/packages/38/e1/a7c6c73c875f5692587beda9ca68773bae069d60b1c79d9fffd8a2840f4d/mojo_lldb_libs-1.0.0-py3-none-manylinux_2_34_aarch64.whl",
+        "hash": "sha256-frHyBIKfAx/ajMnuTn9GHxyj3fHI+1Cavy628Cyd5PU="
+      }
+    }
+  }
+}
