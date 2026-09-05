@@ -231,12 +231,10 @@ in
     v8_expose_public_symbols = true;
     enable_linux_installer = false;
     enable_pdf_save_to_drive = false;
+    node_openssl_path = "//third_party/boringssl";
   }
   // lib.optionalAttrs (lib.versionOlder info.version "43") {
     enterprise_cloud_content_analysis = false;
-  }
-  // lib.optionalAttrs (lib.versionAtLeast info.version "43") {
-    node_openssl_path = "//third_party/boringssl";
   }
   // {
 
