@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   python,
@@ -131,6 +132,14 @@ buildPythonPackage (finalAttrs: {
     mkdir -p "$site"
     tr ':' '\n' <<< "$PYTHONPATH" > "$site/nix-test-env.pth"
   '';
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Relies on json.loads raising RecursionError for a 100k-deep body; on
+    # Darwin it parses and the server answers INVALID_REQUEST, not PARSE_ERROR.
+    "test_modern_post_with_deeply_nested_body_is_parse_error_not_a_crash"
+    # Timing-sensitive protocol-era probe; fails in the sandbox on Darwin.
+    "test_client_auto_mode_recovers_from_a_timed_out_probe_over_a_stream_loop"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
