@@ -194,6 +194,7 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/jax-ml/jax";
     changelog = "https://docs.jax.dev/en/latest/changelog.html";
     license = lib.licenses.asl20;
+    teams = [ lib.teams.cuda ];
     maintainers = with lib.maintainers; [
       GaetanLepage
       samuela
