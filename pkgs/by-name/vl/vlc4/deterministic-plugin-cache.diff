@@ -1,0 +1,27 @@
+diff --git a/src/modules/bank.c b/src/modules/bank.c
+--- a/src/modules/bank.c
++++ b/src/modules/bank.c
+@@ -505,6 +505,11 @@ static void AllocatePluginDir (module_bank_t *bank, unsigned maxdepth,
+     vlc_closedir (dh);
+ }
+
++static int plugin_cmp(const void *first, const void *second)
++{
++    return strcmp((*(vlc_plugin_t **) first)->path, (*(vlc_plugin_t **) second)->path);
++}
++
+ /**
+  * Scans for plug-ins within a file system hierarchy.
+  * \param path base directory to browse
+@@ -547,8 +552,10 @@ static void AllocatePluginPath(libvlc_int_t *obj, const char *path,
+             vlc_plugin_store(plugin);
+     }
+
+-    if (mode & CACHE_WRITE_FILE)
++    if (mode & CACHE_WRITE_FILE) {
++        qsort(bank.plugins, bank.size, sizeof(vlc_plugin_t *), plugin_cmp);
+         CacheSave(obj, path, bank.plugins, bank.size);
++    }
+
+     free(bank.plugins);
+ }
