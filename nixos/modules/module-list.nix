@@ -1796,6 +1796,7 @@
   ./services/web-apps/nostr-rs-relay.nix
   ./services/web-apps/ocis.nix
   ./services/web-apps/olivetin.nix
+  ./services/web-apps/omniroute.nix
   ./services/web-apps/oncall.nix
   ./services/web-apps/onlyoffice.nix
   ./services/web-apps/open-web-calendar.nix
