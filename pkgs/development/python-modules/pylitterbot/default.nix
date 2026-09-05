@@ -5,7 +5,6 @@
   aioresponses,
   buildPythonPackage,
   deepdiff,
-  fastmcp,
   fetchFromGitHub,
   hatchling,
   pycognito,
@@ -41,10 +40,14 @@ buildPythonPackage (finalAttrs: {
     aiointercept
     aiohttp
     deepdiff
-    fastmcp
     pycognito
     pyjwt
   ];
+
+  # The optional `mcp` extra imports `mcp.server.fastmcp`, which mcp 2 removed
+  # (FastMCP moved to the fastmcp package). Drop it until pylitterbot migrates;
+  # the core library, which Home Assistant uses, does not import it.
+  # https://github.com/natekspencer/pylitterbot/blob/2025.6.4/pylitterbot/mcp/server.py
 
   nativeCheckInputs = [
     aioresponses
@@ -53,6 +56,11 @@ buildPythonPackage (finalAttrs: {
     pytest-freezegun
     pytest-timeout
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # exercise the mcp extra, see above
+    "tests/test_mcp_*.py"
   ];
 
   pythonImportsCheck = [ "pylitterbot" ];
