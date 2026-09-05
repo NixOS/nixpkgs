@@ -311,6 +311,11 @@ stdenv.mkDerivation (finalAttrs: {
       Scrumplex
       titaniumtown
     ];
+    knownVulnerabilities = [
+      "Immich 2.x.x will not receive further updates. Immich 3.x.x is available in NixOS 26.11 (unstable at the time of writing)"
+      "CVE-2026-59258"
+      "CVE-2026-82272"
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
     mainProgram = "server";
   };

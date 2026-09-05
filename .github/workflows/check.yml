@@ -51,7 +51,7 @@ jobs:
             ci/github-script
 
       - name: Install dependencies
-        run: npm ci --package-lock-only=false bottleneck
+        run: npm ci --package-lock-only=false --no-audit bottleneck
         working-directory: trusted/ci/github-script
 
       - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
@@ -153,7 +153,7 @@ jobs:
 
       - name: Install dependencies to trusted/
         run: |
-          npm ci --package-lock-only=false
+          npm ci --package-lock-only=false --no-audit
           echo "$PWD/node_modules/.bin" >> "$GITHUB_PATH"
         working-directory: nixpkgs/trusted/ci/github-script
 
