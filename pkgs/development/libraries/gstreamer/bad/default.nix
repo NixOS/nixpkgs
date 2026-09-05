@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
+  testers,
   replaceVars,
   meson,
   ninja,
@@ -112,8 +112,30 @@
   guiSupport ? false,
   gst-plugins-bad,
   apple-sdk_gstreamer,
+  libexif,
+  libltc,
+  # disabled by default for now to reduce closure size
+  vulkanSupport ? false && stdenv.hostPlatform.isLinux,
+  vulkan-headers,
+  vulkan-loader,
+  shaderc,
+  libxkbcommon,
+  # disabled by default for now to reduce closure size
+  onnxSupport ? false && lib.meta.availableOn stdenv.hostPlatform onnxruntime,
+  onnxruntime,
+  # build additional plugins that are rarely used
+  # transitional flag until we move to a gst-plugins-rs style plugin selection system
+  enableAdditionalPlugins ? false,
+  zvbi,
+  google-cloud-cpp,
+  crc32c, # from google-cloud-cpp
+  tinyalsa,
+  vo-amrwbenc,
 }:
 
+let
+  vaSupport = gst-plugins-base.waylandEnabled && lib.meta.availableOn stdenv.hostPlatform libva;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-bad";
   version = "1.28.6";
@@ -150,6 +172,10 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     gstreamer # for gst-tester-1.0
     gobject-introspection
+  ]
+  ++ lib.optionals vulkanSupport [
+    # alternative: glslang
+    shaderc
   ]
   ++ lib.optionals enableDocumentation [
     hotdoc
@@ -204,6 +230,22 @@ stdenv.mkDerivation (finalAttrs: {
     usrsctp
     wildmidi
     svt-av1
+    libltc # used by timecode plugin
+  ]
+  ++ lib.optionals enableAdditionalPlugins [
+    zvbi
+    tinyalsa
+    vo-amrwbenc
+    google-cloud-cpp
+    crc32c
+  ]
+  ++ lib.optionals onnxSupport [
+    onnxruntime
+  ]
+  ++ lib.optionals vulkanSupport [
+    vulkan-headers
+    vulkan-loader
+    libxkbcommon
   ]
   ++ lib.optionals opencvSupport [
     opencv4
@@ -232,10 +274,12 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals ajaSupport [
     libajantv2
   ]
-  ++ lib.optionals (gst-plugins-base.waylandEnabled && stdenv.hostPlatform.isLinux) [
-    libva # vaapi requires libva -> libdrm -> libpciaccess, which is Linux-only in nixpkgs
+  ++ lib.optionals gst-plugins-base.waylandEnabled [
     wayland
     wayland-protocols
+  ]
+  ++ lib.optionals vaSupport [
+    libva
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # TODO: mjpegtools uint64_t is not compatible with guint64 on Darwin
@@ -277,23 +321,66 @@ stdenv.mkDerivation (finalAttrs: {
     apple-sdk_gstreamer
   ];
 
-  mesonFlags = [
-    "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    "-Dglib_debug=disabled" # cast checks should be disabled on stable releases
+  checkInputs = [
+    # for jifmux test, optional
+    libexif
+  ];
 
-    "-Damfcodec=disabled" # Windows-only
-    "-Dandroidmedia=disabled" # Requires Android system.
-    "-Davtp=disabled"
-    "-Dcuda-nvmm=disabled"
-    "-Ddirectshow=disabled" # Windows-only
-    "-Dqt6d3d11=disabled" # Windows-only
-    "-Ddts=disabled" # required `libdca` library not packaged in nixpkgs as of writing, and marked as "BIG FAT WARNING: libdca is still in early development"
-    "-Dzbar=${if enableZbar then "enabled" else "disabled"}"
-    "-Dfaac=${if faacSupport then "enabled" else "disabled"}"
-    "-Diqa=disabled" # required `dssim` library not packaging in nixpkgs as of writing, also this is AGPL so update license when adding support
-    "-Dlcevcencoder=disabled" # not packaged in nixpkgs as of writing
-    "-Dmagicleap=disabled" # required `ml_audio` library not packaged in nixpkgs as of writing
-    "-Dmsdk=disabled" # not packaged in nixpkgs as of writing / no Windows support
+  mesonFlags = [
+    (lib.mesonBool "gst_play_tests" false)
+  ]
+  ++ lib.mapAttrsToList lib.mesonEnable {
+    tests = finalAttrs.finalPackage.doCheck;
+    tools = true;
+    examples = false; # requires many dependencies and probably not useful for our users
+    glib_debug = false; # cast checks should be disabled on stable releases
+
+    # needs gstcuda to be enabled which is Linux-only
+    doc = enableDocumentation && stdenv.hostPlatform.isLinux;
+
+    # Windows-only
+    amfcodec = false;
+    directshow = false;
+    qt6d3d11 = false;
+
+    # Android-only
+    androidmedia = false;
+    avtp = false;
+
+    cuda-nvmm = false;
+    zbar = enableZbar;
+    faac = faacSupport;
+    magicleap = false; # required `ml_audio` library not packaged in nixpkgs as of writing
+    msdk = false; # not packaged in nixpkgs as of writing / no Windows support
+    nvcomp = false;
+    nvdswrapper = false;
+    openni2 = false; # not packaged in nixpkgs as of writing
+    opensles = false; # not packaged in nixpkgs as of writing
+    svthevcenc = false; # required `SvtHevcEnc` library not packaged in nixpkgs as of writing
+    svtjpegxs = false; # not packaged in nixpkgs as of writing
+    teletext = enableAdditionalPlugins;
+    tinyalsa = enableAdditionalPlugins;
+    voamrwbenc = enableAdditionalPlugins;
+    vulkan = vulkanSupport;
+    wasapi = false; # not packaged in nixpkgs as of writing / no Windows support
+    wasapi2 = false; # not packaged in nixpkgs as of writing / no Windows support
+    wpe = false; # required `wpe-webkit` library not packaged in nixpkgs as of writing
+    wpe2 = false;
+    gs = enableAdditionalPlugins; # depends on `google-cloud-cpp`
+    onnx = onnxSupport;
+    openaptx = true; # since gstreamer-1.20.1 `libfreeaptx` is supported for circumventing the dubious license conflict with `libopenaptx`
+    opencv = opencvSupport; # Reduces rebuild size when `config.cudaSupport = true`
+    aja = ajaSupport;
+    microdns = microdnsSupport;
+    bluez = bluezSupport;
+    openh264 = openh264Support;
+    lcevcencoder = false; # not packaged in nixpkgs as of writing
+    lcevcdecoder = lcevcdecSupport;
+    ldac = ldacbtSupport;
+    webrtc = true;
+    webrtcdsp = webrtcAudioProcessingSupport;
+    isac = webrtcAudioProcessingSupport;
+
     # As of writing, with `libmpcdec` in `buildInputs` we get
     #   "Could not find libmpcdec header files, but Musepack was enabled via options"
     # This is likely because nixpkgs has the header in libmpc/mpcdec.h
@@ -304,104 +391,70 @@ stdenv.mkDerivation (finalAttrs: {
     # Fixing it likely requires to first figure out with upstream which one
     # is needed, and then patching upstream to find it (though it probably
     # already works on Arch?).
-    "-Dmusepack=disabled"
-    "-Dnvcomp=disabled"
-    "-Dnvdswrapper=disabled"
-    "-Dopenni2=disabled" # not packaged in nixpkgs as of writing
-    "-Dopensles=disabled" # not packaged in nixpkgs as of writing
-    "-Dsvthevcenc=disabled" # required `SvtHevcEnc` library not packaged in nixpkgs as of writing
-    "-Dsvtjpegxs=disabled" # not packaged in nixpkgs as of writing
-    "-Dteletext=disabled" # required `zvbi` library not packaged in nixpkgs as of writing
-    "-Dtinyalsa=disabled" # not packaged in nixpkgs as of writing
-    "-Dvoamrwbenc=disabled" # required `vo-amrwbenc` library not packaged in nixpkgs as of writing
-    "-Dvulkan=disabled" # Linux-only, and we haven't figured out yet which of the vulkan nixpkgs it needs
-    "-Dwasapi=disabled" # not packaged in nixpkgs as of writing / no Windows support
-    "-Dwasapi2=disabled" # not packaged in nixpkgs as of writing / no Windows support
-    "-Dwpe=disabled" # required `wpe-webkit` library not packaged in nixpkgs as of writing
-    "-Dwpe2=disabled"
-    "-Dgs=disabled" # depends on `google-cloud-cpp`
-    "-Donnx=disabled" # depends on `libonnxruntime` not packaged in nixpkgs as of writing
-    "-Dopenaptx=enabled" # since gstreamer-1.20.1 `libfreeaptx` is supported for circumventing the dubious license conflict with `libopenaptx`
-    "-Dopencv=${if opencvSupport then "enabled" else "disabled"}" # Reduces rebuild size when `config.cudaSupport = true`
-    "-Daja=${if ajaSupport then "enabled" else "disabled"}"
-    "-Dmicrodns=${if microdnsSupport then "enabled" else "disabled"}"
-    "-Dbluez=${if bluezSupport then "enabled" else "disabled"}"
-    (lib.mesonEnable "openh264" openh264Support)
-    (lib.mesonEnable "doc" enableDocumentation)
-    (lib.mesonEnable "directfb" false)
-    (lib.mesonEnable "lcevcdecoder" lcevcdecSupport)
-    (lib.mesonEnable "ldac" ldacbtSupport)
-    (lib.mesonEnable "webrtcdsp" webrtcAudioProcessingSupport)
-    (lib.mesonEnable "isac" webrtcAudioProcessingSupport)
-  ]
-  ++ lib.mapAttrsToList lib.mesonEnable {
+    musepack = false;
+
+    # directfb can't be added to buildInputs due to dependency cycle
+    # gst-plugins-bad -> directfb -> sdl12-compat -> sdl2-compat -> sdl3 -> zenity -> gtk4 -> gst-plugins-bad
+    directfb = false;
+
     mpeghdec = false; # mpeghdec not packaged
     tflite = false;
-  }
-  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
-    "-Ddoc=disabled" # needs gstcuda to be enabled which is Linux-only
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isLinux || !stdenv.hostPlatform.isx86) [
-    "-Dnvcodec=disabled" # Linux-only, broken on non-x86
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isLinux || !gst-plugins-base.waylandEnabled) [
-    "-Dva=disabled" # see comment on `libva` in `buildInputs`
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-Daja=disabled"
-    "-Dchromaprint=disabled"
-    "-Dflite=disabled"
-    "-Dkms=disabled" # renders to libdrm output
-    "-Dlv2=disabled"
-    "-Dsbc=disabled"
-    "-Dspandsp=disabled"
-    "-Ddvb=disabled"
-    "-Dfbdev=disabled"
-    "-Duvcgadget=disabled" # requires gudev
-    "-Duvch264=disabled" # requires gudev
-    "-Dv4l2codecs=disabled" # requires gudev
-    "-Dladspa=disabled" # requires lrdf
-  ]
-  ++
-    lib.optionals
-      (!stdenv.hostPlatform.isLinux || !stdenv.hostPlatform.isx86_64 || !gst-plugins-base.waylandEnabled)
-      [
-        "-Dqsv=disabled" # Linux (and Windows) x86 only, makes va required
-      ]
-  ++ lib.optionals (!gst-plugins-base.glEnabled) [
-    "-Dgl=disabled"
-  ]
-  ++ lib.optionals (!guiSupport) [
-    "-Dgtk3=disabled" # Wayland-based GTK sink
-  ]
-  ++ lib.optionals (!gst-plugins-base.waylandEnabled) [
-    "-Dwayland=disabled"
-  ]
-  ++ lib.optionals (!gst-plugins-base.glEnabled) [
+
+    # Linux (and Windows) x86 only, makes va required
+    qsv =
+      stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 && gst-plugins-base.waylandEnabled;
+
+    gl = gst-plugins-base.glEnabled;
     # `applemedia/videotexturecache.h` requires `gst/gl/gl.h`,
     # but its meson build system does not declare the dependency.
-    "-Dapplemedia=disabled"
-  ]
-  ++ (
-    if enableGplPlugins then
-      [
-        "-Dgpl=enabled"
-      ]
-    else
-      [
-        "-Ddts=disabled"
-        "-Dfaad=disabled"
-        "-Diqa=disabled"
-        "-Dmpeg2enc=disabled"
-        "-Dmplex=disabled"
-        "-Dresindvd=disabled"
-        "-Dx265=disabled"
-      ]
-  );
+    applemedia = gst-plugins-base.glEnabled;
+
+    gtk3 = guiSupport;
+    wayland = gst-plugins-base.waylandEnabled;
+
+    # Linux-only, broken on non-x86
+    nvcodec = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86;
+
+    va = gst-plugins-base.waylandEnabled && lib.meta.availableOn stdenv.hostPlatform libva;
+
+    gpl = enableGplPlugins;
+
+    faad = enableGplPlugins;
+    mpeg2enc = enableGplPlugins;
+    mplex = enableGplPlugins;
+    resindvd = enableGplPlugins;
+    x265 = enableGplPlugins;
+
+    # NOTE:
+    # The following plugins are explicitly mentioned here for reference even though they are always disabled
+    # because they would make the package (A)GPL if they ever get included in the future
+
+    # required `libdca` library not packaged in nixpkgs as of writing
+    dts = false;
+
+    # required `dssim` library not packaging in nixpkgs as of writing,
+    # also this is AGPL so update license when adding support
+    iqa = false;
+  }
+  ++ lib.map (f: lib.mesonEnable f (!stdenv.hostPlatform.isDarwin)) [
+    "chromaprint"
+    "flite"
+    "kms" # renders to libdrm output
+    "lv2"
+    "sbc"
+    "spandsp"
+    "dvb"
+    "fbdev"
+    "uvcgadget" # requires gudev
+    "uvch264" # requires gudev
+    "v4l2codecs" # requires gudev
+    "ladspa" # requires lrdf
+  ];
 
   postPatch = ''
     patchShebangs \
-      scripts/extract-release-date-from-doap-file.py
+      scripts/extract-release-date-from-doap-file.py \
+      ext/vulkan/shaders/bin2array.py
   '';
 
   # This package has some `_("string literal")` string formats
@@ -420,10 +473,16 @@ stdenv.mkDerivation (finalAttrs: {
         enableZbar = true;
         faacSupport = true;
         opencvSupport = true;
+        enableAdditionalPlugins = true;
       };
 
       lgplOnly = gst-plugins-bad.override {
         enableGplPlugins = false;
+      };
+
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+        versionCheck = true;
       };
     };
 
@@ -432,7 +491,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "GStreamer Bad Plugins";
-    mainProgram = "gst-transcoder-1.0";
     homepage = "https://gstreamer.freedesktop.org";
     longDescription = ''
       a set of plug-ins that aren't up to par compared to the
@@ -441,6 +499,33 @@ stdenv.mkDerivation (finalAttrs: {
       a real live maintainer, or some actual wide use.
     '';
     license = if enableGplPlugins then lib.licenses.gpl2Plus else lib.licenses.lgpl2Plus;
+    pkgConfigModules = lib.map (m: "gstreamer-${m}-1.0") (
+      [
+        "analytics"
+        "bad-audio"
+        "codecparsers"
+        "insertbin"
+        "mpegts"
+        "mse"
+        "photography"
+        "play"
+        "player"
+        "plugins-bad"
+        "sctp"
+        "transcoder"
+        "webrtc"
+        "webrtc-nice"
+      ]
+      ++ lib.optional (gst-plugins-base.waylandEnabled) "wayland"
+      ++ lib.optional (gst-plugins-base.waylandEnabled && stdenv.hostPlatform.isLinux) "va"
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        "cuda"
+        "hip"
+        "hip-gl"
+      ]
+      ++ lib.optional vulkanSupport "vulkan"
+      ++ lib.optional (vulkanSupport && gst-plugins-base.waylandEnabled) "vulkan-wayland"
+    );
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ tmarkus ];
   };
