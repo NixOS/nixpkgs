@@ -219,8 +219,6 @@ stdenv.mkDerivation (
 
     ninjaFlags = [ "docs-lldb-man" ];
 
-    propagatedBuildInputs = [ ];
-
     # manually install lldb man page
     installPhase = ''
       runHook preInstall
@@ -231,12 +229,9 @@ stdenv.mkDerivation (
       runHook postInstall
     '';
 
-    postPatch = null;
     postInstall = null;
 
     outputs = [ "out" ];
-
-    doCheck = false;
 
     meta = llvm_meta // {
       description = "man pages for LLDB ${version}";
