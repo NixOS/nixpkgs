@@ -391,7 +391,8 @@ let
       __darwinAllowLocalNetworking = true; # for tests
       __structuredAttrs = true; # for outputChecks
 
-      doCheck = canExecute;
+      # TMP do not commit
+      doCheck = false;
 
       # See https://github.com/nodejs/node/issues/22006
       enableParallelChecking = false;

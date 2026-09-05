@@ -48,11 +48,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "localsearch";
-  version = "3.11.1";
+  version = "3.12.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/localsearch/${lib.versions.majorMinor finalAttrs.version}/localsearch-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ezmmwoqKzysXLxWy+17nx6N2TER8L0oUyqI5t+vmGUI=";
+    hash = "sha256-dyGGCOqSnoZqITpb31EKJkyRs2dZ6wuHWcpmihDrpC8=";
   };
 
   patches = [
@@ -116,6 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     # TODO: tests do not like our sandbox
     "-Dfunctional_tests=false"
+    # avformat (from ffmpeg) and libmediainfo are interchangable
+    "-Dlibmediainfo=disabled"
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     "-Dbattery_detection=none"

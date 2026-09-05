@@ -1,36 +1,36 @@
 {
   lib,
   stdenv,
+  blueprint-compiler,
   fetchurl,
   pkg-config,
   meson,
   gettext,
   gobject-introspection,
-  evince,
   glib,
   gnome,
-  gtksourceview4,
+  gtksourceview5,
   gjs,
-  libsoup_3,
-  webkitgtk_4_1,
-  icu,
-  wrapGAppsHook3,
+  webkitgtk_6_0,
+  wrapGAppsHook4,
   gst_all_1,
-  gdk-pixbuf,
-  librsvg,
-  gtk3,
+  gtk4,
+  libadwaita,
   harfbuzz,
   ninja,
-  libepoxy,
+  papers,
+  fribidi,
+  libglycin,
+  libglycin-gtk4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sushi";
-  version = "50.0";
+  version = "51.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/sushi/${lib.versions.major finalAttrs.version}/sushi-${finalAttrs.version}.tar.xz";
-    hash = "sha256-qyUXeQjVzMWFaHaageubTzIwZ4bmxzYYGT6/YaEn7gA=";
+    hash = "sha256-41Zsw5YZwO8TtFDmgYBob1jAD/8egK92wajBMN7D744=";
   };
 
   nativeBuildInputs = [
@@ -39,22 +39,23 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     gettext
     gobject-introspection
-    wrapGAppsHook3
+    blueprint-compiler
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     glib
-    gtk3
-    evince
-    icu
     harfbuzz
     gjs
-    gtksourceview4
-    gdk-pixbuf
-    librsvg
-    libsoup_3
-    webkitgtk_4_1
-    libepoxy
+    gtk4
+    libglycin
+    libglycin.setupHook
+    libglycin-gtk4
+    libadwaita
+    gtksourceview5
+    webkitgtk_6_0
+    papers
+    fribidi
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     (gst_all_1.gst-plugins-good.override { gtkSupport = true; })

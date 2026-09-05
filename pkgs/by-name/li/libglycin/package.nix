@@ -19,7 +19,6 @@
   libglycin-gtk4,
   fontconfig,
   libseccomp,
-  lcms2,
   gnome,
   replaceVars,
   bubblewrap,
@@ -32,7 +31,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libglycin";
-  version = "2.1.5";
+  version = "2.2.beta";
 
   outputs = [
     "out"
@@ -44,12 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glycin/${lib.versions.majorMinor finalAttrs.version}/glycin-${finalAttrs.version}.tar.xz";
-    hash = "sha256-bAl1fukGMwpgtnBXU6pWvKAHrSGblebjU3UQ1BvDQcg=";
+    hash = "sha256-ZQSjvy+RxHnFK8rPn66ygFoOvXTlzgK7ay2zKmdHhBg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-6vCucnT3xPWSm3TSi3WzgJdiiBFHvGMpab4d53OfThg=";
+    hash = "sha256-0Jbx3g5iPhsdyyumyzKsafNRps3P8Eot9IeKCcQ5bqk=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fontconfig
     libseccomp
-    lcms2
   ];
 
   propagatedBuildInputs = [
@@ -79,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO: these should not be required by .pc file
     fontconfig
     libseccomp
-    lcms2
   ];
 
   mesonFlags = [
@@ -96,8 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs \
       build-aux/crates-version.py
     substituteInPlace libglycin/meson.build --replace-fail \
-      "cargo_output = cargo_target_dir / rust_target" \
-      "cargo_output = cargo_target_dir / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target"
+      "cargo_output = cargo_artifact_dir / rust_target" \
+      "cargo_output = cargo_artifact_dir / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target"
   '';
 
   postFixup = ''

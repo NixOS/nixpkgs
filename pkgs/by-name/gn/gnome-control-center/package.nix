@@ -18,6 +18,7 @@
   glib-networking,
   gcr_4,
   glibc,
+  glibcLocales,
   gnome-bluetooth,
   gnome-color-manager,
   gnome-desktop,
@@ -77,11 +78,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-control-center";
-  version = "50.4";
+  version = "51.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-control-center/${lib.versions.major finalAttrs.version}/gnome-control-center-${finalAttrs.version}.tar.xz";
-    hash = "sha256-WFbHOZm+30XnT3O6w9YeK17BaJ+LzxlDc3uu7oIE+xE=";
+    hash = "sha256-mNPo09WoQOe7a6KKAOWjcQbuhN96Ujru7Fsec7CPlDk=";
   };
 
   patches = [
@@ -164,6 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.python-dbusmock
     setxkbmap
     xorg-server # for Xvfb
+    glibcLocales
   ];
 
   doCheck = true;

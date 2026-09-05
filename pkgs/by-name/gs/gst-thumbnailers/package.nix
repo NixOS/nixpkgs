@@ -21,19 +21,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-thumbnailers";
-  version = "1.0.0";
+  version = "1.1.alpha";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gst-thumbnailers";
     tag = finalAttrs.version;
-    hash = "sha256-QxOdjtPnX4ulGsenASQzKJckbIqfSU7FeR+iW1ZL878=";
+    hash = "sha256-F66TgEzTb0Lg7Danyf9KCOset0ZpyGSKch8SKq8aKIs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-irXwoGGcVeZza02Ob5HTkeTBD3PaXmfJ4vuqXk9BadA=";
+    hash = "sha256-GGLNgEPb4N5AvETYJir9gsUK/+J+GbnupZQLnJ2rB2I=";
   };
 
   nativeBuildInputs = [

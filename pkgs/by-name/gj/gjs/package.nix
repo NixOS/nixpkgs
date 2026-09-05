@@ -37,11 +37,12 @@ let
     gdk-pixbuf
     harfbuzz
     glib.out
+    gobject-introspection
   ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gjs";
-  version = "1.88.1";
+  version = "1.89.2";
 
   outputs = [
     "out"
@@ -51,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor finalAttrs.version}/gjs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-dnurgOZl1nLLAFY8JfCzkqnsjCmW7R1EVMaYtMLwo9k=";
+    hash = "sha256-x9ehdkqNDjYu9qlAEnxAmlj5v+eL/rJkkxowxtbTe6Q=";
   };
 
   patches = [

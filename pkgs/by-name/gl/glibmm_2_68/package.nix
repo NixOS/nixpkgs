@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glibmm";
-  version = "2.88.1";
+  version = "2.89.0";
 
   outputs = [
     "out"
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glibmm/${lib.versions.majorMinor finalAttrs.version}/glibmm-${finalAttrs.version}.tar.xz";
-    hash = "sha256-wTn5YrFXXIgnzTnRrCG3o2e+O9oUCcDH4hopCQ83FQY=";
+    hash = "sha256-TOcSY7KHMbwwVAnaDP2FHqvf5luvXL8XVD/4g/eVJCY=";
   };
 
   nativeBuildInputs = [

@@ -80,8 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs \
       build-aux/crates-version.py
     substituteInPlace libglycin/meson.build --replace-fail \
-      "cargo_output = cargo_target_dir / rust_target" \
-      "cargo_output = cargo_target_dir / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target"
+      "cargo_output = cargo_artifact_dir / rust_target" \
+      "cargo_output = cargo_artifact_dir / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target"
   '';
 
   postFixup = ''

@@ -76,7 +76,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4";
-  version = "4.22.4";
+  version = "4.23.3";
 
   outputs = [
     "out"
@@ -92,16 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor finalAttrs.version}/gtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Ub2fYMfSOmZaVWxzZMIfsuTiglZrPn4JJFXo+RAzCJM=";
+    hash = "sha256-yBkSsIKlvqrR2ElEgFv3zA+Gxqkz4TFmTa09sybt6SQ=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-32bit-VkImage-null.patch";
-      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/10d43de8f4f942cb591ada3103474bd7213425f1.patch";
-      hash = "sha256-DJIL6M3XcsjBoMO77OxNi84d1DxAphAfot3N7Nq1QqQ=";
-    })
-  ];
 
   depsBuildBuild = [
     pkg-config
@@ -256,11 +248,6 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput bin/gtk4-update-icon-cache "$out"
     # Launcher
     moveToOutput bin/gtk-launch "$out"
-
-    # TODO: patch glib directly
-    for f in $dev/bin/gtk4-encode-symbolic-svg; do
-      wrapProgram $f --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
-    done
   ''
   + lib.optionalString broadwaySupport ''
     # Broadway daemon

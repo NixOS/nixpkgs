@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glibmm";
-  version = "2.66.8";
+  version = "2.66.10";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glibmm/${lib.versions.majorMinor finalAttrs.version}/glibmm-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ZPEdO5WiTiqNQWbs/1GHMPeezCciLvQfr3x+A0D8kyk=";
+    hash = "sha256-K2F4AgOu2Y5wHT6lfI81PnyK2pcGp5vngvbFFT3QNcA=";
   };
 
   outputs = [

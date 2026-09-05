@@ -10,6 +10,7 @@
   gettext,
   libxml2,
   libxslt,
+  docutils,
   gobject-introspection,
   wrapGAppsHook4,
   wrapGAppsNoGuiHook,
@@ -38,7 +39,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rygel";
-  version = "45.2";
+  version = "46.beta";
 
   # TODO: split out lib
   outputs = [
@@ -48,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/rygel/${lib.versions.major finalAttrs.version}/rygel-${finalAttrs.version}.tar.xz";
-    hash = "sha256-IOV7cLFahl133Dj594arxSxksRH+X5OKYsKNcS3xMx0=";
+    hash = "sha256-GU6fsSvEFToqjMJRdt2PP8NEteqk9XEli3xWc3l6v+I=";
   };
 
   patches = [
@@ -64,9 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     libxml2
     libxslt # for xsltproc
+    docutils # for rst2man
     gobject-introspection
     (if withGtk then wrapGAppsHook4 else wrapGAppsNoGuiHook)
-    python3
+    (python3.withPackages (ps: [
+      ps.pyyaml
+    ]))
   ];
 
   buildInputs = [
