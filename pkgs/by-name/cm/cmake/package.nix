@@ -8,6 +8,7 @@
   bzip2,
   curlMinimal,
   expat,
+  iconv,
   libarchive,
   libuv,
   ncurses,
@@ -125,7 +126,11 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional useOpenSSL openssl
   ++ lib.optional cursesUI ncurses
-  ++ lib.optional qt5UI qtbase;
+  ++ lib.optional qt5UI qtbase
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    iconv
+    iconv.dev
+  ];
 
   strictDeps = true;
 
