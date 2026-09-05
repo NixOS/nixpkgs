@@ -1,0 +1,15 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3661cf7a..9695c765 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -90,8 +90,8 @@ endif()
+ add_subdirectory(src/VecSim)
+ 
+ # Needed for build as ExternalProject (like RediSearch does)
+-install(TARGETS VectorSimilarity DESTINATION ${CMAKE_INSTALL_PREFIX})
+-install(TARGETS VectorSimilaritySpaces DESTINATION ${CMAKE_INSTALL_PREFIX})
++install(TARGETS VectorSimilarity LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
++install(DIRECTORY src/VecSim DESTINATION ${CMAKE_INSTALL_PREFIX}/include FILES_MATCHING PATTERN "*.h")
+ 
+ # Print compiler flags (similar to RediSearch)
+ get_directory_property(COMPILE_DEFS COMPILE_DEFINITIONS)
