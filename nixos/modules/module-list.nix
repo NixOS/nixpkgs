@@ -944,7 +944,6 @@
   ./services/misc/moonraker.nix
   ./services/misc/mqtt2influxdb.nix
   ./services/misc/n8n.nix
-  ./services/misc/nitter.nix
   ./services/misc/nix-gc.nix
   ./services/misc/nix-optimise.nix
   ./services/misc/nix-ssh-serve.nix

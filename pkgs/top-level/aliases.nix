@@ -1821,6 +1821,7 @@ mapAliases {
   nip2 = throw "'nip2' has been removed due to lack of maintenance and relying on gtk2.";
   nitrogen = throw "'nitrogen' has been removed as it depended on the deprecated gtk2 via gtkmm2"; # Added 2026-08-09
   nitrokey-fido2-firmware = throw "'nitrokey-fido2-firmware' has been removed as it was broken and unmaintained upstream since 2022"; # Added 2026-03-23
+  nitter = throw "'nitter' has been removed due to being unmaintained by a cease and desist sent to upstream repo"; # Added 2026-08-31
   nix-direnv-flakes = throw "'nix-direnv-flakes' has been renamed to/replaced by 'nix-direnv'"; # Converted to throw 2025-10-27
   nix-ld-rs = throw "'nix-ld-rs' has been renamed to/replaced by 'nix-ld'"; # Converted to throw 2025-10-27
   nix-linter = throw "nix-linter has been removed as it was broken for 3 years and unmaintained upstream"; # Added 2025-09-06
