@@ -48,6 +48,16 @@ let
         inherit rev;
       };
     };
+    "2.0.0" = rec {
+      release = "R${rev}";
+      rev = "260501";
+      src = fetchFromGitHub {
+        owner = "Arcachofo";
+        repo = "SimulIDE-dev";
+        rev = "504bf26c28b7523e9d3e407b324cd8ca1340cb0e";
+        hash = "sha256-8Pt7riSVZT1w7n2H4gdcjJ0JdsJybVV/8o1bgpdwdPo=";
+      };
+    };
   };
 in
 
@@ -84,13 +94,13 @@ stdenv.mkDerivation {
     # Note: the project file hardcodes a homebrew gcc compiler when using darwin
     #       which we don't want, so we just delete the relevant lines
     sed -i SimulIDE.pr* \
-      -e "s|^VERSION = .*$|VERSION = ${versionNum}|" \
-      -e "s|^RELEASE = .*$|RELEASE = ${release'}|" \
-      -e "s|^REV_NO = .*$|REV_NO = ${rev}|" \
-      -e "s|^BUILD_DATE = .*$|BUILD_DATE = ??????|" \
-      -e "/QMAKE_CC/d" \
-      -e "/QMAKE_CXX/d" \
-      -e "/QMAKE_LINK/d"
+      -e "s|^ *VERSION *=.*$|VERSION = ${versionNum}|" \
+      -e "s|^ *RELEASE *=.*$|RELEASE = ${release'}|" \
+      -e "s|^ *REV_NO *=.*$|REV_NO = ${rev}|" \
+      -e "s|^ *BUILD_DATE *=.*$|BUILD_DATE = ??????|" \
+      -e "/^ *QMAKE_CC *=/d" \
+      -e "/^ *QMAKE_CXX *=/d" \
+      -e "/^ *QMAKE_LINK *=/d"
 
     ${lib.optionalString (lib.versionOlder versionNum "1.0.0") ''
       # GCC 13 needs the <cstdint> header explicitly included
@@ -103,15 +113,17 @@ stdenv.mkDerivation {
     cd build_XX
   '';
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     libsForQt5.qmake
     libsForQt5.wrapQtAppsHook
-  ];
+    libsForQt5.qttools # for lrelease command
 
-  buildInputs = [
+    # qmake needs doesn't seem to find QT modules from buildInputs
     libsForQt5.qtserialport
     libsForQt5.qtmultimedia
-    libsForQt5.qttools
   ]
   ++ lib.optionals (lib.versionOlder versionNum "1.1.0") [
     libsForQt5.qtscript
@@ -121,43 +133,37 @@ stdenv.mkDerivation {
     runHook preInstall
 
     ${lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -Dm644 ../resources/simulide.desktop $out/share/applications/simulide.desktop
-      install -Dm644 ../${iconPath} $out/share/icons/hicolor/256x256/apps/simulide.png
+      install -Dm644 ../resources/simulide.desktop "$out/share/applications/simulide.desktop"
+      install -Dm644 ../${iconPath} "$out/share/icons/hicolor/256x256/apps/simulide.png"
     ''}
 
     pushd executables/SimulIDE_*
     ${
       if stdenv.hostPlatform.isDarwin then
         ''
-          mkdir -p $out/Applications
-          cp -r simulide.app $out/Applications
+          mkdir -p "$out/Applications"
+          cp -r simulide.app "$out/Applications"
         ''
       else if lib.versionOlder versionNum "1.0.0" then
         ''
-          mkdir -p $out/share/simulide $out/bin
-          cp -r share/simulide/* $out/share/simulide
-          cp bin/simulide $out/bin/simulide
+          install -Dm755 bin/simulide -t "$out/bin"
+          mkdir -p "$out/share/simulide"
+          cp -r share/simulide/* "$out/share/simulide"
+        ''
+      else if lib.versionOlder versionNum "2.0.0" then
+        ''
+          install -Dm755 simulide -t "$out/bin"
+          mkdir -p "$out/share/simulide"
+          cp -r data examples "$out/share/simulide"
         ''
       else
         ''
-          mkdir -p $out/share/simulide $out/bin
-          cp -r data examples $out/share/simulide
-          cp simulide $out/bin/simulide
+          install -Dm755 simulide -t "$out/bin"
         ''
     }
     popd
 
     runHook postInstall
-  '';
-
-  # on darwin there are some binaries in the examples directory which
-  # accidentally get wrapped by wrapQtAppsHook so we do the wrapping manually instead
-  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
-
-  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p $out/bin
-    wrapQtApp $out/Applications/simulide.app/Contents/MacOs/simulide
-    ln -s $out/Applications/simulide.app/Contents/MacOs/simulide $out/bin/simulide
   '';
 
   meta = {
@@ -177,6 +183,9 @@ stdenv.mkDerivation {
     ];
     platforms = [
       "x86_64-linux"
+    ]
+    ++ lib.optionals (lib.versionAtLeast versionNum "2.0.0") [
+      "aarch64-darwin"
     ];
   };
 }
