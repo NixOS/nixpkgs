@@ -52,8 +52,8 @@ buildGoModule (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Unofficial command-line client for the Proton suite (Mail, Drive, Calendar, Contacts, Pass)";
-    homepage = "https://github.com/roman-16/proton-cli";
+    description = "CLI for Proton Mail, Drive, Calendar, Pass and Contacts, end-to-end encrypted";
+    homepage = "https://proton-cli.lerchster.dev/";
     changelog = "https://github.com/roman-16/proton-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "proton";
