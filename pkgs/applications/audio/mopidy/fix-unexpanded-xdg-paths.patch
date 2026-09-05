@@ -1,0 +1,74 @@
+From: Gerhard Schwanzer <geri@sdf.org>
+Subject: [PATCH] Restore handling of unavailable XDG directories
+
+Mopidy 3 skipped optional paths and media directory entries whose XDG variables
+were unavailable. Keep that behavior now that expand_path() raises ValueError
+instead of returning None, so extensions still work in headless services.
+
+diff --git a/src/mopidy/config/types.py b/src/mopidy/config/types.py
+--- a/src/mopidy/config/types.py
++++ b/src/mopidy/config/types.py
+@@ -503,7 +503,12 @@ class Path(ConfigValue[_ExpandedPath]):
+     @override
+     def deserialize(self, value: AnyStr) -> _ExpandedPath | None:
+         raw_value = decode(value).strip()
+-        expanded = paths.expand_path(raw_value)
++        try:
++            expanded = paths.expand_path(raw_value)
++        except ValueError:
++            if self._required:
++                raise
++            expanded = None
+         validators.validate_required(raw_value, self._required)
+         validators.validate_required(expanded, self._required)
+         if not raw_value or expanded is None:
+diff --git a/src/mopidy/_exts/file/library.py b/src/mopidy/_exts/file/library.py
+--- a/src/mopidy/_exts/file/library.py
++++ b/src/mopidy/_exts/file/library.py
+@@ -132,15 +132,16 @@ class FileLibraryProvider(backend.LibraryProvider):
+     def _get_media_dirs(self, config: config_lib.Config) -> Generator[MediaDir]:
+         for entry in config["file"]["media_dirs"]:
+             media_dir_split = [part.strip() for part in entry.split("|", 1)]
+-            local_path = paths.expand_path(media_dir_split[0])
+-
+-            if local_path is None:
++            try:
++                local_path = paths.expand_path(media_dir_split[0])
++            except ValueError:
+                 logger.debug(
+                     "Failed expanding path (%s) from file/media_dirs config value.",
+                     media_dir_split[0],
+                 )
+                 continue
+-            elif not local_path.is_dir():
++
++            if not local_path.is_dir():
+                 logger.warning(
+                     "%s is not a directory. Please create the directory or "
+                     "update the file/media_dirs config value.",
+diff --git a/tests/config/test_types.py b/tests/config/test_types.py
+--- a/tests/config/test_types.py
++++ b/tests/config/test_types.py
+@@ -1334,6 +1334,11 @@ class TestPath:
+         assert cv.deserialize(b"") is None
+         assert cv.deserialize(b" ") is None
+
++    def test_deserialize_optional_unexpanded(self):
++        cv = types.Path(optional=True)
++
++        assert cv.deserialize(b"$XDG_MISSING_DIR") is None
++
+     def test_serialize_uses_original(self):
+         cv = types.Path()
+         path = types._ExpandedPath("original_path", "expanded_path")
+diff --git a/tests/_exts/file/test_browse.py b/tests/_exts/file/test_browse.py
+--- a/tests/_exts/file/test_browse.py
++++ b/tests/_exts/file/test_browse.py
+@@ -44,6 +44,7 @@ def test_file_browse(provider, uri, expected_error, caplog):
+         ([str(path_to_data_dir("")), str(path_to_data_dir(""))], True),
+         ([], None),
+         ([str(path_to_data_dir("song1.wav"))], None),
++        (["$XDG_MISSING_DIR"], None),
+         (["|" + str(path_to_data_dir(""))], False),
+     ],
+ )

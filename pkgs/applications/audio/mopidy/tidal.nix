@@ -32,6 +32,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   enabledTestPaths = [ "tests/" ];
 
   meta = {
+    # The extension does not support Mopidy 4's Pydantic-based models yet.
+    broken = true;
     description = "Mopidy extension for playing music from Tidal";
     homepage = "https://github.com/EbbLabs/mopidy-tidal";
     changelog = "https://github.com/EbbLabs/mopidy-tidal/releases/tag/${finalAttrs.src.tag}";

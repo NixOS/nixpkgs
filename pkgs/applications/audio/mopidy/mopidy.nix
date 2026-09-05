@@ -13,15 +13,22 @@
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy";
-  version = "3.4.2";
+  version = "4.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2OFav2HaQq/RphmZxLyL1n3suwzt1Y/d4h33EdbStjk=";
+    hash = "sha256-fSvUD+vDua3DCKx/CszjKEUuspD0FwROOksRD6K++L0=";
   };
+
+  patches = [
+    # Mopidy 3 skipped unavailable optional XDG paths instead of failing.
+    ./fix-unexpanded-xdg-paths.patch
+    # https://github.com/mopidy/mopidy/pull/2280
+    ./fix-gst-structure-none-checks.patch
+  ];
 
   nativeBuildInputs = [ wrapGAppsNoGuiHook ];
 
@@ -42,24 +49,40 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   propagatedBuildInputs = [ gobject-introspection ];
 
-  build-system = [ pythonPackages.setuptools ];
+  build-system = with pythonPackages; [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies =
     with pythonPackages;
     [
+      cyclopts
       gst-python
+      httpx
+      platformdirs
+      pydantic
       pygobject3
       pykka
-      requests
-      # Provides pkg_resources required by Mopidy 3 and affected extensions.
-      # Remove when updating to Mopidy 4.
-      setuptools_80
+      rich
       tornado
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ dbus-python ];
 
-  # There are no tests
-  doCheck = false;
+  nativeCheckInputs = with pythonPackages; [
+    dirty-equals
+    polyfactory
+    pytestCheckHook
+    pytest-httpx
+    pytest-mock
+  ];
+
+  disabledTests = [
+    # GStreamer 1.28 does not report the duration of the WAV fixture.
+    "test_lookup_converts_uri_metadata_to_track"
+    # GStreamer 1.28.5 recognizes text/plain without the expected decodebin error.
+    "test_text_plain"
+  ];
 
   passthru.tests = {
     inherit (nixosTests) mopidy;
