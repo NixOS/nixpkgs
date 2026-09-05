@@ -19,6 +19,8 @@ class Heading(NamedTuple):
     # elsewhere or still needs closing.
     partintro_closed: bool
 
+    anchor_id: str | None
+
 _bullet_list_styles = [ 'disc', 'circle', 'square' ]
 _ordered_list_styles = [ '1', 'a', 'i', 'A', 'I' ]
 
@@ -178,11 +180,14 @@ class HTMLRenderer(Renderer):
         htag, hstyle = self._make_hN(hlevel)
         if hstyle:
             hstyle = f'style="{escape(hstyle, True)}"'
+        anchor_id = None
         if anchor := cast(str, token.attrs.get('id', '')):
-            anchor = f'id="{escape(anchor, True)}"'
+            anchor_id = escape(anchor, True)
+            anchor = f'id="{anchor_id}"'
+
         result = self._close_headings(hlevel)
         tag = self._heading_tag(token, tokens, i)
-        self._headings.append(Heading(tag, hlevel, htag, tag != 'part'))
+        self._headings.append(Heading(tag, hlevel, htag, tag != 'part', anchor_id))
         return (
             f'{result}'
             f'<div class="{tag}">'
@@ -193,7 +198,13 @@ class HTMLRenderer(Renderer):
         )
     def heading_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         heading = self._headings[-1]
+
+        anchor_link = ''
+        if heading.anchor_id is not None:
+            anchor_link = f'<a class="anchor-link" aria-label="Anchor" href="#{heading.anchor_id}" data-anchorjs-icon="&#xE9CB;"></a>'
+
         result = (
+            f'     {anchor_link}'
             f'   </{heading.html_tag}>'
             f'  </div>'
             f' </div>'
