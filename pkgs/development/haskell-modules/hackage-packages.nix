@@ -467991,112 +467991,6 @@ self: {
     }:
     mkDerivation {
       pname = "mighttpd2";
-      version = "4.0.9";
-      sha256 = "1qd43hlyvhnslxrvy4h0rj5qs6nbxnz8d23myqjspa9jl8rzb1bg";
-      isLibrary = true;
-      isExecutable = true;
-      enableSeparateDataOutput = true;
-      libraryHaskellDepends = [
-        array
-        async
-        auto-update
-        base
-        byteorder
-        bytestring
-        case-insensitive
-        conduit
-        conduit-extra
-        directory
-        filepath
-        http-date
-        http-types
-        http2
-        network
-        parsec
-        resourcet
-        split
-        streaming-commons
-        text
-        unix
-        unix-time
-        unordered-containers
-        wai
-        wai-app-file-cgi
-        warp
-      ];
-      executableHaskellDepends = [
-        base
-        bytestring
-        conduit-extra
-        directory
-        filepath
-        http-client
-        http-date
-        http-types
-        network
-        old-locale
-        streaming-commons
-        time
-        time-manager
-        transformers
-        unix
-        wai
-        wai-app-file-cgi
-        wai-logger
-        warp
-      ];
-      testHaskellDepends = [
-        base
-        hspec
-        http-client
-      ];
-      testToolDepends = [ hspec-discover ];
-      description = "High performance web server on WAI/warp";
-      license = lib.licenses.bsd3;
-      maintainers = [ lib.maintainers.sternenseemann ];
-    }
-  ) { };
-
-  mighttpd2_4_0_10 = callPackage (
-    {
-      mkDerivation,
-      array,
-      async,
-      auto-update,
-      base,
-      byteorder,
-      bytestring,
-      case-insensitive,
-      conduit,
-      conduit-extra,
-      directory,
-      filepath,
-      hspec,
-      hspec-discover,
-      http-client,
-      http-date,
-      http-types,
-      http2,
-      network,
-      old-locale,
-      parsec,
-      resourcet,
-      split,
-      streaming-commons,
-      text,
-      time,
-      time-manager,
-      transformers,
-      unix,
-      unix-time,
-      unordered-containers,
-      wai,
-      wai-app-file-cgi,
-      wai-logger,
-      warp,
-    }:
-    mkDerivation {
-      pname = "mighttpd2";
       version = "4.0.10";
       sha256 = "1nsphcg0fc1mc56d27b96ba9ds6lddngzcbca9zm65w5fikzj4km";
       revision = "1";
@@ -468161,7 +468055,6 @@ self: {
       testToolDepends = [ hspec-discover ];
       description = "High performance web server on WAI/warp";
       license = lib.licenses.bsd3;
-      hydraPlatforms = lib.platforms.none;
       maintainers = [ lib.maintainers.sternenseemann ];
     }
   ) { };
@@ -751821,89 +751714,6 @@ self: {
     }:
     mkDerivation {
       pname = "wai-app-file-cgi";
-      version = "3.1.12";
-      sha256 = "0h1j6zz3l098jhrb42s6hdzxmr2qcksl27w5ghzxrvzwnl12j7fa";
-      libraryHaskellDepends = [
-        array
-        attoparsec
-        base
-        bytestring
-        case-insensitive
-        conduit
-        conduit-extra
-        containers
-        directory
-        filepath
-        http-client
-        http-conduit
-        http-date
-        http-types
-        mime-types
-        network
-        process
-        sockaddr
-        static-hash
-        text
-        transformers
-        unix
-        wai
-        wai-conduit
-        warp
-        word8
-      ];
-      testHaskellDepends = [
-        base
-        bytestring
-        conduit
-        conduit-extra
-        directory
-        filepath
-        hspec
-        HTTP
-        http-types
-        unix
-        wai
-        warp
-      ];
-      description = "File/CGI/Rev Proxy App of WAI";
-      license = lib.licenses.bsd3;
-    }
-  ) { };
-
-  wai-app-file-cgi_3_2_1 = callPackage (
-    {
-      mkDerivation,
-      array,
-      attoparsec,
-      base,
-      bytestring,
-      case-insensitive,
-      conduit,
-      conduit-extra,
-      containers,
-      directory,
-      filepath,
-      hspec,
-      HTTP,
-      http-client,
-      http-conduit,
-      http-date,
-      http-types,
-      mime-types,
-      network,
-      process,
-      sockaddr,
-      static-hash,
-      text,
-      transformers,
-      unix,
-      wai,
-      wai-conduit,
-      warp,
-      word8,
-    }:
-    mkDerivation {
-      pname = "wai-app-file-cgi";
       version = "3.2.1";
       sha256 = "0c75f4q34bjqyncyf7k0lnl25yvl814y1np7rd36y1iqqqg1jca0";
       libraryHaskellDepends = [
@@ -751950,7 +751760,6 @@ self: {
       ];
       description = "File/CGI/Rev Proxy App of WAI";
       license = lib.licenses.bsd3;
-      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
