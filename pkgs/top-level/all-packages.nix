@@ -5768,8 +5768,7 @@ with pkgs;
   # Not moved to aliases while we decide if we should split the package again.
   atk = at-spi2-core;
 
-  pangomm = callPackage ../development/libraries/pangomm { };
-
+  pangomm_1_4 = callPackage ../development/libraries/pangomm { };
   pangomm_2_48 = callPackage ../development/libraries/pangomm/2.48.nix { };
 
   gtk2-x11 = gtk2.override {

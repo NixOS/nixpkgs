@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "pangomm";
+      attrPath = "pangomm_1_4";
       versionPolicy = "odd-unstable";
       freeze = true;
     };
