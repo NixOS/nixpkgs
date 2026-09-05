@@ -840,6 +840,8 @@ in
   */
   importTOML = path: fromTOML (readFile path);
 
+  inherit (lib.ron) importRON;
+
   /**
     `warn` *`message`* *`value`*
 
