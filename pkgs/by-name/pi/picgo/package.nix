@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   nodejs_22,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   electron_43,
@@ -14,7 +14,7 @@
   nix-update-script,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "picgo";

@@ -6,7 +6,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs_24,
-  pnpm_10,
+  pnpm_10_latest,
   nix-update-script,
   nixosTests,
 }:
@@ -27,7 +27,7 @@ let
 
     sourceRoot = "${src.name}/frontend";
 
-    nativeBuildInputs = [ pnpm_10 ];
+    nativeBuildInputs = [ pnpm_10_latest ];
     npmConfigHook = pnpmConfigHook;
     npmDeps = pnpmDeps;
     nodejs = nodejs_24;
@@ -40,7 +40,7 @@ let
         sourceRoot
         ;
       fetcherVersion = 3;
-      pnpm = pnpm_10;
+      pnpm = pnpm_10_latest;
       hash = "sha256-UwTA7Eogp2GrvmXDbdfGBTJS3DuOTJ42e6fHlQxSHoA=";
     };
 

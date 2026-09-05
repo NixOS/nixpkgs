@@ -4,7 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   cargo-tauri,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -21,7 +21,7 @@
   nix-update-script,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "motrix-next";

@@ -31,13 +31,13 @@
   playwright-driver,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_10_latest,
   nodejs,
   markdown,
   nh3,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 buildPythonPackage rec {
   pname = "django-filingcabinet";

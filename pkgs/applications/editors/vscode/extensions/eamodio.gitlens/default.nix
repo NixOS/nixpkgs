@@ -3,7 +3,7 @@
   pkgs,
   stdenv,
   fetchFromGitHub,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -12,7 +12,7 @@
 }:
 
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 
   vsix = stdenv.mkDerivation (finalAttrs: {
     name = "gitlens-${finalAttrs.version}.vsix";

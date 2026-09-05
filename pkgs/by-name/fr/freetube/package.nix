@@ -9,7 +9,7 @@
   nodejs,
   pnpmConfigHook,
   pnpmBuildHook,
-  pnpm_10,
+  pnpm_10_latest,
   makeShellWrapper,
   copyDesktopItems,
   darwin,
@@ -18,7 +18,7 @@
 }:
 let
   description = "Open Source YouTube app for privacy";
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
   electron = electron_42;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {

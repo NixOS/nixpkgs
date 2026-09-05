@@ -8,7 +8,7 @@
   makeWrapper,
   fetchpatch,
   replaceVars,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   rustPlatform,
@@ -27,7 +27,7 @@
 }:
 
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 
   fake-git = writeShellScriptBin "git" (lib.readFile ./fake-git.sh);
 
@@ -136,6 +136,10 @@ stdenv.mkDerivation (finalAttrs: {
         };
       });
 
+  # This upstream release's lockfile lacks integrity fields required by pnpm >= 10.34.1.
+  # Remove this packaging patch when updating to a source lockfile that includes them.
+  patches = [ ./add-pnpm-tarball-integrities.patch ];
+
   postPatch = ''
     # too restrictive Node version requirement
     jq 'del(.engines)' package.json > package.json.new
@@ -168,10 +172,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontUseCmakeConfigure = true;
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
+    inherit (finalAttrs)
+      patches
+      pname
+      src
+      version
+      ;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-8z4EDHpsvM0AFbJy2JXoE4vjiLaDshTihMQsrQzXdEs=";
+    hash = "sha256-OHCiE2FtbQT0zo88n4aABnLS2gpi33rDCSMNc2FJLVc=";
   };
 
   buildPhase = ''

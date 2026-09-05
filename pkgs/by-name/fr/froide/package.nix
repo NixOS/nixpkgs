@@ -8,14 +8,14 @@
   geos,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_10_latest,
   nodejs,
   postgresql,
   postgresqlTestHook,
   playwright-driver,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 
   python = python3Packages.python.override {
     packageOverrides = self: super: {

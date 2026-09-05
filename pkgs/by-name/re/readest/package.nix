@@ -1,7 +1,7 @@
 {
   stdenv,
   rustPlatform,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   cargo-tauri,
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pnpmRoot = "../..";
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 3;
     hash = "sha256-AnCxGeYaA5pY3tXA8e03fAXvU/mj4mBP0ZA3MUkodNo=";
   };
@@ -74,7 +74,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cargo-tauri.hook
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
     pkg-config
     wrapGAppsHook3
     autoPatchelfHook
@@ -115,7 +115,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pname = "tauri-plugin-turso";
     version = finalAttrs.version;
     src = "${finalAttrs.src}/apps/readest-app/src-tauri/plugins/tauri-plugin-turso";
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 3;
     hash = "sha256-Jf/UaEaLUg/v9ZRInBCEfkDY4d6nwyAIegCMKZe0iAQ=";
   };
@@ -126,7 +126,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     src = "${finalAttrs.src}/apps/readest-app/src-tauri/plugins/tauri-plugin-turso";
 
     nativeBuildInputs = [
-      pnpm_10
+      pnpm_10_latest
       pnpmConfigHook
       nodejs
     ];

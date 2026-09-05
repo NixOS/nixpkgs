@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_10_latest,
   faketty,
   nodejs-slim_22,
   versionCheckHook,
@@ -12,7 +12,7 @@
   nix-update-script,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 
   nodejs-slim = nodejs-slim_22;
   pnpm' = pnpm.override { inherit nodejs-slim; };

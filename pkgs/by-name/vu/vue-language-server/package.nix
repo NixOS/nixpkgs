@@ -4,13 +4,13 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_10_latest,
   nodejs,
   nix-update-script,
   makeBinaryWrapper,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vue-language-server";
@@ -23,11 +23,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-q/5erEPVtXdpsyGnxuq+QySsZKibvKLvniDI1glIP0s=";
   };
 
+  # This upstream release's lockfile lacks integrity fields required by pnpm >= 10.34.1.
+  # Remove this packaging patch when updating to a source lockfile that includes them.
+  patches = [ ./add-pkg-pr-new-integrities.patch ];
+
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
+    inherit (finalAttrs)
+      patches
+      pname
+      src
+      version
+      ;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-qm2hDQbOoC04c47w8KSwkdigND6UrkRUGp7YfkRu4as=";
+    hash = "sha256-d52WfVLhgPBxkjGjW4EOsxLSq28LBzeijl+0uRPyYqM=";
   };
 
   nativeBuildInputs = [

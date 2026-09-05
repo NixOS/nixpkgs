@@ -1,14 +1,14 @@
 {
   lib,
   buildNpmPackage,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   fetchFromGitHub,
   unstableGitUpdater,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 buildNpmPackage rec {
   pname = "piped";

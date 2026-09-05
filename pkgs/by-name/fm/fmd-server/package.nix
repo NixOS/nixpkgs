@@ -5,7 +5,7 @@
   fetchPnpmDeps,
   nix-update-script,
   nodejs,
-  pnpm_10,
+  pnpm_10_latest,
   pnpmConfigHook,
   stdenv,
   versionCheckHook,
@@ -27,7 +27,7 @@ buildGoModule (
 
     pnpmDeps = fetchPnpmDeps {
       inherit (ui) pname src;
-      inherit pnpm_10;
+      pnpm = pnpm_10_latest;
       sourceRoot = "${finalAttrs.src.name}/${ui.pnpmRoot}";
       fetcherVersion = 3;
       hash = "sha256-vKSKPwOkb7TwDUlkl8lUvO6tLKp2NyBQ0BGxThUN2P8=";
@@ -55,7 +55,7 @@ buildGoModule (
       nativeBuildInputs = [
         nodejs
         pnpmConfigHook
-        pnpm_10
+        pnpm_10_latest
       ];
 
       buildPhase = ''

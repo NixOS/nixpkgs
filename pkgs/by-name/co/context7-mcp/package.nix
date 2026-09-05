@@ -7,14 +7,14 @@
   versionCheckHook,
 
   nodejs,
-  pnpm_10,
+  pnpm_10_latest,
   pnpmConfigHook,
   fetchPnpmDeps,
 }:
 let
   tag-prefix = "@upstash/context7-mcp";
 
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "context7-mcp";

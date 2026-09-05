@@ -5,7 +5,7 @@
   fetchPnpmDeps,
   rustPlatform,
   nodejs,
-  pnpm_10,
+  pnpm_10_latest,
   pnpmConfigHook,
   geist-font,
   nix-update-script,
@@ -14,7 +14,7 @@
 }:
 
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 
   version = "0.27.0";
 

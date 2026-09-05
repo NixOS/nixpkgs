@@ -6,7 +6,7 @@
   fetchPnpmDeps,
   cargo-tauri,
   nodejs,
-  pnpm_10,
+  pnpm_10_latest,
   pnpmConfigHook,
   wrapGAppsHook4,
   webkitgtk_4_1,
@@ -15,7 +15,7 @@
   nix-update-script,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tabularis";

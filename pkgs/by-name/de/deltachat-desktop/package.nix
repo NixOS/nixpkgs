@@ -9,7 +9,7 @@
   makeWrapper,
   nodejs,
   pkg-config,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   python3,
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 4;
     hash = "sha256-0VvyZzWAdVGsuYb8CI36KqkqvjgRsTLJov1L44MxUHQ=";
   };
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     pkg-config
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
     python3
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

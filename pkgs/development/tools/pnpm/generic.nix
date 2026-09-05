@@ -15,6 +15,8 @@
   tests,
 
   withNode ? true,
+  enableUpdateScript ? true,
+  packageAttrName ? "pnpm_${lib.versions.major version}",
   version,
   hash,
   knownVulnerabilities ? [ ],
@@ -93,7 +95,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru =
     let
-      pnpm' = buildPackages."pnpm_${lib.versions.major version}";
+      pnpm' = buildPackages.${packageAttrName};
     in
     {
       fetchDeps =
@@ -127,6 +129,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         inherit (tests) pnpm;
         version = lib.optionalAttrs withNode (testers.testVersion { package = finalAttrs.finalPackage; });
       };
+    }
+    // lib.optionalAttrs enableUpdateScript {
       updateScript = writeScript "pnpm-update-script" ''
         #!/usr/bin/env nix-shell
         #!nix-shell -i bash -p curl jq common-updater-scripts
@@ -150,7 +154,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
         latestVersion="''${latestTag#v}"
 
-        update-source-version pnpm_${majorVersion} "$latestVersion" --file=./pkgs/development/tools/pnpm/default.nix
+        update-source-version ${packageAttrName} "$latestVersion" --file=./pkgs/development/tools/pnpm/default.nix
       '';
     };
 

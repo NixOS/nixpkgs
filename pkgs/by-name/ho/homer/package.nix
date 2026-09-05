@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation rec {
       version
       src
       ;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 3;
     hash = "sha256-rDKnaIE1ZQ2I83RdlHWtgoMcDoFe7tE102LP2+SPmFg=";
   };
@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation rec {
     nodejs
     dart-sass
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
   ];
 
   buildPhase = ''

@@ -4,14 +4,14 @@
   fetchFromGitHub,
   buildGoModule,
   nodejs-slim_22,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   testers,
 }:
 
 let
-  pnpm = pnpm_10.override { nodejs-slim = nodejs-slim_22; };
+  pnpm = pnpm_10_latest.override { nodejs-slim = nodejs-slim_22; };
   version = "1.16.4";
 
   src = fetchFromGitHub {
