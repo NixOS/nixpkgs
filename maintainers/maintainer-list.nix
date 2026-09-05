@@ -21658,6 +21658,12 @@
     githubId = 5969778;
     name = "Oliver Wilkins";
   };
+  olafkfreund = {
+    email = "olaf@freundcloud.com";
+    github = "olafkfreund";
+    githubId = 12804862;
+    name = "Olaf Krasicki-Freund";
+  };
   olcai = {
     email = "dev@timan.info";
     github = "olcai";
