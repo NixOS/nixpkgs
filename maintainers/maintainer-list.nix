@@ -6758,12 +6758,6 @@
     githubId = 25856103;
     name = "DDoSolitary";
   };
-  dduan = {
-    email = "daniel@duan.ca";
-    github = "dduan";
-    githubId = 75067;
-    name = "Daniel Duan";
-  };
   de11n = {
     email = "nixpkgs-commits@deshaw.com";
     github = "de11n";
