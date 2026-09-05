@@ -1563,6 +1563,8 @@ self: super: with self; {
 
   audio-hotplug = callPackage ../development/python-modules/audio-hotplug { };
 
+  audiolab = callPackage ../development/python-modules/audiolab { };
+
   audioop-lts =
     if pythonAtLeast "3.13" then callPackage ../development/python-modules/audioop-lts { } else null;
 
@@ -10623,6 +10625,8 @@ self: super: with self; {
 
   mediafile = callPackage ../development/python-modules/mediafile { };
 
+  mediapipe = callPackage ../development/python-modules/mediapipe { };
+
   mediapy = callPackage ../development/python-modules/mediapy { };
 
   mediawiki-langcodes = callPackage ../development/python-modules/mediawiki-langcodes { };
@@ -15990,6 +15994,8 @@ self: super: with self; {
   pyrituals = callPackage ../development/python-modules/pyrituals { };
 
   pyrmvtransport = callPackage ../development/python-modules/pyrmvtransport { };
+
+  pyrnnoise = callPackage ../development/python-modules/pyrnnoise { };
 
   pyro-api = callPackage ../development/python-modules/pyro-api { };
 
