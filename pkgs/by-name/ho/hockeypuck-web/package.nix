@@ -8,15 +8,22 @@
 stdenv.mkDerivation {
   pname = "hockeypuck-web";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   inherit (hockeypuck) version src;
 
   dontBuild = true; # We should just copy the web templates
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/
 
     cp -vr contrib/webroot $out/share/
     cp -vr contrib/templates $out/share/
+
+    runHook postInstall
   '';
 
   passthru.tests = nixosTests.hockeypuck;
