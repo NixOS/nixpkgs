@@ -97,5 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ zendo ];
     mainProgram = "wordbook";
+    teams = [ lib.teams.gnome-circle ];
   };
 })

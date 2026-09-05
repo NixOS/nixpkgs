@@ -119,5 +119,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "bazaar";
     platforms = lib.platforms.linux;
+    teams = [ lib.teams.gnome-circle ];
   };
 })
