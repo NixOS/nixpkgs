@@ -1,0 +1,12 @@
+diff -urN a/resources/web/guide/3/3.js b/resources/web/guide/3/3.js
+--- a/resources/web/guide/3/3.js	2026-07-09 08:36:44.900436795 +1000
++++ b/resources/web/guide/3/3.js	2026-07-09 08:36:44.904436786 +1000
+@@ -3,7 +3,7 @@
+ 
+ function OnInit()
+ {
+-	TranslatePage();
++	GotoSkipPage(); return;
+ 	BindUxProgramPopup();
+ 	
+ 	//SendPrivacySelect();
