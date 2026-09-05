@@ -216,6 +216,8 @@ in
         hls_overlay = lself: lsuper: {
           Cabal-syntax = lself.Cabal-syntax_3_10_3_0;
           Cabal = lself.Cabal_3_10_3_0;
+          # Test suite can't find executable due to https://github.com/haskell/cabal/issues/11598
+          cabal-add = dontCheck lsuper.cabal-add_0_2;
           extensions = dontCheck (doJailbreak lself.extensions_0_1_0_1);
         };
       in
