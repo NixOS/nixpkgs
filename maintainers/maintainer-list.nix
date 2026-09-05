@@ -4295,6 +4295,12 @@
     githubId = 40476330;
     name = "brokenpip3";
   };
+  bronek = {
+    email = "brok@incorrekt.com";
+    github = "Bronek";
+    githubId = 823856;
+    name = "Bronek Kozicki";
+  };
   BronzeDeer = {
     github = "BronzeDeer";
     githubId = 74385045;
