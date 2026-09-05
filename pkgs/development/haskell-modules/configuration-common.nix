@@ -1628,6 +1628,7 @@ with haskellLib;
   # https://github.com/haskell-servant/servant/pull/1875 # krank:ignore-line
   servant-auth-client = doJailbreak super.servant-auth-client;
   servant-auth-server = doJailbreak super.servant-auth-server;
+  servant-openapi3 = doJailbreak super.servant-openapi3;
 
   # 2026-06-29: allow doctest 0.25
   # https://github.com/sellout/yaya/issues/91
@@ -1718,10 +1719,6 @@ with haskellLib;
 
   # 2020-11-23: https://github.com/Rufflewind/blas-hs/issues/8
   blas-hs = dontCheck super.blas-hs;
-
-  # Strange doctest problems
-  # https://github.com/biocad/servant-openapi3/issues/30
-  servant-openapi3 = dontCheck super.servant-openapi3;
 
   # 2026-06-04: strict upper bound on random
   # https://github.com/haskell-servant/servant-multipart/issues/76
