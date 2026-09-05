@@ -10,6 +10,7 @@ For new packages please briefly describe the package or provide a link to its ho
 
 <!-- Please check what applies. Note that these are not hard requirements but merely serve as information for reviewers. -->
 
+- [ ] This is not a duplicate of an existing PR.
 - Built on platform:
   - [ ] x86_64-linux
   - [ ] aarch64-linux
