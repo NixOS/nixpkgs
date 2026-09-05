@@ -4,6 +4,7 @@
   bundlerEnv,
   fetchFromGitHub,
   fetchpatch,
+  nixosTests,
   ruby_3_4,
   stdenv,
   tailwindcss_4,
@@ -90,7 +91,11 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    inherit rubyEnv;
     updateScript = ./update.sh;
+    tests = {
+      inherit (nixosTests) sure;
+    };
   };
 
   meta = {
