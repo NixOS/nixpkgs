@@ -5,6 +5,7 @@
   cacert,
   fetchurl,
   fetchzip,
+  installShellFiles,
   makeWrapper,
 }:
 
@@ -26,9 +27,15 @@ tupleStdenv.mkDerivation {
 
   dontUnpack = !isDarwin;
 
-  nativeBuildInputs = lib.optionals (!isDarwin) [
-    makeWrapper
-  ];
+  nativeBuildInputs =
+    if isDarwin then
+      [
+        installShellFiles
+      ]
+    else
+      [
+        makeWrapper
+      ];
 
   installPhase =
     if isDarwin then
@@ -36,6 +43,15 @@ tupleStdenv.mkDerivation {
         runHook preInstall
         mkdir -p $out/Applications
         cp -a $src $out/Applications/Tuple.app
+        mkdir -p $out/bin
+        ln -s ../Applications/Tuple.app/Contents/SharedSupport/bin/tuple $out/bin/tuple
+        # Generate completions from the source path: running the app after
+        # copying it into $out makes macOS lock the bundle (App Management),
+        # after which any chmod inside it fails with EPERM (fixupPhase).
+        $src/Contents/SharedSupport/bin/tuple completion bash >tuple.bash
+        $src/Contents/SharedSupport/bin/tuple completion fish >tuple.fish
+        $src/Contents/SharedSupport/bin/tuple completion zsh >tuple.zsh
+        installShellCompletion tuple.{bash,fish,zsh}
         runHook postInstall
       ''
     else
