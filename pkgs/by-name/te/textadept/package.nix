@@ -4,42 +4,57 @@
   fetchFromGitHub,
   fetchurl,
   cmake,
-  withQt ? true,
-  libsForQt5,
-  withCurses ? false,
-  ncurses,
+  pkg-config,
+  qt6,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
-  version = "12.9";
+  version = "13.0";
   pname = "textadept";
 
   src = fetchFromGitHub {
     owner = "orbitalquark";
     repo = "textadept";
     tag = "textadept_${finalAttrs.version}";
-    hash = "sha256-vpBmDcnaHdpYZIfcy482G4NGor+64Dh1tzryb8JJ+c8=";
+    hash = "sha256-IV+wlL2YgC7uPSweJZx7w2DKd/wYAf8efanQ11ESOVI=";
   };
 
-  nativeBuildInputs = [ cmake ] ++ lib.optionals withQt [ libsForQt5.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qt6.wrapQtAppsHook
+  ];
 
-  buildInputs = lib.optionals withQt [ libsForQt5.qtbase ] ++ lib.optionals withCurses ncurses;
+  buildInputs = [
+    qt6.qtbase
+    qt6.qt5compat
+  ];
 
-  cmakeFlags =
-    lib.optional withQt [ "-DQT=ON" ]
-    ++ lib.optional withCurses [
-      "-DCURSES=ON"
-      "-DQT=OFF"
-    ];
+  cmakeFlags = [
+    "-DQT=ON"
+    "-DCURSES=OFF"
+    "-DGTK2=OFF"
+    "-DGTK3=OFF"
+  ];
+
+  qtWrapperArgs = [
+    "--set"
+    "QT_QPA_PLATFORMTHEME"
+    "generic"
+  ];
 
   preConfigure = ''
-    mkdir -p $PWD/build/_deps
+    rm -rf "$PWD/build/_deps"
+    mkdir -p "$PWD/build/_deps"
 
-  ''
-  + lib.concatStringsSep "\n" (
-    lib.mapAttrsToList (name: params: "ln -s ${fetchurl params} $PWD/build/_deps/${name}") (
-      import ./deps.nix
-    )
-  );
+    ${lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (name: params: "ln -s ${fetchurl params} \"$PWD/build/_deps/${name}\"") (
+        import ./deps.nix
+      )
+    )}
+  '';
+
+  doCheck = false;
 
   meta = {
     description = "Extensible text editor based on Scintilla with Lua scripting";
@@ -51,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
       raskin
       mirrexagon
       arcuru
+      mikecm
     ];
     platforms = lib.platforms.linux;
     mainProgram = "textadept";
