@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  cmake,
   pkg-config,
   bzip2,
   openssl,
@@ -30,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "boa_cli"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cmake ];
 
   buildInputs = [
     bzip2
