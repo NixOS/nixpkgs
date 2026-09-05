@@ -20,5 +20,6 @@ buildDartApplication {
   meta = {
     homepage = "https://github.com/breitburg/domine";
     mainProgram = "domine";
+    license = lib.licenses.gpl2Only;
   };
 }
