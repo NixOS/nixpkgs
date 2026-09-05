@@ -57,7 +57,7 @@ Examples: [#397273](https://github.com/NixOS/nixpkgs/pull/397273#issuecomment-27
 New maintainers will automatically get invited to join the [NixOS/nixpkgs-maintainers](https://github.com/orgs/NixOS/teams/nixpkgs-maintainers) GitHub team.
 By joining, you will get some triaging rights in the nixpkgs repository, like the ability to close and reopen issues made by others, and managing labels.
 However, the GitHub team invite is usually only sent by email, and is only valid for one week!
-Should it expire, please ask for a re-invite in the [GitHub org owners help desk Matrix channel](https://matrix.to/#/#org_owners:nixos.org).
+Should it expire, please request a new one by following the instructions [here](https://github.com/NixOS/rfc39-record/blob/main/README.md).
 
 ### Unofficial maintainer tooling
 
