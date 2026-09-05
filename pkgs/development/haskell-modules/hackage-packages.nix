@@ -126754,67 +126754,6 @@ self: {
     }
   ) { youProbablyWantCapitalCabal = null; };
 
-  cabal-add_0_1 = callPackage (
-    {
-      mkDerivation,
-      base,
-      bytestring,
-      Cabal,
-      cabal-install-parsers,
-      Cabal-syntax,
-      containers,
-      Diff,
-      directory,
-      filepath,
-      mtl,
-      optparse-applicative,
-      process,
-      string-qq,
-      tasty,
-      temporary,
-    }:
-    mkDerivation {
-      pname = "cabal-add";
-      version = "0.1";
-      sha256 = "1szbi0z8yf98641rwnj856gcfsvvflxwrfxraxy6rl60m7i0mab1";
-      revision = "3";
-      editedCabalFile = "0siv5ajqxcbs9c0ky94p5qk51w6cgf1zyc3rckxvlc25f4kygw4v";
-      isLibrary = true;
-      isExecutable = true;
-      libraryHaskellDepends = [
-        base
-        bytestring
-        Cabal
-        Cabal-syntax
-        containers
-        mtl
-      ];
-      executableHaskellDepends = [
-        base
-        bytestring
-        Cabal
-        cabal-install-parsers
-        directory
-        filepath
-        optparse-applicative
-        process
-      ];
-      testHaskellDepends = [
-        base
-        Diff
-        directory
-        process
-        string-qq
-        tasty
-        temporary
-      ];
-      description = "Extend Cabal build-depends from the command line";
-      license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
-      hydraPlatforms = lib.platforms.none;
-      mainProgram = "cabal-add";
-    }
-  ) { };
-
   cabal-add = callPackage (
     {
       mkDerivation,
@@ -530707,60 +530646,6 @@ self: {
       license = lib.licenses.bsd3;
       hydraPlatforms = lib.platforms.none;
       broken = true;
-    }
-  ) { };
-
-  path_0_9_5 = callPackage (
-    {
-      mkDerivation,
-      aeson,
-      base,
-      bytestring,
-      deepseq,
-      exceptions,
-      filepath,
-      genvalidity,
-      genvalidity-hspec,
-      genvalidity-property,
-      hashable,
-      hspec,
-      mtl,
-      QuickCheck,
-      template-haskell,
-      text,
-      validity,
-    }:
-    mkDerivation {
-      pname = "path";
-      version = "0.9.5";
-      sha256 = "0cy4vilmhzhi5nfh4v2kyvizhjzjpjib3bvgm1sgmvjzj40dfgrd";
-      libraryHaskellDepends = [
-        aeson
-        base
-        deepseq
-        exceptions
-        filepath
-        hashable
-        template-haskell
-        text
-      ];
-      testHaskellDepends = [
-        aeson
-        base
-        bytestring
-        filepath
-        genvalidity
-        genvalidity-hspec
-        genvalidity-property
-        hspec
-        mtl
-        QuickCheck
-        template-haskell
-        validity
-      ];
-      description = "Support for well-typed paths";
-      license = lib.licenses.bsd3;
-      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
