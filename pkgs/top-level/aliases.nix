@@ -335,7 +335,6 @@ mapAliases {
   arc-browser = throw "arc-browser was removed due to being unmaintained"; # Added 2025-09-03
   arc-unpacker = throw "'arc-unpacker' has been removed because upstream archived the project in April 2022."; # Added 2026-09-02
   arc_unpacker = throw "'arc_unpacker' has been removed because upstream archived the project in April 2022."; # Added 2026-09-02
-  archi = throw "'archi' has been removed, since its upstream maintainers do not want it packaged"; # Added 2025-11-18
   archipelago-minecraft = throw "archipelago-minecraft has been removed, as upstream no longer ships minecraft as a default APWorld."; # Added 2025-07-15
   ArchiSteamFarm = warnAlias "ArchiSteamFarm has been renamed to/replaced by 'archisteamfarm'" archisteamfarm; # Added 2026-01-31
   archivebox = throw "archivebox has been removed, since the packaged version was stuck on django 3."; # Added 2025-08-01
