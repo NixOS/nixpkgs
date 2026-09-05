@@ -82,6 +82,7 @@ buildVscode rec {
       bobby285271
     ];
     mainProgram = "codium";
+    mainDarwinApp = "VSCodium.app";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
