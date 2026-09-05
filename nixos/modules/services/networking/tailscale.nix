@@ -144,7 +144,12 @@ in
     environment.systemPackages = [ cfg.package ]; # for the CLI
     systemd.packages = [ cfg.package ];
     systemd.services.tailscaled = {
-      after = lib.mkIf (config.networking.networkmanager.enable) [ "NetworkManager-wait-online.service" ];
+      after =
+        # nm-online hang must not kill nixos-rebuild on NM restart (#180175)
+        lib.optional config.networking.networkmanager.enable "NetworkManager-wait-online.service"
+        # `wants` pulls the barrier in so this `after` isn't inert (#527403)
+        ++ [ "network-online.target" ];
+      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       path = [
         (dirOf config.security.wrapperDir) # for `su` to use taildrive with correct access rights
