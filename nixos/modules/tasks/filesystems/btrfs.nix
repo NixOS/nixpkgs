@@ -206,6 +206,10 @@ in
                   (${pkgs.btrfs-progs}/bin/btrfs scrub status ${fs} | ${pkgs.gnugrep}/bin/grep finished) || ${pkgs.btrfs-progs}/bin/btrfs scrub cancel ${fs}
                 '';
               };
+
+              unitConfig = {
+                ConditionPathExists = "${fs}";
+              };
             };
         in
         listToAttrs (map scrubService cfgScrub.fileSystems);
