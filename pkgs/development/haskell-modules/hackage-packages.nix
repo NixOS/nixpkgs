@@ -376868,47 +376868,6 @@ self: {
       base,
       bytestring,
       crypton-x509-store,
-      crypton-x509-validation,
-      http2,
-      network,
-      network-control,
-      network-run,
-      recv,
-      time-manager,
-      tls,
-      utf8-string,
-    }:
-    mkDerivation {
-      pname = "http2-tls";
-      version = "0.4.5";
-      sha256 = "0kc7g8ldgm40fsh73r881pxjb87x0m00xnjd0zsl0baaa85f7r4y";
-      isLibrary = true;
-      isExecutable = true;
-      libraryHaskellDepends = [
-        base
-        bytestring
-        crypton-x509-store
-        crypton-x509-validation
-        http2
-        network
-        network-control
-        network-run
-        recv
-        time-manager
-        tls
-        utf8-string
-      ];
-      description = "Library for HTTP/2 over TLS";
-      license = lib.licenses.bsd3;
-    }
-  ) { };
-
-  http2-tls_0_5_4 = callPackage (
-    {
-      mkDerivation,
-      base,
-      bytestring,
-      crypton-x509-store,
       crypton-x509-system,
       crypton-x509-validation,
       http2,
@@ -376943,7 +376902,6 @@ self: {
       ];
       description = "Library for HTTP/2 over TLS";
       license = lib.licenses.bsd3;
-      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
