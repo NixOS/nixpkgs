@@ -2922,9 +2922,9 @@
   };
 
   ssh-client-config = rec {
-    version = "2026.8.20";
+    version = "2026.9.3";
     url = "github:metio/tree-sitter-ssh-client-config?ref=${version}";
-    hash = "sha256-uwiDL2Rc2kW7TiRqtjmAocceLJOFT/9yDtR4c1IU7PI=";
+    hash = "sha256-/lemMoC6QGz4aXcnb5pGlq7m5ClXcbLK7ZKKwhtUn9E=";
     meta.license = lib.licenses.cc0;
   };
 
