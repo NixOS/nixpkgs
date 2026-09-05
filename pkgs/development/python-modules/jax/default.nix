@@ -175,18 +175,19 @@ buildPythonPackage (finalAttrs: {
   # Run these tests with eg
   #
   #   NIXPKGS_ALLOW_UNFREE=1 nixglhost -- nix run --impure .#python3Packages.jax.passthru.tests.test_cuda_jaxlibBin
-  passthru.tests = {
-    # jaxlib-build is broken as of 2024-12-20
-    # test_cuda_jaxlibSource = callPackage ./test-cuda.nix {
-    #   jax = jax.override { jaxlib = jaxlib-build; };
-    # };
-    test_cuda_jaxlibBin = callPackage ./test-cuda.nix {
-      jax = jax.override { jaxlib = jaxlib-bin; };
+  passthru = {
+    tests = {
+      # jaxlib-build is broken as of 2024-12-20
+      # test_cuda_jaxlibSource = callPackage ./test-cuda.nix {
+      #   jax = jax.override { jaxlib = jaxlib-build; };
+      # };
+      test_cuda_jaxlibBin = callPackage ./test-cuda.nix {
+        jax = jax.override { jaxlib = jaxlib-bin; };
+      };
+      # updater fails to pick the correct branch
+      skipBulkUpdate = true;
     };
   };
-
-  # updater fails to pick the correct branch
-  passthru.skipBulkUpdate = true;
 
   meta = {
     description = "Source-built JAX frontend: differentiate, compile, and transform Numpy code";
