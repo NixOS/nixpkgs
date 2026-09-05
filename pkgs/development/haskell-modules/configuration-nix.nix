@@ -628,17 +628,6 @@ builtins.intersectAttrs super {
     '';
   }) super.cryptol;
 
-  # Some test cases require network access
-  hpack_0_39_1 = doDistribute (
-    overrideCabal (drv: {
-      testFlags = drv.testFlags or [ ] ++ [
-        "--skip=/EndToEnd/hpack/defaults/fails if defaults don't exist/"
-        "--skip=/Hpack.Defaults/ensureFile/downloads file if missing/"
-        "--skip=/Hpack.Defaults/ensureFile/with 404/does not create any files/"
-      ];
-    }) super.hpack_0_39_1
-  );
-
   # Tries accessing the GitHub API
   github-app-token = dontCheck super.github-app-token;
 
@@ -2002,9 +1991,6 @@ builtins.intersectAttrs super {
       builtins.mapAttrs (_: fourmoluTestFix) super
     )
     fourmolu
-    fourmolu_0_14_0_0
-    fourmolu_0_16_0_0
-    fourmolu_0_18_0_0
     ;
 
   # Test suite needs to execute 'disco' binary
@@ -2322,7 +2308,6 @@ builtins.intersectAttrs super {
       })
     ) super)
     hpack
-    hpack_0_38_1
     ;
 
   doctest = overrideCabal (drv: {
