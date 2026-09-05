@@ -1400,26 +1400,23 @@ let
           settings = {
             targets = [
               {
-                "localhost" = {
-                  alias = "local machine";
-                  env = "prod";
-                  type = "domain";
-                };
+                host = "localhost";
+                alias = "local machine";
+                env = "prod";
+                type = "domain";
               }
               {
-                "127.0.0.1" = {
-                  alias = "local machine";
-                  type = "v4";
-                };
+                host = "127.0.0.1";
+                alias = "local machine";
+                type = "v4";
               }
               {
-                "::1" = {
-                  alias = "local machine";
-                  type = "v6";
-                };
+                host = "::1";
+                alias = "local machine";
+                type = "v6";
               }
               {
-                "google.com" = { };
+                host = "google.com";
               }
             ];
             dns = { };
