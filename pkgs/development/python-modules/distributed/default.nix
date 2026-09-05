@@ -26,7 +26,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "distributed";
-  version = "2026.7.1";
+  version = "2026.8.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
     owner = "dask";
     repo = "distributed";
     tag = finalAttrs.version;
-    hash = "sha256-9QZb7PpPhdJEc4Kgoc3PE6TU7LHmiw58jkgfaoSNSg4=";
+    hash = "sha256-Z7T/ik8GDnFESDl2OuvSGFo+SBcEY7gpVx31CoTTvao=";
   };
 
   build-system = [
