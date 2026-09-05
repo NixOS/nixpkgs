@@ -20,7 +20,7 @@
   libxml2,
   libzip,
   poppler,
-  portaudio,
+  portaudiocpp,
   qpdf,
   zlib,
   # plugins
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     libzip
     poppler
-    portaudio
+    portaudiocpp
     qpdf
     zlib
   ]
