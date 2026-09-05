@@ -6,16 +6,16 @@
 }:
 
 let
-  cfg = config.programs.river;
+  cfg = config.programs.river-classic;
 
   wayland-lib = import ./lib.nix { inherit lib; };
 in
 {
-  options.programs.river = {
-    enable = lib.mkEnableOption "river, a non-monolithic Wayland compositor";
+  options.programs.river-classic = {
+    enable = lib.mkEnableOption "river-classic, a dynamic tiling Wayland compositor";
 
     package =
-      lib.mkPackageOption pkgs "river" {
+      lib.mkPackageOption pkgs "river-classic" {
         nullable = true;
         extraDescription = ''
           If the package is not overridable with `xwaylandSupport`, then the module option
@@ -39,8 +39,6 @@ in
     xwayland.enable = lib.mkEnableOption "XWayland" // {
       default = true;
     };
-
-    withUWSM = lib.mkEnableOption "UWSM (Unified Wayland Session Manager) to run river without a display manager while still activating `graphical-session.target` for the portal and XDG autostart services";
 
     extraPackages = lib.mkOption {
       type = with lib.types; listOf package;
@@ -82,21 +80,8 @@ in
         inherit lib pkgs;
         enableXWayland = cfg.xwayland.enable;
       })
-
-      {
-        programs.uwsm = {
-          enable = lib.mkDefault cfg.withUWSM;
-          waylandCompositors = {
-            river = {
-              prettyName = lib.mkDefault "River";
-              comment = lib.mkDefault "River compositor managed by UWSM";
-              binPath = lib.mkDefault "/run/current-system/sw/bin/river";
-            };
-          };
-        };
-      }
     ]
   );
 
-  meta.maintainers = with lib.maintainers; [ yiyu ];
+  meta.maintainers = with lib.maintainers; [ GaetanLepage ];
 }
