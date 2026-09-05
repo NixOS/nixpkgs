@@ -11209,6 +11209,12 @@
     githubId = 10136407;
     name = "Harsh Chokshi";
   };
+  hddq = {
+    name = "hddq";
+    email = "git@hddq.org";
+    github = "hddq";
+    githubId = 125512521;
+  };
   hdhog = {
     name = "Serg Larchenko";
     email = "hdhog@hdhog.ru";
