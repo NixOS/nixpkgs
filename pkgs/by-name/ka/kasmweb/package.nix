@@ -6,12 +6,12 @@
 
 stdenv.mkDerivation rec {
   pname = "kasmweb";
-  version = "1.15.0";
-  build = "06fdc8";
+  version = "1.18.1";
+  build = "d09dbc";
 
   src = fetchzip {
     url = "https://kasm-static-content.s3.amazonaws.com/kasm_release_${version}.${build}.tar.gz";
-    sha256 = "sha256-7z5lc4QEpQQdVGMEMc04wXlJTK5VXJ4rufZmDEflJLw=";
+    sha256 = "sha256-/PPc9tdf47DHKdZDcPDy7D6upbLaIKYIYQXqyVDPZkc=";
   };
 
   dontConfigure = true;
