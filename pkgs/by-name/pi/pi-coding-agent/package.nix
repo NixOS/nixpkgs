@@ -70,12 +70,13 @@ buildNpmPackage (finalAttrs: {
 
     pushd packages/coding-agent
     bun build --compile --no-compile-autoload-bunfig --target=${
-      if stdenvNoCC.hostPlatform.isDarwin then
-        if stdenvNoCC.hostPlatform.isAarch64 then "bun-darwin-arm64" else "bun-darwin-x64"
-      else if stdenvNoCC.hostPlatform.isAarch64 then
-        "bun-linux-arm64"
-      else
-        "bun-linux-x64-baseline"
+      {
+        aarch64-darwin = "bun-darwin-arm64";
+        aarch64-linux = "bun-linux-arm64";
+        x86_64-linux = "bun-linux-x64-baseline";
+      }
+      .${stdenvNoCC.hostPlatform.system}
+        or (throw "Unsupported system for pi-coding-agent bun target: ${stdenvNoCC.hostPlatform.system}")
     } \
       ./dist/bun/cli.js ./src/utils/image-resize-worker.ts \
       --outfile $TMPDIR/pi
