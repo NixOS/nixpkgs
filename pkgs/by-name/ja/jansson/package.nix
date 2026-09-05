@@ -29,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     validatePkgConfig
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     # networkmanager relies on libjansson.so:
     #   https://github.com/NixOS/nixpkgs/pull/176302#issuecomment-1150239453
