@@ -1,0 +1,290 @@
+diff --git a/src/CMake/config/xilinx.icd.in b/src/CMake/config/xilinx.icd.in
+index 58adf1f..803835f 100644
+--- a/src/CMake/config/xilinx.icd.in
++++ b/src/CMake/config/xilinx.icd.in
+@@ -1 +1 @@
+-@CMAKE_INSTALL_PREFIX@/@XRT_INSTALL_LIB_DIR@/libxilinxopencl.so
++@XRT_INSTALL_LIB_DIR@/libxilinxopencl.so
+diff --git a/src/CMake/config/xrt-aws.pc.in b/src/CMake/config/xrt-aws.pc.in
+index 5d1b81c..7716e33 100644
+--- a/src/CMake/config/xrt-aws.pc.in
++++ b/src/CMake/config/xrt-aws.pc.in
+@@ -1,10 +1,8 @@
+ # SPDX-License-Identifier: Apache-2.0
+ # Copyright (C) 2019-2021 Xilinx, Inc. All rights reserved.
+ 
+-prefix=@CMAKE_INSTALL_PREFIX@/@XRT_INSTALL_DIR@
+-exec_prefix=${prefix}
+-libdir=${prefix}/lib
+-includedir=${prefix}/include
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: libxrt-aws
+ Description: Xilinx AWS HAL Library
+diff --git a/src/CMake/config/xrt-edge.pc.in b/src/CMake/config/xrt-edge.pc.in
+index 82f8dc9..cf70be5 100644
+--- a/src/CMake/config/xrt-edge.pc.in
++++ b/src/CMake/config/xrt-edge.pc.in
+@@ -1,10 +1,8 @@
+ # SPDX-License-Identifier: Apache-2.0
+ # Copyright (C) 2019-2021 Xilinx, Inc. All rights reserved.
+ 
+-prefix=@CMAKE_INSTALL_PREFIX@/@XRT_INSTALL_DIR@
+-exec_prefix=${prefix}
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/include
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: XRT
+ Description: Xilinx RunTime
+diff --git a/src/CMake/config/xrt.fp.in b/src/CMake/config/xrt.fp.in
+index 9c739fe..875ef44 100644
+--- a/src/CMake/config/xrt.fp.in
++++ b/src/CMake/config/xrt.fp.in
+@@ -23,7 +23,7 @@
+ @PACKAGE_INIT@
+ 
+ set(@PROJECT_NAME@_INCLUDE_DIRS "${PACKAGE_PREFIX_DIR}/include")
+-set(@PROJECT_NAME@_LINK_DIRS "${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_LIBDIR@")
++set(@PROJECT_NAME@_LINK_DIRS "@CMAKE_INSTALL_LIBDIR@")
+ 
+ set(@PROJECT_NAME@_VERSION @XRT_VERSION_STRING@)
+ 
+diff --git a/src/CMake/config/xrt.pc.in b/src/CMake/config/xrt.pc.in
+index 635080d..c3d2e00 100644
+--- a/src/CMake/config/xrt.pc.in
++++ b/src/CMake/config/xrt.pc.in
+@@ -1,10 +1,8 @@
+ # SPDX-License-Identifier: Apache-2.0
+ # Copyright (C) 2019-2021 Xilinx, Inc. All rights reserved.
+ 
+-prefix=@CMAKE_INSTALL_PREFIX@/@XRT_INSTALL_DIR@
+-exec_prefix=${prefix}
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/include
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: XRT
+ Description: Xilinx RunTime
+diff --git a/src/CMake/dkms-aws.cmake b/src/CMake/dkms-aws.cmake
+index eb18fe3..c2274c3 100644
+--- a/src/CMake/dkms-aws.cmake
++++ b/src/CMake/dkms-aws.cmake
+@@ -6,7 +6,7 @@
+ # XRT_VERSION_STRING
+ # LINUX_KERNEL_VERSION
+ 
+-set(XRT_DKMS_AWS_INSTALL_DIR "/usr/src/xrt-aws-${XRT_VERSION_STRING}")
++set(XRT_DKMS_AWS_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/src/xrt-aws-${XRT_VERSION_STRING}")
+ set(XRT_DKMS_AWS_INSTALL_DRIVER_DIR "${XRT_DKMS_AWS_INSTALL_DIR}/driver")
+ 
+ message("-- XRT DRIVER SRC BASE DIR ${XRT_DKMS_DRIVER_SRC_BASE_DIR}")
+diff --git a/src/CMake/dkms-edge.cmake b/src/CMake/dkms-edge.cmake
+index 01e904a..fac4e7c 100644
+--- a/src/CMake/dkms-edge.cmake
++++ b/src/CMake/dkms-edge.cmake
+@@ -4,7 +4,7 @@
+ # Custom variables imported by this CMake stub which should be defined by parent CMake:
+ # XRT_DKMS_DRIVER_SRC_BASE_DIR
+ 
+-set (XRT_DKMS_INSTALL_DIR "/usr/src/xrt-${XRT_VERSION_STRING}")
++set (XRT_DKMS_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/src/xrt-${XRT_VERSION_STRING}")
+ set (XRT_DKMS_INSTALL_DRIVER_DIR "${XRT_DKMS_INSTALL_DIR}/driver")
+ 
+ message("-- XRT DRIVER SRC BASE DIR ${XRT_DKMS_DRIVER_SRC_BASE_DIR}")
+@@ -78,7 +78,7 @@ SET (XRT_DKMS_DRIVER_SRCS
+   zocl/include/zocl_xgq.h
+   zocl/include/zocl_xgq_plat.h
+   zocl/include/zocl_hwctx.h
+-  
++
+   zocl/zert/cu_scu.c
+   zocl/zert/scu.c
+   zocl/zert/zocl_csr_intc.c
+diff --git a/src/CMake/dkms.cmake b/src/CMake/dkms.cmake
+index 711c4d0..517d36d 100644
+--- a/src/CMake/dkms.cmake
++++ b/src/CMake/dkms.cmake
+@@ -7,7 +7,7 @@
+ # LINUX_KERNEL_VERSION
+ 
+ if (NOT DEFINED XRT_DKMS_INSTALL_DIR)
+-  set (XRT_DKMS_INSTALL_DIR "/usr/src/xrt-${XRT_VERSION_STRING}")
++  set (XRT_DKMS_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/src/xrt-${XRT_VERSION_STRING}")
+ endif()
+ set (XRT_DKMS_INSTALL_DRIVER_DIR "${XRT_DKMS_INSTALL_DIR}/driver")
+ 
+diff --git a/src/CMake/icd.cmake b/src/CMake/icd.cmake
+index c9fadde..d42e015 100644
+--- a/src/CMake/icd.cmake
++++ b/src/CMake/icd.cmake
+@@ -14,7 +14,7 @@ configure_file (
+   ${ICD_FILE_NAME}
+   )
+ 
+-set(OCL_ICD_INSTALL_PREFIX "/etc/OpenCL/vendors")
++set(OCL_ICD_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/etc/OpenCL/vendors")
+ 
+ install (FILES ${CMAKE_CURRENT_BINARY_DIR}/${ICD_FILE_NAME}
+   DESTINATION ${OCL_ICD_INSTALL_PREFIX}
+diff --git a/src/CMake/version.cmake b/src/CMake/version.cmake
+index f986975..93efc9a 100644
+--- a/src/CMake/version.cmake
++++ b/src/CMake/version.cmake
+@@ -152,7 +152,7 @@ else()
+   function(xrt_configure_version_file target_name type)
+     file(TOUCH ${CMAKE_CURRENT_BINARY_DIR}/${target_name}-version.rc)
+   endfunction()
+-endif()  
++endif()
+ 
+ # xrt component install
+ install(FILES
+@@ -170,7 +170,7 @@ endif()
+ # This is not required on MPSoC platform. To avoid yocto error, do NOT intall
+ if (XRT_ALVEO AND (NOT XRT_EDGE) AND (NOT WIN32))
+   # Copied over from dkms.cmake. TODO: cleanup
+-  set (XRT_DKMS_INSTALL_DIR "/usr/src/xrt-${XRT_VERSION_STRING}")
++  set (XRT_DKMS_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/src/xrt-${XRT_VERSION_STRING}")
+   install(FILES
+     ${PROJECT_BINARY_DIR}/gen/xrt/detail/version.h
+     ${PROJECT_BINARY_DIR}/gen/xrt/detail/version-slim.h
+diff --git a/src/CMake/xrtVariables.cmake b/src/CMake/xrtVariables.cmake
+index 8de911d..ca2947f 100644
+--- a/src/CMake/xrtVariables.cmake
++++ b/src/CMake/xrtVariables.cmake
+@@ -12,31 +12,19 @@ if (WIN32)
+   set (XRT_INSTALL_CMAKE_DIR      ${XRT_INSTALL_DIR}/share/cmake/${PROJECT_NAME})
+ else()
+   include (GNUInstallDirs)
+-  message("-- CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}")
+-  message("-- CMAKE_INSTALL_BINDIR=${CMAKE_INSTALL_BINDIR}")
+-  message("-- CMAKE_INSTALL_LIBDIR=${CMAKE_INSTALL_LIBDIR}")
+-  message("-- CMAKE_INSTALL_INCLUDEDIR=${CMAKE_INSTALL_INCLUDEDIR}")
+-  set (XRT_INSTALL_DIR            .)
+-  set (XRT_INSTALL_BIN_DIR        ${XRT_INSTALL_DIR}/${CMAKE_INSTALL_BINDIR})
+-  set (XRT_INSTALL_UNWRAPPED_DIR  ${XRT_INSTALL_BIN_DIR}/unwrapped)
+-  set (XRT_INSTALL_INCLUDE_DIR    ${XRT_INSTALL_DIR}/${CMAKE_INSTALL_INCLUDEDIR})
+-  set (XRT_INSTALL_LIB_DIR        ${XRT_INSTALL_DIR}/${CMAKE_INSTALL_LIBDIR})
++  set (XRT_INSTALL_DIR ${CMAKE_INSTALL_PREFIX})
++  set (XRT_INSTALL_BIN_DIR ${CMAKE_INSTALL_BINDIR})
++  set (XRT_INSTALL_UNWRAPPED_DIR ${XRT_INSTALL_BIN_DIR})
++  set (XRT_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_INCLUDEDIR})
++  set (XRT_INSTALL_LIB_DIR ${CMAKE_INSTALL_LIBDIR})
+   set (XRT_INSTALL_PLUGIN_LIB_DIR ${XRT_INSTALL_LIB_DIR}/xrt/module)
+-  set (XRT_INSTALL_PYTHON_DIR     ${XRT_INSTALL_DIR}/python)
+-  set (XRT_INSTALL_CMAKE_DIR      ${XRT_INSTALL_DIR}/share/cmake/${PROJECT_NAME})
+-  set (XRT_INSTALL_PKG_CONFIG_DIR ${XRT_INSTALL_DIR}/${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+-  set (XRT_BUILD_INSTALL_DIR      ${CMAKE_BINARY_DIR}${CMAKE_INSTALL_PREFIX})
+-  set (XRT_VALIDATE_DIR           ${XRT_INSTALL_DIR}/test)
++  set (XRT_INSTALL_PYTHON_DIR ${XRT_INSTALL_DIR}/share/XRT/python)
++  set (XRT_INSTALL_CMAKE_DIR ${XRT_INSTALL_DIR}/lib/cmake/${PROJECT_NAME})
++  set (XRT_INSTALL_PKG_CONFIG_DIR ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
++  set (XRT_BUILD_INSTALL_DIR ${CMAKE_INSTALL_PREFIX})
++  set (XRT_VALIDATE_DIR ${XRT_INSTALL_DIR}/test)
+   set (XRT_NAMELINK_ONLY NAMELINK_ONLY)
+   set (XRT_NAMELINK_SKIP NAMELINK_SKIP)
+-
+-  # Some install actions are excluded when system install path
+-  # is used.  In particular, do not install to the unwrapped
+-  # bin dir and do not install configuration scripts.
+-  if (CMAKE_INSTALL_PREFIX STREQUAL "/usr"
+-      OR CMAKE_INSTALL_PREFIX STREQUAL "/usr/local")
+-    set (XRT_SYSTEM_INSTALL 1)
+-    set (XRT_INSTALL_UNWRAPPED_DIR  ${XRT_INSTALL_BIN_DIR})
+-  endif()
++  set (XRT_SYSTEM_INSTALL 1)
+ endif()
+ 
+diff --git a/src/runtime_src/core/pcie/tools/cloud-daemon/CMakeLists.txt b/src/runtime_src/core/pcie/tools/cloud-daemon/CMakeLists.txt
+index 716c700..c311e35 100644
+--- a/src/runtime_src/core/pcie/tools/cloud-daemon/CMakeLists.txt
++++ b/src/runtime_src/core/pcie/tools/cloud-daemon/CMakeLists.txt
+@@ -58,7 +58,7 @@ configure_file (
+   )
+ install (
+   FILES ${CMAKE_CURRENT_BINARY_DIR}/${MSD_SERVICE_FILE}
+-  DESTINATION ${XRT_INSTALL_DIR}/etc
++  DESTINATION ${XRT_INSTALL_DIR}/etc/systemd/system
+   )
+ set (MPD_SERVICE_FILE "mpd.service")
+ configure_file (
+@@ -67,18 +67,18 @@ configure_file (
+   )
+ install (
+   FILES ${CMAKE_CURRENT_BINARY_DIR}/${MPD_SERVICE_FILE}
+-  DESTINATION ${XRT_INSTALL_DIR}/etc
++  DESTINATION ${XRT_INSTALL_DIR}/etc/systemd/system
+   )
+ 
+ # depoly header files
+ set(XRT_HEADER_SRC
+-  mpd_plugin.h                                                              
+-  msd_plugin.h)                                                              
+-                                                                                
++  mpd_plugin.h
++  msd_plugin.h)
++
+ install (FILES ${XRT_HEADER_SRC}
+   DESTINATION ${XRT_INSTALL_INCLUDE_DIR}
+   COMPONENT ${XRT_DEV_COMPONENT}
+-)        
++)
+ 
+ if (XRT_ALVEO)
+   add_subdirectory(aws)
+diff --git a/src/runtime_src/core/pcie/tools/cloud-daemon/mpd.service.in b/src/runtime_src/core/pcie/tools/cloud-daemon/mpd.service.in
+index b8b50f1..e0b2094 100644
+--- a/src/runtime_src/core/pcie/tools/cloud-daemon/mpd.service.in
++++ b/src/runtime_src/core/pcie/tools/cloud-daemon/mpd.service.in
+@@ -6,7 +6,7 @@ ConditionDirectoryNotEmpty=/dev/xfpga
+ 
+ [Service]
+ Type=simple
+-ExecStart=${CMAKE_INSTALL_PREFIX}/${XRT_INSTALL_BIN_DIR}/mpd
++ExecStart=${XRT_INSTALL_BIN_DIR}/mpd
+ Restart=on-failure
+ 
+ [Install]
+diff --git a/src/runtime_src/core/pcie/tools/cloud-daemon/msd.service.in b/src/runtime_src/core/pcie/tools/cloud-daemon/msd.service.in
+index 4e75fb7..0e96764 100644
+--- a/src/runtime_src/core/pcie/tools/cloud-daemon/msd.service.in
++++ b/src/runtime_src/core/pcie/tools/cloud-daemon/msd.service.in
+@@ -6,7 +6,7 @@ ConditionDirectoryNotEmpty=/dev/xfpga
+ 
+ [Service]
+ Type=simple
+-ExecStart=${CMAKE_INSTALL_PREFIX}/${XRT_INSTALL_BIN_DIR}/msd
++ExecStart=${XRT_INSTALL_BIN_DIR}/msd
+ Restart=on-failure
+ 
+ [Install]
+diff --git a/src/runtime_src/core/pcie/tools/xbflash.qspi/CMakeLists.txt b/src/runtime_src/core/pcie/tools/xbflash.qspi/CMakeLists.txt
+index 3cf16d3..e068a16 100644
+--- a/src/runtime_src/core/pcie/tools/xbflash.qspi/CMakeLists.txt
++++ b/src/runtime_src/core/pcie/tools/xbflash.qspi/CMakeLists.txt
+@@ -15,7 +15,7 @@ file(GLOB XBFLASH_QSPI_FILES
+ set(XBFLASH_QSPI_SRC ${XBFLASH_QSPI_FILES})
+ set(XBFLASH_NAME "xbflash.qspi")
+ set(XBFLASH_NAME_NEW "xbflash")
+-set(XBFLASH_INSTALL_DEST "/usr/local/bin")
++set(XBFLASH_INSTALL_DEST ${CMAKE_INSTALL_BINDIR})
+ set(XBFLASH_COMPONENT "xbflash")
+ 
+ add_executable(${XBFLASH_NAME} ${XBFLASH_QSPI_SRC})
+diff --git a/src/runtime_src/core/tools/xbflash2/CMakeLists.txt b/src/runtime_src/core/tools/xbflash2/CMakeLists.txt
+index 3bc6c13..d95b964 100755
+--- a/src/runtime_src/core/tools/xbflash2/CMakeLists.txt
++++ b/src/runtime_src/core/tools/xbflash2/CMakeLists.txt
+@@ -30,7 +30,7 @@ file(GLOB XBFLASH_QSPI_FILES
+ 
+ set(XBFLASH_QSPI_SRC ${XBFLASH_BASE_FILES} ${XBFLASH_QSPI_FILES})
+ set(XBFLASH_NAME "xbflash2")
+-set(XBFLASH_INSTALL_DEST "/usr/local/bin")
++set(XBFLASH_INSTALL_DEST ${CMAKE_INSTALL_BINDIR})
+ set(XBFLASH_COMPONENT "xbflash2")
+ 
+ add_executable(${XBFLASH_NAME} ${XBFLASH_QSPI_SRC})

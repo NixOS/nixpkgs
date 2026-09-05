@@ -1,0 +1,21 @@
+diff --git a/src/runtime_src/core/common/module_loader.cpp b/src/runtime_src/core/common/module_loader.cpp
+index a4ca484..34267d3 100644
+--- a/src/runtime_src/core/common/module_loader.cpp
++++ b/src/runtime_src/core/common/module_loader.cpp
+@@ -172,7 +172,7 @@ module_path(const std::string& module)
+ #ifdef _WIN32
+   path /= module + ".dll";
+ #else
+-  path /= XRT_LIB_DIR;
++  path /= "lib";
+   path /= "xrt/module/lib" + module + ".so." + XRT_VERSION_MAJOR;
+ #endif
+   if (!sfs::exists(path) || !sfs::is_regular_file(path))
+@@ -202,7 +202,7 @@ shim_path()
+ #ifdef _WIN32
+   path /= name + ".dll";
+ #else
+-  path /= XRT_LIB_DIR;
++  path /= "lib";
+   path /= "lib" + name + ".so." + XRT_VERSION_MAJOR;
+ #endif
