@@ -24,13 +24,13 @@
   xmlschema,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest";
   version = "9.0.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-uGraUIr4HRnt6yE8aBsdSCRsGpHTBMbIGkJ2dMF+uRw=";
   };
 
@@ -94,11 +94,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest" ];
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Framework for writing tests";
     homepage = "https://docs.pytest.org";
-    changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
+    changelog = "https://github.com/pytest-dev/pytest/releases/tag/${finalAttrs.version}";
     teams = [ lib.teams.python ];
     license = lib.licenses.mit;
   };
-}
+})

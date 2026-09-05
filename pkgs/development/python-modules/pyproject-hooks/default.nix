@@ -9,14 +9,14 @@
   testpath,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyproject-hooks";
   version = "1.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pyproject_hooks";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-HoWb1cQPrpRIZC3Yca30WeXiCEGG6NLCp5qCTJcNofg=";
   };
 
@@ -28,8 +28,8 @@ buildPythonPackage rec {
 
   passthru.tests = {
     pytest = buildPythonPackage {
-      pname = "${pname}-pytest";
-      inherit version;
+      pname = "${finalAttrs.pname}-pytest";
+      inherit (finalAttrs) version;
       pyproject = false;
 
       dontBuild = true;
@@ -52,11 +52,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyproject_hooks" ];
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Low-level library for calling build-backends in `pyproject.toml`-based project";
     homepage = "https://github.com/pypa/pyproject-hooks";
-    changelog = "https://github.com/pypa/pyproject-hooks/blob/v${version}/docs/changelog.rst";
+    changelog = "https://github.com/pypa/pyproject-hooks/blob/v${finalAttrs.version}/docs/changelog.rst";
     license = lib.licenses.mit;
     teams = [ lib.teams.python ];
   };
-}
+})

@@ -25,13 +25,13 @@
 }:
 
 let
-  self = buildPythonPackage rec {
+  self = buildPythonPackage (finalAttrs: {
     pname = "pytest";
     version = "7.4.4";
     pyproject = true;
 
     src = fetchPypi {
-      inherit pname version;
+      inherit (finalAttrs) pname version;
       hash = "sha256-LPAAWSLGrOSj4uyLQIDrDZdT/ckxB0FTMvUM6eeZQoA=";
     };
 
@@ -95,15 +95,17 @@ let
 
     pythonImportsCheck = [ "pytest" ];
 
+    __structuredAttrs = true;
+
     meta = {
       description = "Framework for writing tests";
       homepage = "https://docs.pytest.org";
-      changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
+      changelog = "https://github.com/pytest-dev/pytest/releases/tag/${finalAttrs.version}";
       maintainers = with lib.maintainers; [
         madjar
       ];
       license = lib.licenses.mit;
     };
-  };
+  });
 in
 self

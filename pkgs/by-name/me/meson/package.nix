@@ -14,7 +14,7 @@
   zlib,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "meson";
   version = "1.10.2";
   format = "setuptools";
@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-3Zeavn6aW6920gM7yE73Ms1RPCP2GjX9IUL9YGmISfY=";
   };
 
@@ -176,6 +176,8 @@ python3.pkgs.buildPythonApplication rec {
   setupHook = ./setup-hook.sh;
   env.hostPlatform = stdenv.targetPlatform.system;
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://mesonbuild.com";
     description = "Open source, fast and friendly build system made in Python";
@@ -193,5 +195,5 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ qyliss ];
     inherit (python3.meta) platforms;
   };
-}
+})
 # TODO: a more Nixpkgs-tailoired test suite

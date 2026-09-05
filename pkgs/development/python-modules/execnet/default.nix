@@ -9,13 +9,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "execnet";
   version = "2.1.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Y9g7/dmiPjW5xqMmFBIyT5ZMLsjc2NPGkW7pNz4L780=";
   };
 
@@ -56,11 +56,13 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Distributed Python deployment and communication";
     homepage = "https://execnet.readthedocs.io/";
-    changelog = "https://github.com/pytest-dev/execnet/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/pytest-dev/execnet/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ getchoo ];
   };
-}
+})
