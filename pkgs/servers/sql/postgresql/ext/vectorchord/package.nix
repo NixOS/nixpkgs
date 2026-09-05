@@ -26,7 +26,7 @@ buildPgrxExtension (finalAttrs: {
   cargoHash = "sha256-IXOCzKJArNOcb/2TcJbLz1XdCquUpyF/cLHYU5vmlko=";
 
   patches =
-    lib.optional (lib.versionOlder rustc.llvm.version "22.0.0" && stdenv.hostPlatform.isx86_64)
+    lib.optionals (lib.versionOlder rustc.llvm.version "22.0.0" && stdenv.hostPlatform.isx86_64)
       [
         # Due to a bug in LLVM 21, build fails on x86_64 with:
         # `rustc-LLVM ERROR: Cannot select: intrinsic %llvm.x86.avx512.vpdpbusd.512`.

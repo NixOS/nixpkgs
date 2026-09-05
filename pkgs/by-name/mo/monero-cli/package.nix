@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     "-Wno-dev"
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin "-DBoost_USE_MULTITHREADED=OFF"
-  ++ lib.optional trezorSupport [
+  ++ lib.optionals trezorSupport [
     "-DUSE_DEVICE_TREZOR=ON"
   ];
 

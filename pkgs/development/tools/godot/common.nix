@@ -325,7 +325,7 @@ let
 
                     # stripping dlls results in:
                     # Failed to load System.Private.CoreLib.dll (error code 0x8007000B)
-                    stripExclude = lib.optional withMono [ "*.dll" ];
+                    stripExclude = lib.optionals withMono [ "*.dll" ];
 
                     runtimeDependencies =
                       prev.runtimeDependencies or [ ]

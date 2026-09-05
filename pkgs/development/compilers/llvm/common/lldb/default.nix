@@ -73,7 +73,7 @@ stdenv.mkDerivation (
     patches = [
       ./gnu-install-dirs.patch
     ]
-    ++ lib.optional (lib.versions.major release_version == "18") [
+    ++ lib.optionals (lib.versions.major release_version == "18") [
       # Fix build with gcc15
       # https://github.com/llvm/llvm-project/commit/bb59f04e7e75dcbe39f1bf952304a157f0035314
       ./lldb-add-include-cstdint.patch
