@@ -3,9 +3,9 @@
   stdenv,
   fetchFromGitHub,
   fetchPnpmDeps,
-  electron_40,
+  electron_41,
   nodejs-slim,
-  pnpm_10_29_2,
+  pnpm_11,
   pnpmConfigHook,
   makeWrapper,
   writableTmpDirAsHomeHook,
@@ -15,6 +15,10 @@
   pkg-config,
   makeDesktopItem,
   nix-update-script,
+  bun,
+  mise,
+  ripgrep,
+  uv,
   alsa-lib,
   libevdev,
   libx11,
@@ -26,35 +30,40 @@
 }:
 
 let
-  electron = electron_40;
-  pnpm = pnpm_10_29_2;
+  electron = electron_41;
+  pnpm = pnpm_11;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cherry-studio";
-  version = "1.9.11";
+  version = "2.0.7";
 
   src = fetchFromGitHub {
     owner = "CherryHQ";
     repo = "cherry-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NbjFPHMh8LSqUv3wpXI/hBU9aJFe76l5UyoZ2XqX0hg=";
+    hash = "sha256-K49Y03OF2RyhUUhhKo4YCR4ObgnsBbBfhl2wqe1+xvs=";
   };
 
+  patches = [
+    # Upstream's packaging hooks download prebuilt binaries (mise, bun, uv,
+    # ripgrep, and a GLIBC-compatible better-sqlite3 addon) from GitHub during
+    # electron-builder packaging. That needs network access, which the build
+    # sandbox doesn't have. The tools are resolved from PATH at runtime
+    # instead (see the wrapper below), and better-sqlite3 is rebuilt from
+    # source against electron by electron-builder.
+    ./skip-binary-download.patch
+  ];
+
   postPatch = ''
-    substituteInPlace src/main/services/ConfigManager.ts \
-      --replace-fail "ConfigKeys.AutoUpdate, true" "ConfigKeys.AutoUpdate, false" \
-      --replace-fail "ConfigKeys.AutoUpdate, value" "ConfigKeys.AutoUpdate, false"
-    substituteInPlace src/main/services/AppUpdater.ts \
-      --replace-fail " = isActive" " = false"
-    substituteInPlace src/renderer/src/hooks/useSettings.ts \
-      --replace-fail "isAutoUpdate)" "false)"
+    substituteInPlace src/shared/data/preference/preferenceSchemas.ts \
+      --replace-fail "'app.dist.auto_update.enabled': true" "'app.dist.auto_update.enabled': false"
   '';
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-9Vx4WzQjwNxPAkz+FjjqnMQxJviP4e0EhkQBN9Y+ujo=";
+    fetcherVersion = 4;
+    hash = "sha256-bwfDr6z1/uBO1D0lTpO061nnrDunRjN9InxiT1MABAY=";
   };
 
   nativeBuildInputs = [
@@ -142,6 +151,14 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 build/icon.png $out/share/icons/cherry-studio.png
     makeWrapper ${lib.getExe electron} $out/bin/cherry-studio \
       --inherit-argv0 \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          bun
+          mise
+          ripgrep
+          uv
+        ]
+      } \
       --add-flags $out/opt/cherry-studio/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
