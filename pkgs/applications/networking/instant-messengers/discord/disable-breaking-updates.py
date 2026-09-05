@@ -17,10 +17,13 @@ import os
 import sys
 from pathlib import Path
 
-config_home = {
-    "darwin": os.path.join(os.path.expanduser("~"), "Library", "Application Support"),
-    "linux": os.environ.get("XDG_CONFIG_HOME") or os.path.join(os.path.expanduser("~"), ".config")
-}.get(sys.platform, None)
+config_home = os.environ.get("DISCORD_USER_DATA_DIR")
+if config_home is None:
+    config_home = {
+        "darwin": os.path.join(os.path.expanduser("~"), "Library", "Application Support"),
+        "linux": os.environ.get("XDG_CONFIG_HOME")
+        or os.path.join(os.path.expanduser("~"), ".config"),
+    }.get(sys.platform, None)
 
 if config_home is None:
     print("[Nix] Unsupported operating system.")
@@ -28,8 +31,8 @@ if config_home is None:
 
 config_dir_name = "@configDirName@".replace(" ", "") if sys.platform == "darwin" else "@configDirName@"
 
-settings_path = Path(f"{config_home}/{config_dir_name}/settings.json")
-settings_path_temp = Path(f"{config_home}/{config_dir_name}/settings.json.tmp")
+settings_path = Path(config_home) / config_dir_name / "settings.json"
+settings_path_temp = settings_path.with_suffix(".json.tmp")
 
 if os.path.exists(settings_path):
     with settings_path.open(encoding="utf-8") as settings_file:
