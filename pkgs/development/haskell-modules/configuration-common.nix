@@ -1618,6 +1618,9 @@ with haskellLib;
   # https://github.com/haskellari/binary-instances/pull/34/changes#r3257818178
   binary-instances = doJailbreak super.binary-instances;
 
+  # 2026-09-05: allow QuickCheck 2.16
+  puresat = doJailbreak super.puresat;
+
   # 2026-06-28: allow QuickCheck 2.16 (upstream currently bound to 2.18)
   # https://github.com/haskell-servant/servant/pull/1875 # krank:ignore-line
   servant-auth-client = doJailbreak super.servant-auth-client;
