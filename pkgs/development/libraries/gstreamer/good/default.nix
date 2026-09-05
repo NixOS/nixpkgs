@@ -258,9 +258,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = {
     NIX_LDFLAGS =
-      # linking error on Darwin
+      # linking error on Darwin and musl systems
       # https://github.com/NixOS/nixpkgs/pull/70690#issuecomment-553694896
-      lib.optionalString stdenv.hostPlatform.isDarwin "-lncurses";
+      lib.optionalString (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isMusl) "-lncurses";
   };
 
   # fails 1 tests with "Unexpected critical/warning: g_object_set_is_valid_property: object class 'GstRtpStorage' has no property named ''"
