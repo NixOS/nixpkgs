@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mcp-nixos";
-  version = "3.0.1";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "utensils";
     repo = "mcp-nixos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S6elg+nneCdUwpG6Y9ABMr/bbRfzCvls0ba2Vva22Lk=";
+    hash = "sha256-EjSyb5FcVnZOW0qFbcvxzor/je02duSe/RhJsL5p+14=";
   };
 
   build-system = [ python3Packages.hatchling ];
