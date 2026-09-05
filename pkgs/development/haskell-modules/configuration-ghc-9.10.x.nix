@@ -94,13 +94,21 @@ in
   monad-dijkstra = dontCheck super.monad-dijkstra; # needs hlint 3.10
 
   # Workaround https://github.com/haskell/haskell-language-server/issues/4674
-  haskell-language-server = haskellLib.disableCabalFlag "hlint" (
-    super.haskell-language-server.override {
-      apply-refact = null;
-      hlint = null;
-      refact = null;
-    }
-  );
+  haskell-language-server = lib.pipe super.haskell-language-server [
+    (disableCabalFlag "hlint")
+    (addBuildDepends [
+      self.stan
+      self.trial
+    ])
+    (
+      hls:
+      hls.override {
+        apply-refact = null;
+        hlint = null;
+        refact = null;
+      }
+    )
+  ];
 
   # test-suite uses MultilineStrings, which is only available in GHC 9.12+
   cabal-add = dontCheck super.cabal-add;
