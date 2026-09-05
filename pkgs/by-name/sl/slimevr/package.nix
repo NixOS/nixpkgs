@@ -16,13 +16,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "slimevr";
-  version = "20.1.0";
+  version = "21.0.0";
 
   src = fetchFromGitHub {
     owner = "SlimeVR";
     repo = "SlimeVR-Server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8ti1uyDtgf9JuWurAkE0Twj3/ROOd9ai94htEvoVo50=";
+    hash = "sha256-LOlK4K61/dDK4oiTuk4PDWMWjuWeTZVBhOLImRuL3dg=";
     # solarxr
     fetchSubmodules = true;
   };
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) version src;
     pnpm = pnpm_10;
     fetcherVersion = 4;
-    hash = "sha256-Y8TSsoXqRxexar9uFKHiIuogAuLSTMqK9blFbMVTwOE=";
+    hash = "sha256-6BTvNGDOGjF/k+eLk8WK9nmnJ2wonP6xyRXPB4xaveA=";
   };
 
   patches = [

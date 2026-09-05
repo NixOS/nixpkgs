@@ -662,6 +662,7 @@
         aioruuvigateway
         aioshelly
         aiousbwatcher
+        besen
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -683,7 +684,7 @@
         pyspeex-noise
         serialx
         zeroconf
-      ]; # missing inputs: besen
+      ];
     "beverly" =
       ps: with ps; [
       ];
@@ -2139,12 +2140,13 @@
       [
         aiohasupervisor
         aiousbwatcher
+        flexit-modbus
         modbus-connection
         pymodbus
         serialx
         tmodbus
       ]
-      ++ modbus-connection.optional-dependencies.tmodbus; # missing inputs: flexit-modbus
+      ++ modbus-connection.optional-dependencies.tmodbus;
     "flexit_bacnet" =
       ps: with ps; [
         flexit-bacnet
@@ -2169,9 +2171,10 @@
       ];
     "flow_it" =
       ps: with ps; [
+        flow-it-api
         ifaddr
         zeroconf
-      ]; # missing inputs: flow-it-api
+      ];
     "flume" =
       ps: with ps; [
         pyflume
@@ -2271,12 +2274,13 @@
       ps:
       with ps;
       [
+        fronius-modbus
         modbus-connection
         pyfronius
         pymodbus
         tmodbus
       ]
-      ++ modbus-connection.optional-dependencies.tmodbus; # missing inputs: fronius-modbus
+      ++ modbus-connection.optional-dependencies.tmodbus;
     "frontend" =
       ps: with ps; [
         home-assistant-frontend
@@ -2923,7 +2927,8 @@
       ]; # missing inputs: aiohortos
     "hotspring" =
       ps: with ps; [
-      ]; # missing inputs: python-hotspring
+        python-hotspring
+      ];
     "hp_ilo" =
       ps: with ps; [
         python-hpilo
@@ -3433,13 +3438,14 @@
         hassil
         home-assistant-intents
         ifaddr
+        iseo-argo-ble
         mutagen
         pymicro-vad
         pysmlight
         pyspeex-noise
         serialx
         zeroconf
-      ]; # missing inputs: iseo-argo-ble
+      ];
     "iskra" =
       ps: with ps; [
         pyiskra
@@ -3921,7 +3927,8 @@
       ];
     "librenms" =
       ps: with ps; [
-      ]; # missing inputs: aiolibrenms
+        aiolibrenms
+      ];
     "lichess" =
       ps: with ps; [
         aiolichess
@@ -4813,7 +4820,8 @@
       ];
     "nexblue" =
       ps: with ps; [
-      ]; # missing inputs: nexblue-api
+        nexblue-api
+      ];
     "nexen" =
       ps: with ps; [
       ];
@@ -6208,8 +6216,9 @@
       ps: with ps; [
         aiohasupervisor
         aiousbwatcher
+        samsung-exlink
         serialx
-      ]; # missing inputs: samsung-exlink
+      ];
     "samsung_infrared" =
       ps: with ps; [
         infrared-protocols
@@ -6498,7 +6507,8 @@
       ps: with ps; [
         aiohasupervisor
         paho-mqtt
-      ]; # missing inputs: pysillaprism
+        pysillaprism
+      ];
     "simplefin" =
       ps: with ps; [
         simplefin4py
@@ -6685,9 +6695,10 @@
       [
         modbus-connection
         pymodbus
+        sofar-modbus
         tmodbus
       ]
-      ++ modbus-connection.optional-dependencies.tmodbus; # missing inputs: sofar-modbus
+      ++ modbus-connection.optional-dependencies.tmodbus;
     "solaredge" =
       ps: with ps; [
         aiosolaredge
@@ -6721,7 +6732,8 @@
       ];
     "somfy_mylink" =
       ps: with ps; [
-      ]; # missing inputs: pysomfymylink
+        pysomfymylink
+      ];
     "sonarr" =
       ps: with ps; [
         aiopyarr
@@ -7369,7 +7381,8 @@
         aiohasupervisor
         aiousbwatcher
         serialx
-      ]; # missing inputs: tonewinner-rs232
+        tonewinner-rs232
+      ];
     "toon" =
       ps: with ps; [
         aiohasupervisor
@@ -8420,6 +8433,7 @@
     "bang_olufsen"
     "battery"
     "bayesian"
+    "besen"
     "binary_sensor"
     "blackbird"
     "blebox"
@@ -8613,10 +8627,12 @@
     "fitbit"
     "fivem"
     "fjaraskupan"
+    "flexit"
     "flexit_bacnet"
     "flic"
     "flipr"
     "flo"
+    "flow_it"
     "flume"
     "fluss"
     "flux"
@@ -8635,6 +8651,7 @@
     "fritz"
     "fritzbox"
     "fritzbox_callmonitor"
+    "fronius"
     "frontend"
     "frontier_silicon"
     "fuelprices_dk"
@@ -8738,6 +8755,7 @@
     "homeworks"
     "honeywell"
     "honeywell_string_lights"
+    "hotspring"
     "hr_energy_qube"
     "html5"
     "http"
@@ -8803,6 +8821,7 @@
     "irm_kmi"
     "iron_os"
     "isal"
+    "iseo_argo_ble"
     "iskra"
     "islamic_prayer_times"
     "israel_rail"
@@ -8855,6 +8874,7 @@
     "lg_thinq"
     "lg_tv_rs232"
     "libre_hardware_monitor"
+    "librenms"
     "lichess"
     "lidarr"
     "liebherr"
@@ -8981,6 +9001,7 @@
     "netgear_lte"
     "netio"
     "network"
+    "nexblue"
     "nexia"
     "nextbus"
     "nextcloud"
@@ -9177,6 +9198,7 @@
     "rympro"
     "sabnzbd"
     "saj"
+    "samsung_exlink"
     "samsung_infrared"
     "samsungtv"
     "sanix"
@@ -9212,6 +9234,7 @@
     "sigfox"
     "sighthound"
     "signal_messenger"
+    "silla_prism"
     "simplefin"
     "simplepush"
     "simplisafe"
@@ -9237,11 +9260,13 @@
     "snmp"
     "snoo"
     "snooz"
+    "sofar"
     "solaredge"
     "solarlog"
     "solarman"
     "solax"
     "soma"
+    "somfy_mylink"
     "sonarr"
     "songpal"
     "sonos"
@@ -9334,6 +9359,7 @@
     "tolo"
     "tomato"
     "tomorrowio"
+    "tonewinner"
     "toon"
     "totalconnect"
     "touchline"
