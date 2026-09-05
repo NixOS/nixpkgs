@@ -689,16 +689,21 @@ export default async ({ github, context, core, dry }) => {
     if (context.payload.pull_request) {
       await handle({ item: context.payload.pull_request, stats })
     } else {
+      // We don't use filters here because that causes GitHub to use an often-outdated index,
+      // resulting in the cursor not being updated, and therefore causing the same PRs
+      // to use up our rate limit over and over again.
       const lastRun = (
         await github.rest.actions.listWorkflowRuns({
           ...context.repo,
           workflow_id: 'bot.yml',
-          event: 'schedule',
-          status: 'success',
-          exclude_pull_requests: true,
-          per_page: 1,
         })
-      ).data.workflow_runs[0]
+      ).data.workflow_runs.find(
+        (run) => run.event === 'schedule' && run.conclusion === 'success',
+      )
+
+      core.info(
+        `Last successful run created at: ${lastRun?.created_at ?? '<n/a>'}`,
+      )
 
       const cutoff = new Date(
         Math.max(
