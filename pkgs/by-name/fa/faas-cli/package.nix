@@ -23,7 +23,7 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "faas-cli";
-  version = "0.18.12";
+  version = "0.18.13";
 
   __structuredAttrs = true;
 
@@ -31,7 +31,7 @@ buildGoModule (finalAttrs: {
     owner = "openfaas";
     repo = "faas-cli";
     tag = finalAttrs.version;
-    hash = "sha256-I7P30c7rEVqemgUu/1AtM6jq2f4KB8xyDpjGBMvkLRU=";
+    hash = "sha256-eroQ6tCYlRljqL13u26sqTq3ViqjaGpxxm/5aEX7zRM=";
   };
 
   vendorHash = null;
