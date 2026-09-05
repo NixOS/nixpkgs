@@ -1,0 +1,23 @@
+{
+  "aarch64-darwin": {
+    "version": "4.1.13.59-269627",
+    "src": {
+      "url": "https://dldir1v6.qq.com/weixin/Universal/Mac/xWeChatMac_universal_4.1.13.59_269627.dmg",
+      "hash": "sha256-45zrtADGKikIfN+BQRMR74Pnmr4VHfXShamWEnOTdOk="
+    }
+  },
+  "x86_64-linux": {
+    "version": "4.1.13.8",
+    "src": {
+      "url": "https://web.archive.org/web/20260818044436if_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_x86_64.AppImage",
+      "hash": "sha256-RX26ArkbAxzdRBLu4HT7v/udnQax5Q/Bgi00hw4RSZA="
+    }
+  },
+  "aarch64-linux": {
+    "version": "4.1.13.8",
+    "src": {
+      "url": "https://web.archive.org/web/20260818044444if_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_arm64.AppImage",
+      "hash": "sha256-RLHhac3wSS1C9rx3GsA07Tp1EzxSf2LLBMyPtrECnUY="
+    }
+  }
+}
