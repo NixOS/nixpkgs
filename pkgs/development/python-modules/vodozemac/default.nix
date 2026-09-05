@@ -1,7 +1,9 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
+  hypothesis,
   lib,
+  pytestCheckHook,
   rustPlatform,
 }:
 
@@ -25,6 +27,16 @@ buildPythonPackage (finalAttrs: {
   nativeBuildInputs = [
     rustPlatform.maturinBuildHook
     rustPlatform.cargoSetupHook
+  ];
+
+  preCheck = ''
+    # do not shadow imports
+    rm -r vodozemac
+  '';
+
+  nativeCheckInputs = [
+    hypothesis
+    pytestCheckHook
   ];
 
   meta = {
