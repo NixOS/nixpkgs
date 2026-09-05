@@ -3,58 +3,60 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
+  addDriverRunpath,
   autoPatchelfHook,
   pypaInstallHook,
   wheelUnpackHook,
   cudaPackages,
   python,
   jaxlib,
-  jax-cuda12-pjrt,
 }:
 let
   inherit (jaxlib) version;
-  inherit (jax-cuda12-pjrt) cudaLibPath;
 
   platforms = {
     x86_64-linux = {
       name = "manylinux_2_27_x86_64";
-      hashes = {
-        cp312 = "sha256-8BVPvyNrsiMab8pSBN0eQ6wMHPDeOgAg//kQPlP7hXI=";
-        cp313 = "sha256-2O/FH9SZiimQxGfmPDhs/ckYfH0QWCXFxKt0Pn1SLRE=";
-        cp314 = "sha256-a7jxBoIVF+NEiKUyDkX13vSkYo8qJUr6bix+7DVBm74=";
-      };
+      hash = "sha256-TKiiYaVIWtuFL96VTkuRRfVCwNivRwSojgX67jVBryE=";
     };
     aarch64-linux = {
       name = "manylinux_2_27_aarch64";
-      hashes = {
-        cp312 = "sha256-8qOC5dv2YzB0C/TbOQPGEuhLJN4JkTx5U+0kA8KWtoY=";
-        cp313 = "sha256-6KjWb0PQCzXAQwNmsRfBthKDdk8NENOWWr/jn4coSG8=";
-        cp314 = "sha256-PKEZswHZqTvLg3XGk3z3lJL/WVHKXLuLRvfjSvQtz9M=";
-      };
+      hash = "sha256-gZx0TjXd8Cckv0WWpijSvjhzaah82mBXUTfuQ37NeXo=";
     };
   };
-  currentPlatform =
-    platforms.${stdenv.hostPlatform.system}
-      or (throw "jax-cuda12-plugin is not supported on ${stdenv.hostPlatform.system}");
+  currentPlatform = platforms.${stdenv.hostPlatform.system};
 
-  dist = "cp${lib.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
+  cudaLibPath = lib.makeLibraryPath (
+    with cudaPackages;
+    [
+      (lib.getLib libcublas) # libcublas.so
+      (lib.getLib cuda_cupti) # libcupti.so
+      (lib.getLib cuda_cudart) # libcudart.so
+      (lib.getLib cudnn) # libcudnn.so
+      (lib.getLib libcufft) # libcufft.so
+      (lib.getLib libcusolver) # libcusolver.so
+      (lib.getLib libcusparse) # libcusparse.so
+      (lib.getLib nccl) # libnccl.so
+      (lib.getLib libnvjitlink) # libnvJitLink.so
+      (lib.getLib addDriverRunpath.driverLink) # libcuda.so
+    ]
+  );
+
 in
-buildPythonPackage {
-  pname = "jax-cuda12-plugin";
+buildPythonPackage (finalAttrs: {
+  pname = "jax-cuda13-pjrt";
   inherit version;
   pyproject = false;
   __structuredAttrs = true;
 
   src = fetchPypi {
-    pname = "jax_cuda12_plugin";
-    inherit version dist;
+    pname = "jax_cuda13_pjrt";
+    inherit version;
     format = "wheel";
-    python = dist;
-    abi = dist;
+    python = "py3";
+    dist = "py3";
     platform = currentPlatform.name;
-    hash =
-      currentPlatform.hashes.${dist}
-        or (throw "python${python.pythonVersion}Packages.jax-cuda12-plugin is not supported");
+    inherit (currentPlatform) hash;
   };
 
   nativeBuildInputs = [
@@ -63,53 +65,52 @@ buildPythonPackage {
     wheelUnpackHook
   ];
 
-  # jax-cuda12-plugin looks for ptxas at runtime, e.g. with a triton kernel.
+  # jax-cuda13-pjrt looks for ptxas, nvlink and nvvm at runtime, eg when running `jax.random.PRNGKey(0)`.
   # Linking into $out is the least bad solution. See
   # * https://github.com/NixOS/nixpkgs/pull/164176#discussion_r828801621
   # * https://github.com/NixOS/nixpkgs/pull/288829#discussion_r1493852211
-  # * https://github.com/NixOS/nixpkgs/pull/375186
   # for more info.
   postInstall = ''
-    export BINPATH="$out/${python.sitePackages}/jax_cuda12_plugin/cuda/bin"
+    export OUTPATH="$out/${python.sitePackages}/jax_plugins/nvidia/cu13"
+    export BINPATH="$OUTPATH/bin"
     mkdir -p $BINPATH
     ln -s ${lib.getExe' cudaPackages.cuda_nvcc "ptxas"} $BINPATH/ptxas
     ln -s ${lib.getExe' cudaPackages.cuda_nvcc "nvlink"} $BINPATH/nvlink
+    ln -s ${cudaPackages.cuda_nvcc}/nvvm $OUTPATH/nvvm
   '';
 
-  # jax-cuda12-plugin contains shared libraries that open other shared libraries via dlopen
+  # jax-cuda13-pjrt contains shared libraries that open other shared libraries via dlopen
   # and these implicit dependencies are not recognized by ldd or
   # autoPatchelfHook. That means we need to sneak them into rpath. This step
   # must be done after autoPatchelfHook and the automatic stripping of
   # artifacts. autoPatchelfHook runs in postFixup and auto-stripping runs in the
   # patchPhase.
   preInstallCheck = ''
-    patchelf --add-rpath "${cudaLibPath}" $out/${python.sitePackages}/jax_cuda12_plugin/*.so
+    patchelf --add-rpath "${cudaLibPath}" $out/${python.sitePackages}/jax_plugins/xla_cuda13/xla_cuda_plugin.so
   '';
-
-  dependencies = [ jax-cuda12-pjrt ];
-
-  pythonImportsCheck = [ "jax_cuda12_plugin" ];
 
   # FIXME: there are no tests, but we need to run preInstallCheck above
   doCheck = true;
 
+  pythonImportsCheck = [ "jax_plugins" ];
+
+  passthru = {
+    inherit cudaLibPath;
+  };
+
   meta = {
-    description = "JAX Plugin for CUDA12";
+    description = "JAX XLA PJRT Plugin for NVIDIA GPUs";
     homepage = "https://github.com/jax-ml/jax/tree/main/jax_plugins/cuda";
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     license = lib.licenses.asl20;
-    teams = [ lib.teams.cuda ];
-    maintainers = with lib.maintainers; [
-      GaetanLepage
-      natsukium
-    ];
+    maintainers = with lib.maintainers; [ natsukium ];
     platforms = lib.attrNames platforms;
     problems =
-      lib.optionalAttrs (cudaPackages.cudaMajorVersion != "12") {
+      lib.optionalAttrs (cudaPackages.cudaMajorVersion != "13") {
         unsupported-cuda-version = {
           message = ''
             Incompatible cudaPackages version.
-              - Expected: 12
+              - Expected: 13
               - Got: ${cudaPackages.cudaMajorVersion}
           '';
           kind = "broken";
@@ -127,4 +128,4 @@ buildPythonPackage {
         };
       };
   };
-}
+})
