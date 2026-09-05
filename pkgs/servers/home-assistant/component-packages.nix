@@ -6499,7 +6499,8 @@
       ps: with ps; [
         aiohasupervisor
         paho-mqtt
-      ]; # missing inputs: pysillaprism
+        pysillaprism
+      ];
     "simplefin" =
       ps: with ps; [
         simplefin4py
@@ -9217,6 +9218,7 @@
     "sigfox"
     "sighthound"
     "signal_messenger"
+    "silla_prism"
     "simplefin"
     "simplepush"
     "simplisafe"

@@ -16157,6 +16157,8 @@ self: super: with self; {
 
   pysilero-vad = callPackage ../development/python-modules/pysilero-vad { };
 
+  pysillaprism = callPackage ../development/python-modules/pysillaprism { };
+
   pysim = callPackage ../development/python-modules/pysim { };
 
   pysimplesoap = callPackage ../development/python-modules/pysimplesoap { };
