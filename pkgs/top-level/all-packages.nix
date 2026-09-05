@@ -3347,7 +3347,14 @@ with pkgs;
         isl = if !stdenv.hostPlatform.isDarwin then isl_0_20 else null;
 
         withoutTargetLibc = true;
-        langCC = stdenv.targetPlatform.isCygwin; # can't compile libcygwin1.a without C++
+        # Enable g++ for mlibc platforms, as mlibc is written in C++.
+        # FIXME: This would be enabled for all platforms but it seems to break
+        #        cross compiling for musl. It does work with mlibc.
+        #        Having no C++ support only when not using LLVM and cross
+        #        compiling is weird, especially because if either of those
+        #        are true, stdenvNoLibc will have C++ support.
+        # can't compile libcygwin1.a without C++
+        langCC = stdenv.targetPlatform.isMlibc || stdenv.targetPlatform.isCygwin;
         libcCross = libc1;
         targetPackages.stdenv.cc.bintools = binutilsNoLibc;
         enableShared =
@@ -5645,6 +5652,8 @@ with pkgs;
       netbsd.headers
     else if libc == "cygwin" then
       cygwin.newlib-cygwin-headers
+    else if libc == "mlibc" then
+      mlibc-headers
     else
       null;
 
@@ -5652,8 +5661,6 @@ with pkgs;
   libc =
     let
       inherit (stdenv.hostPlatform) libc;
-      # libc is hackily often used from the previous stage. This `or`
-      # hack fixes the hack, *sigh*.
     in
     if libc == null then
       null
@@ -5677,6 +5684,8 @@ with pkgs;
       newlib-nano
     else if libc == "musl" then
       musl
+    else if libc == "mlibc" then
+      mlibc
     else if libc == "msvcrt" then
       if stdenv.hostPlatform.isMinGW then windows.mingw_w64 else windows.sdk
     else if libc == "ucrt" then
@@ -6143,6 +6152,8 @@ with pkgs;
     })
     mbedtls_4
     ;
+
+  mlibc-headers = callPackage ../by-name/ml/mlibc/package.nix { headersOnly = true; };
 
   simple-dftd3 = callPackage ../development/libraries/science/chemistry/simple-dftd3 { };
 

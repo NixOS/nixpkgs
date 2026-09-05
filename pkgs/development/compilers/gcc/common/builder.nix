@@ -178,7 +178,7 @@ originalAttrs:
               # We don't want the gcc build to assume there will be a libc providing
               # limits.h in this stage
               makeFlagsArray+=(
-                  'LIMITS_H_TEST=false'
+                  'LIMITS_H_TEST=${if stdenv.targetPlatform.libc == "mlibc" then "true" else "false"}'
               )
           else
               makeFlagsArray+=(

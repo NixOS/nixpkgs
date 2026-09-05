@@ -120,6 +120,18 @@ optionals noSysDirs (
   hash = "sha256-UYekGGOkYdBNJEp48QFPFadf3wPFJZL2t3D+iwUeGJA=";
 })
 
+## mlibc
+++ optionals (stdenv.targetPlatform.isMlibc && atLeast14) [
+  # Only the second patch adds support for linux-mlibc, but it needs
+  # the first one to apply cleanly.
+  ./add-managarm-target.patch
+  ./add-mlibc-target.patch
+  ./add-loongarch64-linux-mlibc-target.patch
+  # Set DEFAULT_LIBC=LIBC_MLIBC for *-mlibc* targets and define `__mlibc__`,
+  # so software can detect mlibc.
+  ./add-mlibc-libc.patch
+]
+
 ## Darwin
 
 # Here we apply patches by Iains (https://github.com/iains)
