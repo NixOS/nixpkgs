@@ -62,6 +62,10 @@ rec {
   };
 
   # CI jobs
+  ast-grep-tests = pkgs.runCommandLocal "ast-grep-tests" { nativeBuildInputs = [ pkgs.ast-grep ]; } ''
+    ast-grep test --config ${./ast-grep}/sgconfig.yml
+    touch "$out"
+  '';
   lib-tests = import ../lib/tests/release.nix { inherit pkgs; };
   manual-nixos = (import ../nixos/release.nix { }).manual.${system} or null;
   manual-nixpkgs = (import ../doc { pkgs = docPkgs; });
