@@ -29,7 +29,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tensordict";
-  version = "0.13.0";
+  version = "0.14.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -37,7 +37,7 @@ buildPythonPackage (finalAttrs: {
     owner = "pytorch";
     repo = "tensordict";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JL6S3Wc9PJbskOPhsr+0QFunZBkMcJCsvhLlz6ggAQ4=";
+    hash = "sha256-p1h1JqstEwkrzhEIe3bxGVNBZRy8NS4wUzCRwQ8Aitk=";
   };
 
   postPatch = ''
@@ -79,6 +79,11 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Hangs forever
+    "test/distributed/test_distributed.py"
+  ];
+
   disabledTests = [
     # TypeError: not all arguments converted during string formatting
     "test_dtensor"
@@ -106,18 +111,6 @@ buildPythonPackage (finalAttrs: {
     "test_map_exception"
     "test_map"
     "test_multiprocessing"
-  ];
-
-  disabledTestPaths = [
-    # torch._dynamo.exc.Unsupported: Graph break due to unsupported builtin None.ReferenceType.__new__.
-    "test/test_compile.py"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Hangs forever
-    "test/test_distributed.py"
-    # Hangs after testing due to pool usage
-    "test/test_h5.py"
-    "test/test_memmap.py"
   ];
 
   meta = {

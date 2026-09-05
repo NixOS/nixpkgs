@@ -69,6 +69,7 @@
   # tests
   imageio,
   pytest-rerunfailures,
+  pytest-xdist,
   pytestCheckHook,
   pyyaml,
   scipy,
@@ -87,6 +88,12 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-GdiGZZlx8olRMzl4CJD11S1+q0+pOeCD2wrDPcji5p0=";
   };
 
+  patches = [
+    # Adapt to tensordict 0.14, where `to_module` preserves parameter/buffer
+    # registrations unless `preserve_module_state=False` is passed
+    ./tensordict-0.14-compat.patch
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "pybind11[global]" "pybind11"
@@ -103,6 +110,9 @@ buildPythonPackage (finalAttrs: {
   ];
   dontUseCmakeConfigure = true;
 
+  pythonRelaxDeps = [
+    "tensordict"
+  ];
   dependencies = [
     cloudpickle
     hoptorch
@@ -190,11 +200,18 @@ buildPythonPackage (finalAttrs: {
     export XDG_RUNTIME_DIR=$(mktemp -d)
   '';
 
+  pytestFlags = [
+    # Tests memory consumption grows significantly with the number of parallel processes
+    # -> Limit the number of parallel jobs to prevent OOMing
+    "--maxprocesses=16"
+  ];
+
   nativeCheckInputs = [
-    h5py
     gymnasium
+    h5py
     imageio
     pytest-rerunfailures
+    pytest-xdist
     pytestCheckHook
     pyyaml
     scipy
