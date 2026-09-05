@@ -1,0 +1,15 @@
+name: dart_sqlite3_test
+description: Integration test for nixpkgs Dart SQLite source builders.
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: '>=3.9.0 <4.0.0'
+
+dependencies:
+  sqlite3: 3.4.0
+  sqlite3_flutter_libs: 0.6.0+eol
+  sqlcipher_flutter_libs: 0.7.0+eol
+
+executables:
+  dart-sqlite3-test: main

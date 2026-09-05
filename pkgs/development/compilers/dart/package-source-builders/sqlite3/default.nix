@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postPatch =
-    if lib.versionAtLeast version "3.5.0" then
+    if lib.versionAtLeast version "3.4.0" then
       ''
         substituteInPlace lib/src/hook/compile/description.dart \
           --replace-fail "return fromGitHub(LibraryType.sqlite3);" "return LookupSystem('sqlite3');"
