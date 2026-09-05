@@ -143212,29 +143212,6 @@ self: {
     }:
     mkDerivation {
       pname = "chs-cabal";
-      version = "0.1.1.2";
-      sha256 = "1qh234dx3d3l3nxb67alv0ggwqipp1502krq11fgq3hp0jhcm8b8";
-      revision = "1";
-      editedCabalFile = "08p3vj0v1i546m1allza5wl7q038qgqvb4b4p3p501v097yrvh6z";
-      libraryHaskellDepends = [
-        base
-        Cabal
-        chs-deps
-      ];
-      description = "Cabal with c2hs dependencies";
-      license = lib.licenses.bsd3;
-    }
-  ) { };
-
-  chs-cabal_1_0_0_0 = callPackage (
-    {
-      mkDerivation,
-      base,
-      Cabal,
-      chs-deps,
-    }:
-    mkDerivation {
-      pname = "chs-cabal";
       version = "1.0.0.0";
       sha256 = "0n8ybcs7l8llh7641nkw5bd7pwhx563ip9srdy5vpqijnijsfxkq";
       libraryHaskellDepends = [
@@ -143244,7 +143221,6 @@ self: {
       ];
       description = "Cabal with c2hs dependencies";
       license = lib.licenses.bsd3;
-      hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
