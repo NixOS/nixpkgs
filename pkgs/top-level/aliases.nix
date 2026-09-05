@@ -1387,6 +1387,7 @@ mapAliases {
   librewolf-wayland = throw "'librewolf-wayland' has been renamed to/replaced by 'librewolf'"; # Converted to throw 2025-10-27
   librtlsdr = throw "'librtlsdr' has been renamed to/replaced by 'rtl-sdr'"; # Converted to throw 2025-10-27
   libsForQt515 = throw "'libsForQt515' has been renamed to/replaced by 'libsForQt5'"; # Converted to throw 2025-10-27
+  libsigcxx30 = throw "'libsigcxx30' has been renamed to 'libsigcxx_3_0'"; # Added 2026-09-05
   libsigcxx = throw "'libsigcxx' attribute has been removed from nixpkgs. Use a 'libsigcxx_*' attribute with an explicit ABI version instead."; # Added 2026-09-05
   libSM = libsm; # Added 2026-02-04
   libsmartcols = warnAlias "'util-linux' should be used instead of 'libsmartcols'" util-linux; # Added 2025-09-03

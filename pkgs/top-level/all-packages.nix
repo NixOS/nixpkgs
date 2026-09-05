@@ -6047,8 +6047,7 @@ with pkgs;
     ;
 
   libsigcxx_2_0 = callPackage ../development/libraries/libsigcxx/2.0.nix { };
-
-  libsigcxx30 = callPackage ../development/libraries/libsigcxx/3.0.nix { };
+  libsigcxx_3_0 = callPackage ../development/libraries/libsigcxx/3.0.nix { };
 
   libtorrent-rasterbar = libtorrent-rasterbar-2_0_x;
 

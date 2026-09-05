@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "libsigc++";
-      attrPath = "libsigcxx30";
+      attrPath = "libsigcxx_3_0";
       versionPolicy = "odd-unstable";
     };
   };
