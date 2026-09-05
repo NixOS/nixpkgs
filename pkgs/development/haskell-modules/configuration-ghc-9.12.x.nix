@@ -60,7 +60,7 @@ with haskellLib;
     if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
       null
     else
-      haskellLib.doDistribute self.terminfo_0_4_1_7;
+      doDistribute self.terminfo_0_4_1_7;
   text = null;
   time = null;
   transformers = null;
