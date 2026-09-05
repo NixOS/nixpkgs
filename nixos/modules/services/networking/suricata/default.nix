@@ -272,7 +272,7 @@ in
               LockPersonality = true;
               MemoryDenyWriteExecute = true;
               ProtectHostname = true;
-              ProtectProc = true;
+              ProtectProc = "invisible";
               ProtectKernelLogs = true;
               ProtectKernelModules = true;
               ProtectKernelTunables = true;
