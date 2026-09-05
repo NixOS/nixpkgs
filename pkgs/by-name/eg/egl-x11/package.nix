@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "egl-x11";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "egl-x11";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Sl/qc39H29wXsb5UYKGK7IciwTlbRBqA9omL2sgXpx0=";
+    hash = "sha256-7IJXGLLz0hE8iHiA3Dll8Q1WJzoJn7ObFX5D/ELoo6g=";
   };
 
   depsBuildBuild = [
