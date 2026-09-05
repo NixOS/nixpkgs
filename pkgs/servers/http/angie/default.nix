@@ -9,6 +9,7 @@
 
 callPackage ../nginx/generic.nix args rec {
   pname = "angie";
+  applyCrossPatches = false;
   version = "1.12.1";
 
   src = fetchurl {
