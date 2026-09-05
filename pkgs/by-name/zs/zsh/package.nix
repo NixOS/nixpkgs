@@ -140,7 +140,11 @@ stdenv.mkDerivation (finalAttrs: {
       completion, shell functions (with autoloading), a history mechanism, and
       a host of other features.
     '';
-    license = lib.licenses.mit-modern;
+    license = [
+      lib.licenses.mit-modern
+      lib.licenses.gpl2Only # _osc, _qdbus, _zypper
+      lib.licenses.gpl2Plus # _darcs
+    ];
     homepage = "https://www.zsh.org/";
     maintainers = with lib.maintainers; [
       pSub
