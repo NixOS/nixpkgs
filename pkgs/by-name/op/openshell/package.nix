@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "openshell";
-  version = "0.0.36";
+  version = "0.0.116";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "OpenShell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AnZliQrn5kwaVJw1LEorT+VPtIk2NIbVY0QISxfnORs=";
+    hash = "sha256-9YOAkBPFBOhvc3s/0jl0yphjwblONB6rTZXosIydCIg=";
   };
 
-  cargoHash = "sha256-kmmzzph39KaAXkEbjOHMoTRltX2ttqxtHppb6apoSSs=";
+  cargoHash = "sha256-WVoB7tf1ZxjCo/4sRvKRy8yA0M+R+EjZVkbxr3LHGwQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -39,9 +39,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # fill in package version to Cargo
     substituteInPlace Cargo.toml \
       --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
-    # only build openshell-cli crate
+    # After the breaking change we need to build the CLI, the gateway and the sandbox as it is a prerequisite for the future vm driver.
     substituteInPlace Cargo.toml \
-      --replace-fail 'members = ["crates/*"]' 'members = ["crates/openshell-cli"]'
+      --replace-fail 'members = ["crates/*"]' 'members = ["crates/openshell-cli", "crates/openshell-server", "crates/openshell-sandbox"]'
   '';
 
   env = {
