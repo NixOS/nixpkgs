@@ -4813,7 +4813,8 @@
       ];
     "nexblue" =
       ps: with ps; [
-      ]; # missing inputs: nexblue-api
+        nexblue-api
+      ];
     "nexen" =
       ps: with ps; [
       ];
@@ -8981,6 +8982,7 @@
     "netgear_lte"
     "netio"
     "network"
+    "nexblue"
     "nexia"
     "nextbus"
     "nextcloud"
