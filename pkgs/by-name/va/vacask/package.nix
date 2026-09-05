@@ -19,15 +19,6 @@
 }:
 
 let
-  # VACASK includes SuiteSparse headers as <suitesparse/klu.h>, the layout used
-  # by SuiteSparse >= 6. However, our suitesparse is currently at 5.13.0 and
-  # installs headers flat into include/, so here we're fixing that.
-  # TODO: remove when suitesparse is updated
-  suitesparse-include = runCommand "suitesparse-include" { } ''
-    mkdir -p $out/include/suitesparse
-    ln -s ${suitesparse.dev}/include/*.h $out/include/suitesparse/
-  '';
-
   pyEnv = python3.withPackages (
     ps: with ps; [
       numpy
@@ -77,7 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeFeature "FLEX_INCLUDE_DIR" "${flex}/include")
-    (lib.cmakeFeature "SuiteSparse_DIR" "${suitesparse-include}")
     (lib.cmakeFeature "TOMLPP_DIR" "${tomlplusplus}")
   ];
 
