@@ -2359,6 +2359,8 @@ self: super: with self; {
 
   berkeleydb = callPackage ../development/python-modules/berkeleydb { };
 
+  besen = callPackage ../development/python-modules/besen { };
+
   bespon = callPackage ../development/python-modules/bespon { };
 
   betacode = callPackage ../development/python-modules/betacode { };

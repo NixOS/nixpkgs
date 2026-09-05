@@ -662,6 +662,7 @@
         aioruuvigateway
         aioshelly
         aiousbwatcher
+        besen
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -683,7 +684,7 @@
         pyspeex-noise
         serialx
         zeroconf
-      ]; # missing inputs: besen
+      ];
     "beverly" =
       ps: with ps; [
       ];
@@ -8432,6 +8433,7 @@
     "bang_olufsen"
     "battery"
     "bayesian"
+    "besen"
     "binary_sensor"
     "blackbird"
     "blebox"
