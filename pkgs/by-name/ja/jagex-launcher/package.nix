@@ -58,7 +58,11 @@ appimageTools.wrapAppImage {
       $out/share/applications/${pname}.desktop
 
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace-fail 'Exec=AppRun %U' 'Exec=${pname} %U'
+      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
+
+    wrapProgram $out/bin/${pname} \
+      --set APPIMAGE_EXTRACT_AND_RUN 1 \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
   '';
 
   meta = {
