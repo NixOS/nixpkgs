@@ -27,6 +27,7 @@
   lerc,
   doxygen,
   writableTmpDirAsHomeHook,
+  qtbase,
   nix-update-script,
 }:
 
@@ -54,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     qt6.wrapQtAppsHook
     doxygen # docs
+    qtbase
   ];
 
   cmakeFlags = [
@@ -65,6 +67,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gtest
+    pugixml
+    gdk-pixbuf
+    python3
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qttools
+    libsysprof-capture
+    lerc
+  ]
+  ++ (lib.optionals stdenv.isLinux [
+    wayland-protocols
+    libnotify
+    qt6.qtwayland
+    wayland
     libei
     libportal
     libx11
@@ -74,23 +90,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxrandr
     libxtst
     libxkbcommon
-    pugixml
-    gdk-pixbuf
-    libnotify
-    python3
-    qt6.qtbase
-    wayland-protocols
-    qt6.qtwayland
-    qt6.qtdeclarative
-    qt6.qttools
-    wayland
-    libsysprof-capture
-    lerc
-  ];
+  ]);
 
-  qtWrapperArgs = [
-    "--set QT_QPA_PLATFORM_PLUGIN_PATH ${qt6.qtwayland}/${qt6.qtbase.qtPluginPrefix}/platforms"
-  ];
+  qtWrapperArgs = lib.optional stdenv.isLinux "--set QT_QPA_PLATFORM_PLUGIN_PATH ${qt6.qtwayland}/${qt6.qtbase.qtPluginPrefix}/platforms";
 
   doCheck = true;
 
@@ -127,6 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
       openssl
       mit # share/applications/org.deskflow.deskflow.desktop
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
