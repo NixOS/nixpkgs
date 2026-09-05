@@ -6494,6 +6494,8 @@ self: super: with self; {
 
   fritzconnection = callPackage ../development/python-modules/fritzconnection { };
 
+  fronius-modbus = callPackage ../development/python-modules/fronius-modbus { };
+
   frozendict = callPackage ../development/python-modules/frozendict { };
 
   frozenlist = callPackage ../development/python-modules/frozenlist { };
