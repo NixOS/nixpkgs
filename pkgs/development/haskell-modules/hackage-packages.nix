@@ -128480,6 +128480,161 @@ self: {
         Cabal-tree-diff = null;
       };
 
+  cabal-install_3_16_1_0 =
+    callPackage
+      (
+        {
+          mkDerivation,
+          array,
+          async,
+          base,
+          base16-bytestring,
+          binary,
+          bytestring,
+          Cabal,
+          Cabal-described,
+          cabal-install-solver,
+          Cabal-QuickCheck,
+          Cabal-syntax,
+          Cabal-tests,
+          Cabal-tree-diff,
+          containers,
+          cryptohash-sha256,
+          directory,
+          echo,
+          edit-distance,
+          exceptions,
+          filepath,
+          hackage-security,
+          HTTP,
+          mtl,
+          network-uri,
+          open-browser,
+          parsec,
+          pretty,
+          pretty-show,
+          process,
+          QuickCheck,
+          random,
+          regex-base,
+          regex-posix,
+          resolv,
+          safe-exceptions,
+          semaphore-compat,
+          silently,
+          stm,
+          tagged,
+          tar,
+          tasty,
+          tasty-expected-failure,
+          tasty-golden,
+          tasty-hunit,
+          tasty-quickcheck,
+          text,
+          time,
+          tree-diff,
+          unix,
+          zlib,
+        }:
+        mkDerivation {
+          pname = "cabal-install";
+          version = "3.16.1.0";
+          sha256 = "082ix6d443yqyirsjimzj5lg3znqlb06mfkvd9436fczk0ibq9wx";
+          revision = "3";
+          editedCabalFile = "0492j5bkrjwfflxgf1siw4xz61gj7q6cb0m55k092ldhbnd7wh1j";
+          isLibrary = true;
+          isExecutable = true;
+          libraryHaskellDepends = [
+            array
+            async
+            base
+            base16-bytestring
+            binary
+            bytestring
+            Cabal
+            cabal-install-solver
+            Cabal-syntax
+            containers
+            cryptohash-sha256
+            directory
+            echo
+            edit-distance
+            exceptions
+            filepath
+            hackage-security
+            HTTP
+            mtl
+            network-uri
+            open-browser
+            parsec
+            pretty
+            process
+            random
+            regex-base
+            regex-posix
+            resolv
+            safe-exceptions
+            semaphore-compat
+            stm
+            tar
+            text
+            time
+            unix
+            zlib
+          ];
+          executableHaskellDepends = [ base ];
+          testHaskellDepends = [
+            array
+            base
+            bytestring
+            Cabal
+            Cabal-described
+            cabal-install-solver
+            Cabal-QuickCheck
+            Cabal-syntax
+            Cabal-tests
+            Cabal-tree-diff
+            containers
+            directory
+            filepath
+            mtl
+            network-uri
+            pretty-show
+            process
+            QuickCheck
+            random
+            silently
+            tagged
+            tar
+            tasty
+            tasty-expected-failure
+            tasty-golden
+            tasty-hunit
+            tasty-quickcheck
+            time
+            tree-diff
+            zlib
+          ];
+          doCheck = false;
+          postInstall = ''
+            mkdir -p $out/share/bash-completion
+            mv bash-completion $out/share/bash-completion/completions
+          '';
+          description = "The command-line interface for Cabal and Hackage";
+          license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+          hydraPlatforms = lib.platforms.none;
+          mainProgram = "cabal";
+          maintainers = [ lib.maintainers.sternenseemann ];
+          broken = true;
+        }
+      )
+      {
+        Cabal-QuickCheck = null;
+        Cabal-described = null;
+        Cabal-tests = null;
+        Cabal-tree-diff = null;
+      };
+
   cabal-install =
     callPackage
       (
@@ -128894,6 +129049,62 @@ self: {
       sha256 = "0551cvrkbnjfqjd3byq7pczlwjdb0n1jrfsrb0j8axagylbif7g1";
       revision = "1";
       editedCabalFile = "14jrs9q52vp9slb5pm66a9xrjdgkjypwssnnjc5pamlykakrjqa1";
+      libraryHaskellDepends = [
+        array
+        base
+        bytestring
+        Cabal
+        Cabal-syntax
+        containers
+        directory
+        edit-distance
+        filepath
+        mtl
+        network-uri
+        pretty
+        text
+        transformers
+      ];
+      testHaskellDepends = [
+        base
+        Cabal-syntax
+        tasty
+        tasty-hunit
+        tasty-quickcheck
+      ];
+      description = "The solver component of cabal-install";
+      license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
+      hydraPlatforms = lib.platforms.none;
+    }
+  ) { };
+
+  cabal-install-solver_3_16_1_0 = callPackage (
+    {
+      mkDerivation,
+      array,
+      base,
+      bytestring,
+      Cabal,
+      Cabal-syntax,
+      containers,
+      directory,
+      edit-distance,
+      filepath,
+      mtl,
+      network-uri,
+      pretty,
+      tasty,
+      tasty-hunit,
+      tasty-quickcheck,
+      text,
+      transformers,
+    }:
+    mkDerivation {
+      pname = "cabal-install-solver";
+      version = "3.16.1.0";
+      sha256 = "0a546gpwi8j9ijzqfgm15pajs1myrs6h94bfypgrjygajig2pz5d";
+      revision = "1";
+      editedCabalFile = "0s003vpqfchy967zwgp51q3vczhmldaa10bkckch4dfpyb5qjbw8";
       libraryHaskellDepends = [
         array
         base
