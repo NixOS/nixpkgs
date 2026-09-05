@@ -9,28 +9,40 @@
   nukeReferences,
   freebsd,
   ed,
+  installShellFiles,
 }:
 
 let
   dialect = lib.last (lib.splitString "-" stdenv.hostPlatform.system);
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lsof";
   version = "4.99.7";
 
   src = fetchFromGitHub {
     owner = "lsof-org";
     repo = "lsof";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-o95osjMQvpOVx2b0lCXVp61x2GHQV+HW1iaamVhevng=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+  enableParallelBuilding = true;
+  doCheck = false; # Does not play well with the Nix sandbox
+  outputs = [
+    "out"
+    "man"
+  ];
+
   postPatch = ''
     patchShebangs --build lib/dialects/*/Mksrc
-    # Do not re-build version.h in every 'make' to allow nuke-refs below.
-    # We remove phony 'FRC' target that forces rebuilds:
-    #   'version.h: FRC ...' is translated to 'version.h: ...'.
+  ''
+  # Do not re-build version.h in every 'make' to allow nuke-refs below.
+  # We remove phony 'FRC' target that forces rebuilds:
+  #   'version.h: FRC ...' is translated to 'version.h: ...'.
+  + ''
     sed -i lib/dialects/*/Makefile -e 's/version.h:\s*FRC/version.h:/'
   ''
   # help Configure find libproc.h in $SDKROOT
@@ -45,21 +57,33 @@ stdenv.mkDerivation rec {
     perl
     which
     ed
+    installShellFiles
   ];
   buildInputs = [ ncurses ];
 
-  # Stop build scripts from searching global include paths
-  env.LSOF_INCLUDE = "${lib.getDev stdenv.cc.libc}/include";
   configurePhase =
     let
-      genericFlags = "LSOF_CC=$CC LSOF_AR=\"$AR cr\" LSOF_RANLIB=$RANLIB";
-      linuxFlags = lib.optionalString stdenv.hostPlatform.isLinux "LINUX_CONF_CC=$CC_FOR_BUILD";
-      freebsdFlags = lib.optionalString stdenv.hostPlatform.isFreeBSD "FREEBSD_SYS=${freebsd.sys.src}/sys";
+      toVar = name: value: "${name}=\"${value}\"";
+      configEnv = {
+        LSOF_CC = "$CC";
+        LSOF_AR = "$AR cr";
+        LSOF_RANLIB = "$RANLIB";
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+        LINUX_CONF_CC = "$CC_FOR_BUILD";
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isFreeBSD {
+        FREEBSD_SYS = "${freebsd.sys.src}/sys";
+      };
     in
-    "${genericFlags} ${linuxFlags} ${freebsdFlags} ./Configure -n ${dialect}";
+    ''
+      runHook preConfigure
+      ${lib.concatMapAttrsStringSep " " toVar configEnv} ./Configure -n ${dialect}
+      runHook postConfigure
+    '';
 
   preBuild = ''
-    for filepath in $(find dialects/${dialect} -type f); do
+    for filepath in $(find lib/dialects/${dialect} -type f); do
       sed -i "s,/usr/include,$LSOF_INCLUDE,g" $filepath
     done
 
@@ -68,19 +92,23 @@ stdenv.mkDerivation rec {
     nuke-refs version.h
   '';
 
-  installPhase = ''
-    # Fix references from man page https://github.com/lsof-org/lsof/issues/66
+  # Fix references from man page https://github.com/lsof-org/lsof/issues/66
+  preInstall = ''
     substituteInPlace Lsof.8 \
-      --replace ".so ./00DIALECTS" "" \
-      --replace ".so ./version" ".ds VN ${version}"
-    mkdir -p $out/bin $out/man/man8
-    cp Lsof.8 $out/man/man8/lsof.8
-    cp lsof $out/bin
+      --replace-fail ".so ./00DIALECTS" "" \
+      --replace-fail ".so ./version" ".ds VN ${finalAttrs.version}"
+  '';
+
+  installPhase = ''
+    runHook preInstall
+    installManPage --name lsof.8 Lsof.8
+    installBin lsof
+    runHook postInstall
   '';
 
   meta = {
     homepage = "https://github.com/lsof-org/lsof";
-    changelog = "https://github.com/lsof-org/lsof/releases/tag/${src.tag}";
+    changelog = "https://github.com/lsof-org/lsof/releases/tag/${finalAttrs.src.tag}";
     description = "Tool to list open files";
     mainProgram = "lsof";
     longDescription = ''
@@ -92,4 +120,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})
