@@ -1,12 +1,14 @@
 {
   lib,
   stdenv,
+  _experimental-update-script-combinators,
   alsa-lib,
   alsa-plugins,
   autoPatchelfHook,
   fetchFromGitHub,
   freetype,
   installShellFiles,
+  libGL,
   libGLU,
   libpulseaudio,
   libx11,
@@ -18,24 +20,27 @@
   libxrandr,
   libxrender,
   makeWrapper,
+  nix-update-script,
   openssl,
   pkg-config,
   scons,
+  testers,
   udev,
+  writeScriptBin,
   yasm,
   zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "godot3";
-  version = "3.6.2";
+  version = "3.6.3";
   godotBuildDescription = "X11 tools";
 
   src = fetchFromGitHub {
     owner = "godotengine";
     repo = "godot";
     rev = "${finalAttrs.version}-stable";
-    hash = "sha256-loNjE+NmHniZ827Eb9MHSNo27F2LrURhWURjUq4d8xw=";
+    hash = "sha256-5MerJVY+SAri85mo2dbqxjDftpJJXzjsMAvlwidGEs4=";
   };
 
   # Fix PIE hardening: https://github.com/godotengine/godot/pull/50737
@@ -169,6 +174,39 @@ stdenv.mkDerivation (finalAttrs: {
       udev
     ]
   );
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script {
+        extraArgs = [
+          "--version-regex"
+          "(3\\..*)-stable"
+        ];
+      })
+      ./mono/update-glue-version.sh
+    ];
+
+    patch-godot-bin =
+      let
+        libPath = lib.makeLibraryPath [
+          libxcursor
+          libxinerama
+          libxext
+          libxrandr
+          libxrender
+          libx11
+          libxi
+          libGL
+        ];
+      in
+      writeScriptBin "patch-godot-bin" ''
+        patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" --set-rpath "${libPath}" "$1"
+      '';
+  };
 
   meta = {
     homepage = "https://godotengine.org";
