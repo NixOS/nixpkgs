@@ -11,6 +11,7 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dnsglobe";
   version = "0.5.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "514-labs";
@@ -25,8 +26,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
 
-  versionCheckProgram = [ "${placeholder "out"}/bin/dnsglobe" ];
-
   nativeBuildInputs = [ pkg-config ];
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
@@ -37,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/514-labs/dnsglobe";
     changelog = "https://github.com/514-labs/dnsglobe/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [];
+    maintainers = with lib.maintainers; [ cktiel ];
     mainProgram = "dnsglobe";
   };
 })
