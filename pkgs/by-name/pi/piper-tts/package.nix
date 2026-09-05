@@ -127,6 +127,15 @@ python3Packages.buildPythonApplication rec {
     cp -Rv src/piper/train/vits $train/
   '';
 
+  nativeCheckInputs = [
+    python3Packages.pytestCheckHook
+  ];
+
+  disabledTests = [
+    # RuntimeError: cannot cache function '__o_fold': no locator available for file '/nix/store/byi2l9xb88xan6vf88xcx9vbklyvxha5-python3.14-librosa-1.0.0/lib/python3.14/site-packages/librosa/core/notation.py'
+    "test_training_phonemize_matches_inference_with_vowel_clusters"
+  ];
+
   pythonImportsCheck = [
     "piper"
     "piper.tashkeel"
