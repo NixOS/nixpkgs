@@ -16866,6 +16866,8 @@ self: super: with self; {
 
   python-hosts = callPackage ../development/python-modules/python-hosts { };
 
+  python-hotspring = callPackage ../development/python-modules/python-hotspring { };
+
   python-hpilo = callPackage ../development/python-modules/python-hpilo { };
 
   python-http-client = callPackage ../development/python-modules/python-http-client { };
