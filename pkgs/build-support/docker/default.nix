@@ -57,7 +57,10 @@ let
     ;
 
   mkDbExtraCommand =
-    contents:
+    {
+      contents,
+      includeNixDBHostSignatures ? false,
+    }:
     let
       contentsList = if builtins.isList contents then contents else [ contents ];
     in
@@ -74,6 +77,11 @@ let
       ${lib.getExe' buildPackages.nix "nix-store"} --load-db < ${
         closureInfo { rootPaths = contentsList; }
       }/registration
+      ${lib.optionalString includeNixDBHostSignatures ''
+        # copy signatures from building system (-s "local?read-only=true") into "NIX_REMOTE=local?root=$PWD"
+        # readonly store is required to avoid write operations which might fail due to missing privileges
+        ${buildPackages.nix}/bin/nix store copy-sigs --all -s "local?read-only=true" --extra-experimental-features read-only-local-store --extra-experimental-features nix-command
+      ''}
       # Reset registration times to make the image reproducible
       ${lib.getExe buildPackages.sqlite} nix/var/nix/db/db.sqlite "UPDATE ValidPaths SET registrationTime = ''${SOURCE_DATE_EPOCH}"
 
@@ -430,6 +438,7 @@ rec {
       keepContentsDirlinks ? false,
       # Additional commands to run on the layer before it is tar'd up.
       extraCommands ? "",
+      includeNixDBHostSignatures ? false,
       uid ? 0,
       gid ? 0,
     }:
@@ -442,6 +451,9 @@ rec {
           rsync
           tarsum
         ];
+
+        # enable host signature inclusion even with relaxed sandbox
+        __noChroot = includeNixDBHostSignatures;
       }
       ''
         mkdir layer
@@ -506,11 +518,15 @@ rec {
       buildVMMemorySize ? 512,
       # Commands (bash) to run on the layer; these do not require sudo.
       extraCommands ? "",
+      includeNixDBHostSignatures ? false,
     }:
     # Generate an executable script from the `runAsRoot` text.
     let
       runAsRootScript = shellScript "run-as-root.sh" runAsRoot;
-      extraCommandsScript = shellScript "extra-commands.sh" extraCommands;
+      extraCommandsScript = (shellScript "extra-commands.sh" extraCommands).overrideAttrs {
+        # enable host signature inclusion even with relaxed sandbox
+        __noChroot = includeNixDBHostSignatures;
+      };
     in
     runWithOverlay {
       name = "docker-layer-${name}";
@@ -646,6 +662,8 @@ rec {
       compressor ? "gz",
       # Populate the nix database in the image with the dependencies of `copyToRoot`.
       includeNixDB ? false,
+      # If signatures was present on the builder, it will get copied into the image
+      includeNixDBHostSignatures ? false,
       # Deprecated.
       contents ? null,
       # Meta options to set on the resulting derivation.
@@ -693,9 +711,17 @@ rec {
 
       # TODO: add the dependencies of the config json.
       extraCommandsWithDB =
-        if includeNixDB then (mkDbExtraCommand rootContents) + extraCommands else extraCommands;
+        if includeNixDB then
+          (mkDbExtraCommand {
+            contents = rootContents;
+            inherit includeNixDBHostSignatures;
+          })
+          + extraCommands
+        else
+          extraCommands;
 
       layer =
+
         if runAsRoot == null then
           mkPureLayer {
             name = baseName;
@@ -704,6 +730,7 @@ rec {
               keepContentsDirlinks
               uid
               gid
+              includeNixDBHostSignatures
               ;
             extraCommands = extraCommandsWithDB;
             copyToRoot = rootContents;
@@ -720,6 +747,7 @@ rec {
               runAsRoot
               diskSize
               buildVMMemorySize
+              includeNixDBHostSignatures
               ;
             extraCommands = extraCommandsWithDB;
             copyToRoot = rootContents;
@@ -1020,6 +1048,7 @@ rec {
       enableFakechroot ? false,
       includeStorePaths ? true,
       includeNixDB ? false,
+      includeNixDBHostSignatures ? false,
       passthru ? { },
       meta ? { },
       # Pipeline used to produce docker layers. If not set, popularity contest
@@ -1075,7 +1104,12 @@ rec {
       customisationLayer = symlinkJoin {
         name = "${baseName}-customisation-layer";
         paths = contentsList;
-        extraCommands = (lib.optionalString includeNixDB (mkDbExtraCommand contents)) + extraCommands;
+        extraCommands =
+          (lib.optionalString includeNixDB (mkDbExtraCommand {
+            contents = contentsList;
+            inherit includeNixDBHostSignatures;
+          }))
+          + extraCommands;
         inherit fakeRootCommands;
         nativeBuildInputs = [
           fakeroot
@@ -1126,6 +1160,9 @@ rec {
             | cut -f 1 -d ' ' \
             > $out/checksum
         '';
+
+        # enable host signature inclusion even with relaxed sandbox
+        __noChroot = includeNixDBHostSignatures;
       };
 
       closureRoots = optionals includeStorePaths [
