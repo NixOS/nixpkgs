@@ -39,6 +39,10 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-FV1C8RlbkNXOTtRKSCNgiGetImW0+647JgmZtf5U+pY=";
   };
 
+  patches = [
+    ./darwin-fix-test.patch
+  ];
+
   build-system = [
     hatchling
     hatch-vcs
