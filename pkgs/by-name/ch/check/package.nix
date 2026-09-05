@@ -2,6 +2,7 @@
   fetchurl,
   lib,
   stdenv,
+  validatePkgConfig,
   testers,
 }:
 
@@ -14,12 +15,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-qN5OC6z7TXbdHGGN7SY1I7U7hdkqFG2INesaUpMvogo=";
   };
 
+  nativeBuildInputs = [
+    validatePkgConfig
+  ];
+
+  strictDeps = true;
+
   # fortify breaks the libcompat vsnprintf implementation
   hardeningDisable = lib.optionals (
     stdenv.hostPlatform.isMusl && (stdenv.hostPlatform != stdenv.buildPlatform)
   ) [ "fortify" ];
-
-  strictDeps = true;
 
   # Test can randomly fail: https://hydra.nixos.org/build/7243912
   doCheck = false;
