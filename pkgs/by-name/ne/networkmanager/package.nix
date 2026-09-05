@@ -1,5 +1,6 @@
 {
   fetchurl,
+  fetchpatch,
   gitUpdater,
   lib,
   nixosTests,
@@ -164,6 +165,14 @@ stdenv.mkDerivation (finalAttrs: {
     # Meson does not support using different directories during build and
     # for installation like Autotools did with flags passed to make install.
     ./fix-install-paths.patch
+
+    # Fixes BPF build on powerpc64-linux w/ ELFv1-targeting glibc
+    # https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/merge_requests/2529
+    (fetchpatch {
+      name = "0001-networkmanager-bpf-Detect-ELF-ABI-version-on-ppc64.patch";
+      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/3c28325b9c63386e5313ce006267144e7f63417a.patch";
+      hash = "sha256-SlyeykqL7Y11jEF+5l4aRXY2znHaSBhwV5lcmf88PGc=";
+    })
   ];
 
   nativeBuildInputs = [
