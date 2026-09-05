@@ -1,4 +1,9 @@
-{ lib, fetchurl, appimageTools, }:
+{
+  lib,
+  fetchurl,
+  appimageTools,
+  makeWrapper,
+}:
 
 let
   pname = "jagex-launcher";
