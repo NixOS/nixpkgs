@@ -25,6 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
     libnl
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   installPhase = ''
     runHook preInstall
     install -Dm755 hwsim_mgmt/hwsim_mgmt $out/bin/hwsim_mgmt
