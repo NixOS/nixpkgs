@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   alembic,
   boto3,
   botorch,
@@ -8,7 +7,6 @@
   buildPythonPackage,
   cmaes,
   colorlog,
-  fetchFromGitHub,
   httpx,
   moto,
   numpy,
@@ -23,6 +21,7 @@
   setuptools,
   streamlit,
   tqdm,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -30,11 +29,11 @@ buildPythonPackage rec {
   version = "0.20.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "optuna";
-    repo = "optuna-dashboard";
-    tag = "v${version}";
-    hash = "sha256-pg1R8tZjfLDDzDWiLRmaU1a1mKDzeZliPC2X0UV+xEw=";
+  # bundle.js cannot be built with nix in 0.20.0. This should be fixed in the next release.
+  src = fetchPypi {
+    pname = "optuna_dashboard";
+    inherit version;
+    sha256 = "52a6da480a2500b6993c8fa61c81063b0dbe730edbd9f651c81b318393cca71d";
   };
 
   dependencies = [
@@ -64,30 +63,15 @@ buildPythonPackage rec {
     streamlit
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # AttributeError: module 'numpy' has no attribute 'float128' ==> not available on 64-bit Darwin
-    "test_infer_sortable"
-    "test_serialize_numpy_floating"
-  ];
-
-  # Disable tests that use playwright (needs network)
-  disabledTestPaths = [
-    "e2e_tests/test_dashboard/test_usecases/test_preferential_optimization.py"
-    "e2e_tests/test_dashboard/test_usecases/test_study_history.py"
-    "e2e_tests/test_dashboard/visual_regression_test.py"
-    "e2e_tests/test_standalone/test_study_list.py"
-  ];
-
   pythonImportsCheck = [ "optuna_dashboard" ];
 
-  # Temporarily disable tests as they hang due to a torch bug on darwin
-  # Will revert in https://github.com/NixOS/nixpkgs/pull/424873
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  # the source distribution ships without tests
+  doCheck = false;
 
   meta = {
     description = "Real-time Web Dashboard for Optuna";
     homepage = "https://github.com/optuna/optuna-dashboard";
-    changelog = "https://github.com/optuna/optuna-dashboard/releases/tag/${src.tag}";
+    changelog = "https://github.com/optuna/optuna-dashboard/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jherland ];
     mainProgram = "optuna-dashboard";
