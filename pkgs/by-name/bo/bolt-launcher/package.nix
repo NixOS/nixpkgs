@@ -111,6 +111,8 @@ in
 buildFHSEnv {
   inherit (bolt) pname version;
 
+  passthru.originalSrc = bolt.src;
+
   targetPkgs =
     pkgs:
     [ bolt ]
