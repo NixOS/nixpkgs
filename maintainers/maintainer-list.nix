@@ -5372,7 +5372,7 @@
     email = "tiel@tuta.io";
     github = "cktiel";
     githubId = 	2486916;
-    name = "Artur Cierocki"
+    name = "Artur Cierocki";
   };
   clacke = {
     email = "claes.wallin@greatsinodevelopment.com";
