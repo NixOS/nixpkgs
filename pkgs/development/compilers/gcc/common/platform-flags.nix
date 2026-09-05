@@ -13,7 +13,7 @@ lib.concatLists [
   (lib.optional (
     with targetPlatform; !isLoongArch64 && !isMips && !isRiscV && !isS390 && !isAarch64Darwin && p ? cpu
   ) "--with-cpu=${p.cpu}")
-  (lib.optional (p ? abi) "--with-abi=${p.abi}")
+  (lib.optional (!targetPlatform.isCsky && p ? abi) "--with-abi=${p.abi}")
   (lib.optional (p ? fpu) "--with-fpu=${p.fpu}")
   (lib.optional (p ? float) "--with-float=${p.float}")
   (lib.optional (p ? mode) "--with-mode=${p.mode}")
