@@ -37,12 +37,10 @@ installSkill() {
 
   local skillName
   skillName=$(basename -- "$1")
-  local skillBase="$2"
+  local base="${2:-${pname-}}"
 
-  local base="${skillBase:-$pname}"
-
-  if [ -z "${pname}" ]; then
-    nixErrorLog "error: variable pname is unset"
+  if [ -z "$base" ]; then
+    nixErrorLog "error: no skillBase given and \$pname is unset"
     exit 1
   fi
 
@@ -71,9 +69,10 @@ installSkill() {
 installSkills() {
   if [ "${dontInstallAgentSkills-}" == 1 ]; then return; fi
 
-  # https://unix.stackexchange.com/questions/50692/executing-user-defined-function-in-a-find-exec-call
-  shopt -s globstar
-  for skill in **/SKILL.md; do
-    installSkill "$(dirname "$skill")"
-  done
+  (
+    shopt -s globstar nullglob
+    for skill in **/SKILL.md; do
+      installSkill "$(dirname -- "$skill")"
+    done
+  )
 }
