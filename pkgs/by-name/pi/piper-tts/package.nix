@@ -30,14 +30,14 @@ in
 
 python3Packages.buildPythonApplication rec {
   pname = "piper-tts";
-  version = "1.7.0";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OHF-Voice";
     repo = "piper1-gpl";
     tag = "v${version}";
-    hash = "sha256-oQhDFhB2GXlAdxW1K7BM7RJkzihAwyoB6QbOpaMUVHM=";
+    hash = "sha256-rlox5n+EWJf/464L/0rwjEmSEkxo2XQQhubq7cbLvL8=";
   };
 
   patches = [
