@@ -1,6 +1,8 @@
 {
   lib,
+  ocaml,
   buildDunePackage,
+  removeReferencesTo,
   ocaml-crunch,
   astring,
   cmdliner,
@@ -25,6 +27,7 @@ buildDunePackage (self: {
   nativeBuildInputs = [
     cppo
     ocaml-crunch
+    removeReferencesTo
   ];
   buildInputs = [
     astring
@@ -53,6 +56,19 @@ buildDunePackage (self: {
     # them as well
     find test \( -name '*.sh' -o -name 'run.t' \)  -execdir sed 's@#!/bin/sh@#!${bash}/bin/sh@' -i '{}' \;
     patchShebangs test
+  '';
+
+  outputs = [
+    "bin"
+    "lib"
+    "out"
+  ];
+
+  installPhase = ''
+    runHook preInstall
+    dune install --prefix=$bin --libdir=$lib/lib/ocaml/${ocaml.version}/site-lib odoc
+    remove-references-to -t ${ocaml} $bin/bin/odoc
+    runHook postInstall
   '';
 
   meta = {

@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     ocamlPackages.findlib
     ocamlPackages.ocaml
-    ocamlPackages.odoc
+    (lib.getBin ocamlPackages.odoc)
   ];
 
   buildInputs = [
