@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "1.2.6";
+  version = "1.2.7";
 in
 buildPecl {
   inherit version;
@@ -15,7 +15,7 @@ buildPecl {
     owner = "wikimedia";
     repo = "mediawiki-php-excimer";
     tag = version;
-    hash = "sha256-LnmhItq7OpxXXE6EnTOXZVdfo+MTa2Ud9j16rs8dTBo=";
+    hash = "sha256-pUdu0qg0pVwGfnclGfv8AVTo85whTApax7CyQ371ELM=";
   };
 
   meta = {
