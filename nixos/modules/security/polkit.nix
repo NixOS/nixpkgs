@@ -62,6 +62,28 @@ in
       '';
     };
 
+    packages = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [ ];
+      example = lib.literalExpression ''
+        with pkgs; [
+          udisks
+          rtkit
+          (writeTextDir "share/polkit-1/rules.d/20-other.rules" '''
+            ...
+          ''')
+          (writeTextDir "share/polkit-1/actions/org.example.MyService1.policy" '''
+            ...
+          ''')
+        ]
+      '';
+      description = ''
+        Packages containing polkit rulesets and actions to be added to the system.
+
+        The items should be located in {file}`@out@/share/polkit-1/` in the packages specified.
+      '';
+    };
+
     extraConfig = mkOption {
       type = types.lines;
       default = "";
@@ -114,7 +136,7 @@ in
     systemd.services.polkit = {
       restartTriggers = [ config.system.path ];
       reloadTriggers = [
-        config.environment.etc."polkit-1/rules.d/10-nixos.rules".source
+        config.environment.etc."polkit-1".source
       ];
       serviceConfig.ExecStart = [
         # nuke default ExecStart
@@ -162,16 +184,29 @@ in
     # The polkit daemon reads action/rule files
     environment.pathsToLink = [ "/share/polkit-1" ];
 
+    environment.etc."polkit-1".source = pkgs.symlinkJoin {
+      name = "polkit-rules";
+      paths = [
+        cfg.packages
+        (pkgs.linkFarm "polkitd-conf-dir" {
+          "share/polkit-1/polkitd.conf" = iniFmt.generate "polkitd.conf" cfg.settings;
+        })
+      ];
+      stripPrefix = "/share/polkit-1";
+    };
+
     # PolKit rules for NixOS.
-    environment.etc."polkit-1/rules.d/10-nixos.rules".text = ''
-      polkit.addAdminRule(function(action, subject) {
-        return [${lib.concatStringsSep ", " (map (i: "\"${i}\"") cfg.adminIdentities)}];
-      });
+    security.polkit.packages = [
+      # TODO: validation on compilation (at least against typos)
+      (pkgs.writeTextDir "share/polkit-1/rules.d/10-nixos.rules" ''
+        polkit.addAdminRule(function(action, subject) {
+          return [${lib.concatStringsSep ", " (map (i: "\"${i}\"") cfg.adminIdentities)}];
+        });
 
-      ${cfg.extraConfig}
-    ''; # TODO: validation on compilation (at least against typos)
+        ${cfg.extraConfig}
+      '')
+    ];
 
-    environment.etc."polkit-1/polkitd.conf".source = iniFmt.generate "polkitd.conf" cfg.settings;
     security.pam.services.polkit-1 = { };
 
     security.wrappers.pkexec = {

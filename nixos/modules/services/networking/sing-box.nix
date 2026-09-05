@@ -41,8 +41,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # for polkit rules
-    environment.systemPackages = [ cfg.package ];
+    security.polkit.packages = [ cfg.package ];
     services.dbus.packages = [ cfg.package ];
     systemd.packages = [ cfg.package ];
 
