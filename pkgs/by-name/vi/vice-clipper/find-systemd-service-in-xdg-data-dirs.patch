@@ -1,0 +1,19 @@
+diff --git a/vice/main.py b/vice/main.py
+index e5c37cb..0067652 100644
+--- a/vice/main.py
++++ b/vice/main.py
+@@ -1549,8 +1549,14 @@ def _installed_service_file() -> Optional[Path]:
+     that put the unit in /usr/lib reported "(not installed)" while the service
+     was sitting there enabled (#139).
+     """
++    data_dirs = tuple(
++        Path(path) / "systemd" / "user" / "vice.service"
++        for path in os.environ.get("XDG_DATA_DIRS", "").split(":")
++        if path
++    )
+     candidates = (
+         actual_home_dir() / ".config" / "systemd" / "user" / "vice.service",
++        *data_dirs,
+         Path("/etc/systemd/user/vice.service"),
+         Path("/usr/lib/systemd/user/vice.service"),
+         Path("/usr/local/lib/systemd/user/vice.service"),
