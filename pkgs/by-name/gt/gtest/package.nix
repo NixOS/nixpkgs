@@ -50,8 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-  ]
-  ++ lib.optionals withAbseil [
+  ];
+
+  buildInputs = lib.optionals withAbseil [
     abseil-cpp
     re2
   ];
@@ -73,6 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/google/googletest";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ stephen-huan ];
   };
 })
