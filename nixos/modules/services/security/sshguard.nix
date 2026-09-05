@@ -19,10 +19,14 @@ let
         ++ (map (name: "-t ${lib.escapeShellArg name}") cfg.services)
       );
       backend = if config.networking.nftables.enable then "sshg-fw-nft-sets" else "sshg-fw-ipset";
+      ipv4_subnet = builtins.toString cfg.ipv4_subnet;
+      ipv6_subnet = builtins.toString cfg.ipv6_subnet;
     in
     pkgs.writeText "sshguard.conf" ''
       BACKEND="${pkgs.sshguard}/libexec/${backend}"
       LOGREADER="LANG=C ${config.systemd.package}/bin/journalctl ${args}"
+      IPV4_SUBNET=${ipv4_subnet}
+      IPV6_SUBNET=${ipv6_subnet}
     '';
 
 in
@@ -79,6 +83,22 @@ in
         type = lib.types.int;
         description = ''
           Remember potential attackers for up to detection_time seconds before resetting their score.
+        '';
+      };
+
+      ipv4_subnet = lib.mkOption {
+        default = 32;
+        type = lib.types.ints.unsigned;
+        description = ''
+          IPv4 subnet size to block. Defaults to a single address, CIDR notation.
+        '';
+      };
+
+      ipv6_subnet = lib.mkOption {
+        default = 128;
+        type = lib.types.ints.unsigned;
+        description = ''
+          IPv6 subnet size to block. Defaults to a single address, CIDR notation.
         '';
       };
 
