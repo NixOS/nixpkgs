@@ -38,16 +38,6 @@ let
         hash = "sha256-Ec72OE4xBlanFFzrrGu0lTY2BEVu7slc1+ZDFr8lUT8=";
       };
     };
-    "1.2.0" = rec {
-      release = "RC1";
-      rev = "da3a925491fab9fa2a8633d18e45f8e1b576c9d2";
-      src = fetchFromGitHub {
-        owner = "Arcachofo";
-        repo = "SimulIDE-dev";
-        hash = "sha256-6Gh0efBizDK1rUNkyU+/ysj7QwkAs3kTA1mQZYFb/pI=";
-        inherit rev;
-      };
-    };
     "2.0.0" = rec {
       release = "R${rev}";
       rev = "260501";
@@ -70,7 +60,7 @@ let
     else
       "resources/icons/simulide.png";
 
-  release' = lib.optionalString (lib.versionOlder versionNum "1.2.0") "-" + release;
+  release' = lib.optionalString (lib.versionOlder versionNum "2.0.0") "-" + release;
 in
 
 stdenv.mkDerivation {

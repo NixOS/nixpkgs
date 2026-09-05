@@ -10256,7 +10256,6 @@ with pkgs;
   simulide_0_4_15 = callPackage ../by-name/si/simulide/package.nix { versionNum = "0.4.15"; };
   simulide_1_0_0 = callPackage ../by-name/si/simulide/package.nix { versionNum = "1.0.0"; };
   simulide_1_1_0 = callPackage ../by-name/si/simulide/package.nix { versionNum = "1.1.0"; };
-  simulide_1_2_0 = callPackage ../by-name/si/simulide/package.nix { versionNum = "1.2.0"; };
   simulide_2_0_0 = callPackage ../by-name/si/simulide/package.nix { versionNum = "2.0.0"; };
 
   # this is the same but without the (sizable) 3D models library
