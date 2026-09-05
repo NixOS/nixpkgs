@@ -49,7 +49,7 @@
   lv2,
   makeWrapper,
   pango,
-  pangomm,
+  pangomm_1_4,
   perl,
   pkg-config,
   python3,
@@ -165,7 +165,7 @@ let
       lrdf
       lv2
       pango
-      pangomm
+      pangomm_1_4
       perl
       python3
       qm-dsp

@@ -1,30 +1,33 @@
 {
-  lib,
   stdenv,
+  lib,
   fetchurl,
   pkg-config,
   meson,
   ninja,
   python3,
   pango,
-  glibmm,
-  cairomm,
+  glibmm_2_68,
+  cairomm_1_16,
   gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pangomm";
-  version = "2.46.4";
+  version = "2.56.2";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/pangomm/${lib.versions.majorMinor version}/pangomm-${version}.tar.xz";
-    sha256 = "sha256-uSAWZhUmQk3kuTd/FRL1l4H0H7FsnAJn1hM7oc1o2yI=";
-  };
+  __structuredAttrs = true;
+  strictDeps = true;
 
   outputs = [
     "out"
     "dev"
   ];
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/pangomm/${lib.versions.majorMinor version}/pangomm-${version}.tar.xz";
+    hash = "sha256-8emEyFqFtqDmFhY2ZSH1HdgoKgcrtF0VtQhHYrYvTA4=";
+  };
 
   nativeBuildInputs = [
     pkg-config
@@ -32,10 +35,11 @@ stdenv.mkDerivation rec {
     ninja
     python3
   ];
+
   propagatedBuildInputs = [
     pango
-    glibmm
-    cairomm
+    glibmm_2_68
+    cairomm_1_16
   ];
 
   doCheck = true;
@@ -43,23 +47,13 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "pangomm";
+      attrPath = "pangomm_2_48";
       versionPolicy = "odd-unstable";
-      freeze = true;
     };
   };
 
   meta = {
     description = "C++ interface to the Pango text rendering library";
-    homepage = "https://www.pango.org/";
-    license = with lib.licenses; [
-      lgpl2
-      lgpl21
-    ];
-    maintainers = with lib.maintainers; [
-      raskin
-    ];
-    platforms = lib.platforms.unix;
-
     longDescription = ''
       Pango is a library for laying out and rendering of text, with an
       emphasis on internationalization.  Pango can be used anywhere
@@ -67,5 +61,9 @@ stdenv.mkDerivation rec {
       far has been done in the context of the GTK widget toolkit.
       Pango forms the core of text and font handling for GTK.
     '';
+    homepage = "https://www.pango.org/";
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 }

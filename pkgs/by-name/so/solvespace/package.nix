@@ -23,7 +23,7 @@
   libspnav,
   libthai,
   libxkbcommon,
-  pangomm,
+  pangomm_1_4,
   pcre2,
   util-linuxMinimal, # provides libmount
   libxtst,
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     libspnav
     libthai
     libxkbcommon
-    pangomm
+    pangomm_1_4
     pcre2
     util-linuxMinimal
     libpthread-stubs
