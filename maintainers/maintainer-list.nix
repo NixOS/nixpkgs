@@ -7877,12 +7877,6 @@
     matrix = "@dwoffinden:matrix.org";
     name = "Daniel Woffinden";
   };
-  dwrege = {
-    email = "email@dwrege.de";
-    github = "DominicWrege";
-    githubId = 7389000;
-    name = "Dominic Wrege";
-  };
   dwt = {
     email = "spamfaenger@gmx.de";
     github = "dwt";

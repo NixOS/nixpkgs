@@ -109,7 +109,6 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       azahi
       eclairevoyant
-      dwrege
     ];
     platforms = builtins.attrNames mozillaPlatforms;
     mainProgram = "librewolf";
