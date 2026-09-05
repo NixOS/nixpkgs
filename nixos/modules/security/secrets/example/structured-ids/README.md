@@ -1,0 +1,1 @@
+This directory shows a proof of concept of one way to tack structured IDs on top of the existing NixOS module. Do note that a more advanced solution would be writing a completely new Nix(OS) module together with its own `jsonify`-esque function that handles the ID generation.

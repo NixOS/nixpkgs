@@ -1,0 +1,1 @@
+This directory contains example backends for use in the various examples. Do note that these backends are _not_ production ready by any means. You should consider any code the backends are built upon as potentially unsafe. Indeed, their only purpose is demonstrating the `nixos-secrets` APIs.
