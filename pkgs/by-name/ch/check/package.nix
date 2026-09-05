@@ -2,6 +2,7 @@
   fetchurl,
   lib,
   stdenv,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = {
     description = "Unit testing framework for C";
 
@@ -42,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl2Plus;
     mainProgram = "checkmk";
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "check" ];
   };
 })
