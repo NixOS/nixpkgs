@@ -10202,6 +10202,8 @@ self: super: with self; {
 
   logic2-automation = callPackage ../development/python-modules/logic2-automation { };
 
+  logica = callPackage ../development/python-modules/logica { };
+
   logical-unification = callPackage ../development/python-modules/logical-unification { };
 
   logilab-common = callPackage ../development/python-modules/logilab/common.nix {
