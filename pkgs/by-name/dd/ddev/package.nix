@@ -20,13 +20,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "ddev";
-  version = "1.25.3";
+  version = "1.25.4";
 
   src = fetchFromGitHub {
     owner = "ddev";
     repo = "ddev";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IsFay9UqvRdllLzyQLg3YUPFlg6MugYVWRXxUpBV9n0=";
+    hash = "sha256-zib7Z6BjT4NaxoRskhOKoUivq8yT3bzAI1B8Bzcy2BI=";
   };
 
   postPatch = ''
