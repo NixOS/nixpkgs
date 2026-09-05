@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
-  cmakeFlags = lib.optional (!stdenv.hostPlatform.isx86) [
+  cmakeFlags = lib.optionals (!stdenv.hostPlatform.isx86) [
     "-DCMAKE_CXX_FLAGS=-I${finalAttrs.src}/third_party"
   ];
 

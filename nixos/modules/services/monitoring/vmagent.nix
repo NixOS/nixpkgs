@@ -152,7 +152,7 @@ in
           startCLIList
           ++ lib.optionals (cfg.prometheusConfig != { }) [ "-promscrape.config=${prometheusConfigYml}" ]
         );
-        LoadCredential = lib.optional (cfg.remoteWrite.basicAuthPasswordFile != null) [
+        LoadCredential = lib.optionals (cfg.remoteWrite.basicAuthPasswordFile != null) [
           "remote_write_basic_auth_password:${cfg.remoteWrite.basicAuthPasswordFile}"
         ];
       };

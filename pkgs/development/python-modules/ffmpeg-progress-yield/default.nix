@@ -37,7 +37,7 @@ buildPythonPackage rec {
     procps
   ];
 
-  disabledTests = lib.optional stdenv.hostPlatform.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # cannot access /usr/bin/pgrep from the sandbox
     "test_context_manager"
     "test_context_manager_with_exception"

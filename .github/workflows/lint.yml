@@ -57,6 +57,9 @@ jobs:
             exit 1
           fi
 
+      - name: Test ast-grep rules
+        run: nix-build nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A ast-grep-tests
+
   parse:
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 10
