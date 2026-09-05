@@ -112,7 +112,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     lib.optionals useSharedLibraries [
       bzip2
-      curlMinimal
+      (curlMinimal.override {
+        # TODO: remove this override on staging
+        gssSupport = true;
+        scpSupport = !stdenv.hostPlatform.isSunOS;
+      })
       expat
       libarchive
       xz
