@@ -4,6 +4,7 @@
   skalibs,
   execline,
   writeTextFile,
+  stdenv,
 }:
 
 let
@@ -70,10 +71,10 @@ skawarePackages.buildPackage {
       -Wall -Wpedantic \
       -D "EXECLINEB_PATH()=\"$bin/bin/.execlineb-wrapped\"" \
       -D "EXECLINE_BIN_PATH()=\"$bin/bin\"" \
-      $(pkg-config --cflags libskarnet) \
+      $(${stdenv.cc.targetPrefix}pkg-config --cflags libskarnet) \
       -o "$bin/bin/execlineb" \
       ${./execlineb-wrapper.c} \
-      $(pkg-config --libs libskarnet)
+      $(${stdenv.cc.targetPrefix}pkg-config --libs libskarnet)
   '';
 
   # Write an execline script.
