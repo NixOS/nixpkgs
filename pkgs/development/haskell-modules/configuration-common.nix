@@ -221,8 +221,6 @@ with haskellLib;
           Cabal-syntax = lself.Cabal-syntax_3_14_2_0;
           Cabal = lself.Cabal_3_14_2_0;
           cabal-install = lself.cabal-install_3_14_2_0;
-          # Need a newer version of extensions to be compatible with the newer Cabal
-          extensions = doJailbreak lself.extensions_0_1_1_0;
           # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
           # because some packages, like ormolu, need a newer Cabal version.
           # ghc-paths is special because it depends on Cabal for building
