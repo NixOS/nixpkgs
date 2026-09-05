@@ -3,13 +3,15 @@
   buildNpmPackage,
   fetchFromGitHub,
   versionCheckHook,
-  nix-update-script,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "typescript";
   version = "5.9.3";
 
+  __structuredAttrs = true;
+
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "TypeScript";
@@ -28,14 +30,6 @@ buildNpmPackage (finalAttrs: {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/tsc";
-
-  passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex=^v([\\d.]+)$"
-      ];
-    };
-  };
 
   meta = {
     description = "Superset of JavaScript that compiles to clean JavaScript output";
