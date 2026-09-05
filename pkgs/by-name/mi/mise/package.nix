@@ -22,16 +22,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2026.8.6";
+  version = "2026.9.1";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dm+cIb6i+npYSIUfxaEi3ohumeT9lXXlQwYREndwZFE=";
+    hash = "sha256-fafwSP96jUDfe49K5HgxuqzQhrbcs+OnUMYkeW+ATwA=";
   };
 
-  cargoHash = "sha256-VzRNo2fa4n4oOw27itjFebKpIhSdm8UmI/xdBBJIh9g=";
+  patches = [ ./0001-registry-compile-baked-registry-in-release-tests.patch ];
+
+  cargoHash = "sha256-q/4MYmQ01RRMiJ7OvFUo06R8capujrmLTdDsl5GAfXk=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -79,12 +81,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     # last_modified will always be different in nix
     "--skip=tera::tests::test_last_modified"
+    # bootstrap node-gyp through aube requires network access
+    "--skip=mise_binary_services_aube_node_gyp_bootstrap_trampoline"
+    # we don't care about brew tests and a lot of them fails here
+    "--skip=system::packages::brew::cask::tests::"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
     # shell out to macOS system binaries that the darwin sandbox refuses to exec
     "--skip=system::defaults::tests::test_status_missing_keys_are_unset"
-    # we don't care about brew tests and a lot of them fails here
-    "--skip=system::packages::brew::cask::tests::"
   ];
 
   cargoTestFlags = [ "--all-features" ];
@@ -96,10 +100,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     installManPage ./man/man1/mise.1
-
-    substituteInPlace ./completions/{mise.bash,mise.fish,_mise}  \
-      --replace-fail 'usage &> /dev/null' '${lib.getExe usage} &> /dev/null' \
-      --replace-fail 'usage complete-word' '${lib.getExe usage} complete-word'
 
     installShellCompletion \
       --bash ./completions/mise.bash \
