@@ -72,36 +72,8 @@ with haskellLib;
   # Jailbreaks
   #
 
-  large-generics = doJailbreak super.large-generics; # base <4.20
-  cpphs = overrideCabal (drv: {
-    # jail break manually the conditional dependencies
-    postPatch = ''
-      sed -i 's/time >=1.5 \&\& <1.13/time >=1.5 \&\& <=1.14/g' cpphs.cabal
-    '';
-  }) super.cpphs;
-  timezone-series = doJailbreak super.timezone-series; # time <1.14
-  timezone-olson = doJailbreak super.timezone-olson; # time <1.14
-  cabal-plan = doJailbreak super.cabal-plan; # base <4.21
   decimal-literals = doJailbreak super.decimal-literals; # base <4.21
   matrix-client = doJailbreak super.matrix-client; # time <1.13
   patat = doJailbreak super.patat; # time <1.13
   puresat = doJailbreak super.puresat; # base <4.21
-  dbus = doJailbreak super.dbus; # template-haskell <2.23
-  xmobar = doJailbreak super.xmobar; # base <4.21
-
-  #
-  # Test suite issues
-  #
-
-  relude = dontCheck super.relude;
-
-  # https://gitlab.haskell.org/ghc/ghc/-/issues/25930
-  generic-lens = dontCheck super.generic-lens;
-
-  # Cabal 3.14 regression (incorrect datadir in tests): https://github.com/haskell/cabal/issues/10717
-  alex = overrideCabal (drv: {
-    preCheck = drv.preCheck or "" + ''
-      export alex_datadir="$(pwd)/data"
-    '';
-  }) super.alex;
 }
