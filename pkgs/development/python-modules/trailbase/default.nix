@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "trailbase";
-  version = "0.7.2";
+  version = "0.7.3";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-iWdxMgjEPd5RkCRY3JnzuaJ1nW6LOESciTB6j2lzPzM=";
+    hash = "sha256-TNaNN/n2GAZYdzz7e66k7CqGrMJF2c9R1bCmf+gKuTc=";
   };
 
   # Tests are not on PyPI.
