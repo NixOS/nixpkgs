@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mate-utils";
-  version = "1.28.1";
+  version = "1.28.3";
   outputs = [
     "out"
     "man"
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "mate-utils";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-0G25g4vpfufbvUYjCRJVBv9r5t/gnkDzWGKTf8N5MFQ=";
+    hash = "sha256-3MeR6Fm2w+AY9PHVTd5FoTygNGBLgFYFWoTBeKYEHA8=";
   };
 
   nativeBuildInputs = [

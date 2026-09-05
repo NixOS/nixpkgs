@@ -25,7 +25,6 @@ let
     escapeShellArg
     concatMapStringsSep
     sourceFilesBySuffices
-    modules
     ;
 
   common = import ./common.nix;
@@ -134,7 +133,7 @@ let
     inherit
       (evalModules {
         modules = [
-          (modules.importApply ../../../lib/services/service.nix {
+          (pkgs.lib.importService {
             pkgs = throw "nixos docs / portableServiceOptions: Do not reference pkgs in docs";
           })
         ];

@@ -21,8 +21,9 @@ callPackage (if isDarwin then ./darwin.nix else ./linux.nix) {
     homepage = "https://www.fastmail.com/blog/desktop-app/";
     license = lib.licenses.unfree;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = [
-      lib.maintainers.nekowinston
+    maintainers = with lib.maintainers; [
+      nekowinston
+      supermarin
     ];
     platforms = [
       "aarch64-darwin"

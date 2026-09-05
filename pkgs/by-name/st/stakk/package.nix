@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stakk";
-  version = "2.2.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "glennib";
     repo = "stakk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PKmU1CE7Zf9lTSUdZYpchn8mNYN4ty8Rxd8FKgd82aY=";
+    hash = "sha256-4P1ZAwmpt9OJPz9h5DYEFWtWlLyxMXQI53T+1lP82X4=";
   };
 
-  cargoHash = "sha256-2jIyLk4yeaN1RBg+xq2VMKrINdU5MPpAQL6NP7Z9iy4=";
+  cargoHash = "sha256-ycQc9I2sYmchBK8hQAJCkB/GFSNUBp+/qX9Kt5tPPLY=";
 
   useNextest = true;
 

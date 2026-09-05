@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2026.8.3";
+  version = "2026.9.0";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -28,6 +28,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -95,6 +96,7 @@
       ];
     "ai_task" =
       ps: with ps; [
+        gazetteer-matcher
         hassil
         home-assistant-intents
         pyturbojpeg
@@ -155,6 +157,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -295,6 +298,7 @@
     "anthropic" =
       ps: with ps; [
         anthropic
+        gazetteer-matcher
         ha-ffmpeg
         hassil
         home-assistant-intents
@@ -386,6 +390,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -403,6 +408,9 @@
         arcam-fmj
       ];
     "arest" =
+      ps: with ps; [
+      ];
+    "ariston" =
       ps: with ps; [
       ];
     "arris_tg2492lg" =
@@ -432,6 +440,7 @@
       ];
     "assist_pipeline" =
       ps: with ps; [
+        gazetteer-matcher
         ha-ffmpeg
         hassil
         home-assistant-intents
@@ -441,6 +450,7 @@
       ];
     "assist_satellite" =
       ps: with ps; [
+        gazetteer-matcher
         ha-ffmpeg
         hassil
         home-assistant-intents
@@ -475,6 +485,7 @@
         bluetooth-data-tools
         cronsim
         dbus-fast
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hass-nabucasa
@@ -501,6 +512,7 @@
       ];
     "aurora_abb_powerone" =
       ps: with ps; [
+        aiohasupervisor
         aiousbwatcher
         aurorapy
         serialx
@@ -540,6 +552,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -642,6 +655,38 @@
       ps: with ps; [
         pybbox
       ];
+    "besen" =
+      ps: with ps; [
+        aioesphomeapi
+        aiohasupervisor
+        aioruuvigateway
+        aioshelly
+        aiousbwatcher
+        bleak
+        bleak-esphome
+        bleak-retry-connector
+        bleak-smlight
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
+        dbus-fast
+        esphome-dashboard-api
+        gazetteer-matcher
+        ha-ffmpeg
+        habluetooth
+        hassil
+        home-assistant-intents
+        ifaddr
+        mutagen
+        pymicro-vad
+        pysmlight
+        pyspeex-noise
+        serialx
+        zeroconf
+      ]; # missing inputs: besen
+    "beverly" =
+      ps: with ps; [
+      ];
     "bge" =
       ps: with ps; [
       ];
@@ -698,6 +743,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -721,6 +767,7 @@
       ];
     "bluetooth" =
       ps: with ps; [
+        aiohasupervisor
         aiousbwatcher
         bleak
         bleak-retry-connector
@@ -747,6 +794,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -775,6 +823,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -879,6 +928,7 @@
         bthome-ble
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -895,6 +945,9 @@
       ps: with ps; [
       ];
     "bubendorff" =
+      ps: with ps; [
+      ];
+    "bugu" =
       ps: with ps; [
       ];
     "buienradar" =
@@ -932,6 +985,9 @@
         ha-ffmpeg
         py-canary
       ];
+    "carrier" =
+      ps: with ps; [
+      ];
     "casper_glow" =
       ps: with ps; [
         aioesphomeapi
@@ -948,6 +1004,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -972,6 +1029,7 @@
         bluetooth-data-tools
         cronsim
         dbus-fast
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hass-nabucasa
@@ -1029,6 +1087,7 @@
         chefiq-ble
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -1088,6 +1147,7 @@
         bluetooth-data-tools
         cronsim
         dbus-fast
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hass-nabucasa
@@ -1126,6 +1186,12 @@
       ps: with ps; [
         coinbase-advanced-py
       ];
+    "collection_image" =
+      ps: with ps; [
+      ];
+    "colmo" =
+      ps: with ps; [
+      ];
     "color_extractor" =
       ps: with ps; [
         colorthief
@@ -1139,6 +1205,9 @@
     "comelit" =
       ps: with ps; [
         aiocomelit
+      ];
+    "comfee" =
+      ps: with ps; [
       ];
     "comfoconnect" =
       ps: with ps; [
@@ -1178,6 +1247,7 @@
       ];
     "conversation" =
       ps: with ps; [
+        gazetteer-matcher
         hassil
         home-assistant-intents
       ];
@@ -1214,6 +1284,7 @@
       ];
     "crownstone" =
       ps: with ps; [
+        aiohasupervisor
         aiousbwatcher
         crownstone-cloud
         crownstone-sse
@@ -1294,6 +1365,7 @@
         dbus-fast
         file-read-backwards
         fnv-hash-fast
+        gazetteer-matcher
         go2rtc-client
         ha-ffmpeg
         habluetooth
@@ -1331,6 +1403,7 @@
       ];
     "demo" =
       ps: with ps; [
+        gazetteer-matcher
         hassil
         home-assistant-intents
       ];
@@ -1339,6 +1412,7 @@
       ];
     "denon_rs232" =
       ps: with ps; [
+        aiohasupervisor
         aiousbwatcher
         denon-rs232
         serialx
@@ -1474,6 +1548,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -1513,6 +1588,7 @@
       ];
     "dsmr" =
       ps: with ps; [
+        aiohasupervisor
         aiousbwatcher
         dsmr-parser
         serialx
@@ -1615,6 +1691,7 @@
       ];
     "edl21" =
       ps: with ps; [
+        aiohasupervisor
         aiousbwatcher
         pysml
         serialx
@@ -1739,6 +1816,7 @@
       ];
     "enocean" =
       ps: with ps; [
+        aiohasupervisor
         aiousbwatcher
         enocean-async
         serialx
@@ -1796,6 +1874,7 @@
         dbus-fast
         eq3btsmart
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -1828,6 +1907,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -1868,6 +1948,7 @@
         dbus-fast
         esphome-dashboard-api
         eufylife-ble-client
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -1882,6 +1963,7 @@
       ];
     "eurotronic_cometblue" =
       ps: with ps; [
+        aiohasupervisor
         aiousbwatcher
         bleak
         bleak-retry-connector
@@ -2034,6 +2116,7 @@
         dbus-fast
         esphome-dashboard-api
         fjaraskupan
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -2051,9 +2134,17 @@
         ritassist
       ];
     "flexit" =
-      ps: with ps; [
+      ps:
+      with ps;
+      [
+        aiohasupervisor
+        aiousbwatcher
+        modbus-connection
         pymodbus
-      ];
+        serialx
+        tmodbus
+      ]
+      ++ modbus-connection.optional-dependencies.tmodbus; # missing inputs: flexit-modbus
     "flexit_bacnet" =
       ps: with ps; [
         flexit-bacnet
@@ -2076,6 +2167,11 @@
     "flock" =
       ps: with ps; [
       ];
+    "flow_it" =
+      ps: with ps; [
+        ifaddr
+        zeroconf
+      ]; # missing inputs: flow-it-api
     "flume" =
       ps: with ps; [
         pyflume
@@ -2172,9 +2268,15 @@
       ]
       ++ fritzconnection.optional-dependencies.qr;
     "fronius" =
-      ps: with ps; [
+      ps:
+      with ps;
+      [
+        modbus-connection
         pyfronius
-      ];
+        pymodbus
+        tmodbus
+      ]
+      ++ modbus-connection.optional-dependencies.tmodbus; # missing inputs: fronius-modbus
     "frontend" =
       ps: with ps; [
         home-assistant-frontend
@@ -2242,6 +2344,7 @@
         dbus-fast
         esphome-dashboard-api
         gardena-bluetooth
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -2410,6 +2513,7 @@
       ];
     "google_generative_ai_conversation" =
       ps: with ps; [
+        gazetteer-matcher
         google-genai
         ha-ffmpeg
         hassil
@@ -2477,6 +2581,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         govee-ble
         ha-ffmpeg
         habluetooth
@@ -2766,6 +2871,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -2812,6 +2918,12 @@
       ps: with ps; [
         horimote
       ];
+    "hortimax" =
+      ps: with ps; [
+      ]; # missing inputs: aiohortos
+    "hotspring" =
+      ps: with ps; [
+      ]; # missing inputs: python-hotspring
     "hp_ilo" =
       ps: with ps; [
         python-hpilo
@@ -2853,6 +2965,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -2905,6 +3018,7 @@
         dbus-fast
         esphome-dashboard-api
         gardena-bluetooth
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -2966,6 +3080,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -2999,6 +3114,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -3092,6 +3208,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -3147,6 +3264,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -3183,6 +3301,7 @@
       ];
     "insteon" =
       ps: with ps; [
+        aiohasupervisor
         aiousbwatcher
         home-assistant-frontend
         insteon-frontend-home-assistant
@@ -3209,6 +3328,9 @@
     "intesishome" =
       ps: with ps; [
         pyintesishome
+      ];
+    "inventor" =
+      ps: with ps; [
       ];
     "iometer" =
       ps: with ps; [
@@ -3271,6 +3393,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -3288,6 +3411,35 @@
       ps: with ps; [
         isal
       ];
+    "iseo_argo_ble" =
+      ps: with ps; [
+        aioesphomeapi
+        aiohasupervisor
+        aioruuvigateway
+        aioshelly
+        aiousbwatcher
+        bleak
+        bleak-esphome
+        bleak-retry-connector
+        bleak-smlight
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
+        dbus-fast
+        esphome-dashboard-api
+        gazetteer-matcher
+        ha-ffmpeg
+        habluetooth
+        hassil
+        home-assistant-intents
+        ifaddr
+        mutagen
+        pymicro-vad
+        pysmlight
+        pyspeex-noise
+        serialx
+        zeroconf
+      ]; # missing inputs: iseo-argo-ble
     "iskra" =
       ps: with ps; [
         pyiskra
@@ -3405,6 +3557,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -3442,6 +3595,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -3535,6 +3689,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -3579,6 +3734,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -3598,6 +3754,7 @@
       ];
     "landisgyr_heat_meter" =
       ps: with ps; [
+        aiohasupervisor
         aiousbwatcher
         serialx
         ultraheat-api
@@ -3642,6 +3799,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -3671,6 +3829,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -3700,6 +3859,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -3750,6 +3910,7 @@
       ];
     "lg_tv_rs232" =
       ps: with ps; [
+        aiohasupervisor
         aiousbwatcher
         lg-rs232-tv
         serialx
@@ -3758,6 +3919,9 @@
       ps: with ps; [
         librehardwaremonitor-api
       ];
+    "librenms" =
+      ps: with ps; [
+      ]; # missing inputs: aiolibrenms
     "lichess" =
       ps: with ps; [
         aiolichess
@@ -3824,6 +3988,7 @@
       ];
     "litellm" =
       ps: with ps; [
+        gazetteer-matcher
         ha-ffmpeg
         hassil
         home-assistant-intents
@@ -3836,12 +4001,16 @@
       ps: with ps; [
         pylitterbot
       ];
+    "little_swan" =
+      ps: with ps; [
+      ];
     "livisi" =
       ps: with ps; [
         livisi
       ];
     "llama_cpp" =
       ps: with ps; [
+        gazetteer-matcher
         ha-ffmpeg
         hassil
         home-assistant-intents
@@ -3913,6 +4082,7 @@
         bluetooth-data-tools
         cronsim
         dbus-fast
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hass-nabucasa
@@ -3991,6 +4161,9 @@
         aiohasupervisor
         paho-mqtt
       ];
+    "map_tiles" =
+      ps: with ps; [
+      ];
     "marantz" =
       ps: with ps; [
       ];
@@ -4048,6 +4221,7 @@
       ps: with ps; [
         aiohttp-sse
         anyio
+        gazetteer-matcher
         hassil
         home-assistant-intents
         mcp
@@ -4076,6 +4250,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -4134,6 +4309,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -4230,6 +4406,10 @@
       ];
     "mitsubishi_comfort" =
       ps: with ps; [
+        aiodhcpwatcher
+        aiodiscover
+        cached-ipaddress
+        ifaddr
         mitsubishi-comfort
       ];
     "mjpeg" =
@@ -4251,6 +4431,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -4275,6 +4456,7 @@
         bluetooth-data-tools
         cronsim
         dbus-fast
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hass-nabucasa
@@ -4297,11 +4479,17 @@
         pymochad
       ];
     "modbus" =
-      ps: with ps; [
+      ps:
+      with ps;
+      [
+        modbus-connection
         pymodbus
-      ];
+        tmodbus
+      ]
+      ++ modbus-connection.optional-dependencies.tmodbus;
     "modem_callerid" =
       ps: with ps; [
+        aiohasupervisor
         aiousbwatcher
         phone-modem
         serialx
@@ -4329,13 +4517,38 @@
       ];
     "monoprice" =
       ps: with ps; [
+        aiohasupervisor
         aiousbwatcher
         pymonoprice
         serialx
       ];
     "monzo" =
       ps: with ps; [
+        aiohasupervisor
+        aiousbwatcher
+        bleak
+        bleak-retry-connector
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
+        cronsim
+        dbus-fast
+        gazetteer-matcher
+        ha-ffmpeg
+        habluetooth
+        hass-nabucasa
+        hassil
+        home-assistant-intents
+        matter-ble-proxy
+        matter-python-client
         monzopy
+        mutagen
+        openai
+        pymicro-vad
+        pyspeex-noise
+        pyturbojpeg
+        securetar
+        serialx
       ];
     "moon" =
       ps: with ps; [
@@ -4356,6 +4569,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -4393,6 +4607,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -4551,6 +4766,7 @@
         bluetooth-data-tools
         cronsim
         dbus-fast
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hass-nabucasa
@@ -4581,7 +4797,11 @@
       ];
     "netio" =
       ps: with ps; [
+        netio
         pynetio
+      ];
+    "netsu" =
+      ps: with ps; [
       ];
     "network" =
       ps: with ps; [
@@ -4591,6 +4811,9 @@
       ps: with ps; [
         neurio
       ];
+    "nexblue" =
+      ps: with ps; [
+      ]; # missing inputs: nexblue-api
     "nexen" =
       ps: with ps; [
       ];
@@ -4782,8 +5005,12 @@
       ps: with ps; [
         ohme
       ];
+    "olimpia_splendid" =
+      ps: with ps; [
+      ];
     "ollama" =
       ps: with ps; [
+        gazetteer-matcher
         ha-ffmpeg
         hassil
         home-assistant-intents
@@ -4825,6 +5052,7 @@
         bluetooth-data-tools
         cronsim
         dbus-fast
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hass-nabucasa
@@ -4852,6 +5080,7 @@
         bluetooth-data-tools
         cronsim
         dbus-fast
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hass-nabucasa
@@ -4890,6 +5119,7 @@
       ];
     "open_router" =
       ps: with ps; [
+        gazetteer-matcher
         ha-ffmpeg
         hassil
         home-assistant-intents
@@ -4901,6 +5131,7 @@
       ];
     "openai_conversation" =
       ps: with ps; [
+        gazetteer-matcher
         ha-ffmpeg
         hassil
         home-assistant-intents
@@ -4928,6 +5159,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -5021,6 +5253,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -5098,6 +5331,7 @@
         bluetooth-data-tools
         cronsim
         dbus-fast
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hass-nabucasa
@@ -5116,6 +5350,7 @@
       ];
     "ovhcloud_ai_endpoints" =
       ps: with ps; [
+        gazetteer-matcher
         ha-ffmpeg
         hassil
         home-assistant-intents
@@ -5139,6 +5374,7 @@
         bluetooth-data-tools
         cronsim
         dbus-fast
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hass-nabucasa
@@ -5274,6 +5510,7 @@
         bluetooth-data-tools
         cronsim
         dbus-fast
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hass-nabucasa
@@ -5334,9 +5571,6 @@
       ps: with ps; [
         pyportainer
       ];
-    "portlandgeneral" =
-      ps: with ps; [
-      ];
     "power" =
       ps: with ps; [
       ];
@@ -5372,6 +5606,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -5383,6 +5618,9 @@
         pyspeex-noise
         serialx
         zeroconf
+      ];
+    "pro_breeze" =
+      ps: with ps; [
       ];
     "probe_plus" =
       ps: with ps; [
@@ -5400,6 +5638,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -5542,6 +5781,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -5604,6 +5844,7 @@
         bluetooth-data-tools
         cronsim
         dbus-fast
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hass-nabucasa
@@ -5652,6 +5893,7 @@
       ];
     "rainforest_raven" =
       ps: with ps; [
+        aiohasupervisor
         aioraven
         aiousbwatcher
         serialx
@@ -5679,6 +5921,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -5751,8 +5994,7 @@
       ];
     "remember_the_milk" =
       ps: with ps; [
-        httplib2
-        rtmapi
+        aiortm
       ];
     "remote" =
       ps: with ps; [
@@ -5802,6 +6044,7 @@
       ];
     "rfxtrx" =
       ps: with ps; [
+        aiohasupervisor
         aiousbwatcher
         pyrfxtrx
         serialx
@@ -5859,12 +6102,16 @@
       ps: with ps; [
         roonapi
       ];
+    "rotenso" =
+      ps: with ps; [
+      ];
     "route53" =
       ps: with ps; [
         boto3
       ];
     "route_b_smart_meter" =
       ps: with ps; [
+        aiohasupervisor
         aiousbwatcher
         momonga
         serialx
@@ -5889,6 +6136,7 @@
       ];
     "russound_rio" =
       ps: with ps; [
+        aiohasupervisor
         aiorussound
         aiousbwatcher
         serialx
@@ -5899,6 +6147,7 @@
       ];
     "ruuvi_gateway" =
       ps: with ps; [
+        aiohasupervisor
         aioruuvigateway
         aiousbwatcher
         bleak
@@ -5926,6 +6175,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -5954,6 +6204,12 @@
     "samsam" =
       ps: with ps; [
       ];
+    "samsung_exlink" =
+      ps: with ps; [
+        aiohasupervisor
+        aiousbwatcher
+        serialx
+      ]; # missing inputs: samsung-exlink
     "samsung_infrared" =
       ps: with ps; [
         infrared-protocols
@@ -6059,6 +6315,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -6097,6 +6354,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -6126,6 +6384,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -6196,6 +6455,7 @@
       ];
     "shelly" =
       ps: with ps; [
+        aiohasupervisor
         aioshelly
         aiousbwatcher
         bleak
@@ -6234,6 +6494,11 @@
       ps: with ps; [
         pysignalclirestapi
       ];
+    "silla_prism" =
+      ps: with ps; [
+        aiohasupervisor
+        paho-mqtt
+      ]; # missing inputs: pysillaprism
     "simplefin" =
       ps: with ps; [
         simplefin4py
@@ -6353,6 +6618,7 @@
       ];
     "smlight" =
       ps: with ps; [
+        aiohasupervisor
         aiousbwatcher
         bleak
         bleak-retry-connector
@@ -6399,6 +6665,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -6412,6 +6679,15 @@
         serialx
         zeroconf
       ];
+    "sofar" =
+      ps:
+      with ps;
+      [
+        modbus-connection
+        pymodbus
+        tmodbus
+      ]
+      ++ modbus-connection.optional-dependencies.tmodbus; # missing inputs: sofar-modbus
     "solaredge" =
       ps: with ps; [
         aiosolaredge
@@ -6445,8 +6721,7 @@
       ];
     "somfy_mylink" =
       ps: with ps; [
-        somfy-mylink-synergy
-      ];
+      ]; # missing inputs: pysomfymylink
     "sonarr" =
       ps: with ps; [
         aiopyarr
@@ -6483,6 +6758,39 @@
       ps: with ps; [
         pyspcwebgw
       ];
+    "specialized_turbo" =
+      ps:
+      with ps;
+      [
+        aioesphomeapi
+        aiohasupervisor
+        aioruuvigateway
+        aioshelly
+        aiousbwatcher
+        bleak
+        bleak-esphome
+        bleak-retry-connector
+        bleak-smlight
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
+        dbus-fast
+        esphome-dashboard-api
+        gazetteer-matcher
+        ha-ffmpeg
+        habluetooth
+        hassil
+        home-assistant-intents
+        ifaddr
+        mutagen
+        pymicro-vad
+        pysmlight
+        pyspeex-noise
+        serialx
+        specialized-turbo
+        zeroconf
+      ]
+      ++ specialized-turbo.optional-dependencies.cloud;
     "speedtestdotnet" =
       ps: with ps; [
         speedtest-cli
@@ -6651,6 +6959,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -6675,6 +6984,7 @@
         bluetooth-data-tools
         cronsim
         dbus-fast
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hass-nabucasa
@@ -6818,6 +7128,7 @@
       ++ python-telegram-bot.optional-dependencies.socks;
     "teleinfo" =
       ps: with ps; [
+        aiohasupervisor
         aiousbwatcher
         pyteleinfo
         serialx
@@ -6888,6 +7199,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -6920,6 +7232,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -6985,6 +7298,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -7027,6 +7341,7 @@
       ];
     "togrill" =
       ps: with ps; [
+        aiohasupervisor
         aiousbwatcher
         bleak
         bleak-retry-connector
@@ -7049,6 +7364,12 @@
       ps: with ps; [
         pytomorrowio
       ];
+    "tonewinner" =
+      ps: with ps; [
+        aiohasupervisor
+        aiousbwatcher
+        serialx
+      ]; # missing inputs: tonewinner-rs232
     "toon" =
       ps: with ps; [
         aiohasupervisor
@@ -7060,6 +7381,7 @@
         bluetooth-data-tools
         cronsim
         dbus-fast
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hass-nabucasa
@@ -7077,6 +7399,9 @@
         toonapi
       ];
     "torque" =
+      ps: with ps; [
+      ];
+    "toshiba_lifestyle" =
       ps: with ps; [
       ];
     "totalconnect" =
@@ -7273,6 +7598,7 @@
       ];
     "upb" =
       ps: with ps; [
+        aiohasupervisor
         aiousbwatcher
         serialx
         upb-lib
@@ -7316,6 +7642,7 @@
       ];
     "usb" =
       ps: with ps; [
+        aiohasupervisor
         aiousbwatcher
         serialx
       ];
@@ -7348,6 +7675,9 @@
     "valve" =
       ps: with ps; [
       ];
+    "vandelo" =
+      ps: with ps; [
+      ];
     "vasttrafik" =
       ps: with ps; [
         vtjp
@@ -7358,6 +7688,7 @@
       ];
     "velbus" =
       ps: with ps; [
+        aiohasupervisor
         aiousbwatcher
         serialx
         velbus-aio
@@ -7420,6 +7751,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -7456,10 +7788,6 @@
     "vizio" =
       ps: with ps; [
       ]; # missing inputs: vizaio
-    "vlc" =
-      ps: with ps; [
-        python-vlc
-      ];
     "vlc_telnet" =
       ps: with ps; [
         aiovlc
@@ -7473,6 +7801,7 @@
       ];
     "voip" =
       ps: with ps; [
+        gazetteer-matcher
         ha-ffmpeg
         hassil
         home-assistant-intents
@@ -7497,6 +7826,9 @@
     "w800rf32" =
       ps: with ps; [
         pyw800rf32
+      ];
+    "wahin" =
+      ps: with ps; [
       ];
     "wake_on_lan" =
       ps: with ps; [
@@ -7538,6 +7870,7 @@
         bluetooth-data-tools
         cronsim
         dbus-fast
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hass-nabucasa
@@ -7619,7 +7952,7 @@
       ];
     "whois" =
       ps: with ps; [
-        whois
+        whoisdomain
       ];
     "wiffi" =
       ps: with ps; [
@@ -7627,6 +7960,8 @@
       ];
     "wiim" =
       ps: with ps; [
+        async-upnp-client
+        ifaddr
         wiim
       ];
     "wilight" =
@@ -7652,6 +7987,7 @@
         bluetooth-data-tools
         cronsim
         dbus-fast
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hass-nabucasa
@@ -7707,6 +8043,7 @@
       ];
     "wyoming" =
       ps: with ps; [
+        gazetteer-matcher
         ha-ffmpeg
         hassil
         home-assistant-intents
@@ -7750,6 +8087,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -7797,6 +8135,7 @@
         bluetooth-data-tools
         cronsim
         dbus-fast
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hass-nabucasa
@@ -7834,6 +8173,7 @@
         bluetooth-data-tools
         dbus-fast
         esphome-dashboard-api
+        gazetteer-matcher
         ha-ffmpeg
         habluetooth
         hassil
@@ -8129,6 +8469,7 @@
     "cloudflare_r2"
     "co2signal"
     "coinbase"
+    "collection_image"
     "color_extractor"
     "comelit"
     "comfoconnect"
@@ -8294,7 +8635,6 @@
     "fritz"
     "fritzbox"
     "fritzbox_callmonitor"
-    "fronius"
     "frontend"
     "frontier_silicon"
     "fuelprices_dk"
@@ -8553,6 +8893,7 @@
     "mailgun"
     "manual"
     "manual_mqtt"
+    "map_tiles"
     "marantz_infrared"
     "marytts"
     "mastodon"
@@ -8638,6 +8979,7 @@
     "netatmo"
     "netgear"
     "netgear_lte"
+    "netio"
     "network"
     "nexia"
     "nextbus"
@@ -8900,13 +9242,13 @@
     "solarman"
     "solax"
     "soma"
-    "somfy_mylink"
     "sonarr"
     "songpal"
     "sonos"
     "soundtouch"
     "spaceapi"
     "spc"
+    "specialized_turbo"
     "speedtestdotnet"
     "spider"
     "splunk"
@@ -9131,6 +9473,7 @@
     "zerproc"
     "zeversolar"
     "zha"
+    "zhong_hong"
     "zimi"
     "zinvolt"
     "zodiac"

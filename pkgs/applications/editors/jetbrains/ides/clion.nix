@@ -1,20 +1,21 @@
 {
-  stdenv,
-  lib,
-  fetchurl,
-  mkJetBrainsProduct,
-  libdbm,
-  fsnotifier,
-  patchSharedLibs,
+  # keep-sorted start
   dotnetCorePackages,
-  python3,
-  openssl,
+  expat,
+  fetchurl,
+  fsnotifier,
+  jetbrains,
+  jetbrains-libdbm,
+  lib,
   libxcrypt-legacy,
+  libxml2,
   lttng-ust_2_12,
   musl,
-  expat,
-  libxml2,
+  openssl,
+  python3,
+  stdenv,
   xz,
+  # keep-sorted end
 }:
 let
   system = stdenv.hostPlatform.system;
@@ -35,8 +36,8 @@ let
   };
   # update-script-end: urls
 in
-(mkJetBrainsProduct {
-  inherit libdbm fsnotifier;
+(jetbrains.mkJetBrainsProduct {
+  inherit jetbrains-libdbm fsnotifier;
 
   pname = "clion";
 
@@ -49,6 +50,15 @@ in
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
+
+  # the jdk is bundled on Darwin.
+  jdk =
+    if lib.meta.availableOn stdenv.hostPlatform jetbrains.jdk-no-jcef then
+      jetbrains.jdk-no-jcef
+    else
+      null;
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ jetbrains.sharedLibsHook ];
 
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
@@ -73,6 +83,7 @@ in
       mic92
       tymscar
     ];
+    teams = [ lib.teams.jetbrains ];
     license = lib.licenses.unfree;
     sourceProvenance =
       if stdenv.hostPlatform.isDarwin then
@@ -90,9 +101,4 @@ in
           ln -s ${dotnetCorePackages.sdk_10_0-source}/share/dotnet $dir/dotnet
         done
       '';
-
-    postFixup = ''
-      ${attrs.postFixup or ""}
-      ${patchSharedLibs}
-    '';
   })

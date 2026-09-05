@@ -187,6 +187,9 @@ makeScopeWithSplicing' {
           ++ [
             "-B${targetGccPackages.libstdcxx}/lib"
             "-B${targetGccPackages.libgfortran}/lib/"
+            # `libgfortran.spec`, which the driver reads from the directory
+            # above, links `-lquadmath` unconditionally.
+            "-B${targetGccPackages.libquadmath}/lib"
           ]
           ++ threadsCflags;
         };

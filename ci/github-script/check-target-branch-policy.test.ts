@@ -161,7 +161,31 @@ const cases: Array<{
     expected: 'mass-rebuild',
   },
   {
-    name: 'kernel exemption suppresses a possible mass rebuild',
+    name: 'kernels-org exemption suppresses a possible mass rebuild',
+    facts: {
+      maxRebuildCount: 999,
+      onlyChangedFile: 'pkgs/os-specific/linux/kernel/kernels-org.json',
+    },
+    expected: 'dismiss',
+  },
+  {
+    name: 'kernels-org exemption suppresses a definite mass rebuild',
+    facts: {
+      maxRebuildCount: 1000,
+      onlyChangedFile: 'pkgs/os-specific/linux/kernel/kernels-org.json',
+    },
+    expected: 'dismiss',
+  },
+  {
+    name: 'kernels-org exemption suppresses a NixOS test rebuild',
+    facts: {
+      rebuildsAllTests: true,
+      onlyChangedFile: 'pkgs/os-specific/linux/kernel/kernels-org.json',
+    },
+    expected: 'dismiss',
+  },
+  {
+    name: 'xanmod kernel exemption suppresses a possible mass rebuild',
     facts: {
       maxRebuildCount: 999,
       onlyChangedFile: 'pkgs/os-specific/linux/kernel/xanmod-kernels.nix',
@@ -169,7 +193,7 @@ const cases: Array<{
     expected: 'dismiss',
   },
   {
-    name: 'kernel exemption suppresses a definite mass rebuild',
+    name: 'xanmod kernel exemption suppresses a definite mass rebuild',
     facts: {
       maxRebuildCount: 1000,
       onlyChangedFile: 'pkgs/os-specific/linux/kernel/xanmod-kernels.nix',
@@ -177,7 +201,7 @@ const cases: Array<{
     expected: 'dismiss',
   },
   {
-    name: 'kernel exemption suppresses a NixOS test rebuild',
+    name: 'xanmod kernel exemption suppresses a NixOS test rebuild',
     facts: {
       rebuildsAllTests: true,
       onlyChangedFile: 'pkgs/os-specific/linux/kernel/xanmod-kernels.nix',

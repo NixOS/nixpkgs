@@ -12,6 +12,7 @@
   makeBinaryWrapper,
   autoAddDriverRunpath,
   installShellFiles,
+  versionCheckHook,
 
   # libraries
   cairo,
@@ -42,6 +43,7 @@
   stb,
   systemdLibs,
   tomlplusplus,
+  tzdata,
   wayland,
   wayland-protocols,
   wireplumber,
@@ -54,13 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "noctalia";
-  version = "5.0.0-beta.10";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "noctalia-dev";
     repo = "noctalia";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WijEuINvjcXMO/e/zMqwG1lyGiWNosnVt1QY+ko0Rw8=";
+    hash = "sha256-diS3b69rt/IqehH/8Tsd8/JEQmogVc1ml6FP+iTwBzg=";
   };
 
   strictDeps = true;
@@ -110,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    (lib.mesonEnable "tests" false)
+    (lib.mesonEnable "tests" true)
     (lib.mesonEnable "jemalloc" (!stdenv.hostPlatform.isMusl))
   ];
 
@@ -129,14 +131,20 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [ gitMinimal ]}
   '';
 
-  # remove --version=unstable once 5.0.0 stable is released
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version=unstable"
-      "--version-regex"
-      "v(5\\..*)"
-    ];
-  };
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  nativeCheckInputs = [
+    tzdata
+    gitMinimal
+  ];
+
+  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Sleek, customizable desktop shell crafted for Wayland";

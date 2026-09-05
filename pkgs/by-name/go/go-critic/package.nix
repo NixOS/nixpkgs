@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-critic";
-  version = "0.14.4";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "go-critic";
     repo = "go-critic";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-RrofJ2/IsndBYvGZLlMbz7kZUGtMOwM4kGrzAiAk0Qs=";
+    hash = "sha256-fR5wWZyBJ0pnKsWkgvFUOqzZ5L+8AgdcGNMbpj+nhyQ=";
   };
 
-  vendorHash = "sha256-2tzBJI2d9/EY1lPgJDrOGfgh8dz2bYwP5kWifJ46a8I=";
+  vendorHash = "sha256-o7je2efcEr6nQV+u/zlzVLS1+Pozx2sPCbCZIT5NIIM=";
 
   subPackages = [
     "cmd/gocritic"

@@ -1,14 +1,14 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "tailcat";
-  version = "0.3.0";
+  version = "0.6.0";
 
   __structuredAttrs = true;
 
@@ -16,12 +16,20 @@ buildGoModule (finalAttrs: {
     owner = "tailscale";
     repo = "tailcat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EwjhZzovODhW4seO3FToPLiAV+YwVbrX/u93RfbWMZ4=";
+    hash = "sha256-TwrEezNpn9ylDl7+Vo4XS/SaVOgU6h6PO1UWSrXnBWk=";
   };
 
-  vendorHash = "sha256-3uVUHATnd2s+Axdq06/xAQ2IbzJZfP1yQ/nEopgckq0=";
+  vendorHash = "sha256-hpFVgsUKswE7g69EieoeKGPR1nVkcRmBhDKbnB2CDBg=";
 
   subPackages = [ "cmd/tailcat" ];
+
+  # Build with the same tags as the official release binaries. The
+  # comma-separated list lives in build-tags.txt in the source tree
+  # (see build-tags.md there); it omits unused tailscale.com library
+  # features to shrink the binary.
+  preBuild = ''
+    IFS=, read -ra tags < build-tags.txt
+  '';
 
   ldflags = [
     "-s"
@@ -29,6 +37,13 @@ buildGoModule (finalAttrs: {
   ];
 
   env.CGO_ENABLED = "0";
+
+  # The release tags apply only to the binary. Vendored test helpers
+  # do not compile with the omit tags, and upstream CI runs go test
+  # without them.
+  preCheck = ''
+    unset tags
+  '';
 
   __darwinAllowLocalNetworking = true;
 
