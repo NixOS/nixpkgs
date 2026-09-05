@@ -7,7 +7,6 @@
   pkg-config,
   makeWrapper,
   alsa-lib,
-  libmpg123,
   libogg,
   libvorbis,
   ffmpeg,
@@ -18,16 +17,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "cliamp";
-  version = "2.0.1";
+  version = "1.63.2";
 
   src = fetchFromGitHub {
     owner = "bjarneo";
     repo = "cliamp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r7MrrcVt+/f+iPozn9jaczJmpPv431wAoW8LvHKBtB8=";
+    hash = "sha256-HqFDT8jGvrKqb6bupvXqZ5ECpvColRB5dXPwcKCX4RQ=";
   };
 
-  vendorHash = "sha256-rtwUWbft5XGEbuBCn0OMCn4TS5Ul+UXJNIqNOzXfU+M=";
+  vendorHash = "sha256-WYyv0w5KFA15axb+NA9tClfc1H4Znj8kI2boR8XziXg=";
 
   ldflags = [
     "-s"
@@ -42,7 +41,6 @@ buildGoModule (finalAttrs: {
   ];
 
   buildInputs = [
-    libmpg123
     libogg
     libvorbis
     flac
@@ -62,7 +60,8 @@ buildGoModule (finalAttrs: {
         lib.makeBinPath [
           ffmpeg
           yt-dlp
-        ]}
+        ]
+      }
     install -Dm644 Cliamp.png "$out/share/icons/hicolor/512x512/apps/cliamp.png"
     install -Dm644 cliamp.desktop "$out/share/applications/cliamp.desktop"
   '';
