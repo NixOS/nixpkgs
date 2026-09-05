@@ -10553,6 +10553,8 @@ self: super: with self; {
 
   mcp = callPackage ../development/python-modules/mcp { };
 
+  mcp-types = callPackage ../development/python-modules/mcp-types { };
+
   mcpadapt = callPackage ../development/python-modules/mcpadapt { };
 
   mcstatus = callPackage ../development/python-modules/mcstatus { };
@@ -22992,6 +22994,8 @@ self: super: with self; {
   zenlog = callPackage ../development/python-modules/zenlog { };
 
   zenoh = callPackage ../development/python-modules/zenoh { };
+
+  zensical = toPythonModule (pkgs.zensical.override { python3Packages = self; });
 
   zephyr-python-api = callPackage ../development/python-modules/zephyr-python-api { };
 
