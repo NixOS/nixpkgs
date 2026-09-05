@@ -20810,6 +20810,8 @@ self: super: with self; {
 
   tomlrt = callPackage ../development/python-modules/tomlrt { };
 
+  tonewinner-rs232 = callPackage ../development/python-modules/tonewinner-rs232 { };
+
   toolz = callPackage ../development/python-modules/toolz { };
 
   toonapi = callPackage ../development/python-modules/toonapi { };
