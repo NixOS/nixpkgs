@@ -8538,6 +8538,8 @@ self: super: with self; {
 
   isbnlib = callPackage ../development/python-modules/isbnlib { };
 
+  iseo-argo-ble = callPackage ../development/python-modules/iseo-argo-ble { };
+
   islpy = callPackage ../development/python-modules/islpy { isl = pkgs.isl_0_27; };
 
   ismartgate = callPackage ../development/python-modules/ismartgate { };
