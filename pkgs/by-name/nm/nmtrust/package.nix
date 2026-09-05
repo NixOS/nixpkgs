@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation {
   pname = "nmtrust";
-  version = "0.1.1";
+  version = "0.2.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -22,8 +22,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "brett";
     repo = "nmtrust-nix";
-    rev = "v0.1.1";
-    hash = "sha256-niCbYxeunNxfkM/HEUiMAvwiholR0nmEPqssOOl9Qvo=";
+    rev = "v0.2.0";
+    hash = "sha256-vn1Kwy8vrXyOqj4kfiYHXH3VgMwP8jIDXSP0jAbNWRU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
