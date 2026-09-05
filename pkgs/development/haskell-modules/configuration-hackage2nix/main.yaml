@@ -25,14 +25,9 @@
 # not work.
 # keep-sorted start skip_lines=1 case=no numeric=yes
 default-package-overrides:
-  - chs-cabal == 0.1.1.2 # matches Cabal 3.12 (GHC 9.10)
   - clash-lib-hedgehog < 1.9 # needs to match clash-lib from Stackage
-  # 2025-12-26: Needs to match egison-pattern-src from Stackage LTS
+  # 2025-12-26: Needs to match egison-pattern-src from Stackage
   - egison-pattern-src-th-mode < 0.2.2
-  # 2026-06-29: needs to match futhark-0.26.3
-  - futhark-manifest == 1.8.0.0
-  # 2026-01-30: Needs to match hasql from Stackage LTS 24
-  - hasql-notifications < 0.2.5.0
   # 2026-07-19: ghcide/haskell-debugger don't yet support hie-bios 0.20
   - hie-bios < 0.20
   # 2025-09-13: hnix 0.17.0 doesn't support hnix-store-core >= 0.8
@@ -42,32 +37,22 @@ default-package-overrides:
   - hnix-store-remote < 0.7
   # 2025-08-03: need to match stackage version of hosc
   - hsc3 >= 0.21 && < 0.22
-  # 2026-04-19: needs to match tls and crypton-x509-store from Stackage LTS 24
-  - http2-tls < 0.4.6
   # liquidhaskell-boot 0.9.10.1.2 requires this specific version of liquid-fixpoint
   - liquid-fixpoint == 0.9.6.3.2
   # liquidhaskell(-boot) support one GHC at a time, so we choose the one matching the current GHC (9.10)
   - liquidhaskell == 0.9.10.*
   - liquidhaskell-boot == 0.9.10.*
-  # Needs to match microlens == 0.4.* in Stackage LTS 24
+  # Needs to match microlens == 0.4.* in Stackage
   - microlens-pro < 0.2.0.4
-  # 2026-04-06: 4.0.10 merely adjusts to dependencies that are incompatible with our LTS
-  - mighttpd2 < 4.0.10
   # We currently use pandoc-crossref with a patch to revert it to pandoc == 3.7.*,
   # this no longer works with later versions.
   - pandoc-crossref == 0.3.21
   # 2025-12-19: Needs to match Stackage version of rhine
   - rhine-bayes < 1.6
-  # 2026-06-24: compatibility with mighttpd2-4.0.9
-  - wai-app-file-cgi < 3.2
-  # 2026-02-08: compatibility with crypton-x509* in Stackage LTS 24
-  - x509-ocsp < 0.4.1.0
 # keep-sorted end
 
 # keep-sorted start skip_lines=1 case=no numeric=yes
 extra-packages:
-  - ansi-wl-pprint >= 0.6 && < 0.7      # 2025-07-07: used by gren <= 0.5.4
-  - attoparsec == 0.13.*                # 2022-02-23: Needed to compile elm for now
   - Cabal == 3.10.*
   - Cabal == 3.12.*
   - Cabal == 3.14.*
@@ -81,7 +66,6 @@ extra-packages:
   - Cabal-syntax == 3.14.*
   - Cabal-syntax == 3.16.*              # version required for cabal-install and other packages
   - extensions == 0.1.0.1               # 2025-09-21: needed for Cabal 3.10 (fourmolo/ormolu with ghc 9.8)
-  - fourmolu == 0.14.0.0                # 2023-11-13: for ghc-lib-parser 9.6 compat
   - fourmolu == 0.15.0.0                # 2025-09-21: for ghc-lib-parser 9.8 compat
   - fuzzyset == 0.2.4                   # 2023-12-20: Needed for building postgrest > 10
   - ghc-exactprint == 1.6.*             # 2023-03-30: needed for GHC == 9.4
@@ -109,19 +93,14 @@ extra-packages:
   - hasql-transaction < 1.1.1           # 2025-01-19: Needed for building postgrest
   - hlint == 3.6.*                      # 2025-04-14: needed for hls with ghc-lib-parser 9.6
   - hlint == 3.8.*                      # 2025-09-21: needed for hls with ghc-lib-parser 9.8
-  - hpack == 0.39.1                     # 2026-03-15: to match upstream stack-3.9.3
   - insert-ordered-containers < 0.3     # 2026-05-25: Needed for building postgrest
   - language-javascript == 0.7.0.0      # required by purescript
   - lawful-conversions < 0.2            # 2026-05-25: Needed for building postgrest
-  - network-run == 0.4.0                # 2024-10-20: for GHC 9.10/network == 3.1.*
-  - ormolu == 0.7.2.0                   # 2023-11-13: for ghc-lib-parser 9.6 compat
   - ormolu == 0.7.4.0                   # 2023-09-21: for ghc-lib-parser 9.8 compat
   - postgresql-binary < 0.14            # 2025-01-19: Needed for building postgrest
   - semaphore-compat == 1.0.*           # 2026-07-26: required to build cabal-install 3.14
-  - shake-cabal < 0.2.2.3               # 2023-07-01: last version to support Cabal 3.6.*
   - ShellCheck == 0.10.0                # 2026-05-30: pinned by haskell-ci
   - simple-get-opt < 0.5                # 2025-05-01: for crux-0.7.2
-  - stylish-haskell == 0.14.5.0         # 2025-04-14: needed for hls with ghc-lib 9.6
   - stylish-haskell == 0.14.6.0         # 2025-09-21: needed for hls with ghc-lib 9.8
   - stylish-haskell == 0.15.0.1         # 2025-04-14: needed for hls with ghc-lib 9.10
   - swagger2 < 2.9                      # 2026-05-25: Needed for building postgrest
