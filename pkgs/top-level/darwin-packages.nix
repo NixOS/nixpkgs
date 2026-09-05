@@ -146,6 +146,18 @@ makeScopeWithSplicing' {
         requireXcode
         ;
 
+      inherit (self.callPackage ../os-specific/darwin/metal-toolchain { })
+        metal-toolchain_26_6
+        metal-toolchain
+        requireMetalToolchain
+        ;
+
+      inherit (self.callPackage ../os-specific/darwin/metal-cpp { })
+        metal-cpp_macOS26_iOS26
+        metal-cpp_macOS26_4_iOS26_4
+        metal-cpp
+        ;
+
       # Note: Not in `package.nix` because it references files outside of the package.
       # See doc/packages/darwin-builder.section.md
       linux-builder = lib.makeOverridable (
