@@ -9,11 +9,9 @@
   ninja,
   lit,
   z3,
-  sv-lang_10, # update sv-lang version here according to upstream requirements
   fmt,
   boost,
   mimalloc,
-  gitUpdater,
   callPackage,
   versionCheckHook,
 
@@ -24,15 +22,16 @@
 let
   pythonEnv = python3.withPackages (ps: [ ps.psutil ]);
   circt-llvm = callPackage ./circt-llvm.nix { };
+  circt-sv-lang = callPackage ./sv-lang.nix { };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "circt";
-  version = "1.147.0";
+  version = "1.157.0";
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "circt";
     tag = "firtool-${finalAttrs.version}";
-    hash = "sha256-rtnvahI7EzUJXE80X3XPWjjDD/6f9BPmZ7S97Lstuhw=";
+    hash = "sha256-WPwmUVaOhRUKMorutlBFbgZjOpGOOxvJTkNIjY8qo6E=";
     fetchSubmodules = true;
   };
 
@@ -55,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     fmt
     mimalloc
-    sv-lang_10
+    circt-sv-lang
   ];
 
   cmakeFlags = [
@@ -111,6 +110,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs tools/circt-test
+
+    # Keep the self-contained TableGen tests compatible with nixpkgs' lit.
+    substituteInPlace test/Tools/circt-tblgen/self-contained/self_contained_td_format.py \
+      --replace-fail \
+        'timeout = test.config.maxIndividualTestTime or None' \
+        'timeout = getattr(test.config, "maxIndividualTestTime", None)'
 
     # Replace slang references to match the package in nixpkgs
     substituteInPlace \
@@ -169,10 +174,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gitUpdater {
-      rev-prefix = "firtool-";
-    };
+    updateScript = ./update.sh;
     llvm = circt-llvm;
+    sv-lang = circt-sv-lang;
   };
 
   meta = {
