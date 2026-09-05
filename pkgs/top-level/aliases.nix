@@ -945,6 +945,7 @@ mapAliases {
   garage_1_2_0 = throw "'garage_1_2_0' has been removed. Use 'garage_1' instead."; # Added 2025-09-16
   garage_1_x = warnAlias "'garage_1_x' has been renamed to 'garage_1'" garage_1; # Added 2025-06-23
   garage_2_0_0 = throw "'garage_2_0_0' has been removed. Use 'garage_2' instead."; # Added 2025-09-16
+  garmintools = throw "'garmintools' has been removed as it is unmaintained upstream."; # Added 2026-09-04
   gavrasm = throw "'gavrasm' has been removed. Use 'avra' instead."; # Added 2025-12-21
   gbdfed = throw "'gbdfed' has been removed, as it is unmaintained upstream and depends on GTK 2. Consider using 'fontforge' instead."; # Added 2026-05-22
   gcc9 = throw "gcc9 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2025-08-08
@@ -1089,6 +1090,7 @@ mapAliases {
   gruvbox-material-gtk-theme = throw "'gruvbox-material-gtk-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   gscrabble = throw "'gscrabble' has been removed, as it is unmaintained upstream, and broken in nixpkgs"; # Added 2026-01-03
   gsettings-qt = lomiri.gsettings-qt; # Added 2025-12-06
+  gshogi = throw "'gshogi' has been removed as it is no longer developed upstream."; # Added 2026-09-04
   gssdp = throw "'gssdp' (version 1.4) has been removed as it was unmaintained upstream and depended on libsoup 2.4. Consider using `gssdp_1_6` instead"; # Added 2026-06-07
   gtdialog = throw "'gtdialog' has been removed, as it depended on GTK 2. Consider using 'yad' or 'zenity' instead."; # Added 2026-05-22
   gtk-engine-murrine = throw "'gtk-engine-murrine' has been removed, as it depended on GTK2."; # Added 2026-07-22
@@ -1137,6 +1139,7 @@ mapAliases {
   hpmyroom = throw "hpmyroom has been removed because it has been marked as broken since May 2024."; # Added 2025-10-11
   hpp-fcl = throw "'hpp-fcl' has been renamed to/replaced by 'coal'"; # Converted to throw 2025-10-27
   hspellDicts = throw "'hspellDicts' has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
+  htb-toolkit = throw "'htb-toolkit' has been removed as its upstream repository was deleted."; # Added 2026-09-04
   hterm = throw "'hterm' has been removed as it depended on the deprecated GTK 2 engine."; # Added 2026-08-13
   http-prompt = throw "'http-prompt' has been removed as it was broken and unmaintained upstream"; # Added 2025-11-26
   httperf = throw "'httperf' has been removed as it was unmaintained and broken"; # Added 2026-05-04
@@ -1746,6 +1749,7 @@ mapAliases {
   mysql-client = throw "mysql-client has been replaced by mariadb.client"; # Converted to throw 2025-10-26
   n98-magerun = throw "n98-magerun doesn't support new PHP newer than 8.1"; # Added 2025-10-03
   nagiosPluginsOfficial = throw "'nagiosPluginsOfficial' has been renamed to/replaced by 'monitoring-plugins'"; # Converted to throw 2025-10-27
+  nailgun = throw "'nailgun' has been removed as it is unmaintained upstream."; # Added 2026-09-04
   namazu = throw "namazu has been removed, as it was broken"; # Added 2025-08-25
   nanoblogger = throw "nanoblogger has been removed as upstream stopped development in 2013"; # Added 2025-09-10
   nasc = throw "'nasc' has been removed as it was unmaintained and depends on deprecated webkitgtk_4_0"; # Added 2025-10-09
@@ -2089,6 +2093,7 @@ mapAliases {
   protobuf_24 = throw "'protobuf_24' has been removed from nixpkgs. Consider using a more recent version of the protobuf library"; # Added 2025-07-14
   protobuf_26 = throw "'protobuf_26' has been removed from nixpkgs. Consider using a more recent version of the protobuf library"; # Added 2025-06-29
   protobuf_28 = throw "'protobuf_28' has been removed from nixpkgs. Consider using a more recent version of the protobuf library"; # Added 2025-06-14
+  protoc-gen-twirp_swagger = throw "'protoc-gen-twirp_swagger' has been removed as it was replaced upstream."; # Added 2026-09-04
   proton-caller = throw "'proton-caller' has been removed from nixpkgs due to being unmaintained and lack of upstream maintenance."; # Added 2025-09-25
   proton-vpn-local-agent = throw "'proton-vpn-local-agent' has been renamed to 'python3Packages.proton-vpn-local-agent'"; # Converted to throw 2025-10-26
   protonup = throw "'protonup' has been renamed to/replaced by 'protonup-ng'"; # Converted to throw 2025-10-27
@@ -2192,6 +2197,7 @@ mapAliases {
   remarshal_0_17 = throw "'remarshal_0_17' has been removed because 'remarshal' supports YAML 1.1 with the `--to yaml-1.1` flag."; # added 2026-07-30
   remodel = throw "'remodel' has been removed because it was unmaintained upstream, deprecated in favor of 'lune'"; # Added 2026-05-08
   remotebox = throw "remotebox has been removed because it was unmaintained and broken for a long time"; # Added 2025-09-11
+  renderizer = throw "'renderizer' has been removed as its upstream repository was deleted."; # Added 2026-09-04
   rep-gtk = throw "'rep-gtk' has been removed because it depended on the deprecated GTK2 engine."; # Added 2026-08-03
   resp-app = throw "'resp-app' has been replaced by 'redisinsight'"; # Added 2025-12-17
   responsively-app = throw "'responsively-app' has been removed due to lack of maintenance upstream."; # Added 2025-06-25
@@ -2211,6 +2217,7 @@ mapAliases {
   rockbox_utility = throw "'rockbox_utility' has been renamed to/replaced by 'rockbox-utility'"; # Converted to throw 2025-10-27
   rockcraft = throw "rockcraft was removed in Sep 25 following removal of LXD from nixpkgs"; # Added 2025-09-18
   rofi-emoji-wayland = throw "'rofi-emoji-wayland' has been merged into `rofi-emoji as 'rofi-wayland' has been merged into 'rofi'"; # Added 2025-09-06
+  rofi-pass = throw "'rofi-pass' has been removed as it is unmaintained upstream."; # Added 2026-09-04
   rofi-wayland = throw "'rofi-wayland' has been merged into 'rofi'"; # Added 2025-09-06
   rofi-wayland-unwrapped = throw "'rofi-wayland-unwrapped' has been merged into 'rofi-unwrapped'"; # Added 2025-09-06
   romdirfs = throw "'romdirfs' has been removed as it is unmaintained, and depends on fuse2"; # Added 2026-05-05
@@ -2631,6 +2638,7 @@ mapAliases {
   wasm3 = throw "'wasm3' has been removed as it is unmaintained upstream and has many known vulnerabilities"; # Added 2026-06-03
   wasm-bindgen-cli = wasm-bindgen-cli_0_2_127;
   wasm-strip = throw "'wasm-strip' has been removed due to upstream deprecation. Use 'wabt' instead."; # Added 2025-11-06
+  wasynth = throw "'wasynth' has been removed as it was discontinued upstream."; # Added 2026-09-04
   wavebox = throw "'wavebox' has been removed due to lack of maintenance in nixpkgs"; # Added 2025-06-24
   wavm = throw "wavm has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
   wayv = throw "'wayv' has been removed as it is broken and unmaintained upstream"; # Added 2026-05-05

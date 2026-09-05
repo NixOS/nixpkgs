@@ -240,6 +240,7 @@ let
       });
 
       # internal python packages only consumed by home-assistant itself
+      gazetteer-matcher = self.callPackage ./python-modules/gazetteer-matcher { };
       hass-web-proxy-lib = self.callPackage ./python-modules/hass-web-proxy-lib { };
       home-assistant-frontend = self.callPackage ./frontend.nix { };
       home-assistant-intents = self.callPackage ./intents.nix { };
@@ -270,7 +271,7 @@ let
   extraBuildInputs = extraPackages python3Packages;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2026.8.3";
+  hassVersion = "2026.9.0";
 
 in
 python3Packages.buildPythonApplication rec {
@@ -291,13 +292,13 @@ python3Packages.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-bM4YYwV4MNKnVe+1Gzh2DIY2LE2IvGexP/F0RR0R7Y0=";
+    hash = "sha256-55LMI4jVn4+UU9VDjigSLxv2A6veOzJQnEfcCfXAUtc=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-f1zG2rBz4hKJ0lhMqk25Xp5INWgs6bEisF7vEQV7UPg=";
+    hash = "sha256-rBQMDXArcD7LHmwqLMerhKsHDo90917J22f7252HtsI=";
   };
 
   build-system = with python3Packages; [
@@ -372,6 +373,7 @@ python3Packages.buildPythonApplication rec {
     cronsim
     cryptography
     fnv-hash-fast
+    gazetteer-matcher
     ha-ffmpeg
     hass-nabucasa
     hassil
@@ -386,6 +388,7 @@ python3Packages.buildPythonApplication rec {
     orjson
     packaging
     pillow
+    probatio
     propcache
     psutil-home-assistant
     pyjwt
@@ -494,6 +497,8 @@ python3Packages.buildPythonApplication rec {
     "tests/helpers/test_entity_platform.py::test_platform_warn_slow_setup" # ValueError: not enough values to unpack (expected 2, got 0)
     "tests/helpers/test_entity_component.py::test_set_scan_interval_via_config" # assert 10 == 30.0
     "tests/helpers/test_entity_component.py::test_set_entity_namespace_via_config" # AssertionError: assert [] == ['test_domain...named_device']
+    # orjson 3.12.0 slightly changed an asserted error message
+    "tests/helpers/test_storage.py::test_loading_corrupt_core_file"
   ];
 
   preCheck = ''

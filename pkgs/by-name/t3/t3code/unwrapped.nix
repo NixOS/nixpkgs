@@ -1,7 +1,7 @@
 {
   cctools,
   copyDesktopItems,
-  electron_41,
+  electron_43,
   fetchFromGitHub,
   installShellFiles,
   lib,
@@ -26,7 +26,7 @@ stdenv.mkDerivation (
   finalAttrs:
   let
     appName = "T3 Code (Alpha)";
-    electron = electron_41;
+    electron = electron_43;
     pnpm = pnpm_11;
     desktopIcon =
       if stdenv.hostPlatform.isDarwin then
@@ -37,7 +37,7 @@ stdenv.mkDerivation (
   in
   {
     pname = "t3code-unwrapped";
-    version = "0.0.34";
+    version = "0.0.38";
     strictDeps = true;
     __structuredAttrs = true;
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation (
       owner = "pingdotgg";
       repo = "t3code";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-dS9sDlvepbQe8ATAU/DANGcyBk+BX2mxPaoljeIUn48=";
+      hash = "sha256-lbAOIlNwVxrjXA5jJGzmOm7Fe2ZcsnFuDzaSEt6R7G4=";
     };
 
     postPatch = ''
@@ -93,7 +93,7 @@ stdenv.mkDerivation (
         ;
 
       fetcherVersion = 4;
-      hash = "sha256-y/sJIluwbn65APmJ2p07FK1ScXpetCloTHtQzZMchDU=";
+      hash = "sha256-t/hmpXdYPnBFx18A6NrSL4zSvVnUDIjIPtLjGOzoaDk=";
     };
 
     preBuild = ''

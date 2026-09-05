@@ -13,7 +13,7 @@ else
   nix-update --format --use-github-releases ramalama
 fi
 
-version="$(nix-instantiate --eval -A ramalama.version | jq --raw-output .)"
+version="$(nix-instantiate --eval --raw -A ramalama.version)"
 
 image_name="quay.io/ramalama/ramalama"
 image_tag="${version%.*}"

@@ -55,6 +55,7 @@ buildPythonPackage (finalAttrs: {
     description = "Native CPython for Ghidra";
     homepage = "https://pypi.org/project/pyghidra";
     license = lib.licenses.asl20;
+    mainProgram = "pyghidra";
     maintainers = with lib.maintainers; [ fab ];
   };
 })

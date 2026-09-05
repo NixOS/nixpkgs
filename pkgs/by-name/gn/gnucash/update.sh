@@ -10,8 +10,8 @@ if [[ "$latest_version" = "$UPDATE_NIX_OLD_VERSION" ]]; then
     exit 0
 fi
 
-old_src_hash=$(nix-instantiate --eval -A gnucash.src.outputHash | tr -d '"')
-old_src_doc_hash=$(nix-instantiate --eval -A gnucash.docs.src.outputHash | tr -d '"')
+old_src_hash=$(nix-instantiate --eval --raw -A gnucash.src.outputHash)
+old_src_doc_hash=$(nix-instantiate --eval --raw -A gnucash.docs.src.outputHash)
 
 src_hash=$(nix-prefetch-url "https://github.com/Gnucash/gnucash/releases/download/$latest_version/gnucash-$latest_version.tar.bz2")
 src_hash=$(nix-hash --to-sri --type sha256 "$src_hash")
