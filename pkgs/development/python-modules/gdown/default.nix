@@ -16,12 +16,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "gdown";
-  version = "6.1.0";
+  version = "6.1.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-NhxuBMbKM131C51x9AvP6atw+yahsOiQpCcmd4E4lVM=";
+    hash = "sha256-NM0UrBKAvJCFJm5Hcd8qO+oSXnhTMT2QLpdmQAaDidU=";
   };
 
   build-system = [
