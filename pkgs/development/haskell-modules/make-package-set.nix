@@ -192,7 +192,7 @@ let
     in
     buildPackages.runCommand "cabal2nix-${name}"
       {
-        nativeBuildInputs = [ buildPackages.cabal2nix-unwrapped ];
+        nativeBuildInputs = [ buildPackages.haskellPackages.cabal2nix-unstable ];
         preferLocalBuild = true;
         allowSubstitutes = false;
         env = {
