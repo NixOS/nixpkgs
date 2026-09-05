@@ -5948,6 +5948,8 @@ self: super: with self; {
 
   fastmri = callPackage ../development/python-modules/fastmri { };
 
+  fastnanoid = callPackage ../development/python-modules/fastnanoid { };
+
   fastnlo-toolkit = toPythonModule (
     pkgs.fastnlo-toolkit.override {
       withPython = true;
