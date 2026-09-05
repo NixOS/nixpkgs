@@ -13305,7 +13305,7 @@
   };
   jfr = {
     name = "Joseph Fox-Rabinovitz";
-    github = " joe-saronic";
+    github = "joe-saronic";
     githubId = 156837150;
   };
   jfroche = {
