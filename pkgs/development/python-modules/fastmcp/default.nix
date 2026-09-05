@@ -11,6 +11,7 @@
 
   # dependencies
   fastmcp-slim,
+  fastmcp-tasks,
 
   # tests
   dirty-equals,
@@ -63,7 +64,7 @@ buildPythonPackage (finalAttrs: {
     code-mode = fastmcp-slim.optional-dependencies.code-mode;
     gemini = fastmcp-slim.optional-dependencies.gemini;
     openai = fastmcp-slim.optional-dependencies.openai;
-    # tasks = [ fastmcp-tasks ]; # unpackaged (split out of fastmcp-slim in 4.0)
+    tasks = [ fastmcp-tasks ];
   };
 
   pythonImportsCheck = [ "fastmcp" ];
@@ -89,6 +90,7 @@ buildPythonPackage (finalAttrs: {
   ++ finalAttrs.passthru.optional-dependencies.code-mode
   ++ finalAttrs.passthru.optional-dependencies.gemini
   ++ finalAttrs.passthru.optional-dependencies.openai
+  ++ finalAttrs.passthru.optional-dependencies.tasks
   ++ inline-snapshot.optional-dependencies.dirty-equals;
 
   disabledTests = [
@@ -115,6 +117,9 @@ buildPythonPackage (finalAttrs: {
 
     # AssertionError: assert 'INFO' == 'DEBUG'
     "test_temporary_settings"
+
+    # Upstream pins pydantic-monty==0.0.18; error propagation differs on 0.0.17
+    "test_code_mode_monty_call_tool_errors_are_catchable"
 
     # Subprocess-based multi-client tests fail in sandbox
     "test_multi_client"
