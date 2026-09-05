@@ -24,6 +24,7 @@
   monorepoSrc ? null,
   enableManpages ? false,
   devExtraCmakeFlags ? [ ],
+  getVersionFile,
   versionCheckHook,
 }:
 
@@ -81,6 +82,10 @@ stdenv.mkDerivation (
       # Fix build with gcc15
       # https://github.com/llvm/llvm-project/commit/bb59f04e7e75dcbe39f1bf952304a157f0035314
       ./lldb-add-include-cstdint.patch
+    ]
+    ++ lib.optionals (lib.versionOlder (lib.versions.major release_version) "23") [
+      # Backports several fixes to export trie parsing. Otherwise, LLDB crashes when starting a debugging session on macOS 27.
+      (getVersionFile "lldb/backport-ParseTrieEntries-fixes.patch")
     ];
 
     nativeBuildInputs = [
