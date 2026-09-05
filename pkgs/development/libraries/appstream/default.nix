@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPackages,
-  replaceVars,
   fetchFromGitHub,
   meson,
   mesonEmulatorHook,
@@ -18,7 +17,6 @@
   libxslt,
   libstemmer,
   glib,
-  xapian,
   libxml2,
   libxmlb,
   libfyaml,
@@ -28,10 +26,10 @@
   vala,
   curl,
   cairo,
-  gdk-pixbuf,
   pango,
-  librsvg,
   bash-completion,
+  vips,
+  wayland,
   systemdLibs,
   nixosTests,
   testers,
@@ -43,7 +41,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "appstream";
-  version = "1.1.3";
+  version = "1.2.2";
 
   outputs = [
     "out"
@@ -55,15 +53,10 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ximion";
     repo = "appstream";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-z9HmTYOjglki+ID7GPMf3jGLOAkxLqJd4+GsIR3W3u4=";
+    hash = "sha256-asxvSjcMzx2upmyWJHvN4aqYU8RTQgsEDaJSEm8drG4=";
   };
 
   patches = [
-    # Fix hardcoded paths
-    (replaceVars ./fix-paths.patch {
-      libstemmer_includedir = "${lib.getDev libstemmer}/include";
-    })
-
     # Allow installing installed tests to a separate output.
     ./installed-tests-path.patch
   ];
@@ -103,32 +96,29 @@ stdenv.mkDerivation (finalAttrs: {
     libblake3
     libstemmer
     glib
-    xapian
     libxml2
     libxmlb
     libfyaml
     curl
     cairo
-    gdk-pixbuf
     pango
-    librsvg
     bash-completion
+    vips
+    wayland
   ]
   ++ lib.optionals withSystemd [
     systemdLibs
   ];
 
   mesonFlags = [
-    "-Dapidocs=false"
-    "-Dc_args=-Wno-error=missing-include-dirs"
-    "-Ddocs=false"
-    "-Dvapi=true"
-    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
-    "-Dcompose=true"
+    (lib.mesonBool "apidocs" false)
+    (lib.mesonBool "compose" true)
+    (lib.mesonBool "docs" false)
     (lib.mesonBool "gir" withIntrospection)
-  ]
-  ++ lib.optionals (!withSystemd) [
-    "-Dsystemd=false"
+    (lib.mesonBool "systemd" withSystemd)
+    (lib.mesonBool "vapi" true)
+    (lib.mesonOption "c_args" "-Wno-error=missing-include-dirs")
+    (lib.mesonOption "installed_test_prefix" "${placeholder "installedTests"}")
   ];
 
   passthru.tests = {
