@@ -5,7 +5,9 @@
   gettext,
   perl,
   pkg-config,
-  xfce4-dev-tools,
+  meson,
+  ninja,
+  python3,
   wrapGAppsHook3,
   libice,
   libsm,
@@ -27,7 +29,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxfce4ui";
-  version = "4.20.2";
+  version = "4.21.8";
 
   outputs = [
     "out"
@@ -39,14 +41,16 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "xfce";
     repo = "libxfce4ui";
     tag = "libxfce4ui-${finalAttrs.version}";
-    hash = "sha256-NsTrJ2271v8vMMyiEef+4Rs0KBOkSkKPjfoJdgQU0ds=";
+    hash = "sha256-nyzqV0nSQzNqTC48mN/0DeyQ9BD0dg9LcOhchYW2c+A=";
   };
 
   nativeBuildInputs = [
     gettext
     perl
     pkg-config
-    xfce4-dev-tools
+    meson
+    ninja
+    python3
     wrapGAppsHook3
   ]
   ++ lib.optionals withIntrospection [
@@ -69,12 +73,15 @@ stdenv.mkDerivation (finalAttrs: {
     libxfce4util
   ];
 
-  configureFlags = [
-    "--enable-maintainer-mode"
-    "--with-vendor-info=NixOS"
+  mesonFlags = [
+    (lib.mesonOption "vendor-info" "NixOS")
   ];
 
   enableParallelBuilding = true;
+
+  postPatch = ''
+    patchShebangs xdt-gen-visibility
+  '';
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "libxfce4ui-";
