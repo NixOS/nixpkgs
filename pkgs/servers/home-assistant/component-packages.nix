@@ -3921,7 +3921,8 @@
       ];
     "librenms" =
       ps: with ps; [
-      ]; # missing inputs: aiolibrenms
+        aiolibrenms
+      ];
     "lichess" =
       ps: with ps; [
         aiolichess
@@ -8855,6 +8856,7 @@
     "lg_thinq"
     "lg_tv_rs232"
     "libre_hardware_monitor"
+    "librenms"
     "lichess"
     "lidarr"
     "liebherr"
