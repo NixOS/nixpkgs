@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       by the host computer's memory and graphics hardware.
     '';
     homepage = "https://github.com/jabl/fsv";
-    license = lib.licenses.lgpl2;
+    license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ rnhmjoj ];
     mainProgram = "fsv";
