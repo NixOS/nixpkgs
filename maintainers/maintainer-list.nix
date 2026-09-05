@@ -12337,6 +12337,12 @@
     githubId = 31273774;
     name = "Inigo Querejeta-Azurmendi";
   };
+  iravoiceFounder = {
+    email = "hello@iravoice.com";
+    github = "deepmehta11";
+    githubId = 83613089;
+    name = "IraVoice Founder";
+  };
   irenes = {
     name = "Irene Knapp";
     email = "ireneista@gmail.com";
