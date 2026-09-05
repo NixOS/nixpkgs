@@ -1259,6 +1259,11 @@ in
   nixseparatedebuginfod2 = runTest ./nixseparatedebuginfod2.nix;
   nmtrust = runTest ./nmtrust.nix;
   node-red = runTest ./node-red.nix;
+  nodebb = recurseIntoAttrs (
+    import ./nodebb {
+      inherit pkgs runTest evalSystem;
+    }
+  );
   nohang = runTest ./nohang.nix;
   nomad = runTest ./nomad.nix;
   nominatim = runTest ./nominatim.nix;
