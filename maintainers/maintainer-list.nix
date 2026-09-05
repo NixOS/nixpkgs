@@ -26695,6 +26695,12 @@
     githubId = 10496191;
     name = "Ming Chuan";
   };
+  Sighery = {
+    name = "Sighery";
+    email = "nix@sighery.com";
+    github = "Sighery";
+    githubId = 11218602;
+  };
   sigma = {
     email = "yann.hodique@gmail.com";
     github = "sigma";
