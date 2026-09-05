@@ -38,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   patches = [
     ./python-destdir.patch
