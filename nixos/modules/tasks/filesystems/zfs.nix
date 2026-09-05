@@ -843,10 +843,13 @@ in
           cfgZfs.package
           pkgs.coreutils
           pkgs.curl
+          pkgs.diffutils
+          pkgs.findutils
           pkgs.gawk
           pkgs.gnugrep
           pkgs.gnused
           pkgs.hostname-debian
+          pkgs.logger
           pkgs.util-linux
         ];
       };
