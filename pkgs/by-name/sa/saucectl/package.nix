@@ -28,7 +28,7 @@ buildGoModule (finalAttrs: {
     description = "Command line interface for the Sauce Labs platform";
     changelog = "https://github.com/saucelabs/saucectl/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/saucelabs/saucectl";
-    license = lib.licenses.apsl20;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "saucectl";
   };
