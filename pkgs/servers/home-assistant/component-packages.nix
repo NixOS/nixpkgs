@@ -6722,7 +6722,8 @@
       ];
     "somfy_mylink" =
       ps: with ps; [
-      ]; # missing inputs: pysomfymylink
+        pysomfymylink
+      ];
     "sonarr" =
       ps: with ps; [
         aiopyarr
@@ -9245,6 +9246,7 @@
     "solarman"
     "solax"
     "soma"
+    "somfy_mylink"
     "sonarr"
     "songpal"
     "sonos"

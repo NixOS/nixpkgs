@@ -16233,6 +16233,8 @@ self: super: with self; {
 
   pysoma = callPackage ../development/python-modules/pysoma { };
 
+  pysomfymylink = callPackage ../development/python-modules/pysomfymylink { };
+
   pysonos = callPackage ../development/python-modules/pysonos { };
 
   pysoundfile = self.soundfile; # Alias added 23-06-2019
