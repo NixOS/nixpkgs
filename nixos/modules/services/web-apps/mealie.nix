@@ -26,6 +26,14 @@ in
       description = "Port on which to serve the Mealie service.";
     };
 
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Whether to open the port in the firewall.
+      '';
+    };
+
     settings = lib.mkOption {
       type = with lib.types; attrsOf anything;
       default = { };
@@ -102,6 +110,8 @@ in
         StandardOutput = "journal";
       };
     };
+
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
 
     services.mealie.settings = lib.mkIf cfg.database.createLocally {
       DB_ENGINE = "postgres";
