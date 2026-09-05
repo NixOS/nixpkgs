@@ -69,6 +69,8 @@ buildPythonPackage (finalAttrs: {
     downloadPage = "https://github.com/bodono/scs-python";
     changelog = "https://github.com/bodono/scs-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+    ];
   };
 })
