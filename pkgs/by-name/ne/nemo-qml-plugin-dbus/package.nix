@@ -2,9 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  qmake,
-  wrapQtAppsHook,
-  qtbase,
+  qt5,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,8 +18,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    qmake
-    wrapQtAppsHook
+    qt5.qmake
+    qt5.wrapQtAppsHook
   ];
 
   postPatch = ''
@@ -30,7 +28,7 @@ stdenv.mkDerivation rec {
       --replace /usr $out \
       --replace '$$[QT_INSTALL_LIBS]' $out'/lib'
     substituteInPlace src/plugin/plugin.pro \
-      --replace '$$[QT_INSTALL_QML]' $out'/${qtbase.qtQmlPrefix}'
+      --replace '$$[QT_INSTALL_QML]' $out'/${qt5.qtbase.qtQmlPrefix}'
   '';
 
   meta = {
