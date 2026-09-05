@@ -139,10 +139,11 @@ _resolveUrls() {
             continue
         fi
 
-        # Try to get appropriate mirrors via the sourced mirrorsListFile
+        # Try to get appropriate mirrors via the sourced mirrorsListFile or
+        # environment variable NIX_MIRROR_site
         # Start by looking for mirror:// and splitting everything after that
         # into a site and a path - the site part should lead us to an array
-        # with the URLs
+        # with the URLs, or the appropriate env variable
         if ! [[ "$url" =~ ^mirror://([^/ ]+)[/]([^ ]+)$ ]]; then
           echo "error: fetchurl: $name: invalid mirror:// URL format: $url" >&2
           exit 1
@@ -150,24 +151,21 @@ _resolveUrls() {
         local site="${BASH_REMATCH[1]}"
         local filePath="${BASH_REMATCH[2]}"
 
-        # The name of the array containing mirrors for site
+        # The name of the array containing mirrors for site, or the
+        # environment variable that can override it.
+        local envVarName="NIX_MIRRORS_${site}"
         local varName="_mirror_${site}"
         # Needed to iterate over the array using an indirect reference
         local arrName="${varName}[@]"
-        if ! test -v "${arrName}"; then
-            echo "warning: unknown mirror:// site \`${site}'"
-            continue
-        fi
 
         local mirrorUrls
-        mirrorUrls=("${!arrName}")
-
-        # Allow command-line override by setting NIX_MIRRORS_$site.
-        # This is a string we should split, not an array,
-        # so we don't need arrName here.
-        varName="NIX_MIRRORS_${site}"
-        if test -n "${!varName}"; then
-            IFS=' ' read -r -a mirrorUrls <<< "${!varName}"
+        if test -n "${!envVarName}"; then
+            IFS=' ' read -r -a mirrorUrls <<< "${!envVarName}"
+        elif test -v "${arrName}"; then
+            mirrorUrls=("${!arrName}")
+        else
+            echo "warning: unknown mirror:// site \`${site}'"
+            continue
         fi
 
         local mirrorUrl
