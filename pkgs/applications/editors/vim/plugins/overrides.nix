@@ -78,8 +78,6 @@
   lsof,
   # Preview-nvim dependencies
   md-tui,
-  # sidekick-nvim dependencies
-  copilot-language-server,
   # sved dependencies
   glib,
   gobject-introspection,
@@ -4143,10 +4141,6 @@ assertNoAdditions {
   });
 
   sidekick-nvim = super.sidekick-nvim.overrideAttrs {
-    runtimeDeps = [
-      copilot-language-server
-    ];
-
     nvimSkipModules = [
       "sidekick.docs"
     ];
