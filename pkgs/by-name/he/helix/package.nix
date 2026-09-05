@@ -107,7 +107,11 @@ symlinkJoin {
   '';
 
   passthru = {
-    updateScript = ./update.sh;
+    updateSh = ./update.sh;
+    updateScript = [
+      ./update.sh
+      "helix"
+    ];
     runtime = runtimeDir;
     tree-sitter-grammars = helixTreeSitterGrammars;
   };
