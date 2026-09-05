@@ -71,7 +71,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.hostPlatform.isDarwin [
+    [
+      # GCC 16 fails due to what is ostensibly an out-of-bounds read, but it is
+      # introduced by GCC's own optimizations; building with -O0 or -fno-inline
+      # does not trigger a failure. Possibly related GCC bug:
+      # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=122197
+      "-Wno-error=array-bounds"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-Wno-deprecated-copy-dtor"
     ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [
