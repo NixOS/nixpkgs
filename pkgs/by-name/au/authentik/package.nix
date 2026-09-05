@@ -17,7 +17,7 @@
   perl,
   rustPlatform,
   go,
-  typescript,
+  typescript_5,
   makeSetupHook,
   writeShellScript,
 }:
@@ -102,7 +102,7 @@ let
     nativeBuildInputs = [
       nodejs
       openapi-generator-cli
-      typescript
+      typescript_5
     ];
 
     buildPhase = ''

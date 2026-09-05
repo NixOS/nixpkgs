@@ -8,7 +8,7 @@
   electron_42,
   element-web,
   callPackage,
-  typescript,
+  typescript_5,
   tsx,
   sqlcipher,
   # command line arguments which are always set
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
     nodejs
     makeWrapper
-    typescript
+    typescript_5
     pnpm
     pnpmConfigHook
     tsx

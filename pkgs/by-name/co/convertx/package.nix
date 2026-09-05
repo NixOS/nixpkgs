@@ -6,7 +6,7 @@
   # Build deps
   bun,
   tailwindcss_4,
-  typescript,
+  typescript_5,
   makeBinaryWrapper,
 
   # Runtime deps
@@ -81,7 +81,7 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [
     makeBinaryWrapper
     tailwindcss_4
-    typescript
+    typescript_5
   ];
 
   dontConfigure = true;

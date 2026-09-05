@@ -28,7 +28,7 @@
   git,
   autoconf,
   libtool,
-  typescript,
+  typescript_5,
   wayland,
   libxkbcommon,
 }:
@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [
     cmake
     git
-    typescript
+    typescript_5
     makeWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
