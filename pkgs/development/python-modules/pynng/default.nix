@@ -3,8 +3,11 @@
   cmake,
   ninja,
   buildPythonPackage,
+  applyPatches,
   fetchFromGitHub,
-  setuptools,
+  isPyPy,
+  scikit-build-core,
+  headerkit,
   setuptools-scm,
   cffi,
   sniffio,
@@ -14,34 +17,52 @@
   pytest-asyncio,
 }:
 let
-  nng = fetchFromGitHub {
-    owner = "nanomsg";
-    repo = "nng";
-    tag = "v1.6.0";
-    hash = "sha256-Kq8QxPU6SiTk0Ev2IJoktSPjVOlAS4/e1PQvw2+e8UA=";
+  src = fetchFromGitHub {
+    owner = "codypiersall";
+    repo = "pynng";
+    rev = "fb03025298dd40ea49fdeb0034ce6bfff055bce3";
+    hash = "sha256-ujSi8pjOVS4OzYUQdX/b568OJncrvABiReItkJcnsME=";
+  };
+
+  nng = applyPatches {
+    src = fetchFromGitHub {
+      owner = "nanomsg";
+      repo = "nng";
+      tag = "v1.11";
+      hash = "sha256-yH/iK/DuVff2qby/wk6jJ9Tsmxrl9eMrb9bOxCzvmdA=";
+    };
+    patches = [ "${src}/patches/nng-mbedtls-hostname.patch" ];
   };
 
   mbedtls = fetchFromGitHub {
     owner = "ARMmbed";
     repo = "mbedtls";
-    tag = "v3.5.1";
-    hash = "sha256-HxsHcGbSExp1aG5yMR/J3kPL4zqnmNoN5T5wfV3APaw=";
+    tag = "v3.6.5";
+    hash = "sha256-CAMksh7i4mg5zVTYLB/SZWFVmgQBMhPnislLCD9j7+o=";
+    fetchSubmodules = true;
   };
-
 in
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "pynng";
-  version = "0.8.1-unstable-2025-05-14";
+  version = "0.9.0-unstable-2026-03-22";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "codypiersall";
-    repo = "pynng";
-    rev = "2179328f8a858bbb3e177f66ac132bde4a5aa859";
-    hash = "sha256-TxIVcqc+4bro+krc1AWgLdZKGGuQ2D6kybHnv5z1oHg=";
-  };
+  disabled = isPyPy;
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = "0.8.1";
+  inherit src;
+
+  postPatch =
+    let
+      version = lib.head (lib.strings.splitString "-" finalAttrs.version);
+    in
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail 'dynamic = ["version"]' 'version = "${version}"' \
+        --replace-fail '"cffi_buildtool",' ""
+
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "cffi_buildtool" "cffi.gen_src"
+    '';
 
   nativeBuildInputs = [
     cmake
@@ -49,18 +70,17 @@ buildPythonPackage {
   ];
 
   build-system = [
-    setuptools
+    scikit-build-core
+    cffi
+    headerkit
     setuptools-scm
   ];
 
-  preBuild = ''
-    cp -r ${mbedtls} mbedtls
-    chmod -R +w mbedtls
-    cp -r ${nng} nng
-    chmod -R +w nng
-  '';
-
   dontUseCmakeConfigure = true;
+  cmakeFlags = [
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_NNG" "${nng}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MBEDTLS" "${mbedtls}")
+  ];
 
   dependencies = [
     cffi
@@ -80,4 +100,4 @@ buildPythonPackage {
     maintainers = with lib.maintainers; [ afermg ];
     platforms = lib.platforms.all;
   };
-}
+})
