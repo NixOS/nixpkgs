@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   unzip,
   fetchurl,
 }:
@@ -15,9 +15,9 @@ let
       hash,
       desc,
     }:
-    stdenv.mkDerivation rec {
+    stdenvNoCC.mkDerivation rec {
       inherit pname;
-      version = "7.9";
+      version = "8.0-beta.2";
       src = fetchurl {
         url = "https://github.com/subframe7536/Maple-font/releases/download/v${version}/${pname}.zip";
         inherit hash;
@@ -44,30 +44,32 @@ let
       };
     };
 
+  # *Variants rules from `release-manifest.json`
+
   typeVariants = {
     truetype = {
       suffix = "TTF";
-      desc = "monospace TrueType";
+      desc = "TrueType";
     };
 
     truetype-autohint = {
       suffix = "TTF-AutoHint";
-      desc = "monospace ttf autohint";
-    };
-
-    variable = {
-      suffix = "Variable";
-      desc = "monospace variable";
-    };
-
-    woff2 = {
-      suffix = "Woff2";
-      desc = "WOFF2.0";
+      desc = "TrueType AutoHint";
     };
 
     opentype = {
       suffix = "OTF";
       desc = "OpenType";
+    };
+
+    variable = {
+      suffix = "VF";
+      desc = "variable";
+    };
+
+    woff2 = {
+      suffix = "Woff2";
+      desc = "WOFF2.0";
     };
 
     NF = {
@@ -80,28 +82,38 @@ let
       desc = "Nerd Font unhinted";
     };
 
-    CN = {
-      suffix = "CN";
-      desc = "monospace CN";
+    NF-VF = {
+      suffix = "NF-VF";
+      desc = "Nerd Font variable";
     };
 
-    CN-unhinted = {
-      suffix = "CN-unhinted";
-      desc = "monospace CN unhinted";
+    NFMono-unhinted = {
+      suffix = "NFMono-unhinted";
+      desc = "Nerd Font Mono(icons occupy one Latin-character width) unhinted";
     };
 
-    NF-CN = {
-      suffix = "NF-CN";
-      desc = "Nerd Font CN";
+    NFPropo-unhinted = {
+      suffix = "NFPropo-unhinted";
+      desc = "Nerd Font Propo(variable-width icons) unhinted";
     };
+  };
 
-    NF-CN-unhinted = {
-      suffix = "NF-CN-unhinted";
-      desc = "Nerd Font CN unhinted";
+  widthVariants = {
+    default = {
+      suffix = "";
+      desc = "Default width";
+    };
+    SL = {
+      suffix = "SL";
+      desc = "Slim width";
     };
   };
 
   ligatureVariants = {
+    Ligature = {
+      suffix = "";
+      desc = "Default Ligature";
+    };
     No-Ligature = {
       suffix = "NL";
       desc = "No Ligature";
@@ -116,33 +128,78 @@ let
     };
   };
 
-  combinedFonts =
-    lib.concatMapAttrs (
-      ligName: ligVariant:
-      lib.concatMapAttrs (
-        typeName: typeVariant:
+  cjkVariants = {
+    CN = {
+      suffix = "CN";
+      desc = "Simplified Chinese, with common Traditional Chinese and Japanese ranges";
+    };
+    TC = {
+      suffix = "TC";
+      desc = "Traditional Chinese";
+    };
+    JP = {
+      suffix = "JP";
+      desc = "Japanese";
+    };
+    KR = {
+      suffix = "KR";
+      desc = "Korean";
+    };
+  };
+
+  cjkTypeVariants = {
+    default = {
+      suffix = "";
+      desc = "";
+    };
+    unhinted = {
+      suffix = "-unhinted";
+      desc = "unhinted";
+    };
+    VF = {
+      suffix = "-VF";
+      desc = "variable";
+    };
+  };
+
+  toVariantList = variants: lib.mapAttrsToList (_: v: { inherit (v) suffix desc; }) variants;
+
+  baseSuffix = combo: with combo; "${lig.suffix}${width.suffix}-${type.suffix}";
+  baseDesc = combo: with combo; "${lig.desc} ${width.desc} ${type.desc}";
+  baseCombos = lib.cartesianProduct {
+    lig = toVariantList ligatureVariants;
+    width = toVariantList widthVariants;
+    type = toVariantList typeVariants;
+  };
+
+  cjkSuffix = combo: with combo; "${lig.suffix}${width.suffix}-NF-${lang.suffix}${type.suffix}";
+  cjkDesc = combo: with combo; "${lig.desc} ${width.desc} ${lang.desc} ${type.desc}";
+  cjkCombos = lib.cartesianProduct {
+    lig = toVariantList ligatureVariants;
+    width = toVariantList widthVariants;
+    lang = toVariantList cjkVariants;
+    type = toVariantList cjkTypeVariants;
+  };
+
+  mkPkgs =
+    combos: getSuffix: getDesc:
+    builtins.listToAttrs (
+      map (
+        combo:
         let
-          pname = "MapleMono${ligVariant.suffix}-${typeVariant.suffix}";
+          suffix = getSuffix combo;
+
+          pname = "MapleMono${suffix}";
         in
-        {
-          "${ligVariant.suffix}-${typeVariant.suffix}" = maple-font {
-            inherit pname;
-            desc = "${ligVariant.desc} ${typeVariant.desc}";
-            hash = hashes.${pname};
-          };
-        }
-      ) typeVariants
-    ) ligatureVariants
-    // lib.mapAttrs (
-      _: value:
-      let
-        pname = "MapleMono-${value.suffix}";
-      in
-      maple-font {
-        inherit pname;
-        inherit (value) desc;
-        hash = hashes.${pname};
-      }
-    ) typeVariants;
+        lib.nameValuePair "${lib.removePrefix "-" suffix}" (maple-font {
+          inherit pname;
+          desc = getDesc combo;
+          hash = hashes.${pname};
+        })
+      ) combos
+    );
+
+  combinedFonts = (mkPkgs baseCombos baseSuffix baseDesc) // (mkPkgs cjkCombos cjkSuffix cjkDesc);
+
 in
 combinedFonts
