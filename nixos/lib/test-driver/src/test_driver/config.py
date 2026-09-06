@@ -1,8 +1,18 @@
 import datetime as dt
 import json
 from pathlib import Path
+from typing import Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+
+
+class X11DisplayTargetConfiguration(BaseModel):
+    backend: Literal["x11"]
+    display: str = ":0"
+    xauthority: Path = Path("/root/.Xauthority")
+
+
+DisplayTargetConfiguration = X11DisplayTargetConfiguration
 
 
 class MachineConfiguration(BaseModel):
@@ -15,7 +25,7 @@ class QemuMachineConfiguration(MachineConfiguration):
 
 
 class NspawnMachineConfiguration(MachineConfiguration):
-    pass
+    display_targets: list[DisplayTargetConfiguration] = Field(default_factory=list)
 
 
 class DriverConfiguration(BaseModel):

@@ -7,6 +7,23 @@
 let
   inherit (lib) types;
 
+  displayTarget = types.submodule {
+    options = {
+      backend = lib.mkOption {
+        internal = true;
+        type = types.enum [ "x11" ];
+      };
+      display = lib.mkOption {
+        internal = true;
+        type = types.str;
+      };
+      xauthority = lib.mkOption {
+        internal = true;
+        type = types.str;
+      };
+    };
+  };
+
   machineConfigurationAttrs =
     extraOptions:
     lib.mkOption {
@@ -36,7 +53,13 @@ in
       type = types.submodule {
         options = {
           vms = machineConfigurationAttrs { };
-          containers = machineConfigurationAttrs { };
+          containers = machineConfigurationAttrs {
+            display_targets = lib.mkOption {
+              internal = true;
+              type = types.listOf displayTarget;
+              default = [ ];
+            };
+          };
           vlans = lib.mkOption {
             internal = true;
             type = types.listOf types.ints.unsigned;
@@ -71,6 +94,7 @@ in
       containers = lib.mapAttrs (name: value: {
         inherit name;
         start_script = lib.getExe value.system.build.nspawn;
+        display_targets = value.testing.displayTargets;
       }) config.containers;
       vlans = lib.unique (
         lib.concatMap (

@@ -92,6 +92,29 @@ in
       default = !config.boot.isContainer;
     };
 
+    displayTargets = lib.mkOption {
+      internal = true;
+      default = [ ];
+      description = "Displays provided by this test machine.";
+      type = lib.types.listOf (
+        lib.types.submodule {
+          options = {
+            backend = lib.mkOption {
+              type = lib.types.enum [ "x11" ];
+            };
+            display = lib.mkOption {
+              type = lib.types.str;
+              default = ":0";
+            };
+            xauthority = lib.mkOption {
+              type = lib.types.str;
+              default = "/root/.Xauthority";
+            };
+          };
+        }
+      );
+    };
+
     initrdBackdoor = lib.mkEnableOption ''
       backdoor.service in initrd. Requires
       boot.initrd.systemd.enable to be enabled. Boot will pause in

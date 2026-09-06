@@ -8,6 +8,10 @@ in
     ./auto.nix
   ];
 
+  testing.displayTargets = lib.mkDefault [
+    { backend = "x11"; }
+  ];
+
   services.xserver = lib.mkMerge [
     {
       enable = true;
