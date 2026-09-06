@@ -1,0 +1,62 @@
+{
+  "llvm-project": {
+    "hash": "sha256-5Nb8rQmk6onrc4wKW/kT38FsYsWTqMBWtsHYZLA/0Po="
+  },
+  "sourcekit-lsp": {
+    "hash": "sha256-vDMZJSIeM+oIheeJCEfP0+FAJn+RyNYDDdWrHJDRcyE="
+  },
+  "swift": {
+    "hash": "sha256-apbBe/TMzq0+1XLkaTOj5NaYzLQ81i+vU+O7VSEJrKo="
+  },
+  "swift-build": {
+    "hash": "sha256-uwxnn9B/79mCyceKDIdM+iqxKoCHh8dgEijU4NM2MnM="
+  },
+  "swift-corelibs-foundation": {
+    "hash": "sha256-Ytxiu80su2jnF/xLcLVEaHXYvI4spLO8d+qEhDxqAdQ="
+  },
+  "swift-corelibs-libdispatch": {
+    "hash": "sha256-Tu2G9FAP4q1xgM1n9q17T6VrqJ3tv8RezyUex38yNds="
+  },
+  "swift-corelibs-xctest": {
+    "hash": "sha256-BbzY1kZUaHu7O29c8J7xDuelik6lhqmfSSskvvPZ7R4="
+  },
+  "swift-docc": {
+    "hash": "sha256-zu70RyYvnfhW3DdovSeLFXTNmdHrhdnSYCN8RisSkt8=",
+    "swiftpmDeps": {
+      "hash": "sha256-kJFuNw/pRn2A4UMvGcX3j04Faz44mriSz90u8hLdaZc="
+    }
+  },
+  "swift-driver": {
+    "hash": "sha256-CZYqUadpAsAUnCTZElobZS9nlMfCuHiMnac3o0k7hnI="
+  },
+  "swift-experimental-string-processing": {
+    "hash": "sha256-WtLLqdvYTmLWSS5q42b8yXFrJcC+dUy4uTuCeIflRFs="
+  },
+  "swift-format": {
+    "hash": "sha256-01lnZFaFAcjWN9Hn0y60gEANz7RbYRvjESysYqB9iSo=",
+    "swiftpmDeps": {
+      "hash": "sha256-UAvKJKEN32FVILwdADqXAZ7opS3Tf3e7Qp+RhD4R4QE="
+    }
+  },
+  "swift-foundation": {
+    "hash": "sha256-otE5EGG53zadZVZ0P67rr+4h4x/c3rWWEdZyL23Mxio="
+  },
+  "swift-foundation-icu": {
+    "hash": "sha256-C2rq5Q0F1id89mTN4+B/fKSvX1SEAf3/Zgvb/3IdsJ8="
+  },
+  "swift-llbuild": {
+    "hash": "sha256-nZdiFXYrUiTSlSl6lxNFVpD2x8KGC4OVUUvJSOqH7gU="
+  },
+  "swift-package-manager": {
+    "hash": "sha256-RIJLOoyDWWseBdDbJ5fluoZVq11jOdlV1yjq+m5xIws="
+  },
+  "swift-syntax": {
+    "hash": "sha256-DMMVJQj590RGGBkTgA89u01ZP2B8kbJTmfu+oxzYPds="
+  },
+  "swift-testing": {
+    "hash": "sha256-HgvwoAbUeFTVnrOTNVIgFRLOpGyCQHRgQqulHQ1LYnQ="
+  },
+  "swift-tools-support-core": {
+    "hash": "sha256-mV+z5sdG/maUzXUhK1vMtsnLCclcjqyXSMO6J2FjBEg="
+  }
+}

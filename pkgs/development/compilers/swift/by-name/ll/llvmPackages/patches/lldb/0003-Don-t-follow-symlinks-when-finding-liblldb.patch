@@ -1,0 +1,92 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Wed, 5 Aug 2026 07:36:33 -0400
+Subject: [PATCH 3/3] =?UTF-8?q?Don=E2=80=99t=20follow=20symlinks=20when=20?=
+ =?UTF-8?q?finding=20liblldb?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Various dependencies are symlinked together into the Swift toolchain in
+Nixpkgs. If LLDB resolves the location of liblldb, it will always find
+it in the LLDB derivation’s output, which prevents finding the Swift
+toolchain when running the Swift REPL.
+---
+ include/lldb/Host/Host.h            | 2 +-
+ source/Host/common/Host.cpp         | 6 ++++--
+ source/Host/common/HostInfoBase.cpp | 6 +++++-
+ source/Host/windows/Host.cpp        | 2 +-
+ 4 files changed, 11 insertions(+), 5 deletions(-)
+
+diff --git a/include/lldb/Host/Host.h b/include/lldb/Host/Host.h
+index 23d5383163ff..4a17900be75d 100644
+--- a/include/lldb/Host/Host.h
++++ b/include/lldb/Host/Host.h
+@@ -120,7 +120,7 @@ public:
+   ///     \b A file spec with the module that contains \a host_addr,
+   ///     which may be invalid if \a host_addr doesn't fall into
+   ///     any valid module address range.
+-  static FileSpec GetModuleFileSpecForHostAddress(const void *host_addr);
++  static FileSpec GetModuleFileSpecForHostAddress(const void *host_addr, bool resolvePath = true);
+ 
+   /// If you have an executable that is in a bundle and want to get back to
+   /// the bundle directory from the path itself, this function will change a
+diff --git a/source/Host/common/Host.cpp b/source/Host/common/Host.cpp
+index 04380c6255f1..2510f2d7b54e 100644
+--- a/source/Host/common/Host.cpp
++++ b/source/Host/common/Host.cpp
+@@ -344,14 +344,16 @@ bool Host::ResolveExecutableInBundle(FileSpec &file) { return false; }
+ 
+ #ifndef _WIN32
+ 
+-FileSpec Host::GetModuleFileSpecForHostAddress(const void *host_addr) {
++FileSpec Host::GetModuleFileSpecForHostAddress(const void *host_addr, bool resolvePath) {
+   FileSpec module_filespec;
+ #if !defined(__ANDROID__)
+   Dl_info info;
+   if (::dladdr(host_addr, &info)) {
+     if (info.dli_fname) {
+       module_filespec.SetFile(info.dli_fname, FileSpec::Style::native);
+-      FileSystem::Instance().Resolve(module_filespec);
++      if (resolvePath) {
++        FileSystem::Instance().Resolve(module_filespec);
++      }
+     }
+   }
+ #endif
+diff --git a/source/Host/common/HostInfoBase.cpp b/source/Host/common/HostInfoBase.cpp
+index 5c44c2f38b28..cb10bded1470 100644
+--- a/source/Host/common/HostInfoBase.cpp
++++ b/source/Host/common/HostInfoBase.cpp
+@@ -249,10 +249,14 @@ bool HostInfoBase::ComputeSharedLibraryDirectory(FileSpec &file_spec) {
+   // On other posix systems, we will get .../lib(64|32)?/liblldb.so.
+ 
+   FileSpec lldb_file_spec(Host::GetModuleFileSpecForHostAddress(
+-      reinterpret_cast<void *>(HostInfoBase::ComputeSharedLibraryDirectory)));
++      reinterpret_cast<void *>(HostInfoBase::ComputeSharedLibraryDirectory), /* resolvePath */ false));
+ 
++// If g_shlib_dir_helper is set on Linux, it will resolve the symlink, which we don’t want.
++// Getting the shared library where it is saves ~280 MiB of toolchain closure size.
++#ifdef _WIN32
+   if (g_shlib_dir_helper)
+     g_shlib_dir_helper(lldb_file_spec);
++#endif
+ 
+   // Remove the filename so that this FileSpec only represents the directory.
+   file_spec.SetDirectory(lldb_file_spec.GetDirectory());
+diff --git a/source/Host/windows/Host.cpp b/source/Host/windows/Host.cpp
+index e8973a3fb937..5955cf742059 100644
+--- a/source/Host/windows/Host.cpp
++++ b/source/Host/windows/Host.cpp
+@@ -113,7 +113,7 @@ void Host::Kill(lldb::pid_t pid, int signo) {
+ 
+ const char *Host::GetSignalAsCString(int signo) { return NULL; }
+ 
+-FileSpec Host::GetModuleFileSpecForHostAddress(const void *host_addr) {
++FileSpec Host::GetModuleFileSpecForHostAddress(const void *host_addr, bool resolvePath) {
+   FileSpec module_filespec;
+ 
+   HMODULE hmodule = NULL;
+-- 
+2.54.0
+

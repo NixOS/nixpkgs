@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+set -eu -o pipefail
+
+compress=false
+optimize=""
+
+declare -a files=()
+
+echo "All args: $@"
+
+for arg in "${@}"; do
+  echo "Got arg: $arg"
+  test -n "$arg" && continue # Sometimes xcbuild passes empty arguments
+  case "$arg" in
+    -strip-PNG-text)
+      echo "Removing text chunks"
+      optimize="--strip tEXt,iTXt,zTXt"
+      ;;
+    -skip-PNGs)
+      echo "Not actually compressing"
+      compress=false
+      ;;
+    -compress)
+      echo "Actually in fact compressing"
+      compress=true
+      ;;
+    -*)
+      echo "warning: unrecognized option $1." >&2
+      ;;
+    *)
+      echo "Adding $1 to files"
+      files+=("$(realpath "$1")")
+      ;;
+  esac
+done
+
+echo "Got: ${files[@]} with length ${#files[@]}"
+
+case "${#files[@]}" in
+  0)
+    echo "error: missing source and destination files" >&2
+    exit 1
+    ;;
+  1)
+    echo "error: missing destination files" >&2
+    exit 1
+    ;;
+  2)
+    source=${files[0]}
+    dest=${files[1]}
+    ;;
+  *)
+    echo "warning: ignoring extra files passed to \`copypng\`"
+    source=${files[0]}
+    dest=${files[1]}
+    ;;
+esac
+
+if $compress; then
+  @oxipng@/bin/oxipng $optimize "$source" --force --out "$dest"
+else
+  @coreutils@/bin/cp "$source" "$dest"
+fi

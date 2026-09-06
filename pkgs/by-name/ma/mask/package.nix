@@ -12,6 +12,7 @@
   php,
   python3,
   ruby,
+  swift,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -37,11 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     php
     python3
     ruby
-  ];
-
-  checkFlags = [
-    # requires swift which currently fails to build
-    "--skip=swift"
+    swift
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];

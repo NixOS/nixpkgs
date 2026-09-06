@@ -1,0 +1,28 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Wed, 22 Jul 2026 21:02:05 -0400
+Subject: [PATCH 2/3] Link lldb-server to swiftCore
+
+Fixes a missing symbol error when linking lldb-server on Linux:
+
+    ld.bfd: <swift^compilerLibs>/lib/libswiftASTGen.a(LexicalLookup.swift.o): undefined reference to symbol '$ss10SetAlgebraP9formUnionyyxnFTq'
+    ld.bfd: <stdlib>/lib/libswiftCore.so: error adding symbols: DSO missing from command line
+---
+ tools/lldb-server/CMakeLists.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/lldb-server/CMakeLists.txt b/tools/lldb-server/CMakeLists.txt
+index 4ac3fddf2b53..6c2603626e44 100644
+--- a/tools/lldb-server/CMakeLists.txt
++++ b/tools/lldb-server/CMakeLists.txt
+@@ -55,6 +55,7 @@ add_lldb_tool(lldb-server
+       lldbPluginInstructionMIPS64
+       lldbPluginInstructionRISCV
+       ${LLDB_SYSTEM_LIBS}
++      swiftCore
+ 
+     LINK_COMPONENTS
+       Option
+-- 
+2.54.0
+

@@ -1,0 +1,56 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Fri, 26 Jun 2026 21:01:31 -0400
+Subject: [PATCH 1/4] gnu-install-dirs
+
+---
+ Sources/SwiftDriver/CMakeLists.txt          | 6 +++---
+ Sources/SwiftDriverExecution/CMakeLists.txt | 6 +++---
+ Sources/SwiftOptions/CMakeLists.txt         | 6 +++---
+ 3 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/Sources/SwiftDriver/CMakeLists.txt b/Sources/SwiftDriver/CMakeLists.txt
+index d6594845..fb30f2bf 100644
+--- a/Sources/SwiftDriver/CMakeLists.txt
++++ b/Sources/SwiftDriver/CMakeLists.txt
+@@ -140,6 +140,6 @@ set_target_properties(SwiftDriver PROPERTIES
+   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_Swift_MODULE_DIRECTORY})
+ 
+ install(TARGETS SwiftDriver
+-  ARCHIVE DESTINATION lib
+-  LIBRARY DESTINATION lib
+-  RUNTIME DESTINATION bin)
++  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
++  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
++  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
+diff --git a/Sources/SwiftDriverExecution/CMakeLists.txt b/Sources/SwiftDriverExecution/CMakeLists.txt
+index c42a4dec..91c9bc12 100644
+--- a/Sources/SwiftDriverExecution/CMakeLists.txt
++++ b/Sources/SwiftDriverExecution/CMakeLists.txt
+@@ -26,6 +26,6 @@ set_target_properties(SwiftDriverExecution PROPERTIES
+   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_Swift_MODULE_DIRECTORY})
+ 
+ install(TARGETS SwiftDriverExecution
+-  ARCHIVE DESTINATION lib
+-  LIBRARY DESTINATION lib
+-  RUNTIME DESTINATION bin)
++  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
++  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
++  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
+diff --git a/Sources/SwiftOptions/CMakeLists.txt b/Sources/SwiftOptions/CMakeLists.txt
+index c6262682..d4dbbcc3 100644
+--- a/Sources/SwiftOptions/CMakeLists.txt
++++ b/Sources/SwiftOptions/CMakeLists.txt
+@@ -25,6 +25,6 @@ set_target_properties(SwiftOptions PROPERTIES
+   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_Swift_MODULE_DIRECTORY})
+ 
+ install(TARGETS SwiftOptions
+-  ARCHIVE DESTINATION lib
+-  LIBRARY DESTINATION lib
+-  RUNTIME DESTINATION bin)
++  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
++  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
++  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
+-- 
+2.54.0
+

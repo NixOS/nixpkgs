@@ -1,0 +1,44 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Tue, 4 Aug 2026 21:14:26 -0400
+Subject: [PATCH 4/4] Help the repl find the stdlib in Nixpkgs
+
+The stdlib is located at `lib` instead of `lib/swift/<platform>`, but
+`swift repl` only searches the latter for it.
+---
+ Package.swift                          | 2 +-
+ Sources/SwiftDriver/Jobs/ReplJob.swift | 5 +++++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/Package.swift b/Package.swift
+index cb4bc9a5..f182ee97 100644
+--- a/Package.swift
++++ b/Package.swift
+@@ -20,7 +20,7 @@ let package = Package(
+   ],
+   products: [
+     .executable(
+-      name: "swift-driver",
++      name: "swift",
+       targets: ["swift-driver"]),
+     .executable(
+       name: "swift-help",
+diff --git a/Sources/SwiftDriver/Jobs/ReplJob.swift b/Sources/SwiftDriver/Jobs/ReplJob.swift
+index e7ff7999..d3f75ff2 100644
+--- a/Sources/SwiftDriver/Jobs/ReplJob.swift
++++ b/Sources/SwiftDriver/Jobs/ReplJob.swift
+@@ -25,6 +25,11 @@ extension Driver {
+     )
+     try commandLine.appendAll(.framework, .L, from: &parsedOptions)
+ 
++    // Nixpkgs puts Swift libraries in `lib` instead of `lib/swift/<platform>`. Help `swift repl` find the stdlib there.
++    let toolchainPath = try toolchain.resolvedTool(.swiftCompiler).path.parentDirectory.parentDirectory
++    let libPath = toolchainPath.appending(component: "lib")
++    commandLine.append(contentsOf: [.flag("-L"), .path(.absolute(libPath))])
++
+     // Squash important frontend options into a single argument for LLDB.
+     let lldbCommandLine: [Job.ArgTemplate] = [.squashedArgumentList(option: "--repl=", args: commandLine)]
+     return Job(
+-- 
+2.54.0
+
