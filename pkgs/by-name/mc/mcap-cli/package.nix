@@ -59,11 +59,37 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ''
   );
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "releases/mcap-cli/v(.*)"
-    ];
+  passthru = {
+    # The .bag, .db3 and .mcap fixtures are Git LFS pointers in the source tarball;
+    # fetch the payloads separately so tests.full can run the skipped tests.
+    testFixtures = fetchFromGitHub {
+      owner = "foxglove";
+      repo = "mcap";
+      inherit (finalAttrs.src) tag;
+      sparseCheckout = [
+        "go/ros/testdata"
+        "testdata/bags"
+        "testdata/db3"
+        "tests/conformance/data"
+      ];
+      fetchLFS = true;
+      hash = "sha256-CmPQDNe4UEej6Jw/XK5GhtDGUdp4qy/2eDu7XxMDI1g=";
+    };
+    tests.full = finalAttrs.finalPackage.overrideAttrs (old: {
+      checkFlags = [ ];
+      # Replace the Git LFS pointer files with the real fixtures. preCheck runs at the
+      # source root, before cargoCheckHook enters buildAndTestSubdir, so the copy lands
+      # at the repo-relative paths the tests read.
+      preCheck = ''
+        cp -rf --no-preserve=mode ${finalAttrs.passthru.testFixtures}/. .
+      '';
+    });
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "releases/mcap-cli/v(.*)"
+      ];
+    };
   };
 
   meta = {
