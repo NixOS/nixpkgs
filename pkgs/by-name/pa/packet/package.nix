@@ -73,6 +73,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Quick Share client for Linux";
+    longDescription = ''
+      Packet requires opening firewall port to transfer files.
+      On NixOS, you can use {option}`programs.packet.enable` option.
+      On non-NixOS, you can either disable firewall, or enable
+      "Static Network Port" in Preferences and allow TCP port for
+      corresponding "Port Number" in your firewall settings.
+    '';
     homepage = "https://github.com/nozwock/packet";
     changelog = "https://github.com/nozwock/packet/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
