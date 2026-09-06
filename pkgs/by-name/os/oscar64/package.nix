@@ -28,8 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     "prefix=$(out)"
   ];
 
-  buildTarget = "compiler";
-
   doCheck = true;
   checkTarget = "check";
 
