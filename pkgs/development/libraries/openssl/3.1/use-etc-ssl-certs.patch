@@ -1,0 +1,12 @@
+diff --git a/include/internal/cryptlib.h b/include/internal/cryptlib.h
+--- a/include/internal/cryptlib.h
++++ b/include/internal/cryptlib.h
+@@ -68,7 +68,7 @@ DEFINE_LHASH_OF_EX(MEM);
+ # ifndef OPENSSL_SYS_VMS
+ #  define X509_CERT_AREA          OPENSSLDIR
+ #  define X509_CERT_DIR           OPENSSLDIR "/certs"
+-#  define X509_CERT_FILE          OPENSSLDIR "/cert.pem"
++#  define X509_CERT_FILE          "/etc/ssl/certs/ca-certificates.crt"
+ #  define X509_PRIVATE_DIR        OPENSSLDIR "/private"
+ #  define CTLOG_FILE              OPENSSLDIR "/ct_log_list.cnf"
+ # else
