@@ -27264,6 +27264,11 @@
     githubId = 13762043;
     matrix = "@sophie:nue.soopy.moe";
   };
+  SophanaSok = {
+    name = "Sophana Sok";
+    github = "SophanaSok";
+    githubId = 5224183;
+  };
   sophiebsw = {
     name = "Sophia";
     email = "nixpkgs@drifter.dev";
