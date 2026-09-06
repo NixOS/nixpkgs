@@ -30,14 +30,14 @@ in
 
 python3Packages.buildPythonApplication rec {
   pname = "piper-tts";
-  version = "1.7.0";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OHF-Voice";
     repo = "piper1-gpl";
     tag = "v${version}";
-    hash = "sha256-oQhDFhB2GXlAdxW1K7BM7RJkzihAwyoB6QbOpaMUVHM=";
+    hash = "sha256-rlox5n+EWJf/464L/0rwjEmSEkxo2XQQhubq7cbLvL8=";
   };
 
   patches = [
@@ -126,6 +126,15 @@ python3Packages.buildPythonApplication rec {
     rm -v src/piper/train/vits/monotonic_align/{Makefile,setup.py,core.c,core.pyx}
     cp -Rv src/piper/train/vits $train/
   '';
+
+  nativeCheckInputs = [
+    python3Packages.pytestCheckHook
+  ];
+
+  disabledTests = [
+    # RuntimeError: cannot cache function '__o_fold': no locator available for file '/nix/store/byi2l9xb88xan6vf88xcx9vbklyvxha5-python3.14-librosa-1.0.0/lib/python3.14/site-packages/librosa/core/notation.py'
+    "test_training_phonemize_matches_inference_with_vowel_clusters"
+  ];
 
   pythonImportsCheck = [
     "piper"
