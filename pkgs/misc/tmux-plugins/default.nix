@@ -1009,18 +1009,21 @@ in
   tmux-floax = mkTmuxPlugin {
     pluginName = "tmux-floax";
     rtpFilePath = "floax.tmux";
-    version = "0-unstable-2024-07-24";
+    version = "0-unstable-2026-02-24";
     src = fetchFromGitHub {
       owner = "omerxx";
       repo = "tmux-floax";
-      rev = "46c0a6a8c3cf79b83d1b338f547acbbd1d306301";
-      hash = "sha256-bALZfVWcoAzcTeWwkBHhi7TzUQJicOBTNdeJh3O/Bj8=";
+      rev = "133f526793d90d2caa323c47687dd5544a2c704b";
+      hash = "sha256-9Hb9dn2qHF6KcIhtogvycX3Z0MoQrLPLCzZXtjGlPHw=";
     };
     meta = {
       description = "Floating pane for Tmux";
       homepage = "https://github.com/omerxx/tmux-floax";
       license = lib.licenses.gpl3Only;
-      maintainers = with lib.maintainers; [ redyf ];
+      maintainers = with lib.maintainers; [
+        Noah765
+        redyf
+      ];
       mainProgram = "tmux-floax";
       platforms = lib.platforms.all;
     };
