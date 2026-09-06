@@ -1,16 +1,20 @@
 {
+  addDriverRunpath,
   cmake,
   fetchFromGitHub,
-  pkg-config,
   lib,
+  libdrm,
   libevdev,
   libgbm,
-  libGL,
+  libglvnd,
   libopus,
+  libpulseaudio,
   libx11,
   libxkbcommon,
   libxres,
+  nixosTests,
   nix-update-script,
+  pkg-config,
   rustPlatform,
   versionCheckHook,
   vulkan-loader,
@@ -18,8 +22,8 @@
 }:
 
 let
-  # Fetch the C++ sources of inputtino explicitly since the inputtino-sys crate requires them to be present.
-  # Revision matches Cargo.lock
+  # Fetch the C++ sources of inputtino explicitly since the inputtino-sys crate
+  # expects the repository root to be available. The revision matches Cargo.lock.
   inputtino-src = fetchFromGitHub {
     owner = "games-on-whales";
     repo = "inputtino";
@@ -30,6 +34,8 @@ in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "moonshine";
   version = "0.16.1";
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "hgaiser";
@@ -38,78 +44,78 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-CmSOU263HD4qDFwGRxyozo2u2BlM+bT8AE7EwFPEhnA=";
   };
 
-  __structuredAttrs = true;
-
   cargoHash = "sha256-g9X9tiO+mUW4eTYi16nvesHIvWsQgAft7ZLEK1/CQHg=";
 
-  # Build Moonshine binary and Vulkan layer
-  cargoBuildFlags = [
-    "-p"
-    "moonshine"
-    "-p"
-    "moonshine-wsi"
-  ];
+  # Also installs moonshine-bench and builds the WSI layer.
+  cargoBuildFlags = [ "--workspace" ];
 
   nativeBuildInputs = [
-    pkg-config
+    addDriverRunpath
     cmake
+    pkg-config
     rustPlatform.bindgenHook
   ];
+  dontUseCmakeConfigure = true;
 
+  # System libraries required by upstream's DRM/GBM/EGL, PulseAudio, and Vulkan support.
   buildInputs = [
+    libdrm
     libevdev
     libgbm
+    libglvnd
     libopus
+    libpulseaudio
     libxkbcommon
+    vulkan-loader
     wayland
   ];
 
-  # Patch build.rs from inputtino-sys with the C++ inputtino sources.
-  # Also drop the unneeded libc++ dependency.
   postPatch = ''
-    grep -q 'inputtino#${inputtino-src.rev}' Cargo.lock || {
-      echo "ERROR: inputtino revision needs update (must match Cargo.lock)"
+    # Keep the separately fetched C++ tree in lock-step with the git crate.
+    grep -Fq "inputtino#${inputtino-src.rev}" Cargo.lock || {
+      echo "ERROR: inputtino revision needs update (must match Cargo.lock)" >&2
       exit 1
     }
 
-    substituteInPlace $cargoDepsCopy/*/inputtino-sys-*/build.rs \
+    substituteInPlace "$cargoDepsCopy"/*/inputtino-sys-*/build.rs \
       --replace-fail 'PathBuf::from("../../../")' 'PathBuf::from("${inputtino-src}")' \
       --replace-fail 'println!("cargo:rustc-link-lib=c++");' ""
   '';
 
   postInstall = ''
-    # Setup implicit Vulkan layer manifest as required by Moonshine
-    install -d "$out/share/vulkan/implicit_layer.d"
-    substitute dist/VkLayer_moonshine_wsi.json \
-      "$out/share/vulkan/implicit_layer.d/VkLayer_moonshine_wsi.json" \
+    manifest="$out/share/vulkan/implicit_layer.d/VkLayer_moonshine_wsi.json"
+    install -Dm644 dist/VkLayer_moonshine_wsi.json "$manifest"
+    substituteInPlace "$manifest" \
       --replace-fail /usr/lib/moonshine/vulkan-layers/libmoonshine_wsi.so \
-        "$out/lib/libmoonshine_wsi.so"
+      $out/lib/libmoonshine_wsi.so
 
-    # udev rules for input
-    install -Dm644 dist/60-moonshine.rules "$out/lib/udev/rules.d/60-moonshine.rules"
-
-    # polkit rule for sleep inhibitor
+    install -Dm644 dist/60-moonshine.rules $out/lib/udev/rules.d/60-moonshine.rules
     install -Dm644 dist/50-moonshine-inhibit-sleep.rules \
-      "$out/share/polkit-1/rules.d/50-moonshine-inhibit-sleep.rules"
+      $out/share/polkit-1/rules.d/50-moonshine-inhibit-sleep.rules
   '';
 
   postFixup = ''
-    patchelf --add-rpath ${
-      lib.makeLibraryPath [
-        libGL
-        vulkan-loader
-        # Required by Steam focus protocol (x11_focus.rs)
-        libx11
-        libxres
-      ]
-    } "$out/bin/moonshine"
+    for executable in $out/bin/*; do
+      patchelf --add-rpath ${
+        lib.makeLibraryPath [
+          vulkan-loader
+          libglvnd
+          # Steam focus detection uses dlopen, so auto-RPATH cannot find these.
+          libx11
+          libxres
+        ]
+      } "$executable"
+      addDriverRunpath "$executable"
+    done
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  # NOTE: If upstream bumps inputtino, this must be manually updated above
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = { inherit (nixosTests) moonshine; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Headless streaming server for Moonlight clients";
@@ -124,6 +130,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       neobrain
       anish
+      philocalyst
     ];
     mainProgram = "moonshine";
     platforms = lib.platforms.linux;
