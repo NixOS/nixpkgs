@@ -285,6 +285,11 @@ Once complete, you can follow with
 #### Formatting {#sec-installation-manual-partitioning-formatting}
 []{#sec-installation-partitioning-formatting} <!-- legacy anchor -->
 
+::: {.note}
+If you want to setup an encrypted file system for your main *root* partition,
+see [](#sec-luks-file-systems) before formatting it.
+:::
+
 Use the following commands:
 
 -   For initialising Ext4 partitions: `mkfs.ext4`. It is recommended
