@@ -36,11 +36,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libbluray";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchurl {
     url = "https://get.videolan.org/libbluray/${version}/libbluray-${version}.tar.xz";
-    hash = "sha256-drXcQAl/KNyk67AJyY7VEyGyknRT91zHLPdKzQm59Ek=";
+    hash = "sha256-9nZAjpGl0yGr+LjU39rjYgXCl9q1xUw+xRljkCX0dKI=";
   };
 
   postPatch =
