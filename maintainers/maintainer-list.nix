@@ -4474,6 +4474,14 @@
     githubId = 510553;
     name = "Jos van Bakel";
   };
+  c2fc2f = {
+    name = "c2fc2f";
+    github = "c2fc2f";
+    githubId = 59392138;
+    email = "contact@c2fc2f.com";
+    matrix = "@c2fc2f:sagbot.com";
+    keys = [ { fingerprint = "6EF1 8507 76B5 ABCE 5BF0  C0F8 42E0 E1D1 0B61 1208"; } ];
+  };
   c31io = {
     email = "celiogrand@outlook.com";
     github = "c31io";

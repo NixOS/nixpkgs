@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Highly scalable, robust (fully ACID) native graph database";
     homepage = "https://neo4j.com/";
     license = lib.licenses.gpl3;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.c2fc2f ];
     platforms = lib.platforms.unix;
   };
 })
