@@ -497,8 +497,6 @@ python3Packages.buildPythonApplication rec {
     "tests/helpers/test_entity_platform.py::test_platform_warn_slow_setup" # ValueError: not enough values to unpack (expected 2, got 0)
     "tests/helpers/test_entity_component.py::test_set_scan_interval_via_config" # assert 10 == 30.0
     "tests/helpers/test_entity_component.py::test_set_entity_namespace_via_config" # AssertionError: assert [] == ['test_domain...named_device']
-    # orjson 3.12.0 slightly changed an asserted error message
-    "tests/helpers/test_storage.py::test_loading_corrupt_core_file"
   ];
 
   preCheck = ''
