@@ -31480,6 +31480,11 @@
     githubId = 72203260;
     name = "wyndon";
   };
+  wyspr = {
+    name = "wyspr";
+    github = "preprocesor";
+    githubId = 5649544;
+  };
   wyvie = {
     email = "elijahrum@gmail.com";
     github = "alicerum";
