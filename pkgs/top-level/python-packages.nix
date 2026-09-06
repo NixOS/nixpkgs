@@ -10549,6 +10549,8 @@ self: super: with self; {
 
   mcap = callPackage ../development/python-modules/mcap { };
 
+  mcap-protobuf-support = callPackage ../development/python-modules/mcap-protobuf-support { };
+
   mccabe = callPackage ../development/python-modules/mccabe { };
 
   mcdreforged = callPackage ../development/python-modules/mcdreforged { };
