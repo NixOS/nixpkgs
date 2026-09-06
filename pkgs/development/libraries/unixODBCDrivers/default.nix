@@ -45,36 +45,22 @@
 
   duckdb = duckdb-odbc;
 
-  mariadb = stdenv.mkDerivation rec {
+  mariadb = stdenv.mkDerivation (finalAttrs: {
     pname = "mariadb-connector-odbc";
-    version = "3.2.6";
+    version = "3.2.9";
 
     src = fetchFromGitHub {
       owner = "mariadb-corporation";
       repo = "mariadb-connector-odbc";
-      rev = version;
-      hash = "sha256-FdnA3/xDxnk2910LCMPWQTcUUSYfUsnnZ3Hqj0uey5s=";
+      tag = finalAttrs.version;
+      hash = "sha256-VPpQa17dj544G+kx8b93rErvRZxghvAbZN3povPKYrw=";
       # this driver only seems to build correctly when built against the mariadb-connect-c subrepo
       # (see https://github.com/NixOS/nixpkgs/issues/73258)
       fetchSubmodules = true;
     };
 
-    patches = [
-      # Fix `call to undeclared function 'sleep'` with clang 16
-      ./mariadb-connector-odbc-unistd.patch
-
-      ./mariadb-connector-odbc-musl.patch
-
-      # Fix build with gcc15
-      # https://github.com/mariadb-corporation/mariadb-connector-odbc/pull/63
-      (fetchpatch {
-        name = "mariadb-connector-odbc-add-include-cstdint-gcc15.patch";
-        url = "https://github.com/mariadb-corporation/mariadb-connector-odbc/commit/a3ced654db2ef93de0a818f2d66171f6084e5f2d.patch";
-        hash = "sha256-GZITSryfRdAgNxZehasoBModGNZo575Dd5aokwNWzpY=";
-      })
-    ];
-
     nativeBuildInputs = [ cmake ];
+
     buildInputs = [
       unixodbc
       openssl
@@ -84,19 +70,15 @@
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ libkrb5 ];
 
     cmakeFlags = [
-      "-DWITH_EXTERNAL_ZLIB=ON"
-      "-DODBC_LIB_DIR=${lib.getLib unixodbc}/lib"
-      "-DODBC_INCLUDE_DIR=${lib.getDev unixodbc}/include"
-      "-DWITH_OPENSSL=ON"
-      # on darwin this defaults to ON but we want to build against unixodbc
-      "-DWITH_IODBC=OFF"
+      # On darwin this defaults to ON but we want to build against unixodbc
+      (lib.cmakeBool "WITH_IODBC" false)
+      (lib.cmakeBool "WITH_OPENSSL" true)
+      (lib.cmakeBool "WITH_EXTERNAL_ZLIB" true)
+      (lib.cmakeFeature "ODBC_LIB_DIR" "${lib.getLib unixodbc}/lib")
+      (lib.cmakeFeature "ODBC_INCLUDE_DIR" "${lib.getDev unixodbc}/include")
     ];
 
     buildFlags = if stdenv.hostPlatform.isDarwin then [ "maodbc" ] else null;
-
-    env = lib.optionalAttrs stdenv.cc.isGNU {
-      NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
-    };
 
     installTargets = if stdenv.hostPlatform.isDarwin then [ "install/fast" ] else null;
 
@@ -110,9 +92,10 @@
       description = "MariaDB ODBC database driver";
       homepage = "https://downloads.mariadb.org/connector-odbc/";
       license = lib.licenses.gpl2;
+      maintainers = with lib.maintainers; [ hythera ];
       platforms = lib.platforms.linux ++ lib.platforms.darwin;
     };
-  };
+  });
 
   sqlite = stdenv.mkDerivation rec {
     pname = "sqlite-connector-odbc";
