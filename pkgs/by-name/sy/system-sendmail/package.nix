@@ -1,0 +1,41 @@
+{
+  lib,
+  stdenv,
+  callPackage,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "system-sendmail";
+  version = lib.trivial.release;
+
+  src = ./sendmail.c;
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  dontUnpack = true;
+
+  buildPhase = ''
+    runHook preBuild
+    $CC -O2 -Wall -Wextra -DPATH_SELF="\"$out/bin/sendmail\"" -o sendmail "$src"
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 sendmail $out/bin/sendmail
+    runHook postInstall
+  '';
+
+  passthru.tests = callPackage ./test.nix { system-sendmail = finalAttrs.finalPackage; };
+
+  meta = {
+    description = ''
+      A sendmail wrapper that calls the system sendmail. Do not install as system-wide sendmail!
+    '';
+    platforms = lib.platforms.unix;
+    priority = 10;
+    mainProgram = "sendmail";
+    maintainers = with lib.maintainers; [ h7x4 ];
+  };
+})
