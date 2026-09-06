@@ -2939,8 +2939,14 @@ with pkgs;
   vimpager = callPackage ../tools/misc/vimpager { };
   vimpager-latest = callPackage ../tools/misc/vimpager/latest.nix { };
 
-  voxtype-vulkan = callPackage ../by-name/vo/voxtype/package.nix { vulkanSupport = true; };
-  voxtype-onnx = callPackage ../by-name/vo/voxtype/package.nix { onnxSupport = true; };
+  voxtype-vulkan = callPackage ../by-name/vo/voxtype/package.nix {
+    vulkanSupport = true;
+    osdGtk4Support = true;
+  };
+  voxtype-onnx = callPackage ../by-name/vo/voxtype/package.nix {
+    onnxSupport = true;
+    osdGtk4Support = true;
+  };
 
   openconnectPackages = {
     inherit openconnect openconnect_openssl;
