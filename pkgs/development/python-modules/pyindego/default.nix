@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "pyindego";
-  version = "3.2.2";
+  version = "3.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sander1988";
     repo = "pyIndego";
     tag = version;
-    hash = "sha256-x8/MSbn+urmArQCyxZU1JEUyATJsPzp7bflymE+1rkk=";
+    hash = "sha256-fg9fYL+xXchRHjEh6rb+rMEyUpm11rPsIuDknspzbf8=";
   };
 
   postPatch = ''
