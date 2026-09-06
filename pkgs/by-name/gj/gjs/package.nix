@@ -1,5 +1,6 @@
 {
   fetchurl,
+  fetchpatch,
   lib,
   stdenv,
   meson,
@@ -71,6 +72,12 @@ stdenv.mkDerivation (finalAttrs: {
     # not ok 796 Filename tests various types of path existing
     # Message: Error opening file “/build/.UGHEA3/öäü-3”: Invalid or incomplete multibyte or wide character in /build/gjs-1.84.2/build/../installed-tests/js/testGIMarshalling.js (line 2937)
     ./disable-umlaut-test.patch
+
+    # Fixes build: https://gitlab.gnome.org/GNOME/gjs/-/merge_requests/1114
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gjs/-/merge_requests/1114.patch";
+      hash = "sha256-AiBuTJHdpzANzl27yHkq+Og1oEva3NpUcSEhSOWnF9s=";
+    })
   ];
 
   nativeBuildInputs = [
