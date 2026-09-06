@@ -334,6 +334,8 @@ self: super: with self; {
 
   aiohomematic-test-support = callPackage ../development/python-modules/aiohomematic-test-support { };
 
+  aiohortos = callPackage ../development/python-modules/aiohortos { };
+
   aiohttp = callPackage ../development/python-modules/aiohttp { };
 
   aiohttp-apispec = callPackage ../development/python-modules/aiohttp-apispec { };
