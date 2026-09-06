@@ -2,18 +2,23 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dash-html-components";
   version = "2.0.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "dash_html_components";
-    inherit version;
-    sha256 = "8703a601080f02619a6390998e0b3da4a5daabe97a1fd7a9cebc09d015f26e50";
+    inherit (finalAttrs) version;
+    hash = "sha256-hwOmAQgPAmGaY5CZjgs9pKXaq+l6H9epzrwJ0BXyblA=";
   };
+
+  build-system = [ setuptools ];
 
   # No tests in archive
   doCheck = false;
@@ -24,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

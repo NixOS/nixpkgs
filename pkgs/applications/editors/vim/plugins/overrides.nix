@@ -40,12 +40,13 @@
   openssl,
   ranger,
   ripgrep,
+  slang-server,
   sqlite,
   sshfs,
   stylish-haskell,
   tabnine,
   tmux,
-  typescript,
+  typescript_5,
   typescript-language-server,
   vim,
   which,
@@ -4160,6 +4161,10 @@ assertNoAdditions {
   });
 
   slang-server-nvim = super.slang-server-nvim.overrideAttrs {
+    runtimeDeps = [
+      slang-server
+    ];
+
     dependencies = [ self.nui-nvim ];
   };
 
@@ -4686,7 +4691,7 @@ assertNoAdditions {
     postPatch = ''
       substituteInPlace lua/tsc/utils.lua --replace-fail \
       'bin_name = bin_name or "tsc"' \
-      'bin_name = bin_name or "${typescript}/bin/tsc"'
+      'bin_name = bin_name or "${typescript_5}/bin/tsc"'
     '';
 
     # Unit test

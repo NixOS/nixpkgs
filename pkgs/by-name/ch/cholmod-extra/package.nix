@@ -18,6 +18,18 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "0hz1lfp0zaarvl0dv0zgp337hyd8np41kmdpz5rr3fc6yzw7vmkg";
   };
 
+  patches = [ ./cholmod-internal-suitesparse7.patch ];
+
+  postPatch = ''
+    substituteInPlace Include/cholmod_extra.h \
+      --replace-fail "#include <cholmod_config.h>" "" \
+      --replace-fail "#include <cholmod_core.h>" "#include <cholmod.h>" \
+      --replace-fail "#include <cholmod_partition.h>" "" \
+      --replace-fail "#include <cholmod_supernodal.h>" ""
+    substituteInPlace Source/cholmod_spinv.c \
+      --replace-fail "#include <cholmod_cholesky.h>" ""
+  '';
+
   nativeBuildInputs = [ gfortran ];
   buildInputs = [
     suitesparse

@@ -54,6 +54,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   env = {
+    # Installed binaries are stripped during fixup, so delete.
+    CARGO_PROFILE_RELEASE_DEBUG = "false";
+
     # rust-toolchain.toml pins nightly for the crates' feature gates
     RUSTC_BOOTSTRAP = 1;
     PROTOC = lib.getExe' protobuf "protoc";

@@ -19,6 +19,21 @@ let
     )
   );
 
+  fishFunctions = lib.mapAttrs' (
+    name: value: {
+      name = "fish/functions/${name}.fish";
+      value.source =
+        let
+          body = if lib.isPath value then lib.readFile value else value;
+        in
+        indentFishFile "${name}.fish" ''
+          function ${name}
+            ${lib.strings.removeSuffix "\n" body}
+          end
+        '';
+    }
+  );
+
   envShellInit = pkgs.writeText "shellInit" cfge.shellInit;
   envLoginShellInit = pkgs.writeText "loginShellInit" cfge.loginShellInit;
   envInteractiveShellInit = pkgs.writeText "interactiveShellInit" cfge.interactiveShellInit;
@@ -131,6 +146,58 @@ in
         type = with lib.types; attrsOf (nullOr (either str path));
       };
 
+      shellFunctions = lib.mkOption {
+        description = ''
+          A set of fish functions, with the attribute name being the function name. Function names cannot be reserved
+          words or have spaces. These are elements of fish syntax or builtin commands which are essential for the
+          operations of the shell.
+
+          See the documentation for [fish functions](https://fishshell.com/docs/current/cmds/function.html) for further information.
+        '';
+        example = {
+          ll.body = "ls -l $argv";
+          mcd = {
+            modifiers = {
+              description = "Create a directory and set CWD";
+            };
+            body = ''
+              command mkdir $argv
+              if test $status = 0
+                switch $argv[(count $argv)]
+                  case '-*'
+
+                  case '*'
+                    cd $argv[(count $argv)]
+                    return
+                end
+              end
+            '';
+          };
+        };
+        type = lib.types.attrsOf (
+          lib.types.submodule {
+            options = {
+              body = lib.mkOption {
+                type = lib.types.str;
+                description = ''
+                  The function body. You may provide a path or a string containing the fish function body.
+                '';
+              };
+
+              modifiers = lib.mkOption {
+                type = lib.types.attrsOf lib.types.anything;
+                default = { };
+                defaultText = "input for 'lib.cli.toCommandLine'";
+                description = ''
+                  Modifiers to be applied to the function. This is a string, concatenated with a space after the function nane
+                '';
+              };
+            };
+
+          }
+        );
+      };
+
       shellInit = lib.mkOption {
         default = "";
         description = ''
@@ -223,6 +290,9 @@ in
 
             ${cfg.shellInit}
 
+            # Add the search path for global fish functions
+            set fish_function_path /etc/fish/functions/ $fish_function_path
+
             # and leave a note so we don't source this config section again from
             # this very shell (children will source the general config anew)
             set -g __fish_nixos_general_config_sourced 1
@@ -257,6 +327,21 @@ in
             set -g __fish_nixos_interactive_config_sourced 1
           end
         '';
+      }
+
+      {
+        etc = lib.mapAttrs' (name: value: {
+          name = "fish/functions/${name}.fish";
+          value.source =
+            let
+              modifiers = lib.cli.toCommandLineShellGNU { } value.modifiers;
+            in
+            indentFishFile "${name}.fish" ''
+              function ${name} ${modifiers}
+                ${lib.trim value.body}
+              end
+            '';
+        }) cfg.shellFunctions;
       }
 
       (lib.mkIf cfg.generateCompletions {
