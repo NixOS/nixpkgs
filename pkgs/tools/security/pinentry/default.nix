@@ -12,7 +12,7 @@
   libsForQt5,
   qt6,
   ncurses,
-  gcr,
+  gcr_3,
   withLibsecret ? true,
   libsecret,
 }:
@@ -28,7 +28,7 @@ let
     };
     gnome3 = {
       flag = "gnome3";
-      buildInputs = [ gcr ];
+      buildInputs = [ gcr_3 ];
       nativeBuildInputs = [ wrapGAppsHook3 ];
     };
     qt5 = {

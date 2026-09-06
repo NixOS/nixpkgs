@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "gcr";
   version = "3.41.2";
 
+  __structuredAttrs = true;
+
   outputs = [
     "out"
     "dev"
@@ -107,6 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gnome.updateScript {
+      attrPath = "gcr_3";
       packageName = "gcr";
       freeze = true;
     };
