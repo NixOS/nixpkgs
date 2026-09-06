@@ -36,10 +36,37 @@ let
       "HEAD";
 
   hasColonInfix = lib.hasInfix ":";
-in
 
+  resolveNullableFetchGitArgs =
+    finalAttrs:
+    {
+      deepClone,
+      fetchTags,
+      leaveDotGit,
+      rootDir,
+      sparseCheckout,
+      ...
+    }:
+    {
+      leaveDotGit =
+        if leaveDotGit != null then
+          assert fetchTags -> leaveDotGit;
+          assert rootDir != "" -> !leaveDotGit;
+          leaveDotGit
+        else
+          deepClone || fetchTags;
+      sparseCheckout =
+        let
+          default = lib.optional (finalAttrs.rootDir != "") finalAttrs.rootDir;
+        in
+        lib.defaultTo default sparseCheckout;
+    };
+
+in
 lib.makeOverridable (
   lib.extendMkDerivation {
+    calculateExpectDrvArgs = true;
+
     constructDrv = stdenvNoCC.mkDerivation;
 
     excludeDrvArgNames = [
@@ -140,6 +167,15 @@ lib.makeOverridable (
         in
 
         derivationArgs
+        // resolveNullableFetchGitArgs finalAttrs {
+          inherit
+            deepClone
+            fetchTags
+            leaveDotGit
+            rootDir
+            sparseCheckout
+            ;
+        }
         // {
           __structuredAttrs = true;
 
@@ -267,7 +303,7 @@ lib.makeOverridable (
             // meta.identifiers or { };
           };
 
-          env = {
+          env = derivationArgs.env or { } // {
             NIX_PREFETCH_GIT_CHECKOUT_HOOK = finalAttrs.postCheckout;
           };
 
@@ -283,5 +319,8 @@ lib.makeOverridable (
   }
 )
 // {
-  inherit getRevWithTag;
+  inherit
+    getRevWithTag
+    resolveNullableFetchGitArgs
+    ;
 }
