@@ -1,4 +1,8 @@
-Dismiss warnings about window position being unavailable on Wayland.
+From ef1c430bf2f10a1f08a163a3c3b33c0b935dbbb0 Mon Sep 17 00:00:00 2001
+From: Mark Wagie <mark.wagie@proton.me>
+Date: Mon, 13 Apr 2026 14:05:12 +0800
+Subject: [PATCH 4/6] Dismiss warnings about window position being unavailable
+ on Wayland.
 
 In addition to the other glfw patches, this one is required on certain
 compositors such as niri and waywall to be able to launch Minecraft at
@@ -11,10 +15,15 @@ strict error callbacks are used.
 Original get-position fix by: uku <hi@uku.moe>
 Expanded to include set-position, inspired by Prior5151's fix on AUR.
 https://aur.archlinux.org/packages/glfw-wayland-minecraft-cursorfix#comment-1013099
+---
+ src/wl_window.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/src/wl_window.c b/src/wl_window.c
+index 7a56d532..a98cf04f 100644
 --- a/src/wl_window.c
 +++ b/src/wl_window.c
-@@ -2236,16 +2236,16 @@ void _glfwGetWindowPosWayland(_GLFWwindow* window, int* xpos, int* ypos)
+@@ -2950,16 +2950,16 @@ void _glfwGetWindowPosWayland(_GLFWwindow* window, int* xpos, int* ypos)
      // A Wayland client is not aware of its position, so just warn and leave it
      // as (0, 0)
  
@@ -35,3 +44,6 @@ https://aur.archlinux.org/packages/glfw-wayland-minecraft-cursorfix#comment-1013
  }
  
  void _glfwGetWindowSizeWayland(_GLFWwindow* window, int* width, int* height)
+-- 
+2.53.0
+
