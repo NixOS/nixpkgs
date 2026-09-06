@@ -286,7 +286,6 @@ in
           celluloid
           gnome-calculator
           gnome-calendar
-          gnome-screenshot
           file-roller
           gucharmap
         ] config.environment.cinnamon.excludePackages;
