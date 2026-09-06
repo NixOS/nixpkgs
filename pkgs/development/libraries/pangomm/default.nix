@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pangomm";
-  version = "2.46.4";
+  version = "2.46.5";
 
   src = fetchurl {
     url = "mirror://gnome/sources/pangomm/${lib.versions.majorMinor version}/pangomm-${version}.tar.xz";
-    sha256 = "sha256-uSAWZhUmQk3kuTd/FRL1l4H0H7FsnAJn1hM7oc1o2yI=";
+    sha256 = "sha256-OMoLBQsGXeTj2gwYLfZXQ3dXBju/DEtslWfdugGbHWg=";
   };
 
   outputs = [
