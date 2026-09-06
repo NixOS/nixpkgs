@@ -62,7 +62,7 @@ with haskellLib;
     if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
       null
     else
-      haskellLib.doDistribute self.terminfo_0_4_1_7;
+      doDistribute self.terminfo_0_4_1_7;
   text = null;
   time = null;
   transformers = null;
@@ -76,49 +76,40 @@ with haskellLib;
 
   scrod = doDistribute (unmarkBroken super.scrod);
 
+  # haskell-debugger only works with ghc 9.14+
+  haskell-debugger-view = doDistribute (unmarkBroken super.haskell-debugger-view);
+  haskell-debugger = doDistribute (doJailbreak super.haskell-debugger); # hie-bios < 0.18, random >=1.3.1
+
   #
   # Version upgrades
   #
 
-  ghc-exactprint = doDistribute self.ghc-exactprint_1_14_0_0;
-  hedgehog = doDistribute self.hedgehog_1_7;
-  hie-bios = doDistribute (dontCheck self.hie-bios_0_19_0); # Tests access homeless-shelter.
-  lifted-async = doDistribute self.lifted-async_0_11_0;
-  parallel = doDistribute self.parallel_3_3_0_0;
-  tagged = doDistribute self.tagged_0_8_10;
-  unordered-containers = doDistribute self.unordered-containers_0_2_21;
-  HTTP = doDistribute self.HTTP_4000_5_0;
+  ghc-exactprint_1_14_1_0 = addBuildDepends [
+    # cabal2nix drops conditional block: impl (ghc >= 9.14)
+    self.containers
+    self.Diff
+    self.directory
+    self.filepath
+    self.ghc-paths
+    self.silently
+    self.syb
+    self.HUnit
+  ] super.ghc-exactprint_1_14_1_0;
+
+  ghc-exactprint = doDistribute self.ghc-exactprint_1_14_1_0;
+  ghc-lib = doDistribute self.ghc-lib_9_14_1_20251220;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_14_1_20251220;
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_14_2_0;
+
+  ormolu = doDistribute self.ormolu_0_9_0_0;
+  fourmolu = doDistribute self.fourmolu_0_20_1_0;
 
   #
   # Jailbreaks
   #
 
-  primitive = doJailbreak (dontCheck super.primitive); # base <4.22 and a lot of dependencies on packages not yet working.
-  splitmix = doJailbreak super.splitmix; # base <4.22
-
-  # https://github.com/phadej/boring/issues/48
-  boring = doJailbreak super.boring;
-  # https://github.com/haskellari/indexed-traversable/issues/49
-  indexed-traversable = doJailbreak super.indexed-traversable;
-  # https://github.com/haskellari/indexed-traversable/issues/50
-  indexed-traversable-instances = doJailbreak super.indexed-traversable-instances;
-  # https://github.com/haskellari/these/issues/211
-  these = doJailbreak super.these;
-  # https://github.com/haskellari/these/issues/207
-  semialign = doJailbreak super.semialign;
-  # https://github.com/haskellari/time-compat/issues/48
-  time-compat = doJailbreak super.time-compat;
-  # https://github.com/haskell-hvr/uuid/issues/95
-  uuid-types = doJailbreak super.uuid-types;
   # https://github.com/haskellari/qc-instances/issues/110
   quickcheck-instances = doJailbreak super.quickcheck-instances;
-  # https://github.com/haskell/aeson/issues/1155
-  text-iso8601 = doJailbreak super.text-iso8601;
-  aeson = doJailbreak super.aeson;
-
-  # https://github.com/haskell-party/feed/issues/76
-  feed = doJailbreak super.feed; # time<1.15, base<4.22
-
   # https://github.com/well-typed/cborg/issues/373
   cborg = doJailbreak super.cborg;
   serialise = doJailbreak (
@@ -134,29 +125,16 @@ with haskellLib;
     ] super.serialise
   );
 
-  # https://github.com/sjakobi/newtype-generics/pull/28/files
-  newtype-generics = warnAfterVersion "0.6.2" (doJailbreak super.newtype-generics);
-
-  # haskell-debugger only works with ghc 9.14+
-  haskell-debugger-view = doDistribute (unmarkBroken super.haskell-debugger-view);
-  haskell-debugger = doDistribute (doJailbreak super.haskell-debugger); # hie-bios < 0.18, random >=1.3.1
-
-  ghc-exactprint_1_14_0_0 = addBuildDepends [
-    # cabal2nix drops conditional block: impl (ghc >= 9.14)
-    self.Diff
-    self.extra
-    self.ghc-paths
-    self.silently
-    self.syb
-    self.HUnit
-  ] super.ghc-exactprint_1_14_0_0;
-
-  #
-  # Test suite issues
-  #
-
-  # Fails to compile with GHC 9.14 https://github.com/snoyberg/mono-traversable/pull/261
-  mono-traversable = dontCheck super.mono-traversable;
+  # https://github.com/maoe/ghc-trace-events/pull/17
+  ghc-trace-events = doJailbreak super.ghc-trace-events; # base < 4.22
+  # HLS, for some reason, decided to remove the hie-compat library from its tree
+  # in https://github.com/haskell/haskell-language-server/pull/4613
+  # even though hiedb (a dependency of HLS) unconditionally depends on it
+  # for all GHC versions. As a result, no one has updated the base bound
+  # of hie-compat to allow building it with GHC 9.14 neither in tree
+  # (which no longer exists) nor on Hackage. Instead, HLS is updating their
+  # cabal.project: https://github.com/haskell/haskell-language-server/blob/a4cfaa80ca94beded6f01547a161b37be7b33558/cabal.project#L78
+  hie-compat = doJailbreak super.hie-compat; # base < 4.22
 
   # Too strict bound on containers in test suite
   # https://github.com/jaspervdj/blaze-markup/issues/69
@@ -164,4 +142,19 @@ with haskellLib;
   # https://github.com/jaspervdj/blaze-html/issues/151
   blaze-html = doJailbreak super.blaze-html;
 
+  #
+  # Test suite issues
+  #
+
+  # Fails to compile with GHC 9.14 https://github.com/snoyberg/mono-traversable/pull/261
+  mono-traversable = dontCheck super.mono-traversable;
+  # doctests broke with GHC 9.14, something to do with error messages
+  # https://github.com/kcsongor/generic-lens/issues/174
+  generic-lens = overrideCabal {
+    testTargets = [
+      "generic-lens-bifunctor"
+      "inspection-tests"
+      "generic-lens-syb-tree"
+    ];
+  } super.generic-lens;
 }

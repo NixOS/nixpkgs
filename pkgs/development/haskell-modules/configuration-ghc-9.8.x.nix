@@ -64,7 +64,7 @@ in
   Win32 = null;
 
   # Becomes a core package in GHC >= 9.10
-  os-string = doDistribute self.os-string_2_0_10;
+  os-string = doDistribute self.os-string_2_0_11;
 
   # Become core packages in GHC >= 9.10, no release compatible with GHC < 9.10 is available
   ghc-experimental = null;
@@ -72,6 +72,11 @@ in
   # Become core packages in GHC >= 9.10, but aren't uploaded to Hackage
   ghc-toolchain = null;
   ghc-platform = null;
+
+  # Become core packages in GHC >= 9.12
+  file-io = doDistribute self.file-io_0_2_0;
+  haddock-api = markBroken self.haddock-api_2_29_1; # no compatible release available
+  haddock-library = doJailbreak (doDistribute self.haddock-library_1_11_0);
 
   #
   # Version upgrades
@@ -106,7 +111,6 @@ in
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = doDistribute super.ghc-exactprint_1_8_0_0;
 
-  haddock-library = doJailbreak super.haddock-library;
   ghc-lib = doDistribute self.ghc-lib_9_8_5_20250214;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_8_5_20250214;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_8_0_2;
@@ -116,6 +120,8 @@ in
         hls_overlay = lself: lsuper: {
           Cabal-syntax = lself.Cabal-syntax_3_10_3_0;
           Cabal = lself.Cabal_3_10_3_0;
+          # Test suite can't find executable due to https://github.com/haskell/cabal/issues/11598
+          cabal-add = dontCheck lsuper.cabal-add_0_2;
           extensions = dontCheck (doJailbreak lself.extensions_0_1_0_1);
         };
       in
@@ -128,13 +134,16 @@ in
           self.retrie
           self.floskell
           self.markdown-unlit
+          self.stan
+          self.trial
         ] super.haskell-language-server;
         hls-plugin-api = super.hls-plugin-api;
         hlint = self.hlint_3_8;
         lsp-types = super.lsp-types;
-        ormolu = self.ormolu_0_7_4_0;
+        ormolu = doJailbreak self.ormolu_0_7_4_0;
         retrie = doJailbreak (unmarkBroken super.retrie);
-        stylish-haskell = self.stylish-haskell_0_14_6_0;
+        stan = super.stan;
+        stylish-haskell = doJailbreak self.stylish-haskell_0_14_6_0;
       }
     )
     apply-refact
@@ -147,6 +156,7 @@ in
     lsp-types
     ormolu
     retrie
+    stan
     stylish-haskell
     ;
 }
