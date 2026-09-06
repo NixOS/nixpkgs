@@ -360,6 +360,7 @@ mapAliases {
   astronomer = throw "'astronomer' has been removed, as it has been unmaintained upstream since August 2020"; # Added 2026-01-01
   atlassian-cli = appfire-cli; # Added 2025-09-29
   ats = throw "'ats' has been removed as it is unmaintained for 10 years and broken"; # Added 2025-05-17
+  audacity_4 = audacity; # Added 2026-09-05
   audio-recorder = throw "'audio-recorder' has been removed, as it is unmaintained upstream and broken. Consider using 'gnome-sound-recorder' or 'reco' instead"; # Added 2026-01-02
   august = throw "'august' has been removed, as it has been unmaintained since august 2023"; # Added 2025-12-25
   AusweisApp2 = throw "'AusweisApp2' has been renamed to/replaced by 'ausweisapp'"; # Converted to throw 2025-10-27
