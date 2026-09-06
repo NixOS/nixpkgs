@@ -9196,6 +9196,12 @@
     githubId = 62179193;
     name = "Francesco Carmelo Capria";
   };
+  fcosanabria = {
+    email = "fsanabria@mm.st";
+    github = "fcosanabria";
+    githubId = 37163970;
+    name = "Francisco Sanabria";
+  };
   fd = {
     email = "simon.menke@gmail.com";
     github = "fd";
