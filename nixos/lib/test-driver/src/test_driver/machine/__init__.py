@@ -22,7 +22,14 @@ from pathlib import Path
 from queue import Queue
 from typing import Any
 
-from test_driver.display import graphical_display_available
+from test_driver.config import (
+    DisplayBackend,
+    DisplayProtocol,
+    DisplayTargetConfiguration,
+    DisplayViewerConfiguration,
+    NspawnDisplayExporterConfiguration,
+)
+from test_driver.display import DisplaySession, graphical_display_available
 from test_driver.duration import (
     Duration,
     _warn_if_numeric_duration,
@@ -32,6 +39,7 @@ from test_driver.duration import (
 from test_driver.efi import EfiVariable, EfiVars
 from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
+from test_driver.machine.nspawn_display import create_nspawn_display_exporter
 from test_driver.machine.ocr import (
     perform_ocr_on_screenshot,
     perform_ocr_variants_on_screenshot,
@@ -1666,6 +1674,12 @@ class NspawnMachine(BaseMachine):
     machine_sock: socket.socket | None
     notify_thread: threading.Thread | None
 
+    interactive: bool
+    display_targets: list[DisplayTargetConfiguration]
+    display_exporters: dict[DisplayBackend, NspawnDisplayExporterConfiguration]
+    display_viewers: dict[DisplayProtocol, DisplayViewerConfiguration]
+    display_sessions: list[DisplaySession]
+
     @staticmethod
     def machine_name_from_start_command(start_command: str) -> str:
         match = re.search("run-(.+)-nspawn", os.path.basename(start_command))
@@ -1681,6 +1695,14 @@ class NspawnMachine(BaseMachine):
         logger: AbstractLogger,
         callbacks: list[Callable] | None = None,
         keep_machine_state: bool = False,
+        interactive: bool = False,
+        display_targets: list[DisplayTargetConfiguration] | None = None,
+        display_exporters: (
+            dict[DisplayBackend, NspawnDisplayExporterConfiguration] | None
+        ) = None,
+        display_viewers: (
+            dict[DisplayProtocol, DisplayViewerConfiguration] | None
+        ) = None,
     ):
         # TODO: don't compute `name` from `start_command` path, instead thread it down explicitly.
         # See analogous TODO in `QemuStartCommand::machine_name`.
@@ -1694,6 +1716,11 @@ class NspawnMachine(BaseMachine):
         )
 
         self.start_command = start_command
+        self.interactive = interactive
+        self.display_targets = display_targets or []
+        self.display_exporters = display_exporters or {}
+        self.display_viewers = display_viewers or {}
+        self.display_sessions = []
         self.process = None
         self.notify_thread = None
         # State maintained by the notify-socket drainer thread (see
@@ -1782,8 +1809,62 @@ class NspawnMachine(BaseMachine):
         proxy_cmd = f"socat - UNIX-CLIENT:{socket_path}"
         return f'ssh -o User=root -o ProxyCommand="{proxy_cmd}" bash'
 
+    def _stop_display_sessions(self) -> None:
+        for session in self.display_sessions:
+            session.stop()
+
+    def _join_display_sessions(self) -> None:
+        for session in self.display_sessions:
+            session.join()
+        self.display_sessions = []
+
+    def _is_container_running(self) -> bool:
+        return self.process is not None and self.process.poll() is None
+
+    def _start_display_sessions(self) -> None:
+        if not self.interactive or not self.display_targets:
+            return
+        if not graphical_display_available():
+            self.log("no graphical host display available; display viewers disabled")
+            return
+
+        for index, target in enumerate(self.display_targets):
+            exporter_configuration = self.display_exporters.get(target.backend)
+            if exporter_configuration is None:
+                self.log(
+                    f"display export for backend {target.backend} is not configured"
+                )
+                continue
+            display_exporter = create_nspawn_display_exporter(
+                target=target,
+                configuration=exporter_configuration,
+                port=5900 + index,
+                unit=f"nixos-test-display-{index}",
+                execute=self._execute,
+                wait_for_container_pid=lambda: self.get_systemd_process,
+                container_running=self._is_container_running,
+                log=self.log,
+            )
+            viewer = self.display_viewers.get(display_exporter.protocol)
+            if viewer is None:
+                self.log(
+                    f"display viewer for protocol {display_exporter.protocol} is not configured"
+                )
+                continue
+            session = DisplaySession(
+                exporter=display_exporter,
+                viewer_configuration=viewer,
+                machine_running=self._is_container_running,
+                log=self.log,
+            )
+            self.display_sessions.append(session)
+            session.start()
+
     def release(self) -> None:
+        self._stop_display_sessions()
+
         if self.process is None:
+            self._join_display_sessions()
             return
 
         if self.machine_sock:
@@ -1803,6 +1884,7 @@ class NspawnMachine(BaseMachine):
             self.process.kill()
             self.process.wait()
         self.process = None
+        self._join_display_sessions()
 
     def is_up(self) -> bool:
         return self.process is not None
@@ -2029,6 +2111,7 @@ class NspawnMachine(BaseMachine):
 
         journal_thread = threading.Thread(target=self._stream_journal, daemon=True)
         journal_thread.start()
+        self._start_display_sessions()
 
     def shutdown(self) -> None:
         """
@@ -2050,6 +2133,8 @@ class NspawnMachine(BaseMachine):
         with self.nested("waiting for the container to power off"):
             self.process.wait()
             self.process = None
+            self._stop_display_sessions()
+            self._join_display_sessions()
 
 
 class MachineDeprecationWrapper:

@@ -179,6 +179,7 @@ def main() -> None:
         logger=logger,
         keep_machine_state=args.keep_machine_state,
         debug=debugger,
+        interactive=bool(args.interactive),
     ) as driver:
         if driver.config.enable_ssh_backdoor:
             driver.dump_machine_ssh()

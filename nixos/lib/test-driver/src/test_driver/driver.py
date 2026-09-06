@@ -126,6 +126,7 @@ class Driver:
     polling_conditions: list[PollingCondition]
     race_timer: threading.Timer
     keep_machine_state: bool
+    interactive: bool
     logger: AbstractLogger
     debug: DebugAbstract
     vhost_vsock: VHostDeviceVsock | None = None
@@ -137,6 +138,7 @@ class Driver:
         logger: AbstractLogger,
         keep_machine_state: bool = False,
         debug: DebugAbstract = DebugNop(),
+        interactive: bool = False,
     ):
         self.config = config
         self.tests = config.test_script.read_text()
@@ -145,6 +147,7 @@ class Driver:
         self.debug = debug
         self.polling_conditions = []
         self.keep_machine_state = keep_machine_state
+        self.interactive = interactive
 
     def __enter__(self) -> "Driver":
         self.race_timer = threading.Timer(
@@ -198,6 +201,10 @@ class Driver:
                 keep_machine_state=self.keep_machine_state,
                 callbacks=[self.check_polling_conditions],
                 out_dir=self.out_dir,
+                interactive=self.interactive,
+                display_targets=container_config.display_targets,
+                display_exporters=container_config.display_exporters,
+                display_viewers=self.config.display_viewers,
             )
             for name, container_config in self.config.containers.items()
         ]
