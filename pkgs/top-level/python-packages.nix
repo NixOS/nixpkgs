@@ -7733,6 +7733,8 @@ self: super: with self; {
 
   housekeeping = callPackage ../development/python-modules/housekeeping { };
 
+  hoymiles-wifi = callPackage ../development/python-modules/hoymiles-wifi { };
+
   hpack = callPackage ../development/python-modules/hpack { };
 
   hpccm = callPackage ../development/python-modules/hpccm { };
