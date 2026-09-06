@@ -5142,6 +5142,8 @@ self: super: with self; {
 
   doubles = callPackage ../development/python-modules/doubles { };
 
+  doujinshi-dl-nhentai = callPackage ../development/python-modules/doujinshi-dl-nhentai { };
+
   dowhen = callPackage ../development/python-modules/dowhen { };
 
   downloader-cli = callPackage ../development/python-modules/downloader-cli { };
