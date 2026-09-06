@@ -141,6 +141,9 @@ in
           # soon as it starts.
           machine.wait_for_file("${logFilePath}.log", timeout=120)
 
+      with subtest("session type is wayland"):
+          machine.succeed("grep -z '^XDG_SESSION_TYPE=wayland$' /proc/$(pgrep -o -u ${user.name} -x cosmic-session)/environ")
+
       exit_code = 0
       try:
           machine.wait_for_file("${logFilePath}.done", timeout=700)
