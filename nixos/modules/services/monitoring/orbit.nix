@@ -43,6 +43,20 @@ in
 
     osqueryPackage = lib.mkPackageOption pkgs "osquery" { };
 
+    scriptPackages = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [
+        pkgs.bash
+        pkgs.zsh
+        pkgs.python3
+      ];
+      defaultText = lib.literalExpression "[ pkgs.bash pkgs.zsh pkgs.python3 ]";
+      description = ''
+        Packages added to the Orbit service PATH when Fleet script execution is enabled.
+        These are used by scripts with env-based shebangs.
+      '';
+    };
+
     desktop = {
       enable = lib.mkEnableOption "Fleet Desktop tray application";
 
@@ -57,6 +71,14 @@ in
           required when Fleet uses TLS client authentication.
         '';
       };
+    };
+
+    setupExperience = {
+      enable = lib.mkEnableOption "Fleet's web setup experience" // {
+        default = true;
+      };
+
+      browserPackage = lib.mkPackageOption pkgs "xdg-utils" { };
     };
 
     fleetUrl = lib.mkOption {
@@ -154,6 +176,7 @@ in
         ORBIT_HOST_IDENTIFIER = cfg.hostIdentifier;
         ORBIT_INSECURE = lib.boolToString cfg.insecure;
         ORBIT_FLEET_DESKTOP_ALTERNATIVE_BROWSER_HOST = cfg.desktop.alternativeBrowserHost;
+        ORBIT_DISABLE_SETUP_EXPERIENCE = lib.boolToString (!cfg.setupExperience.enable);
 
         ORBIT_DISABLE_KEYSTORE = "true";
         ORBIT_DISABLE_UPDATES = "true";
@@ -161,10 +184,16 @@ in
         ORBIT_LOG_FILE = "/var/log/orbit/orbit.log";
         ORBIT_OSQUERY_DB = "/var/lib/orbit/osquery.db";
         ORBIT_ROOT_DIR = "/var/lib/orbit";
-        NIX_ORBIT_OSQUERYD_PATH = lib.getExe' cfg.osqueryPackage "osqueryd";
-        NIX_ORBIT_OSQUERY_LOG_PATH = "/var/log/orbit/osquery";
-        NIX_ORBIT_DESKTOP_PATH = if cfg.desktop.enable then lib.getExe cfg.desktop.package else null;
+        ORBIT_OSQUERYD_PATH = lib.getExe' cfg.osqueryPackage "osqueryd";
+        ORBIT_OSQUERY_LOG_PATH = "/var/log/orbit/osquery";
+        ORBIT_DESKTOP_PATH = if cfg.desktop.enable then lib.getExe cfg.desktop.package else null;
+        ORBIT_BROWSER_PATH = lib.getExe' cfg.setupExperience.browserPackage "xdg-open";
       };
+
+      path = [
+        (lib.dirOf config.security.wrapperDir)
+      ]
+      ++ lib.optionals cfg.enableScripts cfg.scriptPackages;
 
       serviceConfig = {
         ExecStart = lib.getExe cfg.orbitPackage;

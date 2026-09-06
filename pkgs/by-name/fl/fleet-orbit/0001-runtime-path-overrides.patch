@@ -1,0 +1,294 @@
+diff --git a/orbit/cmd/orbit/orbit.go b/orbit/cmd/orbit/orbit.go
+--- a/orbit/cmd/orbit/orbit.go
++++ b/orbit/cmd/orbit/orbit.go
+@@ -166,6 +166,26 @@
+ 			Usage:   "Disables auto updates",
+ 			EnvVars: []string{"ORBIT_DISABLE_UPDATES"},
+ 		},
++		&cli.StringFlag{
++			Name:    "osqueryd-path",
++			Usage:   "Path to an externally managed osqueryd executable",
++			EnvVars: []string{"ORBIT_OSQUERYD_PATH"},
++		},
++		&cli.StringFlag{
++			Name:    "desktop-path",
++			Usage:   "Path to an externally managed Fleet Desktop executable",
++			EnvVars: []string{"ORBIT_DESKTOP_PATH"},
++		},
++		&cli.StringFlag{
++			Name:    "osquery-log-path",
++			Usage:   "Directory for osquery result and status logs",
++			EnvVars: []string{"ORBIT_OSQUERY_LOG_PATH"},
++		},
++		&cli.StringFlag{
++			Name:    "browser-path",
++			Usage:   "Path to the browser launcher used by the setup experience",
++			EnvVars: []string{"ORBIT_BROWSER_PATH"},
++		},
+ 		&cli.BoolFlag{
+ 			Name:    "dev-mode",
+ 			Usage:   "Runs in development mode",
+@@ -393,6 +413,44 @@
+ 	return nil
+ }
+ 
++func externalComponentPaths(osquerydPath, desktopPath string, desktopEnabled bool) (string, string, bool, error) {
++	external := osquerydPath != "" || desktopPath != ""
++	if !external {
++		return "", "", false, nil
++	}
++	if osquerydPath == "" {
++		return "", "", false, errors.New("desktop-path requires osqueryd-path")
++	}
++	if desktopEnabled && desktopPath == "" {
++		return "", "", false, errors.New("fleet-desktop requires desktop-path when osqueryd-path is configured")
++	}
++	if !desktopEnabled {
++		desktopPath = ""
++	}
++	return osquerydPath, desktopPath, true, nil
++}
++
++func shouldRunUpdater(disableUpdates, devMode, externalComponents bool) bool {
++	return !externalComponents && (!disableUpdates || devMode)
++}
++
++func configuredPath(value, fallback string) string {
++	if value != "" {
++		return value
++	}
++	return fallback
++}
++
++func linuxBrowserPath(configured string, pathExists func(string) bool) string {
++	if configured != "" {
++		return configured
++	}
++	if pathExists("/usr/bin/firefox") {
++		return "/usr/bin/firefox"
++	}
++	return "/usr/bin/xdg-open"
++}
++
+ // orbitAction is a named function so that NilAway can analyze it for nil-safety.
+ func orbitAction(c *cli.Context) error {
+ 	if c.Bool("version") {
+@@ -634,11 +692,18 @@
+ 	opt.ServerCertificatePath = c.String("update-tls-certificate")
+ 
+ 	var (
+-		osquerydPath string
+-		desktopPath  string
+-		g            run.Group
+-		appDoneCh    chan struct{} // closed when runner run.group.Run() returns
++		g         run.Group
++		appDoneCh chan struct{} // closed when runner run.group.Run() returns
++	)
++	osquerydPath, desktopPath, externalComponents, err := externalComponentPaths(
++		c.String("osqueryd-path"),
++		c.String("desktop-path"),
++		c.Bool("fleet-desktop"),
+ 	)
++	if err != nil {
++		return err
++	}
++	updatesEnabled := shouldRunUpdater(c.Bool("disable-updates"), c.Bool("dev-mode"), externalComponents)
+ 
+ 	// Setting up the system service management early on the process lifetime
+ 	appDoneCh = make(chan struct{})
+@@ -671,7 +736,7 @@
+ 	var updater *update.Updater
+ 	var updateRunner *update.Runner
+ 	var osqueryVersion string
+-	if !c.Bool("disable-updates") || c.Bool("dev-mode") {
++	if updatesEnabled {
+ 		updater, err := update.NewUpdater(opt)
+ 		if err != nil {
+ 			return fmt.Errorf("create updater: %w", err)
+@@ -755,6 +820,13 @@
+ 			// executed without a defined number of max attempts
+ 			return fmt.Errorf("getting targets after retry: %w", err)
+ 		}
++	} else if externalComponents {
++		log.Info().Msg("running with externally managed components")
++		log.Info().Msgf("orbit version: %s", build.Version)
++		if v, err := update.GetVersion(osquerydPath); err == nil && v != "" {
++			log.Info().Msgf("Found osquery version: %s", v)
++			osqueryVersion = v
++		}
+ 	} else {
+ 		log.Info().Msg("running with auto updates disabled")
+ 		updater = update.NewDisabled(opt)
+@@ -908,7 +980,7 @@
+ 		optionsAfterFlagfile []osquery.Option
+ 	)
+ 	options = append(options, osquery.WithDataPath(c.String("root-dir"), ""))
+-	options = append(options, osquery.WithLogPath(filepath.Join(c.String("root-dir"), "osquery_log")))
++	options = append(options, osquery.WithLogPath(configuredPath(c.String("osquery-log-path"), filepath.Join(c.String("root-dir"), "osquery_log"))))
+ 	optionsAfterFlagfile = append(optionsAfterFlagfile, osquery.WithFlags(
+ 		[]string{"--database_path", osqueryDB},
+ 	))
+@@ -1195,7 +1267,7 @@
+ 	// Set the function that will be called to open the SSO window if an enroll
+ 	// request returns an "end user authentication required" error.
+ 	orbitClient.SetOpenSSOWindowFunc(func() error {
+-		err = openBrowserWindow(fleetURL + "/mdm/sso?initiator=" + fleet.SSOInitiatorOrbitSetupExperience + "&host_uuid=" + orbitHostInfo.HardwareUUID)
++		err = openBrowserWindow(fleetURL+"/mdm/sso?initiator="+fleet.SSOInitiatorOrbitSetupExperience+"&host_uuid="+orbitHostInfo.HardwareUUID, c.String("browser-path"))
+ 		if err != nil {
+ 			return fmt.Errorf("opening browser: %w", err)
+ 		}
+@@ -1313,7 +1385,7 @@
+ 	startedInDebug := c.Bool("debug")
+ 	orbitClient.RegisterConfigReceiver(update.NewDebugLogReceiver(startedInDebug))
+ 
+-	if !c.Bool("disable-updates") {
++	if !externalComponents && !c.Bool("disable-updates") {
+ 		serverOverridesReceiver := newServerOverridesReceiver(
+ 			c.String("root-dir"),
+ 			fallbackServerOverridesConfig{
+@@ -1330,7 +1402,7 @@
+ 	// only setup extensions autoupdate if we have enabled updates
+ 	// for extensions autoupdate, we can only proceed after orbit is enrolled in fleet
+ 	// and all relevant things for it (like certs, enroll secrets, tls proxy, etc) is configured
+-	if !c.Bool("disable-updates") || c.Bool("dev-mode") {
++	if updatesEnabled {
+ 		extRunner := update.NewExtensionConfigUpdateRunner(update.ExtensionUpdateOptions{
+ 			RootDir: c.String("root-dir"),
+ 		}, updateRunner, orbitClient.TriggerOrbitRestart)
+@@ -1619,7 +1691,7 @@
+ 		}
+ 		// My Device page
+ 		browserURL := deviceClient.BrowserDeviceURL(token)
+-		return openBrowserWindow(browserURL)
++		return openBrowserWindow(browserURL, c.String("browser-path"))
+ 	}
+ 
+ 	if runSetupExperience {
+@@ -2580,7 +2652,7 @@
+ 	return nil
+ }
+ 
+-func openBrowserWindow(browserURL string) error {
++func openBrowserWindow(browserURL, browserPath string) error {
+ 	switch runtime.GOOS {
+ 	case "linux":
+ 		loggedInUser, err := user.UserLoggedInViaGui()
+@@ -2592,11 +2664,10 @@
+ 			return errors.New("no user logged in")
+ 		}
+ 
+-		browserBin := "/usr/bin/xdg-open"
+-		firefoxBin := "/usr/bin/firefox"
+-		if _, err := os.Stat(firefoxBin); err == nil {
+-			browserBin = firefoxBin
+-		}
++		browserBin := linuxBrowserPath(browserPath, func(path string) bool {
++			_, err := os.Stat(path)
++			return err == nil
++		})
+ 
+ 		var opts []execuser.Option
+ 		opts = append(opts, execuser.WithUser(*loggedInUser))
+
+diff --git a/orbit/cmd/orbit/orbit_test.go b/orbit/cmd/orbit/orbit_test.go
+index a83a97075..74fd32d6c 100644
+--- a/orbit/cmd/orbit/orbit_test.go
++++ b/orbit/cmd/orbit/orbit_test.go
+@@ -389,3 +389,97 @@ func TestProcessLog(t *testing.T) {
+ 	msg = <-runner.errorNotifyCh
+ 	assert.Equal(t, string(logErrorMissingExecMsg), msg)
+ }
++
++func TestExternalComponentPaths(t *testing.T) {
++	for _, tc := range []struct {
++		name           string
++		osquerydPath   string
++		desktopPath    string
++		desktopEnabled bool
++		wantOsqueryd   string
++		wantDesktop    string
++		wantExternal   bool
++		wantErr        bool
++	}{
++		{
++			name: "updater-managed components",
++		},
++		{
++			name:           "external osqueryd",
++			osquerydPath:   "/nix/store/osquery/bin/osqueryd",
++			wantOsqueryd:   "/nix/store/osquery/bin/osqueryd",
++			wantExternal:   true,
++			desktopEnabled: false,
++		},
++		{
++			name:           "external osqueryd and desktop",
++			osquerydPath:   "/nix/store/osquery/bin/osqueryd",
++			desktopPath:    "/nix/store/fleet-desktop/bin/fleet-desktop",
++			desktopEnabled: true,
++			wantOsqueryd:   "/nix/store/osquery/bin/osqueryd",
++			wantDesktop:    "/nix/store/fleet-desktop/bin/fleet-desktop",
++			wantExternal:   true,
++		},
++		{
++			name:           "missing external osqueryd",
++			desktopPath:    "/nix/store/fleet-desktop/bin/fleet-desktop",
++			desktopEnabled: true,
++			wantErr:        true,
++		},
++		{
++			name:           "missing external desktop",
++			osquerydPath:   "/nix/store/osquery/bin/osqueryd",
++			desktopEnabled: true,
++			wantErr:        true,
++		},
++	} {
++		t.Run(tc.name, func(t *testing.T) {
++			gotOsqueryd, gotDesktop, gotExternal, err := externalComponentPaths(
++				tc.osquerydPath,
++				tc.desktopPath,
++				tc.desktopEnabled,
++			)
++			if tc.wantErr {
++				require.Error(t, err)
++				return
++			}
++			require.NoError(t, err)
++			require.Equal(t, tc.wantOsqueryd, gotOsqueryd)
++			require.Equal(t, tc.wantDesktop, gotDesktop)
++			require.Equal(t, tc.wantExternal, gotExternal)
++		})
++	}
++}
++
++func TestShouldRunUpdater(t *testing.T) {
++	for _, tc := range []struct {
++		name           string
++		disableUpdates bool
++		devMode        bool
++		external       bool
++		wantRunUpdater bool
++	}{
++		{name: "updates enabled", wantRunUpdater: true},
++		{name: "updates disabled", disableUpdates: true},
++		{name: "development mode", disableUpdates: true, devMode: true, wantRunUpdater: true},
++		{name: "external components", external: true},
++		{name: "external components in development mode", devMode: true, external: true},
++	} {
++		t.Run(tc.name, func(t *testing.T) {
++			require.Equal(t, tc.wantRunUpdater, shouldRunUpdater(tc.disableUpdates, tc.devMode, tc.external))
++		})
++	}
++}
++
++func TestConfiguredPath(t *testing.T) {
++	require.Equal(t, "/configured", configuredPath("/configured", "/fallback"))
++	require.Equal(t, "/fallback", configuredPath("", "/fallback"))
++}
++
++func TestLinuxBrowserPath(t *testing.T) {
++	pathExists := func(path string) bool { return path == "/usr/bin/firefox" }
++
++	require.Equal(t, "/nix/store/xdg-utils/bin/xdg-open", linuxBrowserPath("/nix/store/xdg-utils/bin/xdg-open", pathExists))
++	require.Equal(t, "/usr/bin/firefox", linuxBrowserPath("", pathExists))
++	require.Equal(t, "/usr/bin/xdg-open", linuxBrowserPath("", func(string) bool { return false }))
++}
