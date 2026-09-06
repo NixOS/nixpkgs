@@ -2,6 +2,7 @@
   lib,
   stdenv,
   python3Packages,
+  qt6,
   fetchFromGitHub,
   fetchzip,
   makeBinaryWrapper,
@@ -12,18 +13,17 @@
   replaceVars,
 
   todds,
-
   steam,
 }:
 let
   pname = "rimsort";
-  version = "1.0.76";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "RimSort";
     repo = "RimSort";
     tag = "v${version}";
-    hash = "sha256-EO1j4GPRQSB+QEF4tB87x4nCUKpdWU9aGlDFghwxar0=";
+    hash = "sha256-1yUzRqOrrSBe5ulUiNiJGdF/fg1wCT/0Y6baWZ+VUjc=";
     fetchSubmodules = true;
   };
 
@@ -51,6 +51,8 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+
   inherit pname;
   inherit version;
   inherit src;
@@ -75,11 +77,14 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeBinaryWrapper
     copyDesktopItems
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
     todds
     steamfiles
+    qt6.qtbase
+    qt6.qtwayland
   ]
   ++ builtins.attrValues {
     inherit (python3Packages)
@@ -132,20 +137,30 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   disabledTestPaths = [
-    # requires network (clones GitHub: Community-Rules-Database, Steam-Workshop-Database)
+    # Requires network access (clones GitHub: Community-Rules-Database, Steam-Workshop-Database)
     "tests/models/metadata/test_metadata_factory.py"
+    # Requires network access.
+    "tests/utils/test_privatebin.py"
+  ];
+
+  disabledTests = [
+    # Works with hard-coded executable paths.
+    "test_execute_calls_runner_when_binary_exists"
+    "test_execute_shows_error_when_binary_missing"
+    "test_download_mods_sets_console_log_path"
   ];
 
   pytestFlags = [ "--doctest-modules" ];
 
   desktopItems = [
     (makeDesktopItem {
-      name = "RimSort";
+      name = "io.github.rimsort.RimSort";
       desktopName = "RimSort";
       exec = "rimsort";
       icon = "rimsort";
       comment = "RimWorld Mod Manager";
       categories = [ "Game" ];
+      startupWMClass = "io.github.rimsort.RimSort";
     })
   ];
 
@@ -157,17 +172,20 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/bin
 
+    install -D ./themes/default-icons/AppIcon_a.png $out/share/icons/hicolor/512x512/apps/rimsort.png
+
+    runHook postInstall
+  '';
+
+  postFixup = ''
     makeBinaryWrapper \
       ${python3Packages.python.interpreter} \
       $out/bin/rimsort \
       --add-flags "-m app" \
       --chdir $out/lib/rimsort \
       --prefix PYTHONPATH : "$PYTHONPATH" \
-      --set RIMSORT_DISABLE_UPDATER 1
-
-    install -D ./themes/default-icons/AppIcon_a.png $out/share/icons/hicolor/512x512/apps/rimsort.png
-
-    runHook postInstall
+      --set RIMSORT_DISABLE_UPDATER 1 \
+      "''${qtWrapperArgs[@]}"
   '';
 
   passthru.updateScript = nix-update-script {
@@ -186,7 +204,9 @@ stdenv.mkDerivation (finalAttrs: {
       # For libsteam_api.so
       valveSDK
     ];
-    maintainers = with lib.maintainers; [ weirdrock ];
+    maintainers = with lib.maintainers; [
+      adda
+    ];
     mainProgram = "rimsort";
     # steamworksSrc is x86_64-linux only
     platforms = [ "x86_64-linux" ];
