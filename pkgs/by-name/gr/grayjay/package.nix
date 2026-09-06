@@ -1,6 +1,7 @@
 {
   buildDotnetModule,
   fetchFromGitLab,
+  fetchurl,
   dotnetCorePackages,
   lib,
   ffmpeg,
@@ -44,17 +45,22 @@
   _experimental-update-script-combinators,
   grayjay-frontend,
   grayjay-libcurlshim,
+  unzip,
 }:
 let
-  version = "17";
+  version = "18";
   src = fetchFromGitLab {
     domain = "gitlab.futo.org";
     owner = "videostreaming";
     repo = "Grayjay.Desktop";
     tag = version;
-    hash = "sha256-/oeoLXKewjYkCO7naZNOzauWm1OYDKnsxXY9EkI7fTM=";
+    hash = "sha256-dhXUjj9x8v1bfHLPxNtcysj/eKeT3kkSeVuX6PKoykE=";
     fetchSubmodules = true;
     fetchLFS = true;
+  };
+  justcefNative = fetchurl {
+    url = "https://static.grayjay.app/justcef/1/JustCefNative-linux-x64.zip";
+    hash = "sha256-LXOp+QZZcWBd8eP+BpK++AMBo9303+aIDEEYNVWekhE=";
   };
   getLibrary =
     pkg: libnm:
@@ -88,6 +94,7 @@ buildDotnetModule (finalAttrs: {
     autoPatchelfHook
     wrapGAppsHook3
     copyDesktopItems
+    unzip
   ];
 
   dontWrapGApps = true;
@@ -108,7 +115,7 @@ buildDotnetModule (finalAttrs: {
     "Grayjay.Engine/Grayjay.Engine/Grayjay.Engine.csproj"
     "Grayjay.Desktop.CEF/Grayjay.Desktop.CEF.csproj"
     "FUTO.MDNS/FUTO.MDNS/FUTO.MDNS.csproj"
-    "JustCef/DotCef.csproj"
+    "JustCef/JustCef.csproj"
   ];
 
   testProjectFile = [
@@ -134,6 +141,10 @@ buildDotnetModule (finalAttrs: {
   preBuild = ''
     rm -r Grayjay.ClientServer/wwwroot/web
     cp -r ${grayjay-frontend} Grayjay.ClientServer/wwwroot/web
+
+    mkdir -p JustCef/obj/justcef/net8.0/1/linux-x64
+    cp ${justcefNative} \
+      JustCef/obj/justcef/net8.0/1/linux-x64/JustCefNative-linux-x64.zip
   '';
 
   postInstall = ''
@@ -148,8 +159,8 @@ buildDotnetModule (finalAttrs: {
     ln -s ${getLibrary libsodium "sodium"} $out/lib/grayjay/libsodium.so
     ln -s ${getLibrary sqlite "sqlite3"} $out/lib/grayjay/libe_sqlite3.so
 
-    # CEF is still vendored for now
-    chmod +x $out/lib/grayjay/cef/dotcefnative
+    # Explicitly fetched and copied over in preBuild
+    chmod +x $out/lib/grayjay/cef/justcefnative
 
     mkdir -p $out/share/icons/hicolor/scalable/apps
     ln -s $out/lib/grayjay/grayjay.png $out/share/icons/hicolor/scalable/apps/grayjay.png
