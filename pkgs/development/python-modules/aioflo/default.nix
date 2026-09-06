@@ -10,7 +10,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioflo";
   version = "2026.09.3";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "aioflo";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-VZ0kHqv+SAZ5JfXJRN6kFFYl2V5ahJJCDdf1kdzIj/Q=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for Flo by Moen Smart Water Detectors";
     homepage = "https://github.com/bachya/aioflo";
-    changelog = "https://github.com/bachya/aioflo/releases/tag/${version}";
+    changelog = "https://github.com/bachya/aioflo/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
