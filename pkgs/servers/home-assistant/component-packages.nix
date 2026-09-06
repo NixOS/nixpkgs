@@ -4752,7 +4752,8 @@
       ];
     "neopool" =
       ps: with ps; [
-      ]; # missing inputs: neopool-modbus
+        neopool-modbus
+      ];
     "ness_alarm" =
       ps: with ps; [
         nessclient
@@ -8994,6 +8995,7 @@
     "nasweb"
     "neato"
     "nederlandse_spoorwegen"
+    "neopool"
     "ness_alarm"
     "nest"
     "netatmo"
