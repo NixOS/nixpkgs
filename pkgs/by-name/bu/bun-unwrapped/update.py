@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p nix-prefetch-git python3
+#!nix-shell -i python3 -p nix-prefetch-git python3 coreutils
 """Update Bun's pinned sources and fixed-output hashes."""
 
 from __future__ import annotations
@@ -203,7 +203,7 @@ def validate_llvm_version(source: Path) -> None:
     )
     if not version.startswith("21.1."):
         raise RuntimeError(
-            f"Bun requires LLVM {version}; update llvmPackages_21 before updating"
+            f"Bun requires LLVM {version}; update the llvmPackages assertion before updating"
         )
 
 
@@ -308,9 +308,7 @@ def pin_webkit(source: Path, current: WebKitPin, *, force: bool) -> WebKitPin:
 def cargo_hash(version: str, source: Path) -> str:
     expression = f"""
 let
-  pkgs = import (builtins.toPath {json.dumps(str(NIXPKGS_ROOT))}) {{
-    system = "x86_64-linux";
-  }};
+  pkgs = import (builtins.toPath {json.dumps(str(NIXPKGS_ROOT))}) {{}};
 in
 pkgs.rustPlatform.fetchCargoVendor {{
   pname = "bun-cargo-deps";
@@ -339,9 +337,7 @@ def bootstrap_path(version: str, asset: BootstrapPin) -> Path:
     url = f"https://github.com/oven-sh/bun/releases/download/bun-v{version}/{asset['name']}.zip"
     expression = f"""
 let
-  pkgs = import (builtins.toPath {json.dumps(str(NIXPKGS_ROOT))}) {{
-    system = "x86_64-linux";
-  }};
+  pkgs = import (builtins.toPath {json.dumps(str(NIXPKGS_ROOT))}) {{}};
 in
 pkgs.stdenvNoCC.mkDerivation {{
   pname = "bun-update-bootstrap";
@@ -351,8 +347,16 @@ pkgs.stdenvNoCC.mkDerivation {{
     hash = {json.dumps(asset["hash"])};
   }};
   sourceRoot = {json.dumps(asset["name"])};
-  nativeBuildInputs = [ pkgs.unzip pkgs.autoPatchelfHook ];
-  buildInputs = [ pkgs.openssl pkgs.stdenv.cc.cc.lib ];
+  nativeBuildInputs = [ pkgs.unzip ]
+    ++ pkgs.lib.optionals pkgs.stdenv.isLinux [ pkgs.autoPatchelfHook ];
+  buildInputs = pkgs.lib.optionals pkgs.stdenv.isLinux [
+    pkgs.openssl pkgs.stdenv.cc.cc.lib
+  ];
+  postFixup = pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
+    ${{pkgs.lib.getExe' pkgs.cctools "install_name_tool"}} "$out/bin/bun" \
+      -change /usr/lib/libicucore.A.dylib '${{pkgs.lib.getLib pkgs.darwin.ICU}}/lib/libicucore.A.dylib'
+    ${{pkgs.lib.getExe pkgs.rcodesign}} sign --code-signature-flags linker-signed "$out/bin/bun"
+  '';
   installPhase = ''
     install -Dm755 bun "$out/bin/bun"
   '';
@@ -495,7 +499,10 @@ def main() -> None:
 
     webkit = pin_webkit(source, current["webkit"], force=arguments.force)
     cargo = cargo_hash(version, source)
-    bootstrap = bootstrap_path(version, bootstrap_assets["x86_64-linux"])
+    system = output(
+        ["nix", "eval", "--impure", "--raw", "--expr", "builtins.currentSystem"]
+    )
+    bootstrap = bootstrap_path(version, bootstrap_assets[system])
 
     updated: Sources = {
         "version": version,

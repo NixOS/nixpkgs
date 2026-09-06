@@ -1,34 +1,34 @@
 {
-  "version": "1.4.0",
-  "revision": "34cbb9a40b4bd1bd767d134a7065e66c2432a676",
-  "sourceHash": "sha256-2QSQwXhJDb7HQy/WuYgyWOzyS+Ic1V4VgmIE+xlcaL0=",
-  "cargoHash": "sha256-76wxJIJpq2sqDaE9+IH/oBwvt+iXCgG/g8BxEXhx0Hk=",
+  "version": "1.4.2",
+  "revision": "744846f844374847c902b5e7fd59b4342a51ef99",
+  "sourceHash": "sha256-N+4Dcac5aUmL+SMvCrMl3NRBvx0F/uFc7Ip3tRvoy6w=",
+  "cargoHash": "sha256-Q4oN80cRJrZwh90sR+Ajo6F2z70uf6BWt+hZSDcWEqY=",
   "bootstrapAssets": {
     "aarch64-darwin": {
       "name": "bun-darwin-aarch64",
-      "hash": "sha256-xmnpf2Fk4cluBwF0jbmN+ndJKQjL2DlMdVcTSnNd44E="
+      "hash": "sha256-kJh6OhbX21VtiGrD1VHnttPt8KHPQ6yu1iLoZ2vh0S8="
     },
     "aarch64-linux": {
       "name": "bun-linux-aarch64",
-      "hash": "sha256-SxozLuhhmD65O8/m93D/+U4+MbLDiL2uo8jtNeWO7Q4="
+      "hash": "sha256-VDKLvC2cjgyfiSxUTWbFeoO4QTnjSQnl7oF1jxrI/ac="
     },
     "aarch64-linux-musl": {
       "name": "bun-linux-aarch64-musl",
-      "hash": "sha256-V2MAzjP/Fv/NRVvxeMLwlfnfhFxsw9AoS6HJbKDoBHM="
+      "hash": "sha256-cXYLbI6jBiO4GkkHy4FdSOLqJm8uc+dRU0pEoGB5UN8="
     },
     "x86_64-linux": {
       "name": "bun-linux-x64-baseline",
-      "hash": "sha256-GE+0WV8NQBohfPfHjBvEMLqDMU2reouUgFurv3+nCX8="
+      "hash": "sha256-xngEDxT+BEDrg503y9DOTAUaMtpygGrJfeamqra/co8="
     },
     "x86_64-linux-musl": {
       "name": "bun-linux-x64-musl-baseline",
-      "hash": "sha256-YYxLwflLAjN+4hAAPAt8Bm8RVIqM3FEJ3xDbBD3EfKI="
+      "hash": "sha256-duHbhOmPIveN4Kh+MJv7vyl3MoR/lyDbNnUGRshcjBg="
     }
   },
   "nodeModulesHashes": {
-    "aarch64-darwin": "sha256-v9ytVeJXM/WD2haOZARyacH/SoHRMYGngkbaLbTv0Ec=",
-    "aarch64-linux": "sha256-6GuDQhc6OUMj2+ARxDkOYvpnLl9XgEVwhsphLwl+oKw=",
-    "x86_64-linux": "sha256-BhtxdGlzP6J/3R0NlGe107dPrEHz9EcEzzGOe1rqOy8="
+    "aarch64-darwin": "sha256-MgFDUaLABE8tHha+eygb06WGBOJPujqVwWTK/U1XECc=",
+    "aarch64-linux": "sha256-lrs/up/xPZY0LR0/eCVWbJe0Q87GPTGx28OXS4+6Hbo=",
+    "x86_64-linux": "sha256-zRkE+ju7f1wbUO+nc4Sh3hatSAVPok6S8UueI74EdIc="
   },
   "downloads": [
     {
@@ -113,8 +113,8 @@
     },
     {
       "name": "mimalloc",
-      "url": "https://github.com/oven-sh/mimalloc/archive/6a14aee24315e503fa295a1fa90fe8b24ad91774.tar.gz",
-      "hash": "sha256-D5q+An/kqplDwt81IwQ8aunrTIJB/rwAkbb1NyItJtg="
+      "url": "https://github.com/oven-sh/mimalloc/archive/6a64e1ba7f5b2130d4efccb67ec87fd0003f0f6a.tar.gz",
+      "hash": "sha256-82NDQWrYI9/MphvRitS7fw2IFKt34P1e8Wn0qc3euLg="
     },
     {
       "name": "tinycc",
@@ -123,8 +123,8 @@
     },
     {
       "name": "boringssl",
-      "url": "https://github.com/oven-sh/boringssl/archive/2288897e2e716330490893d226b4f079f9da9e0c.tar.gz",
-      "hash": "sha256-bHqvDZn/NUdchnikNUP5TVX2jUlWxLc84BQX/DWM7+c="
+      "url": "https://github.com/oven-sh/boringssl/archive/41bf9b59c2ebf277a7aa427e1ecad5cc80dd4d4f.tar.gz",
+      "hash": "sha256-pQKNVHXx6vCteFwYZmszACepIxIdYBEp9KYee/yJod0="
     },
     {
       "name": "lsquic",
@@ -138,8 +138,8 @@
     }
   ],
   "webkit": {
-    "rev": "0f966e81b78c84bb23213e391bc679c4ef83e56b",
-    "hash": "sha256-SoW16cPTTHicOdnSpO+hWXeGNg7/3FmecILrJIcBPkU=",
+    "rev": "2e2aa2290fac856d6f451ceacb58f7f5b44dd057",
+    "hash": "sha256-6H33n41YBi0w2sPJbO6zYjxW3VtIyRMR/3zjyGlFDOA=",
     "sparseCheckout": [
       "Configurations",
       "Source/cmake",
