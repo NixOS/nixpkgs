@@ -9294,6 +9294,8 @@ with pkgs;
     callPackage ../applications/networking/instant-messengers/linphone { }
   );
 
+  typescript = typescript_7;
+
   buildTypstPackage = callPackage ../build-support/build-typst-package.nix { };
 
   typstPackages = recurseIntoAttrs typst.packages;

@@ -10,7 +10,7 @@
   replaceVars,
   yarn,
   testers,
-  typescript,
+  typescript_5,
   nix-update-script,
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (replaceVars ./default-fallbackTsserverPath.diff {
-      typescript = "${typescript}/lib/node_modules/typescript/lib/tsserver.js";
+      typescript = "${typescript_5}/lib/node_modules/typescript/lib/tsserver.js";
     })
   ];
 

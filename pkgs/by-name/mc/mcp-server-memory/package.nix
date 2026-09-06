@@ -1,7 +1,7 @@
 {
   lib,
   buildNpmPackage,
-  typescript,
+  typescript_5,
   fetchFromGitHub,
 }:
 
@@ -17,7 +17,7 @@ buildNpmPackage (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    typescript
+    typescript_5
   ];
 
   dontNpmPrune = true;

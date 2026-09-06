@@ -72,6 +72,8 @@ vimUtils.buildVimPlugin {
       cp ${avante-nvim-lib}/lib/libavante_templates${ext} $out/lua/avante_templates${ext}
       cp ${avante-nvim-lib}/lib/libavante_tokenizers${ext} $out/lua/avante_tokenizers${ext}
       cp ${avante-nvim-lib}/lib/libavante_html2md${ext} $out/lua/avante_html2md${ext}
+
+      install -D contrib/avante $out/bin/avante
     '';
 
   passthru = {
@@ -94,7 +96,7 @@ vimUtils.buildVimPlugin {
 
   meta = {
     description = "Neovim plugin designed to emulate the behaviour of the Cursor AI IDE";
-    homepage = "https://github.com/yetone/avante.nvim";
+    homepage = "https://github.com/avante-corp/avante.nvim";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       ttrei
