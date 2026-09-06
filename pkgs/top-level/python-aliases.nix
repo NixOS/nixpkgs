@@ -166,6 +166,7 @@ mapAliases {
   chromeprint = throw "'chromaprint' was removed as it depended on m2r which was removed."; # Added 2026-05-27
   cirq-rigetti = throw "cirq-rigetti was removed because it is no longer provided by upstream"; # added 2025-09-13
   class-registry = throw "'class-registry' has been renamed to/replaced by 'phx-class-registry'"; # Converted to throw 2025-10-29
+  clikit = throw "'clikit' has been removed from nixpkgs because it is not longer maintained upstream"; # Added 2026-08-08
   ColanderAlchemy = throw "'ColanderAlchemy' has been renamed to/replaced by 'colanderalchemy'"; # Converted to throw 2025-10-29
   command_runner = throw "'command_runner' has been renamed to/replaced by 'command-runner'"; # Converted to throw 2025-10-29
   commitizen = throw "commitizen has been promoted to a top-level attribute name: `pkgs.commitizen`"; # added 2025-09-14
@@ -537,6 +538,7 @@ mapAliases {
   pyialarmxr = throw "'pyialarmxr' has been renamed to/replaced by 'pyialarmxr-homeassistant'"; # Converted to throw 2025-10-29
   PyICU = throw "'PyICU' has been renamed to/replaced by 'pyicu'"; # Converted to throw 2025-10-29
   PyLD = throw "'PyLD' has been renamed to/replaced by 'pyld'"; # Converted to throw 2025-10-29
+  pylev = throw "'pylev' has been removed from nixpkgs as it is unmaintained upstream. Please use levenshtein instead"; # Added 2026-08-08
   pyliblo = throw "pyliblo is unmaintained upstream and was removed from nixpkgs. Please use pyliblo3 instead"; # added 2025-06-23
   pylit = throw "'pylit' has been removed as it was broken and unmaintained upstream"; # Added 2025-11-29
   pymc3 = throw "'pymc3' has been renamed to/replaced by 'pymc'"; # Converted to throw 2025-10-29
