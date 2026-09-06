@@ -36,7 +36,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.9.5";
+  version = "2.9.6";
 
   __structuredAttrs = true;
 
@@ -51,10 +51,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-IEtUgjk0sYvHCRBH8JI4NVhT0J5qhmF0kJ5zq00n0ro=";
+    hash = "sha256-4X7IfQk9NJizhZKqH2EuDnSfk8axkKFyiZEv1FOfWTM=";
   };
 
-  cargoHash = "sha256-b2RxrG2EEKRuEXQG818NwVQV7AgqZOyBYBW3/kGckZg=";
+  cargoHash = "sha256-EKRC+wqIos9O0GHaxjmb/ghyzV6oCi1qwhO2tjszWR4=";
 
   patches = [
     ./patches/0002-tests-replace-hardcoded-paths.patch
