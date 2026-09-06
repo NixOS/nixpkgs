@@ -48,6 +48,8 @@
 
   obs-hyperion = qt6Packages.callPackage ./obs-hyperion/default.nix { };
 
+  obs-image-reaction = callPackage ./obs-image-reaction/default.nix { };
+
   obs-livesplit-one = callPackage ./obs-livesplit-one { };
 
   obs-markdown = callPackage ./obs-markdown.nix { };
