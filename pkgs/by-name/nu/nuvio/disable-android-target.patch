@@ -1,0 +1,120 @@
+# Desktop-only nixpkgs build: drop the Android target and the :androidApp module.
+#
+# Why: this package ships Linux x86_64 only. The Android target applies AGP
+# (com.android.kotlin.multiplatform.library), which hard-requires a full
+# Android SDK (platform android-37, unfree-licensed) at *configuration* time,
+# even when only :composeApp:createReleaseDistributable is executed. Building
+# the desktop app needs none of it: androidMain/androidHostTest sources and
+# :androidApp are never compiled into the desktop distribution.
+# Upstream: https://github.com/NuvioMedia/NuvioDesktop (default branch Dev).
+# If upstream ever splits desktop into its own Gradle module, drop this patch.
+#
+diff --git a/composeApp/build.gradle.kts b/composeApp/build.gradle.kts
+index 9b179d3..126b9a9 100644
+--- a/composeApp/build.gradle.kts
++++ b/composeApp/build.gradle.kts
+@@ -434,7 +434,6 @@ fun jpackageCompatibleVersion(version: String): String {
+ 
+ plugins {
+     alias(libs.plugins.kotlinMultiplatform)
+-    alias(libs.plugins.androidKotlinMultiplatformLibrary)
+     alias(libs.plugins.composeMultiplatform)
+     alias(libs.plugins.composeCompiler)
+     alias(libs.plugins.kotlinxSerialization)
+@@ -1057,22 +1056,6 @@ tasks.withType<KotlinCompilationTask<*>>().configureEach {
+ }
+ 
+ kotlin {
+-    android {
+-        namespace = "com.nuvio.app"
+-        compileSdk {
+-            version = release(libs.versions.android.compileSdk.get().toInt()) {
+-                minorApiLevel = libs.versions.android.compileSdkMinor.get().toInt()
+-            }
+-        }
+-        minSdk = libs.versions.android.minSdk.get().toInt()
+-        androidResources.enable = true
+-        withHostTest { isIncludeAndroidResources = true }
+-
+-        compilerOptions {
+-            jvmTarget.set(JvmTarget.JVM_11)
+-        }
+-    }
+-
+     jvm("desktop") {
+         compilerOptions {
+             jvmTarget.set(JvmTarget.JVM_11)
+@@ -1148,44 +1131,6 @@ kotlin {
+         val commonMain by getting {
+             kotlin.srcDir(generatedRuntimeConfigDir)
+         }
+-        androidMain {
+-            kotlin.srcDir(project.file(androidDistributionSourceDir))
+-            if (androidDistribution == "full") {
+-                kotlin.srcDir(fullCommonSourceDir)
+-            }
+-
+-            dependencies {
+-                implementation(libs.compose.uiToolingPreview)
+-                implementation(libs.androidx.appcompat)
+-                implementation(libs.androidx.activity.compose)
+-                implementation(libs.androidx.core.splashscreen)
+-                implementation(libs.androidx.work.runtime)
+-                implementation(libs.coil.gif)
+-                implementation("androidx.recyclerview:recyclerview:1.4.0")
+-                implementation("com.squareup.okhttp3:okhttp:4.12.0")
+-                implementation("com.google.code.gson:gson:2.11.0")
+-                implementation("io.github.peerless2012:ass-media:0.5.1")
+-                implementation(libs.ktor.client.okhttp)
+-                implementation(libs.sentry.android)
+-                implementation(libs.androidx.media3.exoplayer.hls)
+-                implementation(libs.androidx.media3.exoplayer.dash)
+-                implementation(libs.androidx.media3.exoplayer.smoothstreaming)
+-                implementation(libs.androidx.media3.exoplayer.rtsp)
+-                implementation(libs.androidx.media3.datasource)
+-                implementation(libs.androidx.media3.datasource.okhttp)
+-                implementation(libs.androidx.media3.decoder)
+-                implementation(libs.androidx.media3.session)
+-                implementation(libs.androidx.media3.common)
+-                implementation(libs.androidx.media3.container)
+-                implementation(libs.androidx.media3.extractor)
+-                implementation(libs.mpv.android.lib)
+-                implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("lib-*.aar"))))
+-                if (androidDistribution == "full") {
+-                    implementation(files("libs/quickjs-kt-android-1.0.5-nuvio.aar"))
+-                    implementation(libs.ksoup)
+-                }
+-            }
+-        }
+         val desktopMain by getting {
+             kotlin.srcDir(fullPluginSourceDir)
+             kotlin.srcDir(fullTrailerSourceDir)
+@@ -1210,16 +1155,6 @@ kotlin {
+                 implementation(libs.sentry.jvm)
+             }
+         }
+-        val androidHostTest by getting {
+-            dependencies {
+-                implementation("org.robolectric:robolectric:4.16")
+-                implementation("androidx.work:work-testing:${libs.versions.androidx.work.get()}")
+-                implementation("com.squareup.okhttp3:mockwebserver:5.3.2")
+-            }
+-            if (androidDistribution == "full") {
+-                kotlin.srcDir(project.file("src/androidFullHostTest/kotlin"))
+-            }
+-        }
+         commonMain.dependencies {
+             implementation("io.coil-kt.coil3:coil-compose:${libs.versions.coil.get()}") {
+                 exclude(group = "org.jetbrains.skiko", module = "skiko")
+diff --git a/settings.gradle.kts b/settings.gradle.kts
+index fcd93c3..c689a5f 100644
+--- a/settings.gradle.kts
++++ b/settings.gradle.kts
+@@ -33,7 +33,6 @@ dependencyResolutionManagement {
+ }
+ 
+ include(":composeApp")
+-include(":androidApp")
+ include(":desktopSentry")
+ if (!System.getProperty("os.name").contains("win", ignoreCase = true)) {
+     include(":composeMediaPlayer")
