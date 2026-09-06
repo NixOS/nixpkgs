@@ -34,7 +34,7 @@
   libsoup_3,
   libsecret,
   libxslt,
-  harfbuzz,
+  harfbuzzFull,
   hyphen,
   icu,
   libsysprof-capture,
@@ -58,8 +58,7 @@
   openssl,
   openxr-loader,
   sqlite,
-  gst-plugins-base,
-  gst-plugins-bad,
+  gst_all_1,
   bubblewrap,
   libseccomp,
   libbacktrace,
@@ -149,9 +148,9 @@ clangStdenv.mkDerivation (finalAttrs: {
     libepoxy
     libjxl
     gnutls
-    gst-plugins-bad
-    gst-plugins-base
-    harfbuzz
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-base
+    harfbuzzFull
     hyphen
     icu
     libGL
