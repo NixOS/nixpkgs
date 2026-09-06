@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Package management made easy";
     homepage = "https://pixi.sh/";
-    changelog = "https://pixi.sh/latest/CHANGELOG";
+    changelog = "https://pixi.prefix.dev/latest/CHANGELOG/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       esteve
