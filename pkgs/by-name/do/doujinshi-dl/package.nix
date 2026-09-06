@@ -2,50 +2,27 @@
   lib,
   python3,
   fetchFromGitHub,
-  fetchPypi,
 }:
 
-let
-  python =
-    let
-      packageOverrides = self: super: {
-        iso8601 = super.iso8601.overridePythonAttrs (old: rec {
-          version = "1.1.0";
-          src = fetchPypi {
-            pname = "iso8601";
-            inherit version;
-            hash = "sha256-MoEee4He7iBj6m0ulPiBmobR84EeSdI2I6QfqDK+8D8=";
-          };
-        });
-      };
-    in
-    python3.override {
-      inherit packageOverrides;
-      self = python;
-    };
+python3.pkgs.buildPythonApplication rec {
+  pname = "doujinshi-dl";
+  version = "2.0.9";
+  pyproject = true;
 
-in
-python.pkgs.buildPythonApplication rec {
-  pname = "nhentai";
-  version = "0.5.25";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "RicterZ";
     repo = "doujinshi-dl";
-    rev = version;
-    hash = "sha256-KwcaCeeGeR6qSfraSYyf4VEims9YWB6j3HmpT8XSePo=";
+    tag = "v${version}";
+    hash = "sha256-MeJZEsLH+guMwwkqDBpzqHws6TuhMG79LGR/Sdw7xRw=";
   };
 
-  # tests require a network connection
-  doCheck = false;
-
-  pyproject = true;
-
-  build-system = with python.pkgs; [
+  build-system = with python3.pkgs; [
     poetry-core
   ];
 
-  dependencies = with python.pkgs; [
+  dependencies = with python3.pkgs; [
     requests
     soupsieve
     beautifulsoup4
@@ -54,11 +31,8 @@ python.pkgs.buildPythonApplication rec {
     urllib3
     httpx
     chardet
-  ];
-
-  pythonRelaxDeps = [
-    "tabulate"
-    "urllib3"
+    img2pdf
+    doujinshi-dl-nhentai
   ];
 
   meta = {
@@ -66,6 +40,6 @@ python.pkgs.buildPythonApplication rec {
     description = "CLI tool for downloading doujinshi from adult site(s)";
     license = lib.licenses.mit;
     maintainers = [ ];
-    mainProgram = "nhentai";
+    mainProgram = "doujinshi-dl";
   };
 }
