@@ -10,6 +10,7 @@
   docCargoDeps ? null,
   patches ? [ ],
   knownVulnerabilities ? [ ],
+  updateScript ? null,
 }@args:
 
 assert lib.assertMsg (
@@ -504,6 +505,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit aws-sdk-cpp boehmgc;
+    inherit updateScript;
     tests = {
       misc = nixosTests.nix-misc.default.passthru.override { nixPackage = finalAttrs.finalPackage; };
       installer = nixosTests.installer.simple.override { selectNixPackage = _: finalAttrs.finalPackage; };
@@ -525,6 +527,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://lix.systems";
     license = lib.licenses.lgpl21Plus;
     teams = [ lib.teams.lix ];
+    maintainers = [ lib.maintainers.tyceherrman ];
     platforms = lib.platforms.unix;
     outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
     mainProgram = "nix";
