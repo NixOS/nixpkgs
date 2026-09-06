@@ -66,7 +66,7 @@ nixPrefetch <- function(name, version) {
 
 }
 
-formatPackage <- function(name, version, sha256, depends, imports, linkingTo) {
+formatPackage <- function(name, version, sha256, depends, imports, linkingTo, license) {
     options(warn=5)
     depends <- paste( if (is.na(depends)) "" else gsub("[ \t\n]+", "", depends)
                     , if (is.na(imports)) "" else gsub("[ \t\n]+", "", imports)
@@ -79,7 +79,9 @@ formatPackage <- function(name, version, sha256, depends, imports, linkingTo) {
     depends <- lapply(depends, escapeName)
     depends <- paste(depends)
     depends <- sort(unique(depends))
-    list(name=unbox(name), version=unbox(version), sha256=unbox(sha256), depends=depends)
+
+    analyzedLicense <- unlist(strsplit(tools::analyze_license(license)$spdx, " OR ", fixed=TRUE))
+    list(name=unbox(name), version=unbox(version), spdx=analyzedLicense, sha256=unbox(sha256), depends=depends)
 }
 
 cl <- makeCluster(10)
@@ -90,7 +92,7 @@ pkgTable$sha256 <- parApply(cl, pkgTable, 1, function(p) nixPrefetch(p[1], p[2])
 
 stopCluster(cl)
 
-pkgs <- lapply(1:nrow(pkgTable), function(i) with(pkgTable[i,], formatPackage(Package, Version, sha256, Depends, Imports, LinkingTo)))
+pkgs <- lapply(1:nrow(pkgTable), function(i) with(pkgTable[i,], formatPackage(Package, Version, sha256, Depends, Imports, LinkingTo, License)))
 names(pkgs) <- lapply(pkgs, function(p) escapeName(p$name))
 
 # Mark deleted packages as broken
