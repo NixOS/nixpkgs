@@ -30166,6 +30166,11 @@
     githubId = 98685984;
     name = "utopiatopia";
   };
+  uuxyz = {
+    github = "uuxyz";
+    githubId = 51853008;
+    name = "uuxyz";
+  };
   uvnikita = {
     email = "uv.nikita@gmail.com";
     github = "uvNikita";
