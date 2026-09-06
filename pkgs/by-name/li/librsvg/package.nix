@@ -187,6 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
       let
         updateSource = gnome.updateScript {
           packageName = "librsvg";
+          versionPolicy = "ninety-micro-unstable";
         };
 
         updateLockfile = {
