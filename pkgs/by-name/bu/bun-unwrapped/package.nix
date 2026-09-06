@@ -3,6 +3,7 @@
   stdenv,
   stdenvNoCC,
   runCommand,
+  symlinkJoin,
   fetchFromGitHub,
   fetchgit,
   fetchurl,
@@ -29,10 +30,12 @@
   rustc,
   cargo,
   rustPlatform,
-  llvmPackages_21,
+  llvmPackages,
   openssl,
   icu,
+  libedit,
   libxml2,
+  readline,
   sqlite,
   cctools,
   darwin,
@@ -55,6 +58,17 @@ let
   webkitSource = import ./webkit.nix {
     inherit fetchgit;
     inherit (sources) webkit;
+  };
+
+  # Bun's toolchain override searches one bin directory. Keep Nix's Clang
+  # wrapper while supplying the remaining LLVM tools from their separate outputs.
+  llvmToolchain = symlinkJoin {
+    name = "bun-llvm-toolchain";
+    paths = [
+      llvmPackages.clang
+      llvmPackages.llvm
+      llvmPackages.lld
+    ];
   };
 
   bootstrapAsset =
@@ -198,19 +212,13 @@ stdenv.mkDerivation {
   __structuredAttrs = true;
 
   patches = [
-    # Keep dependency installation offline and expose Nix-specific ABI,
-    # toolchain, and runtime search path settings to Bun's build script.
+    # Keep dependency installation offline and adapt ABI and toolchain settings.
     ./support-nix-build-environment.patch
 
     # Build only the WebKit libraries linked into Bun from the pinned source.
     ./build-webkit-from-source.patch
-
-    # Keep the standalone graph segment last when linking natively on Darwin.
-    # https://github.com/oven-sh/bun/issues/40107
-    ./fix-darwin-standalone-segment-order.patch
   ];
 
-  # Recheck this pin when Bun changes its required LLVM version.
   nativeBuildInputs = [
     bootstrap
     installShellFiles
@@ -231,9 +239,9 @@ stdenv.mkDerivation {
     unzip
     nasm
     which
-    llvmPackages_21.clang
-    llvmPackages_21.llvm
-    llvmPackages_21.lld
+    llvmPackages.clang
+    llvmPackages.llvm
+    llvmPackages.lld
     rustc
     cargo
   ]
@@ -252,6 +260,10 @@ stdenv.mkDerivation {
   ++ lib.optionals isDarwin [
     darwin.ICU
     (lib.getDev sqlite)
+    # The upstream jsc target assumes Darwin provides Readline headers and
+    # links libedit. The Nix Apple SDK removes both, so provide them here.
+    (lib.getDev readline)
+    (lib.getLib libedit)
   ];
 
   # Executables produced by `bun build --compile` link against ICU. Propagate
@@ -262,7 +274,7 @@ stdenv.mkDerivation {
   dontConfigure = true;
 
   # patchelf breaks executables produced by `bun build --compile`. The Nix
-  # compiler wrapper sets the interpreter, and Bun's build sets the RPATH.
+  # compiler wrapper sets the interpreter and RPATH.
   dontPatchELF = isLinux;
 
   # Bun controls _FORTIFY_SOURCE in its own build flags.
@@ -270,11 +282,24 @@ stdenv.mkDerivation {
 
   env = {
     GIT_SHA = revision;
-    BUN_NIX_RPATH = lib.optionalString isLinux (
-      lib.makeLibraryPath [
-        stdenv.cc.cc
-        icu
+    # -gz=zlib: Nix LLVM 21 has no zstd debug compression support.
+    # -ffile-prefix-map: keep WebKit source paths out of the executable.
+    NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
+      "-gz=zlib"
+      "-ffile-prefix-map=${webkitSource}/Source=vendor/WebKit/Source"
+    ];
+    NIX_LDFLAGS = lib.concatStringsSep " " (
+      lib.optionals isLinux [
+        "--disable-new-dtags"
+        "-rpath"
+        (lib.makeLibraryPath [
+          stdenv.cc.cc
+          icu
+        ])
       ]
+      # Keep __BUN last so standalone executables can grow their module graph.
+      # https://github.com/oven-sh/bun/issues/40107
+      ++ lib.optionals isDarwin [ "-rename_segment __DATA_DIRTY __DATA" ]
     );
     BUN_WEBKIT_PATH = webkitSource;
     BUN_NIX_ABI = lib.optionalString isLinux (if isMusl then "musl" else "gnu");
@@ -284,10 +309,7 @@ stdenv.mkDerivation {
     # Upstream uses nightly-only Rust compiler options.
     RUSTC_BOOTSTRAP = 1;
     BUN_BUILD_PREFETCH_DIR = buildPrefetch;
-    CC = lib.getExe llvmPackages_21.clang;
-    CXX = lib.getExe' llvmPackages_21.clang "clang++";
-    AR = lib.getExe' llvmPackages_21.llvm "llvm-ar";
-    RANLIB = lib.getExe' llvmPackages_21.llvm "llvm-ranlib";
+    BUN_TOOLCHAIN_LLVM = llvmToolchain;
   };
 
   preBuild = ''
