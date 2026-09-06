@@ -10,6 +10,7 @@
   junit-xml,
   ptpython,
   pydantic,
+  pytestCheckHook,
   python,
   ovmfvartool,
   remote-pdb,
@@ -77,11 +78,12 @@ buildPythonApplication {
   doCheck = true;
 
   nativeCheckInputs = [
+    pytestCheckHook
     ruff
     ty
   ];
 
-  checkPhase = ''
+  preCheck = ''
     echo -e "\x1b[32m## run ty\x1b[0m"
     ty check --error-on-warning test_driver extract-docstrings.py
     echo -e "\x1b[32m## run ruff check\x1b[0m"
