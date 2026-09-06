@@ -133,6 +133,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     tests = {
       suwayomi-server-with-auth = nixosTests.suwayomi-server.with-auth;
       suwayomi-server-without-auth = nixosTests.suwayomi-server.without-auth;
+      suwayomi-server-without-webui = nixosTests.suwayomi-server.without-webui;
     };
   };
 
