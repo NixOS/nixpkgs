@@ -4,7 +4,6 @@
   fetchFromGitHub,
   autoreconfHook,
   smartmontools,
-  makeWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,18 +19,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.VERSION = finalAttrs.version;
 
+  # snapraid only looks for smartctl in a few fixed system paths
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace cmdline/unix.c \
+      --replace-fail '"/usr/sbin/smartctl"' '"${lib.getExe' smartmontools "smartctl"}"'
+  '';
+
   doCheck = true;
 
-  nativeBuildInputs = [
-    autoreconfHook
-    makeWrapper
-  ];
-
-  # SMART is only supported on Linux and requires the smartmontools package
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    wrapProgram $out/bin/snapraid \
-     --prefix PATH : ${lib.makeBinPath [ smartmontools ]}
-  '';
+  nativeBuildInputs = [ autoreconfHook ];
 
   meta = {
     homepage = "http://www.snapraid.it/";
