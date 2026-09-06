@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    patchShebangs tests
+    patchShebangs tests ./misc/yosys-config.in
     substituteInPlace tests/aiger/generate_mk.py \
       --replace-fail 'SHELL := /usr/bin/env bash' 'SHELL := ${stdenv.shell}'
   ''
