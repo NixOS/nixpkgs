@@ -8773,6 +8773,12 @@
     github = "esteve";
     githubId = 33620;
   };
+  eth-p = {
+    name = "Ethan P.";
+    email = "me@eth-p.dev";
+    github = "eth-p";
+    githubId = 32112321;
+  };
   ethancedwards8 = {
     email = "ethan@ethancedwards.com";
     matrix = "@ethancedwards8:matrix.org";
