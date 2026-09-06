@@ -1920,6 +1920,7 @@ in
   utmp = runTest ./utmp.nix;
   uwsgi = runTest ./uwsgi.nix;
   v2ray = runTest ./v2ray.nix;
+  vanguards = runTest ./vanguards.nix;
   varnish80 = runTest {
     imports = [ ./varnish.nix ];
     _module.args.package = pkgs.varnish80;
