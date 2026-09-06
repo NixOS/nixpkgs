@@ -102,6 +102,8 @@ let
             "-c /etc/wpa_supplicant/imperative.conf"
         )
         + lib.concatMapStrings (p: " -I " + p) cfg.extraConfigFiles;
+
+      enableAutoDetection = iface == null && cfg.autoDetectInterfaces;
     in
     {
       description = "WPA Supplicant instance" + optionalString (iface != null) " for interface ${iface}";
@@ -115,7 +117,8 @@ let
       stopIfChanged = false;
       restartTriggers = [ config.environment.etc."wpa_supplicant/nixos.conf".source ];
 
-      path = [ pkgs.wpa_supplicant ];
+      unitConfig.StartLimitIntervalSec = lib.mkIf enableAutoDetection 0;
+
       serviceConfig = {
         RuntimeDirectory = "wpa_supplicant";
         ExecStartPre =
@@ -131,7 +134,23 @@ let
             "+${pkgs.coreutils}/bin/mkdir -p /run/wpa_supplicant/client"
             "+${pkgs.coreutils}/bin/chown wpa_supplicant:wpa_supplicant /run/wpa_supplicant/client"
             "+${pkgs.coreutils}/bin/chmod g=u /run/wpa_supplicant/client"
+          ]
+          # auto-detect interfaces, and render arguments for wpa_supplicant to use.
+          ++ lib.optionals enableAutoDetection [
+            ''${lib.getExe' pkgs.findutils "find"} /sys/class/net -mindepth 1 -maxdepth 1 -exec ${lib.getExe' pkgs.coreutils "test"} -e {}/wireless \; -fprintf /run/wpa_supplicant/interface-args "-N -i%%f -s ${optionalString cfg.dbusControlled "-u"} -D${cfg.driver} ${configStr} "''
+            ''${lib.getExe' pkgs.gnused "sed"} -i -e "1s/^-N //" -e "1s/^/IFACE_ARGS=/" /run/wpa_supplicant/interface-args''
           ];
+        EnvironmentFile = optionals enableAutoDetection [ "-/run/wpa_supplicant/interface-args" ];
+        ExecStart =
+          if enableAutoDetection then
+            "${lib.getExe' pkgs.wpa_supplicant "wpa_supplicant"} $IFACE_ARGS"
+          else
+            "${lib.getExe' pkgs.wpa_supplicant "wpa_supplicant"} -s ${optionalString cfg.dbusControlled "-u"} -D${cfg.driver} ${configStr}"
+            + optionalString (iface != null) " -i${iface}";
+      }
+      // lib.optionalAttrs enableAutoDetection {
+        Restart = "on-failure";
+        RestartSec = "1s";
       }
       // lib.optionalAttrs cfg.enableHardening {
         User = "wpa_supplicant";
@@ -198,46 +217,6 @@ let
         SystemCallArchitectures = "native";
         UMask = "0077";
       };
-
-      script = ''
-        iface_args="-s ${optionalString cfg.dbusControlled "-u"} -D${cfg.driver} ${configStr}"
-        ${
-          if iface != null then
-            ''
-              # add known interface to the daemon arguments
-              args="-i${iface} $iface_args"
-            ''
-          else if cfg.autoDetectInterfaces then
-            ''
-              # detect interfaces automatically
-
-              # check if there are no wireless interfaces
-              if ! find -H /sys/class/net/* -name wireless | grep -q .; then
-                # if so, wait until one appears
-                echo "Waiting for wireless interfaces"
-                grep -q '^ACTION=add' < <(stdbuf -oL -- udevadm monitor -s net/wlan -pu)
-                # Note: the above line has been carefully written:
-                # 1. The process substitution avoids udevadm hanging (after grep has quit)
-                #    until it tries to write to the pipe again. Not even pipefail works here.
-                # 2. stdbuf is needed because udevadm output is buffered by default and grep
-                #    may hang until more udev events enter the pipe.
-              fi
-
-              # add any interface found to the daemon arguments
-              for name in $(find -H /sys/class/net/* -name wireless | cut -d/ -f 5); do
-                echo "Adding interface $name"
-                args+="''${args:+ -N} -i$name $iface_args"
-              done
-            ''
-          else
-            "args=$iface_args"
-        }
-
-        # finally start daemon
-        # shellcheck disable=SC2086
-        exec wpa_supplicant $args
-      '';
-      enableStrictShellChecks = true;
     };
 
   systemctl = "/run/current-system/systemd/bin/systemctl";
