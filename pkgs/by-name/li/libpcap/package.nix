@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpcap";
-  version = "1.10.6";
+  version = "1.10.7";
 
   __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://www.tcpdump.org/release/libpcap-${finalAttrs.version}.tar.gz";
-    hash = "sha256-hy3REzf+GrAq2dT+4EfJ2iRNaVxt3zTi67cz79Ttiqk=";
+    hash = "sha256-CzlKyQ28Cpg4/5dGjgXJyaPoc97CUUzVjbZdhZ0pbjE=";
   };
 
   outputs = [
