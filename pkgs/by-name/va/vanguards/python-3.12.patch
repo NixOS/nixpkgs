@@ -1,0 +1,51 @@
+Origin: https://github.com/mikeperry-tor/vanguards/pull/105/commits/183d24775521feb3ed61b681088347279c3fc84c
+From: Dave Jones <dave@waveform.org.uk>
+Date: Wed, 28 Aug 2024 12:54:24 +0100
+Subject: [PATCH] Python 3.12 compatibility
+
+Python 3.12 removes the deprecated `SafeConfigParser` class. This patch
+switches the code to using ConfigParser and read_file from Python 3.x,
+and patches 2.7's SafeConfigParser to a compatible definition.
+---
+ src/vanguards/config.py | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/src/vanguards/config.py b/src/vanguards/config.py
+index 1c33391..b8e3f9c 100644
+--- a/src/vanguards/config.py
++++ b/src/vanguards/config.py
+@@ -16,9 +16,12 @@
+ from .logger import plog
+ 
+ try:
+-  from configparser import SafeConfigParser, Error
++  from configparser import ConfigParser, Error
+ except ImportError:
+   from ConfigParser import SafeConfigParser, Error
++  class ConfigParser(SafeConfigParser):
++      def read_file(self, f, source=None):
++          return self.readfp(f, source)
+ 
+ ################# Global options ##################
+ 
+@@ -209,7 +212,7 @@ def set_options_from_module(config, module, section):
+       config.set(section, param, str(val))
+ 
+ def generate_config():
+-  config = SafeConfigParser(allow_no_value=True)
++  config = ConfigParser(allow_no_value=True)
+   set_options_from_module(config, sys.modules[__name__], "Global")
+   set_options_from_module(config, vanguards, "Vanguards")
+   set_options_from_module(config, bandguards, "Bandguards")
+@@ -219,9 +222,9 @@ def generate_config():
+   return config
+ 
+ def apply_config(config_file):
+-  config = SafeConfigParser(allow_no_value=True)
++  config = ConfigParser(allow_no_value=True)
+ 
+-  config.readfp(open(config_file, "r"))
++  config.read_file(open(config_file, "r"))
+ 
+   get_options_for_module(config, sys.modules[__name__], "Global")
+   get_options_for_module(config, vanguards, "Vanguards")

@@ -1,0 +1,28 @@
+From 71a658844e69e3993ab2fe712e0063a67daa00e0 Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Wed, 20 May 2026 15:13:10 +0800
+Subject: Link synthesis target with LAPACK/BLAS libraries
+
+---
+ synthesis/CMakeLists.txt | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/synthesis/CMakeLists.txt b/synthesis/CMakeLists.txt
+index e2250f0..59b55dc 100644
+--- a/synthesis/CMakeLists.txt
++++ b/synthesis/CMakeLists.txt
+@@ -42,6 +42,11 @@ target_link_libraries(casacpp_synthesis PUBLIC PkgConfig::CASACORE)
+ # Libsakura dependency
+ target_link_libraries(casacpp_synthesis PUBLIC PkgConfig::SAKURA)
+ 
++# LAPACK / BLAS dependency
++find_package(BLAS REQUIRED)
++find_package(LAPACK REQUIRED)
++target_link_libraries(casacpp_synthesis PRIVATE LAPACK::LAPACK)
++
+ # Optional HPG dependency
+ if(DEFINED hpg_FOUND AND ${hpg_FOUND})
+ 	target_link_libraries(casacpp_synthesis PUBLIC hpg::hpg)
+-- 
+2.53.0
+

@@ -1,0 +1,15 @@
+diff --git a/Makefile b/Makefile
+index a9a989e..4da737b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -606,8 +606,8 @@ install:	all $(DATA) $(REDO) $(MANS)
+ 			-t '$(DESTDIR)$(TZDEFAULT)'
+ 		cp -f $(TABDATA) '$(DESTDIR)$(TZDIR)/.'
+ 		cp tzselect '$(DESTDIR)$(BINDIR)/.'
+-		cp zdump '$(DESTDIR)$(ZDUMPDIR)/.'
+-		cp zic '$(DESTDIR)$(ZICDIR)/.'
++		cp zdump.exe '$(DESTDIR)$(ZDUMPDIR)/.'
++		cp zic.exe '$(DESTDIR)$(ZICDIR)/.'
+ 		cp libtz.a '$(DESTDIR)$(LIBDIR)/.'
+ 		$(RANLIB) '$(DESTDIR)$(LIBDIR)/libtz.a'
+ 		cp -f newctime.3 newtzset.3 '$(DESTDIR)$(MANDIR)/man3/.'

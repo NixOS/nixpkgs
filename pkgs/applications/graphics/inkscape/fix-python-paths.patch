@@ -1,0 +1,17 @@
+diff --git a/src/extension/implementation/script.cpp b/src/extension/implementation/script.cpp
+index bc6c0ed845..181467834d 100644
+--- a/src/extension/implementation/script.cpp
++++ b/src/extension/implementation/script.cpp
+@@ -82,10 +82,10 @@ const std::map<std::string, Script::interpreter_t> Script::interpreterTab = {
+     { "python",  {"python-interpreter",  {"pythonw"           }}},
+ #elif defined __APPLE__
+     { "perl",    {"perl-interpreter",    {"perl"              }}},
+-    { "python",  {"python-interpreter",  {"python3"           }}},
++    { "python",  {"python-interpreter",  {"@python3@"         }}},
+ #else
+     { "perl",    {"perl-interpreter",    {"perl"              }}},
+-    { "python",  {"python-interpreter",  {"python3", "python" }}},
++    { "python",  {"python-interpreter",  {"@python3@"         }}},
+ #endif
+     { "python2", {"python2-interpreter", {"python2", "python" }}},
+     { "ruby",    {"ruby-interpreter",    {"ruby"    }}},

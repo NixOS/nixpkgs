@@ -1,0 +1,13 @@
+diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
+index c092446fa0715351f72913fd449c8dddb855a10f..83670b496575a85ecb02a4671c0287fd0e052c5a 100644
+--- a/build/config/compiler/BUILD.gn
++++ b/build/config/compiler/BUILD.gn
+@@ -616,7 +616,7 @@ config("compiler") {
+     # The performance improvement does not seem worth the risk. See
+     # https://crbug.com/484082200 for background and https://crrev.com/c/7593035
+     # for discussion.
+-    if (!is_wasm) {
++    if (false) {
+       cflags += [ "-fno-lifetime-dse" ]
+     }
+ 

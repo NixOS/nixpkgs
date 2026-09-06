@@ -1,0 +1,49 @@
+diff --git a/clients/desktop/src-tauri/Cargo.toml b/clients/desktop/src-tauri/Cargo.toml
+index 1234567..abcdefg 100644
+--- a/clients/desktop/src-tauri/Cargo.toml
++++ b/clients/desktop/src-tauri/Cargo.toml
+@@ -17,6 +17,7 @@ debug = true
+ 
+ [package]
++# tauri-plugin-updater removed (nixpkgs policy: no self-updating apps)
+ name = "lookout-desktop"
+ version = "0.3.10"
+ edition = "2021"
+
+diff --git a/clients/desktop/src-tauri/src/lib.rs b/clients/desktop/src-tauri/src/lib.rs
+index 1234567..abcdefg 100644
+--- a/clients/desktop/src-tauri/src/lib.rs
++++ b/clients/desktop/src-tauri/src/lib.rs
+@@ -3671,7 +3671,7 @@ pub fn run() {
+         .plugin(tauri_plugin_http::init())
+         .plugin(tauri_plugin_macos_permissions::init())
+         .plugin(tauri_plugin_opener::init())
+         .plugin(tauri_plugin_liquid_glass::init())
+-        .plugin(tauri_plugin_updater::Builder::new().build())
++        // .plugin(tauri_plugin_updater::Builder::new().build()) // removed: nixpkgs policy
+         .plugin(tauri_plugin_notification::init())
+         .manage(AppState {
+diff --git a/clients/desktop/src-tauri/tauri.conf.json b/clients/desktop/src-tauri/tauri.conf.json
+index 1234567..abcdefg 100644
+--- a/clients/desktop/src-tauri/tauri.conf.json
++++ b/clients/desktop/src-tauri/tauri.conf.json
+@@ -38,7 +38,7 @@
+   "bundle": {
+     "active": true,
+-    "createUpdaterArtifacts": true,
++    "createUpdaterArtifacts": false,
+     "targets": [
+       "app",
+       "dmg",
+
+diff --git a/clients/desktop/src-tauri/capabilities/default.json b/clients/desktop/src-tauri/capabilities/default.json
+index 1234567..abcdefg 100644
+--- a/clients/desktop/src-tauri/capabilities/default.json
++++ b/clients/desktop/src-tauri/capabilities/default.json
+@@ -20,7 +20,6 @@
+     "deep-link:default",
+     "macos-permissions:default",
+-    "updater:default",
+     "notification:default",
+     "core:webview:allow-create-webview-window",
+     "core:window:allow-close",

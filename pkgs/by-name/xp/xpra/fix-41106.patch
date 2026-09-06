@@ -1,0 +1,13 @@
+--- a/xpra/server/runner_script.py
++++ b/xpra/server/runner_script.py
+@@ -74,6 +74,10 @@
+ 
+ 
+ def xpra_runner_shell_script(xpra_file: str, starting_dir: str) -> str:
++    # Nixpkgs contortion:
++    # xpra_file points to a shell wrapper, not to the python script.
++    dirname, basename = os.path.split(xpra_file)
++    xpra_file = os.path.join(dirname, "."+basename+"-wrapped")
+     # We ignore failures in cd'ing, b/c it's entirely possible that we were
+     # started from some temporary directory and all paths are absolute.
+     qdir = sh_quotemeta(starting_dir)

@@ -1,0 +1,31 @@
+diff --git a/Makefile.in b/Makefile.in
+index d5c9fda..a596462 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -14,10 +14,7 @@ DUTI_BUILD_DATE=@build_date@
+ 
+ CC=		@CC@
+ FRAMEWORKS=	-framework ApplicationServices -framework CoreFoundation
+-OPTOPTS=	-isysroot @macosx_sdk@ \
+-			@macosx_arches@ \
+-			-mmacosx-version-min=@macosx_dep_target@ \
+-			@OPTOPTS@
++OPTOPTS=	@OPTOPTS@
+ 
+ LIBS=		@LIBS@
+ LDFLAGS=	@LDFLAGS@ ${LIBS}
+diff --git a/configure.ac b/configure.ac
+index 815f395..05caaed 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -15,8 +15,8 @@ AC_PROG_CC
+ AC_PROG_INSTALL
+ 
+ AC_CANONICAL_SYSTEM
+-DUTI_CHECK_SDK
+-DUTI_CHECK_DEPLOYMENT_TARGET
++#DUTI_CHECK_SDK
++#DUTI_CHECK_DEPLOYMENT_TARGET
+ 
+ # function checks
+ AC_CHECK_FUNC(strlcpy,have_strlcpy=yes,)

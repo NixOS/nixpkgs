@@ -1,0 +1,13 @@
+diff --git a/build.sh b/build.sh
+index f674433..f181344 100755
+--- a/build.sh
++++ b/build.sh
+@@ -197,7 +197,7 @@ echo -n "[*] Checking if memory alignment is required... "
+ 
+ rm -f "$TMP" "$TMP.c" "$TMP.log" || exit 1
+ 
+-echo -e "#include \"types.h\"\nvolatile u8 tmp[6]; int main() { printf(\"%d\x5cn\", *(u32*)(tmp+1)); return 0; }" >"$TMP.c" || exit 1
++echo -e "#include \"types.h\"\n#include \"stdio.h\"\nvolatile u8 tmp[6]; int main() { printf(\"%d\x5cn\", *(u32*)(tmp+1)); return 0; }" >"$TMP.c" || exit 1
+ $CC $USE_CFLAGS $USE_LDFLAGS "$TMP.c" -o "$TMP" &>"$TMP.log"
+ 
+ if [ ! -x "$TMP" ]; then

@@ -1,0 +1,14 @@
+prefix=@out@
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir_http=${prefix}/include/QtWebApp/httpserver
+includedir_logging=${prefix}/include/QtWebApp/logging
+includedir_template=${prefix}/include/QtWebApp/templateengine
+
+Name: QtWebApp
+Description: HTTP server and utility library in C++
+Version: @version@
+Requires: Qt6Network Qt6Core5Compat
+Libs: -L${libdir} -lQtWebApp
+Cflags: -I${includedir_http} -I${includedir_logging} -I${includedir_template}
+

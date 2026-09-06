@@ -1,0 +1,24 @@
+From 64dfcc87ccb6f7b0243b206524f7ea9aa9c59bc8 Mon Sep 17 00:00:00 2001
+From: Jan Engelhardt <jengelh@inai.de>
+Date: Thu, 30 Oct 2025 12:22:01 +0100
+Subject: [PATCH] build: resolve build failure with gcc-13
+
+nullptr is a C23-ism.
+---
+ src/pam_mount.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/src/pam_mount.h b/src/pam_mount.h
+index 61395f7..f547d8c 100644
+--- a/src/pam_mount.h
++++ b/src/pam_mount.h
+@@ -14,6 +14,9 @@
+ #else
+ #	define EXPORT_SYMBOL
+ #endif
++#if defined(__STDC_VERSION__) && __STDC_VERSION__ < 202300L
++#	define nullptr NULL
++#endif
+ 
+ #define sizeof_z(x) (sizeof(x) - 1)
+ 

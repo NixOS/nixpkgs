@@ -1,0 +1,43 @@
+diff --git a/application/src/main/java/nl/jixxed/eliteodysseymaterials/FXApplication.java b/application/src/main/java/nl/jixxed/eliteodysseymaterials/FXApplication.java
+index 0a3b0dc6..d4bd57d9 100644
+--- a/application/src/main/java/nl/jixxed/eliteodysseymaterials/FXApplication.java
++++ b/application/src/main/java/nl/jixxed/eliteodysseymaterials/FXApplication.java
+@@ -125,7 +125,6 @@ public class FXApplication extends Application {
+             }
+             PreferencesService.setPreference(PreferenceConstants.APP_SETTINGS_VERSION, System.getProperty("app.version"));
+             whatsnewPopup();
+-            urlSchemePopup();
+             eddnPopup();
+             versionPopup();
+             MaterialTrackingService.initialize();
+diff --git a/application/src/main/java/nl/jixxed/eliteodysseymaterials/service/registry/UbuntuRegistrationHandler.java b/application/src/main/java/nl/jixxed/eliteodysseymaterials/service/registry/UbuntuRegistrationHandler.java
+index 6ac788ea..a5281983 100644
+--- a/application/src/main/java/nl/jixxed/eliteodysseymaterials/service/registry/UbuntuRegistrationHandler.java
++++ b/application/src/main/java/nl/jixxed/eliteodysseymaterials/service/registry/UbuntuRegistrationHandler.java
+@@ -62,11 +62,7 @@ public class UbuntuRegistrationHandler implements RegistrationHandler {
+ 
+     @Override
+     public boolean isRegistered() {
+-        if (!VersionService.isDev()) {
+-            final File file = new File(System.getProperty(USER_HOME) + DESKTOP_FILE_PATH);
+-            return file.exists() && file.isFile();
+-        }
+-        return false;
++        return true;
+     }
+ 
+ 
+diff --git a/application/src/main/java/nl/jixxed/eliteodysseymaterials/templates/settings/sections/General.java b/application/src/main/java/nl/jixxed/eliteodysseymaterials/templates/settings/sections/General.java
+index 5fa546bb..839eed44 100644
+--- a/application/src/main/java/nl/jixxed/eliteodysseymaterials/templates/settings/sections/General.java
++++ b/application/src/main/java/nl/jixxed/eliteodysseymaterials/templates/settings/sections/General.java
+@@ -82,8 +82,7 @@ public class General extends DestroyableVBox implements DestroyableEventTemplate
+                 langSetting,
+                 fontSetting,
+                 customJournalFolderSetting,
+-                pollSetting,
+-                urlSchemeLinkingSetting
++                pollSetting
+         );
+         if (OsCheck.isWindows()) {
+             final DestroyableHBox darkModeSetting = createDarkModeSetting();

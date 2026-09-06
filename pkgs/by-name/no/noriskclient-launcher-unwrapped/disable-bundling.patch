@@ -1,0 +1,22 @@
+diff --git a/src-tauri/tauri.conf.json b/src-tauri/tauri.conf.json
+index 5f41e46..12d859e 100644
+--- a/src-tauri/tauri.conf.json
++++ b/src-tauri/tauri.conf.json
+@@ -109,7 +109,7 @@
+         }
+       }
+     },
+-    "active": true,
++    "active": false,
+     "targets": [
+       "app",
+       "dmg",
+@@ -124,7 +124,7 @@
+       "icons/icon.icns",
+       "icons/icon.ico"
+     ],
+-    "createUpdaterArtifacts": true,
++    "createUpdaterArtifacts": false,
+     "fileAssociations": [
+       {
+         "ext": [

@@ -1,0 +1,90 @@
+From 6fb6ac13a8deee492449442e1ab3d7429aa9fff8 Mon Sep 17 00:00:00 2001
+From: 4evy <git@evy.pink>
+Date: Sat, 11 Jul 2026 01:12:55 +0300
+Subject: [PATCH 4/4] Use APIs available on the Nixpkgs macOS baseline
+
+The package metadata and Mach-O deployment target are both macOS 14. Remove
+compatibility branches for older systems and use the corresponding current
+APIs:
+
+* request EventKit full access directly;
+* discover the calendar handler through NSWorkspace and
+  UniformTypeIdentifiers;
+* use the renamed CoreAudio main-element constant.
+---
+ Itsycal/EventCenter.m    | 20 ++------------------
+ Itsycal/ViewController.m |  9 ++++-----
+ 2 files changed, 6 insertions(+), 23 deletions(-)
+
+diff --git a/Itsycal/EventCenter.m b/Itsycal/EventCenter.m
+index 148c631..3862630 100644
+--- a/Itsycal/EventCenter.m
++++ b/Itsycal/EventCenter.m
+@@ -59,15 +59,7 @@ static NSString *kSelectedCalendars = @"SelectedCalendars";
+         _queueIsol = dispatch_queue_create("com.mowglii.Itsycal.queueIsol", DISPATCH_QUEUE_SERIAL);
+         _queueIsol2 = dispatch_queue_create("com.mowglii.Itsycal.queueIsol2", DISPATCH_QUEUE_SERIAL);
+         _store = [EKEventStore new];
+-#if MAC_OS_X_VERSION_MAX_ALLOWED >= 140000
+-        if (@available(macOS 14.0, *)) {
+-            [_store requestFullAccessToEventsWithCompletion:requestCompletionHandler];
+-        } else {
+-            [_store requestAccessToEntityType:EKEntityTypeEvent completion:requestCompletionHandler];
+-        }
+-#else
+-        [_store requestAccessToEntityType:EKEntityTypeEvent completion:requestCompletionHandler];
+-#endif
++        [_store requestFullAccessToEventsWithCompletion:requestCompletionHandler];
+ 
+         // Refetch everything when the event store has changed.
+         __weak __typeof(self) weakSelf = self;
+@@ -85,15 +77,7 @@ static NSString *kSelectedCalendars = @"SelectedCalendars";
+ #pragma mark - Public (main thread)
+ 
+ - (BOOL)calendarAccessGranted {
+-#if MAC_OS_X_VERSION_MAX_ALLOWED >= 140000
+-    if (@available(macOS 14.0, *)) {
+-        return [EKEventStore authorizationStatusForEntityType:EKEntityTypeEvent] == EKAuthorizationStatusFullAccess;
+-    } else {
+-        return [EKEventStore authorizationStatusForEntityType:EKEntityTypeEvent] == EKAuthorizationStatusAuthorized;
+-    }
+-#else
+-    return [EKEventStore authorizationStatusForEntityType:EKEntityTypeEvent] == EKAuthorizationStatusAuthorized;
+-#endif
++    return [EKEventStore authorizationStatusForEntityType:EKEntityTypeEvent] == EKAuthorizationStatusFullAccess;
+ }
+ 
+ - (NSString *)defaultCalendarIdentifier {
+diff --git a/Itsycal/ViewController.m b/Itsycal/ViewController.m
+index 0bd303b..a887682 100644
+--- a/Itsycal/ViewController.m
++++ b/Itsycal/ViewController.m
+@@ -21,6 +21,7 @@
+ #import "MoButton.h"
+ #import "MoVFLHelper.h"
+ #import "MoUtils.h"
++#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
+ 
+ @implementation ViewController
+ {
+@@ -319,10 +320,8 @@
+     // Determine the default calendar app.
+     // See: support.busymac.com/help/21535-busycal-url-handler
+     
+-    CFStringRef strRef = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, CFSTR("ics"), kUTTypeData);
+-    CFStringRef bundleID = LSCopyDefaultRoleHandlerForContentType(strRef, kLSRolesEditor);
+-    CFRelease(strRef);
+-    NSString *defaultCalendarAppBundleID = CFBridgingRelease(bundleID);
++    NSURL *defaultCalendarAppURL = [NSWorkspace.sharedWorkspace URLForApplicationToOpenContentType:UTTypeCalendarEvent];
++    NSString *defaultCalendarAppBundleID = [NSBundle bundleWithURL:defaultCalendarAppURL].bundleIdentifier;
+     
+     // Use URL scheme to open BusyCal or Fantastical2 on the
+     // date selected in our calendar.
+@@ -1263,7 +1262,7 @@
+     AudioObjectPropertyAddress propertyAddress;
+     propertyAddress.mSelector = kAudioHardwarePropertyDefaultOutputDevice;
+     propertyAddress.mScope    = kAudioObjectPropertyScopeGlobal;
+-    propertyAddress.mElement  = kAudioObjectPropertyElementMaster;
++    propertyAddress.mElement  = kAudioObjectPropertyElementMain;
+ 
+     OSStatus result = AudioObjectGetPropertyData(kAudioObjectSystemObject, &propertyAddress, 0, NULL, &dataSize, &deviceID);
+ 

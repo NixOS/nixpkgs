@@ -1,0 +1,22 @@
+diff --git a/mysql/libs/mysql/gtid/tag_plain.h b/mysql/libs/mysql/gtid/tag_plain.h
+index 4703a5b0d6e..914c6a4b777 100644
+--- a/mysql/libs/mysql/gtid/tag_plain.h
++++ b/mysql/libs/mysql/gtid/tag_plain.h
+@@ -28,6 +28,7 @@
+ #include <cstring>
+ #include <memory>
+ #include <string>
++#include <type_traits>
+ 
+ #include "mysql/gtid/gtid_constants.h"  // tag_max_length
+ 
+@@ -80,7 +81,8 @@ struct Tag_plain {
+   unsigned char m_data[tag_max_length + 1];
+ };
+ 
+-static_assert(std::is_trivial_v<Tag_plain>);
++static_assert(std::is_trivially_copyable_v<Tag_plain>);
++static_assert(std::is_trivially_default_constructible_v<Tag_plain>);
+ static_assert(std::is_standard_layout_v<Tag_plain>);
+ 
+ }  // namespace mysql::gtid

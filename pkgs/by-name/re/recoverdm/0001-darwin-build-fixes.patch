@@ -1,0 +1,121 @@
+From 9b46e151b9fdaf5684618482e69ef4a307c0d47c Mon Sep 17 00:00:00 2001
+From: annalee <150648636+a-n-n-a-l-e-e@users.noreply.github.com>
+Date: Sun, 18 Feb 2024 19:54:21 +0000
+Subject: [PATCH] darwin build fixes
+
+---
+ compat.h    | 14 ++++++++++++++
+ dev.c       |  1 +
+ error.c     |  1 +
+ io.c        |  1 +
+ mergebad.c  |  1 +
+ recoverdm.c |  1 +
+ utils.c     |  1 +
+ utils.h     |  1 +
+ 8 files changed, 21 insertions(+)
+ create mode 100644 src/compat.h
+
+diff --git a/compat.h b/compat.h
+new file mode 100644
+index 0000000..181c8ea
+--- /dev/null
++++ b/compat.h
+@@ -0,0 +1,14 @@
++#pragma once
++#ifdef __APPLE__
++#include <unistd.h>
++_Static_assert(sizeof(off_t) == 8, "off_t must be 8 bytes");
++typedef off_t off64_t;
++#define stat64 stat
++#define lseek64 lseek
++#define open64 open
++#define POSIX_FADV_SEQUENTIAL 1
++static inline int posix_fadvise(int fd, off_t offset, off_t len, int advice)
++{
++    return 0;
++}
++#endif
+diff --git a/dev.c b/dev.c
+index c1ce748..ae3ce2c 100644
+--- a/dev.c
++++ b/dev.c
+@@ -18,6 +18,7 @@
+ 	#include <scsi/scsi_ioctl.h>
+ 	#include <linux/cdrom.h>
+ #endif
++#include "compat.h"
+ 
+ #include "dev.h"
+ 
+diff --git a/error.c b/error.c
+index d2f8acf..550e1af 100644
+--- a/error.c
++++ b/error.c
+@@ -4,6 +4,7 @@
+ #include <stdlib.h>
+ #include <sys/types.h>
+ #include <signal.h>
++#include "compat.h"
+ 
+ void error_exit(char *format, ...)
+ {
+diff --git a/io.c b/io.c
+index 9d66534..e784d75 100644
+--- a/io.c
++++ b/io.c
+@@ -7,6 +7,7 @@
+ #include <unistd.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
++#include "compat.h"
+ 
+ #include "io.h"
+ #include "error.h"
+diff --git a/mergebad.c b/mergebad.c
+index 34a6ef7..580c3bc 100644
+--- a/mergebad.c
++++ b/mergebad.c
+@@ -7,6 +7,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <unistd.h>
++#include "compat.h"
+ 
+ #include "io.h"
+ #include "dev.h"
+diff --git a/recoverdm.c b/recoverdm.c
+index 8b71ae1..5dddeb3 100644
+--- a/recoverdm.c
++++ b/recoverdm.c
+@@ -7,6 +7,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <unistd.h>
++#include "compat.h"
+ 
+ #include "io.h"
+ #include "dev.h"
+diff --git a/utils.c b/utils.c
+index 5791404..ee42a0a 100644
+--- a/utils.c
++++ b/utils.c
+@@ -7,6 +7,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <unistd.h>
++#include "compat.h"
+ 
+ #include "io.h"
+ #include "dev.h"
+diff --git a/utils.h b/utils.h
+index c749c2e..acb0888 100644
+--- a/utils.h
++++ b/utils.h
+@@ -1,3 +1,4 @@
++#include "compat.h"
+ void * mymalloc(size_t size, char *what);
+ void * myrealloc(void *oldp, size_t newsize, char *what);
+ off64_t get_filesize(char *filename);
+-- 
+2.43.0
+

@@ -1,0 +1,17 @@
+--- a/linux/CMakeLists.txt
++++ b/linux/CMakeLists.txt
+@@ -7,13 +7,10 @@
+ set(PROJECT_NAME "rust_lib_localsend_app")
+ project(${PROJECT_NAME} LANGUAGES CXX)
+ 
+-include("../cargokit/cmake/cargokit.cmake")
+-apply_cargokit(${PROJECT_NAME} ../../rust rust_lib_localsend_app "")
+-
+ # List of absolute paths to libraries that should be bundled with the plugin.
+ # This list could contain prebuilt libraries, or libraries created by an
+ # external build triggered from this build file.
+ set(rust_lib_localsend_app_bundled_libraries
+-  "${${PROJECT_NAME}_cargokit_lib}"
++  "@rustLib@/lib/librust_lib_localsend_app.so"
+   PARENT_SCOPE
+ )

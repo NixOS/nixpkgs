@@ -1,0 +1,41 @@
+From fb1ec0eeac424d72175b14b08da9c2d85681b245 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sun, 17 Nov 2024 10:02:34 -0500
+Subject: [PATCH 13/18] Set the version string in the build
+
+---
+ src/ld/meson.build | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/src/ld/meson.build b/src/ld/meson.build
+index 201e891..769ac28 100644
+--- a/src/ld/meson.build
++++ b/src/ld/meson.build
+@@ -11,6 +11,16 @@ InputFiles_cpp = configure_file(
+     output : '@PLAINNAME@',
+ )
+ 
++version_string_cpp = configure_file(
++    capture : true,
++    command : [
++        find_program('bash', native : true),
++        '-c',
++        'echo \'extern const char ld_classicVersionString[] = "@(#)PROGRAM:ld PROJECT:ld64-' + meson.project_version() + '\\n";\''
++    ],
++    output : 'version_string.cpp',
++)
++
+ executable(
+     'ld',
+     cpp_args : [
+@@ -43,6 +53,7 @@ executable(
+     sources : [
+         configure_h,
+         InputFiles_cpp,
++        version_string_cpp,
+         'FatFile.cpp',
+         'Mangling.cpp',
+         'Options.cpp',
+-- 
+2.47.2
+

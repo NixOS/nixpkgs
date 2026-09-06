@@ -1,0 +1,18 @@
+diff -r 562eb6ecb8ca META
+--- a/META	Wed Oct 01 20:09:24 2014 +0100
++++ b/META	Wed Oct 01 20:22:15 2014 +0100
+@@ -1,6 +1,5 @@
+-description "Bindings for OpenGL"
++description="Bindings for OpenGL"
+ version="1.05"
+-directory="+lablGL"
+ archive(byte) = "lablgl.cma"
+ archive(native) = "lablgl.cmxa"
+ 
+@@ -16,4 +15,4 @@
+   requires = "lablgl"
+   archive(byte) = "lablglut.cma"
+   archive(native) = "lablglut.cmxa"
+-)
+\ No newline at end of file
++)

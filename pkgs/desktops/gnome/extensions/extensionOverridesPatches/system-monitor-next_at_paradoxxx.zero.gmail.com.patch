@@ -1,0 +1,21 @@
+diff --git a/__nix-prepend-search-paths.js b/__nix-prepend-search-paths.js
+new file mode 100644
+index 0000000..bd477f1
+--- /dev/null
++++ b/__nix-prepend-search-paths.js
+@@ -0,0 +1,2 @@
++import GIRepository from "gi://GIRepository";
++"@typelibPath@".split(':').forEach(path => GIRepository.Repository.dup_default().prepend_search_path(path));
+diff --git a/extension.js b/extension.js
+index dfa8118..f2950b4 100644
+--- a/extension.js
++++ b/extension.js
+@@ -18,6 +18,8 @@
+ 
+ // Author: Florian Mounier aka paradoxxxzero
+ 
++import './__nix-prepend-search-paths.js';
++
+ import { Extension, gettext as _ } from "resource:///org/gnome/shell/extensions/extension.js";
+ 
+ import GLib from "gi://GLib";

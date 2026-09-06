@@ -1,0 +1,26 @@
+diff --git a/makefile b/makefile
+index aeb2fcd..4c111a1 100644
+--- a/makefile
++++ b/makefile
+@@ -18,7 +18,7 @@
+ #AR= echo
+ 
+ # Unix, generally
+-CC = gcc -fpic -pedantic
++CC := $(CC) -fpic -pedantic
+ DEBUG=-g -Wall -Wno-char-subscripts -O
+ Osuf=o
+ SOsuf=so
+@@ -27,10 +27,10 @@ EXE_EXT=
+ LIBPREFIX=lib
+ OUT = -o $@
+ RM= -rm -f
+-AR= ar crs
++AR := $(AR) crs
+ 
+ # Linux
+-LD = gcc
++LD := $(CC)
+ LDFLAGS = -shared
+ DEBUG=-g -Wno-char-subscripts -O
+ SYS_LIBS= -ldl -lm

@@ -1,0 +1,26 @@
+diff --git a/.yarnrc.yml b/.yarnrc.yml
+--- a/.yarnrc.yml
++++ b/.yarnrc.yml
+@@ -5,7 +5,10 @@ nodeLinker: node-modules
+ compressionLevel: mixed
+ enableGlobalCache: false
+ 
+-yarnPath: .yarn/releases/yarn-4.9.2.cjs
++approvedGitRepositories:
++  - "**"
++
++enableScripts: true
+ 
+ logFilters:
+   # Disable useless non-actionable warnings.
+diff --git a/yarn.lock b/yarn.lock
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -2,6 +2,6 @@
+ # Manual changes might be lost - proceed with caution!
+ 
+ __metadata:
+-  version: 8
++  version: 9
+   cacheKey: 10
+ 

@@ -1,0 +1,55 @@
+--- a/Include/cholmod_internal.h
++++ b/Include/cholmod_internal.h
+@@ -38,7 +38,6 @@
+  * CHOLMOD with -DNLARGEFILE.  You must do this for MATLAB 6.5 and earlier,
+  * for example. */
+ 
+-#include "cholmod_io64.h"
+ 
+ /* ========================================================================== */
+ /* === debugging and basic includes ========================================= */
+@@ -129,13 +128,28 @@
+     { \
+ 	return (result) ; \
+     } \
+-    if (Common->itype != ITYPE || Common->dtype != DTYPE) \
++    if (Common->itype != ITYPE) \
+     { \
+ 	Common->status = CHOLMOD_INVALID ; \
+ 	return (result) ; \
+     } \
+ }
+ 
++/* Return if a matrix has an invalid xtype */
++#define RETURN_IF_XTYPE_INVALID(A,xtype1,xtype2,result) \
++{ \
++    if ((A)->xtype < (xtype1) || (A)->xtype > (xtype2) || \
++	((A)->xtype != CHOLMOD_PATTERN && ((A)->x) == NULL) || \
++	((A)->xtype == CHOLMOD_ZOMPLEX && ((A)->z) == NULL)) \
++    { \
++	if (Common->status != CHOLMOD_OUT_OF_MEMORY) \
++	{ \
++	    ERROR (CHOLMOD_INVALID, "invalid xtype") ; \
++	} \
++	return (result) ; \
++    } \
++}
++
+ #define IS_NAN(x)	CHOLMOD_IS_NAN(x)
+ #define IS_ZERO(x)	CHOLMOD_IS_ZERO(x)
+ #define IS_NONZERO(x)	CHOLMOD_IS_NONZERO(x)
+@@ -257,14 +271,11 @@
+ /* === real/complex arithmetic ============================================== */
+ /* ========================================================================== */
+ 
+-#include "cholmod_complexity.h"
+ 
+ /* ========================================================================== */
+ /* === Architecture and BLAS ================================================ */
+ /* ========================================================================== */
+ 
+-#define BLAS_OK Common->blas_ok
+-#include "cholmod_blas.h"
+ 
+ /* ========================================================================== */
+ /* === debugging definitions ================================================ */

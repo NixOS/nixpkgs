@@ -1,0 +1,16 @@
+diff --git a/src/game.h b/src/game.h
+index fc75acc..fd511a8 100644
+--- a/src/game.h
++++ b/src/game.h
+@@ -207,9 +207,9 @@ void continueTimer (L_timer * time);
+ 
+ int yesNoQuestion (data_t * gfx, game_t * game, char *text);
+ 
+-int updateInput ();
++int updateInput (game_t * game);
+ 
+-void freeGame ();
++void freeGame (game_t * game);
+ 
+ void drawGame (data_t * gfx, game_t * game);
+ 

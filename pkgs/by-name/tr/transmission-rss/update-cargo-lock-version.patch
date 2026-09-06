@@ -1,0 +1,13 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index e75aca4..88321ec 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -2148,7 +2148,7 @@ dependencies = [
+
+ [[package]]
+ name = "transmission-rss"
+-version = "0.3.0"
++version = "0.3.1"
+ dependencies = [
+  "clap",
+  "env_logger",

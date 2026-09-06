@@ -1,0 +1,23 @@
+diff -aur cnijfilter-source-3.20-1/cnijfilter/src/bjfimage.c cnijfilter-source-3.20-1.new/cnijfilter/src/bjfimage.c
+--- cnijfilter-source-3.20-1/cnijfilter/src/bjfimage.c	2009-03-26 06:11:05.000000000 +0100
++++ cnijfilter-source-3.20-1.new/cnijfilter/src/bjfimage.c	2012-02-10 09:33:52.512334139 +0100
+@@ -1520,8 +1520,8 @@
+ 	short			tmpformat;
+ 	short			retbyte = 0;
+ 	short			bpp = 3;
+-	long			width = 0;
+-	long			length = 0;
++	png_uint_32		width = 0;
++	png_uint_32		length = 0;
+ 	long			rstep = 0;
+ 	long			RasterLength = 0;
+ 	long			i;
+@@ -1574,7 +1574,7 @@
+ 		goto onErr;
+ 	}
+ 
+-	if (setjmp (png_p->jmpbuf))
++	if (setjmp (png_jmpbuf(png_p)))
+ 	{
+ 		png_destroy_read_struct(&png_p, &info_p, (png_infopp)NULL);
+ 		goto onErr;

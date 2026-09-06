@@ -1,0 +1,22 @@
+diff -u a/Makefile b/Makefile
+--- a/Makefile	2015-04-05 19:31:41.871227295 +0100
++++ b/Makefile	2015-04-05 19:42:49.743517508 +0100
+@@ -1,3 +1,5 @@
++prefix=$(out)
++
+ all: mailcheck
+ 
+ debug: mailcheck.c netrc.c netrc.h socket.c
+@@ -7,8 +9,10 @@
+ 	$(CC) -Wall -O2 mailcheck.c netrc.c socket.c -s -o mailcheck
+ 
+ install: mailcheck
+-	install mailcheck $(prefix)/usr/bin
+-	install -m 644 mailcheckrc $(prefix)/etc
++	[ -d $(prefix)/bin ] || mkdir $(prefix)/bin
++	[ -d $(prefix)/etc ] || mkdir $(prefix)/etc
++	install mailcheck $(prefix)/bin/
++	install -m 644 mailcheckrc $(prefix)/etc/
+ 
+ distclean: clean
+ 

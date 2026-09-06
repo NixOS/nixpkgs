@@ -1,0 +1,13 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 0b01d9a44e..8efe4e3eb6 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -365,8 +365,6 @@ if (BUILD_QCH)
+     )
+ endif()
+ 
+-add_dependencies(kdenlive all_qmllint)
+-
+ ecm_finalize_qml_module(kdenliveLib
+     DESTINATION ${KDE_INSTALL_QMLDIR})
+ 

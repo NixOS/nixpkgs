@@ -1,0 +1,9 @@
+--- a/sos/policies/distros/__init__.py
++++ b/sos/policies/distros/__init__.py
+@@ -128,6 +128,8 @@
+             return True
+         # next check os-release for a NAME or ID value we expect
++        if not os.path.exists(OS_RELEASE):
++            return False
+         with open(OS_RELEASE, "r", encoding='utf-8') as f:
+             return _check_release(f.read())
