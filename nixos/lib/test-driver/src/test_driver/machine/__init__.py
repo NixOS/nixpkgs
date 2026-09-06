@@ -2,7 +2,6 @@ import base64
 import datetime as dt
 import io
 import os
-import platform
 import queue
 import re
 import select
@@ -23,6 +22,7 @@ from pathlib import Path
 from queue import Queue
 from typing import Any
 
+from test_driver.display import graphical_display_available
 from test_driver.duration import (
     Duration,
     _warn_if_numeric_duration,
@@ -225,13 +225,7 @@ class QemuStartCommand:
     ) -> str:
         display_opts = ""
 
-        display_available = any(x in os.environ for x in ["DISPLAY", "WAYLAND_DISPLAY"])
-        if platform.system() == "Darwin":
-            # We have no DISPLAY variables on macOS and seemingly no better way
-            # to find out
-            display_available = "TERM_PROGRAM" in os.environ
-
-        if not display_available:
+        if not graphical_display_available():
             display_opts += " -nographic"
 
         # qemu options
