@@ -128,6 +128,15 @@ symlinkJoin {
 
   postBuild = ''
     wrapProgram $out/bin/pandora_launcher "''${makeWrapperArgs[@]}"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    if [ -d $out/Applications/PandoraLauncher.app ]; then
+      rm -rf $out/Applications/PandoraLauncher.app
+      mkdir -p $out/Applications/PandoraLauncher.app/Contents/MacOS
+      ln -s ${pandora-launcher'}/Applications/PandoraLauncher.app/Contents/Info.plist $out/Applications/PandoraLauncher.app/Contents/Info.plist
+      ln -s ${pandora-launcher'}/Applications/PandoraLauncher.app/Contents/Resources $out/Applications/PandoraLauncher.app/Contents/Resources
+      ln -s $out/bin/pandora_launcher $out/Applications/PandoraLauncher.app/Contents/MacOS/pandora_launcher
+    fi
   '';
 
   meta = {
