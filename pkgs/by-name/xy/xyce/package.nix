@@ -36,11 +36,21 @@ let
 
   # using fetchurl or fetchFromGitHub doesn't include the manuals
   # due to .gitattributes files
-  xyce_src = fetchgit {
-    name = "Xyce";
-    url = "https://github.com/Xyce/Xyce.git";
-    rev = "Release-${version}";
-    hash = "sha256-8cvglBCykZVQk3BD7VE3riXfJ0PAEBwsoloqUsrMlBc=";
+  xyce_src = applyPatches {
+    src = fetchgit {
+      name = "Xyce";
+      url = "https://github.com/Xyce/Xyce.git";
+      rev = "Release-${version}";
+      hash = "sha256-8cvglBCykZVQk3BD7VE3riXfJ0PAEBwsoloqUsrMlBc=";
+    };
+
+    patches = [
+      # fix clang build issue
+      (fetchpatch {
+        url = "https://github.com/Xyce/Xyce/commit/f321f7eb1c59d29fe98054ec02567976aca43120.patch";
+        hash = "sha256-VXKMNERrTYciOtb63sIVT36SVsx2scmSWpFE5zaDcX8=";
+      })
+    ];
   };
 
   regression_src = applyPatches {
@@ -61,16 +71,21 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xyce";
   inherit version;
 
+  passthru = {
+    inherit xyce_src;
+    inherit regression_src;
+  };
+
   srcs = [
-    xyce_src
-    regression_src
+    finalAttrs.passthru.xyce_src
+    finalAttrs.passthru.regression_src
   ];
 
-  sourceRoot = xyce_src.name;
+  sourceRoot = finalAttrs.passthru.xyce_src.name;
 
   cmakeFlags = lib.optionals withMPI [
     "-DCMAKE_C_COMPILER=mpicc"
@@ -112,7 +127,7 @@ stdenv.mkDerivation rec {
   doCheck = enableTests;
 
   postPatch = ''
-    pushd ../${regression_src.name}
+    pushd ../${finalAttrs.passthru.regression_src.name}
     find Netlists -type f -regex ".*\.sh\|.*\.pl" -exec chmod ugo+x {} \;
     # some tests generate new files, some overwrite netlists
     find . -type d -exec chmod u+w {} \;
@@ -143,8 +158,18 @@ stdenv.mkDerivation rec {
 
   checkPhase = ''
     XYCE_BINARY="$(pwd)/src/Xyce"
-    EXECSTRING="${lib.optionalString withMPI "mpirun -np 2 "}$XYCE_BINARY"
-    TEST_ROOT="$(pwd)/../../${regression_src.name}"
+    EXECSTRING="$XYCE_BINARY"
+    PARALLEL_TESTS="''${NIX_BUILD_CORES}"
+    NP=1
+  ''
+  + (lib.optionalString withMPI ''
+    NP=2
+    EXECSTRING="${mpi}/bin/mpirun -np $NP $EXECSTRING"
+    PARALLEL_TESTS=$(expr $PARALLEL_TESTS / $NP)
+    echo "Running $PARALLEL_TESTS in parallel across $NP MPI processes." > /dev/stderr
+  '')
+  + ''
+    TEST_ROOT="$(pwd)/../../${finalAttrs.passthru.regression_src.name}"
 
     # Honor the TMP variable
     sed -i -E 's|/tmp|\$TMP|' $TEST_ROOT/TestScripts/suggestXyceTagList.sh
@@ -152,16 +177,31 @@ stdenv.mkDerivation rec {
     EXCLUDE_TESTS_FILE=$TMP/exclude_tests.$$
     # Gold standard has additional ":R" suffix in result column label
     echo "Output/HB/hb-step-tecplot.cir" >> $EXCLUDE_TESTS_FILE
+    # See dedicated section for this test below
+    echo "Certification_Tests/BUG_397/diode.cir" >> $EXCLUDE_TESTS_FILE
     # This test makes Xyce access /sys/class/net when run with MPI
     ${lib.optionalString withMPI "echo \"CommandLine/command_line.cir\" >> $EXCLUDE_TESTS_FILE"}
-
+  ''
+  # This test is incompatible with parallel mode and should only be run:
+  # 1. if withMPI is false
+  # 2. not with run_xyce_regressionMP
+  + (lib.optionalString (!withMPI) ''
     $TEST_ROOT/TestScripts/run_xyce_regression \
+      "$EXECSTRING" \
       --output="$(pwd)/Xyce_Test" \
-      --xyce_test="''${TEST_ROOT}" \
+      --xyce_test="$TEST_ROOT" \
+      --onetest="Certification_Tests/BUG_397/diode.cir" \
+      --resultfile="$(pwd)/diode_test_results"
+  '')
+  + ''
+    $TEST_ROOT/TestScripts/run_xyce_regressionMP \
+      "$EXECSTRING" \
+      --output="$(pwd)/Xyce_Test" \
+      --xyce_test="$TEST_ROOT" \
       --taglist="$($TEST_ROOT/TestScripts/suggestXyceTagList.sh "$XYCE_BINARY" | sed -E -e 's/TAGLIST=([^ ]+).*/\1/' -e '2,$d')" \
       --resultfile="$(pwd)/test_results" \
       --excludelist="$EXCLUDE_TESTS_FILE" \
-      "''${EXECSTRING}"
+      --numproc="$PARALLEL_TESTS"
   '';
 
   outputs = [
@@ -170,10 +210,13 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = lib.optionalString enableDocs ''
-    pushd ../../${xyce_src.name}
+    pushd ../../${finalAttrs.passthru.xyce_src.name}
+
+    VER_MAJOR_MINOR=${lib.versions.majorMinor finalAttrs.version}
+
     local docFiles=("doc/Users_Guide/Xyce_UG"
       "doc/Reference_Guide/Xyce_RG"
-      "doc/Release_Notes/Release_Notes_${lib.versions.majorMinor version}/Release_Notes_${lib.versions.majorMinor version}")
+      "doc/Release_Notes/Release_Notes_''$VER_MAJOR_MINOR/Release_Notes_''$VER_MAJOR_MINOR")
     # hotfix for: https://github.com/Xyce/Xyce/issues/177
     substituteInPlace doc/Reference_Guide/Xyce_RG_macros.tex \
       --replace-fail "\\def\\device{\\goodbreak" "\\def\\device{\\item[]\\goodbreak"
@@ -184,7 +227,7 @@ stdenv.mkDerivation rec {
       sed -i -E "s/\\includegraphics\[height=(0.[1-9]in)\]\{$img\}/\\mbox\{\\\\rule\{0mm\}\{\1\}\}/" ''${docFiles[2]}.tex
     done
 
-    install -d $doc/share/doc/${pname}-${version}/
+    install -d $doc/share/doc/xyce-${finalAttrs.version}/
     for d in ''${docFiles[@]}; do
       # Use a public document class
       sed -i -E 's/\\documentclass\[11pt,report\]\{SANDreport\}/\\documentclass\[11pt,letterpaper\]\{scrreprt\}/' $d.tex
@@ -192,15 +235,13 @@ stdenv.mkDerivation rec {
       sed -i -E 's/\\SANDauthor/\\author/' $d.tex
       pushd $(dirname $d)
       make
-      install -t $doc/share/doc/${pname}-${version}/ $(basename $d.pdf)
+      install -t $doc/share/doc/xyce-${finalAttrs.version}/ $(basename $d.pdf)
       popd
     done
     popd
   '';
 
   meta = {
-    broken =
-      (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin;
     description = "High-performance analog circuit simulator";
     longDescription = ''
       Xyce is a SPICE-compatible, high-performance analog circuit simulator,
@@ -210,6 +251,14 @@ stdenv.mkDerivation rec {
     homepage = "https://xyce.sandia.gov";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ fbeffa ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
+    badPlatforms = lib.optionals withMPI [
+      "aarch64-darwin" # segfaults when running tests and reports no valid Xyce executable
+      "aarch64-linux" # reports no valid Xyce executable
+    ];
   };
-}
+})
