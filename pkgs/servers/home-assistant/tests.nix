@@ -178,8 +178,6 @@ lib.genAttrs home-assistant.supportedComponentsWithTests (
 
     enabledTestPaths = [ "tests/components/${component}" ];
 
-    pytestFlags = [ "-vvv" ];
-
     meta = old.meta // {
       broken = lib.elem component [ ];
       # upstream only tests on Linux, so do we.
