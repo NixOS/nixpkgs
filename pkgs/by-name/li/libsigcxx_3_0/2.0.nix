@@ -8,7 +8,7 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libsigc++";
   version = "2.12.1";
 
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libsigc++/${lib.versions.majorMinor version}/libsigc++-${version}.tar.xz";
-    sha256 = "sha256-qdvuMjNR0Qm3ruB0qcuJyj57z4rY7e8YUfTPNZvVCEM=";
+    url = "mirror://gnome/sources/libsigc++/${lib.versions.majorMinor finalAttrs.version}/libsigc++-${finalAttrs.version}.tar.xz";
+    hash = "sha256-qdvuMjNR0Qm3ruB0qcuJyj57z4rY7e8YUfTPNZvVCEM=";
   };
 
   outputs = [
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.all;
   };
-}
+})
