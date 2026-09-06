@@ -51,7 +51,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   cargoRoot = "subprojects/mathcat-py";
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-MaHjaJAi7JlQ7x0pDKoHrLYyenLeG+w8bhw1GW7IX+g=";
+    hash = "sha256-XxdIfDqb/0eoB3dOHbBW104yxkiCX6oKnvOTqCALBvg=";
   };
 
   # needed for cross-compilation
