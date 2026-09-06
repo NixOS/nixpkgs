@@ -696,7 +696,8 @@
       ];
     "bitcoin" =
       ps: with ps; [
-      ]; # missing inputs: blockchain
+        blockchain
+      ];
     "bizkaibus" =
       ps: with ps; [
         bizkaibus
