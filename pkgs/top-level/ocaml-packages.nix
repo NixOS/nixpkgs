@@ -1377,6 +1377,8 @@ let
 
         mirage-sleep = callPackage ../development/ocaml-modules/mirage-sleep { };
 
+        mirage-solo5 = callPackage ../development/ocaml-modules/mirage-solo5 { };
+
         mirage-time = callPackage ../development/ocaml-modules/mirage-time { };
 
         mirage-time-unix = callPackage ../development/ocaml-modules/mirage-time/unix.nix { };
