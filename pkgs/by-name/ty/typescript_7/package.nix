@@ -15,7 +15,7 @@ let
   buildGoModule = buildGo126Module;
 in
 buildGoModule (finalAttrs: {
-  pname = "typescript-go";
+  pname = "typescript";
   version = "7.0.2";
 
   __structuredAttrs = true;
@@ -71,20 +71,20 @@ buildGoModule (finalAttrs: {
       (nix-update-script {
         extraArgs = [
           "--use-github-releases"
-          "--version-regex=^v([\\d.]+)$"
+          "--version-regex=^v(7\\.[\\d.]+)$"
           "--src-only"
         ];
       })
 
       (lib.getExe (writeShellApplication {
-        name = "typescript-go-go-version-updater";
+        name = "typescript-go-version-updater";
         runtimeInputs = [
           nix
           gnugrep
           gnused
         ];
         text = ''
-          new_src="$(nix-build --attr 'pkgs.typescript-go.src' --no-out-link)"
+          new_src="$(nix-build --attr 'pkgs.typescript_7.src' --no-out-link)"
           new_go_major_minor="$(grep --only-matching --perl-regexp '^go \K([0-9]+\.[0-9]+)' "$new_src/tsc/go.mod")"
           sed -i -E "s/buildGo[0-9]+Module/buildGo''${new_go_major_minor//./}Module/g" '${toString ./package.nix}'
         '';
@@ -98,9 +98,9 @@ buildGoModule (finalAttrs: {
   };
 
   meta = {
-    description = "Go implementation of TypeScript";
-    homepage = "https://github.com/microsoft/typescript";
-    changelog = "https://github.com/microsoft/typescript/releases/tag/v${finalAttrs.version}";
+    description = "Superset of JavaScript that compiles to clean JavaScript output";
+    homepage = "https://www.typescriptlang.org/";
+    changelog = "https://github.com/microsoft/TypeScript/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       kachick

@@ -14,7 +14,7 @@
   libsoup_3,
   networkmanager,
   upower,
-  typescript,
+  typescript_5,
   wrapGAppsHook3,
   linux-pam,
   nix-update-script,
@@ -42,7 +42,7 @@ buildNpmPackage (finalAttrs: {
     pkg-config
     gjs
     gobject-introspection
-    typescript
+    typescript_5
     wrapGAppsHook3
   ];
 

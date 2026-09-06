@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcal";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "bcal";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-6oJEinw9KmZSinMl0s94oWiNshKsEp9HMUvWl12kLP4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Jub6nzol5Wmt/B8U5jmuyTHEKnsg3N28zDjWn/wRhOY=";
   };
 
   buildInputs = [ readline ];
