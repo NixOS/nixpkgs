@@ -2662,7 +2662,8 @@
       ];
     "harbor" =
       ps: with ps; [
-      ]; # missing inputs: harbor-python
+        harbor-python
+      ];
     "hardkernel" =
       ps: with ps; [
         aiohasupervisor
@@ -8718,6 +8719,7 @@
     "guntamatic"
     "habitica"
     "hanna"
+    "harbor"
     "hardkernel"
     "hardware"
     "harmony"
