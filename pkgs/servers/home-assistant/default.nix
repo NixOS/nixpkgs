@@ -271,7 +271,7 @@ let
   extraBuildInputs = extraPackages python3Packages;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2026.9.0";
+  hassVersion = "2026.9.1";
 
 in
 python3Packages.buildPythonApplication rec {
@@ -292,13 +292,13 @@ python3Packages.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-55LMI4jVn4+UU9VDjigSLxv2A6veOzJQnEfcCfXAUtc=";
+    hash = "sha256-YaTWD5uKRjA9T0VKVh0miusR7nVuGZCsexPlYfED7ew=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-rBQMDXArcD7LHmwqLMerhKsHDo90917J22f7252HtsI=";
+    hash = "sha256-zeCzwWuVoVuBgtLz64dOc2ifcui87rY5nUKVJyQIFCs=";
   };
 
   build-system = with python3Packages; [
@@ -493,12 +493,6 @@ python3Packages.buildPythonApplication rec {
     "tests/test_test_fixtures.py::test_evict_faked_translations"
     "tests/helpers/test_backup.py::test_async_get_manager"
     "tests/helpers/test_trigger.py::test_platform_multiple_triggers[sync_action]"
-    # various failing after python-updates
-    "tests/helpers/test_entity_platform.py::test_platform_warn_slow_setup" # ValueError: not enough values to unpack (expected 2, got 0)
-    "tests/helpers/test_entity_component.py::test_set_scan_interval_via_config" # assert 10 == 30.0
-    "tests/helpers/test_entity_component.py::test_set_entity_namespace_via_config" # AssertionError: assert [] == ['test_domain...named_device']
-    # orjson 3.12.0 slightly changed an asserted error message
-    "tests/helpers/test_storage.py::test_loading_corrupt_core_file"
   ];
 
   preCheck = ''
