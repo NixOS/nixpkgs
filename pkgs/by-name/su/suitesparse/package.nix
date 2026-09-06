@@ -69,6 +69,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       cudaPackages.cuda_cudart
       cudaPackages.cccl
       cudaPackages.libcublas
+      cudaPackages.cuda_nvrtc
     ];
 
   preConfigure = ''
