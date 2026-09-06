@@ -1,0 +1,55 @@
+diff --git a/scripts/build/deps/webkit.ts b/scripts/build/deps/webkit.ts
+index 9182233..dd8aaa4 100644
+--- a/scripts/build/deps/webkit.ts
++++ b/scripts/build/deps/webkit.ts
+@@ -226,7 +226,7 @@ export const webkit: Dependency = {
+       return { kind: "none" };
+     }
+
+-    // Local: nested cmake, target=jsc.
++    // Local: nested cmake, build only the static libraries Bun links.
+     //
+     // CMAKE_C_FLAGS/CMAKE_CXX_FLAGS: overrides the global dep flags source.ts
+     // would otherwise pass — WebKit's cmake sets its own -O/-g/sanitizer
+@@ -242,6 +242,7 @@ export const webkit: Dependency = {
+     // (macOS: Homebrew headers + system libs; Linux: libicu-dev) — cmake
+     // auto-detects.
+     const optFlags: string[] = computeCpuTargetFlags(cfg);
++    optFlags.push(`-ffile-prefix-map=${webkitSrcDir(cfg)}/Source=vendor/WebKit/Source`);
+     // -fno-pic: match bun's own C++ (flags.ts) so JSC/WTF const-pointer
+     // tables land in .rodata instead of .data.rel.ro. We link -no-pie, so
+     // PIC codegen here is pure overhead (GOT indirections + ~550 KB of
+@@ -286,6 +287,16 @@ export const webkit: Dependency = {
+       cxxOptFlagStr += ` -nostdlibinc -isystem ${join(inc, "c++", "v1")} -isystem ${inc}`;
+     }
+     const args: Record<string, string> = {
++      ...(cfg.darwin
++        ? {
++            CMAKE_OSX_SYSROOT: "",
++            // JSCOnly has no Swift targets, but WebKit probes swiftc before
++            // feature selection. The path only needs to exist.
++            CMAKE_Swift_COMPILER: cfg.cc,
++            GPERF_EXECUTABLE: process.env.BUN_NIX_GPERF!,
++            Mig_EXECUTABLE: process.env.BUN_NIX_MIG!,
++          }
++        : {}),
+       CMAKE_C_FLAGS: optFlagStr,
+       CMAKE_CXX_FLAGS: cxxOptFlagStr,
+       ...(cfg.abi === "android"
+@@ -328,6 +339,7 @@ export const webkit: Dependency = {
+       ENABLE_STATIC_JSC: "ON",
+       USE_THIN_ARCHIVES: "OFF",
+       ENABLE_FTL_JIT: "ON",
++      ENABLE_TOOLS: "OFF",
+       CMAKE_EXPORT_COMPILE_COMMANDS: "ON",
+       USE_BUN_JSC_ADDITIONS: "ON",
+       USE_BUN_EVENT_LOOP: "ON",
+@@ -342,7 +354,7 @@ export const webkit: Dependency = {
+
+     const spec: NestedCmakeBuild = {
+       kind: "nested-cmake",
+-      targets: ["jsc"],
++      targets: ["JavaScriptCore", "WTF", "bmalloc"],
+       args,
+       // Release local WebKit keeps debug info so JSC crashes symbolicate.
+       // LTO stays plain Release (debug info + LTO bloats significantly).
