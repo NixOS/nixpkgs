@@ -1447,14 +1447,14 @@ def test_execute_test_rollback(
     mock_run: Mock,
 ) -> None:
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
-        if args[0] == "nix-env":
+        if args[0] == "sh":
             return CompletedProcess(
                 [],
                 0,
                 stdout=textwrap.dedent("""\
-                2082   2024-11-07 22:58:56
-                2083   2024-11-07 22:59:41
-                2084   2024-11-07 23:54:17   (current)
+                {"id":642,"timestamp":"2026-09-06 11:57:05","current":false}
+                {"id":643,"timestamp":"2026-09-06 13:01:11","current":false}
+                {"id":644,"timestamp":"2026-09-06 18:59:37","current":true}
                 """),
             )
         elif (args[0] == "nix-instantiate" and "nixos-system" in args) or args[
@@ -1474,14 +1474,21 @@ def test_execute_test_rollback(
     mock_run.assert_has_calls(
         [
             call(
+                ["nix-instantiate", "--find-file", "nixos-system"],
+                check=False,
+                capture_output=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
                 [
-                    "nix-env",
-                    "-p",
+                    "sh",
+                    "-c",
+                    nr.nix.GET_GENERATIONS_SCRIPT,
+                    "get-generations",
                     Path("/nix/var/nix/profiles/system-profiles/foo"),
-                    "--list-generations",
                 ],
                 check=True,
-                stdout=PIPE,
+                capture_output=True,
                 **DEFAULT_RUN_KWARGS,
             ),
             call(
@@ -1492,7 +1499,7 @@ def test_execute_test_rollback(
             call(
                 [
                     Path(
-                        "/nix/var/nix/profiles/system-profiles/foo-2083-link/bin/switch-to-configuration"
+                        "/nix/var/nix/profiles/system-profiles/foo-643-link/bin/switch-to-configuration"
                     ),
                     "test",
                 ],
