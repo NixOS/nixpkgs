@@ -515,6 +515,9 @@ you of the correct hash.
   environment variable. Features can be specified with
   `cargoBuildNoDefaultFeatures` and `cargoBuildFeatures`. Additional
   Cargo build flags can be passed through `cargoBuildFlags`.
+* `cargoAuditHook`: Use [cargo-audit](https://github.com/rustsec/rustsec/tree/main/cargo-audit) to audit a package's dependencies.
+  Uses RustSec's advisory database to analyse dependencies of a package
+  to see if there are CVEs and other vulnerabilities.
 * `maturinBuildHook`: use [Maturin](https://github.com/PyO3/maturin)
   to build a Python wheel. Similar to `cargoBuildHook`, the optional
   variable `buildAndTestSubdir` can be used to build a crate in a

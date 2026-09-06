@@ -19,9 +19,10 @@
 }:
 
 rustPlatform.buildRustPackage.override
-  {
-    cargo-auditable = cargo-auditable.bootstrap;
-  }
+  (prev: {
+    cargo-auditable = prev.cargo-auditable.bootstrap;
+    cargoBuildHook = prev.cargoBuildHook.bootstrap;
+  })
   {
     pname = "cargo";
     inherit (rustc.unwrapped) version src;
