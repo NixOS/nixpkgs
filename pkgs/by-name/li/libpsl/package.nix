@@ -1,53 +1,46 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  fetchpatch,
-  autoreconfHook,
+  fetchFromGitHub,
+  buildPackages,
   docbook_xsl,
   docbook_xml_dtd_43,
   gtk-doc,
-  lzip,
+  meson,
+  ninja,
+  pkg-config,
   libidn2,
   libunistring,
   libxslt,
-  pkg-config,
-  buildPackages,
   publicsuffix-list,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpsl";
-  version = "0.21.5";
+  version = "0.23.3";
 
-  src = fetchurl {
-    url = "https://github.com/rockdaboot/libpsl/releases/download/${finalAttrs.version}/libpsl-${finalAttrs.version}.tar.lz";
-    hash = "sha256-mp9qjG7bplDPnqVUdc0XLdKEhzFoBOnHMgLZdXLNOi0=";
+  src = fetchFromGitHub {
+    owner = "rockdaboot";
+    repo = "libpsl";
+    tag = finalAttrs.version;
+    hash = "sha256-Me22tepjCn1IvILw/Q286QemXs+B5q/h8xxtUs6bLss=";
   };
-
-  patches = [
-    # Can be dropped on next release, or if we switch to Meson for
-    # this package.  Test pkgsStatic.curl still builds.
-    (fetchpatch {
-      name = "static.patch";
-      url = "https://github.com/rockdaboot/libpsl/commit/490bd6f98a2addcade55028ea60c36cce07e21e4.patch";
-      hash = "sha256-7Uu9gaVuA9Aly2mmnhUVgv2BYQTSBODJ2rDl5xp0uVY=";
-    })
-  ];
 
   outputs = [
     "out"
     "dev"
   ];
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
   nativeBuildInputs = [
-    autoreconfHook
-    docbook_xsl
     docbook_xml_dtd_43
+    docbook_xsl
     gtk-doc
-    lzip
-    pkg-config
     libxslt
+    meson
+    ninja
+    pkg-config
   ];
 
   buildInputs = [
@@ -62,24 +55,18 @@ stdenv.mkDerivation (finalAttrs: {
     publicsuffix-list
   ];
 
+  mesonFlags = [
+    (lib.mesonBool "docs" true)
+    (lib.mesonOption "psl_distfile" "${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat")
+    (lib.mesonOption "psl_file" "${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat")
+    (lib.mesonOption "psl_testfile" "${publicsuffix-list}/share/publicsuffix/test_psl.txt")
+  ];
+
   # bin/psl-make-dafsa brings a large runtime closure through python3
   # use the libpsl-with-scripts package if you need this
   postInstall = ''
     rm $out/bin/psl-make-dafsa $out/share/man/man1/psl-make-dafsa*
   '';
-
-  preAutoreconf = ''
-    gtkdocize
-  '';
-
-  configureFlags = [
-    # "--enable-gtk-doc"
-    "--enable-man"
-    "--with-psl-distfile=${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
-    "--with-psl-file=${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
-    "--with-psl-testfile=${publicsuffix-list}/share/publicsuffix/test_psl.txt"
-    "PYTHON=${lib.getExe buildPackages.python3}"
-  ];
 
   enableParallelBuilding = true;
 
