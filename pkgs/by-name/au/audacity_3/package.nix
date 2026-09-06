@@ -91,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     makeWrapper
     wrapGAppsHook3
+    wxwidgets_3_2
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     linuxHeaders
@@ -174,6 +175,9 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false; # Test fails
 
   dontWrapGApps = true;
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   # Replace audacity's wrapper, to:
   # - Put it in the right place; it shouldn't be in "$out/audacity"
