@@ -12,6 +12,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libsigc++";
   version = "3.8.1";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "libsigcplusplus";
     repo = "libsigcplusplus";
@@ -35,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "libsigc++";
-      attrPath = "libsigcxx30";
+      attrPath = "libsigcxx_3_0";
       versionPolicy = "odd-unstable";
     };
   };

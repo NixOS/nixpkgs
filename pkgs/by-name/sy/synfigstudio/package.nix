@@ -15,7 +15,7 @@
   gtk3,
   gtkmm3,
   libjack2,
-  libsigcxx,
+  libsigcxx_2_0,
   libxmlxx,
   mlt,
   imagemagick,
@@ -81,7 +81,7 @@ let
       ETL
       glibmm
       mlt
-      libsigcxx
+      libsigcxx_2_0
       libxmlxx
       imagemagick
       harfbuzz
@@ -135,7 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtkmm3
     imagemagick
     libjack2
-    libsigcxx
+    libsigcxx_2_0
     libxmlxx
     mlt
     fontconfig
