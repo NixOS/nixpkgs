@@ -1,8 +1,8 @@
 diff --git a/src/dist/component/package.rs b/src/dist/component/package.rs
-index dc545d4b62..4dd8ade86e 100644
+index 28e22f8635..568097ccf0 100644
 --- a/src/dist/component/package.rs
 +++ b/src/dist/component/package.rs
-@@ -130,6 +130,7 @@
+@@ -132,6 +132,7 @@
                      } else {
                          builder.move_file(path.clone(), &src_path)?
                      }
@@ -10,7 +10,7 @@ index dc545d4b62..4dd8ade86e 100644
                  }
                  ComponentPartKind::Dir => {
                      if self.copy {
-@@ -152,6 +153,176 @@
+@@ -154,6 +155,176 @@
      }
  }
  
