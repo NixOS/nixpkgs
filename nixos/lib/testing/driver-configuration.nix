@@ -24,6 +24,36 @@ let
     };
   };
 
+  displayViewer = types.submodule {
+    options = {
+      kind = lib.mkOption {
+        internal = true;
+        type = types.enum [ "vnc" ];
+      };
+      executable = lib.mkOption {
+        internal = true;
+        type = types.path;
+      };
+    };
+  };
+
+  nspawnDisplayExporter = types.submodule {
+    options = {
+      kind = lib.mkOption {
+        internal = true;
+        type = types.enum [ "x11-vnc" ];
+      };
+      server = lib.mkOption {
+        internal = true;
+        type = types.path;
+      };
+      relay = lib.mkOption {
+        internal = true;
+        type = types.path;
+      };
+    };
+  };
+
   machineConfigurationAttrs =
     extraOptions:
     lib.mkOption {
@@ -59,6 +89,16 @@ in
               type = types.listOf displayTarget;
               default = [ ];
             };
+            display_exporters = lib.mkOption {
+              internal = true;
+              type = types.attrsOf nspawnDisplayExporter;
+              default = { };
+            };
+          };
+          display_viewers = lib.mkOption {
+            internal = true;
+            type = types.attrsOf displayViewer;
+            default = { };
           };
           vlans = lib.mkOption {
             internal = true;

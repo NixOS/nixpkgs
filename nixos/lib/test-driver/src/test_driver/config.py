@@ -5,14 +5,34 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
+DisplayBackend = Literal["x11"]
+DisplayProtocol = Literal["vnc"]
+
 
 class X11DisplayTargetConfiguration(BaseModel):
-    backend: Literal["x11"]
+    backend: DisplayBackend
     display: str = ":0"
     xauthority: Path = Path("/root/.Xauthority")
 
 
 DisplayTargetConfiguration = X11DisplayTargetConfiguration
+
+
+class VncDisplayViewerConfiguration(BaseModel):
+    kind: Literal["vnc"]
+    executable: Path
+
+
+DisplayViewerConfiguration = VncDisplayViewerConfiguration
+
+
+class NspawnX11VncExporterConfiguration(BaseModel):
+    kind: Literal["x11-vnc"]
+    server: Path
+    relay: Path
+
+
+NspawnDisplayExporterConfiguration = NspawnX11VncExporterConfiguration
 
 
 class MachineConfiguration(BaseModel):
@@ -26,11 +46,17 @@ class QemuMachineConfiguration(MachineConfiguration):
 
 class NspawnMachineConfiguration(MachineConfiguration):
     display_targets: list[DisplayTargetConfiguration] = Field(default_factory=list)
+    display_exporters: dict[DisplayBackend, NspawnDisplayExporterConfiguration] = Field(
+        default_factory=dict
+    )
 
 
 class DriverConfiguration(BaseModel):
     vms: dict[str, QemuMachineConfiguration]
     containers: dict[str, NspawnMachineConfiguration]
+    display_viewers: dict[DisplayProtocol, DisplayViewerConfiguration] = Field(
+        default_factory=dict
+    )
     vlans: list[int]
     global_timeout: dt.timedelta
     enable_ssh_backdoor: bool
