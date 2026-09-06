@@ -15,14 +15,14 @@
 }:
 buildPythonPackage rec {
   pname = "stac-validator";
-  version = "4.4.0";
+  version = "4.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "StacLabs";
     repo = "stac-validator";
     tag = "v${version}";
-    hash = "sha256-JrLpny4PDXvjKN1iQ0uxcTuPgNTykZzv7RdQDoMLQT4=";
+    hash = "sha256-H4vhinsfOY4kM2YRGJrl8+9Wj91gKo5aj8sTZV/LHX0=";
   };
 
   build-system = [ setuptools ];
