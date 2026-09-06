@@ -1,5 +1,4 @@
 {
-  callPackage,
   lib,
   stdenv,
   discord,
@@ -95,13 +94,11 @@ lib.genAttrs [ "discord" "discord-ptb" "discord-canary" "discord-development" ] 
     platformName = if stdenv.hostPlatform.isDarwin then "osx" else "linux";
     source = sources."${platformName}-${args.branch}";
   in
-  callPackage ./wrapper.nix (
-    args
-    // {
-      inherit pname source;
-      meta = meta // {
-        mainProgram = args.binaryName;
-      };
-    }
-  )
+  args
+  // {
+    inherit source;
+    meta = meta // {
+      mainProgram = args.binaryName;
+    };
+  }
 )
