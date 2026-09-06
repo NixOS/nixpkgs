@@ -1,15 +1,22 @@
-{ lib, fetchFromGitHub }:
+{
+  lib,
+  fetchFromGitHub,
+  applyPatches,
+}:
 let
   version = "0.23.1";
 in
 {
   inherit version;
 
-  src = fetchFromGitHub {
-    owner = "Donkie";
-    repo = "Spoolman";
-    rev = "v${version}";
-    hash = "sha256-Oa/cNmpc0hWRf0EQI5aXIE/p9//Sos5Nj3QFEjKgj5o=";
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "Donkie";
+      repo = "Spoolman";
+      rev = "v${version}";
+      hash = "sha256-Oa/cNmpc0hWRf0EQI5aXIE/p9//Sos5Nj3QFEjKgj5o=";
+    };
+    patches = [ ./starlette-file-response.patch ];
   };
 
   meta = {
