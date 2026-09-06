@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
   useVariableFont ? false,
 }:
 
@@ -15,23 +16,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-bCQzGCvjSQ1TXFVC3w9VPXNtjM4h7lRvljVjX/w1TJ4=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    ${
-      if useVariableFont then
-        ''
-          install -Dm644 ttf/*.ttf -t $out/share/fonts/truetype
-        ''
-      else
-        ''
-          install -Dm644 otf/static/*.otf -t $out/share/fonts/opentype
-          install -Dm644 ttf/static/*.ttf -t $out/share/fonts/truetype
-        ''
-    }
-
-    runHook postInstall
-  '';
+  outputs = [
+    "out"
+    "webfont"
+  ];
+  rootDir = if useVariableFont then "ttf" else ".";
+  excludeFonts = if useVariableFont then [ "static/*" ] else [ "ttf/*.ttf" ];
 
   meta = {
     description = "Monospaced font that includes programming ligatures and is designed to enhance the modern look and feel of the Windows Terminal";
