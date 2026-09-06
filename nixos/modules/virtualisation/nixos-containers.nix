@@ -27,6 +27,9 @@ let
       renderExtraVeth = (
         name: cfg: ''
           echo "Bringing ${name} up"
+          ${optionalString (cfg.localMacAddress != null) ''
+            ip link set dev ${name} address ${cfg.localMacAddress}
+          ''}
           ip link set dev ${name} up
           ${optionalString (cfg.localAddress != null) ''
             echo "Setting ip for ${name}"
