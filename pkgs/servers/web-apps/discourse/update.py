@@ -276,6 +276,8 @@ def update(rev):
     subprocess.check_output(["rm", "-rf", "migrations"], cwd=rubyenv_dir)
     # -- end gitlab pkg code
 
+    click.echo("updating dart-sass")
+
     # update the sass-embedded override
     # must run *after* the gemfile update!
     dart_sass_ver = _nix_eval('discourse.rubyEnv.gemset.sass-embedded.version')
@@ -301,17 +303,32 @@ def update(rev):
             f.write(content)
             f.truncate()
 
+    click.echo("updating discourse package")
+
     # update the discourse package itself
     _call_nix_update('discourse', version.version)
 
+    click.echo("querying old PNPM hash")
     old_pnpm_hash = _nix_eval('discourse.assets.pnpmDeps.outputHash')
+
+    click.echo("finding new PNPM hash")
+    # the pnpm builder now requires the has to be set to "" to output a "got: sha256-" line
+    empty_hash_line = f"hash = \"\";#{old_pnpm_hash}";
+    mk_hash_line = lambda hash: f"hash = \"{hash}\";"
+    with open(Path(__file__).parent / "default.nix", 'r+') as f:
+        content = f.read()
+        content = content.replace(mk_hash_line(old_pnpm_hash), empty_hash_line)
+        f.seek(0)
+        f.write(content)
+        f.truncate()
     new_pnpm_hash = _get_build_lock_hash()
+
     if new_pnpm_hash is not None:
         click.echo(f"Updating pnpm lock hash: {old_pnpm_hash} -> {new_pnpm_hash}")
 
         with open(Path(__file__).parent / "default.nix", 'r+') as f:
             content = f.read()
-            content = content.replace(old_pnpm_hash, new_pnpm_hash)
+            content = content.replace(empty_hash_line, mk_hash_line(new_pnpm_hash))
             f.seek(0)
             f.write(content)
             f.truncate()

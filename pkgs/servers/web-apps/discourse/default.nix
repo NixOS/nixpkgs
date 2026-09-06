@@ -54,13 +54,13 @@
 }:
 
 let
-  version = "2026.7.1";
+  version = "2026.8.0";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     tag = "v${version}";
-    hash = "sha256-sGygaOCygtDVjg8uBGdDVaRouUKib8aAukaBAY8aQ9w=";
+    hash = "sha256-UUDPZVBQXG6kfW8+TFFDHsNMdH8WLxsgva4jSdZWsC8=";
   };
 
   pnpm = pnpm_10;
@@ -350,7 +350,7 @@ let
       pname = "discourse-assets";
       inherit version src pnpm;
       fetcherVersion = 3;
-      hash = "sha256-T0qcUYHqpjeGlyozcaiVI/Art0zh2PLyuMzbquhfe/o=";
+      hash = "sha256-fm6hboG2Bjq0HUnbwdLiC1FpoWRZvq+1bN5SupQ2P2k=";
     };
 
     nativeBuildInputs = runtimeDeps ++ [
@@ -392,7 +392,7 @@ let
       # because we fail to copy tmp/ (the default directory where the asset processor is cached,
       # see notes in the discourse `installPhase`) we need to change the directory to something under
       # frontend/ which is moved over as expected.
-      ./prebuild-asset-processor.patch
+      ./include-precompiled-bundles.patch
 
       # safe_exec.rb, which is used to execute ImageMagick among other things, restricts executable paths to standard FHS paths
       # which breaks on nix. this patch adds the entire /nix/store to allowed paths, which is sub-optimal but
@@ -507,7 +507,7 @@ let
       # because we fail to copy tmp/ (the default directory where the asset processor is cached,
       # see notes in the discourse `installPhase`) we need to change the directory to something under
       # frontend/ which is moved over as expected.
-      ./prebuild-asset-processor.patch
+      ./include-precompiled-bundles.patch
 
       # safe_exec.rb, which is used to execute ImageMagick among other things, restricts executable paths to standard FHS paths
       # which breaks on nix. this patch adds the entire /nix/store to allowed paths, which is sub-optimal but
