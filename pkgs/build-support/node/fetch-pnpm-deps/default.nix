@@ -81,6 +81,7 @@ in
             jq
             moreutils
             pnpm # from args
+            pnpm.nodejs-slim
             pnpm-fixup-state-db'
             sqlite
             writableTmpDirAsHomeHook
@@ -139,15 +140,22 @@ in
             pnpm config list
             echo
 
+            local installFlagsArray=(
+              "--force"
+              "--ignore-scripts"
+              "--frozen-lockfile"
+            )
+
+            if [[ -n "$NIX_NPM_REGISTRY" ]]; then
+              installFlagsArray+=("--registry=$NIX_NPM_REGISTRY")
+            fi
+
             # pnpm is going to warn us about using --force
             # --force allows us to fetch all dependencies including ones that aren't meant for our host platform
             pnpm install \
-                --force \
-                --ignore-scripts \
                 ${lib.escapeShellArgs filterFlags} \
                 ${lib.escapeShellArgs pnpmInstallFlags} \
-                --registry="$NIX_NPM_REGISTRY" \
-                --frozen-lockfile
+                "''${installFlagsArray[@]}"
 
             # Record the fetcherVersion in the output for introspection.
             echo ${toString fetcherVersion} > $out/.fetcher-version
