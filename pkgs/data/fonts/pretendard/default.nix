@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 let
@@ -22,13 +23,12 @@ let
         inherit hash;
       };
 
-      installPhase = ''
-        runHook preInstall
+      outputs = [
+        "out"
+        "webfont"
+      ];
 
-        install -Dm644 public/static/*.otf -t $out/share/fonts/opentype
-
-        runHook postInstall
-      '';
+      nativeBuildInputs = [ installFonts ];
 
       meta = {
         homepage = "https://github.com/orioncactus/pretendard";
