@@ -63,7 +63,8 @@ let
     in
     {
       description = "Supplicant ${iface}${optionalString (iface == "WLAN" || iface == "LAN") " %I"}";
-      wantedBy = [ "multi-user.target" ] ++ deps;
+      # WLAN and LAN instances are started by the udev rules below.
+      wantedBy = optionals (iface != "WLAN" && iface != "LAN") ([ "multi-user.target" ] ++ deps);
       wants = [ "network.target" ];
       bindsTo = deps;
       after = deps;
@@ -271,7 +272,8 @@ in
             ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", TAG!="SUPPLICANT_ASSIGNED", TAG+="systemd", PROGRAM="/run/current-system/systemd/bin/systemd-escape -p %E{INTERFACE}", ENV{SYSTEMD_WANTS}+="supplicant-wlan@$result.service"
           ''}
           ${optionalString (hasAttr "LAN" cfg) ''
-            ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="lan", TAG!="SUPPLICANT_ASSIGNED", TAG+="systemd", PROGRAM="/run/current-system/systemd/bin/systemd-escape -p %E{INTERFACE}", ENV{SYSTEMD_WANTS}+="supplicant-lan@$result.service"
+            # Wired interfaces have no DEVTYPE; the device link excludes virtual ones.
+            ACTION=="add", SUBSYSTEM=="net", ATTR{type}=="1", ENV{DEVTYPE}=="", TEST=="device", TAG!="SUPPLICANT_ASSIGNED", TAG+="systemd", PROGRAM="/run/current-system/systemd/bin/systemd-escape -p %E{INTERFACE}", ENV{SYSTEMD_WANTS}+="supplicant-lan@$result.service"
           ''}
         '';
       })
