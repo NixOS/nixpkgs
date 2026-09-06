@@ -11,15 +11,15 @@
   libp11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libp11";
-  version = "0.4.18";
+  version = "0.4.20-unstable-2026-09-03";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "libp11";
-    rev = "${pname}-${version}";
-    sha256 = "sha256-bvVUiv8y5c0P9fHAFs1JX3V7xsorbKUmm0qt3l2SoQQ=";
+    rev = "fa48b0a9ee634b4c6721094840575c7f6d1f498e";
+    hash = "sha256-/MtiuI8jipI9AfQCnCLAHbqMLqY7+s+TWkcjB7c3ZGU=";
   };
 
   configureFlags = [
