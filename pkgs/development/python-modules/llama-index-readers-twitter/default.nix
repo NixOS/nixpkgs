@@ -7,14 +7,14 @@
   tweepy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-index-readers-twitter";
   version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_readers_twitter";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-WguqvAbb6xbuTZDL55Qyv35DdJ7DjqrnvtyxMYe9Tkc=";
   };
 
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
