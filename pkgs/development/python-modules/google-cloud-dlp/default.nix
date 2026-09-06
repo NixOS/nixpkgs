@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dlp";
-  version = "3.38.0";
+  version = "3.39.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_dlp";
     inherit version;
-    hash = "sha256-BcdlhL62CzBcE9xRMhp9Aebj7DHd8QXxjVDy+DT3toQ=";
+    hash = "sha256-dabUewER8SFoc4QYyGy1V71IqxYpzUsnNyRNUfgZH04=";
   };
 
   build-system = [ setuptools ];
