@@ -7,23 +7,26 @@
 let
   inherit (lib) types;
 
-  nodeConfigurationAttrs = lib.mkOption {
-    internal = true;
-    type = types.attrsOf (
-      types.submodule {
-        options = {
-          name = lib.mkOption {
-            internal = true;
-            type = types.str;
-          };
-          start_script = lib.mkOption {
-            internal = true;
-            type = types.path;
-          };
-        };
-      }
-    );
-  };
+  machineConfigurationAttrs =
+    extraOptions:
+    lib.mkOption {
+      internal = true;
+      type = types.attrsOf (
+        types.submodule {
+          options = {
+            name = lib.mkOption {
+              internal = true;
+              type = types.str;
+            };
+            start_script = lib.mkOption {
+              internal = true;
+              type = types.path;
+            };
+          }
+          // extraOptions;
+        }
+      );
+    };
 in
 {
   options = {
@@ -32,8 +35,8 @@ in
       internal = true;
       type = types.submodule {
         options = {
-          vms = nodeConfigurationAttrs;
-          containers = nodeConfigurationAttrs;
+          vms = machineConfigurationAttrs { };
+          containers = machineConfigurationAttrs { };
           vlans = lib.mkOption {
             internal = true;
             type = types.listOf types.ints.unsigned;

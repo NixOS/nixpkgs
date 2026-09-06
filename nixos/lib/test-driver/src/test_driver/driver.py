@@ -1,5 +1,4 @@
 import datetime as dt
-import json
 import os
 import re
 import signal
@@ -17,8 +16,8 @@ from typing import Any
 from unittest import TestCase
 
 from colorama import Style
-from pydantic import BaseModel
 
+from test_driver.config import DriverConfiguration
 from test_driver.debug import DebugAbstract, DebugNop
 from test_driver.duration import as_timedelta
 from test_driver.errors import MachineError, RequestedAssertionFailed
@@ -32,26 +31,6 @@ from test_driver.machine import (
 )
 from test_driver.polling_condition import PollingCondition
 from test_driver.vlan import VLan
-
-
-class NodeConfiguration(BaseModel):
-    name: str
-    start_script: Path
-
-
-class DriverConfiguration(BaseModel):
-    vms: dict[str, NodeConfiguration]
-    containers: dict[str, NodeConfiguration]
-    vlans: list[int]
-    global_timeout: dt.timedelta
-    enable_ssh_backdoor: bool
-    test_script: Path
-
-
-def load_driver_configuration(file_path: str) -> DriverConfiguration:
-    with open(file_path) as f:
-        data = json.load(f)
-    return DriverConfiguration.model_validate(data)
 
 
 class AssertionTester(TestCase):
