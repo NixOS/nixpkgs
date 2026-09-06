@@ -6,17 +6,20 @@
   libnatspec ? null,
   libiconv,
   fetchpatch,
+  fetchDebianPatch,
 }:
 
 assert enableNLS -> libnatspec != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zip";
   version = "3.0";
 
   src = fetchurl {
     urls = [
-      "ftp://ftp.info-zip.org/pub/infozip/src/zip${lib.replaceStrings [ "." ] [ "" ] version}.tgz"
+      "ftp://ftp.info-zip.org/pub/infozip/src/zip${
+        lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
+      }.tgz"
       "https://src.fedoraproject.org/repo/pkgs/zip/zip30.tar.gz/7b74551e63f8ee6aab6fbc86676c0d37/zip30.tar.gz"
     ];
     sha256 = "0sb3h3067pzf3a7mlxn1hikpcjrsvycjcnj9hl9b1c3ykcgvps7h";
@@ -44,9 +47,12 @@ stdenv.mkDerivation rec {
     #     zip I/O error: No such file or directory
     #     zip error: Could not create output file (was replacing the original zip file)
     #     make[2]: *** [CreateJars.gmk:659: /build/source/build/linux-x86_64-normal-server-release/images/src.zip] Error 1
-    #
-    # Source: Debian
-    ./12-fix-build-with-gcc-14.patch
+    (fetchDebianPatch {
+      inherit (finalAttrs) pname version;
+      debianRevision = "16";
+      patch = "fix-build-with-gcc-14.patch";
+      hash = "sha256-C966AdPV5E44cJ1L28iFvmXq3frjNiW6PoHiOOusS04=";
+    })
     (fetchpatch {
       url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-arch/zip/files/zip-3.0-pic.patch?id=d37d095fc7a2a9e4a8e904a7bf0f597fe99df85a";
       hash = "sha256-OXgC9KqiOpH/o/bSabt3LqtoT/xifqfkvpLLPfPz+1c=";
@@ -74,6 +80,22 @@ stdenv.mkDerivation rec {
       url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-arch/zip/files/zip-3.0-zipnote-freeze.patch?id=d37d095fc7a2a9e4a8e904a7bf0f597fe99df85a";
       hash = "sha256-EVr7YS3IytnCRjAYUlkg05GA/kaAY9NRFG7uDt0QLAY=";
     })
+    # Fix buffer overflow (CVE-2018-13410).
+    # See: https://seclists.org/fulldisclosure/2018/Jul/24
+    (fetchDebianPatch {
+      inherit (finalAttrs) pname version;
+      debianRevision = "16";
+      patch = "buffer-overflow-cve-2018-13410.patch";
+      hash = "sha256-Hgy0yrBuSX2XWN1PNASQbjiXfyzSScwHQ+o0fv6Sgs4=";
+    })
+    # Command injection in zip -T for specially crafted file
+    # names. See: https://seclists.org/oss-sec/2026/q3/494
+    (fetchDebianPatch {
+      inherit (finalAttrs) pname version;
+      debianRevision = "16";
+      patch = "fix-command-injection.patch";
+      hash = "sha256-cfE98l98KkPfDS5KT/DB2bqFNPTbHBKyJ7W2+iKgaGI=";
+    })
   ]
   ++ lib.optionals (enableNLS && !stdenv.hostPlatform.isCygwin) [ ./natspec-gentoo.patch.bz2 ];
 
@@ -88,4 +110,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     mainProgram = "zip";
   };
-}
+})
