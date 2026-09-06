@@ -1361,6 +1361,8 @@ let
 
         mirage-net = callPackage ../development/ocaml-modules/mirage-net { };
 
+        mirage-net-solo5 = callPackage ../development/ocaml-modules/mirage-net-solo5 { };
+
         mirage-net-xen = callPackage ../development/ocaml-modules/mirage-net-xen { };
 
         mirage-profile = callPackage ../development/ocaml-modules/mirage-profile { };
