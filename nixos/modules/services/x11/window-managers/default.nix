@@ -13,7 +13,7 @@ in
     ./cwm.nix
     ./clfswm.nix
     ./dk.nix
-    ./dwm.nix
+    ./dwm
     ./e16.nix
     ./evilwm.nix
     ./exwm.nix
