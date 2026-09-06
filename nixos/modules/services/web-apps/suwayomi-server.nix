@@ -15,8 +15,47 @@ let
     ;
 
   format = pkgs.formats.hocon { };
+  configFile = format.generate "server.conf" (
+    lib.filterAttrsRecursive (_: x: x != null) (
+      cfg.settings
+      // {
+        server = removeAttrs cfg.settings.server [
+          "authPasswordFile"
+          "basicAuthEnabled"
+          "basicAuthPasswordFile"
+          "basicAuthUsername"
+        ];
+      }
+    )
+  );
+  isAtLeast2611 = lib.versionAtLeast config.system.stateVersion "26.11";
+  serverConf =
+    if isAtLeast2611 then
+      "${cfg.dataDir}/server.conf"
+    else
+      "${cfg.dataDir}/.local/share/Tachidesk/server.conf";
 in
 {
+  imports = [
+    (lib.mkChangedOptionModule
+      [ "services" "suwayomi-server" "settings" "server" "basicAuthEnabled" ]
+      [ "services" "suwayomi-server" "settings" "server" "authMode" ]
+      (
+        config:
+        let
+          isEnabled = lib.getAttrFromPath [
+            "services"
+            "suwayomi-server"
+            "settings"
+            "server"
+            "basicAuthEnabled"
+          ] config;
+        in
+        if isEnabled then "basic_auth" else "none"
+      )
+    )
+  ];
+
   options = {
     services.suwayomi-server = {
       enable = mkEnableOption "Suwayomi, a free and open source manga reader server that runs extensions built for Tachiyomi";
@@ -60,6 +99,10 @@ in
 
       settings = mkOption {
         type = types.submodule {
+          imports = [
+            (lib.mkRenamedOptionModule [ "server" "basicAuthUsername" ] [ "server" "authUsername" ])
+            (lib.mkRenamedOptionModule [ "server" "basicAuthPasswordFile" ] [ "server" "authPasswordFile" ])
+          ];
           freeformType = format.type;
           options = {
             server = {
@@ -81,12 +124,22 @@ in
                 '';
               };
 
-              basicAuthEnabled = mkEnableOption ''
-                basic access authentication for Suwayomi-Server.
-                Enabling this option is useful when hosting on a public network/the Internet
-              '';
+              authMode = mkOption {
+                type = types.enum [
+                  "none"
+                  "basic_auth"
+                  "simple_login"
+                  "ui_auth"
+                ];
+                default = "none";
+                description = ''
+                  The auth mode to use when authenticating with the server.
+                  See <https://github.com/Suwayomi/Suwayomi-Server/blob/master/docs/Configuring-Suwayomi%E2%80%90Server.md#authentication>
+                  for more information.
+                '';
+              };
 
-              basicAuthUsername = mkOption {
+              authUsername = mkOption {
                 type = types.nullOr types.str;
                 default = null;
                 description = ''
@@ -95,7 +148,7 @@ in
               };
 
               # NOTE: this is not a real upstream option
-              basicAuthPasswordFile = mkOption {
+              authPasswordFile = mkOption {
                 type = types.nullOr types.path;
                 default = null;
                 example = "/var/secrets/suwayomi-server-password";
@@ -112,14 +165,15 @@ in
                 '';
               };
 
-              extensionRepos = mkOption {
+              extensionStores = mkOption {
                 type = types.listOf types.str;
                 default = [ ];
                 example = [
-                  "https://raw.githubusercontent.com/MY_ACCOUNT/MY_REPO/repo/index.min.json"
+                  "https://github.com/MY_ACCOUNT/MY_REPO/raw/repo/index.pb"
                 ];
                 description = ''
-                  URL of repositories from which the extensions can be installed.
+                  URLs of the extension store indexes from which extensions can be
+                  installed.
                 '';
               };
 
@@ -163,7 +217,8 @@ in
       {
         assertion =
           with cfg.settings.server;
-          basicAuthEnabled -> (basicAuthUsername != null && basicAuthPasswordFile != null);
+          (authMode == "basic_auth" || authMode == "simple_login")
+          -> (authUsername != null && authPasswordFile != null);
         message = ''
           [suwayomi-server]: the username and the password file cannot be null when the basic auth is enabled
         '';
@@ -179,65 +234,99 @@ in
     users.users = mkIf (cfg.user == "suwayomi") {
       suwayomi = {
         group = cfg.group;
-        # Need to set the user home because the package writes to ~/.local/Tachidesk
         home = cfg.dataDir;
         description = "Suwayomi Daemon user";
         isSystemUser = true;
       };
     };
 
-    systemd.tmpfiles.settings."10-suwayomi-server" = {
-      "${cfg.dataDir}/.local/share/Tachidesk".d = {
-        mode = "0700";
-        inherit (cfg) user group;
+    systemd.tmpfiles.settings = mkIf (!isAtLeast2611) {
+      "10-suwayomi-server" = {
+        "${cfg.dataDir}/.local/share/Tachidesk".d = {
+          mode = "0700";
+          inherit (cfg) user group;
+        };
       };
     };
 
-    systemd.services.suwayomi-server =
-      let
-        configFile = format.generate "server.conf" (
-          lib.pipe cfg.settings [
-            (
-              settings:
-              lib.recursiveUpdate settings {
-                server.basicAuthPasswordFile = null;
-                server.basicAuthPassword =
-                  if settings.server.basicAuthEnabled then "$TACHIDESK_SERVER_BASIC_AUTH_PASSWORD" else null;
-              }
-            )
-            (lib.filterAttrsRecursive (_: x: x != null))
-          ]
-        );
-      in
-      {
-        description = "A free and open source manga reader server that runs extensions built for Tachiyomi.";
+    systemd.services.suwayomi-server = {
+      description = "A free and open source manga reader server that runs extensions built for Tachiyomi.";
 
-        wantedBy = [ "multi-user.target" ];
-        wants = [ "network-online.target" ];
-        after = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
 
-        script = ''
-          ${lib.optionalString cfg.settings.server.basicAuthEnabled ''
-            export TACHIDESK_SERVER_BASIC_AUTH_PASSWORD="$(<${cfg.settings.server.basicAuthPasswordFile})"
-          ''}
-          ${lib.getExe pkgs.envsubst} -i ${configFile} -o ${cfg.dataDir}/.local/share/Tachidesk/server.conf
-          ${lib.getExe cfg.package} -Dsuwayomi.tachidesk.config.server.rootDir=${cfg.dataDir}
+      environment = mkIf isAtLeast2611 {
+        JAVA_TOOL_OPTIONS = "-Dsuwayomi.tachidesk.config.server.rootDir=${cfg.dataDir}";
+      };
+
+      preStart = ''
+        [[ -f ${serverConf} ]] && rm ${serverConf}
+        install -m0640 ${configFile} ${serverConf}
+      '';
+
+      script =
+        (lib.optionalString
+          (cfg.settings.server.authMode == "basic_auth" || cfg.settings.server.authMode == "simple_login")
+          ''
+            set -u
+            JAVA_TOOL_OPTIONS="''${JAVA_TOOL_OPTIONS:+$JAVA_TOOL_OPTIONS }-Dsuwayomi.tachidesk.config.server.authPassword=$(cat "$CREDENTIALS_DIRECTORY/TACHIDESK_SERVER_AUTH_PASSWORD")"
+          ''
+        )
+        + ''
+          ${lib.getExe cfg.package}
         '';
 
-        serviceConfig = {
-          User = cfg.user;
-          Group = cfg.group;
+      serviceConfig = {
+        Type = "simple";
+        Restart = "on-failure";
 
-          Type = "simple";
-          Restart = "on-failure";
+        User = cfg.user;
+        Group = cfg.group;
 
-          StateDirectory = mkIf (cfg.dataDir == "/var/lib/suwayomi-server") "suwayomi-server";
-        };
+        StateDirectory = mkIf (cfg.dataDir == "/var/lib/suwayomi-server") "suwayomi-server";
+        LoadCredential = mkIf (cfg.settings.server.authMode != "none") [
+          "TACHIDESK_SERVER_AUTH_PASSWORD:${cfg.settings.server.authPasswordFile}"
+        ];
+
+        CapabilityBoundingSet = "";
+        SystemCallFilter = [ "@system-service" ];
+
+        ReadOnlyPaths = [ configFile ];
+        ReadWritePaths = [ cfg.dataDir ];
+        NoNewPrivileges = true;
+        ProtectClock = true;
+        RestrictNamespaces = true;
+        RestrictSUIDSGID = true;
+        LockPersonality = true;
+        RestrictRealtime = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
+        # Java limitations don't allow the
+        # following hardening option
+        # MemoryDenyWriteExecute = true;
+        ProtectHostname = true;
+
+        ProtectSystem = "strict";
+        PrivateTmp = true;
+        ProtectHome = true;
+        PrivateDevices = true;
+        ProtectControlGroups = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectKernelLogs = true;
+        ProtectProc = "invisible";
       };
+    };
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ ratcornu ];
+    maintainers = with lib.maintainers; [
+      nanoyaki
+      ratcornu
+    ];
     doc = ./suwayomi-server.md;
   };
 }
