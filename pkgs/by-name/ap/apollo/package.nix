@@ -19,10 +19,10 @@
   libgbm,
   libopus,
   libva,
-  libX11,
-  libXext,
-  libXfixes,
-  libXrandr,
+  libx11,
+  libxext,
+  libxfixes,
+  libxrandr,
   miniupnpc,
   nlohmann_json,
   numactl,
@@ -146,10 +146,10 @@ stdenv'.mkDerivation (finalAttrs: {
     libgbm
     libopus
     libva
-    libX11
-    libXext
-    libXfixes
-    libXrandr
+    libx11
+    libxext
+    libxfixes
+    libxrandr
     miniupnpc
     nlohmann_json
     numactl
