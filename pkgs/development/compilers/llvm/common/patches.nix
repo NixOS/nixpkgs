@@ -1,0 +1,141 @@
+{
+  "clang/gnu-install-dirs.patch" = [
+    {
+      after = "22";
+      path = ../22;
+    }
+    {
+      after = "19";
+      before = "22";
+      path = ../19;
+    }
+  ];
+  "clang/purity.patch" = [
+    {
+      path = ../18;
+    }
+  ];
+  "lld/gnu-install-dirs.patch" = [
+    {
+      path = ../18;
+    }
+  ];
+  "llvm/gnu-install-dirs.patch" = [
+    {
+      after = "23";
+      path = ../23;
+    }
+    {
+      after = "22";
+      before = "23";
+      path = ../22;
+    }
+    {
+      after = "21";
+      before = "22";
+      path = ../21;
+    }
+    {
+      after = "20";
+      before = "21";
+      path = ../20;
+    }
+    {
+      before = "20";
+      path = ../18;
+    }
+  ];
+  "llvm/gnu-install-dirs-polly.patch" = [
+    {
+      after = "20";
+      path = ../20;
+    }
+    {
+      before = "20";
+      path = ../18;
+    }
+  ];
+  "llvm/llvm-lit-cfg-add-libs-to-dylib-path.patch" = [
+    {
+      path = ../18;
+    }
+  ];
+  "llvm/lit-shell-script-runner-set-dyld-library-path.patch" = [
+    {
+      after = "22";
+      path = ../22;
+    }
+    {
+      path = ../18;
+      before = "22";
+    }
+  ];
+  "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch" = [
+    {
+      path = ../18;
+    }
+  ];
+  "compiler-rt/X86-support-extension.patch" = [
+    {
+      path = ../18;
+    }
+  ];
+  "compiler-rt/armv6-scudo-libatomic.patch" = [
+    {
+      after = "19";
+      path = ../19;
+    }
+    {
+      before = "19";
+      path = ../18;
+    }
+  ];
+  "compiler-rt/normalize-var.patch" = [
+    {
+      path = ../18;
+    }
+  ];
+  "openmp/fix-find-tool.patch" = [
+    {
+      before = "19";
+      path = ../18;
+    }
+  ];
+  "openmp/run-lit-directly.patch" = [
+    {
+      path = ../18;
+    }
+  ];
+  "mlir/mlir-add-include-cstdint.patch" = [
+    {
+      after = "18";
+      before = "19";
+      path = ../18;
+    }
+    {
+      after = "19";
+      before = "20";
+      path = ../19;
+    }
+  ];
+  "flang/warn-on-fbuiltin-and-fno-builtin.patch" = [
+    {
+      after = "20";
+      before = "22";
+      path = ../21;
+    }
+  ];
+  "flang/accept-and-ignore-some-gfortran-optimization-flags.patch" = [
+    {
+      after = "20";
+      before = "22";
+      path = ../21;
+    }
+  ];
+  "flang/use-xflang-in-diagnostics.patch" = [
+    {
+      after = "20";
+      path = ../21;
+    }
+  ];
+}

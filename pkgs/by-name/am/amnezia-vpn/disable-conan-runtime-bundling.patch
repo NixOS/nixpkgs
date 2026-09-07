@@ -1,0 +1,59 @@
+--- a/service/server/CMakeLists.txt
++++ b/service/server/CMakeLists.txt
+@@ -341,56 +341,6 @@
+     )
+ endif()
+ 
+-# install non-linked dependencies
+-if(WIN32)
+-    find_package(awg-windows REQUIRED)
+-    list(APPEND CONAN_EXECS $<TARGET_FILE:amnezia::awg-windows>)
+-
+-    find_package(wintun REQUIRED)
+-    list(APPEND CONAN_BINS $<TARGET_FILE:zx2c4::wintun>)
+-
+-    list(APPEND CONAN_BINS $<TARGET_FILE:OpenSSL::SSL> $<TARGET_FILE:OpenSSL::Crypto>)
+-else()
+-    find_package(awg-go REQUIRED)
+-    list(APPEND CONAN_EXECS $<TARGET_FILE:amnezia::awg-go>)
+-endif()
+-
+-find_package(openvpn REQUIRED)
+-list(APPEND CONAN_EXECS $<TARGET_FILE:openvpn::openvpn>)
+-
+-find_package(tun2socks REQUIRED)
+-list(APPEND CONAN_EXECS $<TARGET_FILE:xjasonlyu::tun2socks>)
+-
+-find_package(v2ray-rules-dat REQUIRED)
+-list(APPEND CONAN_BINS ${GEOSITE_DAT_PATH} ${GEOIP_DAT_PATH})
+-
+-add_custom_command(TARGET ${PROJECT} POST_BUILD
+-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+-        ${CONAN_EXECS} ${CONAN_BINS}
+-        "$<TARGET_FILE_DIR:${PROJECT}>"
+-)
+-if(WIN32)
+-    # using PERMISSIONS on Windows appends read-only flag
+-    # to the files so just omit it for it
+-    install(FILES ${CONAN_EXECS}
+-        DESTINATION ${CMAKE_INSTALL_BINDIR}
+-        COMPONENT AmneziaVPN
+-    )
+-else()
+-    install(FILES ${CONAN_EXECS}
+-        DESTINATION ${CMAKE_INSTALL_BINDIR}
+-        COMPONENT AmneziaVPN
+-        PERMISSIONS
+-            OWNER_READ OWNER_EXECUTE
+-            GROUP_READ GROUP_EXECUTE
+-            WORLD_READ WORLD_EXECUTE
+-    )
+-endif()
+-install(FILES ${CONAN_BINS}
+-    DESTINATION ${CMAKE_INSTALL_BINDIR}
+-    COMPONENT AmneziaVPN
+-)
+-
+ # install drivers
+ if (WIN32)
+     find_package(tap-windows6 REQUIRED)

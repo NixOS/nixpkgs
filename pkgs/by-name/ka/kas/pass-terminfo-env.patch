@@ -1,0 +1,13 @@
+diff --git a/kas/libkas.py b/kas/libkas.py
+index d9db5c6..42ae1ca 100644
+--- a/kas/libkas.py
++++ b/kas/libkas.py
+@@ -322,7 +322,7 @@ def get_build_environ(build_system):
+         env.update({'BB_ENV_EXTRAWHITE': extra_white})
+ 
+     env_vars.extend(['SSH_AUTH_SOCK',
+-                     'SHELL', 'TERM',
++                     'SHELL', 'TERM', 'TERMINFO',
+                      'GIT_PROXY_COMMAND', 'NO_PROXY'])
+ 
+     for env_var in env_vars:

@@ -1,0 +1,11 @@
+diff --git a/base/utils/fs.go b/base/utils/fs.go
+--- a/base/utils/fs.go
++++ b/base/utils/fs.go
+@@ -26,0 +27,7 @@ func EnsureDirectory(path string, perm FSPermission) error {
++			//
++			// Public read-only directories are valid executable artifact
++			// directories. In particular, --bin-dir is documented to support
++			// read-only paths.
++			if perm == PublicReadExecPermission && f.Mode().Perm() == 0o555 {
++				return nil
++			}

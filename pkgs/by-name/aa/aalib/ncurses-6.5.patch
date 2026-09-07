@@ -1,0 +1,20 @@
+Without the change build fails on ncurses-6.5 (enables opaque WINDOW by
+default) as:
+
+    aacurses.c: In function 'curses_getsize':
+    aacurses.c:74:20: error: invalid use of incomplete typedef 'WINDOW' {aka 'struct _win_st'}
+     74 |     *width = stdscr->_maxx + 1;
+        |                    ^~
+--- a/src/aacurses.c
++++ b/src/aacurses.c
+@@ -71,8 +71,8 @@ static void curses_getsize(aa_context * c, int *width, int *height)
+ {
+     if (__resized_curses)
+ 	curses_uninit(c), curses_init(&c->params, NULL,&c->driverparams, NULL), __resized_curses = 0;
+-    *width = stdscr->_maxx + 1;
+-    *height = stdscr->_maxy + 1;
++    *width = getmaxx(stdscr);
++    *height = getmaxy(stdscr);
+ #ifdef GPM_MOUSEDRIVER
+     gpm_mx = *width;
+     gpm_my = *height;

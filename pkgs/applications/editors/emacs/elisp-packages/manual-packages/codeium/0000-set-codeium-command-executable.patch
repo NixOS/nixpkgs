@@ -1,0 +1,18 @@
+diff --git a/codeium.el b/codeium.el
+index 669333e..4d5012d 100644
+--- a/codeium.el
++++ b/codeium.el
+@@ -353,12 +353,7 @@ If you set `codeium-port', it will be used instead and no process will be create
+ 	(pending-table (make-hash-table :test 'eql :weakness nil)) ; requestid that we are waiting for
+ 	)
+ 
+-(codeium-def codeium-command-executable
+-	(expand-file-name
+-		(pcase system-type
+-			('windows-nt "codeium_language_server.exe")
+-			(_ "codeium_language_server"))
+-		(expand-file-name "codeium" user-emacs-directory)))
++(codeium-def codeium-command-executable "@codeium@")
+ 
+ (codeium-def codeium-enterprise nil)
+ (codeium-def codeium-portal-url "https://www.codeium.com")

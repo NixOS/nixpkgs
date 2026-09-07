@@ -1,0 +1,35 @@
+From 1a2293c7593e4eeb3fbad74fa8d362abafb43b56 Mon Sep 17 00:00:00 2001
+From: Tony Allevato <allevato@google.com>
+Date: Wed, 9 Oct 2024 13:54:43 -0400
+Subject: [PATCH] [Frontend] Fix a small `unique_ptr` array access.
+
+When the size of the array accessed here is zero, retrieving the
+address of the zero-th element here is undefined. When the frontend
+is linked against a libc++ that has the `unique_ptr` hardening in
+[this commit](https://github.com/llvm/llvm-project/commit/18df9d23ea390eaa50b41f3083a42f700a2b0e39)
+enabled, it traps here.
+
+Instead, simply call `.get()` to retrieve the address of the
+array, which works even when it is a zero-byte allocation.
+
+(cherry picked from commit bdf40184ab40eb59642cd825781d71d0711493eb)
+---
+ lib/FrontendTool/FrontendTool.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/FrontendTool/FrontendTool.cpp b/lib/FrontendTool/FrontendTool.cpp
+index afbc57cdf2f..ba64a306494 100644
+--- a/lib/FrontendTool/FrontendTool.cpp
++++ b/lib/FrontendTool/FrontendTool.cpp
+@@ -2202,7 +2202,7 @@ int swift::performFrontend(ArrayRef<const char *> Args,
+       std::make_unique<llvm::Optional<PrettyStackTraceFileContents>[]>(
+           configurationFileBuffers.size());
+   for_each(configurationFileBuffers.begin(), configurationFileBuffers.end(),
+-           &configurationFileStackTraces[0],
++           configurationFileStackTraces.get(),
+            [](const std::unique_ptr<llvm::MemoryBuffer> &buffer,
+               llvm::Optional<PrettyStackTraceFileContents> &trace) {
+              trace.emplace(*buffer);
+-- 
+2.52.0
+

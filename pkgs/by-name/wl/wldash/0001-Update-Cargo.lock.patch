@@ -1,0 +1,25 @@
+From 2538e41f001fa363d3459efe3b8102a354b06dd0 Mon Sep 17 00:00:00 2001
+From: Kenny Levinsen <kl@kl.wtf>
+Date: Sun, 16 Jan 2022 23:16:30 +0100
+Subject: [PATCH 1/2] Update Cargo.lock
+
+---
+ Cargo.lock | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Cargo.lock b/Cargo.lock
+index 3da9a07..1ad4a86 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -796,7 +796,7 @@ checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
+ 
+ [[package]]
+ name = "wldash"
+-version = "0.2.0"
++version = "0.3.0"
+ dependencies = [
+  "alsa",
+  "bitflags",
+-- 
+2.44.0
+

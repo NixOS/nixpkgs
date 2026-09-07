@@ -1,0 +1,27 @@
+--- origsrc/setup.py.orig	2012-11-27 10:20:47.442395900 -0500
++++ src/setup.py	2012-11-27 10:53:15.583020900 -0500
+@@ -1141,7 +1141,7 @@
+ 
+         dbm_order = ['gdbm']
+         # The standard Unix dbm module:
+-        if host_platform not in ['cygwin']:
++        if host_platform not in ['win32']:
+             config_args = [arg.strip("'")
+                            for arg in sysconfig.get_config_var("CONFIG_ARGS").split()]
+             dbm_args = [arg for arg in config_args
+@@ -1192,6 +1192,15 @@
+                                     ],
+                                 libraries = gdbm_libs)
+                             break
++                        if find_file("ndbm.h", inc_dirs, []) is not None:
++                            print("building dbm using gdbm")
++                            dbmext = Extension(
++                                'dbm', ['dbmmodule.c'],
++                                define_macros=[
++                                    ('HAVE_NDBM_H', None),
++                                    ],
++                                libraries = gdbm_libs)
++                            break
+                 elif cand == "bdb":
+                     if db_incs is not None:
+                         print "building dbm using bdb"

@@ -1,0 +1,12 @@
+--- vorbisgain-0.37/misc.c	2004-01-03 16:17:28.000000000 -0500
++++ vorbisgain-0.37-patched/misc.c	2025-01-07 20:51:12.989521816 -0500
+@@ -56,8 +56,7 @@
+     vfprintf(stderr, message, args);
+     va_end(args);
+ 
+-    fprintf(stderr, strerror(err_num));
+-    fprintf(stderr, "\n");
++    fprintf(stderr, "%s\n", strerror(err_num));
+ }
+ 
+ 

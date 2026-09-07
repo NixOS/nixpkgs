@@ -1,0 +1,11 @@
+{
+  "umple": {
+    "longVersion": "1.37.1.8673.860b8c752",
+    "revision": "860b8c752",
+    "commitCount": "8673"
+  },
+  "umpleJar": {
+    "url": "https://github.com/umple/umple/releases/download/v1.37.1/umple-1.37.1.8672.ffc0b7ae3.jar",
+    "hash": "sha256-4EWhIxPPkwsS59ZSmpFkZXMRBa/3CTCyQuUWvYcVVC8="
+  }
+}

@@ -1,0 +1,17 @@
+diff --git a/swayr/src/config.rs b/swayr/src/config.rs
+index bc6ec98..48cdc65 100644
+--- a/swayr/src/config.rs
++++ b/swayr/src/config.rs
+@@ -271,6 +271,12 @@ impl Default for Format {
+             ),
+             urgency_end: Some("</span>".to_string()),
+             icon_dirs: Some(vec![
++                "/run/current-system/sw/share/icons/hicolor/scalable/apps".to_string(),
++                "/run/current-system/sw/share/icons/hicolor/48x48/apps".to_string(),
++                "/run/current-system/sw/share/pixmaps".to_string(),
++                "~/.nix-profile/share/icons/hicolor/scalable/apps".to_string(),
++                "~/.nix-profile/share/icons/hicolor/48x48/apps".to_string(),
++                "~/.nix-profile/share/pixmaps".to_string(),
+                 "/usr/share/icons/hicolor/scalable/apps".to_string(),
+                 "/usr/share/icons/hicolor/64x64/apps".to_string(),
+                 "/usr/share/icons/hicolor/48x48/apps".to_string(),

@@ -1,0 +1,69 @@
+From 7192a5658ac5b4b58a26a67c1d6b758fd88cb68e Mon Sep 17 00:00:00 2001
+From: Markus Tuominen <3738613+Markus98@users.noreply.github.com>
+Date: Fri, 17 Jul 2026 12:18:05 +0300
+Subject: [PATCH] Replace pyOpenSSL with cryptography for CSR generation
+
+---
+ setup.py                    |  2 +-
+ thinqconnect/mqtt_client.py | 26 ++++++++++++++++----------
+ 2 files changed, 17 insertions(+), 11 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index d316c39..e21c98e 100644
+--- a/setup.py
++++ b/setup.py
+@@ -24,7 +24,7 @@
+     python_requires=">=3.10",
+     long_description=long_description,
+     long_description_content_type="text/markdown",
+-    install_requires=["aiohttp>=3.14.0", "awsiotsdk", "pyOpenSSL"],
++    install_requires=["aiohttp>=3.14.0", "awsiotsdk", "cryptography"],
+     classifiers=[
+         "Programming Language :: Python :: 3",
+         "License :: OSI Approved :: Apache Software License",
+diff --git a/thinqconnect/mqtt_client.py b/thinqconnect/mqtt_client.py
+index a6a9049..e97aade 100644
+--- a/thinqconnect/mqtt_client.py
++++ b/thinqconnect/mqtt_client.py
+@@ -15,7 +15,10 @@
+ from aiohttp import ClientTimeout, request
+ from awscrt import io, mqtt
+ from awsiot import mqtt_connection_builder
+-from OpenSSL import crypto
++from cryptography import x509
++from cryptography.hazmat.primitives import hashes, serialization
++from cryptography.hazmat.primitives.asymmetric import rsa
++from cryptography.x509.oid import NameOID
+ 
+ from .thinq_api import ThinQApi
+ 
+@@ -157,17 +160,20 @@ async def generate_csr(self) -> bool:
+ 
+         self.bytes_root_ca = cert_data.encode("utf-8")
+ 
+-        key = crypto.PKey()
+-        key.generate_key(crypto.TYPE_RSA, PRIVATE_KEY_SIZE)
+-        key_pem = crypto.dump_privatekey(crypto.FILETYPE_PEM, key).decode("utf-8")
+-        self.bytes_private_key = key_pem.encode("utf-8")
++        key = rsa.generate_private_key(public_exponent=65537, key_size=PRIVATE_KEY_SIZE)
++        self.bytes_private_key = key.private_bytes(
++            serialization.Encoding.PEM,
++            serialization.PrivateFormat.PKCS8,
++            serialization.NoEncryption(),
++        )
+ 
+-        csr = crypto.X509Req()
+-        csr.get_subject().CN = "lg_thinq"
+-        csr.set_pubkey(key)
+-        csr.sign(key, "sha512")
++        csr = (
++            x509.CertificateSigningRequestBuilder()
++            .subject_name(x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, "lg_thinq")]))
++            .sign(key, hashes.SHA512())
++        )
+ 
+-        csr_pem = crypto.dump_certificate_request(crypto.FILETYPE_PEM, csr).decode(encoding="utf-8")
++        csr_pem = csr.public_bytes(serialization.Encoding.PEM).decode(encoding="utf-8")
+         self.csr_str = (
+             re.search(
+                 r"-+BEGIN CERTIFICATE REQUEST-+\s+(.*?)\s+-+END CERTIFICATE REQUEST-+",

@@ -1,0 +1,13 @@
+diff --git a/system-indicators/si-input-sources.c b/system-indicators/si-input-sources.c
+index f13b262..2186b76 100644
+--- a/system-indicators/si-input-sources.c
++++ b/system-indicators/si-input-sources.c
+@@ -807,7 +807,7 @@ spawn_keyboard_display (const char *description)
+   flags = G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD;
+   error = NULL;
+ 
+-  argv[0] = g_strdup ("tecla");
++  argv[0] = g_strdup ("@tecla@");
+   argv[1] = g_strdup (description);
+   argv[2] = NULL;
+ 

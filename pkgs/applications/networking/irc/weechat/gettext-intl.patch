@@ -1,0 +1,12 @@
+diff --git a/cmake/FindGettext.cmake b/cmake/FindGettext.cmake
+index 358734688..ffcbf7ef4 100644
+--- a/cmake/FindGettext.cmake
++++ b/cmake/FindGettext.cmake
+@@ -42,6 +42,7 @@ find_path(LIBINTL_INCLUDE
+ )
+ 
+ set(CMAKE_REQUIRED_INCLUDES ${LIBINTL_INCLUDE})
++set(CMAKE_REQUIRED_FLAGS "-lintl")
+ 
+ check_include_files(libintl.h HAVE_LIBINTL_H)
+ 

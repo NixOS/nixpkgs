@@ -1,0 +1,37 @@
+diff --git a/windmill-worker/nsjail/download.py.config.proto b/windmill-worker/nsjail/download.py.config.proto
+index 5c2989417..7896bde7a 100644
+--- a/windmill-worker/nsjail/download.py.config.proto
++++ b/windmill-worker/nsjail/download.py.config.proto
+@@ -22,17 +22,24 @@ keep_caps: true
+ keep_env: true
+ mount_proc: true
+ 
++mount {
++    src: "/nix/store"
++    dst: "/nix/store"
++	is_bind: true
++}
+ 
+ mount {
+     src: "/bin"
+     dst: "/bin"
+ 	is_bind: true
++    mandatory: false
+ }
+ 
+ mount {
+     src: "/lib"
+     dst: "/lib"
+ 	is_bind: true
++    mandatory: false
+ }
+ 
+ mount {
+@@ -46,6 +53,7 @@ mount {
+     src: "/usr"
+     dst: "/usr"
+ 	is_bind: true
++    mandatory: false
+ }
+ 
+ mount {

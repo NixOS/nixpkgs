@@ -1,0 +1,25 @@
+diff --git a/sources/core/dsp.h b/sources/core/dsp.h
+index 5e3b1c6..b1a4f2d 100644
+--- a/sources/core/dsp.h
++++ b/sources/core/dsp.h
+@@ -5,6 +5,7 @@
+ #pragma once
+
+ #include <jsl/dynarray>
++#include <cstdint>
+
+ namespace dsp {
+
+ uint32_t fastrandom(uint32_t *pseed);
+
+diff --git a/sources/fl/main_controller.h b/sources/fl/main_controller.h
+index 9a7c6b0..e3d4f1a 100644
+--- a/sources/fl/main_controller.h
++++ b/sources/fl/main_controller.h
+@@ -6,6 +6,7 @@
+ 
+ #pragma once
+ #include <memory>
++#include <cstdint>
+ class Message_Queue;
+ struct Basic_Message;

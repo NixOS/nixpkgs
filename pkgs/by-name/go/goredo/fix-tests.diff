@@ -1,0 +1,42 @@
+diff '--color=auto' -ru goredo-2.0.0/t/goredo-chmoding.t goredo-2.0.0.new/t/goredo-chmoding.t
+--- goredo-2.0.0/t/goredo-chmoding.t	2023-10-08 18:50:45.000000000 +0200
++++ goredo-2.0.0.new/t/goredo-chmoding.t	2023-10-08 20:23:54.862618888 +0200
+@@ -8,7 +8,7 @@
+ echo echo ok > foo.do
+ redo foo
+ test_expect_success "foo is non executable" '[ ! -x foo ]'
+-inode0=`stat -f %i foo`
++inode0=`stat -c %i foo`
+ 
+ cat > foo.do <<EOF
+ echo ok > \$3
+@@ -16,7 +16,7 @@
+ EOF
+ redo foo
+ test_expect_success "foo is executable" '[ -x foo ]'
+-inode1=`stat -f %i foo`
++inode1=`stat -c %i foo`
+ test_expect_success "foo was not renamed" '[ $inode0 = $inode1 ]'
+ 
+ test_done
+diff '--color=auto' -ru goredo-2.0.0/t/goredo-double-consideration.t goredo-2.0.0.new/t/goredo-double-consideration.t
+--- goredo-2.0.0/t/goredo-double-consideration.t	2023-10-08 18:50:45.000000000 +0200
++++ goredo-2.0.0.new/t/goredo-double-consideration.t	2023-10-08 20:19:29.213465244 +0200
+@@ -17,7 +17,7 @@
+ redo-stamp <"\$3"
+ EOF
+ cat > version.do <<EOF
+-git rev-parse --short HEAD > "\$3"
++echo 012345 > "\$3"
+ redo-always
+ redo-stamp <"\$3"
+ EOF
+diff '--color=auto' -ru goredo-2.0.0/t/redo-sh.tests/clean.do goredo-2.0.0.new/t/redo-sh.tests/clean.do
+--- goredo-2.0.0/t/redo-sh.tests/clean	2023-10-08 18:50:45.000000000 +0200
++++ goredo-2.0.0.new/t/redo-sh.tests/clean	2023-10-08 20:19:29.213465244 +0200
+@@ -1,4 +1,4 @@
+ for f in * ; do
+     [ -d $f ] || continue
+-    find $f ! -name test -delete
++    find $f ! -name test -delete || true
+ done

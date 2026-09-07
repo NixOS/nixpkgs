@@ -1,0 +1,51 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Philip Taron <philip.taron@gmail.com>
+Date: Thu, 19 Jun 2025 09:24:32 -0700
+Subject: [PATCH] Use libdwarf-2 as the base include path
+
+Signed-off-by: Philip Taron <philip.taron@gmail.com>
+---
+ CMakeLists.txt              | 6 +++---
+ src/symbols/dwarf/dwarf.hpp | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1c607bd44e528a41ccd637f5293b4f56049f5770..53e1aedf463c5eb95dcfd77fa40de66f51381b47 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -419,7 +419,7 @@ if(CPPTRACE_GET_SYMBOLS_WITH_LIBDWARF)
+       target_link_libraries(${target_name} PRIVATE ${LIBDWARF_LIBRARIES})
+     endif()
+     # There seems to be no consistency at all about where libdwarf decides to place its headers........ Figure out if
+-    # it's libdwarf/libdwarf.h and libdwarf/dwarf.h or just libdwarf.h and dwarf.h
++    # it's libdwarf-2/libdwarf.h and libdwarf-2/dwarf.h or just libdwarf.h and dwarf.h
+     include(CheckIncludeFileCXX)
+     # libdwarf's cmake doesn't properly set variables to indicate where its libraries live
+     if(NOT CPPTRACE_FIND_LIBDWARF_WITH_PKGCONFIG)
+@@ -428,9 +428,9 @@ if(CPPTRACE_GET_SYMBOLS_WITH_LIBDWARF)
+       target_include_directories(${target_name} PRIVATE ${LIBDWARF_INCLUDE_DIRS})
+     endif()
+     set(CMAKE_REQUIRED_INCLUDES ${LIBDWARF_INCLUDE_DIRS})
+-    CHECK_INCLUDE_FILE_CXX("libdwarf/libdwarf.h" LIBDWARF_IS_NESTED)
++    CHECK_INCLUDE_FILE_CXX("libdwarf-2/libdwarf.h" LIBDWARF_IS_NESTED)
+     CHECK_INCLUDE_FILE_CXX("libdwarf.h" LIBDWARF_IS_NOT_NESTED)
+-    # check_include_file("libdwarf/libdwarf.h" LIBDWARF_IS_NESTED)
++    # check_include_file("libdwarf-2/libdwarf.h" LIBDWARF_IS_NESTED)
+     # check_support(LIBDWARF_IS_NESTED nested_libdwarf_include.cpp "" "" "")
+     if(${LIBDWARF_IS_NESTED})
+       target_compile_definitions(${target_name} PRIVATE CPPTRACE_USE_NESTED_LIBDWARF_HEADER_PATH)
+diff --git a/src/symbols/dwarf/dwarf.hpp b/src/symbols/dwarf/dwarf.hpp
+index 50b2696148584b7a16da602017793797ba98cb58..53fe275492f4fd7e8e905064696e86f837a55f72 100644
+--- a/src/symbols/dwarf/dwarf.hpp
++++ b/src/symbols/dwarf/dwarf.hpp
+@@ -10,8 +10,8 @@
+ #include <type_traits>
+ 
+ #ifdef CPPTRACE_USE_NESTED_LIBDWARF_HEADER_PATH
+- #include <libdwarf/libdwarf.h>
+- #include <libdwarf/dwarf.h>
++ #include <libdwarf-2/libdwarf.h>
++ #include <libdwarf-2/dwarf.h>
+ #else
+  #include <libdwarf.h>
+  #include <dwarf.h>

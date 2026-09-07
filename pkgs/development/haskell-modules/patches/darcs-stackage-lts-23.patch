@@ -1,0 +1,32 @@
+diff -rN -u old-darcs.net/darcs.cabal new-darcs.net/darcs.cabal
+--- old-darcs.net/darcs.cabal	2025-09-13 02:46:05.662572580 +0200
++++ new-darcs.net/darcs.cabal	2025-09-13 02:46:05.748573468 +0200
+@@ -123,7 +123,7 @@
+ -- ----------------------------------------------------------------------
+ 
+ custom-setup
+-    setup-depends: base      >= 4.10 && < 4.20,
++    setup-depends: base      >= 4.10 && < 4.21,
+                    Cabal     >= 2.4 && < 3.13,
+                    process   >= 1.2.3.0 && < 1.7,
+                    filepath  >= 1.4.1 && < 1.5.0.0,
+@@ -412,7 +412,7 @@
+     else
+       build-depends:  unix >= 2.7.1.0 && < 2.9
+ 
+-    build-depends:    base              >= 4.10 && < 4.20,
++    build-depends:    base              >= 4.10 && < 4.21,
+                       safe              >= 0.3.20 && < 0.4,
+                       stm               >= 2.1 && < 2.6,
+                       binary            >= 0.5 && < 0.11,
+@@ -447,7 +447,7 @@
+                       temporary         >= 1.2.1 && < 1.4,
+                       process           >= 1.2.3.0 && < 1.7,
+                       array             >= 0.5.1.0 && < 0.6,
+-                      hashable          >= 1.2.3.3 && < 1.5,
++                      hashable          >= 1.2.3.3 && < 1.6,
+                       mmap              >= 0.5.9 && < 0.6,
+                       zlib              >= 0.6.1.2 && < 0.8,
+                       network-uri       >= 2.6 && < 2.8,
+ 
+

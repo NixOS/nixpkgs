@@ -1,0 +1,22 @@
+From 3935d8b9fd740e0ed45fade633ab967baee1dfcc Mon Sep 17 00:00:00 2001
+From: Jonathan Albrecht <jonathan.albrecht@ibm.com>
+Date: Tue, 3 Feb 2026 15:07:37 -0500
+Subject: [PATCH] Fix an endian problem when memcpying in
+ _upb_Decoder_DecodeEnumPacked
+
+---
+ upb/wire/decode.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/upb/wire/decode.c b/upb/wire/decode.c
+index 9b050866b45ea..0810ba3e6116b 100644
+--- a/upb/wire/decode.c
++++ b/upb/wire/decode.c
+@@ -359,6 +359,7 @@ static const char* _upb_Decoder_DecodeEnumPacked(
+       _upb_Decoder_AddEnumValueToUnknown(d, msg, field, &elem);
+       continue;
+     }
++    _upb_Decoder_MungeInt32(&elem);
+     if (_upb_Decoder_Reserve(d, arr, 1)) {
+       out = UPB_PTR_AT(upb_Array_MutableDataPtr(arr),
+                        arr->UPB_PRIVATE(size) * 4, void);

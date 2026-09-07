@@ -1,0 +1,42 @@
+From fece8a6f239c7323c61238dfdd1e0dd47885fc88 Mon Sep 17 00:00:00 2001
+From: matthiasdotsh <git@matthias.sh>
+Date: Fri, 2 Jan 2026 11:08:17 +0100
+Subject: [PATCH] Fix copy constructor member access in VectorHashBiTable
+
+The copy constructor of VectorHashBiTable was incorrectly accessing
+`table.s_` instead of `table.selector_`, causing a compilation error
+with stricter C++ compilers.
+
+This issue manifests with GCC 15, which enforces more rigorous checks
+on template member access. The compiler error was:
+
+  error: 'const class fst::VectorHashBiTable<...>' has no member
+  named 's_'; did you mean 'h_'?
+
+The member variable is actually named `selector_`, not `s_`. This fix
+aligns the copy constructor with the correct member variable name used
+throughout the class definition.
+
+Fixes build failures on systems with GCC 15.
+
+Related: https://github.com/gpustack/gpustack/issues/1798#issuecomment-2980869111
+---
+ src/include/fst/bi-table.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/include/fst/bi-table.h b/src/include/fst/bi-table.h
+index 9651cfe..fb747fe 100644
+--- a/src/include/fst/bi-table.h
++++ b/src/include/fst/bi-table.h
+@@ -317,7 +317,7 @@ class VectorHashBiTable {
+   }
+ 
+   VectorHashBiTable(const VectorHashBiTable<I, T, S, FP, H, HS> &table)
+-      : selector_(new S(table.s_)), fp_(new FP(*table.fp_)),
++      : selector_(new S(table.selector_)), fp_(new FP(*table.fp_)),
+         h_(new H(*table.h_)), id2entry_(table.id2entry_),
+         fp2id_(table.fp2id_), hash_func_(*this), hash_equal_(*this),
+         keys_(table.keys_.size(), hash_func_, hash_equal_) {
+-- 
+2.52.0
+

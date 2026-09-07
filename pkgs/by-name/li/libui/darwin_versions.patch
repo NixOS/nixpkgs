@@ -1,0 +1,11 @@
+--- a/meson.build
++++ b/meson.build
+@@ -163,7 +163,7 @@
+ 	objc_args: ['-Dlibui_EXPORTS'],
+ 	link_args: libui_libui_link_args,
+ 	soversion: libui_soversion,
+-	darwin_versions: [])		# TODO
++	darwin_versions: '0.0.0')		# TODO
+ install_headers('ui.h')
+ 
+ # TODO when the API is stable enough to be versioned, create a pkg-config file (https://mesonbuild.com/Pkgconfig-module.html) and a declare_dependency() section too

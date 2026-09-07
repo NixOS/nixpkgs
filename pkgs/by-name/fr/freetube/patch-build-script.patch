@@ -1,0 +1,22 @@
+diff --git a/_scripts/ebuilder.config.mjs b/_scripts/ebuilder.config.mjs
+index bef1f6f1d..d2ee86611 100644
+--- a/_scripts/ebuilder.config.mjs
++++ b/_scripts/ebuilder.config.mjs
+@@ -2,6 +2,8 @@ import packageDetails from '../package.json' with { type: 'json' }
+ 
+ /** @type {import('electron-builder').Configuration} */
+ export default {
++  electronVersion: "@electron-version@",
++  electronDist: "electron-dist",
+   appId: `io.freetubeapp.${packageDetails.name}`,
+   copyright: 'Copyleft © 2020-2026 freetubeapp@protonmail.com',
+   // asar: false,
+@@ -99,7 +101,7 @@ export default {
+     // Enable ad-hoc signing
+     // If we skip signing entirely, macOS says that the application is damaged, which makes users open bug reports.
+     // With an ad-hoc signature it still refuses to launch by default but with the reason that it cannot verify the signature
+-    identity: '-'
++    identity: null
+   },
+   win: {
+     icon: '_icons/icon.ico',

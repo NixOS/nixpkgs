@@ -1,0 +1,44 @@
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pyobjc-core,
+  pyobjc-framework-Cocoa,
+
+  pytestCheckHook,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "utitools";
+  version = "0.5.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "RhetTbull";
+    repo = "utitools";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mx9vcMCeDTJyWJKm0Ci9IEAPCNfx9NvPGC8cuNYnH1M=";
+  };
+
+  build-system = [ flit-core ];
+  dependencies = lib.optionals stdenv.hostPlatform.isDarwin [
+    pyobjc-core
+    pyobjc-framework-Cocoa
+  ];
+
+  pythonImportsCheck = [ "utitools" ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
+    # Requires pyobjc-framework-coreservices and pyobjc-framework-uniformtypeidentifiers
+    # which are currently not packaged in nixpgs.
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "Utilities for working with Uniform Type Identifiers";
+    homepage = "https://github.com/RhetTbull/utitools";
+    changelog = "https://github.com/RhetTbull/utitools/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sigmanificient ];
+  };
+})

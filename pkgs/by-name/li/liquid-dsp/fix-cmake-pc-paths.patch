@@ -1,0 +1,29 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 07c123889..a6640515c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -564,6 +564,9 @@ if (fftw3f_FOUND)
+     string(APPEND LIQUID_PC_LIBS_PRIVATE " -lfftw3f")
+ endif()
+ 
++cmake_path(APPEND libdir_for_pc_file "\${prefix}" "${CMAKE_INSTALL_LIBDIR}")
++cmake_path(APPEND includedir_for_pc_file "\${prefix}" "${CMAKE_INSTALL_INCLUDEDIR}")
++
+ configure_file(
+     cmake/liquid-dsp.pc.in
+     ${CMAKE_CURRENT_BINARY_DIR}/liquid-dsp.pc
+diff --git a/cmake/liquid-dsp.pc.in b/cmake/liquid-dsp.pc.in
+index 93597a7e4..06de85dee 100644
+--- a/cmake/liquid-dsp.pc.in
++++ b/cmake/liquid-dsp.pc.in
+@@ -2,8 +2,8 @@
+ 
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@libdir_for_pc_file@
++includedir=@includedir_for_pc_file@
+ 
+ Name: liquid-dsp
+ Description: Software-defined radio digital signal processing library

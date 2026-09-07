@@ -1,0 +1,13 @@
+Index: kiconthemes-5.17.0/src/kicontheme.cpp
+===================================================================
+--- kiconthemes-5.17.0.orig/src/kicontheme.cpp
++++ kiconthemes-5.17.0/src/kicontheme.cpp
+@@ -557,7 +557,7 @@ void KIconTheme::reconfigure()
+ // static
+ QString KIconTheme::defaultThemeName()
+ {
+-    return QStringLiteral("hicolor");
++    return QStringLiteral("breeze");
+ }
+ 
+ void KIconTheme::assignIconsToContextMenu(ContextMenus type,

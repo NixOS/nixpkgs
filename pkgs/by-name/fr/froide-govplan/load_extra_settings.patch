@@ -1,0 +1,15 @@
+diff --git a/project/settings.py b/project/settings.py
+index dd282ac..64ff265 100644
+--- a/project/settings.py
++++ b/project/settings.py
+@@ -202,3 +202,10 @@ CMS_CONFIRM_VERSION4 = True
+ 
+ GOVPLAN_NAME = "GovPlan"
+ GOVPLAN_ENABLE_FOIREQUEST = False
++
++EXTRA_SETTINGS_PATH = os.path.join(PROJECT_DIR, 'extra_settings.py')
++
++if os.path.exists(EXTRA_SETTINGS_PATH):
++    with open(EXTRA_SETTINGS_PATH) as f:
++        code = compile(f.read(), EXTRA_SETTINGS_PATH, 'exec')
++        exec(code)

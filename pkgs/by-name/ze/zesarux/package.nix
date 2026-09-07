@@ -1,0 +1,83 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  aalib,
+  alsa-lib,
+  libxext,
+  libxxf86vm,
+  libcaca,
+  libpulseaudio,
+  libsndfile,
+  ncurses,
+  openssl,
+  which,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "zesarux";
+  version = "13.0";
+
+  src = fetchFromGitHub {
+    owner = "chernandezba";
+    repo = "zesarux";
+    tag = "ZEsarUX-${finalAttrs.version}";
+    hash = "sha256-clwYn43Xswdo11T+aX78K1Qat5BoGwH3ByCT4qaMl8A=";
+  };
+
+  nativeBuildInputs = [
+    which
+  ];
+
+  buildInputs = [
+    SDL2
+    aalib
+    alsa-lib
+    libxxf86vm
+    libxext
+    libcaca
+    libpulseaudio
+    libsndfile
+    ncurses
+    openssl
+  ];
+
+  strictDeps = true;
+
+  sourceRoot = "${finalAttrs.src.name}/src";
+
+  postPatch = ''
+    patchShebangs *.sh
+  '';
+
+  configureFlags = [
+    "--prefix=${placeholder "out"}"
+    "--c-compiler ${stdenv.cc.targetPrefix}cc"
+    "--enable-cpustats"
+    "--enable-memptr"
+    "--enable-sdl2"
+    "--enable-ssl"
+    "--enable-undoc-scfccf"
+    "--enable-visualmem"
+  ];
+
+  installPhase = ''
+    runHook preInstall
+
+    ./generate_install_sh.sh
+    patchShebangs ./install.sh
+    ./install.sh
+
+    runHook postInstall
+  '';
+
+  meta = {
+    homepage = "https://github.com/chernandezba/zesarux";
+    description = "ZX Second-Emulator And Released for UniX";
+    mainProgram = "zesarux";
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
+  };
+})

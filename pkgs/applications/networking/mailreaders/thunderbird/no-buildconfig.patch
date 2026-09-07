@@ -1,0 +1,13 @@
+Remove about:buildconfig.  If used as-is, it would add unnecessary runtime dependencies.
+--- a/comm/mail/base/jar.mn
++++ b/comm/mail/base/jar.mn
+@@ -120,9 +120,6 @@
+ % override chrome://mozapps/content/profile/profileDowngrade.js chrome://messenger/content/profileDowngrade.js
+ % override chrome://mozapps/content/profile/profileDowngrade.xhtml chrome://messenger/content/profileDowngrade.xhtml
+
+-*   content/messenger/buildconfig.html              (content/buildconfig.html)
+-% override chrome://global/content/buildconfig.html chrome://messenger/content/buildconfig.html
+-
+ comm.jar:
+ % content communicator %content/communicator/
+    content/communicator/contentAreaClick.js         (content/contentAreaClick.js)

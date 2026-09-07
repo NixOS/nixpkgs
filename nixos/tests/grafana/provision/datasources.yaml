@@ -1,0 +1,7 @@
+apiVersion: 1
+
+datasources:
+  - name: 'Test Datasource'
+    type: 'testdata'
+    access: 'proxy'
+    uid: 'test_datasource'

@@ -1,0 +1,91 @@
+commit c8a87d22036e62bac0c6f7836078d8103caa6457
+Author: Thomas Loimer <thomas.loimer@tuwien.ac.at>
+Date:   Wed Jan 22 23:27:43 2025 +0100
+
+    Reject arcs with co-incident points, ticket #186
+
+diff --git a/fig2dev/object.h b/fig2dev/object.h
+index 7f83939..50afbf0 100644
+--- a/fig2dev/object.h
++++ b/fig2dev/object.h
+@@ -3,7 +3,7 @@
+  * Copyright (c) 1991 by Micah Beck
+  * Parts Copyright (c) 1985-1988 by Supoj Sutanthavibul
+  * Parts Copyright (c) 1989-2015 by Brian V. Smith
+- * Parts Copyright (c) 2015-2023 by Thomas Loimer
++ * Parts Copyright (c) 2015-2025 by Thomas Loimer
+  *
+  * Any party obtaining a copy of these files is granted, free of charge, a
+  * full and unrestricted irrevocable, world-wide, paid up, royalty-free,
+@@ -92,10 +92,10 @@ typedef struct f_ellipse {
+ 	struct f_ellipse	*next;
+ } F_ellipse;
+ 
+-#define INVALID_ELLIPSE(e)	\
++#define INVALID_ELLIPSE(e)						\
+ 	e->type < T_ELLIPSE_BY_RAD || e->type > T_CIRCLE_BY_DIA ||	\
+-	COMMON_PROPERTIES(e) || (e->direction != 1 && e->direction != 0) || \
+-	e->radiuses.x == 0 || e->radiuses.y == 0 || \
++	COMMON_PROPERTIES(e) || (e->direction != 1 && e->direction != 0) ||  \
++	e->radiuses.x == 0 || e->radiuses.y == 0 ||			\
+ 	e->angle < -7. || e->angle > 7.
+ 
+ typedef struct f_arc {
+@@ -126,12 +126,16 @@ typedef struct f_arc {
+ #define CIRCARC       9
+ #define CIRCULARARC   > 8
+ 
+-#define INVALID_ARC(a)	\
++#define COINCIDENT(a, b)	(a.x == b.x && a.y == b.y)
++#define INVALID_ARC(a)							\
+ 	a->type < T_OPEN_ARC || a->type > T_PIE_WEDGE_ARC ||		\
+ 	COMMON_PROPERTIES(a) || a->cap_style < 0 || a->cap_style > 2 ||	\
+ 	a->center.x < COORD_MIN || a->center.x > COORD_MAX ||		\
+ 	a->center.y < COORD_MIN || a->center.y > COORD_MAX ||		\
+-	(a->direction != 0 && a->direction != 1)
++	(a->direction != 0 && a->direction != 1) ||			\
++	COINCIDENT(a->point[0], a->point[1]) ||				\
++	COINCIDENT(a->point[0], a->point[2]) ||				\
++	COINCIDENT(a->point[1], a->point[2])
+ 
+ typedef struct f_line {
+ 	int			type;
+diff --git a/fig2dev/tests/read.at b/fig2dev/tests/read.at
+index 1b4baea..da9ea3e 100644
+--- a/fig2dev/tests/read.at
++++ b/fig2dev/tests/read.at
+@@ -2,7 +2,7 @@ dnl Fig2dev: Translate Fig code to various Devices
+ dnl Copyright (c) 1991 by Micah Beck
+ dnl Parts Copyright (c) 1985-1988 by Supoj Sutanthavibul
+ dnl Parts Copyright (c) 1989-2015 by Brian V. Smith
+-dnl Parts Copyright (c) 2015-2024 by Thomas Loimer
++dnl Parts Copyright (c) 2015-2025 by Thomas Loimer
+ dnl
+ dnl Any party obtaining a copy of these files is granted, free of charge, a
+ dnl full and unrestricted irrevocable, world-wide, paid up, royalty-free,
+@@ -14,7 +14,7 @@ dnl party to do so, with the only requirement being that the above copyright
+ dnl and this permission notice remain intact.
+ 
+ dnl read.at
+-dnl Author: Thomas Loimer, 2017-2024
++dnl Author: Thomas Loimer, 2017-2025
+ 
+ 
+ AT_BANNER([Sanitize and harden input.])
+@@ -248,6 +248,16 @@ EOF
+ ])
+ AT_CLEANUP
+ 
++AT_SETUP([reject arcs with coincident points, ticket #186])
++AT_KEYWORDS(read.c arc)
++AT_CHECK([fig2dev -L pict2e <<EOF
++FIG_FILE_TOP
++5 1 0 15 0 7 50 0 -1 0.0 1 0 0 0 0.0 0.0 1 1 1 1 2 0
++EOF
++], 1, ignore, [Invalid arc object at line 10.
++])
++AT_CLEANUP
++
+ AT_SETUP([survive debian bugs #881143, #881144])
+ AT_KEYWORDS([font pic tikz])
+ AT_CHECK([fig2dev -L pic <<EOF

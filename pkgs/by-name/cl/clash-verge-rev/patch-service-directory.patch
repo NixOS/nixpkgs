@@ -1,0 +1,65 @@
+diff --git a/src/core/server.rs b/src/core/server.rs
+index 0098b20..db189e2 100644
+--- a/src/core/server.rs
++++ b/src/core/server.rs
+@@ -73,7 +73,7 @@ pub async fn run_ipc_server() -> Result<JoinHandle<Result<()>>> {
+                 tokio::time::sleep(std::time::Duration::from_millis(25)).await;
+             }
+             if socket_ready {
+-                fs::set_permissions(paths.ipc_path(), Permissions::from_mode(0o777)).await?;
++                fs::set_permissions(paths.ipc_path(), Permissions::from_mode(0o660)).await?;
+             } else {
+                 warn!(
+                     "IPC socket {:?} did not appear before permission update timeout",
+@@ -298,19 +298,9 @@ fn ensure_ipc_dir(dir: &std::path::Path) -> std::io::Result<()> {
+         return Err(std::io::Error::last_os_error());
+     }
+
+-    let gid = resolve_ipc_dir_gid();
+-    // 以 root 运行(生产/launchd)时强制属主为 root:若攻击者预置 `/tmp/verge` 为其拥有的
+-    // 真实目录,必须夺回属主,否则其以 owner 身份保留对目录(及内部 socket)的管理权。
+-    // 非 root(测试/开发)既无权设 root 属主也无攻击面,跳过 chown,仅设权限位。
+-    // chown/chmod 失败即 fatal;`&&`/`||` 短路使 `last_os_error()` 为失败 syscall 的 errno。
+-    let chown_ok =
+-        unsafe { platform_lib::geteuid() } != 0 || unsafe { platform_lib::fchown(fd, 0, gid) } == 0;
+-    let ok = chown_ok && unsafe { platform_lib::fchmod(fd, 0o2770 as platform_lib::mode_t) } == 0;
+-    let result = if ok {
+-        Ok(())
+-    } else {
+-        Err(std::io::Error::last_os_error())
+-    };
++    // The NixOS module's RuntimeDirectory owns the directory access policy.
++    // Opening it with O_NOFOLLOW above still validates that it is not a symlink.
++    let result: std::io::Result<()> = Ok(());
+     unsafe {
+         platform_lib::close(fd);
+     }
+@@ -414,14 +404,9 @@ pub fn spawn_socket_dir_watchdog() {
+                 continue;
+             }
+
+-            // 目录已存在：组属可能过期(开机落 staff、之后控制台用户主组不同)，或被替换为
+-            // symlink/文件。用 lstat(no-follow)判断，必要时经 ensure_ipc_dir 安全收敛
+-            // (issue #7333 开机竞态尾部 + /tmp symlink 防护)。一致则跳过，避免抖动。
+-            use std::os::unix::fs::MetadataExt;
+-            let needs_fix = match std::fs::symlink_metadata(dir) {
+-                Ok(meta) if meta.file_type().is_dir() => meta.gid() != resolve_ipc_dir_gid(),
+-                _ => true,
+-            };
++            // RuntimeDirectory owns group and mode; only reject a replaced path.
++            let needs_fix =
++                !matches!(std::fs::symlink_metadata(dir), Ok(meta) if meta.file_type().is_dir());
+             if needs_fix && let Err(e) = ensure_ipc_dir(dir) {
+                 warn!("Failed to re-apply ownership on {:?}: {}", dir, e);
+             }
+diff --git a/src/lib.rs b/src/lib.rs
+index a21f89b..81175fc 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -24,6 +24,6 @@ pub use client::*;
+
+ #[cfg(all(unix, not(feature = "test")))]
+-pub static IPC_PATH: &str = "/tmp/verge/clash-verge-service.sock";
++pub static IPC_PATH: &str = "/run/clash-verge-rev/service.sock";
+ #[cfg(all(windows, not(feature = "test")))]
+ pub static IPC_PATH: &str = r"\\.\pipe\clash-verge-service";

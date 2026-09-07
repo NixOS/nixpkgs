@@ -1,0 +1,25 @@
+From 40c81f684ec2014ea63a712329f61c52aebe4dba Mon Sep 17 00:00:00 2001
+From: Valentin Boettcher <hiro@protagon.space>
+Date: Wed, 4 Aug 2021 17:25:12 +0200
+Subject: [PATCH] get image from environment
+
+---
+ src/cmd-run-sbcl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/cmd-run-sbcl.c b/src/cmd-run-sbcl.c
+index a83b56c..dc472bb 100644
+--- a/src/cmd-run-sbcl.c
++++ b/src/cmd-run-sbcl.c
+@@ -12,7 +12,7 @@ char** cmd_run_sbcl(int argc,char** argv,struct sub_command* cmd) {
+   char* impl_path=impldir(arch,os,impl,version);
+   char* help=get_opt("help",0);
+   char* script=get_opt("script",0);
+-  char* image=get_opt("image",0);
++  char* image=get_opt("image",1);
+   char* program=get_opt("program",0);
+   char* dynamic_space_size=get_opt("dynamic-space-size",1);
+   char* control_stack_size=get_opt("control-stack-size",1);
+-- 
+2.32.0
+

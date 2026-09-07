@@ -1,0 +1,25 @@
+CMake tries to read a list field from SDKSettings.plist, but the output of
+xcbuild PlistBuddy is incompatible with Apple's. (Plus we don't want it in our
+dependencies.)
+
+Simply assume ARM64 is supported by the SDK. We already limit the actual archs
+we build for by setting DARWIN_osx_BUILTIN_ARCHS explicitely.
+
+--- a/cmake/builtin-config-ix.cmake
++++ b/cmake/builtin-config-ix.cmake
+@@ -97,14 +97,7 @@ if(APPLE)
+   set(DARWIN_osx_BUILTIN_MIN_VER 10.5)
+   set(DARWIN_osx_BUILTIN_MIN_VER_FLAG
+       -mmacosx-version-min=${DARWIN_osx_BUILTIN_MIN_VER})
+-  set(DARWIN_osx_BUILTIN_ALL_POSSIBLE_ARCHS ${X86} ${X86_64})
+-  # Add support for arm64 macOS if available in SDK.
+-  foreach(arch ${ARM64})
+-    sdk_has_arch_support(${DARWIN_osx_SYSROOT} macosx ${arch} MACOS_ARM_SUPPORT)
+-    if (MACOS_ARM_SUPPORT)
+-     list(APPEND DARWIN_osx_BUILTIN_ALL_POSSIBLE_ARCHS ${arch})
+-    endif()
+-  endforeach(arch)
++  set(DARWIN_osx_BUILTIN_ALL_POSSIBLE_ARCHS ${X86} ${X86_64} ${ARM64})
+ 
+   if(COMPILER_RT_ENABLE_IOS)
+     list(APPEND DARWIN_EMBEDDED_PLATFORMS ios)

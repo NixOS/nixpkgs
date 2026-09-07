@@ -1,0 +1,225 @@
+From 3f9ac6721aaeb9e9dd6347164219dc99bfde2a29 Mon Sep 17 00:00:00 2001
+From: Louis Opter <louis@opter.org>
+Date: Sat, 2 May 2026 22:22:03 +0000
+Subject: [PATCH 1/2] CMake: rename QWELibClang_{BIN,BASE}_PATH to
+ QWELibClang_LLVM_{BIN,BASE}_PATH
+
+These cache vars hold the LLVM installation prefix's bin dir and root
+directory -- where llvm-config and libclang.{so,dylib,dll} live -- but
+the unqualified names suggest "the path to the clang binary." Renaming
+makes the LLVM-prefix purpose explicit and frees the unqualified
+namespace for a separate compiler-invocation-prefix distinction
+introduced in a follow-up commit.
+
+No functional change.
+---
+ cmake/FindQWELibClang.cmake    | 24 ++++++++++++------------
+ cmake/QtToolchainHelpers.cmake |  4 ++--
+ 2 files changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/cmake/FindQWELibClang.cmake b/cmake/FindQWELibClang.cmake
+index 3f6f484..ef7d570 100644
+--- a/cmake/FindQWELibClang.cmake
++++ b/cmake/FindQWELibClang.cmake
+@@ -10,7 +10,7 @@ else()
+ endif()
+ 
+ function(try_clang_executable Clang_EXECUTABLE)
+-    if(NOT DEFINED QWELibClang_BIN_PATH)
++    if(NOT DEFINED QWELibClang_LLVM_BIN_PATH)
+         # Extract the base dir from the clang executable
+         if(MSVC)
+             set(CLANG_PRINT_PATH_COMMAND /clang:-print-prog-name=clang)
+@@ -28,13 +28,13 @@ function(try_clang_executable Clang_EXECUTABLE)
+         file(TO_CMAKE_PATH "${clang_output}" clang_output) # $base_path/bin/clang
+         get_filename_component(clang_output "${clang_output}" DIRECTORY) # $base_path/bin
+ 
+-        set(QWELibClang_BIN_PATH "${clang_output}" CACHE INTERNAL "internal")
++        set(QWELibClang_LLVM_BIN_PATH "${clang_output}" CACHE INTERNAL "internal")
+     endif()
+ 
+     # Try to find the llvm-config executable, and extract the library location from it
+     find_program(QWELibClang_LLVM_CONFIG_EXECUTABLE
+         NAMES llvm-config
+-        PATHS ${QWELibClang_BIN_PATH}
++        PATHS ${QWELibClang_LLVM_BIN_PATH}
+         NO_DEFAULT_PATH)
+ 
+     if (QWELibClang_LLVM_CONFIG_EXECUTABLE)
+@@ -45,17 +45,17 @@ function(try_clang_executable Clang_EXECUTABLE)
+             OUTPUT_STRIP_TRAILING_WHITESPACE
+         )
+         file(TO_CMAKE_PATH "${llvm_config_output}" llvm_config_output)
+-        get_filename_component(QWELibClang_BAS_PATH "${llvm_config_output}" DIRECTORY)
++        get_filename_component(QWELibClang_LLVM_BAS_PATH "${llvm_config_output}" DIRECTORY)
+     else()
+         # No llvm-config. Get the base path from the binary directory
+         # This is the expected path for Windows and macOS
+-        get_filename_component(QWELibClang_BAS_PATH "${QWELibClang_BIN_PATH}" DIRECTORY)
++        get_filename_component(QWELibClang_LLVM_BAS_PATH "${QWELibClang_LLVM_BIN_PATH}" DIRECTORY)
+     endif()
+-    set(QWELibClang_BASE_PATH ${QWELibClang_BAS_PATH} CACHE INTERNAL "internal")
++    set(QWELibClang_LLVM_BASE_PATH ${QWELibClang_LLVM_BAS_PATH} CACHE INTERNAL "internal")
+ 
+     find_file(Libclang_LIBRARY
+         NAMES libclang.dll libclang.dylib libclang.so
+-        PATHS ${llvm_config_output} ${QWELibClang_BIN_PATH} ${QWELibClang_BASE_PATH}/lib ${QWELibClang_BASE_PATH}/lib64
++        PATHS ${llvm_config_output} ${QWELibClang_LLVM_BIN_PATH} ${QWELibClang_LLVM_BASE_PATH}/lib ${QWELibClang_LLVM_BASE_PATH}/lib64
+         NO_DEFAULT_PATH)
+ 
+     get_filename_component(Libclang_LIBRARY_DIR "${Libclang_LIBRARY}" DIRECTORY)
+@@ -110,9 +110,9 @@ if(Clang_EXECUTABLE)
+ endif()
+ 
+ # As a backup find the clang version used by pyside on CI
+-if(NOT (QWELibClang_LIBRARY_DIR AND QWELibClang_BASE_PATH AND QWELibClang_BIN_PATH) AND DEFINED ENV{LLVM_DYNAMIC_LIBS_100})
++if(NOT (QWELibClang_LIBRARY_DIR AND QWELibClang_LLVM_BASE_PATH AND QWELibClang_LLVM_BIN_PATH) AND DEFINED ENV{LLVM_DYNAMIC_LIBS_100})
+     unset(Clang_EXECUTABLE)
+-    unset(QWELibClang_BIN_PATH CACHE)
++    unset(QWELibClang_LLVM_BIN_PATH CACHE)
+     find_program(Clang_EXECUTABLE NAMES clang PATHS $ENV{LLVM_DYNAMIC_LIBS_100}/bin)
+     if(Clang_EXECUTABLE)
+         try_clang_executable(${Clang_EXECUTABLE})
+@@ -122,12 +122,12 @@ endif()
+ include(FindPackageHandleStandardArgs)
+ 
+ find_package_handle_standard_args(QWELibClang
+-    REQUIRED_VARS QWELibClang_LIBRARY_DIR QWELibClang_BASE_PATH QWELibClang_BIN_PATH
++    REQUIRED_VARS QWELibClang_LIBRARY_DIR QWELibClang_LLVM_BASE_PATH QWELibClang_LLVM_BIN_PATH
+     VERSION_VAR QWELibClang_VERSION
+ )
+ 
+-mark_as_advanced(QWELibClang_BIN_PATH)
+-mark_as_advanced(QWELibClang_BASE_PATH)
++mark_as_advanced(QWELibClang_LLVM_BIN_PATH)
++mark_as_advanced(QWELibClang_LLVM_BASE_PATH)
+ mark_as_advanced(QWELibClang_LIBRARY_DIR)
+ mark_as_advanced(QWELibClang_RUNTIME_PATH)
+ mark_as_advanced(QWELibClang_RESOURCE_PATH)
+diff --git a/cmake/QtToolchainHelpers.cmake b/cmake/QtToolchainHelpers.cmake
+index b0cd2dd..885fd53 100644
+--- a/cmake/QtToolchainHelpers.cmake
++++ b/cmake/QtToolchainHelpers.cmake
+@@ -404,7 +404,7 @@ macro(append_compiler_linker_sdk_setup)
+             )
+         endif()
+         list(APPEND gnArgArg
+-            clang_base_path="${QWELibClang_BASE_PATH}"
++            clang_base_path="${QWELibClang_LLVM_BASE_PATH}"
+             clang_version="${clang_runtime_path_version}"
+             clang_use_chrome_plugins=false
+             fatal_linker_warnings=false
+@@ -455,7 +455,7 @@ macro(append_compiler_linker_sdk_setup)
+         endif()
+     else()
+         if(QT_FEATURE_use_lld_linker OR QT_FEATURE_webengine_rust_build)
+-            list(APPEND gnArgArg clang_base_path="${QWELibClang_BASE_PATH}")
++            list(APPEND gnArgArg clang_base_path="${QWELibClang_LLVM_BASE_PATH}")
+             if (QT_FEATURE_webengine_rust_build)
+                 get_clang_runtime_path_version(clang_runtime_path_version)
+                 list(APPEND gnArgArg clang_version="${clang_runtime_path_version}")
+
+From 76d33954567d9d96a738a4f1e8baea69d66286b2 Mon Sep 17 00:00:00 2001
+From: Louis Opter <louis@opter.org>
+Date: Sat, 2 May 2026 22:22:55 +0000
+Subject: [PATCH 2/2] CMake: source clang_base_path from CMake-detected
+ compiler dir
+
+The clang_base_path argument fed to Chromium's build system is used to
+invoke ${clang_base_path}/bin/clang++ when compiling chromium sources.
+Since 695dd68f8 ("Optionally build using rust"), it has been derived
+from QWELibClang_LLVM_BIN_PATH, which in turn is computed by running
+"clang -print-prog-name=clang" and taking dirname twice. That
+indirection produces wrong results on wrapped toolchains (ccache,
+distcc, sccache, nixpkgs cc-wrapper) where the wrapper script and the
+underlying clang live in different directories: the wrapper forwards
+the flag, the bare clang reports its own absolute path, and
+clang_base_path ends up at the bare LLVM prefix. The downstream
+chromium compilation then invokes the unwrapped clang, bypassing
+wrapper-injected flags such as -isystem for the libc++ headers, and
+fails on "'atomic' file not found".
+
+The print-prog-name indirection has a legitimate other purpose in this
+file: locating llvm-config and libclang.{so,dylib,dll}. These live in
+the bare LLVM prefix, not the wrapper directory, because wrappers are
+deliberately scoped to compile-driver flag injection: they ship the
+cc/c++/cpp shims plus bintools symlinks, nothing else -- no lib/ and
+no LLVM dev tools alongside. So we cannot simply revert the
+indirection; QWELibClang_LLVM_BIN_PATH and QWELibClang_LLVM_BASE_PATH
+remain unchanged for the libclang/llvm-config lookups they feed.
+
+Instead, introduce QWELibClang_COMPILER_BIN_PATH and
+QWELibClang_COMPILER_BASE_PATH, derived directly from Clang_EXECUTABLE
+via dirname, and route clang_base_path in QtToolchainHelpers.cmake
+through them. On a non-wrapped toolchain the two paths are identical,
+so this change is a no-op there.
+
+Reproduced on x86_64-darwin with nixpkgs (Qt 6.10.2 worked because the
+pre-695dd68f8 inline "dirname dirname ${CMAKE_OBJCXX_COMPILER}" ended
+up at the wrapper directory; Qt 6.11.0 fails). After this change,
+chromium compilation invokes the wrapper, NIX_CFLAGS_COMPILE flows
+through, and qtwebengine builds successfully.
+---
+ cmake/FindQWELibClang.cmake    | 12 ++++++++++++
+ cmake/QtToolchainHelpers.cmake |  4 ++--
+ 2 files changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/cmake/FindQWELibClang.cmake b/cmake/FindQWELibClang.cmake
+index ef7d570..62c87be 100644
+--- a/cmake/FindQWELibClang.cmake
++++ b/cmake/FindQWELibClang.cmake
+@@ -31,6 +31,15 @@ function(try_clang_executable Clang_EXECUTABLE)
+         set(QWELibClang_LLVM_BIN_PATH "${clang_output}" CACHE INTERNAL "internal")
+     endif()
+ 
++    if(NOT DEFINED QWELibClang_COMPILER_BIN_PATH)
++        # Directory of the compiler that CMake invokes; on a wrapped toolchain
++        # this differs from QWELibClang_LLVM_BIN_PATH.
++        get_filename_component(compiler_bin_path "${Clang_EXECUTABLE}" DIRECTORY) # $compiler_base_path/bin
++        get_filename_component(compiler_base_path "${compiler_bin_path}" DIRECTORY) # $compiler_base_path
++        set(QWELibClang_COMPILER_BIN_PATH "${compiler_bin_path}" CACHE INTERNAL "internal")
++        set(QWELibClang_COMPILER_BASE_PATH "${compiler_base_path}" CACHE INTERNAL "internal")
++    endif()
++
+     # Try to find the llvm-config executable, and extract the library location from it
+     find_program(QWELibClang_LLVM_CONFIG_EXECUTABLE
+         NAMES llvm-config
+@@ -113,6 +122,7 @@ endif()
+ if(NOT (QWELibClang_LIBRARY_DIR AND QWELibClang_LLVM_BASE_PATH AND QWELibClang_LLVM_BIN_PATH) AND DEFINED ENV{LLVM_DYNAMIC_LIBS_100})
+     unset(Clang_EXECUTABLE)
+     unset(QWELibClang_LLVM_BIN_PATH CACHE)
++    unset(QWELibClang_COMPILER_BIN_PATH CACHE)
+     find_program(Clang_EXECUTABLE NAMES clang PATHS $ENV{LLVM_DYNAMIC_LIBS_100}/bin)
+     if(Clang_EXECUTABLE)
+         try_clang_executable(${Clang_EXECUTABLE})
+@@ -128,6 +138,8 @@ find_package_handle_standard_args(QWELibClang
+ 
+ mark_as_advanced(QWELibClang_LLVM_BIN_PATH)
+ mark_as_advanced(QWELibClang_LLVM_BASE_PATH)
++mark_as_advanced(QWELibClang_COMPILER_BIN_PATH)
++mark_as_advanced(QWELibClang_COMPILER_BASE_PATH)
+ mark_as_advanced(QWELibClang_LIBRARY_DIR)
+ mark_as_advanced(QWELibClang_RUNTIME_PATH)
+ mark_as_advanced(QWELibClang_RESOURCE_PATH)
+diff --git a/cmake/QtToolchainHelpers.cmake b/cmake/QtToolchainHelpers.cmake
+index 885fd53..3c86a03 100644
+--- a/cmake/QtToolchainHelpers.cmake
++++ b/cmake/QtToolchainHelpers.cmake
+@@ -404,7 +404,7 @@ macro(append_compiler_linker_sdk_setup)
+             )
+         endif()
+         list(APPEND gnArgArg
+-            clang_base_path="${QWELibClang_LLVM_BASE_PATH}"
++            clang_base_path="${QWELibClang_COMPILER_BASE_PATH}"
+             clang_version="${clang_runtime_path_version}"
+             clang_use_chrome_plugins=false
+             fatal_linker_warnings=false
+@@ -455,7 +455,7 @@ macro(append_compiler_linker_sdk_setup)
+         endif()
+     else()
+         if(QT_FEATURE_use_lld_linker OR QT_FEATURE_webengine_rust_build)
+-            list(APPEND gnArgArg clang_base_path="${QWELibClang_LLVM_BASE_PATH}")
++            list(APPEND gnArgArg clang_base_path="${QWELibClang_COMPILER_BASE_PATH}")
+             if (QT_FEATURE_webengine_rust_build)
+                 get_clang_runtime_path_version(clang_runtime_path_version)
+                 list(APPEND gnArgArg clang_version="${clang_runtime_path_version}")

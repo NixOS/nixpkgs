@@ -1,0 +1,68 @@
+load("@bazel_tools//tools/sh:sh_toolchain.bzl", "sh_toolchain")
+load("@rules_rust//rust:toolchain.bzl", "rust_toolchain")
+load("@rules_rust//rust:defs.bzl", "rust_stdlib_filegroup")
+
+toolchains = {
+    "x86_64": "x86_64-unknown-linux-gnu",
+    "aarch64": "aarch64-unknown-linux-gnu",
+}
+
+exports_files(["cargo", "rustdoc", "rustc"])
+
+[
+    rust_stdlib_filegroup(
+        name = "rust_nix_" + k + "_stdlib",
+        srcs = glob(
+            [
+                "rustcroot/lib/rustlib/" + v + "/lib/**",
+            ],
+            allow_empty=True,
+        ),
+    )
+    for k, v in toolchains.items()
+]
+
+[
+    rust_toolchain(
+        name = "rust_nix_" + k + "_impl",
+        binary_ext = "",
+        dylib_ext = ".so",
+        exec_triple = v,
+        cargo = ":cargo",
+        rust_doc = ":rustdoc",
+        rust_std = ":rust_nix_" + k + "_stdlib",
+        rustc = ":rustc",
+        stdlib_linkflags = ["-ldl", "-lpthread"],
+        staticlib_ext = ".a",
+        target_triple = v,
+    )
+    for k, v in toolchains.items()
+]
+
+[
+    toolchain(
+        name = "rust_nix_" + k,
+        exec_compatible_with = [
+            "@platforms//cpu:" + k,
+            "@platforms//os:linux",
+        ],
+        target_compatible_with = [
+            "@platforms//cpu:" + k,
+            "@platforms//os:linux",
+        ],
+        toolchain = ":rust_nix_" + k + "_impl",
+        toolchain_type = "@rules_rust//rust:toolchain_type",
+    )
+    for k in toolchains.keys()
+]
+
+sh_toolchain(
+    name = "local_sh_impl",
+    path = "@bash@",
+)
+
+toolchain(
+    name = "local_sh",
+    toolchain = ":local_sh_impl",
+    toolchain_type = "@bazel_tools//tools/sh:toolchain_type",
+)

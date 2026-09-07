@@ -1,0 +1,66 @@
+diff --git a/README.rst b/README.rst
+index 94855fe..c761229 100644
+--- a/README.rst
++++ b/README.rst
+@@ -299,7 +299,7 @@ automatically generated based on the code of that function:
+     ...     return math.sqrt(x)
+     >>> square_root(-1)
+     Traceback (most recent call last):
+-    PreconditionError: @require(lambda args: args.x > 0) failed
++    dpcontracts.PreconditionError: @require(lambda args: args.x > 0) failed
+ 
+ This is true for postconditions as well:
+ 
+@@ -308,7 +308,7 @@ This is true for postconditions as well:
+     ...     return x - y
+     >>> sub(10, 100)
+     Traceback (most recent call last):
+-    PostconditionError: @ensure(lambda args, result: result > 0) failed
++    dpcontracts.PostconditionError: @ensure(lambda args, result: result > 0) failed
+ 
+ And of course for invariants:
+ 
+@@ -321,7 +321,7 @@ And of course for invariants:
+     >>> counter = Counter(10)
+     >>> counter.increment(-100)
+     Traceback (most recent call last):
+-    PostconditionError: @invariant(lambda self: self.counter >= 0) failed
++    dpcontracts.PostconditionError: @invariant(lambda self: self.counter >= 0) failed
+ 
+ Tests can span more than one line as well:
+ 
+@@ -333,7 +333,7 @@ Tests can span more than one line as well:
+     ...     return x - y
+     >>> sub2(10, 100)
+     Traceback (most recent call last):
+-    PostconditionError: @ensure(lambda args, result: all([
++    dpcontracts.PostconditionError: @ensure(lambda args, result: all([
+         result > 0])) failed
+ 
+ Preserving Old Values
+@@ -342,6 +342,7 @@ Sometimes it's important to be able to compare the results of a function with th
+ previous state of the program. Earlier states can be preserved using the
+ `preserve` decorator:
+ 
++    >>> from dpcontracts import preserve
+     >>> class Counter:
+     ...     def __init__(self, initial_value):
+     ...         self.value = initial_value
+@@ -359,7 +360,7 @@ previous state of the program. Earlier states can be preserved using the
+     >>> counter.increment(10)
+     >>> counter.increment(9)
+     Traceback (most recent call last):
+-    PostconditionError: counter is incremented by value
++    dpcontracts.PostconditionError: counter is incremented by value
+ 
+ Note that Python's pass-by-reference semantics still apply, so if you need to
+ preserve an old value, you might have to copy it.
+@@ -445,7 +446,7 @@ Contracts can be placed on coroutines (that is, async functions):
+     ... async def func(a, b="Foo", *c):
+     ...     await asyncio.sleep(1)
+ 
+-    >>> asyncio.get_event_loop().run_until_complete(
++    >>> asyncio.run(
+     ...     func( 1, "foo", True, True, False))
+ 
+ Predicates functions themselves cannot be coroutines, as this could

@@ -1,0 +1,27 @@
+From 64f735a58d3e5cc2344f823e73602eab638d7076 Mon Sep 17 00:00:00 2001
+From: tropf <tropf@noreply.codeberg.org>
+Date: Mon, 5 Aug 2024 21:25:33 +0200
+Subject: [PATCH 1/4] force frozen=true
+
+Enforce installation in frozen mode, i.e. as a packaged version where
+source can not be modified.
+---
+ inkstitch.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/inkstitch.py b/inkstitch.py
+index efe6f6dec..be8ddf665 100644
+--- a/inkstitch.py
++++ b/inkstitch.py
+@@ -40,7 +40,7 @@ else:
+     ini = {}
+ # --------------------------------------------------------------------------------------------
+ 
+-running_as_frozen = getattr(sys, 'frozen', None) is not None  # check if running from pyinstaller bundle
++running_as_frozen = True
+ 
+ if not running_as_frozen:  # override running_as_frozen from DEBUG.toml - for testing
+     if safe_get(ini, "DEBUG", "force_frozen", default=False):
+-- 
+2.49.0
+

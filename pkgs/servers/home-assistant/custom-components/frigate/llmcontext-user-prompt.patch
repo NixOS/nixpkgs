@@ -1,0 +1,24 @@
+From 16b8a6358fb996db0bc72fa155d9775e67f3b6de Mon Sep 17 00:00:00 2001
+From: Martin Weinelt <hexa@darmstadt.ccc.de>
+Date: Thu, 7 May 2026 03:13:53 +0200
+Subject: [PATCH] Drop user_prompt from LLMContext invocaction
+
+Dropped in 2025.7.0.
+
+Ref: home-assistant/core@059c12798de2c7b0f285cb79e60c01f4be231701
+---
+ tests/test_llm_functions.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/tests/test_llm_functions.py b/tests/test_llm_functions.py
+index b21154d1..c1c6e006 100644
+--- a/tests/test_llm_functions.py
++++ b/tests/test_llm_functions.py
+@@ -28,7 +28,6 @@ def _create_llm_context() -> llm.LLMContext:
+         language="en",
+         assistant=None,
+         device_id=None,
+-        user_prompt=None,
+     )
+ 
+ 

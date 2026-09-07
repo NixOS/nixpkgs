@@ -1,0 +1,15 @@
+diff --git a/package.json b/package.json
+index cb439a93b1..4258f9f93f 100644
+--- a/package.json
++++ b/package.json
+@@ -3,9 +3,8 @@
+     "private": true,
+     "license": "GPL-3.0",
+     "workspaces": [
+-        "applications/*",
++        "applications/authenticator",
+         "applications/lumo/src/app/lib/lumo-api-client",
+-        "applications/pass-desktop/native",
+         "packages/*",
+         "packages/wasm/*",
+         "packages/pass/docs/starlight",

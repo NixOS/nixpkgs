@@ -1,0 +1,285 @@
+From 9510aa4aebf32678884f55ae251e54012a354ed1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Alice=20=E2=9C=A8=F0=9F=8C=99=20Luna?= <alice@liquidnya.dev>
+Date: Sat, 22 Aug 2026 16:26:42 +0200
+Subject: [PATCH] Use sysfs_emit and field width specifier '*'
+
+This fixes the build due to strncpy being removed from the kernel 7.2
+and also makes the code more readable,
+since the handling of buffer overflows id done by sysfs_emit.
+
+Note that the documentation about reading attributes says:
+
+> New implementations of show() methods should only use sysfs_emit()
+> or sysfs_emit_at() when formatting the value to be returned to user space.
+
+See: https://docs.kernel.org/filesystems/sysfs.html#reading-writing-attribute-data
+from kernel 7.2.0, last revised 16 August 2011.
+
+This change also uses the field width specifier '*' for add_uevent_var calls.
+---
+ ddcci/ddcci.c | 153 +++++++++++++++++---------------------------------
+ 1 file changed, 50 insertions(+), 103 deletions(-)
+
+diff --git a/ddcci/ddcci.c b/ddcci/ddcci.c
+index 6b41eab..76a1cd3 100644
+--- a/ddcci/ddcci.c
++++ b/ddcci/ddcci.c
+@@ -735,154 +735,101 @@ static ssize_t ddcci_attr_capabilities_show(struct device *dev,
+ 					    char *buf)
+ {
+ 	struct ddcci_device *device = ddcci_verify_device(dev);
+-	ssize_t ret = -ENOENT;
+-	size_t len;
+ 
+ 	if (likely(device != NULL)) {
+-		len = device->capabilities_len;
+-		if (unlikely(len > PAGE_SIZE))
+-			len = PAGE_SIZE;
+-		if (len == 0) {
+-			ret = len;
+-		} else {
+-			memcpy(buf, device->capabilities, len);
+-			if (likely(len < PAGE_SIZE)) {
+-				buf[len] = '\n';
+-				ret = len+1;
+-			}
+-		}
+-	}
++		if (device->capabilities_len == 0)
++			return 0;
+ 
+-	return ret;
++		return sysfs_emit(buf, "%.*s\n", (int)device->capabilities_len, device->capabilities);
++	}
++	return -ENOENT;
+ }
+ 
+ static ssize_t ddcci_attr_prot_show(struct device *dev,
+ 				    struct device_attribute *attr, char *buf)
+ {
+ 	struct ddcci_device *device = ddcci_verify_device(dev);
+-	ssize_t ret = -ENOENT;
+-	size_t len;
+ 
+ 	if (likely(device != NULL)) {
+-		len = strnlen(device->prot, sizeof(device->prot));
+-		strncpy(buf, device->prot, PAGE_SIZE);
+-		if (len == 0) {
+-			ret = len;
+-		} else if (likely(len < PAGE_SIZE)) {
+-			buf[len] = '\n';
+-			ret = len+1;
+-		} else {
+-			ret = PAGE_SIZE;
+-		}
++		if (device->prot[0] == '\0')
++			return 0;
++
++		return sysfs_emit(buf, "%.*s\n", (int)sizeof(device->prot), device->prot);
+ 	}
+-	return ret;
++	return -ENOENT;
+ }
+ 
+ static ssize_t ddcci_attr_type_show(struct device *dev,
+ 				    struct device_attribute *attr, char *buf)
+ {
+ 	struct ddcci_device *device = ddcci_verify_device(dev);
+-	ssize_t ret = -ENOENT;
+-	size_t len;
+ 
+ 	if (likely(device != NULL)) {
+-		len = strnlen(device->type, sizeof(device->type));
+-		strncpy(buf, device->type, PAGE_SIZE);
+-		if (len == 0) {
+-			ret = len;
+-		} else if (likely(len < PAGE_SIZE)) {
+-			buf[len] = '\n';
+-			ret = len+1;
+-		} else {
+-			ret = PAGE_SIZE;
+-		}
++		if (device->type[0] == '\0')
++			return 0;
++
++		return sysfs_emit(buf, "%.*s\n", (int)sizeof(device->type), device->type);
+ 	}
+-	return ret;
++	return -ENOENT;
+ }
+ 
+ static ssize_t ddcci_attr_model_show(struct device *dev,
+ 				     struct device_attribute *attr, char *buf)
+ {
+ 	struct ddcci_device *device = ddcci_verify_device(dev);
+-	ssize_t ret = -ENOENT;
+-	size_t len;
+ 
+ 	if (likely(device != NULL)) {
+-		len = strnlen(device->model, sizeof(device->model));
+-		strncpy(buf, device->model, PAGE_SIZE);
+-		if (len == 0) {
+-			ret = len;
+-		} else if (likely(len < PAGE_SIZE)) {
+-			buf[len] = '\n';
+-			ret = len+1;
+-		} else {
+-			ret = PAGE_SIZE;
+-		}
++		if (device->model[0] == '\0')
++			return 0;
++
++		return sysfs_emit(buf, "%.*s\n", (int)sizeof(device->model), device->model);
+ 	}
+-	return ret;
++	return -ENOENT;
+ }
+ 
+ static ssize_t ddcci_attr_vendor_show(struct device *dev,
+ 				      struct device_attribute *attr, char *buf)
+ {
+ 	struct ddcci_device *device = ddcci_verify_device(dev);
+-	ssize_t ret = -ENOENT;
+-	size_t len;
+ 
+ 	if (likely(device != NULL)) {
+-		len = strnlen(device->vendor, sizeof(device->vendor));
+-		strncpy(buf, device->vendor, PAGE_SIZE);
+-		if (len == 0) {
+-			ret = len;
+-		} else if (likely(len < PAGE_SIZE)) {
+-			buf[len] = '\n';
+-			ret = len+1;
+-		} else {
+-			ret = PAGE_SIZE;
+-		}
++		if (device->vendor[0] == '\0')
++			return 0;
++
++		return sysfs_emit(buf, "%.*s\n", (int)sizeof(device->vendor), device->vendor);
+ 	}
+-	return ret;
++	return -ENOENT;
+ }
+ 
+ static ssize_t ddcci_attr_module_show(struct device *dev,
+ 				      struct device_attribute *attr, char *buf)
+ {
+ 	struct ddcci_device *device = ddcci_verify_device(dev);
+-	ssize_t ret = -ENOENT;
+-	size_t len;
+ 
+ 	if (likely(device != NULL)) {
+-		len = strnlen(device->module, sizeof(device->module));
+-		strncpy(buf, device->module, PAGE_SIZE);
+-		if (len == 0) {
+-			ret = len;
+-		} else if (likely(len < PAGE_SIZE)) {
+-			buf[len] = '\n';
+-			ret = len+1;
+-		} else {
+-			ret = PAGE_SIZE;
+-		}
++		if (device->module[0] == '\0')
++			return 0;
++
++		return sysfs_emit(buf, "%.*s\n", (int)sizeof(device->module), device->module);
+ 	}
+-	return ret;
++	return -ENOENT;
+ }
+ 
+ static ssize_t ddcci_attr_serial_show(struct device *dev,
+ 				      struct device_attribute *attr, char *buf)
+ {
+ 	struct ddcci_device *device = ddcci_verify_device(dev);
+-	ssize_t ret = -ENOENT;
+ 
+ 	if (likely(device != NULL))
+-		ret = scnprintf(buf, PAGE_SIZE, "%d\n", device->device_number);
++		return sysfs_emit(buf, "%d\n", device->device_number);
+ 
+-	return ret;
++	return -ENOENT;
+ }
+ 
+ static ssize_t ddcci_attr_modalias_show(struct device *dev,
+ 				      struct device_attribute *attr, char *buf)
+ {
+ 	struct ddcci_device *device = ddcci_verify_device(dev);
+-	ssize_t ret = -ENOENT;
+ 	char model[ARRAY_SIZE(device->model)];
+ 	char vendor[ARRAY_SIZE(device->model)];
+ 	char module[ARRAY_SIZE(device->model)];
+@@ -895,16 +842,16 @@ static ssize_t ddcci_attr_modalias_show(struct device *dev,
+ 		ddcci_modalias_clean(vendor, sizeof(vendor), '_');
+ 		ddcci_modalias_clean(module, sizeof(module), '_');
+ 
+-		ret = scnprintf(buf, PAGE_SIZE, "%s%s-%s-%s-%s-%s\n",
++		return sysfs_emit(buf, "%s%.*s-%.*s-%.*s-%.*s-%.*s\n",
+ 			DDCCI_MODULE_PREFIX,
+-			device->prot,
+-			device->type,
+-			model,
+-			vendor,
+-			module
++			(int)sizeof(device->prot), device->prot,
++			(int)sizeof(device->type), device->type,
++			(int)sizeof(model), model,
++			(int)sizeof(vendor), vendor,
++			(int)sizeof(module), module
+ 		);
+ 	}
+-	return ret;
++	return -ENOENT;
+ }
+ 
+ static DEVICE_ATTR(capabilities, S_IRUGO, ddcci_attr_capabilities_show, NULL);
+@@ -945,33 +892,33 @@ static int ddcci_device_uevent(CSTRUCT device *dev, struct kobj_uevent_env *env)
+ 	ddcci_modalias_clean(vendor, sizeof(vendor), '_');
+ 	ddcci_modalias_clean(module, sizeof(module), '_');
+ 
+-	if (add_uevent_var(env, "MODALIAS=%s%s-%s-%s-%s-%s",
++	if (add_uevent_var(env, "MODALIAS=%s%.*s-%.*s-%.*s-%.*s-%.*s",
+ 			   DDCCI_MODULE_PREFIX,
+-			   device->prot,
+-			   device->type,
+-			   model,
+-			   vendor,
+-			   module
++			   (int)sizeof(device->prot), device->prot,
++			   (int)sizeof(device->type), device->type,
++			   (int)sizeof(model), model,
++			   (int)sizeof(vendor), vendor,
++			   (int)sizeof(module), module
+ 		))
+ 		return -ENOMEM;
+ 
+ 	if (device->prot[0])
+-		if (add_uevent_var(env, "DDCCI_PROT=%s", device->prot))
++		if (add_uevent_var(env, "DDCCI_PROT=%.*s", (int)sizeof(device->prot), device->prot))
+ 			return -ENOMEM;
+ 
+ 	if (device->type[0])
+-		if (add_uevent_var(env, "DDCCI_TYPE=%s", device->type))
++		if (add_uevent_var(env, "DDCCI_TYPE=%.*s", (int)sizeof(device->type), device->type))
+ 			return -ENOMEM;
+ 
+ 	if (device->model[0])
+-		if (add_uevent_var(env, "DDCCI_MODEL=%s", device->model))
++		if (add_uevent_var(env, "DDCCI_MODEL=%.*s", (int)sizeof(device->model), device->model))
+ 			return -ENOMEM;
+ 
+ 	if (device->vendor[0]) {
+-		if (add_uevent_var(env, "DDCCI_VENDOR=%s", device->vendor))
++		if (add_uevent_var(env, "DDCCI_VENDOR=%.*s", (int)sizeof(device->vendor), device->vendor))
+ 			return -ENOMEM;
+ 
+-		if (add_uevent_var(env, "DDCCI_MODULE=%s", device->module))
++		if (add_uevent_var(env, "DDCCI_MODULE=%.*s", (int)sizeof(device->module), device->module))
+ 			return -ENOMEM;
+ 
+ 		if (add_uevent_var(env, "DDCCI_UNIQ=%d", device->device_number))
+-- 
+2.54.0
+
