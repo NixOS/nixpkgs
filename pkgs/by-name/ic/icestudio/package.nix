@@ -3,6 +3,7 @@
   fetchurl,
   fetchFromGitHub,
   buildNpmPackage,
+  copyDesktopItems,
   makeDesktopItem,
   makeWrapper,
   unstableGitUpdater,
@@ -11,8 +12,8 @@
   python3,
 }:
 
-let
-  # Use unstable because it has improvements for finding python
+buildNpmPackage (finalAttrs: {
+  pname = "icestudio";
   version = "1.0.0.PRw-20260821-unstable-2026-08-20";
 
   src = fetchFromGitHub {
@@ -22,35 +23,6 @@ let
     hash = "sha256-GTsLt3IgqXCkGJZGmvWslHL8gqm/0tnRJWlceV64asA=";
   };
 
-  collection = fetchurl {
-    url = "https://github.com/FPGAwars/collection-default/archive/v0.4.1.zip";
-    hash = "sha256-F2cAqkTPC7xfGnPQiS8lTrD4y34EkHFUEDPVaYzVVg8=";
-  };
-
-  app = buildNpmPackage {
-    pname = "icestudio-app";
-    inherit version src;
-    npmDepsHash = "sha256-twDndqYV+aXtkcBC/jnZCJ0p9L24AgRORz4yDTledH0=";
-    sourceRoot = "${src.name}/app";
-    dontNpmBuild = true;
-    installPhase = ''
-      cp -r . $out
-    '';
-  };
-
-  desktopItem = makeDesktopItem {
-    desktopName = "Icestudio";
-    comment = "Visual editor for open FPGA boards";
-    name = "icestudio";
-    exec = "icestudio";
-    icon = "icestudio";
-    terminal = false;
-    categories = [ "Development" ];
-  };
-in
-buildNpmPackage rec {
-  pname = "icestudio";
-  inherit version src;
   npmDepsHash = "sha256-4B5dpU7LV/2ga7gbu/TdwOYZL/HDm4fi9TXNcZEyeOI=";
   npmFlags = [
     # Use the legacy dependency resolution, with less strict version
@@ -62,15 +34,24 @@ buildNpmPackage rec {
     "--ignore-scripts"
   ];
 
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
+
+  buildInputs = [
+    python3
+  ];
+
   buildPhase = ''
     runHook preBuild
 
     # Copy the `app` derivation into the folder expected for grunt
-    cp -r ${app}/* app
+    cp -r ${finalAttrs.passthru.app}/* app
 
     # Copy the cached `collection` derivation into the cache location so that
     # grunt avoids downloading it
-    install -m444 -D ${collection} cache/collection/collection-default.zip
+    install -m444 -D ${finalAttrs.passthru.collection} cache/collection/collection-default.zip
 
     # Use grunt to distribute package
     ./node_modules/.bin/grunt dist \
@@ -91,8 +72,6 @@ buildNpmPackage rec {
         $out/share/icons/hicolor/"$size"x"$size"/apps/icestudio.png
     done
 
-    install -Dm644 ${desktopItem}/share/applications/icestudio.desktop -t $out/share/applications
-
     makeWrapper ${nwjs}/bin/nw $out/bin/icestudio \
         --add-flags $out \
         --prefix PATH : "${python3}/bin"
@@ -100,13 +79,39 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = unstableGitUpdater {
-    tagPrefix = "v";
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "Icestudio";
+      comment = "Visual editor for open FPGA boards";
+      name = "icestudio";
+      exec = "icestudio";
+      icon = "icestudio";
+      terminal = false;
+      categories = [ "Development" ];
+    })
+  ];
+
+  passthru = {
+    updateScript = unstableGitUpdater {
+      tagPrefix = "v";
+    };
+
+    collection = fetchurl {
+      url = "https://github.com/FPGAwars/collection-default/archive/v0.4.1.zip";
+      hash = "sha256-F2cAqkTPC7xfGnPQiS8lTrD4y34EkHFUEDPVaYzVVg8=";
+    };
+
+    app = buildNpmPackage {
+      pname = "icestudio-app";
+      inherit (finalAttrs) version src;
+      npmDepsHash = "sha256-twDndqYV+aXtkcBC/jnZCJ0p9L24AgRORz4yDTledH0=";
+      sourceRoot = "${finalAttrs.src.name}/app";
+      dontNpmBuild = true;
+      installPhase = ''
+        cp -r . $out
+      '';
+    };
   };
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  buildInputs = [ python3 ];
 
   meta = {
     description = "Visual editor for open FPGA boards";
@@ -122,4 +127,4 @@ buildNpmPackage rec {
     mainProgram = "icestudio";
     platforms = lib.platforms.linux;
   };
-}
+})
