@@ -29,7 +29,22 @@ done
 if $targetPassed && [[ "$targetValue" != "@defaultTarget@" ]] && (( "${NIX_CC_WRAPPER_SUPPRESS_TARGET_WARNING:-0}" < 1 )); then
     echo "Warning: supplying the --target $targetValue != @defaultTarget@ argument to a nix-wrapped compiler may not work correctly - cc-wrapper is currently not designed with multi-target compilers in mind. You may want to use an un-wrapped compiler instead." >&2
 elif [[ $0 != *cpp ]]; then
-    extraBefore+=(-target @defaultTarget@ @machineFlags@)
+    extraBefore+=(-target @defaultTarget@)
+
+    # Add machine flags.  Flang does not understand all C/C++ machine flags
+    # (e.g. -mtls-dialect), so filter those out for the Fortran compiler.
+    if [ "@isFlang@" != 1 ]; then
+        for f in @machineFlags@; do
+            extraBefore+=("$f")
+        done
+    else
+        for f in @machineFlags@; do
+            case "$f" in
+                -mtls-dialect*) ;; # skip: C/C++ TLS descriptor flag, not supported by flang
+                *) extraBefore+=("$f") ;;
+            esac
+        done
+    fi
 
     if [[ "@explicitAbiValue@" != "" ]]; then
         extraBefore+=(-mabi=@explicitAbiValue@)
