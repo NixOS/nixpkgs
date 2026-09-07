@@ -9,18 +9,18 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "multi-scrobbler";
-  version = "0.16.5";
+  version = "0.17.2";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "FoxxMD";
     repo = "multi-scrobbler";
     tag = finalAttrs.version;
-    hash = "sha256-EqJ265SGFlYGyxnKQciDPjATzznniKfEYbjYEDwjzMY=";
+    hash = "sha256-cmjc9xiCoTt7jPgoB5HihACK3I/rT12ZDjBi+LbObGE=";
   };
 
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-MAb7lzGv0dFRCHlxcFo51C7/YiSxcswfYr5NUfoR1jI=";
+  npmDepsHash = "sha256-E8xZ23V0zyBW5fn8m0FoCOFNYPtZI6iJXnVczWFGxpo=";
 
   nativeBuildInputs = [ makeWrapper ];
 
