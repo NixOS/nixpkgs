@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   makeWrapper,
   wrapGAppsHook3,
@@ -72,6 +73,13 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Introduced by https://github.com/Tencent/rapidjson/commit/b1c0c2843fcb2aca9ecc650fc035c57ffc13697c#diff-2f1bcf2729ff7c408adb0c2cc2cfa01602bd5646b05b3e4bc7e46b606035d249R21
     ./rapidjson.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # https://github.com/audacity/audacity/pull/12022
+    (fetchpatch2 {
+      url = "https://github.com/audacity/audacity/commit/255515c2201527960e3175444ef17700f4f48df4.patch";
+      hash = "sha256-V1mjpw/A8rNdGAiEHoT4RDC9dS7ZN1nIhEG878T2xuY=";
+    })
   ];
 
   postPatch = ''
@@ -162,6 +170,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fix duplicate store paths
     "-DCMAKE_INSTALL_LIBDIR=lib"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "CMAKE_OSX_DEPLOYMENT_TARGET" stdenv.hostPlatform.darwinMinVersion)
   ];
 
   # [ 57%] Generating LightThemeAsCeeCode.h...
