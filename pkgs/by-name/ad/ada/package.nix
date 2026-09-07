@@ -23,6 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-TvjoLUKO2+YgS1mlyglLb+rBLTO/SWSBVA2S34Z6kMI=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
     cmake
     validatePkgConfig
