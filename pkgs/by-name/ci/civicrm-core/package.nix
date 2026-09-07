@@ -30,9 +30,9 @@ php.buildComposerProject2 (finalAttrs: {
   meta = {
     homepage = "https://civicrm.org/";
     changelog = "https://download.civicrm.org/release/${finalAttrs.version}";
-    description = "Standalone version of CiviCRM, a CRM software for non-profit organizations";
+    description = "Core version of CiviCRM, a CRM software for non-profit organizations";
     license = lib.licenses.agpl3Plus;
     maintainers = [ lib.maintainers.sorooris ];
-    mainProgram = "civicrm";
+    mainProgram = "civicrm-core";
   };
 })
