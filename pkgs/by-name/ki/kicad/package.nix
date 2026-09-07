@@ -134,7 +134,7 @@ let
     else
       versionsImport.${baseName}.libVersion.version;
 
-  wxGTK = wxwidgets_3_2;
+  wxGTK = wxwidgets_3_3;
   python = python3;
   wxPython = python.pkgs.wxpython;
   addonPath = "addon.zip";
