@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snapshot";
-  version = "50.0";
+  version = "51.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/snapshot/${lib.versions.major finalAttrs.version}/snapshot-${finalAttrs.version}.tar.xz";
-    hash = "sha256-7J2vmIPrkDMJEbtR5rae7YydvdVDjoZK3JDuVaX+nu0=";
+    hash = "sha256-EJh3LdDkKlRLkQuOpXNGdeRDMvAJOr0riBzNAQI1+so=";
   };
 
   cargoVendorDir = "vendor";
