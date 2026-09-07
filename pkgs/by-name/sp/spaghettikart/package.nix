@@ -4,7 +4,6 @@
   applyPatches,
   writeTextFile,
   fetchurl,
-  fetchpatch,
   stdenv,
   replaceVars,
   yaml-cpp,
@@ -102,20 +101,6 @@ let
     tag = "v4.1.0";
     hash = "sha256-zhRFEmPYNFLqQCfvdAaG5VBNle9Qm8FepIIIrT9sh88=";
   };
-
-  # Include cmake4 patch
-  # Remove when yaml-cpp.src is updated to include it
-  yaml-patched = applyPatches {
-    src = yaml-cpp.src;
-    patches = [
-      (fetchpatch {
-        name = "yaml-cpp-fix-cmake-4.patch";
-        url = "https://github.com/jbeder/yaml-cpp/commit/c2680200486572baf8221ba052ef50b58ecd816e.patch";
-        hash = "sha256-1kXRa+xrAbLEhcJxNV1oGHPmayj1RNIe6dDWXZA3mUA=";
-      })
-    ];
-  };
-
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "spaghettikart";
@@ -154,12 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
         rev = "7e635fca68d014934b4af8a1cf874f63989352b7";
         hash = "sha256-cxTaOuLXHRU8xMz9gluYz0a93O0ez2xOxbloyc1m1ns=";
       };
-      yaml-cpp_src = fetchFromGitHub {
-        owner = "jbeder";
-        repo = "yaml-cpp";
-        rev = "28f93bdec6387d42332220afa9558060c8016795";
-        hash = "sha256-59/s4Rqiiw7LKQw0UwH3vOaT/YsNVcoq3vblK0FiO5c=";
-      };
+      yaml-cpp_src = srcOnly yaml-cpp;
       tinyxml2_src = srcOnly tinyxml-2;
     })
 
@@ -204,7 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_THREADPOOL" "${thread_pool}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_TINYXML2" "${tinyxml-2}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_TOMLPLUSPLUS" "${tomlplusplus.src}")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_YAML-CPP" "${yaml-patched}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_YAML-CPP" "${srcOnly yaml-cpp}")
   ];
 
   strictDeps = true;
