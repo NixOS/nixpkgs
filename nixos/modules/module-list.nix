@@ -1456,6 +1456,7 @@
   ./services/networking/stubby.nix
   ./services/networking/stunnel.nix
   ./services/networking/sunshine.nix
+  ./services/networking/apollo.nix
   ./services/networking/supplicant.nix
   ./services/networking/supybot.nix
   ./services/networking/suricata/default.nix
