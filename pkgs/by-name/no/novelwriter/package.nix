@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 let
-  version = "26.1.2";
+  version = "26.2";
 in
 python3.pkgs.buildPythonApplication {
   pname = "novelwriter";
@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication {
     owner = "vkbo";
     repo = "novelWriter";
     tag = "v${version}";
-    hash = "sha256-nxItDobCQX3rnYzSkilFdW+A9P/2imJ8Pb+QZRy3Tng=";
+    hash = "sha256-wk8upflFaXQfLVm83hvcxswOuv42HqXseNRwzuBVdA8=";
   };
 
   nativeBuildInputs = [ qt6.wrapQtAppsHook ];
