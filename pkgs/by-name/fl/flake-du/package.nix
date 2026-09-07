@@ -1,24 +1,27 @@
 {
   lib,
   rustPlatform,
-  fetchgit,
+  fetchFromGitHub,
+  versionCheckHook,
 }:
-let
-  version = "0.1.0";
-in
-rustPlatform.buildRustPackage {
-  pname = "flake-du";
-  inherit version;
 
-  src = fetchgit {
-    url = "https://github.com/kmein/flake-du";
-    rev = "v${version}";
-    sha256 = "sha256-+YfQRi6QE4xNUcIcEc9HWIbnin6GCVp4SYrjvBwksys=";
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "flake-du";
+  version = "0.1.0";
+
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "kmein";
+    repo = "flake-du";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+YfQRi6QE4xNUcIcEc9HWIbnin6GCVp4SYrjvBwksys=";
   };
 
   cargoHash = "sha256-DYVT9jM9WcgoVSOnoUIWWR9EmNywR1f4xZOAzkbNkCk=";
 
-  __structuredAttrs = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Tool for managing flake inputs with disk usage insights";
@@ -26,4 +29,4 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/kmein/flake-du";
     maintainers = [ lib.maintainers.kmein ];
   };
-}
+})
