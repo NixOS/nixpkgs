@@ -12,7 +12,7 @@
   adwaita-icon-theme,
   dconf,
   gtk3,
-  wxwidgets_3_2,
+  wxwidgets_3_3,
   librsvg,
   cups,
   gsettings-desktop-schemas,
