@@ -33,18 +33,18 @@ elif [[ $0 != *cpp ]]; then
 
     # Add machine flags.  Flang does not understand all C/C++ machine flags
     # (e.g. -mtls-dialect), so filter those out for the Fortran compiler.
-    if [ "@isFlang@" != 1 ]; then
-        for f in @machineFlags@; do
-            extraBefore+=("$f")
-        done
-    else
-        for f in @machineFlags@; do
-            case "$f" in
-                -mtls-dialect*) ;; # skip: C/C++ TLS descriptor flag, not supported by flang
-                *) extraBefore+=("$f") ;;
-            esac
-        done
-    fi
+    for f in @machineFlags@; do
+        case "$f" in
+            -mtls-dialect*)
+                if [ "@isFlang@" != 1 ]; then
+                    extraBefore+=("$f")
+                fi
+                ;;
+            *)
+                extraBefore+=("$f")
+                ;;
+        esac
+    done
 
     if [[ "@explicitAbiValue@" != "" ]]; then
         extraBefore+=(-mabi=@explicitAbiValue@)
