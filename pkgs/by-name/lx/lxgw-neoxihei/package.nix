@@ -2,6 +2,7 @@
   lib,
   fetchurl,
   stdenvNoCC,
+  installFonts,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lxgw-neoxihei";
@@ -12,15 +13,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-vmicx0qKY+M5Nhtv08tG19SZ1aTGWaAioHUluUyXKMg=";
   };
 
-  dontUnpack = true;
+  unpackPhase = ''
+    runHook preUnpack
 
-  installPhase = ''
-    runHook preInstall
+    cp $src LXGWNeoXiHei.ttf
 
-    install -Dm644 $src $out/share/fonts/truetype/LXGWNeoXiHei.ttf
-
-    runHook postInstall
+    runHook postUnpack
   '';
+
+  nativeBuildInputs = [ installFonts ];
 
   __structuredAttrs = true;
 
