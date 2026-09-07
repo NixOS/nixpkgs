@@ -47,6 +47,7 @@
   sassc,
   systemd,
   pipewire,
+  libgudev,
   gst_all_1,
   adwaita-icon-theme,
   glycin-loaders,
@@ -156,6 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     lcms2 # required by mutter-clutter
     libgbm
     libGL # for egl, required by mutter-clutter
+    libgudev
     libxi # required by libmutter
     libx11
     libxkbcommon
