@@ -9,6 +9,7 @@
   asynch,
   clickhouse-driver,
   nix-update-script,
+  nixosTests,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -77,7 +78,12 @@ buildPythonPackage (finalAttrs: {
     "clickhouse_sqlalchemy"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = {
+      inherit (nixosTests) clickhouse-sqlalchemy;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "ClickHouse dialect for SQLAlchemy";
