@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtkmm";
-  version = "4.22.0";
+  version = "4.23.2";
 
   outputs = [
     "out"
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtkmm/${lib.versions.majorMinor finalAttrs.version}/gtkmm-${finalAttrs.version}.tar.xz";
-    hash = "sha256-LoohtLByX2IOM6ruDNND7RIbUzJ1tjKJZhmxyJ6W3mc=";
+    hash = "sha256-ZWLeB3/XqU6fsSW84mSZtQeIyuJUGwN9TE++I/C+Ek0=";
   };
 
   nativeBuildInputs = [
