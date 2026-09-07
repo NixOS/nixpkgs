@@ -84,6 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Library to Instrument Executable Formats";
     homepage = "https://lief.quarkslab.com/";
