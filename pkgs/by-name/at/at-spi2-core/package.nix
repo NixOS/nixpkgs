@@ -29,7 +29,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "at-spi2-core";
-  version = "2.60.6";
+  version = "2.61.90";
 
   outputs = [
     "out"
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/at-spi2-core/${lib.versions.majorMinor finalAttrs.version}/at-spi2-core-${finalAttrs.version}.tar.xz";
-    hash = "sha256-qJtkqLIXqAQr3w41y/q2Kc7uNWQNunXfV4r96ap4nVc=";
+    hash = "sha256-8JnWINKkiZf807ikoES2AVblnBFoV6y8Z2IIVW71QMM=";
   };
 
   nativeBuildInputs = [
