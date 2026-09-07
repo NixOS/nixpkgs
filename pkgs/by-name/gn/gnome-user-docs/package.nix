@@ -6,22 +6,28 @@
   gnome,
   itstool,
   libxml2,
+  meson,
+  ninja,
   yelp-tools,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-user-docs";
-  version = "50.4";
+  version = "51.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-user-docs/${lib.versions.major finalAttrs.version}/gnome-user-docs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-zYdoQ1NDY1uy3P9pygORZxVTJGnEZd9IBMN63ZihNJc=";
+    hash = "sha256-rXb0QIkQ/th/39sLJMYFaK2nFkXr6Rl8q+KzpSHlrWQ=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     gettext
     itstool
     libxml2
+    meson
+    ninja
     yelp-tools
   ];
 
