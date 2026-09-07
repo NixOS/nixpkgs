@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace glycin-loaders/meson.build \
-      --replace-fail "cargo_target_dir / rust_target / loader," "cargo_target_dir / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / loader,"
+      --replace-fail "cargo_artifact_dir / rust_target / loader," "cargo_artifact_dir / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / loader,"
   ''
   + lib.optionalString finalAttrs.finalPackage.doCheck ''
     chmod +x build-aux/setup-integration-test.py

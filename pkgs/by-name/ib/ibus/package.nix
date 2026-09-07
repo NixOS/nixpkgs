@@ -67,13 +67,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ibus";
-  version = "1.5.34";
+  version = "1.5.35-beta1";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus";
     tag = finalAttrs.version;
-    hash = "sha256-MCxzMnG+g2FC4pZtDOP2c7vSRG5Zk6EfrkGnEyFvBfQ=";
+    hash = "sha256-yZ++92u5impw27ZAEaf5DrqK6aYWh7hytuBqRxQqccE=";
   };
 
   patches = [

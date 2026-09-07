@@ -461,6 +461,7 @@ in
             pkgs.gtk3.out # for gtk-launch program
             pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
             pkgs.xdg-user-dirs-gtk # Used to create the default bookmarks
+            pkgs.gnome-extensions-app
           ];
         in
         mandatoryPackages ++ removeExcluded optionalPackages;
