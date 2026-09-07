@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "llama-index-instrumentation";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_instrumentation";
     inherit version;
-    hash = "sha256-7rckZIsl0UneiCpayeIcWssc54DaIUvaKwdTQa8prY4=";
+    hash = "sha256-sYXE4op/MomcJ2ScwuLX1UJn+i/wzUPL4rUhK66Y/jo=";
   };
 
   pythonRelaxDeps = [ "pydantic" ];
