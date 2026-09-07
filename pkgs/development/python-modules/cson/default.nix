@@ -6,13 +6,15 @@
   speg,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cson";
   version = "0.8";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-7owBZvzR9ReJiHGX4+g1Sse++jlvwpcGvOta8l7cngE=";
   };
 
@@ -28,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ xworld21 ];
   };
-}
+})
