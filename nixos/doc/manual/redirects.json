@@ -2420,6 +2420,9 @@
   "sec-running-nixos-tests-interactively": [
     "index.html#sec-running-nixos-tests-interactively"
   ],
+  "sec-nixos-test-interactive-graphical": [
+    "index.html#sec-nixos-test-interactive-graphical"
+  ],
   "sec-nixos-test-shell-access": [
     "index.html#sec-nixos-test-shell-access"
   ],
@@ -2446,6 +2449,9 @@
   ],
   "chap-developing-the-test-driver": [
     "index.html#chap-developing-the-test-driver"
+  ],
+  "sec-test-driver-display-architecture": [
+    "index.html#sec-test-driver-display-architecture"
   ],
   "sec-test-the-test-framework": [
     "index.html#sec-test-the-test-framework"
