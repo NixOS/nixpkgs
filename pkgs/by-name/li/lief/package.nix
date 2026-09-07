@@ -31,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
+    "dev"
     "py"
   ];
 
