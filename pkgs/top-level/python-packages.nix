@@ -22946,6 +22946,8 @@ self: super: with self; {
 
   zalgolib = callPackage ../development/python-modules/zalgolib { };
 
+  zai-sdk = callPackage ../development/python-modules/zai-sdk { };
+
   zamg = callPackage ../development/python-modules/zamg { };
 
   zammad-py = callPackage ../development/python-modules/zammad-py { };
