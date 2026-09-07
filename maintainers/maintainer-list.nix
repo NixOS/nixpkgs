@@ -20060,11 +20060,6 @@
     matrix = "@n4ch7:n3831.net";
     name = "N4CH723HR3R";
   };
-  NCBlizzard = {
-    name = "NCBlizzard";
-    github = "NCBlizzard";
-    githubId = 173630231;
-  };
   n8henrie = {
     name = "Nathan Henrie";
     email = "nate@n8henrie.com";
@@ -20325,6 +20320,11 @@
     github = "nbsp";
     githubId = 57151943;
     name = "aoife cassidy";
+  };
+  NCBlizzard = {
+    name = "NCBlizzard";
+    github = "NCBlizzard";
+    githubId = 173630231;
   };
   ncfavier = {
     email = "n@monade.li";
