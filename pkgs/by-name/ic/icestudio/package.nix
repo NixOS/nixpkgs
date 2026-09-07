@@ -13,13 +13,13 @@
 
 let
   # Use unstable because it has improvements for finding python
-  version = "0.12-unstable-2026-06-29";
+  version = "1.0.0.PRw-20260821-unstable-2026-08-20";
 
   src = fetchFromGitHub {
     owner = "FPGAwars";
     repo = "icestudio";
-    rev = "8607f7ef538c4b447362b2ab90aece2fbb7d1b75";
-    hash = "sha256-8KYwlOKKmTQza71cVpssOGJJNwIUvMHMYcokhK/LhEo=";
+    rev = "989c552b687993f54a5928f693e3502de02e29f8";
+    hash = "sha256-GTsLt3IgqXCkGJZGmvWslHL8gqm/0tnRJWlceV64asA=";
   };
 
   collection = fetchurl {
@@ -30,7 +30,7 @@ let
   app = buildNpmPackage {
     pname = "icestudio-app";
     inherit version src;
-    npmDepsHash = "sha256-Dpnx23iq0fK191DXFgIfnbi+MLEp65H6eL81Icg4H4U=";
+    npmDepsHash = "sha256-twDndqYV+aXtkcBC/jnZCJ0p9L24AgRORz4yDTledH0=";
     sourceRoot = "${src.name}/app";
     dontNpmBuild = true;
     installPhase = ''
@@ -51,7 +51,7 @@ in
 buildNpmPackage rec {
   pname = "icestudio";
   inherit version src;
-  npmDepsHash = "sha256-QHd4d0BQXqAs/4WnnawCW/tJvSbWOz++RwomNG4XBuU=";
+  npmDepsHash = "sha256-4B5dpU7LV/2ga7gbu/TdwOYZL/HDm4fi9TXNcZEyeOI=";
   npmFlags = [
     # Use the legacy dependency resolution, with less strict version
     # requirements for transative dependencies
@@ -72,10 +72,7 @@ buildNpmPackage rec {
     # grunt avoids downloading it
     install -m444 -D ${collection} cache/collection/collection-default.zip
 
-    ./node_modules/.bin/grunt getcollection
-
     # Use grunt to distribute package
-    # TODO: support aarch64
     ./node_modules/.bin/grunt dist \
         --platform=none    `# skip platform-specific steps` \
         --dont-build-nwjs  `# use the nwjs package shipped by Nix` \
@@ -96,12 +93,13 @@ buildNpmPackage rec {
 
     install -Dm644 ${desktopItem}/share/applications/icestudio.desktop -t $out/share/applications
 
-    makeWrapper ${nwjs}/bin/nw $out/bin/${pname} \
+    makeWrapper ${nwjs}/bin/nw $out/bin/icestudio \
         --add-flags $out \
         --prefix PATH : "${python3}/bin"
 
     runHook postInstall
   '';
+
   passthru.updateScript = unstableGitUpdater {
     tagPrefix = "v";
   };
