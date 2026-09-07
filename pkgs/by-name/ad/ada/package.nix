@@ -54,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "WHATWG-compliant and fast URL parser written in modern C";
     homepage = "https://github.com/ada-url/ada";
