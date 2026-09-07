@@ -86,6 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
     export GOCACHE="$TMPDIR/go-cache"
+    # Darwin build directories vary between builds; keep their paths out of Wasm.
+    export RUSTFLAGS="''${RUSTFLAGS-} --remap-path-prefix=$NIX_BUILD_TOP=/build"
     node utils/gen.js
     pnpm --filter=vercel... --recursive run build
     runHook postBuild
@@ -111,7 +113,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
     node packages/cli/scripts/pin-builders.mjs pin
     pnpm config set --location=project injectWorkspacePackages true
-    pnpm --filter=vercel --prod deploy --offline "$out/lib/vercel"
+    # Hoisting avoids virtual-store directory names derived from build paths.
+    pnpm --filter=vercel --prod deploy --offline --config.node-linker=hoisted "$out/lib/vercel"
+    # Keep the pinned manifest rather than deploy's absolute workspace references.
+    cp packages/cli/package.json "$out/lib/vercel/package.json"
+    # Remove pnpm metadata containing timestamps and build-directory paths.
+    rm -f "$out/lib/vercel/node_modules/.modules.yaml" \
+      "$out/lib/vercel/node_modules/.pnpm-workspace-state-v1.json" \
+      "$out/lib/vercel/node_modules/.pnpm/lock.yaml" \
+      "$out/lib/vercel/pnpm-lock.yaml"
     mkdir -p "$out/bin"
     # Project builds need node/npm on PATH; updates are managed by Nix.
     makeWrapper ${lib.getExe nodejs} "$out/bin/vercel" \
