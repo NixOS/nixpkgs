@@ -83,10 +83,6 @@ in
         ];
         description = ''
           Any additional flags passed to {command}`nixos-rebuild`.
-
-          If you are using flakes and use a local repo you can add
-          {command}`[ "--update-input" "nixpkgs" "--commit-lock-file" ]`
-          to update nixpkgs.
         '';
       };
 
