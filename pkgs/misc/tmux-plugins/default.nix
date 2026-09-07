@@ -522,12 +522,12 @@ in
   minimal-tmux-status = mkTmuxPlugin {
     pluginName = "minimal-tmux-status";
     rtpFilePath = "minimal.tmux";
-    version = "0-unstable-2025-06-04";
+    version = "0-unstable-2026-09-07";
     src = fetchFromGitHub {
       owner = "semi710";
       repo = "minimal-tmux-status";
-      rev = "de2bb049a743e0f05c08531a0461f7f81da0fc72";
-      hash = "sha256-0gXtFVan+Urb79AjFOjHdjl3Q73m8M3wFSo3ZhjxcBA=";
+      rev = "4e6fa277e6e3aa0bd7849012ecd6b70258627920";
+      hash = "sha256-4JE+08Ppb/OcIWKWeH0mjp7bO2SCosVHWTJ/fEwt1QU=";
     };
     meta = {
       description = "Minimal tmux status line plugin with prefix key indicator";
@@ -537,7 +537,7 @@ in
         quickly identify the prefix state. Designed to be minimal in appearance and dependencies, it is ideal for users
         who want essential information without clutter.
       '';
-      homepage = "https://github.com/semi710/minimal-tmux-status.git";
+      homepage = "https://github.com/semi710/minimal-tmux-status";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
         semi710
