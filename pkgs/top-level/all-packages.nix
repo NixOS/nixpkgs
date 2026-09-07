@@ -5375,6 +5375,8 @@ with pkgs;
 
   ansi2html = with python3.pkgs; toPythonApplication ansi2html;
 
+  apollo-cuda = apollo.override { cudaSupport = true; };
+
   appstream = callPackage ../development/libraries/appstream { };
 
   argparse-manpage = with python3Packages; toPythonApplication argparse-manpage;
