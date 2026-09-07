@@ -441,6 +441,7 @@ in
     inherit runTest;
     package = pkgs.clickhouse-lts;
   };
+  clickhouse-sqlalchemy = runTest ./clickhouse-sqlalchemy.nix;
   cliproxyapi = runTest ./cliproxyapi.nix;
   cloud-init = runTest ./cloud-init.nix;
   cloud-init-hostname = runTest ./cloud-init-hostname.nix;
