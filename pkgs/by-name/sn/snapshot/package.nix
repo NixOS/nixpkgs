@@ -18,19 +18,17 @@
   gtk4,
   libadwaita,
   libcamera,
-  lcms2,
-  libseccomp,
   pipewire,
   gnome,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snapshot";
-  version = "50.0";
+  version = "51.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/snapshot/${lib.versions.major finalAttrs.version}/snapshot-${finalAttrs.version}.tar.xz";
-    hash = "sha256-7J2vmIPrkDMJEbtR5rae7YydvdVDjoZK3JDuVaX+nu0=";
+    hash = "sha256-EJh3LdDkKlRLkQuOpXNGdeRDMvAJOr0riBzNAQI1+so=";
   };
 
   cargoVendorDir = "vendor";
@@ -60,15 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     libadwaita
     libcamera # for the gstreamer plugin
-    lcms2
-    libseccomp
     pipewire # for device provider
   ];
 
   postPatch = ''
     substituteInPlace src/meson.build --replace-fail \
-      "'cp', cargo_target / rust_target / meson.project_name()" \
-      "'cp', cargo_target / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()"
+      "cargo_target / rust_target / meson.project_name()," \
+      "cargo_target / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name(),"
   '';
 
   preFixup = ''
