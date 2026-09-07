@@ -27,15 +27,18 @@
   geocode-glib_2,
   tzdata,
   writeText,
+  sqlite,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-maps";
-  version = "50.3";
+  version = "51.rc";
+
+  strictDeps = true;
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-maps/${lib.versions.major finalAttrs.version}/gnome-maps-${finalAttrs.version}.tar.xz";
-    hash = "sha256-CJyo4Vq9cqyD2zhs7xnOveBe74t26qyBkGpLBTVUTiw=";
+    hash = "sha256-e4rRxNaNZwL63LWuk1NTByRK6rsBXEosL4ZctFGtdLo=";
   };
 
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -69,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     librest
     libsecret
     libsoup_3
+    sqlite
   ];
 
   mesonFlags = [
