@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   mock,
   pytestCheckHook,
   six,
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "configobj";
   version = "5.0.9";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DiffSK";
@@ -19,7 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-duPCGBaHCXp4A6ZHLnyL1SZtR7K4FJ4hs5wCE1V9WB4=";
   };
 
-  propagatedBuildInputs = [ six ];
+  build-system = [ setuptools ];
+
+  dependencies = [ six ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
