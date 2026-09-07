@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-console";
-  version = "50.0";
+  version = "51.rc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-console/${lib.versions.major finalAttrs.version}/gnome-console-${finalAttrs.version}.tar.xz";
-    hash = "sha256-5JUCB/BUfmpsDxjuv89uGhBGHqsPL64KrlErEETHrG4=";
+    hash = "sha256-j3Lg3hfHA0TKhDuJYYpSWf6ThJqeg3FUv41ahGgzPIY=";
   };
 
   nativeBuildInputs = [
