@@ -216,7 +216,7 @@ stdenv.mkDerivation {
   # Make all modules source trees writable
   + ''
     addModule() {
-      local dst="$NIX_BUILD_TOP/$(basename "$2")"
+      local dst="$NIX_BUILD_TOP/$(stripHash "$2")"
       cp --recursive "$2" "$dst"
       chmod --recursive +w "$dst"
       appendToVar configureFlags "$1=$dst"
@@ -281,7 +281,7 @@ stdenv.mkDerivation {
   ''
   + preInstall;
 
-  disallowedReferences = map (m: m.src) modules;
+  disallowedReferences = modules;
 
   stripDebugList = [
     "bin"
