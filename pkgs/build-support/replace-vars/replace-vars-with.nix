@@ -1,5 +1,21 @@
 { lib, stdenvNoCC }:
 
+let
+  inherit (lib)
+    attrsToList
+    concatLists
+    concatStringsSep
+    defaultTo
+    escapeShellArg
+    mapAttrsToList
+    ;
+  # We use `--replace-fail` instead of `--subst-var-by` so that if the thing isn't there, we fail.
+  subst-var-by = name: value: [
+    "--replace-fail"
+    (escapeShellArg "@${name}@")
+    (escapeShellArg (defaultTo "@${name}@" value))
+  ];
+in
 /**
   `replaceVarsWith` is a wrapper around the [bash function `substitute`](https://nixos.org/manual/nixpkgs/stable/#fun-substitute)
   in the stdenv. It allows for terse replacement of names in the specified path, while checking
@@ -57,17 +73,10 @@
 }@attrs:
 
 let
-  # We use `--replace-fail` instead of `--subst-var-by` so that if the thing isn't there, we fail.
-  subst-var-by = name: value: [
-    "--replace-fail"
-    (lib.escapeShellArg "@${name}@")
-    (lib.escapeShellArg (lib.defaultTo "@${name}@" value))
-  ];
-
-  substitutions = lib.concatLists (lib.mapAttrsToList subst-var-by replacements);
+  substitutions = concatLists (mapAttrsToList subst-var-by replacements);
 
   left-overs = map ({ name, ... }: name) (
-    builtins.filter ({ value, ... }: value == null) (lib.attrsToList replacements)
+    builtins.filter ({ value, ... }: value == null) (attrsToList replacements)
   );
 
   optionalAttrs =
@@ -91,7 +100,7 @@ let
           mkdir -p $out/$dir
       fi
 
-      substitute "$src" "$target" ${lib.concatStringsSep " " substitutions}
+      substitute "$src" "$target" ${concatStringsSep " " substitutions}
 
       if test -n "$isExecutable"; then
           chmod +x $target
@@ -105,7 +114,7 @@ let
       let
         lookahead =
           if builtins.length left-overs == 0 then "" else "(?!${builtins.concatStringsSep "|" left-overs}@)";
-        regex = lib.escapeShellArg "@${lookahead}[a-zA-Z_][0-9A-Za-z_'-]*@";
+        regex = escapeShellArg "@${lookahead}[a-zA-Z_][0-9A-Za-z_'-]*@";
       in
       ''
         runHook preCheck

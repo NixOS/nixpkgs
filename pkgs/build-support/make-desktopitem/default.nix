@@ -72,7 +72,22 @@
   When adding a new value, don't forget to update the Version field below!
   See https://specifications.freedesktop.org/desktop-entry-spec/latest
 */
-lib.makeOverridable (
+let
+  inherit (lib)
+    any
+    attrNames
+    boolToString
+    concatStringsSep
+    filter
+    hasInfix
+    isBool
+    isList
+    makeOverridable
+    mapAttrsToList
+    pipe
+    ;
+in
+makeOverridable (
   {
     name, # The name of the desktop file
     destination ? "/share/applications",
@@ -111,8 +126,8 @@ lib.makeOverridable (
       value:
       if value == null then
         null
-      else if builtins.isBool value then
-        lib.boolToString value
+      else if isBool value then
+        boolToString value
       else
         throw "makeDesktopItem: value must be a boolean or null!";
 
@@ -120,14 +135,14 @@ lib.makeOverridable (
     # Technically, it's possible to escape semicolons in values with \;, but this is currently not implemented.
     renderList =
       key: value:
-      if !builtins.isList value then
+      if !isList value then
         throw "makeDesktopItem: value for ${key} must be a list!"
-      else if builtins.any (item: lib.hasInfix ";" item) value then
+      else if any (item: hasInfix ";" item) value then
         throw "makeDesktopItem: values in ${key} list must not contain semicolons!"
       else if value == [ ] then
         null
       else
-        builtins.concatStringsSep ";" value;
+        concatStringsSep ";" value;
 
     # The [Desktop Entry] section of the desktop file, as an attribute set.
     # Please keep in spec order.
@@ -146,7 +161,7 @@ lib.makeOverridable (
       "Exec" = exec;
       "Path" = path;
       "Terminal" = boolOrNullToString terminal;
-      "Actions" = renderList "actions" (builtins.attrNames actions);
+      "Actions" = renderList "actions" (attrNames actions);
       "MimeType" = renderList "mimeTypes" mimeTypes;
       "Categories" = renderList "categories" categories;
       "Implements" = renderList "implements" implements;
@@ -168,10 +183,10 @@ lib.makeOverridable (
     # Null values are intentionally left out.
     renderSection =
       sectionName: attrs:
-      lib.pipe attrs [
-        (lib.mapAttrsToList renderLine)
-        (builtins.filter (v: v != null))
-        (builtins.concatStringsSep "\n")
+      pipe attrs [
+        (mapAttrsToList renderLine)
+        (filter (v: v != null))
+        (concatStringsSep "\n")
         (section: ''
           [${sectionName}]
           ${section}
@@ -193,7 +208,7 @@ lib.makeOverridable (
         "Exec" = exec;
       };
     renderAction = name: attrs: renderSection "Desktop Action ${name}" (preprocessAction attrs);
-    actionsRendered = lib.mapAttrsToList renderAction actions;
+    actionsRendered = mapAttrsToList renderAction actions;
 
     extension = if type == "Directory" then "directory" else "desktop";
     content = [ mainSectionRendered ] ++ actionsRendered;
@@ -201,7 +216,7 @@ lib.makeOverridable (
   writeTextFile {
     name = "${name}.${extension}";
     destination = "${destination}/${name}.${extension}";
-    text = builtins.concatStringsSep "\n" content;
+    text = concatStringsSep "\n" content;
     checkPhase = ''${buildPackages.desktop-file-utils}/bin/desktop-file-validate "$target"'';
   }
 )
