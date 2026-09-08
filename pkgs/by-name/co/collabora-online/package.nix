@@ -5,6 +5,7 @@
   fetchFromGitHub,
   fetchpatch,
   fetchNpmDeps,
+  fontconfig,
   lib,
   libcap,
   libpng,
@@ -20,11 +21,15 @@
   rsync,
   stdenv,
   zstd,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "collabora-online";
   version = "25.04.9-4";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "CollaboraOnline";
@@ -35,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoreconfHook
+    fontconfig
     nodejs
     npmHooks.npmConfigHook
     pkg-config
@@ -62,8 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-setcap"
     "--disable-werror"
     "--enable-silent-rules"
-    "--with-lo-path=${libreoffice-collabora}/lib/collaboraoffice"
-    "--with-lokit-path=${libreoffice-collabora.src}/include"
+    "--with-lo-path=${finalAttrs.passthru.libreoffice}/lib/collaboraoffice"
+    "--with-lokit-path=${finalAttrs.passthru.libreoffice.src}/include"
   ];
 
   patches = [
@@ -71,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    cp ${./package-lock.json} ${finalAttrs.npmRoot}/package-lock.json
+    cp ${./package-lock.json} ${finalAttrs.env.npmRoot}/package-lock.json
 
     patchShebangs browser/util/*.py coolwsd-systemplate-setup scripts/*
     substituteInPlace configure.ac --replace-fail '/usr/bin/env python3' python3
@@ -82,20 +88,24 @@ stdenv.mkDerivation (finalAttrs: {
     cp etc/ca-chain.cert.pem etc/cert.pem etc/key.pem $out/etc/coolwsd
   '';
 
-  npmDeps = fetchNpmDeps {
-    unpackPhase = "true";
-    # TODO: Use upstream `npm-shrinkwrap.json` once it's fixed
-    # https://github.com/CollaboraOnline/online/issues/9644
-    postPatch = ''
-      cp ${./package-lock.json} package-lock.json
-    '';
-    hash = "sha256-c78C5yt/RH4jmjZpaBskV+1u4wTTVJoWjFqq6eNUVOA=";
-  };
+  env = {
+    npmDeps = fetchNpmDeps {
+      unpackPhase = "true";
+      # TODO: Use upstream `npm-shrinkwrap.json` once it's fixed
+      # https://github.com/CollaboraOnline/online/issues/9644
+      postPatch = ''
+        cp ${./package-lock.json} package-lock.json
+      '';
+      hash = "sha256-c78C5yt/RH4jmjZpaBskV+1u4wTTVJoWjFqq6eNUVOA=";
+    };
 
-  npmRoot = "browser";
+    npmRoot = "browser";
+  };
 
   passthru = {
     libreoffice = libreoffice-collabora; # Used by NixOS module.
+    updateScript = ./update.sh;
+    tests = nixosTests.collabora;
   };
 
   meta = {
