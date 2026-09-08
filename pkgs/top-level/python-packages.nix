@@ -6841,6 +6841,8 @@ self: super: with self; {
 
   giskard-core = callPackage ../development/python-modules/giskard-core { };
 
+  giskard-llm = callPackage ../development/python-modules/giskard-llm { };
+
   git-annex-adapter = callPackage ../development/python-modules/git-annex-adapter { };
 
   git-dummy = callPackage ../development/python-modules/git-dummy { };
