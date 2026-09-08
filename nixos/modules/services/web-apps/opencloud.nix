@@ -28,8 +28,18 @@ in
           Use `pkgs.opencloud-production` package for the production release.
         '';
       };
-      webPackage = lib.mkPackageOption pkgs [ "opencloud" "web" ] { };
-      idpWebPackage = lib.mkPackageOption pkgs [ "opencloud" "idp-web" ] { };
+      webPackage = lib.mkOption {
+        type = lib.types.package;
+        default = config.services.opencloud.package.web;
+        defaultText = "config.services.opencloud.package.web";
+        description = "The web package to use.";
+      };
+      idpWebPackage = lib.mkOption {
+        type = lib.types.package;
+        default = config.services.opencloud.package.idp-web;
+        defaultText = "config.services.opencloud.package.idp-web";
+        description = "The idp-web package to use.";
+      };
 
       user = lib.mkOption {
         type = types.str;
