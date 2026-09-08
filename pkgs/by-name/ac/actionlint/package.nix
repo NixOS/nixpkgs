@@ -5,34 +5,70 @@
   installShellFiles,
   makeWrapper,
   python3Packages,
-  ronn,
+  pandoc,
   shellcheck,
+  nix-update-script,
+  gitMinimal,
+  bash,
+  zsh,
+  fish,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "actionlint";
-  version = "1.7.12";
+  version = "1.17.0";
 
   subPackages = [ "cmd/actionlint" ];
 
   src = fetchFromGitHub {
-    owner = "rhysd";
+    owner = "kjanat";
     repo = "actionlint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mACSb3sYQtkijzk10mPi2ndy3zakonW1jlU7D/DV+SM=";
+    hash = "sha256-OA6Pzb/DVh3wcF/KFdnAtALBO2YSsch/L28EzZnLxqM=";
   };
 
-  vendorHash = "sha256-bPhjeC6xcemV4KZx+Kc/Wbdz6Be6WsiolFTrJ7TURA0=";
+  env.CGO_ENABLED = 0;
+  ldflags = [
+    "-s"
+    "-w"
+    "-X actionlint.kjanat.dev.version=${finalAttrs.version}"
+    "-X actionlint.kjanat.dev.installedFrom=Nix"
+  ];
+
+  vendorHash = "sha256-PVEf1pJvwQu/2dFS0YhWoXahnTqvqmRdYjVfujjs04k=";
 
   nativeBuildInputs = [
     makeWrapper
-    ronn
+    pandoc
     installShellFiles
   ];
 
+  nativeCheckInputs = [
+    gitMinimal
+    bash
+    zsh
+    fish
+    shellcheck
+    python3Packages.pyflakes
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+    export GOFLAGS=''${GOFLAGS//-trimpath/}
+    go test . ./cmd/... ./internal/...
+    runHook postCheck
+  '';
+
   postInstall = ''
-    ronn --roff man/actionlint.1.ronn
+    make man/actionlint.1 PANDOC='pandoc --standalone --from=markdown-smart ${
+      if lib.versionOlder pandoc.version "3.8" then "--no-highlight" else "--syntax-highlighting=none"
+    }'
     installManPage man/actionlint.1
+    installShellCompletion --cmd actionlint \
+      --bash <("$out/bin/actionlint" -completion bash) \
+      --zsh <("$out/bin/actionlint" -completion zsh) \
+      --fish <("$out/bin/actionlint" -completion fish)
+    install -Dm644 actionlint.schema.json "$out/share/actionlint/actionlint.schema.json"
     wrapProgram "$out/bin/actionlint" \
       --prefix PATH : ${
         lib.makeBinPath [
@@ -42,18 +78,14 @@ buildGoModule (finalAttrs: {
       }
   '';
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X github.com/rhysd/actionlint.version=${finalAttrs.version}"
-  ];
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://rhysd.github.io/actionlint/";
+    homepage = "https://kjanat.github.io/actionlint/";
     description = "Static checker for GitHub Actions workflow files";
-    changelog = "https://github.com/rhysd/actionlint/raw/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/kjanat/actionlint/raw/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ voidlily ];
     mainProgram = "actionlint";
   };
 })
