@@ -43,6 +43,12 @@ outer@{
   preConfigure ? "",
   preInstall ? "",
   postInstall ? "",
+  stripDebugList ? [
+    "bin"
+    "sbin"
+    "lib"
+    "modules"
+  ],
   meta ? null,
   nginx-doc ? outer.nginx-doc,
   passthru ? { },
@@ -281,12 +287,7 @@ stdenv.mkDerivation {
 
   disallowedReferences = modules;
 
-  stripDebugList = [
-    "bin"
-    "sbin"
-    "lib"
-    "modules"
-  ];
+  inherit stripDebugList;
 
   postInstall =
     let
