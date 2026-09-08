@@ -3,7 +3,10 @@
   lib,
   fetchFromGitHub,
   cmake,
-  open62541,
+  # TODO Unpin dependency and remove open62541_1_4 when open62541pp is ported
+  # to open62541 >= 1.5.0.
+  # See https://github.com/open62541pp/open62541pp/issues/695
+  open62541_1_4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    open62541
+    open62541_1_4
   ];
 
   meta = {
