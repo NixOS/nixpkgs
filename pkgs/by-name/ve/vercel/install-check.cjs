@@ -6,7 +6,7 @@ const os = require('node:os');
 const { execFileSync } = require('node:child_process');
 
 const cliRequire = createRequire(
-  path.join(process.env.out, 'lib/vercel/package.json'),
+  path.join(process.env.out, 'lib/node_modules/vercel/package.json'),
 );
 const buildUtilsRequire = createRequire(
   cliRequire.resolve('@vercel/build-utils'),
@@ -14,6 +14,15 @@ const buildUtilsRequire = createRequire(
 const analysis = buildUtilsRequire('@vercel/python-analysis');
 
 async function main() {
+  // These native dependencies are loaded lazily by the CLI and its builders.
+  for (const name of ['@napi-rs/keyring', 'oxc-parser', 'oxc-transform', 'rolldown']) {
+    cliRequire(name);
+  }
+  assert.equal(
+    cliRequire('esbuild').transformSync('const x: number = 1', { loader: 'ts' }).code,
+    'const x = 1;\n',
+  );
+
   // Loading the CLI does not instantiate the lazily loaded Wasm component.
   // Exercise it from the installed dependency tree to check its assets and imports.
   assert.equal(
