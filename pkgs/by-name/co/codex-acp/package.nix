@@ -2,6 +2,7 @@
   lib,
   stdenv,
   callPackage,
+  codex,
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
@@ -62,13 +63,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doCheck = false;
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    tests.codex = codex;
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "An ACP-compatible coding agent powered by Codex";
     homepage = "https://github.com/zed-industries/codex-acp";
     changelog = "https://github.com/zed-industries/codex-acp/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ caniko ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
