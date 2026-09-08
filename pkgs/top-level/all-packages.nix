@@ -606,7 +606,7 @@ with pkgs;
             if stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isWindows then
               false
             else
-              old.gssSupport or true; # `? true` is the default
+              old.gssSupport or true; # `? false` is the default
           libkrb5 = buildPackages.krb5.override {
             fetchurl = stdenv.fetchurlBoot;
             inherit pkg-config perl openssl;
@@ -614,6 +614,7 @@ with pkgs;
             byacc = buildPackages.byacc.override { fetchurl = stdenv.fetchurlBoot; };
             keyutils = buildPackages.keyutils.override { fetchurl = stdenv.fetchurlBoot; };
           };
+          scpSupport = !stdenv.hostPlatform.isSunOS && !stdenv.hostPlatform.isCygwin;
           nghttp2 = buildPackages.nghttp2.override {
             fetchurl = stdenv.fetchurlBoot;
             inherit pkg-config;
