@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   openssl,
   pkg-config,
   libnl,
@@ -17,37 +16,25 @@
   unprivileged ? true,
 }:
 
-stdenv.mkDerivation rec {
-  version = "2.11";
+stdenv.mkDerivation (finalAttrs: {
+  version = "2.12";
 
   pname = "wpa_supplicant";
 
   src = fetchurl {
-    url = "https://w1.fi/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-kS6gb3TjCo42+7aAZNbN/yGNjVkdsPxddd7myBrH/Ao=";
+    url = "https://w1.fi/releases/wpa_supplicant-${finalAttrs.version}.tar.gz";
+    hash = "sha256-COI5N+FtAVXlXKsrUfUfvhDYChqpHE4VRCZFBZtzfvY=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "revert-change-breaking-auth-broadcom.patch";
-      url = "https://w1.fi/cgit/hostap/patch/?id=41638606054a09867fe3f9a2b5523aa4678cbfa5";
-      hash = "sha256-X6mBbj7BkW66aYeSCiI3JKBJv10etLQxaTRfRgwsFmM=";
-      revert = true;
-    })
-    (fetchpatch {
-      name = "suppress-ctrl-event-signal-change.patch";
-      url = "https://w1.fi/cgit/hostap/patch/?id=c330b5820eefa8e703dbce7278c2a62d9c69166a";
-      hash = "sha256-5ti5OzgnZUFznjU8YH8Cfktrj4YBzsbbrEbNvec+ppQ=";
-    })
-    (fetchpatch {
-      name = "ensure-full-key-match";
-      url = "https://git.w1.fi/cgit/hostap/patch/?id=1ce37105da371c8b9cf3f349f78f5aac77d40836";
-      hash = "sha256-leCk0oexNBZyVK5Q5gR4ZcgWxa0/xt/aU+DssTa0UwE=";
-    })
-    ./unsurprising-ext-password.patch
     ./multiple-configs.patch
+    ./revert-change-breaking-auth-broadcom.patch
   ]
   ++ lib.optional unprivileged ./unprivileged-daemon.patch;
+
+  strictDeps = true;
+  __structuredAttrs = true;
+  enableParallelBuilding = true;
 
   # TODO: Patch epoll so that the dbus actually responds
   # TODO: Figure out how to get privsep working, currently getting SIGBUS
@@ -178,6 +165,6 @@ stdenv.mkDerivation rec {
     maintainers = [
     ];
     platforms = lib.platforms.linux;
-    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "w1.fi" version;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "w1.fi" finalAttrs.version;
   };
-}
+})
