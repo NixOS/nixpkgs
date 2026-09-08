@@ -1,4 +1,5 @@
 {
+  stdenv,
   buildGoModule,
   fetchurl,
   lib,
@@ -10,21 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "goredo";
-  version = "2.6.0";
+  version = "2.10.0";
 
   src = fetchurl {
     url = "http://www.goredo.stargrave.org/download/goredo-${finalAttrs.version}.tar.zst";
-    hash = "sha256-XTL/otfCKC55TsUBBVors2kgFpOFh+6oekOOafOhcUs=";
+    hash = "sha256-kinv+9it0nK0ia8S2W8AN8FWy1dRN9nNzVeG8n4aY2Q=";
   };
-
-  patches = [
-    # Adapt tests to Linux/nix-build requirements:
-    ./fix-tests.diff
-  ];
 
   nativeBuildInputs = [ zstd ];
 
-  nativeCheckInputs =  [
+  nativeCheckInputs = [
     python3
     perl
   ];
@@ -38,12 +34,20 @@ buildGoModule (finalAttrs: {
   modRoot = "./src";
   subPackages = [ "." ];
 
+  postPatch = ''
+    substituteInPlace t/goredo-executable-rel.t \
+      --replace-fail "#!/usr/bin/env perl" "#!${lib.getExe perl}"
+  '';
+
   postBuild = ''
     ( cd $GOPATH/bin; ./goredo -symlinks )
     cd ..
   '';
 
   doCheck = true;
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    rm t/apenwarr-105-sympath.t
+  '';
   checkPhase = ''
     runHook preCheck
     export PATH=$GOPATH/bin:$PATH
