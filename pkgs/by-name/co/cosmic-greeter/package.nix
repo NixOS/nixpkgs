@@ -16,6 +16,10 @@
   nix-update-script,
   nixosTests,
   orca,
+  withLogind ? true,
+  withSystemd ? true,
+  withUpower ? true,
+  withNetworkManager ? true,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -37,7 +41,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-vHR9go8/iVUT7oBV8h+mmBvhi2oSKNBKtV0uoDOr6go=";
 
-  cargoBuildFlags = [ "--all" ];
+  buildNoDefaultFeatures = true;
+
+  cargoBuildFlags = [ "--workspace" ];
+
+  buildFeatures =
+    lib.optionals withLogind [ "logind" ]
+    ++ lib.optionals withSystemd [ "systemd" ]
+    ++ lib.optionals withUpower [ "upower" ]
+    ++ lib.optionals withNetworkManager [ "networkmanager" ];
 
   separateDebugInfo = true;
   __structuredAttrs = true;
