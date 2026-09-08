@@ -1004,6 +1004,9 @@ in
             optional (cfg.networkNamespace != null && (cfg.privateNetwork || cfg.interfaces != [ ]))
               "containers.${name}.networkNamespace is mutally exclusive to containers.${name}.privateNetwork and containers.${name}.interfaces."
             ++
+              optional (cfg.flake != null && !config.nix.enable)
+                "${options.containers}.${strings.escapeNixIdentifier name}.flake is defined, so the container is built with nix on the host, but ${options.nix.enable} is disabled"
+            ++
               optional
                 (
                   opt.config.isDefined
