@@ -6,6 +6,8 @@
   ghc,
   all-cabal-hashes,
   buildHaskellPackages,
+  # See `alwaysSplice` in ./make-package-set.nix.
+  alwaysSplice ? false,
   compilerConfig ? (self: super: { }),
   packageSetConfig ? (self: super: { }),
   overrides ? (self: super: { }),
@@ -33,6 +35,7 @@ let
       extensible-self
       all-cabal-hashes
       buildHaskellPackages
+      alwaysSplice
       ;
   };
 
