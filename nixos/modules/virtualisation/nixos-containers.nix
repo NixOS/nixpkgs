@@ -996,15 +996,24 @@ in
 
       assertions =
         let
+          # Host Nix config info
+
           mapper =
-            name: cfg:
+            name:
+            { cfg, opt }:
             optional (cfg.networkNamespace != null && (cfg.privateNetwork || cfg.interfaces != [ ]))
               "containers.${name}.networkNamespace is mutally exclusive to containers.${name}.privateNetwork and containers.${name}.interfaces."
             ++
-              optional (cfg.config.nix.enable && cfg.config.nix.daemon.enable && !config.nix.daemon.enable)
+              optional
+                (
+                  opt.config.isDefined
+                  && cfg.config.nix.enable
+                  && cfg.config.nix.daemon.enable
+                  && !config.nix.daemon.enable
+                )
                 "${options.containers}.${strings.escapeNixIdentifier name} requires a Nix daemon but the host does not provided it, as option ${options.nix.daemon.enable} is disabled";
         in
-        mkMerge (mapAttrsToList mapper config.containers);
+        mkMerge (lib.attrValues (lib.modules.mapAttrsOfSubmodule mapper options.containers));
     }
 
     (mkIf (config.boot.enableContainers) (
