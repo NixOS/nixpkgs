@@ -6839,6 +6839,8 @@ self: super: with self; {
 
   gipc = callPackage ../development/python-modules/gipc { };
 
+  giskard-agents = callPackage ../development/python-modules/giskard-agents { };
+
   giskard-core = callPackage ../development/python-modules/giskard-core { };
 
   giskard-llm = callPackage ../development/python-modules/giskard-llm { };
