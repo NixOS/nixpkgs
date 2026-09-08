@@ -15441,6 +15441,8 @@ self: super: with self; {
 
   pymodbus-repl = callPackage ../development/python-modules/pymodbus-repl { };
 
+  pymodbustcp = callPackage ../development/python-modules/pymodbustcp { };
+
   pymodes = callPackage ../development/python-modules/pymodes { };
 
   pymonctl = callPackage ../development/python-modules/pymonctl { };
