@@ -1013,7 +1013,14 @@ in
                 )
                 "${options.containers}.${strings.escapeNixIdentifier name} requires a Nix daemon but the host does not provided it, as option ${options.nix.daemon.enable} is disabled";
         in
-        mkMerge (lib.attrValues (lib.modules.mapAttrsOfSubmodule mapper options.containers));
+        (lib.concatMap
+          # This could be done in mapper but causes a reformat
+          (map (msg: {
+            assertion = false;
+            message = msg;
+          }))
+          (lib.attrValues (lib.modules.mapAttrsOfSubmodule mapper options.containers))
+        );
     }
 
     (mkIf (config.boot.enableContainers) (
