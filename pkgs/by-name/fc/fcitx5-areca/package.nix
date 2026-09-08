@@ -2,6 +2,7 @@
   lib,
   stdenv,
   cmake,
+  dbus,
   fcitx5,
   fetchFromGitHub,
   go,
@@ -11,13 +12,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-areca";
-  version = "4.0.3";
+  version = "5.2.4";
 
   src = fetchFromGitHub {
     owner = "xhkzeroone";
     repo = "ArecaIME";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tjNKRU3yTIOGxkpE2RSuTa7lLZtQvFcUQ0ELCQyinVc=";
+    hash = "sha256-KVcvIYeDgsstRJ3OaXv1EhjCZA0cfae8H1/uVktY6DA=";
     fetchSubmodules = true;
   };
 
@@ -33,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    dbus
     fcitx5
   ];
 
