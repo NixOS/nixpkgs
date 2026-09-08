@@ -58,6 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace docs/reference/libnice/meson.build \
       --replace-fail "version: '<1.30', " ""
+  ''
+  # Manually remove failing tests until we have disabledTests for meson
+  # The failures are due to the sandbox restricting network sockets
+  + ''
+    substituteInPlace tests/meson.build \
+      --replace-fail "'test-slow-resolving'," "" \
+      --replace-fail "'test-set-port-range'," ""
   '';
 
   nativeBuildInputs = [
@@ -100,9 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib_debug = false;
   };
 
-  # Tests are flaky
-  # see https://github.com/NixOS/nixpkgs/pull/53293#issuecomment-453739295
-  doCheck = false;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
     updateScript = nix-update-script { };
