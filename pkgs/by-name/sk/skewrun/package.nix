@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "skewrun";
-  version = "1.1.1";
+  version = "1.2.0";
 
   __structuredAttrs = true;
 
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "JVBotelho";
     repo = "skewrun";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C4LF2am3gnQb+k9cdfB2xcszZ5imRBwz0ldP0gjfXRs=";
+    hash = "sha256-FGEjAJnxROi+M7GVJdCkfYJCE8PnSjxw+3dw879Jezg=";
   };
 
-  cargoHash = "sha256-hGJvirVLtP1ondLxJuyfiV7Y0+pGt8Pu3lzLAhRYtoo=";
+  cargoHash = "sha256-Lh7CqwFjG1bR9kN0fhCE/FYAhO5wHvlBYxiBRxU/Xio=";
 
   buildInputs = [
     libfaketime
