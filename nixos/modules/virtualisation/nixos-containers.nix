@@ -1014,7 +1014,7 @@ in
                   && cfg.config.nix.daemon.enable
                   && !config.nix.daemon.enable
                 )
-                "${options.containers}.${strings.escapeNixIdentifier name} requires a Nix daemon but the host does not provided it, as option ${options.nix.daemon.enable} is disabled";
+                "${options.containers}.${strings.escapeNixIdentifier name} requires a Nix daemon but the host does not provide it, as option ${options.nix.daemon.enable} is disabled";
         in
         (lib.concatMap
           # This could be done in mapper but causes a reformat
