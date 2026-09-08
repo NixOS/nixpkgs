@@ -45,6 +45,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/huggingface/kernels";
     changelog = "https://github.com/huggingface/kernels/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ osbm ];
+    maintainers = with lib.maintainers; [ alexbunt ];
   };
 })
