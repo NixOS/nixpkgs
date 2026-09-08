@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  nixosTests,
 }:
 
 buildGoModule (finalAttrs: {
@@ -30,7 +31,10 @@ buildGoModule (finalAttrs: {
   # bind: operation not permitted
   __darwinAllowLocalNetworking = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = nixosTests.go-avahi-cname;
+  };
 
   meta = {
     description = "Lightweight mDNS publisher of subdomains for your machine";
