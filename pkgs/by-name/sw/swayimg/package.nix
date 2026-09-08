@@ -13,6 +13,7 @@
   exiv2,
   fontconfig,
   giflib,
+  ffmpeg,
   libheif,
   libjpeg,
   libwebp,
@@ -34,13 +35,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swayimg";
-  version = "5.5";
+  version = "5.6";
 
   src = fetchFromGitHub {
     owner = "artemsen";
     repo = "swayimg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PaxVcuEafLdUETSG78lGSaDukPv/2m1TUbfvpBZTT40=";
+    hash = "sha256-R+tdrKnQXLMu+nrcZRiH9SoiMYoV2LTFHS+jYXLJb7g=";
   };
 
   strictDeps = true;
@@ -69,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     exiv2
     fontconfig
     giflib
+    ffmpeg
     libheif
     libjpeg
     libwebp
