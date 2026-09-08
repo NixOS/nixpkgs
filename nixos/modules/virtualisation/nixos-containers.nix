@@ -998,6 +998,24 @@ in
         let
           # Host Nix config info
 
+          # Host Nix config info
+          inherit
+            (rec {
+              disabledOpts = filter (x: !x.value) [
+                options.nix.enable
+                options.nix.daemon.enable
+              ];
+              hostNixSocketEnabled = disabledOpts == [ ];
+              hostNixSocketIsDisabled =
+                if lib.length disabledOpts == 1 then
+                  "host option ${lib.head disabledOpts} is disabled"
+                else
+                  "host options ${lib.concatStringsSep " and " disabledOpts} are disabled";
+            })
+            hostNixSocketEnabled
+            hostNixSocketIsDisabled
+            ;
+
           mapper =
             name:
             { cfg, opt }:
@@ -1009,12 +1027,12 @@ in
             ++
               optional
                 (
-                  opt.config.isDefined
+                  !hostNixSocketEnabled
+                  && opt.config.isDefined
                   && cfg.config.nix.enable
                   && cfg.config.nix.daemon.enable
-                  && !config.nix.daemon.enable
                 )
-                "${options.containers}.${strings.escapeNixIdentifier name} requires a Nix daemon but the host does not provide it, as option ${options.nix.daemon.enable} is disabled";
+                "${options.containers}.${strings.escapeNixIdentifier name} requires a Nix daemon but the host does not provide it, as ${hostNixSocketIsDisabled}";
         in
         (lib.concatMap
           # This could be done in mapper but causes a reformat
