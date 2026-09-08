@@ -902,6 +902,7 @@
   ./services/misc/fstrim.nix
   ./services/misc/gammu-smsd.nix
   ./services/misc/geoipupdate.nix
+  ./services/misc/ghorg.nix
   ./services/misc/gitea.nix
   ./services/misc/gitlab/container-registry.nix
   ./services/misc/gitlab/default.nix
