@@ -10,6 +10,7 @@
   coreutils,
   e2fsprogs,
   fetchzip,
+  fetchpatch,
   fio,
   gawk,
   keyutils,
@@ -45,6 +46,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-b2bL8t1I+kOryAvq3pYTVhx+LwIDf26xdHl7Wdq+Mw8=";
   };
 
+  patches = [
+    # fix build w/ glibc-2.44
+    (fetchpatch {
+      url = "https://lore.kernel.org/fstests/20260813150846.280498-1-zlang@kernel.org/raw";
+      hash = "sha256-NOPMo0cdKKoPMwG53BdTe+G+vDXb+2ICGYFRs4g+edQ=";
+    })
+  ];
+
   nativeBuildInputs = [
     autoconf
     automake
@@ -65,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "format" ];
   enableParallelBuilding = true;
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace Makefile \
       --replace-fail "cp include/install-sh ." "cp -f include/install-sh ."
 
