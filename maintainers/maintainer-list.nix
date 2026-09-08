@@ -9836,6 +9836,13 @@
     githubId = 11352905;
     name = "Friedrich Altheide";
   };
+  friendliness = {
+    github = "Friendliness";
+    githubId = 62225953;
+    email = "friendliness@friendliness.me";
+    name = "Friendliness";
+    keys = [ { fingerprint = "3892 0508 730E 04A9 981E  17AD B189 AC84 3D18 D74A"; } ];
+  };
   frlan = {
     email = "frank@frank.uvena.de";
     github = "frlan";
