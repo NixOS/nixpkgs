@@ -13,6 +13,7 @@
 buildNpmPackage (finalAttrs: {
   pname = "vercel";
   version = "59.11.7";
+  __structuredAttrs = true;
 
   src = fetchzip {
     url = "https://registry.npmjs.org/vercel/-/vercel-${finalAttrs.version}.tgz";
