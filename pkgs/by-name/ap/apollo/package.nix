@@ -10,6 +10,7 @@
   autoPatchelfHook,
   autoAddDriverRunpath,
   udevCheckHook,
+  nixosTests,
   # system deps
   boost,
   curl,
@@ -213,6 +214,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = ./updater.sh;
+    tests = { inherit (nixosTests) apollo; };
   };
 
   meta = with lib; {
