@@ -8,7 +8,10 @@
 
 stdenv.mkDerivation {
   pname = "i3lock-fancy-rapid";
-  version = "unstable-2021-04-21";
+  version = "0-unstable-2021-04-21";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "yvbbrjdr";
