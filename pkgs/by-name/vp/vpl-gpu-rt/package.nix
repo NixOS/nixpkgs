@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vpl-gpu-rt";
-  version = "26.3.0";
+  version = "26.3.3";
 
   outputs = [
     "out"
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "intel";
     repo = "vpl-gpu-rt";
     rev = "intel-onevpl-${finalAttrs.version}";
-    hash = "sha256-7hHeQ5oo6e+rCOSH05TGCUPWR6eO/RUidiTQTF9Ga6Q=";
+    hash = "sha256-NF5Q31lOCmNxrRm692NdB7sGm7YotSpIR5UtzSnqSnk=";
   };
 
   nativeBuildInputs = [
