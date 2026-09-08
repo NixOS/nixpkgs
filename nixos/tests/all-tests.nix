@@ -425,6 +425,7 @@ in
     inherit runTest;
     package = pkgs.clickhouse-lts;
   };
+  clickhouse-sqlalchemy = runTest ./clickhouse-sqlalchemy.nix;
   cloud-init = runTest ./cloud-init.nix;
   cloud-init-hostname = runTest ./cloud-init-hostname.nix;
   cloudcompare = import ./cloudcompare.nix { inherit pkgs runTest; };
