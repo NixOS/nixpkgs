@@ -16,7 +16,9 @@ buildGoModule (finalAttrs: {
     hash = "sha256-wFM7jLBEqKFCBSUIghTXbxPmlKHr/ZxAZN1izuTq7Co=";
   };
 
-  vendorHash = "sha256-Gs90dEuk2uq2MbT/05g4x73FPOmZhJjWBxLmxe37vlg=";
+  vendorHash = "sha256-LuWGOiLPLwPuRNmg6rXRnk0O37i8glgq+xf28wKSoVo=";
+
+  proxyVendor = true;
 
   env.CGO_ENABLED = 0; # Compiles a pure statically linked Go binary.
 
