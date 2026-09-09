@@ -218,7 +218,6 @@ lib.makeOverridable (
           });
 
     buildFlags = [
-      "KBUILD_BUILD_VERSION=1-NixOS"
       target
       "scripts_gdb"
     ]
@@ -325,6 +324,7 @@ lib.makeOverridable (
     makeFlags = [
       "O=$(buildRoot)"
       "KBUILD_BUILD_TIMESTAMP=@$(SOURCE_DATE_EPOCH)"
+      "KBUILD_BUILD_VERSION=1-NixOS"
 
       "DTC_FLAGS=-@"
 
