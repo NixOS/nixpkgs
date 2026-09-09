@@ -13,7 +13,7 @@
 #
 # Parameters:
 # - `configuration`: The thing to actually turn into a secrets configuration.
-# - `phgsTarget`: the package set to use for the target system. Will fallback
+# - `pkgsTarget`: the package set to use for the target system. Will fallback
 #   to the package set the configuration was evaluated with (for NixOS
 #   configurations) or to `pkgsDefault` otherwise.
 # - `pkgsDefault`: a default for when the `pkgsTarget` is not otherwise
