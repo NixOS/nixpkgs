@@ -3,7 +3,6 @@
   stdenv,
   yarn-berry_4,
   nodejs,
-  cypress,
   dart-sass,
   funkwhale,
 }:
@@ -25,22 +24,24 @@ stdenv.mkDerivation (finalAttrs: {
     # https://dev.funkwhale.audio/funkwhale/funkwhale/-/blob/develop/front/package.json?ref_type=heads#L139
     ./yarn-4.14-support.patch
 
-    # when singing up the ui errors with a length not found in the console
+    # when signing up the ui errors with a length not found in the console
     ./signup-bug.patch
   ];
 
-  # TODO update script
-  # yarn-berry-fetcher missing-hashes $(nix-build -A funkwhale.frontend.src)/front/yarn.lock >pkgs/by-name/fu/funkwhale/missing-hashes.json
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src patches sourceRoot;
     missingHashes = ./missing-hashes.json;
-    hash = "sha256-qY0yJk6IY8srLNJWSj4eBTuGoVFOBX8cc1QLODP8qMA=";
+    hash = "sha256-ZZ3P+s3Ymgdiprafhb6mIqMTZRqQT29ljtXIBrs0MV4=";
   };
+
+  # There are basic cypress tests which are testing the demo deployment
+  # So it requires a running funkwhale server to test it, we do it without cypress in nixos test
+  doCheck = false;
 
   env = {
     CYPRESS_INSTALL_BINARY = 0;
-    CYPRESS_RUN_BINARY = lib.getExe cypress;
+    #CYPRESS_RUN_BINARY = lib.getExe cypress;
   };
 
   nativeBuildInputs = [
