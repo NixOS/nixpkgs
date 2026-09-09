@@ -8,10 +8,8 @@
   redisTestHook,
   funkwhale,
   runCommand,
-  typesense,
   curl,
 
-  nix-update-script,
   nixosTests,
 }:
 let
@@ -19,7 +17,7 @@ let
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "funkwhale";
-  version = "2.0.2";
+  version = "2.0.11";
   pyproject = true;
 
   strictDeps = true;
@@ -30,7 +28,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     owner = "funkwhale";
     repo = "funkwhale";
     tag = finalAttrs.version;
-    hash = "sha256-VTY9t+K3ne44rTDTctHMJALFpakdl+pld3t4/qHJm5Q=";
+    hash = "sha256-kccargPGmH/1bY2TPS3vQ5iYL6pzKIH5THIe/Q+dqFk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/api";
@@ -71,6 +69,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       django-filter
       django-oauth-toolkit
       django-redis
+      django-silk
       django-storages
       django-versatileimagefield
       djangorestframework
@@ -163,6 +162,9 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     runHook postCheck
   '';
 
+  # importlib.metadata.PackageNotFoundError: No package metadata was found for funkwhale
+  dontCheckPythonMetadata = true;
+
   passthru = {
     inherit python;
     tests = { inherit (nixosTests) funkwhale; };
@@ -176,12 +178,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
 
     frontend = callPackage ./frontend.nix { };
 
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--subpackage"
-        "frontend"
-      ];
-    };
+    updateScript = ./update.sh;
   };
 
   meta = {
