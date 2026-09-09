@@ -2,8 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   pytestCheckHook,
+  cattrs,
   fontmath,
   fonttools,
   glyphslib,
@@ -46,12 +46,17 @@ buildPythonPackage (finalAttrs: {
 
   optional-dependencies = {
     pathops = [ skia-pathops ];
+    lxml = [ ];
+    mutatormath = [ ];
     autohint = [ ttfautohint-py ];
     json = ufolib2.optional-dependencies.json;
     repacker = fonttools.optional-dependencies.repacker;
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ finalAttrs.passthru.optional-dependencies.autohint;
+  nativeCheckInputs = [
+    pytestCheckHook
+    cattrs
+  ] ++ finalAttrs.passthru.optional-dependencies.autohint;
 
   pythonImportsCheck = [ "fontmake" ];
 
