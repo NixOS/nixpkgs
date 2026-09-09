@@ -9,7 +9,7 @@
     };
 
     # Example of how one can override the host package set!
-    secretConfigurations.differentArch =
+    secretsConfigurations.differentArch =
       let
         pkgsHost = inputs.nixpkgs.legacyPackages.x86_64-linux;
       in
