@@ -285,7 +285,6 @@ lib.makeOverridable (
       "INSTALL_MOD_STRIP=$(if $(dontStrip),,1)"
     ]
     ++ optionals buildDTBs [
-      "dtbs_install"
       "INSTALL_DTBS_PATH=${placeholder "out"}/dtbs"
     ];
 
@@ -526,7 +525,8 @@ lib.makeOverridable (
           "install"
       )
     ]
-    ++ lib.optionals isModular [ "modules_install" ];
+    ++ lib.optionals isModular [ "modules_install" ]
+    ++ lib.optionals buildDTBs [ "dtbs_install" ];
 
     karch = stdenv.hostPlatform.linuxArch;
 
