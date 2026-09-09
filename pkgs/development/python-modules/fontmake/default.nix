@@ -65,6 +65,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/googlefonts/fontmake";
     changelog = "https://github.com/googlefonts/fontmake/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ jopejoe1 ];
   };
 })
