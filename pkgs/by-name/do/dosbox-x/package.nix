@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   gitUpdater,
+  writers,
   alsa-lib,
   autoreconfHook,
   ffmpeg,
@@ -27,6 +28,14 @@
   zlib,
 }:
 
+let
+  check-dosbox-conf = writers.writeText "check-dosbox.conf" ''
+    [autoexec]
+    MOUNT C .
+
+    VER > C:\BLUB
+  '';
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dosbox-x";
   version = "2026.08.31";
@@ -110,6 +119,26 @@ stdenv.mkDerivation (finalAttrs: {
       mv $out/bin/dosbox-x $out/Applications/dosbox-x.app/Contents/MacOS/dosbox-x
       makeWrapper $out/Applications/dosbox-x.app/Contents/MacOS/dosbox-x $out/bin/dosbox-x
     '';
+
+  # Can't personally check Darwin anymore
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    env \
+      SDL_AUDIODRIVER=dummy \
+      SDL_VIDEODRIVER=dummy \
+      $out/bin/dosbox-x \
+        -nopromptfolder -nogui \
+        -exit \
+        -machine pc98 \
+        -conf ${check-dosbox-conf}
+
+    grep -q 'Reported DOS version' BLUB
+
+    runHook postInstallCheck
+  '';
 
   passthru = {
     tests.version = testers.testVersion {
