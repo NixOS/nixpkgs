@@ -29,7 +29,9 @@ stdenvNoCC.mkDerivation rec {
   # ttfautohint: unrecognized option '--epoch'
   postPatch = ''
     substituteInPlace fonttools_script.py \
-      --replace-fail 'print("exec hinting", options_)' 'options_.pop("epoch", None)'
+      --replace-fail 'print("exec hinting", options_)' 'options_.pop("epoch", None)' \
+      --replace-fail 'fix_cmap_table(xml, style, variant)' \
+                     'pass  # FontTools >= 4.58.1 already preserves cmap format 14'
   '';
 
   nativeBuildInputs = [
