@@ -1478,10 +1478,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-Ei/8x4SvIkfwJys0hNCmUD+JaZdmYHUbFYncz65S4CE=",
+                    "hash": "sha256-SLK6HCWzRGZRSkENI2lacq04E1yBxtthChsDAmAOgXg=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v43.5.1"
+                    "tag": "v43.6.0"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -1823,10 +1823,10 @@
             },
             "src/third_party/electron_node": {
                 "args": {
-                    "hash": "sha256-wronyuFX5JzPJgMKWh8FaBx/hG6jopj/OdwyBxRhPGM=",
+                    "hash": "sha256-X7aZh0QOm79anmh77QRiHGRSi8TERuWnWXrcPqDYPjY=",
                     "owner": "nodejs",
                     "repo": "node",
-                    "tag": "v24.19.0"
+                    "tag": "v24.20.0"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -2797,7 +2797,7 @@
             }
         },
         "electron_yarn_data": {
-            "hash": "sha256-Y2TE5iMVUgXqqKojb90yzcCfFAhEy7STB53yYQQanPM=",
+            "hash": "sha256-0ECf2IVgznQNlVMiHqAJCt8lBXXsFIJUekaFnVS+cJ4=",
             "missing_hashes": {
                 "@oxfmt/binding-android-arm-eabi@npm:0.42.0": "42c08d87ce491086843070241f8777fa2cb968f4a08f67b3f6c33a8f67e0b3eac50eae146daede743e90e3bc32326951c5188814eea02e9c3e4a9764a4b492ba",
                 "@oxfmt/binding-android-arm64@npm:0.42.0": "73e6609498d05c655c6a435af9f3e4f341137c260c7ae27fbb0377573574ca5200bd9f187aa90d442879733bbd0c4e91ae023c3b4579c9a57413a0b2922c023a",
@@ -2840,8 +2840,8 @@
             }
         },
         "modules": "148",
-        "node": "24.19.0",
-        "version": "43.5.1"
+        "node": "24.20.0",
+        "version": "43.6.0"
     },
     "44": {
         "chrome": "152.0.7977.54",
