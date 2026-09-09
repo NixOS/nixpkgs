@@ -45,9 +45,9 @@
     machine.succeed("nixos-secrets collect-garbage -f /etc/nixos/config2.nix ")
 
     # "derived" depends on "greeting"
-    t.assertIn("Successfully updated 1 secret(s).", machine.succeed("nixos-secrets generate -f /etc/nixos/config2.nix -g derived"))
-    t.assertIn("Successfully updated 2 secret(s).", machine.succeed("nixos-secrets generate -f /etc/nixos/config2.nix -g greeting"))
-    t.assertIn("Successfully updated 2 secret(s).", machine.succeed("nixos-secrets generate -f /etc/nixos/config2.nix -g greeting -g derived"))
+    t.assertIn("Successfully updated 1 secret(s)", machine.succeed("nixos-secrets generate -f /etc/nixos/config2.nix -g derived"))
+    t.assertIn("Successfully updated 2 secret(s)", machine.succeed("nixos-secrets generate -f /etc/nixos/config2.nix -g greeting"))
+    t.assertIn("Successfully updated 2 secret(s)", machine.succeed("nixos-secrets generate -f /etc/nixos/config2.nix -g greeting -g derived"))
 
     # Local deployments
     machine.succeed("mkdir /tmp/system")

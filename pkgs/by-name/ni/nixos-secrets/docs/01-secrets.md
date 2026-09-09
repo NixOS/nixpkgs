@@ -8,7 +8,7 @@ A _secret_ represents a collection of files, usually (but not necessarily) gener
 
 The files associated with each secret must be handled by a so-called _store backend_. A single `nixos-secrets` configuration can contain multiple store backends. For now, think of backends as little programs that handle the storage and retrieval (and possibly also deployment!) of the secrets one puts in.
 
-There are many ways to provide a nixos-secrets configuration to the CLI, but for now we'll start with the most basic of them all. That is, by using the provided [NixOS module](../../../../nixos/modules/security/secrets/default.nix). Since `nixos-secrets` is still in its early stages, the module must be imported manually:
+There are many ways to provide a nixos-secrets configuration to the CLI, but for now we'll start with the most basic of them all. That is, by using the provided [NixOS module](../../../../nixos/modules/security/secrets/default.nix). The module must be imported manually:
 
 ```nix
 { modulesPath, ... }:
