@@ -480,7 +480,6 @@ lib.makeOverridable (
         '';
       in
       ''
-        installFlags+=("-j$NIX_BUILD_CORES")
         export HOME=${installkernel}
       '';
 
