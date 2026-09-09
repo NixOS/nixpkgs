@@ -14,23 +14,23 @@
 }:
 let
   pname = "beeper";
-  version = "4.3.89";
+  version = "4.3.104";
 
   inherit (stdenv.hostPlatform) system;
 
   sources = {
     x86_64-linux = fetchurl {
       url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-x86_64.AppImage";
-      hash = "sha256-p95gWugC7BQDeoiibAxem7Jw3GCuv91NYif7n+QfXFk=";
+      hash = "sha256-a0IHIVBVm6j1Kf3sgA+AD9UfpuEkGuTLYORFQkeyw+k=";
     };
     aarch64-linux = fetchurl {
       url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-arm64.AppImage";
-      hash = "sha256-oLxNWidGKJ8F11dxpmI6lzvhvgA+dcPFFz4tenN/YKM=";
+      hash = "sha256-azuuKSl0zsqHjVGNR8Gk2j+RvwDcmak5u++BS2Ov0Zo=";
     };
     aarch64-darwin = fetchurl {
       # Zip unpacks cleanly with unzip; the download API redirects to a .dmg.
       url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-arm64-mac.zip";
-      hash = "sha256-9paEYt7MFn5iyUacvKhOwerXtXztwcdmt/vH/r1pLE4=";
+      hash = "sha256-7yKLaZYmidfiW/h9mRWXODeBx0bYvaK5uPqMYsuXOIw=";
     };
   };
 
