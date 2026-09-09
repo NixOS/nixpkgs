@@ -47,6 +47,27 @@ Certain CUDA capabilities are not targeted by default, including capabilities be
 
 The `cudaForwardCompat` boolean configuration option determines whether PTX support for future hardware is enabled.
 
+### Pre-built CUDA packages {#cuda-pre-built-packages}
+
+NVIDIA CUDA packages are generally unfree. `cache.nixos.org` does not normally provide pre-built store paths for them. This same constraint applies to CUDA-enabled packages whose closures depend on proprietary NVIDIA software. This includes packages such as PyTorch and MAGMA, which because of their large transitive closures, typically require considerable time and resources to build.
+
+Flox is [one of the providers](https://developer.nvidia.com/blog/developers-can-now-get-cuda-directly-from-their-favorite-third-party-platforms/) that NVIDIA works with to redistribute CUDA libraries and runtime packages. Flox also distributes PyTorch, MAGMA, and other CUDA-enabled packages whose Nix store closures include proprietary NVIDIA software. This agreement allows Flox to publish pre-built store paths that are not normally available from `cache.nixos.org`.
+
+Flox builds the [release-cuda jobset](https://github.com/nixos/nixpkgs/blob/master/pkgs/top-level/release-cuda.nix) and pushes the store paths to its public binary cache.
+
+| | |
+| --- | --- |
+| Cache URL | `https://cache.flox.dev` |
+| Public Key | `flox-cache-public-1:7F4OyH7ZCnFhcze3fJdfyXYLQw/aV7GEed86nQ7IsOs=` |
+
+Which store paths are available in the cache depends on which Nixpkgs revisions Flox builds against. Flox currently evaluates and builds CUDA packages against revisions from its own Nixpkgs fork at `https://github.com/flox/nixpkgs`. This repo tracks the upstream `nixos-unstable` branch across four Flox-maintained branches (`unstable`, `staging`, `stable`, and `lts`). These branch names describe _Flox’s_ Nixpkgs update schedules, _not_ the stability of the software they reference. In general Flox’s `unstable` branch tracks upstream `nixos-unstable` most closely, sampling and updating on a daily schedule.
+
+Notably, Flox does not currently build against Nixpkgs [release channels](#how-channels-work), so users that pin to revisions from these channels are unlikely to get a cache hit from the Flox binary cache. Because different Nixpkgs revisions can produce different store paths for the same package, using a Nixpkgs revision that Flox builds against significantly increases the likelihood of a cache hit.
+
+For instructions on configuring Nix to use the Flox binary cache, maximizing the likelihood of CUDA cache hits, and controlling which builds query the cache, see [CUDA packages in the Flox Catalog and binary cache](https://flox.dev/docs/concepts/cuda-catalog-and-cache) in Flox’s documentation.
+
+**Note**: The pre-built CUDA software in the Flox binary cache is based entirely on the work of the [Nixpkgs CUDA maintainers](https://nixos.org/community/teams/cuda/). The CUDA team packages NVIDIA CUDA software for Nixpkgs and tests CUDA-enabled packages against CUDA dependencies to verify that they build and link correctly. CUDA-on-Nix would not be a reality without this team.
+
 ### Modifying CUDA package sets {#cuda-modifying-cuda-package-sets}
 
 CUDA package sets are defined in `pkgs/top-level/cuda-packages.nix`. A CUDA package set is created by `callPackage`-ing `pkgs/development/cuda-modules/default.nix` with an attribute set `manifests`, containing NVIDIA manifests for each redistributable. The manifests for supported redistributables are available through `_cuda.manifests` and live in `pkgs/development/cuda-modules/_cuda/manifests`.
