@@ -121,6 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "KICAD_SANITIZE_ADDRESS" sanitizeAddress)
     (cmakeBool "KICAD_SANITIZE_THREADS" sanitizeThreads)
     (cmakeBool "KICAD_SPICE" (!(stable && !withNgspice)))
+    (cmakeBool "KICAD_UPDATE_CHECK" false)
   ]
   ++ optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     (cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'qa_spice|qa_cli'")

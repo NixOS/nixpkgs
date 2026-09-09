@@ -189,7 +189,7 @@ stdenv.mkDerivation rec {
     "-DSQLITE3_INCLUDE_DIR=${sqlite.dev}/include"
     "-DUSE_OPENCL=OFF"
   ]
-  ++ lib.optional withServer [
+  ++ lib.optionals withServer [
     "-DWITH_SERVER=True"
     "-DQGIS_CGIBIN_SUBDIR=${placeholder "out"}/lib/cgi-bin"
   ]

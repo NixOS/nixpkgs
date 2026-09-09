@@ -204,5 +204,5 @@ in
     ]
   );
 
-  meta.maintainers = with lib.maintainers; [ yvnth ];
+  meta.maintainers = [ ];
 }

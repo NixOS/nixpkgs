@@ -55,7 +55,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       faukah
       psibi
-      yvnth
     ];
     mainProgram = "tombi";
   };

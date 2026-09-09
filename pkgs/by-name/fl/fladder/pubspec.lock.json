@@ -121,14 +121,14 @@
       "version": "0.1.4"
     },
     "audio_session": {
-      "dependency": "transitive",
+      "dependency": "direct main",
       "description": {
         "name": "audio_session",
-        "sha256": "8f96a7fecbb718cb093070f868b4cdcb8a9b1053dce342ff8ab2fde10eb9afb7",
+        "sha256": "f9e7711a0e24ca8b40f5d7ac374c3c6e55016f3157912badd18199cdbbca5c4d",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.2.2"
+      "version": "0.2.4"
     },
     "auto_route": {
       "dependency": "direct main",
@@ -1589,7 +1589,7 @@
       "description": {
         "path": "media_kit",
         "ref": "main",
-        "resolved-ref": "34bde583caa800bf2beb06ec6287c943eda24296",
+        "resolved-ref": "cb56b5a6149f1e51086eba473c7e48041c54ab12",
         "url": "https://github.com/DonutWare/media-kit.git"
       },
       "source": "git",
@@ -1600,7 +1600,7 @@
       "description": {
         "path": "libs/android/media_kit_libs_android_video",
         "ref": "HEAD",
-        "resolved-ref": "34bde583caa800bf2beb06ec6287c943eda24296",
+        "resolved-ref": "cb56b5a6149f1e51086eba473c7e48041c54ab12",
         "url": "https://github.com/DonutWare/media-kit.git"
       },
       "source": "git",
@@ -1611,7 +1611,7 @@
       "description": {
         "path": "libs/ios/media_kit_libs_ios_video",
         "ref": "HEAD",
-        "resolved-ref": "34bde583caa800bf2beb06ec6287c943eda24296",
+        "resolved-ref": "cb56b5a6149f1e51086eba473c7e48041c54ab12",
         "url": "https://github.com/DonutWare/media-kit.git"
       },
       "source": "git",
@@ -1622,7 +1622,7 @@
       "description": {
         "path": "libs/linux/media_kit_libs_linux",
         "ref": "HEAD",
-        "resolved-ref": "34bde583caa800bf2beb06ec6287c943eda24296",
+        "resolved-ref": "cb56b5a6149f1e51086eba473c7e48041c54ab12",
         "url": "https://github.com/DonutWare/media-kit.git"
       },
       "source": "git",
@@ -1633,7 +1633,7 @@
       "description": {
         "path": "libs/macos/media_kit_libs_macos_video",
         "ref": "HEAD",
-        "resolved-ref": "34bde583caa800bf2beb06ec6287c943eda24296",
+        "resolved-ref": "cb56b5a6149f1e51086eba473c7e48041c54ab12",
         "url": "https://github.com/DonutWare/media-kit.git"
       },
       "source": "git",
@@ -1644,7 +1644,7 @@
       "description": {
         "path": "libs/universal/media_kit_libs_video",
         "ref": "main",
-        "resolved-ref": "34bde583caa800bf2beb06ec6287c943eda24296",
+        "resolved-ref": "cb56b5a6149f1e51086eba473c7e48041c54ab12",
         "url": "https://github.com/DonutWare/media-kit.git"
       },
       "source": "git",
@@ -1655,7 +1655,7 @@
       "description": {
         "path": "libs/windows/media_kit_libs_windows_video",
         "ref": "HEAD",
-        "resolved-ref": "34bde583caa800bf2beb06ec6287c943eda24296",
+        "resolved-ref": "cb56b5a6149f1e51086eba473c7e48041c54ab12",
         "url": "https://github.com/DonutWare/media-kit.git"
       },
       "source": "git",
@@ -1666,7 +1666,7 @@
       "description": {
         "path": "media_kit_video",
         "ref": "main",
-        "resolved-ref": "34bde583caa800bf2beb06ec6287c943eda24296",
+        "resolved-ref": "cb56b5a6149f1e51086eba473c7e48041c54ab12",
         "url": "https://github.com/DonutWare/media-kit.git"
       },
       "source": "git",
@@ -1941,6 +1941,17 @@
       },
       "source": "hosted",
       "version": "26.1.0"
+    },
+    "pip": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "0.0.3.1",
+        "resolved-ref": "3eaa141d09dbd7fca995bf6c535c055aa173dba8",
+        "url": "https://github.com/DonutWare/pip.git"
+      },
+      "source": "git",
+      "version": "0.0.3"
     },
     "platform": {
       "dependency": "transitive",

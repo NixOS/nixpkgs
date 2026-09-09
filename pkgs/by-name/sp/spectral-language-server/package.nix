@@ -5,7 +5,7 @@
   fetchYarnDeps,
   yarnConfigHook,
   fetchFromGitHub,
-  typescript_5,
+  typescript_7,
   jq,
   fetchpatch,
 }:
@@ -29,7 +29,7 @@ let
     };
 
     nativeBuildInputs = [
-      typescript_5
+      typescript_7
       jq
       yarnConfigHook
     ];
@@ -37,6 +37,8 @@ let
     postPatch = ''
       cp server/tsconfig.json server/tsconfig.json.bak
       jq '.compilerOptions += {"module": "NodeNext", "moduleResolution": "NodeNext"}' server/tsconfig.json.bak > server/tsconfig.json
+      cp tsconfig.base.json tsconfig.base.json.bak
+      jq 'del(.compilerOptions.baseUrl)' tsconfig.base.json.bak > tsconfig.base.json
     '';
 
     buildPhase = ''

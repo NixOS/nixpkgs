@@ -54,6 +54,6 @@ buildGo127Module (finalAttrs: {
     license = lib.licenses.gpl3Only;
     mainProgram = "pokego";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ yvnth ];
+    maintainers = [ ];
   };
 })

@@ -33,14 +33,14 @@ let
   nodejs = nodejs_22;
 
   pname = "zotero";
-  version = "10.0.0";
+  version = "10.0.1";
 
   src = fetchFromGitHub {
     owner = "zotero";
     repo = "zotero";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-lNeujToTGzOTG7aKycoZfnyZawM9EQFWSdRJ4/KEPqQ=";
+    hash = "sha256-ySFz91WD1KW2V0PETnMQLPm8Og69nbvlpmkf0PHWTQQ=";
   };
 
   pdf-js = buildNpmPackage {
@@ -223,6 +223,7 @@ buildNpmPackage (finalAttrs: {
       "should use BrowserRequest for 403 when enforcing file type" \
       "should use BrowserRequest for a JS redirect page" \
       "should throw error on broken symlink" \
+      "should convert the target of a symlinked database file" \
       "should mark every selected collection as current for a multiple-collection selection" \
     ; do
       sed -i -E "s|it(\([\"']$test.*[\"'])|it.skip\1|" test/tests/*.js

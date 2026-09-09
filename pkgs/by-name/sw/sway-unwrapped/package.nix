@@ -139,10 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/swaywm/sway/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
-    maintainers = with lib.maintainers; [
-      c6rg0
-      yvnth
-    ];
+    maintainers = with lib.maintainers; [ c6rg0 ];
     mainProgram = "sway";
   };
 })

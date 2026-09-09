@@ -1,5 +1,6 @@
 {
   lib,
+  buildPackages,
   autoAddDriverRunpath,
   cmake,
   fetchFromGitHub,
@@ -81,6 +82,8 @@ let
     vulkan-headers
     vulkan-loader
   ];
+
+  buildCc = buildPackages.stdenv.cc;
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
@@ -118,6 +121,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   # `glslc` is used at build time to compile the shaders
   ++ optionals vulkanSupport [
     shaderc
+  ];
+
+  depsBuildBuild = optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # llama-ui-embed under tools/ui needs a host compiler
+    buildCc
   ];
 
   buildInputs =
@@ -185,6 +193,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ++ optionals metalSupport [
     (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
     (cmakeBool "LLAMA_METAL_EMBED_LIBRARY" true)
+  ]
+  ++ optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    (cmakeFeature "HOST_CXX_COMPILER" (lib.getExe' buildCc "${buildCc.targetPrefix}c++"))
   ];
 
   postInstall = optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

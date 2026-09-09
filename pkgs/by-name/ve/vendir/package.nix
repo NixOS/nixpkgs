@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "vendir";
-  version = "0.46.1";
+  version = "0.46.2";
 
   src = fetchFromGitHub {
     owner = "carvel-dev";
     repo = "vendir";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-lct7hjzOXezU4jDcT2cljngjQXxjook3od/AGm+GiR0=";
+    sha256 = "sha256-1S6rxh0YD0Iui++CqiB0yQWDmU8l3p70B/h+6bjgSQ0=";
   };
 
   vendorHash = null;

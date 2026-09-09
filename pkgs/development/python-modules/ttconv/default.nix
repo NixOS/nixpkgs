@@ -6,14 +6,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "ttconv";
-  version = "1.2.2";
+  version = "1.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sandflow";
     repo = "ttconv";
     tag = finalAttrs.version;
-    hash = "sha256-2kBEkDX612+H6W0BdtlDScgsgXl/sHRi+jo1vDxTJ7k=";
+    hash = "sha256-UtZeTk305r08LnDet42O4MYBeEhkKSRQjiLk/7Gfx+4=";
   };
 
   build-system = [ setuptools ];

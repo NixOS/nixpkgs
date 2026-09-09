@@ -7800,7 +7800,8 @@
       ];
     "vizio" =
       ps: with ps; [
-      ]; # missing inputs: vizaio
+        vizaio
+      ];
     "vlc_telnet" =
       ps: with ps; [
         aiovlc
@@ -9429,6 +9430,7 @@
     "vilfo"
     "vistapool"
     "vivotek"
+    "vizio"
     "vlc_telnet"
     "vodafone_station"
     "voicerss"

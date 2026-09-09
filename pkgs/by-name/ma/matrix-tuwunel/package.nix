@@ -140,7 +140,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "url_preview"
     "zstd_compression"
   ]
-  ++ lib.optional enableJemalloc [
+  ++ lib.optionals enableJemalloc [
     "jemalloc"
     "jemalloc_conf"
   ]

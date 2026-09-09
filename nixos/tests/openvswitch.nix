@@ -50,7 +50,8 @@
 
   testScript = # python
     ''
-      start_all()
+      node1.start(allow_reboot=True)
+      node2.start()
       node1.wait_for_unit("ovsdb.service")
       node1.wait_for_unit("ovs-vswitchd.service")
       node2.wait_for_unit("ovsdb.service")
@@ -80,5 +81,20 @@
           node1.wait_for_unit("vs0-netdev.service")
 
           check_marker_flow()
+
+      with subtest("Transient ports are removed after reboot"):
+          node1.succeed(
+              "ovs-vsctl --no-wait add-br transient-test-br"
+              " -- add-port transient-test-br transient-test-port"
+              " -- set Interface transient-test-port type=internal"
+              " -- set Port transient-test-port other_config:transient=true"
+          )
+          node1.succeed("ovs-vsctl port-to-br transient-test-port")
+
+          node1.reboot()
+          node1.wait_for_unit("ovsdb.service")
+          node1.wait_for_unit("ovs-vswitchd.service")
+
+          node1.fail("ovs-vsctl port-to-br transient-test-port")
     '';
 }

@@ -48,6 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "/usr/lib/zoneinfo" "" \
       --replace "/usr/local/etc/zoneinfo" ""
   ''
+  + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    substituteInPlace unix/configure unix/configure.in \
+      --replace-fail '`uname -s`' '${stdenv.hostPlatform.uname.system}'
+  ''
   # A shared Cygwin build tries to configure the windows build system
   # to separately build these DLLs so it can load them later. That's
   # not gonna work for us --- in Nixpkgs this would need to be a
@@ -114,7 +118,13 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags =
     lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       # TODO make this unconditional
-      "tcl_cv_sys_version=${stdenv.hostPlatform.uname.system}"
+      # tcl_cv_sys_version is intended to be set to `$(uname -s)-$(uname -r)`.
+      "tcl_cv_sys_version=${
+        lib.concatStringsSep "-" [
+          stdenv.hostPlatform.uname.system
+          (lib.optionalString (stdenv.hostPlatform.uname.release != null) stdenv.hostPlatform.uname.release)
+        ]
+      }"
     ]
     ++ lib.optionals (lib.versionOlder version "9.0") [
       # Unlike the two `versionOlder` gates below, this one is real: enabled

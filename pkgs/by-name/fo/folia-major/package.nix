@@ -7,6 +7,7 @@
   imagemagick,
   makeWrapper,
   electron,
+  ffmpeg_8,
   copyDesktopItems,
   makeDesktopItem,
   nix-update-script,
@@ -22,7 +23,7 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "folia-major";
-  version = "0.7.3";
+  version = "0.7.4";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -31,10 +32,10 @@ buildNpmPackage (finalAttrs: {
     owner = "chthollyphile";
     repo = "folia-major";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EwPD9apPbR0wnBKu6V8LkbXgS4bn9zVmVDNt2rND2jE=";
+    hash = "sha256-cTnxh+UZ9XTHdH0193sqVaFnNhLU1PMjBlyUHrurYDY=";
   };
 
-  npmDepsHash = "sha256-Gywa4OH1NE4Rz8OH6cX1Tn8/M6CyQd/XNeagxzjjb8I=";
+  npmDepsHash = "sha256-xlJBQjg3iwd05crLaomlBAF9SAxH4Il9NmU3rYYugYo=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -56,6 +57,7 @@ buildNpmPackage (finalAttrs: {
       --replace-fail "git rev-parse --short HEAD" "echo unknown" \
       --replace-fail "git rev-parse --abbrev-ref HEAD" "echo main"
 
+    cat <<< $(${lib.getExe jq} 'del(.build.beforePack)' ./package.json) > ./package.json
     cat <<< $(${lib.getExe jq} 'del(.build.generateUpdatesFilesForAllChannels)' ./package.json) > ./package.json
 
     ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
@@ -80,35 +82,37 @@ buildNpmPackage (finalAttrs: {
     runHook postBuild
   '';
 
-  installPhase =
-    if stdenvNoCC.hostPlatform.isDarwin then
-      ''
-        runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-        mkdir -p $out/{Applications,bin}
-        cp -r release/mac*/Folia.app $out/Applications
-        makeWrapper $out/Applications/Folia.app/Contents/MacOS/Folia $out/bin/folia-major
+    ${
+      if stdenvNoCC.hostPlatform.isDarwin then
+        ''
+          mkdir -p $out/{Applications,bin}
+          cp -r release/mac*/Folia.app $out/Applications
+          makeWrapper $out/Applications/Folia.app/Contents/MacOS/Folia $out/bin/folia-major
+        ''
+      else
+        ''
+          mkdir -p $out/share/folia-major
+          cp -r release/*-unpacked/{locales,resources{,.pak}} $out/share/folia-major/
 
-        runHook postInstall
-      ''
-    else
-      ''
-        runHook preInstall
+          install -D build/icon.png $out/share/icons/hicolor/512x512/apps/folia-major.png
 
-        mkdir -p $out/share/folia-major
-        cp -r release/*-unpacked/{locales,resources{,.pak}} $out/share/folia-major/
+          makeWrapper '${lib.getExe electron}' $out/bin/folia-major \
+            --add-flags $out/share/folia-major/resources/app.asar \
+            --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
+            --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
+            --set-default ELECTRON_IS_DEV 0 \
+            --inherit-argv0
+        ''
+    }
 
-        install -D build/icon.png $out/share/icons/hicolor/512x512/apps/folia-major.png
+    mkdir -p ${resourcesDir}/ffmpeg-audio
+    ln -s ${lib.getExe' ffmpeg_8 "ffmpeg"} ${resourcesDir}/ffmpeg-audio/ffmpeg
 
-        makeWrapper '${lib.getExe electron}' $out/bin/folia-major \
-          --add-flags $out/share/folia-major/resources/app.asar \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
-          --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
-          --set-default ELECTRON_IS_DEV 0 \
-          --inherit-argv0
-
-        runHook postInstall
-      '';
+    runHook postInstall
+  '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -131,8 +135,9 @@ buildNpmPackage (finalAttrs: {
 
   meta = {
     description = "Lyrics Reimagine desktop app";
-    homepage = "https://folia-site.vercel.app/";
+    homepage = "https://folia-site.cielaniska.top/";
     downloadPage = "https://github.com/chthollyphile/folia-major/releases";
+    changelog = "https://github.com/chthollyphile/folia-major/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     mainProgram = "folia-major";
     maintainers = with lib.maintainers; [ chillcicada ];

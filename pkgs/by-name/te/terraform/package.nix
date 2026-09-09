@@ -15,16 +15,16 @@
 let
   package = buildGoModule rec {
     pname = "terraform";
-    version = "1.16.0";
+    version = "1.16.1";
 
     src = fetchFromGitHub {
       owner = "hashicorp";
       repo = "terraform";
       rev = "v${version}";
-      hash = "sha256-zVBnNDxQcN5mmqWBZQjeGXZDmWXNS4xrnimVc7TBgNc=";
+      hash = "sha256-0cCEQU+f6wVfcVqFoRA3hpf9Qwdxko2AraeCJQ/vkM4=";
     };
 
-    vendorHash = "sha256-qcP6QJdq8l9S2wRJPANqanEu95qmb09BVpLjwJ95peM=";
+    vendorHash = "sha256-w/dtggDM8sDDA5rqzsRfuZHkBThu6JVvhr13R71E/d8=";
 
     patches = [ ./provider-path-0_15.patch ];
 

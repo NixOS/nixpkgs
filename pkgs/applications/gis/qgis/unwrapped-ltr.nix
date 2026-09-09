@@ -185,7 +185,7 @@ mkDerivation rec {
     "-DQGIS_MACAPP_BUNDLE=0" # Don't copy Qt into bundle; we fix paths in postFixup
     "-DSQLITE3_INCLUDE_DIR=${sqlite.dev}/include" # FindSqlite3.cmake incorrectly assumes framework
   ]
-  ++ lib.optional withServer [
+  ++ lib.optionals withServer [
     "-DWITH_SERVER=True"
     "-DQGIS_CGIBIN_SUBDIR=${placeholder "out"}/lib/cgi-bin"
   ]

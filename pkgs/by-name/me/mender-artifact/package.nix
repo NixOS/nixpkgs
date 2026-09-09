@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "mender-artifact";
-  version = "4.4.1";
+  version = "4.4.2";
 
   src = fetchFromGitHub {
     owner = "mendersoftware";
     repo = "mender-artifact";
     tag = finalAttrs.version;
-    hash = "sha256-N2Q8jGuwqcawqypUu1ZZOZgbR8fT1PCwErk0CMFcllc=";
+    hash = "sha256-Be84RAoxNAz2W7yGi68mwb11TySKfAQ+wl4K67sHBxI=";
   };
 
   nativeBuildInputs = [

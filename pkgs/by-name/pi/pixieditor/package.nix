@@ -46,13 +46,13 @@ let
 in
 buildDotnetModule (finalAttrs: {
   pname = "pixieditor";
-  version = "2.1.2.2";
+  version = "2.1.2.4";
 
   src = fetchFromGitHub {
     owner = "PixiEditor";
     repo = "PixiEditor";
     tag = finalAttrs.version;
-    hash = "sha256-k2dwz1VcXGs0Sh/6nc8Q3bs/dpsHiTnqRbXaGJojBz4=";
+    hash = "sha256-40oOf9dgHBsHd9fUhHctvmB1//aGD++snd+VwsgOxIU=";
     fetchSubmodules = true;
   };
 

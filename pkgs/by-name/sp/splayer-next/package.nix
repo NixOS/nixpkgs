@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_10,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -15,6 +15,8 @@
   openssl,
   ffmpeg-headless,
   alsa-lib,
+  libpulseaudio,
+  pipewire,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
@@ -23,18 +25,25 @@
 }:
 let
   electron = electron_43;
-  pnpm = pnpm_10;
+  pnpm = pnpm_11;
   shareDir = "$out/share/SPlayer-Next";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "splayer-next";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "SPlayer-Dev";
     repo = "SPlayer-Next";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D2Ja/ZF5hKRVy/O33mCsl0iulYUqP/qRiQLjX0tl0dM=";
+    hash = "sha256-ypdEoVtK7ZkrlUycfXgyE4Ki+WPHuzARj15WtbjlNCo=";
+    leaveDotGit = true;
+    postFetch = ''
+      cd "$out"
+      git rev-parse HEAD > $out/COMMIT
+      git log -1 --format=%cI > $out/SOURCE_DATE_EPOCH
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -46,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-zCWX8N4VGZQirHjbseExOVdk4cjFUxJnjYwHFYbKWjM=";
+    hash = "sha256-Ll+nfLfKQapsBc/vGabmd4xuSvYg/XnyLBg9w9hYlhY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -55,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       ;
-    hash = "sha256-iZtUPQ3yUomUNf6j+gV0HxcwsvjBPOVqwzwUvsP0CCY=";
+    hash = "sha256-36PeEuqq/ZNUG+gmPiQbIUt8cpTGF7+9lhCX6YftMr4=";
   };
 
   nativeBuildInputs = [
@@ -77,6 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     ffmpeg-headless
     alsa-lib
+    libpulseaudio
+    pipewire
   ];
 
   env = {
@@ -93,8 +104,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     # Workaround for https://github.com/electron/electron/issues/31121
-    substituteInPlace electron/main/utils/nativeLoader.ts \
+    substituteInPlace electron/main/utils/nativeLoader.ts electron/main/services/recognition/fingerprint.ts \
       --replace-fail 'process.resourcesPath' "'${shareDir}/resources'"
+
+    substituteInPlace electron.vite.config.ts \
+      --replace-fail 'import { execSync } from "child_process";' 'import { readFileSync } from "fs";' \
+      --replace-fail 'execSync("git rev-parse HEAD").toString()' 'readFileSync("COMMIT", "utf8")' \
+      --replace-fail 'execSync("git log -1 --format=%cI").toString()' 'readFileSync("SOURCE_DATE_EPOCH", "utf8")'
 
     sed -i '/^[[:space:]]*\.atleast_version/d' "$cargoDepsCopy"/{.,*}/ffmpeg_audio_sys-*/build.rs
   '';
@@ -183,6 +199,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/SPlayer-Dev/SPlayer-Next";
     changelog = "https://github.com/SPlayer-Dev/SPlayer-Next/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode # resources/afp/afp.wasm.mjs
+    ];
     maintainers = with lib.maintainers; [ ccicnce113424 ];
     mainProgram = "SPlayer-Next";
     platforms = lib.platforms.linux;

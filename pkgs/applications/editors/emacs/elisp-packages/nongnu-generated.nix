@@ -4708,6 +4708,27 @@
       };
     }
   ) { };
+  project-nix-store = callPackage (
+    {
+      elpaBuild,
+      fetchurl,
+      lib,
+    }:
+    elpaBuild {
+      pname = "project-nix-store";
+      ename = "project-nix-store";
+      version = "0.11.0";
+      src = fetchurl {
+        url = "https://elpa.nongnu.org/nongnu/project-nix-store-0.11.0.tar";
+        sha256 = "1f3xsmxfppg5z23pkl1wids359ivhsqlzs6p4s3vaaclxrwrq6kf";
+      };
+      packageRequires = [ ];
+      meta = {
+        homepage = "https://elpa.nongnu.org/nongnu/project-nix-store.html";
+        license = lib.licenses.free;
+      };
+    }
+  ) { };
   projectile = callPackage (
     {
       compat,

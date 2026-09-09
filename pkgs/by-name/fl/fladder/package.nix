@@ -24,13 +24,13 @@ let
   flutter = flutter335;
   sourceBuild = flutter.buildFlutterApplication (finalAttrs: {
     pname = "fladder";
-    version = "0.10.3";
+    version = "0.11.0";
 
     src = fetchFromGitHub {
       owner = "DonutWare";
       repo = "Fladder";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-0eFHylRi2UVaKRG7K3tDZVscgoiL5xFrtFhZiJxj4Mk=";
+      hash = "sha256-oE1nlKH//FFVuOXGByX8cL+q6TA29VPJuoKoz2HLO8g=";
     };
 
     inherit targetFlutterPlatform;
@@ -74,9 +74,9 @@ let
         name = "fladder";
         desktopName = "Fladder";
         genericName = "Jellyfin Client";
-        exec = "Fladder";
+        exec = "fladder";
         icon = "fladder";
-        comment = "Simple Jellyfin Frontend built on top of Flutter";
+        comment = "Cross-platform Jellyfin client built on top of Flutter";
         categories = [
           "AudioVideo"
           "Video"
@@ -88,7 +88,7 @@ let
     passthru.updateScript = ./update.sh;
 
     meta = {
-      description = "Simple Jellyfin Frontend built on top of Flutter";
+      description = "Cross-platform Jellyfin client built on top of Flutter";
       homepage = "https://github.com/DonutWare/Fladder";
       downloadPage = "https://github.com/DonutWare/Fladder/releases";
       license = lib.licenses.gpl3Only;
@@ -96,7 +96,7 @@ let
         ratcornu
         schembriaiden
       ];
-      mainProgram = "Fladder";
+      mainProgram = "fladder";
     };
   });
 
@@ -106,7 +106,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/DonutWare/Fladder/releases/download/v${sourceBuild.version}/Fladder-macOS-${sourceBuild.version}.dmg";
-      hash = "sha256-Vnz0jtmDptcrehE7DrgyTzFJJopirsLaO+lu1V/Xd+o=";
+      hash = "sha256-fl73LdAo0E1qcyE2QCQszAbstcMjWLrp6v1LYK+nPCk=";
     };
 
     nativeBuildInputs = [
@@ -127,6 +127,7 @@ let
     '';
 
     meta = sourceBuild.meta // {
+      mainProgram = "Fladder";
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       platforms = lib.platforms.darwin;
     };

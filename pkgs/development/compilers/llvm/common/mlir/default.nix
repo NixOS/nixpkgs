@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Upstream issue: https://github.com/llvm/llvm-project/issues/150986
     ./mlir-tablegen-imported-target.patch
   ]
-  ++ lib.optional (lib.versionOlder release_version "20") [
+  ++ lib.optionals (lib.versionOlder release_version "20") [
     # Fix build with gcc15
     # https://github.com/llvm/llvm-project/commit/41eb186fbb024898bacc2577fa3b88db0510ba1f
     # https://github.com/llvm/llvm-project/commit/101109fc5460d5bb9bb597c6ec77f998093a6687

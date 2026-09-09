@@ -52,43 +52,43 @@ index f897953c..393572ed 100644
              show_chooser()
  
 diff --git a/bottles/frontend/views/bottle_preferences.py b/bottles/frontend/views/bottle_preferences.py
-index 2bc2235e..34db4dbd 100644
+index 0254eb92..96c73283 100644
 --- a/bottles/frontend/views/bottle_preferences.py
 +++ b/bottles/frontend/views/bottle_preferences.py
-@@ -173,9 +173,6 @@ class PreferencesView(Adw.PreferencesPage):
+@@ -185,9 +185,6 @@ class PreferencesView(Adw.PreferencesPage):
                  )
              )
  
--        if not Xdp.Portal.running_under_sandbox():
+-        if not is_cpak() and not Xdp.Portal.running_under_sandbox():
 -            return
 -
          _not_available = _("This feature is unavailable on your system.")
          _flatpak_not_available = _("{} To add this feature, please run").format(
              _not_available
- 
-         _not_available = _("This feature is unavailable on your system.")
 diff --git a/bottles/frontend/views/list.py b/bottles/frontend/views/list.py
-index 6bd8fc81..0f96ab70 100644
+index 689d023f..7e7d9b89 100644
 --- a/bottles/frontend/views/list.py
 +++ b/bottles/frontend/views/list.py
-@@ -82,8 +82,6 @@ class BottlesBottleRow(Adw.ActionRow):
+@@ -130,8 +130,6 @@ class BottlesBottleRow(Adw.ActionRow):
  
      def run_executable(self, *_args):
          """Display file dialog for executable"""
--        if not Xdp.Portal.running_under_sandbox():
+-        if not is_cpak() and not Xdp.Portal.running_under_sandbox():
 -            return
  
          def set_path(_dialog, response):
              if response != Gtk.ResponseType.ACCEPT:
 diff --git a/bottles/frontend/views/new_bottle_dialog.py b/bottles/frontend/views/new_bottle_dialog.py
-index 9c386862..3ed98f7c 100644
+index 02adeb2f..d755d50d 100644
 --- a/bottles/frontend/views/new_bottle_dialog.py
 +++ b/bottles/frontend/views/new_bottle_dialog.py
-@@ -86,7 +86,7 @@ class BottlesNewBottleDialog(Adw.Dialog):
-         super().__init__(**kwargs)
+@@ -93,9 +93,7 @@ class BottlesNewBottleDialog(Adw.Dialog):
+         )
          # common variables and references
          self.window = GtkUtils.get_parent_window()
--        if not self.window or not Xdp.Portal.running_under_sandbox():
+-        if not self.window or (
+-            not is_cpak() and not Xdp.Portal.running_under_sandbox()
+-        ):
 +        if not self.window:
              return
  

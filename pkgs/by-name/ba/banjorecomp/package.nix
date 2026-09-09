@@ -115,11 +115,9 @@ llvmPackages_21.stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     installBin BanjoRecompiled
-    install -Dm644 -t $out/share ../recompcontrollerdb.txt
+    install -Dm644 -t $out/share/banjorecomp ../recompcontrollerdb.txt
     install -Dm644 ../icons/app.png $out/share/icons/hicolor/512x512/apps/BanjoRecompiled.png
-    cp -r ../assets $out/share/
-    ln -s $out/share/recompcontrollerdb.txt $out/bin/recompcontrollerdb.txt
-    ln -s $out/share/assets $out/bin/assets
+    cp -r ../assets $out/share/banjorecomp/
 
     install -Dm644 -t $out/share/licenses/banjorecomp ../COPYING
     install -Dm644 -t $out/share/licenses/banjorecomp/N64ModernRuntime ../lib/N64ModernRuntime/COPYING
@@ -134,9 +132,8 @@ llvmPackages_21.stdenv.mkDerivation (finalAttrs: {
      )
   '';
 
-  # The game will segfault when not run from the same directory as the binary.
   postFixup = ''
-    wrapProgram $out/bin/BanjoRecompiled --chdir "$out/bin/"
+    wrapProgram $out/bin/BanjoRecompiled --chdir "$out/share/banjorecomp"
   '';
 
   meta = {

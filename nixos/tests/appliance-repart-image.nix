@@ -90,7 +90,16 @@ in
               Minimize = "guess";
             };
           };
-        };
+        }
+        // (lib.genAttrs [ "squashfs" "erofs" "btrfs" "xfs" "swap" "empty" ] (fsType: {
+          repartConfig = {
+            Type = "linux-generic";
+            Format = fsType;
+
+            SizeMinBytes = "10M";
+            SizeMaxBytes = "10M";
+          };
+        }));
       };
     };
 

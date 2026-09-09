@@ -12042,6 +12042,8 @@ self: super: with self; {
 
   nitrokey = callPackage ../development/python-modules/nitrokey { };
 
+  nitypes = callPackage ../development/python-modules/nitypes { };
+
   niworkflows = callPackage ../development/python-modules/niworkflows { };
 
   nix-kernel = callPackage ../development/python-modules/nix-kernel { inherit (pkgs) nix; };
@@ -22235,6 +22237,8 @@ self: super: with self; {
   vivisect = callPackage ../development/python-modules/vivisect {
     inherit (pkgs.libsForQt5) wrapQtAppsHook;
   };
+
+  vizaio = callPackage ../development/python-modules/vizaio { };
 
   vl-convert-python = callPackage ../development/python-modules/vl-convert-python {
     inherit (pkgs) protobuf;

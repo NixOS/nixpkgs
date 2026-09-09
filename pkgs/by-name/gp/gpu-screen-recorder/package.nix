@@ -23,6 +23,7 @@
   libxrandr,
   libxfixes,
   libjpeg_turbo,
+  versionCheckHook,
   wrapperDir ? "/run/wrappers/bin",
   gitUpdater,
 }:
@@ -47,7 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     meson
     ninja
+    wayland-scanner
   ];
+
+  depsBuildBuild = [ pkg-config ];
 
   buildInputs = [
     libxcomposite
@@ -56,7 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
     pipewire
     wayland
-    wayland-scanner
     vulkan-headers
     libdrm
     libva
@@ -65,6 +68,12 @@ stdenv.mkDerivation (finalAttrs: {
     libxrandr
     libxfixes
   ];
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   mesonFlags = [
     # Install the upstream systemd unit
