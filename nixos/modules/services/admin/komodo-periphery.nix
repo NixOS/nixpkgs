@@ -560,6 +560,9 @@ in
       ++ lib.optional (cfg.dockerHost == null) "docker.service";
       wantedBy = [ "multi-user.target" ];
 
+      # Periphery requires the docker cli to spawn containers / stacks / prune / etc
+      path = lib.mkIf (cfg.dockerHost == null) [ pkgs.docker ];
+
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
