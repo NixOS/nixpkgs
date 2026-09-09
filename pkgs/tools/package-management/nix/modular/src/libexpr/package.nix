@@ -14,6 +14,7 @@
   boehmgc,
   libcpuid,
   nlohmann_json,
+  sqlite,
   toml11,
 
   # Configuration Options
@@ -47,6 +48,7 @@ mkMesonLibrary (finalAttrs: {
   buildInputs = [
     toml11
   ]
+  ++ lib.optional (lib.versionAtLeast version "2.36pre") sqlite
   ++ lib.optional ((lib.versionAtLeast version "2.35pre") && stdenv.hostPlatform.isx86_64) libcpuid;
 
   propagatedBuildInputs = [
