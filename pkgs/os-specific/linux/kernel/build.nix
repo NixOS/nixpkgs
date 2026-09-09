@@ -225,7 +225,6 @@ lib.makeOverridable (
     ++ optional isModular "modules"
     ++ optionals buildDTBs [
       "dtbs"
-      "DTC_FLAGS=-@"
     ];
 
     installFlags = [
@@ -325,6 +324,8 @@ lib.makeOverridable (
 
     makeFlags = [
       "O=$(buildRoot)"
+
+      "DTC_FLAGS=-@"
 
       # We have a `modules` variable in the environment for our
       # split output, but the kernel Makefiles also define their
