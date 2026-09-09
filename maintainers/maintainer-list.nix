@@ -15212,6 +15212,12 @@
     githubId = 49951907;
     name = "Karl Zschiebsch";
   };
+  kjanat = {
+    email = "info@kajkowalski.nl";
+    github = "kjanat";
+    githubId = 6353477;
+    name = "Kaj Kowalski";
+  };
   kjeremy = {
     email = "kjeremy@gmail.com";
     name = "Jeremy Kolb";
