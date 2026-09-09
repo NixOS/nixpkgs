@@ -235,7 +235,7 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
                 set_files_from_dir(args, config, generator, out_dir)
             else:
                 raise SecretsError(
-                    f"Secret '{entry}' has no generator script, and no corresponding --set argument was found."
+                    f"Secret '{entry}' has no generator script, nor a corresponding --set argument, and hence can not be updated."
                 )
 
             new_id = str(uuid4())
@@ -248,7 +248,7 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
             up_to_date_meta[entry] = meta
             updated += 1
 
-    print(f"Successfully updated {updated} secret(s).")
+    print(f"Successfully updated {updated} secret(s)")
 
     fixup_all(args, config)
 

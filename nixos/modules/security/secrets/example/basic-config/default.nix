@@ -24,28 +24,28 @@
     settings.store.age.ssh.target = "root@lapetus.overlay.moonythm.dev";
     settings.store.age.ssh.identity = "/home/moon/.ssh/id_ed25519";
 
-    store.example = {
+    store.user = {
       # This prompt will default to the "simple" backend we chose above.
-      prompts.example = {
+      prompts.name = {
         label = "Your name";
         description = "the person to address the greeting to";
         type = "multiline";
       };
 
-      files.example.deploy = false;
+      files.greeting.deploy = false;
       generate =
         pkgs:
-        pkgs.writeScript "gen-example" ''
+        pkgs.writeScript "gen-user" ''
           #!/bin/sh
           export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"
-          echo "Hewwo $(cat "$prompts/example")!" > "$out/example"
+          echo "Hewwo $(cat "$prompts/name")!" > "$out/greeting"
         '';
     };
 
     store.derived = {
       backend = "age";
-      dependencies = [ "example" ];
-      files.derived = { };
+      dependencies = [ "user" ];
+      files.cow-greeting = { };
       generate =
         pkgs:
         pkgs.writeScript "gen-derived" ''
@@ -56,19 +56,19 @@
               pkgs.cowsay
             ]
           }"
-          cat $in/example/example | cowsay > $out/derived
+          cat $in/user/greeting | cowsay > $out/cow-greeting
         '';
     };
 
     store.derivedPlain = {
       dependencies = [ "derived" ];
-      files.derived = { };
+      files.cow-greeting-copy = { };
       generate =
         pkgs:
         pkgs.writeScript "gen-derived-plain" ''
           #!/bin/sh
           export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"
-          cat $in/derived/derived > $out/derived
+          cat $in/derived/cow-greeting > $out/cow-greeting-copy
         '';
     };
   };
