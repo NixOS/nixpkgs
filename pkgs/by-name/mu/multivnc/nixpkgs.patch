@@ -1,0 +1,65 @@
+diff -ruZ source/CMakeLists.txt source2/CMakeLists.txt
+--- source/CMakeLists.txt	1969-12-31 17:00:01.000000000 -0700
++++ source2/CMakeLists.txt	2024-11-03 21:24:22.153712626 -0700
+@@ -12,9 +12,6 @@
+ 
+ set(WXSERVDISC_INSTALL OFF CACHE BOOL "Set to OFF to not include wxservdisc artifacts in install")
+ add_subdirectory(libwxservdisc/src)
+-set(LIBVNCSERVER_INSTALL OFF CACHE BOOL "Set to OFF to not include libvncserver artifacts in install")
+-set(WITH_EXAMPLES OFF CACHE BOOL "Set to OFF to not build libvncserver examples")
+-add_subdirectory(libvncserver)
+ 
+ add_subdirectory(src)
+ 
+diff -ruZ source/src/CMakeLists.txt source2/src/CMakeLists.txt
+--- source/src/CMakeLists.txt	1969-12-31 17:00:01.000000000 -0700
++++ source2/src/CMakeLists.txt	2024-11-03 21:51:56.015301604 -0700
+@@ -1,15 +1,17 @@
+ #
+ # dependencies
+ #
++include(FindPkgConfig)
+ find_package(wxWidgets 3.0 REQUIRED core base net adv qa)
++find_package(LibVNCServer)
++pkg_search_module(GTK3 REQUIRED gtk+-3.0)
+ include(${wxWidgets_USE_FILE})
+ include_directories(
+     ${CMAKE_BINARY_DIR}
+     ${CMAKE_SOURCE_DIR}
+     ${CMAKE_SOURCE_DIR}/src/
+     ${CMAKE_SOURCE_DIR}/libwxservdisc/src
+-    ${CMAKE_SOURCE_DIR}/libvncserver
+-    ${CMAKE_BINARY_DIR}/libvncserver
++    ${GTK3_INCXLUDE_DIRS}
+ )
+ 
+ 
+@@ -39,7 +41,7 @@
+ 
+ add_executable(${executable_name} MACOSX_BUNDLE ${multivnc_SRCS})
+ 
+-target_link_libraries(${executable_name} MultiVNCgui ${wxWidgets_LIBRARIES} wxservdisc vncclient)
++target_link_libraries(${executable_name} MultiVNCgui ${wxWidgets_LIBRARIES} wxservdisc vncclient ${GTK3_LIBRARIES})
+ 
+ if(APPLE AND wxWidgets_VERSION_STRING LESS 3.1)
+     set_target_properties(${executable_name} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in)
+@@ -47,7 +49,6 @@
+ 
+ 
+ 
+-
+ 
+ #original Makefile.am contents follow:
+ 
+diff -ruZ source/src/VNCConn.h source2/src/VNCConn.h
+--- source/src/VNCConn.h	1969-12-31 17:00:01.000000000 -0700
++++ source2/src/VNCConn.h	2024-11-03 21:28:06.620032553 -0700
+@@ -37,7 +37,7 @@
+ #include <wx/secretstore.h>
+ #endif
+ #include <wx/msgqueue.h>
+-#include "rfb/rfbclient.h"
++#include <rfb/rfbclient.h>
+ 
+ 
+ 

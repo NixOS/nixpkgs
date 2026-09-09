@@ -1,0 +1,64 @@
+diff --git a/ICSharpCode.Decompiler.PdbProvider.Cecil/ICSharpCode.Decompiler.PdbProvider.Cecil.csproj b/ICSharpCode.Decompiler.PdbProvider.Cecil/ICSharpCode.Decompiler.PdbProvider.Cecil.csproj
+index 397e0e5..dfa385c 100644
+--- a/ICSharpCode.Decompiler.PdbProvider.Cecil/ICSharpCode.Decompiler.PdbProvider.Cecil.csproj
++++ b/ICSharpCode.Decompiler.PdbProvider.Cecil/ICSharpCode.Decompiler.PdbProvider.Cecil.csproj
+@@ -1,7 +1,7 @@
+ ﻿<Project Sdk="Microsoft.NET.Sdk">
+ 
+   <PropertyGroup>
+-    <TargetFramework>netstandard2.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <LangVersion>7.2</LangVersion>
+     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+   </PropertyGroup>
+diff --git a/ILSpy.Core/ILSpy.Core.csproj b/ILSpy.Core/ILSpy.Core.csproj
+index cd6d5e2..d725817 100644
+--- a/ILSpy.Core/ILSpy.Core.csproj
++++ b/ILSpy.Core/ILSpy.Core.csproj
+@@ -2,7 +2,7 @@
+ <Project Sdk="Microsoft.NET.Sdk">
+ 
+   <PropertyGroup>
+-    <TargetFramework>netstandard2.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+     <EnableDefaultItems>false</EnableDefaultItems>
+     <SignAssembly>True</SignAssembly>
+diff --git a/ILSpy/ILSpy.csproj b/ILSpy/ILSpy.csproj
+index 4deb56f..b9813ba 100644
+--- a/ILSpy/ILSpy.csproj
++++ b/ILSpy/ILSpy.csproj
+@@ -1,7 +1,7 @@
+ ﻿<Project Sdk="Microsoft.NET.Sdk">
+ 
+   <PropertyGroup>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <OutputType>WinExe</OutputType>
+ 
+     <TieredCompilation>true</TieredCompilation>
+diff --git a/SharpTreeView/SharpTreeView.csproj b/SharpTreeView/SharpTreeView.csproj
+index d6f46c5..4183ffd 100644
+--- a/SharpTreeView/SharpTreeView.csproj
++++ b/SharpTreeView/SharpTreeView.csproj
+@@ -1,6 +1,6 @@
+ ﻿<Project Sdk="Microsoft.NET.Sdk">
+   <PropertyGroup>
+-    <TargetFramework>netstandard2.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+     <EnableDefaultItems>false</EnableDefaultItems>
+     <SignAssembly>True</SignAssembly>
+diff --git a/TestPlugin/TestPlugin.csproj b/TestPlugin/TestPlugin.csproj
+index 453a3ef..806f375 100644
+--- a/TestPlugin/TestPlugin.csproj
++++ b/TestPlugin/TestPlugin.csproj
+@@ -2,7 +2,7 @@
+ <Project Sdk="Microsoft.NET.Sdk">
+ 
+   <PropertyGroup>
+-    <TargetFramework>netstandard2.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <AssemblyName>Test.Plugin</AssemblyName>
+ 
+     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>

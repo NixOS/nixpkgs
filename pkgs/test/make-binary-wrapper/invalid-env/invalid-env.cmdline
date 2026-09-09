@@ -1,0 +1,2 @@
+    --set "=" "TEST1" \
+    --set-default "" "TEST2"

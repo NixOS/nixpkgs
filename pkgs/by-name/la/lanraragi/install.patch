@@ -1,0 +1,55 @@
+diff --git a/tools/install.pl b/tools/install.pl
+index 0931979..50745d7 100644
+--- a/tools/install.pl
++++ b/tools/install.pl
+@@ -92,36 +92,6 @@ if ( $ENV{HOMEBREW_FORMULA_PREFIX} ) {
+     $cpanopt = " -l " . $ENV{HOMEBREW_FORMULA_PREFIX} . "/libexec";
+ }
+ 
+-#Load IPC::Cmd
+-install_package( "IPC::Cmd",         $cpanopt );
+-install_package( "Config::AutoConf", $cpanopt );
+-IPC::Cmd->import('can_run');
+-require Config::AutoConf;
+-
+-
+-say("\r\nWill now check if all LRR software dependencies are met. \r\n");
+-
+-#Fails on win even if redis is in the path
+-if ( IS_UNIX ) {
+-    #Check for Redis
+-    say("Checking for Redis...");
+-    can_run('redis-server')
+-      or die 'NOT FOUND! Please install a Redis server before proceeding.';
+-    say("OK!");
+-}
+-
+-#Check for GhostScript
+-say("Checking for GhostScript...");
+-can_run('gs')
+-  or warn 'NOT FOUND! PDF support will not work properly. Please install the "gs" tool.';
+-say("OK!");
+-
+-#Check for libarchive
+-say("Checking for libarchive...");
+-Config::AutoConf->new()->check_header("archive.h")
+-  or die 'NOT FOUND! Please install libarchive and ensure its headers are present.';
+-say("OK!");
+-
+ #Check for PerlMagick
+ say("Checking for ImageMagick/PerlMagick...");
+ my $imgk;
+@@ -170,13 +140,6 @@ if ( $back || $full ) {
+ #Clientside Dependencies with Provisioning
+ if ( $front || $full ) {
+ 
+-    say("\r\nObtaining remote Web dependencies...\r\n");
+-
+-    my $npmcmd = $legacy ? "npm install" : "npm ci";
+-    if ( system($npmcmd) != 0 ) {
+-        die "Something went wrong while obtaining node modules - Bailing out.";
+-    }
+-
+     say("\r\nProvisioning...\r\n");
+ 
+     #Load File::Copy

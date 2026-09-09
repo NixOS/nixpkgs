@@ -1,0 +1,14 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7ec2d39..f52313d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -129,7 +128,8 @@ if(VK_BOOTSTRAP_TEST)
+         endif()
+     endif()
+ 
+-    add_subdirectory(ext)
++    find_package(glfw3)
++    find_package(Catch2 3)
+     add_subdirectory(tests)
+     add_subdirectory(example)
+ endif ()

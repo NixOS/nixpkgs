@@ -1,0 +1,13 @@
+diff --git a/driver/usb/usb_device_interface.h b/driver/usb/usb_device_interface.h
+index 238bca9..54f2f6e 100644
+--- a/driver/usb/usb_device_interface.h
++++ b/driver/usb/usb_device_interface.h
+@@ -15,6 +15,8 @@
+ #ifndef DARWINN_DRIVER_USB_USB_DEVICE_INTERFACE_H_
+ #define DARWINN_DRIVER_USB_USB_DEVICE_INTERFACE_H_
+ 
++#include <cstdint>
++
+ #include "port/array_slice.h"
+ #include "port/integral_types.h"
+ #include "port/status.h"

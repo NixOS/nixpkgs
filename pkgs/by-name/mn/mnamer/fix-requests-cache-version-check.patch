@@ -1,0 +1,33 @@
+From 634d56361e967adcd81c3cb839458d3aea99e5db Mon Sep 17 00:00:00 2001
+From: Skid <26208369+skid9000@users.noreply.github.com>
+Date: Sun, 22 Feb 2026 20:28:03 +0100
+Subject: [PATCH] Fix requests_cache version check for 1.3.0
+
+Using the same method provided here : https://github.com/requests-cache/requests-cache/commit/61fae61e07222777eb26a6fb670c4ee6a9cdddb7
+---
+ mnamer/const.py | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/mnamer/const.py b/mnamer/const.py
+index 66510ebf..bf321f41 100644
+--- a/mnamer/const.py
++++ b/mnamer/const.py
+@@ -4,6 +4,7 @@
+ from pathlib import Path
+ from platform import platform, python_version
+ from sys import argv, gettrace, version_info
++from importlib.metadata import version as pkg_version, PackageNotFoundError
+ 
+ VERSION: str
+ 
+@@ -37,8 +38,8 @@
+     requests_version = "N/A"
+ 
+ try:
+-    from requests_cache import __version__ as requests_cache_version
+-except ModuleNotFoundError:
++    requests_cache_version = pkg_version('requests_cache')
++except PackageNotFoundError:
+     requests_cache_version = "N/A"
+ 
+ try:

@@ -1,0 +1,23 @@
+diff --git a/library/src/tensor_operation_instance/gpu/CMakeLists.txt b/library/src/tensor_operation_instance/gpu/CMakeLists.txt
+index 172f6681b8..d3ddbb2f15 100644
+--- a/library/src/tensor_operation_instance/gpu/CMakeLists.txt
++++ b/library/src/tensor_operation_instance/gpu/CMakeLists.txt
+@@ -154,9 +154,15 @@ function(add_instance_library INSTANCE_NAME)
+                 list(FILTER INST_TARGETS INCLUDE REGEX "gfx12")
+             endif()
+             set(offload_targets)
+-            foreach(target IN LISTS INST_TARGETS)
+-                string(APPEND offload_targets "--offload-arch=${target} ")
+-            endforeach()
++            if(NOT INST_TARGETS)
++                # No valid GPU targets for this source, compile for 90a as fallback
++                # so the add_device…instances and hip_fatbin… symbols still exist
++                set(offload_targets "--offload-arch=gfx90a")
++            else()
++                foreach(target IN LISTS INST_TARGETS)
++                    string(APPEND offload_targets "--offload-arch=${target} ")
++                endforeach()
++            endif()
+             set_source_files_properties(${source} PROPERTIES COMPILE_FLAGS ${offload_targets})
+             list(APPEND INST_OBJ ${source})
+         endforeach()

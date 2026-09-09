@@ -1,0 +1,10 @@
+--- libusb-compat-0.1.5.orig/libusb/usb.h
++++ libusb-compat-0.1.5/libusb/usb.h
+@@ -25,6 +25,7 @@
+ #ifndef __USB_H__
+ #define __USB_H__
+ 
++#include <sys/types.h>
+ #include <unistd.h>
+ #include <stdlib.h>
+ #include <limits.h>

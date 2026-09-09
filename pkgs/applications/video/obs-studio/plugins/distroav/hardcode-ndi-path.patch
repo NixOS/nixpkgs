@@ -1,0 +1,20 @@
+diff --git a/src/plugin-main.cpp b/src/plugin-main.cpp
+index 43f0e28..5e393c6 100644
+--- a/src/plugin-main.cpp
++++ b/src/plugin-main.cpp
+@@ -412,14 +412,7 @@ const NDIlib_v5 *load_ndilib()
+ 	if (!temp_path.isEmpty()) {
+ 		locations << temp_path;
+ 	}
+-#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
+-	// Linux, MacOS
+-	// https://github.com/DistroAV/DistroAV/blob/master/lib/ndi/NDI%20SDK%20Documentation.pdf
+-	// "6.1 LOCATING THE LIBRARY
+-	// ... the redistributable on MacOS is installed within `/usr/local/lib` ..."
+-	locations << "/usr/lib";
+-	locations << "/usr/local/lib";
+-#endif
++	locations << "@NDI@/lib";
+ 	auto lib_path = QString();
+ #if defined(Q_OS_LINUX)
+ 	// Linux

@@ -1,0 +1,21 @@
+A backport of https://github.com/octo/liboping/pull/61
+--- a/src/oping.c
++++ b/src/oping.c
+@@ -1125,7 +1125,7 @@ static int update_graph_prettyping (ping_context_t *ctx, /* {{{ */
+ 			wattron (ctx->window, COLOR_PAIR(color));
+ 
+ 		if (has_utf8())
+-			mvwprintw (ctx->window, /* y = */ 3, /* x = */ x + 2, symbol);
++			mvwprintw (ctx->window, /* y = */ 3, /* x = */ x + 2, "%s", symbol);
+ 		else
+ 			mvwaddch (ctx->window, /* y = */ 3, /* x = */ x + 2, symbolc);
+ 
+@@ -1222,7 +1222,7 @@ static int update_graph_histogram (ping_context_t *ctx) /* {{{ */
+ 		if (counters[x] == 0)
+ 			mvwaddch (ctx->window, /* y = */ 3, /* x = */ x + 2, ' ');
+ 		else if (has_utf8 ())
+-			mvwprintw (ctx->window, /* y = */ 3, /* x = */ x + 2,
++			mvwprintw (ctx->window, /* y = */ 3, /* x = */ x + 2, "%s",
+ 					hist_symbols_utf8[index]);
+ 		else
+ 			mvwaddch (ctx->window, /* y = */ 3, /* x = */ x + 2,

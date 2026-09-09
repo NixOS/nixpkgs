@@ -1,0 +1,33 @@
+From 7458110cc50d91cb7833b2abd232faca52865566 Mon Sep 17 00:00:00 2001
+From: Thomas Heijligen <src@posteo.de>
+Date: Tue, 21 May 2024 22:02:09 +0000
+Subject: [PATCH] fix install
+
+---
+ Makefile | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 4950b2d5cc..9d9358ad08 100644
+--- a/Makefile
++++ b/Makefile
+@@ -106,11 +106,11 @@ install:
+ 	$(CP) share/spark/theories/*why $(THEORIESDIR)
+ 	$(CP) share/spark/theories/*mlw $(THEORIESDIR)
+ 	$(CP) share/spark/runtimes/README $(RUNTIMESDIR)
+-	@echo "Generate Coq files by preprocessing context files:"
+-	$(MAKE) -C include generate
+-	$(CP) include/src/*.ad? $(INCLUDEDIR)
+-	$(CP) include/*.gpr $(LIBDIR)
+-	$(CP) include/proof $(LIBDIR)
++	#@echo "Generate Coq files by preprocessing context files:"
++	#$(MAKE) -C include generate
++	#$(CP) include/src/*.ad? $(INCLUDEDIR)
++	#$(CP) include/*.gpr $(LIBDIR)
++	#$(CP) include/proof $(LIBDIR)
+ 
+ doc: $(DOC)
+ 
+-- 
+2.44.0
+

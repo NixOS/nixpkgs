@@ -1,0 +1,13 @@
+diff --git a/src/backend/shortcuts/nonesteamgame/nonesteamgame.ts b/src/backend/shortcuts/nonesteamgame/nonesteamgame.ts
+index 28c917ce..f3b09c55 100644
+--- a/src/backend/shortcuts/nonesteamgame/nonesteamgame.ts
++++ b/src/backend/shortcuts/nonesteamgame/nonesteamgame.ts
+@@ -255,7 +255,7 @@ async function addNonSteamGame(game: Game): Promise<boolean> {
+     // add new Entry
+     const newEntry = {} as ShortcutEntry
+     newEntry.AppName = gameInfo.title
+-    newEntry.Exe = `"${app.getPath('exe')}"`
++    newEntry.Exe = `"heroic"`
+     newEntry.StartDir = `"${process.cwd()}"`
+ 
+     if (isFlatpak) {

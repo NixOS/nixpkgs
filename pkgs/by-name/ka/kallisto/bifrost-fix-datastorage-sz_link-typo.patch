@@ -1,0 +1,26 @@
+diff --git a/ext/bifrost/src/DataStorage.hpp b/ext/bifrost/src/DataStorage.hpp
+index 016775f..deb849d 100644
+--- a/ext/bifrost/src/DataStorage.hpp
++++ b/ext/bifrost/src/DataStorage.hpp
+@@ -67,6 +67,8 @@ class DataStorage {
+ 
+         inline size_t getNbColors() const { return color_names.size(); }
+ 
++        inline vector<string> const& getColorNames() const { return color_names; }
++
+         size_t getUnitigColorsSize(const size_t nb_threads = 1) const;
+ 
+         uint64_t getHash(const UnitigColorMap<U>& um) const;
+diff --git a/ext/bifrost/src/DataStorage.tcc b/ext/bifrost/src/DataStorage.tcc
+index 02929d9..10b844e 100644
+--- a/ext/bifrost/src/DataStorage.tcc
++++ b/ext/bifrost/src/DataStorage.tcc
+@@ -78,7 +78,7 @@ DataStorage<U>::DataStorage(const DataStorage& o) : color_sets(nullptr), shared_
+ 
+         unitig_cs_link = new atomic<uint64_t>[sz_link];
+ 
+-        for (size_t i = 0; i != sz_link; ++i) unitig_cs_link[i] = o.sz_link[i].load();
++        for (size_t i = 0; i != sz_link; ++i) unitig_cs_link[i] = o.unitig_cs_link[i].load();
+     }
+ 
+     if ((o.data != nullptr) && (o.sz_cs != 0)){

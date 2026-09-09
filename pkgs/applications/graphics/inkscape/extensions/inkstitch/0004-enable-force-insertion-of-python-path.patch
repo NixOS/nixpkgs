@@ -1,0 +1,31 @@
+From 99c895045df01e291c6c9dc89b7a1c758e010bda Mon Sep 17 00:00:00 2001
+From: tropf <tropf@noreply.codeberg.org>
+Date: Sat, 26 Oct 2024 14:07:17 +0200
+Subject: [PATCH 4/4] enable force-insertion of python path
+
+As of now, the inkex library loaded by inkstitch must be fixed. The
+version supplied by inkscape is not sufficient. This should be fixed
+with inkscape 1.4, where this patch can be removed.
+
+The fixed path is injected through an environment variable at runtime.
+---
+ inkstitch.py | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/inkstitch.py b/inkstitch.py
+index be8ddf665..d7a8fca2f 100644
+--- a/inkstitch.py
++++ b/inkstitch.py
+@@ -105,6 +105,9 @@ if not running_as_frozen:  # debugging/profiling only in development mode
+     if prefer_pip_inkex and 'PYTHONPATH' in os.environ:
+         debug_utils.reorder_sys_path()
+ 
++if "PYTHON_INKEX_PATH" in os.environ:
++    sys.path = [os.environ["PYTHON_INKEX_PATH"]] + sys.path
++
+ # enabling of debug depends on value of debug_type in DEBUG.toml file
+ if debug_type != 'none':
+     from lib.debug.debugger import init_debugger
+-- 
+2.49.0
+

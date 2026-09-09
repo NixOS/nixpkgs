@@ -1,0 +1,19 @@
+Revert "signal() returns sighandler_t, not void *"
+
+sadly, on darwin, sighandler_t is not defined
+
+This reverts commit 7bb4dfd0bcadc7c6177d6fe88a4bcccf7fac98b9
+
+diff --git a/build/rpmfc.c b/build/rpmfc.c
+index 86dd36d14..48643a321 100644
+--- a/build/rpmfc.c
++++ b/build/rpmfc.c
+@@ -295,7 +295,7 @@ static int getOutputFrom(ARGV_t argv,
+ 	return -1;
+     }
+     
+-    sighandler_t oldhandler = signal(SIGPIPE, SIG_IGN);
++    void *oldhandler = signal(SIGPIPE, SIG_IGN);
+ 
+     child = fork();
+     if (child < 0) {

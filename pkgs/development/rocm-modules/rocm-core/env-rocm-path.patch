@@ -1,0 +1,22 @@
+In FHS distros rocm-core expects to be installed colocated with a full set of ROCM packages.
+In nixpkgs contexts, we don't want rocm-core to be a ROCM_PATH root.
+diff --git a/cmake_modules/rocm-core-config.cmake.in b/cmake_modules/rocm-core-config.cmake.in
+index f5fe07c..9d72c9c 100644
+--- a/cmake_modules/rocm-core-config.cmake.in
++++ b/cmake_modules/rocm-core-config.cmake.in
+@@ -11,7 +11,14 @@ set_and_check(rocm_core_INCLUDE_DIR "@PACKAGE_INCLUDE_INSTALL_DIR@")
+ set_and_check(ROCM_CORE_INCLUDE_DIR "@PACKAGE_INCLUDE_INSTALL_DIR@")
+ set_and_check(rocm_core_LIB_DIR "@PACKAGE_LIB_INSTALL_DIR@")
+ set_and_check(ROCM_CORE_LIB_DIR "@PACKAGE_LIB_INSTALL_DIR@")
+-set_and_check(ROCM_PATH "${PACKAGE_PREFIX_DIR}")
++# Set ROCM_PATH with priority: existing value > environment variable > package prefix
++if(NOT DEFINED ROCM_PATH)
++    if(DEFINED ENV{ROCM_PATH})
++        set(ROCM_PATH "$ENV{ROCM_PATH}")
++    else()
++        set_and_check(ROCM_PATH "${PACKAGE_PREFIX_DIR}")
++    endif()
++endif()
+ 
+ get_filename_component(ROCM_CORE_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+ include("${ROCM_CORE_CMAKE_DIR}/rocmCoreTargets.cmake")

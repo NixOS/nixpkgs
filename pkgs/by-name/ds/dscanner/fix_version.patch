@@ -1,0 +1,12 @@
+diff --git a/dub.json b/dub.json
+index 72cb269..1ea3903 100644
+--- a/dub.json
++++ b/dub.json
+@@ -21,7 +21,4 @@
+   "stringImportPaths" : [
+     "bin"
+   ],
+-  "preBuildCommands" : [
+-    "\"$DC\" -run \"$PACKAGE_DIR/dubhash.d\""
+-  ]
+ }

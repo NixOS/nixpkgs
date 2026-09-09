@@ -1,0 +1,24 @@
+From 51fda02d223f516c4948606c050bfc732b95f481 Mon Sep 17 00:00:00 2001
+From: Brian Fraser <brian.fraser@booking.com>
+Date: Thu, 24 Sep 2020 15:00:20 +0200
+Subject: [PATCH] _des.h: expose perl_des_expand_key() and perl_des_crypt() to
+ prevent implicit delaration errors/warnings
+
+---
+ _des.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/_des.h b/_des.h
+index ec56b27..b636cda 100644
+--- a/_des.h
++++ b/_des.h
+@@ -4,4 +4,6 @@ typedef unsigned long des_ks[32];
+ 
+ void _des_crypt( des_cblock in, des_cblock out, des_ks key, int encrypt );
+ void _des_expand_key( des_user_key userKey, des_ks key );
++void perl_des_expand_key(des_user_key userKey, des_ks ks);
++void perl_des_crypt( des_cblock input, des_cblock output, des_ks ks, int encrypt );
+ 
+-- 
+2.24.3 (Apple Git-128)
+

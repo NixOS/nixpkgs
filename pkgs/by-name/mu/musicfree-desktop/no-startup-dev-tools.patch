@@ -1,0 +1,18 @@
+diff --git a/src/main/window-manager/index.ts b/src/main/window-manager/index.ts
+index 42fd81c..45f93ab 100644
+--- a/src/main/window-manager/index.ts
++++ b/src/main/window-manager/index.ts
+@@ -129,13 +129,6 @@ class WindowManager implements IWindowManager {
+         initUrl.hash = `/main/musicsheet/${localPluginName}/favorite`;
+         mainWindow.loadURL(initUrl.toString()).then(voidCallback);
+ 
+-        // 3. 开发者工具
+-        if (!app.isPackaged) {
+-            mainWindow.on("ready-to-show", () => {
+-                mainWindow.webContents.openDevTools();
+-            });
+-        }
+-
+         // 4. 主窗口http hack逻辑
+         mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
+             (details, callback) => {

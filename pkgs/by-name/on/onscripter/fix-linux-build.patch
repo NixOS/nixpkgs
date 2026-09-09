@@ -1,0 +1,23 @@
+diff --git a/Makefile.Linux b/Makefile.Linux
+index 2b551bd..efb1f68 100644
+--- a/Makefile.Linux
++++ b/Makefile.Linux
+@@ -41,17 +41,9 @@ LIBS += -logg -lvorbis -lvorbisfile
+ # optional: support CD audio
+ DEFS += -DUSE_CDROM
+ 
+-# optional: avifile
+-DEFS += -DUSE_AVIFILE
+-INCS += `avifile-config --cflags`
+-LIBS += `avifile-config --libs`
+-TARGET += simple_aviplay$(EXESUFFIX)
+-EXT_OBJS += AVIWrapper$(OBJSUFFIX)
+-
+ # optional: lua
+ DEFS += -DUSE_LUA
+-INCS += -I/usr/include/lua5.1
+-LIBS += -llua5.1
++LIBS += -llua
+ EXT_OBJS += LUAHandler$(OBJSUFFIX)
+ 
+ # optional: force screen width for PDA

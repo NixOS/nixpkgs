@@ -1,0 +1,35 @@
+diff --git a/app/legacy/pnpm-lock.yaml b/app/legacy/pnpm-lock.yaml
+index ce6a292..76ba03e 100644
+--- a/app/legacy/pnpm-lock.yaml
++++ b/app/legacy/pnpm-lock.yaml
+@@ -12,8 +12,8 @@ importers:
+         specifier: link:../../core_lib
+         version: link:../../core_lib
+       '@tauri-apps/api':
+-        specifier: 1.5.6
+-        version: 1.5.6
++        specifier: 1.6.0
++        version: 1.6.0
+       pinia:
+         specifier: ^2.2.1
+         version: 2.2.1(typescript@5.6.0-dev.20240811)(vue@3.4.27(typescript@5.6.0-dev.20240811))
+@@ -500,10 +500,6 @@ packages:
+     peerDependencies:
+       tailwindcss: '>=3.0.0 || insiders'
+ 
+-  '@tauri-apps/api@1.5.6':
+-    resolution: {integrity: sha512-LH5ToovAHnDVe5Qa9f/+jW28I6DeMhos8bNDtBOmmnaDpPmJmYLyHdeDblAWWWYc7KKRDg9/66vMuKyq0WIeFA==}
+-    engines: {node: '>= 14.6.0', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
+-
+   '@tauri-apps/api@1.6.0':
+     resolution: {integrity: sha512-rqI++FWClU5I2UBp4HXFvl+sBWkdigBkxnpJDQUWttNyG7IZP4FwQGhTNL5EOw0vI8i6eSAJ5frLqO7n7jbJdg==}
+     engines: {node: '>= 14.6.0', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
+@@ -2707,8 +2703,6 @@ snapshots:
+       postcss-selector-parser: 6.0.10
+       tailwindcss: 3.4.9
+ 
+-  '@tauri-apps/api@1.5.6': {}
+-
+   '@tauri-apps/api@1.6.0': {}
+ 
+   '@tauri-apps/cli-darwin-arm64@1.5.14':

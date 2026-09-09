@@ -1,0 +1,13 @@
+diff --git a/setuptools/version.py b/setuptools/version.py
+--- a/setuptools/version.py
++++ b/setuptools/version.py
+@@ -1,6 +1,3 @@
+-from ._importlib import metadata
+-
+-try:
+-    __version__ = metadata.version('setuptools') or '0.dev0+unknown'
+-except Exception:
+-    __version__ = '0.dev0+unknown'
++# Hardcoded for reproducible builds
++# This avoids runtime metadata queries that can vary between builds
++__version__ = '@version@'

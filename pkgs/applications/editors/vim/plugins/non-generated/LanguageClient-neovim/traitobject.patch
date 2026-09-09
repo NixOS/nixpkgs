@@ -1,0 +1,15 @@
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1026,9 +1028,9 @@ dependencies = [
+
+ [[package]]
+ name = "traitobject"
+-version = "0.1.0"
++version = "0.1.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "efd1f82c56340fdf16f2a953d7bda4f8fdffba13d93b00844c25572110b26079"
++checksum = "04a79e25382e2e852e8da874249358d382ebaf259d0d34e75d8db16a7efabbc7"
+
+ [[package]]
+ name = "treediff"
+

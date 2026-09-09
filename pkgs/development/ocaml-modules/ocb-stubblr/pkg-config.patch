@@ -1,0 +1,26 @@
+--- a/src/ocb_stubblr.ml
++++ b/src/ocb_stubblr.ml
+@@ -31,21 +31,8 @@
+ 
+   (* XXX Would be nice to move pkg-config results to a build artefact. *)
+ 
+-  let opam_prefix =
+-    let cmd = "opam config var prefix" in
+-    lazy ( try run_and_read cmd with Failure _ ->
+-            error_msgf "error running opam")
+-
+-  let var = "PKG_CONFIG_PATH"
+-
+-  let path () =
+-    let opam = Lazy.force opam_prefix
+-    and rest = try [Sys.getenv var] with Not_found -> [] in
+-    opam/"lib"/"pkgconfig" :: opam/"share"/"pkgconfig" :: rest
+-      |> String.concat ~sep:":"
+-
+   let run ~flags package =
+-    let cmd = strf "%s=%s pkg-config %s %s 2>/dev/null"
+-              var (path ()) package (String.concat ~sep:" " flags) in
++    let cmd = strf "pkg-config %s %s 2>/dev/null"
++              package (String.concat ~sep:" " flags) in
+     try `Res (run_and_read cmd) with Failure _ -> `Nonexistent
+ end

@@ -1,0 +1,16 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 966130af88..00710f9652 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -15086,9 +15086,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "picosimd"
+-version = "0.9.2"
++version = "0.9.3"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "af35c838647fef3d6d052e27006ef88ea162336eee33063c50a63f163c18cdeb"
++checksum = "3f8cf1ae70818c6476eb2da0ac8f3f55ecdea41a7aa16824ea6efc4a31cccf41"
+ 
+ [[package]]
+ name = "pin-project"

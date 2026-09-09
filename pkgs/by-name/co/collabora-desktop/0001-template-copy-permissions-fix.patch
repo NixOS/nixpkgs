@@ -1,0 +1,31 @@
+From cd69bba3f02278609699ec53c969a3c5bacbd572 Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Mon, 9 Feb 2026 01:22:26 +0530
+Subject: [PATCH] template copy permissions fix
+
+Signed-off-by: phanirithvij <phanirithvij2000@gmail.com>
+---
+ qt/WebView.cpp | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/qt/WebView.cpp b/qt/WebView.cpp
+index f0434e0055..95ef881808 100644
+--- a/qt/WebView.cpp
++++ b/qt/WebView.cpp
+@@ -656,6 +656,13 @@ WebView* WebView::createNewDocument(QWebEngineProfile* profile, const std::strin
+         return nullptr;
+     }
+ 
++    // Fix for nix, give write permissions as files in the store can only be read-only
++    if (!QFile::setPermissions(newFilePath, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup | QFile::ReadOther))
++    {
++        LOG_ERR("Failed to set write permissions on " << newFilePath.toStdString());
++        return nullptr;
++    }
++
+     // Open the new document
+     Poco::URI newDocumentURI(Poco::Path(newFilePath.toStdString()));
+     WebView* webViewInstance = new WebView(profile, false);
+-- 
+2.52.0
+

@@ -1,0 +1,13 @@
+diff --git a/scripts/wrap/cpp.py b/scripts/wrap/cpp.py
+index 51ac5f1..b5c0b5a 100644
+--- a/scripts/wrap/cpp.py
++++ b/scripts/wrap/cpp.py
+@@ -4595,7 +4595,7 @@ def cpp_source(
+                     */
+                     typedef unsigned long size_t;
+                     '''))
+-            if state.state_.macos:
++            if state.state_.linux or state.state_.macos:
+                 f.write( textwrap.dedent('''
+                     /*
+                     Workaround on MacOS: we need to define fixed-size int types

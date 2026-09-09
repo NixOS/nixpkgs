@@ -1,0 +1,67 @@
+diff --git a/bin/hollywood b/bin/hollywood
+index 6f1ee68..09bc4ea 100755
+--- a/bin/hollywood
++++ b/bin/hollywood
+@@ -74,7 +74,7 @@ if [ -z "$TMUX" ]; then
+ 	else
+ 		tmux_launcher=tmux
+ 	fi
+-	$tmux_launcher new-session -d -s $PKG "/bin/bash"
++	$tmux_launcher new-session -d -s $PKG "/usr/bin/env bash"
+ 	$tmux_launcher send-keys -t $PKG "$0 $1"
+ 	$tmux_launcher send-keys -t $PKG Enter
+ 	exec $tmux_launcher attach-session -t $PKG
+diff --git a/lib/hollywood/code b/lib/hollywood/code
+index 532ce73..3448447 100755
+--- a/lib/hollywood/code
++++ b/lib/hollywood/code
+@@ -19,7 +19,7 @@ command -v view >/dev/null 2>&1 || exit 1
+ 
+ trap "pkill -f -9 lib/hollywood/ >/dev/null 2>&1; exit" INT
+ while true; do
+-	FILES=$(locate -l 4096 "/usr/*.java" "/usr/*.c" "/usr/*.cpp" 2>/dev/null | sort -R)
++	FILES=$(locate -l 4096 "/usr/*.java" "/run/current-system/sw/*.java" "/usr/*.c" "/run/current-system/sw/*.c" "/usr/*.cpp" "/run/current-system/sw/*.cpp" 2>/dev/null | sort -R)
+ 	for f in $FILES; do
+ 		[ -r "$f" ] || continue
+ 		[ -s "$f" ] || continue
+diff --git a/lib/hollywood/hexdump b/lib/hollywood/hexdump
+index f2fb0bd..db059f5 100755
+--- a/lib/hollywood/hexdump
++++ b/lib/hollywood/hexdump
+@@ -19,8 +19,8 @@ command -v ccze >/dev/null 2>&1 || exit 1
+ 
+ trap "pkill -f -9 lib/hollywood/ >/dev/null 2>&1; exit" INT
+ while true; do
+-	for f in $(ls /usr/bin/ | sort -R); do
+-		head -c 4096 "/usr/bin/$f" | hexdump -C | ccze -A -c default=green -c dir="bold green"
++	for f in $(find /usr/bin/ /run/current-system/sw/bin/ | sort -R); do
++		head -c 4096 "$f" | hexdump -C | ccze -A -c default=green -c dir="bold green"
+ 		sleep 0.7
+ 	done
+ done
+diff --git a/lib/hollywood/jp2a b/lib/hollywood/jp2a
+index e87b950..6541f80 100755
+--- a/lib/hollywood/jp2a
++++ b/lib/hollywood/jp2a
+@@ -19,7 +19,7 @@ command -v jp2a >/dev/null 2>&1 || exit 1
+ 
+ trap "pkill -f -9 lib/hollywood/ >/dev/null 2>&1; exit" INT
+ while true; do
+-	FILES=$(locate -l 4096 "/usr/*jpg" 2>/dev/null | sort -R)
++	FILES=$(locate -l 4096 "/usr/*jpg" "/run/current-system/sw/*jpg" 2>/dev/null | sort -R)
+ 	for f in $FILES; do
+ 		[ -r "$f" ] || continue
+ 		[ -s "$f" ] || continue
+diff --git a/lib/hollywood/man b/lib/hollywood/man
+index 2d42513..f4d8bbb 100755
+--- a/lib/hollywood/man
++++ b/lib/hollywood/man
+@@ -19,7 +19,7 @@ command -v ccze >/dev/null 2>&1 || exit 1
+ 
+ trap "pkill -f -9 lib/hollywood/ >/dev/null 2>&1; exit" INT
+ while true; do
+-	FILES=$(ls /usr/share/man/man1/ | sort -R | sed "s/\.1\.gz.*$//" | head -n 4096)
++	FILES=$(ls /usr/share/man/man1/ /run/current-system/sw/share/man/man1/ | sort -R | sed "s/\.1\.gz.*$//" | head -n 4096)
+ 	for f in $FILES; do
+ 		man "$f" | ccze -A
+ 		sleep 0.2

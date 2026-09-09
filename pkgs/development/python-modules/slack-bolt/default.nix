@@ -1,0 +1,124 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  pkg-resources-backport,
+
+  # dependencies
+  slack-sdk,
+
+  # optional-dependencies
+  # - async
+  aiohttp,
+  websockets,
+  # - adapter
+  bottle,
+  chalice,
+  cherrypy,
+  django,
+  falcon,
+  fastapi,
+  flask,
+  gunicorn,
+  moto,
+  pyramid,
+  sanic,
+  sanic-testing,
+  starlette,
+  tornado,
+  uvicorn,
+  websocket-client,
+  werkzeug,
+
+  # tests
+  docker,
+  pytest-asyncio,
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "slack-bolt";
+  version = "1.30.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "slackapi";
+    repo = "bolt-python";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-B9yE2nZ+GF2s2pj5mCaVUiV2rSr6ilaXgQUiLB0XVRQ=";
+  };
+
+  build-system = [ setuptools ];
+
+  dependencies = [ slack-sdk ];
+
+  optional-dependencies = {
+    async = [
+      aiohttp
+      websockets
+    ];
+    adapter = [
+      bottle
+      chalice
+      cherrypy
+      django
+      falcon
+      fastapi
+      flask
+      gunicorn
+      moto
+      pyramid
+      sanic
+      sanic-testing
+      starlette
+      tornado
+      uvicorn
+      websocket-client
+      werkzeug
+    ];
+  };
+
+  pythonImportsCheck = [ "slack_bolt" ];
+
+  nativeCheckInputs = [
+    docker
+    pkg-resources-backport
+    pytest-asyncio
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
+
+  __darwinAllowLocalNetworking = true;
+
+  disabledTestPaths = [
+    # boddle is not packaged as of 2023-07-15
+    "tests/adapter_tests/bottle/"
+  ];
+
+  disabledTests = [
+    # Require network access
+    "test_failure"
+    # TypeError
+    "test_oauth"
+    # AssertionError
+    "test_buffer_size_overrides"
+    "test_buffer_size_overrides"
+    "test_default_params"
+    "test_default_params"
+    "test_parameter_overrides"
+    "test_parameter_overrides"
+  ];
+
+  meta = {
+    description = "Framework to build Slack apps using Python";
+    homepage = "https://github.com/slackapi/bolt-python";
+    changelog = "https://github.com/slackapi/bolt-python/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ samuela ];
+  };
+})

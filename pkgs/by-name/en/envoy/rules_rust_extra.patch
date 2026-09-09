@@ -1,0 +1,18 @@
+--- crate_universe/src/metadata/cargo_tree_rustc_wrapper.sh
++++ crate_universe/src/metadata/cargo_tree_rustc_wrapper.sh
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env bash
++#!@bash@
+ #
+ # For details, see:
+ # `@rules_rust//crate_universe/src/metadata/cargo_tree_resolver.rs - TreeResolver::create_rustc_wrapper`
+
+--- util/process_wrapper/private/process_wrapper.sh
++++ util/process_wrapper/private/process_wrapper.sh
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env bash
++#!@bash@
+ 
+ set -euo pipefail
+ 
+

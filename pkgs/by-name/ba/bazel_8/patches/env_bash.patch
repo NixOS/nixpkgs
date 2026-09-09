@@ -1,0 +1,22 @@
+diff --git a/src/zip_files.sh b/src/zip_files.sh
+index 1422a6c659..920c1019d2 100755
+--- a/src/zip_files.sh
++++ b/src/zip_files.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ 
+ # Copyright 2019 The Bazel Authors. All rights reserved.
+ #
+
+diff --git a/src/package-bazel.sh b/src/package-bazel.sh
+index 56e94db400..2c614af6c2 100755
+--- a/src/package-bazel.sh
++++ b/src/package-bazel.sh
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ #
+ # Copyright 2015 The Bazel Authors. All rights reserved.
+ #
+

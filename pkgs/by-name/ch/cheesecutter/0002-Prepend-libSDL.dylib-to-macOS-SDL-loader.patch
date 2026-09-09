@@ -1,0 +1,25 @@
+From abc5e8786d41803300b56ef40c08db0d867eb01a Mon Sep 17 00:00:00 2001
+From: Christoph Neidahl <christoph.neidahl@gmail.com>
+Date: Sun, 13 Sep 2020 23:22:33 +0200
+Subject: [PATCH 2/2] Prepend libSDL.dylib to macOS SDL loader
+
+---
+ src/derelict/sdl/sdl.d | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/derelict/sdl/sdl.d b/src/derelict/sdl/sdl.d
+index e31a52f..f7915b1 100644
+--- a/src/derelict/sdl/sdl.d
++++ b/src/derelict/sdl/sdl.d
+@@ -54,7 +54,7 @@ public:
+         super(
+             "sdl.dll",
+             "libSDL.so, libSDL.so.0, libSDL-1.2.so, libSDL-1.2.so.0",
+-            "@executable_path/../Frameworks/SDL.framework/SDL, /Library/Frameworks/SDL.framework/SDL, /System/Library/Frameworks/SDL.framework/SDL"
++            "@rpath/libSDL.dylib, @executable_path/../Frameworks/SDL.framework/SDL, /Library/Frameworks/SDL.framework/SDL, /System/Library/Frameworks/SDL.framework/SDL"
+         );
+     }
+ 
+-- 
+2.25.4
+

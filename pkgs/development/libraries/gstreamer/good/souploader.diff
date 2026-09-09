@@ -1,0 +1,13 @@
+diff --git a/ext/soup/gstsouploader.c b/ext/soup/gstsouploader.c
+index 41f3aa3783..451e15b40d 100644
+--- a/ext/soup/gstsouploader.c
++++ b/ext/soup/gstsouploader.c
+@@ -178,7 +178,7 @@ gst_soup_load_library (void)
+       GST_DEBUG ("LibSoup 2 found");
+     } else {
+       GST_DEBUG ("Trying all libsoups");
+-      libsoup_sonames[0] = LIBSOUP_3_SONAME;
++      libsoup_sonames[0] = "@nixLibSoup3Path@/" LIBSOUP_3_SONAME;
+       libsoup_sonames[1] = LIBSOUP_2_SONAME;
+     }
+ 

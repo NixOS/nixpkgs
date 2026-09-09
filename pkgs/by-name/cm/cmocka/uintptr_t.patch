@@ -1,0 +1,16 @@
+Resolve messy situation with uintptr_t and stdint.h
+
+Platforms common in nixpkgs will have stdint.h - thereby we avoid problems
+that seem complicated to avoid.  References:
+https://gitlab.com/cmocka/cmocka/-/issues/38#note_1286565655
+https://git.alpinelinux.org/aports/plain/main/cmocka/musl_uintptr.patch?id=6a15dd0d0ba9cc354a621fb359ca5e315ff2eabd
+
+It isn't easy, as 1.1.6 codebase is missing stdint.h includes on many places,
+and HAVE_UINTPTR_T from cmake also wouldn't get on all places it needs to.
+--- a/include/cmocka.h
++++ b/include/cmocka.h
+@@ -18,2 +18,4 @@
+ #define CMOCKA_H_
++#include <stdint.h>
++#define HAVE_UINTPTR_T 1
+ 

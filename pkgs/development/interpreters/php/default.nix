@@ -1,0 +1,84 @@
+{
+  lib,
+  callPackage,
+  stdenv,
+  llvmPackages,
+  pcre2,
+}:
+
+let
+  mkPhp =
+    { version, hash }:
+    let
+      base = callPackage ./generic.nix {
+        stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
+        inherit version hash;
+      };
+    in
+    base.withExtensions (
+      { all, ... }:
+      with all;
+      [
+        bcmath
+        calendar
+        curl
+        ctype
+        dom
+        exif
+        fileinfo
+        filter
+        ftp
+        gd
+        gettext
+        gmp
+        iconv
+        intl
+        ldap
+        mbstring
+        mysqli
+        mysqlnd
+        openssl
+        pcntl
+        pdo
+        pdo_mysql
+        pdo_odbc
+        pdo_pgsql
+        pdo_sqlite
+        pgsql
+        posix
+        readline
+        session
+        simplexml
+        sockets
+        soap
+        sodium
+        sysvsem
+        sqlite3
+        tokenizer
+        xmlreader
+        xmlwriter
+        zip
+        zlib
+      ]
+      ++ lib.optionals (lib.versionOlder version "8.4") [ all.imap ]
+      ++ lib.optionals (lib.versionOlder version "8.5") [ all.opcache ]
+    );
+in
+{
+  php82 = mkPhp {
+    version = "8.2.33";
+    hash = "sha256-U2Lyp6DnFoznIv6gBIsaHSjg98wmXEF99nDGVnBpUBg=";
+  };
+  php83 = mkPhp {
+    version = "8.3.33";
+    hash = "sha256-+cn00M12ksbj2jY81MpyqCakmuGPXtQwtvyue8KIHhg=";
+  };
+  php84 = mkPhp {
+    version = "8.4.25";
+    hash = "sha256-lSzMF4Uma5WPSh3PxYDgjqu7efRCItHv8ZK82Y2R9uM=";
+  };
+  php85 = mkPhp {
+    version = "8.5.10";
+    hash = "sha256-15vU86kkjly1gzdmug1RzTXdAbhyfyPzC826b6vFHT4=";
+  };
+}
