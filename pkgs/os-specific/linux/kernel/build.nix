@@ -502,11 +502,13 @@ lib.makeOverridable (
       find -empty -type d -delete
     '';
 
-    preFixup = ''
-      if [ -z "''${dontStrip-}" -a -e $out/vmlinux ]; then
-        $STRIP -v -S -p $out/vmlinux
-      fi
-    '';
+    stripDebugList = [
+      "lib"
+
+      # Only relevant for `$out/vmlinux` when that target is used; this
+      # doesn’t strip `$dev/vmlinux`, as it’s a symbolic link.
+      "vmlinux"
+    ];
 
     stripExclude = [ "lib/modules/${modDirVersion}/build/vmlinux" ];
 
