@@ -101,6 +101,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/10d43de8f4f942cb591ada3103474bd7213425f1.patch";
       hash = "sha256-DJIL6M3XcsjBoMO77OxNi84d1DxAphAfot3N7Nq1QqQ=";
     })
+    (fetchpatch {
+      name = "gtk4-munmap-dmabuf-format-table.patch";
+      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/a8a5692ce3c334672ac325cf8f1257a138843bf6.patch";
+      hash = "sha256-4wgiPhOhpK8T0BrRuJFZPfqCe+gAIMHe2fHb5zqSIyw=";
+    })
   ];
 
   depsBuildBuild = [
