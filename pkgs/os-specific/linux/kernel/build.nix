@@ -171,6 +171,22 @@ lib.makeOverridable (
       rustc-unwrapped
       rust-bindgen-unwrapped
     ];
+
+    # Some image types need special install targets
+    installTargetFor =
+      target:
+      if
+        (target == "zImage" || target == "Image.gz" || target == "vmlinuz.efi")
+        && builtins.elem stdenv.hostPlatform.linuxArch [
+          "arm"
+          "arm64"
+          "parisc"
+          "riscv"
+        ]
+      then
+        "zinstall"
+      else
+        "install";
   in
 
   stdenv.mkDerivation {
@@ -572,24 +588,11 @@ lib.makeOverridable (
       baseVersion = lib.head (lib.splitString "-rc" version);
       kernelOlder = lib.versionOlder baseVersion;
       kernelAtLeast = lib.versionAtLeast baseVersion;
+      inherit installTargetFor;
     };
 
-    # Some image types need special install targets
     installTargets = [
-      (
-        if
-          (target == "zImage" || target == "Image.gz" || target == "vmlinuz.efi")
-          && builtins.elem stdenv.hostPlatform.linuxArch [
-            "arm"
-            "arm64"
-            "parisc"
-            "riscv"
-          ]
-        then
-          "zinstall"
-        else
-          "install"
-      )
+      (installTargetFor target)
     ]
     ++ lib.optionals isModular [ "modules_install" ]
     ++ lib.optionals buildDTBs [ "dtbs_install" ];
