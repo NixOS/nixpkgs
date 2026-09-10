@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   gi-docgen,
-  glibcLocales,
+  glibcLocalesUtf8,
   meson,
   ministream,
   ninja,
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     adwaita-icon-theme
-    glibcLocales
+    glibcLocalesUtf8
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     xvfb-run
