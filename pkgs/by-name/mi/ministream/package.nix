@@ -7,6 +7,7 @@
   ninja,
   pkg-config,
   glib,
+  testers,
   gnome,
   gobject-introspection,
   withIntrospection ?
@@ -26,15 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   __structuredAttrs = true;
 
-  depsBuildBuild = [
-    pkg-config
-  ];
-
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    glib
   ]
   ++ lib.optionals withIntrospection [
     gobject-introspection
@@ -45,13 +41,20 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "-Das-compare=disabled"
+    (lib.mesonEnable "as-compare" false)
     (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
   ];
 
+  doCheck = true;
+
   passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      versionCheck = true;
+    };
     updateScript = gnome.updateScript {
-      packageName = finalAttrs.pname;
+      packageName = "ministream";
     };
   };
 
@@ -60,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     longDescription = ''
       Ministream is a small subset of libappstream, intended to be used by
       libadwaita to automatically populate its AboutDialog with data
-      contained in the applications AppStream manifest. Unlike libappstream,
+      contained in the application's AppStream manifest. Unlike libappstream,
       this library only depends on GLib.
     '';
     homepage = "https://gitlab.gnome.org/GNOME/ministream";
@@ -68,5 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
+    pkgConfigModules = [ "ministream" ];
   };
 })
