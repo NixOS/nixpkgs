@@ -81,6 +81,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       RossSmyth
+      mrdev023
       telometto
     ];
     mainProgram = "qmk";
