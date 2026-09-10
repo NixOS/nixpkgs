@@ -113,4 +113,26 @@ in
           { }
       )
   );
+  julia_113 = wrapJulia (
+    callPackage
+      (import ./generic.nix {
+        version = "1.13.1";
+        hash = "sha256-HCAGvO16H4tsklmO9lt7JPx0rqrcU1NaReTGGXABBXw=";
+        patches = [
+          # Upstream only sets CMAKE_BUILD_RPATH on Darwin (JuliaLang/julia#63103).
+          # On Linux in the Nix sandbox, intermediate build tools like llvm-min-tblgen
+          # need build_shlibdir in RPATH to find bundled libz/libzstd during LLVM compilation.
+          ./patches/1.13/0001-llvm-zlib-rpath.patch
+        ];
+      })
+      (
+        if stdenv.cc.isGNU then
+          {
+            stdenv = gcc14Stdenv;
+            gfortran = gfortran14;
+          }
+        else
+          { }
+      )
+  );
 }

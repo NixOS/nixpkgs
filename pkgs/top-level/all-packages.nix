@@ -3822,10 +3822,11 @@ with pkgs;
     julia_110
     julia_111
     julia_112
+    julia_113
     ;
 
   julia-lts = julia_110-bin;
-  julia-stable = julia_112;
+  julia-stable = julia_113;
   julia = julia-stable;
 
   julia-lts-bin = julia_110-bin;
