@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "uv-sort";
-  version = "0.7.1";
+  version = "0.8.0";
   pyproject = true;
 
   # Build from GitHub does not work. Use fetchPypi instead of fetchFromGitHub.
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   src = fetchPypi {
     pname = "uv_sort";
     inherit (finalAttrs) version;
-    hash = "sha256-CFry9+w28S8MhWgSqRG8FTQTQ3eYnxO5xSgQIi/xmkc=";
+    hash = "sha256-GXR9aN2s0ryFl2KMED9ggUPt3ddXfOrzsdUNkyhsT6E=";
   };
 
   build-system = with python3Packages; [

@@ -20,5 +20,4 @@ mkDerivation {
   MK_TESTS = "no";
   clangFixup = true;
 
-  meta.platforms = lib.platforms.freebsd;
 }

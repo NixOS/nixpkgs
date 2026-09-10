@@ -17,12 +17,12 @@ buildGoModule (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "atomgit-cli";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchgit {
     url = "https://atomgit.com/hust-open-atom-club/atomgit-cli.git";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-E1T093LkccgLPPNs5OokxY5tw4HEMmRy+ulaROnuSCE=";
+    hash = "sha256-Yvv65+tNO9JJ4aW0KGDbjYzXAEWp9QFzCrrYMwdSl8M=";
   };
 
   vendorHash = "sha256-YuAY+CBO+YAMEfrJuUJ/EMnmR9pfRkL+qMhOr1LPKck=";

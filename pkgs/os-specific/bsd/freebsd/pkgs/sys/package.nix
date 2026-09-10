@@ -156,6 +156,5 @@ mkDerivation rec {
 
   meta = {
     description = "FreeBSD kernel and modules";
-    platforms = lib.platforms.freebsd;
   };
 }

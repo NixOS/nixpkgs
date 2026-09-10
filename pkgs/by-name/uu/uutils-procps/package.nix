@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uutils-procps";
-  version = "0.0.1-unstable-2026-08-23";
+  version = "0.0.1-unstable-2026-09-06";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "procps";
-    rev = "da9bc6efcecac68cfaccd7e0adc3ed38250a1f45";
-    hash = "sha256-s7fYBkuv37nddm5XX3chaBFh19xDTNaZwbCtSYFkWls=";
+    rev = "ec4b560ff4646a93a174ee272d405fbbc0e6d081";
+    hash = "sha256-C/fmxfMpM/Pq9p1KxUKfjLRHFZGY27stfNolE6aiQ7I=";
   };
 
-  cargoHash = "sha256-Qzvo1a5bJMofR0pf/UOq9ZViFmkhPEx5lWUlt7fHUWg=";
+  cargoHash = "sha256-vRo6y3r9q2AUte3uE0WWI9mJ7sUdcrxNYiMLBvPSlb8=";
 
   cargoBuildFlags = [ "--workspace" ];
 
