@@ -1,8 +1,10 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   git,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -26,7 +28,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-TnpkGOs8/IFJ1trzMijOTmX3BR2P3GsBhyv0GVCwHsc=";
 
   # integrations test require git at build time (jarl >= 0.5.0)
-  nativeBuildInputs = [ git ];
+  nativeBuildInputs = [
+    git
+    installShellFiles
+  ];
 
   # Don't run integration_tests for jarl-lsp, because it doesn't see
   # the CARGO_BIN_EXE_jarl env var even if exported in preCheck
@@ -40,8 +45,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
 
+  # TODO: Upstream also provides Elvish and PowerShell completions,
+  # but `installShellCompletion` only has support for Bash, Zsh and Fish at the moment.
   postInstall = ''
     rm $out/bin/xtask_codegen
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd jarl \
+      --bash <(COMPLETE=bash $out/bin/jarl) \
+      --fish <(COMPLETE=fish $out/bin/jarl) \
+      --zsh <(COMPLETE=zsh $out/bin/jarl) \
   '';
 
   meta = {
