@@ -4805,12 +4805,6 @@ with pkgs;
   autoconf = callPackage ../development/tools/misc/autoconf { };
   autoconf269 = callPackage ../development/tools/misc/autoconf/2.69.nix { };
 
-  automake = automake118x;
-
-  automake116x = callPackage ../development/tools/misc/automake/automake-1.16.x.nix { };
-
-  automake118x = callPackage ../development/tools/misc/automake/automake-1.18.x.nix { };
-
   bandit = with python3Packages; toPythonApplication bandit;
 
   bazel = bazel_7;
