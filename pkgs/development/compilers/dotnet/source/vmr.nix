@@ -67,6 +67,8 @@ stdenv.mkDerivation {
   pname = "${baseName}-vmr";
   inherit version;
 
+  strictDeps = true;
+
   # TODO: fix this in the binary sdk packages
   preHook = lib.optionalString stdenv.hostPlatform.isDarwin ''
     addToSearchPath DYLD_LIBRARY_PATH "${_icu}/lib"
@@ -79,6 +81,10 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
+    # this gets copied into the tree, but we still need the sandbox profile
+    bootstrapSdk
+    # the propagated build inputs in llvm.dev break swift compilation
+    llvmPackages.llvm.out
     ensureNewerSourcesForZipFilesHook
     jq
     curl.bin
@@ -102,13 +108,12 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals isDarwin [
     getconf
+    xcbuild
+    swift
+    sigtool
   ];
 
   buildInputs = [
-    # this gets copied into the tree, but we still need the sandbox profile
-    bootstrapSdk
-    # the propagated build inputs in llvm.dev break swift compilation
-    llvmPackages.llvm.out
     zlib
     _icu
     openssl
@@ -118,10 +123,7 @@ stdenv.mkDerivation {
     lttng-ust_2_12
   ]
   ++ lib.optionals isDarwin [
-    xcbuild
-    swift
     krb5
-    sigtool
   ];
 
   # This is required to fix the error:
