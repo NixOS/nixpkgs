@@ -1,74 +1,86 @@
 {
+  config,
   lib,
   stdenv,
-  fetchurl,
+  cmake,
+  fetchFromGitHub,
+  alsaSupport ? stdenv.hostPlatform.isLinux,
   alsa-lib,
+  jackSupport ? true,
   libjack2,
+  ossSupport ? stdenv.hostPlatform.isBSD,
+  pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  libpulseaudio,
   pkg-config,
   which,
+  testers,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "portaudio";
-  version = "190700_20210406";
+  version = "19.7.0-unstable-2026-02-19";
 
-  src = fetchurl {
-    url = "https://files.portaudio.com/archives/pa_stable_v${finalAttrs.version}.tgz";
-    sha256 = "1vrdrd42jsnffh6rq8ap2c6fr4g9fcld89z649fs06bwqx1bzvs7";
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
+
+  src = fetchFromGitHub {
+    owner = "PortAudio";
+    repo = "portaudio";
+    rev = "5dcff94e28a63aed67b404af9eef9ef8423ab9e9";
+    hash = "sha256-jHYFLNnDUWtls3pj92dTXieZCG7cBVy6dgdPzXT49wI=";
   };
 
   strictDeps = true;
   nativeBuildInputs = [
+    cmake
     pkg-config
     which
   ];
-  buildInputs = [
-    libjack2
-  ]
-  # Enabling alsa causes linux-only sources to be built
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
-  configureFlags = [
-    "--disable-mac-universal"
-    "--enable-cxx"
-  ];
+  propagatedBuildInputs =
+    lib.optionals alsaSupport [ alsa-lib ]
+    ++ lib.optionals jackSupport [ libjack2 ]
+    ++ lib.optionals pulseSupport [ libpulseaudio ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=nullability-inferred-on-nested-type -Wno-error=nullability-completeness-on-arrays -Wno-error=implicit-const-int-float-conversion";
+  cmakeFlags = lib.mapAttrsToList (flag: value: lib.cmakeBool flag value) {
+    BUILD_SHARED_LIBS = !stdenv.hostPlatform.isStatic;
 
-  # Disable parallel build as it fails as:
-  #   make: *** No rule to make target '../../../lib/libportaudio.la',
-  #     needed by 'libportaudiocpp.la'.  Stop.
-  # Next release should address it with
-  #     https://github.com/PortAudio/portaudio/commit/28d2781d9216115543aa3f0a0ffb7b4ee0fac551.patch
-  enableParallelBuilding = false;
+    PA_USE_ALSA = alsaSupport;
+    PA_USE_JACK = jackSupport;
+    PA_USE_OSS = ossSupport;
+    PA_USE_PULSEAUDIO = pulseSupport;
+  };
 
   postPatch = ''
-    # workaround for the configure script which expects an absolute path
-    export AR=$(which $AR)
-  '';
-
-  # not sure why, but all the headers seem to be installed by the make install
-  installPhase = ''
-    make install
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    # fixup .pc file to find alsa library
-    sed -i "s|-lasound|-L${alsa-lib.out}/lib -lasound|" "$out/lib/pkgconfig/"*.pc
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    cp include/pa_mac_core.h $out/include/pa_mac_core.h
+    # remove prefix from library and include paths
+    substituteInPlace cmake/portaudio-2.0.pc.in \
+      --replace-fail 'libdir=''${prefix}/@CMAKE_INSTALL_LIBDIR@' \
+                     'libdir=@CMAKE_INSTALL_FULL_LIBDIR@' \
+      --replace-fail 'includedir=''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@' \
+                     'includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@'
   '';
 
   meta = {
     description = "Portable cross-platform Audio API";
     homepage = "https://www.portaudio.com/";
+    changelog = "https://github.com/PortAudio/portaudio/releases";
     # Not exactly a bsd license, but alike
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+
+    pkgConfigModules = [ "portaudio-2.0" ];
   };
 
   passthru = {
     api_version = 19;
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    updateScript = nix-update-script {
+      extraArgs = [ "--version=branch" ];
+    };
   };
 })

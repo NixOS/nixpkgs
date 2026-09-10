@@ -8,7 +8,7 @@
   mpg123,
   libogg,
   libvorbis,
-  portaudio,
+  portaudiocpp,
   libsndfile,
   flac,
   usePulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     mpg123
     libogg
     libvorbis
-    portaudio
+    portaudiocpp
     libsndfile
     flac
   ]
