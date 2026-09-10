@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cbc";
-  version = "2.10.12";
+  version = "2.10.13";
 
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "Cbc";
     tag = "releases/${finalAttrs.version}";
-    sha256 = "sha256-0Sz4/7CRKrArIUy/XxGIP7WMmICqDJ0VxZo62thChYQ=";
+    sha256 = "sha256-/tGKB4axpnnG7MTYfYinUTtIzaEc2G7TNFuSfx6M9t0=";
   };
 
   # or-tools has a hard dependency on Cbc static libraries, so we build both
