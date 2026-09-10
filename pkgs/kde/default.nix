@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   generateSplicesForMkScope,
   makeScopeWithSplicing',
@@ -81,7 +82,6 @@ let
         kio-snapshot = self.callPackage ./misc/kio-snapshot { };
         klevernotes = self.callPackage ./misc/klevernotes { };
         ktextaddons = self.callPackage ./misc/ktextaddons { };
-        kup = self.callPackage ./misc/kup { };
         marknote = self.callPackage ./misc/marknote { };
         mpvqt = self.callPackage ./misc/mpvqt { };
         phonon = self.callPackage ./misc/phonon { };
@@ -99,6 +99,11 @@ let
         kzones = self.callPackage ./third-party/kzones { };
         wallpaper-engine-plugin = self.callPackage ./third-party/wallpaper-engine-plugin { };
       }
+      // (lib.optionalAttrs config.allowAliases {
+        kgamma = throw "kdePackages.kgamma was removed as it only worked in the X11 session, which is EOL upstream";
+        kwin-x11 = throw "kdePackages.kgamma was removed as it is EOL upstream";
+        wacomtablet = throw "kdePackages.wacomtablet was removed as it only worked in the X11 session, which is EOL upstream";
+      })
     );
 in
 makeScopeWithSplicing' {
