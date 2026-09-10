@@ -407,6 +407,7 @@ in
   );
   ceph-single-node-bluestore = runTestOn [
     "aarch64-linux"
+    "riscv64-linux"
     "x86_64-linux"
   ] ./ceph-single-node-bluestore.nix;
   certmgr = import ./certmgr.nix { inherit pkgs runTest; };
