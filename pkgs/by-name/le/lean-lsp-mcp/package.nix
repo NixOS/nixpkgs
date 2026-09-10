@@ -27,10 +27,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     certifi
   ];
 
-  pythonRelaxDeps = [
-    "mcp"
-    "leanclient"
-  ];
+  pythonRelaxDeps = [ "mcp" ];
 
   # Tests require a real Lean toolchain
   doCheck = false;
