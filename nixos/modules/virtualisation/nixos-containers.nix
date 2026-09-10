@@ -1014,6 +1014,7 @@ in
             hostNixSocketIsDisabled
             ;
 
+          # Tested in: nixos/tests/containers-eval.nix
           mapper =
             name:
             { cfg, opt }:
@@ -1030,7 +1031,7 @@ in
                   && cfg.config.nix.enable
                   && cfg.config.nix.daemon.enable
                 )
-                "${options.containers}.${strings.escapeNixIdentifier name} requires a Nix daemon but the host does not provide it, as ${hostNixSocketIsDisabled}";
+                "${options.containers}.${strings.escapeNixIdentifier name} has nix.daemon.enable = true, but the host does not provide a nix daemon socket, as ${hostNixSocketIsDisabled}. Disable nix.daemon.enable in the container, or enable the daemon on the host.";
         in
         (lib.concatMap
           # This could be done in mapper but causes a reformat
