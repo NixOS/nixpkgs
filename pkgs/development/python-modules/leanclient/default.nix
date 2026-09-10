@@ -11,6 +11,10 @@
   psutil,
   tqdm,
   watchfiles,
+
+  # tests
+  pytestCheckHook,
+  pytest-timeout,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -34,10 +38,33 @@ buildPythonPackage (finalAttrs: {
     watchfiles
   ];
 
-  # Tests require a real Lean toolchain
-  doCheck = false;
+  # pytest-timeout enforces upstream's `timeout = 300`, which matters because
+  # the aio tests spawn subprocesses that could otherwise hang a builder.
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-timeout
+  ];
 
-  pythonImportsCheck = [ "leanclient" ];
+  # tests/integration and tests/benchmark drive a real Lean project; these do not.
+  enabledTestPaths = [
+    "tests/unit"
+    "tests/aio/test_convert.py"
+    "tests/aio/test_fake_server.py"
+  ];
+
+  # These four take the test_project_dir fixture, which runs elan and builds
+  # Mathlib. Nothing else in the enabled paths needs a Lean toolchain.
+  disabledTests = [
+    "test_initial_build"
+    "test_get_env_as_dict"
+    "test_get_env_as_string"
+    "test_needs_mathlib_cache_get_real_project"
+  ];
+
+  pythonImportsCheck = [
+    "leanclient"
+    "leanclient.aio"
+  ];
 
   meta = {
     description = "Python client for the Lean theorem prover LSP";
