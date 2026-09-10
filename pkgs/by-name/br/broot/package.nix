@@ -5,9 +5,6 @@
   fetchFromGitHub,
   installShellFiles,
   makeBinaryWrapper,
-  pkg-config,
-  libgit2,
-  zlib,
   buildPackages,
   versionCheckHook,
   nix-update-script,
@@ -16,28 +13,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "broot";
-  version = "1.59.0";
+  version = "1.60.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "broot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z0n0+dM2lpnM/1Nw28kLnO3UQq1zrhzD2QBPV+zcDfQ=";
+    hash = "sha256-VTVnE96hddGgJ7jXW4eWZ/rJhvgUS+FVR4Ck2Vip4uo=";
   };
 
-  cargoHash = "sha256-MhUjKIW2Nb2Ou0sW7iA4S3ecu3UGIRtFCW+KhbwIjtI=";
+  cargoHash = "sha256-uYbdkaSHkFCzWoUte4/WNdBuz4oOt+AgkQnrswoboMA=";
 
   nativeBuildInputs = [
     installShellFiles
     makeBinaryWrapper
-    pkg-config
   ];
 
-  buildInputs = [ libgit2 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ zlib ];
-
   buildFeatures = lib.optionals withClipboard [ "clipboard" ];
-
-  env.RUSTONIG_SYSTEM_LIBONIG = true;
 
   postPatch = ''
     # Fill the version stub in the man page. We can't fill the date
