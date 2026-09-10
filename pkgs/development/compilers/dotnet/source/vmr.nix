@@ -68,6 +68,7 @@ stdenv.mkDerivation {
   inherit version;
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   # TODO: fix this in the binary sdk packages
   preHook = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -386,7 +387,7 @@ stdenv.mkDerivation {
       dotnet nuget add source "${bootstrapSdk.artifacts}"
     ''
     + ''
-      ${prepScript} $prepFlags
+      ${prepScript} "''${prepFlags[@]}"
     ''
     + lib.optionalString (!hasRuntime) ''
       mkdir .shared-components
@@ -394,7 +395,7 @@ stdenv.mkDerivation {
       chmod +w -R .shared-components/
       # zip dependencies unzipped in bootstrap installPhase, so they can be found
       find .shared-components/assets . -name \*.tar -exec gzip -f --fast {} \;
-      buildFlags+=\ --with-shared-components\ "$PWD"/.shared-components
+      buildFlags+=(--with-shared-components "$PWD"/.shared-components)
     ''
     + ''
 
@@ -459,7 +460,7 @@ stdenv.mkDerivation {
     version= \
     CLR_CC=$(command -v clang) \
     CLR_CXX=$(command -v clang++) \
-      ./build.sh $buildFlags
+      ./build.sh "''${buildFlags[@]}"
 
     runHook postBuild
   '';
