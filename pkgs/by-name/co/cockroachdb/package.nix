@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "23.1.14";
+  version = "25.4.2";
   pname = "cockroachdb";
 
   # For several reasons building cockroach from source has become
@@ -18,11 +18,11 @@ let
   srcs = {
     aarch64-linux = fetchzip {
       url = "https://binaries.cockroachdb.com/cockroach-v${version}.linux-arm64.tgz";
-      hash = "sha256-cwczzmSKKQs/DN6WZ/FF6nJC82Pu47akeDqWdBMgdz0=";
+      hash = "sha256-EyVCPJ+kIrR5LDteFsgJ7/L28/n+NiUnP7H1mCPC5nQ=";
     };
     x86_64-linux = fetchzip {
       url = "https://binaries.cockroachdb.com/cockroach-v${version}.linux-amd64.tgz";
-      hash = "sha256-goCBE+zv9KArdoMsI48rlISurUM0bL/l1OEYWQKqzv0=";
+      hash = "sha256-+ltnhAFh4z3TrMr1FQ+WT8CAiep4/m7b7OxbhfSFAPk=";
     };
   };
   src =
