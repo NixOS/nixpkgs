@@ -56,16 +56,16 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   # requires xvfb-run
-  doInstallCheck = !stdenv.hostPlatform.isDarwin && false; # tests time out
+  doCheck = !stdenv.hostPlatform.isDarwin && false; # tests time out
 
-  installCheckPhase = ''
-    runHook preInstallCheck
+  checkPhase = ''
+    runHook preCheck
 
     xvfb-run dbus-run-session \
       --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --no-rebuild --print-errorlogs
 
-    runHook postInstallCheck
+    runHook postCheck
   '';
 
   # Prevent double wrapping, let the Python wrapper use the args in preFixup.
