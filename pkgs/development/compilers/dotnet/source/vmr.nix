@@ -154,12 +154,6 @@ stdenv.mkDerivation {
     ) ./Prefer-DOTNET_ROOT-over-directory-traversal-when-fin.patch
     ++ lib.optionals (lib.versionAtLeast version "11") [
       ./Prefer-DOTNET_ROOT-over-directory-traversal-when-fin.2.patch
-      (fetchpatch2 {
-        url = "https://github.com/dotnet/runtime/pull/132408/commits/76be9c11bc50bcfa7a13e027fb1cee486bca25a1.patch";
-        hash = "sha256-aJT4QVBaB96mc5m1xX8J5+Uh6h/XtKWV8m5gLOnFc+k=";
-        extraPrefix = "src/runtime/";
-        stripLen = 1;
-      })
     ]
     ++ lib.optional (lib.versionAtLeast version "11" && isDarwin) ./fix-cmake-darwin.patch;
 
@@ -363,13 +357,7 @@ stdenv.mkDerivation {
         src/runtime/src/mono/CMakeLists.txt \
         --replace-fail '/usr/lib/libicucore.dylib' '${darwin.ICU}/lib/libicucore.dylib'
     ''
-  )
-  + lib.optionalString (lib.versionAtLeast version "11") ''
-    # matching the trailing space here to avoid breaking the shebang
-    substituteInPlace \
-      src/msbuild/eng/build.sh \
-      --replace-fail '/bin/bash ' 'bash '
-  '';
+  );
 
   prepFlags = [
     "--no-artifacts"
