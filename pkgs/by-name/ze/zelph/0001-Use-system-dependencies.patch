@@ -1,0 +1,180 @@
+---
+ src/lib/CMakeLists.txt  | 86 +++++++++--------------------------------
+ src/test/CMakeLists.txt | 27 ++++++-------
+ 2 files changed, 30 insertions(+), 83 deletions(-)
+
+diff --git a/src/lib/CMakeLists.txt b/src/lib/CMakeLists.txt
+index a0b4253..4cb679c 100644
+--- a/src/lib/CMakeLists.txt
++++ b/src/lib/CMakeLists.txt
+@@ -26,6 +26,8 @@ include(CheckCXXCompilerFlag)
+ include(FetchContent)
+ include(CheckIPOSupported)
+ 
++find_package(PkgConfig REQUIRED)
++
+ set(_ZELPH_USE_MIMALLOC_DEFAULT OFF)
+ if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND PROJECT_IS_TOP_LEVEL)
+     set(_ZELPH_USE_MIMALLOC_DEFAULT ON)
+@@ -65,40 +67,21 @@ option(ZELPH_USE_MIMALLOC
+ #      is linked in, the system package is not used and its version says
+ #      nothing about this one.
+ if(ZELPH_USE_MIMALLOC AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
+-    set(MI_BUILD_SHARED OFF CACHE BOOL "" FORCE)
+-    # Upstream wires mimalloc-obj-target to mimalloc-static, so the OBJECT
+-    # build needs the static one to exist even though only the object is
+-    # linked. See point 2 above for how it fails when this is OFF.
+-    set(MI_BUILD_STATIC ON CACHE BOOL "" FORCE)
+-    set(MI_BUILD_OBJECT ON CACHE BOOL "" FORCE)
+-    set(MI_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+-    set(MI_OVERRIDE ON CACHE BOOL "" FORCE)
+-
+-    FetchContent_Declare(
+-        mimalloc
+-        GIT_REPOSITORY https://github.com/microsoft/mimalloc.git
+-        GIT_TAG v3.4.5
+-        SYSTEM
+-    )
+-    FetchContent_MakeAvailable(mimalloc)
++    find_package(mimalloc REQUIRED)
+ 
+     add_library(zelph_mimalloc_override INTERFACE)
+     target_link_libraries(zelph_mimalloc_override INTERFACE
+-        mimalloc-obj
+-        "$<TARGET_OBJECTS:mimalloc-obj>"
++        mimalloc-static
+     )
+ endif()
+ 
+-FetchContent_Declare(
+-    janet
+-    GIT_REPOSITORY https://github.com/janet-lang/janet.git
+-    GIT_TAG v1.41.2
+-    SYSTEM
+-    SOURCE_SUBDIR ""
+-)
+-
+-FetchContent_MakeAvailable(janet)
++# Janet is built from source. JANET_SOURCE_DIR must be set via cmake flag.
++if(NOT DEFINED JANET_SOURCE_DIR)
++    message(FATAL_ERROR "JANET_SOURCE_DIR must be set to the Janet source directory")
++endif()
++set(janet_SOURCE_DIR "${JANET_SOURCE_DIR}")
+ 
++if(NOT TARGET janet_lib)
+ if(EMSCRIPTEN)
+     # The Meson/ninja subprocess build cannot produce wasm objects. Instead,
+     # generate Janet's amalgamated source with the HOST toolchain (the
+@@ -230,54 +213,23 @@ endian = 'little'\n"
+     endif ()
+ endif ()
+ 
+-FetchContent_Declare(
+-    unordered_dense
+-    GIT_REPOSITORY https://github.com/martinus/unordered_dense.git
+-    GIT_TAG v4.8.1
+-    SYSTEM
+-)
+-
+-FetchContent_MakeAvailable(unordered_dense)
++endif()
++find_package(unordered_dense REQUIRED)
+ 
+ if(NOT ZELPH_WASM)
+-    FetchContent_Declare(
+-    bzip2
+-    GIT_REPOSITORY https://gitlab.com/bzip2/bzip2.git
+-    GIT_TAG bzip2-1.0.8
+-    SYSTEM
+-)
+-
+-    FetchContent_GetProperties(bzip2)
+-    if (NOT bzip2_POPULATED)
+-        FetchContent_Populate(bzip2)
+-        add_library(bz2 STATIC
+-        ${bzip2_SOURCE_DIR}/blocksort.c
+-        ${bzip2_SOURCE_DIR}/bzlib.c
+-        ${bzip2_SOURCE_DIR}/compress.c
+-        ${bzip2_SOURCE_DIR}/crctable.c
+-        ${bzip2_SOURCE_DIR}/decompress.c
+-        ${bzip2_SOURCE_DIR}/huffman.c
+-        ${bzip2_SOURCE_DIR}/randtable.c
++    find_library(BZ2_LIBRARY bz2 REQUIRED)
++    find_path(BZ2_INCLUDE_DIR bzlib.h REQUIRED)
++    add_library(bz2 STATIC IMPORTED)
++    set_target_properties(bz2 PROPERTIES
++        IMPORTED_LOCATION "${BZ2_LIBRARY}"
++        INTERFACE_INCLUDE_DIRECTORIES "${BZ2_INCLUDE_DIR}"
+     )
+-        target_include_directories(bz2 PUBLIC ${bzip2_SOURCE_DIR})
+-        if (MSVC)
+-            target_compile_definitions(bz2 PRIVATE _CRT_SECURE_NO_WARNINGS)
+-        endif ()
+-        set_target_properties(bz2 PROPERTIES POSITION_INDEPENDENT_CODE ON)
+-    endif ()
+ 
+-    FetchContent_Declare(
+-        CapnProto
+-        GIT_REPOSITORY https://github.com/capnproto/capnproto.git
+-        GIT_TAG v1.4.0
+-        SYSTEM
+-    )
++    find_package(CapnProto REQUIRED)
+ 
+     set(WITH_OPENSSL OFF CACHE BOOL "" FORCE)
+     set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
+ 
+-    FetchContent_MakeAvailable(CapnProto)
+-
+     # Suppress all warnings from Cap'n Proto targets (third-party), including LTO
+     set(CAPNP_TARGETS
+         kj
+diff --git a/src/test/CMakeLists.txt b/src/test/CMakeLists.txt
+index 9de7ccf..f915b4b 100644
+--- a/src/test/CMakeLists.txt
++++ b/src/test/CMakeLists.txt
+@@ -27,22 +27,9 @@ include(FetchContent)
+ # which newer CMake rejects. Allow it to configure anyway.
+ set(CMAKE_POLICY_VERSION_MINIMUM 3.5 CACHE STRING "")
+ 
+-FetchContent_Declare(
+-    doctest
+-    GIT_REPOSITORY https://github.com/doctest/doctest.git
+-    GIT_TAG v2.5.2
+-    SYSTEM
+-)
+-FetchContent_MakeAvailable(doctest)
+-
+-FetchContent_Declare(
+-    unordered_dense
+-    GIT_REPOSITORY https://github.com/martinus/unordered_dense.git
+-    GIT_TAG v4.8.1
+-    SYSTEM
+-)
++find_package(doctest REQUIRED)
+ 
+-FetchContent_MakeAvailable(unordered_dense)
++find_package(unordered_dense REQUIRED)
+ 
+ add_executable(zelph_tests
+     test_bin_inspection.cpp
+@@ -111,7 +98,15 @@ add_executable(zelph_tests
+     test_wikidata_import.cpp
+     test_wikidata_qualifiers.cpp
+ )
+-target_link_libraries(zelph_tests PRIVATE zelph_lib doctest_with_main unordered_dense::unordered_dense)
++
++# Generate a single translation unit that provides the doctest implementation.
++# Using DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN as a compile definition on the whole
++# target causes every TU to emit its own copy of main() and doctest internals.
++file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/doctest_main.cpp
++     "#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN\n#include <doctest/doctest.h>\n")
++target_sources(zelph_tests PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/doctest_main.cpp)
++
++target_link_libraries(zelph_tests PRIVATE zelph_lib doctest::doctest unordered_dense::unordered_dense)
+ 
+ # Where test_paper_scripts.cpp looks. An absolute path into the SOURCE tree,
+ # because the scripts are development material and are not installed anywhere:
+-- 
+2.54.0
+
