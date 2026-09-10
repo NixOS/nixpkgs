@@ -51,6 +51,16 @@ in
       };
     }) { }
   );
+  julia_113-bin = wrapJulia (
+    callPackage (import ./generic-bin.nix {
+      version = "1.13.1";
+      sha256 = {
+        x86_64-linux = "0209grj6fn7yjs021rc99cwxza7p2abcv2fh263jq2m6vv41hbhg";
+        aarch64-linux = "1q2wxknfsh681qfsm9dbk4xc49r6qn1m2yd85wffld27w9i1hd3q";
+        aarch64-darwin = "0zqgkb294y2ih643z4fbil229hf6nvak98fbq9vbghkp8yfjbq53";
+      };
+    }) { }
+  );
   julia_110 = wrapJulia (
     callPackage
       (import ./generic.nix {
