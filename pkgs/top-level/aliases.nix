@@ -369,7 +369,7 @@ mapAliases {
   autoconf264 = throw "'autoconf264' has been removed in favor of 'autoconf'"; # Added 2025-07-21
   autoconf271 = throw "'autoconf271' has been removed in favor of 'autoconf'"; # Added 2026-03-29
   automake111x = throw "'automake111x' has been removed in favor of 'automake'"; # Added 2025-07-21
-  automake118x = automake; # Added 2026-09-10
+  automake118x = throw "'automake118x' has been removed in favor of 'automake'"; # Added 2026-09-10
   autopanosiftc = throw "'autopanosiftc' has been removed, as it is unmaintained upstream"; # Added 2025-10-07
   autoreconfHook264 = throw "'autoreconfHook264' has been removed in favor of 'autoreconfHook'"; # Added 2025-07-21
   autoreconfHook271 = throw "'autoreconfHook271' has been removed in favor of 'autoreconfHook'"; # Added 2026-03-29
