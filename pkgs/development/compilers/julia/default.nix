@@ -113,4 +113,25 @@ in
           { }
       )
   );
+  julia_113 = wrapJulia (
+    callPackage
+      (import ./generic.nix {
+        version = "1.13.0";
+        hash = "sha256-a3+O7LIIsv/8lc7GcToGyU9RvLxWFmMMMLQr2SIcsm4=";
+        patches = [
+          ./patches/1.13/0001-libssh2-fix-source-build.patch
+          ./patches/1.13/0002-llvm-zlib-rpath.patch
+          ./patches/1.13/0003-csl-libatomic-symlink.patch
+        ];
+      })
+      (
+        if stdenv.cc.isGNU then
+          {
+            stdenv = gcc14Stdenv;
+            gfortran = gfortran14;
+          }
+        else
+          { }
+      )
+  );
 }
