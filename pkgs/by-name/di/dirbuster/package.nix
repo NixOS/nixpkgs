@@ -54,9 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
     done
 
     # Extract embedded desktop icon
-    mkdir -p $out/share/pixmaps
+    mkdir -p $out/share/icons/hicolor/96x88/apps
     unzip $JAR
-    strings com/sittinglittleduck/DirBuster/ImageCreator.class | grep iVBORw0KG | base64 -d > $out/share/pixmaps/dirbuster.png
+    strings com/sittinglittleduck/DirBuster/ImageCreator.class | grep iVBORw0KG | base64 -d > $out/share/icons/hicolor/96x88/apps/dirbuster.png
 
     runHook postInstall
   '';
