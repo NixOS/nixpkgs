@@ -97,6 +97,7 @@ extra-packages:
   - hlint == 3.8.*                      # 2025-09-21: needed for hls with ghc-lib-parser 9.8
   - insert-ordered-containers < 0.3     # 2026-05-25: Needed for building postgrest
   - language-javascript == 0.7.0.0      # required by purescript
+  - magic <= 1.1                        # 2026-09-10: Needed for building git-annex
   - ormolu == 0.7.4.0                   # 2023-09-21: for ghc-lib-parser 9.8 compat
   - postgresql-binary < 0.15            # 2026-09-05: Needed for building postgrest
   - semaphore-compat == 1.0.*           # 2026-07-26: required to build cabal-install 3.14

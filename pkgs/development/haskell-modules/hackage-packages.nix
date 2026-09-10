@@ -453760,6 +453760,24 @@ self: {
     }
   ) { inherit (pkgs) ncurses; };
 
+  magic_1_1 = callPackage (
+    {
+      mkDerivation,
+      base,
+      file,
+    }:
+    mkDerivation {
+      pname = "magic";
+      version = "1.1";
+      sha256 = "10p0gjjjwr1dda7hahwrwn5njbfhl67arq3v3nf1jr3vymlkn75j";
+      libraryHaskellDepends = [ base ];
+      librarySystemDepends = [ file ];
+      description = "Interface to C file/magic library";
+      license = lib.licenses.bsd3;
+      hydraPlatforms = lib.platforms.none;
+    }
+  ) { inherit (pkgs) file; };
+
   magic = callPackage (
     {
       mkDerivation,
