@@ -235,7 +235,7 @@ in
         // {
           default = true;
         };
-      createDB = mkEnableOption "the automatic creation of the database for immich." // {
+      createDB = mkEnableOption "the automatic creation of the database for immich" // {
         default = true;
       };
       name = mkOption {
@@ -305,41 +305,43 @@ in
         search_path = "\"$user\", public, vectors";
       };
     };
-    systemd.services.postgresql-setup.serviceConfig.ExecStartPost =
-      let
-        extensions = [
-          "unaccent"
-          "uuid-ossp"
-          "cube"
-          "earthdistance"
-          "pg_trgm"
-          "vector"
-          "vchord"
+    systemd.services.postgresql-setup = mkIf cfg.database.enable {
+      serviceConfig.ExecStartPost =
+        let
+          extensions = [
+            "unaccent"
+            "uuid-ossp"
+            "cube"
+            "earthdistance"
+            "pg_trgm"
+            "vector"
+            "vchord"
+          ];
+          sqlFile = pkgs.writeText "immich-pgvectors-setup.sql" ''
+            -- save previous version of vectorchord to trigger reindex on update
+            SELECT COALESCE(installed_version, ''') AS vchord_version_before FROM pg_available_extensions WHERE name = 'vchord' \gset
+
+            ${lib.concatMapStringsSep "\n" (ext: "CREATE EXTENSION IF NOT EXISTS \"${ext}\";") extensions}
+            ${lib.concatMapStringsSep "\n" (ext: "ALTER EXTENSION \"${ext}\" UPDATE;") extensions}
+            ALTER SCHEMA public OWNER TO ${cfg.database.user};
+
+            -- trigger reindex if vectorchord updates
+            -- https://docs.immich.app/administration/postgres-standalone/#updating-vectorchord
+            SELECT COALESCE(installed_version, ''') AS vchord_version_after FROM pg_available_extensions WHERE name = 'vchord' \gset
+
+            SELECT (:'vchord_version_before' != ''' AND :'vchord_version_before' != :'vchord_version_after') AS has_vchord_updated \gset
+            \if :has_vchord_updated
+              REINDEX INDEX face_index;
+              REINDEX INDEX clip_index;
+            \endif
+          '';
+        in
+        [
+          ''
+            ${lib.getExe' postgresqlPackage "psql"} -d "${cfg.database.name}" -f "${sqlFile}"
+          ''
         ];
-        sqlFile = pkgs.writeText "immich-pgvectors-setup.sql" ''
-          -- save previous version of vectorchord to trigger reindex on update
-          SELECT COALESCE(installed_version, ''') AS vchord_version_before FROM pg_available_extensions WHERE name = 'vchord' \gset
-
-          ${lib.concatMapStringsSep "\n" (ext: "CREATE EXTENSION IF NOT EXISTS \"${ext}\";") extensions}
-          ${lib.concatMapStringsSep "\n" (ext: "ALTER EXTENSION \"${ext}\" UPDATE;") extensions}
-          ALTER SCHEMA public OWNER TO ${cfg.database.user};
-
-          -- trigger reindex if vectorchord updates
-          -- https://docs.immich.app/administration/postgres-standalone/#updating-vectorchord
-          SELECT COALESCE(installed_version, ''') AS vchord_version_after FROM pg_available_extensions WHERE name = 'vchord' \gset
-
-          SELECT (:'vchord_version_before' != ''' AND :'vchord_version_before' != :'vchord_version_after') AS has_vchord_updated \gset
-          \if :has_vchord_updated
-            REINDEX INDEX face_index;
-            REINDEX INDEX clip_index;
-          \endif
-        '';
-      in
-      [
-        ''
-          ${lib.getExe' postgresqlPackage "psql"} -d "${cfg.database.name}" -f "${sqlFile}"
-        ''
-      ];
+    };
 
     services.redis.servers = mkIf cfg.redis.enable {
       immich = {
