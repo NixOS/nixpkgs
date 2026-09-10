@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  ripgrep,
   versionCheckHook,
 }:
 
@@ -22,6 +23,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   build-system = with python3Packages; [ setuptools ];
 
   dependencies = with python3Packages; [
+    anyio
     leanclient
     mcp
     orjson
@@ -30,10 +32,21 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [ "mcp" ];
 
-  nativeCheckInputs = with python3Packages; [
+  # lean_local_search and lean_verify spawn `rg`.
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ ripgrep ])
+  ];
+
+  nativeCheckInputs = [
+    ripgrep
+  ]
+  ++ (with python3Packages; [
     pytestCheckHook
     pytest-asyncio
-  ];
+  ]);
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
@@ -45,11 +58,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "tests/test_transport_disconnect.py"
   ];
 
-  # Both build loogle into the real user cache; they skip today only because
-  # git and lake are absent from the sandbox.
   disabledTests = [
+    # These build loogle into the real user cache; they skip today only
+    # because git and lake are absent from the sandbox.
     "TestLoogleInstall"
     "TestLoogleQuery"
+    # Searches Mathlib but is missing the `skipif(not MATHLIB_DIR.is_dir())`
+    # that its two siblings in tests/unit/test_search_utils.py carry. Drop this
+    # once https://github.com/oOo0oOo/lean-lsp-mcp/pull/226 is in a release.
+    "test_lean_search_integration_mathlib_prefix_limit"
   ];
 
   pythonImportsCheck = [ "lean_lsp_mcp" ];
