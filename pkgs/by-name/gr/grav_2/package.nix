@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "grav";
-  version = "2.0.24";
+  version = "2.0.25";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     in
     fetchzip {
       url = "https://github.com/getgrav/grav/releases/download/${v}/grav-admin-v${v}.zip";
-      hash = "sha256-Plow++quy9/77wVr/Thz6QcFAn+rIJercbUdhKDe0Qs=";
+      hash = "sha256-f4pQYev78eyU0dGxKU+X0Svh1JvvOB0OCrlfsmUAYy4=";
     };
 
   patches = [
