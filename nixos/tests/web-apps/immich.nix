@@ -46,6 +46,7 @@
     machine.wait_for_open_port(2283) # Server
     machine.wait_for_open_port(3003) # Machine learning
     machine.succeed("curl --fail http://localhost:2283/")
+    machine.succeed("curl --fail http://localhost:3003/ping")
 
     with subtest("verify listening to any IP (i.e. v4 & v6)"):
       machine.succeed("ss -tln | grep -F '*:2283'")
