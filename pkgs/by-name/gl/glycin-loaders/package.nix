@@ -85,8 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   postPatch = ''
-    substituteInPlace glycin-loaders/meson.build \
-      --replace-fail "cargo_artifact_dir / rust_target / loader," "cargo_artifact_dir / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / loader,"
+    substituteInPlace meson.build --replace-fail \
+      "meson.get_external_property('rust_target')" \
+      "'${stdenv.hostPlatform.rust.cargoShortTarget}'"
   ''
   + lib.optionalString finalAttrs.finalPackage.doCheck ''
     chmod +x build-aux/setup-integration-test.py
@@ -107,8 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     rm -r $out/share/thumbnailers
   '';
-
-  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
   passthru = {
     inherit enabledLoaders;
