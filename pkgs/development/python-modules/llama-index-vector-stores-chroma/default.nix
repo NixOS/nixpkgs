@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "llama-index-vector-stores-chroma";
-  version = "0.5.5";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_vector_stores_chroma";
     inherit version;
-    hash = "sha256-gjhlBpvOpNnekVECca4DzW6o6wEGpbXqQ//OwD7Cpwg=";
+    hash = "sha256-mKTQSfDbfAwVFViUVgBxlpjjgTIGZ4bKIhJ6dD4FVVQ=";
   };
 
   build-system = [ hatchling ];
