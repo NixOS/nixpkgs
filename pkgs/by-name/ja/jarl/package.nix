@@ -3,19 +3,17 @@
   rustPlatform,
   fetchFromGitHub,
   git,
-  versionCheckHook,
-  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jarl";
-  version = "0.5.0";
+  version = "0.6.0-unstable-2026-08-30"; # TODO revert unstable with next version
 
   src = fetchFromGitHub {
     owner = "etiennebacher";
     repo = "jarl";
-    tag = finalAttrs.version;
-    hash = "sha256-MFP1xMNnJ9mfHuUu6hqE9B7nRgI2HfXBpblo3sFnAwo=";
+    rev = "0abcc17f335010419fa9cae463d746ad1343477e";
+    hash = "sha256-zUOCHL/AKDzOmWbnpP6BccEJ+tmtRvI1vQ+T/sCnXvY=";
   };
 
   postPatch = ''
@@ -25,7 +23,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
                    '(?:/nix)?/(?:build)/(?:nix[\-0-9]+/)?'
   '';
 
-  cargoHash = "sha256-Rhv9Wku/bRl28nrXYof+6VAgl2K4ysILRQa1v19r0pU=";
+  cargoHash = "sha256-TnpkGOs8/IFJ1trzMijOTmX3BR2P3GsBhyv0GVCwHsc=";
 
   # integrations test require git at build time (jarl >= 0.5.0)
   nativeBuildInputs = [ git ];
@@ -40,15 +38,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # "--test integration_tests"
   ];
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   postInstall = ''
     rm $out/bin/xtask_codegen
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Just another R linter";
