@@ -19,7 +19,7 @@
   zeroconf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "peblar";
   version = "2.0.0";
   pyproject = true;
@@ -27,14 +27,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-peblar";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LgeMj0/X+32P9FNBMrlhxql8Mjgi9Gmroquet8rkmis=";
   };
 
   postPatch = ''
     # Upstream doesn't set a version for GitHub releases
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ poetry-core ];
@@ -63,16 +63,16 @@ buildPythonPackage rec {
     pytestCheckHook
     syrupy
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "peblar" ];
 
   meta = {
     description = "Python client for Peblar EV chargers";
     homepage = "https://github.com/frenck/python-peblar";
-    changelog = "https://github.com/frenck/python-peblar/releases/tag/v${version}";
+    changelog = "https://github.com/frenck/python-peblar/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "peblar";
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
