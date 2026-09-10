@@ -2,15 +2,18 @@
 
 let
   inherit (lib)
+    attrNames
     concatLists
     concatMap
     escapeShellArgs
     isBool
     isList
+    join
     mapAttrsToList
     oldestSupportedReleaseIsAtLeast
     optional
     stringLength
+    throwIf
     warnIf
     ;
   inherit (lib.generators) mkValueStringDefault;
@@ -266,14 +269,26 @@ rec {
   /**
     Converts an attribute set into a list of command-line arguments.
 
-    This is the most general command-line construction helper in `lib.cli`.
-    It is parameterized by an `optionFormat` function, which defines how each
+    This is the most general command-line conversion function in `lib.cli`. It
+    is parameterized by an `optionFormat` function, which defines how each
     option name and its value are rendered.
 
-    All other helpers in this file are thin wrappers around this function.
+    # Type
 
-    `toCommandLine` returns a *flat list of strings*, suitable for use as `argv`
-    arguments or for further processing (e.g. shell escaping).
+    ```
+    toCommandLine ::
+      (
+        String ->
+          {
+            option :: String,
+            sep :: String | Null,
+            explicitBool :: Bool,
+            formatArg :: Any -> String,
+            listRepr :: "repeat" | "join" | "spread",
+            splitList :: [Any] -> [[Any]],
+          }
+      ) -> AttrSet -> [String]
+    ```
 
     # Inputs
 
@@ -285,38 +300,61 @@ rec {
 
       The returned attribute set must contain:
 
-      - `option` (string):
-        The option flag itself, e.g. `"-v"` or `"--verbose"`.
+      - `option`:
+        The option string, e.g. `"-v"` or `"--verbose"`.
 
-      - `sep` (string or null):
-        How to separate the option from its argument.
-        If `null`, the option and its argument are returned as two separate
-        list elements.
-        If a string (e.g. `"="`), the option and argument are concatenated.
+      - `sep`:
+        How to separate the option from its argument. If `null`, the option and
+        its argument are returned as two separate list elements. If a string
+        (e.g. `"="`), the option and argument are concatenated.
 
-      - `explicitBool` (bool):
+      - `explicitBool`:
         Controls how boolean values are handled:
+
         - `false`:
-          `true` emits only the option flag, `false` emits nothing.
+          `true` emits only the option string (e.g. `"-v"` or `"--verbose"`),
+          `false` emits nothing.
         - `true`:
-          both `true` and `false` are rendered as explicit arguments via
-          `formatArg`.
+          Both `true` and `false` are rendered as explicit arguments via
+          `formatArg`, e.g. `--debug=true` or `--escape=false`.
 
-      Optional fields:
-
-      - `formatArg`:
-        Converts the option value to a string.
+      - `formatArg` (optional):
+        Converts the option argument to a string.
         Defaults to `lib.generators.mkValueStringDefault { }`.
+
+      - `listRepr` (optional):
+        Specifies which representation should be used for lists:
+
+        - `"repeat"`:
+          Repeats the option with different values, e.g.:
+          `--option=foo --option=bar --option=baz`.
+        - `"join"`:
+          Passes the list of arguments into `formatArg`, e.g.:
+          `--option=foo,bar,baz`.
+        - `"spread"`:
+          Outputs the option once and spreads the arguments after it, e.g.:
+          `--option foo bar baz`.
+          The behavior of this representation can be customized via the
+          `splitList` function. `sep` is treated as if it were `null`.
+
+        Defaults to `"repeat"`.
+
+      - `splitList` (optional):
+        The function that will be applied to a top-level list when `listRepr` is
+        `"spread"`. This function can be used to, for example, split the list
+        into lists of 2 elements each if each use of the option only accepts 2
+        arguments.
+        Defaults to `list: [ list ]`.
 
     `attrs`
 
     : An attribute set mapping option names to values.
 
-      Supported value types:
-      - null: omitted entirely
-      - bool: handled according to `explicitBool`
-      - list: each element is rendered as a separate occurrence of the option
-      - any other value: rendered as a single option argument
+      Value types:
+      - `Null`: Omitted entirely.
+      - `Bool`: Handled according to `explicitBool`.
+      - `List`: Handled according to `listRepr`.
+      - Anything else is rendered as a single option argument via `formatArg`.
 
       Empty attribute names are rejected.
 
@@ -377,18 +415,18 @@ rec {
       optionFormat =
         optionName:
         let
-          isLong = builtins.stringLength optionName > 1;
+          isLong = lib.stringLength optionName > 1;
         in
-        {
+        rec {
           option = if isLong then "--${optionName}" else "-${optionName}";
           sep = if isLong then "=" else null;
           explicitBool = true;
           formatArg =
-            value:
-            if builtins.isAttrs value then
-              builtins.toJSON value
-            else
-              lib.generators.mkValueStringDefault { } value;
+            let
+              f = value: if lib.isString value then value else lib.toJSON value;
+            in
+            value: if listRepr == "join" && lib.isList value then lib.join "," (map f value) else f value;
+          listRepr = if optionName == "tags" then "join" else "repeat";
         };
     in
     lib.cli.toCommandLine optionFormat {
@@ -409,12 +447,17 @@ rec {
         id = 0;
         name = "test";
       };
+      tags = [
+        "foo"
+        "bar"
+      ];
     }
     => [
       "--data={\"id\":0,\"name\":\"test\"}"
       "-n"
       "false"
       "--output=result.txt"
+      "--tags=foo,bar"
       "--testsuite=unit"
       "--testsuite=integration"
       "-v"
@@ -436,39 +479,63 @@ rec {
     optionFormat:
     let
       handlePair =
-        k: v:
-        if k == "" then
-          throw "lib.cli.toCommandLine only accepts non-empty option names."
-        else if isList v then
-          concatMap (handleOption k) v
-        else
-          handleOption k v;
+        spec: name: value:
+        throwIf (name == "") "lib.cli.toCommandLine only accepts non-empty option names." (
+          concatMap (renderOption spec) (prepareValue spec value)
+        );
 
-      handleOption = k: renderOption (optionFormat k) k;
-
-      renderOption =
-        {
-          option,
-          sep,
-          explicitBool,
-          formatArg ? mkValueString,
-        }:
-        k: v:
-        if v == null || (!explicitBool && v == false) then
-          [ ]
-        else if !explicitBool && v == true then
-          [ option ]
+      prepareValue =
+        spec: value:
+        if !isList value then
+          [ value ]
         else
           let
-            arg = formatArg v;
+            reprs = {
+              repeat = value;
+              join = [ value ];
+              spread = spec.splitList value;
+            };
           in
-          if sep != null then
-            [ "${option}${sep}${arg}" ]
+          reprs.${spec.listRepr}
+            or (throw "lib.cli.toCommandline requires that listRepr is one of: ${join ", " (attrNames reprs)}");
+
+      renderOption =
+        spec: value:
+        if value == null || (!spec.explicitBool && value == false) then
+          [ ]
+        else if !spec.explicitBool && value == true then
+          [ spec.option ]
+        else if isList value && spec.listRepr == "spread" then
+          [ spec.option ] ++ (map spec.formatArg value)
+        else
+          let
+            arg = spec.formatArg value;
+          in
+          if spec.sep != null then
+            [ "${spec.option}${spec.sep}${arg}" ]
           else
             [
-              option
+              spec.option
               arg
             ];
+
+      toSpec =
+        optionName:
+        (
+          {
+            option,
+            sep,
+            explicitBool,
+            formatArg ? mkValueString,
+            listRepr ? "repeat",
+            splitList ? list: [ list ],
+          }@spec:
+          {
+            inherit formatArg listRepr splitList;
+          }
+          // spec
+        )
+          (optionFormat optionName);
     in
-    attrs: concatLists (mapAttrsToList handlePair attrs);
+    attrs: concatLists (mapAttrsToList (name: handlePair (toSpec name) name) attrs);
 }

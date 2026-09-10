@@ -45,6 +45,7 @@ let
     concatStrings
     concatStringsSep
     const
+    drop
     escapeXML
     evalModules
     extends
@@ -56,6 +57,7 @@ let
     foldl'
     foldlAttrs
     foldr
+    fromHexString
     functionArgs
     generators
     genList
@@ -66,6 +68,7 @@ let
     groupBy'
     hasAttrByPath
     hasInfix
+    hasPrefix
     id
     ifilter0
     isFunction
@@ -79,11 +82,13 @@ let
     makeIncludePath
     makeOverridable
     mapAttrs
+    mapAttrs'
     mapAttrsToListRecursive
     mapAttrsToListRecursiveCond
     mapCartesianProduct
     matchAttrs
     mergeAttrs
+    mergeAttrsList
     meta
     mod
     nameValuePair
@@ -112,7 +117,6 @@ let
     toBaseDigits
     toExtension
     toHexString
-    fromHexString
     toInt
     toIntBase10
     toShellVars
@@ -3278,45 +3282,174 @@ runTests {
   testToCommandLine = {
     expr =
       let
-        optionFormat = optionName: {
+        optionFormat = optionName: rec {
           option = "-${optionName}";
           sep = "=";
           explicitBool = true;
+          listRepr =
+            if hasPrefix "join-" optionName then
+              "join"
+            else if hasPrefix "spread-" optionName then
+              "spread"
+            else
+              "repeat";
+          formatArg =
+            let
+              f = value: if lib.isString value then value else builtins.toJSON value;
+            in
+            value: if listRepr == "join" && lib.isList value then join "," (map f value) else f value;
+          splitList =
+            let
+              chunk = n: list: if list == [ ] then [ ] else [ (take n list) ] ++ chunk n (drop n list);
+            in
+            chunk 2;
         };
+
+        prefixedTestData =
+          prefix:
+          mapAttrs' (name: value: nameValuePair (prefix + name) value) {
+            zero = 0;
+            int = -42;
+            float = 3.14;
+            true = true;
+            false = false;
+            null = null;
+            empty-string = "";
+            string = "foo";
+            multiline-string = ''
+              foo
+              bar
+            '';
+            empty-attrs = { };
+            attrs = {
+              foo = "bar";
+              baz = "qux";
+            };
+            empty-list = [ ];
+            list-of-strings = [
+              "foo"
+              "bar"
+              "baz"
+            ];
+            list-of-bools = [
+              true
+              true
+              false
+              true
+            ];
+            list-of-any = [
+              0
+              1
+              true
+              true
+              false
+              true
+              null
+              ""
+              "foo"
+              {
+                foo = "bar";
+                baz = "qux";
+              }
+              [
+                "foo"
+                "bar"
+                "baz"
+                [
+                  "foo"
+                  "bar"
+                  "baz"
+                ]
+              ]
+            ];
+          };
       in
-      cli.toCommandLine optionFormat {
-        v = true;
-        verbose = [
-          true
-          true
-          false
-          null
-        ];
-        i = ".bak";
-        testsuite = [
-          "unit"
-          "integration"
-        ];
-        e = [
-          "s/a/b/"
-          "s/b/c/"
-        ];
-        n = false;
-        data = builtins.toJSON { id = 0; };
-      };
+      cli.toCommandLine optionFormat (mergeAttrsList [
+        (prefixedTestData "default-")
+        (prefixedTestData "join-")
+        (prefixedTestData "spread-")
+      ]);
 
     expected = [
-      "-data={\"id\":0}"
-      "-e=s/a/b/"
-      "-e=s/b/c/"
-      "-i=.bak"
-      "-n=false"
-      "-testsuite=unit"
-      "-testsuite=integration"
-      "-v=true"
-      "-verbose=true"
-      "-verbose=true"
-      "-verbose=false"
+      "-default-attrs={\"baz\":\"qux\",\"foo\":\"bar\"}"
+      "-default-empty-attrs={}"
+      "-default-empty-string="
+      "-default-false=false"
+      "-default-float=3.14"
+      "-default-int=-42"
+      "-default-list-of-any=0"
+      "-default-list-of-any=1"
+      "-default-list-of-any=true"
+      "-default-list-of-any=true"
+      "-default-list-of-any=false"
+      "-default-list-of-any=true"
+      "-default-list-of-any="
+      "-default-list-of-any=foo"
+      "-default-list-of-any={\"baz\":\"qux\",\"foo\":\"bar\"}"
+      "-default-list-of-any=[\"foo\",\"bar\",\"baz\",[\"foo\",\"bar\",\"baz\"]]"
+      "-default-list-of-bools=true"
+      "-default-list-of-bools=true"
+      "-default-list-of-bools=false"
+      "-default-list-of-bools=true"
+      "-default-list-of-strings=foo"
+      "-default-list-of-strings=bar"
+      "-default-list-of-strings=baz"
+      "-default-multiline-string=foo\nbar\n"
+      "-default-string=foo"
+      "-default-true=true"
+      "-default-zero=0"
+      "-join-attrs={\"baz\":\"qux\",\"foo\":\"bar\"}"
+      "-join-empty-attrs={}"
+      "-join-empty-list="
+      "-join-empty-string="
+      "-join-false=false"
+      "-join-float=3.14"
+      "-join-int=-42"
+      "-join-list-of-any=0,1,true,true,false,true,null,,foo,{\"baz\":\"qux\",\"foo\":\"bar\"},[\"foo\",\"bar\",\"baz\",[\"foo\",\"bar\",\"baz\"]]"
+      "-join-list-of-bools=true,true,false,true"
+      "-join-list-of-strings=foo,bar,baz"
+      "-join-multiline-string=foo\nbar\n"
+      "-join-string=foo"
+      "-join-true=true"
+      "-join-zero=0"
+      "-spread-attrs={\"baz\":\"qux\",\"foo\":\"bar\"}"
+      "-spread-empty-attrs={}"
+      "-spread-empty-string="
+      "-spread-false=false"
+      "-spread-float=3.14"
+      "-spread-int=-42"
+      "-spread-list-of-any"
+      "0"
+      "1"
+      "-spread-list-of-any"
+      "true"
+      "true"
+      "-spread-list-of-any"
+      "false"
+      "true"
+      "-spread-list-of-any"
+      "null"
+      ""
+      "-spread-list-of-any"
+      "foo"
+      "{\"baz\":\"qux\",\"foo\":\"bar\"}"
+      "-spread-list-of-any"
+      "[\"foo\",\"bar\",\"baz\",[\"foo\",\"bar\",\"baz\"]]"
+      "-spread-list-of-bools"
+      "true"
+      "true"
+      "-spread-list-of-bools"
+      "false"
+      "true"
+      "-spread-list-of-strings"
+      "foo"
+      "bar"
+      "-spread-list-of-strings"
+      "baz"
+      "-spread-multiline-string=foo\nbar\n"
+      "-spread-string=foo"
+      "-spread-true=true"
+      "-spread-zero=0"
     ];
   };
 
