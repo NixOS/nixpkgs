@@ -48,6 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-FNWFwPpQmgifUqlWIZkswvn+xPvWDUpseUt/lOc7vQw=";
   };
 
+  patches = [
+    # Remove when updating to 51.0
+    # Upstream issue: https://gitlab.gnome.org/GNOME/epiphany/-/work_items/2897
+    # Upstream PR: https://gitlab.gnome.org/GNOME/epiphany/-/merge_requests/2123
+    ./CVE-2026-18487.patch
+  ];
+
   nativeBuildInputs = [
     blueprint-compiler
     desktop-file-utils
