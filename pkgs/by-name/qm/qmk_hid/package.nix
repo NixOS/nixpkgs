@@ -35,8 +35,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Commandline tool for interactng with QMK devices over HID";
     homepage = "https://github.com/FrameworkComputer/qmk_hid";
-    license = lib.licenses.bsd3;
-    maintainers = [ ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [
+      mrdev023
+      telometto
+    ];
     mainProgram = "qmk_hid";
   };
 })
