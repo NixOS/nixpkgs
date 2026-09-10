@@ -78,6 +78,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     '';
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      mrdev023
       telometto
     ];
     mainProgram = "qmk";
