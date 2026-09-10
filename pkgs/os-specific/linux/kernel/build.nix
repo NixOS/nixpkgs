@@ -382,8 +382,8 @@ lib.makeOverridable (
       # from a `try-run` call from the Makefile
       rm -f $dev/lib/modules/${modDirVersion}/build/.[0-9]*.d
 
-      # Keep some extra files on some arches (powerpc, aarch64)
-      for f in arch/powerpc/lib/crtsavres.o arch/arm64/kernel/ftrace-mod.o; do
+      # Keep an extra file on powerpc
+      for f in arch/powerpc/lib/crtsavres.o; do
         if [ -f "$buildRoot/$f" ]; then
           mkdir -p "$(dirname $dev/lib/modules/${modDirVersion}/build/$f)"
           cp $buildRoot/$f $dev/lib/modules/${modDirVersion}/build/$f
