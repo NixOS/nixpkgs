@@ -34,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-maps";
   version = "51.rc";
 
+  strictDeps = true;
+
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-maps/${lib.versions.major finalAttrs.version}/gnome-maps-${finalAttrs.version}.tar.xz";
     hash = "sha256-e4rRxNaNZwL63LWuk1NTByRK6rsBXEosL4ZctFGtdLo=";
@@ -53,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     desktop-file-utils
     glib
     gtk4
-    sqlite
   ];
 
   buildInputs = [
@@ -71,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     librest
     libsecret
     libsoup_3
+    sqlite
   ];
 
   mesonFlags = [
