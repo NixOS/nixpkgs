@@ -6,19 +6,20 @@
   kdePackages,
   qtbase,
   qtdeclarative,
+  libhwy,
   opencv,
 }:
 
 stdenv.mkDerivation rec {
   pname = "kquickimageeditor";
-  version = "0.6.1";
+  version = "0.7.0.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "libraries";
     repo = "kquickimageeditor";
     rev = "v${version}";
-    sha256 = "sha256-MluY8nkMtg1uLAStDZFDxyJoeDrcp3smZ4U5IG5sXMk=";
+    sha256 = "sha256-xNMXEVU/fflaHbDSgTwsj1QcH77CUFCgPJI5f60TEEg=";
   };
 
   nativeBuildInputs = [
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
     kdePackages.kirigami
     qtbase
     qtdeclarative
+    libhwy
     (opencv.override {
       enableCuda = false; # fails to compile, disabled in case someone sets config.cudaSupport
       enabledModules = [
