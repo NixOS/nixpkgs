@@ -564,6 +564,7 @@ in
             TimeoutStartSec = "15min";
             ExecStart = "${getExe' pythonEnv "gunicorn"} --bind unix:/run/pretix/pretix.sock ${cfg.gunicorn.extraArgs} pretix.wsgi";
             RuntimeDirectory = "pretix";
+            RuntimeDirectoryMode = "0750";
             Restart = "on-failure";
           };
         };
@@ -594,11 +595,6 @@ in
 
         nginx.serviceConfig.SupplementaryGroups = mkIf cfg.nginx.enable [ "pretix" ];
       };
-
-    systemd.sockets.pretix-web.socketConfig = {
-      ListenStream = "/run/pretix/pretix.sock";
-      SocketUser = "nginx";
-    };
 
     users = {
       groups.${cfg.group} = { };
