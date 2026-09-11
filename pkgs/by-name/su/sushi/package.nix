@@ -11,6 +11,7 @@
   gnome,
   gtksourceview5,
   gjs,
+  libsoup_3,
   webkitgtk_6_0,
   wrapGAppsHook4,
   gst_all_1,
@@ -53,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     libglycin-gtk4
     libadwaita
     gtksourceview5
+    libsoup_3
     webkitgtk_6_0
     papers
     fribidi
