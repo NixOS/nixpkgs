@@ -8,6 +8,7 @@
   mashumaro,
   orjson,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
@@ -31,13 +32,9 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-LgeMj0/X+32P9FNBMrlhxql8Mjgi9Gmroquet8rkmis=";
   };
 
-  postPatch = ''
-    # Upstream doesn't set a version for GitHub releases
-    substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
-  '';
-
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiohttp
