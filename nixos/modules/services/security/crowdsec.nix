@@ -881,7 +881,7 @@ in
 
             createFile = dstPath: content: {
               name = dstPath;
-              value.f = {
+              value."f+" = {
                 user = cfg.user;
                 group = cfg.group;
                 argument = content;
@@ -934,7 +934,7 @@ in
                 lib.strings.concatMapStringsSep "\n---\n" toYaml cfg.settings.acquisitions
               ))
             ];
-            
+
             notificationFiles = map linkNotificationPlugin [
               "dummy"
               "email"
