@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fixes build: https://gitlab.gnome.org/GNOME/gnome-shell/-/merge_requests/4384
     (fetchpatch {
-      url = "https://gitlab.gnome.org/theCapypara/gnome-shell/-/commit/af23da2bbdc5f90d7b33beecf299a570226ea73d.patch";
+      url = "https://gitlab.gnome.org/GNOME/gnome-shell/-/commit/877b7dd14fa36a1b3810034bdfd05425be2e1817.patch";
       hash = "sha256-klScQaVL71eJzmbzMGAKpc5HtnDFc3074MjeMP1ie6Y=";
     })
   ];
@@ -157,7 +157,6 @@ stdenv.mkDerivation (finalAttrs: {
     lcms2 # required by mutter-clutter
     libgbm
     libGL # for egl, required by mutter-clutter
-    libgudev
     libxi # required by libmutter
     libx11
     libxkbcommon
@@ -174,6 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-good
 
     # not declared at build time, but typelib is needed at runtime
+    libgudev
     libgweather
     libnma-gtk4
     webkitgtk_6_0 # for gnome-shell-portal-helper
