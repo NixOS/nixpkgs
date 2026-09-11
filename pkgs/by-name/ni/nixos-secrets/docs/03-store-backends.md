@@ -41,12 +41,6 @@ The `set` script, on the other hand, is mandatory. As with the `get` script, the
 }
 ```
 
-### Exists
-
-The CLI also needs to know when it actually needs to run the various scripts. For this, a backend must support the `exists` script. This script is given a secret name and a file name as an argument, and must exit with code `0` if the file exists or `42` otherwise.
-
-Note that the `exists` script will likely be removed soon (I just haven't taken the time to do so...).
-
 ### Garbage collection
 
 The user might remove secrets from their configuration, yet the respective secrets will still exist on disk. The CLI offers the `collect-garbage` command for handling this exact scenario. In order to support garbage collection, a backend must provide the `list` and `delete` scripts.
@@ -133,4 +127,4 @@ We are not currently planning to ship a production-ready backend alongside the C
 
 ### Metadata
 
-The `nixos-secrets` will attach additional metadata to each secret. The metadata is there in order to detect dependency changes, recover from crashes mid-generation, and so on. The metadata is stored in a file named `.nixos-secrets-metadata`. Store backends do not need special logic/scripts for handling metadata files. Indeed, to a backend, the metadata is merely another file associated with the given secret (although one the user hasn't manually declared).
+The `nixos-secrets` will attach additional metadata to each secret. The metadata is there in order to detect dependency changes, recover from crashes mid-generation, and so on. The metadata is stored in a file named `.nixos-secrets-metadata`. Store backends do not require special logic/scripts for handling metadata files. Indeed, to a backend, the metadata is merely another file associated with the given secret (although one the user hasn't manually declared).

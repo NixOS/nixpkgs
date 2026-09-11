@@ -17,7 +17,6 @@ let
       x.delete
       x.deploy.local
       x.deploy.remote
-      x.exists
       x.fixup
       x.get
       x.list

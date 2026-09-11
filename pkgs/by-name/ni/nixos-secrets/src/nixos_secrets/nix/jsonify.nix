@@ -118,7 +118,6 @@ else
       value = {
         get = evalDeferredPackage backend.get;
         set = evalDeferredPackage backend.set;
-        exists = evalDeferredPackage backend.exists;
         delete = evalDeferredPackage backend.delete;
         list = evalDeferredPackage backend.list;
         fixup = evalDeferredPackage backend.fixup;

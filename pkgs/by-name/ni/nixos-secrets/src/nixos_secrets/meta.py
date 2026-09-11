@@ -6,7 +6,8 @@ from pathlib import Path
 
 from .error import SecretsError
 from .args import SecretsArgs
-from .exec import get_secret, set_secret, file_exists
+from .exec import get_secret, set_secret
+from .list import SecretsFileList
 from .config import (
     SecretsConfig,
     SecretsSecret,
@@ -17,7 +18,7 @@ from .config import (
 VersionID = str
 
 
-@dataclass
+@dataclass(frozen=True)
 class SecretsMetadata:
     id: VersionID
     dependencies: Mapping[str, VersionID]
@@ -34,12 +35,15 @@ class SecretsMetadata:
 
 
 def get_meta(
-    args: SecretsArgs, config: SecretsConfig, secret: SecretsSecret
+    args: SecretsArgs,
+    config: SecretsConfig,
+    files: SecretsFileList,
+    secret: SecretsSecret,
 ) -> Optional[SecretsMetadata]:
-    meta_file = SecretsFile(name=meta_file_name)
-    if not file_exists(args, config.storeBackends[secret.backend], secret, meta_file):
+    if not files.has(secret.backend, secret.name, meta_file_name):
         return None
 
+    meta_file = SecretsFile(name=meta_file_name)
     with tempfile.NamedTemporaryFile(mode="r") as file:
         out_path = Path(file.name)
 
