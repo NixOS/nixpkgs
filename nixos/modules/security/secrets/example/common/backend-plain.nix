@@ -61,7 +61,6 @@ in
   config.secrets.backends.store.plain = {
     get = pkgs: backendScript pkgs "get";
     set = pkgs: backendScript pkgs "set";
-    exists = pkgs: backendScript pkgs "exists";
     list = pkgs: backendScript pkgs "list";
     delete = pkgs: backendScript pkgs "delete";
     deploy.local = pkgs: backendScript pkgs "deploy-local";

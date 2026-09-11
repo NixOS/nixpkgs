@@ -160,7 +160,6 @@ in
   config.secrets.backends.store.age = {
     get = pkgs: ageScript pkgs "get";
     set = pkgs: ageScript pkgs "set";
-    exists = pkgs: ageScript pkgs "exists";
     list = pkgs: ageScript pkgs "list";
     delete = pkgs: ageScript pkgs "delete";
     fixup = pkgs: ageScript pkgs "fixup";

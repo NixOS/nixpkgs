@@ -20,10 +20,6 @@ set_parser = subparsers.add_parser("set")
 set_parser.add_argument("generator")
 set_parser.add_argument("filename")
 
-exists_parser = subparsers.add_parser("exists")
-exists_parser.add_argument("generator")
-exists_parser.add_argument("filename")
-
 list_parser = subparsers.add_parser("list")
 
 delete_parser = subparsers.add_parser("delete")
@@ -121,9 +117,6 @@ if args["command"] == "get":
     get_secret(generator, args["filename"], os.environ["out"])
 elif args["command"] == "set":
     set_secret(args["generator"], args["filename"], os.environ["in"])
-elif args["command"] == "exists":
-    if not host_secret_path(args["generator"], args["filename"]).exists():
-        sys.exit(42)
 elif args["command"] == "list":
     for generator, filename in list_host_secrets():
         print(f"{generator} {filename}")

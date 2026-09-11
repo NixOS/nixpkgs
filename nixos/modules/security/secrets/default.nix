@@ -62,19 +62,12 @@ let
           respective secret from $in and stores it in the appropriate location.
         '';
 
-        exists = deferredPackage ''
-          Given $1=gen_name and $2=file_name, the script exists with status
-          code 0 if the secret exists, and with status code 42 otherwise.
-
-          This script must not perform side effects.
-        '';
-
         delete = nullableDeferredPackage ''
           Given $1=gen_name and $2=file_name, the script deletes the respective
           secret if it does exist.
         '';
 
-        list = nullableDeferredPackage ''
+        list = deferredPackage ''
           A script that lists all files managed by this backend. Should output
           space-separated or newline-separated pairs of: secret_name
           file_name.
