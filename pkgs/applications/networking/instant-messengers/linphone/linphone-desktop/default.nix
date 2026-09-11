@@ -24,6 +24,7 @@
   symlinkJoin,
   xercesc,
   zxing-cpp,
+  wrapGAppsHook3,
 }:
 let
   grammars = symlinkJoin {
@@ -99,7 +100,10 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.wrapQtAppsHook
     python3
     doxygen
+    wrapGAppsHook3
   ];
+
+  dontWrapGApps = true;
 
   cmakeFlags = [
     "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
@@ -152,7 +156,8 @@ stdenv.mkDerivation (finalAttrs: {
   # those just need to be linked manually below.
   preFixup = ''
     qtWrapperArgs+=(
-      --unset QML2_IMPORT_PATH \
+      "''${gappsWrapperArgs[@]}"
+      --unset QML2_IMPORT_PATH
       --set MEDIASTREAMER_PLUGINS_DIR $out/lib/mediastreamer/plugins
     )
   '';
