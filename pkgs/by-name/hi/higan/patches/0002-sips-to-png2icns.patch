@@ -1,0 +1,24 @@
+diff -Naur source-old/higan-ui/GNUmakefile source-new/higan-ui/GNUmakefile
+--- source-old/higan-ui/GNUmakefile	1969-12-31 21:00:01.000000000 -0300
++++ source-new/higan-ui/GNUmakefile	2021-09-29 22:35:35.744721052 -0300
+@@ -61,7 +61,7 @@
+ 	mkdir -p $(output.path)/$(name).app/Contents/Resources/
+ 	mv $(output.path)/$(name) $(output.path)/$(name).app/Contents/MacOS/$(name)
+ 	cp resource/$(name).plist $(output.path)/$(name).app/Contents/Info.plist
+-	sips -s format icns resource/$(name).png --out $(output.path)/$(name).app/Contents/Resources/$(name).icns
++	png2icns $(output.path)/$(name).app/Contents/Resources/$(name).icns resource/$(name).png
+ endif
+ 
+ verbose: nall.verbose ruby.verbose hiro.verbose all;
+diff -Naur source-old/icarus/GNUmakefile source-new/icarus/GNUmakefile
+--- source-old/icarus/GNUmakefile	1969-12-31 21:00:01.000000000 -0300
++++ source-new/icarus/GNUmakefile	2021-09-29 22:35:53.639846113 -0300
+@@ -26,7 +26,7 @@
+ 	mkdir -p $(output.path)/$(name).app/Contents/Resources/
+ 	mv $(output.path)/$(name) $(output.path)/$(name).app/Contents/MacOS/$(name)
+ 	cp resource/$(name).plist $(output.path)/$(name).app/Contents/Info.plist
+-	sips -s format icns resource/$(name).png --out $(output.path)/$(name).app/Contents/Resources/$(name).icns
++	png2icns $(output.path)/$(name).app/Contents/Resources/$(name).icns resource/$(name).png
+ endif
+ 
+ verbose: hiro.verbose nall.verbose all;

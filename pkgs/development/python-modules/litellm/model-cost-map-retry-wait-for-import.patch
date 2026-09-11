@@ -1,0 +1,18 @@
+--- a/litellm/litellm_core_utils/get_model_cost_map.py
++++ b/litellm/litellm_core_utils/get_model_cost_map.py
+@@ -577,6 +577,7 @@
+     first_outcome: _FetchAttemptRetryable,
+ ) -> None:
+     try:
++        _litellm_import_complete.wait()
+         first_wait: Final = _next_retry_wait(outcome=first_outcome, attempt=1, max_attempts=max_attempts, rng=rng)
+         if isinstance(first_wait, ModelCostMapReloadUnavailable):
+             return
+@@ -596,7 +597,6 @@
+                 max_attempts,
+             )
+             return
+-        _litellm_import_complete.wait()
+         if not GetModelCostMap.validate_model_cost_map(
+             fetched_map=result.model_cost_map,
+             backup_model_count=GetModelCostMap._get_backup_model_count(),  # pyright: ignore[reportPrivateUsage]  # integrity cache

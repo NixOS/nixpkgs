@@ -1,0 +1,15 @@
+diff --git a/src/core/lootdeployer.cpp b/src/core/lootdeployer.cpp
+index 81fd1e6..0af720c 100644
+--- a/src/core/lootdeployer.cpp
++++ b/src/core/lootdeployer.cpp
+@@ -186,7 +186,9 @@ void LootDeployer::sortModsByConflicts(std::optional<ProgressNode*> progress_nod
+   sfs::path prelude_path(dest_path_ / "prelude.yaml");
+   if(!sfs::exists(prelude_path))
+     prelude_path = "";
+-  loot_handle->GetDatabase().LoadLists(master_list_path, user_list_path, prelude_path);
++  loot_handle->GetDatabase().LoadMasterlistWithPrelude(master_list_path, prelude_path);
++  if(!sfs::exists(user_list_path))
++    loot_handle->GetDatabase().LoadUserlist(user_list_path);
+   if(progress_node)
+     (*progress_node)->child(1).advance();
+ 

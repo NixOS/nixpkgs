@@ -1,0 +1,60 @@
+From 9a900efb997dee158ce25114633cd07f44ef617a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tim=20H=C3=A4ring?= <tim.haering@gmail.com>
+Date: Sat, 17 May 2025 18:19:45 +0200
+Subject: [PATCH] fix: do not build libbpf
+
+---
+ Makefile | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 0fce8de12..bb9937ed5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -77,7 +77,7 @@ get_priv_reqs_recursive() { \
+ 	fi; \
+ 	processed_libs="$$processed_libs $$lib"; \
+ 	if [ "$$lib" = "libbpf" ]; then \
+-		priv_reqs=$$(PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) $(CMD_PKGCONFIG) --print-requires-private $$lib); \
++		priv_reqs=$$($(CMD_PKGCONFIG) --print-requires-private $$lib); \
+ 	else \
+ 		echo $$lib; \
+ 		priv_reqs=$$($(CMD_PKGCONFIG) --print-requires-private $$lib); \
+@@ -374,7 +374,7 @@ LIBBPF_DESTDIR = $(OUTPUT_DIR)/libbpf
+ LIBBPF_OBJDIR = $(LIBBPF_DESTDIR)/obj
+ LIBBPF_OBJ = $(LIBBPF_OBJDIR)/libbpf.a
+ 
+-$(LIBBPF_OBJ): .build_libbpf .build_libbpf_fix
++$(LIBBPF_OBJ):
+ 
+ .build_libbpf: \
+ 	$(LIBBPF_SRC) \
+@@ -413,7 +413,7 @@ LIBBPF_INCLUDE_UAPI = ./3rdparty/libbpf/include/uapi/linux
+ 	@$(CMD_TOUCH) $@
+ 
+ 
+-TRACEE_EBPF_CFLAGS = $(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) $(CMD_PKGCONFIG) $(PKG_CONFIG_FLAG) --cflags $(LIB_BPF))
++TRACEE_EBPF_CFLAGS = $(shell $(CMD_PKGCONFIG) $(PKG_CONFIG_FLAG) --cflags $(LIB_BPF))
+ 
+ .ONESHELL:
+ .eval_goenv: $(LIBBPF_OBJ)
+@@ -430,7 +430,7 @@ endif
+ 		$(eval GO_ENV_EBPF += GOARCH=$(GO_ARCH))
+ 		$(eval CUSTOM_CGO_CFLAGS := "$(TRACEE_EBPF_CFLAGS)")
+ 		$(eval GO_ENV_EBPF += CGO_CFLAGS=$(CUSTOM_CGO_CFLAGS))
+-		$(eval CUSTOM_CGO_LDFLAGS := "$(shell PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) $(CMD_PKGCONFIG) $(PKG_CONFIG_FLAG) --libs $(LIB_BPF))")
++		$(eval CUSTOM_CGO_LDFLAGS := "$(shell $(CMD_PKGCONFIG) $(PKG_CONFIG_FLAG) --libs $(LIB_BPF))")
+ 		$(eval GO_ENV_EBPF := $(GO_ENV_EBPF) CGO_LDFLAGS=$(CUSTOM_CGO_LDFLAGS))
+ 		export GO_ENV_EBPF=$(GO_ENV_EBPF)
+ 		echo 'GO_ENV_EBPF := $(GO_ENV_EBPF)' > $(GOENV_MK)
+@@ -486,7 +486,6 @@ TRACEE_SRC_DIRS = ./cmd/ ./pkg/ ./signatures/
+ TRACEE_SRC = $(shell find $(TRACEE_SRC_DIRS) -type f -name '*.go' ! -name '*_test.go')
+ GO_TAGS_EBPF = core,ebpf
+ CGO_EXT_LDFLAGS_EBPF =
+-PKG_CONFIG_PATH = $(LIBBPF_OBJDIR)
+ PKG_CONFIG_FLAG =
+ 
+ TRACEE_PROTOS = ./api/v1beta1/*.proto
+-- 
+2.49.0
+

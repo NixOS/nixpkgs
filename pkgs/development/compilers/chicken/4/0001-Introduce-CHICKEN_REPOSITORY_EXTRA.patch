@@ -1,0 +1,157 @@
+From 2877f33747e3871c3a682b3a0c812b8ba2e4da5a Mon Sep 17 00:00:00 2001
+From: Caolan McMahon <caolan@caolanmcmahon.com>
+Date: Sat, 25 Jun 2016 11:52:28 +0100
+Subject: [PATCH] Introduce CHICKEN_REPOSITORY_EXTRA
+
+This environment variable works like CHICKEN_REPOSITORY but supports
+multiple paths separated by `:'. Those paths are searched after
+CHICKEN_REPOSITORY when loading extensions via `require-library' and
+friends. It can be accessed and changed at runtime via the new procedure
+`repository-extra-paths' which is analog to `repository-path'.
+
+Original patch by Moritz Heidkamp.
+Updated by Caolan McMahon for CHICKEN 4.11.0
+---
+ chicken-install.scm | 29 ++++++++++++++++++++++++-----
+ chicken.import.scm  |  1 +
+ eval.scm            | 37 +++++++++++++++++++++++++++++++------
+ 3 files changed, 56 insertions(+), 11 deletions(-)
+
+diff --git a/chicken-install.scm b/chicken-install.scm
+index 7bc6041..f557793 100644
+--- a/chicken-install.scm
++++ b/chicken-install.scm
+@@ -120,6 +120,19 @@
+ 		 (sprintf "lib/chicken/~a" (##sys#fudge 42)))
+ 		(repository-path)))))
+ 
++  (define (repo-paths)
++    (if *deploy*
++	*prefix*
++	(if (and *cross-chicken* (not *host-extension*))
++	    (list (make-pathname C_TARGET_LIB_HOME (sprintf "chicken/~a" C_BINARY_VERSION)))
++	    (cons
++	     (if *prefix*
++		 (make-pathname
++			*prefix*
++			(sprintf "lib/chicken/~a" (##sys#fudge 42)))
++		 (repository-path))
++	     (repository-extra-paths)))))
++
+   (define (get-prefix #!optional runtime)
+     (cond ((and *cross-chicken*
+ 		(not *host-extension*))
+@@ -226,10 +239,13 @@
+            (chicken-version) )
+ 	  ;; Duplication of (extension-information) to get custom
+ 	  ;; prefix.  This should be fixed.
+-          ((let* ((ep (##sys#canonicalize-extension-path x 'ext-version))
+-		  (sf (make-pathname (repo-path) ep "setup-info")))
+-	     (and (file-exists? sf)
+-		  (with-input-from-file sf read))) =>
++      ((let ((ep (##sys#canonicalize-extension-path x 'ext-version)))
++         (let loop ((paths (repo-paths)))
++           (cond ((null? paths) #f)
++                 ((let ((sf (make-pathname (car paths) ep "setup-info")))
++                    (and (file-exists? sf)
++                         (with-input-from-file sf read))))
++                 (else (loop (cdr paths)))))) =>
+            (lambda (info)
+              (let ((a (assq 'version info)))
+                (if a
+@@ -776,7 +792,10 @@
+ 		  "installed extension has no information about which egg it belongs to"
+ 		  (pathname-file sf))
+ 		 #f))))
+-      (glob (make-pathname (repo-path) "*" "setup-info")))
++      (append-map
++       (lambda (path)
++       (glob (make-pathname path "*" "setup-info")))
++       (repo-paths)))
+      equal?))
+ 
+   (define (list-available-extensions trans locn)
+diff --git a/chicken.import.scm b/chicken.import.scm
+index f6e3a19..be1637c 100644
+--- a/chicken.import.scm
++++ b/chicken.import.scm
+@@ -200,6 +200,7 @@
+    repl
+    repl-prompt
+    repository-path
++   repository-extra-paths
+    require
+    reset
+    reset-handler
+diff --git a/eval.scm b/eval.scm
+index 6242f62..f7d76d4 100644
+--- a/eval.scm
++++ b/eval.scm
+@@ -81,6 +81,7 @@
+ (define-constant source-file-extension ".scm")
+ (define-constant setup-file-extension "setup-info")
+ (define-constant repository-environment-variable "CHICKEN_REPOSITORY")
++(define-constant repository-extra-environment-variable "CHICKEN_REPOSITORY_EXTRA")
+ (define-constant prefix-environment-variable "CHICKEN_PREFIX")
+ 
+ ; these are actually in unit extras, but that is used by default
+@@ -1176,6 +1177,25 @@
+ 
+ (define ##sys#repository-path repository-path)
+ 
++(define ##sys#repository-extra-paths
++  (let* ((repaths (get-environment-variable repository-extra-environment-variable))
++	 (repaths (if repaths
++		      (let ((len (string-length repaths)))
++			(let loop ((i 0) (offset 0) (res '()))
++			  (cond ((> i len)
++				 (reverse res))
++				((or (= i len) (eq? #\: (string-ref repaths i)))
++				 (loop (+ i 1) (+ i 1) (cons (substring repaths offset i) res)))
++				(else
++				 (loop (+ i 1) offset res)))))
++		      '())))
++    (lambda (#!optional val)
++      (if val
++	  (set! repaths val)
++	  repaths))))
++
++(define repository-extra-paths ##sys#repository-extra-paths)
++
+ (define ##sys#setup-mode #f)
+ 
+ (define ##sys#find-extension
+@@ -1193,6 +1213,7 @@
+ 	(let loop ((paths (##sys#append
+ 			   (if ##sys#setup-mode '(".") '())
+ 			   (if rp (list rp) '())
++			   (##sys#repository-extra-paths)
+ 			   (if inc? ##sys#include-pathnames '())
+ 			   (if ##sys#setup-mode '() '("."))) ))
+ 	  (and (pair? paths)
+@@ -1252,12 +1273,16 @@
+ 	[string-append string-append]
+ 	[read read] )
+     (lambda (id loc)
+-      (and-let* ((rp (##sys#repository-path)))
+-	(let* ((p (##sys#canonicalize-extension-path id loc))
+-	       (rpath (string-append rp "/" p ".")) )
+-	  (cond ((file-exists? (string-append rpath setup-file-extension))
+-		 => (cut with-input-from-file <> read) )
+-		(else #f) ) ) ) ) ))
++      (let loop ((rpaths (cons (##sys#repository-path) (##sys#repository-extra-paths))))
++	(and (pair? rpaths)
++	     (let ((rp (car rpaths)))
++	       (if (not rp)
++		   (loop (cdr rpaths))
++		   (let* ((p (##sys#canonicalize-extension-path id loc))
++			  (rpath (string-append rp "/" p ".")) )
++		     (cond ((file-exists? (string-append rpath setup-file-extension))
++			    => (cut with-input-from-file <> read) )
++			   (else (loop (cdr rpaths))) ) )) ))) ) ))
+ 
+ (define (extension-information ext)
+   (##sys#extension-information ext 'extension-information) )
+-- 
+2.1.4
+

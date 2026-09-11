@@ -1,0 +1,18 @@
+Drop the hand-rolled bool enum: `bool`, `true`, and `false` are reserved
+keywords in C23 (the default since GCC 15), so the typedef no longer compiles.
+
+--- a/src/rtl_fm_streamer.c
++++ b/src/rtl_fm_streamer.c
+@@ -100,11 +100,7 @@
+
+ #define DEFAULT_PORT_NUMBER "2346"
+
+-typedef enum
+-{
+-    false = 0,
+-    true
+-}bool;
++#include <stdbool.h>
+
+ struct dongle_state
+ {

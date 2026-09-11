@@ -1,0 +1,16 @@
+--- a/run.sh	2021-06-24 22:30:20.764897745 +0900
++++ b/run.sh	2021-06-24 22:29:47.211210142 +0900
+@@ -1,12 +1,6 @@
+ #!/usr/bin/env bash
+ 
+-SOURCE="${BASH_SOURCE[0]}"
+-while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+-  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+-  SOURCE="$(readlink "$SOURCE")"
+-  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+-done
+-cd "$( cd -P "$( dirname "$SOURCE" )" && pwd )"
++cd @out@/protege
+ 
+ java -Xmx500M -Xms200M \
+      -Xss16M \

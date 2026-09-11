@@ -1,0 +1,22 @@
+--- a/tests/helpers/__init__.py
++++ b/tests/helpers/__init__.py
+@@ -9,16 +9,9 @@
+ from cuda_python_test_helpers import IS_LINUX, IS_WINDOWS, IS_WSL, libc, under_compute_sanitizer
+
+ CUDA_PATH = get_cuda_path_or_home()
+-CUDA_INCLUDE_PATH = None
+-CCCL_INCLUDE_PATHS = None
+-if CUDA_PATH is not None:
+-    path = os.path.join(CUDA_PATH, "include")
+-    if os.path.isdir(path):
+-        CUDA_INCLUDE_PATH = path
+-        CCCL_INCLUDE_PATHS = (path,)
+-        path = os.path.join(path, "cccl")
+-        if os.path.isdir(path):
+-            CCCL_INCLUDE_PATHS = (path,) + CCCL_INCLUDE_PATHS
++# Nixpkgs installs CCCL and the CUDA runtime headers in separate prefixes, not under one toolkit root.
++CUDA_INCLUDE_PATH = "@cudartInclude@"
++CCCL_INCLUDE_PATHS = ("@cccl@", "@cudartInclude@")
+
+
+ @functools.cache

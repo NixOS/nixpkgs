@@ -1,0 +1,12 @@
+--- a/op_builder/cpu/builder.py
++++ b/op_builder/cpu/builder.py
+@@ -16,6 +16,9 @@
+ 
+ class CPUOpBuilder(OpBuilder):
+ 
++    def extra_ldflags(self):
++        return ['-lomp']
++
+     def builder(self):
+         from torch.utils.cpp_extension import CppExtension as ExtensionBuilder
+         include_dirs = [os.path.abspath(x) for x in self.strip_empty_entries(self.include_paths())]

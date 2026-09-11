@@ -1,0 +1,11 @@
+diff --git a/phira-monitor/src/main.rs b/phira-monitor/src/main.rs
+--- a/phira-monitor/src/main.rs
++++ b/phira-monitor/src/main.rs
+@@ -3,6 +3,7 @@
+ mod scene;
+ 
+ use anyhow::{Context, Result};
++use log::warn;
+ use macroquad::prelude::*;
+ use prpr::{
+     core::init_assets,

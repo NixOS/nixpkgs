@@ -1,0 +1,61 @@
+diff --git a/src/libponyc/codegen/gencshim.cc b/src/libponyc/codegen/gencshim.cc
+index a1722ad01a22..db742c6adaa5 100644
+--- a/src/libponyc/codegen/gencshim.cc
++++ b/src/libponyc/codegen/gencshim.cc
+@@ -7,6 +7,7 @@
+ #include "../ast/stringtab.h"
+ #include "paths.h"
+ #include "ponyassert.h"
++#include "nix.h"
+ 
+ #ifdef _MSC_VER
+ #  pragma warning(push)
+@@ -307,8 +308,11 @@ static const char* find_macos_sdk_include(pass_opt_t* opt)
+     pclose(f);
+   }
+ 
++  // Fall back to the Nix apple-sdk when xcrun is unavailable, mirroring the
++  // link side in genexe.cc. The unversioned MacOSX.sdk symlink keeps this
++  // independent of the SDK version.
+   const char* fallback =
+-    "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include";
++    "@apple-sdk@/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include";
+ 
+   if(dir_exists(fallback))
+   {
+@@ -349,6 +353,25 @@ static bool push_isystem(pass_opt_t* opt, std::vector<const char*>& args,
+ }
+ 
+ 
++/*
++  Add the Nix header search directories (see nix.h) as -internal-isystem
++  entries. push_isystem skips any directory that doesn't exist, so a partial
++  toolchain degrades gracefully.
++*/
++static bool add_nix_include_dirs(pass_opt_t* opt,
++  std::vector<const char*>& args, errors_t* errors)
++{
++  std::vector<const char*> dirs;
++  nix_collect_include_dirs(opt->strtab, dirs);
++
++  bool any = false;
++  for(size_t i = 0; i < dirs.size(); i++)
++    any |= push_isystem(opt, args, errors, "-internal-isystem", dirs[i], "");
++
++  return any;
++}
++
++
+ // System include directories for the target, derived from the same sysroot
+ // the embedded linker uses — hand-rolled like LLD rather than driven through
+ // clang's Driver, so the headers the shim compiles against stay consistent
+@@ -488,6 +511,9 @@ static bool add_system_include_args(pass_opt_t* opt, const char* sysroot,
+   any |= push_isystem(opt, args, errors, "-internal-externc-isystem",
+     sysroot, "/usr/include");
+ 
++  if(sysroot[0] == '\0')
++    any |= add_nix_include_dirs(opt, args, errors);
++
+   // Per-directory skipping is right (multiarch and /usr/local are
+   // legitimately absent on many systems), but an explicit --sysroot that
+   // yields nothing at all deserves a direct answer, like the macOS branch

@@ -1,0 +1,75 @@
+Use Nix dependencies instead of searching the host's Homebrew installation.
+
+Defer bundle signing until postFixup, after Nix has finished modifying it.
+Use rcodesign for helper signing during the build.
+Provide a default CA bundle to both curl and the RequestServer sandbox
+when no certificate file was supplied explicitly.
+
+--- a/Meta/CMake/compile_options.cmake
++++ b/Meta/CMake/compile_options.cmake
+@@ -232,7 +232,6 @@
+ endif()
+
+ if (APPLE)
+-    list(APPEND CMAKE_PREFIX_PATH /opt/homebrew)
+     add_cxx_link_options(LINKER:-dead_strip)
+
+     # The debug info of LTO code lives in the objects the linker generates, which it deletes after linking unless told
+--- a/UI/CMakeLists.txt
++++ b/UI/CMakeLists.txt
+@@ -81,9 +81,6 @@
+         add_custom_command(TARGET ${target_name} POST_BUILD
+             COMMAND "${CMAKE_COMMAND}" -E create_symlink "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}" "${bundle_dir}/Contents/lib"
+         )
+-
+-        ladybird_codesign_command(codesign_command "${target_name}" "${LADYBIRD_ENTITLEMENTS_FILE}" -v "${bundle_dir}")
+-        add_custom_command(TARGET ${target_name} POST_BUILD COMMAND ${codesign_command} VERBATIM)
+     endif()
+
+     if (APPLE)
+@@ -161,19 +158,6 @@
+ if (APPLE)
+     set_helper_process_properties(WebDriver)
+
+-    # WebDriver and the helpers can link into the bundle after ladybird has signed it — and that leaves the seal stale
+-    # until something later relinks ladybird. Sign once more with everything in place.
+-    set(bundle_signed_stamp "${CMAKE_CURRENT_BINARY_DIR}/ladybird_bundle_signed.stamp")
+-    ladybird_codesign_command(codesign_command ladybird-bundle "${LADYBIRD_ENTITLEMENTS_FILE}" -v "$<TARGET_BUNDLE_DIR:ladybird>")
+-
+-    add_custom_command(
+-        OUTPUT "${bundle_signed_stamp}"
+-        COMMAND ${codesign_command}
+-        COMMAND "${CMAKE_COMMAND}" -E touch "${bundle_signed_stamp}"
+-        DEPENDS ladybird WebDriver ${ladybird_helper_processes} "${LADYBIRD_ENTITLEMENTS_FILE}"
+-        VERBATIM
+-    )
+-    add_custom_target(sign_ladybird_bundle ALL DEPENDS "${bundle_signed_stamp}")
+ endif()
+
+ if(NOT CMAKE_SKIP_INSTALL_RULES)
+--- a/Services/RequestServer/main.cpp
++++ b/Services/RequestServer/main.cpp
+@@ -92,6 +92,10 @@
+     if (enable_test_mode)
+         RequestServer::DNSInfo::the().loopback_domains.append("test"sv);
+
++    // Pass the default CA bundle through the sandbox allowlist as well as to curl.
++    if (certificates.is_empty())
++        certificates.append("@NIX_CA_BUNDLE@");
++
+     // FIXME: Update RequestServer to support multiple custom root certificates.
+     if (!certificates.is_empty())
+         RequestServer::set_default_certificate_path(certificates.first());
+--- a/Meta/CMake/ladybird_helper_processes.cmake
++++ b/Meta/CMake/ladybird_helper_processes.cmake
+@@ -54,6 +54,8 @@
+     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${target}.release.entitlements" DESTINATION entitlements
+         COMPONENT ladybird_Runtime)
+
+-    ladybird_codesign_command(codesign_command "${target}" "${entitlements_file}" -o runtime "$<TARGET_FILE:${target}>")
+-    add_custom_command(TARGET ${target} POST_BUILD COMMAND ${codesign_command} VERBATIM)
++    add_custom_command(TARGET ${target} POST_BUILD
++        COMMAND rcodesign sign --code-signature-flags runtime --entitlements-xml-file "${entitlements_file}" "$<TARGET_FILE:${target}>"
++        VERBATIM
++    )
+ endfunction()

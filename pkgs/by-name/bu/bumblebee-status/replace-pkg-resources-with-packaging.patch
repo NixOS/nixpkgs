@@ -1,0 +1,34 @@
+diff --git a/bumblebee_status/modules/contrib/zpool.py b/bumblebee_status/modules/contrib/zpool.py
+index 9863793..f791dff 100644
+--- a/bumblebee_status/modules/contrib/zpool.py
++++ b/bumblebee_status/modules/contrib/zpool.py
+@@ -31,7 +31,7 @@ contributed by `adam-dej <https://github.com/adam-dej>`_ - many thanks!
+ 
+ import time
+ import logging
+-from pkg_resources import parse_version
++from packaging.version import Version
+ 
+ log = logging.getLogger(__name__)
+ 
+@@ -82,7 +82,7 @@ class Module(core.module.Module):
+         for raw_zpool in raw_zpools:
+             try:
+                 # Ignored fields (assigned to _) are 'expandsz' and 'altroot', also 'ckpoint' in ZFS 0.8.0+
+-                if parse_version(zfs_version) < parse_version("0.8.0"):
++                if Version(zfs_version) < Version("0.8.0"):
+                     (
+                         name,
+                         size,
+diff --git a/tests/modules/contrib/test_zpool.py b/tests/modules/contrib/test_zpool.py
+index 5577e00..8c0521e 100644
+--- a/tests/modules/contrib/test_zpool.py
++++ b/tests/modules/contrib/test_zpool.py
+@@ -1,6 +1,6 @@
+ import pytest
+ 
+-pytest.importorskip("pkg_resources")
++pytest.importorskip("packaging")
+ 
+ def test_load_module():
+     __import__("modules.contrib.zpool")

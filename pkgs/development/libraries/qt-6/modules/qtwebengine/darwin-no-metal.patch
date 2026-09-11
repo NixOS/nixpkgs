@@ -1,0 +1,33 @@
+--- a/configure.cmake
++++ b/configure.cmake
+@@ -533,18 +533,6 @@ qt_webengine_configure_check("windows-sdk"
+ )
+ unset(sdk_minor)
+ 
+-if(APPLE)
+-    qt_webengine_check_for_metal_toolchain()
+-endif()
+-
+-qt_webengine_configure_check("metal-toolchain"
+-    MODULES QtWebEngine
+-    CONDITION NOT APPLE OR ${TEST_metal_toolchain}
+-    MESSAGE "Build requires Metal Toolchain to be installed via 'xcodebuild -downloadComponent MetalToolchain'"
+-    DOCUMENTATION "Metal Toolchain needs to be installed"
+-    TAGS APPLE_PLATFORM
+-)
+-
+ ### Support Checks (optional)
+ 
+ # Only check for the 'xcb' feature if the Gui targets exists, aka Qt was not configured with
+--- a/src/3rdparty/chromium/third_party/angle/src/libANGLE/renderer/metal/metal_backend.gni
++++ b/src/3rdparty/chromium/third_party/angle/src/libANGLE/renderer/metal/metal_backend.gni
+@@ -90,8 +90,7 @@ metal_backend_sources = [
+ # We can build the ANGLE internal shaders at build-time if we have access to the Mac SDK in the "build" dir.
+ # Building internal shaders for iOS is not supported. The Chromium Mac SDK does not have all the required files.
+ # This is also an issue when cross-compiling for mac.
+-metal_internal_shader_compilation_supported =
+-    angle_has_build && !is_ios && target_os == host_os
++metal_internal_shader_compilation_supported = false
+ 
+ metal_internal_shaders_header =
+     "$root_gen_dir/angle/mtl_internal_shaders_metallib.h"

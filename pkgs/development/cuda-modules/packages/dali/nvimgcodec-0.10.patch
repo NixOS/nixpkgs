@@ -1,0 +1,82 @@
+From 39ad05eb58dde6e493d3e811dea3d6bcd68e1039 Mon Sep 17 00:00:00 2001
+From: Joaquin Anton Guirao <janton@nvidia.com>
+Date: Wed, 4 Nov 2026 08:39:25 +0100
+Subject: [PATCH] Integrate nvimgcodec 0.10.0
+
+- Require nvimgcodec >=0.10.0,<0.11.0.
+- Use the NVIMGCODEC_MAKE_SEMANTIC_VERSION macro (the unprefixed name was
+  removed in 0.10.0) in ImageDecoder::version_at_least, and cast
+  NVIMGCODEC_VER to int when comparing against the runtime version in
+  EnforceMinimumNvimgcodecVersion (-Wsign-compare is an error).
+- Point the FetchContent header fallback at the 0.10.0.9 archives for
+  CUDA 12 and 13.
+
+Signed-off-by: Joaquin Anton Guirao <janton@nvidia.com>
+---
+ cmake/Dependencies.common.cmake         | 12 ++++++------
+ dali/operators/imgcodec/image_decoder.h |  4 ++--
+ dali/operators/operators.cc             |  2 +-
+ 3 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/cmake/Dependencies.common.cmake b/cmake/Dependencies.common.cmake
+index 89a233b935e..434572bb83f 100644
+--- a/cmake/Dependencies.common.cmake
++++ b/cmake/Dependencies.common.cmake
+@@ -352,8 +352,8 @@ endif()
+ ##################################################################
+ set(DALI_INSTALL_REQUIRES_NVIMGCODEC "")
+ if(BUILD_NVIMAGECODEC)
+-  set(NVIMGCODEC_MIN_VERSION "0.9.0")
+-  set(NVIMGCODEC_MAX_VERSION "0.10.0")
++  set(NVIMGCODEC_MIN_VERSION "0.10.0")
++  set(NVIMGCODEC_MAX_VERSION "0.11.0")
+   message(STATUS "nvImageCodec - requires version >=${NVIMGCODEC_MIN_VERSION}, <${NVIMGCODEC_MAX_VERSION}")
+   if (WITH_DYNAMIC_NVIMGCODEC)
+     message(STATUS "nvImageCodec - dynamic load")
+@@ -371,14 +371,14 @@ if(BUILD_NVIMAGECODEC)
+       if ("${CUDA_VERSION_MAJOR}" EQUAL "13")
+         FetchContent_Declare(
+             nvimgcodec_headers
+-            URL      https://developer.download.nvidia.com/compute/nvimgcodec/redist/nvimgcodec/linux-x86_64/nvimgcodec-linux-x86_64-0.9.0.20_cuda13-archive.tar.xz
+-            URL_HASH SHA512=a7a07e8f297eaeb41c51769dba57bd56773a88c2612df8bc7c563c8679ffb2da137106589af48f4448a1481764ca62bf5e1250dbfd017e3acbf394b1680e92c1
++            URL      https://developer.download.nvidia.com/compute/nvimgcodec/redist/nvimgcodec/linux-x86_64/nvimgcodec-linux-x86_64-0.10.0.9_cuda13-archive.tar.xz
++            URL_HASH SHA512=66fa44280a327f1c876b0329cd5f823fad857aa786f970b611181146913c36331df50ba2ceb824a1e4c2648c3ab2dd9d1cdbe9f557b5e1bdbcd4a1a94597d213
+         )
+       elseif ("${CUDA_VERSION_MAJOR}" EQUAL "12")
+         FetchContent_Declare(
+             nvimgcodec_headers
+-            URL      https://developer.download.nvidia.com/compute/nvimgcodec/redist/nvimgcodec/linux-x86_64/nvimgcodec-linux-x86_64-0.9.0.20_cuda12-archive.tar.xz
+-            URL_HASH SHA512=687e88cd850574bcfd7dbd5b728580ac4a8bd00ba64ed27f1866efa2b01c7ae0743617daddc3f3b743089484cfdd7fff85d1dc3c0fd99e016988171fbaf83363
++            URL      https://developer.download.nvidia.com/compute/nvimgcodec/redist/nvimgcodec/linux-x86_64/nvimgcodec-linux-x86_64-0.10.0.9_cuda12-archive.tar.xz
++            URL_HASH SHA512=3adada7a49fc60eed735853b453d82a3dc5e6edb8bf7d462e3db1b68c8d509e5be5b4a6e85fe2ed4fedc0e2b01b033b3ad10749d86cafa3f07b6775aec1bbd5d
+         )
+       else()
+         message(FATAL_ERROR "Unsupported CUDA major version: ${CUDA_VERSION_MAJOR}")
+diff --git a/dali/operators/imgcodec/image_decoder.h b/dali/operators/imgcodec/image_decoder.h
+index eabc29b96cf..faaa028ed43 100644
+--- a/dali/operators/imgcodec/image_decoder.h
++++ b/dali/operators/imgcodec/image_decoder.h
+@@ -516,8 +516,8 @@ class ImageDecoder : public StatelessOperator<Backend> {
+   bool version_at_least(int req_major, int req_minor, int req_patch) {
+     int major = -1, minor = -1, patch = -1;
+     get_nvimgcodec_version(&major, &minor, &patch);
+-    return MAKE_SEMANTIC_VERSION(major, minor, patch) >=
+-           MAKE_SEMANTIC_VERSION(req_major, req_minor, req_patch);
++    return NVIMGCODEC_MAKE_SEMANTIC_VERSION(major, minor, patch) >=
++           NVIMGCODEC_MAKE_SEMANTIC_VERSION(req_major, req_minor, req_patch);
+   }
+ 
+   /**
+diff --git a/dali/operators/operators.cc b/dali/operators/operators.cc
+index 8da3b93a98a..458458e13d4 100644
+--- a/dali/operators/operators.cc
++++ b/dali/operators/operators.cc
+@@ -66,7 +66,7 @@ DLL_PUBLIC void EnforceMinimumNvimgcodecVersion() {
+   int minor = NVIMGCODEC_MINOR_FROM_SEMVER(version);
+   int patch = NVIMGCODEC_PATCH_FROM_SEMVER(version);
+ 
+-  if (version < NVIMGCODEC_VER) {
++  if (version < static_cast<int>(NVIMGCODEC_VER)) {
+     std::stringstream ss;
+     ss << "DALI requires nvImageCodec at minimum version " << NVIMGCODEC_VER_MAJOR << "."
+        << NVIMGCODEC_VER_MINOR << "." << NVIMGCODEC_VER_PATCH << ", but got " << major << "."

@@ -1,0 +1,78 @@
+{
+  lib,
+  angr,
+  buildPythonPackage,
+  cmd2,
+  coreutils,
+  fetchFromGitHub,
+  pygments,
+  pytestCheckHook,
+  setuptools,
+  stdenv,
+}:
+
+buildPythonPackage rec {
+  pname = "angrcli";
+  version = "1.3.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "fmagin";
+    repo = "angr-cli";
+    tag = "v${version}";
+    hash = "sha256-egu7jlEk8/i36qQMHztGr959sBt9d5crW8mj6+sKaHI=";
+  };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "version='1.2.0'" "version='${version}'"
+    substituteInPlace tests/test_derefs.py \
+      --replace-fail "/bin/ls" "${coreutils}/bin/ls"
+
+    substituteInPlace \
+      angrcli/ast/rendering.py \
+      angrcli/plugins/ContextView/{context_view,disassemblers}.py \
+      tests/test_{interactive_explore,morph,simprocs}.py \
+      --replace-fail "import claripy" "from angr import claripy"
+    substituteInPlace \
+      angrcli/plugins/ContextView/context_view.py \
+      angrcli/plugins/watches.py \
+      --replace-fail "from claripy." "from angr.claripy."
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    angr
+    cmd2
+    pygments
+  ];
+
+  nativeCheckInputs = [
+    coreutils
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Exact SimProcedure prototype strings changed in angr 9.3.
+    "test_sims"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isx86) [
+    # expects the x86 register "rax" to exist
+    "test_cc"
+    "test_loop"
+    "test_max_depth"
+  ];
+
+  pythonImportsCheck = [ "angrcli" ];
+
+  meta = {
+    description = "Python modules to allow easier interactive use of angr";
+    homepage = "https://github.com/fmagin/angr-cli";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      connornelson
+      fab
+    ];
+  };
+}

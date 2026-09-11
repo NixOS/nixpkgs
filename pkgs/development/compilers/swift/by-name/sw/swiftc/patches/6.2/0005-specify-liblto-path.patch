@@ -1,0 +1,44 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sun, 4 Jan 2026 14:47:06 -0500
+Subject: [PATCH 05/10] specify-liblto-path
+
+---
+ cmake/modules/UnixCompileRules.cmake | 2 +-
+ lib/Driver/DarwinToolChains.cpp      | 7 ++-----
+ 2 files changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/cmake/modules/UnixCompileRules.cmake b/cmake/modules/UnixCompileRules.cmake
+index 06a597b5ebb..e9086801408 100644
+--- a/cmake/modules/UnixCompileRules.cmake
++++ b/cmake/modules/UnixCompileRules.cmake
+@@ -18,7 +18,7 @@ set(CMAKE_CXX_ARCHIVE_FINISH "")
+ # just-built bitcode format. So let's instead ask ar/ranlib/libtool to use the
+ # just-built libLTO.dylib from the toolchain that we're using to build.
+ if(APPLE AND SWIFT_NATIVE_CLANG_TOOLS_PATH)
+-  set(liblto_path "${SWIFT_NATIVE_CLANG_TOOLS_PATH}/../lib/libLTO.dylib")
++  set(liblto_path "@libllvm_path@/lib/libLTO.dylib")
+ 
+   set(CMAKE_C_ARCHIVE_CREATE "${CMAKE_COMMAND} -E env LIBLTO_PATH=${liblto_path} <CMAKE_AR> crs <TARGET> <LINK_FLAGS> <OBJECTS>")
+   set(CMAKE_C_ARCHIVE_APPEND "${CMAKE_COMMAND} -E env LIBLTO_PATH=${liblto_path} <CMAKE_AR> qs <TARGET> <LINK_FLAGS> <OBJECTS>")
+diff --git a/lib/Driver/DarwinToolChains.cpp b/lib/Driver/DarwinToolChains.cpp
+index 7d4d7d61071..832c2dffde3 100644
+--- a/lib/Driver/DarwinToolChains.cpp
++++ b/lib/Driver/DarwinToolChains.cpp
+@@ -270,11 +270,8 @@ void toolchains::Darwin::addLTOLibArgs(ArgStringList &Arguments,
+     Arguments.push_back("-lto_library");
+     Arguments.push_back(context.Args.MakeArgString(context.OI.LibLTOPath));
+   } else {
+-    // Check for relative libLTO.dylib. This would be the expected behavior in an
+-    // Xcode toolchain.
+-    StringRef P = llvm::sys::path::parent_path(getDriver().getSwiftProgramPath());
+-    llvm::SmallString<128> LibLTOPath(P);
+-    llvm::sys::path::remove_filename(LibLTOPath); // Remove '/bin'
++    // Use the LTO dylib from the LLVM built for Swift.
++    llvm::SmallString<128> LibLTOPath("@libllvm_path@");
+     llvm::sys::path::append(LibLTOPath, "lib");
+     llvm::sys::path::append(LibLTOPath, "libLTO.dylib");
+     if (llvm::sys::fs::exists(LibLTOPath)) {
+-- 
+2.54.0
+

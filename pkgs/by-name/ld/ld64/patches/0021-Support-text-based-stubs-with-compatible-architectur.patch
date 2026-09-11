@@ -1,0 +1,35 @@
+From f18377dd297f669be5b9fbf10c132698f452c318 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Tue, 14 Apr 2026 21:35:22 -0400
+Subject: [PATCH] Support text-based stubs with compatible architectures
+
+This is necessary to support newer (e.g., 26.4) SDKs, which only include
+symbol definitions for arm64e. Fortunately, arm64e dylibs are
+ABI-compatible with arm64 binaries.
+---
+ subprojects/libtapi/LinkerInterfaceFile.cpp | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/subprojects/libtapi/LinkerInterfaceFile.cpp b/subprojects/libtapi/LinkerInterfaceFile.cpp
+index 632eac8b0f..dfc5a18a73 100644
+--- a/subprojects/libtapi/LinkerInterfaceFile.cpp
++++ b/subprojects/libtapi/LinkerInterfaceFile.cpp
+@@ -186,6 +186,15 @@
+ 
+   if (enforceCpuSubType)
+     return AK_unknown;
++ 
++  // Check whether any archs has a compatible cpu type and return that if so.
++  for (const auto& targetArch : archs) {
++    auto [targetCpuType, _] = getCPUTypeFromArchitecture(targetArch);
++    if (cpuType == targetCpuType) {
++      return targetArch;
++    }
++  }
++
+   return arch;
+ }
+ 
+-- 
+2.51.2
+

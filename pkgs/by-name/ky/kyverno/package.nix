@@ -1,0 +1,65 @@
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  kyverno,
+}:
+
+buildGoModule (finalAttrs: {
+  pname = "kyverno";
+  version = "1.20.0";
+
+  src = fetchFromGitHub {
+    owner = "kyverno";
+    repo = "kyverno";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-oVDbcImJqcWcpRdvLKqSN/17wMS4fjrpAKaMKd7ubLg=";
+  };
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/kyverno/kyverno/pkg/version.BuildVersion=v${finalAttrs.version}"
+    "-X github.com/kyverno/kyverno/pkg/version.BuildHash=${finalAttrs.version}"
+    "-X github.com/kyverno/kyverno/pkg/version.BuildTime=1970-01-01_00:00:00"
+  ];
+
+  vendorHash = "sha256-sDGPHvhP2jZKMRtH15PjmmybrIqAATk3T1QMUY1v8ck=";
+
+  subPackages = [ "cmd/cli/kubectl-kyverno" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = ''
+    # we have no integration between krew and kubectl
+    # so better rename binary to kyverno and use as a standalone
+    mv $out/bin/kubectl-kyverno $out/bin/kyverno
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd kyverno \
+      --bash <($out/bin/kyverno completion bash) \
+      --zsh <($out/bin/kyverno completion zsh) \
+      --fish <($out/bin/kyverno completion fish)
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    package = kyverno;
+    command = "kyverno version";
+    version = "v${finalAttrs.version}"; # needed because testVersion uses grep -Fw
+  };
+
+  meta = {
+    description = "Kubernetes Native Policy Management";
+    mainProgram = "kyverno";
+    homepage = "https://kyverno.io/";
+    changelog = "https://github.com/kyverno/kyverno/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      LorenzBischof
+      Scrumplex
+    ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "kyverno" finalAttrs.version;
+  };
+})

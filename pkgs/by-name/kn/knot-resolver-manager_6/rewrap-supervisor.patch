@@ -1,0 +1,9 @@
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -60,4 +60,6 @@
+ knot-resolver = "knot_resolver.main:main"
+ kres-manager = "knot_resolver.manager.main:main"
+ kresctl = "knot_resolver.client.main:main"
++supervisord = 'supervisor.supervisord:main'
++supervisorctl = 'supervisor.supervisorctl:main'
+ 

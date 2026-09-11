@@ -1,0 +1,13 @@
+diff --git b/third_party/dawn/src/utils/BUILD.gn a/third_party/dawn/src/utils/BUILD.gn
+index b9f0be693eea5aacdac6f7940642a29e0205c7a9..ed7ad3b6d3de1336c7c89cb18d4b6e4359205417 100644
+--- b/third_party/dawn/src/utils/BUILD.gn
++++ a/third_party/dawn/src/utils/BUILD.gn
+@@ -218,8 +218,6 @@ config("dawn_warnings") {
+       # the analysis pass.
+       "-Wno-lifetime-safety",
+       "-Wno-lifetime-safety-all",
+-      "-Xclang=-fno-lifetime-safety-inference",
+-      "-Xclang=-fno-experimental-lifetime-safety-tu-analysis",
+     ]
+ 
+     # P3. Checks that could be nice but probably don't help with hardening.
