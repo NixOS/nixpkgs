@@ -1,6 +1,5 @@
 {
-  fetchpatch2,
-  fetchzip,
+  fetchurl,
   buildDunePackage,
   lib,
   logs,
@@ -12,26 +11,19 @@
   tls-miou-unix,
   dns-client-miou-unix,
   happy-eyeballs-miou-unix,
-  mirage-crypto-rng-miou-unix,
+  mirage-crypto-rng,
   alcotest,
   digestif,
 }:
 
 buildDunePackage (finalAttrs: {
   pname = "httpcats";
-  version = "0.2.1";
+  version = "0.3.1";
 
-  src = fetchzip {
+  src = fetchurl {
     url = "https://github.com/robur-coop/httpcats/releases/download/v${finalAttrs.version}/httpcats-${finalAttrs.version}.tbz";
-    hash = "sha256-ehtwxQGHw8igzI0dy2Zzs+VOqvck/tAUuuJl+jSpVU8=";
+    hash = "sha256-5BymoyJS5JykTnSee0HhSKzbHkb8j6COuY7tZtGDGh0=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/robur-coop/httpcats/commit/d8787555d4831e0488780d42bd2c65de662d1d38.patch";
-      hash = "sha256-6zXPb+mvw2rcEMv28b0npcL8cKl3CASxDbl7FOAGsXs=";
-    })
-  ];
 
   propagatedBuildInputs = [
     h2
@@ -49,7 +41,7 @@ buildDunePackage (finalAttrs: {
   checkInputs = [
     logs
     fmt
-    mirage-crypto-rng-miou-unix
+    mirage-crypto-rng
     alcotest
     digestif
   ];

@@ -66,6 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Embedded C/C++ web server";
     mainProgram = "civetweb";
     homepage = "https://github.com/civetweb/civetweb";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
   };
 })

@@ -5,11 +5,9 @@
   buildGo126Module,
   makeWrapper,
   nix-update-script,
-  v2ray-geoip,
-  v2ray-domain-list-community,
+  v2ray-rules-dat,
   assets ? [
-    v2ray-geoip
-    v2ray-domain-list-community
+    v2ray-rules-dat
   ],
 }:
 
@@ -61,7 +59,7 @@ buildGo126Module (finalAttrs: {
     description = "Platform for building proxies to bypass network restrictions. A replacement for v2ray-core, with XTLS support and fully compatible configuration";
     mainProgram = "xray";
     homepage = "https://github.com/XTLS/Xray-core";
-    license = with lib.licenses; [ mpl20 ];
+    license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ iopq ];
   };
 })

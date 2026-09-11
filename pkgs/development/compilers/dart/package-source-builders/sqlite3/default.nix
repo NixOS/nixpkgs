@@ -20,10 +20,17 @@ stdenv.mkDerivation (finalAttrs: {
     preFixupHooks+=(sqliteFixupHook)
   '';
 
-  postPatch = lib.optionalString (lib.versionAtLeast version "3.2.0") ''
-    substituteInPlace lib/src/hook/description.dart \
-      --replace-fail "return PrecompiledFromGithubAssets(LibraryType.sqlite3);" "return LookupSystem('sqlite3');"
-  '';
+  postPatch =
+    if lib.versionAtLeast version "3.5.0" then
+      ''
+        substituteInPlace lib/src/hook/compile/description.dart \
+          --replace-fail "return fromGitHub(LibraryType.sqlite3);" "return LookupSystem('sqlite3');"
+      ''
+    else
+      lib.optionalString (lib.versionAtLeast version "3.2.0") ''
+        substituteInPlace lib/src/hook/description.dart \
+          --replace-fail "return PrecompiledFromGithubAssets(LibraryType.sqlite3);" "return LookupSystem('sqlite3');"
+      '';
 
   installPhase = ''
     runHook preInstall

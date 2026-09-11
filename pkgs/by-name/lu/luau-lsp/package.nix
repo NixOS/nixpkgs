@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "luau-lsp";
-  version = "1.68.1";
+  version = "1.69.0";
 
   src = fetchFromGitHub {
     owner = "JohnnyMorganz";
     repo = "luau-lsp";
     tag = finalAttrs.version;
-    hash = "sha256-XxXAK/BaJcgel1vOATVbQVBxsxEYv9vr0w4JjmU64fM=";
+    hash = "sha256-fVmc/Ky1fbS4hnh2pOw1idaZFCq0KFHE2hTVQQmYmfM=";
     fetchSubmodules = true;
   };
 
@@ -57,10 +57,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ HeitorAugustoLN ];
     mainProgram = "luau-lsp";
     platforms = lib.platforms.all;
-    badPlatforms = [
-      # Could not find a package configuration file provided by "Protobuf"
-      # It is unclear why this is only happening on x86_64-darwin
-      "x86_64-darwin"
-    ];
   };
 })

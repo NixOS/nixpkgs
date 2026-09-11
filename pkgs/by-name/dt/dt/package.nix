@@ -2,24 +2,21 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  testers,
-  zig_0_13,
+  zig_0_14,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dt";
-  version = "1.3.1-unstable-2024-07-16";
+  version = "1.3.1-unstable-2025-06-20";
 
   src = fetchFromGitHub {
     owner = "so-dang-cool";
     repo = "dt";
-    rev = "0d16ca2867131e99a93a412231465cf68f2e594f";
-    hash = "sha256-pfTlOMJpOPbXZaJJvOKDUyCZxFHNLRRUteJFWT9IKOU=";
+    rev = "7b87e3e012439179772617814cb7d001928d6868";
+    hash = "sha256-m3tpnPzgkZw7PR9+bnjbKWcvyfO91F0pucSLRJgiHhw=";
   };
 
-  nativeBuildInputs = [ zig_0_13 ];
-
-  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+  nativeBuildInputs = [ zig_0_14 ];
 
   meta = {
     homepage = "https://dt.plumbing";

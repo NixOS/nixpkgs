@@ -20,24 +20,29 @@
     "hash": "sha256-LGruedMrHrI0AXHcXOFxsYP2awwPbrC9Q41AeQk4+9U="
   },
   {
+    "pname": "Microsoft.Bcl.Cryptography",
+    "version": "10.0.2",
+    "hash": "sha256-+OYtcWsd1qZcEXadYeA4t6+pyADg1APQCxpKUtP002M="
+  },
+  {
     "pname": "Microsoft.IdentityModel.Abstractions",
-    "version": "8.18.0",
-    "hash": "sha256-mkguJA4aXIVVQvSJ9Duq9mivbGXAIkLQp3a8PKy223A="
+    "version": "8.22.0",
+    "hash": "sha256-7bBFHdYh/nftSX7dodUj17SB0jb2hmumyYihn53kZAw="
   },
   {
     "pname": "Microsoft.IdentityModel.JsonWebTokens",
-    "version": "8.18.0",
-    "hash": "sha256-MdqY9CGRs+fTLb3HYYcSfuzqDFo4Dpho4McFWWferjA="
+    "version": "8.22.0",
+    "hash": "sha256-8TW85/8cHUZaQrVb68YYzvF3m6l20acJ+JCOoAP0FRI="
   },
   {
     "pname": "Microsoft.IdentityModel.Logging",
-    "version": "8.18.0",
-    "hash": "sha256-09WyYskyL8gjjVDzoZBQAGXgsPmyagWftALSBCdt4gg="
+    "version": "8.22.0",
+    "hash": "sha256-yUuLjrNf/kqVf1W2txx2GKc0tqM6IqOlcJkno8pVhP8="
   },
   {
     "pname": "Microsoft.IdentityModel.Tokens",
-    "version": "8.18.0",
-    "hash": "sha256-sFhonZW9G6H4ooQ6N/78fkZvADZ2Hf5WAS3FKd/ue1E="
+    "version": "8.22.0",
+    "hash": "sha256-cI3VoDGdlniZL4xsq03h599bDLu+8tlQE9PbbSzhq8k="
   },
   {
     "pname": "MimeKit",

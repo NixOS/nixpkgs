@@ -10,6 +10,7 @@
   foundationdb,
   zstd,
   stdenv,
+  _experimental-update-script-combinators,
   nix-update-script,
   rocksdb,
   callPackage,
@@ -50,7 +51,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stalwart" + (lib.optionalString stalwartEnterprise "-enterprise");
-  version = "0.16.10";
+  version = "0.16.20";
 
   __structuredAttrs = true;
 
@@ -58,13 +59,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "stalwartlabs";
     repo = "stalwart";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zP2FwRX9eaP8xn8WElf/1N4doHnvZ4rKQLYrUDoYwkQ=";
+    hash = "sha256-BEWD6hxRJL5WkdRChWvx9Ubn8pSWW8Wy7fpa7oQxtGU=";
   };
 
-  cargoHash = "sha256-HVS89Wtjb2nIdyygP8bPRbVhyMRnJlZDfoCQqiMdVe0=";
+  cargoHash = "sha256-zGGJeMoEJOn/BtNUysuyuPeH3hHkJdrb9jUw6ZTpDgk=";
 
   env = {
+    # https://docs.rs/openssl/latest/openssl/#manual
     OPENSSL_NO_VENDOR = true;
+    OPENSSL_DIR = lib.getDev openssl;
+    OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
     ZSTD_SYS_USE_PKG_CONFIG = true;
     ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
     ROCKSDB_LIB_DIR = "${rocksdb}/lib";
@@ -73,6 +77,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     lib.optionalAttrs
       (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isArmv7))
       {
+        # Required to fix Stalwart on ARM systems with 16 KB page size.
+        # Using rust-jemalloc-sys causes segmentation faults on x86_64.
         JEMALLOC_SYS_WITH_LG_PAGE = 16;
       };
 
@@ -108,6 +114,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals withFoundationdb [ "foundationdb" ]
   ++ lib.optionals stalwartEnterprise [ "enterprise" ];
+
+  cargoBuildFlags = [
+    "-p"
+    "stalwart"
+  ];
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   doCheck = true;
   nativeCheckInputs = [
@@ -208,6 +220,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "smtp::management::queue::manage_queue"
       # NOTE: long running test(s), needs live dependencies, likely to fail on systems under high load
       "smtp::inbound::antispam::antispam"
+      # flaky test (darwin): ... panicked at tests/src/smtp/inbound/mod.rs:287:18:
+      # Unexpected event: Refresh
+      # (linux): Invalid address: failed to lookup address information: Temporary failure in name resolution
+      "smtp::outbound::dane::dane_verify"
     ]
     # ... panicked at tests/src/lib.rs:49:13: Errors: [ Build { ... , message: "Invalid address: failed to lookup address information: Temporary failure in name resolution", }, ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -230,9 +246,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "smtp::lookup::utils::strategies"
       "smtp::management::report::manage_reports"
       "smtp::outbound::dane::dane_test"
-      # since 0.16.10
-      "smtp::outbound::dane::dane_downgrade_on_tlsa_servfail"
-      "smtp::outbound::dane::dane_verify"
       "smtp::outbound::extensions::extensions"
       "smtp::outbound::fallback_relay::fallback_relay"
       "smtp::outbound::ip_lookup::ip_lookup_strategy"
@@ -247,6 +260,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "smtp::reporting::tls::report_tls"
       "store::search_tests"
       "store::store_tests"
+      # since 0.16.10
+      "smtp::outbound::dane::dane_downgrade_on_tlsa_servfail"
     ]
   ) (test: "--skip=${test}");
 
@@ -265,7 +280,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit rocksdb; # make used rocksdb version available (e.g., for backup scripts)
     webui = callPackage ./webui.nix { };
     spam-filter = callPackage ./spam-filter.nix { };
-    updateScript = nix-update-script { };
+    # subpackages have distinct version numbers, so we can't use nix-update's `--subpackage`
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { })
+      (nix-update-script { attrPath = "stalwart_0_16.webui"; })
+      (nix-update-script { attrPath = "stalwart_0_16.spam-filter"; })
+    ];
   };
 
   meta = {
@@ -286,7 +306,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         redistributable = false;
       }
     ];
-
+    maxSilent = 14400; # 4 hours
     mainProgram = "stalwart";
     maintainers = with lib.maintainers; [
       happysalada

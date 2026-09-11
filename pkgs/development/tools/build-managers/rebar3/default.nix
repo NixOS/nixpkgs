@@ -6,6 +6,7 @@
   fetchHex,
   erlang,
   makeWrapper,
+  writableTmpDirAsHomeHook,
   writeScript,
   common-updater-scripts,
   coreutils,
@@ -16,21 +17,27 @@
 }:
 
 let
-  version = "3.27.0";
-  owner = "erlang";
   deps = import ./rebar-deps.nix { inherit fetchFromGitHub fetchgit fetchHex; };
-  rebar3 = stdenv.mkDerivation rec {
+  rebar3 = stdenv.mkDerivation (finalAttrs: {
     pname = "rebar3";
-    inherit version erlang;
+    version = "3.27.0";
+
+    __structuredAttrs = true;
+    strictDeps = true;
 
     # How to obtain `sha256`:
     # nix-prefetch-url --unpack https://github.com/erlang/rebar3/archive/${version}.tar.gz
     src = fetchFromGitHub {
-      inherit owner;
-      repo = pname;
-      rev = version;
+      owner = "erlang";
+      repo = "rebar3";
+      tag = finalAttrs.version;
       sha256 = "+va3wHlAfVtl3aK6+DVkN/EgpiMxwAGUyNywaWiKTJQ=";
     };
+
+    nativeBuildInputs = [
+      erlang
+      writableTmpDirAsHomeHook
+    ];
 
     buildInputs = [ erlang ];
 
@@ -58,22 +65,35 @@ let
     '';
 
     buildPhase = ''
-      HOME=. escript bootstrap
+      runHook preBuild
+
+      escript bootstrap
+
+      runHook postBuild
     '';
 
     checkPhase = ''
-      HOME=. escript ./rebar3 ct
+      runHook preCheck
+
+      escript ./rebar3 ct
+
+      runHook postCheck
     '';
 
     doCheck = true;
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       cp rebar3 $out/bin/rebar3
+
+      runHook postInstall
     '';
 
     meta = {
       homepage = "https://github.com/rebar/rebar3";
+      changelog = "https://github.com/erlang/rebar3/releases/tag/${finalAttrs.version}";
       description = "Erlang build tool that makes it easy to compile and test Erlang applications, port drivers and releases";
       mainProgram = "rebar3";
 
@@ -105,7 +125,7 @@ let
         ]
       }
       latest=$(list-git-tags | sed -n '/[\d\.]\+/p' | sort -V | tail -1)
-      if [ "$latest" != "${version}" ]; then
+      if [ "$latest" != "${finalAttrs.version}" ]; then
         nixpkgs="$(git rev-parse --show-toplevel)"
         nix_path="$nixpkgs/pkgs/development/tools/build-managers/rebar3"
         update-source-version rebar3 "$latest" --version-key=version --print-changes --file="$nix_path/default.nix"
@@ -117,7 +137,7 @@ let
         echo "rebar3 is already up-to-date"
       fi
     '';
-  };
+  });
 
   # Alias rebar3 so we can use it as default parameter below
   _rebar3 = rebar3;

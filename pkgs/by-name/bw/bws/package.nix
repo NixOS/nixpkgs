@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "bitwarden";
-    repo = "sdk";
+    repo = "sdk-sm";
     tag = "bws-v${finalAttrs.version}";
     hash = "sha256-cdiTdgNvUDN0/KzMDEiHo+GIYkUaWEZTAnWahBrMZ4I=";
   };

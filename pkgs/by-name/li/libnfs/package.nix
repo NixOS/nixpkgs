@@ -2,24 +2,24 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  autoreconfHook,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libnfs";
-  version = "5.0.3";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "sahlberg";
     repo = "libnfs";
     tag = "libnfs-${finalAttrs.version}";
-    hash = "sha256-OFzoDCDBo+O7PtUKcyKnUJJ9TrALrkvk5Yo0zn08Q6w=";
+    hash = "sha256-uD7PtW2rcpGVzqD6U0DXK1gUaCKlKh+p+i6CW6jLGdw=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ cmake ];
 
-  configureFlags = [
-    "--enable-pthread"
+  cmakeFlags = [
+    "-DENABLE_MULTITHREADING=ON"
   ];
 
   enableParallelBuilding = true;

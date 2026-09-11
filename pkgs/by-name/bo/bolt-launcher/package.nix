@@ -42,14 +42,14 @@ in
 let
   bolt = stdenv.mkDerivation (finalAttrs: {
     pname = "bolt-launcher";
-    version = "0.22.0";
+    version = "0.24.0";
 
     src = fetchFromCodeberg {
       owner = "AdamCake";
       repo = "Bolt";
       tag = finalAttrs.version;
       fetchSubmodules = true;
-      hash = "sha256-ncmyDav2CmsdDE/nCRmpWuBqutX72vD5/zNO1nvJIlE=";
+      hash = "sha256-z/0rurPX/Om1sXkA3pGcmmbCPk8CONV70eBHGT5nuoc=";
     };
 
     nativeBuildInputs = [
@@ -136,7 +136,7 @@ buildFHSEnv {
       with pkgs;
       [
         gtk2-x11
-        openssl_1_1
+        # openssl_1_1
       ]
     );
 
@@ -166,5 +166,8 @@ buildFHSEnv {
     ];
     platforms = lib.platforms.linux;
     mainProgram = "bolt-launcher";
-  };
+  }
+  // (lib.optionalAttrs enableRS3 {
+    problems.broken.message = "OpenSSL 1.1 has been end of life since 2023 and will be removed soon.";
+  });
 }

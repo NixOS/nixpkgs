@@ -35,24 +35,26 @@
         KExecWatchdogSec = "5min";
       };
       systemd.user.settings.Manager.DefaultEnvironment = "\"XXX_USER=bar\"";
-      services.journald.extraConfig = "Storage=volatile";
+      services.journald.settings.Journal.Storage = "volatile";
       test-support.displayManager.auto.user = "alice";
 
-      systemd.shutdown.test = pkgs.writeScript "test.shutdown" ''
-        #!${pkgs.runtimeShell}
-        PATH=${
-          lib.makeBinPath (
-            with pkgs;
-            [
-              util-linux
-              coreutils
-            ]
-          )
-        }
-        mount -t 9p shared -o trans=virtio,version=9p2000.L /tmp/shared
-        touch /tmp/shared/shutdown-test
-        umount /tmp/shared
-      '';
+      systemd.shutdownRamfs.contents."/etc/systemd/system-shutdown/test".source =
+        pkgs.writeShellScript "test.shutdown" ''
+          PATH=${
+            lib.makeBinPath (
+              with pkgs;
+              [
+                util-linux
+                coreutils
+              ]
+            )
+          }
+          mkdir -p /tmp/shared
+          mount -t virtiofs shared /tmp/shared
+          touch /tmp/shared/shutdown-test
+          umount /tmp/shared
+        '';
+      systemd.shutdownRamfs.storePaths = [ "${pkgs.util-linux}/bin" ];
 
       systemd.services.oncalendar-test = {
         description = "calendar test";
@@ -147,7 +149,7 @@
 
           subprocess.check_call(
               [
-                  "qemu-img",
+                  "${nodes.machine.virtualisation.qemu.package}/bin/qemu-img",
                   "convert",
                   "-O",
                   "raw",

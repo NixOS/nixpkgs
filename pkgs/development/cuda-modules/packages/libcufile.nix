@@ -2,8 +2,11 @@
   buildRedist,
   cudaOlder,
   lib,
+  liburcu,
   numactl,
   rdma-core,
+  systemdLibs,
+  util-linux,
 }:
 buildRedist {
   redistName = "cuda";
@@ -23,6 +26,15 @@ buildRedist {
   buildInputs = [
     numactl
     rdma-core
+  ];
+
+  # dlopen'd by libcufile.so, which is why the buildInputs above do not cover it. Note the
+  # unversioned sonames: the providing output must carry the .so symlink.
+  appendRunpaths = map (pkg: "${lib.getLib pkg}/lib") [
+    systemdLibs # libudev.so
+    util-linux # libmount.so
+    liburcu # liburcu-bp.so, liburcu-cds.so
+    numactl # libnuma.so.%s
   ];
 
   # Before 11.7 libcufile depends on itself for some reason.

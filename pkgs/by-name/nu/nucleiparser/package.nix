@@ -34,6 +34,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/Sinkmanu/nucleiparser/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
-    mainProgram = "nparser";
+    mainProgram = "nparse";
   };
 })

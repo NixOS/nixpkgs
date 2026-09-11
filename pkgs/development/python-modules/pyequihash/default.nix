@@ -31,6 +31,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "equihash" ];
 
+  # The Python bindings' version isn't updated in tandem with equihash
+  dontCheckPythonMetadata = true;
+
   checkPhase = ''
     runHook preCheck
 

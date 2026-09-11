@@ -16,12 +16,14 @@
   urllib3,
 
   # tests
+  addBinToPathHook,
   pytestCheckHook,
+  versionCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "trafilatura";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -29,23 +31,11 @@ buildPythonPackage (finalAttrs: {
     owner = "adbar";
     repo = "trafilatura";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hSeJH+8JX8QC3zHMZ3+M2H0C3xI+BCvLnSo/Ih1wUQw=";
+    hash = "sha256-U6sqUuPQZiv7VMCJ5lLJ3qqdEBq60J82nHHlGdCOyX4=";
   };
-
-  postPatch =
-    # nixify path to the trafilatura binary in the test suite
-    ''
-      substituteInPlace tests/cli_tests.py \
-        --replace-fail \
-          'trafilatura_bin = "trafilatura"' \
-          'trafilatura_bin = "${placeholder "out"}/bin/trafilatura"'
-    '';
 
   build-system = [ setuptools ];
 
-  pythonRelaxDeps = [
-    "lxml"
-  ];
   dependencies = [
     certifi
     charset-normalizer
@@ -56,7 +46,11 @@ buildPythonPackage (finalAttrs: {
     urllib3
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    addBinToPathHook # tests need to execute the trafilatura binary
+    pytestCheckHook
+    versionCheckHook
+  ];
 
   disabledTests = [
     # Disable tests that require an internet connection

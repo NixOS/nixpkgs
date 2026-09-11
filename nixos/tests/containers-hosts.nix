@@ -29,7 +29,9 @@
         localAddress = "10.10.0.1";
         hostAddress = "10.10.0.254";
 
-        config = { };
+        config = {
+          nix.enable = false; # disabled by default on the test's host. See all-tests.nix / tag(no-nix-by-default)
+        };
       };
 
       containers.netmask = {
@@ -38,7 +40,9 @@
         hostBridge = "br0";
         localAddress = "10.11.0.1/24";
 
-        config = { };
+        config = {
+          nix.enable = false; # disabled by default on the test's host. See all-tests.nix / tag(no-nix-by-default)
+        };
       };
     };
 

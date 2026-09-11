@@ -37,7 +37,6 @@ let
   # Map Dwarf Fortress platform names to Nixpkgs platform names.
   platforms = {
     x86_64-linux = "linux";
-    x86_64-darwin = "darwin";
   };
 
   dfVersionTuple = splitVersion dfVersion;

@@ -6,13 +6,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-sort";
-  version = "2.1.3";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "devinr528";
     repo = "cargo-sort";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-PtBjs+mqrz9z6tkpajx/OYQATJP81vi4ColjFXr9Rv0=";
+    sha256 = "sha256-xT+fWwd92Ll9zcz7FKpQbHKjUGXNOSuCGpFuJ3DQTJY=";
   };
 
   cargoHash = "sha256-ygMtfhwoUEIZx+q6KB5yOr8/Fj5FRMIs7dXlYDUKb2U=";

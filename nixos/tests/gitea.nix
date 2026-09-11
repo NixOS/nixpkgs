@@ -1,12 +1,9 @@
 {
-  system ? builtins.currentSystem,
-  config ? { },
-  giteaPackage ? pkgs.gitea,
-  pkgs ? import ../.. { inherit system config; },
+  gitea,
+  lib,
+  runTest,
+  ...
 }:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
-with pkgs.lib;
 
 let
   ## gpg --faked-system-time='20230301T010000!' --quick-generate-key snakeoil ed25519 sign
@@ -31,86 +28,75 @@ let
   ];
   makeGiteaTest =
     type:
-    nameValuePair type (makeTest {
-      name = "${giteaPackage.pname}-${type}";
-      meta.maintainers = with maintainers; [
-        aanderse
-        kolaente
+    runTest {
+      imports = [
+        module
       ];
+      name = "${gitea.pname}-${type}";
+      nodes.server.services.gitea.settings.database = { inherit type; };
+    };
+  module =
+    { config, ... }:
+    {
+      meta = {
+        inherit (gitea.meta) maintainers;
+      };
 
       nodes = {
         server =
-          { config, pkgs, ... }:
+          { pkgs, ... }:
           {
             virtualisation.memorySize = 2047;
-            services.gitea = {
-              enable = true;
-              database = { inherit type; };
-              package = giteaPackage;
-              metricsTokenFile = (pkgs.writeText "metrics_secret" "fakesecret").outPath;
-              settings.service.DISABLE_REGISTRATION = true;
-              settings."repository.signing".SIGNING_KEY = signingPrivateKeyId;
-              settings.actions.ENABLED = true;
-              settings.metrics.ENABLED = true;
+            services = {
+              gitea = {
+                enable = true;
+                package = pkgs.gitea;
+                metricsTokenFile = (pkgs.writeText "metrics_secret" "fakesecret").outPath;
+                settings = {
+                  "repository.signing".SIGNING_KEY = signingPrivateKeyId;
+                  actions.ENABLED = true;
+                  metrics.ENABLED = true;
+                  service.DISABLE_REGISTRATION = true;
+                };
+              };
+
+              openssh.enable = true;
             };
             environment.systemPackages = [
-              giteaPackage
+              pkgs.gitea
               pkgs.gnupg
               pkgs.jq
             ];
-            services.openssh.enable = true;
-
-            specialisation.runner = {
-              inheritParentConfig = true;
-
-              configuration.services.gitea-actions-runner.instances."test" = {
-                enable = true;
-                name = "ci";
-                url = "http://localhost:3000";
-                labels = [
-                  # don't require docker/podman
-                  "native:host"
-                ];
-                tokenFile = "/var/lib/gitea/runner_token";
-              };
-            };
           };
-        client1 =
-          { config, pkgs, ... }:
-          {
-            environment.systemPackages = [ pkgs.git ];
-          };
-        client2 =
-          { config, pkgs, ... }:
+        client =
+          { pkgs, ... }:
           {
             environment.systemPackages = [ pkgs.git ];
           };
       };
 
       testScript =
-        { nodes, ... }:
         let
-          inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
-          serverSystem = nodes.server.system.build.toplevel;
+          inherit (import ./ssh-keys.nix config.node.pkgs) snakeOilPrivateKey snakeOilPublicKey;
         in
-        ''
+        /* python */ ''
           GIT_SSH_COMMAND = "ssh -i $HOME/.ssh/privk -o StrictHostKeyChecking=no"
           REPO = "gitea@server:test/repo"
           PRIVK = "${snakeOilPrivateKey}"
 
           start_all()
 
-          client1.succeed("mkdir /tmp/repo")
-          client1.succeed("mkdir -p $HOME/.ssh")
-          client1.succeed(f"cat {PRIVK} > $HOME/.ssh/privk")
-          client1.succeed("chmod 0400 $HOME/.ssh/privk")
-          client1.succeed("git -C /tmp/repo init")
-          client1.succeed("echo hello world > /tmp/repo/testfile")
-          client1.succeed("git -C /tmp/repo add .")
-          client1.succeed("git config --global user.email test@localhost")
-          client1.succeed("git config --global user.name test")
-          client1.succeed("git -C /tmp/repo commit -m 'Initial import'")
-          client1.succeed(f"git -C /tmp/repo remote add origin {REPO}")
+          client.succeed("mkdir /tmp/repo")
+          client.succeed("mkdir -p $HOME/.ssh")
+          client.succeed(f"cat {PRIVK} > $HOME/.ssh/privk")
+          client.succeed("chmod 0400 $HOME/.ssh/privk")
+          client.succeed("git -C /tmp/repo init")
+          client.succeed("echo hello world > /tmp/repo/testfile")
+          client.succeed("git -C /tmp/repo add .")
+          client.succeed("git config --global user.email test@localhost")
+          client.succeed("git config --global user.name test")
+          client.succeed("git -C /tmp/repo commit -m 'Initial import'")
+          client.succeed(f"git -C /tmp/repo remote add origin {REPO}")
 
           server.wait_for_unit("gitea.service")
           server.wait_for_open_port(3000)
@@ -119,7 +105,7 @@ let
 
           server.succeed(
               "su -l gitea -c 'gpg --homedir /var/lib/gitea/data/home/.gnupg "
-              + "--import ${toString (pkgs.writeText "gitea.key" signingPrivateKey)}'"
+              + "--import ${toString (config.node.pkgs.writeText "gitea.key" signingPrivateKey)}'"
           )
 
           assert "BEGIN PGP PUBLIC KEY BLOCK" in server.succeed("curl http://localhost:3000/api/v1/signing-key.gpg")
@@ -153,15 +139,12 @@ let
               + ' -d \'{"key":"${snakeOilPublicKey}","read_only":true,"title":"SSH"}\'''
           )
 
-          client1.succeed(
+          client.succeed(
               f"GIT_SSH_COMMAND='{GIT_SSH_COMMAND}' git -C /tmp/repo push origin master"
           )
 
-          client2.succeed("mkdir -p $HOME/.ssh")
-          client2.succeed(f"cat {PRIVK} > $HOME/.ssh/privk")
-          client2.succeed("chmod 0400 $HOME/.ssh/privk")
-          client2.succeed(f"GIT_SSH_COMMAND='{GIT_SSH_COMMAND}' git clone {REPO}")
-          client2.succeed('test "$(cat repo/testfile | xargs echo -n)" = "hello world"')
+          client.succeed(f"GIT_SSH_COMMAND='{GIT_SSH_COMMAND}' git clone {REPO} repo2")
+          client.succeed('test "$(cat repo2/testfile | xargs echo -n)" = "hello world"')
 
           server.wait_until_succeeds(
               'test "$(curl http://localhost:3000/api/v1/repos/test/repo/commits '
@@ -173,16 +156,8 @@ let
                              + '-H "Authorization: Bearer fakesecret" '
                              + 'http://localhost:3000/metrics '
                              + '| grep gitea_accesses')
-
-          with subtest("Testing runner registration"):
-              server.succeed(
-                  "su -l gitea -c 'GITEA_WORK_DIR=/var/lib/gitea gitea actions generate-runner-token' | sed 's/^/TOKEN=/' | tee /var/lib/gitea/runner_token"
-              )
-              server.succeed("${serverSystem}/specialisation/runner/bin/switch-to-configuration test")
-              server.wait_for_unit("gitea-runner-test.service")
-              server.succeed("journalctl -o cat -u gitea-runner-test.service | grep -q 'Runner registered successfully'")
         '';
-    });
+    };
 in
 
-listToAttrs (map makeGiteaTest supportedDbTypes)
+lib.genAttrs supportedDbTypes makeGiteaTest

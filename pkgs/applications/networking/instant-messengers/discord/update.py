@@ -123,9 +123,34 @@ def main():
     for v in variants:
         sources[serialize_variant(v)] = asdict(fetch_distro_source(v))
 
-    with open(os.path.join(os.path.dirname(__file__), "sources.json"), "w") as f:
+    sources_path = os.path.join(os.path.dirname(__file__), "sources.json")
+
+    with open(sources_path , 'r') as file:
+        old_versions = json.load(file)
+
+    with open(sources_path , "w") as f:
         json.dump(sources, f, indent=2, sort_keys=True)
         f.write("\n")
+
+    commitInfo = [{
+        "attrPath": "discord",
+        "oldVersion": old_versions["linux-stable"]["version"],
+        "newVersion": sources["linux-stable"]["version"],
+        "files": [ sources_path ],
+        "commitMessage": "discord: update various",
+        "commitBody": (
+            f"discord-canary: {old_versions["linux-canary"]["version"]} -> {sources["linux-canary"]["version"]}\n"
+            f"discord-development: {old_versions["linux-development"]["version"]} -> {sources["linux-development"]["version"]}\n"
+            f"discord-ptb: {old_versions["linux-ptb"]["version"]} -> {sources["linux-ptb"]["version"]}\n"
+            f"discord: {old_versions["linux-stable"]["version"]} -> {sources["linux-stable"]["version"]}\n"
+            f"pkgsCross.aarch64-darwin.discord-canary: {old_versions["osx-canary"]["version"]} -> {sources["osx-canary"]["version"]}\n"
+            f"pkgsCross.aarch64-darwin.discord-development: {old_versions["osx-development"]["version"]} -> {sources["osx-development"]["version"]}\n"
+            f"pkgsCross.aarch64-darwin.discord-ptb: {old_versions["osx-ptb"]["version"]} -> {sources["osx-ptb"]["version"]}\n"
+            f"pkgsCross.aarch64-darwin.discord: {old_versions["osx-stable"]["version"]} -> {sources["osx-stable"]["version"]}\n"
+        )
+    }]
+
+    print(json.dumps(commitInfo))
 
 
 if __name__ == "__main__":

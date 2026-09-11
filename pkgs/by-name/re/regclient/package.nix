@@ -19,15 +19,15 @@ in
 
 buildGoModule (finalAttrs: {
   pname = "regclient";
-  version = "0.11.3";
+  version = "0.11.6";
 
   src = fetchFromGitHub {
     owner = "regclient";
     repo = "regclient";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-/gKvjyFOzyTsgMuqCqZaWl2yun7f+eboQ0iLuXHh4lI=";
+    sha256 = "sha256-GBRqblUXSUVbpI/sQ8UIc/XaRQHZE+S43i/S3zc3vgo=";
   };
-  vendorHash = "sha256-P9ayAWvQY4WgmFTWzk2ZLQ5uwMvIsSfL73C99ROmze8=";
+  vendorHash = "sha256-XU6y15/6VEbV323jKWw2534huQjTxn/qmsyN+qszQxA=";
 
   outputs = [ "out" ] ++ bins;
 
@@ -66,10 +66,22 @@ buildGoModule (finalAttrs: {
     ''
   ) bins;
 
-  checkFlags = [
-    # touches network
-    "-skip=^ExampleNew$"
-  ];
+  checkFlags =
+    let
+      skip = [
+        # touch network
+        "^ExampleNew$"
+        "^TestIsLocal/regclient\\.org$"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        # The Nix sandbox does not have the /etc/nsswitch.conf file (`hosts: files dns`),
+        # so Go defaults to a DNS lookup instead of using the /etc/hosts file.
+        "^TestIsLocal/localhost\\.$"
+      ];
+    in
+    [
+      "-skip=${builtins.concatStringsSep "|" skip}"
+    ];
 
   passthru.tests = lib.mergeAttrsList (
     map (bin: {

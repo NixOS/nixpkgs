@@ -15,13 +15,11 @@ stdenv.mkDerivation rec {
       suffix = selectSystem {
         x86_64-linux = "linux_amd64";
         aarch64-linux = "linux_arm64";
-        x86_64-darwin = "darwin_amd64";
         aarch64-darwin = "darwin_arm64";
       };
       hash = selectSystem {
         x86_64-linux = "sha256-S5wt4Wy2SfO+36YwxQo86vnSIv4I0tMdfXro3i2qS6k=";
         aarch64-linux = "sha256-bu+tYL5uHs67JG1MxCUDIQ9xwYxArbz/FElN0QCXNU4=";
-        x86_64-darwin = "sha256-sRPq9+JnKYD5+0JVqhfGpCflHZgFdsrPprJqfxuAlpI=";
         aarch64-darwin = "sha256-PEaxwEKCidLvDbMSfXZ2ehWOwblLjzU+yy9Qq9tavtw=";
       };
     in
@@ -73,7 +71,11 @@ stdenv.mkDerivation rec {
       jk
       techknowlogick
     ];
-    platforms = lib.platforms.unix;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     mainProgram = "boundary";
   };
 }

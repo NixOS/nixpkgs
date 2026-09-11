@@ -38,9 +38,20 @@ let
       check = treefmt.check nixFilesSrc;
     };
 
+  # nixos-render-docs and nixos-render-docs-redirects
+  # Should be used from tree to build the matching in-tree documentation
+  docPkgs = pkgs.extend (
+    final: prev: {
+      nixos-render-docs = final.callPackage ../pkgs/by-name/ni/nixos-render-docs/package.nix { };
+      nixos-render-docs-redirects =
+        final.callPackage ../pkgs/by-name/ni/nixos-render-docs-redirects/package.nix
+          { };
+    }
+  );
+
 in
 rec {
-  inherit pkgs fmt;
+  inherit pkgs docPkgs fmt;
   codeownersValidator = pkgs.callPackage ./codeowners-validator { };
 
   # FIXME(lf-): it might be useful to test other Nix implementations
@@ -53,13 +64,13 @@ rec {
   # CI jobs
   lib-tests = import ../lib/tests/release.nix { inherit pkgs; };
   manual-nixos = (import ../nixos/release.nix { }).manual.${system} or null;
-  manual-nixpkgs = (import ../doc { inherit pkgs; });
+  manual-nixpkgs = (import ../doc { pkgs = docPkgs; });
   nixpkgs-vet = pkgs.callPackage ./nixpkgs-vet.nix {
     nix = pkgs.nixVersions.latest;
   };
   parse = pkgs.lib.recurseIntoAttrs {
     nix_latest = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.latest; };
-    nix_2_28 = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.nix_2_28; };
+    stable = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.stable; };
     lix = pkgs.callPackage ./parse.nix { nix = pkgs.lix; };
     lix_latest = pkgs.callPackage ./parse.nix { nix = pkgs.lixPackageSets.latest.lix; };
   };

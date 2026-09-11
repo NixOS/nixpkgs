@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-chewing";
-  version = "5.1.12";
+  version = "5.1.13";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-WBCaknT1woPRmnxQP8WhJUodM5jTXYg3QP6trFw37gg=";
+    hash = "sha256-cHiHu1mO9Ph3TDGArWfvmm0/4+CeJf5Z/EUDg7Qi0X8=";
   };
 
   nativeBuildInputs = [

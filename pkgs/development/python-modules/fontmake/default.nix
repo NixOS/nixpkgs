@@ -41,7 +41,8 @@ buildPythonPackage rec {
   ]
   ++ fonttools.optional-dependencies.ufo
   ++ fonttools.optional-dependencies.lxml
-  ++ fonttools.optional-dependencies.unicode;
+  ++ fonttools.optional-dependencies.unicode
+  ++ ufo2ft.optional-dependencies.compreffor;
 
   optional-dependencies = {
     pathops = [ skia-pathops ];

@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "git-backup-go";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "ChappIO";
     repo = "git-backup";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Z32ThzmGkF89wsYqJnP/Koz4/2mulkrvvnUKHE6Crks=";
+    hash = "sha256-xpHrBGgPH2dnbDz49OBntdHbowMhoz3P7k8UlNN7ku8=";
   };
 
-  vendorHash = "sha256-BLnnwwCrJJd8ihpgfdWel7l8aAIVVJBIpE+97J9ojPo=";
+  vendorHash = "sha256-xP2bV3vD4CbMGVT+MK4wJgMbIBZLvyqiMOfgj8Rc38Y=";
 
   ldflags = [ "-X main.Version=${finalAttrs.version}" ];
 

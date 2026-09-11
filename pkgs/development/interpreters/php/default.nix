@@ -12,9 +12,6 @@ let
     let
       base = callPackage ./generic.nix {
         stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
-        pcre2 = pcre2.override {
-          withJitSealloc = false; # See https://bugs.php.net/bug.php?id=78927 and https://bugs.php.net/bug.php?id=78630
-        };
         inherit version hash;
       };
     in
@@ -69,19 +66,19 @@ let
 in
 {
   php82 = mkPhp {
-    version = "8.2.31";
-    hash = "sha256-lIGD+gTPJhybk2PAL0KJd7nd+MC/3/jo4fuoFu1XCAM=";
+    version = "8.2.33";
+    hash = "sha256-U2Lyp6DnFoznIv6gBIsaHSjg98wmXEF99nDGVnBpUBg=";
   };
   php83 = mkPhp {
-    version = "8.3.31";
-    hash = "sha256-5phrH9N+slQCEn/kpyeKPgO3+QJbt6S9KSonG9+TD7k=";
+    version = "8.3.33";
+    hash = "sha256-+cn00M12ksbj2jY81MpyqCakmuGPXtQwtvyue8KIHhg=";
   };
   php84 = mkPhp {
-    version = "8.4.22";
-    hash = "sha256-Sxbn4sOEziXgfSjrlJhVxLT+DRt7nsnI7r0F0M+pxTI=";
+    version = "8.4.25";
+    hash = "sha256-lSzMF4Uma5WPSh3PxYDgjqu7efRCItHv8ZK82Y2R9uM=";
   };
   php85 = mkPhp {
-    version = "8.5.7";
-    hash = "sha256-Tvk1X3hNSzIBUes/McWUHA2ilwJe7bl/KDiyznPdWb8=";
+    version = "8.5.10";
+    hash = "sha256-15vU86kkjly1gzdmug1RzTXdAbhyfyPzC826b6vFHT4=";
   };
 }

@@ -47,6 +47,10 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  pythonRelaxDeps = [
+    "pydantic-core"
+  ];
+
   optional-dependencies = {
     aiohttp = [
       aiohttp

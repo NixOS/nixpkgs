@@ -8,7 +8,7 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tt-smi";
-  version = "5.3.0";
+  version = "6.3.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -16,12 +16,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "tenstorrent";
     repo = "tt-smi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0Z8F1XdFvnx1q5AUA3RiMbfRyw2nlRVgxhKVotr4GrQ=";
+    hash = "sha256-WOg8dHY1LfGGk4iZYHcwVTlHgHZPwL3TYw/spxbeTPY=";
   };
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
+  build-system = with python3Packages; [ setuptools ];
 
   dependencies = with python3Packages; [
     distro
@@ -40,9 +38,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [ "tt-umd" ];
 
-  nativeCheckInputs = [
-    versionCheckHook
-  ];
+  nativeCheckInputs = [ versionCheckHook ];
 
   # Fails due to having no tests
   dontUsePytestCheck = true;
@@ -53,6 +49,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/tenstorrent/tt-smi";
     changelog = "https://github.com/tenstorrent/tt-smi/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ RossComputerGuy ];
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
   };
 })

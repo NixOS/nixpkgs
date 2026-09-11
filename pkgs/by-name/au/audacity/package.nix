@@ -1,217 +1,193 @@
 {
-  stdenv,
   lib,
-  fetchFromGitHub,
+  stdenv,
+  fetchurl,
+
+  # nativeBuildInputs
   cmake,
-  makeWrapper,
-  wrapGAppsHook3,
+  git,
+  linuxHeaders,
+  ninja,
   pkg-config,
   python3,
-  gettext,
-  file,
-  libvorbis,
-  libmad,
+  qt6,
+  wrapGAppsHook3,
+
+  # buildInputs
+  alsa-lib,
+  expat,
+  ffmpeg,
+  flac,
+  freetype,
+  harfbuzz,
+  lame,
   libjack2,
-  lv2,
-  lilv,
+  libogg,
+  libopus,
+  libsndfile,
+  libvorbis,
   mpg123,
   opusfile,
-  rapidjson,
-  serd,
-  sord,
-  sqlite,
-  sratom,
-  suil,
-  libsndfile,
-  soxr,
-  flac,
-  lame,
-  twolame,
-  expat,
-  libid3tag,
-  libopus,
-  libuuid,
-  ffmpeg_7,
-  soundtouch,
-  portaudio, # given up fighting their portaudio.patch?
-  portmidi,
-  linuxHeaders,
-  alsa-lib,
-  at-spi2-core,
-  dbus,
-  libepoxy,
-  libxdmcp,
-  libxtst,
-  libpthread-stubs,
-  libsbsms_2_3_0,
-  libselinux,
-  libsepol,
-  libxkbcommon,
-  util-linux,
+  portaudio,
+  pugixml,
+  utf8cpp,
   wavpack,
   wxwidgets_3_2,
-  gtk3,
-  libpng,
-  libjpeg,
+  zlib,
 }:
-
-# TODO
-# 1. detach sbsms
-
 let
-  ffmpeg = ffmpeg_7;
+  wxwidgets = wxwidgets_3_2.override { withWebKit = false; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "audacity";
-  version = "3.7.8";
+  version = "4.0.0";
 
-  src = fetchFromGitHub {
-    owner = "audacity";
-    repo = "audacity";
-    rev = "Audacity-${finalAttrs.version}";
-    hash = "sha256-Vp3Nx3LuNu5fqeLF6dvZ9/hhkoUCu0eCAdIEDtS1IwU=";
+  src = fetchurl {
+    url = "https://github.com/audacity/audacity/releases/download/Audacity-${finalAttrs.version}/audacity-sources-${finalAttrs.version}.tar.xz";
+    hash = "sha256-spB2+Z+l0vUi0AHbRyqJbbgfnv/v0VlIyUBXF1OFgFg=";
   };
 
   patches = [
-    # Introduced by https://github.com/Tencent/rapidjson/commit/b1c0c2843fcb2aca9ecc650fc035c57ffc13697c#diff-2f1bcf2729ff7c408adb0c2cc2cfa01602bd5646b05b3e4bc7e46b606035d249R21
-    ./rapidjson.patch
+    # https://github.com/musescore/muse_deps/pull/47
+    ./muse-deps-wxwidgets-frameworks.patch
+    # https://github.com/audacity/audacity/pull/12021
+    ./audacity-deployment-target.patch
+    # https://github.com/musescore/muse_framework/pull/278
+    ./muse-framework-deployment-target.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # https://github.com/audacity/audacity/pull/12056
+    ./macdeployqt-extra-options.patch
   ];
 
-  postPatch = ''
-    mkdir src/private
-    substituteInPlace scripts/build/macOS/fix_bundle.py \
-      --replace-fail "path.startswith('/usr/lib/')" "path.startswith('/usr/lib/') or path.startswith('${builtins.storeDir}')"
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace libraries/lib-files/FileNames.cpp \
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace au3/libraries/au3-files/FileNames.cpp \
       --replace-fail /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
   '';
 
   nativeBuildInputs = [
     cmake
-    gettext
+    git
+    ninja
     pkg-config
     python3
-    makeWrapper
-    wrapGAppsHook3
+    qt6.qttools
+    qt6.wrapQtAppsHook
+    wxwidgets
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     linuxHeaders
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     expat
     ffmpeg
-    file
     flac
-    gtk3
+    freetype
+    harfbuzz
     lame
-    libid3tag
     libjack2
-    libmad
+    libogg
     libopus
-    libsbsms_2_3_0
     libsndfile
     libvorbis
-    lilv
-    lv2
     mpg123
     opusfile
-    portmidi
-    rapidjson
-    serd
-    sord
-    soundtouch
-    soxr
-    sqlite
-    sratom
-    suil
-    twolame
     portaudio
+    pugixml
+    qt6.qt5compat
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qtnetworkauth
+    qt6.qtshadertools
+    qt6.qtsvg
+    utf8cpp
     wavpack
-    wxwidgets_3_2
+    wxwidgets
+    zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib # for portaudio
-    at-spi2-core
-    dbus
-    libepoxy
-    libxdmcp
-    libxtst
-    libpthread-stubs
-    libxkbcommon
-    libselinux
-    libsepol
-    libuuid
-    util-linux
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libpng
-    libjpeg
+    alsa-lib
+    qt6.qtwayland
   ];
 
   cmakeFlags = [
-    "-DAUDACITY_BUILD_LEVEL=2"
-    "-DAUDACITY_REV_LONG=nixpkgs"
-    "-DAUDACITY_REV_TIME=nixpkgs"
-    "-DDISABLE_DYNAMIC_LOADING_FFMPEG=ON"
-    "-Daudacity_conan_enabled=Off"
-    "-Daudacity_use_ffmpeg=loaded"
-    "-Daudacity_has_vst3=Off"
-    "-Daudacity_has_crashreports=Off"
-
-    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
-    "-DCMAKE_SKIP_BUILD_RPATH=ON"
-
-    # Fix duplicate store paths
-    "-DCMAKE_INSTALL_LIBDIR=lib"
+    (lib.cmakeFeature "AU4_BUILD_MODE" "release")
+    (lib.cmakeFeature "EXTDEPS_OVERRIDE_ALL" "SYSTEM")
+    (lib.cmakeBool "MUSE_COMPILE_USE_CCACHE" false)
+    (lib.cmakeBool "MUSE_ENABLE_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT" false)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "CMAKE_OSX_ARCHITECTURES" stdenv.hostPlatform.darwinArch)
+    (lib.cmakeFeature "CMAKE_OSX_DEPLOYMENT_TARGET" stdenv.hostPlatform.darwinMinVersion)
+    # Nix performs stripping after deployment.
+    (lib.cmakeFeature "AU4_MACDEPLOYQT_EXTRA_OPTIONS" "-no-strip")
   ];
 
-  # [ 57%] Generating LightThemeAsCeeCode.h...
-  # ../../utils/image-compiler: error while loading shared libraries:
-  # lib-theme.so: cannot open shared object file: No such file or directory
-  preBuild = ''
-    export LD_LIBRARY_PATH=$PWD/Release/lib/audacity
+  preConfigure = ''
+    cmakeFlagsArray+=("-DEXTDEPS_CACHE=$PWD/offline-deps")
   '';
 
-  doCheck = false; # Test fails
+  preInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export NIX_QMLIMPORTSCANNER=${lib.getBin qt6.qtdeclarative}/libexec/qmlimportscanner
+    export QML2_IMPORT_PATH=
+    for input in ${lib.escapeShellArgs finalAttrs.buildInputs}; do
+      addToSearchPath QML2_IMPORT_PATH "$input/${qt6.qtbase.qtQmlPrefix}"
+    done
+  '';
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p "$out/Applications"
+    mv "$out/audacity.app" "$out/Applications/"
+  '';
+
+  qtWrapperArgs = [
+    "--prefix"
+    "${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath [
+      ffmpeg
+      libjack2
+    ])
+  ];
+
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Use bundled Qt plugins, not a second Qt installation from the store.
+    wrapProgram "$out/Applications/audacity.app/Contents/MacOS/audacity" \
+      ${lib.escapeShellArgs finalAttrs.qtWrapperArgs} \
+      --unset QT_PLUGIN_PATH \
+      --unset NIXPKGS_QT6_QML_IMPORT_PATH \
+      --unset QML2_IMPORT_PATH \
+      --unset QML_IMPORT_PATH
+    mkdir -p "$out/bin"
+    makeWrapper "$out/Applications/audacity.app/Contents/MacOS/audacity" "$out/bin/audacity"
+  '';
 
   dontWrapGApps = true;
+  # Automatic scanning would wrap bundled framework libraries as executables.
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
 
-  # Replace audacity's wrapper, to:
-  # - Put it in the right place; it shouldn't be in "$out/audacity"
-  # - Add the ffmpeg dynamic dependency
-  # - Use Xwayland by default on Wayland. See https://github.com/audacity/audacity/pull/5977
-  postFixup =
-    lib.optionalString stdenv.hostPlatform.isLinux ''
-      wrapProgram "$out/bin/audacity" \
-        "''${gappsWrapperArgs[@]}" \
-        --prefix LD_LIBRARY_PATH : "$out/lib/audacity":${lib.makeLibraryPath [ ffmpeg ]} \
-        --suffix AUDACITY_MODULES_PATH : "$out/lib/audacity/modules" \
-        --suffix AUDACITY_PATH : "$out/share/audacity" \
-        --set-default GDK_BACKEND x11
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/{Applications,bin}
-      mv $out/Audacity.app $out/Applications/
-      makeWrapper $out/Applications/Audacity.app/Contents/MacOS/Audacity $out/bin/audacity
-    '';
+  strictDeps = true;
+  __structuredAttrs = true;
 
   meta = {
     description = "Sound editor with graphical UI";
     mainProgram = "audacity";
     homepage = "https://www.audacityteam.org";
-    changelog = "https://github.com/audacity/audacity/releases";
-    license = with lib.licenses; [
-      gpl2Plus
-      # Must be GPL3 when building with "technologies that require it,
-      # such as the VST3 audio plugin interface".
-      # https://github.com/audacity/audacity/discussions/2142.
-      gpl3
-      # Documentation.
-      cc-by-30
+    changelog = "https://github.com/audacity/audacity/releases/tag/Audacity-${finalAttrs.version}";
+    license = lib.licenses.AND [
+      lib.licenses.gpl2Plus
+      lib.licenses.gpl3Only
+      lib.licenses.cc-by-30
     ];
     maintainers = with lib.maintainers; [
+      johnrichardrinehart
       veprbl
       wegank
     ];

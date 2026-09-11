@@ -165,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Simple and elegant markdown editor, available for Linux, macOS and Windows";
-    homepage = "https://www.marktext.cc";
+    homepage = "https://www.marktext.me";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       nh2
@@ -173,7 +173,6 @@ stdenv.mkDerivation (finalAttrs: {
       bot-wxt1221
     ];
     badPlatforms = [
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     platforms = lib.platforms.unix;

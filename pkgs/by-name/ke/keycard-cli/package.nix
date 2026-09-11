@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
   version = "0.8.2";
 
   src = fetchFromGitHub {
-    owner = "status-im";
+    owner = "keycard-tech";
     repo = "keycard-cli";
     rev = finalAttrs.version;
     hash = "sha256-H9fipHGxINMAXdxUYhyVZusDXA3HW1iQl8iRX6AF7iE=";

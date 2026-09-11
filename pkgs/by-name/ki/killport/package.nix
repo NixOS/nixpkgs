@@ -7,14 +7,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "killport";
-  version = "2.0.0";
+  version = "2.0.2";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-I8GsTSCbWRItQ4Hzens2KlsHZNM/boipT392xYL4wmg=";
+    hash = "sha256-m2+rlVLmEODfGuY+pdhQRGLjDP3yBfu33VhYXMMSUEg=";
   };
 
-  cargoHash = "sha256-NOgt2WdS5JqTlCOI6qTOyBkTs/0qoA4qXoOHuZdRKvM=";
+  cargoHash = "sha256-V3VWy+bAKeynod2u4eEJyywGAX4ASoNgRmiTe/ju1GU=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 

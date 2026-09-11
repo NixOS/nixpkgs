@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "NGT";
-  version = "2.6.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
-    owner = "yahoojapan";
+    owner = "NGT-labs";
     repo = "NGT";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-dAJ8Xz7Cgmajac43G/3JWj1gwlG2z1RaN7R49IsbMnc=";
+    sha256 = "sha256-GLCAyLUYdCQHnJzFC75tzqhy5gsoxZ8/vQBME3Ah2Do=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    homepage = "https://github.com/yahoojapan/NGT";
+    homepage = "https://github.com/NGT-labs/NGT";
     description = "Nearest Neighbor Search with Neighborhood Graph and Tree for High-dimensional Data";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.asl20;

@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "sabctools";
-  version = "9.4.1";
+  version = "9.6.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MU2vgWX7ojy5OYllEJTHrz9z7mvrJq3mrfRUM2jQ9ws=";
+    hash = "sha256-+qzSDV7JER45yBMmyh5Jor4rJLlcE8KPguPnrBmMkSk=";
   };
 
   build-system = [ setuptools ];
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sabnzbd/sabctools";
     changelog = "https://github.com/sabnzbd/sabctools/releases/tag/v${version}";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ adamcstephens ];
+    maintainers = [ ];
   };
 }

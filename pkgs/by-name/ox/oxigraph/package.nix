@@ -14,17 +14,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxigraph";
-  version = "0.5.7";
+  version = "0.5.10";
 
   src = fetchFromGitHub {
     owner = "oxigraph";
     repo = "oxigraph";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J4cx/fzdsgRXeWsP9Gt5q/0crWoc1OP8+xbuvQJTj34=";
+    hash = "sha256-2mThlPqjUJ3FuqzGRTfrN8af1NupSgdbWomyL5aMJTA=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-BvL1rGJcU28TLkxJ3pKah6qfaa0SdUt143UgBYJrLsE=";
+  cargoHash = "sha256-iDt9wHJr6PMXGuCvLJqK9bRb3Y5gjuuSYdPhQofeJFQ=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -59,6 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       astro
       tnias
+      videl
     ];
     license = with lib.licenses; [
       asl20

@@ -15,7 +15,7 @@
 
 let
   pname = "pytest-describe";
-  version = "3.1.0";
+  version = "3.2.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -25,7 +25,7 @@ buildPythonPackage {
     owner = "pytest-dev";
     repo = "pytest-describe";
     tag = version;
-    hash = "sha256-ygrZwd1cO9arekdzqn5Axjz4i9Q0QKFA/OS6QSIvP9Y=";
+    hash = "sha256-nvTINE3QtV2pCKD/aixYDSO2ryW1uYDv55FLOMP7Vlc=";
   };
 
   postPatch = ''

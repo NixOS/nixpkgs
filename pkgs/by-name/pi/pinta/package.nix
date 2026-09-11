@@ -8,6 +8,7 @@
   gtk4,
   glib,
   libadwaita,
+  pango,
   intltool,
   wrapGAppsHook4,
   nix-update-script,
@@ -15,7 +16,6 @@
   # Darwin transitive deps
   graphene,
   gettext,
-  pango,
   gdk-pixbuf,
   cairo,
   harfbuzz,
@@ -46,13 +46,13 @@ buildDotnetModule rec {
     gtk4
     glib
     libadwaita
+    pango
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Transitive dylib deps that Pinta's NativeImportResolver dlopen's by bare name.
     # These are not pulled in by wrapGAppsHook4's LD_LIBRARY_PATH on Darwin, so symlink is needed.
     graphene
     gettext
-    pango
     gdk-pixbuf
     cairo
     harfbuzz

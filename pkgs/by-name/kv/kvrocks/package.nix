@@ -3,6 +3,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
+  nixosTests,
 
   # keep-sorted start
   cmake,
@@ -118,6 +120,14 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   __structuredAttrs = true;
+
+  patches = [
+    # Fix build with jsoncons 1.9.0
+    (fetchpatch {
+      url = "https://github.com/apache/kvrocks/commit/50cd1f0da4c3eb8f8c86bad080410e556f18fc98.patch";
+      hash = "sha256-uqaVvBP4XOUvRJZGeHKLKQj0TVoKvxN24KhnNj5ebaM=";
+    })
+  ];
 
   postPatch = ''
     # Replace FetchContent-based cmake files with system library finders
@@ -334,6 +344,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     hook = callPackage ./hook.nix { kvrocks = finalAttrs.finalPackage; };
     tests = {
+      inherit (nixosTests) kvrocks;
       hook = callPackage ./hook-test.nix { kvrocks = finalAttrs.finalPackage; };
     };
   };

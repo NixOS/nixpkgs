@@ -39,9 +39,12 @@ in
       hostBridge = "br0";
       localAddress = containerIp4;
       localAddress6 = containerIp6;
-      config.networking = {
-        defaultGateway.address = hostIp4;
-        defaultGateway6.address = hostIp6;
+      config = {
+        networking = {
+          defaultGateway.address = hostIp4;
+          defaultGateway6.address = hostIp6;
+        };
+        nix.enable = false; # disabled by default on the test's host. See all-tests.nix / tag(no-nix-by-default)
       };
     };
   };

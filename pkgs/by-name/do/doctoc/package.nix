@@ -7,16 +7,16 @@
 
 buildNpmPackage rec {
   pname = "doctoc";
-  version = "2.2.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "thlorenz";
     repo = "doctoc";
     rev = "v${version}";
-    hash = "sha256-LYVxW8bZ4M87CmBvPyp4y0IeL9UFawwAKnUWHEWB5Gs=";
+    hash = "sha256-EmTZLy/eHtJ0Wi8EFP2lHdFKBut/8/aghRKZr1WHcNk=";
   };
 
-  npmDepsHash = "sha256-TbAnFpiN/v6xjQQznL/B180f0W48HPRqW21cO9XZhYA=";
+  npmDepsHash = "sha256-rY9acsWMcR6cf9k0/rSoBvhuk96Yj8Yt8uhsC8dyQZU=";
 
   postInstall = ''
     find $out/lib/node_modules -xtype l -delete

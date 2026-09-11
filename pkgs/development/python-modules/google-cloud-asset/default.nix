@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-asset";
-  version = "4.2.0";
+  version = "4.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
     tag = "google-cloud-asset-v${finalAttrs.version}";
-    sha256 = "sha256-dVgcnnInqjUjySL7wjxGzI33t1YZJ8e9mSsmjAJ+fBI=";
+    sha256 = "sha256-M/7uDWWz4YCfxa4gyM9BaAo10iyTMvtR2MhNpdFYnis=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/google-cloud-asset";

@@ -44,9 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     fribidi
     harfbuzz
   ]
-  ++ lib.optional fontconfigSupport fontconfig
-  # TODO: remove dep after branchoff (in darwin stdenv)
-  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv.out;
+  ++ lib.optional fontconfigSupport fontconfig;
 
   meta = {
     description = "Portable ASS/SSA subtitle renderer";

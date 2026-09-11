@@ -9,7 +9,6 @@
   gobject-introspection,
   polkit,
   systemdLibs,
-  coreutils,
   meson,
   mesonEmulatorHook,
   dbus,
@@ -19,11 +18,12 @@
   vala,
   gettext,
   libxcrypt,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "accountsservice";
-  version = "26.13.3";
+  version = "26.27.3";
 
   outputs = [
     "out"
@@ -35,13 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "accountsservice";
     repo = "accountsservice";
     tag = finalAttrs.version;
-    hash = "sha256-ZIfkBlEaITX2rDcV5al4e2IFP238MXOlWeGoh+3+DoQ=";
+    hash = "sha256-/n0YCPZaf1SsTScidFUZcxfJkpv/+Bnb6Z7oKL+clgE=";
   };
 
   patches = [
     # Hardcode dependency paths.
     (replaceVars ./fix-paths.patch {
-      inherit shadow coreutils;
+      inherit shadow;
     })
 
     # Do not try to create directories in /var, that will not work in Nix sandbox.
@@ -106,6 +106,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace meson.build \
       --replace-fail "run_command(['./generate-version.sh'], check: true).stdout().strip()" "'${finalAttrs.version}'"
   '';
+
+  passthru.tests = { inherit (nixosTests) accountsservice; };
 
   meta = {
     changelog = "https://gitlab.freedesktop.org/accountsservice/accountsservice/-/releases/${finalAttrs.src.tag}";

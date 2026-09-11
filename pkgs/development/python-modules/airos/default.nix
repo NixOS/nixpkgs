@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  setuptools,
+  setuptools_80,
   aiohttp,
   mashumaro,
   aiofiles,
@@ -14,7 +14,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "airos";
-  version = "0.6.8";
+  version = "0.6.12";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -23,10 +23,10 @@ buildPythonPackage (finalAttrs: {
     owner = "CoMPaTech";
     repo = "python-airos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TTEhZ0KJaWM7eyD3Kk646X5rEMIquLte41XqnTeO3lI=";
+    hash = "sha256-6bm23ZzZD9PYSE3ntW5eJc1WvjlktfJ8CzQrwthg3b4=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   dependencies = [
     aiohttp

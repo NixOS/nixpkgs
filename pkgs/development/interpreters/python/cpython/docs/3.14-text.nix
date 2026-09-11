@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation {
   pname = "python314-docs-text";
-  version = "3.14.6";
+  version = "3.14.7";
 
   src = fetchurl {
-    url = "https://www.python.org/ftp/python/doc/3.14.6/python-3.14.6-docs-text.tar.bz2";
-    sha256 = "0flqq4k9fq948gb3zim04znyxr21pfv8i4mrhh3qwna13fh897zg";
+    url = "https://www.python.org/ftp/python/doc/3.14.7/python-3.14.7-docs-text.tar.bz2";
+    sha256 = "sha256-CTat/lWLaXZ/50nMy/mddBxMG8CS13g6pGW2V0jRMoo=";
   };
   installPhase = ''
     mkdir -p $out/share/doc/python314

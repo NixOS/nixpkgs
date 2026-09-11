@@ -3,11 +3,12 @@
   version,
   src,
   meta,
+  updateScript,
   appimageTools,
   makeWrapper,
 }:
 let
-  appimageContents = appimageTools.extractType2 {
+  appimageContents = appimageTools.extract {
     inherit pname version src;
   };
 
@@ -20,6 +21,8 @@ appimageTools.wrapType2 {
     src
     meta
     ;
+
+  passthru = { inherit updateScript; };
 
   nativeBuildInputs = [ makeWrapper ];
 

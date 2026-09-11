@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   pythonOlder,
   aiohttp,
   yarl,
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "volvocarsapi";
-  version = "0.4.3";
+  version = "0.4.4";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -19,8 +20,12 @@ buildPythonPackage rec {
     owner = "thomasddn";
     repo = "volvo-cars-api";
     tag = "v${version}";
-    hash = "sha256-GC2vktTFWh4z/sO+2hhsVKInSl5GQCtzq4q0YtfkfKg=";
+    hash = "sha256-8ASR7IE84Hrv+u4ORULMTSgBnn7TMIKwzFKiKWhQLIg=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [
     hatchling

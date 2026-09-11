@@ -1,44 +1,25 @@
 {
   lib,
   buildNpmPackage,
-  fetchFromGitHub,
-  radicle-httpd,
+  fetchFromRadicle,
   writers,
+  _experimental-update-script-combinators,
+  unstableGitUpdater,
+  nix-update-script,
 }:
-
-let
-  # radicle-explorer bundles these freely available Emoji assets, but does not
-  # redistribute them.
-  twemojiAssets = fetchFromGitHub {
-    owner = "twitter";
-    repo = "twemoji";
-    tag = "v14.0.2";
-    hash = "sha256-YoOnZ5uVukzi/6bLi22Y8U5TpplPzB7ji42l+/ys5xI=";
-    meta.license = [ lib.licenses.cc-by-40 ];
-  };
-in
 
 buildNpmPackage (finalAttrs: {
   pname = "radicle-explorer";
-  inherit (radicle-httpd) version;
+  version = "0-unstable-2026-09-03";
 
-  # radicle-explorer uses the radicle-httpd API, and they are developed in the
-  # same repo. For this reason we pin the sources to each other, but due to
-  # radicle-httpd using a more limited sparse checkout we need to carry a
-  # separate hash.
-  src = radicle-httpd.src.override {
-    hash = "sha256-cnQsPWkRChC8yPrICRoUpGW2GGLB2TK9+3v8ZRGe3x0=";
-    sparseCheckout = [ ];
+  src = fetchFromRadicle {
+    seed = "seed.radicle.dev";
+    repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
+    rev = "fb11e4d9c2c758468b9dca5c615f2392fb011c6e";
+    hash = "sha256-X8YRmyK8VyhmRMnKEiIhbiNyQ/fy4U9FgcIARDz+MfI=";
   };
 
-  npmDepsHash = "sha256-8vmAs788PjdUTaQ5E8YLX0KiIPymJbH51oNaGZACe6I=";
-
-  postPatch = ''
-    patchShebangs --build ./scripts
-    : >scripts/install-twemoji-assets
-
-    cp -r "${twemojiAssets}/assets/svg" public/twemoji
-  '';
+  npmDepsHash = "sha256-m+md3XIjn4SpZ3vp5STDFAKU3QSs0maFUm3Ll5DLghc=";
 
   preBuild = ''
     if [[ $configFile ]]; then
@@ -73,6 +54,11 @@ buildNpmPackage (finalAttrs: {
   passthru.withConfig =
     config:
     finalAttrs.finalPackage.overrideAttrs { configFile = writers.writeJSON "config.json" config; };
+
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (unstableGitUpdater { hardcodeZeroVersion = true; })
+    (nix-update-script { extraArgs = [ "--version=skip" ]; })
+  ];
 
   meta = {
     description = "Web frontend for Radicle";

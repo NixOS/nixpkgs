@@ -1,6 +1,6 @@
 {
   lib,
-  gcc15Stdenv,
+  stdenv,
   fetchFromGitHub,
   gtk3,
   jansson,
@@ -12,7 +12,7 @@
   wrapGAppsHook3,
 }:
 
-gcc15Stdenv.mkDerivation {
+stdenv.mkDerivation {
   pname = "libresplit";
   version = "0-unstable-2026-02-11";
 

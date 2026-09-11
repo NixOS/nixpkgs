@@ -9,7 +9,7 @@
   lib,
 }:
 stdenv.mkDerivation rec {
-  name = "elm-wrap";
+  pname = "elm-wrap";
   version = "1.0.1";
 
   src = fetchFromGitHub {

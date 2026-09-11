@@ -33,17 +33,11 @@ let
     else
       null;
 
-  # Build base configuration with systemd credential path override
   baseSettings =
     cfg.settings
-    // (
-      if effectiveKeyPath != null then
-        {
-          PrivateKeyPath = "/private-key";
-        }
-      else
-        { }
-    );
+    // lib.optionalAttrs (effectiveKeyPath != null) {
+      PrivateKeyPath = "/run/credentials/yggdrasil.service/private-key";
+    };
 
   # Remove null values that yggdrasil doesn't expect
   cleanSettings = lib.filterAttrs (n: v: v != null) baseSettings;
@@ -327,7 +321,6 @@ in
           StateDirectory = "yggdrasil";
           RuntimeDirectory = "yggdrasil";
           RuntimeDirectoryMode = "0750";
-          BindReadOnlyPaths = lib.optional (effectiveKeyPath != null) "%d/private-key:/private-key";
           LoadCredential = lib.optional (effectiveKeyPath != null) "private-key:${effectiveKeyPath}";
 
           AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";

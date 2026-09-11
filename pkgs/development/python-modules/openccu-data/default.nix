@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "openccu-data";
-  version = "2026.5.0";
+  version = "2026.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SukramJ";
     repo = "openccu-data";
     tag = finalAttrs.version;
-    hash = "sha256-jJNNpBeEQ1CPZP/5ssenXSmvC7FMbUUBhG1Ty/3hGvk=";
+    hash = "sha256-B4vnPcceT7XkRWFNmqV0QN1DI6+q64XNI5XYgWEV354=";
   };
 
   build-system = [ setuptools ];

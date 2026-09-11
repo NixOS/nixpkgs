@@ -1,5 +1,3 @@
-diff --git a/samples/Makefile.am b/samples/Makefile.am
-index c253c91..107401d 100644
 --- a/samples/Makefile.am
 +++ b/samples/Makefile.am
 @@ -19,11 +19,6 @@ EXTRA_DIST = knot.sample.conf.in example.com.zone
@@ -14,19 +12,13 @@ index c253c91..107401d 100644
  uninstall-local:
  	-rm -rf $(DESTDIR)/$(config_dir)/knot.sample.conf \
  	        $(DESTDIR)/$(config_dir)/example.com.zone
-diff --git a/src/utils/Makefile.inc b/src/utils/Makefile.inc
-index e6765d9..d859d23 100644
 --- a/src/utils/Makefile.inc
 +++ b/src/utils/Makefile.inc
-@@ -79,11 +79,6 @@ endif HAVE_DNSTAP
- endif HAVE_UTILS
- 
+@@ -137,7 +137,2 @@
  if HAVE_DAEMON
 -# Create storage and run-time directories
 -install-data-hook:
 -	$(INSTALL) -d $(DESTDIR)/@config_dir@
 -	$(INSTALL) -d $(DESTDIR)/@run_dir@
 -	$(INSTALL) -d $(DESTDIR)/@storage_dir@
- 
- sbin_PROGRAMS = knotc knotd
  

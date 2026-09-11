@@ -1,16 +1,15 @@
 {
   blas,
-  cmake,
-  doxygen,
   example-robot-data,
+  jrl-cmakemodules,
   fetchFromGitHub,
+  fontconfig,
   ffmpeg,
   ipopt,
   lapack,
   llvmPackages,
   lib,
   pinocchio,
-  pkg-config,
   stdenv,
 
   withMultithread ? true,
@@ -34,11 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    pkg-config
-  ];
+  nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs;
 
   propagatedBuildInputs = [
     blas
@@ -48,7 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     pinocchio
   ];
 
-  buildInputs = lib.optionals (stdenv.hostPlatform.isDarwin && withMultithread) [
+  buildInputs = [
+    jrl-cmakemodules
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && withMultithread) [
     llvmPackages.openmp
   ];
 
@@ -56,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
   ];
 
-  cmakeFlags = [
+  cmakeFlags = jrl-cmakemodules.docsCmakeFlags ++ [
     (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
     (lib.cmakeBool "BUILD_EXAMPLES" false)
     (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false)
@@ -73,6 +71,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   doCheck = true;
+
+  # Fontconfig error: Cannot load default config file: No such file: (null)
+  env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
   meta = {
     description = "Crocoddyl optimal control library";

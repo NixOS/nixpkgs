@@ -42,6 +42,12 @@ let
     excludes = [ "package.nix" ];
     hash = "sha256-uu/SIG8fgVVWhsGxmszTPHwe4SQtLgbxdShOMKbeg2w=";
   };
+
+  lixFunctional2TimeoutPatch = fetchpatch {
+    name = "lix-f2-increase-timeouts-and-max-worker-count.patch";
+    url = "https://git.lix.systems/lix-project/lix/commit/c6d22874d6dffc9646279601ad546c1d78d9a409.patch";
+    hash = "sha256-V6Q9XFsdla/OPwGPvAkb8mBisdfQbkaNKqpCfL3Tk4U=";
+  };
   makeLixScope =
     {
       attrName,
@@ -226,6 +232,10 @@ lib.makeExtensible (
           inherit src;
           hash = "sha256-a5XtutX+NS4wOqxeqbscWZMs99teKick5+cQfbCRGxQ=";
         };
+
+        patches = [
+          lixFunctional2TimeoutPatch
+        ];
       };
     };
 
@@ -253,7 +263,7 @@ lib.makeExtensible (
 
     latest = self.lix_2_95;
 
-    stable = self.lix_2_94;
+    stable = self.lix_2_95;
 
     # Previously, `nix-eval-jobs` was not packaged here, so we export an
     # attribute with the previously-expected structure for compatibility. This

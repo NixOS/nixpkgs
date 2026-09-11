@@ -7,7 +7,7 @@
   libxkbcommon,
   wayland,
   openssl,
-  squashfsTools,
+  squashfs-tools,
   makeBinaryWrapper,
   versionCheckHook,
   nix-update-script,
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # squashfs tools are needed to build appimages for Linux
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/cargo-bundle \
-      --prefix PATH : ${lib.makeBinPath [ squashfsTools ]}
+      --prefix PATH : ${lib.makeBinPath [ squashfs-tools ]}
   '';
 
   doInstallCheck = true;

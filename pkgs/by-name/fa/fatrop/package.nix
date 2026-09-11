@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "meco-group";
     repo = "fatrop";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WiIryO2bMtupJ2tvMY24Smrf86wgCNNxZbQJMn6ey/A=";
   };
 

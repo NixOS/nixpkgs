@@ -4,9 +4,10 @@
   rustPlatform,
   fetchFromGitHub,
 
-  copyDesktopItems,
+  cargo-tauri,
   jq,
-  makeDesktopItem,
+  makeBinaryWrapper,
+  moreutils,
   nodejs,
   pkg-config,
   pnpm_10,
@@ -25,7 +26,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cc-switch";
-  version = "3.16.3";
+  version = "3.16.5";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -34,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "farion1231";
     repo = "cc-switch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jj7FHJtXn127hqpjCe6buxvJNCtWxRe5HZPY8NRcglM=";
+    hash = "sha256-CrUoTfGAy+gi3gdcSlNyjwM2Rm4nahqDWdM6I9OQgPc=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -48,7 +49,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-Vs+/KLICqciF7dnC3iRH9TFzNCtXDgOkWFPLxdwA0rE=";
   };
 
-  postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+  postPatch = ''
+    jq '
+      del(.build.beforeBuildCommand) |
+      .bundle.createUpdaterArtifacts = false |
+      .plugins.updater.endpoints = []
+    ' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    jq '.bundle.macOS.signingIdentity = null' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     # libappindicator-sys dlopens libayatana-appindicator3.so.1 at runtime; autoPatchelf can't catch it.
     substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
@@ -57,21 +68,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-PfTkrD3ts/OugZ5qM82tTfWwSOcSddgDYzQhr6wLvOg=";
+  cargoHash = "sha256-gX32xCiVKHQ0BIIB9GyWHessIW30zbTcMZLtPJycxn8=";
 
   nativeBuildInputs = [
+    cargo-tauri.hook
     jq
+    moreutils
     nodejs
     pnpmConfigHook
     pnpm_10
   ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    copyDesktopItems
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
     wrapGAppsHook3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeBinaryWrapper
   ];
 
-  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     glib-networking
     libayatana-appindicator
     libsoup_3
@@ -80,48 +95,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   # tauri-build embeds frontendDist (../dist) at compile time; populate it
-  # before cargo build runs.
+  # before cargo tauri build runs (beforeBuildCommand is stripped in postPatch).
   preBuild = ''
     pnpm run build:renderer
   '';
 
-  # cc_switch_lib is an internal staticlib+cdylib+rlib; only the binary is needed.
-  # tauri/custom-protocol enables embedded-asset serving via `tauri://localhost/`;
-  # without it, WKWebView/webkit2gtk fall through to devUrl (http://localhost:3000)
-  # and blank-screen with NSURLErrorCannotConnectToHost.
-  cargoBuildFlags = [
-    "--bin"
-    "cc-switch"
-    "--features=tauri/custom-protocol"
-  ];
+  # Upstream Cargo.lock resolves newer tauri crates than the pinned npm packages
+  # (e.g. tauri 2.10 vs @tauri-apps/api 2.8). cargo tauri build errors on that;
+  # the previous cargo-only packaging already shipped this combination.
+  tauriBuildFlags = [ "--ignore-version-mismatches" ];
 
   # Proxy startup test binds to a local address, which the darwin sandbox blocks.
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "--skip=services::provider::tests::update_current_claude_provider_syncs_live_when_proxy_takeover_detected_without_backup"
   ];
 
-  postInstall = ''
-    rm -rf $out/lib
-    install -Dm644 src-tauri/icons/32x32.png $out/share/icons/hicolor/32x32/apps/cc-switch.png
-    install -Dm644 src-tauri/icons/128x128.png $out/share/icons/hicolor/128x128/apps/cc-switch.png
-    install -Dm644 src-tauri/icons/128x128@2x.png $out/share/icons/hicolor/256x256/apps/cc-switch.png
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p "$out/bin"
+    makeWrapper "$out/Applications/CC Switch.app/Contents/MacOS/cc-switch" "$out/bin/cc-switch"
   '';
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "cc-switch";
-      desktopName = "CC Switch";
-      exec = finalAttrs.meta.mainProgram;
-      icon = "cc-switch";
-      comment = finalAttrs.meta.description;
-      categories = [
-        "Development"
-        "Utility"
-      ];
-      mimeTypes = [ "x-scheme-handler/ccswitch" ];
-      startupWMClass = "cc-switch";
-    })
-  ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -132,7 +124,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/farion1231/cc-switch/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "cc-switch";
-    maintainers = with lib.maintainers; [ imcvampire ];
-    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      imcvampire
+      kenis1108
+    ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

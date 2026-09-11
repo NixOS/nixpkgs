@@ -31,7 +31,7 @@ let
   };
 
   src = fetchFromGitHub {
-    owner = "informalsystems";
+    owner = "quint-co";
     repo = "quint";
     tag = "v${version}";
     hash = "sha256-GTbphBmALx/gDc/iV/wtE1ovpK43VtCQoneN5AqUmvg=";

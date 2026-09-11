@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ssh-audit";
-  version = "3.3.0";
+  version = "3.9.0";
   pyproject = true;
 
   outputs = [
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "jtesta";
     repo = "ssh-audit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sjYKQpn37zH3xpuIiZAjCn0DyLqqoQDwuz7PKDfkeTM=";
+    hash = "sha256-JWhKtQk9jLumblM3eKchPtlqeGgM+/NW7jZ7+dq6w3Y=";
   };
 
   build-system = with python3Packages; [ setuptools ];

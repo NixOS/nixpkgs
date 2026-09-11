@@ -21,6 +21,9 @@ buildPythonPackage (finalAttrs: {
   };
 
   postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'version="0.2.7"' 'version="${finalAttrs.version}"'
+
     sed -i "/from past.builtins import map/d" aurorapy/client.py
   '';
 

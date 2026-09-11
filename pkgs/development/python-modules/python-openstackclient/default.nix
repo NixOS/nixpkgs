@@ -9,9 +9,8 @@
   osc-lib,
   osc-placement,
   pbr,
-  python-aodhclient,
+  aodhclient,
   python-barbicanclient,
-  python-cinderclient,
   python-designateclient,
   python-heatclient,
   python-ironicclient,
@@ -36,19 +35,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-openstackclient";
-  version = "10.0.0";
+  version = "10.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-openstackclient";
     tag = finalAttrs.version;
-    hash = "sha256-UczEgOtZz4roIFg1R6RDGg0tiiiT6lAgJCdgpmK0960=";
+    hash = "sha256-xOvDAwnJGYbMJDG+lO1TCLRFavlciJRVmbjYqU/E1DY=";
   };
-
-  patches = [
-    ./fix-pyproject.patch
-  ];
 
   env.PBR_VERSION = finalAttrs.version;
 
@@ -64,7 +59,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     osc-lib
     pbr
-    python-cinderclient
+    python-manilaclient
     python-keystoneclient
     requests
   ]
@@ -98,17 +93,21 @@ buildPythonPackage (finalAttrs: {
   optional-dependencies = {
     # See https://github.com/openstack/python-openstackclient/blob/master/doc/source/contributor/plugins.rst
     cli-plugins = [
+      aodhclient
+      # gnocchiclient not packaged
       osc-placement
-      python-aodhclient
       python-barbicanclient
+      # python-cyborgclient not packaged
       python-designateclient
       python-heatclient
       python-ironicclient
+      # python-ironic-inspector-client not packaged
       python-magnumclient
       python-manilaclient
       python-mistralclient
       python-neutronclient
       python-octaviaclient
+      # python-troveclient not packaged
       python-watcherclient
       python-zaqarclient
       python-zunclient

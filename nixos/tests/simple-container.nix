@@ -1,11 +1,16 @@
 {
   name = "simple-container";
 
-  containers.machine = { };
+  containers = {
+    machine = { pkgs, ... }: {
+      users.users.root.packages = [ pkgs.hello ];
+    };
+    noprofile = { };
+  };
 
   testScript = ''
     start_all()
-    machine.wait_for_unit("multi-user.target")
-    machine.shutdown()
+    machine.succeed("hello")
+    noprofile.fail("hello")
   '';
 }

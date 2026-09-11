@@ -11,7 +11,7 @@ buildGoModule (finalAttrs: {
   version = "1.2.0";
 
   src = fetchFromGitHub {
-    owner = "Fullscreen";
+    owner = "stefansundin";
     repo = "aws-rotate-key";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-fYpgHHOw0k/8WLGhq+uVOvoF4Wff6wzTXuN8r4D+TmU=";
@@ -31,7 +31,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Easily rotate your AWS key";
-    homepage = "https://github.com/Fullscreen/aws-rotate-key";
+    homepage = "https://github.com/stefansundin/aws-rotate-key";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.mbode ];
     mainProgram = "aws-rotate-key";

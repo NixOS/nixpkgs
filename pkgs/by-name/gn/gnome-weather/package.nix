@@ -17,7 +17,7 @@
   geoclue2,
   python3,
   gsettings-desktop-schemas,
-  typescript,
+  typescript_5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     gobject-introspection
     gjs
-    typescript
+    typescript_5
   ];
 
   buildInputs = [

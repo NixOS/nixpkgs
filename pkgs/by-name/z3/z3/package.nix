@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "Z3_SINGLE_THREADED" (!finalAttrs.enableParallelBuilding))
     (lib.cmakeBool "Z3_BUILD_LIBZ3_SHARED" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" (placeholder "out"))
-    (lib.cmakeBool "Z3_BUILD_TEST_EXECUTABLES" finalAttrs.doCheck)
+    (lib.cmakeBool "Z3_BUILD_TEST_EXECUTABLES" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "Z3_ENABLE_EXAMPLE_TARGETS" false)
   ]
   ++ lib.optionals pythonBindings [

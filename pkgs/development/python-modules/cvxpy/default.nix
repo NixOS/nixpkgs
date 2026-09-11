@@ -28,7 +28,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cvxpy";
-  version = "1.9.1";
+  version = "1.9.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
     owner = "cvxpy";
     repo = "cvxpy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xQ2WD0S4GiFLYqQlOE+3V23bIs7AqJY6Xn9m4sjc10I=";
+    hash = "sha256-nYfS9HXWTKcvVrq+wm5cgvB7keMAQPmKEe8bI0jngFg=";
   };
 
   postPatch =
@@ -99,6 +99,16 @@ buildPythonPackage (finalAttrs: {
     "test_oprelcone_1_m1_k3_complex"
     "test_oprelcone_1_m3_k1_complex"
     "test_oprelcone_2"
+
+    # `use_indirect` was dropped from the SCS python bindings in 3.3.0:
+    # https://github.com/bodono/scs-python/pull/189
+    "test_scs_options"
+
+    # Numerical assertions failing with scs 3.3.0.
+    "test_dist_ratio"
+    "test_sdp_problem"
+    "test_variable_name_conflict"
+    "test_vector2norm"
   ];
 
   pythonImportsCheck = [ "cvxpy" ];

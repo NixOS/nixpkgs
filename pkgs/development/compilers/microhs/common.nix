@@ -54,10 +54,7 @@ let
       homepage = "https://github.com/augustss/MicroHs";
       license = lib.licensesSpdx."Apache-2.0";
       mainProgram = "mhs";
-      maintainers = with lib.maintainers; [
-        AlexandreTunstall
-        steeleduncan
-      ];
+      maintainers = with lib.maintainers; [ AlexandreTunstall ];
       platforms = lib.platforms.all;
     };
   };

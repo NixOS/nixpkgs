@@ -7,6 +7,7 @@
   async-timeout,
   yarl,
   aresponses,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
@@ -23,6 +24,10 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-h3y5hjaSHH6oIfSt5JTt1+pH7mFLOFiq1RuMZ1uYtTE=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ hatchling ];
 

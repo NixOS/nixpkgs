@@ -448,6 +448,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
+  # Make sure our bootstrap packages don't end up in our runtime closure
+  disallowedReferences = [
+    cargo
+    rustc
+  ];
+
   passthru = {
     llvm = llvmShared;
     inherit llvmPackages;

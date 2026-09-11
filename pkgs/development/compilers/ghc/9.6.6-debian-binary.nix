@@ -12,6 +12,8 @@
   libffi,
   coreutils,
   targetPackages,
+  llvmPackages,
+  replaceVarsWith,
 }:
 
 # Prebuilt only does native
@@ -20,10 +22,39 @@ assert stdenv.targetPlatform == stdenv.hostPlatform;
 let
   version = "9.6.6";
 
+  useLLVM = !(import ./common-have-ncg.nix { inherit lib stdenv version; });
+
   # GHC upstream doesn't release bindist tarballs for some platforms.
   # We're using Debian's binary package, and patching it into a usable-in-Nixpkgs state.
   ghcDebs = {
+    loongarch64-linux = {
+      toolPrefix = "loongarch64-linux-gnu-";
+      src = {
+        url = "http://ftp.ports.debian.org/debian-ports/pool-loong64/main/g/ghc/ghc_9.6.6-4+b1_loong64.deb";
+        sha256 = "f14b5e3c8e6bd233b5be8e72c369fea0644f2a804d7636f930c05b4abf77d57f";
+      };
+      exePathForLibraryCheck = null;
+      archSpecificLibraries = [
+        {
+          nixPackage = gmp;
+          fileToCheckFor = null;
+        }
+        {
+          nixPackage = ncurses6;
+          fileToCheckFor = "libtinfo.so.6";
+        }
+        {
+          nixPackage = numactl;
+          fileToCheckFor = null;
+        }
+        {
+          nixPackage = libffi;
+          fileToCheckFor = null;
+        }
+      ];
+    };
     powerpc64-linux = {
+      toolPrefix = "powerpc64-linux-gnu-";
       src = {
         urls = [
           "http://ftp.ports.debian.org/debian-ports/pool-ppc64/main/g/ghc/ghc_9.6.6-4_ppc64.deb"
@@ -32,6 +63,35 @@ let
         sha256 = "722cc301b6ba70b342e5e3d9d0671440bcd749cd2f13dcccbd23c3f6a6060171";
       };
       exePathForLibraryCheck = null;
+      archSpecificLibraries = [
+        {
+          nixPackage = gmp;
+          fileToCheckFor = null;
+        }
+        {
+          nixPackage = ncurses6;
+          fileToCheckFor = "libtinfo.so.6";
+        }
+        {
+          nixPackage = numactl;
+          fileToCheckFor = null;
+        }
+        {
+          nixPackage = libffi;
+          fileToCheckFor = null;
+        }
+      ];
+    };
+    riscv64-linux = {
+      toolPrefix = "riscv64-linux-gnu-";
+      src = {
+        urls = [
+          "https://deb.debian.org/debian/pool/main/g/ghc/ghc_9.6.6-4_riscv64.deb"
+          "https://snapshot.debian.org/archive/debian/20250218T211057Z/pool/main/g/ghc/ghc_9.6.6-4_riscv64.deb"
+        ];
+        sha256 = "01ff1fdec9e7581b05998b216399b316c41bdbbc813e3379c7f7a38223550ad0";
+      };
+      exePathForLibraryCheck = "ghc-debian-binary-9.6.6/usr/lib/ghc/bin/ghc-9.6.6";
       archSpecificLibraries = [
         {
           nixPackage = gmp;
@@ -66,6 +126,23 @@ let
     targetPackages.stdenv.cc
     targetPackages.stdenv.cc.bintools
     coreutils # for cat
+  ]
+  # GHC 9.6 has no NCG for riscv64, it uses LLVM.
+  ++ lib.optionals useLLVM [
+    (replaceVarsWith {
+      name = "subopt";
+      src = ./subopt.bash;
+      dir = "bin";
+      isExecutable = true;
+      preBuild = ''
+        name=opt
+      '';
+      replacements = {
+        inherit (stdenv) shell;
+        opt = lib.getExe' llvmPackages.llvm "opt";
+      };
+    })
+    (lib.getBin llvmPackages.llvm)
   ];
 
   extraLibraryMapping = {
@@ -191,11 +268,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Patch ghc settings
     + ''
       substituteInPlace $out/lib/ghc/lib/settings \
-        --replace-fail powerpc64-linux-gnu-gcc gcc \
-        --replace-fail powerpc64-linux-gnu-g++ g++ \
-        --replace-fail powerpc64-linux-gnu-ld ld \
-        --replace-fail powerpc64-linux-gnu-ar ar \
-        --replace-fail powerpc64-linux-gnu-ranlib ranlib \
+        --replace-fail ${debUsed.toolPrefix}gcc gcc \
+        --replace-fail ${debUsed.toolPrefix}g++ g++ \
+        --replace-fail ${debUsed.toolPrefix}ld ld \
+        --replace-fail ${debUsed.toolPrefix}ar ar \
+        --replace-fail ${debUsed.toolPrefix}ranlib ranlib \
         --replace-fail llc-18 llc \
         --replace-fail opt-18 opt
     '';
@@ -247,7 +324,7 @@ stdenv.mkDerivation (finalAttrs: {
     targetPrefix = "";
     enableShared = true;
 
-    llvmPackages = null;
+    inherit llvmPackages;
 
     # Our Cabal compiler name
     haskellCompilerName = "ghc-${version}";
@@ -263,7 +340,16 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Glasgow Haskell Compiler";
     license = lib.licenses.bsd3;
     platforms = builtins.attrNames ghcDebs;
-    maintainers = [ lib.maintainers.OPNA2608 ];
-    teams = [ lib.teams.haskell ];
+    maintainers = [
+      # powerpc64-linux
+      lib.maintainers.OPNA2608
+      # riscv64-linux
+      lib.maintainers.liberodark
+    ];
+    teams = [
+      lib.teams.haskell
+      # loongarch64-linux
+      lib.teams.loongarch64
+    ];
   };
 })

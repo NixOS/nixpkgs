@@ -19,6 +19,6 @@ fetchurl (finalAttrs: {
     homepage = "http://prototypejs.org/";
     downloadPage = "http://prototypejs.org/download/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ das_j ];
+    maintainers = [ ];
   };
 })

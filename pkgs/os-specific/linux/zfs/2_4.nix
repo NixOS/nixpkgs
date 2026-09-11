@@ -3,7 +3,6 @@
   lib,
   nixosTests,
   stdenv,
-  fetchpatch,
   ...
 }@args:
 
@@ -13,10 +12,13 @@ callPackage ./generic.nix args {
   kernelModuleAttribute = "zfs_2_4";
 
   kernelMinSupportedMajorMinor = "4.18";
-  kernelMaxSupportedMajorMinor = "7.0";
+  kernelMaxSupportedMajorMinor = "7.2";
 
   # this package should point to the latest release.
-  version = "2.4.3";
+  version = "2.4.4";
+
+  # if adding a patch here, check if it also needs to be applied to zfs_unstable
+  extraPatches = [ ];
 
   tests = {
     inherit (nixosTests.zfs) series_2_4;
@@ -30,5 +32,5 @@ callPackage ./generic.nix args {
     amarshall
   ];
 
-  hash = "sha256-I1wLbstr0cFiGsyynP9kJ9ATRp/2b+fnnsdz0up+IzM=";
+  hash = "sha256-ZgfHTPsNoeDq6GKP4Xiti7Keis3vIZLDaTGQjgCItIc=";
 }

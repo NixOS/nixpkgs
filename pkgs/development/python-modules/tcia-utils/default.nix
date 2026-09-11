@@ -49,6 +49,6 @@ buildPythonPackage (finalAttrs: {
     description = "Python utilities for interacting with The Cancer Imaging Archive (TCIA)";
     homepage = "https://github.com/kirbyju/tcia_utils";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ sgomezsal ];
+    maintainers = [ ];
   };
 })

@@ -22,6 +22,7 @@ buildPythonPackage (finalAttrs: {
   pname = "lmstudio";
   version = "1.6.0b1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lmstudio-ai";
@@ -47,6 +48,11 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  pytestFlags = [
+    # pytest.PytestRemovedIn10Warning: Passing a non-Collection iterable to parametrize is deprecated
+    "-Wignore::pytest.PytestRemovedIn10Warning"
   ];
 
   disabledTests = [

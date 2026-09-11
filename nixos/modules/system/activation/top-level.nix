@@ -354,12 +354,6 @@ in
       # but some other script might still depend on them, although unlikely.
       installBootLoader = config.system.build.installBootLoader;
       distroId = config.system.nixos.distroId;
-      perl = pkgs.perl.withPackages (
-        p: with p; [
-          ConfigIniFiles
-          FileSlurp
-        ]
-      );
       # End if legacy environment variables
 
       preSwitchCheck = lib.mkIf (

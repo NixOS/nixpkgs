@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Track each task's time in a simple inobtrusive way";
+    description = "Track each task's time in a simple unobtrusive way";
     homepage = "https://github.com/lainsce/khronos";
     maintainers = with lib.maintainers; [ xiorcale ];
     teams = [ lib.teams.pantheon ];

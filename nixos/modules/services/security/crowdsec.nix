@@ -934,7 +934,7 @@ in
                 lib.strings.concatMapStringsSep "\n---\n" toYaml cfg.settings.acquisitions
               ))
             ];
-
+            
             notificationFiles = map linkNotificationPlugin [
               "dummy"
               "email"

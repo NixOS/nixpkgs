@@ -7,25 +7,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-verge-service-ipc";
-  version = "2.3.0";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "clash-verge-rev";
     repo = "clash-verge-service-ipc";
-    # upstream uses branch
-    rev = "21e661fa141e5ad3c705ee4cdb86efff8df6f769";
-    hash = "sha256-XavlZWxuZKCTyIYpuXRvXpXCdakWhbLhOMmOrGBgDRo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/kr0C+4bhal7DqKudtZvhPYUyn6xbxQw57g6ieJV64w=";
   };
 
   patches = [
-    # 1. Don't SetGID because the path is managed by systemd in NixOS, and we
-    #    use different IPC path for sidecar mode. We can keep RestrictSUIDSGID
-    #    in systemd serviceConfig.
-    # 2. Set IPC socket path
+    # Let the NixOS module's RuntimeDirectory/Group own socket access policy.
+    # Upstream defaults target installer-managed /tmp paths and broad fallback
+    # permissions, which do not fit the hardened systemd service.
     ./patch-service-directory.patch
   ];
 
-  cargoHash = "sha256-WhH2o5wN5vYW8jZl+hWbnk1xqHu61ibAr4+/CI3YKHg=";
+  cargoHash = "sha256-2/lFfhP2414iiH+zG2TvNy6uaCzDldoo7sIfhKrQaFg=";
 
   buildFeatures = [
     "standalone"

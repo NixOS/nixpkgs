@@ -33,7 +33,7 @@ buildGoModule (finalAttrs: {
       There are two main modes of operation for Snowcat. With no positional
       argument, Snowcat will assume it is running inside of a cluster enabled
       with Istio, and begin to enumerate the required data. Optionally, you can
-      point snowcat at a directory containing Kubernets YAML files.
+      point snowcat at a directory containing Kubernetes YAML files.
     '';
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jk ];

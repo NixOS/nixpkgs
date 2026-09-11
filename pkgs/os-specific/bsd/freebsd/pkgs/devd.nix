@@ -48,6 +48,5 @@ mkDerivation {
     make $makeFlags installconfig
   '';
 
-  meta.platforms = lib.platforms.freebsd;
   meta.mainProgram = "devd";
 }

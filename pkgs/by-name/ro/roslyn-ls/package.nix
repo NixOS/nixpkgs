@@ -38,18 +38,18 @@ in
 buildDotnetModule (finalAttrs: {
   inherit pname dotnet-sdk dotnet-runtime;
 
-  vsVersion = "2.144.9-prerelease";
+  vsVersion = "2.148.23-prerelease";
   src = fetchFromGitHub {
     owner = "dotnet";
     repo = "roslyn";
     rev = "VSCode-CSharp-${finalAttrs.vsVersion}";
-    hash = "sha256-Cq1ynxtNaguLhVSSR04wUkqrn4/0YmwGxHfBZC4zMS8=";
+    hash = "sha256-d3RqQihalcCxTbCJZXZUf2ABZ483UhBWFzpiXwCcAuA=";
   };
 
   # versioned independently from vscode-csharp
   # "roslyn" in here:
   # https://github.com/dotnet/vscode-csharp/blob/main/package.json
-  version = "5.9.0-1.26314.1";
+  version = "5.11.0-1.26380.4";
   projectFile = "src/LanguageServer/${project}/${project}.csproj";
   useDotnetFromEnv = true;
   nugetDeps = ./deps.json;
@@ -73,7 +73,7 @@ buildDotnetModule (finalAttrs: {
   dotnetFlags = [
     "-p:TargetRid=${rid}"
     # we don't want to build the binary
-    # and useAppHost is not enough, need to explicilty set to false
+    # and useAppHost is not enough, need to explicitly set to false
     "-p:UseAppHost=false"
     # avoid platform-specific crossgen packages
     "-p:PublishReadyToRun=false"
@@ -136,19 +136,25 @@ buildDotnetModule (finalAttrs: {
               ];
               meta.timeout = 60;
             }
+            # run a LSP handshake rather than matching startup logs -
+            # those go through a StreamWriter that upstream never flushes
             ''
               HOME=$TMPDIR
               expect <<"EOF"
-                spawn ${finalAttrs.meta.mainProgram} --stdio --logLevel Information --extensionLogDirectory log
-                expect_before timeout {
-                  send_error "timeout!\n"
-                  exit 1
+                set timeout 60
+                set req "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"processId\":null,\"rootUri\":null,\"capabilities\":{}}}"
+
+                set chan [open "|${finalAttrs.meta.mainProgram} --stdio --extensionLogDirectory log 2>@stderr" r+]
+                fconfigure $chan -translation binary -buffering none
+                spawn -open $chan
+                match_max 100000
+
+                send -- "Content-Length: [string length $req]\r\n\r\n$req"
+                expect {
+                  -ex {"id":1,"result"} { }
+                  timeout { send_error "\ntimeout!\n"; exit 1 }
+                  eof { send_error "\nserver exited!\n"; exit 1 }
                 }
-                expect "Language server initialized"
-                send \x04
-                expect eof
-                catch wait result
-                exit [lindex $result 3]
               EOF
               touch $out
             '';

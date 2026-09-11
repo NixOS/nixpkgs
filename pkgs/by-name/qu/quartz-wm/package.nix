@@ -2,6 +2,7 @@
   lib,
   clangStdenv,
   fetchgit,
+  fetchpatch,
   autoreconfHook,
   pixman,
   pkg-config,
@@ -23,7 +24,12 @@ clangStdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1+KZNeR4Gq2uWBHTN53PTITHuly1Z4buR+grzdVNwhs=";
   };
 
-  patches = [ ./fix-picture-typedef-conflict.patch ];
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/xorg/app/quartz-wm/-/commit/2f7b5957ffb05dfbf9182f1f2a1ad13069802946.patch";
+      hash = "sha256-z6jd4Q6deMnawIF6wsztJmHWfK5ZGCyyW09cZzLOx00=";
+    })
+  ];
 
   configureFlags = [ "--enable-xplugin-dock-support" ];
   nativeBuildInputs = [

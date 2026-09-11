@@ -9,7 +9,8 @@ let
   meiliCfg = config.services.meilisearch;
   format = pkgs.formats.yaml { };
   configFile = format.generate "librechat.yaml" cfg.settings;
-  exportCredentials = n: _: ''export ${n}="$(${pkgs.systemd}/bin/systemd-creds cat ${n}_FILE)"'';
+  exportCredentials =
+    n: _: ''export ${n}="$(${config.systemd.package}/bin/systemd-creds cat ${n}_FILE)"'';
   exportAllCredentials = vars: lib.concatStringsSep "\n" (lib.mapAttrsToList exportCredentials vars);
   getLoadCredentialList = lib.mapAttrsToList (n: v: "${n}_FILE:${v}") cfg.credentials;
 in
@@ -218,7 +219,7 @@ in
       }
     ];
 
-    networking.firewall.allowedTCPPorts = lib.optional cfg.openFirewall cfg.port;
+    networking.firewall.allowedTCPPorts = lib.optional cfg.openFirewall (lib.toInt cfg.env.PORT);
 
     systemd.tmpfiles.settings."10-librechat"."${cfg.dataDir}".d = {
       mode = "0755";

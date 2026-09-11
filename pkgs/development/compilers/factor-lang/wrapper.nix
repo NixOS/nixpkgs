@@ -13,8 +13,8 @@
   freealut,
   gdk-pixbuf,
   glib,
-  gnome2,
   gtk2-x11,
+  gtkglext,
   libGL,
   libGLU,
   librsvg,
@@ -70,8 +70,8 @@ let
       freealut
       gdk-pixbuf
       glib
-      gnome2.gtkglext
       gtk2-x11
+      gtkglext
       libGL
       libGLU
       pango

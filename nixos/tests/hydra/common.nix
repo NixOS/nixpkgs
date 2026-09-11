@@ -44,5 +44,6 @@
       };
       services.postfix.enable = true;
       nix.settings.substituters = [ ];
+      nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
     };
 }

@@ -12,16 +12,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "vault";
-  version = "1.21.4";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-1yBvcGKzLZYFWlZJL1iJgDFkiT4g2f84iZCjWi2CwDg=";
+    hash = "sha256-s6Muogxe+jvre1qZYRiSGTDgMf0+BVsSOwyxF6+Aa2o=";
   };
 
-  vendorHash = "sha256-LxWqJroDfGqqCrTej+jkpxEO/+ipXuqSPB2R3bg2v10=";
+  vendorHash = "sha256-utF/CgWNtJNin5NIq7ZGjNc7YbjAuN5nm/G57uQal94=";
 
   proxyVendor = true;
 

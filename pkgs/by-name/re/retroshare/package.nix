@@ -107,6 +107,10 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # BT DHT bootstrap
     cp libbitdht/src/bitdht/bdboot.txt $out/share/retroshare
+
+    substituteInPlace $out/share/applications/retroshare.desktop \
+      --replace-fail "/usr/bin/retroshare" "retroshare" \
+      --replace-fail "/usr/share/pixmaps/retroshare.xpm" "retroshare"
   '';
 
   meta = {

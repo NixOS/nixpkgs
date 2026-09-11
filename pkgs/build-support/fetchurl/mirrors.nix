@@ -53,10 +53,13 @@
   ];
 
   # GCC
+  # The commented out ones don't seem to be keeping up with the latest releases
+  # as of 2026-07-07 they don't have tarballs for 14.4 or 15.3
   gcc = [
-    "https://mirror.koddos.net/gcc/"
-    "https://bigsearcher.com/mirrors/gcc/"
-    "ftp://ftp.nluug.nl/mirror/languages/gcc/"
+    # "https://mirror.koddos.net/gcc/"
+    # "https://bigsearcher.com/mirrors/gcc/"
+    "https://mirrorservice.org/sites/sourceware.org/pub/gcc/"
+    # "ftp://ftp.nluug.nl/mirror/languages/gcc/"
     "ftp://ftp.fu-berlin.de/unix/languages/gcc/"
     "ftp://ftp.irisa.fr/pub/mirrors/gcc.gnu.org/gcc/"
     "ftp://gcc.gnu.org/pub/gcc/"

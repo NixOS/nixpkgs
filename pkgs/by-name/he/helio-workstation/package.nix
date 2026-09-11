@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "helio-fm";
-    repo = "helio-workstation";
+    repo = "helio-sequencer";
     tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-uEo4dxwc1HksYGU5ssYp3rLugszSir2kKo4XxgqvSno=";

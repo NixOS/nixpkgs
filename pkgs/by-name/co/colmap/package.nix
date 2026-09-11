@@ -28,6 +28,7 @@
   cudaSupport ? config.cudaSupport,
   cudaCapabilities ? cudaPackages.flags.cudaCapabilities,
   cudaPackages,
+  casparSupport ? cudaSupport && lib.all (lib.flip lib.versionAtLeast "7.5") cudaCapabilities,
   faiss,
   sqlite,
   llvmPackages,
@@ -38,6 +39,7 @@
 }:
 
 assert cudaSupport -> cudaPackages != { };
+assert lib.assertMsg (casparSupport -> cudaSupport) "colmap: casparSupport requires cudaSupport";
 
 let
   stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
@@ -99,39 +101,30 @@ let
   ];
 in
 stdenv'.mkDerivation (finalAttrs: {
-  version = "4.0.4";
+  version = "4.1.1";
   pname = "colmap";
   src = fetchFromGitHub {
     owner = "colmap";
     repo = "colmap";
     tag = finalAttrs.version;
-    hash = "sha256-n9YwEqMSIh6vM2MVf7qxxVvDpsTLEsT37xoHiX66bL0=";
+    hash = "sha256-n0crr452nmo3wWnF2FXuhdsFVzAwGeRjq9mlC6ml1eg=";
   };
 
   __structuredAttrs = true;
   strictDeps = true;
 
-  patches =
-    lib.optionals stdenv'.hostPlatform.isAarch64 [
-      # Set SANITIZE_PR for PoissonRecon to fix data races on aarch64
-      # https://github.com/colmap/colmap/pull/4429
-      (fetchpatch {
-        url = "https://github.com/colmap/colmap/commit/e13294e43baae6cf7f4e3ec05a19060e0b230a72.patch";
-        hash = "sha256-hoIjWdrOlXeT78X+g3YCDWaWnmQMzHVQNkdpx5vXpGk=";
-      })
-      (fetchpatch {
-        url = "https://github.com/colmap/colmap/commit/6c5c59f96f9e819bcc57267ef48b193d77707fe0.patch";
-        hash = "sha256-2dAhy3sgxF2SXPAYE/EV1hd61dm05vJ5JJXEjQxEKWM=";
-      })
-    ]
-    ++ lib.optionals (stdenv'.hostPlatform.isLinux && stdenv'.hostPlatform.isAarch64) [
-      # Fix determinism check in rotation_averaging_test
-      # https://github.com/colmap/colmap/pull/4426
-      (fetchpatch {
-        url = "https://github.com/colmap/colmap/commit/d38b65b9312c66e841739989f4a38924d8cb5ec5.patch";
-        hash = "sha256-dbs+TNfa4o5L79+krPpF4VmP8PhFHtzYZehYZbsnx5s=";
-      })
-    ];
+  patches = lib.optionals stdenv'.hostPlatform.isAarch64 [
+    # Set SANITIZE_PR for PoissonRecon to fix data races on aarch64
+    # https://github.com/colmap/colmap/pull/4429
+    (fetchpatch {
+      url = "https://github.com/colmap/colmap/commit/e13294e43baae6cf7f4e3ec05a19060e0b230a72.patch";
+      hash = "sha256-hoIjWdrOlXeT78X+g3YCDWaWnmQMzHVQNkdpx5vXpGk=";
+    })
+    (fetchpatch {
+      url = "https://github.com/colmap/colmap/commit/6c5c59f96f9e819bcc57267ef48b193d77707fe0.patch";
+      hash = "sha256-2dAhy3sgxF2SXPAYE/EV1hd61dm05vJ5JJXEjQxEKWM=";
+    })
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "DOWNLOAD_ENABLED" true) # We want COLMAP to be able to fetch models like LightGlue.
@@ -145,6 +138,7 @@ stdenv'.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals cudaSupport [
     (lib.cmakeBool "CUDA_ENABLED" cudaSupport)
+    (lib.cmakeBool "CASPAR_ENABLED" casparSupport)
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" (
       lib.strings.concatStringsSep ";" (map cudaPackages.flags.dropDots cudaCapabilities)
     ))
@@ -160,6 +154,7 @@ stdenv'.mkDerivation (finalAttrs: {
     glew
     gtest
     qt5.qtbase
+    qt5.qtsvg
     flann
     lz4
     cgal
@@ -168,6 +163,7 @@ stdenv'.mkDerivation (finalAttrs: {
     libsm
     curl
   ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ qt5.qtwayland ]
   ++ depsAlsoForPycolmap;
 
   nativeBuildInputs = [
@@ -181,6 +177,12 @@ stdenv'.mkDerivation (finalAttrs: {
   ];
 
   doCheck = enableTests;
+
+  # This test needs a GPU
+  checkFlags = lib.optionals casparSupport [
+    "ARGS=-E estimators/bundle_adjustment_caspar_test"
+  ];
+
   preCheck = lib.optionalString enableTests (
     let
       disabledTestPatterns = [

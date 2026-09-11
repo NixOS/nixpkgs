@@ -12,40 +12,32 @@
 }:
 
 let
-  # These files can be found in Stockfish/src/evaluate.h
-  nnueBigFile = "nn-9a0cc2a62c52.nnue";
-  nnueBigHash = "sha256-mgzCpixSClN6rTrG6QiowJiqkAidyny8h0zCGXYYvyM=";
-  nnueBig = fetchurl {
-    url = "https://tests.stockfishchess.org/api/nn/${nnueBigFile}";
-    hash = nnueBigHash;
-  };
-  nnueSmallFile = "nn-47fc8b7fff06.nnue";
-  nnueSmallHash = "sha256-R/yLf/8GfSQEdJO4TkKrhVwPzrUFjAFsafjuXE7kvWk=";
-  nnueSmall = fetchurl {
-    url = "https://tests.stockfishchess.org/api/nn/${nnueSmallFile}";
-    hash = nnueSmallHash;
+  # This file can be found in Stockfish/src/evaluate.h
+  nnueFile = "nn-89cb98a217f7.nnue";
+  nnueHash = "sha256-icuYohf3IBR8coYXYQl76koEKJl90iDsioGlYkMbu+Y=";
+  nnue = fetchurl {
+    url = "https://tests.stockfishchess.org/api/nn/${nnueFile}";
+    hash = nnueHash;
   };
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fishnet";
-  version = "2.13.2";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "lichess-org";
     repo = "fishnet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0ArTovfr9znjudo53W5hnnSZlzfEnAd7E+7DXTqtN6w=";
+    hash = "sha256-p6gZEQfC/XX0qp7nJZps5FNDea5iOVXN4hQ6f5nGKCc=";
     fetchSubmodules = true;
   };
 
   postPatch = ''
-    cp -v '${nnueBig}' 'Stockfish/src/${nnueBigFile}'
-    cp -v '${nnueBig}' 'Fairy-Stockfish/src/${nnueBigFile}'
-    cp -v '${nnueSmall}' 'Stockfish/src/${nnueSmallFile}'
-    cp -v '${nnueSmall}' 'Fairy-Stockfish/src/${nnueSmallFile}'
+    cp -v '${nnue}' 'Stockfish/src/${nnueFile}'
+    cp -v '${nnue}' 'Fairy-Stockfish/src/${nnueFile}'
   '';
 
-  cargoHash = "sha256-mkioBmawYR5GvR0WSlaicGyXV4EVVVQuai5UF5+Thk8=";
+  cargoHash = "sha256-S3mgeYujRLvEoJYLG8Np1f1JYuftF3lZlptG33QqbNM=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -68,10 +60,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
         PNAME = finalAttrs.pname;
         PKG_FILE = toString ./package.nix;
         GITHUB_REPOSITORY = "${finalAttrs.src.owner}/${finalAttrs.src.repo}";
-        NNUE_BIG_FILE = nnueBigFile;
-        NNUE_BIG_HASH = nnueBigHash;
-        NNUE_SMALL_FILE = nnueSmallFile;
-        NNUE_SMALL_HASH = nnueSmallHash;
+        NNUE_FILE = nnueFile;
+        NNUE_HASH = nnueHash;
       };
 
       text = builtins.readFile ./update.bash;

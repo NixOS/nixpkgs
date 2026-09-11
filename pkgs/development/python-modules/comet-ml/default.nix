@@ -24,7 +24,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "comet-ml";
-  version = "3.58.1";
+  version = "3.58.6";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "comet_ml";
     inherit (finalAttrs) version;
-    hash = "sha256-6DHmsd7CcFd1QU06G09CVMeVuHGAtn8Rxsr1++epdeU=";
+    hash = "sha256-+YQSl1bhlR8z3Wjp9kdaR68hkpjgj9rY07jXU64JqWU=";
   };
 
   build-system = [

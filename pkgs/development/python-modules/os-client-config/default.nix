@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  fetchpatch,
   fetchPypi,
   fixtures,
   jsonschema,
@@ -25,6 +26,14 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-4WomDy/VAK8U8Ve5t7fWkpLOg7D4pGHsaM5qikKWfL0=";
   };
+
+  patches = [
+    # Replace deprecated assertItemsEqual
+    (fetchpatch {
+      url = "https://github.com/openstack/os-client-config/commit/a72d8845545d6ac3b64b6fc48d0e2ada5750f6fe.patch";
+      hash = "sha256-i8DZCdpZ8yoN0WHseczycI4iwDP55Ibzo0KLy7Moy4M=";
+    })
+  ];
 
   build-system = [
     pbr

@@ -8,12 +8,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jacoco";
-  version = "0.8.14";
+  version = "0.8.15";
 
   src = fetchzip {
     url = "https://search.maven.org/remotecontent?filepath=org/jacoco/jacoco/${finalAttrs.version}/jacoco-${finalAttrs.version}.zip";
     stripRoot = false;
-    sha256 = "sha256-ysqPAxZK/mcnGiqqqTzfCOCyAcvMMvymFrSme6rFCJE=";
+    hash = "sha256-9B+IkVEWs1hfcI6CSfTIm1EvsuRKiXpHjQfAPGkkqxE=";
   };
 
   outputs = [

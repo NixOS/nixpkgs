@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dependencies = with python3Packages; [
     mutagen
-    mpd2
+    python-mpd2
     toml
     appdirs
   ];

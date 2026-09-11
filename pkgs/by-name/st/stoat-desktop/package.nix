@@ -21,15 +21,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stoat-desktop";
-  version = "1.4.0";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "stoatchat";
     repo = "for-desktop";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-l4kxlPwohaxserVyNAb3Dp4f5XhnPUKeuRJwrOl9EWc=";
+    hash = "sha256-Qfny57ZwSk19R4fnz+IQoEhbVG76yJhx06QPDpLM7fM=";
   };
+
+  patches = [
+    # zip extraction fails on newer nodejs versions without this fix
+    ./bump-yauzl.patch
+  ];
 
   postPatch = ''
     # Disable auto-updates
@@ -54,13 +59,21 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
     fetcherVersion = 3;
     pnpm = pnpm_10;
-    hash = "sha256-bIDwEmt/8URBMx7XIQ1EP4SucwMuyGZE1hlQM0rxDnw=";
+    hash = "sha256-0v+MHYFgnIN4FvzFkv5D3Bqc7538763yCIWu05XR+fA=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+
+  # electron-forge's console output is squeezed into one narrow column if unset
+  env.CI = "1";
 
   buildPhase = ''
     runHook preBuild

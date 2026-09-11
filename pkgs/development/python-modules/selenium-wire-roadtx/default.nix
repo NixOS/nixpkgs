@@ -26,7 +26,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "selenium-wire-roadtx";
-  version = "0-unstable-2026-05-20";
+  version = "5.2.4-unstable-2026-05-20";
   pyproject = true;
 
   __structuredAttrs = true;

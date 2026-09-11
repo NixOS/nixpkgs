@@ -3,35 +3,42 @@
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
+
+  # full SMART attribute tables. Else, fallback to basic verified/failing flag from diskutil
+  withSmartmontools ? false,
+  smartmontools,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "diskwatch";
-  version = "0.1.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "matthart1983";
     repo = "diskwatch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pveHyT3ljQQ9GdOMhZhcY7QD/pMvL3fLrbM6D5fO+h4=";
+    hash = "sha256-aebepClhjC5Gnw9Ct+z04XX0bcDRytk2Z88BeA0lE8Y=";
   };
 
   __structuredAttrs = true;
 
-  cargoHash = "sha256-PufgQqJGsPMBcnNV/QXQnE/wrI4FAJWXLvoHEqLQm5k=";
+  cargoHash = "sha256-+TY+EY3VfMLONYYVH+HdoKdUKXPSer4UvpVgNH59hHI=";
 
   nativeCheckInputs = [ versionCheckHook ];
 
-  doInstallCheck = true;
+  buildInputs = lib.optionals withSmartmontools [ smartmontools ];
 
-  versionCheckProgramArg = [ "-V" ];
+  doInstallCheck = true;
 
   meta = {
     description = "Single-host, read-only disk diagnostics TUI";
-    homepage = "https://github.com/matthart1983/diskwatch";
+    homepage = "https://www.netwatchlabs.com/labs/diskwatch";
     changelog = "https://github.com/matthart1983/diskwatch/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      fab
+      tomasrivera
+    ];
     mainProgram = "diskwatch";
   };
 })

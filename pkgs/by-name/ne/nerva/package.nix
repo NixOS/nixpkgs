@@ -1,25 +1,24 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "nerva";
-  version = "1.25.2";
+  version = "1.69.7";
 
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "nerva";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t8LAxtdA45nfpD99HvRiP5Nv8hsxP9iQF81JUbztLS4=";
+    hash = "sha256-5mZe5hZIMTHwPSuK3ZYIymETObMp9xQtmBWD9YM4Ceg=";
   };
 
-  vendorHash = "sha256-Z0MSD+1/1VzrJ+pz5x0JvxrCxtJe59ckaTqHK/+TVN8=";
+  vendorHash = "sha256-0Io4otRsVndfpF+lV+siLDZLf6rsxsczngSYz3exmxM=";
 
   ldflags = [
     "-s"
-    "-w"
     "-X=main.version=${finalAttrs.version}"
     "-X=main.commit=${finalAttrs.src.rev}"
     "-X=main.date=1970-01-01T00:00:00Z"

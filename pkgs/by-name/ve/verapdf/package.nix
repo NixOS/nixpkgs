@@ -13,7 +13,7 @@
 }:
 maven.buildMavenPackage rec {
   pname = "verapdf" + lib.optionalString (withGui && !withCli) "-gui";
-  version = "1.30.1";
+  version = "1.30.2";
   __structuredAttrs = true;
 
   mvnParameters =
@@ -32,12 +32,12 @@ maven.buildMavenPackage rec {
     owner = "veraPDF";
     repo = "veraPDF-apps";
     tag = "v${version}";
-    hash = "sha256-IoQbAYEUJuK5FxGSxiLfcn5X1KOJca70hu4cMaYXfmw=";
+    hash = "sha256-gYSHo0QLDlBNgDi5GFYsT+D2Toud754iAgRxXEQXPhI=";
   };
 
   patches = [ ./stable-maven-plugins.patch ];
 
-  mvnHash = "sha256-hY+zPuSujMr3RntuLOZVEN8GN4n8201+S5OYvwB1+j4=";
+  mvnHash = "sha256-wfIg6yVmcOiuEphcI5bgEutNi7wZSRWkF8TL2jPCE4c=";
 
   strictDeps = true;
 

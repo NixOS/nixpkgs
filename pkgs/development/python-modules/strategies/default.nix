@@ -4,24 +4,31 @@
   fetchPypi,
   multipledispatch,
   toolz,
-  pytest,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "strategies";
   version = "0.2.3";
-  format = "setuptools";
 
+  __structuredAttrs = true;
+  pyproject = true;
+
+  # GitHub upstream do not have proper release tags
   src = fetchPypi {
-    inherit pname version;
+    pname = "strategies";
+    inherit (finalAttrs) version;
     sha256 = "02i4ydrs9k61p8iv2vl2akks8p9gc88rw8031wlwb1zqsyjmb328";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     multipledispatch
     toolz
   ];
-  nativeCheckInputs = [ pytest ];
+
+  doCheck = false; # no tests in Pypi archive
 
   meta = {
     description = "Python library for control flow programming";
@@ -29,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ suhr ];
   };
-}
+})

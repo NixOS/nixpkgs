@@ -5,7 +5,7 @@
   kernel,
 }:
 let
-  version = "0.1.7-unstable-2026-04-25";
+  version = "0.1.7-unstable-2026-08-15";
 
   ## Upstream has not been merging PRs.
   ## Nixpkgs maintainers are providing a
@@ -14,8 +14,8 @@ let
   src = fetchFromGitHub {
     owner = "amkillam";
     repo = "ryzen_smu";
-    rev = "0bb95d961664c7a0ac180f849fa16fe7da71922d";
-    hash = "sha256-cv0WMvUqrl5C7b5cdQJ4JXDGEzMhwUuNLsYEYobElu4=";
+    rev = "d2983668300dd2a598e5a7dc40e71ce0678cc270";
+    hash = "sha256-OmEoycRO3hGkqueLa0i6AzmwMEbdkkPrwJkMyYxOTek=";
   };
 
   monitor-cpu = stdenv.mkDerivation {

@@ -67,6 +67,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-xai==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

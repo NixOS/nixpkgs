@@ -81,9 +81,13 @@ stdenv.mkDerivation (finalAttrs: {
       install -Dm644 ${finalAttrs.src} $out/share/ocelot-desktop/ocelot-desktop.jar
 
       makeBinaryWrapper ${jre}/bin/java $out/bin/ocelot-desktop \
-        --set JAVA_HOME ${jre.home} \
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeLibs}" \
-        --prefix PATH : "${lib.makeBinPath runtimePrograms}" \
+        --set JAVA_HOME ${jre.home} ${
+          lib.optionalString (
+            runtimeLibs != [ ]
+          ) "--prefix LD_LIBRARY_PATH : \"${lib.makeLibraryPath runtimeLibs}\""
+        } ${
+          lib.optionalString (runtimePrograms != [ ]) "--prefix PATH : \"${lib.makeBinPath runtimePrograms}\""
+        } \
         --add-flags "-jar $out/share/ocelot-desktop/ocelot-desktop.jar"
 
       # copy icons from zip file

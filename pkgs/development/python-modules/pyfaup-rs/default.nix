@@ -8,19 +8,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyfaup-rs";
-  version = "0.4.11";
+  version = "0.4.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ail-project";
     repo = "faup-rs";
     tag = "pyfaup-rs-v${finalAttrs.version}";
-    hash = "sha256-bfUMOuG8wqCoB+32NKApuPPPIZIBvmlMLGD30Wf5hWM=";
+    hash = "sha256-MatIVV3rhIUb6OypnQjJ61z7u1CmXUtV14R4nfAEme8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-s8JwFAERQXWpu84aseI+L+pB3JEafX81HMydjOcwcgE=";
+    hash = "sha256-1TnIAzpyGzpOZoHJhfdD0xC0lxKI5kMLXRnjf8piQHY=";
   };
 
   buildAndTestSubdir = "python";

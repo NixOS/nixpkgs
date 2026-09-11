@@ -7,27 +7,30 @@
   # propagates
   django,
   jwcrypto,
-  requests,
   oauthlib,
+  requests,
+  urllib3,
 
   # tests
+  django-ninja,
   djangorestframework,
   pytest-cov-stub,
   pytest-django,
   pytest-mock,
+  pytest-xdist,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "django-oauth-toolkit";
-  version = "3.3.0";
+  version = "3.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-oauth-toolkit";
     tag = finalAttrs.version;
-    hash = "sha256-eRQzAFUvSgoDiP7LW/+hMrNxHuXVxY+wc/E3VU/zeXo=";
+    hash = "sha256-UsnfGOyVk5w0grG6cTgMmfo+HyrZtsER338YobLyk08=";
   };
 
   build-system = [ setuptools ];
@@ -37,20 +40,20 @@ buildPythonPackage (finalAttrs: {
     jwcrypto
     oauthlib
     requests
+    urllib3
   ];
 
   preCheck = ''
     export DJANGO_SETTINGS_MODULE=tests.settings
   '';
 
-  # xdist is disabled right now because it can cause race conditions on high core machines
-  # https://github.com/jazzband/django-oauth-toolkit/issues/1300
   nativeCheckInputs = [
+    django-ninja
     djangorestframework
     pytest-cov-stub
     pytest-django
-    # pytest-xdist
     pytest-mock
+    pytest-xdist
     pytestCheckHook
   ];
 

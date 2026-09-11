@@ -39,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ gtest ];
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Open-source collection of C++ code designed to augment the C++ standard library";
     homepage = "https://abseil.io/";

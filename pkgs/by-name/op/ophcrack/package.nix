@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
       [ "--disable-gui" ]
   );
 
-  installPhase = lib.optional (stdenv.hostPlatform.isDarwin && enableGui) ''
+  installPhase = lib.optionalString (stdenv.hostPlatform.isDarwin && enableGui) ''
     mkdir -p $out/Applications
     cp -R src/ophcrack.app $out/Applications/ophcrack.app
   '';
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Free Windows password cracker based on rainbow tables";
     homepage = "https://ophcrack.sourceforge.io";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ tochiaha ];
     mainProgram = "ophcrack";
     platforms = lib.platforms.all;

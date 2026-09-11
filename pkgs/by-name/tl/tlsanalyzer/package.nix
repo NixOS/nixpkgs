@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "tlsanalyzer";
-  version = "0.2.2";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "csnp";
     repo = "tls-analyzer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JrQqsDeucekAIc4gXGF5F2iq5UlHG3o6b43zwMdkzTs=";
+    hash = "sha256-qswwS4ZNWyda38zI+1+WYOk4XVuXIO76E2+NfcvUy7s=";
   };
 
   vendorHash = "sha256-CPdAinTb3Yd7dPvDiTHrKk/xeJnO0aAYETWMkf34yWI=";

@@ -14,16 +14,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ratty";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "ratty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Iim0aRy97ilzBE5FLNOD3rVscMeX+9h4tKyzrssM3wM=";
+    hash = "sha256-gQ9qeR9IyPUCy4V2ynnnXeN15Fs7aNDEwjQ+33gonRU=";
   };
 
-  cargoHash = "sha256-Ol2+aeNx4nX5ngj05EDYEPhB4qZbK/AKq+V3nQsbruc=";
+  cargoHash = "sha256-mSb7QCYQ4EL76S7wmSdHBkjE5wzbVK8ln6oPdAv5BuA=";
 
   nativeBuildInputs = [
     pkg-config

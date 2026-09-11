@@ -174,7 +174,9 @@ stdenv.mkDerivation (finalAttrs: {
     #(lib.cmakeBool "ENABLE_AKONADICONTACTSUPPORT" true)
     (lib.cmakeBool "ENABLE_MEDIAPLAYER" true)
     (lib.cmakeBool "ENABLE_APPSTYLES" true)
-    (lib.optionals enableCuda "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}")
+  ]
+  ++ lib.optionals enableCuda [
+    "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}"
   ];
 
   # Tests segfault for some reason…

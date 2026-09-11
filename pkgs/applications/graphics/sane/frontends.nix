@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "1ad4zr7rcxpda8yzvfkq1rfjgx9nl6lan5a628wvpdbh3fn9v0z7";
   };
 
-  # add all fedora patchs. fix gcc-14 build among other things
+  # add all fedora patches. fix gcc-14 build among other things
   # https://src.fedoraproject.org/rpms/sane-frontends/tree/main
   patches =
     let

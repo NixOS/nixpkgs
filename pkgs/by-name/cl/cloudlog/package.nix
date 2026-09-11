@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "cloudlog";
-  version = "2.8.14";
+  version = "2.8.18";
 
   src = fetchFromGitHub {
     owner = "magicbug";
     repo = "Cloudlog";
     rev = version;
-    hash = "sha256-036wo8QiRoqiMNj7ag/txfecxITb1aPI4YydWc9N/yA=";
+    hash = "sha256-gQgEWjR/ezKmk19NLERr8f4+VdK7h9FqXjy0/fgJ90g=";
   };
 
   postPatch = ''

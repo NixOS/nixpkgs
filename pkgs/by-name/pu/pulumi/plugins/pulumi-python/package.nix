@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/sdk/python/cmd/pulumi-language-python";
 
-  vendorHash = "sha256-BfkjDesPdPDV2uILYaMJFIvaEBKT15ukwaReAL3yziw=";
+  vendorHash = "sha256-p5H9y9FtyV2McUiM1naobuXRogjLwlwARmzB5nWWj0g=";
 
   ldflags = [
     "-s"
@@ -23,8 +23,10 @@ buildGoModule (finalAttrs: {
   checkFlags = [
     "-skip=^${
       lib.concatStringsSep "$|^" [
-        "TestLanguage"
-        "TestDeterminePulumiPackages"
+        "TestLanguageDefault"
+        "TestLanguageTOML"
+        "TestLanguageClasses"
+        "TestListPulumiPackageInfos"
       ]
     }$"
   ];
@@ -42,8 +44,7 @@ buildGoModule (finalAttrs: {
   postInstall = ''
     cp -t "$out/bin" \
       ../pulumi-language-python-exec \
-      ../../dist/pulumi-resource-pulumi-python \
-      ../../dist/pulumi-analyzer-policy-python
+      ../../dist/pulumi-resource-pulumi-python
   '';
 
   passthru.tests.smokeTest = callPackage ./smoke-test/default.nix { };
@@ -53,8 +54,6 @@ buildGoModule (finalAttrs: {
     description = "Language host for Pulumi programs written in Python";
     license = lib.licenses.asl20;
     mainProgram = "pulumi-language-python";
-    maintainers = with lib.maintainers; [
-      tie
-    ];
+    maintainers = lib.teams.pulumi.members;
   };
 })

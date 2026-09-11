@@ -25,10 +25,10 @@ let
     if
       isUnixGui
     # if cfg.guiAddress is a unix socket, tell curl explicitly about it
-    # note that the dot in front of `${path}` is the hostname, which is
+    # note that the syncthing.local in front of `${path}` is the hostname, which is
     # required.
     then
-      "--unix-socket ${lib.strings.removePrefix "unix://" cfg.guiAddress} http://.${path}"
+      "--unix-socket ${lib.strings.removePrefix "unix://" cfg.guiAddress} http://syncthing.local${path}"
     # no adjustments are needed if cfg.guiAddress is a network address
     else
       "${cfg.guiAddress}${path}";
@@ -262,7 +262,15 @@ let
                   If it does, write the ignore patterns to the rest API.
                 */
                 + lib.optionalString ((conf_type == "dirs") && (new_cfg.ignorePatterns != null)) ''
-                  curl -d '{"ignore": ${builtins.toJSON new_cfg.ignorePatterns}}' -X POST ${s.ignoreAddress}?folder=${lib.strings.escapeURL new_cfg.id}
+                  curl -d ${
+                    lib.pipe new_cfg.ignorePatterns [
+                      (patterns: {
+                        ignore = patterns;
+                      })
+                      builtins.toJSON
+                      lib.escapeShellArg
+                    ]
+                  } -X POST ${s.ignoreAddress}?folder=${lib.strings.escapeURL new_cfg.id}
                 ''
               ))
               (lib.concatStringsSep "\n")
@@ -1049,7 +1057,7 @@ in
       };
       syncthing-init = lib.mkIf (cleanedConfig != { }) {
         description = "Syncthing configuration updater";
-        requisite = [ "syncthing.service" ];
+        requires = [ "syncthing.service" ];
         after = [ "syncthing.service" ];
         wantedBy = [ "multi-user.target" ];
 

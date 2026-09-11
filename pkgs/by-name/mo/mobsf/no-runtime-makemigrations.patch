@@ -1,0 +1,20 @@
+diff --git a/mobsf/__main__.py b/mobsf/__main__.py
+index 6f93abf..bc5618e 100644
+--- a/mobsf/__main__.py
++++ b/mobsf/__main__.py
+@@ -10,15 +10,6 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mobsf.MobSF.settings')
+ 
+ 
+ def db():
+-    execute_from_command_line([
+-        '',
+-        'makemigrations',
+-    ])
+-    execute_from_command_line([
+-        '',
+-        'makemigrations',
+-        'StaticAnalyzer',
+-    ])
+     execute_from_command_line([
+         '',
+         'migrate',

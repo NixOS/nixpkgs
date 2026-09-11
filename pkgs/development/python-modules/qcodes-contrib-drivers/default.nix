@@ -13,8 +13,8 @@
   cffi,
   packaging,
   pandas,
-  qcodes,
   python-dotenv,
+  qcodes,
 
   # tests
   pytest-mock,
@@ -27,6 +27,7 @@ buildPythonPackage (finalAttrs: {
   pname = "qcodes-contrib-drivers";
   version = "0.25.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "QCoDeS";
@@ -34,6 +35,15 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-4ZVNd1cHqM3tuGcOxlBN8WX9i9u3XFlJ0zr06n7zpmI=";
   };
+
+  postPatch =
+    # versioningit derives the version from git, which is unavailable in the sandbox
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail \
+          'default-version = "0.0"' \
+          'default-version = "${finalAttrs.version}"'
+    '';
 
   build-system = [
     setuptools
@@ -45,8 +55,9 @@ buildPythonPackage (finalAttrs: {
     cffi
     packaging
     pandas
-    qcodes
     python-dotenv
+    qcodes
+    versioningit
   ];
 
   nativeCheckInputs = [

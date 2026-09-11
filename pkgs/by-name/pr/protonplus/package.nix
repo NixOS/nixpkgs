@@ -17,16 +17,19 @@
   libarchive,
   libgee,
   libsoup_3,
+  sdl3,
+  libnotify,
+  appstream,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "protonplus";
-  version = "0.5.20";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "Vysp3r";
     repo = "protonplus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XLA5dEG3gshvklk1te3VF1lqJmeeclNCWn2R/35pq/E=";
+    hash = "sha256-A7HsEeGPX0pdNdk9beZw+vqwS/WTHLHpeLp9X7Cz/nI=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
     libarchive
     libgee
     libsoup_3
+    sdl3
+    libnotify
+    appstream
   ];
 
   passthru = {

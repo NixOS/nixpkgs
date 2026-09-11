@@ -9,22 +9,17 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "empire-compiler";
-  version = "0.4.3";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "bc-security";
     repo = "empire-compiler";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HNT1sELoyibXDoRcKkBZiJHIsNY7Hz2fZfHEM93UCBE=";
+    hash = "sha256-hquqUEQHdID+2dTWiSkMjcYi4wc6KlSllAD9vUzdH10=";
   };
 
-  postPatch = ''
-    substituteInPlace EmpireCompiler/EmpireCompiler.csproj \
-      --replace-fail 'net6.0' 'net9.0'
-  '';
-
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
   nugetDeps = ./deps.json;
 
   projectFile = "EmpireCompiler/EmpireCompiler.csproj";
@@ -41,7 +36,7 @@ buildDotnetModule (finalAttrs: {
   meta = {
     homepage = "https://github.com/BC-SECURITY/Empire-Compiler";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ [ "aarch64-darwin" ];
     description = "C# Compiler for Empire";
     maintainers = with lib.maintainers; [
       fzakaria

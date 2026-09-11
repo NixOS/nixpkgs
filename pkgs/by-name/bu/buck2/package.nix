@@ -47,31 +47,32 @@ let
   # NOTE (aseipp): must be synchronized with update.nu!
   platform-suffix =
     {
-      x86_64-darwin = "x86_64-apple-darwin";
       aarch64-darwin = "aarch64-apple-darwin";
       x86_64-linux = "x86_64-unknown-linux-gnu";
       aarch64-linux = "aarch64-unknown-linux-gnu";
     }
     .${stdenv.hostPlatform.system};
+
+  binaries = [
+    # the main Buck2 binary
+    "buck2"
+    # provides IDE integration for Buck2 Rust projects
+    "rust-project"
+    # opinionated formatter for Starlark/BUCK files
+    "starlark_fmt"
+  ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "buck2";
-  version = "unstable-${buildHashes.version}"; # TODO (aseipp): kill 'unstable' once a non-prerelease is made
+  version = buildHashes.version;
 
-  srcs = [
-    # the platform-specific binary — which is also
-    # zstd-compressed
-    (fetchurl {
-      url = "https://github.com/facebook/buck2/releases/download/${lib.removePrefix "unstable-" finalAttrs.version}/buck2-${platform-suffix}.zst";
-      hash = archHashes.buck2;
-    })
-    # rust-project, which is used to provide IDE integration Buck2 Rust projects,
-    # is part of the official distribution
-    (fetchurl {
-      url = "https://github.com/facebook/buck2/releases/download/${lib.removePrefix "unstable-" finalAttrs.version}/rust-project-${platform-suffix}.zst";
-      hash = archHashes.rust-project;
-    })
-  ];
+  srcs = map (
+    binary:
+    fetchurl {
+      url = "https://github.com/facebook/buck2/releases/download/${finalAttrs.version}/${binary}-${platform-suffix}.zst";
+      hash = archHashes.${binary};
+    }
+  ) binaries;
 
   unpackCmd = "unzstd $curSrc -o $(stripHash $curSrc)";
   sourceRoot = ".";
@@ -86,15 +87,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    #225963
+    # https://github.com/NixOS/nixpkgs/issues/225963
     stdenv.cc.cc.libgcc or null
   ];
 
   installPhase = ''
     runHook preInstall
 
-    install -D buck2* "$out/bin/buck2"
-    install -D rust-project* "$out/bin/rust-project"
+    ${lib.concatMapStringsSep "\n" (binary: "install -D ${binary}* $out/bin/${binary}") binaries}
 
     runHook postInstall
   '';
@@ -135,7 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Fast, hermetic, multi-language build system";
     homepage = "https://buck2.build";
-    changelog = "https://github.com/facebook/buck2/releases/tag/${lib.removePrefix "unstable-" finalAttrs.version}";
+    changelog = "https://github.com/facebook/buck2/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [
       asl20 # or
       mit
@@ -146,11 +146,11 @@ stdenv.mkDerivation (finalAttrs: {
       thoughtpolice
       lf-
       _9999years
+      cbarrete
     ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

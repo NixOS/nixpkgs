@@ -25,21 +25,21 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-web";
-  version = "1.12.21";
+  version = "1.12.26";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-web";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wtMmfNZptCMPp3j6dicEM/80otz20UBQw+HXb8EXJl0=";
+    hash = "sha256-q9AV/jthbHnbESU/wvjdaCiMnIN6KQgAQ3cvEBvduTw=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     pname = "element";
     inherit (finalAttrs) version src;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-OPpJ5XJ0YeidvlT88JwQIKXxbQ40l0xdVH/9uT3La2M=";
+    fetcherVersion = 4;
+    hash = "sha256-R9YuNvrMurRaBxZqUPsUtZSFlSZ8nA7Bd/hlAMfAH+M=";
   };
 
   nativeBuildInputs = [
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Glossy Matrix collaboration client for the web";
+    description = "Matrix client for the web";
     homepage = "https://element.io/";
     changelog = "https://github.com/element-hq/element-web/blob/v${finalAttrs.version}/CHANGELOG.md";
     teams = [ lib.teams.matrix ];

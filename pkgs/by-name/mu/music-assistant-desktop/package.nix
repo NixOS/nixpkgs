@@ -8,6 +8,8 @@
 
   # nativeBuildInputs
   cargo-tauri,
+  jq,
+  moreutils,
   nodejs,
   pkg-config,
   yarnBuildHook,
@@ -21,7 +23,8 @@
   atk,
   dbus,
   glib-networking,
-  libappindicator-gtk3,
+  gst_all_1,
+  libappindicator,
   llvmPackages,
   pulseaudio,
   gtk3,
@@ -30,30 +33,33 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "music-assistant-desktop";
-  version = "0.3.9";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "desktop-app";
     tag = finalAttrs.version;
-    hash = "sha256-fogNPPdbU8ikTxxaGDYsqR6GCcAsc2fS4qapVDkesAQ=";
+    hash = "sha256-zTghc35CSazSfG2SvoigH+3qF7LcwpzrE5FP90I1gq0=";
   };
 
-  # hide update feature
+  patches = [
+    ./remove-updater.diff
+  ];
+
   postPatch = ''
-    substituteInPlace src-tauri/src/lib.rs \
-      --replace-fail \
-        "let update =" \
-        "// let update =" \
-      --replace-fail \
-        "&update," \
-        "// &update," \
+    # set version
+    substituteInPlace package.json src-tauri/tauri.conf.json \
+      --replace-fail "0.0.0" "${finalAttrs.version}"
+
+    # disable upstream updater
+    jq '.plugins.updater.endpoints = [ ] | .bundle.createUpdaterArtifacts = false' src-tauri/tauri.conf.json \
+      | sponge src-tauri/tauri.conf.json
   '';
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-xi6Clo8iHg3YFVcWNMFrN2422MZm2BhB9m/etFlyb/4=";
+  cargoHash = "sha256-18ZS8lmPMCTZU/UAg9gk6I7Ele2XbWCqf9O0L9xxwzE=";
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
@@ -62,6 +68,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     cargo-tauri.hook
+    jq
+    moreutils
     nodejs
     pkg-config
     yarnBuildHook
@@ -78,7 +86,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     atk
     dbus
     glib-networking
-    libappindicator-gtk3
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    libappindicator
     pulseaudio
     gtk3
     webkitgtk_4_1
@@ -86,7 +97,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libappindicator-gtk3 ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libappindicator ]}"
     )
   '';
 
@@ -100,6 +111,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Official companion desktop app for Music Assistant";
+    changelog = "https://github.com/music-assistant/desktop-app/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/music-assistant/desktop-app";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nim65s ];

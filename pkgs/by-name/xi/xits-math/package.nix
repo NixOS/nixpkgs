@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.302";
 
   src = fetchFromGitHub {
-    owner = "alif-type";
+    owner = "aliftype";
     repo = "xits";
     rev = "v${finalAttrs.version}";
     sha256 = "1x3r505dylz9rz8dj98h5n9d0zixyxmvvhnjnms9qxdrz9bxy9g1";
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://github.com/alif-type/xits";
+    homepage = "https://github.com/aliftype/xits";
     description = "OpenType implementation of STIX fonts with math support";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;

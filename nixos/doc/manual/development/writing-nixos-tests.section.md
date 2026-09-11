@@ -92,6 +92,10 @@ cd /my/git/clone/of/nixpkgs
 nix-build -A nixosTests.hostname
 ```
 
+In-tree tests run with a few changes to defaults, notably
+- The `pkgs.*` are read only by default. You can opt out with `node.pkgsReadOnly = false;` at the test level.
+- `nix.enable` defaults to `false` to reduce build closure size; in particular the reverse build closure of `nix` and its dependencies.
+
 ### Testing outside the NixOS project {#sec-call-nixos-test-outside-nixos}
 
 Outside the `nixpkgs` repository, you can use the `runNixOSTest` function from
@@ -109,6 +113,8 @@ pkgs.testers.runNixOSTest {
 ```
 
 `runNixOSTest` returns a derivation that runs the test.
+
+Out-of-tree tests evaluate with a set of defaults that balances the principle of least surprise in the general case, but has a few differences from in-tree NixOS tests. See [Testing within NixOS](#sec-call-nixos-test-in-nixos).
 
 ## Test machines {#ssec-nixos-test-machines}
 
@@ -276,12 +282,15 @@ with foo_running:
 
 `polling_condition` takes the following (optional) arguments:
 
-`seconds_interval`
+`interval`
 
-:   specifies how often the condition should be polled:
+:   specifies how often the condition should be polled, as a `datetime.timedelta`:
 
 ```py
-@polling_condition(seconds_interval=10)
+import datetime as dt
+
+
+@polling_condition(interval=dt.timedelta(seconds=10))
 def foo_running():
     machine.succeed("pgrep -x foo")
 ```

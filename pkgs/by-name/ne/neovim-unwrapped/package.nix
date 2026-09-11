@@ -20,14 +20,7 @@
   procps ? null,
   versionCheckHook,
   nix-update-script,
-  writableTmpDirAsHomeHook,
   wasmSupport ? false,
-
-  # now defaults to false because some tests can be flaky (clipboard etc), see
-  # also: https://github.com/neovim/neovim/issues/16233
-  nodejs ? null,
-  fish ? null,
-  python3 ? null,
 }:
 
 let
@@ -110,7 +103,7 @@ stdenv.mkDerivation (
   in
   {
     pname = "neovim-unwrapped";
-    version = "0.12.3";
+    version = "0.12.5";
 
     __structuredAttrs = true;
 
@@ -118,7 +111,7 @@ stdenv.mkDerivation (
       owner = "neovim";
       repo = "neovim";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-JjDU3GZf+wvsMyDjIfu1btTUBkOlpp6E1HFLqBLR9po=";
+      hash = "sha256-dpu2kncpm+2k+XR7qOEi4KeEy9a1E6X7kjf3s4AbcSo=";
     };
 
     strictDeps = true;
@@ -184,7 +177,14 @@ stdenv.mkDerivation (
     # make oldtests too
     checkPhase = ''
       runHook preCheck
+
+      # tests listen socket gets created here. not using writableTmpDirAsHomeHook
+      # as this path can be too long for the listen socket creation
+      export XDG_RUNTIME_DIR="$NIX_BUILD_TOP/tests"
+      mkdir -p "$XDG_RUNTIME_DIR"
+
       make functionaltest__treesitter
+
       runHook postCheck
     '';
 
@@ -193,22 +193,6 @@ stdenv.mkDerivation (
       gettext
       pkg-config
     ];
-
-    # extra programs test via `make functionaltest`
-    nativeCheckInputs =
-      let
-        pyEnv = python3.withPackages (
-          ps: with ps; [
-            pynvim
-            msgpack
-          ]
-        );
-      in
-      [
-        fish
-        nodejs
-        pyEnv # for src/clint.py
-      ];
 
     postPatch =
       lib.optionalString wasmSupport ''
@@ -283,7 +267,6 @@ stdenv.mkDerivation (
     nativeInstallCheckInputs = [
       versionCheckHook
       lua.pkgs.busted
-      writableTmpDirAsHomeHook
       glibcLocales
 
       # needs git for vim.pack tests as well

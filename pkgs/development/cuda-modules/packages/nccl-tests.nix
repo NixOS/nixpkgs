@@ -30,13 +30,13 @@ backendStdenv.mkDerivation (finalAttrs: {
   # NOTE: Depends on the CUDA package set, so use cudaNamePrefix.
   name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "nccl-tests";
-  version = "2.18.5";
+  version = "2.20.0";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nccl-tests";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-XH5/hS1oy1V8w4nIx7+RRaiUrOIPDGwLSFpVKSnOOJE=";
+    hash = "sha256-gy901+Hd0gV47Ca61/QKPUHpiMl0WSrz3azN2E0YdAA=";
   };
 
   postPatch = ''

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ctypes.sh";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "taviso";
     repo = "ctypes.sh";
     rev = "v${finalAttrs.version}";
-    sha256 = "1wafyfhwd7nf7xdici0djpwgykizaz7jlarn0r1b4spnpjx1zbx4";
+    sha256 = "sha256-ZYsjySJaxyLAiyGaNwngA7ef6vA+fUTCh9hi5g55v+g=";
   };
 
   nativeBuildInputs = [

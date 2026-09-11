@@ -93,6 +93,7 @@ in
         ];
         RestrictNamespaces = true;
         PrivateDevices = true;
+        PrivateTmp = true;
         PrivateUsers = true;
         ProtectClock = true;
         ProtectControlGroups = true;

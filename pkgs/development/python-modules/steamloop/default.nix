@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "steamloop";
-  version = "1.2.1";
+  version = "1.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hvaclibs";
     repo = "steamloop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0uzx1lW34sBWq06dR+ajPZ5VfUSTQHGSB/hoy1fLKLo=";
+    hash = "sha256-7AxUEe57OpDi2ofbKWvdcFCoq7ARXtlKpiJQyQX891c=";
   };
 
   build-system = [ setuptools ];

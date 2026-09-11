@@ -9,10 +9,10 @@
 
 buildMozillaMach rec {
   pname = "firefox";
-  version = "152.0.2";
+  version = "155.0.1";
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-    sha512 = "e4e54cffffcfd5751eac5817a7b74b0ef0aa43fc00ef29397cc9df9aa52572b2272b96e60373a70d712be4dc849170d8d5c1b449f3ea978b4ab28dee19056b03";
+    sha512 = "6d137a7a315cb1d0aac1a3fe314af80fe290c49b7c2e47f8687b25d4720927b2a0dc71a3da9d75f6cab479067db114caa6732d17e888b0abfce99238a8af0f39";
   };
 
   meta = {
@@ -30,6 +30,18 @@ buildMozillaMach rec {
     maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
     license = lib.licenses.mpl20;
     mainProgram = "firefox";
+    identifiers = {
+      cpeParts = {
+        inherit version;
+        product = "firefox";
+        update = "*";
+        vendor = "mozilla";
+      };
+      purlParts = {
+        type = "generic";
+        spec = "firefox@${version}";
+      };
+    };
   };
   tests = {
     inherit (nixosTests) firefox;

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtalarm";
-  version = "3.0.1";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "CountMurphy";
     repo = "QTalarm";
     tag = finalAttrs.version;
-    hash = "sha256-IN/XdR8J5uMIAjb1G2kzuLDtO972RLKSy3Ceh9CcHWw=";
+    hash = "sha256-9g6WzOn9yCOnu14nLwsR15E6rmLBOEtDZKnZzz6HS6Y=";
   };
 
   buildInputs = [

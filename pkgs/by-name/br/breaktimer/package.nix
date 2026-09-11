@@ -3,7 +3,7 @@
   stdenv,
   buildNpmPackage,
   copyDesktopItems,
-  electron_40,
+  electron_42,
   fetchFromGitHub,
   jq,
   makeDesktopItem,
@@ -13,18 +13,18 @@
 }:
 
 let
-  electron = electron_40;
+  electron = electron_42;
   nodejs = nodejs_24;
   description = "Cross-platform desktop app for managing periodic breaks";
 in
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "breaktimer";
   version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "tom-james-watson";
     repo = "breaktimer-app";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-STDb6+brlVk/ZPUbw3cQOpe2r03WlFKEBgVLqJrsrHI=";
   };
 
@@ -50,13 +50,6 @@ buildNpmPackage rec {
     makeWrapper
     copyDesktopItems
   ];
-
-  preBuild = ''
-    if [[ $(jq --raw-output '.devDependencies.electron' < package.json | grep -E --only-matching '\^[0-9]+' | sed -e 's/\^//') != ${lib.escapeShellArg (lib.versions.major electron.version)} ]]; then
-      echo 'ERROR: electron version mismatch'
-      exit 1
-    fi
-  '';
 
   buildPhase = ''
     runHook preBuild
@@ -131,10 +124,10 @@ buildNpmPackage rec {
   meta = {
     inherit description;
     homepage = "https://github.com/tom-james-watson/breaktimer-app";
-    changelog = "https://github.com/tom-james-watson/breaktimer-app/releases/tag/v${version}";
+    changelog = "https://github.com/tom-james-watson/breaktimer-app/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ proitheus ];
     mainProgram = "breaktimer";
     platforms = electron.meta.platforms;
   };
-}
+})

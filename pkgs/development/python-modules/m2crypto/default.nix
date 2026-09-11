@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "m2crypto";
-  version = "0.48.0";
+  version = "0.49.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "m2crypto";
     repo = "m2crypto";
     tag = finalAttrs.version;
-    hash = "sha256-Ya1og1x3EPbHkrY74tkdkMOJreS3x8x/1oVfwcpAEOU=";
+    hash = "sha256-1YM8X7h3AD+LVYya7Pt1YHcG+4PnEpcSaHBFg6jkDC0=";
   };
 
   # https://lists.sr.ht/~mcepl/m2crypto/%3CCAPhw1+Hg6+OJZoqt1O6aezxnTUFmfFTMzDwkD2bJ74jnmygqrg@mail.gmail.com%3E

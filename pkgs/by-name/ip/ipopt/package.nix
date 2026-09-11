@@ -19,13 +19,13 @@ assert !mumps.mpiSupport;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ipopt";
-  version = "3.14.19";
+  version = "3.14.20";
 
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "Ipopt";
-    rev = "releases/${finalAttrs.version}";
-    sha256 = "sha256-85fUBMwQtG+RWQYk9YzdZYK3CYcDKgWroo4blhVWBzE=";
+    tag = "releases/${finalAttrs.version}";
+    hash = "sha256-bQo/AxzbgKCnL8VZuvq/w3qgrtzg67kIOqQTa1zQuSY=";
   };
 
   outputs =

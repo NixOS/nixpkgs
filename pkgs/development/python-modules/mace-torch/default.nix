@@ -50,6 +50,11 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
 
+  env = {
+    # Skip the most intensive tests
+    CI = true;
+  };
+
   pythonRelaxDeps = [
     "e3nn"
   ];

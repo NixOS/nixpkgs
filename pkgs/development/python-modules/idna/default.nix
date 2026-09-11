@@ -6,16 +6,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "idna";
-  version = "3.13";
+  version = "3.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kjd";
     repo = "idna";
-    tag = "v${version}";
-    hash = "sha256-D72KUEwiFA/LdU/xE3sN+Abc6NpAsIlGSdB07V1nk68=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9nLy/9PNuLSQJsf4Jes0uN695+LGjz2LXlfiZxxvGV4=";
   };
 
   build-system = [ flit-core ];
@@ -26,9 +26,9 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/kjd/idna/";
-    changelog = "https://github.com/kjd/idna/releases/tag/${src.tag}";
+    changelog = "https://github.com/kjd/idna/blob/${finalAttrs.src.tag}/HISTORY.md";
     description = "Internationalized Domain Names in Applications (IDNA)";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

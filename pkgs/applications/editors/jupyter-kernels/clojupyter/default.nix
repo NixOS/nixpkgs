@@ -13,7 +13,7 @@
 # nix run --impure --expr 'with import <nixpkgs> {}; jupyter-console.withSingleKernel clojupyter.definition'
 
 # Jupyter notebook:
-# nix run --impure --expr 'with import <nixpkgs> {}; jupyter.override { definitions.clojure = clojupyter.definition; }'
+# nix shell --impure --expr 'with import <nixpkgs> {}; [ (jupyter.override { definitions.clojure = clojupyter.definition; }) ]' -c jupyter-notebook
 
 let
   cljdeps = import ./deps.nix { inherit pkgs; };

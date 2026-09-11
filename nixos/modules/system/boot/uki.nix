@@ -12,6 +12,8 @@ let
   inherit (pkgs.stdenv.hostPlatform) efiArch;
 
   format = pkgs.formats.ini { };
+
+  ukiSettings = lib.filterAttrsRecursive (_: v: v != null) cfg.settings;
 in
 
 {
@@ -94,7 +96,7 @@ in
           };
     };
 
-    boot.uki.configFile = lib.mkOptionDefault (format.generate "ukify.conf" cfg.settings);
+    boot.uki.configFile = lib.mkOptionDefault (format.generate "ukify.conf" ukiSettings);
 
     system.boot.loader.ukiFile =
       let

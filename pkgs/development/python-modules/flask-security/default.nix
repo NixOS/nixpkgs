@@ -51,14 +51,14 @@
 
 buildPythonPackage rec {
   pname = "flask-security";
-  version = "5.8.1";
+  version = "5.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets-eco";
     repo = "flask-security";
     tag = version;
-    hash = "sha256-xNWgLIk/AB5beZQX7jzh8uQ9o0Gq+W5rgowBS215pk4=";
+    hash = "sha256-WRhQqSSlPKqY/NxqPCG3izYy782vCq6JGRzReL8Qwqw=";
   };
 
   build-system = [ flit-core ];

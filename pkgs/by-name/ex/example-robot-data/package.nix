@@ -1,10 +1,7 @@
 {
-  cmake,
-  doxygen,
   fetchFromGitHub,
   lib,
   jrl-cmakemodules,
-  pkg-config,
   stdenv,
 }:
 
@@ -26,17 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    pkg-config
-  ];
+  nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs;
 
-  propagatedBuildInputs = [
+  buildInputs = [
     jrl-cmakemodules
   ];
 
-  cmakeFlags = [ (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false) ];
+  cmakeFlags = jrl-cmakemodules.docsCmakeFlags ++ [ (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false) ];
 
   doCheck = true;
 

@@ -13,21 +13,27 @@
   glib,
   gnome,
   gssdp-tools,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  buildPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gssdp";
-  version = "1.6.4";
+  version = "1.6.6";
 
   outputs = [
     "out"
     "dev"
+  ]
+  ++ lib.optionals withIntrospection [
     "devdoc"
   ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor finalAttrs.version}/gssdp-${finalAttrs.version}.tar.xz";
-    hash = "sha256-/5f9+39WHT5oE7T2ohRSWefC7/Q8wOY/P9Ax0LYmYDI=";
+    hash = "sha256-dn0idSVM4O/q6sZEGf+fTwrUcNE072cvXFVrKrt4a8s=";
   };
 
   depsBuildBuild = [
@@ -38,10 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    glib
+  ]
+  ++ lib.optionals withIntrospection [
     gobject-introspection
     vala
     gi-docgen
-    python3
   ];
 
   buildInputs = [
@@ -53,16 +61,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=true"
     "-Dsniffer=false"
     # This packages only has manpages for gssdp-device-sniffer, which we disabled above.
     "-Dmanpages=false"
+    (lib.mesonBool "gtk_doc" withIntrospection)
+    (lib.mesonBool "introspection" withIntrospection)
   ];
 
   # On Darwin: Failed to bind socket, Operation not permitted
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  postFixup = ''
+  postFixup = lib.optionalString withIntrospection ''
     # Move developer documentation to devdoc output.
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     find -L "$out/share/doc" -type f -regex '.*\.devhelp2?' -print0 \

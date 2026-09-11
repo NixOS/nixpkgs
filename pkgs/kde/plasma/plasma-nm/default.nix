@@ -3,9 +3,7 @@
   mkKdeDerivation,
   replaceVars,
   pkg-config,
-  qtkeychain,
   qtwebengine,
-  kirigami-addons,
   mobile-broadband-provider-info,
   openconnect,
   openvpn,
@@ -23,11 +21,8 @@ mkKdeDerivation {
 
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
-    qtkeychain
     qtwebengine
     mobile-broadband-provider-info
     openconnect
   ];
-
-  extraPropagatedBuildInputs = [ kirigami-addons ];
 }

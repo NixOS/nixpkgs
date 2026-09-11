@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
       standard, and vastly expands it, in 16×16 pixels.
 
       The icons are in SVG format, so can be scaled to any size without
-      loosing any quality. However, they've been designed to be used in
+      losing any quality. However, they've been designed to be used in
       `16×16` pixels, to be pixel-perfect.
     '';
     homepage = "https://github.com/oclero/qlementine-icons";

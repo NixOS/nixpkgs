@@ -7,19 +7,20 @@
   pkg-config,
   openssl,
   nodejs,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cook-cli";
-  version = "0.32.0";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "cooklang";
     repo = "cookcli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Lft44tBo8l+EhqEHuq6mKBVTjgpewd34SPtloVwkmGc=";
+    hash = "sha256-d2sO25QtElhAATgUeyDQaYMN2ZC7r6Nj8IH9xe+pabs=";
   };
 
-  cargoHash = "sha256-pSvf3xW5UJWc6Z39w2FI5yoZS8KJpQj04LcTrNFrtGk=";
+  cargoHash = "sha256-i8vE4iMe8JfghR2k9pNP3CkZlXP+87eF3MZfCBLxhiM=";
 
   # Build without the self-updating feature
   buildNoDefaultFeatures = true;
@@ -39,13 +40,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-tBOBa2plgJ0dG5eDD9Yc9YS+Dh6rhBdqU6JiZUjTUY4=";
+    hash = "sha256-ZSRd4tcAsR1tKZ8ZBcb95C1FWEaijsA0WQ5EME0cOfo=";
   };
 
   preBuild = ''
     npm run build-css
     npm run build-js
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/cooklang/cookcli/releases/tag/v${finalAttrs.version}";
@@ -56,6 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = [
       lib.maintainers.emilioziniades
       lib.maintainers.ginkogruen
+      lib.maintainers.pinage404
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

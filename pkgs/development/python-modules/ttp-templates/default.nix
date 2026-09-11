@@ -8,17 +8,17 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ttp-templates";
-  version = "0.5.8";
+  version = "0.5.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dmulyalin";
     repo = "ttp_templates";
     tag = finalAttrs.version;
-    hash = "sha256-W6F0/CGm713HhCtgqv+tEDm5mlkx0JJRmnUc9j+Fnvs=";
+    hash = "sha256-0QFo/ZnOLX43oBj9KQoMmXL7SDHYN42K3dWuGTaUNqQ=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
   dependencies = [ pydantic ];
 

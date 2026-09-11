@@ -16,6 +16,7 @@ let
     any
     attrNames
     attrValues
+    catAttrs
     concatMap
     isFunction
     isBool
@@ -141,10 +142,10 @@ lib.fix (self: {
     assert all isTypeDef types;
     let
       # Store a list of functions so we don't have to pay the cost of attrset lookups at runtime.
-      funcs = map (t: t.verify) types;
+      funcs = catAttrs "verify" types;
     in
     {
-      name = "union<${concatStringsSep "," (map (t: t.name) types)}>";
+      name = "union<${concatStringsSep "," (catAttrs "name" types)}>";
       verify = v: any (func: func v) funcs;
     };
 
@@ -153,11 +154,37 @@ lib.fix (self: {
     assert all isTypeDef types;
     let
       # Store a list of functions so we don't have to pay the cost of attrset lookups at runtime.
-      funcs = map (t: t.verify) types;
+      funcs = catAttrs "verify" types;
     in
     {
-      name = "intersection<${concatStringsSep "," (map (t: t.name) types)}>";
+      name = "intersection<${concatStringsSep "," (catAttrs "name" types)}>";
       verify = v: all (func: func v) funcs;
+    };
+
+  either =
+    t1: t2:
+    assert isTypeDef t1 && isTypeDef t2;
+    let
+      # Store the functions directly so we don't have to pay the cost of attrset lookups at runtime.
+      v1 = t1.verify;
+      v2 = t2.verify;
+    in
+    {
+      name = "either<${t1.name},${t2.name}>";
+      verify = v: v1 v || v2 v;
+    };
+
+  both =
+    t1: t2:
+    assert isTypeDef t1 && isTypeDef t2;
+    let
+      # Store the functions directly so we don't have to pay the cost of attrset lookups at runtime.
+      v1 = t1.verify;
+      v2 = t2.verify;
+    in
+    {
+      name = "both<${t1.name},${t2.name}>";
+      verify = v: v1 v && v2 v;
     };
 
   not =

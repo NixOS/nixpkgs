@@ -59,7 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Check Cache Availablility of NixOS Configurations";
+    description = "Check Cache Availability of NixOS Configurations";
     longDescription = ''
       Fast rust tool to check availability of your entire system in caches. It
       so to speak "checks the weather" before going to update. Useful for

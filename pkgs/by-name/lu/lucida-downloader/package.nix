@@ -7,18 +7,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lucida-downloader";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "jelni";
     repo = "lucida-downloader";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-284f3+yKkE37wZzmyW7qupvYwEkmLvco8lc5dFSiLAQ=";
+    hash = "sha256-7mq6xoafXqhqhe9vLdc67aGzlUrD8hTyCGkIyqndfPA=";
   };
 
   passthru.updateScript = nix-update-script { };
 
-  cargoHash = "sha256-PT8E9AqvhChKk76AA2qsAf2ICy5maQ9SK96V/vkmwy8=";
+  cargoHash = "sha256-lUxPPykO/U7bVgtw3yGxqD0PbqHng5bIW0krvYW7+Kw=";
 
   meta = {
     description = "Multithreaded client for downloading music for free with lucida";

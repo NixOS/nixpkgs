@@ -2,7 +2,7 @@
 import ../make-test-python.nix (
   { package, lib, ... }:
   {
-    name = "hadoop-hdfs";
+    name = "hadoop-${package.version}-hdfs";
 
     nodes =
       let

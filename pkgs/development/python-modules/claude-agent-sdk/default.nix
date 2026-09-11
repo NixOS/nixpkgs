@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "claude-agent-sdk";
-  version = "0.2.108";
+  version = "0.2.152";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anthropics";
     repo = "claude-agent-sdk-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RL4YtNUoW6YFg/5eM8ZAlUNNDBuZLu01qNShN7Ddlxc=";
+    hash = "sha256-h3LjBolK1hpcATNX45ftYZBTKWQtSF34o78E6fRab2M=";
   };
 
   build-system = [ hatchling ];
@@ -46,6 +46,11 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Code not available
     "test_query_with_async_iterable"
+  ];
+
+  disabledTestPaths = [
+    # Tests require claude code with is non-free
+    "tests/test_close_cancellation.py"
   ];
 
   meta = {

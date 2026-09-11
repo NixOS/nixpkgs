@@ -1,9 +1,11 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   fetchurl,
   buildGoModule,
-  fuse,
+  fuse3,
+  macfuse-stubs,
   runCommand,
   jq,
   gnused,
@@ -12,70 +14,52 @@
 }:
 
 let
-  fuseftpVersion = "1.0.1";
-  fuseftp = buildGoModule rec {
-    pname = "go-fuseftp";
-    version = fuseftpVersion;
-
-    src = fetchFromGitHub {
-      owner = "datawire";
-      repo = "go-fuseftp";
-      tag = "v${version}";
-      hash = "sha256-ojue7mNu5pujM9Nnc/7bL7kWzQSwa8lnnUSWS2rWuHM=";
-    };
-
-    vendorHash = "sha256-C1E/ai82FTjWZmDXEeKN9GxCh+KtzIKPtx5BAWIuQr4=";
-
-    buildInputs = [ fuse ];
-
-    ldflags = [
-      "-s"
-      "-w"
-    ];
-
-    subPackages = [ "pkg/main" ];
-  };
-
-  k8sVersion = "v1.34.2";
+  k8sVersion = "v1.36.2";
   k8sDefsJson = fetchurl {
     url = "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/${k8sVersion}-standalone/_definitions.json";
-    hash = "sha256-IMEXD8MeTgAhBn6dnElp7uKtVLv4UcuDI51pQ4o953Q=";
+    hash = "sha256-qemM3GqwmYDyO16Yel8R0OwfyDgYfvuS80fM847Y/WU=";
   };
 in
 buildGoModule rec {
   pname = "telepresence2";
-  version = "2.27.3";
+  version = "2.31.2";
 
   src = fetchFromGitHub {
     owner = "telepresenceio";
     repo = "telepresence";
     rev = "v${version}";
-    hash = "sha256-cN3zuS4OEllGP6e0PqntLbE5OaVgmH7ccOfLq+WC6Wk=";
+    hash = "sha256-7COG0LwInqoX9a1SwJyXcF+ptGCKTYJz6wP9uN/CKZo=";
   };
-
-  propagatedBuildInputs = [
-    fuseftp
-  ];
 
   nativeBuildInputs = [
     jq
   ];
 
-  # telepresence depends on fuseftp existing as a built binary, as it gets embedded
-  # CGO gets disabled to match their build process as that is how it's done upstream
-  preBuild = ''
-    cp ${fuseftp}/bin/main ./pkg/client/remotefs/fuseftp.bits
+  # the fuseftp file system is linked into the binary and requires CGO (libfuse)
+  # ref: https://github.com/telepresenceio/telepresence/blob/v2.31.2/build-aux/main.mk#L38-L43
+  buildInputs = [
+    # cgofuse uses the fuse2 header locations on darwin
+    (if stdenv.hostPlatform.isDarwin then (macfuse-stubs.override { isFuse3 = false; }) else fuse3)
+  ];
 
+  # upstream builds against the FUSE 2 API by default; the vendored cgofuse
+  # supports FUSE 3 behind this build tag
+  tags = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "fuse3" ];
+
+  preBuild = ''
     mkdir -p charts/telepresence-oss
     cp ${k8sDefsJson} charts/telepresence-oss/k8s-defs.json
-
-    export CGO_ENABLED=0
   '';
 
-  vendorHash = "sha256-wOadx4iUgh56FLB6BDSZdAUPV+G7Ld8K+CDGYnUsDG0=";
+  vendorHash = "sha256-5kqdZS5+1cp+DXb/zi4Yc7A38yZPZaOUvOccPKYjP98=";
+
+  # required for the encoding/json/v2 and encoding/json/jsontext imports,
+  # which are still experimental in Go 1.26
+  # ref: https://github.com/telepresenceio/telepresence/blob/v2.31.2/build-aux/main.mk#L33
+  env.GOEXPERIMENT = "jsonv2";
 
   # ldflags copied from Makefile
-  # ref: https://github.com/telepresenceio/telepresence/blob/7a2b9f553fb51ef252df957916c7b831bd65c1ce/build-aux/main.mk#L250-L251
+  # ref: https://github.com/telepresenceio/telepresence/blob/v2.31.2/build-aux/main.mk#L240-L243
   ldflags = [
     "-s"
     "-w"
@@ -85,6 +69,15 @@ buildGoModule rec {
   preConfigure = ''
     HELM_VERSION=$(go mod edit -json | jq -r '.Require[] | select(.Path == "helm.sh/helm/v3") | .Version')
     ldflags="$ldflags -X github.com/telepresenceio/telepresence/v2/pkg/version.HelmVersion=$HELM_VERSION"
+  '';
+
+  # cgofuse hardcodes -I/usr/include/fuse3 for its #include <fuse.h>, and
+  # loads libfuse at runtime via dlopen with a bare soname, which cannot be
+  # resolved on NixOS; point it at the store path instead
+  postConfigure = lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace vendor/github.com/winfsp/cgofuse/fuse/host_cgo.go \
+      --replace-fail "fuse.h" "fuse3/fuse.h" \
+      --replace-fail '"libfuse3.so.3"' '"${lib.getLib fuse3}/lib/libfuse3.so.3"'
   '';
 
   subPackages = [ "cmd/telepresence" ];
@@ -114,31 +107,11 @@ buildGoModule rec {
 
           echo "PASS: k8s version $actual_version matches" | tee $out
         '';
-    fuseftp-version-matches =
-      runCommand "telepresence2-fuseftp-version-test"
-        {
-          nativeBuildInputs = [
-            gnugrep
-            gawk
-          ];
-        }
-        ''
-          actual_version=$(grep 'github.com/telepresenceio/go-fuseftp/rpc' ${src}/go.mod | awk '{print $2}')
-          expected_version="v${fuseftpVersion}"
-
-          if [ "$actual_version" != "$expected_version" ]; then
-            echo "FAIL: fuseftp version mismatch in telepresence2" >&2
-            echo "  Hardcoded in Nix: $expected_version" >&2
-            echo "  Found in go.mod:  $actual_version" >&2
-            echo "  Update fuseftpVersion variable & hash in telepresence2 package" >&2
-            exit 1
-          fi
-
-          echo "PASS: fuseftp version $actual_version matches" | tee $out
-        '';
   };
 
   meta = {
+    # requires CGO and dlopens libfuse at runtime
+    broken = stdenv.hostPlatform.isStatic;
     description = "Local development against a remote Kubernetes or OpenShift cluster";
     homepage = "https://telepresence.io";
     license = lib.licenses.asl20;

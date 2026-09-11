@@ -74,7 +74,6 @@ let
     {
       x86_64-linux = "Linux-x86_64";
       aarch64-linux = "Linux-aarch64";
-      x86_64-darwin = "Darwin-x86_64";
       aarch64-darwin = "Darwin-arm64";
     }
     .${stdenv.hostPlatform.system}
@@ -89,7 +88,6 @@ let
       {
         x86_64-linux = "sha256-VT+4qP2FaizCoIBBbBkzbYw4YOvGhuBUoZxWL0IYVZo=";
         aarch64-linux = "sha256-X5v/GsJy8G3/LHW/8s0VAS0Vegr7JhZSqYotXL/s81o=";
-        x86_64-darwin = "sha256-rrOGahWwJikRfUn27Q4jVra2Q/MMSNitu0wS2UGKGWk=";
         aarch64-darwin = "sha256-xkfwLJgb7uz1H7mJrQFW79w2T/T/Zv7biXlvXz5UvXc=";
       }
       .${stdenv.hostPlatform.system};
@@ -99,6 +97,9 @@ in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "sunshine";
   version = "2026.516.143833";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "LizardByte";
@@ -113,11 +114,6 @@ stdenv'.mkDerivation (finalAttrs: {
     inherit (finalAttrs) src version;
     pname = "sunshine-ui";
     npmDepsHash = "sha256-YnNnuAdj/S5LGNytqIsmCApIec8DTWKF6VIJ7AXUctU=";
-
-    # use generated package-lock.json as upstream does not provide one
-    postPatch = ''
-      cp ${./package-lock.json} ./package-lock.json
-    '';
 
     installPhase = ''
       runHook preInstall
@@ -226,7 +222,6 @@ stdenv'.mkDerivation (finalAttrs: {
     libnotify
   ]
   ++ lib.optionals cudaSupport [
-    cudaPackages.cudatoolkit
     cudaPackages.cuda_cudart
   ]
   ++ lib.optionals isDarwin [
@@ -277,9 +272,9 @@ stdenv'.mkDerivation (finalAttrs: {
 
   env = {
     # needed to trigger CMake version configuration
-    BUILD_VERSION = "${finalAttrs.version}";
+    BUILD_VERSION = finalAttrs.version;
     BRANCH = "master";
-    COMMIT = "";
+    COMMIT = finalAttrs.src.rev;
   };
 
   # copy webui where it can be picked up by build
@@ -311,9 +306,7 @@ stdenv'.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = lib.optionals isLinux [ udevCheckHook ];
 
   passthru = {
-    tests = lib.optionalAttrs isLinux {
-      sunshine = nixosTests.sunshine;
-    };
+    tests = { inherit (nixosTests) sunshine; };
     updateScript = ./updater.sh;
   };
 
@@ -326,6 +319,10 @@ stdenv'.mkDerivation (finalAttrs: {
       devusb
       anish
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
   };
 })

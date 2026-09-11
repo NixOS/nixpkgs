@@ -22,14 +22,13 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "0.27.0";
+  version = "0.28.0";
 in
 buildPythonPackage {
-  inherit version;
-
   pname = "torchvision";
-
+  inherit version;
   format = "wheel";
+  __structuredAttrs = true;
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
@@ -65,7 +64,8 @@ buildPythonPackage {
 
   meta = {
     description = "PyTorch vision library";
-    homepage = "https://pytorch.org/";
+    homepage = "https://pytorch.org/vision";
+    downloadPage = "https://github.com/pytorch/vision";
     changelog = "https://github.com/pytorch/vision/releases/tag/v${version}";
     # Includes CUDA and Intel MKL, but redistributions of the binary are not limited.
     # https://docs.nvidia.com/cuda/eula/index.html

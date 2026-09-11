@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   cmake,
   qmake,
@@ -18,28 +17,18 @@
 }:
 
 let
-  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+  withQt6 = lib.versions.major qtbase.version == "6";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "qqc2-suru-style";
-  version = "0.20230630";
+  version = "0.20260619";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/qqc2-suru-style";
     tag = finalAttrs.version;
-    hash = "sha256-kAgHsNWwUWxHg26bTMmlq8m9DR4+ob4pl/oUX7516hM=";
+    hash = "sha256-yGm3rBKS1DKrpIVerfZVn5j0keGlQXr7nn6lSmI8xEw=";
   };
-
-  patches = [
-    # https://gitlab.com/ubports/development/core/qqc2-suru-style/-/merge_requests/69
-    # Remove when version > 0.20230630
-    (fetchpatch {
-      name = "0001-qqc2-suru-style-Qt6-port.patch";
-      url = "https://gitlab.com/ubports/development/core/qqc2-suru-style/-/commit/30b662113900ce2a4e27a0647e439ffdba5fd609.patch";
-      hash = "sha256-RCXEhDUgMqi+oeY313hXOVTr3rGiyF/Mqe/Uf4+YaBU=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace qqc2-suru/suru.pri \

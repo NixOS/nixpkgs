@@ -24,7 +24,6 @@ let
     singleton
     strings
     toJSON
-    toPretty
     types
     versionAtLeast
     warn
@@ -39,6 +38,7 @@ let
     toLua
     mkLuaInline
     toPlist
+    toPretty
     ;
 
   inherit (lib.types)
@@ -146,14 +146,14 @@ optionalAttrs allowAliases aliases
           runCommand name
             {
               nativeBuildInputs = [ jq ];
-              value = toJSON value;
+              inherit value;
               preferLocalBuild = true;
               __structuredAttrs = true;
             }
+            # NIX_ATTRS_JSON_FILE won't have `value` if it's null, but jq returns null for missing properties anyway
+            # jsonNull test keeps this in check
             ''
-              valuePath="$TMPDIR/value"
-              printf "%s" "$value" > "$valuePath"
-              jq . "$valuePath" > $out
+              jq .value "$NIX_ATTRS_JSON_FILE" > $out
             ''
         ) { };
 
@@ -162,32 +162,9 @@ optionalAttrs allowAliases aliases
   yaml = yaml_1_1;
 
   yaml_1_1 =
-    { }:
     {
-      generate =
-        name: value:
-        pkgs.callPackage (
-          { runCommand, remarshal_0_17 }:
-          runCommand name
-            {
-              nativeBuildInputs = [ remarshal_0_17 ];
-              value = toJSON value;
-              preferLocalBuild = true;
-              __structuredAttrs = true;
-            }
-            ''
-              valuePath="$TMPDIR/value"
-              printf "%s" "$value" > "$valuePath"
-              json2yaml "$valuePath" "$out"
-            ''
-        ) { };
-
-      type = serializableValueWith { typeName = "YAML 1.1"; };
-
-    };
-
-  yaml_1_2 =
-    { }:
+      tags ? false,
+    }:
     {
       generate =
         name: value:
@@ -196,14 +173,45 @@ optionalAttrs allowAliases aliases
           runCommand name
             {
               nativeBuildInputs = [ remarshal ];
-              value = toJSON value;
+              inherit value;
               preferLocalBuild = true;
               __structuredAttrs = true;
             }
             ''
-              valuePath="$TMPDIR/value"
-              printf "%s" "$value" > "$valuePath"
-              json2yaml "$valuePath" "$out"
+              remarshal --from json --to yaml-1.1${lib.optionalString tags " --yaml-tags"} ${
+                # attributes with null values are omitted from the JSON with structured attrs
+                # yaml_1_1Null test keeps this in check
+                if value == null then ''<(echo "null")'' else ''--unwrap value "$NIX_ATTRS_JSON_FILE"''
+              } "$out"
+            ''
+        ) { };
+
+      type = serializableValueWith { typeName = "YAML 1.1"; };
+
+    };
+
+  yaml_1_2 =
+    {
+      tags ? false,
+    }:
+    {
+      generate =
+        name: value:
+        pkgs.callPackage (
+          { runCommand, remarshal }:
+          runCommand name
+            {
+              nativeBuildInputs = [ remarshal ];
+              inherit value;
+              preferLocalBuild = true;
+              __structuredAttrs = true;
+            }
+            ''
+              json2yaml${lib.optionalString tags " --yaml-tags"} ${
+                # attributes with null values are omitted from the JSON with structured attrs
+                # yaml_1_2Null test keeps this in check
+                if value == null then ''<(echo "null")'' else ''--unwrap value "$NIX_ATTRS_JSON_FILE"''
+              } "$out"
             ''
         ) { };
 
@@ -958,50 +966,54 @@ optionalAttrs allowAliases aliases
                 python3
                 black
               ];
-              imports = toJSON (value._imports or [ ]);
-              value = toJSON (removeAttrs value [ "_imports" ]);
+              imports = value._imports or [ ];
+              # value must be an attrset, type would verify that,
+              # otherwise removeAttrs will fail.
+              value = removeAttrs value [ "_imports" ];
               pythonGen = pkgs.writeText "pythonGen" ''
+                import ast
                 import json
                 import os
 
-                def recursive_repr(value: any) -> str:
+                def gen_ast_node(value: any) -> ast.expr:
                     if type(value) is list:
-                        return '\n'.join([
-                            "[",
-                            *[recursive_repr(x) + "," for x in value],
-                            "]",
-                        ])
-                    elif type(value) is dict and value.get("_type") == "raw":
-                        return value.get("value")
+                        return ast.List(elts=[gen_ast_node(x) for x in value])
                     elif type(value) is dict:
-                        return '\n'.join([
-                            "{",
-                            *[f"'{k.replace('\''', '\\\''')}': {recursive_repr(v)}," for k, v in value.items()],
-                            "}",
-                        ])
+                        if value.get("_type") == "raw":
+                            return ast.parse(value["value"], mode="eval").body
+                        else:
+                            return ast.Dict(
+                                keys=[ast.Constant(k) for k in value],
+                                values=[gen_ast_node(v) for v in value.values()],
+                            )
                     else:
-                        return repr(value)
+                        return ast.Constant(value)
 
-                with open(os.environ["importsPath"], "r") as f:
-                    imports = json.load(f)
-                    if imports is not None:
-                        for i in imports:
-                            print(f"import {i}")
-                        print()
 
-                with open(os.environ["valuePath"], "r") as f:
-                    for key, value in json.load(f).items():
-                        print(f"{key} = {recursive_repr(value)}")
+                tree = ast.Module(body=[], type_ignores=[])
+
+                with open(os.environ["NIX_ATTRS_JSON_FILE"], "r") as f:
+                    attrs = json.load(f)
+
+                    if attrs["imports"] is not None:
+                        for i in attrs["imports"]:
+                            tree.body.append(ast.parse(f"import {i}").body[0])
+
+                    for key, val in attrs["value"].items():
+                        tree.body.append(ast.Assign(
+                            targets=[ast.Name(id=key, ctx=ast.Store())],
+                            value=gen_ast_node(val),
+                        ))
+
+                ast.fix_missing_locations(tree)
+
+                print(ast.unparse(tree))
+
               '';
               preferLocalBuild = true;
               __structuredAttrs = true;
             }
             ''
-              export importsPath="$TMPDIR/imports"
-              printf "%s" "$imports" > "$importsPath"
-              export valuePath="$TMPDIR/value"
-              printf "%s" "$value" > "$valuePath"
-              cat "$valuePath"
               python3 "$pythonGen" > $out
               black $out
             ''
@@ -1015,7 +1027,13 @@ optionalAttrs allowAliases aliases
     }:
     if format == "badgerfish" then
       {
-        type = serializableValueWith { typeName = "XML"; };
+        type =
+          attrsOf (serializableValueWith {
+            typeName = "XML";
+          })
+          // {
+            description = "XML value";
+          };
 
         generate =
           name: value:
@@ -1031,14 +1049,16 @@ optionalAttrs allowAliases aliases
                   python3Packages.xmltodict
                   libxml2Python
                 ];
-                value = toJSON value;
+                inherit value;
                 pythonGen = pkgs.writeText "pythonGen" ''
                   import json
                   import os
                   import xmltodict
 
-                  with open(os.environ["valuePath"], "r") as f:
-                      print(xmltodict.unparse(json.load(f), full_document=${
+                  with open(os.environ["NIX_ATTRS_JSON_FILE"], "r") as f:
+                      value = json.load(f).get("value")
+                      assert type(value) is dict, "value must be an attrset"
+                      print(xmltodict.unparse(value, full_document=${
                         if withHeader then "True" else "False"
                       }, pretty=True, indent=" " * 2))
                 '';
@@ -1046,8 +1066,6 @@ optionalAttrs allowAliases aliases
                 __structuredAttrs = true;
               }
               ''
-                export valuePath="$TMPDIR/value"
-                printf "%s" "$value" > "$valuePath"
                 python3 "$pythonGen" > $out
                 xmllint $out > /dev/null
               ''

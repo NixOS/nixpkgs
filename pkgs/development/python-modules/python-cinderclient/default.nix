@@ -62,19 +62,7 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
 
-    #   File "/build/python-cinderclient-9.6.0/cinderclient/client.py", line 196, in request
-    # if raise_exc and resp.status_code >= 400:
-    #                  ^^^^^^^^^^^^^^^^^^^^^^^
-    #
-    # TypeError: '>=' not supported between instances of 'Mock' and 'int'
-    stestr run -e <(echo "
-      cinderclient.tests.unit.test_client.ClientTest.test_keystone_request_raises_auth_failure_exception
-      cinderclient.tests.unit.test_client.ClientTest.test_sessionclient_request_method
-      cinderclient.tests.unit.test_client.ClientTest.test_sessionclient_request_method_raises_badrequest
-      cinderclient.tests.unit.test_client.ClientTest.test_sessionclient_request_method_raises_overlimit
-      cinderclient.tests.unit.test_shell.ShellTest.test_password_prompted
-      cinderclient.tests.unit.test_shell.TestLoadVersionedActions.test_load_versioned_actions_with_help
-    ")
+    stestr run
 
     runHook postCheck
   '';

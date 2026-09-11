@@ -1,4 +1,4 @@
-Use CMake imported targets and disable the static Boost build.
+Use CMake imported targets and a system argparse instead of FetchContent.
 
 The upstream link command `target_link_libraries(... ${NVML_LIB_NAME} cuda)`
 expands to plain `-lnvidia-ml -lcuda`, which forces the linker to look up
@@ -8,40 +8,41 @@ build fails. Switching to the `CUDA::nvml` / `CUDA::cuda_driver` imported
 targets exposed by `find_package(CUDAToolkit)` makes CMake link against the
 absolute stub paths it discovers via `CUDAToolkit_ROOT` instead.
 
-The static-Boost branch is also dropped: it dispatches on `/etc/os-release`,
-which doesn't exist in the Nix sandbox, and we want a dynamic build anyway.
+The `FetchContent` argparse dependency is also dropped in favour of the
+`argparse` package from Nixpkgs (pinned to the same v3.2 upstream requests):
+`FetchContent` downloads a tarball over the network, which isn't available in
+the Nix sandbox.
 ---
- CMakeLists.txt | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+ CMakeLists.txt | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -43,16 +43,11 @@
+@@ -76,14 +76,8 @@
      set(CMAKE_BUILD_TYPE "Release")
  endif()
 
--if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
--    file(READ "/etc/os-release" OS_RELEASE_CONTENT)
--    # Skip static libs on Fedora - https://github.com/NVIDIA/nvbandwidth/issues/4
--    if(NOT OS_RELEASE_CONTENT MATCHES "ID=.*fedora|azurelinux")
--        set(Boost_USE_STATIC_LIBS ON)
--    endif()
--else()
-+if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
-     set(Boost_USE_STATIC_LIBS ON)
- endif()
- find_package(Boost COMPONENTS program_options REQUIRED)
+-include(FetchContent)
+-FetchContent_Declare(
+-        argparse
+-        URL https://github.com/p-ranav/argparse/archive/refs/tags/v3.2.tar.gz
+-        URL_HASH SHA256=9dcb3d8ce0a41b2a48ac8baa54b51a9f1b6a2c52dd374e28cc713bab0568ec98
+-        # Pinned version - provides .flag(), .store_into(), .choices()
+-)
+-FetchContent_MakeAvailable(argparse)
++find_package(argparse REQUIRED)
 +find_package(CUDAToolkit REQUIRED)
 
  set(src
-     environment.cpp
-@@ -85,7 +80,7 @@
-
- add_executable(nvbandwidth ${src})
- target_include_directories(nvbandwidth PRIVATE ${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES} .)
--target_link_libraries(nvbandwidth Boost::program_options ${NVML_LIB_NAME} cuda)
-+target_link_libraries(nvbandwidth Boost::program_options CUDA::nvml CUDA::cuda_driver)
-
- if (MULTINODE)
-     find_package(MPI REQUIRED)
+     cuda_version_check.cpp
+@@ -107,7 +101,7 @@
+ target_include_directories(nvbandwidth PRIVATE
+     ${CMAKE_CURRENT_BINARY_DIR}
+     ${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES}
+     .)
+-target_link_libraries(nvbandwidth argparse ${NVML_LIB_NAME} cuda)
++target_link_libraries(nvbandwidth argparse::argparse CUDA::nvml CUDA::cuda_driver)
+ if(NOT WIN32)
+     target_link_libraries(nvbandwidth dl)
+ endif()

@@ -4,21 +4,29 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  makeWrapper,
   versionCheckHook,
+  withQemu ? false,
+  qemu,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "talosctl";
-  version = "1.13.4";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "siderolabs";
     repo = "talos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jcBRAixpdfbzOfCc7BjyDScWPsrW9Mc7A8vGLyN1f68=";
+    hash = "sha256-zKxP5IM0/c4ntbujIYYe91r7VfdoolHWs/CdkYOOLJU=";
   };
 
-  vendorHash = "sha256-dbuPRXAz+YOxmhEdd1R3R5rOAiNn9TOEeDavL+40MV4=";
+  vendorHash = "sha256-XBqBYg+/yGECsHsmZuJzliyUVcWoby/IHs2WBaMw9jo=";
+
+  postPatch = lib.optionalString withQemu ''
+    substituteInPlace pkg/provision/providers/qemu/arch.go \
+      --replace-fail '/opt/homebrew' '${lib.getLib qemu}'
+  '';
 
   ldflags = [
     "-s"
@@ -33,14 +41,19 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "cmd/talosctl" ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals withQemu [ makeWrapper ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd talosctl \
-      --bash <($out/bin/talosctl completion bash) \
-      --fish <($out/bin/talosctl completion fish) \
-      --zsh <($out/bin/talosctl completion zsh)
-  '';
+  postInstall =
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd talosctl \
+        --bash <($out/bin/talosctl completion bash) \
+        --fish <($out/bin/talosctl completion fish) \
+        --zsh <($out/bin/talosctl completion zsh)
+    ''
+    + lib.optionalString withQemu ''
+      wrapProgram $out/bin/talosctl \
+        --suffix PATH : ${lib.makeBinPath [ qemu ]}
+    '';
 
   doCheck = false; # no tests
 

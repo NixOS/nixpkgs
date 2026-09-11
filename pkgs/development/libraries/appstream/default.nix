@@ -12,8 +12,9 @@
   cmake,
   gettext,
   xmlto,
-  docbook-xsl-nons,
+  docbook-xsl-ns,
   docbook_xml_dtd_45,
+  libblake3,
   libxslt,
   libstemmer,
   glib,
@@ -31,18 +32,18 @@
   pango,
   librsvg,
   bash-completion,
-  systemd,
+  systemdLibs,
   nixosTests,
   testers,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "appstream";
-  version = "1.1.2";
+  version = "1.1.3";
 
   outputs = [
     "out"
@@ -54,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ximion";
     repo = "appstream";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-tvdWWdL6PthffAZZnNZ3+17/eJdZFx8xFkqm7IvyPWE=";
+    hash = "sha256-z9HmTYOjglki+ID7GPMf3jGLOAkxLqJd4+GsIR3W3u4=";
   };
 
   patches = [
@@ -81,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     libxslt
     xmlto
-    docbook-xsl-nons
+    docbook-xsl-ns
     docbook_xml_dtd_45
     glib
     itstool
@@ -99,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    libblake3
     libstemmer
     glib
     xapian
@@ -113,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     bash-completion
   ]
   ++ lib.optionals withSystemd [
-    systemd
+    systemdLibs
   ];
 
   mesonFlags = [

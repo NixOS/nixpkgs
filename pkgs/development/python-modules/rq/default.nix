@@ -23,7 +23,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "rq";
-  version = "2.9.1";
+  version = "2.10";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
     owner = "rq";
     repo = "rq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-arPz/+T8+NneiTur17BQehMiIIpHqqR8M8nw5LWu56o=";
+    hash = "sha256-D5K9N5egGdysskfyjriANgytHWK0E+JMvyEpJt9QJyo=";
   };
 
   build-system = [ hatchling ];
@@ -76,6 +76,10 @@ buildPythonPackage (finalAttrs: {
       # PermissionError: [Errno 13] Permission denied: '/tmp/rq-tests.txt'
       "test_deleted_jobs_arent_executed"
       "test_suspend_worker_execution"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # no delay between reaping worker and checking; racy
+      "test_reap_workers"
     ];
 
   pythonImportsCheck = [ "rq" ];

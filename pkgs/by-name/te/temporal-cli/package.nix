@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "temporal-cli";
-  version = "1.7.1";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8e6sBlUC+N4P7FO4EOtc7sDzSAZwDovN+cGpV+rWObs=";
+    hash = "sha256-4+DvAUQC+iW+GuvTNBDvr9rJDQ0bXZvkO9XhZPYYQsw=";
   };
 
-  vendorHash = "sha256-N9K05Kcb0YaQO7M9gR22QzAOzbmgEhIqADcAESqYtQ8=";
+  vendorHash = "sha256-h2HSuVQTdLxatLObbNHCjP2qHNE9Qy/4U1MZ0G7HCNY=";
 
   __structuredAttrs = true;
 

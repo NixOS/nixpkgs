@@ -1,24 +1,31 @@
 {
-  buildDotnetModule,
   lib,
+
+  # Build
+  buildDotnetModule,
   fetchFromGitHub,
   dotnetCorePackages,
+
+  # Runtime
   SDL2,
   SDL2_image,
   SDL2_ttf,
+
+  # Updates
+  nix-update-script,
 }:
 let
-  dotnet = dotnetCorePackages.dotnet_8;
+  dotnet = dotnetCorePackages.dotnet_10;
 in
 buildDotnetModule (finalAttrs: {
   pname = "yafc-ce";
-  version = "2.19.0";
+  version = "2.20.0";
 
   src = fetchFromGitHub {
     owner = "Yafc-CE";
     repo = "yafc-ce";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-O4ldYVfOgq+0lZ7xWtBATzx/xlmz3tydC+YX/fvVgY4=";
+    hash = "sha256-J0oDrmSt/VnFT82Uql38alHQDAOgzm1lapQPCObicdA=";
   };
 
   projectFile = [
@@ -38,6 +45,8 @@ buildDotnetModule (finalAttrs: {
     SDL2_ttf
     SDL2_image
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Powerful Factorio calculator/analyser that works with mods, Community Edition";

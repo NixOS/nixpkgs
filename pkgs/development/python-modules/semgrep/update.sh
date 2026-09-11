@@ -105,7 +105,6 @@ update_core_platform() {
 # update_core_platform <nix-system> <pypi-arch> <pypi-distro>
 update_core_platform "x86_64-linux" "x86_64" "manylinux"
 update_core_platform "aarch64-linux" "aarch64" "manylinux"
-update_core_platform "x86_64-darwin" "x86_64" "macosx"
 update_core_platform "aarch64-darwin" "arm64" "macosx"
 
 OLD_PWD=$PWD

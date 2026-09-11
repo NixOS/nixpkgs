@@ -2,6 +2,7 @@
   fetchFromGitHub,
   lib,
   makeWrapper,
+  nix-update-script,
   python3,
   runCommand,
   stdenv,
@@ -10,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "graphene-hardened-malloc";
-  version = "2025092700";
+  version = "14";
 
   src = fetchFromGitHub {
     owner = "GrapheneOS";
     repo = "hardened_malloc";
-    rev = finalAttrs.version;
-    hash = "sha256-t7PnBwpGh53+ZqTbnm8lYaNBtUgLev9kbvFlbfSCBrU=";
+    tag = finalAttrs.version;
+    hash = "sha256-QUGDJyTnD5MuBUMlc4PZOZSAfevVUB6QbncVyXIAgb8=";
   };
 
   nativeCheckInputs = [ python3 ];
@@ -48,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   passthru = {
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
     ld-preload-tests = stdenv.mkDerivation {
       name = "${finalAttrs.pname}-ld-preload-tests";
       inherit (finalAttrs) src;
@@ -104,7 +105,10 @@ stdenv.mkDerivation (finalAttrs: {
       corruption vulnerabilities yet aims to provide decent overall performance.
     '';
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ris ];
+    maintainers = with lib.maintainers; [
+      ris
+      baksa
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

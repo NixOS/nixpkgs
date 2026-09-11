@@ -1,0 +1,13 @@
+diff --git a/includes/Installer/DatabaseUpdater.php b/includes/Installer/DatabaseUpdater.php
+index 8ed996b9dee..733a3210096 100644
+--- a/includes/Installer/DatabaseUpdater.php
++++ b/includes/Installer/DatabaseUpdater.php
+@@ -1380,7 +1380,7 @@ public function purgeCache() {
+ 		// ObjectCache
+ 		$this->db->newDeleteQueryBuilder()
+ 			->deleteFrom( 'objectcache' )
+-			->where( ISQLPlatform::ALL_ROWS )
++			->where( "keyname NOT LIKE '%:MWSession:%'" )
+ 			->caller( __METHOD__ )
+ 			->execute();
+ 

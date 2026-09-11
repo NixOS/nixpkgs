@@ -39,6 +39,7 @@ assert lib.assertMsg (
   darwin,
   doxygen,
   editline,
+  fetchpatch2,
   flex,
   git,
   gtest,
@@ -121,10 +122,11 @@ let
           [project options]
           builtin-dep-closure = @deps@
         '';
-        passAsFile = [ "input" ];
+        __structuredAttrs = true;
       }
       ''
-        substitute $inputPath $out --replace-fail @deps@ "$(cat ${deps})"
+        printf "%s" "$input" > $out
+        substituteInPlace $out --replace-fail @deps@ "$(cat ${deps})"
       '';
 in
 # gcc miscompiles coroutines at least until 13.2, possibly longer
@@ -289,6 +291,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     boehmgc
+    boost
     nlohmann_json
   ];
 

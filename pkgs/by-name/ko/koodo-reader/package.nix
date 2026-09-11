@@ -70,6 +70,12 @@ stdenv.mkDerivation (finalAttrs: {
     export npm_config_nodedir=${nodejs-slim}
     npm rebuild --verbose cpu-features
 
+    # register-scheme is an optional dependency of discord-rpc that fails to compile on modern macOS/Electron
+    # and is not required for the application's core functionality.
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      rm -rf node_modules/register-scheme
+    ''}
+
     export npm_config_nodedir=${electron.headers}
     # Explicitly set identity to null to avoid signing on darwin
     yarn --offline run electron-builder --dir \

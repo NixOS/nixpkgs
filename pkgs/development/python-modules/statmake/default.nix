@@ -5,8 +5,6 @@
   cattrs,
   fetchFromGitHub,
   fonttools,
-  fs,
-  poetry-core,
   pytestCheckHook,
   ufo2ft,
   ufolib2,
@@ -30,16 +28,12 @@ buildPythonPackage rec {
     hatchling
     hatch-vcs
   ];
-
-  nativeBuildInputs = [ poetry-core ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     cattrs
     fonttools
-    # required by fonttools[ufo]
-    fs
-  ];
+  ]
+  ++ fonttools.optional-dependencies.ufo;
 
   nativeCheckInputs = [
     pytestCheckHook

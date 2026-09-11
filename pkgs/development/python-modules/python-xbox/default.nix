@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "python-xbox";
-  version = "0.2.0";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tr4nt0r";
     repo = "python-xbox";
     tag = "v${version}";
-    hash = "sha256-5sYN7w/cemZPMt8awsoaUPo845oXiiUsIfl8GG85Umw=";
+    hash = "sha256-zI0eFbIw1BL1MsBle1hMs8WuBaN3FHJMgPSlZ2aOjBo=";
   };
 
   build-system = [
@@ -60,7 +60,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/tr4nt0r/python-xbox/releases/tag/${src.tag}";
-    description = ":ibrary to authenticate with Xbox Network and use their API";
+    description = "Library to authenticate with Xbox Network and use their API";
     homepage = "https://github.com/tr4nt0r/python-xbox";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dotlambda ];

@@ -162,7 +162,7 @@ in
 runCommand "fastfetch-${unwrapped.version}"
   {
     pname = "fastfetch";
-    inherit (unwrapped) version;
+    inherit (unwrapped) version; # nixpkgs-update: no auto update
 
     strictDeps = true;
     __structuredAttrs = true;

@@ -150,13 +150,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish";
-  version = "4.7.1";
+  version = "4.9.3";
 
   src = fetchFromGitHub {
     owner = "fish-shell";
     repo = "fish-shell";
     tag = finalAttrs.version;
-    hash = "sha256-u0mBdWkxP4zI6NUhJ0LJrEDrbAAfTDi8IapsWWC9yWc=";
+    hash = "sha256-/q+w18Akm1VUAI1bM1lHud8QPNkpz2xCUh/7+ot44Gk=";
   };
 
   env = {
@@ -169,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-d4YA9fnDQyfyK675nP+tiTqJ1o2jqjwPHU1trXd8MCA=";
+    hash = "sha256-vINXoQKol3rY2WDlU01eLzuzxnTx2w3tAfKSg7tRSGI=";
   };
 
   patches = [
@@ -254,14 +254,16 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # Trailing space in 'awk ' to avoid matching store paths that coincidentally
+    # contain the string 'awk'. (Yes, this has happened before!)
     for cur in share/functions/*.fish; do
       substituteInPlace "$cur" \
         --replace-quiet '/usr/bin/getent' '${lib.getExe getent}' \
-        --replace-quiet 'awk' '${lib.getExe' gawk "awk"}'
+        --replace-quiet 'awk ' '${lib.getExe' gawk "awk"} '
     done
     for cur in share/completions/*.fish; do
       substituteInPlace "$cur" \
-        --replace-quiet 'awk' '${lib.getExe' gawk "awk"}'
+        --replace-quiet 'awk ' '${lib.getExe' gawk "awk"} '
     done
   ''
   + ''
@@ -404,10 +406,17 @@ stdenv.mkDerivation (finalAttrs: {
       fishConfig =
         let
           fishScript = writeText "test.fish" ''
-            set -x __fish_bin_dir ${finalAttrs.finalPackage}/bin
-            echo $__fish_bin_dir
-            cp -r ${finalAttrs.finalPackage}/share/fish/tools/web_config/* .
-            chmod -R +w *
+            # webconfig.py locates fish via $fish_bin_dir, which fish_config
+            # normally exports from the read-only $__fish_bin_dir.
+            set -x fish_bin_dir $__fish_bin_dir
+            echo $fish_bin_dir
+
+            # The web_config tool is embedded in the binary, so extract it.
+            for f in (status list-files tools/web_config)
+                mkdir -p (path dirname $f)
+                status get-file $f > $f
+            end
+            cd tools/web_config
 
             # if we don't set `delete=False`, the file will get cleaned up
             # automatically (leading the test to fail because there's no

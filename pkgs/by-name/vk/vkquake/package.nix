@@ -1,5 +1,5 @@
 {
-  SDL2,
+  sdl3,
   fetchFromGitHub,
   flac,
   glslang,
@@ -24,13 +24,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vkquake";
-  version = "1.34.1";
+  version = "1.36.0";
 
   src = fetchFromGitHub {
     owner = "Novum";
     repo = "vkQuake";
     tag = finalAttrs.version;
-    hash = "sha256-vCjL8zDf+VJjYHQoXPY9kqrAiU7HA7avJcOx6v2Jujg=";
+    hash = "sha256-fdethtp6esp+44KBS9oeZ1To+B/WFVd/+bUUJGYPQ5E=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    SDL2
+    sdl3
     flac
     gzip
     libmpg123

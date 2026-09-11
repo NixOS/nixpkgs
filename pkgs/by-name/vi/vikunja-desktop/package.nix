@@ -3,9 +3,11 @@
   stdenv,
   makeWrapper,
   makeDesktopItem,
-  pnpm_10_29_2,
+  darwin,
+  pnpm_10,
   pnpmConfigHook,
   nodejs,
+  perl,
   electron,
   nix-update-script,
   fetchFromGitHub,
@@ -15,12 +17,12 @@
 
 let
   executableName = "vikunja-desktop";
-  version = "2.3.0";
+  version = "2.6.0";
   src = fetchFromGitHub {
     owner = "go-vikunja";
     repo = "vikunja";
     rev = "v${version}";
-    hash = "sha256-bdHiSFaN0vNQMhy6GPlpoFeYrk2CLvO7E30d8J/9GC0=";
+    hash = "sha256-Xh1ozUTOVqywk0i8xQWkG/bPRgPH9EABjRW8p4do1mE=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -37,9 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
       src
       sourceRoot
       ;
-    pnpm = pnpm_10_29_2;
-    fetcherVersion = 3;
-    hash = "sha256-phvNUUYh858CDt0O8GCWkgO402C0wiYtzEorOIV789M=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-RpME/0lU8i+D8erEkTfA0cXrEs8LRZvNdfU8e3X366Y=";
   };
 
   env = {
@@ -49,9 +51,13 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm_10_29_2
+    perl
+    pnpm_10
     pnpmConfigHook
     vikunja.passthru.frontend
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.autoSignDarwinBinariesHook
   ];
 
   buildPhase = ''
@@ -59,8 +65,25 @@ stdenv.mkDerivation (finalAttrs: {
 
     sed -i "s/\$${version}/${version}/g" package.json
     sed -i "s/\"version\": \".*\"/\"version\": \"${version}\"/" package.json
-    ln -s '${vikunja.passthru.frontend}' frontend
-    pnpm run pack -c.electronDist="${electron.dist}" -c.electronVersion="${electron.version}"
+    cp -r '${vikunja.passthru.frontend}' frontend
+    chmod -R u+w frontend
+
+    # Replicates step 2 of upstream's desktop/build.js: the desktop CSP is
+    # script-src 'self', which blocks the inline window.API_URL script in index.html.
+    perl -0pi -e 's|<script>(?:(?!</script>).)*?window\.API_URL(?:(?!</script>).)*?</script>|<script src="/api-url.js"></script>|s' frontend/index.html
+    echo "window.API_URL = '''" > frontend/api-url.js
+
+    electronDist="${electron.dist}"
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      electronDist="$(mktemp -d)"
+      cp -R "${electron.dist}/." "$electronDist"
+      chmod -R u+w "$electronDist"
+      export CSC_IDENTITY_AUTO_DISCOVERY=false
+    ''}
+    pnpm run pack \
+      -c.electronDist="$electronDist" \
+      -c.electronVersion="${electron.version}" \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"}
 
     runHook postBuild
   '';
@@ -70,27 +93,32 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out/share/lib/vikunja-desktop"
-    cp -r ./dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/vikunja-desktop"
-    cp -r ./node_modules "$out/share/lib/vikunja-desktop/resources"
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      mkdir -p "$out/share/lib/vikunja-desktop"
+      cp -r ./dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/vikunja-desktop"
+      cp -r ./node_modules "$out/share/lib/vikunja-desktop/resources"
 
-    install -Dm644 "build/icon.png" "$out/share/icons/hicolor/256x256/apps/vikunja-desktop.png"
+      install -Dm644 "build/icon.png" "$out/share/icons/hicolor/256x256/apps/vikunja-desktop.png"
 
-    # use makeShellWrapper (instead of the makeBinaryWrapper provided by wrapGAppsHook3) for proper shell variable expansion
-    # see https://github.com/NixOS/nixpkgs/issues/172583
-    makeShellWrapper "${lib.getExe electron}" "$out/bin/vikunja-desktop" \
-      --add-flags "$out/share/lib/vikunja-desktop/resources/app.asar" \
-      "''${gappsWrapperArgs[@]}" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer}}" \
-      --set-default ELECTRON_IS_DEV 0 \
-      --inherit-argv0
+      # use makeShellWrapper (instead of the makeBinaryWrapper provided by wrapGAppsHook3) for proper shell variable expansion
+      # see https://github.com/NixOS/nixpkgs/issues/172583
+      makeShellWrapper "${lib.getExe electron}" "$out/bin/vikunja-desktop" \
+        --add-flags "$out/share/lib/vikunja-desktop/resources/app.asar" \
+        "''${gappsWrapperArgs[@]}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer}}" \
+        --set-default ELECTRON_IS_DEV 0 \
+        --inherit-argv0
+    ''}
+
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p "$out/Applications" "$out/bin"
+      mv ./dist/mac*/*.app "$out/Applications"
+      makeWrapper \
+        "$out/Applications/Vikunja Desktop.app/Contents/MacOS/Vikunja Desktop" \
+        "$out/bin/vikunja-desktop"
+    ''}
 
     runHook postInstall
-  '';
-
-  # Do not attempt generating a tarball for vikunja-frontend again.
-  distPhase = ''
-    true
   '';
 
   passthru.updateScript = nix-update-script { };

@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       baloo
-      raitobezarius
     ];
+    teams = [ lib.teams.boot-security ];
   };
 })

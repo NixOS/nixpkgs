@@ -10,13 +10,13 @@
 melpaBuild {
 
   pname = "eaf-pyqterminal";
-  version = "0-unstable-2025-05-05";
+  version = "0-unstable-2025-10-19";
 
   src = fetchFromGitHub {
     owner = "mumu-lhl";
     repo = "eaf-pyqterminal";
-    rev = "db947f136660adc4c3883b332f4465af82e4c9da";
-    hash = "sha256-0BH29XvBzJPgJBFSKHiKSLo/dpj5rixg7+u+LDpB5+U=";
+    rev = "37b7b2afbdd47c89d85ff6e3412e1dc6c555ab50";
+    hash = "sha256-+RVA+UM473eTPrsX3TpUrzPx8UY5gAgIkMl0CB/iBTw=";
   };
 
   files = ''

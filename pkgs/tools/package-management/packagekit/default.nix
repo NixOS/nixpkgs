@@ -25,8 +25,8 @@
   enableCommandNotFound ? false,
   enableBashCompletion ? false,
   bash-completion ? null,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   nixosTests,
 }:
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     boost
   ]
-  ++ lib.optional enableSystemd systemd
+  ++ lib.optional enableSystemd systemdLibs
   ++ lib.optional enableBashCompletion bash-completion;
   nativeBuildInputs = [
     gobject-introspection
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    (if enableSystemd then "-Dsystemd=true" else "-Dsystem=false")
+    (lib.mesonBool "systemd" enableSystemd)
     # often fails to build with nix updates
     # and remounts /nix/store as rw
     # https://github.com/NixOS/nixpkgs/issues/177946

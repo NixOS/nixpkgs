@@ -3,17 +3,18 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  nixosTests,
 }:
 
 buildGoModule rec {
   pname = "netfoil";
-  version = "0.5.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "tinfoil-factory";
     repo = "netfoil";
     tag = "v${version}";
-    hash = "sha256-iea76gzkbLKguqkFh1QzTiYu2aKkdW6FAOkMcp34P1M=";
+    hash = "sha256-WKtyNdb3hwveLpg3vkKFTXceE6b4AjVrzZoj9eEkdx4=";
   };
 
   __structuredAttrs = true;
@@ -24,7 +25,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-L+E6pLDi68TpXxzSwWlbwMLbnkJHvQY1kRwTtk6pWYM=";
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.nixos = nixosTests.netfoil;
+  };
 
   meta = with lib; {
     description = "Minimal, filtering, DNS proxy";

@@ -7,7 +7,7 @@
   cmake,
   boost,
   bzip2,
-  ffmpeg,
+  ffmpeg_8,
   fftwSinglePrec,
   hdf5,
   muparser,
@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ovito";
-  version = "3.15.4";
+  version = "3.16.0";
 
   src = fetchFromGitLab {
     owner = "stuko";
     repo = "ovito";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9/aps/phWkWflEdC46QWK/psA5DpdwxBK+2NSMaB4I0=";
+    hash = "sha256-NN5q+qh84w7myBYiRAsBxDDV/82AmIz8j2yk6JiEHcY=";
     fetchSubmodules = true;
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     bzip2
-    ffmpeg
+    ffmpeg_8
     fftwSinglePrec
     hdf5
     muparser

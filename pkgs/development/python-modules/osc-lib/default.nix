@@ -12,25 +12,21 @@
   requests-mock,
   setuptools,
   stdenv,
-  stestr,
+  stestrCheckHook,
   stevedore,
 }:
 
 buildPythonPackage rec {
   pname = "osc-lib";
-  version = "4.6.0";
+  version = "4.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "osc-lib";
     tag = version;
-    hash = "sha256-XwOJSd3k/74FvSZGveSTjH+KGLlQ2jNbk8GrTzFhbL0=";
+    hash = "sha256-GVjzDPmASEItGsZCjH+tjgP8bRf5WgEOoDr+uOhQtws=";
   };
-
-  patches = [
-    ./fix-pyproject.diff
-  ];
 
   env.PBR_VERSION = version;
 
@@ -51,23 +47,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     requests-mock
-    stestr
+    stestrCheckHook
   ];
 
-  checkPhase =
-    let
-      disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-        "osc_lib.tests.test_shell.TestShellCli.test_shell_args_cloud_public"
-        "osc_lib.tests.test_shell.TestShellCli.test_shell_args_precedence"
-        "osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_1"
-        "osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_2"
-      ];
-    in
-    ''
-      runHook preCheck
-      stestr run -e <(echo "${lib.concatStringsSep "\n" disabledTests}")
-      runHook postCheck
-    '';
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    "osc_lib.tests.test_shell.TestShellCli.test_shell_args_cloud_public"
+    "osc_lib.tests.test_shell.TestShellCli.test_shell_args_precedence"
+    "osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_1"
+    "osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_2"
+  ];
 
   pythonImportsCheck = [
     "osc_lib"

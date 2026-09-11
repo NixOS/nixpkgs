@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-csp-collector";
-  version = "0.0.22";
+  version = "0.0.23";
 
   src = fetchFromGitHub {
     owner = "jacobbednarz";
     repo = "go-csp-collector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-30+rLt0VonbwP3I09OrAxiCqrUuIvGivE3+6sQ/hnRo=";
+    hash = "sha256-ph9iaM80SUVUM64eqkHxrxWk7yRx6uJUKsq1gxUga1c=";
   };
 
   vendorHash = "sha256-gto2lD3atZTy5QMECarLBWQR7Z1bBlFAoJtJYrzg7bY=";

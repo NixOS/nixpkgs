@@ -13,18 +13,13 @@
 # reference: https://boringssl.googlesource.com/boringssl/+/refs/tags/0.20250818.0/BUILDING.md
 stdenv.mkDerivation (finalAttrs: {
   pname = "boringssl";
-  version = "0.20260526.0";
+  version = "0.20260803.0";
 
   src = fetchgit {
     url = "https://boringssl.googlesource.com/boringssl";
     tag = finalAttrs.version;
-    hash = "sha256-SmyImyzGn7v2b5qGJbMmQZX5bODA9i6+8jy3uGwOawA=";
+    hash = "sha256-GmaXG6I2euA+Q7naO2Oxu+P4mK37RbgwW5iM7ync6Gg=";
   };
-
-  patches = [
-    # Add SECP224R1 for backward compatibility
-    ./secp224r1-compat.patch
-  ];
 
   nativeBuildInputs = [
     cmake

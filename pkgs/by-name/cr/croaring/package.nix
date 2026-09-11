@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "croaring";
-  version = "4.7.1";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "RoaringBitmap";
     repo = "CRoaring";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FZP+RTV4pcj9pzDq3G2+sWeJnkh9WnW3Atd0CC9zDCk=";
+    hash = "sha256-I9ioukybY8NXBFmQd9xFyrd9Ye2FuGTewuX1pCQscQM=";
   };
 
   # roaring.pc.in cannot handle absolute CMAKE_INSTALL_*DIRs, nor

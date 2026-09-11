@@ -15,19 +15,24 @@
   SDL2,
   systemdLibs,
   vulkan-loader,
+  moltenvk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flycast";
-  version = "2.6";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "flyinghead";
     repo = "flycast";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Lq6Oj+U4mpwNlL/t3ZB9gjE5NAVQyhdvBwLUGu1C+j0=";
+    hash = "sha256-8qGAoMQ7hF1HFx7m+CuhxX+IG7L4fk1XQkKUYZODGmA=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    ./fix-darwin-objective-cxx-pch.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -36,7 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    alsa-lib
     curl
     libao
     libpulseaudio
@@ -44,15 +48,37 @@ stdenv.mkDerivation (finalAttrs: {
     lua
     miniupnpc
     SDL2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
     systemdLibs
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ moltenvk ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        '"$ENV{VULKAN_SDK}/lib/libMoltenVK.dylib"' \
+        '"${moltenvk}/lib/libMoltenVK.dylib"'
+  '';
 
   cmakeFlags = [
     "-DUSE_HOST_SDL=ON"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DUSE_BREAKPAD=OFF"
+    "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
+    "-DZLIB_LIBRARY=" # Unsets broken default for Darwin.
   ];
 
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/flycast --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
+  '';
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p "$out/Applications"
+    mv "$out/bin/Flycast.app" "$out/Applications/"
+    rm -rf "$out/include" "$out/lib" "$out/bin"
   '';
 
   meta = {
@@ -62,6 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "flycast";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tallesCoelho ];
   };
 })

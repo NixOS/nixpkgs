@@ -125,8 +125,6 @@ let
             !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin)
             # build failure
             && !stdenv.hostPlatform.isStatic
-            # LTO breaks exception handling on x86-64-darwin.
-            && stdenv.system != "x86_64-darwin"
           )
           ''
             case "$mesonBuildType" in
@@ -191,6 +189,11 @@ let
     meta = prevAttrs.meta or { } // {
       homepage = prevAttrs.meta.homepage or "https://nixos.org/nix";
       donationPage = prevAttrs.meta.donationPage or "https://nixos.org/donate/";
+      changelog =
+        let
+          ver = lib.versions.majorMinor finalAttrs.version;
+        in
+        prevAttrs.meta.changelog or "https://nix.dev/manual/nix/${ver}/release-notes/rl-${ver}.html";
       longDescription =
         prevAttrs.longDescription or ''
           Nix is a powerful package manager for mainly Linux and other Unix systems that

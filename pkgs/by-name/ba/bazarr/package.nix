@@ -1,75 +1,112 @@
 {
-  stdenv,
   lib,
-  fetchzip,
-  makeWrapper,
-  python3,
-  unar,
+  stdenv,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  nodejs,
+  npmHooks,
+  dart-sass,
+  makeBinaryWrapper,
+  python313,
   ffmpeg,
+  unar,
   nixosTests,
+  nix-update-script,
 }:
-
 let
-  runtimeProgDeps = [
-    ffmpeg
-    unar
-  ];
+  python = python313.withPackages (ps: [
+    ps.lxml
+    ps.numpy
+    ps.pillow
+    ps.psycopg2
+    ps.setuptools
+    ps.webrtcvad
+  ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bazarr";
-  version = "1.5.6";
+  version = "1.6.0";
 
-  src = fetchzip {
-    url = "https://github.com/morpheus65535/bazarr/releases/download/v${version}/bazarr.zip";
-    hash = "sha256-S3idNH9Wm9f6aNj69dERmeks1rLvUeQJYFebXa5cWQo=";
-    stripRoot = false;
+  src = fetchFromGitHub {
+    owner = "morpheus65535";
+    repo = "bazarr";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-r3H0JEcGYzQOTHVR/zONmtOIF+LnJd+qn2pcAj8vdOA=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  npmRoot = "frontend";
+  npmDeps = fetchNpmDeps {
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/frontend";
+    hash = "sha256-cb++eqVtKZer9B1rwJ9WR4mZImnASeFU2MojgXAPWf4=";
+  };
 
-  buildInputs = [
-    (python3.withPackages (ps: [
-      ps.lxml
-      ps.numpy
-      ps.gevent
-      ps.gevent-websocket
-      ps.pillow
-      ps.setuptools
-      ps.psycopg2
-      ps.webrtcvad
-    ]))
-  ]
-  ++ runtimeProgDeps;
+  nativeBuildInputs = [
+    nodejs
+    npmHooks.npmConfigHook
+    dart-sass
+    makeBinaryWrapper
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+    pushd frontend
+    # sass-embedded's bundled Dart compiler won't run in the sandbox; use nixpkgs' dart-sass.
+    # https://github.com/sass/embedded-host-node/issues/334
+    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["dart-sass"];'
+    npm run build
+    popd
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out"/{bin,share/${pname}}
-    cp -r * "$out/share/${pname}"
+    mkdir -p $out/share/bazarr/frontend
+    cp -r bazarr bazarr.py custom_libs libs migrations $out/share/bazarr/
+    cp -r frontend/build $out/share/bazarr/frontend/build
 
-    # Add missing shebang and execute perms so that patchShebangs can do its
-    # thing.
-    sed -i "1i #!/usr/bin/env python3" "$out/share/${pname}/bazarr.py"
-    chmod +x "$out/share/${pname}/bazarr.py"
+    printf '%s' "${finalAttrs.version}" > $out/share/bazarr/VERSION
 
-    makeWrapper "$out/share/${pname}/bazarr.py" \
-        "$out/bin/bazarr" \
-        --suffix PATH : ${lib.makeBinPath runtimeProgDeps}
+    printf '%s' "${
+      lib.generators.toKeyValue { } {
+        updatemethod = "External";
+        updatemethodmessage = "Bazarr is managed by Nix. Update it through your system configuration.";
+        packageversion = finalAttrs.version;
+        packageauthor = "nixpkgs";
+      }
+    }" > $out/share/bazarr/package_info
+
+    makeWrapper ${lib.getExe python} $out/bin/bazarr \
+      --add-flags $out/share/bazarr/bazarr.py \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          ffmpeg
+          unar
+        ]
+      }
 
     runHook postInstall
   '';
 
-  passthru.tests = {
-    smoke-test = nixosTests.bazarr;
+  passthru = {
+    tests.smoke-test = nixosTests.bazarr;
+    updateScript = nix-update-script { };
   };
 
   meta = {
     description = "Subtitle manager for Sonarr and Radarr";
     homepage = "https://www.bazarr.media/";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    changelog = "https://github.com/morpheus65535/bazarr/releases/tag/v${finalAttrs.version}";
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ diogotcorreia ];
+    maintainers = with lib.maintainers; [
+      connor-grady
+      diogotcorreia
+    ];
     mainProgram = "bazarr";
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.unix;
   };
-}
+})

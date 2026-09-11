@@ -21,7 +21,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "flash-attn-4";
-  version = "4.0.0.beta18";
+  version = "4.0.0.beta20";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -29,14 +29,12 @@ buildPythonPackage (finalAttrs: {
     owner = "Dao-AILab";
     repo = "flash-attention";
     tag = "fa4-v${finalAttrs.version}";
-    hash = "sha256-DnlFOdAlge/FAbLI2KH+76hJkgqcHuVEorJ1A4hlpr0=";
+    hash = "sha256-Joo6WJHuAlj8icQHFtmd3XxklhGTvOG4Z5r/86KJ9VQ=";
   };
 
   # FA4 is a separate distribution shipped under flash_attn/cute/ with its own pyproject.toml.
   # The top-level setup.py builds the classic compiled flash-attn and excludes flash_attn.cute.
   sourceRoot = "${finalAttrs.src.name}/flash_attn/cute";
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
 
   build-system = [
     setuptools

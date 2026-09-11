@@ -21,6 +21,7 @@
   libva-minimal,
   llvmPackages,
   lm_sensors,
+  mesa-libclc,
   meson,
   ninja,
   pkg-config,
@@ -280,9 +281,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxxf86vm
     llvmPackages.clang
     llvmPackages.clang-unwrapped
-    llvmPackages.libclc
     llvmPackages.libllvm
     lm_sensors
+    mesa-libclc
     python3Packages.python # for shebang
     spirv-llvm-translator
     udev

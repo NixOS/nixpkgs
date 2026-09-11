@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "mobly";
-  version = "1.13";
+  version = "1.13.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "mobly";
     tag = version;
-    hash = "sha256-lQyhLZFA9lad7LYKa6AP+nQonTRtiFA8Egjo0ATbLVI=";
+    hash = "sha256-J0mP7l2JXZDSuQm5vsLB87zbFK7MmP5xc8T7qDS34M4=";
   };
 
   build-system = [ setuptools ];

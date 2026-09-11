@@ -10,15 +10,15 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "frp";
-  version = "0.69.1";
+  version = "0.71.0";
   src = fetchFromGitHub {
     owner = "fatedier";
     repo = "frp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3tOOgnzZZ05En5NMLbp4UFNazX950Jbosvszmjf947c=";
+    hash = "sha256-q6E77uwV28CUR9LXPDp4DXuBiIvfonybyKIi+aZQvEE=";
   };
 
-  vendorHash = "sha256-JrkIztnmhEYAogr4pDWrPu9/j+C0VLpEyNbh2UK5UcY=";
+  vendorHash = "sha256-TrO0ZVLazqtUpGREb6kjGiTZhGo3R1QK5iHFlojE7po=";
 
   doCheck = false;
 

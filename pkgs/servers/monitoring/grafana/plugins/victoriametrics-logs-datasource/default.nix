@@ -2,8 +2,8 @@
 
 grafanaPlugin {
   pname = "victoriametrics-logs-datasource";
-  version = "0.28.0";
-  zipHash = "sha256-DDCe66GyC7UumcQgQwn1qKSfyKxO45QnmyvsI+q4HY0=";
+  version = "0.31.0";
+  zipHash = "sha256-WVqK8LBvhQqTc17Td9hNTdCeUvluNbXProoYZPIjoMk=";
   meta = {
     description = "Grafana datasource for VictoriaLogs";
     license = lib.licenses.asl20;

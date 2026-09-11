@@ -1,37 +1,35 @@
 {
-  stdenv,
-  lib,
+  # keep-sorted start
   fetchurl,
-  mkJetBrainsProduct,
-  libdbm,
   fsnotifier,
+  jetbrains,
+  jetbrains-libdbm,
+  lib,
   libgcc,
+  stdenv,
+  # keep-sorted end
 }:
 let
   system = stdenv.hostPlatform.system;
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2026.1.3.tar.gz";
-      hash = "sha256-HizogKH6goX1NdcI/Fj4YsCRzDWfFvQGYSaMM9wVDCA=";
+      url = "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2026.2.tar.gz";
+      hash = "sha256-FdjMPo4SyWAojyqKm+FFdt3f7NuEfSFvH8I2ctygxjE=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2026.1.3-aarch64.tar.gz";
-      hash = "sha256-CSe04BBo4jS1cIhu4NfZqaSHMaNue2eFUPa+1gOxuoo=";
-    };
-    x86_64-darwin = {
-      url = "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2026.1.3.dmg";
-      hash = "sha256-WKwIP19y5EKO98JgEm468ofaRp/JO5z8lqNhtpsH4tY=";
+      url = "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2026.2-aarch64.tar.gz";
+      hash = "sha256-bYLMkv7/aNFyZOBLFp0SBFA44YCzFjqArTWEpJO+jmo=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2026.1.3-aarch64.dmg";
-      hash = "sha256-AHY/lY0ARkW0VoSgy0t7LLNXA965PLooWBSWxBKBV5M=";
+      url = "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2026.2-aarch64.dmg";
+      hash = "sha256-FUus7mjiYWAiyIihEjhpEILYupLAFdjrA8xClovJU2o=";
     };
   };
   # update-script-end: urls
 in
-mkJetBrainsProduct {
-  inherit libdbm fsnotifier;
+jetbrains.mkJetBrainsProduct {
+  inherit jetbrains-libdbm fsnotifier;
 
   pname = "gateway";
 
@@ -40,11 +38,18 @@ mkJetBrainsProduct {
   productShort = "Gateway";
 
   # update-script-start: version
-  version = "2026.1.3";
-  buildNumber = "261.25134.98";
+  version = "2026.2";
+  buildNumber = "262.8665.250";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
+
+  # the jdk is bundled on Darwin.
+  jdk =
+    if lib.meta.availableOn stdenv.hostPlatform jetbrains.jdk-no-jcef then
+      jetbrains.jdk-no-jcef
+    else
+      null;
 
   buildInputs = [
     libgcc
@@ -56,6 +61,7 @@ mkJetBrainsProduct {
     description = "Remote development for JetBrains products";
     longDescription = "JetBrains Gateway is a lightweight launcher that connects a remote server with your local machine and opens your project in JetBrains Client.";
     maintainers = [ ];
+    teams = [ lib.teams.jetbrains ];
     license = lib.licenses.unfree;
     sourceProvenance =
       if stdenv.hostPlatform.isDarwin then

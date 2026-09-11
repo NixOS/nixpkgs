@@ -62,10 +62,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Bisects rustc, either nightlies or CI artifacts";
     mainProgram = "cargo-bisect-rustc";
     homepage = "https://github.com/rust-lang/cargo-bisect-rustc";
-    license = with lib.licenses; [
-      asl20
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [ sandarukasa ];
   };
 })

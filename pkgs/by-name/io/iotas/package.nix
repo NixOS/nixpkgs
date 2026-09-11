@@ -1,7 +1,8 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitLab,
+  blueprint-compiler,
   meson,
   ninja,
   pkg-config,
@@ -18,9 +19,9 @@
   webkitgtk_6_0,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "iotas";
-  version = "2026.6";
+  version = "2026.7";
   pyproject = false;
 
   src = fetchFromGitLab {
@@ -28,10 +29,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "World";
     repo = "iotas";
     tag = finalAttrs.version;
-    hash = "sha256-Zsfp5O6k8VMjF6Hl3lT+u9JingGq3XgCzc8h9PVAhLg=";
+    hash = "sha256-qJI1C5G8DGdIOHXVPiky7JK+Re+0WY18c868LY8/h4k=";
   };
 
   nativeBuildInputs = [
+    blueprint-compiler
     meson
     ninja
     pkg-config
@@ -51,7 +53,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     webkitgtk_6_0
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     pygobject3
     pygtkspellcheck
     requests
@@ -69,6 +71,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   '';
 
   meta = {
+    changelog = "https://gitlab.gnome.org/World/iotas/-/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Simple note taking with mobile-first design and Nextcloud sync";
     homepage = "https://gitlab.gnome.org/World/iotas";
     license = lib.licenses.gpl3Plus;

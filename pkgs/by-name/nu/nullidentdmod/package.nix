@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "nullidentdmod";
     license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/Ranthrall/nullidentdmod";
-    maintainers = with lib.maintainers; [ das_j ];
+    maintainers = [ ];
     platforms = lib.platforms.linux; # Must be run by systemd
   };
 })

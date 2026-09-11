@@ -9,16 +9,16 @@
 }:
 buildDotnetModule (finalAttrs: {
   pname = "recyclarr";
-  version = "8.6.0";
+  version = "8.7.1";
 
   src = fetchFromGitHub {
     owner = "recyclarr";
     repo = "recyclarr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Uu6fBKODzKGYA6vSJPw0OV/+bi3y2F/SHfrdd5pdyzs=";
+    hash = "sha256-BPU+Kzx7AJRy1aL4QjcUQeLxGpy2lzUF7YoZY/FQEA4=";
   };
 
-  projectFile = "Recyclarr.slnx";
+  projectFile = "src/Recyclarr.Cli/Recyclarr.Cli.csproj";
   nugetDeps = ./deps.json;
 
   postPatch = ''
@@ -39,7 +39,6 @@ buildDotnetModule (finalAttrs: {
 
   dotnetBuildFlags = [
     "-p:DisableGitVersionTask=true"
-    "/m:1"
   ];
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
@@ -57,7 +56,11 @@ buildDotnetModule (finalAttrs: {
 
   passthru = {
     updateScript = ./update.sh;
-    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = ''RECYCLARR_CONFIG_DIR="$TMPDIR/recyclarr" recyclarr --version'';
+      version = "v${finalAttrs.version}";
+    };
   };
 
   meta = {

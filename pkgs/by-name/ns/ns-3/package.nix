@@ -152,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DNS3_GTK3=ON"
     "-DGTK3_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
   ]
-  ++ lib.optional finalAttrs.doCheck "-DNS3_TESTS=ON";
+  ++ lib.optional finalAttrs.finalPackage.doCheck "-DNS3_TESTS=ON";
 
   # strictoverflow prevents clang from discovering pyembed when bindings
   hardeningDisable = [

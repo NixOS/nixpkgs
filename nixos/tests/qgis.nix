@@ -13,7 +13,7 @@ import ./make-test-python.nix (
     };
   in
   {
-    name = "qgis";
+    name = "qgis-${package.version}";
     meta = {
       maintainers = lib.teams.geospatial.members;
     };

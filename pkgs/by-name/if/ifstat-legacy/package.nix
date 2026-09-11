@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Report network interfaces bandwith just like vmstat/iostat do for other system counters - legacy version";
+    description = "Report network interfaces bandwidth just like vmstat/iostat do for other system counters - legacy version";
     homepage = "http://gael.roualland.free.fr/ifstat/";
     maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = lib.platforms.unix;

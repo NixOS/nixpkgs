@@ -44,6 +44,10 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-vaedx45NlFi2RbrQj16M0bAWuSz+ZlVL8Ivykp54mQU=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail '"setuptools>=70.0.0,<=82.0.1"' '"setuptools"'
+  '';
+
   build-system = [ setuptools ];
 
   pythonRelaxDeps = [
@@ -137,11 +141,6 @@ buildPythonPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       osbm
       mana-byte
-    ];
-    badPlatforms = [
-      # Tests crash with:
-      # Fatal Python error: Segmentation fault for x86_64 Darwin in tests/python.py
-      "x86_64-darwin"
     ];
   };
 })

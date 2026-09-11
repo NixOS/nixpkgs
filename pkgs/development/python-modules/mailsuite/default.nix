@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mailsuite";
-  version = "2.2.2";
+  version = "2.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "seanthegeek";
     repo = "mailsuite";
     tag = finalAttrs.version;
-    hash = "sha256-qQ+AaelLQED0mWCAItx/3d7o9QVUnhUVxvdCfnNRqzQ=";
+    hash = "sha256-u/o5XcRYB5Nck6XakQkjev3EhsjHJPq9Q+Nx1C8EvqM=";
   };
 
   pythonRelaxDeps = [ "mail-parser" ];

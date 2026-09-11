@@ -16,14 +16,12 @@ stdenv.mkDerivation rec {
         x86_64-linux = "linux_amd64";
         aarch64-linux = "linux_arm64";
         i686-linux = "linux_386";
-        x86_64-darwin = "darwin_amd64";
         aarch64-darwin = "darwin_arm64";
       };
       hash = selectSystem {
         x86_64-linux = "sha256-THVYezhV7TmChy8IKsE8Agx6ks4wFctuk+GevXhwRv8=";
         aarch64-linux = "sha256-Wmlpw9gzbdCvgCwf3Nh9JPjjmDKS2P0TNYaRvKqO4fg=";
         i686-linux = "sha256-Fdxq1r1G17kiCl7b9OBrWwkyo+VoKOvrUPf0p4wZlcs=";
-        x86_64-darwin = "sha256-tyQzmycXo4kSvo1X4afFU2aWuXyvyvw0mb81eiH3WjE=";
         aarch64-darwin = "sha256-+zor3j+7saG6AnuIlkJSAsCkMHYuhm0Abmt6TTu8bZI=";
       };
     in
@@ -70,7 +68,6 @@ stdenv.mkDerivation rec {
     platforms = [
       "x86_64-linux"
       "i686-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
       "aarch64-linux"
     ];

@@ -1,8 +1,9 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildNpmPackage,
-  electron_40,
+  electron_43,
   makeWrapper,
   testers,
   mattermost-desktop,
@@ -10,21 +11,21 @@
 }:
 
 let
-  electron = electron_40;
+  electron = electron_43;
 in
 
 buildNpmPackage rec {
   pname = "mattermost-desktop";
-  version = "6.1.2";
+  version = "6.3.0";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "desktop";
     tag = "v${version}";
-    hash = "sha256-EI1bDSiWdLCXlhUk1CmbUyYU7giey366cZLuhs0qtqY=";
+    hash = "sha256-aDYmnFb0CJDF/M1ca/6YkKTBcTC56+zpe9iqtRR0cpU=";
   };
 
-  npmDepsHash = "sha256-7XUZ2rt2fZiQNpW8iHnNDbCSuK4/srWqIEKOKM6xty8=";
+  npmDepsHash = "sha256-nNKfzPKA0kjki169u/qe5r6rrVbVi3+0nkVj6niS+/c=";
   npmBuildScript = "build-prod";
   makeCacheWritable = true;
 
@@ -47,7 +48,7 @@ buildNpmPackage rec {
     chmod -R u+w electron-dist
 
     npm exec electron-builder -- \
-        --config electron-builder.json \
+        --config electron-builder.ts \
         --dir \
         -c.electronDist=electron-dist \
         -c.electronVersion=${electron.version}
@@ -100,6 +101,8 @@ buildNpmPackage rec {
     changelog = "https://github.com/mattermost/desktop/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     platforms = electron.meta.platforms;
+    # https://github.com/NixOS/nixpkgs/issues/430763
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [
       joko
       liff

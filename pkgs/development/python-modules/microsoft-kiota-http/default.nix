@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  flit-core,
   httpx,
   microsoft-kiota-abstractions,
   opentelemetry-api,
@@ -16,19 +16,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "microsoft-kiota-http";
-  version = "1.10.3";
+  version = "1.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-python";
     tag = "microsoft-kiota-http-v${finalAttrs.version}";
-    hash = "sha256-r0u+erTSKBWzLV7VfwWUYh7lyJS1hDh5A0Tzk3pFzo4=";
+    hash = "sha256-c4ZAXdUW1kjecq1zB/T8TyXLP3yi3isqiOo0j/MqKIs=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/http/httpx/";
 
-  build-system = [ poetry-core ];
+  build-system = [ flit-core ];
 
   dependencies = [
     httpx

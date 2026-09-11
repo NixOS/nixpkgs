@@ -16,31 +16,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "file";
-  version = "5.47";
+  version = "5.48";
 
   src = fetchurl {
     urls = [
       "https://astron.com/pub/file/file-${finalAttrs.version}.tar.gz"
       "https://distfiles.macports.org/file/file-${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-RWcv7BZctMwTWKLXa11X0ih23Ll6sWlCesOFy+HVWXo=";
+    hash = "sha256-7RRlaIOyOjZLQFfAVZXZMlLam8Rz0wEGUZUZ0NoUEoM=";
   };
+
+  # Work around too strict landlock hardening
+  # https://bugs.astron.com/view.php?id=785
+  postPatch = ''
+    substituteInPlace src/landlock.c --replace-fail \
+      "LANDLOCK_ACCESS_FS_READ_FILE | LANDLOCK_ACCESS_FS_READ_DIR" \
+      "LANDLOCK_ACCESS_FS_READ_FILE | LANDLOCK_ACCESS_FS_READ_DIR | LANDLOCK_ACCESS_FS_EXECUTE"
+  '';
 
   outputs = [
     "out"
     "dev"
     "man"
-  ];
-
-  patches = [
-    # Fixes `cat archive.zip | file -` just showing a generic "data" type. See:
-    # - https://bugs.astron.com/view.php?id=764
-    # - https://github.com/file/file/commit/12b76648185104ce9118d8b5fa57aa34a77ad084
-    # Vendored patch because using fetchpatch is impossible for a package in
-    # this part of the bootstrap chain.
-    ./0001-PR-745-streamout-Don-t-flush-when-trying-to-set-nega.patch
-    # Fixes breakage of python3Packages.python-magic and xdg-utils
-    ./0002-PR-725-inliniac-Revert-previous-and-always-set-offse.patch
   ];
 
   strictDeps = true;
@@ -60,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
   ) "FILE_COMPILE=${lib.getExe buildPackages.file}";
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://darwinsys.com/file";

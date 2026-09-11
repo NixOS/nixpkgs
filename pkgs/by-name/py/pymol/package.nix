@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   fetchpatch,
+  fetchpatch2,
   makeDesktopItem,
   cmake,
   python3Packages,
@@ -74,6 +75,11 @@ python3Packages.buildPythonApplication rec {
     (fetchpatch {
       url = "https://github.com/schrodinger/pymol-open-source/commit/17c6cbd96d52e9692fd298daec6c9bda273a8aad.patch";
       hash = "sha256-dcYRzUhiaGlR3CjQ0BktA5L+8lFyVdw0+hIz3Li7gDQ=";
+    })
+    # Fixes `set` command with int/float arguments, i.e. `set transparency, 0.5`
+    (fetchpatch2 {
+      url = "https://github.com/schrodinger/pymol-open-source/commit/71246845f77ecfa2e14f01887abd180c18ebfb55.patch";
+      hash = "sha256-ES7v38daaDXgbHqtxJ6Pt6Xa3ggKwXcx1txWJWkkLgI=";
     })
   ];
 

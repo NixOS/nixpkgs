@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
   # No tests included
   doCheck = false;
 
-  pythonImportsCheck = [ "fuse" ];
+  pythonImportsCheck = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "fuse" ];
 
   meta = {
     description = "Simple ctypes bindings for FUSE";

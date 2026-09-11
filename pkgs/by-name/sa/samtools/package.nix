@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     htslib
   ];
 
-  preConfigure = lib.optional stdenv.hostPlatform.isStatic ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isStatic ''
     export LIBS="-lz -lbz2 -llzma"
   '';
   makeFlags = lib.optional stdenv.hostPlatform.isStatic "AR=${stdenv.cc.targetPrefix}ar";

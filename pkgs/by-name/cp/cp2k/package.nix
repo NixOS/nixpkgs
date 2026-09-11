@@ -6,6 +6,7 @@
   cmake,
   python3,
   gfortran,
+  boost,
   blas,
   lapack,
   dbcsr,
@@ -131,13 +132,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cp2k";
-  version = "2026.1-unstable-2026-06-16";
+  version = "2026.2";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cp2k";
     repo = "cp2k";
-    rev = "c28f603b5956aa638ef130b21b091da4e3a17639";
-    hash = "sha256-LIghR2gCYbJDux4bFfeKCi+a+VDVbjcZfcVpYwjPkEg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ojG00n6KiaDW9vLgw/sIrhS8ceyh1mmlxgacw8KfMnA=";
     fetchSubmodules = true;
   };
 
@@ -157,10 +161,14 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
     gfortran
+    mpi
   ]
-  ++ lib.optional (gpuBackend == "cuda") cudaPackages.cuda_nvcc;
+  ++ lib.optionals (gpuBackend == "cuda") [
+    cudaPackages.cuda_nvcc
+  ];
 
   buildInputs = [
+    boost
     fftw
     gsl
     libint
@@ -191,6 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional enableElpa elpa
   ++ lib.optionals (gpuBackend == "cuda") [
     cudaPackages.cuda_cudart
+    cudaPackages.libcufft
     cudaPackages.libcublas
     cudaPackages.cuda_nvrtc
   ]

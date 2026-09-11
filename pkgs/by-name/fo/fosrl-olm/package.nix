@@ -2,24 +2,28 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "olm";
-  version = "1.6.0";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "olm";
     tag = finalAttrs.version;
-    hash = "sha256-USwTaQd8Aqq1Azsp4fXz3xSoxiqzYRSnUoBiqrepOXY=";
+    hash = "sha256-4uHRWAgJzDBnPXi4XyzsAUgNp+l5R7anUD7sfoYLY/k=";
   };
 
-  vendorHash = "sha256-+KQpYGoyNI2SnEjj23GM0FqZFX6lHx7oNw9qdkkgcPU=";
+  vendorHash = "sha256-7eKAftMOnVBnZhC800fRmOoV+8+Tq+RlSEpVUdZKSlk=";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   ldflags = [
     "-s"
     "-w"
+    "-X=main.olmVersion=${finalAttrs.version}"
   ];
 
   doInstallCheck = true;

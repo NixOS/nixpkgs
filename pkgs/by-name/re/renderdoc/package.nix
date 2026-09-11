@@ -36,13 +36,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renderdoc";
-  version = "1.44";
+  version = "1.46";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-EInMFJMs+0bNSWmNP/f17pFCV9tJj6Ys3tZY6D69c/E=";
+    hash = "sha256-NW0gqSTKL5X6PWda/l/+qjdENySwh9dmD4k5CBr2kG0=";
   };
 
   outputs = [
@@ -51,15 +51,12 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
+  # https://github.com/baldurk/renderdoc/issues/2945
+  # https://github.com/baldurk/renderdoc/issues/3902
   patches = [
-    (fetchpatch {
-      # https://github.com/baldurk/renderdoc/issues/2945
-      # https://github.com/baldurk/renderdoc/commit/adf8acbccd642c8bc62256fb5580795320364895
-      name = "devendor-pcre.patch";
-      url = "https://github.com/baldurk/renderdoc/commit/adf8acbccd642c8bc62256fb5580795320364895.patch?full_index=1";
-      hash = "sha256-uQoSVmgU09tw7ccTnH1MrisDisTUbaXTelA1YdsYPlM=";
-      revert = true;
-    })
+    # custom revert of
+    # https://github.com/baldurk/renderdoc/commit/adf8acbccd642c8bc62256fb5580795320364895
+    ./remove-pcre.patch
   ];
   swig_patches = [
     # use PCRE2 instead of PCRE
@@ -140,6 +137,12 @@ stdenv.mkDerivation (finalAttrs: {
       "-DRENDERDOC_SWIG_PACKAGE=$PWD/../swig"
       "-DVULKAN_LAYER_FOLDER=$out/share/vulkan/implicit_layer.d/"
      )
+  '';
+
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/renderdoc.thumbnailer \
+      --replace-fail "TryExec=/usr/bin/renderdoccmd" "TryExec=$out/bin/renderdoccmd" \
+      --replace-fail "Exec=/usr/bin/renderdoccmd" "Exec=$out/bin/renderdoccmd"
   '';
 
   preFixup =

@@ -5,15 +5,15 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "types-docutils";
-  version = "0.22.3.20260518";
+  version = "0.22.3.20260712";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_docutils";
-    inherit version;
-    hash = "sha256-LEW6Y6msZCRjNTWbaP6cJ2ApJkmcm2fK7DeAdF9qre4=";
+    inherit (finalAttrs) version;
+    hash = "sha256-vtVKUBNsjnYTwD7hxR65WLQnVJFd+DU13jVrl0ygWHc=";
   };
 
   build-system = [ setuptools ];
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -77,7 +77,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     jansson
-    swift-corelibs-libdispatch
+    (swift-corelibs-libdispatch.override { useSwift = false; })
     gtk3
     gsettings-desktop-schemas
   ]

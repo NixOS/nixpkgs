@@ -11,13 +11,16 @@
   mlflow-skinny,
 
   # tests
+  matplotlib,
+  pandas,
   pytestCheckHook,
   scikit-learn,
+  skops,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "sagemaker-mlflow";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -25,8 +28,16 @@ buildPythonPackage (finalAttrs: {
     owner = "aws";
     repo = "sagemaker-mlflow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QE40ZBW7N3GPC+eJqj5uzS3L+A6Wu2/LgHOiUsEXKMw=";
+    hash = "sha256-nSI1BGJ2hhzuHxnGjElDuPpuc2rRn2mX5+s4ZSuZna0=";
   };
+
+  # AssertionError: sagemaker_mlflow version is dev - 0.5.0.dev1
+  postPatch = ''
+    substituteInPlace VERSION \
+      --replace-fail \
+        "0.5.0.dev1" \
+        "${finalAttrs.version}"
+  '';
 
   build-system = [
     setuptools
@@ -40,9 +51,18 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "sagemaker_mlflow" ];
 
   nativeCheckInputs = [
+    matplotlib
+    pandas
     pytestCheckHook
     scikit-learn
+    skops
   ];
+
+  # mlflow.exceptions.MlflowException: The filesystem tracking backend (e.g., './mlruns') is in maintenance mode and will not receive further updates.
+  # Please migrate to a database backend (e.g., 'sqlite:///mlflow.db') to access the latest MLflow features.
+  preCheck = ''
+    export MLFLOW_ALLOW_FILE_STORE=true
+  '';
 
   disabledTests = [
     # AssertionError: assert 's3' in '/build/source/not implemented/0/d3c16d2bad4245bf9fc68f86d2e7599d/artifacts'
@@ -56,18 +76,6 @@ buildPythonPackage (finalAttrs: {
     "test_log_artifact"
     "test_presigned_url"
     "test_presigned_url_with_fields"
-
-    # Exercises a `sqlite://` model-registry store, only available with the
-    # sqlalchemy backend of the full `mlflow` package (not `mlflow-skinny`).
-    "test_store_instantiation_none"
-  ];
-
-  disabledTestPaths = [
-    # `from mlflow.models import infer_signature` fails to import at collection
-    # time: `infer_signature` is only available in the full `mlflow` package,
-    # not in `mlflow-skinny`. Also see:
-    # https://github.com/aws/sagemaker-mlflow/issues/16
-    "test/integration/tests/test_model_registry.py"
   ];
 
   meta = {

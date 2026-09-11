@@ -1,0 +1,17 @@
+diff --git a/src/tools/perf/perftest.c b/src/tools/perf/perftest.c
+index 52a1682f85..87e0511807 100644
+--- a/src/tools/perf/perftest.c
++++ b/src/tools/perf/perftest.c
+@@ -243,7 +243,11 @@
+ {
+ #if _OPENMP
+ #  pragma omp barrier
+-#  pragma omp master
++#  if _OPENMP >= 202011
++#    pragma omp masked
++#  else
++#    pragma omp master
++#  endif
+ #endif
+   {
+     sock_rte_group_t *group = rte_group;

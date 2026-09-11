@@ -23,6 +23,10 @@ buildNimSbom (finalAttrs: {
   buildInputs = [ openssl ];
   nativeBuildInputs = [ makeWrapper ];
 
+  patches = [
+    ./nil.patch
+  ];
+
   postFixup = ''
     wrapProgram $out/bin/nim_lk \
       --suffix PATH : ${

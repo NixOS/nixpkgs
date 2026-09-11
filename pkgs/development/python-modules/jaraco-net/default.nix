@@ -25,7 +25,6 @@
   ifconfig-parser,
   pytestCheckHook,
   cherrypy,
-  importlib-resources,
   pyparsing,
   pytest-responses,
   net-tools,
@@ -74,7 +73,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     cherrypy
-    importlib-resources
     pyparsing
     pytest-responses
   ]

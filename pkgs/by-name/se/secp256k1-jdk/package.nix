@@ -3,24 +3,25 @@
   fetchFromGitHub,
   maven,
   jdk25,
+  nix-update-script,
 }:
 
 maven.buildMavenPackage (finalAttrs: {
   pname = "secp256k1-jdk";
-  version = "0.3";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "bitcoinj";
     repo = "secp256k1-jdk";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-kIWBgJ9OueNNDRKf1HHaxt6PFxK2iCuO0TFr8swbiL0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-F2e4NDPEU7ZAu4+fvEd4BRbE2JwCvUiMeXHTMDXbIJE=";
   };
 
   mvnJdk = jdk25;
   mvnGoal = "deploy"; # The secp256k1-jdk POM targets a `local-staging` repository using a file URL
   mvnOffline = false; # We need actions not allowed in Maven offline mode, but Nix sandboxing will still be enforced
   mvnParameters = "-Drevision=${finalAttrs.version}"; # make snapshot builds reproducible
-  mvnHash = "sha256-87iDewdy/7lSyvROf1YyrsgvVUJtaivdHdSLig3Ea1Y=";
+  mvnHash = "sha256-a62jDFapnYV/mguZ/5PDzI5Unz7BnuvieLmpsocYMO4=";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -43,6 +44,8 @@ maven.buildMavenPackage (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/bitcoinj/secp256k1-jdk/blob/master/CHANGELOG.adoc";

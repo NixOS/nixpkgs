@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  runtimeShell,
   man-db,
   groff,
   xdg-utils,
@@ -17,6 +16,7 @@
   xz,
   cunit,
   nix-update-script,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,8 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    substituteInPlace src/qman_tests_list.sh \
-      --replace-fail "/usr/bin/env bash" ${runtimeShell}
+    patchShebangs --build src/qman_tests_list.sh
     substituteInPlace src/config_def.py \
       --replace-fail "/usr/bin/man" ${man-db}/bin/man \
       --replace-fail "/usr/bin/groff" ${groff}/bin/groff \
@@ -62,6 +61,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Dconfigdir=${placeholder "out"}/etc/xdg/qman"
+  ];
+
+  doInstallCheck = true;
+  versionCheckKeepEnvironment = [
+    "TERM"
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
   ];
 
   passthru.updateScript = nix-update-script { };

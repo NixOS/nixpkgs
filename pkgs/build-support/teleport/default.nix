@@ -10,7 +10,7 @@
   nodejs,
   openssl,
   pkg-config,
-  pnpm_10_29_2,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   rustc,
@@ -81,7 +81,7 @@ let
         pname
         version
         ;
-      pnpm = pnpm_10_29_2;
+      pnpm = pnpm_10;
       fetcherVersion = 3;
       hash = pnpmHash;
     };
@@ -91,7 +91,7 @@ let
       cargo
       nodejs
       pnpmConfigHook
-      pnpm_10_29_2
+      pnpm_10
       rustc
       rustc.llvmPackages.lld
       rustPlatform.cargoSetupHook
@@ -162,10 +162,10 @@ buildGoModule (finalAttrs: {
     ++ [
       ./rdpclient.patch
     ]
-    ++ lib.optional (lib.versionOlder version "18.8.0") [
+    ++ lib.optionals (lib.versionOlder version "18.8.0") [
       ./0001-fix-add-nix-path-to-exec-env.patch
     ]
-    ++ lib.optional (lib.versionAtLeast version "18.8.0") [
+    ++ lib.optionals (lib.versionAtLeast version "18.8.0") [
       ./0001-fix-add-nix-path-to-exec-env-reexec.patch
     ];
 

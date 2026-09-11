@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "sklearn-compat";
-  version = "0.1.5";
+  version = "0.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sklearn-compat";
     repo = "sklearn-compat";
     tag = version;
-    hash = "sha256-7YgNXYm/uMPRRZ1ApHQ8PPyeNBURuwHao5GSXJFCYZ0=";
+    hash = "sha256-bziweext3Mqq0Wa9KlX1gp5NpVYX8IpcvS1gTjxQa70=";
   };
 
   build-system = [

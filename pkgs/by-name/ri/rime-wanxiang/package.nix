@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "rime-wanxiang";
-  version = "15.14.2";
+  version = "17.9.3";
 
   src = fetchFromGitHub {
     owner = "amzxyz";
-    repo = "rime_wanxiang";
+    repo = "rime-wanxiang";
     tag = "v" + finalAttrs.version;
-    hash = "sha256-OSOnMt9kk0wc1uGAxzp7Fa8OLNs89feKTqKZj4iu/1Y=";
+    hash = "sha256-RKQy47FIRbBH12fDoPA2e1Ypg76YZUpX1iQ+VHrYlME=";
   };
 
   installPhase = ''
@@ -59,9 +59,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         __include: wanxiang_suggested_default:/
       ```
     '';
-    homepage = "https://github.com/amzxyz/rime_wanxiang";
-    downloadPage = "https://github.com/amzxyz/rime_wanxiang/releases";
-    changelog = "https://github.com/amzxyz/rime_wanxiang/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/amzxyz/rime-wanxiang";
+    downloadPage = "https://github.com/amzxyz/rime-wanxiang/releases";
+    changelog = "https://github.com/amzxyz/rime-wanxiang/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.cc-by-40;
     maintainers = with lib.maintainers; [ rc-zb ];
     platforms = lib.platforms.all;

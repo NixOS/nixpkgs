@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "influxdb3-python";
-  version = "0.20.0";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "InfluxCommunity";
     repo = "influxdb3-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gCIaOE0k/h1Lb4wIuw+eOEjwdDJVc8tGd3Ql6JE+gmE=";
+    hash = "sha256-wSPsuER4YPH6wX5i1o1T4uEwoEdes3fJJrGVmZfV+jU=";
   };
 
   postPatch = ''

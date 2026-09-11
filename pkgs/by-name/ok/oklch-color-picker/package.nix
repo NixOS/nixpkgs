@@ -9,22 +9,27 @@
   libxkbcommon,
   libGL,
   stdenv,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oklch-color-picker";
-  version = "2.3.3";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "eero-lehtinen";
     repo = "oklch-color-picker";
     tag = finalAttrs.version;
-    hash = "sha256-IwG3oUYArr6cHSa3fNukQ7CjasUMaVWX9JXChSHTnEs=";
+    hash = "sha256-AdLpP01VeeAAOBEeX/dxLPdAqTfgH9X+NDCmFgqA3hs=";
   };
 
-  cargoHash = "sha256-Vs6bMHHHRdqSYjOzJuq2agmuXSjGRagIATVzQa3Z/M8=";
+  cargoHash = "sha256-FB8zvWhO+ZbzWjkQCnf3ghgM+IL4px7QNO4dLPcczec=";
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [
+    copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   runtimeDependencies = [
     libGL
@@ -38,6 +43,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   passthru.updateScript = nix-update-script { };
 
+  postInstall = ''
+    install -Dm444 assets/icon.png $out/share/icons/hicolor/512x512/apps/${finalAttrs.meta.mainProgram}.png
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = finalAttrs.meta.mainProgram;
+      exec = finalAttrs.meta.mainProgram;
+      icon = finalAttrs.meta.mainProgram;
+      desktopName = "OKLCH Color Picker";
+      genericName = "Color Picker";
+      comment = finalAttrs.meta.description;
+      categories = [
+        "Graphics"
+      ];
+    })
+  ];
+
   meta = {
     description = "Color picker for Oklch";
     longDescription = ''
@@ -46,6 +69,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://github.com/eero-lehtinen/oklch-color-picker";
     changelog = "https://github.com/eero-lehtinen/oklch-color-picker/releases/tag/${finalAttrs.version}";
+    mainProgram = "oklch-color-picker";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ videl ];
   };

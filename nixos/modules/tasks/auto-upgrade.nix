@@ -140,9 +140,19 @@ in
       rebootWindow = lib.mkOption {
         description = ''
           Define a lower and upper time value (in HH:MM format) which
-          constitute a time window during which reboots are allowed after an upgrade.
+          constitute a time window during which reboots are allowed
+          immediately after the upgrade finishes.
+
           This option only has an effect when {option}`allowReboot` is enabled.
           The default value of `null` means that reboots are allowed at any time.
+
+          If the system should be rebooted but the time window is missed,
+          no reboot will be scheduled, and no switch will be performed.
+          The reboot will be reattempted after the next upgrade operation,
+          even when no further system upgrades are available,
+          as long as the time window is then met.
+          Therefore {option}`dates` (with and without {option}`randomizedDelaySec`)
+          should be enclosed by the time window.
         '';
         default = null;
         example = {

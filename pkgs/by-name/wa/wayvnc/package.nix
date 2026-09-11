@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayvnc";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = "wayvnc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+CAH2jcIIQqImonWeWxMQyTtEEuuQlaGyl/ajPfClh8=";
+    hash = "sha256-XVu+sj7O6usFXljkGvQHU9KARjW9jYhFltgbY900TyA=";
   };
 
   strictDeps = true;

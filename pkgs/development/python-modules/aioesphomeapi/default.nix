@@ -27,20 +27,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioesphomeapi";
-  version = "45.3.1"; # must track the major version that home-assistant pins
+  version = "46.3.0"; # must track the major version that home-assistant pins
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "aioesphomeapi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+8P6OL+4Y+qrKLYqXtjBL2ylcamsF24Ccn00Vt9ohD0=";
+    hash = "sha256-xwsNlgcYXUOJdJmpQ3/O1gtYptAeX2Vtn4ywxbdNGOM=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=82.0.1" setuptools \
-      --replace-fail "Cython>=3.2.5" Cython
+      --replace-fail "setuptools>=83.0.0" setuptools \
+      --replace-fail "Cython>=3.2.9" Cython
   '';
 
   build-system = [
@@ -72,7 +72,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   # Lack of network sandboxing leads to conflicting listeners when testing
-  # this package e.g. in nixpkgs-review on the two suppoted python package sets.
+  # this package e.g. in nixpkgs-review on the two supported python package sets.
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTestPaths = [

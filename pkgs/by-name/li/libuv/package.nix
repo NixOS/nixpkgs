@@ -7,7 +7,6 @@
   darwin,
   libtool,
   pkg-config,
-  pkgsStatic,
 
   # for passthru.tests
   bind,
@@ -19,6 +18,7 @@
   neovim,
   nodejs,
   ocamlPackages,
+  pkgsStatic,
   python3,
   testers,
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libuv";
     repo = "libuv";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Y9Nph2LkT1qnOYTW3WCumWWwORnI4P7HxzBjUlGaL7M=";
   };
 
@@ -129,6 +129,10 @@ stdenv.mkDerivation (finalAttrs: {
         # https://github.com/libuv/libuv/issues/1871
         "shutdown_close_pipe"
       ]
+      ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
+        # Aborts (SIGABRT, exit 134)
+        "poll_nested_epoll"
+      ]
       ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
         # ENETUNREACH when performed in jailed build env
         "tcp_connect"
@@ -147,8 +151,6 @@ stdenv.mkDerivation (finalAttrs: {
     in
     lib.optionalString (finalAttrs.finalPackage.doCheck) ''
       sed '/${tdRegexp}/d' -i test/test-list.h
-      # https://github.com/libuv/libuv/issues/4794
-      substituteInPlace Makefile.am --replace-fail -lutil "-lutil -lm"
     '';
 
   nativeBuildInputs = [
@@ -157,6 +159,8 @@ stdenv.mkDerivation (finalAttrs: {
     libtool
     pkg-config
   ];
+
+  strictDeps = true;
 
   # This is part of the Darwin bootstrap, so we don’t always get
   # `libutil.dylib` automatically propagated through the SDK.
@@ -204,6 +208,8 @@ stdenv.mkDerivation (finalAttrs: {
     static = pkgsStatic.libuv;
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Multi-platform support library with a focus on asynchronous I/O";

@@ -11,6 +11,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "acpica-tools";
   version = "20260408";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "acpica";
     repo = "acpica";

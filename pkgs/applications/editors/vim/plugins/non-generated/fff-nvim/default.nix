@@ -13,18 +13,18 @@
   writableTmpDirAsHomeHook,
 }:
 let
-  version = "0.9.6";
+  version = "0.10.3";
   src = fetchFromGitHub {
     owner = "dmtrKovalenko";
-    repo = "fff.nvim";
+    repo = "fff";
     tag = "v${version}";
-    hash = "sha256-JOoc4RDPIggZaoPtPEWhQ2msWfgOOuI4PPguFMczJls=";
+    hash = "sha256-pE4DsaCvlvgTKJtyV8uGhAQvbJpxpgXlIkoVh8I15qw=";
   };
   fff-nvim-lib = rustPlatform.buildRustPackage {
     pname = "fff-nvim-lib";
     inherit version src;
 
-    cargoHash = "sha256-nHVQccbKSfX9fZXh0aPRP33n4nHWhaRdz9k49apULME=";
+    cargoHash = "sha256-iRQa3K5/E520hbq6yO+RRG8pjJBTamj/nm13XCHNOZs=";
 
     cargoBuildFlags = [
       "-p"
@@ -108,7 +108,7 @@ vimUtils.buildVimPlugin {
 
   meta = {
     description = "Fast Fuzzy File Finder for Neovim";
-    homepage = "https://github.com/dmtrKovalenko/fff.nvim";
+    homepage = "https://github.com/dmtrKovalenko/fff";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       GaetanLepage

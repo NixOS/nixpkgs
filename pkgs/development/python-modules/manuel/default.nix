@@ -2,38 +2,38 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
   python,
-  six,
+  setuptools,
   zope-testing,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "manuel";
   version = "1.13.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-XWMSDej6bZJ3gLaa4oqj6dFmmxCvPTJ4Xz+6EaW+iFo=";
   };
 
-  patches = lib.optionals (lib.versionAtLeast python.version "3.11") [
-    # https://github.com/benji-york/manuel/pull/32
-    # Applying conditionally until upstream arrives at some general solution.
-    (fetchpatch {
-      name = "TextTestResult-python311.patch";
-      url = "https://github.com/benji-york/manuel/commit/d9f12d03e39bb76e4bb3ba43ad51af6d3e9d45c0.diff";
-      hash = "sha256-k0vBtxEixoI1INiKtc7Js3Ai00iGAcCvCFI1ZIBRPvQ=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ six ];
   nativeCheckInputs = [ zope-testing ];
+
+  # https://github.com/benji-york/manuel/issues/34#issuecomment-2016443027
+  checkPhase = ''
+    ${python.interpreter} -m unittest -vv manuel.tests.test_suite
+  '';
+
+  pythonImportsCheck = [ "manuel" ];
 
   meta = {
     description = "Documentation builder";
     homepage = "https://pypi.org/project/manuel/";
+    changelog = "https://github.com/benji-york/manuel/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.zpl20;
   };
-}
+})

@@ -18,14 +18,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "crosswords";
-  version = "0.3.17";
+  version = "0.3.18.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "jrb";
     repo = "crosswords";
     rev = finalAttrs.version;
-    hash = "sha256-VeiVuMEfMCVjSk52BGtlypapeW6CBW1VQsrtDS8aCoY=";
+    hash = "sha256-d8KwZ06WubqIRq5aPm+W/MfLgNcLP+233gur5pLF/PY=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +44,16 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     libipuz
   ];
+
+  mesonFlags = [
+    (lib.mesonBool "development" false)
+  ];
+
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/crosswords.thumbnailer \
+      --replace-fail "TryExec=crosswords-thumbnailer" "TryExec=$out/bin/crosswords-thumbnailer" \
+      --replace-fail "Exec=crosswords-thumbnailer" "Exec=$out/bin/crosswords-thumbnailer"
+  '';
 
   passthru.updateScript = nix-update-script { };
 

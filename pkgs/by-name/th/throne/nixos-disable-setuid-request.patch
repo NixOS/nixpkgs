@@ -20,15 +20,15 @@ index 9acfee4..c0c313a 100644
 --- a/src/ui/mainwindow.cpp
 +++ b/src/ui/mainwindow.cpp
 @@ -163,8 +163,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
-     Configs::dataManager->settingsRepo->core_port = MkPort();
-     if (Configs::dataManager->settingsRepo->core_port <= 0) Configs::dataManager->settingsRepo->core_port = 19810;
+     runOnNewThread([=, this] {GetDeviceDetails(); });
  
+     // Prepare core
 -    auto core_path = QApplication::applicationDirPath() + "/";
 -    core_path += "ThroneCore";
 +    auto core_path = Configs::FindCoreRealPath();
  
-     QStringList args;
-     args.push_back("-port");
+     bool coreDebugMode = (Configs::dataManager->settingsRepo->log_level == "debug");
+ 
 @@ -1296,6 +1295,15 @@ bool MainWindow::get_elevated_permissions(int reason) {
          return true;
      }

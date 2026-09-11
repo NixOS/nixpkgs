@@ -94,8 +94,8 @@ in
     serviceConfig = {
       ExecStart = ''
         ${pkgs.prometheus-imap-mailstat-exporter}/bin/imap-mailstat-exporter \
-          -config ${createConfigFile cfg.accounts} \
-          ${optionalString cfg.oldestUnseenDate "-oldestunseendate"} \
+          --config.file="${createConfigFile cfg.accounts}" \
+          ${optionalString cfg.oldestUnseenDate "--oldestunseen.feature"} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };

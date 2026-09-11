@@ -4,10 +4,10 @@
 # and otherwise uses the default answer (as determined by the default
 # config for the architecture).  Overrides are read from the file
 # $KERNEL_CONFIG, which on each line contains an option name and an
-# answer, e.g. "EXT2_FS_POSIX_ACL y".  The script warns about ignored
-# options in $KERNEL_CONFIG, and barfs if `make config' selects
-# another answer for an option than the one provided in
-# $KERNEL_CONFIG.
+# answer, e.g. "EXT2_FS_POSIX_ACL y".  A name without an answer means
+# an empty string.  The script warns about ignored options in
+# $KERNEL_CONFIG, and barfs if `make config' selects another answer
+# for an option than the one provided in $KERNEL_CONFIG.
 
 use strict;
 use IPC::Open2;
@@ -29,8 +29,12 @@ open ANSWERS, "<$ENV{KERNEL_CONFIG}" or die "Could not open answer file";
 while (<ANSWERS>) {
     chomp;
     s/#.*//;
-    if (/^\s*([A-Za-z0-9_]+)(\?)?\s+(.*\S)\s*$/) {
-        $answers{$1} = $3;
+    if (/^\s*([A-Za-z0-9_]+)(\?)?(?:\s+(.*\S))?\s*$/) {
+        if (defined $3) {
+            $answers{$1} = $3;
+        } else {
+            $answers{$1} = "";
+        }
         $requiredAnswers{$1} = !(defined $2);
     } elsif (!/^\s*$/) {
         die "invalid config line: $_";
@@ -140,20 +144,32 @@ runConfig;
 # Read the final .config file and check that our answers are in
 # there.  `make config' often overrides answers if later questions
 # cause options to be selected.
+#
+# The same pass rewrites the options we answered with an empty string.
+# `make config' reads an empty answer as "keep the default", so a
+# non-empty defconfig value such as CONFIG_LOCALVERSION="-v8" survives
+# and we overwrite it here.  Options missing from .config stay missing,
+# so the check below reports them as unused.
 my %config;
-open CONFIG, "<$buildRoot/.config" or die "Could not read .config";
-while (<CONFIG>) {
-    chomp;
-    if (/^CONFIG_([A-Za-z0-9_]+)="(.*)"$/) {
-        # String options have double quotes, e.g. 'CONFIG_NLS_DEFAULT="utf8"' and allow escaping.
-        ($config{$1} = $2) =~ s/\\([\\"])/$1/g;
-    } elsif (/^CONFIG_([A-Za-z0-9_]+)=(.*)$/) {
-        $config{$1} = $2;
-    } elsif (/^# CONFIG_([A-Za-z0-9_]+) is not set$/) {
-        $config{$1} = "n";
+{
+    local @ARGV = ("$buildRoot/.config");
+    local $^I = ""; # edit in place
+    while (<>) {
+        if (/^CONFIG_([^=]+)=/ && exists $answers{$1} && $answers{$1} eq "") {
+            $_ = "CONFIG_$1=\"\"\n";
+        }
+        chomp(my $line = $_);
+        if ($line =~ /^CONFIG_([A-Za-z0-9_]+)="(.*)"$/) {
+            # String options have double quotes, e.g. 'CONFIG_NLS_DEFAULT="utf8"' and allow escaping.
+            ($config{$1} = $2) =~ s/\\([\\"])/$1/g;
+        } elsif ($line =~ /^CONFIG_([A-Za-z0-9_]+)=(.*)$/) {
+            $config{$1} = $2;
+        } elsif ($line =~ /^# CONFIG_([A-Za-z0-9_]+) is not set$/) {
+            $config{$1} = "n";
+        }
+        print;
     }
 }
-close CONFIG;
 
 my $ret = 0;
 foreach my $name (sort (keys %answers)) {

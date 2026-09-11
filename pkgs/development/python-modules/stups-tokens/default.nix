@@ -22,6 +22,11 @@ buildPythonPackage rec {
     sha256 = "09z3l3xzdlwpivbi141gk1k0zd9m75mjwbdy81zc386rr9k8s0im";
   };
 
+  postPatch = ''
+    substituteInPlace tokens/__init__.py \
+      --replace-fail "__version__ = '0.8'" "__version__ = '${version}'"
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [ requests ];

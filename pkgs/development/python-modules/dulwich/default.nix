@@ -9,7 +9,7 @@
   git,
   glibcLocales,
   gnupg,
-  gpgme,
+  gpg,
   merge3,
   nix-update-script,
   openssh,
@@ -25,19 +25,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dulwich";
-  version = "1.2.6";
+  version = "1.2.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "dulwich";
     tag = "dulwich-${finalAttrs.version}";
-    hash = "sha256-nj20g5OmlcqWDaKv3NoKWZS5/e4HOMCf7DHeS7xDzjQ=";
+    hash = "sha256-ogYR4xK4sYbh7zOozpiZ+bubA6/kDx1iFkbIAjYLkIs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-wifh/beg3VVQpAXg/P/tq6qiUwCqXxhWPoRvX2HcFOc=";
+    hash = "sha256-Shu80kj4rir3JvrgXmO82/Z6ZROaACl43zQBzjlDFYc=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +61,7 @@ buildPythonPackage (finalAttrs: {
     https = [ urllib3 ];
     merge = [ merge3 ];
     pgp = [
-      gpgme
+      gpg
       gnupg
     ];
     paramiko = [ paramiko ];

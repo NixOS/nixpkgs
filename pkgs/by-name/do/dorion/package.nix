@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchurl,
   rustPlatform,
   cmake,
   ninja,
@@ -16,7 +15,7 @@
   openssl,
   pkg-config,
   yq-go,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   webkitgtk_4_1,
@@ -25,44 +24,36 @@
   pipewire,
   apple-sdk_15,
   darwin,
+  shelter,
+  nix-update-script,
 }:
 
 let
   webkitgtk_4_1' = webkitgtk_4_1.override {
     enableExperimental = true;
   };
-
-  shelter = fetchurl {
-    url = "https://raw.githubusercontent.com/uwu/shelter-builds/7a1beaff4bb4ec5e8590d069549686fda4200e82/shelter.js";
-    hash = "sha256-LeZTxrGRQb0rl3BMP34UFHIEFnil4k3Fet3MTujvVB8=";
-    meta = {
-      homepage = "https://github.com/uwu/shelter";
-      sourceProvenance = [ lib.sourceTypes.binaryBytecode ]; # actually, minified JS
-      license = lib.licenses.cc0;
-    };
-  };
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dorion";
-  version = "6.12.2";
+  version = "6.13.0";
 
   src = fetchFromGitHub {
     owner = "SpikeHD";
     repo = "Dorion";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aPYQOec4D0I4N/6nmSwodXsh3pvcHnlD37fUIw5kMjo=";
+    hash = "sha256-3AQX1q3qpu/QKqigmCvLKQJzQpsTnYgwT+1VWA+gIz0=";
   };
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-3FS8w9K3Wx7KbT7iy+0pAMdmreZnL+ZFMSAnwesnS7Y=";
+  cargoHash = "sha256-p/mj3BL61HlLpN3nqNkVExu0mWaMawg9I2+dKeFUOJ8=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
+    pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-E45X3JEns1TE+SVbtbBEl+RzwRgTiGN7/N4OgJ5o63o=";
+    hash = "sha256-i20NSlWot8DmjSpdIGd2ne/82HyPB1cdxkBSxbOLA/8=";
   };
 
   # CMake (webkit extension, Linux only)
@@ -78,7 +69,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
     cargo-tauri.hook
     nodejs
     pkg-config
@@ -124,7 +115,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ' src-tauri/tauri.conf.json
 
     # link shelter injection
-    ln -s "${shelter}" src-tauri/injection/shelter.js
+    ln -s ${shelter}/shelter.js src-tauri/injection/shelter.js
 
     # link html/frontend data
     ln -s "$(pwd)/src" src-tauri/html
@@ -189,8 +180,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = false;
 
   env = {
+    # pnpm 10 prompts before purging node_modules in non-interactive builds.
+    CI = "true";
     TAURI_RESOURCE_DIR = "${placeholder "out"}/lib";
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://spikehd.github.io/projects/dorion/";
@@ -201,10 +196,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     changelog = "https://github.com/SpikeHD/Dorion/releases/tag/v${finalAttrs.version}";
     downloadPage = "https://github.com/SpikeHD/Dorion/releases/tag/v${finalAttrs.version}";
-    license = [
-      lib.licenses.gpl3Only
-      shelter.meta.license
-    ];
+    license = lib.licenses.gpl3Only;
     mainProgram = "Dorion";
     maintainers = with lib.maintainers; [
       nyabinary
@@ -214,7 +206,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     platforms = lib.platforms.unix;
     sourceProvenance = [
-      lib.sourceTypes.binaryBytecode # actually, minified JS
       lib.sourceTypes.fromSource
     ];
   };

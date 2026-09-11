@@ -2,6 +2,9 @@
   "chap-build-helpers-finalAttrs": [
     "index.html#chap-build-helpers-finalAttrs"
   ],
+  "chap-first-package": [
+    "index.html#chap-first-package"
+  ],
   "chap-release-notes": [
     "release-notes.html#chap-release-notes"
   ],
@@ -102,8 +105,20 @@
   "cuda-writing-tests": [
     "index.html#cuda-writing-tests"
   ],
+  "dev-environments": [
+    "index.html#dev-environments"
+  ],
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
+  ],
+  "ex-build-helpers-extendMkDerivation-transformDrv-wrapper": [
+    "index.html#ex-build-helpers-extendMkDerivation-transformDrv-wrapper"
+  ],
+  "ex-first-package-go": [
+    "index.html#ex-first-package-go"
+  ],
+  "ex-modularServiceCompliance-nixos": [
+    "index.html#ex-modularServiceCompliance-nixos"
   ],
   "ex-pkgs-replace-vars": [
     "index.html#ex-pkgs-replace-vars",
@@ -125,8 +140,17 @@
   "ex-testEqualArrayOrMap-test-function-add-cowbell": [
     "index.html#ex-testEqualArrayOrMap-test-function-add-cowbell"
   ],
+  "ex-trivial-builder-finalAttrs": [
+    "index.html#ex-trivial-builder-finalAttrs"
+  ],
   "ex-writeShellApplication": [
     "index.html#ex-writeShellApplication"
+  ],
+  "fetchfromtangled": [
+    "index.html#fetchfromtangled"
+  ],
+  "first-package-go": [
+    "index.html#first-package-go"
   ],
   "friction-graphics": [
     "index.html#friction-graphics"
@@ -134,8 +158,14 @@
   "friction-graphics-wayland": [
     "index.html#friction-graphics-wayland"
   ],
+  "getting-started": [
+    "index.html#getting-started"
+  ],
   "ghc-deprecation-policy": [
     "index.html#ghc-deprecation-policy"
+  ],
+  "how-channels-work": [
+    "index.html#how-channels-work"
   ],
   "inkscape-plugins": [
     "index.html#inkscape-plugins"
@@ -191,6 +221,21 @@
   "julec-hook-variables": [
     "index.html#julec-hook-variables"
   ],
+  "juce-projucer-hook": [
+    "index.html#juce-projucer-hook"
+  ],
+  "juce-projucer-hook-example": [
+    "index.html#juce-projucer-hook-example"
+  ],
+  "juce-projucer-hook-variables": [
+    "index.html#juce-projucer-hook-variables"
+  ],
+  "juce-dontuseprojucerconfigure": [
+    "index.html#juce-dontuseprojucerconfigure"
+  ],
+  "juce-dontuseprojucerinstall": [
+    "index.html#juce-dontuseprojucerinstall"
+  ],
   "libcxxhardeningextensive": [
     "index.html#libcxxhardeningextensive"
   ],
@@ -220,6 +265,9 @@
   ],
   "neovim-luarocks-based-plugins": [
     "index.html#neovim-luarocks-based-plugins"
+  ],
+  "neovim-plugin-treesitter-wasm": [
+    "index.html#neovim-plugin-treesitter-wasm"
   ],
   "nixpkgs-manual": [
     "index.html#nixpkgs-manual"
@@ -377,9 +425,7 @@
     "index.html#pnpm-build-hook-honored-variables"
   ],
   "preface": [
-    "index.html#preface"
-  ],
-  "overview-of-nixpkgs": [
+    "index.html#preface",
     "index.html#overview-of-nixpkgs"
   ],
   "part-using": [
@@ -420,6 +466,9 @@
   ],
   "sec-darwin-availability-checks": [
     "index.html#sec-darwin-availability-checks"
+  ],
+  "sec-darwin-builder-vz": [
+    "index.html#sec-darwin-builder-vz"
   ],
   "sec-darwin-libcxx-deployment-targets": [
     "index.html#sec-darwin-libcxx-deployment-targets"
@@ -619,6 +668,15 @@
   ],
   "chap-overrides": [
     "index.html#chap-overrides"
+  ],
+  "sec-packer": [
+    "index.html#sec-packer"
+  ],
+  "sec-packer-list-plugins": [
+    "index.html#sec-packer-list-plugins"
+  ],
+  "sec-packer-with-plugins": [
+    "index.html#sec-packer-with-plugins"
   ],
   "sec-pkg-override": [
     "index.html#sec-pkg-override"
@@ -902,6 +960,18 @@
   "glibcxxassertions": [
     "index.html#glibcxxassertions"
   ],
+  "tester-modularServiceCompliance": [
+    "index.html#tester-modularServiceCompliance"
+  ],
+  "tester-modularServiceCompliance-inputs": [
+    "index.html#tester-modularServiceCompliance-inputs"
+  ],
+  "tester-modularServiceCompliance-manual": [
+    "index.html#tester-modularServiceCompliance-manual"
+  ],
+  "tester-modularServiceCompliance-return": [
+    "index.html#tester-modularServiceCompliance-return"
+  ],
   "tester-shfmt": [
     "index.html#tester-shfmt"
   ],
@@ -931,6 +1001,9 @@
   ],
   "treefmt": [
     "index.html#treefmt"
+  ],
+  "trivial-builder-finalAttrs": [
+    "index.html#trivial-builder-finalAttrs"
   ],
   "typst": [
     "index.html#typst",
@@ -1090,6 +1163,9 @@
   ],
   "x86_64-darwin-26.05": [
     "release-notes.html#x86_64-darwin-26.05"
+  ],
+  "x86_64-darwin-26.11": [
+    "release-notes.html#x86_64-darwin-26.11"
   ],
   "zip-files": [
     "index.html#zip-files"
@@ -2019,6 +2095,12 @@
   "fetchfromgithub": [
     "index.html#fetchfromgithub"
   ],
+  "fetchfromhuggingface": [
+    "index.html#fetchfromhuggingface"
+  ],
+  "ex-fetchfromhuggingface": [
+    "index.html#ex-fetchfromhuggingface"
+  ],
   "fetchfromgitlab": [
     "index.html#fetchfromgitlab"
   ],
@@ -2389,6 +2471,18 @@
   "sec-checkpoint-build-example": [
     "index.html#sec-checkpoint-build-example"
   ],
+  "sec-redisTestHook": [
+    "index.html#sec-redisTestHook"
+  ],
+  "sec-redisTestHook-variables": [
+    "index.html#sec-redisTestHook-variables"
+  ],
+  "sec-memcachedTestHook": [
+    "index.html#sec-memcachedTestHook"
+  ],
+  "sec-memcachedTestHook-variables": [
+    "index.html#sec-memcachedTestHook-variables"
+  ],
   "chap-images": [
     "index.html#chap-images"
   ],
@@ -2740,9 +2834,6 @@
   "glycin-dont-wrap": [
     "index.html#glycin-dont-wrap"
   ],
-  "ghc": [
-    "index.html#ghc"
-  ],
   "gnome-platform": [
     "index.html#gnome-platform"
   ],
@@ -2877,6 +2968,10 @@
   ],
   "setup-hook-mpi-check": [
     "index.html#setup-hook-mpi-check"
+  ],
+  "setup-hook-check-phase-thread-limit": [
+    "index.html#setup-hook-check-phase-thread-limit",
+    "index.html#setup-hook-omp-check"
   ],
   "ninja": [
     "index.html#ninja"
@@ -3586,7 +3681,8 @@
     "index.html#hareHook-cross-compilation"
   ],
   "haskell": [
-    "index.html#haskell"
+    "index.html#haskell",
+    "index.html#ghc"
   ],
   "haskell-available-packages": [
     "index.html#haskell-available-packages"
@@ -3715,15 +3811,9 @@
     "index.html#language-javascript"
   ],
   "javascript-introduction": [
-    "index.html#javascript-introduction"
-  ],
-  "javascript-finding-examples": [
-    "index.html#javascript-finding-examples"
-  ],
-  "javascript-finding-examples-github": [
-    "index.html#javascript-finding-examples-github"
-  ],
-  "javascript-finding-examples-gitlab": [
+    "index.html#javascript-introduction",
+    "index.html#javascript-finding-examples",
+    "index.html#javascript-finding-examples-github",
     "index.html#javascript-finding-examples-gitlab"
   ],
   "javascript-tools-overview": [

@@ -12,13 +12,13 @@
 buildHomeAssistantComponent rec {
   owner = "bcpearce";
   domain = "gtfs_realtime";
-  version = "0.4.7";
+  version = "0.4.9";
 
   src = fetchFromGitHub {
     owner = "bcpearce";
     repo = "homeassistant-gtfs-realtime";
     tag = version;
-    hash = "sha256-swqq2KY12EuDUnhnZ0zU8uIla7jvKLzvySnXU+vg/Jg=";
+    hash = "sha256-a9ZL5NQvmMi58rfTG3REDpYAkg8Y4PmeYn/brBz5K3U=";
   };
 
   dependencies = [ gtfs-station-stop ];
@@ -31,8 +31,8 @@ buildHomeAssistantComponent rec {
   ];
 
   disabledTests = [
-    # upstream snapshot is stale
-    "test_diagnostics"
+    # calls async_get_device with deprecated via_device=
+    "test_call_card_creator"
   ];
 
   ignoreVersionRequirement = [ "gtfs_station_stop" ];

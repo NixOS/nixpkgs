@@ -41,8 +41,6 @@ buildPythonPackage rec {
     rm -v ./bootstrap.py
   '';
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeCheckInputs = [
     pytestCheckHook
     pyarrow

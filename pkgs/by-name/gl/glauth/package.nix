@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "glauth";
-  version = "2.5.0";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "glauth";
     repo = "glauth";
     tag = "GLAuth-v${finalAttrs.version}";
-    hash = "sha256-9aymP2zhp2DaqqrC1tiTicqnzBvAHGdx4KHKXkYNNsg=";
+    hash = "sha256-LrQmCkWiPSZIW2zxdqIWXL+w+hE3Duu2sM17TDcYmkk=";
   };
 
   vendorHash = "sha256-Lijy0LFy0PgWogdzYRNPFOkLym6Gf9qG4R+Bm91eYJg=";

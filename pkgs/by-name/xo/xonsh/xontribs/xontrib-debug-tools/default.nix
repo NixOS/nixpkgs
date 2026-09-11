@@ -43,6 +43,9 @@ buildPythonPackage rec {
     description = "Debug tools for xonsh shell";
     homepage = "https://github.com/xonsh/xontrib-debug-tools";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ greg ];
+    maintainers = with lib.maintainers; [
+      greg
+      infinidoge
+    ];
   };
 }

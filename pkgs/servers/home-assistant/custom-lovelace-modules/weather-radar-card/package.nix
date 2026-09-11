@@ -7,18 +7,23 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "weather-radar-card";
-  version = "3.7.0";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "jpettitt";
     repo = "weather-radar-card";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZEd27lt5S7pnGGzTnxLV6voEpzXjvRjubjmusLuISZg=";
+    hash = "sha256-NvxkVEuXrVO95qR7YBU1WSdZXTlHsOkVB39ZGwis/lw=";
   };
+
+  postPatch = ''
+    substituteInPlace src/radar-toolbar.ts \
+      --replace-fail "/local/community/weather-radar-card/" "/local/nixos-lovelace-modules/"
+  '';
 
   npmDepsFetcherVersion = 2;
   npmFlags = [ "--legacy-peer-deps" ];
-  npmDepsHash = "sha256-S3PZOcKBseohCKOUSRFCQj6fAJTrZLRD5916iB35rrc=";
+  npmDepsHash = "sha256-/PU0e4A5RH7g5jE0+Ai2y4MvOa6D2+7G+wcsv18orYk=";
 
   installPhase = ''
     runHook preInstall

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pyschlage";
-  version = "2025.9.0";
+  version = "2026.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dknowles2";
     repo = "pyschlage";
     tag = version;
-    hash = "sha256-ROLtRN/J6LdL67CQ/Ui60RLMLNStb1CZlvQGt8xerOA=";
+    hash = "sha256-I16P37eGjMJ1qYVDu9+mrqOPGiFklNJmhqSLaJTXyoA=";
   };
 
   build-system = [

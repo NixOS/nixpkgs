@@ -5,12 +5,12 @@
 }:
 buildDartApplication (finalAttrs: {
   pname = "melos";
-  version = "7.8.2";
+  version = "8.6.0";
   src = fetchFromGitHub {
     owner = "invertase";
     repo = "melos";
     tag = "melos-v${finalAttrs.version}";
-    hash = "sha256-5HLd0NUaRd0zl8WtTOGX4nHXwzCOOvCQcUW8GmmBqEw=";
+    hash = "sha256-cQGVAepdKrcwaGmWCl+8kTNBkQmNOiTpyyQcSevn5Y0=";
   };
 
   patches = [
@@ -27,6 +27,8 @@ buildDartApplication (finalAttrs: {
       --replace-fail "final melosPackageFileUri = await Isolate.resolvePackageUri(melosPackageUri);" "return \"$out\";"
     substituteInPlace packages/melos/lib/src/common/utils.dart \
       --replace-fail "return p.normalize('\''${melosPackageFileUri!.toFilePath()}/../..');" " "
+    substituteInPlace packages/melos/bin/melos.dart \
+      --replace-fail "__NIX_MELOS_PACKAGE_ROOT__" "$out"
     mkdir --parents $out
     cp --recursive packages/melos/templates $out/
   '';

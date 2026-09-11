@@ -1,3 +1,8 @@
+case "$TERM" in
+  foot*) : ;;
+  *) return 0 ;;
+esac
+
 function osc7-pwd() {
     emulate -L zsh # also sets localoptions for us
     setopt extendedglob

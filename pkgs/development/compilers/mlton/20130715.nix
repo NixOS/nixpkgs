@@ -29,11 +29,6 @@ stdenv.mkDerivation rec {
         url = "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}-1.amd64-linux.tgz";
         hash = "sha256-9vkSAJsJRrc6+I/18+cTtr5juHFpbiaXzPFWS1bn0Ds=";
       })
-    else if stdenv.hostPlatform.system == "x86_64-darwin" then
-      (fetchurl {
-        url = "mirror://sourceforge/project/mlton/mlton/${version}/${pname}-${version}-1.amd64-darwin.gmp-macports.tgz";
-        hash = "sha256-qb//O8Wnk+hDBvmM1g8ZWoE5kCkA+W4QctE8CBO0nBA=";
-      })
     else
       throw "Architecture not supported";
 
@@ -76,9 +71,6 @@ stdenv.mkDerivation rec {
   ''
   + lib.optionalString stdenv.cc.isClang ''
     sed -i "s_	patch -s -p0 <gdtoa.hide-public-fns.patch_	patch -s -p0 <gdtoa.hide-public-fns.patch\n\tsed -i 's|printf(emptyfmt|printf(\"\"|g' ./gdtoa/arithchk.c_" ./runtime/Makefile
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    sed -i 's|XCFLAGS += -I/usr/local/include -I/sw/include -I/opt/local/include||' ./runtime/Makefile
   '';
 
   preBuild = ''
@@ -93,19 +85,11 @@ stdenv.mkDerivation rec {
     # So the builder runs the binary compiler with gmp.
     export LD_LIBRARY_PATH=${gmp.out}/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
 
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
     # Patch ELF interpreter.
     patchelf --set-interpreter ${dynamic_linker} $(pwd)/../${usr_prefix}/lib/mlton/mlton-compile
     for e in mllex mlyacc ; do
       patchelf --set-interpreter ${dynamic_linker} $(pwd)/../${usr_prefix}/bin/$e
     done
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Patch libgmp linking
-    install_name_tool -change /opt/local/lib/libgmp.10.dylib ${gmp}/lib/libgmp.10.dylib $(pwd)/../${usr_prefix}/lib/mlton/mlton-compile
-    install_name_tool -change /opt/local/lib/libgmp.10.dylib ${gmp}/lib/libgmp.10.dylib $(pwd)/../${usr_prefix}/bin/mlyacc
-    install_name_tool -change /opt/local/lib/libgmp.10.dylib ${gmp}/lib/libgmp.10.dylib $(pwd)/../${usr_prefix}/bin/mllex
   '';
 
   doCheck = true;

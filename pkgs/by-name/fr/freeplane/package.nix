@@ -8,11 +8,12 @@
   gradle_9,
   which,
   copyDesktopItems,
+  fetchpatch,
 }:
 
 let
   pname = "freeplane";
-  version = "1.12.16";
+  version = "1.13.2";
 
   jdk = jdk17;
   gradle = gradle_9;
@@ -21,12 +22,20 @@ let
     owner = "freeplane";
     repo = "freeplane";
     rev = "release-${version}";
-    hash = "sha256-I7vp67UXoiBDxmIOlgCWk6sKOZSWHHI7A2Sdu6cl488=";
+    hash = "sha256-NDji6psNXESAY5NWI/Ms63MTgbxZHiIxYAgOSkWHuK0=";
   };
 
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   inherit pname version src;
+
+  patches = [
+    # Gradle 9.5 compatibility. Remove on next version bump.
+    (fetchpatch {
+      url = "https://github.com/freeplane/freeplane/commit/34189b58bbdf0027185a212e2d6bd9e289782ef2.patch";
+      hash = "sha256-gVCKXme+pB7PV0yBoDMPg6ltCaTGYh1lspEKgwVkDgc=";
+    })
+  ];
 
   nativeBuildInputs = [
     makeBinaryWrapper

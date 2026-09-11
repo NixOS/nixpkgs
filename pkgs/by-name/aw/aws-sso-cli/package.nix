@@ -6,19 +6,20 @@
   lib,
   makeWrapper,
   stdenv,
+  writableTmpDirAsHomeHook,
   xdg-utils,
 }:
 buildGoModule (finalAttrs: {
   pname = "aws-sso-cli";
-  version = "2.2.4";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "synfinatic";
     repo = "aws-sso-cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JkCHzIbIeFvmXrIkQaybjUtPDzmZ2XPv6tz3fA6ni44=";
+    hash = "sha256-u9fgfLhsdpEQ9T1T8jbGWl87vu61bWX9SzELktihBg8=";
   };
-  vendorHash = "sha256-euqhgbyz8H/fQ1RAP0k4GMOjOu7gVeYzQv75tjCh5z0=";
+  vendorHash = "sha256-lpp3Fji/EChMukRpypN98h9c5iN5z2S9RyrghFpxLbk=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -41,7 +42,14 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/aws-sso setup completions --source --shell=zsh)
   '';
 
-  nativeCheckInputs = [ getent ];
+  nativeCheckInputs = [
+    getent
+    writableTmpDirAsHomeHook
+  ];
+
+  preCheck = ''
+    mkdir -p "$HOME/.config/aws-sso"
+  '';
 
   checkFlags =
     let
@@ -51,6 +59,7 @@ buildGoModule (finalAttrs: {
         "TestAWSConsoleUrlEU"
         "TestAWSConsoleUrlUSEast"
         "TestAWSConsoleUrlUSGov"
+        "TestGetScriptsAutoDetect"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [ "TestDetectShellBash" ];
     in

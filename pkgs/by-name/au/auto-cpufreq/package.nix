@@ -13,14 +13,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "auto-cpufreq";
-  version = "3.0.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AdnanHodzic";
     repo = "auto-cpufreq";
     tag = "v${version}";
-    hash = "sha256-X+2RxD4+F8LBqvJNRh6FduRLU4a2SnZQ8a9BCN6Ty1E=";
+    hash = "sha256-yaA/YM0SVIDCWOZi12R6qryWmPCI6zIYEHoyK0QdOos=";
   };
 
   patches = [

@@ -12,7 +12,7 @@
 }:
 
 let
-  inherit (pkgsCross.wasi32) extism-js-core;
+  inherit (pkgsCross.wasm32-wasip1) extism-js-core;
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "extism-js";
@@ -33,10 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zstd
   ];
 
-  # fs-set-times v0.20.3 uses #![feature]
-  env.RUSTC_BOOTSTRAP = 1;
-
-  env.EXTISM_ENGINE_PATH = "${pkgsCross.wasi32.extism-js-core}/bin/js_pdk_core.wasm";
+  env.EXTISM_ENGINE_PATH = "${pkgsCross.wasm32-wasip1.extism-js-core}/bin/js_pdk_core.wasm";
   env.ZSTD_SYS_USE_PKG_CONFIG = true;
 
   cargoBuildFlags = [ "--package=js-pdk-cli" ];

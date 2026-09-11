@@ -274,6 +274,7 @@ in
 
     services.power-profiles-daemon.enable = mkDefault true;
     services.system-config-printer.enable = mkIf config.services.printing.enable (mkDefault true);
+    programs.fuse.enable = true;
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
     services.libinput.enable = mkDefault true;

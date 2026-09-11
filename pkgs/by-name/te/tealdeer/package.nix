@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tealdeer";
-  version = "1.8.1";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "tealdeer-rs";
     repo = "tealdeer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-QxkFpcEFLn98LvGDQ/PEovzzHTfNiKFQfGaHl/w5aLQ=";
+    hash = "sha256-aDhSxjRETpSaN+Dd9Aa1E+uZUVCp65QWne7mqJA7E54=";
   };
 
-  cargoHash = "sha256-45oFBZC8IRCybhnmZfwDsouFVsm2hgPQohem/1nsAxc=";
+  cargoHash = "sha256-4qtjurYWbGrjtCGsJyu1aMCvSVJ1aC5TEdGRYMe5tUU=";
 
   nativeBuildInputs = [ installShellFiles ];
 

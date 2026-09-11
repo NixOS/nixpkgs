@@ -9,7 +9,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "1.5.1";
 
   src = fetchFromGitHub {
-    owner = "tgirlcloud";
+    owner = "isabelroses";
     repo = "lix-diff";
     tag = "v${finalAttrs.version}";
     hash = "sha256-mURA7fZ9RAhVtOx+gnEeJI48tyvi+zbKE+xUs5UMPY4=";

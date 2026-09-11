@@ -4,33 +4,42 @@
   buildGoModule,
   faketty,
   fetchFromGitHub,
-  fetchYarnDeps,
-  fixup-yarn-lock,
+  fetchPnpmDeps,
   go,
   makeWrapper,
   nodejs,
   nix-update-script,
   patchelf,
+  pnpm_10,
+  pnpmConfigHook,
   removeReferencesTo,
-  testers,
-  yarn,
   versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdktn-cli";
-  version = "0.23.3";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "open-constructs";
     repo = "cdk-terrain";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k3xAaJiqldRZubAFrRuNM1e+3kH/5vv0maEeT/gdqK0=";
+    hash = "sha256-8vUGGg31MkuXdyvZo83GIoLZeJlOKIFgg3KlYU2F8hY=";
   };
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-9nhv31ljJ8DphOot3TAsYhbV6cx7Ovfe+ll+V2vJWx8=";
+  pnpmWorkspaces = [ "cdktn-cli..." ];
+
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      pnpmInstallFlags
+      pnpmWorkspaces
+      ;
+    fetcherVersion = 3;
+    hash = "sha256-2DTexRQg/n454cKaYitFT3KAT8BR+153KxlYMaa1NXM=";
+    pnpm = pnpm_10;
   };
 
   hcl2json-go-modules =
@@ -55,26 +64,27 @@ stdenv.mkDerivation (finalAttrs: {
       env.GOWORK = "off";
     }).goModules;
 
+  pnpmInstallFlags = [ "--shamefully-hoist" ];
   strictDeps = true;
   disallowedReferences = [ go ];
 
   nativeBuildInputs = [
     faketty
-    fixup-yarn-lock
     go
     makeWrapper
     nodejs
     patchelf
+    pnpm_10
+    pnpmConfigHook
     removeReferencesTo
-    yarn
   ];
 
   postPatch = ''
-    # wasm_exec has moved to lib in newer versions of Go
-    substituteInPlace packages/@cdktn/hcl-tools/prebuild.sh \
-      --replace-fail "misc/wasm/wasm_exec.js" "lib/wasm/wasm_exec.js"
-    substituteInPlace packages/@cdktn/hcl2json/prebuild.sh \
-      --replace-fail "misc/wasm/wasm_exec.js" "lib/wasm/wasm_exec.js"
+    # Fix tests (workaround for https://github.com/open-constructs/cdk-terrain/issues/381)
+    substituteInPlace jest.preset.js \
+      --replace-fail "...nxPreset," "...nxPreset, transform: {},"
+
+    patchShebangs packages
   '';
 
   preConfigure = ''
@@ -87,24 +97,12 @@ stdenv.mkDerivation (finalAttrs: {
     export CHECKPOINT_DISABLE=1
   '';
 
-  configurePhase = ''
-    runHook preConfigure
-
-    export HOME=$(mktemp -d)
-    yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup-yarn-lock yarn.lock
-    yarn --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive install
-    patchShebangs node_modules packages
-
-    runHook postConfigure
-  '';
-
   buildPhase = ''
     runHook preBuild
 
-    bash ./tools/align-version.sh
+    node tools/align-version.mjs
 
-    faketty yarn --offline build
+    faketty pnpm --filter "cdktn-cli..." run build
 
     runHook postBuild
   '';
@@ -114,9 +112,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preCheck
 
     # Skip tests that require terraform (unfree)
-    yarn --offline workspace cdktn-cli jest \
+    pnpm --filter cdktn-cli exec jest \
       --testPathIgnorePatterns \
-       "src/test/cmds/(convert|init).test.ts"
+       "src/test/cmds/convert.test.ts"
 
     runHook postCheck
   '';
@@ -124,14 +122,15 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    yarn --offline --production install
+    pnpm install --force --offline --production --ignore-scripts --shamefully-hoist --filter "cdktn-cli..."
 
-    mkdir -p "$out/lib/node_modules/cdktn-cli"
-    cp -rL node_modules packages/cdktn-cli/bundle packages/cdktn-cli/package.json "$out/lib/node_modules/cdktn-cli/"
+    mkdir -p "$out/lib/cdktn"
+    cp -r node_modules packages package.json "$out/lib/cdktn/"
 
     makeWrapper "${lib.getExe nodejs}" "$out/bin/cdktn" \
+      --set-default CHECKPOINT_DISABLE 1 \
       --add-flags "--no-warnings=DEP0040" \
-      --add-flags "$out/lib/node_modules/cdktn-cli/bundle/bin/cdktn.js"
+      --add-flags "$out/lib/cdktn/packages/cdktn-cli/bundle/bin/cdktn.js"
 
     runHook postInstall
   '';
@@ -139,8 +138,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     # Go isn't needed at runtime, so remove these to decrease the closure size
     remove-references-to -t ${go} \
-      "$out/lib/node_modules/cdktn-cli/node_modules/@cdktn/hcl-tools/main.wasm" \
-      "$out/lib/node_modules/cdktn-cli/node_modules/@cdktn/hcl2json/main.wasm"
+      "$out/lib/cdktn/packages/@cdktn/hcl-tools/main.wasm" \
+      "$out/lib/cdktn/packages/@cdktn/hcl2json/main.wasm"
   '';
 
   nativeInstallCheckInputs = [

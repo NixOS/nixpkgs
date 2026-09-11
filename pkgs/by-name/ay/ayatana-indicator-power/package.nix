@@ -13,7 +13,7 @@
   libayatana-common,
   libnotify,
   librda,
-  lomiri,
+  lomiri-qt6,
   pkg-config,
   python3,
   systemd,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Path needed for build-time codegen
     substituteInPlace src/CMakeLists.txt \
-      --replace-fail '/usr/share/accountsservice/interfaces/com.lomiri.touch.AccountsService.Sound.xml' '${lomiri.lomiri-schemas}/share/accountsservice/interfaces/com.lomiri.touch.AccountsService.Sound.xml'
+      --replace-fail '/usr/share/accountsservice/interfaces/com.lomiri.touch.AccountsService.Sound.xml' '${lomiri-qt6.lomiri-schemas}/share/accountsservice/interfaces/com.lomiri.touch.AccountsService.Sound.xml'
   '';
 
   strictDeps = true;
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     librda
     systemd
   ]
-  ++ (with lomiri; [
+  ++ (with lomiri-qt6; [
     cmake-extras
     deviceinfo
     lomiri-schemas

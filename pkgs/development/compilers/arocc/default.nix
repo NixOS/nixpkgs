@@ -2,18 +2,18 @@
   lib,
   fetchFromGitHub,
   callPackage,
-  zig_0_14,
+  zig,
 }:
 let
   versions = [
     {
-      zig = zig_0_14;
-      version = "0-unstable-2025-03-05";
+      inherit zig;
+      version = "0-unstable-2026-04-02";
       src = fetchFromGitHub {
         owner = "Vexu";
         repo = "arocc";
-        rev = "8c6bab43ba351fc045a1d262d8a8da4a11215e37";
-        hash = "sha256-J5Cj9UMwAMwH2JGby13FIKl5Qbj4N4XpSSY7zL21aoY=";
+        rev = "5f5a050569a95ecc40a426f0c3666ae7ef987ede";
+        hash = "sha256-f8Z0SXWx5Uia2TCMB5SUpcO8+xUnaWk32Oknva7xcxw=";
       };
     }
   ];

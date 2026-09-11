@@ -27,7 +27,7 @@
   atk,
   # For Adding additional GRC blocks
   extraPackages ? [ ],
-  # For Adding additional python packaages
+  # For Adding additional python packages
   extraPythonPackages ? [ ],
   soapysdr, # For it's passthru.searchPath
   # soapysdr plugins we add by default. Ideally, we should have a

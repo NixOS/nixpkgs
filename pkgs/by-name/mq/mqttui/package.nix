@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mqttui";
-  version = "0.23.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "EdJoPaTo";
     repo = "mqttui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Z9Xfg3y26e0sKhutm5Xvm8V6LYNJWvobjU5R6Inll0E=";
+    hash = "sha256-NpWQGjIbm9HOyutcaojzwqta28pUIBlE0a/2ziun2pY=";
   };
 
-  cargoHash = "sha256-Nyaiu9DEMJK8EHZQ0xPWPKgvD0yhlFhtdvQ4JjbKcvs=";
+  cargoHash = "sha256-wRkErkRm7cA/LWFhjQE4bwd4+mWANxZrZjj2CSfwshc=";
 
   meta = {
     description = "Terminal client for MQTT";

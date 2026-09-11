@@ -29,13 +29,13 @@
   libx11,
   libxshmfence,
   libxcb,
-  version ? "147.0.10",
-  gitRevision ? "d58e84d",
-  chromiumVersion ? "147.0.7727.118",
+  version ? "151.3.16",
+  gitRevision ? "be1e15d",
+  chromiumVersion ? "151.0.7922.109",
   buildType ? "Release",
   srcHashes ? {
-    aarch64-linux = "sha256-kaRijMDacPcoeCcS31zmRSNOvgozx+uq2M34mD28bu4=";
-    x86_64-linux = "sha256-CHzPofBDhCniDZEpOxXK4I7p57SYjMAY1HVo3Vna0e8=";
+    aarch64-linux = "sha256-gRYcEylZAUvKTOmV1zw9TyiEkv6FZ0vhVT1mLwne57k=";
+    x86_64-linux = "sha256-6usxPmA53kZIVYk9KHxNXrTscSaXjqg8YWS/SiPcAXo=";
   },
 }:
 

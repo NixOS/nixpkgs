@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "neargye-semver";
-  version = "0.3.1";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "Neargye";
     repo = "semver";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-0HOp+xzo8xcCUUgtSh87N9DXP5P0odBaYXhcDzOiiXE=";
+    sha256 = "sha256-ANH6GjtEbxozCVev25xO9agr2LkJb7uDLVTmuL0bZ7M=";
   };
 
   nativeBuildInputs = [

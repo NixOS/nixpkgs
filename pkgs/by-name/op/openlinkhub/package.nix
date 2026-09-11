@@ -11,17 +11,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "openlinkhub";
-  version = "0.8.8";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "jurkovic-nikola";
     repo = "OpenLinkHub";
     tag = finalAttrs.version;
-    hash = "sha256-uYuhmvdHNVs19egakwDOvIJ2IEAeZEAV6qgMYEl+Ie4=";
+    hash = "sha256-MIr37WrS3DoBL1gdzUkXugX8KksUA3x5pTsh5+6VBXs=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-/itomxsbTDT7ML52bpUfDZIBZ/Rh/zx4Blg+PP7m7gE=";
+  vendorHash = "sha256-d0tA2XVDF/PzmBKqBSjfKJ3C3Lt0gMi3i2bx5LKRgj8=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -37,10 +37,12 @@ buildGoModule (finalAttrs: {
     runHook preInstall
 
     install -Dm 644 -t $out/etc/udev/rules.d 99-openlinkhub.rules
-    install -Dm 755 -t $out/bin $GOPATH/bin/OpenLinkHub
+    install -Dm 755 -t $out/opt/OpenLinkHub $GOPATH/bin/OpenLinkHub
 
-    mkdir -p $out/opt/OpenLinkHub
-    cp -r {database,static,web} $out/opt/OpenLinkHub
+    cp -rt $out/opt/OpenLinkHub database static web
+
+    mkdir -p $out/bin
+    ln -st $out/bin $out/opt/OpenLinkHub/OpenLinkHub
 
     runHook postInstall
   '';

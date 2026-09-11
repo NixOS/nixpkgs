@@ -7,26 +7,29 @@
   cmake,
   installShellFiles,
   versionCheckHook,
+  _experimental-update-script-combinators,
   nix-update-script,
+  python3,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
-  majorVersion ? "45",
+  variant ? "main",
 }:
 let
   sources = {
-    "36" = {
-      version = "36.0.11";
-      hash = "sha256-rrSI2dSOA8/1CL7JhW0eQ7LaeS5EqTVnyn2HTI+/x20=";
-      cargoHash = "sha256-S67/fv7179uDy4PpwycyXSWAknIC/7ZzvzWPOd6MD+8=";
+    lts-36 = {
+      version = "36.0.14";
+      hash = "sha256-OI8wixfzV4U2brmW7uqhk55eLhj+Fdp+J5Pzz1iBO6U=";
+      cargoHash = "sha256-2Nwcw3Z4/cbkRcG2hJ2/1PcXZf3vYB9NGUlr7pxdqzU=";
     };
-    "45" = {
-
-      version = "45.0.2";
-      hash = "sha256-LEQitwz+UDSX4mrjEecmoO/ZPgRnYTZ3DsD1pu8Jybs=";
-      cargoHash = "sha256-uTgEW2w0RSMetd2W1ucGiVMEEvz2A7CQ79SEsE8/+BM=";
+    main = {
+      version = "48.0.1";
+      hash = "sha256-nvDiKIyo0/BmwjPTfNGIX1kSVVJQbmjjT4qed0dr8cc=";
+      cargoHash = "sha256-NVea5PiuFTr1NrIcyEJSq0gFf2XkDZj/VKubHwO34U4=";
     };
   };
-  source = sources.${majorVersion};
+  source = sources.${variant};
+  # there is no LTS version of python3Packages.wasmtime yet
+  hasPythonBinding = variant == "main";
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasmtime";
@@ -56,6 +59,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "dev"
     "lib"
   ];
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
@@ -111,21 +116,30 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "^v(\\d+\\.\\d+\\.\\d+)$"
-      ];
+    tests = lib.optionalAttrs hasPythonBinding {
+      python3-wasmtime = python3.pkgs.wasmtime;
     };
+    updateScript = _experimental-update-script-combinators.sequence (
+      [
+        (nix-update-script {
+          extraArgs = [
+            "--version-regex"
+            "^v(\\d+\\.\\d+\\.\\d+)$"
+          ];
+        })
+      ]
+      ++ lib.optionals hasPythonBinding [
+        (nix-update-script {
+          attrPath = "python3.pkgs.wasmtime";
+        })
+      ]
+    );
   };
 
   meta = {
     description = "Standalone JIT-style runtime for WebAssembly, using Cranelift";
     homepage = "https://wasmtime.dev/";
-    license = [
-      lib.licenses.asl20
-      lib.licenses.llvm-exception
-    ];
+    license = lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception;
     mainProgram = "wasmtime";
     maintainers = with lib.maintainers; [
       ereslibre

@@ -24,10 +24,6 @@ let
         arch = "linux-arm64";
         hash = "sha256-EV3745OXbwrRmc8P5e13DZbomyJGcYQUF07WflRWU1Q=";
       };
-      x86_64-darwin = {
-        arch = "darwin-x64";
-        hash = "sha256-i2cALeaSXfwIdfXNeWfND99nFYIiOFwsxbqU7/Effx8=";
-      };
       aarch64-darwin = {
         arch = "darwin-arm64";
         hash = "sha256-KCIkjBmYZPiuFmQ3/aDycARYIHPyDTmMkoGcuG5DQX8=";
@@ -42,9 +38,11 @@ let
   #       everyone to reuse.
   roslyn-copilot = fetchzip {
     url = "https://roslyn.blob.core.windows.net/releases/Microsoft.VisualStudio.Copilot.Roslyn.LanguageServer-18.3.72-alpha.zip";
-    hash = "sha256-Eh1XaF9eCN5saTrIf4NeZZKDeiEvrTo0m+vOiM5QZoI=";
+    hash = "sha256-vzowJOPp/VVeWkPihvWX2jvTrbFMZMtgX03eLezdanE=";
+    # Must be written to $out: fetchzip runs postFetch with cwd = $TMPDIR/unpack,
+    # which stripRoot has already emptied by moving the payload to $out.
     postFetch = ''
-      touch install.Lock
+      touch "$out/install.Lock"
     '';
   };
 in
@@ -159,7 +157,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

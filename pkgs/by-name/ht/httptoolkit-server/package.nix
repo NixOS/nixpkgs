@@ -21,13 +21,13 @@ let
 
   # update together with httptoolkit
   # nixpkgs-update: no auto update
-  version = "1.26.1";
+  version = "1.27.1";
 
   src = fetchFromGitHub {
     owner = "httptoolkit";
     repo = "httptoolkit-server";
     tag = "v${version}";
-    hash = "sha256-pCEz5bgpzEjGeBoOp3fb/WBW+loCzjvCckJTEwK0o7U=";
+    hash = "sha256-t7Rxh8BuzfhdBfMGMNWUV/xMtbhgw0yU9t97LbdKB9o=";
   };
 
   overridesNodeModules = buildNpmPackage' {
@@ -35,7 +35,7 @@ let
     inherit version src;
     sourceRoot = "${src.name}/overrides/js";
 
-    npmDepsHash = "sha256-B/W6kD6x10bfsuehRb9oObi+Gf3Hovm0jMNLcbuigeo=";
+    npmDepsHash = "sha256-oZcroK5zmQvvxBas9OmAXins+7+olGWwouUepprWFxk=";
 
     dontBuild = true;
 
@@ -45,6 +45,7 @@ let
     '';
   };
 
+  # Check update in package-lock.json
   nodeDatachannel = buildNpmPackage' {
     pname = "node-datachannel";
     version = "0.12.0";
@@ -105,7 +106,7 @@ buildNpmPackage' {
 
   patches = [ ./only-build-for-one-platform.patch ];
 
-  npmDepsHash = "sha256-OO1QI2KNbZo/2Bl6xC6oORVfDtBqjr2tuQmk6s70znM=";
+  npmDepsHash = "sha256-xICvMGB3RLsI0UDGPrtxkNrO1SgZqGGmfBzCQOFGJzY=";
 
   npmFlags = [ "--ignore-scripts" ];
 

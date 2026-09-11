@@ -100,10 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = buildType == "meson";
 
-  preCheck = ''
-    export OMP_NUM_THREADS=2
-  '';
-
   meta = {
     description = "Light-weight tight-binding framework";
     mainProgram = "tblite";

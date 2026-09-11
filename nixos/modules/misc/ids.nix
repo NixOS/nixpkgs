@@ -124,7 +124,7 @@ in
       datadog = 76;
       lighttpd = 77;
       lightdm = 78;
-      freenet = 79;
+      # hyphanet = 79; # was freenet; dynamically allocated as of 2026-09-02
       ircd = 80;
       bacula = 81;
       #almir = 82; # removed 2018-03-25, the almir package was removed in 30291227f2411abaca097773eedb49b8f259e297 during 2017-08
@@ -194,7 +194,7 @@ in
       redmine = 147;
       #seeks = 148; # removed 2020-06-21
       prosody = 149;
-      i2pd = 150;
+      # i2pd = 150; # dynamically allocated as of 2026-08-07
       systemd-coredump = 151;
       systemd-network = 152;
       systemd-resolve = 153;
@@ -466,7 +466,7 @@ in
       datadog = 76;
       lighttpd = 77;
       lightdm = 78;
-      freenet = 79;
+      # hyphanet = 79; # was freenet; dynamically allocated as of 2026-09-02
       ircd = 80;
       bacula = 81;
       #almir = 82; # removed 2018-03-25, the almir package was removed in 30291227f2411abaca097773eedb49b8f259e297 during 2017-08
@@ -534,7 +534,7 @@ in
       redmine = 147;
       #seeks = 148; # removed 2020-06-21
       prosody = 149;
-      i2pd = 150;
+      # i2pd = 150; # dynamically allocated as of 2026-08-07
       systemd-network = 152;
       systemd-resolve = 153;
       systemd-timesync = 154;

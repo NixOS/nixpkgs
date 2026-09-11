@@ -1,5 +1,6 @@
 {
   _cuda,
+  autoAddDriverRunpath,
   backendStdenv,
   buildPackages,
   cmake,
@@ -21,9 +22,11 @@
   mpi,
   nccl,
   ninja,
+  patchelf,
   pmix,
   python3Packages,
   rdma-core,
+  removeReferencesTo,
   ucx,
   # passthru.updateScript
   gitUpdater,
@@ -40,13 +43,16 @@ let
   inherit (lib)
     cmakeBool
     cmakeFeature
+    concatMapStringsSep
     getBin
     getDev
     getExe
     getLib
     licenses
     maintainers
+    makeLibraryPath
     optional
+    optionalString
     optionals
     teams
     ;
@@ -70,13 +76,18 @@ backendStdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" ];
 
   nativeBuildInputs = [
+    # libnvshmem_host dlopens libcuda.so.1 and libnvidia-ml.so.1 by bare soname
+    # (src/host/init/{cudawrap,nvmlwrap}.cpp).
+    autoAddDriverRunpath
     cuda_nvcc
     cmake
     ninja
+    patchelf
 
     # NOTE: Python is required even if not building nvshmem4py:
     # https://github.com/NVIDIA/nvshmem/blob/131da55f643ac87c810ba0bc51d359258bf433a1/CMakeLists.txt#L173
     python3Packages.python
+    removeReferencesTo
   ]
   ++ optionals withMpi [
     # NOTE: mpi is in nativeBuildInputs because it contains compilers and is only discoverable by CMake
@@ -186,6 +197,54 @@ backendStdenv.mkDerivation (finalAttrs: {
     mv -v "$out"/{changelog,git_commit.txt,License.txt,version.txt} "$out/share/"
   '';
 
+  # These are all dlopen'd by bare soname, so buildInputs alone never reaches a RUNPATH. The contrast
+  # is visible within this package: ibgda links libmlx5.so.1 and so does pick up rdma-core, while
+  # ibrc -- the default transport -- only dlopens libibverbs.so.1 and would get nothing.
+  postFixup =
+    # Skips entries already present, so ibgda does not end up with rdma-core twice.
+    ''
+      addMissing() {
+        local elf=$1 rp d
+        shift
+        rp=$(patchelf --print-rpath "$elf")
+        for d in "$@"; do [[ ":$rp:" == *":$d:"* ]] || rp=''${rp:+$rp:}$d; done
+        patchelf --set-rpath "$rp" "$elf"
+      }
+    ''
+    + ''
+      nixLog "adding dlopen'd transport libraries to the transport plugins' runpath"
+      for transport in "$out"/lib/nvshmem_transport_*.so.*.*; do
+        addMissing "$transport" ${makeLibraryPath ([ rdma-core ] ++ optional withGdrcopy gdrcopy)}
+      done
+    ''
+    # libnvshmem_host dlopens libnccl.so.2 for host-side collectives (src/host/coll/cpu_coll.cpp).
+    + optionalString withNccl ''
+      nixLog "adding nccl to libnvshmem_host's runpath"
+      addMissing "$out"/lib/libnvshmem_host.so.*.* "${getLib nccl}/lib"
+    ''
+    # cmake_config/NVSHMEMEnv.cmake:156 bakes every -D*_HOME we pass into NVSHMEM_BUILD_VARS, a
+    # diagnostic banner that nvshmem-info and init.cu only print. Nix still counts the store paths, so
+    # build-only inputs become runtime dependencies -- and the banner is substituted into an installed
+    # header, so consumers inherit them too. Only the dev outputs and nvcc are stripped: gdrcopy and
+    # mpi appear in the same string but are genuine runtime dependencies. No disallowedRequisites
+    # guard here, unlike nccl and gdrcopy, because ucx and openmpi pull nvcc in on their own.
+    + ''
+      nixLog "removing build-time references baked into NVSHMEM_BUILD_VARS"
+      remove-references-to ${
+        concatMapStringsSep " " (p: ''-t "${p}"'') (
+          [ (getBin cuda_nvcc) ]
+          ++ optional withNccl (getDev nccl)
+          ++ optional withUcx (getDev ucx)
+          ++ optional withLibfabric (getDev libfabric)
+          ++ optional withPmix (getDev pmix)
+        )
+      } \
+        "$out"/bin/nvshmem-info \
+        "$out"/lib/libnvshmem_host.so.*.* \
+        "$out"/include/non_abi/nvshmem_version.h \
+        "$out"/share/src/*/include/non_abi/nvshmem_version.h
+    '';
+
   doCheck = false;
 
   passthru = {
@@ -195,7 +254,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     };
 
     brokenAssertions = [
-      # CUDA pre-11.7 yeilds macro/type errors in src/include/internal/host_transport/cudawrap.h.
+      # CUDA pre-11.7 yields macro/type errors in src/include/internal/host_transport/cudawrap.h.
       {
         message = "NVSHMEM does not support CUDA releases earlier than 11.7 (found ${cudaMajorMinorVersion})";
         assertion = cudaAtLeast "11.7";

@@ -10,6 +10,7 @@
   hatchling,
   httpx,
   litestar,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-django,
   pytestCheckHook,
@@ -34,6 +35,10 @@ buildPythonPackage (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-JxwzTU17jCQMFNCtmcZVAZQnwDZjHNxCGNdKhkCMoPs=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ hatchling ];
 
@@ -64,6 +69,11 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+
+  pytestFlags = [
+    # Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    "-Wignore::starlette.exceptions.StarletteDeprecationWarning"
+  ];
 
   pythonImportsCheck = [ "cross_web" ];
 

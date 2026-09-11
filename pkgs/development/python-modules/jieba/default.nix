@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    description = "Chinese Words Segementation Utilities";
+    description = "Chinese Words Segmentation Utilities";
     homepage = "https://github.com/fxsjy/jieba";
     license = lib.licenses.mit;
     teams = [ lib.teams.tts ];

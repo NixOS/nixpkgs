@@ -7,7 +7,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "lstk";
-  version = "0.13.0";
+  version = "0.22.2";
 
   __structuredAttrs = true;
 
@@ -15,10 +15,10 @@ buildGoModule (finalAttrs: {
     owner = "localstack";
     repo = "lstk";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-UF+ySjw3fdb9aTA/tRDmFR3EXYA7nvbuv/esT/3Rsv4=";
+    sha256 = "sha256-Yy3LmKih91bXsa2wbBgGGNP6VhYBSD/3FFeU6WN15ek=";
   };
 
-  vendorHash = "sha256-zKEUGn9eKYdxSinS+NXc7PrgZkrQRZnIxTNH3yNL4GE=";
+  vendorHash = "sha256-wA59wFUoNW4NqAUI2MAGyF2g4vhX4++vlSAqwuXK4U4=";
 
   excludedPackages = "test/integration";
 

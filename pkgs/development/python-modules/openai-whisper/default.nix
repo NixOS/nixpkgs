@@ -27,7 +27,7 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "whisper";
+  pname = "openai-whisper";
   version = "20250625";
   pyproject = true;
   __structuredAttrs = true;

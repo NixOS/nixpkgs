@@ -26,6 +26,7 @@ mkKdeDerivation {
       inherit mlt glaxnimate;
       ffmpeg = ffmpeg-full;
     })
+    ./no-qmllint.patch
   ];
 
   extraCmakeFlags = [

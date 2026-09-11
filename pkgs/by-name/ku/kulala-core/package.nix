@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kulala-core";
-  version = "0.14.1";
+  version = "0.37.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mistweaverco";
     repo = "kulala-core";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1EtYAKulMQbtYWHZ8MkUA1fMcL3V07/Sz1sjl5PnaI4=";
+    hash = "sha256-rqfxp+i2o2DA8vle8yr+C6TzHcF2Q7kwYkW2VLMaKw0=";
   };
 
   node_modules = stdenv.mkDerivation {
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     dontFixup = true;
 
-    outputHash = "sha256-XQlBawD3vt8pVc7Gy9XeiGie89HWbljNJt7kUEDaDKk=";
+    outputHash = "sha256-y/Wl87g9BEok6DbUIKxMhp9rhSBpfFDQt5BSiUJzpW4=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Core parser and runner for kulala.nvim";
+    description = "HTTP client library powering the Kulala toolchain";
     homepage = "https://github.com/mistweaverco/kulala-core";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];

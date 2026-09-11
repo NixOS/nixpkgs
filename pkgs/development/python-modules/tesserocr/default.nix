@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tesserocr";
-  version = "2.10.0";
+  version = "2.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sirfz";
     repo = "tesserocr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-y/3MXkocO4hRMjREPT6yvqH87EZm79zerinp5TUHNP4=";
+    hash = "sha256-DkwWTCsuDs9dmHjZ8CQrqfVJjWVxnn7Bx0UhylY/AMY=";
   };
 
   postPatch = ''

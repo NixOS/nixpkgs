@@ -9,16 +9,16 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "slacky";
-  version = "0.0.9";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "andirsun";
     repo = "Slacky";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DnbB11hCWUa5RL30taFvOIG6EmKMaNSH6KnJc7XrrW4=";
+    hash = "sha256-Tx4UbvQV05ITFxBB5SyFx+jvxc0jpIvpHJ+hpgUy0t4=";
   };
 
-  npmDepsHash = "sha256-GD7yni+AgpCaNCohHCa/I2fis1867mgGrdIuyEzi4wU=";
+  npmDepsHash = "sha256-UAnIaAh8UPciwrOP/06KQPj1sb/ItkByQKgJxGorNSw=";
 
   npmPackFlags = [
     "--ignore-scripts"

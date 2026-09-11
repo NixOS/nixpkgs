@@ -10,20 +10,20 @@
 let
   pythonEnv = python3.withPackages (
     ps: with ps; [
-      cheetah3
+      ct3
       lxml
     ]
   );
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sickgear";
-  version = "3.34.13";
+  version = "3.36.0";
 
   src = fetchFromGitHub {
     owner = "SickGear";
     repo = "SickGear";
     tag = "release_${finalAttrs.version}";
-    hash = "sha256-jOQktr7KG/C/ap/cLGMCwWnceirGo3TuwxXNewE5I78=";
+    hash = "sha256-+ih4UHgoyZpg9kpl3ldzaFLzd0UJ6YDrXAhV36jr+hA=";
   };
 
   dontBuild = true;

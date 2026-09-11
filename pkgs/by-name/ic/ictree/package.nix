@@ -24,5 +24,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = [ ];
     mainProgram = "ictree";
+    license = lib.licenses.gpl3Plus;
   };
 })

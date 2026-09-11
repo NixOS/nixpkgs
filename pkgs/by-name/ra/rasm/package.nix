@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rasm";
-  version = "3.2.5";
+  version = "3.2.7";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "EdouardBERGE";
     repo = "rasm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sLSODTaVxhybtkzRAjQw4bRSPhp9O69S5OzkEq/pK0M=";
+    hash = "sha256-8Efo7B1q0pNKSkUR3UUhAxvItgt7bxSSbw4uTllShTk=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

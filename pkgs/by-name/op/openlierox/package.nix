@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.58_rc5";
 
   src = fetchFromGitHub {
-    owner = "albertz";
+    owner = "openlierox";
     repo = "openlierox";
     rev = finalAttrs.version;
     hash = "sha256-4ofjroEHlfrQitc7M+YTNWut0LGgntgQoOeBWU8nscY=";

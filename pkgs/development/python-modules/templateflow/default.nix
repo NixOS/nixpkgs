@@ -10,7 +10,7 @@
 
   writableTmpDirAsHomeHook,
 
-  # dependenices
+  # dependencies
   nipreps-versions,
   platformdirs,
   pybids,

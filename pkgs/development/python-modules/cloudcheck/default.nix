@@ -15,19 +15,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cloudcheck";
-  version = "11.0.0";
+  version = "11.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blacklanternsecurity";
     repo = "cloudcheck";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ao5NSGu2QOPn0P/51vjIu71IlhTWd1h4q9q++B+p4Po=";
+    hash = "sha256-rOMr7J6XZGjWq11Mlr3gkE7IpBlBeQ30gJ5uGXfbxTI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-8uMyBhD8dybSFS4KqFHBfamyTdFYawoM0P4R6WAy10E=";
+    hash = "sha256-OmWW3+nCx8a0X25kKQ97+MJlCb7mOh9WN4zI+3oOTd4=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -67,6 +67,7 @@ buildPythonPackage (finalAttrs: {
     "test_lookup_google_dns"
     "test_lookup_amazon_domain"
     "test_lookup_endpoint"
+    "test_lookup_with_ssl_verification_disabled"
   ];
 
   preCheck = ''
