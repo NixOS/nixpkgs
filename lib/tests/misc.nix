@@ -3402,26 +3402,30 @@ runTests {
         docList = optionAttrSetToDocList options;
       in
       {
+        # Top-level container schema
+        hasDefs = optionDoc ? "$defs" && optionDoc."$defs" == { };
+
         # Standard option schema verification (no loc, no name)
-        bootEnableDescription = optionDoc.boot.enable.description;
-        bootEnableType = optionDoc.boot.enable.type;
-        bootEnableDefaultText = optionDoc.boot.enable.default.text;
-        bootEnableHasNoLoc = !(optionDoc.boot.enable ? loc);
-        bootEnableHasNoName = !(optionDoc.boot.enable ? name);
+        bootEnableDescription = optionDoc.options.boot.enable.description;
+        bootEnableType = optionDoc.options.boot.enable.type;
+        bootEnableDefaultText = optionDoc.options.boot.enable.default.text;
+        bootEnableHasNoLoc = !(optionDoc.options.boot.enable ? loc);
+        bootEnableHasNoName = !(optionDoc.options.boot.enable ? name);
 
         # Submodule nesting via '*' key
-        vhostDescription = optionDoc.services.nginx.virtualHosts.description;
-        vhostType = optionDoc.services.nginx.virtualHosts.type;
-        vhostSubOptionType = optionDoc.services.nginx.virtualHosts."*".enableSSL.type;
+        vhostDescription = optionDoc.options.services.nginx.virtualHosts.description;
+        vhostType = optionDoc.options.services.nginx.virtualHosts.type;
+        vhostSubOptionType = optionDoc.options.services.nginx.virtualHosts."*".enableSSL.type;
 
         # attrTag nesting via '*' key
-        attrTagDescription = optionDoc.tagTest.description;
-        attrTagSubOptionType = optionDoc.tagTest."*".tagA.type;
+        attrTagDescription = optionDoc.options.tagTest.description;
+        attrTagSubOptionType = optionDoc.options.tagTest."*".tagA.type;
 
         # Equivalent traversal via optionAttrSetToDocList
         docListCount = builtins.length docList;
       };
     expected = {
+      hasDefs = true;
       bootEnableDescription = "Enable boot";
       bootEnableType = "boolean";
       bootEnableDefaultText = "false";

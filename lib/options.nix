@@ -686,8 +686,7 @@ rec {
     } options;
 
   /**
-    Generate documentation template as a nested attribute set (tree)
-    preserving module option structure.
+    Generate documentation template as an attribute set preserving module option structure.
 
     Submodule sub-options are nested directly under the `"*"` wildcard key.
 
@@ -700,36 +699,40 @@ rec {
     # Type
 
     ```
-    optionToDoc :: (OptionSet | Option) -> AttrSet
+    optionToDoc :: (OptionSet | Option) -> { options :: AttrSet, "$defs" :: AttrSet }
     ```
 
     # Examples
     :::{.example}
-    ## Generate a nested option documentation tree
+    ## Generate option documentation
 
     ```nix
     optionToDoc (evalModules { modules = [ module ]; }).options
     => {
-      boot = {
-        enable = {
-          default = { _type = "literalExpression"; text = "false"; };
-          description = "Enable boot";
-          type = "boolean";
+      options = {
+        boot = {
+          enable = {
+            default = { _type = "literalExpression"; text = "false"; };
+            description = "Enable boot";
+            type = "boolean";
+          };
         };
       };
+      "$defs" = { };
     }
     ```
     :::
   */
-  optionToDoc =
-    options:
-    foldOptionSet {
+  optionToDoc = options: {
+    options = foldOptionSet {
       onOption =
         doc: subDocs: _:
         if subDocs != { } then doc // { "*" = subDocs; } else doc;
       onAttrSet = recurse: set: mapAttrs (_: recurse) set;
       empty = { };
     } options;
+    "$defs" = { };
+  };
 
   /**
     This function recursively removes all derivation attributes from
