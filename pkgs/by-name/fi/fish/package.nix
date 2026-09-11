@@ -165,6 +165,10 @@ stdenv.mkDerivation (finalAttrs: {
     CI = 1;
     # really skip them all https://github.com/fish-shell/fish-shell/issues/12253#issuecomment-3707996020
     FISH_CI_SAN = 1;
+  }
+  // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+    "CARGO_TARGET_${stdenv.buildPlatform.rust.cargoEnvVarTarget}_RUSTFLAGS" =
+      "-L${buildPackages.pcre2.out}/lib";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -303,6 +307,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libiconv
     pcre2
+  ];
+
+  depsBuildBuild = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    buildPackages.pcre2
   ];
 
   cmakeFlags = [
