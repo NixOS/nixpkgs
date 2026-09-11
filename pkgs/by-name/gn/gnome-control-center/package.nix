@@ -18,7 +18,7 @@
   glib-networking,
   gcr_4,
   glibc,
-  glibcLocales,
+  glibcLocalesUtf8,
   gnome-bluetooth,
   gnome-color-manager,
   gnome-desktop,
@@ -165,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.python-dbusmock
     setxkbmap
     xorg-server # for Xvfb
-    glibcLocales
+    glibcLocalesUtf8
   ];
 
   doCheck = true;
