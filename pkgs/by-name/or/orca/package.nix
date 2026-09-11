@@ -50,7 +50,12 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   cargoRoot = "subprojects/mathcat-py";
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src cargoRoot;
+    inherit (finalAttrs)
+      src
+      pname
+      version
+      cargoRoot
+      ;
     hash = "sha256-XxdIfDqb/0eoB3dOHbBW104yxkiCX6oKnvOTqCALBvg=";
   };
 
