@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  callPackage,
   fetchFromGitHub,
   nix-update-script,
 
@@ -14,9 +15,11 @@
   # run-time
   bzip2,
   capnproto,
-  doctest,
   mimalloc,
   unordered_dense,
+
+  # tests
+  doctest,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     bzip2
     capnproto
-    doctest
     mimalloc
     unordered_dense
   ];
@@ -57,7 +59,16 @@ stdenv.mkDerivation (finalAttrs: {
     cmakeFlagsArray+=("-DJANET_SOURCE_DIR=$(pwd)/janet-src")
   '';
 
-  passthru.updateScript = nix-update-script { };
+  checkInputs = [
+    doctest
+  ];
+
+  doCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+    playground = callPackage ./playground.nix { };
+  };
 
   meta = {
     description = "Semantic network system and reasoning engine";
