@@ -44,7 +44,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openrct2";
-  version = "0.5.4";
+  version = "0.5.5";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NzPkrPQ8XIekFfTzPwHnR1skhKv530x80YBZ5fvTRqw=";
+    hash = "sha256-FcZVBhiKLoxVX7rhJEfBqGy+yA8w8twGsVSitVuxbWQ=";
   };
 
   passthru = {
