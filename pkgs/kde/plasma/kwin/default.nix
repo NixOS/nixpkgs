@@ -25,6 +25,7 @@ mkKdeDerivation {
   patches = [
     ./0003-plugins-qpa-allow-using-nixos-wrapper.patch
     ./0001-NixOS-Unwrap-executable-name-for-.desktop-search.patch
+    ./plasma-setup-xwayland-path.patch
   ];
 
   postPatch = ''
