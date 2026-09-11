@@ -1,0 +1,43 @@
+--- a/lib/OAMa/CommandLine.hs
++++ b/lib/OAMa/CommandLine.hs
+@@ -10,31 +10,11 @@
+   versionInfo,
+ ) where
+ 
+-import Data.Time.Clock.POSIX qualified as TCP
+-import Data.Time.Format qualified as TF
+ import Data.Version (showVersion)
+ import Data.Yaml qualified as Yaml
+ import GHC.Generics
+-import GitHash
+ import Options.Applicative
+ import Paths_oama (version)
+-import Text.Printf
+-
+-gi :: GitInfo
+-gi = $$tGitInfoCwd
+-
+-_GIT_STATUS_INFO :: String
+-_GIT_STATUS_INFO =
+-  printf
+-    "%s %04d.%s%s"
+-    ( TF.formatTime
+-        TF.defaultTimeLocale
+-        "%Y-%m-%d"
+-        (TCP.posixSecondsToUTCTime (fromIntegral (giCommitTime gi)))
+-    )
+-    (giCommitCount gi)
+-    (take 8 (giHash gi))
+-    (if giDirty gi then " dirty" else "")
+ 
+ data Opts = Opts
+   { optConfig :: !String,
+@@ -65,7 +45,7 @@
+     )
+ 
+ versionInfo :: String
+-versionInfo = showVersion version <> printf " - %s" _GIT_STATUS_INFO
++versionInfo = showVersion version
+ 
+ versionOption :: Parser (a -> a)
+ versionOption = do
