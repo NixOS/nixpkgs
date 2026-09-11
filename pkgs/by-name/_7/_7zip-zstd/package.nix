@@ -16,7 +16,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "7zip-zstd";
-  version = "26.01-v1.5.7-R1";
+  version = "26.02-v1.5.7-R2";
 
   src = fetchFromGitHub {
     owner = "mcmilk";
@@ -24,9 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash =
       if enableUnfree then
-        "sha256-P6kwg3McroMwqB5bryfoS9dIBsxcd84bVzsjUv5Bk5k="
+        "sha256-Y1l+PiZyHZX4KnqANogn4iVhhEjsezGckkeXtO0RHDY="
       else
-        "sha256-WowqcjcA/DUwj7DJrKDTYKpCDWd/tTIZ3yiuBgqXpmU=";
+        "sha256-0m4Q4920/tIatY28E5d89hYvp6Z0zE2v55rUSwig1+0=";
     # remove the unRAR related code from the src drv
     # > the license requires that you agree to these use restrictions,
     # > or you must remove the software (source and binary) from your hard disks
@@ -119,11 +119,12 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       runHook preInstall
 
+      # Upstream always names this module 7z.so on Unix, including Darwin.
       install -Dt "$out/${if isWindows then "bin" else "lib"}/7zip" \
         CPP/7zip/Bundles/Alone/b/*/7za${extensions.executable} \
         CPP/7zip/Bundles/Alone2/b/*/7zz${extensions.executable} \
         CPP/7zip/Bundles/Alone7z/b/*/7zr${extensions.executable} \
-        CPP/7zip/Bundles/Format7zF/b/*/7z${extensions.sharedLibrary} \
+        CPP/7zip/Bundles/Format7zF/b/*/7z${if isWindows then extensions.sharedLibrary else ".so"} \
         CPP/7zip/UI/Console/b/*/7z${extensions.executable}
       install -D CPP/7zip/Bundles/SFXCon/b/*/7zCon${extensions.executable} "$out/lib/7zip/7zCon.sfx"
 
