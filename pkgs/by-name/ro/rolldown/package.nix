@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_10_latest,
   nodejs_22,
   rustPlatform,
   cargo,
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     pname = "rolldown";
     version = finalAttrs.version;
     src = finalAttrs.src;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 3;
     hash = "sha256-lQVbYV8S3P1+AQwF9PBDxJqbKf9jBAtwymKcxQ55FeQ=";
   };
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
     nodejs_22
     rustPlatform.cargoSetupHook
     cargo

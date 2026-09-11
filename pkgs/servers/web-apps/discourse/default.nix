@@ -40,7 +40,7 @@
   buildRubyGem,
   rustc,
   cargo,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   svgo,
@@ -63,7 +63,7 @@ let
     sha256 = "sha256-sGygaOCygtDVjg8uBGdDVaRouUKib8aAukaBAY8aQ9w=";
   };
 
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 
   ruby = ruby_3_4;
 
