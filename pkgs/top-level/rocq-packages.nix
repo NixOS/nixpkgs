@@ -18,14 +18,10 @@ let
   mkRocqPackages' =
     self: rocq-core:
     let
-      callPackage = self.callPackage;
+      callPackage = self.newScope { rocqPackages = self; };
     in
     {
       inherit lib;
-      rocqPackages = self // {
-        __attrsFailEvaluation = true;
-        recurseForDerivations = false;
-      };
 
       metaFetch = import ../build-support/rocq/meta-fetch/default.nix {
         inherit
