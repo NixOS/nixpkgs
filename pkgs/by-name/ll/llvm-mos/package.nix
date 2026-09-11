@@ -74,7 +74,12 @@ stdenv.mkDerivation {
   meta = {
     description = "LLVM-MOS C compiler for 6502-based systems";
     homepage = "https://llvm-mos.org/";
-    license = lib.licenses.gpl3;
+    license =
+      with lib.licenses;
+      AND [
+        ncsa
+        (WITH asl20 llvm-exception)
+      ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ llamato ];
   };
