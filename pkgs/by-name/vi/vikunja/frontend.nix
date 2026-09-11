@@ -5,7 +5,7 @@
   lib,
   stdenv,
   nodejs_24,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   dart-sass,
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       sourceRoot
       ;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 3;
     hash = "sha256-aQWTzJZU6NJrZxuoCeQDJjujPq+niixmFvqtPdWS4wk=";
   };
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs_24
     dart-sass
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
   ];
 
   postPatch = ''

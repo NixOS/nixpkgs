@@ -8,7 +8,7 @@
   nodejs,
   writableTmpDirAsHomeHook,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_10_latest,
   unzip,
   patchelf,
   autoPatchelfHook,
@@ -17,7 +17,7 @@
   nix-update-script,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kilocode-cli";

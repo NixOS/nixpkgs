@@ -3,7 +3,7 @@
   buildNpmPackage,
   fetchFromGitHub,
 
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   makeBinaryWrapper,
@@ -12,7 +12,7 @@
   nodejs,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 buildNpmPackage (finalAttrs: {
   pname = "sub-store";

@@ -4,13 +4,13 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
-  pnpm_10,
+  pnpm_10_latest,
   # https://github.com/openbao/openbao/issues/731
   nodejs-slim_22,
 }:
 let
   nodejs-slim = nodejs-slim_22;
-  pnpm = pnpm_10.override { inherit nodejs-slim; };
+  pnpm = pnpm_10_latest.override { inherit nodejs-slim; };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = openbao.pname + "-ui";

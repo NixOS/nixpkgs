@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cargo-tauri,
   nodejs,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   pkg-config,
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       src
       patches
       ;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 3;
     hash = "sha256-omomvnHUiEfGVJn6LApWOnRwSVO8kpMLN3Jz0MhwPpQ=";
   };
@@ -62,7 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wrapGAppsHook3
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
   ];
 
   buildInputs = [

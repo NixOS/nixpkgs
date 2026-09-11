@@ -3,7 +3,7 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   wails,
@@ -13,7 +13,7 @@
   copyDesktopItems,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 buildGoModule rec {
   pname = "satisfactorymodmanager";

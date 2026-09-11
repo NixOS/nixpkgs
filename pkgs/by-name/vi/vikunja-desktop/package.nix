@@ -4,7 +4,7 @@
   makeWrapper,
   makeDesktopItem,
   darwin,
-  pnpm_10,
+  pnpm_10_latest,
   pnpmConfigHook,
   nodejs,
   electron,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
       sourceRoot
       patches
       ;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 4;
     hash = "sha256-2jyb5BYEkopZCbS19flUgCopiJWngyFxkXsyMuOpJEU=";
   };
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm_10
+    pnpm_10_latest
     pnpmConfigHook
     vikunja.passthru.frontend
   ]

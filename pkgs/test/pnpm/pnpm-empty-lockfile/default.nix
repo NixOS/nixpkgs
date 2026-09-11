@@ -3,7 +3,7 @@
   stdenv,
   fetchPnpmDeps,
   nodejs,
-  pnpm_10,
+  pnpm_10_latest,
   pnpmConfigHook,
 }:
 stdenv.mkDerivation {
@@ -12,14 +12,14 @@ stdenv.mkDerivation {
   src = ./.;
 
   nativeBuildInputs = [
-    pnpm_10
+    pnpm_10_latest
     pnpmConfigHook
   ];
 
   pnpmDeps = fetchPnpmDeps {
     pname = "pnpm-empty-lockfile";
     fetcherVersion = 3;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     src = ./.;
     hash = "sha256-u0GOAX5B1f2ANWbOezScp/eKQRRZA/JoYfQ5zLrNip4=";
   };

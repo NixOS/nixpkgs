@@ -4,13 +4,13 @@
   fetchFromGitHub,
   makeWrapper,
   nodejs,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   testers,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zenn-cli";
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
     makeWrapper
   ];
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       pnpmWorkspaces
       ;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 3;
     hash = "sha256-uxeZnYZzwyNOZN1x1f6tzcYgPbJhSc3gTdsfaE+967w=";
   };

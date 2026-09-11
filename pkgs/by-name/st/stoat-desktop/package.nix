@@ -9,7 +9,7 @@
   makeWrapper,
   removeReferencesTo,
   copyDesktopItems,
-  pnpm_10,
+  pnpm_10_latest,
   nodejs,
   electron_42,
   zip,
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     copyDesktopItems
     nodejs
-    pnpm_10
+    pnpm_10_latest
     zip
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       ;
     fetcherVersion = 3;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     hash = "sha256-0v+MHYFgnIN4FvzFkv5D3Bqc7538763yCIWu05XR+fA=";
   };
 

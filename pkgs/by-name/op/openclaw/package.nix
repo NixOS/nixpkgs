@@ -5,7 +5,7 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_10_latest,
   nodejs-slim_22,
   makeWrapper,
   versionCheckHook,
@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 3;
     hash = finalAttrs.pnpmDepsHash;
   };
@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
     nodejs-slim_22
     makeWrapper
     installShellFiles
