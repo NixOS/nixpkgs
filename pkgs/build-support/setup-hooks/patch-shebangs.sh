@@ -23,6 +23,24 @@ fixupOutputHooks+=(patchShebangsAuto)
 # $ patchShebangs --build configure
 
 patchShebangs() {
+    # Use C implementation if available (much faster)
+    if command -v patch-shebangs >/dev/null 2>&1; then
+        local mode="" update=""
+        while [[ $# -gt 0 ]]; do
+            case "$1" in
+                --host)   mode="--host"; shift ;;
+                --build)  mode="--build"; shift ;;
+                --update) update="--update"; shift ;;
+                --) shift; break ;;
+                -*|--*) echo "Unknown option $1 supplied to patchShebangs" >&2; return 1 ;;
+                *) break ;;
+            esac
+        done
+        [[ -z "$mode" ]] && { [[ -n $strictDeps && $1 == "$NIX_STORE"* ]] && mode="--host" || mode="--build"; }
+        patch-shebangs $mode $update -- "$@"
+        return
+    fi
+
     local pathName
     local update=false
 
@@ -62,13 +80,18 @@ patchShebangs() {
     local args
     local oldInterpreterLine
     local newInterpreterLine
+    local tmpFile
 
     if [[ $# -eq 0 ]]; then
         echo "No arguments supplied to patchShebangs" >&2
         return 0
     fi
 
-    local f
+    # Create temp files once, reuse for all files (avoids mktemp per-file overhead)
+    tmpFile=$(mktemp -t patchShebangs.XXXXXXXXXX)
+    # shellcheck disable=SC2064
+    trap "rm -f ''${tmpFile@Q} ''${tmpFile@Q}.out" RETURN
+
     while IFS= read -r -d $'\0' f; do
         isScript "$f" || continue
 
@@ -120,34 +143,25 @@ patchShebangs() {
 
         if [[ -n "$oldPath" && ( "$update" == true || "${oldPath:0:${#NIX_STORE}}" != "$NIX_STORE" ) ]]; then
             if [[ -n "$newPath" && "$newPath" != "$oldPath" ]]; then
-                echo "$f: interpreter directive changed from \"$oldInterpreterLine\" to \"$newInterpreterLine\""
-                # escape the escape chars so that sed doesn't interpret them
-                escapedInterpreterLine=${newInterpreterLine//\\/\\\\}
-
-                # Preserve times, see: https://github.com/NixOS/nixpkgs/pull/33281
-                timestamp=$(stat --printf "%y" "$f")
-
-                # Manually create temporary file instead of using sed -i
-                # (sed -i on $out/x creates tmpfile /nix/store/x which fails on macos + sandbox)
-                tmpFile=$(mktemp -t patchShebangs.XXXXXXXXXX)
-                sed -e "1 s|.*|#\!$escapedInterpreterLine|" "$f" > "$tmpFile"
-
                 # Make original file writable if it is read-only
-                local restoreReadOnly
+                local restoreReadOnly=
                 if [[ ! -w "$f" ]]; then
                     chmod +w "$f"
                     restoreReadOnly=true
                 fi
 
-                # Replace the original file's content with the patched content
-                # (preserving permissions)
-                cat "$tmpFile" > "$f"
-                rm "$tmpFile"
-                if [[ -n "${restoreReadOnly:-}" ]]; then
+                # Preserve timestamp using touch -r (avoids stat subshell)
+                # Write to temp file in $TMPDIR to avoid macOS sandbox issues with /nix/store
+                touch -r "$f" "$tmpFile"
+                { printf '%s\n' "#!$newInterpreterLine"; tail -n +2 "$f"; } > "$tmpFile.out"
+                cat "$tmpFile.out" > "$f"
+                touch -r "$tmpFile" "$f"
+
+                if [[ -n "$restoreReadOnly" ]]; then
                     chmod -w "$f"
                 fi
 
-                touch --date "$timestamp" "$f"
+                echo "$f: interpreter directive changed from \"$oldInterpreterLine\" to \"$newInterpreterLine\""
             fi
         fi
     done < <(find "$@" -type f -perm -0100 -print0)
