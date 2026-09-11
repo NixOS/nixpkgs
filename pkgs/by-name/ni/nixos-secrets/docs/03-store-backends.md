@@ -5,22 +5,43 @@ Store backends are specified in a similar manner to prompt backends:
 ```nix
 {
   # For a full example, see the provided examples
-  secrets.backends.store.prompt = {
-    get =
-      pkgs:
-      pkgs.writeScript "secrets-plain-get" ''
-        #!/bin/sh
-        export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"
-        cat /var/lib/nixos-secrets-plain/generators/"$1"/files/"$2" > "$out"
-      '';
-    # ...
-  };
+  secrets.backends.store.plain = { };
 }
 ```
 
+### Get
+
 Unlike prompt backends, store backends must provide a number of different scripts. The most basic of said scripts are `get` and `set`. The former is given the secret name and the file name as an argument, and must return the content of said backend to `$out`. The CLI needs to be able to access any of the secrets at runtime in order for secret dependencies to work out. The `get` script can be omitted as long as the backend in question is never used as a dependency for another generator.
 
+```nix
+{
+  secrets.backends.store.plain.get =
+    pkgs:
+    pkgs.writeScript "secrets-plain-get" ''
+      #!/bin/sh
+      export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"
+      cat /var/lib/nixos-secrets-plain/generators/"$1"/files/"$2" > "$out"
+    '';
+}
+```
+
+### Set
+
 The `set` script, on the other hand, is mandatory. As with the `get` script, the `set` script is given a secret name and a file name as an argument, together with a secret at `$in`, and is responsible for saving said secret for later.
+
+```nix
+{
+  secrets.backends.store.plain.set =
+    pkgs:
+    pkgs.writeScript "secrets-plain-set" ''
+      #!/bin/sh
+      export PATH="${lib.makeBinPath [ pkgs.coreutils ]}"
+      cat "$in" > /var/lib/nixos-secrets-plain/generators/"$1"/files/"$2"
+    '';
+}
+```
+
+### Exists
 
 The CLI also needs to know when it actually needs to run the various scripts. For this, a backend must support the `exists` script. This script is given a secret name and a file name as an argument, and must exit with code `0` if the file exists or `42` otherwise.
 
@@ -45,7 +66,7 @@ These operations are not difficult to implement in the easy case of managing a s
 
 ### Performing automatic updates
 
-Backends might need to perform maintenance work on the secret files on disk. Think re-keying when using `age` keys and a new recipient is added, or perhaps rotating API keys when storing the secrets remotely. A backend can provide a `fixup` script, which will be run after each `generate` command (even if the secret & file in question has not changed this run!).
+Backends might need to perform maintenance work on the secret files on disk. Think re-keying when using `age` keys and a new recipient is added, or perhaps rotating API keys when storing the secrets remotely. A backend can provide a `fixup` script, which will be run after each `generate` command. This script will be run regardless of whether any of the files involved got updated/regenerated.
 
 Said script can perform side effects, yet must remain idempotent. The script is expected to perform the necessary updates to every file within a single invocation, and is given a list of files to act on as argument, in the same format as the output of the `list` script (although the actual content might of course be different).
 
@@ -67,7 +88,7 @@ For example, the plain backend might work as follows:
 
 ```nix
 {
-  secrets.backends.store.prompt.fileModule =
+  secrets.backends.store.plain.fileModule =
     { secret, name, ... }:
     {
       path = "${config.secrets.settings.store.plain.targetDirectory}/${secret.name}/${name}";
@@ -91,10 +112,7 @@ Backends will commonly need to define custom per-generator or per-file options. 
       lib.types.submodule {
         options.age.identity.host = lib.mkOption {
           default = config.secrets.age.identity.host;
-          type = lib.types.oneOf [
-            lib.types.str
-            lib.types.path
-          ];
+          type = lib.types.str;
           description = ''
             Path to the age private key file for decryption on the host machine
           '';
