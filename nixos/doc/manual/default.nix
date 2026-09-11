@@ -24,6 +24,7 @@ let
     mkOption
     escapeShellArg
     concatMapStringsSep
+    sortOn
     sourceFilesBySuffices
     ;
 
@@ -103,15 +104,16 @@ let
 
     cp -r ${../../../doc/release-notes} ./release-notes-nixpkgs
 
-    cp ${./nav.json} nav.json
+    cp --no-preserve=all ${./nav.json} nav.json
 
     substituteInPlace ./manual.md \
       --replace-fail '@NIXOS_VERSION@' "${version}"
+    # Module chapters sorted by filename
     substituteInPlace ./nav.json \
       --replace-fail \
           '"@MODULE_CHAPTERS@"' \
           ${escapeShellArg (
-            concatMapStringsSep ",\n" (p: ''{ "file": "${p.value}" }'') config.meta.doc
+            concatMapStringsSep ",\n" (p: ''{ "file": "${p.value}" }'') (sortOn (p: p.file) config.meta.doc)
           )}
     substituteInPlace ./nixos-options.md \
       --replace-fail \
@@ -204,7 +206,7 @@ rec {
           --script ./highlightjs/loader.js \
           --script ./anchor.min.js \
           --script ./anchor-use.js \
-          --sidebar-depth 3 \
+          --sidebar-depth 4 \
           --header ${./header.html}\
           --no-navheader \
           --experimental-config nav.json \

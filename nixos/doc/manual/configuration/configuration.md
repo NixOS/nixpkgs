@@ -1,5 +1,5 @@
-# Configuration {#ch-configuration}
+# Guides {#ch-configuration}
 
-This chapter describes how to configure various aspects of a NixOS machine through the configuration file {file}`/etc/nixos/configuration.nix`. As described in [](#sec-changing-config), changes to this file only take effect after you run {command}`nixos-rebuild`.
+These guides describe how to configure various aspects of a NixOS machine through the configuration file {file}`/etc/nixos/configuration.nix`. As described in [](#sec-changing-config), changes to this file only take effect after you run {command}`nixos-rebuild`.
 
 <!-- Apache; libvirtd virtualisation -->
