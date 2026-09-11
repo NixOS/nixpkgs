@@ -96,6 +96,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       anish
+      hackcraft_
     ];
     platforms = lib.platforms.all;
     mainProgram = "dx";
