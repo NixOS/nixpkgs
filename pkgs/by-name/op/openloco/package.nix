@@ -9,6 +9,7 @@
   libzip,
   openal,
   pkg-config,
+  makeBinaryWrapper,
   yaml-cpp,
   fmt_11,
   libx11,
@@ -54,6 +55,13 @@ stdenv.mkDerivation rec {
 
     # prefetch openloco-objects
     sed -i 's#URL \+${openloco-objects.url}#URL ${openloco-objects}#' CMakeLists.txt
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # experimental libraries result in compilation issues using Clang for Darwin.
+    # hence, disable the experimental libraries option.
+    substituteInPlace src/OpenLoco/CMakeLists.txt \
+        --replace-fail '-fexperimental-library' \
+                       '-D_LIBCPP_ENABLE_EXPERIMENTAL -D_LIBCPP_PSTL_BACKEND_SERIAL'
   '';
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=null-dereference";
@@ -65,6 +73,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    makeBinaryWrapper
   ];
 
   buildInputs = [
@@ -74,14 +83,22 @@ stdenv.mkDerivation rec {
     openal
     yaml-cpp
     fmt_11
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libx11
   ];
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications $out/bin
+    cp -R OpenLoco.app $out/Applications/
+    makeBinaryWrapper $out/Applications/OpenLoco.app/Contents/MacOS/OpenLoco $out/bin/OpenLoco
+  '';
 
   meta = {
     description = "Open source re-implementation of Chris Sawyer's Locomotion";
     homepage = "https://github.com/OpenLoco/OpenLoco";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ icewind1991 ];
     mainProgram = "OpenLoco";
   };
