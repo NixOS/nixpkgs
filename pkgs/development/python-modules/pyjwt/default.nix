@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pyjwt";
-  version = "2.13.0";
+  version = "2.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jpadilla";
     repo = "pyjwt";
     tag = version;
-    hash = "sha256-q4ynXCJVDsyZh70439dloyWgRTLVm+elDOahUVOT5vA=";
+    hash = "sha256-SxJ2GQt1pfm8iAeTB2RmH2kliGeQ6whkM5nuesI1s/U=";
   };
 
   outputs = [
