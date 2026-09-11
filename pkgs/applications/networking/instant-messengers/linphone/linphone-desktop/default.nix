@@ -146,12 +146,17 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # In order to find mediastreamer plugins, mediastreamer package was patched to
-  # support an environment variable pointing to the plugin directory. Set that
-  # environment variable by wrapping the Linphone executable.
-  #
+  # support an environment variable pointing to the plugin directory.
   # It is quite likely that there are some other files still missing and
   # Linphone will randomly crash when it tries to access those files. Then,
   # those just need to be linked manually below.
+  preFixup = ''
+    qtWrapperArgs+=(
+      --unset QML2_IMPORT_PATH \
+      --set MEDIASTREAMER_PLUGINS_DIR $out/lib/mediastreamer/plugins
+    )
+  '';
+
   postInstall = ''
     mkdir -p $out/lib/mediastreamer/plugins
     ln -s ${msopenh264}/lib/mediastreamer/plugins/* $out/lib/mediastreamer/plugins/
@@ -166,10 +171,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/share/sounds/linphone/
     ln -s ${liblinphone}/share/sounds/linphone/rings $out/share/sounds/linphone/rings
-
-    wrapProgram $out/bin/linphone \
-      --unset QML2_IMPORT_PATH \
-      --set MEDIASTREAMER_PLUGINS_DIR $out/lib/mediastreamer/plugins
   '';
 
   meta = {
