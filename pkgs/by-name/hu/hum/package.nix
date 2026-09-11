@@ -7,6 +7,7 @@
 
 buildGo127Module (finalAttrs: {
   pname = "hum";
+  __structuredAttrs = true;
   version = "0.9.1";
 
   src = fetchFromGitHub {
