@@ -28,6 +28,8 @@
   microsoft-gsl,
   boost,
   ada,
+  pango,
+  tlottie,
   cmark-gfm,
   libfido2,
   libavif,
@@ -47,14 +49,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop-unwrapped";
-  version = "7.1.5";
+  version = "7.2.8";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-FbenDWiv4fxb6GHHsP0P7VLoMk6h+BYcfpomvS22b/c=";
+    hash = "sha256-Hhx65dqKlsoLvh7lEWYxnIiXFFd0qrDKpYYsHdhzqnk=";
   };
 
   nativeBuildInputs = [
@@ -92,6 +94,12 @@ stdenv.mkDerivation (finalAttrs: {
     qtwayland
     kcoreaddons
     hunspell
+  ]
+  ++ lib.optionals (finalAttrs.pname == "telegram-desktop-unwrapped" && stdenv.hostPlatform.isLinux) [
+    pango
+  ]
+  ++ lib.optionals (finalAttrs.pname == "telegram-desktop-unwrapped") [
+    tlottie
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_15
