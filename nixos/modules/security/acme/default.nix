@@ -153,6 +153,19 @@ let
     ''
     + (lib.concatStringsSep "\n" (
       lib.mapAttrsToList (cert: data: ''
+        # Compat with NixOS < 25.11, which tracked "a real certificate exists"
+        # with ConditionPathExists on the self-signing unit rather than with an
+        # acme-success marker. Without this, upgrading replaces a perfectly good
+        # CA-issued certificate with a self-signed one until the next successful
+        # order. A certificate that does not verify against our own self-signing
+        # CA came from a real CA, so record that success up front.
+        if [ -e ${lib.escapeShellArg cert}/fullchain.pem ] \
+          && [ ! -e ${lib.escapeShellArg cert}/acme-success ] \
+          && ! ${lib.getExe' pkgs.openssl "openssl"} verify -CAfile .minica/cert.pem \
+               ${lib.escapeShellArg cert}/fullchain.pem >/dev/null 2>&1; then
+          touch ${lib.escapeShellArg cert}/acme-success
+        fi
+
         for fixpath in ${lib.escapeShellArg cert} .lego/${lib.escapeShellArg cert}; do
           if [ -d "$fixpath" ]; then
             chmod -R u=rwX,g=rX,o= "$fixpath"
@@ -420,14 +433,20 @@ let
             }
           }
 
-          # Create files to match directory layout for real certificates
-          (
-            cd '${keyName}'
-            cp -vp cert.pem ../out/cert.pem
-            cp -vp key.pem ../out/key.pem
-          )
-          cat out/cert.pem ca/cert.pem > out/fullchain.pem
-          cp ca/cert.pem out/chain.pem
+          # Create files to match directory layout for real certificates.
+          #
+          # orderRenewService installs cert.pem as a symlink to fullchain.pem,
+          # so these outputs may already alias one another. Both cp(1) and >
+          # follow a symlinked destination and write through it, which would
+          # make `cat out/cert.pem ... > out/fullchain.pem` truncate its own
+          # input and leave fullchain.pem holding nothing but the CA
+          # certificate. Unlink first, then write each output exactly once.
+          rm -f out/cert.pem out/key.pem out/chain.pem out/fullchain.pem out/full.pem
+
+          cp -vp '${keyName}/cert.pem' out/cert.pem
+          cp -vp '${keyName}/key.pem' out/key.pem
+          cp -vp ca/cert.pem out/chain.pem
+          cat out/cert.pem out/chain.pem > out/fullchain.pem
           cat out/key.pem out/fullchain.pem > out/full.pem
 
           # Fix up the output files to adhere to the group and
