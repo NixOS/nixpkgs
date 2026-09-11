@@ -1,0 +1,38 @@
+From cc153b180829c6b561765cbbb9b621d1142ff1cd Mon Sep 17 00:00:00 2001
+From: annalee <150648636+a-n-n-a-l-e-e@users.noreply.github.com>
+Date: Tue, 28 Nov 2023 13:13:44 +0000
+Subject: [PATCH] use proper format specifier for size_t
+
+---
+ Utilities/MM.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Utilities/MM.h b/Utilities/MM.h
+index 11e86c5..301c3ec 100644
+--- a/Utilities/MM.h
++++ b/Utilities/MM.h
+@@ -33,18 +33,18 @@ if ( (count) > 0 ) { \
+    if ( (ptr = (type *)malloc((unsigned long)((count)*sizeof(type)))) \
+         == NULL ) {\
+       fprintf(stderr, \
+-              "\n ALLOCATE failure : bytes %d, line %d, file %s", \
++              "\n ALLOCATE failure : bytes %zu, line %d, file %s", \
+               (count)*sizeof(type), __LINE__, __FILE__) ; \
+       exit(-1) ; } \
+    else if ( MEMORY_DEBUG > 0 ) { \
+       fprintf(stderr, \
+-              "\n ALLOCATE : address %p, bytes %d, line %d, file %s", \
++              "\n ALLOCATE : address %p, bytes %zu, line %d, file %s", \
+               ptr, (count)*sizeof(type), __LINE__, __FILE__) ; } } \
+ else if ( (count) == 0 ) { \
+    ptr = NULL ; } \
+ else { \
+    fprintf(stderr, \
+-           "\n ALLOCATE error : bytes %d, line %d, file %s", \
++           "\n ALLOCATE error : bytes %zu, line %d, file %s", \
+            (count)*sizeof(type), __LINE__, __FILE__) ; \
+    exit(-1) ; }
+ /*
+-- 
+2.42.0
+

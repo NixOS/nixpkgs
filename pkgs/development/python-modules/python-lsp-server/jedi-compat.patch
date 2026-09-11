@@ -1,0 +1,40 @@
+From 07bb69fe0c3168f9951914547dcb89309fea1b20 Mon Sep 17 00:00:00 2001
+From: Lumir Balhar <lbalhar@redhat.com>
+Date: Mon, 4 May 2026 12:09:22 +0200
+Subject: [PATCH] Fix test_snippets_completion to not depend on typeshed
+ overload ordering
+
+jedi 0.20.0 bundles a newer typeshed that adds a no-arg overload for
+defaultdict.__init__ as the first overload, causing format_snippet to
+hit the zero-params branch and produce "defaultdict()" instead of
+"defaultdict($0)". Replace defaultdict with a locally-defined function
+to make the test stable across typeshed updates.
+---
+ test/plugins/test_completion.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/test/plugins/test_completion.py b/test/plugins/test_completion.py
+index ae5021f5..bbaeabe0 100644
+--- a/test/plugins/test_completion.py
++++ b/test/plugins/test_completion.py
+@@ -322,7 +322,7 @@ def test_matplotlib_completions(config, workspace) -> None:
+ 
+ 
+ def test_snippets_completion(config, workspace) -> None:
+-    doc_snippets = "from collections import defaultdict \na=defaultdict"
++    doc_snippets = "from collections import defaultdict \ndef foo(a): pass\nfoo"
+     com_position = {"line": 0, "character": 35}
+     doc = Document(DOC_URI, workspace, doc_snippets)
+     config.capabilities["textDocument"] = {
+@@ -332,9 +332,9 @@ def test_snippets_completion(config, workspace) -> None:
+     completions = pylsp_jedi_completions(config, doc, com_position)
+     assert completions[0]["insertText"] == "defaultdict"
+ 
+-    com_position = {"line": 1, "character": len(doc_snippets)}
++    com_position = {"line": 2, "character": 3}
+     completions = pylsp_jedi_completions(config, doc, com_position)
+-    assert completions[0]["insertText"] == "defaultdict($0)"
++    assert completions[0]["insertText"] == "foo($0)"
+     assert completions[0]["insertTextFormat"] == lsp.InsertTextFormat.Snippet
+ 
+

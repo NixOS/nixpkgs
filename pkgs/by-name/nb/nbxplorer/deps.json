@@ -1,0 +1,77 @@
+[
+  {
+    "pname": "Dapper",
+    "version": "2.1.79",
+    "hash": "sha256-QIGZ+vlnwhSl+nnVZ//s3uwFh/vKJ5kDpgGkmpMjhmw="
+  },
+  {
+    "pname": "Microsoft.AspNetCore.JsonPatch",
+    "version": "10.0.10",
+    "hash": "sha256-NIFI6z2X1blS3ab3G/CgY42WuJULni5wTa4X8AMx1c0="
+  },
+  {
+    "pname": "Microsoft.AspNetCore.Mvc.NewtonsoftJson",
+    "version": "10.0.10",
+    "hash": "sha256-QlXe8Il3kcDQZTSZg3tCvW7c8ERix7lIWvYGSrrleNE="
+  },
+  {
+    "pname": "Microsoft.Extensions.Logging.Abstractions",
+    "version": "1.0.0",
+    "hash": "sha256-asIXVFsAK7ELd/f+vLwhxYDdazqRTmf+fGJ4WFtcCeo="
+  },
+  {
+    "pname": "NBitcoin",
+    "version": "10.0.8",
+    "hash": "sha256-SnJ60lhDv94oD0370ZyrvFG2LDJ0wkixNP1pIvcq8AA="
+  },
+  {
+    "pname": "NBitcoin.Altcoins",
+    "version": "6.0.4",
+    "hash": "sha256-BpXLxjmFf1JUud0Mwz/Zph0jPVqrEfa6KiMMnsOeIU8="
+  },
+  {
+    "pname": "NETStandard.Library.Ref",
+    "version": "2.1.0",
+    "hash": "sha256-Ruovy9EKgXaFuFr3zgw5fRKUS9yBIJ4nLeHgXv0zx4o="
+  },
+  {
+    "pname": "Newtonsoft.Json",
+    "version": "12.0.1",
+    "hash": "sha256-4Xf3RZrJomAh3jaZrEAJX3oPmOowGV8yDB9Y3h0Dw4U="
+  },
+  {
+    "pname": "Newtonsoft.Json",
+    "version": "13.0.1",
+    "hash": "sha256-K2tSVW4n4beRPzPu3rlVaBEMdGvWSv/3Q1fxaDh4Mjo="
+  },
+  {
+    "pname": "Newtonsoft.Json",
+    "version": "13.0.3",
+    "hash": "sha256-hy/BieY4qxBWVVsDqqOPaLy1QobiIapkbrESm6v2PHc="
+  },
+  {
+    "pname": "Newtonsoft.Json.Bson",
+    "version": "1.0.2",
+    "hash": "sha256-ZUj6YFSMZp5CZtXiamw49eZmbp1iYBuNsIKNnjxcRzA="
+  },
+  {
+    "pname": "NicolasDorier.CommandLine",
+    "version": "2.0.0",
+    "hash": "sha256-LizYyIMx6I17jZd52duYcGWNgcPs88c/zWxo/ADd3D8="
+  },
+  {
+    "pname": "NicolasDorier.CommandLine.Configuration",
+    "version": "2.0.0",
+    "hash": "sha256-fDpDOVdt7xCDXXqaBnbaFvUOPaE0Sl4cLWjNkU0Cz7I="
+  },
+  {
+    "pname": "NicolasDorier.StandardConfiguration",
+    "version": "2.0.1",
+    "hash": "sha256-PdNopObnA2hOiHomejN/ZYK2CK1aGXMuOnsjHyS2Mco="
+  },
+  {
+    "pname": "Npgsql",
+    "version": "10.0.3",
+    "hash": "sha256-ddCXCSOoyfy7035OvnL+4LEDYqHjZyPoZ3ffG2coMW0="
+  }
+]

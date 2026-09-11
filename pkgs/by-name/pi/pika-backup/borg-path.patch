@@ -1,0 +1,13 @@
+diff --git a/pika-backup-common/src/borg/process.rs b/pika-backup-common/src/borg/process.rs
+index eb97eef9..5e8fad65 100644
+--- a/pika-backup-common/src/borg/process.rs
++++ b/pika-backup-common/src/borg/process.rs
+@@ -284,7 +284,7 @@ impl BorgCall {
+     }
+ 
+     pub(super) fn command(&self) -> Result<(async_process::Command, UnixStream)> {
+-        let mut cmd = async_process::Command::new("borg");
++        let mut cmd = async_process::Command::new("@borg@");
+ 
+         let unix_stream = self.stream_password(&mut cmd)?;
+ 

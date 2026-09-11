@@ -1,0 +1,43 @@
+diff --git a/etc/setup.d/20copyfiles b/etc/setup.d/20copyfiles
+index 3247ae2a..eed9fa46 100755
+--- a/etc/setup.d/20copyfiles
++++ b/etc/setup.d/20copyfiles
+@@ -39,9 +39,9 @@ copy_file()
+         if [ -e "$2" ]; then
+ 
+             # Device and inode
+-            da=$(/usr/bin/stat --format="%d %i" "$1")
++            da=$(stat --format="%d %i" "$1")
+             # This one can fail since it might not exist yet
+-            db=$(/usr/bin/stat --format="%d %i" "$2" 2>/dev/null || :)
++            db=$(stat --format="%d %i" "$2" 2>/dev/null || :)
+ 
+             if [ "$da" = "$db" ]; then
+                 COPY="false"
+@@ -50,8 +50,8 @@ copy_file()
+                 :
+             elif [ -f "$1" ] && [ -f "$2" ]; then
+                 # Content
+-                ca=$(/usr/bin/md5sum "$1" | sed -e 's/\(^[0-9a-f][0-9a-f]*\).*$/\1/')
+-                cb=$(/usr/bin/md5sum "$2" 2>/dev/null || :)
++                ca=$(md5sum "$1" | sed -e 's/\(^[0-9a-f][0-9a-f]*\).*$/\1/')
++                cb=$(md5sum "$2" 2>/dev/null || :)
+                 cb=$(echo "$cb" | sed -e 's/\(^[0-9a-f][0-9a-f]*\).*$/\1/')
+                 # Copy only if file contents differ
+                 if [ "$ca" = "$cb" ]; then
+diff --git a/etc/setup.d/20nssdatabases b/etc/setup.d/20nssdatabases
+index ac7206b7..00645362 100755
+--- a/etc/setup.d/20nssdatabases
++++ b/etc/setup.d/20nssdatabases
+@@ -42,9 +42,9 @@ if [ $STAGE = "setup-start" ] || [ $STAGE = "setup-recover" ]; then
+                 fi
+ 
+                 # Device and inode
+-                dr=$(/usr/bin/stat --format="%d %i" "/etc/$db")
++                dr=$(stat --format="%d %i" "/etc/$db")
+                 # This one can fail since it might not exist yet
+-                dc=$(/usr/bin/stat --format="%d %i" "${CHROOT_PATH}/etc/$db" 2>/dev/null || :)
++                dc=$(stat --format="%d %i" "${CHROOT_PATH}/etc/$db" 2>/dev/null || :)
+ 
+                 # If the database inside and outside the chroot is the
+                 # same, it's very likely that dup_nss would blank the

@@ -1,0 +1,27 @@
+From 8c04235655a79f9b39003e49ea3bfa921e42e371 Mon Sep 17 00:00:00 2001
+From: Marie Ramlow <me@nycode.dev>
+Date: Wed, 26 Aug 2026 17:16:42 +0200
+Subject: [PATCH] Fix backup restoration when using a unix socket
+
+---
+ app/Console/Commands/RestoreFromBackup.php | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/app/Console/Commands/RestoreFromBackup.php b/app/Console/Commands/RestoreFromBackup.php
+index ba5d9aa8df..f449420cc5 100644
+--- a/app/Console/Commands/RestoreFromBackup.php
++++ b/app/Console/Commands/RestoreFromBackup.php
+@@ -510,7 +510,9 @@ class RestoreFromBackup extends Command
+             ' --batch '.
+             ' --binary-mode '.
+             ' -u '.escapeshellarg($connectionConfig['username']).' '.
+-            ' -P '.escapeshellarg($connectionConfig['port']).' '.
++            (empty($connectionConfig['unix_socket'])
++                ? ' -P '.escapeshellarg($connectionConfig['port'])
++                : ' -S '.escapeshellarg($connectionConfig['unix_socket'])). ' '.
+             escapeshellarg($connectionConfig['database']), // yanked -p since we pass via ENV
+             [0 => ['pipe', 'r'], 1 => ['pipe', 'w'], 2 => ['pipe', 'w']],
+             $pipes,
+-- 
+2.55.0
+

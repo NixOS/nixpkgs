@@ -1,0 +1,11 @@
+--- a/corestuff/CMakeLists.txt	2022-01-29 14:09:02.699700817 +0700
++++ b/CMakeLists.txt	2022-01-29 14:09:23.211754633 +0700
+@@ -121,7 +121,3 @@
+ install( FILES cc.cubocore.CoreStuff.svg DESTINATION share/icons/hicolor/scalable/apps/ )
+ install( FILES background/default.svg DESTINATION share/coreapps/background )
+
+-if ( DEFINED ADD_AUTOSTART )
+-    message("INSTALLING TO AUTOSTART LOCATION")
+-    install( FILES cc.cubocore.CoreStuff.desktop DESTINATION /etc/xdg/autostart )
+-endif()
+

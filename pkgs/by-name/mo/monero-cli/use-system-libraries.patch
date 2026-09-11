@@ -1,0 +1,11 @@
+diff --git a/external/CMakeLists.txt b/external/CMakeLists.txt
+index 5bdd5d9b4..3af6c5f5a 100644
+--- a/external/CMakeLists.txt
++++ b/external/CMakeLists.txt
+@@ -44,4 +44,5 @@ endif()
+ add_subdirectory(db_drivers)
+ add_subdirectory(easylogging++)
+ add_subdirectory(qrcodegen)
+-add_subdirectory(randomx EXCLUDE_FROM_ALL)
++find_library(RANDOMX_LIBRARY randomx)
++find_package(RapidJSON)

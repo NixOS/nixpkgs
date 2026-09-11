@@ -1,0 +1,51 @@
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  hidapi,
+  readline,
+  libsForQt5,
+}:
+
+stdenv.mkDerivation {
+  pname = "flirc";
+  version = "3.27.15";
+
+  src = fetchurl {
+    url = "https://web.archive.org/web/20240626115121/http://apt.flirc.tv/arch/x86_64/flirc.latest.x86_64.tar.gz";
+    hash = "sha256-8bUsOsp5obJJdZU9QHfJnZKNAXJwi0nrHkSeDTE1Xa4=";
+  };
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    libsForQt5.wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    hidapi
+    readline
+    libsForQt5.qtsvg
+    libsForQt5.qtxmlpatterns
+  ];
+
+  dontConfigure = true;
+  dontBuild = true;
+
+  # udev rules don't appear in the official package
+  # https://flirc.gitbooks.io/flirc-instructions/content/linux.html
+  installPhase = ''
+    install -D -t $out/bin/ Flirc flirc_util
+    install -D ${./99-flirc.rules} $out/lib/udev/rules.d/99-flirc.rules
+  '';
+
+  meta = {
+    homepage = "https://flirc.tv/more/flirc-usb";
+    description = "Use any Remote with your Media Center";
+    maintainers = with lib.maintainers; [ aanderse ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    mainProgram = "Flirc";
+    platforms = [ "x86_64-linux" ];
+  };
+}

@@ -1,0 +1,12 @@
+diff --git a/sources/code/common/main.ts b/sources/code/common/main.ts
+index 3936ee0..bd745ef 100644
+--- a/sources/code/common/main.ts
++++ b/sources/code/common/main.ts
+@@ -358,6 +358,7 @@ app.userAgentFallback = getUserAgent(process.versions.chrome, userAgent.mobile,
+ const singleInstance = app.requestSingleInstanceLock();
+ 
+ function main(): void {
++  session.defaultSession.loadExtension("@vencord@");
+   if (overwriteMain) {
+     // Execute flag-specific functions for ready application.
+     overwriteMain();

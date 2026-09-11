@@ -1,0 +1,12 @@
+diff --git a/java-tutorial/MODULE.bazel b/java-tutorial/MODULE.bazel
+index 1496f64..d3df2d5 100644
+--- a/MODULE.bazel
++++ b/MODULE.bazel
+@@ -1 +1,7 @@
+ bazel_dep(name = "rules_java", version = "7.11.1")
++bazel_dep(name = "rules_cc", version = "0.2.13")
++single_version_override(
++    module_name = "rules_cc",
++    patches = [":rules_cc.patch"],
++    patch_strip = 1,
++)

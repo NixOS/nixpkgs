@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index f0b6baf..71033a5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -4,7 +4,7 @@ SRCS +=	$(wildcard src/*.cpp)
+ OBJS = $(SRCS:.cpp=.o)
+ DESTDIR = $(HOME)/.local
+ 
+-CXXFLAGS = -march=native -mtune=native -Os -s -Wall -flto=auto -fno-exceptions
++CXXFLAGS = -Os -s -Wall -flto=auto -fno-exceptions
+ CXXFLAGS += $(shell pkg-config --cflags $(PKGS))
+ LDFLAGS += $(shell pkg-config --libs $(PKGS)) -Wl,--gc-sections
+ 

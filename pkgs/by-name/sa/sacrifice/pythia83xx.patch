@@ -1,0 +1,55 @@
+diff --git a/include/Sacrifice/UserHooksFactory.hh b/include/Sacrifice/UserHooksFactory.hh
+index 04b105b..19f2b4f 100644
+--- a/include/Sacrifice/UserHooksFactory.hh
++++ b/include/Sacrifice/UserHooksFactory.hh
+@@ -12,7 +12,7 @@
+ 
+ namespace Sacrifice{
+ 
+-  using Pythia8::UserHooks;
++  using Pythia8::UserHooksPtr;
+   using std::string;
+   using std::map;
+ 
+@@ -21,7 +21,7 @@ namespace Sacrifice{
+ 
+   public:
+ 
+-    static UserHooks* create(const string &hookName);
++    static UserHooksPtr create(const string &hookName);
+ 
+     /**
+      *  Loads a library of UserHooks
+@@ -39,7 +39,7 @@ namespace Sacrifice{
+ 
+     class ICreator{
+     public:
+-      virtual UserHooks *create() const = 0;
++      virtual UserHooksPtr create() const = 0;
+       virtual ~ICreator(){};
+     };
+ 
+@@ -61,8 +61,8 @@ namespace Sacrifice{
+         }
+       }
+ 
+-      UserHooks *create()const{
+-        return new T;
++      UserHooksPtr create()const{
++        return std::make_shared<T>();
+       }
+ 
+     private:
+diff --git a/src/UserHooksFactory.cxx b/src/UserHooksFactory.cxx
+index 84a485b..5274119 100644
+--- a/src/UserHooksFactory.cxx
++++ b/src/UserHooksFactory.cxx
+@@ -11,7 +11,7 @@ namespace Sacrifice{
+   using std::ifstream;
+ 
+   //////////////////////////////////////////////////////////////////////////////
+-  UserHooks *UserHooksFactory::create(const string &name){
++  UserHooksPtr UserHooksFactory::create(const string &name){
+     map<string, const ICreator*>::const_iterator it = s_creators().find(name);
+     if(it == s_creators().end()){
+       //eek!

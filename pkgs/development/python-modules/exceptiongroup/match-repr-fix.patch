@@ -1,0 +1,48 @@
+From 9be2b65dbd8366da27cd79c09195493217dbf539 Mon Sep 17 00:00:00 2001
+From: Tom Hunze <dev@thunze.de>
+Date: Sat, 7 Feb 2026 11:37:49 +0100
+Subject: [PATCH] Fix `ExceptionGroup` repr changing when original exception
+ sequence is mutated
+
+https://github.com/python/cpython/pull/141736
+---
+ src/exceptiongroup/_exceptions.py | 3 ++-
+ tests/test_exceptions.py          | 3 +--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/exceptiongroup/_exceptions.py b/src/exceptiongroup/_exceptions.py
+index f42c1ad..996d8e1 100644
+--- a/src/exceptiongroup/_exceptions.py
++++ b/src/exceptiongroup/_exceptions.py
+@@ -101,6 +101,7 @@ class BaseExceptionGroup(BaseException, Generic[_BaseExceptionT_co]):
+                         )
+ 
+         instance = super().__new__(cls, __message, __exceptions)
++        instance._exceptions_str = repr(__exceptions)
+         instance._exceptions = tuple(__exceptions)
+         return instance
+ 
+@@ -275,7 +276,7 @@ class BaseExceptionGroup(BaseException, Generic[_BaseExceptionT_co]):
+         return f"{self.message} ({len(self._exceptions)} sub-exception{suffix})"
+ 
+     def __repr__(self) -> str:
+-        return f"{self.__class__.__name__}({self.args[0]!r}, {self.args[1]!r})"
++        return f"{self.__class__.__name__}({self.args[0]!r}, {self._exceptions_str})"
+ 
+ 
+ class ExceptionGroup(BaseExceptionGroup[_ExceptionT_co], Exception):
+diff --git a/tests/test_exceptions.py b/tests/test_exceptions.py
+index e2bc81a..a253236 100644
+--- a/tests/test_exceptions.py
++++ b/tests/test_exceptions.py
+@@ -883,6 +883,5 @@ def test_exceptions_mutate_original_sequence():
+     exceptions.append(KeyError("bar"))
+     assert excgrp.exceptions is exc_tuple
+     assert repr(excgrp) == (
+-        "BaseExceptionGroup('foo', [ValueError(1), KeyboardInterrupt(), "
+-        "KeyError('bar')])"
++        "BaseExceptionGroup('foo', [ValueError(1), KeyboardInterrupt()])"
+     )
+-- 
+2.51.2
+

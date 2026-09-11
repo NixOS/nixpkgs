@@ -1,0 +1,32 @@
+commit b5c20736ca6270b6ac20ee24e4788cfc656815cb
+Author: Sandro Jäckel <sandro.jaeckel@gmail.com>
+Date:   Tue, 10 Mar 2026 02:42:27 +0100
+
+    Update tests
+
+diff --git a/tests/offline/test_async_plant_detail_lang.py b/tests/offline/test_async_plant_detail_lang.py
+index 3d460fb..75e4018 100644
+--- a/tests/offline/test_async_plant_detail_lang.py
++++ b/tests/offline/test_async_plant_detail_lang.py
+@@ -75,7 +75,7 @@ def test_forwards_lang_param_when_provided(self):
+         self.assertIn("Authorization", sess.headers)
+         self.assertTrue(sess.headers["Authorization"].startswith("Bearer "))
+         # Assert that the request URL targets the expected endpoint
+-        self.assertTrue(sess.last_get_url.endswith("/plant/detail/abelia chinensis"))
++        self.assertTrue(sess.last_get_url.endswith("/plant/detail/abelia chinensis/"))
+         # Critical assertion: 'lang' param is forwarded
+         self.assertEqual(sess.last_get_params, {"lang": "de"})
+ 
+diff --git a/tests/offline/test_pass_through_params.py b/tests/offline/test_pass_through_params.py
+index 62c2443..0ea36a9 100644
+--- a/tests/offline/test_pass_through_params.py
++++ b/tests/offline/test_pass_through_params.py
+@@ -118,7 +118,7 @@ def test_detail_merges_and_overrides_lang_and_kwargs(self):
+         self.assertIn("Authorization", sess.headers)
+         self.assertTrue(sess.headers["Authorization"].startswith("Bearer "))
+         # Request URL targets the expected endpoint
+-        self.assertTrue(sess.last_get_url.endswith("/plant/detail/abelia chinensis"))
++        self.assertTrue(sess.last_get_url.endswith("/plant/detail/abelia chinensis/"))
+         # 'lang' from explicit arg overrides value in params; other params are preserved
+         self.assertEqual(sess.last_get_params, {"lang": "de", "page": "2"})
+         # request_kwargs forwarded to session.get

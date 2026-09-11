@@ -1,0 +1,39 @@
+Prevents a user-visible warning on every compilation:
+
+  ld: warning: directory not found for option '-L.../MacOSX11.0.sdk/usr/lib/swift'
+
+--- a/lib/Driver/ToolChains.cpp
++++ b/lib/Driver/ToolChains.cpp
+@@ -1455,9 +1455,11 @@ void ToolChain::getRuntimeLibraryPaths(SmallVectorImpl<std::string> &runtimeLibP
+       runtimeLibPaths.push_back(std::string(scratchPath.str()));
+     }
+ 
++    if (!SDKPath.startswith("@storeDir@")) {
+     scratchPath = SDKPath;
+     llvm::sys::path::append(scratchPath, "usr", "lib", "swift");
+     runtimeLibPaths.push_back(std::string(scratchPath.str()));
++    }
+   }
+ }
+ 
+--- a/lib/Frontend/CompilerInvocation.cpp
++++ b/lib/Frontend/CompilerInvocation.cpp
+@@ -185,7 +185,9 @@ static void updateRuntimeLibraryPaths(SearchPathOptions &SearchPathOpts,
+       RuntimeLibraryImportPaths.push_back(std::string(LibPath.str()));
+     }
+ 
+-    LibPath = SearchPathOpts.getSDKPath();
++    auto SDKPath = SearchPathOpts.getSDKPath();
++    if (!SDKPath.startswith("@storeDir@")) {
++    LibPath = SDKPath;
+     llvm::sys::path::append(LibPath, "usr", "lib", "swift");
+     if (!Triple.isOSDarwin()) {
+       // Use the non-architecture suffixed form with directory-layout
+@@ -200,6 +202,7 @@ static void updateRuntimeLibraryPaths(SearchPathOptions &SearchPathOpts,
+       llvm::sys::path::append(LibPath, swift::getMajorArchitectureName(Triple));
+     }
+     RuntimeLibraryImportPaths.push_back(std::string(LibPath.str()));
++    }
+   }
+   SearchPathOpts.setRuntimeLibraryImportPaths(RuntimeLibraryImportPaths);
+ }

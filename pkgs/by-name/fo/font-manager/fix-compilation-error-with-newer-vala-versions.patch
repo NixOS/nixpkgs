@@ -1,0 +1,37 @@
+From e2ad529a88929bbc76906ac78260dacf4d8c8c6b Mon Sep 17 00:00:00 2001
+From: Jan Baier <jan.baier@amagical.net>
+Date: Fri, 1 May 2026 17:25:25 +0200
+Subject: [PATCH] Fix compilation error with newer Vala versions
+
+Fixes #467
+---
+ src/font-manager/Collections.vala | 2 +-
+ src/font-manager/FontList.vala    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/font-manager/Collections.vala b/src/font-manager/Collections.vala
+index 5e7f5cdb..43531e54 100644
+--- a/src/font-manager/Collections.vala
++++ b/src/font-manager/Collections.vala
+@@ -523,7 +523,7 @@ namespace FontManager {
+             var row = ((CollectionListRow) source.widget);
+             var drag_icon = new Gtk.Label(row.item_label.label);
+             drag_icon.add_css_class("FontManagerListRowDrag");
+-            var gtk_drag_icon = (Gtk.DragIcon) Gtk.DragIcon.get_for_drag(drag);
++            var gtk_drag_icon = new Gtk.DragIcon.get_for_drag(drag);
+             gtk_drag_icon.set_child(drag_icon);
+             return;
+         }
+diff --git a/src/font-manager/FontList.vala b/src/font-manager/FontList.vala
+index c8b170cb..9720dc2b 100644
+--- a/src/font-manager/FontList.vala
++++ b/src/font-manager/FontList.vala
+@@ -669,7 +669,7 @@ namespace FontManager {
+             widget_set_name(drag_count, "FontManagerListDragCount");
+             drag_icon.add_overlay(drag_count);
+             drag_count.set_label(selected_items.length.to_string());
+-            var gtk_drag_icon = (Gtk.DragIcon) Gtk.DragIcon.get_for_drag(drag);
++            var gtk_drag_icon = new Gtk.DragIcon.get_for_drag(drag);
+             gtk_drag_icon.set_child(drag_icon);
+             return;
+         }

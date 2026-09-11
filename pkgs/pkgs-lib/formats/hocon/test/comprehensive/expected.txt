@@ -1,0 +1,48 @@
+{
+  "array2d" = [
+    [
+      1,
+      2,
+      "a"
+    ],
+    [
+      2,
+      1,
+      "b"
+    ]
+  ]
+  "cursed \" .attrs \" " = {
+    "a" = 1
+    "a b" = ${?a}
+    "a b c" = ${?a b}
+  }
+  "misc attrs" = {
+    "x" = 1
+    "y" += {
+      "a" = 1
+    }
+  }
+  "nasty_string" = "\"@\n\\\t^*bf\n0\";'''$"
+  "nested" = {
+    "attrset" = {
+      "has" = {
+        "a" = {
+          "integer" = {
+            "value" = 100
+          }
+        }
+      }
+    }
+  }
+  "simple_top_level_attr" = "1.0"
+  "some_floaty" = 29.95
+  "to_include" = {
+    include "/nix/store/ccnzr53dpipdacxgci3ii3bqacvb5hxm-hocon-test-include.conf"
+    include "https://example.com"
+    include required(file("/nix/store/ccnzr53dpipdacxgci3ii3bqacvb5hxm-hocon-test-include.conf"))
+    include "/nix/store/ccnzr53dpipdacxgci3ii3bqacvb5hxm-hocon-test-include.conf"
+    include url("https://example.com")
+
+  }
+}
+

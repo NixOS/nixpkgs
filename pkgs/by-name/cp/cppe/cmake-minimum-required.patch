@@ -1,0 +1,22 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5d5d359..ba8992c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,5 +1,5 @@
+-cmake_minimum_required(VERSION 3.0.0)
+-cmake_policy(VERSION 3.0.0)
++cmake_minimum_required(VERSION 3.10)
++cmake_policy(VERSION 3.10)
+ 
+ project(cppe LANGUAGES CXX)
+ 
+diff --git a/cppe/CMakeLists.txt b/cppe/CMakeLists.txt
+index 6780f18..17ac4b9 100644
+--- a/cppe/CMakeLists.txt
++++ b/cppe/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.0.0)
++cmake_minimum_required(VERSION 3.10)
+ project(cppe-core VERSION 0.3.1 LANGUAGES CXX)
+ 
+ include(GNUInstallDirs)

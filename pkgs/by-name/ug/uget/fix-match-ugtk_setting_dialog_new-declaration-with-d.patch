@@ -1,0 +1,26 @@
+From 3a63063a5722947e8089d33ebdaf3ef6b293e2b3 Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Sat, 3 Jan 2026 13:24:27 +0800
+Subject: [PATCH] fix: match ugtk_setting_dialog_new declaration with
+ definition
+
+---
+ ui-gtk/UgtkSettingDialog.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ui-gtk/UgtkSettingDialog.h b/ui-gtk/UgtkSettingDialog.h
+index 750949e..0e82638 100644
+--- a/ui-gtk/UgtkSettingDialog.h
++++ b/ui-gtk/UgtkSettingDialog.h
+@@ -75,7 +75,7 @@ struct UgtkSettingDialog
+ 	struct UgtkMediaWebsiteForm   media_website;
+ };
+ 
+-UgtkSettingDialog*  ugtk_setting_dialog_new ();
++UgtkSettingDialog*  ugtk_setting_dialog_new (const gchar* title, GtkWindow* parent);
+ void                ugtk_setting_dialog_free (UgtkSettingDialog* sdialog);
+ 
+ void  ugtk_setting_dialog_run (UgtkSettingDialog* dialog, UgtkApp* app);
+-- 
+2.52.0
+

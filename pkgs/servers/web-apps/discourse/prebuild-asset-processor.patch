@@ -1,0 +1,13 @@
+diff --git a/lib/asset_processor.rb b/lib/asset_processor.rb
+index bacb376c856..11d7d7edd32 100644
+--- a/lib/asset_processor.rb
++++ b/lib/asset_processor.rb
+@@ -3,7 +3,7 @@
+ class AssetProcessor
+   BASE_COMPILER_VERSION = 113
+ 
+-  PROCESSOR_DIR = "tmp/asset-processor"
++  PROCESSOR_DIR = "frontend/asset-processor.build"
+   LOCK_FILE = "#{PROCESSOR_DIR}/build.lock"
+ 
+   CACHE_DEPENDENCY_GLOBS = %w[

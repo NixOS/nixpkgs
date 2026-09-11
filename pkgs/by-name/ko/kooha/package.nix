@@ -1,0 +1,78 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  appstream-glib,
+  cargo,
+  desktop-file-utils,
+  glib,
+  gst_all_1,
+  pipewire,
+  gtk4,
+  libadwaita,
+  libpulseaudio,
+  librsvg,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wayland,
+  wrapGAppsHook4,
+}:
+
+stdenv.mkDerivation rec {
+  pname = "kooha";
+  version = "2.3.1";
+
+  src = fetchFromGitHub {
+    owner = "SeaDve";
+    repo = "Kooha";
+    rev = "v${version}";
+    hash = "sha256-Fdl6Oj5pXE/TLieQ03oCmlbHJJ2KDJmOgHXOeOp05Ys=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-GB70rsDfuqaUo39xGKporG8FJFFlmyiKA0JVEvgFzV0=";
+  };
+
+  nativeBuildInputs = [
+    appstream-glib
+    desktop-file-utils
+    meson
+    ninja
+    pkg-config
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+    wrapGAppsHook4
+  ];
+
+  buildInputs = [
+    glib
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-ugly
+    gtk4
+    libadwaita
+    libpulseaudio
+    librsvg
+    wayland
+    pipewire
+  ];
+
+  installCheckPhase = ''
+    $out/bin/kooha --help
+  '';
+
+  meta = {
+    description = "Elegantly record your screen";
+    homepage = "https://github.com/SeaDve/Kooha";
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ austinbutler ];
+    mainProgram = "kooha";
+  };
+}

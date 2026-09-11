@@ -1,0 +1,33 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index a33fb2c..8426d66 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -46,3 +46,2 @@ itertools = "0.14"
+ log = "0.4"
+-mimalloc = { version = "0.1.49", default-features = false, features = ["local_dynamic_tls"], optional = true }
+ mime_guess = "=2.0"
+@@ -58,3 +57,2 @@ socket2 = { version = "=0.6", features = ["all"] }
+ sysinfo = "=0.39"
+-tikv-jemallocator = { version = "=0.7", default-features = false, features = ["disable_initial_exec_tls"], optional = true }
+ tls-listener = { version = "=0.11", git = "https://github.com/gi0baro/tls-listener.git", branch = "0.11.x", features = ["rustls-ring", "rustls-tls12"] }
+@@ -68,6 +66,2 @@ pyo3-build-config = "=0.27"
+ 
+-[features]
+-jemalloc = ["dep:tikv-jemallocator"]
+-mimalloc = ["dep:mimalloc"]
+-
+ [profile.release]
+diff --git a/src/lib.rs b/src/lib.rs
+index f3a8218..805b725 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1,9 +1 @@
+-#[cfg(all(feature = "jemalloc", not(feature = "mimalloc")))]
+-#[global_allocator]
+-static GLOBAL: tikv_jemallocator::Jemalloc = tikv_jemallocator::Jemalloc;
+-
+-#[cfg(all(feature = "mimalloc", not(feature = "jemalloc")))]
+-#[global_allocator]
+-static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
+-
+ use pyo3::prelude::*;

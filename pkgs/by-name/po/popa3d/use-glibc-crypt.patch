@@ -1,0 +1,25 @@
+diff -ubr popa3d-1.0.2-orig/Makefile popa3d-1.0.2/Makefile
+--- popa3d-1.0.2-orig/Makefile	2012-09-19 01:19:56.698098130 +0200
++++ popa3d-1.0.2/Makefile	2012-09-19 01:24:33.871750473 +0200
+@@ -9,7 +9,7 @@
+ LDFLAGS = -s
+ LIBS =
+ # Linux with glibc, FreeBSD, NetBSD
+-#LIBS += -lcrypt
++LIBS += -lcrypt
+ # HP-UX trusted system
+ #LIBS += -lsec
+ # Solaris (POP_STANDALONE, POP_VIRTUAL)
+diff -ubr popa3d-1.0.2-orig/auth_shadow.c popa3d-1.0.2/auth_shadow.c
+--- a/auth_shadow.c
++++ b/auth_shadow.c
+@@ -14,8 +14,9 @@
+ #define _XOPEN_SOURCE 4
+ #define _XOPEN_SOURCE_EXTENDED
+ #define _XOPEN_VERSION 4
+ #define _XPG4_2
++#define _DEFAULT_SOURCE
+ #include <unistd.h>
+ #include <string.h>
+ #include <stdlib.h>
+ #include <pwd.h>

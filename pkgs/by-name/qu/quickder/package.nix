@@ -1,0 +1,86 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchFromGitLab,
+  python3,
+  cmake,
+  doxygen,
+  gitUpdater,
+  graphviz,
+  quickmem,
+  arpa2common,
+  arpa2cm,
+  ensureNewerSourcesForZipFilesHook,
+}:
+
+let
+  python =
+    let
+      packageOverrides = self: super: {
+        pyparsing = super.pyparsing.overridePythonAttrs (old: rec {
+          version = "3.1.2";
+          src = fetchFromGitHub {
+            owner = "pyparsing";
+            repo = "pyparsing";
+            tag = version;
+            hash = "sha256-0B8DjO4kLgvt4sYsk8CZI+5icdKy73XE2tWeqVLqO5A=";
+          };
+        });
+      };
+    in
+    python3.override {
+      inherit packageOverrides;
+      self = python;
+    };
+in
+stdenv.mkDerivation rec {
+  pname = "quickder";
+  version = "1.7.2";
+
+  src = fetchFromGitLab {
+    owner = "arpa2";
+    repo = "quick-der";
+    rev = "v${version}";
+    hash = "sha256-IxoE9h+ISExNys2egvjSEb3phkrf4ices7k5oYgOL4A=";
+  };
+
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    graphviz
+    ensureNewerSourcesForZipFilesHook
+  ];
+
+  buildInputs = [
+    arpa2cm
+    arpa2common
+    (python.withPackages (
+      ps: with ps; [
+        asn1ate
+        colored
+        pyparsing
+        setuptools
+        six
+      ]
+    ))
+    quickmem
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py --replace-fail 'pyparsing==' 'pyparsing>='
+    rm python/__init__.py
+  '';
+
+  doCheck = true;
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+
+  meta = {
+    description = "Quick (and Easy) DER, a Library for parsing ASN.1";
+    homepage = "https://gitlab.com/arpa2/quick-der/";
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    teams = with lib.teams; [ ngi ];
+  };
+}

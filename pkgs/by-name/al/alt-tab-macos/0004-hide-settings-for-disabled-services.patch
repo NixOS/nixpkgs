@@ -1,0 +1,43 @@
+From cb68a038f6a0fc79cb60570bbec7bf3c45a5d8d2 Mon Sep 17 00:00:00 2001
+From: nixpkgs <nix@nixpkgs>
+Date: Fri, 10 Jul 2026 13:52:57 +0300
+Subject: [PATCH 4/4] hide settings for disabled services
+
+---
+ .../settings-window/tabs/GeneralTab.swift           | 13 -------------
+ 1 file changed, 13 deletions(-)
+
+diff --git a/src/preferences/settings-window/tabs/GeneralTab.swift b/src/preferences/settings-window/tabs/GeneralTab.swift
+index ab64ea9c..19dbef5e 100644
+--- a/src/preferences/settings-window/tabs/GeneralTab.swift
++++ b/src/preferences/settings-window/tabs/GeneralTab.swift
+@@ -20,12 +20,6 @@ class GeneralTab {
+             ])
+         let language = TableGroupView.Row(leftTitle: NSLocalizedString("Language", comment: ""),
+             rightViews: [LabelAndControl.makeDropdown("language", LanguagePreference.allCases, extraAction: setLanguageCallback)])
+-        updatesPolicyDropdown = LabelAndControl.makeDropdown("updatePolicy", UpdatePolicyPreference.allCases)
+-        let checkForUpdates = NSButton(title: NSLocalizedString("Check for updates now…", comment: ""), target: nil, action: nil)
+-        checkForUpdates.onAction = { control in checkForUpdatesNow(control) }
+-        crashPolicyDropdown = LabelAndControl.makeDropdown("crashPolicy", CrashPolicyPreference.allCases)
+-        let crashPolicy = TableGroupView.Row(leftTitle: NSLocalizedString("Crash reports policy", comment: ""),
+-            rightViews: [crashPolicyDropdown!])
+         for i in 0..<MenubarIconPreference.allCases.count {
+             let image = NSImage.initCopy("menubar-\(i)")
+             image.isTemplate = i < 2
+@@ -45,13 +39,6 @@ class GeneralTab {
+         table.addRow(captureWindowsInBackground)
+         table.addNewTable()
+         table.addRow(language)
+-        table.addNewTable()
+-        table.addRow(leftViews: [TableGroupView.makeText(NSLocalizedString("Updates policy", comment: ""))],
+-            rightViews: [updatesPolicyDropdown!],
+-            secondaryViews: [checkForUpdates],
+-            secondaryViewsAlignment: .right,
+-            secondaryViewsTopGap: 8)
+-        table.addRow(crashPolicy)
+         let exportButton = NSButton(title: NSLocalizedString("Export settings…", comment: ""), target: nil, action: nil)
+         exportButton.onAction = { _ in exportSettings() }
+         let importButton = NSButton(title: NSLocalizedString("Import settings…", comment: ""), target: nil, action: nil)
+-- 
+2.55.0
+

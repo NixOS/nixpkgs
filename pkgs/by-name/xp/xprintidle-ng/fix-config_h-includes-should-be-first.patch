@@ -1,0 +1,62 @@
+Fixes the config.h include error during build:
+
+```console
+In file included from src/xprintidle-ng.c:36:
+lib/time.h:28:3: error: #error "Please include config.h first."
+    28 |  #error "Please include config.h first."
+      |   ^~~~~
+```
+
+Introduced since gnulib upgrade:
+* https://github.com/coreutils/gnulib/commit/8ad7bc6
+* https://lists.gnu.org/archive/html/bug-gnulib/2023-04/msg00088.html
+* https://www.gnu.org/software/gnulib/manual/html_node/Source-changes.html
+
+The last version of gnulib now checks that config.h is the first include
+in every compilation unit.
+
+This is not the case with the xprintidle-ng source code, so this patch
+moves these `config.h` inclusions to be first.
+
+---
+ src/time-format.c   | 2 +-
+ src/xprintidle-ng.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/time-format.c b/src/time-format.c
+index 3a46749..4c0a4d2 100644
+--- a/src/time-format.c
++++ b/src/time-format.c
+@@ -18,10 +18,10 @@
+ //     51 Franklin Street, Fifth Floor
+ //     Boston, MA 02110-1301, USA.
+
++#include <config.h>
+ #include <stdbool.h>
+ #include <signal.h>
+ #include <time.h>
+-#include <config.h>
+ #include "system.h"
+ #include "xalloc.h"
+
+diff --git a/src/xprintidle-ng.c b/src/xprintidle-ng.c
+index 5156adf..ca69b2d 100644
+--- a/src/xprintidle-ng.c
++++ b/src/xprintidle-ng.c
+@@ -28,13 +28,13 @@
+ // Eivind Magnus Hvidevold <hvidevold@gmail.com>.
+ // kpowersave is licensed under the GNU GPL, version 2 _only_.
+
++#include <config.h>
+ #include <X11/Xlib.h>
+ #include <X11/extensions/dpms.h>
+ #include <X11/extensions/scrnsaver.h>
+ #include <stdbool.h>
+ #include <signal.h>
+ #include <time.h>
+-#include <config.h>
+ #include "system.h"
+ #include "errno.h"
+ #include "error.h"
+--
+2.42.0

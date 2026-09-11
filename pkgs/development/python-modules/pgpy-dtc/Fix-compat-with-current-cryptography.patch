@@ -1,0 +1,34 @@
+--- a/pgpy_dtc/_curves.py
++++ b/pgpy_dtc/_curves.py
+@@ -75,26 +75,31 @@
+     class BrainpoolP256R1(ec.EllipticCurve):
+         name = 'brainpoolP256r1'
+         key_size = 256
++        group_order = 0xa9fb57dba1eea9bc3e660a909d838d718c397aa3b561a6f7901e0e82974856a7
+ 
+ 
+     class BrainpoolP384R1(ec.EllipticCurve):  # noqa: E303
+         name = 'brainpoolP384r1'
+         key_size = 384
++        group_order = 0x8cb91e82a3386d280f5d6f7e50e641df152f7109ed5456b31f166e6cac0425a7cf3ab6af6b7fc3103b883202e9046565
+ 
+ 
+     class BrainpoolP512R1(ec.EllipticCurve):  # noqa: E303
+         name = 'brainpoolP512r1'
+         key_size = 512
++        group_order = 0xaadd9db8dbe9c48b3fd4e6ae33c9fc07cb308db3b3c9d20ed6639cca70330870553e5c414ca92619418661197fac10471db1d381085ddaddb58796829ca90069
+ 
+ 
+     class X25519(ec.EllipticCurve):  # noqa: E303
+         name = 'X25519'
+         key_size = 256
++        group_order = 0x1000000000000000000000000000000014def9dea2f79cd65812631a5cf5d3ed
+ 
+ 
+     class Ed25519(ec.EllipticCurve):  # noqa: E303
+         name = 'ed25519'
+         key_size = 256
++        group_order = 0x1000000000000000000000000000000014def9dea2f79cd65812631a5cf5d3ed
+ 
+ 
+ # add these curves to the _CURVE_TYPES list

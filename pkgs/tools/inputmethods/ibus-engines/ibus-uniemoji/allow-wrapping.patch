@@ -1,0 +1,11 @@
+--- a/uniemoji.xml.in
++++ b/uniemoji.xml.in
+@@ -7,7 +7,7 @@
+     <license>GPL</license>
+     <author>Lalo Martins &lt;lalo.martins@gmail.com&gt;</author>
+     <homepage>https://github.com/salty-horse/ibus-uniemoji</homepage>
+-    <exec>@PYTHON@ @DATADIR@/ibus-uniemoji/ibus.py --ibus</exec>
++    <exec>@DATADIR@/ibus-uniemoji/ibus.py --ibus</exec>
+     <textdomain>uniemoji</textdomain>
+     <engines>
+         <engine>

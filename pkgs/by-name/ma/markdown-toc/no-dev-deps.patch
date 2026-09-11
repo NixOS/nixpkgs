@@ -1,0 +1,15 @@
+diff --git a/package.json b/package.json
+index 9280c8b..356f1af 100644
+--- a/package.json
++++ b/package.json
+@@ -60,10 +60,6 @@
+     "repeat-string": "^1.6.1",
+     "strip-color": "^0.1.0"
+   },
+-  "devDependencies": {
+-    "gulp-format-md": "^0.1.11",
+-    "mocha": "^3.2.0"
+-  },
+   "keywords": [
+     "anchor",
+     "commonmark",

@@ -1,0 +1,22 @@
+diff --git a/NifSkope_targets.pri b/NifSkope_targets.pri
+index 05324c2..d8389b1 100644
+--- a/NifSkope_targets.pri
++++ b/NifSkope_targets.pri
+@@ -11,7 +11,7 @@ else:EXE = ""
+ ## lupdate / lrelease
+ ###############################
+ 
+-QMAKE_LUPDATE = $$[QT_INSTALL_BINS]/lupdate$${EXE}
++QMAKE_LUPDATE = @qttools@/lupdate$${EXE}
+ exists($$QMAKE_LUPDATE) {
+ 	# Make target for Updating .ts
+ 	updatets.target = updatets
+@@ -23,7 +23,7 @@ exists($$QMAKE_LUPDATE) {
+ 	message("lupdate could not be found, ignoring make target")
+ }
+ 
+-QMAKE_LRELEASE = $$[QT_INSTALL_BINS]/lrelease$${EXE}
++QMAKE_LRELEASE = @qttools@/lrelease$${EXE}
+ exists($$QMAKE_LRELEASE) {
+ 	# Build Step for Releasing .ts->.qm
+ 	updateqm.input = TRANSLATIONS

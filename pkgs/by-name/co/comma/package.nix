@@ -1,0 +1,79 @@
+{
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  fzy,
+  lib,
+  nix-index-unwrapped,
+  nix,
+  rustPlatform,
+  versionCheckHook,
+  buildPackages,
+}:
+
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "comma";
+  version = "2.4.2";
+
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "nix-community";
+    repo = "comma";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5Q1CQn7kw619KWVVCJTN8HhOdVTy7DgenbmHJodhR4g=";
+  };
+
+  cargoHash = "sha256-LQZ//9r1kmnb3TwhwYHdCny/U5hp1+QMziDC31l/zSM=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postPatch = ''
+    substituteInPlace ./src/main.rs \
+      --replace-fail '"nix-locate"' '"${lib.getExe' nix-index-unwrapped "nix-locate"}"' \
+      --replace-fail '"nix"' '"${lib.getExe nix}"' \
+      --replace-fail '"nix-env"' '"${lib.getExe' nix "nix-env"}"' \
+      --replace-fail '"fzy"' '"${lib.getExe fzy}"'
+  '';
+
+  postInstall =
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      ln -s $out/bin/comma $out/bin/,
+
+      mkdir -p $out/share/comma
+
+      cp $src/etc/command-not-found.sh $out/share/comma
+      cp $src/etc/command-not-found.nu $out/share/comma
+      cp $src/etc/command-not-found.fish $out/share/comma
+
+      patchShebangs $out/share/comma/command-not-found.sh
+      substituteInPlace \
+        "$out/share/comma/command-not-found.sh" \
+        "$out/share/comma/command-not-found.nu" \
+        "$out/share/comma/command-not-found.fish" \
+        --replace-fail "comma --ask" "$out/bin/comma --ask"
+    ''
+    + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+      ${emulator} "$out/bin/comma" --mangen > comma.1
+      installManPage comma.1
+
+      installShellCompletion --cmd comma \
+        --bash <(${emulator} $out/bin/comma --print-completions bash) \
+        --fish <(${emulator} $out/bin/comma --print-completions fish) \
+        --zsh <(${emulator} $out/bin/comma --print-completions zsh)
+    '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  meta = {
+    homepage = "https://github.com/nix-community/comma";
+    description = "Runs programs without installing them";
+    license = lib.licenses.mit;
+    mainProgram = "comma";
+    maintainers = with lib.maintainers; [ artturin ];
+  };
+})

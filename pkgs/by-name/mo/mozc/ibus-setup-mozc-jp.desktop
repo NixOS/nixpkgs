@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Mozc Setup
+Exec=@mozc@/lib/mozc/mozc_tool --mode=config_dialog
+Type=Application
+StartupNotify=true
+NoDisplay=true
+X-Desktop-File-Install-Version=0.27

@@ -1,0 +1,11 @@
+--- a/libgcc/config/t-slibgcc-darwin
++++ b/libgcc/config/t-slibgcc-darwin
+@@ -139,8 +139,7 @@ libgcc_s.1.dylib: all-multi libgcc_s.$(SHLIB_SOVERSION)$(SHLIB_EXT)
+ 	  $(CC) -arch $${arch} -nodefaultlibs -dynamiclib -nodefaultrpaths \
+ 	    -o libgcc_s.1$(SHLIB_EXT)_T_$${mlib} \
+ 	    -Wl,-reexport_library,libgcc_s.$(SHLIB_SOVERSION)$(SHLIB_EXT)_T_$${mlib} \
+ 	    -lSystem \
+-	    -Wl,-reexported_symbols_list,$(srcdir)/config/darwin-unwind.ver \
+ 	    -install_name $(SHLIB_RPATH)/libgcc_s.1.dylib \
+ 	    -compatibility_version 1 -current_version 1.1 ; \
+ 	done

@@ -1,0 +1,20 @@
+diff --git a/src/rpy2/rinterface/__init__.py b/src/rpy2/rinterface/__init__.py
+index 0ba46083..1f4265aa 100644
+--- a/src/rpy2/rinterface/__init__.py
++++ b/src/rpy2/rinterface/__init__.py
+@@ -1100,6 +1100,15 @@ NA = None
+ NA_Real = None
+ NA_Complex = None
+ 
++def initr_simple() -> typing.Optional[int]:
++    """Initialize R's embedded C library."""
++    with openrlib.rlock:
++        status = embedded._initr()
++        atexit.register(endr, 0)
++        _rinterface._register_external_symbols()
++        _post_initr_setup()
++        return status
++
+ 
+ def initr(
+         interactive: typing.Optional[bool] = None,

@@ -1,0 +1,45 @@
+{
+  "version": {
+    "major": 148,
+    "minor": 0,
+    "build": 7749,
+    "patch": 2
+  },
+  "pdfium": {
+    "hash": "sha256-RMkVffwjC8W4YwjlssNIWX1n2CAl97kE7z11yuzMX2o="
+  },
+  "build": {
+    "rev": "c9202dd8ca1d4255bd9e505988b945746ddb378a",
+    "hash": "sha256-ovdPiQ4i2sFzjiwG8vZAWVaFQ03OXNB9ZdUULU2/q9g="
+  },
+  "chromiumBuildtools": {
+    "hash": "sha256-BvGCdJ3EgUZX6MC3jf86YNl4LzUxpxiptCEBv3bqBIo="
+  },
+  "abseil": {
+    "rev": "2a7d49fc392cad55159d68d98aa3648bc89795d3",
+    "hash": "sha256-dz2DA+bw/QQcfI9d9AKP7dn0eW0aAnhH+RmSStKS/hY="
+  },
+  "fastFloat": {
+    "rev": "cb1d42aaa1e14b09e1452cfdef373d051b8c02a4",
+    "hash": "sha256-CG5je117WYyemTe5PTqznDP0bvY5TeXn8Vu1Xh5yUzQ="
+  },
+  "gtest": {
+    "rev": "4fe3307fb2d9f86d19777c7eb0e4809e9694dde7",
+    "hash": "sha256-gJhv3DQQSP5BQ6GmDobq42/Gkx4AbOg/ZS80bM0WpEw="
+  },
+  "generateShimHeaders": {
+    "hash": "sha256-tqhnqYoQeXUTN7OSSVwchpEkGJwhCUSk8TG8LUgrHdg="
+  },
+  "testFonts": {
+    "rev": "7f51783942943e965cd56facf786544ccfc07713",
+    "hash": "sha256-gBnAOW/X2R13AP9507uPsvQ4A2ZUPbvzFcg3Neu3DT8=",
+    "bundle": {
+      "object": "cd96fc55dc243f6c6f4cb63ad117cad6cd48dceb",
+      "hash": "sha256-7Jc+zNZp1Bf78tCk2scwdEoxdCaP8GLbVFG1XIK8NJI="
+    }
+  },
+  "simdutf": {
+    "rev": "f7356eed293f8208c40b3c1b344a50bd70971983",
+    "hash": "sha256-l0VPVhfabaMx0oJphFjA9S1LVtavWFZ4w3btW7avCDY="
+  }
+}

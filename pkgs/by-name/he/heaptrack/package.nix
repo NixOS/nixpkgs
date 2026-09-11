@@ -1,0 +1,82 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  makeBinaryWrapper,
+  zlib,
+  boost,
+  libunwind,
+  elfutils,
+  sparsehash,
+  zstd,
+  kdePackages,
+  rustc-demangle,
+}:
+
+stdenv.mkDerivation {
+  pname = "heaptrack";
+  version = "1.5.0-unstable-2025-07-21";
+
+  src = fetchFromGitLab {
+    domain = "invent.kde.org";
+    owner = "sdk";
+    repo = "heaptrack";
+    rev = "9db5d53df554959478575e080648f6854d362faf";
+    hash = "sha256-8NLpp/+PK3wIB5Sx0Z1185DCDQ18zsGj9Wp5YNKgX8E=";
+  };
+
+  patches = [
+    ./boost-189.patch
+    ./cmake-minimum-required.patch
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    kdePackages.extra-cmake-modules
+    makeBinaryWrapper
+    kdePackages.wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    zlib
+    boost
+    libunwind
+    sparsehash
+    zstd
+    rustc-demangle
+  ]
+  ++ (with kdePackages; [
+    qtbase
+    kio
+    kitemmodels
+    threadweaver
+    kconfigwidgets
+    kcoreaddons
+    kdiagram
+  ])
+
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    elfutils
+  ];
+
+  postPatch = ''
+    substituteInPlace src/interpret/demangler.cpp \
+      --replace-fail "librustc_demangle.so" "${rustc-demangle}/lib/librustc_demangle.so"
+  '';
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    makeWrapper \
+      $out/Applications/KDE/heaptrack_gui.app/Contents/MacOS/heaptrack_gui \
+      $out/bin/heaptrack_gui
+  '';
+
+  meta = {
+    description = "Heap memory profiler for Linux";
+    homepage = "https://github.com/KDE/heaptrack";
+    license = lib.licenses.lgpl21Plus;
+    mainProgram = "heaptrack_gui";
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
+  };
+}

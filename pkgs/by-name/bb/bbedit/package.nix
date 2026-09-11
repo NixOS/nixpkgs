@@ -1,0 +1,46 @@
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  _7zz,
+}:
+
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "bbedit";
+  version = "16.0.3";
+
+  src = fetchurl {
+    url = "https://s3.amazonaws.com/BBSW-download/BBEdit_${finalAttrs.version}.dmg";
+    hash = "sha256-rPKunlxovqzf11NIYfqMmS4b3VORpxs8CLPth5wrNXI=";
+  };
+
+  sourceRoot = ".";
+
+  nativeBuildInputs = [ _7zz ];
+
+  # 7zz extracts APFS alternate data streams as separate files, breaking the seal
+  postUnpack = ''
+    find . -name "*:com.apple.*" -delete
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p "$out/Applications"
+    cp -r *.app "$out/Applications"
+
+    runHook postInstall
+  '';
+
+  # app bundle may be messed up by standard fixup
+  dontFixup = true;
+
+  meta = {
+    description = "Powerful and full-featured professional HTML and text editor for macOS";
+    homepage = "https://www.barebones.com/products/bbedit/";
+    license = lib.licenses.unfree;
+    maintainers = [ ];
+    platforms = lib.platforms.darwin;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+  };
+})

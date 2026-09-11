@@ -1,0 +1,252 @@
+{
+  lib,
+  bash,
+  binutils-unwrapped,
+  coreutils,
+  gawk,
+  libarchive,
+  pv,
+  squashfs-tools,
+  buildFHSEnv,
+  replaceVarsWith,
+  runtimeShell,
+  runCommand,
+}:
+
+rec {
+  appimage-exec = replaceVarsWith {
+    src = ./appimage-exec.sh;
+    isExecutable = true;
+    dir = "bin";
+    replacements = {
+      inherit runtimeShell;
+      path = lib.makeBinPath [
+        bash
+        binutils-unwrapped
+        coreutils
+        gawk
+        libarchive
+        pv
+        squashfs-tools
+      ];
+    };
+  };
+
+  extract =
+    args@{
+      pname,
+      version,
+      name ? null,
+      postExtract ? "",
+      src,
+      ...
+    }:
+    assert
+      name == null
+      || throw "The `name` argument is deprecated. Use `pname` and `version` instead to construct the name.";
+    runCommand "${pname}-${version}-extracted"
+      {
+        nativeBuildInputs = [ appimage-exec ];
+        strictDeps = true;
+      }
+      ''
+        appimage-exec.sh -x $out ${src}
+        ${postExtract}
+      '';
+
+  # for compatibility, deprecated
+  extractType1 = lib.warn "'appimageTools.extractType1' is deprecated, use 'appimageTools.extract' instead" extract;
+  extractType2 = lib.warn "'appimageTools.extractType2' is deprecated, use 'appimageTools.extract' instead" extract;
+  wrapType1 = lib.warn "'appimageTools.wrapType1' is deprecated, use 'appimageTools.wrapType2' instead" wrapType2;
+
+  wrapAppImage = lib.extendMkDerivation {
+    constructDrv = buildFHSEnv;
+    excludeDrvArgNames = [ "extraPkgs" ];
+    extendDrvArgs =
+      finalAttrs:
+      prev@{
+        contents ? prev.src,
+        extraPkgs ? pkgs: [ ],
+        meta ? { },
+        ...
+      }:
+      defaultFhsEnvArgs
+      // {
+        targetPkgs = pkgs: [ appimage-exec ] ++ defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
+
+        runScript = "appimage-exec.sh -w ${finalAttrs.contents or prev.src} --";
+
+        meta = {
+          sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+        }
+        // meta;
+      };
+  };
+
+  wrapType2 = lib.extendMkDerivation {
+    constructDrv = wrapAppImage;
+    extendDrvArgs = finalAttrs: args: {
+      contents = extract (
+        lib.filterAttrs (
+          key: value:
+          builtins.elem key [
+            "pname"
+            "version"
+            "src"
+          ]
+        ) finalAttrs
+      );
+
+      # passthru src to make nix-update work
+      # hack to keep the origin position (unsafeGetAttrPos)
+      passthru =
+        lib.pipe finalAttrs [
+          lib.attrNames
+          (lib.remove "src")
+          (removeAttrs finalAttrs)
+        ]
+        // args.passthru or { };
+    };
+  };
+
+  defaultFhsEnvArgs = {
+    # Most of the packages were taken from the Steam chroot
+    targetPkgs =
+      pkgs: with pkgs; [
+        gtk3
+        bashInteractive
+        zenity
+        xrandr
+        which
+        perl
+        xdg-user-dirs # flutter desktop apps
+        xdg-utils
+        iana-etc
+        krb5
+        gsettings-desktop-schemas
+        hicolor-icon-theme # dont show a gtk warning about hicolor not being installed
+
+        # libraries not on the upstream include list, but nevertheless expected
+        # by at least one appimage
+        libsecret # For bitwarden, appimage is x86_64 only
+      ];
+
+    # list of libraries expected in an appimage environment:
+    # https://github.com/AppImage/pkg2appimage/blob/master/excludelist
+    multiPkgs =
+      pkgs: with pkgs; [
+        desktop-file-utils
+        libxcomposite
+        libxtst
+        libxrandr
+        libxext
+        libx11
+        libxfixes
+        libGL
+
+        gst_all_1.gstreamer
+        gst_all_1.gst-plugins-ugly
+        gst_all_1.gst-plugins-base
+        libdrm
+        xkeyboard-config
+        libpciaccess
+
+        glib
+        bzip2
+        zlib
+        gdk-pixbuf
+
+        libxinerama
+        libxdamage
+        libxcursor
+        libxrender
+        libxscrnsaver
+        libxxf86vm
+        libxi
+        libsm
+        libice
+        freetype
+        curlWithGnuTls
+        nspr
+        nss
+        fontconfig
+        cairo
+        pango
+        expat
+        dbus
+        cups
+        libcap
+        SDL2
+        libusb1
+        udev
+        dbus-glib
+        atk
+        at-spi2-atk
+        libudev0-shim
+
+        libxt
+        libxmu
+        libxcb
+        libxcb-util
+        libxcb-wm
+        libxcb-image
+        libxcb-keysyms
+        libxcb-render-util
+        libGLU
+        libuuid
+        libogg
+        libvorbis
+        SDL2_image
+        glew_1_10
+        openssl
+        libidn
+        onetbb
+        wayland
+        libgbm
+        libxkbcommon
+        vulkan-loader
+
+        flac
+        libglut
+        libjpeg
+        libpng12
+        libpulseaudio
+        libsamplerate
+        libmikmod
+        libthai
+        libtheora
+        libtiff
+        pixman
+        speex
+        SDL2_ttf
+        SDL2_mixer
+        libcaca
+        libcanberra
+        libgcrypt
+        libvpx
+        librsvg
+        libxft
+        libvdpau
+        alsa-lib
+
+        harfbuzz
+        e2fsprogs
+        libgpg-error
+        keyutils.lib
+        libjack2
+        fribidi
+        p11-kit
+
+        gmp
+
+        # libraries not on the upstream include list, but nevertheless expected
+        # by at least one appimage
+        libtool.lib # for Synfigstudio
+        at-spi2-core
+        pciutils # for FreeCAD
+        pipewire # immersed-vr wayland support
+        libmpg123 # Slippi launcher
+        brotli # TwitchDropsMiner
+      ];
+  };
+}

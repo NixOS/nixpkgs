@@ -1,0 +1,27 @@
+diff --git a/cmake_modules/FindOTF2.cmake b/cmake_modules/FindOTF2.cmake
+index 2853f92a..af1f3225 100644
+--- a/cmake_modules/FindOTF2.cmake
++++ b/cmake_modules/FindOTF2.cmake
+@@ -15,11 +15,11 @@ IF(NOT OTF2_CONFIG OR NOT EXISTS ${OTF2_CONFIG})
+ ELSE()
+   message(STATUS "OTF2 installation found. (using ${OTF2_CONFIG})")
+ 
+-  execute_process(COMMAND ${OTF2_CONFIG} "--cppflags" OUTPUT_VARIABLE OTF2_INCLUDE_PATH)
++  execute_process(COMMAND ${OTF2_CONFIG} "--cppflags" "--target" "backend" OUTPUT_VARIABLE OTF2_INCLUDE_PATH)
+   STRING(REPLACE "\n" "" OTF2_INCLUDE_PATH ${OTF2_INCLUDE_PATH})
+   STRING(REPLACE "-I" "" OTF2_INCLUDE_PATH ${OTF2_INCLUDE_PATH})
+   
+-  execute_process(COMMAND ${OTF2_CONFIG} "--ldflags" OUTPUT_VARIABLE _LINK_LD_ARGS)
++  execute_process(COMMAND ${OTF2_CONFIG} "--ldflags" "--target" "backend" OUTPUT_VARIABLE _LINK_LD_ARGS)
+   STRING( REPLACE " " ";" _LINK_LD_ARGS ${_LINK_LD_ARGS} )
+   FOREACH( _ARG ${_LINK_LD_ARGS} )
+     IF(${_ARG} MATCHES "^-L")
+@@ -29,7 +29,7 @@ ELSE()
+     ENDIF(${_ARG} MATCHES "^-L")
+   ENDFOREACH(_ARG)
+ 
+-  execute_process(COMMAND ${OTF2_CONFIG} "--libs" OUTPUT_VARIABLE _LINK_LD_ARGS)
++  execute_process(COMMAND ${OTF2_CONFIG} "--libs" "--target" "backend" OUTPUT_VARIABLE _LINK_LD_ARGS)
+   STRING( REPLACE " " ";" _LINK_LD_ARGS ${_LINK_LD_ARGS} )
+   FOREACH( _ARG ${_LINK_LD_ARGS} )
+     IF(${_ARG} MATCHES "^-l")

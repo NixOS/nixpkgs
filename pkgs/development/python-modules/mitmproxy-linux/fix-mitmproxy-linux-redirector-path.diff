@@ -1,0 +1,13 @@
+diff --git a/mitmproxy-linux/mitmproxy_linux/__init__.py b/mitmproxy-linux/mitmproxy_linux/__init__.py
+index 7c50254..68aea37 100644
+--- a/mitmproxy-linux/mitmproxy_linux/__init__.py
++++ b/mitmproxy-linux/mitmproxy_linux/__init__.py
+@@ -12,6 +12,8 @@ def executable_path() -> Path:
+     for development setups this may invoke cargo to build it.
+     """
+ 
++    return "@mitmproxy-linux-redirector@"
++
+     if getattr(sys, 'frozen', False) and (pyinstaller_dir := getattr(sys, '_MEIPASS')):
+         return Path(pyinstaller_dir) / "mitmproxy-linux-redirector"
+     else:

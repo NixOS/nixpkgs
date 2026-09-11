@@ -1,0 +1,20 @@
+diff --git a/libpurple/plugin.c b/libpurple/plugin.c
+index 4f2b402..fda9add 100644
+--- a/libpurple/plugin.c
++++ b/libpurple/plugin.c
+@@ -1181,8 +1181,15 @@ purple_plugins_get_handle(void) {
+ void
+ purple_plugins_init(void) {
+ 	void *handle = purple_plugins_get_handle();
++	gchar **paths, **p;
+ 
+ 	purple_plugins_add_search_path(LIBDIR);
++	paths = g_strsplit(g_getenv("PURPLE_PLUGIN_PATH"), ":", -1);
++	if (paths) {
++		for (p = paths; *p; ++p)
++			if (**p) purple_plugins_add_search_path(*p);
++	}
++	g_strfreev(paths);
+ 
+ 	purple_signal_register(handle, "plugin-load",
+ 						 purple_marshal_VOID__POINTER,

@@ -1,0 +1,196 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 54aadcca..070057a3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -210,7 +210,7 @@ target_link_libraries(
+           lodepng
+           qhullstatic_r
+           tinyobjloader
+-          tinyxml2
++          tinyxml2::tinyxml2
+ )
+ 
+ if(NOT EMSCRIPTEN)
+diff --git a/cmake/MujocoDependencies.cmake b/cmake/MujocoDependencies.cmake
+index 6e205a7d..815d1c90 100644
+--- a/cmake/MujocoDependencies.cmake
++++ b/cmake/MujocoDependencies.cmake
+@@ -88,8 +88,6 @@ include(third_party_deps/lodepng)
+ if(NOT TARGET marchingcubecpp)
+   FetchContent_Declare(
+     marchingcubecpp
+-    GIT_REPOSITORY https://github.com/aparis69/MarchingCubeCpp.git
+-    GIT_TAG ${MUJOCO_DEP_VERSION_MarchingCubeCpp}
+   )
+ 
+   FetchContent_GetProperties(marchingcubecpp)
+@@ -112,10 +110,6 @@ findorfetch(
+   qhull
+   LIBRARY_NAME
+   qhull
+-  GIT_REPO
+-  https://github.com/qhull/qhull.git
+-  GIT_TAG
+-  ${MUJOCO_DEP_VERSION_qhull}
+   TARGETS
+   qhull
+   EXCLUDE_FROM_ALL
+@@ -137,10 +131,6 @@ findorfetch(
+   tinyxml2
+   LIBRARY_NAME
+   tinyxml2
+-  GIT_REPO
+-  https://github.com/leethomason/tinyxml2.git
+-  GIT_TAG
+-  ${MUJOCO_DEP_VERSION_tinyxml2}
+   TARGETS
+   tinyxml2
+   EXCLUDE_FROM_ALL
+@@ -160,10 +150,6 @@ findorfetch(
+   tinyobjloader
+   LIBRARY_NAME
+   tinyobjloader
+-  GIT_REPO
+-  https://github.com/tinyobjloader/tinyobjloader.git
+-  GIT_TAG
+-  ${MUJOCO_DEP_VERSION_tinyobjloader}
+   TARGETS
+   tinyobjloader
+   EXCLUDE_FROM_ALL
+@@ -198,10 +184,6 @@ findorfetch(
+   ccd
+   LIBRARY_NAME
+   ccd
+-  GIT_REPO
+-  https://github.com/danfis/libccd.git
+-  GIT_TAG
+-  ${MUJOCO_DEP_VERSION_ccd}
+   TARGETS
+   ccd
+   EXCLUDE_FROM_ALL
+@@ -234,8 +216,6 @@ endif()
+ set(BUILD_TESTS OFF)
+ fetchpackage(
+   PACKAGE_NAME  miniz
+-  GIT_REPO      https://github.com/richgel999/miniz.git
+-  GIT_TAG       ${MUJOCO_DEP_VERSION_miniz}
+   TARGETS       miniz
+ )
+ if(_BUILD_TESTS_WAS_DEFINED)
+@@ -267,10 +247,6 @@ if(MUJOCO_BUILD_TESTS OR MUJOCO_BUILD_STUDIO OR MUJOCO_USE_FILAMENT)
+     absl
+     LIBRARY_NAME
+     abseil-cpp
+-    GIT_REPO
+-    https://github.com/abseil/abseil-cpp.git
+-    GIT_TAG
+-    ${MUJOCO_DEP_VERSION_abseil}
+     TARGETS
+     absl::core_headers
+     EXCLUDE_FROM_ALL
+@@ -299,10 +275,6 @@ if(MUJOCO_BUILD_TESTS)
+     GTest
+     LIBRARY_NAME
+     googletest
+-    GIT_REPO
+-    https://github.com/google/googletest.git
+-    GIT_TAG
+-    ${MUJOCO_DEP_VERSION_gtest}
+     TARGETS
+     gtest
+     gmock
+@@ -331,10 +303,6 @@ if(MUJOCO_BUILD_TESTS)
+     benchmark
+     LIBRARY_NAME
+     benchmark
+-    GIT_REPO
+-    https://github.com/google/benchmark.git
+-    GIT_TAG
+-    ${MUJOCO_DEP_VERSION_benchmark}
+     TARGETS
+     benchmark::benchmark
+     benchmark::benchmark_main
+@@ -351,8 +319,6 @@ if(MUJOCO_TEST_PYTHON_UTIL)
+ 
+     FetchContent_Declare(
+       Eigen3
+-      GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+-      GIT_TAG ${MUJOCO_DEP_VERSION_Eigen3}
+     )
+ 
+     FetchContent_GetProperties(Eigen3)
+diff --git a/cmake/third_party_deps/lodepng.cmake b/cmake/third_party_deps/lodepng.cmake
+index b604f052..9f4d531d 100644
+--- a/cmake/third_party_deps/lodepng.cmake
++++ b/cmake/third_party_deps/lodepng.cmake
+@@ -22,7 +22,5 @@ include(FindOrFetch)
+ 
+ fetchpackage(
+     PACKAGE_NAME  lodepng
+-    GIT_REPO      https://github.com/lvandeve/lodepng.git
+-    GIT_TAG       ${MUJOCO_DEP_VERSION_lodepng}
+     CUSTOM_CMAKE  "${CMAKE_CURRENT_LIST_DIR}/lodepng/CMakeLists.txt"
+ )
+diff --git a/python/mujoco/util/CMakeLists.txt b/python/mujoco/util/CMakeLists.txt
+index 666a3725..d89bb499 100644
+--- a/python/mujoco/util/CMakeLists.txt
++++ b/python/mujoco/util/CMakeLists.txt
+@@ -63,8 +63,8 @@ if(BUILD_TESTING)
+   target_link_libraries(
+     array_traits_test
+     array_traits
+-    gmock
+-    gtest_main
++    GTest::gmock
++    GTest::gtest_main
+   )
+   gtest_add_tests(TARGET array_traits_test SOURCES array_traits_test.cc)
+ 
+@@ -72,8 +72,8 @@ if(BUILD_TESTING)
+   target_link_libraries(
+     func_traits_test
+     func_traits
+-    gmock
+-    gtest_main
++    GTest::gmock
++    GTest::gtest_main
+   )
+   gtest_add_tests(TARGET func_traits_test SOURCES func_traits_test.cc)
+ 
+@@ -81,8 +81,8 @@ if(BUILD_TESTING)
+   target_link_libraries(
+     func_wrap_test
+     func_wrap
+-    gmock
+-    gtest_main
++    GTest::gmock
++    GTest::gtest_main
+   )
+   gtest_add_tests(TARGET func_wrap_test SOURCES func_wrap_test.cc)
+ 
+@@ -90,8 +90,8 @@ if(BUILD_TESTING)
+   target_link_libraries(
+     tuple_tools_test
+     func_wrap
+-    gmock
+-    gtest_main
++    GTest::gmock
++    GTest::gtest_main
+   )
+   gtest_add_tests(TARGET tuple_tools_test SOURCES tuple_tools_test.cc)
+ endif()
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index f1bbba61..4c3ee22d 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -98,8 +98,8 @@ target_link_libraries(
+          absl::synchronization
+          absl::flat_hash_map
+          absl::flat_hash_set
+-         gtest
+-         gmock
++         GTest::gmock
++         GTest::gtest_main
+          mujoco::mujoco
+ )
+ target_include_directories(fixture PRIVATE ${mujoco_SOURCE_DIR}/include gmock)

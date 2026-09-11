@@ -1,0 +1,13 @@
+#/usr/bin/env tcsh
+
+set UNPATCHED_SOURCE_FILE = "$1"
+set PATCHED_SOURCE_FILE = "$2"
+set ORIG_PATH = "${PWD}/alfa:${PWD}/bravo"
+
+set RESULT_PATH_FROM_UNPATCHED = `setenv PATH "$ORIG_PATH"; source $UNPATCHED_SOURCE_FILE; echo $PATH`
+set RESULT_PATH_FROM_PATCHED = `setenv PATH "$ORIG_PATH"; source $PATCHED_SOURCE_FILE; echo $PATH`
+
+if ($RESULT_PATH_FROM_UNPATCHED != $RESULT_PATH_FROM_PATCHED) then
+    echo "Result path mismatched: $UNPATCHED_SOURCE_FILE ($RESULT_PATH_FROM_UNPATCHED) and $PATCHED_SOURCE_FILE ($RESULT_PATH_FROM_PATCHED)" > /dev/stderr
+    exit 1
+endif

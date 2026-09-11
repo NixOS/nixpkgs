@@ -1,0 +1,145 @@
+From 20799887ff1d50dc6ca5d90bc1038ff5160b97f3 Mon Sep 17 00:00:00 2001
+From: "paul@iqmo.com" <paul@iqmo.com>
+Date: Tue, 19 Aug 2025 21:38:21 -0400
+Subject: [PATCH 3/8] fix 3.14 / PEP649, but maintain bw compat
+
+---
+ dataclasses_json/core.py           | 40 +++++++++++++++++++++++++++++-
+ dataclasses_json/undefined.py      |  3 ++-
+ tests/test_undefined_parameters.py | 36 +++++++++++++++++++++++++++
+ 3 files changed, 77 insertions(+), 2 deletions(-)
+
+diff --git a/dataclasses_json/core.py b/dataclasses_json/core.py
+index 69f51a3a..313e2615 100644
+--- a/dataclasses_json/core.py
++++ b/dataclasses_json/core.py
+@@ -18,6 +18,7 @@
+ from uuid import UUID
+ 
+ from typing_inspect import is_union_type  # type: ignore
++import typing
+ 
+ from dataclasses_json import cfg
+ from dataclasses_json.utils import (_get_type_cons, _get_type_origin,
+@@ -44,6 +45,43 @@
+     Set: frozenset,
+ })
+ 
++PEP649 = sys.version_info >= (3, 14)
++
++if PEP649:
++    import inspect
++
++def _safe_get_type_hints(c, **kwargs):
++
++    if not PEP649: 
++        # not running under PEP 649 (future/deferred annotations),
++        return typing.get_type_hints(c, include_extras=True, **kwargs)
++
++    else:        
++        if not isinstance(c, type):
++            # If we're passed an instance instead of a class, normalize to its type
++            c = c.__class__     
++        if "." not in getattr(c, "__qualname__", ""):
++            # If this is a *top-level class* (no "." in __qualname__),
++            # typing.get_type_hints works fine even under PEP 649.
++            return typing.get_type_hints(c, include_extras=True, **kwargs)
++        else:
++            # Otherwise, this is a *nested class* (defined inside another class or function),
++            # where typing.get_type_hints may fail under PEP 649.
++            ann = {}
++
++            # First collect annotations from bases in the MRO
++            for base in reversed(c.__mro__[:-1]):
++                ann.update(inspect.get_annotations(base, format=inspect.Format.VALUE) or {})
++
++            # For the class itself, use FORWARDREF format to keep "Self"/recursive types intact
++            ann.update(inspect.get_annotations(c, format=inspect.Format.FORWARDREF) or {})
++
++            if ann:
++                return ann
++            else:
++                return {f.name: f.type for f in fields(c)}
++
++
+ 
+ class _ExtendedEncoder(json.JSONEncoder):
+     def default(self, o) -> Json:
+@@ -175,7 +213,7 @@ def _decode_dataclass(cls, kvs, infer_missing):
+     kvs = _handle_undefined_parameters_safe(cls, kvs, usage="from")
+ 
+     init_kwargs = {}
+-    types = get_type_hints(cls)
++    types = _safe_get_type_hints(cls)
+     for field in fields(cls):
+         # The field should be skipped from being added
+         # to init_kwargs as it's not intended as a constructor argument.
+diff --git a/dataclasses_json/undefined.py b/dataclasses_json/undefined.py
+index cb8b2cfc..a94b4718 100644
+--- a/dataclasses_json/undefined.py
++++ b/dataclasses_json/undefined.py
+@@ -7,6 +7,7 @@
+ from typing import Any, Callable, Dict, Optional, Tuple, Union, Type, get_type_hints
+ from enum import Enum
+ 
++from .core import _safe_get_type_hints
+ from marshmallow.exceptions import ValidationError  # type: ignore
+ 
+ from dataclasses_json.utils import CatchAllVar
+@@ -248,7 +249,7 @@ def _catch_all_init(self, *args, **kwargs):
+     @staticmethod
+     def _get_catch_all_field(cls) -> Field:
+         cls_globals = vars(sys.modules[cls.__module__])
+-        types = get_type_hints(cls, globalns=cls_globals)
++        types = _safe_get_type_hints(cls, globalns=cls_globals)
+         catch_all_fields = list(
+             filter(lambda f: types[f.name] == Optional[CatchAllVar], fields(cls)))
+         number_of_catch_all_fields = len(catch_all_fields)
+diff --git a/tests/test_undefined_parameters.py b/tests/test_undefined_parameters.py
+index bac711af..6bd33406 100644
+--- a/tests/test_undefined_parameters.py
++++ b/tests/test_undefined_parameters.py
+@@ -221,6 +221,42 @@ class Boss:
+     assert json.loads(boss_json) == Boss.schema().dump(boss)
+     assert "".join(boss_json.replace('\n', '').split()) == "".join(Boss.schema().dumps(boss).replace('\n', '').split())
+ 
++@dataclass_json(undefined=Undefined.INCLUDE)
++@dataclass(frozen=True)
++class Minion2:
++    name: str
++    catch_all: CatchAll
++
++@dataclass_json(undefined=Undefined.INCLUDE)
++@dataclass(frozen=True)
++class Boss2:
++    minions: List[Minion2]
++    catch_all: CatchAll
++
++def test_undefined_parameters_catch_all_schema_roundtrip2(boss_json):
++    boss1 = Boss2.schema().loads(boss_json)
++    dumped_s = Boss2.schema().dumps(boss1)
++    boss2 = Boss2.schema().loads(dumped_s)
++    assert boss1 == boss2
++
++
++def test_undefined_parameters_catch_all_schema_roundtrip(boss_json):
++    @dataclass_json(undefined=Undefined.INCLUDE)
++    @dataclass(frozen=True)
++    class Minion:
++        name: str
++        catch_all: CatchAll
++
++    @dataclass_json(undefined=Undefined.INCLUDE)
++    @dataclass(frozen=True)
++    class Boss:
++        minions: List[Minion]
++        catch_all: CatchAll
++
++    boss1 = Boss.schema().loads(boss_json)
++    dumped_s = Boss.schema().dumps(boss1)
++    boss2 = Boss.schema().loads(dumped_s)
++    assert boss1 == boss2
+ 
+ def test_undefined_parameters_catch_all_schema_roundtrip(boss_json):
+     @dataclass_json(undefined=Undefined.INCLUDE)
+

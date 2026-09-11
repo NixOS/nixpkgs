@@ -1,0 +1,12 @@
+diff --git a/Makefile.am b/Makefile.am
+index 6eedb51..7b54313 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,5 +1,7 @@
+ SUBDIRS = macros data gifenc src po
+ 
++ACLOCAL_AMFLAGS = -I macros
++
+ EXTRA_DIST = \
+ 	MAINTAINERS \
+ 	depcomp \

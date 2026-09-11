@@ -1,0 +1,19 @@
+From 17228e7435f0c3e4244fb8853835538807ca7505 Mon Sep 17 00:00:00 2001
+From: SkohTV <contact@skoh.dev>
+Date: Thu, 9 Oct 2025 15:51:07 -0400
+Subject: [PATCH] Increase `cmake_minimum_required`: 3.3 -> 3.10 cmake 4.0
+ dropped the support for cmake < 3.5
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1c26f9a..ca8e4c2 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION "3.3")
++cmake_minimum_required(VERSION 3.3...3.10)
+ cmake_policy(SET CMP0063 NEW)
+ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
