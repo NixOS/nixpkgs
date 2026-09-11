@@ -6,13 +6,13 @@
   makeWrapper,
   net-tools,
   nodejs,
-  pnpm_10,
+  pnpm_10_latest,
   pnpmConfigHook,
   stdenvNoCC,
 }:
 
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 
   version = "0.63.15";
 

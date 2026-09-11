@@ -7,7 +7,7 @@
   # javascript
   fetchPnpmDeps,
   nodejs,
-  pnpm_10,
+  pnpm_10_latest,
   pnpmConfigHook,
 
   # python
@@ -106,14 +106,14 @@ buildPythonPackage (
 
       nativeBuildInputs = [
         nodejs
-        pnpm_10
+        pnpm_10_latest
         pnpmConfigHook
       ];
 
       pnpmDeps = fetchPnpmDeps {
         pname = "airflow-ui";
         inherit src version;
-        pnpm = pnpm_10;
+        pnpm = pnpm_10_latest;
         sourceRoot = uiAttrs.sourceRoot;
         fetcherVersion = 3;
         hash = "sha256-+f/AcJSQyvu3YCT6p4wvbNXz/xM0WN8N+MWT7iLlFEk=";
@@ -139,14 +139,14 @@ buildPythonPackage (
 
       nativeBuildInputs = [
         nodejs
-        pnpm_10
+        pnpm_10_latest
         pnpmConfigHook
       ];
 
       pnpmDeps = fetchPnpmDeps {
         pname = "simple-auth-manager-ui";
         inherit src version;
-        pnpm = pnpm_10;
+        pnpm = pnpm_10_latest;
         sourceRoot = simpleUiAttrs.sourceRoot;
         fetcherVersion = 3;
         hash = "sha256-jLCTKdBdKQufVWQ1XRzOVN4jVC0YAcP+jnz5R966zUY=";

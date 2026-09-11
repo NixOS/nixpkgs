@@ -9,7 +9,7 @@
   nodejs,
   openssl,
   pkg-config,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   protobuf,
@@ -20,7 +20,7 @@
 }:
 let
   # upstream still uses pnpm 8 though
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 rustPlatform.buildRustPackage rec {
   pname = "rquickshare";

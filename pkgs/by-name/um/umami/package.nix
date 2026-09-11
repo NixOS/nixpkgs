@@ -66,7 +66,7 @@ let
   prisma' =
     (prisma_7.override {
       prisma-engines_7 = prisma-engines';
-      pnpm_10 = pnpm_11;
+      pnpm_10_latest = pnpm_11;
     }).overrideAttrs
       (
         finalAttrs: prevAttrs: {
