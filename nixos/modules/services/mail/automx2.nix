@@ -23,7 +23,20 @@ in
         type = lib.types.str;
         example = "example.com";
         description = ''
+          Prefer use of `domains` option.
+
           E-Mail-Domain for which mail client autoconfig/autoconfigure should be set up.
+          The `autoconfig` and `autodiscover` subdomains are automatically prepended and set up with ACME.
+          The names of those domains are hardcoded in the mail clients and are not configurable.
+        '';
+      };
+
+      domains = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        example = ["example.com"];
+        default = [cfg.domain];
+        description = ''
+          E-Mail-Domains for which mail client autoconfig/autoconfigure should be set up.
           The `autoconfig` and `autodiscover` subdomains are automatically prepended and set up with ACME.
           The names of those domains are hardcoded in the mail clients and are not configurable.
         '';
@@ -48,11 +61,11 @@ in
   config = lib.mkIf cfg.enable {
     services.nginx = {
       enable = true;
-      virtualHosts = {
-        "autoconfig.${cfg.domain}" = {
+      virtualHosts = lib.attrsets.mergeAttrsList (lib.lists.forEach cfg.domains (domain: {
+        "autoconfig.${domain}" = {
           enableACME = true;
           forceSSL = true;
-          serverAliases = [ "autodiscover.${cfg.domain}" ];
+          serverAliases = [ "autodiscover.${domain}" ];
           locations = {
             "/".proxyPass = "http://127.0.0.1:${toString cfg.port}/";
             "/initdb".extraConfig = ''
@@ -62,7 +75,7 @@ in
             '';
           };
         };
-      };
+      }));
     };
 
     systemd.services.automx2 = {
