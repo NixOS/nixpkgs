@@ -1,0 +1,13 @@
+diff --git a/stand/common/newvers.sh b/stand/common/newvers.sh
+index 8541d61ed76c..368f233de1e1 100755
+--- a/stand/common/newvers.sh
++++ b/stand/common/newvers.sh
+@@ -45,7 +45,7 @@ shift $((OPTIND - 1))
+ LC_ALL=C; export LC_ALL
+ u=${USER-root} h=${HOSTNAME-`hostname`}
+ if [ -n "$SOURCE_DATE_EPOCH" ]; then
+-	if ! t=$(date -ur $SOURCE_DATE_EPOCH 2>/dev/null); then
++	if ! t=$(date -d @$SOURCE_DATE_EPOCH 2>/dev/null); then
+ 		echo "Invalid SOURCE_DATE_EPOCH" >&2
+ 		exit 1
+ 	fi
