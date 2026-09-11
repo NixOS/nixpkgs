@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "rectangle-packer";
-  version = "2.0.5";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Penlect";
     repo = "rectangle-packer";
     rev = version;
-    hash = "sha256-BHFy88yrcfDRalvrzwUHseSKmQXIM70ginnd+W6LVLY=";
+    hash = "sha256-rdryJvY1kSRVIlC8LOr+//0fQLWEIExRQxuI3W53n18=";
   };
 
   build-system = [
