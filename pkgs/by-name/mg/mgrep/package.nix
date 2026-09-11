@@ -1,6 +1,6 @@
 {
   lib,
-  pnpm_10,
+  pnpm_10_latest,
   stdenv,
   fetchFromGitHub,
   nodejs,
@@ -11,7 +11,7 @@
 }:
 
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mgrep";

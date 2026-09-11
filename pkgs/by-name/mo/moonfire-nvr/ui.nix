@@ -3,7 +3,7 @@
   moonfire-nvr,
   nodejs,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
 }:
 
@@ -16,12 +16,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
   ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     sourceRoot = "${finalAttrs.src.name}/ui";
     fetcherVersion = 4;
     hash = "sha256-U/SHOVlx0kj1hfl09KcPg3CQZX9HZE5SghVEThWL1RA=";

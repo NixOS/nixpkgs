@@ -2,7 +2,7 @@
   lib,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_10_latest,
   fetchFromGitHub,
   stdenv,
   makeWrapper,
@@ -16,7 +16,7 @@
 
 let
   nodejs-slim = nodejs-slim_22;
-  pnpm = pnpm_10.override { inherit nodejs-slim; };
+  pnpm = pnpm_10_latest.override { inherit nodejs-slim; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "seerr";
