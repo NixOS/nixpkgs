@@ -38,7 +38,7 @@
 
 let
   pname = "mindustry";
-  version = "159.3";
+  version = "160.4";
   buildVersion = makeBuildVersion version;
 
   jdk = jdk17;
@@ -48,21 +48,21 @@ let
     owner = "Anuken";
     repo = "Mindustry";
     tag = "v${version}";
-    hash = "sha256-i29EbiKBVWab9YJWPWeVFQLLvRcigvHJPc7803A5e6g=";
+    hash = "sha256-gWAsYavRkRfdJ89IHrbK89Jwp/Whvu2FnswlJBb1rfQ=";
   };
   Arc = fetchFromGitHub {
     name = "Arc-source";
     owner = "Anuken";
     repo = "Arc";
     tag = "v${version}";
-    hash = "sha256-1HEPON+cfsPYhPtYwVhj7zrc7fMdwpOA6H2r8yp4erE=";
+    hash = "sha256-V4j0VNwcc1C5xaWiE1cPEKLah+ba3ahPANPEVi43cCE=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
     repo = "soloud";
     # This is pinned in Arc's build.gradle
-    tag = "2026.06.01";
-    hash = "sha256-0/A3myfCYb+AMP3WH6stmXeb1eiA4dgX6H1Quj4AD9Q=";
+    tag = "2026.09.04";
+    hash = "sha256-g8ZELw+hB9x7/HnmNzvXihGTBqpigdtScvYbrhvlZVM=";
   };
 
   desktopItem = makeDesktopItem {
@@ -117,6 +117,20 @@ stdenv.mkDerivation {
     touch build/jnigen/sources/glew.zip
     touch build/jnigen/sources/sdlmingw.tar.gz
     popd
+
+    # force jnigen to use nixpkgs cc-wrapper
+    for file in \
+      Arc/arc-core/build.gradle \
+      Arc/extensions/freetype/build.gradle \
+      Arc/extensions/filedialogs/build.gradle
+    do
+      substituteInPlace "$file" \
+        --replace-fail "addLinux(x64, x86)" "addLinux(x64, x86)
+            each({it.os == Linux}){ compilerPrefix = '${stdenv.cc}/bin/' }"
+    done
+    substituteInPlace Arc/backends/backend-sdl/build.gradle \
+      --replace-fail "addLinux(x64, x86){" "addLinux(x64, x86){
+          compilerPrefix = '${stdenv.cc}/bin/'"
 
     cd Mindustry
 
