@@ -17,10 +17,6 @@ set_parser = subparsers.add_parser("set")
 set_parser.add_argument("generator")
 set_parser.add_argument("filename")
 
-exists_parser = subparsers.add_parser("exists")
-exists_parser.add_argument("generator")
-exists_parser.add_argument("filename")
-
 list_parser = subparsers.add_parser("list")
 
 delete_parser = subparsers.add_parser("delete")
@@ -68,9 +64,6 @@ elif args["command"] == "set":
     out_path = host_secret_path(args["generator"], args["filename"])
     out_path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
     Path(os.environ["in"]).copy(out_path)
-elif args["command"] == "exists":
-    if not host_secret_path(args["generator"], args["filename"]).exists():
-        sys.exit(42)
 elif args["command"] == "list":
     if host_directory.exists():
         for generator in (host_directory / "generators").iterdir():

@@ -16,9 +16,9 @@ from .exec import (
     fixup_all,
     run_prompt,
     reset_terminal_state,
-    file_exists,
 )
 from .error import SecretsError
+from .list import build_file_list
 
 
 def generate_secrets(args: SecretsArgs, config: SecretsConfig):
@@ -28,6 +28,8 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
             raise SecretsError(f"Invalid secret name '{gen_name}'")
 
     order = execution_order(config)
+    files = build_file_list(args, config)
+
     updated = 0
 
     # Bubblewrap requires usernamespaces to be enabled, so it won't work (by
@@ -70,9 +72,9 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
             # - ...or if any of the files are missing
 
             regen = False
-            meta = get_meta(args, config, generator)
+            meta = get_meta(args, config, files, generator)
             if entry in forced_regens:
-                print(f"Regenerating '{entry}' (forced)")
+                print(f"Updating '{entry}' (forced)")
                 regen = True
             elif meta:
                 meta_deps = set(meta.dependencies.keys())
@@ -81,11 +83,11 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
                 added_deps = config_deps - meta_deps
                 if removed_deps:
                     dep_str = ", ".join(sorted(removed_deps))
-                    print(f"Regenerating '{entry}' (removed dependencies: {dep_str})")
+                    print(f"Updating '{entry}' (removed dependencies: {dep_str})")
                     regen = True
                 elif added_deps:
                     dep_str = ", ".join(sorted(added_deps))
-                    print(f"Regenerating '{entry}' (added dependencies: {dep_str})")
+                    print(f"Updating '{entry}' (added dependencies: {dep_str})")
                     regen = True
                 else:
                     changed_deps = set()
@@ -94,19 +96,16 @@ def generate_secrets(args: SecretsArgs, config: SecretsConfig):
                             changed_deps.add(dep)
                     if changed_deps:
                         dep_str = ", ".join(sorted(changed_deps))
-                        print(
-                            f"Regenerating '{entry}' (dependencies changed: {dep_str})"
-                        )
+                        print(f"Updating '{entry}' (dependencies changed: {dep_str})")
                         regen = True
             else:
-                print(f"Regenerating '{entry}' (missing metadata)")
+                print(f"Updating '{entry}' (missing metadata)")
                 regen = True
 
             if not regen:
                 for file in generator.files.values():
-                    backend = config.storeBackends[generator.backend]
-                    if not file_exists(args, backend, generator, file):
-                        print(f"Regenerating '{entry}' (file '{file.name}' is missing)")
+                    if not files.has(generator.backend, generator.name, file.name):
+                        print(f"Updating '{entry}' (file '{file.name}' is missing)")
                         regen = True
                         break
 

@@ -49,36 +49,6 @@ def backend_env_vars(args: SecretsArgs) -> Mapping[str, str]:
     return out
 
 
-def file_exists(
-    args: SecretsArgs,
-    backend: SecretsStoreBackend,
-    generator: SecretsSecret,
-    file: SecretsFile,
-) -> bool:
-    binary = build_binary(backend.exists)
-    env = os.environ.copy()
-    env.update(backend_env_vars(args))
-    result = subprocess.run(
-        [binary, generator.name, file.name],
-        capture_output=not args.verbose,
-        env=env,
-        text=True,
-    )
-
-    reset_terminal_state()
-
-    if result.returncode == 42:
-        return False
-
-    try:
-        result.check_returncode()
-        return True
-    except subprocess.CalledProcessError as e:
-        raise SecretsError(
-            f"Error running the '{backend.name}/exists' script for '{generator.name}/{file.name}' [Exit code: {e.returncode}]:\n{e.stderr}"
-        )
-
-
 def get_secret(
     args: SecretsArgs,
     config: SecretsConfig,

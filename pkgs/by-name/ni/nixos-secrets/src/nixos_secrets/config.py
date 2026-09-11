@@ -9,7 +9,7 @@ safe_name_regex = re.compile("^[a-zA-Z0-9:_\\.-]+$")
 meta_file_name = ".nixos-secrets-metadata"  # In this file to prevent cyclic imports
 
 
-@dataclass
+@dataclass(frozen=True)
 class SecretsPromptBackend:
     name: str
     ask: str
@@ -18,7 +18,7 @@ class SecretsPromptBackend:
         return SecretsPromptBackend(name=name, ask=json["ask"])
 
 
-@dataclass
+@dataclass(frozen=True)
 class SecretsPrompt:
     name: str
     label: str
@@ -36,12 +36,11 @@ class SecretsPrompt:
         )
 
 
-@dataclass
+@dataclass(frozen=True)
 class SecretsStoreBackend:
     name: str
     get: Optional[str]
     set: str
-    exists: str
     delete: Optional[str]
     list: Optional[str]
     fixup: Optional[str]
@@ -53,7 +52,6 @@ class SecretsStoreBackend:
             name=name,
             get=json["get"],
             set=json["set"],
-            exists=json["exists"],
             delete=json.get("delete"),
             list=json.get("list"),
             fixup=json.get("fixup"),
@@ -62,7 +60,7 @@ class SecretsStoreBackend:
         )
 
 
-@dataclass
+@dataclass(frozen=True)
 class SecretsFile:
     name: str
     deploy: bool = False
@@ -79,7 +77,7 @@ class SecretsFile:
         return SecretsFile(name=name, deploy=json["deploy"])
 
 
-@dataclass
+@dataclass(frozen=True)
 class SecretsSecret:
     name: str
     backend: str
@@ -125,7 +123,7 @@ class SecretsSecret:
         return result
 
 
-@dataclass
+@dataclass(frozen=True)
 class SecretsConfig:
     generators: Mapping[str, SecretsSecret]
     storeBackends: Mapping[str, SecretsStoreBackend]

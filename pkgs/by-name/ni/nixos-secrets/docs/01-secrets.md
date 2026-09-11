@@ -48,7 +48,7 @@ The CLI accepts a few different kinds of inputs. The two most important ones are
 
 ```
 $ nixos-secrets generate --file /path/to/config.nix
-Regenerating 'user' (missing metadata)
+Updating 'user' (missing metadata)
 Generating 'user'
 Successfully updated 1 secret(s)
 Running fixup scripts:
@@ -59,7 +59,7 @@ Note that this will do nothing on further re-runs (the secrets already exist, af
 
 ```
 $ nixos-secrets generate --file /path/to/config --generate user
-Regenerating 'user' (forced)
+Updating 'user' (forced)
 Generating 'user'
 Successfully updated 1 secret(s)
 Running fixup scripts:
@@ -97,7 +97,7 @@ Note that we did not manually specify a backend this time! In such scenarios, th
 ```
 $ nixos-secrets generate --file /path/to/config
 Skipping 'user'
-Regenerating 'derived' (missing metadata)
+Updating 'derived' (missing metadata)
 Generating 'derived'
 Successfully updated 1 secret(s)
 Running fixup scripts:
@@ -117,9 +117,9 @@ We can now use the `--set` flag to import the directory we've just created:
 
 ```
 $ nixos-secrets generate --file /path/to/config --set user=manual
-Regenerating 'user' (forced)
+Updating 'user' (forced)
 Importing 'user' from disk
-Regenerating 'derived' (dependencies changed: user)
+Updating 'derived' (dependencies changed: user)
 Generating 'derived'
 Successfully updated 2 secret(s)
 Running fixup scripts:
@@ -163,11 +163,11 @@ Running the above through the CLI (with the `--generate` flag!) will ask the use
 
 ```
 $ nixos-secrets generate --file /path/to/config --generate user
-Regenerating 'user' (forced)
+Updating 'user' (forced)
 Evaluating prompts for 'user':
 - 'name'
 Generating 'user'
-Regenerating 'derived' (dependencies changed: user)
+Updating 'derived' (dependencies changed: user)
 Generating 'derived'
 Successfully updated 2 secret(s)
 Running fixup scripts:

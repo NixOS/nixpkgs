@@ -4,7 +4,7 @@ from typing import Optional, Any, Self, Mapping, List
 from .error import SecretsError
 
 
-@dataclass
+@dataclass(frozen=True)
 class SecretsArgs:
     file: Optional[Path]
     flake: Optional[str]
