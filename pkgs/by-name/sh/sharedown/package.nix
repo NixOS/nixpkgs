@@ -23,16 +23,16 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "Sharedown";
-  version = "5.3.6-unstable-2025-12-16";
+  version = "20260901092954-unstable-2026-09-01";
 
   src = fetchFromGitHub {
     owner = "kylon";
     repo = "Sharedown";
-    rev = "5d0cbe2d25de6e288e35bd549f436b090d6e287a";
-    hash = "sha256-yHnTS3B3lWSkAVlUNQYFuKIHM96d1ZeVWImJqXjlfMw=";
+    rev = "225c6e98e3097699c95c31c16b4fc30155eaab6c";
+    hash = "sha256-Ephn5lG9mDnx5rngc/XoudGwnuOdvr67hyO2Is+jvG8=";
   };
 
-  npmDepsHash = "sha256-YmrSIOi9WpqDPC9Tj1oTprdCFDdYj6C91kg567+/3ik=";
+  npmDepsHash = "sha256-aWymGPE0YW5XmnyNEQw4v8MF7cDI2pxmxlrVJy0hw0k=";
 
   nativeBuildInputs = [
     copyDesktopItems
