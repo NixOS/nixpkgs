@@ -4211,6 +4211,11 @@
     githubId = 523;
     name = "Brett Eisenberg";
   };
+  brettinternet = {
+    github = "brettinternet";
+    githubId = 20871604;
+    name = "Brett";
+  };
   brettlyons = {
     email = "blyons@fastmail.com";
     github = "brettlyons";
