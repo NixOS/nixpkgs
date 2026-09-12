@@ -23,7 +23,7 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "nc_py_api";
+  pname = "nc-py-api";
   version = "0.30.3";
   pyproject = true;
 
