@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "pywebpush";
-  version = "2.3.0";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0eJ9uN6eZ1fBh19nKSVUvVTEGHTDb0tcTrtUQtziBPI=";
+    hash = "sha256-gmD45C1w7ZWjvQBSf/y0O1s9+Jg6SkiwWf4psG3D2Sw=";
   };
 
   build-system = [ setuptools ];
