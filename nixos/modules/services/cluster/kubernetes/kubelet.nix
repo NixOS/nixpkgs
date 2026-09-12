@@ -13,6 +13,14 @@ let
   otop = options.services.kubernetes;
   cfg = top.kubelet;
 
+  # --flag=value form; interpolate path literals so they end up in the store
+  optionFormat = option: {
+    option = "--${option}";
+    sep = "=";
+    explicitBool = true;
+    formatArg = v: if builtins.isPath v then "${v}" else lib.generators.mkValueStringDefault { } v;
+  };
+
   cniConfig =
     if cfg.cni.config != [ ] && cfg.cni.configDir != null then
       throw "Verbatim CNI-config and CNI configDir cannot both be set."
@@ -365,18 +373,20 @@ in
           MemoryAccounting = true;
           Restart = "on-failure";
           RestartSec = "1000ms";
-          ExecStart = ''
-            ${top.package}/bin/kubelet \
-                        --config=${kubeletConfig} \
-                        --hostname-override=${cfg.hostname} \
-                        --kubeconfig=${kubeconfig} \
-                        ${optionalString (cfg.nodeIp != null) "--node-ip=${cfg.nodeIp}"} \
-                        ${optionalString (cfg.manifests != { }) "--pod-manifest-path=/etc/${manifestPath}"} \
-                        ${optionalString (taints != "") "--register-with-taints=${taints}"} \
-                        --root-dir=${top.dataDir} \
-                        ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
-                        ${cfg.extraOpts}
-          '';
+          ExecStart = lib.concatStringsSep " " [
+            "${top.package}/bin/kubelet"
+            (lib.cli.toCommandLineShell optionFormat {
+              config = kubeletConfig;
+              hostname-override = cfg.hostname;
+              inherit kubeconfig;
+              node-ip = cfg.nodeIp;
+              pod-manifest-path = if cfg.manifests != { } then "/etc/${manifestPath}" else null;
+              register-with-taints = if taints != "" then taints else null;
+              root-dir = top.dataDir;
+              v = cfg.verbosity;
+            })
+            cfg.extraOpts
+          ];
           WorkingDirectory = top.dataDir;
         };
         unitConfig = {
