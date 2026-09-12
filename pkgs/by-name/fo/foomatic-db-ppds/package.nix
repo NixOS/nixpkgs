@@ -5,6 +5,7 @@
   buildEnv,
   foomatic-db-engine,
   stdenv,
+  coreutils,
   cups-filters,
   ghostscript,
   netpbm,
@@ -51,7 +52,11 @@ stdenv.mkDerivation {
     lib.lists.head
   ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   buildInputs = [
+    coreutils
     cups-filters
     ghostscript
     netpbm
@@ -76,8 +81,8 @@ stdenv.mkDerivation {
 
   # Comments indicate the respective
   # package the command is contained in.
-  ppdFileCommands = [
-    "cat"
+  env.ppdFileCommands = lib.join " " [
+    "cat" # coreutils
     "echo" # coreutils
     "foomatic-rip" # cups-filters or foomatic-filters
     "gs" # ghostscript
