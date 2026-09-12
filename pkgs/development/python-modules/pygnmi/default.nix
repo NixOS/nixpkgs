@@ -7,21 +7,26 @@
   grpcio,
   protobuf,
   pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygnmi";
   version = "0.8.15";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "akarneliuk";
     repo = "pygnmi";
-    tag = "v${version}";
-    sha256 = "sha256-2QPUyPGTtXlO6A05mmb/jofRidXfKq0xvH7lv1f9OQk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2QPUyPGTtXlO6A05mmb/jofRidXfKq0xvH7lv1f9OQk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cryptography
     dictdiffer
     grpcio
@@ -40,8 +45,8 @@ buildPythonPackage rec {
     description = "Pure Python gNMI client to manage network functions and collect telemetry";
     mainProgram = "pygnmicli";
     homepage = "https://github.com/akarneliuk/pygnmi";
-    changelog = "https://github.com/akarneliuk/pygnmi/releases/tag/${src.tag}";
+    changelog = "https://github.com/akarneliuk/pygnmi/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})
