@@ -13,6 +13,8 @@
   gnuplot,
   withLibnbd ? stdenv.hostPlatform.isLinux,
   libnbd,
+  withLibblkio ? stdenv.hostPlatform.isLinux,
+  libblkio,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,7 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ]
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) libaio
-  ++ lib.optional withLibnbd libnbd;
+  ++ lib.optional withLibnbd libnbd
+  ++ lib.optional withLibblkio libblkio;
 
   patches = [
     # https://github.com/axboe/fio/pull/2097
@@ -49,7 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--disable-native"
   ]
-  ++ lib.optional withLibnbd "--enable-libnbd";
+  ++ lib.optional withLibnbd "--enable-libnbd"
+  ++ lib.optional (!withLibblkio) "--disable-libblkio";
 
   dontAddStaticConfigureFlags = true;
 
