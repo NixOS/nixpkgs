@@ -37,6 +37,62 @@ let
       def // { value = lib.mkOrder unadornedFlagPriority def.value.content; }
     else
       def;
+
+  directoryType = types.nullOr (types.submodule {
+    options = {
+      path = mkOption {
+        type = types.str;
+        description = "Relative underlying service manager runtime directory path.";
+      };
+
+      # NOTE: probably want to be aware of https://github.com/NixOS/nixpkgs/issues/545287
+      user = mkOption {
+        type = types.bool;
+        default = false;
+        description = "The user that owns this directory.";
+      };
+      group = mkOption {
+        type = types.bool;
+        default = false;
+        description = "The group that owns this directory";
+      };
+
+      createOnStartup = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Creates the directory on process startup.";
+      };
+
+      removeOnShutdown = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Removes the directory upon process shutdown.";
+      };
+
+      cleanupInterval = mkOption {
+        type = types.nullOr (
+          types.submodule {
+            options = lib.genAttrs [
+              "secconds"
+              "minutes"
+              "hours"
+              "days"
+              "weeks"
+            ] (
+                name:
+                mkOption {
+                  type = types.int;
+                  default = 0;
+                  description = "Cleanup interval in ${name}.";
+                }
+              );
+          }
+        );
+        default = null;
+        description = "How often to clean up the directory when process is running. Set to null to disable.";
+      };
+    };
+  });
 in
 {
   # https://nixos.org/manual/nixos/unstable/#modular-services
@@ -187,6 +243,10 @@ in
         description = ''
           Command used for reloading in the underlying service manager to reload.
         '';
+      };
+
+      runtimeDirectory = mkOption {
+        type = directoryType
       };
     };
 
