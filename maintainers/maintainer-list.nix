@@ -31154,6 +31154,12 @@
     githubId = 85547207;
     name = "Hinata Toma";
   };
+  whyshouldibother = {
+    email = "maintainer@speakoflow.com";
+    github = "whyshouldibother";
+    githubId = 113842019;
+    name = "Why ";
+  };
   wietsedv = {
     email = "wietsedv@proton.me";
     github = "wietsedv";
