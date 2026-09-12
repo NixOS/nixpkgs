@@ -7,6 +7,7 @@
   zlib,
   libsForQt5,
   fetchpatch,
+  verifyDesktopItemsHook,
 }:
 
 stdenv.mkDerivation {
@@ -73,6 +74,9 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ verifyDesktopItemsHook ];
 
   meta = {
     homepage = "https://github.com/niftools/nifskope";

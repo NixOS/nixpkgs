@@ -6,6 +6,7 @@
   vte,
   gtk3,
   pcre2,
+  verifyDesktopItemsHook,
   nixosTests,
 }:
 
@@ -41,6 +42,9 @@ stdenv.mkDerivation {
     substituteInPlace $out/share/applications/stupidterm.desktop \
       --replace "Exec=st" "Exec=$out/bin/stupidterm"
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ verifyDesktopItemsHook ];
 
   passthru.tests.test = nixosTests.terminal-emulators.stupidterm;
 

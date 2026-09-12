@@ -13,6 +13,7 @@
   lua5,
   pkg-config,
   zlib,
+  verifyDesktopItemsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -65,6 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     installManPage misc/unix/grafx2.1
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ verifyDesktopItemsHook ];
 
   meta = {
     homepage = "http://grafx2.eu/";

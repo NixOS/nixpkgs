@@ -344,6 +344,9 @@
               "file": "hooks/validatePkgConfig.section.md"
             },
             {
+              "file": "hooks/verifyDesktopItemsHook.section.md"
+            },
+            {
               "file": "hooks/versionCheckHook.section.md"
             },
             {
