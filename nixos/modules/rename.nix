@@ -332,6 +332,9 @@ in
     (mkRemovedOptionModule [ "services" "prey" ] ''
       prey-bash-client is deprecated upstream
     '')
+    (mkRemovedOptionModule [ "services" "prosody-filer" ] ''
+      The Prosody Filer package and module have been removed because the project was discontinued upstream. Use Prosody's built-in `services.prosody.httpFileShare` support or Rusty Filer instead.
+    '')
     (mkRemovedOptionModule [
       "services"
       "quagga"
