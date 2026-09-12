@@ -27812,6 +27812,12 @@
     name = "Steve Streza";
     keys = [ { fingerprint = "DFED 4E42 34E7 348C 57D4  6568 C4DC 30F8 5ABC 6FA1"; } ];
   };
+  stfl = {
+    email = "nixpkgs@stfl.dev";
+    github = "stfl";
+    githubId = 1321542;
+    name = "Stefan Lendl";
+  };
   stianlagstad = {
     email = "stianlagstad@gmail.com";
     github = "stianlagstad";
