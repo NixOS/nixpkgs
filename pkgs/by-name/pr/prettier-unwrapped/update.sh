@@ -7,7 +7,7 @@ set -o xtrace # debugging
 # Configuration
 owner='prettier'
 repo='prettier'
-package='prettier'
+package='prettier-unwrapped'
 
 cleanup() {
   rm --force --recursive "${tmpdir}"
