@@ -88,6 +88,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!systemdSupport) [
     "-Dsystemd=disabled"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isMusl) [
+    "-Dc_args=-D_GNU_SOURCE"
   ];
 
   doCheck = false; # fails 21 out of 603 tests, needs dbus daemon
