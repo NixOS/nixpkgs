@@ -12,9 +12,12 @@
   wayland-scanner,
 }:
 
+let
+  versionData = lib.importJSON ./hashes.json;
+in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "kotonoha";
-  version = "0.2.1";
+  inherit (versionData) version;
   pyproject = true;
   __structuredAttrs = true;
 
@@ -22,7 +25,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "locez";
     repo = "kotonoha";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vym24/K7K4vVFzGnNTCasLkZirsqLRuMNe+vtlDglPQ=";
+    inherit (versionData) hash;
   };
 
   build-system = [ python3Packages.scikit-build-core ];
@@ -95,6 +98,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     runHook postInstallCheck
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Linux desktop lyrics overlay for MPRIS players";
