@@ -17,16 +17,21 @@ let
     optionalAttrs
     attrNames
     filter
+    filterAttrs
     elemAt
+    concatMap
     concatStringsSep
     sortOn
     take
+    toLower
     length
     head
     pipe
+    range
     isDerivation
     listToAttrs
     mapAttrs
+    nameValuePair
     seq
     flatten
     deepSeq
@@ -701,12 +706,26 @@ rec {
     ```
   */
   makeScopeWithSplicing' =
+    let
+      # Workaround setFunctionArgs's neglecting other attributes of a callable set.
+      toCallableSet = f: if isAttrs f then f else mirrorFunctionArgs f f;
+    in
     {
       splicePackages,
       newScope,
     }:
+    let
+      isNewScopeSpliced = removeAttrs (newScope.__spliced or { }) [ "hostTarget" ] != { };
+    in
     {
-      otherSplices,
+      otherSplices ? {
+        selfBuildBuild = { };
+        selfBuildHost = { };
+        selfBuildTarget = { };
+        selfHostHost = { };
+        selfHostTarget = { };
+        selfTargetTarget = { };
+      },
       # Attrs from `self` which won't be spliced.
       # Avoid using keep, it's only used for a python hook workaround, added in PR #104201.
       # ex: `keep = (self: { inherit (self) aAttr; })`
@@ -727,32 +746,150 @@ rec {
       # ```
       extra ? (_spliced0: { }),
       f,
+      fExplicit ?
+        {
+          selfBuildBuild,
+          selfBuildHost,
+          selfBuildTarget,
+          selfHostHost,
+          selfHostTarget,
+          selfTargetTarget,
+        }:
+        { },
+      spliceOutput ? false,
+      splicedPackagesAttrName ? null,
     }:
     let
-      spliced0 = splicePackages {
-        pkgsBuildBuild = otherSplices.selfBuildBuild;
-        pkgsBuildHost = otherSplices.selfBuildHost;
-        pkgsBuildTarget = otherSplices.selfBuildTarget;
-        pkgsHostHost = otherSplices.selfHostHost;
-        pkgsHostTarget = self; # Not `otherSplices.selfHostTarget`;
-        pkgsTargetTarget = otherSplices.selfTargetTarget;
+      splicePackages' =
+        {
+          otherSplices,
+          self,
+          splitSelves,
+        }:
+        let
+          spliced0 = splicePackages {
+            pkgsBuildBuild = otherSplices.selfBuildBuild // splitSelves.buildBuild;
+            pkgsBuildHost = otherSplices.selfBuildHost // splitSelves.buildHost;
+            pkgsBuildTarget = otherSplices.selfBuildTarget // splitSelves.buildTarget;
+            pkgsHostHost = otherSplices.selfHostHost // splitSelves.hostHost;
+            pkgsHostTarget = self; # Not `otherSplices.selfHostTarget`;
+            pkgsTargetTarget = otherSplices.selfTargetTarget // splitSelves.targetTarget;
+          };
+          explicitSelves = lib.renameCrossIndexTo "self" splitSelves;
+        in
+        extra spliced0 // spliced0 // fExplicit explicitSelves // keep self;
+      getSelf =
+        {
+          newScope,
+          otherSplices,
+          self,
+          spliced,
+          splitSelves,
+        }:
+        f self
+        // {
+          # Fancy way to write `newScope = scope: newScope (spliced // scope)`
+          newScope = {
+            __functor = _: scope: newScope (spliced // scope);
+            ${if isNewScopeSpliced then "__spliced" else null} = filterAttrs (_: value: value != null) (
+              mapAttrs (name: _: splitSelves.${name}.newScope or null) newScope.__spliced or { }
+            );
+          };
+          callPackage = newScope spliced; # == self.newScope {};
+          # NOTE:
+          # If newScope.__spliced does not exist or doesn't provide all six cross indexes,
+          # some of the other stages of the package set spliced in may *not* be overridden.
+          overrideScope =
+            g:
+            (makeScopeWithSplicing' { inherit splicePackages newScope; } {
+              inherit
+                otherSplices
+                keep
+                extra
+                spliceOutput
+                splicedPackagesAttrName
+                ;
+              f = extends g f;
+            });
+          packages = f;
+          ${splicedPackagesAttrName} =
+            splicePackages (
+              renameCrossIndexTo "pkgs" (
+                mapCrossIndex (as: removeAttrs as [ splicedPackagesAttrName ]) splitSelves
+              )
+            )
+            // {
+              ${splicedPackagesAttrName} = self.${splicedPackagesAttrName};
+            };
+        };
+      otherSplicesLower = renameCrossIndexFrom "self" otherSplices;
+      splitSpliced = lib.mapAttrs (
+        name1: value1:
+        splicePackages' {
+          otherSplices = mapAttrs (name2: value2: otherSplicesLower.${value2}) (
+            lib.renameCrossIndexTo "self" value1
+          );
+          splitSelves = mapAttrs (name2: value2: splitSelves.${value2}) value1;
+          self = splitSelves.${name1};
+        }
+      ) crossIndexSelection;
+      splitSelves =
+        lib.mapAttrs (
+          name1: value1:
+          if newScope ? __spliced.${name1} then
+            getSelf {
+              newScope = splitNewScopes.${name1};
+              otherSplices = mapAttrs (name2: value2: otherSplicesLower.${value2}) (
+                lib.renameCrossIndexTo "self" value1
+              );
+              splitSelves = mapAttrs (name2: value2: splitSelves.${value2}) value1;
+              self = splitSelves.${name1};
+              spliced = splitSpliced.${name1};
+            }
+          else
+            { }
+        ) (removeAttrs crossIndexSelection [ "hostTarget" ])
+        // {
+          hostTarget = self;
+        };
+      splitNewScopes =
+        lib.mapAttrs (
+          name1: value1:
+          toCallableSet newScope.__spliced.${name1}
+          // {
+            __spliced = filterAttrs (name2: value2: value2 != null) (
+              mapAttrs (name2: value2: splitNewScopes.${value2} or null) value1
+            );
+          }
+        ) (intersectAttrs newScope.__spliced or { } (removeAttrs crossIndexSelection [ "hostTarget" ]))
+        // {
+          hostTarget =
+            if newScope ? __spliced then
+              newScope
+              // {
+                __spliced = {
+                  inherit (splitNewScopes) hostTarget;
+                }
+                // newScope.__spliced or { };
+              }
+            else
+              newScope;
+        };
+      self = getSelf {
+        inherit
+          otherSplices
+          splitSelves
+          newScope
+          self
+          ;
+        spliced = splitSpliced.hostTarget;
       };
-      spliced = extra spliced0 // spliced0 // keep self;
-      self = f self // {
-        newScope = scope: newScope (spliced // scope);
-        callPackage = newScope spliced; # == self.newScope {};
-        # N.B. the other stages of the package set spliced in are *not*
-        # overridden.
-        overrideScope =
-          g:
-          (makeScopeWithSplicing' { inherit splicePackages newScope; } {
-            inherit otherSplices keep extra;
-            f = extends g f;
-          });
-        packages = f;
-      };
+      splicedSelf = splicePackages (renameCrossIndexTo "pkgs" splitSelves);
+      explicitPackages = fExplicit (lib.renameCrossIndexTo "self" splitSelves);
+      keptPackages = keep self;
+      splicedOutput = splicedSelf // explicitPackages // keptPackages;
     in
-    self;
+    if spliceOutput then splicedOutput else self;
 
   /**
     Define a `mkDerivation`-like function based on another `mkDerivation`-like function.
@@ -1038,4 +1175,38 @@ rec {
       hostTarget = f hostTarget;
       targetTarget = f targetTarget;
     };
+
+  crossIndexSelection =
+    let
+      names = [
+        "Build"
+        "Host"
+        "Target"
+      ];
+    in
+    listToAttrs (
+      concatMap (
+        i:
+        (map (j: {
+          name = toLower (elemAt names i) + elemAt names j;
+          value =
+            let
+              indices = [
+                0
+                i
+                j
+              ];
+            in
+            listToAttrs (
+              concatMap (
+                k:
+                map (l: {
+                  name = toLower (elemAt names k) + elemAt names l;
+                  value = toLower (elemAt names (elemAt indices k)) + elemAt names (elemAt indices l);
+                }) (range k 2)
+              ) (range 0 2)
+            );
+        }) (range i 2))
+      ) (range 0 2)
+    );
 }
