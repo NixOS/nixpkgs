@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "endlessh-go";
-  version = "2026.0328.0";
+  version = "2026.0730.0";
 
   src = fetchFromGitHub {
     owner = "shizunge";
     repo = "endlessh-go";
     rev = finalAttrs.version;
-    hash = "sha256-EiIWgyAHAJrloIztKX1oZaSNNSG4t2OaVYyLTfJCkLU=";
+    hash = "sha256-jNU8PWKFhOl4cFHaKfypsOt8tWoVr2rymR8tVYxnxgc=";
   };
 
-  vendorHash = "sha256-HumLc9u7jVFk7228SYHptBEOSRdLp4r5QECYlYrO6KY=";
+  vendorHash = "sha256-bJ7EaD0BQKQCww7ZLCz5Fqi8dy1w9RhRxwKGBQEEkN0=";
 
   env.CGO_ENABLED = 0;
 
