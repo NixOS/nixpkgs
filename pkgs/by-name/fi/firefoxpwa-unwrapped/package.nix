@@ -76,7 +76,7 @@ rustPlatform.buildRustPackage rec {
 
     # AppStream Metadata
     install -Dm644 packages/appstream/si.filips.FirefoxPWA.metainfo.xml $out/share/metainfo/si.filips.FirefoxPWA.metainfo.xml
-    install -Dm644 packages/appstream/si.filips.FirefoxPWA.svg $out/share/icons/hicolor/scalable/apps/si.filips.FirefoxPWA.svg
+    install -Dm644 packages/appstream/si.filips.FirefoxPWA.svg $out/share/icons/hicolor/scalable/apps/firefoxpwa.svg
 
     wrapProgram $out/bin/firefoxpwa \
       --prefix FFPWA_SYSDATA : "$out/share/firefoxpwa"
