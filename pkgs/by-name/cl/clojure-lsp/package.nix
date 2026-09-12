@@ -10,11 +10,11 @@
 
 buildGraalvmNativeImage (finalAttrs: {
   pname = "clojure-lsp";
-  version = "2026.02.20-16.08.58";
+  version = "2026.07.06-14.34.19";
 
   src = fetchurl {
     url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${finalAttrs.version}/clojure-lsp-standalone.jar";
-    hash = "sha256-sSE/BIRT5CNc2ZS3LwSMLvQDVKLMlM1BIhKq6joX3c8=";
+    hash = "sha256-GU92OeKzKm42Qy+6fMSpsSj0WInSrQVyVVFSPxZNaEY=";
   };
 
   strictDeps = true;
