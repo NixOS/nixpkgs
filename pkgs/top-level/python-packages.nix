@@ -3979,6 +3979,8 @@ self: super: with self; {
 
   cytoolz = callPackage ../development/python-modules/cytoolz { };
 
+  cyvcf2 = callPackage ../development/python-modules/cyvcf2 { };
+
   cyvest = callPackage ../development/python-modules/cyvest { };
 
   dacite = callPackage ../development/python-modules/dacite { };
