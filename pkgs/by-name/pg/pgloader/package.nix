@@ -1,87 +1,129 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  stdenvNoCC,
   fetchFromGitHub,
+  clojure,
   installShellFiles,
-  makeWrapper,
-  sbcl_2_4_6,
-  sqlite,
-  freetds,
-  libzip,
-  curl,
-  git,
-  cacert,
-  openssl,
+  jdk21_headless,
+  makeBinaryWrapper,
   sphinx,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "pgloader";
-  version = "3.6.9";
+  # pgloader has no v4 release yet
+  version = "4.0.0-unstable-2026-07-24";
 
-  srcs = [
-    (fetchurl {
-      url = "https://github.com/dimitri/pgloader/releases/download/v3.6.9/pgloader-bundle-3.6.9.tgz";
-      sha256 = "sha256-pdCcRmoJnrfVnkhbT0WqLrRbCtOEmRgGRsXK+3uByeA=";
-    })
-    # needed because bundle does not contain docs / man pages
-    (fetchFromGitHub {
-      owner = "dimitri";
-      repo = "pgloader";
-      rev = "v${finalAttrs.version}";
-      hash = "sha256-lqvfWayaJbZ9xx4CgFfY1g0TKwFEd5IWf+RLLXQddw4=";
-    })
-  ];
+  src = fetchFromGitHub {
+    owner = "dimitri";
+    repo = "pgloader";
+    rev = "ea152ef47711af0cc821067b95065e9f2e76c45b";
+    hash = "sha256-TpQ9Y9rM1qQnQx54uKjyu1/FjyDO3PsZQzeLt657MrQ=";
+  };
 
-  sourceRoot = ".";
+  mvnDeps = stdenvNoCC.mkDerivation {
+    name = "pgloader-${finalAttrs.version}-maven-deps";
+    inherit (finalAttrs) src;
+
+    nativeBuildInputs = [
+      clojure
+      jdk21_headless
+    ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      export HOME="$(mktemp -d)"
+      mkdir -p "$out"
+
+      cd clojure
+
+      clojure -Sdeps "{:mvn/local-repo \"$out\"}" -P
+      clojure -Sdeps "{:mvn/local-repo \"$out\"}" -P -T:build
+
+      runHook postBuild
+    '';
+
+    # make the output reproducible:
+    # delete all ephemeral files with lastModified timestamps
+    installPhase = ''
+      runHook preInstall
+
+      find "$out" -type f \( \
+        -name \*.lastUpdated \
+        -o -name resolver-status.properties \
+        -o -name _remote.repositories \) \
+        -delete
+
+      runHook postInstall
+    '';
+
+    dontFixup = true;
+
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+    outputHash = "sha256-pL+U/SCNRq0+48ec99I8j8qN8vXIJ3OMa6ue9cHZrsQ=";
+  };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
-    git
-    makeWrapper
+    clojure
     installShellFiles
-  ];
-
-  buildInputs = [
-    sbcl_2_4_6
-    cacert
-    sqlite
+    jdk21_headless
+    makeBinaryWrapper
     sphinx
-    freetds
-    libzip
-    curl
-    openssl
   ];
 
-  env.LD_LIBRARY_PATH = lib.makeLibraryPath [
-    sqlite
-    libzip
-    curl
-    git
-    openssl
-    freetds
-  ];
+  env.PGLOADER_VERSION = finalAttrs.version;
 
   buildPhase = ''
-    export PATH=$PATH:$out/bin
-    export HOME=$TMPDIR
+    runHook preBuild
 
-    pushd pgloader-bundle-${finalAttrs.version}
-    make pgloader
+    export HOME="$TMPDIR"
+
+    mvnRepo="$PWD/mvn-repo"
+    cp -r ${finalAttrs.mvnDeps} "$mvnRepo"
+    chmod -R u+w "$mvnRepo"
+
+    substituteInPlace clojure/deps.edn \
+      --replace-fail '{:paths' "{:mvn/local-repo \"$mvnRepo\" :paths"
+
+    pushd clojure
+    clojure -Sdeps "{:mvn/local-repo \"$mvnRepo\"}" -T:build uber
     popd
 
-    pushd source/docs
-    make man
-    popd
+    # build man pages
+    sphinx-build -b man docs man
+
+    runHook postBuild
   '';
 
-  dontStrip = true;
-  enableParallelBuilding = false;
-
   installPhase = ''
-    install -Dm755 pgloader-bundle-${finalAttrs.version}/bin/pgloader "$out/bin/pgloader"
-    wrapProgram $out/bin/pgloader --prefix LD_LIBRARY_PATH : "${finalAttrs.env.LD_LIBRARY_PATH}"
-    mkdir -p $out/bin $out/man/man1
-    installManPage source/docs/_build/man/*.1
+    runHook preInstall
+
+    install -Dm644 "clojure/target/pgloader-v4-${finalAttrs.version}.jar" \
+      "$out/share/pgloader/pgloader.jar"
+
+    makeWrapper ${lib.getExe' jdk21_headless "java"} "$out/bin/pgloader" \
+      --add-flags "-jar $out/share/pgloader/pgloader.jar"
+
+    installManPage man/*.1
+
+    runHook postInstall
+  '';
+
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    export HOME="$TMPDIR"
+    # Assert that the binary works / does not crash
+    "$out/bin/pgloader" --version
+
+    runHook postInstallCheck
   '';
 
   meta = {
@@ -90,6 +132,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "pgloader";
     maintainers = with lib.maintainers; [ mguentner ];
     license = lib.licenses.postgresql;
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.unix;
   };
 })
