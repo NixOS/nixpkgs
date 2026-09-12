@@ -1754,6 +1754,7 @@
   ./services/web-apps/isso.nix
   ./services/web-apps/jirafeau.nix
   ./services/web-apps/jitsi-meet.nix
+  ./services/web-apps/kanbn.nix
   ./services/web-apps/kanboard.nix
   ./services/web-apps/karakeep.nix
   ./services/web-apps/kasmweb/default.nix
