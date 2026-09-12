@@ -24,7 +24,6 @@ for arg in "$@"; do
     case $arg in
         --system=*)
             system="${arg#*=}"
-            systemArg="--system ${arg#*=}"
         ;;
         --version-key=*)
             versionKey="${arg#*=}"
@@ -79,7 +78,7 @@ else
     requiredArgs=1
 fi
 
-if (( "${#args[*]}" < $requiredArgs )); then
+if (( "${#args[*]}" < requiredArgs )); then
     echo "$scriptName: Too few arguments"
     usage
     exit 1
@@ -99,18 +98,22 @@ if [[ -z "$sourceKey" ]]; then
     sourceKey=src
 fi
 
+do_eval() {
+    nix-instantiate ${system:+--system "$system"} --eval "$@"
+}
+
 # Allow finding packages among flake outputs in repos using flake-compat.
-pname=$(nix-instantiate $systemArg --eval --strict -A "$attr.name" || echo)
+pname=$(do_eval --strict -A "$attr.name" || echo)
 if [[ -z "$pname" ]]; then
     if [[ -z "$system" ]]; then
         system=$(nix-instantiate --eval -E 'builtins.currentSystem' | tr -d '"')
     fi
 
-    pname=$(nix-instantiate $systemArg --eval --strict -A "packages.$system.$attr.name" || echo)
+    pname=$(do_eval --strict -A "packages.$system.$attr.name" || echo)
     if [[ -n "$pname" ]]; then
         attr="packages.$system.$attr"
     else
-        pname=$(nix-instantiate $systemArg --eval --strict -A "legacyPackages.$system.$attr.name" || echo)
+        pname=$(do_eval --strict -A "legacyPackages.$system.$attr.name" || echo)
         if [[ -n "$pname" ]]; then
             attr="legacyPackages.$system.$attr"
         else
@@ -120,22 +123,25 @@ if [[ -z "$pname" ]]; then
 fi
 
 if [[ -z "$nixFile" ]]; then
-    nixFile=$(nix-instantiate $systemArg --eval --strict -A "$attr.meta.position" | sed -re 's/^"(.*):[0-9]+"$/\1/')
+    nixFile=$(do_eval --strict -A "$attr.meta.position" | sed -re 's/^"(.*):[0-9]+"$/\1/')
     if [[ ! -f "$nixFile" ]]; then
         die "Couldn't evaluate '$attr.meta.position' to locate the .nix file!"
     fi
 
     # flake-compat will return paths in the Nix store, we need to correct for that.
-    possiblyOutPath=$(nix-instantiate $systemArg --eval -E "with $importTree; outPath" 2>/dev/null | tr -d '"')
+    possiblyOutPath=$(do_eval -E "with $importTree; outPath" 2>/dev/null | tr -d '"')
     if [[ -n "$possiblyOutPath" ]]; then
+        # shellcheck disable=SC2001
         outPathEscaped=$(echo "$possiblyOutPath" | sed 's#[$^*\\.[|]#\\&#g')
+        # shellcheck disable=SC2001
         pwdEscaped=$(echo "$PWD" | sed 's#[$^*\\.[|]#\\&#g')
+        # shellcheck disable=SC2001
         nixFile=$(echo "$nixFile" | sed "s|^$outPathEscaped|$pwdEscaped|")
     fi
 fi
 
-oldHashAlgo=$(nix-instantiate $systemArg --eval --strict -E "let pkgs = $importTree; in pkgs.$attr.$sourceKey.drvAttrs.outputHashAlgo or pkgs.$attr.$sourceKey.drvAttrs.outputHash" | tr -d '"' | sed "s/-.*//")
-oldHash=$(nix-instantiate $systemArg --eval --strict -A "$attr.$sourceKey.drvAttrs.outputHash" | tr -d '"')
+oldHashAlgo=$(do_eval --strict -E "let pkgs = $importTree; in pkgs.$attr.$sourceKey.drvAttrs.outputHashAlgo or pkgs.$attr.$sourceKey.drvAttrs.outputHash" | tr -d '"' | sed "s/-.*//")
+oldHash=$(do_eval --strict -A "$attr.$sourceKey.drvAttrs.outputHash" | tr -d '"')
 
 if [[ -z "$oldHashAlgo" || -z "$oldHash" ]]; then
     die "Couldn't evaluate old source hash from '$attr.$sourceKey'!"
@@ -145,7 +151,7 @@ if [[ $(grep --count "$oldHash" "$nixFile") != 1 ]]; then
     die "Couldn't locate old source hash '$oldHash' (or it appeared more than once) in '$nixFile'!"
 fi
 
-oldVersion=$(nix-instantiate $systemArg --eval -E "with $importTree; $attr.${versionKey} or (builtins.parseDrvName $attr.name).version" | tr -d '"')
+oldVersion=$(do_eval -E "with $importTree; $attr.${versionKey} or (builtins.parseDrvName $attr.name).version" | tr -d '"')
 
 if [[ -z "$oldVersion" ]]; then
     die "Couldn't find out the old version of '$attr'!"
@@ -164,7 +170,7 @@ if [[ -z "$ignoreSameVersion" && "$oldVersion" = "$newVersion" ]]; then
 fi
 
 if [[ -n "$newRevision" ]]; then
-    oldRevision=$(nix-instantiate $systemArg --eval -E "with $importTree; $attr.$sourceKey.rev" | tr -d '"')
+    oldRevision=$(do_eval -E "with $importTree; $attr.$sourceKey.rev" | tr -d '"')
     if [[ -z "$oldRevision" ]]; then
         die "Couldn't evaluate source revision from '$attr.$sourceKey'!"
     fi
@@ -224,7 +230,7 @@ fi
 
 # Replace new URL
 if [[ -n "$newUrl" ]]; then
-    oldUrl=$(nix-instantiate $systemArg --eval -E "with $importTree; builtins.elemAt ($attr.$sourceKey.drvAttrs.urls or [ $attr.$sourceKey.url ]) 0" | tr -d '"')
+    oldUrl=$(do_eval -E "with $importTree; builtins.elemAt ($attr.$sourceKey.drvAttrs.urls or [ $attr.$sourceKey.url ]) 0" | tr -d '"')
     if [[ -z "$oldUrl" ]]; then
         die "Couldn't evaluate source url from '$attr.$sourceKey'!"
     fi
@@ -254,7 +260,7 @@ fi
 
 # If new hash not given on the command line, recalculate it ourselves.
 if [[ -z "$newHash" ]]; then
-    nix-build $systemArg --no-out-link -A "$attr.$sourceKey" 2>"$attr.fetchlog" >/dev/null || true
+    nix-build ${system:+--system "$system"} --no-out-link -A "$attr.$sourceKey" 2>"$attr.fetchlog" >/dev/null || true
     # FIXME: use nix-build --hash here once https://github.com/NixOS/nix/issues/1172 is fixed
     newHash=$(
         sed '1,/hash mismatch in fixed-output derivation/d' "$attr.fetchlog" \
