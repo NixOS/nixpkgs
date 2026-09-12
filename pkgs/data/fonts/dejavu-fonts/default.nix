@@ -5,6 +5,7 @@
   fontforge,
   perl,
   perlPackages,
+  installFonts,
 }:
 
 let
@@ -38,6 +39,7 @@ let
       perl
       perlPackages.IOString
       perlPackages.FontTTF
+      installFonts
     ];
 
     src = fetchFromGitHub {
@@ -51,7 +53,7 @@ let
 
     preBuild = "patchShebangs scripts";
 
-    installPhase = "install -m444 -Dt $out/share/fonts/truetype build/*.ttf";
+    installPhase = "runHook preInstall";
 
     inherit meta;
   };
