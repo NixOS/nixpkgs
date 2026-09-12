@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libvpl";
-  version = "2.16.0";
+  version = "2.17.0";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "libvpl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-TbneMexrGShBE83WRCHvECucG2/eYMtljwb3yvCTP7k=";
+    hash = "sha256-nuDm5gGZisMHSwdnERu2gX6Xq/7x7Ez9XdKj/IfCUxg=";
   };
 
   nativeBuildInputs = [
