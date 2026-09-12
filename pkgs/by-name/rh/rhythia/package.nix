@@ -7,7 +7,7 @@
   dotnetCorePackages,
   fetchFromGitHub,
   fontconfig,
-  godotPackages_4_6,
+  godotPackages_4_7,
   lib,
   libGL,
   libx11,
@@ -35,7 +35,9 @@ let
     presets.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  godotPackages = godotPackages_4_6;
+  # godotPackages = godotPackages_4_6;
+  # indev branch
+  godotPackages = godotPackages_4_7;
 
   godot = godotPackages.godot-mono;
 
@@ -63,13 +65,24 @@ in
 
 buildDotnetModule (finalAttrs: {
   pname = "rhythia";
-  version = "0.1.2";
+  # version = "0.1.2";
+  # indev branch
+  version = "0-unstable-2026-09-11";
 
+  # src = fetchFromGitHub {
+  #   owner = "Rhythia";
+  #   repo = "Client";
+  #   rev = finalAttrs.version;
+  #   hash = "sha256-alwbuNJ+wa3VF0g8kYSebtuyc2Ouder5asNi9e62dvA=";
+  #   fetchLFS = true;
+  # };
+
+  # indev branch
   src = fetchFromGitHub {
     owner = "Rhythia";
     repo = "Client";
-    rev = finalAttrs.version;
-    hash = "sha256-alwbuNJ+wa3VF0g8kYSebtuyc2Ouder5asNi9e62dvA=";
+    rev = "41874d670cf0a2a5309a8de052df2e84e411c079";
+    hash = "sha256-7gK7shxbHL/GtP29i3+FV63Dtt1snlr2qQGktzkgNvM=";
     fetchLFS = true;
   };
 
@@ -77,10 +90,12 @@ buildDotnetModule (finalAttrs: {
   strictDeps = true;
 
   patches = [
-    ./godot-dotnet-sdk-4.6.3.patch
+    # ./godot-dotnet-sdk-4.6.3.patch
+    # indev branch
+    ./godot-dotnet-sdk-4.7.2.patch
   ];
 
-  nugetDeps = ./deps.json;
+  nugetDeps = ./deps-indev.json;
 
   inherit dotnet-sdk dotnet-runtime;
 
@@ -124,10 +139,10 @@ buildDotnetModule (finalAttrs: {
     cp ${./export_presets.cfg} ./export_presets.cfg
 
     mkdir -p ./build
-    godot4.6-mono --headless --export-release "${preset}" ./build/Rhythia
+    godot4.7-mono --headless --export-debug "${preset}" ./build/Rhythia
 
     mkdir -p ./build/${dataDir}
-    dotnet build ./Rhythia.csproj -o ./build/${dataDir}
+    dotnet build --configuration "Debug" ./Rhythia.csproj -o ./build/${dataDir}
 
     runHook postBuild
   '';
@@ -136,11 +151,6 @@ buildDotnetModule (finalAttrs: {
     runHook preInstall
 
     install -Dm 755 -t $out/libexec ./build/Rhythia
-    ${lib.optionalString (
-      # no libs there on arm
-      # probably related to this https://github.com/Rhythia/Client/issues/145
-      stdenv.hostPlatform.system == "x86_64-linux"
-    ) "install -Dm 755 -t $out/libexec ./build/lib*"}
 
     install -Dm 755 -t $out/libexec/${dataDir} ./build/${dataDir}/*.dll
     install -Dm 755 -t $out/libexec/${dataDir} ./build/${dataDir}/runtimes/${runtimeDir}/native/*.so
