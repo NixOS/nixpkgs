@@ -17,6 +17,11 @@ rustPlatform.buildRustPackage (finalAttrs: rec {
   env.RUSTFLAGS = "-C linker=wasm-ld";
   nativeBuildInputs = [ lld ];
 
+  postInstall = ''
+    mkdir -p $out/lib/rosec/providers
+    mv $out/bin/*.wasm $out/lib/rosec/providers/
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   __structuredAttrs = true;
