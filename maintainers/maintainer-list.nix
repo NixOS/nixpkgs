@@ -22137,6 +22137,11 @@
     githubId = 17091659;
     name = "Pablo Andres Dealbera";
   };
+  packetThrower = {
+    github = "packetThrower";
+    githubId = 6597817;
+    name = "Will Lehnertz";
+  };
   pacman99 = {
     email = "pachum99@gmail.com";
     matrix = "@pachumicchu:myrdd.info";
