@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "xhtml2pdf";
-  version = "0.2.17";
+  version = "0.2.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xhtml2pdf";
     repo = "xhtml2pdf";
     tag = "v${version}";
-    hash = "sha256-qp0JVp5efIrI98YT0rwFAMSEW+0aIhedfYGND4V7Mto=";
+    hash = "sha256-AAFtHz1jOPmSMP3FIo9Tb5Bv0TmR2PtLsB1uSEgNLJo=";
   };
 
   build-system = [
