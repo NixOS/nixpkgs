@@ -26,6 +26,15 @@ let
   addToCscOptions = opt: old: {
     env.CSC_OPTIONS = lib.concatStringsSep " " ([ old.env.CSC_OPTIONS or "" ] ++ lib.toList opt);
   };
+  # chicken-install installs every .egg it finds, so keep only the canonical <eggName>.egg.
+  removeBundledEggs = eggName: old: {
+    preBuild = (old.preBuild or "") + ''
+      for f in *.egg; do
+        [ -e "$f" ] || continue
+        [ "$f" = "${eggName}.egg" ] || rm "$f"
+      done
+    '';
+  };
 in
 {
   breadline = addToBuildInputs pkgs.readline;
@@ -56,6 +65,7 @@ in
       ];
     };
   espeak = addToBuildInputsWithPkgConfig pkgs.espeak-ng;
+  http-curl = addToBuildInputsWithPkgConfig pkgs.curl;
   ephem = addToBuildInputs pkgs.libnova;
   exif = addToBuildInputsWithPkgConfig pkgs.libexif;
   expat =
@@ -142,6 +152,7 @@ in
       '';
       env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
     };
+  nanograd = addToPropagatedBuildInputs (with chickenEggs; [ blas ]);
   nanomsg = addToBuildInputs pkgs.nanomsg;
   ncurses = addToBuildInputsWithPkgConfig [ pkgs.ncurses ];
   oauthtoothy =
@@ -157,6 +168,9 @@ in
     pkgs.ocl-icd
   ];
   openssl = addToBuildInputs pkgs.openssl;
+  orm-db-rqlite = removeBundledEggs "orm-db-rqlite";
+  orm-db-sqlite = removeBundledEggs "orm-db-sqlite";
+  orm = removeBundledEggs "orm";
   plot = addToBuildInputs pkgs.plotutils;
   postgresql = addToBuildInputsWithPkgConfig pkgs.libpq;
   pyffi = addToBuildInputsWithPkgConfig pkgs.python3;
@@ -219,7 +233,7 @@ in
   svn-client =
     old:
     (addToBuildInputs [ pkgs.subversion pkgs.aprutil ] old)
-    // (addToNativeBuildInputs pkgs.apr old)
+    // (addToNativeBuildInputs [ pkgs.apr pkgs.pkg-config ] old)
     // {
       postPatch =
         let
@@ -227,7 +241,9 @@ in
           aprUtilInclude = "${lib.getDev pkgs.aprutil}/include";
         in
         ''
-          substituteInPlace build-svn-client svn-client.setup \
+          substituteInPlace build-svn-client \
+            --replace-fail 'CFLAGS="$CFLAGS `pkg-config --cflags libsvn_client`"' 'CFLAGS="$CFLAGS `pkg-config --cflags libsvn_client` -I${svnInclude}"'
+          substituteInPlace svn-client.setup \
             --replace-fail '-I/usr/include/subversion-1' "-I${svnInclude}" \
             --replace-fail '-I/usr/local/include/subversion-1' "-I${aprUtilInclude} -I${svnInclude}"
         '';
