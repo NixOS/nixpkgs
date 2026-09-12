@@ -29,6 +29,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   postPatch = ''
     substituteInPlace galene_stream/galene.py \
       --replace-fail 'await websockets.connect(status["endpoint"], ssl=ssl_context)' 'await websockets.connect(status["endpoint"], ssl=None if self.insecure else ssl_context)'
+
+    # NOTE: python 3.14 disallows get_event_loop without an active loop, set one
+    substituteInPlace galene_stream/cli.py \
+      --replace-fail 'event_loop = asyncio.get_event_loop()' 'event_loop = asyncio.new_event_loop(); asyncio.set_event_loop(event_loop)'
   '';
 
   strictDeps = true;
