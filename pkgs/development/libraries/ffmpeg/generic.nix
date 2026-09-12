@@ -109,6 +109,7 @@
   withMfx ? false, # Hardware acceleration via intel-media-sdk/libmfx
   withModplug ? withFullDeps && !stdenv.hostPlatform.isDarwin, # ModPlug support
   withMp3lame ? withHeadlessDeps, # LAME MP3 encoder
+  withMpeghdec ? withFullDeps && (!withGPL || withUnfree) && lib.versionAtLeast version "8.1", # MPEG-H decoder
   withMysofa ? withFullDeps, # HRTF support via SOFAlizer
   withNpp ? withFullDeps && withUnfree && config.cudaSupport, # Nvidia Performance Primitives-based code
   withNvdec ? withHeadlessDeps && withNvcodec,
@@ -323,6 +324,7 @@
   libxext,
   libxml2,
   libxv,
+  mpeghdec,
   nv-codec-headers,
   nv-codec-headers-12,
   ocl-icd, # OpenCL ICD
@@ -690,6 +692,11 @@ stdenv.mkDerivation (
       (enableFeature withMfx "libmfx")
       (enableFeature withModplug "libmodplug")
       (enableFeature withMp3lame "libmp3lame")
+    ]
+    ++ optionals (versionAtLeast version "8.1") [
+      (enableFeature withMpeghdec "libmpeghdec")
+    ]
+    ++ [
       (enableFeature withMysofa "libmysofa")
       (enableFeature withNpp "libnpp")
       (enableFeature withNvdec "nvdec")
@@ -919,6 +926,7 @@ stdenv.mkDerivation (
       ++ optionals withMfx [ intel-media-sdk ]
       ++ optionals withModplug [ libmodplug ]
       ++ optionals withMp3lame [ lame ]
+      ++ optionals withMpeghdec [ mpeghdec ]
       ++ optionals withMysofa [ libmysofa ]
       ++ optionals withNpp [
         libnpp
