@@ -31,6 +31,8 @@ stdenv.mkDerivation (
     # which causes configure checks to work incorrectly with clang 16.
     nativeBuildInputs = lib.optionals stdenv.cc.isClang [ autoconf269 ] ++ [ autoreconfHook ];
 
+    strictDeps = true;
+
     patches = [
       (fetchpatch {
         name = "gcc15.patch";
@@ -111,6 +113,8 @@ stdenv.mkDerivation (
     checkPhase = ''
       make examples_c examples_cxx
     '';
+
+    __structuredAttrs = true;
 
     meta = {
       homepage = "https://www.oracle.com/database/technologies/related/berkeleydb.html";
