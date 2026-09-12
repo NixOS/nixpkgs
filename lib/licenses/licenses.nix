@@ -1764,18 +1764,24 @@ lib.mapAttrs mkLicense (
   }
   // {
     # TODO: remove legacy aliases
-    apsl10 = {
-      # deprecated for consistency with `apple-psl20`; use `apple-psl10`
-      spdxId = "APSL-1.0";
-      fullName = "Apple Public Source License 1.0";
-      deprecated = true;
-    };
-    apsl20 = {
-      # deprecated due to confusion with Apache-2.0; use `apple-psl20`
-      spdxId = "APSL-2.0";
-      fullName = "Apple Public Source License 2.0";
-      deprecated = true;
-    };
+    apsl10 =
+      lib.warn # For removal in release 27.05
+        "The `apsl10` license identifier is deprecated. It should be replaced with the `apple-psl10` identifier."
+        {
+          # deprecated for consistency with `apple-psl20`; use `apple-psl10`
+          spdxId = "APSL-1.0";
+          fullName = "Apple Public Source License 1.0";
+          deprecated = true;
+        };
+    apsl20 =
+      lib.warn # For removal in release 27.05
+        "The `apsl20` license identifier is deprecated because of persistent confusion with the `asl20` license. Verify that this wasn't intended to be the Apache 2.0 license, then replace it with the `apple-psl20` identifier."
+        {
+          # deprecated due to confusion with Apache-2.0; use `apple-psl20`
+          spdxId = "APSL-2.0";
+          fullName = "Apple Public Source License 2.0";
+          deprecated = true;
+        };
     gpl2 = {
       spdxId = "GPL-2.0";
       fullName = "GNU General Public License v2.0";
