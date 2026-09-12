@@ -16721,6 +16721,12 @@
     ];
     name = "Logan Barnett";
   };
+  loganphinney = {
+    name = "Logan Phinney";
+    email = "mail@loganphinney.com";
+    github = "loganphinney";
+    githubId = 154395727;
+  };
   logger = {
     name = "Ido Samuelson";
     email = "ido.samuelson@gmail.com";
