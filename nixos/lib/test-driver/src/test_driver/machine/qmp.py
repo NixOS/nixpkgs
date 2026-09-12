@@ -2,7 +2,9 @@ import datetime as dt
 import json
 import logging
 import os
+import select
 import socket
+import time
 from collections.abc import Iterator
 from pathlib import Path
 from queue import Queue
@@ -56,13 +58,25 @@ class QMPSession:
     def _wait_for_new_result(self) -> dict[str, str]:
         assert self.results.empty(), "Results set is not empty, missed results!"
         while self.results.empty():
-            self.read_pending_messages()
+            if self.read_pending_messages():
+                continue
+
+            self._wait_for_socket_data()
+
         return self.results.get()
 
-    def read_pending_messages(self) -> None:
+    def _wait_for_socket_data(self, timeout: float | None = None) -> None:
+        readable, _, _ = select.select([self.sock], [], [], timeout)
+        if not readable:
+            raise TimeoutError
+
+        if self.sock.recv(1, socket.MSG_PEEK) == b"":
+            raise ConnectionError("QMP connection closed while waiting for data")
+
+    def read_pending_messages(self) -> bool:
         line = self.reader.readline()
         if not line:
-            return
+            return False
         evt_or_result = json.loads(line)
         logger.debug(f"Received a message: {evt_or_result}")
 
@@ -75,13 +89,23 @@ class QMPSession:
         else:
             raise QMPAPIError(evt_or_result)
 
+        return True
+
     def wait_for_event(
         self, timeout: dt.timedelta = dt.timedelta(seconds=10)
     ) -> dict[str, Any]:
+        deadline = time.monotonic() + timeout.total_seconds()
         while self.pending_events.empty():
-            self.read_pending_messages()
+            if self.read_pending_messages():
+                continue
 
-        return self.pending_events.get(timeout=timeout.total_seconds())
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise TimeoutError
+
+            self._wait_for_socket_data(remaining)
+
+        return self.pending_events.get_nowait()
 
     def events(
         self, timeout: dt.timedelta = dt.timedelta(seconds=10)
