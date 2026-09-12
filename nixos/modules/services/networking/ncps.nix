@@ -40,6 +40,10 @@ let
       export CACHE_DATABASE_URL="$(cat "$CREDENTIALS_DIRECTORY/databaseURL")"
     ''}
 
+    ${lib.optionalString (cfg.cache.getTokenFile != null) ''
+      export CACHE_GET_TOKEN="$(cat "$CREDENTIALS_DIRECTORY/getToken")"
+    ''}
+
     exec ${lib.getExe cfg.package} --config "${configFile}" "$@"
   '';
 
@@ -60,6 +64,8 @@ let
     cache = {
       allow-delete-verb = cfg.cache.allowDeleteVerb;
       allow-put-verb = cfg.cache.allowPutVerb;
+      require-trusted-signature = cfg.cache.requireTrustedSignature;
+      trusted-upload-keys = cfg.cache.trustedUploadKeys;
       hostname = cfg.cache.hostName;
       database-url = cfg.cache.databaseURL;
       database.pool = {
@@ -73,6 +79,18 @@ let
           avg
           max
           ;
+        chunk-wait-timeout = cfg.cache.cdc.chunkWaitTimeout;
+        lazy-chunking-enabled = cfg.cache.cdc.lazyChunking;
+        background-workers = cfg.cache.cdc.backgroundWorkers;
+        delete-delay = cfg.cache.cdc.deleteDelay;
+        lazy-recovery-schedule = cfg.cache.cdc.lazyRecoverySchedule;
+        lazy-recovery-batch-size = cfg.cache.cdc.lazyRecoveryBatchSize;
+        lazy-cleanup-schedule = cfg.cache.cdc.lazyCleanupSchedule;
+      };
+      inflight-staging = {
+        enabled = cfg.cache.inflightStaging.enable;
+        retention = cfg.cache.inflightStaging.retention;
+        part-size = cfg.cache.inflightStaging.partSize;
       };
       max-size = cfg.cache.maxSize;
       lru = {
@@ -157,7 +175,7 @@ in
       "services"
       "ncps"
       "dbmatePackage"
-    ] "dbmate is now wrapped within ncps package, you need to override ncps to change dbmate package")
+    ] "dbmate has been removed; ncps now runs database migrations itself via `ncps migrate up`")
 
     (lib.mkRemovedOptionModule [
       "services"
@@ -223,6 +241,34 @@ in
           to the cache.
         '';
 
+        requireTrustedSignature = lib.mkEnableOption ''
+          rejecting narinfos uploaded via PUT that do not carry a signature
+          trusted by config.ncps.cache.trustedUploadKeys (fail-closed). Only
+          relevant when config.ncps.cache.allowPutVerb is enabled
+        '';
+
+        trustedUploadKeys = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [ ];
+          example = [ "cache.example.com-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
+          description = ''
+            A list of `name:base64` public keys, in nix format, authorizing PUT
+            uploads when config.ncps.cache.requireTrustedSignature is enabled.
+            This is independent of config.ncps.cache.upstream.publicKeys.
+          '';
+        };
+
+        getTokenFile = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = null;
+          description = ''
+            File containing a bearer token required to access the GET and HEAD
+            routes. When set, requests without a matching
+            `Authorization: Bearer <token>` header are rejected with 401
+            Unauthorized. The /healthz and /metrics routes are always exempt.
+          '';
+        };
+
         cdc = {
           enabled = lib.mkEnableOption ''
             Whether to enable Content-Defined Chunking (CDC) for deduplication (experimental).
@@ -249,6 +295,99 @@ in
             default = 262144;
             description = ''
               The maximum chunk size for CDC in bytes.
+            '';
+          };
+
+          chunkWaitTimeout = lib.mkOption {
+            type = lib.types.str;
+            default = "30s";
+            description = ''
+              Maximum time progressive CDC streaming waits for the next chunk
+              to be produced/become readable before failing the transfer. Keep
+              it below your reverse-proxy gateway timeout so a stalled chunk on
+              high-latency storage surfaces as a retryable error to the client
+              rather than a gateway 504.
+            '';
+          };
+
+          lazyChunking = lib.mkEnableOption ''
+            lazy chunking: store the compressed NAR first and chunk it in the
+            background instead of synchronously on upload
+          '';
+
+          backgroundWorkers = lib.mkOption {
+            type = lib.types.nullOr lib.types.int;
+            default = null;
+            description = ''
+              Number of background workers for lazy chunking. When null, ncps
+              defaults to the number of CPUs.
+            '';
+          };
+
+          deleteDelay = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            example = "24h";
+            description = ''
+              Delay before deleting the compressed NAR files after chunking
+              completes. When null, ncps uses its default (24h).
+            '';
+          };
+
+          lazyRecoverySchedule = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            example = "@every 5m";
+            description = ''
+              Cron schedule for recovering stuck CDC NARs. When null, ncps uses
+              its default (@every 5m).
+            '';
+          };
+
+          lazyRecoveryBatchSize = lib.mkOption {
+            type = lib.types.nullOr lib.types.int;
+            default = null;
+            description = ''
+              Maximum number of stuck NARs to process per recovery cron run.
+              When null, ncps uses its default (100).
+            '';
+          };
+
+          lazyCleanupSchedule = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            example = "@every 1h";
+            description = ''
+              Cron schedule for cleaning up deleted NAR files after lazy
+              chunking. When null, ncps uses its default (@every 1h).
+            '';
+          };
+        };
+
+        inflightStaging = {
+          enable = lib.mkEnableOption ''
+            in-flight NAR staging: serve a NAR cross-instance while it is still
+            downloading by staging it to shared storage as part-objects once
+            another replica waits for it. An HA-safe alternative to CDC; only
+            active with a distributed (Redis) lock backend
+          '';
+
+          retention = lib.mkOption {
+            type = lib.types.str;
+            default = "5m";
+            description = ''
+              Grace period to retain in-flight staging part-objects after the
+              NAR's final representation is committed, so in-flight readers
+              drain before reclamation.
+            '';
+          };
+
+          partSize = lib.mkOption {
+            type = lib.types.ints.positive;
+            default = 8388608;
+            description = ''
+              Size in bytes of each in-flight staging part-object (a transport
+              unit, distinct from CDC chunk sizes). Defaults to 8 MiB.
             '';
           };
         };
@@ -671,6 +810,10 @@ in
         assertion = cfg.cache.redis != null -> cfg.cache.lock.backend == "redis";
         message = "You must set config.ncps.cache.lock.backend to 'redis' when config.ncps.cache.redis is set";
       }
+      {
+        assertion = cfg.cache.requireTrustedSignature -> cfg.cache.trustedUploadKeys != [ ];
+        message = "You must specify config.ncps.cache.trustedUploadKeys when config.ncps.cache.requireTrustedSignature is enabled";
+      }
     ];
 
     users.users.ncps = {
@@ -706,13 +849,12 @@ in
 
       preStart = ''
         ${lib.optionalString (cfg.cache.databaseURLFile != null) ''
-          export DATABASE_URL="$(cat "$CREDENTIALS_DIRECTORY/databaseURL")"
+          export CACHE_DATABASE_URL="$(cat "$CREDENTIALS_DIRECTORY/databaseURL")"
         ''}
         ${lib.optionalString (cfg.cache.databaseURL != null) ''
-          export DATABASE_URL="${cfg.cache.databaseURL}"
+          export CACHE_DATABASE_URL="${cfg.cache.databaseURL}"
         ''}
-        echo ${cfg.package}/bin/dbmate-ncps up
-        ${cfg.package}/bin/dbmate-ncps up
+        ${lib.getExe cfg.package} migrate up
       '';
 
       serviceConfig = lib.mkMerge [
@@ -744,6 +886,11 @@ in
 
         (lib.mkIf (cfg.cache.databaseURLFile != null) {
           LoadCredential = lib.singleton "databaseURL:${cfg.cache.databaseURLFile}";
+        })
+
+        # credentials for cache.getTokenFile
+        (lib.mkIf (cfg.cache.getTokenFile != null) {
+          LoadCredential = lib.singleton "getToken:${cfg.cache.getTokenFile}";
         })
 
         # ensure permissions on required directories
