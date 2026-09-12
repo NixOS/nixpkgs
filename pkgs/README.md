@@ -49,6 +49,11 @@ Before adding a new package, please consider the following questions:
 
 If any of these questions' answer is no, then you should probably not add the package.
 
+> [!NOTE]
+> Many upstream developers submit their own projects for inclusion in Nixpkgs.
+> While these PRs are welcomed, this is often a sign that the package doesn't yet meet the userbase requirements.
+> Consider waiting for another user of your project to submit it instead.
+
 Special care has to be taken with security-critical software components.
 Because entries in the Nix store are inert and do nothing by themselves, packages should be considered by their intended use, e.g. when used together with a NixOS module.
 
