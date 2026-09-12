@@ -900,7 +900,7 @@ in
               "syslog"
               "systemd"
             ];
-            default = "syslog";
+            default = "systemd";
             description = ''
               Logging backend to use.
               systemd automatically adds the php-systemd extensions to services.nextcloud.phpExtraExtensions.
@@ -914,6 +914,15 @@ in
               The directory where the skeleton files are located. These files will be
               copied to the data directory of new users. Leave empty to not copy any
               skeleton files.
+            '';
+          };
+          serverid = lib.mkOption {
+            default = 1;
+            type = lib.types.ints.between 0 511;
+            description = ''
+              Server ID, must be an integer between 0 and 511 (inclusive).
+              Should be configured if your Nextcloud instance is using different PHP
+              servers.
             '';
           };
           trusted_domains = lib.mkOption {
@@ -959,6 +968,17 @@ in
 
               As an example, with `DE` set as the default phone region,
               the `+49` prefix can be omitted for phone numbers.
+            '';
+          };
+          maintenance_window_start = lib.mkOption {
+            default = 100;
+            type = lib.types.int;
+            example = 1;
+            description = ''
+              UTC Hour for maintenance windows which advertise themselves as not time sensitive.
+              A value of 1, e.g., will only run these background jobs between 01:00am UTC and
+              05:00am UTC.
+              Default is 100 which disables this feature.
             '';
           };
           "profile.enabled" = lib.mkEnableOption "global profiles" // {
