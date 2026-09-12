@@ -160,4 +160,3 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "wusel";
   };
 })
-
