@@ -1,42 +1,27 @@
 [
   {
+    "pname": "Meziantou.Analyzer",
+    "version": "3.0.137",
+    "hash": "sha256-SSfebkwgoWHDbQQp3cDajz0vz0gX4p8mnUyxD9WoRqI="
+  },
+  {
     "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
-    "version": "10.0.8",
-    "hash": "sha256-HV30fu+lF/GYkeVP+Yq/EU1FzgdMqwqlepCpvxUgugE="
+    "version": "10.0.10",
+    "hash": "sha256-2r+Qvd0u3zODfQ1NAL+qu+W5XGaqJjm31bG6SGJKZn0="
+  },
+  {
+    "pname": "Roslynator.Analyzers",
+    "version": "4.15.0",
+    "hash": "sha256-NACDl8bu5GXzS62uwSpGGhacQrqsfnsG8XSg+cS94rY="
   },
   {
     "pname": "Serilog",
-    "version": "4.0.0",
-    "hash": "sha256-j8hQ5TdL1TjfdGiBO9PyHJFMMPvATHWN1dtrrUZZlNw="
+    "version": "4.4.0",
+    "hash": "sha256-tP4X06ThcDVL6XXtYIhdJyxn4uL9jLL0s3DRO6HNQk8="
   },
   {
-    "pname": "Serilog",
-    "version": "4.1.0",
-    "hash": "sha256-r89nJ5JE5uZlsRrfB8QJQ1byVVfCWQbySKQ/m9PYj0k="
-  },
-  {
-    "pname": "Serilog",
-    "version": "4.2.0",
-    "hash": "sha256-7f3EpCsEbDxXgsuhE430KVI14p7oDUuCtwRpOCqtnbs="
-  },
-  {
-    "pname": "Serilog",
-    "version": "4.3.1",
-    "hash": "sha256-TY+GaQYnyDfOGl0gi67xDyUMOuV/mjz8BU66/UsmStI="
-  },
-  {
-    "pname": "Serilog.Sinks.Async",
-    "version": "2.1.0",
-    "hash": "sha256-LDoLpXkleD2MVPK2KBsLGRf5yqrwckBiAnYDbuIbaUM="
-  },
-  {
-    "pname": "Serilog.Sinks.Console",
-    "version": "6.1.1",
-    "hash": "sha256-CfIg4Us4kSMQAn6rU2rsAeE22g6MpFiZdhoZWySpZeY="
-  },
-  {
-    "pname": "Serilog.Sinks.File",
-    "version": "7.0.0",
-    "hash": "sha256-LxZYUoUPkCjIIVarJilnXnqQiMrFNJtoRilmzTNtUjo="
+    "pname": "SonarAnalyzer.CSharp",
+    "version": "10.31.0.145097",
+    "hash": "sha256-FfpKfrvF2jgtegBbqItB++X3+pqYvuACkcL6MuPFVA8="
   }
 ]
