@@ -91,6 +91,7 @@
   intel-llvm,
   intel-graphics-compiler,
   oneapiSupport ? false,
+  opencl-headers,
 }:
 
 let
@@ -125,6 +126,9 @@ in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
   version = "5.2.1";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchzip {
     name = "source";
@@ -254,17 +258,14 @@ stdenv'.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     makeWrapper
+    pkg-config
     python3Packages.wrapPython
+    python3
   ]
   ++ lib.optional oneapiSupport addDriverRunpath
-  ++ lib.optional (!oneapiSupport) llvmPackages.llvm.dev
   ++ lib.optionals cudaSupport [
     addDriverRunpath
     cudaPackages.cuda_nvcc
-  ]
-  ++ lib.optionals waylandSupport [
-    pkg-config
-    wayland-scanner
   ];
 
   buildInputs = [
@@ -301,7 +302,6 @@ stdenv'.mkDerivation (finalAttrs: {
     openxr-loader
     potrace
     pugixml
-    python3
     python3Packages.materialx
     python3Packages.openshadinglanguage
     rubberband
@@ -311,7 +311,9 @@ stdenv'.mkDerivation (finalAttrs: {
   ++ lib.optionals oneapiSupport [
     intel-compute-runtime
     intel-llvm
+    opencl-headers
   ]
+  ++ lib.optional (!oneapiSupport) llvmPackages.llvm
   ++ lib.optional embreeSupport embree
   ++ lib.optional rocmSupport rocmPackages.clr
   ++ lib.optional openImageDenoiseSupport (openimagedenoise.override { inherit cudaSupport; })
@@ -347,6 +349,7 @@ stdenv'.mkDerivation (finalAttrs: {
     libxkbcommon
     wayland
     wayland-protocols
+    wayland-scanner
   ]
   ++ lib.optional jackaudioSupport libjack2
   ++ lib.optional spaceNavSupport libspnav
