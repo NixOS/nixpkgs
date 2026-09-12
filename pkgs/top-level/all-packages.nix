@@ -2578,6 +2578,8 @@ with pkgs;
 
   ophcrack-cli = ophcrack.override { enableGui = false; };
 
+  open62541_1_4 = callPackage ../by-name/op/open62541/1_4.nix { };
+
   openntpd_nixos = openntpd.override {
     privsepUser = "ntp";
     privsepPath = "/var/empty";
