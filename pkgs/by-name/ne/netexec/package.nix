@@ -15,7 +15,7 @@ let
           owner = "fortra";
           repo = "impacket";
           rev = "caba5facdd3a01b5d0decc6daf5871839f22f792";
-          hash = "sha256-jyn5qSSAipGYhHm2EROwDHa227mnmW+d+0H0/++i1OY=";
+          hash = "sha256-W7wXgUq34xzqbi/vEyUoKguaBmKeKGd6u3Oce39JHFc=";
         };
         # Fix version to be compliant with Python packaging rules
         postPatch = ''
@@ -23,6 +23,11 @@ let
             --replace 'version="{}.{}.{}.{}{}"' 'version="{}.{}.{}"'
         '';
       };
+      certipy-ad = super.certipy-ad.overridePythonAttrs (old: {
+        # NetExec pins impacket to a 0.14.0 dev revision; certipy-ad still
+        # declares impacket~=0.13.0, so relax it to build against 0.14.0.
+        pythonRelaxDeps = (old.pythonRelaxDeps or [ ]) ++ [ "impacket" ];
+      });
     };
   };
 in
