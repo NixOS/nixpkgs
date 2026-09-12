@@ -1887,6 +1887,7 @@ in
   taskchampion-sync-server = runTest ./taskchampion-sync-server.nix;
   taskserver = runTest ./taskserver.nix;
   tayga = runTest ./tayga.nix;
+  tcpcrypt = runTest ./tcpcrypt.nix;
   tdarr = runTest ./tdarr.nix;
   technitium-dns-server = runTest ./technitium-dns-server.nix;
   teeworlds = runTest ./teeworlds.nix;
