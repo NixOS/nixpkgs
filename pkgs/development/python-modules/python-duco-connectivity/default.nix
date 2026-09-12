@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-duco-connectivity";
-  version = "0.12.0";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ronaldvdmeer";
     repo = "python-duco-connectivity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eBjHvZ9jO2na+DcmttWWAPkAltYp+8ZacMkZZc2xQjU=";
+    hash = "sha256-39BqEJfB7BYpD0ZLpgSNcMdRWnZ6TA3lxKzpuWDlNTg=";
   };
 
   build-system = [ setuptools ];
