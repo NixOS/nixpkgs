@@ -7,7 +7,6 @@
   graphviz,
   doxygen,
   ocamlPackages,
-  coq,
   dune,
   why3,
   withWP ? true,
