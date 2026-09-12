@@ -21743,6 +21743,12 @@
     githubId = 14004859;
     name = "Ole Mussmann";
   };
+  olestrohm = {
+    email = "ole@strohm.no";
+    github = "olstrohm";
+    githubId = 6892524;
+    name = "Ole Strohm";
+  };
   olillin = {
     email = "oli@olillin.com";
     github = "olillin";
