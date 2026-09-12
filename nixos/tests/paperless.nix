@@ -23,6 +23,10 @@
                 enable = true;
                 configureNginx = true;
                 domain = "localhost";
+                extraDomains = [
+                  "paperless1.example.com"
+                  "paperless2.example.com"
+                ];
                 passwordFile = builtins.toFile "password" "admin";
 
                 exporter = {
@@ -55,6 +59,13 @@
 
     def test_paperless(node):
       node.wait_for_unit("paperless-consumer.service")
+
+      with subtest("Extra domains are configured correctly"):
+        nginx_conf = node.succeed("cat /etc/nginx/nginx.conf")
+        assert "server_name localhost paperless1.example.com paperless2.example.com;" in nginx_conf, "extraDomains missing from server_name"
+
+        origins = node.succeed("systemctl show paperless-web -p Environment | grep -o 'PAPERLESS_CSRF_TRUSTED_ORIGINS=[^ ]*'").strip()
+        assert origins == "PAPERLESS_CSRF_TRUSTED_ORIGINS=https://paperless1.example.com,https://paperless2.example.com"
 
       with subtest("Add a document via the file system"):
         node.succeed(
