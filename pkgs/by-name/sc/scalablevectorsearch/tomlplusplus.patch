@@ -1,0 +1,37 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1179d37..59cf878 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -31,7 +31,8 @@ target_include_directories(
+ target_compile_features(tomlplusplus_tomlplusplus INTERFACE cxx_std_17)
+
+ # ---- Install rules and examples ----
+-if(PROJECT_IS_TOP_LEVEL)
++option(TOMLPLUSPLUS_INSTALL "Enable cmake installation" OFF)
++if(TOMLPLUSPLUS_INSTALL OR PROJECT_IS_TOP_LEVEL)
+   include(cmake/install-rules.cmake)
+   option(BUILD_EXAMPLES "Build examples tree." OFF)
+   if(BUILD_EXAMPLES)
+diff --git a/include/toml++/impl/make_node.h b/include/toml++/impl/make_node.h
+index 4b754b7..5ebc665 100644
+--- a/include/toml++/impl/make_node.hpp
++++ b/include/toml++/impl/make_node.hpp
+@@ -134,6 +134,18 @@ TOML_IMPL_NAMESPACE_START
+ 		return node_ptr{ make_node_impl(static_cast<T&&>(val), flags) };
+ 	}
+
++	TOML_NODISCARD
++	inline node_ptr make_node(node_ptr&& val, value_flags flags = preserve_source_value_flags)
++	{
++        return std::move(val);
++	}
++
++	TOML_NODISCARD
++	inline node_ptr make_node(const node_ptr& val, value_flags flags = preserve_source_value_flags)
++	{
++        return make_node(*val);
++	}
++
+ 	template <typename... T>
+ 	struct emplaced_type_of_
+ 	{
