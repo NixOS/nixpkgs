@@ -1,4 +1,28 @@
 {
+  "module-services-jellystat": [
+    "index.html#module-services-jellystat"
+  ],
+  "module-services-jellystat-configuration": [
+    "index.html#module-services-jellystat-configuration"
+  ],
+  "module-services-jellystat-database": [
+    "index.html#module-services-jellystat-database"
+  ],
+  "module-services-jellystat-environment": [
+    "index.html#module-services-jellystat-environment"
+  ],
+  "module-services-jellystat-geolite": [
+    "index.html#module-services-jellystat-geolite"
+  ],
+  "module-services-jellystat-paths": [
+    "index.html#module-services-jellystat-paths"
+  ],
+  "module-services-jellystat-quickstart": [
+    "index.html#module-services-jellystat-quickstart"
+  ],
+  "module-services-jellystat-troubleshooting": [
+    "index.html#module-services-jellystat-troubleshooting"
+  ],
   "module-services-portmaster": [
     "index.html#module-services-portmaster"
   ],
