@@ -32,11 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Steam Locomotive runs across your terminal when you type 'sl'";
     homepage = "http://www.tkl.iis.u-tokyo.ac.jp/~toyoda/index_e.html";
-    license = rec {
-      shortName = "Toyoda Masashi's free software license";
-      fullName = shortName;
-      url = "https://github.com/eyJhb/sl/blob/master/LICENSE";
-    };
+    license = lib.licenses.sl;
     maintainers = with lib.maintainers; [ eyjhb ];
     platforms = lib.platforms.unix;
     mainProgram = "sl";
