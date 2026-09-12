@@ -18,7 +18,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pinentry-egui";
-  version = "0-unstable-2026-07-10";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "dsociative";
