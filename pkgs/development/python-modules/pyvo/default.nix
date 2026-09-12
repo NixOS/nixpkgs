@@ -1,25 +1,40 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  astropy,
-  pillow,
-  pytestCheckHook,
-  pytest-astropy,
-  requests,
-  requests-mock,
+  fetchFromGitHub,
+
+  # build-system
   setuptools,
   setuptools-scm,
+
+  # dependencies
+  astropy,
+  requests,
+
+  # optional dependencies
+  pillow,
+  defusedxml,
+
+  # testing
+  pytestCheckHook,
+  pytest-astropy,
+  pytest-timeout,
+  pytest-doctestplus,
+  requests-mock,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pyvo";
-  version = "1.8.1";
+  version = "1.9.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-08xgqj00FtIsieRloE36n1IQhf3VIozOLP/S/uOp5wk=";
+  src = fetchFromGitHub {
+    owner = "astropy";
+    repo = finalAttrs.pname;
+    # A few commits above 1.9.1 to include https://github.com/astropy/pyvo/pull/757,
+    # which fixes tests
+    rev = "6c5311c06cd04cf0c56f648ccdae50338cc351a2";
+    hash = "sha256-kqYA/qgqTZe4GwOwtzIKy/X3mrVukn7mq3CiqJIWI+A=";
   };
 
   build-system = [
@@ -32,12 +47,27 @@ buildPythonPackage (finalAttrs: {
     requests
   ];
 
+  optional-dependencies = {
+    all = [
+      pillow
+      defusedxml
+    ];
+    test = [
+      pytest-astropy
+      pytest-timeout
+      pytest-doctestplus
+      requests-mock
+    ];
+  };
+
   nativeCheckInputs = [
-    pillow
     pytestCheckHook
-    pytest-astropy
-    requests-mock
-  ];
+  ]
+  ++ (with finalAttrs.passthru.optional-dependencies; all ++ test);
+
+  preCheck = ''
+    export HOME="$TMPDIR"
+  '';
 
   disabledTestPaths = [
     # touches network
@@ -46,11 +76,11 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "pyvo" ];
 
-  meta = {
+  meta = with lib; {
     description = "Astropy affiliated package for accessing Virtual Observatory data and services";
     homepage = "https://github.com/astropy/pyvo";
     changelog = "https://github.com/astropy/pyvo/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ smaret ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ smaret ];
   };
 })
