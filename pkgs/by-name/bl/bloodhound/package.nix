@@ -138,5 +138,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ akechishiro ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "BloodHound";
+    knownVulnerabilities = [
+      "upstream is deprecated, using Electron 11 which was EOL in 2021"
+    ];
   };
 })
