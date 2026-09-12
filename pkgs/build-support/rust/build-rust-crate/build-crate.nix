@@ -73,7 +73,7 @@ let
     lib.optional (stdenv.hostPlatform.linker == "lld" && rustc ? llvmPackages.lld) # Needed when building for targets that use lld. e.g. 'wasm32-unknown-unknown'
       "-C linker=${rustc.llvmPackages.lld}/bin/lld"
   ++ lib.optional (
-    stdenv.hasCC && stdenv.hostPlatform.linker != "lld"
+    stdenv.hasCC && stdenv.hostPlatform.linker != "lld" && stdenv.hostPlatform.linker != "wasm-component-ld"
   ) "-C linker=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
   rustcMeta = "-C metadata=${metadata} -C extra-filename=-${metadata}";
 
