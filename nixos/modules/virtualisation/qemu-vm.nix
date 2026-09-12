@@ -132,7 +132,7 @@ let
         echo "Disk image does not exist, creating the virtualisation disk image..."
 
         ${
-          if (cfg.useBootLoader && cfg.useDefaultFilesystems) then
+          if (cfg.useBootLoader && cfg.useDefaultFilesystems && !espOnlyImage) then
             ''
               # Create a writable qcow2 image using the systemImage as a backing
               # image.
@@ -190,6 +190,21 @@ let
 
     # Create a directory for exchanging data with the VM.
     mkdir -p "$TMPDIR/xchg"
+
+    ${lib.optionalString espOnlyImage ''
+      # Writable overlay so the guest's boot loader writes to the ESP survive reboots.
+      NIX_ESP_IMAGE=$(readlink -f "''${NIX_ESP_IMAGE:-${config.system.name}-esp.qcow2}")
+      if ! test -e "$NIX_ESP_IMAGE"; then
+        ${qemu}/bin/qemu-img create \
+          -f qcow2 \
+          -b ${espImage}/esp.qcow2 \
+          -F qcow2 \
+          "$NIX_ESP_IMAGE"
+      fi
+
+      # The boot loader controls the kernel command line, so pass the regInfo path via xchg instead.
+      echo ${regInfo}/registration > "$TMPDIR/xchg/reg-info"
+    ''}
 
     ${lib.optionalString cfg.useHostCerts ''
       mkdir -p "$TMPDIR/certs"
@@ -393,6 +408,81 @@ let
     copyChannel = false;
     OVMF = cfg.efi.OVMF;
   };
+
+  espOnlyImage =
+    cfg.useBootLoader && cfg.useDefaultFilesystems && config.boot.loader.systemd-boot.enable;
+
+  espTree =
+    pkgs.runCommand "${config.system.name}-esp-tree"
+      {
+        nativeBuildInputs = [ pkgs.buildPackages.bubblewrap ];
+      }
+      ''
+        mkdir -p root/{etc,tmp,nix/var/nix/profiles} $out
+        ln -s ${config.environment.etc."os-release".source} root/etc/os-release
+        ${lib.optionalString (config.environment.etc ? machine-id) ''
+          ln -s ${config.environment.etc."machine-id".source} root/etc/machine-id
+        ''}
+        ln -s ${config.system.build.toplevel} root/nix/var/nix/profiles/system-1-link
+        ln -s system-1-link root/nix/var/nix/profiles/system
+
+        bwrap \
+          --bind "$PWD/root" / \
+          --bind "$out" "${config.boot.loader.efi.efiSysMountPoint}" \
+          --ro-bind ${builtins.storeDir} ${builtins.storeDir} \
+          --proc /proc \
+          --dev /dev \
+          --setenv NIXOS_INSTALL_BOOTLOADER 1 \
+          --setenv SYSTEMD_RELAX_ESP_CHECKS 1 \
+          --setenv NIX_REMOTE "dummy://" \
+          --setenv TMPDIR /tmp \
+          -- ${config.system.build.installBootLoader} ${config.system.build.toplevel}
+
+        rm -f $out/loader/random-seed
+      '';
+
+  espImage =
+    pkgs.runCommand "${config.system.name}-esp-image"
+      {
+        __structuredAttrs = true;
+        # The image is self-contained, so drop references to its copied contents.
+        unsafeDiscardReferences.out = true;
+
+        nativeBuildInputs = [
+          pkgs.buildPackages.systemd
+          pkgs.util-linux
+          pkgs.fakeroot
+          pkgs.dosfstools
+          pkgs.mtools
+          pkgs.qemu-utils
+        ];
+      }
+      ''
+        mkdir -p repart.d $out
+        cat > repart.d/00-esp.conf <<EOF
+        [Partition]
+        Type=esp
+        Format=vfat
+        Label=esp
+        CopyFiles=${espTree}:/
+        SizeMinBytes=256M
+        SizeMaxBytes=256M
+        EOF
+
+        # qemu-vm mounts the boot partition by filesystem label.
+        export SYSTEMD_REPART_MKFS_OPTIONS_VFAT="-n ${espFilesystemLabel}"
+
+        # --seed is fixed for reproducible partition UUIDs.
+        unshare --map-root-user fakeroot systemd-repart \
+          --dry-run=no \
+          --empty=create \
+          --size=auto \
+          --seed=0f8b5a9e-3b1e-4c9a-8f2d-1a2b3c4d5e6f \
+          --definitions=repart.d \
+          esp.raw
+
+        qemu-img convert -f raw -O qcow2 esp.raw $out/esp.qcow2
+      '';
 in
 {
   imports = [
@@ -879,8 +969,8 @@ in
 
     virtualisation.mountHostNixStore = mkOption {
       type = types.bool;
-      default = !cfg.useNixStoreImage && !cfg.useBootLoader;
-      defaultText = literalExpression "!cfg.useNixStoreImage && !cfg.useBootLoader";
+      default = !cfg.useNixStoreImage && (!cfg.useBootLoader || espOnlyImage);
+      defaultText = literalExpression "!cfg.useNixStoreImage && (!cfg.useBootLoader || espOnlyImage)";
       description = ''
         Mount the host Nix store via a virtual filesystem.
       '';
@@ -989,8 +1079,8 @@ in
 
       keepVariables = mkOption {
         type = types.bool;
-        default = cfg.useBootLoader;
-        defaultText = literalExpression "cfg.useBootLoader";
+        default = cfg.useBootLoader && !espOnlyImage;
+        defaultText = literalExpression "cfg.useBootLoader && !espOnlyImage";
         description = "Whether to keep EFI variable values from the generated system image";
       };
     };
@@ -1146,6 +1236,12 @@ in
             Please enable it in your configuration.
           '';
         }
+        {
+          assertion = espOnlyImage -> cfg.useEFIBoot;
+          message = ''
+            The boot-partition-only image requires `virtualisation.useEFIBoot`.
+          '';
+        }
       ];
 
     warnings = optional (cfg.directBoot.enable && cfg.useBootLoader) ''
@@ -1203,9 +1299,59 @@ in
       script = ''
         if [[ "$(cat /proc/cmdline)" =~ regInfo=([^ ]*) ]]; then
           ${lib.getExe' config.nix.package.out "nix-store"} --load-db < "''${BASH_REMATCH[1]}"
+        ${lib.optionalString espOnlyImage ''
+          elif [[ -e /tmp/xchg/reg-info ]]; then
+            ${lib.getExe' config.nix.package.out "nix-store"} --load-db < "$(cat /tmp/xchg/reg-info)"
+        ''}
         fi
       '';
     };
+
+    # Seed generation 1 so generation numbering matches a full system image.
+    systemd.services.seed-system-profile = lib.mkIf espOnlyImage {
+      unitConfig = {
+        DefaultDependencies = false;
+        ConditionPathExists = "!/nix/var/nix/profiles/system";
+      };
+      wantedBy = [ "sysinit.target" ];
+      before = [
+        "sysinit.target"
+        "shutdown.target"
+      ];
+      conflicts = [ "shutdown.target" ];
+      restartIfChanged = false;
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script = ''
+        mkdir -p /nix/var/nix/profiles
+        ln -sfn "$(readlink -f /run/current-system)" /nix/var/nix/profiles/system-1-link
+        ln -sfn system-1-link /nix/var/nix/profiles/system
+      '';
+    };
+
+    # The offline image build cannot write EFI NVRAM, install on first boot.
+    systemd.services.install-boot-loader =
+      lib.mkIf (espOnlyImage && config.boot.loader.efi.canTouchEfiVariables)
+        {
+          wantedBy = [ "multi-user.target" ];
+          restartIfChanged = false;
+          unitConfig = {
+            ConditionPathExists = "!/var/lib/install-boot-loader.done";
+            RequiresMountsFor = config.boot.loader.efi.efiSysMountPoint;
+          };
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+          };
+          script = ''
+            ${lib.getExe' config.systemd.package "bootctl"} install \
+              --esp-path=${config.boot.loader.efi.efiSysMountPoint}
+
+            touch /var/lib/install-boot-loader.done
+          '';
+        };
 
     boot.initrd.availableKernelModules =
       optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx" ++ optional (cfg.tpm.enable) "tpm_tis";
@@ -1357,6 +1503,17 @@ in
           imgCfg.driveConfig
         ]
       ) cfg.emptyDiskImages)
+      # ESP drive last so the empty root stays /dev/vda and emptyDiskImages keep
+      # their names.
+      (mkIf espOnlyImage [
+        {
+          name = "esp";
+          file = ''"$NIX_ESP_IMAGE"'';
+          driveExtraOpts.cache = "writeback";
+          driveExtraOpts.werror = "report";
+          deviceExtraOpts.bootindex = "0";
+        }
+      ])
     ];
 
     # By default, use mkVMOverride to enable building test VMs (e.g. via
