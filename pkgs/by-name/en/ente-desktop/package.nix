@@ -18,6 +18,8 @@
   vips,
 
   wasm-bindgen-cli_0_2_125,
+
+  nix-update-script,
 }:
 let
   version = "1.7.27";
@@ -171,6 +173,18 @@ buildNpmPackage (finalAttrs: {
       ];
     })
   ];
+
+  passthru = {
+    inherit webApp;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "photos-desktop-v(.*)"
+        "--subpackage"
+        "webApp"
+      ];
+    };
+  };
 
   meta = {
     description = "Desktop (Electron) client for Ente Photos";
