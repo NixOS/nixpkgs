@@ -57,6 +57,12 @@ buildNodejs {
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
+
+      # TODO: remove when support for OpenSSL 3.6.4 has landed upstream
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/40eac4a32f3676b286fd44435be4514962a40b79.patch?full_index=1";
+        hash = "sha256-zLMd79mQclmZpS1oiTOZ0JOPDSjKGtLl0e4itUNm4og=";
+      })
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
       # Fix builds with shared llhttp
