@@ -1001,6 +1001,11 @@
     githubId = 44871469;
     name = "Etienne Wodey";
   };
+  aisk = {
+    github = "aisk";
+    githubId = 699636;
+    name = "An Long";
+  };
   aither64 = {
     email = "aither@havefun.cz";
     github = "aither64";
