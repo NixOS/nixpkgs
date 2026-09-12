@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  config,
   newScope,
   fetchFromGitHub,
   fetchFromGitLab,
@@ -75,9 +76,16 @@ let
   */
   builtGrammars = lib.mapAttrs (_: lib.makeOverridable buildGrammar) grammars;
 
+  hasTreeSitterPrefix = lib.hasPrefix "tree-sitter-";
+  grammarAliases = import ./grammars/aliases.nix { inherit lib; };
+
   grammarDerivationsFrom = lib.filterAttrs (
-    name: value: lib.hasPrefix "tree-sitter-" name && lib.isDerivation value
+    name: value: hasTreeSitterPrefix name && lib.isDerivation value
   );
+
+  removeTreesitterPrefix = lib.strings.removePrefix "tree-sitter-";
+  removeGrammarSuffix = lib.strings.removeSuffix "-grammar";
+  replaceHyphens = lib.strings.replaceStrings [ "-" ] [ "_" ];
 
   mkGrammarLinkFarm =
     grammars:
@@ -88,11 +96,7 @@ let
           name = lib.strings.getName drv;
         in
         {
-          name =
-            (lib.strings.replaceStrings [ "-" ] [ "_" ] (
-              lib.strings.removePrefix "tree-sitter-" (lib.strings.removeSuffix "-grammar" name)
-            ))
-            + ".so";
+          name = (replaceHyphens (removeTreesitterPrefix (removeGrammarSuffix name))) + ".so";
           path = "${drv}/parser";
         }
       ) grammars
@@ -116,6 +120,7 @@ let
   grammarsScope = lib.makeScope newScope (
     self:
     builtGrammars
+    // lib.optionalAttrs config.allowAliases (grammarAliases self builtGrammars)
     // {
       derivations = grammarDerivationsFrom self;
       allGrammars = lib.filter (p: !(p.meta.broken or false)) (
@@ -130,17 +135,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tree-sitter";
-  version = "0.26.8";
+  version = "0.26.11";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fcFEfoALrbpBD6rWogxJ7FNVlvDQgswoX9ylRgko+8Q=";
+    hash = "sha256-YXnmVM90sEH8kqgqCygpeCAyvggMIsv+oXi0SJOvMRM=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-9FeWnWWPUWmMF15Psmul8GxGv2JceHWc2WZPmOr81gw=";
+  cargoHash = "sha256-kHDjPRhBUYlxLWYSv6cn6U1QDIWwCgHeIz2A5yCi1yo=";
 
   cargoBuildFeatures = lib.optionals wasmSupport [ "wasm" ];
 

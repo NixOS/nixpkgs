@@ -526,7 +526,6 @@ let
               "sha256-ty5+51BwHWE1xR4/0WcWTp608NzSAS/iiyN+9zx7/wI="
             else
               "sha256-9btXrNHqd720oXTPDhSmFidv5iaZRLjCVX8opmrMjXk=";
-          x86_64-darwin = "sha256-gqb03kB0z2pZQ6m1fyRp1/Nbt8AVVHWpOJSeZNCLc4w=";
           aarch64-darwin = "sha256-WdgAaFZU+ePwWkVBhLzjlNT7ELfGHOTaMdafcAMD5yo=";
         }
         .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
@@ -629,13 +628,19 @@ buildPythonPackage {
       -e "s/'protobuf[^']*',/'protobuf',/"
   '';
 
-  # Upstream has a pip hack that results in bin/tensorboard being in both tensorflow
-  # and the propagated input tensorboard, which causes environment collisions.
-  # Another possibility would be to have tensorboard only in the buildInputs
-  # https://github.com/tensorflow/tensorflow/blob/v1.7.1/tensorflow/tools/pip_package/setup.py#L79
-  postInstall = ''
-    rm $out/bin/tensorboard
-  '';
+  postInstall =
+    # Upstream has a pip hack that results in bin/tensorboard being in both tensorflow
+    # and the propagated input tensorboard, which causes environment collisions.
+    # Another possibility would be to have tensorboard only in the buildInputs
+    # https://github.com/tensorflow/tensorflow/blob/v1.7.1/tensorflow/tools/pip_package/setup.py#L79
+    ''
+      rm $out/bin/tensorboard
+    ''
+    # Don't set RTLD_GLOBAL by removing file only meant to ship in static builds.
+    # https://github.com/tensorflow/tensorflow/commit/5720ab7845de0b2a2e2f5fdf547d2515d39a20b9
+    + ''
+      rm $out/${python.sitePackages}/tensorflow/python/pywrap_dlopen_global_flags.py
+    '';
 
   setupPyGlobalFlags = [
     "--project_name"

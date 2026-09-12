@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "adbc-driver-manager";
-  version = "1.11.0";
+  version = "1.12.0";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "adbc_driver_manager";
     inherit (finalAttrs) version;
-    hash = "sha256-xkqqvrWBAQmrPSlhAI8bAU6fLYez30QWwqCApAI3r1A=";
+    hash = "sha256-RZkfDC3jadMwxqIRyi7bzOY4nF3IHN5wRhvetvj3smg=";
   };
 
   build-system = [

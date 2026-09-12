@@ -646,11 +646,28 @@ rec {
     :::
   */
   findFirst =
+    let
+      init = {
+        found = false;
+      };
+    in
     pred: default: list:
     let
-      index = findFirstIndex pred null list;
+      result = foldl' (
+        acc: el:
+        if !acc.found && pred el then
+          # We haven't found a match yet, and the current element passes the
+          # predicate!
+          {
+            found = true;
+            value = el;
+          }
+        else
+          # There's already a match, or the current element fails the predicate
+          acc
+      ) init list;
     in
-    if index == null then default else elemAt list index;
+    if result.found then result.value else default;
 
   /**
     Returns true if function `pred` returns true for at least one

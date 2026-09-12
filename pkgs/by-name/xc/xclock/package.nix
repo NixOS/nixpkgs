@@ -19,7 +19,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xclock";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "app";
     repo = "xclock";
     tag = "xclock-${finalAttrs.version}";
-    hash = "sha256-sytAl9vXBdxjTM0NnAgRNK34yqn/6zJeCQ/9bH3xaOc=";
+    hash = "sha256-e8P1tMLwFMThc0WIJTm5E0jAjJnCF8cdrHtp7tKN8IQ=";
   };
 
   strictDeps = true;

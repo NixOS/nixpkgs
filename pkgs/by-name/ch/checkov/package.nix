@@ -35,18 +35,19 @@ let
 in
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "checkov";
-  version = "3.3.6";
+  version = "3.3.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "checkov";
     tag = finalAttrs.version;
-    hash = "sha256-4wOFbEv1MVVuMpYQLs+oHQxCLw/tk++yTiR+yyLiCa8=";
+    hash = "sha256-XbfuMOXpG1sQgqiq42kJB3zmcKrBGhgLaopvSV0fFVY=";
   };
 
   pythonRelaxDeps = [
     "aiodns" # breaking change is that it requires pycares >= 5.0.0, which is fine.
+    "aiohttp"
     "asteval"
     "bc-detect-secrets"
     "bc-python-hcl2"

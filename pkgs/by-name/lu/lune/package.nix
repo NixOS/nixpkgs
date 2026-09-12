@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
   version = "0.10.4";
 
   src = fetchFromGitHub {
-    owner = "filiptibell";
+    owner = "lune-org";
     repo = "lune";
     tag = "v${version}";
     hash = "sha256-AbviyCy2nn6WHC575JKl/t3bM/4Myb+Wx5/buTvB4MY=";

@@ -3,12 +3,13 @@
   fetchPypi,
   buildPythonPackage,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "calmjs-types";
   version = "1.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "calmjs.types";
@@ -17,11 +18,14 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
+  build-system = [ setuptools ];
+
   checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "calmjs.types" ];
 
   meta = {
+    broken = lib.versionAtLeast setuptools.version "82";
     description = "Types for the calmjs framework";
     homepage = "https://github.com/calmjs/calmjs.types";
     license = lib.licenses.mit;

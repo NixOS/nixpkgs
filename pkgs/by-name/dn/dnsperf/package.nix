@@ -2,7 +2,7 @@
   lib,
   stdenv,
   autoreconfHook,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   fetchpatch,
   ldns,
   libck,
@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnsperf";
-  version = "2.14.0";
+  version = "2.16.0";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "DNS-OARC";
     repo = "dnsperf";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-eDDVNFMjj+0wEBe1qO6r4Bai554Sp+EmP86reJ/VXGk=";
+    hash = "sha256-4DSIdEj7fqDLaT7ZrLg/bgK/QeCE4puMdWr18h9Tr0A=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
     nghttp2
     openssl
   ];
+
+  strictDeps = true;
 
   patches = lib.optionals stdenv.hostPlatform.isMusl [
     # dnsperf doesn't have support for musl (https://github.com/DNS-OARC/dnsperf/issues/265)

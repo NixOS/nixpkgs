@@ -21,7 +21,7 @@
   gnutls,
   pcre2,
   libdbusmenu-gtk3,
-  libappindicator-gtk3,
+  libappindicator,
   libvncserver,
   libpthread-stubs,
   libxdmcp,
@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     fuse3
-    libappindicator-gtk3
+    libappindicator
     libdbusmenu-gtk3
     wayland
   ]

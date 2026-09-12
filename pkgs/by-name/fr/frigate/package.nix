@@ -6,6 +6,7 @@
   callPackage,
   python313Packages,
   fetchFromGitHub,
+  rustPlatform,
   fetchurl,
   ffmpeg-headless,
   sqlite-vec,
@@ -29,8 +30,8 @@ let
     inherit version src;
   };
 
-  python = python313Packages.python.override {
-    packageOverrides = self: super: {
+  python3Packages = python313Packages.overrideScope (
+    self: super: {
       joserfc = super.joserfc.overridePythonAttrs (oldAttrs: {
         version = "1.1.0";
         src = fetchFromGitHub {
@@ -41,11 +42,50 @@ let
         };
       });
 
+      # transformers 4.* is not compatible with the latest tokenizers
+      tokenizers = super.tokenizers.overridePythonAttrs (
+        oldAttrs:
+        let
+          version = "0.22.1";
+          src = fetchFromGitHub {
+            owner = "huggingface";
+            repo = "tokenizers";
+            tag = "v${version}";
+            hash = "sha256-1ijP16Fw/dRgNXXX9qEymXNaamZmlNFqbfZee82Qz6c=";
+          };
+          sourceRoot = "${src.name}/bindings/python";
+        in
+        {
+          inherit version src sourceRoot;
+
+          # Account for divergences with the main `tokenizers` derivation:
+          postPatch = "";
+          disabledTests = [
+            # PermissionError: [Errno 13] Permission denied: 'tests/data/small.txt'
+            "TestUnigram"
+
+            # huggingface_hub.errors.LocalEntryNotFoundError: An error happened while trying to
+            # locate the file on the Hub and we cannot find the requested files in the local cache.
+            # Please check your connection and try again or make sure your Internet connection is on.
+            "TestAsyncTokenizer"
+            "TestTokenizer"
+            "TestTrainFromIterators"
+          ];
+
+          cargoDeps = rustPlatform.fetchCargoVendor {
+            inherit (oldAttrs) pname;
+            inherit version src sourceRoot;
+            hash = "sha256-CKbnFtwsEtJ11Wnn8JFpHd7lnUzQMTwJ1DmmB44qciM=";
+          };
+        }
+      );
+
       huggingface-hub = super.huggingface-hub_0;
       transformers = super.transformers_4;
-    };
-  };
-  python3Packages = python.pkgs;
+    }
+  );
+
+  inherit (python3Packages) python;
 
   # Tensorflow audio model
   # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L125
@@ -101,6 +141,9 @@ python3Packages.buildPythonApplication rec {
     # Fix excessive trailing whitespaces in process commandlines
     # https://github.com/blakeblackshear/frigate/pull/22089
     ./proc-cmdline-strip.patch
+
+    # Fix more granular dtype resolution in Pandas 3.0
+    ./pandas3-compat.patch
   ];
 
   postPatch = ''

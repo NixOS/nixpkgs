@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mlkit";
-  version = "4.7.21";
+  version = "4.7.22";
 
   src = fetchFromGitHub {
     owner = "melsman";
     repo = "mlkit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c1GdM3K6dgY0EgHu01adBXwAxuMehRfo73Lo71couJ4=";
+    hash = "sha256-YbWvKakqLnsPeM2kTDlqcRZRqcpUHfd0PI34iwlXQGI=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/melsman/mlkit/blob/v${finalAttrs.version}/NEWS.md";
     license = lib.licenses.gpl2Plus;
     platforms = [
-      "x86_64-darwin"
       "x86_64-linux"
     ];
     maintainers = with lib.maintainers; [ athas ];

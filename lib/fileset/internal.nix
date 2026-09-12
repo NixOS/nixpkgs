@@ -349,24 +349,33 @@ rec {
     ```
   */
   _normaliseTreeFilter =
-    path: tree:
-    if tree == "directory" || isAttrs tree then
-      let
-        entries = _directoryEntries path tree;
-        normalisedSubtrees = mapAttrs (name: _normaliseTreeFilter (path + "/${name}")) entries;
-        subtreeValues = attrValues normalisedSubtrees;
-      in
-      # This triggers either when all files in a directory are filtered out
-      # Or when the directory doesn't contain any files at all
-      if all isNull subtreeValues then
-        null
-      # Triggers when we have the same as a `readDir path`, so we can turn it back into an equivalent "directory".
-      else if all isString subtreeValues then
-        "directory"
-      else
-        normalisedSubtrees
-    else
-      tree;
+    let
+      # Recurses into a tree that's already known to be a directory (either a "directory" or an attrset).
+      #
+      # Only directories need to be recursed into:
+      # Files are either null (excluded) or a file type string (included), which are already normalised.
+      #
+      # Checking this in the caller instead of here also avoids the thunk allocation for the path concatenation below.
+      recurse =
+        path: tree:
+        let
+          normalisedSubtrees = mapAttrs (
+            name: subtree:
+            if subtree == "directory" || isAttrs subtree then recurse (path + "/${name}") subtree else subtree
+          ) (_directoryEntries path tree);
+          subtreeValues = attrValues normalisedSubtrees;
+        in
+        # This triggers either when all files in a directory are filtered out
+        # Or when the directory doesn't contain any files at all
+        if all isNull subtreeValues then
+          null
+        # Triggers when we have the same as a `readDir path`, so we can turn it back into an equivalent "directory".
+        else if all isString subtreeValues then
+          "directory"
+        else
+          normalisedSubtrees;
+    in
+    path: tree: if tree == "directory" || isAttrs tree then recurse path tree else tree;
 
   /**
     A minimal normalisation of a filesetTree, intended for pretty-printing:
@@ -526,6 +535,9 @@ rec {
         else
           "/" + concatStringsSep "/" fileset._internalBaseComponents + "/";
 
+      getBaseStringPrefix = substring 0 baseLength;
+      removeBaseStringPrefix = substring baseLength (-1);
+
       baseLength = stringLength baseString;
 
       # Check whether a list of path components under the base path exists in the tree.
@@ -551,7 +563,12 @@ rec {
               # or a string ("directory" or "regular", etc.) in which case it's included
               localTree != null;
         in
-        recurse 0 tree;
+        # Start by recursing into the first element. This is guaranteed to be
+        # safe. components will never be empty (builtins.split can't make an
+        # empty list). Tree can be something other than an attrset, but if so,
+        # the isAttrs check will fail when being passed `or tree`, and the index
+        # being ahead doesn't matter.
+        recurse 2 (tree.${head components} or tree);
 
       # Filter suited when there's no files
       empty = _: _: false;
@@ -569,25 +586,34 @@ rec {
           pathSlash = path + "/";
         in
         (
+          # Same as `hasPrefix baseString pathSlash`, but more efficient.
+          # The path is either the base itself or underneath it,
+          # but only on the few paths above it, so its checked first.
+          # With base /foo/bar this matches /foo/bar and /foo/bar/baz
+          # hasPrefix "/foo/bar/" "/foo/bar/baz/"
+          if getBaseStringPrefix pathSlash == baseString then
+            if pathSlash == baseString then
+              # The path is the base directory itself, which is always included
+              true
+            else
+              # Same as `removePrefix baseString path`, but more efficient.
+              # From the above code we know that hasPrefix baseString pathSlash holds, so this is safe.
+              # We don't use pathSlash here because we only needed the trailing slash for the prefix matching.
+              # With base /foo and path /foo/bar/baz this gives
+              # inTree (split "/" (removePrefix "/foo/" "/foo/bar/baz"))
+              # == inTree (split "/" "bar/baz")
+              # == inTree [ "bar" "baz" ]
+              inTree (split "/" (removeBaseStringPrefix path))
           # Same as `hasPrefix pathSlash baseString`, but more efficient.
+          # The path is a proper ancestor of the base, which needs to be included for the base to be reachable:
           # With base /foo/bar we need to include /foo:
           # hasPrefix "/foo/" "/foo/bar/"
-          if substring 0 (stringLength pathSlash) baseString == pathSlash then
+          else if substring 0 (stringLength pathSlash) baseString == pathSlash then
             true
-          # Same as `! hasPrefix baseString pathSlash`, but more efficient.
-          # With base /foo/bar we need to exclude /baz
-          # ! hasPrefix "/baz/" "/foo/bar/"
-          else if substring 0 baseLength pathSlash != baseString then
-            false
           else
-            # Same as `removePrefix baseString path`, but more efficient.
-            # From the above code we know that hasPrefix baseString pathSlash holds, so this is safe.
-            # We don't use pathSlash here because we only needed the trailing slash for the prefix matching.
-            # With base /foo and path /foo/bar/baz this gives
-            # inTree (split "/" (removePrefix "/foo/" "/foo/bar/baz"))
-            # == inTree (split "/" "bar/baz")
-            # == inTree [ "bar" "baz" ]
-            inTree (split "/" (substring baseLength (-1) path))
+            # The path is unrelated to the base, so nothing from it is included
+            # With base /foo/bar this matches e.g. /baz
+            false
         )
         # This is a way have an additional check in case the above is true without any significant performance cost
         && (
@@ -802,21 +828,34 @@ rec {
   */
   _unionTrees =
     trees:
-    let
-      stringIndex = findFirstIndex isString null trees;
-      withoutNull = filter (tree: tree != null) trees;
-    in
-    if stringIndex != null then
+    if length trees == 1 then
+      # The union of a single tree simply returns the first element
+      head trees
+    else
+      let
+        # Like lib.findFirstIndex but without indexing.
+        # This is a hot path so the indexing arithmetic adds up.
+        firstStr = foldl' (
+          found: tree:
+          if found != null then
+            found
+          else if isString tree then
+            tree
+          else
+            found # null
+        ) null trees;
+        nonNulls = filter (tree: tree != null) trees;
+      in
       # If there's a string, it's always a fully included tree (dir or file),
       # no need to look at other elements
-      elemAt trees stringIndex
-    else if withoutNull == [ ] then
-      # If all trees are null, then the resulting tree is also null
-      null
-    else
-      # The non-null elements have to be attribute sets representing partial trees
-      # We need to recurse into those
-      zipAttrsWith (name: _unionTrees) withoutNull;
+      if firstStr != null then
+        firstStr
+      else if nonNulls == [ ] then
+        null
+      else
+        # The non-null elements have to be attribute sets representing partial trees
+        # We need to recurse into those
+        zipAttrsWith (name: _unionTrees) nonNulls;
 
   /**
     Computes the intersection of two filesets.

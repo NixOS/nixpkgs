@@ -25,6 +25,7 @@ EOF
 cabal2nix \
   --maintainer maralorn \
   "https://code.maralorn.de/maralorn/nix-output-monitor/archive/${new_version}.tar.gz" \
+  --subpath nix-output-monitor \
   >> "$derivation_file"
 
 nixfmt "$derivation_file"

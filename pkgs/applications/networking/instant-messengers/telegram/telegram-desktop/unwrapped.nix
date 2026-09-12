@@ -6,7 +6,6 @@
   pkg-config,
   cmake,
   ninja,
-  clang,
   python3,
   qtshadertools,
   tdlib,
@@ -17,7 +16,7 @@
   kcoreaddons,
   lz4,
   xxhash,
-  ffmpeg_6,
+  ffmpeg,
   protobuf,
   openal-soft,
   minizip-ng-compat,
@@ -29,6 +28,8 @@
   microsoft-gsl,
   boost,
   ada,
+  cmark-gfm,
+  libfido2,
   libavif,
   libheif,
   libjxl,
@@ -46,14 +47,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop-unwrapped";
-  version = "6.9.3";
+  version = "7.1.5";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-QCGtESg+38lHWCFcsevHdc0kQ7LKJQmJjUJWszphah8=";
+    hash = "sha256-FbenDWiv4fxb6GHHsP0P7VLoMk6h+BYcfpomvS22b/c=";
   };
 
   nativeBuildInputs = [
@@ -64,8 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     qtshadertools
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # to build bundled libdispatch
-    clang
     gobject-introspection
   ];
 
@@ -74,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtsvg
     lz4
     xxhash
-    ffmpeg_6
+    ffmpeg
     openal-soft
     minizip-ng-compat
     range-v3
@@ -84,6 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
     microsoft-gsl
     boost
     ada
+    cmark-gfm
+    libfido2
     (tdlib.override { tde2eOnly = true; })
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

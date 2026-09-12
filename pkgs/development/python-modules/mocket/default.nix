@@ -37,12 +37,12 @@
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.14.2";
+  version = "3.14.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-n8SQbK45B+mijEbnc/Otq+8NX0CIxuOQ72FEAhnOCac=";
+    hash = "sha256-lDDPfk8a1/HPxIzgCKv4eq+asnJkFsWBCUROnF6g+wg=";
   };
 
   build-system = [ hatchling ];
@@ -90,6 +90,8 @@ buildPythonPackage rec {
     "test_gethostbyname"
     # httpx read failure
     "test_no_dangling_fds"
+    # redis-py response mismatch
+    "test_hgetall"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fails on darwin due to upstream bug: https://github.com/mindflayer/python-mocket/issues/287

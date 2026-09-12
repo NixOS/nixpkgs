@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation {
-  name = "mirth";
+  pname = "mirth";
   version = "0-unstable-2026-05-28";
 
   src = fetchFromSourcehut {
@@ -107,7 +107,6 @@ stdenv.mkDerivation {
       "aarch64-windows"
       "i686-linux"
       "i686-windows"
-      "x86_64-darwin"
       "x86_64-linux"
       "x86_64-windows"
     ];

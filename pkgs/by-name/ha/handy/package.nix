@@ -55,7 +55,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "handy";
-  version = "0.9.0";
+  version = "0.9.6";
 
   __structuredAttrs = true;
 
@@ -63,11 +63,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "cjpais";
     repo = "Handy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jRzy8nsLtlNrYXb4LWP5SK6XpIy2pguNcZno3m6Mkqw=";
+    hash = "sha256-6eNa9iNjwKgLL8t72GeMHTxjyHaeVl+9VF/QWjlHzts=";
   };
 
   cargoRoot = "src-tauri";
-  cargoHash = "sha256-Ag02t6KwKvgO1kKsQ4RAw9X+rWYNhDyav2N6i4o7ifQ=";
+  cargoHash = "sha256-fzTklIGMCE2ugLc6KIj3XDqxB4qjhtm14LKBUb8kBWE=";
 
   nativeInstallInputs = [ jq ];
 
@@ -246,9 +246,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
       outputHash =
         {
-          "x86_64-linux" = "sha256-1jZBFvX9Ch3jNGPgSnOE8yNCXlHru7tcMJZ5uNZtE1g=";
-          "aarch64-linux" = "sha256-MsY2tOdBg11OMyQLRkLoVKxyrcqa0yVddfcYuIVWSxw=";
-          "aarch64-darwin" = "sha256-Fw0va7mq0F36qa15bDFVL01Q5pEprWhza78CzurLoLg=";
+          "x86_64-linux" = "sha256-huOC2smHU0sGIxeyvWmzdewUEpKHfdSGNhf9xWpH9Jk=";
+          "aarch64-linux" = "sha256-UDn8nIgIx23ampe43Qr0j9h+hlU9g1QzzlIlbRH2CKs=";
+          "aarch64-darwin" = "sha256-8Rw4iNvqeq/sRvZpbtZo0f0iPAwu1TeB8Y+ut4kb9uw=";
         }
         .${stdenv.hostPlatform.system};
 
@@ -281,6 +281,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
       philocalyst
     ];
     platforms = with lib.platforms; linux ++ darwin;
-    badPlatforms = [ "x86_64-darwin" ]; # We weren't able to get hashes here
   };
 })

@@ -1,47 +1,51 @@
 {
   lib,
   stdenv,
-  fetchgit,
+  fetchFromGitLab,
   pkg-config,
   meson,
   ninja,
   wrapGAppsHook4,
   enchant,
   gtkmm4,
-  libchamplain_libsoup3,
   libgcrypt,
+  gtk3,
   shared-mime-info,
   libshumate,
-  gitUpdater,
+  nix-update-script,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lifeograph";
-  version = "3.0.4";
+  version = "3.1.4";
 
-  src = fetchgit {
-    url = "https://git.launchpad.net/lifeograph";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Zo3bMIAao055YhhIFR8AH43lMi6T82PrcYR3Cis/yK0=";
+  src = fetchFromGitLab {
+    owner = "bilheps";
+    repo = "lifeograph";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Tsvuc6s8D45WKCTWSqRBIVu1zOjx43edBlAw/TLOGV0=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    gtk3 # for gtk-update-icon-cache (meson post-install script)
     shared-mime-info # for update-mime-database
     wrapGAppsHook4
+    python3.pkgs.pybind11
   ];
 
   buildInputs = [
     libgcrypt
     enchant
     gtkmm4
-    libchamplain_libsoup3
     libshumate
+    python3
   ];
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://lifeograph.sourceforge.net/doku.php?id=start";

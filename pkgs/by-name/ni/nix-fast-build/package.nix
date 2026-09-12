@@ -1,55 +1,61 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   python3Packages,
   nix-eval-jobs,
-  nix-output-monitor,
   nix-update-script,
   bashInteractive,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nix-fast-build";
-  version = "1.6.0";
+  version = "2.0.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nix-fast-build";
     tag = finalAttrs.version;
-    hash = "sha256-PMBbenLBvn/0pSFOhwPVn171Vw7kU5YmBUNDhxllZ7c=";
+    hash = "sha256-bD5s8NbVSQevMEA7ewS4S5wkxnfat/QV0WRjGK1Kx6o=";
   };
 
   build-system = [ python3Packages.setuptools ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath (
-        [
-          nix-eval-jobs
-          nix-eval-jobs.nix
-          bashInteractive
-        ]
-        ++ lib.optional (lib.meta.availableOn stdenv.buildPlatform nix-output-monitor.compiler) nix-output-monitor
-      )
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      nix-eval-jobs
+      nix-eval-jobs.nix
+      bashInteractive
+    ])
   ];
 
-  # Don't run integration tests as they try to run nix
-  # to build stuff, which we cannot do inside the sandbox.
-  checkPhase = ''
-    PYTHONPATH= $out/bin/nix-fast-build --help
-  '';
+  nativeCheckInputs = with python3Packages; [
+    pyte
+    pytestCheckHook
+  ];
+
+  enabledTestPaths = [
+    # The other test files run nix, which fails in the sandbox
+    "tests/test_ci_renderer.py"
+    "tests/test_log_format.py"
+    "tests/test_term.py"
+    "tests/test_tty_renderer.py"
+  ];
+
+  pythonImportsCheck = [ "nix_fast_build" ];
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
   meta = {
-    description = "Combine the power of nix-eval-jobs with nix-output-monitor to speed-up your evaluation and building process";
+    description = "Speed-up your Nix evaluation and building process by running them in parallel";
     homepage = "https://github.com/Mic92/nix-fast-build";
-    changelog = "https://github.com/Mic92/nix-fast-build/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/Mic92/nix-fast-build/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       getchoo

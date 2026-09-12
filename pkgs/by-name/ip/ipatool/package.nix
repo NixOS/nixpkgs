@@ -5,20 +5,31 @@
   nix-update-script,
   testers,
   ipatool,
+  writableTmpDirAsHomeHook,
+  installShellFiles,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "ipatool";
-  version = "2.3.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "majd";
     repo = "ipatool";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ME3fvYziI3fjlQ0KBPMJJXsCG3hW0z2iz1gKoBh0grk=";
+    hash = "sha256-yC6MSyL3b9u/mb+YJUIZTsH2dtVgE0w2K3F2LlQE9tI=";
   };
 
-  vendorHash = "sha256-TmP7NjDrxTcsnVU9Hi4S1wXSzQNCJOVH02j5QpjvMgw=";
+  vendorHash = "sha256-/DIJ41YXPMKZgnNraBasnJ1AIgfC5OA3fLn/vFJqs/Q=";
+
+  # Fixes "import lookup disabled by -mod=vendor" for onepassword-sdk-go on macOS
+  proxyVendor = true;
+
+  # Fixes "unable to open output file '/homeless-shelter/.cache/clang/ModuleCache/" on macOS
+  nativeBuildInputs = [
+    writableTmpDirAsHomeHook
+    installShellFiles
+  ];
 
   ldflags = [
     "-s"
@@ -32,6 +43,13 @@ buildGoModule (finalAttrs: {
   #   go generate ./...
   # '';
   doCheck = false;
+
+  postInstall = ''
+    installShellCompletion --cmd ipatool \
+      --bash <($out/bin/ipatool completion bash) \
+      --fish <($out/bin/ipatool completion fish) \
+      --zsh <($out/bin/ipatool completion zsh)
+  '';
 
   passthru = {
     updateScript = nix-update-script { };

@@ -66,6 +66,8 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Library for manipulating containers of machine code";
     longDescription = ''

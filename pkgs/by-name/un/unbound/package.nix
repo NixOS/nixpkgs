@@ -7,6 +7,7 @@
   expat,
   flex,
   libevent,
+  bashNonInteractive,
   libsodium,
   protobufc,
   hiredis,
@@ -63,13 +64,13 @@ assert lib.assertMsg (
 ) "unbound: withDoQ requires OpenSSL with QUIC support (OpenSSL >= 3.5)";
 stdenv.mkDerivation (finalAttrs: {
   pname = "unbound";
-  version = "1.25.1";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = "unbound";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-1PXnxCPxoB5IrVBQIsrxiWAq+IoH7Ma9T1TTJsoTJc4=";
+    hash = "sha256-ESRboc5vwsNZ/Yynl2JGRWhH1QEYZumoTzgSvN3NbSU=";
   };
 
   outputs = [
@@ -86,18 +87,25 @@ stdenv.mkDerivation (finalAttrs: {
       flex
       bison
     ]
-    ++ lib.optionals withPythonModule [ swig ];
+    ++ lib.optionals withPythonModule [
+      python
+      swig
+    ];
 
   buildInputs = [
     openssl
     nettle
     expat
     libevent
+    bashNonInteractive
   ]
   ++ lib.optionals withSystemd [ systemd ]
+  ++ lib.optionals withDNSTAP [ protobufc ]
   ++ lib.optionals withDoH [ libnghttp2 ]
   ++ lib.optionals withDoQ [ ngtcp2 ]
   ++ lib.optionals withPythonModule [ python ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
@@ -231,6 +239,8 @@ stdenv.mkDerivation (finalAttrs: {
       nixos-test-exporter = nixosTests.prometheus-exporters.unbound;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Validating, recursive, and caching DNS resolver";

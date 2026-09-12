@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -13,42 +12,52 @@
   transformers,
 
   # optional-dependencies
+  tilelang,
   causal-conv1d,
+  pandas,
+  pytest-xdist,
   matplotlib,
   datasets,
   pytest,
+  triton,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "flash-linear-attention";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "fla-org";
     repo = "flash-linear-attention";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vxNbZ+FkxJh2E0TF09Z7ghkm8eas7Q96heeSXwgV4uU=";
+    hash = "sha256-Z4TEy8ycUA9NNw/yA4uIJHooqsmXUF2EIG0Lo454NXg=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     einops
-    torch
+    torch # Requires torch to function
     transformers
   ];
 
   optional-dependencies = {
-    # tilelang = [ tilelang ];
+    cuda = [ triton ];
+    cpu = [ triton ];
+    tilelang = [ tilelang ];
     conv1d = [ causal-conv1d ];
     benchmark = [
       matplotlib
+      pandas
       datasets
     ];
-    test = [ pytest ];
+    test = [
+      pytest
+      pytest-xdist
+    ];
   };
 
   # Tests require a GPU

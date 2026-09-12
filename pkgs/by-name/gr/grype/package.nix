@@ -12,7 +12,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "grype";
-  version = "0.115.0";
+  version = "0.118.0";
 
   # required for tests
   __darwinAllowLocalNetworking = true;
@@ -21,7 +21,7 @@ buildGoModule (finalAttrs: {
     owner = "anchore";
     repo = "grype";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tc7ikgRQxwkCOaZuLzp7F898C+3mjpCjDSURw3rJRMc=";
+    hash = "sha256-vCxwFw35Kq/HnUjyvHxDzHASajQ5zm+eGTCg2TBjWYM=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -36,7 +36,7 @@ buildGoModule (finalAttrs: {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-QxHhRqLPXVzJL7ksx0lMQuk0qtzartJk+tKiz6IP4xc=";
+  vendorHash = "sha256-mZojEPzjO3seAknCkl9mgKHoxyxgqJN8Fi6kL0mI5H0=";
 
   patches = [
     # several test golden files have unstable paths based on the platform
@@ -59,7 +59,6 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
     "-X=main.version=${finalAttrs.version}"
     "-X=main.gitDescription=v${finalAttrs.version}"
     "-X=main.gitTreeState=clean"
@@ -112,6 +111,8 @@ buildGoModule (finalAttrs: {
         "Test_SarifIsValid"
         "Test_dpkgUseCPEsForEOLEnvVar"
         "Test_rpmUseCPEsForEOLEnvVar"
+        "TestMatcherGolang_GoSymbols_GHSAMerge"
+        "TestMatcherGolang_GoSymbols"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # fails to generate x509 certificate
@@ -136,7 +137,7 @@ buildGoModule (finalAttrs: {
       As a vulnerability scanner grype is able to scan the contents of a
       container image or filesystem to find known vulnerabilities.
     '';
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       fab
       jk

@@ -104,6 +104,14 @@ stdenv.mkDerivation (
         tests/unit-tests/CMakeLists.txt \
         tests/mir_test_framework/CMakeLists.txt \
         --replace-fail 'Boost::system' ""
+    ''
+    # Fix ambiguity (int/void*) of nullptr w/ gtest 1.18
+    # https://github.com/canonical/mir/commit/fae4944d3b9f3dc8431efc8aba1c79f677ae1c50
+    # https://github.com/canonical/mir/commit/fc0cac6fd6f8828f05fc4b876990641f2ae71523
+    # One hunk fails to apply
+    + lib.optionalString (lib.strings.versionOlder version "2.29.0") ''
+      substituteInPlace tests/unit-tests/console/test_linux_virtual_terminal.cpp \
+        --replace-fail ', nullptr' ', static_cast<void*>(nullptr)'
     '';
 
     strictDeps = true;

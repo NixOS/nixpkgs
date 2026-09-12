@@ -13,7 +13,6 @@ let
     {
       "x86_64-linux" = "linux-x86-64";
       "aarch64-linux" = "linux-aarch64";
-      "x86_64-darwin" = "darwin-x86-64";
       "aarch64-darwin" = "darwin-aarch64";
     }
     .${stdenv.system} or null;

@@ -42,7 +42,12 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTestPaths = [
+    # crashes in pygraphviz/graphviz
+    "tests/test_pygraphviz.py::PygraphvizTest::test_binary_stream"
+    "tests/test_pygraphviz.py::TestPygraphvizNested::test_binary_stream"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # sleep is not accurate on Darwin
     "tests/test_async.py"
   ];

@@ -39,6 +39,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "deep-gemm";
   version = "2.1.1.post3";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "deepseek-ai";
@@ -68,7 +69,20 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     })
   ];
 
-  env = optionalAttrs cudaSupport {
+  # Upstream hardcodes `__version__ = '2.1.1'` in `deep_gemm/__init__.py`, which does not match the
+  # release tag and fails the metadata check.
+  postPatch = ''
+    substituteInPlace deep_gemm/__init__.py \
+      --replace-fail \
+        "__version__ = '2.1.1'" \
+        "__version__ = '${finalAttrs.version}'"
+  '';
+
+  env = {
+    # Do not append a `+local` revision to the version (no git repository available)
+    DG_USE_LOCAL_VERSION = "0";
+  }
+  // optionalAttrs cudaSupport {
     CUDA_HOME = (getBin cudaPackages.cuda_nvcc).outPath;
 
     LDFLAGS = toString [

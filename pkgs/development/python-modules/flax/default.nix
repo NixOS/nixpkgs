@@ -16,6 +16,7 @@
   pyyaml,
   rich,
   tensorstore,
+  treescope,
   typing-extensions,
 
   # tests
@@ -27,7 +28,7 @@
   pytest-xdist,
   sphinx,
   tensorflow,
-  treescope,
+  torch,
 
   writeScript,
   tomlq,
@@ -35,7 +36,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "flax";
-  version = "0.12.7";
+  version = "0.12.9";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -43,16 +44,8 @@ buildPythonPackage (finalAttrs: {
     owner = "google";
     repo = "flax";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a78KiTsCCARWZvbxz9QKdUKnjkDJGXcPVVJu5rU4m/U=";
+    hash = "sha256-Zh5PE9pq+loJCIW5EPvtWTco/ouIK3TzJ0o3Ydthz00=";
   };
-
-  # DeprecationWarning: `with mesh:` context manager has been deprecated. Please use `with jax.set_mesh(mesh):` instead.
-  postPatch = ''
-    substituteInPlace tests/nnx/transforms_test.py \
-      --replace-fail \
-        "with mesh:" \
-        "with jax.set_mesh(mesh):"
-  '';
 
   build-system = [
     setuptools
@@ -83,6 +76,7 @@ buildPythonPackage (finalAttrs: {
     pytest-xdist
     sphinx
     tensorflow
+    torch
   ];
 
   disabledTestPaths = [

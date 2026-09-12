@@ -49,6 +49,7 @@
   typer,
   typing-extensions,
   uvicorn,
+  urllib3,
 
   # oauth
   authlib,
@@ -81,7 +82,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "gradio";
-  version = "6.19.0";
+  version = "6.22.0"; # please always backport gradio changes
   pyproject = true;
   __structuredAttrs = true;
 
@@ -89,7 +90,7 @@ buildPythonPackage (finalAttrs: {
     owner = "gradio-app";
     repo = "gradio";
     tag = "gradio@${finalAttrs.version}";
-    hash = "sha256-9vO+cuxpXERD/rH8wMuNWBNSH6Mu+yZLQMxLoiUTKtk=";
+    hash = "sha256-9FcGnZ/yktKM8sTGpgTv3QLIe2IoGbSw10rLWgj1zSU=";
   };
 
   patches = [
@@ -102,17 +103,16 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs)
-      pname
-      version
-      src
-      ;
+    pname = "gradio"; # to avoid a "sans-reverse-dependencies" duplicate
+    inherit (finalAttrs) version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-xCxr/jnp9emeB6THGt4cumvApw6fSZQwG2NGOcvR0yQ=";
+    hash = "sha256-TX4sLAfka/j002OsUKqxqi5B6Fb+DXSGdeL+w6V9XuM=";
   };
 
   env = {
+    # test/test_utils.py
+    # @settings(derandomize=os.getenv("CI") is not None)
     CI = "true";
   };
 
@@ -158,6 +158,7 @@ buildPythonPackage (finalAttrs: {
     typer
     typing-extensions
     uvicorn
+    urllib3
   ]
   ++ lib.optionals (pythonAtLeast "3.13") [
     audioop-lts
@@ -196,6 +197,10 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ finalAttrs.passthru.optional-dependencies.oauth
   ++ pydantic.optional-dependencies.email;
+
+  pythonRelaxDeps = [
+    "tomlkit" # pre-emptive upper bound
+  ];
 
   preBuild = ''
     pnpm build
@@ -415,14 +420,14 @@ buildPythonPackage (finalAttrs: {
         # gradio.sans-reverse-dependencies, which would create a build cycle.
         # Break it by giving hf-gradio a checkless gradio-client.
         hf-gradio = hf-gradio.override {
-          gradio-client = gradio-client.overridePythonAttrs {
-            doCheck = false;
-          };
+          gradio-client = gradio-client.sans-reverse-dependencies;
         };
       }).overridePythonAttrs
         (old: {
           pname = old.pname + "-sans-reverse-dependencies";
           pythonRemoveDeps = (old.pythonRemoveDeps or [ ]) ++ [ "gradio-client" ];
+          # we aggressively remove all checkPhase related attrs
+          # to save on rebuilds during bumps
           doInstallCheck = false;
           doCheck = false;
           postPatch = "";
@@ -431,6 +436,7 @@ buildPythonPackage (finalAttrs: {
           disabledTestPaths = [ ];
           disabledTestMarks = [ ];
           pytestFlags = [ ];
+          preBuild = ":"; # skip pnpm build, for speed
           postInstall = ''
             shopt -s globstar
             for f in $out/**/*.py; do
@@ -440,6 +446,7 @@ buildPythonPackage (finalAttrs: {
           '';
           pythonImportsCheck = null;
           dontCheckRuntimeDeps = true;
+          dontCheckPythonMetadata = true; # broken due to changed pname
         });
 
     # We can't use gitUpdater, because we need to update the pnpm hash.

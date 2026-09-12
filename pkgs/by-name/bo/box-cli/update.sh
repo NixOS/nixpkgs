@@ -32,7 +32,6 @@ echo "Updating box-cli from $old_version to $version"
 declare -A platforms=(
     [x86_64-linux]="box-linux-x64"
     [aarch64-linux]="box-linux-arm64"
-    [x86_64-darwin]="box-darwin-x64"
     [aarch64-darwin]="box-darwin-arm64"
 )
 

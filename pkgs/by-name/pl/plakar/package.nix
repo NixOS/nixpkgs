@@ -1,33 +1,45 @@
 {
   stdenv,
   lib,
-  buildGo125Module,
+  buildGoModule,
   fetchFromGitHub,
+  fetchpatch,
   installShellFiles,
-  fuse,
+  makeBinaryWrapper,
+  fuse3,
 }:
-buildGo125Module (finalAttrs: {
+
+buildGoModule (finalAttrs: {
   pname = "plakar";
-  version = "1.1.4";
+  version = "1.1.5";
 
   # to avoid having all the Test(Get|Set|Validate)Service.* tests fail on darwin
   __darwinAllowLocalNetworking = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "PlakarKorp";
     repo = "plakar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Urj1BG3XGhSroaa9pl9NGiKj38J1P+H9sA7noGwIhdc=";
+    hash = "sha256-6uw20jqAtJnPEeNrMsK/jA7+stdY4tAEkPe+mov6UNo=";
   };
 
-  vendorHash = "sha256-aqHjSTVVxBbaHAZZNQaFbftN0Hbl/+7wgk5uFM664po=";
+  vendorHash = "sha256-s/4vTHFFfOuGnVc3FK0B5aa9kRATr356/mGydw4cMng=";
 
-  buildInputs = [
-    fuse
+  # Remove in next release
+  patches = [
+    (fetchpatch {
+      name = "backup-allow-multiple-ignore-files.patch";
+      url = "https://github.com/PlakarKorp/plakar/commit/049603ba4db8086ceb9aadf6197751083821e699.patch";
+      includes = [ "subcommands/backup/backup.go" ];
+      hash = "sha256-9uxkXpuWs758xlu3afANB14hqhVut7agvIeOlcm+98k=";
+    })
   ];
 
   nativeBuildInputs = [
     installShellFiles
+    makeBinaryWrapper
   ];
 
   checkFlags =
@@ -35,6 +47,8 @@ buildGo125Module (finalAttrs: {
       skippedTests = [
         # hangs even outside Nix, so probably an upstream issue:
         "TestRebuildStateVersionMismatch"
+        # dry-run fails on any per-file scan error
+        "TestBackupDryRunProducesNoSnapshot"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         "TestBTreeScanMemory"
@@ -46,6 +60,10 @@ buildGo125Module (finalAttrs: {
 
   postInstall = ''
     installManPage $(find $src -regex '.*\.[0-9]$')
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    wrapProgram $out/bin/plakar \
+      --suffix PATH : ${lib.makeBinPath [ fuse3 ]}
   '';
 
   meta = {

@@ -19,7 +19,7 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "rcu";
-  version = "5.1.0";
+  version = "5.1.1";
 
   pyproject = false;
 
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
     let
       src-tarball = requireFile {
         name = "rcu-${version}-source.tar.gz";
-        hash = "sha256-s5cqUu2hJEHpLVUwTbNYLQCNXMjv0vFGzQb041+XEqA=";
+        hash = "sha256-6O2WULD4QAq20ax67gcr8DoNWehoIoFc1LGXFxROTLA=";
         url = "https://www.davisr.me/projects/rcu/";
         meta = {
           # `requireFile` sets `lib.licenses.unfree` by default
@@ -41,8 +41,19 @@ python3Packages.buildPythonApplication rec {
       ln -s ${src-tarball} $out/src
     '';
 
+  # RCU officially targets older dependency versions. We apply these patches to
+  # keep the application working securely with the modern nixpkgs environment.
+  # These compatibility patches have been submitted upstream to the RCU developer via email.
+  #
+  # - Port-to-paramiko-5.x.patch: RCU vendors an old `transport.py` from paramiko.
+  #   This patch removes references to GSSAPI and SHA-1 Key Exchanges that were dropped in paramiko 5.0.0.
+  # - Fix-urllib-cafile.patch: Replaces the `cafile` kwarg in urllib (removed in Python 3.10) with an ssl context to fix the updater.
+  # - Fix-Python-SyntaxWarnings.patch: Converts regex strings with invalid escapes to raw strings to fix Python 3.12+ warnings.
+  #   Without this patch, these invalid escape sequences will become hard SyntaxErrors in Python 3.16.
   patches = [
-    ./Port-to-paramiko-4.x.patch
+    ./Port-to-paramiko-5.x.patch
+    ./Fix-urllib-cafile.patch
+    ./Fix-Python-SyntaxWarnings.patch
   ];
 
   postPatch = ''

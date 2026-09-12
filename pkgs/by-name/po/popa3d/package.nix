@@ -47,5 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tiny POP3 daemon with security as the primary goal";
     mainProgram = "popa3d";
     platforms = lib.platforms.linux;
+    license = lib.licenses.free;
   };
 })

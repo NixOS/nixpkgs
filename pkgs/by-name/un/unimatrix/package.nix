@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication {
   pname = "unimatrix";
-  version = "0-unstable-2023-04-25";
+  version = "0-unstable-2026-05-20";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "will8211";
     repo = "unimatrix";
-    rev = "65793c237553bf657af2f2248d2a2dc84169f5c4";
-    hash = "sha256-fiaVEc0rtZarUQlUwe1V817qWRx4LnUyRD/j2vWX5NM=";
+    rev = "dff519f972103f91384f360f270614184de8aa92";
+    hash = "sha256-g5/Hrk/coq8d7pNwE5juMQhxYSZBXwlGbqikiI9eGvg=";
   };
 
   installPhase = ''

@@ -1,6 +1,7 @@
 # This file contains type hints that can be prepended to Nix test scripts so they can be type
 # checked.
 
+import datetime as dt
 from contextlib import contextmanager
 from typing import Any, Callable, ContextManager, Generator, List, Optional, Union
 from unittest import TestCase
@@ -32,10 +33,11 @@ class CreateMachineProtocol(Protocol):
 class PollingConditionProtocol(Protocol):
     def __call__(
         self,
-        fun_: Optional[Callable] = None,
+        fun_: Callable | None = None,
         *,
-        seconds_interval: float = 2.0,
-        description: Optional[str] = None,
+        seconds_interval: dt.timedelta | float | None = None,
+        interval: dt.timedelta | None = None,
+        description: str | None = None,
     ) -> Union[Callable[[Callable], ContextManager], ContextManager]:
         raise Exception("This is just type information for the Nix test driver")
 
@@ -98,12 +100,20 @@ log: AbstractLogger = CompositeLogger([])
 
 
 def polling_condition(
-    fun: Callable | None, seconds_interval: float = 0.0, description: str | None = None
+    fun_: Callable | None = None,
+    *,
+    seconds_interval: float | dt.timedelta | None = None,
+    interval: dt.timedelta | None = None,
+    description: str | None = None,
 ):
     pass
 
 
-def retry(fn: Callable, timeout_seconds: int = 900) -> None:
+def retry(
+    fn: Callable,
+    timeout_seconds: int | dt.timedelta | None = None,
+    timeout: dt.timedelta | None = None,
+) -> None:
     pass
 
 

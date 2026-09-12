@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "odp-dpdk";
-  version = "1.50.0.0_DPDK_24.11";
+  version = "1.51.0.0_DPDK_24.11";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "OpenDataPlane";
     repo = "odp-dpdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q1xJ5JCrR/RH5Mxnrs6+gR3D7I2BpmPDki0yJ+5N/UE=";
+    hash = "sha256-L6lF8VaycAz7PcFArAgLhI8+sc0jnAHY3gum/uDIYz4=";
   };
 
   nativeBuildInputs = [

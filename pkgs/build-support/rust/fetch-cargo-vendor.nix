@@ -3,7 +3,7 @@
   stdenvNoCC,
   runCommand,
   writers,
-  python3Packages,
+  python3,
   cargo,
   gitMinimal,
   nix-prefetch-git,
@@ -11,6 +11,16 @@
 }:
 
 let
+  python = python3.override {
+    self = python;
+    packageOverrides = final: prev: {
+      # The ast-serialize package, a dependency for mypy, depends on
+      # fetchCargoVendor and is part of the bootstrap chain for requests.
+      charset-normalizer = prev.charset-normalizer.override { withMypyc = false; };
+    };
+  };
+  python3Packages = python.pkgs;
+
   replaceWorkspaceValues = writers.writePython3Bin "replace-workspace-values" {
     libraries = with python3Packages; [
       tomli

@@ -14,17 +14,12 @@ Use **examples** first to show how to get something done. Keep **Explanation** l
 
 Use our [styleguide](./styleguide.md) for more in depth guidance on writing good documentation.
 
-This directory contains **guides** and **reference** documentation for Nixpkgs.
+Documentation about Nixpkgs belongs here, this includes 'getting-started'-guides and 'onboarding-guides' for *using* Nixpkgs and the language frameworks it ships.
 
-Borrowing from [Diátaxis framework](https://diataxis.fr/) what suits our needs:
+Write **guides** task-first: lead with a working example, then explain in prose.
+Write **reference** as the specification of functions and attributes.
 
-**Guides** are task-oriented. They can be tutorial-style walkthroughs or how-to sections.
-Explanations appear as prose after examples.
-
-**Reference** documentation is the specification of functions and attributes.
-
-We are actively working to generate **all** reference documentation from the [doc-comments](https://github.com/NixOS/rfcs/blob/master/rfcs/0145-doc-strings.md) present in code.
-This also provides the benefit of using `:doc` in the `nix repl` to view reference documentation locally on the fly.
+We are actively working to generate reference documentation from the [doc-comments](https://github.com/NixOS/rfcs/blob/master/rfcs/0145-doc-strings.md) present in code, which also lets you view it locally with `:doc` in `nix repl`.
 
 See [Document structure](#document-structure) for a structural template.
 
@@ -198,15 +193,15 @@ watermelon
 - If creating a commit purely for documentation changes, format the commit message in the following way:
 
   ```
-  doc: (documentation summary)
+  doc/component: (documentation summary)
 
   (Motivation for change, relevant links, additional information.)
   ```
 
   Examples:
 
-  * doc: update the kernel config documentation to use `nix-shell`
-  * doc: add information about `nix-update-script`
+  * doc/stdenv: update the kernel config documentation to use `nix-shell`
+  * doc/getting-started: add information about `nix-update-script`
 
     Closes #216321.
 

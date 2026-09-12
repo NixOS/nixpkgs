@@ -10,16 +10,16 @@
 
 maven.buildMavenPackage rec {
   pname = "filius";
-  version = "2.12.1";
+  version = "2.13.0";
 
   src = fetchFromGitLab {
     owner = "filius1";
     repo = "filius";
     tag = "v${version}";
-    hash = "sha256-sIcYjbWONg8Cq+dHpoBYj07cyHV7oX06Xh1zK0CHn64=";
+    hash = "sha256-u4X6jrlNzgm1vWyRFSzVjoQ3dtZUK9pAHSMxUHsSV84=";
   };
 
-  mvnHash = "sha256-41NirfgR9EhHLRT3V6P5KrakYKZ6dJTlXZu6rgCAK3I=";
+  mvnHash = "sha256-0xc/gnodgBo6gOkvz7Oe/5AQyjh2xMgyWEeEyktFqEA=";
   mvnParameters = "-Plinux";
 
   # tests want to create an X11 window which isn't often feasible
@@ -55,8 +55,10 @@ maven.buildMavenPackage rec {
   postInstall = ''
     install -Dm444 src/deb/application-filius-project.xml $out/share/mime/packages/application-filius-project.xml
 
-    install -Dm444 src/deb/filius32.png $out/share/icons/hicolor/80x56/mimetypes/filius.png
-    install -Dm444 src/deb/filius32.png $out/share/icons/hicolor/80x56/apps/filius.png
+    for size in {32,64,96}; do
+      install -Dm444 src/deb/icons/hicolor/"$size"x"$size"/apps/filius.png $out/share/icons/hicolor/"$size"x"$size"/apps/filius.png
+      install -Dm444 src/deb/icons/hicolor/"$size"x"$size"/apps/filius.png $out/share/icons/hicolor/"$size"x"$size"/mimetypes/filius.png
+    done
 
     mkdir -p $out/share/man/man1/
     cp src/deb/filius.1 $out/share/man/man1/

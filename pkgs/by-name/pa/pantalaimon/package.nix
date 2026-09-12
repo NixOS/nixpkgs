@@ -43,7 +43,7 @@ python3Packages.buildPythonApplication rec {
       janus
       keyring
       logbook
-      (matrix-nio.override { withOlm = true; })
+      (matrix-nio.override { withVodozemac = true; })
       peewee
       platformdirs
       prompt-toolkit

@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Application-focused API for memory management on NUMA & GPU architectures";
     homepage = "https://github.com/LLNL/Umpire";
     maintainers = with lib.maintainers; [ sheepforce ];
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     platforms = lib.platforms.linux;
   };
 })

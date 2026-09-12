@@ -112,25 +112,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   src =
     if monorepoSrc != null then
-      runCommand "libcxx-src-${version}" { inherit (monorepoSrc) passthru; } (
-        ''
-          mkdir -p "$out/llvm"
-          cp -r ${monorepoSrc}/cmake "$out"
-          cp -r ${monorepoSrc}/libcxx "$out"
-          cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
-          cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
-          cp -r ${monorepoSrc}/third-party "$out"
-        ''
-        + (lib.optionalString (lib.versionAtLeast release_version "20") ''
-          cp -r ${monorepoSrc}/libc "$out"
-        '')
-        + ''
-          cp -r ${monorepoSrc}/runtimes "$out"
-        ''
-        + (lib.optionalString (cxxabi == null) ''
-          cp -r ${monorepoSrc}/libcxxabi "$out"
-        '')
-      )
+      runCommand "libcxx-src-${version}"
+        {
+          inherit (monorepoSrc) passthru;
+          strictDeps = true;
+          __structuredAttrs = true;
+        }
+        (
+          ''
+            mkdir -p "$out/llvm"
+            cp -r ${monorepoSrc}/cmake "$out"
+            cp -r ${monorepoSrc}/libcxx "$out"
+            cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
+            cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
+            cp -r ${monorepoSrc}/third-party "$out"
+          ''
+          + (lib.optionalString (lib.versionAtLeast release_version "20") ''
+            cp -r ${monorepoSrc}/libc "$out"
+          '')
+          + ''
+            cp -r ${monorepoSrc}/runtimes "$out"
+          ''
+          + (lib.optionalString (cxxabi == null) ''
+            cp -r ${monorepoSrc}/libcxxabi "$out"
+          '')
+        )
     else
       src;
 
@@ -157,6 +163,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm && !stdenv.hostPlatform.isFreeBSD) [
     libunwind
   ];
+
+  strictDeps = true;
 
   # TODO: Possibly move back to `sourceRoot` on `staging`?
   postPatch = ''
@@ -200,6 +208,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     isLLVM = true;
   };
+
+  __structuredAttrs = true;
 
   meta = llvm_meta // {
     homepage = "https://libcxx.llvm.org/";

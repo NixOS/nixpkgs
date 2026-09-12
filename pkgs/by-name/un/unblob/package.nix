@@ -42,7 +42,7 @@ let
     zstd
     lz4
   ]
-  ++ lib.optional stdenvNoCC.isLinux partclone;
+  ++ lib.optional stdenvNoCC.hostPlatform.isLinux partclone;
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "unblob";

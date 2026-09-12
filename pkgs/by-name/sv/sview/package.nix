@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sview";
-  version = "26_02";
+  version = "26.07";
 
   src = fetchFromGitHub {
     owner = "gkv311";
     repo = "sview";
-    tag = version;
-    hash = "sha256-UIA8bDGYVN8Zw23PkKprYrvcMubHzoquaSArLShu+aw=";
+    tag = lib.replaceString "." "_" version;
+    hash = "sha256-Kyz+FHYpBKKAyHMEM0DTKNNIAw4/tORxeCOFOLySspY=";
   };
 
   droidSansFallback = fetchurl {
@@ -46,7 +46,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DUSE_UPDATER=OFF"
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DCMAKE_INSTALL_LIBDIR=/lib"
     "-DCMAKE_INSTALL_BINDIR=/bin"
     "-DCMAKE_INSTALL_DATAROOTDIR=/share"

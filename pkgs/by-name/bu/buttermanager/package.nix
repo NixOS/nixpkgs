@@ -46,7 +46,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   meta = {
-    description = "Btrfs tool for managing snapshots, balancing filesystems and upgrading the system safetly";
+    description = "Btrfs tool for managing snapshots, balancing filesystems and upgrading the system safely";
     homepage = "https://github.com/egara/buttermanager";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ t4ccer ];

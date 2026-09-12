@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "prometheus-nvidia-gpu-exporter";
-  version = "1.6.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "utkuozdemir";
     repo = "nvidia_gpu_exporter";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KMXdKUBHL6Fq4GQC5paDqn9vb4/KBMcfq4c1njhGi6o=";
+    hash = "sha256-dE5ERAOocAJnYjWmF057ifPBhDGK41p7cGl+rX2IzRg=";
   };
 
-  vendorHash = "sha256-QG2Pcg+RwnGMBcDMjaFEROTDTr39J0oGJplO7vPvXYk=";
+  vendorHash = "sha256-6eX+SVm6+/NWuNRD2MkJaDNi9YwJnojx9Df+o1km88I=";
 
   ldflags = [
     "-s"

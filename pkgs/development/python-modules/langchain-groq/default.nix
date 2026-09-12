@@ -68,6 +68,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-groq==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

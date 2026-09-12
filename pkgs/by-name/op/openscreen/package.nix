@@ -120,7 +120,7 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://openscreen.vercel.app";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      Renna42
+      etiennelescot
     ];
     mainProgram = "openscreen";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

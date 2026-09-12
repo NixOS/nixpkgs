@@ -50,7 +50,6 @@ buildGoModule (finalAttrs: {
         # https://github.com/stripe/stripe-cli/blob/e3020d2e2df9c731b2f51df3aa53bf16383e863f/pkg/plugins/test_artifacts/plugins.toml
         !lib.lists.any (platform: lib.meta.platformMatch stdenv.hostPlatform platform) [
           "x86_64-linux"
-          "x86_64-darwin"
           "aarch64-darwin"
         ]
       )
@@ -106,7 +105,7 @@ buildGoModule (finalAttrs: {
       Tail your API request logs in real-time
       Create, retrieve, update, or delete API objects.
     '';
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       RaghavSood
       jk

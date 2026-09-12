@@ -20,6 +20,7 @@
   nixosTests,
   writeTextFile,
   rustc-unwrapped,
+  cacert,
 }:
 let
   rust-jemalloc-sys' = rust-jemalloc-sys.override {
@@ -43,8 +44,8 @@ let
             # The commit on the rocksdb fork, tuwunel-changes branch referenced by the upstream
             # tuwunel flake.lock:
             # https://github.com/matrix-construct/tuwunel/blob/main/flake.lock#L557C17-L557C57
-            rev = "9a3a213b55df0b11408102c899a940675c0d90e4";
-            hash = "sha256-aOV/jJjRjNJ3hrRqhCsXlIz05NvEhDF/j5Q5UOQuvp8=";
+            rev = "eb79ddeff0ea32ebb8f8b69dd1df95c557328e85";
+            hash = "sha256-7hiKaIssPpqB8UTAR4ZE19pZTp09sVGOMht7sAitZAs=";
           };
           version = "tuwunel-changes";
           patches = [ ];
@@ -88,16 +89,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-tuwunel";
-  version = "1.7.1";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "matrix-construct";
     repo = "tuwunel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KbcijWL4PwEUycE9pxdJjnBP0pxK6ywuf7wpuy2eA60=";
+    hash = "sha256-F9zmYanxCZjXBCh3GvSBiPQC6OFyugThq88MLvhLOyA=";
   };
 
-  cargoHash = "sha256-RsZWk+cm9JJ6+8xsWXNyN2QcHSMFOD3CikNm84DhXWU=";
+  cargoHash = "sha256-TT+dGr3DD9aPWYDxLTYPK0aZpQu64Ja8z+dJJmZQho8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -139,7 +140,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "url_preview"
     "zstd_compression"
   ]
-  ++ lib.optional enableJemalloc [
+  ++ lib.optionals enableJemalloc [
     "jemalloc"
     "jemalloc_conf"
   ]
@@ -148,6 +149,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [
     libredirect.hook
+    cacert
   ];
 
   # Make sure tuwunel doesn't try to write to arbitrary

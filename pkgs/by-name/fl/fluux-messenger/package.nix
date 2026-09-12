@@ -18,24 +18,25 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fluux-messenger";
-  version = "0.16.2";
+  version = "0.17.2";
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchFromGitHub {
+    name = "${finalAttrs.pname}-${finalAttrs.version}-source";
     owner = "processone";
     repo = "fluux-messenger";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-G5VDcFHp+mIYBXh7Vju/8bGB3CPD1dyZKq8zAOKn3UY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-APdzwVnDOGnngZJ3LjQMk2Y6KRbGqXaaFEb+NzhfkIo=";
   };
 
   cargoRoot = "apps/fluux/src-tauri";
-  cargoHash = "sha256-/jaEpC0f6B1zTxN7MHv/DESFnRTSAd3qi9rrnXurcPQ=";
+  cargoHash = "sha256-pjx4tP89aRx1/m5eYjI2DPhTtSuMnFudongEFhiaigE=";
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-XAzE4I13GN4Gfi6g4VX5ZwM2DhVycKz7cGBQroAFvf8=";
+    hash = "sha256-rV5Q8WKcSmL1JSubFefsytOd3qiB5OandcwfZw9DJgE=";
   };
 
   nativeBuildInputs = [
@@ -69,10 +70,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "XMPP client for communities and organizations";
+    longDescription = "A modern, Web and Desktop cross-platform XMPP client for communities and organizations, built with a reusable Typescript SDK and Tauri for desktop";
+    changelog = "https://github.com/processone/fluux-messenger/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     homepage = "https://github.com/processone/fluux-messenger";
     license = lib.licenses.agpl3Plus;
     mainProgram = "fluux";
     maintainers = [ lib.maintainers.haansn08 ];
     platforms = lib.platforms.all;
+    # see also https://github.com/processone/fluux-messenger/blob/main/fluux-messenger.doap
   };
 })

@@ -11,6 +11,7 @@
   ptpython,
   pydantic,
   python,
+  ovmfvartool,
   remote-pdb,
   ruff,
   ty,
@@ -47,6 +48,7 @@ buildPythonApplication {
     junit-xml
     ptpython
     pydantic
+    ovmfvartool
     remote-pdb
   ]
   ++ extraPythonPackages python.pkgs;
@@ -58,7 +60,7 @@ buildPythonApplication {
     util-linux
     vde2
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     vhost-device-vsock
   ]
   ++ lib.optionals enableNspawn [

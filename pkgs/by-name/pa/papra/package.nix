@@ -14,6 +14,7 @@
   python3,
   nix-update-script,
   tsx,
+  nixosTests,
 }:
 let
   pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_26; };
@@ -95,7 +96,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.nixos = nixosTests.papra;
+  };
 
   meta = {
     description = "Open-source document management platform designed to help you organize, secure, and archive your files effortlessly.";

@@ -6,7 +6,7 @@
 buildGoModule rec {
   pname = "ocb";
   # Also update `pkgs/tools/misc/opentelemetry-collector/releases.nix`
-  # whenever that version changes.
+  # whenever this version changes.
   version = "0.155.0";
 
   src = fetchFromGitHub {
@@ -30,6 +30,8 @@ buildGoModule rec {
   checkFlags = [
     "-skip TestGenerateAndCompile|TestReplaceStatementsAreComplete|TestVersioning|TestRunInit"
   ];
+
+  passthru.updateScript = ./update.sh;
 
   # Rename to ocb (it's generated as "builder")
   postInstall = ''

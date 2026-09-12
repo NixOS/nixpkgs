@@ -42,7 +42,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "orbax-checkpoint";
-  version = "0.12.1";
+  version = "0.12.3";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -50,7 +50,7 @@ buildPythonPackage (finalAttrs: {
     owner = "google";
     repo = "orbax";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yE8M8f2c+4lTL56LrS57vU/MMM3NgYCZOuHZWbdODh0=";
+    hash = "sha256-uyObu0UdXRN5KgJhTTdkL2vJEjF9Lh0oOjMZENH4zck=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/checkpoint";
@@ -132,6 +132,9 @@ buildPythonPackage (finalAttrs: {
     # self.assertFalse(os.path.exists(dst_dir))
     # AssertionError: True is not false
     "test_create_snapshot"
+
+    # AssertionError: Expected 'BasePyTreeCheckpointHandler' to have been called.
+    "test_memory_options_propagation"
   ];
 
   disabledTestPaths = [

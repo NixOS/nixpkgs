@@ -164,7 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # N.B.: Loading modules may fail due to symbols used by the moodules
+    # N.B.: Loading modules may fail due to symbols used by the modules
     # not being found, to address this issue the libraries providing the
     # symbols are re-exported when building on Darwin using -Wl,-reexport-l.
     ./rack-minimize-vendoring.patch

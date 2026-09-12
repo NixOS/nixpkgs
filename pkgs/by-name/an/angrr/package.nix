@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "angrr";
-  version = "0.2.6";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "linyinfeng";
     repo = "angrr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Sj7aaKC7rtIzIz3UiVfmLjr4O7hWXrEC3wkKaPra/3A=";
+    hash = "sha256-XsFuvWur9KaZaIT4IkgiXRtom/Hcn6xnJt8lbvpYu94=";
   };
 
-  cargoHash = "sha256-LspQncUrWfou41G37L3O1GbeiaoQpAC/RAu3EAPVrRU=";
+  cargoHash = "sha256-QZxEVHd1RoN7Qxouj5cScvbK6Y0FLMH3zXKr07/Cyes=";
 
   buildAndTestSubdir = "angrr";
 
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Auto Nix GC Root Retention";
     homepage = "https://github.com/linyinfeng/angrr";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yinfeng ];
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "angrr";

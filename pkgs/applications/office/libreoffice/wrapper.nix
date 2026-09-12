@@ -118,6 +118,11 @@ let
         fi
       '')
     ]
+    ++ lib.optionals unwrapped.withJava [
+      "--set"
+      "JAVA_HOME"
+      "${unwrapped.jdk.home}"
+    ]
     ++ [
       "--inherit-argv0"
     ]
@@ -126,6 +131,11 @@ let
 in
 runCommand "${unwrapped.name}-wrapped"
   {
+
+    # Not sure if meaningful for runCommand, but nixpkgs-vet demands this anyway
+    __structuredAttrs = true;
+    strictDeps = true;
+
     inherit (unwrapped) meta pname version;
     paths = [ unwrapped ];
     nativeBuildInputs = [

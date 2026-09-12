@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  gitUpdater,
   pkg-config,
   cmake,
   arpa2cm,
@@ -12,18 +13,17 @@
   libkrb5,
   libev,
   e2fsprogs,
-  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quick-sasl";
-  version = "0.13.2";
+  version = "0.14.0";
 
   src = fetchFromGitLab {
     owner = "arpa2";
     repo = "quick-sasl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kMKZRromm/hb9PZwvWAzmJorSqTB8xMIbWASfSjajiQ=";
+    hash = "sha256-RVk44Ioaennw088HFxdAMU744aqw3ii8v8cJqjlVmno=";
   };
 
   strictDeps = true;
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     e2fsprogs
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "Gentle wrapper around any SASL implementation";

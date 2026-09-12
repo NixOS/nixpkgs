@@ -1,40 +1,38 @@
 {
-  stdenv,
-  lib,
+  # keep-sorted start
   fetchurl,
-  mkJetBrainsProduct,
-  libdbm,
   fsnotifier,
-  maven,
-  zlib,
+  jetbrains,
+  jetbrains-libdbm,
+  lib,
   lldb,
+  maven,
   musl,
+  stdenv,
+  zlib,
+  # keep-sorted end
 }:
 let
   system = stdenv.hostPlatform.system;
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/idea/ideaIU-2026.1.4.tar.gz";
-      hash = "sha256-MQTYXZUH/4ggZeP465UGQCtKgSkJLSaCZiu26cTwY/w=";
+      url = "https://download.jetbrains.com/idea/ideaIU-2026.2.0.1.tar.gz";
+      hash = "sha256-kU4x4xtOEoXVOM8/rlswCvCLz/NrwpisYgBQS74S8YA=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/idea/ideaIU-2026.1.4-aarch64.tar.gz";
-      hash = "sha256-MDZFuLrUxcCIc0Zhi4QhgKPeU7Pgs9oJ/FxQH1n3gBM=";
-    };
-    x86_64-darwin = {
-      url = "https://download.jetbrains.com/idea/ideaIU-2026.1.4.dmg";
-      hash = "sha256-8K+LiewiINP4S9eqV0kGWtfy2Ff/zvBwX89iX7mYZ78=";
+      url = "https://download.jetbrains.com/idea/ideaIU-2026.2.0.1-aarch64.tar.gz";
+      hash = "sha256-HkRhBq1vh1iRjshmX+D9cT1iSRZk/NEz6YkTwWhKl0g=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/idea/ideaIU-2026.1.4-aarch64.dmg";
-      hash = "sha256-XIBK/+Lxaz9dX+Lxl7HXsl+Z3Z7GBzSuDxNssb/4A2s=";
+      url = "https://download.jetbrains.com/idea/ideaIU-2026.2.0.1-aarch64.dmg";
+      hash = "sha256-vN2wVaM5V9H5Xnrjv9MIKT0PgSJQqrk5kWQWOqEYOZ8=";
     };
   };
   # update-script-end: urls
 in
-mkJetBrainsProduct {
-  inherit libdbm fsnotifier;
+jetbrains.mkJetBrainsProduct {
+  inherit jetbrains-libdbm fsnotifier;
 
   pname = "idea";
 
@@ -43,11 +41,18 @@ mkJetBrainsProduct {
   productShort = "IDEA";
 
   # update-script-start: version
-  version = "2026.1.4";
-  buildNumber = "261.26222.65";
+  version = "2026.2.0.1";
+  buildNumber = "262.8665.337";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
+
+  # the jdk is bundled on Darwin.
+  jdk =
+    if lib.meta.availableOn stdenv.hostPlatform jetbrains.jdk-no-jcef then
+      jetbrains.jdk-no-jcef
+    else
+      null;
 
   extraLdPath = [ zlib ];
   extraWrapperArgs = [
@@ -56,8 +61,10 @@ mkJetBrainsProduct {
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    # keep-sorted start
     lldb
     musl
+    # keep-sorted end
   ];
 
   # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed
@@ -72,6 +79,7 @@ mkJetBrainsProduct {
       gytis-ivaskevicius
       tymscar
     ];
+    teams = [ lib.teams.jetbrains ];
     license = lib.licenses.unfree;
     sourceProvenance =
       if stdenv.hostPlatform.isDarwin then

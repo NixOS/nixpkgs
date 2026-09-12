@@ -6,7 +6,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "budget-tracker-tui";
-  version = "1.4.0";
+  version = "1.6.0";
 
   __structuredAttrs = true;
 
@@ -14,9 +14,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Feromond";
     repo = "budget_tracker_tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rVNAYMfTGYRepeNSlm+d/bJq11lRNFZjpoQjQpclSzY=";
+    hash = "sha256-hkk25SpIQ7t8otp0vLYtNcCXlbFoXnF7bQKg1qvEYEE=";
   };
-  cargoHash = "sha256-u9XlckBJCRzpmY+Hs5x9cBWtxIN1zwMuIYMCuS7i6rQ=";
+  cargoHash = "sha256-P4Fl2muXjog8RRJ4EZ6EWWIB1wUG0Rqm3ugVMvbQ1cI=";
 
   passthru.updateScript = nix-update-script { };
 

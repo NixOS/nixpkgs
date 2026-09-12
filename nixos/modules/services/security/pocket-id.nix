@@ -31,7 +31,8 @@ let
   format = pkgs.formats.keyValue { };
   settingsFile = format.generate "pocket-id-env-vars" cfg.settings;
 
-  exportCredentials = n: _: ''export ${n}="$(${pkgs.systemd}/bin/systemd-creds cat ${n}_FILE)"'';
+  exportCredentials =
+    n: _: ''export ${n}="$(${config.systemd.package}/bin/systemd-creds cat ${n}_FILE)"'';
   exportAllCredentials = vars: lib.concatStringsSep "\n" (lib.mapAttrsToList exportCredentials vars);
   getLoadCredentialList = lib.mapAttrsToList (n: v: "${n}_FILE:${v}") cfg.credentials;
 in

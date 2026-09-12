@@ -8,7 +8,7 @@
   electron_42,
   element-web,
   callPackage,
-  typescript,
+  typescript_7,
   tsx,
   sqlcipher,
   # command line arguments which are always set
@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-desktop";
-  version = "1.12.22";
+  version = "1.12.26";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-web";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TtC4KUnaKy/gmh5CbkPTWKCFjdeKvt8esFt3awdkA/g=";
+    hash = "sha256-q9AV/jthbHnbESU/wvjdaCiMnIN6KQgAQ3cvEBvduTw=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -46,8 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
       src
       ;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-Cxc2/NpOpkXavDvBgaU6Douud7AO06jt1KjuaLnZh8M=";
+    fetcherVersion = 4;
+    hash = "sha256-R9YuNvrMurRaBxZqUPsUtZSFlSZ8nA7Bd/hlAMfAH+M=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
     nodejs
     makeWrapper
-    typescript
+    typescript_7
     pnpm
     pnpmConfigHook
     tsx
@@ -176,7 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "Feature-rich client for Matrix.org";
+    description = "Matrix client for desktop";
     homepage = "https://element.io/";
     changelog = "https://github.com/element-hq/element-web/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.agpl3Plus;

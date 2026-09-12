@@ -8,8 +8,8 @@
   python3,
   gtk3,
   glibmm,
-  cairomm,
-  pangomm,
+  cairomm_1_0,
+  pangomm_1_4,
   atkmm,
   libepoxy,
   gnome,
@@ -45,8 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
     glibmm
     gtk3
     atkmm
-    cairomm
-    pangomm
+    cairomm_1_0
+    pangomm_1_4
   ];
 
   # https://bugzilla.gnome.org/show_bug.cgi?id=764521

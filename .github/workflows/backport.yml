@@ -39,6 +39,8 @@ jobs:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+          # Avoid materializing full nixpkgs tree
+          sparse-checkout: .
           token: ${{ steps.app-token.outputs.token }}
           persist-credentials: true
 
@@ -49,7 +51,7 @@ jobs:
 
       - name: Create backport PRs
         id: backport
-        uses: korthout/backport-action@66065406958f46e82238fd59546f5a99e69e22aa # v4.5.2
+        uses: korthout/backport-action@2e830a1d0b8269505846ddd407a70876913ad1f8 # v4.6.0
         with:
           # Config README: https://github.com/korthout/backport-action#backport-action
           add_author_as_reviewer: true

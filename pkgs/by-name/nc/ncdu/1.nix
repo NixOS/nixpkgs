@@ -1,22 +1,31 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   pkg-config,
+  autoreconfHook,
   ncurses,
   versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ncdu";
-  version = "1.22";
+  version = "1.23.0";
 
-  src = fetchurl {
-    url = "https://dev.yorhel.nl/download/ncdu-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-CtbAltwE1RIFgRBHYMAbj06X1BkdbJ73llT6PGkaF2s=";
+  src = fetchFromGitHub {
+    owner = "BratishkaErik";
+    repo = "ncdu";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XhBZlcQ7QmzdmNjHa0saWZUkqbGPD041Y2IW13Y3R40=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
 
   buildInputs = [ ncurses ];
 
@@ -25,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Disk usage analyzer with an ncurses interface";
-    homepage = "https://dev.yorhel.nl/ncdu";
+    homepage = "https://github.com/BratishkaErik/ncdu";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ pSub ];

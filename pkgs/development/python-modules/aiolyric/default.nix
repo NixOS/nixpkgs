@@ -12,15 +12,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiolyric";
-  version = "2.1.1";
+  version = "2.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = "aiolyric";
     tag = finalAttrs.version;
-    hash = "sha256-+OYMe63sX5TtvJpNn6dzvnephlhS/MyFXmUerYZqF5A=";
+    hash = "sha256-jIJTQm86PBnLwJlYalEhppU01g02wbu20kpVvP4kXz0=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail .dev0 ""
+  '';
 
   build-system = [
     setuptools

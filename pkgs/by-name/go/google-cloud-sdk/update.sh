@@ -30,9 +30,6 @@ EOF
     echo -n "    x86_64-linux ="
     genMainSrc "linux" "x86_64"
 
-    echo -n "    x86_64-darwin ="
-    genMainSrc "darwin" "x86_64"
-
     echo -n "    aarch64-linux ="
     genMainSrc "linux" "arm"
 

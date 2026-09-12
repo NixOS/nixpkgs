@@ -78,6 +78,9 @@ in
         '';
         default = { };
         type = submodule {
+          imports = [
+            (lib.mkRenamedOptionModule [ "global" ] [ "transfers" ])
+          ];
           freeformType = settingsFormat.type;
           options = {
             remote_file_management = mkEnableOption "modification of share contents through the web ui";
@@ -145,8 +148,7 @@ in
               };
             };
 
-            global = {
-              # TODO speed units
+            transfers = {
               upload = {
                 slots = mkOption {
                   type = ints.unsigned;
@@ -154,7 +156,7 @@ in
                 };
                 speed_limit = mkOption {
                   type = ints.unsigned;
-                  description = "Total upload speed limit.";
+                  description = "Total upload speed limit in kibibytes per second.";
                 };
               };
               download = {
@@ -164,7 +166,7 @@ in
                 };
                 speed_limit = mkOption {
                   type = ints.unsigned;
-                  description = "Total upload download limit";
+                  description = "Total download speed limit in kibibytes per second.";
                 };
               };
             };
@@ -265,9 +267,9 @@ in
       cfg = config.services.slskd;
 
       confWithoutNullValues = (
-        lib.filterAttrsRecursive (
-          key: value: (builtins.tryEval value).success && value != null
-        ) cfg.settings
+        lib.filterAttrsRecursive (key: value: (builtins.tryEval value).success && value != null) (
+          lib.removeAttrs cfg.settings [ "global" ]
+        )
       );
 
       configurationYaml = settingsFormat.generate "slskd.yml" confWithoutNullValues;

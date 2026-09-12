@@ -157,13 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/ziglang/zig/issues/14281#issuecomment-1624220653
     zig_default_cpu_flag = "-Dcpu=baseline";
 
-    zig_default_optimize_flag =
-      if lib.versionAtLeast finalAttrs.version "0.12" then
-        "--release=safe"
-      else if lib.versionAtLeast finalAttrs.version "0.11" then
-        "-Doptimize=ReleaseSafe"
-      else
-        "-Drelease-safe=true";
+    zig_default_optimize_flag = "--release=safe";
   };
 
   setupHook = ./setup-hook.sh;

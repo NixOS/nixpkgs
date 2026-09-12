@@ -84,12 +84,14 @@ in
           alsa-utils
           cosmic-edit
           cosmic-icons
+          cosmic-monitor
           cosmic-player
           cosmic-randr
           cosmic-reader
           cosmic-screenshot
           cosmic-term
           cosmic-wallpapers
+          cosmic-sound-theme
           glib
           hicolor-icon-theme
           networkmanagerapplet

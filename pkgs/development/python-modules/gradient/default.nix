@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "gradient";
-  version = "3.12.1";
+  version = "3.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "digitalocean";
     repo = "gradient-python";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4BJMUxNryePXIAG92JOX7pTbDN6FQzmYRu1+2bKEwX0=";
+    hash = "sha256-2blzsP8KJfCbqBmoaWgQRCmiR5Dj3ofbd65fJqQpfAI=";
   };
 
   postPatch = ''

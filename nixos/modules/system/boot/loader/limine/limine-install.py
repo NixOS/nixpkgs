@@ -1,4 +1,4 @@
-#!@python3@/bin/python3 -B
+#!@python3@/bin/python3 -BP
 
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple
@@ -347,7 +347,7 @@ def config_entry(levels: int, bootspec: BootSpec, label: str, time: str) -> str:
             os.path.basename(bootspec.toplevel) + "-secrets"
         )
 
-        if os.system(bootspec.initrdSecrets + " " + initrd_secrets_path_temp) != 0:
+        if subprocess.run([bootspec.initrdSecrets, initrd_secrets_path_temp]).returncode != 0:
             print(
                 f'warning: failed to create initrd secrets for "{label}"',
                 file=sys.stderr,
@@ -621,7 +621,7 @@ def install_bootloader() -> None:
     paths[config_file_path] = True
 
     for dest_path, source_path in config("additionalFiles").items():
-        dest_path = os.path.join(limine_install_dir, dest_path)
+        dest_path = os.path.join(str(config("efiMountPoint")), dest_path)
 
         copy_file(source_path, dest_path)
 
@@ -730,6 +730,14 @@ def install_bootloader() -> None:
                     boot_order = re.findall(
                         r"BootOrder: ((?:[0-9a-fA-F]{4},?)*)", efibootmgr_output
                     )[0]
+                    normalized_boot_order = boot_order.upper().split(",")
+                    create_options = ["-C"]
+                    if limine_boot_entry.upper() in normalized_boot_order:
+                        create_options = [
+                            "-c",
+                            "--index",
+                            str(normalized_boot_order.index(limine_boot_entry.upper())),
+                        ]
 
                     efibootmgr_output = subprocess.check_output(
                         [
@@ -745,7 +753,7 @@ def install_bootloader() -> None:
                     efibootmgr_output = subprocess.check_output(
                         [
                             efibootmgr,
-                            "-c",
+                            *create_options,
                             "-b",
                             limine_boot_entry,
                             "-d",
@@ -756,8 +764,6 @@ def install_bootloader() -> None:
                             f"\\efi\\limine\\{boot_file}",
                             "-L",
                             "Limine",
-                            "-o",
-                            boot_order,
                         ],
                         stderr=subprocess.STDOUT,
                         universal_newlines=True,

@@ -24,7 +24,7 @@ let
       gawk,
       gnugrep,
       gnused,
-      systemd,
+      systemdMinimal,
       smartmontools,
       enableMail ? false,
       sysstat,
@@ -136,7 +136,7 @@ let
                  gawk
                  gnused
                  gnugrep
-                 systemd
+                 systemdMinimal
                ]
              }"
 

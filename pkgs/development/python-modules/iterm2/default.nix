@@ -3,29 +3,33 @@
   buildPythonPackage,
   fetchPypi,
   protobuf,
+  pytestCheckHook,
+  setuptools,
   websockets,
 }:
 
 buildPythonPackage rec {
   pname = "iterm2";
-  version = "2.13";
-  format = "setuptools";
+  version = "2.20";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vslDklETWNlOfD+E4xvMOAJXyyYYVs9/CKHk5WPXI34=";
+    hash = "sha256-Fo04B81Ys+Z4R2hSviu0pc2J8AjZXjfSd32YEHMc/wg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     protobuf
     websockets
   ];
 
-  # The tests require pyobjc. We can't use pyobjc because at
-  # time of writing the pyobjc derivation is disabled on python 3.
-  # iterm2 won't build on python 2 because it depends on websockets
-  # which is disabled below python 3.3.
-  doCheck = false;
+  nativeBuildInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "iterm2" ];
 

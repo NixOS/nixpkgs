@@ -8,6 +8,7 @@
   lxml,
   packaging,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
   python-dateutil,
   semver,
@@ -27,6 +28,8 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-NKe5kM4YPxsGge1UG7DjE3SDXlfZIVazOVmF5RBCbSo=";
   };
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ poetry-core ];
 
@@ -76,7 +79,7 @@ buildPythonPackage (finalAttrs: {
     description = "Collection of Python utilities, tools, classes and functions";
     homepage = "https://github.com/greenbone/pontos";
     changelog = "https://github.com/greenbone/pontos/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

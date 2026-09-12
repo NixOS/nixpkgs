@@ -9,16 +9,16 @@
 }:
 
 let
-  amdgpuVersion = "6.1.3";
-  ubuntuVersion = "22.04";
+  amdgpuVersion = "6.4.4";
+  ubuntuVersion = "24.04";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amf";
-  version = "1.4.34-1787253";
+  version = "1.4.37-2203192";
 
   src = fetchurl {
     url = "https://repo.radeon.com/amdgpu/${amdgpuVersion}/ubuntu/pool/proprietary/a/amf-amdgpu-pro/amf-amdgpu-pro_${finalAttrs.version}.${ubuntuVersion}_amd64.deb";
-    hash = "sha256-5sMI0ktqQDTu5xOKP9T9vjaSIHQizF1wHhqJcVnY40c=";
+    hash = "sha256-pklpKaWLrcClRRaY9jJhFZLbyFXPUY9H5UpmARrgFPU=";
   };
 
   nativeBuildInputs = [

@@ -34,6 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     presetdir=$out/share/starship/presets/
     mkdir -p $presetdir
     cp docs/public/presets/toml/*.toml $presetdir
+    install -Dm644 .github/config-schema.json $out/share/starship/config-schema.json
   ''
   + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
     let
@@ -43,6 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       installShellCompletion --cmd starship \
         --bash <(${emulator} $out/bin/starship completions bash) \
         --fish <(${emulator} $out/bin/starship completions fish) \
+        --nushell <(${emulator} $out/bin/starship completions nushell) \
         --zsh <(${emulator} $out/bin/starship completions zsh)
     ''
   );
@@ -54,8 +56,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  passthru.tests = {
-    inherit (nixosTests) starship;
+  passthru = {
+    jsonschema = {
+      config = "${finalAttrs.finalPackage}/share/starship/config-schema.json";
+    };
+    tests = {
+      inherit (nixosTests) starship;
+    };
   };
 
   meta = {

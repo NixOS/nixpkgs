@@ -21,7 +21,7 @@
   zlib,
   liburing,
   gnutls,
-  systemd,
+  systemdLibs,
   samba,
   talloc,
   jansson,
@@ -81,11 +81,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "samba";
-  version = "4.23.8";
+  version = "4.23.10";
 
   src = fetchurl {
     url = "https://download.samba.org/pub/samba/stable/samba-${finalAttrs.version}.tar.gz";
-    hash = "sha256-l2EphHRW3Ft4wA+P+3ncYFxJ1qrKiyqncv0i27afrgE=";
+    hash = "sha256-50s/SV1+SOZxC1Aas4HIDd88uZxmBHMtNgQCZdnK9FI=";
   };
 
   outputs = [
@@ -167,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals stdenv.hostPlatform.isLinux [
     liburing
-    systemd
+    systemdLibs
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [ libiconv ]
   ++ optionals enableLDAP [

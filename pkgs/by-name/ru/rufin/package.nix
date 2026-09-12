@@ -3,7 +3,7 @@
   fetchFromGitHub,
   rustPlatform,
   cacert,
-  gdk-pixbuf,
+  glib,
   gettext,
   gst_all_1,
   gtk4,
@@ -14,7 +14,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rufin";
-  version = "0.7.13";
+  version = "0.13.1";
 
   __structuredAttrs = true;
 
@@ -22,10 +22,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "screwys";
     repo = "Rufin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gY/Y+9D/9VlVrmYH+Cf7uP787yxhTyb0RyFRhiTjynM=";
+    hash = "sha256-BCn88jedL9+5rLjwHmOIiG6Yg6EZwcDOALEJgDvzfNs=";
   };
 
-  cargoHash = "sha256-DQRURA9IvUZC9gTvKIsAmO8uq8DwGGYTySDI7cGSxMU=";
+  cargoHash = "sha256-kAti4GinC/zcAuhuQi/t/VnbY0laie9BEeUphXLc/M8=";
 
   strictDeps = true;
 
@@ -36,8 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    gdk-pixbuf
-    gettext
+    glib
     gtk4
     libadwaita
   ]
@@ -58,6 +57,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = false;
 
   postInstall = ''
+    install -Dm644 data/japanese-readings.dic \
+      "$out/share/rufin/japanese-readings.dic"
+    install -Dm644 data/japanese-readings.LICENSE \
+      "$out/share/licenses/rufin/japanese-readings.LICENSE"
     install -Dm644 data/io.github.screwys.Rufin.desktop \
       "$out/share/applications/io.github.screwys.Rufin.desktop"
     substituteInPlace "$out/share/applications/io.github.screwys.Rufin.desktop" \
@@ -75,7 +78,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm644 -t "$out/share/icons/hicolor/64x64/apps" \
       data/icons/hicolor/64x64/apps/*.png
 
-    for po_file in locales/*.po; do
+    for po_file in crates/localization/locales/*.po; do
       if [ -f "$po_file" ]; then
         lang="$(basename "$po_file" .po)"
         mkdir -p "$out/share/locale/$lang/LC_MESSAGES"
@@ -93,7 +96,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   meta = {
-    description = "Native GTK music client for Jellyfin";
+    description = "Native GTK4/libadwaita music client for Jellyfin, Subsonic, Navidrome and local libraries written in Rust";
     homepage = "https://github.com/screwys/Rufin";
     changelog = "https://github.com/screwys/Rufin/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;

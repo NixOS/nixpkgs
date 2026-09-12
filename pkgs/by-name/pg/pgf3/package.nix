@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pgf";
-  version = "3.1.11a";
+  version = "3.1.12";
 
   src = fetchFromGitHub {
     owner = "pgf-tikz";
     repo = "pgf";
     tag = finalAttrs.version;
-    hash = "sha256-+OxQ7sf5qh9hiVdCapJOUUwxDNsbvCXZEupN52wqldE=";
+    hash = "sha256-rn1C/KlFA3zjKa7wQpSUE0Bg407rNxbk+d4C0bf9EVc=";
   };
 
   dontConfigure = true;

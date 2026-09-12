@@ -325,7 +325,7 @@ let
 
                     # stripping dlls results in:
                     # Failed to load System.Private.CoreLib.dll (error code 0x8007000B)
-                    stripExclude = lib.optional withMono [ "*.dll" ];
+                    stripExclude = lib.optionals withMono [ "*.dll" ];
 
                     runtimeDependencies =
                       prev.runtimeDependencies or [ ]
@@ -788,7 +788,6 @@ let
           ++ lib.optional (!withMono) "i686-linux"
           # 4.3 doesn't compile on darwin, and 4.4 doesn't pass tests
           ++ lib.optionals (lib.versionAtLeast version "4.5") [
-            "x86_64-darwin"
             "aarch64-darwin"
           ];
           maintainers = with lib.maintainers; [

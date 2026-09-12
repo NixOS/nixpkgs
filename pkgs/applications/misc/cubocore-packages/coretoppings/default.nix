@@ -6,7 +6,7 @@
   ffmpeg,
   cmake,
   ninja,
-  v4l-utils,
+  libv4l,
   grim,
   wf-recorder,
   libdbusmenu,
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtconnectivity
     libdbusmenu
     ffmpeg
-    v4l-utils
+    libv4l
     grim
     wf-recorder
     playerctl

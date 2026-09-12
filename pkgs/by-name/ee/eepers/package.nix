@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
       -Wall \
       -Wextra \
       -gnat2012 \
-      -o eepers-linux eepers.adb \
+      -o eepers eepers.adb \
       -bargs \
       -largs -lraylib -lm \
       -pthread
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/eepers \
       --add-needed libwayland-client.so \
       --add-needed libwayland-cursor.so \
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/bin
-    cp ./eepers-linux $out/bin/eepers
+    cp ./eepers $out/bin/eepers
 
     cp -r ./assets $out/
 
@@ -74,7 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/tsoding/eepers";
     changelog = "https://github.com/tsoding/eepers/blob/${finalAttrs.src.rev}/CHANGELOG.txt";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      zinzilulo
+    ];
     mainProgram = "eepers";
     platforms = lib.platforms.all;
   };

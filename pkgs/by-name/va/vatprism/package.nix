@@ -114,6 +114,6 @@ maven.buildMavenPackage rec {
     mainProgram = "vatprism";
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ thepuzzlemaker ];
+    maintainers = with lib.maintainers; [ tahlonbrahic ];
   };
 }

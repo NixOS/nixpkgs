@@ -34,10 +34,10 @@
       return status == 0 and int(output) == 1
 
     def start_job():
-      machine.succeed("curl -X POST http://localhost:8156/api/jobs/Test%20job")
+      machine.succeed("curl -X POST http://localhost:8156/api/jobs/test-job")
 
     def job_ran_successfully() -> bool:
-      output = machine.succeed("curl http://localhost:8156/api/runs/Test%20job | jq '.[0].status_id, .[0].logs.[2].message'")
+      output = machine.succeed("curl http://localhost:8156/api/runs/test-job | jq '.[0].status_id, .[0].logs.[2].message'")
       split_output = output.split('\n')
       ran_successfully = int(split_output[0]) == 3
       log_message_as_expected = "Job runs not successfully" in split_output[1]

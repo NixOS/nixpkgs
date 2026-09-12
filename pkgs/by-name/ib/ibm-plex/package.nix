@@ -62,7 +62,7 @@ in
 assert lib.assertMsg (unknownFamilies == [ ]) "Unknown font(s): ${toString unknownFamilies}";
 symlinkJoin {
   pname = "ibm-plex";
-  version = "0-unstable-2026-02-12";
+  version = "0-unstable-2026-07-30";
   paths = lib.attrValues fontDerivations;
   passthru = fontDerivations // {
     updateScript = ./update.py;

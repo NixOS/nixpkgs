@@ -1,5 +1,3 @@
-// @ts-check
-
 const eventToState = {
   COMMENT: 'COMMENTED',
   REQUEST_CHANGES: 'CHANGES_REQUESTED',
@@ -16,7 +14,7 @@ const reviewUsers = [
 ]
 
 /**
- * @typedef {InstanceType<import('@actions/github/lib/utils').GitHub>} GitHub
+ * @typedef {InstanceType<typeof import('@actions/github/lib/utils').GitHub>} GitHub
  * @typedef {typeof import('@actions/github').context} Context
  *
  * @typedef {Awaited<ReturnType<GitHub['rest']['pulls']['listReviews']>>['data'][number]} Review
@@ -27,12 +25,18 @@ const reviewUsers = [
  * @param {{
  *  github: GitHub,
  *  context: Context,
- *  core: import('@actions/core'),
+ *  core: typeof import('@actions/core'),
  *  dry: boolean,
  *  reviewKey?: string,
  * }} DismissReviewsProps
  */
-async function dismissReviews({ github, context, core, dry, reviewKey }) {
+export async function dismissReviews({
+  github,
+  context,
+  core,
+  dry,
+  reviewKey,
+}) {
   const pull_number = context.payload.pull_request?.number
   if (!pull_number) {
     core.warning('dismissReviews called outside of pull_request context')
@@ -165,14 +169,14 @@ async function dismissReviews({ github, context, core, dry, reviewKey }) {
  * @param {{
  *  github: GitHub,
  *  context: Context,
- *  core: import('@actions/core'),
+ *  core: typeof import('@actions/core'),
  *  dry: boolean,
  *  body: string,
- *  event: keyof eventToState,
+ *  event: keyof typeof eventToState,
  *  reviewKey: string,
  * }} PostReviewProps
  */
-async function postReview({
+export async function postReview({
   github,
   context,
   core,
@@ -263,9 +267,4 @@ async function postReview({
       })
     }
   }
-}
-
-module.exports = {
-  dismissReviews,
-  postReview,
 }

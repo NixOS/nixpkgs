@@ -1,12 +1,14 @@
 {
   lib,
   fetchFromGitHub,
+  kingfisher,
+  nix-update-script,
   python3Packages,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "prowler";
-  version = "5.31.1";
+  version = "5.41.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -15,10 +17,17 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "prowler-cloud";
     repo = "prowler";
     tag = finalAttrs.version;
-    hash = "sha256-V3kPj3gtS8ZkeU/rBaTPaOdfWvYI70jAi52kCX0m/jg=";
+    hash = "sha256-aWGMdpQXwxDXqYpil+MjlIRTZ9/KzxPGPtJ3eLyiTIY=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatchling==1.32.0" "hatchling"
+  '';
+
   pythonRelaxDeps = true;
+
+  pythonRemoveDeps = [ "kingfisher-bin" ];
 
   build-system = with python3Packages; [ hatchling ];
 
@@ -77,6 +86,17 @@ python3Packages.buildPythonApplication (finalAttrs: {
     google-api-python-client
     google-auth-httplib2
     h2
+    huaweicloudsdkcore
+    huaweicloudsdkcts
+    huaweicloudsdkecs
+    huaweicloudsdkelb
+    huaweicloudsdkevs
+    huaweicloudsdkiam
+    huaweicloudsdkkms
+    huaweicloudsdkobs
+    huaweicloudsdkrds
+    huaweicloudsdkvpc
+    huaweicloudsdkwaf
     jsonschema
     kubernetes
     linode-api4
@@ -102,12 +122,21 @@ python3Packages.buildPythonApplication (finalAttrs: {
     stackit-iaas
     stackit-objectstorage
     stackit-resourcemanager
+    stackit-ske
     tabulate
+    truststore
     tzlocal
     uuid6
+    zstandard
   ];
 
+  postFixup = ''
+    wrapProgram $out/bin/prowler --prefix PATH : "${lib.makeBinPath [ kingfisher ]}"
+  '';
+
   pythonImportsCheck = [ "prowler" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Security tool to perform Cloud Security best practices assessments";

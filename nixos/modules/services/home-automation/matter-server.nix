@@ -71,7 +71,7 @@ in
         # specified. This symlinks /data at the systemd-managed
         # /var/lib/matter-server, so all files get dropped into the state
         # directory.
-        ln -s $STATE_DIRECTORY $RUNTIME_DIRECTORY/data
+        ln -s "$STATE_DIRECTORY" "$RUNTIME_DIRECTORY/data"
 
         # Create directories to hold certificates and OTA updates.
         CERT_DIR="$CACHE_DIRECTORY/certs"
@@ -87,8 +87,8 @@ in
                 vendorid = vendorId;
                 storage-path = storagePath;
                 log-level = cfg.logLevel;
-                paa-root-cert-dir = "$CERT_DIR";
-                ota-provider-dir = "$OTA_UPDATE_DIR";
+                paa-root-cert-dir = ''"$CERT_DIR"'';
+                ota-provider-dir = ''"$OTA_UPDATE_DIR"'';
               }
               // cfg.extraArgs
             )

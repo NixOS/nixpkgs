@@ -17,10 +17,10 @@
   },
   "26": {
     "urls": [
-      "https://swcdn.apple.com/content/downloads/32/53/047-96692-A_OAHIHT53YB/ybtshxmrcju8m2qvw3w5elr4rajtg1x3y3/CLTools_macOSNMOS_SDK.pkg",
-      "https://web.archive.org/web/20260406133131/https://swcdn.apple.com/content/downloads/32/53/047-96692-A_OAHIHT53YB/ybtshxmrcju8m2qvw3w5elr4rajtg1x3y3/CLTools_macOSNMOS_SDK.pkg"
+      "https://swcdn.apple.com/content/downloads/09/08/047-91568-A_Y1CFZWQCD4/4xekpyz43i26dbp4enxfro8eb1q7wiujh5/CLTools_macOSNMOS_SDK.pkg",
+      "https://web.archive.org/web/20260512015547/https://swcdn.apple.com/content/downloads/09/08/047-91568-A_Y1CFZWQCD4/4xekpyz43i26dbp4enxfro8eb1q7wiujh5/CLTools_macOSNMOS_SDK.pkg"
     ],
-    "version": "26.4",
-    "hash": "sha256-7nrbCv1pNlpzEqwZWVfUPCvDfXEJJNOl7ApkeFpIOC0="
+    "version": "26.5",
+    "hash": "sha256-IkDNtiO7PP4GI6OszCNWE1Xb4iepCUKwQHYUyc9NgNA="
   }
 }

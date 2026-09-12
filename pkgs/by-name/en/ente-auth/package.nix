@@ -34,7 +34,7 @@ flutter.buildFlutterApplication rec {
 
   customSourceBuilders.ente_strings =
     { version, src, ... }:
-    # There currently is no covenient way to setup the flutter SDK outside of apps
+    # There currently is no convenient way to setup the flutter SDK outside of apps
     # and we can't move this to the app's own build phase as it would still reference
     # the immutable source variant without the generated l10n files.
     flutter.buildFlutterApplication {

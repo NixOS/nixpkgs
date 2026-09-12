@@ -5,6 +5,7 @@
 
   # build-system
   cython,
+  distutils,
   setuptools,
 
   # optional-dependencies
@@ -21,6 +22,7 @@
   pytest-asyncio,
   pytestCheckHook,
   scipy,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -38,6 +40,7 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [
     cython
+    distutils
     setuptools
   ];
 
@@ -56,6 +59,7 @@ buildPythonPackage (finalAttrs: {
     pytest-asyncio
     pytestCheckHook
     scipy
+    writableTmpDirAsHomeHook
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 

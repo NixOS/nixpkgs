@@ -94,7 +94,7 @@ in
       ];
 
       packages = [
-        pkgs.buffybox
+        cfg.package
       ];
 
       paths.unl0kr-agent.wantedBy = [ "local-fs-pre.target" ];

@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "oslo-i18n";
-  version = "6.8.0";
+  version = "6.9.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "oslo_i18n";
     inherit version;
-    hash = "sha256-oLTGTBOWhp1xRNymCtl8frAo949h+RxwB1MSOAUZl98=";
+    hash = "sha256-V0vPIYc7GFBovOyVHeHsCTFY/9/wWoBV/Rjdy2n2nmU=";
   };
 
   postPatch = ''
@@ -40,10 +40,7 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
 
-    stestr run -e <(echo "
-    # test counts warnings which no longer matches in python 3.11
-    oslo_i18n.tests.test_message.MessageTestCase.test_translate_message_bad_translation
-    ")
+    stestr run
 
     runHook postCheck
   '';

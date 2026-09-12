@@ -19,15 +19,18 @@ let
 
   urlToPath =
     url:
-    if lib.hasPrefix "https://" url then
-      (
-        let
-          url' = lib.drop 2 (lib.splitString "/" url);
-        in
-        "https/${builtins.concatStringsSep "/" url'}"
-      )
-    else
-      builtins.replaceStrings [ "://" ] [ "/" ] url;
+    lib.elemAt (lib.splitString "?" (
+      if lib.hasPrefix "https://" url then
+        (
+          let
+            url' = lib.drop 2 (lib.splitString "/" url);
+          in
+          "https/${builtins.concatStringsSep "/" url'}"
+        )
+      else
+        builtins.replaceStrings [ "://" ] [ "/" ] url
+    )) 0;
+
   code = ''
     mkdir -p "$out"
     cd "$out"

@@ -13,6 +13,7 @@
   buildPythonPackage,
   click,
   cryptography,
+  expression,
   fastapi,
   fastapi-sso,
   fastuuid,
@@ -24,9 +25,11 @@
   gunicorn,
   httpx,
   importlib-metadata,
+  inquirerpy,
   jinja2,
   jsonschema,
   langfuse,
+  maturin,
   mcp,
   openai,
   opentelemetry-api,
@@ -37,6 +40,7 @@
   prisma,
   prometheus-client,
   pydantic,
+  pydantic-settings,
   pyjwt,
   pynacl,
   pypdf,
@@ -47,11 +51,11 @@
   restrictedpython,
   rich,
   rq,
+  rustPlatform,
   sentry-sdk,
   soundfile,
   tiktoken,
   tokenizers,
-  uv-build,
   uvicorn,
   uvloop,
   websockets,
@@ -61,25 +65,41 @@
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.89.0";
+  version = "1.98.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";
     tag = "v${version}";
-    hash = "sha256-tPw4cDqCQgyC8EoB5EPfui2gT+frjlSMOv95ntUXTWk=";
+    hash = "sha256-eMquDSSlBo//huXXiys/F36O18VDjv7U1OUe7DrKhus=";
+  };
+
+  nativeBuildInputs = with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
+  ];
+
+  cargoRoot = "litellm-rust";
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit
+      pname
+      version
+      src
+      cargoRoot
+      ;
+    hash = "sha256-iwgIclG8BGeHDNtm686w2Rxe+9ddvBrz1sMfOBeuKK0=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build==0.11.8" "uv_build"
+      --replace-fail "maturin==1.9.4" "maturin==${maturin.version}"
   '';
-
-  build-system = [ uv-build ];
 
   dependencies = [
     aiohttp
+    boto3
     click
     fastuuid
     httpx
@@ -88,6 +108,7 @@ buildPythonPackage rec {
     jsonschema
     openai
     pydantic
+    pydantic-settings
     python-dotenv
     tiktoken
     tokenizers
@@ -99,11 +120,12 @@ buildPythonPackage rec {
       azure-identity
       azure-storage-blob
       backoff
-      boto3
       cryptography
+      expression
       fastapi
       fastapi-sso
       gunicorn
+      inquirerpy
       # FIXME package litellm-enterprise
       # FIXME package litellm-proxy-extras
       mcp
@@ -158,10 +180,12 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "aiohttp"
+    "boto3"
     "click"
     "importlib-metadata"
     "jsonschema"
     "openai"
+    "pydantic"
     "python-dotenv"
   ];
 

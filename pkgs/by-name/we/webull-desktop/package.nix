@@ -60,7 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
       };
 
       # Keep the "CURL_GNUTLS_3" symbol which is sought by libwbhttpsclient.so
-      patches = (previousAttrs.patches or [ ]) ++ [
+      # "fix-wakeup-consumption.patch" that is applied to newer versions of curl
+      #                                is not needed and will not apply to curl-8.10.0
+      patches = [
         (builtins.toFile "curl-gnutls-keep-symbols-compatible.patch" ''
           --- a/lib/libcurl.vers.in
           +++ b/lib/libcurl.vers.in

@@ -108,6 +108,8 @@ in
 
         system.extraDependencies = [ nodes.initiatorRootDisk.system.build.toplevel ];
 
+        nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
+
         nix.settings = {
           substituters = lib.mkForce [ ];
           hashed-mirrors = null;

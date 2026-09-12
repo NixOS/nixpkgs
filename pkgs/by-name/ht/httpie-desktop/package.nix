@@ -22,7 +22,7 @@ appimageTools.wrapType2 rec {
 
   extraInstallCommands =
     let
-      contents = appimageTools.extractType2 { inherit pname version src; };
+      contents = appimageTools.extract { inherit pname version src; };
     in
     ''
       install -Dm644 ${contents}/httpie.desktop $out/share/applications/httpie.desktop

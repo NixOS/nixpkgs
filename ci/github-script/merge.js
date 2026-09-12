@@ -1,4 +1,5 @@
-const { classify } = require('../supportedBranches.js')
+// @ts-nocheck
+import { classify } from './supportedBranches.js'
 
 function runChecklist({
   committers,
@@ -122,7 +123,7 @@ function hasMergeCommand(body) {
     .match(/^@NixOS\/nixpkgs-merge-bot merge\s*$/im)
 }
 
-async function handleMergeComment({ github, body, node_id, reaction }) {
+export async function handleMergeComment({ github, body, node_id, reaction }) {
   if (!hasMergeCommand(body)) return
 
   await github.graphql(
@@ -137,7 +138,7 @@ async function handleMergeComment({ github, body, node_id, reaction }) {
   )
 }
 
-async function handleMerge({
+export async function handleMerge({
   github,
   context,
   core,
@@ -407,9 +408,4 @@ async function handleMerge({
   // Returns a boolean, which indicates whether the PR is merge-bot eligible in principle.
   // This is used to set the respective label in bot.js.
   return result
-}
-
-module.exports = {
-  handleMerge,
-  handleMergeComment,
 }

@@ -99,13 +99,13 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "fex";
-  version = "2605";
+  version = "2608";
 
   src = fetchFromGitHub {
     owner = "FEX-Emu";
     repo = "FEX";
     tag = "FEX-${finalAttrs.version}";
-    hash = "sha256-N4iiDa9DbET/8wzFmp9FoFQfm0ZmtUT76sipmi8LE/0=";
+    hash = "sha256-2NdkQpzqDkM/fEW8QYS05KU3JPJeLw4gliryqdOJ3vE=";
 
     leaveDotGit = true;
     postFetch = ''
@@ -185,7 +185,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     llvmPackages.bintools
     (python3.withPackages (
       pythonPackages: with pythonPackages; [
-        setuptools
+        packaging
         libclang
       ]
     ))
@@ -233,7 +233,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
       cmakeFlagsArray+=("-DBUILD_TESTING:BOOL=FALSE")
     else
       echo "Keeping checkPhase as-is"
-      cmakeFlagsArray+=("${lib.cmakeBool "BUILD_TESTING" finalAttrs.doCheck}")
+      cmakeFlagsArray+=("${lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck}")
     fi
   '';
 

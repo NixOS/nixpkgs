@@ -7,33 +7,18 @@
 }:
 let
   inherit (stdenvNoCC.hostPlatform) system;
-  version = "2.2.1-20628";
-  sourceData = {
-    aarch64-darwin = {
-      arch = "arm64";
-      hash = "sha256-W8FxnDyYfExgxlvp/dZbRzCZDhaX7Byxwz5rujG/krU=";
-    };
-    x86_64-darwin = {
-      arch = "amd64";
-      hash = "sha256-8woVgREEpJT+IGaVsash/PruEuye+8uhKaADTrtoMZs=";
-    };
-  };
-  sources = lib.mapAttrs (
-    system:
-    { arch, hash }:
-    fetchurl {
-      url = "https://cdn-updates.orbstack.dev/${arch}/OrbStack_v${
-        lib.replaceString "-" "_" version
-      }_${arch}.dmg";
-      inherit hash;
-    }
-  ) sourceData;
+  version = "2.2.3-20963";
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "orbstack";
   inherit version;
 
-  src = finalAttrs.passthru.sources.${system} or (throw "unsupported system ${system}");
+  src = fetchurl {
+    url = "https://cdn-updates.orbstack.dev/arm64/OrbStack_v${
+      lib.replaceString "-" "_" version
+    }_arm64.dmg";
+    hash = "sha256-fKd4aPOg19n1ez+YYVqtMMxZ0jzIS7/xP3iEbfC0k9Q=";
+  };
 
   # -snld prevents "ERROR: Dangerous symbolic link path was ignored"
   # -xr'!*:com.apple.*' prevents macOS extended attributes (e.g. macl or
@@ -70,7 +55,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    inherit sources;
     updateScript = ./update.sh;
   };
 

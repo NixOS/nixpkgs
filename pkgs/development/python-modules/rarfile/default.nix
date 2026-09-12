@@ -15,14 +15,14 @@ assert !useUnrar -> libarchive != null;
 
 buildPythonPackage rec {
   pname = "rarfile";
-  version = "4.2";
+  version = "4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "markokr";
     repo = "rarfile";
     tag = "v${version}";
-    hash = "sha256-ZiwD2LG25fMd4Z+QWsh/x3ceG5QRBH4s/TZDwMnfpNI=";
+    hash = "sha256-QhNzpNKOuBF/QEQ9XBXwKudcq4VqJyN/0chT+9uCcKg=";
   };
 
   prePatch = ''

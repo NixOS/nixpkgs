@@ -1,7 +1,7 @@
 {
   lib,
   aiohttp,
-  aioresponses,
+  aiointercept,
   buildPythonPackage,
   click,
   cryptography,
@@ -12,21 +12,21 @@
   pyjwt,
   pytest-asyncio,
   pytestCheckHook,
-  syrupy,
+  syrupy_6,
   tabulate,
   typeguard,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "renault-api";
-  version = "0.5.12";
+  version = "0.5.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = "renault-api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XUrI03gr3U0wfEXLNGaxGil2tOfXrmeUUuH5lVKF0e0=";
+    hash = "sha256-+kzIPnz34uTjUQ9hksxr3RIEg0+/w+8BdoH+ruenzi0=";
   };
 
   build-system = [ poetry-core ];
@@ -47,10 +47,10 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
-    aioresponses
+    aiointercept
     pytest-asyncio
     pytestCheckHook
-    syrupy
+    syrupy_6
     typeguard
   ]
   ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);

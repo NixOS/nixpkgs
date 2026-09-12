@@ -118,7 +118,9 @@ stdenvNoCC.mkDerivation (
         --script ./anchor.min.js \
         --script ./anchor-use.js \
         --sidebar-depth 3 \
-        --nav ./nav.json \
+        --experimental-config ./nav.json \
+        --header ${./header.html}\
+        --no-navheader \
         manual.md \
         out/index.html
 
@@ -174,5 +176,7 @@ stdenvNoCC.mkDerivation (
         manpage-urls = callPackage ../tests/manpage-urls.nix { };
       };
     };
+
+    meta.license = lib.licenses.mit;
   }
 )

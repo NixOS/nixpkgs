@@ -1,6 +1,6 @@
 {
   fetchurl,
-  jdk17_headless,
+  jdk25_headless,
   lib,
   makeBinaryWrapper,
   stdenv,
@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "questdb";
-  version = "9.3.5";
+  version = "9.4.3";
 
   src = fetchurl {
     url = "https://github.com/questdb/questdb/releases/download/${finalAttrs.version}/questdb-${finalAttrs.version}-no-jre-bin.tar.gz";
-    hash = "sha256-TvymN030Q9k9qPbBvrtHcOjT9KILw0tzCle1pdI7Bj8=";
+    hash = "sha256-f8EaA7jiq4UxQia3sQvtVN/v4dh8fsg26FyK1hdefVw=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp questdb.jar $out/share/java
 
     ln -s $out/share/java/questdb.jar $out/bin
-    wrapProgram $out/bin/questdb.sh --set JAVA_HOME "${jdk17_headless}"
+    wrapProgram $out/bin/questdb.sh --set JAVA_HOME "${jdk25_headless}"
 
     runHook postInstall
   '';

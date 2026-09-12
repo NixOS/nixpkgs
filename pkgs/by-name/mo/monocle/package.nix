@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "monocle";
-  version = "1.3.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "bgpkit";
     repo = "monocle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S1oFajXaym787JFwKpZwajRaVyj3cxWT3DZE/fIZCSY=";
+    hash = "sha256-UF4i1Nq0gZIZ2nZy9Lx9yeCVdl3uv5eQo8uVPvKuodE=";
   };
 
-  cargoHash = "sha256-60cFl2+ZdYJ/iAC5IjP/5T9f8a/qxsK/szo7qT+/aU8=";
+  cargoHash = "sha256-D5khIguUPvUT1Sa/m141BSnT0qkaXDreVpsTNSnH7x4=";
 
   # require internet access
   checkFlags = map (t: "--skip=${t}") [
@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "lens::ip::tests::test_fetch_ip_info"
     "lens::search::tests::test_build_broker_with_filters"
     "lens::search::tests::test_pagination_logic"
+    "rejects_invalid_historical_rpki_selections"
     "server::handlers::country::tests::test_country_lens_lookup"
   ];
 

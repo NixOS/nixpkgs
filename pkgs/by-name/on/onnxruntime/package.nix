@@ -25,7 +25,7 @@
   pythonSupport ? (stdenv.buildPlatform.canExecute stdenv.hostPlatform),
   cudaSupport ? config.cudaSupport,
   ncclSupport ? cudaSupport && cudaPackages.nccl.meta.available,
-  openvinoSupport ? stdenv.isLinux,
+  openvinoSupport ? stdenv.hostPlatform.isLinux,
   rocmSupport ? config.rocmSupport,
   coremlSupport ? stdenv.hostPlatform.isDarwin,
   withFullProtobuf ? false,
@@ -112,20 +112,17 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "onnxruntime";
-  version = "1.26.0";
+  version = "1.27.1";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-+9M4mEPLLJ5N+JomoXIKcUBV85lr6lFJjJQ3qsMRrQY=";
+    hash = "sha256-i2u/JnfbJ/srsZY3ATb2YsBBXEhTGhatsr3+9eHVV3M=";
   };
 
   patches = [
-    # Skip execinfo include on musl
-    # https://github.com/microsoft/onnxruntime/pull/25726
-    ./musl-execinfo.patch
     # Add missing include which is only needed on musl (is implied in other includes on glibc)
     # https://github.com/microsoft/onnxruntime/pull/26969
     ./musl-cstdint.patch
@@ -135,11 +132,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     # Patch adapted from https://gitlab.alpinelinux.org/alpine/aports/-/raw/462dfe0eb4b66948fe48de44545cc22bb64fdf9f/community/onnxruntime/0001-Remove-MATH_NO_EXCEPT-macro.patch
     ./remove-MATH_NO_EXCEPT-macro.patch
   ]
-  # Include additional target_link_libraries needed for cudnn-frontend >= 2.19
-  # See: https://github.com/microsoft/onnxruntime/pull/28849
-  # These changes are included in 548ab6e and fc7a9f0 upstream
   ++ lib.optionals cudaSupport [
-    ./nvrtc-link.patch
+    # Drop the orphaned ShardedMoE CUDA contrib op, whose ft_moe backend was removed upstream
+    # Fix submitted upstream: https://github.com/microsoft/onnxruntime/pull/31139
+    ./drop-orphaned-sharded-moe.patch
   ];
 
   postPatch = ''
@@ -295,7 +291,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     # fails to find protoc on darwin, so specify it
     (lib.cmakeFeature "ONNX_CUSTOM_PROTOC_EXECUTABLE" (lib.getExe buildPackages.protobuf))
     (lib.cmakeBool "onnxruntime_BUILD_SHARED_LIB" true)
-    (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "onnxruntime_USE_FULL_PROTOBUF" withFullProtobuf)
     (lib.cmakeBool "onnxruntime_USE_CUDA" cudaSupport)
     (lib.cmakeBool "onnxruntime_USE_NCCL" ncclSupport)

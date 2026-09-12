@@ -41,5 +41,6 @@ and non-critical by adding `options = [ "nofail" ];`.
 ```{=include=} sections
 luks-file-systems.section.md
 sshfs-file-systems.section.md
+nfs-file-systems.section.md
 overlayfs.section.md
 ```

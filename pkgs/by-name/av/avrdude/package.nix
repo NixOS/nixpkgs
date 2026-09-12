@@ -31,13 +31,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "avrdude";
-  version = "8.1";
+  version = "8.3";
 
   src = fetchFromGitHub {
     owner = "avrdudes";
     repo = "avrdude";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-i1q0NQKVd/wiOm1Amop3hW+FWuefFOQCCivuEtEH38k=";
+    sha256 = "sha256-QE41ncnn8t55TYe7ypKYPjo9C2ioxuFXN3nFiYlvpEo=";
   };
 
   nativeBuildInputs = [

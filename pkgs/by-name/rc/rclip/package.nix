@@ -1,20 +1,33 @@
 {
   lib,
+  stdenv,
   python3Packages,
   fetchFromGitHub,
+  fetchpatch,
   versionCheckHook,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rclip";
-  version = "3.2.3";
+  version = "3.3.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "yurijmikhalevich";
     repo = "rclip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LiqhJNt6wSSmwJ6kQJQpIHXYjdQI9eR2rrqkYPZknrQ=";
+    hash = "sha256-QdyqECPzZZtphtjSJAKrWGwGKcYrlbSSkJ0GHs9+K10=";
   };
+
+  patches = [
+    # use pillow-heif instead of pi-heif as it has been discontinued
+    # https://github.com/bigcat88/pillow_heif/pull/431
+    (fetchpatch {
+      url = "https://github.com/yurijmikhalevich/rclip/commit/7207600d8da6aef0aacb2c2b52e90a564e3018aa.patch";
+      hash = "sha256-Bua9tIpRq2mWSQLP0dcHE8S0Ef7AZKvlOS5fXAqTcQY=";
+      revert = true;
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -25,6 +38,16 @@ python3Packages.buildPythonApplication (finalAttrs: {
     uv-build
   ];
 
+  pythonRelaxDeps = [
+    "numpy"
+    "pillow"
+    "rawpy"
+    "regex"
+  ];
+  pythonRemoveDeps = lib.optionals stdenv.hostPlatform.isDarwin [
+    # unpackaged
+    "coremltools"
+  ];
   dependencies = with python3Packages; [
     ftfy
     huggingface-hub
@@ -36,12 +59,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     requests
     tqdm
     rawpy
-  ];
-
-  pythonRelaxDeps = [
-    "numpy"
-    "pillow"
-    "rawpy"
   ];
 
   pythonImportsCheck = [ "rclip" ];

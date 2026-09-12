@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
+  qaseprite,
   qbs,
   libsForQt5,
   zlib,
@@ -12,6 +13,7 @@
 
 let
   qtEnv = libsForQt5.env "tiled-qt-env" [
+    qaseprite
     libsForQt5.qtbase
     libsForQt5.qtdeclarative
     libsForQt5.qtsvg
@@ -74,6 +76,12 @@ stdenv.mkDerivation (finalAttrs: {
     qbs install --settings-dir . --install-root $out config:release
 
     runHook postInstall
+  '';
+
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/tiled.thumbnailer \
+      --replace-fail "TryExec=tmxrasterizer" "TryExec=$out/bin/tmxrasterizer" \
+      --replace-fail "Exec=tmxrasterizer" "Exec=$out/bin/tmxrasterizer"
   '';
 
   meta = {

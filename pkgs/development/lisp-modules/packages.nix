@@ -601,7 +601,7 @@ let
         meta = {
           description = "Functional collections library";
           homepage = "https://gitlab.common-lisp.net/fset/fset/-/wikis/home";
-          license = pkgs.lib.licenses.llgpl21;
+          license = with pkgs.lib.licenses; WITH lgpl21Only llgplPreamble;
         };
       });
 
@@ -625,6 +625,21 @@ let
         };
       });
 
+      cffi-c2ffi = self.cffi.overrideLispAttrs (old: {
+        systems = old.systems ++ [
+          "cffi/c2ffi"
+          "cffi/c2ffi-generator"
+        ];
+        lispLibs = old.lispLibs ++ [
+          self.cl-ppcre
+          self.cl-json
+        ];
+        postPatch = (old.postPatch or "") + ''
+          echo '(unless (ignore-errors (c2ffi-executable-available?))
+              (setf *c2ffi-executable* "${pkgs.lib.getExe pkgs.c2ffi}"))' \
+          >> src/c2ffi/c2ffi.lisp
+        '';
+      });
     }
     // optionalAttrs pkgs.config.allowAliases {
       cl-glib_dot_gio = throw "cl-glib_dot_gio was replaced by cl-gio";

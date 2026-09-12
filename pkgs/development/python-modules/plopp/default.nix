@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pythonAtLeast,
 
   # build-system
@@ -45,6 +46,14 @@ buildPythonPackage (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-TpoTOzdD8N9IcATmMRTfbSSBWwosxCW+MBa5MDtabf8=";
   };
+
+  patches = [
+    # Fixes test failures: https://github.com/scipp/plopp/pull/592
+    (fetchpatch {
+      url = "https://github.com/scipp/plopp/commit/4d2aac82d9ac42f5b74b4e12de689a627e1fc457.patch";
+      hash = "sha256-Kec+AQrwCNE8X/EfUzXMZIxD8puVbmrR3y6J7EThBlk=";
+    })
+  ];
 
   build-system = [
     setuptools

@@ -108,7 +108,7 @@ in
         DynamicUser = true;
         ExecStart = lib.getExe cfg.package;
         LockPersonality = true;
-        MemoryDenyWriteExecute = true;
+        MemoryDenyWriteExecute = false; # pcre2 jit
         PrivateDevices = true;
         ProtectClock = true;
         ProtectControlGroups = true;

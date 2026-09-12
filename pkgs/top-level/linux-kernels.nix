@@ -92,8 +92,8 @@ in
           ];
         };
 
-        linux_7_1 = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "7.1";
+        linux_7_2 = callPackage ../os-specific/linux/kernel/mainline.nix {
+          branch = "7.2";
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
@@ -168,6 +168,7 @@ in
         linux_6_17 = throw "linux 6.17 was removed because it has reached its end of life upstream";
         linux_6_19 = throw "linux 6.19 was removed because it has reached its end of life upstream";
         linux_7_0 = throw "linux 7.0 was removed because it has reached its end of life upstream";
+        linux_7_1 = throw "linux 7.1 was removed because it has reached its end of life upstream";
 
         linux_5_10_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
         linux_5_15_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
@@ -341,19 +342,13 @@ in
 
         framework-laptop-kmod = callPackage ../os-specific/linux/framework-laptop-kmod { };
 
-        fwts-efi-runtime = callPackage ../os-specific/linux/fwts/module.nix { };
-
         gasket = callPackage ../os-specific/linux/gasket { };
 
         gcadapter-oc-kmod = callPackage ../os-specific/linux/gcadapter-oc-kmod { };
 
-        hyperv-daemons = callPackage ../os-specific/linux/hyperv-daemons { };
+        gtp5g = callPackage ../os-specific/linux/gtp5g { };
 
-        e1000e =
-          if lib.versionOlder kernel.version "4.10" then
-            callPackage ../os-specific/linux/e1000e { }
-          else
-            null;
+        hyperv-daemons = callPackage ../os-specific/linux/hyperv-daemons { };
 
         iio-utils =
           if lib.versionAtLeast kernel.version "4.1" then
@@ -368,6 +363,8 @@ in
             null;
 
         ipu6-drivers = callPackage ../os-specific/linux/ipu6-drivers { };
+
+        ipu7-drivers = callPackage ../os-specific/linux/ipu7-drivers { };
 
         ivsc-driver = callPackage ../os-specific/linux/ivsc-driver { };
 
@@ -463,8 +460,6 @@ in
         rtl88xxau-aircrack = callPackage ../os-specific/linux/rtl88xxau-aircrack { };
 
         rtl8821au = callPackage ../os-specific/linux/rtl8821au { };
-
-        rtl8821ce = callPackage ../os-specific/linux/rtl8821ce { };
 
         rtl88x2bu = callPackage ../os-specific/linux/rtl88x2bu { };
 
@@ -576,12 +571,6 @@ in
 
         vmware = callPackage ../os-specific/linux/vmware { };
 
-        wireguard =
-          if lib.versionOlder kernel.version "5.6" then
-            callPackage ../os-specific/linux/wireguard { }
-          else
-            null;
-
         x86_energy_perf_policy = callPackage ../os-specific/linux/x86_energy_perf_policy { };
 
         xone =
@@ -642,6 +631,7 @@ in
         hid-nintendo = throw "hid-nintendo was added in mainline kernel version 5.16"; # Added 2023-07-30
         sch_cake = throw "sch_cake was added in mainline kernel version 4.19"; # Added 2023-06-14
         rtl8723bs = throw "rtl8723bs was added in mainline kernel version 4.12"; # Added 2023-06-14
+        rtl8821ce = throw "rtl8821ce has been removed due to lack of maintenance"; # Added 2026-07-22
         vm-tools = self.mm-tools;
         xmm7360-pci = throw "Support for the XMM7360 WWAN card was added to the iosm kmod in mainline kernel version 5.18";
         amdgpu-pro = throw "amdgpu-pro was removed due to lack of maintenance"; # Added 2024-06-16
@@ -655,6 +645,7 @@ in
         prl-tools = throw "Parallel Tools no longer provide any kernel module, please use pkgs.prl-tools instead."; # added 2025-10-04
         nvidia_dc_565 = throw "nvidiaPackages.dc_565 has reached end of life, see https://endoflife.date/nvidia"; # added 2026-02-10
         nvidia_dc_535 = throw "nvidiaPackages.dc_535 removed, soon reaches end of life, see https://endoflife.date/nvidia"; # added 2026-03-08
+        fwts-efi-runtime = throw "fwts-efi-runtime has been replaced by efi_test starting with kernel version 4.8, see https://bugs.launchpad.net/fwts/+bug/2138473"; # added 2026-05-16
       }
     )).extend
       (lib.fixedPoints.composeManyExtensions kernelPackagesExtensions);
@@ -667,7 +658,7 @@ in
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
     linux_6_12 = recurseIntoAttrs (packagesFor kernels.linux_6_12);
     linux_6_18 = recurseIntoAttrs (packagesFor kernels.linux_6_18);
-    linux_7_1 = recurseIntoAttrs (packagesFor kernels.linux_7_1);
+    linux_7_2 = recurseIntoAttrs (packagesFor kernels.linux_7_2);
   }
   // lib.optionalAttrs config.allowAliases {
     linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11"; # Added 2024-09-21
@@ -682,6 +673,7 @@ in
     linux_6_17 = throw "linux 6.17 was removed because it reached its end of life upstream"; # Added 2025-12-22
     linux_6_19 = throw "linux 6.19 was removed because it reached its end of life upstream"; # Added 2026-04-23
     linux_7_0 = throw "linux 7.0 was removed because it has reached its end of life upstream"; # Added 2026-06-27
+    linux_7_1 = throw "linux 7.1 was removed because it has reached its end of life upstream"; # Added 2026-09-02
   };
 
   rpiPackages = {
@@ -737,7 +729,7 @@ in
   packageAliases = {
     linux_default = packages.linux_6_18;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_7_1;
+    linux_latest = packages.linux_7_2;
   }
   // lib.optionalAttrs config.allowAliases {
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";

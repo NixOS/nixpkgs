@@ -26,9 +26,16 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mlflow";
     repo = "mlflow";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-e11ZncpvThb1Nt6OH+O6Do74N3dphxBiK/HIeLQMxAw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2nWu+P9bGAl+1p3ZfxO2XdBMrfePJI6EBk82r99w480=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        "setuptools<=82.0.1" \
+        "setuptools"
+  '';
 
   sourceRoot = "${finalAttrs.src.name}/libs/tracing";
 

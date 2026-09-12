@@ -96,8 +96,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
       ${manage} compress
     '';
 
-  # Upstream pins all dependencies, so their version constraints are mostly meanningless,
-  # except for a few packages maintained by themselfes.
+  # Upstream pins all dependencies, so their version constraints are mostly meaningless,
+  # except for a few packages maintained by themselves.
   # https://github.com/WeblateOrg/weblate/issues/20003#issuecomment-4691837274
   pythonRelaxDeps =
     let

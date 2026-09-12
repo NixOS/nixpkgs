@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdbook-bib";
-  version = "0.5.2";
+  version = "0.5.3";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "francisco-perez-sorrosal";
     repo = "mdbook-bib";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xgGJYnOYUuxHs2sXzYKSZd0jLm/x/PoPsNHQcWpXkn8=";
+    hash = "sha256-IhGwVnUYjnwZmZJkt1Z9yFlNcJ2EObnqFHmmfJNco/M=";
   };
 
-  cargoHash = "sha256-QyP+Mw/95NvjaAkr5eoeC49nLXCE9/TMPIWahJayqBQ=";
+  cargoHash = "sha256-A1rOfXZP4rFtLX3pmLwB99FBws1wMotKnMPfqnYW9m0=";
 
   nativeBuildInputs = [
     pkg-config

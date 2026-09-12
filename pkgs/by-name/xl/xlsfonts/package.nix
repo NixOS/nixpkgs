@@ -9,11 +9,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xlsfonts";
-  version = "1.0.8";
+  version = "1.0.9";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/xlsfonts-${finalAttrs.version}.tar.xz";
-    hash = "sha256-gH+QnqzmhLhm/GOz6WJynBIIIqbJbgUf9RzzULP/ts0=";
+    hash = "sha256-pqLikYAUWNklECY7F10W+YAk3DgW692955tQCfbDsGU=";
   };
 
   strictDeps = true;

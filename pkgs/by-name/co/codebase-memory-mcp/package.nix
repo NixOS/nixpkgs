@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "codebase-memory-mcp";
-  version = "0.8.1";
+  version = "0.10.8";
 
   src = fetchFromGitHub {
     owner = "DeusData";
     repo = "codebase-memory-mcp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-H0l8H2JhPT1Rs0p+CJC1a1qYtnZNgLGe6n7PmM+WvE4=";
+    hash = "sha256-lPuayLN6W31zQ45UTQehP+tmoo/UrQJuRsJzi1wZ9Tg=";
   };
 
   patches = [
@@ -27,14 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace Makefile.cbm \
       --replace-fail "npm ci &&" ""
 
-    substituteInPlace scripts/embed-frontend.sh \
-      --replace-fail "/bin/bash" "${bash}/bin/bash"
+    patchShebangs scripts/embed-frontend.sh
   '';
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
-    hash = "sha256-feoZNsZfrPgoLdjlnnh3w3vTxR6AwPdUkPubaR93TAk=";
+    hash = "sha256-cDwGJi8M/t7eTHVKu6TzW7L9OUAQgB+0c+fiTgPn7cE=";
   };
 
   npmRoot = "graph-ui";

@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -13,14 +14,15 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-8AWT0/DELfNWXtZOejC90DbUSOtyGt9tSkcSuO7HP2o=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
-    install -Dm644 */*/*.otf -t $out/share/fonts/opentype
-    install -Dm644 */*/*.ttf -t $out/share/fonts/truetype
-    install -Dm644 *.md  -t $out/share/doc/${pname}-${version}
+  nativeBuildInputs = [ installFonts ];
 
-    runHook postInstall
+  postInstall = ''
+    install -Dm644 *.md  -t $out/share/doc/overpass-${version}
   '';
 
   meta = {

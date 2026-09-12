@@ -21,7 +21,6 @@
   libxml2,
   libglut,
   libsamplerate,
-  pcre,
   libevent,
   libedit,
   yajl,
@@ -81,7 +80,6 @@ stdenv.mkDerivation {
     libxml2
     libglut
     libsamplerate
-    pcre
     libevent
     libedit
     yajl

@@ -1,0 +1,29 @@
+From 9ce5e368c00ed887f6d2628d4e8eff664bff5522 Mon Sep 17 00:00:00 2001
+From: 4evy <git@evy.pink>
+Date: Sat, 11 Jul 2026 01:12:36 +0300
+Subject: [PATCH 1/4] Allow running from the Nix store
+
+Upstream normally requires the bundle to live in /Applications because its
+Sparkle updater needs a stable, writable installation path. Nix applications
+instead live in the immutable Nix store and are updated by Nix.
+
+Use upstream's existing kAllowOutsideApplicationsFolder escape hatch as the
+registered default. This preserves upstream's check and keeps the downstream
+change to one explicit policy setting.
+---
+ Itsycal/AppDelegate.m | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Itsycal/AppDelegate.m b/Itsycal/AppDelegate.m
+index 5cc187a..ee256d9 100644
+--- a/Itsycal/AppDelegate.m
++++ b/Itsycal/AppDelegate.m
+@@ -42,6 +42,8 @@
+         kThemePreference:      @0, // System=0, Light=1, Dark=2
+         kHideIcon:             @(NO),
+         kShowLocation:         @(NO),
++        // Nix installs the app in the immutable Nix store, not /Applications.
++        kAllowOutsideApplicationsFolder: @(YES),
+         kEnableTahoeMenuIcons: @(NO),
+         kDoNotDrawOutlineAroundCurrentMonth: @(NO)
+     }];

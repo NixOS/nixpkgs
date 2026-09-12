@@ -4,11 +4,12 @@
   lib,
   nodejs_24,
   pnpm_10,
+  pnpm_11,
   node-gyp,
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
-  electron_42,
+  electron_43,
   python3,
   makeWrapper,
   callPackage,
@@ -32,22 +33,25 @@ assert lib.warnIf (commandLineArgs != "")
   true;
 let
   nodejs = nodejs_24;
-  pnpm = pnpm_10;
-  electron = electron_42;
+  pnpm = pnpm_11;
+  electron = electron_43;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
-  signal-sqlcipher = callPackage ./signal-sqlcipher.nix { inherit pnpm nodejs; };
+  signal-sqlcipher = callPackage ./signal-sqlcipher.nix {
+    pnpm = pnpm_10;
+    inherit nodejs;
+  };
 
   webrtc = callPackage ./webrtc.nix { };
   ringrtc = callPackage ./ringrtc.nix { inherit webrtc; };
 
-  version = "8.15.0";
+  version = "8.25.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-SiOgNUll6J+EZNlmM6yhXakOc5qFCFRE/GczhaH57Vo=";
+    hash = "sha256-eP6EsTUnKgSh1QcAged/rr0Y/9I2P2fJnSQ1666Ddic=";
     # Emoji font files will be added in `postFetch` if `withAppleEmojis` is enabled. They
     # are fetched separately below.
     postFetch = ''
@@ -63,14 +67,24 @@ let
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
     pname = "signal-desktop-sticker-creator";
-    inherit version;
-    src = src + "/sticker-creator";
+    inherit src version;
+
+    pnpmRoot = "sticker-creator";
+    pnpmWorkspaces = [ "signal-art-creator" ];
 
     pnpmDeps = fetchPnpmDeps {
-      inherit (finalAttrs) pname src version;
+      inherit (finalAttrs)
+        pname
+        src
+        version
+        pnpmWorkspaces
+        ;
       inherit pnpm;
+      prePnpmInstall = ''
+        pnpm config set fetch-timeout 300000
+      '';
       fetcherVersion = 4;
-      hash = "sha256-WmDSa4PrASaqs8X68LYaPBeE+i+Jh3FfWF30SseN74Y=";
+      hash = "sha256-y3OVpWiWIUsq4mfjZqar88LCEzu0d2isTT+9DowzTFY=";
     };
 
     strictDeps = true;
@@ -83,7 +97,7 @@ let
 
     installPhase = ''
       runHook preInstall
-      cp -r dist $out
+      cp -r sticker-creator/dist $out
       runHook postInstall
     '';
   });
@@ -113,9 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./force-90-days-expiration.patch
-
-    # Drop once https://github.com/NixOS/nixpkgs/pull/520553 and https://github.com/NixOS/nixpkgs/pull/525241 land.
-    ./dont-assert-unicode-17-emoji.patch
   ]
   ++ lib.optional (!withAppleEmojis) (
     # Signal ships the Apple emoji set without a licence and upstream
@@ -149,6 +160,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace config/production.json \
       --replace-fail '"updatesEnabled": true' '"updatesEnabled": false'
 
+    # pnpm 11 verifies node_modules before every `pnpm run`, which fails
+    # after nixpkgs swaps in the prebuilt native modules below.
+    substituteInPlace pnpm-workspace.yaml \
+      --replace-fail "verifyDepsBeforeRun: prompt" "verifyDepsBeforeRun: false"
+
     # Nix builds do not need upstream release hooks (notarization and
     # language-pack postprocessing), and they expect a different macOS
     # app layout than nixpkgs' Electron provides.
@@ -171,14 +187,19 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       ;
     inherit pnpm;
+    prePnpmInstall = ''
+      pnpm config set fetch-timeout 300000
+    '';
     fetcherVersion = 4;
-    hash = "sha256-/z+P9mb7Cm3FzzMpV6Da6THcHd73JgPuuB0Gx8KwKcc=";
+    hash = "sha256-y3OVpWiWIUsq4mfjZqar88LCEzu0d2isTT+9DowzTFY=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1781737260;
+    # Signal enforces that builds expire 90 days after the last source code change to disallow sending messages from older versions.
+    # We set the source-changed date to match the corresponding upstream release date.
+    SOURCE_DATE_EPOCH = 1787765339;
   };
 
   preBuild = ''
@@ -232,6 +253,21 @@ stdenv.mkDerivation (finalAttrs: {
     node-gyp rebuild
     popd
     test -f node_modules/fs-xattr/build/Release/xattr.node
+
+    # @signalapp/windows-ucv is imported on all platforms, but its TypeScript
+    # output is normally produced by its preinstall script. pnpmConfigHook runs
+    # `pnpm install --ignore-scripts`, so build it explicitly.
+    pushd packages/windows-ucv
+    pnpm run build
+    popd
+    test -f node_modules/@signalapp/windows-ucv/dist/index.js
+
+    # @signalapp/types is required at runtime by preload.wrapper.js, but its
+    # output is normally produced by the prepare script.
+    pushd packages/types
+    pnpm run build
+    popd
+    test -f node_modules/@signalapp/types/dist/index.std.cjs
 
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
@@ -339,7 +375,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

@@ -2,7 +2,6 @@
   runTest,
   runTestOn,
   lib,
-  ...
 }:
 
 let
@@ -41,6 +40,8 @@ let
       boot.loader.efi.canTouchEfiVariables = true;
       environment.systemPackages = [ pkgs.efibootmgr ];
       system.switch.enable = true;
+      nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
+
       # Needed for machine-id to be persisted between reboots.
       # Must be a valid (non-zero) ID, otherwise sd_id128_get_machine()
       # returns -ENOMEDIUM and dbus-broker refuses to start.
@@ -288,7 +289,6 @@ in
         {
           imports = [ common ];
           environment.systemPackages = [ pkgs.sbctl ];
-          virtualisation.useSecureBoot = true;
         };
 
       testScript =
@@ -460,19 +460,17 @@ in
       nodes.machine = common;
 
       testScript =
-        let
-          oldVersion = "222";
-        in
         # python
         ''
           machine.succeed("mount -o remount,rw /boot")
 
           def switch():
-              # Replace version inside sd-boot with something older. See magic[] string in systemd src/boot/efi/boot.c
+              # Replace version inside sd-boot with something older. See SD_MAGIC in systemd src/boot/boot.c
+              # Note: the sed replacement has to be length-preserving, because section length matters.
               machine.succeed(
-                """
+                r"""
                 find /boot -iname '*boot*.efi' -print0 | \
-                xargs -0 -I '{}' sed -i 's/#### LoaderInfo: systemd-boot .* ####/#### LoaderInfo: systemd-boot ${oldVersion} ####/' '{}'
+                xargs -0 -I '{}' sed -i 's/#### LoaderInfo: systemd-boot [0-9]\(.*\) ####/#### LoaderInfo: systemd-boot 0\1 ####/' '{}'
                 """
               )
               return machine.succeed("/run/current-system/bin/switch-to-configuration boot 2>&1")
@@ -935,6 +933,8 @@ in
               "test -e /sys/firmware/efi/efivars/LoaderBootCountPath-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f"
           )
 
+          # systemd-bless-boot should have already removed the "+2" suffix from the boot entry
+          machine.wait_for_unit("systemd-bless-boot.service")
           check_generation(1)
           check_current_system(orig)
 

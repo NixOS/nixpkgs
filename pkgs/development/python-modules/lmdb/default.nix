@@ -11,12 +11,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lmdb";
-  version = "2.2.1";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-sgG0FvfWzqm9L5dyd6X1HW5SpDTW7FEaizSZDfKxqcU=";
+    hash = "sha256-Jg9ENkDuLaPP0FmoQlhlkxn/OcqRLBa/l0jDJAdrnQk=";
   };
 
   build-system = [ setuptools ];

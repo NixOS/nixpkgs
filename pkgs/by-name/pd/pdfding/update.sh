@@ -4,7 +4,7 @@
 set -x
 set -eou pipefail
 
-version=$(curl ${GITHUB_TOKEN:+ -H "Authorization: Bearer $GITHUB_TOKEN"} -sL https://api.github.com/repos/mrmn2/PdfDing/releases/latest | jq -r '.tag_name')
+version=$(curl -sL https://codeberg.org/api/v1/repos/mrmn/PdfDing/releases/latest | jq -r '.tag_name')
 
 if [[ "v${UPDATE_NIX_OLD_VERSION:-}" == "$version" ]]; then
   echo "Already up-to-date, version: $version"
@@ -37,7 +37,7 @@ new_npm_hash="$(prefetch-npm-deps ./package-lock.json)"
 sed -i "s|$prev_npm_hash|$new_npm_hash|g" "$PACKAGE_DIR/frontend.nix"
 
 # pdfjs version
-pdfjs_version="$(grep 'PDFJS_VERSION=' "$src/Dockerfile" | cut -d'=' -f2)"
+pdfjs_version="$(jq -r .config.pdfjs_version package.json)"
 
 sed -i "s|pdfjsVersion = .*;|pdfjsVersion = \"$pdfjs_version\";|" "$PACKAGE_DIR/frontend.nix"
 

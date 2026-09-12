@@ -20,10 +20,6 @@ let
       url = "https://www.rarlab.com/rar/rarmacos-arm-${downloadVersion}.tar.gz";
       hash = "sha256-aLOTwAB1jUd/3kPJVf91QvEvdvP16HzdqSMVL8eRvU0=";
     };
-    x86_64-darwin = {
-      url = "https://www.rarlab.com/rar/rarmacos-x64-${downloadVersion}.tar.gz";
-      hash = "sha256-2h+zw9d0gTbJs2m2g9V0s3LLHtBJpjSoH4XZORg0bY8=";
-    };
   };
 in
 stdenv.mkDerivation {

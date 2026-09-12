@@ -19,15 +19,15 @@ in
 
 buildGoModule (finalAttrs: {
   pname = "regclient";
-  version = "0.11.5";
+  version = "0.11.6";
 
   src = fetchFromGitHub {
     owner = "regclient";
     repo = "regclient";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-tJBnNtuN9BIlGvHekrvziyBu5gFPzbID/09eAoM5VUc=";
+    sha256 = "sha256-GBRqblUXSUVbpI/sQ8UIc/XaRQHZE+S43i/S3zc3vgo=";
   };
-  vendorHash = "sha256-jpXy3ZWj+JoDKU2r7FanKR8nQGIQPAL9GW4g//e5xZs=";
+  vendorHash = "sha256-XU6y15/6VEbV323jKWw2534huQjTxn/qmsyN+qszQxA=";
 
   outputs = [ "out" ] ++ bins;
 

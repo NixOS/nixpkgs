@@ -18,7 +18,6 @@ fi
 for i in \
   "x86_64-linux linux_x86_64.AppImage" \
   "aarch64-linux linux_arm64.AppImage" \
-  "x86_64-darwin mac_x64.dmg" \
   "aarch64-darwin mac_arm64.dmg"; do
   set -- $i
   hash=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url "https://github.com/streetwriters/notesnook/releases/download/v$latestVersion/notesnook_$2")")

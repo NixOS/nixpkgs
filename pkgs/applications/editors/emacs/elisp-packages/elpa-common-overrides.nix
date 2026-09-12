@@ -54,6 +54,7 @@ in
 
       meta = previousAttrs.meta // {
         maintainers = [ lib.maintainers.sternenseemann ];
+        broken = true; # https://github.com/NixOS/nixpkgs/issues/544219
       };
     }
   );
@@ -322,9 +323,6 @@ in
         rm $outd/xapian-lite.cc $outd/emacs-module.h $outd/emacs-module-prelude.h $outd/demo.gif $outd/Makefile
       '';
   });
-
-  # native-ice https://github.com/mattiase/xr/issues/9
-  xr = ignoreCompilationError super.xr;
 
   # keep-sorted end
 }

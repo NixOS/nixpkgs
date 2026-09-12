@@ -2,7 +2,7 @@
   lib,
   clangStdenv,
   fetchFromGitHub,
-  makeWrapper,
+  makeBinaryWrapper,
 
   nixosTests,
   alsa-lib,
@@ -12,7 +12,9 @@
   cryptopp,
   ffmpeg,
   fmt,
+  freetype,
   half,
+  httplib,
   jack2,
   libdecor,
   libpng,
@@ -21,6 +23,7 @@
   libusb1,
   magic-enum,
   minimp3,
+  miniupnpc,
   miniz,
   nlohmann_json,
   libgbm,
@@ -49,27 +52,37 @@
   vulkan-memory-allocator,
   xbyak,
   xxhash,
+  zarchive,
+  zstd,
   zlib,
   nix-update-script,
+
+  withRpc ? true,
 }:
 
+let
+  abseilCppSrc = fetchFromGitHub {
+    owner = "abseil";
+    repo = "abseil-cpp";
+    tag = "20250512.1";
+    hash = "sha256-eB7OqTO9Vwts9nYQ/Mdq0Ds4T1KgmmpYdzU09VPWOhk=";
+  };
+in
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.16.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-SavSUHtnJeRi2mzIyUhLfLk37Y/PSuI3bbbqWA7qVbg=";
+    hash = "sha256-n2q4qmbknkT6kb6I5aeu6tU6EzSIfdrV+ptzQvhUJ/Q=";
 
     postCheckout = ''
-      cd "$out"
+      git -C "$out" rev-parse --short=8 HEAD > $out/COMMIT
+      date -u -d "@$(git -C "$out" log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
 
-      git rev-parse --short=8 HEAD > $out/COMMIT
-      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
-
-      git -C externals submodule update --init --recursive \
+      git -C "$out/externals" submodule update --init --recursive \
         glslang \
         zydis \
         sirit \
@@ -83,9 +96,13 @@ clangStdenv.mkDerivation (finalAttrs: {
         aacdec/fdk-aac \
         spdlog \
         libressl \
-        ImGuiFileDialog
+        ImGuiFileDialog \
+        protobuf
     '';
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   postPatch = ''
     substituteInPlace src/common/scm_rev.cpp.in \
@@ -96,6 +113,15 @@ clangStdenv.mkDerivation (finalAttrs: {
       --replace-fail @BUILD_DATE@ $(cat SOURCE_DATE_EPOCH)
   '';
 
+  # System Zstd is not linked by default
+  env.NIX_LDFLAGS = "-lzstd";
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    makeBinaryWrapper
+  ];
+
   buildInputs = [
     alsa-lib
     boost
@@ -103,7 +129,9 @@ clangStdenv.mkDerivation (finalAttrs: {
     cryptopp
     ffmpeg
     fmt
+    freetype
     half
+    httplib
     jack2
     libdecor
     libpng
@@ -120,6 +148,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libxtst
     magic-enum
     minimp3
+    miniupnpc
     miniz
     libgbm
     nlohmann_json
@@ -139,17 +168,17 @@ clangStdenv.mkDerivation (finalAttrs: {
     vulkan-memory-allocator
     xbyak
     xxhash
+    zarchive
+    zstd
     zlib
   ];
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    makeWrapper
-  ];
-
   cmakeFlags = [
+    (lib.cmakeBool "ENABLE_DISCORD_RPC" withRpc)
+    (lib.cmakeBool "ENABLE_TESTS" false)
     (lib.cmakeBool "ENABLE_UPDATER" false)
+    (lib.cmakeBool "ENABLE_SYSTEM_LIBRARIES" true)
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ABSL" "${abseilCppSrc}")
   ];
 
   # Still in development, help with debugging
@@ -183,7 +212,9 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Early in development PS4 emulator";
-    homepage = "https://github.com/shadps4-emu/shadPS4";
+    homepage = "https://shadps4.net";
+    downloadPage = "https://shadps4.net/downloads";
+    donationPage = "https://ko-fi.com/shadps4";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       ryand56

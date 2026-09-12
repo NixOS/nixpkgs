@@ -42,10 +42,6 @@ let
       fridaArch = "linux-ia32";
       fridaHash = "sha256-vLwf+EwWNDLznda8J+xVqp8XmuivdZ0VKgISR9YoQR0=";
     };
-    x86_64-darwin = {
-      fridaArch = "darwin-x64";
-      fridaHash = "sha256-raODa/EHRpMYNwFK9gxTXWrxnx1G1IbKTKV1343MTm8=";
-    };
     aarch64-darwin = {
       fridaArch = "darwin-arm64";
       fridaHash = "sha256-mR6HM9rmRmXhWqXA0GC4Xkdj9KVSthhtvMAzijE+j5c=";

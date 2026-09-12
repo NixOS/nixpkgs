@@ -16,6 +16,8 @@ stdenv.mkDerivation (finalAttrs: {
   # attempt to use C library functions without declaring them, which is raised as an error.
   env.NIX_CFLAGS_COMPILE = "-D__GNU_LIBRARY__";
 
+  strictDeps = true;
+
   makeFlags = [
     "WITHOUT_GETTEXT=1"
     "LIBCGETOPT=0"
@@ -23,10 +25,13 @@ stdenv.mkDerivation (finalAttrs: {
     "CC:=$(CC)"
   ];
 
+  __structuredAttrs = true;
+
   meta = {
     platforms = lib.platforms.unix;
-    homepage = "http://frodo.looijaard.name/project/getopt";
+    homepage = "https://frodo.looijaard.name/project/getopt";
     description = "Parses command-line arguments from shell scripts";
     mainProgram = "getopt";
+    license = lib.licenses.gpl2Plus;
   };
 })

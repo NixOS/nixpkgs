@@ -12,13 +12,17 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "catchorg";
     repo = "Catch2";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-XnT2ziES94Y4uzWmaxSw7nWegJFQjAqFUG8PkwK5nLU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XnT2ziES94Y4uzWmaxSw7nWegJFQjAqFUG8PkwK5nLU=";
   };
 
   nativeBuildInputs = [ cmake ];
 
+  strictDeps = true;
+
   cmakeFlags = [ "-H.." ];
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Multi-paradigm automated test framework for C++ and Objective-C (and, maybe, C)";

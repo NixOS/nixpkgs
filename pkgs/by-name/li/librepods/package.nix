@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   src = fetchFromGitHub {
-    owner = "kavishdevar";
+    owner = "librepods-org";
     repo = "librepods";
     tag = "v${finalAttrs.version}";
     hash = "sha256-6l1WjwjDbv5e3tDaWo9+XSEjr9ge/hKysIkeUqyiO4U=";
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    homepage = "https://github.com/kavishdevar/librepods";
+    homepage = "https://github.com/librepods-org/librepods";
     description = "AirPods liberated from Apple's ecosystem";
     license = lib.licenses.gpl3;
     mainProgram = "librepods";

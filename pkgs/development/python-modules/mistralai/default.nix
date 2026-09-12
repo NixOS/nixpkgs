@@ -27,12 +27,13 @@
 
   # tests
   opentelemetry-sdk,
+  pytest-asyncio,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "mistralai";
-  version = "2.5.2";
+  version = "2.9.4";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -40,7 +41,7 @@ buildPythonPackage (finalAttrs: {
     owner = "mistralai";
     repo = "client-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-skcg4fa9WUNqQs3rqfwVovpQ65hCXqhDDyeJa7kAwNA=";
+    hash = "sha256-w7nU4fiduMhpuvKZMJ3JTLEg8Bvuv5L5OXeJYve3/fI=";
   };
 
   preBuild = ''
@@ -87,6 +88,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "mistralai" ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
   ]
   ++ finalAttrs.passthru.optional-dependencies.agents
@@ -99,6 +101,8 @@ buildPythonPackage (finalAttrs: {
     "src/mistralai/extra/tests/test_otel_tracing.py"
     # ModuleNotFoundError: No module named 'msgpack'
     "src/mistralai/extra/tests/test_workflow_encoding.py"
+    # '062f2cad7f1fee8c3e409b73d431e71b' not found in '00-e5d29cde482d5d796428c10d13e86060-468fe44f7efdb086-01'
+    "src/mistralai/extra/tests/test_traceparent_hook.py::TestTraceparentInjectionHook::test_propagates_sampled_active_span"
   ];
 
   meta = {

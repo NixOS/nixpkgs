@@ -22,14 +22,13 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "0.27.0";
+  version = "0.28.0";
 in
 buildPythonPackage {
-  inherit version;
-
   pname = "torchvision";
-
+  inherit version;
   format = "wheel";
+  __structuredAttrs = true;
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 

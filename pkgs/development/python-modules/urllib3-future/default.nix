@@ -23,16 +23,16 @@
   zstandard,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "urllib3-future";
-  version = "2.22.900";
+  version = "2.24.907";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "urllib3.future";
-    tag = version;
-    hash = "sha256-y31EzgiRN6X5lWlgv8MNYbMIuoTR13w9wgAT9rklx5s=";
+    tag = finalAttrs.version;
+    hash = "sha256-itZQm1QYQ+g1v8EKTSIX45kcyV1B/fXJvPG26SYdKM4=";
   };
 
   postPatch = ''
@@ -75,7 +75,11 @@ buildPythonPackage rec {
     tornado
     trustme
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
+
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn10Warning"
+  ];
 
   disabledTestPaths = [
     # test connects to the internet
@@ -83,10 +87,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/jawah/urllib3.future/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/jawah/urllib3.future/blob/${finalAttrs.src.tag}/CHANGES.rst";
     description = "Powerful HTTP 1.1, 2, and 3 client with both sync and async interfaces";
     homepage = "https://github.com/jawah/urllib3.future";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

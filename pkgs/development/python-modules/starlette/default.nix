@@ -8,7 +8,6 @@
 
   # dependencies
   anyio,
-  typing-extensions,
 
   # optional dependencies
   itsdangerous,
@@ -16,6 +15,7 @@
   python-multipart,
   pyyaml,
   httpx,
+  httpx2,
 
   # tests
   pytestCheckHook,
@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "1.1.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "encode";
+    owner = "Kludex";
     repo = "starlette";
     tag = version;
-    hash = "sha256-9iQXlpA1VDGw1c7X1zJPmJ3Dub46PwqrVIX1+fWOZ7M=";
+    hash = "sha256-0eby4cDIU2bPUv+1qSTnZtfo4kkgMDIDYnZ9wp2wtoI=";
   };
 
   build-system = [ hatchling ];
@@ -47,20 +47,14 @@ buildPythonPackage rec {
     python-multipart
     pyyaml
     httpx
+    httpx2
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
     trio
-    typing-extensions
   ]
   ++ lib.concatAttrValues optional-dependencies;
-
-  pytestFlags = [
-    "-Wignore::DeprecationWarning"
-    "-Wignore::trio.TrioDeprecationWarning"
-    "-Wignore::ResourceWarning" # FIXME remove once test suite is fully compatible with anyio 4.4.0
-  ];
 
   pythonImportsCheck = [ "starlette" ];
 
@@ -69,8 +63,8 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://www.starlette.io/release-notes/#${lib.replaceStrings [ "." ] [ "" ] version}";
-    downloadPage = "https://github.com/encode/starlette";
+    changelog = "https://github.com/Kludex/starlette/blob/${src.tag}/docs/release-notes.md";
+    downloadPage = "https://github.com/Kludex/starlette";
     homepage = "https://www.starlette.io/";
     description = "Little ASGI framework that shines";
     license = lib.licenses.bsd3;

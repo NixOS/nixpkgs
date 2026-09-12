@@ -8,13 +8,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "ostui";
-  version = "1.3.4";
+  version = "1.3.9";
 
   src = fetchFromSourcehut {
     owner = "~ser";
     repo = "ostui";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+8YZiFV86SuTYQT+FTMo55dQy/W35hD+mcJp8MUz17s=";
+    hash = "sha256-al8vMreGUS4Y6/407wXozZRb5rnKyXKBzXN+Z3d2MC4=";
   };
 
   vendorHash = "sha256-cCyOG6nqlw2DPbA1dCuki5cpDy9LmZV/3YGyB3nCreI=";

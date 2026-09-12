@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = {
     description = "Universal feed parser";
     homepage = "https://github.com/kurtmckee/feedparser";
-    changelog = "https://feedparser.readthedocs.io/en/latest/changelog.html";
+    changelog = "https://feedparser.readthedocs.io/en/latest/changelog";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };

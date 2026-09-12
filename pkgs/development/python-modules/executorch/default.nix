@@ -4,6 +4,7 @@
   pkgs,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # nativeBuildInputs
   gitMinimal,
@@ -51,9 +52,19 @@
   cudaSupport ? torch.cudaSupport,
   cudaPackages,
 }:
+let
+  # The Cortex-M backend fetches CMSIS-NN through `FetchContent` at configure time.
+  # Revision taken from `CMSIS_NN_VERSION` in `backends/cortex_m/CMakeLists.txt`.
+  cmsis-nn-src = fetchFromGitHub {
+    owner = "ARM-software";
+    repo = "CMSIS-NN";
+    rev = "dbf45dbfcc515421dd6099037d3e2637b90748c8";
+    hash = "sha256-FOr7DevJxroGAOmnqKK9/suXjOeaZYQFlFIrYmU19WQ=";
+  };
+in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "executorch";
-  version = "1.3.1";
+  version = "1.4.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -67,7 +78,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     name = "executorch";
 
     fetchSubmodules = true;
-    hash = "sha256-UyMPY+qYTHYZDeftj4YVqzO2ibTswzd+HWW5JeXHW0Q=";
+    hash = "sha256-j43JX/3WLassyiyfwwIfSKO05ZmmS9wGUol4c+BZLEU=";
   };
 
   postPatch =
@@ -115,6 +126,9 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
       # For some cmake-tier reason, cmakeBool does not work here
       (lib.cmakeFeature "EXECUTORCH_BUILD_CUDA" (if cudaSupport then "ON" else "OFF"))
+
+      # Avoid fetching CMSIS-NN from the network
+      (lib.cmakeFeature "CMSIS_NN_LOCAL_PATH" cmsis-nn-src.outPath)
     ];
   }
   // lib.optionalAttrs cudaSupport {
@@ -158,6 +172,8 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pythonRelaxDeps = [
     "mpmath"
     "scikit-learn"
+    # Upstream requires a torch nightly (>=2.13.0a0), but builds fine against the released 2.12
+    "torch"
     "torchao"
   ];
   dependencies = [
@@ -243,6 +259,11 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
     # RuntimeError: Failed to compile /build/tmplb6i266d/data.json to /build/tmplb6i266d/data.pte
     "test_flatbuffer_paths_match"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # ValueError: badly formed help string
+    "test_with_config"
+    "test_with_config_and_cli"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
     # RuntimeError: Error in dlopen:

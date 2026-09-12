@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jocalsend";
-  version = "1.618033988";
+  version = "1.6180339887";
 
   __structuredAttrs = true;
 
@@ -18,10 +18,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "nebkor";
     repo = "joecalsend";
     tag = finalAttrs.version;
-    hash = "sha256-nzsvVC1e8ENh0bpQwiogGew823NNmSNXN+VZZHfVFIY=";
+    hash = "sha256-sOgFOAJXX5mugjMfTICNrJHc/DRD5zdZsg/K4cbRjlQ=";
   };
 
-  cargoHash = "sha256-5V/a6rj08Ucu6S+SBukYQktWLVnnbXeoGan1oYTozHc=";
+  cargoHash = "sha256-UEzyy6SQ3ntJHeXivd6e8Xvr4aTdpfYrFMWqLjoBrJc=";
 
   nativeBuildInputs = [
     pkg-config
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://git.kittencollective.com/nebkor/joecalsend";
     description = "Rust terminal client for Localsend";
     changelog = "https://git.kittencollective.com/nebkor/joecalsend/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ unfreeRedistributable ];
+    license = lib.licenses.unfreeRedistributable;
     maintainers = with lib.maintainers; [ Cameo007 ];
     mainProgram = "jocalsend";
   };

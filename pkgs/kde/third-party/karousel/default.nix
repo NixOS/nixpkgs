@@ -5,7 +5,7 @@
   kpackage,
   kwin,
   nodejs,
-  typescript,
+  typescript_5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     kpackage
     nodejs
-    typescript
+    typescript_5
   ];
   buildInputs = [ kwin ];
   dontWrapQtApps = true;

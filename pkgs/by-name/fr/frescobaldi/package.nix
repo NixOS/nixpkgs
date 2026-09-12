@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "frescobaldi";
-  version = "4.0.6";
+  version = "4.0.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frescobaldi";
     repo = "frescobaldi";
     tag = "v${version}";
-    hash = "sha256-IgvjKj0+8oNbuZ91n4O16kGXBS7rS63HQUNQnJcOis8=";
+    hash = "sha256-tCFK6UHLxDwouqyMbGPLXMtHsMdZ9SURGHV5GJm7z/4=";
   };
 
   dependencies = with python3Packages; [
@@ -56,7 +56,7 @@ python3Packages.buildPythonApplication rec {
       versions of LilyPond, automatically selects the correct version, Built-in
       LilyPond documentation browser and built-in User Guide, Smart
       layout-control functions like coloring specific objects in the PDF,
-      MusicXML import, Modern user iterface with configurable colors,
+      MusicXML import, Modern user interface with configurable colors,
       fonts and keyboard shortcuts
     '';
     license = lib.licenses.gpl2Plus;

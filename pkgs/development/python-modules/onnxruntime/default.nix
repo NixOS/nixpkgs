@@ -89,7 +89,7 @@ buildPythonPackage {
   # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
   # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
   #
-  # While this problem has existed for a while, it started occuring at import time since the update
+  # While this problem has existed for a while, it started occurring at import time since the update
   # of onnxruntime to 1.23.1 (https://github.com/NixOS/nixpkgs/pull/450587)
   pythonImportsCheck =
     lib.optionals (!(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64))

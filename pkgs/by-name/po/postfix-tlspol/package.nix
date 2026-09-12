@@ -1,19 +1,19 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   nixosTests,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "postfix-tlspol";
-  version = "1.11.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "Zuplu";
     repo = "postfix-tlspol";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mdnCa0xrexkKWHdtCeSXxwMnx9xNKAdkZlHIhqxD/P4=";
+    hash = "sha256-9G24iBDQrKNUZEhUBiVwhzgs8geEb/balxzxnDSOlus=";
   };
 
   vendorHash = null;

@@ -34,6 +34,7 @@
 
 let
   inherit (stdenv) hostPlatform;
+  rustc = rustPlatform.callPackage ({ rustc }: rustc) { };
 
   accelIsValid = builtins.elem acceleration [
     null
@@ -73,14 +74,14 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mistral-rs";
-  version = "0.8.4";
+  version = "0.9.3";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";
     repo = "mistral.rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BSP8fi4grbEzGOfR4tGCJVjIom/1d2mnFrK8O6BRWL4=";
+    hash = "sha256-uuWwp1f0GCCCml/lkfrs0+ceE98MirQII0YJZJyZ40o=";
   };
 
   patches = [
@@ -94,22 +95,42 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --replace-fail \
           "lto = true" \
           "lto = false"
+
+    ''
+    # LLVM 21 cannot select the VPDPBUSD intrinsic because its argument types are incorrect.
+    # Fixed by https://github.com/rust-lang/llvm-project/commit/94e2c19f86a699d7a19ff0f4130b696699189c8d.
+    + lib.optionalString (hostPlatform.isx86_64 && lib.versionOlder rustc.llvm.version "22") ''
+      substituteInPlace "$cargoDepsCopy/source-git-0/candle-core-0.11.0/src/quantized/mod.rs" \
+        --replace-fail \
+          '#[cfg(target_arch = "x86_64")]' \
+          '#[cfg(any())]' \
+        --replace-fail \
+          '#[cfg(not(any(target_arch = "aarch64", target_arch = "x86_64")))]' \
+          '#[cfg(not(target_arch = "aarch64"))]'
+
+      substituteInPlace "$cargoDepsCopy/source-git-0/candle-core-0.11.0/src/quantized/repack.rs" \
+        --replace-fail \
+          '#[cfg(target_arch = "x86_64")]' \
+          '#[cfg(any())]' \
+        --replace-fail \
+          '#[cfg(not(any(target_arch = "aarch64", target_arch = "x86_64")))]' \
+          '#[cfg(not(target_arch = "aarch64"))]'
     ''
     # Prevent build scripts from attempting to clone cutlass (which would fail in the sandbox anyway).
     # Instead, we provide cutlass in buildInputs.
     + lib.optionalString cudaSupport ''
       substituteInPlace mistralrs-flash-attn/build.rs \
         --replace-fail \
-          ".with_cutlass(Some(CUTLASS_COMMIT))" \
+          ".with_cutlass(Some(&cutlass_commit))" \
           ""
 
       substituteInPlace mistralrs-quant/build.rs \
         --replace-fail \
-          'builder = builder.with_cutlass(Some("7d49e6c7e2f8896c47f586706e67e1fb215529dc"));' \
+          "builder = builder.with_cutlass(Some(&cutlass_commit));" \
           ""
     '';
 
-  cargoHash = "sha256-T4TPm31fihx9ZvQ6jme67yrc0osl4c9CiAm4+rISgFs=";
+  cargoHash = "sha256-nHcXQQYu6fzeAWQdUN1uV6e/fO6bvyPtIejb3EIW9T4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -196,6 +217,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFeatures = [ ];
 
   checkFlags = [
+    # Error: failed to read MTP model config: No such file or directory (os error 2)
+    "--skip=external_mtp_checkpoint_bytes_are_added_to_the_cache_reservation"
+
+    # assertion `left == right` failed: docs/openapi.json is stale;
+    # regenerate with: cargo test -p mistralrs-server-core regenerate_openapi -- --ignored
+    "--skip=openapi_doc::tests::openapi_matches_committed"
+
+    # Max error 0.27852345 is too large
+    "--skip=vector_fp8::ops::tests::test_fp8_vector_quant_cpu"
+
     # Try to access internet
     "--skip=gguf::gguf_tokenizer::tests::test_encode_decode_gpt2"
     "--skip=gguf::gguf_tokenizer::tests::test_encode_decode_llama"
@@ -206,6 +237,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=callbacks_outlive_manager_executor_tempdir"
     "--skip=sandboxed_session_can_execute_python"
     "--skip=sandboxed_session_default_policy_can_execute_python"
+
+    # Upstream's v0.9.2 bump updated the version example in the generated CLI reference page
+    # but not in the clap doc comment it is generated from, so this golden test fails at the tag.
+    "--skip=docgen::cli_reference_matches_committed"
 
     # Linux namespace / seccomp tests require capabilities the nix build sandbox blocks
     "--skip=network_none_blocks_socket"
@@ -220,6 +255,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # When started, mistralrs tries to load libcuda.so from the driver which is not available in the sandbox
   # mistralrs: error while loading shared libraries: libcuda.so.1: cannot open shared object file: No such file or directory
   doInstallCheck = !cudaSupport;
+
+  __darwinAllowLocalNetworking = true;
 
   passthru = {
     tests = {

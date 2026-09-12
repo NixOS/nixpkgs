@@ -92,7 +92,9 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 buildPythonPackage rec {
   version = src.version;
-  pname = "sagelib";
+  # Sage publishes Python metadata as "sagemath" even though this nixpkgs
+  # attribute is exposed as `sagelib`.
+  pname = "sagemath";
   src = sage-src;
   pyproject = true;
 

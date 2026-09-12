@@ -28,6 +28,8 @@
   libtiff,
   enableWebP ? true,
   libwebp,
+  enableJpegXL ? true,
+  libjxl,
   enableEXR ? !stdenv.hostPlatform.isDarwin,
   openexr,
   enableJPEG2000 ? true,
@@ -52,14 +54,13 @@
   enableIpp ? false,
   enablePython ? false,
   pythonPackages,
-  enableGtk2 ? false,
-  gtk2,
   enableGtk3 ? false,
   gtk3,
   enableVtk ? false,
   vtk,
   enableFfmpeg ? true,
-  ffmpeg,
+  # FIXME: unpin once upstream has ffmpeg 9 support
+  ffmpeg_8-headless,
   enableGStreamer ? true,
   elfutils,
   gst_all_1,
@@ -358,9 +359,6 @@ effectiveStdenv.mkDerivation {
   ++ optionals (effectiveStdenv.buildPlatform == effectiveStdenv.hostPlatform) [
     hdf5
   ]
-  ++ optionals enableGtk2 [
-    gtk2
-  ]
   ++ optionals enableGtk3 [
     gtk3
   ]
@@ -379,6 +377,9 @@ effectiveStdenv.mkDerivation {
   ++ optionals enableWebP [
     libwebp
   ]
+  ++ optionals enableJpegXL [
+    libjxl
+  ]
   ++ optionals enableEXR [
     openexr
   ]
@@ -386,7 +387,7 @@ effectiveStdenv.mkDerivation {
     openjpeg
   ]
   ++ optionals enableFfmpeg [
-    ffmpeg
+    ffmpeg_8-headless
   ]
   ++ optionals (enableGStreamer && effectiveStdenv.hostPlatform.isLinux) [
     elfutils
@@ -497,6 +498,7 @@ effectiveStdenv.mkDerivation {
     (cmakeBool "WITH_IPP" enableIpp)
     (cmakeBool "WITH_TIFF" enableTIFF)
     (cmakeBool "WITH_WEBP" enableWebP)
+    (cmakeBool "WITH_JPEGXL" enableJpegXL)
     (cmakeBool "WITH_JPEG" enableJPEG)
     (cmakeBool "WITH_PNG" enablePNG)
     (cmakeBool "WITH_OPENEXR" enableEXR)
@@ -529,7 +531,7 @@ effectiveStdenv.mkDerivation {
 
     # OpenCV respects at least three variables:
     # -DCUDA_GENERATION takes a single arch name, e.g. Volta
-    # -DCUDA_ARCH_BIN takes a semi-colon separated list of real arches, e.g. "8.0;8.6"
+    # -DCUDA_ARCH_BIN takes a semicolon-separated list of real arches, e.g. "8.0;8.6"
     # -DCUDA_ARCH_PTX takes the virtual arch, e.g. "8.6"
     (cmakeFeature "CUDA_ARCH_BIN" cmakeCudaArchitecturesString)
     (cmakeFeature "CUDA_ARCH_PTX" (last cudaCapabilities))
@@ -643,7 +645,6 @@ effectiveStdenv.mkDerivation {
       opencv4-tests = callPackage ./tests.nix {
         inherit
           enableGStreamer
-          enableGtk2
           enableGtk3
           runAccuracyTests
           runPerformanceTests

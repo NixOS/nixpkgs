@@ -2,24 +2,25 @@
   lib,
   buildHomeAssistantComponent,
   fetchFromGitHub,
-  httpx,
   home-assistant,
+  httpx,
+  pytest-asyncio,
   pytest-cov-stub,
   pytest-homeassistant-custom-component,
-  pytest-asyncio,
+  pytest-xdist,
   pytestCheckHook,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "luuquangvu";
   domain = "blueprints_updater";
-  version = "2.9.1";
+  version = "2.14.5";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "blueprints-updater";
     tag = version;
-    hash = "sha256-OGQ6lE14w84C88QJv5w+mNBGg7gbCtqb9nde47FkL6A=";
+    hash = "sha256-aU7oyFMeQkaVAHQcMvMn28Kx0KZ7zanI3ZLNJtM1mu4=";
   };
 
   patches = [
@@ -41,14 +42,8 @@ buildHomeAssistantComponent rec {
     pytest-asyncio
     pytest-cov-stub
     pytest-homeassistant-custom-component
+    pytest-xdist
     pytestCheckHook
-  ];
-
-  disabledTestPaths = [
-    # pytest-homeassistant-custom-component tries to create temporary directories inside the nix store
-    "tests/integration/test_init.py::test_full_update_lifecycle"
-    "tests/integration/test_services.py::test_restore_blueprint_service"
-    "tests/integration/test_services.py::test_update_all_service"
   ];
 
   meta = {

@@ -418,6 +418,59 @@ def test_execute_nix_build_vm(mock_run: Mock, tmp_path: Path) -> None:
 
 @patch.dict(os.environ, {}, clear=True)
 @patch("subprocess.run", autospec=True)
+def test_execute_nix_build_vm_with_bootloader_and_specialisation(
+    mock_run: Mock, tmp_path: Path
+) -> None:
+    config_path = tmp_path / "test"
+    config_path.touch()
+
+    def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
+        if args[0] == "nix-build":
+            return CompletedProcess([], 0, str(config_path))
+        elif args[0] == "nix-instantiate":
+            return CompletedProcess([], 1)
+        else:
+            return CompletedProcess([], 0)
+
+    mock_run.side_effect = run_side_effect
+
+    nr.execute(
+        [
+            "nixos-rebuild",
+            "build-vm-with-bootloader",
+            "--specialisation",
+            "custom-specialisation",
+            "--no-flake",
+            "--no-reexec",
+        ]
+    )
+
+    assert mock_run.call_count == 2
+    mock_run.assert_has_calls(
+        [
+            call(
+                ["nix-instantiate", "--find-file", "nixos-system"],
+                check=False,
+                capture_output=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "nix-build",
+                    "<nixpkgs/nixos>",
+                    "--attr",
+                    "config.specialisation.custom-specialisation.configuration.system.build.vmWithBootLoader",
+                ],
+                check=True,
+                stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
+            ),
+        ]
+    )
+
+
+@patch.dict(os.environ, {}, clear=True)
+@patch("subprocess.run", autospec=True)
 def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
@@ -610,7 +663,7 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
 @patch("subprocess.run", autospec=True)
 @patch("uuid.uuid4", autospec=True)
 @patch(get_qualified_name(nr.services.cleanup_ssh), autospec=True)
-def test_execute_nix_switch_build_target_host(
+def test_execute_nix_switch_build_target_host_custom_profile(
     mock_cleanup_ssh: Mock,
     mock_uuid4: Mock,
     mock_run: Mock,
@@ -654,10 +707,12 @@ def test_execute_nix_switch_build_target_host(
             "nixos-config=./configuration.nix",
             "-I",
             "nixpkgs=$HOME/.nix-defexpr/channels/pinned_nixpkgs",
+            "--profile-name",
+            "custom-profile",
         ]
     )
 
-    assert mock_run.call_count == 12
+    assert mock_run.call_count == 13
     mock_run.assert_has_calls(
         [
             call(
@@ -802,9 +857,27 @@ def test_execute_nix_switch_build_target_host(
                     "-c",
                     """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
                     "sh",
+                    "mkdir",
+                    "-p",
+                    "/nix/var/nix/profiles/system-profiles",
+                ],
+                check=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "ssh",
+                    *nr.process.SSH_DEFAULT_OPTS,
+                    "user@target-host",
+                    "--",
+                    "sudo",
+                    "/bin/sh",
+                    "-c",
+                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
+                    "sh",
                     "nix-env",
                     "-p",
-                    "/nix/var/nix/profiles/system",
+                    "/nix/var/nix/profiles/system-profiles/custom-profile",
                     "--set",
                     str(config_path),
                 ],
@@ -993,9 +1066,9 @@ def test_execute_nix_switch_flake_build_host(
     config_path.touch()
 
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
-        if args[0] == "nix" and "eval" in args:
-            return CompletedProcess([], 0, str(config_path))
-        elif args[0] == "ssh" and "nix" in args:
+        if (args[0] == "nix" and "eval" in args) or (
+            args[0] == "ssh" and "nix" in args
+        ):
             return CompletedProcess([], 0, str(config_path))
         elif args[0] == "nix-instantiate":
             return CompletedProcess([], 1)
@@ -1316,9 +1389,7 @@ def test_execute_test_flake(mock_run: Mock, tmp_path: Path) -> None:
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
         if args[0] == "nix":
             return CompletedProcess([], 0, str(config_path))
-        elif args[0] == "nix-instantiate":
-            return CompletedProcess([], 1)
-        elif args[0] == "test":
+        elif args[0] == "nix-instantiate" or args[0] == "test":
             return CompletedProcess([], 1)
         else:
             return CompletedProcess([], 0)
@@ -1386,9 +1457,9 @@ def test_execute_test_rollback(
                 2084   2024-11-07 23:54:17   (current)
                 """),
             )
-        elif args[0] == "nix-instantiate" and "nixos-system" in args:
-            return CompletedProcess([], 1)
-        elif args[0] == "test":
+        elif (args[0] == "nix-instantiate" and "nixos-system" in args) or args[
+            0
+        ] == "test":
             return CompletedProcess([], 1)
         else:
             return CompletedProcess([], 0)

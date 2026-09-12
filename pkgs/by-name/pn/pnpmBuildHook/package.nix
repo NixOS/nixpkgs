@@ -6,5 +6,4 @@ makeSetupHook {
   # the config hook must also be used.
   name = "pnpm-build-hook";
 
-  __structuredAttrs = true;
 } ./pnpm-build-hook.sh

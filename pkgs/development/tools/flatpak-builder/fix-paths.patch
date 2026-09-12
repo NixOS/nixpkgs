@@ -11,15 +11,15 @@ index dde12790..3a379297 100644
    self->have_rofiles = path != NULL;
  }
  
-@@ -800,7 +800,7 @@ builder_context_enable_rofiles (BuilderContext *self,
+@@ -889,7 +889,7 @@ builder_context_enable_rofiles (BuilderContext *self,
    g_autoptr(GFile) rofiles_base = NULL;
    g_autoptr(GFile) rofiles_dir = NULL;
    g_autofree char *tmpdir_name = NULL;
 -  char *argv[] = { "rofiles-fuse",
 +  char *argv[] = { "@rofilesfuse@",
                     "-o",
-                    "kernel_cache,entry_timeout=60,attr_timeout=60,splice_write,splice_move",
-                    (char *)flatpak_file_get_path_cached (self->app_dir),
+                    (
+                     "kernel_cache,entry_timeout=60,attr_timeout=60"
 diff --git a/src/builder-git.c b/src/builder-git.c
 index ef517adb..6ab095f0 100644
 --- a/src/builder-git.c
@@ -59,8 +59,8 @@ index ed66d5b..9ca9486 100644
         GError     **error)
  {
    gboolean res;
--  const char *argv[] = { "unzip", "-q", zip_path, NULL };
-+  const char *argv[] = { "@unzip@", "-q", zip_path, NULL };
+-  const char *argv[] = { "bsdunzip", "-q", zip_path, NULL };
++  const char *argv[] = { "@bsdunzip@", "-q", zip_path, NULL };
 
    res = flatpak_spawnv (dir, NULL, 0, error, argv, NULL);
 
@@ -99,7 +99,7 @@ diff --git a/src/builder-source-patch.c b/src/builder-source-patch.c
 index 8721e1e4..d7f4d840 100644
 --- a/src/builder-source-patch.c
 +++ b/src/builder-source-patch.c
-@@ -247,15 +247,15 @@ patch (GFile      *dir,
+@@ -250,16 +250,16 @@ patch (GFile      *dir,
  
    args = g_ptr_array_new ();
    if (use_git) {
@@ -112,6 +112,7 @@ index 8721e1e4..d7f4d840 100644
 +    g_ptr_array_add (args, "@git@");
      g_ptr_array_add (args, "am");
      g_ptr_array_add (args, "--keep-cr");
+     g_ptr_array_add (args, "--no-gpg-sign");
    } else {
 -    g_ptr_array_add (args, "patch");
 +    g_ptr_array_add (args, "@patch@");

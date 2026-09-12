@@ -10,15 +10,15 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "shen-sbcl";
-  version = "41.1";
+  version = "41.2";
 
   src = fetchzip {
-    url = "https://www.shenlanguage.org/Download/S${finalAttrs.version}.zip";
-    hash = "sha256-v/hlP23yfpkpFEDCTKYoxeMJbfR2qVF9LFUkqsFwo6g=";
+    url = "https://shenlanguage.org/Download/S${finalAttrs.version}.zip";
+    hash = "sha256-hgO/g0XefSXn5pjiV5LzGmoZ8nsqmZcyZpK6nbcE0es=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/S41";
   nativeBuildInputs = [ sbcl ];
+  strictDeps = true;
   dontStrip = true; # necessary to prevent runtime errors with sbcl
 
   buildPhase = ''
@@ -45,15 +45,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # remove interactive prompts during image creation
     # shen/tk requires further configuration and isn't supported by default
     substituteInPlace Lib/install.shen \
-      --replace-fail '(y-or-n? "install standard library?")' '${
-        if installStandardLibrary then "true" else "false"
-      }' \
-      --replace-fail '(y-or-n? "install concurrency? (required for Shen/tk)")' '${
-        if installConcurrency then "true" else "false"
-      }' \
+      --replace-fail '(y-or-n? "install standard library?")' '${lib.boolToString installStandardLibrary}' \
+      --replace-fail '(y-or-n? "install concurrency? (required for Shen/tk)")' '${lib.boolToString installConcurrency}' \
       --replace-fail '(y-or-n? "install Shen/tk + IDE?")' 'false' \
-      --replace-fail '(y-or-n? "install THORN?")' '${if installThorn then "true" else "false"}' \
-      --replace-fail '(y-or-n? "install Logic Lab?")' '${if installLogicLab then "true" else "false"}'
+      --replace-fail '(y-or-n? "install THORN?")' '${lib.boolToString installThorn}' \
+      --replace-fail '(y-or-n? "install Logic Lab?")' '${lib.boolToString installLogicLab}'
   '';
 
   meta = {

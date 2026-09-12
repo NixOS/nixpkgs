@@ -758,6 +758,7 @@ An attribute set of derivations which perform the tests during their build.
   - Output attribute `config` is the resulting evaluated services attrset (e.g., the value of the `system.services` option in NixOS).
     This attribute must be available even if `checkDrv` would fail.
   - Output attribute `checkDrv` is a representative derivation whose existence and buildability prove the eval is sound (e.g., `system.build.toplevel` in NixOS, but could perhaps be more specific in the case of another process manager integration).
+  - The generic tester only reads `config` and `checkDrv`. An integration may return additional attributes for its own integration-specific eval checks. Such extra attributes are optional.
 
 `mkTest` (function)
 
@@ -771,6 +772,14 @@ An attribute set of derivations which perform the tests during their build.
 
 : Path to a directory writable by service processes and readable by `testExe`.
   The integration must ensure this directory is available when the services and `testExe` run.
+
+`callReload` (function)
+
+: `path -> string`.
+  Given a service's name `path` (the list of service names from the top-level service down to the target sub-service, e.g. `[ "reload" "inner" ]`), returns a shell command that reloads that service.
+  The command is embedded in `testExe` and executed with sufficient privilege to reload the service (e.g. as root in the test VM).
+  There is no manager-agnostic reload command, so every integration must provide this; the integration joins the `path` per its own unit-naming convention (the suite does not assume one).
+  On NixOS the `path` dash-joins into the systemd unit name with a `.service` suffix, so the command is `systemctl reload ${lib.concatStringsSep "-" path}.service` (a top-level service is a single-element path `[ "svc" ]` -> `svc.service`; a nested sub-service `[ "parent" "child" ]` -> `parent-child.service`).
 
 :::{.example #ex-modularServiceCompliance-nixos}
 
@@ -802,6 +811,7 @@ recurseIntoAttrs (
         config = machine.config.system.services;
         checkDrv = machine.config.system.build.toplevel;
       };
+    callReload = path: "systemctl reload ${lib.concatStringsSep "-" path}.service";
     mkTest =
       {
         name,

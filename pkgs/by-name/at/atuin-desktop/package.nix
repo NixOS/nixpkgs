@@ -14,7 +14,7 @@
 
   alsa-lib,
   glib-networking,
-  libappindicator-gtk3,
+  libappindicator,
   openssl,
   webkitgtk_4_1,
 }:
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoRoot = "./.";
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-68yQkgIVpqUo5tOcvxKh6NOkW565V94zHIZeI4q7nNA=";
   };
 
@@ -80,7 +80,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       {
         aarch64-darwin = "sha256-YbjDAa2KG8U0ODqIYc5h7iNr5px+6+iforDrPomOVDo=";
         aarch64-linux = "sha256-JoUPAfBF4xdQxtx+J/VNpYomBACNsL7Wes0XXuGByGk=";
-        x86_64-darwin = "sha256-YzxQyZPfcQci8QsGEDRTcc2A9tmvem3cHkv/OBFlWDQ=";
         x86_64-linux = "sha256-w8fMS6f+F+23EtMjjl0RsHMm6b5jOXSwUDAc21vqLAg=";
       }
       .${stdenv.hostPlatform.system}
@@ -100,7 +99,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     glib-networking
-    libappindicator-gtk3
+    libappindicator
     openssl
     webkitgtk_4_1
   ];

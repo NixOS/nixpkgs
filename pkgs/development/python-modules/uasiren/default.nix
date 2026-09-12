@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
 
   # build time
   setuptools-scm,
@@ -14,25 +15,26 @@
   pytestCheckHook,
 }:
 
-let
+buildPythonPackage (finalAttrs: {
   pname = "uasiren";
   version = "0.0.1";
-in
+  pyproject = true;
 
-buildPythonPackage {
-  inherit pname version;
-  format = "setuptools";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "PaulAnnekov";
     repo = "uasiren";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NHrnG5Vhz+JZgcTJyfIgGz0Ye+3dFVv2zLCCqw2++oM=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [ aiohttp ];
+  dependencies = [ aiohttp ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -45,10 +47,10 @@ buildPythonPackage {
   ];
 
   meta = {
-    changelog = "https://github.com/PaulAnnekov/uasiren/releases/tag/v${version}";
+    changelog = "https://github.com/PaulAnnekov/uasiren/releases/tag/${finalAttrs.src.tag}";
     description = "Implements siren.pp.ua API - public wrapper for api.ukrainealarm.com API that returns info about Ukraine air-raid alarms";
     homepage = "https://github.com/PaulAnnekov/uasiren";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

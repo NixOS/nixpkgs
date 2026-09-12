@@ -64,7 +64,8 @@ jobs:
           #   https://github.com/octokit/plugin-retry.js/blob/9a2443746c350b3beedec35cf26e197ea318a261/src/index.ts#L14
           retry-exempt-status-codes: 400,401,403,404
           script: |
-            require('./ci/github-script/prepare.js')({
+            const { default: prepare } = await import('${{ github.workspace }}/ci/github-script/prepare.js')
+            await prepare({
               github,
               context,
               core,

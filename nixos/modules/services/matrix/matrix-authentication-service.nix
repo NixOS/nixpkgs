@@ -46,7 +46,7 @@ let
   configFile = format.generate "config.yaml" finalSettings;
 
   extraConfigFiles = lib.imap0 (
-    i: _: "$CREDENTIALS_DIRECTORY/config-${toString i}"
+    i: _: "\${CREDENTIALS_DIRECTORY}/config-${toString i}"
   ) cfg.extraConfigFiles;
   runtimeConfig = "/run/matrix-authentication-service/config.yaml";
 in

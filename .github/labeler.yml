@@ -43,14 +43,6 @@
               - .github/**/*
               - ci/**/*.*
 
-"6.topic: coq":
-  - any:
-      - changed-files:
-          - any-glob-to-any-file:
-              - pkgs/applications/science/logic/coq/**/*
-              - pkgs/development/coq-modules/**/*
-              - pkgs/top-level/coq-packages.nix
-
 "6.topic: COSMIC":
   - any:
       - changed-files:
@@ -465,6 +457,18 @@
       - changed-files:
           - any-glob-to-any-file:
               - pkgs/development/rocm-modules/**/*
+
+"6.topic: rocq":
+  - any:
+      - changed-files:
+          - any-glob-to-any-file:
+              - pkgs/applications/science/logic/coq/**/*
+              - pkgs/applications/science/logic/rocq-core/**/*
+              - pkgs/build-support/coq/**/*
+              - pkgs/build-support/rocq/**/*
+              - pkgs/development/rocq-modules/**/*
+              - pkgs/top-level/coq-packages.nix
+              - pkgs/top-level/rocq-packages.nix
 
 "6.topic: ruby":
   - any:

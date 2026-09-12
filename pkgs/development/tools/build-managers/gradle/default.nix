@@ -1,5 +1,7 @@
 {
   callPackage,
+  stdenv,
+  gradle-native-platform ? null,
   jdk11,
   jdk17,
   jdk21,
@@ -104,6 +106,8 @@ let
       # A current LTS version of a JDK is a good choice.
       defaultJava,
 
+      extraNativePlatformJars ? null,
+
       # The platforms supported by this Gradle package.
       # Gradle Native-Platform ships some binaries that
       # are compatible only with specific platforms.
@@ -115,10 +119,10 @@ let
         "aarch64-linux"
         "i686-windows"
         "x86_64-cygwin"
-        "x86_64-darwin"
         "x86_64-linux"
         "x86_64-windows"
-      ],
+      ]
+      ++ (if extraNativePlatformJars != null then [ "riscv64-linux" ] else [ ]),
 
       # Extra attributes to be merged into the resulting derivation's
       # meta attribute.
@@ -241,7 +245,12 @@ let
           export PATH="${buildPackages.jdk}/bin:$PATH"
           . ${./patching.sh}
 
-          nativeVersion="$(extractVersion native-platform $gradleLibexec/lib/native-platform-*.jar)"
+          nativeVersion="$(extractVersion native-platform $gradleLibexec/lib/native-platform-*.jar)"${
+            lib.optionalString (extraNativePlatformJars != null) ''
+
+              cp -t "$gradleLibexec/lib/" ${extraNativePlatformJars}/lib/*.jar
+            ''
+          }
           for variant in "" "-ncurses5" "-ncurses6"; do
             autoPatchelfInJar \
               $gradleLibexec/lib/native-platform-linux-${arch}$variant-''${nativeVersion}.jar \
@@ -307,7 +316,7 @@ let
               '';
         };
       };
-      passthru.jdk = defaultJava;
+      passthru.jdk = java;
       passthru.wrapped = callPackage wrapGradle {
         gradle-unwrapped = mkGradle genArgs;
       };
@@ -318,8 +327,8 @@ let
               "--url=https://github.com/gradle/gradle"
               "--use-github-releases"
               # Gradle’s .0 releases are tagged as `vX.Y.0`, but the actual
-              # release version omits the `.0`, so we’ll wanto to only capture
-              # the version up but not including the the trailing `.0`.
+              # release version omits the `.0`, so we’ll want to only capture
+              # the version up to but not including the trailing `.0`.
               "--version-regex=^v(${updateScriptMajorVersion}\\.\\d+(?:\\.[1-9]\\d?)?)(\\.0)?$"
             ];
           }
@@ -372,8 +381,8 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_9 = mkGradle {
-    version = "9.5.1";
-    hash = "sha256-uvwUG2Ga1jUP2XX8kDFW3VwVGZjMiwWOjBBEq197Ax8=";
+    version = "9.7.1";
+    hash = "sha256-rNU/HtrwLxqP+Zh5+KNLMCZhoFfZsGOunjW1UvgE0go=";
     defaultJava = jdk25;
     updateScriptMajorVersion = "9";
   };
@@ -382,14 +391,7 @@ rec {
     hash = "sha256-8XcSmKcPbbWina9iN4xOGKF/wzybprFDYuDN9AYQOA0=";
     defaultJava = jdk21;
     updateScriptMajorVersion = "8";
-  };
-  gradle_7 = mkGradle {
-    version = "7.6.6";
-    hash = "sha256-Zz2XdvMDvHBI/DMp0jLW6/EFGweJO9nRFhb62ahnO+A=";
-    defaultJava = jdk17;
-    meta.knownVulnerabilities = [
-      "Gradle 7 no longer receives security updates with the release of Gradle 9 on 31 July 2025. https://endoflife.date/gradle"
-    ];
+    extraNativePlatformJars = if stdenv.hostPlatform.isRiscV64 then gradle-native-platform else null;
   };
 
   # Default version of Gradle in nixpkgs.

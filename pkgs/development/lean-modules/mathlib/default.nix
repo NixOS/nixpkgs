@@ -72,11 +72,11 @@ in
 runCommand mathlib__archive.name
   {
     nativeBuildInputs = [ leangz-raw ];
+    inherit (mathlib__archive) pname version;
     passthru = {
       inherit mathlib__archive;
       inherit (mathlib__archive)
         src
-        version
         lakePackageName
         lean4
         allLeanDeps

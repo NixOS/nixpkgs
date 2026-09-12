@@ -5,6 +5,6 @@ requirement.
 ---
 --- a/package.json
 +++ b/package.json
-@@ -40 +40 @@
--  "packageManager": "pnpm@9.15.9",
-+  "packageManager": "pnpm",
+@@ -41 +41 @@
+-  "packageManager": "pnpm@11.2.1"
++  "packageManager": "pnpm"

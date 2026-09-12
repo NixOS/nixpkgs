@@ -10,15 +10,15 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gh-gonest";
-  version = "0-unstable-2025-12-17";
+  version = "0-unstable-2026-08-31";
 
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "emmanuel-ferdman";
     repo = "gh-gonest";
-    rev = "4be041b29e6e102b04b00f98619c818780060a60";
-    hash = "sha256-NTqq7y/6Gw1CXgmEpj7an2bT7d5ZFjjlV4zyBthC5yw=";
+    rev = "5e9df184e59c7ccfef269f6629c4eba1da86b7bf";
+    hash = "sha256-JYevA+RDs9j2rCtmZVvz6f7ruD0AZgW06oFZ51FYIY4=";
   };
 
   strictDeps = true;

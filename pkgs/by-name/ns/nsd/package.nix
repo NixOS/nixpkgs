@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  removeReferencesTo,
   fstrm,
   libevent,
   openssl,
@@ -32,15 +33,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nsd";
-  version = "4.14.3";
+  version = "4.15.2";
 
   src = fetchurl {
     url = "https://www.nlnetlabs.nl/downloads/nsd/nsd-${finalAttrs.version}.tar.gz";
-    hash = "sha256-limtZNnBsBm74iKW1RSNeuZfWIziZaZCR1B0DwUrsSs=";
+    hash = "sha256-u01XdTwswqZByS2rECEBbSX7S5cpIL9PC7uMQMGpzOI=";
   };
 
   nativeBuildInputs = [
     pkg-config
+    removeReferencesTo
   ]
   ++ lib.optionals withDnstap [ protobuf ];
 
@@ -57,12 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  # TODO: prePatch doesn't actually get executed because patchPhase is overridden
-  prePatch = ''
-    substituteInPlace nsd-control-setup.sh.in --replace openssl ${openssl}/bin/openssl
-  '';
-
-  patchPhase = ''
+  # Prevent the install script from copying nsd.conf.sample into /etc/nsd.
+  postPatch = ''
     sed 's@$(INSTALL_DATA) nsd.conf.sample $(DESTDIR)$(nsdconfigfile).sample@@g' -i Makefile.in
   '';
 
@@ -89,6 +87,10 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-nsd_conf_file=${configFile}"
       "--with-configdir=etc/nsd"
     ];
+
+  postFixup = ''
+    find "$out" -type f -exec remove-references-to -t ${openssl.dev} -t ${libevent.dev} '{}' +
+  '';
 
   passthru.tests = {
     inherit (nixosTests) nsd;

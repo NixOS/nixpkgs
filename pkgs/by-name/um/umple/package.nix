@@ -8,11 +8,11 @@
   installShellFiles,
   makeBinaryWrapper,
   opentxl,
-  jre,
+  jre_headless,
 }:
 let
   versions = lib.importJSON ./versions.json;
-  inherit (versions.umple) version longVersion;
+  inherit (versions.umple) longVersion;
 
   # Required for bootstrapping
   umpleJar = fetchurl versions.umpleJar;
@@ -28,13 +28,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "umple";
-  inherit version;
+  version = "1.37.1";
 
   src = fetchFromGitHub {
     owner = "umple";
     repo = "umple";
-    tag = "v${version}";
-    hash = "sha256-BPy1L3bzvKoywM0srv36SXVe8psaY/m0bljy30z5dr8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xrq3Qmoq0tWR+9vrp292H3WpcWCYjYeIu1LJPBLvhD4=";
   };
 
   patches = [
@@ -112,7 +112,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     done
     # Create wrappers
     for file in *.jar; do
-      makeWrapper ${lib.getExe jre} "$out/bin/''${file%.jar}" \
+      makeWrapper ${lib.getExe jre_headless} "$out/bin/''${file%.jar}" \
         --add-flags "-jar $out/share/java/$file"
     done
     popd

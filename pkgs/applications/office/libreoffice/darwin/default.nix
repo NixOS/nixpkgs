@@ -12,29 +12,15 @@ let
   version = "26.2.4";
 
   dist = {
-    aarch64-darwin = rec {
-      arch = "aarch64";
-      archSuffix = arch;
-      url = "https://download.documentfoundation.org/libreoffice/stable/${version}/mac/${arch}/LibreOffice_${version}_MacOS_${archSuffix}.dmg";
-      sha256 = "64e0ad05564554eeee639d49b08b20908a38d4722ec95f1620d05c99bcbe9fb1";
-    };
-
-    x86_64-darwin = rec {
-      arch = "x86_64";
-      archSuffix = "x86-64";
-      url = "https://download.documentfoundation.org/libreoffice/stable/${version}/mac/${arch}/LibreOffice_${version}_MacOS_${archSuffix}.dmg";
-      sha256 = "f92ba40fdada173232fe929bf77973a1ffcccec55ae7971957a6de84d33f0f1e";
-    };
+    url = "https://download.documentfoundation.org/libreoffice/stable/${version}/mac/aarch64/LibreOffice_${version}_MacOS_aarch64.dmg";
+    sha256 = "64e0ad05564554eeee639d49b08b20908a38d4722ec95f1620d05c99bcbe9fb1";
   };
 in
 stdenvNoCC.mkDerivation {
   inherit version;
   pname = "libreoffice";
   src = fetchurl {
-    inherit
-      (dist.${stdenvNoCC.hostPlatform.system}
-        or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}")
-      )
+    inherit (dist)
       url
       sha256
       ;
@@ -59,16 +45,13 @@ stdenvNoCC.mkDerivation {
     let
       defaultNixFile = toString ./default.nix;
       updateNix = toString ./update.nix;
-      aarch64Url = dist."aarch64-darwin".url;
-      x86_64Url = dist."x86_64-darwin".url;
     in
     writeScript "update-libreoffice.sh" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash --argstr aarch64Url ${aarch64Url} --argstr x86_64Url ${x86_64Url} --argstr version ${version} ${updateNix}
+      #!nix-shell -i bash --argstr url ${dist.url} --argstr version ${version} ${updateNix}
       set -eou pipefail
 
-      update-source-version libreoffice-bin $newVersion $newAarch64Sha256 --file=${defaultNixFile} --system=aarch64-darwin --ignore-same-version
-      update-source-version libreoffice-bin $newVersion $newX86_64Sha256 --file=${defaultNixFile} --system=x86_64-darwin --ignore-same-version
+      update-source-version libreoffice-bin $newVersion $newSha256 --file=${defaultNixFile} --ignore-same-version
     '';
 
   meta = {
@@ -78,7 +61,6 @@ stdenvNoCC.mkDerivation {
     maintainers = with lib.maintainers; [ tricktron ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

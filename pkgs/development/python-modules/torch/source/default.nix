@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   fetchFromGitLab,
+  fetchpatch,
   git-unroll,
   buildPythonPackage,
   python,
@@ -14,7 +15,7 @@
   autoAddDriverRunpath,
   effectiveMagma ?
     if cudaSupport then
-      magma-cuda-static
+      magma-cuda-static.override { inherit cudaPackages; }
     else if rocmSupport then
       magma-hip
     else
@@ -25,6 +26,7 @@
   # Use the system NCCL as long as we're targeting CUDA on a supported platform.
   useSystemNccl ? (cudaSupport && cudaPackages.nccl.meta.available || rocmSupport),
   withNvshmem ? (cudaSupport && cudaPackages.libnvshmem.meta.available),
+  withTensorboard ? false,
   MPISupport ? false,
   mpi,
   buildDocs ? false,
@@ -33,34 +35,39 @@
   # tests.cudaAvailable:
   callPackage,
 
-  # Native build inputs
+  # build-system
   cmake,
+  ninja,
+  numpy,
+  packaging,
+  pyyaml,
+  requests,
+  six,
+
+  # nativeBuildInputs
   symlinkJoin,
   which,
   pybind11,
   pkg-config,
   removeReferencesTo,
 
-  # Build inputs
+  # buildInputs
   openssl,
   numactl,
   llvmPackages,
 
   # dependencies
-  binutils,
-  expecttest,
   filelock,
   fsspec,
-  hypothesis,
   jinja2,
   networkx,
-  packaging,
-  psutil,
-  pyyaml,
-  requests,
+  setuptools,
   sympy,
-  types-dataclasses,
   typing-extensions,
+
+  binutils,
+  hypothesis,
+  psutil,
   # ROCm build and `torch.compile` requires `triton`
   tritonSupport ? (!stdenv.hostPlatform.isDarwin),
   triton,
@@ -73,7 +80,7 @@
   #          (dependencies without cuda support).
   #          Instead we should rely on overlays and nixpkgsFun.
   # (@SomeoneSerge)
-  _tritonEffective ? if cudaSupport then triton-cuda else triton,
+  _tritonEffective ? if cudaSupport then triton-cuda.override { inherit cudaPackages; } else triton,
   triton-cuda,
 
   # Disable MKLDNN on aarch64-darwin, it negatively impacts performance,
@@ -84,12 +91,8 @@
   # See https://github.com/NixOS/nixpkgs/pull/83888
   blas,
 
-  # ninja (https://ninja-build.org) must be available to run C++ extensions tests,
-  ninja,
-
   # dependencies for torch.utils.tensorboard
   pillow,
-  six,
   tensorboard,
   protobuf,
 
@@ -259,6 +262,9 @@ let
     "Magma cudaPackages does not match cudaPackages" =
       cudaSupport
       && (effectiveMagma.cudaPackages.cudaMajorMinorVersion != cudaPackages.cudaMajorMinorVersion);
+    "Triton cudaPackages does not match cudaPackages" =
+      cudaSupport
+      && (_tritonEffective.cudaPackages.cudaMajorMinorVersion != cudaPackages.cudaMajorMinorVersion);
   };
 
   unroll-src = writeShellScript "unroll-src" ''
@@ -283,7 +289,7 @@ in
 buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.12.0";
+  version = "2.13.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -311,7 +317,20 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   ]
   ++ lib.optionals cudaSupport [
     ./fix-cmake-cuda-toolkit.patch
+
+    # Let CMake find CUPTI through the variables we export in `preConfigure`, so that the
+    # `CUDA::cupti` target kineto requires gets defined
+    ./forward-cupti-env-vars.patch
+
     ./nvtx3-hpp-path-fix.patch
+
+    # Don't emit both `sm_103` and `sm_103f` gencode flags, which nvcc rejects:
+    # https://github.com/pytorch/pytorch/pull/187006
+    (fetchpatch {
+      name = "avoid-duplicate-sm_103-codegen.patch";
+      url = "https://github.com/pytorch/pytorch/commit/94079bfd49e1d8a458a8d7714a8bf7379bba947a.patch";
+      hash = "sha256-PFj8RihqeKTAogoCt59ikTbQ8wwpPJvUXGFlpBs8gE0=";
+    })
   ]
   ++ lib.optionals (lib.getName blas.provider == "mkl") [
     # The CMake install tries to add some hardcoded rpaths, incompatible
@@ -327,7 +346,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=70.1.0,<80.0" "setuptools"
+      --replace-fail "setuptools>=77.0.0,<82" "setuptools"
   ''
   # Provide path to openssl binary for inductor code cache hash
   # InductorError: FileNotFoundError: [Errno 2] No such file or directory: 'openssl'
@@ -403,8 +422,8 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   preConfigure =
     lib.optionalString cudaSupport ''
       export TORCH_CUDA_ARCH_LIST="${gpuTargetString}"
-      export CUPTI_INCLUDE_DIR=${lib.getDev cudaPackages.cuda_cupti}/include
-      export CUPTI_LIBRARY_DIR=${lib.getLib cudaPackages.cuda_cupti}/lib
+      export CUDAToolkit_CUPTI_INCLUDE_DIR=${lib.getInclude cudaPackages.cuda_cupti}/include
+      export CUDA_cupti_LIBRARY=${lib.getLib cudaPackages.cuda_cupti}/lib/libcupti.so
     ''
     + lib.optionalString (cudaSupport && cudaPackages ? cudnn) ''
       export CUDNN_INCLUDE_DIR=${lib.getLib cudnn}/include
@@ -531,10 +550,20 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     done
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     cmake
-    which
     ninja
+    numpy
+    packaging
+    pyyaml
+    requests
+    setuptools
+    six
+    typing-extensions
+  ];
+
+  nativeBuildInputs = [
+    which
     pybind11
     pkg-config
     removeReferencesTo
@@ -597,32 +626,23 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     rocmPackages.clr # Added separately so setup hook applies
   ];
 
-  pythonRelaxDeps = [
-    "sympy"
-  ];
   dependencies = [
-    expecttest
     filelock
     fsspec
-    hypothesis
     jinja2
     networkx
-    packaging
-    psutil
-    pyyaml
-    requests
+    setuptools
     sympy
-    types-dataclasses
     typing-extensions
-
-    # the following are required for tensorboard support
-    pillow
-    six
-    tensorboard
-    protobuf
 
     # torch/csrc requires `pybind11` at runtime
     pybind11
+  ]
+  ++ lib.optionals withTensorboard [
+    pillow
+    protobuf
+    six
+    tensorboard
   ]
   ++ lib.optionals tritonSupport [ _tritonEffective ]
   ++ lib.optionals vulkanSupport [

@@ -8,7 +8,7 @@ import sys
 
 all_feature_versions = (8, 11, 17, 21, 25, 26)
 oses = ("mac", "linux", "alpine-linux")
-types = ("jre", "jdk")
+types = ("jre", "jdk", "jmods")
 impls = ("hotspot",)
 
 arch_to_nixos = {

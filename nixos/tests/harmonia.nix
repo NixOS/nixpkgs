@@ -18,6 +18,7 @@
 
       # check that extra-allowed-users is effective for harmonia
       nix.settings.allowed-users = [ ];
+      nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
     };
 
     client01 = {
@@ -27,6 +28,7 @@
           "cache.example.com-1:eIGQXcGQpc00x6/XFcyacLEUmC07u4RAEHt5Y8vdglo="
         ];
       };
+      nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
     };
   };
 

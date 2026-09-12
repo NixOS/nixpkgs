@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  autoreconfHook,
   autoconf,
   automake,
   libtool,
@@ -18,6 +19,8 @@
   texliveBasic,
   # test
   perl,
+  runCommandCC,
+  versionCheckHook,
 }:
 let
   nistTestSuite = fetchurl {
@@ -30,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "gnucobol";
   version = "3.2";
 
+  strictDeps = true;
+
   src = fetchurl {
     url = "mirror://gnu/gnucobol/gnucobol-${finalAttrs.version}.tar.xz";
     hash = "sha256-O7SK9GztR3n6z0H9wu5g5My4bqqZ0BCzZoUxXfOcLuI=";
@@ -37,14 +42,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    autoconf
-    automake
     help2man
     libtool
     perl
     texinfo
     texliveBasic
-  ];
+  ]
+  ++ (
+    if stdenv.hostPlatform.isDarwin then
+      # autoreconf runs aclocal before autoconf, which messes up some compiler
+      # definition and causes many tests to fail (with segfaults)
+      [
+        automake
+        autoconf
+      ]
+    else
+      [ autoreconfHook ]
+  );
 
   buildInputs = [
     cjson
@@ -69,23 +83,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Skips a broken test
   postPatch = ''
-    sed -i '/^AT_CHECK.*crud\.cob/i AT_SKIP_IF([true])' tests/testsuite.src/listings.at
     # upstream reports the following tests as known failures
-    # test 843 (runtime check: write to internal storage (1))
-    sed -i "/^843;/d" tests/testsuite
-    # test 875 (INDEXED sample)
-    sed -i "/^875;/d" tests/testsuite
-
+    sed -i '/AT_SETUP(\[runtime check: write to internal storage (1)\])/a \
+             AT_SKIP_IF(\[true\])' tests/testsuite.src/run_misc.at
     # gnucobol.texi:2765: no matching `@end verbatim'
     sed -i "214i @end verbatim" doc/cbrunt.tex
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    sed -i '/AT_SETUP(\[INDEXED sample\])/a \
+             AT_SKIP_IF(\[true\])' tests/testsuite.src/run_file.at
   '';
 
-  preConfigure = ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     autoconf
     aclocal
     automake
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # when building with nix on darwin, configure will use GNU strip,
     # which fails due to using --strip-unneeded, which is not supported
     substituteInPlace configure --replace-fail '"GNU strip"' 'FAKE GNU strip'
@@ -93,62 +105,49 @@ stdenv.mkDerivation (finalAttrs: {
 
   # GCC 15 changed some warnings to errors, particularly around function pointer types
   # (C23 empty parentheses means no args, not unspecified). These flags are needed
-  # until gnucobol is updated to compile cleanly with GCC 15.
+  # until gnucobol is updated to compile cleanly with GCC 15+/latest LLVM.
   # See: https://gcc.gnu.org/gcc-15/porting_to.html
-  env.CFLAGS =
-    let
-      # Clang needs -Wno-error=implicit-function-declaration for xmlCleanupParser
-      clangFlags = "-Wno-error=implicit-function-declaration";
-      # GCC 15+ needs additional flags for incompatible pointer type errors
-      gcc15Flags = "-Wno-error=incompatible-pointer-types -std=gnu11";
-    in
-    if stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "15.0.0" then
-      gcc15Flags
-    else if stdenv.cc.isClang then
-      clangFlags
-    else
-      "";
-
+  env.CFLAGS = "-std=gnu17";
   enableParallelBuilding = true;
 
   installFlags = [
+    "localedir=$out/share/locale"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
     "install-pdf"
     "install-html"
-    "localedir=$out/share/locale"
   ];
 
-  # Tests must run after install.
+  # Needs to be install check for macos, inbuilt tests fail unless they are installed first
   doCheck = false;
-
-  doInstallCheck = true;
+  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "bin"}/bin/cob-config";
   installCheckPhase = ''
     runHook preInstallCheck
 
-    # Run tests
+    # Run tests (parallel via autoconf testscript)
     TESTSUITEFLAGS="--jobs=$NIX_BUILD_CORES" make check
 
-    # Run NIST tests
+    # Run NIST tests (parallel via make)
     cp -v ${nistTestSuite} ./tests/cobol85/newcob.val.tar.gz
-    TESTSUITEFLAGS="--jobs=$NIX_BUILD_CORES" make test
-
-    # Sanity check
-    message="Hello, COBOL!"
-    # XXX: Don't for a second think you can just get rid of these spaces, they
-    # are load bearing.
-    tee hello.cbl <<EOF
-           IDENTIFICATION DIVISION.
-           PROGRAM-ID. HELLO.
-
-           PROCEDURE DIVISION.
-           DISPLAY "$message".
-           STOP RUN.
-    EOF
-    $bin/bin/cobc -x -o hello-cobol "hello.cbl"
-    hello="$(./hello-cobol | tee >(cat >&2))"
-    [[ "$hello" == "$message" ]] || exit 1
+    make test --jobs=$NIX_BUILD_CORES
 
     runHook postInstallCheck
   '';
+
+  passthru.tests.hello =
+    runCommandCC "hello-cobol"
+      {
+        nativeBuildInputs = [ finalAttrs.finalPackage.bin ];
+      }
+      ''
+        cp ${./hello.cbl} hello.cbl
+        cobc -x -o hello-cobol "hello.cbl"
+        hello="$(./hello-cobol | tee >(cat >&2))"
+        [[ "$hello" == "Hello, COBOL!" ]] || exit 1
+        touch $out
+      '';
 
   meta = {
     description = "Free/libre COBOL compiler";
@@ -162,7 +161,9 @@ stdenv.mkDerivation (finalAttrs: {
       lovesegfault
       techknowlogick
       kiike
+      sempiternal-aurora
     ];
+    teams = [ lib.teams.ngi ];
     platforms = lib.platforms.all;
   };
 })

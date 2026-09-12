@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
@@ -20,7 +21,6 @@
   # tests
   matplotlib,
   numpy,
-  orion,
   pytest-benchmark,
   pytest-regressions,
   pytestCheckHook,
@@ -28,14 +28,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "simple-parsing";
-  version = "0.1.8";
+  version = "0.1.9";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lebrice";
     repo = "SimpleParsing";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Nsr+I+BoVxockRGQAjG+ushRQ4CtWgkHrg5aVorSrvw=";
+    hash = "sha256-tSQgyxJ0INGQkmqRmzVgKwBd/JXr3OTecdNSfc9Nf94=";
   };
 
   build-system = [
@@ -61,13 +62,18 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     matplotlib
     numpy
-    orion
     pytest-benchmark
     pytest-regressions
     pytestCheckHook
   ];
 
   pytestFlags = [ "--benchmark-disable" ];
+
+  preCheck =
+    # Prevents 'Fatal Python error: Aborted' on darwin during checkPhase
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export MPLBACKEND="Agg"
+    '';
 
   disabledTests = [
     # AssertionError

@@ -2,8 +2,12 @@
   lib,
   buildGoModule,
   fetchFromCodeberg,
+  fetchpatch,
   nix-update-script,
   versionCheckHook,
+  formats,
+  coreutils,
+  nixosTests,
 }:
 
 buildGoModule (finalAttrs: {
@@ -18,6 +22,16 @@ buildGoModule (finalAttrs: {
     hash = "sha256-4yQ3RRJbOfMaqjJJ6CRRN7TuaYY8ScLXxMZPd4tWPwk=";
   };
 
+  patches = [
+    # bugfix to avoid creating parent directory on start
+    # remove when https://codeberg.org/git-pages/git-pages/pulls/258 is available in the release
+    (fetchpatch {
+      name = "mkdirall-parent-dir-create.patch";
+      url = "https://codeberg.org/git-pages/git-pages/commit/507e57edbcfc0ec933a877bf26b1756ca0a61870.patch";
+      hash = "sha256-1CjU4yGmDOmYsxo3U44Cg2xLJkrmUOX5ZXTycdLs6OE=";
+    })
+  ];
+
   subPackages = [ "." ];
 
   vendorHash = "sha256-NNIkzgRki2rtCVUnnhT44rEBcMZYiJPmsXySpxiHYR0=";
@@ -31,7 +45,16 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "-version";
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = { inherit (nixosTests) git-pages-modular; };
+    updateScript = nix-update-script { };
+    services.default = {
+      imports = [
+        (lib.modules.importApply ./service.nix { inherit formats coreutils; })
+      ];
+      git-pages.package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = {
     description = "Scalable static site server for Git forges (like GitHub Pages or Netlify";

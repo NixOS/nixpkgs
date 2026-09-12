@@ -150,7 +150,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
     ]
     ++ lib.optionals (backendIsLLVM || backendIsLLVMJit || backendIsGCC) [ "aarch64-linux" ]
     ++ lib.optionals (backendIsLLVM || backendIsLLVMJit) [ "aarch64-darwin" ];

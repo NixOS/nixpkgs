@@ -82,6 +82,10 @@ extend-select = [
     # allow Any type
     "ANN401"
 ]
+"nixos_rebuild/constants.py" = [
+    # allow constant comparison since the values are replaced at build-time
+    "PLR0133"
+]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]

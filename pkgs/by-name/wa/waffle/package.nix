@@ -25,14 +25,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waffle";
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "Mesa";
     repo = "waffle";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-1yAg8ws4GIs/IHGVbfUKTXkD9JVRtjuH0REFIfDqXtc=";
+    sha256 = "sha256-VvkSZOddxTPukyPpngi4vxni/OqmMGJV7voiiM0uHXo=";
   };
 
   buildInputs = [

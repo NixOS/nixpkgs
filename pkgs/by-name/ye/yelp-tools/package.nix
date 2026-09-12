@@ -43,7 +43,7 @@ python3.pkgs.buildPythonApplication rec {
     python3.pkgs.lxml
   ];
 
-  strictDeps = false; # TODO: Meson cannot find xmllint oherwise. Maybe add it to machine file?
+  strictDeps = false; # TODO: Meson cannot find xmllint otherwise. Maybe add it to machine file?
 
   doCheck = true;
 

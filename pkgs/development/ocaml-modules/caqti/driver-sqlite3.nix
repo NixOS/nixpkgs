@@ -1,7 +1,7 @@
 {
   buildDunePackage,
   caqti,
-  ocaml_sqlite3,
+  sqlite3,
   alcotest,
   dune-site,
 }:
@@ -12,7 +12,7 @@ buildDunePackage {
 
   propagatedBuildInputs = [
     caqti
-    ocaml_sqlite3
+    sqlite3
   ];
 
   checkInputs = [

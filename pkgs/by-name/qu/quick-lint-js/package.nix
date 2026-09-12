@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Find bugs in Javascript programs";
+    description = "Find bugs in JavaScript programs";
     mainProgram = "quick-lint-js";
     homepage = "https://quick-lint-js.com";
     downloadPage = "https://github.com/quick-lint/quick-lint-js";

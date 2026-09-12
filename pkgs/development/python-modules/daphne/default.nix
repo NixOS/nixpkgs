@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "daphne";
-  version = "4.2.2";
+  version = "4.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django";
     repo = "daphne";
     tag = finalAttrs.version;
-    hash = "sha256-i0BwZCpMZW6WXK94FSvlEheXHUzXviCBEew6AbkLkpk=";
+    hash = "sha256-xdHvJZ+JfVYBpSvZ83mCgLSYgiIxZUS0Yx6Kg706aN4=";
   };
 
   build-system = [ setuptools ];

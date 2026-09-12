@@ -6,21 +6,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cpc";
-  version = "4.0.0";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
-    owner = "probablykasper";
+    owner = "kasper9n";
     repo = "cpc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Gd2bFOyPERcwTGurJJDMNrRjFq7smtkgFMGUXxZVwaI=";
+    hash = "sha256-reaKxnWGg3lIUFjCRwaX4HMb+f8371OFKffpBWR48w0=";
   };
 
-  cargoHash = "sha256-visApJ3DgQ1ohaQ2IE63bzdf0RuQI4NnpQqspP8WKjg=";
+  cargoHash = "sha256-DlxJolTdEqeoczIY0utECw1Xjn0LlyMBo6vLwCYhTjA=";
 
   meta = {
     mainProgram = "cpc";
     description = "Text calculator with support for units and conversion";
-    homepage = "https://github.com/probablykasper/cpc";
+    homepage = "https://github.com/kasper9n/cpc";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       s0me1newithhand7s

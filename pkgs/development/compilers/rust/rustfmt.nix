@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage {
 
   meta = {
     description = "Tool for formatting Rust code according to style guidelines";
-    homepage = "https://github.com/rust-lang-nursery/rustfmt";
+    homepage = "https://github.com/rust-lang/rustfmt";
     license = with lib.licenses; [
       mit
       asl20

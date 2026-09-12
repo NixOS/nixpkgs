@@ -24,6 +24,8 @@
 
   # passthru
   cuda-core,
+  python,
+  runCommand,
 
   cudaSupport ? config.cudaSupport,
 }:
@@ -80,6 +82,7 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
   '';
 
   dependencies = [
+    cuda-bindings
     cuda-pathfinder
     numpy
   ];
@@ -118,9 +121,22 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
   # Tests require a GPU
   doCheck = false;
 
-  passthru.gpuCheck = cuda-core.overridePythonAttrs {
-    requiredSystemFeatures = [ "cuda" ];
-    doCheck = true;
+  passthru = {
+    tests = {
+      import-clean-env =
+        runCommand "import-clean-env-cuda-core"
+          {
+            nativeBuildInputs = [ (python.withPackages (_: [ finalAttrs.finalPackage ])) ];
+          }
+          ''
+            python -c 'import cuda.core'
+            touch $out
+          '';
+    };
+    gpuCheck = cuda-core.overridePythonAttrs {
+      requiredSystemFeatures = [ "cuda" ];
+      doCheck = true;
+    };
   };
 
   meta = {

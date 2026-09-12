@@ -39,6 +39,7 @@ assert lib.assertMsg (
   darwin,
   doxygen,
   editline,
+  fetchpatch2,
   flex,
   git,
   gtest,
@@ -121,24 +122,12 @@ let
           [project options]
           builtin-dep-closure = @deps@
         '';
-        passAsFile = [ "input" ];
+        __structuredAttrs = true;
       }
       ''
-        substitute $inputPath $out --replace-fail @deps@ "$(cat ${deps})"
+        printf "%s" "$input" > $out
+        substituteInPlace $out --replace-fail @deps@ "$(cat ${deps})"
       '';
-
-  # https://github.com/NixOS/nixpkgs/pull/525953 backported a performance patch
-  # that /somehow/ breaks Lix unit tests.
-  # FIXME revert when the patch is gone in curl drv
-  curl-fixed = curl.overrideAttrs (
-    {
-      patches ? [ ],
-      ...
-    }:
-    {
-      patches = lib.filter (patch: !lib.strings.hasSuffix "fix-wakeup-consumption.patch" patch) patches;
-    }
-  );
 in
 # gcc miscompiles coroutines at least until 13.2, possibly longer
 # do not remove this check unless you are sure you (or your users) will not report bugs to Lix upstream about GCC miscompilations.
@@ -256,14 +245,14 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linuxMinimal ]
   ++ lib.optionals (lib.versionAtLeast version "2.94") [ zstd ]
   ++ lib.optionals (withPlugins && finalAttrs.doInstallCheck) [
-    curl-fixed
+    curl
   ];
 
   buildInputs = [
     boost
     brotli
     bzip2
-    curl-fixed
+    curl
     capnproto
     editline
     openssl
@@ -302,6 +291,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     boehmgc
+    boost
     nlohmann_json
   ];
 

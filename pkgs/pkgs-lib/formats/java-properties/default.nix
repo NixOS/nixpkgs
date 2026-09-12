@@ -106,12 +106,13 @@ in
               #    general.
 
               preferLocalBuild = true;
-              passAsFile = [ "value" ];
               value = builtins.toJSON value;
               nativeBuildInputs = [
                 jq
                 libiconvReal
               ];
+
+              __structuredAttrs = true;
 
               jqCode =
                 let
@@ -151,7 +152,7 @@ in
               (
                 echo "$comment" | while read -r ln; do echo "# $ln"; done
                 echo
-                jq -r --arg hash '#' "$jqCode" "$valuePath" \
+                printf "%s" "$value" | jq -r --arg hash '#' "$jqCode" \
                   | iconv --from-code "$inputEncoding" --to-code JAVA \
               ) > "$out"
             ''

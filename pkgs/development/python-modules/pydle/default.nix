@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "pydle";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
   src = fetchFromCodeberg {
     owner = "shiz";
     repo = "pydle";
     tag = "v${version}";
-    hash = "sha256-LxlE0JVKgwDcPB7QuKkmfBWG33pDzG0F9qaL88xF8r4=";
+    hash = "sha256-460oY68PSmmgXq4bLOr8SB9RiMy3wc5EwEV7s5AKePY=";
   };
 
   build-system = [ poetry-core ];

@@ -124,7 +124,6 @@ buildPythonPackage (finalAttrs: {
     lib.optionals stdenv.hostPlatform.isDarwin [
       # Crashes the interpreter
       # - On aarch64-darwin: Trace/BPT trap: 5
-      # - On x86_64-darwin: Fatal Python error: Illegal instruction
       "tests/inference_test.py"
       "tests/test_train.py"
     ]

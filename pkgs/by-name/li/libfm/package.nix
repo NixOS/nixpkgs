@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   autoreconfHook,
   gtk-doc,
   glib,
@@ -11,14 +10,11 @@
   pango,
   pkg-config,
   vala,
-  extraOnly ? false,
-  withGtk3 ? false,
-  gtk2,
   gtk3,
+  extraOnly ? false,
 }:
 
 let
-  gtk = if withGtk3 then gtk3 else gtk2;
   inherit (lib) optional optionalString;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -41,16 +37,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     glib
-    gtk
+    gtk3
     pango
   ]
   ++ optional (!extraOnly) menu-cache;
 
   configureFlags = [
     "--sysconfdir=/etc"
+    "--with-gtk=3"
   ]
-  ++ optional extraOnly "--with-extra-only"
-  ++ optional withGtk3 "--with-gtk=3";
+  ++ optional extraOnly "--with-extra-only";
 
   installFlags = [ "sysconfdir=${placeholder "out"}/etc" ];
 

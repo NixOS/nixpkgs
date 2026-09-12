@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "Chinese font that shows stroke order for HSK 1-4";
     homepage = "http://rtega.be/chmn/index.php?subpage=68";
-    license = [ lib.licenses.arphicpl ];
+    license = lib.licenses.arphicpl;
     maintainers = with lib.maintainers; [ johnazoidberg ];
     platforms = lib.platforms.all;
   };

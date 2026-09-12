@@ -8,7 +8,9 @@
   lv2,
   pkg-config,
   stdenv,
+  which,
   xorgproto,
+  xxd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    which
+    xxd
   ];
 
   buildInputs = [
@@ -47,11 +51,13 @@ stdenv.mkDerivation (finalAttrs: {
     "VST2_INSTAL_DIR=$(out)/lib/vst"
     "user=root"
     "STRIP=:"
+    "PKGCONFIG=$(PKG_CONFIG)"
   ];
 
   postPatch = ''
     substituteInPlace Ratatouille/makefile \
-      --replace-fail "-flto=auto" ""
+      --replace-fail "-flto=auto" "" \
+      --replace-fail "pkg-config" '$(PKGCONFIG)'
   '';
 
   meta = {

@@ -20,11 +20,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = "make PREFIX=$out copy-data";
 
   meta = {
-    description = "CLI program for produce fake datas";
+    description = "CLI program for produce fake data";
     homepage = "https://github.com/mothsart/pouf";
     changelog = "https://github.com/mothsart/pouf/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [ mothsart ];
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     mainProgram = "pouf";
   };
 })

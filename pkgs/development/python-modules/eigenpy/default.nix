@@ -3,22 +3,17 @@
 
   buildPythonPackage,
   fetchFromGitHub,
-  writableTmpDirAsHomeHook,
   fontconfig,
 
   # nativeBuildInputs
-  cmake,
-  doxygen,
-  graphviz,
-  pkg-config,
   scipy,
 
   # buildInputs
   boost,
+  jrl-cmakemodules,
 
   # propagatedBuildInputs
   eigen,
-  jrl-cmakemodules,
   numpy,
 }:
 
@@ -40,7 +35,7 @@ buildPythonPackage rec {
     "out"
   ];
 
-  cmakeFlags = [
+  cmakeFlags = jrl-cmakemodules.docsCmakeFlags ++ [
     "-DINSTALL_DOCUMENTATION=ON"
     "-DBUILD_TESTING=ON"
     "-DBUILD_TESTING_SCIPY=ON"
@@ -51,20 +46,17 @@ buildPythonPackage rec {
   # Fontconfig error: Cannot load default config file: No such file: (null)
   env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    graphviz
-    pkg-config
+  nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs ++ [
     scipy
-    writableTmpDirAsHomeHook
   ];
 
-  buildInputs = [ boost ];
+  buildInputs = [
+    boost
+    jrl-cmakemodules
+  ];
 
   propagatedBuildInputs = [
     eigen
-    jrl-cmakemodules
     numpy
   ];
 

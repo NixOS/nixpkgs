@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "boat-cli";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "coko7";
     repo = "boat-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+QhW7QWBoDzSNzkHotNLg/dnolSd3uK/IcDPnzVKBbI=";
+    hash = "sha256-oS+NfEQKAcfZwYQkftMJAUz7fG1nleruAROMUUbBP3Y=";
   };
 
-  cargoHash = "sha256-rfZbOeOoBWMp232vXVeKtQz3LP5IloIBZS0OWkN8Fys=";
+  cargoHash = "sha256-mHqXIFI2KJOMnxdG3X4DHDozFDPmqw4f//ori3Dc7us=";
 
   nativeBuildInputs = [
     writableTmpDirAsHomeHook

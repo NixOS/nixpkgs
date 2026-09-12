@@ -6,11 +6,15 @@
   nix-prefetch-github,
   nix-prefetch-git,
   nurl,
+  luajit,
   python3Packages,
 
   # optional
   neovim-unwrapped,
 }:
+let
+  luaWithPackages = luajit.withPackages (ps: [ ps.json ]);
+in
 buildPythonApplication {
   pname = "vim-plugins-updater";
   version = "0.1";
@@ -23,7 +27,6 @@ buildPythonApplication {
   ];
 
   pythonPath = [
-    python3Packages.requests
     python3Packages.nixpkgs-plugin-update
   ];
 
@@ -42,6 +45,7 @@ buildPythonApplication {
         nix-prefetch-git
         neovim-unwrapped
         nurl
+        luaWithPackages
       ]
     }" --prefix PYTHONPATH : "${lib.sources.sourceByGlobs ./. [ "**/*.py" ]}" )
     wrapPythonPrograms

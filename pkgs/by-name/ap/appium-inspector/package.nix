@@ -2,7 +2,7 @@
   lib,
   buildNpmPackage,
   copyDesktopItems,
-  electron_41,
+  electron_43,
   fetchFromGitHub,
   makeDesktopItem,
   makeWrapper,
@@ -14,22 +14,21 @@
 }:
 
 let
-  electron = electron_41;
-  version = "2026.5.1";
+  electron = electron_43;
 in
 
 buildNpmPackage (finalAttrs: {
   pname = "appium-inspector";
-  inherit version;
+  version = "2026.7.1";
 
   src = fetchFromGitHub {
     owner = "appium";
     repo = "appium-inspector";
-    tag = "v${version}";
-    hash = "sha256-SJlTTVTZ/zGIK7Nf35cZ62tdhevXC95MsbiQJCLiVtk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7pxXlY/aifrg4cuGZSgxONF+RPL8P7JcZ6Gobqv2nz4=";
   };
 
-  npmDepsHash = "sha256-2rjgKS1mIrjOg+YXuMaqKyEQt0utLA4DGxOs0oI4BaQ=";
+  npmDepsHash = "sha256-W9FWIHhtS2d9xBpIEGB8sWmDfcdyphL+0eCk1+8pu2s=";
   npmFlags = [ "--ignore-scripts" ];
 
   nativeBuildInputs = [
@@ -102,7 +101,7 @@ buildNpmPackage (finalAttrs: {
   meta = {
     description = "GUI inspector for the appium UI automation tool";
     homepage = "https://appium.github.io/appium-inspector";
-    changelog = "https://github.com/appium/appium-inspector/releases/tag/v${version}";
+    changelog = "https://github.com/appium/appium-inspector/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     mainProgram = "appium-inspector";
     maintainers = with lib.maintainers; [ marie ];

@@ -262,6 +262,8 @@ in
           allowners_muc = cfg.prosody.allowners_muc;
           roomLocking = false;
           roomDefaultPublicJids = true;
+          # muc_meeting_id loads jitsi_permissions for moderator features
+          extraModules = [ "muc_meeting_id" ];
           extraConfig = ''
             restrict_room_creation = true
             storage = "memory"
@@ -273,6 +275,7 @@ in
           name = "Jitsi Meet Breakout MUC";
           roomLocking = false;
           roomDefaultPublicJids = true;
+          extraModules = [ "muc_meeting_id" ];
           extraConfig = ''
             restrict_room_creation = true
             storage = "memory"
@@ -320,6 +323,7 @@ in
       ];
       extraPluginPaths = [ "${pkgs.jitsi-meet-prosody}/share/prosody-plugins" ];
       extraConfig = lib.mkMerge [
+        (mkBefore "component_admins_as_room_owners = true")
         (mkAfter ''
           Component "focus.${cfg.hostName}" "client_proxy"
             target_address = "focus@auth.${cfg.hostName}"
@@ -445,13 +449,27 @@ in
         EnvironmentFile = [ "/var/lib/jitsi-meet/secrets-env" ];
         SupplementaryGroups = [ "jitsi-meet" ];
       };
-      reloadIfChanged = true;
+      reloadIfChanged = false;
     };
 
     users.groups.jitsi-meet = { };
     systemd.tmpfiles.rules = [
       "d '/var/lib/jitsi-meet' 0750 root jitsi-meet - -"
     ];
+
+    systemd.services.jicofo = mkIf (cfg.jicofo.enable && cfg.prosody.enable) {
+      partOf = [ "prosody.service" ];
+      after = [ "prosody.service" ];
+    };
+    systemd.services.jibri =
+      mkIf ((config.services.jibri.enable || cfg.jibri.enable) && cfg.prosody.enable)
+        {
+          partOf = [ "prosody.service" ];
+          after = [
+            "jicofo.service"
+            "prosody.service"
+          ];
+        };
 
     systemd.services.jitsi-meet-init-secrets = {
       wantedBy = [ "multi-user.target" ];

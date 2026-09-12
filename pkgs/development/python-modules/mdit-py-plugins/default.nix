@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mdit-py-plugins";
-  version = "0.5.0";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "mdit-py-plugins";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MQU6u49KsWGaKeWU5v066kZidcfCoubqClxAapAZb9A=";
+    hash = "sha256-rG9l45V+qsXZmBpRGkt1zuCRJVOsEC+Z2WrplQ1oGSo=";
   };
 
   build-system = [ flit-core ];

@@ -22,7 +22,7 @@
   versionCheckHook,
 }:
 let
-  version = "2.84.0";
+  version = "2.85.0";
   fakeGit = writeScriptBin "git" ''
     if [ "$1" = "describe" ]; then
       echo "${version}"
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
     owner = "etlegacy";
     repo = "etlegacy";
     tag = "v${version}";
-    hash = "sha256-E1eR0OIfXn2QkSGYNu1JFXDIVrkz+pxM7IU0GVkvAFQ=";
+    hash = "sha256-oOgoM5BLBnmrmbdXFGYkVcQLYq8tVpLgnzJXax7g3vI=";
   };
 
   nativeBuildInputs = [
@@ -77,7 +77,6 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     (lib.cmakeBool "CROSS_COMPILE32" false)
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeBool "BUILD_SERVER" true)
     (lib.cmakeBool "BUILD_CLIENT" true)
     (lib.cmakeBool "BUNDLED_WOLFSSL" false)
@@ -115,7 +114,7 @@ stdenv.mkDerivation {
   meta = {
     description = "ET: Legacy is an open source project based on the code of Wolfenstein: Enemy Territory which was released in 2010 under the terms of the GPLv3 license";
     homepage = "https://etlegacy.com";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     longDescription = ''
       ET: Legacy, an open source project fully compatible client and server
       for the popular online FPS game Wolfenstein: Enemy Territory - whose

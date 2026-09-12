@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-ofi-nccl";
-  version = "1.20.0";
+  version = "1.21.1";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "aws";
     repo = "aws-ofi-nccl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QQlimX5sbdR+0PpQ3dLXcDqY5TthXF7Z5dtj6wIm+UQ=";
+    hash = "sha256-foer3lY1VeiJrIHTiwXhYEjWARTGjs9bpjFgK2k9L7I=";
   };
 
   nativeBuildInputs = [

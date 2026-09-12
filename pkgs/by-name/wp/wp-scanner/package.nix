@@ -7,7 +7,7 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "wp-scanner";
-  version = "2.0.1-unstable-2026-03-17";
+  version = "3.0.0";
   pyproject = false;
 
   __structuredAttrs = true;
@@ -15,8 +15,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Triotion";
     repo = "WP-Scanner";
-    rev = "1f75728384ca5422f69cf5f1d0a284c36b0ed45a";
-    hash = "sha256-gIfOxoiVdRKa2GGDy9GMi7+6u2Lh/yVdin/hY9lh4bs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XTUWL1M2JLqswZsrsew7GlzaZttA39oyHK2zFvPHMfE=";
   };
 
   dependencies = with python3.pkgs; [
@@ -48,8 +48,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Wordpress Security Scanner and Auto Exploiter";
     homepage = "https://github.com/Triotion/WP-Scanner";
-    # https://github.com/Triotion/WP-Scanner/issues/2
-    license = lib.licenses.unfree;
+    changelog = "https://github.com/Triotion/WP-Scanner/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "wp-scanner";
   };

@@ -8,7 +8,7 @@
   alsa-lib,
   speex,
   libusbmuxd,
-  libappindicator-gtk3,
+  libappindicator,
   pkg-config,
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     speex
     libusbmuxd
-    libappindicator-gtk3
+    libappindicator
   ];
 
   postPatch = ''

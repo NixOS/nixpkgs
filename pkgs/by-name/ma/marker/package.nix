@@ -8,7 +8,7 @@
   pkg-config,
   wrapGAppsHook3,
   gtk3,
-  gtksourceview,
+  gtksourceview3,
   gtkspell3,
   webkitgtk_4_1,
   pandoc,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gtk3
-    gtksourceview
+    gtksourceview3
     gtkspell3
     webkitgtk_4_1
     pandoc

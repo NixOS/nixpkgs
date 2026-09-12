@@ -4,7 +4,7 @@
   python3Packages,
   fetchFromGitHub,
   gobject-introspection,
-  libappindicator-gtk3,
+  libappindicator,
   libayatana-appindicator,
   libnotify,
   wrapGAppsHook4,
@@ -35,7 +35,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ]
   ++ lib.optionals withIndicator [
     # Adds AppIndicator3 namespace
-    libappindicator-gtk3
+    libappindicator
     # Adds AyatanaAppIndicator3 namespace
     libayatana-appindicator
   ];

@@ -45,6 +45,7 @@ let
 in
 {
   name = "${rancherPackage.name}-single-node";
+  interactive.sshBackdoor.enable = true;
 
   nodes.machine =
     { config, pkgs, ... }:

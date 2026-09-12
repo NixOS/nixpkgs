@@ -15,19 +15,20 @@
   wayland,
   glibc,
   udevCheckHook,
+  gettext,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asusctl";
-  version = "6.3.8";
+  version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "OpenGamingCollective";
     repo = "asusctl";
     tag = finalAttrs.version;
-    hash = "sha256-DXpuKZmjYKiQp8ULH39EYtY75muZ77YzwYmE/yF1wEY=";
+    hash = "sha256-qLdOdZaQm3t7LhvoCCo/FwZo4O7Z9aP1KPPlERgZX00=";
   };
 
-  cargoHash = "sha256-nZDpKuL+7IIuV5q/W4qWHa7C/HEoX5YaerUMcDQQVtg=";
+  cargoHash = "sha256-sAJ4el6URZXHD2NWiWpJSBf8Qeq2v/y+F9KpMCc8BbE=";
 
   postPatch = ''
     files="
@@ -55,15 +56,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     substituteInPlace Makefile \
       --replace-fail /usr/bin/grep ${lib.getExe gnugrep}
-
-    substituteInPlace /build/asusctl-${finalAttrs.version}-vendor/source-*/sg-*/build.rs \
-      --replace-fail /usr/include ${lib.getDev glibc}/include
   '';
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
     udevCheckHook
+    gettext
   ];
 
   buildInputs = [
@@ -110,6 +109,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       k900
       aacebedo
       yuannan
+      luytan
     ];
   };
 })

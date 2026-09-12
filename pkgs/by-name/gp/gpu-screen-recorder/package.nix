@@ -22,26 +22,36 @@
   libxi,
   libxrandr,
   libxfixes,
+  libjpeg_turbo,
+  versionCheckHook,
   wrapperDir ? "/run/wrappers/bin",
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpu-screen-recorder";
-  version = "5.13.9";
+  version = "6.1.1";
 
   src = fetchgit {
     url = "https://repo.dec05eba.com/gpu-screen-recorder";
     tag = finalAttrs.version;
-    hash = "sha256-rGjS21eY2XfcdRwmKE2hJO1+FIXAmmBJ4y2oKgSwoRM=";
+    hash = "sha256-I5q2bvCjoXkXue/rr6IhwwhdQkxMmf1MgaKEjh+IZP8=";
   };
+
+  postPatch = ''
+    substituteInPlace src/capture/v4l2.c src/image_writer.c \
+      --replace-fail "libturbojpeg.so.0" "${lib.getLib libjpeg_turbo}/lib/libturbojpeg${stdenv.hostPlatform.extensions.sharedLibrary}"
+  '';
 
   nativeBuildInputs = [
     pkg-config
     makeWrapper
     meson
     ninja
+    wayland-scanner
   ];
+
+  depsBuildBuild = [ pkg-config ];
 
   buildInputs = [
     libxcomposite
@@ -50,7 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
     pipewire
     wayland
-    wayland-scanner
     vulkan-headers
     libdrm
     libva
@@ -60,6 +69,12 @@ stdenv.mkDerivation (finalAttrs: {
     libxfixes
   ];
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   mesonFlags = [
     # Install the upstream systemd unit
     (lib.mesonBool "systemd" true)
@@ -68,6 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Handle by the module
     (lib.mesonBool "capabilities" false)
     (lib.mesonBool "nvidia_suspend_fix" false)
+    # Disable upstream static ffmpeg build
+    (lib.mesonBool "ffmpeg_static" false)
   ];
 
   postInstall = ''
@@ -82,6 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
       }" \
       --prefix PATH : "${wrapperDir}" \
       --suffix PATH : "$out/bin"
+    substituteInPlace $out/lib/systemd/user/gpu-screen-recorder.service \
+      --replace-fail "ExecStart=gpu-screen-recorder" "ExecStart=$out/bin/gpu-screen-recorder"
   '';
 
   passthru.updateScript = gitUpdater { };
@@ -94,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       babbaj
       js6pak
+      keenanweaver
     ];
     platforms = lib.platforms.linux;
   };

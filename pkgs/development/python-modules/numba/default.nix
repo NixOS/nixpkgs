@@ -4,10 +4,15 @@
   fetchFromGitHub,
   buildPythonPackage,
   replaceVars,
-  fetchpatch,
 
   # nativeBuildInputs
   setuptools,
+
+  # sets NUMBA_NUM_THREADS and OMP_NUM_THREADS for packages
+  # invoking numba during checkPhase/installCheckPhase to
+  # avoid overloading builders with excessive parallelism
+  # See also: https://numba.readthedocs.io/en/stable/reference/envvars.html#threading-control
+  checkPhaseThreadLimitHook,
 
   # dependencies
   llvmlite,
@@ -16,8 +21,8 @@
   # tests
   numba,
   pytestCheckHook,
+  pytest-xdist,
   writableTmpDirAsHomeHook,
-  numpy_1,
   writers,
   python,
 
@@ -34,12 +39,27 @@
 }:
 
 let
-  cudatoolkit = cudaPackages.cuda_nvcc;
+  # `libnvvm.so` and `libdevice.10.bc` are bundled in `cuda_nvcc` up to CUDA 12.x, and shipped as a
+  # dedicated redistributable from CUDA 13.0 onwards
+  nvvmRoot =
+    if cudaPackages.cudaOlder "13.0" then
+      "${lib.getLib cudaPackages.cuda_nvcc}/nvvm"
+    else
+      "${lib.getLib cudaPackages.libnvvm}";
+
+  libCudaPath =
+    # Use cuda_compat to provide libcuda.so on pre-Thor Jetsons
+    if (cudaPackages.cuda_compat.meta.available or false) then
+      cudaPackages.cuda_compat
+    # Else, use the host CUDA driver library
+    else
+      addDriverRunpath.driverLink;
 in
 buildPythonPackage (finalAttrs: {
-  version = "0.63.1";
+  version = "0.67.0";
   pname = "numba";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "numba";
@@ -53,15 +73,20 @@ buildPythonPackage (finalAttrs: {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' $out/numba/_version.py
     '';
-    hash = "sha256-M7Hdc1Qakclz7i/HujBUqVEWFsHj9ZGQDzb8Ze9AztA=";
+    hash = "sha256-xQFJSO9kcRwyNx/G/ALQXZWE6+4wL1Dz+5kIDXK5Eow=";
   };
 
-  postPatch = ''
-    substituteInPlace numba/cuda/cudadrv/driver.py \
-      --replace-fail \
-        "dldir = [" \
-        "dldir = [ '${addDriverRunpath.driverLink}/lib', "
-  '';
+  patches = lib.optionals cudaSupport [
+    # Hardcode the paths of the NVIDIA libraries which numba looks up at runtime, instead of
+    # relying on its discovery heuristics (conda environment, `CUDA_HOME`, `/usr/local/cuda`, ...)
+    (replaceVars ./nvidia-libs-paths.patch {
+      libcuda = libCudaPath;
+      libcudart = lib.getLib cudaPackages.cuda_cudart;
+      libcudart_static = lib.getOutput "static" cudaPackages.cuda_cudart;
+      libnvrtc = lib.getLib cudaPackages.cuda_nvrtc;
+      libnvvm = nvvmRoot;
+    })
+  ];
 
   build-system = [
     setuptools
@@ -75,43 +100,19 @@ buildPythonPackage (finalAttrs: {
 
   buildInputs = lib.optionals cudaSupport [ cudaPackages.cuda_cudart ];
 
-  pythonRelaxDeps = [
-    "numpy"
-  ];
-
   dependencies = [
     numpy
     llvmlite
   ];
 
-  patches = [
-    # Support Numpy 2.4, see:
-    #
-    # - https://github.com/numba/numba/pull/10393
-    # - https://github.com/numba/numba/issues/10263
-    (fetchpatch {
-      url = "https://github.com/numba/numba/commit/7ec267efb80d87f0652c00535e8843f35d006f20.patch";
-      hash = "sha256-oAOZa2/m2qs8CeX13/0lmRTg/lQj5aDIaaQeDeLAghc=";
-      excludes = [
-        "azure-pipelines.yml"
-        "buildscripts/azure/azure-windows.yml"
-      ];
-    })
-    # The above doesn't fix the source's build and run time checks of Numpy's
-    # version, it only fixes the tests and API. Upstream puts these checks only
-    # in release tarballs, and hence the patch has to be vendored.
-    ./numpy2.4.patch
-  ]
-  ++ lib.optionals cudaSupport [
-    (replaceVars ./cuda_path.patch {
-      cuda_toolkit_path = cudatoolkit;
-      cuda_toolkit_lib_path = lib.getLib cudatoolkit;
-    })
-  ];
-
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-xdist
     writableTmpDirAsHomeHook
+  ];
+
+  propagatedNativeBuildInputs = [
+    checkPhaseThreadLimitHook
   ];
 
   # https://github.com/NixOS/nixpkgs/issues/255262
@@ -162,9 +163,6 @@ buildPythonPackage (finalAttrs: {
       cudaSupport = false;
       doFullCheck = true;
       testsWithoutSandbox = false;
-    };
-    numpy_1 = numba.override {
-      numpy = numpy_1;
     };
   };
 

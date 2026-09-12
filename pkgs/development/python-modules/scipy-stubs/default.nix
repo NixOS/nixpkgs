@@ -6,22 +6,21 @@
   optype,
   scipy,
 }:
-
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scipy-stubs";
-  version = "1.17.0.1";
+  version = "1.18.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipy";
     repo = "scipy-stubs";
-    tag = "v${version}";
-    hash = "sha256-wzXRnTaSYOePt3XvZ/OeBOQCKObuCL1rWrVDo73yM1I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-manM9kHSk7+iSytce0ZEwE2oN4KJYsc1JVh/1CPHNHI=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.9.25,<0.10.0" "uv_build"
+      --replace-fail "uv_build>=0.12.5,<0.13" "uv_build"
   '';
 
   build-system = [
@@ -48,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jolars ];
   };
-}
+})

@@ -14,13 +14,13 @@
 melpaBuild (finalAttrs: {
 
   pname = "eaf-map";
-  version = "0-unstable-2025-07-04";
+  version = "0-unstable-2025-07-26";
 
   src = fetchFromGitHub {
     owner = "emacs-eaf";
     repo = "eaf-map";
-    rev = "667865a9422ec71e3518833e1a13806d4f03adfb";
-    hash = "sha256-UgHIzYu/K1NzTDvUn2JkEmiyDEBT9JDmlvp6xG7Nv5k=";
+    rev = "8bec6ab7c1194491ffccbeeec45451d8dc6fb405";
+    hash = "sha256-rwtC4CAOTNmR8sH6P4mKyON65yNYWMBYImQkBGZH0Qs=";
   };
 
   env.npmDeps = fetchNpmDeps {

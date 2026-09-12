@@ -5,7 +5,6 @@
 
   # Build time
   fetchurl,
-  fetchpatch,
   pkg-config,
   perl,
   texinfo,
@@ -68,11 +67,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "17.1";
+  version = "17.2";
 
   src = fetchurl {
     url = "mirror://gnu/gdb/gdb-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FJlvX3TJ9o9aVD/cRbyngAIH+R+SrupsLnkYIsfG2HY=";
+    hash = "sha256-HANsDXLks9H7XJTIhjKt1vnXb018TS6nk8EqnxmjIow=";
   };
 
   postPatch =
@@ -90,17 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./debug-info-from-env.patch
-
-    (fetchurl {
-      name = "musl.patch";
-      url = "https://inbox.sourceware.org/gdb-patches/20260324164527.1446549-2-sunilkumar.dora@windriver.com/raw";
-      hash = "sha256-FC4DDVS4wtE/HXtbUqvkxu9+e7nE3DYi1zIuQP9yQO8=";
-    })
-    (fetchpatch {
-      name = "musl-aarch64.patch";
-      url = "https://sourceware.org/git/?p=binutils-gdb.git;a=patch;h=1ccc3f6a2e28fa1f3357826374cba165b3ba3ff7";
-      hash = "sha256-Q2oTo2b+9yNN3PSsxqgxV4/9/05uFE/JMLe1CPs9Y7I=";
-    })
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [
     ./darwin-target-match.patch
@@ -218,13 +206,13 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = writeScript "update-gdb" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -eu -o pipefail
 
       # Expect the text in format of '<h3>GDB version 12.1</h3>'
       new_version="$(curl -s https://www.sourceware.org/gdb/ |
-          pcregrep -o1 '<h3>GDB version ([0-9.]+)</h3>')"
+          pcre2grep -o1 '<h3>GDB version ([0-9.]+)</h3>')"
       update-source-version ${pname} "$new_version"
     '';
   };

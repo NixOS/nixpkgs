@@ -71,8 +71,8 @@
 
       # add user account
       def add_user_account(user: str):
-        click_position(26, 48) # burger menu
-        click_position(179, 144) # add account
+        click_position(19, 52) # burger menu
+        click_position(70, 150) # add account
 
         wait_main_screen()
         click_position(366, 598) # chat address
@@ -83,21 +83,16 @@
       # NOTE: currently, we're hardcoding this to add to john's contact list,
       # since it's simpler than somehow reading the screen, determining where
       # each user is positioned and choosing them.
-      def add_contact(user, message=""):
-        click_position(26, 48) # burger menu
-        machine.wait_for_text(r"(Add|contact|chat|QR|code|address)")
+      def add_contact(user):
+        click_position(19, 52) # burger menu
+        machine.sleep(10)
         click_position(225, 344) # Add contact by chat address
         click_position(404, 359) # Add contact to john
 
         machine.send_chars(f"{users[user]["email"]}\n",0.1);
         machine.sleep(1)
-        machine.send_key("tab")
-        machine.send_key("tab")
-        machine.sleep(1)
-        machine.send_chars(f"{message if message != "" else users[user]["message"]}\n",0.1);
-        machine.sleep(1)
 
-        click_position(511, 524) # Add
+        click_position(511, 500) # Add
 
       # send a message
       def send_message(message):
@@ -129,19 +124,21 @@
         machine.send_chars("foobar", 0.1)
         machine.send_key("tab")
         machine.send_chars("foobar\n", 0.1)
-        machine.wait_for_text(r"(Search|Select|chat|start)")
+        machine.wait_for_console_text(r"(RosterPage|EmptyChatPage)")
+        machine.sleep(10)
 
         # we add a second account, which will be communicating with the first one
         add_user_account("alice")
-        machine.wait_for_text(r"(Search|Select|chat|start)")
+        machine.wait_for_console_text(r"(RosterPage|EmptyChatPage)")
+        machine.sleep(10)
 
       # NOTE: OCR doesn't work well here. We assume both messages are received
       # and just take a screenshot.
       # TODO: verify messages exist in the screenshot.
       with subtest("Chat between 2 users"):
         # add alice to john's contacts with an initial message
-        add_contact("alice", users["john"]["message"])
-        machine.sleep(5)
+        add_contact("alice")
+        machine.sleep(10)
 
         # john sends alice a message
         click_position(151, 110) # alice in john's contacts

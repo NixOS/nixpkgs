@@ -8,19 +8,16 @@
   nix-update-script,
 }:
 
-let
-  version = "4.1.1";
+buildDartApplication (finalAttrs: {
+  pname = "fvm";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
-    owner = "leoafarias";
+    owner = "conceptadev";
     repo = "fvm";
-    tag = version;
-    hash = "sha256-5XQK90aJ32A74FWV9ukwg0lRmRUU62ENy2SEjwsu+Os=";
+    tag = finalAttrs.version;
+    hash = "sha256-6NQbcPb8J/xUG289c/51Ck4Ms/ceXq50V0bbWq4iAeU=";
   };
-in
-buildDartApplication {
-  pname = "fvm";
-  inherit version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -28,7 +25,7 @@ buildDartApplication {
     pubspecSource =
       runCommand "pubspec.lock.json"
         {
-          inherit src;
+          inherit (finalAttrs) src;
           nativeBuildInputs = [ yq-go ];
         }
         ''
@@ -47,9 +44,9 @@ buildDartApplication {
 
   meta = {
     description = "Simple CLI to manage Flutter SDK versions";
-    homepage = "https://github.com/leoafarias/fvm";
+    homepage = "https://github.com/conceptadev/fvm";
     license = lib.licenses.mit;
     mainProgram = "fvm";
     maintainers = [ ];
   };
-}
+})

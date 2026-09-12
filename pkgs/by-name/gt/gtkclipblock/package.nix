@@ -6,7 +6,6 @@
   cmake,
   ninja,
   pkg-config,
-  gtk2,
   gtk3,
   gtk4,
 }:
@@ -40,10 +39,11 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    gtk2
     gtk3
     gtk4
   ];
+
+  mesonFlags = [ (lib.mesonEnable "gtk2" false) ];
 
   postPatch = ''
     substituteInPlace subprojects/funchook-helper/subprojects/funchook/CMakeLists.txt \

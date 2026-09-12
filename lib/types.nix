@@ -91,6 +91,9 @@ let
     in
     if pos == null then "" else " at ${pos.file}:${toString pos.line}:${toString pos.column}";
 
+  hasColonInfix = hasInfix ":";
+  hasNewlineInfix = hasInfix "\n";
+
   # Internal functor to help for migrating functor.wrapped to functor.payload.elemType
   # Note that individual attributes can be overridden if needed.
   elemTypeFunctor =
@@ -533,13 +536,14 @@ rec {
   singleLineStr =
     let
       inherit (strMatching "[^\n\r]*\n?") check merge;
+      removeNewlineSuffix = lib.removeSuffix "\n";
     in
     mkOptionType {
       name = "singleLineStr";
       description = "(optionally newline-terminated) single-line string";
       descriptionClass = "noun";
       inherit check;
-      merge = loc: defs: lib.removeSuffix "\n" (merge loc defs);
+      merge = loc: defs: removeNewlineSuffix (merge loc defs);
     };
 
   strMatching =
@@ -580,7 +584,7 @@ rec {
 
   passwdEntry =
     entryType:
-    addCheck entryType (str: !(hasInfix ":" str || hasInfix "\n" str))
+    addCheck entryType (str: !(hasColonInfix str || hasNewlineInfix str))
     // {
       name = "passwdEntry ${entryType.name}";
       description = "${
@@ -604,7 +608,7 @@ rec {
     description = "fileset";
     descriptionClass = "noun";
     check = isFileset;
-    merge = loc: defs: unions (map (x: x.value) defs);
+    merge = loc: defs: unions (getValues defs);
     emptyValue.value = empty;
   };
 
@@ -1238,18 +1242,44 @@ rec {
         optionDescriptionPhrase (class: class == "noun" || class == "conjunction") elemType
       }";
       descriptionClass = "conjunction";
-      check = x: x == null || elemType.check x;
-      merge =
-        loc: defs:
-        let
-          nulls = filter (def: def.value == null) defs;
-        in
-        if nulls == [ ] then
-          elemType.merge loc defs
-        else if length nulls == length defs then
-          null
-        else
-          throw "The option `${showOption loc}` is defined both null and not null, in ${showFiles (getFiles defs)}.";
+      check = {
+        __functor = _self: x: x == null || elemType.check x;
+        isV2MergeCoherent = true;
+      };
+      merge = {
+        __functor =
+          self: loc: defs:
+          let
+            inherit (self.v2 { inherit loc defs; }) headError value;
+          in
+          if headError.causedByMixedNulls or false then throw headError.message else value;
+        v2 =
+          { loc, defs }:
+          if all (def: def.value != null) defs then
+            # There are no null values
+            if elemType.merge ? v2 then
+              checkV2MergeCoherence loc elemType (elemType.merge.v2 { inherit loc defs; })
+            else
+              {
+                value = elemType.merge loc defs;
+                headError = checkDefsForError elemType.check loc defs;
+                valueMeta = { };
+              }
+          else
+            # There are some null values
+            {
+              headError =
+                if length defs == 1 || all (def: def.value == null) defs then
+                  null
+                else
+                  {
+                    message = "The option `${showOption loc}` is defined both null and not null, in ${showFiles (getFiles defs)}.";
+                    causedByMixedNulls = true;
+                  };
+              value = null;
+              valueMeta = { };
+            };
+      };
       emptyValue = {
         value = null;
       };

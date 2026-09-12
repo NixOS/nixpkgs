@@ -6,16 +6,24 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rot8";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "efernau";
     repo = "rot8";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dHx3vFY0ztyTIlzUi22TYphPD5hvgfHrWaaeoGxnvW0=";
+    hash = "sha256-9zjAi4yIpTqcJ338t0CVoOo0jlzrzRMfTH4ZRqBVAQg=";
   };
 
-  cargoHash = "sha256-MZz8IZDux9VEDDLQjkT96smNsygY1vYG2QBw3Q09hqw=";
+  # Upstream dropped Cargo.lock from the repo, so it has to be
+  # generated manually with `cargo generate-lockfile`.
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+  };
+
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
 
   meta = {
     description = "Screen rotation daemon for X11 and wlroots";

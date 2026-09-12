@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "First generation napari plugin engine";
     homepage = "https://github.com/napari/napari-plugin-engine";
-    changelog = "https://github.com/napari/napari-plugin-engine/releases/tag/{finalAttrs.src.tag}";
+    changelog = "https://github.com/napari/napari-plugin-engine/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ SomeoneSerge ];
   };

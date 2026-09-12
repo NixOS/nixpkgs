@@ -66,7 +66,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     ruamel-yaml
     discid
     pillow
-    setuptools
+    setuptools_80
   ];
 
   buildInputs = [

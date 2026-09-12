@@ -42,7 +42,7 @@ python3Packages.buildPythonApplication rec {
 
   dependencies = with python3Packages; [
     lxml
-    python-djvulibre
+    djvulibre-python
     pyicu
     html5lib
   ];

@@ -842,7 +842,7 @@ in
       users.users = {
         root = {
           uid = ids.uids.root;
-          description = "System administrator";
+          description = mkDefault "System administrator";
           home = "/root";
           shell = mkDefault cfg.defaultUserShell;
           group = "root";
@@ -850,7 +850,7 @@ in
         nobody = {
           uid = ids.uids.nobody;
           isSystemUser = true;
-          description = "Unprivileged account (don't use!)";
+          description = mkDefault "Unprivileged account (don't use!)";
           group = "nogroup";
         };
       };

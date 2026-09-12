@@ -19,7 +19,6 @@
   python3,
   util-linux,
   which,
-  whoami,
 
   # run-time
   boost,
@@ -98,7 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     pkg-config
     which
-    whoami
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     util-linux # rev, and possibly others

@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "cloudflared";
-  version = "2026.6.1";
+  version = "2026.9.1";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cloudflared";
     tag = finalAttrs.version;
-    hash = "sha256-TQW0XnYS96sX/+dTGocKzz91fJG58cSV3jGZI3TBaeg=";
+    hash = "sha256-w14ptM9nbfVz+8R51HOLJCGIMdQvxEQ0TsEsWcpuLZ4=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-uqgFn1veadGiGPI75ULNZF4NoUERlCn3p6JFP+I4y6s=";
 
   ldflags = [
     "-s"
@@ -30,11 +30,6 @@ buildGoModule (finalAttrs: {
   preCheck = ''
     # Workaround for: sshgen_test.go:74: mkdir /homeless-shelter/.cloudflared: no such file or directory
     export HOME="$(mktemp -d)"
-
-    # Workaround for: protocol_test.go:11:
-    #   lookup protocol-v2.argotunnel.com on [::1]:53: read udp [::1]:51876->[::1]:53: read: connection refused
-    substituteInPlace "edgediscovery/protocol_test.go" \
-      --replace-warn "TestProtocolPercentage" "SkipProtocolPercentage"
 
     # Workaround for: origin_icmp_proxy_test.go:46:
     #   cannot create ICMPv4 proxy: socket: permission denied nor ICMPv6 proxy: socket: permission denied

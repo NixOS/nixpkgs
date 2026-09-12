@@ -23,11 +23,11 @@
 
 buildGoModule (finalAttrs: {
   pname = "vors";
-  version = "5.0.0";
+  version = "6.3.0";
 
   src = fetchurl {
     url = "http://www.vors.stargrave.org/download/vors-${finalAttrs.version}.tar.zst";
-    hash = "sha256-DpwnhfexF/yw2emn1xrhKbGNbk9Z6wm5A2azQSAdmpA=";
+    hash = "sha256-N/ELiTB2T/2iSKFOS7W0hhqcSzRNxBBfkwqIRLnKYZw=";
   };
 
   vendorHash = null;

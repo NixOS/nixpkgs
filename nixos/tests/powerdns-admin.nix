@@ -132,13 +132,13 @@ let
 
           # Login
           # Outputs 'Redirecting' if successful
-          curl -sSfb session http://127.0.0.1:8000/login \
+          curl -sSf -b session -c session http://127.0.0.1:8000/login \
             -F "_csrf_token=$csrf_token" \
             -F "username=user" \
             -F "password=password" | grep Redirecting
 
           # Check that we are logged in, this redirects to /admin/setting/pdns if we are
-          curl -sSfb session http://127.0.0.1:8000/dashboard/ | grep /admin/setting
+          curl -sSf -b session -c session http://127.0.0.1:8000/dashboard/ | grep /admin/setting
         '';
       };
       unix = {

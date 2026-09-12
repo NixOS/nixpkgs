@@ -3,11 +3,12 @@
 Note that "The Rocq Prover" (Rocq for short) is the new name of the
 proof assistant formerly known as Coq. The `coq` and `coqPackages`
 derivations currently remain for both older versions of Coq, but also
-some versions of Rocq during the renaming transition. In the latter
-case, the `coq` derivation encompasses the compatibility binaries
-(`coqtop`, `coqc`, etc.) in addition to the `rocq` binary. The packages
-only in `coqPackages` are the ones which currently still depend on these
-compatibility binaries.
+as compatibility aliases for some versions of Rocq. In both cases, the
+`coq` and `rocq-core` attributes exist. In the case of Coq (< 9),
+`rocq-core` is just an alias for `coq`, while in the case of Rocq (>= 9),
+`rocq-core` is the main Rocq derivation, while `coq` provides
+compatibility binaries (`coqc`, `coqtop`, etc.) for packages that still
+depend on them.
 
 ## Rocq derivation: `rocq-core` {#rocq-derivation-rocq}
 
@@ -17,18 +18,18 @@ The Rocq derivation is overridable through the `rocq-core.override overrides`, w
 * `customOCamlPackages` (optional, defaults to `null`, which lets Rocq choose a version automatically), which can be set to any of the ocaml packages attribute of `ocaml-ng` (such as `ocaml-ng.ocamlPackages_4_14` which is the default for Rocq 9.1 for example).
 * `rocq-version` (optional, defaults to the short version e.g. "9.1"), is a version number of the form "x.y" that indicates which Rocq's version build behavior to mimic when using a source which is not a release. E.g. `rocq-core.override { version = "40be8435e132aab2231a79091f011ebc3e64a753"; rocq-version = "9.1"; }`.
 
-## Creating custom Coq environments with `coq.withPackages` {#coq-withPackages}
+## Creating custom Coq environments with `rocq-core.withPackages` {#coq-withPackages}
 
-The `coq.withPackages` function provides a convenient way to create a Coq environment that includes additional Coq packages. This is similar to how `python.withPackages` works for Python environments.
+The `rocq-core.withPackages` function provides a convenient way to create a Rocq environment that includes additional Rocq packages. This is similar to how `python.withPackages` works for Python environments.
 
-The function takes a function that receives the Coq package set and returns a list of packages. It returns a wrapped Coq environment where all Coq binaries (`coqtop`, `coqc`, `coqdep`, `coqchk`, `coqide`, etc.) are configured with the appropriate environment variables to find the packages.
+The function takes a function that receives the Rocq package set and returns a list of packages. It returns a wrapped Rocq environment where the Rocq binaries (`rocq`, etc.) are configured with the appropriate environment variables to find the packages.
 
 ### Usage {#coq-withPackages-usage}
 
-Here is an example of creating a Coq environment with specific packages.
+Here is an example of creating a Rocq environment with specific packages.
 
 ```nix
-coq.withPackages (
+rocq-core.withPackages (
   ps: with ps; [
     mathcomp
     bignums
@@ -36,7 +37,9 @@ coq.withPackages (
 )
 ```
 
-If you install the `vsrocq-language-server` or `rocq-lsp` server, make sure to list them as part of the above `coq.withPackages` expression instead of installing them separately if you want them to find your Coq/Rocq packages.
+If you install the `vsrocq-language-server` or `rocq-lsp` server, make sure to list them as part of the above `rocq-core.withPackages` expression instead of installing them separately if you want them to find your Rocq packages.
+
+For versions prior to Rocq 9.0, a similar `coq.withPackages` function is available.
 
 ## Rocq packages attribute sets: `rocqPackages` {#rocq-packages-attribute-sets-rocqpackages}
 
@@ -59,7 +62,7 @@ The recommended way of defining a derivation for a Rocq library, is to use the `
 * `releaseRev` (optional, defaults to `(v: v)`), provides a default mapping from release names to revision hashes/branch names/tags,
 * `releaseArtifact` (optional, defaults to `(v: null)`), provides a default mapping from release names to artifact names (only works for github artifact for now),
 * `displayVersion` (optional), provides a way to alter the computation of `name` from `pname`, by explaining how to display version numbers,
-* `namePrefix` (optional, defaults to `[ "rocq-core" ]`), provides a way to alter the computation of `name` from `pname`, by explaining which dependencies must occur in `name`,
+* `namePrefix` (optional, defaults to `[ "rocq" ]`), provides a way to alter the computation of `name` from `pname`, by explaining which dependencies must occur in `name`,
 * `nativeBuildInputs` (optional), is a list of executables that are required to build the current derivation, in addition to the default ones (namely `which`, `dune` and `ocaml` depending on whether `useDune`, `useDuneifVersion` and `mlPlugin` are set).
 * `extraNativeBuildInputs` (optional, deprecated), an additional list of derivation to add to `nativeBuildInputs`,
 * `overrideNativeBuildInputs` (optional) replaces the default list of derivation to which `nativeBuildInputs` and `extraNativeBuildInputs` adds extra elements,
@@ -68,12 +71,14 @@ The recommended way of defining a derivation for a Rocq library, is to use the `
 * `overrideBuildInputs` (optional) replaces the default list of derivation to which `buildInputs` and `extraBuildInputs` adds extras elements,
 * `propagatedBuildInputs` (optional) is passed as is to `mkDerivation`, we recommend to use this for Rocq libraries and Rocq plugin dependencies, as this makes sure the paths of the compiled libraries and plugins will always be added to the build environments of subsequent derivation, which is necessary for Rocq packages to work correctly,
 * `mlPlugin` (optional, defaults to `false`). Some extensions (plugins) might require OCaml and sometimes other OCaml packages. Standard dependencies can be added by setting the current option to `true`. For a finer grain control, the `rocq-core.ocamlPackages` attribute can be used in `nativeBuildInputs`, `buildInputs`, and `propagatedBuildInputs` to depend on the same package set Rocq was built against.
-* `useDuneifVersion` (optional, default to `(x: false)` uses Dune to build the package if the provided predicate evaluates to true on the version, e.g. `useDuneifVersion = versions.isGe "1.1"`  will use dune if the version of the package is greater or equal to `"1.1"`,
+* `useDuneifVersion` (optional, default to `(x: false)`) uses Dune to build the package if the provided predicate evaluates to true on the version, e.g. `useDuneifVersion = versions.isGe "1.1"`  will use dune if the version of the package is greater or equal to `"1.1"`,
 * `useDune` (optional, defaults to `false`) uses Dune to build the package if set to true, the presence of this attribute overrides the behavior of the previous one.
 * `opam-name` (optional, defaults to concatenating with a dash separator the components of `namePrefix` and `pname`), name of the Dune package to build.
 * `enableParallelBuilding` (optional, defaults to `true`), since it is activated by default, we provide a way to disable it.
 * `extraInstallFlags` (optional), allows to extend `installFlags` which initializes the variables `COQLIBINSTALL` and `COQPLUGININSTALL` so as to install in the proper subdirectory. Indeed Rocq libraries should be installed in `$(out)/lib/coq/${rocq-core.rocq-version}/user-contrib/`. Such directories are automatically added to the `$ROCQPATH` environment variable by the hook defined in the Rocq derivation.
 * `setROCQBIN` (optional, defaults to `true`), by default, the environment variable `$ROCQBIN` is set to the current Rocq's binary, but one can disable this behavior by setting it to `false`,
+* `useCoq` (optional, defaults to `false`), adds the Coq compatibility binaries to the build environment, which is necessary for some packages that still depend on them and sets `COQBIN` to the path of the `coqc` binary (if `setROCQBIN` is also set to `true`). A wrapper `mkCoqDerivation` is provided that sets this option to `true`.
+* `useCoqifVersion` (optional, defaults to `(x: false)`), adds the Coq compatibility binaries to the build environment if the provided predicate evaluates to true on the version. This can be useful for supporting old package versions that need the Coq compatibility binaries, while newer versions do not.
 * `useMelquiondRemake` (optional, default to `null`) is an attribute set, which, if given, overloads the `preConfigurePhases`, `configureFlags`, `buildPhase`, and `installPhase` attributes of the derivation for a specific use in libraries using `remake` as set up by Guillaume Melquiond for `flocq`, `gappalib`, `interval`, and `coquelicot` (see the corresponding derivation for concrete examples of use of this option). For backward compatibility, the attribute `useMelquiondRemake.logpath` must be set to the logical root of the library (otherwise, one can pass `useMelquiondRemake = {}` to activate this without backward compatibility).
 * `dropAttrs`, `keepAttrs`, `dropDerivationAttrs` are all optional and allow to tune which attribute is added or removed from the final call to `mkDerivation`.
 
@@ -128,7 +133,7 @@ mkRocqDerivation {
     mathcomp.boot
     mathcomp.algebra
     mathcomp-finmap
-    mathcomp.fingroup
+    mathcomp.finite-group
     mathcomp-bigenough
   ];
 

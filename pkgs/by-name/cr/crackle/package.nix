@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "crackle";
-  version = "unstable-2020-12-13";
+  version = "0.1-unstable-2020-12-12";
 
   src = fetchFromGitHub {
     owner = "mikeryan";

@@ -20,7 +20,6 @@
   astring,
   result,
   camlp-streams,
-  odoc,
 }:
 buildDunePackage (finalAttrs: {
   pname = "ocamlformat-mlx-lib";
@@ -51,7 +50,6 @@ buildDunePackage (finalAttrs: {
     astring
     result
     camlp-streams
-    odoc
   ];
 
   nativeBuildInputs = [

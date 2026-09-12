@@ -16,7 +16,6 @@
   libgbm,
   lcms2,
   pipewire,
-  krunner,
   python3,
 }:
 mkKdeDerivation {
@@ -47,8 +46,6 @@ mkKdeDerivation {
     qttools
     qtvirtualkeyboard
     qtwayland
-
-    krunner
 
     libgbm
     lcms2

@@ -1,18 +1,17 @@
-// @ts-check
-const { classify } = require('../supportedBranches.js')
-const { getCommitDetailsForPR } = require('./get-pr-commit-details.js')
+import { getCommitDetailsForPR } from './get-pr-commit-details.js'
+import { classify } from './supportedBranches.js'
 
 /** @typedef {import('./get-pr-commit-details.js').Commit} Commit */
 
 /**
  * @param {{
- *  github: InstanceType<import('@actions/github/lib/utils').GitHub>,
+ *  github: InstanceType<typeof import('@actions/github/lib/utils').GitHub>,
  *  context: typeof import('@actions/github').context,
- *  core: import('@actions/core'),
+ *  core: typeof import('@actions/core'),
  *  repoPath?: string,
  * }} LintCommitsProps
  */
-async function lintCommits({ github, context, core, repoPath }) {
+export default async function lintCommits({ github, context, core, repoPath }) {
   // This check should only be run when we have the pull_request context.
   const pull_number = context.payload.pull_request?.number
   if (!pull_number) {
@@ -57,7 +56,7 @@ async function lintCommits({ github, context, core, repoPath }) {
 /**
  * @param {{
  *  commits: Commit[],
- *  core: import('@actions/core'),
+ *  core: typeof import('@actions/core'),
  * }} CheckCommitMessagesProps
  */
 async function checkCommitMessages({ commits, core }) {
@@ -74,8 +73,10 @@ async function checkCommitMessages({ commits, core }) {
     'fix',
     'perf',
     'refactor',
+    'services',
     'style',
     'test',
+    'update',
   ]
 
   /**
@@ -168,7 +169,7 @@ async function checkCommitMessages({ commits, core }) {
 /**
  * @param {{
  *  commits: Commit[],
- *  core: import('@actions/core'),
+ *  core: typeof import('@actions/core'),
  * }} CheckGitFieldsProps
  */
 async function checkCommitMetadata({ commits, core }) {
@@ -219,5 +220,3 @@ async function checkCommitMetadata({ commits, core }) {
     core.setFailed('Committers: merging is discouraged.')
   }
 }
-
-module.exports = lintCommits

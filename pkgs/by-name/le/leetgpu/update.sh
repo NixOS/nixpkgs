@@ -16,7 +16,6 @@ update-source-version leetgpu $latestVersion || true
 for system in \
     x86_64-linux \
     aarch64-linux \
-    x86_64-darwin \
     aarch64-darwin; do
     hash=$(nix store prefetch-file --json --hash-type sha256 \
       $(nix-instantiate --eval --raw -E "with import ./. {}; leetgpu.src.url" --system "$system") | jq -r '.hash')

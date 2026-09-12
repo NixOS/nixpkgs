@@ -3,11 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
 
-  # frontend
+  # nativeBuildInputs
   nodejs,
   yarn-berry_3,
 
   # build-system
+  hatch,
   hatchling,
   hatch-build-scripts,
   hatch-jupyter-builder,
@@ -25,6 +26,7 @@ buildPythonPackage (finalAttrs: {
   pname = "bqscales";
   version = "0.3.7";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bqplot";
@@ -32,10 +34,6 @@ buildPythonPackage (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-AAKnOEwdycSlxJEK0qbFJp2Dpiw/rEIk7fUa3NTymqQ=";
   };
-
-  postPatch = ''
-    sed -i "/\"hatch\"/d" pyproject.toml
-  '';
 
   missingHashes = ./missing-hashes.json;
 
@@ -46,8 +44,8 @@ buildPythonPackage (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    yarn-berry_3.yarnBerryConfigHook
     yarn-berry_3
+    yarn-berry_3.yarnBerryConfigHook
   ];
 
   preBuild = ''
@@ -55,6 +53,7 @@ buildPythonPackage (finalAttrs: {
   '';
 
   build-system = [
+    hatch
     hatch-build-scripts
     hatch-jupyter-builder
     hatch-nodejs-version
@@ -71,7 +70,7 @@ buildPythonPackage (finalAttrs: {
 
   env.SKIP_JUPYTER_BUILDER = 1;
 
-  # no tests in PyPI dist
+  # no python tests
   doCheck = false;
 
   pythonImportsCheck = [ "bqscales" ];

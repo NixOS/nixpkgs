@@ -12,20 +12,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "glslang";
-  version = "16.2.0";
+  version = "16.4.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
     tag = finalAttrs.version;
-    hash = "sha256-2uWnZZNGdZorHaiLzMb/rpM6bL9oBClKqiFkUH3krJQ=";
+    hash = "sha256-nPXwBROAj/zYccM5Lydwws13e/nW96gm+f4218sQhE8=";
   };
-
-  patches = [
-    # Allow building against our already-built gtest, without eating a rebuild
-    # https://github.com/KhronosGroup/glslang/pull/4140
-    ./external-gtest.patch
-  ];
 
   outputs = [
     "bin"

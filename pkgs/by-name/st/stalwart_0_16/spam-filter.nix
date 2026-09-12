@@ -1,38 +1,13 @@
 {
   lib,
   fetchFromGitHub,
-  stdenv,
+  stdenvNoCC,
   stalwart_0_16,
   nix-update-script,
-  python3Packages,
+  python3,
 }:
-let
-  generate_rules_json =
-    {
-      src,
-      version,
-    }:
-    python3Packages.buildPythonApplication {
-      pname = "generate_rules_json";
-      inherit src version;
-      __structuredAttrs = true;
-      format = "other";
-      dontBuild = true;
-      dependencies = [ python3Packages.tomli ];
-      installPhase = ''
-        runHook preInstall
-        mkdir -p $out/bin
-        cp generate_rules_json.py $out/bin/generate_rules_json
-        chmod +x $out/bin/generate_rules_json
-        runHook postInstall
-      '';
-      postFixup = ''
-        wrapPythonPrograms
-      '';
-      patches = [ ./spam-filter-generate-rules-json-use-current-working-dir.patch ];
-    };
-in
-stdenv.mkDerivation (finalAttrs: {
+
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "spam-filter";
   version = "3.0.0";
 
@@ -45,17 +20,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
+  nativeBuildInputs = [ python3 ];
+
   buildPhase = ''
     runHook preBuild
-    ${generate_rules_json { inherit (finalAttrs) src version; }}/bin/generate_rules_json
+    python3 generate_rules_json.py
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out
-    cp spam-filter.toml $out/
-    cp spam-filter-rules.json.gz $out/
+    cp spam-filter-rules.json.gz $out
     runHook postInstall
   '';
 

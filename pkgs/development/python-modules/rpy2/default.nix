@@ -1,12 +1,11 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchPypi,
   isPyPy,
   rpy2-rinterface,
   rpy2-robjects,
-  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-8ftGSc59FOk1EzCI3sl82ifrN858xxA4X4HcpVb+jJ8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     rpy2-rinterface
     rpy2-robjects
   ];

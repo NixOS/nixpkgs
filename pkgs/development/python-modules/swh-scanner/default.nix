@@ -34,6 +34,8 @@ buildPythonPackage (finalAttrs: {
   version = "0.8.3";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
     domain = "gitlab.softwareheritage.org";
     group = "swh";

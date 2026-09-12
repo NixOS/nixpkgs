@@ -6,7 +6,7 @@
   fetchpatch,
 
   # build-system
-  setuptools,
+  setuptools_80,
 
   # dependencies
   addict,
@@ -71,7 +71,8 @@ buildPythonPackage (finalAttrs: {
         --replace-fail "import numpy.compat" ""
     '';
 
-  build-system = [ setuptools ];
+  # https://github.com/open-mmlab/mmengine/issues/1616
+  build-system = [ setuptools_80 ];
 
   dependencies = [
     addict
@@ -212,7 +213,7 @@ buildPythonPackage (finalAttrs: {
     description = "Library for training deep learning models based on PyTorch";
     homepage = "https://github.com/open-mmlab/mmengine";
     changelog = "https://github.com/open-mmlab/mmengine/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rxiao ];
   };
 })

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   gitMinimal,
   makeBinaryWrapper,
+  cmake,
   installShellFiles,
   rustPlatform,
   testers,
@@ -24,16 +25,16 @@
 }:
 
 let
-  version = "2.1.2";
-  devenvNixVersion = "2.34";
-  devenvNixRev = "42d4b7de21c15f28c568410f4383fa06a8458a40";
+  version = "2.3.0";
+  devenvNixVersion = "2.35";
+  devenvNixRev = "b9b81726b38469c55b9706d80d37d6c73cc7f76c";
 
   devenvNixSrc = fetchFromGitHub {
     name = "devenv-nix-${devenvNixVersion}-source";
     owner = "cachix";
     repo = "nix";
     rev = devenvNixRev;
-    hash = "sha256-g2KEBuHpc3a56c+jPcg0+w6LSuIj6f+zzdztLCOyIhc=";
+    hash = "sha256-3NT3yTvoRT7+rxLDNovpyeTDIJkZlBoO72rcu2x9Y9o=";
   };
 
   nix_components = (nixVersions.nixComponents_git.overrideSource devenvNixSrc).overrideScope (
@@ -49,11 +50,11 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "cachix";
     repo = "devenv";
-    tag = "v2.1.2";
-    hash = "sha256-EQnZCy7r4VMO6KDoytxHBa0mFbM1D9g1kaDfs/s0YZA=";
+    tag = "v2.3";
+    hash = "sha256-ZH5WcgnRjqV1jY4gCHWOv6DlDVgBz+xLIoja/e8cWjw=";
   };
 
-  cargoHash = "sha256-uEwxqnLqCFpyV2NbnfuUyVqKrMeVeQzoGQmElaVeGU8=";
+  cargoHash = "sha256-IAmZzN+sj8GZvbW0Q0wEdz+m3ZMrpvGKh1iH8r2LgLQ=";
 
   env = {
     RUSTFLAGS = "--cfg tracing_unstable";
@@ -69,6 +70,7 @@ rustPlatform.buildRustPackage {
   ];
 
   nativeBuildInputs = [
+    cmake
     installShellFiles
     makeBinaryWrapper
     pkg-config
@@ -107,6 +109,12 @@ rustPlatform.buildRustPackage {
   '';
 
   useNextest = true;
+  # Binding a TCP socket is not permitted in the darwin sandbox.
+  checkFlags = [
+    "--skip"
+    "waits_for_previous_proxy_to_release_control_socket"
+  ];
+
   cargoTestFlags = [
     "-p"
     "devenv"

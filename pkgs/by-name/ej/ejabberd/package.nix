@@ -144,7 +144,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ejabberd";
-  version = "26.04";
+  version = "26.07";
 
   nativeBuildInputs = [
     makeWrapper
@@ -184,7 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "processone";
     repo = "ejabberd";
     tag = finalAttrs.version;
-    hash = "sha256-PF65TgHvKeSEudEqqJVEotu2zgiWgGtRuNvbiyE0nwc=";
+    hash = "sha256-YCcRXbhlIYV0cP4RLTknYnfSpkknLenvWOYs9kt7m3c=";
   };
 
   passthru.tests = {

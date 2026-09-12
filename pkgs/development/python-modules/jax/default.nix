@@ -7,6 +7,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   cudaSupport ? config.cudaSupport,
+  cudaPackages,
 
   # build-system
   setuptools,
@@ -20,9 +21,12 @@
 
   # optional-dependencies
   jax-cuda12-plugin,
+  jax-cuda13-plugin,
 
   # tests
+  absl-py,
   cloudpickle,
+  flatbuffers,
   hypothesis,
   matplotlib,
   pytestCheckHook,
@@ -40,7 +44,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "jax";
-  version = "0.10.2";
+  version = "0.11.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -49,7 +53,7 @@ buildPythonPackage (finalAttrs: {
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
     tag = "jax-v${finalAttrs.version}";
-    hash = "sha256-OQkh9uC8NsxoG3SByPybXQ81c11T3lYgjaU3tbB0+6E=";
+    hash = "sha256-OiH4qhVK7T6o+lYtP1e2UqtSitxVdzUWC5YXbaNMZsQ=";
   };
 
   build-system = [ setuptools ];
@@ -67,26 +71,37 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.optionals cudaSupport finalAttrs.passthru.optional-dependencies.cuda;
 
-  optional-dependencies = rec {
-    cuda = [ jax-cuda12-plugin ];
-    cuda12 = cuda;
-    cuda12_pip = cuda;
-    cuda12_local = cuda;
-  };
+  optional-dependencies =
+    let
+      inherit (cudaPackages) cudaMajorVersion;
+      cuda12 = [ jax-cuda12-plugin ];
+      cuda13 = [ jax-cuda13-plugin ];
+    in
+    {
+      cuda =
+        if cudaMajorVersion == "12" then
+          cuda12
+        else if cudaMajorVersion == "13" then
+          cuda13
+        else
+          throw "Unsupported cudaPackages version (${cudaMajorVersion}). Supported versions are 12 and 13.";
+      cuda12 = cuda12;
+      cuda12_local = cuda12;
+      cuda13 = cuda13;
+      cuda13_local = cuda13;
+    };
 
   nativeCheckInputs = [
+    absl-py
     cloudpickle
+    flatbuffers
     hypothesis
     matplotlib
     pytestCheckHook
     pytest-xdist
   ];
 
-  # high parallelism will result in the tests getting stuck
-  dontUsePytestXdist = true;
-
   pytestFlags = [
-    "--numprocesses=4"
     "-Wignore::DeprecationWarning"
   ];
 
@@ -98,29 +113,18 @@ buildPythonPackage (finalAttrs: {
     "tests/"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
-    # reported at: https://github.com/jax-ml/jax/issues/26106
-    "tests/pjit_test.py::PJitErrorTest::testAxisResourcesMismatch"
-    "tests/shape_poly_test.py::ShapePolyTest"
-    "tests/tree_util_test.py::TreeTest"
-
-    # Mostly AssertionError on numerical tests failing since 0.7.0
-    # https://github.com/jax-ml/jax/issues/31428
-    "tests/export_back_compat_test.py"
-    "tests/lax_numpy_test.py"
-    "tests/lax_scipy_test.py"
-    "tests/lax_test.py"
-    "tests/linalg_test.py"
-  ];
-
-  # Prevents `tests/export_back_compat_test.py::CompatTest::test_*` tests from failing on darwin with
-  # PermissionError: [Errno 13] Permission denied: '/tmp/back_compat_testdata/test_*.py'
-  # See https://github.com/google/jax/blob/jaxlib-v0.4.27/jax/_src/internal_test_util/export_back_compat_test_util.py#L240-L241
-  # NOTE: this doesn't seem to be an issue on linux
-  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export TEST_UNDECLARED_OUTPUTS_DIR=$(mktemp -d)
-  '';
+  preCheck =
+    # Prevents `tests/export_back_compat_test.py::CompatTest::test_*` tests from failing on darwin with
+    # PermissionError: [Errno 13] Permission denied: '/tmp/back_compat_testdata/test_*.py'
+    # See https://github.com/google/jax/blob/jaxlib-v0.4.27/jax/_src/internal_test_util/export_back_compat_test_util.py#L240-L241
+    # NOTE: this doesn't seem to be an issue on linux
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export TEST_UNDECLARED_OUTPUTS_DIR=$(mktemp -d)
+    ''
+    # Disable CUDA during tests when cudaSupport is enabled but no GPU is available
+    + lib.optionalString cudaSupport ''
+      export JAX_PLATFORMS=cpu
+    '';
 
   disabledTests = [
     # Exceeds tolerance when the machine is busy
@@ -142,22 +146,23 @@ buildPythonPackage (finalAttrs: {
     "test_custom_root_with_aux"
     "testEigvalsGrad_shape"
   ]
-  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-    # Fails on some hardware due to some numerical error
-    # See https://github.com/google/jax/issues/18535
-    "testQdwhWithOnRankDeficientInput5"
+  ++ lib.optionals cudaSupport [
+    # AssertionError: 'INFO' not found in "DEBUG:2026-09-05 10:11:42,262:jax._src.path:40: etils.epath was not found...
+    "test_subprocess_stderr_debug_logging"
+
+    # AssertionError: 'INFO' not found in 'I0905 10:11:44.349869   24500 pjrt_api.cc:119] GetPjrtApi was found for cuda at...
+    "test_subprocess_stderr_info_logging"
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
-    # reported at: https://github.com/jax-ml/jax/issues/26106
-    "testInAxesPyTreePrefixMismatchError"
-    "testInAxesPyTreePrefixMismatchErrorKwargs"
-    "testOutAxesPyTreePrefixMismatchError"
-    "test_tree_map"
-    "test_tree_prefix_error"
-    "test_vjp_rule_inconsistent_pytree_structures_error"
-    "test_vmap_in_axes_tree_prefix_error"
-    "test_vmap_mismatched_axis_sizes_error_message_issue_705"
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    # The Mosaic GPU interpreter emulates tcgen05 MMA on the CPU backend and compares the
+    # result with `assert_array_equal`. On x86_64 the two sides contract differently and
+    # disagree by a single float32 ULP (max relative difference 5.5e-07).
+    # Passes on aarch64-linux and aarch64-darwin.
+    "test_async_copy_tmem_with_mma"
+    "test_can_commit_mma_to_multiple_barriers"
+    "test_can_deallocate_tmem_while_mma_active_on_different_tmem"
+    "test_can_pipeline_with_multiple_children"
+    "test_can_pipeline_with_multiple_parents"
   ];
 
   pythonImportsCheck = [ "jax" ];
@@ -170,24 +175,26 @@ buildPythonPackage (finalAttrs: {
   # Run these tests with eg
   #
   #   NIXPKGS_ALLOW_UNFREE=1 nixglhost -- nix run --impure .#python3Packages.jax.passthru.tests.test_cuda_jaxlibBin
-  passthru.tests = {
-    # jaxlib-build is broken as of 2024-12-20
-    # test_cuda_jaxlibSource = callPackage ./test-cuda.nix {
-    #   jax = jax.override { jaxlib = jaxlib-build; };
-    # };
-    test_cuda_jaxlibBin = callPackage ./test-cuda.nix {
-      jax = jax.override { jaxlib = jaxlib-bin; };
+  passthru = {
+    tests = {
+      # jaxlib-build is broken as of 2024-12-20
+      # test_cuda_jaxlibSource = callPackage ./test-cuda.nix {
+      #   jax = jax.override { jaxlib = jaxlib-build; };
+      # };
+      test_cuda_jaxlibBin = callPackage ./test-cuda.nix {
+        jax = jax.override { jaxlib = jaxlib-bin; };
+      };
+      # updater fails to pick the correct branch
+      skipBulkUpdate = true;
     };
   };
 
-  # updater fails to pick the correct branch
-  passthru.skipBulkUpdate = true;
-
   meta = {
     description = "Source-built JAX frontend: differentiate, compile, and transform Numpy code";
-    homepage = "https://github.com/google/jax";
+    homepage = "https://github.com/jax-ml/jax";
     changelog = "https://docs.jax.dev/en/latest/changelog.html";
     license = lib.licenses.asl20;
+    teams = [ lib.teams.cuda ];
     maintainers = with lib.maintainers; [
       GaetanLepage
       samuela

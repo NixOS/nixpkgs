@@ -3,21 +3,27 @@
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
+  testers,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasmi";
-  version = "1.1.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "wasmi-labs";
     repo = "wasmi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-54mZxX7ygmX93V3l1ZRqDdbGe5uk772GSaNmXnV3iEQ=";
+    hash = "sha256-oGuw8//jsmeTxwHli7EAy4+W/iB/kSW40DFLjObA4hg=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-v38ThWgelSmxWLhOHqmJIbh1sisB1K56825ut/mZoMs=";
+  cargoHash = "sha256-QhSY6VGtpy2s7Dmp+cm65PCkM4zoeJ/ZrjjEGVWLgm4=";
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+  };
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
@@ -29,6 +35,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
     ];
     maintainers = with lib.maintainers; [ iamanaws ];
-    mainProgram = "wasmi_cli";
+    mainProgram = "wasmi";
   };
 })

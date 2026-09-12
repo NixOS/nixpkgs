@@ -62,3 +62,6 @@ ci/OWNERS linguist-language=CODEOWNERS
 # patching CRLF line endings from an upstream source package.
 *.diff !text !eol
 *.patch !text !eol
+
+# Torrent files are binary files and should not be re-encoded.
+*.torrent !text !eol

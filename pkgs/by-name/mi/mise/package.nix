@@ -13,8 +13,8 @@
   openssl,
   cmake,
   cacert,
+  tzdata,
   usage,
-  mise,
   testers,
   runCommand,
   jq,
@@ -22,16 +22,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2026.7.0";
+  version = "2026.8.6";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F/hxgkqLk36906uhr56W+4Evwc8WLbYWw8pibGsq3EY=";
+    hash = "sha256-dm+cIb6i+npYSIUfxaEi3ohumeT9lXXlQwYREndwZFE=";
   };
 
-  cargoHash = "sha256-W88dlxvDEwN6C1j1WMtL/KodWQZ9UnI1VJc3xp1Lnqw=";
+  cargoHash = "sha256-VzRNo2fa4n4oOw27itjFebKpIhSdm8UmI/xdBBJIh9g=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -69,20 +69,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustPlatform.bindgenHook
   ];
 
-  # disable warnings as errors for aws-lc-sys in checkPhase
-  env.NIX_CFLAGS_COMPILE = "-Wno-error";
+  env = {
+    # disable warnings as errors for aws-lc-sys in checkPhase
+    NIX_CFLAGS_COMPILE = "-Wno-error";
+    # tera date helper tests look up timezone data via TZDIR.
+    TZDIR = "${tzdata}/share/zoneinfo";
+  };
 
   checkFlags = [
     # last_modified will always be different in nix
     "--skip=tera::tests::test_last_modified"
-    # Nix's build sandbox strips setuid bits, so this round-trip assertion
-    # fails on both Linux and Darwin (cf. apko's TestSpecialModeBits).
-    "--skip=oci::layer::tests::preserve_metadata_dir_layer_keeps_special_permission_bits"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-    # x86_64-darwin started failing mid-April 2025; aarch64 in Feb 2026
-    "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_with_cache"
-    "--skip=task::task_file_providers::remote_task_http::tests::test_http_remote_task_get_local_path_without_cache"
+    # shell out to macOS system binaries that the darwin sandbox refuses to exec
+    "--skip=system::defaults::tests::test_status_missing_keys_are_unset"
+    # we don't care about brew tests and a lot of them fails here
+    "--skip=system::packages::brew::cask::tests::"
   ];
 
   cargoTestFlags = [ "--all-features" ];
@@ -96,7 +98,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installManPage ./man/man1/mise.1
 
     substituteInPlace ./completions/{mise.bash,mise.fish,_mise}  \
-      --replace-fail '-p usage' '-p ${lib.getExe usage}' \
+      --replace-fail 'usage &> /dev/null' '${lib.getExe usage} &> /dev/null' \
       --replace-fail 'usage complete-word' '${lib.getExe usage} complete-word'
 
     installShellCompletion \
@@ -116,7 +118,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ];
     };
     tests = {
-      version = (testers.testVersion { package = mise; }).overrideAttrs (old: {
+      version = (testers.testVersion { package = finalAttrs.finalPackage; }).overrideAttrs (old: {
         nativeBuildInputs = old.nativeBuildInputs ++ [ cacert ];
       });
       usageCompat =
@@ -124,7 +126,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         runCommand "mise-usage-compatibility"
           {
             nativeBuildInputs = [
-              mise
+              finalAttrs.finalPackage
               usage
               jq
             ];
@@ -147,7 +149,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Front-end to your dev env";
     changelog = "https://github.com/jdx/mise/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ konradmalik ];
+    maintainers = with lib.maintainers; [
+      konradmalik
+      Br1ght0ne
+    ];
     mainProgram = "mise";
   };
 })

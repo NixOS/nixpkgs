@@ -5,13 +5,13 @@
 }:
 mkYaziPlugin {
   pname = "zoom.yazi";
-  version = "0-unstable-2026-06-20";
+  version = "0-unstable-2026-09-09";
 
   src = fetchFromGitHub {
     owner = "yazi-rs";
     repo = "plugins";
-    rev = "38efe09c270162f1b0dfb6020e021a5b64bdc735";
-    hash = "sha256-rgelX8Aj6iPYzk3NZN5NLMiJ/dQKJD2BKXsrK6xXdkc=";
+    rev = "65255958371798cb82643f08ce739a1affc21f07";
+    hash = "sha256-QVGXSvkSF7U/mo3iVywxyF/Xj5aXD+wtKGBtXzdQyqo=";
   };
 
   meta = {

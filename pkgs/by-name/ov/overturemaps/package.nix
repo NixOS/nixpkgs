@@ -4,14 +4,14 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "overturemaps";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-yKl13Y9kRCGHzoqeZIQEac/PrByTCtCQFaz8sUgeVIs=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-6SNV3MKWHaDOlauYN6WfLRW8w1e+UdDEFc6rPYEvyX0=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -30,10 +30,23 @@ python3Packages.buildPythonPackage rec {
     tqdm
   ];
 
-  # Drop once tqdm 4.67.3 reaches master
-  pythonRelaxDeps = [ "tqdm" ];
-
   pythonImportsCheck = [ "overturemaps" ];
+
+  preCheck = ''
+    substituteInPlace pytest.ini \
+      --replace-fail "testpaths = tests benchmarks" "testpaths = tests"
+  '';
+
+  disabledTestPaths = [
+    # requires network
+    "tests/test_changelog.py"
+    "tests/test_gers.py"
+    "tests/test_releases.py"
+  ];
+
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+  ];
 
   meta = {
     description = "Official command-line tool of the Overture Maps Foundation";
@@ -42,4 +55,4 @@ python3Packages.buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ crimeminister ];
   };
-}
+})

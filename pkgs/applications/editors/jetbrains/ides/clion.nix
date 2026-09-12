@@ -1,46 +1,43 @@
 {
-  stdenv,
-  lib,
-  fetchurl,
-  mkJetBrainsProduct,
-  libdbm,
-  fsnotifier,
-  patchSharedLibs,
+  # keep-sorted start
   dotnetCorePackages,
-  python3,
-  openssl,
+  expat,
+  fetchurl,
+  fsnotifier,
+  jetbrains,
+  jetbrains-libdbm,
+  lib,
   libxcrypt-legacy,
+  libxml2,
   lttng-ust_2_12,
   musl,
-  expat,
-  libxml2,
+  openssl,
+  python3,
+  stdenv,
   xz,
+  # keep-sorted end
 }:
 let
   system = stdenv.hostPlatform.system;
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/cpp/CLion-2026.1.4.tar.gz";
-      hash = "sha256-uOhFuDqVw3pxtqBvOQH+FpJTFrneaD/R0VcpJZRYD2o=";
+      url = "https://download.jetbrains.com/cpp/CLion-2026.2.0.1.tar.gz";
+      hash = "sha256-3/SNgt6bpr0aIQWmTJnvkgftdZE0M5wcE/LDS1Hk4R0=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/cpp/CLion-2026.1.4-aarch64.tar.gz";
-      hash = "sha256-I6IKQng4lNtRlQIq08K5bueqgKI/q1awX4EuRnyAnOk=";
-    };
-    x86_64-darwin = {
-      url = "https://download.jetbrains.com/cpp/CLion-2026.1.4.dmg";
-      hash = "sha256-AJt+K1zv4eyjdzubUeFGwB9mqzvOeb3ffA2k0MajPBs=";
+      url = "https://download.jetbrains.com/cpp/CLion-2026.2.0.1-aarch64.tar.gz";
+      hash = "sha256-IG2U2v9mTk+GCbB9jJVoX5hKju37+DfqRiMtxu8b8bo=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/cpp/CLion-2026.1.4-aarch64.dmg";
-      hash = "sha256-i3stX7dyRgSOJkFTMD9/hkw6e2mGNqn13S7X/vJ66RQ=";
+      url = "https://download.jetbrains.com/cpp/CLion-2026.2.0.1-aarch64.dmg";
+      hash = "sha256-nkkJ80rc1bApEBMZT0ZjZQcnhkzAG3i1p9GhQUA4gT4=";
     };
   };
   # update-script-end: urls
 in
-(mkJetBrainsProduct {
-  inherit libdbm fsnotifier;
+(jetbrains.mkJetBrainsProduct {
+  inherit jetbrains-libdbm fsnotifier;
 
   pname = "clion";
 
@@ -48,11 +45,20 @@ in
   product = "CLion";
 
   # update-script-start: version
-  version = "2026.1.4";
-  buildNumber = "261.26222.59";
+  version = "2026.2.0.1";
+  buildNumber = "262.8665.321";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
+
+  # the jdk is bundled on Darwin.
+  jdk =
+    if lib.meta.availableOn stdenv.hostPlatform jetbrains.jdk-no-jcef then
+      jetbrains.jdk-no-jcef
+    else
+      null;
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ jetbrains.sharedLibsHook ];
 
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
@@ -77,6 +83,7 @@ in
       mic92
       tymscar
     ];
+    teams = [ lib.teams.jetbrains ];
     license = lib.licenses.unfree;
     sourceProvenance =
       if stdenv.hostPlatform.isDarwin then
@@ -94,9 +101,4 @@ in
           ln -s ${dotnetCorePackages.sdk_10_0-source}/share/dotnet $dir/dotnet
         done
       '';
-
-    postFixup = ''
-      ${attrs.postFixup or ""}
-      ${patchSharedLibs}
-    '';
   })

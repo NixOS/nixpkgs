@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "swpui";
-  version = "0.10.0";
+  version = "0.10.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "beeb";
     repo = "swpui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/UojnHph71H7mhinCi+uQDhkKkh20JdcHjiF1R7SE3A=";
+    hash = "sha256-VbwaZKni5no+ei7fXi14QUJMjL6PHB2ck0n50kQMlaw=";
   };
 
-  cargoHash = "sha256-jaI5jX5hdyZu15oObp+vx4P0OxW/3q2Pg4aQzSJySLY=";
+  cargoHash = "sha256-rrC0TUbFjlWjdUEa+aYtirjXUSuc83bl4uGX6Tkr37M=";
 
   meta = {
     description = "TUI utility to search and replace with a focus on ergonomics, speed and case-awareness";

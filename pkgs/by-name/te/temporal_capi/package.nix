@@ -11,16 +11,22 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "temporal_capi";
-  version = "0.2.4";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "boa-dev";
     repo = "temporal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0JhYANVsVvNC0OZe1E6WzGc+pH9j7Z9SGCmhk8TQanU=";
+    hash = "sha256-nKE5n/ingB/+sEPJvpUQVsjCn+4/EPpcfZAM91CCZDE=";
   };
 
-  cargoHash = "sha256-atS6chUiKa9VVbsyar00YCdlVOuZ52qQWkz6HIvEqP4=";
+  __structuredAttrs = true;
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  cargoHash = "sha256-sE4I1TW6XEgdqcPL0kRHQ+usb1UYIvbf8ujpJHu4LXo=";
 
   postPatch = ''
     # Force crate-type to include staticlib
@@ -65,7 +71,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     Cflags: -I\''${includedir}
     EOF
   '';
-  postFixup = lib.optional (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic) ''
+  postFixup = lib.optionalString (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic) ''
     ${stdenv.cc.targetPrefix}install_name_tool -id "$out/lib/libtemporal_capi.dylib" "$out/lib/libtemporal_capi.dylib"
   '';
 
@@ -79,7 +85,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   installCheckPhase = ''
     runHook preInstallCheck
 
-    FLAGS=$(PKG_CONFIG_PATH="$out/lib/pkgconfig" pkg-config --cflags --libs temporal_capi)
+    FLAGS=$(PKG_CONFIG_PATH="$dev/lib/pkgconfig" pkg-config --cflags --libs temporal_capi)
     cc $FLAGS temporal_capi/tests/c/simple.c -o c_test
     ./c_test
     c++ $FLAGS temporal_capi/tests/cpp/simple.cpp -o cpp_test

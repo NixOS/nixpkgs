@@ -13,20 +13,15 @@
 
 buildPythonPackage rec {
   pname = "xontrib-jedi";
-  version = "0.1.1";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xonsh";
     repo = "xontrib-jedi";
     tag = "v${version}";
-    hash = "sha256-T4Yxr91emM2mjclQOjQsnnPO/JijAGNcqmZjxrz72Bs=";
+    hash = "sha256-n2zJKlI52TMuYA6q822ZIHgxT6sGW+GE8paI5WB7Cyg=";
   };
-
-  prePatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'xonsh = ">=0.17"' ""
-  '';
 
   build-system = [
     poetry-core
@@ -47,6 +42,11 @@ buildPythonPackage rec {
     xonsh
   ];
 
+  disabledTests = [
+    # stdout not properly captured?
+    "test_jedi_error_logged_when_debug_set"
+  ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
@@ -54,6 +54,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/xonsh/xontrib-jedi";
     changelog = "https://github.com/xonsh/xontrib-jedi/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ greg ];
+    maintainers = with lib.maintainers; [
+      greg
+      infinidoge
+    ];
   };
 }

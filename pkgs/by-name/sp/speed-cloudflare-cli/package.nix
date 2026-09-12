@@ -18,7 +18,7 @@ buildNpmPackage {
       sha256 = "sha256-kJ//zXBW2IQ5V5dJfAm8iGxf9QILH0uloNYiwG3pTe4=";
     };
 
-    # Applies the follwing PR:
+    # Applies the following PR:
     # https://github.com/KNawm/speed-cloudflare-cli/pull/38
     patches = [
       # fix: handle non-array response from /locations and format

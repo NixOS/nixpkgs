@@ -8,19 +8,20 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   testers,
+  nix-update-script,
 }:
 let
   pnpm = pnpm_10;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zenn-cli";
-  version = "0.2.10";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "zenn-dev";
     repo = "zenn-editor";
     tag = finalAttrs.version;
-    hash = "sha256-wItKDLAJHIyxUUaLIFM+sNYWtXKWC4P6GkCKn2Wh2JA=";
+    hash = "sha256-zvQ8b7ZaDBYGMGqOcttixjaQpC27vtvZ6ZXpzmg9Sf4=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-uxeZnYZzwyNOZN1x1f6tzcYgPbJhSc3gTdsfaE+967w=";
+    hash = "sha256-tPA2pgbvcFIL3UXr+G6XLdmdTxzdx6pi6KnzvvkCYAk=";
   };
 
   preBuild = ''
@@ -72,7 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {

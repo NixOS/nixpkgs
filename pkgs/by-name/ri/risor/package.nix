@@ -11,7 +11,7 @@ buildGoModule (finalAttrs: {
   version = "2.1.0";
 
   src = fetchFromGitHub {
-    owner = "risor-io";
+    owner = "deepnoodle-ai";
     repo = "risor";
     rev = "v${finalAttrs.version}";
     hash = "sha256-SXUaSJmtWul4LYRdoxv4lXBB4HHp62xrWbEchI691YY=";
@@ -40,8 +40,8 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Fast and flexible scripting for Go developers and DevOps";
     mainProgram = "risor";
-    homepage = "https://github.com/risor-io/risor";
-    changelog = "https://github.com/risor-io/risor/releases/tag/${finalAttrs.src.rev}";
+    homepage = "https://github.com/deepnoodle-ai/risor";
+    changelog = "https://github.com/deepnoodle-ai/risor/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };

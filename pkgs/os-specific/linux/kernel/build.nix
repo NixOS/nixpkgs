@@ -23,6 +23,8 @@
   rustc-unwrapped,
   rust-bindgen-unwrapped,
   rustPlatform,
+  makeSetupHook,
+  xz,
 }:
 
 let
@@ -158,6 +160,11 @@ lib.makeOverridable (
       elfutils
       # module makefiles often run uname commands to find out the kernel version
       (buildPackages.deterministic-uname.override { inherit modDirVersion; })
+      (makeSetupHook {
+        name = "setup-module-compression";
+        substitutions = { inherit configfile modDirVersion; };
+        propagatedNativeBuildInputs = [ xz ];
+      } ./setup-module-compression.sh)
     ]
     ++ optional (lib.versionAtLeast version "5.13") zstd
     ++ optionals withRust [
@@ -569,7 +576,8 @@ lib.makeOverridable (
           "riscv32-linux"
           "riscv64-linux"
         ]
-        ++ lib.optional (lib.versionOlder version "5.19") "loongarch64-linux";
+        # Generic scripts/install.sh is only available on LoongArch64 since 6.16.
+        ++ lib.optional (lib.versionOlder version "6.16") "loongarch64-linux";
       timeout = 14400; # 4 hours
       identifiers.cpeParts = {
         part = "o";

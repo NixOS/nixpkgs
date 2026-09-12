@@ -1,30 +1,21 @@
+diff --git a/__nix-prepend-search-paths.js b/__nix-prepend-search-paths.js
+new file mode 100644
+index 0000000..bd477f1
+--- /dev/null
++++ b/__nix-prepend-search-paths.js
+@@ -0,0 +1,2 @@
++import GIRepository from "gi://GIRepository";
++"@typelibPath@".split(':').forEach(path => GIRepository.Repository.dup_default().prepend_search_path(path));
 diff --git a/extension.js b/extension.js
-index ee8c3a9..ca72885 100644
+index dfa8118..f2950b4 100644
 --- a/extension.js
 +++ b/extension.js
-@@ -21,6 +21,7 @@
+@@ -18,6 +18,8 @@
+ 
+ // Author: Florian Mounier aka paradoxxxzero
+ 
++import './__nix-prepend-search-paths.js';
++
  import { Extension, gettext as _ } from "resource:///org/gnome/shell/extensions/extension.js";
  
- import Clutter from "gi://Clutter";
-+import GIRepository from "gi://GIRepository";
  import GLib from "gi://GLib";
- import GObject from "gi://GObject";
- 
-@@ -28,7 +29,6 @@ import Gio from "gi://Gio";
- import Shell from "gi://Shell";
- import St from "gi://St";
- import UPowerGlib from "gi://UPowerGlib";
--import GTop from "gi://GTop";
- import NM from "gi://NM";
- 
- import * as ModalDialog from "resource:///org/gnome/shell/ui/modalDialog.js";
-@@ -41,6 +41,9 @@ import * as PopupMenu from "resource:///org/gnome/shell/ui/popupMenu.js";
- 
- import * as Util from "resource:///org/gnome/shell/misc/util.js";
- 
-+GIRepository.Repository.dup_default().prepend_search_path('@gtop_path@');
-+const GTop = (await import("gi://GTop")).default;
-+
- const NetworkManager = NM;
- const UPower = UPowerGlib;
- // Copied as of https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/5fa08fe53376f5dca755360bd005a4a51ca78917/js/ui/panel.js#L45

@@ -23,6 +23,8 @@
 
         networking.firewall.allowedTCPPorts = [ 8383 ];
 
+        nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
+
         # virtualisation.diskSize = 2 * 1024;
       };
   };

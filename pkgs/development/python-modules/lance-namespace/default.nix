@@ -30,7 +30,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lance-namespace";
-  version = "0.8.6";
+  version = "0.11.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -38,7 +38,7 @@ buildPythonPackage (finalAttrs: {
     owner = "lancedb";
     repo = "lance-namespace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QYzVsarjTg2arNNuCFbVgtA7rfLTm6AJD3liNr3QuSU=";
+    hash = "sha256-eiuUY207P7rod7hYk+MVDarr+4tk/pWUqwz6jUEO3UY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python/lance_namespace";

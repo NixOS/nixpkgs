@@ -48,8 +48,11 @@ let
     "application/ld+json"
     "application/manifest+json"
     "application/rdf+xml"
+    "application/rss+xml" # What the default (mailcap) mime.types maps ".rss" to
+    "application/vnd.api+json"
     "application/vnd.ms-fontobject"
     "application/wasm"
+    "application/x-javascript" # Legacy alias of "application/javascript", still emitted by some upstreams
     "application/x-rss+xml"
     "application/x-web-app-manifest+json"
     "application/xhtml+xml"
@@ -61,6 +64,8 @@ let
     "image/bmp"
     "image/svg+xml"
     "image/vnd.microsoft.icon"
+    "image/x-icon" # What nginx's own mime.types maps ".ico" to, see services.nginx.defaultMimeTypes
+    "image/x-ms-bmp" # What nginx's own mime.types maps ".bmp" to, see services.nginx.defaultMimeTypes
     "text/cache-manifest"
     "text/calendar"
     "text/css"
@@ -72,6 +77,7 @@ let
     "text/vnd.rim.location.xloc"
     "text/vtt"
     "text/x-component"
+    "text/x-cross-domain-policy"
     "text/xml"
   ];
 
@@ -188,6 +194,11 @@ let
         pid /run/nginx/nginx.pid;
         error_log ${cfg.logError};
         daemon off;
+
+        # load_module is a main-context directive that must precede events{}/http{}.
+        ${optionalString (
+          (cfg.package.dynamicModules or [ ]) != [ ]
+        ) "include ${cfg.package}/etc/nginx/dynamic-modules.conf;"}
 
         ${optionalString cfg.enableQuicBPF ''
           quic_bpf on;
@@ -398,6 +409,11 @@ let
 
         hostListen = if vhost.forceSSL then filter (x: x.ssl) defaultListen else defaultListen;
 
+        # If there's any location setting `useGrpcErrorPages`, we need to add the location blocks.
+        locationsWantGrpcErrorPages = builtins.any (location: location.useGrpcErrorPages) (
+          attrValues vhost.locations
+        );
+
         listenString =
           {
             addr,
@@ -515,6 +531,10 @@ let
 
           ${mkBasicAuth vhostName vhost}
 
+          ${optionalString locationsWantGrpcErrorPages ''
+            include ${./grpc-locations.conf};
+          ''}
+
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
 
           ${optionalString (vhost.globalRedirect != null) ''
@@ -559,6 +579,9 @@ let
               optionalAttrs (config.fastcgiParams != { }) (defaultFastcgiParams // config.fastcgiParams)
             )
           )}
+          ${optionalString config.useGrpcErrorPages ''
+            include ${./grpc-error-pages.conf};
+          ''}
           ${optionalString (config.index != null) "index ${config.index};"}
           ${optionalString (config.tryFiles != null) "try_files ${config.tryFiles};"}
           ${optionalString (config.root != null) "root ${config.root};"}
@@ -805,7 +828,7 @@ in
           Nginx package to use. This defaults to the stable version. Note
           that the nginx team recommends to use the mainline version which
           available in nixpkgs as `nginxMainline`.
-          Supported Nginx forks include `angie`, `openresty` and `tengine`.
+          Supported Nginx forks include `angie` and `openresty`.
         '';
       };
 
@@ -1614,11 +1637,7 @@ in
           ];
           RestrictNamespaces = true;
           LockPersonality = true;
-          MemoryDenyWriteExecute =
-            !(
-              (builtins.any (mod: (mod.allowMemoryWriteExecute or false)) cfg.package.modules)
-              || (cfg.package == pkgs.openresty)
-            );
+          MemoryDenyWriteExecute = false; # for pcre2 & several plugins
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           RemoveIPC = true;
@@ -1628,7 +1647,7 @@ in
           SystemCallFilter = [
             "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @setuid"
           ]
-          ++ optional cfg.enableQuicBPF [ "bpf" ];
+          ++ optionals cfg.enableQuicBPF [ "bpf" ];
         };
       };
 
@@ -1752,6 +1771,8 @@ in
       rotate = 26;
       compress = true;
       delaycompress = true;
+      # Run postrotate script only once after rotation of all log files:
+      sharedscripts = true;
       postrotate = "[ ! -f /var/run/nginx/nginx.pid ] || kill -USR1 `cat /var/run/nginx/nginx.pid`";
     };
   };

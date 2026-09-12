@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "zipstream-ng";
-  version = "1.9.2";
+  version = "1.9.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pR0Ps";
     repo = "zipstream-ng";
     tag = "v${version}";
-    hash = "sha256-1MSnabckpAwV/NmD5wKxF7k7hwve6fBiCPyw7skxdlM=";
+    hash = "sha256-YVF7uUOCYtQRtOUzS8/l9hIxp1nR0hoEJGpEw7HViwE=";
   };
 
   build-system = [ hatchling ];

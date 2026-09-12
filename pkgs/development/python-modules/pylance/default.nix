@@ -29,13 +29,14 @@
   pillow,
   polars,
   psutil,
+  pytest-xdist,
   pytestCheckHook,
   tqdm,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pylance";
-  version = "8.0.0";
+  version = "11.0.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -43,7 +44,7 @@ buildPythonPackage (finalAttrs: {
     owner = "lancedb";
     repo = "lance";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pxggvF23u3Wfm6YdaHwbDUZDUwtJ4tOaTLViUfGZ0B8=";
+    hash = "sha256-+EHbyo+YLqp6TyUBWEbKRy44NUrRZjalRzjtVnaBDOk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python";
@@ -55,8 +56,28 @@ buildPythonPackage (finalAttrs: {
       src
       sourceRoot
       ;
-    hash = "sha256-VSy1cOshPLAic+1HkTGiavdNRffiEVAlWThNeebJSyg=";
+    hash = "sha256-HtKqj7KcTrV1P4wi7wy24NwcSUgARrfht7uohh/JXnY=";
   };
+
+  # `lance-linalg`'s AVX-512 VNNI u8-distance kernels call `_mm512_dpbusd_epi32` /
+  # `_mm512_dpwssd_epi32`. With the current toolchain, stdarch's signature for these intrinsics
+  # mismatches LLVM's `llvm.x86.avx512.vpdpbusd.512`, so the crate fails to compile.
+  # Drop the AVX-512 VNNI dispatch branch: the kernels then become dead code (their module is
+  # crate-private and otherwise only used from `#[cfg(test)]`, which is not built for
+  # dependencies), so they are never codegen'd and runtime dispatch falls back to the equivalent
+  # AVX2 / scalar kernels.
+  postPatch = ''
+    lanceDistance="../rust/lance-linalg/src/distance"
+
+    substituteInPlace "$lanceDistance/dot_u8.rs" \
+      --replace-fail "return |a, b| unsafe { x86::dot_u8_avx512_vnni(a, b) };" ""
+
+    substituteInPlace "$lanceDistance/l2_u8.rs" \
+      --replace-fail "return |a, b| unsafe { x86::l2_u8_avx512_vnni(a, b) };" ""
+
+    substituteInPlace "$lanceDistance/cosine_u8.rs" \
+      --replace-fail "return |a, b| unsafe { x86::cosine_u8_accum_avx512_vnni(a, b) };" ""
+  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -74,8 +95,10 @@ buildPythonPackage (finalAttrs: {
     protobuf
   ];
 
-  pythonRelaxDeps = [ "pyarrow" ];
-
+  pythonRelaxDeps = [
+    "lance-namespace"
+    "pyarrow"
+  ];
   dependencies = [
     lance-namespace
     numpy
@@ -96,6 +119,7 @@ buildPythonPackage (finalAttrs: {
     pillow
     polars
     psutil
+    pytest-xdist
     pytestCheckHook
     tqdm
   ]
@@ -165,19 +189,6 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Build hangs after all the tests are run due to a torch subprocess not exiting
     "test_multiprocess_loading"
-
-    # torch._inductor.exc.InductorError: CppCompileError: C++ compile error
-    # OpenMP support not found
-    # TODO: figure out why this only happens on python 3.13 and not 3.14
-    "test_cosine_distance"
-    "test_ground_truth"
-    "test_index_cast_centroids"
-    "test_index_with_no_centroid_movement"
-    "test_l2_distance"
-    "test_l2_distance_f16_bf16_cpu"
-    "test_pairwise_cosine"
-    "test_torch_index_with_nans"
-    "test_torch_kmeans_nans"
   ]
   ++ lib.optionals (pythonAtLeast "3.14") [
     # RuntimeError: torch.compile is not supported on Python 3.14+

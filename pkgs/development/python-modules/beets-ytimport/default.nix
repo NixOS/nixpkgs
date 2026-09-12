@@ -45,7 +45,7 @@ buildPythonPackage rec {
     description = "Beets plugin to import music from Youtube and SoundCloud";
     homepage = "https://github.com/mgoltzsche/beets-ytimport";
     maintainers = with lib.maintainers; [ pyrox0 ];
-    license = [ lib.licenses.asl20 ];
+    license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

@@ -24,13 +24,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hamlib";
-  version = "4.7.1";
+  version = "4.7.2";
 
   src = fetchFromGitHub {
     owner = "Hamlib";
     repo = "Hamlib";
     tag = finalAttrs.version;
-    hash = "sha256-nI8gDACxlci2Q9V2W4D1DYDUL74JwlCs+qyyNkXOPu4=";
+    hash = "sha256-t1GgCYH+AJE5UZKQu+9uqx7fJDv4zuT0OzWxicZFfdQ=";
   };
 
   strictDeps = true;

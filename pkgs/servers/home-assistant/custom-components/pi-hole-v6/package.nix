@@ -7,13 +7,13 @@
 buildHomeAssistantComponent rec {
   owner = "bastgau";
   domain = "pi_hole_v6";
-  version = "1.18.0";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "ha-pi-hole-v6";
     tag = "v${version}";
-    hash = "sha256-nMaECGuIAAcE9IPgiT2iPHh1RrCPOSd/sqY9KFKDacM=";
+    hash = "sha256-4bQp27htsGHhXzqPagtlTxoLFYZLRPIbYx1//8KmSzY=";
   };
 
   # has no tests

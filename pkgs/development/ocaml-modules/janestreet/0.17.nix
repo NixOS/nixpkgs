@@ -60,6 +60,7 @@ with self;
     pname = "accessor_core";
     hash = "sha256-ku83ZfLtVI8FvQhrKcnJmhmoNlYcVMKx1tor5N8Nq7M=";
     meta.description = "Accessors for Core types, for use with the Accessor library";
+    meta.broken = lib.versionAtLeast ocaml.version "5.5";
     propagatedBuildInputs = [
       accessor_base
       core_kernel
@@ -176,6 +177,7 @@ with self;
       async_websocket
       cohttp_async_websocket
     ];
+    __darwinAllowLocalNetworking = true;
   };
 
   async_sendfile = janePackage {
@@ -437,6 +439,7 @@ with self;
       ppx_jane
       uri-sexp
     ];
+    __darwinAllowLocalNetworking = true;
   };
 
   cohttp_static_handler = janePackage {
@@ -444,6 +447,7 @@ with self;
     hash = "sha256-RB/sUq1tL8A3m9YhHHx2LFqoExTX187VeZI9MRb1NeA=";
     meta.description = "Library for easily creating a cohttp handler for static files";
     propagatedBuildInputs = [ cohttp-async_5_3 ];
+    __darwinAllowLocalNetworking = true;
   };
 
   content_security_policy = janePackage {

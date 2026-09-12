@@ -10,7 +10,7 @@
 
 let
   platform =
-    with stdenv;
+    with stdenv.hostPlatform;
     if isDarwin then
       "macosx"
     else if isCygwin then

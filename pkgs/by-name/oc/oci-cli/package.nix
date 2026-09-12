@@ -31,14 +31,14 @@ in
 
 py.pkgs.buildPythonApplication (finalAttrs: {
   pname = "oci-cli";
-  version = "3.88.0";
+  version = "3.92.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "oci-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Jjh6YNIOkHA1XaejIFl9JU9ktAr58aMGt4Zu4ZVaXFQ=";
+    hash = "sha256-pXLCLXyFmUjp3y3BEhKCMdOYjktlhAA46EC6YtNJQhk=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -66,6 +66,7 @@ py.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
+    "setuptools"
     "click"
     "PyYAML"
     "cryptography"

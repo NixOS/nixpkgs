@@ -6,18 +6,18 @@
   technitium-dns-server-library,
   libmsquic,
   nixosTests,
-  nix-update-script,
 }:
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "technitium-dns-server";
-  version = "15.2.0";
+  version = "15.4.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "TechnitiumSoftware";
     repo = "DnsServer";
-    tag = "v${version}";
-    hash = "sha256-464jhswTOJnQnxetl9hH5U3aDP0RXzJTicot9nWzpAo=";
-    name = "${pname}-${version}";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EPqaVulPO5giURtlmj4vMDXYFKICrhJa9TQbQ9AaYJ8=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
@@ -41,21 +41,15 @@ buildDotnetModule rec {
     libmsquic
   ];
 
-  # Confirmed correct by upstream, remove when fixed in a release:
-  # https://github.com/TechnitiumSoftware/DnsServer/issues/1967
-  patches = [
-    ./dnssec-do-bit-fix.patch
-  ];
-
   passthru.tests = {
     inherit (nixosTests) technitium-dns-server;
   };
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     changelog = "https://github.com/TechnitiumSoftware/DnsServer/blob/master/CHANGELOG.md";
-    description = "Authorative and Recursive DNS server for Privacy and Security";
+    description = "Authoritative and Recursive DNS server for Privacy and Security";
     homepage = "https://github.com/TechnitiumSoftware/DnsServer";
     license = lib.licenses.gpl3Only;
     mainProgram = "technitium-dns-server";
@@ -65,4 +59,4 @@ buildDotnetModule rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

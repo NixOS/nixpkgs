@@ -5,9 +5,6 @@
   fetchFromGitHub,
   pythonAtLeast,
 
-  # buildInputs
-  llvmPackages,
-
   # build-system
   setuptools,
 
@@ -28,7 +25,7 @@
   torchvision,
   transformers,
   config,
-  cudatoolkit,
+  cudaPackages,
   writableTmpDirAsHomeHook,
 }:
 
@@ -36,6 +33,7 @@ buildPythonPackage (finalAttrs: {
   pname = "accelerate";
   version = "1.13.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
@@ -67,7 +65,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   preCheck = lib.optionalString config.cudaSupport ''
-    export TRITON_PTXAS_PATH="${lib.getExe' cudatoolkit "ptxas"}"
+    export TRITON_PTXAS_PATH="${lib.getExe' cudaPackages.cuda_nvcc "ptxas"}"
   '';
   enabledTestPaths = [ "tests" ];
   disabledTests = [
@@ -185,7 +183,7 @@ buildPythonPackage (finalAttrs: {
     "CheckpointTest"
   ];
 
-  disabledTestPaths = lib.optionals (!(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64)) [
+  disabledTestPaths = [
     # numerous instances of torch.multiprocessing.spawn.ProcessRaisedException:
     "tests/test_cpu.py"
     "tests/test_grad_sync.py"

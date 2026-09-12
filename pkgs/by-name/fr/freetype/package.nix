@@ -42,14 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "freetype";
   version = "2.14.3";
 
-  src =
-    let
-      inherit (finalAttrs) pname version;
-    in
-    fetchurl {
-      url = "mirror://savannah/freetype/freetype-${version}.tar.xz";
-      sha256 = "sha256-NrxPHMQTM1No7mVsQq/KZcWjmH6HaMwozxG6d154Wl8=";
-    };
+  src = fetchurl {
+    url = "mirror://savannah/freetype/freetype-${finalAttrs.version}.tar.xz";
+    hash = "sha256-NrxPHMQTM1No7mVsQq/KZcWjmH6HaMwozxG6d154Wl8=";
+  };
 
   propagatedBuildInputs = [
     zlib

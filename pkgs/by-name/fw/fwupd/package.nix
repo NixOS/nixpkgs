@@ -13,6 +13,7 @@
   unstableGitUpdater,
 
   # fwupd
+  fetchpatch2,
   pkg-config,
   pkgsBuildBuild,
 
@@ -51,7 +52,6 @@
   readline,
   sqlite,
   tpm2-tss,
-  valgrind,
   xz, # for liblzma
 
   # mesonFlags
@@ -122,7 +122,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "2.1.5";
+  version = "2.1.6";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -140,14 +140,21 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     tag = finalAttrs.version;
-    hash = "sha256-DzQ+N99ZmFRqZc2rN6PSqmoIMXUyrE8Kkn+KnT/AWPc=";
+    hash = "sha256-K8n1rPiLuHDybWPoAUQA7RY4J+Ga1fwNiaj48fHAh9A=";
   };
 
   patches = [
     ./0001-Install-fwupdplugin-to-out.patch
     ./0002-Add-output-for-installed-tests.patch
     ./0003-Add-option-for-installation-sysconfdir.patch
-    ./0004-Get-the-efi-app-from-fwupd-efi.patch
+
+    # The memfd seal check added in 2.1.6 rejects any file on tmpfs, since
+    # F_GET_SEALS also works on tmpfs files on recent kernels.
+    # Remove when updating to 2.1.7.
+    (fetchpatch2 {
+      url = "https://github.com/fwupd/fwupd/commit/c2ff6e0bf9e3fea5b8502ed12fdc9ab604a51518.patch";
+      hash = "sha256-Y8YbECfUGqvpNTlKCLOXgRSIZYO+MsZYIMcMgIQfkIs=";
+    })
   ];
 
   postPatch = ''
@@ -214,7 +221,6 @@ stdenv.mkDerivation (finalAttrs: {
     readline
     sqlite
     tpm2-tss
-    valgrind
     xz # for liblzma
   ];
 
@@ -227,6 +233,10 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=/etc"
     (lib.mesonOption "sysconfdir_install" "${placeholder "out"}/etc")
     (lib.mesonOption "efi_os_dir" "nixos")
+    # Signing setups (lanzaboote, sbctl, …) must place the signed EFI app next
+    # to the unsigned one, which the store does not allow.
+    # https://github.com/fwupd/fwupd/issues/10202
+    (lib.mesonOption "efi_app_location" "/run/fwupd-efi")
     # HSI is auto-disabled on non-x86 upstream; auto_features=enabled overrides
     # that, breaking the fwupdtool installed test which expects rc=1 on non-x86.
     (lib.mesonEnable "hsi" isx86)
@@ -235,6 +245,7 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO: what should this be?
     (lib.mesonOption "vendor_ids_dir" "${hwdata}/share/hwdata")
     (lib.mesonEnable "umockdev_tests" false)
+    (lib.mesonEnable "valgrind" false)
     # We do not want to place the daemon into lib (cyclic reference)
     "--libexecdir=${placeholder "out"}/libexec"
   ]

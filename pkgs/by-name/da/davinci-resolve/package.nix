@@ -39,7 +39,7 @@
   xkeyboard_config,
   glib,
   libarchive,
-  libxcrypt,
+  libxcrypt-legacy,
   python3,
   aprutil,
   makeDesktopItem,
@@ -56,7 +56,7 @@ let
   davinci = (
     stdenv.mkDerivation rec {
       pname = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
-      version = "21.0.1";
+      version = "21.1";
 
       nativeBuildInputs = [
         appimageTools.appimage-exec
@@ -78,9 +78,9 @@ let
             outputHashAlgo = "sha256";
             outputHash =
               if studioVariant then
-                "sha256-8JN3ptd8jcacxHihZHXuhdkyambUsnFIj+AruvpztKI="
+                "sha256-D5RjUukwKMpULrDfMJOPsPWW9FxhQ/IUMh76u5JLytA="
               else
-                "sha256-ioAqvqHjwFX1ec6fDoxg2VUZy1moYoGx/aEewDuN1+g=";
+                "sha256-bQ4Yag4xfIF9Fs0UVKaYFhObMsAof5n+Sy4osw35a9g=";
 
             impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
@@ -171,7 +171,7 @@ let
           test -e ${lib.escapeShellArg appimageName}
           appimage-exec.sh -x $out ${lib.escapeShellArg appimageName}
 
-          mkdir -p $out/{"Apple Immersive/Calibration",configs,DolbyVision,easyDCP,Extras,Fairlight,GPUCache,logs,Media,"Resolve Disk Database",.crashreport,.license,.LUT}
+          mkdir -p $out/{"Apple Immersive/Calibration",configs,DolbyVision,easyDCP,Extras,Fairlight,GPUCache,Immersive/Canon/STMap,logs,Media,"Resolve Disk Database",.crashreport,.license,.LUT}
 
           # Install udev rules for Blackmagic hardware (color panels, Speed Editor, Editor Keyboard)
           mkdir -p $out/lib/udev/rules.d
@@ -207,7 +207,6 @@ let
             addDriverRunpath "$program"
           fi
         done
-        ln -s $out/libs/libcrypto.so.1.1 $out/libs/libcrypt.so.1
       '';
 
       desktopItems = [
@@ -303,7 +302,7 @@ buildFHSEnv {
       librsvg
       libtool
       libuuid
-      libxcrypt # provides libcrypt.so.1
+      libxcrypt-legacy # provides libcrypt.so.1
       libxkbcommon
       nspr
       ocl-icd

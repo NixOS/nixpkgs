@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "adbc-driver-postgresql";
-  version = "1.11.0";
+  version = "1.12.0";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "adbc_driver_postgresql";
     inherit (finalAttrs) version;
-    hash = "sha256-9WiLhkiseobYuJNAIxuzaGrF31buldHKC4ddrV1StIo=";
+    hash = "sha256-dmoAJTG7mbaR0rkufZKN6iHCTqVnwDpu4e22H+lbkYc=";
   };
 
   build-system = [

@@ -32,6 +32,12 @@ buildPythonPackage rec {
       hash = "sha256-t/Ubv9qC1Fvh4JsnfVgOZO/O7ZpCGHugBUt9qAjnH8c=";
       excludes = [ "pdm.lock" ];
     })
+    # Remove when updating to the first release containing this fix.
+    (fetchpatch {
+      name = "CVE-2026-73030.patch";
+      url = "https://github.com/frostming/unearth/commit/6c78164e7bfa28b8b3d6f247b87e560692e3c8ba.patch";
+      hash = "sha256-OEf4YnpNhZcIWaFMSXQP0SA7kRV9FqKIpnkLbUrQj+4=";
+    })
   ];
 
   build-system = [ pdm-backend ];

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "psycopg2";
-  version = "2.9.11";
+  version = "2.9.12";
   pyproject = true;
 
   # Extension modules don't work well with PyPy. Use psycopg2cffi instead.
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lk0xyvco4hfGl/936mnCughl+kHsILsA8Jd+Yv3MUuM=";
+    hash = "sha256-He2xx6HYVSxKYETGscQaUuao4tFEr4PsysdYB2sbfBU=";
   };
 
   postPatch = ''

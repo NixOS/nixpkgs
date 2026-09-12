@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-graph";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "git-bahn";
     repo = "git-graph";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9GFwxWYDnH3kKDWpxgh7ciSLB1Zr2zExxIrIrhycmZY=";
+    hash = "sha256-5h1PSVGLxWVktRNPbVbx/Rk3/URcIMJvDCbG0PTtBk0=";
   };
 
-  cargoHash = "sha256-hKCEAXZj2ExSamvtl10RnAiuV9w6yOYdnsXm0gplFSU=";
+  cargoHash = "sha256-MGa9QKCEu7t3y7AKAm++/8+C+PjAY1dFAFIxpr4c9ks=";
 
   meta = {
     description = "Command line tool to show clear git graphs arranged for your branching model";

@@ -91,6 +91,10 @@ with lib.maintainers;
     shortName = "Blockchains";
   };
 
+  boot-security = {
+    github = "boot-security";
+  };
+
   budgie = {
     members = [
       bobby285271
@@ -321,13 +325,7 @@ with lib.maintainers;
   };
 
   gnome-circle = {
-    members = [
-      aleksana
-      getchoo
-      michaelgrahamevans
-    ];
-    scope = "Maintain GNOME Circle applications.";
-    shortName = "GNOME Circle";
+    github = "gnome-circle";
   };
 
   golang = {
@@ -402,6 +400,7 @@ with lib.maintainers;
       GaetanLepage
       natsukium
       thomasjm
+      haansn08
     ];
     scope = "Maintain Jupyter and related packages.";
     shortName = "Jupyter";
@@ -519,7 +518,6 @@ with lib.maintainers;
     members = [
       alejandrosame
       aleksi
-      artturin
       emilytrau
       ericson2314
       jk
@@ -551,6 +549,7 @@ with lib.maintainers;
       dotlambda
       ma27
       provokateurin
+      staticdev
     ];
     scope = "Maintain Nextcloud, its tests and the integration of applications.";
     shortName = "Nextcloud";
@@ -654,6 +653,16 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  pulumi = {
+    scope = "Maintains the Pulumi IaC tool and its language-specific SDKs";
+    shortName = "Pulumi";
+    members = [
+      nicoo
+      tie
+      untio11
+    ];
+  };
+
   python = {
     members = [
       hexa
@@ -700,7 +709,6 @@ with lib.maintainers;
 
   sage = {
     members = [
-      timokau
       raskin
       collares
     ];
@@ -715,6 +723,15 @@ with lib.maintainers;
 
   security-review = {
     github = "security-review";
+  };
+
+  stardust-xr = {
+    members = [
+      pandapip1
+      technobaboo
+    ];
+    scope = "Maintain Stardust XR packages";
+    shortName = "StardustXR";
   };
 
   stdenv = {
@@ -734,7 +751,6 @@ with lib.maintainers;
 
   swift = {
     members = [
-      dduan
       samasaur
       stephank
     ];

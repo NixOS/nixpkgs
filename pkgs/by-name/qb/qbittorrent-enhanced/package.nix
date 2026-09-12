@@ -7,13 +7,13 @@
 
 (qbittorrent.override { inherit guiSupport; }).overrideAttrs (old: rec {
   pname = "qbittorrent-enhanced" + lib.optionalString (!guiSupport) "-nox";
-  version = "5.2.1.10";
+  version = "5.2.3.10";
 
   src = fetchFromGitHub {
     owner = "c0re100";
     repo = "qBittorrent-Enhanced-Edition";
     rev = "release-${version}";
-    hash = "sha256-WTzNIK6/ePLHfGN8vqnhvoO4Sbq57oLB5//RPYeG5As=";
+    hash = "sha256-frAmiYQekEzIgWeSqHVAlTY5u6j7eH8Nx8MaqHjZU9E=";
   };
 
   meta = old.meta // {

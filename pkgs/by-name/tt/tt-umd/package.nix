@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-g+ZPKBUhBGlgvce8uTkuR983unD2kbQKgoddko7x+fk=";
       })
     ))
-    (lib.cmakeBool "TT_UMD_BUILD_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "TT_UMD_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "TT_UMD_BUILD_STATIC" stdenv.hostPlatform.isStatic)
     (lib.cmakeBool "TT_UMD_BUILD_PYTHON" true)
     (lib.cmakeFeature "nanobind_DIR" "${python3.pkgs.nanobind}/${python3.sitePackages}/nanobind/cmake")
@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "User-Mode Driver for Tenstorrent hardware";
     homepage = "https://github.com/tenstorrent/tt-umd";
     maintainers = with lib.maintainers; [ RossComputerGuy ];
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
   };
 })

@@ -7,6 +7,7 @@
   libGL,
   libGLU,
   libx11,
+  expat,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,8 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     libGL
     libGLU
+    expat
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux libx11;
+
+  cmakeFlags = [
+    (lib.cmakeBool "USE_EXTERNAL_EXPAT" true)
+  ];
 
   meta = {
     homepage = "https://github.com/coin3d/coin";

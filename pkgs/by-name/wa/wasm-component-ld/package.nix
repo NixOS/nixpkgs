@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasm-component-ld";
-  version = "0.5.25";
+  version = "0.5.30";
 
   __structuredAttrs = true;
 
@@ -14,13 +14,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "bytecodealliance";
     repo = "wasm-component-ld";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EQqNm3GRuMafbrOyzsdZ5e1pX4LH40wCyKVgSgm8A48=";
+    hash = "sha256-/Fg80rVPaPC7IOvaj+FecXY9Tmn9WiseiRMkO70TQ/0=";
   };
 
-  cargoHash = "sha256-1e54TLWGjfNORwr6uLIe/XhdDDOkbalw/6/0UGuBiPk=";
+  cargoHash = "sha256-jMI8XHQAfs/nzOLssz9+EqWCTkhv7qxIA5r9SH1Zx1c=";
 
   # Tests require a rustc that can target wasm32-wasip1, including std. This is awkward for
-  # Nixpkgs to provide at the same time as providing a rustc that's targetting the actual target.
+  # Nixpkgs to provide at the same time as providing a rustc that's targeting the actual target.
   # TODO: work around by patching the test suite to invoke pkgsBuildTarget.rustc rather than just looking in PATH for any old rustc
   doCheck = false;
 

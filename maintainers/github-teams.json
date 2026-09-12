@@ -2,11 +2,10 @@
   "acme": {
     "description": "Maintain ACME-related packages and modules.",
     "id": 3806126,
-    "maintainers": {
-      "emilazy": 18535642
-    },
+    "maintainers": {},
     "members": {
       "arianvp": 628387,
+      "emilazy": 18535642,
       "m1cr0man": 3044438
     },
     "name": "ACME"
@@ -60,10 +59,19 @@
       "adamcstephens": 2071575,
       "ankhers": 750786,
       "gleber": 33185,
-      "minijackson": 1200507,
       "yurrriq": 1866448
     },
     "name": "Beam"
+  },
+  "boot-security": {
+    "description": "Maintain support for boot security technologies like Secure Boot",
+    "id": 18686947,
+    "maintainers": {},
+    "members": {
+      "ElvishJerricco": 1365692,
+      "emilazy": 18535642
+    },
+    "name": "Boot security"
   },
   "bootstrapping": {
     "description": "coordinates efforts towards bootstrappable builds (see https://bootstrappable.org/)",
@@ -87,8 +95,8 @@
       "fgaz": 8182846,
       "natsukium": 25083790,
       "philiptaron": 43863,
-      "pyrotelekinetic": 29682759,
-      "tomodachi94": 68489118
+      "tomodachi94": 68489118,
+      "tr3foil": 29682759
     },
     "members": {},
     "name": "Categorization"
@@ -151,6 +159,7 @@
       "samuela": 226872
     },
     "members": {
+      "ethancedwards8": 60861925,
       "prusnak": 42201
     },
     "name": "cuda-maintainers"
@@ -172,7 +181,6 @@
     "description": "Improve Darwin-support across Nixpkgs and help maintainers without access to Darwin hardware. Apply to join through https://github.com/NixOS/nixpkgs/issues/323144 to keep the process transparent.",
     "id": 2385202,
     "maintainers": {
-      "emilazy": 18535642,
       "toonn": 1486805
     },
     "members": {
@@ -191,6 +199,7 @@
       "Prince213": 25235514,
       "Samasaur1": 30577766,
       "Steven0351": 24440751,
+      "TyceHerrman": 22066434,
       "afh": 16507,
       "azuwis": 9315,
       "booxter": 90200,
@@ -198,11 +207,12 @@
       "cideM": 4246921,
       "cidkidnix": 67574902,
       "copumpkin": 2623,
+      "delafthi": 50531499,
       "devusb": 4951663,
       "domenkozar": 126339,
-      "donn": 12652988,
       "dwt": 57199,
       "eclairevoyant": 848000,
+      "emilazy": 18535642,
       "ethancedwards8": 60861925,
       "fiddlerwoaroof": 808745,
       "fulsomenko": 14945057,
@@ -245,13 +255,13 @@
       "sikmir": 688044,
       "siraben": 8219659,
       "siriobalmelli": 23038812,
-      "skulldogged": 33522919,
       "starcraft66": 1858154,
       "stepbrobd": 81826728,
       "stephank": 89950,
       "stephenstubbs": 18033664,
       "t-monaghan": 62273348,
       "thefloweringash": 42933,
+      "thtrf": 82712122,
       "tricktron": 16036882,
       "uncenter": 47499684,
       "usertam": 22500027,
@@ -365,9 +375,11 @@
   "freedesktop": {
     "description": "Maintain Freedesktop.org packages for graphical desktop.",
     "id": 3806136,
-    "maintainers": {},
-    "members": {
+    "maintainers": {
       "jtojnar": 705123
+    },
+    "members": {
+      "Hythera": 87016780
     },
     "name": "Freedesktop"
   },
@@ -404,10 +416,13 @@
     "description": "Maintain GNOME desktop environment and platform.",
     "id": 3806133,
     "maintainers": {
+      "bobby285271": 20080233,
       "jtojnar": 705123
     },
     "members": {
-      "bobby285271": 20080233
+      "nekowinston": 79978224,
+      "theCapypara": 3512122,
+      "thunze": 22795263
     },
     "name": "GNOME"
   },
@@ -563,11 +578,11 @@
     "id": 9955829,
     "maintainers": {
       "RossComputerGuy": 19699320,
-      "alyssais": 2768870,
-      "emilazy": 18535642
+      "alyssais": 2768870
     },
     "members": {
       "Ericson2314": 1055245,
+      "emilazy": 18535642,
       "peterwaller-arm": 52030119,
       "rrbutani": 7833358
     },
@@ -642,7 +657,6 @@
       "djacu": 7043297
     },
     "members": {
-      "Sigmanificient": 53050011,
       "flyfloh": 74379,
       "thilobillerbeck": 7442383
     },
@@ -679,8 +693,8 @@
       "eclairevoyant": 848000
     },
     "members": {
-      "Eveeifyeve": 88671402,
-      "daylinmorgan": 47667941
+      "daylinmorgan": 47667941,
+      "eveeifyeve": 88671402
     },
     "name": "nim"
   },
@@ -719,7 +733,7 @@
     "description": "Manage the current nixpkgs/NixOS release",
     "id": 3620128,
     "maintainers": {
-      "jopejoe1": 34899572,
+      "Scrumplex": 11587657,
       "yayayayaka": 73759599
     },
     "members": {},
@@ -738,16 +752,6 @@
       "mdaniels5757": 8762511
     },
     "name": "Nixpkgs CI"
-  },
-  "nixpkgs-core": {
-    "description": "Provides leadership for and has authority over Nixpkgs.",
-    "id": 14317027,
-    "maintainers": {
-      "alyssais": 2768870,
-      "emilazy": 18535642
-    },
-    "members": {},
-    "name": "Nixpkgs core"
   },
   "nixpkgs-merge-bot": {
     "description": "This team exists as a target for triggering the nixpkgs merge bot.",
@@ -783,10 +787,11 @@
     "description": "Maintain Pantheon desktop environment and platform",
     "id": 4786995,
     "maintainers": {
+      "bobby285271": 20080233,
       "davidak": 91113
     },
     "members": {
-      "bobby285271": 20080233
+      "amz-x": 18249234
     },
     "name": "Pantheon"
   },
@@ -850,6 +855,7 @@
       "lorenzleutgeb": 542154
     },
     "members": {
+      "Mic92": 96200,
       "ju1m": 21160136,
       "matthiasbeyer": 427866
     },
@@ -890,7 +896,6 @@
       "0x4A6F": 9675338
     },
     "members": {
-      "DarkKirb": 23011243,
       "dramforever": 2818072,
       "fgaz": 8182846,
       "jonhermansen": 660911
@@ -954,7 +959,6 @@
     },
     "members": {
       "andir": 638836,
-      "leona-ya": 11006031,
       "pyrox0": 35778371
     },
     "name": "Security review"
@@ -984,12 +988,11 @@
     "id": 11265412,
     "maintainers": {
       "RossComputerGuy": 19699320,
-      "emilazy": 18535642,
       "philiptaron": 43863
     },
     "members": {
-      "Artturin": 56650223,
       "Ericson2314": 1055245,
+      "emilazy": 18535642,
       "reckenrode": 7413633
     },
     "name": "stdenv"

@@ -3,21 +3,33 @@
   lib,
   fetchurl,
   fixDarwinDylibNames,
+
+  # for passthru.tests
+  SDL2_image,
+  SDL_image,
+  gdal,
+  imlib2,
+  leptonica,
+  libjxl,
+  libwebp,
+  openimageio,
+  openjdk,
   pkgsStatic,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "giflib";
-  version = "5.2.2";
+  version = "6.1.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/giflib/giflib-${finalAttrs.version}.tar.gz";
-    hash = "sha256-vn/70FfK3r4qoURUL9kMaDjGoIO16KkEi47jtmsp1fs=";
+    hash = "sha256-tltmuZ8EJLk1JfmHOG8i/F77naK/ySrUpTIkmq/7qw4=";
   };
 
   patches = [
-    ./CVE-2021-40633.patch
-    ./CVE-2025-31344.patch
+    # Fix missing symbol error on Darwin when linking libutil.dylib.
+    # Based on discussion in https://sourceforge.net/p/giflib/bugs/189/.
+    ./0001-Suppress-undefined-symbol-error-on-Darwin.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isMinGW [
     # Build dll libraries.
@@ -45,15 +57,23 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString stdenv.hostPlatform.isStatic ''
     # Upstream build system does not support NOT building shared libraries.
-    sed -i '/all:/ s/$(LIBGIFSO)//' Makefile
-    sed -i '/all:/ s/$(LIBUTILSO)//' Makefile
-    sed -i '/-m 755 $(LIBGIFSO)/ d' Makefile
-    sed -i '/ln -sf $(LIBGIFSOVER)/ d' Makefile
-    sed -i '/ln -sf $(LIBGIFSOMAJOR)/ d' Makefile
+    substituteInPlace Makefile \
+      --replace-fail "all: shared-lib static-lib $(UTILS)" "all: static-lib $(UTILS)" \
+      --replace-fail "install-lib: install-static-lib install-shared-lib" "install-lib: install-static-lib"
   '';
 
   passthru.tests = {
     static = pkgsStatic.giflib;
+    inherit
+      SDL2_image
+      SDL_image
+      gdal
+      imlib2
+      leptonica
+      libjxl
+      openimageio
+      openjdk
+      ;
   };
 
   meta = {

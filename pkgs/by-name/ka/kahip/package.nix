@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional pythonSupport python3Packages.pybind11
   ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
-  # create meta package providing dist-info for python3Pacakges.kahip that common cmake build does not do
+  # create meta package providing dist-info for python3Packages.kahip that common cmake build does not do
   propagatedBuildInputs = lib.optional pythonSupport (
     python3Packages.mkPythonMetaPackage {
       inherit (finalAttrs) pname version meta;

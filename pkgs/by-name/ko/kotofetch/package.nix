@@ -6,7 +6,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kotofetch";
-  version = "0.2.22";
+  version = "0.2.23";
 
   __structuredAttrs = true;
 
@@ -14,10 +14,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "hxpe-dev";
     repo = "kotofetch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aY8HRKSHLQKjl4b7v5q3SeNMc+GJPnE2XVrEsl+nGR0=";
+    hash = "sha256-mW0oMrmDUn8qsCCu870z6zS3szGVyCU4wnSytH6DkUE=";
   };
 
-  cargoHash = "sha256-r36x/I/RaIWFEoDYXf3edpLeqGvEyozhT4EuCTSEe/k=";
+  cargoHash = "sha256-g5SLS6PpcRNm1zcHkX8pvqk7s2yQ+zUAjp4CSCq/U/o=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

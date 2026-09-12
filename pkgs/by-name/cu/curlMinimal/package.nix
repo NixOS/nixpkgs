@@ -6,6 +6,8 @@
   perl,
   nixosTests,
   autoreconfHook,
+  buildPackages,
+  runtimeShellPackage,
   brotliSupport ? false,
   brotli,
   c-aresSupport ? false,
@@ -44,8 +46,6 @@
   openssl,
   pslSupport ? false,
   libpsl,
-  rtmpSupport ? false,
-  rtmpdump,
   scpSupport ? zlibSupport && !stdenv.hostPlatform.isSunOS && !stdenv.hostPlatform.isCygwin,
   libssh2,
   rustlsSupport ? false,
@@ -82,9 +82,12 @@ assert
     ]) > 1
   );
 
+let
+  isCross = !lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.20.0";
+  version = "8.22.0";
 
   src = fetchurl {
     urls = [
@@ -93,21 +96,31 @@ stdenv.mkDerivation (finalAttrs: {
         builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
       }/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-Y/4twUi6DOromSLvg49+XJRicsLni3xZ+rS3nTziuJY=";
+    hash = "sha256-9+866KIuUh8omAP+k1Q+tkwym1iqc6niJN/ZFaKl9Pc=";
   };
-
-  patches = [
-    # https://github.com/curl/curl/commit/2a2104f3cff44bb28bb570a093be52bbeeed8f23
-    # According to <https://curl.se/mail/distros-2026-05/0000.html>, this fixes
-    # a performance regression, causing high CPU usage
-    ./fix-wakeup-consumption.patch
-  ];
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
   postPatch = ''
     substituteInPlace ./config.guess --replace-fail /usr/bin/uname uname
-    patchShebangs scripts
+  ''
+  # `wcurl` is the one thing in `scripts` that is installed, so it is the one
+  # whose shebang has to suit the host platform. The rest are only used during
+  # the build, and want this platform's shell. Say which is which rather than
+  # patch them all one way and correct it afterwards.
+  #
+  # Where the host has no shell at all, `patchShebangs --host` finds nothing
+  # and leaves the shebang as shipped, which is the best available answer.
+  + ''
+    local f flag
+    for f in scripts/*; do
+      if [[ "$f" == scripts/wcurl ]]; then
+        flag=--host
+      else
+        flag=--build
+      fi
+      patchShebangs "$flag" "$f"
+    done
   '';
 
   outputs = [
@@ -163,7 +176,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional ldapSupport openldap
     ++ lib.optional opensslSupport openssl
     ++ lib.optional pslSupport libpsl
-    ++ lib.optional rtmpSupport rtmpdump
     ++ lib.optional scpSupport libssh2
     ++ lib.optional rustlsSupport rustls-ffi
     ++ lib.optional zlibSupport zlib
@@ -187,7 +199,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature opensslSupport "ca-fallback")
     (lib.withFeature http3Support "nghttp3")
     (lib.withFeature http3Support "ngtcp2")
-    (lib.withFeature rtmpSupport "librtmp")
     (lib.withFeature rustlsSupport "rustls")
     (lib.withFeature zstdSupport "zstd")
     (lib.withFeature pslSupport "libpsl")
@@ -248,7 +259,22 @@ stdenv.mkDerivation (finalAttrs: {
     ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}
     ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}.4
     ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}.4.4.0
+  ''
+  # `postPatch` above should have pointed everything installed at the host's
+  # shell already. Do it again over what was installed, defensively.
+  + lib.optionalString isCross ''
+    patchShebangs --host "''${!outputBin}/bin"
   '';
+
+  # Whether we patch the shebangs in the installed script or not, we should not
+  # have build platform software in the final runtime closure.
+  outputChecks.bin.disallowedReferences = lib.optional isCross buildPackages.runtimeShellPackage;
+  outputChecks.out.disallowedReferences = lib.optional isCross buildPackages.runtimeShellPackage;
+
+  # Some hosts have no shell for the scripts to point at: MinGW is the one in
+  # tree, where `bash` is marked unsupported because it needs a POSIX layer. We
+  # cannot patch shebangs in that case.
+  buildInputs = lib.optional (lib.meta.availableOn stdenv.hostPlatform runtimeShellPackage) runtimeShellPackage;
 
   passthru =
     let
@@ -288,6 +314,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.curl;
     maintainers = with lib.maintainers; [
       Scrumplex
+      tmarkus
     ];
     teams = [ lib.teams.security-review ];
     platforms = lib.platforms.all;

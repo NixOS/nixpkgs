@@ -32,6 +32,7 @@
   sqlite,
   withYubikey ? false,
   libyubikey,
+  nixosTests,
 }:
 
 assert withRest -> withJson;
@@ -100,6 +101,13 @@ stdenv.mkDerivation rec {
     "man"
     "doc"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests.networking.networkmanager)
+      eap
+      eapFiles
+      ;
+  };
 
   meta = {
     homepage = "https://freeradius.org/";

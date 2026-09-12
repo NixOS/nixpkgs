@@ -1,14 +1,18 @@
 {
   buildDotnetGlobalTool,
+  dotnetCorePackages,
   lib,
   testers,
 }:
 
 buildDotnetGlobalTool (finalAttrs: {
   pname = "fable";
-  version = "4.29.0";
+  version = "5.15.0";
 
-  nugetHash = "sha256-Eed1bb9heteWOWmv6NnXPzXbf3t218K/eHufwgtRuzI=";
+  nugetHash = "sha256-HnUVyhoT+MhSzuNGVkQTHB4DqTvtpMRWc6tiPVxarxE=";
+
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   passthru.tests = testers.testVersion {
     package = finalAttrs.finalPackage;

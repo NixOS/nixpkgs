@@ -57,14 +57,14 @@ diff -ruN a/src/stores/kernelApi.ts b/src/stores/kernelApi.ts
 diff -ruN a/src/types/app.d.ts b/src/types/app.d.ts
 --- a/src/types/app.d.ts
 +++ b/src/types/app.d.ts
-@@ -19,6 +19,7 @@
-   appName: string
-   appVersion: string
-   basePath: string
-+  configPath: string
-   appPath: string
-   os: OS
-   arch: string
+@@ -17,6 +17,7 @@
+     appName: string
+     appVersion: string
+     basePath: string
++    configPath: string
+     appPath: string
+     os: OS
+     arch: string
 diff -ruN a/src/views/PluginsView/index.vue b/src/views/PluginsView/index.vue
 --- a/src/views/PluginsView/index.vue
 +++ b/src/views/PluginsView/index.vue

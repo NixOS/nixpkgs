@@ -7,16 +7,16 @@
 mkPackerPlugin (finalAttrs: {
 
   pname = "packer-plugin-docker";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "packer-plugin-docker";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h89FGwUQjTk81CYUe1xmKxSHr1t3wyBg9lHUTqmVym8=";
+    hash = "sha256-rv12zSAH8TbbrRKk1/gd558EYTlBeBdHRMD6OQA6Xrg=";
   };
 
-  vendorHash = "sha256-mvyafYSLi/q7lWorfKc4Gc4oM7yti3v/bLcVnNkH7ZY=";
+  vendorHash = "sha256-He7xU6naVhwSatAntw/BgMIm+3vN5onCbaaH/6XmlIY=";
 
   meta = {
     description = "Packer plugin for Docker";

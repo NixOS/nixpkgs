@@ -1,0 +1,39 @@
+From 3c3cf5beb4557af2616f3e4e0bdc3d22e7fd1536 Mon Sep 17 00:00:00 2001
+From: Kai Stian Olstad <kai.stian.olstad@gmail.com>
+Date: Sat, 8 Aug 2026 23:47:56 +0200
+Subject: [PATCH] Plain desktop file for distro that does not use systemd
+
+---
+ resources/README                | 4 ++++
+ resources/qtile-generic.desktop | 6 ++++++
+ 2 files changed, 10 insertions(+)
+ create mode 100644 resources/qtile-generic.desktop
+
+diff --git a/resources/README b/resources/README
+index 3e12a454e8..0e4a34d65d 100644
+--- a/resources/README
++++ b/resources/README
+@@ -2,6 +2,10 @@ qtile.desktop: A desktop file for qtile telling session managers about qtile
+     and how to run it. Install it to /usr/share/xsessions (to offer an X11
+     session) and/or /usr/share/wayland-sessions (to offer a Wayland session).
+ 
++qtile-generic.desktop: A qtile desktop file for non sytemd users.
++    Install it to /usr/share/xsessions (to offer an X11 session) and/or
++    /usr/share/wayland-sessions (to offer a Wayland session).
++
+ 99-qtile.rules: udev rules for hardware that qtile can manage
+ 
+ qtile-session.target, qtile.service: systemd user units that start qtile as a
+diff --git a/resources/qtile-generic.desktop b/resources/qtile-generic.desktop
+new file mode 100644
+index 0000000000..0ea0a2fe62
+--- /dev/null
++++ b/resources/qtile-generic.desktop
+@@ -0,0 +1,6 @@
++[Desktop Entry]
++Name=Qtile
++Comment=Qtile Session
++Exec=qtile start
++Type=Application
++Keywords=wm;tiling
+

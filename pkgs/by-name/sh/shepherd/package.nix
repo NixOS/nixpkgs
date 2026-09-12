@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.16.0";
 
   src = fetchFromGitHub {
-    owner = "NerdWalletOSS";
+    owner = "shepherd-tools";
     repo = "shepherd";
     rev = "v${finalAttrs.version}";
     hash = "sha256-LY8Vde4YpGuKnQ5UnSOpsQDY7AOyZRziUrfZb5dRiX4=";
@@ -67,9 +67,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    changelog = "https://github.com/NerdWalletOSS/shepherd/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/shepherd-tools/shepherd/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Utility for applying code changes across many repositories";
-    homepage = "https://github.com/NerdWalletOSS/shepherd";
+    homepage = "https://github.com/shepherd-tools/shepherd";
     license = lib.licenses.asl20;
     mainProgram = "shepherd";
     maintainers = with lib.maintainers; [ dbirks ];

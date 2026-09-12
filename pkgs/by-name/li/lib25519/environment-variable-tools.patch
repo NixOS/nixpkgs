@@ -1,8 +1,8 @@
 diff --git a/configure b/configure
-index 04042b2..30d1ea9 100755
+index 86b7e88..33c126f 100755
 --- a/configure
 +++ b/configure
-@@ -210,6 +210,17 @@ for arch in sorted(os.listdir('compilers')):
+@@ -255,6 +255,17 @@ for arch in sorted(os.listdir('compilers')):
      with open('compilers/%s' % arch) as f:
        for c in f.readlines():
          c = c.strip()
@@ -20,19 +20,32 @@ index 04042b2..30d1ea9 100755
          cv = compilerversion(c)
          if cv == None:
            log('skipping %s compiler %s' % (arch,c))
+diff --git a/scripts-build/checkinsns b/scripts-build/checkinsns
+index 039a0c5..4e64c96 100755
+--- a/scripts-build/checkinsns
++++ b/scripts-build/checkinsns
+@@ -5,7 +5,7 @@ import sys
+ import subprocess
+ import traceback
+ 
+-objdump = os.getenv('CROSS','')+'objdump'
++objdump = os.getenv('OBJDUMP', os.getenv('CROSS','')+'objdump')
+ 
+ host = sys.argv[1]
+ 
 diff --git a/scripts-build/checknamespace b/scripts-build/checknamespace
-index ae11bed..bd9cb85 100755
+index 2a599e4..d0ae563 100755
 --- a/scripts-build/checknamespace
 +++ b/scripts-build/checknamespace
-@@ -36,7 +36,7 @@ def doit(d):
-   obj2U = {}
+@@ -4,7 +4,7 @@ import os
+ import sys
+ import subprocess
  
-   try:
--    p = subprocess.Popen(['nm','-ApP']+objs,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,universal_newlines=True)
-+    p = subprocess.Popen([os.getenv('NM', 'nm'),'-ApP']+objs,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,universal_newlines=True)
-     out,err = p.communicate()
-   except Exception as e:
-     warn('nm failure: %s' % e)
+-nm = os.getenv('CROSS','')+'nm'
++nm = os.getenv('NM', os.getenv('CROSS','')+'nm')
+ 
+ topnamespace = sys.argv[1]
+ 
 diff --git a/scripts-build/staticlib b/scripts-build/staticlib
 index 7683233..0445bc3 100755
 --- a/scripts-build/staticlib

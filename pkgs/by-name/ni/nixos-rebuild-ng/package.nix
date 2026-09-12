@@ -55,6 +55,7 @@ python3Packages.buildPythonApplication rec {
 
     installShellCompletion --cmd ${executable} \
       --bash <(shtab --shell bash nixos_rebuild.get_main_parser) \
+      --fish <(shtab --shell fish nixos_rebuild.get_main_parser) \
       --zsh <(shtab --shell zsh nixos_rebuild.get_main_parser)
   '';
 

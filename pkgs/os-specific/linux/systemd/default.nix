@@ -5,6 +5,7 @@
   pkgsCross,
   testers,
   fetchFromGitHub,
+  fetchpatch,
   buildPackages,
   makeBinaryWrapper,
   ninja,
@@ -34,8 +35,8 @@
   acl,
   lz4,
   openssl,
+  libucontext,
   libgcrypt,
-  libgpg-error,
   libidn2,
   curl,
   zlib,
@@ -106,6 +107,7 @@
   withHostnamed ? true,
   withHwdb ? true,
   withImportd ? true,
+  withImds ? true,
   withKmod ? true,
   withLibBPF ?
     lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
@@ -142,6 +144,7 @@
   withRemote ? true,
   withResolved ? true,
   withShellCompletions ? true,
+  withSysinstall ? true,
   withSysusers ? true,
   withSysupdate ? true,
   withTimedated ? true,
@@ -190,7 +193,7 @@ assert withRepart -> withCryptsetup;
 assert withBootloader -> withEfi;
 
 let
-  wantCurl = withRemote || withImportd;
+  wantCurl = withRemote || withImportd || withImds;
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
@@ -201,13 +204,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "260.2";
+  version = "261.2";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-NXmmSV7/9WIW6C8wjdOwaerCy4v7Zcrd8+XDzcS8rEk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-w0Fxx+zYBs806whyaKBytGwSgn89ARdukAm6Hp+XlQQ=";
   };
 
   # PATCH POLICY
@@ -237,24 +240,31 @@ stdenv.mkDerivation (finalAttrs: {
     ./0003-add-rootprefix-to-lookup-dir-paths.patch
     ./0004-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
     ./0005-core-don-t-taint-on-unmerged-usr.patch
+    # Remove this with v262
+    # Fixes an issue for switch-to-configuration
+    (fetchpatch {
+      name = "postpone-d-bus-queue-dispatch.patch";
+      url = "https://github.com/systemd/systemd/commit/266b3e50218e2b27cd67d2371c165bf53ad3bf00.patch";
+      hash = "sha256-dEEzZUqicnmgDuXVBV1y0BxzgKbb6Q47Dmxj+O71bFE=";
+    })
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
     ./0006-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
   ];
 
   postPatch = ''
-    substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
+    substituteInPlace src/basic/path-util.h --replace-fail "@defaultPathNormal@" "${placeholder "out"}/bin/"
   ''
   + lib.optionalString withLibBPF ''
-    substituteInPlace meson.build \
-      --replace "find_program('clang'" "find_program('${stdenv.cc.targetPrefix}clang'"
+    substituteInPlace src/bpf/meson.build \
+      --replace-fail "find_program('clang'" "find_program('${stdenv.cc.targetPrefix}clang'"
   ''
   + lib.optionalString withUkify ''
     substituteInPlace src/ukify/ukify.py \
-      --replace \
+      --replace-fail \
       "'readelf'" \
       "'${targetPackages.stdenv.cc.bintools.targetPrefix}readelf'" \
-      --replace \
+      --replace-fail \
       "/usr/lib/systemd/boot/efi" \
       "$out/lib/systemd/boot/efi"
   ''
@@ -308,11 +318,7 @@ stdenv.mkDerivation (finalAttrs: {
         jinja2
       ]
       ++ lib.optional withEfi ps.pyelftools
-      # pefile is only required to trigger a check in meson to actually build
-      # ukify. This module should never appear in the runtime closure of ukify.
-      # Instead the pefile from buildInputs should be used.
-      # Remove this when it's fixed upstream: https://github.com/systemd/systemd/pull/41959
-      ++ lib.optional withUkify ps.pefile
+      ++ lib.optional (withUkify && finalAttrs.finalPackage.doCheck) ps.pefile
     ))
   ]
   ++ lib.optionals withLibBPF [
@@ -321,17 +327,25 @@ stdenv.mkDerivation (finalAttrs: {
     buildPackages.llvmPackages.libllvm
   ];
 
-  autoPatchelfFlags = [ "--keep-libc" ];
+  autoPatchelfFlags = [
+    "--keep-libc"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    # TODO: can be unconditionalized on staging.
+    # Nixpkgs does not rely on gettext for libintl for musl.
+    "--ignore-missing=libintl.so.8"
+  ];
 
   buildInputs = [
     libxcrypt
     libuuid
     linuxHeaders
   ]
-
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    libucontext
+  ]
   ++ lib.optionals withGcrypt [
     libgcrypt
-    libgpg-error
   ]
   ++ lib.optionals withOpenSSL [ openssl ]
   ++ lib.optional withTests glib
@@ -347,7 +361,7 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
   ]
   ++ lib.optional withCoredump elfutils
-  ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
+  ++ lib.optional withCryptsetup cryptsetup
   ++ lib.optional withKexectools kexec-tools
   ++ lib.optional withKmod kmod
   ++ lib.optional withLibidn2 libidn2
@@ -360,7 +374,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnutls
   ]
   ++ lib.optionals (withHomed || withCryptsetup) [ p11-kit ]
-  ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
+  ++ lib.optionals (withHomed || withCryptsetup || withFido2) [ libfido2 ]
   ++ lib.optionals withLibBPF [ libbpf ]
   ++ lib.optional withTpm2Tss tpm2-tss
   ++ lib.optional withUkify (
@@ -498,6 +512,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "apparmor" withApparmor)
     (lib.mesonEnable "gcrypt" withGcrypt)
     (lib.mesonEnable "importd" withImportd)
+    (lib.mesonEnable "imds" withImds)
     (lib.mesonEnable "homed" withHomed)
     (lib.mesonEnable "polkit" withPolkit)
     (lib.mesonEnable "elfutils" withCoredump)
@@ -539,6 +554,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "coredump" withCoredump)
     (lib.mesonBool "firstboot" withFirstboot)
     (lib.mesonBool "resolve" withResolved)
+    (lib.mesonBool "sysinstall" withSysinstall)
     (lib.mesonBool "sysusers" withSysusers)
     (lib.mesonBool "efi" withEfi)
     (lib.mesonBool "utmp" withUtmp)
@@ -572,7 +588,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   preConfigure = ''
     substituteInPlace src/libsystemd/sd-journal/catalog.c \
-      --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
+      --replace-fail /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
   '';
 
   # These defines are overridden by CFLAGS and would trigger annoying
@@ -620,7 +636,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       # Fix reference to /bin/false in the D-Bus services.
       for i in $out/share/dbus-1/system-services/*.service; do
-        substituteInPlace $i --replace /bin/false ${coreutils}/bin/false
+        substituteInPlace $i --replace-fail /bin/false ${coreutils}/bin/false
       done
 
       # For compatibility with dependents that use sbin instead of bin.
@@ -790,11 +806,14 @@ stdenv.mkDerivation (finalAttrs: {
           fsck-systemd-stage-1
           hibernate-systemd-stage-1
           switchTest
-          # systemd # broken on master
+          switchTest-basics
+          switchTest-units
+          switchTest-user
+          systemd
           systemd-analyze
           systemd-bpf
           systemd-confinement
-          # systemd-coredump # broken on master
+          systemd-coredump
           systemd-cryptenroll
           systemd-credentials-tpm2
           systemd-escaping
@@ -813,14 +832,13 @@ stdenv.mkDerivation (finalAttrs: {
           systemd-initrd-networkd-openvpn
           systemd-initrd-vlan
           systemd-journal
-          # systemd-journal-gateway # broken on master
+          systemd-journal-gateway
           systemd-journal-upload
           # systemd-machinectl # broken on master
           systemd-networkd
           systemd-networkd-bridge
           systemd-networkd-dhcpserver
           systemd-networkd-dhcpserver-static-leases
-          systemd-networkd-ipv6-prefix-delegation
           systemd-networkd-vrf
           systemd-no-tainted
           systemd-nspawn
@@ -834,12 +852,13 @@ stdenv.mkDerivation (finalAttrs: {
           systemd-sysusers-mutable
           systemd-sysusers-immutable
           systemd-sysusers-password-option-override-ordering
-          # systemd-timesyncd-nscd-dnssec # broken on master
+          systemd-timesyncd
+          systemd-timesyncd-nscd-dnssec
           systemd-user-linger
           systemd-user-tmpfiles-rules
           systemd-misc
           systemd-userdbd
-          # systemd-homed # broken on master
+          systemd-homed
           ;
       };
 

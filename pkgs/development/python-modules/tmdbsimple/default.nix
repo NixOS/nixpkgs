@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tmdbsimple";
-  version = "2.9.6";
+  version = "2.9.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "celiao";
     repo = "tmdbsimple";
     tag = finalAttrs.version;
-    hash = "sha256-ooyfwRCvH980gym8ujpLxbmR7FYfi59gGXqT8K40pNw=";
+    hash = "sha256-bKSvknFnqF/QXdJZfQu6RCufXp6u4zvr8IAo8WToWf8=";
   };
 
   build-system = [ setuptools ];

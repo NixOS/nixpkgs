@@ -1,7 +1,7 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.9.4";
+  version = "2.9.13";
   builtins = [
     "builtin"
     "coverartarchive"
@@ -32,8 +32,10 @@
       ps: with ps; [
         alexapy
       ];
-    apple_music = ps: [
-    ]; # missing pywidevine
+    apple_music =
+      ps: with ps; [
+        pywidevine
+      ];
     ard_audiothek =
       ps: with ps; [
         gql
@@ -48,8 +50,10 @@
       ps: with ps; [
         aioaudiobookshelf
       ];
-    bandcamp = ps: [
-    ]; # missing bandcamp-async-api
+    bandcamp =
+      ps: with ps; [
+        bandcamp-async-api
+      ];
     bbc_sounds =
       ps: with ps; [
         pytz
@@ -145,8 +149,6 @@
     loudness_analysis = ps: [
     ];
     lrclib = ps: [
-    ];
-    motherearthradio = ps: [
     ];
     mpd =
       ps: with ps; [
@@ -272,10 +274,8 @@
       ps: with ps; [
         pkce
       ];
-    spotify_connect =
-      ps: with ps; [
-        pkce
-      ];
+    spotify_connect = ps: [
+    ];
     squeezelite =
       ps: with ps; [
         aioslimproto

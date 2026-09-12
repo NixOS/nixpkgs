@@ -6,20 +6,21 @@
   hatchling,
   hatch-vcs,
   defusedxml,
-  pytest-aiohttp,
+  pytest-asyncio,
+  pytest-vcr,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "afsapi";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wlcrs";
     repo = "python-afsapi";
     tag = finalAttrs.version;
-    hash = "sha256-OMz8zJrU1qymvhD9mnf248687wpqfgUnXna7Cbr83No=";
+    hash = "sha256-ZfP8LboBDrxXULtocOTZJ0Ku/zgear4NW5ckcHUKXc4=";
   };
 
   build-system = [
@@ -32,14 +33,19 @@ buildPythonPackage (finalAttrs: {
     defusedxml
   ];
 
-  doCheck = false; # Failed: async def functions are not natively supported.
-
   nativeCheckInputs = [
-    pytest-aiohttp
+    pytest-asyncio
+    pytest-vcr
     pytestCheckHook
   ];
 
-  enabledTestPaths = [ "async_tests.py" ];
+  disabledTestPaths = [
+    # Failed: async def functions are not natively supported.
+    "async_tests.py"
+    # requires local device
+    "tests/test_device_recordings.py"
+    "tests/test_device_recordings_write.py"
+  ];
 
   pythonImportsCheck = [ "afsapi" ];
 

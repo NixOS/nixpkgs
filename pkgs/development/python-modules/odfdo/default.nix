@@ -9,14 +9,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "odfdo";
-  version = "3.22.8";
+  version = "3.22.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jdum";
     repo = "odfdo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N256BtTV3zUXLL/ynXOTWqyoBorVsTEgevxdmLfRoJw=";
+    hash = "sha256-H/aJhWqkQGtG7bppM1AxWo/GBGYR6qAF7d/nxrby30M=";
   };
 
   build-system = [ uv-build ];

@@ -15,13 +15,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rauthy";
-  version = "0.36.0";
+  version = "0-unstable-2026-09-11";
 
   src = fetchFromGitHub {
     owner = "sebadob";
     repo = "rauthy";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-ctc80gG36O4viHrFcG3RSrr8wnwD3YZD0eyauS9JCPA=";
+    rev = "53125a91665a8eb4038ece01bee1d121b5590f4c";
+    hash = "sha256-NFtdz8T7CKt3Hq+TmoH2Lv4LHsbguZFyzZufoRWGZwQ=";
   };
 
   nativeBuildInputs = [
@@ -40,10 +40,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/frontend";
-    hash = "sha256-3bLzlGbC1i8TOYNi/SAVqIb8bsK0IhDTGr65rVWU5XY=";
+    hash = "sha256-VdOJOine6UQ/muVANoOiw5F3ECQ1OXPXqCuCoA3sLEA=";
   };
 
-  cargoHash = "sha256-lkD2Yd15VuQT+OmMttea0KBWOnhwvRBN6aS1DVR0Heg=";
+  cargoHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
 
   preBuild = ''
     pushd src/wasm-modules
@@ -66,7 +66,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "rauthy";
     description = "Single Sign-On Identity & Access Management via OpenID Connect, OAuth 2.0 and PAM";
     homepage = "https://github.com/sebadob/rauthy";
-    changelog = "https://github.com/sebadob/rauthy/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/sebadob/rauthy/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       angelodlfrtr

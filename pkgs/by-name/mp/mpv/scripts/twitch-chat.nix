@@ -7,13 +7,13 @@
 }:
 buildLua {
   pname = "twitch-chat";
-  version = "0-unstable-2026-06-13";
+  version = "0-unstable-2026-07-02";
 
   src = fetchFromGitHub {
     owner = "CrendKing";
     repo = "mpv-twitch-chat";
-    rev = "1e9d2dfcd8ab9c343cc6a3c55363994dbafe5b58";
-    hash = "sha256-vtv5YZO7qROhUL3TKCKaNfvv1uCjQv9kvfo7sno24BE=";
+    rev = "72d97a02fae1045dedc44979e60403a198bbef1c";
+    hash = "sha256-PaPCAmvARbRrL+NY+CcJGiQRO+Ahjo0o5vz1av3h2Ds=";
 
     postFetch = "rm $out/screenshot.webp";
   };

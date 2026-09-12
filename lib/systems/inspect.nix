@@ -27,6 +27,8 @@ let
     execFormats
     ;
 
+  hasArmv7Prefix = hasPrefix "armv7";
+
   # Based on lib.attrsets.matchAttrs, but with:
   # - the initial isAttrs assertion removed, since this function is only ever
   # called with attrsets
@@ -137,7 +139,7 @@ rec {
       {
         cpu = { inherit arch; };
       }
-    ) (filter (cpu: hasPrefix "armv7" cpu.arch or "") (attrValues cpuTypes));
+    ) (filter (cpu: cpu ? arch && hasArmv7Prefix cpu.arch) (attrValues cpuTypes));
     isAarch64 = {
       cpu = {
         family = "arm";
@@ -390,8 +392,11 @@ rec {
       kernel = kernels.windows;
       abi = abis.msvc;
     };
-    isWasi = {
-      kernel = kernels.wasi;
+    isWasi = [
+      { kernel = kernels.wasip1; }
+    ];
+    isWasiP1 = {
+      kernel = kernels.wasip1;
     };
     isRedox = {
       kernel = kernels.redox;
@@ -430,6 +435,9 @@ rec {
         muslabin32
         muslabi64
       ];
+    isPicolibc = {
+      abi = abis.picolibc;
+    };
     isUClibc =
       with abis;
       map (a: { abi = a; }) [

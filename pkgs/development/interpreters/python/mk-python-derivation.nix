@@ -18,6 +18,7 @@
   pypaInstallHook,
   pythonCatchConflictsHook,
   pythonImportsCheckHook,
+  pythonMetadataCheckHook,
   pythonNamespacesHook,
   pythonOutputDistHook,
   pythonRelaxDepsHook,
@@ -59,6 +60,8 @@ let
     in
     fixedWidthString len " " name;
 
+  hasZipSuffix = hasSuffix "zip";
+
   isPythonModule =
     drv:
     # all pythonModules have the pythonModule attribute
@@ -91,6 +94,16 @@ let
     "wheel"
   ];
 
+  bootstrappedPypaBuildHook = pypaBuildHook.override {
+    inherit (python.pythonOnBuildForHost.pkgs.bootstrap) build;
+    wheel = null;
+  };
+  bootstrappedPypaInstallHook = pypaInstallHook.override {
+    inherit (python.pythonOnBuildForHost.pkgs.bootstrap) installer;
+  };
+  bootstrappedRuntimeDepsCheckHook = pythonRuntimeDepsCheckHook.override {
+    inherit (python.pythonOnBuildForHost.pkgs.bootstrap) packaging;
+  };
 in
 
 lib.extendMkDerivation {
@@ -279,13 +292,7 @@ lib.extendMkDerivation {
       name = namePrefix + attrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
 
       runtimeDepsCheckHook =
-        if isBootstrapPackage then
-          pythonRuntimeDepsCheckHook.override {
-            inherit (python.pythonOnBuildForHost.pkgs.bootstrap) packaging;
-          }
-        else
-          pythonRuntimeDepsCheckHook;
-
+        if isBootstrapPackage then bootstrappedRuntimeDepsCheckHook else pythonRuntimeDepsCheckHook;
     in
     {
       inherit name;
@@ -317,22 +324,14 @@ lib.extendMkDerivation {
       ++ optionals removeBinBytecode [
         pythonRemoveBinBytecodeHook
       ]
-      ++ optionals (hasSuffix "zip" (finalAttrs.src.name or "")) [
+      ++ optionals (attrs ? src.name && hasZipSuffix attrs.src.name) [
         unzip
       ]
       ++ optionals (format' == "setuptools") [
         setuptoolsBuildHook
       ]
       ++ optionals (format' == "pyproject") [
-        (
-          if isBootstrapPackage then
-            pypaBuildHook.override {
-              inherit (python.pythonOnBuildForHost.pkgs.bootstrap) build;
-              wheel = null;
-            }
-          else
-            pypaBuildHook
-        )
+        (if isBootstrapPackage then bootstrappedPypaBuildHook else pypaBuildHook)
         runtimeDepsCheckHook
       ]
       ++ optionals (format' == "wheel") [
@@ -345,19 +344,27 @@ lib.extendMkDerivation {
         eggInstallHook
       ]
       ++ optionals (format' != "other") [
-        (
-          if isBootstrapInstallPackage then
-            pypaInstallHook.override {
-              inherit (python.pythonOnBuildForHost.pkgs.bootstrap) installer;
-            }
-          else
-            pypaInstallHook
-        )
+        (if isBootstrapInstallPackage then bootstrappedPypaInstallHook else pypaInstallHook)
       ]
       ++ optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
         # This is a test, however, it should be ran independent of the checkPhase and checkInputs
         pythonImportsCheckHook
       ]
+      ++
+        optionals
+          (
+            finalAttrs ? "pname"
+            && finalAttrs ? "version"
+            # We don't care about the METADATA of Python applications.
+            && isPythonModule finalAttrs.passthru
+            # METADATA is unlikely to be correct if pyproject is false or null.
+            && pyproject == true
+            && !lib.hasInfix "unstable-" finalAttrs.version
+            && !isBootstrapPackage
+          )
+          [
+            pythonMetadataCheckHook
+          ]
       ++ optionals (python.pythonAtLeast "3.3") [
         # Optionally enforce PEP420 for python3
         pythonNamespacesHook

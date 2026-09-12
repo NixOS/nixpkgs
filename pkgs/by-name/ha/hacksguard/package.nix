@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hacksguard";
-  version = "0.1";
+  version = "0.3";
 
   __structuredAttrs = true;
 
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Rhacknarok";
     repo = "hacksguard";
     tag = finalAttrs.version;
-    hash = "sha256-kS8VF1zD4VV9rSLz4euvNwtOUFWLeW2isAjgjw/iay0=";
+    hash = "sha256-3HD6FFZBJ7x5uDy0UEwQVaxpuNt4O2wmJgMspeFF6iQ=";
   };
 
-  cargoHash = "sha256-7Wt2cFKwWT82P2uxOy/lGEWZcCUSu0BNr9JdgRLwBnw=";
+  cargoHash = "sha256-LLAPbXz8QAEUGs+37ZIFVNW1WfCVQbROfI7wQFaiy3E=";
 
   nativeBuildInputs = [ pkg-config ];
 

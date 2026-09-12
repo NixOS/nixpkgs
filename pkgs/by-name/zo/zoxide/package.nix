@@ -62,6 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd zoxide \
       --bash contrib/completions/zoxide.bash \
       --fish contrib/completions/zoxide.fish \
+      --nushell contrib/completions/zoxide.nu \
       --zsh contrib/completions/_zoxide
   '';
 
@@ -69,7 +70,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Fast cd command that learns your habits";
     homepage = "https://github.com/ajeetdsouza/zoxide";
     changelog = "https://github.com/ajeetdsouza/zoxide/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       ysndr
       cole-h

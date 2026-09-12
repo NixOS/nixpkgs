@@ -30,6 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "apache-arrow-nanoarrow-${finalAttrs.version}";
     hash = "sha256-1iLbT1eeyZaoB75uYTgg4qns+C7b4DErqMwJ9nQPRls=";
   };
+  patches = [
+    # Fixes an issue between our `arrow-cpp` and this version of `nanoarrow`.
+    # Not applicable for upstreaming so it seems. See discussion:
+    # https://github.com/apache/arrow-nanoarrow/issues/902
+    ./cpp20-arrow-cpp-fix.diff
+  ];
 
   nativeBuildInputs = [
     meson

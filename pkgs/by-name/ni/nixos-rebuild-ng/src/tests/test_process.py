@@ -29,8 +29,10 @@ def test_remote_env_shell_argv() -> None:
         "sudo",
         "/bin/sh",
         "-c",
-        """exec /usr/bin/env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" """
-        '''NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"''',
+        (
+            """exec /usr/bin/env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" """
+            '''NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'''
+        ),
         "sh",
         "cmd",
         "arg",
@@ -231,6 +233,52 @@ def test_remote_from_name(monkeypatch: MonkeyPatch) -> None:
         "user@localhost",
         opts=["-f", "foo", "-b", "bar", "-t"],
         store_type="ssh",
+    )
+
+
+def test_ssh_default_opts(monkeypatch: MonkeyPatch) -> None:
+    monkeypatch.delenv("NIXOS_REBUILD_SSH_DEFAULT_OPTS", raising=False)
+    assert p.ssh_default_opts() == p.SSH_DEFAULT_OPTS
+
+    monkeypatch.setenv(
+        "NIXOS_REBUILD_SSH_DEFAULT_OPTS", "-o ControlPath=/run/user/1000/%C"
+    )
+    assert p.ssh_default_opts() == ["-o", "ControlPath=/run/user/1000/%C"]
+
+    monkeypatch.setenv("NIXOS_REBUILD_SSH_DEFAULT_OPTS", "")
+    assert p.ssh_default_opts() == []
+
+
+@patch.dict(
+    p.os.environ,
+    {"PATH": "/path/to/bin", "NIXOS_REBUILD_SSH_DEFAULT_OPTS": ""},
+    clear=True,
+)
+@patch("subprocess.run", autospec=True)
+def test_run_wrapper_ssh_default_opts_override(mock_run: Any) -> None:
+    p.run_wrapper(
+        ["test"],
+        check=True,
+        remote=m.Remote("user@localhost", ["-p", "2222"], "ssh"),
+    )
+    mock_run.assert_called_with(
+        [
+            "ssh",
+            "-p",
+            "2222",
+            "user@localhost",
+            "--",
+            "/bin/sh",
+            "-c",
+            """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
+            "sh",
+            "test",
+        ],
+        check=True,
+        text=True,
+        errors="surrogateescape",
+        env=None,
+        input=None,
     )
 
 
