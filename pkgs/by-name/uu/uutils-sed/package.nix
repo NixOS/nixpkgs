@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uutils-sed";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "sed";
     tag = finalAttrs.version;
-    hash = "sha256-y1X9nj/quBtisp+6MHFjVKFHrdFnujWTxLWNLvdrADA=";
+    hash = "sha256-KBeZcVFFoiMblonSvtfA9I9udYj9VP5NtjbcLvhQchM=";
   };
 
-  cargoHash = "sha256-N5wwNPjOL3U4bPSONGpjmOBU31Nt/sCVth+JH3xmz/g=";
+  cargoHash = "sha256-5Zo9IvIAjwzW7QY4YDxUN8+Fudz9xhQiwPMuXZ8wx/A=";
 
   meta = {
     changelog = "https://github.com/uutils/sed/releases/tag/${finalAttrs.version}";
