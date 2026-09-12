@@ -107,7 +107,7 @@ const downloadPkg = (pkg, verbose) => {
 
   const [ url, hash ] = pkg.resolved.split('#')
   if (verbose) console.log('downloading ' + url)
-  const fileName = urlToName(url)
+  const fileName = urlToName(url, hash)
   const s = url.split('/')
   if (url.startsWith('https://codeload.github.com/') && url.includes('/tar.gz/')) {
     return downloadGit(fileName, `https://github.com/${s[3]}/${s[4]}.git`, s[s.length-1])

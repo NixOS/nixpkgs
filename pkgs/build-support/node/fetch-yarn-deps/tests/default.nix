@@ -11,7 +11,7 @@
   };
   gitDep = testers.invalidateFetcherByDrvHash fetchYarnDeps {
     yarnLock = ./git.lock;
-    sha256 = "sha256-f90IiEzHDiBdswWewRBHcJfqqpPipaMg8N0DVLq2e8Q=";
+    sha256 = "sha256-PsCQGLc5NCXJBU+eSE+OLymX5iEZyKTw8ZET8gefGhs=";
   };
   githubDep = testers.invalidateFetcherByDrvHash fetchYarnDeps {
     yarnLock = ./github.lock;
@@ -24,5 +24,9 @@
   gitUrlDep = testers.invalidateFetcherByDrvHash fetchYarnDeps {
     yarnLock = ./giturl.lock;
     sha256 = "sha256-VPnyqN6lePQZGXwR7VhbFnP7/0/LB621RZwT1F+KzVQ=";
+  };
+  gitMultiRevDep = testers.invalidateFetcherByDrvHash fetchYarnDeps {
+    yarnLock = ./git-multi-rev.lock;
+    sha256 = "sha256-y4ulvP99lMjmjnjoSSivWW/1iQBsvvLLwT5zwqSrmn8=";
   };
 }
