@@ -30,5 +30,8 @@ buildDunePackage {
 
   meta = mirage-crypto.meta // {
     description = "Simple public-key cryptography for the modern age";
+    knownVulnerabilities = [
+      "CVE-2026-87735" # fixed in 2.3.0
+    ];
   };
 }
