@@ -2,12 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   meson,
   pkg-config,
   libxml2,
   libusb1,
   libzip,
+  nbdkit,
+  zip,
   cmocka,
   ninja,
   versionCheckHook,
@@ -16,49 +17,44 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qdl";
-  version = "2.7.1";
+  version = "2.8";
 
   __structuredAttrs = true;
-  strictDeps = true;
+
+  # with true: "Run-time dependency cmocka found: NO (tried pkgconfig)"
+  strictDeps = false;
 
   src = fetchFromGitHub {
     owner = "linux-msm";
     repo = "qdl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r7DVfuTjuhkhLCXJdgzLuh34nIsoEroGzIaFQJ3oHAA=";
+    hash = "sha256-ysL9tO1GKvzphxezMspGMW8kkUNGHHspA1YU+v5HA/A=";
   };
-
-  patches = [
-    # allow VERSION to be overridden, will land in 2.8
-    (fetchpatch2 {
-      url = "https://github.com/linux-msm/qdl/commit/6f8700ed81b3614baa12786a9845c9abeab1e178.patch";
-      hash = "sha256-fDC34Wq4MadDDLHVQ5zuRKE2zD2dOMTU8EGINcJTYuI=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
     pkg-config
-    cmocka
     ninja
   ];
   buildInputs = [
     libxml2
     libusb1
     libzip
+    nbdkit
+  ];
+  nativeCheckInputs = [
+    cmocka
+    zip
   ];
 
   mesonFlags = [
     "--prefix=${placeholder "out"}"
-    "-DVERSION=${finalAttrs.src.rev}"
-
-    # Tests currently fail to link but seem rather new
-    # https://github.com/linux-msm/qdl/issues/260
-    # test_contents_selectors.c:(.text+0x234e): undefined reference to `firehose_alloc_op'
-    "-Dtests=disabled"
+    "-DVERSION=${finalAttrs.version}"
   ];
 
   enableParallelBuilding = true;
+
+  doCheck = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
