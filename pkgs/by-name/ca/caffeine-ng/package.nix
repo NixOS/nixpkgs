@@ -19,14 +19,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "caffeine-ng";
-  version = "4.3.2";
+  version = "4.3.0";
   pyproject = false;
 
   src = fetchFromCodeberg {
     owner = "WhyNotHugo";
     repo = "caffeine-ng";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-eJ/0lzE5X1WFhgTAgI/SOmtxPbK7ppTk90RWobPZk2o=";
+    hash = "sha256-q9UkM4LPL4hv5NteaMJaU8fwExxiFZx5+4kBW/Bwc5k=";
   };
 
   nativeBuildInputs = [
