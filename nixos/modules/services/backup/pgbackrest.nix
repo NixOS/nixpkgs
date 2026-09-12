@@ -87,6 +87,20 @@ let
       default = null;
       internal = true;
     };
+
+  # Values of a path option across the global section and every command section.
+  pathsFor =
+    option:
+    lib.unique (
+      lib.filter (p: p != null) (
+        [ (cfg.settings.${option} or null) ]
+        ++ lib.mapAttrsToList (_: command: command.${option} or null) cfg.commands
+      )
+    );
+
+  # paths that need to be accessed by all members of the pgbackrest group,
+  # e.g. the postgresql user and the pgbackrest user
+  groupPaths = pathsFor "log-path" ++ pathsFor "lock-path";
 in
 
 {
@@ -376,7 +390,9 @@ in
       {
         services.pgbackrest.settings = {
           log-level-console = lib.mkDefault "info";
-          log-level-file = lib.mkDefault "off";
+          log-level-file = lib.mkDefault "info";
+          log-path = lib.mkDefault "/var/log/pgbackrest";
+          lock-path = lib.mkDefault "/run/pgbackrest";
           cmd-ssh = lib.getExe pkgs.openssh;
         };
 
@@ -394,6 +410,29 @@ in
           home = cfg.repos.localhost.path or "/var/lib/pgbackrest";
         };
         users.groups.pgbackrest = { };
+
+        # ensure groupPaths and their contents are accessible for members of
+        # the group
+        systemd.tmpfiles.settings.pgbackrest = lib.genAttrs groupPaths (_: {
+          d = {
+            user = "pgbackrest";
+            group = "pgbackrest";
+            mode = "2770";
+          };
+        });
+
+        # pgBackRest appends to its log files and never rotates them itself.
+        services.logrotate.settings.pgbackrest = {
+          files = map (path: "${path}/*.log") (pathsFor "log-path");
+          # The log directory is group writable, which logrotate refuses to
+          # touch as root.
+          su = "pgbackrest pgbackrest";
+          frequency = "weekly";
+          rotate = 4;
+          compress = true;
+          missingok = true;
+          notifempty = true;
+        };
 
         systemd.services = lib.mapAttrs (
           _:
@@ -449,9 +488,15 @@ in
             user = "postgres";
           };
         };
-        # If PostgreSQL runs on the same machine, any restore will have to be done with that user.
-        # Keeping the lock file in a directory writeable by the postgres user prevents errors.
-        services.pgbackrest.commands.restore.lock-path = "/tmp/postgresql";
+        # postgresql is running with ProtectSystem=strict which disallows
+        # writing to e.g. /run. This punches holes into that so that it can
+        # write into the groupPaths as necessary.
+        systemd.services.postgresql.serviceConfig.ReadWritePaths = map (path: "-${path}") (
+          lib.unique (
+            groupPaths ++ lib.optional (cfg.repos.localhost.path or null != null) cfg.repos.localhost.path
+          )
+        );
+
         services.postgresql.identMap = ''
           postgres pgbackrest postgres
         '';
