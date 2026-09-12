@@ -167,7 +167,13 @@ lib.makeExtensible (
             hash = "sha256-b7fhCXxl9qKTNPQvG8T/+nOxB95kalt9/aSY+ZSRctk=";
           };
         }).appendPatches
-          [ ];
+          (
+            lib.optionals stdenv.hostPlatform.isDarwin [
+              # Avoid recursive arch probes when libnixstore is preloaded by Cachix.
+              # https://github.com/NixOS/nixpkgs/issues/562481
+              ./detect-rosetta-via-runtime-file.patch
+            ]
+          );
 
       nix_2_31 = addTests "nix_2_31" self.nixComponents_2_31.nix-everything;
 
