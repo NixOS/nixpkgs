@@ -4,6 +4,7 @@
   fetchFromCodeberg,
   rustPlatform,
   wayland,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "microcad";
@@ -28,6 +29,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "-p"
     "microcad-lsp"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Description language for modeling parameterizable geometric objects";
