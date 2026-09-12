@@ -53,11 +53,11 @@ buildPythonPackage (finalAttrs: {
 
   # The integration tests under `tests/` require a live Nextcloud
   # instance (upstream `conftest.py` connects at module load and raises
-  # `EnvironmentError` if no server is reachable).  Strip that
+  # `EnvironmentError` if no server is reachable).  Skip that
   # directory and run only the offline `tests_unit/` subset.
-  postPatch = ''
-    rm -rf tests
-  '';
+  disabledTestPaths = [
+    "tests"
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio
