@@ -1,0 +1,24 @@
+diff --git a/src/pc/cliopts.c b/src/pc/cliopts.c
+index c544579..b3e8fc6 100644
+--- a/src/pc/cliopts.c
++++ b/src/pc/cliopts.c
+@@ -16,7 +16,7 @@
+ struct PCCLIOptions gCLIOpts;
+ 
+ static void print_help(void) {
+-    printf("Super Mario 64 PC Port\n");
++    printf("Super Mario 64 PC Port for Archipelago\n");
+     printf("%-20s\tEnables the cheat menu.\n", "--cheats");
+     printf("%-20s\tSaves the configuration file as CONFIGNAME.\n", "--configfile CONFIGNAME");
+     printf("%-20s\tSets additional data directory name (only 'res' is used by default).\n", "--gamedir DIRNAME");
+@@ -24,6 +24,10 @@ static void print_help(void) {
+     printf("%-20s\tStarts the game in full screen mode.\n", "--fullscreen");
+     printf("%-20s\tSkips the Peach and Castle intro when starting a new game.\n", "--skip-intro");
+     printf("%-20s\tStarts the game in windowed mode.\n", "--windowed");
++    printf("%-20s\tSets the File path of the offline Archipelago room.\n", "--sm64ap_file");
++    printf("%-20s\tSets the IP and Port of the Archipelago server.\n", "--sm64ap_ip");
++    printf("%-20s\tSets the Name of the Archipelago user.\n", "--sm64ap_name");
++    printf("%-20s\tSets the Password of the Archipelago user.\n", "--sm64ap_passwd");
+ }
+ 
+ static inline int arg_string(const char *name, const char *value, char *target) {
