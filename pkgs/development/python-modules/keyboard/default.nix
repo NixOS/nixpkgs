@@ -9,7 +9,7 @@ buildPythonPackage {
   pname = "keyboard";
   # the commit tagged v0.13.5 on github actually has version 0.13.4,
   # and fetchPypi reports 404 error; very strange!
-  version = "0.13.5-unstable-2023-01-31";
+  version = "0.13.5";
 
   src = fetchFromGitHub {
     owner = "boppreh";
