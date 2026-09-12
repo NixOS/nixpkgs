@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
+  doCheck = true;
+
   passthru = {
     tests = {
       inherit gnuplot;
