@@ -63,6 +63,12 @@ in
 
     autoUpdateService = lib.mkEnableOption "if `true` `cscli hub update` will be executed daily. See `https://docs.crowdsec.net/docs/cscli/cscli_hub_update/` for more information";
 
+    showDataDirBreakingChange = lib.mkOption {
+      type = lib.types.bool;
+      description = "Set it to `true` if the `BREAKING CHANGE: (...)` message for `/var/lib/crowdsec` should be displayed, otherwise not.";
+      default = true;
+    };
+
     user = lib.mkOption {
       type = lib.types.str;
       description = "The user to run crowdsec as";
@@ -691,7 +697,6 @@ in
               ) "cscli ${lib.toLower x} install ${argString cfg.hub.${x}}";
           in
           ''
-
             echo "Updating hub..."
 
             cscli hub update
@@ -733,6 +738,9 @@ in
 
       warnings =
         [ ]
+        ++ lib.optionals (cfg.showDataDirBreakingChange) [
+          "BREAKING CHANGE: If there are any errors from `crowdsec-setup`, please remove its data directory (`rm -rf /var/lib/crowdsec`) and try rebuilding your nixos config then."
+        ]
         ++ lib.optionals (cfg.settings.profiles == [ ]) [
           "By not specifying profiles in services.crowdsec.settings.profiles, CrowdSec will not react to any alert by default."
         ]
