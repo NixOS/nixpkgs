@@ -27,12 +27,12 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "casatools";
-  version = "6.7.5.18";
+  version = "6.7.6.14";
 
   src = fetchgit {
     url = "https://open-bitbucket.nrao.edu/scm/casa/casa6.git";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-75oIlaNAyu70KWSjz38LoYAvV7RJgzH/X9uBnGpriF4=";
+    hash = "sha256-ZMcowd7EqP5CO6JNbvbOZ3X9boPKKMUwRL2RBCHTo34=";
     fetchSubmodules = false;
   };
 
