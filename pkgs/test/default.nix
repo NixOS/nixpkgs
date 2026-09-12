@@ -111,6 +111,8 @@ in
 
   devShellTools = callPackage ../build-support/dev-shell-tools/tests { };
 
+  dart = recurseIntoAttrs (callPackage ./dart { });
+
   stdenv-inputs = callPackage ./stdenv-inputs { };
   stdenv = recurseIntoAttrs (callPackage ./stdenv { });
 
