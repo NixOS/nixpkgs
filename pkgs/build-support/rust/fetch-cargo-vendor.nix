@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   runCommand,
+  writeText,
   writers,
   python3,
   cargo,
@@ -45,6 +46,7 @@ let
     "version"
     "nativeBuildInputs"
     "hash"
+    "registryDlOverrides"
   ];
 
   fetchCargoVendorUtil = writers.writePython3Bin "fetch-cargo-vendor-util" {
@@ -65,12 +67,30 @@ in
   name ? if args ? pname && args ? version then "${args.pname}-${args.version}" else "cargo-deps",
   hash ? (throw "fetchCargoVendor requires a `hash` value to be set for ${name}"),
   nativeBuildInputs ? [ ],
+  # Attribute set mapping a Cargo.lock source string (e.g.
+  # "registry+https://github.com/rust-lang/crates.io-index") to a download URL
+  # that overrides the `dl` entry advertised by the registry's config.json.
+  # The URL follows the same substitution rules as the registry `dl` field
+  # (see https://doc.rust-lang.org/cargo/reference/registry-index.html#index-configuration).
+  # A bare URL with no `{...}` placeholders is treated as
+  # `<url>/{crate}/{version}/download`.
+  # Example:
+  #   registryDlOverrides = {
+  #     "registry+https://github.com/rust-lang/crates.io-index" = "https://static.crates.io/crates";
+  #   };
+  registryDlOverrides ? { },
   ...
 }@args:
 
 # TODO: add asserts about pname version and name
 
 let
+  registryDlOverridesFile =
+    if registryDlOverrides == { } then
+      null
+    else
+      writeText "registry-dl-overrides.json" (builtins.toJSON registryDlOverrides);
+
   vendorStaging = stdenvNoCC.mkDerivation (
     {
       name = "${name}-vendor-staging";
@@ -84,6 +104,8 @@ let
       ]
       ++ nativeBuildInputs;
 
+      registryDlOverridesFile = if registryDlOverridesFile != null then registryDlOverridesFile else "";
+
       buildPhase = ''
         runHook preBuild
 
@@ -91,7 +113,7 @@ let
           cd "$cargoRoot"
         fi
 
-        fetch-cargo-vendor-util create-vendor-staging ./Cargo.lock "$out"
+        fetch-cargo-vendor-util create-vendor-staging ./Cargo.lock "$out" ''${registryDlOverridesFile:+"$registryDlOverridesFile"}
 
         runHook postBuild
       '';
