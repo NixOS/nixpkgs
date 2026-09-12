@@ -1472,6 +1472,8 @@ let
 
         num = callPackage ../development/ocaml-modules/num { };
 
+        nunchaku = callPackage ../development/ocaml-modules/nunchaku { };
+
         ### O ###
 
         ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
@@ -2049,6 +2051,8 @@ let
         simple-diff = callPackage ../development/ocaml-modules/simple-diff { };
 
         slug = callPackage ../development/ocaml-modules/slug { };
+
+        smbc = callPackage ../development/ocaml-modules/smbc { };
 
         smtml = callPackage ../development/ocaml-modules/smtml {
           mdx = mdx.override { inherit logs; };
