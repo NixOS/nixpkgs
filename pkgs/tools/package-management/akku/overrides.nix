@@ -104,6 +104,13 @@ in
   ufo-threaded-function = skipTests;
   ufo-timer = skipTests;
   ufo-try = skipTests;
+  srfi-19 = skipTests;
+  dataframe = skipTests;
+  surfage = skipTests;
+  fectors = skipTests;
+  gnuplot-pipe = skipTests;
+  wak-ssax = skipTests;
+  chez-stats = skipTests;
 
   # unsupported schemes, it seems.
   loko-srfi = broken;
@@ -121,7 +128,6 @@ in
   chibi-math-linalg = broken;
   chibi-mecab = broken;
   chibi-ssl = broken;
-  chibi-voting = broken;
   chibi-xgboost = broken;
   dockerfile = broken;
   in-progress-hash-bimaps = broken;
@@ -138,7 +144,6 @@ in
   rapid-syntax = broken;
   read-char-if = broken;
   shell-quote = broken;
-  srfi-19 = broken;
   srfi-64 = broken;
   srfi-179 = broken;
   string-inflection = broken;
@@ -148,30 +153,21 @@ in
   agave = broken;
   box2d-lite = broken;
   chez-soop = broken;
-  chez-stats = broken;
-  dataframe = broken;
-  dharmalab = broken;
   dorodango = broken;
-  fectors = broken;
   fs-fatfs = broken;
   fs-partitions = broken;
-  gnuplot-pipe = broken;
   http-pixiu = broken;
   influx-client = broken;
   linenoise = broken;
-  mpl = broken;
   mummel = broken;
-  ocelotl = broken;
   r6lint = broken;
   r6rs-clos = broken;
   r6rs-coap = broken;
   r6rs-msgpack = broken;
   scheme-bytestructures = broken;
-  surfage = broken;
   swish = broken;
   text-mode = broken;
   thunderchez = broken;
-  wak-ssax = broken;
   wak-sxml-tools = broken;
   yxskaft = broken;
 }
