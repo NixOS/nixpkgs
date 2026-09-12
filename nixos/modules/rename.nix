@@ -253,6 +253,10 @@ in
         See <https://grafana.com/docs/alloy/latest/set-up/migrate/> or <https://docs.fluentbit.io/manual/data-pipeline/outputs/loki>.
       ''
     )
+    (mkRemovedOptionModule [
+      "services"
+      "haste-server"
+    ] "The `services.haste-server` module has been removed because the upstream project was deleted.")
     (mkRemovedOptionModule [ "services" "homeassistant-satellite" ]
       "The `services.homeassistant-satellite` module has been replaced by `services.wyoming-satellite`."
     )
