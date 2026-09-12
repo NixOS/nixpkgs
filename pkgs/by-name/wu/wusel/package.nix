@@ -128,7 +128,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       icon = "at.itbh.Wusel";
       exec = "wusel mount --account default";
       terminal = false;
-      categories = [ "Network" "Utility" ];
+      categories = [
+        "Network"
+        "Utility"
+      ];
     })
   ];
 
@@ -155,3 +158,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "wusel";
   };
 })
+
