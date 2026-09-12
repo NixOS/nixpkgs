@@ -514,7 +514,13 @@ let
     export NIX_STATE_DIR=$TMPDIR/state
     nix-store --load-db < ${closureInfo}/registration
 
-    chmod 755 "$TMPDIR"
+    # Ensure TMPDIR has o+rx for nixos-install's permission check.
+    # Only chmod if needed; skip if we don't own the directory (e.g., in some
+    # sandboxed builders where TMPDIR is pre-created by root with 777 perms).
+    tmpdir_mode=$(stat -c '%a' "$TMPDIR")
+    if [[ "''${tmpdir_mode: -1}" -lt 5 ]]; then
+      chmod 755 "$TMPDIR"
+    fi
     echo "running nixos-install..."
     nixos-install --root $root --no-bootloader --no-root-passwd \
       --system ${config.system.build.toplevel} \
