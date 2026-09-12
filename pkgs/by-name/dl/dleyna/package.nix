@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dleyna";
-  version = "0.8.3";
+  version = "0.8.4";
 
   outputs = [
     "out"
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "World";
     repo = "dLeyna";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ti4yF8sALpWyrdQTt/jVrMKQ4PLhakEi620fJNMxT0c=";
+    hash = "sha256-R07WCjdiuljCxIOzbdZAPm/VgGRxlTjWacFBf9o5jpk=";
   };
 
   nativeBuildInputs = [
