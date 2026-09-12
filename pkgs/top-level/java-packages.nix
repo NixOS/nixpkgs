@@ -49,12 +49,18 @@ in
           };
         in
         mkLinuxDarwin openjdkLinux openjdkDarwin;
+
+      mkCorretto =
+        majorVersion:
+        callPackage ../development/compilers/corretto/mk-corretto.nix {
+          inherit majorVersion;
+        };
     in
     rec {
-      corretto11 = callPackage ../development/compilers/corretto/11.nix { };
-      corretto17 = callPackage ../development/compilers/corretto/17.nix { };
-      corretto21 = callPackage ../development/compilers/corretto/21.nix { };
-      corretto25 = callPackage ../development/compilers/corretto/25.nix { };
+      corretto11 = mkCorretto "11";
+      corretto17 = mkCorretto "17";
+      corretto21 = mkCorretto "21";
+      corretto25 = mkCorretto "25";
 
       openjdk8 = mkOpenjdk "8";
       openjdk11 = mkOpenjdk "11";
