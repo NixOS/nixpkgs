@@ -15,6 +15,7 @@ let
     mkPackageOption
     types
     getExe
+    getExe'
     optional
     converge
     filterAttrsRecursive
@@ -28,26 +29,32 @@ let
   # Remove null values, so we can document optional/forbidden values that don't end up in the generated TOML file.
   filterConfig = converge (filterAttrsRecursive (_: v: v != null));
 
-  finalPackage = cfg.package.overridePythonAttrs (old: {
-    dependencies =
-      old.dependencies
-      ++ old.optional-dependencies.front
-      ++ old.optional-dependencies.oidc
-      ++ old.optional-dependencies.scim
-      ++ old.optional-dependencies.ldap
-      ++ old.optional-dependencies.sentry
-      ++ old.optional-dependencies.postgresql
-      ++ old.optional-dependencies.otp
-      ++ old.optional-dependencies.sms;
-    makeWrapperArgs = (old.makeWrapperArgs or [ ]) ++ [
-      "--set CANAILLE_CONFIG /etc/canaille/config.toml"
-      "--set SECRETS_DIR \"${secretsDir}\""
-    ];
-  });
+  finalPackage = cfg.package.python.pkgs.toPythonModule (
+    cfg.package.overridePythonAttrs (old: {
+      dependencies =
+        old.dependencies
+        ++ old.optional-dependencies.front
+        ++ old.optional-dependencies.oidc
+        ++ old.optional-dependencies.scim
+        ++ old.optional-dependencies.ldap
+        ++ old.optional-dependencies.sentry
+        ++ old.optional-dependencies.postgresql
+        ++ old.optional-dependencies.otp
+        ++ old.optional-dependencies.sms;
+      makeWrapperArgs = (old.makeWrapperArgs or [ ]) ++ [
+        "--set CANAILLE_CONFIG /etc/canaille/config.toml"
+        "--set SECRETS_DIR \"${secretsDir}\""
+      ];
+    })
+  );
   inherit (finalPackage) python;
   pythonEnv = python.buildEnv.override {
     extraLibs = with python.pkgs; [
-      (toPythonModule finalPackage)
+      finalPackage
+      (gunicorn.overridePythonAttrs (old: {
+        # Allows Gunicorn to set a meaningful process name
+        dependencies = (old.dependencies or [ ]) ++ old.optional-dependencies.setproctitle;
+      }))
       celery
     ];
   };
@@ -308,19 +315,12 @@ in
       };
       serviceConfig = commonServiceConfig // {
         Restart = "on-failure";
-        ExecStart =
-          let
-            gunicorn = python.pkgs.gunicorn.overridePythonAttrs (old: {
-              # Allows Gunicorn to set a meaningful process name
-              dependencies = (old.dependencies or [ ]) ++ old.optional-dependencies.setproctitle;
-            });
-          in
-          ''
-            ${getExe gunicorn} \
-              --name=canaille \
-              --bind='unix:///run/canaille.socket' \
-              'canaille:create_app()'
-          '';
+        ExecStart = ''
+          ${getExe' pythonEnv "gunicorn"} \
+            --name=canaille \
+            --bind='unix:///run/canaille.socket' \
+            'canaille:create_app()'
+        '';
       };
       restartTriggers = [ "/etc/canaille/config.toml" ];
     };
