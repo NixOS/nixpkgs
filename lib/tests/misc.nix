@@ -3454,32 +3454,44 @@ runTests {
   };
 
   testToCommandLineGNU = {
-    expr = cli.toCommandLineGNU { } {
-      v = true;
-      verbose = [
-        true
-        true
-        false
-        null
-      ];
-      i = ".bak";
-      testsuite = [
-        "unit"
-        "integration"
-      ];
-      e = [
-        "s/a/b/"
-        "s/b/c/"
-      ];
-      n = false;
-      data = builtins.toJSON { id = 0; };
-    };
+    expr =
+      cli.toCommandLineGNU
+        {
+          listRepr = optionName: if optionName == "tags" then "join" else "repeat";
+        }
+        {
+          v = true;
+          verbose = [
+            true
+            true
+            false
+            null
+          ];
+          i = ".bak";
+          testsuite = [
+            "unit"
+            "integration"
+          ];
+          e = [
+            "s/a/b/"
+            "s/b/c/"
+          ];
+          n = false;
+          data = builtins.toJSON {
+            id = 0;
+          };
+          tags = [
+            "foo"
+            "bar"
+          ];
+        };
 
     expected = [
       "--data={\"id\":0}"
       "-es/a/b/"
       "-es/b/c/"
       "-i.bak"
+      "--tags=foo,bar"
       "--testsuite=unit"
       "--testsuite=integration"
       "-v"
