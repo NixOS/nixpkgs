@@ -187,6 +187,20 @@ rec {
 
     `toCommandLineGNU` returns a list of string arguments.
 
+    # Type
+
+    ```
+    toCommandLineGNU ::
+      {
+        isLong :: String -> Bool,
+        explicitBool :: Bool,
+        formatArg :: Any -> String,
+        listRepr :: String -> "repeat" | "join" | "spread",
+        formatList :: [Any] -> String,
+        splitList :: String -> [Any] -> [[Any]],
+      } -> [String]
+    ```
+
     # Inputs
 
     `options`
@@ -195,7 +209,7 @@ rec {
 
     `attrs`
 
-    : The attributes to transform into arguments.
+    : The attributes to convert into arguments.
 
     ## Options
 
@@ -211,20 +225,66 @@ rec {
 
     : A function that turns the option argument into a string.
 
+    `listRepr`:
+
+    : A function that takes the option name and returns the list representation:
+
+      - `"repeat"`:
+        Repeats the option with different values, e.g.:
+        `--option=foo --option=bar --option=baz`.
+      - `"join"`:
+        Joins option arguments via `formatList`, e.g.: `--option=foo,bar,baz`.
+      - `"spread"`:
+        Outputs the option once and spreads the arguments after it, e.g.:
+        `--option foo bar baz`.
+        The behavior of this representation can be customized via the
+        `splitList` function. `sep` is treated as if it were `null`.
+
+      Defaults to `_: "repeat"`.
+      For further reference see `listRepr` in:
+      [`lib.cli.toCommandLine`](#function-library-lib.cli.toCommandLine)
+
+    `formatList`
+
+    : Applied to top-level lists when `listRepr` is `"join"`. This function
+      turns a list of option arguments into a string.
+      Defaults to `list: join "," (map formatArg list)`.
+
+    `splitList`
+
+    : This function takes the option name and returns the function that will be
+      applied to top-level lists when `listRepr` is `"spread"`. This function
+      can be used to, for example, split the list into lists of 2 elements each
+      if each use of the option only accepts 2 arguments.
+      Defaults to `splitList ? _: list: [ list ]`.
+      For further reference see `splitList` in:
+      [`lib.cli.toCommandLine`](#function-library-lib.cli.toCommandLine)
+
     # Examples
 
     :::{.example}
     ## `lib.cli.toCommandLineGNU` usage example
 
     ```nix
-    lib.cli.toCommandLineGNU {} {
+    lib.cli.toCommandLineGNU { } {
       v = true;
-      verbose = [true true false null];
+      verbose = [
+        true
+        true
+        false
+        null
+      ];
       i = ".bak";
-      testsuite = ["unit" "integration"];
-      e = ["s/a/b/" "s/b/c/"];
+      testsuite = [
+        "unit"
+        "integration"
+      ];
+      e = [
+        "s/a/b/"
+        "s/b/c/"
+      ];
       n = false;
-      data = builtins.toJSON {id = 0;};
+      data = builtins.toJSON { id = 0; };
     }
     => [
       "--data={\"id\":0}"
@@ -238,7 +298,6 @@ rec {
       "--verbose"
     ]
     ```
-
     :::
   */
   toCommandLineGNU =
@@ -246,12 +305,19 @@ rec {
       isLong ? optionName: stringLength optionName > 1,
       explicitBool ? false,
       formatArg ? mkValueString,
+      listRepr ? _: "repeat",
+      formatList ? list: join "," (map formatArg list),
+      splitList ? _: list: [ list ],
     }:
     let
       optionFormat = optionName: {
         option = if isLong optionName then "--${optionName}" else "-${optionName}";
         sep = if isLong optionName then "=" else "";
-        inherit explicitBool formatArg;
+        formatArg =
+          value: if listRepr optionName == "join" && isList value then formatList value else formatArg value;
+        listRepr = listRepr optionName;
+        splitList = splitList optionName;
+        inherit explicitBool;
       };
     in
     toCommandLine optionFormat;
