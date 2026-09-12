@@ -1,0 +1,54 @@
+diff --git a/src/app/thermometer.ts b/src/app/thermometer.ts
+index f39d426..3056f44 100644
+--- a/src/app/thermometer.ts
++++ b/src/app/thermometer.ts
+@@ -287,10 +287,10 @@ export class Thermometer extends Gtk.Widget {
+             GObject.BindingFlags.DEFAULT
+         );
+ 
+-        // @ts-expect-error ts-for-gir does not `bind_property_full` correctly. In GJS it actually returns a
+-        // tuple of [boolean, value] where the boolean is whether the transformation succeeded, and the value
+-        // is the transformed value.
+         this.bind_property_full(
++            // @ts-expect-error No overload matches this call. In GJS it actually returns a
++            // tuple of [boolean, value] where the boolean is whether the transformation succeeded, and the value
++            // is the transformed value.
+             'range',
+             this.lowLabel,
+             'label',
+@@ -301,8 +301,8 @@ export class Thermometer extends Gtk.Widget {
+             null
+         );
+ 
+-        // @ts-expect-error Same as the above.
+         this.bind_property_full(
++            // @ts-expect-error Same as the above.
+             'range',
+             this.highLabel,
+             'label',
+diff --git a/src/service/searchProvider.ts b/src/service/searchProvider.ts
+index 6db1563..4fb655c 100644
+--- a/src/service/searchProvider.ts
++++ b/src/service/searchProvider.ts
+@@ -22,7 +22,7 @@ import GWeather from 'gi://GWeather';
+ 
+ import * as Util from '../misc/util.js';
+ import {WeatherBackgroundService} from './main.js';
+-import {WorldModel} from 'src/shared/world.js';
++import {WorldModel} from '../shared/world.js';
+ 
+ type ResultMeta = {
+     name: GLib.Variant<'s'>;
+diff --git a/tsconfig.json b/tsconfig.json
+index 7fbd63b..f0fdc8b 100644
+--- a/tsconfig.json
++++ b/tsconfig.json
+@@ -3,7 +3,7 @@
+         "experimentalDecorators": true,
+         "strict": true,
+         "target": "ES2022",
+-        "baseUrl": ".",
++        "rootDir": "./src",
+         "moduleResolution": "bundler",
+         "module": "ES2022",
+         "lib": [
