@@ -20,10 +20,15 @@ let
     rawHomeserverUrl = cfg.homeserverUrl;
 
     pantalaimon = {
-      inherit (cfg.pantalaimon) username;
-
       use = cfg.pantalaimon.enable;
+    }
+    // lib.optionalAttrs cfg.pantalaimon.enable {
+      inherit (cfg.pantalaimon) username;
       password = "@PANTALAIMON_PASSWORD@"; # will be replaced in "generateConfig"
+    };
+    encryption = {
+      inherit (cfg.settings.encryption) username;
+      password = "@ENCRYPTION_PASSWORD@"; # will be replaced in "generateConfig"
     };
   };
 
@@ -72,6 +77,9 @@ let
       ${lib.optionalString (cfg.pantalaimon.passwordFile != null) ''
         ${pkgs.replace-secret}/bin/replace-secret '@PANTALAIMON_PASSWORD@' '${cfg.pantalaimon.passwordFile}' ${cfg.dataPath}/config/default.yaml
       ''}
+      ${lib.optionalString (cfg.encryption.passwordFile != null) ''
+        ${pkgs.replace-secret}/bin/replace-secret '@ENCRYPTION_PASSWORD@' '${cfg.encryption.passwordFile}' ${cfg.dataPath}/config/default.yaml
+      ''}
     ''
   );
 in
@@ -95,6 +103,14 @@ in
       default = null;
       description = ''
         File containing the matrix access token for the `mjolnir` user.
+      '';
+    };
+
+    encryption.passwordFile = lib.mkOption {
+      type = with lib.types; nullOr path;
+      default = null;
+      description = ''
+        File containing the matrix password for the `mjolnir` user.
       '';
     };
 
@@ -187,16 +203,21 @@ in
   config = lib.mkIf config.services.mjolnir.enable {
     assertions = [
       {
+        assertion = !(cfg.settings.encryption.use && cfg.encryption.passwordFile == null);
+        message = "encryption.passwordFile must be specified when native encryption is used.";
+      }
+      {
         assertion = !(cfg.pantalaimon.enable && cfg.pantalaimon.passwordFile == null);
-        message = "Specify pantalaimon.passwordFile";
+        message = "pantalaimon.passwordFile must be specified when pantalaimon is enabled.";
       }
       {
-        assertion = !(cfg.pantalaimon.enable && cfg.accessTokenFile != null);
-        message = "Do not specify accessTokenFile when using pantalaimon";
+        assertion = cfg.accessTokenFile == null -> cfg.pantalaimon.enable || cfg.settings.encryption.use;
+        message = "Do not specify accessTokenFile when using native encryption or pantalaimon";
       }
       {
-        assertion = !(!cfg.pantalaimon.enable && cfg.accessTokenFile == null);
-        message = "Specify accessTokenFile when not using pantalaimon";
+        assertion =
+          !(!cfg.pantalaimon.enable && !cfg.settings.encryption.use && cfg.accessTokenFile == null);
+        message = "Specify accessTokenFile when not using pantalaimon or native encryption.";
       }
     ];
 
