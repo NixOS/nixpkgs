@@ -1743,7 +1743,7 @@ in
   sudo = runTest ./sudo.nix;
   sudo-rs = runTest ./sudo-rs.nix;
   sunshine = runTest ./sunshine.nix;
-  suricata = runTest ./suricata.nix;
+  suricata = import ./suricata { inherit runTest; };
   suwayomi-server = import ./suwayomi-server.nix {
     inherit lib runTest;
   };
