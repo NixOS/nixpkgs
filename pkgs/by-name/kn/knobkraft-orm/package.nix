@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  makeWrapper,
   pkg-config,
 
   gtk3,
@@ -38,18 +39,19 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "KnobKraft-orm";
 
-  version = "2.7.2";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "christofmuc";
     repo = "knobkraft-orm";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-1mPeiey0hbJmg5k9R06wnDIGDDxbOfRixQ0zoFa4zYA=";
+    hash = "sha256-5d1sYoNBLspBc8b8dwNS1H7dTSFiMBPHE7Ti1MV3Sv0=";
   };
 
   nativeBuildInputs = [
     cmake
+    makeWrapper
     pkg-config
   ];
 
@@ -84,18 +86,34 @@ stdenv.mkDerivation (finalAttrs: {
     libwebp
   ];
 
-  # Issue has been raised and should be resolved with next release.
-  # CMakeLists.txt needs three more lines to properly build.
+  # Archive toolchain workaround and version injection for sources without Git metadata.
+  # Upstream discussion: https://github.com/christofmuc/KnobKraft-orm/pull/486
   patches = [ ./temporary.patch ];
 
+  postPatch = ''
+    # Keep bundled adaptations and their support modules out of bin.
+    substituteInPlace adaptations/CMakeLists.txt \
+      --replace-fail 'DESTINATION bin' 'DESTINATION share/knobkraft-orm/adaptations'
+    # Update Python imports, discovery, built-in names and adaptation export.
+    substituteInPlace adaptations/GenericAdaptation.cpp \
+      --replace-fail 'getChildFile("adaptations")' 'getChildFile("../share/knobkraft-orm/adaptations")'
+  '';
+
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_INTERPROCEDURAL_OP" "off")
+    (lib.cmakeFeature "CMAKE_INTERPROCEDURAL_OPTIMIZATION" "OFF")
+    (lib.cmakeFeature "KNOBKRAFT_EXTERNAL_VERSION" finalAttrs.version)
     (lib.cmakeFeature "PYTHON_VERSION_TO_EMBED" "${python312.pythonVersion}")
   ];
 
   makeFlags = [
     "package"
   ];
+
+  postInstall = ''
+    # Embedded Python must find its own standard-library extension modules.
+    wrapProgram "$out/bin/KnobKraftOrm" \
+      --set PYTHONHOME "${python312}"
+  '';
 
   meta = {
     homepage = "https://github.com/christofmuc/KnobKraft-orm";
