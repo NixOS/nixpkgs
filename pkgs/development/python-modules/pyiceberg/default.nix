@@ -60,7 +60,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyiceberg";
-  version = "0.11.1";
+  version = "0.12.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -68,7 +68,7 @@ buildPythonPackage (finalAttrs: {
     owner = "apache";
     repo = "iceberg-python";
     tag = "pyiceberg-${finalAttrs.version}";
-    hash = "sha256-MjBvLJOnjtpIwBMkI+81S6aipye+PnbrC8T317Qj6rY=";
+    hash = "sha256-rH+lURcsMqU+Dz4AdofngxLVhJzZIp4LMru1yyvyItI=";
   };
 
   build-system = [
