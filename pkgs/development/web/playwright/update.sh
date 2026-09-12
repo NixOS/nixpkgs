@@ -31,8 +31,8 @@ python_version=$(github_api_get https://api.github.com/repos/microsoft/playwrigh
 # Most of the time, this should be the latest stable release of the Node-based
 # Playwright version, but upstream occasionally ships additional npm-only patch
 # releases. Resolve the latest patch in the same major.minor series.
-setup_py_url="https://github.com/microsoft/playwright-python/raw/v${python_version}/setup.py"
-python_driver_version=$(curl -fsSL "$setup_py_url" | grep '^driver_version =' | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+')
+driver_version_url="https://github.com/microsoft/playwright-python/raw/v${python_version}/DRIVER_VERSION"
+python_driver_version=$(curl -fsSL "$driver_version_url" | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+')
 python_major_minor=$(major_minor "$python_driver_version")
 resolve_driver_version_latest_patch() {
     local mm_escaped
@@ -45,7 +45,7 @@ resolve_driver_version_latest_patch() {
 }
 driver_version="$(resolve_driver_version_latest_patch)"
 : "${driver_version:?failed to resolve driver version from npm for python major.minor ${python_major_minor}}"
-: "${python_driver_version:?failed to resolve driver_version from ${setup_py_url}}"
+: "${python_driver_version:?failed to resolve driver_version from ${driver_version_url}}"
 
 # TODO: skip if update-source-version reported the same version
 update-source-version playwright-driver "$driver_version"

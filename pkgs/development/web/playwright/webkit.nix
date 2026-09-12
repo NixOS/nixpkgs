@@ -11,6 +11,7 @@
   brotli,
   at-spi2-atk,
   cairo,
+  enchant_2,
   flite,
   fontconfig,
   freetype,
@@ -23,6 +24,7 @@
   icu74,
   lcms,
   libavif,
+  libbacktrace,
   libdrm,
   libepoxy,
   libevent,
@@ -120,8 +122,8 @@ let
       inherit (download) url stripRoot;
       hash =
         {
-          x86_64-linux = "sha256-BVIZxnnfhBvI737ojRZ+yUX8mcbQ6WOlNdYJ9t4R5yY=";
-          aarch64-linux = "sha256-t9kqUdyOgDXroKp7LWQsaiaRGZVZN3ZdfYLahl5GW2E=";
+          x86_64-linux = "sha256-GASDnneoxfZLUctJLnaUTPW4HDbKdSamJBxFDVpPUC0=";
+          aarch64-linux = "sha256-qtqMCyEZVQu44HGI73t50D1WcnuzxuxLY7MDzf4NDeA=";
         }
         .${system} or throwSystem;
     };
@@ -134,6 +136,7 @@ let
     buildInputs = [
       at-spi2-atk
       cairo
+      enchant_2
       flite
       fontconfig.lib
       freetype
@@ -149,6 +152,7 @@ let
       icu74
       lcms
       libavif
+      libbacktrace
       libdrm
       libepoxy
       libevent
@@ -193,8 +197,8 @@ let
     inherit (download) url stripRoot;
     hash =
       {
-        x86_64-darwin = "sha256-NjuRZrYzraE1FrPAmyMcQFAS2zWZXYe8cBQVbSU6zFw=";
-        aarch64-darwin = "sha256-9g7YHg+TQNmAE07K6jKSSRUJ7IENUQMp2q54Mk2BbaY=";
+        x86_64-darwin = "sha256-FFWFWKHroNBeDw4KYDe4UeucaJzMyin0Ca/qxN2iaO0=";
+        aarch64-darwin = "sha256-glVkYnthOFBPp1gZXTue9WwjP+oCgQpq6j9Mlm/bjmg=";
       }
       .${system} or throwSystem;
   };
