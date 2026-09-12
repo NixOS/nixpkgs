@@ -89,13 +89,13 @@ stdenv.mkDerivation (finalAttrs: {
     # archival: disallow path traversals (CVE-2023-39810)
     (fetchpatch {
       name = "CVE-2023-39810.patch";
-      url = "https://git.busybox.net/busybox/patch/?id=9a8796436b9b0641e13480811902ea2ac57881d3";
+      url = "https://github.com/vda-linux/busybox_mirror/commit/9a8796436b9b0641e13480811902ea2ac57881d3.patch";
       hash = "sha256-pOARbCwiucrkNITBoOMpLF3GniYvJiyBeBi2/Aw2JY8=";
     })
     # tar: strip unsafe hardlink components - GNU tar does the same
     (fetchpatch {
       name = "CVE-2026-26157_CVE-2026-26158.patch";
-      url = "https://git.busybox.net/busybox/patch/?id=3fb6b31c716669e12f75a2accd31bb7685b1a1cb";
+      url = "https://github.com/vda-linux/busybox_mirror/commit/3fb6b31c716669e12f75a2accd31bb7685b1a1cb.patch";
       excludes = [ "networking/httpd_ratelimit_cgi.c" ]; # New since release.
       hash = "sha256-Msm9sDZrVx7ofunnvnTS73SPKUUpR3Tv5xZ/wBd+rts=";
     })
