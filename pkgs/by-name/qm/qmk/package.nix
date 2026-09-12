@@ -1,19 +1,36 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchPypi,
-  pkgsCross,
   avrdude,
   bootloadhid,
   dfu-programmer,
   dfu-util,
   wb32-dfu-updater,
-  gcc-arm-embedded,
   gnumake,
   teensy-loader-cli,
+  binutils,
+  gcc,
+  libc,
+  # TESTING ONLY
+  pkgsCross,
 }:
-
-python3.pkgs.buildPythonApplication (finalAttrs: {
+let
+  runtimeBuildTools = [
+    avrdude
+    bootloadhid
+    dfu-programmer
+    dfu-util
+    wb32-dfu-updater
+    teensy-loader-cli
+    gnumake
+    binutils
+    binutils.bintools
+    gcc
+    libc
+  ];
+in
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "qmk";
   version = "1.2.0";
   pyproject = true;
@@ -23,42 +40,45 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-FkvRbExAGyt2XuTwF7z6gUGULd82KWHEy6GXXYyyikg=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  propagatedBuildInputs =
-    with python3.pkgs;
-    [
-      dotty-dict
-      hid
-      hjson
-      jsonschema
-      milc
-      pygments
-      pyserial
-      pyusb
-      pillow
-    ]
-    ++ [
-      # Binaries need to be in the path so this is in propagatedBuildInputs
-      avrdude
-      bootloadhid
-      dfu-programmer
-      dfu-util
-      wb32-dfu-updater
-      teensy-loader-cli
-      gcc-arm-embedded
-      gnumake
-      pkgsCross.avr.buildPackages.binutils
-      pkgsCross.avr.buildPackages.binutils.bintools
-      pkgsCross.avr.buildPackages.gcc
-      pkgsCross.avr.libc
-    ];
+  dependencies = with python3Packages; [
+    dotty-dict
+    hid
+    hjson
+    jsonschema
+    milc
+    pygments
+    pyserial
+    pyusb
+    pillow
+  ];
+
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath runtimeBuildTools}"
+  ];
 
   # no tests implemented
   doCheck = false;
 
+  passthru = {
+    # Passthru helper for getting an AVR-targetting QMK
+    avr = pkgsCross.buildPackages.qmk;
+
+    tests = {
+      # Cannot use finalAttrs.finalPackage here
+      # because it is not spliced, and this must be spliced.
+      avr = pkgsCross.avr.callPackage ./avr.nix { };
+    };
+  };
   meta = {
     homepage = "https://github.com/qmk/qmk_cli";
     description = "Program to help users work with QMK Firmware";
@@ -76,8 +96,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
         - qmk lint
       - ... and many more!
     '';
-    license = lib.licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.PLUS lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.RossSmyth ];
     mainProgram = "qmk";
   };
 })
