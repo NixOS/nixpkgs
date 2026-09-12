@@ -36,6 +36,20 @@ with lib;
         '';
       };
 
+      extraSettingsFiles = mkOption {
+        type = types.listOf types.path;
+        default = [ ];
+        example = [
+          "/run/xray-secrets/vless-inbounds.json"
+          "/run/xray-secrets/vless-outbounds.json"
+        ];
+        description = ''
+          Additional settings files used to configure xray.
+
+          See <https://www.v2fly.org/en_US/config/overview.html>.
+        '';
+      };
+
       settings = mkOption {
         type = types.nullOr (types.attrsOf types.unspecified);
         default = null;
@@ -79,7 +93,16 @@ with lib;
               ${cfg.package}/bin/xray -test -config $out
             '';
           };
-
+      allSettingsFiles = [
+        {
+          path = settingsFile;
+          credentialFile = "config.json";
+        }
+      ]
+      ++ (lib.imap0 (index: path: {
+        inherit path;
+        credentialFile = "config-extra-${toString index}.json";
+      }) cfg.extraSettingsFiles);
     in
     mkIf cfg.enable {
       assertions = [
@@ -94,9 +117,14 @@ with lib;
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
-          ExecStart = "${cfg.package}/bin/xray -config \"\${CREDENTIALS_DIRECTORY}\"/config.json";
+          ExecStart = lib.concatStringsSep " " (
+            [
+              "${cfg.package}/bin/xray"
+            ]
+            ++ (map (x: "-config \"\${CREDENTIALS_DIRECTORY}\"/${x.credentialFile}") allSettingsFiles)
+          );
           DynamicUser = true;
-          LoadCredential = "config.json:${settingsFile}";
+          LoadCredential = map (x: "${x.credentialFile}:${x.path}") allSettingsFiles;
           CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
           AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
           NoNewPrivileges = true;
