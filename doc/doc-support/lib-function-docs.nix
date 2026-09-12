@@ -37,6 +37,11 @@
       description = "list manipulation functions";
     }
     {
+      name = "linkedLists";
+      baseName = "linked-lists";
+      description = "linked list functions";
+    }
+    {
       name = "debug";
       description = "debugging functions";
     }
