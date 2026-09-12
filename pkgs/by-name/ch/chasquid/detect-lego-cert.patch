@@ -1,0 +1,63 @@
+From 89dc2a001f5b6eaddb80c3be43061588d2ec687f Mon Sep 17 00:00:00 2001
+From: ThinkChaos <ThinkChaos@users.noreply.github.com>
+Date: Wed, 13 Aug 2025 22:12:04 -0400
+Subject: [PATCH] chasquid: support `key.pem` private filename
+
+Lego, the ACME client used by the NixOS ACME module, names the private
+keys `key.pem`.
+Auto-detect that filename so Chasquid just works with Lego & NixOS ACME.
+
+https://go-acme.github.io/lego/
+https://wiki.nixos.org/wiki/ACME
+---
+ chasquid.go | 27 ++++++++++++++++++++++++---
+ 1 file changed, 24 insertions(+), 3 deletions(-)
+
+diff --git a/chasquid.go b/chasquid.go
+index 18040e2..7261d1b 100644
+--- a/chasquid.go
++++ b/chasquid.go
+@@ -269,18 +269,39 @@ func loadCert(name, dir string, s *smtpsrv.Server) {
+ 		log.Infof("    skipping: %v", err)
+ 		return
+ 	}
+-	keyPath := filepath.Join(dir, "privkey.pem")
+-	if _, err := os.Stat(keyPath); err != nil {
++
++	keyPath, err := findCertKey(dir)
++	if err != nil {
+ 		log.Infof("    skipping: %v", err)
+ 		return
+ 	}
+ 
+-	err := s.AddCerts(certPath, keyPath)
++	err = s.AddCerts(certPath, keyPath)
+ 	if err != nil {
+ 		log.Fatalf("    %v", err)
+ 	}
+ }
+ 
++func findCertKey(dir string) (string, error) {
++	keyFiles := []string{
++		"key.pem",
++		"privkey.pem",
++	}
++
++	var err error
++
++	for _, name := range keyFiles {
++		keyPath := filepath.Join(dir, name)
++
++		_, err = os.Stat(keyPath)
++		if err == nil {
++			return keyPath, nil
++		}
++	}
++
++	return "", err
++}
++
+ // Helper to load a single domain configuration into the server.
+ func loadDomain(name, dir string, s *smtpsrv.Server) {
+ 	s.AddDomain(name)
+
