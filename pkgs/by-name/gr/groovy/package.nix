@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "groovy";
-  version = "5.0.4";
+  version = "5.1.1";
 
   src = fetchurl {
     url = "mirror://apache/groovy/${finalAttrs.version}/distribution/apache-groovy-binary-${finalAttrs.version}.zip";
-    hash = "sha256-Xl6aRo1DRODI7gzWjGJ1HM9OX4+E162birxqAQFLn3k=";
+    hash = "sha256-UaWobGOKvGGCc/nzGK0tkG/NT+y9wbn6PJ9HyMPNdTs=";
   };
 
   nativeBuildInputs = [
