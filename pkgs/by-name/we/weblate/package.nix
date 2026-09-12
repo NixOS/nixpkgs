@@ -3,12 +3,6 @@
   python3,
   fetchFromGitHub,
   gettext,
-  pango,
-  harfbuzz,
-  librsvg,
-  gdk-pixbuf,
-  glib,
-  gobject-introspection,
   borgbackup,
   writeText,
   postgresqlTestHook,
@@ -34,23 +28,13 @@ let
     self = python;
     packageOverrides = _final: prev: {
       django = prev.django_6;
-      pygobject = prev.pygobject3;
     };
   };
   python3Packages = python.pkgs;
-
-  GI_TYPELIB_PATH = lib.makeSearchPathOutput "out" "lib/girepository-1.0" [
-    pango
-    harfbuzz
-    librsvg
-    gdk-pixbuf
-    glib
-    gobject-introspection
-  ];
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "weblate";
-  version = "2026.6.1";
+  version = "2026.9";
   pyproject = true;
 
   outputs = [
@@ -62,14 +46,20 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "WeblateOrg";
     repo = "weblate";
     tag = "weblate-${finalAttrs.version}";
-    hash = "sha256-7dhEkU2sVIjMPPR/0U2sMFXG6bl8s5WDvw8MyZZhqNE=";
+    hash = "sha256-CzbUI6g+AuvKQi2+KSZGXZ2TT8OcDZYLWgMVGpuOyP8=";
   };
 
   postPatch = ''
-    sed -i 's|/bin/true|true|g' weblate/addons/example_pre.py
-
     sed -i 's/"setuptools==.*"/"setuptools"/' pyproject.toml
     sed -i 's/"translate-toolkit==.*"/"translate-toolkit"/' pyproject.toml
+
+    substituteInPlace weblate/addons/example_pre.py \
+      --replace-fail "/bin/true" "true"
+
+    substituteInPlace weblate/vcs/git.py \
+      --replace-fail \
+        '_cmd: ClassVar[str] = "git"' \
+        '_cmd: ClassVar[str] = "${lib.getExe gitSVN}"'
   '';
 
   build-system = with python3Packages; [ setuptools ];
@@ -82,7 +72,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       staticSettings = writeText "static_settings.py" ''
         DEBUG = False
         STATIC_ROOT = os.environ["static"]
-        COMPRESS_OFFLINE = True
         # So we don't need postgres dependencies
         DATABASES = {}
       '';
@@ -93,7 +82,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       cat weblate/settings_example.py ${staticSettings} > weblate/settings_static.py
       ${manage} compilemessages
       ${manage} collectstatic --no-input
-      ${manage} compress
     '';
 
   # Upstream pins all dependencies, so their version constraints are mostly meaningless,
@@ -131,12 +119,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
       cryptography
       cssselect
       cyrtranslit
+      cysignals
       dateparser
       diff-match-patch
       disposable-email-domains
       django-appconf
       django-celery-beat
-      django-compressor
       django-cors-headers
       django-crispy-forms
       django-filter
@@ -154,8 +142,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
       gitpython
       hiredis
       html2text
+      httpx2
+      idna
       jsonschema
       lxml
+      matplotlib
       mistletoe
       nh3
       openpyxl
@@ -170,9 +161,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pillow
       pyaskalono
       pyasn1
-      pycairo
       pygments
-      pygobject
       pyicumessageformat
       pyjwt
       pyopenssl
@@ -192,17 +181,23 @@ python3Packages.buildPythonApplication (finalAttrs: {
       translate-toolkit
       translation-finder
       twisted
+      unicode-segmentation-rs
       unidecode
       urllib3
       user-agents
+      webauthn
       weblate-fonts
       weblate-language-data
       weblate-schemas
     ]
     ++ django.optional-dependencies.argon2
     ++ celery.optional-dependencies.redis
+    ++ django-filter.optional-dependencies.drf
     ++ drf-spectacular.optional-dependencies.sidecar
     ++ drf-standardized-errors.optional-dependencies.openapi
+    ++ httpx2.optional-dependencies.brotli
+    ++ httpx2.optional-dependencies.socks
+    ++ httpx2.optional-dependencies.zstd
     ++ translate-toolkit.optional-dependencies.chardet
     ++ translate-toolkit.optional-dependencies.fluent
     ++ translate-toolkit.optional-dependencies.ini
@@ -217,7 +212,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   # Commented entries are not packaged yet
   optional-dependencies = with python3Packages; {
-    amazon = [ boto3 ];
+    amazon = [
+      boto3
+      # django-ses
+    ];
+    asgi = [ granian ];
     # gelf = [ logging-gelf ];
     # gerrit = [ git-review ];
     google = [
@@ -241,13 +240,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     wsgi = [ granian ];
     # zxcvbn = [ django-zxcvbn-password-validator ];
   };
-
-  # We don't just use wrapGAppsNoGuiHook because we need to expose GI_TYPELIB_PATH
-  env = {
-    inherit GI_TYPELIB_PATH;
-  };
-
-  makeWrapperArgs = [ "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\"" ];
 
   nativeCheckInputs =
     with python3Packages;
@@ -333,9 +325,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "weblate/addons/tests.py::WebhooksAddonTest::test_webhook_signature"
     "weblate/addons/tests.py::WebhooksAddonTest::test_webhook_signature_prefix"
 
+
     # Tries to resolve DNS
     "weblate/api/tests.py::ProjectAPITest::test_install_machinery"
     "weblate/addons/tests.py::WebhooksAddonTest::test_form"
+    "weblate/trans/tests/test_component.py::ComponentValidationTest::test_github_app_clears_locked_push_fields"
+    "weblate/trans/tests/test_create.py::CreateTest::test_create_component_github_app_link_survives_discovery"
+    "weblate/trans/tests/test_create.py::CreateTest::test_create_component_existing_github_app_links_repository"
 
     # djangosaml2idp2 is not packaged yet
     "weblate/utils/tests/test_djangosaml2idp.py"
@@ -347,7 +343,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   passthru = {
     inherit python;
     # We need to expose this so weblate can work outside of calling its bin output
-    inherit GI_TYPELIB_PATH;
     tests = {
       inherit (nixosTests) weblate;
     };

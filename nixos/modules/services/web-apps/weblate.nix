@@ -12,22 +12,28 @@ let
   cacheDir = "${dataDir}/cache";
   settingsDir = "${dataDir}/settings";
 
-  finalPackage = cfg.package.overridePythonAttrs (old: {
-    # We only support the PostgreSQL backend in this module
-    dependencies = old.dependencies ++ cfg.package.optional-dependencies.postgres;
-    # Use a settings module in dataDir, to avoid having to rebuild the package
-    # when user changes settings.
-    makeWrapperArgs = (old.makeWrapperArgs or [ ]) ++ [
-      "--set PYTHONPATH  \"${settingsDir}\""
-      "--set DJANGO_SETTINGS_MODULE \"settings\""
-    ];
-  });
+  finalPackage = cfg.package.python.pkgs.toPythonModule (
+    cfg.package.overridePythonAttrs (old: {
+      # We only support the PostgreSQL backend in this module
+      dependencies = old.dependencies ++ cfg.package.optional-dependencies.postgres;
+      # Use a settings module in dataDir, to avoid having to rebuild the package
+      # when user changes settings.
+      makeWrapperArgs = (old.makeWrapperArgs or [ ]) ++ [
+        "--set PYTHONPATH  \"${settingsDir}\""
+        "--set DJANGO_SETTINGS_MODULE \"settings\""
+      ];
+    })
+  );
   inherit (finalPackage) python;
 
   pythonEnv = python.buildEnv.override {
     extraLibs = with python.pkgs; [
-      (toPythonModule finalPackage)
+      finalPackage
       celery
+      (gunicorn.overridePythonAttrs (old: {
+        # Allows Gunicorn to set a meaningful process name
+        dependencies = (old.dependencies or [ ]) ++ old.optional-dependencies.setproctitle;
+      }))
     ];
   };
 
@@ -44,8 +50,6 @@ let
     CACHE_DIR = f"{DATA_DIR}/cache"
     STATIC_ROOT = "${finalPackage.static}"
     MEDIA_ROOT = "/var/lib/weblate/media"
-    COMPRESS_ROOT = "${finalPackage.static}"
-    COMPRESS_OFFLINE = True
     DEBUG = False
 
     with open("${cfg.djangoSecretKeyFile}") as f:
@@ -127,8 +131,6 @@ let
   environment = {
     PYTHONPATH = "${settingsDir}:${pythonEnv}/${python.sitePackages}/";
     DJANGO_SETTINGS_MODULE = "settings";
-    # We run Weblate through gunicorn, so we can't utilise the env var set in the wrapper.
-    inherit (finalPackage) GI_TYPELIB_PATH;
   };
 
   # Packages needed at runtime
@@ -378,20 +380,13 @@ in
       serviceConfig = {
         Type = "notify";
         NotifyAccess = "all";
-        ExecStart =
-          let
-            gunicorn = python.pkgs.gunicorn.overridePythonAttrs (old: {
-              # Allows Gunicorn to set a meaningful process name
-              dependencies = (old.dependencies or [ ]) ++ old.optional-dependencies.setproctitle;
-            });
-          in
-          ''
-            ${lib.getExe gunicorn} \
-              --name=weblate \
-              --bind='unix:///run/weblate.socket' \
-              --preload \
-              weblate.wsgi
-          '';
+        ExecStart = ''
+          ${lib.getExe' pythonEnv "gunicorn"} \
+            --name=weblate \
+            --bind='unix:///run/weblate.socket' \
+            --preload \
+            weblate.wsgi
+        '';
         ExecReload = "${lib.getExe' pkgs.coreutils "kill"} -s HUP $MAINPID";
         KillMode = "mixed";
         PrivateTmp = true;
