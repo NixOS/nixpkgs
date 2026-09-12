@@ -7,7 +7,9 @@
   perl,
   pkg-config,
   vala,
-  xfce4-dev-tools,
+  meson,
+  ninja,
+  python3,
   wrapGAppsNoGuiHook,
   libxfce4util,
   glib,
@@ -20,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfconf";
-  version = "4.20.0";
+  version = "4.21.2";
 
   outputs = [
     "out"
@@ -32,14 +34,16 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "xfce";
     repo = "xfconf";
     tag = "xfconf-${finalAttrs.version}";
-    hash = "sha256-U+Sk7ubBr1ZD1GLQXlxrx0NQdhV/WpVBbnLcc94Tjcw=";
+    hash = "sha256-2WB392mViHRbi9FclnU1A+AW+iPGSpdWZVU9oBOvqlg=";
   };
 
   nativeBuildInputs = [
     gettext
     perl
     pkg-config
-    xfce4-dev-tools
+    meson
+    ninja
+    python3
     wrapGAppsNoGuiHook
   ]
   ++ lib.optionals withIntrospection [
@@ -51,8 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [ glib ];
 
-  configureFlags = [ "--enable-maintainer-mode" ];
   enableParallelBuilding = true;
+
+  postPatch = ''
+    patchShebangs xdt-gen-visibility
+  '';
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "xfconf-";
