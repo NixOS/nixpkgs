@@ -479,6 +479,10 @@ in
       See https://www.isc.org/blogs/isc-dhcp-eol/ for details.
       Please switch to a different implementation like kea or dnsmasq.
     '')
+    (lib.mkRemovedOptionModule [ "services" "go-neb" ] ''
+      The Go-NEB project was discontinued by Matrix.org and archived in June
+      2023. Use matrix-hookshot or another maintained Matrix bot instead.
+    '')
     (mkRemovedOptionModule [ "services" "gsignond" ] ''
       The corresponding package was unmaintained, abandoned upstream, used outdated library and thus removed from nixpkgs.
     '')
