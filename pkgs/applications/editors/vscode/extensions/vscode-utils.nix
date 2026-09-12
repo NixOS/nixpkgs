@@ -8,7 +8,6 @@
   buildPackages,
   unzip,
   makeSetupHook,
-  writeScript,
   jq,
   vscode-extension-update-script,
 }:
@@ -24,6 +23,7 @@ let
     constructDrv = stdenv.mkDerivation;
     excludeDrvArgNames = [
       "vscodeExtUniqueId"
+      "executableConfig"
     ];
     extendDrvArgs =
       finalAttrs:
@@ -34,6 +34,7 @@ let
         vscodeExtPublisher,
         vscodeExtName,
         vscodeExtUniqueId,
+        executableConfig ? { },
         configurePhase ? ''
           runHook preConfigure
           runHook postConfigure
@@ -87,6 +88,34 @@ let
 
             runHook postInstall
           '';
+
+        postInstall =
+          let
+            jqExprs = lib.concatMapAttrsStringSep "| " (
+              executableConfigKey:
+              {
+                package,
+                extraJqExpr ? "",
+              }:
+              # https://code.visualstudio.com/api/references/contribution-points
+              ''
+                .contributes."configuration.properties"."${executableConfigKey}"${extraJqExpr}.default = "${
+                  if lib.isDerivation package then lib.getExe package else package
+                }"
+              ''
+            ) executableConfig;
+            original = args.postInstall or "";
+          in
+          if executableConfig == { } then
+            original
+          else
+            original
+            + ''
+              cd "$out/$installPrefix"
+              ${lib.getExe buildPackages.jq} -e '
+                ${jqExprs}' package.json |
+              ${lib.getExe' buildPackages.moreutils "sponge"} package.json
+            '';
       };
   };
 
@@ -98,6 +127,7 @@ let
     excludeDrvArgNames = [
       "mktplcRef"
       "vsix"
+      "executableConfig"
     ];
     extendDrvArgs =
       finalAttrs:
@@ -106,6 +136,7 @@ let
         src ? null,
         vsix ? null,
         mktplcRef,
+        executableConfig ? { },
         ...
       }:
       assert "" == name;
@@ -117,6 +148,7 @@ let
         vscodeExtPublisher = mktplcRef.publisher;
         vscodeExtName = mktplcRef.name;
         vscodeExtUniqueId = "${mktplcRef.publisher}.${mktplcRef.name}";
+        inherit executableConfig;
       };
   };
 
