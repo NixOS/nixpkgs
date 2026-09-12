@@ -106,21 +106,28 @@ def make_command(args: list) -> str:
     return " ".join(map(shlex.quote, (map(str, args))))
 
 
+_DEFAULT_RETRY_TIMEOUT = dt.timedelta(minutes=15)
+
+
 def retry(
-    fn: Callable,
-    timeout_seconds: int | dt.timedelta | None = None,
-    timeout: dt.timedelta | None = None,
+    fn: Callable[[float | None], bool],
+    timeout_seconds: Duration | None = None,
+    timeout: dt.timedelta | None = _DEFAULT_RETRY_TIMEOUT,
 ) -> None:
     """Call the given function repeatedly, with a one second interval between
     retries, until it returns True or a timeout is reached.
 
-    Note that the timeout shown will include the time of the last attempted run.
-
     Has a default timeout of 15 minutes which can be modified.
     The ``timeout_seconds`` argument is deprecated. Use ``timeout`` instead.
+
+    The function receives the time remaining, or None for an unbounded retry.
+    The timeout is checked between calls, so a call which started before the
+    deadline may finish after it.
+    A timeout less than or equal to zero makes no call.
+    Passing ``timeout=None`` retries indefinitely.
     """
     if timeout_seconds is not None:
-        if timeout is not None:
+        if timeout is not _DEFAULT_RETRY_TIMEOUT:
             raise TypeError(
                 "retry() got both 'timeout' and 'timeout_seconds' arguments. Pass only 'timeout'"
             )
@@ -130,23 +137,20 @@ def retry(
             )
         timeout = as_timedelta(timeout_seconds)
 
-    if timeout is None:
-        timeout = dt.timedelta(minutes=15)
     start_time = time.monotonic()
+    deadline = float("inf") if timeout is None else start_time + timeout.total_seconds()
 
-    def elapsed() -> dt.timedelta:
-        return dt.timedelta(seconds=time.monotonic() - start_time)
-
-    while elapsed() < timeout:
-        if fn(False):
+    while (remaining := deadline - time.monotonic()) > 0:
+        if fn(None if timeout is None else remaining):
             return
-        time.sleep(1)
+        if (remaining := deadline - time.monotonic()) > 0:
+            time.sleep(min(1, remaining))
 
-    if not fn(True):
-        raise RequestedAssertionFailed(
-            f"action timed out after {elapsed().total_seconds():.2f} seconds "
-            f"(timeout={timeout.total_seconds()})"
-        )
+    elapsed = time.monotonic() - start_time
+    timeout_display = None if timeout is None else timeout.total_seconds()
+    raise RequestedAssertionFailed(
+        f"action timed out after {elapsed:.2f} seconds (timeout={timeout_display})"
+    )
 
 
 class QemuStartCommand:
@@ -382,7 +386,7 @@ class BaseMachine(ABC):
         """
         _warn_if_numeric_duration(timeout, "wait_for_unit")
 
-        def check_active(_last_try: bool) -> bool:
+        def check_active(_timeout: float | None) -> bool:
             state = self.get_unit_property(unit, "ActiveState", user)
             if state == "failed":
                 raise RequestedAssertionFailed(f'unit "{unit}" reached state "{state}"')
@@ -532,7 +536,7 @@ class BaseMachine(ABC):
         _warn_if_numeric_duration(timeout, "wait_until_succeeds")
         output = ""
 
-        def check_success(_last_try: bool) -> bool:
+        def check_success(_timeout: float | None) -> bool:
             nonlocal output
             status, output = self.execute(command, timeout=timeout)
             return status == 0
@@ -550,7 +554,7 @@ class BaseMachine(ABC):
         _warn_if_numeric_duration(timeout, "wait_until_fails")
         output = ""
 
-        def check_failure(_last_try: bool) -> bool:
+        def check_failure(_timeout: float | None) -> bool:
             nonlocal output
             status, output = self.execute(command, timeout=timeout)
             return status != 0
@@ -589,7 +593,7 @@ class BaseMachine(ABC):
         """
         _warn_if_numeric_duration(timeout, "wait_for_file")
 
-        def check_file(_last_try: bool) -> bool:
+        def check_file(_timeout: float | None) -> bool:
             status, _ = self.execute(f"test -e {filename}")
             return status == 0
 
@@ -608,7 +612,7 @@ class BaseMachine(ABC):
         """
         _warn_if_numeric_duration(timeout, "wait_for_open_port")
 
-        def port_is_open(_last_try: bool) -> bool:
+        def port_is_open(_timeout: float | None) -> bool:
             status, _ = self.execute(f"nc -z {addr} {port}")
             return status == 0
 
@@ -632,7 +636,7 @@ class BaseMachine(ABC):
             "-uU" if is_datagram else "-U",
         ]
 
-        def socket_is_open(_last_try: bool) -> bool:
+        def socket_is_open(_timeout: float | None) -> bool:
             status, _ = self.execute(f"nc {' '.join(nc_flags)} {addr}")
             return status == 0
 
@@ -653,7 +657,7 @@ class BaseMachine(ABC):
         """
         _warn_if_numeric_duration(timeout, "wait_for_closed_port")
 
-        def port_is_closed(_last_try: bool) -> bool:
+        def port_is_closed(_timeout: float | None) -> bool:
             status, _ = self.execute(f"nc -z {addr} {port}")
             return status != 0
 
@@ -956,18 +960,22 @@ class QemuMachine(BaseMachine):
         """
         _warn_if_numeric_duration(timeout, "wait_until_tty_matches")
         matcher = re.compile(regexp)
+        last_text = ""
 
-        def tty_matches(last_try: bool) -> bool:
-            text = self.get_tty_text(tty)
-            if last_try:
-                self.log(
-                    f"Last chance to match /{regexp}/ on TTY{tty}, "
-                    f"which currently contains: {text}"
-                )
-            return len(matcher.findall(text)) > 0
+        def tty_matches(_timeout: float | None) -> bool:
+            nonlocal last_text
+            last_text = self.get_tty_text(tty)
+            return len(matcher.findall(last_text)) > 0
 
         with self.nested(f"waiting for {regexp} to appear on tty {tty}"):
-            retry(tty_matches, as_timedelta(timeout))
+            try:
+                retry(tty_matches, as_timedelta(timeout))
+            except RequestedAssertionFailed:
+                self.log(
+                    f"Timed out matching /{regexp}/ on TTY{tty}. "
+                    f"The last observed contents were: {last_text}"
+                )
+                raise
 
     def dump_tty_contents(self, tty: str) -> None:
         """Debugging: Dump the contents of the TTY<n>"""
@@ -1129,7 +1137,7 @@ class QemuMachine(BaseMachine):
         """
         _warn_if_numeric_duration(timeout, "wait_for_file")
 
-        def check_file(_last_try: bool) -> bool:
+        def check_file(_timeout: float | None) -> bool:
             status, _ = self.execute(f"test -e {filename}")
             return status == 0
 
@@ -1220,7 +1228,7 @@ class QemuMachine(BaseMachine):
                         f"Cannot convert screenshot (pnmtopng returned code {ret.returncode})"
                     )
 
-    def get_screen_text_variants(self) -> list[str]:
+    def get_screen_text_variants(self, timeout: Duration | None = None) -> list[str]:
         """
         Return a list of different interpretations of what is currently
         visible on the machine's screen using optical character
@@ -1228,32 +1236,58 @@ class QemuMachine(BaseMachine):
         specified and is subject to change, but if no exception is raised at
         least one will be returned.
 
+        If timeout is set, preprocessing and all OCR variants share that time
+        budget. A timed-out variant produces an empty string.
+
         ::: {.note}
         This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
         :::
         """
+        _warn_if_numeric_duration(timeout, "get_screen_text_variants")
+        timeout_seconds = None if timeout is None else as_seconds(timeout)
+        start_time = time.monotonic()
         with self._managed_screenshot() as screenshot_path:
-            return perform_ocr_variants_on_screenshot(screenshot_path)
+            remaining = (
+                None
+                if timeout_seconds is None
+                else max(0, timeout_seconds - (time.monotonic() - start_time))
+            )
+            return perform_ocr_variants_on_screenshot(
+                screenshot_path, timeout=remaining
+            )
 
-    def get_screen_text(self) -> str:
+    def get_screen_text(self, timeout: Duration | None = None) -> str:
         """
         Return a textual representation of what is currently visible on the
         machine's screen using optical character recognition.
 
+        If timeout is set, the OCR operation is limited to that many seconds
+        and returns an empty string when it times out.
+
         ::: {.note}
         This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
         :::
         """
+        _warn_if_numeric_duration(timeout, "get_screen_text")
+        timeout_seconds = None if timeout is None else as_seconds(timeout)
+        start_time = time.monotonic()
         with self._managed_screenshot() as screenshot_path:
-            return perform_ocr_on_screenshot(screenshot_path)
+            remaining = (
+                None
+                if timeout_seconds is None
+                else max(0, timeout_seconds - (time.monotonic() - start_time))
+            )
+            return perform_ocr_on_screenshot(screenshot_path, remaining)
 
     def wait_for_text(
-        self, regex: str, timeout: Duration = dt.timedelta(minutes=15)
+        self, regex: str, timeout: Duration | None = dt.timedelta(minutes=15)
     ) -> None:
         """
         Wait until the supplied regular expressions matches the textual
         contents of the screen by using optical character recognition (see
         `get_screen_text` and `get_screen_text_variants`).
+
+        A timeout of None waits indefinitely.
 
         ::: {.note}
         This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
@@ -1261,19 +1295,33 @@ class QemuMachine(BaseMachine):
         """
         _warn_if_numeric_duration(timeout, "wait_for_text")
 
-        def screen_matches(last_try: bool) -> bool:
-            variants = self.get_screen_text_variants()
-            for text in variants:
+        last_variants: list[str] = []
+
+        def screen_matches(attempt_timeout: float | None) -> bool:
+            nonlocal last_variants
+            ocr_timeout = (
+                None
+                if attempt_timeout is None
+                else dt.timedelta(seconds=attempt_timeout)
+            )
+            last_variants = self.get_screen_text_variants(ocr_timeout)
+            for text in last_variants:
                 if re.search(regex, text) is not None:
                     return True
-
-            if last_try:
-                self.log(f"Last OCR attempt failed. Text was: {variants}")
 
             return False
 
         with self.nested(f"waiting for {regex} to appear on screen"):
-            retry(screen_matches, as_timedelta(timeout))
+            try:
+                retry(
+                    screen_matches,
+                    timeout=None if timeout is None else as_timedelta(timeout),
+                )
+            except RequestedAssertionFailed:
+                self.log(
+                    f"OCR timed out. Text from the last attempt was: {last_variants}"
+                )
+                raise
 
     def wait_for_console_text(
         self, regex: str, timeout: Duration | None = None
@@ -1290,7 +1338,7 @@ class QemuMachine(BaseMachine):
         # to match multiline regexes.
         console = io.StringIO()
 
-        def console_matches(_last_try: bool, block: bool = False) -> bool:
+        def console_matches(_timeout: float | None, block: bool = False) -> bool:
             nonlocal console
             try:
                 while True:
@@ -1308,7 +1356,7 @@ class QemuMachine(BaseMachine):
             if timeout is not None:
                 retry(console_matches, as_timedelta(timeout))
             else:
-                console_matches(False, block=True)
+                console_matches(None, block=True)
 
     def get_console_log(self) -> str:
         """
@@ -1471,7 +1519,7 @@ class QemuMachine(BaseMachine):
         """
         _warn_if_numeric_duration(timeout, "wait_for_x")
 
-        def check_x(_last_try: bool) -> bool:
+        def check_x(_timeout: float | None) -> bool:
             cmd = (
                 "journalctl -b SYSLOG_IDENTIFIER=systemd | "
                 + 'grep "Reached target Current graphical"'
@@ -1499,19 +1547,23 @@ class QemuMachine(BaseMachine):
         """
         _warn_if_numeric_duration(timeout, "wait_for_window")
         pattern = re.compile(regexp)
+        last_names: list[str] = []
 
-        def window_is_visible(last_try: bool) -> bool:
-            names = self.get_window_names()
-            if last_try:
-                self.log(
-                    f"Last chance to match {regexp} on the window list,"
-                    + " which currently contains: "
-                    + ", ".join(names)
-                )
-            return any(pattern.search(name) for name in names)
+        def window_is_visible(_timeout: float | None) -> bool:
+            nonlocal last_names
+            last_names = self.get_window_names()
+            return any(pattern.search(name) for name in last_names)
 
         with self.nested("waiting for a window to appear"):
-            retry(window_is_visible, as_timedelta(timeout))
+            try:
+                retry(window_is_visible, as_timedelta(timeout))
+            except RequestedAssertionFailed:
+                self.log(
+                    f"Timed out matching {regexp} on the window list. "
+                    + "The last observed window list was: "
+                    + ", ".join(last_names)
+                )
+                raise
 
     def forward_port(self, host_port: int = 8080, guest_port: int = 80) -> None:
         """

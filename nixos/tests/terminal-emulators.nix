@@ -196,7 +196,7 @@ mapAttrs (
           import subprocess
 
 
-          def check_for_pink(final=False) -> bool:
+          def check_for_pink(_remaining: float | None = None) -> bool:
               with tempfile.NamedTemporaryFile() as tmpin:
                   machine.send_monitor_command("screendump {}".format(tmpin.name))
 

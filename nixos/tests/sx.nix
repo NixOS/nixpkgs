@@ -46,7 +46,7 @@
       machine.wait_for_file(xauthority)
       machine.succeed(f"xauth merge {xauthority}")
 
-      def icewm_is_visible(_last_try: bool) -> bool:
+      def icewm_is_visible(_remaining: float | None) -> bool:
           # sx will set DISPLAY as the TTY number we started, in this case
           # TTY1:
           # https://github.com/Earnestly/sx/blob/master/sx#L41.

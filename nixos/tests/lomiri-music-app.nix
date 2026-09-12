@@ -106,8 +106,8 @@ in
     startColor: str = "${ocrStartColor}"
 
     # Based on terminal-emulators.nix' check_for_pink
-    def check_for_color(color: str) -> Callable[[bool], bool]:
-        def check_for_color_retry(final=False) -> bool:
+    def check_for_color(color: str) -> Callable[[float | None], bool]:
+        def check_for_color_retry(_remaining: float | None) -> bool:
             with tempfile.NamedTemporaryFile() as tmpin:
                 machine.send_monitor_command("screendump {}".format(tmpin.name))
 
@@ -160,7 +160,7 @@ in
 
         # Ensure pause colours isn't present already
         assert (
-            check_for_color(pauseColor)(True) == False
+            check_for_color(pauseColor)(None) == False
         ), "pauseColor {} was present on the screen before we selected anything!".format(pauseColor)
 
         machine.succeed("xdotool mousemove 25 120 click 1") # Select the track
@@ -173,7 +173,7 @@ in
 
         # Ensure play colours isn't present already
         assert (
-            check_for_color(startColor)(True) == False
+            check_for_color(startColor)(None) == False
         ), "startColor {} was present on the screen before we were expecting it to be!".format(startColor)
 
         machine.succeed("xdotool mousemove 860 480 click 1") # Pause track (only works if app can actually decode the file)
