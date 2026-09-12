@@ -4538,6 +4538,11 @@
       { fingerprint = "1EBC648C64D6045463013B3EB7EFFC271D55DB8A"; }
     ];
   };
+  cabbagehao = {
+    github = "cabbagehao";
+    githubId = 8425720;
+    name = "Chris Fox";
+  };
   cablehead = {
     email = "andy@thecablelounge.com";
     github = "cablehead";
