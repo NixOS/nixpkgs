@@ -140,7 +140,15 @@ stdenv.mkDerivation (finalAttrs: {
       completion, shell functions (with autoloading), a history mechanism, and
       a host of other features.
     '';
-    license = lib.licenses.mit-modern;
+    license = [
+      lib.licenses.mit-modern
+      # The upstream package includes some non-MIT-licensed third-party
+      # completion scripts, so we list those licenses here.
+      # Some of these scripts may be removed from future zsh releases:
+      # see https://www.zsh.org/mla/workers/2026/msg00725.html
+      lib.licenses.gpl2Only # _osc, _qdbus, _zypper
+      lib.licenses.gpl2Plus # _darcs
+    ];
     homepage = "https://www.zsh.org/";
     maintainers = with lib.maintainers; [
       pSub
