@@ -5,7 +5,37 @@ npmConfigHook() {
 
     # Use npm patches in the nodejs package
     export NIX_NODEJS_BUILDNPMPACKAGE=1
+
+    # Git dependencies with install scripts are prepared by a nested npm
+    # process (see node-npm-build-npm-package-logic.patch), which expects these
+    # from its environment. With `__structuredAttrs = true`, derivation
+    # attributes are shell variables instead of environment variables, so they
+    # need to be exported explicitly. Note that this exports them for every
+    # child process of the build, not just for npm; `prefetchNpmDeps` below has
+    # always been like this.
+    export stdenv
+    export forceGitDeps
     export prefetchNpmDeps="@prefetchNpmDeps@"
+
+    local -a nixNpmFlags=()
+    local -a nixNpmInstallFlags=()
+    local -a nixNpmRebuildFlags=()
+    concatTo nixNpmFlags npmFlags npmFlagsArray
+    concatTo nixNpmInstallFlags npmInstallFlags npmInstallFlagsArray
+    concatTo nixNpmRebuildFlags npmRebuildFlags npmRebuildFlagsArray
+
+    # The nested npm process needs these flags as well, but an environment
+    # variable can not hold a list. Pass them as a quoted string, which the
+    # patch turns back into an array with `eval`. `[*]` joins on the first
+    # character of IFS, so make sure that it is a space.
+    #
+    # This is also why the lists above are kept apart instead of being
+    # concatenated into one array per npm invocation, like the way the other
+    # hooks do.
+    local IFS=$' \t\n'
+    export NIX_NPM_FLAGS="${nixNpmFlags[*]@Q}"
+    export NIX_NPM_INSTALL_FLAGS="${nixNpmInstallFlags[*]@Q}"
+    export NIX_NPM_REBUILD_FLAGS="${nixNpmRebuildFlags[*]@Q}"
 
     if [ -n "${npmRoot-}" ]; then
       pushd "$npmRoot"
@@ -122,7 +152,9 @@ npmConfigHook() {
 
     echo "Installing dependencies"
 
-    if ! npm ci --ignore-scripts $npmInstallFlags "${npmInstallFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}"; then
+    echoCmd 'npmConfigHook ci flags' "${nixNpmInstallFlags[@]}" "${nixNpmFlags[@]}"
+
+    if ! npm ci --ignore-scripts "${nixNpmInstallFlags[@]}" "${nixNpmFlags[@]}"; then
         echo
         echo "ERROR: npm failed to install dependencies"
         echo
@@ -138,7 +170,9 @@ npmConfigHook() {
 
     patchShebangs node_modules
 
-    npm rebuild $npmRebuildFlags "${npmRebuildFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}"
+    echoCmd 'npmConfigHook rebuild flags' "${nixNpmRebuildFlags[@]}" "${nixNpmFlags[@]}"
+
+    npm rebuild "${nixNpmRebuildFlags[@]}" "${nixNpmFlags[@]}"
 
     patchShebangs node_modules
 
