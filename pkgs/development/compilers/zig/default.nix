@@ -24,6 +24,9 @@ let
     "0.16.0" = {
       llvmPackages = llvmPackages_21;
       hash = "sha256-2sTMhaasyrKoBnyH/hQrNCbi0Vh6HekIrpE4XkyQulQ=";
+      patches = [
+        ./patches/0.16/Config.resolve-don-t-error-on-explicit-dynamic-linke.patch
+      ];
     };
   }
   // zigVersions;
@@ -33,6 +36,7 @@ let
       version,
       hash,
       llvmPackages,
+      patches ? [ ],
     }@args:
     callPackage ./generic.nix args;
 
