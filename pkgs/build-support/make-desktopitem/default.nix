@@ -129,6 +129,39 @@ lib.makeOverridable (
       else
         builtins.concatStringsSep ";" value;
 
+    # Translations, e.g. `Name[de]`. There is no argument for them, so
+    # `extraConfig` is the only way one reaches an item.
+    localizedFields = {
+      "Name" = "desktopName";
+      "GenericName" = "genericName";
+      "Comment" = "comment";
+      "Keywords" = "keywords";
+      "Icon" = "icon";
+    };
+
+    localized = lib.foldl' (
+      acc: key:
+      let
+        parts = lib.splitString "[" key;
+        name = lib.head parts;
+      in
+      if lib.length parts != 2 || !(localizedFields ? ${name}) then
+        acc
+      else
+        let
+          locale = lib.removeSuffix "]" (lib.elemAt parts 1);
+          field = localizedFields.${name};
+          value = extraConfig.${key};
+        in
+        acc
+        // {
+          ${locale} = (acc.${locale} or { }) // {
+            ${field} =
+              if field == "keywords" then lib.filter (item: item != "") (lib.splitString ";" value) else value;
+          };
+        }
+    ) { } (builtins.attrNames extraConfig);
+
     # The [Desktop Entry] section of the desktop file, as an attribute set.
     # Please keep in spec order.
     mainSection = {
@@ -203,5 +236,20 @@ lib.makeOverridable (
     destination = "${destination}/${name}.${extension}";
     text = builtins.concatStringsSep "\n" content;
     checkPhase = ''${buildPackages.desktop-file-utils}/bin/desktop-file-validate "$target"'';
+    # Read by `pkgs/top-level/desktop-entries.nix` for `packages.json`.
+    passthru.desktopEntry = {
+      inherit
+        type
+        desktopName
+        genericName
+        comment
+        icon
+        keywords
+        mimeTypes
+        categories
+        noDisplay
+        localized
+        ;
+    };
   }
 )
