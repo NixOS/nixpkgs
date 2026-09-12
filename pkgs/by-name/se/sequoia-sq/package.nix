@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sequoia-sq";
-  version = "1.4.0";
+  version = "1.4.0-pqc.1";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-sq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+6QVRp0zDJIIv23YlAI/cspHuGc+YcWdPfJZIOxQRW8=";
+    hash = "sha256-ep3il5In0ecyNWHvCo0yh4yL92VTy3/FligzKkY+SJQ=";
   };
 
-  cargoHash = "sha256-I6hPpRpILV+iU9erfVBQOXuICx4IvWvGyHWdep7jRm4=";
+  cargoHash = "sha256-NYUYQCKG4XWchvuEzzAD+R25Wk0YrHN4ISVtQnhPkcM=";
 
   strictDeps = true;
   __structuredAttrs = true;
