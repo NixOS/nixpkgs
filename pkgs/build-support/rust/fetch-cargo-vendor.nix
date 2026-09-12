@@ -39,12 +39,10 @@ let
     git-lfs = null;
   };
 
-  removedArgs = [
+  # Arguments not overwritten by `args`
+  priorityArgs = [
     "name"
-    "pname"
-    "version"
     "nativeBuildInputs"
-    "hash"
   ];
 
   fetchCargoVendorUtil = writers.writePython3Bin "fetch-cargo-vendor-util" {
@@ -61,18 +59,28 @@ let
   } (builtins.readFile ./fetch-cargo-vendor-util.py);
 in
 
-{
-  name ? if args ? pname && args ? version then "${args.pname}-${args.version}" else "cargo-deps",
-  hash ? (throw "fetchCargoVendor requires a `hash` value to be set for ${name}"),
-  nativeBuildInputs ? [ ],
-  ...
-}@args:
+lib.extendMkDerivation {
+  constructDrv = stdenvNoCC.mkDerivation;
 
-# TODO: add asserts about pname version and name
-
-let
-  vendorStaging = stdenvNoCC.mkDerivation (
+  extendDrvArgs =
+    finalAttrs:
     {
+      name ?
+        if finalAttrs ? pname && finalAttrs ? version then
+          "${finalAttrs.pname}-${finalAttrs.version}"
+        else
+          "cargo-deps",
+      hash ? (throw "fetchCargoVendor requires a `hash` value to be set for ${name}"),
+      nativeBuildInputs ? [ ],
+      ...
+    }@args:
+
+    # TODO: add asserts about pname version and name
+    {
+      inherit
+        hash
+        ;
+
       name = "${name}-vendor-staging";
 
       impureEnvVars = lib.fetchers.proxyImpureEnvVars;
@@ -102,22 +110,31 @@ let
       dontInstall = true;
       dontFixup = true;
 
-      outputHash = hash;
-      outputHashAlgo = if hash == "" then "sha256" else null;
+      outputHash = if finalAttrs.hash == "" then lib.fakeHash else finalAttrs.hash;
       outputHashMode = "recursive";
     }
-    // removeAttrs args removedArgs
-  );
-in
-runCommand "${name}-vendor"
-  {
-    inherit vendorStaging;
-    nativeBuildInputs = [
-      fetchCargoVendorUtil
-      cargo
-      replaceWorkspaceValues
-    ];
-  }
-  ''
-    fetch-cargo-vendor-util create-vendor "$vendorStaging" "$out"
-  ''
+    # Trick to avoid repetitive `{ <attrname> = args.<attrname> or ...; }`
+    // removeAttrs args priorityArgs;
+
+  transformDrv =
+    vendorStaging:
+    (runCommand "${lib.replaceString "-vendor-staging" "-vendor" vendorStaging.name}"
+      {
+        inherit vendorStaging;
+        nativeBuildInputs = [
+          fetchCargoVendorUtil
+          cargo
+          replaceWorkspaceValues
+        ];
+      }
+      ''
+        fetch-cargo-vendor-util create-vendor "$vendorStaging" "$out"
+      ''
+      # TODO(@ShamrockLee): Remove after converting to stdenvNoCC.mkDerivation
+    ).overrideAttrs
+      (
+        finalAttrs: previousAttrs: {
+          name = lib.replaceString "-vendor-staging" "-vendor" finalAttrs.vendorStaging.name;
+        }
+      );
+}
