@@ -16,6 +16,8 @@
   imagemagick,
   makeWrapper,
   vips,
+
+  wasm-bindgen-cli_0_2_125,
 }:
 let
   version = "1.7.27";
@@ -56,13 +58,19 @@ let
     hash = "sha256-iSqxANhb/DC/57Ltw4F9YKjTlJaAeZG3K4NrUN/+omA=";
   };
 
-  webApp = ente-web.overrideAttrs {
-    inherit version src;
-    npmDeps = webNpmDeps;
-    cargoDeps = webCargoDeps;
-
-    _ENTE_IS_DESKTOP = "1";
-  };
+  webApp =
+    (ente-web.override {
+      # This produces an eval error when we're out of sync with ente-web
+      wasm-bindgen-cli_0_2_125 = wasm-bindgen-cli_0_2_125;
+      extraBuildEnv = {
+        _ENTE_IS_DESKTOP = "1";
+      };
+    }).overrideAttrs
+      {
+        inherit version src;
+        npmDeps = webNpmDeps;
+        cargoDeps = webCargoDeps;
+      };
 in
 buildNpmPackage (finalAttrs: {
   pname = "ente-desktop";
