@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wasm-pack
   ];
 
-  buildInputs = [ rust-jemalloc-sys-unprefixed ];
+  buildInputs = [rust-jemalloc-sys-unprefixed];
 
   npmRoot = "frontend";
 
@@ -43,7 +43,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-VdOJOine6UQ/muVANoOiw5F3ECQ1OXPXqCuCoA3sLEA=";
   };
 
-  cargoHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+  cargoHash = "sha256-MqLGaP+4H7UP6vuoexAnTrkxo8345lckWI6wwluwZN4=";
+
+  postPatch = ''
+        substituteInPlace src/api_types/src/users.rs \
+          --replace-fail \
+            '#[cfg_attr(debug_assertions, derive(Serialize))]
+    #[serde(rename_all = "lowercase")]' \
+            '#[derive(Serialize)]
+    #[serde(rename_all = "lowercase")]'
+  '';
 
   preBuild = ''
     pushd src/wasm-modules
@@ -59,7 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = false;
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {};
   };
 
   meta = {
