@@ -263,6 +263,7 @@ setEnvPrefix() {
     val=$(escapeStringLiteral "$3")
     printf '%s' "set_env_prefix(\"$env\", \"$sep\", \"$val\");"
     assertValidEnvName "$1"
+    assertNoEmptySegment "--prefix" "$1" "$2" "$3"
 }
 
 # suffix ENV SEP VAL
@@ -273,6 +274,7 @@ setEnvSuffix() {
     val=$(escapeStringLiteral "$3")
     printf '%s' "set_env_suffix(\"$env\", \"$sep\", \"$val\");"
     assertValidEnvName "$1"
+    assertNoEmptySegment "--suffix" "$1" "$2" "$3"
 }
 
 # setEnv KEY VALUE
@@ -323,6 +325,14 @@ assertValidEnvName() {
         *=*) printf '\n%s\n' "#error Illegal environment variable name \`$1\` (cannot contain \`=\`)";;
         "")  printf '\n%s\n' "#error Environment variable name can't be empty.";;
     esac
+}
+
+assertNoEmptySegment() {
+    local flag="$1" env="$2" sep="$3" val="$4"
+    [ -n "$sep" ] || return 0
+    if [[ "$sep$val$sep" == *"$sep$sep"* ]]; then
+        printf '\n%s\n' "#error $flag $env would introduce an empty PATH-like segment (empty, or a leading/trailing/doubled \`$sep\`). This is interpreted as \"search the current directory\" by shells, execvp() and the dynamic linker, see https://github.com/NixOS/nixpkgs/security/advisories/GHSA-p7v3-pr2c-8584. Guard the value with e.g. lib.optionalString (list != [])."
+    fi
 }
 
 setSepSurroundCheck() {
