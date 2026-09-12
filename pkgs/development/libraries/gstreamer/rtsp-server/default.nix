@@ -2,12 +2,13 @@
   stdenv,
   lib,
   fetchurl,
+  testers,
+  directoryListingUpdater,
+  apple-sdk_gstreamer,
   meson,
   ninja,
   pkg-config,
   python3,
-  gettext,
-  gobject-introspection,
   gst-plugins-base,
   gst-plugins-bad,
   # only for passthru.gstreamerCpeParts
@@ -15,8 +16,11 @@
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
-  directoryListingUpdater,
-  apple-sdk_gstreamer,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  buildPackages,
+  gobject-introspection,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,10 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     meson
     ninja
-    gettext
-    gobject-introspection
     pkg-config
     python3
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
   ]
   ++ lib.optionals enableDocumentation [
     hotdoc
@@ -58,11 +63,13 @@ stdenv.mkDerivation (finalAttrs: {
     apple-sdk_gstreamer
   ];
 
-  mesonFlags = [
-    "-Dglib_debug=disabled" # cast checks should be disabled on stable releases
-    "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    (lib.mesonEnable "doc" enableDocumentation)
-  ];
+  mesonFlags = lib.mapAttrsToList lib.mesonEnable {
+    glib_debug = false; # cast checks should be disabled on stable releases
+    examples = false; # requires many dependencies and probably not useful for our users
+    doc = enableDocumentation;
+    tests = finalAttrs.finalPackage.doCheck;
+    introspection = withIntrospection;
+  };
 
   postPatch = ''
     patchShebangs \
@@ -75,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = directoryListingUpdater { odd-unstable = true; };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = {
@@ -83,9 +91,13 @@ stdenv.mkDerivation (finalAttrs: {
     longDescription = ''
       A library on top of GStreamer for building an RTSP server.
     '';
+    pkgConfigModules = [ "gstreamer-rtsp-server-1.0" ];
     license = lib.licenses.lgpl2Plus;
     identifiers.cpeParts = gstreamer.passthru.gstreamerCpeParts finalAttrs.version;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ bkchr ];
+    maintainers = with lib.maintainers; [
+      bkchr
+      tmarkus
+    ];
   };
 })
