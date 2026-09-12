@@ -1,28 +1,28 @@
 diff --git a/Makefile b/Makefile
-index 9e598ea..0776132 100644
+index db61eb2..dc0be31 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -1,6 +1,7 @@
- VERSION         := 0.12
+@@ -4,6 +4,7 @@ include $(_SRC)/Makefile.vars # AKMOD can be annoying so preventing his silent c
  DKMS_ROOT_PATH  := /usr/src/msi_ec-$(VERSION)
- KERNELRELEASE ?= $(shell uname -r)
+ 
+ KERNELRELEASE := $(shell uname -r)
 +KERNELDIR ?= /lib/modules/$(KERNELRELEASE)/build/
  
- ccflags-y := -std=gnu11 -Wno-declaration-after-statement
+ KMOD_DIR        := /lib/modules/$(KERNELRELEASE)/updates/drivers/platform/x86
  
-@@ -10,11 +11,14 @@ obj-m += msi-ec.o
+@@ -14,10 +15,13 @@ obj-m += $(MODNAME).o
  all: modules
  
  modules:
 -	@$(MAKE) -C /lib/modules/$(KERNELRELEASE)/build M=$(CURDIR) modules
 +	@$(MAKE) -C $(KERNELDIR) M=$(CURDIR) modules
- 
- clean:
- 	@$(MAKE) -C /lib/modules/$(KERNELRELEASE)/build M=$(CURDIR) clean
- 
++
 +modules_install:
 +	@$(MAKE) -C $(KERNELDIR) M=$(CURDIR) modules_install
-+
+ 
+ clean:
+-	@$(MAKE) -C /lib/modules/$(KERNELRELEASE)/build M=$(CURDIR) clean
++	@$(MAKE) -C $(KERNELDIR) M=$(CURDIR) clean
+ 
  load:
  	insmod msi-ec.ko
- 
