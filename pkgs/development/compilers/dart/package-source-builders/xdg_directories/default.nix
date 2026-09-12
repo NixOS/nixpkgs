@@ -11,8 +11,10 @@ stdenv.mkDerivation rec {
   inherit (src) passthru;
 
   postPatch = ''
+    pushd ${src.passthru.packageRoot}
     substituteInPlace ./lib/xdg_directories.dart \
       --replace-fail "'xdg-user-dir'," "'${xdg-user-dirs}/bin/xdg-user-dir',"
+    popd
   '';
 
   installPhase = ''

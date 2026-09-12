@@ -1,0 +1,4283 @@
+{
+  "packages": {
+    "_fe_analyzer_shared": {
+      "dependency": "transitive",
+      "description": {
+        "name": "_fe_analyzer_shared",
+        "sha256": "8d7ff3948166b8ec5da0fbb5962000926b8e02f2ed9b3e51d1738905fbd4c98d",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "93.0.0"
+    },
+    "adaptive_number": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "c3f06de08064acca1b04975abcd4c3977c0b5256",
+        "resolved-ref": "c3f06de08064acca1b04975abcd4c3977c0b5256",
+        "url": "https://github.com/lemoony/adaptive_number_dart"
+      },
+      "source": "git",
+      "version": "1.0.0"
+    },
+    "analyzer": {
+      "dependency": "transitive",
+      "description": {
+        "name": "analyzer",
+        "sha256": "de7148ed2fcec579b19f122c1800933dfa028f6d9fd38a152b04b1516cec120b",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "10.0.1"
+    },
+    "animate_do": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "94ca5c43abd93901fcd97b47102b6e5d37ce67ca",
+        "resolved-ref": "94ca5c43abd93901fcd97b47102b6e5d37ce67ca",
+        "url": "https://github.com/Klerith/animate_do_package"
+      },
+      "source": "git",
+      "version": "2.1.0"
+    },
+    "animated_reorderable_list": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "4a6810d0a912018fb0b193337f46973a478fcc4b",
+        "resolved-ref": "4a6810d0a912018fb0b193337f46973a478fcc4b",
+        "url": "https://github.com/canopas/animated_reorderable_list"
+      },
+      "source": "git",
+      "version": "1.3.0"
+    },
+    "another_flushbar": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "a334e8e2dfbe3d5e531b63f72164093aa399047b",
+        "resolved-ref": "a334e8e2dfbe3d5e531b63f72164093aa399047b",
+        "url": "https://github.com/ideployed/another-flushbar"
+      },
+      "source": "git",
+      "version": "1.12.32"
+    },
+    "ansicolor": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "35e67e6eb2da5e6d726fadfa90ccf437981c1e65",
+        "resolved-ref": "35e67e6eb2da5e6d726fadfa90ccf437981c1e65",
+        "url": "https://github.com/google/ansicolor-dart"
+      },
+      "source": "git",
+      "version": "2.0.3"
+    },
+    "archive": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "f01d6a340ffe24e0ef46fa682d1b6bcc7b7aef13",
+        "resolved-ref": "f01d6a340ffe24e0ef46fa682d1b6bcc7b7aef13",
+        "url": "https://github.com/brendan-duncan/archive"
+      },
+      "source": "git",
+      "version": "4.0.9"
+    },
+    "args": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/args",
+        "ref": "61e677100b06d56a1b3731ab1178ebf9102ecb1f",
+        "resolved-ref": "61e677100b06d56a1b3731ab1178ebf9102ecb1f",
+        "url": "https://github.com/dart-lang/core"
+      },
+      "source": "git",
+      "version": "2.7.0"
+    },
+    "asn1lib": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "1616ff662cd84301e029d1fa936acb8192a2b165",
+        "resolved-ref": "1616ff662cd84301e029d1fa936acb8192a2b165",
+        "url": "https://github.com/wstrange/asn1lib"
+      },
+      "source": "git",
+      "version": "1.6.5"
+    },
+    "async": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/async",
+        "ref": "158d80dc6d17c7b967e655e27a859cbc1c6aa71d",
+        "resolved-ref": "158d80dc6d17c7b967e655e27a859cbc1c6aa71d",
+        "url": "https://github.com/dart-lang/core"
+      },
+      "source": "git",
+      "version": "2.13.1"
+    },
+    "auto_size_text": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "2178f0821132636bc4f0dea1bc4d40a889d8249b",
+        "resolved-ref": "2178f0821132636bc4f0dea1bc4d40a889d8249b",
+        "url": "https://github.com/leisim/auto_size_text"
+      },
+      "source": "git",
+      "version": "3.0.0"
+    },
+    "awesome_dialog": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "c7923f15d1d22de5c9077fff0bab6f9cc6463540",
+        "resolved-ref": "c7923f15d1d22de5c9077fff0bab6f9cc6463540",
+        "url": "https://github.com/marcos930807/awesomeDialogs"
+      },
+      "source": "git",
+      "version": "3.2.1"
+    },
+    "base32": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "6ed989354aee7865ee74f3f1802268dd81bb234d",
+        "resolved-ref": "6ed989354aee7865ee74f3f1802268dd81bb234d",
+        "url": "https://github.com/Daegalus/dart-base32"
+      },
+      "source": "git",
+      "version": "2.1.3"
+    },
+    "base58check": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "240913d11885ee80506ff6f51033ddf527106086",
+        "resolved-ref": "240913d11885ee80506ff6f51033ddf527106086",
+        "url": "https://github.com/dartcoin/base58check"
+      },
+      "source": "git",
+      "version": "2.0.0"
+    },
+    "base_x": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "b434cc7890337af7c04004c681018a2f32689217",
+        "resolved-ref": "b434cc7890337af7c04004c681018a2f32689217",
+        "url": "https://github.com/litaoh/base-x"
+      },
+      "source": "git",
+      "version": "2.0.1"
+    },
+    "basic_utils": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "6a5034927857a08f3bdf5a177529e361179f6dab",
+        "resolved-ref": "6a5034927857a08f3bdf5a177529e361179f6dab",
+        "url": "https://github.com/Ephenodrom/Dart-Basic-Utils"
+      },
+      "source": "git",
+      "version": "5.7.0"
+    },
+    "bbqrdart": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "e867e3d0156d0b29858100f30adc2625b9dae586",
+        "resolved-ref": "e867e3d0156d0b29858100f30adc2625b9dae586",
+        "url": "https://github.com/mrcyjanek/bbqrdart"
+      },
+      "source": "git",
+      "version": "1.0.0"
+    },
+    "bech32": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "05755063b593aa6cca0a4820a318e0ce17de6192",
+        "resolved-ref": "05755063b593aa6cca0a4820a318e0ce17de6192",
+        "url": "https://github.com/cake-tech/bech32.git"
+      },
+      "source": "git",
+      "version": "0.2.2"
+    },
+    "bip32": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "b5c6a6e891b89f92529799b42af62b8a8af09eaf",
+        "resolved-ref": "b5c6a6e891b89f92529799b42af62b8a8af09eaf",
+        "url": "https://github.com/dart-bitcoin/bip32-dart"
+      },
+      "source": "git",
+      "version": "2.0.0"
+    },
+    "bip340": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "bbab1a01b6b6ab7c18f26294febb3bee38b24798",
+        "resolved-ref": "bbab1a01b6b6ab7c18f26294febb3bee38b24798",
+        "url": "https://github.com/fiatjaf/dart-bip340"
+      },
+      "source": "git",
+      "version": "0.2.0"
+    },
+    "bip39": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "3633daa2026b98c523ae9a091322be2903f7a8ab",
+        "resolved-ref": "3633daa2026b98c523ae9a091322be2903f7a8ab",
+        "url": "https://github.com/anicdh/bip39"
+      },
+      "source": "git",
+      "version": "1.0.6"
+    },
+    "bitbox": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "57b78afb85bd2c30d3cdb9f7884f3878a62be442",
+        "resolved-ref": "57b78afb85bd2c30d3cdb9f7884f3878a62be442",
+        "url": "https://github.com/cake-tech/bitbox-flutter.git"
+      },
+      "source": "git",
+      "version": "1.0.1"
+    },
+    "bitbox_flutter": {
+      "dependency": "direct main",
+      "description": {
+        "path": "scripts/bitbox_flutter",
+        "relative": true
+      },
+      "source": "path",
+      "version": "0.0.1"
+    },
+    "bitcoin_base": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "4e41f96f4838139895c65c3f49109d05af5d46aa",
+        "resolved-ref": "4e41f96f4838139895c65c3f49109d05af5d46aa",
+        "url": "https://github.com/cake-tech/bitcoin_base"
+      },
+      "source": "git",
+      "version": "4.7.0"
+    },
+    "bloc": {
+      "dependency": "direct main",
+      "description": {
+        "path": "packages/bloc",
+        "ref": "60892540c1faec3fd01cc8c8fea378a59cf42e3d",
+        "resolved-ref": "60892540c1faec3fd01cc8c8fea378a59cf42e3d",
+        "url": "https://github.com/felangel/bloc"
+      },
+      "source": "git",
+      "version": "9.2.1"
+    },
+    "bloc_concurrency": {
+      "dependency": "direct main",
+      "description": {
+        "path": "packages/bloc_concurrency",
+        "ref": "13dbe0ce078e7efaebb54b37489879daeb57459d",
+        "resolved-ref": "13dbe0ce078e7efaebb54b37489879daeb57459d",
+        "url": "https://github.com/felangel/bloc"
+      },
+      "source": "git",
+      "version": "0.3.0"
+    },
+    "blockchain_utils": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "59fdf29d72068e0522a96a8953ed7272833a9f57",
+        "resolved-ref": "59fdf29d72068e0522a96a8953ed7272833a9f57",
+        "url": "https://github.com/cake-tech/blockchain_utils"
+      },
+      "source": "git",
+      "version": "3.3.0"
+    },
+    "bluez": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "f02727e93b61585ea6c5a6a18ebf84b7374a71d3",
+        "resolved-ref": "f02727e93b61585ea6c5a6a18ebf84b7374a71d3",
+        "url": "https://github.com/canonical/bluez.dart"
+      },
+      "source": "git",
+      "version": "0.8.3"
+    },
+    "boolean_selector": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/boolean_selector",
+        "ref": "b1312b18df67b0be3101ca15c03dfd8d7c9383bb",
+        "resolved-ref": "b1312b18df67b0be3101ca15c03dfd8d7c9383bb",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "2.1.2"
+    },
+    "borsh_annotation": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/borsh_annotation",
+        "ref": "ab60e9d4c7d7271037597154ad2a835812054ed6",
+        "resolved-ref": "ab60e9d4c7d7271037597154ad2a835812054ed6",
+        "url": "https://github.com/espresso-cash/espresso-cash-public"
+      },
+      "source": "git",
+      "version": "0.3.2"
+    },
+    "breez_sdk_spark_flutter": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "5943a3e773203f21728f87f1c0779040db8f2c28",
+        "resolved-ref": "5943a3e773203f21728f87f1c0779040db8f2c28",
+        "url": "https://github.com/breez/breez-sdk-spark-flutter"
+      },
+      "source": "git",
+      "version": "0.23.0"
+    },
+    "bs58": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "637d7b4bef20ac4edb553ef20e40725c4a213736",
+        "resolved-ref": "637d7b4bef20ac4edb553ef20e40725c4a213736",
+        "url": "https://github.com/litaoh/base58"
+      },
+      "source": "git",
+      "version": "1.0.2"
+    },
+    "bs58check": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "1216b214e26332ccc4a3de4c9eac87de7fd47b5a",
+        "resolved-ref": "1216b214e26332ccc4a3de4c9eac87de7fd47b5a",
+        "url": "https://github.com/MrCyjaneK/bs58check"
+      },
+      "source": "git",
+      "version": "1.0.2"
+    },
+    "bubble": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "6a90afbbb8fee0dccfd7843248c74c1f8460e813",
+        "resolved-ref": "6a90afbbb8fee0dccfd7843248c74c1f8460e813",
+        "url": "https://github.com/vi-k/bubble"
+      },
+      "source": "git",
+      "version": "1.2.1"
+    },
+    "buffer": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "96be675b6f2bbca859a13da6c5f551ffd7eebc1c",
+        "resolved-ref": "96be675b6f2bbca859a13da6c5f551ffd7eebc1c",
+        "url": "https://github.com/isoos/buffer"
+      },
+      "source": "git",
+      "version": "1.2.3"
+    },
+    "build": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "build",
+        "ref": "565856b394c26a0d4c8cda88b69b6dcfaa2acd1f",
+        "resolved-ref": "565856b394c26a0d4c8cda88b69b6dcfaa2acd1f",
+        "url": "https://github.com/dart-lang/build"
+      },
+      "source": "git",
+      "version": "4.0.7"
+    },
+    "build_cli_annotations": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "build_cli_annotations",
+        "ref": "d01ba0ba11a73b4e541ff65508ae55842a8f887f",
+        "resolved-ref": "d01ba0ba11a73b4e541ff65508ae55842a8f887f",
+        "url": "https://github.com/kevmoo/build_cli"
+      },
+      "source": "git",
+      "version": "2.1.1"
+    },
+    "build_config": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "build_config",
+        "ref": "7d6c879a01d80056b3eae52f7fab2237103a7fe7",
+        "resolved-ref": "7d6c879a01d80056b3eae52f7fab2237103a7fe7",
+        "url": "https://github.com/dart-lang/build"
+      },
+      "source": "git",
+      "version": "1.3.2"
+    },
+    "build_daemon": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "build_daemon",
+        "ref": "f20f2a24e0e1259f6ee53c6828d7c396d5b23bbf",
+        "resolved-ref": "f20f2a24e0e1259f6ee53c6828d7c396d5b23bbf",
+        "url": "https://github.com/dart-lang/build"
+      },
+      "source": "git",
+      "version": "4.1.5"
+    },
+    "build_runner": {
+      "dependency": "direct dev",
+      "description": {
+        "path": "build_runner",
+        "ref": "565856b394c26a0d4c8cda88b69b6dcfaa2acd1f",
+        "resolved-ref": "565856b394c26a0d4c8cda88b69b6dcfaa2acd1f",
+        "url": "https://github.com/dart-lang/build"
+      },
+      "source": "git",
+      "version": "2.15.1"
+    },
+    "built_collection": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "8153cc41299a28e4426b22959f87dca0f7f8cd19",
+        "resolved-ref": "8153cc41299a28e4426b22959f87dca0f7f8cd19",
+        "url": "https://github.com/google/built_collection.dart"
+      },
+      "source": "git",
+      "version": "5.1.1"
+    },
+    "built_value": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "built_value",
+        "ref": "b66790e815350e8c569bfe723d5263925df5a46d",
+        "resolved-ref": "b66790e815350e8c569bfe723d5263925df5a46d",
+        "url": "https://github.com/google/built_value.dart"
+      },
+      "source": "git",
+      "version": "8.12.7"
+    },
+    "cake_backup": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "3aba867dcab6737f6707782f5db15d71f303db38",
+        "resolved-ref": "3aba867dcab6737f6707782f5db15d71f303db38",
+        "url": "https://github.com/cake-tech/cake_backup.git"
+      },
+      "source": "git",
+      "version": "1.0.0+1"
+    },
+    "characters": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/characters",
+        "ref": "b59ecf4ceebe6153e1c0166b7c9a7fdd9458a89d",
+        "resolved-ref": "b59ecf4ceebe6153e1c0166b7c9a7fdd9458a89d",
+        "url": "https://github.com/dart-lang/core"
+      },
+      "source": "git",
+      "version": "1.4.1"
+    },
+    "checked_yaml": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "checked_yaml",
+        "ref": "d30c2fdb0598d548c25705931531842957623fdd",
+        "resolved-ref": "d30c2fdb0598d548c25705931531842957623fdd",
+        "url": "https://github.com/google/json_serializable.dart"
+      },
+      "source": "git",
+      "version": "2.0.4"
+    },
+    "cli_config": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/cli_config",
+        "ref": "378790dd8cdaecd8cb48283de445f7cf80419cc0",
+        "resolved-ref": "378790dd8cdaecd8cb48283de445f7cf80419cc0",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "0.2.0"
+    },
+    "cli_util": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/cli_util",
+        "ref": "d7a7e2ebba2fdc25e78000a1af08508b60beb7fc",
+        "resolved-ref": "d7a7e2ebba2fdc25e78000a1af08508b60beb7fc",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "0.4.2"
+    },
+    "clock": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/clock",
+        "ref": "04f7512ab6d7d554e33abd124a41e2aeec97dcbd",
+        "resolved-ref": "04f7512ab6d7d554e33abd124a41e2aeec97dcbd",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "1.1.2"
+    },
+    "code_assets": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/code_assets",
+        "ref": "fca756b953bc94f109039dd553f0bc18de620338",
+        "resolved-ref": "fca756b953bc94f109039dd553f0bc18de620338",
+        "url": "https://github.com/dart-lang/native"
+      },
+      "source": "git",
+      "version": "1.2.1"
+    },
+    "code_builder": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/code_builder",
+        "ref": "125b9a9a5556fa88ecec26f649e1cddb1623aa2f",
+        "resolved-ref": "125b9a9a5556fa88ecec26f649e1cddb1623aa2f",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "4.11.1"
+    },
+    "collection": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/collection",
+        "ref": "dec28c1d477cd191e2af868579817b926b07d9f5",
+        "resolved-ref": "dec28c1d477cd191e2af868579817b926b07d9f5",
+        "url": "https://github.com/dart-lang/core"
+      },
+      "source": "git",
+      "version": "1.19.1"
+    },
+    "connectivity_plus": {
+      "dependency": "direct main",
+      "description": {
+        "path": "packages/connectivity_plus/connectivity_plus",
+        "ref": "9f03424b7916b195ec6a4bebe4cc1a310ba40d4a",
+        "resolved-ref": "9f03424b7916b195ec6a4bebe4cc1a310ba40d4a",
+        "url": "https://github.com/fluttercommunity/plus_plugins"
+      },
+      "source": "git",
+      "version": "6.1.5"
+    },
+    "connectivity_plus_platform_interface": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/connectivity_plus/connectivity_plus_platform_interface",
+        "ref": "c46ab89942b2be24aedf79555f247c566d99777f",
+        "resolved-ref": "c46ab89942b2be24aedf79555f247c566d99777f",
+        "url": "https://github.com/fluttercommunity/plus_plugins"
+      },
+      "source": "git",
+      "version": "2.1.0"
+    },
+    "console": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "f391b6d289490e1735566c63fe539d1c3fc40818",
+        "resolved-ref": "f391b6d289490e1735566c63fe539d1c3fc40818",
+        "url": "https://github.com/DirectMyFile/console.dart"
+      },
+      "source": "git",
+      "version": "4.1.0"
+    },
+    "convert": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/convert",
+        "ref": "16f396fcf87da1db940187db3564b3a490015678",
+        "resolved-ref": "16f396fcf87da1db940187db3564b3a490015678",
+        "url": "https://github.com/dart-lang/core"
+      },
+      "source": "git",
+      "version": "3.1.2"
+    },
+    "coverage": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/coverage",
+        "ref": "176ad7aea84d9fccc5c17795568ea2165a0414f9",
+        "resolved-ref": "176ad7aea84d9fccc5c17795568ea2165a0414f9",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "1.15.1"
+    },
+    "cross_file": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/cross_file",
+        "ref": "b967797f07f1e4fc4fb264f5c8e5181b1385d9d9",
+        "resolved-ref": "b967797f07f1e4fc4fb264f5c8e5181b1385d9d9",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "0.3.5+4"
+    },
+    "crypto": {
+      "dependency": "direct main",
+      "description": {
+        "path": "pkgs/crypto",
+        "ref": "e6c3810cdbbd6b483973f4685e950644114b495e",
+        "resolved-ref": "e6c3810cdbbd6b483973f4685e950644114b495e",
+        "url": "https://github.com/dart-lang/core"
+      },
+      "source": "git",
+      "version": "3.0.7"
+    },
+    "cryptography": {
+      "dependency": "direct main",
+      "description": {
+        "path": "cryptography",
+        "ref": "87f42fad6f7f120feb8e47854164016ceac3dfd0",
+        "resolved-ref": "87f42fad6f7f120feb8e47854164016ceac3dfd0",
+        "url": "https://github.com/dint-dev/cryptography"
+      },
+      "source": "git",
+      "version": "2.9.0"
+    },
+    "csslib": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/csslib",
+        "ref": "91a840b6bc02e5e4b57fb55a047267923b894c89",
+        "resolved-ref": "91a840b6bc02e5e4b57fb55a047267923b894c89",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "1.0.2"
+    },
+    "cupertino_icons": {
+      "dependency": "direct main",
+      "description": {
+        "path": "third_party/packages/cupertino_icons",
+        "ref": "f330175dbf168a7bf94a127c492e025b4cc0bfba",
+        "resolved-ref": "f330175dbf168a7bf94a127c492e025b4cc0bfba",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "1.0.9"
+    },
+    "cw_bitcoin": {
+      "dependency": "direct main",
+      "description": {
+        "path": "cw_bitcoin",
+        "relative": true
+      },
+      "source": "path",
+      "version": "0.0.1"
+    },
+    "cw_bitcoin_cash": {
+      "dependency": "direct main",
+      "description": {
+        "path": "cw_bitcoin_cash",
+        "relative": true
+      },
+      "source": "path",
+      "version": "0.0.1"
+    },
+    "cw_core": {
+      "dependency": "direct main",
+      "description": {
+        "path": "cw_core",
+        "relative": true
+      },
+      "source": "path",
+      "version": "0.0.1"
+    },
+    "cw_dogecoin": {
+      "dependency": "direct main",
+      "description": {
+        "path": "cw_dogecoin",
+        "relative": true
+      },
+      "source": "path",
+      "version": "0.0.1"
+    },
+    "cw_evm": {
+      "dependency": "direct main",
+      "description": {
+        "path": "cw_evm",
+        "relative": true
+      },
+      "source": "path",
+      "version": "0.0.1"
+    },
+    "cw_monero": {
+      "dependency": "direct main",
+      "description": {
+        "path": "cw_monero",
+        "relative": true
+      },
+      "source": "path",
+      "version": "0.0.1"
+    },
+    "cw_mweb": {
+      "dependency": "transitive",
+      "description": {
+        "path": "cw_mweb",
+        "relative": true
+      },
+      "source": "path",
+      "version": "0.0.1"
+    },
+    "cw_nano": {
+      "dependency": "direct main",
+      "description": {
+        "path": "cw_nano",
+        "relative": true
+      },
+      "source": "path",
+      "version": "0.0.1"
+    },
+    "cw_solana": {
+      "dependency": "direct main",
+      "description": {
+        "path": "cw_solana",
+        "relative": true
+      },
+      "source": "path",
+      "version": "0.0.1"
+    },
+    "cw_tron": {
+      "dependency": "direct main",
+      "description": {
+        "path": "cw_tron",
+        "relative": true
+      },
+      "source": "path",
+      "version": "0.0.1"
+    },
+    "cw_wownero": {
+      "dependency": "direct main",
+      "description": {
+        "path": "cw_wownero",
+        "relative": true
+      },
+      "source": "path",
+      "version": "0.0.1"
+    },
+    "cw_zcash": {
+      "dependency": "direct main",
+      "description": {
+        "path": "cw_zcash",
+        "relative": true
+      },
+      "source": "path",
+      "version": "1.0.0"
+    },
+    "dart_style": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "a0f21e86a7a0ba52f11f46e3ed2ad1144616b512",
+        "resolved-ref": "a0f21e86a7a0ba52f11f46e3ed2ad1144616b512",
+        "url": "https://github.com/dart-lang/dart_style"
+      },
+      "source": "git",
+      "version": "3.1.7"
+    },
+    "dart_varuint_bitcoin": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "51f9656d5937659c9f034cb0910dd0144459f137",
+        "resolved-ref": "51f9656d5937659c9f034cb0910dd0144459f137",
+        "url": "https://github.com/dart-bitcoin-lib/dart-varuint-bitcoin"
+      },
+      "source": "git",
+      "version": "1.0.3"
+    },
+    "data_table_2": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "4db30aa145e4e831e5527708cf77d9ed4d8e9700",
+        "resolved-ref": "4db30aa145e4e831e5527708cf77d9ed4d8e9700",
+        "url": "https://github.com/maxim-saplin/data_table_2"
+      },
+      "source": "git",
+      "version": "2.7.2"
+    },
+    "dbus": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "2db8509d7f7081025e7246511e823287fdd09abc",
+        "resolved-ref": "2db8509d7f7081025e7246511e823287fdd09abc",
+        "url": "https://github.com/canonical/dbus.dart"
+      },
+      "source": "git",
+      "version": "0.7.12"
+    },
+    "decimal": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "bc9771127e4c26f068fc9b016269f0ddabe9b475",
+        "resolved-ref": "bc9771127e4c26f068fc9b016269f0ddabe9b475",
+        "url": "https://github.com/a14n/dart-decimal"
+      },
+      "source": "git",
+      "version": "2.3.3"
+    },
+    "device_display_brightness": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "4cac18c446ce686f3d75b1565badbd7da439bbd9",
+        "resolved-ref": "4cac18c446ce686f3d75b1565badbd7da439bbd9",
+        "url": "https://github.com/MrCyjaneK/device_display_brightness.git"
+      },
+      "source": "git",
+      "version": "0.0.6"
+    },
+    "device_info_plus": {
+      "dependency": "direct main",
+      "description": {
+        "path": "packages/device_info_plus/device_info_plus",
+        "ref": "83f86a357da31c7e9c47ee668fe3142bafea9c91",
+        "resolved-ref": "83f86a357da31c7e9c47ee668fe3142bafea9c91",
+        "url": "https://github.com/fluttercommunity/plus_plugins"
+      },
+      "source": "git",
+      "version": "9.1.2"
+    },
+    "device_info_plus_platform_interface": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/device_info_plus/device_info_plus_platform_interface",
+        "ref": "1b37ba220c99b16693991042c3fcc69eae98864a",
+        "resolved-ref": "1b37ba220c99b16693991042c3fcc69eae98864a",
+        "url": "https://github.com/fluttercommunity/plus_plugins"
+      },
+      "source": "git",
+      "version": "7.0.3"
+    },
+    "devicelocale": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "3ed4bcc443a40da200af162f4b97d63d7b00d291",
+        "resolved-ref": "3ed4bcc443a40da200af162f4b97d63d7b00d291",
+        "url": "https://github.com/magnatronus/flutter-devicelocale"
+      },
+      "source": "git",
+      "version": "0.8.1"
+    },
+    "dio": {
+      "dependency": "direct main",
+      "description": {
+        "path": "dio",
+        "ref": "ef9dbb860c085a8e81ecd36d5bcf29d5672947e1",
+        "resolved-ref": "ef9dbb860c085a8e81ecd36d5bcf29d5672947e1",
+        "url": "https://github.com/cfug/dio"
+      },
+      "source": "git",
+      "version": "5.11.0"
+    },
+    "dio_web_adapter": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "plugins/web_adapter",
+        "ref": "f72e83c8e832e81169f621b13c9e39aeaf9286b8",
+        "resolved-ref": "f72e83c8e832e81169f621b13c9e39aeaf9286b8",
+        "url": "https://github.com/cfug/dio"
+      },
+      "source": "git",
+      "version": "2.2.1"
+    },
+    "dnssec_proof": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "b48a9defddce036048bae02e2069ebcbd6824afc",
+        "resolved-ref": "b48a9defddce036048bae02e2069ebcbd6824afc",
+        "url": "https://github.com/MrCyjaneK/dnssec_proof.git"
+      },
+      "source": "git",
+      "version": "0.0.1"
+    },
+    "dotenv": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "08216384e8a03b0aa55e0fcb81f4d03a52f7ea76",
+        "resolved-ref": "08216384e8a03b0aa55e0fcb81f4d03a52f7ea76",
+        "url": "https://github.com/mockturtl/dotenv"
+      },
+      "source": "git",
+      "version": "3.0.0"
+    },
+    "dotted_border": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "a0168f4a4d410087afb378a06deb058cb92a9fb1",
+        "resolved-ref": "a0168f4a4d410087afb378a06deb058cb92a9fb1",
+        "url": "https://github.com/ajilo297/Flutter-Dotted-Border"
+      },
+      "source": "git",
+      "version": "2.1.0"
+    },
+    "easy_debounce": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "ed3f2aff0f080aa21cecd86e3a7c108340a9f17d",
+        "resolved-ref": "ed3f2aff0f080aa21cecd86e3a7c108340a9f17d",
+        "url": "https://github.com/magnuswikhog/easy_debounce"
+      },
+      "source": "git",
+      "version": "2.0.3"
+    },
+    "easy_stepper": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "cec4390aef9e5ff9fe064a44ed06b4f2c6dae1d2",
+        "resolved-ref": "cec4390aef9e5ff9fe064a44ed06b4f2c6dae1d2",
+        "url": "https://github.com/ma7moud3osman/easy_stepper"
+      },
+      "source": "git",
+      "version": "0.8.5+1"
+    },
+    "ed25519_edwards": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "944daea677c4d7f3abea608f55b34aec93bb79fb",
+        "resolved-ref": "944daea677c4d7f3abea608f55b34aec93bb79fb",
+        "url": "https://github.com/Tougee/ed25519"
+      },
+      "source": "git",
+      "version": "0.3.1"
+    },
+    "ed25519_hd_key": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "be3939527511af23dbfd97b5abde56215a5ce60d",
+        "resolved-ref": "be3939527511af23dbfd97b5abde56215a5ce60d",
+        "url": "https://github.com/alepop/dart-ed25519-hd-key"
+      },
+      "source": "git",
+      "version": "2.3.0"
+    },
+    "eip1559": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "d1888bf05e99cca1638e7fcc10d7f82d21857f9a",
+        "resolved-ref": "d1888bf05e99cca1638e7fcc10d7f82d21857f9a",
+        "url": "https://github.com/xclud/dart_eip1559"
+      },
+      "source": "git",
+      "version": "0.6.2"
+    },
+    "eip55": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "1dd7172b6d8f7e21f11378a4bf3489a8d1ff890f",
+        "resolved-ref": "1dd7172b6d8f7e21f11378a4bf3489a8d1ff890f",
+        "url": "https://github.com/xclud/dart_eip55"
+      },
+      "source": "git",
+      "version": "1.0.2"
+    },
+    "encrypt": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "8581b81c060cde1c531e35a6eaa4b7324e9ab813",
+        "resolved-ref": "8581b81c060cde1c531e35a6eaa4b7324e9ab813",
+        "url": "https://github.com/leocavalcante/encrypt"
+      },
+      "source": "git",
+      "version": "5.0.2"
+    },
+    "ens_dart": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "9fa09b9db69b8645d5d50a844652aa570451d101",
+        "resolved-ref": "9fa09b9db69b8645d5d50a844652aa570451d101",
+        "url": "https://github.com/cake-tech/ens_dart.git"
+      },
+      "source": "git",
+      "version": "1.0.0"
+    },
+    "equatable": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "f98a58960545ba72b51d0eacf746af393a0c6b24",
+        "resolved-ref": "f98a58960545ba72b51d0eacf746af393a0c6b24",
+        "url": "https://github.com/felangel/equatable"
+      },
+      "source": "git",
+      "version": "2.1.0"
+    },
+    "erc20": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "759c4363d1dc9d6a3c2604ceb4261b5bcdfc68b1",
+        "resolved-ref": "759c4363d1dc9d6a3c2604ceb4261b5bcdfc68b1",
+        "url": "https://github.com/xclud/dart_erc20"
+      },
+      "source": "git",
+      "version": "1.0.1"
+    },
+    "eth_sig_util": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "6acd66a126f470b5541f089fdd1c079d35a59c9a",
+        "resolved-ref": "6acd66a126f470b5541f089fdd1c079d35a59c9a",
+        "url": "https://github.com/wakumo/eth-sig-util"
+      },
+      "source": "git",
+      "version": "0.0.9"
+    },
+    "event": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "93e1c474cf736481a0ef07c15a8c8bbdc5f21b60",
+        "resolved-ref": "93e1c474cf736481a0ef07c15a8c8bbdc5f21b60",
+        "url": "https://github.com/aryehof/dart-event"
+      },
+      "source": "git",
+      "version": "3.1.0"
+    },
+    "fake_async": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/fake_async",
+        "ref": "82417ab30b95ff471ded4bf6a3eea005ca97774f",
+        "resolved-ref": "82417ab30b95ff471ded4bf6a3eea005ca97774f",
+        "url": "https://github.com/dart-lang/test"
+      },
+      "source": "git",
+      "version": "1.3.3"
+    },
+    "fast_base58": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "46955c19e499ce5c15755f6f573479d5f5218a45",
+        "resolved-ref": "46955c19e499ce5c15755f6f573479d5f5218a45",
+        "url": "https://github.com/maoxs2/dart_fast_base58"
+      },
+      "source": "git",
+      "version": "0.2.2"
+    },
+    "fast_scanner": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "69b3276b090fa6ac01b4483ca3adca93a8e615be",
+        "resolved-ref": "69b3276b090fa6ac01b4483ca3adca93a8e615be",
+        "url": "https://github.com/MrCyjaneK/fast_scanner"
+      },
+      "source": "git",
+      "version": "5.1.1"
+    },
+    "ffi": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/ffi",
+        "ref": "6bd0935f29c7294ebb9aab21c06b47b513def933",
+        "resolved-ref": "6bd0935f29c7294ebb9aab21c06b47b513def933",
+        "url": "https://github.com/dart-lang/native"
+      },
+      "source": "git",
+      "version": "2.1.0"
+    },
+    "ffigen": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/ffigen",
+        "ref": "c837526da8808501b53255caea0364eaa2c84afb",
+        "resolved-ref": "c837526da8808501b53255caea0364eaa2c84afb",
+        "url": "https://github.com/dart-lang/native"
+      },
+      "source": "git",
+      "version": "12.0.0"
+    },
+    "file": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/file",
+        "ref": "3f7a46606496f826c2f60586ab71c2b7a9bfbf15",
+        "resolved-ref": "3f7a46606496f826c2f60586ab71c2b7a9bfbf15",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "7.0.1"
+    },
+    "file_picker": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "c414574bc5ac349450f601e7f72c7b9f31b4d087",
+        "resolved-ref": "c414574bc5ac349450f601e7f72c7b9f31b4d087",
+        "url": "https://github.com/cake-tech/flutter_file_picker.git"
+      },
+      "source": "git",
+      "version": "8.1.6"
+    },
+    "file_selector_linux": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/file_selector/file_selector_linux",
+        "ref": "e67b6be3f57927f6831ec41afd3444adb31be3d3",
+        "resolved-ref": "e67b6be3f57927f6831ec41afd3444adb31be3d3",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "0.9.4"
+    },
+    "file_selector_macos": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/file_selector/file_selector_macos",
+        "ref": "e67b6be3f57927f6831ec41afd3444adb31be3d3",
+        "resolved-ref": "e67b6be3f57927f6831ec41afd3444adb31be3d3",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "0.9.5"
+    },
+    "file_selector_platform_interface": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/file_selector/file_selector_platform_interface",
+        "ref": "29211e8b56107f477d4521dd30e8ad713007860e",
+        "resolved-ref": "29211e8b56107f477d4521dd30e8ad713007860e",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "2.7.0"
+    },
+    "file_selector_windows": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/file_selector/file_selector_windows",
+        "ref": "18b9cc5f2b0820cb6164f0150958ba76db75c61a",
+        "resolved-ref": "18b9cc5f2b0820cb6164f0150958ba76db75c61a",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "0.9.3+5"
+    },
+    "fixed": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "1bdd715b95d8ed9c7fdffa6735bdcf2bf5ff8e65",
+        "resolved-ref": "1bdd715b95d8ed9c7fdffa6735bdcf2bf5ff8e65",
+        "url": "https://github.com/onepub-dev/fixed"
+      },
+      "source": "git",
+      "version": "5.3.4"
+    },
+    "fixnum": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/fixnum",
+        "ref": "17d1b2cd13991f3cf844886db1c7ad18910a8908",
+        "resolved-ref": "17d1b2cd13991f3cf844886db1c7ad18910a8908",
+        "url": "https://github.com/dart-lang/core"
+      },
+      "source": "git",
+      "version": "1.1.1"
+    },
+    "fixnum_nanodart": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "332e879371f175b52f688383d6ff795609aece85",
+        "resolved-ref": "332e879371f175b52f688383d6ff795609aece85",
+        "url": "https://github.com/MrCyjaneK/fixnum_nanodart"
+      },
+      "source": "git",
+      "version": "1.0.0"
+    },
+    "fl_chart": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "be14b9722b7f18310c869c930562b7871b0165ed",
+        "resolved-ref": "be14b9722b7f18310c869c930562b7871b0165ed",
+        "url": "https://github.com/imaNNeo/fl_chart"
+      },
+      "source": "git",
+      "version": "0.70.2"
+    },
+    "flat_buffers": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "dart",
+        "ref": "187240970746d00bbd26b0f5873ed54d2477f9f3",
+        "resolved-ref": "187240970746d00bbd26b0f5873ed54d2477f9f3",
+        "url": "https://github.com/google/flatbuffers"
+      },
+      "source": "git",
+      "version": "25.9.23"
+    },
+    "flex_color_scheme": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "c0e810b1eba7cd2b2be1f5c6130b86672858db3d",
+        "resolved-ref": "c0e810b1eba7cd2b2be1f5c6130b86672858db3d",
+        "url": "https://github.com/rydmike/flex_color_scheme"
+      },
+      "source": "git",
+      "version": "8.4.0"
+    },
+    "flex_seed_scheme": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "aa7be701ad58dc8e61637373db2bef0f28d2606e",
+        "resolved-ref": "aa7be701ad58dc8e61637373db2bef0f28d2606e",
+        "url": "https://github.com/rydmike/flex_seed_scheme"
+      },
+      "source": "git",
+      "version": "4.0.1"
+    },
+    "flutter": {
+      "dependency": "direct main",
+      "description": "flutter",
+      "source": "sdk",
+      "version": "0.0.0"
+    },
+    "flutter_bloc": {
+      "dependency": "direct main",
+      "description": {
+        "path": "packages/flutter_bloc",
+        "ref": "59098d33f3eed63001d3170295d2bfa76fa84351",
+        "resolved-ref": "59098d33f3eed63001d3170295d2bfa76fa84351",
+        "url": "https://github.com/felangel/bloc"
+      },
+      "source": "git",
+      "version": "9.1.1"
+    },
+    "flutter_daemon": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "c24ee99f2f3070ea02d8108bbdd7727d73f7e5f1",
+        "resolved-ref": "c24ee99f2f3070ea02d8108bbdd7727d73f7e5f1",
+        "url": "https://github.com/MrCyjaneK/flutter_daemon"
+      },
+      "source": "git",
+      "version": "0.0.1"
+    },
+    "flutter_driver": {
+      "dependency": "transitive",
+      "description": "flutter",
+      "source": "sdk",
+      "version": "0.0.0"
+    },
+    "flutter_form_builder": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "c55646b1d7f995752dbf5a9bd63da7592d342ffb",
+        "resolved-ref": "c55646b1d7f995752dbf5a9bd63da7592d342ffb",
+        "url": "https://github.com/flutter-form-builder-ecosystem/flutter_form_builder"
+      },
+      "source": "git",
+      "version": "10.3.0+2"
+    },
+    "flutter_hooks": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/flutter_hooks",
+        "ref": "9a2245f922bbd0ec397562fc7dc4b22b98c9199e",
+        "resolved-ref": "9a2245f922bbd0ec397562fc7dc4b22b98c9199e",
+        "url": "https://github.com/rrousselGit/flutter_hooks"
+      },
+      "source": "git",
+      "version": "0.21.3+1"
+    },
+    "flutter_inappwebview": {
+      "dependency": "direct main",
+      "description": {
+        "path": "flutter_inappwebview",
+        "ref": "f67ae1f34868c7660c16a2473f53a7a7bfb6f784",
+        "resolved-ref": "f67ae1f34868c7660c16a2473f53a7a7bfb6f784",
+        "url": "https://github.com/pichillilorenzo/flutter_inappwebview"
+      },
+      "source": "git",
+      "version": "6.1.5"
+    },
+    "flutter_inappwebview_android": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "flutter_inappwebview_android",
+        "ref": "a17ca9d0b8d8d98b53c6759768f1df4d0a058984",
+        "resolved-ref": "a17ca9d0b8d8d98b53c6759768f1df4d0a058984",
+        "url": "https://github.com/pichillilorenzo/flutter_inappwebview"
+      },
+      "source": "git",
+      "version": "1.1.3"
+    },
+    "flutter_inappwebview_internal_annotations": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "dev_packages/flutter_inappwebview_internal_annotations",
+        "ref": "5be1ade739ab2a385e94a1bd5936c5a2000d52a9",
+        "resolved-ref": "5be1ade739ab2a385e94a1bd5936c5a2000d52a9",
+        "url": "https://github.com/pichillilorenzo/flutter_inappwebview"
+      },
+      "source": "git",
+      "version": "1.3.0"
+    },
+    "flutter_inappwebview_ios": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "flutter_inappwebview_ios",
+        "ref": "a17ca9d0b8d8d98b53c6759768f1df4d0a058984",
+        "resolved-ref": "a17ca9d0b8d8d98b53c6759768f1df4d0a058984",
+        "url": "https://github.com/pichillilorenzo/flutter_inappwebview"
+      },
+      "source": "git",
+      "version": "1.1.2"
+    },
+    "flutter_inappwebview_macos": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "flutter_inappwebview_macos",
+        "ref": "a17ca9d0b8d8d98b53c6759768f1df4d0a058984",
+        "resolved-ref": "a17ca9d0b8d8d98b53c6759768f1df4d0a058984",
+        "url": "https://github.com/pichillilorenzo/flutter_inappwebview"
+      },
+      "source": "git",
+      "version": "1.1.2"
+    },
+    "flutter_inappwebview_platform_interface": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "flutter_inappwebview_platform_interface",
+        "ref": "60f1012e804f785421878ba1ee34403458e6baf2",
+        "resolved-ref": "60f1012e804f785421878ba1ee34403458e6baf2",
+        "url": "https://github.com/pichillilorenzo/flutter_inappwebview"
+      },
+      "source": "git",
+      "version": "1.3.0+1"
+    },
+    "flutter_inappwebview_web": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "flutter_inappwebview_web",
+        "ref": "a17ca9d0b8d8d98b53c6759768f1df4d0a058984",
+        "resolved-ref": "a17ca9d0b8d8d98b53c6759768f1df4d0a058984",
+        "url": "https://github.com/pichillilorenzo/flutter_inappwebview"
+      },
+      "source": "git",
+      "version": "1.1.2"
+    },
+    "flutter_inappwebview_windows": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "flutter_inappwebview_windows",
+        "ref": "952aa783912c9b0fd98d01e3c2c707d97512cd63",
+        "resolved-ref": "952aa783912c9b0fd98d01e3c2c707d97512cd63",
+        "url": "https://github.com/pichillilorenzo/flutter_inappwebview"
+      },
+      "source": "git",
+      "version": "0.6.0"
+    },
+    "flutter_lints": {
+      "dependency": "direct dev",
+      "description": {
+        "name": "flutter_lints",
+        "sha256": "a25a15ebbdfc33ab1cd26c63a6ee519df92338a9c10f122adda92938253bef04",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.0.3"
+    },
+    "flutter_local_authentication": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "75c8681ebef62398a87c8ae0cccb7cfddffa9734",
+        "resolved-ref": "75c8681ebef62398a87c8ae0cccb7cfddffa9734",
+        "url": "https://github.com/cake-tech/flutter_local_authentication"
+      },
+      "source": "git",
+      "version": "1.2.0"
+    },
+    "flutter_local_notifications": {
+      "dependency": "direct main",
+      "description": {
+        "path": "flutter_local_notifications",
+        "ref": "6c7378ddb1ed7f885e1e80caa3df3bcfb0fe8707",
+        "resolved-ref": "6c7378ddb1ed7f885e1e80caa3df3bcfb0fe8707",
+        "url": "https://github.com/MaikuB/flutter_local_notifications"
+      },
+      "source": "git",
+      "version": "19.5.0"
+    },
+    "flutter_local_notifications_linux": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "flutter_local_notifications_linux",
+        "ref": "314b432f98bcaef768468e5755317e10213a59bf",
+        "resolved-ref": "314b432f98bcaef768468e5755317e10213a59bf",
+        "url": "https://github.com/MaikuB/flutter_local_notifications"
+      },
+      "source": "git",
+      "version": "6.0.0"
+    },
+    "flutter_local_notifications_platform_interface": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "flutter_local_notifications_platform_interface",
+        "ref": "816a1ddbf733bba3fb8d87ac3a9c2673ec15881b",
+        "resolved-ref": "816a1ddbf733bba3fb8d87ac3a9c2673ec15881b",
+        "url": "https://github.com/MaikuB/flutter_local_notifications"
+      },
+      "source": "git",
+      "version": "9.1.0"
+    },
+    "flutter_local_notifications_windows": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "flutter_local_notifications_windows",
+        "ref": "ecd66b1515d17e327a62ca4ff8e94f925e97d688",
+        "resolved-ref": "ecd66b1515d17e327a62ca4ff8e94f925e97d688",
+        "url": "https://github.com/MaikuB/flutter_local_notifications"
+      },
+      "source": "git",
+      "version": "1.0.3"
+    },
+    "flutter_localizations": {
+      "dependency": "direct main",
+      "description": "flutter",
+      "source": "sdk",
+      "version": "0.0.0"
+    },
+    "flutter_mailer": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "9c4ed111a9151a2bbfb9afe2c18a37599c6f84f3",
+        "resolved-ref": "9c4ed111a9151a2bbfb9afe2c18a37599c6f84f3",
+        "url": "https://github.com/taljacobson/flutter_mailer"
+      },
+      "source": "git",
+      "version": "3.0.0"
+    },
+    "flutter_mobx": {
+      "dependency": "direct main",
+      "description": {
+        "path": "flutter_mobx",
+        "ref": "0cadcd03551baaae57788b7288e1245e6408d5cf",
+        "resolved-ref": "0cadcd03551baaae57788b7288e1245e6408d5cf",
+        "url": "https://github.com/mobxjs/mobx.dart"
+      },
+      "source": "git",
+      "version": "2.3.0"
+    },
+    "flutter_native_splash": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "8c65117f0a4adc04f93deeb595a699a0d6dac559",
+        "resolved-ref": "8c65117f0a4adc04f93deeb595a699a0d6dac559",
+        "url": "https://github.com/jonbhanson/flutter_native_splash"
+      },
+      "source": "git",
+      "version": "2.4.6"
+    },
+    "flutter_plugin_android_lifecycle": {
+      "dependency": "direct main",
+      "description": {
+        "path": "packages/flutter_plugin_android_lifecycle",
+        "ref": "4afc383a6db56cb969af5d8ad02a1a0220758b66",
+        "resolved-ref": "4afc383a6db56cb969af5d8ad02a1a0220758b66",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "2.0.23"
+    },
+    "flutter_riverpod": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/flutter_riverpod",
+        "ref": "eb3651b42e368fc9a227aeffc9736fdc9a82f1b7",
+        "resolved-ref": "eb3651b42e368fc9a227aeffc9736fdc9a82f1b7",
+        "url": "https://github.com/rrousselGit/riverpod"
+      },
+      "source": "git",
+      "version": "3.3.2"
+    },
+    "flutter_rust_bridge": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "frb_dart",
+        "ref": "f19087cd0cac019b82d52cfa5153ce81b1b6e902",
+        "resolved-ref": "f19087cd0cac019b82d52cfa5153ce81b1b6e902",
+        "url": "https://github.com/fzyzcjy/flutter_rust_bridge"
+      },
+      "source": "git",
+      "version": "2.11.1"
+    },
+    "flutter_secure_storage": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "flutter_secure_storage",
+        "ref": "ca897a08677edb443b366352dd7412735e098e7b",
+        "resolved-ref": "ca897a08677edb443b366352dd7412735e098e7b",
+        "url": "https://github.com/cake-tech/flutter_secure_storage.git"
+      },
+      "source": "git",
+      "version": "8.1.0"
+    },
+    "flutter_secure_storage_linux": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "flutter_secure_storage_linux",
+        "ref": "1355e56cd48404fdbb0848979de72ee317b0c6c9",
+        "resolved-ref": "1355e56cd48404fdbb0848979de72ee317b0c6c9",
+        "url": "https://github.com/mogol/flutter_secure_storage"
+      },
+      "source": "git",
+      "version": "1.2.3"
+    },
+    "flutter_secure_storage_macos": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "flutter_secure_storage_macos",
+        "ref": "ca897a08677edb443b366352dd7412735e098e7b",
+        "resolved-ref": "ca897a08677edb443b366352dd7412735e098e7b",
+        "url": "https://github.com/cake-tech/flutter_secure_storage.git"
+      },
+      "source": "git",
+      "version": "3.0.0"
+    },
+    "flutter_secure_storage_platform_interface": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "flutter_secure_storage_platform_interface",
+        "ref": "3d5466cc3b93196bc9d8287f67f85a45ab6ebd3e",
+        "resolved-ref": "3d5466cc3b93196bc9d8287f67f85a45ab6ebd3e",
+        "url": "https://github.com/mogol/flutter_secure_storage"
+      },
+      "source": "git",
+      "version": "1.1.2"
+    },
+    "flutter_secure_storage_web": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "flutter_secure_storage_web",
+        "ref": "62cb9ec42b78fca2a1e64d729423367735134c11",
+        "resolved-ref": "62cb9ec42b78fca2a1e64d729423367735134c11",
+        "url": "https://github.com/mogol/flutter_secure_storage"
+      },
+      "source": "git",
+      "version": "1.2.1"
+    },
+    "flutter_secure_storage_windows": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "flutter_secure_storage_windows",
+        "ref": "908d3f3f5fb1ba90927ceebde8b253f413f833d7",
+        "resolved-ref": "908d3f3f5fb1ba90927ceebde8b253f413f833d7",
+        "url": "https://github.com/mogol/flutter_secure_storage"
+      },
+      "source": "git",
+      "version": "3.1.2"
+    },
+    "flutter_shaders": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "e331377d58755fe914a2ce54b0f70ba34898dfdd",
+        "resolved-ref": "e331377d58755fe914a2ce54b0f70ba34898dfdd",
+        "url": "https://github.com/jonahwilliams/flutter_shaders"
+      },
+      "source": "git",
+      "version": "0.1.3"
+    },
+    "flutter_slidable": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "7dbeb6667bf410d9a8401f0f8412e14669e7338f",
+        "resolved-ref": "7dbeb6667bf410d9a8401f0f8412e14669e7338f",
+        "url": "https://github.com/letsar/flutter_slidable"
+      },
+      "source": "git",
+      "version": "3.1.2"
+    },
+    "flutter_spinkit": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "bf8508db798f1e31dea152b9b762f223d90d3449",
+        "resolved-ref": "bf8508db798f1e31dea152b9b762f223d90d3449",
+        "url": "https://github.com/jogboms/flutter_spinkit"
+      },
+      "source": "git",
+      "version": "5.2.2"
+    },
+    "flutter_svg": {
+      "dependency": "direct main",
+      "description": {
+        "path": "third_party/packages/flutter_svg",
+        "ref": "ddc9430a0080bea73c5511732f396acde1f48fe0",
+        "resolved-ref": "ddc9430a0080bea73c5511732f396acde1f48fe0",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "2.3.0"
+    },
+    "flutter_test": {
+      "dependency": "direct dev",
+      "description": "flutter",
+      "source": "sdk",
+      "version": "0.0.0"
+    },
+    "flutter_web_bluetooth": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "82d12cda1b65efc1d96b53b27b8b5451e34c96ef",
+        "resolved-ref": "82d12cda1b65efc1d96b53b27b8b5451e34c96ef",
+        "url": "https://github.com/jeroen1602/flutter_web_bluetooth"
+      },
+      "source": "git",
+      "version": "1.1.0"
+    },
+    "flutter_web_plugins": {
+      "dependency": "transitive",
+      "description": "flutter",
+      "source": "sdk",
+      "version": "0.0.0"
+    },
+    "fluttertoast": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "e875d071da02fe6f3090794d1ac623093c3b7074",
+        "resolved-ref": "e875d071da02fe6f3090794d1ac623093c3b7074",
+        "url": "https://github.com/PonnamKarthik/FlutterToast"
+      },
+      "source": "git",
+      "version": "8.2.12"
+    },
+    "form_builder_validators": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "7a561b8aff3739d80c54c394f9b0cc9c861a01b8",
+        "resolved-ref": "7a561b8aff3739d80c54c394f9b0cc9c861a01b8",
+        "url": "https://github.com/flutter-form-builder-ecosystem/form_builder_validators"
+      },
+      "source": "git",
+      "version": "11.3.0"
+    },
+    "freezed_annotation": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/freezed_annotation",
+        "ref": "4f7c141c6d2573622b5ea29fe305a8f08db1483b",
+        "resolved-ref": "4f7c141c6d2573622b5ea29fe305a8f08db1483b",
+        "url": "https://github.com/rrousselGit/freezed"
+      },
+      "source": "git",
+      "version": "2.4.4"
+    },
+    "frontend_server_client": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "frontend_server_client",
+        "ref": "74e95837adf3d4ea64a003ccc4f8f09704c1d866",
+        "resolved-ref": "74e95837adf3d4ea64a003ccc4f8f09704c1d866",
+        "url": "https://github.com/dart-lang/webdev"
+      },
+      "source": "git",
+      "version": "4.0.0"
+    },
+    "fuchsia_remote_debug_protocol": {
+      "dependency": "transitive",
+      "description": "flutter",
+      "source": "sdk",
+      "version": "0.0.0"
+    },
+    "gap": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "b385a5888b1582badf22bbd93283ec22de8a75d7",
+        "resolved-ref": "b385a5888b1582badf22bbd93283ec22de8a75d7",
+        "url": "https://github.com/letsar/gap"
+      },
+      "source": "git",
+      "version": "3.0.1"
+    },
+    "get_it": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "974c0b367c58fd75e78f0d036147a6963392f975",
+        "resolved-ref": "974c0b367c58fd75e78f0d036147a6963392f975",
+        "url": "https://github.com/fluttercommunity/get_it"
+      },
+      "source": "git",
+      "version": "7.7.0"
+    },
+    "glob": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/glob",
+        "ref": "92114ab8a16eef77be1cd7bad3f5af28b5b1dc63",
+        "resolved-ref": "92114ab8a16eef77be1cd7bad3f5af28b5b1dc63",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "2.1.3"
+    },
+    "go_router": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/go_router",
+        "ref": "6d191c59e6f31c0133955c88bede437745659452",
+        "resolved-ref": "6d191c59e6f31c0133955c88bede437745659452",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "14.8.1"
+    },
+    "google_identity_services_web": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/google_identity_services_web",
+        "ref": "41211cf4c9a801f8d8ad527e54062d457a7cfbff",
+        "resolved-ref": "41211cf4c9a801f8d8ad527e54062d457a7cfbff",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "0.3.3+1"
+    },
+    "googleapis_auth": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "googleapis_auth",
+        "ref": "1631558038c7e30511295512527d8ade2bd64c40",
+        "resolved-ref": "1631558038c7e30511295512527d8ade2bd64c40",
+        "url": "https://github.com/google/googleapis.dart"
+      },
+      "source": "git",
+      "version": "1.6.0"
+    },
+    "graphs": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/graphs",
+        "ref": "55dbd6e09042bc1b935c019d8e70b3f41e6b90ea",
+        "resolved-ref": "55dbd6e09042bc1b935c019d8e70b3f41e6b90ea",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "2.3.2"
+    },
+    "grpc": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "4f6fe9b1114aa5bd9d97e5d3b5ae2cb354804a1f",
+        "resolved-ref": "4f6fe9b1114aa5bd9d97e5d3b5ae2cb354804a1f",
+        "url": "https://github.com/grpc/grpc-dart"
+      },
+      "source": "git",
+      "version": "4.0.1"
+    },
+    "hashlib": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "07848d0ebc5ff67dac0d2ecb638c3f4cd670d0cf",
+        "resolved-ref": "07848d0ebc5ff67dac0d2ecb638c3f4cd670d0cf",
+        "url": "https://github.com/bitanon/hashlib"
+      },
+      "source": "git",
+      "version": "1.19.2"
+    },
+    "hashlib_codecs": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "b15b231bbced2bb076890f8cfd384f024e9eba71",
+        "resolved-ref": "b15b231bbced2bb076890f8cfd384f024e9eba71",
+        "url": "https://github.com/bitanon/hashlib_codecs"
+      },
+      "source": "git",
+      "version": "2.6.0"
+    },
+    "hex": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "262f0113430f7c5662f0578d86334fce0e008ea7",
+        "resolved-ref": "262f0113430f7c5662f0578d86334fce0e008ea7",
+        "url": "https://github.com/stevenroose/dart-hex"
+      },
+      "source": "git",
+      "version": "0.2.0"
+    },
+    "hive": {
+      "dependency": "direct main",
+      "description": {
+        "path": "hive",
+        "ref": "470473ffc1ba39f6c90f31ababe0ee63b76b69fe",
+        "resolved-ref": "470473ffc1ba39f6c90f31ababe0ee63b76b69fe",
+        "url": "https://github.com/hivedb/hive"
+      },
+      "source": "git",
+      "version": "2.2.3"
+    },
+    "hive_flutter": {
+      "dependency": "direct main",
+      "description": {
+        "path": "hive_flutter",
+        "ref": "db56a26d5324a19373a35e365c50d808c6e1ce0c",
+        "resolved-ref": "db56a26d5324a19373a35e365c50d808c6e1ce0c",
+        "url": "https://github.com/hivedb/hive"
+      },
+      "source": "git",
+      "version": "1.1.0"
+    },
+    "hooks": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/hooks",
+        "ref": "5e2b3d1171cabe90bae969cd098c85182c1751b3",
+        "resolved-ref": "5e2b3d1171cabe90bae969cd098c85182c1751b3",
+        "url": "https://github.com/dart-lang/native"
+      },
+      "source": "git",
+      "version": "2.0.2"
+    },
+    "hooks_riverpod": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/hooks_riverpod",
+        "ref": "eb3651b42e368fc9a227aeffc9736fdc9a82f1b7",
+        "resolved-ref": "eb3651b42e368fc9a227aeffc9736fdc9a82f1b7",
+        "url": "https://github.com/rrousselGit/riverpod"
+      },
+      "source": "git",
+      "version": "3.3.2"
+    },
+    "html": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/html",
+        "ref": "11f4cf7ee79632be370062dad67b7dd81bc28d55",
+        "resolved-ref": "11f4cf7ee79632be370062dad67b7dd81bc28d55",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "0.15.6"
+    },
+    "http": {
+      "dependency": "direct main",
+      "description": {
+        "path": "pkgs/http",
+        "ref": "907782f5a792e7a5b0ed92f118c0ad91f3ecde51",
+        "resolved-ref": "907782f5a792e7a5b0ed92f118c0ad91f3ecde51",
+        "url": "https://github.com/dart-lang/http"
+      },
+      "source": "git",
+      "version": "1.6.0"
+    },
+    "http2": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/http2",
+        "ref": "5e2281edd25f9addbf26242a0658d8f2dfa1134b",
+        "resolved-ref": "5e2281edd25f9addbf26242a0658d8f2dfa1134b",
+        "url": "https://github.com/dart-lang/http"
+      },
+      "source": "git",
+      "version": "2.3.1"
+    },
+    "http_multi_server": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/http_multi_server",
+        "ref": "c27d6c780bae0207e938f09596c2cf8d9bb4a963",
+        "resolved-ref": "c27d6c780bae0207e938f09596c2cf8d9bb4a963",
+        "url": "https://github.com/dart-lang/http"
+      },
+      "source": "git",
+      "version": "3.2.2"
+    },
+    "http_parser": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/http_parser",
+        "ref": "6ecd13a88b82c2fdc8a555f218bafb0ad0370f51",
+        "resolved-ref": "6ecd13a88b82c2fdc8a555f218bafb0ad0370f51",
+        "url": "https://github.com/dart-lang/http"
+      },
+      "source": "git",
+      "version": "4.1.2"
+    },
+    "image": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "a5cc03b65592616bb423254cdea8ce4b093b4a04",
+        "resolved-ref": "a5cc03b65592616bb423254cdea8ce4b093b4a04",
+        "url": "https://github.com/brendan-duncan/image"
+      },
+      "source": "git",
+      "version": "4.8.0"
+    },
+    "image_picker": {
+      "dependency": "direct main",
+      "description": {
+        "path": "packages/image_picker/image_picker",
+        "ref": "2900bc94e9912486e3454223df2683a372f4e137",
+        "resolved-ref": "2900bc94e9912486e3454223df2683a372f4e137",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "1.2.3"
+    },
+    "image_picker_android": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/image_picker/image_picker_android",
+        "ref": "5f14a8010690b33f8f71d888dd6a3de665164e21",
+        "resolved-ref": "5f14a8010690b33f8f71d888dd6a3de665164e21",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "0.8.13+17"
+    },
+    "image_picker_for_web": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/image_picker/image_picker_for_web",
+        "ref": "34746bb64150c7bbf319a9eee4164b4a5d733b2e",
+        "resolved-ref": "34746bb64150c7bbf319a9eee4164b4a5d733b2e",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "3.1.1"
+    },
+    "image_picker_ios": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/image_picker/image_picker_ios",
+        "ref": "44a58ab4aab0b78fab2b51e0d093561be0b4964c",
+        "resolved-ref": "44a58ab4aab0b78fab2b51e0d093561be0b4964c",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "0.8.13+6"
+    },
+    "image_picker_linux": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/image_picker/image_picker_linux",
+        "ref": "b26262b5034d59c9575b708a031ecfdfe12e5118",
+        "resolved-ref": "b26262b5034d59c9575b708a031ecfdfe12e5118",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "0.2.2"
+    },
+    "image_picker_macos": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/image_picker/image_picker_macos",
+        "ref": "7ebd635db5c71197877a48cc31a7edba9a3f067b",
+        "resolved-ref": "7ebd635db5c71197877a48cc31a7edba9a3f067b",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "0.2.2+1"
+    },
+    "image_picker_platform_interface": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/image_picker/image_picker_platform_interface",
+        "ref": "501d8c9bd36577f1af17d799cb69fefd6c4b2f4b",
+        "resolved-ref": "501d8c9bd36577f1af17d799cb69fefd6c4b2f4b",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "2.11.1"
+    },
+    "image_picker_windows": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/image_picker/image_picker_windows",
+        "ref": "b26262b5034d59c9575b708a031ecfdfe12e5118",
+        "resolved-ref": "b26262b5034d59c9575b708a031ecfdfe12e5118",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "0.2.2"
+    },
+    "in_app_review": {
+      "dependency": "direct main",
+      "description": {
+        "path": "in_app_review",
+        "ref": "a08b2fcb98c74f2fa12b5f3c61b588b763430368",
+        "resolved-ref": "a08b2fcb98c74f2fa12b5f3c61b588b763430368",
+        "url": "https://github.com/britannio/in_app_review"
+      },
+      "source": "git",
+      "version": "2.0.12"
+    },
+    "in_app_review_platform_interface": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "in_app_review_platform_interface",
+        "ref": "54fcef429fc6f9ed50660d23741ef7e38a684a1f",
+        "resolved-ref": "54fcef429fc6f9ed50660d23741ef7e38a684a1f",
+        "url": "https://github.com/britannio/in_app_review"
+      },
+      "source": "git",
+      "version": "2.0.5"
+    },
+    "integration_test": {
+      "dependency": "direct dev",
+      "description": "flutter",
+      "source": "sdk",
+      "version": "0.0.0"
+    },
+    "intl": {
+      "dependency": "direct main",
+      "description": {
+        "path": "pkgs/intl",
+        "ref": "a1dd8e1ff32e5b53bdf38511cd5d7524694af95a",
+        "resolved-ref": "a1dd8e1ff32e5b53bdf38511cd5d7524694af95a",
+        "url": "https://github.com/dart-lang/i18n"
+      },
+      "source": "git",
+      "version": "0.20.2"
+    },
+    "io": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/io",
+        "ref": "faf2b86b71e633e956ff1489eb60885b21fa100d",
+        "resolved-ref": "faf2b86b71e633e956ff1489eb60885b21fa100d",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "1.0.5"
+    },
+    "jni": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/jni",
+        "ref": "3b0c7beded15ef47a3dba4b5c0093cbe195e7aba",
+        "resolved-ref": "3b0c7beded15ef47a3dba4b5c0093cbe195e7aba",
+        "url": "https://github.com/dart-lang/native"
+      },
+      "source": "git",
+      "version": "1.0.3"
+    },
+    "jni_flutter": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/jni_flutter",
+        "ref": "6e3efdc1afa0462b1aff38c087cb50f0e6925cda",
+        "resolved-ref": "6e3efdc1afa0462b1aff38c087cb50f0e6925cda",
+        "url": "https://github.com/dart-lang/native"
+      },
+      "source": "git",
+      "version": "1.0.2"
+    },
+    "jni_util": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/jni_util",
+        "ref": "7990d3a3806fa6c161e2340a95574d3a92d9bca2",
+        "resolved-ref": "7990d3a3806fa6c161e2340a95574d3a92d9bca2",
+        "url": "https://github.com/dart-lang/native"
+      },
+      "source": "git",
+      "version": "1.0.0"
+    },
+    "js": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkg/js",
+        "ref": "c70f78e7d682c158c15ca0c26c729b3ccb932284",
+        "resolved-ref": "c70f78e7d682c158c15ca0c26c729b3ccb932284",
+        "url": "https://github.com/dart-lang/sdk"
+      },
+      "source": "git",
+      "version": "0.7.2"
+    },
+    "json_annotation": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "json_annotation",
+        "ref": "61e7b879b22af58f2f942ccf6c0ae81acd0cb1bc",
+        "resolved-ref": "61e7b879b22af58f2f942ccf6c0ae81acd0cb1bc",
+        "url": "https://github.com/google/json_serializable.dart"
+      },
+      "source": "git",
+      "version": "4.12.0"
+    },
+    "json_bigint": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "5528e714cb048860a3fd700fd3f2e406828e9cd8",
+        "resolved-ref": "5528e714cb048860a3fd700fd3f2e406828e9cd8",
+        "url": "https://github.com/ozaner/json_bigint"
+      },
+      "source": "git",
+      "version": "3.1.0"
+    },
+    "json_rpc_2": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/json_rpc_2",
+        "ref": "88087ae253cab7ff9eccadb3c8cbf550ee071226",
+        "resolved-ref": "88087ae253cab7ff9eccadb3c8cbf550ee071226",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "3.0.3"
+    },
+    "kepler": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "e2c671389c18a5149147f598627c946c311e36b8",
+        "resolved-ref": "e2c671389c18a5149147f598627c946c311e36b8",
+        "url": "https://github.com/tjcampanella/kepler"
+      },
+      "source": "git",
+      "version": "1.0.3"
+    },
+    "keyboard_actions": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "e197412c52cd75d8a7c7ac74558610c0f92635e4",
+        "resolved-ref": "e197412c52cd75d8a7c7ac74558610c0f92635e4",
+        "url": "https://github.com/diegoveloper/flutter_keyboard_actions"
+      },
+      "source": "git",
+      "version": "4.2.2"
+    },
+    "leak_tracker": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/leak_tracker",
+        "ref": "64bae50ca89528f73d6a440c22b7e3e1713bb7f0",
+        "resolved-ref": "64bae50ca89528f73d6a440c22b7e3e1713bb7f0",
+        "url": "https://github.com/dart-lang/leak_tracker"
+      },
+      "source": "git",
+      "version": "11.0.2"
+    },
+    "leak_tracker_flutter_testing": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/leak_tracker_flutter_testing",
+        "ref": "84d523d8ea34ecf889a3f383e206bc231af31686",
+        "resolved-ref": "84d523d8ea34ecf889a3f383e206bc231af31686",
+        "url": "https://github.com/dart-lang/leak_tracker"
+      },
+      "source": "git",
+      "version": "3.0.10"
+    },
+    "leak_tracker_testing": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/leak_tracker_testing",
+        "ref": "84d523d8ea34ecf889a3f383e206bc231af31686",
+        "resolved-ref": "84d523d8ea34ecf889a3f383e206bc231af31686",
+        "url": "https://github.com/dart-lang/leak_tracker"
+      },
+      "source": "git",
+      "version": "3.0.2"
+    },
+    "ledger_bitcoin": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/ledger-bitcoin",
+        "ref": "75bba8632c529debf30ee2b1858530009fa6440b",
+        "resolved-ref": "75bba8632c529debf30ee2b1858530009fa6440b",
+        "url": "https://github.com/cake-tech/ledger-flutter-plus-plugins"
+      },
+      "source": "git",
+      "version": "0.0.3"
+    },
+    "ledger_ethereum": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/ledger-ethereum",
+        "ref": "f4761cd5171d4c1e2e42fd3298261650539fb2db",
+        "resolved-ref": "f4761cd5171d4c1e2e42fd3298261650539fb2db",
+        "url": "https://github.com/cake-tech/ledger-flutter-plus-plugins"
+      },
+      "source": "git",
+      "version": "0.0.5"
+    },
+    "ledger_flutter_plus": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "eaf49764ad0863e8dec97ad30ff6aea0a1d1bd28",
+        "resolved-ref": "eaf49764ad0863e8dec97ad30ff6aea0a1d1bd28",
+        "url": "https://github.com/cake-tech/ledger-flutter-plus"
+      },
+      "source": "git",
+      "version": "1.6.0+1"
+    },
+    "ledger_litecoin": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/ledger-litecoin",
+        "ref": "75bba8632c529debf30ee2b1858530009fa6440b",
+        "resolved-ref": "75bba8632c529debf30ee2b1858530009fa6440b",
+        "url": "https://github.com/cake-tech/ledger-flutter-plus-plugins"
+      },
+      "source": "git",
+      "version": "0.0.2"
+    },
+    "ledger_usb_plus": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "40af7c48cf34211ba3cc9e87dd05ed1af8a429a2",
+        "resolved-ref": "40af7c48cf34211ba3cc9e87dd05ed1af8a429a2",
+        "url": "https://github.com/cake-tech/ledger-usb-plus"
+      },
+      "source": "git",
+      "version": "1.0.8"
+    },
+    "libcrypto": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "98be84e0a2c7b423842d1fbbd2d920ff03180235",
+        "resolved-ref": "98be84e0a2c7b423842d1fbbd2d920ff03180235",
+        "url": "https://github.com/MrCyjaneK/libcrypto"
+      },
+      "source": "git",
+      "version": "0.2.2"
+    },
+    "lints": {
+      "dependency": "transitive",
+      "description": {
+        "name": "lints",
+        "sha256": "0a217c6c989d21039f1498c3ed9f3ed71b354e69873f13a8dfc3c9fe76f1b452",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.1.1"
+    },
+    "local_auth": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/local_auth/local_auth",
+        "ref": "db8bfed397145b7c5a1ade3c374a74053649ce12",
+        "resolved-ref": "db8bfed397145b7c5a1ade3c374a74053649ce12",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "2.3.0"
+    },
+    "local_auth_android": {
+      "dependency": "direct main",
+      "description": {
+        "path": "packages/local_auth/local_auth_android",
+        "ref": "1c0be204c45eea42927eb6005bb45f16a8fffb07",
+        "resolved-ref": "1c0be204c45eea42927eb6005bb45f16a8fffb07",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "1.0.56"
+    },
+    "local_auth_darwin": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/local_auth/local_auth_darwin",
+        "ref": "d3e0285a6bf353f4bed9ba01d2b37a68fa63d741",
+        "resolved-ref": "d3e0285a6bf353f4bed9ba01d2b37a68fa63d741",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "1.6.1"
+    },
+    "local_auth_platform_interface": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/local_auth/local_auth_platform_interface",
+        "ref": "321a5846838d2bfa5f3dd463e3833b951da0db32",
+        "resolved-ref": "321a5846838d2bfa5f3dd463e3833b951da0db32",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "1.1.0"
+    },
+    "local_auth_windows": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/local_auth/local_auth_windows",
+        "ref": "e978e06eb9207e4bd7a56b2139b2906d3150edb5",
+        "resolved-ref": "e978e06eb9207e4bd7a56b2139b2906d3150edb5",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "1.0.11"
+    },
+    "logger": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "4c56353a5060f403650f0c728a6438d3db2de669",
+        "resolved-ref": "4c56353a5060f403650f0c728a6438d3db2de669",
+        "url": "https://github.com/SourceHorizon/logger"
+      },
+      "source": "git",
+      "version": "2.7.0"
+    },
+    "logging": {
+      "dependency": "direct dev",
+      "description": {
+        "path": "pkgs/logging",
+        "ref": "8151b9f57fa3fee10421a19ce24470e143c0dee5",
+        "resolved-ref": "8151b9f57fa3fee10421a19ce24470e143c0dee5",
+        "url": "https://github.com/dart-lang/core"
+      },
+      "source": "git",
+      "version": "1.3.0"
+    },
+    "lottie": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "1eef993a7a69cd05cfcc4c9eac4f2d89ecfab2d1",
+        "resolved-ref": "1eef993a7a69cd05cfcc4c9eac4f2d89ecfab2d1",
+        "url": "https://github.com/xvrh/lottie-flutter"
+      },
+      "source": "git",
+      "version": "3.3.3"
+    },
+    "matcher": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/matcher",
+        "ref": "45e4ef287d70dad449f13d4f284f9faea2d9188b",
+        "resolved-ref": "45e4ef287d70dad449f13d4f284f9faea2d9188b",
+        "url": "https://github.com/dart-lang/test"
+      },
+      "source": "git",
+      "version": "0.12.19"
+    },
+    "material_color_utilities": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "dart",
+        "ref": "5d4397afe1830b09ff99c1cb3cf901038951282a",
+        "resolved-ref": "5d4397afe1830b09ff99c1cb3cf901038951282a",
+        "url": "https://github.com/material-foundation/material-color-utilities"
+      },
+      "source": "git",
+      "version": "0.13.0"
+    },
+    "memoize": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "f541e50b3be0e7b9e83bbd3858d3a25356140570",
+        "resolved-ref": "f541e50b3be0e7b9e83bbd3858d3a25356140570",
+        "url": "https://github.com/wrike/memoize_dart"
+      },
+      "source": "git",
+      "version": "3.0.0"
+    },
+    "meta": {
+      "dependency": "transitive",
+      "description": {
+        "name": "meta",
+        "sha256": "23f08335362185a5ea2ad3a4e597f1375e78bce8a040df5c600c8d3552ef2394",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.17.0"
+    },
+    "mime": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/mime",
+        "ref": "3440b74e430051304b56d4acd71b7ed30ab1855d",
+        "resolved-ref": "3440b74e430051304b56d4acd71b7ed30ab1855d",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "2.0.0"
+    },
+    "mobx": {
+      "dependency": "direct main",
+      "description": {
+        "path": "mobx",
+        "ref": "d677b8d361301b60577267703371013749b7b7de",
+        "resolved-ref": "d677b8d361301b60577267703371013749b7b7de",
+        "url": "https://github.com/mobxjs/mobx.dart"
+      },
+      "source": "git",
+      "version": "2.6.0"
+    },
+    "mobx_codegen": {
+      "dependency": "direct dev",
+      "description": {
+        "path": "mobx_codegen",
+        "ref": "39a1f18c2e76a564b5e5358426d335569bc332ec",
+        "resolved-ref": "39a1f18c2e76a564b5e5358426d335569bc332ec",
+        "url": "https://github.com/mobxjs/mobx.dart"
+      },
+      "source": "git",
+      "version": "2.7.7"
+    },
+    "mockito": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "builder_pkgs/mockito",
+        "ref": "f550d53994b429f48f2b86f9c70956bf50d4e0c2",
+        "resolved-ref": "f550d53994b429f48f2b86f9c70956bf50d4e0c2",
+        "url": "https://github.com/dart-lang/build"
+      },
+      "source": "git",
+      "version": "5.6.4"
+    },
+    "mocktail": {
+      "dependency": "direct dev",
+      "description": {
+        "path": "packages/mocktail",
+        "ref": "12989138eb6beb3d1cad330ebfd88fef005a4e3e",
+        "resolved-ref": "12989138eb6beb3d1cad330ebfd88fef005a4e3e",
+        "url": "https://github.com/felangel/mocktail"
+      },
+      "source": "git",
+      "version": "1.0.5"
+    },
+    "modal_bottom_sheet": {
+      "dependency": "direct main",
+      "description": {
+        "path": "modal_bottom_sheet",
+        "ref": "b1cca111c53d41b9f07123a8c67cfe06fb1b69bf",
+        "resolved-ref": "b1cca111c53d41b9f07123a8c67cfe06fb1b69bf",
+        "url": "https://github.com/cake-tech/modal_bottom_sheet"
+      },
+      "source": "git",
+      "version": "3.0.0"
+    },
+    "monero": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "impls/monero.dart",
+        "ref": "cd4fe366cc8d3c188c91de279f43b29c0e044b15",
+        "resolved-ref": "cd4fe366cc8d3c188c91de279f43b29c0e044b15",
+        "url": "https://github.com/mrcyjanek/monero_c.git"
+      },
+      "source": "git",
+      "version": "0.0.0"
+    },
+    "msgpack_dart": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "2527c0a1e2eabf92a7f5db50983d3ee4ec71ccaa",
+        "resolved-ref": "2527c0a1e2eabf92a7f5db50983d3ee4ec71ccaa",
+        "url": "https://github.com/knopp/msgpack_dart"
+      },
+      "source": "git",
+      "version": "1.0.1"
+    },
+    "msix": {
+      "dependency": "direct dev",
+      "description": {
+        "path": ".",
+        "ref": "1ab4df346a92ef4dc7bf02fd857d2975be04d47c",
+        "resolved-ref": "1ab4df346a92ef4dc7bf02fd857d2975be04d47c",
+        "url": "https://github.com/YehudaKremer/msix"
+      },
+      "source": "git",
+      "version": "3.16.9"
+    },
+    "mutex": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "84ca903a3ac863735e3228c75a212133621f680f",
+        "resolved-ref": "84ca903a3ac863735e3228c75a212133621f680f",
+        "url": "https://github.com/hoylen/dart-mutex"
+      },
+      "source": "git",
+      "version": "3.1.0"
+    },
+    "nanodart": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "5c1b352fc02d94a34129f3848bedcec441c2b8c7",
+        "resolved-ref": "5c1b352fc02d94a34129f3848bedcec441c2b8c7",
+        "url": "https://github.com/appditto/nanodart"
+      },
+      "source": "git",
+      "version": "2.0.0"
+    },
+    "nanoutil": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "c01a9c552917008d8fbc6b540db657031625b04f",
+        "resolved-ref": "c01a9c552917008d8fbc6b540db657031625b04f",
+        "url": "https://github.com/perishllc/nanoutil.git"
+      },
+      "source": "git",
+      "version": "1.0.3"
+    },
+    "native_toolchain_c": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/native_toolchain_c",
+        "ref": "7dbb51d78534b3c037f3f063448cc45e5ca80a58",
+        "resolved-ref": "7dbb51d78534b3c037f3f063448cc45e5ca80a58",
+        "url": "https://github.com/dart-lang/native"
+      },
+      "source": "git",
+      "version": "0.19.2"
+    },
+    "nested": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "23dbf54af127301839927831695800edd5cc3dc0",
+        "resolved-ref": "23dbf54af127301839927831695800edd5cc3dc0",
+        "url": "https://github.com/rrousselGit/nested"
+      },
+      "source": "git",
+      "version": "1.0.0"
+    },
+    "nm": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "6568c7666071f56177e45333c80dc1978ae14483",
+        "resolved-ref": "6568c7666071f56177e45333c80dc1978ae14483",
+        "url": "https://github.com/canonical/nm.dart"
+      },
+      "source": "git",
+      "version": "0.5.0"
+    },
+    "node_preamble": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "ddd4f12ddddf94ad53ec17a742008c23ad666cef",
+        "resolved-ref": "ddd4f12ddddf94ad53ec17a742008c23ad666cef",
+        "url": "https://github.com/mbullington/node_preamble.dart"
+      },
+      "source": "git",
+      "version": "2.0.2"
+    },
+    "nostr_tools": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "089d5a2dd751429a040ba10fb24fcbae564053e5",
+        "resolved-ref": "089d5a2dd751429a040ba10fb24fcbae564053e5",
+        "url": "https://github.com/cake-tech/nostr_tools.git"
+      },
+      "source": "git",
+      "version": "1.0.9"
+    },
+    "objective_c": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/objective_c",
+        "ref": "7990d3a3806fa6c161e2340a95574d3a92d9bca2",
+        "resolved-ref": "7990d3a3806fa6c161e2340a95574d3a92d9bca2",
+        "url": "https://github.com/dart-lang/native"
+      },
+      "source": "git",
+      "version": "9.5.0"
+    },
+    "on_chain": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "096865a8c6b89c260beadfec04f7e184c40a3273",
+        "resolved-ref": "096865a8c6b89c260beadfec04f7e184c40a3273",
+        "url": "https://github.com/cake-tech/on_chain.git"
+      },
+      "source": "git",
+      "version": "3.7.0"
+    },
+    "package_config": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/package_config",
+        "ref": "9c533582195b12ea006dc7188767b5a288b4c5c8",
+        "resolved-ref": "9c533582195b12ea006dc7188767b5a288b4c5c8",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "2.2.0"
+    },
+    "package_info_plus": {
+      "dependency": "direct main",
+      "description": {
+        "path": "packages/package_info_plus/package_info_plus",
+        "ref": "9f03424b7916b195ec6a4bebe4cc1a310ba40d4a",
+        "resolved-ref": "9f03424b7916b195ec6a4bebe4cc1a310ba40d4a",
+        "url": "https://github.com/fluttercommunity/plus_plugins"
+      },
+      "source": "git",
+      "version": "8.3.1"
+    },
+    "package_info_plus_platform_interface": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/package_info_plus/package_info_plus_platform_interface",
+        "ref": "9f03424b7916b195ec6a4bebe4cc1a310ba40d4a",
+        "resolved-ref": "9f03424b7916b195ec6a4bebe4cc1a310ba40d4a",
+        "url": "https://github.com/fluttercommunity/plus_plugins"
+      },
+      "source": "git",
+      "version": "3.2.1"
+    },
+    "path": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/path",
+        "ref": "010a343e71238b3ed7fcd55dad5869ecaa40991a",
+        "resolved-ref": "010a343e71238b3ed7fcd55dad5869ecaa40991a",
+        "url": "https://github.com/dart-lang/core"
+      },
+      "source": "git",
+      "version": "1.9.1"
+    },
+    "path_drawing": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "27ce967273429ce505962d4cf68c17a5b16b5aef",
+        "resolved-ref": "27ce967273429ce505962d4cf68c17a5b16b5aef",
+        "url": "https://github.com/dnfield/flutter_path_drawing"
+      },
+      "source": "git",
+      "version": "1.0.1"
+    },
+    "path_parsing": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "third_party/packages/path_parsing",
+        "ref": "3c3181c2cfcd0557e12a95ace0e347141f63e384",
+        "resolved-ref": "3c3181c2cfcd0557e12a95ace0e347141f63e384",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "1.1.0"
+    },
+    "path_provider": {
+      "dependency": "direct main",
+      "description": {
+        "path": "packages/path_provider/path_provider",
+        "ref": "aa964a3ed6d97e4e9778feed85fa9ef1255a0477",
+        "resolved-ref": "aa964a3ed6d97e4e9778feed85fa9ef1255a0477",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "2.1.6"
+    },
+    "path_provider_android": {
+      "dependency": "direct main",
+      "description": {
+        "path": "packages/path_provider/path_provider_android",
+        "ref": "f52df418da6ef2ba666112b4b9e87d9a1c43a0d0",
+        "resolved-ref": "f52df418da6ef2ba666112b4b9e87d9a1c43a0d0",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "2.3.1"
+    },
+    "path_provider_foundation": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/path_provider/path_provider_foundation",
+        "ref": "2ada7838737b6ea374c3ef1fffba95bd097eed92",
+        "resolved-ref": "2ada7838737b6ea374c3ef1fffba95bd097eed92",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "2.6.0"
+    },
+    "path_provider_linux": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/path_provider/path_provider_linux",
+        "ref": "af136ccab198bc7dfa25f5fa5ace23fdbcdaadc7",
+        "resolved-ref": "af136ccab198bc7dfa25f5fa5ace23fdbcdaadc7",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "2.2.2"
+    },
+    "path_provider_platform_interface": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/path_provider/path_provider_platform_interface",
+        "ref": "aa964a3ed6d97e4e9778feed85fa9ef1255a0477",
+        "resolved-ref": "aa964a3ed6d97e4e9778feed85fa9ef1255a0477",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "2.1.3"
+    },
+    "path_provider_windows": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/path_provider/path_provider_windows",
+        "ref": "47a92dbdea9bc433779c76b404af9c5ab6fa40cc",
+        "resolved-ref": "47a92dbdea9bc433779c76b404af9c5ab6fa40cc",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "2.3.0"
+    },
+    "pausable_timer": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "41e21b6444749a5d8cdb720128c9be66168b83cf",
+        "resolved-ref": "41e21b6444749a5d8cdb720128c9be66168b83cf",
+        "url": "https://github.com/llucax/pausable_timer"
+      },
+      "source": "git",
+      "version": "3.1.0+3"
+    },
+    "payjoin_flutter": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "b28c825b1d63381e8c2b25ef2ccabacbf833ce53",
+        "resolved-ref": "b28c825b1d63381e8c2b25ef2ccabacbf833ce53",
+        "url": "https://github.com/konstantinullrich/payjoin-flutter"
+      },
+      "source": "git",
+      "version": "0.23.0"
+    },
+    "pedantic": {
+      "dependency": "direct dev",
+      "description": {
+        "path": ".",
+        "ref": "bdcb962e3d2bda31a0e6dadb58b670aa633046e9",
+        "resolved-ref": "bdcb962e3d2bda31a0e6dadb58b670aa633046e9",
+        "url": "https://github.com/google/pedantic"
+      },
+      "source": "git",
+      "version": "1.11.1"
+    },
+    "permission_handler": {
+      "dependency": "direct main",
+      "description": {
+        "path": "permission_handler",
+        "ref": "441c53c4e02ac9b6417f758495a4b04618c6e600",
+        "resolved-ref": "441c53c4e02ac9b6417f758495a4b04618c6e600",
+        "url": "https://github.com/baseflow/flutter-permission-handler"
+      },
+      "source": "git",
+      "version": "11.4.0"
+    },
+    "permission_handler_android": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "permission_handler_android",
+        "ref": "1dd6dc265a8f7b8b8dd0dd04f7202b8c17e4aa59",
+        "resolved-ref": "1dd6dc265a8f7b8b8dd0dd04f7202b8c17e4aa59",
+        "url": "https://github.com/baseflow/flutter-permission-handler"
+      },
+      "source": "git",
+      "version": "12.1.0"
+    },
+    "permission_handler_apple": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "permission_handler_apple",
+        "ref": "5c989b1be9abbbb325424ad96e5be4efdc0987c2",
+        "resolved-ref": "5c989b1be9abbbb325424ad96e5be4efdc0987c2",
+        "url": "https://github.com/baseflow/flutter-permission-handler"
+      },
+      "source": "git",
+      "version": "9.6.1"
+    },
+    "permission_handler_html": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "permission_handler_html",
+        "ref": "f93a58bb2b993b831f48cf1ec0b3537905643e7e",
+        "resolved-ref": "f93a58bb2b993b831f48cf1ec0b3537905643e7e",
+        "url": "https://github.com/baseflow/flutter-permission-handler"
+      },
+      "source": "git",
+      "version": "0.1.4+1"
+    },
+    "permission_handler_platform_interface": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "permission_handler_platform_interface",
+        "ref": "b0bdda5faabb912dc6d0b3f330f9d801727db76e",
+        "resolved-ref": "b0bdda5faabb912dc6d0b3f330f9d801727db76e",
+        "url": "https://github.com/baseflow/flutter-permission-handler"
+      },
+      "source": "git",
+      "version": "4.4.0"
+    },
+    "permission_handler_windows": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "permission_handler_windows",
+        "ref": "41c2485eb698d055dcf59a373c07dee537b8aa01",
+        "resolved-ref": "41c2485eb698d055dcf59a373c07dee537b8aa01",
+        "url": "https://github.com/baseflow/flutter-permission-handler"
+      },
+      "source": "git",
+      "version": "0.2.2"
+    },
+    "petitparser": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "3d3c2155df8c427027660f8ca37ddc6e7b894748",
+        "resolved-ref": "3d3c2155df8c427027660f8ca37ddc6e7b894748",
+        "url": "https://github.com/petitparser/dart-petitparser"
+      },
+      "source": "git",
+      "version": "6.1.0"
+    },
+    "pinenacl": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "30c38f30a34137aa748217cf2d6fc978740d8da8",
+        "resolved-ref": "30c38f30a34137aa748217cf2d6fc978740d8da8",
+        "url": "https://github.com/ilap/pinenacl-dart"
+      },
+      "source": "git",
+      "version": "0.6.0"
+    },
+    "platform": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/platform",
+        "ref": "07aff972869412010a73bbe33af0909bc0536e78",
+        "resolved-ref": "07aff972869412010a73bbe33af0909bc0536e78",
+        "url": "https://github.com/dart-lang/core"
+      },
+      "source": "git",
+      "version": "3.1.6"
+    },
+    "plugin_platform_interface": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/plugin_platform_interface",
+        "ref": "bb97da8ec627466fdb45cdd36e2c0e35dee40e9e",
+        "resolved-ref": "bb97da8ec627466fdb45cdd36e2c0e35dee40e9e",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "2.1.8"
+    },
+    "pointycastle": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "c7009dbf7785f4ff865ddb4eefdaed8c18ef3baa",
+        "resolved-ref": "c7009dbf7785f4ff865ddb4eefdaed8c18ef3baa",
+        "url": "https://github.com/bcgit/pc-dart"
+      },
+      "source": "git",
+      "version": "3.9.1"
+    },
+    "polyseed": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "1a8280ac2b6f01d202d8bff71527fe1ce498c4ed",
+        "resolved-ref": "1a8280ac2b6f01d202d8bff71527fe1ce498c4ed",
+        "url": "https://github.com/cake-tech/polyseed_dart"
+      },
+      "source": "git",
+      "version": "0.0.7"
+    },
+    "pool": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/pool",
+        "ref": "042b03e8284032088f851172ab7b2aed06da1d72",
+        "resolved-ref": "042b03e8284032088f851172ab7b2aed06da1d72",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "1.5.2"
+    },
+    "posix": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "3c544340f3e4ffc64b20e6959ae8229c98638a0a",
+        "resolved-ref": "3c544340f3e4ffc64b20e6959ae8229c98638a0a",
+        "url": "https://github.com/onepub-dev/dart_posix"
+      },
+      "source": "git",
+      "version": "6.5.2"
+    },
+    "process": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/process",
+        "ref": "5e977d6f0698a220279a50538c89a440d56b0c44",
+        "resolved-ref": "5e977d6f0698a220279a50538c89a440d56b0c44",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "5.0.5"
+    },
+    "progressive_blur": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "6ec8d0ccf46b1629a46ab68f31e26df489bac958",
+        "resolved-ref": "6ec8d0ccf46b1629a46ab68f31e26df489bac958",
+        "url": "https://github.com/kekland/progressive_blur"
+      },
+      "source": "git",
+      "version": "0.0.2"
+    },
+    "protobuf": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "protobuf",
+        "ref": "a852ba4e4b6f319c655fc938864dac8442b7c4ad",
+        "resolved-ref": "a852ba4e4b6f319c655fc938864dac8442b7c4ad",
+        "url": "https://github.com/google/protobuf.dart"
+      },
+      "source": "git",
+      "version": "3.1.0"
+    },
+    "provider": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/provider",
+        "ref": "558bdcd26ddb2b922bec06e3fa0d91bc59479baf",
+        "resolved-ref": "558bdcd26ddb2b922bec06e3fa0d91bc59479baf",
+        "url": "https://github.com/rrousselGit/provider"
+      },
+      "source": "git",
+      "version": "6.1.5+1"
+    },
+    "pub_semver": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/pub_semver",
+        "ref": "d67cd0022095a138c66df94f100e5a129c15a65e",
+        "resolved-ref": "d67cd0022095a138c66df94f100e5a129c15a65e",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "2.2.0"
+    },
+    "pubspec_parse": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/pubspec_parse",
+        "ref": "070355ee7014c4d37bdc50fa2b4a597f2774f9ca",
+        "resolved-ref": "070355ee7014c4d37bdc50fa2b4a597f2774f9ca",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "1.5.0"
+    },
+    "qr": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "792288784e200301b323b1e36852ae60a3ac2431",
+        "resolved-ref": "792288784e200301b323b1e36852ae60a3ac2431",
+        "url": "https://github.com/kevmoo/qr.dart"
+      },
+      "source": "git",
+      "version": "3.0.2"
+    },
+    "qr_flutter": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "dced28909a82e1906e7c510ae8ca807a1658c898",
+        "resolved-ref": "dced28909a82e1906e7c510ae8ca807a1658c898",
+        "url": "https://github.com/cake-tech/qr.flutter.git"
+      },
+      "source": "git",
+      "version": "4.0.1"
+    },
+    "quick_actions": {
+      "dependency": "direct main",
+      "description": {
+        "path": "packages/quick_actions/quick_actions",
+        "ref": "8238e1c5ada8c6a99f7fb6087484b52face33721",
+        "resolved-ref": "8238e1c5ada8c6a99f7fb6087484b52face33721",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "1.1.0"
+    },
+    "quick_actions_android": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/quick_actions/quick_actions_android",
+        "ref": "c05ab81dddf0f145c57b43df80903ce17ba84baf",
+        "resolved-ref": "c05ab81dddf0f145c57b43df80903ce17ba84baf",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "1.0.30"
+    },
+    "quick_actions_ios": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/quick_actions/quick_actions_ios",
+        "ref": "7ae082a7f6cd1bc6a219c6ab0adf27a3d8ffdc23",
+        "resolved-ref": "7ae082a7f6cd1bc6a219c6ab0adf27a3d8ffdc23",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "1.2.4"
+    },
+    "quick_actions_platform_interface": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/quick_actions/quick_actions_platform_interface",
+        "ref": "761812665448c7e5a1bd5810aeabfac1ac027038",
+        "resolved-ref": "761812665448c7e5a1bd5810aeabfac1ac027038",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "1.1.0"
+    },
+    "quiver": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "6ec3568dee63ae02e8676e28a6df0157f4d20e84",
+        "resolved-ref": "6ec3568dee63ae02e8676e28a6df0157f4d20e84",
+        "url": "https://github.com/google/quiver-dart"
+      },
+      "source": "git",
+      "version": "3.2.2"
+    },
+    "rational": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "09b5adc5be7a27c349a36b73d0d616b133ad8730",
+        "resolved-ref": "09b5adc5be7a27c349a36b73d0d616b133ad8730",
+        "url": "https://github.com/a14n/dart-rational"
+      },
+      "source": "git",
+      "version": "2.2.3"
+    },
+    "record_use": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/record_use",
+        "ref": "abe17706806e8aa3cdafcbdab02cbbb5d1d2f884",
+        "resolved-ref": "abe17706806e8aa3cdafcbdab02cbbb5d1d2f884",
+        "url": "https://github.com/dart-lang/native"
+      },
+      "source": "git",
+      "version": "0.6.0"
+    },
+    "reown_core": {
+      "dependency": "transitive",
+      "description": {
+        "path": "scripts/reown_flutter/packages/reown_core",
+        "relative": true
+      },
+      "source": "path",
+      "version": "1.2.1"
+    },
+    "reown_sign": {
+      "dependency": "transitive",
+      "description": {
+        "path": "scripts/reown_flutter/packages/reown_sign",
+        "relative": true
+      },
+      "source": "path",
+      "version": "1.2.0"
+    },
+    "reown_walletkit": {
+      "dependency": "direct main",
+      "description": {
+        "path": "scripts/reown_flutter/packages/reown_walletkit",
+        "relative": true
+      },
+      "source": "path",
+      "version": "1.2.0"
+    },
+    "reown_yttrium": {
+      "dependency": "transitive",
+      "description": {
+        "path": "scripts/reown_flutter/packages/reown_yttrium",
+        "relative": true
+      },
+      "source": "path",
+      "version": "0.0.1"
+    },
+    "rive": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "2dbfe918a3d38340f378ab2734b1c97ebcb4ab26",
+        "resolved-ref": "2dbfe918a3d38340f378ab2734b1c97ebcb4ab26",
+        "url": "https://github.com/MrCyjaneK/rive-flutter-no-lfs"
+      },
+      "source": "git",
+      "version": "0.13.20"
+    },
+    "rive_common": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "34ef174e87dc4a29e728babfaad8dd9464b704ae",
+        "resolved-ref": "34ef174e87dc4a29e728babfaad8dd9464b704ae",
+        "url": "https://github.com/malik1004x/rive_common"
+      },
+      "source": "git",
+      "version": "0.4.15"
+    },
+    "riverpod": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/riverpod",
+        "ref": "eb3651b42e368fc9a227aeffc9736fdc9a82f1b7",
+        "resolved-ref": "eb3651b42e368fc9a227aeffc9736fdc9a82f1b7",
+        "url": "https://github.com/rrousselGit/riverpod"
+      },
+      "source": "git",
+      "version": "3.3.2"
+    },
+    "riverpod_annotation": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/riverpod_annotation",
+        "ref": "eb3651b42e368fc9a227aeffc9736fdc9a82f1b7",
+        "resolved-ref": "eb3651b42e368fc9a227aeffc9736fdc9a82f1b7",
+        "url": "https://github.com/rrousselGit/riverpod"
+      },
+      "source": "git",
+      "version": "4.0.3"
+    },
+    "rlz": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "rust_builder",
+        "ref": "36e72b530c274c4a54a6127aadb94886e84d67bf",
+        "resolved-ref": "36e72b530c274c4a54a6127aadb94886e84d67bf",
+        "url": "https://github.com/cake-tech/zkool2.git"
+      },
+      "source": "git",
+      "version": "0.0.1"
+    },
+    "rxdart": {
+      "dependency": "direct main",
+      "description": {
+        "path": "packages/rxdart",
+        "ref": "6852efa646198d8a75fcaee52a5227682f8016e7",
+        "resolved-ref": "6852efa646198d8a75fcaee52a5227682f8016e7",
+        "url": "https://github.com/ReactiveX/rxdart"
+      },
+      "source": "git",
+      "version": "0.28.0"
+    },
+    "searchable_listview": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "87c203ac2737c3103929e2a2cd0f23becc4c3334",
+        "resolved-ref": "87c203ac2737c3103929e2a2cd0f23becc4c3334",
+        "url": "https://github.com/koukibadr/Searchable-Listview"
+      },
+      "source": "git",
+      "version": "2.19.5"
+    },
+    "sec": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "1a53c7983d0e8b5e3842eff85cebc27fd474d8f0",
+        "resolved-ref": "1a53c7983d0e8b5e3842eff85cebc27fd474d8f0",
+        "url": "https://github.com/xclud/dart_sec"
+      },
+      "source": "git",
+      "version": "1.1.0"
+    },
+    "sensitive_clipboard": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "288c7ee2d63b459bc735f7dc89321b29a1f12fae",
+        "resolved-ref": "288c7ee2d63b459bc735f7dc89321b29a1f12fae",
+        "url": "https://github.com/cake-tech/sensitive_clipboard"
+      },
+      "source": "git",
+      "version": "1.0.0"
+    },
+    "sha3": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "6d879eb52dec2b5e110d11957f5512ceb0eaa664",
+        "resolved-ref": "6d879eb52dec2b5e110d11957f5512ceb0eaa664",
+        "url": "https://github.com/maoxs2/dart_sha3"
+      },
+      "source": "git",
+      "version": "0.2.1"
+    },
+    "share_plus": {
+      "dependency": "direct main",
+      "description": {
+        "path": "packages/share_plus/share_plus",
+        "ref": "8e5fab7bfb1685f5a56f53020a49b2ff5bece25d",
+        "resolved-ref": "8e5fab7bfb1685f5a56f53020a49b2ff5bece25d",
+        "url": "https://github.com/fluttercommunity/plus_plugins"
+      },
+      "source": "git",
+      "version": "10.1.4"
+    },
+    "share_plus_platform_interface": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/share_plus/share_plus_platform_interface",
+        "ref": "b5d24a0e3927314e50be041c9f5b7da487d69313",
+        "resolved-ref": "b5d24a0e3927314e50be041c9f5b7da487d69313",
+        "url": "https://github.com/fluttercommunity/plus_plugins"
+      },
+      "source": "git",
+      "version": "5.0.2"
+    },
+    "shared_preferences": {
+      "dependency": "direct main",
+      "description": {
+        "path": "packages/shared_preferences/shared_preferences",
+        "ref": "064b0b26568728342a550dc876b0a0e0f2fbaa84",
+        "resolved-ref": "064b0b26568728342a550dc876b0a0e0f2fbaa84",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "2.5.3"
+    },
+    "shared_preferences_android": {
+      "dependency": "direct main",
+      "description": {
+        "path": "packages/shared_preferences/shared_preferences_android",
+        "ref": "371106fe7d9864a157fc9366f57d0b0e64fab932",
+        "resolved-ref": "371106fe7d9864a157fc9366f57d0b0e64fab932",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "2.4.23"
+    },
+    "shared_preferences_foundation": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/shared_preferences/shared_preferences_foundation",
+        "ref": "18b9cc5f2b0820cb6164f0150958ba76db75c61a",
+        "resolved-ref": "18b9cc5f2b0820cb6164f0150958ba76db75c61a",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "2.5.6"
+    },
+    "shared_preferences_linux": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/shared_preferences/shared_preferences_linux",
+        "ref": "cdd6e1368ffdf6a4fc9c0c11b72cfc5388f90f2d",
+        "resolved-ref": "cdd6e1368ffdf6a4fc9c0c11b72cfc5388f90f2d",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "2.4.1"
+    },
+    "shared_preferences_platform_interface": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/shared_preferences/shared_preferences_platform_interface",
+        "ref": "371106fe7d9864a157fc9366f57d0b0e64fab932",
+        "resolved-ref": "371106fe7d9864a157fc9366f57d0b0e64fab932",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "2.4.2"
+    },
+    "shared_preferences_web": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/shared_preferences/shared_preferences_web",
+        "ref": "cb4fb13e19756cbbcb523bc33fbf7b7a5923e787",
+        "resolved-ref": "cb4fb13e19756cbbcb523bc33fbf7b7a5923e787",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "2.4.3"
+    },
+    "shared_preferences_windows": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/shared_preferences/shared_preferences_windows",
+        "ref": "cdd6e1368ffdf6a4fc9c0c11b72cfc5388f90f2d",
+        "resolved-ref": "cdd6e1368ffdf6a4fc9c0c11b72cfc5388f90f2d",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "2.4.1"
+    },
+    "shelf": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/shelf",
+        "ref": "2536c15a562cb183dabbc628824a215663830325",
+        "resolved-ref": "2536c15a562cb183dabbc628824a215663830325",
+        "url": "https://github.com/dart-lang/shelf"
+      },
+      "source": "git",
+      "version": "1.4.2"
+    },
+    "shelf_packages_handler": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/shelf_packages_handler",
+        "ref": "25861e55406c1f66cce066b6ed575f420b480e45",
+        "resolved-ref": "25861e55406c1f66cce066b6ed575f420b480e45",
+        "url": "https://github.com/dart-lang/shelf"
+      },
+      "source": "git",
+      "version": "3.0.2"
+    },
+    "shelf_static": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/shelf_static",
+        "ref": "d53a8f9a98ccbe69078d397d45c2c6b3e7c243b6",
+        "resolved-ref": "d53a8f9a98ccbe69078d397d45c2c6b3e7c243b6",
+        "url": "https://github.com/dart-lang/shelf"
+      },
+      "source": "git",
+      "version": "1.1.3"
+    },
+    "shelf_web_socket": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/shelf_web_socket",
+        "ref": "2a7442f7d6d3e63fdc7b387128619b263dcb7e78",
+        "resolved-ref": "2a7442f7d6d3e63fdc7b387128619b263dcb7e78",
+        "url": "https://github.com/dart-lang/shelf"
+      },
+      "source": "git",
+      "version": "3.0.0"
+    },
+    "sky_engine": {
+      "dependency": "transitive",
+      "description": "flutter",
+      "source": "sdk",
+      "version": "0.0.0"
+    },
+    "smooth_page_indicator": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "519df3304d58c9d77e91725318076bc3aaa6e852",
+        "resolved-ref": "519df3304d58c9d77e91725318076bc3aaa6e852",
+        "url": "https://github.com/Milad-Akarie/smooth_page_indicator"
+      },
+      "source": "git",
+      "version": "1.2.1"
+    },
+    "socks5_proxy": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "27ad7c2efae8d7460325c74b90f660085cbd0685",
+        "resolved-ref": "27ad7c2efae8d7460325c74b90f660085cbd0685",
+        "url": "https://github.com/LacticWhale/socks_dart.git"
+      },
+      "source": "git",
+      "version": "2.1.0"
+    },
+    "socks_socket": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "e6232c53c1595469931ababa878759a067c02e94",
+        "resolved-ref": "e6232c53c1595469931ababa878759a067c02e94",
+        "url": "https://github.com/sneurlax/socks_socket"
+      },
+      "source": "git",
+      "version": "1.1.1"
+    },
+    "solana": {
+      "dependency": "direct main",
+      "description": {
+        "path": "packages/solana",
+        "ref": "ab60e9d4c7d7271037597154ad2a835812054ed6",
+        "resolved-ref": "ab60e9d4c7d7271037597154ad2a835812054ed6",
+        "url": "https://github.com/espresso-cash/espresso-cash-public"
+      },
+      "source": "git",
+      "version": "0.31.2+1"
+    },
+    "source_gen": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "source_gen",
+        "ref": "98cbdb6b17cdccabb0fec6e37fd66e2790d05092",
+        "resolved-ref": "98cbdb6b17cdccabb0fec6e37fd66e2790d05092",
+        "url": "https://github.com/dart-lang/source_gen"
+      },
+      "source": "git",
+      "version": "4.2.4"
+    },
+    "source_map_stack_trace": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/source_map_stack_trace",
+        "ref": "56db6f3d085fa4e70b0286b30989654a5db90c94",
+        "resolved-ref": "56db6f3d085fa4e70b0286b30989654a5db90c94",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "2.1.2"
+    },
+    "source_maps": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/source_maps",
+        "ref": "db47a844e03cbd076ac7e5a0f4f46cadcba28da8",
+        "resolved-ref": "db47a844e03cbd076ac7e5a0f4f46cadcba28da8",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "0.10.13"
+    },
+    "source_span": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/source_span",
+        "ref": "e501121027c0a9014161ff79cbf519c1813e3153",
+        "resolved-ref": "e501121027c0a9014161ff79cbf519c1813e3153",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "1.10.2"
+    },
+    "sp_scanner": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "40ed3ce8319744907bef3b25bc6e0af8428c8724",
+        "resolved-ref": "40ed3ce8319744907bef3b25bc6e0af8428c8724",
+        "url": "https://github.com/cake-tech/sp_scanner"
+      },
+      "source": "git",
+      "version": "0.0.1"
+    },
+    "sqflite": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "sqflite",
+        "ref": "094cc31b82df7f9ba04f330f13b50e345f777079",
+        "resolved-ref": "094cc31b82df7f9ba04f330f13b50e345f777079",
+        "url": "https://github.com/tekartik/sqflite"
+      },
+      "source": "git",
+      "version": "2.4.2+1"
+    },
+    "sqflite_android": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "sqflite_android",
+        "ref": "7e7159b59572e04024258417072428d1cffca1cc",
+        "resolved-ref": "7e7159b59572e04024258417072428d1cffca1cc",
+        "url": "https://github.com/tekartik/sqflite"
+      },
+      "source": "git",
+      "version": "2.4.2+3"
+    },
+    "sqflite_common": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "sqflite_common",
+        "ref": "018def1518b3ce9efcb25bbf57809153e9252da7",
+        "resolved-ref": "018def1518b3ce9efcb25bbf57809153e9252da7",
+        "url": "https://github.com/tekartik/sqflite"
+      },
+      "source": "git",
+      "version": "2.5.8"
+    },
+    "sqflite_common_ffi": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "sqflite_common_ffi",
+        "ref": "7482da6f456feb715eecdff8a6287bb30d01481f",
+        "resolved-ref": "7482da6f456feb715eecdff8a6287bb30d01481f",
+        "url": "https://github.com/tekartik/sqflite"
+      },
+      "source": "git",
+      "version": "2.4.0+3"
+    },
+    "sqflite_darwin": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "sqflite_darwin",
+        "ref": "e2d87c863f33e8981dfb589d4784ab14d8f5cc77",
+        "resolved-ref": "e2d87c863f33e8981dfb589d4784ab14d8f5cc77",
+        "url": "https://github.com/tekartik/sqflite"
+      },
+      "source": "git",
+      "version": "2.4.2"
+    },
+    "sqflite_platform_interface": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "sqflite_platform_interface",
+        "ref": "03e86a1aa7f8ebea7c40d2b02248cadc7630c2f0",
+        "resolved-ref": "03e86a1aa7f8ebea7c40d2b02248cadc7630c2f0",
+        "url": "https://github.com/tekartik/sqflite"
+      },
+      "source": "git",
+      "version": "2.4.0"
+    },
+    "sqlite3": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "sqlite3",
+        "ref": "ac40b296e7069c4e83503bcbe4a3b22dfe5431a7",
+        "resolved-ref": "ac40b296e7069c4e83503bcbe4a3b22dfe5431a7",
+        "url": "https://github.com/simolus3/sqlite3.dart"
+      },
+      "source": "git",
+      "version": "3.5.1"
+    },
+    "sqlite3_flutter_libs": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "sqlite3_flutter_libs",
+        "ref": "808a60becaa3f9fae41e0590b853c3283b5f6afb",
+        "resolved-ref": "808a60becaa3f9fae41e0590b853c3283b5f6afb",
+        "url": "https://github.com/simolus3/sqlite3.dart"
+      },
+      "source": "git",
+      "version": "0.5.40"
+    },
+    "stack_trace": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/stack_trace",
+        "ref": "07648c8269244506d83c15dc8cc50aa53d24bf35",
+        "resolved-ref": "07648c8269244506d83c15dc8cc50aa53d24bf35",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "1.12.1"
+    },
+    "state_notifier": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/state_notifier",
+        "ref": "061abfc682881d5da4716b211cd4e7d41805a9ac",
+        "resolved-ref": "061abfc682881d5da4716b211cd4e7d41805a9ac",
+        "url": "https://github.com/rrousselGit/state_notifier"
+      },
+      "source": "git",
+      "version": "1.0.0"
+    },
+    "stream_channel": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/stream_channel",
+        "ref": "5265a85f307ce7be94553378589205df97736a1b",
+        "resolved-ref": "5265a85f307ce7be94553378589205df97736a1b",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "2.1.4"
+    },
+    "stream_transform": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/stream_transform",
+        "ref": "46cc745458f93bdbd39972a925d7530e57f84f5c",
+        "resolved-ref": "46cc745458f93bdbd39972a925d7530e57f84f5c",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "2.1.1"
+    },
+    "string_scanner": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/string_scanner",
+        "ref": "3815ff3fd2aee5212586c3fc4d2bcf08584c98f3",
+        "resolved-ref": "3815ff3fd2aee5212586c3fc4d2bcf08584c98f3",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "1.4.1"
+    },
+    "sync_http": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "39509d69fd5a9c3da46eab48fcafdf62e6ad4580",
+        "resolved-ref": "39509d69fd5a9c3da46eab48fcafdf62e6ad4580",
+        "url": "https://github.com/google/sync_http.dart"
+      },
+      "source": "git",
+      "version": "0.3.1"
+    },
+    "synchronized": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "synchronized",
+        "ref": "b38010355b23e3baed85e263ca7f9e222d57b00a",
+        "resolved-ref": "b38010355b23e3baed85e263ca7f9e222d57b00a",
+        "url": "https://github.com/tekartik/synchronized.dart"
+      },
+      "source": "git",
+      "version": "3.4.0+1"
+    },
+    "term_glyph": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/term_glyph",
+        "ref": "c90e95b1f2a130b2e951466719b28c3d13b8dab5",
+        "resolved-ref": "c90e95b1f2a130b2e951466719b28c3d13b8dab5",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "1.2.2"
+    },
+    "test": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/test",
+        "ref": "45e4ef287d70dad449f13d4f284f9faea2d9188b",
+        "resolved-ref": "45e4ef287d70dad449f13d4f284f9faea2d9188b",
+        "url": "https://github.com/dart-lang/test"
+      },
+      "source": "git",
+      "version": "1.30.0"
+    },
+    "test_api": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/test_api",
+        "ref": "45e4ef287d70dad449f13d4f284f9faea2d9188b",
+        "resolved-ref": "45e4ef287d70dad449f13d4f284f9faea2d9188b",
+        "url": "https://github.com/dart-lang/test"
+      },
+      "source": "git",
+      "version": "0.7.10"
+    },
+    "test_core": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/test_core",
+        "ref": "45e4ef287d70dad449f13d4f284f9faea2d9188b",
+        "resolved-ref": "45e4ef287d70dad449f13d4f284f9faea2d9188b",
+        "url": "https://github.com/dart-lang/test"
+      },
+      "source": "git",
+      "version": "0.6.16"
+    },
+    "timezone": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "64db18e450c10247e23ee36546865007b01cf135",
+        "resolved-ref": "64db18e450c10247e23ee36546865007b01cf135",
+        "url": "https://github.com/srawlins/timezone"
+      },
+      "source": "git",
+      "version": "0.10.1"
+    },
+    "toastification": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "4f1068f5265a0d189aee6881d125e8a35adec74f",
+        "resolved-ref": "4f1068f5265a0d189aee6881d125e8a35adec74f",
+        "url": "https://github.com/payam-zahedi/toastification"
+      },
+      "source": "git",
+      "version": "3.2.0"
+    },
+    "torch_dart": {
+      "dependency": "direct main",
+      "description": {
+        "path": "scripts/torch_dart",
+        "relative": true
+      },
+      "source": "path",
+      "version": "0.0.1"
+    },
+    "translator": {
+      "dependency": "direct dev",
+      "description": {
+        "path": ".",
+        "ref": "b36571ec11efd838afda010adcc21a4e95302745",
+        "resolved-ref": "b36571ec11efd838afda010adcc21a4e95302745",
+        "url": "https://github.com/cake-tech/google-translator.git"
+      },
+      "source": "git",
+      "version": "1.0.0"
+    },
+    "trezor_connect": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "d1242cea90f84b00200e7bcab914a5af750e23fb",
+        "resolved-ref": "d1242cea90f84b00200e7bcab914a5af750e23fb",
+        "url": "https://github.com/cake-tech/trezor_connect"
+      },
+      "source": "git",
+      "version": "0.0.1"
+    },
+    "trezor_flutter": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "trezor-flutter",
+        "ref": "7d27e19b7bcdcd6241df35953f9a6ec2df0c7a97",
+        "resolved-ref": "7d27e19b7bcdcd6241df35953f9a6ec2df0c7a97",
+        "url": "https://github.com/cake-tech/trezor-flutter.git"
+      },
+      "source": "git",
+      "version": "0.1.0"
+    },
+    "trezor_usb_transport": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "trezor_usb_transport",
+        "ref": "7d27e19b7bcdcd6241df35953f9a6ec2df0c7a97",
+        "resolved-ref": "7d27e19b7bcdcd6241df35953f9a6ec2df0c7a97",
+        "url": "https://github.com/cake-tech/trezor-flutter.git"
+      },
+      "source": "git",
+      "version": "0.0.1"
+    },
+    "tuple": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "91bcce6e0672c4b071d270aafde5cd86103668dd",
+        "resolved-ref": "91bcce6e0672c4b071d270aafde5cd86103668dd",
+        "url": "https://github.com/google/tuple.dart"
+      },
+      "source": "git",
+      "version": "2.0.2"
+    },
+    "typed_data": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/typed_data",
+        "ref": "5ed932323581a4791672c25fe154c622b535c264",
+        "resolved-ref": "5ed932323581a4791672c25fe154c622b535c264",
+        "url": "https://github.com/dart-lang/core"
+      },
+      "source": "git",
+      "version": "1.4.0"
+    },
+    "uni_links": {
+      "dependency": "direct main",
+      "description": {
+        "path": "uni_links",
+        "ref": "1989db3f5d625e2fffbad7b85a3b1b8c78c6dfa1",
+        "resolved-ref": "1989db3f5d625e2fffbad7b85a3b1b8c78c6dfa1",
+        "url": "https://github.com/cake-tech/uni_links"
+      },
+      "source": "git",
+      "version": "0.5.1"
+    },
+    "uni_links_platform_interface": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "uni_links_platform_interface",
+        "ref": "cdd7a217d351a32c418afad18f8ea6893cfed05a",
+        "resolved-ref": "cdd7a217d351a32c418afad18f8ea6893cfed05a",
+        "url": "https://github.com/avioli/uni_links"
+      },
+      "source": "git",
+      "version": "1.0.0"
+    },
+    "uni_links_web": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "uni_links_web",
+        "ref": "cf9d2b64dc3e890015d1dd6df7b6414123835663",
+        "resolved-ref": "cf9d2b64dc3e890015d1dd6df7b6414123835663",
+        "url": "https://github.com/avioli/uni_links"
+      },
+      "source": "git",
+      "version": "0.1.0"
+    },
+    "universal_ble": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "6735c1bdf7f42c501d51c20564eb957c3a12b981",
+        "resolved-ref": "6735c1bdf7f42c501d51c20564eb957c3a12b981",
+        "url": "https://github.com/cake-tech/universal_ble.git"
+      },
+      "source": "git",
+      "version": "2.0.0"
+    },
+    "universal_io": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "ed92942d149674621e7ae4ac46325e55ecee9368",
+        "resolved-ref": "ed92942d149674621e7ae4ac46325e55ecee9368",
+        "url": "https://github.com/dart-io-packages/universal_io"
+      },
+      "source": "git",
+      "version": "2.3.1"
+    },
+    "universal_platform": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "f4fc405630cdd541d78457b0b4521b89456ea068",
+        "resolved-ref": "f4fc405630cdd541d78457b0b4521b89456ea068",
+        "url": "https://github.com/gskinnerTeam/flutter-universal-platform"
+      },
+      "source": "git",
+      "version": "1.1.0"
+    },
+    "unorm_dart": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "3301bdc74e9644c69201db31e0daefb24fd10cd8",
+        "resolved-ref": "3301bdc74e9644c69201db31e0daefb24fd10cd8",
+        "url": "https://github.com/yshrsmz/unorm-dart"
+      },
+      "source": "git",
+      "version": "0.3.2"
+    },
+    "ur": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "5738f70d0ec3d50977ac3dd01fed62939600238b",
+        "resolved-ref": "5738f70d0ec3d50977ac3dd01fed62939600238b",
+        "url": "https://github.com/bukata-sa/bc-ur-dart"
+      },
+      "source": "git",
+      "version": "0.1.0"
+    },
+    "url_launcher": {
+      "dependency": "direct main",
+      "description": {
+        "path": "packages/url_launcher/url_launcher",
+        "ref": "3fe6a0149acebc9cb8707cf508d13f59fc372986",
+        "resolved-ref": "3fe6a0149acebc9cb8707cf508d13f59fc372986",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "6.3.2"
+    },
+    "url_launcher_android": {
+      "dependency": "direct main",
+      "description": {
+        "path": "packages/url_launcher/url_launcher_android",
+        "ref": "7287c7b7f1d51e8842f49df46dbd0af3bd1c1077",
+        "resolved-ref": "7287c7b7f1d51e8842f49df46dbd0af3bd1c1077",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "6.3.14"
+    },
+    "url_launcher_ios": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/url_launcher/url_launcher_ios",
+        "ref": "9cac0573363b7bbe6bf32aca44582fb75ee67521",
+        "resolved-ref": "9cac0573363b7bbe6bf32aca44582fb75ee67521",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "6.4.1"
+    },
+    "url_launcher_linux": {
+      "dependency": "direct main",
+      "description": {
+        "path": "packages/url_launcher/url_launcher_linux",
+        "ref": "73d2f3eb966d36a44cbb943ea0e96dda3a2f8da2",
+        "resolved-ref": "73d2f3eb966d36a44cbb943ea0e96dda3a2f8da2",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "3.1.1"
+    },
+    "url_launcher_macos": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/url_launcher/url_launcher_macos",
+        "ref": "18b9cc5f2b0820cb6164f0150958ba76db75c61a",
+        "resolved-ref": "18b9cc5f2b0820cb6164f0150958ba76db75c61a",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "3.2.5"
+    },
+    "url_launcher_platform_interface": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/url_launcher/url_launcher_platform_interface",
+        "ref": "ef349bec8ee9d5fa3f69d73aa78ab9bb84ae0aa7",
+        "resolved-ref": "ef349bec8ee9d5fa3f69d73aa78ab9bb84ae0aa7",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "2.3.2"
+    },
+    "url_launcher_web": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/url_launcher/url_launcher_web",
+        "ref": "67ec0d36293eb963590e0606c8bede379be4d142",
+        "resolved-ref": "67ec0d36293eb963590e0606c8bede379be4d142",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "2.4.3"
+    },
+    "url_launcher_windows": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/url_launcher/url_launcher_windows",
+        "ref": "18b9cc5f2b0820cb6164f0150958ba76db75c61a",
+        "resolved-ref": "18b9cc5f2b0820cb6164f0150958ba76db75c61a",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "3.1.5"
+    },
+    "uuid": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "d602950818e4b11d097d26f5408b461f38248130",
+        "resolved-ref": "d602950818e4b11d097d26f5408b461f38248130",
+        "url": "https://github.com/Daegalus/dart-uuid"
+      },
+      "source": "git",
+      "version": "4.6.0"
+    },
+    "vector_graphics": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/vector_graphics",
+        "ref": "caddb39d831fc9e7f9a2cbe5c87d75629adc35ac",
+        "resolved-ref": "caddb39d831fc9e7f9a2cbe5c87d75629adc35ac",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "1.2.3"
+    },
+    "vector_graphics_codec": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/vector_graphics_codec",
+        "ref": "11a9fa8bf6e5a49d02aef0ba5c5a95037a2acbc3",
+        "resolved-ref": "11a9fa8bf6e5a49d02aef0ba5c5a95037a2acbc3",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "1.1.13"
+    },
+    "vector_graphics_compiler": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/vector_graphics_compiler",
+        "ref": "3d05e51b22d99c5362d2f1f7f5b80358dd4e9cb3",
+        "resolved-ref": "3d05e51b22d99c5362d2f1f7f5b80358dd4e9cb3",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "1.3.0"
+    },
+    "vector_math": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "13f185f7e97d559e003f5ac79201da12f9a01049",
+        "resolved-ref": "13f185f7e97d559e003f5ac79201da12f9a01049",
+        "url": "https://github.com/google/vector_math.dart"
+      },
+      "source": "git",
+      "version": "2.2.0"
+    },
+    "vm_service": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkg/vm_service",
+        "ref": "c70f78e7d682c158c15ca0c26c729b3ccb932284",
+        "resolved-ref": "c70f78e7d682c158c15ca0c26c729b3ccb932284",
+        "url": "https://github.com/dart-lang/sdk"
+      },
+      "source": "git",
+      "version": "15.1.0"
+    },
+    "wakelock_plus": {
+      "dependency": "direct main",
+      "description": {
+        "path": "wakelock_plus",
+        "ref": "e7301f64397c946fac4ee66acdfb545b666f4a43",
+        "resolved-ref": "e7301f64397c946fac4ee66acdfb545b666f4a43",
+        "url": "https://github.com/fluttercommunity/wakelock_plus"
+      },
+      "source": "git",
+      "version": "1.3.3"
+    },
+    "wakelock_plus_platform_interface": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "wakelock_plus_platform_interface",
+        "ref": "302991238a66dd1f6b1e50b38f58d97d177cd9ab",
+        "resolved-ref": "302991238a66dd1f6b1e50b38f58d97d177cd9ab",
+        "url": "https://github.com/fluttercommunity/wakelock_plus"
+      },
+      "source": "git",
+      "version": "1.6.0"
+    },
+    "wallet": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "aa5ba16f7a8a3a7789ca78330ce3877913f29a83",
+        "resolved-ref": "aa5ba16f7a8a3a7789ca78330ce3877913f29a83",
+        "url": "https://github.com/xclud/dart_wallet"
+      },
+      "source": "git",
+      "version": "0.0.13"
+    },
+    "watcher": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/watcher",
+        "ref": "67a0fea10d8402d427aca8aff95cdc3b16004fc2",
+        "resolved-ref": "67a0fea10d8402d427aca8aff95cdc3b16004fc2",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "1.2.1"
+    },
+    "web": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "web",
+        "ref": "222164b5010cb0324d4132666f1d43750ffc6448",
+        "resolved-ref": "222164b5010cb0324d4132666f1d43750ffc6448",
+        "url": "https://github.com/dart-lang/web"
+      },
+      "source": "git",
+      "version": "1.1.1"
+    },
+    "web3dart": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "aa3f932dbf54eda651b7bd01ad00204acf998bd0",
+        "resolved-ref": "aa3f932dbf54eda651b7bd01ad00204acf998bd0",
+        "url": "https://github.com/cake-tech/web3dart.git"
+      },
+      "source": "git",
+      "version": "2.7.2"
+    },
+    "web_socket": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/web_socket",
+        "ref": "31da3556357cd9ba9205e20c9299a1d48c149382",
+        "resolved-ref": "31da3556357cd9ba9205e20c9299a1d48c149382",
+        "url": "https://github.com/dart-lang/http"
+      },
+      "source": "git",
+      "version": "1.0.1"
+    },
+    "web_socket_channel": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/web_socket_channel",
+        "ref": "63c477b466f650e8f5505d6d78dc283c2c2f9845",
+        "resolved-ref": "63c477b466f650e8f5505d6d78dc283c2c2f9845",
+        "url": "https://github.com/dart-lang/http"
+      },
+      "source": "git",
+      "version": "3.0.3"
+    },
+    "webdriver": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "e84e9ccbee3e0c38a149b7d964eb7ab6ccc78384",
+        "resolved-ref": "e84e9ccbee3e0c38a149b7d964eb7ab6ccc78384",
+        "url": "https://github.com/google/webdriver.dart"
+      },
+      "source": "git",
+      "version": "3.1.0"
+    },
+    "webkit_inspection_protocol": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "82f0c1c46dfdba5edf7c5fa84456233121dd69e1",
+        "resolved-ref": "82f0c1c46dfdba5edf7c5fa84456233121dd69e1",
+        "url": "https://github.com/google/webkit_inspection_protocol.dart"
+      },
+      "source": "git",
+      "version": "1.2.1"
+    },
+    "win32": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/win32",
+        "ref": "64b0a07ab7e1e3e7db6fca60c6b121d6cfd73709",
+        "resolved-ref": "64b0a07ab7e1e3e7db6fca60c6b121d6cfd73709",
+        "url": "https://github.com/halildurmus/win32"
+      },
+      "source": "git",
+      "version": "5.15.0"
+    },
+    "win32_registry": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "fd20025f9b6f0ce6937b3e7e4b923e51ae11e40f",
+        "resolved-ref": "fd20025f9b6f0ce6937b3e7e4b923e51ae11e40f",
+        "url": "https://github.com/halildurmus/win32_registry"
+      },
+      "source": "git",
+      "version": "1.1.5"
+    },
+    "x25519": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "61b636d53e03cd12c9d9f728f8be6821fb6e2581",
+        "resolved-ref": "61b636d53e03cd12c9d9f728f8be6821fb6e2581",
+        "url": "https://github.com/Tougee/curve25519"
+      },
+      "source": "git",
+      "version": "0.1.1"
+    },
+    "xdg_directories": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "packages/xdg_directories",
+        "ref": "b33972233ecb894f2fd3d61a74dd1c300fac10c2",
+        "resolved-ref": "b33972233ecb894f2fd3d61a74dd1c300fac10c2",
+        "url": "https://github.com/flutter/packages"
+      },
+      "source": "git",
+      "version": "1.1.0"
+    },
+    "xml": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "83796f3dd0923590561d9d169d6ee2db46580099",
+        "resolved-ref": "83796f3dd0923590561d9d169d6ee2db46580099",
+        "url": "https://github.com/renggli/dart-xml"
+      },
+      "source": "git",
+      "version": "6.5.0"
+    },
+    "yaml": {
+      "dependency": "direct main",
+      "description": {
+        "path": "pkgs/yaml",
+        "ref": "27f829e3752382beae9deb1e87029f9ed52ef32e",
+        "resolved-ref": "27f829e3752382beae9deb1e87029f9ed52ef32e",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "3.1.3"
+    },
+    "yaml_edit": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "pkgs/yaml_edit",
+        "ref": "119a499068a903222fbbefdea18ea59efdd417b9",
+        "resolved-ref": "119a499068a903222fbbefdea18ea59efdd417b9",
+        "url": "https://github.com/dart-lang/tools"
+      },
+      "source": "git",
+      "version": "2.2.4"
+    },
+    "zkool": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": ".",
+        "ref": "36e72b530c274c4a54a6127aadb94886e84d67bf",
+        "resolved-ref": "36e72b530c274c4a54a6127aadb94886e84d67bf",
+        "url": "https://github.com/cake-tech/zkool2.git"
+      },
+      "source": "git",
+      "version": "6.24.0"
+    }
+  },
+  "sdks": {
+    "dart": ">=3.9.0 <4.0.0",
+    "flutter": ">=3.3.0"
+  }
+}
