@@ -1434,6 +1434,7 @@
   ./services/networking/scion/scion-ip-gateway.nix
   ./services/networking/scion/scion-router.nix
   ./services/networking/scion/scion.nix
+  ./services/networking/seafile.nix
   ./services/networking/searx.nix
   ./services/networking/shadowsocks.nix
   ./services/networking/shairport-sync.nix
