@@ -21,6 +21,7 @@
   libGL,
   libxcursor,
   libxext,
+  libxi,
   libxinerama,
   libxrandr,
   libepoxy,
@@ -44,7 +45,7 @@ assert lib.assertOneOf "simdTarget" simdTarget [
 ];
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "zlequalizer";
-  version = "1.2.2";
+  version = "1.3.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -53,7 +54,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     owner = "ZL-Audio";
     repo = "ZLEqualizer";
     tag = finalAttrs.version;
-    hash = "sha256-fIcplXdRKtCqWBm2Vw/Nm8dVDOpKnsejo2irv1xehvk=";
+    hash = "sha256-fojgunfHoiYqQdwibQ8e9DS30zHSOrZveozaNYNFRqo=";
     fetchSubmodules = true;
   };
 
@@ -78,6 +79,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libGL
     libxcursor
     libxext
+    libxi
     libxinerama
     libxrandr
     libepoxy
@@ -91,6 +93,7 @@ clangStdenv.mkDerivation (finalAttrs: {
       "-lX11"
       "-lXext"
       "-lXcursor"
+      "-lXi"
       "-lXinerama"
       "-lXrandr"
     ];
