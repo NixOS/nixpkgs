@@ -5,7 +5,7 @@
 }:
 let
   pname = "realvnc-vnc-viewer";
-  version = "7.15.1";
+  version = "8.5.0";
 
   meta = {
     description = "VNC remote desktop client software by RealVNC";
@@ -21,7 +21,7 @@ let
       onedragon
     ];
     platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
-    mainProgram = "vncviewer";
+    mainProgram = "realvnc-vnc-viewer";
   };
 in
 if stdenv.hostPlatform.isDarwin then
