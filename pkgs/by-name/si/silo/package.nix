@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   testers,
 }:
@@ -26,20 +26,26 @@ let
   #   => "2026"
   versionToYear = version: builtins.elemAt (lib.splitString "-" version) 0;
 in
-buildGoModule (finalAttrs: {
+# Upstream's go.mod requires go 1.27.1 (release notes for 2026-09-03),
+# and buildGoModule defaults to 1.26 which refuses. Pin to buildGo127Module
+# rather than buildGoLatestModule to avoid joining the mass rebuild when
+# buildGoLatestModule tracks Go 1.28. Per pkgs/build-support/go/README.md,
+# this builder auto-bumps to the then-oldest supported toolchain once Go
+# 1.27 reaches EOL, so we won't strand on it forever.
+buildGo127Module (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "silo";
-  version = "2026-08-06T00-00-00Z";
+  version = "2026-09-03T13-18-01Z";
 
   src = fetchFromGitHub {
     owner = "pgsty";
     repo = "silo";
     tag = "RELEASE.${finalAttrs.version}";
-    hash = "sha256-mFHgeetimgSgztA39oP4TcxdlFpI+Usjg7cvhyjsYRI=";
+    hash = "sha256-VweJo3kHv/wdViNlh/B11qxevpOktkj/knkudHr7qQg=";
   };
 
-  vendorHash = "sha256-7uXfM10x5ouCLNuk204AUi9up5oXVesPdNAbbGFyQ6U=";
+  vendorHash = "sha256-YaZzqV6OL+kft8DcUxhxWlH02nF/Od1l0kdiJSrF8as=";
 
   subPackages = [ "." ];
 
