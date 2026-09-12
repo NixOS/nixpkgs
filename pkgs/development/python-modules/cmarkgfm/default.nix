@@ -4,21 +4,26 @@
   cffi,
   fetchPypi,
   pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cmarkgfm";
   version = "2025.10.22";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-W+xhAHtluRlIhELIOMWKbIv0dB9RA8WTsu8YDTmBjto=";
   };
 
+  build-system = [ setuptools ];
+
   propagatedNativeBuildInputs = [ cffi ];
 
-  propagatedBuildInputs = [ cffi ];
+  dependencies = [ cffi ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -26,8 +31,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Minimal bindings to GitHub's fork of cmark";
-    homepage = "https://github.com/jonparrott/cmarkgfm";
+    homepage = "https://github.com/theacodes/cmarkgfm";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
