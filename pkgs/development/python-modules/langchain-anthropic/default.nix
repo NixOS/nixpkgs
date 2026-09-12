@@ -24,7 +24,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-anthropic";
-  version = "1.5.2";
+  version = "1.5.6";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-anthropic==${finalAttrs.version}";
-    hash = "sha256-mk0Cx1rYO1sPbFJdpqVs+hCvLkV7u1WrHOIkTW5ewDE=";
+    hash = "sha256-4i4cTMOzJzQVrq/FMqMmoSZbb2ncwvQmFhvOuwshKFg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/partners/anthropic";
