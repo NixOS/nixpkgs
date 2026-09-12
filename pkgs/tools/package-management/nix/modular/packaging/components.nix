@@ -359,6 +359,13 @@ in
     scope.mesonComponentOverrides
   ];
 
+  /**
+    Whether to embed the public C API into nix-cli so plugins can resolve those symbols from the executable.
+  */
+  withPluginCAPI =
+    (lib.versionAtLeast (lib.versions.majorMinor version) "2.35")
+    && !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isStatic);
+
   nix-util = callPackage ../src/libutil/package.nix { };
   nix-util-c = callPackage ../src/libutil-c/package.nix { };
   nix-util-test-support = callPackage ../src/libutil-test-support/package.nix { };
