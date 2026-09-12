@@ -4,12 +4,9 @@
   pkgs,
   ...
 }:
-
 with lib;
-
 {
   options = {
-
     services.xray = {
       enable = mkOption {
         type = types.bool;
@@ -36,19 +33,42 @@ with lib;
         '';
       };
 
-      extraSettingsFiles = mkOption {
-        type = types.listOf types.path;
-        default = [ ];
-        example = [
-          "/run/xray-secrets/vless-inbounds.json"
-          "/run/xray-secrets/vless-outbounds.json"
-        ];
-        description = ''
-          Additional settings files used to configure xray.
+      extraSettingsFiles =
+        let
+          extraSettingFileSubmodule = types.submodule {
+            options = {
+              path = mkOption {
+                type = types.path;
+                description = "The absolute path to the configuration file.";
+              };
+              tail = mkOption {
+                type = types.bool;
+                default = false;
+                description = "Whether outbounds rules must be appended to the end.";
+              };
+            };
+          };
+          extraSettingFileType = types.coercedTo types.str (path: {
+            inherit path;
+          }) extraSettingFileSubmodule;
+        in
+        mkOption {
+          type = types.listOf extraSettingFileType;
+          default = [ ];
+          example = [
+            "/run/xray-secrets/vless-inbounds.json"
+            {
+              path = "/run/xray-secrets/vless-outbounds.json";
+              tail = true;
+            }
+          ];
+          # https://www.v2fly.org/en_US/config/multiple_config.html lacks English translation
+          description = ''
+            Additional settings files used to configure xray. Later files update or override previous settings.
 
-          See <https://www.v2fly.org/en_US/config/overview.html>.
-        '';
-      };
+            See <https://xtls.github.io/en/config/features/multiple.html>.
+          '';
+        };
 
       settings = mkOption {
         type = types.nullOr (types.attrsOf types.unspecified);
@@ -76,7 +96,6 @@ with lib;
         '';
       };
     };
-
   };
 
   config =
@@ -99,9 +118,10 @@ with lib;
           credentialFile = "config.json";
         }
       ]
-      ++ (lib.imap0 (index: path: {
-        inherit path;
-        credentialFile = "config-extra-${toString index}.json";
+      ++ (lib.imap0 (index: item: {
+        inherit (item) path;
+        # prefixes only matter if configs are passed via `-confdir`
+        credentialFile = "config-extra-${toString index}${lib.optionalString item.tail "-tail"}.json";
       }) cfg.extraSettingsFiles);
     in
     mkIf cfg.enable {
