@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "maturin";
-  version = "1.14.1";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "PyO3";
     repo = "maturin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sqcNRN8oAZ2AK5gHr3ipb035VOiB+zDA10wTtiaeUBM=";
+    hash = "sha256-elK82eg/m33GYNWeZUSfKxFVJS6fMRatHl66NgvxcxE=";
   };
 
-  cargoHash = "sha256-pD8/S7GsFFeAjc8U4fQ9ZTu+o3mKyPagMPKKRI40n4w=";
+  cargoHash = "sha256-WRVXmhwhbOf2Isjvyqw3d4scA5Vs8Vkyy1m7WC3xb0s=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv

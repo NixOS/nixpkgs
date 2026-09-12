@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   autoreconfHook,
+  bashNonInteractive,
   # By default, jemalloc puts a je_ prefix onto all its symbols on OSX, which
   # then stops downstream builds (mariadb in particular) from detecting it. This
   # option should remove the prefix and give us a working jemalloc.
@@ -76,6 +77,12 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
   ];
 
+  buildInputs = [
+    bashNonInteractive
+  ];
+
+  strictDeps = true;
+
   configureFlags = [
     "--with-version=${finalAttrs.version}-0-g0000000000000000000000000000000000000000"
     "--with-lg-vaddr=${with stdenv.hostPlatform; toString (if isILP32 then 32 else parsed.cpu.bits)}"
@@ -107,6 +114,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Parallel builds break reproducibility.
   enableParallelBuilding = false;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://jemalloc.net/";

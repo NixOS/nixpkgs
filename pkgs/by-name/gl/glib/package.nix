@@ -9,7 +9,6 @@
   pkg-config,
   perl,
   python3,
-  python3Packages,
   libiconv,
   zlib,
   libffi,
@@ -78,6 +77,8 @@ let
     &&
       # dtrace support requires sys/sdt.h header
       lib.meta.availableOn stdenv.hostPlatform libsystemtap;
+
+  withSysprofCapture = !stdenv.hostPlatform.isWindows && !stdenv.hostPlatform.isFreeBSD;
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -161,7 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     finalAttrs.setupHook
   ]
-  ++ lib.optionals (!stdenv.hostPlatform.isFreeBSD) [
+  ++ lib.optionals withSysprofCapture [
     libsysprof-capture
   ]
   ++ [
@@ -193,8 +194,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     perl
     python3
-    python3Packages.packaging # mostly used to make meson happy
-    python3Packages.wrapPython # for patchPythonScript
     gettext
     libxslt
   ]
@@ -233,13 +232,12 @@ stdenv.mkDerivation (finalAttrs: {
     # FIXME: Fails when linking target glib/tests/libconstructor-helper.so
     # relocation R_X86_64_32 against hidden symbol `__TMC_END__' can not be used when making a shared object
     "-Dtests=${lib.boolToString (!stdenv.hostPlatform.isStatic)}"
-  ]
-  ++ lib.optionals (!lib.meta.availableOn stdenv.hostPlatform elfutils) [
-    "-Dlibelf=disabled"
+    (lib.mesonEnable "libelf" (lib.meta.availableOn stdenv.hostPlatform elfutils))
+    # sysprof-capture does not build on Windows
+    (lib.mesonEnable "sysprof" withSysprofCapture)
   ]
   ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     "-Dxattr=false"
-    "-Dsysprof=disabled" # sysprof-capture does not build on FreeBSD
   ];
 
   env = {
@@ -293,11 +291,6 @@ stdenv.mkDerivation (finalAttrs: {
     for i in $dev/bin/*; do
       moveToOutput "share/bash-completion/completions/''${i##*/}" "$dev"
     done
-  '';
-
-  preFixup = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
-    buildPythonPath ${python3Packages.packaging}
-    patchPythonScript "$dev/share/glib-2.0/codegen/utils.py"
   '';
 
   # Move man pages to the same output as their binaries (needs to be

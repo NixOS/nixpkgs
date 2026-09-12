@@ -10,13 +10,6 @@ let
 
   cfg = config.services.udev;
 
-  initrdUdevRules = pkgs.runCommand "initrd-udev-rules" { } ''
-    mkdir -p $out/etc/udev/rules.d
-    for f in 60-cdrom_id 60-persistent-storage 75-net-description 80-drivers 80-net-setup-link; do
-      ln -s ${config.boot.initrd.systemd.package}/lib/udev/rules.d/$f.rules $out/etc/udev/rules.d
-    done
-  '';
-
   extraUdevRules = pkgs.writeTextFile {
     name = "extra-udev-rules";
     text = cfg.extraRules;
@@ -59,8 +52,11 @@ let
         nativeBuildInputs = [
           # We only include the out output here to avoid needing to include all
           # other outputs in the installer tests as well
-          # We only need the udevadm command anyway
-          pkgs.buildPackages.systemdMinimal.out
+          # We only need the udevadm command anyway.
+          #
+          # We cannot use systemdMinimal here because it doesn't contain all
+          # the udev builtins, most notably uacess.
+          pkgs.buildPackages.systemd.out
         ];
       }
       ''
@@ -74,7 +70,7 @@ let
         # Add the udev rules from other packages.
         for i in $packages; do
           echo "Adding rules for package $i"
-          for j in $i/{etc,lib}/udev/rules.d/*; do
+          for j in $i/{etc,lib}/udev/rules.d/*.rules; do
             echo "Copying $j to $out/$(basename $j)"
             cat $j > $out/$(basename $j)
           done
@@ -101,7 +97,9 @@ let
         run_progs=$(grep -v '^[[:space:]]*#' $out/* | grep 'RUN+="[^/$]' |
           sed -e 's/.*RUN+="\([^ "]*\)[ "].*/\1/' | uniq)
         for i in $import_progs $run_progs; do
-          if [[ ! -x ${udev}/lib/udev/$i && ! $i =~ socket:.* ]]; then
+          # Remove the check for tpm2_id when systemd v262 lands where this is
+          # correctly identified as a builtin.
+          if [[ ! -x ${udev}/lib/udev/$i && ! $i =~ socket:.* && ! $i == tpm2_id ]]; then
             echo "FAIL"
             echo "$i is called in udev rules but not installed by udev"
             exit 1
@@ -154,10 +152,15 @@ let
           exit 1
         fi
 
-        # Verify all the udev rules
-        echo "Verifying udev rules using udevadm verify..."
-        udevadm verify --resolve-names=late --no-style $out
-        echo "OK"
+        # Only run these checks if the systemd used to check is at least as new
+        # as the one configured to run on the system. This is necessary to be
+        # able to test newer systemd versions.
+        ${lib.optionalString (lib.versionAtLeast pkgs.buildPackages.systemdMinimal.version systemd.version) ''
+          # Verify all the udev rules
+          echo "Verifying udev rules using udevadm verify..."
+          udevadm verify --resolve-names=late --no-style $out
+          echo "OK"
+        ''}
 
         # If auto-configuration is disabled, then remove
         # udev's 80-drivers.rules file, which contains rules for
@@ -426,6 +429,7 @@ in
     services.udev.extraRules = nixosRules;
 
     services.udev.packages = [
+      config.systemd.package
       extraUdevRules
       extraHwdbFile
     ];
@@ -490,7 +494,7 @@ in
     };
     # Insert initrd rules
     boot.initrd.services.udev.packages = [
-      initrdUdevRules
+      config.boot.initrd.systemd.package
       (lib.mkIf (config.boot.initrd.services.udev.rules != "") (
         pkgs.writeTextFile {
           name = "initrd-udev-rules";

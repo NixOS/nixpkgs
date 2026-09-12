@@ -20,6 +20,17 @@
       path = ../18;
     }
   ];
+  "llvm/backport-darwin-triple-parsing.patch" = [
+    {
+      after = "18";
+      before = "21";
+      path = ../18;
+    }
+    {
+      after = "21";
+      path = ../21;
+    }
+  ];
   "llvm/gnu-install-dirs.patch" = [
     {
       after = "23";
@@ -116,6 +127,21 @@
       after = "19";
       before = "20";
       path = ../19;
+    }
+  ];
+  "mlir/mlir-tablegen-imported-target.patch" = [
+    {
+      before = "19";
+      path = ../18;
+    }
+    {
+      after = "19";
+      before = "21";
+      path = ../19;
+    }
+    {
+      after = "21";
+      path = ../21;
     }
   ];
   "flang/warn-on-fbuiltin-and-fno-builtin.patch" = [

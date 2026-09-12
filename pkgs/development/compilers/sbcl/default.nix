@@ -30,8 +30,8 @@ let
     "2.4.6".sha256 = "sha256-pImQeELa4JoXJtYphb96VmcKrqLz7KH7cCO8pnw/MJE=";
     # By unofficial and very loose convention we keep the latest version of
     # SBCL, and the previous one in case someone quickly needs to roll back.
-    "2.6.6".sha256 = "sha256-plp6MIEqr1SSXRGSubnoEPUnx5kRxgALdUgQWu99o0s=";
     "2.6.7".sha256 = "sha256-Hr3DXJ3I4nG4zRrESWXgC/JV+cAiFlD8t38Ps0wtOt4=";
+    "2.6.8".sha256 = "sha256-rVEm39+6XbJ+53vMJYkwIP5SLQt2U9RbTEeVrePdwj0=";
   };
   # Collection of pre-built SBCL binaries for platforms that need them for
   # bootstrapping. Ideally these are to be avoided.  If ECL (or any other
@@ -172,11 +172,6 @@ stdenv.mkDerivation (finalAttrs: {
       [
         ./patches/dynamic-space-size-envvar-2.6.3-feature.patch
         ./patches/dynamic-space-size-envvar-2.6.3-tests.patch
-      ]
-    else if lib.versionOlder "2.5.2" finalAttrs.version then
-      [
-        ./patches/dynamic-space-size-envvar-2.5.3-feature.patch
-        ./patches/dynamic-space-size-envvar-2.5.3-tests.patch
       ]
     else
       [

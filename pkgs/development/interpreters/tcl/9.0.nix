@@ -1,6 +1,4 @@
 {
-  lib,
-  stdenv,
   callPackage,
   fetchpatch,
   fetchzip,
@@ -25,10 +23,7 @@ callPackage ./generic.nix (
     #
     # `includes` leaves out `win/configure`: it is generated, and we run
     # `autoreconf` over the patched `configure.ac` ourselves.
-    #
-    # TODO apply unconditionally; only `win` is patched, but doing so
-    # today would be a mass rebuild for a no-op elsewhere.
-    patches = lib.optionals stdenv.hostPlatform.isWindows [
+    patches = [
       (fetchpatch {
         name = "windows-disable-tzdata.patch";
         url = "https://github.com/tcltk/tcl/commit/54b509164606717adb3fbeacf71524f0a6e940f4.patch";

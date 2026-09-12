@@ -17,7 +17,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ty";
-  version = "0.0.78";
+  version = "0.0.79";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "ty";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-sFUSKJsPu8HlJm4pWb5E3k5k36S3e6HHriDZ/tGa2z8=";
+    hash = "sha256-mMZbROCS6muD44eomf6szSNblkk65AMxSVRPjMutOl0=";
   };
 
   # For Darwin platforms, remove the integration test for file notifications,
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--package=ty" ];
 
-  cargoHash = "sha256-TsspMKOxq5rh6dNWev297FQYi27n2ncQ1gUx9469WwY=";
+  cargoHash = "sha256-4V/5aTRy+i0HQNrsfK0jfoPyAgbVYJ6Wz2MglZfC7vY=";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = [ rust-jemalloc-sys ];
@@ -96,6 +96,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     updateScript = nix-update-script { };
   };
+
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
     description = "Extremely fast Python type checker and language server, written in Rust";

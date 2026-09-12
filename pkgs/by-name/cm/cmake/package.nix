@@ -4,9 +4,11 @@
   fetchurl,
   replaceVars,
   buildPackages,
+  bashNonInteractive,
   bzip2,
   curlMinimal,
   expat,
+  iconv,
   libarchive,
   libuv,
   ncurses,
@@ -50,11 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString isMinimalBuild "-minimal"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "4.3.4";
+  version = "4.4.2";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-/e/4l7nrSddkU58rHtxut+FEDfMlZ4qXwZeEmekxrdo=";
+    hash = "sha256-HbnmHmC24IdMhjhjQLkQOC88XnW5+/tE0SIGMSmieJ0=";
   };
 
   patches = [
@@ -109,20 +111,28 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals buildDocs [ texinfo ]
     ++ lib.optionals qt5UI [ wrapQtAppsHook ];
 
-  buildInputs =
-    lib.optionals useSharedLibraries [
-      bzip2
-      curlMinimal
-      expat
-      libarchive
-      xz
-      zlib
-      libuv
-      rhash
-    ]
-    ++ lib.optional useOpenSSL openssl
-    ++ lib.optional cursesUI ncurses
-    ++ lib.optional qt5UI qtbase;
+  buildInputs = [
+    bashNonInteractive
+  ]
+  ++ lib.optionals useSharedLibraries [
+    bzip2
+    curlMinimal
+    expat
+    libarchive
+    xz
+    zlib
+    libuv
+    rhash
+  ]
+  ++ lib.optional useOpenSSL openssl
+  ++ lib.optional cursesUI ncurses
+  ++ lib.optional qt5UI qtbase
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    iconv
+    iconv.dev
+  ];
+
+  strictDeps = true;
 
   # bootstrap is not autoconf and rejects --enable-static/--disable-shared
   # FIXME: rebuild avoidance, drop optionalDrvAttr in staging
@@ -134,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
       --subst-var-by libc_dev ${lib.getDev stdenv.cc.libc} \
       --subst-var-by libc_lib ${lib.getLib stdenv.cc.libc}
     # CC_FOR_BUILD and CXX_FOR_BUILD are used to bootstrap cmake
-    configureFlags="--parallel=''${NIX_BUILD_CORES:-1} CC=$CC_FOR_BUILD CXX=$CXX_FOR_BUILD $configureFlags $cmakeFlags"
+    configureFlags=("--parallel=''${NIX_BUILD_CORES:-1}" "CC=$CC_FOR_BUILD" "CXX=$CXX_FOR_BUILD" ''${configureFlags[@]} ''${cmakeFlags[@]})
   ''
   + lib.optionalString (stdenv.hostPlatform.isStatic && useSharedLibraries) ''
     # FindLibArchive ignores libarchive.pc's Libs.private
@@ -205,6 +215,8 @@ stdenv.mkDerivation (finalAttrs: {
     rev-prefix = "v";
     ignoredVersions = "-"; # -rc1 and friends
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://cmake.org/";

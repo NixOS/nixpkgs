@@ -11,6 +11,7 @@ buildPythonPackage (finalAttrs: {
   pname = "nest-asyncio2";
   version = "1.7.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Chaoses-Ib";
@@ -33,6 +34,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/Chaoses-Ib/nest-asyncio2";
     changelog = "https://github.com/Chaoses-Ib/nest-asyncio2/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ fab ];
+    teams = [ lib.teams.jupyter ];
   };
 })

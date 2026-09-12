@@ -1,28 +1,34 @@
 {
   lib,
   buildPythonPackage,
-  pystemmer,
   fetchPypi,
+  setuptools,
+  pystemmer,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "snowballstemmer";
   version = "3.1.1";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
     sha256 = "sha256-4Hu8VKDXmP5gEKEjmEIuYqi/u6lcOU/QlW71jLTT4mA=";
   };
 
+  build-system = [ setuptools ];
+
+  dependencies = [ pystemmer ];
+
   # No tests included
   doCheck = false;
 
-  propagatedBuildInputs = [ pystemmer ];
-
   meta = {
     description = "16 stemmer algorithms (15 + Poerter English stemmer) generated from Snowball algorithms";
-    homepage = "http://sigal.saimon.org/en/latest/index.html";
+    homepage = "https://snowballstem.org/";
+    changelog = "https://github.com/snowballstem/snowball/blob/v${finalAttrs.version}/NEWS";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
   };

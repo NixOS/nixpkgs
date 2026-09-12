@@ -169,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--with-packager=https://nixos.org"
     "--with-selinux"
-    "--enable-install-program=kill,uptime"
+    "--enable-install-program=arch,kill,uptime"
   ]
   ++ optional (singleBinary != false) (
     "--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}"
@@ -260,7 +260,7 @@ stdenv.mkDerivation (finalAttrs: {
       }{chroot,env,install,nice,nohup,runcon,sort,split,${stdbuf}timeout}
       execer cannot bin/${
         if withPrefix then "g" else ""
-      }{[,b2sum,base32,base64,basename,basenc,cat,chcon,chgrp,chmod,chown,cksum,comm,cp,csplit,cut,date,dd,df,dir,dircolors,dirname,du,echo,expand,expr,factor,false,fmt,fold,groups,head,hostid,id,join,kill,link,ln,logname,ls,md5sum,mkdir,mkfifo,mknod,mktemp,mv,nl,nproc,numfmt,od,paste,pathchk,pinky,pr,printenv,printf,ptx,pwd,readlink,realpath,rm,rmdir,seq,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum,shred,shuf,sleep,stat,stty,sum,sync,tac,tail,tee,test,touch,tr,true,truncate,tsort,tty,uname,unexpand,uniq,unlink,uptime,users,vdir,wc,who,whoami,yes}
+      }{[,arch,b2sum,base32,base64,basename,basenc,cat,chcon,chgrp,chmod,chown,cksum,comm,cp,csplit,cut,date,dd,df,dir,dircolors,dirname,du,echo,expand,expr,factor,false,fmt,fold,groups,head,hostid,id,join,kill,link,ln,logname,ls,md5sum,mkdir,mkfifo,mknod,mktemp,mv,nl,nproc,numfmt,od,paste,pathchk,pinky,pr,printenv,printf,ptx,pwd,readlink,realpath,rm,rmdir,seq,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum,shred,shuf,sleep,stat,stty,sum,sync,tac,tail,tee,test,touch,tr,true,truncate,tsort,tty,uname,unexpand,uniq,unlink,uptime,users,vdir,wc,who,whoami,yes}
     '';
   }
   // optionalAttrs (singleBinary == false) {

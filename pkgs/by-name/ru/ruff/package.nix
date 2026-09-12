@@ -88,6 +88,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = {
     description = "Extremely fast Python linter and code formatter";
     homepage = "https://github.com/astral-sh/ruff";
