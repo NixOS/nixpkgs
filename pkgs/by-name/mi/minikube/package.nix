@@ -118,6 +118,7 @@ buildGoModule (finalAttrs: {
       vdemeester
       atkinschang
       Chili-Man
+      bddvlpr
     ];
   };
 })
