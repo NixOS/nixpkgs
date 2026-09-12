@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "bx-python";
-  version = "0.14.0";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bxlab";
     repo = "bx-python";
     tag = "v${version}";
-    hash = "sha256-WZjCPggAlC+L/SagC4TXJXNrFG85BmjO7FaV2GxrYYA=";
+    hash = "sha256-2V05c7+kRBNq62DtRZpgyZKMlzveWDXOKrMUiOLzkRU=";
   };
 
   postPatch = ''
