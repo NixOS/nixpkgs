@@ -3466,6 +3466,47 @@ final: prev: {
     }
   ) { };
 
+  luagobject = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+      luaOlder,
+    }:
+    buildLuarocksPackage {
+      pname = "luagobject";
+      version = "0.10.5-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/luagobject-0.10.5-1.rockspec";
+          sha256 = "0iqazv1h7ymiqn21xcnzm54wkdgz3v3hzgc7brmhsjl0swzlmxq9";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "vtrlx";
+        repo = "LuaGObject";
+        tag = "0.10.5";
+        hash = "sha256-ZqOvG8OcnpiYEbgE3lZsihsuvrkTcOvB3V9MEYKODh0=";
+      };
+
+      disabled = luaOlder "5.1";
+
+      meta = {
+        homepage = "https://github.com/vtrlx/LuaGObject";
+        maintainers = with lib.maintainers; [ hythera ];
+        license = lib.licenses.AND [
+          lib.licenses.mit
+          lib.licenses.x11
+        ];
+        description = "Use GObject libraries from Lua";
+        longDescription = ''
+          Dynamically bind to any GObject-based library which supports
+          		GObject-Introspection—such as Gtk, Adwaita, Glib, and more—allowing the
+          		use of these libraries directly from Lua.
+          	'';
+      };
+    }
+  ) { };
+
   lualdap = callPackage (
     {
       buildLuarocksPackage,
