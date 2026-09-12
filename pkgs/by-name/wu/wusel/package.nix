@@ -16,6 +16,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wusel";
   version = "0.4.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "itbh-at";
     repo = "wusel";
