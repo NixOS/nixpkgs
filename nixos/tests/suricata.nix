@@ -66,14 +66,17 @@
     # check that configuration has been applied correctly with suricatasc
     with subtest("suricata configuration test"):
         ids.wait_for_unit("suricata.service")
-        assert '1' in ids.succeed("suricatasc -c 'iface-list' | ${pkgs.jq}/bin/jq .message.count")
+        ids.wait_for_file("/var/run/suricata/suricata-command.socket")
+        ids.wait_until_succeeds(
+            "suricatasc -c 'iface-list' | ${pkgs.jq}/bin/jq -e '.message.count == 1'"
+        )
 
     # test detection of events based on a static ruleset (output of id command)
     with subtest("suricata rule test"):
         helper.wait_for_unit("nginx.service")
-        ids.wait_for_unit("suricata.service")
-
-        ids.succeed("curl http://192.168.1.1/id/")
-        assert "id check returned root [**] [Classification: Potentially Bad Traffic]" in ids.succeed("tail -n 1 /var/log/suricata/fast.log"), "Suricata didn't detect the output of id comment"
+        ids.wait_until_succeeds(
+            "curl -sSf http://192.168.1.1/id/ && "
+            "grep -qF 'id check returned root [**] [Classification: Potentially Bad Traffic]' /var/log/suricata/fast.log"
+        )
   '';
 }
