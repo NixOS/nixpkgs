@@ -2,22 +2,30 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  gitMinimal,
   pkg-config,
   cairo,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "inav-blackbox-tools";
-  version = "unstable-2021-04-22";
+  version = "9.0.0";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "iNavFlight";
     repo = "blackbox-tools";
-    rev = "0109e2fb9b44d593e60bca4cef4098d83c55c373";
-    sha256 = "1rdlw74dqq0hahnka2w2pgvs172vway2x6v8byxl2s773l22k4ln";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AWlf7Tfi2rwtvZB8xCCjzUvblhwDsgUB357VyCfTdUo=";
+    leaveDotGit = true;
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    gitMinimal
+    pkg-config
+  ];
 
   buildInputs = [ cairo ];
 
@@ -38,4 +46,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/inav-blackbox-tools.x86_64-darwin
   };
-}
+})
