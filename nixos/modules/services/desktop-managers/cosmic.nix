@@ -151,17 +151,8 @@ in
     # Required for screen locker
     security.pam.services.cosmic-greeter = { };
 
-    # geoclue2 stuff
-    services.geoclue2.enable = true;
-    # We _do_ use the demo agent in the `cosmic-settings-daemon` package,
-    # but this option also creates a systemd service that conflicts with the
-    # `cosmic-settings-daemon` package's geoclue2 agent. Therefore, disable it.
-    services.geoclue2.enableDemoAgent = false;
-    # As mentioned above, we do use the demo agent. And it needs to be
-    # whitelisted, otherwise it doesn't run.
-    services.geoclue2.whitelistedAgents = [ "geoclue-demo-agent" ]; # whitelist our own geoclue2 agent o
-
     # Good to have defaults
+    services.geoclue2.enable = lib.mkDefault true;
     hardware.bluetooth.enable = lib.mkDefault true;
     networking.networkmanager.enable = lib.mkDefault true;
     services.acpid.enable = lib.mkDefault true;
