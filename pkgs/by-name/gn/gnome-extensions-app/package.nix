@@ -33,9 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
     ./shew-gir-path.patch
   ];
 
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace-fail "gjs = find_program('gjs')" "gjs = find_program('${lib.getExe gjs}')"
+  '';
+
   nativeBuildInputs = [
     desktop-file-utils
-    gjs
     glib
     gobject-introspection
     meson
@@ -50,18 +54,17 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
   ];
 
-  mesonFlags = [ ];
-
   passthru = {
     updateScript = gnome.updateScript { packageName = "gnome-extensions-app"; };
   };
 
   meta = {
+    description = "Small app for managing GNOME Shell extensions";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-extensions-app";
-    description = "GNOME Extensions is a small app for managing GNOME Shell extensions";
-    teams = [ lib.teams.gnome ];
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-extensions-app/-/blob/${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
     mainProgram = "gnome-extensions-app";
   };
 })
