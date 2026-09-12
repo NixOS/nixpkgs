@@ -116,6 +116,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 /nixos/lib/eval-config.nix                            @infinisil
 /nixos/modules/misc/ids.nix                           @R-VdP
 /nixos/modules/system/activation/bootspec.nix         @grahamc @cole-h @raitobezarius
+/nixos/modules/system/activation/restrict-activation-scripts.nix @R-VdP
 /nixos/modules/system/activation/bootspec.cue         @grahamc @cole-h @raitobezarius
 
 # NixOS Render Docs
