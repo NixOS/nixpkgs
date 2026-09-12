@@ -1,7 +1,7 @@
 {
   lib,
   mkDerivation,
-  fetchgit,
+  fetchFromGitea,
   gnuradio,
   cmake,
   pkg-config,
@@ -26,13 +26,17 @@
 
 mkDerivation {
   pname = "gr-fosphor";
-  version = "unstable-2024-03-23";
+  version = "0-unstable-2024-03-23";
 
-  # It is a gitea instance, but its archive service doesn't work very well so
-  # we can't use it.
-  src = fetchgit {
-    url = "https://gitea.osmocom.org/sdr/gr-fosphor.git";
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  src = fetchFromGitea {
+    domain = "gitea.osmocom.org";
+    owner = "sdr";
+    repo = "gr-fosphor";
     rev = "74d54fc0b3ec9aeb7033686526c5e766f36eaf24";
+    forceFetchGit = true;
     hash = "sha256-FBmH4DmKATl0FPFU7T30OrYYmxlSTTLm1SZpt0o1qkw=";
   };
   disabled = gnuradioOlder "3.9" || gnuradioAtLeast "3.11";
