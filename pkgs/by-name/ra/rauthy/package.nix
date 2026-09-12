@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wasm-pack
   ];
 
-  buildInputs = [rust-jemalloc-sys-unprefixed];
+  buildInputs = [ rust-jemalloc-sys-unprefixed ];
 
   npmRoot = "frontend";
 
@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = false;
 
   passthru = {
-    updateScript = nix-update-script {};
+    updateScript = nix-update-script { };
   };
 
   meta = {
