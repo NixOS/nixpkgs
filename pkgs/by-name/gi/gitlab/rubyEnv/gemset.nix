@@ -4152,10 +4152,10 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "16r32y1xxga2z893p7rgxb3y23gwgzr814yh73djgnlza1dq9zii";
+      sha256 = "0gpqz526j2395swp3a1ar00j22m0n82n73caskwnylbzfqrqcz4v";
       type = "gem";
     };
-    version = "2.6.3";
+    version = "2.6.10";
   };
   graphql-docs = {
     dependencies = [
@@ -10573,10 +10573,10 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0qj9dmkmgahmadgh88kydb7cv15w13l1fj3kk9zz28iwji5vl3gd";
+      sha256 = "0ij19k6034x0c4hw0ywa7wnk5s912r8aq0hhjss10d5z36q5dicp";
       type = "gem";
     };
-    version = "0.8.0";
+    version = "0.8.2";
   };
   websocket-extensions = {
     groups = [
