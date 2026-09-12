@@ -38,7 +38,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.agpl3Plus;
     mainProgram = "microcad";
     donationPage = "https://opencollective.com/microcad/donate";
-    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ]
+    ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ fred441a ];
   };
 })
