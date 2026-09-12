@@ -29,7 +29,7 @@
   libpng,
   librevenge,
   librsvg,
-  libsigcxx,
+  libsigcxx_2_0,
   libvisio,
   libwpg,
   libxft,
@@ -165,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     librevenge
     librsvg # for loading icons
-    libsigcxx
+    libsigcxx_2_0
     libvisio
     libwpg
     libxft

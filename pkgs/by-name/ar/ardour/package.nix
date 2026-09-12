@@ -36,7 +36,7 @@
   libpulseaudio,
   librdf_rasqal,
   libsamplerate,
-  libsigcxx,
+  libsigcxx_2_0,
   libsndfile,
   libusb1,
   libuv,
@@ -154,7 +154,7 @@ let
       libogg
       librdf_rasqal
       libsamplerate
-      libsigcxx
+      libsigcxx_2_0
       libsndfile
       libusb1
       libuv

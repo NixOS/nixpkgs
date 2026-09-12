@@ -15,7 +15,7 @@
   libbs2b,
   libebur128,
   libmysofa,
-  libsigcxx30,
+  libsigcxx_3_0,
   libsndfile,
   lilv,
   lsp-plugins,
@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     libbs2b
     libebur128
     libmysofa
-    libsigcxx30
+    libsigcxx_3_0
     libsndfile
     lilv
     lv2

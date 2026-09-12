@@ -11,7 +11,7 @@
   gsm,
   libgcrypt,
   libgpiod_1,
-  libsigcxx,
+  libsigcxx_2_0,
   popt,
   qt5,
   rtl-sdr,
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
     libgpiod_1
     libopus
-    libsigcxx
+    libsigcxx_2_0
     popt
     qt5.qtbase
     rtl-sdr
