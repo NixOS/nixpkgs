@@ -123,6 +123,7 @@ stdenv.mkDerivation {
   passthru.updateScript = ./update.sh;
 
   meta = {
+    changelog = "https://github.com/meteor/meteor/releases/tag/release%2FMETEOR%40${version}";
     description = "Complete open source platform for building web and mobile apps in pure JavaScript";
     homepage = "https://www.meteor.com/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
