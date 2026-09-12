@@ -12914,6 +12914,17 @@
       }
     ];
   };
+  jaspermayone = {
+    email = "nix@jaspermayone.com";
+    github = "jaspermayone";
+    githubId = 65788728;
+    name = "Jasper Mayone";
+    keys = [
+      {
+        fingerprint = "00E6 43C2 1FAC 965F FB28  D3B7 14D0 D45A 1DAD AAFA";
+      }
+    ];
+  };
   jaspersurmont = {
     email = "jasper@surmont.dev";
     github = "jaspersurmont";
