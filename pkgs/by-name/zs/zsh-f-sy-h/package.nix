@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "zsh-f-sy-h";
-  version = "1.67";
+  version = "1.67.1";
 
   src = fetchFromGitHub {
     owner = "z-shell";
     repo = "F-Sy-H";
     rev = "v${version}";
-    sha256 = "0bcsc4kgda577fs3bnvymmxdz3z5mf19pn8ngfqsklabnf79f5nf";
+    sha256 = "sha256-lB61hHEzGcmi25lNk33+NkvZr4e+TItzf86Sak5z/so=";
   };
 
   strictDeps = true;
