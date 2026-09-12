@@ -370,7 +370,15 @@ let
     # Aarch64 uses TLSDESC by default and the option is completely ignored (at least on LLVM).
     # TODO: Enable by default in GCC via --with-tls since https://gcc.gnu.org/cgit/gcc/commit/?id=96a291c4bb0b8a00b0a125e6a60f60072ffe53a7 (GCC 16).
     # No equivalent build-time option for LLVM yet.
-    ++ optional (tlsDialect != null) "-mtls-dialect=${tlsDialect}";
+    ++ optional (tlsDialect != null) "-mtls-dialect=${tlsDialect}"
+    # LLVM default-enables AltiVec for powerpc64, and for many CPU targets that didn't actually have it.
+    # https://github.com/llvm/llvm-project/blob/40977001fcb190a509897aee592819cdd7e83740/llvm/lib/Target/PowerPC/PPC.td#L791-L796
+    # GCC is more conservative: Requires selecting POWER7 or higher for auto-enable, or opting into it on older ones.
+    # If no CPU is specified, disable AltiVec like GCC does.
+    # TODO: Specify CPU + AltiVec preference?
+    ++ optional (
+      (targetPlatform.isPower64 && targetPlatform.isBigEndian) && isClang && !(targetPlatform ? gcc.cpu)
+    ) "-mno-altivec";
 
   defaultHardeningFlags = bintools.defaultHardeningFlags or [ ];
 
