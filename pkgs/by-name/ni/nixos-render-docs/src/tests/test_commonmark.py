@@ -220,7 +220,22 @@ some nested anchors
 
  - *‌more stuff in same deflist‌*
    
-   foo""".replace(' ', ' ')
+   foo
+<table>
+<thead>
+<tr>
+<th>this</th>
+<th>is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a</td>
+<td>table</td>
+</tr>
+</tbody>
+</table>
+""".replace(' ', ' ')
 
 def test_images() -> None:
     c = Converter({})
