@@ -8588,6 +8588,8 @@ self: super: with self; {
 
   iso4217 = callPackage ../development/python-modules/iso4217 { };
 
+  iso4217parse = callPackage ../development/python-modules/iso4217parse { };
+
   iso639-lang = callPackage ../development/python-modules/iso639-lang { };
 
   iso8601 = callPackage ../development/python-modules/iso8601 { };
