@@ -73,17 +73,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     desktop-file-edit \
-    --set-name "NoRiskClient Launcher" \
-    --set-comment "Launcher for NoRiskClient" \
-    --set-key="Categories" --set-value="Game" \
-    --set-key="Keywords" --set-value="nrc;minecraft;mc;" \
-    $out/share/applications/NoRisk\ Launcher.desktop
+      --set-name "NoRiskClient Launcher" \
+      --set-comment "Launcher for NoRiskClient" \
+      --set-key="Categories" --set-value="Game" \
+      --set-key="Keywords" --set-value="nrc;minecraft;mc;" \
+        $out/share/applications/NoRisk\ Launcher.desktop
   '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/NoRiskClient/noriskclient-launcher/blob/v3/changelogs/${finalAttrs.version}.txt";
+    changelog = "https://github.com/NoRiskClient/noriskclient-launcher/blob/v3/changelogs/${finalAttrs.version}.md";
     description = "Minecraft Launcher for NoRisk Client";
     homepage = "https://norisk.gg";
     license = lib.licenses.gpl3Only;
