@@ -10,21 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "goredo";
-  version = "2.6.0";
+  version = "2.10.0";
 
   src = fetchurl {
-    url = "http://www.goredo.cypherpunks.ru/download/goredo-${finalAttrs.version}.tar.zst";
-    hash = "sha256-XTL/otfCKC55TsUBBVors2kgFpOFh+6oekOOafOhcUs=";
+    url = "http://www.goredo.stargrave.org/download/goredo-${finalAttrs.version}.tar.zst";
+    hash = "sha256-kinv+9it0nK0ia8S2W8AN8FWy1dRN9nNzVeG8n4aY2Q=";
   };
-
-  patches = [
-    # Adapt tests to Linux/nix-build requirements:
-    ./fix-tests.diff
-  ];
 
   nativeBuildInputs = [ zstd ];
 
-  nativeCheckInputs = lib.optionals finalAttrs.finalPackage.doCheck [
+  nativeCheckInputs = [
     python3
     perl
   ];
@@ -64,8 +59,8 @@ buildGoModule (finalAttrs: {
   meta = {
     outputsToInstall = [ "out" ];
     description = "Makefile replacement that sucks less";
-    homepage = "https://www.goredo.cypherpunks.ru";
-    license = lib.licenses.gpl3;
+    homepage = "http://www.goredo.stargrave.org/";
+    license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.spacefrogg ];
   };
 })
