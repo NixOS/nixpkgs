@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmpdclient";
-  version = "2.24";
+  version = "2.27";
 
   src = fetchFromGitHub {
     owner = "MusicPlayerDaemon";
     repo = "libmpdclient";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VACe7/RnKgoA3qRIWmjFhCW+GVk9qUGp4+tSXMTo8Bk=";
+    hash = "sha256-TQ6vk+hQ/GgoxaMz66YG7jWqjHCkTiTk/h2P2obVypw=";
   };
 
   nativeBuildInputs = [
