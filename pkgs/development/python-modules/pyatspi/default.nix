@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "pyatspi";
-  version = "2.58.1";
+  version = "2.58.2";
 
   pyproject = false;
 
   src = fetchurl {
     url = "mirror://gnome/sources/pyatspi/${lib.versions.majorMinor version}/pyatspi-${version}.tar.xz";
-    sha256 = "Px8HmTX5JlhDMQJcdTGFjetCJFyZO2USH09LAeawRTY=";
+    hash = "sha256-JFkOW2D+yN+1n80n0qkN5wNAYL4xjKP3dw4PmE8flOI=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +48,7 @@ buildPythonPackage rec {
     homepage = "https://gitlab.gnome.org/GNOME/pyatspi2";
     license = lib.licenses.lgpl2Only;
     maintainers = with lib.maintainers; [ jtojnar ];
+    teams = [ lib.teams.gnome ];
     platforms = with lib.platforms; unix;
   };
 }
