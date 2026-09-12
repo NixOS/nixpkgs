@@ -23,6 +23,7 @@
   fribidi,
   libglycin,
   libglycin-gtk4,
+  glycin-loaders,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -52,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     libglycin
     libglycin.setupHook
     libglycin-gtk4
+    glycin-loaders
     libadwaita
     gtksourceview5
     libsoup_3
