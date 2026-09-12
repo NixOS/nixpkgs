@@ -22907,6 +22907,12 @@
     githubId = 20472367;
     name = "Peter Hebden";
   };
+  pix3l-p33p3r = {
+    email = "pix3l-p33p3r@proton.me";
+    github = "pix3l-p33p3r";
+    githubId = 83790382;
+    name = "pixel-peeper";
+  };
   pixel-87 = {
     email = "edwardoliverthomas@gmail.com";
     github = "pixel-87";
