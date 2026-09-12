@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "zsa-udev-rules";
-  version = "unstable-2023-11-30";
+  version = "2.1.3-unstable-2023-11-30";
 
   src = fetchFromGitHub {
     owner = "zsa";
