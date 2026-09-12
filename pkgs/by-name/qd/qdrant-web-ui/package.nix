@@ -5,16 +5,16 @@
 }:
 buildNpmPackage rec {
   pname = "qdrant-web-ui";
-  version = "0.1.40";
+  version = "0.2.15";
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant-web-ui";
     tag = "v${version}";
-    hash = "sha256-fkgTQZ5172T/reUk9luv9lWON1gkRO6sXPUmfe6f4oc=";
+    hash = "sha256-lPeORrcHtaooA0d/buCLtMqqpobdz7aJAR84PqbEWAE=";
   };
 
-  npmDepsHash = "sha256-tET15Dcu8V7ssHgjC09w2zcFSU8Oyb0V+nlpptxmqjo=";
+  npmDepsHash = "sha256-TeHrJsTumcuabrtNiGmWdCXu2itx0ayehuhtlPUiGew=";
 
   npmBuildScript = "build-qdrant";
 
@@ -29,7 +29,10 @@ buildNpmPackage rec {
     homepage = "https://github.com/qdrant/qdrant-web-ui";
     changelog = "https://github.com/qdrant/qdrant-web-ui/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ xzfc ];
+    maintainers = with lib.maintainers; [
+      xzfc
+      patrickdag
+    ];
     platforms = lib.platforms.all;
   };
 }
