@@ -229,6 +229,7 @@ in
       sansSerif = mkDefault [ "Noto Sans" ];
       monospace = mkDefault [ "Hack" ];
     };
+    i18n.spellcheck.enable = mkDefault true;
 
     environment.pathsToLink = [
       "/share" # TODO: https://github.com/NixOS/nixpkgs/issues/47173
