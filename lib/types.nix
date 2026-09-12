@@ -1421,6 +1421,7 @@ rec {
       shorthandOnlyDefinesConfig ? false,
       description ? null,
       class ? null,
+      cancel ? { },
     }@attrs:
     let
       inherit (lib.modules) evalModules;
@@ -1512,7 +1513,12 @@ rec {
           };
       };
       emptyValue = {
-        value = base.config;
+        value =
+          if cancel == { } then
+            # avoid small extendModules detour
+            base.config
+          else
+            (base.extendModules { modules = [ cancel ]; }).config;
       };
       getSubOptions =
         prefix:
@@ -1555,6 +1561,7 @@ rec {
             specialArgs
             shorthandOnlyDefinesConfig
             description
+            cancel
             ;
         };
         binOp = lhs: rhs: {
@@ -1596,6 +1603,20 @@ rec {
               lhs.description
             else
               throw "A submoduleWith option is declared multiple times with conflicting descriptions";
+          cancel =
+            # avoid constructing a module if possible
+            if lhs.cancel == { } then
+              rhs.cancel
+            else if rhs.cancel == { } then
+              lhs.cancel
+            else
+              # combine the modules
+              {
+                imports = [
+                  lhs.cancel
+                  rhs.cancel
+                ];
+              };
         };
       };
     };
