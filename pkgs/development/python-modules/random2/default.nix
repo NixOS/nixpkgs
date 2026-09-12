@@ -2,33 +2,37 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPyPy,
-  fetchpatch,
+  setuptools,
+  python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "random2";
-  version = "1.0.1";
-  format = "setuptools";
-  doCheck = !isPyPy;
+  version = "1.0.2";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    sha256 = "34ad30aac341039872401595df9ab2c9dc36d0b7c077db1cea9ade430ed1c007";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-N1T870gmdWfNVwX6faa7w4Ccs/gIdAMT5nBazDwFfnc=";
   };
-
   patches = [
-    # Patch test suite for python >= 3.9
-    (fetchpatch {
-      url = "https://github.com/strichter/random2/pull/3/commits/1bac6355d9c65de847cc445d782c466778b94fbd.patch";
-      sha256 = "064137pg1ilv3f9r10123lqbqz45070jca8pjjyp6gpfd0yk74pi";
-    })
+    ./tests-exit-code.patch
+    ./tests-pypy-skip-bigrand.patch
   ];
+
+  build-system = [ setuptools ];
+
+  checkPhase = ''
+    ${python.interpreter} src/tests.py
+  '';
 
   meta = {
     homepage = "http://pypi.org/pypi/random2/";
+    changelog = "https://github.com/strichter/random2/blob/${finalAttrs.version}/CHANGES.rst";
     description = "Python 3 compatible Python 2 `random` Module";
     license = lib.licenses.psfl;
+    maintainers = with lib.maintainers; [
+      sandarukasa
+    ];
   };
-}
+})
