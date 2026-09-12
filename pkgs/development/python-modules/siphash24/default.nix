@@ -11,7 +11,7 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  version = "1.8";
+  version = "1.9";
   pname = "siphash24";
   pyproject = true;
 
@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
     owner = "dnicolodi";
     repo = "python-siphash24";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-51LgmB30MDTBRoZttIESopWMdrozvLFwlxYELmqu5UQ=";
+    hash = "sha256-V279CjIeSJvhgBYwbMAw8PaguLpCuYCec6fD8agFZTg=";
   };
 
   nativeBuildInputs = [ pkg-config ];
