@@ -290,7 +290,11 @@ let
   #
   # Same as our GHC, unless we're cross, in which case it is native GHC with the
   # same version.
-  nativeGhc = buildHaskellPackages.ghc;
+  # `_wrappers.ghc`, not `buildHaskellPackages.ghc`: in a set that builds GHC
+  # from its own packages, the `ghc` attribute is the GHC *library*
+  # (`compiler/ghc.cabal`), not a compiler. For every other set the two are the
+  # same value.
+  nativeGhc = buildHaskellPackages._wrappers.ghc;
 
   # the target dir for haddock documentation
   docdir = docoutput: docoutput + "/share/doc/" + pname + "-" + version;
