@@ -36,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://jugit.fz-juelich.de/mlz/lib/cerf/-/blob/${finalAttrs.src.tag}/CHANGELOG";
     description = "Complex error (erf), Dawson, Faddeeva, and Voigt function library";
     homepage = "https://jugit.fz-juelich.de/mlz/lib/cerf";
     license = lib.licenses.mit;
