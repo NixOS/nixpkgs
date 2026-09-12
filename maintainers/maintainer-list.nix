@@ -8504,6 +8504,12 @@
     github = "encode42";
     githubId = 34699884;
   };
+  enderfare = {
+    email = "ender.fare.md@gmail.com";
+    github = "enderfare";
+    githubId = 135335132;
+    name = "Ender Fare";
+  };
   enderger = {
     email = "endergeryt@gmail.com";
     github = "enderger";
@@ -9889,6 +9895,12 @@
     github = "frostplexx";
     githubId = 62436912;
     name = "Daniel Inama";
+  };
+  frozenoverthemoon = {
+    email = "frozenoverthemoon@gmail.com";
+    github = "FrozenOverTheMoon";
+    githubId = 120668955;
+    name = "Frozen Moon";
   };
   fryuni = {
     name = "Luiz Ferraz";
