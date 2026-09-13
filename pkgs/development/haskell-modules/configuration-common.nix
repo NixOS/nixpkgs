@@ -2004,7 +2004,6 @@ with haskellLib;
       haskell-ci.override {
         ShellCheck = self.ShellCheck_0_10_0;
         cabal-install-parsers = lib.pipe self.cabal-install-parsers [
-          (warnAfterVersion "0.6.3")
           (overrideSrc {
             version = "0.6.4-unstable-2026-04-15";
             inherit (self.haskell-ci) src;
