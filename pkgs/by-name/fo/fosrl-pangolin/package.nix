@@ -10,6 +10,7 @@
   environmentVariables ? { },
   nixosTests,
   nodejs_22,
+  nix-update-script,
 }:
 
 assert lib.assertOneOf "databaseType" databaseType [
@@ -36,7 +37,7 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "pangolin";
-  version = "1.21.1";
+  version = "1.22.2";
 
   __structuredAttrs = true;
   enableParallelBuilding = true;
@@ -45,12 +46,13 @@ buildNpmPackage (finalAttrs: {
     owner = "fosrl";
     repo = "pangolin";
     tag = finalAttrs.version;
-    hash = "sha256-zfXHev0bN3KVkoiSQ+2WQCgmcCtWi3dib6EiaYmthTo=";
+    hash = "sha256-FNEw1qOX1s3vO9WQIbgspNAGwPzS2cyUb2HiS0RHaAg=";
   };
 
   nodejs = nodejs_22;
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-9wPn2nSD9VxMyHywrG52WrChsrJ/ctnKGlMZZEymP6A=";
+  npmDepsHash = "sha256-BRUNkfSbvuzo2iR25WdNGlr47UErjwJl31oKQ815vWg=";
+  npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
     esbuild
@@ -169,6 +171,7 @@ buildNpmPackage (finalAttrs: {
   passthru = {
     inherit databaseType;
     tests = { inherit (nixosTests) pangolin; };
+    updateScript = nix-update-script { };
   };
 
   meta = {
