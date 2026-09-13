@@ -11,18 +11,16 @@
   dart,
 }:
 
-let
+flutter344.buildFlutterApplication (finalAttrs: {
+  pname = "cwtch-ui";
+
   version = "1.17.2";
   # This Gitea instance has archive downloads disabled, so: fetchgit
   src = fetchgit {
     url = "https://git.openprivacy.ca/cwtch.im/cwtch-ui";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UA3XDAo1kiKnCvB2en4y+L5tgtD18+DsmTnaL8OY5+c=";
   };
-in
-flutter344.buildFlutterApplication {
-  pname = "cwtch-ui";
-  inherit version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -30,7 +28,7 @@ flutter344.buildFlutterApplication {
 
   flutterBuildFlags = [
     "--dart-define"
-    "BUILD_VER=${version}"
+    "BUILD_VER=${finalAttrs.version}"
     "--dart-define"
     "BUILD_DATE=1980-01-01-00:00"
   ];
@@ -55,7 +53,7 @@ flutter344.buildFlutterApplication {
     pubspecSource =
       runCommand "pubspec.lock.json"
         {
-          inherit src;
+          inherit (finalAttrs) src;
           nativeBuildInputs = [ yq-go ];
         }
         ''
@@ -91,4 +89,4 @@ flutter344.buildFlutterApplication {
     platforms = [ "x86_64-linux" ];
     maintainers = [ lib.maintainers.gmacon ];
   };
-}
+})
