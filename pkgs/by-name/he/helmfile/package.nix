@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "helmfile";
-  version = "1.7.4";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "helmfile";
     repo = "helmfile";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/igJVn3d9rsclr87z3q6BklE9+QzZ1NDRVRZhF3OQIc=";
+    hash = "sha256-sPzJ/DniVFCY4hrZvLXpvcFFaT7vdTWiwxoqly7hzOs=";
   };
 
-  vendorHash = "sha256-X3y6a5YcBAHuOxYKHj8dGRt8841lZBrA91e0nFjdR7o=";
+  vendorHash = "sha256-bpiIOfh6hvaAS+hcwd4phv8fXwzbdUCYVxZyyejTx8k=";
 
   proxyVendor = true; # darwin/linux hash mismatch
 
