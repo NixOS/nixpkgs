@@ -176,6 +176,16 @@ in
         icmpv6 type != { nd-redirect, 139 } accept comment "Accept all ICMPv6 messages except redirects and node information queries (type 139).  See RFC 4890, section 4.4."
         ip6 daddr fe80::/64 udp dport 546 accept comment "DHCPv6 client"
 
+        # Allow DHCP server requests from systemd virtual network interfaces.
+        # ve-*: nspawn --network-veth
+        iifname "ve-*" udp dport 67 accept comment "systemd-nspawn veth DHCP server"
+        # vz-*: nspawn --network-zone
+        iifname "vz-*" udp dport 67 accept comment "systemd-nspawn zone DHCP server"
+        # vt-*: vmspawn TAP
+        iifname "vt-*" udp dport 67 accept comment "systemd-vmspawn TAP DHCP server"
+        # ns-*: nsresourced network namespaces.
+        iifname "ns-*" udp dport 67 accept comment "systemd-nsresourced DHCP server"
+
         ${cfg.extraInputRules}
 
       }
