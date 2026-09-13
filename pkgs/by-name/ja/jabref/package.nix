@@ -54,7 +54,7 @@ let
     url = ltwaUrl;
     hash = "sha256-jnS8Y9x8eg2L3L3RPnS6INTs19mEtwzfNIjJUw6HtIY=";
   };
-  kotlinDslVersion = "6.4.2";
+  kotlinDslVersion = "6.7.3";
 in
 stdenv.mkDerivation rec {
   version = "6.0-alpha.4";
