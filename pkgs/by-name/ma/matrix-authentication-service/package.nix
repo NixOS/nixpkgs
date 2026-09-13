@@ -3,7 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   fetchPnpmDeps,
-  pnpm,
+  pnpm_11,
   pnpmConfigHook,
   nodejs,
   python3,
@@ -17,7 +17,9 @@
   versionCheckHook,
   buildPackages,
 }:
-
+let
+  pnpm = pnpm_11;
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-authentication-service";
   version = "1.24.0";
@@ -33,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 4;
     hash = "sha256-DxEjMhYqZGbnobQ/F0WFXq7qaxSkWDcoZ0kmWJsdxEQ=";
   };
