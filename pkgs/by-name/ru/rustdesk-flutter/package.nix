@@ -203,10 +203,16 @@ flutter329.buildFlutterApplication rec {
     cp ../res/scalable.svg $out/share/icons/hicolor/scalable/apps/rustdesk.svg
   '';
 
-  extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : ${addDriverRunpath.driverLink}/lib \
-    --prefix PATH : ${lib.makeBinPath [ xdg-user-dirs ]}
-  '';
+  extraWrapProgramArgs = [
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    "${addDriverRunpath.driverLink}/lib"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ xdg-user-dirs ])
+  ];
 
   desktopItems = [
     (makeDesktopItem {
