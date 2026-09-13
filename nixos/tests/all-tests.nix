@@ -1258,6 +1258,7 @@ in
   nfs4 = handleTest ./nfs { version = 4; };
   nghttpx = runTest ./nghttpx.nix;
   nginx = runTest ./nginx.nix;
+  nginx-acme = runTest ./nginx-acme.nix;
   nginx-auth = runTest ./nginx-auth.nix;
   nginx-compression = runTest ./nginx-compression.nix;
   nginx-dynamic-modules = runTest ./nginx-dynamic-modules.nix;
