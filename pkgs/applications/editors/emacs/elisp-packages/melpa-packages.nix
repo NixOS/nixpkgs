@@ -1581,6 +1581,8 @@ let
               '';
           });
 
+          peek-mode = ignoreCompilationError super.peek-mode; # elisp error when loading elnode
+
           pgdevenv = ignoreCompilationError super.pgdevenv; # elisp error
 
           pinot = ignoreCompilationError super.pinot; # elisp error
