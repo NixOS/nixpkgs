@@ -1,81 +1,100 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitLab,
+
   python,
-  pygobject3,
-  pyatspi,
-  pycairo,
+
   at-spi2-core,
   gobject-introspection,
   gtk3,
-  gsettings-desktop-schemas,
-  fetchurl,
+  pyatspi,
+  pycairo,
+  pygobject3,
+  setuptools,
+  setuptools-scm,
+
+  packaging,
+  psutil,
+
   dbus,
-  xvfb-run,
+  gsettings-desktop-schemas,
   wrapGAppsHook3,
-  # , fetchPypi
+  writableTmpDirAsHomeHook,
+  xvfb-run,
+
+  callPackage,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "dogtail";
-  version = "0.9.11";
-  format = "setuptools";
+  version = "2.0.1";
+  pyproject = true;
 
   outputs = [
     "out"
     "dev"
   ];
 
-  # https://gitlab.com/dogtail/dogtail/issues/1
-  # src = fetchPypi {
-  #   inherit pname version;
-  #   sha256 = "0p5wfssvzr9w0bvhllzbbd8fnp4cca2qxcpcsc33dchrmh5n552x";
-  # };
-  src = fetchurl {
-    url = "https://gitlab.com/dogtail/dogtail/raw/released/dogtail-0.9.10.tar.gz";
-    sha256 = "EGyxYopupfXPYtTL9mm9ujZorvh8AGaNXVKBPWsGy3c=";
+  src = fetchFromGitLab {
+    owner = "dogtail";
+    repo = "dogtail";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+mtof4KFhybLjoQ2pMindZJt2rNxSbtgGl9wJQahMYI=";
   };
 
-  patches = [ ./nix-support.patch ];
+  patches = [ ./0001-nixos-support.patch ];
+
+  postPatch = ''
+    # some custom configure command, not helpful for nix build
+    rm -f configure
+    # logs say `Not loading module "atk-bridge": The functionality is provided by GTK natively. Please try to not load it`
+    sed -i 's/"gail:atk-bridge"/""/g' dogtail/utils.py
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
+    pyatspi
+    pycairo
+    pygobject3
+  ];
 
   nativeBuildInputs = [
     gobject-introspection
-    dbus
-    xvfb-run
     wrapGAppsHook3
-  ]; # for setup hooks
-  propagatedBuildInputs = [
-    at-spi2-core
-    gtk3
-    pygobject3
-    pyatspi
-    pycairo
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:$XDG_DATA_DIRS
-    # export NO_AT_BRIDGE=1
-    gsettings set org.gnome.desktop.interface toolkit-accessibility true
-    xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus}/share/dbus-1/session.conf \
-      ${python.interpreter} nix_run_setup test
-    runHook postCheck
-  '';
+  propagatedBuildInputs = [
+    packaging
+    psutil
 
-  dontWrapGApps = true;
+    at-spi2-core
+    gtk3
+  ];
 
-  preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
+  makeWrapperArgs = [
+    "--prefix"
+    "GI_TYPELIB_PATH"
+    ":"
+    "${lib.makeSearchPath "lib/girepository-1.0" finalAttrs.propagatedBuildInputs}"
+  ];
 
-  # TODO: Tests require accessibility
+  # Tests require accessibility etc.
+  # do it in a vm
   doCheck = false;
+
+  passthru.tests = callPackage ./tests { };
 
   meta = {
     description = "GUI test tool and automation framework that uses Accessibility technologies to communicate with desktop applications";
     homepage = "https://gitlab.com/dogtail/dogtail";
-    license = lib.licenses.gpl2Only;
-    maintainers = [ ];
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "dogtail-headless";
+    maintainers = with lib.maintainers; [ phanirithvij ];
+    platforms = lib.platforms.linux;
   };
-}
+})
