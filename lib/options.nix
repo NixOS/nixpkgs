@@ -594,7 +594,7 @@ rec {
       type = opt.type.description or "unspecified";
     }
     // optionalAttrs (opt ? example) {
-      example = builtins.addErrorContext "while evaluating the example of option `${name}`" (
+      example = lib.addErrorContext "while evaluating the example of option `${name}`" (
         renderOptionValue opt.example
       );
     }
@@ -611,7 +611,7 @@ rec {
         )
         {
           default =
-            builtins.addErrorContext
+            lib.addErrorContext
               "while evaluating the ${
                 if opt ? defaultText then "defaultText" else "default value"
               } of option `${name}`"
@@ -680,7 +680,7 @@ rec {
           )
         ]
         ++ subDocs;
-      onAttrSet = recurse: set: concatMap recurse (builtins.attrValues set);
+      onAttrSet = recurse: set: concatMap recurse (lib.attrValues set);
       empty = [ ];
     } options;
 

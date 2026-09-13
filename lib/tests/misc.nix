@@ -3426,7 +3426,7 @@ runTests {
         attrTagSubOptionType = optionDoc.options.tagTest."*".tagA.type;
 
         # Equivalent traversal via optionAttrSetToDocList
-        docListCount = builtins.length docList;
+        docListCount = length docList;
       };
     expected = {
       hasDefs = true;
