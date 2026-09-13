@@ -9303,6 +9303,8 @@ self: super: with self; {
 
   langchain-huggingface = callPackage ../development/python-modules/langchain-huggingface { };
 
+  langchain-mcp-adapters = callPackage ../development/python-modules/langchain-mcp-adapters { };
+
   langchain-mistralai = callPackage ../development/python-modules/langchain-mistralai { };
 
   langchain-mongodb = callPackage ../development/python-modules/langchain-mongodb { };
