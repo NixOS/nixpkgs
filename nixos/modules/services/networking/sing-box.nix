@@ -7,6 +7,7 @@
 }:
 let
   cfg = config.services.sing-box;
+  immutableEtc = config.system.etc.overlay.enable && !config.system.etc.overlay.mutable;
   settingsFormat = pkgs.formats.json { };
 in
 {
@@ -50,7 +51,7 @@ in
       serviceConfig = {
         User = "sing-box";
         Group = "sing-box";
-        ConfigurationDirectory = "sing-box";
+        ConfigurationDirectory = lib.mkIf (!immutableEtc) "sing-box";
         StateDirectory = "sing-box";
         StateDirectoryMode = "0700";
         RuntimeDirectory = "sing-box";
@@ -66,11 +67,11 @@ in
           lib.mkIf (cfg.settings != { }) "+${script}";
         ExecStart =
           let
-            configDir = if cfg.settings != { } then "RUNTIME_DIRECTORY" else "CONFIGURATION_DIRECTORY";
+            configDir = if cfg.settings != { } then "\${RUNTIME_DIRECTORY}" else "/etc/sing-box";
           in
           [
             ""
-            "${lib.getExe cfg.package} -D \${STATE_DIRECTORY} -C \${${configDir}} run"
+            "${lib.getExe cfg.package} -D \${STATE_DIRECTORY} -C ${configDir} run"
           ];
       };
       # After= is specified by upstream
