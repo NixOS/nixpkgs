@@ -60,9 +60,23 @@ run_require_checks() {
     successful_modules=()
 
     export HOME="$TMPDIR"
-    local deps="${dependencies[*]}"
-    local nativeCheckInputs="${nativeBuildInputs[*]}"
-    local checkInputs="${buildInputs[*]}"
+
+    local -a dependencyPathArgs=()
+    local -a dependencyLoadArgs=()
+
+    if [ -n "${nvimRequireCheckPackPath:-}" ]; then
+        dependencyPathArgs=(--cmd "set packpath^=$nvimRequireCheckPackPath")
+        dependencyLoadArgs=(--cmd "packloadall")
+    else
+        local deps="${dependencies[*]}"
+        local nativeCheckInputs="${nativeBuildInputs[*]}"
+        local checkInputs="${buildInputs[*]}"
+        dependencyPathArgs=(
+            --cmd "set rtp+=${deps// /,}"
+            --cmd "set rtp+=${nativeCheckInputs// /,}"
+            --cmd "set rtp+=${checkInputs// /,}"
+        )
+    fi
 
     local -a luaPathArgs=()
     if [ -n "${nvimRequireCheckLuaPath:-}" ] || [ -n "${nvimRequireCheckLuaCPath:-}" ]; then
@@ -98,10 +112,9 @@ run_require_checks() {
         if [ "$skip" = false ]; then
             echo "Attempting to require module: $name"
             if @nvimBinary@ -es --headless -n -u NONE -i NONE --clean -V1 \
-                --cmd "set rtp+=${deps// /,}" \
-                --cmd "set rtp+=${nativeCheckInputs// /,}" \
-                --cmd "set rtp+=${checkInputs// /,}" \
+                "${dependencyPathArgs[@]}" \
                 "${luaPathArgs[@]}" \
+                "${dependencyLoadArgs[@]}" \
                 --cmd "set packpath^=$packPathDir" \
                 --cmd "packadd testPlugin" \
                 --cmd "lua require('$name')"; then
