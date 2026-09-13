@@ -1,0 +1,36 @@
+diff --git a/CMake/upstream.cmake b/CMake/upstream.cmake
+index 4fa5dc2..edbdbaa 100644
+--- a/CMake/upstream.cmake
++++ b/CMake/upstream.cmake
+@@ -7,5 +7,11 @@ endif()
+ # When building for upstream, only shim plugin library is built
+ # XRT is part of the upstreaming project and provides the headers
+ # and targets needed by xdna plugin
+-set(XRT_PLUGIN_VERSION_STRING ${XRT_VERSION_STRING})
++find_package(XRT REQUIRED)
++
++add_library(xrt_core ALIAS XRT::xrt_core)
++add_library(xrt_coreutil ALIAS XRT::xrt_coreutil)
++
++set(XRT_PLUGIN_VERSION_STRING ${XRT_VERSION})
++string(REGEX MATCH "^[0-9]+" XRT_SOVERSION "${XRT_PLUGIN_VERSION_STRING}")
+ add_subdirectory(src/shim)
+diff --git a/src/shim/CMakeLists.txt b/src/shim/CMakeLists.txt
+index 15a47b2..0d81d2e 100644
+--- a/src/shim/CMakeLists.txt
++++ b/src/shim/CMakeLists.txt
+@@ -63,12 +63,10 @@ target_link_options(${XDNA_TARGET} PRIVATE
+ 
+ # install components for packaging
+ install(TARGETS ${XDNA_TARGET}
+-  LIBRARY DESTINATION ${XDNA_PKG_LIB_DIR}
++  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+   NAMELINK_SKIP
+   COMPONENT ${XDNA_COMPONENT}
+   )
+ 
+ # install components for testing
+-install(TARGETS ${XRT_CORE_TARGET} DESTINATION ${XDNA_BIN_DIR}/${XDNA_PKG_LIB_DIR})
+-install(TARGETS ${XRT_COREUTIL_TARGET} DESTINATION ${XDNA_BIN_DIR}/${XDNA_PKG_LIB_DIR})
+-install(TARGETS ${XDNA_TARGET} DESTINATION ${XDNA_BIN_DIR}/${XDNA_PKG_LIB_DIR})
++install(TARGETS ${XDNA_TARGET} DESTINATION ${CMAKE_INSTALL_LIBDIR})
