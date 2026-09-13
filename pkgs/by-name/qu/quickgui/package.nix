@@ -22,11 +22,12 @@ flutter332.buildFlutterApplication rec {
     window_size = "sha256-XelNtp7tpZ91QCEcvewVphNUtgQX7xrp5QP0oFo6DgM=";
   };
 
-  extraWrapProgramArgs = "--prefix PATH : ${
-    lib.makeBinPath [
-      quickemu
-    ]
-  }";
+  extraWrapProgramArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ quickemu ])
+  ];
 
   nativeBuildInputs = [ copyDesktopItems ];
 
