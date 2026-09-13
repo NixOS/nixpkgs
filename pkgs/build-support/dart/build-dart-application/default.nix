@@ -82,7 +82,26 @@ lib.extendMkDerivation {
       ...
     }:
     let
-      generators = callPackage ./generators.nix { inherit dart; } { buildDrvArgs = args; };
+      extraWrapProgramArgs =
+        if lib.types.str.check extraWrapProgramArgs then
+          lib.warn "Passing a string to extraWrapProgramArgs is deprecated, use a list of arguments instead" (
+            lib.splitStringBy (
+              _prev: cur:
+              builtins.elem cur [
+                " "
+                "\t"
+                "\n"
+              ]
+            ) false (lib.trim extraWrapProgramArgs)
+          )
+        else
+          extraWrapProgramArgs;
+
+      generators = callPackage ./generators.nix { inherit dart; } {
+        buildDrvArgs = args // {
+          inherit extraWrapProgramArgs;
+        };
+      };
 
       pubspecLockFile = builtins.toJSON pubspecLock;
       pubspecLockData = pub2nix.readPubspecLock {
