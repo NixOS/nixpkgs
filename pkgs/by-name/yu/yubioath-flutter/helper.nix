@@ -29,4 +29,6 @@ rustPlatform.buildRustPackage {
     install -d $out/libexec/helper
     ln -fs $out/bin/authenticator-helper $out/libexec/helper/authenticator-helper
   '';
+
+  __structuredAttrs = true;
 }
