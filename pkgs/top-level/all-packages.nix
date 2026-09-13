@@ -6685,10 +6685,6 @@ with pkgs;
     gtkVersion = "4";
   };
 
-  inherit (callPackage ../development/libraries/vtk { }) vtk_9_5 vtk_9_6;
-
-  vtk = vtk_9_5;
-
   vtk-full = vtk.override {
     withQt6 = true;
     mpiSupport = true;
