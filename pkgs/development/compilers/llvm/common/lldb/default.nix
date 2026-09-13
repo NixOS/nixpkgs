@@ -3,6 +3,7 @@
   stdenv,
   llvm_meta,
   release_version,
+  getVersionFile,
   cmake,
   zlib,
   ncurses,
@@ -75,7 +76,7 @@ stdenv.mkDerivation (
     sourceRoot = "${finalAttrs.src.name}/lldb";
 
     patches = [
-      ./gnu-install-dirs.patch
+      (getVersionFile "lldb/gnu-install-dirs.patch")
     ]
     ++ lib.optionals (lib.versions.major release_version == "18") [
       # Fix build with gcc15
