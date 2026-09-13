@@ -26,14 +26,14 @@ let
     };
   };
 in
-flutter344.buildFlutterApplication rec {
+flutter344.buildFlutterApplication (finalAttrs: {
   pname = "bluebubbles";
   version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "BlueBubblesApp";
     repo = "bluebubbles-app";
-    tag = "v${version}+91";
+    tag = "v${finalAttrs.version}+91";
     hash = "sha256-NYX30yt7cFlhTQKLKzYKEjaA4ZKLNWg5HuKSgQiZIDM=";
   };
 
@@ -107,4 +107,4 @@ flutter344.buildFlutterApplication rec {
       zacharyweiss
     ];
   };
-}
+})
