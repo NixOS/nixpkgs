@@ -94,6 +94,7 @@
   pytest-factoryboy,
   pytest-flask,
   mock,
+  py7zr,
   rarfile,
   responses,
   requests-mock,
@@ -114,12 +115,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "beets";
-  version = "2.13.1";
+  version = "2.14.0";
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-f25Uv7PRKBFUWah6pvEwwTFjxXKQfmAP2fyTNFJyWB0=";
+    hash = "sha256-lhU7hGyudDgmAyKUNInxZ8nM/dd6xWLS83vp3rwZuHQ=";
   };
   pyproject = true;
 
@@ -185,6 +186,7 @@ buildPythonPackage (finalAttrs: {
     pytest-factoryboy
     pytest-flask
     mock
+    py7zr
     rarfile
     responses
     requests-mock
