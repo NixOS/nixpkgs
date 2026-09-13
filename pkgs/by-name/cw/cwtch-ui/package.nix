@@ -38,7 +38,12 @@ flutter329.buildFlutterApplication {
   # These things are added to LD_LIBRARY_PATH, but not PATH
   runtimeDependencies = [ cwtch ];
 
-  extraWrapProgramArgs = "--prefix PATH : ${lib.makeBinPath [ tor ]}";
+  extraWrapProgramArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ tor ])
+  ];
 
   postInstall = ''
     mkdir -p $out/share/applications
