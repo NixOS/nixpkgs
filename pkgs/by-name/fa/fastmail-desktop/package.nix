@@ -22,6 +22,7 @@ callPackage (if isDarwin then ./darwin.nix else ./linux.nix) {
     license = lib.licenses.unfree;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [
+      iedame
       nekowinston
       supermarin
     ];

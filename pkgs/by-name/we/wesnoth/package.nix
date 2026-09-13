@@ -155,7 +155,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.wesnoth.org/";
     changelog = "https://github.com/wesnoth/wesnoth/blob/${finalAttrs.version}/changelog.md";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ niklaskorz ];
+    maintainers = with lib.maintainers; [
+      niklaskorz
+      iedame
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "wesnoth${suffix}";
   };
