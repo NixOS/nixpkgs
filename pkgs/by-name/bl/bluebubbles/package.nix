@@ -79,9 +79,12 @@ flutter344.buildFlutterApplication rec {
     install -Dm0644 flatpak/icon/128x128.png $out/share/icons/hicolor/128x128/apps/bluebubbles.png
   '';
 
-  extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : $out/app/bluebubbles/lib
-  '';
+  extraWrapProgramArgs = [
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    "$out/app/bluebubbles/lib"
+  ];
 
   meta = {
     description = "Cross-platform iMessage client";
