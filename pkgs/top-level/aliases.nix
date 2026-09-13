@@ -375,6 +375,7 @@ mapAliases {
   av-98 = throw "'av-98' has been removed because it has been broken since at least November 2024."; # Added 2025-10-03
   avocode = throw "'avocode' has been removed as it was sunset in October 2023"; # Added 2026-05-27
   avr-sim = throw "'avr-sim' has been removed as it was broken and unmaintained. Possible alternatives are 'simavr', SimulAVR and AVRStudio."; # Added 2025-05-31
+  avrdudess = throw "'avrdudess' has been removed as it was broken and relies on gtk2"; # Added 2026-09-13
   awesome-4-0 = throw "'awesome-4-0' has been renamed to/replaced by 'awesome'"; # Converted to throw 2025-10-27
   awf = throw "'awf' has been removed as the upstream project was archived in 2021"; # Added 2025-10-03
   aws-shell = throw "'aws-shell' has been removed because it is unmaintained upstream"; # Added 2026-01-18
