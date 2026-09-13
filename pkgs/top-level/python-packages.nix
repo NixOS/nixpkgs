@@ -2976,6 +2976,8 @@ self: super: with self; {
 
   celery-redbeat = callPackage ../development/python-modules/celery-redbeat { };
 
+  celery-redbeat-pypi = callPackage ../development/python-modules/celery-redbeat-pypi { };
+
   celery-singleton = callPackage ../development/python-modules/celery-singleton { };
 
   celery-types = callPackage ../development/python-modules/celery-types { };
@@ -19915,6 +19917,8 @@ self: super: with self; {
   starlette-compress = callPackage ../development/python-modules/starlette-compress { };
 
   starlette-context = callPackage ../development/python-modules/starlette-context { };
+
+  starlette-csrf = callPackage ../development/python-modules/starlette-csrf { };
 
   starlette-wtf = callPackage ../development/python-modules/starlette-wtf { };
 
