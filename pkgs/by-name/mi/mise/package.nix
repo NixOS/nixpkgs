@@ -5,33 +5,46 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  writeShellScript,
   coreutils,
   bash,
   direnv,
-  git,
+  gitMinimal,
   pkg-config,
   openssl,
   cmake,
   cacert,
   tzdata,
+  python3,
   usage,
   testers,
   runCommand,
   jq,
 }:
 
+let
+  copyProbe = writeShellScript "mise-copy-probe" ''
+    exec ${lib.getExe' coreutils "cp"} "$@"
+  '';
+
+  codesignStub = writeShellScript "mise-codesign-stub" ''
+    for arg; do bundle=$arg; done
+    mkdir -p "$bundle/Contents/_CodeSignature"
+    : > "$bundle/Contents/_CodeSignature/CodeResources"
+  '';
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mise";
-  version = "2026.8.6";
+  version = "2026.9.3";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dm+cIb6i+npYSIUfxaEi3ohumeT9lXXlQwYREndwZFE=";
+    hash = "sha256-o61fIIVKJrZd36O3sc1O9lEEoHMPH1sryasLXNckLWQ=";
   };
 
-  cargoHash = "sha256-VzRNo2fa4n4oOw27itjFebKpIhSdm8UmI/xdBBJIh9g=";
+  cargoHash = "sha256-22i9pURiN3CGgFRmG4VptpdR1MIryd3sCxtxOx9SMZA=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -51,7 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '/usr/bin/env bash' '${lib.getExe bash}'
 
     substituteInPlace ./src/git.rs \
-      --replace-fail '"git"' '"${lib.getExe git}"'
+      --replace-fail '"git"' '"${lib.getExe gitMinimal}"'
 
     substituteInPlace ./src/env_diff.rs \
       --replace-fail '"bash"' '"${lib.getExe bash}"'
@@ -59,13 +72,34 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace ./src/cli/direnv/exec.rs \
       --replace-fail '"env"' '"${lib.getExe' coreutils "env"}"' \
       --replace-fail 'cmd!("direnv"' 'cmd!("${lib.getExe direnv}"'
+
+    # the age plugin protocol test writes this fixture out and executes it
+    substituteInPlace ./src/agecrypt/fixtures/age-plugin-se.py \
+      --replace-fail '#!/usr/bin/env python3' '#!${lib.getExe python3}'
+
+    # /bin/cp is not in the sandbox, and it is both the probe's symlink target
+    # and the file the probe is asked to copy
+    substituteInPlace ./src/backend/spm.rs \
+      --replace-fail '/bin/cp' '${copyProbe}'
+
+    # tests that clear the environment and rebuild a minimal system PATH
+    substituteInPlace ./src/cmd.rs ./src/inline_command.rs \
+      --replace-fail '.env("PATH", "/usr/bin:/bin")' '.env("PATH", "${lib.getBin coreutils}/bin:/usr/bin:/bin")'
+
+    substituteInPlace ./src/inline_command.rs \
+      --replace-fail 'Command::new("/bin/sh")' 'Command::new("${lib.getExe' bash "sh"}")'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+
+    substituteInPlace ./build.rs \
+      --replace-fail '/usr/bin/codesign' '${codesignStub}'
   '';
 
   nativeCheckInputs = [
     cacert
     cmake
     # gix spawns git-upload-pack by name in file:// clone tests.
-    git
+    gitMinimal
     rustPlatform.bindgenHook
   ];
 
@@ -74,17 +108,29 @@ rustPlatform.buildRustPackage (finalAttrs: {
     NIX_CFLAGS_COMPILE = "-Wno-error";
     # tera date helper tests look up timezone data via TZDIR.
     TZDIR = "${tzdata}/share/zoneinfo";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # the notification helper is never Developer ID signed here
+    MISE_NOTIFICATION_SIGN_IDENTITY = "-";
   };
 
   checkFlags = [
     # last_modified will always be different in nix
     "--skip=tera::tests::test_last_modified"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-    # shell out to macOS system binaries that the darwin sandbox refuses to exec
-    "--skip=system::defaults::tests::test_status_missing_keys_are_unset"
+    # bootstrapping node-gyp through aube requires network access
+    "--skip=mise_binary_services_aube_node_gyp_bootstrap_trampoline"
     # we don't care about brew tests and a lot of them fails here
     "--skip=system::packages::brew::cask::tests::"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # talk to the macOS preferences store, which is unreachable in the sandbox
+    "--skip=system::defaults::tests::test_status_missing_keys_are_unset"
+    "--skip=system::defaults::tests::test_nested_value_round_trip"
+    # the notification helper will not work on macos without codesigned bundle
+    "--skip=system::history::notify::macos::tests::"
+    # sandbox-exec is unavailable inside the darwin sandbox
+    "--skip=cmd::tests::test_macos_sandbox_preserves_piped_stdin"
+    "--skip=sandbox::macos::tests::"
   ];
 
   cargoTestFlags = [ "--all-features" ];
@@ -96,10 +142,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     installManPage ./man/man1/mise.1
-
-    substituteInPlace ./completions/{mise.bash,mise.fish,_mise}  \
-      --replace-fail 'usage &> /dev/null' '${lib.getExe usage} &> /dev/null' \
-      --replace-fail 'usage complete-word' '${lib.getExe usage} complete-word'
 
     installShellCompletion \
       --bash ./completions/mise.bash \
