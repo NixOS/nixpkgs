@@ -40,7 +40,7 @@ flutter335.buildFlutterApplication rec {
 
   postInstall = ''
     install -Dm0644 aur/chameleonultragui.desktop $out/share/applications/chameleonultragui.desktop
-    install -Dm0644 aur/chameleonultragui.png $out/share/pixmaps/chameleonultragui.png
+    install -Dm0644 aur/chameleonultragui.png $out/share/icons/chameleonultragui.png
     install -Dm0644 build/linux/*/release/shared/librecovery.so $out/app/chameleonultragui/lib
   '';
 
