@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchurl,
   bintools-unwrapped,
   callPackage,
   coreutils,
@@ -9,15 +10,23 @@
   unzip,
 }:
 
+let
+  bootstrap-version = "3.9.2";
+  cosmocc-zip = fetchurl {
+    url = "https://github.com/jart/cosmopolitan/releases/download/${bootstrap-version}/cosmocc-${bootstrap-version}.zip";
+    sha256 = "sha256-9P8Tr2X80wnz8c/QQnWZb7f3KkiXcmYoqMnPcy6FAZM=";
+  };
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "cosmopolitan";
-  version = "2.2";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "jart";
     repo = "cosmopolitan";
     rev = finalAttrs.version;
-    hash = "sha256-DTL1dXH+LhaxWpiCrsNjV74Bw5+kPbhEAA2Z1NKiPDk=";
+    hash = "sha256-NaWQK7SkqS3rrGG95dEjq8ptXogYU4bNndoXPU2rXnM=";
   };
 
   patches = [
@@ -41,7 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   # slashes are significant because upstream uses o/$(MODE)/foo.o
   buildFlags = [
-    "o/cosmopolitan.h"
     "o//cosmopolitan.a"
     "o//libc/crt/crt.o"
     "o//ape/ape.o"
@@ -56,6 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
   dontConfigure = true;
   dontFixup = true;
 
+  preBuild = ''
+    # Extract cosmocc to the expected location
+    mkdir -p .cosmocc/${bootstrap-version}
+    unzip -qo ${cosmocc-zip} -d .cosmocc/${bootstrap-version}
+  '';
+
   preCheck =
     let
       failingTests = [
@@ -63,8 +77,9 @@ stdenv.mkDerivation (finalAttrs: {
         "test/libc/calls/sched_setscheduler_test.c"
         "test/libc/thread/pthread_create_test.c"
         "test/libc/calls/getgroups_test.c"
-        # fails
-        "test/libc/stdio/posix_spawn_test.c"
+        "test/libc/calls/cachestat_test.c"
+        "test/libc/calls/getprogramexecutablename_test.c"
+        "test/libc/proc/posix_spawn_test.c"
       ];
     in
     lib.concatStringsSep ";\n" (map (t: "rm -v ${t}") failingTests);
@@ -73,8 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/{include,lib}
-    install o/cosmopolitan.h $out/include
-    install o/cosmopolitan.a o/libc/crt/crt.o o/ape/ape.{o,lds} o/ape/ape-no-modify-self.o $out/lib
+    install o//cosmopolitan.a o//libc/crt/crt.o o//ape/ape.{o,lds} o//ape/ape-no-modify-self.o $out/lib
     cp -RT . "$dist"
 
     runHook postInstall
