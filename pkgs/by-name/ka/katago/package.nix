@@ -1,6 +1,8 @@
 {
   stdenv,
+  apple-sdk,
   boost,
+  clangStdenv,
   cmake,
   config,
   cudaPackages,
@@ -10,9 +12,11 @@
   lib,
   libzip,
   makeWrapper,
+  ninja,
   ocl-icd,
   opencl-headers,
   openssl,
+  protobuf,
   writeShellScriptBin,
   enableAVX2 ? stdenv.hostPlatform.avx2Support,
   backend ? if config.cudaSupport then "cuda" else "opencl",
@@ -27,10 +31,20 @@ assert lib.assertOneOf "backend" backend [
   "cuda"
   "tensorrt"
   "eigen"
+  "metal"
 ];
 
+# Metal is only permitted on MacOS
+assert stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 || backend != "metal";
+
+# The TensorRT Plan Cache is only applicable to the trt backend
+assert !(enableTrtPlanCache && backend != "tensorrt");
+
+# cannot enable both TrtPlanCache and Contrib simultaneously, this is checked by CMake
+assert !(enableTrtPlanCache && enableContrib);
+
 let
-  githash = "ba938676d7f42d70950b3a535af2466fb642008c";
+  githash = "5246793f77b480dee91a3b92902d1a9b92860bd0";
   fakegit = writeShellScriptBin "git" "echo ${githash}";
   stdenv' =
     if
@@ -40,35 +54,26 @@ let
       ]
     then
       cudaPackages.backendStdenv
+    else if backend == "metal" then
+      clangStdenv
     else
       stdenv;
 in
 stdenv'.mkDerivation rec {
   pname = "katago";
-  version = "1.16.5";
+  version = "1.17.2";
 
   src = fetchFromGitHub {
     owner = "lightvector";
     repo = "katago";
     rev = "v${version}";
-    sha256 = "sha256-+s4JO6+UMyeSHUqyRFEhJD2kmsdhcydanFWjTqxC1Tc=";
+    sha256 = "sha256-mnsfl/HNrrQiKIBV3dzb3AVFDPf0q3DSl/QG5tzasmA=";
   };
 
   nativeBuildInputs = [
     cmake
     makeWrapper
   ];
-
-  # Included from release 1.16.2:
-  # https://github.com/lightvector/KataGo/commit/9030f72d152da42c1dd03590aa5116993ea842f6
-  # Doesn't apply cleanly as a patch so doing a quick replacement to the same effect.
-  prePatch = lib.optionalString (backend == "tensorrt") ''
-    nixLog "patching $PWD/cpp/CMakeLists.txt to work around outdated TensorRT version detection"
-    substituteInPlace "$PWD/cpp/CMakeLists.txt" \
-      --replace-fail \
-        'if(TENSORRT_VERSION VERSION_LESS 8.5)' \
-        'if(NOT TENSORRT_VERSION STREQUAL ".." AND TENSORRT_VERSION VERSION_LESS 8.5)'
-  '';
 
   buildInputs = [
     libzip
@@ -78,9 +83,8 @@ stdenv'.mkDerivation rec {
   ++ lib.optionals (backend == "cuda") (
     with cudaPackages;
     [
-      cccl
       cuda_cudart
-      cuda_nvcc
+      cuda_nvrtc
       cudnn
       libcublas
     ]
@@ -90,11 +94,16 @@ stdenv'.mkDerivation rec {
     [
       cuda_cudart
       tensorrt
+      protobuf
     ]
   )
   ++ lib.optionals (backend == "opencl") [
-    opencl-headers
     ocl-icd
+    opencl-headers
+  ]
+  ++ lib.optionals (backend == "metal") [
+    apple-sdk
+    ninja
   ]
   ++ lib.optionals enableContrib [ openssl ]
   ++ lib.optionals enableTcmalloc [ gperftools ];
@@ -110,6 +119,9 @@ stdenv'.mkDerivation rec {
   ++ lib.optionals enableContrib [
     (lib.cmakeBool "BUILD_DISTRIBUTED" true)
     (lib.cmakeFeature "GIT_EXECUTABLE" "${fakegit}/bin/git")
+  ]
+  ++ lib.optionals (backend == "metal") [
+    "-GNinja"
   ];
 
   preConfigure = ''
@@ -132,12 +144,12 @@ stdenv'.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Go engine modeled after AlphaGo Zero";
     mainProgram = "katago";
     homepage = "https://github.com/lightvector/katago";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.omnipotententity ];
-    platforms = [ "x86_64-linux" ];
+    license = licenses.mit;
+    maintainers = [ maintainers.omnipotententity ];
+    platforms = platforms.unix;
   };
 }
