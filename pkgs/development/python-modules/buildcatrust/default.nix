@@ -30,6 +30,8 @@ buildPythonPackage (finalAttrs: {
     "buildcatrust.cli"
   ];
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Build SSL/TLS trust stores";
     mainProgram = "buildcatrust";

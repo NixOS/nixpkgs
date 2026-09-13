@@ -8,7 +8,7 @@
   mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "installer";
   version = "1.0.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "installer";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-GkHLZfzHfTcBL8wQmIGlNkVodEw9Pih4i1SS36mSfBo=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
 
   passthru.tests = {
     pytest = buildPythonPackage {
-      pname = "${pname}-pytest";
-      inherit version;
+      pname = "${finalAttrs.pname}-pytest";
+      inherit (finalAttrs) version;
       pyproject = false;
 
       dontBuild = true;
@@ -49,12 +49,14 @@ buildPythonPackage rec {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Low-level library for installing a Python package from a wheel distribution";
     homepage = "https://github.com/pypa/installer";
-    changelog = "https://github.com/pypa/installer/blob/${src.rev}/docs/changelog.md";
+    changelog = "https://github.com/pypa/installer/blob/${finalAttrs.src.rev}/docs/changelog.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.cpcloud ];
     teams = [ lib.teams.python ];
   };
-}
+})

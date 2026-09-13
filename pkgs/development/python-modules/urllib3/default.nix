@@ -93,6 +93,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "urllib3" ];
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Powerful, user-friendly HTTP client for Python";
     homepage = "https://github.com/urllib3/urllib3";

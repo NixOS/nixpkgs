@@ -8,7 +8,7 @@
   pexpect,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-timeout";
   version = "2.4.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-timeout";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-NGTy3Hua6yEMWXQDJQO2Z5DD3clXTZXEH6DNQBMSGtQ=";
   };
 
@@ -31,11 +31,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_timeout" ];
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Pytest plugin to abort hanging tests";
     homepage = "https://github.com/pytest-dev/pytest-timeout/";
-    changelog = "https://github.com/pytest-dev/pytest-timeout/tree/${src.tag}#changelog";
+    changelog = "https://github.com/pytest-dev/pytest-timeout/tree/${finalAttrs.src.tag}#changelog";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ makefu ];
   };
-}
+})
