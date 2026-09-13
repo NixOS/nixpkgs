@@ -842,13 +842,6 @@ let
           let
             # Merge manifest with manifests generated from auto deploying charts, keep only enabled manifests
             enabledManifests = lib.filterAttrs (_: v: v.enable) (cfg.autoDeployCharts // cfg.manifests);
-            # Make a systemd-tmpfiles rule for a manifest
-            mkManifestRule = manifest: {
-              name = "${manifestDir}/${manifest.target}";
-              value = {
-                "L+".argument = "${manifest.source}";
-              };
-            };
             # Make a systemd-tmpfiles rule for a container image
             mkImageRule = image: {
               name = "${imageDir}/${image.name}";
@@ -872,7 +865,21 @@ let
               };
             };
           in
-          (lib.mapAttrs' (_: v: mkManifestRule v) enabledManifests)
+          {
+            # Static symlink from k3s/rke2 manifest dir to a linkFarm in the store.
+            # k3s/rke2 scan subdirectories recursively (filepath.Walk),
+            # so files under nixos/ are picked up. When manifests are removed
+            # from config, the linkFarm derivation changes, tmpfiles updates
+            # the symlink, and the stale files disappear.
+            "${manifestDir}/nixos" = {
+              "L+".argument = "${pkgs.linkFarm "${name}-manifests" (
+                lib.mapAttrsToList (_: v: {
+                  name = v.target;
+                  path = v.source;
+                }) enabledManifests
+              )}";
+            };
+          }
           // (builtins.listToAttrs (map mkImageRule cfg.images))
           // (lib.optionalAttrs (cfg.containerdConfigTemplate != null) {
             ${containerdConfigTemplateFile} = {
