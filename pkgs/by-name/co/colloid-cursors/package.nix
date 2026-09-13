@@ -2,18 +2,16 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  gitUpdater,
 }:
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "colloid-cursors";
-  version = "2025-07-19";
+  version = "0-unstable-2023-03-28";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = "Colloid-icon-theme";
-    tag = finalAttrs.version;
-    hash = "sha256-x2SSaIkKm1415avO7R6TPkpghM30HmMdjMFUUyPWZsk=";
+    rev = "d8bfd7339e3ab97a0c08b3e373a895119cc78ca8";
+    hash = "sha256-DOli7Ze1op1liU9xWku9tmQO0I711CstyqC+PYXvbJM=";
   };
 
   installPhase = ''
@@ -27,7 +25,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Colloid cursor theme";
