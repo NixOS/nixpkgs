@@ -169,24 +169,33 @@ let
         TMPDIR=$(mktemp -d nix-vm.XXXXXXXXXX --tmpdir)
     fi
 
-    ${lib.optionalString (cfg.useNixStoreImage) ''
-      echo "Creating Nix store image..."
+    ${
+      if cfg.useNixStoreImage then
+        ''
+          echo "Creating Nix store image..."
 
-      ${import ../../lib/erofs-store-image.nix {
-        inherit hostPkgs;
-        storePaths = "${
-          hostPkgs.closureInfo {
-            rootPaths = [
-              config.system.build.toplevel
-              regInfo
-            ];
-          }
-        }/store-paths";
-        label = nixStoreFilesystemLabel;
-        destination = ''"$TMPDIR"/store.img'';
-      }}
-      echo "Created Nix store image."
-    ''}
+          ${import ../../lib/erofs-store-image.nix {
+            inherit hostPkgs;
+            storePaths = "${
+              hostPkgs.closureInfo {
+                rootPaths = [
+                  config.system.build.toplevel
+                  regInfo
+                ];
+              }
+            }/store-paths";
+            label = nixStoreFilesystemLabel;
+            destination = ''"$TMPDIR"/store.img'';
+          }}
+
+          echo "Created Nix store image."
+        ''
+      else
+        ''
+          # Retain gcroots in the host Nix store while the VM is running.
+          export NIX_GCROOTS="${concatStringsSep ":" config.virtualisation.additionalPaths}"
+        ''
+    }
 
     # Create a directory for exchanging data with the VM.
     mkdir -p "$TMPDIR/xchg"
