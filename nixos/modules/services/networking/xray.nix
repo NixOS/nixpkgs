@@ -35,19 +35,43 @@ with lib;
 
       extraSettingsFiles =
         let
-          extraSettingFileSubmodule = types.submodule {
-            options = {
-              path = mkOption {
-                type = types.path;
-                description = "The absolute path to the configuration file.";
+          validFormats = [
+            "json"
+            "jsonc"
+            "yaml"
+            "yml"
+            "toml"
+            "pb"
+            "protobuf"
+          ];
+          extraSettingFileSubmodule = types.submodule (
+            { config, ... }: {
+              options = {
+                path = mkOption {
+                  type = types.path;
+                  description = "The absolute path to the configuration file.";
+                };
+                tail = mkOption {
+                  type = types.bool;
+                  default = false;
+                  description = "Whether outbounds rules must be appended to the end.";
+                };
+                format = mkOption {
+                  type = types.enum validFormats;
+                  defaultText = literalMD "Auto-detected based on the `path` extension.";
+                  default =
+                    let
+                      extension = last (splitString "." config.path);
+                    in
+                    if elem extension validFormats then
+                      extension
+                    else
+                      throw "Couldn't auto-detect format for ${config.path}, please specify `format` explicitly.";
+                  description = "The format of the configuration file.";
+                };
               };
-              tail = mkOption {
-                type = types.bool;
-                default = false;
-                description = "Whether outbounds rules must be appended to the end.";
-              };
-            };
-          };
+            }
+          );
           extraSettingFileType = types.coercedTo types.str (path: {
             inherit path;
           }) extraSettingFileSubmodule;
@@ -56,10 +80,15 @@ with lib;
           type = types.listOf extraSettingFileType;
           default = [ ];
           example = [
-            "/run/xray-secrets/vless-inbounds.json"
+            "/run/xray-secrets/vless-inbounds-1.json"
+            "/run/xray-secrets/vless-inbounds-2.yml"
             {
-              path = "/run/xray-secrets/vless-outbounds.json";
+              path = "/run/xray-secrets/append-outbound-to-the-end.json";
               tail = true;
+            }
+            {
+              path = "/run/xray-secrets/file-with-incorrect.extension";
+              format = "json";
             }
           ];
           # https://www.v2fly.org/en_US/config/multiple_config.html lacks English translation
@@ -121,7 +150,7 @@ with lib;
       ++ (lib.imap0 (index: item: {
         inherit (item) path;
         # prefixes only matter if configs are passed via `-confdir`
-        credentialFile = "config-extra-${toString index}${lib.optionalString item.tail "-tail"}.json";
+        credentialFile = "config-extra-${toString index}${lib.optionalString item.tail "-tail"}.${item.format}";
       }) cfg.extraSettingsFiles);
     in
     mkIf cfg.enable {
