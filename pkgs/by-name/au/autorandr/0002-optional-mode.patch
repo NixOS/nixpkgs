@@ -1,0 +1,14 @@
+Skip the framebuffer size hint when an output has no mode.
+Upstream issue: https://github.com/phillipberndt/autorandr/issues/305
+
+--- a/autorandr.py
++++ b/autorandr.py
+@@ -867,6 +867,8 @@
+     for output in configuration.values():
+         if "off" in output.options or not output.edid:
+             continue
++        if "mode" not in output.options:
++            return None
+         # This won't work with all modes -- but it's a best effort.
+         match = re.search("[0-9]{3,}x[0-9]{3,}", output.options["mode"])
+         if not match:
