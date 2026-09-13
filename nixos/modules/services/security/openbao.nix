@@ -15,7 +15,7 @@ in
       enable = lib.mkEnableOption "OpenBao daemon";
 
       package = lib.mkPackageOption pkgs "openbao" {
-        example = "pkgs.openbao.override { withHsm = false; withUi = false; }";
+        example = "pkgs.openbao.override { withUi = false; }";
       };
 
       settings = lib.mkOption {
