@@ -1,0 +1,26 @@
+From: Sergei Volkov <taranarmo@gmail.com>
+Subject: [PATCH] llvm: add zlib and zstd build rpath
+
+When building LLVM as part of Julia source build, intermediate build tools
+like llvm-min-tblgen dynamically link against zlib/zstd located in build_shlibdir.
+Add build_shlibdir to the build RPATH so these tools can run during compilation.
+
+--- a/deps/llvm.mk
++++ b/deps/llvm.mk
+@@ -82,7 +82,7 @@ LLVM_EXPERIMENTAL_TARGETS :=
+ LLVM_CFLAGS :=
+ LLVM_CXXFLAGS :=
+ LLVM_CPPFLAGS :=
+-LLVM_LDFLAGS := "-L$(build_shlibdir)" # hacky way to force zlib to be found when linking against libLLVM and sysroot is set
++LLVM_LDFLAGS := "-L$(build_shlibdir) -Wl,-rpath,$(build_shlibdir)" # hacky way to force zlib to be found when linking against libLLVM and sysroot is set
+ LLVM_CMAKE :=
+ 
+ LLVM_CMAKE += -DLLVM_ENABLE_PROJECTS="$(LLVM_ENABLE_PROJECTS)"
+@@ -108,6 +108,7 @@ LLVM_CMAKE += -DLLVM_TARGETS_TO_BUILD:STRING="$(LLVM_TARGETS)" -DCMAKE_BUILD_TY
+ LLVM_CMAKE += -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_HOST_TRIPLE="$(or $(XC_HOST),$(BUILD_MACHINE))"
+ LLVM_CMAKE += -DLLVM_ENABLE_ZLIB=FORCE_ON -DZLIB_ROOT="$(build_prefix)"
+ LLVM_CMAKE += -DLLVM_ENABLE_ZSTD=FORCE_ON -DZSTD_ROOT="$(build_prefix)"
++LLVM_CMAKE += -DCMAKE_BUILD_RPATH="$(build_shlibdir)"
+ ifeq ($(USE_POLLY_ACC),1)
+ LLVM_CMAKE += -DPOLLY_ENABLE_GPGPU_CODEGEN=ON
+ endif
