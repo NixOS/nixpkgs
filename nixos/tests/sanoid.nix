@@ -60,6 +60,33 @@ in
             };
             # Take snapshot and sync
             "pool/syncoid".target = "root@target:pool/syncoid";
+            # Test to make sure two commands can use the same dataset
+            "pool/syncoid2" = {
+              source = "pool/syncoid";
+              target = "root@target:pool/syncoid2";
+              extraArgs = [
+                "--identifier"
+                "syncoid2"
+              ];
+            };
+            # Test to make sure two commands can use the same dataset with different permissions
+            "pool/syncoid3" = {
+              source = "pool/syncoid";
+              target = "root@target:pool/syncoid3";
+              extraArgs = [
+                "--identifier"
+                "syncoid3"
+              ];
+              localSourceAllow = [
+                "bookmark"
+                "hold"
+                "send"
+                "snapshot"
+                "destroy"
+                "mount"
+                "rollback"
+              ];
+            };
 
             # Test pool without parent (regression test for https://github.com/NixOS/nixpkgs/pull/180111)
             "pool".target = "root@target:pool/full-pool";
@@ -127,11 +154,13 @@ in
     source.succeed("touch /mnt/pool/syncoid/test.txt")
     source.systemctl("start --wait syncoid-pool-sanoid.service")
     target.succeed("cat /mnt/pool/sanoid/test.txt")
-    source.systemctl("start --wait syncoid-pool-syncoid.service")
-    source.systemctl("start --wait syncoid-pool-syncoid.service")
+    source.systemctl("start --wait syncoid-pool-syncoid.service syncoid-pool-syncoid2.service syncoid-pool-syncoid3.service")
+    source.systemctl("start --wait syncoid-pool-syncoid.service syncoid-pool-syncoid2.service syncoid-pool-syncoid3.service")
     target.succeed("cat /mnt/pool/syncoid/test.txt")
+    target.succeed("cat /mnt/pool/syncoid2/test.txt")
+    target.succeed("cat /mnt/pool/syncoid3/test.txt")
 
-    assert(len(source.succeed("zfs list -H -t snapshot pool/syncoid").splitlines()) == 1), "Syncoid should only retain one sync snapshot"
+    assert(len(source.succeed("zfs list -H -t snapshot pool/syncoid").splitlines()) == 3), "Syncoid should only retain one sync snapshot for each command"
 
     source.systemctl("start --wait syncoid-pool.service")
     target.succeed("[[ -d /mnt/pool/full-pool/syncoid ]]")
