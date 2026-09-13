@@ -22,6 +22,12 @@
       inherit package;
     };
   };
+  mcp = runTest {
+    imports = [ ./mcp.nix ];
+    _module.args = {
+      inherit package;
+    };
+  };
   s3 = runTest {
     imports = [ ./s3.nix ];
     _module.args = {
