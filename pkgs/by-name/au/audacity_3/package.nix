@@ -214,7 +214,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       veprbl
-      wegank
     ];
     platforms = lib.platforms.unix;
   };
