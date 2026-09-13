@@ -5,21 +5,21 @@
   fetchFromGitHub,
   hypothesis,
   hatchling,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytestCheckHook,
   trustme,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "aiosmtplib";
-  version = "5.1.2";
+  version = "5.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cole";
     repo = "aiosmtplib";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IAWMs4LBfVDMLxgPBnXrHQQ/8yhBYjvd4Fi4k0F19o0=";
+    hash = "sha256-izU4m+XgXYvS9vxlf5I5RWwuQGIoLlef7/Es5N5u7WI=";
   };
 
   build-system = [ hatchling ];
@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     aiosmtpd
     hypothesis
-    pytest-asyncio_0
+    pytest-asyncio
     pytestCheckHook
     trustme
   ];
