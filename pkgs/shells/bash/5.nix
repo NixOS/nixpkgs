@@ -295,5 +295,9 @@ lib.warnIf (withDocs != null)
           version = lib.elemAt versionSplit 0;
           update = lib.elemAt versionSplit 2;
         };
+      identifiers.purlParts = {
+        type = "nix";
+        spec = "nixpkgs/bash@${fa.version}";
+      };
     };
   })

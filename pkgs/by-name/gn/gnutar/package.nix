@@ -93,5 +93,9 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     platforms = lib.platforms.all;
     priority = 10;
+    identifiers.purlParts = {
+      type = "nix";
+      spec = "nixpkgs/gnutar@${finalAttrs.version}";
+    };
   };
 })

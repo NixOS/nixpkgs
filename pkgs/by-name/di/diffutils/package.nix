@@ -91,5 +91,9 @@ stdenv.mkDerivation (finalAttrs: {
       das_j
       helsinki-Jo
     ];
+    identifiers.purlParts = {
+      type = "nix";
+      spec = "nixpkgs/diffutils@${finalAttrs.version}";
+    };
   };
 })

@@ -68,5 +68,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "libmagic" ];
     platforms = lib.platforms.all;
     mainProgram = "file";
+    identifiers.purlParts = {
+      type = "nix";
+      spec = "nixpkgs/file@${finalAttrs.version}";
+    };
   };
 })
