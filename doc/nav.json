@@ -329,6 +329,9 @@
               "file": "hooks/scons.section.md"
             },
             {
+              "file": "hooks/systemd-verify-units-hook.section.md"
+            },
+            {
               "file": "hooks/tauri.section.md"
             },
             {
