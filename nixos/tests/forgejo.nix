@@ -297,6 +297,19 @@ let
               server.succeed(
                   "su -l forgejo -c 'GITEA_WORK_DIR=/var/lib/forgejo forgejo actions generate-runner-token' | sed 's/^/TOKEN=/' | tee /var/lib/forgejo/runner_token"
               )
+
+              # The `su -l forgejo` invocations above register a logind session and start a
+              # `user@<uid>.service` manager for the forgejo user, which logind tears down
+              # asynchronously once `su` exits. If `switch-to-configuration` runs while that
+              # teardown is still in progress, its per-user activation step races against the
+              # vanishing session bus (`/run/user/<uid>` still exists, but the bus already
+              # refuses connections) and the whole switch fails with exit code 4. This race is
+              # hit frequently on slower machines (e.g. aarch64). Terminate the session and wait
+              # for its runtime directory to disappear to make the following switches deterministic.
+              forgejo_uid = server.succeed("id -u forgejo").strip()
+              server.succeed("loginctl terminate-user forgejo || true")
+              server.wait_until_fails(f"test -e /run/user/{forgejo_uid}", timeout=30)
+
               server.succeed("${serverSystem}/specialisation/gitea-actions-runner/bin/switch-to-configuration test")
               server.wait_for_unit("gitea-runner-test.service")
               server.succeed("journalctl -o cat -u gitea-runner-test.service | grep -q 'Runner registered successfully'")
