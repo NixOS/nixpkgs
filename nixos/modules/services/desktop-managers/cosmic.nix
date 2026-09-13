@@ -169,8 +169,9 @@ in
     services.gnome.gnome-keyring.enable = lib.mkDefault true;
     services.gvfs.enable = lib.mkDefault true;
     services.orca.enable = lib.mkDefault (notExcluded pkgs.orca);
-    services.power-profiles-daemon.enable = lib.mkDefault (
-      !config.hardware.system76.power-daemon.enable
+    services.system76-scheduler.enable = lib.mkDefault true;
+    hardware.system76.power-daemon.enable = lib.mkDefault (
+      !config.services.power-profiles-daemon.enable && !config.services.tuned.enable
     );
 
     warnings = lib.optionals (cfg.showExcludedPkgsWarning && excludedCorePkgs != [ ]) [
