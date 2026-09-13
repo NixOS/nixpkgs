@@ -15,6 +15,8 @@
   testedTargets ?
     if stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32 then
       [ "neon-i32x4" ]
+    else if stdenv.hostPlatform.isRiscV64 then
+      [ "rvv-x4" ]
     else
       [ "sse2-i32x4" ],
 }:
@@ -58,6 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit testedTargets;
 
+  # run_tests.py does not know riscv64 hosts and defaults to x86 targets
+  patches = lib.optionals stdenv.hostPlatform.isRiscV64 [
+    ./run-tests-riscv64.patch
+  ];
+
   doCheck = true;
 
   # the compiler enforces -Werror, and -fno-strict-overflow makes it mad.
@@ -93,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "X86_ENABLED" (
       if stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isx86_32 then "TRUE" else "FALSE"
     ))
+    (lib.cmakeFeature "RISCV_ENABLED" (if stdenv.hostPlatform.isRiscV64 then "TRUE" else "FALSE"))
   ];
 
   meta = {
