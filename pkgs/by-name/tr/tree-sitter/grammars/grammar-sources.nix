@@ -2402,10 +2402,10 @@
   };
 
   proto = {
-    version = "0-unstable-2026-03-15";
+    version = "0.6.0-unstable-2026-09-01";
     url = "github:coder3101/tree-sitter-proto";
-    rev = "d65a18ce7c2242801f702770114ad08056c7f8c9";
-    hash = "sha256-bgrL4IK9sUB5tGoIBdNLGudbFf2OhQYdw0Ub1gM0NL0=";
+    rev = "6c878d18628ebbff3474479d2fdd6d8ba1954c3e";
+    hash = "sha256-N7GpIolkFkmVs1wLtx22HZ1+CmeXDSI2J1FmohtnY7M=";
     meta = {
       license = lib.licenses.mit;
     };
