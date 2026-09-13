@@ -19,16 +19,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asusctl";
-  version = "6.4.0";
+  version = "6.5.0";
 
   src = fetchFromGitHub {
     owner = "OpenGamingCollective";
     repo = "asusctl";
     tag = finalAttrs.version;
-    hash = "sha256-qLdOdZaQm3t7LhvoCCo/FwZo4O7Z9aP1KPPlERgZX00=";
+    hash = "sha256-UTs9LF2EKUj5vxG0hc9V4DvCFMbyYgvA645ClxnE3WM=";
   };
 
-  cargoHash = "sha256-sAJ4el6URZXHD2NWiWpJSBf8Qeq2v/y+F9KpMCc8BbE=";
+  cargoHash = "sha256-Kujj8gQ5qsEv2iLO3T1JoK0E2q0ByOhxpuN942EvB7Q=";
 
   postPatch = ''
     files="
