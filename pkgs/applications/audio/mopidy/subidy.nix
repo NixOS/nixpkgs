@@ -24,6 +24,8 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   dependencies = [
     mopidy
     pythonPackages.py-sonic
+    # Provides pkg_resources; remove when upstream replaces it.
+    pythonPackages.setuptools_80
   ];
 
   nativeCheckInputs = [

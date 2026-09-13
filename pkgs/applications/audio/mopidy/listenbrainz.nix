@@ -7,14 +7,14 @@
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-listenbrainz";
-  version = "0.3.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "suaviloquence";
     repo = "mopidy-listenbrainz";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kYZgG2KQMTxMR8tdwwCKkfexDcxcndXG9LSdlnoN/CY=";
+    hash = "sha256-e3VrOILOqBvX3j8jEsseFY6ihZiXIm0ela66VRwvlgg=";
   };
 
   build-system = [
@@ -24,7 +24,14 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   dependencies = [
     mopidy
     pythonPackages.musicbrainzngs
+    pythonPackages.pykka
   ];
+
+  nativeCheckInputs = [
+    pythonPackages.pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "mopidy_listenbrainz" ];
 
   meta = {
     homepage = "https://github.com/suaviloquence/mopidy-listenbrainz";
