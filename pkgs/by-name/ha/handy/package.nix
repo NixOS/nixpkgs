@@ -200,6 +200,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "$out/Applications/Handy.app/Contents/MacOS/handy"
   '';
 
+  # HTTP tests bind local TCP listeners, which the Darwin sandbox blocks by default.
+  __darwinAllowLocalNetworking = true;
+
   preCheck = ''
     cd ${finalAttrs.cargoRoot}
   ''
