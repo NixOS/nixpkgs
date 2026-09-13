@@ -3,6 +3,7 @@
   pkg-config,
   qtwayland,
   cups,
+  pipewire,
 }:
 mkKdeDerivation {
   pname = "xdg-desktop-portal-kde";
@@ -11,5 +12,6 @@ mkKdeDerivation {
   extraBuildInputs = [
     qtwayland
     cups
+    pipewire
   ];
 }
