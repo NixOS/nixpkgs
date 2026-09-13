@@ -40,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ unzip ];
 
+  strictDeps = true;
+
   installPhase = ''
     runHook preInstall
 
@@ -64,18 +66,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
+  __structuredAttrs = true;
+
   passthru = {
     fetchGitHashesScript = ./fetch-git-hashes.py;
     updateScript = ./update.sh;
     tests = {
-      testCreate = runCommand "dart-test-create" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
-        PROJECTNAME="dart_test_project"
-        dart create --no-pub $PROJECTNAME
+      testCreate =
+        runCommand "dart-test-create"
+          {
+            nativeBuildInputs = [ finalAttrs.finalPackage ];
+            strictDeps = true;
+            __structuredAttrs = true;
+          }
+          ''
+            PROJECTNAME="dart_test_project"
+            dart create --no-pub $PROJECTNAME
 
-        [[ -d $PROJECTNAME ]]
-        [[ -f $PROJECTNAME/bin/$PROJECTNAME.dart ]]
-        touch $out
-      '';
+            [[ -d $PROJECTNAME ]]
+            [[ -f $PROJECTNAME/bin/$PROJECTNAME.dart ]]
+            touch $out
+          '';
 
       testCompile =
         runCommand "dart-test-compile"
@@ -87,6 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
               cctools
               darwin.sigtool
             ];
+            strictDeps = true;
+            __structuredAttrs = true;
           }
           ''
             HELLO_MESSAGE="Hello, world!"
