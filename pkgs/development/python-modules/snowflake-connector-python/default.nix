@@ -2,7 +2,9 @@
   lib,
   aioboto3,
   aiohttp,
+  anyio,
   asn1crypto,
+  azure-identity,
   buildPythonPackage,
   boto3,
   botocore,
@@ -21,6 +23,7 @@
   pyarrow,
   pyjwt,
   pyopenssl,
+  python,
   pytest-asyncio,
   pytest-xdist,
   pytestCheckHook,
@@ -35,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "4.3.0";
+  version = "4.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snowflakedb";
     repo = "snowflake-connector-python";
     tag = "v${version}";
-    hash = "sha256-bJK6U5lomcPMGeKEmv+9m+uM5+3GJKKUA3dEwP/ynVo=";
+    hash = "sha256-YH4hXGwgQxDliFWOWa+Nw+PychZzpqIP1/J0AcShREA=";
   };
 
   build-system = [
@@ -91,6 +94,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioboto3
     aiohttp
+    anyio
+    azure-identity
     numpy
     pytest-asyncio
     pytest-xdist
@@ -130,6 +135,18 @@ buildPythonPackage rec {
     # snowflake.connector.errors.ProgrammingError: 251008: 251008: Failed to load private key:
     # argument 'password': Cannot convert "<class 'int'>" instance to a buffer.
     "test/unit/aio/test_auth_keypair_async.py::test_auth_keypair"
+    # `AssertionError: /build/source/.wiremock/wiremock-standalone.jar` does not exist
+    "test/unit/test_redirect_retry.py"
+    # Mock is set up on `mock_wic.return_value.get_token`, but the code calls
+    # get_token() through the async context manager `(__aenter__().get_token())`,
+    # so it gets an unconfigured `AsyncMock` instead of the fixture's JWT --
+    # upstream test/mock mismatch; the sync equivalent test passes fine.
+    "test/unit/aio/test_auth_workload_identity_async.py::test_aks_path_plumbs_mi_token_to_api"
+  ]
+  # `asyncio.get_event_loop()` no longer implicitly creates a loop outside of a
+  # running one on 3.14, and this whole file relies on that in its fixtures
+  ++ lib.optionals (python.pythonAtLeast "3.14") [
+    "test/unit/aio/test_connection_async_unit.py"
   ];
 
   disabledTests = [
@@ -138,6 +155,9 @@ buildPythonPackage rec {
     "test_test_socket_get_cert"
     # Missing .wiremock/wiremock-standalone.jar
     "test_wiremock"
+    # `OperationalError: ... 'Mock' object is not iterable`. Upstream test/mock mismatch
+    "test_request_throws_http_exception_for_non_retryable"
+    "test_request_throws_http_exception_for_retryable"
   ];
 
   __darwinAllowLocalNetworking = true;
