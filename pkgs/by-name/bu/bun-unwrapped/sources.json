@@ -139,6 +139,7 @@
   ],
   "webkit": {
     "rev": "2e2aa2290fac856d6f451ceacb58f7f5b44dd057",
+    "version": "0-unstable-2026-09-04",
     "hash": "sha256-6H33n41YBi0w2sPJbO6zYjxW3VtIyRMR/3zjyGlFDOA=",
     "sparseCheckout": [
       "Configurations",
