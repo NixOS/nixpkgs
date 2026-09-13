@@ -10,14 +10,24 @@
 }:
 
 let
-  ocamlPackages = rocq-core.ocamlPackages;
+  # OCaml defaults to yojson 3.0.0; unify on 2.2.2 to avoid two conflicting yojson
+  # copies in the same build environment
+  # See https://github.com/rocq-prover/vsrocq/blob/main/flake.nix
+  ocamlPackages = rocq-core.ocamlPackages.overrideScope (
+    self: super: {
+      yojson = super.yojson.overrideAttrs (_: {
+        version = "2.2.2";
+        __intentionallyOverridingVersion = true;
+      });
+    }
+  );
   defaultVersion =
     let
       case = case: out: { inherit case out; };
     in
     lib.switch rocq-core.rocq-version [
       # When updating the default version here, also update the VsRocq VS Code extension
-      (case (lib.versions.range "8.18" "9.1") "2.4.3")
+      (case (lib.versions.range "8.18" "9.2") "2.5.0")
     ] null;
   location = {
     domain = "github.com";
@@ -33,6 +43,8 @@ let
     release."2.3.4".sha256 = "sha256-v1hQjE8U1o2VYOlUjH0seIsNG+NrMNZ8ixt4bQNyGvI=";
     release."2.4.3".rev = "v2.4.3";
     release."2.4.3".sha256 = "sha256-R/fpTiYZ9uvtKQcWD4jwUZPvUrcdvHc/wpoTrdkEQoQ=";
+    release."2.5.0".rev = "v2.5.0";
+    release."2.5.0".sha256 = "sha256-TJO5RLPqWETqYZ9qxWMVi787nFdyuI2yqK3lVZR65xI=";
     inherit location;
   };
   fetched = fetch (if version != null then version else defaultVersion);
@@ -64,6 +76,7 @@ ocamlPackages.buildDunePackage {
     lsp
     sel
     ppx_optcomp
+    memprof-limits
   ]);
   preBuild = ''
     make dune-files
