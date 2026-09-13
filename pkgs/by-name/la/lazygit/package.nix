@@ -42,6 +42,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/jesseduffield/lazygit/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      ddogfoodd
       equirosa
       khaneliman
       starsep
