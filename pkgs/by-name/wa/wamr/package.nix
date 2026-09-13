@@ -20,6 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DWAMR_BUILD_SIMD=0"
+    "-DBUILD_SHARED_LIBS=ON"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinSdkVersion}"

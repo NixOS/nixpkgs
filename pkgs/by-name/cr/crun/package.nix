@@ -15,8 +15,16 @@
   nixosTests,
   criu,
   versionCheckHook,
+  wamr,
+  wasmedge,
+  wasmer,
+  wasmtime,
   withLibkrun ? lib.meta.availableOn stdenv.hostPlatform libkrun,
   withLibkrunSEV ? false,
+  withWamr ? false,
+  withWasmedge ? true,
+  withWasmer ? false,
+  withWasmtime ? true,
 }:
 
 let
@@ -80,17 +88,44 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withLibkrunSEV [
     libkrun-sev
+  ]
+  ++ lib.optionals withWasmtime [
+    wasmtime
+    wasmtime.dev
+    wasmtime.lib
+  ]
+  ++ lib.optionals withWasmedge [
+    wasmedge
+  ]
+  ++ lib.optionals withWamr [
+    wamr
+  ]
+  ++ lib.optionals withWasmer [
+    wasmer
   ];
 
-  configureFlags = lib.optionals withLibkrun [
-    "--with-libkrun"
-  ];
+  configureFlags =
+    lib.optionals withLibkrun [
+      "--with-libkrun"
+    ]
+    ++ lib.optionals withWamr [
+      "--with-wamr"
+    ]
+    ++ lib.optionals withWasmedge [
+      "--with-wasmedge"
+    ]
+    ++ lib.optionals withWasmer [
+      "--with-wasmer"
+    ]
+    ++ lib.optionals withWasmtime [
+      "--with-wasmtime"
+    ];
 
   enableParallelBuilding = true;
   strictDeps = true;
 
   env = {
-    NIX_LDFLAGS = "-lcriu";
+    NIX_LDFLAGS = "-lcriu" + lib.optionalString withWamr " -liwasm";
   };
 
   # we need this before autoreconfHook does its thing in order to initialize
@@ -110,6 +145,22 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString withLibkrunSEV ''
     substituteInPlace src/libcrun/handlers/krun.c \
       --replace-fail '"libkrun-sev.so.1"' '"${libkrun-sev}/lib/libkrun-sev.so.1"'
+  ''
+  + lib.optionalString withWamr ''
+    substituteInPlace src/libcrun/handlers/wamr.c \
+      --replace-fail '"libiwasm.so"' '"${wamr}/lib/libiwasm.so"'
+  ''
+  + lib.optionalString withWasmedge ''
+    substituteInPlace src/libcrun/handlers/wasmedge.c \
+      --replace-fail '"libwasmedge.so.0"' '"${wasmedge}/lib/libwasmedge.so.0"'
+  ''
+  + lib.optionalString withWasmer ''
+    substituteInPlace src/libcrun/handlers/wasmer.c \
+      --replace-fail '"libwasmer.so"' '"${wasmer}/lib/libwasmer.so"'
+  ''
+  + lib.optionalString withWasmtime ''
+    substituteInPlace src/libcrun/handlers/wasmtime.c \
+      --replace-fail '"libwasmtime.so"' '"${wasmtime.lib}/lib/libwasmtime.so"'
   '';
 
   doCheck = true;
