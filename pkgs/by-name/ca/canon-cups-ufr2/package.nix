@@ -101,8 +101,6 @@ let
       }
     '';
   };
-in
-let
   driver = stdenv.mkDerivation rec {
     pname = "canon-cups-ufr2";
     inherit version;
@@ -239,35 +237,19 @@ buildFHSEnv {
   # paths those binaries expect there.
   targetPkgs =
     fhsPkgs:
-    let
-      inherit (fhsPkgs)
-        cups
-        zlib
-        jbigkit
-        libjpeg
-        libgcrypt
-        glib
-        gtk3
-        libxml2_13
-        gdk-pixbuf
-        pango
-        cairo
-        atk
-        ;
-    in
     [
-      cups
-      zlib
-      jbigkit
-      libjpeg
-      libgcrypt
-      glib
-      gtk3
-      libxml2_13
-      gdk-pixbuf
-      pango
-      cairo
-      atk
+      fhsPkgs.cups
+      fhsPkgs.zlib
+      fhsPkgs.jbigkit
+      fhsPkgs.libjpeg
+      fhsPkgs.libgcrypt
+      fhsPkgs.glib
+      fhsPkgs.gtk3
+      fhsPkgs.libxml2_13
+      fhsPkgs.gdk-pixbuf
+      fhsPkgs.pango
+      fhsPkgs.cairo
+      fhsPkgs.atk
     ];
   extraBuildCommands = ''
     mkdir -p $out/usr/bin $out/usr/share $out/etc $out/usr/local/canon/lib
