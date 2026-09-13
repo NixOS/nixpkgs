@@ -1,0 +1,26 @@
+{
+  lib,
+  fetchFromGitHub,
+  mkOpenbaoPlugin,
+}:
+
+mkOpenbaoPlugin (finalAttrs: {
+  plugin = "kms-gcp";
+  pluginType = "kms";
+  pluginName = "gcpckms";
+  version = "0.1.0";
+
+  src = fetchFromGitHub {
+    owner = "openbao";
+    repo = "openbao-plugins";
+    tag = "kms-gcp-v${finalAttrs.version}";
+    hash = "sha256-TD2xQQEOOLS9yUtoRyVt61auOpNh+zUv/CrRRplYTB4=";
+  };
+
+  vendorHash = "sha256-gGERjo6RAFofgkAl/b8cmepNeQWivq9TFUnfBjeZxXQ=";
+
+  meta = {
+    description = "OpenBao KMS plugin for Auto Unseal via Google Cloud";
+    maintainers = with lib.maintainers; [ kranzes ];
+  };
+})
