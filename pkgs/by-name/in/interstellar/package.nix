@@ -71,9 +71,12 @@ flutter341.buildFlutterApplication (finalAttrs: {
     install -D --mode=0644 linux/appimage/interstellar.desktop --target-directory $out/share/applications
   '';
 
-  extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : $out/app/${finalAttrs.pname}/lib
-  '';
+  extraWrapProgramArgs = [
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    "$out/app/${finalAttrs.pname}/lib"
+  ];
 
   passthru = {
     pubspecSource =
