@@ -6,13 +6,13 @@
 
 buildGoModule {
   pname = "sourcemapper";
-  version = "0-unstable-2024-03-22";
+  version = "0-unstable-2026-07-24";
 
   src = fetchFromGitHub {
     owner = "denandz";
     repo = "sourcemapper";
-    rev = "467916e59f9f28f2df3c2fb209db32dabd057c92";
-    hash = "sha256-JuP8ElLyG+FynH0YYZqpZejbAwcCq5d9lj5hJYGW7+g=";
+    rev = "f739bd5dd266b0d0e2cfa17c0a132f79bd9a5ba9";
+    hash = "sha256-nOhybCGjy5CNdKDbQPANaVfprZX51Q71bmfxvX38yrw=";
   };
 
   vendorHash = null;
