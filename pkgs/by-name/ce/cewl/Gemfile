@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+gem 'getoptlong'
 gem 'mime'
 gem 'mime-types', ">=3.3.1"
 gem 'mini_exiftool'
