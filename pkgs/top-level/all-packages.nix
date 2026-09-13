@@ -7856,7 +7856,7 @@ with pkgs;
       cephSupport = lib.meta.availableOn stdenv.hostPlatform ceph;
     }
   );
-
+  qemu_minimal = lowPrio (qemu.override { minimal = true; });
   qemu_test = lowPrio (
     qemu.override {
       nixosTestRunner = true;
