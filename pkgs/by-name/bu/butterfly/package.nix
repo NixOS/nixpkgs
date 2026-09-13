@@ -38,6 +38,8 @@ flutter344.buildFlutterApplication {
       runCommand "pubspec.lock.json"
         {
           inherit src;
+          strictDeps = true;
+          __structuredAttrs = true;
           nativeBuildInputs = [ yq-go ];
         }
         ''
