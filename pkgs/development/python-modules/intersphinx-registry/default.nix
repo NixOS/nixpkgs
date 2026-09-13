@@ -23,7 +23,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "intersphinx-registry";
-  version = "0.2705.27";
+  version = "0.2609.5";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Quansight-labs";
     repo = "intersphinx_registry";
     tag = finalAttrs.version;
-    hash = "sha256-yFpk3NZO2iCjuJ43WvssbDYxNJ6G6KfY5pcTCilsGQs=";
+    hash = "sha256-mbSKIwRNdHPxaAeHNX9t6skGc7B5MchOUSlzBYZIhB0=";
   };
 
   nativeBuildInputs = [
