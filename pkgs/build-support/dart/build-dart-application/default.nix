@@ -75,6 +75,8 @@ lib.extendMkDerivation {
           lib.importJSON (
             runCommand "${lib.getName args}-pubspec-lock-json" {
               nativeBuildInputs = [ yq ];
+              strictDeps = true;
+              __structuredAttrs = true;
             } ''yq . '${autoPubspecLock}' > "$out"''
           ),
       ...
@@ -95,19 +97,25 @@ lib.extendMkDerivation {
           # https://github.com/dart-lang/pub/blob/e1fbda73d1ac597474b82882ee0bf6ecea5df108/lib/src/sdk/dart.dart#L80
           "dart" =
             name:
-            runCommand "dart-sdk-${name}" { passthru.packageRoot = "."; } ''
-              for path in '${dart}/pkg/${name}'; do
-                if [ -d "$path" ]; then
-                  ln -s "$path" "$out"
-                  break
-                fi
-              done
+            runCommand "dart-sdk-${name}"
+              {
+                strictDeps = true;
+                __structuredAttrs = true;
+                passthru.packageRoot = ".";
+              }
+              ''
+                for path in '${dart}/pkg/${name}'; do
+                  if [ -d "$path" ]; then
+                    ln -s "$path" "$out"
+                    break
+                  fi
+                done
 
-              if[ ! -e "$out" ]; then
-                echo 1>&2 'The Dart SDK does not contain the requested package: ${name}!'
-                exit 1
-              fi
-            '';
+                if[ ! -e "$out" ]; then
+                  echo 1>&2 'The Dart SDK does not contain the requested package: ${name}!'
+                  exit 1
+                fi
+              '';
         }
         // sdkSourceBuilders;
       };
