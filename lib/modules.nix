@@ -1636,6 +1636,78 @@ let
     else
       f def;
 
+  /**
+    Consume the `options` metadata of the submodules typed by `attrsOf submodule`.
+
+    It also works with `lazyAttrsOf` and `attrsWith`.
+
+    # Inputs
+
+    1. A function that takes `name: { cfg, opt }:` and returns anything.
+       `name` is the attribute name at the level of `attrsOf`.
+       `cfg` is the corresponding option *value*, as typically found in `config`.
+       `opt` is the corresponding evaluated option, as typically found in `options`.
+
+    2. An `options` attribute value, e.g. `options.users.groups`.
+
+    # Output
+
+    An attribute set whose attribute names correspond to the definitions of the
+    option, and whose values are the return value of the passed function.
+
+    # Type
+
+    ```
+    mapAttrsOfSubmodule :: (String -> { cfg :: AttrSet, opt :: AttrSet } -> a) -> Option -> AttrSetOf a
+    ```
+
+    `Option` refers to an evaluated option,
+    retrievable from the `options` module argument
+    or the `options` configuration attribute returned by `evalModules`.
+    It carries attribute `_type = "option";`.
+
+    # Example
+
+    :::{.example}
+    ## Use `mapAttrsOfSubmodule` to distinguish which NixOS system services are explicitly enabled or disabled
+    ```nix
+    lib.modules.mapAttrsOfSubmodule
+      (name: { cfg, opt }:
+        {
+          isExplicit = opt.enable.highestPrio < (lib.mkOptionDefault null).priority;
+          value = cfg.enable;
+        })
+      (pkgs.nixos { }).options.systemd.services
+    =>
+    {
+      console-getty = {
+        isExplicit = true;
+        value = false;
+      };
+      "container-getty@" = {
+        isExplicit = false;
+        value = true;
+      };
+      # ...
+    }
+    ```
+
+    :::
+  */
+  mapAttrsOfSubmodule =
+    f: opt:
+    assert opt._type or null == "option";
+    assert opt.type.name == "attrsOf" || opt.type.name == "lazyAttrsOf";
+    assert opt.type.nestedTypes.elemType.name == "submodule";
+
+    mapAttrs (
+      name: attrMeta:
+      f name {
+        cfg = attrMeta.configuration.config;
+        opt = attrMeta.configuration.options;
+      }
+    ) opt.valueMeta.attrs;
+
   mkBefore = mkOrder 500;
   defaultOrderPriority = 1000;
   mkAfter = mkOrder 1500;
@@ -2340,6 +2412,7 @@ private
     importApply
     importJSON
     importTOML
+    mapAttrsOfSubmodule
     mapDefinitionValue
     mergeDefinitions
     mergeAttrDefinitionsWithPrio
