@@ -35,6 +35,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env.OPENSSL_NO_VENDOR = true;
 
+  # error: linker `aarch64-linux-gnu-gcc` not found
+  # Remove this when upgrading to a version that has upstream's commit d033f07474937ddf83bad0122193302375106689 applied.
+  postPatch = ''
+    rm .cargo/config.toml
+  '';
+
   postInstall = ''
     installShellCompletion \
       $releaseDir/build/snouty-*/out/snouty.{bash,fish} \
