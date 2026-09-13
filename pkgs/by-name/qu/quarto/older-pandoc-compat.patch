@@ -1,0 +1,47 @@
+diff --git a/bin/quarto.js b/bin/quarto.js
+index b68ea22..dd311f1 100644
+--- a/bin/quarto.js
++++ b/bin/quarto.js
+@@ -19487,7 +19487,7 @@ var init_constants6 = __esm({
+     kPaperSize = "papersize";
+     kLogFile = "log-file";
+     kHighlightStyle = "highlight-style";
+-    kSyntaxHighlighting = "syntax-highlighting";
++    kSyntaxHighlighting = "highlight-style";
+     kDefaultImageExtension = "default-image-extension";
+     kLogo = "logo";
+     kLinkColor = "linkcolor";
+@@ -143675,7 +143675,7 @@ async function textPreviewHtml(file, req) {
+   const cmd = [pandocBinaryPath()];
+   cmd.push("--to", "html");
+   cmd.push(
+-    "--syntax-highlighting",
++    "--highlight-style",
+     textHighlightThemePath("atom-one", darkMode ? "dark" : "light")
+   );
+   cmd.push("--standalone");
+@@ -143746,7 +143746,7 @@ ${jsInit}`;
+     cmd.push("--lua-filter");
+     cmd.push(filter3);
+     if (highlightPath) {
+-      cmd.push("--syntax-highlighting");
++      cmd.push("--highlight-style");
+       cmd.push(highlightPath);
+     }
+     cmd.push("--mathjax");
+diff --git a/share/filters/modules/jog.lua b/share/filters/modules/jog.lua
+index a354757..160e75b 100644
+--- a/share/filters/modules/jog.lua
++++ b/share/filters/modules/jog.lua
+@@ -115,7 +115,10 @@ local function recurse (element, tp, jogger)
+     end
+   elseif tp == 'Row' or tp == 'pandoc Row' then
+     element.cells    = jogger(element.cells)
+-  elseif tp == 'pandoc TableHead' or tp == 'pandoc TableFoot' or
++  elseif tp == 'pandoc TableBody' or tp == 'TableBody' then
++    element.head = jogger(element.head)
++    element.body = jogger(element.body)
++elseif tp == 'pandoc TableHead' or tp == 'pandoc TableFoot' or
+          tp == 'TableHead' or tp == 'TableFoot' then
+     element.rows    = jogger(element.rows)
+   elseif tp == 'pandoc TableBody' or tp == 'TableBody' then
