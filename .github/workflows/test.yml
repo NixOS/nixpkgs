@@ -82,6 +82,7 @@ jobs:
               'ci/github-script/bot.js',
               'ci/github-script/check-target-branch.ts',
               'ci/github-script/commits.js',
+              'ci/github-script/docs-styleguide.js',
               'ci/github-script/get-pr-commit-details.js',
               'ci/github-script/lint-commits.js',
               'ci/github-script/merge.js',
@@ -126,5 +127,6 @@ jobs:
       NIXPKGS_BRANCH_CHECK_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_BRANCH_CHECK_APP_PRIVATE_KEY }}
       NIXPKGS_COMMIT_CHECK_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_COMMIT_CHECK_APP_PRIVATE_KEY }}
       NIXPKGS_MANUAL_EDIT_CHECK_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_MANUAL_EDIT_CHECK_APP_PRIVATE_KEY }}
+      NIXPKGS_DOCS_CHECK_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_DOCS_CHECK_APP_PRIVATE_KEY }}
     with:
       artifact-prefix: pr-
