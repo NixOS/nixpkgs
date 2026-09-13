@@ -1,13 +1,13 @@
 { lib, ... }:
 {
   _class = "nixosTest";
-  name = "opengist";
+  name = "opengist-modular";
   meta.maintainers = with lib.maintainers; [ tomasrivera ];
 
   nodes.machine = { pkgs, ... }: {
-    system.services."opengist" = {
+    system.services.opengist = {
       imports = [ pkgs.opengist.services.default ];
-      settings = {
+      opengist.settings = {
         opengist-home = "/tmp/test";
       };
     };

@@ -1294,7 +1294,7 @@ in
   openarena = runTest ./openarena.nix;
   openbao = runTest ./openbao.nix;
   opencloud = runTest ./opencloud.nix;
-  opengist = runTest ./opengist.nix;
+  opengist-modular = runTest ./opengist-modular.nix;
   openldap = runTest ./openldap.nix;
   openresty-lua = runTest ./openresty-lua.nix;
   opensearch = discoverTests (import ./opensearch.nix);
