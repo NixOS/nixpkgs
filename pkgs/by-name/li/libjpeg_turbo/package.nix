@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches =
     [ ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [
-      ./mingw-boolean.patch
+      ./0001-header-compat.mingw.patch
     ];
 
   outputs = [
