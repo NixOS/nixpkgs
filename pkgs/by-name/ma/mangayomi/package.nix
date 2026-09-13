@@ -157,9 +157,12 @@ flutter347.buildFlutterApplication {
       --replace-fail 'fread(magic, 1, 2, f);' '(void)fread(magic, 1, 2, f);'
   '';
 
-  extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : $out/app/mangayomi/lib
-  '';
+  extraWrapProgramArgs = [
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    "$out/app/mangayomi/lib"
+  ];
 
   passthru = {
     inherit rustDep;
