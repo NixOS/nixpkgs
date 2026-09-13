@@ -11,6 +11,7 @@ const reviewUsers = [
   'branch-check',
   'commit-check',
   'manual-edit',
+  'docs-check',
 ]
 
 /**

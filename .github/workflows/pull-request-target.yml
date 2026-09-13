@@ -16,6 +16,8 @@ on:
         required: true
       NIXPKGS_MANUAL_EDIT_CHECK_APP_PRIVATE_KEY:
         required: true
+      NIXPKGS_DOCS_CHECK_APP_PRIVATE_KEY:
+        required: true
 
 concurrency:
   group: pr-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
@@ -82,6 +84,7 @@ jobs:
     secrets:
       NIXPKGS_COMMIT_CHECK_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_COMMIT_CHECK_APP_PRIVATE_KEY }}
       NIXPKGS_MANUAL_EDIT_CHECK_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_MANUAL_EDIT_CHECK_APP_PRIVATE_KEY }}
+      NIXPKGS_DOCS_CHECK_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_DOCS_CHECK_APP_PRIVATE_KEY }}
     with:
       baseBranch: ${{ needs.prepare.outputs.baseBranch }}
       headBranch: ${{ needs.prepare.outputs.headBranch }}
