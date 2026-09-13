@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   nodejs_24,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   python3,
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
     python3
     yq-go
   ]
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 3;
     hash = "sha256-ldxhP+I455PEfBrkJIlHudNvAsI4EN34ZkQXMBciOo4=";
   };

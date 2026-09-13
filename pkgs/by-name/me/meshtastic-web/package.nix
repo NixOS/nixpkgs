@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmWorkspaces = [ "*" ];
   pnpmRoot = "packages/web";
   pnpmDeps = fetchPnpmDeps {
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 4;
     inherit (finalAttrs)
       pname
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    pnpm_10
+    pnpm_10_latest
     pnpmConfigHook
     nodejs
   ];

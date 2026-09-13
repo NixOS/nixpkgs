@@ -4,7 +4,7 @@
   fetchFromGitHub,
   nix-update-script,
 
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 3;
     hash = "sha256-GnVBCrBCnS0Tl9jZu3poIZZJO2SRdlS8jOYUE9G+BFM=";
   };
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cargo-tauri.hook
 
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
     nodejs
 
     pkg-config

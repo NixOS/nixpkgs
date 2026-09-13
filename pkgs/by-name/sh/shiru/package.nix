@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  pnpm_10,
+  pnpm_10_latest,
   nodejs,
   fetchFromGitHub,
   python3,
@@ -14,7 +14,7 @@
   nix-update-script,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
   electron = electron_39;
 in
 stdenv.mkDerivation (finalAttrs: {

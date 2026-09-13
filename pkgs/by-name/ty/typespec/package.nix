@@ -7,14 +7,14 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_10_latest,
   versionCheckHook,
 }:
 
 let
   workspace = "@typespec/compiler...";
 
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "typespec";

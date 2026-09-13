@@ -4,7 +4,7 @@
   fetchFromGitHub,
   nodejs,
   npmHooks,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   systemdMinimal,
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 4;
     hash = "sha256-NnrwIJbWmegTfZl5UGSQs/U4ov6sdV2EaX6aVE5XUJ4=";
   };
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     npmHooks.npmInstallHook
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
   ];
 
   buildInputs = lib.optionals withSystemd [

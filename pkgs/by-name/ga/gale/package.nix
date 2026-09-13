@@ -6,7 +6,7 @@
 
   jq,
   moreutils,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       src
       patches
       ;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 3;
     hash = "sha256-Duwy8cKOnMT8s0SWrxiBvkK/v1s9En0i+7z4NuY/m9E=";
   };
@@ -80,7 +80,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     jq
     moreutils
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
     nodejs
     cargo-tauri.hook
     pkg-config
