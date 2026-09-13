@@ -4,7 +4,7 @@ A free and open source manga reader server that runs extensions built for Tachiy
 
 ## Basic usage {#module-services-suwayomi-server-basic-usage}
 
-By default, the module will execute Suwayomi-Server backend and web UI:
+By default, the module will execute Suwayomi-Server backend and serve the web UI:
 
 ```nix
 { ... }:
@@ -72,11 +72,11 @@ You can configure a basic authentication to the web interface with:
     settings = {
       server.port = 4567;
       server = {
-        basicAuthEnabled = true;
-        basicAuthUsername = "username";
+        authMode = "basic_auth";
+        authUsername = "username";
 
         # NOTE: this is not a real upstream option
-        basicAuthPasswordFile = ./path/to/the/password/file;
+        authPasswordFile = ./path/to/the/password/file;
       };
     };
   };
@@ -101,11 +101,16 @@ Not all the configuration options are available directly in this module, but you
         port = 4567;
         autoDownloadNewChapters = false;
         maxSourcesInParallel = 6;
-        extensionRepos = [
-          "https://raw.githubusercontent.com/MY_ACCOUNT/MY_REPO/repo/index.min.json"
+        extensionStores = [
+          "https://github.com/MY_ACCOUNT/MY_REPO/raw/repo/index.pb"
         ];
       };
     };
   };
 }
 ```
+
+## Migrating the data directory {#module-services-suwayomi-migrating-data-directory}
+
+The app's data directory has changed to reflect `services.suwayomi-server.dataDir` accurately.
+Before 26.11 release, Suwayomi-Server would store it's files under `${dataDir}/.local/share/Tachidesk`.
