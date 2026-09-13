@@ -14625,6 +14625,12 @@
     github = "kagehisa";
     githubId = 37015428;
   };
+  kahlstrm = {
+    email = "kalle.ahlstrom@iki.fi";
+    github = "kahlstrm";
+    githubId = 71292737;
+    name = "Kalle Ahlström";
+  };
   kai-tub = {
     name = "Kai Norman Clasen";
     github = "kai-tub";
