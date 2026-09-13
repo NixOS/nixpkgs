@@ -74,9 +74,12 @@ flutter347.buildFlutterApplication rec {
   '';
 
   # Needed for QR scanning to work
-  extraWrapProgramArgs = ''
-    --prefix PATH : ${lib.makeBinPath [ gnome-screenshot ]}
-  '';
+  extraWrapProgramArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ gnome-screenshot ])
+  ];
 
   passthru = {
     helper = python3Packages.callPackage ./helper.nix { inherit src version meta; };
