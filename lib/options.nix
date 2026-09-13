@@ -712,6 +712,7 @@ rec {
       options = {
         boot = {
           enable = {
+            _type = "option";
             default = { _type = "literalExpression"; text = "false"; };
             description = "Enable boot";
             type = "boolean";
@@ -727,7 +728,13 @@ rec {
     options = foldOptionSet {
       onOption =
         doc: subDocs: _:
-        if subDocs != { } then doc // { "*" = subDocs; } else doc;
+        let
+          optDoc = {
+            _type = "option";
+          }
+          // doc;
+        in
+        if subDocs != { } then optDoc // { "*" = subDocs; } else optDoc;
       onAttrSet = recurse: set: mapAttrs (_: recurse) set;
       empty = { };
     } options;

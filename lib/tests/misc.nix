@@ -3405,6 +3405,10 @@ runTests {
         # Top-level container schema
         hasDefs = optionDoc ? "$defs" && optionDoc."$defs" == { };
 
+        # Leaf discriminator
+        bootEnableDiscriminator = optionDoc.options.boot.enable._type or null;
+        intermediateHasNoDiscriminator = !(optionDoc.options.boot ? _type);
+
         # Standard option schema verification (no loc, no name)
         bootEnableDescription = optionDoc.options.boot.enable.description;
         bootEnableType = optionDoc.options.boot.enable.type;
@@ -3426,6 +3430,8 @@ runTests {
       };
     expected = {
       hasDefs = true;
+      bootEnableDiscriminator = "option";
+      intermediateHasNoDiscriminator = true;
       bootEnableDescription = "Enable boot";
       bootEnableType = "boolean";
       bootEnableDefaultText = "false";
