@@ -8,11 +8,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xbitmaps";
-  version = "1.1.3";
+  version = "1.1.4";
 
   src = fetchurl {
     url = "mirror://xorg/individual/data/xbitmaps-${finalAttrs.version}.tar.xz";
-    hash = "sha256-rWytVIh4MqF9hsLM/F5Sod+rCQ+DB7FSx4sOFSnND3o=";
+    hash = "sha256-iVci8TbiHnKMUvLZn9La6VAYud2tG6wfKdYbzWWTch0=";
   };
 
   strictDeps = true;
