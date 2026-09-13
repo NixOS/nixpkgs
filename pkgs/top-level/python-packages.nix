@@ -9299,6 +9299,8 @@ self: super: with self; {
 
   langchain-google-genai = callPackage ../development/python-modules/langchain-google-genai { };
 
+  langchain-google-vertexai = callPackage ../development/python-modules/langchain-google-vertexai { };
+
   langchain-groq = callPackage ../development/python-modules/langchain-groq { };
 
   langchain-huggingface = callPackage ../development/python-modules/langchain-huggingface { };
