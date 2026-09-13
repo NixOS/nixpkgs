@@ -1,0 +1,80 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b8d15f865..63d2cfcc1 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -830,9 +830,6 @@ endif()
+ target_link_libraries(${TARGET_CORE_NAME}
+     PUBLIC
+         nlohmann_json::nlohmann_json
+-        libnop
+-    INTERFACE
+-        XLinkPublic
+     PRIVATE
+         fmt::fmt
+         yaml-cpp::yaml-cpp
+@@ -845,8 +842,7 @@ target_link_libraries(${TARGET_CORE_NAME}
+         httplib::httplib
+         semver::semver
+         magic_enum::magic_enum
+-        liblzma::liblzma
+-        lz4::lz4
++        lz4
+         Eigen3::Eigen
+ )
+ 
+@@ -902,6 +898,7 @@ target_compile_definitions(${TARGET_CORE_NAME}
+ if(DEPTHAI_ENABLE_LIBUSB)
+     target_compile_definitions(${TARGET_CORE_NAME} PRIVATE DEPTHAI_ENABLE_LIBUSB)
+     target_compile_definitions(${TARGET_CORE_NAME} PRIVATE DEPTHAI_HAVE_LIBUSB_SUPPORT)
++    target_link_libraries(depthai-core PRIVATE PkgConfig::LIBUSB)
+     set(DEPTHAI_HAVE_LIBUSB_SUPPORT ON)
+ endif()
+ 
+@@ -972,7 +969,7 @@ macro(add_runtime_dependencies depending_target dependency)
+     endif()
+ endmacro()
+ # Add libusb dll in build time
+-add_runtime_dependencies(${TARGET_CORE_NAME} usb-1.0)
++add_runtime_dependencies(${TARGET_CORE_NAME} PkgConfig::LIBUSB)
+ # Add dynamic calibration dll in build time
+ if(DEPTHAI_DYNAMIC_CALIBRATION_SUPPORT)
+     add_runtime_dependencies(${TARGET_CORE_NAME} dynamic_calibration_imported)
+diff --git a/cmake/depthaiDependencies.cmake b/cmake/depthaiDependencies.cmake
+index 578a1bcef..9c1c6928e 100644
+--- a/cmake/depthaiDependencies.cmake
++++ b/cmake/depthaiDependencies.cmake
+@@ -47,7 +47,6 @@ if(NOT CONFIG_MODE OR (CONFIG_MODE AND NOT DEPTHAI_SHARED_LIBS))
+     endif()
+     # libarchive for firmware packages
+     find_package(LibArchive ${_QUIET}  REQUIRED)
+-    find_package(liblzma ${_QUIET} CONFIG REQUIRED)
+     # httplib for Gate communication
+     find_package(httplib ${_QUIET} CONFIG REQUIRED)
+     # ZLIB for compressing Apps
+@@ -179,24 +178,11 @@ set(BUILD_SHARED_LIBS OFF)
+ set(XLINK_ENABLE_LIBUSB ${DEPTHAI_ENABLE_LIBUSB} CACHE BOOL "Enable libusb" FORCE)
+ set(XLINK_INSTALL_PUBLIC_ONLY ON CACHE BOOL "Install only public headers" FORCE)
+ if(DEPTHAI_ENABLE_LIBUSB)
+-    find_package(usb-1.0 ${_QUIET} CONFIG REQUIRED)
+-endif()
+-if(DEPTHAI_XLINK_LOCAL AND (NOT CONFIG_MODE))
+-    add_subdirectory("${DEPTHAI_XLINK_LOCAL}" ${CMAKE_CURRENT_BINARY_DIR}/XLink)
+-else()
+-    FetchContent_Declare(
+-        XLink
+-        GIT_REPOSITORY https://github.com/luxonis/XLink.git
+-        GIT_TAG        f001d710be6a4010db913510da08caaa3a58466c
+-    )
+-
+-    FetchContent_MakeAvailable(
+-        XLink
+-    )
++  find_package(PkgConfig REQUIRED)
++  pkg_check_modules(LIBUSB REQUIRED IMPORTED_TARGET libusb-1.0)
+ endif()
+ set(BUILD_SHARED_LIBS "${_BUILD_SHARED_LIBS_SAVED}")
+ unset(_BUILD_SHARED_LIBS_SAVED)
+-list(APPEND targets_to_export XLinkPublic)
+ 
+ # OpenCV 4 - (optional)
+ message("DEPTHAI_OPENCV_SUPPORT: ${DEPTHAI_OPENCV_SUPPORT}")
