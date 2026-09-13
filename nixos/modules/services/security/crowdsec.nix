@@ -357,7 +357,7 @@ in
                       example = "\${config.services.crowdsec.settings.config.config_paths.data_dir}/online_api_credentials.yaml";
                       description = ''
                         Path to a file containing credentials for the Central API.
-                        To automatically register with `crowdsec-setup`, set this option (typically to ''${config.services.crowdsec.settings.config.config_paths.data_dir}/online_api_credentials.yaml).
+                        To automatically register with `crowdsec-setup`, set this option (typically to `/var/lib/crowdsec/online_api_credentials.yaml`).
                         The file will be automatically created, unless it already exists.
                       '';
                     };
@@ -748,6 +748,18 @@ in
           "By not specifying acquisitions in services.crowdsec.settings.acquisitions, CrowdSec will not look for any data source."
         ];
 
+      assertions =
+        [ ]
+        ++
+          lib.optionals
+            (
+              (builtins.hasAttr "console.enrollKeyFile" cfg.settings)
+              && (!builtins.hasAttr "config.api.server.online_client.credentials_path" cfg.settings)
+            )
+            [
+              "You need to set `services.crowdsec.settings.config.api.server.online_client.credentials_path` (like to `/var/lib/crowdsec/online_api_credentials.yaml`)"
+            ];
+
       environment.systemPackages = [ cfg.package ];
 
       systemd = {
@@ -771,7 +783,6 @@ in
                 Group = cfg.group;
                 UMask = "0077";
                 DynamicUser = true;
-                ReadWritePaths = dirs;
                 PrivateDevices = true;
                 LockPersonality = true;
 
