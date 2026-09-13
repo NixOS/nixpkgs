@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "klassy";
-  version = "6.7.1";
+  version = "6.7.2";
 
   src = fetchFromGitHub {
     owner = "paulmcauley";
     repo = "klassy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5sB8vBjxJ+7/YkJDC7GvOKt35wJCGnJLOQAYH6+qmoU=";
+    hash = "sha256-z8BXruvsrLz2Fyj1UIkEEiml5ZBoxlogSeRGxZ5holY=";
   };
 
   nativeBuildInputs = [
