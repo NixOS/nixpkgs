@@ -650,13 +650,12 @@ rec {
         tree:
         if isOption tree then
           let
-            doc = optionToDocItem tree;
-            visible = tree.visible or true;
-            subVisible = if isBool visible then visible else visible == "transparent";
+            v = tree.visible or true;
+            subVisible = if isBool v then v else v == "transparent";
             ss = tree.type.getSubOptions tree.loc;
             subDocs = if subVisible && ss != { } then recurse ss else empty;
           in
-          onOption doc subDocs tree
+          onOption (optionToDocItem tree) subDocs tree
         else
           onAttrSet recurse tree;
     in
