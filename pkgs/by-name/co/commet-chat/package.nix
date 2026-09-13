@@ -47,10 +47,8 @@ flutter341.buildFlutterApplication (finalAttrs: {
       find $out -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  strictDeps = true;
   sourceRoot = "${finalAttrs.src.name}/commet";
 
-  pubspecLockFilePath = "../pubspec.lock";
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   gitHashes = {
@@ -136,7 +134,12 @@ flutter341.buildFlutterApplication (finalAttrs: {
     packageRun build_runner build --delete-conflicting-outputs
   '';
 
-  extraWrapProgramArgs = "--suffix LD_LIBRARY_PATH : $out/app/commet-chat/lib";
+  extraWrapProgramArgs = [
+    "--suffix"
+    "LD_LIBRARY_PATH"
+    ":"
+    "$out/app/commet-chat/lib"
+  ];
 
   postInstall = ''
     mkdir -p $out/share/applications
@@ -152,7 +155,6 @@ flutter341.buildFlutterApplication (finalAttrs: {
     patchelf --add-rpath ${libwebrtcRpath} $out/app/commet-chat/lib/libwebrtc.so
   '';
 
-  __structuredAttrs = true;
   meta = {
     homepage = "https://commet.chat";
     description = "Client for Matrix focused on providing a feature rich experience while maintaining a simple interface";
