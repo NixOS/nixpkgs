@@ -83,9 +83,12 @@ flutter341.buildFlutterApplication (finalAttrs: {
     done
   '';
 
-  extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : $out/app/localsend/lib
-  '';
+  extraWrapProgramArgs = [
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    "$out/app/localsend/lib"
+  ];
 
   desktopItems = [
     (makeDesktopItem {
