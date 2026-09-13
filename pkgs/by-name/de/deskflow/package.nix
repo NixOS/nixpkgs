@@ -2,31 +2,41 @@
   lib,
   stdenv,
   fetchFromGitHub,
+
+  # nativeBuildInputs
   cmake,
+  doxygen,
   ninja,
   pkg-config,
-  gtest,
-  libei,
-  libportal,
-  libx11,
-  libxkbfile,
-  libxtst,
-  libxinerama,
-  libxi,
-  libxrandr,
-  libxkbcommon,
+  qt6,
+
+  # nativeCheckInputs
+  writableTmpDirAsHomeHook,
+
+  # buildInputs (Linux and Darwin)
+  openssl,
   pugixml,
   python3,
+
+  # buildInputs (Linux-specific)
   gdk-pixbuf,
-  libnotify,
-  qt6,
-  xkeyboard_config,
-  wayland-protocols,
-  wayland,
-  libsysprof-capture,
+  gtest,
   lerc,
-  doxygen,
-  writableTmpDirAsHomeHook,
+  libei,
+  libnotify,
+  libportal,
+  libsysprof-capture,
+  libx11,
+  libxi,
+  libxinerama,
+  libxkbcommon,
+  libxkbfile,
+  libxrandr,
+  libxtst,
+  wayland,
+  wayland-protocols,
+
+  # Update script for `passthru`.
   nix-update-script,
 }:
 
@@ -41,13 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-XcSG47Ysjn+wrJH5DC/XXGXcneXcW7xIhAn6sguuv+s=";
   };
 
-  postPatch = ''
-    substituteInPlace src/lib/deskflow/unix/AppUtilUnix.cpp \
-      --replace-fail "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboard_config}/share/X11/xkb/rules/evdev.xml"
-    substituteInPlace deploy/linux/deploy.cmake \
-      --replace-fail 'message(FATAL_ERROR "Unable to read file /etc/os-release")' 'set(RELEASE_FILE_CONTENTS "")'
-  '';
-
   nativeBuildInputs = [
     cmake
     ninja
@@ -56,41 +59,58 @@ stdenv.mkDerivation (finalAttrs: {
     doxygen # docs
   ];
 
+  buildInputs = [
+    openssl
+    pugixml
+    python3
+    qt6.qtbase
+    qt6.qttools
+    qt6.qttranslations
+  ]
+  ++ (lib.optionals stdenv.hostPlatform.isLinux [
+    gdk-pixbuf
+    gtest
+    lerc
+    libei
+    libnotify
+    libportal
+    libsysprof-capture
+    libx11
+    libxi
+    libxinerama
+    libxkbcommon
+    libxkbfile
+    libxrandr
+    libxtst
+    pugixml
+    python3
+    qt6.qtdeclarative
+    qt6.qtwayland
+    wayland
+    wayland-protocols
+  ]);
+
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export PATH="${qt6.qtbase}/bin:$PATH"
+  '';
+
+  postPatch = ''
+    substituteInPlace translations/CMakeLists.txt \
+      --replace-fail 'PATHS ''${QT_ROOT_DIR} PATH_SUFFIXES "translations" "share/qt/translations"' 'PATHS "${qt6.qttranslations}/translations"'
+    substituteInPlace src/lib/net/CMakeLists.txt \
+      --replace-fail "set(OPENSSL_USE_STATIC_LIBS TRUE)" ""
+    substituteInPlace deploy/linux/deploy.cmake \
+      --replace-fail 'message(FATAL_ERROR "Unable to read file /etc/os-release")' 'set(RELEASE_FILE_CONTENTS "")'
+  '';
+
   cmakeFlags = [
     "-DCMAKE_SKIP_RPATH=ON" # Avoid generating incorrect RPATH
     "-DSKIP_BUILD_TESTS=ON" # Perform unit tests in `checkPhase` manually, with one job at a time.
   ];
 
+  qtWrapperArgs = lib.optional stdenv.hostPlatform.isLinux "--set QT_QPA_PLATFORM_PLUGIN_PATH ${qt6.qtwayland}/${qt6.qtbase.qtPluginPrefix}/platforms";
+
   strictDeps = true;
-
-  buildInputs = [
-    gtest
-    libei
-    libportal
-    libx11
-    libxkbfile
-    libxinerama
-    libxi
-    libxrandr
-    libxtst
-    libxkbcommon
-    pugixml
-    gdk-pixbuf
-    libnotify
-    python3
-    qt6.qtbase
-    wayland-protocols
-    qt6.qtwayland
-    qt6.qtdeclarative
-    qt6.qttools
-    wayland
-    libsysprof-capture
-    lerc
-  ];
-
-  qtWrapperArgs = [
-    "--set QT_QPA_PLATFORM_PLUGIN_PATH ${qt6.qtwayland}/${qt6.qtbase.qtPluginPrefix}/platforms"
-  ];
 
   doCheck = true;
 
@@ -124,9 +144,9 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ flacks ];
     license = with lib.licenses; [
       gpl2Plus
-      openssl
+      lib.licenses.openssl # We have to be explicit here, as `openssl` is a buildInput.
       mit # share/applications/org.deskflow.deskflow.desktop
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 })
