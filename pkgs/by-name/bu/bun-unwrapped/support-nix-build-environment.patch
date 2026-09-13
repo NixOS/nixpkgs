@@ -1,5 +1,5 @@
 diff --git a/scripts/build/codegen.ts b/scripts/build/codegen.ts
-index 36566f1e..4051819d 100644
+index 36566f1..4051819 100644
 --- a/scripts/build/codegen.ts
 +++ b/scripts/build/codegen.ts
 @@ -160,7 +160,7 @@ export function registerCodegenRules(n: Ninja, cfg: Config): void {
@@ -12,7 +12,7 @@ index 36566f1e..4051819d 100644
      restat: true,
      // bun install can be memory-hungry and grabs a lockfile; serialize.
 diff --git a/scripts/build/config.ts b/scripts/build/config.ts
-index 671839b7..01ba2c76 100644
+index 671839b..01ba2c7 100644
 --- a/scripts/build/config.ts
 +++ b/scripts/build/config.ts
 @@ -523,6 +523,8 @@ export function detectHost(): Host {
@@ -25,7 +25,7 @@ index 671839b7..01ba2c76 100644
  }
 
 diff --git a/scripts/build/flags.ts b/scripts/build/flags.ts
-index 0b377562..e5b93471 100644
+index 0b37756..e5b9347 100644
 --- a/scripts/build/flags.ts
 +++ b/scripts/build/flags.ts
 @@ -1086,14 +1086,6 @@ export const linkerFlags: Flag[] = [
@@ -44,7 +44,7 @@ index 0b377562..e5b93471 100644
      // Cross-link from a non-darwin host: same pattern as Android/FreeBSD —
      // target triple + explicit linker. -isysroot is added by the deployment-
 diff --git a/scripts/build/rust.ts b/scripts/build/rust.ts
-index 5e4fa5c5..ee324357 100644
+index 5e4fa5c..ee32435 100644
 --- a/scripts/build/rust.ts
 +++ b/scripts/build/rust.ts
 @@ -333,14 +333,9 @@ export function cargoBuildInvocation(cfg: Config): CargoInvocation {
