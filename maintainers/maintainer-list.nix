@@ -10089,6 +10089,12 @@
     githubId = 33058747;
     name = "Gaetan Lepage";
   };
+  gaetinux = {
+    email = "gaetan@gaetinux.com";
+    name = "Gaëtan Pawlowski";
+    github = "gaetinux";
+    githubId = 111299313;
+  };
   gal_bolle = {
     email = "florent.becker@ens-lyon.org";
     github = "FlorentBecker";
