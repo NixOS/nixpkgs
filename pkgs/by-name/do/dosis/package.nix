@@ -2,9 +2,10 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dosis";
   version = "1.007";
 
@@ -15,13 +16,10 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-rZ49uNBlI+NWkiZykpyXzOonXlbVB6Vf6a/8A56Plj4=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    find . -name '*.otf' -exec install -m444 -Dt $out/share/fonts/opentype {} \;
-    install -m444 -Dt $out/share/doc/${pname}-${version} README.md FONTLOG.txt
-
-    runHook postInstall
+  postInstall = ''
+    install -m444 -Dt $out/share/doc/${finalAttrs.pname}-${finalAttrs.version} README.md FONTLOG.txt
   '';
 
   meta = {
@@ -39,7 +37,7 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "http://www.impallari.com/dosis";
     license = lib.licenses.ofl;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pancaek ];
     platforms = lib.platforms.all;
   };
-}
+})
