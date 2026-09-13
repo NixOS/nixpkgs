@@ -1044,7 +1044,7 @@ in
       };
       syncthing-init = mkIf (cleanedConfig != { }) {
         description = "Syncthing configuration updater";
-        requisite = [ "syncthing.service" ];
+        requires = [ "syncthing.service" ];
         after = [ "syncthing.service" ];
         wantedBy = [ "multi-user.target" ];
 

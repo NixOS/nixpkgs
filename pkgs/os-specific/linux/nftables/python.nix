@@ -4,13 +4,16 @@
   nftables,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "nftables";
   inherit (nftables) version src;
   pyproject = true;
 
+  __structuredAttrs = true;
+
   postPatch = ''
     substituteInPlace "src/nftables.py" \
+      --replace-fail 'NFTABLES_VERSION = "0.1"' 'NFTABLES_VERSION = "${finalAttrs.version}"' \
       --replace-fail "libnftables.so.1" "${nftables}/lib/libnftables.so.1"
   '';
 
@@ -29,4 +32,4 @@ buildPythonPackage {
       maintainers
       ;
   };
-}
+})
