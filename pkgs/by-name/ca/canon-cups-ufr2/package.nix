@@ -199,6 +199,10 @@ let
           --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
           --set NIX_REDIRECTS /usr/share/cnpkbidir=$out/share/cnpkbidir
 
+        wrapProgram $out/bin/cnrsdrvufr2 \
+          --prefix LD_LIBRARY_PATH ":" "$out/lib" \
+          --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
+          --set NIX_REDIRECTS /usr/bin/cnpkmoduleufr2r=$out/bin/cnpkmoduleufr2r:/usr/bin/cnjbigufr2=$out/bin/cnjbigufr2
 
         wrapProgram $out/bin/cnsetuputil2 \
           --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
