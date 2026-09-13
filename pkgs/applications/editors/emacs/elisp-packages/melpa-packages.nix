@@ -1516,6 +1516,9 @@ let
 
           org-pdftools = mkHome super.org-pdftools;
 
+          # elisp error when loading elnode
+          org-present-remote = ignoreCompilationError super.org-present-remote;
+
           org-projectile = super.org-projectile.overrideAttrs (
             finalAttrs: previousAttrs: {
               # https://github.com/melpa/melpa/pull/9150
