@@ -33,6 +33,8 @@ buildPythonPackage rec {
     hash = "sha256-FWNIZFzY7BXC3vQKsIUFIJr3dQ8V1+OOmt5mKQP9/3M=";
   };
 
+  patches = [ ./cholmod-cuda-include.patch ];
+
   # Fix:
   # > PermissionError: [Errno 13] Permission denied:
   # > '/nix/store/…-python3-3.12.9/lib/python3.12/site-packages/nanoeigenpy.pyi'

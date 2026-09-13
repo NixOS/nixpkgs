@@ -33,6 +33,7 @@ buildPythonPackage rec {
   buildInputs = [
     blas
     lapack
+    suitesparse
   ];
 
   build-system = [ setuptools-scm ];
