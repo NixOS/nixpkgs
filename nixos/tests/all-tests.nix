@@ -1240,6 +1240,7 @@ in
   neo4j = runTest ./neo4j.nix;
   netbird = runTest ./netbird.nix;
   netbox = runTest ./web-apps/netbox/default.nix;
+  netbox-branching = runTest ./netbox-branching.nix;
   netdata = runTest ./netdata.nix;
   netfoil = runTest ./netfoil.nix;
   netplan = runTest ./netplan.nix;
