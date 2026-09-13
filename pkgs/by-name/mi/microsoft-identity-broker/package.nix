@@ -25,11 +25,12 @@
 }:
 stdenv.mkDerivation rec {
   pname = "microsoft-identity-broker";
-  version = "3.0.2";
+  version = "3.0.2-resolute";
+  ubuntuVersion = "26.04";
 
   src = fetchurl {
-    url = "https://packages.microsoft.com/ubuntu/24.04/prod/pool/main/m/microsoft-identity-broker/microsoft-identity-broker_${version}-noble_amd64.deb";
-    hash = "sha256-A+YNfbcZflkDllxd97YBrhvbcvzphsz7zb7y/abyx/k=";
+    url = "https://packages.microsoft.com/ubuntu/${ubuntuVersion}/prod/pool/main/m/microsoft-identity-broker/microsoft-identity-broker_${version}_amd64.deb";
+    hash = "sha256-HyturWVNdGxuVlJn2JYq/TVVnF+6ZmBvOHnlK1XQb6c=";
   };
 
   nativeBuildInputs = [
