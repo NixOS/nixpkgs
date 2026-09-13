@@ -5,7 +5,7 @@
   fetchNpmDeps,
   makeWrapper,
   npmHooks,
-  gradle,
+  gradle_8,
   jdk_headless,
   jre_minimal,
   nodejs,
@@ -23,6 +23,7 @@ let
       "jdk.crypto.ec"
     ];
   };
+  gradle = gradle_8;
   protobuf = protobuf_35;
   protobufJavaVer = import ./protobuf-java-version.nix;
 in

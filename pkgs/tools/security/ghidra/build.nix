@@ -3,7 +3,7 @@
   fetchFromGitHub,
   lib,
   callPackage,
-  gradle,
+  gradle_8,
   makeBinaryWrapper,
   openjdk21,
   unzip,
@@ -18,6 +18,9 @@
 }:
 
 let
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
+
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
   version = "12.1.2";
