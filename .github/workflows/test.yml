@@ -88,6 +88,7 @@ jobs:
               'ci/github-script/package.json',
               'ci/github-script/package-lock.json',
               'ci/github-script/prepare.js',
+              'ci/github-script/reminders.ts',
               'ci/github-script/reviewers.js',
               'ci/github-script/reviews.js',
               'ci/github-script/supportedBranches.js',
@@ -95,7 +96,7 @@ jobs:
               'ci/github-script/withRateLimit.js',
               'ci/pinned.json',
               'pkgs/top-level/release-supported-systems.json',
-            ].includes(file))) core.setOutput('pr', true)
+            ].includes(file) || file.startsWith('ci/github-script/reminders/'))) core.setOutput('pr', true)
 
   merge-group:
     if: needs.prepare.outputs.merge-group
