@@ -135,7 +135,6 @@ def _rollback_system(
             maybe_path_to_config = nix.rollback_temporary_profile(
                 profile,
                 target_host,
-                elevate=args.elevator,
             )
             if maybe_path_to_config:
                 path_to_config = maybe_path_to_config

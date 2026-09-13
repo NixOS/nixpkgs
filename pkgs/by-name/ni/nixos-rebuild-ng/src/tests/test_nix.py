@@ -521,53 +521,6 @@ def test_get_generations_with_profile(tmp_path: Path) -> None:
     ]
 
 
-def test_get_generations_from_nix_env(tmp_path: Path) -> None:
-    path = tmp_path / "test"
-    path.touch()
-    return_value = CompletedProcess(
-        [],
-        0,
-        stdout=textwrap.dedent("""\
-        2082   2024-11-07 22:58:56
-        2083   2024-11-07 22:59:41
-        2084   2024-11-07 23:54:17   (current)
-        """),
-    )
-
-    with patch(
-        get_qualified_name(n.run_wrapper, n), autospec=True, return_value=return_value
-    ) as mock_run:
-        assert n.get_generations_from_nix_env(m.Profile("system", path)) == [
-            m.Generation(id=2082, current=False, timestamp="2024-11-07 22:58:56"),
-            m.Generation(id=2083, current=False, timestamp="2024-11-07 22:59:41"),
-            m.Generation(id=2084, current=True, timestamp="2024-11-07 23:54:17"),
-        ]
-        mock_run.assert_called_with(
-            ["nix-env", "-p", path, "--list-generations"],
-            stdout=PIPE,
-            remote=None,
-            elevate=e.NO_ELEVATOR,
-        )
-
-    remote = m.Remote("user@host", [], "ssh")
-    with patch(
-        get_qualified_name(n.run_wrapper, n), autospec=True, return_value=return_value
-    ) as mock_run:
-        assert n.get_generations_from_nix_env(
-            m.Profile("system", path), remote, SUDO
-        ) == [
-            m.Generation(id=2082, current=False, timestamp="2024-11-07 22:58:56"),
-            m.Generation(id=2083, current=False, timestamp="2024-11-07 22:59:41"),
-            m.Generation(id=2084, current=True, timestamp="2024-11-07 23:54:17"),
-        ]
-        mock_run.assert_called_with(
-            ["nix-env", "-p", path, "--list-generations"],
-            stdout=PIPE,
-            remote=remote,
-            elevate=SUDO,
-        )
-
-
 @patch(
     get_qualified_name(n.get_generations),
     autospec=True,
@@ -687,47 +640,25 @@ def test_rollback_temporary_profile(tmp_path: Path) -> None:
             [],
             0,
             stdout=textwrap.dedent("""\
-                2082   2024-11-07 22:58:56
-                2083   2024-11-07 22:59:41
-                2084   2024-11-07 23:54:17   (current)
+                {"id":642,"timestamp":"2026-09-06 11:57:05","current":false}
+                {"id":643,"timestamp":"2026-09-06 13:01:11","current":false}
+                {"id":644,"timestamp":"2026-09-06 18:59:37","current":true}
                 """),
         )
         assert (
-            n.rollback_temporary_profile(m.Profile("system", path), None, e.NO_ELEVATOR)
-            == path.parent / "system-2083-link"
-        )
-        mock_run.assert_called_with(
-            [
-                "nix-env",
-                "-p",
-                path,
-                "--list-generations",
-            ],
-            stdout=PIPE,
-            remote=None,
-            elevate=e.NO_ELEVATOR,
+            n.rollback_temporary_profile(m.Profile("system", path), None)
+            == path.parent / "system-643-link"
         )
 
         target_host = m.Remote("user@localhost", [], "ssh")
         assert (
-            n.rollback_temporary_profile(m.Profile("foo", path), target_host, SUDO)
-            == path.parent / "foo-2083-link"
-        )
-        mock_run.assert_called_with(
-            [
-                "nix-env",
-                "-p",
-                path,
-                "--list-generations",
-            ],
-            stdout=PIPE,
-            remote=target_host,
-            elevate=SUDO,
+            n.rollback_temporary_profile(m.Profile("foo", path), target_host)
+            == path.parent / "foo-643-link"
         )
 
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
         mock_run.return_value = CompletedProcess([], 0, stdout="")
-        assert n.rollback_temporary_profile(profile, None, e.NO_ELEVATOR) is None
+        assert n.rollback_temporary_profile(profile, None) is None
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)

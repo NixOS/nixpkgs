@@ -10,7 +10,7 @@ version = "0.0.0"
 nixos-rebuild = "nixos_rebuild:main"
 
 [tool.setuptools.package-data]
-nixos_rebuild = ["*.nix.template"]
+nixos_rebuild = ["get_generations.sh", "*.nix.template"]
 
 [tool.mypy]
 files = ["nixos_rebuild", "tests"]
