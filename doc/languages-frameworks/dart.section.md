@@ -92,7 +92,7 @@ Run the following commands in the source directory to configure Dart appropriate
 Do not use `pub` after doing so; it will download the dependencies itself and overwrite these changes.
 
 ```bash
-cp --no-preserve=all "$pubspecLockFilePath" pubspec.lock
+printf "%s" "$pubspecLockFile" > pubspec.lock
 mkdir -p .dart_tool && cp --no-preserve=all "$packageConfig" .dart_tool/package_config.json
 ```
 
