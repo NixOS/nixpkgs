@@ -89,6 +89,7 @@ let
     nameValuePair
     optionalDrvAttr
     optionAttrSetToDocList
+    optionToDoc
     overrideExisting
     packagesFromDirectoryRecursive
     pipe
@@ -3419,6 +3420,91 @@ runTests {
         "bar"
       ]
     ];
+  };
+
+  testOptionToDoc = {
+    expr =
+      let
+        module = {
+          options.boot.enable = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = "Enable boot";
+          };
+          options.services.nginx.virtualHosts = lib.mkOption {
+            type = lib.types.attrsOf (
+              lib.types.submodule {
+                options.enableSSL = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = "Enable SSL";
+                };
+              }
+            );
+            default = { };
+            description = "Virtual hosts";
+          };
+          options.tagTest = lib.mkOption {
+            type = lib.types.attrTag {
+              tagA = lib.mkOption {
+                type = lib.types.bool;
+                default = false;
+                description = "Tag A";
+              };
+            };
+            description = "AttrTag test option";
+          };
+        };
+        options = (evalModules { modules = [ module ]; }).options;
+        optionDoc = optionToDoc options;
+        docList = optionAttrSetToDocList options;
+      in
+      {
+        # Top-level container schema
+        hasDefs = optionDoc ? "$defs" && optionDoc."$defs" == { };
+
+        # Leaf discriminator
+        bootEnableDiscriminator = optionDoc.options.boot.enable._type or null;
+        intermediateHasNoDiscriminator = !(optionDoc.options.boot ? _type);
+
+        # Standard option schema verification (no loc, no name)
+        bootEnableDescription = optionDoc.options.boot.enable.description;
+        bootEnableType = optionDoc.options.boot.enable.type;
+        bootEnableDefaultText = optionDoc.options.boot.enable.default.text;
+        bootEnableHasNoLoc = !(optionDoc.options.boot.enable ? loc);
+        bootEnableHasNoName = !(optionDoc.options.boot.enable ? name);
+
+        # Submodule nesting via '*' key
+        vhostDescription = optionDoc.options.services.nginx.virtualHosts.description;
+        vhostType = optionDoc.options.services.nginx.virtualHosts.type;
+        vhostSubOptionType = optionDoc.options.services.nginx.virtualHosts."*".enableSSL.type;
+
+        # attrTag nesting via '*' key
+        attrTagDescription = optionDoc.options.tagTest.description;
+        attrTagSubOptionType = optionDoc.options.tagTest."*".tagA.type;
+
+        # Equivalent traversal via optionAttrSetToDocList
+        docListCount = length docList;
+      };
+    expected = {
+      hasDefs = true;
+      bootEnableDiscriminator = "option";
+      intermediateHasNoDiscriminator = true;
+      bootEnableDescription = "Enable boot";
+      bootEnableType = "boolean";
+      bootEnableDefaultText = "false";
+      bootEnableHasNoLoc = true;
+      bootEnableHasNoName = true;
+
+      vhostDescription = "Virtual hosts";
+      vhostType = "attribute set of (submodule)";
+      vhostSubOptionType = "boolean";
+
+      attrTagDescription = "AttrTag test option";
+      attrTagSubOptionType = "boolean";
+
+      docListCount = 13;
+    };
   };
 
   testFreeformOptions = {
