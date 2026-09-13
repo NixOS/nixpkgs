@@ -2,62 +2,89 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  cmake,
+  ninja,
   pkg-config,
   udevCheckHook,
   udev,
-  libsForQt5,
+  qt6,
   alsa-lib,
   ola,
   libftdi1,
-  libusb-compat-0_1,
+  libusb1,
   libsndfile,
-  libmad,
+  fftw,
 }:
 
 stdenv.mkDerivation rec {
   pname = "qlcplus";
-  version = "5.0.0";
+  version = "5.2.2";
 
   src = fetchFromGitHub {
     owner = "mcallegari";
     repo = "qlcplus";
     rev = "QLC+_${version}";
-    hash = "sha256-gEwcTIJhY78Ts0lUn4MVciV7sPIBkqlxPMa9I1nTHO0=";
+    hash = "sha256-e8KyuCnzTUz/f6cfT7LyUQ9snaFBnE5WTc4FP7jhdRY=";
   };
 
   nativeBuildInputs = [
-    libsForQt5.qmake
+    cmake
+    ninja
     pkg-config
     udevCheckHook
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
   buildInputs = [
     udev
-    libsForQt5.qtmultimedia
-    libsForQt5.qtscript
-    libsForQt5.qtserialport
-    libsForQt5.qtwebsockets
     alsa-lib
     ola
     libftdi1
-    libusb-compat-0_1
+    libusb1
     libsndfile
-    libmad
-  ];
-
-  qmakeFlags = [ "INSTALLROOT=$(out)" ];
+    fftw
+  ]
+  ++ (with qt6; [
+    qtbase
+    qtdeclarative
+    qtmultimedia
+    qtserialport
+    qtsvg
+    qttools
+    qtwebsockets
+    qt3d
+  ]);
 
   postPatch = ''
     patchShebangs .
-    sed -i -e '/unix:!macx:INSTALLROOT += \/usr/d' \
-            -e "s@\$\$LIBSDIR/qt4/plugins@''${qtPluginPrefix}@" \
-            -e "s@/etc/udev/rules.d@''${out}/lib/udev/rules.d@" \
-      variables.pri
 
-    # Fix gcc-13 build failure by removing blanket -Werror.
-    fgrep Werror variables.pri
-    substituteInPlace variables.pri --replace-fail "QMAKE_CXXFLAGS += -Werror" ""
+    # Fix build failure caused by newer compilers/Qt turning on additional
+    # warnings (e.g. -Wunused-result for [[nodiscard]] QFile::open) by
+    # removing the blanket -Werror.
+    substituteInPlace variables.cmake --replace-fail 'set(CMAKE_CXX_FLAGS "''${CMAKE_CXX_FLAGS} -Werror")' ""
+
+    # On Linux, QLC+'s build system hardcodes all of its installation
+    # directories (binaries, libraries, data files, ...) to be relative to
+    # "/usr", following the same "install root" convention used by its
+    # Debian packaging (see INSTALL_ROOT below). Drop that hardcoded "/usr"
+    # prefix so everything installs directly under $out in the conventional
+    # FHS-style layout instead of $out/usr.
+    substituteInPlace variables.cmake --replace-fail 'set(INSTALLROOT "/usr")' 'set(INSTALLROOT "")'
   '';
+
+  cmakeFlags = [
+    # QLC+ 5's QML-based UI, as opposed to the legacy Qt Widgets UI.
+    (lib.cmakeBool "qmlui" true)
+    # See the INSTALLROOT patch in postPatch above: this is prepended to it
+    # (and to a few paths that don't use INSTALLROOT, like the udev rules
+    # directory) to form the actual installation prefix.
+    (lib.cmakeFeature "INSTALL_ROOT" (placeholder "out"))
+    # nixpkgs' cmake setup-hook forces CMAKE_INSTALL_LIBDIR to the absolute
+    # path "$out/lib". QLC+ then prepends INSTALLROOT (i.e. $out again, see
+    # above) to it, resulting in a doubled-up, nested install path. Reset it
+    # back to a plain relative directory so it composes correctly with
+    # INSTALLROOT instead.
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+  ];
 
   enableParallelBuilding = true;
 
