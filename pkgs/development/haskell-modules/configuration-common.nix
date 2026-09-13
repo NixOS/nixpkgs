@@ -694,40 +694,52 @@ with haskellLib;
   # Requires file-io >= 0.2 if using OsPath flag which is incompatible with the directory
   # version shipped with GHC 9.12 and 9.14, so we're sticking with filepath-bytestring for now.
   # TODO(@sternenseemann): look into restoring compat for file-io < 0.2 or upgrade to file-io
-  git-annex = lib.pipe (super.git-annex.override { file-io = self.filepath-bytestring; }) [
-    (overrideCabal (drv: {
-      # Hackage tarball only includes what is supported by `cabal install git-annex`,
-      # but we want e.g. completions as well. See
-      # https://web.archive.org/web/20160724083703/https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
-      # or git-annex @ 3571b077a1244330cc736181ee04b4d258a78476 doc/bugs/bash_completion_file_is_missing*
-      src = pkgs.fetchgit {
-        name = "git-annex-${super.git-annex.version}-src";
-        url = "git://git-annex.branchable.com/";
-        tag = super.git-annex.version;
-        sha256 = "sha256-Ih5Ct8G54p2FddxJEBl2JL5H/U35iNvy5oKN0CA0q0w=";
-        # delete android and Android directories which cause issues on
-        # darwin (case insensitive directory). Since we don't need them
-        # during the build process, we can delete it to prevent a hash
-        # mismatch on darwin.
-        postFetch = ''
-          rm -r $out/doc/?ndroid*
-        '';
-      };
+  git-annex =
+    lib.pipe
+      (super.git-annex.override {
+        file-io = self.filepath-bytestring;
+        # git-annex does not support magic >= 2.0 and doesn't intend to, at least for now.
+        # patching in support is pretty involved and changes in recent versions of magic
+        # are hard to review since it appears to be heavily LLM generated, see git-annex
+        # commits 512f9d6bebd3, ca4bc8f22c417760967b6f.
+        magic = self.magic_1_1;
+      })
+      [
+        (overrideCabal (drv: {
+          # Hackage tarball only includes what is supported by `cabal install git-annex`,
+          # but we want e.g. completions as well. See
+          # https://web.archive.org/web/20160724083703/https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
+          # or git-annex @ 3571b077a1244330cc736181ee04b4d258a78476 doc/bugs/bash_completion_file_is_missing*
+          src = pkgs.fetchgit {
+            name = "git-annex-${super.git-annex.version}-src";
+            url = "git://git-annex.branchable.com/";
+            tag = super.git-annex.version;
+            sha256 = "sha256-eMOsguPJSiBYLBPUM8Ck7uXDt6sLwjXJRjx/p9MtIdI=";
+            # delete android and Android directories which cause issues on
+            # darwin (case insensitive directory). Since we don't need them
+            # during the build process, we can delete it to prevent a hash
+            # mismatch on darwin.
+            postFetch = ''
+              rm -r $out/doc/?ndroid*
+            '';
+          };
 
-      patches = drv.patches or [ ] ++ [
-        # Prevent .desktop files from being installed to $out/usr/share.
-        # TODO(@sternenseemann): submit upstreamable patch resolving this
-        # (this should be possible by also taking PREFIX into account).
-        ./patches/git-annex-no-usr-prefix.patch
+          patches = drv.patches or [ ] ++ [
+            # Prevent .desktop files from being installed to $out/usr/share.
+            # TODO(@sternenseemann): submit upstreamable patch resolving this
+            # (this should be possible by also taking PREFIX into account).
+            ./patches/git-annex-no-usr-prefix.patch
+            # Allow building with crypton >= 1.1 until upstream adds support
+            ./patches/git-annex-crypton-1.1.patch
+          ];
+
+          postPatch = ''
+            substituteInPlace Makefile \
+              --replace-fail 'InstallDesktopFile $(PREFIX)/bin/git-annex' \
+                             'InstallDesktopFile git-annex'
+          '';
+        }))
       ];
-
-      postPatch = ''
-        substituteInPlace Makefile \
-          --replace-fail 'InstallDesktopFile $(PREFIX)/bin/git-annex' \
-                         'InstallDesktopFile git-annex'
-      '';
-    }))
-  ];
 
   # Fix test trying to access /home directory
   shell-conduit = overrideCabal (drv: {
