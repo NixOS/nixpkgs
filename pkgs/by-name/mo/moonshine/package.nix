@@ -29,19 +29,19 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "moonshine";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "hgaiser";
     repo = "moonshine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TvL3s738wooQwZfBKyCqp0V8qcYFtJL98tsxlSX8fLM=";
+    hash = "sha256-SpDGhIi6FTYAWDzMZwPdNbwPmDEA3w/xOi2z5wRR1Qc=";
   };
 
   __structuredAttrs = true;
   strictDeps = true;
 
-  cargoHash = "sha256-PAC8PcGOXxFNN8Eeiik4JrXeH2H+YcqRaBpJVtUoZ44=";
+  cargoHash = "sha256-GhHjXPx3aEYPO9OsuB1ZAiwvessXoOOQ8MqFwmORJOs=";
 
   # Build Moonshine binary and Vulkan layer
   cargoBuildFlags = [
