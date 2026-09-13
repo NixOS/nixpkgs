@@ -16,6 +16,7 @@
   pytest-xdist,
   pytestCheckHook,
   rich,
+  stdenv,
   typing-extensions,
 }:
 
@@ -65,6 +66,10 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests don't play nice with pytest-xdist
     "tests/test_typing.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
+    # docs formatting checks diverge from committed examples on slow hardware
+    "tests/test_docs.py"
   ];
 
   meta = {
