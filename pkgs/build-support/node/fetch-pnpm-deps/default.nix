@@ -69,7 +69,7 @@ in
     ) true;
 
     lib.warnIf (fetcherVersion < 3)
-      "fetchPnpmDeps: `fetcherVersion = ${toString fetcherVersion}` is deprecated and scheduled for removal in the 26.11 release. Please migrate `${pname}` to `fetcherVersion = 3` and regenerate the hash. See https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion."
+      "fetchPnpmDeps: `fetcherVersion = ${toString fetcherVersion}` is deprecated and scheduled for removal in the 26.11 release. Please migrate `${pname}` to `fetcherVersion = 4` and regenerate the hash. See https://nixos.org/manual/nixpkgs/stable/#javascript-pnpm-fetcherVersion."
 
       stdenvNoCC.mkDerivation
       (
@@ -84,6 +84,7 @@ in
               jq
               moreutils
               pnpm # from args
+              pnpm.nodejs-slim
               pnpm-fixup-state-db'
               sqlite
               writableTmpDirAsHomeHook
@@ -148,13 +149,20 @@ in
 
               # pnpm is going to warn us about using --force
               # --force allows us to fetch all dependencies including ones that aren't meant for our host platform
+              local installFlagsArray=(
+                "--force"
+                "--ignore-scripts"
+                "--frozen-lockfile"
+              )
+
+              if [[ -n "$NIX_NPM_REGISTRY" ]]; then
+                installFlagsArray+=("--registry=$NIX_NPM_REGISTRY")
+              fi
+
               pnpm install \
-                  --force \
-                  --ignore-scripts \
                   ${lib.escapeShellArgs filterFlags} \
                   ${lib.escapeShellArgs pnpmInstallFlags} \
-                  --registry="$NIX_NPM_REGISTRY" \
-                  --frozen-lockfile
+                  "''${installFlagsArray[@]}"
 
               # Store newer fetcherVersion in case pnpmConfigHook also needs it
               if [[ ${toString fetcherVersion} -gt 1 ]]; then
