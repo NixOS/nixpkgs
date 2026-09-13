@@ -2561,9 +2561,9 @@
     # check if https://github.com/tree-sitter/tree-sitter-regex/tags is actually
     # a recent version. After v1.0.0, tree-sitter-regex confusingly released
     # v0.20.0, v0.21.0, etc.
-    version = "0.25.0";
+    version = "1.0.0";
     url = "github:tree-sitter/tree-sitter-regex";
-    hash = "sha256-bR0K6SR19QuQwDUic+CJ69VQTSGqry5a5IOpPTVJFlo=";
+    hash = "sha256-3D+LOWRUamAdbegVfWD5yFcCjBucthPogOL/zWR78PY=";
     meta = {
       license = lib.licenses.mit;
     };
