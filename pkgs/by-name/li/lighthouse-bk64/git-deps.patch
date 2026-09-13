@@ -1,0 +1,63 @@
+Submodule Torch contains modified content
+diff --git a/Torch/CMakeLists.txt b/Torch/CMakeLists.txt
+index e67e2eb..e622d24 100644
+--- a/Torch/CMakeLists.txt
++++ b/Torch/CMakeLists.txt
+@@ -64,8 +64,7 @@ if(USE_STANDALONE)
+     # Because libgfxd is not a CMake project, we have to manually fetch it and add it to the build
+     FetchContent_Declare(
+         libgfxd
+-        GIT_REPOSITORY https://github.com/glankk/libgfxd.git
+-        GIT_TAG 96fd3b849f38b3a7c7b7f3ff03c5921d328e6cdf
++        URL @libgfxd_src@
+     )
+ 
+     FetchContent_GetProperties(libgfxd)
+@@ -338,8 +337,7 @@ set(YAML_CPP_BUILD_TESTS OFF)
+ set(YAML_CPP_DISABLE_UNINSTALL ON)
+ FetchContent_Declare(
+     yaml-cpp
+-    GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
+-    GIT_TAG yaml-cpp-0.9.0
++    URL @yaml-cpp_src@
+ )
+ set(YAML_CPP_BUILD_TESTS OFF)
+ FetchContent_MakeAvailable(yaml-cpp)
+@@ -359,8 +357,7 @@ if(USE_STANDALONE)
+ 	if(NOT spdlog_FOUND)
+ 		FetchContent_Declare(
+ 			spdlog
+-			GIT_REPOSITORY https://github.com/gabime/spdlog.git
+-			GIT_TAG 79524ddd08a4ec981b7fea76afd08ee05f83755d
++            URL @spdlog_src@
+ 		)
+ 
+ 		FetchContent_MakeAvailable(spdlog)
+@@ -402,14 +399,14 @@ endif()
+ set(tinyxml2_BUILD_TESTING OFF)
+ FetchContent_Declare(
+     tinyxml2
+-    GIT_REPOSITORY https://github.com/leethomason/tinyxml2.git
+-    GIT_TAG 10.0.0
++    URL @tinyxml2_src@
+     OVERRIDE_FIND_PACKAGE
+ )
+ FetchContent_MakeAvailable(tinyxml2)
+ 
+ # Link zlib
+-if(EMSCRIPTEN OR ANDROID)
++option(USE_SYSTEM_ZLIB OFF)
++if(USE_SYSTEM_ZLIB OR EMSCRIPTEN OR ANDROID)
+     find_package(ZLIB REQUIRED)
+     set(TORCH_ZLIB_TARGET ZLIB::ZLIB)
+ else()
+@@ -420,8 +417,7 @@ else()
+ 
+     FetchContent_Declare(
+         zlib
+-        GIT_REPOSITORY https://github.com/madler/zlib.git
+-        GIT_TAG v1.3.1
++        URL @zlib_src@
+         OVERRIDE_FIND_PACKAGE
+     )
+     FetchContent_MakeAvailable(zlib)
