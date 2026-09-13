@@ -14,6 +14,7 @@
   libusb1,
   makeWrapper,
   neon,
+  glib,
   net-snmp,
   openssl,
   pkg-config,
@@ -49,11 +50,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nut";
-  version = "2.8.4";
+  version = "2.8.5";
 
   src = fetchurl {
     url = "https://networkupstools.org/source/${lib.versions.majorMinor finalAttrs.version}/nut-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-ATC6gup58Euk80xSSahZQ5d+/ZhO199q7BpRjVo1lPg=";
+    sha256 = "sha256-GL8y5Z63ZLE9o8T6cDhJJtf6WEyzHS/n8TelcGM+7sE=";
   };
 
   patches = [
@@ -73,12 +74,15 @@ stdenv.mkDerivation (finalAttrs: {
       libmodbus = "${modbus}/lib";
       netsnmp = "${net-snmp.lib}/lib";
     })
+    # Vendored until https://github.com/networkupstools/nut/pull/3499 merges upstream
+    ./CVE-2026-54161.patch
   ];
 
   buildInputs = [
     avahi
     freeipmi
     gd
+    glib
     libtool
     libusb1
     modbus
@@ -109,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-systemdsystemunitdir=$(out)/lib/systemd/system"
     "--with-systemdshutdowndir=$(out)/lib/systemd/system-shutdown"
     "--with-systemdtmpfilesdir=$(out)/lib/tmpfiles.d"
+    "--with-systemdsysusersdir=$(out)/lib/sysusers.d/"
     "--with-udev-dir=$(out)/etc/udev"
     "--with-user=nutmon"
     "--with-group=nutmon"
