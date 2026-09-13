@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch,
   versionCheckHook,
   _experimental-update-script-combinators,
   nix-update-script,
@@ -18,6 +19,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-XyVWNhVDo190/hnKj6A5dDYnlO9/WI0GYJIrkyfUkTw=";
   };
+
+  patches = [
+    # Fix test for Rust 1.98: https://github.com/rust-lang/rust/pull/155527
+    (fetchpatch {
+      name = "update-snapshot-for-rust-1.98.patch";
+      url = "https://github.com/g-plane/wasm-language-tools/commit/d7cabdba9fa90ec74a461dcc6b470288184d6c86.patch";
+      hash = "sha256-dPPMebvNVVtFTURsxGGHTwZ6SM3CDMlZucENzwOO6/4=";
+    })
+  ];
 
   cargoHash = "sha256-VoApXHdD8SF8ZqnDVynxunjVoZ5WKai2Xzw0UYy7hSg=";
 
