@@ -72,6 +72,14 @@ callPackage ../nginx/generic.nix args rec {
       --replace-fail "'bin/nginx'" "'$out/bin/nginx'"
   '';
 
+  stripDebugList = [
+    "nginx/bin"
+    "luajit/bin"
+    "luajit/lib"
+    "lualib"
+    "modules"
+  ];
+
   passthru = {
     tests = {
       inherit (nixosTests) openresty-lua;
