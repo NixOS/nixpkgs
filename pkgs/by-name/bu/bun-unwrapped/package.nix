@@ -1,27 +1,24 @@
 {
   lib,
   stdenv,
-  stdenvNoCC,
+  buildPackages,
+  pkgsBuildBuild,
   callPackage,
   runCommand,
   symlinkJoin,
   fetchFromGitHub,
   fetchurl,
-  autoPatchelfHook,
   installShellFiles,
-  unzip,
-  cacert,
   cmake,
   ninja,
   go,
   perl,
-  git,
+  gitMinimal,
   nasm,
   rustc,
   cargo,
   rustPlatform,
   llvmPackages,
-  openssl,
   icu,
   sqlite,
   cctools,
@@ -41,12 +38,14 @@ let
     version
     ;
 
-  isLinux = stdenv.hostPlatform.isLinux;
-  isDarwin = stdenv.hostPlatform.isDarwin;
-  isMusl = stdenv.hostPlatform.isMusl;
-  platformKey = stdenv.hostPlatform.system + lib.optionalString isMusl "-musl";
-  # Bun's toolchain override searches one bin directory. Keep Nix's Clang
-  # wrapper while supplying the remaining LLVM tools from their separate outputs.
+  inherit (stdenv) buildPlatform hostPlatform;
+  inherit (hostPlatform) isDarwin isLinux isMusl;
+  isCross = buildPlatform != hostPlatform;
+  bootstrapPlatformKey = buildPlatform.system + lib.optionalString buildPlatform.isMusl "-musl";
+  hostClang = pkgsBuildBuild.llvmPackages.clang;
+
+  # Bun checks the LLVM major in scripts/build/tools.ts. Review llvmPackages when
+  # it changes. The override accepts one bin directory, so join the LLVM outputs.
   llvmToolchain = symlinkJoin {
     name = "bun-llvm-toolchain";
     paths = [
@@ -57,15 +56,16 @@ let
   };
 
   bootstrapAsset =
-    bootstrapAssets.${platformKey} or (throw "Unsupported Bun bootstrap platform: ${platformKey}");
+    bootstrapAssets.${bootstrapPlatformKey}
+      or (throw "Unsupported Bun bootstrap platform: ${bootstrapPlatformKey}");
 
-  # bun install selects native packages such as esbuild for the host platform.
-  # Linux installs keep both glibc and musl variants, so the hash only differs
-  # by system and CPU architecture.
+  # Node modules contain build-time tools such as esbuild, so select them for
+  # the platform that runs the build. Linux installs include both libc variants.
   nodeModulesHash =
-    nodeModulesHashes.${stdenv.hostPlatform.system}
-      or (throw "Unsupported Bun node_modules platform: ${stdenv.hostPlatform.system}");
+    nodeModulesHashes.${buildPlatform.system}
+      or (throw "Unsupported Bun node_modules platform: ${buildPlatform.system}");
 
+  # macOS libicucore lacks _ubrk_clone. Use Nix ICU until Bun stops needing it.
   fixDarwinBinary =
     binary:
     lib.optionalString isDarwin ''
@@ -93,7 +93,7 @@ let
   # Bun stores prefetched archives under the first 32 characters of SHA-256(url).
   cacheKey = download: builtins.substring 0 32 (builtins.hashString "sha256" download.url);
 
-  bootstrap = stdenvNoCC.mkDerivation {
+  bootstrap = buildPackages.stdenvNoCC.mkDerivation {
     pname = "bun-bootstrap";
     inherit version;
 
@@ -105,19 +105,14 @@ let
 
     strictDeps = true;
     nativeBuildInputs = [
-      unzip
+      buildPackages.unzip
     ]
-    ++ lib.optionals isLinux [ autoPatchelfHook ]
-    ++ lib.optionals isDarwin [
-      cctools
-      rcodesign
+    ++ lib.optional buildPlatform.isLinux buildPackages.patchelf
+    ++ lib.optionals buildPlatform.isDarwin [
+      buildPackages.cctools
+      buildPackages.rcodesign
     ];
-    buildInputs =
-      lib.optionals isLinux [
-        openssl
-        stdenv.cc.cc.lib
-      ]
-      ++ lib.optionals isDarwin [ darwin.ICU ];
+    buildInputs = lib.optional buildPlatform.isDarwin buildPackages.darwin.ICU;
 
     dontConfigure = true;
     dontBuild = true;
@@ -130,17 +125,36 @@ let
       runHook postInstall
     '';
 
-    postFixup = fixDarwinBinary "$out/bin/bun";
+    # The bootstrap runs on buildPlatform, so use buildPackages for its fixups.
+    postFixup =
+      lib.optionalString buildPlatform.isLinux ''
+        if patchelf --print-interpreter "$out/bin/bun" >/dev/null 2>&1; then
+          patchelf \
+            --set-interpreter '${buildPackages.stdenv.cc.bintools.dynamicLinker}' \
+            "$out/bin/bun"
+        fi
+      ''
+      + lib.optionalString buildPlatform.isDarwin ''
+        '${lib.getExe' buildPackages.cctools "${buildPackages.cctools.targetPrefix}install_name_tool"}' \
+          "$out/bin/bun" \
+          -change /usr/lib/libicucore.A.dylib \
+          '${lib.getLib buildPackages.darwin.ICU}/lib/libicucore.A.dylib'
+        '${lib.getExe buildPackages.rcodesign}' sign \
+          --code-signature-flags linker-signed \
+          "$out/bin/bun"
+      '';
   };
 
-  nodeModules = stdenvNoCC.mkDerivation {
+  # Keep these directories in sync with NODE_MODULE_DIRS in update.py and
+  # emitPackageInstall() calls in upstream codegen.ts.
+  nodeModules = buildPackages.stdenvNoCC.mkDerivation {
     pname = "bun-node-modules";
     inherit version src;
 
     strictDeps = true;
     nativeBuildInputs = [
       bootstrap
-      cacert
+      buildPackages.cacert
     ];
     dontConfigure = true;
     dontFixup = true;
@@ -184,6 +198,8 @@ let
     '') downloads}
   '';
 
+  # Bun overwrites .cargo/config.toml. Put the vendor config in CARGO_HOME
+  # instead of using cargoSetupHook.
   cargoDeps = rustPlatform.fetchCargoVendor {
     pname = "bun-cargo-deps";
     inherit version src;
@@ -197,14 +213,23 @@ stdenv.mkDerivation {
   __structuredAttrs = true;
 
   patches = [
-    # Keep dependency installation offline and adapt ABI and toolchain settings.
+    # Review after upstream changes dependency installs, Linux targets, Rust
+    # release flags, or host tool discovery.
     ./support-nix-build-environment.patch
 
-    # Link the WebKit libraries built by the separate derivation.
+    # Keep this bridge in sync with build() and provides() in webkit.ts.
     ./use-nix-webkit.patch
   ];
 
-  disallowedReferences = [ bun-webkit ];
+  disallowedReferences = [
+    bootstrap
+    bun-webkit
+  ];
+
+  depsBuildBuild = lib.optionals (isLinux && isCross) [
+    pkgsBuildBuild.stdenv.cc
+    hostClang
+  ];
 
   nativeBuildInputs = [
     bootstrap
@@ -213,7 +238,7 @@ stdenv.mkDerivation {
     ninja
     go
     perl
-    git
+    gitMinimal
     nasm
     llvmPackages.clang
     llvmPackages.llvm
@@ -274,7 +299,12 @@ stdenv.mkDerivation {
       ++ lib.optionals isDarwin [ "-rename_segment __DATA_DIRTY __DATA" ]
     );
     BUN_WEBKIT_DIR = bun-webkit;
-    BUN_NIX_ABI = lib.optionalString isLinux (if isMusl then "musl" else "gnu");
+    BUN_NIX_BUILD_ABI = lib.optionalString buildPlatform.isLinux (
+      if buildPlatform.isMusl then "musl" else "gnu"
+    );
+    BUN_NIX_CROSS = lib.optionalString (isLinux && isCross) "1";
+    BUN_NIX_HOST_CC = lib.optionalString isCross "${hostClang}/bin/clang";
+    BUN_NIX_HOST_CXX = lib.optionalString isCross "${hostClang}/bin/clang++";
 
     # Upstream uses nightly-only Rust compiler options.
     RUSTC_BOOTSTRAP = 1;
@@ -310,6 +340,8 @@ stdenv.mkDerivation {
     runHook preBuild
 
     buildArgs=(
+      --os=${hostPlatform.parsed.kernel.name}
+      --arch=${if hostPlatform.isAarch64 then "aarch64" else "x64"}
       --profile=release
       --canary=off
       --webkit=local
@@ -340,7 +372,7 @@ stdenv.mkDerivation {
 
   postFixup = fixDarwinBinary "$out/bin/bun";
 
-  doInstallCheck = true;
+  doInstallCheck = buildPlatform.canExecute hostPlatform;
   __darwinAllowLocalNetworking = true;
   installCheckPhase = ''
     runHook preInstallCheck

@@ -1,5 +1,5 @@
 diff --git a/scripts/build/codegen.ts b/scripts/build/codegen.ts
-index 36566f1..4051819 100644
+index 36566f1e..4051819d 100644
 --- a/scripts/build/codegen.ts
 +++ b/scripts/build/codegen.ts
 @@ -160,7 +160,7 @@ export function registerCodegenRules(n: Ninja, cfg: Config): void {
@@ -12,20 +12,38 @@ index 36566f1..4051819 100644
      restat: true,
      // bun install can be memory-hungry and grabs a lockfile; serialize.
 diff --git a/scripts/build/config.ts b/scripts/build/config.ts
-index 671839b..01ba2c7 100644
+index 671839b7..aa669b3d 100644
 --- a/scripts/build/config.ts
 +++ b/scripts/build/config.ts
 @@ -523,6 +523,8 @@ export function detectHost(): Host {
   * so it must be requested explicitly via --abi=android.
   */
  export function detectLinuxAbi(): Abi {
-+  const nixAbi = process.env.BUN_NIX_ABI;
++  const nixAbi = process.env.BUN_NIX_BUILD_ABI;
 +  if (nixAbi === "musl" || nixAbi === "gnu") return nixAbi;
    return existsSync("/etc/alpine-release") ? "musl" : "gnu";
  }
 
+@@ -1020,7 +1022,7 @@ export function resolveConfig(partial: PartialConfig, toolchain: Toolchain): Con
+       sysroot = detectLinuxMuslSysroot(arch);
+       if (sysroot !== undefined || isCross) {
+         crossTarget = `${llvmArch}-alpine-linux-musl`;
+-        if (sysroot === undefined) {
++        if (sysroot === undefined && process.env.BUN_NIX_CROSS !== "1") {
+           const p = arch === "aarch64" ? "/opt/linux-sysroot-musl-arm64" : "/opt/linux-sysroot-musl";
+           throw new BuildError(`--os=linux --arch=${arch} --abi=musl requires a musl sysroot when cross-compiling`, {
+             hint: `Set LINUX_MUSL_SYSROOT or provision ${p} (see install_linux_musl_sysroot() in scripts/bootstrap.sh).`,
+@@ -1036,7 +1038,7 @@ export function resolveConfig(partial: PartialConfig, toolchain: Toolchain): Con
+           : detectLinuxGlibcSysroot(arch);
+       if (sysroot !== undefined || isCross) {
+         crossTarget = `${llvmArch}-linux-gnu`;
+-        if (sysroot === undefined) {
++        if (sysroot === undefined && process.env.BUN_NIX_CROSS !== "1") {
+           const p = arch === "aarch64" ? "/opt/linux-sysroot-glibc-arm64" : "/opt/linux-sysroot-glibc";
+           throw new BuildError(`--os=linux --arch=${arch} --abi=gnu cross-compile requires a glibc sysroot`, {
+             hint: `Set LINUX_GLIBC_SYSROOT or provision ${p} (see install_linux_glibc_sysroot() in scripts/bootstrap.sh).`,
 diff --git a/scripts/build/flags.ts b/scripts/build/flags.ts
-index 0b37756..e5b9347 100644
+index 0b377562..e5b93471 100644
 --- a/scripts/build/flags.ts
 +++ b/scripts/build/flags.ts
 @@ -1086,14 +1086,6 @@ export const linkerFlags: Flag[] = [
@@ -44,7 +62,7 @@ index 0b37756..e5b9347 100644
      // Cross-link from a non-darwin host: same pattern as Android/FreeBSD —
      // target triple + explicit linker. -isysroot is added by the deployment-
 diff --git a/scripts/build/rust.ts b/scripts/build/rust.ts
-index 5e4fa5c..ee32435 100644
+index 5e4fa5c5..ee324357 100644
 --- a/scripts/build/rust.ts
 +++ b/scripts/build/rust.ts
 @@ -333,14 +333,9 @@ export function cargoBuildInvocation(cfg: Config): CargoInvocation {
@@ -72,3 +90,20 @@ index 5e4fa5c..ee32435 100644
    // Match the C/C++ side's `-fno-pic` / `-Wl,-no-pie` (flags.ts:929,1001) on
    // the targets where bun links as a position-dependent ET_EXEC. With the
    // default `pic`, every Rust `&'static [T]` / `&'static str` / vtable is a
+diff --git a/scripts/build/tools.ts b/scripts/build/tools.ts
+index 4aa4474b..a3a061cf 100644
+--- a/scripts/build/tools.ts
++++ b/scripts/build/tools.ts
+@@ -484,9 +484,9 @@ export function resolveLlvmToolchain(
+   // host, cc/cxx are clang-cl (which defaults to a *-windows-msvc triple,
+   // emits COFF, and can't drive an ELF link) — host tools must stay on plain
+   // clang/clang++.
+-  let hostCc: string | undefined;
+-  let hostCxx: string | undefined;
+-  if (msvcTarget && os !== "windows") {
++  let hostCc = process.env.BUN_NIX_HOST_CC || undefined;
++  let hostCxx = process.env.BUN_NIX_HOST_CXX || undefined;
++  if (hostCc === undefined && hostCxx === undefined && msvcTarget && os !== "windows") {
+     hostCc = findLlvmTool("clang", paths, os, { checkVersion: false, required: true })?.path;
+     hostCxx = findLlvmTool("clang++", paths, os, { checkVersion: false, required: true })?.path;
+   }
