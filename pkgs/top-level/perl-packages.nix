@@ -3676,7 +3676,7 @@ with self;
       TaskWeaken
       TextSimpleTable
       TreeSimpleVisitorFactory
-      URIws
+      URI
     ];
     meta = {
       description = "Catalyst Framework Runtime";
@@ -25408,7 +25408,6 @@ with self;
       IOAsync
       ProtocolWebSocket
       URI
-      URIws
       meta
     ];
     preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -37972,24 +37971,6 @@ with self;
     };
   };
 
-  URIws = buildPerlPackage {
-    pname = "URI-ws";
-    version = "0.03";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PL/PLICEASE/URI-ws-0.03.tar.gz";
-      hash = "sha256-bmsOQXKstqU8IiY5wABgjC3WHVCEhkdIKshgDVDlQe8=";
-    };
-    propagatedBuildInputs = [ URI ];
-    meta = {
-      description = "WebSocket support for URI package";
-      homepage = "http://perl.wdlabs.com/URI-ws";
-      license = with lib.licenses; [
-        artistic1
-        gpl1Plus
-      ];
-    };
-  };
-
   UUID4Tiny = buildPerlPackage {
     pname = "UUID4-Tiny";
     version = "0.003";
@@ -39842,4 +39823,5 @@ with self;
   pcscperl = throw "'pcscperl' has been renamed to 'ChipcardPCSC'"; # Added 2023-12-07
   HTTPHeaderParserXS = throw "HTTPHeaderParserXS has been removed"; # Added 2025-11-08
   SDL = throw "'SDL' has been removed as it was broken and unused"; # Added 2026-05-17
+  URIws = throw "'URIws' has been removed"; # 2026-09-14
 }
