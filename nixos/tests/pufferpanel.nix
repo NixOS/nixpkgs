@@ -9,31 +9,35 @@
       environment.systemPackages = [ pkgs.pufferpanel ];
       services.pufferpanel = {
         enable = true;
-        extraPackages = [ pkgs.netcat ];
+        extraPackages = [
+          pkgs.netcat
+          pkgs.bash
+        ];
         environment = {
           PUFFER_PANEL_REGISTRATIONENABLED = "false";
           PUFFER_PANEL_SETTINGS_COMPANYNAME = "NixOS";
+          PUFFER_SECURITY_DISABLEUNSHARE = "true";
         };
       };
     };
 
   testScript = ''
-    import shlex
     import json
 
     curl = "curl --fail-with-body --silent"
     baseURL = "http://localhost:8080"
     adminName = "admin"
     adminEmail = "admin@nixos.org"
-    adminPass = "admin"
+    adminPass = "admin1234"
     adminCreds = json.dumps({
       "email": adminEmail,
       "password": adminPass,
     })
     stopCode = 9 # SIGKILL
     serverPort = 1337
+    serverName = "netcat"
     serverDefinition = json.dumps({
-      "name": "netcat",
+      "name": serverName,
       "node": 0,
       "users": [
         adminName,
@@ -64,14 +68,11 @@
 
     machine.succeed(f"pufferpanel --workDir /var/lib/pufferpanel user add --admin --name {adminName} --email {adminEmail} --password {adminPass}")
 
-    resp = json.loads(machine.succeed(f"{curl} -d '{adminCreds}' {baseURL}/auth/login"))
-    assert "servers.admin" in resp["scopes"], "User is not administrator"
-    token = resp["session"]
-    authHeader = shlex.quote(f"Authorization: Bearer {token}")
+    resp = json.loads(machine.succeed(f"{curl} -c cookie.txt -d '{adminCreds}' {baseURL}/auth/login"))
+    assert "admin" in resp["scopes"], "User is not administrator"
 
-    resp = json.loads(machine.succeed(f"{curl} -H {authHeader} -H 'Content-Type: application/json' -d '{serverDefinition}' {baseURL}/api/servers"))
-    serverID = resp["id"]
-    machine.succeed(f"{curl} -X POST -H {authHeader} {baseURL}/proxy/daemon/server/{serverID}/start")
+    resp = json.loads(machine.succeed(f"{curl} -X PUT -b cookie.txt -H 'Content-Type: application/json' -d '{serverDefinition}' {baseURL}/api/servers/{serverName}"))
+    machine.succeed(f"{curl} -X POST -b cookie.txt {baseURL}/api/servers/{serverName}/start")
     machine.wait_for_open_port(serverPort)
   '';
 }
