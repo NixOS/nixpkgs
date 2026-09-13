@@ -72,6 +72,9 @@ lib.extendMkDerivation {
         flutterFlags = flutterFlags;
         flutterBuildFlags = flutterBuildFlags';
 
+        strictDeps = true;
+        __structuredAttrs = true;
+
         sdkSetupScript = ''
           # Pub needs SSL certificates. Dart normally looks in a hardcoded path.
           # https://github.com/dart-lang/sdk/blob/3.1.0/runtime/bin/security_context_linux.cc#L48
@@ -180,6 +183,10 @@ lib.extendMkDerivation {
 
       linux = universal // {
         outputs = universal.outputs or [ ] ++ [ "debug" ];
+
+        depsBuildBuild = [
+          pkg-config
+        ];
 
         nativeBuildInputs = (universal.nativeBuildInputs or [ ]) ++ [
           wrapGAppsHook3
