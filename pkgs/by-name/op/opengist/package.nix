@@ -6,8 +6,11 @@
   fetchFromGitHub,
   moreutils,
   jq,
-  git,
+  gitMinimal,
   writableTmpDirAsHomeHook,
+  makeWrapper,
+  nixosTests,
+  formats,
 }:
 
 buildGoModule (finalAttrs: {
@@ -48,8 +51,12 @@ buildGoModule (finalAttrs: {
     "-X github.com/thomiceli/opengist/internal/config.OpengistVersion=v${finalAttrs.version}"
   ];
 
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
   nativeCheckInputs = [
-    git
+    gitMinimal
     writableTmpDirAsHomeHook
   ];
 
@@ -69,9 +76,25 @@ buildGoModule (finalAttrs: {
     cp -R ${finalAttrs.frontend}/public/assets public/
   '';
 
+  postInstall = ''
+    wrapProgram $out/bin/opengist \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          gitMinimal
+        ]
+      }
+  '';
+
   passthru = {
     inherit (finalAttrs) frontend;
     updateScript = ./update.sh;
+    tests = nixosTests.opengist-modular;
+    services.default = {
+      imports = [
+        (lib.modules.importApply ./service.nix { inherit formats; })
+      ];
+      opengist.package = lib.mkDefault finalAttrs.finalPackage;
+    };
   };
 
   meta = {
