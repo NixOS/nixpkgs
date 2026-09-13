@@ -23,7 +23,7 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-X=github.com/SpecterOps/AzureHound/v${(lib.versions.major finalAttrs.version)}/constants.Version=${finalAttrs.version}"
+    "-X=github.com/SpecterOps/AzureHound/v2/constants/misc.Version=${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
