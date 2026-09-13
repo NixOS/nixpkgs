@@ -42,5 +42,9 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "i686-linux"
     ];
+    # upstream it87.c uses the single-argument class_create(), which requires
+    # Linux 6.4+ (the owner parameter was removed in 6.4), and
+    # DEFINE_SIMPLE_DEV_PM_OPS which does not exist on 5.10.
+    broken = lib.versionOlder kernel.version "6.4";
   };
 }
