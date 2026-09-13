@@ -30,6 +30,8 @@ stdenv.mkDerivation {
     libgpg-error
   ];
 
+  strictDeps = true;
+
   installPhase = ''
     runHook preInstall
 
@@ -38,4 +40,6 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
+  __structuredAttrs = true;
 }
