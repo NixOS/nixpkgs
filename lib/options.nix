@@ -652,11 +652,11 @@ rec {
           let
             doc = optionToDocItem tree;
             visible = tree.visible or true;
-            ss = tree.type.getSubOptions tree.loc;
-            subDocs = if ss != { } then recurse ss else empty;
             subVisible = if isBool visible then visible else visible == "transparent";
+            ss = tree.type.getSubOptions tree.loc;
+            subDocs = if subVisible && ss != { } then recurse ss else empty;
           in
-          onOption doc (if subVisible then subDocs else empty) tree
+          onOption doc subDocs tree
         else
           onAttrSet recurse tree;
     in
@@ -728,14 +728,8 @@ rec {
     options = foldOptionSet {
       onOption =
         doc: subDocs: _:
-        let
-          optDoc = {
-            _type = "option";
-          }
-          // doc;
-        in
-        if subDocs != { } then optDoc // { "*" = subDocs; } else optDoc;
-      onAttrSet = recurse: set: mapAttrs (_: recurse) set;
+        { _type = "option"; } // doc // optionalAttrs (subDocs != { }) { "*" = subDocs; };
+      onAttrSet = recurse: mapAttrs (_: recurse);
       empty = { };
     } options;
     "$defs" = { };
