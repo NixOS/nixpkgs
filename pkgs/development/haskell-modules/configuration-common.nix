@@ -1593,6 +1593,10 @@ with haskellLib;
   # https://github.com/raehik/rerefined/issues/2
   rerefined = doJailbreak super.rerefined;
 
+  # 2026-09-13: allow QuickCheck 2.16
+  # https://github.com/muesli4/table-layout/issues/62
+  table-layout = doJailbreak super.table-layout;
+
   # 2026-05-17: allow QuickCheck 2.16
   # https://github.com/haskell-hvr/uuid/issues/101
   uuid = doJailbreak super.uuid;
