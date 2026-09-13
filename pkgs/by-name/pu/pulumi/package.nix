@@ -17,18 +17,18 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "pulumi";
-  version = "3.255.0";
+  version = "3.262.0";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G1AC+vPxCJRt6Iv82Y37rONgeE9E3eiEZdrqRBc4Gcs=";
+    hash = "sha256-83C6mxVGK/zTSz8UF1G/+ZGUS8KElbGd7Q2jwMfOw/8=";
     # Some tests rely on checkout directory name
     name = "pulumi";
   };
 
-  vendorHash = "sha256-aUnqpnf1Svy8hbp6s+sZvQ5sA3FSt59VnhuVyoggi2s=";
+  vendorHash = "sha256-Ws4PDqUnSdHVASUHY399AblLVZQ+ILKp2PrvHueAm/4=";
 
   sourceRoot = "${finalAttrs.src.name}/pkg";
 
@@ -105,6 +105,15 @@ buildGoModule (finalAttrs: {
         # Requires pulumi-yaml
         "TestProjectNameDefaults"
         "TestProjectNameOverrides"
+        "TestGuidedNewAcceptSkipsAllPrompts"
+        "TestGuidedNewDeclineRepromptsPrefilled"
+        "TestGuidedNewDeclineDoesNotReofferFlagConfig"
+        "TestGuidedNewNoDefaultConfigAskedBeforeBlock"
+        "TestGuidedNewSecretConfigIsMaskedAndEncrypted"
+        "TestGuidedNewCollidingDefaultNameAsksThenConfirms"
+        "TestGuidedNewExistingStackNameAsksBeforeBlock"
+        "TestGeneratingProjectWithExistingArgsSpecifiedNameSucceeds"
+        "TestGeneratingProjectWithExistingPromptedNameSucceeds"
 
         # Downloads pulumi-resource-random from Pulumi plugin registry.
         "TestPluginInstallCancellation"
@@ -240,6 +249,7 @@ buildGoModule (finalAttrs: {
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.asl20;
     mainProgram = "pulumi";
-    maintainers = lib.teams.pulumi.members;
+    maintainers = [ lib.maintainers.wrbbz ];
+    teams = [ lib.teams.pulumi ];
   };
 })
