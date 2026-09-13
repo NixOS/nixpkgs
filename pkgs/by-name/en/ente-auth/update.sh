@@ -5,7 +5,7 @@ set -eou pipefail
 pkg_dir="$(dirname "$0")"
 
 gh-curl () {
-  curl --silent ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} "$1"
+  curl --location --silent ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} "$1"
 }
 
 version="$(gh-curl "https://api.github.com/repos/ente-io/ente/releases" | gojq 'map(select(.draft == false and .prerelease == false and (.tag_name | startswith("auth-v")))) | first | .tag_name' --raw-output)"
@@ -20,19 +20,13 @@ echo "Updating to $short_version"
 mobile_tree="$(gh-curl "https://api.github.com/repos/ente-io/ente/git/trees/$version" | gojq '.tree[] | select(.path == "mobile") | .url' --raw-output)"
 apps_tree="$(gh-curl "$mobile_tree" | gojq '.tree[] | select(.path == "apps") | .url' --raw-output)"
 auth_tree="$(gh-curl "$apps_tree" | gojq '.tree[] | select(.path == "auth") | .url' --raw-output)"
-packages_tree="$(gh-curl "$mobile_tree" | gojq '.tree[] | select(.path == "packages") | .url' --raw-output)"
-strings_tree="$(gh-curl "$packages_tree" | gojq '.tree[] | select(.path == "strings") | .url' --raw-output)"
 
 pushd "$pkg_dir"
 
 # Get lockfile and convert to JSON
 echo "Updating lockfile"
-pubspec_lock="$(gh-curl "$auth_tree" | gojq '.tree[] | select(.path == "pubspec.lock") | .url' --raw-output)"
+pubspec_lock="$(gh-curl "$mobile_tree" | gojq '.tree[] | select(.path == "pubspec.lock") | .url' --raw-output)"
 gh-curl "$pubspec_lock" | gojq '.content | @base64d' --raw-output | gojq --yaml-input > pubspec.lock.json
-
-echo "Updating strings lockfile"
-strings_pubspec_lock="$(gh-curl "$strings_tree" | gojq '.tree[] | select(.path == "pubspec.lock") | .url' --raw-output)"
-gh-curl "$strings_pubspec_lock" | gojq '.content | @base64d' --raw-output | gojq --yaml-input > strings.pubspec.lock.json
 
 echo "Updating git hashes"
 ./fetch-git-hashes.py
