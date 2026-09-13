@@ -13,14 +13,14 @@ in
 python.pkgs.toPythonModule (
   python.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2026-09-01";
+    version = "0-unstable-2026-09-12";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "79c8ffe0da5d75e48dbd55d505adab5d0ca554b9";
-      hash = "sha256-lxxO1wcZ9RDnw/28mVaT4oGGWkw5yEaeagcCdnlEInI=";
+      rev = "d4f00d15d4c2b8260124a9039b80bc9c1c26499b";
+      hash = "sha256-N5sCetc2JEnKl9eZn2HtJ4QP3TAH9h75/lmqqSWpPSg=";
     };
 
     nativeBuildInputs = with python.pkgs; [ pythonRelaxDepsHook ];
@@ -48,33 +48,26 @@ python.pkgs.toPythonModule (
 
     build-system = with python.pkgs; [ setuptools ];
 
-    dependencies =
-      with python.pkgs;
-      [
-        babel
-        certifi
-        cloudscraper
-        flask
-        flask-babel
-        httpx
-        httpx-socks
-        isodate
-        jinja2
-        lxml
-        markdown-it-py
-        msgspec
-        pygments
-        python-dateutil
-        pyyaml
-        sniffio
-        typer
-        typing-extensions
-        valkey
-        whitenoise
-      ]
-      ++ httpx.optional-dependencies.http2
-      ++ httpx.optional-dependencies.socks
-      ++ httpx-socks.optional-dependencies.asyncio;
+    dependencies = with python.pkgs; [
+      babel
+      certifi
+      cloudscraper
+      curl-cffi
+      flask
+      flask-babel
+      isodate
+      jinja2
+      lxml
+      markdown-it-py
+      msgspec
+      pygments
+      python-dateutil
+      pyyaml
+      typer
+      typing-extensions
+      valkey
+      whitenoise
+    ];
 
     # tests try to connect to network
     doCheck = false;
