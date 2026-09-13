@@ -106,6 +106,13 @@ in
 
   src = null;
 
+  patches =
+    base.patches
+    ++
+      # Restore fake libGLESv2.so which is patchelf'd by the chromium derivation
+      lib.optional (lib.versionAtLeast info.version "44")
+        ./0001-Revert-build-stop-shipping-dummy-ANGLE-libs-in-Linux.patch;
+
   postPatch = ''
     mkdir -p third_party/jdk/current/bin
 
@@ -231,12 +238,10 @@ in
     v8_expose_public_symbols = true;
     enable_linux_installer = false;
     enable_pdf_save_to_drive = false;
+    node_openssl_path = "//third_party/boringssl";
   }
   // lib.optionalAttrs (lib.versionOlder info.version "43") {
     enterprise_cloud_content_analysis = false;
-  }
-  // lib.optionalAttrs (lib.versionAtLeast info.version "43") {
-    node_openssl_path = "//third_party/boringssl";
   }
   // {
 
