@@ -63,6 +63,7 @@ do
     "mojo_compiler-$version-py3-none-$wheelTag.whl")
   mojoLldbLibs=$(wheel mojo-lldb-libs "$version" \
     "mojo_lldb_libs-$version-py3-none-$wheelTag.whl")
+  systemJson=$(jq --null-input --compact-output \
     --argjson maxCore "$maxCore" \
     --argjson mojo "$mojo" \
     --argjson mojoCompiler "$mojoCompiler" \

@@ -52,6 +52,24 @@
         "url": "https://files.pythonhosted.org/packages/38/e1/a7c6c73c875f5692587beda9ca68773bae069d60b1c79d9fffd8a2840f4d/mojo_lldb_libs-1.0.0-py3-none-manylinux_2_34_aarch64.whl",
         "hash": "sha256-frHyBIKfAx/ajMnuTn9GHxyj3fHI+1Cavy628Cyd5PU="
       }
+    },
+    "aarch64-darwin": {
+      "maxCore": {
+        "url": "https://files.pythonhosted.org/packages/bc/dd/cc7598a6fe1c8ac924f65c4346619a06fe883a7052df69b752b414208ce2/max_core-26.5.0-py3-none-macosx_13_0_arm64.whl",
+        "hash": "sha256-v1ucV6wBu4rbRri2O5jHV3yho6hwsmdoahqiFCMElsk="
+      },
+      "mojo": {
+        "url": "https://files.pythonhosted.org/packages/e1/f0/80f6d88e19c038b2ef251b137379663a61227d6918602d8d3f702121b7cf/mojo-1.0.0-py3-none-macosx_13_0_arm64.whl",
+        "hash": "sha256-aUE/7pbf1DxJVazlbkuw+JQBCY2vYVOKVjyCVxvJ2YQ="
+      },
+      "mojoCompiler": {
+        "url": "https://files.pythonhosted.org/packages/60/59/c11cf3129d4bc77b1604ac3a84bee51ee1a7cd8a3a8fa25c14528f4bd51e/mojo_compiler-1.0.0-py3-none-macosx_13_0_arm64.whl",
+        "hash": "sha256-UHfuJ8Dfu98TihHsEoOLDT8QFIqHTPlQQMnKIzKuJiI="
+      },
+      "mojoLldbLibs": {
+        "url": "https://files.pythonhosted.org/packages/ee/2c/b862539eb138fdbb934321f11fe13d67ceb0d8bebcc8351bc88b0ca4f8c2/mojo_lldb_libs-1.0.0-py3-none-macosx_13_0_arm64.whl",
+        "hash": "sha256-uPQXw8LGQFjBwRRnCGwuZEZKvNkdupOMZZtJ2UzHXFs="
+      }
     }
   }
 }
