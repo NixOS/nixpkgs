@@ -14,6 +14,7 @@
   version,
   hash,
   versionCheckHook,
+  symlinkJoin,
 
   # downstream dependencies
   python3,
@@ -226,6 +227,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
     inherit abseil-cpp;
+
+    full = symlinkJoin {
+      inherit (finalAttrs.finalPackage) name;
+      paths = finalAttrs.finalPackage.all;
+    };
   };
 
   meta = {
