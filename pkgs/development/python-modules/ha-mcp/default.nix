@@ -31,6 +31,16 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
 
+  # Upstream pins fastmcp==3.4.7. The only API it uses that moved in
+  # FastMCP 4 is ToolResult, now exported from fastmcp.tools.base.
+  postPatch = ''
+    substituteInPlace \
+      src/ha_mcp/tools/tools_config_dashboards.py \
+      src/ha_mcp/tools/tools_dashboard_screenshot.py \
+      src/ha_mcp/visibility/enforcement.py \
+      --replace-fail "from fastmcp.tools.tool import" "from fastmcp.tools.base import"
+  '';
+
   pythonRelaxDeps = true;
 
   dependencies = [
