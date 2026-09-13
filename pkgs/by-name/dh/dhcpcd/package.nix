@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dhcpcd";
-  version = "10.3.1";
+  version = "10.3.2";
 
   src = fetchFromGitHub {
     owner = "NetworkConfiguration";
     repo = "dhcpcd";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-L2rR6/qMHWVth2GR3VAoBZmhA6lmCLddbi0VvEG5r70=";
+    sha256 = "sha256-tJV533j/nQT/PP5KVPJCgTo0Lu8NNMIGnJBvYUG8ufw=";
   };
 
   nativeBuildInputs = [ pkg-config ];
