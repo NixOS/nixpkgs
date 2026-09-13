@@ -101,9 +101,15 @@ stdenv.mkDerivation (finalAttrs: {
     # before we can patchShebangs additional paths (see buildPhase).
     # https://github.com/NixOS/nixpkgs/blob/3cd051861c41df675cee20153bfd7befee120a98/pkgs/by-name/ya/yarn-berry/fetcher/yarn-berry-config-hook.sh#L83
     YARN_ENABLE_SCRIPTS = 0;
+
+    # Use nixpkgs' patched offline Yarn instead of Joplin's vendored Yarn.
+    YARN_IGNORE_PATH = 1;
   };
 
   postPatch = ''
+    # Nixpkgs provides Electron; don't run Joplin's networked Electron installer.
+    sed -i "/^[[:space:]]*'installElectron',$/d" packages/app-desktop/gulpfile.ts
+
     # Don't automatically build everything
     sed -i '/postinstall/d' package.json
     # Don't install onenote-converter subpackage deps
