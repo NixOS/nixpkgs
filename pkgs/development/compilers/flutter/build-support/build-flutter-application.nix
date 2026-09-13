@@ -181,6 +181,10 @@ lib.extendMkDerivation {
       linux = universal // {
         outputs = universal.outputs or [ ] ++ [ "debug" ];
 
+        depsBuildBuild = [
+          pkg-config
+        ];
+
         nativeBuildInputs = (universal.nativeBuildInputs or [ ]) ++ [
           wrapGAppsHook3
 

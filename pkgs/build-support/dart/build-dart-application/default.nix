@@ -79,6 +79,11 @@ lib.extendMkDerivation {
               __structuredAttrs = true;
             } ''yq . '${autoPubspecLock}' > "$out"''
           ),
+
+      strictDeps ? true,
+
+      __structuredAttrs ? true,
+
       ...
     }:
     let
@@ -201,15 +206,25 @@ lib.extendMkDerivation {
           # Ensure that we inherit the propagated build inputs from the dependencies.
           builtins.attrValues pubspecLockData.dependencySources;
 
+      __structuredAttrs =
+        if args.__structuredAttrs or false then
+          lib.warn "Explicitly setting `__structuredAttrs = true;` for Dart/Flutter package ${args.pname}-${args.version} is redundant" __structuredAttrs
+        else
+          __structuredAttrs;
+
+      strictDeps =
+        if args.strictDeps or false then
+          lib.warn "Explicitly setting `strictDeps = true;` for Dart/Flutter package ${args.pname}-${args.version} is redundant" strictDeps
+        else
+          strictDeps;
+
       preConfigure = args.preConfigure or "" + ''
-        ln -sf "$pubspecLockFilePath" pubspec.lock
+        printf "%s" "$pubspecLockFile" > pubspec.lock
       '';
 
       # When stripping, it seems some ELF information is lost and the dart VM cli
       # runs instead of the expected program. Don't strip if it's an exe output.
       dontStrip = args.dontStrip or (dartOutputType == "exe");
-
-      passAsFile = [ "pubspecLockFile" ];
 
       passthru = {
         pubspecLock = pubspecLockData;
