@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 let
   certs = import ./common/acme/server/snakeoil-certs.nix;
   domain = certs.domain;
@@ -48,6 +48,13 @@ in
 
           storage.raft.path = "/var/lib/openbao";
         };
+
+        plugins = with pkgs.openbaoPlugins; [
+          auth-github
+          kms-pkcs11
+          secrets-nomad
+          secrets-oauthapp
+        ];
       };
 
       environment.variables = {
@@ -60,6 +67,10 @@ in
     { nodes, ... }:
     let
       inherit (nodes.machine.services.openbao.settings) listener;
+      # KMS plugins are not part of the plugin catalog.
+      catalogPlugins = map (
+        plugin: ''("${plugin.pluginType}", "${plugin.pluginName}", "v${plugin.version}")''
+      ) (lib.filter (plugin: plugin.pluginType != "kms") nodes.machine.services.openbao.plugins);
     in
     ''
       import json
@@ -104,6 +115,20 @@ in
 
       with subtest("Login with root token"):
         machine.succeed(f"bao login {init_output["root_token"]}")
+
+      with subtest("Check that external plugins are registered"):
+        for type, name, version in [${lib.concatStringsSep ", " catalogPlugins}]:
+          info = json.loads(machine.succeed(f"bao plugin info -version {version} {type} {name}"))
+          assert info["version"] == version, info
+          assert not info["builtin"], info
+
+      with subtest("Enable external plugins"):
+        machine.succeed("bao auth enable github")
+        machine.succeed("bao secrets enable nomad")
+        machine.succeed("bao secrets enable oauthapp")
+        assert "github/" in json.loads(machine.succeed("bao auth list"))
+        secrets = json.loads(machine.succeed("bao secrets list"))
+        assert "nomad/" in secrets and "oauthapp/" in secrets, secrets
 
       with subtest("Enable userpass auth method"):
         machine.succeed("bao auth enable userpass")
