@@ -68,7 +68,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = finalAttrs.src.meta.homepage;
     license = lib.licenses.mit;
     mainProgram = "scenefx";
-    maintainers = with lib.maintainers; [ swarsel ];
+    maintainers = with lib.maintainers; [
+      swarsel
+      yvnth
+    ];
     pkgConfigModules = [ "scenefx-${lib.versions.majorMinor finalAttrs.version}" ];
     platforms = lib.platforms.all;
   };
