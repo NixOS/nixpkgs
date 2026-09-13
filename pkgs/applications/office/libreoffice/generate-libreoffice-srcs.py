@@ -35,11 +35,14 @@ def main():
         url = construct_url(x)
         print('url: {}'.format(url), file=sys.stderr)
 
-        path = download(url, tarball, hash, hashtype)
-        print('path: {}'.format(path), file=sys.stderr)
+        if upstream_sha256:
+            sha256 = upstream_sha256
+        else:
+            path = download(url, tarball, hash, hashtype)
+            print('path: {}'.format(path), file=sys.stderr)
 
-        sha256 = get_sha256(path)
-        print('sha256: {}'.format(sha256), file=sys.stderr)
+            sha256 = get_sha256(path)
+            print('sha256: {}'.format(sha256), file=sys.stderr)
 
         print('  {')
         print('    name = "{}";'.format(tarball))

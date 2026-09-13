@@ -10,7 +10,7 @@ while ! test -f default.nix; do cd ..; done
 NIXPKGS_DIR="$PWD"
 
 new_version="$(
-  list-git-tags --url=https://github.com/CollaboraOnline/online |
+  list-git-tags --url=https://github.com/CollaboraOnline/online.mirror.git |
     grep --perl-regex --only-matching '^coda-\K[0-9.-]+$' |
     sort --version-sort |
     tail -n1

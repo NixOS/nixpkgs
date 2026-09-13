@@ -4,6 +4,7 @@
   cppunit,
   fetchFromGitHub,
   fetchNpmDeps,
+  fetchzip,
   lib,
   libcap,
   libpng,
@@ -25,12 +26,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "collabora-desktop";
-  version = "25.04.9.2-2";
+  version = "26.04.2.4-3";
   src = fetchFromGitHub {
     owner = "CollaboraOnline";
-    repo = "online";
-    tag = "coda-${finalAttrs.version}";
-    hash = "sha256-5SKtZvdtYoAsTlEseGsW+ndnD45bjTga3FPpDEldaRY=";
+    repo = "online.mirror";
+    rev = "coda-${finalAttrs.version}";
+    hash = "sha256-PbtFJnA51rogdmqXgTwOn/FXDcUJ1FhhhNkNDf+CtiE=";
   };
 
   __structuredAttrs = true;
@@ -47,6 +48,19 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs browser/util/*.py coolwsd-systemplate-setup scripts/*
     substituteInPlace configure.ac --replace-fail '/usr/bin/env python3' python3
 
+    # In Nixpkgs, lrelease and lupdate are provided by qttools, not qtbase.
+    # So they won't be found in qtpaths6's QT_BIN_DIR.
+    substituteInPlace configure.ac \
+      --replace-fail 'test -n "$QT_BIN_DIR" -a -x "$QT_BIN_DIR/lrelease"' 'command -v lrelease >/dev/null' \
+      --replace-fail 'LRELEASE="$QT_BIN_DIR/lrelease"' 'LRELEASE="lrelease"' \
+      --replace-fail 'test -n "$QT_BIN_DIR" -a -x "$QT_BIN_DIR/lupdate"' 'command -v lupdate >/dev/null' \
+      --replace-fail 'LUPDATE="$QT_BIN_DIR/lupdate"' 'LUPDATE="lupdate"'
+
+    # Fix tsc-strict not finding tsc
+    substituteInPlace browser/Makefile.am \
+      --replace-warn '$(NODE) $(builddir)/node_modules/.bin/tsc-strict' 'PATH="$(abs_builddir)/node_modules/.bin:$$PATH" $(NODE) $(builddir)/node_modules/.bin/tsc-strict' \
+      --replace-warn 'ci --offline' 'ci --offline && sed -i --follow-symlinks "s|^#!/usr/bin/env node|#!${nodejs}/bin/node|" node_modules/.bin/*'
+
     # workaround for QtWebEngine crash when loading 'cell' cursor
     substituteInPlace browser/css/spreadsheet.css \
       --replace-warn "cursor: cell" "cursor: crosshair"
@@ -54,9 +68,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoreconfHook
+    kdePackages.qttools
     perl
     nodejs
-    npmHooks.npmConfigHook
     pkg-config
     python3
     python3.pkgs.lxml
@@ -104,20 +118,35 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-werror"
     "--enable-silent-rules"
     "--with-lo-path=${finalAttrs.passthru.libreoffice}/lib/collaboraoffice"
-    "--with-lokit-path=${finalAttrs.passthru.libreoffice.src}/include"
+    "--with-lokit-path=${finalAttrs.passthru.libreoffice.src}/engine/include"
     "--enable-silent-rules"
     "--disable-ssl"
     "--with-info-url=https://collaboraoffice.com/"
   ];
+
+  preBuild = ''
+    export npm_config_cache=$(mktemp -d)
+    cp -R ${finalAttrs.env.npmDeps}/. $npm_config_cache/
+    chmod -R +w $npm_config_cache
+  '';
 
   enableParallelBuilding = true;
 
   postInstall = ''
     cp --no-preserve=mode ${finalAttrs.passthru.libreoffice}/lib/collaboraoffice/LICENSE.html $out/LICENSE.html
     python3 scripts/insert-coda-license.py $out/LICENSE.html CODA-THIRDPARTYLICENSES.html
+
+    # Apply official branding
+    cp -a ${finalAttrs.env.brandSrc}/branding* ${finalAttrs.env.brandSrc}/images ${finalAttrs.env.brandSrc}/welcome $out/share/coolwsd/browser/dist/
   '';
 
   env = {
+    brandSrc = fetchzip {
+      url = "https://www.collaboraoffice.com/downloads/collabora-office-brand/collabora-office-brand-26.04.2.3.tar.gz";
+      hash = "sha256-z5nVEhMMBkDpYTF/X24HJj28HvwXjzC7PEIhm7NeAU0=";
+      stripRoot = true;
+    };
+
     npmDeps = fetchNpmDeps {
       unpackPhase = "true";
       # TODO: Use upstream `npm-shrinkwrap.json` once it's fixed
@@ -125,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
       postPatch = ''
         cp ${./package-lock.json} package-lock.json
       '';
-      hash = "sha256-03ycmv27icEASJZCUSz8OqEAOr9MVgEKkfHN4ddbQNg=";
+      hash = "sha256-yQYS/Cm3mq20RDBQGSdpnp+OKdttBul2+95WqH+6W4k=";
     };
 
     npmRoot = "browser";
@@ -135,6 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
     libreoffice = libreoffice-collabora.override {
       variant = "collabora-coda";
       withFonts = true;
+      withJava = false;
     };
 
     updateScript = ./update.sh;
