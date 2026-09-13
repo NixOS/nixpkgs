@@ -47,9 +47,12 @@ flutter332.buildFlutterApplication rec {
     install -Dm644 assets/logo.png $out/share/icons/simple-live-app.png
   '';
 
-  extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : $out/app/simple-live-app/lib
-  '';
+  extraWrapProgramArgs = [
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    "$out/app/simple-live-app/lib"
+  ];
 
   passthru.updateScript = ./update.sh;
 
