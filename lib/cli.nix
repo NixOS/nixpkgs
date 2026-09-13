@@ -208,26 +208,44 @@ rec {
 
     : A function that turns the option argument into a string.
 
+    `detachArg`
+
+    : A function that determines whether the option should be separated from its
+      argument.
+
     # Examples
 
     :::{.example}
-    ## `lib.cli.toCommandLineGNU` usage example
+    ## `lib.cli.toCommandLineGNU` basic usage example
 
     ```nix
-    lib.cli.toCommandLineGNU {} {
+    lib.cli.toCommandLineGNU { } {
       v = true;
-      verbose = [true true false null];
+      verbose = [
+        true
+        true
+        false
+        null
+      ];
       i = ".bak";
-      testsuite = ["unit" "integration"];
-      e = ["s/a/b/" "s/b/c/"];
+      testsuite = [
+        "unit"
+        "integration"
+      ];
+      e = [
+        "s/a/b/"
+        "s/b/c/"
+      ];
       n = false;
-      data = builtins.toJSON {id = 0;};
+      data = builtins.toJSON { id = 0; };
+      s = "";
     }
     => [
       "--data={\"id\":0}"
       "-es/a/b/"
       "-es/b/c/"
       "-i.bak"
+      "-s"
       "--testsuite=unit"
       "--testsuite=integration"
       "-v"
@@ -235,7 +253,107 @@ rec {
       "--verbose"
     ]
     ```
+    :::
 
+    :::{.example}
+    ## `lib.cli.toCommandLineGNU` usage with `detachArg`
+
+    ```nix
+    lib.cli.toCommandLineGNU
+      {
+        detachArg =
+          optionName:
+          builtins.elem optionName [
+            "n"
+            "s"
+          ];
+      }
+      {
+        v = true;
+        verbose = [
+          true
+          true
+          false
+          null
+        ];
+        i = ".bak";
+        testsuite = [
+          "unit"
+          "integration"
+        ];
+        e = [
+          "s/a/b/"
+          "s/b/c/"
+        ];
+        n = false;
+        data = builtins.toJSON { id = 0; };
+        s = "";
+      }
+    => [
+      "--data={\"id\":0}"
+      "-es/a/b/"
+      "-es/b/c/"
+      "-i.bak"
+      "-s"
+      ""
+      "--testsuite=unit"
+      "--testsuite=integration"
+      "-v"
+      "--verbose"
+      "--verbose"
+    ]
+    ```
+    :::
+
+    :::{.example}
+    ## `lib.cli.toCommandLineGNU` usage with `detachArg` for all options
+
+    ```nix
+    lib.cli.toCommandLineGNU
+      {
+        detachArg = _: true;
+      }
+      {
+        v = true;
+        verbose = [
+          true
+          true
+          false
+          null
+        ];
+        i = ".bak";
+        testsuite = [
+          "unit"
+          "integration"
+        ];
+        e = [
+          "s/a/b/"
+          "s/b/c/"
+        ];
+        n = false;
+        data = builtins.toJSON { id = 0; };
+        s = "";
+      }
+    => [
+      "--data"
+      "{\"id\":0}"
+      "-e"
+      "s/a/b/"
+      "-e"
+      "s/b/c/"
+      "-i"
+      ".bak"
+      "-s"
+      ""
+      "--testsuite"
+      "unit"
+      "--testsuite"
+      "integration"
+      "-v"
+      "--verbose"
+      "--verbose"
+    ]
+    ```
     :::
   */
   toCommandLineGNU =
@@ -243,11 +361,18 @@ rec {
       isLong ? optionName: stringLength optionName > 1,
       explicitBool ? false,
       formatArg ? mkValueString,
+      detachArg ? _: false,
     }:
     let
       optionFormat = optionName: {
         option = if isLong optionName then "--${optionName}" else "-${optionName}";
-        sep = if isLong optionName then "=" else "";
+        sep =
+          if detachArg optionName then
+            null
+          else if isLong optionName then
+            "="
+          else
+            "";
         inherit explicitBool formatArg;
       };
     in
