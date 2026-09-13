@@ -24,6 +24,10 @@ buildGo127Module (finalAttrs: {
 
   subPackages = [ "." ];
 
+  # The root package's interrupt tests start a local relay, which needs to bind
+  # a port inside the Darwin sandbox.
+  __darwinAllowLocalNetworking = true;
+
   nativeBuildInputs = [
     installShellFiles
   ];
