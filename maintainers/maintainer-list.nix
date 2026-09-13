@@ -22144,6 +22144,12 @@
     githubId = 16345849;
     name = "Parthiv Seetharaman";
   };
+  padowyt2 = {
+    email = "me@padow.dev";
+    github = "PadowYT2";
+    githubId = 71085027;
+    name = "PadowYT2";
+  };
   paepcke = {
     email = "git@paepcke.de";
     github = "paepckehh";
