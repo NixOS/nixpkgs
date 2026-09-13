@@ -308,9 +308,11 @@ makeScopeWithSplicing' {
           && stdenv.targetPlatform.useLLVM or false
         ) "-lunwind"
         ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
-        nixSupport.cc-ldflags = lib.optionals (
-          !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
-        ) [ "-L${targetLlvmPackages.libunwind}/lib" ];
+        nixSupport.cc-ldflags =
+          lib.optionals (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD) [
+            "-L${targetLlvmPackages.libunwind}/lib"
+          ]
+          ++ lib.optional stdenv.targetPlatform.isMinGW "-L${targetLlvmPackages.compiler-rt}/lib";
       };
 
       clangWithLibcAndBasicRtAndLibcxx = wrapCCWith rec {
@@ -424,6 +426,11 @@ makeScopeWithSplicing' {
 
       compiler-rt-no-libc = callPackage ./compiler-rt {
         doFakeLibgcc = stdenv.hostPlatform.useLLVM or false;
+        # This runtime is used to bootstrap the libc-capable toolchain.  Keep
+        # atomics in builtins.a until that toolchain can link the shared atomic
+        # runtime against libc (and pthreads, when enabled).
+        withAtomicsLib = false;
+        withAtomicsPthread = false;
         stdenv =
           # Darwin needs to use a bootstrap stdenv to avoid an infinite recursion when cross-compiling.
           if stdenv.hostPlatform.isDarwin then
