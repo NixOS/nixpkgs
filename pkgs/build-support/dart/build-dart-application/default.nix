@@ -64,7 +64,7 @@ lib.extendMkDerivation {
           null,
 
       runtimeDependencies ? [ ],
-      extraWrapProgramArgs ? "",
+      extraWrapProgramArgs ? [ ],
 
       autoPubspecLock ? null,
       pubspecLock ?

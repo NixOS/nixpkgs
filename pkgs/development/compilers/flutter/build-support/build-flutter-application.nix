@@ -49,7 +49,7 @@ lib.extendMkDerivation {
       pubGetScript ? null,
       flutterBuildFlags ? [ ],
       targetFlutterPlatform ? "linux",
-      extraWrapProgramArgs ? "",
+      extraWrapProgramArgs ? [ ],
       flutterMode ? null,
       ...
     }:
@@ -249,9 +249,11 @@ lib.extendMkDerivation {
           '';
 
         dontWrapGApps = true;
-        extraWrapProgramArgs = ''
-          ''${gappsWrapperArgs[@]} \
-          ${extraWrapProgramArgs}
+
+        inherit extraWrapProgramArgs;
+
+        preFixup = ''
+          extraWrapProgramArgs=("''${gappsWrapperArgs[@]}" "''${extraWrapProgramArgs[@]}")
         '';
       };
 
