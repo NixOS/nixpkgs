@@ -1,115 +1,135 @@
 {
   autoPatchelfHook,
-  buildFHSEnv,
-  dpkg,
+  brotli,
+  dbus,
   fetchurl,
-  inotify-tools,
+  fontconfig,
+  freetype,
+  glib,
   lib,
-  stdenvNoCC,
-  sysctl,
-  writeScript,
+  libcap_ng,
+  libdrm,
+  libglvnd,
+  libice,
+  libnl,
+  libsm,
+  libxkbcommon,
+  stdenv,
+  wayland,
+  zlib,
 }:
 
 let
+  version = "14.2.1.13658";
+in
+stdenv.mkDerivation {
   pname = "expressvpn";
-  clientVersion = "3.52.0";
-  clientBuild = "2";
-  version = lib.strings.concatStringsSep "." [
-    clientVersion
-    clientBuild
+  inherit version;
+
+  src = fetchurl {
+    url = "https://www.expressvpn.works/clients/linux/expressvpn-linux-universal-${version}_release.run";
+    hash = "sha256-o9y+sIwcZO7bkhsYwNkdZM3oS5eEQ336dMdmLzDsTDk=";
+  };
+
+  nativeBuildInputs = [ autoPatchelfHook ];
+
+  buildInputs = [
+    stdenv.cc.cc.lib
+    glib
+    libxkbcommon
+    fontconfig
+    freetype
+    libcap_ng
+    dbus
+    zlib
+    brotli
+    libglvnd
+    libdrm
+    wayland
+    libsm
+    libice
   ];
 
-  expressvpnBase = stdenvNoCC.mkDerivation {
-    inherit pname version;
+  # The daemon loads libnl dynamically for network-change monitoring.
+  runtimeDependencies = [ (lib.getLib libnl) ];
 
-    src = fetchurl {
-      url = "https://www.expressvpn.works/clients/linux/expressvpn_${version}-1_amd64.deb";
-      hash = "sha256-cDZ9R+MA3FXEto518bH4/c1X4W9XxgTvXns7zisylew=";
-    };
+  # The archive ships optional QML plugins whose backing Qt libraries are not
+  # bundled. The client does not import these modules.
+  autoPatchelfIgnoreMissingDeps = [
+    "libQt6StateMachineQml.so.6"
+    "libQt6StateMachine.so.6"
+    "libQt6QmlXmlListModel.so.6"
+    "libQt6LabsAnimation.so.6"
+    "libQt6LabsFolderListModel.so.6"
+    "libQt6LabsWavefrontMesh.so.6"
+    "libQt6LabsSharedImage.so.6"
+    "libQt6LabsSettings.so.6"
+    "libQt6LabsQmlModels.so.6"
+    "libQt6Bodymovin.so.6"
+    "libQt6QuickTest.so.6"
+    "libQt6Test.so.6"
+    "libQt6QuickTimeline.so.6"
+    "libQt6QuickParticles.so.6"
+    "libQt6VirtualKeyboard.so.6"
+    "libQt6QmlLocalStorage.so.6"
+    "libQt6Sql.so.6"
+    "libQt6WlShellIntegration.so.6"
+    "libQt6EglFsKmsSupport.so.6"
+    "libQt6EglFSDeviceIntegration.so.6"
+  ];
 
-    nativeBuildInputs = [
-      dpkg
-      autoPatchelfHook
-    ];
-
-    dontConfigure = true;
-    dontBuild = true;
-
-    unpackPhase = ''
-      runHook preUnpack
-      dpkg --fsys-tarfile $src | tar --extract
-      runHook postUnpack
-    '';
-
-    installPhase = ''
-      runHook preInstall
-      mv usr/ $out/
-      runHook postInstall
-    '';
-  };
-
-  expressvpndFHS = buildFHSEnv {
-    inherit version;
-    pname = "expressvpnd";
-
-    # When connected, it directly creates/deletes resolv.conf to change the DNS entries.
-    # Since it's running in an FHS environment, it has no effect on actual resolv.conf.
-    # Hence, place a watcher that updates host resolv.conf when FHS resolv.conf changes.
-
-    # Mount the host's resolv.conf to the container's /etc/resolv.conf
-    runScript = writeScript "${pname}-wrapper" ''
-      mkdir -p /host/etc
-      [ -e /host/etc/resolv.conf ] || touch /host/etc/resolv.conf
-      mount --bind /etc/resolv.conf /host/etc/resolv.conf
-      mount -o remount,rw /host/etc/resolv.conf
-      trap "umount /host/etc/resolv.conf" EXIT
-
-      while inotifywait /etc 2>/dev/null;
-      do
-        cp /etc/resolv.conf /host/etc/resolv.conf;
-      done &
-      expressvpnd --client-version ${clientVersion} --client-build ${clientBuild}
-    '';
-
-    # expressvpnd binary has hard-coded the path /sbin/sysctl hence below workaround.
-    extraBuildCommands = ''
-      mkdir -p sbin
-      chmod +w sbin
-      ln -s ${sysctl}/bin/sysctl sbin/sysctl
-    '';
-
-    # The expressvpnd binary also uses hard-coded paths to the other binaries and files
-    # it ships with, hence the FHS environment.
-
-    targetPkgs =
-      pkgs: with pkgs; [
-        expressvpnBase
-        inotify-tools
-        iproute2
-      ];
-  };
-in
-stdenvNoCC.mkDerivation {
-  inherit pname version;
-
-  dontUnpack = true;
-  dontConfigure = true;
-  dontBuild = true;
+  unpackPhase = ''
+    runHook preUnpack
+    bash "$src" --noexec --accept --target ./extract
+    cd "./extract/${if stdenv.hostPlatform.isAarch64 then "arm64" else "x64"}"
+    runHook postUnpack
+  '';
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin $out/share
-    ln -s ${expressvpnBase}/bin/expressvpn $out/bin
-    ln -s ${expressvpndFHS}/bin/expressvpnd $out/bin
-    ln -s ${expressvpnBase}/share/{bash-completion,doc,man} $out/share/
+    mkdir -p "$out"/{bin,libexec/expressvpn,lib,plugins,qml,share}
+    cp -r expressvpnfiles/bin/* "$out/libexec/expressvpn/"
+    cp -r expressvpnfiles/lib/* "$out/lib/"
+    cp -r expressvpnfiles/plugins/* "$out/plugins/"
+    cp -r expressvpnfiles/qml/* "$out/qml/"
+    cp -r expressvpnfiles/share/* "$out/share/"
+
+    install -Dm644 installfiles/app-icon.png "$out/share/pixmaps/expressvpn.png"
+    install -Dm644 installfiles/expressvpn.desktop "$out/share/applications/expressvpn.desktop"
+
+    substituteInPlace "$out/libexec/expressvpn/qt.conf" \
+      --replace-fail /opt/expressvpn "$out"
+    substituteInPlace "$out/libexec/expressvpn/openvpn-updown.sh" \
+      --replace-fail /opt/expressvpn/var /var/lib/expressvpn
+
+    ln -s expressvpn-daemon "$out/libexec/expressvpn/expressvpnd"
+    ln -s expressvpnctl "$out/libexec/expressvpn/expressvpn"
     runHook postInstall
   '';
 
+  postFixup = ''
+    for name in expressvpn-daemon expressvpn-client expressvpnctl \
+                expressvpn-support-tool support-tool-launcher browser_helper; do
+      cat > "$out/bin/$name" <<EOF
+    #!${stdenv.shell}
+    exec /opt/expressvpn/bin/$name "\$@"
+    EOF
+      chmod +x "$out/bin/$name"
+    done
+    ln -s expressvpn-daemon "$out/bin/expressvpnd"
+    ln -s expressvpnctl "$out/bin/expressvpn"
+  '';
+
   meta = {
-    description = "CLI client for ExpressVPN";
+    description = "CLI and GUI clients for ExpressVPN";
     homepage = "https://www.expressvpn.com";
     license = lib.licenses.unfree;
-    platforms = [ "x86_64-linux" ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     maintainers = with lib.maintainers; [ yureien ];
+    mainProgram = "expressvpn";
   };
 }
