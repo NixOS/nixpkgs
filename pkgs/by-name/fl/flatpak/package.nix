@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchFromGitHub,
   pkgsCross,
   appstream,
   bison,
@@ -80,7 +81,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flatpak";
-  version = "1.16.6";
+  version = "1.16.7";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [
@@ -96,9 +97,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional finalAttrs.doCheck "installedTests"
   ++ lib.optional withMan "man";
 
-  src = fetchurl {
-    url = "https://github.com/flatpak/flatpak/releases/download/${finalAttrs.version}/flatpak-${finalAttrs.version}.tar.xz";
-    hash = "sha256-HmPn8/5EtgLzTZKm/kb9ijvGvpRgwDwmgeV5dsZY7sM=";
+  src = fetchFromGitHub {
+    owner = "flatpak";
+    repo = "flatpak";
+    rev = "187a5439b5712c5806b46988f0c2e35bccbaa1f8"; # flatpak-1.16.x
+    sha256 = "sha256-2eARgsiC/lDbV7LaQ9CaNTeuBbzbRav8dVsl+xrJG2g=";
   };
 
   patches = [
