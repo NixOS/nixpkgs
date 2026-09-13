@@ -1,13 +1,13 @@
 {
   lib,
-  pkgs,
-  buildNavidromePlugin,
+  fetchFromGitHub,
+  buildNavidromeGoPlugin,
 }:
-buildNavidromePlugin rec {
+buildNavidromeGoPlugin rec {
   pname = "audiomuseai";
   version = "8";
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "NeptuneHub";
     repo = "AudioMuse-AI-NV-plugin";
     tag = "v${version}";

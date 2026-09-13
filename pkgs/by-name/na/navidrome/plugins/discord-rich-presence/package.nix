@@ -1,13 +1,13 @@
 {
   lib,
-  pkgs,
-  buildNavidromePlugin,
+  fetchFromGitHub,
+  buildNavidromeGoPlugin,
 }:
-buildNavidromePlugin rec {
+buildNavidromeGoPlugin rec {
   pname = "discord-rich-presence-plugin";
   version = "2.0.0";
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "navidrome";
     repo = "discord-rich-presence-plugin";
     tag = "v${version}";
