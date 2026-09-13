@@ -40,6 +40,15 @@ let
 
   src = fetchurl { inherit (source.distro) url hash; };
 
+  # Keep the modules outside the .app. Discord ships a notarized Developer ID
+  # signature whose sealed resource envelope covers everything under Contents/,
+  # so extracting them in there invalidates it and macOS refuses to launch the
+  # app through LaunchServices, reporting that it is damaged. Nothing reads them
+  # from the bundle: stageModules uses this directory only as the source for the
+  # symlinks it puts in the user data directory, which is where Discord's module
+  # loader looks.
+  modulesDir = "share/${pname}/modules";
+
   fixDistroSymlinks = writeScript "discord-fix-distro-symlinks.py" ''
     #!${python3.interpreter}
     import pathlib
@@ -102,8 +111,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     ${lib.concatStringsSep "\n" (
       lib.mapAttrsToList (name: src: ''
-        mkdir -p "$out/Applications/${desktopName}.app/Contents/Resources/modules/${name}"
-        extractDistro ${src} "$out/Applications/${desktopName}.app/Contents/Resources/modules/${name}"
+        mkdir -p "$out/${modulesDir}/${name}"
+        extractDistro ${src} "$out/${modulesDir}/${name}"
       '') moduleSrcs
     )}
 
@@ -111,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
     makeWrapper "$out/Applications/${desktopName}.app/Contents/MacOS/${binaryName}" "$out/bin/${binaryName}" \
       ${lib.strings.optionalString disableUpdates "--run ${lib.getExe finalAttrs.disableBreakingUpdates}"} \
-      --run "${finalAttrs.stageModules} \"$out/Applications/${desktopName}.app/Contents/Resources/modules\"" \
+      --run "${finalAttrs.stageModules} \"$out/${modulesDir}\"" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook postInstall
