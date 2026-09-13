@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://codeberg.org/Vaishnav-Sabari-Girish/miru";
     changelog = "https://codeberg.org/Vaishnav-Sabari-Girish/miru/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ yvnth ];
     platforms = lib.platforms.linux;
     mainProgram = "miru-daemon";
   };
