@@ -1,0 +1,14 @@
+Allow the system CA bundle explicitly. On NixOS this file is a symlink
+into the Nix store, so allowing /etc/ssl alone does not grant access to it.
+The Landlock rule opens the file with O_PATH, following the symlink.
+
+--- a/Services/RequestServer/SandboxLinux.cpp
++++ b/Services/RequestServer/SandboxLinux.cpp
+@@ -23,6 +23,7 @@
+     TRY(Core::Directory::create(cache_path, Core::Directory::CreateDirectories::Yes));
+ 
+     TRY(Sandbox::add_landlock_path_if_exists(paths, "/etc/ssl"sv, Sandbox::LandlockPath::Access::ReadOnly));
++    TRY(Sandbox::add_landlock_path_if_exists(paths, "/etc/ssl/certs/ca-certificates.crt"sv, Sandbox::LandlockPath::Access::ReadOnly));
+     TRY(Sandbox::add_landlock_path_if_exists(paths, "/etc/host.conf"sv, Sandbox::LandlockPath::Access::ReadOnly));
+     TRY(Sandbox::add_landlock_path_if_exists(paths, "/etc/hosts"sv, Sandbox::LandlockPath::Access::ReadOnly));
+     TRY(Sandbox::add_landlock_path_if_exists(paths, "/etc/nsswitch.conf"sv, Sandbox::LandlockPath::Access::ReadOnly));
