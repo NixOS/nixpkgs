@@ -10,14 +10,14 @@ buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "netbox-inventory";
-  version = "2.6.0";
+  version = "2.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ArnesSI";
     repo = "netbox-inventory";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NTo9WYkjY4BdE3gSkzNKxjHiWVnLQGVZQ5s8e9u3VY0=";
+    hash = "sha256-gPCFEfMD5niCbI/++CvTTEHN+BtoZx7Yihher9yjWuU=";
   };
 
   build-system = [ setuptools ];
