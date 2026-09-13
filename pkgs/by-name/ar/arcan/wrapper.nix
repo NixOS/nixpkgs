@@ -25,6 +25,10 @@ symlinkJoin {
         --set ARCAN_SCRIPTPATH "${placeholder "out"}/share/arcan/scripts/"
     done
   '';
+
+  meta = arcan.meta // {
+    description = arcan.meta.description;
+  };
 }
 # TODO: set ARCAN_STATEBASEPATH to $HOME/.arcan/resources/savestates/ - possibly
 # via a suitable script
