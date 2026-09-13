@@ -57,6 +57,11 @@ if stdenv.hostPlatform.isDarwin then
     configureFlags = (previousAttrs.configureFlags or [ ]) ++ [
       "--with-plugindir=${pluginsEnv}/lib/vapoursynth"
     ];
+    postInstall = vapoursynth.postInstall + ''
+      for pythonPlugin in ${pythonEnvironment}/${python3.sitePackages}/*; do
+          ln -s $pythonPlugin $out/''${pythonPlugin#"${pythonEnvironment}/"}
+      done
+    '';
   })
 else
   runCommand "${vapoursynth.name}-with-plugins"
