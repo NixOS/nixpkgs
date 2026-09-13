@@ -2,7 +2,6 @@
   autoPatchelfHook,
   fetchFromGitHub,
   fetchurl,
-  fetchpatch,
   stdenv,
   cmake,
   python3,
@@ -53,50 +52,41 @@ let
   inherit (arches) depsArch projectArch targetArch;
 
   # `cef_binary_${CEF_VERSION}_linux64_minimal`, where CEF_VERSION is from $src/CMakeLists.txt
-  cef-name = "cef_binary_144.0.15+g72717cf+chromium-144.0.7559.172_${platform}_minimal";
+  cef-name = "cef_binary_150.0.14+g7c1aa68+chromium-150.0.7871.129_${platform}_minimal";
 
   cef-bin = cef-binary.override {
-    version = "144.0.15";
-    gitRevision = "72717cf";
-    chromiumVersion = "144.0.7559.172";
+    version = "150.0.14";
+    gitRevision = "7c1aa68";
+    chromiumVersion = "150.0.7871.129";
     srcHashes = {
-      aarch64-linux = "sha256-2w2TDj7LGjYeUjpVvojAsHb8HlqG82AwH8Arg0NxREg=";
-      x86_64-linux = "sha256-JDlZmIEg9ajjuFOL8qAr6HDVbeu3/Cg21Z57fHryfdc=";
+      aarch64-linux = "sha256-tA4hWg9G/UDQSxXUuDO+IRjvc8Qx1cEdGOtiXg3ktk0=";
+      x86_64-linux = "sha256-QO9hPkVcrNB6p8gfQl76qLb3frg/E8wo1HDuuk5h+Y8=";
     };
   };
 
-  thrift20 = thrift.overrideAttrs (old: {
-    version = "0.20.0";
+  thrift23 = thrift.overrideAttrs (old: {
+    version = "0.23.0";
 
     src = fetchFromGitHub {
       owner = "apache";
       repo = "thrift";
-      tag = "v0.20.0";
-      hash = "sha256-cwFTcaNHq8/JJcQxWSelwAGOLvZHoMmjGV3HBumgcWo=";
+      tag = "v0.23.0";
+      hash = "sha256-7N9jLDwvw6xh8uUY13Mmw6KEaNLYVowudrYSL2yJj2Q=";
     };
 
     cmakeFlags = (old.cmakeFlags or [ ]) ++ [
       "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
-    ];
-    patches = (old.patches or [ ]) ++ [
-      # Fix build with gcc15
-      # https://github.com/apache/thrift/pull/3078
-      (fetchpatch {
-        name = "thrift-add-missing-cstdint-include-gcc15.patch";
-        url = "https://github.com/apache/thrift/commit/947ad66940cfbadd9b24ba31d892dfc1142dd330.patch";
-        hash = "sha256-pWcG6/BepUwc/K6cBs+6d74AWIhZ2/wXvCunb/KyB0s=";
-      })
     ];
   });
 
 in
 stdenv.mkDerivation rec {
   pname = "jcef-jetbrains";
-  rev = "fa677024a129747bd8cb05447af8918c494e4af7";
+  rev = "5a9c64ca090f24d1d037de7b3edca2ee5607c995";
   # This is the commit number
-  # Currently from the branch: https://github.com/JetBrains/jcef/tree/261
+  # Currently from the branch: https://github.com/JetBrains/jcef/tree/263
   # Run `git rev-list --count HEAD`
-  version = "1207";
+  version = "1231";
 
   nativeBuildInputs = [
     cmake
@@ -119,14 +109,14 @@ stdenv.mkDerivation rec {
     libxdamage
     nss
     nspr
-    thrift20
+    thrift23
   ];
 
   src = fetchFromGitHub {
     owner = "jetbrains";
     repo = "jcef";
     inherit rev;
-    hash = "sha256-eYn1T4cRrHeVDSye6FKBv8X3zZPDGFurk6HJG+jPypY=";
+    hash = "sha256-Q4LQnzbUiAGyWgsfCuMayj76FzC4bN0l1O90vP96IGM=";
   };
 
   # Find the hash in tools/buildtools/linux64/clang-format.sha1
@@ -159,7 +149,7 @@ stdenv.mkDerivation rec {
       -e 's|vcpkg_install_package(boost-filesystem boost-interprocess thrift)||' \
       -i CMakeLists.txt
 
-    sed -e 's|vcpkg_bring_host_thrift()|set(THRIFT_COMPILER_HOST ${lib.getExe thrift20})|' -i remote/CMakeLists.txt
+    sed -e 's|vcpkg_bring_host_thrift()|set(THRIFT_COMPILER_HOST ${lib.getExe thrift23})|' -i remote/CMakeLists.txt
 
     mkdir jcef_build
     cd jcef_build
@@ -175,12 +165,6 @@ stdenv.mkDerivation rec {
 
   postBuild = ''
     export JCEF_ROOT_DIR=$(realpath ..)
-
-    # Apply https://github.com/JetBrains/jcef/pull/42
-    substituteInPlace ../build.xml \
-      --replace-fail \
-        '<matches pattern="17*.*" string="''${java.version}"/>' \
-        '<javaversion atLeast="17"/>'
 
     ../tools/compile.sh ${platform} Release
   '';
