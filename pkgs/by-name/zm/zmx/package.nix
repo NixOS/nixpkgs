@@ -5,7 +5,12 @@
   apple-sdk,
   installShellFiles,
   writeShellScriptBin,
+  bats,
+  python3,
+  unixtools,
   zig_0_16,
+  versionCheckHook,
+  runCommand,
   nix-update-script,
 }:
 let
@@ -69,7 +74,41 @@ stdenv.mkDerivation (finalAttrs: {
       --fish <($out/bin/zmx completions fish)
   '';
 
-  passthru.updateScript = nix-update-script { };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  # `zmx --version` creates socket and log dir under $ZMX_DIR so we set ZMX_DIR to keep
+  # it from writing to `$HOME/.local/state`.
+  versionCheckKeepEnvironment = [ "ZMX_DIR" ];
+  preInstallCheck = ''
+    export ZMX_DIR="$TMPDIR/zmx-version-check"
+  '';
+
+  # Run the upstream integration tests as our package integration tests.
+  passthru = {
+    updateScript = nix-update-script { };
+
+    tests.integration =
+      runCommand "zmx-integration-tests"
+        {
+          nativeBuildInputs = [
+            bats
+            python3
+            unixtools.hostname
+          ];
+        }
+        ''
+          cp -R ${finalAttrs.src}/test .
+          chmod -R u+w test
+
+          # The integration tests expect the binary at $REPO_DIR/zig-out/bin/zmx,
+          # otherwise they'll initiate a `zig build` from scratch.
+          mkdir -p zig-out/bin
+          ln -s ${finalAttrs.finalPackage}/bin/zmx zig-out/bin/zmx
+
+          bats test
+          touch $out
+        '';
+  };
 
   meta = {
     homepage = "https://github.com/neurosnap/zmx";
