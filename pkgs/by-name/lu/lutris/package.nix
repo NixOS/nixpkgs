@@ -288,6 +288,8 @@ buildFHSEnv {
       # Winetricks
       fribidi
       pango
+      libadwaita
+      gtk4
     ]
     ++ xorgDeps pkgs
     ++ gstreamerDeps pkgs
