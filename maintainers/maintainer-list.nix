@@ -16887,6 +16887,12 @@
     githubId = 639066;
     name = "Luke Rewega";
   };
+  lrfe = {
+    email = "aliamemis@disroot.org";
+    github = "lrfe";
+    githubId = 320530729;
+    name = "Ali Ahmet Memiş";
+  };
   lriesebos = {
     name = "Leon Riesebos";
     github = "lriesebos";

@@ -4688,8 +4688,6 @@ with pkgs;
 
   vc4-newlib = callPackage ../development/misc/vc4/newlib.nix { };
 
-  or1k-newlib = callPackage ../development/misc/or1k/newlib.nix { };
-
   ### DEVELOPMENT / TOOLS
 
   inherit (callPackage ../development/tools/alloy { })
