@@ -11,6 +11,9 @@ if (!playwrightCorePath || !expectedConfigPath) {
 
 const browserDownloads = JSON.parse(fs.readFileSync(expectedConfigPath, "utf8"));
 const browserNames = Object.keys(browserDownloads);
+const playwrightBrowsers = JSON.parse(
+  fs.readFileSync(`${playwrightCorePath}/browsers.json`, "utf8"),
+).browsers;
 
 const hostPlatformBySystem = {
   "x86_64-linux": "ubuntu24.04-x64",
@@ -21,7 +24,7 @@ const hostPlatformBySystem = {
 function getRegistryDownloadURLs(hostPlatform) {
   const script = `
     const path = require("path");
-    const { registry } = require(path.join(process.env.PLAYWRIGHT_CORE_PATH, "lib/server/registry/index.js"));
+    const { registry } = require(path.join(process.env.PLAYWRIGHT_CORE_PATH, "lib/coreBundle.js")).registry;
     const browserNames = JSON.parse(process.env.PLAYWRIGHT_BROWSER_NAMES);
     const downloadURLs = Object.fromEntries(
       browserNames.map((name) => [name, registry.findExecutable(name).downloadURLs]),
@@ -43,6 +46,13 @@ function getRegistryDownloadURLs(hostPlatform) {
 }
 
 const failures = [];
+
+for (const browser of playwrightBrowsers) {
+  if (Object.hasOwn(browser, "revisionOverrides")) {
+    failures.push(`${browser.name} has unsupported revisionOverrides`);
+  }
+}
+
 const systems = Object.keys(browserDownloads[browserNames[0]]);
 
 for (const system of systems) {
