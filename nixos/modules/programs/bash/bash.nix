@@ -77,16 +77,16 @@ in
       promptInit = lib.mkOption {
         default = ''
           # Provide a nice prompt if the terminal supports it.
-          if [ "$TERM" != "dumb" ] || [ -n "$INSIDE_EMACS" ]; then
+          if [ "''${TERM:-}" != "dumb" ] || [ -n "''${INSIDE_EMACS:-}" ]; then
             PROMPT_COLOR="1;31m"
             ((UID)) && PROMPT_COLOR="1;32m"
-            if [ -n "$INSIDE_EMACS" ]; then
+            if [ -n "''${INSIDE_EMACS:-}" ]; then
               # Emacs term mode doesn't support xterm title escape sequence (\e]0;)
               PS1="\n\[\033[$PROMPT_COLOR\][\u@\h:\w]\\$\[\033[0m\] "
             else
               PS1="\n\[\033[$PROMPT_COLOR\][\[\e]0;\u@\h: \w\a\]\u@\h:\w]\\$\[\033[0m\] "
             fi
-            if test "$TERM" = "xterm"; then
+            if test "''${TERM:-}" = "xterm"; then
               PS1="\[\033]2;\h:\u:\w\007\]$PS1"
             fi
           fi
@@ -131,7 +131,7 @@ in
       shellAliases = builtins.mapAttrs (name: lib.mkDefault) cfge.shellAliases;
 
       shellInit = ''
-        if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]; then
+        if [ -z "''${__NIXOS_SET_ENVIRONMENT_DONE:-}" ]; then
             . ${config.system.build.setEnvironment}
         fi
 
@@ -158,7 +158,7 @@ in
       # This file is read for login shells.
 
       # Only execute this file once per shell.
-      if [ -n "$__ETC_PROFILE_SOURCED" ]; then return; fi
+      if [ -n "''${__ETC_PROFILE_SOURCED:-}" ]; then return; fi
       __ETC_PROFILE_SOURCED=1
 
       # Prevent this file from being sourced by interactive non-login child shells.
@@ -181,18 +181,18 @@ in
       # /etc/bashrc: DO NOT EDIT -- this file has been generated automatically.
 
       # Only execute this file once per shell.
-      if [ -n "$__ETC_BASHRC_SOURCED" ] || [ -n "$NOSYSBASHRC" ]; then return; fi
+      if [ -n "''${__ETC_BASHRC_SOURCED:-}" ] || [ -n "''${NOSYSBASHRC:-}" ]; then return; fi
       __ETC_BASHRC_SOURCED=1
 
       # If the profile was not loaded in a parent process, source
       # it.  But otherwise don't do it because we don't want to
       # clobber overridden values of $PATH, etc.
-      if [ -z "$__ETC_PROFILE_DONE" ]; then
+      if [ -z "''${__ETC_PROFILE_DONE:-}" ]; then
           . /etc/profile
       fi
 
       # We are not always an interactive shell.
-      if [ -n "$PS1" ]; then
+      if [ -n "''${PS1:-}" ]; then
           ${cfg.interactiveShellInit}
       fi
 
@@ -206,7 +206,7 @@ in
       # /etc/bash_logout: DO NOT EDIT -- this file has been generated automatically.
 
       # Only execute this file once per shell.
-      if [ -n "$__ETC_BASHLOGOUT_SOURCED" ] || [ -n "$NOSYSBASHLOGOUT" ]; then return; fi
+      if [ -n "''${__ETC_BASHLOGOUT_SOURCED:-}" ] || [ -n "''${NOSYSBASHLOGOUT:-}" ]; then return; fi
       __ETC_BASHLOGOUT_SOURCED=1
 
       ${cfg.logout}
