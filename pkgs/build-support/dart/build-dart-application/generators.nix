@@ -66,6 +66,8 @@ let
             yq
           ];
 
+        strictDeps = true;
+
         dontBuild = true;
 
         installPhase =
@@ -89,6 +91,8 @@ let
 
             runHook postInstall
           '';
+
+        __structuredAttrs = true;
       }
     );
 in

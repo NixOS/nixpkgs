@@ -8,24 +8,21 @@
   gitUpdater,
   dart,
 }:
+flutter341.buildFlutterApplication (finalAttrs: {
+  pname = "butterfly";
 
-let
   version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "LinwoodDev";
     repo = "Butterfly";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BJOLUFxXAbby5x7LllTSgHH5RGFc6bDtwaf13TcLXfs=";
   };
-in
-flutter341.buildFlutterApplication {
-  pname = "butterfly";
-  inherit version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  sourceRoot = "${src.name}/app";
+  sourceRoot = "${finalAttrs.src.name}/app";
 
   gitHashes = lib.importJSON ./git-hashes.json;
 
@@ -37,7 +34,9 @@ flutter341.buildFlutterApplication {
     pubspecSource =
       runCommand "pubspec.lock.json"
         {
-          inherit src;
+          inherit (finalAttrs) src;
+          strictDeps = true;
+          __structuredAttrs = true;
           nativeBuildInputs = [ yq-go ];
         }
         ''
@@ -87,4 +86,4 @@ flutter341.buildFlutterApplication {
       "x86_64-linux"
     ];
   };
-}
+})
