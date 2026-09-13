@@ -8504,6 +8504,12 @@
     github = "encode42";
     githubId = 34699884;
   };
+  enderbsd = {
+    email = "ender@enderzone.com";
+    github = "enderbsd";
+    githubId = 13617481;
+    name = "enderbsd";
+  };
   enderger = {
     email = "endergeryt@gmail.com";
     github = "enderger";
