@@ -4409,6 +4409,25 @@ with self;
     };
   };
 
+  CBORXS = buildPerlPackage {
+    pname = "CBOR-XS";
+    version = "1.87";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/CBOR-XS-1.87.tar.gz";
+      hash = "sha256-6sFecwqvYS7dnt9x5qqVRlNhG65aEEO5YK/1qbHlcf8=";
+    };
+    buildInputs = [
+      CanaryStability
+      TaskWeaken
+    ];
+    propagatedBuildInputs = [
+      TypesSerialiser
+      commonsense
+    ];
+    meta = {
+    };
+  };
+
   CDDB_get = buildPerlPackage {
     pname = "CDDB_get";
     version = "2.28";
@@ -39620,11 +39639,18 @@ with self;
 
   ZonemasterCLI = buildPerlPackage {
     pname = "Zonemaster-CLI";
-    version = "8.0.1";
+    version = "8.0.2";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-CLI-v8.0.1.tar.gz";
-      hash = "sha256-QLUza9M72r/q1W+uhG5pn6YWz7dDJQ0rIq3NyDVUtjU=";
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-CLI-v8.0.2.tar.gz";
+      hash = "sha256-Y9XorsQS7NFjaxv+/maPQM3hlPdo7ODDZWkQZJkgxgU=";
     };
+    postPatch = ''
+      # 8.0.2 removed the fixture packets in t/usage.normal.data. This breaks in Nix's isolated environment.
+      substituteInPlace t/usage.t \
+        --replace-fail \
+          'qr{NOTICE .* WARNING .* ERROR}msx' \
+          'qr{NOTICE .* WARNING}msx'
+    '';
     buildInputs = [
       JSONValidator
       TestDifferences
@@ -39633,9 +39659,8 @@ with self;
     ];
     propagatedBuildInputs = [
       JSONXS
-      MooseXGetopt
       NetIPXS
-      TextReflow
+      Readonly
       TryTiny
       ZonemasterEngine
       ZonemasterLDNS
@@ -39655,10 +39680,10 @@ with self;
 
   ZonemasterEngine = buildPerlPackage {
     pname = "Zonemaster-Engine";
-    version = "8.1.1";
+    version = "9.0.0";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-Engine-v8.1.1.tar.gz";
-      hash = "sha256-QlQQ+saL++8A1MW9dqMRzDNH6cydyQl9HB3cXanudGI=";
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-Engine-v9.0.0.tar.gz";
+      hash = "sha256-9J07VHNQF3AQA/9VeaVjcIZbZyB3wu/yoDDUT0HJgFU=";
     };
     buildInputs = [
       LocalePO
@@ -39671,6 +39696,7 @@ with self;
       TestPod
     ];
     propagatedBuildInputs = [
+      CBORXS
       ClassAccessor
       Clone
       EmailValid
@@ -39686,23 +39712,22 @@ with self;
       NetIPXS
       Readonly
       TextCSV
-      ZonemasterLDNS
       YAMLLibYAML
+      ZonemasterLDNS
       libintl-perl
     ];
-
     meta = {
-      description = "Tool to check the quality of a DNS zone";
+      description = "A tool to check the quality of a DNS zone";
       license = lib.licenses.bsd3;
     };
   };
 
   ZonemasterLDNS = buildPerlPackage {
     pname = "Zonemaster-LDNS";
-    version = "5.0.2";
+    version = "5.1.0";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-LDNS-5.0.2.tar.gz";
-      hash = "sha256-IP1f+7SgnQ1vv9BjkBoSsa7rv9k3KoXOLUVcmkwJqYY=";
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-LDNS-5.1.0.tar.gz";
+      hash = "sha256-R8zYw/Zm051R/DZp+PSZetQeIfydTkD4G3VYw7FeT88=";
     };
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include -I${pkgs.libidn2}.dev}/include";
     env.NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.libidn2}/lib -lcrypto -lidn2";
@@ -39716,9 +39741,10 @@ with self;
       MIMEBase32
       ModuleInstall
       ModuleInstallXSUtil
-      TestFatal
       TestDifferences
       TestException
+      TestFatal
+      TestNoWarnings
       pkgs.ldns
       pkgs.libidn2
       pkgs.openssl
