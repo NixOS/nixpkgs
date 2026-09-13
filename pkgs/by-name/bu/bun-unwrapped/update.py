@@ -26,6 +26,7 @@ BUN_REPOSITORY = "https://github.com/oven-sh/bun.git"
 WEBKIT_REPOSITORY = "https://github.com/oven-sh/WebKit.git"
 FAKE_HASH = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
 
+# Asset names come from Bun's GitHub release.
 BOOTSTRAP_ASSETS: dict[str, str] = {
     "aarch64-darwin": "bun-darwin-aarch64",
     "aarch64-linux": "bun-linux-aarch64",
@@ -34,12 +35,14 @@ BOOTSTRAP_ASSETS: dict[str, str] = {
     "x86_64-linux-musl": "bun-linux-x64-musl-baseline",
 }
 
-# Linux installs keep both glibc and musl optional packages.
+# package.nix gets meta.platforms from these hashes. Linux installs include
+# both libc variants, so one hash covers glibc and musl.
 NODE_MODULE_TARGETS: dict[str, tuple[str, str]] = {
     "aarch64-darwin": ("darwin", "arm64"),
     "aarch64-linux": ("linux", "arm64"),
     "x86_64-linux": ("linux", "x64"),
 }
+# Mirrors package.nix and emitPackageInstall() calls in upstream codegen.ts.
 NODE_MODULE_DIRS = (".", "packages/bun-error", "src/node-fallbacks")
 
 
@@ -196,20 +199,9 @@ def resolve_constant(text: str, expression: str, source: Path) -> str:
     )
 
 
-def validate_llvm_version(source: Path) -> None:
-    tools_path = source / "scripts/build/tools.ts"
-    version = capture(
-        r'export const LLVM_VERSION = "([^"]+)";',
-        tools_path.read_text(),
-        tools_path,
-    )
-    if not version.startswith("21.1."):
-        raise RuntimeError(
-            f"Bun requires LLVM {version}; update the llvmPackages assertion before updating"
-        )
-
-
 def source_archives(source: Path) -> list[Archive]:
+    # This parses Bun's current Dependency and allDeps syntax. Revisit it when
+    # upstream changes archive declarations or dependency ordering.
     directory = source / "scripts/build/deps"
     archives_by_symbol: dict[str, Archive] = {}
 
@@ -285,6 +277,7 @@ def unstable_version(commit_date: object) -> str:
 
 
 def pin_webkit(source: Path, current: WebKitPin, *, force: bool) -> WebKitPin:
+    # Keep sparseCheckout in sources.json. Deriving it needs the full WebKit tree.
     webkit_path = source / "scripts/build/deps/webkit.ts"
     revision = capture(
         r'export const WEBKIT_VERSION = "([^"]+)";',
@@ -365,11 +358,11 @@ pkgs.stdenvNoCC.mkDerivation {{
   }};
   sourceRoot = {json.dumps(asset["name"])};
   nativeBuildInputs = [ pkgs.unzip ]
-    ++ pkgs.lib.optionals pkgs.stdenv.isLinux [ pkgs.autoPatchelfHook ];
-  buildInputs = pkgs.lib.optionals pkgs.stdenv.isLinux [
+    ++ pkgs.lib.optionals pkgs.stdenv.buildPlatform.isLinux [ pkgs.autoPatchelfHook ];
+  buildInputs = pkgs.lib.optionals pkgs.stdenv.buildPlatform.isLinux [
     pkgs.openssl pkgs.stdenv.cc.cc.lib
   ];
-  postFixup = pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
+  postFixup = pkgs.lib.optionalString pkgs.stdenv.buildPlatform.isDarwin ''
     ${{pkgs.lib.getExe' pkgs.cctools "install_name_tool"}} "$out/bin/bun" \
       -change /usr/lib/libicucore.A.dylib '${{pkgs.lib.getLib pkgs.darwin.ICU}}/lib/libicucore.A.dylib'
     ${{pkgs.lib.getExe pkgs.rcodesign}} sign --code-signature-flags linker-signed "$out/bin/bun"
@@ -495,8 +488,6 @@ def main() -> None:
         f"https://github.com/oven-sh/bun/archive/{revision}.tar.gz",
         unpack=True,
     )
-    validate_llvm_version(source)
-
     downloads = source_archives(source)
     bootstrap_downloads = {
         platform: Archive(
@@ -516,10 +507,23 @@ def main() -> None:
 
     webkit = pin_webkit(source, current["webkit"], force=arguments.force)
     cargo = cargo_hash(version, source)
-    system = output(
-        ["nix", "eval", "--impure", "--raw", "--expr", "builtins.currentSystem"]
+    bootstrap_platform = output(
+        [
+            "nix",
+            "eval",
+            "--impure",
+            "--raw",
+            "--expr",
+            f"""
+let
+  pkgs = import (builtins.toPath {json.dumps(str(NIXPKGS_ROOT))}) {{}};
+in
+pkgs.stdenv.buildPlatform.system
++ pkgs.lib.optionalString pkgs.stdenv.buildPlatform.isMusl "-musl"
+""",
+        ]
     )
-    bootstrap = bootstrap_path(version, bootstrap_assets[system])
+    bootstrap = bootstrap_path(version, bootstrap_assets[bootstrap_platform])
 
     updated: Sources = {
         "version": version,
