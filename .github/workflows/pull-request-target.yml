@@ -82,6 +82,7 @@ jobs:
     secrets:
       NIXPKGS_COMMIT_CHECK_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_COMMIT_CHECK_APP_PRIVATE_KEY }}
       NIXPKGS_MANUAL_EDIT_CHECK_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_MANUAL_EDIT_CHECK_APP_PRIVATE_KEY }}
+      NIXPKGS_CI_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
     with:
       baseBranch: ${{ needs.prepare.outputs.baseBranch }}
       headBranch: ${{ needs.prepare.outputs.headBranch }}
