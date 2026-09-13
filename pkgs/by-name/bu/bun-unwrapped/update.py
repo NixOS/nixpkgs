@@ -14,6 +14,7 @@ import tempfile
 from collections.abc import Mapping
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
+from datetime import date
 from pathlib import Path
 from typing import TypedDict, cast
 
@@ -55,6 +56,7 @@ class DownloadPin(TypedDict):
 
 class WebKitPin(TypedDict):
     rev: str
+    version: str
     hash: str
     sparseCheckout: list[str]
 
@@ -268,6 +270,20 @@ def pin_downloads(
     ]
 
 
+def unstable_version(commit_date: object) -> str:
+    if not isinstance(commit_date, str):
+        raise TypeError("nix-prefetch-git returned no WebKit commit date")
+
+    match = re.fullmatch(r"(\d{4}-\d{2}-\d{2})T.*", commit_date)
+    if match is None:
+        raise ValueError(f"Invalid WebKit commit date: {commit_date}")
+    try:
+        commit_day = date.fromisoformat(match.group(1))
+    except ValueError as error:
+        raise ValueError(f"Invalid WebKit commit date: {commit_date}") from error
+    return f"0-unstable-{commit_day.isoformat()}"
+
+
 def pin_webkit(source: Path, current: WebKitPin, *, force: bool) -> WebKitPin:
     webkit_path = source / "scripts/build/deps/webkit.ts"
     revision = capture(
@@ -275,7 +291,7 @@ def pin_webkit(source: Path, current: WebKitPin, *, force: bool) -> WebKitPin:
         webkit_path.read_text(),
         webkit_path,
     )
-    if revision == current["rev"] and not force:
+    if revision == current["rev"] and not force and "version" in current:
         return current
 
     payload = json_output(
@@ -300,6 +316,7 @@ def pin_webkit(source: Path, current: WebKitPin, *, force: bool) -> WebKitPin:
 
     return {
         "rev": revision,
+        "version": unstable_version(payload.get("date")),
         "hash": hash_value,
         "sparseCheckout": current["sparseCheckout"],
     }

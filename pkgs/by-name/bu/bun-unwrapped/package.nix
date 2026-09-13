@@ -2,10 +2,10 @@
   lib,
   stdenv,
   stdenvNoCC,
+  callPackage,
   runCommand,
   symlinkJoin,
   fetchFromGitHub,
-  fetchgit,
   fetchurl,
   autoPatchelfHook,
   installShellFiles,
@@ -13,33 +13,23 @@
   cacert,
   cmake,
   ninja,
-  pkg-config,
-  bison,
-  gawk,
-  gperf,
-  python3,
   go,
-  libtool,
-  automake,
-  autoconf,
-  ruby,
   perl,
   git,
   nasm,
-  which,
   rustc,
   cargo,
   rustPlatform,
   llvmPackages,
   openssl,
   icu,
-  libedit,
-  libxml2,
-  readline,
   sqlite,
   cctools,
   darwin,
   rcodesign,
+  bun-webkit ? callPackage ./webkit/package.nix {
+    inherit llvmPackages;
+  },
 }:
 
 let
@@ -55,11 +45,6 @@ let
   isDarwin = stdenv.hostPlatform.isDarwin;
   isMusl = stdenv.hostPlatform.isMusl;
   platformKey = stdenv.hostPlatform.system + lib.optionalString isMusl "-musl";
-  webkitSource = import ./webkit.nix {
-    inherit fetchgit;
-    inherit (sources) webkit;
-  };
-
   # Bun's toolchain override searches one bin directory. Keep Nix's Clang
   # wrapper while supplying the remaining LLVM tools from their separate outputs.
   llvmToolchain = symlinkJoin {
@@ -215,30 +200,21 @@ stdenv.mkDerivation {
     # Keep dependency installation offline and adapt ABI and toolchain settings.
     ./support-nix-build-environment.patch
 
-    # Build only the WebKit libraries linked into Bun from the pinned source.
-    ./build-webkit-from-source.patch
+    # Link the WebKit libraries built by the separate derivation.
+    ./use-nix-webkit.patch
   ];
+
+  disallowedReferences = [ bun-webkit ];
 
   nativeBuildInputs = [
     bootstrap
     installShellFiles
     cmake
     ninja
-    pkg-config
-    bison
-    gawk
-    gperf
-    python3
     go
-    libtool
-    automake
-    autoconf
-    ruby
     perl
     git
-    unzip
     nasm
-    which
     llvmPackages.clang
     llvmPackages.llvm
     llvmPackages.lld
@@ -254,16 +230,12 @@ stdenv.mkDerivation {
   # nixpkgs removes SQLite headers from apple-sdk. Bun uses the header while
   # compiling, then loads macOS libsqlite3.dylib at runtime.
   buildInputs = [
-    libxml2
+    bun-webkit
   ]
   ++ lib.optionals isLinux [ icu ]
   ++ lib.optionals isDarwin [
     darwin.ICU
     (lib.getDev sqlite)
-    # The upstream jsc target assumes Darwin provides Readline headers and
-    # links libedit. The Nix Apple SDK removes both, so provide them here.
-    (lib.getDev readline)
-    (lib.getLib libedit)
   ];
 
   # Executables produced by `bun build --compile` link against ICU. Propagate
@@ -282,11 +254,11 @@ stdenv.mkDerivation {
 
   env = {
     GIT_SHA = revision;
-    # -gz=zlib: Nix LLVM 21 has no zstd debug compression support.
-    # -ffile-prefix-map: keep WebKit source paths out of the executable.
     NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
+      # Nix LLVM 21 has no zstd debug compression support.
       "-gz=zlib"
-      "-ffile-prefix-map=${webkitSource}/Source=vendor/WebKit/Source"
+      # Keep the build-only WebKit output out of the Bun runtime closure.
+      "-ffile-prefix-map=${bun-webkit}=build/release/deps/webkit"
     ];
     NIX_LDFLAGS = lib.concatStringsSep " " (
       lib.optionals isLinux [
@@ -301,10 +273,8 @@ stdenv.mkDerivation {
       # https://github.com/oven-sh/bun/issues/40107
       ++ lib.optionals isDarwin [ "-rename_segment __DATA_DIRTY __DATA" ]
     );
-    BUN_WEBKIT_PATH = webkitSource;
+    BUN_WEBKIT_DIR = bun-webkit;
     BUN_NIX_ABI = lib.optionalString isLinux (if isMusl then "musl" else "gnu");
-    BUN_NIX_GPERF = lib.optionalString isDarwin (lib.getExe gperf);
-    BUN_NIX_MIG = lib.optionalString isDarwin (lib.getExe' darwin.bootstrap_cmds "mig");
 
     # Upstream uses nightly-only Rust compiler options.
     RUSTC_BOOTSTRAP = 1;
@@ -417,7 +387,10 @@ stdenv.mkDerivation {
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = ./update.py;
+  passthru = {
+    updateScript = ./update.py;
+    webkit = bun-webkit;
+  };
 
   meta = {
     homepage = "https://bun.sh";
