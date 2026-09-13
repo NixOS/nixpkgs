@@ -83,7 +83,6 @@ lib.makeOverridable (
     buildDTBs ? null,
 
     isLTS ? false,
-    isZen ? false,
 
     autoModules ? true,
     # TODO: Remove this default?
@@ -330,7 +329,6 @@ lib.makeOverridable (
             structuredExtraConfig
             extraMakeFlags
             isLTS
-            isZen
             ;
 
           # Adds dependencies needed to edit the config:

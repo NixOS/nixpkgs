@@ -7737,10 +7737,6 @@ with pkgs;
   linuxPackages_testing = linuxKernel.packages.linux_testing;
   linux_testing = linuxKernel.kernels.linux_testing;
 
-  # zen-kernel
-  linuxPackages_zen = linuxKernel.packages.linux_zen;
-  linux_zen = linuxPackages_zen.kernel;
-
   # XanMod kernel
   linuxPackages_xanmod = linuxKernel.packages.linux_xanmod;
   linux_xanmod = linuxKernel.kernels.linux_xanmod;

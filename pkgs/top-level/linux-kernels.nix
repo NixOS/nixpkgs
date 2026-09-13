@@ -119,13 +119,6 @@ in
 
         linux_latest = packageAliases.linux_latest.kernel;
 
-        linux_zen = callPackage ../os-specific/linux/kernel/zen-kernels.nix {
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-          ];
-        };
-
         # This contains the variants of the XanMod kernel
         xanmodKernels = callPackage ../os-specific/linux/kernel/xanmod-kernels.nix;
 
@@ -153,6 +146,7 @@ in
       }
       // lib.optionalAttrs config.allowAliases {
         linux_lqx = throw "linux_lqx has been removed due to lack of maintenance";
+        linux_zen = throw "linux_zen has been removed due to lack of maintenance";
         linux_libre = throw "linux_libre has been removed due to lack of maintenance";
         linux_latest_libre = throw "linux_latest_libre has been removed due to lack of maintenance";
 
@@ -270,7 +264,6 @@ in
         # to help determine module compatibility
         inherit (kernel)
           isLTS
-          isZen
           ;
         inherit (kernel) kernelOlder kernelAtLeast;
         kernelModuleMakeFlags = self.kernel.commonMakeFlags ++ [
@@ -691,13 +684,13 @@ in
       # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
       linux_testing = packagesFor kernels.linux_testing;
 
-      linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
       linux_xanmod = recurseIntoAttrs (packagesFor kernels.linux_xanmod);
       linux_xanmod_stable = recurseIntoAttrs (packagesFor kernels.linux_xanmod_stable);
       linux_xanmod_latest = recurseIntoAttrs (packagesFor kernels.linux_xanmod_latest);
     }
     // lib.optionalAttrs config.allowAliases {
       linux_lqx = throw "linux_lqx has been removed due to lack of maintenance";
+      linux_zen = throw "linux_zen has been removed due to lack of maintenance";
       linux_libre = throw "linux_libre has been removed due to lack of maintenance";
       linux_latest_libre = throw "linux_latest_libre has been removed due to lack of maintenance";
 

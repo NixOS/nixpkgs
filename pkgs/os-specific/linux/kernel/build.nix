@@ -89,9 +89,6 @@ lib.makeOverridable (
     # Extra meta attributes
     extraMeta ? { },
 
-    # for module compatibility
-    isZen ? false,
-
     # Whether to utilize the controversial import-from-derivation feature to parse the config
     allowImportFromDerivation ? false,
     features ? { },
@@ -518,7 +515,6 @@ lib.makeOverridable (
         commonMakeFlags
         ;
       inherit
-        isZen
         withRust
         # Forwarded into passthru so features survive kernel.override() call chains
         # used by the NixOS module system (see boot.kernelPackages apply in kernel.nix).
