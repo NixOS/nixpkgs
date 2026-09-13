@@ -39,8 +39,3 @@ configuration, use `pkgs` prefix (variable).
 
 To "uninstall" a package, remove it from
 [](#opt-environment.systemPackages) and run `nixos-rebuild switch`.
-
-```{=include=} sections
-customizing-packages.section.md
-adding-custom-packages.section.md
-```
