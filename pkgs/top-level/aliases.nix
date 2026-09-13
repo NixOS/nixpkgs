@@ -1385,18 +1385,18 @@ mapAliases {
   ####
   # LibreOffice related aliases
   # Cannot order them usefully due to editorconfig
-  libreoffice-fresh = warnAlias "LibreOffice upstream has changed the versioning, please use use `libreoffice-stable`" libreoffice-stable; # Added 2026-08-11
+  libreoffice-fresh = warnAlias "LibreOffice upstream has changed the versioning, please use `libreoffice-stable` or just `libreoffice`" libreoffice-stable; # Added 2026-08-11
   libreoffice-qt6 = libreoffice-qt; # Added 2025-08-30
   libreoffice-qt6-fresh = libreoffice-qt-fresh; # Added 2025-08-30
   libreoffice-qt6-fresh-unwrapped = libreoffice-qt-fresh.unwrapped; # Added 2025-08-30
   libreoffice-qt6-still = libreoffice-qt-still; # Added 2025-08-30
   libreoffice-qt6-still-unwrapped = libreoffice-qt-still.unwrapped; # Added 2025-08-30
   libreoffice-qt6-unwrapped = libreoffice-qt.unwrapped; # Added 2025-08-30
-  libreoffice-qt-fresh = warnAlias "LibreOffice upstream has changed the versioning, please use use `libreoffice-qt-stable`" libreoffice-qt-stable; # Added 2026-08-11
+  libreoffice-qt-fresh = warnAlias "LibreOffice upstream has changed the versioning, please use `libreoffice-qt-stable` or just `libreoffice-qt`" libreoffice-qt-stable; # Added 2026-08-11
   libreoffice-qt-fresh-unwrapped = libreoffice-qt-stable-unwrapped; # Added 2026-08-11
-  libreoffice-qt-still = warnAlias "LibreOffice upstream has changed the versioning, please use use `libreoffice-qt-stable`" libreoffice-qt-stable; # Added 2026-08-11
+  libreoffice-qt-still = warnAlias "LibreOffice upstream has changed the versioning, please use `libreoffice-qt-stable` or just `libreoffice-qt`" libreoffice-qt-stable; # Added 2026-08-11
   libreoffice-qt-still-unwrapped = libreoffice-qt-stable-unwrapped; # Added 2026-08-11
-  libreoffice-still = warnAlias "LibreOffice upstream has changed the versioning, please use use `libreoffice-stable`" libreoffice-stable; # Added 2026-08-11
+  libreoffice-still = warnAlias "LibreOffice upstream has changed the versioning, please use `libreoffice-stable` or just `libreoffice`" libreoffice-stable; # Added 2026-08-11
   ###
   librest_1_0 = warnAlias "'librest_1_0' has been renamed to/replaced by 'librest'" librest; # Added 2026-05-30
   librewolf-wayland = throw "'librewolf-wayland' has been renamed to/replaced by 'librewolf'"; # Converted to throw 2025-10-27

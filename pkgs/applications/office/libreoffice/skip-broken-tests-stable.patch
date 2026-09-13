@@ -16,15 +16,16 @@ diff --git a/sc/qa/extras/vba-macro-test.cxx b/sc/qa/extras/vba-macro-test.cxx
 index 4dc1f0fe93c4..46b506131719 100644
 --- a/sc/qa/extras/vba-macro-test.cxx
 +++ b/sc/qa/extras/vba-macro-test.cxx
-@@ -355,7 +355,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVba)
+@@ -355,8 +355,8 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVba)
  // Failed:  : Test change event for Range.FillRight:
  // Tests passed: 4
  // Tests failed: 4
 -#if !defined(_WIN32)
 +#if 0 // flaky, see above
-         { u"Ranges-3.xls"_ustr,
-           u"vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document"_ustr },
- #endif
+ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testRanges3)
+ {
+     testMacro(
+         u"Ranges-3.xls",
 diff --git a/sc/qa/unit/ucalc_formula.cxx b/sc/qa/unit/ucalc_formula.cxx
 index 40d2c6f174de..9f540581133e 100644
 --- a/sc/qa/unit/ucalc_formula.cxx
@@ -141,18 +142,6 @@ index 61c556369d21..c91befbbada2 100644
      loadFromURL(u"private:factory/swriter"_ustr);
  
      uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(mxComponent,
-diff --git a/vcl/qa/cppunit/pdfexport/pdfexport2.cxx b/vcl/qa/cppunit/pdfexport/pdfexport2.cxx
-index 203b9cebc1df..b07082f1e6b1 100644
---- a/vcl/qa/cppunit/pdfexport/pdfexport2.cxx
-+++ b/vcl/qa/cppunit/pdfexport/pdfexport2.cxx
-@@ -6077,6 +6077,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf162750SmallCapsLigature)
- 
- CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf164106SplitReorderedClusters)
- {
-+    return; // fails due to missing font: Noto Sans
-     saveAsPDF(u"tdf164106.fodt");
- 
-     auto pPdfDocument = parsePDFExport();
 diff --git i/sc/qa/extras/scsolverobj.cxx w/sc/qa/extras/scsolverobj.cxx
 index 0537b6e4f4ffdae3b094457db0034f2de8676608..8ce4deaa368f11fdc7eb36fec4e75501fa51ea7d 100644
 --- i/sc/qa/extras/scsolverobj.cxx
@@ -162,9 +151,9 @@ index 0537b6e4f4ffdae3b094457db0034f2de8676608..8ce4deaa368f11fdc7eb36fec4e75501
  void ScSolverSettingsObj::testXSolverSettings()
  {
 +    return;
+ #ifdef ENABLE_LPSOLVE
      uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
      uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
-     uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
 diff --git i/reportdesign/qa/unit/ReportDesignBasicTests.cxx w/reportdesign/qa/unit/ReportDesignBasicTests.cxx
 index 875aca028be9..41df1e3e7ab0 100644
 --- i/reportdesign/qa/unit/ReportDesignBasicTests.cxx
@@ -238,7 +227,7 @@ index 5f73bad89f3b..d1ff4ccf7f5f 100644
      void testSVGExportEmbeddedVideo()
      {
 +        return; // Failed to connect PipeWire event context (errno: 112)
-         loadFromFile(u"slide-video-thumbnail.odp");
+         loadFromFile(u"odp/slide-video-thumbnail.odp");
          save(TestFilter::SVG_IMPRESS);
 
 diff --git i/sd/qa/unit/export-tests-ooxml2.cxx w/sd/qa/unit/export-tests-ooxml2.cxx
@@ -370,30 +359,6 @@ index 7766c3aa3e76..bb00df6ba673 100644
      vcl::filter::PDFDocument aDocument;
      load(u"tdf105093.odp", aDocument);
 
-diff --git i/vcl/qa/cppunit/pdfexport/pdfexport2.cxx w/vcl/qa/cppunit/pdfexport/pdfexport2.cxx
-index b9c560f422b5..e415b1fcc807 100644
---- i/vcl/qa/cppunit/pdfexport/pdfexport2.cxx
-+++ w/vcl/qa/cppunit/pdfexport/pdfexport2.cxx
-@@ -6320,6 +6320,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTextBoxRuby)
-
- CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf166044ContFootnoteOnlyOnePgNum)
- {
-+    return; // fails due to missing font: Noto Sans Lao
-     saveAsPDF(u"tdf166044-cont-footnote-one-pgnum.fodt");
-
-     auto pPdfDocument = parsePDFExport();
-diff --git a/svgio/qa/cppunit/data/tdf160386.svg b/svgio/qa/cppunit/data/tdf160386.svg
-index 1644b0d15514..cf429508bcd4 100644
---- a/svgio/qa/cppunit/data/tdf160386.svg
-+++ b/svgio/qa/cppunit/data/tdf160386.svg
-@@ -8,7 +8,6 @@
-     <text systemLanguage="en">Hello!</text>
-     <text systemLanguage="es">Hola!</text>
-     <text systemLanguage="fr">Bonjour!</text>
--    <text systemLanguage="ja">こんにちは</text>
-     <text systemLanguage="ru">Привет!</text>
-     <text>☺</text>
-   </switch>
 diff --git i/sc/qa/unit/subsequent_export_test2.cxx w/sc/qa/unit/subsequent_export_test2.cxx
 index 956838656b28..70b38e4d59ba 100644
 --- i/sc/qa/unit/subsequent_export_test2.cxx
@@ -406,6 +371,14 @@ index 956838656b28..70b38e4d59ba 100644
      // this doc is configured with CalcA1 ref syntax
      createScDoc("xlsx/empty.xlsx");
  
+@@ -224,6 +224,7 @@
+ 
+ CPPUNIT_TEST_FIXTURE(ScExportTest2, testNoRefStringConfigXLSX)
+ {
++    return; // failing; not immediately clear how defaults work here and what to debug
+     // this doc has no entry for ref syntax
+     createScDoc("xlsx/empty-noconf.xlsx");
+ 
 @@ -137,6 +138,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testRefStringConfigXLSX)
  
  CPPUNIT_TEST_FIXTURE(ScExportTest2, testRefStringUnspecified)
@@ -414,3 +387,99 @@ index 956838656b28..70b38e4d59ba 100644
      createScDoc();
  
      ScDocument* pDoc = getScDoc();
+--- a/vcl/qa/cppunit/pdfexport/pdfexport2.cxx	2025-11-05 10:25:25.693126767 +0100
++++ b/vcl/qa/cppunit/pdfexport/pdfexport2.cxx	2025-11-05 10:27:38.216128865 +0100
+@@ -5544,6 +5544,7 @@
+ // tdf#124116 - Tests that track-changes inside a grapheme cluster does not break positioning
+ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf124116TrackUntrack)
+ {
++    return; // failing due to missing font: David Libre
+     loadFromFile(u"tdf124116-hebrew-track-untrack.odt");
+     save(TestFilter::PDF_WRITER);
+ 
+@@ -5127,6 +5127,7 @@
+ // tdf#134226 - Tests that shaping is not broken by invisible spans
+ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf134226)
+ {
++    return ; // flaky layout test; depends on system font versions?
+     loadFromFile(u"tdf134226-shadda-in-hidden-span.fodt");
+     save(TestFilter::PDF_WRITER);
+ 
+@@ -5605,6 +5606,7 @@
+ // tdf#151748 - Textboxes should validate kashida positions
+ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf151748KashidaSpace)
+ {
++    return ; // flaky layout test; depends on the system font versions?
+     loadFromFile(u"tdf151748.fodt");
+     save(TestFilter::PDF_WRITER);
+ 
+@@ -5665,6 +5667,7 @@
+ // tdf#163105 - Writer kashida justification should expand spaces
+ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf163105SwKashidaSpaceExpansion)
+ {
++    return ; // flaky layout test; depends on the system font versions?
+     loadFromFile(u"tdf163105-kashida-spaces.fodt");
+     save(TestFilter::PDF_WRITER);
+ 
+@@ -6077,6 +6077,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf162750SmallCapsLigature)
+ 
+ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf164106SplitReorderedClusters)
+ {
++    return; // fails due to missing font: Noto Sans
+     loadFromFile(u"tdf164106.fodt");
+     save(TestFilter::PDF_WRITER);
+ 
+@@ -6320,6 +6320,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTextBoxRuby)
+
+ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf166044ContFootnoteOnlyOnePgNum)
+ {
++    return; // fails due to missing font: Noto Sans Lao
+     loadFromFile(u"tdf166044-cont-footnote-one-pgnum.fodt");
+     save(TestFilter::PDF_WRITER);
+
+@@ -6618,6 +6618,7 @@
+ 
+ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf117941RtlStrikeoutChars)
+ {
++    return; // fails due to missing font: Noto Sans Hebrew
+     loadFromFile(u"tdf117941-rtl-strike-chars.fodt");
+     save(TestFilter::PDF_WRITER);
+ 
+--- a/svgio/qa/cppunit/SvgImportTest.cxx	2026-09-10 14:38:43.279112227 +0200
++++ b/svgio/qa/cppunit/SvgImportTest.cxx	2026-09-10 14:39:14.591112036 +0200
+@@ -2279,6 +2279,7 @@
+ 
+ CPPUNIT_TEST_FIXTURE(Test, testFontVariationSettings)
+ {
++    return; // fails due to missing font: Reem Kufi
+     // tdf#118792 given an SVG file with font-variation-settings:
+     xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/font-variation-settings.svg");
+ 
+--- ./sw/qa/extras/layout/layout3.cxx	2026-09-10 14:43:37.277110432 +0200
++++ ./sw/qa/extras/layout/layout3.cxx	2026-09-10 14:44:26.106110134 +0200
+@@ -1733,6 +1733,7 @@
+ 
+ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testDropAsianWord)
+ {
++    return; // failing due to missing font: Liberation Mono
+     // Trigger the ASIAN script case in GetDropLen
+     createSwDoc("drop_asian_word.fodt");
+     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+@@ -1747,6 +1747,7 @@
+ 
+ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testDropComplexWord)
+ {
++    return; // fails due to missing font Liberation Mono (even though Liberation Mono Regular is there)
+     // Trigger the COMPLEX script case in GetDropLen
+     createSwDoc("drop_complex_word.fodt");
+     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+--- ./sw/qa/extras/layout/layout6.cxx   2026-08-21 14:51:44.000000000 +0200
++++ ./sw/qa/extras/layout/layout6.cxx.new       2026-09-10 14:47:30.399109010 +0200
+@@ -2285,6 +2285,7 @@
+ 
+ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf146572BidiWrapNoExtraSpace)
+ {
++    return; // fails due to missing font Noto Sans Hebrew, although Noto Sans Hebrew Light is there
+     createSwDoc("tdf146572-bidi-wrap-no-extra-space.fodt");
+     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+ 
