@@ -8,18 +8,18 @@
   copyDesktopItems,
 }:
 
-flutter332.buildFlutterApplication rec {
+flutter332.buildFlutterApplication (finalAttrs: {
   pname = "simple-live-app";
   version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "xiaoyaocz";
     repo = "dart_simple_live";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6kEty4QZZQW3Xzz4213ThC4FF+quMNE4oAuZ1limxFg=";
   };
 
-  sourceRoot = "${src.name}/simple_live_app";
+  sourceRoot = "${finalAttrs.src.name}/simple_live_app";
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -64,4 +64,4 @@ flutter332.buildFlutterApplication rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})
