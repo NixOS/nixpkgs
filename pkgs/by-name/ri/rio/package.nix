@@ -91,6 +91,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildNoDefaultFeatures = true;
   buildFeatures = [ ] ++ lib.optional withX11 "x11" ++ lib.optional withWayland "wayland";
 
+  cargoBuildFlags = [
+    "-p"
+    "rioterm"
+  ];
+  cargoTestFlags = [
+    "-p"
+    "rioterm"
+  ];
+
   checkFlags = [
     # These build "dead" contexts, which carry the placeholder shell PID 1.
     # Dropping one sends SIGHUP to that PID, and the builder is PID 1 inside the
