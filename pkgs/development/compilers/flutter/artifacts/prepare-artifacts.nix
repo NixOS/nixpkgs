@@ -14,6 +14,8 @@
 
   autoPatchelfFlags = [ "--preserve-origin" ];
 
+  strictDeps = true;
+
   installPhase = ''
     runHook preInstall
 
@@ -23,6 +25,8 @@
 
     runHook postInstall
   '';
+
+  __structuredAttrs = true;
 }).overrideAttrs
   (
     if builtins.pathExists (./overrides + "/${src.flutterPlatform}.nix") then
