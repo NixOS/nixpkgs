@@ -13,6 +13,7 @@ let
     mkPackageOption
     mkOption
     maintainers
+    optionals
     ;
   inherit (lib.types)
     addCheck
@@ -23,6 +24,11 @@ let
     str
     submodule
     ;
+  inherit (pkgs)
+    symlinkJoin
+    makeWrapper
+    ;
+
   cfg = config.services.navidrome;
   settingsFormat = pkgs.formats.json { };
 in
@@ -33,6 +39,16 @@ in
       enable = mkEnableOption "Navidrome music server";
 
       package = mkPackageOption pkgs "navidrome" { };
+
+      adminWrapper = mkOption {
+        type = bool;
+        default = true;
+        example = false;
+        description = ''
+          Add a wrapped Navidrome to PATH for CLI admin tasks.
+          This wrapped Navidrome will be called "navidrome-cli".
+        '';
+      };
 
       plugins = mkOption {
         type = listOf (
@@ -146,6 +162,46 @@ in
     let
       inherit (lib) mkIf optional getExe;
       WorkingDirectory = "/var/lib/navidrome";
+
+      settingsFile = settingsFormat.generate "navidrome.json" cfg.settings;
+
+      # Wrapper so that users can do admin tasks with the configured navidrome
+      wrappedNavi = symlinkJoin {
+        inherit (cfg.finalPackage) pname version;
+
+        paths = [
+          cfg.finalPackage
+        ];
+
+        strictDeps = true;
+        __structuredAttrs = true;
+
+        nativeBuildInputs = [
+          makeWrapper
+        ];
+
+        wrapperArgs = [
+          "--add-flag"
+          "--configfile"
+          "--add-flag"
+          "${settingsFile}"
+        ]
+        ++ optionals (cfg.environmentFile != null) [
+          "--run"
+          "source ${cfg.environmentFile}"
+        ];
+
+        postBuild = ''
+          makeWrapper "${lib.getExe cfg.finalPackage}" "$out/bin/navidrome-cli" \
+            "''${wrapperArgs[@]}"
+
+          rm "$out/bin/navidrome"
+        '';
+
+        meta = cfg.finalPackage.meta // {
+          mainProgram = "navidrome-cli";
+        };
+      };
     in
     mkIf cfg.enable {
       systemd = {
@@ -169,9 +225,7 @@ in
           after = [ "network.target" ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
-            ExecStart = ''
-              ${getExe cfg.finalPackage} --configfile ${settingsFormat.generate "navidrome.json" cfg.settings}
-            '';
+            ExecStart = "${lib.getExe cfg.finalPackage} --configfile ${settingsFile}";
             EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
             User = cfg.user;
             Group = cfg.group;
@@ -235,6 +289,10 @@ in
       users.groups = mkIf (cfg.group == "navidrome") { navidrome = { }; };
 
       networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.Port ];
+
+      environment.systemPackages = mkIf cfg.adminWrapper [
+        wrappedNavi
+      ];
     };
   meta.maintainers = with maintainers; [
     fsnkty
