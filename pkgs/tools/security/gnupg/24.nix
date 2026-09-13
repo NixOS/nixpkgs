@@ -90,8 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
   freepgPatches = fetchFromGitLab {
     owner = "freepg";
     repo = "gnupg";
-    tag = "source-2.4.9-freepg";
-    hash = "sha256-wF+iR0OgnU8VI90NlFOXtN5aCRC0YY/X7sPiDXjJm5M=";
+    tag = "source-2.4.9-freepg-1";
+    hash = "sha256-hoSuIrq7Epco1LLlc77tGr/YZdp2w04Eq0rGbBCurWU=";
   };
 
   patches = [
@@ -132,6 +132,15 @@ stdenv.mkDerivation (finalAttrs: {
     "0033-Support-large-RSA-keygen-in-non-batch-mode.patch"
     "0034-gpg-Verify-Text-mode-Signatures-over-binary-Literal-.patch"
     "0039-gpg-Do-not-use-a-default-when-asking-for-another-out.patch"
+    "0040-Add-missing-test-files-to-EXTRA_DIST.patch"
+    "0045-gpg-Fix-edge-case-in-refresh-keys.patch"
+    "0046-gpgsm-Require-a-minimum-tag-length-for-GCM-decryptio.patch"
+    "0047-gpg-Fix-handling-with-no-CRC-armor.patch"
+    "0048-gpg-Fix-armored-input-parsing.patch"
+    "0049-gpg-Fix-armor-parsing-when-no-CRC-is-found.patch"
+    "0050-tpm-Fix-possible-buffer-overflow-in-PKDECRYPT.patch"
+    "0051-agent-Fix-the-regression-in-pkdecrypt-with-TPM-RSA.patch"
+    "0052-dirmngr-Fix-a-call-of-calloc.patch"
   ];
 
   postPatch =
