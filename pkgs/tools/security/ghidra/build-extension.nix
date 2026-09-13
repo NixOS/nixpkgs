@@ -5,6 +5,7 @@
   jdk,
   gradle,
   ghidra,
+  replaceVars,
 }:
 
 let
@@ -39,6 +40,17 @@ let
         ];
 
         preBuild = ''
+          ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+            gradleJvmArgs="-Xms64m -Xmx2G -Dfile.encoding=UTF-8 -Duser.language=en -Duser.country=US -Duser.variant"
+            if [[ -n "''${MITM_CACHE_KEYSTORE-}" ]]; then
+              gradleJvmArgs+=" -Dhttp.proxyHost=$MITM_CACHE_HOST -Dhttp.proxyPort=$MITM_CACHE_PORT"
+              gradleJvmArgs+=" -Dhttps.proxyHost=$MITM_CACHE_HOST -Dhttps.proxyPort=$MITM_CACHE_PORT"
+              gradleJvmArgs+=" -Djavax.net.ssl.trustStore=$MITM_CACHE_KEYSTORE -Djavax.net.ssl.trustStorePassword=$MITM_CACHE_KS_PWD"
+            fi
+            echo "org.gradle.jvmargs=$gradleJvmArgs" >> gradle.properties
+            export GRADLE_OPTS="$gradleJvmArgs ''${GRADLE_OPTS:-}"
+          ''}
+
           # Set project name, otherwise defaults to directory name
           echo -e '\nrootProject.name = "${pname}"' >> settings.gradle
           # A config directory needs to exist when ghidra's GHelpBuilder is run
@@ -48,9 +60,18 @@ let
 
         # Needed to run gradle on darwin
         __darwinAllowLocalNetworking = true;
+        enableParallelBuilding = args.enableParallelBuilding or (!stdenv.hostPlatform.isDarwin);
 
         gradleBuildTask = args.gradleBuildTask or "buildExtension";
-        gradleFlags = args.gradleFlags or [ ] ++ [ "-PGHIDRA_INSTALL_DIR=${ghidra}/lib/ghidra" ];
+        gradleFlags =
+          (args.gradleFlags or [ ])
+          ++ [ "-PGHIDRA_INSTALL_DIR=${ghidra}/lib/ghidra" ]
+          ++ lib.optionals stdenv.hostPlatform.isDarwin [
+            "--max-workers=1"
+            "--init-script"
+            "${./darwin-javac-init.gradle}"
+            "-PNIX_JAVAC=${jdk}/bin/javac"
+          ];
 
         installPhase =
           args.installPhase or ''
@@ -80,6 +101,13 @@ let
         meta ? { },
         ...
       }@args:
+      let
+        extensionProperties = replaceVars ./script-extension.properties.in {
+          inherit pname;
+          description = meta.description or "";
+          version = lib.getVersion ghidra;
+        };
+      in
       {
         installPhase = ''
           runHook preInstall
@@ -89,14 +117,7 @@ let
           cp -r . $GHIDRA_HOME/ghidra_scripts
 
           touch $GHIDRA_HOME/Module.manifest
-          cat <<'EOF' > extension.properties
-          name=${pname}
-          description=${meta.description or ""}
-          author=
-          createdOn=
-          version=${lib.getVersion ghidra}
-
-          EOF
+          cp ${extensionProperties} "$GHIDRA_HOME/extension.properties"
 
           runHook postInstall
         '';
