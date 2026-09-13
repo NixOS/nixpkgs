@@ -16,20 +16,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sentry-cli";
-  version = "2.58.2";
+  version = "3.7.1-snapshot.20260828.3e7488c";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-cli";
     tag = finalAttrs.version;
-    hash = "sha256-2dxnAwxIdmeA53PETUyDUgi1T4ZH9faBvPCMdRPUDxw=";
+    hash = "sha256-+DTFj3Ib/YBH7mYsSmFGUm+oRR1zmzIwlyk32OBxW8s=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
     (replaceVars ./fix-swift-lib-path.patch { swiftLib = lib.getLib swift; })
   ];
 
-  cargoHash = "sha256-CwULTOZN2TTpB8heLuegID38ub6J3XoiY7l7UW1VcGo=";
+  cargoHash = "sha256-ZtuAA3C818jwj2pVfmkTNtaHP7G4DFcZbqSkXRRVnHE=";
 
   # Needed to get openssl-sys to use pkgconfig.
   env.OPENSSL_NO_VENDOR = 1;
