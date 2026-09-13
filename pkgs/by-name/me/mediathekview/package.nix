@@ -11,11 +11,11 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "14.4.2";
+  version = "14.5.0";
   pname = "mediathekview";
   src = fetchurl {
     url = "https://download.mediathekview.de/stabil/MediathekView-${finalAttrs.version}-linux.tar.gz";
-    sha256 = "sha256-sDZSXYzak2RKQiW1OGpgSvFlkZrttsoOxVqRaodol24=";
+    sha256 = "sha256-IKAxEEZ5hWW6+RPbzsMJccRpiPobdH3Y47gqWb9btC8=";
   };
 
   nativeBuildInputs = [
