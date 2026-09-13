@@ -11,18 +11,18 @@
 }:
 
 let
-  version = "3.4";
+  version = "3.5.2";
 
   inherit (stdenv.hostPlatform) system;
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://static.meteor.com/packages-bootstrap/${version}/meteor-bootstrap-os.linux.x86_64.tar.gz";
-      hash = "sha256-tzzRN9UAH7+BM3fs76U5H20vD0LGMpdrMDDiJtchgEg=";
+      hash = "sha256-4YwcHrFmD9BU2ebeSHHt+LDMXTW1DnFHs8j1SltInAg=";
     };
     aarch64-darwin = fetchurl {
       url = "https://static.meteor.com/packages-bootstrap/${version}/meteor-bootstrap-os.osx.arm64.tar.gz";
-      hash = "sha256-AT7njZTgf/WTHlvLEbF3dXKNoqyqHy8KloBQ4gsbPuM=";
+      hash = "sha256-5utHDLdIaNQlnWg/gH4IZc1kBctnsu8KJYkRa/9NTSM=";
     };
   };
 in
@@ -123,6 +123,7 @@ stdenv.mkDerivation {
   passthru.updateScript = ./update.sh;
 
   meta = {
+    changelog = "https://github.com/meteor/meteor/releases/tag/release%2FMETEOR%40${version}";
     description = "Complete open source platform for building web and mobile apps in pure JavaScript";
     homepage = "https://www.meteor.com/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

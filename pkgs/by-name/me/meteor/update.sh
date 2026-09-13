@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bash common-updater-scripts curl nix-update
+#!nix-shell -i bash -p bash common-updater-scripts curl jq nix-update
 
 releaseInfo=$(curl https://install.meteor.com)
 latestVersion=$(grep <<<"$releaseInfo" -oP 'RELEASE="\K[^"]+')
@@ -12,6 +12,8 @@ if [[ "$latestVersion" == "$currentVersion" ]]; then
    echo "package is up-to-date"
    exit 0
 fi
+
+update-source-version meteor $latestVersion
 
 systems=$(nix eval --json -f . meteor.meta.platforms | jq --raw-output '.[]')
 for system in $systems; do
