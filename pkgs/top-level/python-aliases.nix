@@ -185,6 +185,7 @@ mapAliases {
   debian = throw "'debian' has been renamed to/replaced by 'python-debian'"; # Converted to throw 2025-10-29
   dedupe-pylbfgs = pylbfgs; # added 2026-06-28
   deepsearch-glm = throw "'deepsearch-glm' has been removed due to lack of upstream maintenance"; # Added 2025-03-04
+  deezer-python-async = throw "'deezer-python-async' has been removed because Music-Assistant moved to deezer-python-gql"; # Added 2026-08-21
   derpconf = throw "'derpconf' has been removed because it is unmaintained upstream"; # Added 2026-09-05
   detectron2 = throw "'detectron2' has been removed because it is unmaintained upstream"; # Added 2026-09-06
   dictionaries = throw "'dictionaries' has been removed as it was archived upstream"; # Added 2026-07-20
