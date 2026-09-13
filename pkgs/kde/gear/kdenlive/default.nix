@@ -17,6 +17,8 @@
   opentimelineio,
   frei0r,
   qtimageformats,
+  wrapGAppsNoGuiHook,
+  gtk3,
 }:
 mkKdeDerivation {
   pname = "kdenlive";
@@ -36,6 +38,8 @@ mkKdeDerivation {
   extraNativeBuildInputs = [
     pkg-config
     shared-mime-info
+    wrapGAppsNoGuiHook
+    gtk3
   ];
 
   extraBuildInputs = [
@@ -43,7 +47,7 @@ mkKdeDerivation {
     qtmultimedia
     qtnetworkauth
     qtimageformats # UI uses webp images
-
+    gtk3
     kddockwidgets
     qqc2-desktop-style
     kio-extras
