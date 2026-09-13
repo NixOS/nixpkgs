@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "reviewdog";
-  version = "0.21.0";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "reviewdog";
     repo = "reviewdog";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VYhn98tDyUS2HNd7sEJD/M8kln9/AMeGxm84SxSSOy8=";
+    hash = "sha256-NEnYaHUC7a4ylKvyZ6iAXjLKeEICki/0ro9rhhLoXZs=";
   };
 
-  vendorHash = "sha256-V4hL4PHtpLV6SHg7sCbs5tHIEuosRMr7jynTFdD1eZ8=";
+  vendorHash = "sha256-k5dLFgYOgwlMUnk1Xb7lyewT9lXdAoCj1HNxshSVE9M=";
 
   doCheck = false;
 
