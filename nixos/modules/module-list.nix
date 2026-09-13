@@ -1677,6 +1677,7 @@
   ./services/web-apps/bookorbit.nix
   ./services/web-apps/bookstack.nix
   ./services/web-apps/bulwark.nix
+  ./services/web-apps/busybar-manager.nix
   ./services/web-apps/c2fmzq-server.nix
   ./services/web-apps/calibre-web.nix
   ./services/web-apps/castopod.nix
