@@ -338458,102 +338458,6 @@ self: {
     {
       mkDerivation,
       aeson,
-      base,
-      base16-bytestring,
-      bytestring,
-      co-log-core,
-      conduit,
-      conduit-extra,
-      cryptohash-sha1,
-      deepseq,
-      directory,
-      exceptions,
-      extra,
-      file-embed,
-      filepath,
-      ghc,
-      optparse-applicative,
-      prettyprinter,
-      tasty,
-      tasty-expected-failure,
-      tasty-hunit,
-      template-haskell,
-      temporary,
-      text,
-      time,
-      transformers,
-      unix-compat,
-      unordered-containers,
-      yaml,
-    }:
-    mkDerivation {
-      pname = "hie-bios";
-      version = "0.19.0";
-      sha256 = "0k0sqwwsjbbcx7n08xxvxd8l1a3833fm7w268nivhhlyb7ahahgv";
-      isLibrary = true;
-      isExecutable = true;
-      libraryHaskellDepends = [
-        aeson
-        base
-        base16-bytestring
-        bytestring
-        co-log-core
-        conduit
-        conduit-extra
-        cryptohash-sha1
-        deepseq
-        directory
-        exceptions
-        extra
-        file-embed
-        filepath
-        ghc
-        prettyprinter
-        template-haskell
-        temporary
-        text
-        time
-        transformers
-        unix-compat
-        unordered-containers
-        yaml
-      ];
-      executableHaskellDepends = [
-        base
-        co-log-core
-        directory
-        filepath
-        optparse-applicative
-        prettyprinter
-      ];
-      testHaskellDepends = [
-        aeson
-        base
-        co-log-core
-        directory
-        extra
-        filepath
-        ghc
-        prettyprinter
-        tasty
-        tasty-expected-failure
-        tasty-hunit
-        temporary
-        text
-        transformers
-        yaml
-      ];
-      description = "Set up a GHC API session";
-      license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
-      mainProgram = "hie-bios";
-      maintainers = [ lib.maintainers.alexfmpe ];
-    }
-  ) { };
-
-  hie-bios_0_21_0 = callPackage (
-    {
-      mkDerivation,
-      aeson,
       async,
       base,
       base16-bytestring,
@@ -338649,7 +338553,6 @@ self: {
       ];
       description = "Set up a GHC API session";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
-      hydraPlatforms = lib.platforms.none;
       mainProgram = "hie-bios";
       maintainers = [ lib.maintainers.alexfmpe ];
     }
