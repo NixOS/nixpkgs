@@ -199,6 +199,17 @@ in
             pruneOpts = [ "--keep-last 1" ];
             checkOpts = [ "--some-check-option" ];
           };
+          customUnitConfig = {
+            inherit passwordFile paths;
+            repository = remoteRepository;
+            unitConfig = {
+              documentation = [ "custom-unit-config-was-written" ];
+              # confirm that nested attrs also merge
+              serviceConfig = {
+                ExecPreStart = "${pkgs.lib.getExe' pkgs.coreutils "echo"} works";
+              };
+            };
+          };
         };
 
         environment.sessionVariables.RCLONE_CONFIG_LOCAL_TYPE = "local";
@@ -338,6 +349,11 @@ in
         # test that remoteprune brings us back to 1 snapshot in remotebackup
         "systemctl start restic-backups-remoteprune.service",
         'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
+
+        # test that custom unit config is present
+        "systemctl cat restic-backups-customUnitConfig | grep custom-unit-config-was-written",
+        # but its empty serviceConfig did not clobber the defaults
+        "systemctl cat restic-backups-customUnitConfig | grep Type=oneshot"
     )
 
     # test that the inhibit option is working

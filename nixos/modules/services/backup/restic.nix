@@ -177,6 +177,17 @@ in
               ];
             };
 
+            unitConfig = lib.mkOption {
+              type = lib.types.attrsOf unitOption;
+              default = { };
+              description = ''
+                Configuration for the systemd unit.
+              '';
+              example = {
+                OnFailure = "notify-restic-failure.service";
+              };
+            };
+
             timerConfig = lib.mkOption {
               type = lib.types.nullOr (lib.types.attrsOf unitOption);
               default = {
@@ -420,85 +431,89 @@ in
         toRcloneVal = v: if lib.isBool v then lib.boolToString v else v;
       in
       lib.nameValuePair "restic-backups-${name}" (
-        {
-          environment = {
-            # not %C, because that wouldn't work in the wrapper script
-            RESTIC_CACHE_DIR = "/var/cache/restic-backups-${name}";
-            RESTIC_PASSWORD_FILE = backup.passwordFile;
-            RESTIC_REPOSITORY = backup.repository;
-            RESTIC_REPOSITORY_FILE = backup.repositoryFile;
+        lib.mkMerge [
+          {
+            environment = {
+              # not %C, because that wouldn't work in the wrapper script
+              RESTIC_CACHE_DIR = "/var/cache/restic-backups-${name}";
+              RESTIC_PASSWORD_FILE = backup.passwordFile;
+              RESTIC_REPOSITORY = backup.repository;
+              RESTIC_REPOSITORY_FILE = backup.repositoryFile;
+            }
+            // lib.optionalAttrs (backup.rcloneOptions != null) (
+              lib.mapAttrs' (
+                name: value: lib.nameValuePair (rcloneAttrToOpt name) (toRcloneVal value)
+              ) backup.rcloneOptions
+            )
+            // lib.optionalAttrs (backup.rcloneConfigFile != null) {
+              RCLONE_CONFIG = backup.rcloneConfigFile;
+            }
+            // lib.optionalAttrs (backup.rcloneConfig != null) (
+              lib.mapAttrs' (
+                name: value: lib.nameValuePair (rcloneAttrToConf name) (toRcloneVal value)
+              ) backup.rcloneConfig
+            )
+            // lib.optionalAttrs (backup.progressFps != null) {
+              RESTIC_PROGRESS_FPS = toString backup.progressFps;
+            };
+            path = [ config.programs.ssh.package ];
+            restartIfChanged = false;
+            wants = [ "network-online.target" ];
+            after = [ "network-online.target" ];
+            serviceConfig = {
+              Type = "oneshot";
+              ExecStart =
+                lib.optionals doBackup [
+                  "${resticCmd} backup ${
+                    lib.concatStringsSep " " (
+                      backup.extraBackupArgs
+                      ++ lib.optionals fileBackup (excludeFlags ++ [ "--files-from=${filesFromTmpFile}" ])
+                      ++ lib.optionals commandBackup ([ "--stdin-from-command=true --" ] ++ backup.command)
+                    )
+                  }"
+                ]
+                ++ pruneCmd
+                ++ checkCmd;
+              User = backup.user;
+              RuntimeDirectory = "restic-backups-${name}";
+              CacheDirectory = "restic-backups-${name}";
+              CacheDirectoryMode = "0700";
+              PrivateTmp = true;
+            }
+            // lib.optionalAttrs (backup.environmentFile != null) {
+              EnvironmentFile = backup.environmentFile;
+            };
           }
-          // lib.optionalAttrs (backup.rcloneOptions != null) (
-            lib.mapAttrs' (
-              name: value: lib.nameValuePair (rcloneAttrToOpt name) (toRcloneVal value)
-            ) backup.rcloneOptions
-          )
-          // lib.optionalAttrs (backup.rcloneConfigFile != null) {
-            RCLONE_CONFIG = backup.rcloneConfigFile;
-          }
-          // lib.optionalAttrs (backup.rcloneConfig != null) (
-            lib.mapAttrs' (
-              name: value: lib.nameValuePair (rcloneAttrToConf name) (toRcloneVal value)
-            ) backup.rcloneConfig
-          )
-          // lib.optionalAttrs (backup.progressFps != null) {
-            RESTIC_PROGRESS_FPS = toString backup.progressFps;
-          };
-          path = [ config.programs.ssh.package ];
-          restartIfChanged = false;
-          wants = [ "network-online.target" ];
-          after = [ "network-online.target" ];
-          serviceConfig = {
-            Type = "oneshot";
-            ExecStart =
-              lib.optionals doBackup [
-                "${resticCmd} backup ${
-                  lib.concatStringsSep " " (
-                    backup.extraBackupArgs
-                    ++ lib.optionals fileBackup (excludeFlags ++ [ "--files-from=${filesFromTmpFile}" ])
-                    ++ lib.optionals commandBackup ([ "--stdin-from-command=true --" ] ++ backup.command)
-                  )
-                }"
-              ]
-              ++ pruneCmd
-              ++ checkCmd;
-            User = backup.user;
-            RuntimeDirectory = "restic-backups-${name}";
-            CacheDirectory = "restic-backups-${name}";
-            CacheDirectoryMode = "0700";
-            PrivateTmp = true;
-          }
-          // lib.optionalAttrs (backup.environmentFile != null) {
-            EnvironmentFile = backup.environmentFile;
-          };
-        }
-        // lib.optionalAttrs (backup.initialize || doBackup || backup.backupPrepareCommand != null) {
-          preStart = ''
-            ${lib.optionalString (backup.backupPrepareCommand != null) ''
-              ${pkgs.writeScript "backupPrepareCommand" backup.backupPrepareCommand}
-            ''}
-            ${lib.optionalString backup.initialize ''
-              ${resticCmd} cat config > /dev/null || ${resticCmd} init
-            ''}
-            ${lib.optionalString (backup.paths != null && backup.paths != [ ]) ''
-              cat ${pkgs.writeText "staticPaths" (lib.concatLines backup.paths)} >> ${filesFromTmpFile}
-            ''}
-            ${lib.optionalString (backup.dynamicFilesFrom != null) ''
-              ${pkgs.writeScript "dynamicFilesFromScript" backup.dynamicFilesFrom} >> ${filesFromTmpFile}
-            ''}
-          '';
-        }
-        // lib.optionalAttrs (doBackup || backup.backupCleanupCommand != null) {
-          postStop = ''
-            ${lib.optionalString (backup.backupCleanupCommand != null) ''
-              ${pkgs.writeScript "backupCleanupCommand" backup.backupCleanupCommand}
-            ''}
-            ${lib.optionalString fileBackup ''
-              rm -f ${filesFromTmpFile}
-            ''}
-          '';
-        }
+          (lib.mkIf (backup.initialize || doBackup || backup.backupPrepareCommand != null) {
+            preStart = ''
+              ${lib.optionalString (backup.backupPrepareCommand != null) ''
+                ${pkgs.writeScript "backupPrepareCommand" backup.backupPrepareCommand}
+              ''}
+              ${lib.optionalString backup.initialize ''
+                ${resticCmd} cat config > /dev/null || ${resticCmd} init
+              ''}
+              ${lib.optionalString (backup.paths != null && backup.paths != [ ]) ''
+                cat ${pkgs.writeText "staticPaths" (lib.concatLines backup.paths)} >> ${filesFromTmpFile}
+              ''}
+              ${lib.optionalString (backup.dynamicFilesFrom != null) ''
+                ${pkgs.writeScript "dynamicFilesFromScript" backup.dynamicFilesFrom} >> ${filesFromTmpFile}
+              ''}
+            '';
+          })
+          (lib.mkIf (doBackup || backup.backupCleanupCommand != null) {
+            postStop = ''
+              ${lib.optionalString (backup.backupCleanupCommand != null) ''
+                ${pkgs.writeScript "backupCleanupCommand" backup.backupCleanupCommand}
+              ''}
+              ${lib.optionalString fileBackup ''
+                rm -f ${filesFromTmpFile}
+              ''}
+            '';
+          })
+          backup.unitConfig
+        ]
       )
+
     ) config.services.restic.backups;
     systemd.timers = lib.mapAttrs' (
       name: backup:
