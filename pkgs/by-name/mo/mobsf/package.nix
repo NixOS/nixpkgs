@@ -158,5 +158,6 @@ buildPythonApplication (finalAttrs: {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ felbinger ];
     platforms = lib.platforms.linux;
+    mainProgram = "mobsf";
   };
 })
