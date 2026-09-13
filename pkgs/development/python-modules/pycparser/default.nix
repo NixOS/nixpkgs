@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
     substituteInPlace examples/using_gcc_E_libc.py \
       --replace-fail "'gcc'" "'${stdenv.cc.targetPrefix}cc'"
   '';
-  unittestFlagsArray = [
+  unittestFlags = [
     "-s"
     "tests"
   ];
