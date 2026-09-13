@@ -1401,6 +1401,8 @@ let
 
           mu4e-alert = addPackageRequires super.mu4e-alert [ self.mu4e ];
 
+          mu4e-autotask = addPackageRequires super.mu4e-autotask [ self.mu4e ];
+
           mu4e-column-faces = addPackageRequires super.mu4e-column-faces [ self.mu4e ];
 
           mu4e-conversation = addPackageRequires super.mu4e-conversation [ self.mu4e ];
