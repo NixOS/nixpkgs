@@ -35,6 +35,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "bun-webkit";
   inherit (sources.webkit) version;
 
+  # update.py updates the revision and hash, not sparseCheckout. Add paths when
+  # a new WebKit revision needs them.
   src = fetchgit {
     name = "bun-webkit-source";
     url = "https://github.com/oven-sh/WebKit.git";
@@ -72,6 +74,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     libedit
   ];
 
+  # Review these settings against Bun's local WebKit build in webkit.ts.
   cmakeBuildType = "RelWithDebInfo";
   cmakeFlags = [
     (lib.cmakeFeature "PORT" "JSCOnly")
@@ -99,6 +102,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "Mig_EXECUTABLE" (lib.getExe' darwin.bootstrap_cmds "mig"))
   ];
 
+  # Match computeCpuTargetFlags() in webkit.ts. Bun and JavaScriptCore need the
+  # same CPU baseline.
   env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " (
     [
       "-gz=zlib"
@@ -117,6 +122,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   ninjaFlags = [ "jsc" ];
 
+  # webkit.ts provides() reads these libraries and generated headers directly.
   installPhase = ''
     runHook preInstall
 
