@@ -13,18 +13,20 @@
 }:
 
 let
-  pythonEnv = python3.withPackages (ps: with ps; [ click ]);
+  pythonDeps = ps: with ps; [ click ];
+  pythonEnv = python3.withPackages pythonDeps;
+  checkPythonEnv = python3.withPackages (ps: pythonDeps ps ++ [ ps.xmlschema ]);
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sby";
-  version = "0.68";
+  version = "0.69";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "sby";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WRZp4+gwUgDKCWAdBK/36ArM2KFGyLBZ20S32k7YN+8=";
+    hash = "sha256-BNxSMDtfnNrIOrXYxXD7XAHNJUGifEFRYrYpyteAMHQ=";
   };
 
   postPatch = ''
@@ -68,8 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeCheckInputs = [
-    python3
-    python3.pkgs.xmlschema
+    checkPythonEnv
     yosys
     yices
     z3
