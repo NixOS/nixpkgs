@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dotbot";
-  version = "1.24.0";
+  version = "1.24.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anishathalye";
     repo = "dotbot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HlCq9ek/419A+bgwtbRr45Q2RqPPv38QKSV+CwzihFc=";
+    hash = "sha256-EpIPuwV9Kx6XZHzq5Q/+jZDnOD728UXKJAaITv6KKHw=";
   };
 
   preCheck = ''
