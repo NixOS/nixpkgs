@@ -1,14 +1,11 @@
-{ ... }:
 {
   name = "immich-nixos";
 
-  nodes.machine =
+  containers.machine =
     { pkgs, ... }:
     {
       # These tests need a little more juice
       virtualisation = {
-        cores = 2;
-        memorySize = 4096;
         diskSize = 4096;
       };
 
@@ -82,5 +79,11 @@
     """ % token)
     assert sum(json.loads(res)["backupDatabase"]["jobCounts"].values()) >= 1
     machine.wait_until_succeeds("ls /var/lib/immich/backups/*.sql.gz")
+
+    with subtest("Test immich-admin"):
+      machine.succeed("echo admin2 | immich-admin reset-admin-password")
+      machine.succeed("""
+        curl -f --json '{ "email": "test@example.com", "password": "admin2" }' http://localhost:2283/api/auth/login
+      """)
   '';
 }
