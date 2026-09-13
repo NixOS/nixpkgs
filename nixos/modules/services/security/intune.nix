@@ -10,6 +10,8 @@ in
 {
   options.services.intune = {
     enable = lib.mkEnableOption "Microsoft Intune";
+    intune-portal.package = lib.mkPackageOption pkgs "intune-portal" { };
+    microsoft-identity-broker.package = lib.mkPackageOption pkgs "microsoft-identity-broker" { };
   };
 
   config = lib.mkIf cfg.enable {
@@ -20,16 +22,16 @@ in
 
     users.groups.microsoft-identity-broker = { };
     environment.systemPackages = [
-      pkgs.microsoft-identity-broker
-      pkgs.intune-portal
+      cfg.intune-portal.package
+      cfg.microsoft-identity-broker.package
     ];
     systemd.packages = [
-      pkgs.microsoft-identity-broker
-      pkgs.intune-portal
+      cfg.microsoft-identity-broker.package
+      cfg.intune-portal.package
     ];
 
-    systemd.tmpfiles.packages = [ pkgs.intune-portal ];
-    services.dbus.packages = [ pkgs.microsoft-identity-broker ];
+    systemd.tmpfiles.packages = [ cfg.intune-portal.package ];
+    services.dbus.packages = [ cfg.microsoft-identity-broker.package ];
   };
 
   meta = {
