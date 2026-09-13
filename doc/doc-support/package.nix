@@ -91,7 +91,7 @@ stdenvNoCC.mkDerivation (
       substituteInPlace ./languages-frameworks/python.section.md \
         --subst-var-by python-interpreter-table "$(<"${pythonInterpreterTable}")"
 
-      cat ./functions/library.md.in ${lib-docs}/index.md > ./functions/library.md
+      cp ${lib-docs}/lib-functions.json ./functions/lib-functions.json
 
       substitute ./manual.md.in ./manual.md \
         --replace-fail '@MANUAL_VERSION@' '${lib.version}'
@@ -147,7 +147,7 @@ stdenvNoCC.mkDerivation (
     '';
 
     passthru = {
-      lib-docs = callPackage ./lib-function-docs.nix { inherit nixpkgs; };
+      lib-docs = callPackage ./lib-function-docs.nix { };
 
       epub = callPackage ./epub.nix { };
 
