@@ -1,5 +1,5 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
   fetchFromGitHub,
   gnat,
@@ -34,7 +34,7 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "gnatcoll-${component}";
   version = "25.0.0";
 
