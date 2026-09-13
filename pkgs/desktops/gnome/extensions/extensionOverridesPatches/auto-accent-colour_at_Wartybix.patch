@@ -1,0 +1,10 @@
+--- a/extension.js
++++ b/extension.js
+@@ -163,7 +163,7 @@ async function runColorThief(imagePath, extensionPath) {
+     try {
+         const resultStr = await execCommand(
+-            ['gjs', '-m', `${extensionPath}/color-thief/run-color-thief.js`, imagePath]
++            ['@gjs@/bin/gjs', '-m', `${extensionPath}/color-thief/run-color-thief.js`, imagePath]
+         )
+ 
+         const palette = resultStr.split(';')
