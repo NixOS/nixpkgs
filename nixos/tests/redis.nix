@@ -4,12 +4,8 @@
   package,
   ...
 }:
-let
-  mkTestName =
-    pkg: "${pkg.pname}_${builtins.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor pkg.version)}";
-in
 {
-  name = mkTestName package;
+  name = package.pname;
   meta.maintainers = lib.teams.redis.members;
 
   nodes = {
