@@ -5,7 +5,7 @@
   versionCheckHook,
 
   # build-system
-  setuptools,
+  setuptools_80,
 
   # dependencies
   aiohttp,
@@ -60,7 +60,7 @@ buildPythonPackage (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/server";
 
   build-system = [
-    setuptools
+    setuptools_80
   ];
 
   dependencies = [
@@ -79,7 +79,7 @@ buildPythonPackage (finalAttrs: {
     py
     pyramid
     repoze-lru
-    setuptools
+    setuptools_80
     strictyaml
     waitress
   ]
