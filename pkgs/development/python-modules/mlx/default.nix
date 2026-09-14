@@ -44,7 +44,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "mlx";
-  version = "0.32.0";
+  version = "0.32.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -52,7 +52,7 @@ buildPythonPackage (finalAttrs: {
     owner = "ml-explore";
     repo = "mlx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yHpTyRf9FOPbdyDWSM7b6VC72STnUpgCMLbDxLbdaqs=";
+    hash = "sha256-VstsaBOAvqHJhTNXczjFavG4l5VTJdJWT0VKuzmwIEA=";
   };
 
   patches = [
