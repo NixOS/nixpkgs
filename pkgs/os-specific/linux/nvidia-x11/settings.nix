@@ -19,9 +19,10 @@
   libglvnd,
   wrapGAppsHook3,
   addDriverRunpath,
-  nvidia_x11,
+  platforms,
   version,
   hash,
+  useProfiles,
   withGtk2 ? false,
   withGtk3 ? true,
 }:
@@ -36,7 +37,7 @@ let
 
   meta = {
     homepage = "https://www.nvidia.com/object/unix.html";
-    platforms = nvidia_x11.meta.platforms;
+    inherit platforms;
   };
 
   libXNVCtrl = stdenv.mkDerivation {
@@ -113,8 +114,8 @@ stdenv.mkDerivation {
           hash = "sha256-wKuO5CUTUuwYvsP46Pz+6fI0yxLNpZv8qlbL0TFkEFE=";
         });
 
-  postPatch = lib.optionalString nvidia_x11.useProfiles ''
-    sed -i 's,/usr/share/nvidia/,${nvidia_x11.bin}/share/nvidia/,g' src/gtk+-2.x/ctkappprofile.c
+  postPatch = lib.optionalString useProfiles ''
+    sed -i 's,/usr/share/nvidia/,/run/current-system/sw/share/nvidia/,g' src/gtk+-2.x/ctkappprofile.c
   '';
 
   enableParallelBuilding = true;
@@ -142,7 +143,6 @@ stdenv.mkDerivation {
     libxext
     libxxf86vm
     libvdpau
-    nvidia_x11
     dbus
     vulkan-headers
   ]

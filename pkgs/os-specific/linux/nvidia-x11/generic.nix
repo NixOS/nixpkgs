@@ -199,12 +199,12 @@ nvidiaDriver.overrideAttrs (
       settings =
         if useSettings then
           (if settings32Bit then pkgsi686Linux.callPackage else callPackage) ./settings.nix {
-            nvidia_x11 = finalAttrs.finalPackage;
             version = settingsVersion;
             hash = settingsSha256;
             withGtk2 = preferGtk2;
             withGtk3 = !preferGtk2;
-            inherit fetchFromGithubOrNvidia;
+            inherit fetchFromGithubOrNvidia useProfiles;
+            inherit (finalAttrs.meta) platforms;
           }
         else
           { };
