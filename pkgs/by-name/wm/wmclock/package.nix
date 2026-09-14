@@ -4,9 +4,9 @@
   fetchurl,
   autoreconfHook,
   pkg-config,
-  libX11,
-  libXext,
-  libXpm,
+  libx11,
+  libxext,
+  libxpm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,9 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
-    libXext
-    libXpm
+    libx11
+    libxext
+    libxpm
   ];
 
   meta = {
