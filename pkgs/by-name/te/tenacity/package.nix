@@ -49,14 +49,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tenacity";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchFromCodeberg {
     owner = "tenacityteam";
     repo = "tenacity";
     fetchSubmodules = true;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2gndOwgEJK2zDSbjcZigbhEpGv301/ygrf+EQhKp8PI=";
+    hash = "sha256-szw4BcWoBT9EY1VbPtlKGAbg4kAhZPUE9mghDm2mt4M=";
   };
 
   # https://codeberg.org/tenacityteam/tenacity/pulls/696
