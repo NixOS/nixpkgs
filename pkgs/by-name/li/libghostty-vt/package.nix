@@ -60,6 +60,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ ];
 
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/build/LibtoolStep.zig \
+      --replace-fail /bin/cp cp \
+      --replace-fail /usr/bin/ranlib ranlib
+    substituteInPlace src/build/GhosttyLibVt.zig \
+      --replace-fail /bin/ln ln
+    substituteInPlace pkg/apple-sdk/native_link.zig \
+      --replace-fail /usr/bin/xcrun xcrun
+  '';
+
   dontSetZigDefaultFlags = true;
 
   zigBuildFlags = [
