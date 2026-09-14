@@ -60,7 +60,8 @@ let
       name = "nixos-system-${config.system.name}-${config.system.nixos.label}";
       preferLocalBuild = true;
       allowSubstitutes = false;
-      buildCommand = systemBuilder;
+      # We handle assertions here so that merely evaluating the name attribute (e.g. in `nix flake show`) doesn't trigger heavy instantiations.
+      buildCommand = lib.asserts.checkAssertWarn config.assertions config.warnings systemBuilder;
 
       systemd = config.systemd.package;
 
@@ -74,9 +75,6 @@ let
     }
   );
 
-  # Handle assertions and warnings
-  baseSystemAssertWarn = lib.asserts.checkAssertWarn config.assertions config.warnings baseSystem;
-
   # Replace runtime dependencies
   system =
     let
@@ -84,7 +82,7 @@ let
     in
     if replacements == [ ] then
       # Avoid IFD if possible, by sidestepping replaceDependencies if no replacements are specified.
-      baseSystemAssertWarn
+      baseSystem
     else
       (pkgs.replaceDependencies.override {
         replaceDirectDependencies = pkgs.replaceDirectDependencies.override {
@@ -92,7 +90,7 @@ let
         };
       })
         {
-          drv = baseSystemAssertWarn;
+          drv = baseSystem;
           inherit replacements cutoffPackages;
         };
 
