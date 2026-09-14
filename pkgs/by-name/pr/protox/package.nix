@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Rust implementation of the protobuf compiler";
     mainProgram = "protox";
     homepage = "https://github.com/andrewhickman/protox";
-    changelog = "https://github.com/andrewhickman/protox/blob/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/andrewhickman/protox/blob/protox-v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
