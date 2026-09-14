@@ -12,8 +12,6 @@ let
     mkIf
     mkPackageOption
     types
-    optional
-    optionals
     mapAttrs
     mapAttrs'
     filterAttrs
@@ -28,14 +26,6 @@ let
 
   builtInRemovedMsg = "This is now built-in in DMS and doesn't need additional dependencies.";
 
-  optionalPackages =
-    optionals cfg.enableVPN [
-      pkgs.glib
-      pkgs.networkmanager
-    ]
-    ++ optional cfg.enableDynamicTheming pkgs.matugen
-    ++ optional cfg.enableAudioWavelength pkgs.cava
-    ++ optional cfg.enableCalendarEvents pkgs.khal;
 in
 {
   imports = [
@@ -47,6 +37,18 @@ in
     (lib.mkRemovedOptionModule (path ++ [ "enableClipboard" ]) builtInRemovedMsg)
     (lib.mkRemovedOptionModule (path ++ [ "enableSystemMonitoring" ]) builtInRemovedMsg)
     (lib.mkRemovedOptionModule (path ++ [ "enableClipboardPaste" ]) builtInRemovedMsg)
+    (lib.mkRemovedOptionModule (path ++ [ "enableVPN" ])
+      "Networking backends are detected by DMS at runtime. Configure the desired networking service separately."
+    )
+    (lib.mkRemovedOptionModule (
+      path ++ [ "enableDynamicTheming" ]
+    ) "Install matugen separately to use DMS dynamic theming.")
+    (lib.mkRemovedOptionModule (
+      path ++ [ "enableAudioWavelength" ]
+    ) "Install cava separately to use the DMS audio visualizer.")
+    (lib.mkRemovedOptionModule (
+      path ++ [ "enableCalendarEvents" ]
+    ) "Install a supported calendar backend separately and select it in DMS settings.")
   ];
 
   options.programs.dms-shell = {
@@ -84,50 +86,6 @@ in
           after a system rebuild.
         '';
       };
-    };
-
-    enableVPN = mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
-        Whether to install dependencies required for VPN widgets.
-        This enables VPN status monitoring and management through NetworkManager.
-
-        Requires: glib, networkmanager
-      '';
-    };
-
-    enableDynamicTheming = mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
-        Whether to install dependencies required for dynamic theming support.
-        This enables automatic theme generation based on wallpapers and other sources.
-
-        Requires: matugen
-      '';
-    };
-
-    enableAudioWavelength = mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
-        Whether to install dependencies required for audio wavelength visualization.
-        This enables audio spectrum and waveform visualizer widgets.
-
-        Requires: cava
-      '';
-    };
-
-    enableCalendarEvents = mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
-        Whether to install dependencies required for calendar events support.
-        This enables calendar widgets that display events and reminders via khal.
-
-        Requires: khal
-      '';
     };
 
     quickshell = {
@@ -183,8 +141,7 @@ in
     environment.systemPackages = [
       cfg.package
       cfg.quickshell.package
-    ]
-    ++ optionalPackages;
+    ];
 
     environment.etc =
       mapAttrs'
