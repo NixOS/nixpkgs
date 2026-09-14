@@ -91,6 +91,7 @@ buildLinux (
         thiagokokada
         jerrysm64
         axertheaxe
+        eljamm
       ];
       teams = [ ];
       description = "Built using the best configuration and kernel sources for desktop, multimedia, and gaming workloads.";
