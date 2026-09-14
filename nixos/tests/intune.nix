@@ -36,6 +36,10 @@
   testScript = ''
     start_all()
 
+    machine.wait_for_unit("sockets.target")
+    machine.succeed("systemctl is-enabled intune-daemon.socket")
+    machine.wait_for_unit("intune-daemon.socket")
+
     # Check System Daemons successfully start
     machine.succeed("systemctl start microsoft-identity-device-broker.service")
     machine.succeed("systemctl start intune-daemon.service")
@@ -43,6 +47,9 @@
     # Check User Daemons and intune-portal execurtable works
     # Going any further than starting it would require internet access and a microsoft account
     machine.wait_for_x()
+    machine.wait_for_unit("graphical-session.target", user="alice")
+    machine.succeed("su - alice -c 'systemctl --user is-enabled intune-agent.timer'")
+    machine.wait_for_unit("intune-agent.timer", user="alice")
     # TODO: This needs an unlocked user keychain before it will work
     #machine.succeed("su - alice -c 'systemctl start --user microsoft-identity-broker.service'")
     machine.succeed("su - alice -c 'systemctl start --user intune-agent.service'")
