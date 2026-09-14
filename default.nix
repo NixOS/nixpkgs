@@ -1,5 +1,7 @@
 let
-  missingFeatures = map ({ description, ... }: description) (import ./lib/minfeatures.nix).missing;
+  missingFeatures =
+    map ({ description, ... }: description)
+      (import ./pkgs/top-level/minfeatures.nix).missing;
 in
 
 if missingFeatures != [ ] then
