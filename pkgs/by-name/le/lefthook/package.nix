@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "lefthook";
-  version = "2.1.12";
+  version = "2.1.14";
 
   src = fetchFromGitHub {
     owner = "evilmartians";
     repo = "lefthook";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-lYZ76qEF1oIZ4YKoNNIU0j4dncZRTqC0hi2Sb1uxMPI=";
+    hash = "sha256-UknO4ka3fjldpsp9V+GPkPYvhmlF4e6nd6dW9Uwjc2o=";
   };
 
   vendorHash = "sha256-G+v6ZqnkcFdPDzXlN89oqD7mOnHfq1tvIkFxdoVnBNo=";

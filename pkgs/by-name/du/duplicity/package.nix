@@ -17,6 +17,7 @@
   getconf,
   testers,
   nix-update-script,
+  nixosTests,
 }:
 
 let
@@ -156,6 +157,8 @@ let
       tests.version = testers.testVersion {
         package = self;
       };
+
+      tests.nixos = nixosTests.duplicity;
     };
 
     meta = {

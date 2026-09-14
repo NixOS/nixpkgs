@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  useMoldLinker,
   fetchFromGitHub,
   gitMinimal,
   makeBinaryWrapper,
@@ -42,8 +43,11 @@ let
       version = devenvNixVersion;
     }
   );
+  buildRustPackage = rustPlatform.buildRustPackage.override {
+    stdenv = if stdenv.hostPlatform.isLinux then useMoldLinker stdenv else stdenv;
+  };
 in
-rustPlatform.buildRustPackage {
+buildRustPackage {
   pname = "devenv";
   inherit version;
 
@@ -59,6 +63,7 @@ rustPlatform.buildRustPackage {
   env = {
     RUSTFLAGS = "--cfg tracing_unstable";
     LIBSQLITE3_SYS_USE_PKG_CONFIG = "1";
+    OPENSSL_NO_VENDOR = "1";
     DEVENV_IS_RELEASE = true;
   };
 
@@ -67,6 +72,8 @@ rustPlatform.buildRustPackage {
     "devenv"
     "-p"
     "devenv-run-tests"
+    "-p"
+    "devenv-proxy"
   ];
 
   nativeBuildInputs = [

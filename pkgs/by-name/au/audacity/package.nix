@@ -189,7 +189,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       johnrichardrinehart
       veprbl
-      wegank
     ];
     platforms = lib.platforms.unix;
   };
