@@ -62,7 +62,7 @@ buildDotnetModule (finalAttrs: {
   pname = "rhythia";
   # version = "0.1.2";
   # indev branch
-  version = "0-unstable-2026-09-11";
+  version = "0-unstable-2026-09-14";
 
   # src = fetchFromGitHub {
   #   owner = "Rhythia";
@@ -76,8 +76,8 @@ buildDotnetModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Rhythia";
     repo = "Client";
-    rev = "41874d670cf0a2a5309a8de052df2e84e411c079";
-    hash = "sha256-7gK7shxbHL/GtP29i3+FV63Dtt1snlr2qQGktzkgNvM=";
+    rev = "3b658ad0dae6d97f8845365c30f19b881e68a109";
+    hash = "sha256-/9gon2J1yQwFsdpdATKjafsChbue7rkAtGdQ4fxdIXg=";
     fetchLFS = true;
   };
 
@@ -86,10 +86,12 @@ buildDotnetModule (finalAttrs: {
 
   patches = [
     # ./godot-dotnet-sdk-4.6.3.patch
-    # indev branch
-    ./godot-dotnet-sdk-4.7.2.patch
   ]
   ++ lib.optional (stdenv.hostPlatform.system == "aarch64-linux") ./fix-aarch64-linux.patch;
+
+  postPatch = ''
+    rm dotnet-tools.json
+  '';
 
   nugetDeps = ./deps-indev.json;
 

@@ -5,11 +5,6 @@
     "hash": "sha256-uXTNIWfZU7Gf/JpXQ5ufKA3SQdXYSkg3yLm5yCrBDd8="
   },
   {
-    "pname": "Godot.NET.Sdk",
-    "version": "4.7.2",
-    "hash": "sha256-Z5/pxnNsoZQ7BnMqxRE/UMJI6gKAWT/32wiBS3IFess="
-  },
-  {
     "pname": "Godot.SourceGenerators",
     "version": "4.7.2",
     "hash": "sha256-1vUbZvoXVQvPy8OKrjQOcfHHKYskI23wk15O3NZ0VL4="
