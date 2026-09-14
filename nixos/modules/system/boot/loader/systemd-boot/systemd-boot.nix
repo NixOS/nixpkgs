@@ -45,7 +45,7 @@ let
 
       inherit (pkgs) python3;
 
-      systemd = config.systemd.package;
+      systemd = cfg.package;
 
       nix = config.nix.package.out;
 
@@ -173,6 +173,44 @@ in
         Whether to enable the systemd-boot (formerly gummiboot) EFI boot manager.
         For more information about systemd-boot:
         <https://www.freedesktop.org/wiki/Software/systemd/systemd-boot/>
+      '';
+    };
+
+    package = mkOption {
+      type = types.package;
+      example = literalExpression ''
+        let
+          systemd = config.systemd.package;
+          disabledAllWith = lib.pipe systemd.override [
+            lib.functionArgs
+            builtins.attrNames
+            (builtins.filter (name: lib.hasPrefix "with" name))
+            lib.genAttrs
+          ] (_: false);
+        in
+        (systemd.override (
+          # disable all with* function arguments like withTimesyncd etc.
+          disabledAllWith
+          // {
+            # and re-enable bootloader arguments to just build the bootloader
+            withEfi = true;
+            withBootloader = true;
+          }
+        )).overrideAttrs
+          (old: {
+            # change the colors of the bootloader
+            mesonFlags = (old.mesonFlags or [ ]) ++ [
+              "-Defi-color-normal=black,lightgray"
+              "-Defi-color-entry=black,lightgray"
+              "-Defi-color-highlight=green,lightgray"
+              "-Defi-color-edit=black,lightgray"
+            ];
+          });
+      '';
+      default = config.systemd.package;
+      defaultText = literalExpression "config.systemd.package";
+      description = ''
+        The systemd package to use containing the systemd-boot (formerly gummiboot) EFI boot manager.
       '';
     };
 
