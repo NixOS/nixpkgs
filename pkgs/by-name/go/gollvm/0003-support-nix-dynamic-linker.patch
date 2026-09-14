@@ -1,0 +1,60 @@
+From c20e3925db81b0b57f13a63d8d7dcf33976e4b53 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 19 Apr 2026 20:12:00 -0500
+Subject: [PATCH 3/10] driver: make the default dynamic linker configurable
+
+On ordinary distributions the Linux driver can usually fall back to a
+loader path such as /lib64/ld-linux-x86-64.so.2. Nix does not provide
+that layout: the ELF interpreter lives in the store and its path must be
+passed in explicitly when no sysroot is in use.
+
+Add a cache variable for the default dynamic linker and use it before
+falling back to the hard-coded FHS path. Existing builds keep the old
+behaviour unless they opt in to the new setting.
+---
+ cmake/modules/AddGollvm.cmake | 1 +
+ driver/GollvmConfig.h.cmake   | 3 +++
+ driver/LinuxToolChain.cpp     | 5 +++++
+ 3 files changed, 9 insertions(+)
+
+diff --git a/cmake/modules/AddGollvm.cmake b/cmake/modules/AddGollvm.cmake
+index 3fd4162..2085d41 100644
+--- a/cmake/modules/AddGollvm.cmake
++++ b/cmake/modules/AddGollvm.cmake
+@@ -22,6 +22,7 @@ set(GOLLVM_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}")
+ set(GOLLVM_INSTALL_LIBDIR "${CMAKE_INSTALL_PREFIX}/${libsubdir}")
+ 
+ message(STATUS "default linker set to \"${GOLLVM_DEFAULT_LINKER}\"")
++set(GOLLVM_DEFAULT_DYNAMIC_LINKER "" CACHE STRING "Absolute path to the default ELF dynamic linker")
+ 
+ # Check to see whether the build compiler supports -fcf-protection=branch
+ set(OLD_CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS}")
+diff --git a/driver/GollvmConfig.h.cmake b/driver/GollvmConfig.h.cmake
+index b03bbcc..df2df37 100644
+--- a/driver/GollvmConfig.h.cmake
++++ b/driver/GollvmConfig.h.cmake
+@@ -22,4 +22,7 @@
+ // Gollvm default linker
+ #define GOLLVM_DEFAULT_LINKER "@GOLLVM_DEFAULT_LINKER@"
+ 
++// Default dynamic linker used when no sysroot is set
++#cmakedefine GOLLVM_DEFAULT_DYNAMIC_LINKER "@GOLLVM_DEFAULT_DYNAMIC_LINKER@"
++
+ #endif // GOLLVM_CONFIG_H
+diff --git a/driver/LinuxToolChain.cpp b/driver/LinuxToolChain.cpp
+index 8d1f4a1..95e53d4 100644
+--- a/driver/LinuxToolChain.cpp
++++ b/driver/LinuxToolChain.cpp
+@@ -148,5 +148,10 @@ std::string Linux::getDynamicLinker(const llvm::opt::ArgList &args)
+     std::string Sysroot = Arg->getValue();
+     return Sysroot + "/" + LibDir + "/" + Loader;
+   }
++#ifdef GOLLVM_DEFAULT_DYNAMIC_LINKER
++  if (GOLLVM_DEFAULT_DYNAMIC_LINKER[0] != '\0') {
++    return GOLLVM_DEFAULT_DYNAMIC_LINKER;
++  }
++#endif
+   return "/" + LibDir + "/" + Loader;
+ }
+-- 
+2.50.1
