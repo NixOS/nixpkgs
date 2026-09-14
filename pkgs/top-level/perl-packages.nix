@@ -7562,6 +7562,21 @@ with self;
     };
   };
 
+  CryptURandomMonkeyPatch = buildPerlPackage {
+    pname = "Crypt-URandom-MonkeyPatch";
+    version = "0.1.4";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RR/RRWO/Crypt-URandom-MonkeyPatch-v0.1.4.tar.gz";
+      hash = "sha256-eydufcxL7TnZW/+dnTemlTkycVaPTarMrFBowLQcKsk=";
+    };
+    buildInputs = [ TestOutput ];
+    propagatedBuildInputs = [ CryptURandom ];
+    meta = {
+      description = "Override core rand function to use system random sources";
+      license = lib.licenses.artistic2;
+    };
+  };
+
   CryptScryptKDF = buildPerlModule {
     pname = "Crypt-ScryptKDF";
     version = "0.011";
