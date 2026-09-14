@@ -11331,6 +11331,8 @@ self: super: with self; {
 
   multiaddr = callPackage ../development/python-modules/multiaddr { };
 
+  multiarchive = callPackage ../development/python-modules/multiarchive { };
+
   multidict = callPackage ../development/python-modules/multidict { };
 
   multimethod = callPackage ../development/python-modules/multimethod { };
@@ -17370,6 +17372,8 @@ self: super: with self; {
 
   pytransportnswv2 = callPackage ../development/python-modules/pytransportnswv2 { };
 
+  pytrash = callPackage ../development/python-modules/pytrash { };
+
   pytricia = callPackage ../development/python-modules/pytricia { };
 
   pytrydan = callPackage ../development/python-modules/pytrydan { };
@@ -20622,6 +20626,8 @@ self: super: with self; {
   textual-autocomplete = callPackage ../development/python-modules/textual-autocomplete { };
 
   textual-dev = callPackage ../development/python-modules/textual-dev { };
+
+  textual-drivers = callPackage ../development/python-modules/textual-drivers { };
 
   textual-fastdatatable = callPackage ../development/python-modules/textual-fastdatatable { };
 
