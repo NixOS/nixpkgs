@@ -168,6 +168,12 @@ let
         $out/libexec/electron/electron \
         $out/libexec/electron/chrome_crashpad_handler
 
+      # replace bundled vulkan-loader
+      rm "$out/libexec/electron/libvulkan.so.1"
+      ln -s -t "$out/libexec/electron" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
+
+    ''
+    + lib.optionalString (lib.versionOlder version "44") ''
       # patch libANGLE
       patchelf \
         --set-rpath "${
@@ -178,10 +184,6 @@ let
           ]
         }" \
         $out/libexec/electron/lib*GL*
-
-      # replace bundled vulkan-loader
-      rm "$out/libexec/electron/libvulkan.so.1"
-      ln -s -t "$out/libexec/electron" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
     '';
 
     passthru.dist = finalAttrs.finalPackage + "/libexec/electron";
