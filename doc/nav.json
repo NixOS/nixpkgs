@@ -645,45 +645,6 @@
         },
         {
           "file": "module-system/module-system.chapter.md"
-        }
-      ]
-    },
-    {
-      "label": "Contributing to Nixpkgs",
-      "id": "part-contributing",
-      "children": [
-        {
-          "file": "contributing.md"
-        },
-        {
-          "file": "contributing/quick-start.chapter.md"
-        },
-        {
-          "label": "Development of Nixpkgs",
-          "id": "part-development",
-          "children": [
-            {
-              "file": "development.md"
-            },
-            {
-              "file": "development/opening-issues.chapter.md"
-            }
-          ]
-        },
-        {
-          "file": "contributing/coding-conventions.chapter.md"
-        },
-        {
-          "file": "contributing/submitting-changes.chapter.md"
-        },
-        {
-          "file": "contributing/vulnerability-roundup.chapter.md"
-        },
-        {
-          "file": "contributing/reviewing-contributions.chapter.md"
-        },
-        {
-          "file": "contributing/contributing-to-documentation.chapter.md"
         },
         {
           "label": "Interoperability Standards",
@@ -698,6 +659,9 @@
           ]
         }
       ]
+    },
+    {
+      "file": "contributing.md"
     }
   ]
 }

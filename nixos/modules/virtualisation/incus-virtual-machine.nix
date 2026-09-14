@@ -47,6 +47,7 @@ in
     });
 
     image.repart = {
+      enable = true;
       name = "nixos";
       version = null;
       sectorSize = 512;
