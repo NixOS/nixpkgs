@@ -2,65 +2,45 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  boost,
   cmake,
   pkg-config,
   curl,
-  boost,
-  liboauth,
+  html-tidy,
   jsoncpp,
-  htmlcxx,
+  ninja,
+  pkg-config,
   rhash,
   tinyxml-2,
-  help2man,
-  html-tidy,
-  qt6,
-  testers,
-
-  enableGui ? false,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lgogdownloader";
-  version = "3.18";
+  version = "3.19";
 
   src = fetchFromGitHub {
     owner = "Sude-";
     repo = "lgogdownloader";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dVEV2smZxB6+Utm9FApiFydAS3hLm4y9YZja1B/PiEk=";
+    hash = "sha256-4JHV2m5zSekWYpO0j3weH5hiG/kmciDF4Jby46ykxCI=";
   };
-
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "set_property(TARGET \''${PROJECT_NAME} PROPERTY CXX_STANDARD 11)" "set_property(TARGET \''${PROJECT_NAME} PROPERTY CXX_STANDARD 17)"
-  '';
 
   nativeBuildInputs = [
     cmake
+    ninja
     pkg-config
-    help2man
-    html-tidy
-  ]
-  ++ lib.optional enableGui qt6.wrapQtAppsHook;
+  ];
 
   buildInputs = [
     boost
     curl
-    htmlcxx
+    html-tidy
     jsoncpp
     liboauth
     rhash
     tinyxml-2
-  ]
-  ++ lib.optionals enableGui [
-    qt6.qtbase
-    qt6.qtwebengine
-  ];
-
-  cmakeFlags = [
-    (lib.cmakeBool "USE_QT_GUI" enableGui)
-    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17")
-    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DJSONCPP_HAS_STRING_VIEW=1")
+    zlib
   ];
 
   passthru.tests = {
@@ -68,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Unofficial downloader to GOG.com for Linux users. It uses the same API as the official GOGDownloader";
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "lgogdownloader";
     homepage = "https://github.com/Sude-/lgogdownloader";
     license = lib.licenses.wtfpl;
