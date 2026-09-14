@@ -34,10 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qasync" ];
 
-  # crashes the interpreter
-  disabledTestPaths = [
-    "tests/test_qeventloop.py"
-    "tests/test_run.py"
+  env.QT_QPA_PLATFORM = "offscreen";
+
+  disabledTests = [
+    "test_no_stale_reference_as_argument"
+    "test_no_stale_reference_as_result"
   ];
 
   meta = {
