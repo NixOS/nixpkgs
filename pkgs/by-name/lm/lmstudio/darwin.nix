@@ -51,12 +51,5 @@ stdenv.mkDerivation {
   # LM Studio ships Scripts inside the App Bundle, which may be messed up by standard fixups
   dontFixup = true;
 
-  # undmg doesn't support APFS and 7zz does break the xattr. Took that approach from https://github.com/NixOS/nixpkgs/blob/a3c6ed7ad2649c1a55ffd94f7747e3176053b833/pkgs/by-name/in/insomnia/package.nix#L52
-  # NOTE (djmaxus): even with hdiutil, a check `xattr -lr LM\ Studio.app` returns nothing,
-  # meaning that xattrs are lost anyway? So, I brought back simple 7zip unpacking
-  unpackPhase = ''
-    7zz x -snld $src
-  '';
-
   inherit passthru;
 }
