@@ -54,6 +54,8 @@ in
 
       hsphfpd.enable = mkEnableOption "support for hsphfpd[-prototype] implementation";
 
+      experimental.enable = mkEnableOption "support for experimental D-Bus interfaces";
+
       powerOnBoot = mkOption {
         type = types.bool;
         default = true;
@@ -116,6 +118,13 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.experimental.enable -> lib.elem "--enable-experimental" cfg.package.configureFlags;
+        message = "hardware.bluetooth.experimental.enable requires bluez-experimental";
+      }
+    ];
+
     environment.systemPackages = [ package ] ++ optional cfg.hsphfpd.enable pkgs.hsphfpd;
 
     environment.etc."bluetooth/input.conf".source = cfgFmt.generate "input.conf" cfg.input;
@@ -138,7 +147,8 @@ in
             "-f"
             "/etc/bluetooth/main.conf"
           ]
-          ++ optional hasDisabledPlugins "--noplugin=${concatStringsSep "," cfg.disabledPlugins}";
+          ++ optional hasDisabledPlugins "--noplugin=${concatStringsSep "," cfg.disabledPlugins}"
+          ++ optional cfg.experimental.enable "--experimental";
         in
         {
           wantedBy = [ "bluetooth.target" ];
