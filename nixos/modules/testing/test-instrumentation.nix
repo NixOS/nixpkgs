@@ -233,11 +233,13 @@ in
     environment.systemPackages = [
       pkgs.xwininfo
     ]
-    ++ lib.optional config.boot.isNspawnContainer (
+    ++ lib.optionals config.boot.isNspawnContainer [
       # Unlike a QEMU machine, an nspawn container has no monitor that can
-      # capture its display, so the test driver uses `xwd' inside the container.
+      # capture its display or inject keyboard input, so the test driver uses
+      # `xwd' and `xdotool' inside the container instead.
+      pkgs.xdotool
       pkgs.xwd
-    );
+    ];
 
     # Log everything to the serial console.
     services.journald.settings.Journal = {

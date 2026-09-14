@@ -101,6 +101,48 @@ CHAR_TO_KEY = {
     ")": "shift-0x0B",
 }
 
+X11_KEY_ALIASES = {
+    "\n": "Return",
+    "alt": "Alt_L",
+    "alt_r": "Alt_R",
+    "backspace": "BackSpace",
+    "delete": "Delete",
+    "down": "Down",
+    "esc": "Escape",
+    "kp_enter": "KP_Enter",
+    "left": "Left",
+    "meta_l": "Super_L",
+    "meta_r": "Super_R",
+    "ret": "Return",
+    "right": "Right",
+    "shift": "Shift_L",
+    "spc": "space",
+    "tab": "Tab",
+    "up": "Up",
+}
+
+X11_MODIFIER_ALIASES = {
+    "alt": "alt",
+    "ctrl": "ctrl",
+    "meta_l": "super",
+    "meta_r": "super",
+    "shift": "shift",
+}
+
+
+def x11_key_name(key: str) -> str:
+    """Translate a key from the test driver vocabulary to an X11 key chord."""
+    parts = key.split("-")
+    modifiers = []
+    while len(parts) > 1 and parts[0] in X11_MODIFIER_ALIASES:
+        modifiers.append(X11_MODIFIER_ALIASES[parts.pop(0)])
+
+    base = "-".join(parts)
+    base = X11_KEY_ALIASES.get(base, base)
+    if re.fullmatch(r"f\d+", base):
+        base = base.upper()
+    return "+".join([*modifiers, base])
+
 
 def make_command(args: list) -> str:
     return " ".join(map(shlex.quote, (map(str, args))))
@@ -623,6 +665,38 @@ class BaseMachine(ABC):
 
         with self.nested("waiting for a window to appear"):
             retry(window_is_visible, as_timedelta(timeout))
+
+    @abstractmethod
+    def send_key(
+        self,
+        key: str,
+        delay: Duration | None = dt.timedelta(milliseconds=10),
+        log: bool | None = True,
+    ) -> None:
+        """
+        Simulate pressing a key or key chord, e.g.,
+        `send_key("ctrl-alt-delete")`.
+
+        Portable key names include printable ASCII characters, function keys,
+        `tab`, `ret`, `esc`, `spc`, `backspace`, `delete`, `left`, `right`,
+        `up`, `down`, and `kp_enter`. Chords may use the `ctrl`, `alt`,
+        `shift`, `meta_l`, and `meta_r` modifiers. Machine backends may accept
+        additional key names.
+        """
+        ...
+
+    def send_chars(
+        self, chars: str, delay: Duration | None = dt.timedelta(milliseconds=10)
+    ) -> None:
+        r"""
+        Simulate typing a sequence of characters on the virtual keyboard,
+        e.g., `send_chars("foobar\n")` will type the string `foobar`
+        followed by the Enter key.
+        """
+        _warn_if_numeric_duration(delay, "send_chars")
+        with self.nested(f"sending keys {repr(chars)}"):
+            for char in chars:
+                self.send_key(char, delay, log=False)
 
     @contextmanager
     def _managed_screenshot(self) -> Generator[Path]:
@@ -1224,19 +1298,6 @@ class QemuMachine(BaseMachine):
             if elapsed >= timeout:
                 raise TimeoutError
 
-    def send_chars(
-        self, chars: str, delay: Duration | None = dt.timedelta(milliseconds=10)
-    ) -> None:
-        r"""
-        Simulate typing a sequence of characters on the virtual keyboard,
-        e.g., `send_chars("foobar\n")` will type the string `foobar`
-        followed by the Enter key.
-        """
-        _warn_if_numeric_duration(delay, "send_chars")
-        with self.nested(f"sending keys {repr(chars)}"):
-            for char in chars:
-                self.send_key(char, delay, log=False)
-
     def wait_for_file(
         self, filename: str, timeout: Duration = dt.timedelta(minutes=15)
     ) -> None:
@@ -1361,13 +1422,6 @@ class QemuMachine(BaseMachine):
         delay: Duration | None = dt.timedelta(milliseconds=10),
         log: bool | None = True,
     ) -> None:
-        """
-        Simulate pressing keys on the virtual keyboard, e.g.,
-        `send_key("ctrl-alt-delete")`.
-
-        Please also refer to the QEMU documentation for more information on the
-        input syntax: https://en.wikibooks.org/wiki/QEMU/Monitor#sendkey_keys
-        """
         _warn_if_numeric_duration(delay, "send_key")
         key = CHAR_TO_KEY.get(key, key)
         context = self.nested(f"sending key {repr(key)}") if log else nullcontext()
@@ -1668,6 +1722,36 @@ class NspawnMachine(BaseMachine):
 
         with self.nested("waiting for the X11 server"):
             retry(check_x, as_timedelta(timeout))
+
+    def send_key(
+        self,
+        key: str,
+        delay: Duration | None = dt.timedelta(milliseconds=10),
+        log: bool | None = True,
+    ) -> None:
+        _warn_if_numeric_duration(delay, "send_key")
+        context = self.nested(f"sending key {repr(key)}") if log else nullcontext()
+        with context:
+            if len(key) == 1 and key.isprintable():
+                command = [
+                    "xdotool",
+                    "type",
+                    "--clearmodifiers",
+                    "--delay",
+                    0,
+                    "--",
+                    key,
+                ]
+            else:
+                command = [
+                    "xdotool",
+                    "key",
+                    "--clearmodifiers",
+                    x11_key_name(key),
+                ]
+            self.succeed(make_command(command))
+            if delay is not None:
+                time.sleep(as_seconds(delay))
 
     @contextmanager
     def _managed_screenshot(self) -> Generator[Path]:
