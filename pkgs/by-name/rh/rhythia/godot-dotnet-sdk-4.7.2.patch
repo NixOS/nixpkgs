@@ -1,0 +1,66 @@
+diff --git a/Rhythia.csproj b/Rhythia.csproj
+index cd63240..8a3ef95 100644
+--- a/Rhythia.csproj
++++ b/Rhythia.csproj
+@@ -1,4 +1,4 @@
+-<Project Sdk="Godot.NET.Sdk/4.7.1">
++<Project Sdk="Godot.NET.Sdk/4.7.2">
+   <PropertyGroup>
+     <TargetFramework>net10.0</TargetFramework>
+     <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net10.0</TargetFramework>
+@@ -13,7 +13,7 @@
+   </PropertyGroup>
+   <ItemGroup>
+     <PackageReference Include="DiscordRichPresence" Version="1.6.1.70" />
+-    <PackageReference Include="Godot.NET.Sdk" Version="4.5.0" />
++    <PackageReference Include="Godot.NET.Sdk" Version="4.7.2" />
+     <PackageReference Include="Semver" Version="3.0.0" />
+     <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+     <PackageReference Include="Tomlyn" Version="0.20.0" />
+diff --git a/packages.lock.json b/packages.lock.json
+index a0b4639..bfa8713 100644
+--- a/packages.lock.json
++++ b/packages.lock.json
+@@ -13,29 +13,29 @@
+       },
+       "Godot.NET.Sdk": {
+         "type": "Direct",
+-        "requested": "[4.5.0, )",
+-        "resolved": "4.5.0",
+-        "contentHash": "PYPVsaq5knx4qj2dbvdnnHE7qva9Of1ALM1Y3EuiBEV/9ZmNeApE/J/eobI7WNbc6OZ/SKRLiPgglw59QbSj9w=="
++        "requested": "[4.7.2, )",
++        "resolved": "4.7.2",
++        "contentHash": "ZzETraZAWcCaNiuUtrYPt1Ud4C9VdSaDyUewr88uGjqYE4irALsGzbs+0ecTZzxtL1Co4QdkVjhOSqaN7MDgGw=="
+       },
+       "Godot.SourceGenerators": {
+         "type": "Direct",
+-        "requested": "[4.7.1, )",
+-        "resolved": "4.7.1",
+-        "contentHash": "XNYxnzQtZw/3ebPgpVC5eKMH5z3mx/MFNAb9rNeb/SmyMus+u4GPbwMN1ZsmXf0j4a9L/Uj55PbZIHLk96EFyQ=="
++        "requested": "[4.7.2, )",
++        "resolved": "4.7.2",
++        "contentHash": "PeYESFlRxlmeClrPhlMINhVvt2HiKnx2Ux/FYA10rimDevHljji3/jmRZOMo9XDNQsZzPH4uQmDyPgQgzTFvAg=="
+       },
+       "GodotSharp": {
+         "type": "Direct",
+-        "requested": "[4.7.1, )",
+-        "resolved": "4.7.1",
+-        "contentHash": "OCTPz0MtENY0J1e9Sw4VB9qxS0DK9xpEQLAIMRzCtnVKiJvHZUAAnJ9mU4ewW5+88V4beewp3dl8OE813Qw73g=="
++        "requested": "[4.7.2, )",
++        "resolved": "4.7.2",
++        "contentHash": "EPvfayB7b7MrBNdASvy86jRS5AbM9dprkVivcRD80g+ngn2M8KAIrBQH4NhyQL+pwxni0xVnuqhD9AFpZeNQpw=="
+       },
+       "GodotSharpEditor": {
+         "type": "Direct",
+-        "requested": "[4.7.1, )",
+-        "resolved": "4.7.1",
+-        "contentHash": "MAX9wPgjX9BM+EOMxuF++mWKdvO2y0ZiEAfv6D68HGseQc8mX//yc7QrJizXSJ4ii1nh3krXZSyIJ77nmjOgYA==",
++        "requested": "[4.7.2, )",
++        "resolved": "4.7.2",
++        "contentHash": "Fuf2rNvajla9N8Z+ksxsSIt326wsjpB2F2uZCtxkdfWIsApabCHy5fsE2EKxOlQ4NaINGdgMIv62D0n583qe1A==",
+         "dependencies": {
+-          "GodotSharp": "4.7.1"
++          "GodotSharp": "4.7.2"
+         }
+       },
+       "Semver": {
