@@ -24537,6 +24537,11 @@
     githubId = 178049808;
     matrix = "@reylak:unredacted.org";
   };
+  rem719 = {
+  github = "rem719";
+  githubId = 61773995;
+  name = "Christiano Nicholas";
+ };
   rgnns = {
     email = "jglievano@gmail.com";
     github = "rgnns";
