@@ -20,10 +20,10 @@ buildKodiBinaryAddon rec {
   };
 
   extraCMakeFlags = [
-    "-DGW_LIB=${gw}/lib/retroarch/cores/gw_libretro.so"
+    "-DGW_LIB=${lib.getLib gw}/lib/retroarch/cores/gw_libretro.so"
   ];
 
-  extraBuildInputs = [ gw ];
+  extraBuildInputs = [ (lib.getLib gw) ];
   propagatedBuildInputs = [
     libretro
   ];
