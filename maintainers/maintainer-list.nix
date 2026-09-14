@@ -16660,6 +16660,11 @@
     githubId = 516527;
     name = "Lukas Werling";
   };
+  lmdevv = {
+    github = "lmdevv";
+    githubId = 138343225;
+    name = "lmdev";
+  };
   lnk3 = {
     github = "lnk3";
     githubId = 23727619;
