@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchzip,
+  installFonts,
 }:
 
 let
@@ -52,8 +53,11 @@ let
         inherit sha256;
       };
 
-      installPhase = ''
-        install -m444 -Dt $out/share/fonts/opentype opentype/*.otf
+      nativeBuildInputs = [
+        installFonts
+      ];
+
+      postInstall = ''
         install -m444 -Dt $out/share/doc/${pname}-${version}    doc/*.txt
       '';
 
