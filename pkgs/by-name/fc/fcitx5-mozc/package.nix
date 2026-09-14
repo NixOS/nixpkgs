@@ -1,6 +1,5 @@
 {
-  bazel_7,
-  buildBazelPackage,
+  bazel_9,
   fcitx5,
   fetchFromGitHub,
   gettext,
@@ -8,132 +7,128 @@
   mozc,
   nixosTests,
   pkg-config,
-  protobuf_27,
   python3,
   stdenv,
   unzip,
+  libglvnd,
+  libxcrypt-legacy,
+  writableTmpDirAsHomeHook,
+  lndir,
 }:
 
-buildBazelPackage {
+let
+  bazel = bazel_9;
+
   pname = "fcitx5-mozc";
-  version = "2.30.5544.102"; # make sure to update protobuf if needed
+  version = "3.34.6239";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "mozc";
     fetchSubmodules = true;
-    rev = "57e67f2a25e4c0861e0e422da0c7d4c232d89fcc";
-    hash = "sha256-1EZjEbMl+LRipH5gEgFpaKP8uEKPfupHmiiTNJc/T1k=";
+    rev = "35898ee6c4f7424ae73000bbd754510d7ab772d0";
+    hash = "sha256-PQtHjZAwo/hImF+7nVEEs85uZbwO1zaXVy+/qbhMY9Q=";
   };
 
   nativeBuildInputs = [
+    bazel
     gettext
+    lndir
     pkg-config
     python3
     unzip
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
-    mozc
     fcitx5
+    libglvnd
+    libxcrypt-legacy
   ];
 
-  postPatch = ''
-    # replace protobuf with our own
-    rm -r src/third_party/protobuf
-    cp -r ${protobuf_27.src} src/third_party/protobuf
-    sed -i -e 's|^\(LINUX_MOZC_SERVER_DIR = \).\+|\1"${mozc}/lib/mozc"|' src/config.bzl
-  '';
+  includePath = lib.makeIncludePath buildInputs;
+  libraryPath = lib.makeLibraryPath buildInputs;
 
-  bazel = bazel_7;
-  removeRulesCC = false;
-  dontAddBazelOpts = true;
-
-  bazelFlags = [
-    "--config"
-    "oss_linux"
-    "--compilation_mode"
-    "opt"
-  ];
-
-  bazelTargets = [
+  bazelArgs = mozc.bazelCommonArgs ++ [
+    "--action_env=C_INCLUDE_PATH=${includePath}"
+    "--action_env=CPLUS_INCLUDE_PATH=${includePath}"
+    "--action_env=LIBRARY_PATH=${libraryPath}"
     "unix/fcitx5:fcitx5-mozc.so"
     "unix/icons"
   ];
 
-  fetchAttrs = {
-    preInstall = ''
-      # Remove reference to buildInput
-      rm -rf $bazelOut/external/fcitx5
-      # Remove reference to the host platform
-      rm -rv "$bazelOut"/external/host_platform
-    '';
-
-    hash = "sha256-ZjrXMQwxlaU5YGZtBZ+D2XBQHnOk+zV+a9cmkf3U5NU=";
+  vendorDeps = mozc.mkVendorDeps {
+    inherit
+      pname
+      src
+      version
+      nativeBuildInputs
+      buildInputs
+      bazelArgs
+      ;
+    hash = "sha256-l3J2LyB95Scdz9GLC0YrPXg01jJK60woHVm3AdYQ31w=";
   };
+in
+stdenv.mkDerivation {
+  inherit
+    pname
+    version
+    src
+    nativeBuildInputs
+    buildInputs
+    ;
 
-  preConfigure = ''
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  env.USE_BAZEL_VERSION = bazel.version;
+
+  postPatch = ''
+    patchShebangs --build scripts
+
     cd src
+
+    ${mozc.setupBazelVendor vendorDeps}
+
+    substituteInPlace config.bzl \
+      --replace-fail "/usr/lib/mozc" "${mozc}/lib/mozc"
   '';
 
-  buildAttrs = {
-    installPhase = ''
-      runHook preInstall
+  buildPhase = ''
+    runHook preBuild
 
-      install -Dm444 ../LICENSE $out/share/licenses/fcitx5-mozc/LICENSE
-      install -Dm444 data/installer/credits_en.html $out/share/licenses/fcitx5-mozc/Submodules
+    bazel build --lockfile_mode=error --vendor_dir=vendor_dir ${lib.escapeShellArgs bazelArgs}
 
-      install -Dm555 bazel-bin/unix/fcitx5/fcitx5-mozc.so $out/lib/fcitx5/fcitx5-mozc.so
-      install -Dm444 unix/fcitx5/mozc-addon.conf $out/share/fcitx5/addon/mozc.conf
-      install -Dm444 unix/fcitx5/mozc.conf $out/share/fcitx5/inputmethod/mozc.conf
+    runHook postBuild
+  '';
 
-      for pofile in unix/fcitx5/po/*.po; do
-        filename=$(basename $pofile)
-        lang=''${filename/.po/}
-        mofile=''${pofile/.po/.mo}
-        msgfmt $pofile -o $mofile
-        install -Dm444 $mofile $out/share/locale/$lang/LC_MESSAGES/fcitx5-mozc.mo
-      done
+  installPhase = ''
+    runHook preInstall
 
-      msgfmt --xml -d unix/fcitx5/po/ --template unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml.in -o unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml
-      install -Dm444 unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml $out/share/metainfo/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml
+    PREFIX="$out" ../scripts/install_fcitx5_bazel
+    install -Dm444 ../LICENSE "$out/share/licenses/$pname/LICENSE"
 
-      cd bazel-bin/unix
+    iconsDir="$out/share/icons/hicolor/scalable/apps"
+    mkdir -p "$iconsDir"
+    unzip -q bazel-bin/unix/icons.zip -d icons
+    install -Dm444 icons/mozc.svg "$iconsDir/org.fcitx.Fcitx5.fcitx_mozc.svg"
+    ln -s org.fcitx.Fcitx5.fcitx_mozc.svg "$iconsDir/fcitx_mozc.svg"
+    for icon in alpha_full alpha_half direct hiragana katakana_full katakana_half dictionary properties tool; do
+      install -Dm444 "icons/$icon.svg" \
+        "$iconsDir/org.fcitx.Fcitx5.fcitx_mozc_$icon.svg"
+      ln -s "org.fcitx.Fcitx5.fcitx_mozc_$icon.svg" \
+        "$iconsDir/fcitx_mozc_$icon.svg"
+    done
 
-      unzip -o icons.zip
+    runHook postInstall
+  '';
 
-      # These are relative symlinks, they will always resolve to files within $out
-
-      install -Dm444 mozc.png $out/share/icons/hicolor/128x128/apps/org.fcitx.Fcitx5.fcitx_mozc.png
-      ln -s org.fcitx.Fcitx5.fcitx_mozc.png $out/share/icons/hicolor/128x128/apps/fcitx_mozc.png
-
-      for svg in \
-        alpha_full.svg \
-        alpha_half.svg \
-        direct.svg \
-        hiragana.svg \
-        katakana_full.svg \
-        katakana_half.svg \
-        outlined/dictionary.svg \
-        outlined/properties.svg \
-        outlined/tool.svg
-      do
-        name=$(basename -- $svg)
-        path=$out/share/icons/hicolor/scalable/apps
-        prefix=org.fcitx.Fcitx5.fcitx_mozc
-
-        install -Dm444 $svg $path/$prefix_$name
-        ln -s $prefix_$name $path/fcitx_mozc_$name
-      done
-
-      runHook postInstall
-    '';
+  passthru = {
+    inherit vendorDeps;
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      inherit (nixosTests) fcitx5;
+    };
   };
-
-  passthru.tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
-    inherit (nixosTests) fcitx5;
-  };
-
   meta = {
     description = "Mozc - a Japanese Input Method Editor designed for multi-platform";
     homepage = "https://github.com/fcitx/mozc";
