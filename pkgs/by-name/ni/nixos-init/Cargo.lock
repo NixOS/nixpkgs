@@ -139,6 +139,7 @@ dependencies = [
  "indoc",
  "log",
  "pathrs",
+ "rustix",
  "serde",
  "serde_json",
  "tempfile",
