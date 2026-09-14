@@ -7,16 +7,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "coc-java";
-  version = "1.26.1";
+  version = "1.56.0";
 
   src = fetchFromGitHub {
     owner = "neoclide";
     repo = "coc-java";
     tag = finalAttrs.version;
-    hash = "sha256-OKqZk1pt8qt6O+kHYdhAAha5S8YTJBFQPn7oIrjGZgI=";
+    hash = "sha256-ez2ZFFiHy4p56RT0RvdimSiX5SCPYzkn5FS3armOy/0=";
   };
 
-  npmDepsHash = "sha256-FF7EAf6SvO1sGMIE8FCS7MbnpVwVUwVg0SVUsX+i7zg=";
+  npmDepsHash = "sha256-GtRvLza13eB/jM1O7PIqKC9atp8s8dD6qHEPhd2S7Ds=";
 
   passthru.updateScript = nix-update-script { };
 
