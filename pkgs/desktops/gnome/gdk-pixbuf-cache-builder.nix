@@ -32,8 +32,20 @@ runCommand "gdk-pixbuf-loaders.cache"
           echo "Error: gdkPixbufCacheBuilder: Passed package “''${package}” does not contain GdkPixbuf loaders in “${gdk-pixbuf.moduleDir}”." 1>&2
           exit 1
         fi
-        GDK_PIXBUF_MODULEDIR="$module_dir" \
-          ${stdenv.hostPlatform.emulator buildPackages} ${gdk-pixbuf.dev}/bin/gdk-pixbuf-query-loaders
+        if [[ "${lib.boolToString stdenv.hostPlatform.isDarwin}" == true ]]; then
+          # gdk-pixbuf's Darwin scanner only considers .so modules, while
+          # some third-party loaders are shipped as .dylib. Query explicit
+          # module paths so both suffixes work.
+          loaders=()
+          for loader in "$module_dir"/loaders/*.so "$module_dir"/loaders/*.dylib "$module_dir"/*.so "$module_dir"/*.dylib; do
+            [[ -f "$loader" ]] && loaders+=("$loader")
+          done
+          DYLD_LIBRARY_PATH=${lib.makeLibraryPath loaderPackages} \
+            ${stdenv.hostPlatform.emulator buildPackages} ${gdk-pixbuf.dev}/bin/gdk-pixbuf-query-loaders "''${loaders[@]}"
+        else
+          GDK_PIXBUF_MODULEDIR="$module_dir" \
+            ${stdenv.hostPlatform.emulator buildPackages} ${gdk-pixbuf.dev}/bin/gdk-pixbuf-query-loaders
+        fi
       done
     ) > "$out"
   ''
