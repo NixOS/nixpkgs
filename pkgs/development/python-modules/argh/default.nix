@@ -37,7 +37,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "argh" ];
 
   meta = {
-    changelog = "https://github.com/neithere/argh/blob/v${version}/CHANGES";
+    changelog = "https://github.com/neithere/argh/blob/v${version}/CHANGELOG.rst";
     homepage = "https://github.com/neithere/argh";
     description = "Unobtrusive argparse wrapper with natural syntax";
     license = lib.licenses.lgpl3Plus;

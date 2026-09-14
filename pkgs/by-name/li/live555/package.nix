@@ -140,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
     #!nix-shell -i bash -p curl common-updater-scripts
 
     # Expect the text in format of '2025.05.24:'
-    new_version="$(curl -s http://www.live555.com/liveMedia/public/changelog.txt |
+    new_version="$(curl -s ${finalAttrs.meta.changelog} |
       head -n1 | tr -d ':')"
     update-source-version live555 "$new_version"
   '';
@@ -148,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "http://www.live555.com/liveMedia/";
     description = "Set of C++ libraries for multimedia streaming, using open standard protocols (RTP/RTCP, RTSP, SIP)";
-    changelog = "http://www.live555.com/liveMedia/public/changelog.txt";
+    changelog = "https://download.live555.com/changelog.txt";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
