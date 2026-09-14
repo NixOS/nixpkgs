@@ -1010,6 +1010,7 @@ in
     inherit lib runTest;
   };
   kvrocks = runTest ./kvrocks.nix;
+  kvrocks-backup = runTest ./kvrocks-backup.nix;
   labgrid = runTest ./labgrid.nix;
   lact = runTest ./lact.nix;
   ladybird = runTest ./ladybird.nix;
