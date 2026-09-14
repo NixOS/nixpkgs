@@ -1290,6 +1290,7 @@ in
   nix-ld = runTest ./nix-ld.nix;
   nix-local-store = runTest ./nix-local-store.nix;
   nix-misc = handleTest ./nix/misc.nix { };
+  nix-remote-build = runTest ./nix/remote-build.nix;
   nix-required-mounts = runTest ./nix-required-mounts;
   nix-serve = runTest ./nix-serve.nix;
   nix-serve-ssh = runTest ./nix-serve-ssh.nix;
