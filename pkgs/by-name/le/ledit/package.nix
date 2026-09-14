@@ -5,15 +5,15 @@
   ocamlPackages,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ledit";
-  version = "2.06";
+  version = "2.08";
 
   src = fetchFromGitHub {
     owner = "chetmurthy";
     repo = "ledit";
-    rev = "3dbd668d9c69aab5ccd61f6b906c14122ae3271d";
-    hash = "sha256-9+isvwOw5Iw5OToztqZ5PiQPj6Pxl2ZqAC7UMF+tCM4=";
+    tag = finalAttrs.version;
+    hash = "sha256-45Y7lzm/KMsSAtnCwYNwIiRPYXNpfMN0UQbkEW9/7aQ=";
   };
 
   preBuild = ''
@@ -51,4 +51,4 @@ stdenv.mkDerivation {
     maintainers = [ lib.maintainers.delta ];
     mainProgram = "ledit";
   };
-}
+})
