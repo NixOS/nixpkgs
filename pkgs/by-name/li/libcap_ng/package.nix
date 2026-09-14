@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   pkg-config,
   swig,
@@ -14,14 +15,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcap-ng";
-  version = "0.9.5";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "stevegrubb";
     repo = "libcap-ng";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HYVbPoFSlkmNuL5EsEQVAekE4fwidgL+biTBBS1BdPM=";
+    hash = "sha256-+2u3clE04++YfHbTCQAIY9uKmfks9fsPZnVQNE/CmvY=";
   };
+
+  patches = [
+    # https://github.com/stevegrubb/libcap-ng/issues/85
+    (fetchpatch {
+      # static musl has tests failing to compile
+      url = "https://github.com/stevegrubb/libcap-ng/commit/ef1b34928455fa31ff5427d6ad4166406d5a1df1.patch";
+      hash = "sha256-7EZC87RoVH2Dkg859rRXt2A+GhRJVajn/DpmYBUuEBI=";
+    })
+    (fetchpatch {
+      # tests fail when building on a host with alpine kernel
+      url = "https://github.com/stevegrubb/libcap-ng/commit/b346f998af31febfb7d0915d0cf5e633a5262e88.patch";
+      hash = "sha256-b+OOY4XFXxK7sAH8/PUJ8oDPVtH84LYrzcEvhPfB9QI=";
+    })
+  ];
 
   # NEWS needs to exist or else the build fails
   postPatch = ''
@@ -86,9 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # assumption: build machine runs linux kernel 5.0 or newer
   # see https://github.com/stevegrubb/libcap-ng?tab=readme-ov-file#note-to-distributions
-  # disabled on static due to symbol collision in test file compilation
-  # see https://github.com/stevegrubb/libcap-ng/issues/85
-  doCheck = !stdenv.hostPlatform.isStatic;
+  doCheck = true;
 
   pythonImportsCheck = [
     "capng"
