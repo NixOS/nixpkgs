@@ -56,6 +56,14 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    description = "Unofficial GOG.com downloader";
+    homepage = "https://sites.google.com/site/gogdownloader/";
+    changelog = "https://github.com/Sude-/lgogdownloader/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.wtfpl;
+    maintainers = with lib.maintainers; [
+      _0x4A6F
+      keenanweaver
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "lgogdownloader";
   };
