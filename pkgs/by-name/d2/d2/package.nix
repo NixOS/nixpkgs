@@ -29,7 +29,11 @@ buildGo127Module (finalAttrs: {
     hash = "sha256-HhCktLU43Y/uje038axwO7tNqO353mV/JID223sBtd8=";
   };
 
-  vendorHash = "sha256-LRvQ4diXmoZNnRomVv6HTni6jrJ8e0IHqxVmJhEFR/w=";
+  # d2renderers/d2raster's TestRasterPackageHasNoIOCapabilities shells out to
+  # `go list -mod=readonly -deps`, which bypasses the vendor directory and needs
+  # a populated module cache.
+  proxyVendor = true;
+  vendorHash = "sha256-6rrFjboeJ2Qln5TxbsJKmyTclIh1gz1X91g5IFjbMKo=";
 
   excludedPackages = [
     "./ci"
@@ -40,7 +44,7 @@ buildGo127Module (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X oss.terrastruct.com/d2/lib/version.Version=v${finalAttrs.version}"
+    "-X github.com/d2lang/d2/lib/version.Version=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
