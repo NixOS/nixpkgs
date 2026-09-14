@@ -48,9 +48,9 @@ let
         name = "redmine-${id}-${name}";
         nativeBuildInputs = [ pkgs.unzip ];
         buildCommand = ''
-          mkdir -p $out
-          cd $out
-          unpackFile ${source}
+          mkdir -p "$out/share/redmine/${name}s.dist"
+          cd "$out/share/redmine/${name}s.dist"
+          unpackFile '${source}'
         '';
       }
     );
@@ -351,22 +351,27 @@ in
       "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/cache' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/config' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/config/initializers' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/files' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.stateDir}/plugins' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/public' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/public/assets' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/public/plugin_assets' 0750 ${cfg.user} ${cfg.group} - -"
-      "d '${cfg.stateDir}/themes' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/tmp' 0750 ${cfg.user} ${cfg.group} - -"
     ];
 
     systemd.services.redmine = {
       after = [
         "network.target"
+        "systemd-tmpfiles-setup.service"
+        "systemd-tmpfiles-resetup.service"
       ]
       ++ lib.optional mysqlLocal "mysql.service"
       ++ lib.optional pgsqlLocal "postgresql.target";
+      wants = [
+        "systemd-tmpfiles-setup.service"
+        "systemd-tmpfiles-resetup.service"
+      ];
       wantedBy = [ "multi-user.target" ];
       environment.RAILS_ENV = "production";
       environment.RAILS_CACHE = "${cfg.stateDir}/cache";
@@ -384,85 +389,89 @@ in
         ++ lib.optional cfg.components.imagemagick imagemagick
         ++ lib.optional cfg.components.ghostscript ghostscript;
 
-      preStart = ''
-        # Create symlinks for the basic directory layout the redmine package
-        # expects. This part must be done in preStart rather than tmpfiles,
-        # because /run/redmine is re-created when the service is restarted
-        mkdir /run/redmine/public
-        ln -s "${cfg.stateDir}/config" /run/redmine/config
-        ln -s "${cfg.stateDir}/files" /run/redmine/files
-        ln -s "${cfg.stateDir}/log" /run/redmine/log
-        ln -s "${cfg.stateDir}/plugins" /run/redmine/plugins
-        ln -s "${cfg.stateDir}/public/assets" /run/redmine/public/assets
-        ln -s "${cfg.stateDir}/public/plugin_assets" /run/redmine/public/plugin_assets
-        ln -s "${cfg.stateDir}/themes" /run/redmine/themes
-        ln -s "${cfg.stateDir}/tmp" /run/redmine/tmp
-
-        rm -rf "${cfg.stateDir}/plugins/"*
-        rm -rf "${cfg.stateDir}/themes/"*
-
-        # start with a fresh config directory
-        # the config directory is copied instead of linked as some mutable data is stored in there
-        find "${cfg.stateDir}/config" ! -name "secret_token.rb" -type f -exec rm -f {} +
-        cp -r ${cfg.package}/share/redmine/config.dist/* "${cfg.stateDir}/config/"
-
-        chmod -R u+w "${cfg.stateDir}/config"
-
-        # link in the application configuration
-        ln -fs ${configurationYml} "${cfg.stateDir}/config/configuration.yml"
-
-        # link in the additional environment configuration
-        ln -fs ${additionalEnvironment} "${cfg.stateDir}/config/additional_environment.rb"
-
-
-        # link in all user specified themes
-        for theme in ${lib.concatStringsSep " " (lib.mapAttrsToList unpackTheme cfg.themes)}; do
-          ln -fs $theme/* "${cfg.stateDir}/themes"
-        done
-
-        # link in redmine provided themes
-        ln -sf ${cfg.package}/share/redmine/themes.dist/* "${cfg.stateDir}/themes/"
-
-
-        # link in all user specified plugins
-        for plugin in ${lib.concatStringsSep " " (lib.mapAttrsToList unpackPlugin cfg.plugins)}; do
-          ln -fs $plugin/* "${cfg.stateDir}/plugins/''${plugin##*-redmine-plugin-}"
-        done
-
-
-        # handle database.passwordFile & permissions
-        cp -f ${databaseYml} "${cfg.stateDir}/config/database.yml"
-
-        ${lib.optionalString ((cfg.database.type != "sqlite3") && (cfg.database.passwordFile != null)) ''
-          DBPASS="$(head -n1 ${cfg.database.passwordFile})"
-          sed -e "s,#dbpass#,$DBPASS,g" -i "${cfg.stateDir}/config/database.yml"
-        ''}
-
-        chmod 440 "${cfg.stateDir}/config/database.yml"
-
-
-        # generate a secret token if required
-        if ! test -e "${cfg.stateDir}/config/initializers/secret_token.rb"; then
-          ${bundle} exec rake generate_secret_token
-          chmod 440 "${cfg.stateDir}/config/initializers/secret_token.rb"
-        fi
-
-        # execute redmine required commands prior to starting the application
-        ${bundle} exec rake db:migrate
-        ${bundle} exec rake redmine:plugins:migrate
-        ${bundle} exec rake redmine:load_default_data
-        ${bundle} exec rake assets:precompile
-      '';
-
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
         TimeoutSec = "300";
         WorkingDirectory = "${cfg.package}/share/redmine";
+
+        ExecStartPre =
+          lib.optionals ((cfg.database.type != "sqlite3") && (cfg.database.passwordFile != null)) [
+            # handle database.passwordFile & permissions
+            "${lib.getExe' pkgs.coreutils "install"} -Dm640 ${databaseYml} '/run/redmine/database.yml'"
+            "${lib.getExe pkgs.replace-secret} '#dbpass#' '${cfg.database.passwordFile}' /run/redmine/database.yml"
+          ]
+          ++ [
+            # This step only has an effect if the token is not already present
+            "${bundle} exec rake generate_secret_token"
+
+            # execute redmine required commands prior to starting the application
+            "${bundle} exec rake db:migrate"
+            "${bundle} exec rake redmine:plugins:migrate"
+            "${bundle} exec rake redmine:load_default_data"
+            "${bundle} exec rake assets:precompile"
+          ];
+
         ExecStart = "${bundle} exec rails server -u webrick -e production -b ${toString cfg.address} -p ${toString cfg.port}";
-        RuntimeDirectory = "redmine";
+
         RuntimeDirectoryMode = "0750";
+        RuntimeDirectory = [
+          "redmine"
+          "redmine/config"
+          "redmine/files"
+          "redmine/log"
+          "redmine/plugins"
+          "redmine/public"
+          "redmine/public/assets"
+          "redmine/public/plugin_assets"
+          "redmine/themes"
+          "redmine/tmp"
+        ];
+        BindReadOnlyPaths = [
+          "${
+            pkgs.symlinkJoin {
+              name = "redmine-config";
+              paths = [ "${cfg.package}/share/redmine/config.dist" ];
+              postBuild = ''
+                ln -s ${configurationYml} "$out/configuration.yml"
+                ln -s ${additionalEnvironment} "$out/additional_environment.rb"
+                ln -s ${
+                  if ((cfg.database.type != "sqlite3") && (cfg.database.passwordFile != null)) then
+                    "/run/redmine/database.yml"
+                  else
+                    lib.escapeShellArg databaseYml
+                } "$out/database.yml"
+                ln -s "${cfg.stateDir}/config/initializers/secret_token.rb" "$out/initializers/secret_token.rb"
+              '';
+            }
+          }:/run/redmine/config"
+          "${
+            pkgs.symlinkJoin {
+              name = "redmine-combined-themes";
+              stripPrefix = "/share/redmine/themes.dist";
+              paths = [
+                cfg.package
+              ]
+              ++ lib.mapAttrsToList unpackTheme cfg.themes;
+            }
+          }:/run/redmine/themes"
+          "${
+            pkgs.symlinkJoin {
+              name = "redmine-combined-plugins";
+              stripPrefix = "/share/redmine/plugins.dist";
+              paths = lib.mapAttrsToList unpackPlugin cfg.plugins;
+            }
+          }:/run/redmine/plugins"
+        ];
+        BindPaths = [
+          "${cfg.stateDir}/files:/run/redmine/files"
+          "${cfg.stateDir}/log:/run/redmine/log"
+          "${cfg.stateDir}/public/assets:/run/redmine/public/assets"
+          "${cfg.stateDir}/public/plugin_assets:/run/redmine/public/plugin_assets"
+          "${cfg.stateDir}/tmp:/run/redmine/tmp"
+        ];
+
         AmbientCapabilities = "";
         CapabilityBoundingSet = "";
         LockPersonality = true;
