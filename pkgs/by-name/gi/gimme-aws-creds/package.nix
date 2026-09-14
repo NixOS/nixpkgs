@@ -33,7 +33,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     beautifulsoup4
     ctap-keyring-device
     requests
-    okta
+    # gimme-aws-creds 2.8.2 requires okta < 3; drop this once a release lands
+    # with support for okta 3 (upstream master has already migrated to it)
+    okta_2
     pyjwt
     html5lib
     furl
