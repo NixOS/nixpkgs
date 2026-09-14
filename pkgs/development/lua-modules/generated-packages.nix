@@ -5125,17 +5125,17 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "nginx-lua-prometheus";
-      version = "0.20240525-1";
+      version = "0.20260912-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/nginx-lua-prometheus-0.20240525-1.rockspec";
-          sha256 = "0xw21h7bl7l8kijbmw98v0lc7910r5pwnx7h3w894dv63d413ixr";
+          url = "mirror://luarocks/nginx-lua-prometheus-0.20260912-1.rockspec";
+          sha256 = "1cbhmq6zz27sx9pmcig04m75qqiaqmsq61dzh28b2jpj7b6n5kqb";
         }).outPath;
       src = fetchFromGitHub {
         owner = "knyar";
         repo = "nginx-lua-prometheus";
-        tag = "0.20240525";
-        hash = "sha256-ovLpOQKgTfrrgCxCF/OtdPUuAQ9J4RtT9F68Bbzu1XQ=";
+        tag = "0.20260912";
+        hash = "sha256-OE2EcqdO9vaR79W0jYfln4H7FRDxO+wedr0NMZY2DHU=";
       };
 
       disabled = luaOlder "5.1";
