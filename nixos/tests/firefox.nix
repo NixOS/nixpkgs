@@ -12,11 +12,10 @@
   };
 
   nodes.machine =
-    { pkgs, ... }:
+    { ... }:
 
     {
       imports = [ ./common/x11.nix ];
-      environment.systemPackages = [ pkgs.xdotool ];
 
       programs.firefox = {
         enable = true;
@@ -94,10 +93,10 @@
           machine.copy_from_machine("/tmp/record.wav")
 
       with subtest("Close sound test tab"):
-          machine.execute("xdotool key ctrl+w")
+          machine.send_key("ctrl-w")
 
       with subtest("Close default browser prompt"):
-          machine.execute("xdotool key space")
+          machine.send_key("spc")
 
       with subtest("Wait until Firefox draws the developer tool panel"):
           machine.sleep(10)
