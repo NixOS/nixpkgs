@@ -26,14 +26,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kbd" + lib.optionalString withVlock "-vlock";
-  version = "2.9.0";
+  version = "2.10-rc1";
 
   __structuredAttrs = true;
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/linux/kernel/git/legion/kbd.git";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uUECxFdm/UhoHKLHLFe6/ygCQ+4mrQOZExKl+ReaTNw=";
+    hash = "sha256-7oM+HuqwLQ6NFt88BtzV2aLEDqKBmjResWRYj9iO8qc=";
   };
 
   outputs = [
