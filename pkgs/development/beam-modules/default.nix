@@ -81,6 +81,7 @@ makeScopeWithSplicing' {
 
       inherit (pkgs.callPackages ./hooks { })
         beamCopySourceHook
+        beamCopySourceToSourceRootHook
         beamModuleInstallHook
         mixBuildDirHook
         mixCompileHook
