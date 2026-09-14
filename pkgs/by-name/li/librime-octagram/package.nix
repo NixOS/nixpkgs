@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "librime-octagram";
-  version = "0-unstable-2026-07-11";
+  version = "0-unstable-2026-08-31";
 
   src = fetchFromGitHub {
     owner = "lotem";
     repo = "librime-octagram";
-    rev = "c030e30e4df01a806841b64a438b55ec7b617b1f";
-    hash = "sha256-kjUsG9Qm29nBYl/G/7FvHKirOq298scKFmaXtZfrcss=";
+    rev = "57d18b9f58e5284bd891d559f6bdd16cf60341e9";
+    hash = "sha256-nQA8u0iqioLBM2rA57NPd7TOS49aHQl+mHKfu0sRwhY=";
   };
 
   installPhase = ''
