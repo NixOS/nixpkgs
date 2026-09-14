@@ -101,9 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # assumption: build machine runs linux kernel 5.0 or newer
   # see https://github.com/stevegrubb/libcap-ng?tab=readme-ov-file#note-to-distributions
-  # disabled on static due to symbol collision in test file compilation
-  # see https://github.com/stevegrubb/libcap-ng/issues/85
-  doCheck = !stdenv.hostPlatform.isStatic;
+  doCheck = true;
 
   pythonImportsCheck = [
     "capng"
