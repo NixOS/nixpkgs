@@ -10,6 +10,8 @@
   gobject-introspection,
   gst-plugins-base,
   gst-plugins-bad,
+  # only for passthru.gstreamerCpeParts
+  gstreamer,
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
@@ -82,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
       A library on top of GStreamer for building an RTSP server.
     '';
     license = lib.licenses.lgpl2Plus;
+    identifiers.cpeParts = gstreamer.passthru.gstreamerCpeParts finalAttrs.version;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bkchr ];
   };

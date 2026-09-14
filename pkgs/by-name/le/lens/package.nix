@@ -8,16 +8,16 @@
 let
 
   pname = "lens-desktop";
-  version = "2026.8.270956";
+  version = "2026.9.20601";
 
   sources = {
     x86_64-linux = {
       url = "https://api.k8slens.dev/binaries/Lens-${version}-latest.x86_64.AppImage";
-      hash = "sha512-0mYzoQPGo0x6JT0iB+wPPa9ia8TsP4V6Mfa0NEJLz+uZWXD3rDqHJQSOxbDkKQ/nQSrSZQ7a2Qx1Np1Jea1S2Q==";
+      hash = "sha512-21OGo4uXHjcvGNNiiy6hWm+tEJc4yFaYvVfXK89oH5oSrEpIacNlZ8I95tI0yjJQsuZEHBN9wBD+Zm6WgO4hFg==";
     };
     aarch64-darwin = {
       url = "https://api.k8slens.dev/binaries/Lens-${version}-latest-arm64.dmg";
-      hash = "sha512-PO0ntwaiy+hGMJESfAsRQZw5Bgbe66P6JBAg28FQMqbxSaNoEhGKboDY8+OGIbkJ1GLR23gsB0qPBlPpgYsVGQ==";
+      hash = "sha512-kCL3jZHB644fRlwbmqNkusvC9k9EAi6EWsH8bEc9isGC4vwShkYw5Fu7U53nT6nh6wxba5aDMk9ZJWA3tB8Tgw==";
     };
   };
 

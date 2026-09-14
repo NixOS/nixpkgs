@@ -3,6 +3,7 @@
   stdenv,
   pkgsStatic,
   fetchurl,
+  fetchpatch2,
   versionCheckHook,
   libpcap,
   pkg-config,
@@ -23,6 +24,14 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://nmap.org/dist/nmap-${finalAttrs.version}.tar.bz2";
     hash = "sha256-pdUH8pQ3vvO+3Udx/5qqj8HCoQnduh9bHPEgJ0VpKb4=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "Do-not-call-NSE-if-compiling-without-Lua-support.patch";
+      url = "https://github.com/nmap/nmap/commit/4c36cf12f246b52a8d510bdde8becd5c5b3bf8b5.patch";
+      hash = "sha256-aWPHfJF1wOE5l6LQUKCqKVKxBoyNFov3r0NGEOxWpw8=";
+    })
+  ];
 
   prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace libz/configure \

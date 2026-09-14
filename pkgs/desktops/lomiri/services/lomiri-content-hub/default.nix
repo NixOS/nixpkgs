@@ -129,6 +129,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_WERROR" (!withQt6)) # Known issues on Qt6
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations"; # gtest-1.18
+
   preBuild =
     let
       listToQtVar =

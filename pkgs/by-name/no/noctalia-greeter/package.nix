@@ -17,6 +17,7 @@
   librsvg,
   libwebp,
   libxkbcommon,
+  libxml2,
   nlohmann_json,
   pango,
   stb,
@@ -31,7 +32,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "noctalia-greeter";
-  version = "1.3.1";
+  version = "1.5.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -40,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "noctalia-dev";
     repo = "noctalia-greeter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1ZdtgBwndNHDltX8J7DLLl2/LBgywQhmt1JNcanfeMA=";
+    hash = "sha256-JgPgbmlUOKlgCX/KDfRF+z9ID80+Q7CcdaJFh5eaFjU=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     libwebp
     libxkbcommon
+    libxml2
     nlohmann_json
     pango
     stb

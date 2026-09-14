@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "drift";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "phlx0";
     repo = "drift";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Gom5PQovsC9Q0jQN2kdJzo2D/uqKGA0i8wJ2Kc/XbfQ=";
+    hash = "sha256-PEKVwtJGYgyaV31OUMDHbYqS948GqBZ1/gb/n12D3Fo=";
   };
 
-  vendorHash = "sha256-FsNa9qp2MnPk1onv/O13mFi+82yP7D4LdILZsNzHs+4=";
+  vendorHash = "sha256-xcSoDytK7cQrECa5PVoLunCG5im2YbOd8/0bclvTaq0=";
 
   ldflags = [
     "-s"

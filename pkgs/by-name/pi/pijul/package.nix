@@ -17,14 +17,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "pijul";
-  version = "1.0.0-beta.21";
+  version = "1.0.0-beta.23";
 
   src = fetchCrate {
     inherit (finalAttrs) version pname;
-    hash = "sha256-IC47l6FzlopoiVZmKojPzIQzBS6UzdgE397no6GzrR4=";
+    hash = "sha256-+qbJniBWp+cOmrYyhEvGapPR5jV92s4oF1giujkx1mM=";
   };
 
-  cargoHash = "sha256-Ldb+CpKiVvNOeMhdD/hfQfAAMwdwUy/npY85VBPBq5k=";
+  cargoHash = "sha256-RO9fN4jS3g+qfatjtlWI8Oko7X91PNyf723Ipkg4BX0=";
 
   # Tests require a TTY, which the Nix sandbox does not provide.
   doCheck = false;

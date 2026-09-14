@@ -140,6 +140,9 @@
   "ex-testEqualArrayOrMap-test-function-add-cowbell": [
     "index.html#ex-testEqualArrayOrMap-test-function-add-cowbell"
   ],
+  "ex-trivial-builder-finalAttrs": [
+    "index.html#ex-trivial-builder-finalAttrs"
+  ],
   "ex-writeShellApplication": [
     "index.html#ex-writeShellApplication"
   ],
@@ -166,6 +169,15 @@
   ],
   "inkscape-plugins": [
     "index.html#inkscape-plugins"
+  ],
+  "installAgentSkills": [
+    "index.html#installAgentSkills"
+  ],
+  "installAgentSkills-installSkill": [
+    "index.html#installAgentSkills-installSkill"
+  ],
+  "installAgentSkills-installSkill-exampleusage": [
+    "index.html#installAgentSkills-installSkill-exampleusage"
   ],
   "installfonts": [
     "index.html#installfonts"
@@ -998,6 +1010,9 @@
   ],
   "treefmt": [
     "index.html#treefmt"
+  ],
+  "trivial-builder-finalAttrs": [
+    "index.html#trivial-builder-finalAttrs"
   ],
   "typst": [
     "index.html#typst",

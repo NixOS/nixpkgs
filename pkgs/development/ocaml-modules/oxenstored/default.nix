@@ -14,6 +14,8 @@ buildDunePackage (finalAttrs: {
   pname = "oxenstored";
   version = "25.3.0";
 
+  minimalOCamlVersion = "4.13";
+
   outputs = [
     "out"
     "doc"

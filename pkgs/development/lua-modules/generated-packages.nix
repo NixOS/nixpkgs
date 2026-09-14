@@ -2551,17 +2551,17 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "lua-resty-openidc";
-      version = "1.9.0-1";
+      version = "1.9.1-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/lua-resty-openidc-1.9.0-1.rockspec";
-          sha256 = "0s4717scx37crqbnvq752j4n2f773hp0ndd8z0x2iyiwdnw8jjwf";
+          url = "mirror://luarocks/lua-resty-openidc-1.9.1-1.rockspec";
+          sha256 = "1irh9c1v10yx0zdxplbypy2zv2717mh5j2qxsdv5hvwvrp3h2rf4";
         }).outPath;
       src = fetchFromGitHub {
         owner = "zmartzone";
         repo = "lua-resty-openidc";
-        tag = "v1.9.0";
-        hash = "sha256-3dkHUN3Twe1g+oRXD7asMG28GxKzRAEF1SfZ4iuWhwA=";
+        tag = "v1.9.1";
+        hash = "sha256-98b+FmBq+yMnTpnimkLSUEkA0WWO0Ob1h25xwRjBvJY=";
       };
 
       disabled = luaOlder "5.1";
@@ -3586,15 +3586,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "luaossl";
-      version = "20250929-0";
+      version = "20260910-0";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/luaossl-20250929-0.rockspec";
-          sha256 = "11m823vd8cwc3s5420lv042ny1d7hrimzx05ldy8f6rlh6m2d9xl";
+          url = "mirror://luarocks/luaossl-20260910-0.rockspec";
+          sha256 = "0863wkp1j9r3nrv312x4j188kgyryqkbnn2dz351glc69lsni4jg";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/wahern/luaossl/archive/rel-20250929.zip";
-        sha256 = "115a5r0n7qc9lnjxld551ag6l9rq1wawcbrfjqhz2l6krb3pbv3d";
+        url = "https://github.com/wahern/luaossl/archive/rel-20260910.zip";
+        sha256 = "1q29kdfyxxmn55ld1sw7rhjl0cqkqm7sy1g9ii041jcdkbgbg36y";
       };
 
       meta = {
@@ -5905,21 +5905,21 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "rustaceanvim";
-      version = "9.2.0-2";
+      version = "9.2.1-2";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/rustaceanvim-9.2.0-2.rockspec";
-          sha256 = "0iyhf54r870kfg9j6z18c3x152r4i6b70llyvpzpqaywrqql8qxs";
+          url = "mirror://luarocks/rustaceanvim-9.2.1-2.rockspec";
+          sha256 = "10icfi38z1qx9ma7ixj3j3cbkfsfhnbw3zhwjab6p0cv0287yv7p";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/mrcjkb/rustaceanvim/archive/refs/tags/v9.2.0.zip";
-        sha256 = "0a2zprnrgqkl8229rapjh3ighlhrbvawr67xg3scpyrj6ccfc7sz";
+        url = "https://github.com/mrcjkb/rustaceanvim/archive/refs/tags/v9.2.1.zip";
+        sha256 = "182z9nqjd5ycbq0fij2xdwbq2b5xr51wckcks50aiwim31cr52br";
       };
 
       disabled = lua.luaversion != "5.1";
 
       meta = {
-        homepage = "https://github.com/mrcjkb/rustaceanvim/archive/refs/tags/v9.2.0.zip";
+        homepage = "https://github.com/mrcjkb/rustaceanvim/archive/refs/tags/v9.2.1.zip";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license = lib.licenses.gpl2Only;
         description = "🦀 Supercharge your Rust experience in Neovim! A heavily modified fork of rust-tools.nvim";

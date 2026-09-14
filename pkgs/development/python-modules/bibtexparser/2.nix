@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "bibtexparser";
-  version = "2.0.0b9";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sciunto-org";
     repo = "python-bibtexparser";
     tag = "v${version}";
-    hash = "sha256-viBY2hZXsXsfjpi7zMFh3CwQFOKL41F3x0IKULelo/o=";
+    hash = "sha256-rOWXCT/E0LQ4Fc50iJnGR8ZZ5lrKA2SO1jQqUqV6Tlw=";
   };
 
   build-system = [ setuptools ];

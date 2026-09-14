@@ -17,7 +17,7 @@
   libzip,
   bzip2,
   fontconfig,
-  pangomm,
+  pangomm_1_4,
   libxmlxx,
   libssh,
   xmlsec,
@@ -47,12 +47,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dcpomatic";
-  version = "2.19.1";
+  version = "2.18.50";
 
   src = fetchgit {
     url = "https://git.carlh.net/git/dcpomatic";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c+An8V/A7Vk0ChGQULk9uj0zN5slLb8wSKlWl+3uL1Y=";
+    hash = "sha256-qYzV8tXISGCYAzoJJDhx/xDZAS4HD8VwE3Z0CsCjIZs=";
   };
 
   nativeBuildInputs = [
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     libzip
     bzip2
-    pangomm
+    pangomm_1_4
     leqm-nrt
     libttf
     libcxml

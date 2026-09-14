@@ -47,7 +47,7 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "sparkle";
-  version = "1.26.7";
+  version = "1.26.8";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -56,7 +56,7 @@ buildNpmPackage (finalAttrs: {
     owner = "xishang0128";
     repo = "sparkle";
     tag = finalAttrs.version;
-    hash = "sha256-R9FVlt0rLxgIpeIJbwoIIYPmpP3LKoRWyt7u4ohbN4E=";
+    hash = "sha256-hAUc8T+xHRDwP0mj8wyd0+pNR5B5QEj4PXZVookxJeE=";
   };
 
   npmDeps = null;
@@ -64,7 +64,7 @@ buildNpmPackage (finalAttrs: {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-hSozWInESlJhEjNKbVLgRJG+G7dFgFb+834rugHh05c=";
+    hash = "sha256-VTeLrZz6nVfVmVJHMwkGTfVYl7Qs2ph3uHtOE8qoq/Q=";
   };
 
   nativeBuildInputs = [

@@ -86,6 +86,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
   };
 
+  # Fix rust 1.98 compatibility
+  postPatch = ''
+    substituteInPlace src/trace.rs --replace-fail 'use futures::StreamExt as _;' ""
+  '';
+
   doCheck = true;
   checkType = "debug";
 

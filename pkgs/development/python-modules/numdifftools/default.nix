@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "numdifftools";
-  version = "0.11.0";
+  version = "0.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pbrod";
     repo = "numdifftools";
     tag = "v${version}";
-    hash = "sha256-3Bmh6quHc2Kr+1vNqZrmYgnCOGqvPplabPcZQkilLnI=";
+    hash = "sha256-NgMqnIMRGdm33v+iH++tFL9a7MczyLGVBKiL6eAC5xw=";
   };
 
   build-system = [ pdm-backend ];

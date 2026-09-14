@@ -31,6 +31,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/google/capslock";
     license = lib.licenses.bsd3;
     mainProgram = "capslock";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sotormd ];
   };
 })

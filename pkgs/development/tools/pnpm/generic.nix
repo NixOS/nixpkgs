@@ -121,7 +121,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         set -eou pipefail
 
         curl_github() {
-            curl -L ''${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} "$@"
+          curl -L ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} "$@"
         }
 
         latestTag=$(

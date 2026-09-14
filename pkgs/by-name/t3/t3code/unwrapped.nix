@@ -6,11 +6,13 @@
   installShellFiles,
   lib,
   libicns,
+  libsecret,
   makeBinaryWrapper,
   makeDesktopItem,
   nix-update-script,
   node-gyp,
   nodejs,
+  pkg-config,
   python3,
   stdenv,
   writeDarwinBundle,
@@ -37,7 +39,7 @@ stdenv.mkDerivation (
   in
   {
     pname = "t3code-unwrapped";
-    version = "0.0.38";
+    version = "0.0.40";
     strictDeps = true;
     __structuredAttrs = true;
 
@@ -45,7 +47,7 @@ stdenv.mkDerivation (
       owner = "pingdotgg";
       repo = "t3code";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-lbAOIlNwVxrjXA5jJGzmOm7Fe2ZcsnFuDzaSEt6R7G4=";
+      hash = "sha256-J8kXpfMfm03/DDAiWXJuANwUNDshhiUn7Lf9tV42Xfw=";
     };
 
     postPatch = ''
@@ -65,13 +67,18 @@ stdenv.mkDerivation (
       pnpm
       cacert
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      copyDesktopItems
+      pkg-config
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools.libtool
       libicns
       writeDarwinBundle
       xcbuild
     ];
+
+    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libsecret ];
 
     pnpmWorkspaces = [
       # `...` suffix is used to also include other workspace packages that are
@@ -93,7 +100,7 @@ stdenv.mkDerivation (
         ;
 
       fetcherVersion = 4;
-      hash = "sha256-t/hmpXdYPnBFx18A6NrSL4zSvVnUDIjIPtLjGOzoaDk=";
+      hash = "sha256-+UsoURSM4VP+CgF1fWROBEB85EuH+iJJM/xDPFigCKk=";
     };
 
     preBuild = ''
@@ -139,6 +146,13 @@ stdenv.mkDerivation (
       mkdir --parents "$out"/libexec/t3code/apps/desktop/prod-resources
       install --mode=444 ${desktopIcon} \
         "$out"/libexec/t3code/apps/desktop/prod-resources/icon.png
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm755 \
+        native/browser-secret/build/${stdenv.hostPlatform.node.arch}/t3-browser-secret \
+        "$out"/libexec/t3code/apps/desktop/prod-resources/browser-secret/t3-browser-secret
+    ''
+    + ''
 
       find "$out"/libexec/t3code -xtype l -delete
 

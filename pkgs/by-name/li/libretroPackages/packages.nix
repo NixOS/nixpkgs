@@ -74,6 +74,8 @@ lib.makeScope newScope (self: {
 
   fmsx = self.callPackage ./cores/fmsx.nix { };
 
+  freechaf = self.callPackage ./cores/freechaf.nix { };
+
   freeintv = self.callPackage ./cores/freeintv.nix { };
 
   fuse = self.callPackage ./cores/fuse.nix { };
@@ -82,6 +84,8 @@ lib.makeScope newScope (self: {
 
   genesis-plus-gx = self.callPackage ./cores/genesis-plus-gx.nix { };
 
+  gearcoleco = self.callPackage ./cores/gearcoleco.nix { };
+
   gpsp = self.callPackage ./cores/gpsp.nix { };
 
   gw = self.callPackage ./cores/gw.nix { };
@@ -89,6 +93,8 @@ lib.makeScope newScope (self: {
   handy = self.callPackage ./cores/handy.nix { };
 
   hatari = self.callPackage ./cores/hatari.nix { };
+
+  jaxe = self.callPackage ./cores/jaxe.nix { };
 
   mame = self.callPackage ./cores/mame.nix { };
 
@@ -103,6 +109,8 @@ lib.makeScope newScope (self: {
   mame2015 = self.callPackage ./cores/mame2015.nix { };
 
   mame2016 = self.callPackage ./cores/mame2016.nix { };
+
+  m2000 = self.callPackage ./cores/m2000.nix { };
 
   melonds = self.callPackage ./cores/melonds.nix { };
 
@@ -133,6 +141,8 @@ lib.makeScope newScope (self: {
   opera = self.callPackage ./cores/opera.nix { };
 
   parallel-n64 = self.callPackage ./cores/parallel-n64.nix { };
+
+  pd777 = self.callPackage ./cores/pd777.nix { };
 
   pcsx2 = self.callPackage ./cores/pcsx2.nix { };
 
@@ -183,11 +193,15 @@ lib.makeScope newScope (self: {
 
   tgbdual = self.callPackage ./cores/tgbdual.nix { };
 
+  theodore = self.callPackage ./cores/theodore.nix { };
+
   thepowdertoy = self.callPackage ./cores/thepowdertoy.nix { };
 
   tic80 = self.callPackage ./cores/tic80.nix { };
 
   twenty-fortyeight = self.callPackage ./cores/twenty-fortyeight.nix { };
+
+  uzem = self.callPackage ./cores/uzem.nix { };
 
   vba-m = self.callPackage ./cores/vba-m.nix { };
 

@@ -36,12 +36,12 @@
   gnupg,
   gnutar,
   json-glib,
+  libarchive,
   libcap,
   libyaml,
   ostree,
   patch,
   rpm,
-  unzip,
   attr,
 }:
 
@@ -52,7 +52,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "flatpak-builder";
-  version = "1.4.4";
+  version = "1.4.10";
 
   outputs = [
     "out"
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   # fetchFromGitHub fetches an archive which does not contain the full source (https://github.com/flatpak/flatpak-builder/issues/558)
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak-builder/releases/download/${finalAttrs.version}/flatpak-builder-${finalAttrs.version}.tar.xz";
-    hash = "sha256-3CcVk5S6qiy1I/Uvh0Ry/1DRYZgyMyZMoqIuhQdB7Ho=";
+    hash = "sha256-sXIQeMBpfIyh19uWUjK1CdGqh/aLTa43jrUAvd3bnME=";
   };
 
   patches = [
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       cp = "${coreutils}/bin/cp";
       patch = "${patch}/bin/patch";
       tar = "${gnutar}/bin/tar";
-      unzip = "${unzip}/bin/unzip";
+      bsdunzip = "${libarchive}/bin/bsdunzip";
       rpm2cpio = "${rpm}/bin/rpm2cpio";
       cpio = "${cpio}/bin/cpio";
       git = "${gitMinimal}/bin/git";

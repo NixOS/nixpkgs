@@ -33,14 +33,14 @@
   withCli ? true,
 }:
 let
-  version = "2.3.0";
-  rev = "94d5eb9e6fe9c6b1f69e663d9ed410a441e2d67f";
+  version = "2.4.0";
+  rev = "24aa15eefdb146350d2548c0a015b04eddbd1008";
 
   m3shapes_src = fetchFromGitHub {
     owner = "soramanew";
     repo = "m3shapes";
-    rev = "bdc327b29f95394a732baf3c9b19658ba23755b6";
-    hash = "sha256-kfHyzZaPHgqZML48OA+5JwBOsLdQJ2ci/aGPShvUB4Y=";
+    rev = "32ad9ce328bb77ed349b40a3be10ee9ea610b8ab";
+    hash = "sha256-YZelgEZflFNwGutX4/tIzBdbOeghJgE2oDw0uWYGxns=";
   };
 
   runtimeDeps = [
@@ -73,11 +73,9 @@ let
     (lib.cmakeFeature "DISTRIBUTOR" "nixpkgs")
   ];
 
-  m3shapesFlag = lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_M3SHAPES_EXTERNAL" "${m3shapes_src}";
-
   shellSrc = fetchurl {
     url = "https://github.com/caelestia-dots/shell/releases/download/v${version}/caelestia-shell-v${version}.tar.gz";
-    hash = "sha256-EjPnMXxonYAewJW1/XKQUC5fbqIU7xSwI3XTW1VC544=";
+    hash = "sha256-r3SRcn/zBplpgVD598GGCJzNFxpQne8zK8uh3hyzF3E=";
   };
 
   extras = stdenv.mkDerivation {
@@ -130,7 +128,7 @@ let
   m3shapesModule = stdenv.mkDerivation {
     inherit cmakeBuildType;
     name = "caelestia-m3shapes";
-    src = shellSrc;
+    src = m3shapes_src;
 
     nativeBuildInputs = [
       cmake
@@ -139,15 +137,13 @@ let
     buildInputs = [
       qt6.qtbase
       qt6.qtdeclarative
+      qt6.qtshadertools
     ];
 
     dontWrapQtApps = true;
     cmakeFlags = [
-      (lib.cmakeFeature "ENABLE_MODULES" "m3shapes")
       (lib.cmakeFeature "INSTALL_QMLDIR" qt6.qtbase.qtQmlPrefix)
-      m3shapesFlag
-    ]
-    ++ cmakeVersionFlags;
+    ];
   };
 
 in

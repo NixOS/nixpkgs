@@ -37,7 +37,7 @@ buildRedist {
         hash = "sha256-hYfMFsd7Y8CwuNGaPYG6uEB+lg1TmWSIIU5ToVMULKY=";
       })
     ]
-    ++ lib.optionals (cudaAtLeast "13.2") [
+    ++ lib.optionals (cudaAtLeast "13.2" && cudaOlder "13.4") [
       # Fix onnxruntime compilation error: https://github.com/microsoft/onnxruntime/issues/28023
       # Backport: https://github.com/NVIDIA/cccl/pull/8771
       (fetchpatch {

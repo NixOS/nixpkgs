@@ -66,7 +66,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "8.1.4087.75";
+  version = "8.2.4133.47";
 
   suffix =
     {
@@ -79,8 +79,8 @@ stdenv.mkDerivation rec {
     url = "https://downloads.vivaldi.com/stable/vivaldi-stable_${version}-1_${suffix}.deb";
     hash =
       {
-        aarch64-linux = "sha256-MyGnFbWXjbD5TzHzlXyV1Qg17dx/MjjNWRDRieqksCw=";
-        x86_64-linux = "sha256-nLfNB2SB3Z7PQ0gRXbegQ0JD6RHie2EVdQkuNLLUiZw=";
+        aarch64-linux = "sha256-oyS7p7B8kxRPl0KxXuWQBgEhIPkP36vI6MNDRfkl7UY=";
+        x86_64-linux = "sha256-St7C8XxA1PIegF1JDUoPHV9Q/UBuemKzcRfLQqWKX24=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
@@ -171,10 +171,6 @@ stdenv.mkDerivation rec {
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "${libPath}" \
         opt/vivaldi/$f
-    done
-
-    for f in libGLESv2.so libqt5_shim.so libqt6_shim.so; do
-      patchelf --set-rpath "${libPath}" opt/vivaldi/$f
     done
   ''
   + lib.optionalString proprietaryCodecs ''

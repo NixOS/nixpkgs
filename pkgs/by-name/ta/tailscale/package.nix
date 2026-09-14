@@ -24,7 +24,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "tailscale";
-  version = "1.102.3";
+  version = "1.102.4";
 
   outputs = [
     "out"

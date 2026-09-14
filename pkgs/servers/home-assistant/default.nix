@@ -133,15 +133,6 @@ let
         doCheck = false; # no tests
       });
 
-      openhomedevice = super.openhomedevice.overridePythonAttrs (oldAttrs: rec {
-        version = "2.2";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          tag = version;
-          hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
-        };
-      });
-
       plexapi = super.plexapi.overrideAttrs (oldAttrs: rec {
         version = "4.15.16";
         src = fetchFromGitHub {
@@ -180,17 +171,6 @@ let
           "test_async_add_tasks"
           "test_send_heartbeat"
         ];
-      });
-
-      # Pinned due to API changes >0.3.5.3
-      pyatag = super.pyatag.overridePythonAttrs (oldAttrs: rec {
-        version = "0.3.5.3";
-        src = fetchFromGitHub {
-          owner = "MatsNl";
-          repo = "pyatag";
-          rev = version;
-          sha256 = "00ly4injmgrj34p0lyx7cz2crgnfcijmzc0540gf7hpwha0marf6";
-        };
       });
 
       pyflume = super.pyflume.overridePythonAttrs (oldAttrs: rec {
@@ -271,7 +251,7 @@ let
   extraBuildInputs = extraPackages python3Packages;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2026.9.1";
+  hassVersion = "2026.9.2";
 
 in
 python3Packages.buildPythonApplication rec {
@@ -292,13 +272,13 @@ python3Packages.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-YaTWD5uKRjA9T0VKVh0miusR7nVuGZCsexPlYfED7ew=";
+    hash = "sha256-JBGydiQydkIDPl1HybR7OK8Y1iuqht3olOlzY1tz/KQ=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-zeCzwWuVoVuBgtLz64dOc2ifcui87rY5nUKVJyQIFCs=";
+    hash = "sha256-CnnNTxNkK+pO0YczaZiRoNplH2s74fzCv7XEWdxvd+E=";
   };
 
   build-system = with python3Packages; [

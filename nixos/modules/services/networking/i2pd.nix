@@ -263,6 +263,14 @@ in
           types.submodule {
             inherit freeformType;
             options = {
+              type = lib.mkOption {
+                type = types.str;
+                default = "server";
+                description = ''
+                  Type of server tunnel.
+                  See <https://docs.i2pd.website/en/latest/user-guide/tunnels/#tunnel-types>.
+                '';
+              };
               host = lib.mkOption {
                 type = types.either types.str credType;
                 description = "IP address of server (on this address i2pd will send data from I2P)";
@@ -289,6 +297,14 @@ in
           types.submodule {
             inherit freeformType;
             options = {
+              type = lib.mkOption {
+                type = types.str;
+                default = "client";
+                description = ''
+                  Type of client tunnel.
+                  See <https://docs.i2pd.website/en/latest/user-guide/tunnels/#tunnel-types>.
+                '';
+              };
               port = lib.mkOption {
                 type = types.port;
                 description = "Port of client tunnel (on this port i2pd will receive data)";
@@ -401,10 +417,8 @@ in
       gen = attr: settings: {
         conf = genConfig "i2pd.conf" (credSubstituteRec attr settings);
         tunconf = genTunnels "i2pd-tunnels.conf" (
-          lib.mapAttrs' (k: v: lib.nameValuePair "client-${k}" (v // { "type" = "client"; })) (
-            credSubstituteRec attr cfg.clientTunnels
-          )
-          // lib.mapAttrs' (k: v: lib.nameValuePair "server-${k}" (v // { "type" = "server"; })) (
+          lib.mapAttrs' (k: v: lib.nameValuePair "client-${k}" v) (credSubstituteRec attr cfg.clientTunnels)
+          // lib.mapAttrs' (k: v: lib.nameValuePair "server-${k}" v) (
             credSubstituteRec attr cfg.serverTunnels
           )
         );

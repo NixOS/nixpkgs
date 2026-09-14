@@ -6,8 +6,8 @@
   versionCheckHook,
 }:
 let
-  version = "1.1.24";
-  buildId = "5215338632183808";
+  version = "1.2.3";
+  buildId = "6402006605234176";
   wholeVersion = "${version}-${buildId}";
 
   throwSystem = throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}";
@@ -15,15 +15,15 @@ let
   sourceData = {
     x86_64-linux = fetchurl {
       url = "https://storage.googleapis.com/antigravity-public/antigravity-cli/${wholeVersion}/linux-x64/cli_linux_x64.tar.gz";
-      hash = "sha256-FWgRhlUCV++eW3AG02VLWEPahjRO4cp3YPX5UhbMBrU=";
+      hash = "sha256-lsZgrjuF/+/avYqMqxHsILXvAbGkF7nXO6BCWJ79LPQ=";
     };
     aarch64-linux = fetchurl {
       url = "https://storage.googleapis.com/antigravity-public/antigravity-cli/${wholeVersion}/linux-arm/cli_linux_arm64.tar.gz";
-      hash = "sha256-GKmQw5qLmcihFOG/qaOGs0y1J4Rz/S/Ka0cjVoapuDI=";
+      hash = "sha256-Fic4n3O1BfgBSFpz4cPsd+jZvocMMsjaA1pJNpW2lPk=";
     };
     aarch64-darwin = fetchurl {
       url = "https://storage.googleapis.com/antigravity-public/antigravity-cli/${wholeVersion}/darwin-arm/cli_mac_arm64.tar.gz";
-      hash = "sha256-Nba6bSLTnLagJXQizRLbEE2FQ2UeFmgusfniq102qu4=";
+      hash = "sha256-YSMl+5ZkEC22pvw/0HfrMW1pQlkxK7OZsgaZwPJb82E=";
     };
   };
 in

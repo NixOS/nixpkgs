@@ -6,22 +6,24 @@
   pytestCheckHook,
   pyyaml,
   pythonAtLeast,
+  setuptools,
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "configargparse";
-  version = "1.7.5";
-  format = "setuptools";
+  version = "1.7.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bw2";
     repo = "ConfigArgParse";
-    tag = "v${version}";
-    hash = "sha256-ZRdwA3X1TCv0BIwr1gFeSi6UuziXiazciKw/6ewkpRE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-s1QkHTU36Kj+XK8dNiEXAxZrW2oDPISai056V+B4eog=";
   };
 
   build-system = [
+    setuptools
     setuptools-scm
   ];
 
@@ -33,7 +35,7 @@ buildPythonPackage rec {
     pytestCheckHook
     mock
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   disabledTests = lib.optionals (pythonAtLeast "3.13") [
     # regex mismatch
@@ -45,8 +47,8 @@ buildPythonPackage rec {
   meta = {
     description = "Drop-in replacement for argparse";
     homepage = "https://github.com/bw2/ConfigArgParse";
-    changelog = "https://github.com/bw2/ConfigArgParse/releases/tag/${src.tag}";
+    changelog = "https://github.com/bw2/ConfigArgParse/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

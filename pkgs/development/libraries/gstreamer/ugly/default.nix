@@ -17,6 +17,8 @@
   libintl,
   lib,
   enableGplPlugins ? true,
+  # only for passthru.gstreamerCpeParts
+  gstreamer,
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
@@ -122,6 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
       like. The code might be widely known to present patent problems.
     '';
     license = if enableGplPlugins then lib.licenses.gpl2Plus else lib.licenses.lgpl2Plus;
+    identifiers.cpeParts = gstreamer.passthru.gstreamerCpeParts finalAttrs.version;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ tmarkus ];
   };

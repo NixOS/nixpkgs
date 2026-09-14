@@ -3,22 +3,23 @@
   fetchFromGitHub,
   lib,
   nix-update-script,
+  nixosTests,
   rustPlatform,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hickory-dns";
-  version = "0.26.2";
+  version = "0.26.3";
 
   src = fetchFromGitHub {
     owner = "hickory-dns";
     repo = "hickory-dns";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qwyMfjo3LTyvxwRlQ/4Odc3yZsSuA4cn7zj/KLCfRSs=";
+    hash = "sha256-zm8qMYqdDEZjtNC9arMzCAxPpBRRRwiHsb3lsP/cHIg=";
   };
 
-  cargoHash = "sha256-TsawTK+MaQ8isxa+/lROTgnA2u26XKjZCtRFUKLRbrw=";
+  cargoHash = "sha256-u6Uf9lhrFgWfzIXZ3DIPk2JdDTdd1qBTkqUgmSspR9c=";
 
   buildFeatures = [
     "blocklist"
@@ -80,7 +81,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace crates/resolver/src/lib.rs --replace-fail '//! ```rust' '//! ```rust,no_run'
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = {
+      inherit (nixosTests) hickory-dns;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Rust based DNS client, server, and resolver";

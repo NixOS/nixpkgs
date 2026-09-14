@@ -1700,7 +1700,11 @@ let
 
         owl-base = callPackage ../development/ocaml-modules/owl-base { };
 
-        oxenstored = callPackage ../development/ocaml-modules/oxenstored { };
+        oxenstored = callPackage ../development/ocaml-modules/oxenstored {
+          xen = pkgs.xen.override {
+            ocamlPackages = self;
+          };
+        };
 
         ### P ###
 

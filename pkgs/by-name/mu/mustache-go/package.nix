@@ -6,14 +6,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "mustache-go";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "cbroglie";
     repo = "mustache";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-PBU9p0CpqYCODOebkFuSCFx8eZhgBLgIt2t7CZ9js1k=";
+    hash = "sha256-1Kx3CnNxyRyRixMd49HfVAPQhyxU0qMw/H1mD0ugOdk=";
   };
 
   vendorHash = "sha256-8IuIjowz7NoUUEIuEQ55uvvOT5PsaIJhaNIeZIIaXY4=";

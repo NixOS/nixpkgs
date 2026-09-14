@@ -15,7 +15,7 @@
   nix-update-script,
 }:
 let
-  version = "0.8.16";
+  version = "0.8.17";
 in
 stdenv.mkDerivation {
   pname = "setbfree";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     owner = "pantherb";
     repo = "setBfree";
     rev = "v${version}";
-    hash = "sha256-bfmCNoTINFEqGKsnef8+gS8PGTAuogyikL9HzpMjKaI=";
+    hash = "sha256-MjbgN0WIZtoFjEtjYa0MkTtaub/oNSxQ0i8EedBbTGA=";
   };
 
   postPatch = ''

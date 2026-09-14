@@ -18,6 +18,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ _7zz ];
 
+  # 7zz extracts APFS alternate data streams as separate files, breaking the seal
+  postUnpack = ''
+    find . -name "*:com.apple.*" -delete
+  '';
+
   installPhase = ''
     runHook preInstall
 

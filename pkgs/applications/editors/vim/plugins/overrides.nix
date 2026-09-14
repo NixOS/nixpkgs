@@ -1027,18 +1027,11 @@ assertNoAdditions {
   };
 
   copilot-lua = super.copilot-lua.overrideAttrs {
-    # Avoid copying the bundled 500MB language server into the plugin output.
-    preInstall = ''
-      rm -rf copilot/js
-    '';
-
-    postInstall = ''
-      mkdir -p $target/copilot
-      ln -s ${copilot-language-server}/share/copilot-language-server $target/copilot/js
-
-      substituteInPlace $target/lua/copilot/lsp/nodejs.lua \
-        --replace-fail "copilot/js/language-server.js" "copilot/js/main.js"
-      sed -i 's/version = "[^"]*"/version = "${copilot-language-server.version}"/' $target/lua/copilot/util.lua
+    # Use the packaged language server instead of the runtime installer.
+    postPatch = ''
+      substituteInPlace lua/copilot/config/server.lua \
+        --replace-fail 'custom_server_filepath = nil,' \
+        'custom_server_filepath = "${lib.getExe copilot-language-server}",'
     '';
 
     runtimeDeps = [

@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "repgrep";
-  version = "0.17.0";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "acheronfail";
     repo = "repgrep";
     tag = finalAttrs.version;
-    hash = "sha256-cAk2TUfdp9Qw1MVHYNmBFB5HtrWNTfa5K8ylNZLYjqQ=";
+    hash = "sha256-n2rBHwNBxFHShBDVAYwk0M/7K/9Np3hHHinjTVtaaHI=";
   };
 
-  cargoHash = "sha256-nFK285is1AR9ffYNoQUYbZh7TMcsurt4Hb/OPtq0e5c=";
+  cargoHash = "sha256-pJVGgBFRuEpwMCEzqg/cDLQg5IOxH0+o4gUYKMsT8iY=";
 
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # Requires access to a controlling terminal, which is unavailable in the sandbox.

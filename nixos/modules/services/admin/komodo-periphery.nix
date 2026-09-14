@@ -560,6 +560,16 @@ in
       ++ lib.optional (cfg.dockerHost == null) "docker.service";
       wantedBy = [ "multi-user.target" ];
 
+      # Periphery shells out to `docker`, `docker compose` and `git` through `sh -c`.
+      path = [
+        pkgs.git
+        config.virtualisation.docker.package
+      ]
+      ++ lib.optionals (!cfg.disableTerminals) [
+        "/run/current-system/sw"
+        "/run/wrappers"
+      ];
+
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
@@ -603,11 +613,6 @@ in
           }
           // cfg.environment
         );
-
-        ExecSearchPath = lib.mkIf (!cfg.disableTerminals) [
-          "/run/current-system/sw/bin"
-          "/run/wrappers/bin"
-        ];
 
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
 

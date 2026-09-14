@@ -9,13 +9,13 @@
   nix-update-script,
 }:
 let
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.pairs";
     tag = "v${version}";
-    hash = "sha256-h5qpbo/SPTstxPUu3/7iRB8Bx3P4TSzQYGbHqN6XwAM=";
+    hash = "sha256-HrBUKw1qWRmciiPgBkjTArDxmYayKXesQafJixvUpbc=";
   };
 
   blink-pairs-lib = rustPlatform.buildRustPackage {

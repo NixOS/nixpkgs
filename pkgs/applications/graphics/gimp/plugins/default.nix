@@ -346,7 +346,7 @@ lib.makeScope pkgs.newScope (
         with pkgs;
         [
           lensfun
-          gexiv2
+          gexiv2_0_10
         ]
         ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
       );

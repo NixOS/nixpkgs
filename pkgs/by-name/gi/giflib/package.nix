@@ -48,7 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-  ];
+  ]
+  ++ lib.optional (
+    stdenv.buildPlatform.parsed.kernel.name != stdenv.hostPlatform.parsed.kernel.name
+  ) "UNAME=${stdenv.hostPlatform.uname.system}";
 
   postPatch = ''
     # we don't want to build HTML documentation

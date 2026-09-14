@@ -4,6 +4,7 @@
   pkgs,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # nativeBuildInputs
   gitMinimal,
@@ -258,6 +259,11 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
     # RuntimeError: Failed to compile /build/tmplb6i266d/data.json to /build/tmplb6i266d/data.pte
     "test_flatbuffer_paths_match"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # ValueError: badly formed help string
+    "test_with_config"
+    "test_with_config_and_cli"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
     # RuntimeError: Error in dlopen:

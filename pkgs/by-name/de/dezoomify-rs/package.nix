@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dezoomify-rs";
-  version = "2.19.0";
+  version = "2.20.0";
 
   __structuredAttrs = true;
 
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "lovasoa";
     repo = "dezoomify-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AxypP0od1hmhE/aXVuh5TlScIL7erZ2VYPD2+Djkbh0=";
+    hash = "sha256-Qj+qJvCk77hDw1bNgITETONZPGuFkcVJ+rzmeJGgVAs=";
   };
 
   nativeBuildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  cargoHash = "sha256-OC+aVsC4MgvrmJWn0ritHjCsg2qpdj1V9sjN9PW9JkI=";
+  cargoHash = "sha256-w3kYruKuraP1NPTGupqLUA2WoIlieIrMVWAy13vO8Ug=";
 
   # hyper uses SystemConfiguration.framework to read system proxy settings.
   # Allow access to the Mach service to prevent the tests from failing.

@@ -24,13 +24,13 @@ let
   flutter = flutter335;
   sourceBuild = flutter.buildFlutterApplication (finalAttrs: {
     pname = "fladder";
-    version = "0.11.0";
+    version = "0.11.1";
 
     src = fetchFromGitHub {
       owner = "DonutWare";
       repo = "Fladder";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-oE1nlKH//FFVuOXGByX8cL+q6TA29VPJuoKoz2HLO8g=";
+      hash = "sha256-inBjXTIsmBNWFVbykZgiAAI99sByT2IJGn9AyVo9kkk=";
     };
 
     inherit targetFlutterPlatform;
@@ -106,7 +106,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/DonutWare/Fladder/releases/download/v${sourceBuild.version}/Fladder-macOS-${sourceBuild.version}.dmg";
-      hash = "sha256-fl73LdAo0E1qcyE2QCQszAbstcMjWLrp6v1LYK+nPCk=";
+      hash = "sha256-23+T6DOhSvq7cQMqBmTIMcVnEo1bYMaszEAndQZe/lE=";
     };
 
     nativeBuildInputs = [

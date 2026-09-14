@@ -81,14 +81,11 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
   __structuredAttrs = true;
 
-  # No tags have been made for 0.14.0
-  # https://github.com/pytorch/rl/pull/4108#issuecomment-5558175190
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "rl";
-    # tag = "v${finalAttrs.version}";
-    rev = "6e18e35b2c68be1a56afebfb0676d217925114cd";
-    hash = "sha256-a1Ehbr6N5w9sVH1ygFhlPEm8J51zIrXB37N18OQqiDM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ATfvAobn9MjY+PHY7xY+iPztyKBZ5YpGXL1ZCzgvQXc=";
   };
 
   postPatch = ''
@@ -327,8 +324,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Modular, primitive-first, python-first PyTorch library for Reinforcement Learning";
     homepage = "https://github.com/pytorch/rl";
-    # TODO: uncomment when src is using a git tag again
-    # changelog = "https://github.com/pytorch/rl/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/pytorch/rl/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

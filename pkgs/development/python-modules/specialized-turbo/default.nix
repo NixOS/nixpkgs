@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "specialized-turbo";
-  version = "0.8.2";
+  version = "0.8.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JamieMagee";
     repo = "specialized-turbo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ey9XQocBDJDNenCnJ2iz4jcJ5cB+BiTt0ngvOX6PKik=";
+    hash = "sha256-y2T44Az+nDHntwkulPQGYChpG72HoLqWdz6Dr3gJYpE=";
   };
 
   build-system = [ hatchling ];

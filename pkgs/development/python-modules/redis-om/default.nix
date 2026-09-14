@@ -32,6 +32,11 @@ buildPythonPackage rec {
     hash = "sha256-qjGrhEINW9p2Rd3O5WI4QKYcj8tn/FI3pjnhI1k3mmc=";
   };
 
+  pythonRelaxDeps = [
+    "more-itertools"
+    "redis"
+  ];
+
   build-system = [
     hatchling
     unasync

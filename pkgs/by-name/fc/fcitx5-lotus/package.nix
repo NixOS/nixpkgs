@@ -31,14 +31,28 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-lotus";
-  version = "3.5.7";
+  version = "3.5.9";
 
   src = fetchFromGitHub {
     owner = "LotusInputMethod";
     repo = "fcitx5-lotus";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-IQFklfLrccVm/SW8dpcplbWfoYJNoS4nMMdkuOzOgdo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kOIs8nLSF93xDIU7v8Wldyw+Zs5NEMJqZA/42TN4oYM=";
     fetchSubmodules = true;
+  };
+
+  vendorDir = finalAttrs.passthru."go-modules";
+
+  passthru = {
+    "go-modules" =
+      (buildGoModule {
+        pname = "fcitx5-lotus-go-modules";
+        inherit (finalAttrs) version src;
+        modRoot = "bamboo";
+        vendorHash = "sha256-CNDYjxDfqh9nGs5vlpb/7qXZeNtkvegC5nPvBOZcDrc=";
+      }).goModules;
+
+    updateScript = nix-update-script { };
   };
 
   nativeBuildInputs = [
@@ -65,17 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+
   __structuredAttrs = true;
 
   dontWrapQtApps = true;
-
-  vendorDir =
-    (buildGoModule {
-      pname = "fcitx5-lotus-go-modules";
-      inherit (finalAttrs) version src;
-      modRoot = "bamboo";
-      vendorHash = "sha256-Y8sh1PqmBjXko2X9YOxwCrtrGLQ565aewrq4sRvLdpw=";
-    }).goModules;
 
   preConfigure = ''
     export GOCACHE=$TMPDIR/go-cache
@@ -118,8 +125,6 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtApp $out/bin/fcitx5-lotus-settings \
       --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share"
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Vietnamese input method engine for Fcitx5";

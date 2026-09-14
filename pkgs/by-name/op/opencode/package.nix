@@ -4,7 +4,7 @@
   bun,
   darwin,
   fetchFromGitHub,
-  makeBinaryWrapper,
+  makeWrapper,
   models-dev,
   nodejs,
   nix-update-script,
@@ -77,14 +77,14 @@ let
       # NOTE: Required else we get errors that our fixed-output derivation references store paths
       dontFixup = true;
 
-      outputHash = "sha256-0rpyP6nqK4FrJNjl0WV5adPjEQhe8a55RM7CgP9wlak=";
+      outputHash = "sha256-38HGR+n9I7QrE4i+CmRViX4/3TEQjLgU81LbEDBzj7Y=";
       outputHashAlgo = "sha256";
       outputHashMode = "recursive";
     };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "1.18.29";
+  version = "1.18.30";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "anomalyco";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lCXlxTOhcX70jxJAbpolyGlIxQK2nst+6bFhq3Xzdmc=";
+    hash = "sha256-G4qRDwJ6i5SpsiHoej31HRPLOHpkLc66B+UmdzOY1+o=";
   };
 
   postPatch =
@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     bun
     nodejs
     installShellFiles
-    makeBinaryWrapper
+    makeWrapper
     writableTmpDirAsHomeHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -136,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
   env.OPENCODE_DISABLE_MODELS_FETCH = true;
   env.OPENCODE_VERSION = finalAttrs.version;
-  env.OPENCODE_CHANNEL = "stable";
+  env.OPENCODE_CHANNEL = "prod";
 
   buildPhase = ''
     runHook preBuild
@@ -166,7 +166,39 @@ stdenv.mkDerivation (finalAttrs: {
          ]
        )
      } \
-    --set OPENCODE_DISABLE_AUTOUPDATE true
+    --set OPENCODE_DISABLE_AUTOUPDATE true \
+    --run '
+      # NOTE: Once this workaround is removed we should switch back to using
+      # makeBinaryWrapper here.
+
+      # nixpkgs previously built OpenCode with OPENCODE_CHANNEL=stable. "stable"
+      # is no longer an upstream channel, so it caused OpenCode to store its database
+      # as opencode-stable.db. After switching to the upstream production channel,
+      # OpenCode would normally use opencode.db instead, making existing sessions
+      # appear to be lost. Keep using the legacy database until the user migrates
+      # it, unless they explicitly configured OPENCODE_DB or disabled this workaround.
+
+      data_home="''${XDG_DATA_HOME:-$HOME/.local/share}"
+      legacy="$data_home/opencode/opencode-stable.db"
+      canonical="$data_home/opencode/opencode.db"
+
+      if [ -z "''${OPENCODE_DB:-}" ] \
+        && [ -z "''${NIXPKGS_OPENCODE_DISABLE_LEGACY_DB_WORKAROUND:-}" ] \
+        && [ -e "$legacy" ] \
+        && [ ! -e "$canonical" ]; then
+        export OPENCODE_DB="opencode-stable.db"
+
+        # Only show migration guidance when stderr is attached to a terminal.
+        # Non-interactive uses such as `opencode web`, services, or scripts
+        # should continue starting normally with the legacy database selected.
+        if [ -t 2 ]; then
+          echo "Detected legacy nixpkgs OpenCode database at $legacy." >&2
+          echo "Continuing to use it for compatibility." >&2
+          echo "See https://github.com/NixOS/nixpkgs/pull/558549 for migration instructions." >&2
+          echo "Set NIXPKGS_OPENCODE_DISABLE_LEGACY_DB_WORKAROUND=1 to disable this workaround." >&2
+        fi
+      fi
+    '
 
     install -Dm644 ${models-dev.jsonschema} $out/share/model-schema.json
     install -Dm644 config.json $out/share/config.json

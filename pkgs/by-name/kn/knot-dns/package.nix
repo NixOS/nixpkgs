@@ -23,8 +23,8 @@
   xdp-tools,
   fstrm,
   protobufc,
-  sphinx,
   autoreconfHook,
+  tzdata,
   nixosTests,
   knot-resolver_5,
   knot-resolver-manager_6,
@@ -62,17 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./runtime-deps.patch
   ];
 
-  postPatch = ''
-    substituteInPlace tests/contrib/test_time.c \
-      --replace-fail 'test_time_print();' ""
-  '';
-
-  # FIXME: sphinx is needed for now to get man-pages
   nativeBuildInputs = [
     pkg-config
     protobufc # dnstap support
     autoreconfHook
-    sphinx
+    tzdata # tests/contrib/test_time
   ];
   buildInputs = [
     gnutls

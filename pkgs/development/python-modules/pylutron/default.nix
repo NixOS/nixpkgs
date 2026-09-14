@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pylutron";
-  version = "0.4.2";
+  version = "0.4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thecynic";
     repo = "pylutron";
     tag = finalAttrs.version;
-    hash = "sha256-W0QiOiaUh2/kNNxdPlQLyc4HorDAxZLc+zsftNC0Ah4=";
+    hash = "sha256-xpa/kZv4cwNuadTuVhopFJSBP4eGzsSQOadcAiM/RKY=";
   };
 
   postPatch = ''

@@ -401,17 +401,6 @@ let
               driver = "nl80211";
               pkcs11 = {
                 enable = true;
-                package = pkgs.libp11.overrideAttrs {
-                  # TODO: Remove this override once a libp11 release includes the fix for
-                  # https://github.com/OpenSC/libp11/issues/672
-                  version = "0.4.21-unstable-2026-08-19";
-                  src = pkgs.fetchFromGitHub {
-                    owner = "OpenSC";
-                    repo = "libp11";
-                    rev = "e72a2014eb078c7b784e2a9be3e7abd3dce8fd5a";
-                    hash = "sha256-V9ZRPUJp2FkK+Zb/qYC13SDE7+oyJ/hlnO/XEN2zDD8=";
-                  };
-                };
               };
             };
           };

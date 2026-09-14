@@ -37,13 +37,13 @@
 
 rustPlatform.buildRustPackage {
   pname = "weylus";
-  version = "0.11.4-unstable-2025-10-08";
+  version = "0.11.4-unstable-2026-2-16";
 
   src = fetchFromGitHub {
     owner = "H-M-H";
     repo = "weylus";
-    rev = "56e29ecbde3a4aba994a9df047b5398feb447c1b";
-    hash = "sha256-dHdgWrygSXqKf9fpYRVDj+Ql97Or/kjBfN/mECy2ipc=";
+    rev = "38a01a8f8e429500c7e9f67fc1c88ca37a4d1e93";
+    hash = "sha256-kcFXwrxg9PQxR4/71s10TMtaFvksuQaNReSoGBbrdM0=";
   };
 
   postPatch = ''
@@ -88,7 +88,7 @@ rustPlatform.buildRustPackage {
     libtool
   ];
 
-  cargoHash = "sha256-Mx8/zMG36qztbFYgqC7SB75bf8T0NkYQA+2Hs9/pnjk=";
+  cargoHash = "sha256-2K+zLgZ3ApTCpj/OYy0f80pkvXPaB6TJe4fcrqsxPPw=";
 
   cargoBuildFlags = [ "--features=ffmpeg-system" ];
   cargoTestFlags = [ "--features=ffmpeg-system" ];
@@ -123,6 +123,6 @@ rustPlatform.buildRustPackage {
     mainProgram = "weylus";
     homepage = "https://github.com/H-M-H/Weylus";
     license = lib.licenses.agpl3Only;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.zainkergaye ];
   };
 }

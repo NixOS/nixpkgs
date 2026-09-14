@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "notifications-python-client";
-  version = "12.1.0";
+  version = "12.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alphagov";
     repo = "notifications-python-client";
     tag = finalAttrs.version;
-    hash = "sha256-jaNALtQQBxBE2ofBw9ZXC4z5VCnclAAHYvPMTBK74tY=";
+    hash = "sha256-tUAubS20CSTYgzVPjE8r6jK2l9Qy3YKggW1YEEm1Rlg=";
   };
 
   postPatch = ''

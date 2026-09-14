@@ -9,7 +9,7 @@
   pkg-config,
 
   # buildInputs
-  ffmpeg,
+  ffmpeg-headless,
   libavif,
   libheif,
   libjpeg,
@@ -66,17 +66,17 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
       test/test_encoders.py \
       --replace-fail \
         '"ffprobe"' \
-        '"${lib.getExe' ffmpeg "ffprobe"}"'
+        '"${lib.getExe' ffmpeg-headless "ffprobe"}"'
 
     substituteInPlace test/test_encoders.py \
       --replace-fail \
         '"ffmpeg"' \
-        '"${lib.getExe ffmpeg}"'
+        '"${lib.getExe ffmpeg-headless}"'
 
     substituteInPlace test/test_transform_ops.py \
       --replace-fail \
         'ffmpeg_cli = "ffmpeg"' \
-        'ffmpeg_cli = "${lib.getExe ffmpeg}"'
+        'ffmpeg_cli = "${lib.getExe ffmpeg-headless}"'
   '';
 
   nativeBuildInputs = [
@@ -90,7 +90,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   ];
 
   buildInputs = [
-    ffmpeg
+    ffmpeg-headless
     libavif
     libheif
     libjpeg

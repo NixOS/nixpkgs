@@ -29,6 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sabnzbd/sabctools";
     changelog = "https://github.com/sabnzbd/sabctools/releases/tag/v${version}";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ adamcstephens ];
+    maintainers = [ ];
   };
 }

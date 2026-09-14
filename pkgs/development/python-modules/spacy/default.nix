@@ -135,6 +135,10 @@ buildPythonPackage (finalAttrs: {
     #   assert eval["nel_macro_f"] > 0
     #   assert 0.0 > 0
     "test_overfitting_IO_with_ner"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # AssertionError: assert 'V' == 'N'
+    "test_tok2vec_frozen_overfitting"
   ];
 
   pythonImportsCheck = [ "spacy" ];

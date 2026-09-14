@@ -138,7 +138,6 @@ let
             jobs.stdenv.aarch64-darwin
             jobs.vim.aarch64-darwin
             jobs.cachix.aarch64-darwin
-            jobs.darwin.linux-builder.aarch64-darwin
 
             # UI apps
             # jobs.firefox-unwrapped.aarch64-darwin
@@ -221,7 +220,6 @@ let
         jobs.vim.aarch64-darwin
         jobs.inkscape.aarch64-darwin
         jobs.qt5.qtmultimedia.aarch64-darwin
-        jobs.darwin.linux-builder.aarch64-darwin
         /*
           jobs.tests.cc-wrapper.default.aarch64-darwin
           jobs.tests.cc-wrapper.llvmPackages.clang.aarch64-darwin

@@ -8,12 +8,12 @@ download_urls = {
     "brave": {
         "aarch64-linux": "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_arm64.deb",
         "x86_64-linux": "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb",
-        "aarch64-darwin": "https://github.com/brave/brave-browser/releases/download/v${version}/brave-v${version}-darwin-arm64.zip",
+        "aarch64-darwin": "https://github.com/brave/brave-browser/releases/download/v${version}/Brave-Browser-arm64.dmg",
     },
     "brave-origin": {
         "aarch64-linux": "https://github.com/brave/brave-browser/releases/download/v${version}/brave-origin_${version}_arm64.deb",
         "x86_64-linux": "https://github.com/brave/brave-browser/releases/download/v${version}/brave-origin_${version}_amd64.deb",
-        "aarch64-darwin": "https://github.com/brave/brave-browser/releases/download/v${version}/brave-origin-v${version}-darwin-arm64.zip",
+        "aarch64-darwin": "https://github.com/brave/brave-browser/releases/download/v${version}/Brave-Origin-arm64.dmg",
     },
 }
 

@@ -4,7 +4,6 @@
   lib,
   # service/package name to test
   rancherDistro,
-  ...
 }:
 let
   allPackages = lib.filterAttrs (

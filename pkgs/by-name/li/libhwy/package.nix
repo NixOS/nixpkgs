@@ -82,6 +82,11 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 hwy/tests/*.h -t $out/include/hwy/tests/
   '';
 
+  postFixup = ''
+    substituteInPlace $dev/lib/cmake/hwy/hwy-config-release.cmake \
+      --replace-fail "\''${_IMPORT_PREFIX}/lib" "$out/lib"
+  '';
+
   # hydra's darwin machines run into https://github.com/libjxl/libjxl/issues/408
   doCheck = !stdenv.hostPlatform.isDarwin;
 

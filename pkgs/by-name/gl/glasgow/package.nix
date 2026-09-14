@@ -4,10 +4,14 @@
   fetchFromGitHub,
   icestorm,
   nextpnr,
-  sdcc,
+  sdcc_4_5,
   yosys,
 }:
 
+let
+  # The firmware must match glasgow's checked-in blob byte for byte, so libfx2 needs the same sdcc.
+  fx2 = python3Packages.fx2.override { sdcc = sdcc_4_5; };
+in
 python3Packages.buildPythonApplication rec {
   pname = "glasgow";
   version = "0-unstable-2025-07-25";
@@ -32,19 +36,21 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    sdcc
+    sdcc_4_5
   ];
 
   build-system = [
     python3Packages.pdm-backend
   ];
 
-  dependencies = with python3Packages; [
+  dependencies = [
+    fx2
+  ]
+  ++ (with python3Packages; [
     aiohttp
     amaranth
     cobs
     enum-tools
-    fx2
     importlib-resources
     libusb1
     packaging
@@ -52,7 +58,7 @@ python3Packages.buildPythonApplication rec {
     pyvcd
     typing-extensions
     tqdm
-  ];
+  ]);
 
   nativeCheckInputs = [
     # pytestCheckHook discovers way less tests
@@ -69,10 +75,10 @@ python3Packages.buildPythonApplication rec {
   __darwinAllowLocalNetworking = true;
 
   preBuild = ''
-    make -C firmware/fx2 GIT_TREE_DIRTY=0 GIT_REV_SHORT=${firmwareGitRev} LIBFX2=${python3Packages.fx2}/share/libfx2
+    make -C firmware/fx2 GIT_TREE_DIRTY=0 GIT_REV_SHORT=${firmwareGitRev} LIBFX2=${fx2}/share/libfx2
 
     # Normalize the .ihex file, see ./software/deploy-firmware.sh.
-    ${python3Packages.python.withPackages (p: [ p.fx2 ])}/bin/python firmware/fx2/normalize.py \
+    ${python3Packages.python.withPackages (_: [ fx2 ])}/bin/python firmware/fx2/normalize.py \
       firmware/fx2/build/firmware.ihex firmware/fx2/glasgow.ihex
 
     # Ensure the compiled firmware is exactly the same as the one shipped in the repo.

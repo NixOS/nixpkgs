@@ -29,5 +29,12 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/telemt/telemt";
     maintainers = with lib.maintainers; [ r4v3n6101 ];
     platforms = lib.platforms.linux;
+    license = {
+      # Custom license "based on Apache License 2 principles"
+      shortName = "telemt-pl3";
+      fullName = "Telemt Public License 3";
+      free = true;
+      redistributable = true;
+    };
   };
 }

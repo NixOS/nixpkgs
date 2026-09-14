@@ -11,7 +11,7 @@
   gtkmm3,
   libnotify,
   libsecret,
-  pangomm,
+  pangomm_1_4,
   libxscrnsaver,
   libpulseaudio,
   librsvg,
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     gtkmm3
     libnotify
     libsecret
-    pangomm
+    pangomm_1_4
     libxscrnsaver
     libpulseaudio
     librsvg

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromCodeberg,
   rustPlatform,
   pkg-config,
@@ -7,7 +8,6 @@
   cmake,
   ninja,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "microcad";
   version = "0.5.0";
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ninja
     pkg-config
   ];
-  buildInputs = [ wayland ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ wayland ];
   cargoBuildFlags = [
     "-p"
     "microcad-viewer"
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.agpl3Plus;
     mainProgram = "microcad";
     donationPage = "https://opencollective.com/microcad/donate";
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ fred441a ];
   };
 })

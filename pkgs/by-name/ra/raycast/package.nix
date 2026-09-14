@@ -11,15 +11,15 @@
 
 stdenvNoCC.mkDerivation {
   pname = "raycast";
-  version = "2.2.0.0";
+  version = "2.3.1.0";
 
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchurl {
     name = "Raycast.dmg";
-    url = "https://x-r2.raycast-releases.com/Raycast_2.2.0.0_52fdfad707_arm64.dmg";
-    hash = "sha256-oxIui7wC2rNV99mU6CWU2PyN2PpaxHbsanQop8+88rI=";
+    url = "https://x-r2.raycast-releases.com/Raycast_2.3.1.0_860512aaa4_arm64.dmg";
+    hash = "sha256-mvkDrula9V5fhEt7R8d3QM/DD+UM6eN7qy95RlhKDsg=";
   };
 
   dontPatch = true;
