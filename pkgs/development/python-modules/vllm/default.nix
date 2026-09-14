@@ -200,8 +200,8 @@ let
     owner = "vllm-project";
     repo = "MSA";
     rev = "fee783153f3efe57e3e933c5cb7e267a7cebcfb5";
-    hash = "sha256-4yNoYnGK0eElgI01d+n0Hy54oVZLmETVRwnj2Q1/dEY=";
     fetchSubmodules = true;
+    hash = "sha256-4yNoYnGK0eElgI01d+n0Hy54oVZLmETVRwnj2Q1/dEY=";
   };
 
   # grep for DEFAULT_TRITON_KERNELS_TAG in the following file
@@ -268,6 +268,15 @@ let
       cp -rva . $out
     '';
   }) vllm-flash-attn;
+
+  # grep for GIT_TAG in the following file
+  # https://github.com/vllm-project/vllm/blob/v${version}/cmake/external_projects/tml-fa4.cmake
+  tml-fa4 = fetchFromGitHub {
+    owner = "vllm-project";
+    repo = "tml-fa4";
+    rev = "b206834606ed5b5f21f8eed6b0683f528ea9cf7d";
+    hash = "";
+  };
 
   cpuSupport = !cudaSupport && !rocmSupport;
 
@@ -370,14 +379,14 @@ in
 
 buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   pname = "vllm";
-  version = "0.24.0";
+  version = "0.28.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vllm-project";
     repo = "vllm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ArmNLA71YRNpBAMlWxwBzUroMFjhyZ2ZsjX8JNc4pH4=";
+    hash = "sha256-Ia5SB9bQ+Vxkc5wBwY7HxQo6rqYFpWlVxeQyyP55dMg=";
   };
 
   cargoRoot = "rust";
@@ -388,7 +397,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
       src
       cargoRoot
       ;
-    hash = "sha256-Kdp0+NzDBs9S57XUVNmV7q1fxGog1rd3lh+J5F3vQqY=";
+    hash = "sha256-CLvLAkejYfrnrPXJ78xh2mgCyRg7F56Um1LPnJtj7iw=";
   };
 
   patches = [
