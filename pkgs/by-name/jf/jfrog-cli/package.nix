@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "jfrog-cli";
-  version = "2.123.0";
+  version = "2.124.0";
 
   src = fetchFromGitHub {
     owner = "jfrog";
     repo = "jfrog-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HyBHH1EU0fIkxHL/36pU758L9t7N7a5QpFM8Kz4/s/8=";
+    hash = "sha256-r7mU+QfPCawsO4SrcXhOtJXvkby9RCe7XhbV+83bY7c=";
   };
 
   proxyVendor = true;
