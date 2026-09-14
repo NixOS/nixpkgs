@@ -42,7 +42,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lancedb";
-  version = "0.37.1";
+  version = "0.38.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -50,14 +50,14 @@ buildPythonPackage (finalAttrs: {
     owner = "lancedb";
     repo = "lancedb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ibyiZeZDSI7W7Cog+6N5zp7jr2Rm0Ql0BfePngucPW0=";
+    hash = "sha256-IkV/+S5ypBbfsHU8dJ5E4lccvHgmNequAmX7rKSkfWw=";
   };
 
   buildAndTestSubdir = "python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-aBc77iHWrFJhygwtcZaIu6ScHNnDXxn+QKHmvjRYLWg=";
+    hash = "sha256-gR4mt+tulpQHwMUoI/KWVRf6rgNgG6YpQs/uIrAd8SA=";
   };
 
   # `lance-linalg`'s AVX-512 VNNI u8-distance kernels call `_mm512_dpbusd_epi32` /
