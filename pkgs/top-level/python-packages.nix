@@ -20962,6 +20962,8 @@ self: super: with self; {
 
   torchrl = callPackage ../development/python-modules/torchrl { };
 
+  torchrunx = callPackage ../development/python-modules/torchrunx { };
+
   torchsde = callPackage ../development/python-modules/torchsde { };
 
   torchsnapshot = callPackage ../development/python-modules/torchsnapshot { };
