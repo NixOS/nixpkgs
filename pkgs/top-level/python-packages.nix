@@ -12780,6 +12780,10 @@ self: super: with self; {
     callPackage ../development/python-modules/opentelemetry-instrumentation-sqlite3
       { };
 
+  opentelemetry-instrumentation-structlog =
+    callPackage ../development/python-modules/opentelemetry-instrumentation-structlog
+      { };
+
   opentelemetry-instrumentation-system-metrics =
     callPackage ../development/python-modules/opentelemetry-instrumentation-system-metrics
       { };
@@ -12798,6 +12802,10 @@ self: super: with self; {
 
   opentelemetry-propagator-aws-xray =
     callPackage ../development/python-modules/opentelemetry-propagator-aws-xray
+      { };
+
+  opentelemetry-propagator-b3 =
+    callPackage ../development/python-modules/opentelemetry-propagator-b3
       { };
 
   opentelemetry-proto = callPackage ../development/python-modules/opentelemetry-proto { };
