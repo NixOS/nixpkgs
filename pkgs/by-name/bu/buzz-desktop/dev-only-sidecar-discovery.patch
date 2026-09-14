@@ -1,0 +1,17 @@
+diff --git a/desktop/src-tauri/src/managed_agents/discovery.rs b/desktop/src-tauri/src/managed_agents/discovery.rs
+index 84f88e406..1af17cc60 100644
+--- a/desktop/src-tauri/src/managed_agents/discovery.rs
++++ b/desktop/src-tauri/src/managed_agents/discovery.rs
+@@ -96,2 +96,3 @@ pub(crate) fn known_skill_dirs() -> impl Iterator<Item = &'static str> {
++#[cfg(debug_assertions)]
+ fn workspace_root_dir() -> PathBuf {
+     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..")
+@@ -363,5 +364,7 @@ fn profile_target_dirs(root: &Path) -> [PathBuf; 2] {
+ fn command_search_dirs() -> Vec<PathBuf> {
+-    let mut dirs = profile_target_dirs(&workspace_root_dir()).to_vec();
++    let mut dirs = Vec::new();
++    #[cfg(debug_assertions)]
++    dirs.extend(profile_target_dirs(&workspace_root_dir()));
+     if let Ok(current_dir) = std::env::current_dir() {
+         dirs.extend(profile_target_dirs(&current_dir));
+     }
