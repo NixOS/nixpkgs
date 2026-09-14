@@ -28,7 +28,7 @@
 
 let
   presets = {
-    "x86_64-linux" = "Linux x86_64";
+    "x86_64-linux" = "Linux";
     "aarch64-linux" = "Linux AArch64";
   };
   preset =
@@ -88,7 +88,8 @@ buildDotnetModule (finalAttrs: {
     # ./godot-dotnet-sdk-4.6.3.patch
     # indev branch
     ./godot-dotnet-sdk-4.7.2.patch
-  ];
+  ]
+  ++ lib.optional (stdenv.hostPlatform.system == "aarch64-linux") ./fix-aarch64-linux.patch;
 
   nugetDeps = ./deps-indev.json;
 
@@ -130,8 +131,6 @@ buildDotnetModule (finalAttrs: {
     export HOME=$(mktemp -d)
     mkdir -p $HOME/.local/share/godot/
     ln -s "${export-templates}"/share/godot/export_templates "$HOME"/.local/share/godot/
-
-    cp ${./export_presets.cfg} ./export_presets.cfg
 
     mkdir -p ./build
     godot4.7-mono --headless --export-release "${preset}" ./build/Rhythia
