@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bundler bundix nixfmt
+#!nix-shell -i bash -E 'with import ../.. {}; mkShell { packages = [ bash bundler bundix (import ../../ci {}).fmt.pkg ]; }'
 # shellcheck shell=bash
 
 set -euf -o pipefail
@@ -20,7 +20,7 @@ rm -f gemset.nix Gemfile.lock
 # platform from where it was executed.
 BUNDLE_FORCE_RUBY_PLATFORM=1 bundle lock
 bundix
-nixfmt gemset.nix
+treefmt --no-cache gemset.nix
 
 # Run checks against the update.
 if ! \
