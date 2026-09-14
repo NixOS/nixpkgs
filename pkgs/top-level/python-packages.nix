@@ -7286,6 +7286,8 @@ self: super: with self; {
 
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
+  gramps = callPackage ../development/python-modules/gramps { };
+
   grandalf = callPackage ../development/python-modules/grandalf { };
 
   granian = callPackage ../development/python-modules/granian { };
