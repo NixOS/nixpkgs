@@ -203,11 +203,13 @@ in
               inherit certificateFile originRequest;
 
               credentialsFile = lib.mkOption {
-                type = lib.types.path;
+                type = lib.types.pathWith { };
                 description = ''
                   Credential file.
 
                   See [Credentials file](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-useful-terms/#credentials-file).
+
+                  A relative filename will be searched for as a [systemd credential](https://systemd.io/CREDENTIALS/).
                 '';
               };
 
