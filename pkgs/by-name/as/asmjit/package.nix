@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "asmjit";
-  version = "0-unstable-2026-03-26";
+  version = "0-unstable-2026-09-08";
 
   src = fetchFromGitHub {
     owner = "asmjit";
     repo = "asmjit";
-    rev = "0bd5787b54b575ed94bf32ac452153b34385c514";
-    hash = "sha256-mBnpoTG2c6RrTjOYSIeIANQKE6Uvd3/dnBGDnw3AfSA=";
+    rev = "e24347521858616d2d070375ad0d52512e6e44ba";
+    hash = "sha256-R/4s74HzCkSnzQYAlZFPFj7AHY7X5XIb7bxgwo8237A=";
   };
 
   nativeBuildInputs = [
