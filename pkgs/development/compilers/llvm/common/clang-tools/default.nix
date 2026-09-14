@@ -3,6 +3,7 @@
   stdenv,
   runCommand,
   writeText,
+  bashNonInteractive,
   clang-unwrapped,
   clang,
   libcxxClang,
@@ -19,6 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
   __structuredAttrs = true;
+
+  buildInputs = [ bashNonInteractive ];
 
   installPhase = ''
     runHook preInstall
