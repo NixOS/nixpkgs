@@ -15,6 +15,7 @@
 .br
 .Op Fl -no-flake
 .Op Fl -show-trace
+.Op Fl -extra-experimental-features Ar features
 .Ar option.name
 .
 .
@@ -75,6 +76,11 @@ if
 .Pa /etc/nixos/flake.nix
 exists. With this option, it is possible to show options in non-flake NixOS
 configurations even if the current NixOS systems uses flakes.
+.
+.It Fl -extra-experimental-features
+Specify additional experimental feature flags to enable. This option is passed to the underlying
+.Xr nix-instantiate 1
+invocation.
 .
 .El
 .
