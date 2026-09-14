@@ -2,6 +2,7 @@
 
 lib.recurseIntoAttrs {
   cabalSdist = callPackage ./cabalSdist { };
+  stack = callPackage ./stack { };
   documentationTarball = callPackage ./documentationTarball { };
   env = callPackage ./env { };
   ghcWithPackages = callPackage ./ghcWithPackages { };
