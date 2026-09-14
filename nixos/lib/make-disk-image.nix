@@ -389,22 +389,24 @@ let
     echo -n ${config.system.nixos.versionSuffix} > $out/nixos/.version-suffix
   '';
 
-  binPath = lib.makeBinPath (
-    with pkgs;
-    [
-      rsync
-      util-linux
-      parted
-      e2fsprogs
-      lkl
-      config.system.build.nixos-install
-      nixos-enter
-      nix
-      systemdMinimal
-    ]
-    ++ lib.optional deterministic gptfdisk
-    ++ stdenv.initialPath
-  );
+  mkBinPath =
+    p:
+    lib.makeBinPath (
+      with p;
+      [
+        rsync
+        util-linux
+        parted
+        e2fsprogs
+        lkl
+        config.system.build.nixos-install
+        nixos-enter
+        nix
+        systemdMinimal
+      ]
+      ++ lib.optional deterministic gptfdisk
+      ++ stdenv.initialPath
+    );
 
   # I'm preserving the line below because I'm going to search for it across nixpkgs to consolidate
   # image building logic. The comment right below this now appears in 4 different places in nixpkgs :)
@@ -426,7 +428,7 @@ let
   blockSize = toString (4 * 1024); # ext4fs block size (not block device sector size)
 
   prepareImage = ''
-    export PATH=${binPath}
+    export PATH=${mkBinPath pkgs.buildPackages}
 
     # Yes, mkfs.ext4 takes different units in different contexts. Fun.
     sectorsToKilobytes() {
@@ -640,7 +642,7 @@ let
         ''
       else
         ''
-          ${pkgs.qemu-utils}/bin/qemu-img convert -f raw -O ${format} ${compress} $diskImage $out/${filename}
+          ${pkgs.buildPackages.qemu-utils}/bin/qemu-img convert -f raw -O ${format} ${compress} $diskImage $out/${filename}
         ''
     }
     diskImage=$out/${filename}
@@ -657,8 +659,12 @@ let
     echo "file ${format}-image $out/${filename}" >> $out/nix-support/hydra-build-products
   '';
 
+  hostPkgs = import pkgs.path {
+    localSystem = pkgs.stdenv.hostPlatform;
+  };
+
   buildImage = pkgs.vmTools.runInLinuxVM (
-    pkgs.runCommand name
+    hostPkgs.runCommand name
       {
         preVM = prepareImage + lib.optionalString touchEFIVars createEFIVars;
         buildInputs = with pkgs; [
@@ -682,7 +688,15 @@ let
         inherit memSize;
       }
       ''
-        export PATH=${binPath}:$PATH
+        # This is a sily, stupid hack, and I'd love to get rid of it: basically,
+        # we use as much as possible from our (potentially cross) package set,
+        # while only picking up the stdenv so that e.g. `stdenv.initialPath`
+        # is right. I'm sure there's a better way to do this (e.g. just manually
+        # expanding `stdenv.initialPath` with our cross set?).
+        #
+        # I'm not sure this really gets away from the "you need a native stdenv
+        # to cross-compile a disk image" requirement, though.
+        export PATH=${mkBinPath (pkgs // { stdenv = hostPkgs.stdenv; })}:$PATH
 
         rootDisk=${if partitionTableType != "none" then "/dev/vda${rootPartition}" else "/dev/vda"}
 
