@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "adrs";
-  version = "0.11.1";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "joshrotenberg";
     repo = "adrs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9FWBfOwePl4ML7OIyhbiZAiXVoyEwtyJCxcPsO/tW3E=";
+    hash = "sha256-enUoRwEEn97W9j4mLxzGI9C1WRWNmOJ+AQXS3kWuD3w=";
   };
 
-  cargoHash = "sha256-hN7saY0W2dov1cR0VRab7K/wqCnYMCkOpR5ayAY34+Q=";
+  cargoHash = "sha256-kPTA4pH/mXY02hs0XLi8zGR1hNaFiF6VoSprDlqrmpA=";
 
   meta = {
     description = "Command-line tool for managing Architectural Decision Records";
