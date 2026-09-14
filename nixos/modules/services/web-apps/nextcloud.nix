@@ -994,6 +994,20 @@ in
               "OC\\Preview\\TXT"
               "OC\\Preview\\OpenDocument"
             ];
+            defaultText = lib.literalExpression ''
+              [
+                "OC\\Preview\\PNG"
+                "OC\\Preview\\JPEG"
+                "OC\\Preview\\GIF"
+                "OC\\Preview\\BMP"
+                "OC\\Preview\\XBitmap"
+                "OC\\Preview\\Krita"
+                "OC\\Preview\\WebP"
+                "OC\\Preview\\MarkDown"
+                "OC\\Preview\\TXT"
+                "OC\\Preview\\OpenDocument"
+              ]
+            '';
             description = ''
               The preview providers that should be explicitly enabled.
             '';
@@ -1624,16 +1638,12 @@ in
             # https://docs.nextcloud.com/server/latest/admin_manual/installation/server_tuning.html#previews
             (lib.mkIf cfg.imaginary.enable {
               preview_imaginary_url = "http://${config.services.imaginary.address}:${toString config.services.imaginary.port}";
-
-              # Imaginary replaces a few of the built-in providers, so the default value has to be adjusted.
-              enabledPreviewProviders = lib.mkDefault [
-                "OC\\Preview\\Imaginary"
-                "OC\\Preview\\ImaginaryPDF"
-                "OC\\Preview\\Krita"
-                "OC\\Preview\\MarkDown"
-                "OC\\Preview\\TXT"
-                "OC\\Preview\\OpenDocument"
-              ];
+              enabledPreviewProviders = lib.mkOptionDefault (
+                lib.mkBefore [
+                  "OC\\Preview\\Imaginary"
+                  "OC\\Preview\\ImaginaryPDF"
+                ]
+              );
             })
           ];
         };
