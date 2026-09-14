@@ -51,14 +51,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    cacert
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1
     libayatana-appindicator
     libxscrnsaver
-    cacert
   ];
 
   # libayatana-appindicator is not in the RUNPATH by default
-  runtimeDependencies = [ libayatana-appindicator ];
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [ libayatana-appindicator ];
 
   tauriBuildFlags = [ "--no-sign" ];
 
