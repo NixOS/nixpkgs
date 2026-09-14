@@ -580,7 +580,7 @@ in
 
   nord = mkTmuxPlugin {
     pluginName = "nord";
-    version = "0.3.0-unstable-2023-03-03";
+    version = "0.3.0";
     src = pkgs.fetchFromGitHub {
       owner = "nordtheme";
       repo = "tmux";
