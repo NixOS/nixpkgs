@@ -1192,6 +1192,7 @@
   ./services/networking/cgit.nix
   ./services/networking/chisel-server.nix
   ./services/networking/cjdns.nix
+  ./services/networking/clashtui.nix
   ./services/networking/clatd.nix
   ./services/networking/cloudflare-ddns.nix
   ./services/networking/cloudflare-dyndns.nix
