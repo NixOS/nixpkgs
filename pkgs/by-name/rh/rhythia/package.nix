@@ -39,20 +39,15 @@ let
   # indev branch
   godotPackages = godotPackages_4_7;
 
-  godot = godotPackages.godot-mono;
+  godot = godotPackages.godot-mono.override {
+    inherit dotnet-sdk;
+    dotnet-sdk_alt = dotnet-sdk;
+  };
 
   export-templates = godot.export-templates-bin;
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
   dotnet-runtime = dotnetCorePackages.runtime_10_0;
-
-  runtimeDirs = {
-    "x86_64-linux" = "linux-x64";
-    "aarch64-linux" = "linux-arm";
-  };
-  runtimeDir =
-    runtimeDirs.${stdenv.hostPlatform.system}
-      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   dataDirs = {
     "x86_64-linux" = "data_Rhythia_linuxbsd_x86_64";
@@ -139,10 +134,7 @@ buildDotnetModule (finalAttrs: {
     cp ${./export_presets.cfg} ./export_presets.cfg
 
     mkdir -p ./build
-    godot4.7-mono --headless --export-debug "${preset}" ./build/Rhythia
-
-    mkdir -p ./build/${dataDir}
-    dotnet build --configuration "Debug" ./Rhythia.csproj -o ./build/${dataDir}
+    godot4.7-mono --headless --export-release "${preset}" ./build/Rhythia
 
     runHook postBuild
   '';
@@ -151,10 +143,7 @@ buildDotnetModule (finalAttrs: {
     runHook preInstall
 
     install -Dm 755 -t $out/libexec ./build/Rhythia
-
-    install -Dm 755 -t $out/libexec/${dataDir} ./build/${dataDir}/*.dll
-    install -Dm 755 -t $out/libexec/${dataDir} ./build/${dataDir}/runtimes/${runtimeDir}/native/*.so
-    install -Dm 755 -t $out/libexec/${dataDir} ${dotnet-runtime}/share/dotnet/shared/Microsoft.NETCore.App/10.0.11/*
+    install -Dm 755 -t $out/libexec/${dataDir} ./build/${dataDir}/*
 
     install -Dm 644 ./textures/icon.svg $out/share/icons/hicolor/scalable/apps/Rhythia.svg
     install -dm 755 $out/bin
