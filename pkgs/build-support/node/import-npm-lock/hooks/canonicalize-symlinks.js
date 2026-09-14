@@ -6,38 +6,42 @@ const path = require("path");
 // npm writes the symlinks relative to the build directory.
 //
 // This makes relocating node_modules tricky when refering to the store.
-// This script walks node_modules and canonicalizes symlinks.
+// This script walks node_modules and replaces symlinks to targets outside the
+// node_modules directory with copies.
 
-async function canonicalize(storePrefix, root) {
-  console.log(storePrefix, root)
-  const entries = await fs.promises.readdir(root);
-  const paths = entries.map((entry) => path.join(root, entry));
+async function canonicalize(storePrefix, dir, root = path.resolve(dir)) {
+  console.log(storePrefix, dir);
+  const entries = await fs.promises.readdir(dir);
+  const paths = entries.map((entry) => path.join(dir, entry));
 
   const stats = await Promise.all(
     paths.map(async (path) => {
-      return {
-        path: path,
-        stat: await fs.promises.lstat(path),
-      };
-    })
+      return { path: path, stat: await fs.promises.lstat(path) };
+    }),
   );
 
   const symlinks = stats.filter((stat) => stat.stat.isSymbolicLink());
-  const dirs = stats.filter((stat) => stat.stat.isDirectory());
+  const subdirs = stats.filter((stat) => stat.stat.isDirectory());
 
-  // Canonicalize symlinks to their real path
+  // Replace symlinks outside the root directory with a copy of their target.
   await Promise.all(
     symlinks.map(async (stat) => {
       const target = await fs.promises.realpath(stat.path);
-      if (target.startsWith(storePrefix)) {
+      // We assume that symlinks within the root can remain without issue.
+      if (!target.startsWith(root + "/")) {
         await fs.promises.unlink(stat.path);
-        await fs.promises.symlink(target, stat.path);
+        await fs.promises.cp(target, stat.path, {
+          errorOnExist: true,
+          recursive: true,
+        });
       }
-    })
+    }),
   );
 
-  // Recurse into directories
-  await Promise.all(dirs.map((dir) => canonicalize(storePrefix, dir.path)));
+  // Recurse into directories.
+  await Promise.all(
+    subdirs.map((subdir) => canonicalize(storePrefix, subdir.path, root)),
+  );
 }
 
 async function main() {
