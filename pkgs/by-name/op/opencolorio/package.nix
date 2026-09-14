@@ -68,7 +68,9 @@ stdenv.mkDerivation rec {
 
   # Gcc blindly tries to optimize all float operations instead of just marked ones.
   # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=122304
-  env.CXXFLAGS = "-ffp-contract=on";
+  env.CXXFLAGS = lib.concatStringsSep " " (
+    [ "-ffp-contract=on" ] ++ lib.optional stdenv.hostPlatform.isi686 "-mfpmath=sse -msse2"
+  );
   cmakeFlags = [
     "-DOCIO_INSTALL_EXT_PACKAGES=NONE"
     "-DOCIO_USE_SSE2NEON=OFF"
