@@ -1,0 +1,17 @@
+diff --git a/app/models/optimized_image.rb b/app/models/optimized_image.rb
+index 35f563403e0..f9ca4e60619 100644
+--- a/app/models/optimized_image.rb
++++ b/app/models/optimized_image.rb
+@@ -359,11 +359,7 @@ class OptimizedImage < ActiveRecord::Base
+     else
+       error = +"Failed to optimize image:"
+ 
+-      if e.message =~ /\A(?:convert|magick):([^`]+)/
+-        error << $1
+-      else
+-        error << " unknown reason"
+-      end
++      error << $1
+ 
+       Discourse.warn(
+         error,

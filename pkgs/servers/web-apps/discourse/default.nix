@@ -517,6 +517,8 @@ let
       # Our app/assets/generated folder is a symlink, but the ruby File.mkdir_p doesn't allow
       # a symlink in the way to the last directory. This patch explicitly resolves the symlink.
       ./resolve_generated_assets_symlink.patch
+
+      ./optimize-image-do-not-hide-errors.patch
     ];
 
     postPatch = ''
