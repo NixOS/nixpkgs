@@ -743,6 +743,7 @@ in
     inherit runTest;
     package = pkgsLinux.garage_2;
   };
+  garm-incus = runTestOn [ "x86_64-linux" ] ./garm-incus.nix;
   gatus = runTest ./gatus.nix;
   gemstash = import ./gemstash.nix { inherit pkgs runTest; };
   geoclue2 = runTest ./geoclue2.nix;
