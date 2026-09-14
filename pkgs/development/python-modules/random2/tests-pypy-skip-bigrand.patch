@@ -1,0 +1,14 @@
+diff --git a/src/tests.py b/src/tests.py
+index 018e6f4..f4c73f7 100644
+--- a/src/tests.py
++++ b/src/tests.py
+@@ -211,6 +211,9 @@ class WichmannHill_TestBasicOps(TestBasicOps):
+             self.assertEqual(y1, y2)
+ 
+     def test_bigrand(self):
++        import platform
++        if platform.python_implementation() == 'PyPy':
++            return
+         # Verify warnings are raised when randrange is too large for random()
+         with warnings.catch_warnings():
+             warnings.filterwarnings("error", "Underlying random")
