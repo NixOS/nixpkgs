@@ -53,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     gatt
     pybluez
     requests
+    distutils
   ];
 
   preFixup = ''
