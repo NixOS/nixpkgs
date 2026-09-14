@@ -1,0 +1,26 @@
+--- a/buildGdis.gradle
++++ b/buildGdis.gradle
+@@ -48,12 +47,0 @@
+-	tasks.compileGdisMac_x86_64ExecutableGdisC {
+-		dependsOn 'copyBinutilsArtifcats_mac_x86_64'
+-	}
+-	tasks.compileGdisLinux_x86_64ExecutableGdisC {
+-		dependsOn 'copyBinutilsArtifcats_linux_x86_64'
+-	}
+-	tasks.compileGdisMac_arm_64ExecutableGdisC {
+-		dependsOn 'copyBinutilsArtifcats_mac_arm_64'
+-	}
+-	tasks.compileGdisLinux_arm_64ExecutableGdisC {
+-		dependsOn 'copyBinutilsArtifcats_linux_arm_64'
+-	}
+@@ -62,0 +51,4 @@
++tasks.matching { it.name.startsWith('compileGdis') && it.name.endsWith('ExecutableGdisC') }.configureEach {
++    dependsOn 'copyBinutilsArtifcats_@gdis-platform@'
++}
++
+@@ -94,0 +87,5 @@
++        def zutilHeader = file("${binutilsUnpackDir}/zlib/zutil.h")
++        zutilHeader.text = zutilHeader.text.replace(
++            "#if defined(MACOS) || defined(TARGET_OS_MAC)",
++            "#if defined(MACOS)"
++        )
