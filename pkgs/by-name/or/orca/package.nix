@@ -28,6 +28,8 @@
   brltty,
   liblouis,
   gst_all_1,
+  common-updater-scripts,
+  _experimental-update-script-combinators,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -142,9 +144,33 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "orca";
-    };
+    updateScript =
+      let
+        updateSource = gnome.updateScript {
+          packageName = "orca";
+        };
+
+        updateLockfile = {
+          command = [
+            "sh"
+            "-c"
+            ''
+              PATH=${
+                lib.makeBinPath [
+                  common-updater-scripts
+                ]
+              }
+              update-source-version orca --ignore-same-version --source-key=cargoDeps.vendorStaging > /dev/null
+            ''
+          ];
+          # Experimental feature: do not copy!
+          supportedFeatures = [ "silent" ];
+        };
+      in
+      _experimental-update-script-combinators.sequence [
+        updateSource
+        updateLockfile
+      ];
   };
 
   meta = {
