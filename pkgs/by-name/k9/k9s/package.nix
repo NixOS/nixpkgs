@@ -4,21 +4,23 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  makeWrapper,
   testers,
   nix-update-script,
   k9s,
+  kubectl,
   writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "k9s";
-  version = "0.50.18";
+  version = "0.51.0";
 
   src = fetchFromGitHub {
     owner = "derailed";
     repo = "k9s";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WIcT4LfoIZ8BctwrUgn+mLbqwJ2NZx6Sc5sJeT9fsus=";
+    hash = "sha256-70Rfu1BVd/QnwWXRRpwIeZ2UJNWIGixpdiOHo4v7adA=";
   };
 
   ldflags = [
@@ -32,7 +34,7 @@ buildGoModule (finalAttrs: {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-QvMT/pHtwXAsbGxcOLwqYQoa2gdplhDUnPhwc/50PFs=";
+  vendorHash = "sha256-PkYDJK2oGl+siCG9p4R8shC0e5BhGFdJsc+ksL9J5zw=";
 
   # TODO investigate why some config tests are failing
   doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
@@ -48,7 +50,10 @@ buildGoModule (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
   postInstall = ''
     # k9s requires a writeable log directory
     # Otherwise an error message is printed
@@ -59,6 +64,13 @@ buildGoModule (finalAttrs: {
       --bash <($out/bin/k9s completion bash) \
       --fish <($out/bin/k9s completion fish) \
       --zsh <($out/bin/k9s completion zsh)
+
+    wrapProgram $out/bin/k9s \
+      --suffix PATH : "${
+        lib.makeBinPath [
+          kubectl
+        ]
+      }"
 
     mkdir -p $out/share/k9s/skins
     cp -r $src/skins/* $out/share/k9s/skins/
