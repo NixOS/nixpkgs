@@ -101,7 +101,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://www.ibm.com/quantum/qiskit";
     downloadPage = "https://github.com/QISKit/qiskit/releases";
-    changelog = "https://docs.quantum.ibm.com/api/qiskit/release-notes";
+    changelog = "https://quantum.cloud.ibm.com/docs/en/api/qiskit/release-notes";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };

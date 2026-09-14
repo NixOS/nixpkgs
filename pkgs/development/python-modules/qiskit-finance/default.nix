@@ -80,7 +80,7 @@ buildPythonPackage rec {
     description = "Software for developing quantum computing programs";
     homepage = "https://qiskit.org";
     downloadPage = "https://github.com/QISKit/qiskit-optimization/releases";
-    changelog = "https://qiskit.org/documentation/release_notes.html";
+    changelog = "https://quantum.cloud.ibm.com/docs/en/api/qiskit/release-notes";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
