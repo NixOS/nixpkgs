@@ -1,0 +1,21 @@
+--- a/libaom-sys-0.17.2+libaom.3.11.0/vendor/build/cmake/aom_optimization.cmake
++++ b/libaom-sys-0.17.2+libaom.3.11.0/vendor/build/cmake/aom_optimization.cmake
+@@ -212,7 +212,7 @@ endfunction()
+ # Currently checks only for presence of required object formats and support for
+ # the -Ox argument (multipass optimization).
+ function(test_nasm)
+-  execute_process(COMMAND ${CMAKE_ASM_NASM_COMPILER} -hf
++  execute_process(COMMAND ${CMAKE_ASM_NASM_COMPILER} -hO
+                   OUTPUT_VARIABLE nasm_helptext)
+ 
+   if(NOT "${nasm_helptext}" MATCHES "-Ox")
+@@ -220,6 +220,9 @@ function(test_nasm)
+       FATAL_ERROR "Unsupported nasm: multipass optimization not supported.")
+   endif()
+ 
++  execute_process(COMMAND ${CMAKE_ASM_NASM_COMPILER} -hf
++                  OUTPUT_VARIABLE nasm_helptext)
++
+   if("${AOM_TARGET_CPU}" STREQUAL "x86")
+     if("${AOM_TARGET_SYSTEM}" STREQUAL "Darwin")
+       if(NOT "${nasm_helptext}" MATCHES "macho32")
