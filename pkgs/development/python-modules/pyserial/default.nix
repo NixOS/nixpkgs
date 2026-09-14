@@ -4,15 +4,16 @@
   buildPythonPackage,
   fetchPypi,
   unittestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyserial";
   version = "3.5";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-PHfgFBcN//vYFub/wgXphC77EL6fWOwW0+hnW0klzds=";
   };
 
@@ -20,6 +21,8 @@ buildPythonPackage rec {
     ./001-rfc2217-only-negotiate-on-value-change.patch
     ./002-rfc2217-timeout-setter-for-rfc2217.patch
   ];
+
+  build-system = [ setuptools ];
 
   doCheck = !stdenv.hostPlatform.isDarwin; # broken on darwin
 
@@ -38,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ makefu ];
   };
-}
+})
