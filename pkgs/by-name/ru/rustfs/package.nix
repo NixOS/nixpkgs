@@ -121,7 +121,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/rustfs/rustfs";
     changelog = "https://github.com/rustfs/rustfs/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ marcel ];
+    maintainers = with lib.maintainers; [
+      marcel
+      adamcstephens
+    ];
     mainProgram = "rustfs";
   };
 })
