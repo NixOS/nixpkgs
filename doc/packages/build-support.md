@@ -103,3 +103,62 @@ replaceVarsWith {
 
 This will make the resulting file executable, put it in `bin/say-goodbye` and set `meta` attributes respectively.
 :::
+
+## `pkgs.nukeReferences` {#pkgs-nukereferences}
+
+`nuke-refs` replaces unwanted Nix store references in a file.
+
+:::{.example #ex-pkgs-nuke-references}
+# Usage of `pkgs.nukeReferences`
+
+```nix
+{
+  stdenv,
+  nukeReferences,
+  libfoo,
+  libbar,
+}:
+stdenv.mkDerivation {
+  pname = "baz";
+  version = "1.0";
+  src = ./src;
+
+  nativeBuildInputs = [
+    nukeReferences
+    libfoo
+  ];
+  buildInputs = [ libbar ];
+
+  postFixup = ''
+    nuke-refs -e "$out" -e "${libbar}" "$out/lib/baz.so"
+  '';
+}
+```
+
+- `$out/lib/baz.so` links against `libbar`, so `libbar` is still needed at runtime.
+- `libfoo` was only needed at buildtime to build `baz.so`, but its path ended up embedded anyway.
+- `baz.so` also has its own install path, `$out/share/baz`, compiled in as a data directory, which is an intentional self-reference.
+- `-e "${libbar}"` keeps all `libbar` references.
+- `-e "$out"` keeps that self-reference to `$out`.
+
+`nuke-refs` replaces the `libfoo` reference, along with any other unwanted store path reference embedded in `$out/lib/baz.so`.
+For example:
+
+```
+/nix/store/lxra5fkapsdbdjqi6wa205s7vmqh1vxb-libfoo-1.2.3/lib/libfoo.so -> /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-libfoo-1.2.3/lib/libfoo.so
+```
+:::
+
+[Nix scans all outputs for Nix store references, and registers them as runtime dependencies](https://nix.dev/manual/nix/stable/store/building.html#processing-outputs).
+Any reference left behind by a build tool, e.g. a compiler path embedded in a generated file, can therefore pull in a much larger closure than intended.
+Such references might even fail the build outright if it forms a reference cycle or violates [`disallowedReferences`](https://nix.dev/manual/nix/stable/language/advanced-attributes.html#adv-attr-disallowedReferences).
+
+`nuke-refs [-e <path>]... file...` replaces unwanted references in each `file` in place.
+Pass one or more `-e path` arguments to keep certain store paths from being replaced.
+
+::: {.note}
+`nuke-refs` replaces the hash of each store path with `eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee`.
+
+`-e` only matches on the hash, not the derivation name.
+If you pass `-e /nix/store/<hash>-foo`, `nuke-refs` also keeps `/nix/store/<hash>-bar`.
+:::
