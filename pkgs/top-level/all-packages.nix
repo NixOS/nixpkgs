@@ -2553,6 +2553,8 @@ with pkgs;
 
   ophcrack-cli = ophcrack.override { enableGui = false; };
 
+  openbaoPlugins = callPackage ../by-name/op/openbao/plugins.nix { };
+
   openntpd_nixos = openntpd.override {
     privsepUser = "ntp";
     privsepPath = "/var/empty";
