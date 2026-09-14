@@ -117,7 +117,10 @@ buildDotnetModule rec {
       thiagokokada
       Guanran928
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     mainProgram = "osu!";
   };
 }

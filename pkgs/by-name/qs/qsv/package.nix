@@ -33,7 +33,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qsv";
-  version = "22.0.1";
+  version = "23.0.1";
 
   inherit buildFeatures;
 
@@ -41,10 +41,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "dathere";
     repo = "qsv";
     rev = finalAttrs.version;
-    hash = "sha256-lZ1iC+lnPgJqcKV9RDia/ndVBJjWUV8Z3L6k9hjAe3M=";
+    hash = "sha256-lWyJOKVKg94TWBoRWu7nnhUM3so2Vg0iICkCnNxqiaI=";
   };
 
-  cargoHash = "sha256-QdNOXmTIZ5CF73u1fMkkVa+ulUfD/looiBvbiM9TBfo=";
+  cargoHash = "sha256-x/APHiuSWEvzChVGLogjDvxrhYDL7q6Ujb5TrETV+qc=";
 
   buildInputs = [
     file
