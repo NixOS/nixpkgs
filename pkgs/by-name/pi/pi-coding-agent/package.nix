@@ -51,6 +51,14 @@ buildNpmPackage (finalAttrs: {
     makeBinaryWrapper
   ];
 
+  # We pin jiti's transpile cache to a persistent dir.
+  # The default tmpdir() that jiti uses is wiped by nix shell on each session
+  # resulting in a cold recompile each time.
+  postPatch = ''
+    substituteInPlace packages/coding-agent/src/core/extensions/loader.ts \
+      --replace-fail 'moduleCache: false,' 'moduleCache: false, fsCache: path.join(process.env.XDG_CACHE_HOME || path.join(process.env.HOME || "", ".cache"), "pi", "jiti"),'
+  '';
+
   # Build workspace dependencies in order, then the coding-agent.
   # We invoke tsgo directly for workspace deps to skip pi-ai's
   # generate-models script, which requires network access; the model
