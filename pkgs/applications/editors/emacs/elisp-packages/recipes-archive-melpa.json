@@ -106568,11 +106568,11 @@
   "repo": "polymode/polymode",
   "unstable": {
    "version": [
-    20260302,
-    1043
+    20260505,
+    1803
    ],
-   "commit": "4604f55cc020c75562526fb76b723e5e242c97c0",
-   "sha256": "1g36ss0ms12ah84dxdbdw0kim6wymrf2hmpsvd7lnszc19ip6zf9"
+   "commit": "8cb72fa5dcc0d98746c680043dc121edc7621e3a",
+   "sha256": "02vzq5v6kykw389lymgb5cri8h4p3rwjbwg67zkhbd1mrfa9525g"
   },
   "stable": {
    "version": [
