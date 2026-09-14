@@ -1053,6 +1053,8 @@ let
         junit_alcotest = callPackage ../development/ocaml-modules/junit/alcotest.nix { };
         junit_ounit = callPackage ../development/ocaml-modules/junit/ounit.nix { };
 
+        jws = callPackage ../development/ocaml-modules/jws { };
+
         jwto = callPackage ../development/ocaml-modules/jwto { };
 
         ### K ###
