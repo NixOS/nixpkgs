@@ -95,6 +95,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [
     "django-allauth"
+    "django-guardian"
     "django-filter"
     "drf-spectacular-sidecar"
     "redis"
