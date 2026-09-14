@@ -583,14 +583,16 @@ def install_bootloader(args: argparse.Namespace) -> None:
                 default_entry_id = new_bootctl_id
                 critical_paths.update(bf.path for bf in new_boot_files)
 
-    # Garbage-collect stale kernels/initrds/entries before re-populating extra
-    # files, so that user-supplied extraEntries (which may also live under
-    # loader/entries and start with `nixos-`) are not removed again.
-    garbage_collect(boot_files)
-
     write_boot_files(boot_files, critical_paths)
 
     write_loader_conf(default_entry_id)
+
+    # Garbage-collect stale kernels/initrds/entries only after the new boot
+    # files and loader configuration are in place. Keep this before
+    # re-populating extra files so that user-supplied extraEntries (which may
+    # also live under loader/entries and start with `nixos-`) are not removed
+    # again.
+    garbage_collect(boot_files)
 
     remove_extra_files()
     run([COPY_EXTRA_FILES])
