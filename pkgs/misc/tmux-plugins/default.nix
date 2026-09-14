@@ -142,7 +142,7 @@ in
 
   continuum = mkTmuxPlugin {
     pluginName = "continuum";
-    version = "unstable-2022-01-25";
+    version = "3.1.0";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-continuum";
