@@ -97,13 +97,11 @@ let
           };
 
           # NOTE: The `common-*.nix` helpers contain a top-level function which
-          # takes the Lix source to build and version information. We use the
-          # outer `callPackage` for that.
-          #
+          # takes the Lix source to build and version information.
           # That *returns* another function which takes the actual build
           # dependencies, and that uses the new scope's `self.callPackage` so
           # that `nix-eval-jobs` can be built against the correct `lix` version.
-          lix = self.callPackage (callPackage ./common-lix.nix lix-args) {
+          lix = self.callPackage (import ./common-lix.nix (lix-args // { inherit lib; })) {
             stdenv = lixStdenv;
           };
 
@@ -135,9 +133,11 @@ let
             nix = self.lix;
           };
 
-          nix-eval-jobs = self.callPackage (callPackage ./common-nix-eval-jobs.nix nix-eval-jobs-args) {
-            stdenv = lixStdenv;
-          };
+          nix-eval-jobs =
+            self.callPackage (import ./common-nix-eval-jobs.nix (nix-eval-jobs-args // { inherit lib; }))
+              {
+                stdenv = lixStdenv;
+              };
 
           nix-fast-build = nix-fast-build.override {
             inherit (self) nix-eval-jobs;
