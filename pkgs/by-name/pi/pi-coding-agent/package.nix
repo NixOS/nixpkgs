@@ -71,15 +71,7 @@ buildNpmPackage (finalAttrs: {
     npm run build --workspace=packages/coding-agent
 
     pushd packages/coding-agent
-    bun build --compile --no-compile-autoload-bunfig --target=${
-      {
-        aarch64-darwin = "bun-darwin-arm64";
-        aarch64-linux = "bun-linux-arm64";
-        x86_64-linux = "bun-linux-x64-baseline";
-      }
-      .${stdenvNoCC.hostPlatform.system}
-        or (throw "Unsupported system for pi-coding-agent bun target: ${stdenvNoCC.hostPlatform.system}")
-    } \
+    bun build --compile --no-compile-autoload-bunfig \
       ./dist/bun/cli.js ./src/utils/image-resize-worker.ts \
       --outfile $TMPDIR/pi
     popd
