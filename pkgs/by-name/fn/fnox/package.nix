@@ -15,16 +15,16 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
   pname = "fnox";
-  version = "1.34.1";
+  version = "1.35.1";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "fnox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OZ9WVPsx6McCk6ONuUZ8Ws7f5WHlEMUOEYV457jexAs=";
+    hash = "sha256-kzLZ4CFwiSzrFXCiSEAlQHLgbiF3nodepBosNoFm8eA=";
   };
 
-  cargoHash = "sha256-QRRIZOjqYdVsK04vjyLRhbI1jsV2oekfORswbDYQBIg=";
+  cargoHash = "sha256-cyABXlm6VAmoX8jZvPd9LOSS7Xy5leQgVIW1Ln+ecKU=";
 
   nativeBuildInputs = [
     perl
