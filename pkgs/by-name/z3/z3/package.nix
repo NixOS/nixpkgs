@@ -29,13 +29,13 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "z3";
-  version = "4.16.0";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "Z3Prover";
     repo = "z3";
     rev = "z3-${finalAttrs.version}";
-    hash = "sha256-DnhX3kxggnFmyYwXEPBsBA1rh4oor1oIJR5TMJk/jvc=";
+    hash = "sha256-qB6XXho4LqItMuhUaDmapM0pQok8/ge1Lc4XM1crX04=";
   };
 
   patches = lib.optionals useCmakeBuild [
