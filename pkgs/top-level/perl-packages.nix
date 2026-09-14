@@ -14911,7 +14911,16 @@ with self;
       url = "mirror://cpan/authors/id/B/BU/BURAK/GD-SecurityImage-1.75.tar.gz";
       hash = "sha256-Pd4k2ay6lRzd5bVp0eQsrZRs/bUSgORGnzNv1f4MjqY=";
     };
-    propagatedBuildInputs = [ GD ];
+    patches = [
+      (fetchpatch {
+        url = "https://security.metacpan.org/patches/G/GD-SecurityImage/1.75/CVE-2026-13082-r1.patch";
+        hash = "sha256-xIMPQD2JYuHdsYnW1ojqG3xgV7VWEKyJ6sEqNRUdNdQ=";
+      })
+    ];
+    propagatedBuildInputs = [
+      CryptURandomMonkeyPatch
+      GD
+    ];
     meta = {
       description = "Security image (captcha) generator";
       license = with lib.licenses; [
