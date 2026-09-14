@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/odin-lang/Odin";
     homepage = "https://odin-lang.org/";
     changelog = "https://github.com/odin-lang/Odin/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.bsd3;
+    license = lib.licenses.zlib;
     mainProgram = "odin";
     maintainers = with lib.maintainers; [
       astavie
