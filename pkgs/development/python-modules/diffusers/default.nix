@@ -45,14 +45,14 @@
 
 buildPythonPackage rec {
   pname = "diffusers";
-  version = "0.38.0";
+  version = "0.40.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "diffusers";
     tag = "v${version}";
-    hash = "sha256-FyXQJh4i/m9lAD2Sz45YWc+KIFMA+xQLb3ErudO9voY=";
+    hash = "sha256-MwKzy8Zle1+jXu9SSDmU3qL1ScnLnrBZNKJ9gyIrYAo=";
   };
 
   build-system = [ setuptools ];
