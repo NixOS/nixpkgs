@@ -209,8 +209,10 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       jcumming
     ];
-
+    # last successful hydra build on darwin was in 2024
     # `Makefile.am` assumes the ability to run the hostPlatform's python binary at build time
-    broken = withPython && (with stdenv; !buildPlatform.canExecute hostPlatform);
+    broken =
+      stdenv.hostPlatform.isDarwin
+      || (withPython && !stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   };
 }
