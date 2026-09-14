@@ -45,6 +45,8 @@ buildPythonPackage (finalAttrs: {
     doCheck = true;
   });
 
+  __structuredAttrs = true;
+
   meta = {
     changelog = "https://github.com/pypa/packaging/blob/${finalAttrs.version}/CHANGELOG.rst";
     description = "Core utilities for Python packages";

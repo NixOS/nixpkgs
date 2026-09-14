@@ -43,6 +43,8 @@ buildPythonPackage (finalAttrs: {
     inherit distutils;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Utilities to facilitate the installation of Python packages";
     homepage = "https://github.com/pypa/setuptools";
