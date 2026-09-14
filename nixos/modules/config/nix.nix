@@ -60,36 +60,17 @@ let
     systemFeatures = "system-features";
   };
 
-  semanticConfType =
-    with types;
-    let
-      confAtom =
-        nullOr (oneOf [
-          bool
-          int
-          float
-          str
-          path
-          package
-        ])
-        // {
-          description = "Nix config atom (null, bool, int, float, str, path or package)";
-        };
-    in
-    attrsOf (either confAtom (listOf confAtom));
+  nixConfFormat = pkgs.formats.nixConf {
+    inherit (cfg)
+      package
+      checkAllErrors
+      checkConfig
+      extraOptions
+      ;
+    inherit (nixPackage) version;
+  };
 
-  nixConf =
-    (pkgs.formats.nixConf {
-      inherit (cfg)
-        package
-        checkAllErrors
-        checkConfig
-        extraOptions
-        ;
-      inherit (nixPackage) version;
-    }).generate
-      "nix.conf"
-      cfg.settings;
+  nixConf = nixConfFormat.generate "nix.conf" cfg.settings;
 
   makeNixBuildUser = nr: {
     name = "nixbld${toString nr}";
@@ -210,7 +191,7 @@ in
 
       settings = mkOption {
         type = types.submodule {
-          freeformType = semanticConfType;
+          freeformType = nixConfFormat.type;
 
           options = {
             max-jobs = mkOption {

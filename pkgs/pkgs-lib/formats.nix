@@ -843,6 +843,8 @@ optionalAttrs allowAliases aliases
       lib.mkRaw = mkLuaInline;
     };
 
+  # cannot handle list values not using "space" as a separator
+  # those should be handled in the declarations of nix.settings.*
   nixConf =
     {
       package,
@@ -865,12 +867,13 @@ optionalAttrs allowAliases aliases
             str
             path
             types.package
-          ]);
+          ]) // {
+            description = "Nix config atom (null, bool, int, float, string, path or package)";
+          };
         in
-        attrsOf atomType;
+        attrsOf (either atomType (listOf atomType));
       generate =
         let
-          # note that list type has been omitted here as the separator varies, see `nix.settings.*`
           mkValueString =
             v:
             if v == null then
@@ -888,7 +891,7 @@ optionalAttrs allowAliases aliases
             else if isString v then
               v
             else if strings.isConvertibleWithToString v then
-              toString v
+              toString v # also handles list values, concats with space
             else
               abort "The nix conf value: ${toPretty { } v} can not be encoded";
 
