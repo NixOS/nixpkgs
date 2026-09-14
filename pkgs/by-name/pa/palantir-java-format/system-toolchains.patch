@@ -1,0 +1,61 @@
+diff --git a/build.gradle b/build.gradle
+index c6d56a70e8..19d46b5a50 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -31,8 +31,6 @@
+ apply plugin: 'com.palantir.git-version'
+ apply plugin: 'com.palantir.gradle-guide'
+ apply plugin: 'com.palantir.idea-language-injector'
+-apply plugin: 'com.palantir.jdks'
+-apply plugin: 'com.palantir.jdks.latest'
+ apply plugin: 'com.palantir.baseline'
+ apply plugin: 'com.palantir.baseline-error-prone-root'
+ apply plugin: 'com.palantir.baseline-java-versions'
+@@ -43,7 +41,6 @@
+ 
+ allprojects {
+     apply plugin: 'com.palantir.baseline-null-away'
+-    apply plugin: 'com.palantir.java-format'
+     apply plugin: 'com.palantir.jakarta-package-alignment'
+     group = 'com.palantir.javaformat'
+     version = rootProject.version
+@@ -77,14 +74,3 @@
+     libraryTarget = 17
+     runtime = 21
+ }
+-
+-jdks {
+-    daemonTarget = 21
+-
+-    jdk(23) {
+-        distribution = 'graalvm-ce'
+-        jdkVersion = '23.0.1'
+-    }
+-
+-    jdkMajorVersionsToUse().add(JavaLanguageVersion.of("23"))
+-}
+diff --git a/palantir-java-format-native/build.gradle b/palantir-java-format-native/build.gradle
+index 91c3c67524..66a100cf41 100644
+--- a/palantir-java-format-native/build.gradle
++++ b/palantir-java-format-native/build.gradle
+@@ -45,7 +45,7 @@
+     binaries {
+         main {
+             javaLauncher = javaToolchains.launcherFor {
+-                languageVersion = JavaLanguageVersion.of(23)
++                languageVersion = JavaLanguageVersion.of(25)
+                 vendor = JvmVendorSpec.GRAAL_VM
+             }
+             imageName = String.format('palantir-java-format-%s_%s', operatingSystem.uiName(), architecture.uiName())
+diff --git a/settings.gradle b/settings.gradle
+index 1ffaf98dfb..d7f5fbe5d3 100644
+--- a/settings.gradle
++++ b/settings.gradle
+@@ -7,7 +7,6 @@
+         classpath 'com.palantir.gradle.jdks:gradle-jdks-settings:0.82.0'
+     }
+ }
+-apply plugin: 'com.palantir.jdks.settings'
+ rootProject.name = 'palantir-java-format-parent'
+ 
+ include ':gradle-palantir-java-format'
