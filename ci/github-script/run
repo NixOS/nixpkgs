@@ -123,7 +123,7 @@ program
   .argument('<repo>', 'Name of the GitHub repository to run on (Example: nixpkgs)')
   .argument('<pr>', 'Number of the Pull Request to run on')
   .action(async (owner, repo, pr, options) => {
-    const checkManualFileEdits = (await import('./manual-file-edits.js')).default
+    const checkManualFileEdits = (await import('./manual-file-edits.ts')).default
     await run(checkManualFileEdits, owner, repo, pr, options)
   })
 

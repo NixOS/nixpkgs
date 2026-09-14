@@ -84,6 +84,7 @@ jobs:
               'ci/github-script/commits.js',
               'ci/github-script/get-pr-commit-details.js',
               'ci/github-script/lint-commits.js',
+              'ci/github-script/manual-file-edits.ts',
               'ci/github-script/merge.js',
               'ci/github-script/package.json',
               'ci/github-script/package-lock.json',
