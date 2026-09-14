@@ -4293,6 +4293,11 @@
     name = "Billy Rhoades";
     keys = [ { fingerprint = "BF4FCB85C69989B4ED95BF938AE74787A4B7C07E"; } ];
   };
+  brohamgoham = {
+    name = "brohamgoham";
+    github = "brohamgoham";
+    githubId = 80609236;
+  };
   broke = {
     email = "broke@in-fucking.space";
     github = "broke";
