@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "intel-ipsec-mb";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-ipsec-mb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k/NoPMKbiWZ25tdomsPpv2gfhQuBHxzX6KRT1UY88Ko=";
+    hash = "sha256-ClNzjFDrzX571FVV/jzlM3Sflvs33bttB2pdlhudX8o=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/lib";
