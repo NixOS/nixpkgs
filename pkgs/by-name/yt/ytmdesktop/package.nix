@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
       }
     '';
 
-    hash = "sha256-fT5UdJ9YYK3hXC8GkEeJ/LK1bCyXofcKA0aCJUnjZdk=";
+    hash = "sha256-48PeFM6azfPJBc3c6gNRE6mQnfYWMkMI9WQOcnFQCuA=";
   };
 
   patches = [
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-fpvBE4QZcDaWGgqU3jQlOe+bOLtnDEVNR4IuKBo35BQ=";
+    hash = "sha256-oDouMkHjvENQrGBHfgGC/+ZBRJSAdXR+f2Fb0fkM9Sw=";
   };
 
   nativeBuildInputs = [
