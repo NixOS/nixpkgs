@@ -2123,10 +2123,6 @@ with pkgs;
 
   gdown = with python3Packages; toPythonApplication gdown;
 
-  gpt4all-cuda = gpt4all.override {
-    cudaSupport = true;
-  };
-
   gprof2dot = with python3Packages; toPythonApplication gprof2dot;
 
   grails = callPackage ../development/web/grails { jdk = null; };
