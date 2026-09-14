@@ -28,12 +28,14 @@ let
       }
       .${region};
   };
-  result = runCommand "baserom-${region}-safety-dir" { } ''
-    mkdir $out
-    ln -s ${file} $out/${file.name}
-  '';
+  result =
+    runCommand "baserom-${region}-safety-dir"
+      {
+        passthru.romPath = "${result.outPath}/${file.name}";
+      }
+      ''
+        mkdir $out
+        ln -s ${file} $out/${file.name}
+      '';
 in
 result
-// {
-  romPath = "${result.outPath}/${file.name}";
-}
