@@ -76,6 +76,13 @@ This can happen when an identifier was added, renamed, or removed.
         $ nix-shell doc
         NixOS:
         $ nix-shell nixos/doc/manual
+
+    NOTE: Building a NixOS configuration rather than working on nixpkgs itself?
+        An out-of-tree module that sets `meta.doc` contributes identifiers that
+        nixos/doc/manual/redirects.json cannot list. Skip this check with the
+        NixOS option:
+
+            documentation.nixos.checkRedirects = false;
 """)
         error_messages.append("NOTE: If your build passes locally and you see this message in CI, you probably need a rebase.")
         return "\n".join(error_messages)
