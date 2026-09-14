@@ -43,6 +43,29 @@ in
               type = lib.types.bool;
             };
           };
+          Contacts = {
+            SizeMin = lib.mkOption {
+              default = false;
+              description = "The minimal diameter a contact must have.";
+              type = lib.types.float;
+            };
+            SizeMax = lib.mkOption {
+              default = false;
+              description = "The maximal diameter a contact can have.";
+              type = lib.types.float;
+            };
+            AspectMin = lib.mkOption {
+              default = false;
+              description = "The minimal aspect ratio a contact must have.";
+              type = lib.types.float;
+            };
+            AspectMax = lib.mkOption {
+              default = false;
+              description = "The maximal aspect ratio a contact can have.";
+              type = lib.types.float;
+            };
+            
+          };
         };
       };
     };
