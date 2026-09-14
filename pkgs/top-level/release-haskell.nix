@@ -67,7 +67,9 @@ let
     ghc967
     ghc984
     ghc9103
-    ghc9123
+    ghc9125
+    ghc9141
+    ghc9142
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
@@ -525,22 +527,49 @@ let
         compilerNames.ghc948
       ] released;
       Cabal_3_10_3_0 = lib.subtractLists [
-        # time < 1.13 conflicts with time == 1.14.*
-        compilerNames.ghc9123
+        # time < 1.13 conflicts with time == 1.14.* || == 1.15.*
+        compilerNames.ghc9125
+        compilerNames.ghc9141
+        compilerNames.ghc9142
       ] released;
-      Cabal_3_12_1_0 = released;
-      Cabal_3_14_2_0 = released;
+      Cabal_3_12_1_0 = lib.subtractLists [
+        # time < 1.15 conflicts with time == 1.15.*
+        compilerNames.ghc9141
+        compilerNames.ghc9142
+      ] released;
+      Cabal_3_14_2_0 = lib.subtractLists [
+        # time < 1.15 conflicts with time == 1.15.*
+        compilerNames.ghc9141
+        compilerNames.ghc9142
+      ] released;
       Cabal_3_16_1_0 = released;
+      Cabal_3_18_1_0 = released;
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
+      # haddock-{api,library} are core packages as of GHC >= 9.12
+      haddock-api = [
+        compilerNames.ghc94
+        compilerNames.ghc96
+        # No version compatible with 9.8 nor 9.10 released to Hackage
+      ];
+      haddock-library = [
+        compilerNames.ghc94
+        compilerNames.ghc96
+        compilerNames.ghc98
+        compilerNames.ghc910
+      ];
       haskell-debugger = [
         compilerNames.ghc9141
+        compilerNames.ghc9142
       ];
       haskell-language-server = released;
       hoogle = released;
       hlint = lib.subtractLists [
-        compilerNames.ghc9123
+        # https://github.com/ndmitchell/hlint/issues/1672
+        # https://github.com/ndmitchell/hlint/pull/1673
+        compilerNames.ghc9141
+        compilerNames.ghc9142
       ] released;
       hpack = released;
       hsdns = released;
@@ -549,28 +578,28 @@ let
       language-nix = released;
       nix-paths = released;
       titlecase = released;
+      ghc-exactprint = released;
       ghc-lib = released;
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
-      ghc-source-gen = lib.subtractLists [
-        compilerNames.ghc9123
-      ] released;
+      ghc-source-gen = released;
       ghc-tags = lib.subtractLists [
-        compilerNames.ghc9123
+        # https://github.com/arybczak/ghc-tags/pull/31
+        compilerNames.ghc9141
+        compilerNames.ghc9142
       ] released;
       hashable = released;
       primitive = released;
       scrod = [
         compilerNames.ghc9141
+        compilerNames.ghc9142
       ];
       semaphore-compat = [
         # Compiler < 9.8 don't have the semaphore-compat core package, but
         # requires unix >= 2.8.1.0 which implies GHC >= 9.6 for us.
         compilerNames.ghc967
       ];
-      weeder = lib.subtractLists [
-        compilerNames.ghc9123
-      ] released;
+      weeder = released;
 
       # MicroHs core packages
       ghc-compat = [
