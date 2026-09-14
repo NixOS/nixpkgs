@@ -2,6 +2,9 @@
 let
   inherit (import ../ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
   backupPath = "/home/backup";
+  cipherPassFile = "/run/cipher-pass";
+  cipherPass = "my_cipher";
+  cipherType = "aes-256-cbc";
 in
 {
   name = "pgbackrest-sftp";
@@ -20,15 +23,22 @@ in
         '';
       };
 
+      # Stands in for whatever secret manager provides the passphrase at runtime.
+      systemd.services.pgbackrest-secrets.preStart = ''
+        echo -n "${cipherPass}" > ${cipherPassFile}
+      '';
+
       services.pgbackrest = {
         enable = true;
         repos.backup = {
           type = "sftp";
-          path = "/home/backup";
+          path = backupPath;
           sftp-host-key-check-type = "none";
           sftp-host-key-hash-type = "sha256";
           sftp-host-user = "backup";
           sftp-private-key-file = "/var/lib/pgbackrest/sftp_key";
+          cipher-type = cipherType;
+          cipher-pass-file = cipherPassFile;
         };
 
         stanzas.default.jobs.future = {
@@ -75,6 +85,14 @@ in
       with subtest("backup/restore works with local instance/remote repo (SFTP)"):
         primary.succeed("sudo -u pgbackrest pgbackrest --stanza=default stanza-create", timeout=10)
         primary.succeed("sudo -u pgbackrest pgbackrest --stanza=default check")
+
+        # The passphrase reaches pgBackRest without passing through the store.
+        primary.fail("grep -r '${cipherPass}' /etc/pgbackrest/pgbackrest.conf")
+        primary.succeed("sudo -u postgres test -r /etc/pgbackrest/conf.d/cipher-pass.conf")
+        assert "640 pgbackrest pgbackrest" in primary.succeed(
+            "stat -c '%a %U %G' /etc/pgbackrest/conf.d/cipher-pass.conf"
+        )
+        assert "${cipherType}" in primary.succeed("sudo -u pgbackrest pgbackrest --stanza=default info")
 
         primary.systemctl("start pgbackrest-default-future")
 
