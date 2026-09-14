@@ -741,7 +741,11 @@ in
     };
 
     virtualisation.qemu = {
-      enableSharedMemory = mkEnableOption "shared memory";
+      enableSharedMemory = mkOption {
+        type = types.bool;
+        default = useVirtiofs; # Need shared memory for virtiofs: <https://www.qemu.org/docs/master/system/devices/virtio/vhost-user.html#shared-memory-object>
+        description = "Enable shared memory";
+      };
 
       package = mkOption {
         type = types.package;
