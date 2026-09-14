@@ -25,6 +25,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     cloudscraper
     html5lib
     html2text
+    pillow
     requests
     requests-file
     urllib3
