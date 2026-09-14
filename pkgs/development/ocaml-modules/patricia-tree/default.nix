@@ -11,7 +11,7 @@
 
 buildDunePackage (finalAttrs: {
   pname = "patricia-tree";
-  version = "0.14.0";
+  version = "0.15.0";
 
   __structuredAttrs = true;
 
@@ -26,7 +26,7 @@ buildDunePackage (finalAttrs: {
     owner = "codex-semantics-library";
     repo = "patricia-tree";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rWhVBmeBItRDpQSAeIuDIv9zrP6p1oIs471Bx9KUx1w=";
+    hash = "sha256-u2t63vGV4tNF0RzbdkvQrpmwe7ep03TPtZehbPxasWI=";
   };
 
   nativeCheckInputs = [
