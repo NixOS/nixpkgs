@@ -19,16 +19,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "npins";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "andir";
     repo = "npins";
     tag = finalAttrs.version;
-    sha256 = "sha256-XzJaDf5tlrYGTMJ+eS9hH9l79S4JA8h2KfbvKHF14xY=";
+    sha256 = "sha256-toAQj3cO6dhfm6FnK0a0mbj+VBaADCsNZNi1PMuJnFQ=";
   };
 
-  cargoHash = "sha256-Fiku3UULsm6HL1skjJA/UiW9VRFRWbnXULQFBiVDCJ0=";
+  cargoHash = "sha256-Ee/QN1Jro78mzwcRWerpZu8Gsj2mkddHBrKUXGGoIQU=";
 
   nativeBuildInputs = [ makeWrapper ];
 
