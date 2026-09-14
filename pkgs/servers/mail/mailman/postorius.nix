@@ -11,7 +11,7 @@ with python3.pkgs;
 buildPythonPackage (finalAttrs: {
   pname = "postorius";
   version = "1.3.13";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
