@@ -11845,6 +11845,10 @@ self: super: with self; {
 
   natasha = callPackage ../development/python-modules/natasha { };
 
+  native-sparse-attention-pytorch =
+    callPackage ../development/python-modules/native-sparse-attention-pytorch
+      { };
+
   nats-py = callPackage ../development/python-modules/nats-py { };
 
   nats-python = callPackage ../development/python-modules/nats-python { };
@@ -19075,6 +19079,8 @@ self: super: with self; {
   sjcl = callPackage ../development/python-modules/sjcl { };
 
   skein = callPackage ../development/python-modules/skein { };
+
+  skggm = callPackage ../development/python-modules/skggm { };
 
   skia-pathops = callPackage ../development/python-modules/skia-pathops { };
 

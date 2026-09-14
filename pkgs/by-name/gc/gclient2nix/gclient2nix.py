@@ -94,11 +94,11 @@ class Repo:
             {
                 **{
                 f"checkout_{platform}": platform == "linux"
-                for platform in ["ios", "chromeos", "android", "mac", "win", "linux", "fuchsia", "s390"]
+                for platform in ["ios", "chromeos", "android", "mac", "win", "linux", "fuchsia"]
                 },
                 **{
                 f"checkout_{arch}": True
-                for arch in ["x64", "arm64", "arm", "x86", "mips", "mips64", "ppc", "riscv64"]
+                for arch in ["x64", "arm64", "arm", "x86", "mips", "mips64", "ppc", "riscv64", "s390"]
                 },
             },
             "",
