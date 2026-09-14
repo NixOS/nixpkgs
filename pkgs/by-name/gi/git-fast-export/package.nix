@@ -10,13 +10,13 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "fast-export";
+  pname = "git-fast-export";
   version = "260405";
 
   src = fetchFromGitHub {
     owner = "frej";
     repo = "fast-export";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8bZXTW0dKdkd49KGUyHl+cdmYqUtppzkwV1cLJsUzWE=";
   };
 
