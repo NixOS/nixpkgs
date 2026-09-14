@@ -68,5 +68,16 @@ stdenv.mkDerivation (finalAttrs: {
       l0b0
     ];
     platforms = lib.platforms.unix;
+    categories = with lib.categories; [
+      game.puzzle
+      implementedIn.c
+      interface.x11
+      role.program
+      scope.application
+      uitoolkit.gtk
+      use.editing
+      use.gameplaying
+      worksWith.file
+    ];
   };
 })
