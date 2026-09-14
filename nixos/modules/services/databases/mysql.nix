@@ -527,7 +527,8 @@ in
     systemd.services.mysql = {
       description = "MySQL Server";
 
-      after = [ "network.target" ];
+      after = [ "network.target" ] ++ lib.optional cfg.galeraCluster.enable "network-online.target";
+      wants = lib.optional cfg.galeraCluster.enable "network-online.target";
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ cfg.configFile ];
 
