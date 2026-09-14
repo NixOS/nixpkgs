@@ -6,7 +6,7 @@
   pkg-config,
   autoreconfHook,
   librdf_raptor2,
-  doCheck ? config.doCheckByDefault or false,
+  doCheck ? config.doCheckByDefault,
   ladspaPlugins,
 }:
 
