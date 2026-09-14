@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "sherlock";
-  version = "0.16.0-unstable-2026-05-09";
+  version = "0.16.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sherlock-project";
     repo = "sherlock";
-    rev = "206068dc7842665130c87e16e1535572d3d1a907";
-    hash = "sha256-QM0vHvZ1w9FtM0bGPGvMhhobPKOGQNPacVWB0caoPTw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pc8/04+W77rvMnK0zYaYkHvmZ5N8gYFM6ZNRHN4o1MM=";
   };
 
   patches = [
