@@ -32,14 +32,13 @@
   libsepol,
   orc,
   alsa-lib,
+  withIpod ? false,
+  withMTP ? true,
+  withCD ? true,
+  withCloud ? true,
 }:
 
 let
-  withIpod = config.clementine.ipod or false;
-  withMTP = config.clementine.mtp or true;
-  withCD = config.clementine.cd or true;
-  withCloud = config.clementine.cloud or true;
-
   gst_plugins = with gst_all_1; [
     gst-plugins-base
     gst-plugins-good
