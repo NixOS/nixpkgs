@@ -847,6 +847,19 @@
     };
   };
 
+  fsharp_signature = {
+    version = "0.3.0-unstable-2026-04-16";
+    url = "github:ionide/tree-sitter-fsharp";
+    rev = "5247c1197cb290fcaea0e0a793d32829c1396831";
+    hash = "sha256-ntcLDSt6BPF9PtASx221hwZhKl3yKKrzbEYQD/ghYxw=";
+    meta = {
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        aciceri
+      ];
+    };
+  };
+
   fstar = {
     version = "0-unstable-2026-03-14";
     url = "github:sei40kr/tree-sitter-fstar";
