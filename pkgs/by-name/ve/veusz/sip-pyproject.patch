@@ -1,0 +1,11 @@
+--- a/pyqt_setuptools.py
++++ b/pyqt_setuptools.py
+@@ -267,7 +267,7 @@ class sip_build_ext(build_ext):
+ requires=["sip >= 6.8, <7"]
+ build-backend="sipbuild.api"
+
+-[tool.sip.metadata]
++[project]
+ name="{modulename}"
+
+ [tool.sip.project]
