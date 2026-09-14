@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   git,
@@ -18,20 +18,24 @@ assert lib.assertMsg (
   withImageSupport -> lib.meta.availableOn stdenv.hostPlatform libdrm
 ) "d2: withImageSupport is not supported on ${stdenv.hostPlatform.system} (requires libdrm)";
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "d2";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "d2lang";
     repo = "d2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4RYKm8wq+KxzLQbd3sIEZLTy7xBtlWhJCHfggvkktXo=";
+    hash = "sha256-HhCktLU43Y/uje038axwO7tNqO353mV/JID223sBtd8=";
   };
 
-  vendorHash = "sha256-4IhAb3UeqSGX9jTdhWonf7lEBhUlUrrVt31NyfSoQF8=";
+  vendorHash = "sha256-LRvQ4diXmoZNnRomVv6HTni6jrJ8e0IHqxVmJhEFR/w=";
 
-  excludedPackages = [ "./e2etests" ];
+  excludedPackages = [
+    "./ci"
+    "./e2etests"
+    "./e2etests-cli"
+  ];
 
   ldflags = [
     "-s"
