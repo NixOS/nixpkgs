@@ -18344,6 +18344,8 @@ self: super: with self; {
 
   rsa = callPackage ../development/python-modules/rsa { };
 
+  rsl-rl-lib = callPackage ../development/python-modules/rsl-rl-lib { };
+
   rsskey = callPackage ../development/python-modules/rsskey { };
 
   rst2ansi = callPackage ../development/python-modules/rst2ansi { };
