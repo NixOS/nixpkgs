@@ -23,7 +23,7 @@ let
       homepage = "https://github.com/NordSecurity/nordvpn-linux";
       changelog = "${homepage}/releases/tag/${version}";
       license = lib.licenses.gpl3Only;
-      maintainers = with lib.maintainers; [ different-error ];
+      maintainers = [ ];
       platforms = lib.platforms.linux;
     };
 
