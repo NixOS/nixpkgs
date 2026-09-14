@@ -27,7 +27,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nilearn";
-  version = "0.14.0";
+  version = "0.14.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -35,7 +35,7 @@ buildPythonPackage (finalAttrs: {
     owner = "nilearn";
     repo = "nilearn";
     tag = finalAttrs.version;
-    hash = "sha256-WG+ijSNur7XWF3D+MwQU/VUcMalKEEMkFtH0Meca+Mk=";
+    hash = "sha256-z/U2ZfAuyFYhkSCv0X2ZRqUPFt8HM4X8NBntELccBO4=";
   };
 
   postPatch = ''
