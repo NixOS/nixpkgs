@@ -641,6 +641,7 @@ in
   fanout = runTest ./fanout.nix;
   fastnetmon-advanced = runTest ./fastnetmon-advanced.nix;
   fcitx5 = runTest ./fcitx5;
+  fcron = runTest ./fcron.nix;
   fedimintd = runTest ./fedimintd.nix;
   feishin = handleTest ./feishin { };
   ferm = runTest ./ferm.nix;
