@@ -16215,19 +16215,18 @@ with self;
 
   HTMLFormHandler = buildPerlPackage {
     pname = "HTML-FormHandler";
-    version = "0.40068";
+    version = "0.410002";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GS/GSHANK/HTML-FormHandler-0.40068.tar.gz";
-      hash = "sha256-63t43aMSV1LMi8wDltOXf70o2jPS1ExQQq1tNdbN6Cc=";
+      url = "mirror://cpan/authors/id/A/AB/ABRAXXA/HTML-FormHandler-0.410002.tar.gz";
+      hash = "sha256-wT3n5PLDmV5QR1xilSm2VM+eLGJ73WLifqSMfG1jqeU=";
     };
-    # a single test is failing on perl 5.20
-    doCheck = false;
     buildInputs = [
       FileShareDirInstall
       PadWalker
       TestDifferences
       TestException
       TestMemoryCycle
+      TestNeeds
       TestWarn
     ];
     propagatedBuildInputs = [
