@@ -20,10 +20,9 @@
   replaceVars,
   extraPackages ? [ ],
   crun,
-  runc,
   krunkit,
   conmon,
-  extraRuntimes ? lib.optionals stdenv.hostPlatform.isLinux [ runc ], # e.g.: runc, gvisor, youki
+  extraRuntimes ? [ ], # e.g.: runc, gvisor, youki
   fuse-overlayfs,
   util-linuxMinimal,
   nftables,
