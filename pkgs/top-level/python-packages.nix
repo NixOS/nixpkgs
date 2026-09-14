@@ -10924,6 +10924,8 @@ self: super: with self; {
 
   mizani = callPackage ../development/python-modules/mizani { };
 
+  mjlab = callPackage ../development/python-modules/mjlab { };
+
   mjviser = callPackage ../development/python-modules/mjviser { };
 
   mkdocs = callPackage ../development/python-modules/mkdocs { };
