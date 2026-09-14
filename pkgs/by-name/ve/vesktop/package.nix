@@ -192,6 +192,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       getchoo
+      mothzarella
       Scrumplex
       vgskye
       pluiedev
