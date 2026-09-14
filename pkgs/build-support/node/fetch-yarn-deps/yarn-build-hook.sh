@@ -10,10 +10,10 @@ yarnBuildHook() {
         echo yarnConfigHook WARNING: a node interpreter was not added to the \
             build, and is probably required to run \'yarn $yarnBuildHook\'. \
             A common symptom of this is getting \'command not found\' errors \
-            for Nodejs related tools.
+            for Node.js related tools.
     fi
 
-    yarn --offline "$yarnBuildScript" $yarnBuildFlags
+    yarn ${yarnBuildGlobalFlags:---offline} "$yarnBuildScript" $yarnBuildFlags
 
     echo "finished yarnBuildHook"
     runHook postBuild
