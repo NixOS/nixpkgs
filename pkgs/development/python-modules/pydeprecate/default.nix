@@ -25,7 +25,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyDeprecate";
-  version = "0.9.0";
+  version = "0.12.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -33,7 +33,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Borda";
     repo = "pyDeprecate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M3h5m+MqUYl8902YUqKqPfLpZXF3yQjlXP8f0ehnHds=";
+    hash = "sha256-qe0PBlRMwKqASUStHL3PbA64tCZW9iLS0PyNL344KEE=";
   };
 
   build-system = [
