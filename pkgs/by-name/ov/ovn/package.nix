@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   libbpf,
   libcap_ng,
@@ -21,9 +22,10 @@
   makeWrapper,
 
   # test dependencies
-  which,
-  util-linux,
   tcpdump,
+  testers,
+  util-linux,
+  which,
 }:
 let
   withOpensslConfigureFlag = "--with-openssl=${lib.getLib openssl.dev}";
@@ -39,6 +41,41 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-aIC9l9rCBcc+IaMEz1HJlcUDm7Q09htJXsGa+p3qk48=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/ac165c29df9c3a7ea44f9491f776535d15a7dabb.patch";
+      hash = "sha256-i1nDVcHsM0ambvCvVhn+4krV3cW5Cbc3OvvGlyElaxg=";
+    })
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/944dded0f7eecb7456d6b85774bf9bc1df9cb0ac.patch";
+      hash = "sha256-/vIWXUVWO+7SbYynMMmNOHAIjZFOfp1BzAV6g1yoYEc=";
+    })
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/1ce2794460c01967c8b674d12762ac7c1ce52091.patch";
+      hash = "sha256-DprJiAVXk4XIfmt7ETQfmFxyo6a43qdv0W1FbPUZsPA=";
+    })
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/4d32c2f936ea1c5d0e1f3e924d779115f4c9731a.patch";
+      hash = "sha256-kkrJRIf8YEf+Nwg1DVxU7AWpOaIjl6XiPyARquhYtkw=";
+    })
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/2d762d1934be14bb8d1cef3954e641cc4cf91fde.patch";
+      hash = "sha256-OS7sU3QuRKt3xRxD6AybZICDOw1wioAQpNHsNf+8Ag4=";
+    })
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/5fb4cb24510e7db84550024c1448c1c76849325e.patch";
+      hash = "sha256-sFXe8rtPwp70bdoE2eSk/11K+BnSTnoAYaVimDfOdko=";
+    })
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/bb14529390e52b727e9686fae336481bbbe53b68.patch";
+      hash = "sha256-+bKM5UHM46p1caJdpSN+acLlXp7GCGCXuW6endmG1AY=";
+    })
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/d2f7f9ace6c08d8bc04ee243b940f417d2927998.patch";
+      hash = "sha256-wiclwlS4t94R7PTRxpMsektbZum6/HjHGSR7DlCf4l8=";
+    })
+  ];
 
   outputs = [
     "out"
@@ -162,7 +199,69 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests =
+      let
+        systemTestData = finalAttrs.finalPackage.overrideAttrs {
+          doCheck = false;
+          outputs = [ "out" ];
+          installPhase = "cp -a . $out";
+          postInstall = "";
+          dontFixup = true;
+        };
+
+        mkSystemTest =
+          mode: makeTarget:
+          testers.runNixOSTest {
+            name = "ovn-system-tests-${mode}";
+
+            nodes.machine = { pkgs, ... }: {
+              environment.systemPackages = with pkgs; [
+                bc
+                curl
+                ethtool
+                gnumake
+                iproute2
+                iputils
+                kmod
+                net-tools
+                nfdump
+                nftables
+                nmap
+                openssl
+                procps
+                tcpdump
+                util-linux
+                wget
+                which
+                (python3.withPackages (ps: [ ps.scapy ]))
+              ];
+
+              virtualisation = {
+                cores = 4;
+                diskSize = 8192;
+                memorySize = 4096;
+              };
+            };
+
+            testScript = ''
+              machine.succeed(
+                  "mkdir -p /build",
+                  # Makefiles contain absolute references to the build directory.
+                  "cp -a ${systemTestData} /build/source",
+                  "chmod -R u+w /build/source",
+                  "SKIP_UNSTABLE=yes make -C /build/source ${makeTarget}",
+              )
+            '';
+          };
+      in
+      {
+        system-userspace = mkSystemTest "userspace" "check-system-userspace";
+        system-kernel = mkSystemTest "kernel" "check-kernel";
+      };
+
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Open Virtual Network";
