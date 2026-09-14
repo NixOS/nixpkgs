@@ -3,6 +3,7 @@
   stdenv,
   fetchFromCodeberg,
   rustPlatform,
+  pkg-config,
   wayland,
   nix-update-script,
 }:
@@ -20,6 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-arPCdWRdPju5AfxH8u1td8V7hrzWSCfIDnJ2JsCW00w=";
 
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ wayland ];
   cargoBuildFlags = [
     "-p"
