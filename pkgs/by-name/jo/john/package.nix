@@ -22,6 +22,7 @@
   enableUnfree ? false,
   replaceVars,
   makeWrapper,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation {
@@ -36,37 +37,18 @@ stdenv.mkDerivation {
   };
 
   patches = lib.optionals withOpenCL [
+    # Load OpenCL from the Nix store instead of searching system library paths
     (replaceVars ./opencl.patch {
       ocl_icd = ocl-icd;
     })
   ];
 
-  postPatch = ''
-    sed -ri -e '
-      s!^(#define\s+CFG_[A-Z]+_NAME\s+).*/!\1"'"$out"'/etc/john/!
-      /^#define\s+JOHN_SYSTEMWIDE/s!/usr!'"$out"'!
-    ' src/params.h
-    sed -ri -e '/^\.include/ {
-      s!\$JOHN!'"$out"'/etc/john!
-      s!^(\.include\s*)<([^./]+\.conf)>!\1"'"$out"'/etc/john/\2"!
-    }' run/*.conf
-  '';
-
-  preConfigure = ''
-    cd src
-    # Makefile.in depends on AS and LD being set to CC, which is set by default in configure.ac.
-    # This ensures we override the environment variables set in cc-wrapper/setup-hook.sh
-    export AS=$CC
-    export LD=$CC
-  ''
-  + lib.optionalString withOpenCL ''
-    python ./opencl_generate_dynamic_loader.py  # Update opencl_dynamic_loader.c
-  '';
-  configureFlags = [
-    "--disable-native-tests"
-    "--with-systemwide"
-  ]
-  ++ lib.optionals (!enableUnfree) [ "--without-unrar" ];
+  nativeBuildInputs = [
+    gcc
+    python3Packages.wrapPython
+    perl
+    makeWrapper
+  ];
 
   buildInputs = [
     openssl
@@ -77,16 +59,11 @@ stdenv.mkDerivation {
     zlib
     libpcap
     re2
+    perl
   ]
   ++ lib.optionals withOpenCL [
     opencl-headers
     ocl-icd
-  ];
-  nativeBuildInputs = [
-    gcc
-    python3Packages.wrapPython
-    perl
-    makeWrapper
   ];
   propagatedBuildInputs =
     # For pcap2john.py
@@ -111,7 +88,39 @@ stdenv.mkDerivation {
     ]);
   # TODO: Get dependencies for radius2john.pl and lion2john-alt.pl
 
+  nativeInstallCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  configureFlags = [
+    "--disable-native-tests"
+    "--with-systemwide"
+  ]
+  ++ lib.optionals (!enableUnfree) [ "--without-unrar" ];
+
   enableParallelBuilding = true;
+
+  doInstallCheck = true;
+
+  postPatch = ''
+    sed -ri -e '
+      s!^(#define\s+CFG_[A-Z]+_NAME\s+).*/!\1"'"$out"'/etc/john/!
+      /^#define\s+JOHN_SYSTEMWIDE/s!/usr!'"$out"'!
+    ' src/params.h
+    sed -ri -e '/^\.include/ {
+      s!\$JOHN!'"$out"'/etc/john!
+      s!^(\.include\s*)<([^./]+\.conf)>!\1"'"$out"'/etc/john/\2"!
+    }' run/*.conf
+  '';
+
+  preConfigure = ''
+    cd src
+    # Makefile.in depends on AS and LD being set to CC, which is set by default in configure.ac.
+    # This ensures we override the environment variables set in cc-wrapper/setup-hook.sh
+    export AS=$CC
+    export LD=$CC
+  ''
+  + lib.optionalString withOpenCL ''
+    python ./opencl_generate_dynamic_loader.py  # Update opencl_dynamic_loader.c
+  '';
 
   postInstall = ''
     mkdir -p "$out/bin" "$out/etc/john" "$out/share/john" "$out/share/doc/john" "$out/share/john/rules" "$out/share/john/opencl" "$out/${perlPackages.perl.libPrefix}"
@@ -131,6 +140,19 @@ stdenv.mkDerivation {
     for i in $out/bin/*.pl; do
       wrapProgram "$i" --prefix PERL5LIB : "$PERL5LIB:$out/${perlPackages.perl.libPrefix}"
     done
+  '';
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    "$out/bin/john" --help | grep "John the Ripper"
+
+    # The script has no help option, and passing no arguments exits with an
+    # error after printing usage. Reaching this output ensures it can import
+    # `Compress::Raw::Lzma`.
+    { "$out/bin/7z2john.pl" || true; } 2>&1 | grep "Usage:"
+
+    runHook postInstallCheck
   '';
 
   passthru.updateScript = unstableGitUpdater {
