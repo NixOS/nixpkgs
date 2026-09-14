@@ -6,7 +6,14 @@
 
 let
   mp = iortcw_sp.overrideAttrs (oldAttrs: {
+    pname = "iortcw-mp";
     sourceRoot = "${oldAttrs.src.name}/MP";
+    passthru = oldAttrs.passthru // {
+      executables = [
+        "iowolfded"
+        "iowolfmp"
+      ];
+    };
   });
 in
 buildEnv {
@@ -23,11 +30,7 @@ buildEnv {
   nativeBuildInputs = [ makeWrapper ];
 
   # so we can launch sp from mp game and vice versa
-  postBuild = ''
-    for i in `find -L $out/opt/iortcw -maxdepth 1 -type f -executable`; do
-      makeWrapper $i $out/bin/`basename $i` --chdir "$out/opt/iortcw"
-    done
-  '';
+  postBuild = iortcw_sp.postInstall + mp.postInstall;
 
   meta = iortcw_sp.meta // {
     description = "Game engine for Return to Castle Wolfenstein";
