@@ -4108,12 +4108,19 @@ with self;
 
   CatalystPluginStaticSimple = buildPerlPackage {
     pname = "Catalyst-Plugin-Static-Simple";
-    version = "0.37";
+    version = "0.38";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IL/ILMARI/Catalyst-Plugin-Static-Simple-0.37.tar.gz";
-      hash = "sha256-Wk2Fo1iM1Og/GwAlgUEufXG31X9mBW5dh6Nvk9icnnw=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Catalyst-Plugin-Static-Simple-0.38.tar.gz";
+      hash = "sha256-BOtn69x4cyf3fvLHOXar7Pk/mu/KCnGFIv6YuMpSOLA=";
     };
-    patches = [ ../development/perl-modules/catalyst-plugin-static-simple-etag.patch ];
+    patches = [
+      (fetchpatch {
+        url = "https://security.metacpan.org/patches/C/Catalyst-Plugin-Static-Simple/0.38/CVE-2026-15743-r1.patch";
+        hash = "sha256-dNJOz7X7i03kisrf+lhqAaL6lYeTlt1NJZnJWNM7bgQ=";
+      })
+      ../development/perl-modules/catalyst-plugin-static-simple-etag.patch
+    ];
+    postPatch = "rm -f lib/Catalyst/Plugin/Static/Simple.pm.orig";
     propagatedBuildInputs = [
       CatalystRuntime
       MIMETypes
