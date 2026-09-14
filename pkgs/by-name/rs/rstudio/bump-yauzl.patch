@@ -1,8 +1,8 @@
 diff --git a/src/node/desktop/package-lock.json b/src/node/desktop/package-lock.json
-index c78746a..93d15e5 100644
+index 8e01e6fd1a..87f22dd082 100644
 --- a/src/node/desktop/package-lock.json
 +++ b/src/node/desktop/package-lock.json
-@@ -4372,16 +4372,6 @@
+@@ -4640,16 +4640,6 @@
          "ieee754": "^1.2.1"
        }
      },
@@ -19,7 +19,7 @@ index c78746a..93d15e5 100644
      "node_modules/buffer-from": {
        "version": "1.1.2",
        "resolved": "https://registry.npmjs.org/buffer-from/-/buffer-from-1.1.2.tgz",
-@@ -6777,16 +6767,6 @@
+@@ -6864,16 +6854,6 @@
          "node": ">=0.8.0"
        }
      },
@@ -36,7 +36,7 @@ index c78746a..93d15e5 100644
      "node_modules/fecha": {
        "version": "4.2.3",
        "resolved": "https://registry.npmjs.org/fecha/-/fecha-4.2.3.tgz",
-@@ -14054,14 +14034,16 @@
+@@ -13911,14 +13891,16 @@
        }
      },
      "node_modules/yauzl": {
@@ -59,15 +59,16 @@ index c78746a..93d15e5 100644
      },
      "node_modules/yn": {
 diff --git a/src/node/desktop/package.json b/src/node/desktop/package.json
-index 613361f..c18514f 100644
+index 44a22d3f52..a9d3641433 100644
 --- a/src/node/desktop/package.json
 +++ b/src/node/desktop/package.json
-@@ -85,5 +85,8 @@
-     "vue": "3.5.29",
-     "winston": "3.19.0",
-     "winston-syslog": "2.7.1"
-+  },
-+  "overrides": {
+@@ -34,7 +34,8 @@
+     "tmp": "^0.2.7",
+     "undici": "^7.28.0",
+     "uuid": "$uuid",
+-    "webpack-dev-server": "^5.2.5"
++    "webpack-dev-server": "^5.2.5",
 +    "yauzl": "^3.3.1"
-   }
- }
+   },
+   "devDependencies": {
+     "@electron-forge/cli": "7.11.2",

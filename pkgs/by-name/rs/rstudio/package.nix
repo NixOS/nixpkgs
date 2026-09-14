@@ -25,8 +25,8 @@
   yarnConfigHook,
   zip,
 
-  boost190,
-  electron_41,
+  boost191,
+  electron_42,
   fontconfig,
   gnumake,
   hunspellDicts,
@@ -45,27 +45,33 @@
 }:
 
 let
-  electron = electron_41;
-  boost = boost190;
+  electron = electron_42;
+  boost = boost191;
 
-  mathJaxSrc = fetchzip {
-    url = "https://s3.amazonaws.com/rstudio-buildtools/mathjax-27.zip";
-    hash = "sha256-J7SZK/9q3HcXTD7WFHxvh++ttuCd89Vc4SEBrUEU0AI=";
+  mathJax27Src = fetchzip {
+    url = "https://s3.amazonaws.com/rstudio-buildtools/mathjax-2.7.9.zip";
+    hash = "sha256-eQY8Q7ty7OcCs9E2hLsZjX5GncodGdEIbdUYDdKy9Ds=";
+  };
+
+  mathJax4Src = fetchzip {
+    url = "https://s3.amazonaws.com/rstudio-buildtools/mathjax-4.1.3.zip";
+    hash = "sha256-DCfc3H09FXuihKca62oZM6z1nsW8+6kMvad1HBBJI3A=";
   };
 
   # Note: we could build this from source, but let's just do what upstream does for now
   gwt = fetchzip {
-    url = "https://rstudio-buildtools.s3.us-east-1.amazonaws.com/gwt/gwt-2.12.2.tar.gz";
+    url = "https://rstudio-buildtools.s3.us-east-1.amazonaws.com/gwt/gwt-2.12.2-autumn-hawkbit.tar.gz";
     stripRoot = false;
-    hash = "sha256-DgcCiheYeP7sISduz6E3WhTty2nSs14k2OYIG93KmkY=";
+    hash = "sha256-eRmdDiAjMz/nvQCXmRwGAt6HC3Nr5KACsxahS1cLpHA=";
   };
 
   quartoSrc = fetchFromGitHub {
     owner = "quarto-dev";
     repo = "quarto";
     # Note: rev should ideally be the last commit of the release/rstudio-[codename] branch
-    rev = "8c1669f3095c5afee6bcd98a659d51a43300bda9";
-    hash = "sha256-01urKiFz5iDtW8r+w7zwUDXUOKZIOhi/ip329RsuQ+Q=";
+    # Last updated: 2026-09-11 to release/rstudio-autumn-hawkbit branch
+    rev = "828ae28e53b796fb95a33bd7f3c7c109e0709649";
+    hash = "sha256-xkNCbGrMUSkPBSkMqjOz2jljw71TyPThUfd79XYM+WE=";
   };
 
   hunspellDictionaries = lib.filter lib.isDerivation (lib.unique (lib.attrValues hunspellDicts));
@@ -93,13 +99,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rstudio";
-  version = "2026.04.0+526";
+  version = "2026.09.0+174";
 
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "rstudio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6oHH3C3/MGFSOuI+FvyrLyOKRyy455Wkr75ZL8ZeiWg=";
+    hash = "sha256-67HT2JT0kPXqzCfcgtfRZZ/zM35ZWULb0ooCjagzr3w=";
   };
 
   # sources fetched into _deps via cmake's FetchContent
@@ -131,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
     dontBuild = true;
     dontFixup = true;
 
-    outputHash = "sha256-XzSDU4GVY6OrIFG4qCWUF94nV6fcz9zyFSlSvttVrYw=";
+    outputHash = "sha256-GZgQQAmU5YeH3IQhmFUD4zU/IlA6Qau/7j7b76gXYtQ=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
@@ -210,9 +216,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # Partly taken from https://github.com/rstudio/rstudio/pull/17470
-    ./electron-41.patch
-
     # zip extraction fails on newer nodejs versions without this fix
     ./bump-yauzl.patch
 
@@ -250,7 +253,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnOfflineCache = fetchYarnDeps {
     src = quartoSrc;
-    hash = "sha256-XRxClyAaz3ja+Tr97aoqVxKhWOxezZ6OmEPGILdeOww=";
+    hash = "sha256-4mPc2gNlXTvAWLdWViceTPk5lizKST7iBMZ42ZcrEZA=";
   };
 
   dontYarnInstallDeps = true; # will call manually in preConfigure
@@ -266,7 +269,7 @@ stdenv.mkDerivation (finalAttrs: {
     name = "rstudio-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src patches;
     postPatch = "cd ${finalAttrs.npmRoot}";
-    hash = "sha256-rdtnQKaOUp9jfWRA4BuEOyJn8emimiy+Kvxu1939H30=";
+    hash = "sha256-nZkI0y4Ol8Ieug5TAtKBDEmQdRR1aIkabzkLr+iZq5c=";
   };
 
   preConfigure = ''
@@ -298,12 +301,13 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${quartoWrapper} dependencies/quarto
 
     # version in dependencies/common/install-mathjax
-    ln -s ${mathJaxSrc} dependencies/mathjax-27
+    ln -s ${mathJax27Src} dependencies/mathjax-27
+    ln -s ${mathJax4Src} dependencies/mathjax-4
 
     # node used by cmake and node used for distribution
     # version in cmake/globals.cmake
     RSTUDIO_NODE_VERSION="22.22.2"
-    RSTUDIO_INSTALLED_NODE_VERSION="22.22.2"
+    RSTUDIO_INSTALLED_NODE_VERSION="22.23.2"
 
     mkdir -p dependencies/common/node
     ln -s ${nodejs} dependencies/common/node/$RSTUDIO_NODE_VERSION
