@@ -4,21 +4,25 @@
   fetchFromGitHub,
   pytestCheckHook,
   setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "puremagic";
-  version = "1.30";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cdgriffith";
     repo = "puremagic";
     tag = version;
-    hash = "sha256-k2xrcML8XxI9cMTQTv0pDLkOrmEr5mbDnVsyWuD1rEc=";
+    hash = "sha256-Mvhn/1xcgYgVkWok2qZXAe40pocfu6nJo5xuPruw2dc=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
