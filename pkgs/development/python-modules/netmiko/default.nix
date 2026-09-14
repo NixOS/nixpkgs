@@ -13,14 +13,14 @@
   textfsm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "netmiko";
-  version = "4.6.0";
+  version = "4.7.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-lwG7LBoV6y6AdMsuKMoAfGm5+lKWG4O5jHV+rWuA3u8=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-lM97/l2u0dBYREzhY34QF33yL5A2g6U9H77kdVNIjGU=";
   };
 
   build-system = [ poetry-core ];
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Multi-vendor library to simplify Paramiko SSH connections to network devices";
     homepage = "https://github.com/ktbyers/netmiko/";
-    changelog = "https://github.com/ktbyers/netmiko/releases/tag/v${version}";
+    changelog = "https://github.com/ktbyers/netmiko/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.astro ];
   };
-}
+})
