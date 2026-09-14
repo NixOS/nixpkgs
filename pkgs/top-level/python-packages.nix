@@ -6857,6 +6857,18 @@ self: super: with self; {
 
   gipc = callPackage ../development/python-modules/gipc { };
 
+  giskard = callPackage ../development/python-modules/giskard { };
+
+  giskard-agents = callPackage ../development/python-modules/giskard-agents { };
+
+  giskard-checks = callPackage ../development/python-modules/giskard-checks { };
+
+  giskard-core = callPackage ../development/python-modules/giskard-core { };
+
+  giskard-llm = callPackage ../development/python-modules/giskard-llm { };
+
+  giskard-scan = callPackage ../development/python-modules/giskard-scan { };
+
   git-annex-adapter = callPackage ../development/python-modules/git-annex-adapter { };
 
   git-dummy = callPackage ../development/python-modules/git-dummy { };
