@@ -289,7 +289,7 @@ in
 buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.13.0";
+  version = "2.14.0";
   pyproject = true;
   __structuredAttrs = true;
 
