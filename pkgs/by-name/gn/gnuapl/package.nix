@@ -1,10 +1,20 @@
 {
   lib,
   stdenv,
+  autoreconfHook,
+  pkg-config,
   fetchurl,
-  readline,
-  gettext,
   ncurses,
+  gtk3,
+  libxcb,
+  libx11,
+  postgresql,
+  sqlite,
+  fftw,
+  gsl,
+  libpng,
+  zlib,
+  pcre2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,11 +26,27 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-JLu3RPzkfmKDcjSgU73uzuUbnqYcgseffMGRvGpUwKE=";
   };
 
-  buildInputs = [
-    readline
-    gettext
-    ncurses
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    postgresql.pg_config
   ];
+
+  buildInputs = [
+    ncurses
+    gtk3
+    libx11
+    libxcb
+    postgresql.lib
+    sqlite
+    fftw
+    gsl
+    libpng
+    zlib
+    pcre2
+  ];
+
+  configureFlags = [ "--with-sqlite3=${lib.getDev sqlite}" ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     (lib.optionals stdenv.cc.isGNU [
