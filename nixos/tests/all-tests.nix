@@ -765,6 +765,7 @@ in
   };
   gitolite = runTest ./gitolite.nix;
   gitolite-fcgiwrap = runTest ./gitolite-fcgiwrap.nix;
+  gitwatch = runTest ./gitwatch.nix;
   glance = runTest ./glance.nix;
   glances = runTest ./glances.nix;
   glitchtip = runTest ./glitchtip.nix;
