@@ -31,6 +31,10 @@
               "nosuid"
               "nodev"
               "bind"
+              # Match nvidia-ctk's own generated mounts (NVIDIA/nvidia-container-toolkit#980):
+              # without rprivate, a user-supplied directory mount inherits the host's
+              # shared peer group, and per-file rbinds under it propagate back to the host.
+              "rprivate"
             ];
             type = lib.types.listOf lib.types.str;
             description = "Mount options.";
