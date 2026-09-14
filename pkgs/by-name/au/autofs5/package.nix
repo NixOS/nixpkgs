@@ -21,6 +21,7 @@
   pkgconf,
   fetchpatch,
   libnsl,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -91,6 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkgconf
     libnsl.dev
   ];
+
+  passthru.tests.nixos = nixosTests.autofs;
 
   meta = {
     description = "Kernel-based automounter";
