@@ -831,7 +831,6 @@ in
   };
   haproxy = runTest ./haproxy.nix;
   harmonia = runTest ./harmonia.nix;
-  haste-server = runTest ./haste-server.nix;
   hbase2 = runTest {
     imports = [ ./hbase.nix ];
     _module.args.getPackage = pkgs: pkgs.hbase2;
