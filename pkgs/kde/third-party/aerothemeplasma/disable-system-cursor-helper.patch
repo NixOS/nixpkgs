@@ -1,0 +1,32 @@
+diff --git a/plasma/atpootb/CMakeLists.txt b/plasma/atpootb/CMakeLists.txt
+index 12c8397..ab89682 100644
+--- a/plasma/atpootb/CMakeLists.txt
++++ b/plasma/atpootb/CMakeLists.txt
+@@ -53,11 +53,3 @@ qt_policy(SET QTP0001 NEW)
+ ecm_find_qmlmodule(org.kde.kirigamiaddons.formcard 1.0)
+-
+-kauth_install_actions(io.gitgud.wackyideas.ootb kauth.actions)
+-
+-add_executable(ootbcursor_authhelper src/ootbauthhelper.cpp src/ootbauthhelper.h)
+-target_link_libraries(ootbcursor_authhelper KF6::AuthCore KF6::ConfigCore KF6::I18n Qt6::DBus Qt6::Core)
+-
+-install(TARGETS ootbcursor_authhelper DESTINATION ${KAUTH_HELPER_INSTALL_DIR})
+-kauth_install_helper_files(ootbcursor_authhelper io.gitgud.wackyideas.ootb root)
+-
++
+ add_subdirectory(src)
+diff --git a/plasma/atpootb/src/contents/ui/Main.qml b/plasma/atpootb/src/contents/ui/Main.qml
+index 30a94b5..b7b6abf 100644
+--- a/plasma/atpootb/src/contents/ui/Main.qml
++++ b/plasma/atpootb/src/contents/ui/Main.qml
+@@ -301,9 +301,9 @@ Rectangle {
+             }
+         }
+         Component.onCompleted: {
++            cursorAction.parent = null;
+             if(!KAUTH_ACTIONS_QML) {
+                 sddmAction.parent = null;
+-                cursorAction.parent = null;
+             }
+         }
+     }
