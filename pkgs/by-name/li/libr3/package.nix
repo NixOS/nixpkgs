@@ -40,6 +40,20 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru.tests.consumer = stdenv.mkDerivation (consumerAttrs: {
+    pname = "libr3-test";
+    inherit (finalAttrs) version src;
+    sourceRoot = "${consumerAttrs.src.name}/examples";
+
+    buildInputs = [ finalAttrs.finalPackage ];
+    nativeBuildInputs = [ pkg-config ];
+
+    doCheck = true;
+
+    buildPhase = "cc simple.c -o test `pkg-config --cflags --libs r3`";
+    checkPhase = "./test";
+    installPhase = "mkdir -p $out/bin; mv test $out/bin/";
+  });
 
   meta = {
     description = "High-performance path dispatching library";
