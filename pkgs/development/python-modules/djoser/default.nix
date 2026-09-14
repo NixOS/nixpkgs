@@ -28,6 +28,8 @@ buildPythonPackage rec {
     social-auth-app-django
   ];
 
+  pythonRelaxDeps = [ "social-auth-app-django" ];
+
   # djet isn't packaged yet
   # nativeCheckInputs = [ pytestCheckHook ];
 
