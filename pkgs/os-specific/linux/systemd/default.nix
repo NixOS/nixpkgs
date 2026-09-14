@@ -465,6 +465,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "sshconfdir" "")
     (lib.mesonOption "sshdconfdir" "no")
 
+    # KVM
+    # Set /dev/kvm udev mode to a more secure default
+    (lib.mesonOption "dev-kvm-mode" "0660")
+
     # RPM
     # This stops building/installing RPM specific tools.
     (lib.mesonOption "rpmmacrosdir" "no")
