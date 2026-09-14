@@ -16,23 +16,16 @@
         80
         8080
       ];
-      services.xandikos.enable = true;
-      services.xandikos.address = "localhost";
-      services.xandikos.port = 8080;
-      services.xandikos.routePrefix = "/xandikos-prefix/";
-      services.xandikos.extraOptions = [
-        "--defaults"
-      ];
-      services.nginx = {
+      services.xandikos = {
         enable = true;
-        recommendedProxySettings = true;
-        virtualHosts."xandikos" = {
-          serverName = "xandikos.local";
-          basicAuth.xandikos = "snakeOilPassword";
-          locations."/xandikos/" = {
-            proxyPass = "http://localhost:8080/xandikos-prefix/";
-          };
+        settings = {
+          listen-address = "localhost";
+          port = 8080;
+          route-prefix = "/xandikos/";
+          defaults = true;
         };
+        domain = "xandikos.local";
+        nginx.basicAuth.xandikos = "snakeOilPassword";
       };
     };
   };
