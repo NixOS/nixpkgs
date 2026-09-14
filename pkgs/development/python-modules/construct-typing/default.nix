@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "construct-typing";
-  version = "0.7.0";
+  version = "0.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "timrid";
     repo = "construct-typing";
     tag = "v${version}";
-    hash = "sha256-iiMnt/f1ppciL6AVq3q0wOtoARcNYJycQA5Ev+dIow8=";
+    hash = "sha256-yKk0KmvXShKLG3wxGGWZUydro34qHx3JriwPsF4qaWA=";
   };
 
   build-system = [ setuptools ];
