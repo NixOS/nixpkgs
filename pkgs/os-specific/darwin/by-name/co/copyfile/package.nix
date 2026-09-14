@@ -1,4 +1,5 @@
 {
+  lib,
   mkAppleDerivation,
   sourceRelease,
   stdenvNoCC,
@@ -69,6 +70,19 @@ mkAppleDerivation {
   ];
 
   xcodeHash = "sha256-SYW6pBlCQkcbkBqCq+W/mDYZZ7/co2HlPZwXzgh/LnI=";
+
+  # on iOS decmpfs.h pulls in <sys/kdebug.h>, <sys/kernel_types.h>,
+  # and <sys/vnode.h>. None of those are in the iOS SDK.
+  # Upstream includes <TargetConditionals.h> after the DECMPFS block,
+  # so this move it above in order for TARGET_OS_IPHONE to work.
+  # b/c decmpfs.h is skipped, we need to pull <stdbool.h> manually.
+  postPatch = lib.optionalString stdenvNoCC.hostPlatform.isiOS ''
+    substituteInPlace copyfile.c \
+      --replace-fail '#ifdef VOL_CAP_FMT_DECMPFS_COMPRESSION' \
+                     '#include <TargetConditionals.h>
+    #include <stdbool.h>
+    #if defined(VOL_CAP_FMT_DECMPFS_COMPRESSION) && !TARGET_OS_IPHONE'
+  '';
 
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";
 
