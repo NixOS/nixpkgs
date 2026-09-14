@@ -1,0 +1,47 @@
+[
+  {
+    "pname": "CSharpier",
+    "version": "1.3.0",
+    "hash": "sha256-hwieEoQTcATyKZIZ7CQSWANPBv+pEShg6cDXU5EIexU="
+  },
+  {
+    "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
+    "version": "8.0.0",
+    "hash": "sha256-75KzEGWjbRELczJpCiJub+ltNUMMbz5A/1KQU+5dgP8="
+  },
+  {
+    "pname": "Microsoft.IO.RecyclableMemoryStream",
+    "version": "3.0.1",
+    "hash": "sha256-unFg/5EcU/XKJbob4GtQC43Ydgi5VjeBGs7hfhj4EYo="
+  },
+  {
+    "pname": "Microsoft.Kiota.Abstractions",
+    "version": "2.0.0",
+    "hash": "sha256-vTpcCiHDNaDE7slU7C0ebP7g9TD7hS5/Mushl/by9Sc="
+  },
+  {
+    "pname": "Microsoft.Kiota.Http.HttpClientLibrary",
+    "version": "2.0.0",
+    "hash": "sha256-sYQHaCZlES6FvGkWYAhwhPocFRQevrLW/8ZAjN8YyE8="
+  },
+  {
+    "pname": "Microsoft.Kiota.Serialization.Json",
+    "version": "2.0.0",
+    "hash": "sha256-1bzWjJui+N2RY5sKQGX4fQ2kJ7AfHjIf76cX2kXCFD0="
+  },
+  {
+    "pname": "Microsoft.OpenApi.Kiota",
+    "version": "1.34.1",
+    "hash": "sha256-SqFPEtVz1WROsWe4N8T6ENfXt+xKZjS4vEAmJp+adnE="
+  },
+  {
+    "pname": "Std.UriTemplate",
+    "version": "2.0.8",
+    "hash": "sha256-0f3ydgUE2KDzzHmN4FREzXLDrPJgLZemx917muHX90k="
+  },
+  {
+    "pname": "System.CommandLine",
+    "version": "2.0.10",
+    "hash": "sha256-iljDXiGjtA+w9kLHLtyRSm67VvRnTKiQSfPUTNt2BUE="
+  }
+]
