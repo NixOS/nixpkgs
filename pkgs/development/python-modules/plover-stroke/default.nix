@@ -15,14 +15,14 @@ buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "plover-stroke";
-  version = "1.1.0";
+  version = "1.1.0.dev0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstenoproject";
     repo = "plover_stroke";
     tag = finalAttrs.version;
-    hash = "sha256-A75OMzmEn0VmDAvmQCp6/7uptxzwWJTwsih3kWlYioA=";
+    hash = "sha256-R/q7xL2zU7RdywHEcXW2tYbu89bfgCxBrB9DAKFurPU=";
   };
 
   build-system = [ setuptools ];
