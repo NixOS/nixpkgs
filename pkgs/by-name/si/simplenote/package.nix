@@ -8,11 +8,11 @@
 
 let
   pname = "simplenote";
-  version = "2.27.1";
+  version = "2.27.2-md-editor-wysiwyg.1";
 
   src = fetchurl {
     url = "https://github.com/Automattic/simplenote-electron/releases/download/v${version}/Simplenote-linux-${version}-x86_64.AppImage";
-    hash = "sha512-jf9mnmf+5Xcowxgx7uizWVmv88gPdYwojQ2f+xhbqnXaHD3dSbcW2YdxiV3qjmFsRzUgwZvBVOGpOMvnSHuQDA==";
+    hash = "sha256-l8xqWev77dcME9S+5H2Tr7K31pR9WqoIzbMhTMXkkM0=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
