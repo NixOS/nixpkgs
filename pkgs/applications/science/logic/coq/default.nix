@@ -147,6 +147,7 @@ let
     ocamlPackages.ocaml
     ocamlPackages.findlib
   ]
+  ++ lib.optional (!coqAtLeast "8.10") ocamlPackages.camlp5
   ++ lib.optional (coqAtLeast "8.14") dune;
   ocamlBuildInputs = [
     ocamlPackages.findlib
