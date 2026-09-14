@@ -229,6 +229,7 @@ in
       restartTriggers = [ configFile ];
       serviceConfig = {
         DynamicUser = true;
+        SupplementaryGroups = [ "avahi-snapserver" ];
         ExecStart = toString [
           (lib.getExe' cfg.package "snapserver")
           "--daemon"
@@ -255,6 +256,24 @@ in
       ]
       ++ lib.optional (cfg.openFirewall && cfg.settings.tcp-control.enabled) cfg.settings.tcp-control.port
       ++ lib.optional (cfg.openFirewall && cfg.settings.http.enabled) cfg.settings.http.port;
+
+    users.groups.avahi-snapserver = { };
+
+    # Add D-Bus policy for avahi
+    services.dbus.packages = [
+      (pkgs.writeTextDir "share/dbus-1/system.d/snapserver.conf" ''
+        <!DOCTYPE busconfig PUBLIC
+          "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
+          "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+
+        <busconfig>
+          <policy group="avahi-snapserver">
+              <allow send_destination="org.freedesktop.Avahi"/>
+              <allow receive_sender="org.freedesktop.Avahi"/>
+          </policy>
+        </busconfig>
+      '')
+    ];
   };
 
   meta = {
