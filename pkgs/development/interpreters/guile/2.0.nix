@@ -5,7 +5,6 @@
   fetchpatch,
   boehmgc,
   buildPackages,
-  coverageAnalysis ? null,
   gawk,
   gmp,
   libffi,
@@ -15,18 +14,15 @@
   pkg-config,
   pkgsBuildBuild,
   readline,
+  guileImportsCheckHook,
 }:
 
-let
-  # Do either a coverage analysis build or a standard build.
-  builder = if coverageAnalysis != null then coverageAnalysis else stdenv.mkDerivation;
-in
-builder rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile";
   version = "2.0.13";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
+    url = "mirror://gnu/guile/guile-${finalAttrs.version}.tar.xz";
     sha256 = "12yqkr974y91ylgw6jnmci2v90i90s7h9vxa4zk0sai8vjnz4i1p";
   };
 
@@ -62,6 +58,9 @@ builder rec {
     # flags, see below.
     libtool
     libunistring
+  ]
+  ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+    (guileImportsCheckHook.override { effectiveVersion = finalAttrs.passthru.effectiveVersion; })
   ];
 
   enableParallelBuilding = true;
@@ -81,7 +80,6 @@ builder rec {
       sha256 = "0p6c1lmw1iniq03z7x5m65kg3lq543kgvdb4nrxsaxjqf3zhl77v";
     })
   ]
-  ++ (lib.optional (coverageAnalysis != null) ./gcov-file-name.patch)
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ./filter-mkostemp-darwin.patch
     (fetchpatch {
@@ -136,14 +134,14 @@ builder rec {
   # make check doesn't work on darwin
   # On Linuxes+Hydra the tests are flaky; feel free to investigate deeper.
   doCheck = false;
-  doInstallCheck = doCheck;
+  doInstallCheck = finalAttrs.doCheck;
 
   setupHook = ./setup-hook-2.0.sh;
 
-  passthru = rec {
-    effectiveVersion = lib.versions.majorMinor version;
-    siteCcacheDir = "lib/guile/${effectiveVersion}/site-ccache";
-    siteDir = "share/guile/site/${effectiveVersion}";
+  passthru = {
+    effectiveVersion = lib.versions.majorMinor finalAttrs.version;
+    siteCcacheDir = "lib/guile/${finalAttrs.passthru.effectiveVersion}/site-ccache";
+    siteDir = "share/guile/site/${finalAttrs.passthru.effectiveVersion}";
   };
 
   meta = {
@@ -162,7 +160,7 @@ builder rec {
     maintainers = with lib.maintainers; [ ludo ];
     platforms = lib.platforms.all;
   };
-}
+})
 
 //
 
