@@ -17,10 +17,10 @@ mkRocqDerivation {
     in
     with versions;
     switch rocq-core.rocq-version [
-      (case (range "9.0" "9.3") "0.5.0")
+      (case (range "9.0" "9.3") "0.5.1")
     ] null;
   release = {
-    "0.5.0".hash = "sha256-pmK4gD5ccerjr2UVgwGIVbjH/RiXdYQq79/XFetiHZg=";
+    "0.5.1".hash = "sha256-QfEP4qBbP0FLoxnjLe26tmZCpMg7Xu/gk6OXxL6Fdc4=";
   };
   releaseRev = v: "rocqnavi." + v;
 
