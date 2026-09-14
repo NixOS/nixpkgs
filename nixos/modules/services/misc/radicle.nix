@@ -301,6 +301,25 @@ in
         };
       };
     };
+    declarativeSeeding = type = attrsOf (submodule {
+      options = {
+        enable = lib.mkEnableOption {
+          type = str;
+          description = "Enable declarative seeding. Beware, this would effectively unseed repositories seeded manually (using `rad seed`) and not declared.";
+        };
+        repositories = lib.mkOption {
+          type = with lib.types; listOf str;
+          description = "The list of repositories to seed.";
+          default = [ ];
+          example = [ "rad:z3gqcJUoA1n9HaHKufZs5FCSGazv5" ];
+        };
+      };
+    });
+    repositoriesToSeed = lib.mkOption {
+      type = with lib.types; listOf str;
+      default = [ ];
+      description = "List of repositories to seed";
+    };
   };
 
   config = lib.mkIf cfg.enable (
@@ -434,6 +453,43 @@ in
           })
         ]
       ))
+
+      (lib.mkIf cfg.declarativeSeeding.enable (
+        systemd.services = lib.optionalAttrs config.services.radicle.enable {
+          radicle-seed = {
+            bindsTo = [ "radicle-node.service" ];
+            after = [ "radicle-node.service" ];
+
+            path = [
+              config.services.radicle.package
+            ];
+
+            environment = env;
+
+            serviceConfig = {
+              User = config.users.users.radicle.name;
+              Group = config.users.groups.radicle.name;
+              Type = "oneshot";
+
+              ImportCredential = config.systemd.services.radicle-node.serviceConfig.ImportCredential or [ ];
+              LoadCredential = config.systemd.services.radicle-node.serviceConfig.LoadCredential or [ ];
+
+              ReadWritePaths = [ RAD_HOME ];
+              RuntimeDirectory = "radicle-seed";
+              WorkingDirectory = "/run/radicle-seed";
+              ExecStart = pkgs.writers.writeNu "radicle-seed" ''
+                let toSeed = ${''["'' + (builtins.concatStringsSep ''", "'' (lib.attrValues cfg.declatativeSeeding.repositories)) + ''"]''}
+                let seeded = ls $"(rad path)/storage" | get name | split column "/" | each { get column5 | $"rad:($in)" }
+
+                $toSeed | where $it not-in $seeded | each { |r| rad seed $r }
+                $seeded | where $it not-in $toSeed | each { |r| rad unseed $r }
+              '';
+            };
+
+            wantedBy = [ "multi-user.target" ];
+          };
+        }
+      )
     ]
   );
 
