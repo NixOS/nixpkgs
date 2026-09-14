@@ -13,6 +13,7 @@
   writableTmpDirAsHomeHook,
   writeShellScriptBin,
   zlib,
+  jq,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -190,7 +191,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       --replace-fail "python3 -c " "${python3.interpreter} -c "
   '';
 
-  setupHook = ./setup-hook.sh;
+  setupHook = replaceVars ./setup-hook.sh {
+    jqExe = lib.getExe jq;
+    hostPlatform = null;
+  };
   env.hostPlatform = stdenv.targetPlatform.system;
 
   meta = {
