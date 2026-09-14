@@ -1,7 +1,7 @@
-From c15715af2cfca6603241f4d414b68d43bd4acb98 Mon Sep 17 00:00:00 2001
+From 017ef8fd1f8635eb9927e0b3138611aa325823cb Mon Sep 17 00:00:00 2001
 From: tropf <tropf@noreply.codeberg.org>
 Date: Mon, 5 Aug 2024 21:26:13 +0200
-Subject: [PATCH 2/4] plugin invocation: use python script as entrypoint
+Subject: [PATCH 2/2] plugin invocation: use python script as entrypoint
 
 Ink/Stitch is invoked by calling a script with command line parameters.
 Depending on the distribution format, this is bundled into a standalone
@@ -30,5 +30,5 @@ index c4cbf6f0d..6d4774ec0 100755
          # Command tag and icons path
          if sys.platform == "win32":
 -- 
-2.49.0
+2.54.0
 

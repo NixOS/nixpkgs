@@ -2,29 +2,25 @@
   lib,
   python3,
   fetchFromGitHub,
-  fetchpatch,
   gettext,
 }:
 let
-  version = "3.2.2";
+  version = "3.3.0";
 
   dependencies = with python3.pkgs; [
-    pyembroidery
+    pystitch
     inkex
     wxpython
     networkx
     platformdirs
     shapely
     lxml
-    appdirs
     numpy
     jinja2
-    requests
     colormath2
     flask
     fonttools
     trimesh
-    scipy
     diskcache
     flask-cors
   ];
@@ -39,7 +35,8 @@ python3.pkgs.buildPythonApplication {
     owner = "inkstitch";
     repo = "inkstitch";
     tag = "v${version}";
-    hash = "sha256-6EVfjmTXEYgZta01amK8E6t5h2JBPfGGNnqfBG8LQfo=";
+    fetchSubmodules = true; # required to get the embedded fonts
+    hash = "sha256-vQL0Zgzfi3YHfh/WKbIg1ZaaboQQoFj+f5QBvdD9JYU=";
   };
 
   nativeBuildInputs = [
@@ -66,17 +63,8 @@ python3.pkgs.buildPythonApplication {
   '';
 
   patches = [
-    ./0001-force-frozen-true.patch
+    ./0001-force-frozen-True.patch
     ./0002-plugin-invocation-use-python-script-as-entrypoint.patch
-    ./0003-lazy-load-module-to-access-global_settings.patch
-    ./0004-enable-force-insertion-of-python-path.patch
-
-    # Fix compatibility with inkex 1.4
-    # https://github.com/inkstitch/inkstitch/pull/3825
-    (fetchpatch {
-      url = "https://github.com/inkstitch/inkstitch/commit/454b5ee1a00e9d4b96f5f057a8611da68a6cc796.patch";
-      hash = "sha256-nAs1rAr3lvN5Qwhj0I+7puM3R2X1NoHpB0ltvlwHDXA=";
-    })
   ];
 
   doCheck = false;
