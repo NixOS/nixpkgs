@@ -14,7 +14,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cuda-pathfinder";
-  version = "1.8.0";
+  version = "1.8.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
     owner = "NVIDIA";
     repo = "cuda-python";
     tag = "cuda-pathfinder-v${finalAttrs.version}";
-    hash = "sha256-BQstl5FMKuAeaH3cQXrU/+tDM0WYliYvbHeAw3LnaTg=";
+    hash = "sha256-FX2UtqDTunBubCXdaX3Ts9VpGgYRmgJV+mfIdaQDBM4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cuda_pathfinder";
