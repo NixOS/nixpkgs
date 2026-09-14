@@ -90859,9 +90859,9 @@
   "fetcher": "github",
   "repo": "pyluyten/emacs-nu",
   "unstable": {
-   "version": [
-    20250211,
-    1243
+  "version": [
+    20260913,
+    1919
    ],
    "deps": [
     "ace-window",
@@ -90871,8 +90871,8 @@
     "undo-tree",
     "which-key"
    ],
-   "commit": "6510bc3f22e921aeb8ef3190bca1f432acc2870e",
-   "sha256": "0i636xql6s9fg9ggs5a1j70bsn6qgabdhqdic8vmxy1sjggiv2g7"
+   "commit": "157c414bb451a84fc4add88c328da33ef76058fc",
+   "sha256": "0rlpazzkxa4jhq0a3gh314sfylc0n030a7m0miblj78hi6h7zw1r"
   }
  },
  {
