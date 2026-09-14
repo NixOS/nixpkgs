@@ -1,0 +1,50 @@
+From: Vasileios Papadimas <papadimas@protonmail.com>
+Date: Mon, 20 Jul 2026 12:00:00 +0300
+Subject: [PATCH] Fix undefined behavior in fixup iterators
+
+Taking the address of vector elements at index zero when the vector is
+empty, or at index size for the end iterator, is undefined behavior.
+Recent Clang versions exploit that undefined behavior and emit a trap for
+these implementations, causing ld64 to crash while processing synthesized
+Objective-C atoms.
+
+Use vector::data() to construct the iterator range without indexing outside
+the vector.
+
+Assisted-by: OpenAI Codex (gpt-5.6-sol high)
+---
+ src/ld/passes/dtrace_dof.cpp |  4 ++--
+ src/ld/passes/objc.cpp       | 16 ++++++++--------
+ 2 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/src/ld/passes/dtrace_dof.cpp b/src/ld/passes/dtrace_dof.cpp
+--- a/src/ld/passes/dtrace_dof.cpp
++++ b/src/ld/passes/dtrace_dof.cpp
+@@ -56,2 +56,2 @@ public:
+-	virtual ld::Fixup::iterator				fixupsBegin() const				{ return &_fixups[0]; }
+-	virtual ld::Fixup::iterator				fixupsEnd() const				{ return &_fixups[_fixups.size()]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const				{ return const_cast<ld::Fixup*>(_fixups.data()); }
++	virtual ld::Fixup::iterator				fixupsEnd() const				{ return const_cast<ld::Fixup*>(_fixups.data()) + _fixups.size(); }
+diff --git a/src/ld/passes/objc.cpp b/src/ld/passes/objc.cpp
+--- a/src/ld/passes/objc.cpp
++++ b/src/ld/passes/objc.cpp
+@@ -251,2 +251,2 @@ public:
+-	virtual ld::Fixup::iterator				fixupsBegin() const	{ return (ld::Fixup*)&_fixups[0]; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const	{ return (ld::Fixup*)&_fixups[_fixups.size()]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const	{ return const_cast<ld::Fixup*>(_fixups.data()); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const	{ return const_cast<ld::Fixup*>(_fixups.data()) + _fixups.size(); }
+@@ -298,2 +298,2 @@ public:
+-	virtual ld::Fixup::iterator				fixupsBegin() const	{ return (ld::Fixup*)&_fixups[0]; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const	{ return (ld::Fixup*)&_fixups[_fixups.size()]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const	{ return const_cast<ld::Fixup*>(_fixups.data()); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const	{ return const_cast<ld::Fixup*>(_fixups.data()) + _fixups.size(); }
+@@ -338,2 +338,2 @@ public:
+-	virtual ld::Fixup::iterator				fixupsBegin() const	{ return (ld::Fixup*)&_fixups[0]; }
+-	virtual ld::Fixup::iterator				fixupsEnd()	const	{ return (ld::Fixup*)&_fixups[_fixups.size()]; }
++	virtual ld::Fixup::iterator				fixupsBegin() const	{ return const_cast<ld::Fixup*>(_fixups.data()); }
++	virtual ld::Fixup::iterator				fixupsEnd()	const	{ return const_cast<ld::Fixup*>(_fixups.data()) + _fixups.size(); }
+@@ -382,2 +382,2 @@ public:
+-	virtual ld::Fixup::iterator			fixupsBegin() const	{ return (ld::Fixup*)&_fixups[0]; }
+-	virtual ld::Fixup::iterator			fixupsEnd()	const	{ return (ld::Fixup*)&_fixups[_fixups.size()]; }
++	virtual ld::Fixup::iterator			fixupsBegin() const	{ return const_cast<ld::Fixup*>(_fixups.data()); }
++	virtual ld::Fixup::iterator			fixupsEnd()	const	{ return const_cast<ld::Fixup*>(_fixups.data()) + _fixups.size(); }
