@@ -19,17 +19,29 @@
 
 buildGoModule (finalAttrs: {
   pname = "tracee";
-  version = "0.23.2";
+  version = "0.24.1";
 
-  # src = /home/tim/repos/tracee;
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = "tracee";
-    # project has branches and tags of the same name
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Rf1pa9e6t002ltg40xZZVpE5OL9Vl02Xcn2Ux0To408=";
+    hash = "sha256-TtSc5IfmDGu4BQv4HSumZEF5M2Gga/Svhri6tw3HybU=";
   };
-  vendorHash = "sha256-2+4UN9WB6eGzedogy5dMvhHj1x5VeUUkDM0Z28wKQgM=";
+  vendorHash = "sha256-c5w3lHReff5tD/l03moFfXOR7TzAG0OE/4ASYkjHUC4=";
+
+  proxyVendor = true;
+
+  preBuild = ''
+    go work init . cmd/traceectl api common types
+  '';
+
+  overrideModAttrs = (
+    _: {
+      preBuild = ''
+        go work init . cmd/traceectl api common types
+      '';
+    }
+  );
 
   patches = [
     ./0001-fix-do-not-build-libbpf.patch
@@ -83,7 +95,7 @@ buildGoModule (finalAttrs: {
 
     mkdir -p $out/bin $lib/lib/tracee $share/share/tracee
 
-    mv ./dist/{tracee,signatures} $out/bin/
+    mv ./dist/{tracee,traceectl,signatures} $out/bin/
     mv ./dist/tracee.bpf.o $lib/lib/tracee/
     mv ./cmd/tracee-rules/templates $share/share/tracee/
 
