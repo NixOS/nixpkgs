@@ -8,14 +8,11 @@
   setuptools,
 }:
 let
-  rev = "26780de81b8c14d48fe8d757c642086f2af2a66b";
-
   src = fetchFromGitHub {
     owner = "philippj";
     repo = "SteamworksPy";
-    inherit rev;
-    hash = "sha256-nSGkEP6tny/Kv2+YjldFCYrLe1jnKOTa+w1/KCpSLsU=";
-
+    rev = "c021d1c186084d22a21817fc4fe5fad1e1c20a7e";
+    hash = "sha256-pAl/utInHYZsqCjvVHTeQU4jOX/Vim9EEO6jIFhwz9w=";
   };
   steamworksSrc = fetchzip {
     url = "https://web.archive.org/web/20250527013243/https://partner.steamgames.com/downloads/steamworks_sdk_162.zip";
@@ -24,7 +21,7 @@ let
 
   library = stdenv.mkDerivation {
     pname = "steamworkspy-c";
-    version = rev;
+    version = "1.6.5-unstable-2026-06-18";
 
     unpackPhase = ''
       runHook preUnpack
@@ -48,7 +45,7 @@ in
 
 buildPythonPackage {
   pname = "steamworkspy";
-  version = rev;
+  version = "1.6.5-unstable-2026-06-18";
   pyproject = true;
 
   inherit src;
@@ -69,6 +66,8 @@ buildPythonPackage {
     ];
     # steamworksSrc is x86_64-linux only
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ weirdrock ];
+    maintainers = with lib.maintainers; [
+      adda
+    ];
   };
 }
