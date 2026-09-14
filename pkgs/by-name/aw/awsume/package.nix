@@ -3,12 +3,13 @@
   installShellFiles,
   fetchFromGitHub,
   python3Packages,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "awsume";
   version = "4.5.5";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trek10inc";
@@ -21,13 +22,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  build-system = with python3Packages; [ setuptools ];
+
   dependencies = with python3Packages; [
     colorama
     boto3
     psutil
     pluggy
     pyyaml
-    setuptools
   ];
 
   postPatch = ''
@@ -45,7 +47,18 @@ python3Packages.buildPythonApplication (finalAttrs: {
     rm -f $out/bin/awsume.bat
   '';
 
-  doCheck = false;
+  preCheck = ''
+    mkdir -p $NIX_BUILD_TOP/.home/.awsume
+
+    # required for test_safe_print.py
+    touch $NIX_BUILD_TOP/.home/.awsume/config.yaml
+  '';
+
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+    xmltodict
+  ];
 
   meta = {
     description = "Utility for easily assuming AWS IAM roles from the command line";
