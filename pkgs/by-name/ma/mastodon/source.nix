@@ -19,5 +19,5 @@ applyPatches {
       yarnMissingHashes = ./missing-hashes.json;
     };
   };
-  patches = [ ];
+  patches = patches ++ [ ];
 }

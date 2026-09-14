@@ -13,16 +13,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "texlyre";
-  version = "0.9.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "TeXlyre";
     repo = "texlyre";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sUyQYtTuE5bNEqxDw9DYT0KRiww7PmGnQ7CYt60EbSc=";
+    hash = "sha256-lMXnlH54V2DEDV23TCSebh+xCzTZHqy5PtIj1FYbRWA=";
   };
 
-  npmDepsHash = "sha256-bOhK7kQWY3QYri9S+WoD8VyZXTGK5gcK/ixpGeeP4hg=";
+  npmDepsHash = "sha256-Dvw4RSEWlTJfrNL+pgMsX1a0yihM+bKnRqFqeSSR454=";
 
   postPatch = ''
     sed -i 's/"version": ".*"/"version": "${finalAttrs.version}"/' package.json
@@ -71,24 +71,24 @@ buildNpmPackage (finalAttrs: {
     updateScript = ./update.sh;
     drawioEmbed = stdenvNoCC.mkDerivation (finalAttrs: {
       pname = "drawio-embed";
-      version = "30.2.2";
+      version = "31.4.4";
       src = fetchFromGitHub {
         owner = "TeXlyre";
         repo = "drawio-embed-mirror";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-bdOhviJl0P/+GSJKaHMbGoPf+uEhoX5GeyY6bGBOpCg=";
+        hash = "sha256-RcaoHnzXJq5ayL6e7vWPECjNbavDvKcRbLmToxsyz8E=";
       };
       dontBuild = true;
       installPhase = "cp -a . $out";
     });
     busytexAssets = stdenvNoCC.mkDerivation (finalAttrs: {
       pname = "busytex-assets";
-      version = "1.1.1";
+      version = "1.4.0";
       src = fetchFromGitHub {
         owner = "TeXlyre";
         repo = "texlyre-busytex";
         tag = "assets-v${finalAttrs.version}";
-        hash = "sha256-vlLoJw5EX6x3nTQvBC8hntDa5QKtY46eJSxJLJzs4EE=";
+        hash = "sha256-TRpfACtq11t1tJ9waavroujgnPLHyNp3i+F4DBYCwuY=";
       };
       dontBuild = true;
       installPhase = "cp -a . $out";

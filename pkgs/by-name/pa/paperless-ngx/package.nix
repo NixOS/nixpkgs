@@ -180,6 +180,7 @@ python.pkgs.buildPythonApplication rec {
     "drf-spectacular-sidecar"
     "python-dotenv"
     "gotenberg-client"
+    "nltk"
     "redis"
     "scikit-learn"
     "tika-client"
