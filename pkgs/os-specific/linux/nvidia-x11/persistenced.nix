@@ -1,28 +1,28 @@
-nvidia_x11: sha256:
-
 {
   stdenv,
   lib,
-  fetchFromGitHub,
+  fetchFromGithubOrNvidia,
   buildPackages,
   m4,
   pkg-config,
   addDriverRunpath,
   libtirpc,
+  version,
+  hash,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nvidia-persistenced";
-  version = nvidia_x11.persistencedVersion;
+  inherit version;
 
-  src = fetchFromGitHub {
+  src = fetchFromGithubOrNvidia {
     owner = "NVIDIA";
     repo = "nvidia-persistenced";
-    rev = nvidia_x11.persistencedVersion;
-    inherit sha256;
+    tag = finalAttrs.version;
+    inherit hash;
   };
 
-  env = lib.optionalAttrs (lib.versionOlder nvidia_x11.persistencedVersion "450.51") {
+  env = lib.optionalAttrs (lib.versionOlder finalAttrs.version "450.51") {
     NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
     NIX_LDFLAGS = toString [ "-ltirpc" ];
   };
@@ -61,8 +61,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/NVIDIA/nvidia-persistenced";
     description = "NVIDIA driver persistence daemon";
     license = lib.licenses.mit;
-    platforms = nvidia_x11.meta.platforms;
     maintainers = [ ];
     mainProgram = "nvidia-persistenced";
   };
-}
+})
