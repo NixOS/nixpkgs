@@ -23,7 +23,10 @@ buildGoModule (finalAttrs: {
   ];
   buildInputs = cbconvert.buildInputs ++ [ gtk3 ];
 
-  vendorHash = "sha256-oMW5zfAw2VQSVaB+Z1pE51OtNIFr+PnRMM+oBYNLWxk=";
+  env.GOWORK = "off";
+
+  proxyVendor = true;
+  vendorHash = "sha256-jG8pQdY01MMCumNLBiHdgZ1pvp653WWaUCXD/gEuSpk=";
   modRoot = "cmd/cbconvert-gui";
 
   ldflags = [

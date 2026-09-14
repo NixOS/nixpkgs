@@ -4,7 +4,7 @@
   fetchFromGitHub,
   glib,
   gjs,
-  typescript_5,
+  typescript_7,
   unstableGitUpdater,
 }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     glib
     gjs
-    typescript_5
+    typescript_7
   ];
 
   buildInputs = [ gjs ];
