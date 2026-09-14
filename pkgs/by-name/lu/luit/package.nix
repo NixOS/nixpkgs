@@ -31,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     update-source-version luit "$version"
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Filter between an arbitrary application and a UTF-8 terminal emulator converting the output and input between the locale's encoding and UTF-8";
     homepage = "https://invisible-island.net/luit/";
