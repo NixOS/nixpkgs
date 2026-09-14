@@ -10,8 +10,8 @@
         "lts": true
     },
     "5.15": {
-        "version": "5.15.220",
-        "hash": "sha256:08v7mbwvfgy9vv60j2ssdks4ss218p27rkwwrmjch2hj0ljrkcmm",
+        "version": "5.15.221",
+        "hash": "sha256:130ll4gnj2779kpx8x4r6v28vnwjn4qdw9ksaq3f5vr8wphq4y60",
         "lts": true
     },
     "5.10": {
