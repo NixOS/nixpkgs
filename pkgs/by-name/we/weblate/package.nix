@@ -50,7 +50,7 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "weblate";
-  version = "2026.6.1";
+  version = "2026.9.1";
   pyproject = true;
 
   outputs = [
@@ -62,7 +62,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "WeblateOrg";
     repo = "weblate";
     tag = "weblate-${finalAttrs.version}";
-    hash = "sha256-7dhEkU2sVIjMPPR/0U2sMFXG6bl8s5WDvw8MyZZhqNE=";
+    hash = "sha256-T28Qq4iAjm14Lj2i1+db9mpCw7BOSLNbygrbnuViI3U=";
   };
 
   postPatch = ''
