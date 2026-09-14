@@ -135,7 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.strings.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
     (lib.strings.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     "-DLINALG=Manual"
-    (lib.strings.cmakeBool "DGA" enableMpi)
+    (lib.strings.cmakeBool "GA" enableMpi)
     (lib.strings.cmakeBool "MPI" enableMpi)
   ];
 
