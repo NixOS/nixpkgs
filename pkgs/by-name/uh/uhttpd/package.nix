@@ -15,12 +15,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uhttpd";
-  version = "0-unstable-2025-12-24";
+  version = "0-unstable-2026-08-03";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/uhttpd.git";
-    rev = "506e24987b97fbc866005bfb71316bd63601a1ef";
-    hash = "sha256-x5hbbEcyxWhCjjqiHvAxvI1eHewqRlXuAGqXNw+c4sA=";
+    rev = "60f64bec40c8113cf09815ec377761b1f4f95f22";
+    hash = "sha256-T0Ko/oS4biz+No6r+a1Ke9+CC1d2DHb0FqQfbJ44YQw=";
   };
 
   nativeBuildInputs = [
