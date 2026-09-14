@@ -9,11 +9,11 @@
 let
   appName = "LibreOffice.app";
   scriptName = "soffice";
-  version = "26.2.4";
+  version = "26.2.5";
 
   dist = {
     url = "https://download.documentfoundation.org/libreoffice/stable/${version}/mac/aarch64/LibreOffice_${version}_MacOS_aarch64.dmg";
-    sha256 = "64e0ad05564554eeee639d49b08b20908a38d4722ec95f1620d05c99bcbe9fb1";
+    sha256 = "sha256-yZ+0/ldEN/xMuCCkyhUnG8oyWSCGH3E5hYs21/nfeK0=";
   };
 in
 stdenvNoCC.mkDerivation {
