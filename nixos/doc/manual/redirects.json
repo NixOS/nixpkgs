@@ -1,4 +1,7 @@
 {
+  "module-services-comfyui": [
+    "index.html#module-services-comfyui"
+  ],
   "module-services-portmaster": [
     "index.html#module-services-portmaster"
   ],
