@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  useMoldLinker,
   fetchFromGitHub,
   gitMinimal,
   makeBinaryWrapper,
@@ -42,8 +43,11 @@ let
       version = devenvNixVersion;
     }
   );
+  buildRustPackage = rustPlatform.buildRustPackage.override {
+    stdenv = if stdenv.hostPlatform.isLinux then useMoldLinker stdenv else stdenv;
+  };
 in
-rustPlatform.buildRustPackage {
+buildRustPackage {
   pname = "devenv";
   inherit version;
 
