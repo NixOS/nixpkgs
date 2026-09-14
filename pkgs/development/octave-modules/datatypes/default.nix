@@ -10,13 +10,13 @@
 
 buildOctavePackage rec {
   pname = "datatypes";
-  version = "1.3.4";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "pr0m1th3as";
     repo = "datatypes";
     tag = "release-${version}";
-    sha256 = "sha256-D1iWQmn7/v4QcCkFP6Th+aHmGh3dUg1Obe7qC7CYQ7w=";
+    sha256 = "sha256-aKY8SDCZHSkIlA4M6iAmXkl8kP+CANedNnvJOjgw+7U=";
   };
 
   nativeOctavePkgTestInputs = [
