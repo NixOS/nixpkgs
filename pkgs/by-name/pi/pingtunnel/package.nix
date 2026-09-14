@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "pingtunnel";
-  version = "2.8";
+  version = "2.9";
 
   src = fetchFromGitHub {
     owner = "esrrhs";
     repo = "pingtunnel";
     rev = finalAttrs.version;
-    hash = "sha256-qkIeE6gNBUUd5/IhcKhDmXZbzeSTR0r6qCAK/Nz7Kew=";
+    hash = "sha256-KBDqrpS96RHz9irNBGRTqGe7u5/FK2gPy3/h+UDgBlw=";
   };
 
-  vendorHash = "sha256-SkBHFvQn3Q6fl/d1npEspTYhq1YrnusXNWr/Ky4bv64=";
+  vendorHash = "sha256-k98rCkjML0XtYUXq6E1HuskYQ+sENE9KaqS0U197H10=";
 
   ldflags = [
     "-s"
