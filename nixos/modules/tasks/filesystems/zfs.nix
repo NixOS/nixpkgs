@@ -382,6 +382,18 @@ in
         '';
       };
 
+      exportAllByShutdown = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Export all ZFS pool(s) before shutting down.
+
+          This allows other systems OS to import the ZFS pools
+          after NixOS's clean shutdown.
+          It requires all datasets to be unmounted before shutdown.
+        '';
+      };
+
       requestEncryptionCredentials = lib.mkOption {
         type = lib.types.either lib.types.bool (lib.types.listOf lib.types.str);
         default = true;
@@ -917,7 +929,10 @@ in
             lib.nameValuePair "zfs-sync-${pool}" {
               description = "Sync ZFS pool \"${pool}\"";
               wantedBy = [ "shutdown.target" ];
-              before = [ "final.target" ];
+              before = [
+                "zfs-export-${pool}.service"
+                "final.target"
+              ];
               unitConfig = {
                 DefaultDependencies = false;
               };
@@ -927,6 +942,35 @@ in
               };
               script = ''
                 ${cfgZfs.package}/sbin/zfs set nixos:shutdown-time="$(date)" "${pool}"
+              '';
+            };
+
+          # Export ZFS pools prior to poweroff
+          createExportService =
+            pool:
+            lib.nameValuePair "zfs-export-${pool}" {
+              description = "Export ZFS pool \"${pool}\"";
+              wantedBy = [ "shutdown.target" ];
+              before = [
+                "final.target"
+              ];
+              after = [
+                "zfs-sync-${pool}.service"
+              ];
+              unitConfig = {
+                DefaultDependencies = false;
+              };
+              serviceConfig = {
+                Type = "oneshot";
+                RemainAfterExit = true;
+                StandardOutput = "journal";
+                StandardError = "journal";
+              };
+              script = ''
+                ${cfgZfs.package}/sbin/zfs export "${pool}" || {
+                  # Tolerate and inform failed `zfs export`
+                  echo "Warning: Failed to export pool ${pool}. Some datasets may still be mounted." >&2
+                }
               '';
             };
 
@@ -941,6 +985,7 @@ in
         lib.listToAttrs (
           map createImportService' dataPools
           ++ map createSyncService allPools
+          ++ lib.optionals cfgZfs.exportAllByShutdown (map createExportService allPools)
           ++ map createZfsService [
             "zfs-mount"
             "zfs-share"
