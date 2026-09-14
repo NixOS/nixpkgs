@@ -14,10 +14,17 @@ src="$(nix-build . --no-out-link -A coreboot-toolchain.i386.src)"
 urls=$("${src}/util/crossgcc/buildgcc" -u)
 
 tmp=$(mktemp)
-echo '{ fetchurl }: [' >"$tmp"
 
+cat <<EOF >>"$tmp"
+{ fetchurl }:
+[
+EOF
+
+# Can have duplicates, which will break build
+duplicates=()
 for url in $urls; do
     name="$(basename "$url")"
+    [[ " ${duplicates[*]} " =~ ${name} ]] && continue || duplicates+=("$name")
     hash="$(nix-prefetch-url "$url")"
 
     cat <<EOF >>"$tmp"
@@ -35,4 +42,4 @@ echo ']' >>"$tmp"
 
 sed -i -e 's/https\:\/\/ftpmirror\.gnu\.org/mirror\:\/\/gnu/g' "$tmp"
 
-mv "$tmp" "${pkg_dir}/sources.nix"
+mv -f "$tmp" "${pkg_dir}/stable.nix"
