@@ -48,6 +48,8 @@ in
         description = ''
           Whether to open the firewall ports required for Omada devices to communicate
           with the Omada Software Controller (discovery, adoption, management, etc.).
+          This includes the HTTPS ports 8043 and 8044 that adopted devices download
+          firmware images from; 8043 is also the web interface port.
         '';
       };
 
@@ -55,7 +57,8 @@ in
         type = lib.types.bool;
         default = false;
         description = ''
-          Whether to open the firewall ports of the web interface (8043, 8088).
+          Whether to open the firewall ports of the web interface (8043, 8088) and
+          the captive portal (8843).
         '';
       };
     };
@@ -101,7 +104,11 @@ in
         StandardInput = "data";
         StandardInputText = "y";
         Type = "forking";
-        TimeoutSec = 300;
+        TimeoutStartSec = 300;
+        # The control script waits 30 seconds for a graceful stop, another 30
+        # seconds after SIGTERM, and then sends SIGKILL itself, so systemd only
+        # needs a little headroom beyond that.
+        TimeoutStopSec = 90;
         RuntimeDirectory = "omada";
         RuntimeDirectoryMode = "0755";
         PIDFile = "/run/omada/omada.pid";
@@ -123,6 +130,8 @@ in
       ];
       allowedTCPPorts =
         lib.optionals cfg.openFirewallDevicePorts [
+          8043 # firmware download for APs and gateways (upgrade.https.port)
+          8044 # firmware download for switches (upgrade.es.https.port)
           29811 # management port
           29812 # adoption port
           29813 # upgrade port
@@ -134,6 +143,7 @@ in
         ++ lib.optionals cfg.openFirewallWebPorts [
           8043 # web port (HTTPS)
           8088 # web port (HTTP)
+          8843 # portal port (HTTPS)
         ];
     };
   };
