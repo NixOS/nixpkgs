@@ -128,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
   # plugins are installed by cloning their repos
   postFixup = ''
     wrapProgram $out/bin/noctalia \
-      --prefix PATH : ${lib.makeBinPath [ gitMinimal ]}
+      --suffix PATH : ${lib.makeBinPath [ gitMinimal ]}
   '';
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
