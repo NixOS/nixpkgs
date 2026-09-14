@@ -20,10 +20,10 @@ buildKodiBinaryAddon rec {
   };
 
   extraCMakeFlags = [
-    "-DNESTOPIA_LIB=${nestopia}/lib/retroarch/cores/nestopia_libretro.so"
+    "-DNESTOPIA_LIB=${lib.getLib nestopia}/lib/retroarch/cores/nestopia_libretro.so"
   ];
 
-  extraBuildInputs = [ nestopia ];
+  extraBuildInputs = [ (lib.getLib nestopia) ];
   propagatedBuildInputs = [
     libretro
   ];
