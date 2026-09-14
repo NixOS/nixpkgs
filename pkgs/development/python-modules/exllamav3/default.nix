@@ -22,18 +22,28 @@
   typing-extensions,
 }:
 let
-  newerThanTuring = lib.filter (version: lib.versionOlder "7.9" version) torch.cudaCapabilities;
+  # https://github.com/turboderp-org/exllamav3/blob/master/.github/workflows/build.yml#L55
+  # https://github.com/turboderp-org/exllamav3/issues/44
+  # Using unsupported platforms the build will fail
+  cudaCapabilities = lib.intersectLists torch.cudaCapabilities [
+    "8.0"
+    "8.6"
+    "8.9"
+    "9.0"
+    "10.0"
+    "12.0"
+  ];
 in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "exllamav3";
-  version = "1.4.8";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "turboderp-org";
     repo = "exllamav3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CnbJR5rsHzNEeQBJLdD7LGrrTgy+GKpvop1R4uY4d8U=";
+    hash = "sha256-gW6A2nWx3lumnJz7r7vxQyC1qM9Agqdr0DiL68yJvAI=";
   };
 
   pythonRelaxDeps = [
@@ -57,7 +67,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   ];
 
   dependencies = [
-    flash-linear-attention
+    flash-linear-attention # Upstream vendors it instead
     llguidance
     marisa-trie
     numpy
@@ -73,9 +83,9 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
   env = lib.optionalAttrs torch.cudaSupport {
     CUDA_HOME = lib.getDev cudaPackages.cuda_nvcc;
-    # exllamav3 only supports turing or newer GPUs
-    # https://github.com/turboderp-org/exllamav3/issues/44
-    TORCH_CUDA_ARCH_LIST = lib.concatStringsSep ";" newerThanTuring;
+    TORCH_CUDA_ARCH_LIST = lib.concatStringsSep ";" (
+      cudaCapabilities ++ [ "${lib.last cudaCapabilities}+PTX" ]
+    );
   };
 
   pythonImportsCheck = [ "exllamav3" ];
