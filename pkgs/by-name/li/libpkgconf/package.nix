@@ -12,12 +12,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkgconf";
-  version = "2.5.1";
+  version = "3.0.7";
 
   # fetchFromGitHub isn't used because it's unavailable during bootstrapping
   src = fetchurl {
     url = "https://github.com/pkgconf/pkgconf/archive/refs/tags/pkgconf-${finalAttrs.version}.tar.gz";
-    hash = "sha256-eXIbrcrRmH3q2cNgnrSHerm1iCHAa9rLgk8siJfBHyo=";
+    hash = "sha256-qa5niHl3H88VJHrCQ1562DCL6KWSGJjmcgs7iUlBD3M=";
   };
 
   outputs = [
