@@ -1,0 +1,66 @@
+diff --git a/orbit/pkg/user/user_linux.go b/orbit/pkg/user/user_linux.go
+--- a/orbit/pkg/user/user_linux.go
++++ b/orbit/pkg/user/user_linux.go
+@@ -14,6 +14,9 @@ import (
+ 	"github.com/rs/zerolog/log"
+ )
+ 
++// loginctlPath may be set at build time when loginctl is not available on PATH.
++var loginctlPath = "loginctl"
++
+ type User struct {
+ 	Name string
+ 	ID   int64
+@@ -71,7 +74,7 @@ func LoggedInGuiUser() (*User, error) {
+ // getLoginUsers returns all logged-in users as reported by
+ // `loginctl list-users`.
+ func getLoginUsers() ([]User, error) {
+-	out, err := exec.Command("loginctl", "list-users", "--no-legend", "--no-pager").CombinedOutput()
++	out, err := exec.Command(loginctlPath, "list-users", "--no-legend", "--no-pager").CombinedOutput()
+ 	if err != nil {
+ 		return nil, fmt.Errorf("loginctl list-users exec failed: %w, output: %s", err, string(out))
+ 	}
+@@ -120,3 +123,3 @@ func GetUserDisplaySessionType(uid string) (*UserDisplaySession, error) {
+ 	// Get the "Display" session ID of the user.
+-	cmd := exec.Command("loginctl", "show-user", uid, "-p", "Display", "--value")
++	cmd := exec.Command(loginctlPath, "show-user", uid, "-p", "Display", "--value")
+ 	var stdout bytes.Buffer
+@@ -130,7 +133,7 @@ func GetUserDisplaySessionType(uid string) (*UserDisplaySession, error) {
+ 	}
+ 
+ 	// Get the "Type" of session.
+-	cmd = exec.Command("loginctl", "show-session", guiSessionID, "-p", "Type", "--value")
++	cmd = exec.Command(loginctlPath, "show-session", guiSessionID, "-p", "Type", "--value")
+ 	stdout.Reset()
+ 	cmd.Stdout = &stdout
+ 	if err := cmd.Run(); err != nil {
+@@ -151,7 +154,7 @@ func GetUserDisplaySessionType(uid string) (*UserDisplaySession, error) {
+ 	}
+ 
+ 	// Get the "Active" property of the session.
+-	cmd = exec.Command("loginctl", "show-session", guiSessionID, "-p", "Active", "--value")
++	cmd = exec.Command(loginctlPath, "show-session", guiSessionID, "-p", "Active", "--value")
+ 	stdout.Reset()
+ 	cmd.Stdout = &stdout
+ 	if err := cmd.Run(); err != nil {
+diff --git a/orbit/pkg/user/user_linux_test.go b/orbit/pkg/user/user_linux_test.go
+--- a/orbit/pkg/user/user_linux_test.go
++++ b/orbit/pkg/user/user_linux_test.go
+@@ -3,6 +3,7 @@
+ package user
+ 
+ import (
++	"os/exec"
+ 	"testing"
+ 
+ 	"github.com/stretchr/testify/assert"
+@@ -81,3 +82,9 @@ func TestParseLoginctlUsersOutput(t *testing.T) {
+ 		})
+ 	}
+ }
++
++func TestGetLoginUsersDoesNotDependOnPATH(t *testing.T) {
++	t.Setenv("PATH", t.TempDir())
++	_, err := getLoginUsers()
++	require.NotErrorIs(t, err, exec.ErrNotFound)
++}
