@@ -1004,6 +1004,7 @@
   ./services/misc/shoko.nix
   ./services/misc/snapper.nix
   ./services/misc/soft-serve.nix
+  ./services/misc/soularr.nix
   ./services/misc/spice-autorandr.nix
   ./services/misc/spice-vdagentd.nix
   ./services/misc/spice-webdavd.nix
