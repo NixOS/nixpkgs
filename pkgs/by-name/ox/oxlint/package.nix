@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_10_latest,
   nodejs_24,
   nodejs-slim,
   rustPlatform,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 3;
     hash = "sha256-C2WEaxluYXmBl4UG4V444lWeKa7+7zcsY3B7Dz7nEqA=";
   };
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeBinaryWrapper
     nodejs_24
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
     rustPlatform.cargoSetupHook
     rustc
   ];

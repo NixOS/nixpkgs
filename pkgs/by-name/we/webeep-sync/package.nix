@@ -1,7 +1,7 @@
 {
   stdenvNoCC,
   fetchFromGitHub,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   writableTmpDirAsHomeHook,
@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
     writableTmpDirAsHomeHook
     makeWrapper
     nodejs
@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     hash = "sha256-IuI1asHqq2n1/hqf1NlRUG5/GU7HTLKCjalNooyPcO4=";
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 3;
   };
 

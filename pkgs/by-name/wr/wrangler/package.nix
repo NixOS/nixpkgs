@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   nodejs,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   autoPatchelfHook,
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       postPatch
       ;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 3;
     hash = "sha256-bc/L3bQl2BlcoqpTGBrFbGNl8IeRPoV65EVykAa8euA=";
   };
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
     jq
     moreutils
   ]

@@ -10,7 +10,7 @@
   nodejs,
   openssl,
   pkg-config,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   rustc,
@@ -81,7 +81,7 @@ let
         pname
         version
         ;
-      pnpm = pnpm_10;
+      pnpm = pnpm_10_latest;
       fetcherVersion = 3;
       hash = pnpmHash;
     };
@@ -91,7 +91,7 @@ let
       cargo
       nodejs
       pnpmConfigHook
-      pnpm_10
+      pnpm_10_latest
       rustc
       rustc.llvmPackages.lld
       rustPlatform.cargoSetupHook

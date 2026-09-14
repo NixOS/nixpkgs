@@ -4,7 +4,7 @@
   buildGo127Module,
   stdenvNoCC,
   nodejs,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
@@ -64,11 +64,11 @@ buildGo127Module (finalAttrs: {
       nodejs
       pnpmConfigHook
       pnpmBuildHook
-      pnpm_10
+      pnpm_10_latest
     ];
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
-      pnpm = pnpm_10;
+      pnpm = pnpm_10_latest;
       fetcherVersion = 4;
       hash = "sha256-KswQQVz2Xw/dG21134SObM3mQAKP2IHc+UM/BX/dvrI=";
     };
