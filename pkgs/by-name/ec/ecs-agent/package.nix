@@ -32,7 +32,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/aws/amazon-ecs-agent/raw/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ RumBugen ];
     mainProgram = "agent";
   };
 })

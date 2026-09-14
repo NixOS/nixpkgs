@@ -76,6 +76,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     mainProgram = "npb";
     homepage = "https://github.com/samestep/npb";
+    changelog = "https://github.com/samestep/npb/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       samestep
