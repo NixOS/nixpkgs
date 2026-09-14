@@ -1,0 +1,14 @@
+--- a/pipe/linux/CMakeLists.txt
++++ b/pipe/linux/CMakeLists.txt
+@@ -99,10 +99,7 @@
+     #       setting GIT_DIR=. which fucks this up. So we have to write our own
+     #       DOWNLOAD_COMMAND which explicitly unsets GIT_DIR to solve that.
+     #GIT_REPOSITORY https://github.com/vanilla-wiiu/drc-hostap.git
+-    DOWNLOAD_COMMAND
+-        ${CMAKE_COMMAND} -E remove_directory "${HOSTAP_DIR}" &&
+-        ${CMAKE_COMMAND} -E env --unset=GIT_DIR -- ${GIT_EXECUTABLE} clone https://github.com/vanilla-wiiu/drc-hostap.git "${HOSTAP_DIR}" &&
+-        ${CMAKE_COMMAND} -E env --unset=GIT_DIR -- ${GIT_EXECUTABLE} -C "${HOSTAP_DIR}" checkout 257096accc39f9c2750a7718ff5751108d15f668
++    DOWNLOAD_COMMAND ${CMAKE_COMMAND} -E copy_directory @DRC_HOSTAP_SRC@ "${HOSTAP_DIR}"
+     CONFIGURE_COMMAND ${CMAKE_COMMAND} -E copy_if_different conf/wpa_supplicant.config wpa_supplicant/.config
+     BUILD_COMMAND env ${HOSTAP_ENV} make -C wpa_supplicant -j${CMAKE_BUILD_PARALLEL_LEVEL} libwpa_supplicant.a libwpa_client.a
+     INSTALL_COMMAND ""
