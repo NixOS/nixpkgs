@@ -7863,8 +7863,6 @@ with pkgs;
     }
   );
 
-  rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
-
   sgx-psw = callPackage ../os-specific/linux/sgx/psw {
     protobuf = protobuf_33;
   };
