@@ -1172,6 +1172,7 @@ in
   monica = runTest ./web-apps/monica.nix;
   moodle = runTest ./moodle.nix;
   moonraker = runTest ./moonraker.nix;
+  moonshine = runTest ./moonshine.nix;
   moosefs = runTest ./moosefs.nix;
   mopidy = runTest ./mopidy.nix;
   morph-browser = discoverTests (import ./morph-browser.nix);

@@ -7,13 +7,30 @@
 
 let
   cfg = config.services.moonshine;
-  tomlFormat = pkgs.formats.toml { };
-  configFile = tomlFormat.generate "moonshine-config.toml" cfg.settings;
+  settingsFormat = pkgs.formats.toml { };
+  configFile = settingsFormat.generate "moonshine-config.toml" cfg.settings;
+  runtimeDir = "/run/user/${toString cfg.uid}";
 
-  runScript = pkgs.writeShellScriptBin "moonshine-server" ''
-    export XDG_RUNTIME_DIR="''${XDG_RUNTIME_DIR:-/run/user/$(${lib.getExe' pkgs.coreutils "id"} -u)}"
-    export DBUS_SESSION_BUS_ADDRESS="''${DBUS_SESSION_BUS_ADDRESS:-unix:path=$XDG_RUNTIME_DIR/bus}"
-    exec ${lib.getExe cfg.package} ${configFile} "$@"
+  ports = {
+    tcp = [
+      (cfg.settings.webserver.port_https or 47984)
+      (cfg.settings.webserver.port or 47989)
+      (cfg.settings.stream.port or 48010)
+    ];
+    udp = [
+      5353 # mDNS
+      (cfg.settings.stream.video.port or 47998)
+      (cfg.settings.stream.control.port or 47999)
+      (cfg.settings.stream.audio.port or 48000)
+    ];
+  };
+
+  # Only the manifest belongs in the graphics driver path. It refers to the
+  # layer library in cfg.package by its absolute store path.
+  wsiLayer = pkgs.runCommand "moonshine-wsi-layer" { } ''
+    install -Dm644 \
+      ${cfg.package}/share/vulkan/implicit_layer.d/VkLayer_moonshine_wsi.json \
+      $out/share/vulkan/implicit_layer.d/VkLayer_moonshine_wsi.json
   '';
 in
 {
@@ -26,77 +43,57 @@ in
       type = lib.types.nonEmptyStr;
       example = "alice";
       description = ''
-        User under which to run Moonshine. The user must be declared separately
-        in {option}`users.users`. Lingering is enabled automatically so the
-        server can run without an active login session.
+        User under which to run Moonshine. The user must be declared in
+        {option}`users.users`. Lingering is enabled automatically.
+      '';
+    };
+
+    uid = lib.mkOption {
+      type = lib.types.nullOr lib.types.ints.unsigned;
+      default = config.users.users.${cfg.user}.uid or null;
+      defaultText = lib.literalExpression "config.users.users.<name>.uid";
+      example = 1000;
+      description = ''
+        Numeric uid of {option}`services.moonshine.user`. This is used for the
+        runtime directory and user systemd instance. Set it explicitly when
+        the user's uid is not declared in the NixOS configuration.
       '';
     };
 
     settings = lib.mkOption {
-      type = tomlFormat.type;
+      inherit (settingsFormat) type;
       default = { };
       example = lib.literalExpression ''
         {
           name = "my-desktop";
-          address = "0.0.0.0";
           application = [
             {
               title = "Steam";
-              command = [ "steam" "steam://open/bigpicture" ];
-            }
-          ];
-          application_scanner = [
-            {
-              type = "steam";
-              library = "$HOME/.local/share/Steam";
-              command = [ "steam" "-bigpicture" "steam://rungameid/{game_id}" ];
+              command = [ "/run/current-system/sw/bin/steam" "steam://open/bigpicture" ];
             }
           ];
         }
       '';
       description = ''
         Moonshine configuration, generated as a TOML file in the Nix store.
-        See <https://github.com/hgaiser/moonshine/blob/main/moonshine-core/src/config.rs>
-        for the available settings and <https://github.com/hgaiser/moonshine#configuration> for some examples.
-
-        Do not leave this option empty: Moonshine's upstream defaults configure
-        Steam at {file}`/usr/bin/steam`, which does not exist on NixOS. Define
-        at least `application` with an executable in the Nix store, as shown in
-        the example. Setting `application` explicitly is sufficient;
-        `application_scanners` may be omitted.
-
-        Moonshine stores {file}`cert.pem` and {file}`key.pem` in
-        {file}`~/.config/moonshine/`, and paired-client state in
-        {file}`~/.local/share/moonshine/state.toml` for the configured user.
-
-        Since the service runs without a desktop session, its notification
-        action cannot reliably open the pairing page. Pair clients by visiting
-        {file}`http://<host>:47989/pin` in a browser instead.
+        See <https://github.com/hgaiser/moonshine#configuration> for available
+        settings. Upstream's default application uses `/usr/bin/steam`, so an
+        application with a NixOS executable path should normally be specified.
       '';
     };
 
-    extraPackages = lib.mkOption {
-      type = lib.types.listOf lib.types.package;
-      default = [ ];
-      example = lib.literalExpression "[ pkgs.steam ]";
-      description = ''
-        Packages added to the service's {env}`PATH` for applications launched
-        by Moonshine.
-      '';
+    logFilter = lib.mkOption {
+      type = lib.types.str;
+      default = "moonshine=info";
+      description = "Value of the `MOONSHINE_LOG` tracing filter.";
     };
 
-    environment = lib.mkOption {
-      type = lib.types.attrsOf lib.types.str;
-      default = { };
-      example = {
-        MESA_VK_DEVICE_SELECT = "10de:25a2!";
-      };
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
       description = ''
-        Environment variables set for Moonshine.
-
-        ::: {.note}
-        Those are not inherited by launched applications.
-        :::
+        Open the configured GameStream ports on all interfaces. Moonshine is
+        not designed for public networks; expose it only on a LAN or VPN.
       '';
     };
 
@@ -108,9 +105,25 @@ in
         "wg0"
       ];
       description = ''
-        Network interfaces on which to open the Moonlight/GameStream ports.
-        The ports are not opened when this list is empty.
-        Moonshine is not designed for use on public networks. Do not expose Moonshine ports directly to the internet. See https://github.com/hgaiser/moonshine#security
+        Interfaces on which to open the configured GameStream ports. This is
+        a narrower alternative to {option}`services.moonshine.openFirewall`.
+      '';
+    };
+
+    extraPackages = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [ ];
+      example = lib.literalExpression "[ pkgs.steam ]";
+      description = "Packages added to the Moonshine service's executable search path.";
+    };
+
+    environment = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
+      default = { };
+      example.MESA_VK_DEVICE_SELECT = "10de:25a2!";
+      description = ''
+        Environment variables for the Moonshine daemon. These are not
+        inherited by applications launched through the user's systemd instance.
       '';
     };
   };
@@ -118,8 +131,17 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = lib.hasAttr cfg.user config.users.users;
-        message = "services.moonshine.user refers to undeclared user '${cfg.user}'.";
+        assertion =
+          config.users.users.${cfg.user}.isNormalUser || config.users.users.${cfg.user}.isSystemUser;
+        message = "services.moonshine.user must refer to a declared normal or system user.";
+      }
+      {
+        assertion = cfg.uid != null;
+        message = ''
+          services.moonshine.uid could not be derived because
+          users.users.${cfg.user}.uid is not set. Set services.moonshine.uid
+          explicitly or declare a fixed uid for the user.
+        '';
       }
     ];
 
@@ -130,51 +152,20 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    # Make the implicit WSI Vulkan layer available to launched applications.
     hardware.graphics = {
       enable = true;
-      extraPackages = [ cfg.package ];
+      extraPackages = [ wsiLayer ];
     };
-
-    networking.firewall.interfaces = lib.genAttrs cfg.firewallInterfaces (_: {
-      allowedTCPPorts = [
-        (cfg.settings.webserver.port_https or 47984)
-        (cfg.settings.webserver.port or 47989)
-        (cfg.settings.stream.port or 48010)
-      ];
-      allowedUDPPorts = [
-        5353 # moonshine has an embedded mDNS responder that does not conflict with avahi
-        (cfg.settings.stream.video.port or 47998)
-        (cfg.settings.stream.control.port or 47999)
-        (cfg.settings.stream.audio.port or 48000)
-      ];
-    });
 
     services.udev.packages = [ cfg.package ];
 
-    systemd.services.moonshine = {
-      description = "Streaming server using the NVIDIA GameStream / Moonlight protocol.";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      path = [ pkgs.xwayland ] ++ cfg.extraPackages;
-      environment = {
-        MOONSHINE_LOG = "moonshine=info";
-      }
-      // cfg.environment;
-      serviceConfig = {
-        User = cfg.user;
-        SupplementaryGroups = [ "moonshine" ];
-        ExecStart = lib.getExe runScript;
-        Restart = "on-failure";
-        RestartSec = 5;
-        DeviceAllow = [
-          "/dev/uinput rw"
-          "/dev/uhid rw"
-          "char-drm rw"
-          "char-nvidia rw"
-          "char-nvidia-uvm rw"
-        ];
-      };
+    networking.firewall = {
+      allowedTCPPorts = lib.mkIf cfg.openFirewall ports.tcp;
+      allowedUDPPorts = lib.mkIf cfg.openFirewall ports.udp;
+      interfaces = lib.genAttrs cfg.firewallInterfaces (_: {
+        allowedTCPPorts = ports.tcp;
+        allowedUDPPorts = ports.udp;
+      });
     };
 
     users = {
@@ -184,5 +175,46 @@ in
         extraGroups = [ "input" ];
       };
     };
+
+    systemd.services.moonshine = {
+      description = "Moonshine game streaming server";
+      wantedBy = [ "multi-user.target" ];
+      requires = [ "user@${toString cfg.uid}.service" ];
+      after = [
+        "network.target"
+        "user@${toString cfg.uid}.service"
+      ];
+      path = [ pkgs.xwayland ] ++ cfg.extraPackages;
+      environment = {
+        MOONSHINE_LOG = cfg.logFilter;
+        XDG_RUNTIME_DIR = runtimeDir;
+        DBUS_SESSION_BUS_ADDRESS = "unix:path=${runtimeDir}/bus";
+      }
+      // cfg.environment;
+      serviceConfig = {
+        User = cfg.user;
+        SupplementaryGroups = [
+          "moonshine"
+          "video"
+        ];
+        ExecStart = "${lib.getExe cfg.package} ${configFile}";
+        Restart = "on-failure";
+        RestartSec = 5;
+        DeviceAllow = [
+          "/dev/uinput rw"
+          "/dev/uhid rw"
+          "char-drm rw"
+          "char-nvidia rw"
+          "char-nvidia-uvm rw"
+        ];
+        UMask = "0077";
+      };
+    };
   };
+
+  meta.maintainers = with lib.maintainers; [
+    neobrain
+    anish
+    philocalyst
+  ];
 }
