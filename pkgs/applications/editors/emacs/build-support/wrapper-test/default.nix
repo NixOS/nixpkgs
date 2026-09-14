@@ -1,7 +1,7 @@
 {
   runCommand,
   emacs,
-  cowsay,
+  hello,
   replaceVars,
 }:
 
@@ -25,7 +25,7 @@ runCommand "test-emacs-withPackages-wrapper"
         }) epkgs.melpaBuild)
         (mkEpkg "early-default" ./early-default.el epkgs.melpaBuild)
         (mkEpkg "default" ./default.el epkgs.melpaBuild)
-        cowsay
+        hello
         (epkgs.treesit-grammars.with-grammars (ps: [ ps.tree-sitter-nix ]))
       ]))
     ];
