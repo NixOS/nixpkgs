@@ -135,6 +135,41 @@ in
       '';
     };
 
+    firewall.trustBridge = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Add the default podman bridge interface (typically `podman0`) to
+        {option}`networking.firewall.trustedInterfaces`.
+
+        Container-to-host traffic terminating at a host-bound service
+        enters the host's `INPUT` chain on the bridge interface
+        (`podman0` for the default network, or whatever
+        {option}`virtualisation.podman.defaultNetwork.settings.network_interface`
+        names). Per-interface allow-lists scoped to other interfaces, e.g.
+
+        ```nix
+        networking.firewall.interfaces.wg-home.allowedTCPPorts = [ 6379 ];
+        ```
+
+        do not match this bridge ingress, so containers cannot reach
+        services that are only allow-listed on the LAN/VPN side. Setting
+        this option marks the bridge as trusted, accepting all
+        container-to-host traffic regardless of port allow-lists. The
+        alternative is to duplicate every relevant `allowedTCPPorts` /
+        `allowedUDPPorts` rule on the bridge interface, which is easy to
+        forget and grows unwieldy.
+
+        Defaults to `false` (opt-in only): trusting a bridge changes the
+        host's firewall surface, so users explicitly choose this rather
+        than inheriting it from an unrelated option.
+
+        Honored by both the iptables/nftables backend (via
+        {option}`networking.firewall.trustedInterfaces`) and the firewalld
+        backend (via the `trusted` zone, which consumes the same option).
+      '';
+    };
+
     autoPrune = {
       enable = mkOption {
         type = types.bool;
@@ -250,10 +285,21 @@ in
         source = json.generate "podman.json" networkConfig;
       };
 
-      # containers cannot reach aardvark-dns otherwise
-      networking.firewall = lib.mkIf (config.networking.firewall.backend != "firewalld") {
-        interfaces.${network_interface}.allowedUDPPorts = lib.mkIf dns_enabled [ 53 ];
-      };
+      # `trustedInterfaces` is honored by every firewall backend — the
+      # iptables/nftables backends consume it directly, and the firewalld
+      # backend maps it to the `trusted` zone (see
+      # `nixos/modules/services/networking/firewall-firewalld.nix`).
+      # The aardvark-dns rule, on the other hand, is iptables/nftables-only;
+      # firewalld has its own DNS handling.
+      networking.firewall = lib.mkMerge [
+        {
+          trustedInterfaces = lib.optional cfg.firewall.trustBridge network_interface;
+        }
+        # containers cannot reach aardvark-dns otherwise
+        (lib.mkIf (config.networking.firewall.backend != "firewalld") {
+          interfaces.${network_interface}.allowedUDPPorts = lib.mkIf dns_enabled [ 53 ];
+        })
+      ];
 
       virtualisation.containers = {
         enable = true; # Enable common /etc/containers configuration
