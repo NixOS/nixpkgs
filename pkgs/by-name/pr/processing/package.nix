@@ -11,22 +11,23 @@
   wrapGAppsHook3,
   libGL,
   libxxf86vm,
+  gtk3,
 }:
 let
   # Force use of JDK 17, see https://github.com/processing/processing4/issues/1043
   gradle = gradle_8.override { java = jdk17; };
   jdk = jdk17;
-  buildNumber = "1310";
+  buildNumber = "1434";
 in
 stdenv.mkDerivation rec {
   pname = "processing";
-  version = "4.4.10";
+  version = "4.5.6";
 
   src = fetchFromGitHub {
     owner = "processing";
     repo = "processing4";
     rev = "processing-${buildNumber}-${version}";
-    sha256 = "sha256-u2wQl/VGCNJPd+k3DX2eW7gkA/RARMTSNGcoQuS/Oh8=";
+    sha256 = "sha256-f/8vPhKJEgdsy0TpRX+PsTWi41CW+Dmu3keiIXhbVik=";
   };
 
   patches = [
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
     rsync
     libGL
     libxxf86vm
+    gtk3
   ];
 
   mitmCache = gradle.fetchDeps {
@@ -89,7 +91,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    gradle assemble
+    gradle assemble -x :java:gradle:compileJava -x :java:gradle:compileKotlin -x :java:gradle:classes -x :java:gradle:jar
 
     runHook postBuild
   '';
@@ -109,6 +111,12 @@ stdenv.mkDerivation rec {
     rm -r $out/lib/app/resources/jdk
     ln -s ${jdk}/lib/openjdk $out/lib/app/resources/jdk
 
+    runHook postInstall
+  '';
+
+  # gappsWrapperArgs is fully populated in preFixupPhases (after GSETTINGS_SCHEMAS_PATH
+  # is set by the glib setup hook), so makeWrapper must run here, not in installPhase.
+  preFixup = ''
     makeWrapper $out/unwrapped/Processing $out/bin/Processing \
       ''${gappsWrapperArgs[@]} \
       --prefix LD_LIBRARY_PATH : "${
@@ -118,8 +126,6 @@ stdenv.mkDerivation rec {
         ]
       }" \
       --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
-
-    runHook postInstall
   '';
 
   postFixup = ''
