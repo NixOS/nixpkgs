@@ -1,6 +1,7 @@
 {
   lib,
   fetchzip,
+  ocaml,
   topkg,
   buildTopkgPackage,
   withBrr ? true,
@@ -9,35 +10,47 @@
   bytesrw,
   withCmdliner ? true,
   cmdliner,
+  withTypegist ? lib.versionAtLeast ocaml.version "5.5",
+  typegist,
 }:
 
 buildTopkgPackage rec {
   pname = "jsont";
-  version = "0.3.0";
+  version = "0.4.0";
 
   minimalOCamlVersion = "4.14.0";
 
   src = fetchzip {
     url = "https://erratique.ch/software/jsont/releases/jsont-${version}.tbz";
-    hash = "sha256-Gojblihb+So/0KpQHbIWuE33Ir2a4w5DdY+F3S9+qBk=";
+    hash = "sha256-2L7YaPXn4PzGl/3XwuwvpQTr4aiS85Hm1HNofuaK7DY=";
   };
 
   buildInputs = lib.optional withCmdliner cmdliner;
 
-  propagatedBuildInputs = lib.optional withBrr brr ++ lib.optional withBytesrw bytesrw;
+  propagatedBuildInputs =
+    lib.optional withBrr brr
+    ++ lib.optional withBytesrw bytesrw
+    ++ lib.optional withTypegist typegist;
 
-  buildPhase = "${topkg.run} build ${
-    lib.escapeShellArgs [
-      "--with-brr"
-      (lib.boolToString withBrr)
+  buildPhase = ''
+    runHook preBuild
+    ${topkg.run} build ${
+      lib.escapeShellArgs [
+        "--with-brr"
+        (lib.boolToString withBrr)
 
-      "--with-bytesrw"
-      (lib.boolToString withBytesrw)
+        "--with-bytesrw"
+        (lib.boolToString withBytesrw)
 
-      "--with-cmdliner"
-      (lib.boolToString withCmdliner)
-    ]
-  }";
+        "--with-cmdliner"
+        (lib.boolToString withCmdliner)
+
+        "--with-typegist"
+        (lib.boolToString withTypegist)
+      ]
+    }
+    runHook postBuild
+  '';
 
   meta = {
     description = "Declarative JSON data manipulation";
