@@ -7955,6 +7955,7 @@ with pkgs;
   inherit (callPackage ../misc/uboot { })
     buildUBoot
     ubootTools
+    ubootEnvTools
     ubootPythonTools
     ubootA20OlinuxinoLime
     ubootA20OlinuxinoLime2EMMC
