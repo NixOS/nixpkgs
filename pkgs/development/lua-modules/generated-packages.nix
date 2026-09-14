@@ -4483,25 +4483,25 @@ final: prev: {
       buildLuarocksPackage,
       fetchurl,
       fetchzip,
-      luaOlder,
+      lua,
     }:
     buildLuarocksPackage {
       pname = "lz.n";
-      version = "2.11.3-1";
+      version = "3.1.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/lz.n-2.11.3-1.rockspec";
-          sha256 = "0fg256gwa7444fh7wivasi77x7qgxx4r3hjqw90qa1kav10np88n";
+          url = "mirror://luarocks/lz.n-3.1.0-1.rockspec";
+          sha256 = "0b6d61r0x9x0f03f9mx4l0na9jphlkihizvh7f29xfxvk9khgfp6";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/nvim-neorocks/lz.n/archive/v2.11.3.zip";
-        sha256 = "0vnr1iiq4z3q7s3qylfmvcclmspydg8ll4p75jilcx9d114v7wwc";
+        url = "https://github.com/lumen-oss/lz.n/archive/v3.1.0.zip";
+        sha256 = "00xc3k6pcihz1cznmj4lsjwlcb54k0m5iv4x6zqkqkgwavsv62iw";
       };
 
-      disabled = luaOlder "5.1";
+      disabled = lua.luaversion != "5.1";
 
       meta = {
-        homepage = "https://github.com/nvim-neorocks/lz.n";
+        homepage = "https://github.com/lumen-oss/lz.n";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license = lib.licenses.gpl2Plus;
         description = "🦥 A dead simple lazy-loading Lua library for Neovim plugins.";
