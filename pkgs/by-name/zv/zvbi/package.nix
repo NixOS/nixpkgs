@@ -37,6 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
     libintl
   ];
 
+  env = lib.optionalAttrs (stdenv.hostPlatform.isLinux && stdenv.cc.isClang) {
+    CFLAGS = "-std=gnu17";
+  };
+
   nativeCheckInputs = [
     tzdata
   ];
