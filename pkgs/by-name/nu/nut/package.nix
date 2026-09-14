@@ -7,6 +7,7 @@
   fetchurl,
   freeipmi,
   gd,
+  glib,
   i2c-tools,
   libgpiod_1,
   libmodbus,
@@ -49,11 +50,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nut";
-  version = "2.8.4";
+  version = "2.8.5";
 
   src = fetchurl {
     url = "https://networkupstools.org/source/${lib.versions.majorMinor finalAttrs.version}/nut-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-ATC6gup58Euk80xSSahZQ5d+/ZhO199q7BpRjVo1lPg=";
+    sha256 = "GL8y5Z63ZLE9o8T6cDhJJtf6WEyzHS/n8TelcGM+7sE=";
   };
 
   patches = [
@@ -79,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     avahi
     freeipmi
     gd
+    glib
     libtool
     libusb1
     modbus
@@ -108,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-systemdsystempresetdir=$(out)/lib/systemd/system-preset"
     "--with-systemdsystemunitdir=$(out)/lib/systemd/system"
     "--with-systemdshutdowndir=$(out)/lib/systemd/system-shutdown"
+    "--with-systemdsysusersdir=$(out)/lib/sysusers.d"
     "--with-systemdtmpfilesdir=$(out)/lib/tmpfiles.d"
     "--with-udev-dir=$(out)/etc/udev"
     "--with-user=nutmon"
