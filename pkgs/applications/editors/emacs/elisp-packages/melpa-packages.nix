@@ -1411,6 +1411,8 @@ let
 
           mu4e-alert = addPackageRequires super.mu4e-alert [ self.mu4e ];
 
+          mu4e-autotask = addPackageRequires super.mu4e-autotask [ self.mu4e ];
+
           mu4e-column-faces = addPackageRequires super.mu4e-column-faces [ self.mu4e ];
 
           mu4e-conversation = addPackageRequires super.mu4e-conversation [ self.mu4e ];
@@ -1524,6 +1526,9 @@ let
 
           org-pdftools = mkHome super.org-pdftools;
 
+          # elisp error when loading elnode
+          org-present-remote = ignoreCompilationError super.org-present-remote;
+
           org-projectile = super.org-projectile.overrideAttrs (
             finalAttrs: previousAttrs: {
               # https://github.com/melpa/melpa/pull/9150
@@ -1585,6 +1590,8 @@ let
                     --replace-fail '(executable-find "pdftk")' '"${lib.getExe pkgs.pdftk}"'
               '';
           });
+
+          peek-mode = ignoreCompilationError super.peek-mode; # elisp error when loading elnode
 
           pgdevenv = ignoreCompilationError super.pgdevenv; # elisp error
 
