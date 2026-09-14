@@ -29,7 +29,7 @@
   qt6,
   stepcode,
   tcl,
-  tinygltf,
+  tinygltf_2,
   tk,
   zlib,
 
@@ -224,7 +224,7 @@ stdenv.mkDerivation (finalAttrs: {
     pugixml
     stepcode
     tcl
-    tinygltf
+    tinygltf_2
     tk
     zlib
   ]
