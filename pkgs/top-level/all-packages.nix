@@ -1323,6 +1323,8 @@ with pkgs;
     bitwarden-directory-connector
     ;
 
+  blender-oneapi = callPackage ../by-name/bl/blender/package.nix { oneapiSupport = true; };
+
   blocksat-cli = with python3Packages; toPythonApplication blocksat-cli;
 
   bucklespring-x11 = callPackage ../by-name/bu/bucklespring-libinput/package.nix { legacy = true; };
