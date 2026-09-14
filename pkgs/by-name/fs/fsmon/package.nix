@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/nowsecure/fsmon";
     changelog = "https://github.com/nowsecure/fsmon/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dezgeg ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "fsmon";
   };

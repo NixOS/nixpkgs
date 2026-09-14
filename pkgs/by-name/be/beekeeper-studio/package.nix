@@ -35,11 +35,12 @@
   systemd,
   libGL,
   krb5,
+  unixodbc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "beekeeper-studio";
-  version = "5.5.5";
+  version = "6.0.5";
 
   src =
     let
@@ -47,17 +48,15 @@ stdenv.mkDerivation (finalAttrs: {
       asset = selectSystem {
         x86_64-linux = "beekeeper-studio_${finalAttrs.version}_amd64.deb";
         aarch64-linux = "beekeeper-studio_${finalAttrs.version}_arm64.deb";
-        x86_64-darwin = "Beekeeper-Studio-${finalAttrs.version}-mac.zip";
         aarch64-darwin = "Beekeeper-Studio-${finalAttrs.version}-arm64-mac.zip";
       };
     in
     fetchurl {
       url = "https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v${finalAttrs.version}/${asset}";
       hash = selectSystem {
-        x86_64-linux = "sha256-XV7PXoXA99BwPolg20vUVAAWhs3eBTmgLOEWZrq6Mq4=";
-        aarch64-linux = "sha256-lfW7gjes/Kn8zCKh2LNItu4kwSr9dxYGviUjgXFiHzU=";
-        x86_64-darwin = "sha256-EGsfHUYAxjgMBye+D8XzPdUqtXIG7X+DpJoViVcYGHU=";
-        aarch64-darwin = "sha256-JfxhOS74xQP8MK2nBz3V0VPxHbXF5m9OtRI2m4ZWjk0=";
+        x86_64-linux = "sha256-AlimxfT2aMPXJQKU7NxSmhqhQApIWp1K5qd3wFRvo/w=";
+        aarch64-linux = "sha256-W+Avv/yKefGk64Wvz3rF7ehYkD73EbsMXqeQi/tXjtw=";
+        aarch64-darwin = "sha256-+NFFtfX4CxlzjBA8iAgexGIOx+5thEJ4iZR9ngkTsjI=";
       };
     };
 
@@ -98,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgbm
     vulkan-loader
     krb5
+    unixodbc
   ];
 
   runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux (lib.getLib systemd);
@@ -158,8 +158,9 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
       "x86_64-linux"
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
-    knownVulnerabilities = [ "Electron version 32 is EOL" ];
+    knownVulnerabilities = [
+      "Uses Electron 39.8.1, which was EOL on March 13 2026, with several known CVEs"
+    ];
   };
 })

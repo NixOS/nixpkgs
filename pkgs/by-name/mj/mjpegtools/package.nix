@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchurl,
-  gtk2,
   libdv,
   libjpeg,
   libpng,
@@ -46,11 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
   ]
   ++ lib.optionals (!withMinimal) [
-    gtk2
     libx11
     SDL
     SDL_gfx
   ];
+
+  configureFlags = [ "--without-gtk" ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (!withMinimal) "-I${lib.getDev SDL}/include/SDL";
 

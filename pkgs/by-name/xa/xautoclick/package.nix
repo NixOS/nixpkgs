@@ -9,7 +9,6 @@
   libevdev,
   gtkSupport ? true,
   gtk3,
-  pcre,
   glib,
   wrapGAppsHook3,
   fltkSupport ? true,
@@ -47,7 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals gtkSupport [
     gtk3
-    pcre
     glib
     wrapGAppsHook3
   ]

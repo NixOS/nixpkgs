@@ -9,6 +9,7 @@
   fontconfig,
   libpng,
   libtiff,
+  libx11,
   lua5,
   pkg-config,
   zlib,
@@ -31,12 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace misc/unix/grafx2.desktop \
-      --replace "Exec=grafx2" "Exec=grafx2-sdl"
+      --replace-fail "Exec=grafx2" "Exec=grafx2-sdl"
   '';
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
+    SDL # for sdl-config
   ];
 
   buildInputs = [
@@ -46,11 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     libpng
     libtiff
+    libx11
     lua5
     zlib
   ];
 
-  strictDeps = false; # Why??
+  strictDeps = true;
+  __structuredAttrs = true;
 
   makeFlags = [ "--directory=src" ];
   installFlags = [
@@ -75,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
       The program is mostly developed on Haiku, Linux and Windows, but is also
       portable on many other platforms.
     '';
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     mainProgram = "grafx2-sdl";
     maintainers = [ ];
     platforms = lib.platforms.unix;

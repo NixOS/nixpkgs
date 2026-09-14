@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "3.1.0";
+  version = "3.1.1";
 in
 buildPythonPackage {
   pname = "mfusepy";
@@ -19,11 +19,17 @@ buildPythonPackage {
     owner = "mxmlnkn";
     repo = "mfusepy";
     tag = "v${version}";
-    hash = "sha256-HOibpS6lbrIwhdnbML9nLK9XUo8ILDqAp8ZjGiMKYMQ=";
+    hash = "sha256-k7CxATpFTIZfQxnz8aYuyeooFY64JZl7Z8jfH2CtehM=";
   };
 
+  # upstream pins setuptools < 83 because of backward-incompatible license
+  # file specification change; nixpkgs has setuptools 83 which still works
+  # (deprecation warning only, see pyproject.toml for the full context)
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail '"setuptools >= 61, < 83"' '"setuptools >= 61"'
+  ''
   # If fuse library path cannot be found, use fuse library path in nixpkgs
-  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace mfusepy.py \
       --replace-fail "_libfuse_path = find_library('fuse3')" '_libfuse_path = "${lib.getLib fuse3}/lib/libfuse3.so.4"'
   '';

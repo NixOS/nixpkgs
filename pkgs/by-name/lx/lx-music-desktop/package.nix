@@ -10,23 +10,22 @@
   makeWrapper,
   makeDesktopItem,
 
-  electron_40,
-  nodejs_22,
+  electron_42,
   commandLineArgs ? "",
 }:
 
 let
-  electron = electron_40;
+  electron = electron_42;
 in
 buildNpmPackage (finalAttrs: {
   pname = "lx-music-desktop";
-  version = "2.12.0";
+  version = "2.12.4";
 
   src = fetchFromGitHub {
     owner = "lyswhut";
     repo = "lx-music-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g4QVpymzoRKIq70aRLXGFmUmIpSiXIZThrp8fumBKTQ=";
+    hash = "sha256-sjdWDpObF+AxPLommw1biJU8OgTALYLEjJDV2yBiCPg=";
   };
 
   desktopItems = [
@@ -57,7 +56,6 @@ buildNpmPackage (finalAttrs: {
     (replaceVars ./electron-builder.patch {
       electron_version = electron.version;
     })
-    ./electron-version.patch
   ];
 
   nativeBuildInputs = [
@@ -65,10 +63,7 @@ buildNpmPackage (finalAttrs: {
     copyDesktopItems
   ];
 
-  # Npm 11 (nodejs 24) can't resolve all dependencies from the prefetched cache.
-  nodejs = nodejs_22;
-
-  npmDepsHash = "sha256-BmrY7IXx6Z+sBAemYnOZUBMyLInENMOB6fh/4LoV80w=";
+  npmDepsHash = "sha256-A7tR1mZ9TlGj+srPb6ZrJcCPbafT4e51XDexE76jPXc=";
 
   makeCacheWritable = true;
 
@@ -81,6 +76,11 @@ buildNpmPackage (finalAttrs: {
   preBuild = ''
     # delete prebuilt libs
     rm -r build-config/lib
+    rm -r node_modules/better-sqlite3/prebuilds
+
+    # prevent copying previously deleted libs to node_modules
+    substituteInPlace build-config/postinstall.js \
+      --replace-fail 'copyLib()' ""
 
     # don't spam the build logs
     substituteInPlace build-config/pack.js \
@@ -123,6 +123,13 @@ buildNpmPackage (finalAttrs: {
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Music software based on Electron and Vue";
+    longDescription = ''
+      Some functionalities (e.g. lyrics window) are broken when lx-music-desktop
+      runs using a Wayland ozone platform due to Electron's lack of support
+      for Wayland. If you do need these features, please consider unsetting
+      `NIXOS_OZONE_WL` and passing `--ozone-platform=x11` from the command line
+      to restore the expected behavior.
+    '';
     homepage = "https://github.com/lyswhut/lx-music-desktop";
     changelog = "https://github.com/lyswhut/lx-music-desktop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;

@@ -69,12 +69,12 @@ stdenv.mkDerivation {
 
   cargoDeps = symlinkJoin {
     name = "vodozemac-wasm-cargodeps";
-    paths = [
-      pubSources.flutter_vodozemac.passthru.cargoDeps
-      # Pull in rust vendor so we don't have to vendor rustLibSrc again
-      # This is required because `-Z build-std=std,panic_abort` rebuilds std
-      rustPlatform.rustVendorSrc
-    ];
+    paths = [ pubSources.flutter_vodozemac.passthru.cargoDeps ];
+    # Pull in rust vendor so we don't have to vendor rustLibSrc again
+    # This is required because `-Z build-std=std,panic_abort` rebuilds std
+    postBuild = ''
+      cp -rsn ${rustPlatform.rustVendorSrc}/* $out/*/
+    '';
   };
 
   nativeBuildInputs = [

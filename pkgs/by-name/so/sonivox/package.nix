@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sonivox";
-  version = "4.0.0";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "EmbeddedSynth";
     repo = "sonivox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eOC/7R45X93Q9KKnP+/fyPMESOVyTnzpqnLHnDQwLnQ=";
+    hash = "sha256-FExMOhE2iz/FDCldryG1eqxJF/JvYHczyrQ8r0OL6Es=";
   };
 
   nativeBuildInputs = [ cmake ];

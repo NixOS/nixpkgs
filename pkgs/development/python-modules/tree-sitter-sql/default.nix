@@ -1,46 +1,35 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchurl,
 
   # build-system
   setuptools,
-  tree-sitter-sql,
 
   #optional-dependencies
   tree-sitter,
+
+  pytestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tree-sitter-sql";
   version = "0.3.11";
   pyproject = true;
+  __structuredAttrs = true;
 
-  src = fetchFromGitHub {
-    owner = "DerekStride";
-    repo = "tree-sitter-sql";
-    tag = "v${version}";
-    hash = "sha256-efeDAUgCwV9UBXbLyZ1a4Rwcvr/+wke8IzkxRUQnddM=";
+  # The git tree does not contain the generated parser (`src/parser.c`), which is required for
+  # compilation. Only the release tarball ships it.
+  # https://github.com/DerekStride/tree-sitter-sql#readme
+  src = fetchurl {
+    url = "https://github.com/DerekStride/tree-sitter-sql/releases/download/v${finalAttrs.version}/tree-sitter-sql-v${finalAttrs.version}.tar.gz";
+    hash = "sha256-qXoyTq6cge1o9uFiubM/iRH8ZELKopUOV8SY4kYNE4c=";
   };
 
-  postUnpack = ''
-    cp -rf ${tree-sitter-sql.passthru.parsers}/* $sourceRoot
-  '';
+  sourceRoot = ".";
 
   build-system = [
     setuptools
   ];
-
-  passthru = {
-    # As mentioned in https://github.com/DerekStride/tree-sitter-sql README
-    # generated tree sitter parser files necessary for compilation
-    # are separately distributed on the gh-pages branch
-    parsers = fetchFromGitHub {
-      owner = "DerekStride";
-      repo = "tree-sitter-sql";
-      rev = "9853b887c5e4309de273922b681cc7bc09e30c78/gh-pages";
-      hash = "sha256-p60nphbSN+O5fOlL06nw0qgQFpmvoNCTmLzDvUC/JGs=";
-    };
-  };
 
   optional-dependencies = {
     core = [
@@ -50,11 +39,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tree_sitter_sql" ];
 
+  nativeCheckInputs = [
+    pytestCheckHook
+    tree-sitter
+  ];
+
   meta = {
     description = "Sql grammar for tree-sitter";
     homepage = "https://github.com/DerekStride/tree-sitter-sql";
-    changelog = "https://github.com/DerekStride/tree-sitter-sql/releases/tag/${src.tag}";
+    changelog = "https://github.com/DerekStride/tree-sitter-sql/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pcboy ];
   };
-}
+})

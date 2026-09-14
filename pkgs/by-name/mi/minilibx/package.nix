@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation {
   pname = "minilibx";
-  version = "0-unstable-2021-10-30";
+  version = "0-unstable-2026-06-20";
 
   src = fetchFromGitHub {
     owner = "42Paris";
     repo = "minilibx-linux";
-    rev = "7dc53a411a7d4ae286c60c6229bd1e395b0efb82";
-    hash = "sha256-aRYMpaPC7dC6EHmmXugvwcQnaizRCQZKFcQX0K2MLM4=";
+    rev = "f07d00f07c5c652223f505b526f84dab73cf2598";
+    hash = "sha256-DPQ+hc4yJ7nh9UTJg+ustE+Gp+YM05RzsqiKdWQevkQ=";
   };
 
   outputs = [

@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromSourcehut,
+  fetchurl,
   desktop-file-utils,
   glib,
   gobject-introspection,
@@ -16,16 +17,23 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "numberstation";
-  version = "1.4.0";
+  version = "1.5.0";
 
   pyproject = false;
 
   src = fetchFromSourcehut {
     owner = "~martijnbraam";
     repo = "numberstation";
-    rev = finalAttrs.version;
-    hash = "sha256-0T/Dc2i6auuZiWjcPR72JT8yOrzmdEmbW2PS5YhmEwI=";
+    tag = finalAttrs.version;
+    hash = "sha256-N8hTXlJcekg/+dCK/tp2EhbNBtj8n9K3LHURRI5ruQQ=";
   };
+
+  patches = [
+    (fetchurl {
+      url = "https://src.fedoraproject.org/rpms/numberstation/raw/05cb9e58d879cd9d224862bb72c373374de63943/f/0001-Fix-if-statement-after-b32decode-removal.patch";
+      hash = "sha256-grTSKdXl1WIK+n4rOe/g4lczc8eIuCU1ZqHI1VNkJ8w=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs build-aux/meson

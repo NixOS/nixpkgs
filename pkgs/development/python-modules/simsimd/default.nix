@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "simsimd";
-  version = "6.5.13";
+  version = "6.5.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ashvardanian";
     repo = "SimSIMD";
     tag = "v${version}";
-    hash = "sha256-jNJ44jCPcs83HbLSkup6eeCL0Hf+SyU4RzyQAyuPJ94=";
+    hash = "sha256-J4lxmsIgzBhG2MSu2LPDY/5IKTNWEG0fDX1EI4NgLB0=";
   };
 
   build-system = [

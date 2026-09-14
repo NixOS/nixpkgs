@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     nodejs
   ];
 
-  NODE_OPTIONS = "--openssl-legacy-provider";
+  env.NODE_OPTIONS = "--openssl-legacy-provider";
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 

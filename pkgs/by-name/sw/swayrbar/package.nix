@@ -7,21 +7,21 @@
   pulseaudio,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "swayrbar";
   version = "0.5.0";
 
   src = fetchFromSourcehut {
     owner = "~tsdh";
     repo = "swayr";
-    tag = "swayrbar-${version}";
+    tag = "swayrbar-${finalAttrs.version}";
     sha256 = "sha256-uT8MYgH9kANQ0t+7jqjOOvQIZf5ImdQruZLLlCejwcc=";
   };
 
   cargoHash = "sha256-Aj4U2xyfNhf3HDSEd1SQ5TyO2MXn2/hrfnG0ZayzMtU=";
 
   # don't build swayr
-  buildAndTestSubdir = pname;
+  buildAndTestSubdir = finalAttrs.pname;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     export HOME=$TMPDIR
   '';
 
-  postInstall = lib.optionals withPulseaudio ''
+  postInstall = lib.optionalString withPulseaudio ''
     wrapProgram "$out/bin/swayrbar" \
       --prefix PATH : "$out/bin:${lib.makeBinPath [ pulseaudio ]}"
   '';
@@ -38,9 +38,9 @@ rustPlatform.buildRustPackage rec {
     description = "Status command for sway's swaybar implementing the swaybar-protocol";
     homepage = "https://git.sr.ht/~tsdh/swayr#a-idswayrbarswayrbara";
     changelog = "https://git.sr.ht/~tsdh/swayr/tree/main/item/swayrbar/NEWS.md";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ilkecan ];
     mainProgram = "swayrbar";
   };
-}
+})

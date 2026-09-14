@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "adafruit-io";
-  version = "2.8.2";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adafruit";
     repo = "Adafruit_IO_Python";
     tag = finalAttrs.version;
-    hash = "sha256-JYQKrGg4FRzqq3wy/TqafC16rldvPEi+/xEI7XGvWM8=";
+    hash = "sha256-INi1ZJf9j8fP+DJrtQvXKWr7gjp8V7OQVOBuSMB1O/0=";
   };
 
   build-system = [

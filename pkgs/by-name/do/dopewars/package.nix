@@ -34,8 +34,17 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
   ];
 
-  # remove the denied setting of setuid bit permission
-  patches = [ ./0001-remove_setuid.patch ];
+  patches = [
+    # remove the denied setting of setuid bit permission
+    ./0001-remove_setuid.patch
+    # fix compilation errors with gcc15
+    ./0002-fix_gcc15.patch
+  ];
+
+  preConfigure = ''
+    substituteInPlace po/Makefile.in.in \
+      --replace-fail '$(GMSGFMT) -c --statistics --verbose' '$(GMSGFMT) --statistics --verbose'
+  '';
 
   # run dopewars with -f so that it finds its scoreboard file in ~/.local/share
   postInstall = ''

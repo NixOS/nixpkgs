@@ -1,62 +1,77 @@
 {
   lib,
+  stdenv,
   python3Packages,
   fetchFromGitHub,
+  fetchpatch,
   versionCheckHook,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rclip";
-  version = "2.0.11";
+  version = "3.3.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "yurijmikhalevich";
     repo = "rclip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TXJpaMCSKCeOiWPVb9//czux+JV8VlJsiWH8fUb1tkw=";
+    hash = "sha256-QdyqECPzZZtphtjSJAKrWGwGKcYrlbSSkJ0GHs9+K10=";
   };
 
-  build-system = with python3Packages; [
-    poetry-core
+  patches = [
+    # use pillow-heif instead of pi-heif as it has been discontinued
+    # https://github.com/bigcat88/pillow_heif/pull/431
+    (fetchpatch {
+      url = "https://github.com/yurijmikhalevich/rclip/commit/7207600d8da6aef0aacb2c2b52e90a564e3018aa.patch";
+      hash = "sha256-Bua9tIpRq2mWSQLP0dcHE8S0Ef7AZKvlOS5fXAqTcQY=";
+      revert = true;
+    })
   ];
 
-  dependencies = with python3Packages; [
-    numpy
-    open-clip-torch
-    pillow
-    requests
-    torch
-    torchvision
-    tqdm
-    rawpy
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11.12,<0.12.0" uv_build
+  '';
+
+  build-system = with python3Packages; [
+    uv-build
   ];
 
   pythonRelaxDeps = [
     "numpy"
-    "open_clip_torch"
     "pillow"
     "rawpy"
-    "torch"
-    "torchvision"
+    "regex"
+  ];
+  pythonRemoveDeps = lib.optionals stdenv.hostPlatform.isDarwin [
+    # unpackaged
+    "coremltools"
+  ];
+  dependencies = with python3Packages; [
+    ftfy
+    huggingface-hub
+    numpy
+    onnxruntime
+    pillow
+    pillow-heif
+    regex
+    requests
+    tqdm
+    rawpy
   ];
 
   pythonImportsCheck = [ "rclip" ];
 
   nativeCheckInputs = [
     versionCheckHook
+    python3Packages.jinja2
   ]
   ++ (with python3Packages; [ pytestCheckHook ]);
 
   disabledTestPaths = [
     # requires network
     "tests/e2e/test_rclip.py"
-  ];
-
-  disabledTests = [
-    # requires network
-    "test_text_model_produces_the_same_vector_as_the_main_model"
-    "test_loads_text_model_when_text_processing_only_requested_and_checkpoint_exists"
-    "test_loads_full_model_when_text_processing_only_requested_and_checkpoint_doesnt_exist"
   ];
 
   meta = {

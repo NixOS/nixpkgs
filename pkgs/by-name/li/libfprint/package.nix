@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   pkg-config,
   meson,
   python3,
@@ -21,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfprint";
-  version = "1.94.9";
+  version = "1.94.100";
   outputs = [
     "out"
     "devdoc"
@@ -32,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libfprint";
     repo = "libfprint";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UiUdZokgi27LlyO419dd+NIcQD2RSUfdsC08sW3qzko=";
+    hash = "sha256-JwD8U6CjVH+huvVFIxRWRrsWbLOEeqOd1lCMdWgPtrA=";
   };
 
   postPatch = ''

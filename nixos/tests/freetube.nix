@@ -41,6 +41,7 @@ let
 
         testScript = ''
           start_all()
+          machine = ${name}
           machine.wait_for_unit('graphical.target')
           machine.wait_for_text('Your Subscription list is currently empty')
           machine.send_key("ctrl-r")

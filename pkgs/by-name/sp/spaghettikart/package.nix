@@ -24,6 +24,7 @@
   SDL2,
   SDL2_net,
   spdlog,
+  stb,
   tinyxml-2,
   tomlplusplus,
   zenity,
@@ -83,12 +84,6 @@ let
     '';
   };
 
-  stb' = fetchurl {
-    name = "stb_image.h";
-    url = "https://raw.githubusercontent.com/nothings/stb/0bc88af4de5fb022db643c2d8e549a0927749354/stb_image.h";
-    hash = "sha256-xUsVponmofMsdeLsI6+kQuPg436JS3PBl00IZ5sg3Vw=";
-  };
-
   stormlib' = applyPatches {
     src = fetchFromGitHub {
       owner = "ladislav-zezula";
@@ -124,13 +119,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "spaghettikart";
-  version = "0.9.9.1-unstable-2025-12-23";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "HarbourMasters";
     repo = "SpaghettiKart";
-    rev = "b0582b5c32914a815fe6a2ffc41f3eb9c24a3a2b";
-    hash = "sha256-TTsW49jo8yNxuL5GFStiQRWOBw/X8Pt2hMKmDZPpEVI=";
+    tag = finalAttrs.version;
+    hash = "sha256-XEsOtt2Xg/HyYw07YGXTIBOCtIDbh3hmaBEQpbFVFYc=";
     fetchSubmodules = true;
     deepClone = true;
     postFetch = ''
@@ -219,7 +214,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure = ''
     mkdir stb
-    cp ${stb'} ./stb/${stb'.name}
+    cp ${stb}/include/stb/stb_image.h ./stb/stb_image.h
     cp ${stb_impl} ./stb/${stb_impl.name}
     substituteInPlace libultraship/cmake/dependencies/common.cmake \
       --replace-fail "\''${STB_DIR}" "$(readlink -f ./stb)"
@@ -239,6 +234,10 @@ stdenv.mkDerivation (finalAttrs: {
     # We need to use GetAppDirectoryPath on nix or else it crashes
     substituteInPlace src/port/GameExtractor.cpp \
     --replace-fail "const std::string assets_path = Ship::Context::GetAppBundlePath();" "const std::string assets_path = Ship::Context::GetAppDirectoryPath();"
+
+    # fix building with fmt_12
+    substituteInPlace torch/lib/miniz/zip_file.hpp \
+    --replace-fail '#include <cstdint>' '#include <cstdint>''\n#include <cstring>'
   '';
 
   postBuild = ''
@@ -279,7 +278,6 @@ stdenv.mkDerivation (finalAttrs: {
       icon = "spaghettikart";
       exec = "Spaghettify";
       comment = finalAttrs.meta.description;
-      genericName = "spaghettikart";
       desktopName = "spaghettikart";
       categories = [ "Game" ];
     })

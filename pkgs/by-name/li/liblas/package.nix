@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   fetchpatch,
   boost,
   cmake,
@@ -14,46 +14,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liblas";
-  version = "1.8.1";
+  version = "1.8.1-unstable-2025-11-08";
 
-  src = fetchurl {
-    url = "https://download.osgeo.org/liblas/libLAS-${finalAttrs.version}.tar.bz2";
-    sha256 = "0xjfxb3ydvr2258ji3spzyf81g9caap19ql2pk91wiivqsc4mnws";
+  src = fetchFromGitHub {
+    owner = "libLAS";
+    repo = "libLAS";
+    rev = "0756b73ed41211d1bb8d9b96c6767f2350d8fe2b";
+    hash = "sha256-A+Ek3MVw2wcmVSn1qFNLS59rbgTW+Nlzy6NCZIQ+y7I=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "aarch64-darwin.patch";
-      url = "https://github.com/libLAS/libLAS/commit/ded463732db1f9baf461be6f3fe5b8bb683c41cd.patch";
-      sha256 = "sha256-aWMpazeefDHE9OzuLR3FJ8+oXeGhEsk1igEm6j2DUnw=";
-    })
-    (fetchpatch {
-      name = "fix-build-with-boost-1.73-1.patch";
-      url = "https://github.com/libLAS/libLAS/commit/af431abce95076b59f4eb7c6ef0930ca57c8a063.patch";
-      hash = "sha256-2lr028t5hq3oOLZFXnvIJXCUsoVHbG/Mus93OZvi5ZU=";
-    })
-    (fetchpatch {
-      name = "fix-build-with-boost-1.73-2.patch";
-      url = "https://github.com/libLAS/libLAS/commit/0d3b8d75f371a6b7c605bbe5293091cb64a7e2d3.patch";
-      hash = "sha256-gtNIazR+l1h+Xef+4qQc7EVi+Nlht3F8CrwkINothtA=";
-    })
-    # remove on update. fix compile error in apps/las2col.c
-    # https://github.com/libLAS/libLAS/pull/151
-    (fetchpatch {
-      name = "fflush-x2-is-not-an-fsync.patch";
-      url = "https://github.com/libLAS/libLAS/commit/e789d43df4500da0c12d2f6d3ac1d031ed835493.patch";
-      hash = "sha256-0zI0NvOt9C5BPrfAbgU1N1kj3rZFB7rf0KRj7yemyWI=";
-    })
-    (fetchpatch {
-      name = "set-macos-rpath-to-off-explicitly.patch";
-      url = "https://github.com/libLAS/libLAS/commit/ce9bc0da9e5d1eb8527259854aa826df062ed18e.patch";
-      hash = "sha256-Rse0p8bNgORNaw/EBbu0i2/iVmikFyeloJL8YkYarn0=";
-    })
-    (fetchpatch {
-      name = "fix-findLASZIP.patch";
-      url = "https://github.com/libLAS/libLAS/commit/be77a75f475ec8d59c0dae1c3c896289bcb5a287.patch";
-      hash = "sha256-5XDexk3IW7s2/G27GXkWp7cw1WZyQLMk/lTpfOM6PM0=";
-    })
     (fetchpatch {
       name = "fix-gcc15.patch";
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/liblas/-/raw/1.8.1.r128+gded46373-17/liblas-gcc15.patch";
@@ -61,16 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  # Disable setting of C++98 standard which was dropped in boost 1.84.0
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'set(CMAKE_CXX_FLAGS "''${CMAKE_CXX_FLAGS} -std=c++98 -ansi")' '#'
-  ''
   # Upstream libLAS still uses cmake_minimum_required(VERSION 2.8.11).
   # This is not compatible with CMake 4, because support for CMake < 3.5 has been removed.
-  + ''
+  postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail 'cmake_minimum_required(VERSION 2.6.0)' 'cmake_minimum_required(VERSION 3.10)'
+      --replace-fail 'cmake_minimum_required(VERSION 2.8.11)' 'cmake_minimum_required(VERSION 3.10)'
   '';
 
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;

@@ -9,7 +9,7 @@ let
 in
 {
   meta = {
-    maintainers = lib.teams.freedesktop.members;
+    teams = [ lib.teams.freedesktop ];
   };
 
   options = with lib; {
@@ -64,10 +64,15 @@ in
 
     systemd.services.ModemManager = {
       aliases = [ "dbus-org.freedesktop.ModemManager1.service" ];
-      path = lib.optionals (cfg.fccUnlockScripts != [ ]) [
-        pkgs.libqmi
-        pkgs.libmbim
-      ];
+      path = lib.optionals (cfg.fccUnlockScripts != [ ]) (
+        with pkgs;
+        [
+          gawk
+          libmbim
+          libqmi
+          xxd
+        ]
+      );
     };
 
     /*

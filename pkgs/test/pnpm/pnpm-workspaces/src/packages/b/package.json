@@ -1,0 +1,7 @@
+{
+  "name": "@pnpm-workspaces-test/b",
+  "version": "0.0.0",
+  "dependencies": {
+    "@pnpm-workspaces-test/b-dep": "workspace:*"
+  }
+}

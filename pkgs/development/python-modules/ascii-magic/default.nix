@@ -2,23 +2,27 @@
   lib,
   buildPythonPackage,
   colorama,
-  fetchPypi,
+  fetchFromGitHub,
   pillow,
   pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ascii-magic";
-  version = "2.3.0";
-  format = "setuptools";
+  version = "2.7.4";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "ascii_magic";
-    inherit version;
-    hash = "sha256-PtQaHLFn3u1cz8YotmnzWjoD9nvdctzBi+X/2KJkPYU=";
+  src = fetchFromGitHub {
+    owner = "LeandroBarone";
+    repo = "python-ascii_magic";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-werCg7LW7MKMoYp/QxZU74MSc6WmscwWfvGRG4Dn60c=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     colorama
     pillow
   ];
@@ -28,7 +32,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ascii_magic" ];
 
   preCheck = ''
-    cd tests
+    ln -s ascii_magic/tests/*.{jpg,png} ./
   '';
 
   disabledTests = [
@@ -47,4 +51,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

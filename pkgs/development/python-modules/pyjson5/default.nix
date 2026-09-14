@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyjson5";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kijewski";
     repo = "pyjson5";
     tag = "v${version}";
-    hash = "sha256-vHO354ZjaQirOWavfaDvenE+MLQLhWF3bCHa5Z1NNXg=";
+    hash = "sha256-SonObL4watru9+YDiw4K7Mo5BOKWmhp1R/IZ54H9Db0=";
     fetchSubmodules = true;
   };
 

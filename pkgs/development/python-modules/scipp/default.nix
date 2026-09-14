@@ -39,15 +39,16 @@
 
 buildPythonPackage rec {
   pname = "scipp";
-  version = "26.2.0";
+  version = "26.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipp";
     repo = "Scipp";
     tag = version;
-    hash = "sha256-4Ha2Gz6yYBCYBGXMWPJjuooyKeJJBBVmmByFXbTLans=";
+    hash = "sha256-D8xUq63S1mEALfrw0Qz/7Mprw1zQMj6W2j/LjkgfGvM=";
   };
+
   env = {
     SKIP_REMOTE_SOURCES = "true";
   };

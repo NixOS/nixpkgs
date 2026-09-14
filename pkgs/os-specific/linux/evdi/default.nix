@@ -7,7 +7,6 @@
   libdrm,
   python3,
 }:
-
 let
   python3WithLibs = python3.withPackages (
     ps: with ps; [
@@ -17,23 +16,23 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "evdi";
-  version = "1.14.13";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = "evdi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-59Tr2l2RHOW/TMgSW0HY0l60L7mBZKmYyx/r+Y0NatQ=";
+    hash = "sha256-CXF7PvmrPjjNoWXbWxEkFE/Sw4bO6YqDplPwF/OxhB0=";
   };
 
-  prePatch = ''
-    substituteInPlace module/Makefile \
-      --replace-fail '/etc/os-release' '/dev/null'
-  '';
+  patches = [
+    # Fix feature probes on kernels with allocation profiling enabled.
+    # Upstream: https://github.com/DisplayLink/evdi/pull/592
+    ./fix-conftest-probes.patch
+  ];
 
   env.CFLAGS = toString [
     "-Wno-error"
-    "-Wno-error=discarded-qualifiers" # for Linux 4.19 compatibility
     "-Wno-error=sign-compare"
   ];
 
@@ -77,7 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Extensible Virtual Display Interface";
     homepage = "https://www.displaylink.com/";
     license = with lib.licenses; [
-      lgpl21Only
+      mit
+      lgpl21Plus
       gpl2Only
     ];
     maintainers = [ ];

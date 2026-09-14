@@ -45,6 +45,18 @@ stdenv'.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  configureFlags =
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      "ATF_SHELL=${darwin.bootstrapStdenv.shell}"
+    ]
+    # When cross-compiling, autoconf cannot run test programs on the build host.
+    # Pre-set cache variables so configure skips those AC_RUN_IFELSE checks.
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      "kyua_cv_getopt_plus=yes"
+      "kyua_cv_attribute_noreturn=yes"
+      "kyua_cv_getcwd_works=yes"
+    ];
+
   enableParallelBuilding = true;
 
   makeFlags = [

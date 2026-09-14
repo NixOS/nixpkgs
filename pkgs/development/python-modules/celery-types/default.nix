@@ -2,24 +2,29 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  poetry-core,
   typing-extensions,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "celery-types";
-  version = "0.23.0";
+  version = "0.26.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "celery_types";
     inherit version;
-    hash = "sha256-QC7QVVrqPNXh5iSPRjLk8Y7sjtskNRc/nm3AhEn6EB4=";
+    hash = "sha256-+jGBNv2tg/g/FTHe7Nn+Zktd///ynzwx6RIKRrjjkI8=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.18,<0.10.0" "uv_build"
+  '';
 
-  propagatedBuildInputs = [ typing-extensions ];
+  build-system = [ uv-build ];
+
+  dependencies = [ typing-extensions ];
 
   doCheck = false;
 

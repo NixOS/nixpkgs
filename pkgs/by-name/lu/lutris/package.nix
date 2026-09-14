@@ -18,7 +18,7 @@ let
   gnomeDeps =
     pkgs: with pkgs; [
       zenity
-      gtksourceview
+      gtksourceview3
       gnome-desktop
       libgnome-keyring
       webkitgtk_4_1
@@ -274,7 +274,7 @@ buildFHSEnv {
       lcms2
       mpg123
       cairo
-      unixODBC
+      unixodbc
       samba4
       sane-backends
       openldap

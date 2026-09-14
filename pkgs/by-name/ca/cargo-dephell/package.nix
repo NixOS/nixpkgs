@@ -57,5 +57,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
+    broken = stdenv.hostPlatform.isLinux;
   };
 })

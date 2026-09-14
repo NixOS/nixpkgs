@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
+  aiohttp,
   attrdict,
   beautifulsoup4,
   cython,
@@ -32,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "paddleocr";
-  version = "3.3.3";
+  version = "3.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleOCR";
     tag = "v${version}";
-    hash = "sha256-D+ubKviK6Nx+PlvBkTvCfKomZ9og0YrdNZNxMqWlPik=";
+    hash = "sha256-uOtxJmhhPkl1l9R4Qzx8wuMEVXKTUt5YDK4WHozlmMc=";
   };
 
   patches = [
@@ -48,7 +49,7 @@ buildPythonPackage rec {
     # unmaintained and has been removed from nixpkgs.
     #
     # The image OCR feature of PaddleOCR doesn't use these classes though, so
-    # they work even after stripping the the `IaaAugment` and `CopyPaste`
+    # they work even after stripping the `IaaAugment` and `CopyPaste`
     # exports. It probably breaks some of the OCR model creation tooling that
     # PaddleOCR provides, however.
     ./remove-import-imaug.patch
@@ -65,6 +66,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    aiohttp
     attrdict
     beautifulsoup4
     cython
@@ -109,7 +111,6 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ happysalada ];
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

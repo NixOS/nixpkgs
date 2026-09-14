@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "wikipedia-api";
-  version = "0.8.1";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "martin-majlis";
     repo = "Wikipedia-API";
     tag = "v${version}";
-    hash = "sha256-5wi1HVkD36RnmIAKSKRYTc30HtYMiFrRoYzZRWENd/M=";
+    hash = "sha256-kIZnKb0dzvXBgK1UNoG0gVIy5BvHnOjZbRo+xsLeQ/g=";
   };
 
   build-system = [ setuptools ];

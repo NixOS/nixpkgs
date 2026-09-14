@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   libtool,
   gettext,
   pkg-config,
@@ -17,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libskk";
-  version = "1.0.5";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "ueno";
     repo = "libskk";
     tag = finalAttrs.version;
-    hash = "sha256-xXed7mQqseefIldGjNsQf8n0YTcI9L9T1FkO/dhNR3g=";
+    hash = "sha256-Dciz5VeflaX2eYt1B90NpgLKNtCHY/CDabuCx+T/SS0=";
   };
 
   env = {
@@ -31,15 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
       "-Wno-error=int-conversion"
     ];
   };
-
-  patches = [
-    # fix parse error in default.json
-    # https://github.com/ueno/libskk/pull/90
-    (fetchpatch {
-      url = "https://github.com/ueno/libskk/commit/2382ebedc8dca88e745d223ad7badb8b73bbb0de.diff";
-      hash = "sha256-e1bKVteNjqmr40XI82Qar63LXPWYIfnUVlo5zQSkPNw=";
-    })
-  ];
 
   buildInputs = [ libxkbcommon ];
   nativeBuildInputs = [

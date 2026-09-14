@@ -7,11 +7,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mingw_w64-headers";
-  version = "13.0.0";
+  version = "14.0.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/mingw-w64/mingw-w64-v${finalAttrs.version}.tar.bz2";
-    hash = "sha256-Wv6CKvXE7b9n2q9F7sYdU49J7vaxlSTeZIl8a5WCjK8=";
+    hash = "sha256-bq+SHZ65h9OCCzZOqXdbwZuWXsgUkLb91xZSbCjhmVw=";
   };
 
   configureFlags = [
@@ -23,6 +23,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    # Headers-only stand-in used to bootstrap a toolchain before the real libc
+    # exists: runtimes can compile against it, but not link.
+    headersOnly = true;
     tests = {
       inherit (nixosTests) wine;
     };

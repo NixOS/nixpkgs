@@ -11,29 +11,34 @@
   copyDesktopItems,
   pnpm_10,
   nodejs,
-  electron_38,
+  electron_42,
   zip,
+  nix-update-script,
 }:
 let
-  electron = electron_38;
+  electron = electron_42;
   stdenv = stdenvNoCC;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stoat-desktop";
-  version = "1.2.0";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "stoatchat";
     repo = "for-desktop";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Q1FKQBxtlrGmdfx7gLd0aQx/5Pqd4atFdMykxK997Rw=";
+    hash = "sha256-Qfny57ZwSk19R4fnz+IQoEhbVG76yJhx06QPDpLM7fM=";
   };
+
+  patches = [
+    # zip extraction fails on newer nodejs versions without this fix
+    ./bump-yauzl.patch
+  ];
 
   postPatch = ''
     # Disable auto-updates
-    substituteInPlace src/main.ts \
-      --replace-fail "updateElectronApp();" ""
+    sed -i '/updateElectronApp([^)]*)/d' src/main.ts
   '';
 
   strictDeps = true;
@@ -54,13 +59,21 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
     fetcherVersion = 3;
     pnpm = pnpm_10;
-    hash = "sha256-m0EuM8qTCFLxxO0RNze5WgMkuHZXeIi+U/Jiuv91eCg=";
+    hash = "sha256-0v+MHYFgnIN4FvzFkv5D3Bqc7538763yCIWu05XR+fA=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+
+  # electron-forge's console output is squeezed into one narrow column if unset
+  env.CI = "1";
 
   buildPhase = ''
     runHook preBuild
@@ -140,14 +153,14 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Open source user-first chat platform";
     homepage = "https://stoat.chat/";
     changelog = "https://github.com/stoatchat/for-desktop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
-      heyimnova
-      magistau
       v3rm1n0
       RossSmyth
     ];

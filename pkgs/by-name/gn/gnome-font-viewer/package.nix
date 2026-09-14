@@ -14,15 +14,16 @@
   wrapGAppsHook4,
   gnome,
   harfbuzz,
+  desktop-file-utils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-font-viewer";
-  version = "49.0";
+  version = "50.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-font-viewer/${lib.versions.major finalAttrs.version}/gnome-font-viewer-${finalAttrs.version}.tar.xz";
-    hash = "sha256-fAGJJcKFdxtV19Gm8VcRwMGT10UO2YceINRPJUhWJAQ=";
+    hash = "sha256-lWSwiMWxUMVOKjp7xwFN7sbuVRJh6YSI+JGx8bjca4A=";
   };
 
   doCheck = true;
@@ -35,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
     libxml2
     glib
+    desktop-file-utils
   ];
 
   buildInputs = [
@@ -45,12 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
     fribidi
   ];
 
-  # Do not run meson-postinstall.sh
-  preConfigure = "sed -i '2,$ d'  meson-postinstall.sh";
-
-  env = lib.optionalAttrs stdenv.cc.isGNU {
-    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
-  };
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/gnome-font-viewer.thumbnailer \
+      --replace-fail "TryExec=gnome-thumbnail-font" "TryExec=$out/bin/gnome-thumbnail-font" \
+      --replace-fail "Exec=gnome-thumbnail-font" "Exec=$out/bin/gnome-thumbnail-font"
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {

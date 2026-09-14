@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "subdir('tests')" ""
   '';
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   mesonFlags = [
     "-Dinstall-py-overrides=true"

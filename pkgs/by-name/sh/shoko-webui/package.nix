@@ -3,21 +3,24 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   nodejs,
-  pnpm,
+  pnpm_10,
   pnpmConfigHook,
   lib,
   shoko,
   nix-update-script,
 }:
+let
+  pnpm = pnpm_10;
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "shoko-webui";
-  version = "2.4.1";
+  version = "2.5.9";
 
   src = fetchFromGitHub {
     owner = "ShokoAnime";
     repo = "Shoko-WebUI";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/frP6qI5xAmogb5a5AA83IJxgOhVUi6X0E4h3Qg5u6w=";
+    hash = "sha256-mHBflHehCnwCkh4K271vo30rfoQa+3xLos0d7P/kKvE=";
   };
 
   # Avoid requiring git as a build time dependency. It's used for version
@@ -27,8 +30,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-rTlem83dFptgvKUKUaHK8vi5B0FBehPFtkCUhOnUKd0=";
+    hash = "sha256-0ZXXfP6iHyd5zlUQruS3MZADkuucygXrUPRKNCNYA7k=";
   };
 
   nativeBuildInputs = [
@@ -60,10 +64,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ShokoAnime/Shoko-WebUI";
     changelog = "https://github.com/ShokoAnime/Shoko-WebUI/releases/tag/v${finalAttrs.version}";
     description = "Web-based frontend for the Shoko anime management system";
-    maintainers = with lib.maintainers; [
-      diniamo
-      nanoyaki
-    ];
+    maintainers = with lib.maintainers; [ nanoyaki ];
     inherit (shoko.meta) license platforms;
   };
 })

@@ -1,6 +1,6 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
   bundlerEnv,
   bundlerUpdateScript,
@@ -14,12 +14,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cewl";
-  version = "5.5.2";
+  version = "6.2.1";
+
   src = fetchFromGitHub {
     owner = "digininja";
     repo = "CeWL";
     tag = finalAttrs.version;
-    hash = "sha256-5LTZUr3OMeu1NODhIgBiVqtQnUWYfZTm73q61vT3rXc=";
+    hash = "sha256-wMTGAB4P925z2UYNvlN4kSu1SLzKyB4a/Cjq4BofJ9w=";
   };
 
   buildInputs = [ rubyEnv.wrappedRuby ];
@@ -34,8 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Custom wordlist generator";
-    mainProgram = "cewl";
     homepage = "https://digi.ninja/projects/cewl.php/";
+    changelog = "https://github.com/digininja/CeWL/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    mainProgram = "cewl";
   };
 })

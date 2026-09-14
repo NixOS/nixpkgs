@@ -15,21 +15,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jitsi-meet";
-  version = "1.0.8792";
+  version = "1.0.9365";
 
   src = fetchFromGitHub {
     owner = "jitsi";
     repo = "jitsi-meet";
     tag = lib.last (lib.splitVersion finalAttrs.version);
-    hash = "sha256-K4Xrse1kpNqlUChbQnAjP5lRCRuDfJKiN/022tCmMVQ=";
+    hash = "sha256-gAXY40jvQjGhitbpWjJ+C8GZwuRu/zyJw2NN5yf/l6o=";
   };
 
   env = {
     makeFlags = "source-package";
     makeCacheWritable = true;
+    forceGitDeps = true;
     npmDeps = fetchNpmDeps {
       inherit (finalAttrs) src;
-      hash = "sha256-2NPfr3gskHz9zSGs//uzyCCuE+CZ295hhitDPlS9xuY=";
+      hash = "sha256-5fGaX8VFCCMkTeQuhFPwd9W7cBNVML/bVYLODq07s5w=";
+      forceGitDeps = true;
     };
   };
 

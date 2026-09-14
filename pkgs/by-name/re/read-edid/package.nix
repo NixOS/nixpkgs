@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tool for reading and parsing EDID data from monitors";
     homepage = "http://www.polypux.org/projects/read-edid/";
     license = lib.licenses.bsd2; # Quoted: "This is an unofficial license. Let's call it BSD-like."
-    maintainers = [ lib.maintainers.dezgeg ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

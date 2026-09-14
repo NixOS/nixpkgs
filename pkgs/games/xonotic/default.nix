@@ -38,7 +38,6 @@
 let
   pname = "xonotic";
   version = "0.8.6";
-  name = "${pname}-${version}";
   variant =
     if withSDL && withGLX then
       ""
@@ -205,6 +204,15 @@ let
             --add-needed ${libtheora}/lib/libtheora.so \
             $out/bin/xonotic-sdl
       '';
+
+    meta.mainProgram = "xonotic-${
+      if withSDL then
+        "sdl"
+      else if withGLX then
+        "glx"
+      else
+        "dedicated"
+    }";
   };
 
 in
@@ -233,6 +241,7 @@ rec {
         desktopItems = [ desktopItem ];
         meta = meta // {
           hydraPlatforms = [ ];
+          mainProgram = if withSDL || withGLX then "xonotic" else "xonotic-dedicated";
         };
       }
       (

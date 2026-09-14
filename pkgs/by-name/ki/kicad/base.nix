@@ -20,7 +20,7 @@
   graphviz,
   libpthread-stubs,
   libxdmcp,
-  unixODBC,
+  unixodbc,
   libgit2,
   libsecret,
   libgcrypt,
@@ -43,9 +43,11 @@
 
   swig,
   python,
+  poppler,
   wxPython,
   opencascade-occt_7_6,
   libngspice,
+  libspnav,
   valgrind,
   protobuf_29,
   nng,
@@ -119,6 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "KICAD_SANITIZE_ADDRESS" sanitizeAddress)
     (cmakeBool "KICAD_SANITIZE_THREADS" sanitizeThreads)
     (cmakeBool "KICAD_SPICE" (!(stable && !withNgspice)))
+    (cmakeBool "KICAD_UPDATE_CHECK" false)
   ]
   ++ optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     (cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'qa_spice|qa_cli'")
@@ -171,13 +174,17 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     swig
     python
-    unixODBC
+    poppler
+    unixodbc
     libdeflate
     opencascade-occt
     protobuf_29
 
     # This would otherwise cause a linking requirement for mbedtls.
     (nng.override { mbedtlsSupport = false; })
+  ]
+  ++ optionals (stdenv.hostPlatform.isLinux) [
+    libspnav
   ]
   ++ optionals withScripting [ wxPython ]
   ++ optionals withNgspice [ libngspice ]

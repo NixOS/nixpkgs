@@ -11,7 +11,7 @@
   libpulseaudio,
   alsa-lib,
   jack2,
-  v4l-utils,
+  libv4l,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     libpulseaudio
     jack2
-    v4l-utils
+    libv4l
   ];
 
   nativeBuildInputs = [
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     description = "Webcam Capture Software";
     longDescription = "Webcamoid is a full featured and multiplatform webcam suite.";
     homepage = "https://github.com/webcamoid/webcamoid/";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ robaca ];
     mainProgram = "webcamoid";

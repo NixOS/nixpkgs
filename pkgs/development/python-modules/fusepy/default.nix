@@ -3,23 +3,19 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pkgs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fusepy";
   version = "3.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1gg69qfi9pjcic3g98l8ya64rw2vc1bp8gsf76my6gglq8z7izvj";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-cv94PsL0PeOrOU4/dFdgW/BMjPKIovQGi0zeFB1O5r0=";
   };
-
-  propagatedBuildInputs = [ pkgs.fuse ];
-
-  # No tests included
-  doCheck = false;
 
   # On macOS, users are expected to install macFUSE. This means fusepy should
   # be able to find libfuse in /usr/local/lib.
@@ -27,6 +23,15 @@ buildPythonPackage rec {
     substituteInPlace fuse.py --replace \
       "find_library('fuse')" "'${lib.getLib pkgs.fuse}/lib/libfuse.so'"
   '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [ pkgs.fuse3 ];
+
+  # No tests included
+  doCheck = false;
+
+  pythonImportsCheck = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "fuse" ];
 
   meta = {
     description = "Simple ctypes bindings for FUSE";
@@ -38,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
   };
-}
+})

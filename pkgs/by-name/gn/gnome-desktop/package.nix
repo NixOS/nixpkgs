@@ -18,14 +18,14 @@
   meson,
   wayland,
   libseccomp,
-  systemd,
+  systemdLibs,
   udev,
   bubblewrap,
   gobject-introspection,
   gtk-doc,
   docbook-xsl-nons,
   gsettings-desktop-schemas,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
   ]
   ++ lib.optionals withSystemd [
-    systemd
+    systemdLibs
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     bubblewrap
@@ -110,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl2Plus
     ];
     platforms = lib.platforms.unix;
+    badPlatforms = lib.platforms.darwin;
     teams = [ lib.teams.gnome ];
   };
 })

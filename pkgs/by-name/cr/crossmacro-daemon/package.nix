@@ -14,13 +14,13 @@
 
 buildDotnetModule rec {
   pname = "crossmacro-daemon";
-  version = "0.9.7";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "alper-han";
     repo = "CrossMacro";
     tag = "v${version}";
-    hash = "sha256-qVKlch9GxEfB9thqXdiwWgF25ljX+b5on+bZmcAjAzw=";
+    hash = "sha256-2L25A2OO2Ju6n1QlblNBtKva1PfbidFz/QESjLBVuSU=";
   };
 
   projectFile = "src/CrossMacro.Daemon/CrossMacro.Daemon.csproj";
@@ -44,11 +44,20 @@ buildDotnetModule rec {
     zlib
   ];
 
-  dotnetFlags = [ "-p:Version=${version}" ];
+  dotnetFlags = [
+    "-p:PublishAot=true"
+    "-p:PublishReadyToRun=false"
+    "-p:OptimizationPreference=Speed"
+    "-p:StripSymbols=true"
+    "-p:IlcTrimMetadata=true"
+    "-p:DebugType=None"
+    "-p:DebugSymbols=false"
+    "-p:Version=${version}"
+  ];
 
   postInstall = ''
-    install -Dm644 scripts/assets/org.crossmacro.policy \
-      $out/share/polkit-1/actions/org.crossmacro.policy
+    install -Dm644 scripts/assets/io.github.alper_han.crossmacro.policy \
+      $out/share/polkit-1/actions/io.github.alper_han.crossmacro.policy
 
     install -Dm644 scripts/assets/50-crossmacro.rules \
       $out/share/polkit-1/rules.d/50-crossmacro.rules

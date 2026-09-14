@@ -8,19 +8,20 @@
   poetry-core,
   pytestCheckHook,
   pyyaml,
+  rpds-py,
   toml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "netutils";
-  version = "1.17.1";
+  version = "1.19.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "networktocode";
     repo = "netutils";
-    tag = "v${version}";
-    hash = "sha256-LdLNDzO5ANpTqpcemgyNoZxm6LDYRonS5o8mMmdg4vM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5BtrtlwY/V8hFUxUOri8v8j4hd6hF2c7ZWvQEmKdTjM=";
   };
 
   build-system = [ poetry-core ];
@@ -28,16 +29,18 @@ buildPythonPackage rec {
   dependencies = [ jsonschema ];
 
   optional-dependencies.optionals = [
+    jinja2
     jsonschema
     napalm
+    rpds-py
   ];
 
   nativeCheckInputs = [
-    jinja2
     pytestCheckHook
     pyyaml
     toml
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "netutils" ];
 
@@ -59,8 +62,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library that is a collection of objects for common network automation tasks";
     homepage = "https://github.com/networktocode/netutils";
-    changelog = "https://github.com/networktocode/netutils/releases/tag/${src.tag}";
+    changelog = "https://github.com/networktocode/netutils/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

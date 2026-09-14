@@ -18,13 +18,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "buildah";
-  version = "1.43.0";
+  version = "1.45.0";
 
   src = fetchFromGitHub {
-    owner = "containers";
+    owner = "podman-container-tools";
     repo = "buildah";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SihJXPnUrOe4TxbbnQOhXoZlbQZfLy0YGMV32CtojV8=";
+    hash = "sha256-s+94gep69JEJCeS+HuPt2VuK64QzH/Gc1v8sFeyaIjw=";
   };
 
   outputs = [
@@ -80,7 +80,7 @@ buildGoModule (finalAttrs: {
     description = "Tool which facilitates building OCI images";
     mainProgram = "buildah";
     homepage = "https://buildah.io/";
-    changelog = "https://github.com/containers/buildah/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/podman-container-tools/buildah/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     teams = [ lib.teams.podman ];
   };

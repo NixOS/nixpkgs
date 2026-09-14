@@ -1,0 +1,13 @@
+diff --git a/mgvams/mg_task_write.cc b/mgvams/mg_task_write.cc
+index b67288c..56b0e67 100644
+--- a/mgvams/mg_task_write.cc
++++ b/mgvams/mg_task_write.cc
+@@ -162,7 +162,7 @@ public: //overrides
+       o______ "a0 += \"" << end() << "\";\n";
+     }else{
+     }
+-    o______ "fprintf(stdout, a0.c_str()";
++    o______ "fprintf(stdout, \"%s\", a0.c_str()";
+     for(size_t i=1; i<num_args(); ++i) {
+       o << ", plain_value(a" << i << ")";
+     }

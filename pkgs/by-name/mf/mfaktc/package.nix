@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mfaktc";
-  version = "0.24.0";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "primesearch";
     repo = "mfaktc";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-7lJ3+v9exe+n+Txkn1vsvSPYLEP4l/0UgHpc6lAGv1Y=";
+    hash = "sha256-t1YaNHFndgNJ5VnUXI8cDJ62bBL7M6Q+by2XKlUleyc=";
   };
 
   enableParallelBuilding = true;
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Trial Factoring program using CUDA for GIMPS";
     longDescription = ''
-      CUDA Program for trial factoring Mersenne primes. Intented for use with GIMPS through autoprimenet.py.
+      CUDA Program for trial factoring Mersenne primes. Intended for use with GIMPS through autoprimenet.py.
       Note that the mfaktc.ini file, which is in $out/share, must be symlinked to your working directory.
     '';
     homepage = "https://github.com/primesearch/mfaktc";

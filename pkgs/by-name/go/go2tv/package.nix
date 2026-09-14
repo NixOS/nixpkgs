@@ -10,24 +10,32 @@
   libxcursor,
   libx11,
   libglvnd,
+  libxkbcommon,
+  pipewire,
   pkg-config,
+  wayland,
   withGui ? true,
 }:
 
 buildGoModule rec {
   pname = "go2tv" + lib.optionalString (!withGui) "-lite";
-  version = "2.0.2";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "alexballas";
     repo = "go2tv";
     tag = "v${version}";
-    hash = "sha256-oyd6H3U799el9xcte3mOJo0m2YQTZ/vZjFdM2F7Cha8=";
+    hash = "sha256-rNoQafBIxE0xoBFQNy6GoeIE93Uq3QEsktko77P2ps8=";
   };
 
-  vendorHash = "sha256-2eEB6yfWFD7X3+qQenRoMiyzHH9i/gDg0IuOo/gUBFw=";
+  vendorHash = "sha256-h8/DBqkaSSxIIFrdbun4doN3qyKbR3BhO4SwL5H/sfc=";
 
   nativeBuildInputs = [ pkg-config ];
+
+  env = {
+    # allow flag from `pkg-config --cflags libpipewire-0.3`
+    CGO_CFLAGS_ALLOW = "-fno-strict-overflow";
+  };
 
   buildInputs = [
     libx11
@@ -38,6 +46,9 @@ buildGoModule rec {
     libxext
     libxxf86vm
     libglvnd
+    libxkbcommon
+    pipewire
+    wayland
   ];
 
   ldflags = [

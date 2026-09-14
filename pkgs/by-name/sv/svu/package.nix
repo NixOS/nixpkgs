@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "svu";
-  version = "3.3.0";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "caarlos0";
     repo = "svu";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-3Rj+2ROo9TuWc2aZ8kkGeXH+PHjKva6nD7wlXHY/LQg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uU5/BZA5EcIlzwoG42ZjQAkSec1hZ76pTUhK4n7bxBA=";
   };
 
-  vendorHash = "sha256-2QznJ28lp/+f4MIbu4Wi5Kx46B7IIHGYGofY7B1OEjo=";
+  vendorHash = "sha256-qRnPj4Hnf+MH96J4oYRCDBqVthHmnAoNt0CUVZZv0CI=";
 
   ldflags = [
     "-s"

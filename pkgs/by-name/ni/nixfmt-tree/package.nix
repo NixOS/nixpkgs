@@ -54,7 +54,7 @@ let
       '' allRuntimeInputs;
   };
 in
-treefmtWithConfig.overrideAttrs {
+treefmtWithConfig.overrideAttrs (prevAttrs: {
   meta = {
     mainProgram = "treefmt";
     description = "Official Nix formatter zero-setup starter using treefmt";
@@ -118,63 +118,65 @@ treefmtWithConfig.overrideAttrs {
     platforms = lib.platforms.all;
   };
 
-  passthru.tests.simple =
-    runCommand "nixfmt-tree-test-simple"
-      {
-        nativeBuildInputs = [
-          git
-          nixfmt-tree
-          writableTmpDirAsHomeHook
-        ];
-      }
-      ''
-        git config --global user.email "nix-builder@nixos.org"
-        git config --global user.name "Nix Builder"
+  passthru = prevAttrs.passthru // {
+    tests.simple =
+      runCommand "nixfmt-tree-test-simple"
+        {
+          nativeBuildInputs = [
+            git
+            nixfmt-tree
+            writableTmpDirAsHomeHook
+          ];
+        }
+        ''
+          git config --global user.email "nix-builder@nixos.org"
+          git config --global user.name "Nix Builder"
 
-        cat > unformatted.nix <<EOF
-        let to = "be formatted"; in to
-        EOF
+          cat > unformatted.nix <<EOF
+          let to = "be formatted"; in to
+          EOF
 
-        cat > formatted.nix <<EOF
-        let
-          to = "be formatted";
-        in
-        to
-        EOF
+          cat > formatted.nix <<EOF
+          let
+            to = "be formatted";
+          in
+          to
+          EOF
 
-        mkdir -p repo
-        (
-          cd repo
-          mkdir dir
-          cp ../unformatted.nix a.nix
-          cp ../unformatted.nix dir/b.nix
-
-          git init
-          git add .
-          git commit -m "Initial commit"
-
-          treefmt dir
-          if [[ "$(<dir/b.nix)" != "$(<../formatted.nix)" ]]; then
-            echo "File dir/b.nix was not formatted properly after dir was requested to be formatted"
-            exit 1
-          elif [[ "$(<a.nix)" != "$(<../unformatted.nix)" ]]; then
-            echo "File a.nix was formatted when only dir was requested to be formatted"
-            exit 1
-          fi
-
+          mkdir -p repo
           (
-            cd dir
-            treefmt
+            cd repo
+            mkdir dir
+            cp ../unformatted.nix a.nix
+            cp ../unformatted.nix dir/b.nix
+
+            git init
+            git add .
+            git commit -m "Initial commit"
+
+            treefmt dir
+            if [[ "$(<dir/b.nix)" != "$(<../formatted.nix)" ]]; then
+              echo "File dir/b.nix was not formatted properly after dir was requested to be formatted"
+              exit 1
+            elif [[ "$(<a.nix)" != "$(<../unformatted.nix)" ]]; then
+              echo "File a.nix was formatted when only dir was requested to be formatted"
+              exit 1
+            fi
+
+            (
+              cd dir
+              treefmt
+            )
+
+            if [[ "$(<a.nix)" != "$(<../formatted.nix)" ]]; then
+              echo "File a.nix was not formatted properly after running treefmt without arguments in dir"
+              exit 1
+            fi
           )
 
-          if [[ "$(<a.nix)" != "$(<../formatted.nix)" ]]; then
-            echo "File a.nix was not formatted properly after running treefmt without arguments in dir"
-            exit 1
-          fi
-        )
+          echo "Success!"
 
-        echo "Success!"
-
-        touch $out
-      '';
-}
+          touch $out
+        '';
+  };
+})

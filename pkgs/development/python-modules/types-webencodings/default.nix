@@ -5,15 +5,15 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "types-webencodings";
-  version = "0.5.0.20251108";
+  version = "0.6.0.20260827";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_webencodings";
-    inherit version;
-    hash = "sha256-I3jizszO09QbteITh1hue1MF4RUZ/GsGWcYp8jsuXeQ=";
+    inherit (finalAttrs) version;
+    hash = "sha256-t6jOaBQa4NMY+8R5E38o3CRbpXiuB/bsbONbKU8Ez0E=";
   };
 
   build-system = [ setuptools ];
@@ -26,4 +26,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

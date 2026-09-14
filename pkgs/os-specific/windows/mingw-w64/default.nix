@@ -27,6 +27,11 @@ stdenv.mkDerivation {
     (lib.enableFeature stdenv.hostPlatform.isAarch64 "libarm64")
   ];
 
+  # MinGW has no pthreads of its own; threading goes through the Win32 API
+  # declared by these headers. See `threadModel` in
+  # pkgs/development/compilers/gcc/ng/common/libgcc/default.nix.
+  passthru.threadModel = "win32";
+
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ autoreconfHook ];

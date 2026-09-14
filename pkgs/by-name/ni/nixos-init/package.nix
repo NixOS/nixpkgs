@@ -47,6 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   binaries = [
     "initrd-init"
     "find-etc"
+    "clear-etc-opaque"
     "resolve-in-root"
     "env-generator"
   ];

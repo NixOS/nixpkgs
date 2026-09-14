@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mediasynclite";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "iBroadcastMediaServices";
     repo = "MediaSyncLiteLinux";
     rev = finalAttrs.version;
-    hash = "sha256-ToSkR6tPJMBCcj1NUBAywKjCAPlpmh+ngIopFrT2PIA=";
+    hash = "sha256-vnajWmQfKJ3ff/O4IROXiRAKEGu/6EMX9/oApwcwoaU=";
   };
 
   buildInputs = [

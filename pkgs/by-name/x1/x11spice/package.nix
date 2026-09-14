@@ -7,7 +7,7 @@
   libxcb-util,
   util-macros,
   libxcb,
-  gtk2,
+  gtk3,
   spice,
   spice-protocol,
 }:
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     libxcb
     libxcb-util
     util-macros
-    gtk2
+    gtk3
     spice
     spice-protocol
   ];

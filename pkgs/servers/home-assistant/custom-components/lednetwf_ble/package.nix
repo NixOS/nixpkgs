@@ -38,6 +38,6 @@ buildHomeAssistantComponent {
     homepage = "https://github.com/8none1/lednetwf_ble";
     changelog = "https://github.com/8none1/lednetwf_ble/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ blenderfreaky ];
+    maintainers = with lib.maintainers; [ kilyanni ];
   };
 }

@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "gattlib";
-  version = "20210616";
+  version = "0.20210616";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oscaracena";
     repo = "pygattlib";
-    rev = "v.${version}";
+    tag = "v.${lib.removePrefix "0." version}";
     hash = "sha256-n3D9CWKvgw4FYmbvsfhaHN963HARBG0p4CcZBC8Gkb0=";
   };
 

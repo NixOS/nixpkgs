@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion artifacts/mmtc.{bash,fish} --zsh artifacts/_mmtc
   '';
 
-  GEN_ARTIFACTS = "artifacts";
+  env.GEN_ARTIFACTS = "artifacts";
 
   meta = {
     description = "Minimal mpd terminal client that aims to be simple yet highly configurable";

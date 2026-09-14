@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.6.0";
 
   src = fetchFromGitHub {
-    owner = "biscuit-auth";
+    owner = "eclipse-biscuit";
     repo = "biscuit-cli";
     tag = finalAttrs.version;
     sha256 = "sha256-s4Y4MhM79Z+4VxB03+56OqRQJaSHj2VQEJcL6CsT+2k=";

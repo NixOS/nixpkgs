@@ -27,15 +27,18 @@
   wrapQtAppsHook,
 }:
 
+let
+  withQt6 = lib.versions.major qtbase.version == "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mediascanner2";
-  version = "0.118";
+  version = "0.201";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/mediascanner2";
     tag = finalAttrs.version;
-    hash = "sha256-ZJXJNDZUDor5EJ+rn7pQt7lLzoszZUQM3B+u1gBSMs8=";
+    hash = "sha256-Z57ptFR+/W80sPquM5hgaqnCjd9pWYheq2VnkR+fGSY=";
   };
 
   outputs = [
@@ -45,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/qml/MediaScanner.*/CMakeLists.txt \
-      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
   '';
 
   strictDeps = true;
@@ -80,14 +83,20 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-good
   ]);
 
+  nativeCheckInputs = [ dbus ];
+
   checkInputs = [ gtest ];
 
-  cmakeFlags = [ (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck) ];
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_QT6" withQt6)
+    (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
+  ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   preCheck = ''
     export QT_PLUGIN_PATH=${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
+    export QML2_IMPORT_PATH=${lib.getBin qtdeclarative}/${qtbase.qtQmlPrefix}
     export XDG_DATA_DIRS=${shared-mime-info}/share:$XDG_DATA_DIRS
   '';
 
@@ -100,10 +109,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    }
+    // lib.optionalAttrs (!withQt6) {
       # music app needs mediascanner to work properly, so it can find files
       music-app = nixosTests.lomiri-music-app;
-
-      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
     updateScript = gitUpdater { };
   };

@@ -23,6 +23,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     changelog = "https://github.com/trag1c/paperbush/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Super concise argument parsing tool for Python";
+    homepage = "https://github.com/trag1c/paperbush";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };

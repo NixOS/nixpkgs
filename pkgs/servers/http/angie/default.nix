@@ -9,11 +9,11 @@
 
 callPackage ../nginx/generic.nix args rec {
   pname = "angie";
-  version = "1.11.3";
+  version = "1.12.1";
 
   src = fetchurl {
     url = "https://download.angie.software/files/angie-${version}.tar.gz";
-    hash = "sha256-CPqZ0YqQ9zhnSzAPZIZ0BgRa1cUY6VLNJOP/2wwUEX0=";
+    hash = "sha256-X08gO+Kspv4gdwtInHIORuUdM35SEGXn5HK2HiTj0vU=";
   };
 
   configureFlags = lib.optionals withAcme [
@@ -39,9 +39,13 @@ callPackage ../nginx/generic.nix args rec {
 
   meta = {
     description = "Angie is an efficient, powerful, and scalable web server that was forked from nginx";
-    homepage = "https://angie.software/en/";
+    homepage = "https://en.angie.software/";
+    mainProgram = "angie";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ izorkin ];
+    maintainers = with lib.maintainers; [
+      izorkin
+      suorcd
+    ];
   };
 }

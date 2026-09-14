@@ -33,6 +33,14 @@ in
             unix = {
               type = "unix";
             };
+
+            unix-custom = {
+              type = "unix";
+              address = "/run/openbao/world-accessible.sock";
+              socket_mode = "0222";
+              socket_user = "openbao";
+              socket_group = "openbao";
+            };
           };
 
           cluster_addr = "https://127.0.0.1:8201";
@@ -50,6 +58,9 @@ in
 
   testScript =
     { nodes, ... }:
+    let
+      inherit (nodes.machine.services.openbao.settings) listener;
+    in
     ''
       import json
 
@@ -58,7 +69,15 @@ in
       with subtest("Wait for OpenBao to start up"):
         machine.wait_for_unit("openbao.service")
         machine.wait_for_open_port(8200)
-        machine.wait_for_open_unix_socket("${nodes.machine.services.openbao.settings.listener.unix.address}")
+        machine.wait_for_open_unix_socket("${listener.unix.address}")
+        machine.wait_for_open_unix_socket("${listener.unix-custom.address}")
+
+      with subtest("Check Unix Socket listeners"):
+        t.assertEqual("srwx------ openbao:openbao", machine.succeed("stat --printf '%A %U:%G' ${listener.unix.address}"))
+        machine.fail("su -l nobody -s /bin/sh -c 'curl --fail --silent --unix-socket ${listener.unix.address} localhost'")
+
+        t.assertEqual("s-w--w--w- openbao:openbao", machine.succeed("stat --printf '%A %U:%G' ${listener.unix-custom.address}"))
+        machine.succeed("su -l nobody -s /bin/sh -c 'curl --fail --silent --unix-socket ${listener.unix-custom.address} localhost'")
 
       with subtest("Check that the web UI is being served"):
         machine.succeed("curl -L --fail --show-error --silent $BAO_ADDR | grep '<title>OpenBao</title>'")

@@ -1,0 +1,31 @@
+diff --git a/components/cbor/BUILD.gn b/components/cbor/BUILD.gn
+index 91fbfffd3c143..d87ef0d404b20 100644
+--- a/components/cbor/BUILD.gn
++++ b/components/cbor/BUILD.gn
+@@ -12,7 +12,7 @@ buildflag_header("buildflags") {
+   # TODO(crbug.com/535682335): Remove `USE_CBOR_RUST` buildflag entirely,
+   # unconditionally enable Rust CBOR parser, and drop `is_cronet_build` check
+   # once Cronet supports Crubit dependencies.
+-  flags = [ "USE_CBOR_RUST=!$is_cronet_build" ]
++  flags = [ "USE_CBOR_RUST=$enable_cpp_api_from_rust" ]
+ }
+ 
+ component("cbor") {
+@@ -37,7 +37,7 @@ component("cbor") {
+     "//base",
+   ]
+ 
+-  if (!is_cronet_build) {
++  if (enable_cpp_api_from_rust) {
+     public_deps = [
+       "//build/rust/crubit",
+       "//components/cbor/rust:cbor_rust_bindings",
+@@ -63,7 +63,7 @@ source_set("unit_tests") {
+     "//testing/gtest",
+     "//third_party/fuzztest",
+   ]
+-  if (!is_cronet_build) {
++  if (enable_cpp_api_from_rust) {
+     deps += [ "//components/cbor/rust:cbor_rust_unittests" ]
+   }
+ 

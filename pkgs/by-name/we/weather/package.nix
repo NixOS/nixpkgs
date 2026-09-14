@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "weather";
 
   src = fetchurl {
-    url = "http://fungi.yuggoth.org/weather/src/weather-${finalAttrs.version}.tar.xz";
+    url = "https://fungi.yuggoth.org/weather/src/weather-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-wn3cpgfrlqntMIiVFh4317DrbGgQ4YRnFz3KHXacTw4=";
   };
 

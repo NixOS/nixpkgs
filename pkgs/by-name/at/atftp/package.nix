@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "atftp";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/atftp/atftp-${finalAttrs.version}.tar.gz";
-    hash = "sha256-3yqgicdnD56rQOVZjl0stqWC3FGCkm6lC01pDk438xY=";
+    hash = "sha256-lsvb0vFmFcicnbNr6bMG3hdtmhwD3LjLd3Ylv+BovCs=";
   };
 
   # fix test script

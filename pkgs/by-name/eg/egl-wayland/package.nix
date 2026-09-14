@@ -8,15 +8,15 @@
   ninja,
   wayland-scanner,
   libGL,
-  libx11,
   libdrm,
   wayland,
   wayland-protocols,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "egl-wayland";
-  version = "1.1.21";
+  version = "1.1.22";
 
   outputs = [
     "out"
@@ -24,10 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "Nvidia";
+    owner = "NVIDIA";
     repo = "egl-wayland";
-    rev = finalAttrs.version;
-    hash = "sha256-a98DzmzCG6DlLJ1HCl/LeD21Q7yyNbTce1poOoAnTjA=";
+    tag = finalAttrs.version;
+    hash = "sha256-3adLn4Sa2jzeg1uR00fVVLgVGdORlpp1xm7Il5i8xpQ=";
   };
 
   postPatch = ''
@@ -49,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libGL
-    libx11
     libdrm
     wayland
     wayland-protocols
@@ -59,11 +58,18 @@ stdenv.mkDerivation (finalAttrs: {
     eglexternalplatform
   ];
 
+  absolutizeEglExternalPlatformIcdJson = true;
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+
   meta = {
     description = "EGLStream-based Wayland external platform";
     homepage = "https://github.com/NVIDIA/egl-wayland/";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ hedning ];
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    maintainers = with lib.maintainers; [ ccicnce113424 ];
   };
 })

@@ -51,13 +51,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hardinfo2";
-  version = "2.2.16";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "hardinfo2";
     repo = "hardinfo2";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-n/Rf/XKsATx3OEzYSjl+2Yzk7WSiaBkbOveA9+xR6fc=";
+    hash = "sha256-rrb7iwR5kd7kJSncbE+yzdG55L7IaF7919kLsl/A5pY=";
   };
 
   patches = [
@@ -143,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.runtimeLibs}
 
       substituteInPlace $out/lib/systemd/system/hardinfo2.service \
-        --replace-fail "ExecStart=/usr/bin/hwinfo2_fetch_sysdata" "ExecStart=$out/hwinfo2_fetch_sysdata"
+        --replace-fail "ExecStart=/usr/bin/hwinfo2_fetch_sysdata" "ExecStart=$out/bin/hwinfo2_fetch_sysdata"
   '';
 
   # account for tags having a release- prefix

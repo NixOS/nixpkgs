@@ -22,7 +22,7 @@
   chrootSetprivPath ? "/usr/bin/setpriv",
 }:
 
-resholve.mkDerivation rec {
+resholve.mkDerivation (finalAttrs: {
   pname = "arch-install-scripts";
   version = "31";
 
@@ -30,7 +30,7 @@ resholve.mkDerivation rec {
     domain = "gitlab.archlinux.org";
     owner = "archlinux";
     repo = "arch-install-scripts";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Oh1nC/gPJDDy8cXiZPbEfpwOuO+RFRcxVCZuTtB2MV8=";
   };
 
@@ -121,4 +121,4 @@ resholve.mkDerivation rec {
     maintainers = with lib.maintainers; [ samlukeyes123 ];
     platforms = lib.platforms.linux;
   };
-}
+})

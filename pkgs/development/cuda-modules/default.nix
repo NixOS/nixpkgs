@@ -141,6 +141,7 @@ let
           srcOnly
           stdenv
           stdenvNoCC
+          zstd
           ;
         inherit (finalCudaPackages)
           autoAddCudaCompatRunpath

@@ -29,7 +29,7 @@ buildDunePackage (finalAttrs: {
   meta = {
     description = "CBOR backend for decoders";
     homepage = "https://github.com/mattjbray/ocaml-decoders";
-    changelog = "https://github.com/mattjbray/ocaml-decoders/blob/${finalAttrs.version}/CHANGES.md";
+    changelog = "https://github.com/mattjbray/ocaml-decoders/blob/v${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ infinidoge ];
   };

@@ -67,6 +67,7 @@ buildGoModule (finalAttrs: {
     libraryPath = symlinkJoin {
       name = "eduroam-gui-puregotk-lib";
       # based on https://github.com/jwijenbergh/puregotk/blob/bc1a52f44fd4c491947f7af85296c66173da17ba/internal/core/core.go#L41
+      # cat "$(nix-build . -A geteduroam.goModules)"/*/*/puregotk/v4/*/*.go | grep -E 'SetSharedLibraries\(.*\)' -o | cut -d'"' -f4 | sort -u
       paths = [
         cairo
         gdk-pixbuf

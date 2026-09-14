@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   # native deps.
   runCommand,
   pkg-config,
@@ -36,25 +35,16 @@ let
 
   unwrapped = stdenv.mkDerivation (finalAttrs: {
     pname = "knot-resolver_5";
-    version = "5.7.6";
+    version = "5.7.8";
 
     src = fetchurl {
-      url = "https://secure.nic.cz/files/knot-resolver/knot-resolver-${finalAttrs.version}.tar.xz";
-      sha256 = "500ccd3a560300e547b8dc5aaff322f7c8e2e7d6f0d7ef5f36e59cb60504d674";
+      url = "https://knot-resolver.nic.cz/release/knot-resolver-${finalAttrs.version}.tar.xz";
+      sha256 = "e9367304b41a32e9290cb339a0f968b5c590d0453c2b1f26af79268bba08e46c";
     };
 
     outputs = [
       "out"
       "dev"
-    ];
-
-    patches = [
-      (fetchpatch {
-        # https://gitlab.nic.cz/knot/knot-resolver/-/merge_requests/1772
-        url = "https://gitlab.nic.cz/knot/knot-resolver/-/commit/f4eaf8e69cc9839f68b613d0be10103e05c57fe9.patch";
-        hash = "sha256-u/YQ85Jb5OxV8G3HeVPQUw0cmA+TLIDPze9mreqJGL4=";
-        excludes = [ "daemon/ratelimiting.test/tests.inc.c" ];
-      })
     ];
 
     # Path fixups for the NixOS service.
@@ -140,6 +130,7 @@ let
       rm -r "$out"/lib/sysusers.d/ # ATM more likely to harm than help
     '';
 
+    __darwinAllowLocalNetworking = true;
     doInstallCheck = with stdenv; hostPlatform == buildPlatform;
     nativeInstallCheckInputs = [
       cmocka

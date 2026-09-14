@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation {
   pname = "gtk-frdp";
-  version = "0-unstable-2025-08-15";
+  version = "0-unstable-2026-07-24";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gtk-frdp";
-    rev = "b59dc88624511311576dca607d3cb9317569de34";
-    hash = "sha256-6zCaegBshOLQWeHtUYOaofbUVK797vyn5bdpwHD0Z/s=";
+    rev = "83854a24e31d1c07519f6e4393fe280d3b59e080";
+    hash = "sha256-6f0irRBkpmOYrhXkeSR6ni55SJiltOfYRiwZy5V/VrE=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +53,6 @@ stdenv.mkDerivation {
     description = "RDP viewer widget for GTK";
     teams = [ lib.teams.gnome ];
     license = lib.licenses.lgpl3Plus;
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.linux;
   };
 }

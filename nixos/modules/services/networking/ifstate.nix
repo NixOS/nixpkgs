@@ -69,7 +69,6 @@ let
   # https://github.com/systemd/systemd/blob/main/units/systemd-networkd.service.in
   commonServiceConfig = {
     after = [
-      "systemd-udev-settle.service"
       "network-pre.target"
       "systemd-sysusers.service"
       "systemd-sysctl.service"
@@ -173,7 +172,7 @@ in
         etc."ifstate/ifstate.yaml".source = settingsFormat.generate "ifstate.yaml" cfg.settings cfg.package;
       };
 
-      systemd.services.ifstate = commonServiceConfig // {
+      systemd.services.ifstate = lib.recursiveUpdate commonServiceConfig {
         description = "IfState";
 
         wantedBy = [
@@ -188,6 +187,13 @@ in
           ExecStart = "${lib.getExe cfg.package} --config ${
             config.environment.etc."ifstate/ifstate.yaml".source
           } apply";
+
+          # We wait for the udev events queue to empty in the *hope* that the
+          # devices needed here become available. This is terribly broken and
+          # essentially no better than a random sleep(). Same below for initrd.
+          # FIXME: use .device units dependecies instead.
+          ExecStartPre = "-${lib.getExe' config.systemd.package "udevadm"} settle --timeout=180";
+
           # because oneshot services do not have a timeout by default
           TimeoutStartSec = "2min";
         };
@@ -263,7 +269,7 @@ in
             "remote-fs.target"
           ];
 
-          services.ifstate-initrd = commonServiceConfig // {
+          services.ifstate-initrd = lib.recursiveUpdate commonServiceConfig {
             description = "IfState initrd";
 
             wantedBy = [
@@ -289,6 +295,8 @@ in
               } apply";
               # because oneshot services do not have a timeout by default
               TimeoutStartSec = "2min";
+              # See comment on non-initrd service above
+              ExecStartPre = "-${lib.getExe' config.boot.initrd.systemd.package "udevadm"} settle --timeout=180";
             };
           };
         };

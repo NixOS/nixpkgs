@@ -7,21 +7,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "3proxy";
-  version = "0.9.5";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "3proxy";
     repo = "3proxy";
     tag = finalAttrs.version;
-    sha256 = "sha256-uy6flZ1a7o02pr5O0pgl9zCjh8mE9W5JxotJeBMB16A=";
+    sha256 = "sha256-JRoSCmoTIXHsUWZt9OyDVp1Veuy2w1ZPFe0rUGdJv0k=";
   };
 
   # They use 'install -s', that calls the native strip instead of the cross.
   # Don't strip binary on install, we strip it on fixup phase anyway.
   postPatch = ''
     substituteInPlace Makefile.Linux \
-      --replace "(INSTALL_BIN) -s" "(INSTALL_BIN)" \
-      --replace "/usr" ""
+      --replace-fail "(INSTALL_BIN) -s" "(INSTALL_BIN)" \
+      --replace-fail "/usr" ""
   '';
 
   makeFlags = [

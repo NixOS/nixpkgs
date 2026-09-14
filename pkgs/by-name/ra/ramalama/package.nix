@@ -1,5 +1,7 @@
 {
   lib,
+  stdenv,
+  callPackage,
   python3Packages,
   fetchFromGitHub,
   go-md2man,
@@ -15,14 +17,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ramalama";
-  version = "0.17.1";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "ramalama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BXUWNP3yxuDsL1gY28oWhlu+vTIezYpDbScUsOulyYA=";
+    hash = "sha256-k3VfZ9+ATu2Cwx531D0WVagjn1ZMIKR1i3yyq+3IGJ4=";
   };
 
   build-system = with python3Packages; [
@@ -34,7 +36,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     argcomplete
     bcrypt
     pyyaml
-    jsonschema
     jinja2
   ];
 
@@ -44,27 +45,26 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   postPatch = ''
     substituteInPlace ramalama/config.py --replace-fail "{sys.prefix}" "$out"
+    patchShebangs hack/markdown-preprocess
   '';
 
   preBuild = ''
     make docs
   '';
 
-  postInstall = lib.optionalString withPodman ''
-    wrapProgram $out/bin/ramalama \
-      --prefix PATH : ${
-        lib.makeBinPath (
-          [
-            llama-cpp-vulkan
-            podman
-          ]
-          ++ (with python3Packages; [
-            huggingface-hub
-            mlx-lm
-          ])
-        )
-      }
-  '';
+  postInstall =
+    let
+      binPackages = [
+        llama-cpp-vulkan
+        python3Packages.huggingface-hub
+      ]
+      ++ lib.optional stdenv.hostPlatform.isDarwin python3Packages.mlx-lm
+      ++ lib.optional withPodman podman;
+    in
+    ''
+      wrapProgram $out/bin/ramalama \
+        --prefix PATH : ${lib.makeBinPath binPackages}
+    '';
 
   pythonImportsCheck = [
     "ramalama"
@@ -82,9 +82,29 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   passthru = {
+    updateScript = ./update.sh;
+
     tests = {
+      nocontainer = callPackage ./tests/nocontainer.nix {
+        ramalama = finalAttrs.finalPackage;
+      };
+
       withoutPodman = ramalama.override {
         withPodman = false;
+      };
+    }
+    //
+      lib.optionalAttrs
+        (
+          stdenv.hostPlatform.isDarwin
+          || (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch64))
+        )
+        {
+          podman = callPackage ./tests/podman.nix { };
+        }
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      mlx = callPackage ./tests/mlx.nix {
+        ramalama = finalAttrs.finalPackage;
       };
     };
   };

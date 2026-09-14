@@ -2,9 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   coreutils,
   setuptools,
-  xlib,
+  python-xlib,
   fontconfig,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
@@ -29,6 +30,13 @@ buildPythonPackage rec {
   };
 
   patches = [
+    # Upstream fix for short reads on the asyncio command socket.
+    # This fixes darwin tests.
+    (fetchpatch {
+      url = "https://github.com/altdesktop/i3ipc-python/commit/2e6533e8df42c124f2cb10677dbb3639745a6610.patch";
+      hash = "sha256-DjJrMLPL1hbufukaWOiC3Utyw2nXs9y7SCKML9DP71g=";
+    })
+
     # Upstream expects a very old version of pytest-asyncio. This patch correctly
     # decorates async fixtures using pytest-asyncio and configures `loop_scope`
     # where needed.
@@ -41,7 +49,7 @@ buildPythonPackage rec {
   '';
 
   build-system = [ setuptools ];
-  dependencies = [ xlib ];
+  dependencies = [ python-xlib ];
 
   # Fontconfig error: Cannot load default config file
   env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";

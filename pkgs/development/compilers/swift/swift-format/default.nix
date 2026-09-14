@@ -1,11 +1,11 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   callPackage,
   swift,
   swiftpm,
   swiftpm2nix,
+  installShellFiles,
   Dispatch,
   Foundation,
 }:
@@ -22,6 +22,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     swift
     swiftpm
+    installShellFiles
   ];
   buildInputs = [ Foundation ];
 
@@ -38,11 +39,21 @@ stdenv.mkDerivation {
     binPath="$(swiftpmBinPath)"
     mkdir -p $out/bin
     cp $binPath/swift-format $out/bin/
+
+    # Generate shell completions
+    for shell in bash zsh fish; do
+      $out/bin/swift-format --generate-completion-script $shell > swift-format.$shell
+    done
+
+    installShellCompletion --cmd swift-format \
+      --bash swift-format.bash \
+      --zsh swift-format.zsh \
+      --fish swift-format.fish
   '';
 
   meta = {
     description = "Formatting technology for Swift source code";
-    homepage = "https://github.com/apple/swift-format";
+    homepage = "https://github.com/swiftlang/swift-format";
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.asl20;
     teams = [ lib.teams.swift ];

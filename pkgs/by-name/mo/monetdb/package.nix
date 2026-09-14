@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "monetdb";
-  version = "11.55.1";
+  version = "11.55.5";
 
   src = fetchurl {
     url = "https://dev.monetdb.org/downloads/sources/archive/MonetDB-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-Bf0HZcRs0pjAq39iZApUOlrjQjqg15qGEWdz5gHI4Ak=";
+    hash = "sha256-u/Jukp09g8i/zcUA0vFqmTMvX4XcNPs/gIRInvZSHj0=";
   };
 
   nativeBuildInputs = [

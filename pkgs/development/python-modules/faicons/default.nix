@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "faicons";
   version = "0.2.2";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "py-faicons";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-okkZ8anirjcZcZeB3XjvNJpiYQEau+o6dmCGqFBD8XY=";
   };
 
@@ -32,10 +32,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/posit-dev/py-faicons/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/posit-dev/py-faicons/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Interface to Font-Awesome for use in Shiny";
     homepage = "https://github.com/posit-dev/py-faicons";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

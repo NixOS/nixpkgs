@@ -14,7 +14,7 @@
     ]
     ++ teams.ngi.members;
 
-  nodes.machine = {
+  containers.machine = {
     environment.systemPackages = with pkgs; [
       dep-scan
       jq

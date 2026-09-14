@@ -38,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dimagi/django-cte";
     changelog = "https://github.com/dimagi/django-cte/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ jopejoe1 ];
+    maintainers = [ ];
   };
 }

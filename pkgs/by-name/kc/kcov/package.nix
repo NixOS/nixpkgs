@@ -77,7 +77,7 @@ let
         Kcov is a code coverage tester for compiled programs, Python
         scripts and shell scripts. It allows collecting code coverage
         information from executables without special command-line
-        arguments, and continuosly produces output from long-running
+        arguments, and continuously produces output from long-running
         applications.
       '';
 

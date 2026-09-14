@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   appstream,
   cmake,
   createrepo_c,
@@ -9,6 +10,7 @@
   gettext,
   help2man,
   pkg-config,
+  python3,
   python3Packages,
   cppunit,
   fmt,
@@ -19,6 +21,8 @@
   libsolv,
   libxml2,
   libyaml,
+  libpkgmanifest,
+  acl,
   pcre2,
   rpm,
   sdbus-cpp_2,
@@ -33,7 +37,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnf5";
-  version = "5.2.18.0";
+  version = "5.4.4.0";
 
   outputs = [
     "out"
@@ -44,8 +48,16 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rpm-software-management";
     repo = "dnf5";
     tag = finalAttrs.version;
-    hash = "sha256-VTuGHHNNdoDfbJ86GOR4a+Fy2s+NSXPH337+AZpLKuo=";
+    hash = "sha256-l0wdC2XMl8CevKtq4VINoCZ4p/KEMCKaKTQ8bjskb3M=";
   };
+
+  patches = [
+    # fmt 12.2.0 no longer includes <cstring> transitively.
+    (fetchpatch {
+      url = "https://github.com/rpm-software-management/dnf5/commit/10b3ea5df53349511df179eee8dbe3b7a77e8ba4.patch";
+      hash = "sha256-vhkEqoFtB/hk1vhHo6qpzrqbEVrn5eVdsDsnNsb70uM=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -71,6 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
     librepo
     util-linux
     libsolv
+    libpkgmanifest
+    acl
     libxml2
     libyaml
     pcre2.dev
@@ -86,16 +100,19 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-Wno-restrict -Wno-maybe-uninitialized";
 
   cmakeFlags = [
-    "-DWITH_PERL5=OFF"
-    "-DWITH_PYTHON3=OFF"
-    "-DWITH_RUBY=OFF"
-    "-DWITH_SYSTEMD=OFF"
-    "-DWITH_PLUGIN_RHSM=OFF" # Red Hat Subscription Manager plugin
+    (lib.cmakeBool "WITH_PERL5" false)
+    (lib.cmakeBool "WITH_PYTHON3" false)
+    (lib.cmakeBool "WITH_RUBY" false)
+    (lib.cmakeBool "WITH_SYSTEMD" false)
+    (lib.cmakeBool "WITH_PLUGIN_RHSM" false) # Red Hat Subscription Manager plugin
+    # doc/atp.py preprocesses manpages, but upstream only runs
+    # find_package(Python3) from targets gated on WITH_PYTHON3.
+    (lib.cmakeFeature "Python3_EXECUTABLE" (lib.getExe python3))
     # the cmake package does not handle absolute CMAKE_INSTALL_INCLUDEDIR correctly
     # (setting it to an absolute path causes include files to go to $out/$out/include,
     #  because the absolute path is interpreted with root at $out).
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
+    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
   ];
 
   postBuild = ''

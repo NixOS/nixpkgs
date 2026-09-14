@@ -36,11 +36,11 @@ let
   # TODO: we could cut the `let` short here, but it would de-indent everything.
   unwrapped = stdenv.mkDerivation (finalAttrs: {
     pname = "knot-resolver_6";
-    version = "6.2.0";
+    version = "6.4.2";
 
     src = fetchurl {
-      url = "https://secure.nic.cz/files/knot-resolver/knot-resolver-${finalAttrs.version}.tar.xz";
-      hash = "sha256-tEYzvIQxgMC8fHfPexX+VxJDrpkrTdt0r97kz6gDcBs=";
+      url = "https://knot-resolver.nic.cz/release/knot-resolver-${finalAttrs.version}.tar.xz";
+      hash = "sha256-hUrSM2e6tmOS99dPFC8iGeMJCugRJrY1Qw/OexkW8aM=";
     };
 
     outputs = [
@@ -121,6 +121,7 @@ let
       rm -r "$out"/lib/sysusers.d/ # ATM more likely to harm than help
     '';
 
+    __darwinAllowLocalNetworking = true;
     doInstallCheck = with stdenv; hostPlatform == buildPlatform;
     nativeInstallCheckInputs = [
       which

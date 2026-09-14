@@ -14,6 +14,8 @@
   requests,
   requests-toolbelt,
   uuid-utils,
+  websockets,
+  xxhash,
   zstandard,
 
   # tests
@@ -23,24 +25,25 @@
   multipart,
   opentelemetry-sdk,
   pytest-asyncio,
+  pytest-httpx,
   pytest-socket,
   pytest-vcr,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langsmith";
-  version = "0.6.4";
+  version = "0.8.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
-    tag = "v${version}";
-    hash = "sha256-325A2kEx2UrykxVRzp6WQCPrg92Vy+6R1CfgnCLV2V8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YQ49pg0+RepwlEHtu8GDUpfnXQF3yFiz6ZeRcnHXSWU=";
   };
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   pythonRelaxDeps = [ "orjson" ];
 
@@ -53,6 +56,8 @@ buildPythonPackage rec {
     requests
     requests-toolbelt
     uuid-utils
+    websockets
+    xxhash
     zstandard
   ];
 
@@ -60,9 +65,10 @@ buildPythonPackage rec {
     anthropic
     attrs
     dataclasses-json
+    multipart
     opentelemetry-sdk
     pytest-asyncio
-    multipart
+    pytest-httpx
     pytest-socket
     pytest-vcr
     pytestCheckHook
@@ -84,15 +90,22 @@ buildPythonPackage rec {
     "test_as_runnable_batch"
     "test_as_runnable_async"
     "test_as_runnable_async_batch"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # flaky (timing sensitive)
+    "test_refresh_loop_continues_after_500_errors"
   ];
 
   disabledTestPaths = [
     # due to circular import
     "tests/unit_tests/test_client.py"
     "tests/unit_tests/evaluation/test_runner.py"
-    # flaky time comparisons
-    # https://github.com/langchain-ai/langsmith-sdk/issues/2245
-    "tests/unit_tests/test_uuid_v7.py"
+
+    # google-adk isn't packaged (and has an enormous number of dependencies)
+    "tests/unit_tests/wrappers/test_google_adk.py"
+
+    # strands-agents isn't packaged
+    "tests/unit_tests/wrappers/test_strands_agents.py"
   ];
 
   pythonImportsCheck = [ "langsmith" ];
@@ -102,7 +115,7 @@ buildPythonPackage rec {
   meta = {
     description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform";
     homepage = "https://github.com/langchain-ai/langsmith-sdk";
-    changelog = "https://github.com/langchain-ai/langsmith-sdk/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langsmith-sdk/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       natsukium
@@ -110,4 +123,4 @@ buildPythonPackage rec {
     ];
     mainProgram = "langsmith";
   };
-}
+})

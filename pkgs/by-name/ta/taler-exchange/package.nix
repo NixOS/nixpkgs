@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.3.0";
 
   src = fetchgit {
-    url = "https://git.taler.net/exchange.git";
+    url = "https://git-www.taler.net/exchange.git";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-FePuJUEa01E2jlAOdHryzkFwXqNcU+AkMKs1pamNJn8=";
@@ -132,8 +132,8 @@ stdenv.mkDerivation (finalAttrs: {
       Taler includes code examples to help Merchants integrate Taler as a
       payment system.
     '';
-    homepage = "https://taler.net/";
-    changelog = "https://git.taler.net/exchange.git/tree/ChangeLog";
+    homepage = "https://www.taler.net/en/";
+    changelog = "https://git-www.taler.net/exchange.git/tree/ChangeLog?h=v${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ astro ];
     teams = with lib.teams; [ ngi ];

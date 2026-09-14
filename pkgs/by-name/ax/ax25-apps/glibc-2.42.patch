@@ -1,0 +1,26 @@
+--- a/ax25ipd/io.c
++++ b/ax25ipd/io.c
+@@ -19,20 +19,21 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <syslog.h>
+-#include <termio.h>
++#include <termios.h>
+ #include <time.h>
+ #include <unistd.h>
+ #include <arpa/inet.h>
+ #include <netinet/in.h>
+ #include <netinet/in_systm.h>
+ #include <netinet/ip.h>
++#include <sys/ioctl.h>
+ #include <sys/types.h>
+ #include <sys/time.h>
+ #include <sys/socket.h>
+ 
+ #include "ax25ipd.h"
+ 
+-static struct termio nterm;
++static struct termios nterm;
+ 
+ int ttyfd = -1;
+ static int udpsock = -1;

@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "k3sup";
-  version = "0.13.11";
+  version = "0.13.13";
 
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "k3sup";
     rev = finalAttrs.version;
-    sha256 = "sha256-MLGgH9Tg3lcl/nDGlGgfvgjoxjXRux79Cz6Tig0kDM4=";
+    sha256 = "sha256-6S8PMIRITXbS5fFexCBEekVDZwTvZ4bN9sanjiDY39M=";
   };
 
   nativeBuildInputs = [

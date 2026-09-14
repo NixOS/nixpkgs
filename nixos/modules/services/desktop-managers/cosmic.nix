@@ -20,7 +20,7 @@ let
     with pkgs;
     [
       cosmic-applets
-      cosmic-applibrary
+      cosmic-app-library
       cosmic-bg
       cosmic-comp
       cosmic-files
@@ -44,7 +44,7 @@ let
     ];
 in
 {
-  meta.maintainers = lib.teams.cosmic.members;
+  meta.teams = [ lib.teams.cosmic ];
 
   options = {
     services.desktopManager.cosmic = {
@@ -84,12 +84,14 @@ in
           alsa-utils
           cosmic-edit
           cosmic-icons
+          cosmic-monitor
           cosmic-player
           cosmic-randr
           cosmic-reader
           cosmic-screenshot
           cosmic-term
           cosmic-wallpapers
+          cosmic-sound-theme
           glib
           hicolor-icon-theme
           networkmanagerapplet
@@ -124,16 +126,7 @@ in
       };
     };
 
-    systemd = {
-      packages = [ pkgs.cosmic-session ];
-      user.targets = {
-        # TODO: remove when upstream has XDG autostart support
-        cosmic-session = {
-          wants = [ "xdg-desktop-autostart.target" ];
-          before = [ "xdg-desktop-autostart.target" ];
-        };
-      };
-    };
+    systemd.packages = [ pkgs.cosmic-session ];
 
     fonts.packages = with pkgs; [
       fira
@@ -146,7 +139,10 @@ in
     environment.sessionVariables.X11_EXTRA_RULES_XML = "${config.services.xserver.xkb.dir}/rules/base.extras.xml";
     programs.dconf.enable = true;
     programs.dconf.packages = [ pkgs.cosmic-session ];
-    security.polkit.enable = true;
+    security.polkit = {
+      enable = true;
+      enablePkexecWrapper = lib.mkDefault true;
+    };
     security.rtkit.enable = true;
     services.accounts-daemon.enable = true;
     services.displayManager.sessionPackages = [ pkgs.cosmic-session ];
@@ -173,8 +169,9 @@ in
     services.gnome.gnome-keyring.enable = lib.mkDefault true;
     services.gvfs.enable = lib.mkDefault true;
     services.orca.enable = lib.mkDefault (notExcluded pkgs.orca);
-    services.power-profiles-daemon.enable = lib.mkDefault (
-      !config.hardware.system76.power-daemon.enable
+    services.system76-scheduler.enable = lib.mkDefault true;
+    hardware.system76.power-daemon.enable = lib.mkDefault (
+      !config.services.power-profiles-daemon.enable && !config.services.tuned.enable
     );
 
     warnings = lib.optionals (cfg.showExcludedPkgsWarning && excludedCorePkgs != [ ]) [

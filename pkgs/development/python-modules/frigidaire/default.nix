@@ -1,52 +1,46 @@
 {
   lib,
   buildPythonPackage,
-  certifi,
-  chardet,
   fetchFromGitHub,
-  idna,
+  pytestCheckHook,
   requests,
+  responses,
   setuptools,
-  urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "frigidaire";
-  version = "0.18.28";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bm1549";
     repo = "frigidaire";
-    tag = version;
-    hash = "sha256-2VleZyisva2HQPDmPoZbxnYu3t1S/HTuaZtFWFiU1nU=";
+    tag = finalAttrs.version;
+    hash = "sha256-1Zl97UynwI0vkt6rDEmqh1R8G493f9C3zYn1KLfFjjs=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-warn 'version = "SNAPSHOT"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0-dev"' 'version = "${finalAttrs.version}"'
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    certifi
-    chardet
-    idna
-    requests
-    urllib3
+  dependencies = [ requests ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    responses
   ];
-
-  # Project has no tests
-  doCheck = false;
 
   pythonImportsCheck = [ "frigidaire" ];
 
   meta = {
     description = "Python API for the Frigidaire devices";
     homepage = "https://github.com/bm1549/frigidaire";
-    changelog = "https://github.com/bm1549/frigidaire/releases/tag/${src.tag}";
+    changelog = "https://github.com/bm1549/frigidaire/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

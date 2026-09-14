@@ -1,5 +1,6 @@
 {
   fetchFromGitLab,
+  fetchpatch,
   inih,
   lib,
   libdrm,
@@ -15,17 +16,35 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "buffybox";
-  version = "3.4.2-unstable-2025-10-25";
-  # 3.4.2 would be preferred but there are 3 commits past 3.4.2 that are really nice to have
+  version = "3.5.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.postmarketos.org";
     owner = "postmarketOS";
     repo = "buffybox";
     fetchSubmodules = true; # to use its vendored lvgl
-    rev = "437ff2cbd7fd35ba6ca2d46624e7fcf8c5f3f954";
-    hash = "sha256-1GRsntNc3byHmZKLG/ZRXvbo96DjmLrA0bVYtMAlKsQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-aOPfKqnUIkJozt+DwVJjbNQEcmpjCmUgJUjTx9LV23M=";
   };
+
+  mesonFlags = [
+    (lib.mesonBool "systemd" true)
+  ];
+
+  patches = [
+    /*
+      There's a close to zero chance that anyone with a 32-bit machine will be using BuffyBox.
+      In the case that it happens, I expect no complaints whatsoever.
+
+      https://gitlab.postmarketos.org/postmarketOS/buffybox/-/merge_requests/87
+    */
+
+    (fetchpatch {
+      name = "fix-32-bit-build";
+      url = "https://gitlab.postmarketos.org/postmarketOS/buffybox/-/merge_requests/87.patch";
+      hash = "sha256-GUk+YrG07hL+0w70qvymPzHGTmUXdfzG4Cy35gg/Asw=";
+    })
+  ];
 
   depsBuildBuild = [
     pkg-config
@@ -54,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Suite of graphical applications for the terminal";
     homepage = "https://gitlab.postmarketos.org/postmarketOS/buffybox";
+    changelog = "https://gitlab.postmarketos.org/postmarketOS/buffybox/-/blob/main/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ colinsane ];
     platforms = lib.platforms.linux;

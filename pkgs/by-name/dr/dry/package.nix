@@ -6,17 +6,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "dry";
-  version = "0.11.2";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "moncho";
     repo = "dry";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JGtPX6BrB3q2EQyF6x2A5Wsn5DudOSVt3IxBAjjwlC8=";
+    hash = "sha256-mS7vb1geYqzj6KnkOE7j/HRdqmdipfTsFufK3v6AgdM=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-AduDbBpCoW7GmYrBPpL7wyLvwoez81qP/+mllgoHInY=";
+  vendorHash = "sha256-e8IkL+HRAWDKiw/Za899y1cuvKlaM6gUGToKvIsTZD8=";
 
   meta = {
     description = "Terminal application to manage Docker and Docker Swarm";

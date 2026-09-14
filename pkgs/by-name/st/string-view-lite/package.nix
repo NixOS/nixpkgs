@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "string-view-lite";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
-    owner = "martinmoene";
+    owner = "nonstd-lite";
     repo = "string-view-lite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hXm3MLskeZzTegSj79dQV+VcwBatT1VIAUydjisd19U=";
+    hash = "sha256-WMWTrzkAex8gR1juvYdUhq1y6qSdxHowJK3EpjAlYbI=";
   };
 
   nativeBuildInputs = [
@@ -30,8 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "C++17-like string_view for C++98, C++11 and later in a single-file header-only library";
-    homepage = "https://github.com/martinmoene/string-view-lite";
-    changelog = "https://github.com/martinmoene/string-view-lite/blob/v${finalAttrs.version}/CHANGES.txt";
+    homepage = "https://github.com/nonstd-lite/string-view-lite";
+    changelog = "https://github.com/nonstd-lite/string-view-lite/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.boost;
     maintainers = with lib.maintainers; [ titaniumtown ];
   };

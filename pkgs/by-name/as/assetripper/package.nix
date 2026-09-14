@@ -6,17 +6,18 @@
   fetchFromGitHub,
   dbus,
   dotnetCorePackages,
+  nix-update-script,
 }:
 
 buildDotnetModule (finalAttrs: {
   pname = "assetripper";
-  version = "1.3.10";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "AssetRipper";
     repo = "AssetRipper";
     tag = finalAttrs.version;
-    hash = "sha256-sqlZsUTeLyHHESNtC07F2FjgLXnuqgoPYRcgE57sq5k=";
+    hash = "sha256-8IYbpR94lgan3DSSywy/Q5PlbeH4z6fHrH2IWxcFnNs=";
   };
 
   buildInputs = [
@@ -47,8 +48,8 @@ buildDotnetModule (finalAttrs: {
   fixupPhase = lib.optionalString stdenv.hostPlatform.isLinux ''
     runHook preFixup
 
-    autoPatchelf $out/lib/${finalAttrs.pname}/libnfd.so
-    autoPatchelf $out/lib/${finalAttrs.pname}/libTexture2DDecoderNative.so
+    autoPatchelf $out/lib/assetripper/libnfd.so
+    autoPatchelf $out/lib/assetripper/libTexture2DDecoderNative.so
 
     runHook postFixup
   '';
@@ -67,9 +68,12 @@ buildDotnetModule (finalAttrs: {
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
   dotnet-runtime = finalAttrs.dotnet-sdk.aspnetcore;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Tool for extracting assets from Unity serialized files and asset bundles";
     homepage = "https://github.com/AssetRipper/AssetRipper";
+    changelog = "https://github.com/AssetRipper/AssetRipper/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     mainProgram = "AssetRipper";
     maintainers = with lib.maintainers; [

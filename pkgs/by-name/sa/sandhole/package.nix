@@ -1,44 +1,48 @@
 {
   cmake,
   fetchFromGitHub,
+  installShellFiles,
   lib,
+  lld,
   perl,
   rustPlatform,
+  stdenv,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sandhole";
-  version = "0.8.7";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "EpicEric";
     repo = "sandhole";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C6LJj8bQAe23uLEdQ3b90wanTfZvEM6o8svoOg99K2g=";
+    hash = "sha256-9Bs8J+aHxKoHX8ksxe/iwl297rVyKDk4nm3+vzzh7Lo=";
   };
 
-  cargoHash = "sha256-HzSytIh/oMEXsd+sqR9jxi03FvbRs3WBmmscZydHL/k=";
-
-  # All integration tests require networking.
-  postPatch = ''
-    echo "fn main() {}" > tests/integration/main.rs
-  '';
+  cargoHash = "sha256-DQWVTI7cwVuqWSXMkAw4RwRtp1SXeJj0idP3C68QTT4=";
 
   nativeBuildInputs = [
     cmake
+    installShellFiles
     perl
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ lld ];
   strictDeps = true;
 
   useNextest = true;
-  checkFlags = [
-    # Some unit tests require networking.
-    "--skip"
-    "login"
-  ];
+  # Skip tests that require networking.
+  cargoTestFlags = [ "--profile=no-network" ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd sandhole \
+      --bash <($out/bin/sandhole --completions bash) \
+      --fish <($out/bin/sandhole --completions fish) \
+      --zsh <($out/bin/sandhole --completions zsh)
+  '';
 
   meta = {
     description = "Expose HTTP/SSH/TCP services through SSH port forwarding";
@@ -48,9 +52,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://sandhole.com.br";
     changelog = "https://github.com/EpicEric/sandhole/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.mit;
+    license = lib.licenses.agpl3Plus;
     mainProgram = "sandhole";
     maintainers = with lib.maintainers; [ EpicEric ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = lib.platforms.all;
   };
 })

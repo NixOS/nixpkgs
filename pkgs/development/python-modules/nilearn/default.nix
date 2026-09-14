@@ -9,30 +9,33 @@
 
   # dependencies
   joblib,
-  lxml,
   nibabel,
   numpy,
   pandas,
   requests,
   scikit-learn,
+  jinja2,
   scipy,
   packaging,
 
   pytestCheckHook,
   pytest-timeout,
+  pytest-rerunfailures,
   numpydoc,
+  polars,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nilearn";
-  version = "0.12.1";
+  version = "0.14.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "nilearn";
     repo = "nilearn";
-    tag = version;
-    hash = "sha256-jUP/gUMUVveX8m2VbyilTsx5OppuYVXH1qKeEfEVajQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-z/U2ZfAuyFYhkSCv0X2ZRqUPFt8HM4X8NBntELccBO4=";
   };
 
   postPatch = ''
@@ -45,14 +48,20 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
+  # nilearn excludes scikit-learn 1.9.0 due to a sluggish HTML repr bug,
+  # which is fixed by the patch applied to python3Packages.scikit-learn.
+  pythonRelaxDeps = [
+    "scikit-learn"
+  ];
+
   dependencies = [
     joblib
-    lxml
     nibabel
     numpy
     pandas
     requests
     scikit-learn
+    jinja2
     scipy
     packaging
   ];
@@ -60,7 +69,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-timeout
+    pytest-rerunfailures
     numpydoc
+    polars
   ];
 
   # do subset of tests which don't fetch resources
@@ -69,8 +80,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for statistical learning on neuroimaging data";
     homepage = "https://nilearn.github.io";
-    changelog = "https://github.com/nilearn/nilearn/releases/tag/${src.tag}";
+    changelog = "https://github.com/nilearn/nilearn/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

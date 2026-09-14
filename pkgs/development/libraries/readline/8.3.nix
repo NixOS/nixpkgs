@@ -83,7 +83,12 @@ stdenv.mkDerivation (finalAttrs: {
   #
   # Method borrowed from
   # https://github.com/msys2/MINGW-packages/commit/35830ab27e5ed35c2a8d486961ab607109f5af50
-  CFLAGS = lib.optionalString stdenv.hostPlatform.isMinGW "-D__USE_MINGW_ALARM -D_POSIX";
+  env = lib.optionalAttrs stdenv.hostPlatform.isMinGW {
+    CFLAGS = toString [
+      "-D__USE_MINGW_ALARM"
+      "-D_POSIX"
+    ];
+  };
 
   # This install error is caused by a very old libtool. We can't autoreconfHook this package,
   # so this is the best we've got!
@@ -91,6 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/lib/libhistory.so* $out/lib/libhistory.so
     ln -s $out/lib/libreadline.so* $out/lib/libreadline.so
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Library for interactive line editing";

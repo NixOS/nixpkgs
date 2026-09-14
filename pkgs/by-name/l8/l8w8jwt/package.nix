@@ -17,6 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-aR3r84AYvCNx3jm9lB1qtbbEh9rU3LTkI+TK9LPQaPk=";
   };
 
+  patches = [
+    # adapted from https://github.com/Mbed-TLS/mbedtls/commit/79b513894a28718604f7cb531380bfea0354844f
+    ./fix-gcc15.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [

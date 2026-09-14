@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace 3rdpatry/http-client-lite/CMakeLists.txt --replace-fail \
       'cmake_minimum_required(VERSION 3.3 FATAL_ERROR)' \
-      'cmake_minimum_required(VERSION 3.10)' \
+      'cmake_minimum_required(VERSION 3.10)'
   '';
 
   nativeBuildInputs = [

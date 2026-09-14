@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://developer.android.com/studio/command-line/bundletool";
     changelog = "https://github.com/google/bundletool/releases/tag/${finalAttrs.version}";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = [ ];
     platforms = jre_headless.meta.platforms;
     license = lib.licenses.asl20;
   };

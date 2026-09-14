@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pur";
-  version = "7.3.3";
+  version = "7.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alanhamlett";
     repo = "pip-update-requirements";
     tag = finalAttrs.version;
-    hash = "sha256-zSEzYYpDmu3fennTZNvQjAoMekzxoMDUEqvSjN6hNUk=";
+    hash = "sha256-BxUR4yyT6ipvBozWgat709rNPHELE/PNPVJ4LtfOdfQ=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

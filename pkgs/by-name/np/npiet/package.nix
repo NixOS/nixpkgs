@@ -37,6 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'exec wish' 'exec ${tk}/bin/wish'
   '';
 
+  # K&R-style decls clash with GCC 15's default of -std=gnu23.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   strictDeps = true;
 
   passthru.tests =

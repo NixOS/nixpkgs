@@ -27,20 +27,21 @@
   sqlalchemy,
   sse-starlette,
   starlette,
+  stdenv,
   uv-dynamic-versioning,
   uvicorn,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "a2a-sdk";
-  version = "0.3.23";
+  version = "0.3.26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "a2aproject";
     repo = "a2a-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F7tu+coSNNrLT36DFaHdoFe7hBG5lA69O5ktnxfJlZI=";
+    hash = "sha256-OQVNoKCx/7t3LeLgcVCVJUDnrWnugbM6EReE0713CM4=";
   };
 
   build-system = [
@@ -104,10 +105,18 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "a2a" ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.14") [
-    # _pickle.PicklingError: Can't pickle local object <function...
-    "test_notification_triggering"
-  ];
+  disabledTests =
+    [ ]
+    ++ lib.optionals (pythonAtLeast "3.14") [
+      # _pickle.PicklingError: Can't pickle local object <function...
+      "test_notification_triggering"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # AttributeError: Can't get local object 'FastAPI.setup.<locals>.openap…
+      "test_notification_triggering_with_in_message_config_e2e"
+      "test_notification_triggering_after_config_change_e2e"
+      "test_trace_function_sync_attribute_extractor_error_logged"
+    ];
 
   meta = {
     description = "Python SDK for the Agent2Agent (A2A) Protocol";

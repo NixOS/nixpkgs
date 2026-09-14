@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  wrapGAppsHook3,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -18,6 +19,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   build-system = with python3.pkgs; [
     setuptools
+    wrapGAppsHook3
   ];
 
   dependencies = with python3.pkgs; [

@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.3";
 
   src = fetchurl {
-    url = "http://www.netlib.org/benchmark/hpl/hpl-${finalAttrs.version}.tar.gz";
+    url = "https://www.netlib.org/benchmark/hpl/hpl-${finalAttrs.version}.tar.gz";
     sha256 = "0c18c7fzlqxifz1bf3izil0bczv3a7nsv0dn6winy3ik49yw3i9j";
   };
 

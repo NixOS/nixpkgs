@@ -109,7 +109,7 @@ in
 
     store = lib.mkOption {
       type = lib.types.path;
-      default = /var/lib/gemini/certs;
+      default = "/var/lib/gemini/certs";
       description = ''
         Path to the certificate store on disk. This should be a
         persistent directory writable by Stargazer.
@@ -271,7 +271,7 @@ in
           "~CAP_SYS_BOOT"
           "~CAP_NET_ADMIN"
         ]
-        ++ lib.lists.optional (!cfg.allowCgiUser) [
+        ++ lib.lists.optionals (!cfg.allowCgiUser) [
           "~CAP_SETGID"
           "~CAP_SETUID"
         ];
@@ -279,12 +279,12 @@ in
         SystemCallFilter = [
           "~@cpu-emulation @debug @keyring @mount @obsolete"
         ]
-        ++ lib.lists.optional (!cfg.allowCgiUser) [ "@privileged @setuid" ];
+        ++ lib.lists.optionals (!cfg.allowCgiUser) [ "@privileged @setuid" ];
       };
     };
 
     # Create default cert store
-    systemd.tmpfiles.rules = lib.mkIf (cfg.store == /var/lib/gemini/certs) [
+    systemd.tmpfiles.rules = lib.mkIf ((builtins.toString cfg.store) == "/var/lib/gemini/certs") [
       ''d /var/lib/gemini/certs - "${cfg.user}" "${cfg.group}" -''
     ];
 

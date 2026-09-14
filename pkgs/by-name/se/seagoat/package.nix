@@ -14,23 +14,27 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "seagoat";
-  version = "1.0.26";
+  version = "1.2.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kantord";
     repo = "SeaGOAT";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XXKLvm3sEYgfLojtYKI3i8o3HERdH4+FRSo28FBqONg=";
+    hash = "sha256-ps+pwFOpCQWyI2SrOZSysq1kUeo53I2cfW2WC+SwccE=";
   };
 
   build-system = [ python3Packages.poetry-core ];
 
   pythonRelaxDeps = [
+    "chardet"
     "chromadb"
+    "deepmerge"
+    "ollama"
     "psutil"
     "setuptools"
-    "ollama"
+    "stop-words"
   ];
 
   dependencies = with python3Packages; [
@@ -43,6 +47,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     gitpython
     halo
     jsonschema
+    mcp
     nest-asyncio
     ollama
     psutil

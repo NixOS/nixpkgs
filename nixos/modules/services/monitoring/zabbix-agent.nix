@@ -9,7 +9,6 @@ let
   cfg = config.services.zabbixAgent;
 
   inherit (lib)
-    mkDefault
     mkEnableOption
     mkPackageOption
     mkIf
@@ -18,9 +17,7 @@ let
     ;
   inherit (lib)
     attrValues
-    concatMapStringsSep
     literalExpression
-    optionalString
     types
     ;
   inherit (lib.generators) toKeyValue;

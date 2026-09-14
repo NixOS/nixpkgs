@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bfs";
-  version = "4.1";
+  version = "4.1.4";
 
   src = fetchFromGitHub {
     repo = "bfs";
     owner = "tavianator";
     tag = finalAttrs.version;
-    hash = "sha256-+hGxdsk9MU5MVvvx3C2cqomboNxD0UZ5y7t84fAwfqs=";
+    hash = "sha256-gENWuxZh4dOaKUyrb53dn/ai7F2L3gyYj8kuha0JaLo=";
   };
 
   buildInputs = [
@@ -30,7 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     liburing
   ];
 
-  configureFlags = [ "--enable-release" ];
+  # The configure script is not from GNU autotools, so most options injected by Nix are not supported
+  configurePhase = ''
+    runHook preConfigure
+    ./configure --prefix=$out --enable-release
+    runHook postConfigure
+  '';
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {

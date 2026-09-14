@@ -1,20 +1,42 @@
-// @ts-check
-
 const eventToState = {
   COMMENT: 'COMMENTED',
   REQUEST_CHANGES: 'CHANGES_REQUESTED',
 }
 
+// Use substring checks in order to allow testing in forks
+// Usernames must also end in "[bot]"
+const reviewUsers = [
+  'github-actions',
+  'nixpkgs-ci',
+  'branch-check',
+  'commit-check',
+  'manual-edit',
+]
+
+/**
+ * @typedef {InstanceType<typeof import('@actions/github/lib/utils').GitHub>} GitHub
+ * @typedef {typeof import('@actions/github').context} Context
+ *
+ * @typedef {Awaited<ReturnType<GitHub['rest']['pulls']['listReviews']>>['data'][number]} Review
+ * @typedef {Review & { user: NonNullable<Review['user']> }} ReviewWithNonNullUser
+ */
+
 /**
  * @param {{
- *  github: InstanceType<import('@actions/github/lib/utils').GitHub>,
- *  context: import('@actions/github/lib/context').Context,
- *  core: import('@actions/core'),
+ *  github: GitHub,
+ *  context: Context,
+ *  core: typeof import('@actions/core'),
  *  dry: boolean,
  *  reviewKey?: string,
  * }} DismissReviewsProps
  */
-async function dismissReviews({ github, context, core, dry, reviewKey }) {
+export async function dismissReviews({
+  github,
+  context,
+  core,
+  dry,
+  reviewKey,
+}) {
   const pull_number = context.payload.pull_request?.number
   if (!pull_number) {
     core.warning('dismissReviews called outside of pull_request context')
@@ -25,18 +47,32 @@ async function dismissReviews({ github, context, core, dry, reviewKey }) {
     return
   }
 
-  const reviews = (
-    await github.paginate(github.rest.pulls.listReviews, {
-      ...context.repo,
-      pull_number,
-    })
-  ).filter(
-    (review) =>
-      review.user?.login === 'github-actions[bot]' &&
-      review.state !== 'DISMISSED',
+  const allReviews = await github.paginate(github.rest.pulls.listReviews, {
+    ...context.repo,
+    pull_number,
+  })
+
+  const reviews = /** @type {ReviewWithNonNullUser[]} */ (
+    allReviews.filter(
+      (review) =>
+        review.user &&
+        review.state !== 'DISMISSED' &&
+        review.user.login.endsWith('[bot]') &&
+        reviewUsers.some((substr) => review.user?.login.includes(substr)),
+    )
   )
-  const changesRequestedReviews = reviews.filter(
-    (review) => review.state === 'CHANGES_REQUESTED',
+
+  const reviewsByUser = reviews.reduce(
+    (prev, curr) => {
+      if (!(curr.user.login in prev)) {
+        prev[curr.user.login] = []
+      }
+
+      prev[curr.user.login].push(curr)
+
+      return prev
+    },
+    /** @type {Record<string, ReviewWithNonNullUser[]> } */ ({}),
   )
 
   const commentRegex = new RegExp(
@@ -50,8 +86,8 @@ async function dismissReviews({ github, context, core, dry, reviewKey }) {
   )
 
   let reviewsToMinimize = reviews
-  let /** @type {typeof reviews} */ reviewsToDismiss = []
-  let /** @type {typeof reviews} */ reviewsToResolve = []
+  const /** @type {ReviewWithNonNullUser[]} */ reviewsToDismiss = []
+  const /** @type {ReviewWithNonNullUser[]} */ reviewsToResolve = []
 
   if (reviewKey && reviews.every((review) => commentRegex.test(review.body))) {
     reviewsToMinimize = reviews.filter((review) =>
@@ -59,29 +95,39 @@ async function dismissReviews({ github, context, core, dry, reviewKey }) {
     )
   }
 
-  // If we want to dismiss all reviews with the key reviewKey,
-  // but there are other requested changes from CI, we can't dismiss,
-  // because then the other requested changes will be dismissed too.
-  if (
-    changesRequestedReviews.every(
-      (review) =>
-        commentResolvedRegex.test(review.body) ||
-        (reviewKey && reviewKeyRegex.test(review.body)) ||
-        // If we are called by check-commits and the review body is clearly
-        // from `commits.js`, then we can safely dismiss the review.
-        // This helps with pre-existing reviews (before the comments were added).
-        (reviewKey &&
-          reviewKey === 'check-commits' &&
-          review.body.includes('PR / Check / cherry-pick')),
-    )
-  ) {
-    reviewsToDismiss = changesRequestedReviews
-  } else if (reviewsToMinimize.length) {
-    reviewsToResolve = reviewsToMinimize.filter(
-      (review) =>
-        review.state === 'CHANGES_REQUESTED' &&
-        !commentResolvedRegex.test(review.body),
-    )
+  for (const reviewsForUser of Object.values(reviewsByUser)) {
+    // Make sure that we don't dismiss all reviews by a user if they
+    // have any reviews we don't want to dismiss.
+    if (
+      reviewsForUser.every(
+        (review) =>
+          commentResolvedRegex.test(review.body) ||
+          (reviewKey && reviewKeyRegex.test(review.body)) ||
+          // If we are called by check-commits and the review body is clearly
+          // from `commits.js`, then we can safely dismiss the review.
+          // This helps with pre-existing reviews (before the comments were added).
+          (reviewKey &&
+            reviewKey === 'check-commits' &&
+            review.body.includes('PR / Check / cherry-pick')),
+      )
+    ) {
+      reviewsToDismiss.push(
+        ...reviewsForUser.filter(
+          (review) => review.state === 'CHANGES_REQUESTED',
+        ),
+      )
+    } else {
+      reviewsToResolve.push(
+        ...reviewsForUser.filter(
+          (review) =>
+            review.state === 'CHANGES_REQUESTED' &&
+            !commentResolvedRegex.test(review.body) &&
+            reviewsToMinimize.some(
+              (toMinimize) => toMinimize.node_id === review.node_id,
+            ),
+        ),
+      )
+    }
   }
 
   await Promise.all([
@@ -121,16 +167,16 @@ async function dismissReviews({ github, context, core, dry, reviewKey }) {
 
 /**
  * @param {{
- *  github: InstanceType<import('@actions/github/lib/utils').GitHub>,
- *  context: import('@actions/github/lib/context').Context
- *  core: import('@actions/core'),
+ *  github: GitHub,
+ *  context: Context,
+ *  core: typeof import('@actions/core'),
  *  dry: boolean,
  *  body: string,
- *  event: keyof eventToState,
+ *  event: keyof typeof eventToState,
  *  reviewKey: string,
  * }} PostReviewProps
  */
-async function postReview({
+export async function postReview({
   github,
   context,
   core,
@@ -158,11 +204,13 @@ async function postReview({
     })
   ).filter(
     (review) =>
-      review.user?.login === 'github-actions[bot]' &&
-      review.state !== 'DISMISSED',
+      review.user &&
+      review.state !== 'DISMISSED' &&
+      review.user.login.endsWith('[bot]') &&
+      reviewUsers.some((substr) => review.user?.login.includes(substr)),
   )
 
-  /** @type {null | typeof reviews[number]} */
+  /** @type {null | Review} */
   let pendingReview
   const matchingReviews = reviews.filter((review) =>
     reviewKeyRegex.test(review.body),
@@ -219,9 +267,4 @@ async function postReview({
       })
     }
   }
-}
-
-module.exports = {
-  dismissReviews,
-  postReview,
 }

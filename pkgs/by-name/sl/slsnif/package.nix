@@ -13,6 +13,14 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "0gn8c5hj8m3sywpwdgn6w5xl4rzsvg0z7d2w8dxi6p152j5b0pii";
   };
 
+  patches = [
+    ./fix-gcc15.patch
+  ];
+
+  configureFlags = [
+    "ac_cv_type_signal=void"
+  ];
+
   meta = {
     description = "Serial line sniffer";
     homepage = "http://slsnif.sourceforge.net/";

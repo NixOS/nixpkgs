@@ -19,11 +19,19 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.4.1";
 
   src = fetchFromGitHub {
-    owner = "acrisci";
+    owner = "altdesktop";
     repo = "playerctl";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-OiGKUnsKX0ihDRceZoNkcZcEAnz17h2j2QUOSVcxQEY=";
   };
+
+  # macOS's ld64 has no --version-script, so translate the data/playerctl.syms
+  # filter to an -exported_symbols_list to keep the same symbols exported on darwin
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    printf '%s\n' '_Playerctl*' '_PLAYERCTL*' '_playerctl_*' '_pctl_*' > data/playerctl.syms
+    substituteInPlace playerctl/meson.build \
+      --replace-fail '--version-script' '-exported_symbols_list'
+  '';
 
   nativeBuildInputs = [
     docbook_xsl
@@ -46,11 +54,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Command-line utility and library for controlling media players that implement MPRIS";
-    homepage = "https://github.com/acrisci/playerctl";
+    homepage = "https://github.com/altdesktop/playerctl";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ puffnfresh ];
-    broken = stdenv.hostPlatform.isDarwin;
+    maintainers = with lib.maintainers; [
+      puffnfresh
+      anish
+    ];
     mainProgram = "playerctl";
   };
 })

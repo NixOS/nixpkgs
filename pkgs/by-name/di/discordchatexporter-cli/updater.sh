@@ -11,5 +11,5 @@ if [[ "$new_version" == "$old_version" ]]; then
 fi
 
 cd ../../../..
-update-source-version discordchatexporter-cli "$new_version"
+update-source-version discordchatexporter-cli "$new_version" --file=./pkgs/by-name/di/discordchatexporter-cli/package.nix
 $(nix-build -A discordchatexporter-cli.fetch-deps --no-out-link)

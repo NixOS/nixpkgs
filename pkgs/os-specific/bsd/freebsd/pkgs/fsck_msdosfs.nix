@@ -10,5 +10,4 @@ mkDerivation {
     "-Wno-unterminated-string-initialization"
   ];
 
-  meta.platforms = lib.platforms.freebsd;
 }

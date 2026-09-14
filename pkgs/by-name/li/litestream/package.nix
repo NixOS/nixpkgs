@@ -3,16 +3,17 @@
   fetchFromGitHub,
   lib,
   nixosTests,
+  testers,
 }:
 buildGoModule (finalAttrs: {
   pname = "litestream";
-  version = "0.3.13";
+  version = "0.5.17";
 
   src = fetchFromGitHub {
     owner = "benbjohnson";
     repo = "litestream";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-p858gK+ICKDQ+/LUiBaxF/kfrZzQAXnYMZDFU8kNCJ4=";
+    hash = "sha256-NOSyBKmxy+gtLFl4XgmU4xkKT06yRhEEdfcM0mB7ajU=";
   };
 
   ldflags = [
@@ -21,17 +22,27 @@ buildGoModule (finalAttrs: {
     "-X main.Version=${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-sYIY3Z3VrCqbjEbQtEY7q6Jljg8jMoa2qWEB/IkDjzM=";
+  vendorHash = "sha256-IbnLypkKqtm+wceNXakdeML66fHNmuBRi+cWSFmUKWk=";
 
-  patches = [ ./fix-cve-2024-41254.patch ];
+  # httptest servers in tests
+  __darwinAllowLocalNetworking = true;
 
-  passthru.tests = { inherit (nixosTests) litestream; };
+  passthru.tests = {
+    inherit (nixosTests) litestream;
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "litestream version";
+    };
+  };
 
   meta = {
     description = "Streaming replication for SQLite";
     mainProgram = "litestream";
     license = lib.licenses.asl20;
     homepage = "https://litestream.io/";
-    maintainers = with lib.maintainers; [ fbrs ];
+    maintainers = with lib.maintainers; [
+      fbrs
+      konradmalik
+    ];
   };
 })

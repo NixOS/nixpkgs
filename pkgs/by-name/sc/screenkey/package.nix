@@ -6,7 +6,7 @@
   libx11,
   gobject-introspection,
   gtk3,
-  libappindicator-gtk3,
+  libappindicator,
   slop,
   python3,
 }:
@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   buildInputs = [
     gtk3
-    libappindicator-gtk3
+    libappindicator
   ];
 
   build-system = with python3.pkgs; [ setuptools ];

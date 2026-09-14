@@ -144,12 +144,10 @@ in
       ++ optional (cfg.database.dialect == "postgres") "postgresql.target";
       wantedBy = [ "multi-user.target" ];
 
-      script = ''
-        exec ${getExe cfg.package} -config ${settingsFile}
-      '';
-
       serviceConfig = {
         EnvironmentFile = cfg.environmentFiles;
+
+        ExecStart = "${getExe cfg.package} -config ${settingsFile}";
 
         User = config.users.users.wakapi.name;
         Group = config.users.users.wakapi.group;
@@ -196,14 +194,12 @@ in
       }
     ];
 
-    warnings = [
-      (lib.optionalString (cfg.database.createLocally && cfg.settings.db.dialect != "postgres") ''
-        You have enabled automatic database configuration, but the database dialect is not set to "posgres".
+    warnings = lib.optional (cfg.database.createLocally && cfg.settings.db.dialect != "postgres") ''
+      You have enabled automatic database configuration, but the database dialect is not set to "postgres".
 
-        The Wakapi module only supports PostgreSQL. Please set `services.wakapi.database.createLocally`
-        to `false`, or switch to "postgres" as your database dialect.
-      '')
-    ];
+      The Wakapi module only supports PostgreSQL. Please set `services.wakapi.database.createLocally`
+      to `false`, or switch to "postgres" as your database dialect.
+    '';
 
     users = {
       users.wakapi = {

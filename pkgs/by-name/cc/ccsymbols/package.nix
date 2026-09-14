@@ -2,31 +2,32 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  installFonts,
   unzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ccsymbols";
   version = "2020-04-19";
 
   src = fetchurl {
-    url = "https://www.ctrl.blog/file/${version}_cc-symbols.zip";
+    url = "https://www.ctrl.blog/file/${finalAttrs.version}_cc-symbols.zip";
     hash = "sha256-hkARhb8T6VgGAybYkVuPuebjhuk1dwiBJ1bZMwvYpMY=";
   };
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ unzip ];
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [
+    installFonts
+    unzip
+  ];
 
-    install -Dm644 CCSymbols.* -t $out/share/fonts/ccsymbols
-
-    runHook postInstall
-  '';
-
-  passthru = { inherit pname version; };
+  passthru = { inherit (finalAttrs) pname version; };
 
   meta = {
     description = "Creative Commons symbol font";
@@ -35,4 +36,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.publicDomain;
     platforms = lib.platforms.all;
   };
-}
+})

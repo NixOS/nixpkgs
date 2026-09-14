@@ -13,7 +13,7 @@
 }:
 {
   units,
-  # : AttrSet String (Either Path { path : Path, wanted-by : [ String ] })
+  # : { [String] :: Path | { path :: Path; wanted-by :: [String]; } }
   # ^ A set whose names are unit names and values are
   # either paths to the corresponding unit files or a set
   # containing the path and the list of units this unit

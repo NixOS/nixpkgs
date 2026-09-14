@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "pcre2-py";
-  version = "0.5.2";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "grtetrault";
     repo = "pcre2.py";
     tag = "v${version}";
-    hash = "sha256-W3oKluXC4orw1ThYM1Beeu8+6rNMr8FSCqep84SmXLE=";
+    hash = "sha256-XSEYhVxOZnioFEX5kdODwF8SbPm5k6+TENsdOH9Yr1k=";
     fetchSubmodules = false;
   };
 
@@ -82,7 +82,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for the PCRE2 library created by Philip Hazel";
     homepage = "https://github.com/grtetrault/pcre2.py";
-    changelog = "https://github.com/grtetrault/pcre2.py/releases/tag/v${version}";
+    changelog = "https://github.com/grtetrault/pcre2.py/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ tochiaha ];
   };

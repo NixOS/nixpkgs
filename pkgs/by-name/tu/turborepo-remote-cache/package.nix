@@ -9,23 +9,24 @@
   fetchPnpmDeps,
   makeWrapper,
   nix-update-script,
+  nixosTests,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "turborepo-remote-cache";
-  version = "2.7.3";
+  version = "2.12.3";
 
   src = fetchFromGitHub {
     owner = "ducktors";
     repo = "turborepo-remote-cache";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I5EySaE0SFUmJdK9AAR6Id1TpTS3IOclRazTio8wFeI=";
+    hash = "sha256-Jn/p7wGq/FzF55ZAeIt5gPRKPOrHHocTbjtJCfRuWmo=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-CJE8fZEgde06Mm3sg9tRfbU/5jHT9caP67ODWCjQyJI=";
+    hash = "sha256-YCwTqY9iyOY7u6TscRi1j7/p+08qbQdQkWXelx7kWwo=";
   };
 
   nativeBuildInputs = [
@@ -73,13 +74,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = { inherit (nixosTests) turborepo-remote-cache; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://github.com/ducktors/turborepo-remote-cache";
     description = "This project is an open-source implementation of the Turborepo custom remote cache server.";
     license = lib.licenses.mit;
     mainProgram = "turborepo-remote-cache";
-    maintainers = with lib.maintainers; [ humemm ];
+    maintainers = with lib.maintainers; [
+      humemm
+      ibizaman
+    ];
   };
 })

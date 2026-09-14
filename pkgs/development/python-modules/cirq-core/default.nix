@@ -1,53 +1,47 @@
 {
   lib,
   stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
   attrs,
+  autoray ? null,
+  buildPythonPackage,
   duet,
+  fetchFromGitHub,
+  freezegun,
   matplotlib,
   networkx,
   numpy,
+  opt-einsum,
   pandas,
+  ply,
+  pylatex ? null,
+  pyquil ? null,
+  pytest-asyncio,
+  pytest-benchmark,
+  pytestCheckHook,
+  quimb ? null,
   requests,
   scipy,
+  setuptools,
   sortedcontainers,
   sympy,
   tqdm,
   typing-extensions,
-  autoray ? null,
-  opt-einsum,
-  ply,
-  pylatex ? null,
-  pyquil ? null,
-  quimb ? null,
-
-  # tests
-  freezegun,
-  pytest-asyncio,
-  pytestCheckHook,
-
   withContribRequires ? false,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cirq-core";
-  version = "1.6.1";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "quantumlib";
     repo = "cirq";
-    tag = "v${version}";
-    hash = "sha256-M+ojGXJOnrBipjSA9hd3++yTS70kCjPru9FG/rm7zI8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OAyBYzMEFyVMlxN5UjrKk1x2rSayLyAIAC5h96JeqK0=";
   };
 
-  sourceRoot = "${src.name}/${pname}";
+  sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pname}";
 
   pythonRelaxDeps = [ "matplotlib" ];
 
@@ -79,6 +73,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     freezegun
     pytest-asyncio
+    pytest-benchmark
     pytestCheckHook
   ];
 
@@ -105,10 +100,8 @@ buildPythonPackage rec {
   meta = {
     description = "Framework for creating, editing, and invoking Noisy Intermediate Scale Quantum (NISQ) circuits";
     homepage = "https://github.com/quantumlib/cirq";
-    changelog = "https://github.com/quantumlib/Cirq/releases/tag/${src.tag}";
+    changelog = "https://github.com/quantumlib/Cirq/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      fab
-    ];
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -7,6 +7,7 @@
   ocamlbuild,
   topkg,
   cmdliner,
+  cmdliner_1,
   version ? if lib.versionAtLeast ocaml.version "4.14" then "0.9.10" else "0.9.8",
 }:
 
@@ -34,7 +35,7 @@ stdenv.mkDerivation {
   configurePlatforms = [ ];
   buildInputs = [
     topkg
-    cmdliner
+    (if lib.versionAtLeast version "0.9.10" then cmdliner else cmdliner_1)
   ];
 
   inherit (topkg) buildPhase installPhase;

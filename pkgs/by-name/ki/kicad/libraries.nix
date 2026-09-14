@@ -6,6 +6,7 @@
   compressStep,
   stepreduce,
   parallel,
+  python3,
   zip,
 }:
 let
@@ -24,11 +25,14 @@ let
         stepreduce
         parallel
         zip
+      ]
+      ++ lib.optionals (name == "symbols") [
+        python3
       ];
 
       postInstall =
         lib.optionalString (name == "packages3d") ''
-          find $out -type f -name '*.step' | parallel 'stepreduce {} {} ${lib.optionalString compressStep "&& zip -9 {.}.stpZ {} && rm {}"}'
+          find $out -type f -name '*.step' | parallel 'stepreduce {} {} ${lib.optionalString compressStep "&& zip -j -9 {.}.stpZ {} && rm {}"}'
         ''
         + lib.optionalString ((name == "footprints") && compressStep) ''
           grep -rl '\.step' $out | xargs sed -i 's/\.step/.stpZ/g'

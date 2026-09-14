@@ -2,8 +2,9 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  fetchNpmDeps,
-  npmHooks,
+  fetchPnpmDeps,
+  pnpm,
+  pnpmConfigHook,
   nodejs,
   python3,
   pkg-config,
@@ -14,34 +15,36 @@
   cctools,
   nix-update-script,
   versionCheckHook,
+  buildPackages,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-authentication-service";
-  version = "1.11.0";
+  version = "1.24.0";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "matrix-authentication-service";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vP/4QzsuA+guUBNFJWytdPiAuHh5+D+UMpRwb/9Lbxc=";
+    hash = "sha256-LWGnfM7os9GT6fa/Vk1wAEp9m1L5rEL7tSPmgEKMNfQ=";
   };
 
-  cargoHash = "sha256-MLWjY+Rw4PkKb1zqZaDGpGsKPlGTDNpPRzyz/w1HfZ0=";
+  cargoHash = "sha256-jAJuRwhc+0IAikLyqctHuCQcS61iNj7iKWHJdRAqsAk=";
 
-  npmDeps = fetchNpmDeps {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
-    src = "${finalAttrs.src}/${finalAttrs.npmRoot}";
-    hash = "sha256-CXS5o1qYXPS5armoT9jLq4vv5ni3hht3ZCMXtNAGBQY=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    fetcherVersion = 4;
+    hash = "sha256-DxEjMhYqZGbnobQ/F0WFXq7qaxSkWDcoZ0kmWJsdxEQ=";
   };
 
-  npmRoot = "frontend";
-  npmFlags = [ "--legacy-peer-deps" ];
+  pnpmRoot = "frontend";
 
   nativeBuildInputs = [
     pkg-config
     open-policy-agent
-    npmHooks.npmConfigHook
+    pnpmConfigHook
+    pnpm
     nodejs
     (python3.withPackages (ps: [ ps.setuptools ])) # Used by gyp
   ]
@@ -51,6 +54,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     sqlite
     zstd
   ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -72,28 +77,40 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail ./share/policy.wasm "$out/share/$pname/policy.wasm"
   '';
 
-  preBuild = ''
-    make -C policies
-    (cd "$npmRoot" && npm run build)
-  '';
+  preBuild =
+    let
+      buildTarget = stdenv.buildPlatform.rust.rustcTarget;
+      buildTargetUnderscore = lib.replaceString "-" "_" buildTarget;
+    in
+    ''
+      make -C policies
+      (cd "$pnpmRoot" && npm run build)
+
+      # Fix aws-lc-sys cross-compilation
+      export CC_${buildTargetUnderscore}=$CC_FOR_BUILD
+      export CXX_${buildTargetUnderscore}=$CXX_FOR_BUILD
+    '';
 
   # Adapted from https://github.com/element-hq/matrix-authentication-service/blob/v0.20.0/.github/workflows/build.yaml#L75-L84
   postInstall = ''
     install -Dm444 -t "$out/share/$pname"        "policies/policy.wasm"
-    install -Dm444 -t "$out/share/$pname"        "$npmRoot/dist/manifest.json"
-    install -Dm444 -t "$out/share/$pname/assets" "$npmRoot/dist/"*
+    install -Dm444 -t "$out/share/$pname"        "$pnpmRoot/dist/manifest.json"
+    install -Dm444 -t "$out/share/$pname/assets" "$pnpmRoot/dist/"*
     cp -r templates   "$out/share/$pname/templates"
     cp -r translations   "$out/share/$pname/translations"
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      # avoid unstable pre‐releases
-      "--version-regex"
-      "^v([0-9.]+)$"
-    ];
+  passthru = {
+    tests = { inherit (nixosTests) matrix-authentication-service; };
+    updateScript = nix-update-script {
+      extraArgs = [
+        # avoid unstable pre‐releases
+        "--version-regex"
+        "^v([0-9.]+)$"
+      ];
+    };
   };
 
   meta = {
@@ -101,7 +118,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/element-hq/matrix-authentication-service";
     changelog = "https://github.com/element-hq/matrix-authentication-service/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ teutat3s ];
+    teams = [ lib.teams.matrix ];
     mainProgram = "mas-cli";
   };
 })

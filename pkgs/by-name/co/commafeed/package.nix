@@ -9,15 +9,17 @@
   unzip,
   nixosTests,
   writeText,
+  stdenv,
+  nix-update-script,
 }:
 let
-  version = "6.2.0";
+  version = "7.3.0";
 
   src = fetchFromGitHub {
     owner = "Athou";
     repo = "commafeed";
     tag = version;
-    hash = "sha256-M5p3nzlEIuIEMADZyQUqE6WAzlMmP/e4Zh9J8nbhZ9Q=";
+    hash = "sha256-VCN8NBVGQl7/D3fESxiw3ipUoK3qBM0SSnEYBB0E+64=";
   };
 
   frontend = buildNpmPackage {
@@ -27,7 +29,7 @@ let
 
     sourceRoot = "${src.name}/commafeed-client";
 
-    npmDepsHash = "sha256-XkUlsRdqIXwVExvSofZJLKMUSzjxJRRpV549UTP9Cjo=";
+    npmDepsHash = "sha256-usdJEjW/Oz993Ik8JZnEQ08ArqmLx/3hSdhlUJgCrig=";
 
     nativeBuildInputs = [ biome ];
 
@@ -53,7 +55,7 @@ maven.buildMavenPackage {
 
   pname = "commafeed";
 
-  mvnHash = "sha256-vZ7BPA2N3jgRnTwF3k9En2Pn+zTrXbtB9FGbmU4wJgY=";
+  mvnHash = "sha256-Gi+KMrdSXlnI34wvAYnJffVCa3WUYkPEFIv382+mwj4=";
   mvnJdk = jdk25;
 
   mvnParameters = lib.escapeShellArgs [
@@ -92,13 +94,23 @@ maven.buildMavenPackage {
     runHook postInstall
   '';
 
-  passthru.tests = nixosTests.commafeed;
+  passthru = {
+    inherit frontend;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+      ];
+    };
+    tests = nixosTests.commafeed;
+  };
 
   meta = {
     description = "Google Reader inspired self-hosted RSS reader";
     homepage = "https://github.com/Athou/commafeed";
     license = lib.licenses.asl20;
     mainProgram = "commafeed";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ svrana ];
+    broken = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64;
   };
 }

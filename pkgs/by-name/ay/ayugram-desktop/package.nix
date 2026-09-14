@@ -12,13 +12,16 @@ telegram-desktop.override {
   unwrapped = telegram-desktop.unwrapped.overrideAttrs (
     finalAttrs: previousAttrs: {
       pname = "ayugram-desktop-unwrapped";
-      version = "6.3.10";
+      version = "7.0.9";
 
       src = fetchFromGitHub {
         owner = "AyuGram";
         repo = "AyuGramDesktop";
-        tag = "v${finalAttrs.version}";
-        hash = "sha256-kyxnr246bhxHpDUhhEnraDtHZDnF2uU2tdmfIvPnKHo=";
+        # tag = "v${finalAttrs.version}";
+        # v7.0.9 tag contains a codegen bug due to an outdated submodule
+        # https://github.com/AyuGram/codegen/pull/3
+        rev = "db3b9891cb0b04ebb7d8c0e71ada3bcc669b910a";
+        hash = "sha256-JSx6qPpVul3NX8stNZzZX/ckNBQ3uXZP7lofb6eWauM=";
         fetchSubmodules = true;
       };
 

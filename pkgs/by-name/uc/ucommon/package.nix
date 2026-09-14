@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   # use C++14 Standard until error handling code gets updated upstream
-  CXXFLAGS = [ "-std=c++14" ];
+  env.CXXFLAGS = toString [ "-std=c++14" ];
 
   # disable flaky networking test
   postPatch = ''

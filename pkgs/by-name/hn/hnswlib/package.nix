@@ -15,13 +15,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hnswlib";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "nmslib";
     repo = "hnswlib";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1KkAX42j/I06KO4wCnDsDifN1JiENqYKR5NNHBjyuVA=";
+    hash = "sha256-tYzx92eKRFcZ+RW5mcAw1SFT5aRHvdDr9oBsWj6xZbg=";
   };
 
   # this is a header-only library, so we don't need to build it

@@ -7,31 +7,31 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "click-aliases";
-  version = "1.0.5";
-
+  version = "1.0.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "click-contrib";
     repo = "click-aliases";
-    rev = "v${version}";
-    hash = "sha256-vR5MUbgQfgownnq/VuEB/Jreibh/SB8wbDWGOmareRU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Km6rVAsdoctECEFxZG/gCnacmhdHQVJcVrOta6xh1XU=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ click ];
+  dependencies = [ click ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "click_aliases" ];
 
   meta = {
-    homepage = "https://github.com/click-contrib/click-aliases";
     description = "Enable aliases for click";
+    homepage = "https://github.com/click-contrib/click-aliases";
+    changelog = "https://github.com/click-contrib/click-aliases/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ panicgh ];
   };
-}
+})

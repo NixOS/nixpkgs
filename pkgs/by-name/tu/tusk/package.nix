@@ -48,7 +48,7 @@ appimageTools.wrapType2 rec {
     '';
     homepage = "https://klaussinani.github.io/tusk/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tbenst ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "tusk";
   };

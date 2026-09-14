@@ -21,7 +21,7 @@
   libusb1,
   pkg-config,
   # #FIXME: Could not get cmake to pick up on these dependencies
-  # Ommiting them prevents cmake from building the OCR video capabilities
+  # Omitting them prevents cmake from building the OCR video capabilities
   # Everything else should work it's just missing this one plugin
   # tesseract,
   # leptonica,
@@ -36,13 +36,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "advanced-scene-switcher";
-  version = "1.32.6";
+  version = "1.36.1";
 
   src = fetchFromGitHub {
     owner = "WarmUpTill";
     repo = "SceneSwitcher";
     rev = version;
-    hash = "sha256-BQnu7zRk1zOsEqFjmRrOeK/jE+rmnsB1ktW+OfH+L3I=";
+    hash = "sha256-padrHEGUtgXV0ee5mgIHSLHjh+6npL/vZAEJ8nARML0=";
   };
 
   nativeBuildInputs = [

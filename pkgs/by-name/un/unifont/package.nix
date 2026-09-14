@@ -1,66 +1,102 @@
 {
   lib,
   stdenv,
+  bashNonInteractive,
+  buildPackages,
   fetchurl,
-  mkfontscale,
-  fonttosfnt,
-  libfaketime,
+  perl,
+  bdftopcf,
+  bdf2psf,
+  imagemagick,
 }:
 
+let
+  perlenv = perl.withPackages (ps: [ ps.GD ]);
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "unifont";
-  version = "16.0.03";
+  version = "17.0.05";
 
-  otf = fetchurl {
-    url = "mirror://gnu/unifont/unifont-${finalAttrs.version}/unifont-${finalAttrs.version}.otf";
-    hash = "sha256-9TnyHLrjkWoJP4GdNsR3EtVwGshtrO2KaOzPe9nTPAw=";
+  strictDeps = true;
+
+  src = fetchurl {
+    url = "mirror://gnu/unifont/unifont-${finalAttrs.version}/unifont-${finalAttrs.version}.tar.gz";
+    hash = "sha256-8ofP+ybiJyOqNuZoSGmw8/87+4IsSwEAi9hHkR7BtjE=";
   };
 
-  pcf = fetchurl {
-    url = "mirror://gnu/unifont/unifont-${finalAttrs.version}/unifont-${finalAttrs.version}.pcf.gz";
-    hash = "sha256-ysKULOBusx4n7NfYRAzEoRfqaTNn5JtjigTVmb7wozY=";
-  };
-
-  bdf = fetchurl {
-    url = "mirror://gnu/unifont/unifont-${finalAttrs.version}/unifont-${finalAttrs.version}.bdf.gz";
-    hash = "sha256-fz0WZKwcBR9ZoaE2DdZU942CwkamiMNC6GPOx/a6ldQ=";
-  };
+  postPatch = ''
+    rm -r font/precompiled
+    patchShebangs ./src
+    ${lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      substituteInPlace Makefile --replace-fail \
+        'bin/unigenwidth ' \
+        '$(BINDIR)/unigenwidth '
+      substituteInPlace font/Makefile --replace-fail \
+        '"BINDIR:../../../$(BINDIR)/"' \
+        '"BINDIR:$(BINDIR)/"'
+    ''}
+  '';
 
   nativeBuildInputs = [
-    libfaketime
-    fonttosfnt
-    mkfontscale
+    perlenv
+    bdftopcf
+    bdf2psf
+    imagemagick
   ];
 
-  dontUnpack = true;
+  buildInputs = [
+    bashNonInteractive
+    perlenv
+  ];
 
-  buildPhase = ''
-    runHook preBuild
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "BINDIR=${buildPackages.unifont.bin}/bin"
+  ];
 
-    # convert pcf font to otb
-    faketime -f "1970-01-01 00:00:01" \
-    fonttosfnt -g 2 -m 2 -v -o "unifont.otb" "${finalAttrs.pcf}"
+  buildFlags = [ "BUILDFONT=1" ];
 
-    runHook postBuild
+  # The `sample` variants are not intended for general use.
+  #
+  # From the 2013 changelog:
+  #
+  # > These "Unifont Sample" fonts contain combining circles, and four-digit
+  # > hexadecimal glyphs for unassigned code points and Private Use Area glyphs.
+  # > Because of the inclusion of combining cirlces, "Unifont Sample" font
+  # > versions are only intended for illustrating individual glyphs, not for
+  # > general-purpose writing.
+  postInstall = ''
+    moveToOutput bin "$bin"
+    moveToOutput share/unifont "$doc"
+
+    # Move `sample` into its own output.
+    mkdir -vp "$sample/share/fonts/X11/misc/"
+    mkdir -vp "$sample/share/fonts/opentype/unifont/"
+    mv -vt "$sample/share/fonts/X11/misc/" \
+      "$out"/share/fonts/X11/misc/*_sample.*
+    mv -vt "$sample/share/fonts/opentype/unifont/" \
+      "$out"/share/fonts/opentype/unifont/*_sample.*
   '';
 
-  installPhase = ''
-    runHook preInstall
-
-    # install otb fonts
-    install -m 644 -D unifont.otb "$out/share/fonts/unifont.otb"
-    mkfontdir "$out/share/fonts"
-
-    # install pcf, otf, and bdf fonts
-    install -m 644 -D ${finalAttrs.pcf} $out/share/fonts/unifont.pcf.gz
-    install -m 644 -D ${finalAttrs.otf} $out/share/fonts/opentype/unifont.otf
-    gunzip -c ${finalAttrs.bdf} > $out/share/fonts/unifont.bdf
-    cd "$out/share/fonts"
-    mkfontdir
-    mkfontscale
-
-    runHook postInstall
+  postFixup = ''
+    patchShebangs --host --update "$bin"
   '';
+
+  outputs = [
+    "out"
+    "bin"
+    "doc"
+    "man"
+    "info"
+    "sample"
+  ];
+
+  # Don't bloat the font output with tools
+  propagatedBuildOutputs = [ ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Unicode font for Base Multilingual Plane";
@@ -71,7 +107,10 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
       fontException
     ];
-    maintainers = [ lib.maintainers.rycee ];
+    maintainers = with lib.maintainers; [
+      rycee
+      qweered
+    ];
     platforms = lib.platforms.all;
   };
 })

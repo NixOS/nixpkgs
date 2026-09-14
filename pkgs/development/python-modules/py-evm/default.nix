@@ -3,7 +3,6 @@
   fetchFromGitHub,
   # python module stuff
   buildPythonPackage,
-  pythonAtLeast,
   setuptools,
   # dependencies
   cached-property,
@@ -25,18 +24,15 @@
   pycryptodome,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-evm";
   version = "0.12.1-beta.1";
   pyproject = true;
 
-  # py-evm project has been archived by upstream; its support should be deprecated from "3.14".
-  disabled = pythonAtLeast "3.14";
-
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "py-evm";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-n2F0ApdmIED0wrGuNN45lyb7cGu8pRn8mLDehT7Ru9E=";
   };
 
@@ -64,6 +60,11 @@ buildPythonPackage rec {
     pycryptodome
   ];
 
+  pytestFlags = [
+    # 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    "-Wignore::DeprecationWarning"
+  ];
+
   disabledTests = [
     # side-effect: runs pip online check and is blocked by sandbox
     "test_install_local_wheel"
@@ -82,4 +83,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hellwolf ];
   };
-}
+})

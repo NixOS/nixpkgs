@@ -29,8 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "paxtest";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
-      joachifm
-    ];
+    maintainers = [ ];
   };
 })

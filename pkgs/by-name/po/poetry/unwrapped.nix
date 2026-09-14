@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   findpython,
   installShellFiles,
   build,
@@ -30,19 +31,31 @@
   httpretty,
   pytest-mock,
   pytest-xdist,
+  responses,
 }:
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "2.2.1";
+  version = "2.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = "poetry";
     tag = version;
-    hash = "sha256-oPHRDYci4lrZBY3MC4QU1juwbMJYFDJjARg1Y8us4FQ=";
+    hash = "sha256-ZYOnjWmcmswyugay8RuO/adkKo8/P9Xj9ADmEt4IHCE=";
   };
+
+  patches = [
+    # since virtualenv update to 21.6.1 the poetry tests do not pass.
+    # This should be removed once the upstream PR is merged and released.
+    # See : https://github.com/python-poetry/poetry/pull/10994
+    (fetchpatch {
+      url = "https://github.com/python-poetry/poetry/commit/aedda8577cd6e7c2d2b983130933a640b1b6545a.patch";
+      hash = "sha256-n1etA9em5+kvCN4yiLwBensUb7n6asW+xrIEhA9fNaE=";
+      excludes = [ "poetry.lock" ];
+    })
+  ];
 
   build-system = [
     poetry-core
@@ -50,12 +63,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
-  ];
-
-  pythonRelaxDeps = [
-    "dulwich"
-    "keyring"
-    "pbs-installer"
   ];
 
   dependencies = [
@@ -87,11 +94,13 @@ buildPythonPackage rec {
   ++ pbs-installer.optional-dependencies.download
   ++ pbs-installer.optional-dependencies.install;
 
+  pythonRelaxDeps = [ "installer" ];
+
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd poetry \
       --bash <($out/bin/poetry completions bash) \
       --fish <($out/bin/poetry completions fish) \
-      --zsh <($out/bin/poetry completions zsh) \
+      --zsh <($out/bin/poetry completions zsh)
   '';
 
   nativeCheckInputs = [
@@ -100,6 +109,7 @@ buildPythonPackage rec {
     httpretty
     pytest-mock
     pytest-xdist
+    responses
   ];
 
   preCheck = (

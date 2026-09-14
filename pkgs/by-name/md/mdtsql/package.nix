@@ -9,16 +9,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "mdtsql";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "noborus";
     repo = "mdtsql";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D9suWLrVQOztz0rRjEo+pjxQlGWOOsk3EUbkN9yuriY=";
+    hash = "sha256-fmv8wJfeJ8Lz6Z5OxggrudUvyJaA+22tCs0x2Dvz+Bw=";
   };
 
-  vendorHash = "sha256-psXnLMhrApyBjDY/S4WwIM1GLczyn4dUmX2fWSTq7mQ=";
+  vendorHash = "sha256-/FpbKpxTYiwWVDRxBn3GmPEhna/a+t4CuVq/bZmsb9w=";
 
   nativeBuildInputs = [
     installShellFiles

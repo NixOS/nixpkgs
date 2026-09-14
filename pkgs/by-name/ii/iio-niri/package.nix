@@ -1,30 +1,40 @@
 {
   rustPlatform,
+  stdenv,
   lib,
   fetchFromGitHub,
   dbus,
   pkg-config,
+  installShellFiles,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iio-niri";
-  version = "1.3.0";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "Zhaith-Izaliel";
     repo = "iio-niri";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tbCiG/u350U7UbYDV5gWczDQd//RosNHuzB/cP9Dyyo=";
+    hash = "sha256-ljoEzw4to+Sgq/nDLKFrKtK1GjZFwzuItZ0afwd9RE0=";
   };
 
-  cargoHash = "sha256-JnjBnqZXRhxUClvC2hIW898AwwEOS/ELrsrjY2dV3Is=";
+  cargoHash = "sha256-U2vYP0IsJl4KWhQ36wt4XEfuzziHH8a4MBh9HuXQO58=";
 
   nativeBuildInputs = [
     pkg-config
+    installShellFiles
   ];
 
   buildInputs = [
     dbus
   ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd iio-niri \
+      --bash <($out/bin/iio-niri completions bash) \
+      --zsh <($out/bin/iio-niri completions zsh) \
+      --fish <($out/bin/iio-niri completions fish)
+  '';
 
   meta = {
     description = "Listen to iio-sensor-proxy and updates Niri output orientation depending on the accelerometer orientation";

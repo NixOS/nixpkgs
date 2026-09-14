@@ -73,7 +73,7 @@ let
       types = callLibs ./types.nix;
 
       # constants
-      licenses = callLibs ./licenses.nix;
+      licenses = callLibs ./licenses;
       sourceTypes = callLibs ./source-types.nix;
       systems = callLibs ./systems;
 
@@ -89,6 +89,14 @@ let
 
       # domain-specific
       fetchers = callLibs ./fetchers.nix;
+      services = callLibs ./services/lib.nix;
+      importService = self.modules.importApply ./services/service.nix;
+
+      # Modules that are not specific to a module class
+      genericModules = {
+        meta-maintainers = ./modules/generic/meta-maintainers.nix;
+        assertions = ./modules/generic/assertions.nix;
+      };
 
       # Eval-time filesystem handling
       path = callLibs ./path;

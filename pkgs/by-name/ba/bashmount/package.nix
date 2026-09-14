@@ -2,6 +2,15 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  makeWrapper,
+  coreutils,
+  cryptsetup,
+  eject,
+  gnugrep,
+  gnused,
+  less,
+  udisks,
+  util-linux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,6 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     sha256 = "1irw47s6i1qwxd20cymzlfw5sv579cw877l27j3p66qfhgadwxrl";
   };
+
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -29,6 +40,22 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/doc/bashmount
     cp COPYING $out/share/doc/bashmount
     cp NEWS    $out/share/doc/bashmount
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/bashmount \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          cryptsetup
+          eject
+          gnugrep
+          gnused
+          less
+          udisks
+          util-linux
+        ]
+      }
   '';
 
   meta = {

@@ -6,16 +6,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "parso";
-  version = "0.8.5";
+  version = "0.8.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "davidhalter";
     repo = "parso";
-    tag = "v${version}";
-    hash = "sha256-faSXCrOkybLr0bboF/8rPV/Humq8s158A3UOpdlYi0I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vpWoxLIvNt4QQh/r57iAvX3Zebet3mihb5efOWLhYI8=";
   };
 
   build-system = [ setuptools ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python Parser";
     homepage = "https://parso.readthedocs.io/en/latest/";
-    changelog = "https://github.com/davidhalter/parso/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/davidhalter/parso/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
   };
-}
+})

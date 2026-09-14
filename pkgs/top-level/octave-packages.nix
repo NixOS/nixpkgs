@@ -56,11 +56,13 @@ makeScope newScope (
   in
   {
 
-    inherit callPackage buildOctavePackage computeRequiredOctavePackages;
+    inherit buildOctavePackage computeRequiredOctavePackages;
 
     inherit (callPackage ../development/interpreters/octave/hooks { })
       writeRequiredOctavePackagesHook
       ;
+
+    # keep-sorted start block=yes newline_separated=yes case=no numeric=yes skip_lines=1
 
     arduino = callPackage ../development/octave-modules/arduino {
       inherit (pkgs) arduino-core-unwrapped;
@@ -84,6 +86,8 @@ makeScope newScope (
 
     dataframe = callPackage ../development/octave-modules/dataframe { };
 
+    datatypes = callPackage ../development/octave-modules/datatypes { };
+
     dicom = callPackage ../development/octave-modules/dicom { };
 
     divand = callPackage ../development/octave-modules/divand { };
@@ -92,9 +96,9 @@ makeScope newScope (
 
     econometrics = callPackage ../development/octave-modules/econometrics { };
 
-    fits = callPackage ../development/octave-modules/fits { };
-
     financial = callPackage ../development/octave-modules/financial { };
+
+    fits = callPackage ../development/octave-modules/fits { };
 
     fpl = callPackage ../development/octave-modules/fpl { };
 
@@ -114,17 +118,23 @@ makeScope newScope (
       inherit (pkgs) gsl;
     };
 
-    image = callPackage ../development/octave-modules/image { };
+    image = callPackage ../development/octave-modules/image {
+      inherit (pkgs)
+        gnuplot
+        makeFontsConf
+        writableTmpDirAsHomeHook
+        ;
+    };
 
     image-acquisition = callPackage ../development/octave-modules/image-acquisition { };
 
     instrument-control = callPackage ../development/octave-modules/instrument-control { };
 
+    interval = callPackage ../development/octave-modules/interval { };
+
     io = callPackage ../development/octave-modules/io {
       inherit (octave) enableJava;
     };
-
-    interval = callPackage ../development/octave-modules/interval { };
 
     linear-algebra = callPackage ../development/octave-modules/linear-algebra { };
 
@@ -147,7 +157,7 @@ makeScope newScope (
     miscellaneous = callPackage ../development/octave-modules/miscellaneous { };
 
     msh = callPackage ../development/octave-modules/msh {
-      # PLACEHOLDER until KarlJoad gets dolfin packaged.
+      # PLACEHOLDER until ravenjoad gets dolfin packaged.
       dolfin = null;
     };
 
@@ -183,11 +193,11 @@ makeScope newScope (
 
     sockets = callPackage ../development/octave-modules/sockets { };
 
-    stk = callPackage ../development/octave-modules/stk { };
-
     splines = callPackage ../development/octave-modules/splines { };
 
     statistics = callPackage ../development/octave-modules/statistics { };
+
+    stk = callPackage ../development/octave-modules/stk { };
 
     strings = callPackage ../development/octave-modules/strings { };
 
@@ -207,6 +217,7 @@ makeScope newScope (
       inherit (pkgs) zeromq autoreconfHook;
     };
 
+    # keep-sorted end
   }
   // lib.optionalAttrs config.allowAliases {
     fem-fenics = throw "octavePackages.fem-fenics has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05

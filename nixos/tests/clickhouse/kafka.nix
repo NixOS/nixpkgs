@@ -27,7 +27,7 @@ let
   kafkaNamedCollection = pkgs.writeText "kafka.xml" kafkaNamedCollectionConfig;
 in
 {
-  name = "clickhouse-kafka";
+  name = "clickhouse-${package.version}-kafka";
   meta.maintainers = with pkgs.lib.maintainers; [
     jpds
     thevar1able

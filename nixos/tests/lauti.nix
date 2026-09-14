@@ -5,20 +5,20 @@
 }:
 
 {
-  name = "eintopf";
+  name = "lauti";
   meta.maintainers = with lib.maintainers; [ onny ];
 
   nodes = {
-    eintopf = {
-      services.eintopf.enable = true;
+    lauti = {
+      services.lauti.enable = true;
     };
   };
 
   testScript = ''
-    eintopf.start
-    eintopf.wait_for_unit("eintopf.service")
-    eintopf.wait_for_open_port(3333)
-    eintopf.succeed("curl -sSfL http://eintopf:3333 | grep 'No events available'")
+    lauti.start
+    lauti.wait_for_unit("lauti.service")
+    lauti.wait_for_open_port(3333)
+    lauti.succeed("curl -sSfL http://lauti:3333 | grep 'No events available'")
   '';
 
 }

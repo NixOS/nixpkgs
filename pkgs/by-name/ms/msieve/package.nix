@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     ecm
   ];
 
-  ECM = if ecm == null then "0" else "1";
+  env.ECM = if ecm == null then "0" else "1";
 
   # Doesn't hurt Linux but lets clang-based platforms like Darwin work fine too
   makeFlags = [

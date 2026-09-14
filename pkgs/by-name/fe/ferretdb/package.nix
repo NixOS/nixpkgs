@@ -44,7 +44,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://www.ferretdb.com/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      dit7ya
       noisersup
       julienmalka
     ];

@@ -16,14 +16,15 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "tclint";
-  version = "0.7.0";
+  version = "0.9.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "nmoroze";
     repo = "tclint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GkWQlOmPh/IpkdcNKkaHJoVDD2r5wCSFeMZA96dxiXM=";
+    hash = "sha256-+ev/zqZwgW80XmVs8T+Ji37aJMOpr/1QyLAeHJES13Y=";
   };
 
   build-system = with pythonPackages; [
@@ -34,6 +35,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   pythonRelaxDeps = [
     "importlib-metadata"
     "pathspec"
+    "voluptuous"
   ];
   dependencies = with pythonPackages; [
     importlib-metadata
@@ -52,7 +54,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     pythonPackages.pytestCheckHook
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   disabledTestPaths = [
     # Fails to find lsprotocol in the sandbox, even when added to nativeCheckInputs

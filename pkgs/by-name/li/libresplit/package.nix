@@ -1,6 +1,6 @@
 {
   lib,
-  gcc15Stdenv,
+  stdenv,
   fetchFromGitHub,
   gtk3,
   jansson,
@@ -12,15 +12,15 @@
   wrapGAppsHook3,
 }:
 
-gcc15Stdenv.mkDerivation {
+stdenv.mkDerivation {
   pname = "libresplit";
-  version = "0-unstable-2026-01-22";
+  version = "0-unstable-2026-02-11";
 
   src = fetchFromGitHub {
     owner = "LibreSplit";
     repo = "LibreSplit";
-    rev = "be1ae0ea476846bb7e296613f471ba8803b1d7ff";
-    hash = "sha256-9BzzpKun8c9TFzwHHbGxFK6ThfVHRMUUqjwRiS+Lfks=";
+    rev = "f87a6829c9319acca907a39af4d391375a322713";
+    hash = "sha256-wcv4VkuVClc+yCe/o8hIQFO/mxF4NAB7et52SLOwgpk=";
   };
 
   nativeBuildInputs = [

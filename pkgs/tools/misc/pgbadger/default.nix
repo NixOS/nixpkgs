@@ -14,13 +14,13 @@
 
 buildPerlPackage rec {
   pname = "pgbadger";
-  version = "12.4";
+  version = "13.2";
 
   src = fetchFromGitHub {
     owner = "darold";
     repo = "pgbadger";
     tag = "v${version}";
-    hash = "sha256-an/BOkQsMkTXS0HywV1JWerS16HRbO1MHVleYhVqmBM=";
+    hash = "sha256-i2EamGk+urwTQNaiphJw0QIjLq/OpRdQzsR6ytaZc7k=";
   };
 
   postPatch = ''

@@ -7,6 +7,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   numpy,
+  pytest-doctestplus,
   pytestCheckHook,
   scipy,
   setuptools-scm,
@@ -25,6 +26,10 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-0iUnapBn8yDCx1tqHD10Ljid15yBuqlICyFuva2LNPk=";
   };
 
+  postPatch = ''
+    sed -i "/--doctest-rst/d" pyproject.toml
+  '';
+
   build-system = [
     setuptools
     setuptools-scm
@@ -40,6 +45,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    pytest-doctestplus
     pytestCheckHook
   ];
 

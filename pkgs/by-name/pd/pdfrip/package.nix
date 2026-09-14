@@ -6,22 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pdfrip";
-  version = "2.0.1";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "mufeedvh";
     repo = "pdfrip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9KDWd71MJ2W9Xp3uqp0iZMmkBwIay+L4gnPUt7hylS0=";
+    hash = "sha256-VytsSVcKx1/A9BSlmRdkD61txDvFOaSfG411565q9eY=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
+  cargoHash = "sha256-JKZ29fW/B4rJe6g6VKkgZdxlA2eaaAgjztFQ/5kDF1o=";
 
   meta = {
     description = "PDF password cracking utility";

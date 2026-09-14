@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "xmltodict";
-  version = "1.0.2";
+  version = "1.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "martinblech";
     repo = "xmltodict";
     tag = "v${version}";
-    hash = "sha256-gnTNkh0GLfRmjMsLhfvpNrewfinNOhem0i3wzIZvKpA=";
+    hash = "sha256-G7hVtS6toUJC0YY1AXBOJSc3wnAZyWilLnT/5vvFRRw=";
   };
 
   build-system = [ setuptools ];
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/martinblech/xmltodict";
     changelog = "https://github.com/martinblech/xmltodict/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.dotlambda ];
   };
 }

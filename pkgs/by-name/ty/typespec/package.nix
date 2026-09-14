@@ -7,12 +7,14 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
   versionCheckHook,
 }:
 
 let
   workspace = "@typespec/compiler...";
+
+  pnpm = pnpm_10;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "typespec";
@@ -41,8 +43,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       pnpmWorkspaces
       postPatch
       ;
-    fetcherVersion = 2;
-    hash = "sha256-ztig1B10cQQy+4XKZjwwlCxGenwcU+C28TfTWHqZ59Y=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-wZvnRSALrupyhpSN8zNL3b6SZnVPXX3BdHrbzHUNtUg=";
   };
 
   postPatch = ''

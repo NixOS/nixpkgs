@@ -32,6 +32,6 @@ buildNpmPackage {
     homepage = "https://ejs.co";
     license = lib.licenses.asl20;
     mainProgram = "ejs";
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = [ ];
   };
 }

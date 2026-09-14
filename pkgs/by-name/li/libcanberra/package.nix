@@ -5,15 +5,14 @@
   fetchpatch,
   pkg-config,
   libtool,
-  gtk2-x11,
   gtk3-x11,
   gtkSupport ? null,
   libpulseaudio,
   gst_all_1,
   libvorbis,
   libcap,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   withAlsa ? stdenv.hostPlatform.isLinux,
   alsa-lib,
 }:
@@ -43,10 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
     gstreamer
     gst-plugins-base
   ])
-  ++ lib.optional (gtkSupport == "gtk2") gtk2-x11
   ++ lib.optional (gtkSupport == "gtk3") gtk3-x11
   ++ lib.optional stdenv.hostPlatform.isLinux libcap
-  ++ lib.optional withSystemd systemd
+  ++ lib.optional withSystemd systemdLibs
   ++ lib.optional withAlsa alsa-lib;
 
   configureFlags = [
@@ -55,11 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isLinux "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system";
 
   patches = [
-    (fetchpatch {
-      name = "0001-gtk-Don-t-assume-all-GdkDisplays-are-GdkX11Displays-.patch";
-      url = "http://git.0pointer.net/libcanberra.git/patch/?id=c0620e432650e81062c1967cc669829dbd29b310";
-      sha256 = "0rc7zwn39yxzxp37qh329g7375r5ywcqcaak8ryd0dgvg8m5hcx9";
-    })
+    ./0001-gtk-Don-t-assume-all-GdkDisplays-are-GdkX11Displays-.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (fetchpatch {
@@ -79,6 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
       sed 's|-lltdl|-L${libtool.lib}/lib -lltdl|' -i $f
     done
   '';
+
+  enableParallelBuilding = true;
 
   passthru = lib.optionalAttrs (gtkSupport != null) {
     gtkModule = if gtkSupport == "gtk2" then "/lib/gtk-2.0" else "/lib/gtk-3.0/";

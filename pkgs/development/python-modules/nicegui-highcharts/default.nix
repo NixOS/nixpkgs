@@ -5,23 +5,26 @@
   fetchFromGitHub,
   nicegui,
   hatchling,
+  pyprojectVersionPatchHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "nicegui-highcharts";
-  version = "3.2.0";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zauberzeug";
     repo = "nicegui-highcharts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ihPWk/FnOAJzO3kWM4dV0ZbbDgBfGb4o+6zkVEb6wrA=";
+    hash = "sha256-QvhvQU/na33ZYQbAuCJvsVDDRkTy+Z4STJg9vlZrQbY=";
   };
 
   pythonRelaxDeps = [ "docutils" ];
 
   build-system = [ hatchling ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     docutils

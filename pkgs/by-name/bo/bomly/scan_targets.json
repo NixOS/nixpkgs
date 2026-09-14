@@ -1,0 +1,160 @@
+[
+  {
+    "name": "scan-go",
+    "url": "https://github.com/bomly-dev/example-go-gomod",
+    "ref": "v1.0.0",
+    "ecosystem": "go",
+    "tools": ["go"],
+    "benchmark_enabled": true
+  },
+  {
+    "name": "scan-npm",
+    "url": "https://github.com/bomly-dev/example-javascript-npm",
+    "ref": "v1.0.0",
+    "ecosystem": "npm",
+    "tools": ["npm"],
+    "benchmark_enabled": true
+  },
+  {
+    "name": "scan-maven",
+    "url": "https://github.com/bomly-dev/example-java-maven",
+    "ref": "v1.0.0",
+    "ecosystem": "maven",
+    "tools": ["mvn"],
+    "benchmark_enabled": true
+  },
+  {
+    "name": "scan-python-pip",
+    "url": "https://github.com/bomly-dev/example-python-pip",
+    "ref": "fe04c758134b95dab102e1fce10275f7d18c0cf2",
+    "ecosystem": "python",
+    "tools": ["pip"],
+    "benchmark_enabled": true
+  },
+  {
+    "name": "scan-composer",
+    "url": "https://github.com/bomly-dev/example-php-composer",
+    "ref": "v1.0.0",
+    "ecosystem": "php",
+    "benchmark_enabled": true
+  },
+  {
+    "name": "scan-bundler",
+    "url": "https://github.com/bomly-dev/example-ruby-bundler",
+    "ref": "v1.0.0",
+    "ecosystem": "ruby",
+    "benchmark_enabled": true
+  },
+  {
+    "name": "scan-github-actions",
+    "url": "https://github.com/bomly-dev/example-github-actions",
+    "ref": "v1.0.0",
+    "ecosystem": "github-actions",
+    "benchmark_enabled": true
+  },
+  {
+    "name": "scan-nuget",
+    "url": "https://github.com/bomly-dev/example-dotnet-nuget",
+    "ref": "v1.0.0",
+    "ecosystem": "dotnet",
+    "benchmark_enabled": true
+  },
+  {
+    "name": "scan-cargo",
+    "url": "https://github.com/bomly-dev/example-rust-cargo",
+    "ref": "v1.0.0",
+    "ecosystem": "rust",
+    "benchmark_enabled": true
+  },
+  {
+    "name": "scan-pub",
+    "url": "https://github.com/bomly-dev/example-dart-pub",
+    "ref": "v1.0.0",
+    "ecosystem": "dart",
+    "benchmark_enabled": true
+  },
+  {
+    "name": "scan-cocoapods",
+    "url": "https://github.com/bomly-dev/example-swift-cocoapods",
+    "ref": "v1.0.0",
+    "ecosystem": "swift",
+    "benchmark_enabled": true
+  },
+  {
+    "name": "scan-mix",
+    "url": "https://github.com/bomly-dev/example-elixir-mix",
+    "ref": "v1.0.0",
+    "ecosystem": "elixir",
+    "benchmark_enabled": true
+  },
+  {
+    "name": "scan-swiftpm",
+    "url": "https://github.com/bomly-dev/example-swift-swiftpm",
+    "ref": "v1.0.0",
+    "ecosystem": "swift",
+    "benchmark_enabled": true
+  },
+  {
+    "name": "scan-sbt",
+    "url": "https://github.com/bomly-dev/example-scala-sbt",
+    "ref": "v1.0.0",
+    "ecosystem": "scala",
+    "benchmark_enabled": true
+  },
+  {
+    "name": "scan-yarn",
+    "url": "https://github.com/bomly-dev/example-javascript-yarn",
+    "ref": "v1.0.0",
+    "ecosystem": "npm",
+    "tools": ["npm"],
+    "benchmark_enabled": true
+  },
+  {
+    "name": "scan-pnpm",
+    "url": "https://github.com/bomly-dev/example-javascript-pnpm",
+    "ref": "v1.0.0",
+    "ecosystem": "npm",
+    "tools": ["npm"],
+    "benchmark_enabled": true
+  },
+  {
+    "name": "scan-gradle",
+    "url": "https://github.com/bomly-dev/example-java-gradle",
+    "ref": "v1.0.0",
+    "ecosystem": "maven",
+    "benchmark_enabled": true
+  },
+  {
+    "name": "scan-python-pipenv",
+    "url": "https://github.com/bomly-dev/example-python-pipenv",
+    "ref": "v1.0.0",
+    "ecosystem": "python",
+    "args": ["--install-first"],
+    "tools": ["pipenv"],
+    "benchmark_enabled": true
+  },
+  {
+    "name": "scan-python-poetry",
+    "url": "https://github.com/bomly-dev/example-python-poetry",
+    "ref": "v1.0.0",
+    "ecosystem": "python",
+    "tools": ["poetry"],
+    "benchmark_enabled": true
+  },
+  {
+    "name": "scan-python-uv",
+    "url": "https://github.com/bomly-dev/example-python-uv",
+    "ref": "v1.0.0",
+    "ecosystem": "python",
+    "args": ["--install-first"],
+    "tools": ["uv"],
+    "benchmark_enabled": true
+  },
+  {
+    "name": "scan-cpp-conan",
+    "url": "https://github.com/bomly-dev/example-cpp-conan",
+    "ref": "v1.0.0",
+    "ecosystem": "cpp",
+    "benchmark_enabled": true
+  }
+]

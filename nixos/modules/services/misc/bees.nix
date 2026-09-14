@@ -17,6 +17,7 @@ let
     notice = 5;
     info = 6;
     debug = 7;
+    trace = 8;
   };
 
   fsOptions = with lib.types; {

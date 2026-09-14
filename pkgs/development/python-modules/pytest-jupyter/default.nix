@@ -24,14 +24,14 @@
 let
   self = buildPythonPackage rec {
     pname = "pytest-jupyter";
-    version = "0.10.1";
+    version = "0.11.0";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "jupyter-server";
       repo = "pytest-jupyter";
       tag = "v${version}";
-      hash = "sha256-RTpXBbVCRj0oyZ1TXXDv3M7sAI4kA6f3ouzTr0rXjwY=";
+      hash = "sha256-x3Q9Ei4WIMDjjrYfWees30eooWep60EljGYyUyypxqQ=";
     };
 
     nativeBuildInputs = [ hatchling ];
@@ -69,7 +69,7 @@ let
     };
 
     meta = {
-      changelog = "https://github.com/jupyter-server/pytest-jupyter/releases/tag/v${version}";
+      changelog = "https://github.com/jupyter-server/pytest-jupyter/releases/tag/${src.tag}";
       description = "Pytest plugin for testing Jupyter core libraries and extensions";
       homepage = "https://github.com/jupyter-server/pytest-jupyter";
       license = lib.licenses.bsd3;

@@ -60,6 +60,16 @@
       "source": "hosted",
       "version": "9.2.0"
     },
+    "bloc_concurrency": {
+      "dependency": "direct main",
+      "description": {
+        "name": "bloc_concurrency",
+        "sha256": "86b7b17a0a78f77fca0d7c030632b59b593b22acea2d96972588f40d4ef53a94",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.3.0"
+    },
     "boolean_selector": {
       "dependency": "transitive",
       "description": {
@@ -165,11 +175,11 @@
       "dependency": "transitive",
       "description": {
         "name": "characters",
-        "sha256": "f71061c654a3380576a52b451dd5532377954cf9dbd272a78fc8479606670803",
+        "sha256": "faf38497bda5ead2a8c7615f4f7939df04333478bf32e4173fcb06d428b5716b",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.4.0"
+      "version": "1.4.1"
     },
     "checked_yaml": {
       "dependency": "transitive",
@@ -687,11 +697,21 @@
       "dependency": "transitive",
       "description": {
         "name": "material_color_utilities",
-        "sha256": "f7142bb1154231d7ea5f96bc7bde4bda2a0945d2806bb11670e30b850d56bdec",
+        "sha256": "9c337007e82b1889149c82ed242ed1cb24a66044e30979c44912381e9be4c48b",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.11.1"
+      "version": "0.13.0"
+    },
+    "menu_base": {
+      "dependency": "transitive",
+      "description": {
+        "name": "menu_base",
+        "sha256": "820368014a171bd1241030278e6c2617354f492f5c703d7b7d4570a6b8b84405",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.1.1"
     },
     "meta": {
       "dependency": "direct main",
@@ -1202,6 +1222,16 @@
       "source": "hosted",
       "version": "3.0.0"
     },
+    "shortid": {
+      "dependency": "transitive",
+      "description": {
+        "name": "shortid",
+        "sha256": "d0b40e3dbb50497dad107e19c54ca7de0d1a274eb9b4404991e443dadb9ebedb",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.1.2"
+    },
     "sky_engine": {
       "dependency": "transitive",
       "description": "flutter",
@@ -1297,6 +1327,16 @@
       },
       "source": "hosted",
       "version": "0.7.8"
+    },
+    "tray_manager": {
+      "dependency": "direct main",
+      "description": {
+        "name": "tray_manager",
+        "sha256": "c5fd83b0ae4d80be6eaedfad87aaefab8787b333b8ebd064b0e442a81006035b",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.5.2"
     },
     "typed_data": {
       "dependency": "transitive",

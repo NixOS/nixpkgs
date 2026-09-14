@@ -3,25 +3,25 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  cacert,
   pkg-config,
   oniguruma,
   installShellFiles,
-  zola,
   testers,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zola";
-  version = "0.22.1";
+  version = "0.23.4";
 
   src = fetchFromGitHub {
     owner = "getzola";
     repo = "zola";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-mynoXNJE7IcP/0bMLUr/pJQbaEVEj2q/488Z4c9Tr5A=";
+    hash = "sha256-9lSl4/vM+mO2YQA1uq6knVZ6uENhxPPjJ9a8z2A5aRc=";
   };
 
-  cargoHash = "sha256-AEgyaKenTMKAoJjzcklFFWjy5H5hkNZvVnlMZmqQxlM=";
+  cargoHash = "sha256-LsnnX8zyyJexmc+aGiI3Lwbrb/rjtKiL15CSM/cEFOY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -30,6 +30,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     oniguruma
+  ];
+
+  checkInputs = [
+    cacert
   ];
 
   env.RUSTONIG_SYSTEM_LIBONIG = true;
@@ -41,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh <($out/bin/zola completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion { package = zola; };
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {
     description = "Fast static site generator with everything built-in";

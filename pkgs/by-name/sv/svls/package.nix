@@ -22,6 +22,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "svls";
     homepage = "https://github.com/dalance/svls";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ trepetti ];
+    maintainers = [ ];
   };
 })

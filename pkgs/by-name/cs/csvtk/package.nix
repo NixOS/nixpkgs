@@ -7,7 +7,7 @@
   buildPackages,
 }:
 let
-  version = "0.33.0";
+  version = "0.37.0";
 in
 buildGoModule {
   pname = "csvtk";
@@ -17,10 +17,13 @@ buildGoModule {
     owner = "shenwei356";
     repo = "csvtk";
     tag = "v${version}";
-    hash = "sha256-Zacs1hw4pryVNxnrkLIoBNWo0jcKjtYdx6kW2LTFEIs=";
+    hash = "sha256-dpWxLOckdA0tNhSM8wGqBag/cXmMFhonybN+W1+KBXA=";
   };
 
-  vendorHash = "sha256-T9flXxly3i8SKQlhp4AF2FNCqgcnGAHxv5b7nqzM3DI=";
+  vendorHash = "sha256-wi7WPwCg0MoNxgCLZO1UxG4M0g/Vo/GCiCGu8c5avyU=";
+
+  # stale upstream test: asserts byte length, but expr-lang now returns rune count
+  checkFlags = [ "-skip=TestMutate3" ];
 
   nativeBuildInputs = [ installShellFiles ];
 

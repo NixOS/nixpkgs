@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/hashcat/maskprocessor";
-    description = "High-Performance word generator with a per-position configureable charset";
+    description = "High-Performance word generator with a per-position configurable charset";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     changelog = "https://github.com/hashcat/maskprocessor/releases/tag/v${finalAttrs.version}";

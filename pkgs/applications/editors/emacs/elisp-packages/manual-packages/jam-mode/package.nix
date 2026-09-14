@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-melpaBuild rec {
+melpaBuild (finalAttrs: {
   pname = "jam-mode";
   version = "0.3";
 
   src = fetchurl {
-    url = "https://dev.gentoo.org/~ulm/distfiles/${pname}-${version}.el.xz";
+    url = "https://dev.gentoo.org/~ulm/distfiles/${finalAttrs.pname}-${finalAttrs.version}.el.xz";
     hash = "sha256-0IlYqbPa4AAwOpjdd20k8hqtvDhZmcz1WHa/LHx8kMk=";
   };
 
@@ -32,4 +32,4 @@ melpaBuild rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ qyliss ];
   };
-}
+})

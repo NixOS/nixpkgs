@@ -11,6 +11,13 @@
 }:
 
 # adding a plugin for another printer shouldn't be too difficult, but you need the firmware to test...
+#
+# Each installPhase below runs `rpm2cpio X | cpio -idmv`. Under stdenv's
+# `pipefail`, cpio exiting on the complete archive can kill rpm2cpio with
+# SIGPIPE (exit 141), so each pipe runs in a subshell with `set +o pipefail`
+# (scoped so later phases keep pipefail). cpio's own exit status still fails
+# on truncated archives. Same fix as in pkgs/build-support/vm/default.nix.
+# See NixOS/nixpkgs#541364.
 {
   v330 = stdenv.mkDerivation rec {
     name = "iscan-v330-bundle";
@@ -35,7 +42,8 @@
     ];
 
     installPhase = ''
-      ${rpm}/bin/rpm2cpio plugins/esci-interpreter-perfection-v330-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      ( set +o pipefail; ${rpm}/bin/rpm2cpio plugins/esci-interpreter-perfection-v330-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      )
       mkdir $out{,/share,/lib}
       cp -r ./usr/share/{iscan-data,esci}/ $out/share/
       cp -r ./usr/lib64/esci $out/lib
@@ -70,7 +78,8 @@
 
     installPhase = ''
       cd plugins
-      ${rpm}/bin/rpm2cpio iscan-plugin-perfection-v370-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      ( set +o pipefail; ${rpm}/bin/rpm2cpio iscan-plugin-perfection-v370-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      )
 
 
       mkdir -p $out/share $out/lib
@@ -107,7 +116,8 @@
     };
     installPhase = ''
       cd plugins
-      ${rpm}/bin/rpm2cpio iscan-plugin-perfection-v550-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      ( set +o pipefail; ${rpm}/bin/rpm2cpio iscan-plugin-perfection-v550-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      )
       mkdir $out
       cp -r usr/share $out
       cp -r usr/lib64 $out/lib
@@ -141,7 +151,8 @@
     };
     installPhase = ''
       cd plugins
-      ${rpm}/bin/rpm2cpio iscan-plugin-gt-x820-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      ( set +o pipefail; ${rpm}/bin/rpm2cpio iscan-plugin-gt-x820-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      )
       mkdir $out
       cp -r usr/share $out
       cp -r usr/lib64 $out/lib
@@ -175,7 +186,8 @@
     };
     installPhase = ''
       cd plugins
-      ${rpm}/bin/rpm2cpio iscan-plugin-gt-x770-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      ( set +o pipefail; ${rpm}/bin/rpm2cpio iscan-plugin-gt-x770-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      )
       mkdir $out
       cp -r usr/share $out
       cp -r usr/lib64 $out/lib
@@ -207,7 +219,8 @@
     };
     installPhase = ''
       cd plugins
-      ${rpm}/bin/rpm2cpio esci-interpreter-gt-f720-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      ( set +o pipefail; ${rpm}/bin/rpm2cpio esci-interpreter-gt-f720-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      )
       mkdir $out
       cp -r usr/share $out
       cp -r usr/lib64 $out/lib
@@ -242,8 +255,9 @@
     };
     installPhase = ''
       cd plugins
-      ${rpm}/bin/rpm2cpio esci-interpreter-gt-s80-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
-      ${rpm}/bin/rpm2cpio iscan-plugin-esdip-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      ( set +o pipefail; ${rpm}/bin/rpm2cpio esci-interpreter-gt-s80-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+        ${rpm}/bin/rpm2cpio iscan-plugin-esdip-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      )
       mkdir $out
       cp -r usr/share $out
       cp -r usr/lib64 $out/lib
@@ -283,7 +297,8 @@
 
     installPhase = ''
       cd plugins
-      ${rpm}/bin/rpm2cpio iscan-plugin-gt-s600-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      ( set +o pipefail; ${rpm}/bin/rpm2cpio iscan-plugin-gt-s600-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      )
       mkdir $out
       cp -r usr/share $out
       cp -r usr/lib64 $out/lib
@@ -320,7 +335,8 @@
 
     installPhase = ''
       cd plugins
-      ${rpm}/bin/rpm2cpio iscan-plugin-gt-s650-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      ( set +o pipefail; ${rpm}/bin/rpm2cpio iscan-plugin-gt-s650-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      )
       mkdir $out
       cp -r usr/share $out
       cp -r usr/lib64 $out/lib
@@ -358,7 +374,8 @@
 
     installPhase = ''
       cd plugins
-      ${rpm}/bin/rpm2cpio iscan-plugin-gt-x750-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      ( set +o pipefail; ${rpm}/bin/rpm2cpio iscan-plugin-gt-x750-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      )
       mkdir $out
       cp -r usr/share $out
       cp -r usr/lib64 $out/lib
@@ -395,7 +412,8 @@
 
     installPhase = ''
       cd plugins
-      ${rpm}/bin/rpm2cpio iscan-plugin-gt-1500-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      ( set +o pipefail; ${rpm}/bin/rpm2cpio iscan-plugin-gt-1500-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      )
       mkdir $out
       cp -r usr/share $out
       cp -r usr/lib64 $out/lib
@@ -431,7 +449,8 @@
     ];
 
     installPhase = ''
-      ${rpm}/bin/rpm2cpio plugins/iscan-plugin-ds-30-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      ( set +o pipefail; ${rpm}/bin/rpm2cpio plugins/iscan-plugin-ds-30-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      )
       mkdir $out
       cp -r usr/share $out
       cp -r usr/lib64 $out/lib
@@ -466,7 +485,8 @@
     };
     installPhase = ''
       cd plugins
-      ${rpm}/bin/rpm2cpio iscan-network-nt-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      ( set +o pipefail; ${rpm}/bin/rpm2cpio iscan-network-nt-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      )
 
       mkdir $out
       cp -r usr/share $out

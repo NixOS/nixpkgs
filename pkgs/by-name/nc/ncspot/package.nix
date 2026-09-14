@@ -15,7 +15,6 @@
   python3,
   rustPlatform,
   versionCheckHook,
-  ueberzug,
   withALSA ? stdenv.hostPlatform.isLinux,
   withClipboard ? true,
   withCover ? false,
@@ -32,16 +31,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ncspot";
-  version = "1.3.3";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "hrkfdn";
     repo = "ncspot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U2uadZzC38pZf4For6Nyo91IXr9XqNSU6B+gpuTZJQo=";
+    hash = "sha256-YJbdXLqFPYKnluHCR5svAGIkzbKH3xYPOnA2uQCK5q4=";
   };
 
-  cargoHash = "sha256-ny1vGZSUHxjUZb/nxu2SXP1gimPlPBUejAjiqPpe+CM=";
+  cargoHash = "sha256-4RRAFThnp06QFb3U4IjRTRc3B9muyajH592ZNWJrJZY=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optional withClipboard python3;
 
@@ -51,7 +50,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isLinux openssl
   ++ lib.optional (withALSA || withRodio) alsa-lib
   ++ lib.optional withClipboard libxcb
-  ++ lib.optional withCover ueberzug
   ++ lib.optional (withMPRIS || withNotify) dbus
   ++ lib.optional withNcurses ncurses
   ++ lib.optional withPortAudio portaudio

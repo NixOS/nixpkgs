@@ -3,17 +3,18 @@
   stdenv,
   fetchurl,
   bzip2,
+  bashNonInteractive,
   enableNLS ? false,
   libnatspec,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unzip";
   version = "6.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/infozip/unzip${lib.replaceStrings [ "." ] [ "" ] version}.tar.gz";
-    sha256 = "0dxx11knh3nk95p2gg2ak777dd11pr7jx5das2g49l262scrcv83";
+    url = "mirror://sourceforge/infozip/unzip${lib.replaceString "." "" finalAttrs.version}.tar.gz";
+    hash = "sha256-A22WmRZG0ESe0KqVLk++IbR2zplKvCduSdMOaGcIvTc=";
   };
 
   hardeningDisable = [
@@ -57,11 +58,7 @@ stdenv.mkDerivation rec {
     # Clang 16 makes implicit declarations an error by default for C99 and newer, causing the
     # configure script to fail to detect errno and the directory libraries on Darwin.
     ./implicit-declarations-fix.patch
-    (fetchurl {
-      name = "CVE-2021-4217.patch";
-      url = "https://git.launchpad.net/ubuntu/+source/unzip/plain/debian/patches/CVE-2021-4217.patch?id=94a790fcbb5d6c53cdf5d786bcaa0b8dc10309b6";
-      hash = "sha256-YKE4jVNSlrHLbszXNYYRtAQs0ly4AsodEz6tadMIVqE=";
-    })
+    ./CVE-2021-4217.patch
   ]
   ++ lib.optional enableNLS (fetchurl {
     url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-arch/unzip/files/unzip-6.0-natspec.patch?id=56bd759df1d0c750a065b8c845e93d5dfa6b549d";
@@ -75,7 +72,13 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ bzip2 ];
-  buildInputs = [ bzip2 ] ++ lib.optional enableNLS libnatspec;
+  buildInputs = [
+    bashNonInteractive # for zipgrep shebang
+    bzip2
+  ]
+  ++ lib.optional enableNLS libnatspec;
+
+  strictDeps = true;
 
   makefile = "unix/Makefile";
 
@@ -109,6 +112,8 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "http://www.info-zip.org";
     description = "Extraction utility for archives compressed in .zip format";
@@ -117,4 +122,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     mainProgram = "unzip";
   };
-}
+})

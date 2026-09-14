@@ -3,13 +3,18 @@
   buildPythonApplication,
   makeWrapper,
   nix,
+  nix-prefetch-github,
   nix-prefetch-git,
   nurl,
+  luajit,
   python3Packages,
 
   # optional
   neovim-unwrapped,
 }:
+let
+  luaWithPackages = luajit.withPackages (ps: [ ps.json ]);
+in
 buildPythonApplication {
   pname = "vim-plugins-updater";
   version = "0.1";
@@ -22,7 +27,6 @@ buildPythonApplication {
   ];
 
   pythonPath = [
-    python3Packages.requests
     python3Packages.nixpkgs-plugin-update
   ];
 
@@ -37,11 +41,13 @@ buildPythonApplication {
     makeWrapperArgs+=( --prefix PATH : "${
       lib.makeBinPath [
         nix
+        nix-prefetch-github
         nix-prefetch-git
         neovim-unwrapped
         nurl
+        luaWithPackages
       ]
-    }" --prefix PYTHONPATH : "${./.}" )
+    }" --prefix PYTHONPATH : "${lib.sources.sourceByGlobs ./. [ "**/*.py" ]}" )
     wrapPythonPrograms
   '';
 
@@ -49,5 +55,8 @@ buildPythonApplication {
     export PYTHONPATH=pkgs/applications/editors/vim/plugins:$PYTHONPATH
   '';
 
-  meta.mainProgram = "vim-plugins-updater";
+  meta = {
+    mainProgram = "vim-plugins-updater";
+    license = lib.licenses.mit;
+  };
 }

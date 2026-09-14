@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xtl";
-  version = "0.8.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xtl";
     tag = finalAttrs.version;
-    hash = "sha256-hhXM2fG3Yl4KeEJlOAcNPVLJjKy9vFlI63lhbmIAsT8=";
+    hash = "sha256-Ob9MCfWpfUwlBD3gs9JiqJ+JVsVByaTlSfawmQrnvSw=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -9,7 +9,6 @@
   gtk2,
   libcanberra,
   libnotify,
-  pcre,
   sqlite,
   libxdmcp,
   libpthread-stubs,
@@ -48,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     gtk2
     libcanberra
     libnotify
-    pcre
     sqlite
     libxdmcp
     libpthread-stubs

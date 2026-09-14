@@ -25,6 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-DTdxzBe9fBOH5fHME++oq62xMtBKnjY7BCevwjl8VZ8=";
   };
 
+  patches = [
+    # https://github.com/mjj4791/python-buienradar/pull/26
+    ./setuptools-82-compat.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [

@@ -8,16 +8,16 @@
   requests-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "remotezip";
-  version = "0.12.3";
+  version = "0.12.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gtsystem";
     repo = "python-remotezip";
-    tag = "v${version}";
-    hash = "sha256-TNEM7Dm4iH4Z/P/PAqjJppbn1CKmyi9Xpq/sU9O8uxg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qItxfjzOc0nulqVRnwrE3JGpML2m/sVyKLtKDbLlJkc=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -38,4 +38,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

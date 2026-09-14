@@ -25,7 +25,6 @@ stdenv.mkDerivation {
 
   # By targeting the development version, we can omit the patches Arch uses
   src = fetchFromGitLab {
-    domain = "gitlab.com";
     owner = "LibreGames";
     repo = "jumpnbump";
     rev = "5744738211ca691444f779aafee3537fb3562516";

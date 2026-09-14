@@ -1,22 +1,35 @@
 {
   lib,
   fetchFromGitHub,
+  openssl,
+  pkg-config,
   rustPlatform,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "versatiles";
-  version = "3.6.2";
+  version = "4.13.0";
 
   src = fetchFromGitHub {
     owner = "versatiles-org";
     repo = "versatiles-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OK+rcnWxr1s4kGsXJ8u1WK7VWzfGO7LhD/HYg9Cy1u8=";
+    hash = "sha256-GDio5QTDl8d1/T7yISufSdoNfSSlUMdS+wfQpMzFUbc=";
   };
 
-  cargoHash = "sha256-/8Nnau4zkEY6oTYh08/XiN2rQ5M/bTMYyZTVD6UjAgU=";
+  cargoHash = "sha256-DNWz2Ap0yrm5Jn0MTZXENOFoF/pmEEg6XJDqiJ+cpV8=";
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
+  ];
+
+  # Needed to get openssl-sys to use pkg-config.
+  env.OPENSSL_NO_VENDOR = 1;
 
   __darwinAllowLocalNetworking = true;
 

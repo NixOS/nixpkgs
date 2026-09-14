@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation {
   pname = "wdt";
-  version = "1.27.1612021-unstable-2026-01-28";
+  version = "1.27.1612021-unstable-2026-06-26";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "wdt";
-    rev = "8529231cd0906876f5ed5902d026bf313fa2ef98";
-    sha256 = "sha256-ylmzw5LRc7b8GfvO0HiK77fDp4k5gumDd8uvnZ/pvxs=";
+    rev = "ee01f20850558d5c6a0e1fc3cf9d12cd1702c18a";
+    hash = "sha256-YReA7lBSeWRZHpF4E7yY6HuabRUOT6Aipk9dgjlTuik=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -51,9 +51,14 @@ stdenv.mkDerivation {
     };
   };
 
+  # We must increase the pinned C++ standard since headers from Folly
+  # v2026.07.27.00 require at least C++20
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)"
+      --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)" \
+      --replace-fail "find_package(Boost COMPONENTS system filesystem REQUIRED)" \
+        "find_package(Boost COMPONENTS filesystem REQUIRED)" \
+      --replace-fail "set(CMAKE_CXX_STANDARD 17)" "set(CMAKE_CXX_STANDARD 20)"
   '';
 
   meta = {

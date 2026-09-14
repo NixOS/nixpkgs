@@ -20,6 +20,10 @@ let
               type = types.str;
               default = "";
             };
+            provision = mkOption {
+              type = types.str;
+              default = "";
+            };
             extraTests = mkOption {
               type = types.either types.str (types.functionTo types.str);
               default = "";
@@ -75,6 +79,7 @@ let
           inherit (config) test-helpers;
         in
         mkBefore ''
+          ${test-helpers.provision}
           start_all()
           nextcloud.wait_for_unit("multi-user.target")
 
@@ -131,6 +136,8 @@ let
     map callNextcloudTest (
       [
         ./basic.nix
+        ./home-bindmount.nix
+        ./home-mount.nix
         ./with-declarative-redis-and-secrets.nix
         ./with-mysql-and-memcached.nix
         ./with-postgresql-and-redis.nix
@@ -142,7 +149,8 @@ let
 in
 listToAttrs (
   concatMap genTests [
-    31
     32
+    33
+    34
   ]
 )

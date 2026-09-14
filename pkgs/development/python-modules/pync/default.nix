@@ -27,9 +27,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python Wrapper for Mac OS 10.8 Notification Center";
-    homepage = "https://pypi.python.org/pypi/pync";
+    homepage = "https://pypi.org/project/pync/";
     license = lib.licenses.mit;
     platforms = lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
   };
 }

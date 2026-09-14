@@ -11,11 +11,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "listres";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/listres-${finalAttrs.version}.tar.xz";
-    hash = "sha256-TRxT79abplTyh34Vd+mUx4h0sFEvobBmbP/PRSruQ8o=";
+    hash = "sha256-173HNUpT83hkhzmbbV6oFp+sndrCx1HFMDg8d30a8Tk=";
   };
 
   strictDeps = true;

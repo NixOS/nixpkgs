@@ -18,6 +18,7 @@
   buildPackages,
   callPackage,
   libGL,
+  libnotify,
   clang_20,
   jq,
   glib,
@@ -43,6 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     postFetch = ''
       # there's a file with a weird name that causes a hash mismatch on darwin
       rm $out/packages/app-cli/tests/support/photo*
+
+      # Remove after upstream updates to Yarn 4.14
+      # https://github.com/laurent22/joplin/blob/dev/package.json#L103
+      sed -i '/__metadata/{n;s/version: 8$/version: 9/;}' $out/yarn.lock
     '';
     inherit (releaseData) hash;
   };
@@ -50,7 +55,10 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes postPatch;
+    inherit (finalAttrs)
+      src
+      missingHashes
+      ;
     hash = releaseData.deps_hash;
   };
 
@@ -63,8 +71,9 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libGL
+    libnotify
   ];
 
   nativeBuildInputs = [
@@ -184,7 +193,13 @@ stdenv.mkDerivation (finalAttrs: {
       done
 
       makeWrapper "$outdir"/joplin $out/bin/joplin-desktop \
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
+        --prefix LD_LIBRARY_PATH : "${
+          lib.makeLibraryPath [
+            libGL
+            libnotify
+          ]
+        }" \
+        --prefix PATH : "${lib.makeBinPath [ libnotify ]}" \
         --prefix XDG_DATA_DIRS : "${glib.getSchemaDataDirPath gsettings-desktop-schemas}" \
         --add-flags "--no-sandbox" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-wayland-ime --ozone-platform=wayland --enable-features=WaylandWindowDecorations}}" \
@@ -217,7 +232,7 @@ stdenv.mkDerivation (finalAttrs: {
       icon = "joplin";
       comment = "Joplin for Desktop";
       categories = [ "Office" ];
-      startupWMClass = "@joplin/app-desktop";
+      startupWMClass = "joplin-app-desktop";
       mimeTypes = [ "x-scheme-handler/joplin" ];
     })
   ];

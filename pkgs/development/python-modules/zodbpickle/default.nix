@@ -8,18 +8,13 @@
 
 buildPythonPackage rec {
   pname = "zodbpickle";
-  version = "4.2";
+  version = "4.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WoUUT7psNPxnvQDH8InW1TLcQ6A0R9/F4jhGyRkjCkU=";
+    hash = "sha256-Z9QpXdtoskEP5BcJT/4aiw7UGDTuMIAg9Y7htjPh91E=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools <= 75.6.0" "setuptools"
-  '';
 
   build-system = [ setuptools ];
 

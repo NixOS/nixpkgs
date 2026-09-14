@@ -21,7 +21,7 @@ buildGoModule (finalAttrs: {
     description = "Realtime API Gateway used with NATS to build REST, real time, and RPC APIs";
     homepage = "https://resgate.io";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ farcaller ];
+    maintainers = [ ];
     mainProgram = "resgate";
   };
 })

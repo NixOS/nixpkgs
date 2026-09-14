@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub }:
 let
-  version = "0.22.1";
+  version = "0.23.1";
 in
 {
   inherit version;
@@ -9,7 +9,7 @@ in
     owner = "Donkie";
     repo = "Spoolman";
     rev = "v${version}";
-    hash = "sha256-EVGpwcjEh4u8Vtgu2LypqMqArYLZe7oh1qYhGZpgjh0=";
+    hash = "sha256-Oa/cNmpc0hWRf0EQI5aXIE/p9//Sos5Nj3QFEjKgj5o=";
   };
 
   meta = {

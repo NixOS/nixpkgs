@@ -7,7 +7,7 @@
   openssl,
   curl,
   libnotify,
-  libappindicator-gtk3,
+  libappindicator,
   gst_all_1,
   gtk3,
   dconf,
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     curl
     libnotify
-    libappindicator-gtk3
+    libappindicator
     gtk3
     (lib.getLib dconf)
   ]

@@ -11,7 +11,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-base-url";
   version = "2.1.0";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-base-url";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-3P3Uk3QoznAtNODLjXFbeNn3AOfp9owWU2jqkxTEAa4=";
   };
 
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pytest plugin for URL based tests";
     homepage = "https://github.com/pytest-dev/pytest-base-url";
-    changelog = "https://github.com/pytest-dev/pytest-base-url/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/pytest-dev/pytest-base-url/blob/${finalAttrs.src.rev}/CHANGES.rst";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ sephi ];
   };
-}
+})

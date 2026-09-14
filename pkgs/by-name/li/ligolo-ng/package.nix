@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "ligolo-ng";
-  version = "0.8.2";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "nicocha30";
     repo = "ligolo-ng";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ND0SFB0xj4WK6okNzChZWfK5bhNc4PTWuZoq/PodTW0=";
+    hash = "sha256-oEB9RCpVTlw62+hu75Nmwk7mn+ptv8vamDze4r48lf4=";
   };
 
-  vendorHash = "sha256-oc85xNPMFeaPC7TMcSh3i3Msd8sCJ5QGFmi2fKjcyvk=";
+  vendorHash = "sha256-trHlhuVT76Q13WvOgVQo5VmD4ouUR5BQRY7JF1wiY+U=";
 
   env.CGO_ENABLED = 0;
 

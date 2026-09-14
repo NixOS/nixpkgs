@@ -3,14 +3,13 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  cairomm,
+  cairomm_1_0,
   cmake,
   lv2,
   libpthread-stubs,
   libxdmcp,
   libxft,
   ntk,
-  pcre,
   fftwFloat,
   zita-resampler,
 }:
@@ -31,13 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
   buildInputs = [
-    cairomm
+    cairomm_1_0
     lv2
     libpthread-stubs
     libxdmcp
     libxft
     ntk
-    pcre
     fftwFloat
     zita-resampler
   ];

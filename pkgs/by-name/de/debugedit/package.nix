@@ -7,7 +7,7 @@
   autoreconfHook,
   pkg-config,
   elfutils,
-  xxHash,
+  xxhash,
   help2man,
   util-linux,
   cpio,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     elfutils
-    xxHash
+    xxhash
   ];
 
   nativeCheckInputs = [

@@ -1,8 +1,6 @@
 {
   lib,
   stdenv,
-  toPythonModule,
-  fetchFromGitHub,
   buildPythonPackage,
 
   # build-system
@@ -16,7 +14,6 @@
 
   # buildInputs
   dolfinx,
-  darwinMinVersionHook,
 
   # dependency
   numpy,
@@ -87,8 +84,7 @@ buildPythonPackage (finalAttrs: {
 
   buildInputs = [
     fenicsPackages.dolfinx
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin (darwinMinVersionHook "13.3");
+  ];
 
   dependencies = [
     numpy

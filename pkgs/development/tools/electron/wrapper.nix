@@ -40,5 +40,9 @@ stdenv.mkDerivation {
     unwrapped = electron-unwrapped;
     inherit (electron-unwrapped) headers dist;
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
   inherit (electron-unwrapped) meta;
 }

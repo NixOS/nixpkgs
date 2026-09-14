@@ -12,6 +12,7 @@
   gtk3,
   openssl,
   systemd,
+  imagemagick,
   libGL,
   libxkbcommon,
   nix-update-script,
@@ -32,6 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    imagemagick
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
@@ -67,10 +69,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall = ''
-    mkdir -p "$out/share/applications"
-    cp ./assets/Pineflash.desktop "$out/share/applications/Pineflash.desktop"
-    mkdir -p "$out/share/pixmaps"
-    cp ./assets/pine64logo.png "$out/share/pixmaps/pine64logo.png"
+    mkdir -p $out/share/icons/hicolor/128x128/apps
+    install -D ./assets/Pineflash.desktop -t $out/share/applications
+    magick ./assets/pine64logo.png -resize 128x128 $out/share/icons/hicolor/128x128/apps/pine64logo.png
   '';
 
   passthru = {

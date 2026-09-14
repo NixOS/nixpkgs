@@ -21,6 +21,12 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-ElKmi+ANuB3LPwZTMcr5HEMESjDwENbYnNIGdRP24d0=";
   };
 
+  postPatch = ''
+    # gcc15
+    substituteInPlace mlvwm/functions.h \
+      --replace-fail "void (*action)();" "void (*action)(char *);"
+  '';
+
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [

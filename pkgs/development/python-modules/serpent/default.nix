@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "serpent";
-  version = "1.42";
+  version = "1.43";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jqCCsB+LoH7NdONKkRisRSG8RZSTjZErgIyJ8dpCVQY=";
+    hash = "sha256-YtwkL9TqKlAzn09aqvbsxVYF7nR3DX6yAx52DZCg0RQ=";
   };
 
   build-system = [ setuptools ];

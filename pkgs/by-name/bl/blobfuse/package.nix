@@ -9,19 +9,19 @@
 }:
 
 let
-  version = "2.5.2";
+  version = "2.5.5";
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-storage-fuse";
     rev = "blobfuse2-${version}";
-    sha256 = "sha256-iTzVKb8z7lQh40iMZiwjeufColiwU2YrihBLNLjS6JI=";
+    sha256 = "sha256-P68vhxvG/3fOMJeNxf2LS2GJDnojswm/dl6QLDXpiLA=";
   };
 in
 buildGoModule {
   pname = "blobfuse";
   inherit version src;
 
-  vendorHash = "sha256-9sT+8o+esVYdqYqAfkvyggqPiIIkG78krv+uID9+UBw=";
+  vendorHash = "sha256-Qm4kKatlQHyYxLFVHuF8w0/sa4iA6Two6rzvcBJqbfU=";
 
   buildInputs = [ fuse3 ];
 
@@ -36,6 +36,7 @@ buildGoModule {
 
   meta = {
     description = "Mount an Azure Blob storage as filesystem through FUSE";
+    homepage = "https://github.com/Azure/azure-storage-fuse";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jbgi ];
     platforms = lib.platforms.linux;

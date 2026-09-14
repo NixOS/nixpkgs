@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.1.21";
 
   src = fetchFromGitHub {
-    owner = "mlange-42";
+    owner = "git-bahn";
     repo = "git-igitt";
     rev = "v${finalAttrs.version}";
     hash = "sha256-5AVKBew+HShWFZwm4xRmRSL76N2c84Yi97jgcqsslxM=";
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Interactive, cross-platform Git terminal application with clear git graphs arranged for your branching model";
-    homepage = "https://github.com/mlange-42/git-igitt";
+    homepage = "https://github.com/git-bahn/git-igitt";
     license = lib.licenses.mit;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     maintainers = [ lib.maintainers.pinage404 ];

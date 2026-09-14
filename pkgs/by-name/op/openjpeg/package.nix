@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
     description = "Open-source JPEG 2000 codec written in C language";
     homepage = "https://www.openjpeg.org/";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ codyopel ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     changelog = "https://github.com/uclouvain/openjpeg/blob/v${version}/CHANGELOG.md";
   };

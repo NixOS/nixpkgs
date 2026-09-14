@@ -50,7 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     xwayland
   ];
 
-  strictDeps = false; # why is it so hard?
+  strictDeps = true;
+  __structuredAttrs = true;
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=maybe-uninitialized";
 
@@ -76,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       Wio is a Wayland compositor for Linux and FreeBSD which has a similar look
       and feel to plan9's rio.
     '';
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     mainProgram = "wio";
     maintainers = [ ];
     inherit (wayland.meta) platforms;

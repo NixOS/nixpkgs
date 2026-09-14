@@ -12,6 +12,8 @@
   glib,
   glm,
   gtest,
+  gtk4,
+  gtk4-layer-shell,
   json_c,
   libevdev,
   libglvnd,
@@ -26,45 +28,42 @@
   pkg-config,
   python3,
   systemd,
+  wasmedge,
   wayland,
+  wayland-scanner,
+  wrapGAppsHook4,
   yaml-cpp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miracle-wm";
-  version = "0.8.2";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "miracle-wm-org";
     repo = "miracle-wm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RzqF3UDC4MY85ex9TOD2L0Zd7T6mgiZ+ImJuJG+xtjo=";
+    hash = "sha256-htFgvXYgxQXV2U3F+tXEoaTb0udc2H1aHsIg5E8nRL8=";
   };
 
   patches = [
-    # Fix compat with newer Mir
-    # Remove when version > 0.8.2
+    # Mir 2.29 compat, remove when version > 0.10.1
     (fetchpatch {
-      url = "https://github.com/miracle-wm-org/miracle-wm/commit/3f3389bf49ad780d258d34109f87e73ef7c02344.patch";
-      hash = "sha256-dxrYfn/MhpCkgsmunMAl5TrPxY8FO0dqQf4LYcuiFGk=";
+      name = "0001-miracle-wm-remove-legacy-mir-optional-usage.patch";
+      url = "https://github.com/miracle-wm-org/miracle-wm/commit/a4d7b21e0d25667cd270d7ff52f8dccc2a217796.patch";
+      hash = "sha256-XBbYSuXUOS9Gbs/LwxbbTAVsFuH8xLj8VhoCAjmCDfQ=";
     })
   ];
 
+  # Mir 2.29 compat, remove when version > 0.10.1 (97a40cd8879898062b2cf7b5d1f5252ffc3b8dce is more than just a compat change)
   postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'DESTINATION /usr/lib' 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}' \
-      --replace-fail '-march=native' '# -march=native'
+    substituteInPlace src/policy.{cpp,h} \
+      --replace-fail 'handle_raise_window' 'handle_activate_window'
   ''
-  # Fix compat with newer Mir
-  # https://github.com/miracle-wm-org/miracle-wm/commit/aaae6e64261d8a00c2a1df47e2eab99400382d69
-  # Remove when version > 0.8.2
   + ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail 'pkg_check_modules(MIRRENDERER REQUIRED mirrenderer' 'pkg_check_modules(MIRRENDERER mirrenderer'
-  ''
-  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'add_subdirectory(tests/)' ""
+      --replace-fail 'DESTINATION lib' 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}' \
+      --replace-fail '-march=native' '# -march=native'
   '';
 
   strictDeps = true;
@@ -73,12 +72,16 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     makeWrapper
     pkg-config
+    wayland-scanner
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     boost
     glib
     glm
+    gtk4
+    gtk4-layer-shell
     json_c
     libevdev
     libglvnd
@@ -95,14 +98,22 @@ stdenv.mkDerivation (finalAttrs: {
         tenacity
       ]
     ))
+    wasmedge
     wayland
     yaml-cpp
   ];
 
   checkInputs = [ gtest ];
 
+  # Manually wrapping the few binaries that needs it
+  dontWrapGApps = true;
+
   cmakeFlags = [
+    (lib.cmakeBool "BUILD_DEBUG_OVERLAY" true)
+    (lib.cmakeBool "BUILD_ERROR_REPORTER" true)
     (lib.cmakeBool "ENABLE_LTO" true)
+    (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "FEATURE_PLUGIN_SYSTEM" true)
     (lib.cmakeBool "SYSTEMD_INTEGRATION" true)
     (lib.cmakeBool "END_TO_END_TESTS" finalAttrs.finalPackage.doCheck)
   ];
@@ -121,6 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     patchShebangs $out/libexec/miracle-wm-session-setup
+
     wrapProgram $out/libexec/miracle-wm-session-setup \
       --prefix PATH : "$out/bin:${
         lib.makeBinPath [
@@ -129,6 +141,9 @@ stdenv.mkDerivation (finalAttrs: {
           systemd # systemctl
         ]
       }"
+
+    wrapGApp $out/bin/miracle-wm-basic-error-reporter
+    wrapGApp $out/bin/miracle-wm-debug-overlay
   '';
 
   passthru = {
@@ -146,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       See the user guide for info on how to use miracle-wm: https://wiki.miracle-wm.org/v${finalAttrs.version}/
     '';
-    homepage = "https://github.com/mattkae/miracle-wm";
+    homepage = "https://miracle-wm.org";
     changelog = "https://github.com/miracle-wm-org/miracle-wm/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     mainProgram = "miracle-wm";

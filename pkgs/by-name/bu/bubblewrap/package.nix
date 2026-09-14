@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bubblewrap";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "bubblewrap";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8IDMLQPeO576N1lizVudXUmTV6hNOiowjzRpEWBsZ+U=";
+    hash = "sha256-VnhJ5bej3/GTHcU8+AkyR7f3J0KKDuoc94SFxo4grhk=";
   };
 
   outputs = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/containers/bubblewrap/releases/tag/${finalAttrs.src.rev}";
     description = "Unprivileged sandboxing tool";
     homepage = "https://github.com/containers/bubblewrap";
-    license = lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = lib.platforms.linux;
     mainProgram = "bwrap";

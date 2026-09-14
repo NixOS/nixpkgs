@@ -9,6 +9,7 @@
   pcsclite,
   proot,
   zlib,
+  versionCheckHook,
 }:
 
 let
@@ -26,13 +27,13 @@ in
 maven.buildMavenPackage rec {
   pname = "global-platform-pro";
   version = "25.10.20";
-  GPPRO_VERSION = "v25.10.20-0-g72f85b9"; # git describe --tags --always --long --dirty
+  env.GPPRO_VERSION = "v25.10.20-0-g72f85b9"; # git describe --tags --always --long --dirty
 
   src = fetchFromGitHub {
     owner = "martinpaljak";
     repo = "GlobalPlatformPro";
-    rev = "v${version}";
-    sha256 = "sha256-H4rq68ECfdUvgTbG4Ho1EgAgD+1qTZu5DYfg+SjrDkw=";
+    tag = "v${version}";
+    hash = "sha256-H4rq68ECfdUvgTbG4Ho1EgAgD+1qTZu5DYfg+SjrDkw=";
   };
 
   mvnJdk = jdk11;
@@ -69,6 +70,9 @@ maven.buildMavenPackage rec {
       --prefix LD_LIBRARY_PATH : "${lib.getLib pcsclite}/lib"
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
     description = "Command-line utility for managing applets and keys on Java Cards";
     longDescription = ''
@@ -83,7 +87,7 @@ maven.buildMavenPackage rec {
       fromSource
       binaryBytecode # deps
     ];
-    license = with lib.licenses; [ lgpl3 ];
+    license = lib.licenses.lgpl3;
     mainProgram = "gp";
   };
 }

@@ -2,21 +2,24 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "css-parser";
   version = "1.0.10";
-  format = "setuptools";
+  pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-vx6XKtMzROkyBpZPtM2QjZ3e+fzQwB+pPg1zRnU5Q2M=";
   };
 
-  # Test suite not included in tarball yet
-  # See https://github.com/ebook-utils/css-parser/pull/2
-  doCheck = false;
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "css_parser" ];
 
@@ -26,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ jethro ];
   };
-}
+})

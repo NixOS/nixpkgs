@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rauc";
-  version = "1.15.1";
+  version = "1.15.2";
 
   src = fetchFromGitHub {
     owner = "rauc";
     repo = "rauc";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-aGJj1Vm1gznZBnoGkfbJlhGAUrP5JAMgEL8L+8UL9LY=";
+    sha256 = "sha256-wWj4tOUFVn+dgt4741YPF0+x85wRb46DM9lGLNon03Q=";
   };
 
   enableParallelBuilding = true;

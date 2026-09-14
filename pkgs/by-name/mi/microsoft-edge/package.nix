@@ -90,6 +90,8 @@
   libsecret,
   # Edge Specific
   libuuid,
+  # Create a symlink at $out/bin/microsoft-edge-stable
+  withSymlink ? true,
 }:
 let
   opusWithCustomModes = libopus.override { withCustomModes = true; };
@@ -162,11 +164,11 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "microsoft-edge";
-  version = "145.0.3800.58";
+  version = "152.0.4191.66";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_${finalAttrs.version}-1_amd64.deb";
-    hash = "sha256-RmXe5w7UQALjjEPfrH3l5nyi0U58x5OlNrtfWIY48U0=";
+    hash = "sha256-GGwZ+dYHnRdO+7TvMxzMHhHRObb3qOo7DbdfmxfiXw0=";
   };
 
   # With strictDeps on, some shebangs were not being patched correctly
@@ -245,9 +247,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --add-flags "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
-    # Make sure that libGL and libvulkan are found by ANGLE libGLESv2.so
-    patchelf --set-rpath $rpath $out/share/microsoft/$appname/lib*GL*
-
     # Edge specific set liboneauth
     patchelf --set-rpath $rpath $out/share/microsoft/$appname/liboneauth.so
 
@@ -255,6 +254,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       patchelf --set-rpath $rpath $elf
       patchelf --set-interpreter ${bintools.dynamicLinker} $elf
     done
+
+    ${lib.optionalString withSymlink ''
+      ln -s $out/bin/microsoft-edge $out/bin/microsoft-edge-stable
+    ''}
 
     runHook postInstall
   '';
@@ -272,7 +275,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ulrikstrid
       maeve-oake
       leleuvilela
-      bricklou
       jonhermansen
       iedame
     ];

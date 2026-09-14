@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   version = "0-unstable-2002-10-31";
 
   src = fetchurl {
-    url = "http://www.inp.nsk.su/~bolkhov/files/fonts/univga/uni-vga.tgz";
+    url = "https://www.inp.nsk.su/~bolkhov/files/fonts/univga/uni-vga.tgz";
     sha256 = "05sns8h5yspa7xkl81ri7y1yxf5icgsnl497f3xnaryhx11s2rv6";
   };
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Unicode VGA font";
-    maintainers = [ lib.maintainers.ftrvxmtrx ];
+    maintainers = [ ];
     homepage = "http://www.inp.nsk.su/~bolkhov/files/fonts/univga/";
     license = lib.licenses.mit;
   };

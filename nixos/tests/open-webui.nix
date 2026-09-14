@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   mainPort = "8080";
   webuiName = "NixOS Test";
@@ -16,6 +21,10 @@ in
         services.open-webui = {
           enable = true;
           host = "";
+          # Use package with all optional dependencies to ensure they are buildable
+          package = pkgs.open-webui.overridePythonAttrs (old: {
+            dependencies = old.dependencies ++ pkgs.open-webui.optional-dependencies.all;
+          });
           environment = {
             # Requires network connection
             RAG_EMBEDDING_MODEL = "";

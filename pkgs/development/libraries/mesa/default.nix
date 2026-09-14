@@ -12,7 +12,6 @@
   glslang,
   spirv-tools,
   intltool,
-  jdupes,
   libdisplay-info,
   libdrm,
   libgbm,
@@ -22,6 +21,7 @@
   libva-minimal,
   llvmPackages,
   lm_sensors,
+  mesa-libclc,
   meson,
   ninja,
   pkg-config,
@@ -112,7 +112,6 @@
     "screenshot"
     "vram-report-limit"
   ],
-  mesa,
   mesa-gl-headers,
   makeSetupHook,
 }:
@@ -144,7 +143,7 @@ let
 
   common = import ./common.nix { inherit lib fetchFromGitLab; };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   inherit (common)
     pname
     version
@@ -282,9 +281,9 @@ stdenv.mkDerivation {
     libxxf86vm
     llvmPackages.clang
     llvmPackages.clang-unwrapped
-    llvmPackages.libclc
     llvmPackages.libllvm
     lm_sensors
+    mesa-libclc
     python3Packages.python # for shebang
     spirv-llvm-translator
     udev
@@ -318,7 +317,6 @@ stdenv.mkDerivation {
     python3Packages.mako
     python3Packages.ply
     python3Packages.pyyaml
-    jdupes
     # Use bin output from glslang to not propagate the dev output at
     # the build time with the host glslang.
     (lib.getBin glslang)
@@ -382,9 +380,6 @@ stdenv.mkDerivation {
     # Don't depend on build python
     patchShebangs --host --update $out/bin/*
 
-    # NAR doesn't support hard links, so convert them to symlinks to save space.
-    jdupes --hard-links --link-soft --recurse "$out"
-
     # add RPATH here so Zink can find libvulkan.so
     patchelf --add-rpath ${vulkan-loader}/lib $out/lib/libgallium*.so $opencl/lib/libRusticlOpenCL.so
   '';
@@ -400,19 +395,20 @@ stdenv.mkDerivation {
       ;
 
     # for compatibility
-    drivers = lib.warn "`mesa.drivers` is deprecated, use `mesa` instead" mesa;
+    drivers = lib.warn "`mesa.drivers` is deprecated, use `mesa` instead" finalAttrs.finalPackage;
 
     tests.outDoesNotDependOnLLVM = stdenv.mkDerivation {
       name = "mesa-does-not-depend-on-llvm";
       buildCommand = ''
-        echo ${mesa} >>$out
+        echo ${finalAttrs.finalPackage} >>$out
       '';
       disallowedRequisites = [ llvmPackages.llvm ];
     };
 
     llvmpipeHook = makeSetupHook {
       name = "llvmpipe-hook";
-      substitutions.mesa = mesa;
+      substitutions.mesa = finalAttrs.finalPackage;
+      meta.license = lib.licenses.mit;
     } ./llvmpipe-hook.sh;
   };
-}
+})

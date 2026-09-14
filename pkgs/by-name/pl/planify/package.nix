@@ -11,6 +11,7 @@
   evolution-data-server-gtk4,
   glib,
   glib-networking,
+  gnome-online-accounts,
   gst_all_1,
   gtk4,
   gtksourceview5,
@@ -24,19 +25,25 @@
   libsoup_3,
   libspelling,
   sqlite,
-  webkitgtk_6_0,
+  icu,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "planify";
-  version = "4.18.0";
+  version = "4.20.0";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9yNOiYmsYNLupIFn0H4rq9RqeCFzBpsE9Gj5kkqbNho=";
+    hash = "sha256-0d5EzbPs2MIdnIjLGBY6JRmXJ/NFjO4DPom0WY989mQ=";
+    fetchSubmodules = true;
   };
+
+  postPatch = ''
+    # Don't check updates
+    sed -i -e '/check_for_updates.begin/d' src/Layouts/Sidebar.vala
+  '';
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -51,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     evolution-data-server-gtk4
     glib
     glib-networking
+    gnome-online-accounts
     # Needed for GtkMediaStream creation with success.ogg, see #311295.
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
@@ -66,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsoup_3
     libspelling
     sqlite
-    webkitgtk_6_0
+    icu
   ];
 
   meta = {

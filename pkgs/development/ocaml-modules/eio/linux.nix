@@ -1,5 +1,7 @@
 {
+  lib,
   buildDunePackage,
+  dune-configurator,
   eio,
   fmt,
   logs,
@@ -15,9 +17,11 @@ buildDunePackage {
     version
     ;
 
-  minimalOCamlVersion = "5.0";
+  minimalOCamlVersion = "5.2";
 
   dontStrip = true;
+
+  buildInputs = [ dune-configurator ];
 
   propagatedBuildInputs = [
     eio

@@ -5,13 +5,13 @@
   mopidy,
 }:
 
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-tunein";
   version = "1.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "Mopidy-TuneIn";
     sha256 = "01y1asylscr73yqx071imhrzfzlg07wmqqzkdvpgm6r35marc2li";
   };
@@ -32,4 +32,4 @@ pythonPackages.buildPythonApplication rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

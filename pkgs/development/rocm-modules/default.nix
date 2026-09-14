@@ -3,8 +3,6 @@
   config,
   callPackage,
   newScope,
-  symlinkJoin,
-  fetchFromGitHub,
   boost179,
   opencv,
   python3Packages,
@@ -89,6 +87,11 @@ let
       rocprofiler-register = self.callPackage ./rocprofiler-register {
         inherit (llvm) clang;
       };
+      rocprofiler-sdk = self.callPackage ./rocprofiler-sdk { };
+
+      rocprof-compute-viewer = self.callPackage ./rocprof-compute-viewer { };
+
+      rocprof-trace-decoder = self.callPackage ./rocprof-trace-decoder { };
 
       roctracer = self.callPackage ./roctracer { };
 
@@ -113,6 +116,8 @@ let
       mscclpp = self.callPackage ./mscclpp { };
 
       rccl = self.callPackage ./rccl { };
+
+      rocshmem = self.callPackage ./rocshmem { };
 
       hipcub = self.callPackage ./hipcub { };
 
@@ -152,6 +157,8 @@ let
 
       hipblaslt = self.callPackage ./hipblaslt { };
 
+      hipsparselt = self.callPackage ./hipsparselt { };
+
       # hipTensor - Only supports GFX9
 
       composable_kernel_base = self.callPackage ./composable_kernel/base.nix { };
@@ -173,20 +180,9 @@ let
 
       rpp = self.callPackage ./rpp { };
 
-      rpp-hip = self.rpp.override {
-        useOpenCL = false;
-        useCPU = false;
-      };
+      rpp-hip = self.rpp.override { useCPU = false; };
 
-      rpp-opencl = self.rpp.override {
-        useOpenCL = true;
-        useCPU = false;
-      };
-
-      rpp-cpu = self.rpp.override {
-        useOpenCL = false;
-        useCPU = true;
-      };
+      rpp-cpu = self.rpp.override { useCPU = true; };
 
       mivisionx = self.callPackage ./mivisionx {
         stdenv = origStdenv;
@@ -254,6 +250,11 @@ let
       };
     }
     // lib.optionalAttrs config.allowAliases {
+      rpp-opencl = throw ''
+        'rpp-opencl' has been removed as it has been broken for a year and has no consuming packages.
+        Use 'rpp' or 'rpp-cpu' instead.
+      ''; # Added 2026-03-08
+
       rocmPath = throw ''
         'rocm-path' has been removed. If a ROCM_PATH value is required in nixpkgs please
         construct one with the minimal set of required deps.

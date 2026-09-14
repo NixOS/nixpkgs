@@ -3,26 +3,24 @@
   lib,
   fetchFromGitHub,
   adwaita-icon-theme,
-  gnome-icon-theme,
   hicolor-icon-theme,
   gtk3,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "mint-l-icons";
-  version = "1.8.0";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "mint-l-icons";
     # They don't really do tags, this is just a named commit.
-    rev = "256fe2e44655ce197701e35aefc40f49fe30356d";
-    hash = "sha256-BYzgGOVmUZBkz6lG1vFXtqiyUf3xnhXsoP+q4aLLMJs=";
+    rev = "5f5957bc87af839ffdcaa779d099b217bb6825a2";
+    hash = "sha256-9CwO0x9+hcUSZDviysn5EvH48oJuO6QhsfeNqWakm9M=";
   };
 
   propagatedBuildInputs = [
     adwaita-icon-theme
-    gnome-icon-theme
     hicolor-icon-theme
   ];
 

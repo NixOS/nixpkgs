@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "btrbk";
-  version = "0.32.6";
+  version = "0.32.7";
 
   src = fetchurl {
     url = "https://digint.ch/download/btrbk/releases/btrbk-${finalAttrs.version}.tar.xz";
-    sha256 = "AuKsZHyRhGMgLL5ge7lVV6T3/SNwaRJDM8VNpbK7t2s=";
+    sha256 = "f1PPVaAHVwyd5aHE+UbKc3L61eBXyLHJ16/CF2zDLNM=";
   };
 
   nativeBuildInputs = [

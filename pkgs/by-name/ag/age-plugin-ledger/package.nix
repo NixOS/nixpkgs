@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
@@ -29,6 +30,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libusb1
     openssl
   ];
+
+  # rage (used in tests) panics on locale detection in the Nix sandbox without
+  # a valid LANG set.
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export LANG=en_US.UTF-8
+  '';
 
   nativeCheckInputs = [
     rage

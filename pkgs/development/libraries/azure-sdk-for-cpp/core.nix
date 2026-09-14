@@ -10,7 +10,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "azure-sdk-for-cpp-core";
-  version = "1.16.1";
+  version = "1.16.3";
   outputs = [
     "out"
     "dev"
@@ -19,8 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-sdk-for-cpp";
-    tag = "azure-core_1.16.1";
-    hash = "sha256-gMINz3bH80l0QYX3iKJlL962WIMujR1wuN+t4t7g7qg=";
+    tag = "azure-core_${finalAttrs.version}";
+    hash = "sha256-1OLyTwjfSunwvDMbMTNw0w8txhJxXthtAVeFf7abrIs=";
   };
   sourceRoot = "${finalAttrs.src.name}/sdk/core/azure-core";
 

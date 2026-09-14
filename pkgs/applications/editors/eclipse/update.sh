@@ -1,31 +1,31 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash --pure -p curl cacert libxml2 yq nix jq
-#! nix-shell -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/3c7487575d9445185249a159046cc02ff364bff8.tar.gz
+#! nix-shell -i bash --pure -p curl cacert nix jq
+#! nix-shell -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/5b2c2d84341b2afb5647081c1386a80d7a8d8605.tar.gz
 #                                                                ^
 #                                                                |
-#                   nixos-unstable ~ 2023-07-06 -----------------/
+#                   nixos-unstable ~ 2026-03-16 -----------------/
 
 set -o errexit
 set -o nounset
 
 # scrape the downloads page for release info
 
-curl -s -o eclipse-dl.html https://download.eclipse.org/eclipse/downloads/
-trap "rm eclipse-dl.html" EXIT
+curl -s -O https://download.eclipse.org/eclipse/downloads/data.json
+trap "rm data.json" EXIT
 
 dlquery() {
-    q=$1
-    xmllint --html eclipse-dl.html --xmlout 2>/dev/null | xq -r ".html.body.main.div.table[3].tr[1].td[0].a${q}";
+    q="$1"
+    cat data.json | jq -r ".releases[0] | $q";
 }
 
 # extract release info from download page HTML
 
-platform_major=$(dlquery '."#text" | split(".") | .[0]' -r);
-platform_minor=$(dlquery '."#text" | split(".") | .[1]' -r);
+platform_major=$(dlquery '.label | split(".") | .[0]');
+platform_minor=$(dlquery '.label | split(".") | .[1]');
 
-year=$(dlquery '."@href" | split("/") | .[] | select(. | startswith("R")) | split("-") | .[2] | .[0:4]')
-buildmonth=$(dlquery '."@href" | split("/") | .[] | select(. | startswith("R")) | split("-") | .[2] | .[4:6]')
-builddaytime=$(dlquery '."@href" | split("/") | .[] | select(. | startswith("R")) | split("-") | .[2] | .[6:12]')
+year=$(dlquery '.path | split("/") | .[] | select(. | startswith("R")) | split("-") | .[2] | .[0:4]')
+buildmonth=$(dlquery '.path | split("/") | .[] | select(. | startswith("R")) | split("-") | .[2] | .[4:6]')
+builddaytime=$(dlquery '.path | split("/") | .[] | select(. | startswith("R")) | split("-") | .[2] | .[6:12]')
 timestamp="${year}${buildmonth}${builddaytime}";
 
 # account for possible release-month vs. build-month mismatches

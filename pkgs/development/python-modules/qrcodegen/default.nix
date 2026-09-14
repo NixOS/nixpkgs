@@ -6,7 +6,7 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qrcodegen";
   pyproject = true;
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     src
     ;
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   build-system = [ setuptools ];
 
@@ -38,4 +38,4 @@ buildPythonPackage rec {
       platforms
       ;
   };
-}
+})

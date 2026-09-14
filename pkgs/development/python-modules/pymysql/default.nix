@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "pymysql";
-  version = "1.1.1";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pymysql";
     inherit version;
-    hash = "sha256-4SdhGq8rQXQDxgv03FcBJK60pX9fN7jpWuOZpC+QTNA=";
+    hash = "sha256-bHsXymhpiBBNdCbCeJW0Vc3uo+nTzrEnDww3BP6tjDM=";
   };
 
   build-system = [ setuptools ];

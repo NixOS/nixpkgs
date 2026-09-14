@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   autoreconfHook,
   pkg-config,
   glib,
@@ -12,17 +12,17 @@
   libdrm,
   libxrandr,
   libxext,
+  acl,
+  dbus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ddcutil";
-  version = "2.2.5";
+  version = "2.2.7";
 
-  src = fetchFromGitHub {
-    owner = "rockowitz";
-    repo = "ddcutil";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-6Bf4I2bt7Ykn2P834tVIbTaY+7fae18zrs2I84Byv1Y=";
+  src = fetchurl {
+    url = "https://www.ddcutil.com/tarballs/ddcutil-${finalAttrs.version}.tar.gz";
+    hash = "sha256-GaxmBM8Rd7pWZm+KaCWB5x6Jc70Gx8jc8DNnTkqqpkg=";
   };
 
   nativeBuildInputs = [
@@ -31,14 +31,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    acl
+    dbus
     glib
     jansson
     libdrm
     libgudev
     libusb1
-    udev
     libxext
     libxrandr
+    udev
   ];
 
   enableParallelBuilding = true;

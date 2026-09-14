@@ -68,7 +68,7 @@ let
 
   configFile = pkgs.writeText "plymouthd.conf" ''
     [Daemon]
-    ShowDelay=0
+    ShowDelay=${toString cfg.showDelay}
     DeviceTimeout=8
     Theme=${cfg.theme}
     ${cfg.extraConfig}
@@ -163,6 +163,15 @@ in
         description = ''
           Logo which is displayed on the splash screen.
           Currently supports PNG file format only.
+        '';
+      };
+
+      showDelay = mkOption {
+        type = types.numbers.nonnegative;
+        default = 0;
+        example = 0.5;
+        description = ''
+          Time (in seconds) to delay the splash screen.
         '';
       };
 

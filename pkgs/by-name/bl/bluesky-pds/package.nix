@@ -4,11 +4,11 @@
   removeReferencesTo,
   srcOnly,
   python3,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   fetchFromGitHub,
-  nodejs_22,
+  nodejs_22, # TODO: move back to 24
   vips,
   pkg-config,
   nixosTests,
@@ -18,22 +18,22 @@
 }:
 
 let
-  # build failure against better-sqlite3, so we use nodejs_22; upstream
-  # bluesky-pds uses 20
+  # upstream bluesky-social/pds uses nodejs 22+ (aims for LTS)
   nodejs = nodejs_22;
   nodeSources = srcOnly nodejs;
   pythonEnv = python3.withPackages (p: [ p.setuptools ]);
+  pnpm = pnpm_10;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pds";
-  version = "0.4.208";
+  version = "0.4.5027";
 
   src = fetchFromGitHub {
     owner = "bluesky-social";
     repo = "pds";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/porufe1XVtjEFMOv40+1G1n5WgaAJIvOv/KWkKgxuQ=";
+    hash = "sha256-XHHVeowq0SYLyhascy0380swKBvfX5vJDvwR2BJGnnY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/service";
@@ -44,14 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
     pythonEnv
     pkg-config
     pnpmConfigHook
-    pnpm_9
+    pnpm
     removeReferencesTo
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools.libtool
   ];
 
-  # Required for `sharp` NPM dependency
+  # Required for `sharp` npm dependency
   buildInputs = [ vips ];
 
   pnpmDeps = fetchPnpmDeps {
@@ -61,9 +61,9 @@ stdenv.mkDerivation (finalAttrs: {
       src
       sourceRoot
       ;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-TZ+lUdICkLZfHPvU1qEUeB3wasBKJpGo2lMk4eeyjas=";
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-T0yqfY6b+Kfti5cIWH++QFh3cII9znBcf6kkZCwLSZg=";
   };
 
   buildPhase = ''
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper "${lib.getExe nodejs}" "$out/bin/pds" \
       --add-flags --enable-source-maps \
-      --add-flags "$out/lib/pds/index.js" \
+      --add-flags "$out/lib/pds/index.ts" \
       --set-default NODE_ENV production
 
     runHook postBuild
@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/{bin,lib/pds}
     mv node_modules $out/lib/pds
-    mv index.js $out/lib/pds
+    mv index.ts $out/lib/pds
 
     runHook postInstall
   '';

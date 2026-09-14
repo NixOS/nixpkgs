@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./autogen.sh
   '';
 
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     "-O0"
     "-I${lib.getDev utf8cpp}/include/utf8cpp"
   ];

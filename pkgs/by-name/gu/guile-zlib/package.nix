@@ -21,6 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-aaZhwHimQq408DNtHy442kh/EYdRdxP0Z1tQGDKmkmc=";
   };
 
+  patches = [
+    # fix path to libz.so to sharedlibdir from zlib.pc
+    ./guile-zlib-change-zlib-path-from-libdir-to-sharedlibdir.diff
+  ];
+
   strictDeps = true;
   nativeBuildInputs = [
     autoreconfHook

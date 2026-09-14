@@ -27,7 +27,7 @@ stdenv.mkDerivation {
       --replace "RXPATH=/usr/bin/ssh" "RXPATH=ssh"
   '';
 
-  CFLAGS = "-D_DARWIN_C_SOURCE";
+  env.CFLAGS = "-D_DARWIN_C_SOURCE";
   makeFlags = [ "DESTDIR=$(out)" ];
   buildInputs = [
     libx11

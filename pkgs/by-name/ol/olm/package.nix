@@ -5,16 +5,19 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "olm";
   version = "3.2.16";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitLab {
     domain = "gitlab.matrix.org";
     owner = "matrix-org";
     repo = "olm";
-    rev = version;
-    sha256 = "sha256-JX20mpuLO+UoNc8iQlXEHAbH9sfblkBbM1gE27Ve0ac=";
+    tag = finalAttrs.version;
+    hash = "sha256-JX20mpuLO+UoNc8iQlXEHAbH9sfblkBbM1gE27Ve0ac=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -44,7 +47,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       tilpner
-      oxzi
     ];
     knownVulnerabilities = [
       ''
@@ -95,4 +97,4 @@ stdenv.mkDerivation rec {
       ''
     ];
   };
-}
+})

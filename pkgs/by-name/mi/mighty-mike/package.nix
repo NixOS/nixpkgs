@@ -4,6 +4,7 @@
   fetchFromGitHub,
   SDL2,
   cmake,
+  libGL,
   makeWrapper,
   unstableGitUpdater,
 }:
@@ -26,7 +27,10 @@ stdenv.mkDerivation {
     makeWrapper
   ];
 
-  buildInputs = [ SDL2 ];
+  buildInputs = [
+    SDL2
+    libGL
+  ];
 
   strictDeps = true;
 
@@ -40,8 +44,7 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/MightyMike --chdir "$out/share/MightyMike"
 
     install -Dm644 $src/packaging/io.jor.mightymike.desktop $out/share/applications/mightymike.desktop
-    install -Dm644 $src/packaging/io.jor.mightymike.png $out/share/pixmaps/mightymike-desktopicon.png
-
+    install -Dm644 $src/packaging/io.jor.mightymike.png -t $out/share/icons/hicolor/512x512/apps
     runHook postInstall
   '';
 

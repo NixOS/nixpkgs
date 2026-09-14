@@ -392,7 +392,7 @@ in
       let
         extraOptions = lib.concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
         inhibitCmd = lib.concatStringsSep " " [
-          "${pkgs.systemd}/bin/systemd-inhibit"
+          "${config.systemd.package}/bin/systemd-inhibit"
           "--mode='block'"
           "--who='restic'"
           "--what='sleep'"
@@ -505,6 +505,7 @@ in
       lib.nameValuePair "restic-backups-${name}" {
         wantedBy = [ "timers.target" ];
         inherit (backup) timerConfig;
+        unitConfig.X-OnlyManualStart = true;
       }
     ) (lib.filterAttrs (_: backup: backup.timerConfig != null) config.services.restic.backups);
 

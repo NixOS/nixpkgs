@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitLab,
+  fetchpatch,
   installShellFiles,
   pkg-config,
   python3,
@@ -16,16 +17,25 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prs";
-  version = "0.5.6";
+  version = "0.5.7";
 
   src = fetchFromGitLab {
     owner = "timvisee";
     repo = "prs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oV5i93+4+ZI1ngZX6A68vXQ3NtjChK8AzgjZC3URmBw=";
+    hash = "sha256-U0qaFrRp2KTKejPivd62tWM7qsGiBmGsWrEpTnCroyY=";
   };
 
-  cargoHash = "sha256-430/6Ww+PUBwyDs5vWLsMyHDEfF9wxgYZd455G5sj/w=";
+  patches = [
+    # Fix macos compilation error
+    # https://gitlab.com/timvisee/prs/-/commit/dd29c60992714a160e88c32f6ec8848e7ccbee12
+    (fetchpatch {
+      url = "https://gitlab.com/timvisee/prs/-/commit/dd29c60992714a160e88c32f6ec8848e7ccbee12.patch";
+      hash = "sha256-P3hC+drh6gWsWVgICfEVxr3ghB4E45ZM2cZaCdFDELE=";
+    })
+  ];
+
+  cargoHash = "sha256-xPF3HeDU6AXQ0M4utko3SCuLVBjj/qMjTCeSUT6kGmo=";
 
   nativeBuildInputs = [
     gpgme

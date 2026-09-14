@@ -47,4 +47,4 @@ echo "updating commit hash of ${owner}/${repo} @ ${tag} to ${sha}" >&2
 
 cd "$(dirname "$(readlink -f "$0")")"
 
-sed -i "s|\".*\"; # update-commit-sha|${sha}; # update-commit-sha|" default.nix
+sed -i "s|\".*\"; # update-commit-sha|${sha}; # update-commit-sha|" package.nix

@@ -13,20 +13,16 @@
 
 buildNpmPackage rec {
   pname = "lanraragi";
-  version = "0.9.60";
+  version = "0.9.81";
 
   src = fetchFromGitHub {
     owner = "Difegue";
     repo = "LANraragi";
     tag = "v.${version}";
-    hash = "sha256-ieYil/3n8iSWdfO6MQ1sW8q/TnQekpCx24n/BDfeLNg=";
+    hash = "sha256-oXId9VrNNp/S1ZrNFba/9jMqE3/qZWB63dU3DpLiDDo=";
   };
 
   patches = [
-    # https://github.com/Difegue/LANraragi/pull/1340
-    # Note: the PR was reverted upstream because it broke on windows
-    ./bail-if-cpanm-fails.patch
-
     # Skip running `npm ci` and unnecessary build-time checks
     ./install.patch
 
@@ -46,7 +42,7 @@ buildNpmPackage rec {
     ./expose-password-hashing.patch
   ];
 
-  npmDepsHash = "sha256-9SuimhLvEuruvFXuFm62DzgldngfiJneV6MDedGy6LY=";
+  npmDepsHash = "sha256-SkKYRmVpMmvOBp6FkYOcaGQJ8BF0nUuAHpHQxpcqSIc=";
 
   nativeBuildInputs = [
     perl
@@ -77,6 +73,7 @@ buildNpmPackage rec {
       Mojolicious
       MojoliciousPluginTemplateToolkit
       MojoliciousPluginRenderFile
+      MojoliciousPluginOpenAPI
       IOSocketSocks
       IOSocketSSL
       CpanelJSONXS
@@ -141,18 +138,19 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/lanraragi
+    mkdir -p "$out/share/lanraragi" "$out/share/lanraragi/tools"
     chmod +x script/launcher.pl
-    cp -r lib public script locales templates package.json lrr.conf $out/share/lanraragi
+    cp -r lib public script locales templates package.json lrr.conf "$out/share/lanraragi"
+    cp tools/openapi.yaml "$out/share/lanraragi/tools/openapi.yaml"
 
-    makeWrapper $out/share/lanraragi/script/launcher.pl $out/bin/lanraragi \
-      --prefix PERL5LIB : $PERL5LIB \
+    makeWrapper "$out/share/lanraragi/script/launcher.pl" "$out/bin/lanraragi" \
+      --prefix PERL5LIB : "$PERL5LIB" \
       --prefix PATH : ${lib.makeBinPath [ ghostscript ]} \
       --run "cp -n --no-preserve=all $out/share/lanraragi/lrr.conf ./lrr.conf 2>/dev/null || true" \
       --add-flags "-f $out/share/lanraragi/script/lanraragi"
 
     makeWrapper ${lib.getExe perl} $out/bin/helpers/lrr-make-password-hash \
-      --prefix PERL5LIB : $out/share/lanraragi/lib:$PERL5LIB \
+      --prefix PERL5LIB : "$out/share/lanraragi/lib:$PERL5LIB" \
       --add-flags "-e 'use LANraragi::Controller::Config; print LANraragi::Controller::Config::make_password_hash(@ARGV[0])' 2>/dev/null"
 
     runHook postInstall

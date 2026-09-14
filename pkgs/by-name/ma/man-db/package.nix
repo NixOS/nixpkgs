@@ -1,14 +1,21 @@
 {
   buildPackages,
   gdbm,
-  fetchurl,
+  fetchFromGitLab,
+  autoconf,
+  automake,
+  flex,
+  gettext,
+  gnulib,
   groff,
   gzip,
   lib,
   libiconv,
   libiconvReal,
   libpipeline,
+  libtool,
   makeWrapper,
+  nix-update-script,
   nixosTests,
   pkg-config,
   stdenv,
@@ -24,9 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "man-db";
   version = "2.13.1";
 
-  src = fetchurl {
-    url = "mirror://savannah/man-db/man-db-${finalAttrs.version}.tar.xz";
-    hash = "sha256-iv67b362u4VCkpRYhB9cfm8kDjDIY1jB+8776gdsh9k=";
+  src = fetchFromGitLab {
+    owner = "man-db";
+    repo = "man-db";
+    tag = finalAttrs.version;
+    hash = "sha256-o85IJCsP5NA4AUhr6SNLOSnAoIEWoEejVG8w08jfyqQ=";
   };
 
   outputs = [
@@ -37,7 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
   nativeBuildInputs = [
+    autoconf
+    automake
+    flex
+    gettext
     groff
+    libtool
     makeWrapper
     pkg-config
     zstd
@@ -88,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   preConfigure = ''
+    ./bootstrap --no-git --gnulib-srcdir=${gnulib} --gen
     configureFlagsArray+=("--with-sections=1 n l 8 3 0 2 5 4 9 6 7")
   '';
 
@@ -117,8 +132,11 @@ stdenv.mkDerivation (finalAttrs: {
     !stdenv.hostPlatform.isMusl # iconv binary
   ;
 
-  passthru.tests = {
-    nixos = nixosTests.man;
+  passthru = {
+    tests = {
+      nixos = nixosTests.man;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -127,5 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     mainProgram = "man";
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
 })

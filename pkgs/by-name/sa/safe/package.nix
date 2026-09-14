@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
   version = "1.8.0";
 
   src = fetchFromGitHub {
-    owner = "starkandwayne";
+    owner = "egen";
     repo = "safe";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-sg0RyZ5HpYu7M11bNy17Sjxm7C3pkQX3I17edbALuvU=";
@@ -26,7 +26,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Vault CLI";
     mainProgram = "safe";
-    homepage = "https://github.com/starkandwayne/safe";
+    homepage = "https://github.com/egen/safe";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eonpatapon ];
   };

@@ -6,8 +6,12 @@ let
 in
 {
   name = "lemmy";
-  meta = with lib.maintainers; {
-    maintainers = [ mightyiam ];
+  meta = {
+    maintainers = with lib.maintainers; [
+      mightyiam
+      lucasew
+    ];
+    teams = [ lib.teams.ngi ];
   };
 
   nodes = {

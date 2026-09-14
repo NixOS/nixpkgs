@@ -11,14 +11,19 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.8.90";
 
   src = fetchurl {
-    url = "http://tango.freedesktop.org/releases/icon-naming-utils-${finalAttrs.version}.tar.gz";
+    url = "https://tango.freedesktop.org/releases/icon-naming-utils-${finalAttrs.version}.tar.gz";
     sha256 = "071fj2jm5kydlz02ic5sylhmw6h2p3cgrm3gwdfabinqkqcv4jh4";
   };
 
-  buildInputs = [
-    librsvg
+  nativeBuildInputs = [
     (perl.withPackages (p: [ p.XMLSimple ]))
   ];
+
+  buildInputs = [
+    librsvg
+  ];
+
+  strictDeps = true;
 
   meta = {
     homepage = "https://tango.freedesktop.org/Standard_Icon_Naming_Specification";

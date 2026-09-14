@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "eksctl";
-  version = "0.223.0";
+  version = "0.230.0";
 
   src = fetchFromGitHub {
-    owner = "weaveworks";
+    owner = "eksctl-io";
     repo = "eksctl";
     rev = finalAttrs.version;
-    hash = "sha256-AGtKkfEeLwL0mSdObL8fS2wOHgFr/lKahImvj5Ox7qo=";
+    hash = "sha256-slyLgQ01m1iZs10auYBgmc2x+A2UhwEX65RDBdCAWkc=";
   };
 
-  vendorHash = "sha256-qU2Cb9ob9/jMFMS8eanxjxpQSjfV71t8gLa4HfSu0Ok=";
+  vendorHash = "sha256-XGLxHXwoL768wnpXoM5Hz+TTGH+zdWLbiAUqNT6Zmrk=";
 
   doCheck = false;
 
@@ -46,7 +46,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "CLI for Amazon EKS";
-    homepage = "https://github.com/weaveworks/eksctl";
+    homepage = "https://github.com/eksctl-io/eksctl";
     changelog = "https://github.com/eksctl-io/eksctl/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [

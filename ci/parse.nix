@@ -28,7 +28,14 @@ runCommand "nix-parse-${nix.name}"
     # the other CI jobs will report in more detail. This job is about checking parsing
     # across different implementations / versions, not about providing the best DX.
     # Returning all parse errors requires significantly more resources.
-    find . -type f -iname '*.nix' | xargs -P $(nproc) nix-instantiate --parse >/dev/null
+
+    find . -type f -iname '*.nix' | xargs -P $(nproc) nix-instantiate --parse 2>&1 >/dev/null | {
+      # Also fail on (deprecation) warnings printed to stderr.
+      if grep "warning"; then
+        echo "Failing due to warnings in stderr" >&2
+        exit 1
+      fi
+    }
 
     touch $out
   ''

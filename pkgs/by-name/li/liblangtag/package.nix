@@ -16,18 +16,18 @@
 
 stdenv.mkDerivation rec {
   pname = "liblangtag";
-  version = "0.6.7";
+  version = "0.6.8";
 
   # Artifact tarball contains lt-localealias.h needed for darwin
   src = fetchurl {
-    url = "https://bitbucket.org/tagoh/liblangtag/downloads/liblangtag-${version}.tar.bz2";
-    hash = "sha256-Xta81K4/PAXJEuYvIWzRpEEjhGFH9ymkn7VmjaUeAw4=";
+    url = "https://gitlab.com/tagoh/liblangtag/-/releases/${version}/downloads/liblangtag-${version}.tar.bz2";
+    hash = "sha256-qWl1t53dj+9tkpXAg/4/GvoaiJilcjXUBpJVreROXPI=";
   };
 
   core_zip = fetchurl {
     # please update if an update is available
-    url = "http://www.unicode.org/Public/cldr/46/core.zip";
-    hash = "sha256-+86cInWGKtJmaPs0eD/mwznz2S3f61oQoXdftYGBoV0=";
+    url = "http://www.unicode.org/Public/cldr/48/core.zip";
+    hash = "sha256-BsfGmNb9jWfO+sFaAgawEJsA4O8WNvhvhESfqVlWH3Q=";
   };
 
   language_subtag_registry = fetchurl {
@@ -66,11 +66,11 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
+    changelog = "https://gitlab.com/tagoh/liblangtag/-/blob/${version}/NEWS";
     description = "Interface library to access tags for identifying languages";
     license = lib.licenses.mpl20;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
-    # There are links to a homepage that are broken by a BitBucket change
-    homepage = "https://bitbucket.org/tagoh/liblangtag/overview";
+    homepage = "https://gitlab.com/tagoh/liblangtag";
   };
 }

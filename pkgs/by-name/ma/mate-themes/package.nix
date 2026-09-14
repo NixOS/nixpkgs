@@ -1,14 +1,12 @@
 {
-  lib,
   stdenv,
-  fetchurl,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
   pkg-config,
   gettext,
   mate-icon-theme,
-  gtk2,
   gtk3,
-  gtk_engines,
-  gtk-engine-murrine,
   gdk-pixbuf,
   librsvg,
   gitUpdater,
@@ -16,14 +14,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mate-themes";
-  version = "3.22.26";
+  version = "3.22.26-unstable-2026-06-25";
 
-  src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/themes/${lib.versions.majorMinor finalAttrs.version}/mate-themes-${finalAttrs.version}.tar.xz";
-    sha256 = "Ik6J02TrO3Pxz3VtBUlKmEIak8v1Q0miyF/GB+t1Xtc=";
+  src = fetchFromGitHub {
+    owner = "mate-desktop";
+    repo = "mate-themes";
+    # For `build: add --enable-gtk2 configure flag`
+    # nixpkgs-update: no auto update
+    rev = "3eba5d520b9ae1c64ef6c42ac442a7a97d38f7c7";
+    hash = "sha256-IZc1LxjHnwmvUOqGGnfzFdNI8dfyB3juOgY28xrXf1c=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
+    autoreconfHook
     pkg-config
     gettext
     gtk3
@@ -31,14 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     mate-icon-theme
-    gtk2
-    gtk_engines
     gdk-pixbuf
     librsvg
   ];
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
+  configureFlags = [
+    "--disable-gtk2"
   ];
 
   dontDropIconThemeCache = true;
@@ -50,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   passthru.updateScript = gitUpdater {
-    url = "https://git.mate-desktop.org/mate-themes";
     odd-unstable = true;
     rev-prefix = "v";
   };

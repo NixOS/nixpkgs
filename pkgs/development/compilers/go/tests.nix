@@ -9,11 +9,11 @@
   runCommand,
   bintools,
   # A package with CGO_ENABLED=0
-  athens,
+  uplosi,
 }:
 let
   skopeo' = skopeo.override { buildGoModule = buildGoModule; };
-  athens' = athens.override { buildGoModule = buildGoModule; };
+  uplosi' = uplosi.override { buildGoModule = buildGoModule; };
   expectedCgoEnabledType = "DYN";
   expectedCgoDisabledType = "EXE";
 in
@@ -24,7 +24,7 @@ in
     command = "go version";
     version = "go${go.version}";
   };
-  athens = testers.testVersion { package = athens'; };
+  uplosi = testers.testVersion { package = uplosi'; };
 }
 # bin type tests assume ELF file + linux-specific exe types
 // lib.optionalAttrs stdenv.hostPlatform.isLinux {
@@ -41,13 +41,13 @@ in
       exit 1
     fi
   '';
-  athens-bin-type = runCommand "athens-bin-type" { meta.broken = stdenv.hostPlatform.isStatic; } ''
-    bin="${lib.getExe athens'}"
+  uplosi-bin-type = runCommand "uplosi-bin-type" { meta.broken = stdenv.hostPlatform.isStatic; } ''
+    bin="${lib.getExe uplosi'}"
     ${lib.optionalString (stdenv.buildPlatform == stdenv.targetPlatform) ''
       # For CGO_ENABLED=0 the internal linker should be used, except
       # for cross where we rely on external linking by default
-      if ${lib.getExe' bintools "readelf"} -p .comment ${lib.getExe athens'} | grep -Fq "GCC: (GNU)"; then
-        echo "${lib.getExe athens'} has a GCC .comment, but it should have used the internal go linker"
+      if ${lib.getExe' bintools "readelf"} -p .comment ${lib.getExe uplosi'} | grep -Fq "GCC: (GNU)"; then
+        echo "${lib.getExe uplosi'} has a GCC .comment, but it should have used the internal go linker"
         exit 1
       fi
     ''}

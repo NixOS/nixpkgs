@@ -5,18 +5,20 @@
   python3Packages,
   installShellFiles,
   procps,
+
+  buildPackages,
 }:
 
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
-  version = "5.9.0";
+  version = "5.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubikey-manager";
     tag = version;
-    hash = "sha256-8SWuhuFeMRIskJRxeb67gA3gdhSDf/vnrYHra6t71Bc=";
+    hash = "sha256-9ngsjXkQ3YUc5nCgG1i592LoVERr4jRSKi8POBaP/aw=";
   };
 
   postPatch = ''
@@ -41,14 +43,32 @@ python3Packages.buildPythonPackage rec {
     python-pskc
   ];
 
+  pythonRelaxDeps = [
+    "cryptography"
+  ];
+
   postInstall = ''
     installManPage man/ykman.1
-
-    installShellCompletion --cmd ykman \
-      --bash <(_YKMAN_COMPLETE=bash_source "$out/bin/ykman") \
-      --zsh  <(_YKMAN_COMPLETE=zsh_source  "$out/bin/ykman") \
-      --fish <(_YKMAN_COMPLETE=fish_source "$out/bin/ykman") \
-  '';
+  ''
+  + (
+    let
+      compOpts =
+        x:
+        if stdenv.buildPlatform.canExecute python3Packages.stdenv.hostPlatform then
+          "--${x} <(_YKMAN_COMPLETE=${x}_source ${placeholder "out"}/bin/ykman)"
+        else
+          ''--${x} <(_YKMAN_COMPLETE=${x}_source PYTHONPATH= "${buildPackages.yubikey-manager}/bin/ykman")'';
+    in
+    ''
+      installShellCompletion --cmd ykman ${
+        lib.strings.concatMapStringsSep " " compOpts [
+          "bash"
+          "zsh"
+          "fish"
+        ]
+      }
+    ''
+  );
 
   nativeCheckInputs = with python3Packages; [
     astroid

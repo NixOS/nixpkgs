@@ -18,6 +18,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   };
 
   pythonRelaxDeps = [
+    "sqlglot" # https://github.com/dbcli/mycli/issues/1696
     "sqlparse"
     "click"
   ];

@@ -11,16 +11,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oboete";
-  version = "0.2.3";
+  version = "0.2.6";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mariinkys";
     repo = "oboete";
     tag = finalAttrs.version;
-    hash = "sha256-Ydl6gVlE/6dN/qp348wc626TSG8FIBv2U7H/FVahrOs=";
+    hash = "sha256-AMJQ3z/ffFmFLpwauWplgveSVufoYcmJRdGfeKmqMhg=";
   };
 
-  cargoHash = "sha256-R8y0UpSY8K5yMZK719eXb+R9ABllpRV/QoAcISV138w=";
+  cargoHash = "sha256-3u80gfpPMGsNyH8zQpHBI24gwOc4IaLl6seMQAK7bBQ=";
 
   nativeBuildInputs = [
     libcosmicAppHook
@@ -48,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Simple flashcards application for the COSMIC™ desktop written in Rust";
     homepage = "https://github.com/mariinkys/oboete";
-    changelog = "https://github.com/mariinkys/oboete/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/mariinkys/oboete/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       GaetanLepage

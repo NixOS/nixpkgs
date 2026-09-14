@@ -16,6 +16,7 @@
   fixDarwinDylibNames,
   enableManpages ? false,
   enableClangToolsExtra ? true,
+  extraPatches ? [ ],
   devExtraCmakeFlags ? [ ],
   replaceVars,
   getVersionFile,
@@ -31,12 +32,18 @@ stdenv.mkDerivation (
 
     src =
       if monorepoSrc != null then
-        runCommand "clang-src-${version}" { inherit (monorepoSrc) passthru; } ''
-          mkdir -p "$out"
-          cp -r ${monorepoSrc}/cmake "$out"
-          cp -r ${monorepoSrc}/clang "$out"
-          ${lib.optionalString enableClangToolsExtra "cp -r ${monorepoSrc}/clang-tools-extra \"$out\""}
-        ''
+        runCommand "clang-src-${version}"
+          {
+            inherit (monorepoSrc) passthru;
+            strictDeps = true;
+            __structuredAttrs = true;
+          }
+          ''
+            mkdir -p "$out"
+            cp -r ${monorepoSrc}/cmake "$out"
+            cp -r ${monorepoSrc}/clang "$out"
+            ${lib.optionalString enableClangToolsExtra "cp -r ${monorepoSrc}/clang-tools-extra \"$out\""}
+          ''
       else
         src;
 
@@ -73,7 +80,8 @@ stdenv.mkDerivation (
       ];
       stripLen = 1;
       hash = "sha256-1NKej08R9SPlbDY/5b0OKUsHjX07i9brR84yXiPwi7E=";
-    });
+    })
+    ++ extraPatches;
 
     nativeBuildInputs = [
       cmake
@@ -90,6 +98,8 @@ stdenv.mkDerivation (
       libxml2
       libllvm
     ];
+
+    strictDeps = true;
 
     cmakeFlags = [
       (lib.cmakeFeature "CLANG_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/clang")
@@ -166,6 +176,7 @@ stdenv.mkDerivation (
     ''
     + ''
       patchShebangs $python/bin
+      patchShebangs $python/share/clang/
 
       mkdir -p $dev/bin
       cp bin/clang-tblgen $dev/bin
@@ -188,6 +199,8 @@ stdenv.mkDerivation (
     passthru = {
       inherit libllvm;
       isClang = true;
+      langC = true;
+      langCC = true;
       hardeningUnsupportedFlagsByTargetPlatform =
         targetPlatform:
         [ "fortify3" ]
@@ -208,6 +221,8 @@ stdenv.mkDerivation (
         enableClangToolsExtra = false;
       };
     };
+
+    __structuredAttrs = true;
 
     requiredSystemFeatures = [ "big-parallel" ];
     meta = llvm_meta // {
@@ -244,6 +259,7 @@ stdenv.mkDerivation (
 
     meta = llvm_meta // {
       description = "man page for Clang ${version}";
+      homepage = "https://github.com/llvm/llvm-project";
     };
   }
 )

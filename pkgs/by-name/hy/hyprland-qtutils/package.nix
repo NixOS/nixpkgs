@@ -1,6 +1,6 @@
 {
   lib,
-  gcc15Stdenv,
+  gcc16Stdenv,
   fetchFromGitHub,
   fetchpatch,
   cmake,
@@ -13,7 +13,7 @@
 let
   inherit (lib.strings) makeBinPath;
 in
-gcc15Stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland-qtutils";
   version = "0.1.5";
 
@@ -50,6 +50,9 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     qtWrapperArgs+=(--prefix PATH : "${makeBinPath [ pciutils ]}")
   '';
+
+  cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
 
   meta = {
     description = "Hyprland QT/qml utility apps";

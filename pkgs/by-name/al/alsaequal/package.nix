@@ -4,7 +4,7 @@
   fetchFromGitHub,
   alsa-lib,
   caps,
-  ladspaH,
+  ladspa-header,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     alsa-lib
-    ladspaH
+    ladspa-header
   ];
 
   makeFlags = [ "DESTDIR=$(out)" ];

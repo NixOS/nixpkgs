@@ -16,10 +16,8 @@
   pyyaml,
   rich,
   tensorstore,
+  treescope,
   typing-extensions,
-
-  # optional-dependencies
-  matplotlib,
 
   # tests
   cloudpickle,
@@ -30,22 +28,23 @@
   pytest-xdist,
   sphinx,
   tensorflow,
-  treescope,
+  torch,
 
   writeScript,
   tomlq,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flax";
-  version = "0.12.2";
+  version = "0.12.9";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flax";
-    tag = "v${version}";
-    hash = "sha256-Wdfc35/iah98C5WNYZWiAd2FJUJlyGLJ8xELpuYD3GU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Zh5PE9pq+loJCIW5EPvtWTco/ouIK3TzJ0o3Ydthz00=";
   };
 
   build-system = [
@@ -67,10 +66,6 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  optional-dependencies = {
-    all = [ matplotlib ];
-  };
-
   pythonImportsCheck = [ "flax" ];
 
   nativeCheckInputs = [
@@ -81,11 +76,7 @@ buildPythonPackage rec {
     pytest-xdist
     sphinx
     tensorflow
-  ];
-
-  pytestFlags = [
-    # FutureWarning: In the future `np.object` will be defined as the corresponding NumPy scalar.
-    "-Wignore::FutureWarning"
+    torch
   ];
 
   disabledTestPaths = [
@@ -132,8 +123,8 @@ buildPythonPackage rec {
   meta = {
     description = "Neural network library for JAX";
     homepage = "https://github.com/google/flax";
-    changelog = "https://github.com/google/flax/releases/tag/v${version}";
+    changelog = "https://github.com/google/flax/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };
-}
+})

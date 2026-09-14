@@ -7,21 +7,21 @@
   rustc,
 }:
 
-buildPythonPackage rec {
-  pname = "zenoh";
-  version = "1.6.2"; # nixpkgs-update: no auto update
+buildPythonPackage (finalAttrs: {
+  pname = "eclipse-zenoh";
+  version = "1.10.0"; # nixpkgs-update: no auto update
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-python";
-    rev = version;
-    hash = "sha256-GGqZGtHSCaPeO6wFFBxPjdjhsIdcgI1RJ4mZbGq4uzc=";
+    tag = finalAttrs.version;
+    hash = "sha256-s5vINKV4RLtV/8rFZe7iqOks4wfXeDEY7aUOCeuJCUM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src pname version;
-    hash = "sha256-2Hieow0+GzcNQmvqsJd+5bpE9RWUDbaBR9jah+O4GtI=";
+    inherit (finalAttrs) src pname version;
+    hash = "sha256-gCdiJ7FoBa5oHQJJ9Alhl+3Zei2FwYMXOqIaBzN+hh0=";
   };
 
   build-system = [
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ markuskowa ];
   };
-}
+})

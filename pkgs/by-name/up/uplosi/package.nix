@@ -46,6 +46,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       katexochen
       malt3
+      charludo
     ];
     platforms = lib.platforms.unix;
   };

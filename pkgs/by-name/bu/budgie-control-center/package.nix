@@ -5,13 +5,12 @@
   replaceVars,
   accountsservice,
   budgie-desktop,
-  cheese,
   colord,
   colord-gtk,
   cups,
   docbook-xsl-nons,
   fontconfig,
-  gcr,
+  gcr_3,
   gdk-pixbuf,
   gettext,
   glib,
@@ -19,16 +18,14 @@
   glibc,
   gnome,
   gst_all_1,
-  gnome-bluetooth_1_0,
-  gnome-color-manager,
   gnome-desktop,
   gnome-settings-daemon,
+  gnome-tecla,
   gsettings-desktop-schemas,
   gsound,
   gtk3,
   ibus,
   libepoxy,
-  libgnomekbd,
   libgtop,
   libgudev,
   libhandy,
@@ -38,7 +35,6 @@
   libpwquality,
   librsvg,
   libsecret,
-  libwacom,
   libxml2,
   libxslt,
   meson,
@@ -72,23 +68,21 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-control-center";
-  version = "2.1.0";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-control-center";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-sdAzReZVAZ5omLOhly/l3buiw01eem+k9+3RbVPzS2g=";
+    hash = "sha256-zxhMRmRfwBX8a7T0G4hq+zf3xVyryOiCYSOl4BbSObc=";
   };
 
   patches = [
     (replaceVars ./paths.patch {
       budgie_desktop = budgie-desktop;
-      gcm = gnome-color-manager;
       inherit
         cups
-        libgnomekbd
         shadow
         ;
       inherit networkmanagerapplet tzdata;
@@ -111,14 +105,13 @@ stdenv.mkDerivation (finalAttrs: {
     colord
     colord-gtk
     fontconfig
-    gcr
+    gcr_3
     gdk-pixbuf
     glib
     glib-networking
     gnome-desktop
+    gnome-tecla
     gst_all_1.gstreamer
-    cheese
-    gnome-bluetooth_1_0
     gnome-settings-daemon
     gsettings-desktop-schemas
     gsound
@@ -133,7 +126,6 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     libpwquality
     libsecret
-    libwacom
     libxml2
     modemmanager
     networkmanager

@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/tmccombs/swaytools";
     description = "Collection of simple tools for sway (and i3)";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ atila ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

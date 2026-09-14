@@ -5,12 +5,12 @@
   alcotest,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ohex";
   version = "0.2.0";
 
   src = fetchurl {
-    url = "https://github.com/ocaml/opam-source-archives/raw/main/ohex-${version}.tar.gz";
+    url = "https://github.com/ocaml/opam-source-archives/raw/main/ohex-${finalAttrs.version}.tar.gz";
     hash = "sha256-prV7rbo0sAx3S2t4YtjniJEVq43uLXK8ZMsqoMzn2Ow=";
   };
 
@@ -22,4 +22,4 @@ buildDunePackage rec {
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

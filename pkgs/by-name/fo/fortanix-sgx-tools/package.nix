@@ -6,7 +6,7 @@
   openssl_3,
   protobuf,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fortanix-sgx-tools";
   version = "0.6.1";
   nativeBuildInputs = [
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [ openssl_3 ];
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-IVkmZs3imzj8uN8kqEzN/Oio3H+Nqzu8ORjARNx1TpQ=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     platforms = [ "x86_64-linux" ];
     license = lib.licenses.mpl20;
   };
-}
+})

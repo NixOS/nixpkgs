@@ -41,7 +41,7 @@
       # declared. Backport of https://cygwin.com/cgit/newlib-cygwin/commit/?id=73600d68227e125af24b7de7c3fccbd4eb66ee03
       ./fix-winsize.patch
     ]
-    ++ lib.optional (!headersOnly) [
+    ++ lib.optionals (!headersOnly) [
       # https://cygwin.com/pipermail/cygwin-developers/2020-September/011970.html
       # This is required for boost coroutines to work. After we get to the point
       # where nix runs on cygwin, we can attempt to upstream this again.
@@ -52,7 +52,22 @@
       !headersOnly && stdenvNoLibc.hostPlatform != stdenvNoLibc.buildPlatform
     ) ./fix-cross.patch;
 
-    passthru.w32api = if headersOnly then w32api-headers else w32api;
+    passthru = {
+      w32api = if headersOnly then w32api-headers else w32api;
+
+      # The headers-only build is the stand-in used to bootstrap a toolchain
+      # before this package itself exists. Runtimes built against it can
+      # compile, but there is nothing here to link against.
+      inherit headersOnly;
+    }
+    # Cygwin's threads are POSIX threads.
+    #
+    # See the comment on `threadModel` in
+    # pkgs/development/compilers/gcc/ng/common/libgcc/default.nix for further
+    # details.
+    // lib.optionalAttrs (!headersOnly) {
+      threadModel = "posix";
+    };
 
     meta = {
       homepage = "https://cygwin.com/";
@@ -154,7 +169,7 @@
           "--enable-static"
           "--disable-dumper"
           "--with-cross-bootstrap"
-          # if gm4 or gnum4 are in PATH, they would be be preferred to nixpkgs m4
+          # if gm4 or gnum4 are in PATH, they would be preferred to nixpkgs m4
           "M4=m4"
         ];
 

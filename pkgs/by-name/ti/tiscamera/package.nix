@@ -14,7 +14,6 @@
   libuuid,
   libzip,
   orc,
-  pcre,
   zstd,
   glib,
   gobject-introspection,
@@ -34,13 +33,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tiscamera";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "TheImagingSource";
     repo = "tiscamera";
     rev = "v-tiscamera-${finalAttrs.version}";
-    hash = "sha256-33U/8CbqNWIRwfDHXCZSN466WEQj9fip+Z5EJ7kIwRM=";
+    hash = "sha256-3qAPUcP+Rh1aA1qNWq0NWMpJftinm32r52esikH804Y=";
   };
 
   postPatch = ''
@@ -78,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
     libuuid
     libzip
     orc
-    pcre
     zstd
     glib
     gst_all_1.gstreamer
@@ -142,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Linux sources and UVC firmwares for The Imaging Source cameras";
     homepage = "https://github.com/TheImagingSource/tiscamera";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ jraygauthier ];
   };

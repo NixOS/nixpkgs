@@ -1,3 +1,5 @@
+import sys
+
 import dataclasses
 from urllib import request
 from urllib.error import HTTPError
@@ -43,13 +45,17 @@ class VersionFetcher:
         self, ide: Ide, ignore_no_url_error=False
     ) -> VersionInfo | None:
         if ide.update_info is None:
-            print(f"[!] no update info for {ide.name} in `updateInfo.json` - skipping!")
+            print(
+                f"[!] no update info for {ide.name} in `updateInfo.json` - skipping!",
+                file=sys.stderr,
+            )
             return None
         channel_name = ide.update_info["channel"]
         channel = self.channels.get(channel_name)
         if channel is None:
             print(
-                f"[!] failed to find IDE channel {channel_name} - skipping! check {ide.name}'s `channel`!"
+                f"[!] failed to find IDE channel {channel_name} - skipping! check {ide.name}'s `channel`!",
+                file=sys.stderr,
             )
             return None
         try:
@@ -59,7 +65,7 @@ class VersionFetcher:
                 new_build_number = build["@number"]
             else:
                 new_build_number = build["@fullNumber"]
-            if "EAP" not in channel["@name"]:
+            if "EAP" not in channel["@id"]:
                 version_or_build_number = new_version
             else:
                 version_or_build_number = new_build_number
@@ -73,7 +79,8 @@ class VersionFetcher:
                 )
                 if not download_url and not ignore_no_url_error:
                     print(
-                        f"[!] no valid URL found for '{ide.name}' for '{system}'! make sure `updater/updateInfo.json` contains an entry and is correct."
+                        f"[!] no valid URL found for '{ide.name}' for '{system}'! make sure `updater/updateInfo.json` contains an entry and is correct.",
+                        file=sys.stderr,
                     )
                     download_urls[system] = None
                 else:
@@ -84,7 +91,10 @@ class VersionFetcher:
                 urls=download_urls,
             )
         except Exception as e:
-            print(f"[!] exception while trying to fetch version: {e} - skipping!")
+            print(
+                f"[!] exception while trying to fetch version: {e} - skipping!",
+                file=sys.stderr,
+            )
             return None
 
     @classmethod
@@ -101,7 +111,7 @@ class VersionFetcher:
         root = xmltodict.parse(updates_response.text)
         products = root["products"]["product"]
         return {
-            channel["@name"]: channel
+            channel["@id"]: channel
             for product in products
             if "channel" in product
             for channel in one_or_more(product["channel"])

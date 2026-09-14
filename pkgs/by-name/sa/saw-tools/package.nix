@@ -11,16 +11,17 @@
   testers,
 }:
 
+let
+  sources = import ./sources.nix;
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "saw-tools";
-  version = "1.4";
+  version = "1.5";
 
-  src = fetchurl {
-    url = "https://github.com/GaloisInc/saw-script/releases/download/v${finalAttrs.version}/saw-${finalAttrs.version}-ubuntu-22.04-X64-with-solvers.tar.gz";
-    hash = "sha256-AjMGOi0Nzl0cjVltjgbqhzBiPpIZbDtS3+SqergeulE=";
-  };
+  src = fetchurl sources.${stdenv.hostPlatform.system};
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     gmp
     ncurses
     readline
@@ -28,10 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    makeWrapper
-  ];
+  nativeBuildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      autoPatchelfHook
+    ]
+    ++ [
+      makeWrapper
+    ];
 
   installPhase = ''
     mkdir -p $out/lib $out/share
@@ -49,10 +53,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Tools for software verification and analysis";
-    homepage = "https://saw.galois.com";
+    homepage = "https://tools.galois.com/saw";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.bsd3;
-    platforms = [ "x86_64-linux" ];
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    platforms = lib.attrNames sources;
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      thelissimus
+    ];
+    mainProgram = "saw";
   };
 })

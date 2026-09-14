@@ -8,21 +8,32 @@
 
 buildGoModule (finalAttrs: {
   pname = "desync";
-  version = "1.0.0";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "folbricht";
     repo = "desync";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aRxWq9gGfglfBixS7xOoj8r29rJRAfGj4ydcSFf/7P0=";
+    hash = "sha256-xiiN+0veHRxVNsIpob7W/iRH+dABYIiWfw22DH1bTEs=";
   };
 
-  vendorHash = "sha256-ywID0txn7L6+QkYNvGvO5DTsDQBZLU+pGwNd3q7kLKI=";
+  vendorHash = "sha256-FRXwQUOD1UiGSlGkBLXT0RGG382RJdEGUJxaQiyzR9A=";
+
+  ldflags = [ "-X main.version=${finalAttrs.src.tag}" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  # nix builder doesn't have access to test data; tests fail for reasons unrelated to binary being bad.
-  doCheck = false;
+  # required for TestHTTPHandlerReadWrite and other tests
+  __darwinAllowLocalNetworking = true;
+
+  checkFlags =
+    let
+      skippedTests = lib.optionals stdenv.hostPlatform.isDarwin [
+        "TestS3StoreGetChunk/fail" # sendfile is not permitted in Darwin sandbox
+        "TestS3StoreGetChunk/recover" # sendfile is not permitted in Darwin sandbox
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd desync \
@@ -41,6 +52,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/folbricht/desync";
     changelog = "https://github.com/folbricht/desync/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ chaduffy ];
+    maintainers = with lib.maintainers; [ matshch ];
   };
 })

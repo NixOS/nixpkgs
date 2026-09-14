@@ -853,7 +853,7 @@ Used with CVS. Expects `cvsRoot`, `tag`, and `hash`.
 
 Used with Mercurial. Expects `url`, `rev`, `hash`, overridable with [`<pkg>.overrideAttrs`](#sec-pkg-overrideAttrs).
 
-A number of fetcher functions wrap part of `fetchurl` and `fetchzip`. They are mainly convenience functions intended for commonly used destinations of source code in Nixpkgs. These wrapper fetchers are listed below.
+A number of fetcher functions wrap lower-level fetchers such as `fetchurl`, `fetchzip`, and `fetchgit`. They are mainly convenience functions intended for commonly used destinations of source code in Nixpkgs. These wrapper fetchers are listed below.
 
 ## `fetchFromGitea`, `fetchFromForgejo` and `fetchFromCodeberg` {#fetchfromgitea}
 
@@ -875,6 +875,45 @@ However, `fetchFromGitHub` will automatically switch to using `fetchgit` in any 
 - `rootDir` is set to a non-empty string
 
 When `fetchgit` is used, refer to the `fetchgit` section for documentation of its available options.
+
+## `fetchFromHuggingFace` {#fetchfromhuggingface}
+
+`fetchFromHuggingFace` fetches repositories from Hugging Face Hub. It expects
+`repoId`, exactly one of `rev` or `tag`, and `hash`.
+
+`repoId` must be in the form `repo` or `owner/repo`, so repositories such as
+`gpt2` work as well.
+
+::: {.example #ex-fetchfromhuggingface}
+
+# Fetching a model repository from Hugging Face
+
+```nix
+fetchFromHuggingFace {
+  repoId = "hf-internal-testing/tiny-random-gpt2";
+  rev = "71034c5d8bde858ff824298bdedc65515b97d2b9";
+  backend = "lfs";
+  hash = "sha256-8K9B/C62GW5lXC0c8QQpQ9QAE1UMoG+kYqvGhnWIp64=";
+}
+```
+
+:::
+
+The optional `repoType` argument selects which Hugging Face Hub repository type
+to use:
+
+- `"model"` (default) fetches from `https://huggingface.co/<repo-id>`
+- `"dataset"` fetches from `https://huggingface.co/datasets/<repo-id>`
+- `"space"` fetches from `https://huggingface.co/spaces/<repo-id>`
+
+To use a different Hugging Face Hub instance, use `domain`
+(defaults to `"huggingface.co"`).
+
+The optional `backend` argument defaults to `"xet"`. Because the Xet backend is
+not implemented yet, callers must currently set `backend = "lfs"`, which uses
+`fetchgit` with Git LFS enabled and defaults `fetchSubmodules` to `false`.
+`rootDir`, `sparseCheckout`, and low-level `fetchgit` options such as
+`deepClone`, `fetchTags`, `leaveDotGit`, and `branchName` are also supported.
 
 ## `fetchFromGitLab` {#fetchfromgitlab}
 
@@ -920,14 +959,14 @@ respectively. Otherwise, the fetcher uses `fetchzip`.
 
 This is used with Radicle repositories. The arguments expected are similar to `fetchgit`.
 
-Requires a `seed` argument (e.g. `seed.radicle.xyz` or `rosa.radicle.xyz`) and a `repo` argument
+Requires a `seed` argument (e.g. `seed.radicle.dev` or `rosa.radicle.network`) and a `repo` argument
 (the repository id *without* the `rad:` prefix). Also accepts an optional `node` argument which
 contains the id of the node from which to fetch the specified ref. If `node` is `null` (the
 default), a canonical ref is fetched instead.
 
 ```nix
 fetchFromRadicle {
-  seed = "seed.radicle.xyz";
+  seed = "seed.radicle.dev";
   repo = "z3gqcJUoA1n9HaHKufZs5FCSGazv5"; # heartwood
   tag = "releases/1.3.0";
   hash = "sha256-4o88BWKGGOjCIQy7anvzbA/kPOO+ZsLMzXJhE61odjw=";
@@ -942,10 +981,24 @@ contains the full revision id of the Radicle patch to fetch.
 
 ```nix
 fetchRadiclePatch {
-  seed = "rosa.radicle.xyz";
+  seed = "rosa.radicle.network";
   repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5"; # radicle-explorer
   revision = "d97d872386c70607beda2fb3fc2e60449e0f4ce4"; # patch: d77e064
   hash = "sha256-ttnNqj0lhlSP6BGzEhhUOejKkkPruM9yMwA5p9Di4bk=";
+}
+```
+
+## `fetchFromTangled` {#fetchfromtangled}
+
+This is to be used with tangled repositories. `fetchFromTangled` works with
+very similar arguments to `fetchFromGithub`. However, instead of a `owner` and
+`repo`, a `did` argument is expected.
+
+```nix
+fetchFromTangled {
+  did = "did:plc:jj6ajj6duxnlthwtnob4qyuv"; # tranquil.farm/tranquil-pds
+  tag = "v6.6.0";
+  hash = "sha256-cfTsjmK/IMqT5kMKOGpwwWbBlvtrCDOerUJJ8AVI3kY=";
 }
 ```
 

@@ -4,7 +4,7 @@
   fetchFromGitLab,
   poetry-core,
   protoletariat,
-  mypy-protobuf,
+  mypy-protobuf_3_6,
   pkgs,
   protobuf,
   pynng,
@@ -34,13 +34,12 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     protobuf
     pynng
-    mypy-protobuf
   ]
   ++ (lib.optional (pythonOlder "3.13") typing-extensions);
 
   nativeBuildInputs = [
     pkgs.protobuf
-    mypy-protobuf
+    mypy-protobuf_3_6
     gitMinimal
   ];
 

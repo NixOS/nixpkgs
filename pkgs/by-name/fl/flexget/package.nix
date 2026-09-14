@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "flexget";
-  version = "3.17.11";
+  version = "3.20.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Flexget";
     repo = "Flexget";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Qfq6TXSNAnIq8m3I7noFe6pIq6PmUTQKUjN+ZC4NxyU=";
+    hash = "sha256-U7GwGbYaSz2X95We0X7RNvVNDlFeGKR099hn5WmgyQs=";
   };
 
   pythonRelaxDeps = true;
@@ -30,12 +30,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     apscheduler
     beautifulsoup4
     colorama
+    curl-cffi
     feedparser
     guessit
     html5lib
     jinja2
     jsonschema
     loguru
+    pyscrypt
     psutil
     pydantic
     pynzb
@@ -68,10 +70,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     transmission-rpc
     qbittorrent-api
     deluge-client
-    cloudscraper
     python-telegram-bot
     boto3
-    libtorrent-rasterbar
+    matrix-nio
+    subliminal
   ];
 
   pythonImportsCheck = [
@@ -156,6 +158,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # others
     "TestRegexp"
     "TestYamlLists"
+    "test_ambiguous[guessit]"
+    "test_date_id[guessit]"
+  ];
+
+  disabledTestPaths = [
+    # FIXME package pytest-ftpserver
+    "tests/ftp/test_ftp_download.py"
+    "tests/ftp/test_ftp_list.py"
   ];
 
   meta = {

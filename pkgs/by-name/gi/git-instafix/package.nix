@@ -1,48 +1,50 @@
 {
-  git,
+  gitMinimal,
   lib,
   libgit2,
+  oniguruma,
+  pkg-config,
   rustPlatform,
   stdenv,
   fetchFromGitHub,
 }:
-let
-  inherit (lib)
-    licenses
-    maintainers
-    ;
-
-  version = "0.2.7";
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-instafix";
-  inherit version;
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "quodlibetor";
     repo = "git-instafix";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Uz+KQ8cQT3v97EtmbAv2II30dUrFD0hMo/GhnqcdBOs=";
   };
 
   cargoHash = "sha256-B0XTk0KxA60AuaS6eO3zF/eA/cTcLwA31ipG4VjvO8Q=";
 
-  buildInputs = [ libgit2 ];
-  nativeCheckInputs = [ git ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    libgit2
+    oniguruma
+  ];
+
+  nativeCheckInputs = [ gitMinimal ];
+
+  env.RUSTONIG_SYSTEM_LIBONIG = true;
 
   meta = {
     description = "Quickly fix up an old commit using your currently-staged changes";
     mainProgram = "git-instafix";
     homepage = "https://github.com/quodlibetor/git-instafix";
-    license = with licenses; [
+    changelog = "https://github.com/quodlibetor/git-instafix/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       mightyiam
       quodlibetor
     ];
-    changelog = "https://github.com/quodlibetor/git-instafix/releases/tag/v${version}";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

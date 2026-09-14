@@ -2,12 +2,15 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
+  gitUpdater,
   alsa-lib,
   autoreconfHook,
   ffmpeg,
   fluidsynth,
   freetype,
   glib,
+  libGL,
   libicns,
   libpcap,
   libpng,
@@ -27,14 +30,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dosbox-x";
-  version = "2026.01.02";
+  version = "2026.08.02";
 
   src = fetchFromGitHub {
     owner = "joncampbell123";
     repo = "dosbox-x";
     rev = "dosbox-x-v${finalAttrs.version}";
-    hash = "sha256-/1DACDf530rzxeLVMLGkB3n6d3d8sN/ci8Q3kHAtZJo=";
+    hash = "sha256-zipg/eTz/k6IQeUovgpZ/ezOJNEjSQwHpkpGYOtdpS0=";
   };
+
+  patches = [
+    # https://github.com/joncampbell123/dosbox-x/issues/6446
+    # Remove when version > 2026.08.02
+    (fetchpatch {
+      name = "0001-dosbox-x-Fix-FFmpeg-9-compat.patch";
+      url = "https://github.com/joncampbell123/dosbox-x/commit/18062c0ffb33db35fa52ce937ce25223140c0293.patch";
+      hash = "sha256-S6DMmofFBloZFut0M3ZVAV/awG8Af9xjO2AcfVusOdg=";
+    })
+  ];
 
   # sips is unavailable in sandbox, replacing with imagemagick breaks build due to wrong Foundation propagation(?) so don't generate resolution variants
   # iconutil is unavailable, replace with png2icns from libicns
@@ -78,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
+    libGL
     libxkbfile
     libxrandr
   ];
@@ -85,11 +99,9 @@ stdenv.mkDerivation (finalAttrs: {
   # Tests for SDL_net.h for modem & IPX support, not automatically picked up due to being in SDL2 subdirectory
   env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL2_net}/include/SDL2";
 
-  configureFlags = [ "--enable-sdl2" ];
+  configureFlags = [ (lib.strings.enableFeature true "sdl2") ];
 
   enableParallelBuilding = true;
-
-  hardeningDisable = [ "format" ]; # https://github.com/joncampbell123/dosbox-x/issues/4436
 
   # Build optional App Bundle target, which needs at least one arch-suffixed binary
   postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -110,10 +122,16 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapper $out/Applications/dosbox-x.app/Contents/MacOS/dosbox-x $out/bin/dosbox-x
     '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    # Version output on stderr, program returns status code 1
-    command = "${lib.getExe finalAttrs.finalPackage} -version 2>&1 || true";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      # Version output on stderr, program returns status code 1
+      command = "${lib.getExe finalAttrs.finalPackage} -version 2>&1 || true";
+    };
+    updateScript = gitUpdater {
+      rev-prefix = "dosbox-x-v";
+      ignoredVersions = "-osfree$";
+    };
   };
 
   meta = {

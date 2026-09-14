@@ -8,13 +8,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyqwikswitch";
   version = "0.94";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-IpyWz+3EMr0I+xULBJJhBgdnQHNPJIM1SqKFLpszhQc=";
   };
 
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     teams = [ lib.teams.home-assistant ];
   };
-}
+})

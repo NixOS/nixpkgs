@@ -27,13 +27,13 @@ assert
   (!withFirefox && !withChromium) -> throw "Either `withFirefox` or `withChromium` must be enabled.";
 buildNpmPackage (finalAttrs: {
   pname = "sitespeed-io";
-  version = "39.4.1";
+  version = "42.6.0";
 
   src = fetchFromGitHub {
     owner = "sitespeedio";
     repo = "sitespeed.io";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Dpg/UsuCfiTcSnDDCpsYh+T/JGbC1r+gUegzZJdtycw=";
+    hash = "sha256-tyEa28WmMa+t55k/CHBZNXno9pTyKJZed47OA5VN5U4=";
   };
 
   env = {
@@ -49,7 +49,7 @@ buildNpmPackage (finalAttrs: {
 
   dontNpmBuild = true;
   npmInstallFlags = [ "--omit=dev" ];
-  npmDepsHash = "sha256-R2i05VBhhOTbk+tXjlet01coBMpXB1h6aSqewscCQls=";
+  npmDepsHash = "sha256-NFhsVh3Hu/PFE1pPLPBYWswSWUqJmSriCaDn1KFM054=";
 
   postInstall = ''
     mv $out/bin/sitespeed{.,-}io

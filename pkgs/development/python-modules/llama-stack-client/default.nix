@@ -32,13 +32,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "llama-stack-client";
-  version = "0.5.0";
+  version = "0.7.5";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_stack_client";
     inherit (finalAttrs) version;
-    hash = "sha256-4AWunZdc2jCzuGJhBX8ijXABB+Jj4St5a5IM0fubqWg=";
+    hash = "sha256-gNQZu8uLHOwuGQU25XZXbtL7v0eIJGXXL8YGHvncrbI=";
   };
 
   postPatch = ''

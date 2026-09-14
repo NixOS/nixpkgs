@@ -16,7 +16,6 @@ stdenv.mkDerivation (finalAttrs: {
   version = "5.11.01";
 
   src = fetchFromGitLab {
-    domain = "gitlab.com";
     owner = "fbb-git";
     repo = "bobcat";
     tag = finalAttrs.version;

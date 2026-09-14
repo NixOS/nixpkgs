@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "itch-dl";
-  version = "0.6.1";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DragoonAethis";
     repo = "itch-dl";
     tag = finalAttrs.version;
-    hash = "sha256-zwsiG38wOVi3pP0gQWkZqfAmdWKadjB65qiTg68tZWg=";
+    hash = "sha256-var0iT10MT/QjCkF9GUlLufXdMi5tweH8HAlhqXckpU=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -36,6 +36,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "urllib3"
     "beautifulsoup4"
     "lxml"
+    "tqdm"
   ];
 
   meta = {
@@ -43,7 +44,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     mainProgram = "itch-dl";
     homepage = "https://github.com/DragoonAethis/itch-dl";
     changelog = "https://github.com/DragoonAethis/itch-dl/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jopejoe1 ];
   };
 })

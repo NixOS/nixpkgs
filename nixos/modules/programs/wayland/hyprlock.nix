@@ -26,5 +26,5 @@ in
     security.pam.services.hyprlock = { };
   };
 
-  meta.maintainers = lib.teams.hyprland.members;
+  meta.teams = [ lib.teams.hyprland ];
 }

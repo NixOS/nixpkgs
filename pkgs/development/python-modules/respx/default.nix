@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "respx";
-  version = "0.22.0";
+  version = "0.23.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lundberg";
     repo = "respx";
     tag = version;
-    hash = "sha256-T3DLNXJykSF/HXjlmQdJ2CG4d+U1eTa+XWcgtT3dhl4=";
+    hash = "sha256-Fz3CS9rIm+H6axVIRErlFTTDgtAcTmGj4/wabLxDV2I=";
   };
 
   build-system = [ setuptools ];

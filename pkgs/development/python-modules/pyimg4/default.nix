@@ -66,6 +66,8 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    # https://github.com/m1stadev/PyIMG4/pull/59
+    broken = lib.versionAtLeast asn1.version "3";
     changelog = "https://github.com/m1stadev/PyIMG4/releases/tag/${src.tag}";
     description = "Python library/CLI tool for parsing Apple's Image4 format";
     homepage = "https://github.com/m1stadev/PyIMG4";

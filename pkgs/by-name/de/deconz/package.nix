@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "deconz";
-  version = "2.31.2";
+  version = "2.32.5";
 
   src = fetchurl {
     url = "https://deconz.dresden-elektronik.de/ubuntu/beta/deconz-${version}-qt5.deb";
-    sha256 = "sha256-FiZFi7nRVn4i4KEAFc0P+5MPNw/DzBTds06jXvC7qGg=";
+    sha256 = "sha256-57HS7x76qLBfBGuYu8gEXqVTLldLz/ixg4fE6+LnIzI=";
   };
 
   nativeBuildInputs = [

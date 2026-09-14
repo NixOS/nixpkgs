@@ -11,16 +11,16 @@
   types-colorama,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "beautysh";
-  version = "6.4.2";
+  version = "6.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lovesegfault";
     repo = "beautysh";
-    tag = "v${version}";
-    hash = "sha256-wLqysNhkagZ+sphqMC78cLoKvsMJpJCJr16lgvU37JI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-P2oF6Sb7CBsZGSOXifxgCtJdY50YUJF3tKihp3v1cK4=";
   };
 
   build-system = [ hatchling ];
@@ -42,9 +42,9 @@ buildPythonPackage rec {
   meta = {
     description = "Tool for beautifying Bash scripts";
     homepage = "https://github.com/lovesegfault/beautysh";
-    changelog = "https://github.com/lovesegfault/beautysh/releases/tag/${src.tag}";
+    changelog = "https://github.com/lovesegfault/beautysh/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "beautysh";
   };
-}
+})

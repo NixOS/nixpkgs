@@ -1,6 +1,11 @@
-{ getPackage, lib, ... }:
 {
-  name = "hbase-standalone";
+  pkgs,
+  getPackage,
+  lib,
+  ...
+}:
+{
+  name = "hbase-${(getPackage pkgs).version}-standalone";
 
   meta = with lib.maintainers; {
     maintainers = [ illustris ];

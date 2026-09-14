@@ -12,14 +12,14 @@
 }:
 buildPythonPackage rec {
   pname = "environ-config";
-  version = "24.1.0";
+  version = "26.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "environ-config";
     owner = "hynek";
     tag = version;
-    hash = "sha256-XiJNLQgKhf9hXQfIMsfiEaHx7IHaExhphpYfOBgIT+s=";
+    hash = "sha256-baj61mS4rSLMngrAdmSwupN/2ewo/GDwbZqFTr8fVuE=";
   };
 
   build-system = [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     description = "Python Application Configuration With Environment Variables";
     homepage = "https://github.com/hynek/environ-config";
     changelog = "https://github.com/hynek/environ-config/releases/tag/${version}";
-    license = lib.licenses.apsl20;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ lykos153 ];
   };
 }

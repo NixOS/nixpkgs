@@ -29,7 +29,7 @@
   testScript =
     { nodes, ... }:
     let
-      user = nodes.machine.config.users.users.alice;
+      user = nodes.machine.users.users.alice;
     in
     ''
       with subtest("Wait for cage to boot up"):

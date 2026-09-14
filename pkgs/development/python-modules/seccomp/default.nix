@@ -11,7 +11,7 @@ buildPythonPackage rec {
   format = "setuptools";
   src = libseccomp.pythonsrc;
 
-  VERSION_RELEASE = version; # used by build system
+  env.VERSION_RELEASE = version; # used by build system
 
   nativeBuildInputs = [ cython ];
   buildInputs = [ libseccomp ];
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python bindings for libseccomp";
-    license = with lib.licenses; [ lgpl21 ];
+    license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

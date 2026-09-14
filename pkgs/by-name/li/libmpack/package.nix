@@ -15,6 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "0rai5djdkjz7bsn025k5489in7r1amagw1pib0z4qns6b52kiar2";
   };
 
+  preBuild = lib.optionalString stdenv.hostPlatform.isStatic ''
+    mkdir -p build/release/src build/release/test/deps/tap
+  '';
+
   makeFlags = [
     "LIBTOOL=${libtool}/bin/libtool"
     "PREFIX=$(out)"
@@ -25,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Simple implementation of msgpack in C";
     homepage = "https://github.com/tarruda/libmpack/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

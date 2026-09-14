@@ -5,26 +5,28 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
+  msrest,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-cosmosdb";
-  version = "9.8.0";
+  version = "9.9.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_cosmosdb";
     inherit version;
-    hash = "sha256-IU7kcWU4flePhuZhH7MptNVNwpWtedo3udksXW0g0bE=";
+    hash = "sha256-Rni/BCvcIIqiT8pxdnrCm28qJyKseHJgg3Glki87bDc=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    isodate
     azure-common
     azure-mgmt-core
+    isodate
+    msrest
   ];
 
   # Module has no tests

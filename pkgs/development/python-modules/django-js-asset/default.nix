@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "django-js-asset";
-  version = "3.1.2";
+  version = "4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matthiask";
     repo = "django-js-asset";
     tag = version;
-    hash = "sha256-OG31i8r6rwR2aDzraAorHdYrJrWt/e7SY9+iV7SJGJ8=";
+    hash = "sha256-ZfSO0S6NL8Jw1gynwHy3j6Em6nC5BYNNo9SEfoHmy0w=";
   };
 
   build-system = [ hatchling ];
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Script tag with additional attributes for django.forms.Media";
     homepage = "https://github.com/matthiask/django-js-asset";
     maintainers = with lib.maintainers; [ hexa ];
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
   };
 }

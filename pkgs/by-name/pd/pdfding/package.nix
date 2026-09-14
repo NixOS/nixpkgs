@@ -1,8 +1,7 @@
 {
   lib,
   callPackage,
-  fetchFromGitHub,
-  fetchpatch2,
+  fetchFromCodeberg,
   makeWrapper,
   nixosTests,
 
@@ -13,30 +12,21 @@ let
 in
 python.pkgs.buildPythonPackage (finalAttrs: {
   pname = "pdfding";
-  version = "1.5.1";
-  src = fetchFromGitHub {
-    owner = "mrmn2";
+  version = "1.14.0";
+  src = fetchFromCodeberg {
+    owner = "mrmn";
     repo = "PdfDing";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-PXkD+2k8/LmMWzZAj8qEK4mLoOKS4mDWcqe8AgoCdBU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-yxDN6aFYRdrpDV7AdKeam1ZUcs5GTXU1fLaOHB7Mx8c=";
   };
   pyproject = true;
 
-  patches = [
-    # fixes two tests, remove patch in the next version
-    # https://github.com/mrmn2/PdfDing/pull/248
-    (fetchpatch2 {
-      url = "https://github.com/mrmn2/PdfDing/commit/24df5a82ffb1d60162978791b716f67d20128a22.patch?full_index=1";
-      hash = "sha256-N3FtPQGSOFeUbVcinXK9kJM6hZOn4YdJJVWe4VXb8pE=";
-    })
-  ];
+  strictDeps = true;
+  __structuredAttrs = true;
 
-  # remove supervisor from dependencies
+  # remove supervisor from dependencies, we use systemd
   postPatch = ''
     sed -i 's/supervisor.*$//' pyproject.toml
-
-    substituteInPlace pdfding/backup/tests/test_management.py pdfding/backup/tests/test_tasks.py \
-      --replace-fail "Path(__file__).parents[2]" "Path('$PDFDING_OUT_DIR')"
   '';
 
   dependencies =
@@ -62,18 +52,20 @@ python.pkgs.buildPythonPackage (finalAttrs: {
       ruamel-yaml
       whitenoise
 
-      # dependecies required for django collectstatic
+      # dependencies required for django collectstatic
       cryptography
       pyjwt
       requests
     ]
     ++ qrcode.optional-dependencies.pil
+    ++ django-allauth.optional-dependencies.mfa
     ++ django-allauth.optional-dependencies.socialaccount;
 
   build-system = with python.pkgs; [ poetry-core ];
 
   nativeBuildInputs = [
     makeWrapper
+    python.pkgs.pyprojectVersionPatchHook
   ];
 
   optional-dependencies = {
@@ -119,9 +111,13 @@ python.pkgs.buildPythonPackage (finalAttrs: {
   env.PDFDING_OUT_DIR = "${placeholder "out"}/${python.sitePackages}/pdfding";
 
   makeWrapperArgs = [
-    "--set-default DATA_DIR /var/lib/pdfding"
+    "--set-default"
+    "DATA_DIR"
+    "/var/lib/pdfding"
     # allow for gunicorn processes to have access to Python packages
-    "--prefix PYTHONPATH : "
+    "--prefix"
+    "PYTHONPATH"
+    ":"
     "${python.pkgs.makePythonPath finalAttrs.passthru.dependencies}:${finalAttrs.env.PDFDING_OUT_DIR}"
   ];
 
@@ -129,45 +125,43 @@ python.pkgs.buildPythonPackage (finalAttrs: {
     mkdir -p $out/bin
 
     makeWrapper "$PDFDING_OUT_DIR/manage.py" $out/bin/pdfding-manage \
-      $makeWrapperArgs
+      "''${makeWrapperArgs[@]}"
 
     makeWrapper ${lib.getExe python.pkgs.gunicorn} $out/bin/pdfding-start \
       --add-flags '--bind ''${HOST_IP:-127.0.0.1}:''${HOST_PORT:-8080} core.wsgi:application' \
-      $makeWrapperArgs
+      "''${makeWrapperArgs[@]}"
   '';
 
+  # NOTE: don't undo relaxing of any of these, they are bound to break again
   pythonRelaxDeps = [
     "django"
     "django-allauth"
-    "django-htmx"
+    "gunicorn"
+    "huey"
+    "markdown"
+    "nh3"
+    "psycopg2-binary"
     "pypdf"
-    "ruamel-yaml"
+    "pypdfium2"
+  ];
+
+  checkInputs = with python.pkgs; [
+    fido2
+    pytest-django
   ];
 
   nativeCheckInputs = with python.pkgs; [
-    pytest-django
     pytestCheckHook
   ];
 
   # from .github/workflows/tests.yaml
-  pytestFlags = [
-    "--ignore=e2e"
-  ];
+  pytestFlags = [ "--ignore=e2e" ];
 
-  disabledTests = [
-    # broken tests in 1.5.0
-    "test_adjust_file_paths_to_ws_collection"
-    "test_oidc_callback" # AssertionError: 200 != 401
-  ];
-
-  /*
-    fix two breaking tests by providing full out path
-    AssertionError: Calls not found
-    AssertionError: 'add_file_to_minio' does not contain all of ...
-  */
   preCheck = ''
     # dev.py is required for tests, restore it
     mv dev.py.bak $PDFDING_OUT_DIR/core/settings/dev.py
+
+    export DATA_DIR=$PWD/pdfding
 
     # tests should run in pdfding directory
     pushd pdfding
@@ -176,6 +170,8 @@ python.pkgs.buildPythonPackage (finalAttrs: {
   postCheck = ''
     # come out of the pdfding directory
     popd
+
+    unset DATA_DIR
 
     # remove dev.py
     rm $PDFDING_OUT_DIR/core/settings/dev.py
@@ -193,13 +189,12 @@ python.pkgs.buildPythonPackage (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/mrmn2/PdfDing/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://codeberg.org/mrmn/PdfDing/src/commit/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Selfhosted PDF manager, viewer and editor offering a seamless user experience on multiple devices";
-    downloadPage = "https://github.com/mrmn2/PdfDing";
+    downloadPage = "https://codeberg.org/mrmn/PdfDing";
     homepage = "https://pdfding.com";
     license = lib.licenses.agpl3Only;
     mainProgram = "pdfding-manage";
-    maintainers = with lib.maintainers; [ phanirithvij ];
     platforms = lib.platforms.unix;
     teams = with lib.teams; [ ngi ];
   };

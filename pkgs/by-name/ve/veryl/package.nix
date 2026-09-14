@@ -5,22 +5,24 @@
   pkg-config,
   installShellFiles,
   dbus,
+  writableTmpDirAsHomeHook,
+  git,
   stdenv,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "veryl";
-  version = "0.18.0";
+  version = "0.20.2";
 
   src = fetchFromGitHub {
     owner = "veryl-lang";
     repo = "veryl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dqVEl/sClzhLiX5ung4au6dXUkeMbKPdoSDRV0evT3w=";
+    hash = "sha256-ldibFrtU/lEL4a0QIhVKx8A0noZF2qyH9iExYNZedoU=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-0RFzZwaF8hVVBBBC7l9Ql9mN99cxI2tiWlo7eNX/Tho=";
+  cargoHash = "sha256-mpI3Eo5fkP66Ywr/anQ3ajPrVuuK6Ku7qJ/jpVPHE6Q=";
 
   nativeBuildInputs = [
     pkg-config
@@ -38,6 +40,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh <($out/bin/veryl metadata --completion zsh)
   '';
 
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+    git
+  ];
+
   checkFlags = [
     # takes over an hour
     "--skip=tests::progress"
@@ -50,8 +57,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=tests::publish"
     "--skip=tests::publish_with_commit"
     # "Permission Denied", while making its cache dir?
+    "--skip=native_test::test"
+    "--skip=native_test::test_ignored_attribute"
+    "--skip=native_test::test_wave_dump"
     "--skip=analyzer::test_25_dependency"
+    "--skip=analyzer::test_84_package_self_ref_2"
     "--skip=analyzer::test_68_std"
+    "--skip=emitter::test_84_package_self_ref_2"
     "--skip=emitter::test_25_dependency"
     "--skip=emitter::test_68_std"
     "--skip=filelist::test"

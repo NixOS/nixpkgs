@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitnr";
-  version = "0.2.2";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "reemus-dev";
     repo = "gitnr";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9vx+bGfYuJuafZUY2ZT4SAgrNcSXuMe1kHH/lrpItvM=";
+    hash = "sha256-Bxr8NwUUDLHbAzGbS5S89StzXTZ88qa2TuO8zxYVkAg=";
   };
 
-  cargoHash = "sha256-DlYV92ZbkeUieVmyaxVuCslkwAgWrULu4HerLFXZZtE=";
+  cargoHash = "sha256-cSvcVe1v9tRxXb4rm2Hfr0K5RhLjLgGPjdfc1VCh3co=";
 
   nativeBuildInputs = [
     pkg-config
@@ -40,7 +40,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Create `.gitignore` files using one or more templates from TopTal, GitHub or your own collection";
     homepage = "https://github.com/reemus-dev/gitnr";
-    changelog = "https://github.com/reemus-dev/gitnr/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       matthiasbeyer

@@ -31,6 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/carpedm20/emoji/";
     changelog = "https://github.com/carpedm20/emoji/blob/${src.tag}/CHANGES.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ joachifm ];
+    maintainers = [ ];
   };
 }

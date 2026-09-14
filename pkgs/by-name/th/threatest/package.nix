@@ -8,17 +8,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "threatest";
-  version = "1.2.5";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "threatest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rVRBrf/RTcHvKOLHNASzvij3fV+uQEuIVKb07CZ/cT0=";
+    hash = "sha256-NYvy+Q9vNFEzqBkX77aF8MMBl8pVQRldyxEiWSOhs1U=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-EvVazz51sW8z+8XfZB0Xo42KuUT6Q9n2Y/0HvlF1bV4=";
+  vendorHash = "sha256-U848PVujiKVyJGtNIvhFlh1lETNB4746UqwIdGCLRpk=";
 
   nativeBuildInputs = [
     installShellFiles

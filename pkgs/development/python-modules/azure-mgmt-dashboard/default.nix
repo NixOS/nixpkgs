@@ -5,13 +5,12 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
-  setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-dashboard";
-  version = "1.1.0";
+  version = "2.0.0";
   format = "wheel";
 
   src = fetchPypi {
@@ -20,7 +19,7 @@ buildPythonPackage rec {
     format = "wheel";
     python = "py3";
     dist = "py3";
-    hash = "sha256-WoZW5p30f0mrmMyhD68nxqlGrTtUU93V167B8wZitdA=";
+    hash = "sha256-1LASBzs+biyDDQPoCujcvLhK3iyNaHLU8VCtBSdTJxg=";
   };
 
   propagatedBuildInputs = [

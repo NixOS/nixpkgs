@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ncpamixer";
-  version = "1.3.9";
+  version = "1.3.11";
 
   src = fetchFromGitHub {
     owner = "fulhax";
     repo = "ncpamixer";
     tag = finalAttrs.version;
-    hash = "sha256-uafjAaXtn97NNmRPxeHmbAaMeHIR/nrQKsTqDX5NRGU=";
+    hash = "sha256-N7GtMOcZb345tjcT5S3QOGx+n4SpDohiKPOjsgwgr6I=";
   };
 
   patches = [

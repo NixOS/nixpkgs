@@ -29,7 +29,7 @@
   libxkbcommon,
   libxshmfence,
   libGL,
-  libappindicator-gtk3,
+  libappindicator,
   libgbm,
   nspr,
   nss,
@@ -93,7 +93,7 @@ stdenv.mkDerivation {
           libxkbcommon
           libxshmfence
           libGL
-          libappindicator-gtk3
+          libappindicator
           libgbm
           nspr
           nss

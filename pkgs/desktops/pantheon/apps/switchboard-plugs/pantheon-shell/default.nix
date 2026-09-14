@@ -11,7 +11,7 @@
   libadwaita,
   libgee,
   granite7,
-  gexiv2,
+  gexiv2_0_10,
   gnome-settings-daemon,
   elementary-settings-daemon,
   gtk4,
@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-pantheon-shell";
-  version = "8.2.1";
+  version = "8.3.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "settings-desktop";
     tag = version;
-    hash = "sha256-8NPMZfOQIZtMiGrsFXYPOwNbPU+d9CgPBsT36VJsvHw=";
+    hash = "sha256-qczv+G0v47SiMsLlWjDPK0ZY4J+V/CXe/l7b6pWG+WY=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     elementary-settings-daemon
     gnome-settings-daemon
     gala
-    gexiv2
+    gexiv2_0_10
     glib
     granite7
     gtk4

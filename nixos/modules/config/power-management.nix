@@ -25,6 +25,9 @@ in
       resumeCommands = lib.mkOption {
         type = lib.types.lines;
         default = "";
+        example = lib.literalExpression ''
+          "''${pkgs.util-linux}/bin/rfkill unblock all"
+        '';
         description = "Commands executed after the system resumes from suspend-to-RAM.";
       };
 
@@ -32,7 +35,7 @@ in
         type = lib.types.lines;
         default = "";
         example = lib.literalExpression ''
-          "''${pkgs.hdparm}/sbin/hdparm -B 255 /dev/sda"
+          "''${pkgs.powertop}/bin/powertop --auto-tune"
         '';
         description = ''
           Commands executed when the machine powers up.  That is,
@@ -51,6 +54,18 @@ in
           Commands executed when the machine powers down.  That is,
           they're executed both when the system shuts down and when
           it goes to suspend or hibernation.
+        '';
+      };
+
+      bootCommands = lib.mkOption {
+        type = lib.types.lines;
+        default = "";
+        example = lib.literalExpression ''
+          "''${pkgs.networkmanager}/bin/nmcli radio wifi on"
+        '';
+        description = ''
+          Commands executed only once after initial boot.
+          These commands are executed before `powerUpCommands`.
         '';
       };
 
@@ -75,50 +90,61 @@ in
       https://www.freedesktop.org/software/systemd/man/latest/systemd.special.html#sleep.target
     '';
 
-    systemd.targets.post-resume = {
-      description = "Post-Resume Actions";
-      requires = [ "post-resume.service" ];
-      after = [ "post-resume.service" ];
-      wantedBy = [ "sleep.target" ];
-      unitConfig.StopWhenUnneeded = true;
-    };
+    systemd.services = {
+      # Service executed before suspending/hibernating.
+      sleep-actions = {
+        description = "Sleep Actions";
+        wantedBy = [ "sleep.target" ];
+        before = [ "sleep.target" ];
+        unitConfig.StopWhenUnneeded = true;
+        script = ''
+          # NixOS pre-sleep script
 
-    # Service executed before suspending/hibernating.
-    systemd.services.pre-sleep = {
-      description = "Pre-Sleep Actions";
-      wantedBy = [ "sleep.target" ];
-      before = [ "sleep.target" ];
-      script = ''
-        ${cfg.powerDownCommands}
-      '';
-      serviceConfig.Type = "oneshot";
-    };
+          # config.powerManagement.powerDownCommands
+          ${cfg.powerDownCommands}
+        '';
+        preStop = ''
+          # NixOS pre-resume script
 
-    systemd.services.post-boot = {
-      description = "Post-boot Actions";
-      # It's not well defined at what point in the bootup sequence this should run
-      # we should eventually just remove this.
-      wantedBy = [ "multi-user.target" ];
-      restartIfChanged = false;
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
+          # config.powerManagement.resumeCommands
+          ${cfg.resumeCommands}
+
+          # config.powerManagement.powerUpCommands
+          ${cfg.powerUpCommands}
+        '';
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
       };
-      script = ''
-        ${cfg.powerUpCommands}
-      '';
-    };
 
-    systemd.services.post-resume = {
-      description = "Post-Resume Actions";
-      # Pulled in by post-resume.service above
-      after = [ "sleep.target" ];
-      script = ''
-        /run/current-system/systemd/bin/systemctl try-restart --no-block post-resume.target
-        ${cfg.resumeCommands}
-        ${cfg.powerUpCommands}
-      '';
-      serviceConfig.Type = "oneshot";
+      # Service executed after boot, and stopped during shutdown
+      post-boot = {
+        description = "Post-Boot Actions";
+        # It's not well defined at what point in the bootup sequence this should run
+        # we should eventually just remove this.
+        wantedBy = [ "multi-user.target" ];
+        restartIfChanged = false;
+        script = ''
+          # NixOS post-boot script
+
+          # config.powerManagement.bootCommands
+          ${cfg.bootCommands}
+
+          # config.powerManagement.powerUpCommands
+          ${cfg.powerUpCommands}
+        '';
+        preStop = ''
+          # NixOS pre-shutdown script
+
+          # config.powerManagement.powerDownCommands
+          ${cfg.powerDownCommands}
+        '';
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+      };
     };
 
   };

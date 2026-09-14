@@ -4,7 +4,7 @@
   fetchFromGitHub,
   wrapGAppsHook4,
   pkg-config,
-  fuse,
+  fuse3,
   glib,
   gtk4,
   hicolor-icon-theme,
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    fuse
+    fuse3
     glib
     gtk4
     hicolor-icon-theme

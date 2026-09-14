@@ -70,4 +70,16 @@ dir="$(nix-instantiate --eval --strict --read-write-mode --json --expr '(with im
 EOF
 ) || die "cleanSourceWith + cleanSource"
 
+
+dir="$(nix-instantiate --eval --strict --read-write-mode --json --expr '(with import <nixpkgs/lib>; "${
+  sources.sourceByGlobs '"$work"' [ "*.md" "**/*.o" ]
+}")' | crudeUnquoteJSON)"
+(cd "$dir"; find) | sort -f | diff -U10 - <(cat <<EOF
+.
+./module.o
+./README.md
+EOF
+) || die "sourceByGlobs 1"
+
+
 echo >&2 tests ok

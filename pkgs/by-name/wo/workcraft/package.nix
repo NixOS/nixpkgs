@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "workcraft";
-  version = "3.5.4";
+  version = "3.5.5";
 
   src = fetchurl {
     url = "https://github.com/workcraft/workcraft/releases/download/v${finalAttrs.version}/workcraft-v${finalAttrs.version}-linux.tar.gz";
-    hash = "sha256-+G4Z9GfyfdBL3qb8RqtmRPq6wC6et4P3S6Owy/L5sSU=";
+    hash = "sha256-zpuwNwVu9iH7JSHsSyGt3gl6swOHa2b9uDC8Ck2Mtno=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

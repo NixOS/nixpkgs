@@ -4,7 +4,6 @@
   buildPythonPackage,
   django,
   fetchFromGitHub,
-  fetchpatch2,
   jinja2,
   pillow,
   pytest-django,
@@ -14,23 +13,20 @@
 
 buildPythonPackage rec {
   pname = "django-bootstrap5";
-  version = "25.2";
+  version = "26.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zostera";
     repo = "django-bootstrap5";
     tag = "v${version}";
-    hash = "sha256-aqP2IkAkZsw5vbQxhiy9L3giSgb0seub9gsxPTajiXo=";
+    hash = "sha256-kLq1BHN4PKwtAH/TqHn8B697K9Nk5mNMpjUsW5cCrj4=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      name = "uv-build.patch";
-      url = "https://github.com/zostera/django-bootstrap5/commit/d1d54f5fc8041d2781189321402b4f3937f77913.patch?full_index=1";
-      hash = "sha256-cFOY+pu2TAZXpAipSIQh1nPPC0ipfncvpObcH667+ac=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.6,<0.10.0" uv_build
+  '';
 
   build-system = [ uv-build ];
 

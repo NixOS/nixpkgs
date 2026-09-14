@@ -39,7 +39,7 @@
 }:
 
 let
-  glLibs = lib.optionals stdenv.isLinux [
+  glLibs = lib.optionals stdenv.hostPlatform.isLinux [
     libGL
     libGLU
     libglut
@@ -73,7 +73,7 @@ let
     stdenv.cc.cc.lib
   ];
   runtimeLibPath = lib.makeLibraryPath runtimeLibs;
-  libPathVar = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+  libPathVar = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
 in
 stdenv.mkDerivation (finalAttrs: {
   version = "2.4.2";
@@ -100,13 +100,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     substituteInPlace "$out/share/applications/speed-dreams.desktop" \
-      --replace-fail "Exec=$out/games/speed-dreams-2" "Exec=$out/bin/speed-dreams"
-    ${lib.optionalString stdenv.isLinux ''
+      --replace-fail "Exec=$out/games/speed-dreams-2" "Exec=speed-dreams"
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
       # Symlink for desktop icon
-      mkdir -p $out/share/pixmaps/
-      ln -s "$out/share/games/speed-dreams-2/data/icons/icon.png" "$out/share/pixmaps/speed-dreams-2.png"
+      mkdir -p $out/share/icons/hicolor/{96x96,scalable}/apps
+      ln -s "$out/share/games/speed-dreams-2/data/icons/icon.png" "$out/share/icons/hicolor/96x96/apps/speed-dreams-2.png"
+      ln -s "$out/share/games/speed-dreams-2/data/icons/icon.svg" "$out/share/icons/hicolor/scalable/apps/speed-dreams-2.svg"
       substituteInPlace "$out/share/applications/speed-dreams.desktop" \
-        --replace-fail "Icon=/build/speed-dreams-code/speed-dreams-data/data/data/icons/icon.png" "Icon=$out/share/pixmaps/speed-dreams-2.png"
+        --replace-fail "Icon=/build/speed-dreams-code/speed-dreams-data/data/data/icons/icon.png" "Icon=speed-dreams-2"
     ''}
   '';
 
@@ -115,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapperArgs=(
       --prefix ${libPathVar} : "$out/lib/games/speed-dreams-2/lib:$out/lib:${runtimeLibPath}"
     )
-    ${lib.optionalString stdenv.isLinux "makeWrapperArgs+=(--set SDL_VIDEODRIVER x11)"}
+    ${lib.optionalString stdenv.hostPlatform.isLinux "makeWrapperArgs+=(--set SDL_VIDEODRIVER x11)"}
     makeWrapper "$out/games/speed-dreams-2" "$out/bin/speed-dreams" "''${makeWrapperArgs[@]}"
   '';
 
@@ -160,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
     minizip
     rhash
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGL
     libGLU
     libglut

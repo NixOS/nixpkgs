@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-httpx";
-  version = "0.35.0";
+  version = "0.36.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Colin-b";
     repo = "pytest_httpx";
     tag = "v${version}";
-    hash = "sha256-O5nLkXmGmLRA7tUYYDQ/w9JSxoiaWSLdHIYGrBjkGPE=";
+    hash = "sha256-WuvfhLRKbfhVehyz/0PAUlIYbwfTYlQMRC8uTWD1T00=";
   };
 
   nativeBuildInputs = [

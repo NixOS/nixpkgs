@@ -43,9 +43,7 @@ buildGoModule (finalAttrs: {
     description = "Command-line tool for sending OpenTelemetry traces";
     changelog = "https://github.com/equinix-labs/otel-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      emattiza
-    ];
+    maintainers = [ ];
     mainProgram = "otel-cli";
   };
 })

@@ -11,13 +11,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "uacme";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "ndilieto";
     repo = "uacme";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-d5qOvL4v6SmdZEMk9BMdhfpRjZ1fVbR1V+l6JzNu8co=";
+    hash = "sha256-TiijVeY7MXNaFE+ZYg8G6yYjafTwRA+y6zlwUNnPR48=";
   };
 
   configureFlags = [ "--with-openssl" ];

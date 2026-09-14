@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   goBuyItNow = ''
     We cannot download the full version automatically, as you require a license.
     Once you bought a license, you need to add your downloaded version to the nix store.
-    You can do this by using "nix-prefetch-url file://\$PWD/vessel-${version}-bin" in the
+    You can do this by using "nix-prefetch-url file://$PWD/vessel-${version}-bin" in the
     directory where you saved it.
   '';
 

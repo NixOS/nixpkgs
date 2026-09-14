@@ -14,16 +14,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "buildkite-agent";
-  version = "3.89.0";
+  version = "3.137.2";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "agent";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-5COo5vXecXLhYAy3bcaYvmluFdfEKGgiTbhat8T3AV8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lAhWU5Zm8ohrAFudJVJvz24wgM/V6KsknVBg6zU04uY=";
   };
 
-  vendorHash = "sha256-iYc/TWiUFdlgoGB4r/L28yhwQG7g+tBG8usB77JJncM=";
+  vendorHash = "sha256-sjLVMMC9INg4R9Yd0hVLkqMUkdQf40O9zRYfJGpcGWw=";
 
   postPatch = ''
     substituteInPlace clicommand/agent_start.go --replace /bin/bash ${bash}/bin/bash
@@ -59,9 +59,6 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     tests.smoke-test = nixosTests.buildkite-agents;
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-    };
   };
 
   meta = {
@@ -80,6 +77,7 @@ buildGoModule (finalAttrs: {
       zimbatm
       jsoo1
       techknowlogick
+      cbrxyz
     ];
     platforms = with lib.platforms; unix ++ darwin;
   };

@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.1.7";
 
   src = fetchurl {
-    url = "http://download.netsurf-browser.org/libs/releases/libnspsl-${finalAttrs.version}-src.tar.gz";
+    url = "https://download.netsurf-browser.org/libs/releases/libnspsl-${finalAttrs.version}-src.tar.gz";
     hash = "sha256-NoTOwy9VXa7UMZk+C/bL2TdPbJCERiN+CJ8LYdaUrIA=";
   };
 

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   ant,
   jdk,
+  imagemagick,
   makeWrapper,
   wrapGAppsHook3,
   makeDesktopItem,
@@ -15,13 +16,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pattypan";
-  version = "22.03";
+  version = "26.02";
 
   src = fetchFromGitHub {
     owner = "yarl";
     repo = "pattypan";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wMQrBg+rEV1W7NgtWFXZr3pAxpyqdbEBKLNwDDGju2I=";
+    hash = "sha256-d4OF2ayL56R6j2js44e3tOUY5kNqWSM2L4VQw0f6OoY=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
     copyDesktopItems
     stripJavaArchivesHook
+    imagemagick
   ];
 
   dontWrapGApps = true;
@@ -45,8 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
+    mkdir -p $out/share/icons/hicolor/96x96/apps
     install -Dm644 pattypan.jar -t $out/share/pattypan
-    install -Dm644 src/pattypan/resources/logo.png $out/share/pixmaps/pattypan.png
+    magick src/pattypan/resources/logo.png -resize 96x96 $out/share/icons/hicolor/96x96/apps/pattypan.png
     runHook postInstall
   '';
 

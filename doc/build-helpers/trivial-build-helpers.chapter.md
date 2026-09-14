@@ -3,6 +3,35 @@
 Nixpkgs provides a variety of wrapper functions that help build commonly useful derivations.
 Like [`stdenv.mkDerivation`](#sec-using-stdenv), each of these build helpers creates a derivation, but the arguments passed are different (usually simpler) from those required by `stdenv.mkDerivation`.
 
+## Arguments with finalAttrs {#trivial-builder-finalAttrs}
+
+In parameters that reference this section, you may either pass the value itself,
+or a function that produces it.
+When it's a function the argument value is [`finalAttrs`] from [`mkDerivation`].
+
+Typically both the *attributes* and *script* arguments support this, simultaneously if needed.
+
+::: {.example #ex-trivial-builder-finalAttrs}
+# Using `finalAttrs` in a build helper
+
+```nix
+runCommand "hi" (finalAttrs: { passthru.exe = "${finalAttrs.finalPackage}/bin/hi"; }) ''
+  mkdir -p $out/bin
+  substitute ${./hi.foo} $out/bin/hi --replace-fail "@foo@" ${lib.getExe foo}
+''
+```
+
+This creates a package with an executable script that's in the standard `bin/` directory,
+but also convenient to interpolate without reliance on `$PATH`, e.g assuming the result of the above is in binding `hi`:
+```nix
+''
+  echo START_GREETING
+  ${hi.exe} --rude
+  echo END_GREETING
+''
+```
+
+:::
 
 ## `runCommandWith` {#trivial-builder-runCommandWith}
 
@@ -23,8 +52,10 @@ runCommandWith :: {
   name :: name;
   stdenv? :: Derivation;
   runLocal? :: Bool;
-  derivationArgs? :: { ... };
-} -> String -> Derivation
+  derivationArgs? :: { ... } | finalAttrs@{ finalPackage :: Derivation, ... } -> { ... };
+}
+  -> (String | finalAttrs@{ finalPackage :: Derivation, ... } -> String)
+  -> Derivation
 ```
 
 ### Inputs {#trivial-builder-runCommandWith-Inputs}
@@ -47,10 +78,10 @@ runCommandWith :: {
 `stdenv` (Derivation)
 :   The [standard environment](#chap-stdenv) to use, defaulting to `pkgs.stdenv`.
 
-`derivationArgs` (Attribute set)
+`derivationArgs` (Attribute set *or* [function from `finalAttrs`](#trivial-builder-finalAttrs))
 :   Additional arguments for [`mkDerivation`](#sec-using-stdenv).
 
-`buildCommand` (String)
+`buildCommand` (String *or* [function from `finalAttrs`](#trivial-builder-finalAttrs))
 :   Shell commands to run in the derivation builder.
 
     ::: {.note}
@@ -109,10 +140,10 @@ While the type signature(s) differ from [`runCommandWith`], individual arguments
 `name` (String)
 :   The derivation's name
 
-`derivationArgs` (Attribute set)
+`derivationArgs` (Attribute set *or* [function from `finalAttrs`](#trivial-builder-finalAttrs))
 :   Additional parameters passed to [`mkDerivation`]
 
-`buildCommand` (String)
+`buildCommand` (String *or* [function from `finalAttrs`](#trivial-builder-finalAttrs))
 :   The command(s) run to build the derivation.
 
 
@@ -165,7 +196,7 @@ They are useful for creating files from Nix expressions, and are all implemented
 Each of these functions will cause a derivation to be produced.
 When you coerce the result of each of these functions to a string with [string interpolation](https://nixos.org/manual/nix/stable/language/string-interpolation) or [`toString`](https://nixos.org/manual/nix/stable/language/builtins#builtins-toString), it will evaluate to the [store path](https://nixos.org/manual/nix/stable/store/store-path) of this derivation.
 
-:::: {.note}
+::: {.note}
 Some of these functions will put the resulting files within a directory inside the [derivation output](https://nixos.org/manual/nix/stable/language/derivations#attr-outputs).
 If you need to refer to the resulting files somewhere else in a Nix expression, append their path to the derivation's store path.
 
@@ -190,7 +221,7 @@ writeShellScript "evaluate-my-file.sh" ''
   cat ${my-file}/share/my-file
 ''
 ```
-::::
+:::
 
 ### `makeDesktopItem` {#trivial-builder-makeDesktopItem}
 
@@ -734,7 +765,80 @@ Some basic Bash options are set by default (`errexit`, `nounset`, and `pipefail`
 Extra arguments may be passed to `stdenv.mkDerivation` by setting `derivationArgs`; note that variables set in this manner will be set when the shell script is _built,_ not when it's run.
 Runtime environment variables can be set with the `runtimeEnv` argument.
 
-For example, the following shell application can refer to `curl` directly, rather than needing to write `${curl}/bin/curl`:
+`writeShellApplication` has the following arguments:
+
+`name` (String)
+
+: The name of the script to write.
+
+`text` (String)
+
+: The shell script's text, not including a shebang.
+
+`runtimeInputs` (List of derivations or strings, _optional_)
+
+: Inputs to add to the shell script's `$PATH` at runtime.
+
+  Each elements can either be a normal derivation, or a string containing a path, in which case it will be suffixed with `/bin` to create a `PATH` expression (see [`lib.strings.makeBinPath`](#function-library-lib.strings.makeBinPath) for more information).
+
+`runtimeEnv` (Attribute set, _optional_)
+
+: Extra environment variables to set at runtime.
+
+`checkPhase` (String, _optional_)
+
+: The `checkPhase` to run.
+
+  The script path will be given as `$target` in the `checkPhase`
+
+  _Default behavior:_ run [`shellcheck`](https://github.com/koalaman/shellcheck) (on supported platforms) and `bash -n` (check syntax but don't execute commands).
+
+`excludeShellChecks` (List of strings, _optional_)
+
+: Checks to exclude when running `shellcheck`.
+
+  For example, `excludeShellChecks = [ "SC2016" ]` would prevent `shellcheck` from reporting `SC2016`, but would still detect any other problems.
+
+  See [the `shellcheck` wiki](https://www.shellcheck.net/wiki/) for a list of checks.
+
+`extraShellCheckFlags` (List of strings, _optional_)
+
+: Extra command-line flags to pass to `shellcheck`.
+
+`bashOptions` (List of strings, _optional_)
+
+: Bash options to activate with `set -o` at the start of the script
+
+  _Default:_ `[ "errexit" "nounset" "pipefail" ]`, which means:
+  1. A failing command inside of a command list or pipeline will make the script exit, except if used as a conditional (inside a `while`, `if`, `&&`, `||`, etc.);
+  2. Any attempt to expand an undefined variable will make the script exit.
+
+`inheritPath` (Bool, _optional_)
+
+: Whether the script will inherit the PATH from its parent environment.
+
+  _Default:_ `true`
+
+`meta` (Attribute set, _optional_)
+
+: `stdenv.mkDerivation`'s [`meta`](#chap-meta) argument
+
+`passthru` (Attribute set, _optional_)
+
+: `stdenv.mkDerivation`'s [`passthru`](#chap-passthru) argument
+
+`derivationArgs` (Attribute set, _optional_)
+
+: Extra arguments to pass to [`stdenv.mkDerivation`](#chap-stdenv)
+
+  ::: {.caution}
+  Certain derivation attributes are also set internally, so overriding those could cause problems.
+  :::
+
+::: {.example #ex-writeShellApplication}
+# Usage of `writeShellApplication`
+
+The following shell application can refer to `curl` directly, rather than needing to write `${curl}/bin/curl`
 
 ```nix
 writeShellApplication {
@@ -750,6 +854,7 @@ writeShellApplication {
   '';
 }
 ```
+:::
 
 ## `symlinkJoin` {#trivial-builder-symlinkJoin}
 
@@ -828,3 +933,6 @@ produces an output path `/nix/store/<hash>-runtime-references` containing
 
 but none of `hello`'s dependencies because those are not referenced directly
 by `hi`'s output.
+
+[`finalAttrs`]: #mkderivation-recursive-attributes
+[`mkDerivation`]: #sec-using-stdenv

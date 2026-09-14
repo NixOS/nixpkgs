@@ -5,30 +5,37 @@
   buildPythonPackage,
   fetchFromGitHub,
   orjson,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-error-for-skips,
   pytestCheckHook,
   setuptools,
   syrupy,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "accuweather";
-  version = "5.0.0";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "accuweather";
     tag = version;
-    hash = "sha256-EM0DpFvToPgI0PSFYlJsQQ16Uh1qd0ARp1ucvUD16ss=";
+    hash = "sha256-IXsf78AN5Gl6itQBfxwMEWE0ggoUohD0RgMgsgLaXOI=";
   };
 
   build-system = [ setuptools ];
 
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
+
   dependencies = [
     aiohttp
     orjson
+    yarl
   ];
 
   nativeCheckInputs = [

@@ -3,14 +3,20 @@
   stdenvNoCC,
   fetchurl,
   unzip,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "roboto-serif";
   version = "1.008";
 
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
   src = fetchurl {
-    url = "https://github.com/googlefonts/roboto-serif/releases/download/v${version}/RobotoSerifFonts-v${version}.zip";
+    url = "https://github.com/googlefonts/roboto-serif/releases/download/v${finalAttrs.version}/RobotoSerifFonts-v${finalAttrs.version}.zip";
     hash = "sha256-Nm9DcxL0CgA51nGeZJPWSCipgqwnNPlhj0wHyGhLaYQ=";
   };
 
@@ -18,15 +24,8 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs = [
     unzip
+    installFonts
   ];
-
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm644 variable/*.ttf -t $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
 
   meta = {
     description = "Roboto family of fonts";
@@ -40,4 +39,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.all;
   };
-}
+})

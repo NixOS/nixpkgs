@@ -6,18 +6,20 @@
   installShellFiles,
   versionCheckHook,
   nix-update-script,
+  cacert,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "openstack-rs";
-  version = "0.13.3";
+  version = "0.13.7";
+
   src = fetchFromGitHub {
     owner = "gtema";
     repo = "openstack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F9ePn+Fu9/9/rQnF0a+ViezsMtxuojycF4h9e77tm1Y=";
+    hash = "sha256-cpx35OT/x/2XJD4RzaWX/yKM4nwBgl6/gVrEtgyljEI=";
   };
 
-  cargoHash = "sha256-nVR0XUjOwiYNEYG/6ViH4biCXyeK5GVkMb/uOvBRFUw=";
+  cargoHash = "sha256-LwN+7LkE/nFbiUlcSjQRxIg0BtO4XLuf/wPS1Vdvx+M=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -29,6 +31,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --fish <($out/bin/osc completion fish) \
       --zsh <($out/bin/osc completion zsh)
   '';
+
+  nativeCheckInputs = [
+    cacert
+  ];
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";

@@ -3,6 +3,7 @@
   gitMinimal,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   flit-core,
   mkdocs,
   mkdocs-exclude,
@@ -24,6 +25,10 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-guv+c4QwaATYEZ6XcWVZaOcZ7U9oLsW+RdWBtB1Xrnc=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ flit-core ];
 
@@ -56,7 +61,7 @@ buildPythonPackage rec {
   meta = {
     description = "Plugin for customizing the navigation structure of your MkDocs site";
     homepage = "https://github.com/lukasgeiter/mkdocs-awesome-nav";
-    changelog = "https://github.com/lukasgeiter/mkdocs-awesome-nav/blob/${src.tag}/CHANGELOG";
+    changelog = "https://github.com/lukasgeiter/mkdocs-awesome-nav/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ phaer ];
   };

@@ -28,14 +28,14 @@ let
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "netexec";
-  version = "1.5.0";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Pennyw0rth";
     repo = "NetExec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gGyaEifIveoeVdeviLiQ6ZIHku//h9Hp84ffktAgxDY=";
+    hash = "sha256-BKqBmpA2cSKwC9zX++Z6yTSDIyr4iZVGC/Eea6zoMLQ=";
   };
 
   pythonRelaxDeps = true;
@@ -43,7 +43,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   pythonRemoveDeps = [
     # Fail to detect dev version requirement
     "neo4j"
-    # No python package in nixpkgs; use bloodhound-py instead.
+    # No python package in nixpkgs; use bloodhound instead.
     "bloodhound-ce"
   ];
 
@@ -72,7 +72,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     argcomplete
     asyauth
     beautifulsoup4
-    bloodhound-py
+    bloodhound
     certipy-ad
     dploot
     dsinternals
@@ -102,9 +102,6 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   nativeCheckInputs = with python.pkgs; [ pytestCheckHook ] ++ [ writableTmpDirAsHomeHook ];
-
-  # Tests no longer works out-of-box with 1.3.0
-  doCheck = false;
 
   meta = {
     description = "Network service exploitation tool (maintained fork of CrackMapExec)";

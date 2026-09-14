@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ gfortran ];
   buildInputs = [ zlib ];
 
-  FFLAGS = [
+  env.FFLAGS = toString [
     "-std=legacy" # fix build with gfortran 10
   ];
 

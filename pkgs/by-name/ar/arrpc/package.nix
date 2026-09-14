@@ -5,16 +5,16 @@
 }:
 buildNpmPackage rec {
   pname = "arrpc";
-  version = "3.6.0";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "OpenAsar";
     repo = "arrpc";
     tag = version;
-    hash = "sha256-WSwnCE3hs3Rj42XDbPtxuYL8tAlfzuWPkIypKzCu8EQ=";
+    hash = "sha256-2SYlCOgeaPsYIQmGj4/fdme0S36COolXxER3rDjIe20=";
   };
 
-  npmDepsHash = "sha256-A98oNT1rGctSlJG9yLaa6i0VsGMIo1r2NoNk00SVupk=";
+  npmDepsHash = "sha256-GNXQLOTuu+7QWjx1Y+eaAon70jj7XC3p5a7z7qJOB+Q=";
 
   dontNpmBuild = true;
 

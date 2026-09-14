@@ -6,16 +6,19 @@
 }:
 
 stdenv.mkDerivation {
-  name = "tarsum";
+  pname = "tarsum";
+  inherit (docker) version;
 
   nativeBuildInputs = [ go ];
   disallowedReferences = [ go ];
 
   dontUnpack = true;
 
-  CGO_ENABLED = 0;
-  GOFLAGS = "-trimpath";
-  GO111MODULE = "off";
+  env = {
+    CGO_ENABLED = 0;
+    GOFLAGS = "-trimpath";
+    GO111MODULE = "off";
+  };
 
   buildPhase = ''
     runHook preBuild

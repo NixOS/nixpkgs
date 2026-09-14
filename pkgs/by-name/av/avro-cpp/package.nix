@@ -24,6 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-get-rid-of-fmt-fetchcontent.patch
     ./0002-fix-fmt-name-formatter.patch
     ./0003-fix-fmt-type-formatter.patch
+    ./0004-remove-boost-system-component.patch
   ];
 
   nativeBuildInputs = [

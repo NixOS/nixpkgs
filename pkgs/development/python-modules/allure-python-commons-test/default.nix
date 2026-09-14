@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "allure-python-commons-test";
-  version = "2.15.3";
+  version = "2.16.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "allure_python_commons_test";
     inherit version;
-    hash = "sha256-eRjjsxiXm/7nMyaJS5pXhpNmrjOhnd1o7+F9ZwGzI/I=";
+    hash = "sha256-otfGxWNnbMUGuQcqsroOOfiqhCQqe25c39Ur57ek2og=";
   };
 
   build-system = [ setuptools-scm ];

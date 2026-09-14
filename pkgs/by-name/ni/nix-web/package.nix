@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoBuildFlags = cargoFlags;
   cargoTestFlags = cargoFlags;
 
-  NIX_WEB_BUILD_NIX_CLI_PATH = "${nixPackage}/bin/nix";
+  env.NIX_WEB_BUILD_NIX_CLI_PATH = "${nixPackage}/bin/nix";
 
   meta = {
     description = "Web interface for the Nix store";

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "liblistenbrainz";
-  version = "0.6.1";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = "liblistenbrainz";
-    tag = "v${version}";
-    hash = "sha256-2/EUzkC+8u6SQZYstIqJnlWcz74f5UpuXh/r4ImNd0g=";
+    tag = version;
+    hash = "sha256-fZgIVGDUJ4Dh/7CIOugvpRP7FoijpsgA3bBKJMmDd7o=";
   };
 
   build-system = [

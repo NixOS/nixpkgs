@@ -1,37 +1,35 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
-  rustPlatform,
-  libiconv,
   fetchFromGitHub,
+  rustPlatform,
+  pytestCheckHook,
 }:
-let
+
+buildPythonPackage (finalAttrs: {
   pname = "nh3";
-  version = "0.3.2";
+  version = "0.3.7";
+  pyproject = true;
+
   src = fetchFromGitHub {
     owner = "messense";
     repo = "nh3";
-    rev = "v${version}";
-    hash = "sha256-2D8ZLmVRA+SuMqeUsSXyY+0zlgqp7TSRyQuJMjmRVFk=";
-  };
-in
-buildPythonPackage {
-  inherit pname version src;
-  pyproject = true;
-
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-dN6zdwMGh8stgDuGiO+T/ZZ3/3P9Wu/gUw5gHJ1pPGA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ta3si1wiRmKQbpbDiu7+WM2pa1AfK3pYSd+Hf8xL5ss=";
   };
 
-  nativeBuildInputs = with rustPlatform; [
-    cargoSetupHook
+  build-system = with rustPlatform; [
     maturinBuildHook
+    cargoSetupHook
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-Fp8DaZp5LdaqPH9HUExxdjSJlM0IkkkZn0Owc4k4G0c=";
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "nh3" ];
@@ -39,7 +37,11 @@ buildPythonPackage {
   meta = {
     description = "Python binding to Ammonia HTML sanitizer Rust crate";
     homepage = "https://github.com/messense/nh3";
+    changelog = "https://github.com/messense/nh3/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ happysalada ];
+    maintainers = with lib.maintainers; [
+      happysalada
+      erictapen
+    ];
   };
-}
+})

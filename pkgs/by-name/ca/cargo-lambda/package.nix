@@ -8,22 +8,22 @@
   pkg-config,
   openssl,
   stdenv,
-  zig_0_13,
+  zig,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-lambda";
-  version = "1.8.6";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "cargo-lambda";
     repo = "cargo-lambda";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ocFD2FK1nlEJ8xXhDSxpSKYU8oZk/QwfojveypVt1GU=";
+    hash = "sha256-WF/s+bSwFG94ooFNBmbZVXCrCzDFxWDBQ7QMXUrcCzg=";
   };
 
-  cargoHash = "sha256-yE0pr7RZb015d51QtwVNfqXd8yEETvDdKJ5M7Oqc4Ds=";
+  cargoHash = "sha256-vJBviHdHMtff7QA7xW2D7rX7UYtaYFnW2zB6wvvEtOU=";
 
   nativeCheckInputs = [ cacert ];
 
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/cargo-lambda --prefix PATH : ${lib.makeBinPath [ zig_0_13 ]}
+    wrapProgram $out/bin/cargo-lambda --prefix PATH : ${lib.makeBinPath [ zig ]}
   '';
 
   env.CARGO_LAMBDA_BUILD_INFO = "(nixpkgs)";

@@ -29,7 +29,6 @@
   makeWrapper,
   rpm,
   system-sendmail,
-  gnome2,
   curl,
   procps,
   systemd,
@@ -95,7 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
       libsepol
       curl
       glib
-      gnome2.ORBit2
       opendbx
     ];
 

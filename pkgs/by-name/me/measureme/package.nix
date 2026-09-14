@@ -17,6 +17,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoLock.lockFile = ./Cargo.lock;
 
+  # __cpuid is safe in newer Rust; suppress lint until upstream fixes it
+  env.RUSTFLAGS = "-A unused-unsafe";
+
   postPatch = ''
     ln -s ${./Cargo.lock} Cargo.lock
   '';

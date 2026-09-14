@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "joplin-cli";
-  version = "3.5.1";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "laurent22";
@@ -25,14 +25,25 @@ stdenv.mkDerivation (finalAttrs: {
       # there's a file with a weird name that causes a hash mismatch on darwin
       rm $out/packages/app-cli/tests/support/photo*
     '';
-    hash = "sha256-NNtdY6ajMfcMWj/AIo+b2nhylBCqyOIwCepYx/ZNCBY=";
+    hash = "sha256-4o8mao7wAqDzwQgJ4QY+DPs9rtsnga6LLnq744l7HVM=";
   };
+
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/laurent22/joplin/blob/dev/package.json#L103
+    ./yarn-4.14-support.patch
+  ];
 
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes postPatch;
-    hash = "sha256-EGP/nnz4u6I0efTQu41lgmk0tuHpiavVKHRdiSYdEUs=";
+    inherit (finalAttrs)
+      src
+      missingHashes
+      patches
+      postPatch
+      ;
+    hash = "sha256-CHjvFu6r5zak19dqtRkcGkPhPoKgt1nkBVa71ZcvdgE=";
   };
 
   nativeBuildInputs = [
@@ -115,6 +126,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://joplinapp.org/";
     license = lib.licenses.agpl3Plus;
     mainProgram = "joplin";
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

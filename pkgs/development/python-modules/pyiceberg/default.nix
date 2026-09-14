@@ -59,15 +59,16 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "iceberg-python";
-  version = "0.11.0";
+  pname = "pyiceberg";
+  version = "0.11.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "iceberg-python";
     tag = "pyiceberg-${finalAttrs.version}";
-    hash = "sha256-sej0RJuoTnpX0DXC54RTacZNJIxzorcG4xlxByNUxc4=";
+    hash = "sha256-MjBvLJOnjtpIwBMkI+81S6aipye+PnbrC8T317Qj6rY=";
   };
 
   build-system = [
@@ -77,6 +78,13 @@ buildPythonPackage (finalAttrs: {
 
   # Prevents the cython build to fail silently
   env.CIBUILDWHEEL = "1";
+
+  pythonRelaxDeps = [
+    # cachetools<7.0,>=5.5 not satisfied by version 7.1.4
+    "cachetools"
+    # rich<15.0.0,>=10.11.0 not satisfied by version 15.0.0
+    "rich"
+  ];
 
   dependencies = [
     cachetools
@@ -209,6 +217,8 @@ buildPythonPackage (finalAttrs: {
   pytestFlags = [
     # ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7ffe7c6f4220>
     "-Wignore::ResourceWarning"
+    # Using `@model_validator` with mode='after' on a classmethod is deprecated
+    "-Wignore::pydantic.warnings.PydanticDeprecatedSince212"
   ];
 
   preCheck = ''
@@ -282,6 +292,14 @@ buildPythonPackage (finalAttrs: {
 
     # Hangs forever (from tests/io/test_pyarrow.py)
     "test_getting_length_of_file_gcs"
+
+    # Timing sensitive
+    # AssertionError: assert 8 == 5
+    "test_hive_wait_for_lock"
+
+    # Schema comparison faildue to `string` becoming `large_string`
+    "test_read_map "
+    "test_projection_maps_of_structs"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # ImportError: The pyarrow installation is not built with support for 'GcsFileSystem'

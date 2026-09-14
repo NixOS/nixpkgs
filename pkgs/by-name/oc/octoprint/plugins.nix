@@ -498,7 +498,7 @@ in
     };
 
     meta = {
-      description = "Simple plugin that add an emergency stop buton on NavBar of OctoPrint";
+      description = "Simple plugin that add an emergency stop button on NavBar of OctoPrint";
       homepage = "https://github.com/Sebclem/OctoPrint-SimpleEmergencyStop";
       license = lib.licenses.agpl3Only;
       maintainers = with lib.maintainers; [ WhittlesJr ];

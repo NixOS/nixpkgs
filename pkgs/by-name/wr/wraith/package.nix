@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
       configure it. See https://github.com/wraith/wraith/wiki/GettingStarted .
 
       The binary will not run when moved onto non-NixOS systems; use patchelf
-      to fix its runtime dependenices.
+      to fix its runtime dependencies.
     '';
     homepage = "https://wraith.botpack.net/";
     license = lib.licenses.gpl2Plus;

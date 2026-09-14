@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pik";
-  version = "0.29.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "jacek-kurlit";
     repo = "pik";
     rev = finalAttrs.version;
-    hash = "sha256-SXSMYvpFLT4sYb1UxC4SoOXL5J2V0/hSL5p2Wa/Ba00=";
+    hash = "sha256-t9qrN6R+4jbwpIBXaUvGgnemZtSqDltly6Aspcd/sr8=";
   };
 
-  cargoHash = "sha256-+7sUlqi3cv3GksVMMCgrcbGgkCIQZCWEco5LpXo7p2w=";
+  cargoHash = "sha256-SMoejcJW0Fk/j7+64VZSIwdBEwyK7plVesnOK2C6dio=";
 
   passthru.tests.version = testers.testVersion { package = pik; };
 
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       It works like pkill command but search is interactive.
     '';
     homepage = "https://github.com/jacek-kurlit/pik";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bew ];
     mainProgram = "pik";
   };

@@ -10,7 +10,7 @@
   hicolor-icon-theme,
   procps,
   libwnck,
-  libappindicator-gtk3,
+  libappindicator,
   xdg-utils,
 }:
 
@@ -64,13 +64,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shutter";
-  version = "0.99.6";
+  version = "0.99.7";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "shutter-project";
     repo = "shutter";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-2wRPmTpFfgU8xW9Fyn1+TMowcKm3pukT1ck06IWPiGo=";
+    tag = finalAttrs.version;
+    sha256 = "sha256-iri4yj2DujsEfpa6u4f5bpaOhWL0h/XbSlolkSJgKgE=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
@@ -80,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     librsvg
     libwnck
-    libappindicator-gtk3
+    libappindicator
     hicolor-icon-theme
   ]
   ++ perlModules;

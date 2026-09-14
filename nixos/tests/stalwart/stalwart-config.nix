@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ lib, ... }:
 
 let
   certs = import ../common/acme/server/snakeoil-certs.nix;
@@ -9,6 +9,9 @@ in
 
   services.stalwart = {
     enable = true;
+
+    stateVersion = lib.trivial.release; # Only for the test; please don't do in production
+
     settings = {
       server.hostname = domain;
 

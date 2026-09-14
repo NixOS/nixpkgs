@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libosmo-sigtran";
-  version = "2.1.2";
+  version = "2.3.0";
 
   # fetchFromGitea hangs
   src = fetchgit {
     url = "https://gitea.osmocom.org/osmocom/libosmo-sigtran.git";
     rev = finalAttrs.version;
-    hash = "sha256-/TxD7lc/htm1c24rKfnlYxGsVpxawi3nh7m34mRRhUA=";
+    hash = "sha256-RtEncgL+AVpFQ+4/j9fSVvpAuRoIOXOoqJoVIdkh/48=";
   };
 
   configureFlags = [ "--with-systemdsystemunitdir=$out" ];

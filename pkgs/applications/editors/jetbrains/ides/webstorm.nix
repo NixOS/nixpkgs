@@ -1,37 +1,35 @@
 {
-  stdenv,
-  lib,
+  # keep-sorted start
   fetchurl,
-  mkJetBrainsProduct,
-  libdbm,
   fsnotifier,
+  jetbrains,
+  jetbrains-libdbm,
+  lib,
   musl,
+  stdenv,
+  # keep-sorted end
 }:
 let
   system = stdenv.hostPlatform.system;
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/webstorm/WebStorm-2025.3.2.tar.gz";
-      hash = "sha256-qkDuuP8QU+Ptcafw12LFD2n4s6tClg40uHVqZx2+hII=";
+      url = "https://download.jetbrains.com/webstorm/WebStorm-2026.2.0.1.tar.gz";
+      hash = "sha256-FEe4EDYWJwGt5hEdbf0A6g2+ZyIrX4ztzQYmZe5GZPg=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/webstorm/WebStorm-2025.3.2-aarch64.tar.gz";
-      hash = "sha256-k8FX/hn+U8XppVopB/ArvupH4CH+5cJlbBtjSaIarLA=";
-    };
-    x86_64-darwin = {
-      url = "https://download.jetbrains.com/webstorm/WebStorm-2025.3.2.dmg";
-      hash = "sha256-GsOQE3NLqIifQ9mXWRT0M7hJeN+fdzSqn7pwjWf8Vcw=";
+      url = "https://download.jetbrains.com/webstorm/WebStorm-2026.2.0.1-aarch64.tar.gz";
+      hash = "sha256-pt1MwGNXHT1QlePbVdtkwtYpenKlf53DGDG24+PM9tc=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/webstorm/WebStorm-2025.3.2-aarch64.dmg";
-      hash = "sha256-Pc3+hlKpCIOgJLxWMOn0Uw+7cIzLD4iayaNsWYoB4mo=";
+      url = "https://download.jetbrains.com/webstorm/WebStorm-2026.2.0.1-aarch64.dmg";
+      hash = "sha256-WtvL7DLrchsKlMPrsYeluxoPo/sXBaUw0WO1mlxtHkc=";
     };
   };
   # update-script-end: urls
 in
-mkJetBrainsProduct {
-  inherit libdbm fsnotifier;
+jetbrains.mkJetBrainsProduct {
+  inherit jetbrains-libdbm fsnotifier;
 
   pname = "webstorm";
 
@@ -39,11 +37,18 @@ mkJetBrainsProduct {
   product = "WebStorm";
 
   # update-script-start: version
-  version = "2025.3.2";
-  buildNumber = "253.30387.83";
+  version = "2026.2.0.1";
+  buildNumber = "262.8665.341";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
+
+  # the jdk is bundled on Darwin.
+  jdk =
+    if lib.meta.availableOn stdenv.hostPlatform jetbrains.jdk-no-jcef then
+      jetbrains.jdk-no-jcef
+    else
+      null;
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     musl
@@ -58,6 +63,7 @@ mkJetBrainsProduct {
       abaldeau
       tymscar
     ];
+    teams = [ lib.teams.jetbrains ];
     license = lib.licenses.unfree;
     sourceProvenance =
       if stdenv.hostPlatform.isDarwin then

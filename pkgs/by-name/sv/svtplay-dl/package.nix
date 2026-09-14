@@ -22,7 +22,7 @@ let
     requests-mock
     ;
 
-  version = "4.173";
+  version = "4.193";
 
 in
 
@@ -35,7 +35,7 @@ buildPythonApplication {
     owner = "spaam";
     repo = "svtplay-dl";
     tag = version;
-    hash = "sha256-Cjp3FX2jg4QkdRh/chQ7cPIOkuCiYZ6gNtykddmYhvM=";
+    hash = "sha256-AR7AITB3Mnfg1hMCe1TDQ7F3NwRDo9hMysPxV6O1m5A=";
   };
 
   build-system = [ setuptools ];

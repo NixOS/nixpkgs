@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
   meson,
   ninja,
   pkg-config,
@@ -33,6 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix_build_with_icu76.patch
   ];
 
+  postPatch = ''
+    # Disable werror, since the use of deprecated functions in libzim causes the build to fail
+    substituteInPlace meson.build \
+      --replace-fail "'werror=true', " ""
+  '';
+
   nativeBuildInputs = [
     meson
     ninja
@@ -51,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [ gtest ];
   doCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Various ZIM command line tools";

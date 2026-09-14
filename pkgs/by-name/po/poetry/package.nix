@@ -18,12 +18,12 @@ let
       # We keep the override around even when the versions match, as
       # it's likely to become relevant again after the next Poetry update.
       poetry-core = super.poetry-core.overridePythonAttrs (old: rec {
-        version = "2.2.1";
+        version = "2.4.0";
         src = fetchFromGitHub {
           owner = "python-poetry";
           repo = "poetry-core";
           tag = version;
-          hash = "sha256-l5WTjKa+A66QfWLmrjCQq7ZrSaeuylGIRZr8jsiYq+A=";
+          hash = "sha256-i9EucMsoX8Z0iyhNDVYaczv1CSY/KaZpMjn/FGzIJU4=";
         };
       });
     }
@@ -37,10 +37,11 @@ let
 
   plugins =
     ps: with ps; {
+      poeblix = callPackage ./plugins/poeblix.nix { };
       poetry-audit-plugin = callPackage ./plugins/poetry-audit-plugin.nix { };
       poetry-plugin-export = callPackage ./plugins/poetry-plugin-export.nix { };
       poetry-plugin-up = callPackage ./plugins/poetry-plugin-up.nix { };
-      poetry-plugin-poeblix = callPackage ./plugins/poetry-plugin-poeblix.nix { };
+      poetry-plugin-migrate = callPackage ./plugins/poetry-plugin-migrate.nix { };
       poetry-plugin-shell = callPackage ./plugins/poetry-plugin-shell.nix { };
     };
 

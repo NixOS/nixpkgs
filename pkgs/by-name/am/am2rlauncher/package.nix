@@ -5,7 +5,7 @@
   glibc,
   gtk3,
   libappindicator,
-  # webkitgtk_4_0,
+  webkitgtk_4_1,
   e2fsprogs,
   libnotify,
   libgit2,
@@ -48,13 +48,13 @@ let
 in
 buildDotnetModule {
   pname = "am2rlauncher";
-  version = "2.3.0-unstable-2023-11-08";
+  version = "2.3.0-unstable-2026-07-22";
 
   src = fetchFromGitHub {
     owner = "AM2R-Community-Developers";
     repo = "AM2RLauncher";
-    rev = "5d8b7d9b3de68e6215c10b9fd223b7f1d5e40dea";
-    hash = "sha256-/nHqo8jh3sOUngbpqdfiQjUWO/8Uzpc5jtW7Ep4q6Wg=";
+    rev = "f9bd0a3e0b661648b0ce1b0531dc174d9ebcf7d9";
+    hash = "sha256-bXUBw8XN3iR3UL1vvTsBqnnnJGxMIxFCg1tVVyAxRPw=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -67,7 +67,7 @@ buildDotnetModule {
     glibc
     gtk3
     libappindicator
-    # webkitgtk_4_0
+    webkitgtk_4_1
     e2fsprogs
     libnotify
     libgit2
@@ -84,7 +84,6 @@ buildDotnetModule {
 
   patches = [
     ./am2r-run-binary.patch
-    ./dotnet-8-upgrade.patch
   ];
 
   dotnetFlags = [
@@ -116,8 +115,6 @@ buildDotnetModule {
   '';
 
   meta = {
-    # webkitgtk_4_0 was removed
-    broken = true;
     homepage = "https://github.com/AM2R-Community-Developers/AM2RLauncher";
     description = "Front-end for dealing with AM2R updates and mods";
     longDescription = ''

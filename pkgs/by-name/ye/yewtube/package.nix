@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "yewtube";
-  version = "2.12.1";
+  version = "2.13.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mps-youtube";
     repo = "yewtube";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+V9t71Z8PKioM7HWlzTB6X7EokAWgqC3fQJr5tkPdq8=";
+    hash = "sha256-aRJQMm1Ykn6bs6OTSEGMTc5N8pinuRQQ+m54XpT45As=";
   };
 
   postPatch = ''

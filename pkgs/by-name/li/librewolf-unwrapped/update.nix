@@ -33,7 +33,7 @@ writeScript "update-librewolf" ''
   }
   set -euo pipefail
 
-  latestTag=$(curl "https://codeberg.org/api/v1/repos/librewolf/source/tags?page=1&limit=1" | jq -r .[0].name)
+  latestTag=$(curl "https://librewolf.dev/api/v1/repos/librewolf/source/tags?page=1&limit=1" | jq -r .[0].name)
   echo "latestTag=$latestTag"
 
   srcJson=pkgs/by-name/li/librewolf-unwrapped/src.json
@@ -45,7 +45,7 @@ writeScript "update-librewolf" ''
   fi
 
   prefetchOut=$(mktemp)
-  repoUrl=https://codeberg.org/librewolf/source.git
+  repoUrl=https://librewolf.dev/librewolf/source.git
   nix-prefetch-git $repoUrl --quiet --rev $latestTag --fetch-submodules > $prefetchOut
   srcDir=$(jq -r .path < $prefetchOut)
   srcHash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $(jq -r .sha256 < $prefetchOut))

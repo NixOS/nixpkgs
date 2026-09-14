@@ -1,0 +1,194 @@
+From fba74f7d69198202057f08b2cb77aac7d8e17a06 Mon Sep 17 00:00:00 2001
+From: wrench-exile-legacy <user@wrench-exile-legacy.site>
+Date: Sun, 23 Aug 2026 11:57:14 +0100
+Subject: [PATCH] Update electron from 41.7.2 -> 43.4.1
+
+- Updates node-abi to allow node-gyp to recognise the electron version.
+- Updates better-sqlite3 to match the newer javascript engine in electron 43.
+---
+ app/package-lock.json | 15 ++++++++-------
+ app/package.json      |  2 +-
+ package-lock.json     | 44 +++++++++++++++++++++----------------------
+ package.json          |  2 +-
+ 4 files changed, 32 insertions(+), 31 deletions(-)
+
+diff --git a/app/package-lock.json b/app/package-lock.json
+index 52e9a74f4..951491cd4 100644
+--- a/app/package-lock.json
++++ b/app/package-lock.json
+@@ -568,9 +568,9 @@
+       ]
+     },
+     "node_modules/better-sqlite3": {
+-      "version": "12.8.0",
+-      "resolved": "https://registry.npmjs.org/better-sqlite3/-/better-sqlite3-12.8.0.tgz",
+-      "integrity": "sha512-RxD2Vd96sQDjQr20kdP+F+dK/1OUNiVOl200vKBZY8u0vTwysfolF6Hq+3ZK2+h8My9YvZhHsF+RSGZW2VYrPQ==",
++      "version": "12.11.1",
++      "resolved": "https://registry.npmjs.org/better-sqlite3/-/better-sqlite3-12.11.1.tgz",
++      "integrity": "sha512-dq9AtApgg5PGFtBzPFSBl3HZQjHok5gaQCM6zh2Yk0aSmDCs1CbnVI8/HgASQkNKsWFpseIO9beg5xxpYhbIfA==",
+       "hasInstallScript": true,
+       "license": "MIT",
+       "dependencies": {
+@@ -578,7 +578,7 @@
+         "prebuild-install": "^7.1.1"
+       },
+       "engines": {
+-        "node": "20.x || 22.x || 23.x || 24.x || 25.x"
++        "node": "20.x || 22.x || 23.x || 24.x || 25.x || 26.x"
+       }
+     },
+     "node_modules/bindings": {
+@@ -3492,9 +3492,10 @@
+       "integrity": "sha512-CXdUiJembsNjuToQvxayPZF9Vqht7hewsvy2sOWafLvi2awflj9mOC6bHIg50orX8IJvWKY9wYQ/zB2kogPslQ=="
+     },
+     "node_modules/node-abi": {
+-      "version": "3.87.0",
+-      "resolved": "https://registry.npmjs.org/node-abi/-/node-abi-3.87.0.tgz",
+-      "integrity": "sha512-+CGM1L1CgmtheLcBuleyYOn7NWPVu0s0EJH2C4puxgEZb9h8QpR9G2dBfZJOAUhi7VQxuBPMd0hiISWcTyiYyQ==",
++      "version": "3.94.0",
++      "resolved": "https://registry.npmjs.org/node-abi/-/node-abi-3.94.0.tgz",
++      "integrity": "sha512-W5ZNO5KRPB5TkYmGVD9F6YqhsglXJzE6etpbmT+f6EQElhiX/UTG551cnsRGvLG3fyZEg9HwaDmNmj5nwJ4z9g==",
++      "license": "MIT",
+       "dependencies": {
+         "semver": "^7.3.5"
+       },
+diff --git a/app/package.json b/app/package.json
+index c53086e15..56e40feb9 100644
+--- a/app/package.json
++++ b/app/package.json
+@@ -74,7 +74,7 @@
+     "xml2js": "^0.6.2"
+   },
+   "resolutions": {
+-    "electron": "41.7.2",
++    "electron": "43.4.1",
+     "@types/react": "^17.0.0",
+     "@types/react-dom": "^17.0.0"
+   },
+diff --git a/package-lock.json b/package-lock.json
+index 4622a1e15..004cf4f8f 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -42,7 +42,7 @@
+         "better-sqlite3": "^12.8.0",
+         "chalk": "1.x.x",
+         "devtron": "^1.4.0",
+-        "electron": "41.7.2",
++        "electron": "43.4.1",
+         "electron-playwright-helpers": "^2.1.0",
+         "electron-winstaller": "5.4.0",
+         "eslint": "^8.0.0",
+@@ -1615,9 +1615,9 @@
+       ]
+     },
+     "node_modules/better-sqlite3": {
+-      "version": "12.9.0",
+-      "resolved": "https://registry.npmjs.org/better-sqlite3/-/better-sqlite3-12.9.0.tgz",
+-      "integrity": "sha512-wqUv4Gm3toFpHDQmaKD4QhZm3g1DjUBI0yzS4UBl6lElUmXFYdTQmmEDpAFa5o8FiFiymURypEnfVHzILKaxqQ==",
++      "version": "12.11.1",
++      "resolved": "https://registry.npmjs.org/better-sqlite3/-/better-sqlite3-12.11.1.tgz",
++      "integrity": "sha512-dq9AtApgg5PGFtBzPFSBl3HZQjHok5gaQCM6zh2Yk0aSmDCs1CbnVI8/HgASQkNKsWFpseIO9beg5xxpYhbIfA==",
+       "hasInstallScript": true,
+       "license": "MIT",
+       "dependencies": {
+@@ -1625,7 +1625,7 @@
+         "prebuild-install": "^7.1.1"
+       },
+       "engines": {
+-        "node": "20.x || 22.x || 23.x || 24.x || 25.x"
++        "node": "20.x || 22.x || 23.x || 24.x || 25.x || 26.x"
+       }
+     },
+     "node_modules/bindings": {
+@@ -2120,10 +2120,9 @@
+       }
+     },
+     "node_modules/electron": {
+-      "version": "41.7.2",
+-      "resolved": "https://registry.npmjs.org/electron/-/electron-41.7.2.tgz",
+-      "integrity": "sha512-oYbZNimoMlAy6Fp/o5x2vTggptuPsIbnPKCb6jGf1PJStXH7Gkw0MUQrBliHmDqKLW7yeE+SPsvFNILVN0ORMQ==",
+-      "hasInstallScript": true,
++      "version": "43.4.1",
++      "resolved": "https://registry.npmjs.org/electron/-/electron-43.4.1.tgz",
++      "integrity": "sha512-5b+EuiwkgG5iRcsEL34rimgRpkYp15SsfZOa0pC5kXs0Tb82TH4n95rpQzTZa7yRCbA7tm0WoEbuBL6NaAhAcA==",
+       "license": "MIT",
+       "dependencies": {
+         "@electron-internal/extract-zip": "^1.0.1",
+@@ -2131,7 +2130,8 @@
+         "@types/node": "^24.9.0"
+       },
+       "bin": {
+-        "electron": "cli.js"
++        "electron": "cli.js",
++        "install-electron": "install.js"
+       },
+       "engines": {
+         "node": ">= 22.12.0"
+@@ -4637,9 +4637,9 @@
+       }
+     },
+     "node_modules/node-abi": {
+-      "version": "3.91.0",
+-      "resolved": "https://registry.npmjs.org/node-abi/-/node-abi-3.91.0.tgz",
+-      "integrity": "sha512-B+S7X/GS3Un6wMICtnsNjQD7oSpVBQrZftHE6GZ1Fe9/k3XOOoqbM5DZZ0GO4x3YiSCQfrM28yj1ppplwgIsfg==",
++      "version": "3.94.0",
++      "resolved": "https://registry.npmjs.org/node-abi/-/node-abi-3.94.0.tgz",
++      "integrity": "sha512-W5ZNO5KRPB5TkYmGVD9F6YqhsglXJzE6etpbmT+f6EQElhiX/UTG551cnsRGvLG3fyZEg9HwaDmNmj5nwJ4z9g==",
+       "license": "MIT",
+       "dependencies": {
+         "semver": "^7.3.5"
+@@ -7636,9 +7636,9 @@
+       "integrity": "sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA=="
+     },
+     "better-sqlite3": {
+-      "version": "12.9.0",
+-      "resolved": "https://registry.npmjs.org/better-sqlite3/-/better-sqlite3-12.9.0.tgz",
+-      "integrity": "sha512-wqUv4Gm3toFpHDQmaKD4QhZm3g1DjUBI0yzS4UBl6lElUmXFYdTQmmEDpAFa5o8FiFiymURypEnfVHzILKaxqQ==",
++      "version": "12.11.1",
++      "resolved": "https://registry.npmjs.org/better-sqlite3/-/better-sqlite3-12.11.1.tgz",
++      "integrity": "sha512-dq9AtApgg5PGFtBzPFSBl3HZQjHok5gaQCM6zh2Yk0aSmDCs1CbnVI8/HgASQkNKsWFpseIO9beg5xxpYhbIfA==",
+       "requires": {
+         "bindings": "^1.5.0",
+         "prebuild-install": "^7.1.1"
+@@ -7974,9 +7974,9 @@
+       }
+     },
+     "electron": {
+-      "version": "41.7.2",
+-      "resolved": "https://registry.npmjs.org/electron/-/electron-41.7.2.tgz",
+-      "integrity": "sha512-oYbZNimoMlAy6Fp/o5x2vTggptuPsIbnPKCb6jGf1PJStXH7Gkw0MUQrBliHmDqKLW7yeE+SPsvFNILVN0ORMQ==",
++      "version": "43.4.1",
++      "resolved": "https://registry.npmjs.org/electron/-/electron-43.4.1.tgz",
++      "integrity": "sha512-5b+EuiwkgG5iRcsEL34rimgRpkYp15SsfZOa0pC5kXs0Tb82TH4n95rpQzTZa7yRCbA7tm0WoEbuBL6NaAhAcA==",
+       "requires": {
+         "@electron-internal/extract-zip": "^1.0.1",
+         "@electron/get": "^5.0.0",
+@@ -9653,9 +9653,9 @@
+       "integrity": "sha512-8Ofs/AUQh8MaEcrlq5xOX0CQ9ypTF5dl78mjlMNfOK08fzpgTHQRQPBxcPlEtIw0yRpws+Zo/3r+5WRby7u3Gg=="
+     },
+     "node-abi": {
+-      "version": "3.91.0",
+-      "resolved": "https://registry.npmjs.org/node-abi/-/node-abi-3.91.0.tgz",
+-      "integrity": "sha512-B+S7X/GS3Un6wMICtnsNjQD7oSpVBQrZftHE6GZ1Fe9/k3XOOoqbM5DZZ0GO4x3YiSCQfrM28yj1ppplwgIsfg==",
++      "version": "3.94.0",
++      "resolved": "https://registry.npmjs.org/node-abi/-/node-abi-3.94.0.tgz",
++      "integrity": "sha512-W5ZNO5KRPB5TkYmGVD9F6YqhsglXJzE6etpbmT+f6EQElhiX/UTG551cnsRGvLG3fyZEg9HwaDmNmj5nwJ4z9g==",
+       "requires": {
+         "semver": "^7.3.5"
+       }
+diff --git a/package.json b/package.json
+index abf9b55dc..77cdd0414 100644
+--- a/package.json
++++ b/package.json
+@@ -49,7 +49,7 @@
+     "better-sqlite3": "^12.8.0",
+     "chalk": "1.x.x",
+     "devtron": "^1.4.0",
+-    "electron": "41.7.2",
++    "electron": "43.4.1",
+     "electron-playwright-helpers": "^2.1.0",
+     "electron-winstaller": "5.4.0",
+     "eslint": "^8.0.0",
+-- 
+2.55.0
+

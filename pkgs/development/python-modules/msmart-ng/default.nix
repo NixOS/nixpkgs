@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "msmart-ng";
-  version = "2025.12.0";
+  version = "2026.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mill1000";
     repo = "midea-msmart";
     tag = version;
-    hash = "sha256-zRTs6nRgI5ixbHzDXfAjJ2JW/9y+b7vzAyUGk120xj4=";
+    hash = "sha256-UbRL42jQk3A8VYe/eLj3XNTFPhyVjBMzB/lTNs0tyRM=";
   };
 
   build-system = [
@@ -51,7 +51,6 @@ buildPythonPackage rec {
     mainProgram = "msmart-ng";
     maintainers = with lib.maintainers; [
       hexa
-      emilylange
     ];
   };
 }

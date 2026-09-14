@@ -3,22 +3,20 @@
   fetchurl,
   buildTopkgPackage,
   cmdliner,
-  odoc,
   b0,
 }:
 
 buildTopkgPackage rec {
   pname = "odig";
-  version = "0.0.9";
+  version = "0.1.0";
 
   src = fetchurl {
-    url = "${meta.homepage}/releases/odig-${version}.tbz";
-    sha256 = "sha256-sYKvGYkxeF5FmrNQdOyMAtlsJqhlmUESi9SkPn/cjM4=";
+    url = "https://erratique.ch/software/odig/releases/odig-${version}.tbz";
+    hash = "sha256-uyiJXYKNGGb2FIRW0CDyB7QW9e4FI0+zVfkE7kNjtuE=";
   };
 
   buildInputs = [
     cmdliner
-    odoc
     b0
   ];
 

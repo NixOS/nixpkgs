@@ -10,20 +10,20 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "panvimdoc";
-  version = "4.0.1";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "kdheepak";
     repo = "panvimdoc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HmEBPkNELHC7Xy0v730sQWZyPPwFdIBUcELzNtrWwzQ=";
+    hash = "sha256-O1Ufn9TEO6M8dbPa0nxArXdG3Vsi1Q+zA82kTi5wjks";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   buildPhase = ''
     runHook preBuild
-    install -Dm444 scripts/* -t $out/share/scripts
+    find scripts -maxdepth 1 -type f -exec install -Dm444 {} -t $out/share/scripts \;
     install -Dm444 lib/* -t $out/share/lib
     install -Dm755 panvimdoc.sh -t $out/share
     runHook postBuild

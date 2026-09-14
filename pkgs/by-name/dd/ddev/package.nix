@@ -1,25 +1,40 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
+  docker-buildx,
   fetchFromGitHub,
   installShellFiles,
+  makeBinaryWrapper,
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
-buildGoModule (finalAttrs: {
+let
+  dockerCliPlugins = [
+    docker-buildx
+  ];
+  dockerCliPluginsDirs = lib.strings.concatStringsSep ":" (
+    map (p: "${p}/libexec/docker/cli-plugins") dockerCliPlugins
+  );
+in
+buildGo127Module (finalAttrs: {
   pname = "ddev";
-  version = "1.25.0";
+  version = "1.25.4";
 
   src = fetchFromGitHub {
     owner = "ddev";
     repo = "ddev";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-vRhFj2/lV34sDIDUxi2/zF9VJimhi6By6TQndl0O/Xg=";
+    hash = "sha256-zib7Z6BjT4NaxoRskhOKoUivq8yT3bzAI1B8Bzcy2BI=";
   };
 
+  postPatch = ''
+    (cd vendor/github.com/docker/cli && patch -p1 < ${./cli-system-plugin-dir-from-env.patch})
+  '';
+
   nativeBuildInputs = [
+    makeBinaryWrapper
     installShellFiles
   ];
 
@@ -34,7 +49,13 @@ buildGoModule (finalAttrs: {
   # Tests need docker.
   doCheck = false;
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
+    # make buildx available, it is a docker plugin which docker-compose uses and thus DDEV requires
+    # https://github.com/NixOS/nixpkgs/blob/43fc054052db6ca5df042dcbe823740aa6c9a7c2/pkgs/applications/virtualization/docker/default.nix#L339
+    wrapProgram $out/bin/ddev \
+      --prefix DOCKER_CLI_PLUGIN_DIRS : "${dockerCliPluginsDirs}"
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     # DDEV will try to create $HOME/.ddev, so we set $HOME to a temporary
     # directory.
     export HOME=$(mktemp -d)

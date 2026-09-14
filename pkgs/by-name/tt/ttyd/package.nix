@@ -10,17 +10,22 @@
   json_c,
   libuv,
   zlib,
+  versionCheckHook,
   nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ttyd";
   version = "1.7.7";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "tsl0922";
     repo = "ttyd";
     tag = finalAttrs.version;
-    sha256 = "sha256-7e08oBKU7BMZ8328qCfNynCSe7LVZ88+iQZRRKl2YkY=";
+    hash = "sha256-7e08oBKU7BMZ8328qCfNynCSe7LVZ88+iQZRRKl2YkY=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "man"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.tests = {
     inherit (nixosTests) ttyd;

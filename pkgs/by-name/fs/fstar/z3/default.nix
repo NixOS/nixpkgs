@@ -64,6 +64,18 @@ let
           ]
           ++ [
             ./4-8-5-typos.diff
+            (fetchpatch {
+              url = "https://github.com/Z3Prover/z3/commit/40183d7b73fcc4020b4d4b2e658b24a8c4b648ee.patch";
+              hash = "sha256-+VpPYUBVAVB9BQIp+phmL6IAEc0RC+YoUVCIsIe5TSQ=";
+            })
+            (fetchpatch {
+              url = "https://github.com/Z3Prover/z3/commit/03ae6d86cb4db88c71d6b245e29400e9a44cb59f.patch";
+              hash = "sha256-nNjkQpaSCyAqnPEZcRtG+cMTPeA+CQfvmNUe5fAK93Q=";
+            })
+            (fetchpatch {
+              url = "https://github.com/Z3Prover/z3/commit/f6c9ead10c0cf904925d7495f5c08dae66643b7a.patch";
+              hash = "sha256-eUeFayyfdg9Q8s97H6khBXst9nLYWM7NSEoQ2btMHEE=";
+            })
           ];
 
         postPatch =

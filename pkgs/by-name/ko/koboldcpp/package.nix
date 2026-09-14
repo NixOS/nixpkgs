@@ -39,13 +39,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
-  version = "1.105.4";
+  version = "1.119";
 
   src = fetchFromGitHub {
     owner = "LostRuins";
     repo = "koboldcpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m3rpvp7Lqs9RUEYwtxHjfNv0ByCWEVrtGvQFtzreMI4=";
+    hash = "sha256-WJVbzh4BGLiQdd/rzqSe2Q9PGqMpsqmQNQf33INJkd8=";
   };
 
   enableParallelBuilding = true;
@@ -53,7 +53,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     python3Packages.wrapPython
-  ];
+  ]
+  ++ lib.optionals vulkanSupport [ shaderc ];
 
   postPatch = ''
     nixLog "patching $PWD/Makefile to remove explicit linking against CUDA driver"
@@ -73,7 +74,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     cudaPackages.libcublas
     cudaPackages.cuda_nvcc
     cudaPackages.cuda_cudart
-    cudaPackages.cuda_cccl
+    cudaPackages.cccl
   ]
   ++ lib.optionals clblastSupport [
     clblast
@@ -81,7 +82,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals vulkanSupport [
     vulkan-loader
-    shaderc
   ];
 
   pythonPath = finalAttrs.pythonInputs;
@@ -91,7 +91,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (makeBool "LLAMA_CLBLAST" clblastSupport)
     (makeBool "LLAMA_VULKAN" vulkanSupport)
     (makeBool "LLAMA_METAL" metalSupport)
-    (lib.optionals cublasSupport "CUDA_DOCKER_ARCH=${builtins.head cudaArches}")
+  ]
+  ++ lib.optionals cublasSupport [
+    "CUDA_DOCKER_ARCH=${builtins.head cudaArches}"
   ];
 
   installPhase = ''
@@ -131,7 +133,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     mainProgram = "koboldcpp";
     maintainers = with lib.maintainers; [
       maxstrid
-      FlameFlag
+      _4evy
     ];
     platforms = lib.platforms.unix;
   };

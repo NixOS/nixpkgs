@@ -1,7 +1,7 @@
 {
   lib,
   stdenvNoCC,
-  requireFile,
+  fetchItchIo,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
@@ -57,11 +57,11 @@ stdenvNoCC.mkDerivation {
 
   src =
     if overrideSrc == null then
-      # TODO: Replace this with fetchItchIo
-      requireFile {
+      fetchItchIo {
         name = "celeste-linux.zip";
+        gameUrl = downloadPage;
+        upload = "12748042";
         hash = "sha256-phNDBBHb7zwMRaBHT5D0hFEilkx9F31p6IllvLhHQb8=";
-        url = downloadPage;
       }
     else
       overrideSrc;
@@ -162,7 +162,7 @@ stdenvNoCC.mkDerivation {
   meta = {
     inherit downloadPage description;
     homepage = "https://www.celestegame.com";
-    license = with lib.licenses; [ unfree ];
+    license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ ulysseszhan ];
     platforms = [

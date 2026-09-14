@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pytestCheckHook,
   pyzmq,
   twisted,
@@ -10,7 +11,10 @@
 buildPythonPackage rec {
   pname = "txzmq";
   version = "1.0.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchPypi {
     inherit version;
@@ -18,7 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-jWB9C/CcqUYAuOQvByHb5D7lOgRwGCNErHrOfljcYXc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pyzmq
     twisted
   ];

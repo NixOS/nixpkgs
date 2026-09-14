@@ -15,11 +15,14 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "wcpg";
   version = "0.9";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "fixif";
     repo = "wcpg";
-    rev = finalAttrs.version;
-    sha256 = "sha256-uA/ENjf4urEO+lqebkp/k54199o2434FYgPSmYCG4UA=";
+    tag = finalAttrs.version;
+    hash = "sha256-uA/ENjf4urEO+lqebkp/k54199o2434FYgPSmYCG4UA=";
   };
 
   nativeBuildInputs = [

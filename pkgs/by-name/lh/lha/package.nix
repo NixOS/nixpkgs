@@ -3,27 +3,33 @@
   lib,
   fetchFromGitHub,
   autoreconfHook,
+  testers,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lha";
-  version = "1.14i-unstable-2024-11-27";
+  version = "1.14i-unstable-2026-01-01";
 
   src = fetchFromGitHub {
     owner = "jca02266";
     repo = "lha";
-    rev = "26b71be85a762098bdeb95f4533045c7dad86f31";
-    hash = "sha256-jiYTBqDXvxTdrvHYaK+1eo4xIpl+B9ZljhBBYD0BGzQ=";
+    rev = "86094cb56aba34de45668f39f74fcfb61e9d7fb6";
+    hash = "sha256-ckzcCvt5v6rBcp9n8XXzgS2XkURbO8bsqTURGLRzpAU=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "lha --help";
+    version = "1.14i";
+  };
 
   meta = {
     description = "Archiver and compressor using the LZSS and Huffman encoding compression algorithms";
     homepage = "https://github.com/jca02266/lha";
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      momeemt
+    maintainers = [
     ];
     # Some of the original LHa code has been rewritten and the current author
     # considers adopting a "true" free and open source license for it.
@@ -33,4 +39,4 @@ stdenv.mkDerivation {
     license = lib.licenses.unfree;
     mainProgram = "lha";
   };
-}
+})

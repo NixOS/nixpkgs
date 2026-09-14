@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  fetchpatch,
   fetchurl,
   replaceVars,
   vpnc,
@@ -31,6 +32,8 @@ stdenv.mkDerivation rec {
     (replaceVars ./fix-paths.patch {
       inherit vpnc kmod;
     })
+    # https://gitlab.gnome.org/GNOME/NetworkManager-vpnc/-/merge_requests/19
+    ./export_nm_vpn_editor_factory_vpnc.patch
   ];
 
   nativeBuildInputs = [

@@ -9,16 +9,13 @@
   nixosTests,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "jitsi-videobridge2";
-  version = "2.3-249-g9a2123ad4";
+  version = "2.3-307-g4bb0aead1";
   src = fetchurl {
-    url = "https://download.jitsi.org/stable/jitsi-videobridge2_${version}-1_all.deb";
-    sha256 = "b8hYuDyweRLAagaehHMzC2/XjZHNlxMchM8za8zPtj4=";
+    url = "https://download.jitsi.org/stable/jitsi-videobridge2_${finalAttrs.version}-1_all.deb";
+    hash = "sha256-5im9MH8xwJMH3PklZX/Tli641HmmxV6df5jWfsBYxDo=";
   };
-in
-stdenv.mkDerivation {
-  inherit pname version src;
 
   dontBuild = true;
 
@@ -67,4 +64,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
     mainProgram = "jitsi-videobridge";
   };
-}
+})

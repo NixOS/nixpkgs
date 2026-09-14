@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "moarvm";
-  version = "2025.12";
+  version = "2026.07";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "MoarVM";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-hftskJ+5p/XHahAJTG28ifWkExb8Z8u7J5CeoQooUYE=";
+    hash = "sha256-zdmBlDtu5y54iwfXAcx79amfhee+Jw94sIAfdF6rfSk=";
   };
 
   nativeBuildInputs = [ pkg-config ];

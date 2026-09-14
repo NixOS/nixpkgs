@@ -8,6 +8,13 @@
 with lib;
 let
   cfg = config.services.prosody;
+  communityModulesToEnable =
+    let
+      componentSpecificModules = [ "muc_notifications" ];
+    in
+    lib.concatMap (
+      mod: lib.optional (!(lib.elem mod componentSpecificModules)) "${toLua mod};"
+    ) cfg.package.communityModules;
 
   sslOpts = _: {
     options = {
@@ -415,6 +422,11 @@ let
         default = "en";
         description = "Default room language.";
       };
+      extraModules = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = "Additional modules to load on this MUC component.";
+      };
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -546,7 +558,7 @@ let
         ${lib.concatStringsSep "\n  " (
           lib.mapAttrsToList (name: val: optionalString val "${toLua name};") cfg.modules
         )}
-        ${lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.package.communityModules)}
+        ${lib.concatStringsSep "\n" communityModulesToEnable}
         ${lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.extraModules)}
       };
 
@@ -577,7 +589,15 @@ let
 
       ${lib.concatMapStrings (muc: ''
         Component ${toLua muc.domain} "muc"
-            modules_enabled = {${optionalString cfg.modules.mam ''"muc_mam",''}${optionalString muc.allowners_muc ''"muc_allowners",''}${optionalString muc.moderation ''"muc_moderation",''} }
+            modules_enabled = ${
+              toLua (
+                optional cfg.modules.mam "muc_mam"
+                ++ optional muc.allowners_muc "muc_allowners"
+                ++ optional muc.moderation "muc_moderation"
+                ++ optional (lib.elem "muc_notifications" cfg.package.communityModules) "muc_notifications"
+                ++ muc.extraModules
+              )
+            }
             name = ${toLua muc.name}
             restrict_room_creation = ${toLua muc.restrictRoomCreation}
             max_history_messages = ${toLua muc.maxHistoryMessages}
@@ -886,6 +906,7 @@ in
           "internal_hashed"
           "cyrus"
           "anonymous"
+          "ldap"
         ];
         default = "internal_hashed";
         example = "internal_plain";
@@ -1002,12 +1023,11 @@ in
         {
           User = cfg.user;
           Group = cfg.group;
-          Type = "simple";
+          Type = "notify-reload";
           RuntimeDirectory = "prosody";
           PIDFile = "/run/prosody/prosody.pid";
           Environment = "PROSODY_CONFIG=/run/prosody/prosody.cfg.lua";
           ExecStart = "${lib.getExe cfg.package} -F";
-          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           Restart = "on-abnormal";
 
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];

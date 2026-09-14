@@ -19,7 +19,6 @@ bundlerEnv {
     mainProgram = "cfn_nag";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      momeemt
       mathstlouis
     ];
     platforms = lib.platforms.unix;

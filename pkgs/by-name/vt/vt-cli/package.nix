@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "vt-cli";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "vt-cli";
     tag = finalAttrs.version;
-    hash = "sha256-B4SOoEc05nDFc93MYZDSj+LRt06jWjudocE4IKEw7jE=";
+    hash = "sha256-oYdF3UmPT43iXWYx4A3ctDIf96nAriwt0gasOIObhlU=";
   };
 
   vendorHash = "sha256-n44nEff0/neaqHfU6UbPjEAW46axJ0hIxrOnlq5QKA0=";
@@ -27,6 +27,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/VirusTotal/vt-cli/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "vt";
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
 })

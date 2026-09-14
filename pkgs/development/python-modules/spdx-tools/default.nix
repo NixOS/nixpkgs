@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "spdx-tools";
-  version = "0.8.4";
+  version = "0.8.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spdx";
     repo = "tools-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-loD+YXRCEYRynOKf7Da43SA7JQVYP1IzJe2f7ssJTtI=";
+    hash = "sha256-dHR5Lx8KDmfQLS4I+6oO5kucEUXsFhAaHSPpxJbxlu4=";
   };
 
   build-system = [

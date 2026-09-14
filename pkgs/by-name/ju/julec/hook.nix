@@ -1,4 +1,5 @@
 {
+  lib,
   julec,
   makeSetupHook,
 }:
@@ -10,5 +11,6 @@ makeSetupHook {
 
   meta = {
     inherit (julec.meta) maintainers;
+    license = lib.licenses.mit;
   };
 } ./hook.sh

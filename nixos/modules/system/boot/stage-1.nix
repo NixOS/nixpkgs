@@ -206,6 +206,7 @@ let
         if [ -z "${toString (pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform)}" ]; then
         # Make sure that the patchelf'ed binaries still work.
         echo "testing patched programs..."
+        set -x
         $out/bin/ash -c 'echo hello world' | grep "hello world"
         $out/bin/mount -V 2>&1 | grep -q "mount from util-linux"
         $out/bin/blkid -V 2>&1 | grep -q 'libblkid'
@@ -218,6 +219,7 @@ let
         ''}
 
         ${config.boot.initrd.extraUtilsCommandsTest}
+        set +x
         fi
       ''; # */
 
@@ -727,6 +729,10 @@ in
   };
 
   config = mkIf config.boot.initrd.enable {
+    warnings = lib.optional (!config.boot.initrd.systemd.enable) ''
+      Scripted initrd is deprecated and scheduled for removal in 26.11. See the NixOS 26.05 release notes.
+    '';
+
     assertions = [
       {
         assertion = !config.boot.initrd.systemd.enable -> any (fs: fs.mountPoint == "/") fileSystems;
@@ -786,6 +792,5 @@ in
   };
 
   imports = [
-    (mkRenamedOptionModule [ "boot" "initrd" "mdadmConf" ] [ "boot" "swraid" "mdadmConf" ])
   ];
 }

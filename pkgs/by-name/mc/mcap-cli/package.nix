@@ -8,7 +8,7 @@
   nix-update-script,
 }:
 let
-  version = "0.0.61";
+  version = "0.0.62";
 in
 buildGoModule {
 
@@ -20,7 +20,7 @@ buildGoModule {
     repo = "mcap";
     owner = "foxglove";
     rev = "releases/mcap-cli/v${version}";
-    hash = "sha256-PR0w/D5XwLaRP9vkRt8f9huG75lPTIwyhcegjlY1pno=";
+    hash = "sha256-lVTL+pa+gTPQWj7+RmaJUIdfOlPhlGtHujBalR+GDsI=";
   };
 
   vendorHash = "sha256-Q1TjUlS7+fV2HBQk108c+o/9IRpDc9C8jzBk048Mkig=";
@@ -34,7 +34,7 @@ buildGoModule {
   tags = [
     "sqlite_omit_load_extension"
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     "netgo"
     "osusergo"
   ];
@@ -77,7 +77,7 @@ buildGoModule {
   meta = {
     description = "MCAP CLI tool to inspect and fix MCAP files";
     homepage = "https://github.com/foxglove/mcap";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       therishidesai
     ];

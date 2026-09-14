@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
   ];
 
-  env.NIX_CFLAGS_COMPILE = [ "-Wno-array-bounds" ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-array-bounds";
 
   passthru.updateScript = nix-update-script { };
 

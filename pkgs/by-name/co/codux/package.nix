@@ -13,7 +13,7 @@ let
     hash = "sha256-rD0yXZAEUcPtxWlWuZD77gjw6JlcUvBsaDYGj+NgLss=";
   };
 
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 
 appimageTools.wrapType2 {
@@ -31,7 +31,6 @@ appimageTools.wrapType2 {
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
-      dit7ya
       kashw2
     ];
     mainProgram = "codux";

@@ -6,12 +6,12 @@
   postgresql,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reshape";
   version = "0.8.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-viS//3ZFqogI0BbZ0rypo5zpQUgqKiLgK585iw3BMgM=";
   };
 
@@ -34,8 +34,8 @@ rustPlatform.buildRustPackage rec {
     description = "Easy-to-use, zero-downtime schema migration tool for Postgres";
     mainProgram = "reshape";
     homepage = "https://github.com/fabianlindfors/reshape";
-    changelog = "https://github.com/fabianlindfors/reshape/releases/tag/v${version}";
+    changelog = "https://github.com/fabianlindfors/reshape/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ilyakooo0 ];
   };
-}
+})

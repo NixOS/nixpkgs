@@ -24,10 +24,8 @@ in
         # IP address or "*"
         Host: *
         Debug_Mode: Yes # Yes or No
-        # If available, "nobody" is much more secure for User:.
-        User: root
-        # If available, "nobody" is much more secure for Group:.
-        Group: root
+        User: mighttpd2
+        Group: mighttpd2
         Pid_File: /run/mighty.pid
         Logging: Yes # Yes or No
         Log_File: /var/log/mighty # The directory must be writable by User:

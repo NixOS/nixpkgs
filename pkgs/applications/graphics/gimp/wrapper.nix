@@ -15,11 +15,9 @@ let
   selectedPlugins = lib.filter (pkg: pkg != gimp) (if plugins == null then allPlugins else plugins);
   extraArgs =
     map (x: x.wrapArgs or "") selectedPlugins
-    ++ lib.optionals (gimp.majorVersion == "2.0") [
+    ++ lib.optionals (gimp.apiVersion == "2.0") [
       ''--prefix GTK_PATH : "${gnome-themes-extra}/lib/gtk-2.0"''
     ];
-  exeVersion =
-    if gimp.majorVersion == "2.0" then lib.versions.majorMinor gimp.version else gimp.majorVersion;
   majorVersion = lib.versions.major gimp.version;
 
 in
@@ -37,7 +35,7 @@ symlinkJoin {
   nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
-    for each in gimp-${exeVersion} gimp-console-${exeVersion}; do
+    for each in gimp-${gimp.appVersion} gimp-console-${gimp.appVersion}; do
       wrapProgram $out/bin/$each \
         --set GIMP${majorVersion}_PLUGINDIR "$out/${gimp.targetLibDir}" \
         --set GIMP${majorVersion}_DATADIR "$out/${gimp.targetDataDir}" \
@@ -45,11 +43,18 @@ symlinkJoin {
     done
     set +x
     for each in gimp gimp-console; do
-      ln -sf "$each-${exeVersion}" $out/bin/$each
+      ln -sf "$each-${gimp.appVersion}" $out/bin/$each
     done
 
     ln -s ${gimp.man} $man
   '';
 
-  inherit (gimp) meta;
+  meta = gimp.meta // {
+    description = "${gimp.meta.description} with plugins";
+    longDescription = ''
+      Plugins:
+
+      ${lib.concatMapStringsSep "\n" (p: "- ${p.pname}") selectedPlugins}
+    '';
+  };
 }

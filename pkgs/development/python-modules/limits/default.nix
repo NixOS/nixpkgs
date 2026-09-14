@@ -100,6 +100,22 @@ buildPythonPackage rec {
     "TestSlidingWindow"
   ];
 
+  disabledTestMarks = [
+    "flaky"
+    "memcached"
+    "mongodb"
+    "redis"
+    "redis_cluster"
+    "redis_sentinel"
+    "valkey"
+    "valkey_cluster"
+  ];
+
+  disabledTestPaths = [
+    # docker
+    "tests/benchmarks/test_storage.py"
+  ];
+
   pythonImportsCheck = [ "limits" ];
 
   meta = {

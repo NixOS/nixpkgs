@@ -3,9 +3,9 @@
   stdenvNoCC,
   fetchFromGitHub,
   sassc,
-  gnome-themes-extra,
-  gtk-engine-murrine,
+  gnome-shell,
   unstableGitUpdater,
+  writeShellScriptBin,
   colorVariants ? [ ],
   sizeVariants ? [ ],
   themeVariants ? [ ],
@@ -77,10 +77,17 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants lib
       hash = "sha256-RXoPj/aj9OCTIi8xWatG0QpDAUh102nFOipdSIiqt7o=";
     };
 
-    propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+    patches = [
+      ./do-not-install-gtk-2.0.diff
+    ];
 
-    nativeBuildInputs = [ sassc ];
-    buildInputs = [ gnome-themes-extra ];
+    nativeBuildInputs = [
+      # only used for version sensing
+      (writeShellScriptBin "gnome-shell" ''
+        echo "${gnome-shell.version}"
+      '')
+      sassc
+    ];
 
     dontBuild = true;
 

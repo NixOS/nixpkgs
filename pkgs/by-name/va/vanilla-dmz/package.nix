@@ -43,6 +43,19 @@ stdenvNoCC.mkDerivation rec {
     for theme in DMZ-{White,Black}; do
       mkdir -p $out/share/icons/$theme/cursors
       cp -a $theme/xcursors/* $out/share/icons/$theme/cursors/
+
+      pushd $out/share/icons/$theme/cursors
+      ln -s bottom_left_corner sw-resize
+      ln -s bottom_right_corner se-resize
+      ln -s bottom_side s-resize
+      ln -s left_ptr default
+      ln -s left_side w-resize
+      ln -s right_side e-resize
+      ln -s top_left_corner nw-resize
+      ln -s top_right_corner ne-resize
+      ln -s top_side n-resize
+      popd
+
       install -m644 $theme/index.theme $out/share/icons/$theme/index.theme
     done
 
@@ -57,6 +70,6 @@ stdenvNoCC.mkDerivation rec {
     description = "Style neutral scalable cursor theme";
     platforms = lib.platforms.all;
     license = lib.licenses.cc-by-sa-30;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ amaanq ];
   };
 }

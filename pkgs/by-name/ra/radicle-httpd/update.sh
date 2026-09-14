@@ -3,4 +3,3 @@
 
 version=$(list-git-tags | grep -oP '^releases/\K\d+\.\d+\.\d+$' | sort -rV | head -1)
 nix-update --version="$version" radicle-httpd
-nix-update --version=skip radicle-explorer

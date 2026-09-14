@@ -11,6 +11,36 @@ use std::{
 };
 use url::Url;
 
+fn warn_unresolved_packages(
+    packages_without_resolved: &[(String, Package)],
+    total_count: usize,
+) {
+    let missing_count = packages_without_resolved.len();
+    if missing_count == 0 {
+        return;
+    }
+
+    let percentage = (missing_count as f64 / total_count as f64) * 100.0;
+    eprintln!(
+        "warning: {} out of {} packages ({:.1}%) are missing 'resolved' URLs and will not be cached.",
+        missing_count, total_count, percentage
+    );
+    eprintln!("warning: Packages without 'resolved' URLs:");
+    for (name, _) in packages_without_resolved.iter().take(10) {
+        eprintln!("warning:   - {}", name.trim_start_matches("node_modules/"));
+    }
+    if missing_count > 10 {
+        eprintln!("warning:   ... and {} more", missing_count - 10);
+    }
+    if percentage > 50.0 {
+        eprintln!(
+            "warning: More than 50% of packages are missing 'resolved' URLs. This may indicate an issue with the lockfile.\n\
+             warning: This is a known issue with some npm versions. See: https://github.com/npm/cli/issues/6301\n\
+             warning: Consider regenerating upstream's lockfile with: npm install --package-lock-only (sending an upstream PR is best)"
+        );
+    }
+}
+
 pub(super) fn packages(content: &str) -> anyhow::Result<Vec<Package>> {
     let lockfile: Lockfile = serde_json::from_str(content)?;
 
@@ -20,13 +50,27 @@ pub(super) fn packages(content: &str) -> anyhow::Result<Vec<Package>> {
 
             to_new_packages(lockfile.dependencies.unwrap_or_default(), &initial_url)?
         }
-        2 | 3 => lockfile
-            .packages
-            .unwrap_or_default()
-            .into_iter()
-            .filter(|(n, p)| !n.is_empty() && matches!(p.resolved, Some(UrlOrString::Url(_))))
-            .map(|(n, p)| Package { name: Some(n), ..p })
-            .collect(),
+        2 | 3 => {
+            let (packages_with_resolved, packages_without_resolved): (Vec<_>, Vec<_>) = lockfile
+                .packages
+                .unwrap_or_default()
+                .into_iter()
+                .filter(|(n, _)| !n.is_empty())
+                .partition(|(_, p)| matches!(p.resolved, Some(UrlOrString::Url(_))));
+
+            let total_count = packages_with_resolved.len() + packages_without_resolved.len();
+            warn_unresolved_packages(&packages_without_resolved, total_count);
+
+            packages_with_resolved
+                .into_iter()
+                .map(|(n, p)| Package {
+                    // Use the package's own name if present (for aliases like string-width-cjs -> string-width),
+                    // otherwise extract from the lockfile key
+                    name: Some(p.name.unwrap_or(n)),
+                    ..p
+                })
+                .collect()
+        }
         _ => bail!(
             "We don't support lockfile version {}, please file an issue.",
             lockfile.version
@@ -73,6 +117,7 @@ struct OldPackage {
 pub(super) struct Package {
     #[serde(default)]
     pub(super) name: Option<String>,
+    pub(super) version: Option<String>,
     pub(super) resolved: Option<UrlOrString>,
     pub(super) integrity: Option<HashCollection>,
 }
@@ -249,6 +294,7 @@ fn to_new_packages(
 
         new.push(Package {
             name: Some(name),
+            version: None, // v1 lockfiles don't include version in the same structure
             resolved: if matches!(package.version, UrlOrString::Url(_)) {
                 Some(package.version)
             } else {
@@ -310,6 +356,7 @@ mod tests {
         assert_eq!(new.len(), 1, "new packages map should contain 1 value");
         assert_eq!(new[0], Package {
             name: Some(String::from("sqlite3")),
+            version: None,
             resolved: Some(UrlOrString::Url(Url::parse("git+ssh://git@github.com/mapbox/node-sqlite3.git#593c9d498be2510d286349134537e3bf89401c4a").unwrap())),
             integrity: None
         });

@@ -36,7 +36,7 @@ let
       };
       tun = {
         disabled = netCfg.tun.disable;
-        dev = if (netCfg.tun.device != null) then netCfg.tun.device else "nebula.${netName}";
+        dev = netCfg.tun.device;
       };
       firewall = {
         inbound = netCfg.firewall.inbound;
@@ -75,187 +75,213 @@ in
         description = "Nebula network definitions.";
         default = { };
         type = lib.types.attrsOf (
-          lib.types.submodule {
-            options = {
-              enable = lib.mkOption {
-                type = lib.types.bool;
-                default = true;
-                description = "Enable or disable this network.";
-              };
+          lib.types.submodule (
+            { name, ... }: {
+              options = {
+                enable = lib.mkOption {
+                  type = lib.types.bool;
+                  default = true;
+                  description = "Enable or disable this network.";
+                };
 
-              package = lib.mkPackageOption pkgs "nebula" { };
+                package = lib.mkPackageOption pkgs "nebula" { };
 
-              ca = lib.mkOption {
-                type = lib.types.path;
-                description = "Path to the certificate authority certificate.";
-                example = "/etc/nebula/ca.crt";
-              };
+                ca = lib.mkOption {
+                  type = lib.types.path;
+                  description = "Path to the certificate authority certificate.";
+                  example = "/etc/nebula/ca.crt";
+                };
 
-              cert = lib.mkOption {
-                type = lib.types.path;
-                description = "Path to the host certificate.";
-                example = "/etc/nebula/host.crt";
-              };
+                cert = lib.mkOption {
+                  type = lib.types.path;
+                  description = "Path to the host certificate.";
+                  example = "/etc/nebula/host.crt";
+                };
 
-              key = lib.mkOption {
-                type = lib.types.oneOf [
-                  lib.types.nonEmptyStr
-                  lib.types.path
-                ];
-                description = "Path or reference to the host key.";
-                example = "/etc/nebula/host.key";
-              };
+                key = lib.mkOption {
+                  type = lib.types.oneOf [
+                    lib.types.nonEmptyStr
+                    lib.types.path
+                  ];
+                  description = "Path or reference to the host key.";
+                  example = "/etc/nebula/host.key";
+                };
 
-              enableReload = lib.mkOption {
-                type = lib.types.bool;
-                default = false;
-                description = ''
-                  Enable automatic config reload on config change.
-                  This setting is not enabled by default as nix cannot determine if the config change is reloadable.
-                  Please refer to the [config reference](https://nebula.defined.net/docs/config/) for documentation on reloadable changes.
-                '';
-              };
+                enableReload = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = ''
+                    Enable automatic config reload on config change.
+                    This setting is not enabled by default as nix cannot determine if the config change is reloadable.
+                    Please refer to the [config reference](https://nebula.defined.net/docs/config/) for documentation on reloadable changes.
+                  '';
+                };
 
-              staticHostMap = lib.mkOption {
-                type = lib.types.attrsOf (lib.types.listOf (lib.types.str));
-                default = { };
-                description = ''
-                  The static host map defines a set of hosts with fixed IP addresses on the internet (or any network).
-                  A host can have multiple fixed IP addresses defined here, and nebula will try each when establishing a tunnel.
-                '';
-                example = {
-                  "192.168.100.1" = [ "100.64.22.11:4242" ];
+                staticHostMap = lib.mkOption {
+                  type = lib.types.attrsOf (lib.types.listOf (lib.types.str));
+                  default = { };
+                  description = ''
+                    The static host map defines a set of hosts with fixed IP addresses on the internet (or any network).
+                    A host can have multiple fixed IP addresses defined here, and nebula will try each when establishing a tunnel.
+                  '';
+                  example = {
+                    "192.168.100.1" = [ "100.64.22.11:4242" ];
+                  };
+                };
+
+                isLighthouse = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = "Whether this node is a lighthouse.";
+                };
+
+                isRelay = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = "Whether this node is a relay.";
+                };
+
+                lighthouse.dns.enable = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = "Whether this lighthouse node should serve DNS.";
+                };
+
+                lighthouse.dns.host = lib.mkOption {
+                  type = lib.types.str;
+                  default = "localhost";
+                  description = ''
+                    IP address on which nebula lighthouse should serve DNS.
+                    'localhost' is a good default to ensure the service does not listen on public interfaces;
+                    use a Nebula address like 10.0.0.5 to make DNS resolution available to nebula hosts only.
+                  '';
+                };
+
+                lighthouse.dns.port = lib.mkOption {
+                  type = lib.types.nullOr lib.types.port;
+                  default = 5353;
+                  description = "UDP port number for lighthouse DNS server.";
+                };
+
+                lighthouses = lib.mkOption {
+                  type = lib.types.listOf lib.types.str;
+                  default = [ ];
+                  description = ''
+                    List of IPs of lighthouse hosts this node should report to and query from. This should be empty on lighthouse
+                    nodes. The IPs should be the lighthouse's Nebula IPs, not their external IPs.
+                  '';
+                  example = [ "192.168.100.1" ];
+                };
+
+                relays = lib.mkOption {
+                  type = lib.types.listOf lib.types.str;
+                  default = [ ];
+                  description = ''
+                    List of IPs of relays that this node should allow traffic from.
+                  '';
+                  example = [ "192.168.100.1" ];
+                };
+
+                listen.host = lib.mkOption {
+                  type = lib.types.str;
+                  default = "0.0.0.0";
+                  description = "IP address to listen on.";
+                };
+
+                listen.port = lib.mkOption {
+                  type = lib.types.nullOr lib.types.port;
+                  default = null;
+                  defaultText = lib.literalExpression ''
+                    if (config.services.nebula.networks.''${name}.isLighthouse ||
+                        config.services.nebula.networks.''${name}.isRelay) then
+                      4242
+                    else
+                      0;
+                  '';
+                  description = "Port number to listen on.";
+                };
+
+                tun.disable = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = ''
+                    When tun is disabled, a lighthouse can be started without a local tun interface (and therefore without root).
+                  '';
+                };
+
+                tun.device = lib.mkOption {
+                  type = lib.types.nullOr lib.types.str;
+                  default = "nebula.${name}";
+                  description = "Name of the tun device. Defaults to nebula.\${networkName}.";
+                };
+
+                firewall.outbound = lib.mkOption {
+                  type = lib.types.listOf lib.types.attrs;
+                  default = [ ];
+                  description = "Firewall rules for outbound traffic.";
+                  example = [
+                    {
+                      port = "any";
+                      proto = "any";
+                      host = "any";
+                    }
+                  ];
+                };
+
+                firewall.inbound = lib.mkOption {
+                  type = lib.types.listOf lib.types.attrs;
+                  default = [ ];
+                  description = "Firewall rules for inbound traffic.";
+                  example = [
+                    {
+                      port = "any";
+                      proto = "any";
+                      host = "any";
+                    }
+                  ];
+                };
+
+                settings = lib.mkOption {
+                  type = format.type;
+                  default = { };
+                  description = ''
+                    Nebula configuration. Refer to
+                    <https://github.com/slackhq/nebula/blob/master/examples/config.yml>
+                    for details on supported values.
+                  '';
+                  example = lib.literalExpression ''
+                    {
+                      lighthouse.interval = 15;
+                    }
+                  '';
+                };
+
+                user = lib.mkOption {
+                  type = lib.types.str;
+                  default = nameToId name;
+                  description = ''
+                    User under which the nebula daemon is run for this network.
+
+                    ::: {.note}
+                    A user will be created if this config is left to the default value.
+                    :::
+                  '';
+                };
+
+                group = lib.mkOption {
+                  type = lib.types.str;
+                  default = nameToId name;
+                  description = ''
+                    Group under which the nebula daemon is run for this network.
+
+                    ::: {.note}
+                    The group will be created if this config is left to the default value.
+                    :::
+                  '';
                 };
               };
-
-              isLighthouse = lib.mkOption {
-                type = lib.types.bool;
-                default = false;
-                description = "Whether this node is a lighthouse.";
-              };
-
-              isRelay = lib.mkOption {
-                type = lib.types.bool;
-                default = false;
-                description = "Whether this node is a relay.";
-              };
-
-              lighthouse.dns.enable = lib.mkOption {
-                type = lib.types.bool;
-                default = false;
-                description = "Whether this lighthouse node should serve DNS.";
-              };
-
-              lighthouse.dns.host = lib.mkOption {
-                type = lib.types.str;
-                default = "localhost";
-                description = ''
-                  IP address on which nebula lighthouse should serve DNS.
-                  'localhost' is a good default to ensure the service does not listen on public interfaces;
-                  use a Nebula address like 10.0.0.5 to make DNS resolution available to nebula hosts only.
-                '';
-              };
-
-              lighthouse.dns.port = lib.mkOption {
-                type = lib.types.nullOr lib.types.port;
-                default = 5353;
-                description = "UDP port number for lighthouse DNS server.";
-              };
-
-              lighthouses = lib.mkOption {
-                type = lib.types.listOf lib.types.str;
-                default = [ ];
-                description = ''
-                  List of IPs of lighthouse hosts this node should report to and query from. This should be empty on lighthouse
-                  nodes. The IPs should be the lighthouse's Nebula IPs, not their external IPs.
-                '';
-                example = [ "192.168.100.1" ];
-              };
-
-              relays = lib.mkOption {
-                type = lib.types.listOf lib.types.str;
-                default = [ ];
-                description = ''
-                  List of IPs of relays that this node should allow traffic from.
-                '';
-                example = [ "192.168.100.1" ];
-              };
-
-              listen.host = lib.mkOption {
-                type = lib.types.str;
-                default = "0.0.0.0";
-                description = "IP address to listen on.";
-              };
-
-              listen.port = lib.mkOption {
-                type = lib.types.nullOr lib.types.port;
-                default = null;
-                defaultText = lib.literalExpression ''
-                  if (config.services.nebula.networks.''${name}.isLighthouse ||
-                      config.services.nebula.networks.''${name}.isRelay) then
-                    4242
-                  else
-                    0;
-                '';
-                description = "Port number to listen on.";
-              };
-
-              tun.disable = lib.mkOption {
-                type = lib.types.bool;
-                default = false;
-                description = ''
-                  When tun is disabled, a lighthouse can be started without a local tun interface (and therefore without root).
-                '';
-              };
-
-              tun.device = lib.mkOption {
-                type = lib.types.nullOr lib.types.str;
-                default = null;
-                description = "Name of the tun device. Defaults to nebula.\${networkName}.";
-              };
-
-              firewall.outbound = lib.mkOption {
-                type = lib.types.listOf lib.types.attrs;
-                default = [ ];
-                description = "Firewall rules for outbound traffic.";
-                example = [
-                  {
-                    port = "any";
-                    proto = "any";
-                    host = "any";
-                  }
-                ];
-              };
-
-              firewall.inbound = lib.mkOption {
-                type = lib.types.listOf lib.types.attrs;
-                default = [ ];
-                description = "Firewall rules for inbound traffic.";
-                example = [
-                  {
-                    port = "any";
-                    proto = "any";
-                    host = "any";
-                  }
-                ];
-              };
-
-              settings = lib.mkOption {
-                type = format.type;
-                default = { };
-                description = ''
-                  Nebula configuration. Refer to
-                  <https://github.com/slackhq/nebula/blob/master/examples/config.yml>
-                  for details on supported values.
-                '';
-                example = lib.literalExpression ''
-                  {
-                    lighthouse.interval = 15;
-                  }
-                '';
-              };
-            };
-          }
+            }
+          )
         );
       };
     };
@@ -263,11 +289,21 @@ in
 
   # Implementation
   config = lib.mkIf (enabledNetworks != { }) {
+    assertions = lib.mapAttrsToList (netName: netCfg: {
+      # IFNAMSIZ caps network device names to 16 chars (including NULL terminator).
+      # Without this check, users might end up with a truncated interface name.
+      assertion = !netCfg.tun.disable && builtins.stringLength netCfg.tun.device <= 15;
+      message = ''
+        Network device names can't be longer than 15 chars.
+        `config.services.nebula.networks.${netName}.tun.device` is set to "${netCfg.tun.device}" which is above the limit.
+        Please assign `tun.device` to something shorter.
+      '';
+    }) enabledNetworks;
+
     systemd.services = lib.mkMerge (
       lib.mapAttrsToList (
         netName: netCfg:
         let
-          networkId = nameToId netName;
           settings = genSettings netName netCfg;
           generatedConfigFile = genConfigFile netName settings;
           configFile =
@@ -328,8 +364,8 @@ in
               ProtectSystem = true;
               RestrictNamespaces = true;
               RestrictSUIDSGID = true;
-              User = networkId;
-              Group = networkId;
+              User = netCfg.user;
+              Group = netCfg.group;
             };
             unitConfig.StartLimitIntervalSec = 0; # ensure Restart=always is always honoured (networks can go down for arbitrarily long)
           };
@@ -343,7 +379,7 @@ in
           "nebula/${netName}.yml" = {
             source = genConfigFile netName (genSettings netName netCfg);
             mode = "0440";
-            user = nameToId netName;
+            user = netCfg.user;
           };
         })
         (
@@ -362,19 +398,25 @@ in
 
     # Create the service users and groups.
     users.users = lib.mkMerge (
-      lib.mapAttrsToList (netName: netCfg: {
-        ${nameToId netName} = {
-          group = nameToId netName;
-          description = "Nebula service user for network ${netName}";
-          isSystemUser = true;
-        };
-      }) enabledNetworks
+      lib.mapAttrsToList (
+        netName: netCfg:
+        lib.optionalAttrs (netCfg.user == nameToId netName) {
+          ${nameToId netName} = {
+            group = netCfg.group;
+            description = "Nebula service user for network ${netName}";
+            isSystemUser = true;
+          };
+        }
+      ) enabledNetworks
     );
 
     users.groups = lib.mkMerge (
-      lib.mapAttrsToList (netName: netCfg: {
-        ${nameToId netName} = { };
-      }) enabledNetworks
+      lib.mapAttrsToList (
+        netName: netCfg:
+        lib.optionalAttrs (netCfg.group == nameToId netName) {
+          ${nameToId netName} = { };
+        }
+      ) enabledNetworks
     );
   };
 

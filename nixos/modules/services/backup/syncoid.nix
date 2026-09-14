@@ -362,7 +362,6 @@ in
           {
             description = "Syncoid ZFS synchronization from ${c.source} to ${c.target}";
             after = [ "zfs.target" ];
-            startAt = cfg.interval;
             # syncoid may need zpool to get feature@extensible_dataset
             path = [ "/run/booted-system/sw/bin/" ];
             serviceConfig = {
@@ -459,7 +458,8 @@ in
                 "~@privileged"
                 "~@resources"
                 "~@setuid"
-                "~@timer"
+                # NB: pv after 1.11.0 uses timer syscalls (specifically setitimer)
+                # "~@timer"
               ];
               SystemCallArchitectures = "native";
               # This is for BindPaths= and BindReadOnlyPaths=
@@ -471,6 +471,23 @@ in
           c.service
         ]
       )
+    ) cfg.commands;
+
+    systemd.timers = lib.concatMapAttrs (
+      name: c:
+      lib.optionalAttrs
+        (config.systemd.services."syncoid-${escapeUnitName name}".enable && cfg.interval != [ ])
+        {
+          "syncoid-${escapeUnitName name}" = {
+            wantedBy = [ "timers.target" ];
+            timerConfig = {
+              OnCalendar = cfg.interval;
+              # Backup timers should catch up on missed windows (e.g. the
+              # machine was powered off), like restic and btrbk do.
+              Persistent = true;
+            };
+          };
+        }
     ) cfg.commands;
   };
 

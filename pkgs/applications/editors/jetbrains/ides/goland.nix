@@ -1,37 +1,35 @@
 {
-  stdenv,
-  lib,
+  # keep-sorted start
   fetchurl,
-  mkJetBrainsProduct,
-  libdbm,
   fsnotifier,
+  jetbrains,
+  jetbrains-libdbm,
+  lib,
   libgcc,
+  stdenv,
+  # keep-sorted end
 }:
 let
   system = stdenv.hostPlatform.system;
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/go/goland-2025.3.1.1.tar.gz";
-      hash = "sha256-+4A+rTMwiXjKuBI2dUf90F9KUFaGlB2xgO+BX09WnWw=";
+      url = "https://download.jetbrains.com/go/goland-2026.2.2.1.tar.gz";
+      hash = "sha256-ENJ699YXT798jpTQQVpFwTvlhvXbQlwQMQxE3zXxVHE=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/go/goland-2025.3.1.1-aarch64.tar.gz";
-      hash = "sha256-zGPly+ELyQYGrq5eoOqeujDptL7aIOY0KK5FVaSFZ8k=";
-    };
-    x86_64-darwin = {
-      url = "https://download.jetbrains.com/go/goland-2025.3.1.1.dmg";
-      hash = "sha256-xZeuUIyqPUoOPWzuwuCS0nkasvuwLSc43tcSSGZrHS0=";
+      url = "https://download.jetbrains.com/go/goland-2026.2.2.1-aarch64.tar.gz";
+      hash = "sha256-JxQLaXRb5nOKWQ/ZrpBoDotiauahIZy+VuuqZnxYfy0=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/go/goland-2025.3.1.1-aarch64.dmg";
-      hash = "sha256-vV8TxLG/KEUuAcN1lsCKT6v4tg6UmbUU7U5OCJ8rhXQ=";
+      url = "https://download.jetbrains.com/go/goland-2026.2.2.1-aarch64.dmg";
+      hash = "sha256-xTTNC4J1rRHtR+wZkZsDQX1x+BdYbhHb6ehOh/ToCMY=";
     };
   };
   # update-script-end: urls
 in
-(mkJetBrainsProduct {
-  inherit libdbm fsnotifier;
+(jetbrains.mkJetBrainsProduct {
+  inherit jetbrains-libdbm fsnotifier;
 
   pname = "goland";
 
@@ -39,11 +37,18 @@ in
   product = "Goland";
 
   # update-script-start: version
-  version = "2025.3.1.1";
-  buildNumber = "253.29346.379";
+  version = "2026.2.2.1";
+  buildNumber = "262.10315.160";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
+
+  # the jdk is bundled on Darwin.
+  jdk =
+    if lib.meta.availableOn stdenv.hostPlatform jetbrains.jdk-no-jcef then
+      jetbrains.jdk-no-jcef
+    else
+      null;
 
   extraWrapperArgs = [
     # fortify source breaks build since delve compiles with -O0
@@ -62,6 +67,7 @@ in
       The IDE extends the IntelliJ platform with the coding assistance and tool integrations specific for the Go language.
     '';
     maintainers = with lib.maintainers; [ tymscar ];
+    teams = [ lib.teams.jetbrains ];
     license = lib.licenses.unfree;
     sourceProvenance =
       if stdenv.hostPlatform.isDarwin then

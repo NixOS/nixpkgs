@@ -7,21 +7,20 @@
   installShellFiles,
   versionCheckHook,
 }:
-
 buildGoModule (finalAttrs: {
   pname = "kubescape";
-  version = "3.0.47";
+  version = "4.0.13";
 
   src = fetchFromGitHub {
     owner = "kubescape";
     repo = "kubescape";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tXGFCKkuK8PGdgVGNXO5qVWB1+XPz092ovmLdVMY+yQ=";
+    hash = "sha256-OsMCmh2KxpPKjXd0XkaoHtmaocw/kYDlZDPSPFgu5oU=";
     fetchSubmodules = true;
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-1WmG+ffcwBCsAdBTXST0iZIcA8Mo0LRt317WDX2f/aM=";
+  vendorHash = "sha256-dF6JC6Ransv8iCHz3LfmIs4HZAmbATlNsnII379rNyo=";
 
   subPackages = [ "." ];
 
@@ -34,7 +33,7 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
+    "-X=main.version=v${finalAttrs.version}"
     "-X=github.com/kubescape/kubescape/v3/core/cautils.BuildNumber=v${finalAttrs.version}"
   ];
 
@@ -42,7 +41,6 @@ buildGoModule (finalAttrs: {
     export HOME=$(mktemp -d)
 
     # Remove tests that use networking
-    rm core/pkg/resourcehandler/urlloader_test.go
     rm core/pkg/opaprocessor/*_test.go
     rm core/cautils/getter/downloadreleasedpolicy_test.go
     rm core/core/initutils_test.go

@@ -5,33 +5,43 @@
   fetchFromGitHub,
   pkg-config,
   makeWrapper,
-  webkitgtk_4_1,
+  fontconfig,
+  libGL,
+  libx11,
+  libxcursor,
+  libxi,
+  libxkbcommon,
+  libxrandr,
+  wayland,
+  xdg-utils,
   zenity,
   withGui ? true,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alfis";
-  version = "0.8.8";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "Revertron";
     repo = "Alfis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gRk4kvIV+5cCUFaJvGbTAR44678Twa28iMGZ75lJz2c=";
+    hash = "sha256-guB9yGT+aliRORJE4iYKB2RAFuQOFkdzI0RCf0Y1pKI=";
   };
 
-  cargoHash = "sha256-Ge0+7ClXlJFT6CyluHF7k4stsX+KuYp/riro1pvrcKM=";
+  cargoHash = "sha256-BYKVRD7H2uEE0oxyAn21tb0a6Qkx6nwrImh/Nk8zZDM=";
 
   nativeBuildInputs = [
     pkg-config
     makeWrapper
   ];
 
-  buildInputs = lib.optional (withGui && stdenv.hostPlatform.isLinux) webkitgtk_4_1;
+  buildInputs = lib.optionals (withGui && stdenv.hostPlatform.isLinux) [
+    fontconfig
+  ];
 
   buildNoDefaultFeatures = true;
-  buildFeatures = [ "doh" ] ++ lib.optional withGui "webgui";
+  buildFeatures = [ "doh" ] ++ lib.optional withGui "gui";
 
   checkFlags = [
     # these want internet access, disable them
@@ -41,7 +51,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = lib.optionalString (withGui && stdenv.hostPlatform.isLinux) ''
     wrapProgram $out/bin/alfis \
-      --prefix PATH : ${lib.makeBinPath [ zenity ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          xdg-utils
+          zenity
+        ]
+      } \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          libGL
+          libx11
+          libxcursor
+          libxi
+          libxkbcommon
+          libxrandr
+          wayland
+        ]
+      }
   '';
 
   meta = {

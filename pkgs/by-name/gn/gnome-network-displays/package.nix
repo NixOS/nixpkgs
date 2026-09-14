@@ -19,6 +19,7 @@
   glib,
   networkmanager,
   json-glib,
+  glib-networking,
   libadwaita,
   libportal-gtk4,
   libpulseaudio,
@@ -58,10 +59,13 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-rtsp-server
-    gst_all_1.gst-vaapi
     pipewire
     networkmanager
     json-glib
+    # Not strictly required according to configure phase log, but putting it
+    # here adds gio modules to the GIO_EXTRA_MODULES environment variables - as
+    # required for TLS. See https://github.com/NixOS/nixpkgs/issues/502092
+    glib-networking
     libadwaita
     libportal-gtk4
     libpulseaudio
@@ -78,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     Hence, this is not necessarily an upstream issue, but could be something
     wrong with how our gst_all_1 depend on each other.
   */
-  CFLAGS = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
+  env.CFLAGS = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
 
   preConfigure = ''
     patchShebangs ./build-aux/meson/postinstall.py

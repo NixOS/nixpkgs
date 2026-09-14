@@ -14,17 +14,23 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tensorflow-metadata";
-  version = "1.17.3";
+  version = "1.21.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "metadata";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4xj2JfQryGy7a9ho9/JJtyg+0H5VLQzq9JevOmOWJZk=";
+    hash = "sha256-k+SJmR5n4S31wpSuMhJwrjJfX/Bow0QwLpw+TwRPS7U=";
   };
 
   patches = [ ./build.patch ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools<70" "setuptools"
+  '';
 
   # Default build pulls in Bazel + extra deps, given the actual build
   # is literally three lines (see below) - replace it with custom build.

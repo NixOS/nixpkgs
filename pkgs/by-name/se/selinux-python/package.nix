@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "selinux-python";
-  version = "3.8.1";
+  version = "3.10";
 
   inherit (libsepol) se_url;
 
   src = fetchurl {
     url = "${finalAttrs.se_url}/${finalAttrs.version}/selinux-python-${finalAttrs.version}.tar.gz";
-    hash = "sha256-dJAlv6SqDgCb8//EVdVloY1Ntxz+eWvkQFghcXIGwlo=";
+    hash = "sha256-nQpbafL7zOjlzNjg8X1W9x5gBadWOG+Ps2wx+UJBkaI=";
   };
 
   strictDeps = true;
@@ -82,6 +82,8 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     # Version hasn't changed in 17 years, if it suddenly does these tests deserve to break
     $out/bin/audit2allow --version | grep -Fm1 'audit2allow .1'
     $out/bin/audit2why --version | grep -Fm1 'audit2allow .1'
@@ -96,16 +98,15 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Should at least run, even if we can't provide it a policy file and need to provide /dev/zero
     { $out/bin/sepolgen-ifgen-attr-helper test /dev/null 2>&1 || true; } | grep -Fm1 'error(s) encountered' >/dev/null
+
+    runHook postInstallCheck
   '';
 
   meta = {
     description = "SELinux policy core utilities written in Python";
     license = lib.licenses.gpl2Plus;
     homepage = "https://selinuxproject.org";
-    maintainers = with lib.maintainers; [
-      RossComputerGuy
-      numinit
-    ];
+    inherit (libsepol.meta) maintainers;
     platforms = lib.platforms.linux;
   };
 })

@@ -12,6 +12,9 @@ in
 {
   name = "nix-ssh-serve";
   meta.maintainers = [ lib.maintainers.shlevy ];
+  defaults = {
+    nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
+  };
   nodes = {
     server.nix.sshServe = {
       enable = true;

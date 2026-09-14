@@ -14,7 +14,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   meta = {
-    description = "Simple, powerfull and nonobstructive django email middleware";
+    description = "Simple, powerful and nonobstructive django email middleware";
     homepage = "https://github.com/bameda/djmail";
     license = lib.licenses.bsd3;
   };
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ glibcLocales ];
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   propagatedBuildInputs = [
     celery

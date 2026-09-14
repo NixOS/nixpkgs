@@ -2,38 +2,34 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  hatchling,
   mock,
-  pbr,
   pytest-mock,
   pytestCheckHook,
   pytz,
   requests,
-  setuptools,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "jenkinsapi";
-  version = "0.3.15";
+  version = "0.3.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pycontribs";
     repo = "jenkinsapi";
     tag = version;
-    hash = "sha256-r6GOi/0ALJDy6R6cd/bECk+HVe/AyKZYG96sr9y9o/4=";
+    hash = "sha256-1dTcT84cDpP9V4tVrgW2MTYx4jQj0/tZiAuakC+orUQ=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-    pbr
+  build-system = [
+    hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pytz
     requests
-    setuptools
     six
   ];
 

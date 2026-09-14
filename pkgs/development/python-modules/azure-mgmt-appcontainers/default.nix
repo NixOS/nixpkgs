@@ -5,18 +5,19 @@
   azure-common,
   azure-mgmt-core,
   isodate,
+  msrest,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-appcontainers";
-  version = "3.2.0";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_appcontainers";
     inherit version;
-    hash = "sha256-bp7WPCwssPZD+tZ52BMIxKomFWztQfwDPl9MBJghjz4=";
+    hash = "sha256-FzETbKAWbF+8IaWM036nZ4fSCYnn+V3BKuYn768dw6U=";
   };
 
   build-system = [ setuptools ];
@@ -25,6 +26,7 @@ buildPythonPackage rec {
     azure-common
     azure-mgmt-core
     isodate
+    msrest
   ];
 
   # no tests included

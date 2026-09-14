@@ -6,21 +6,21 @@
 
 buildGoModule (finalAttrs: {
   pname = "oauth2c";
-  version = "1.19.0";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
-    owner = "cloudentity";
+    owner = "SecureAuthCorp";
     repo = "oauth2c";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Bh4gWskmY2nWTckUT1FX7vRDz/gg670A77CQTZhz3mg=";
+    hash = "sha256-l/fXorXE4+6n7qQM2c2pJssNq3DKaxOjapdfNlXuAWg=";
   };
 
-  vendorHash = "sha256-I2pOyjKghvHHGEuVqODhysD++f2hD+BF7WJxWbrLcWA=";
+  vendorHash = "sha256-+Y8AStkbaecVdosfWlEmO53Y5aC13zfzlDOeMO91Lw0=";
 
   doCheck = false; # tests want to talk to oauth2c.us.authz.cloudentity.io
 
   meta = {
-    homepage = "https://github.com/cloudentity/oauth2c";
+    homepage = "https://github.com/SecureAuthCorp/oauth2c";
     description = "User-friendly OAuth2 CLI";
     mainProgram = "oauth2c";
     longDescription = ''

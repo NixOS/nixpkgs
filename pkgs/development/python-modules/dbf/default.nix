@@ -2,30 +2,39 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  setuptools,
   aenum,
+  pytestCheckHook,
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dbf";
   version = "0.99.11";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "dbf";
+    inherit (finalAttrs) version;
     hash = "sha256-IWnAUlLA776JfzRvBoMybsJYVL6rHQxkMN9ukDpXsxU=";
   };
+
+  build-system = [ setuptools ];
 
   # Workaround for https://github.com/ethanfurman/dbf/issues/48
   patches = lib.optional python.stdenv.hostPlatform.isDarwin ./darwin.patch;
 
-  propagatedBuildInputs = [ aenum ];
+  dependencies = [ aenum ];
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m dbf.test
-    runHook postCheck
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    sed -i '/^import tempfile$/a tempdir = tempfile.mkdtemp()' dbf/test.py
   '';
+
+  enabledTestPaths = [ "dbf/test.py" ];
 
   pythonImportsCheck = [ "dbf" ];
 
@@ -35,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

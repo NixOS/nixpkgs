@@ -67,5 +67,4 @@ mkDerivation {
     cp -r $BSDSRCDIR/stand/defaults $out/bin/defaults
   '';
 
-  meta.platforms = lib.platforms.freebsd;
 }

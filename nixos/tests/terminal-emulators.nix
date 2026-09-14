@@ -92,8 +92,6 @@ let
     terminology.cmd = "SHELL=$command terminology --no-wizard=true";
     terminology.colourTest = false; # broken by gloss effect
 
-    termite.pkg = p: p.termite;
-
     termonad.pkg = p: p.termonad;
 
     tilda.pkg = p: p.tilda;

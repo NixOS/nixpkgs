@@ -1,6 +1,7 @@
 {
   buildLuarocksPackage,
   fetchurl,
+  lib,
   luaAtLeast,
   luaOlder,
   luaposix,
@@ -39,7 +40,7 @@ buildLuarocksPackage {
   meta = {
     homepage = "https://pjb.com.au/comp/lua/readline.html";
     description = "Interface to the readline library";
-    license.fullName = "MIT/X11";
+    license = lib.licenses.mit;
     broken = (luaOlder "5.1") || (luaAtLeast "5.5");
   };
 }

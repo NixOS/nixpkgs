@@ -46,13 +46,13 @@ lib.throwIf (enableDragAndDrop && !hasDndSupport)
 
     dependencies = [
       python3Packages.send2trash
-      python3Packages.unicurses
+      python3Packages.uni-curses
     ]
     ++ (lib.optionals enableDragAndDrop [
       python3Packages.pynput
       python3Packages.pyside6
       python3Packages.requests
-      python3Packages.xlib
+      python3Packages.python-xlib
       kdePackages.qtbase
       kdePackages.qt6gtk2
     ]);

@@ -1,12 +1,13 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysnooper";
   version = "1.2.3";
   pyproject = true;
@@ -14,13 +15,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cool-RR";
     repo = "PySnooper";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-+Cjqi0xkWO4QVAZymmcper4dal9pNWbpPgPY4UzbXfA=";
   };
 
   build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # timing-sensitive and often breaks on Darwin
+    "test_relative_time"
+  ];
 
   pythonImportsCheck = [ "pysnooper" ];
 
@@ -30,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ seqizz ];
   };
-}
+})

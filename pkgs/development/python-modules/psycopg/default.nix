@@ -4,6 +4,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
+  nukeReferences,
+  python,
   replaceVars,
 
   # build
@@ -32,14 +34,14 @@
 
 let
   pname = "psycopg";
-  version = "3.3.3";
+  version = "3.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = "psycopg";
     tag = version;
-    hash = "sha256-hWiclfvimp6WldcDQPx7RFLx+XYRR9wPagAe0oZg7Pw=";
+    hash = "sha256-hHgswbqaoQRQrUxhNFG6tfmlap1mVUo/OkNsWF686U4=";
   };
 
   patches = [
@@ -78,11 +80,16 @@ let
 
     nativeBuildInputs = [
       libpq.pg_config
+      nukeReferences
     ];
 
     buildInputs = [
       libpq
     ];
+
+    postInstall = ''
+      nuke-refs $out/${python.sitePackages}/psycopg_c/{pq.c,_psycopg.c}
+    '';
 
     # tested in psycopg
     doCheck = false;
@@ -107,6 +114,9 @@ let
     build-system = [ setuptools ];
 
     dependencies = [ typing-extensions ];
+
+    # the psycopg-pool version isn't updated in tandem with psycopg
+    dontCheckPythonMetadata = true;
 
     # tested in psycopg
     doCheck = false;
@@ -133,12 +143,6 @@ buildPythonPackage rec {
   ];
 
   sphinxRoot = "../docs";
-
-  # Introduce this file necessary for the docs build via environment var
-  LIBPQ_DOCS_FILE = fetchurl {
-    url = "https://raw.githubusercontent.com/postgres/postgres/496a1dc44bf1261053da9b3f7e430769754298b4/doc/src/sgml/libpq.sgml";
-    hash = "sha256-JwtCngkoi9pb0pqIdNgukY8GbG5pUDZvrGAHZqjFOw4";
-  };
 
   inherit patches;
 
@@ -185,6 +189,11 @@ buildPythonPackage rec {
   ++ optional-dependencies.pool;
 
   env = {
+    # Introduce this file necessary for the docs build via environment var
+    LIBPQ_DOCS_FILE = fetchurl {
+      url = "https://raw.githubusercontent.com/postgres/postgres/496a1dc44bf1261053da9b3f7e430769754298b4/doc/src/sgml/libpq.sgml";
+      hash = "sha256-JwtCngkoi9pb0pqIdNgukY8GbG5pUDZvrGAHZqjFOw4";
+    };
     postgresqlEnableTCP = 1;
     PGUSER = "psycopg";
     PGDATABASE = "psycopg";
@@ -226,6 +235,7 @@ buildPythonPackage rec {
     "refcount"
     "timing"
     "flakey"
+    "slow"
   ];
 
   postCheck = ''

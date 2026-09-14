@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lldpd";
-  version = "1.0.20";
+  version = "1.0.22";
 
   src = fetchurl {
     url = "https://media.luffy.cx/files/lldpd/lldpd-${finalAttrs.version}.tar.gz";
-    hash = "sha256-YbjLItSHnmj3glovuOHpKrtKukdzl3zwJYvDLtn1VFA=";
+    hash = "sha256-lYeUDtIxSoZ3TFSZ89+xOo64YjKmLSQ6g6HwmIaEjgM=";
   };
 
   configureFlags = [
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "802.1ab implementation (LLDP) to help you locate neighbors of all your equipments";
+    description = "802.1ab implementation (LLDP) to help you locate neighbors of all your equipment";
     homepage = "https://lldpd.github.io/";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ fpletz ];

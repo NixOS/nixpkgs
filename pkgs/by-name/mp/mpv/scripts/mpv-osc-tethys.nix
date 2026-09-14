@@ -2,6 +2,7 @@
   lib,
   buildLua,
   fetchFromGitHub,
+  mpvScripts,
 }:
 buildLua (finalAttrs: {
   pname = "mpv-osc-tethys";
@@ -10,6 +11,9 @@ buildLua (finalAttrs: {
   scriptPath = "osc_tethys.lua";
   extraScriptsToCopy = [ "mpv_thumbnail_script_server.lua" ];
   extraScriptsToLoad = [ "mpv_thumbnail_script_server.lua" ];
+
+  # FIXME?: collides with mpvScripts.thumbnail, this one yields since it is unfree
+  passthru.dontCollideCheck = lib.hasAttr "thumbnail" mpvScripts;
 
   src = fetchFromGitHub {
     owner = "Zren";

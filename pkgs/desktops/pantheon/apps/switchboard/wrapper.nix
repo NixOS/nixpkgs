@@ -32,15 +32,13 @@ stdenv.mkDerivation {
   ]
   ++ selectedPlugs;
 
-  passAsFile = [ "paths" ];
-
   nativeBuildInputs = [
     glib
     lndir
     wrapGAppsHook4
   ];
 
-  buildInputs = lib.forEach selectedPlugs (x: x.buildInputs) ++ selectedPlugs;
+  buildInputs = lib.concatMap (x: x.buildInputs) selectedPlugs ++ selectedPlugs;
 
   dontUnpack = true;
   dontConfigure = true;
@@ -52,7 +50,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out
-    for i in $(cat $pathsPath); do
+    for i in "''${paths[@]}"; do
       lndir -silent $i $out
     done
 
@@ -67,6 +65,8 @@ stdenv.mkDerivation {
       --set SWITCHBOARD_PLUGS_PATH "$out/lib/switchboard-3"
     )
   '';
+
+  __structuredAttrs = true;
 
   inherit (switchboard) meta;
 }

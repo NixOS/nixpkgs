@@ -1,22 +1,50 @@
 {
   lib,
-  claude-code,
+  stdenv,
+  stdenvNoCC,
+  autoPatchelfHook,
+  alsa-lib,
+  testers,
   vscode-utils,
 }:
 
-vscode-utils.buildVscodeMarketplaceExtension {
-  mktplcRef = {
-    name = "claude-code";
-    publisher = "anthropic";
-    version = "2.1.39";
-    hash = "sha256-8OaNOwG9lRHca/hjqGpmcuY+2OGkv7rPSt0faO72vIc=";
-  };
+vscode-utils.buildVscodeMarketplaceExtension (finalAttrs: {
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  postInstall = ''
-    mkdir -p "$out/$installPrefix/resources/native-binary"
-    rm -f "$out/$installPrefix/resources/native-binary/claude"*
-    ln -s "${claude-code}/bin/claude" "$out/$installPrefix/resources/native-binary/claude"
-  '';
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    (lib.getLib stdenv.cc.cc)
+    alsa-lib
+  ];
+
+  mktplcRef =
+    let
+      sources = {
+        "x86_64-linux" = {
+          arch = "linux-x64";
+          hash = "sha256-4zsbiDEjApU4V7Cgn6ZdwT9y1Ycw5xEHOFomow3dhkA=";
+        };
+        "aarch64-linux" = {
+          arch = "linux-arm64";
+          hash = "sha256-XBxsHACZV6nHsYEA9VzrDd2rbAIbeXyGBdtQf/pT814=";
+        };
+        "aarch64-darwin" = {
+          arch = "darwin-arm64";
+          hash = "sha256-0dLJV/XDo7HffO3FzSBqRqm59V4fXjDlf3TpJK5NndQ=";
+        };
+      };
+    in
+    {
+      name = "claude-code";
+      publisher = "anthropic";
+      version = "2.1.270";
+    }
+    // sources.${stdenvNoCC.hostPlatform.system}
+      or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");
+
+  passthru.tests.bundled-claude-runs = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "${finalAttrs.finalPackage}/share/vscode/extensions/anthropic.claude-code/resources/native-binary/claude --version";
+  };
 
   meta = {
     description = "Harness the power of Claude Code without leaving your IDE";
@@ -25,5 +53,10 @@ vscode-utils.buildVscodeMarketplaceExtension {
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [ xiaoxiangmoe ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
   };
-}
+})

@@ -70,7 +70,7 @@ buildPythonPackage rec {
   doCheck = !stdenv.buildPlatform.isDarwin;
 
   meta = {
-    homepage = "https://pypi.python.org/pypi/pytest-postgresql";
+    homepage = "https://pypi.org/project/pytest-postgresql/";
     description = "Pytest plugin that enables you to test code on a temporary PostgreSQL database";
     changelog = "https://github.com/dbfixtures/pytest-postgresql/blob/v${version}/CHANGES.rst";
     license = lib.licenses.lgpl3Plus;

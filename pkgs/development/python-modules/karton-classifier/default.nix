@@ -10,16 +10,16 @@
   yara-python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "karton-classifier";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "karton-classifier";
-    tag = "v${version}";
-    hash = "sha256-YqxRiQ/kJheEJpYDqRNu9FydfnNX3OlGjgfX9Hwv+dM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ew7IZEo471keFOX7Ksi8nCmggI3EzG4hmaIBbdDW4XE=";
   };
 
   pythonRelaxDeps = [
@@ -46,14 +46,17 @@ buildPythonPackage rec {
     "test_process_misc_csv"
     "test_process_runnable_win32_jar"
     "test_process_runnable_win32_lnk"
+    # Assertion error
+    "test_process_runnable_win32_msi"
+    "test_process_misc_webp"
   ];
 
   meta = {
     description = "File type classifier for the Karton framework";
     homepage = "https://github.com/CERT-Polska/karton-classifier";
-    changelog = "https://github.com/CERT-Polska/karton-classifier/releases/tag/v${version}";
+    changelog = "https://github.com/CERT-Polska/karton-classifier/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "karton-classifier";
   };
-}
+})

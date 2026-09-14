@@ -1,2 +1,4 @@
 source 'https://rubygems.org'
 gem 'cddl'
+
+gem "base64", "~> 0.2.0"

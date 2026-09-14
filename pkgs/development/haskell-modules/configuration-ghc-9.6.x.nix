@@ -38,7 +38,6 @@ in
   haskeline = null;
   hpc = null;
   integer-gmp = null;
-  libiserv = null;
   mtl = null;
   parsec = null;
   pretty = null;
@@ -60,13 +59,18 @@ in
   xhtml = null;
   Win32 = null;
 
+  libiserv = doJailbreak (markUnbroken (doDistribute super.libiserv)); # ghci ==9.6.6
+
+  iserv-proxy = addBuildDepend self.libiserv super.iserv-proxy;
+
   # Becomes a core package in GHC >= 9.8
   semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
 
   # Becomes a core package in GHC >= 9.10
-  os-string = doDistribute self.os-string_2_0_8;
+  os-string = doDistribute self.os-string_2_0_10;
 
-  # Becomes a core package in GHC >= 9.10, no release compatible with GHC < 9.10 is available
+  # Become core packages in GHC >= 9.10, no release compatible with GHC < 9.10 is available
+  ghc-experimental = null;
   ghc-internal = null;
   # Become core packages in GHC >= 9.10, but aren't uploaded to Hackage
   ghc-toolchain = null;

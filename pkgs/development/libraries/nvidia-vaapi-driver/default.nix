@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nvidia-vaapi-driver";
-  version = "0.0.15";
+  version = "0.0.18";
 
   src = fetchFromGitHub {
     owner = "elFarto";
     repo = "nvidia-vaapi-driver";
     rev = "v${version}";
-    sha256 = "sha256-q51ChAPcTKgYtMzcesKDDDeZRg0/+bSlA4VxsLKn/BA=";
+    sha256 = "sha256-cEEPRKoWtNXk8LsDbkhNjnIY7UD1rfYbv2Q6ThG0YLg=";
   };
 
   patches = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/elFarto/nvidia-vaapi-driver";
-    description = "VA-API implemention using NVIDIA's NVDEC";
+    description = "VA-API implementation using NVIDIA's NVDEC";
     changelog = "https://github.com/elFarto/nvidia-vaapi-driver/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nickcao ];

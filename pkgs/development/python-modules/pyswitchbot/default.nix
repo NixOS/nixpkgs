@@ -1,30 +1,31 @@
 {
   lib,
   aiohttp,
-  bleak,
   bleak-retry-connector,
+  bleak,
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
+  poetry-core,
   pyopenssl,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
-  setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pyswitchbot";
-  version = "1.0.0";
+  version = "2.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pySwitchbot";
     tag = finalAttrs.version;
-    hash = "sha256-O8bdWAAtNfLo7WBgvKMm0LXCzpFz1MUqAbBJlyUBcPs=";
+    hash = "sha256-Hg2xZqLdAJqd907JnY8THLjYN+3zHrW6+8IpsPtQuDA=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
@@ -36,6 +37,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 

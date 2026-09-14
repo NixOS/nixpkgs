@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  callPackage,
   fetchFromGitHub,
   apple-sdk_14,
   ncurses,
@@ -24,6 +25,9 @@ let
   ruby = ruby_3_4;
 in
 
+let
+  common = callPackage ./common.nix { inherit stdenv; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "macvim";
 
@@ -182,7 +186,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # macvim obj-c log macro triggers -Wformat-security (seems like a bug? it's a string literal!)
-  hardeningDisable = [ "format" ];
+  hardeningDisable = common.hardeningDisable ++ [ "format" ];
   # os_log also enables -Werror,-Wformat by default
   env.NIX_CFLAGS_COMPILE = "-DOS_LOG_FORMAT_WARNINGS";
 

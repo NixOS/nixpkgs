@@ -5,6 +5,7 @@
   cargo,
   meson,
   ninja,
+  perl,
   pkg-config,
   gst_all_1,
   openssl,
@@ -23,19 +24,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flare";
-  version = "0.18.3";
+  version = "0.22.2";
 
   src = fetchFromGitLab {
-    domain = "gitlab.com";
     owner = "schmiddi-on-mobile";
     repo = "flare";
     tag = finalAttrs.version;
-    hash = "sha256-+25nDG/xw82Iv6gGYWmGHUBf4CbTLBTzrOqKdrCFIMQ=";
+    hash = "sha256-D6jhEfsLxQI2/pU6IPFtMmbCEPWASjbd1gVAX5G7Snk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-nY+rxWzZJoQRB+Pn4yjof+fCcI2GU2+QFCN73kgRLZ0=";
+    hash = "sha256-NsBuEujUvrflgpx20tqJVluFVwXJgCYQCDlmNDtncjQ=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     desktop-file-utils # for update-desktop-database
     meson
     ninja
+    perl
     pkg-config
     wrapGAppsHook4
     rustPlatform.cargoSetupHook

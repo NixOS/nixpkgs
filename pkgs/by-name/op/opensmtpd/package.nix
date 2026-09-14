@@ -14,6 +14,7 @@
   pam,
   libxcrypt,
   nixosTests,
+  binPath ? "/run/wrappers/bin",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,11 +44,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./proc_path.diff # TODO: upstream to OpenSMTPD, see https://github.com/NixOS/nixpkgs/issues/54045
+    ./offline.patch
   ];
 
   postPatch = ''
-    substituteInPlace mk/smtpctl/Makefile.am --replace "chgrp" "true"
-    substituteInPlace mk/smtpctl/Makefile.am --replace "chmod 2555" "chmod 0555"
+    substituteInPlace mk/smtpctl/Makefile.am \
+      --replace-fail "chgrp" "true" \
+      --replace "chmod 2555" "chmod 0555"
+    substituteInPlace mk/pathnames \
+      --replace-fail "-DPATH_SMTPCTL=\\\"\$(sbindir)" \
+                     "-DPATH_SMTPCTL=\\\"${binPath}" \
+      --replace-fail "-DPATH_MAKEMAP=\\\"\$(sbindir)" \
+                     "-DPATH_MAKEMAP=\\\"${binPath}"
+    substituteInPlace usr.sbin/smtpd/smtpd.c \
+      --replace-fail "@@PATH_SENDMAIL@@" "\"${binPath}/sendmail\""
   '';
 
   configureFlags = [

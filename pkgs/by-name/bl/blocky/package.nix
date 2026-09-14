@@ -7,20 +7,20 @@
 
 buildGoModule (finalAttrs: {
   pname = "blocky";
-  version = "0.28.2";
+  version = "0.34.0";
 
   src = fetchFromGitHub {
     owner = "0xERR0R";
     repo = "blocky";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-GLVyPb2Qyn1jnRz+e74dFzL/AMloKqSe1BUUAGTquWA=";
+    hash = "sha256-EgZId3EzfAUWsQo56Y5VGs2VJxj0tXiSuZNhd6/U/zc=";
   };
 
   # needs network connection and fails at
   # https://github.com/0xERR0R/blocky/blob/development/resolver/upstream_resolver_test.go
   doCheck = false;
 
-  vendorHash = "sha256-AzfI4SElD7GFIG8/REB4PU0/Haj5x5HUNj/3/n1OXZE=";
+  vendorHash = "sha256-BeRM5X0cuxHCud23lgy+fL6PGAlY7XOmeKTiDeToAeQ=";
 
   ldflags = [
     "-s"

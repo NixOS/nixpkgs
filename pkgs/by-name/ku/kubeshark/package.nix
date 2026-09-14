@@ -4,23 +4,24 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  testers,
-  kubeshark,
+  versionCheckHook,
   nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "kubeshark";
-  version = "52.10.3";
+  version = "53.4.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kubeshark";
     repo = "kubeshark";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-n7AYUms6fn25UinLd5xFG2DfcpJU0/pR4JF3i1VY1hM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ijAiPJ8Bn6zZ8VK94vbjlRKSHDaVC7Ki5UNX+4EhXC4=";
   };
 
-  vendorHash = "sha256-4s1gxJo2w5BibZ9CJP7Jl9Z8Zzo8WpBokBnRN+zp8b4=";
+  vendorHash = "sha256-mJfjiVyKVGB410ned2E13i35mAN0XrPNERUa+MAzF58=";
 
   ldflags =
     let
@@ -28,8 +29,7 @@ buildGoModule (finalAttrs: {
     in
     [
       "-s"
-      "-w"
-      "-X ${t}/misc.GitCommitHash=${finalAttrs.src.rev}"
+      "-X ${t}/misc.GitCommitHash=${finalAttrs.src.tag}"
       "-X ${t}/misc.Branch=master"
       "-X ${t}/misc.BuildTimestamp=0"
       "-X ${t}/misc.Platform=unknown"
@@ -38,10 +38,8 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  checkPhase = ''
-    go test ./...
-  '';
-  doCheck = true;
+  # Tests bind loopback sockets via httptest.
+  __darwinAllowLocalNetworking = true;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kubeshark \
@@ -50,20 +48,17 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/kubeshark completion zsh)
   '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = kubeshark;
-      command = "kubeshark version";
-      inherit (finalAttrs) version;
-    };
-    updateScript = nix-update-script { };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/kubeshark/kubeshark/releases/tag/v${finalAttrs.version}";
     description = "API Traffic Viewer for Kubernetes";
     mainProgram = "kubeshark";
-    homepage = "https://kubeshark.co/";
+    homepage = "https://kubeshark.com/";
     license = lib.licenses.asl20;
     longDescription = ''
       The API traffic viewer for Kubernetes providing real-time, protocol-aware visibility into Kubernetes’ internal network,
@@ -72,6 +67,7 @@ buildGoModule (finalAttrs: {
     '';
     maintainers = with lib.maintainers; [
       qjoly
+      miniharinn
     ];
   };
 })

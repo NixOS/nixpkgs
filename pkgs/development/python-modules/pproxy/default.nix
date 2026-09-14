@@ -8,6 +8,7 @@
   aioquic,
   python-daemon,
   setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -18,11 +19,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "qwj";
     repo = "python-proxy";
-    rev = "7fccf8dd62204f34b0aa3a70fc568fd6ddff7728";
-    sha256 = "sha256-bOqDdNiaZ5MRi/UeF0hJwMs+rfQBKRsTmXrZ6ieIguo=";
+    tag = version;
+    hash = "sha256-DWxbU2LtXzec1T175cMVJuWuhnxWYhe0FH67stMyOTM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   optional-dependencies = {
     accelerated = [
@@ -58,6 +62,6 @@ buildPythonPackage rec {
     mainProgram = "pproxy";
     homepage = "https://github.com/qwj/python-proxy";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.ryand56 ];
   };
 }

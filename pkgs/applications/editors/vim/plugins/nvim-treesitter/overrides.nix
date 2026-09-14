@@ -4,9 +4,11 @@
   symlinkJoin,
   vimUtils,
   tree-sitter,
+  tree-sitter-grammars,
   neovim,
   neovimUtils,
   runCommand,
+  runCommandLocal,
   vimPlugins,
   writableTmpDirAsHomeHook,
 }:
@@ -22,7 +24,11 @@ let
       requires ? [ ],
     }:
     vimUtils.toVimPlugin (
-      runCommand "nvim-treesitter-queries-${language}"
+      # Just mkdir + ln -s; cheaper to build than to substitute (and not
+      # on cache.nixos.org anyway since release.nix doesn't recurse into
+      # passthru.queries). With ~300 languages under withAllGrammars,
+      # round-tripping each to a remote builder is very slow.
+      runCommandLocal "nvim-treesitter-queries-${language}"
         {
           passthru = {
             inherit language requires;
@@ -32,8 +38,8 @@ let
         }
         ''
           mkdir -p "$out/queries"
-          if [ -d "${super.nvim-treesitter.src}/runtime/queries/${language}" ]; then
-            ln -s "${super.nvim-treesitter.src}/runtime/queries/${language}" "$out/queries/${language}"
+          if [ -d "${self.nvim-treesitter}/runtime/queries/${language}" ]; then
+            ln -s "${self.nvim-treesitter}/runtime/queries/${language}" "$out/queries/${language}"
           else
             echo "Error: there are no queries for ${language}."
             exit 1
@@ -122,7 +128,7 @@ let
   withPlugins =
     f:
     let
-      selectedGrammars = f (tree-sitter.builtGrammars // builtGrammars);
+      selectedGrammars = f (tree-sitter-grammars.derivations // builtGrammars);
 
       grammarPlugins = map grammarToPlugin selectedGrammars;
 
@@ -139,8 +145,6 @@ let
   grammarPlugins = lib.mapAttrs (_: grammarToPlugin) parsersWithMeta;
 in
 {
-  nvimSkipModules = [ "nvim-treesitter._meta.parsers" ];
-
   passthru = super.nvim-treesitter.passthru or { } // {
     inherit
       buildQueries

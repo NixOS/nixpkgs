@@ -42,7 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dmoduledir=${mesa.driverLink}/lib/vdpau"
   ];
 
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lX11";
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-lX11";
+  };
 
   # The tracing library in this package must be conditionally loaded with dlopen().
   # Therefore, we must restore the RPATH entry for the library itself that was removed by the patchelf hook.

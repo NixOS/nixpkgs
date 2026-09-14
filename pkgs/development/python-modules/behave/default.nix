@@ -67,8 +67,11 @@ buildPythonPackage rec {
     "test_step_decorator_async_run_until_complete"
   ];
 
+  # -e disables tags.help.feature from being executed (due to stdout formatting differences)
   postCheck = ''
-    ${python.interpreter} bin/behave -f progress3 --stop --tags='~@xfail' features/
+    ${python.interpreter} bin/behave -f progress3 --stop --tags='~@xfail' \
+      -e tags.help.feature \
+      features/
     ${python.interpreter} bin/behave -f progress3 --stop --tags='~@xfail' tools/test-features/
     ${python.interpreter} bin/behave -f progress3 --stop --tags='~@xfail' issue.features/
   '';

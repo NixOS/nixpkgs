@@ -1,11 +1,11 @@
 {
-  stdenv,
+  gcc14Stdenv,
   lib,
   fetchzip,
   fetchpatch,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "miranda";
   version = "2.066";
 
@@ -62,17 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:
   #   ld: types.o:(.bss+0x11b0): multiple definition of `current_file'; y.tab.o:(.bss+0x70): first defined here
-  env.NIX_CFLAGS_COMPILE = toString (
-    [
-      "-fcommon"
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
-      "-Wno-error=int-conversion"
-    ]
-  );
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
+    "CC=${gcc14Stdenv.cc.targetPrefix}cc"
     "CFLAGS=-O2"
     "PREFIX=${placeholder "out"}"
   ];
@@ -81,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs quotehostinfo
-    substituteInPlace Makefile --replace strip '${stdenv.cc.targetPrefix}strip'
+    substituteInPlace Makefile --replace strip '${gcc14Stdenv.cc.targetPrefix}strip'
   '';
 
   meta = {

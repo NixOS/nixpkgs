@@ -14,7 +14,6 @@
   libxdmcp,
   lv2,
   minixml,
-  pcre,
   pkg-config,
   readline,
   libpthread-stubs,
@@ -23,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yoshimi";
-  version = "2.3.5.3";
+  version = "2.3.6.5";
 
   src = fetchFromGitHub {
     owner = "Yoshimi";
     repo = "yoshimi";
     tag = finalAttrs.version;
-    hash = "sha256-3/iFZfqUX2q4+6rD6AX3E8vXt0HP82PDDTqpiZTvtLw=";
+    hash = "sha256-ZlabEfDt/94kXPI1DbkykdFGfqf0csH/Cad3OBtyUf0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
@@ -56,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxdmcp
     lv2
     minixml
-    pcre
     readline
     libpthread-stubs
     zlib

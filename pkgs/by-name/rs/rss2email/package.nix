@@ -73,7 +73,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "Tool that converts RSS/Atom newsfeeds to email";
-    homepage = "https://pypi.python.org/pypi/rss2email";
+    homepage = "https://pypi.org/project/rss2email/";
     license = lib.licenses.gpl2;
     mainProgram = "r2e";
   };

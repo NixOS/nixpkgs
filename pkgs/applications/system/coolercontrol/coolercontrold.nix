@@ -1,6 +1,8 @@
 {
   rustPlatform,
   testers,
+  hwdata,
+  pkg-config,
   libdrm,
   coolercontrol,
   runtimeShell,
@@ -21,14 +23,23 @@ rustPlatform.buildRustPackage {
   inherit version src;
   sourceRoot = "${src.name}/coolercontrold";
 
-  cargoHash = "sha256-5YYodScAAs6ERVbj+irvyNS9IOkVaBHR4DCXTrrtyVI=";
+  cargoHash = "sha256-DE1m/odw90epyR8U9H1pxyJXariIHLXwk+mVYi8cu5A=";
 
-  buildInputs = [ libdrm ];
+  buildInputs = [
+    hwdata
+    libdrm
+  ];
 
   nativeBuildInputs = [
+    pkg-config
     protobuf
     addDriverRunpath
     python3Packages.wrapPython
+  ];
+
+  checkFlags = [
+    # This test has a build-machine dependency and will be removed from the normal test suite in the next release
+    "--skip=repositories::hwmon::hwmon_repo::coalescer_tests::fast_device_no_added_latency"
   ];
 
   pythonPath = [ liquidctl ];
@@ -39,7 +50,7 @@ rustPlatform.buildRustPackage {
     cp -R ${coolercontrol.coolercontrol-ui-data}/* resources/app/
 
     # Hardcode a shell
-    substituteInPlace src/repositories/utils.rs \
+    substituteInPlace daemon/src/repositories/utils.rs \
       --replace-fail 'Command::new("sh")' 'Command::new("${runtimeShell}")'
   '';
 

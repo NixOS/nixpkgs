@@ -131,14 +131,21 @@ in
           serviceConfig.ExecStart = "@${kernel.virtualboxGuestAdditions}/bin/VBoxService VBoxService --foreground";
         };
 
-        services.udev.extraRules = ''
-          # /dev/vboxuser is necessary for VBoxClient to work.  Maybe we
-          # should restrict this to logged-in users.
-          KERNEL=="vboxuser",  OWNER="root", GROUP="root", MODE="0666"
+        users.groups.vboxuserdev = { };
 
-          # Allow systemd dependencies on vboxguest.
-          SUBSYSTEM=="misc", KERNEL=="vboxguest", TAG+="systemd"
-        '';
+        services.udev.packages = lib.singleton (
+          pkgs.writeTextFile {
+            name = "virtualboxGuestAdditions";
+            text = ''
+              # /dev/vboxuser is necessary for VBoxClient to work
+              KERNEL=="vboxuser", OWNER="root", GROUP="vboxuserdev", MODE="0660", TAG+="uaccess"
+
+              # Allow systemd dependencies on vboxguest.
+              SUBSYSTEM=="misc", KERNEL=="vboxguest", TAG+="systemd"
+            '';
+            destination = "/etc/udev/rules.d/70-virtualboxGuestAdditions.rules";
+          }
+        );
 
         systemd.user.services.virtualboxClientVmsvga = mkVirtualBoxUserService "--vmsvga-session" cfg.verbose;
       }

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
 
   # build-system
   packaging,
@@ -40,13 +39,13 @@
 }:
 
 let
-  version = "39.3.0";
+  version = "41.2.2";
 
   src = fetchFromGitHub {
     owner = "rucio";
     repo = "rucio";
     tag = version;
-    hash = "sha256-IfHxm6T3tEMT35h8Fd0nvrhBmXdcghO+01+1MjmxMCk=";
+    hash = "sha256-XRZirQAWpTDq6WueyyUCHUMhBPEaspjW7rircLM02qk=";
   };
 in
 buildPythonPackage {
@@ -54,30 +53,7 @@ buildPythonPackage {
   inherit version src;
   pyproject = true;
 
-  # future-1.0.0 not supported for interpreter python3.13
-  disabled = pythonAtLeast "3.13";
-
-  pythonRelaxDeps = [
-    "alembic"
-    "argcomplete"
-    "dogpile.cache"
-    "flask"
-    "geoip2"
-    "google-auth"
-    "jsonschema"
-    "oic"
-    "packaging"
-    "paramiko"
-    "prometheus_client"
-    "python-dateutil"
-    "redis"
-    "requests"
-    "rich"
-    "sqlalchemy"
-    "stomp.py"
-    "typing_extensions"
-    "urllib3"
-  ];
+  pythonRelaxDeps = true;
 
   pythonRemoveDeps = [ "boto" ];
 

@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-35zb5Kx0tRP5l0hILdomCu2YSQfng02mbyyAClm4uZs=";
   };
 
-  postPatch = lib.optional (!lib.versionOlder rrdtool.version "1.9.0") ''
+  postPatch = lib.optionalString (!lib.versionOlder rrdtool.version "1.9.0") ''
     substituteInPlace kcollectd/rrd_interface.cc --replace-fail 'char *arg[] =' 'const char *arg[] ='
   '';
 

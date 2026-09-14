@@ -3,14 +3,17 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  guile_2_2,
+  guile,
   pkg-config,
   texinfo,
 }:
 
 stdenv.mkDerivation {
   pname = "guile-xcb";
-  version = "unstable-2017-05-29";
+  version = "1.3-unstable-2017-05-28";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mwitmer";
@@ -19,18 +22,24 @@ stdenv.mkDerivation {
     hash = "sha256-zbIsEIPwNJ1YXMZTDw2DfzufC+IZWfcWgZHbuv7bhJs=";
   };
 
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail "2.0 2.2" "2.0 2.2 3.0"
+  '';
+
   nativeBuildInputs = [
     autoreconfHook
+    guile
     pkg-config
+    texinfo
   ];
   buildInputs = [
-    guile_2_2
-    texinfo
+    guile
   ];
 
   configureFlags = [
-    "--with-guile-site-dir=$(out)/${guile_2_2.siteDir}"
-    "--with-guile-site-ccache-dir=$(out)/${guile_2_2.siteCcacheDir}"
+    "--with-guile-site-dir=$(out)/${guile.siteDir}"
+    "--with-guile-site-ccache-dir=$(out)/${guile.siteCcacheDir}"
   ];
 
   makeFlags = [
@@ -42,6 +51,6 @@ stdenv.mkDerivation {
     description = "XCB bindings for Guile";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = guile_2_2.meta.platforms;
+    platforms = guile.meta.platforms;
   };
 }

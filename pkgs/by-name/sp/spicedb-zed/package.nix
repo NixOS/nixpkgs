@@ -8,18 +8,21 @@
 
 buildGoModule (finalAttrs: {
   pname = "zed";
-  version = "0.30.2";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "authzed";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ftSgp0zxUmSTJ7lFHxFdebKrCKbsRocDkfabVpyQ5Kg=";
+    hash = "sha256-WoUz7la5X/C7+ey0sUPLt3lDuGonNEOIpRPYQgPuEQc=";
   };
 
-  vendorHash = "sha256-2AkknaufRhv79c9WQtcW5oSwMptkR+FB+1/OJazyGSM=";
+  vendorHash = "sha256-M3WXfiFq5q+gpMpapPMgMsv9SyOjxKTZvGe9xPkaEOg=";
 
   ldflags = [ "-X 'github.com/jzelinskie/cobrautil/v2.Version=${finalAttrs.src.tag}'" ];
+
+  # Version test expects '(devel)' but version is being set to the package version
+  checkFlags = [ "--skip=TestGetClientVersion" ];
 
   preCheck = ''
     export NO_COLOR=true

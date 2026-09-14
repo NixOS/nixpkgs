@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     sha256 = "09mmsalc7dwlvgrda56s2k927rpl3a5dzfa88aslkqcjnr790wjy";
     rev = "v${finalAttrs.version}";
-    repo = "xdelta-devel";
+    repo = "xdelta-gpl";
     owner = "jmacd";
   };
 

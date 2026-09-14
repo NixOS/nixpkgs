@@ -71,9 +71,10 @@ let
         stateDirectories = # sh
           ''
             # Symlinking in our state directories
-            rm -rf $out/{.env,cache} ${appDir}/{log,public/cache}
+            rm -rf $out/{.env,cache} ${appDir}/{log,public/cache,public/images}
             ln -s ${cfg.dataDir}/.env ${appDir}/.env
             ln -s ${cfg.dataDir}/public/cache ${appDir}/public/cache
+            ln -s ${cfg.dataDir}/public/images ${appDir}/public/images
             ln -s ${cfg.logDir} ${appDir}/log
             ln -s ${cfg.runtimeDir}/cache ${appDir}/cache
           '';
@@ -867,8 +868,9 @@ in
           fi
 
           # Caches, logs
-          mkdir -p ${cfg.dataDir}/public/cache ${cfg.logDir} ${cfg.runtimeDir}/cache
+          mkdir -p ${cfg.dataDir}/public/{cache,images} ${cfg.logDir} ${cfg.runtimeDir}/cache
           chmod -R ug+rw ${cfg.dataDir}/public/cache
+          chmod -R ug+rw ${cfg.dataDir}/public/images
           chmod -R ug+rw ${cfg.logDir}
           chmod -R ug+rwx ${cfg.runtimeDir}/cache
 
@@ -943,6 +945,10 @@ in
           mode = "0750";
         };
         "${dataDir}/public/cache".d = {
+          inherit user group;
+          mode = "0750";
+        };
+        "${dataDir}/public/images".d = {
           inherit user group;
           mode = "0750";
         };

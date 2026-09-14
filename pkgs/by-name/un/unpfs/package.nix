@@ -4,7 +4,7 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "unpfs";
   version = "0-unstable-2021-04-23";
 
@@ -15,15 +15,15 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-zyDkUb+bFsVnxAE4UODbnRtDim7gqUNuY22vuxMsLZM=";
   };
 
-  sourceRoot = "${src.name}/example/unpfs";
+  sourceRoot = "${finalAttrs.src.name}/example/unpfs";
 
   cargoHash = "sha256-jRe1lgzfhzBUsS6wwwlqxxomap2TIDOyF3YBv20GJ14=";
 
   env.RUSTC_BOOTSTRAP = 1;
 
   postInstall = ''
-    install -D -m 0444 ../../README* -t "$out/share/doc/${pname}"
-    install -D -m 0444 ../../LICEN* -t "$out/share/doc/${pname}"
+    install -D -m 0444 ../../README* -t "$out/share/doc/unpfs"
+    install -D -m 0444 ../../LICEN* -t "$out/share/doc/unpfs"
   '';
 
   meta = {
@@ -36,4 +36,4 @@ rustPlatform.buildRustPackage rec {
     platforms = with lib.platforms; linux;
     mainProgram = "unpfs";
   };
-}
+})

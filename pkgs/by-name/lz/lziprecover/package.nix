@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lziprecover";
-  version = "1.25";
+  version = "1.26";
 
   src = fetchurl {
     url = "mirror://savannah/lzip/lziprecover/lziprecover-${finalAttrs.version}.tar.gz";
-    sha256 = "4f392f9c780ae266ee3d0db166b0f1b4d3ae07076e401dc2b199dc3a0fff8b45";
+    sha256 = "sha256-4jQAWnVtVkn0FoYRbT5UhzbUp35aXsN7lDymZQeHgB0=";
     # This hash taken from the mailing list announcement.
   };
 

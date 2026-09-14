@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "4.1.9";
 
   src = fetchurl {
-    url = "http://www.igniterealtime.org/downloadServlet?filename=smack/smack_${
+    url = "https://www.igniterealtime.org/downloadServlet?filename=smack/smack_${
       lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.tar.gz";
     sha256 = "009x0qcxd4dkvwcjz2nla470pwbabwvg37wc21pslpw42ldi0bzp";

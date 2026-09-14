@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   autopage,
-  cmd2,
+  cmd2_4,
   openstackdocstheme,
   pbr,
   prettytable,
@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "cliff";
-  version = "4.13.1";
+  version = "4.16.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-t5zAssGfbG54yCvZI+BnhQNdd8sNKhpIMinwooNvDKc=";
+    hash = "sha256-hTFK1JvWL5ClEJTU4xsctNO5L7g8s5Ne66AjbDKDnnU=";
   };
 
   build-system = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   dependencies = [
     autopage
-    cmd2
+    cmd2_4
     prettytable
     pyyaml
     stevedore

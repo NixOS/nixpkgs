@@ -29,7 +29,7 @@ mkDerivation rec {
 
   meta = {
     description = "Qt wrapper around PolKit";
-    maintainers = with lib.maintainers; [ ttuegel ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

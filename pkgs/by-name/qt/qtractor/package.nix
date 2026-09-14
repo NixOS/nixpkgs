@@ -7,7 +7,7 @@
   fetchurl,
   flac,
   libjack2,
-  ladspaH,
+  ladspa-header,
   ladspaPlugins,
   liblo,
   libmad,
@@ -30,11 +30,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtractor";
-  version = "1.5.11";
+  version = "1.6.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/qtractor/qtractor-${finalAttrs.version}.tar.gz";
-    hash = "sha256-wXEsMuScYl+X5bNddnfwdlJpWUtenvNyQfAj9xZDXNg=";
+    hash = "sha256-Up//oPsTt73/PTCd4rUM0UrvTeH1eu3EsStI6BUpL2o=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     dssi
     flac
     libjack2
-    ladspaH
+    ladspa-header
     ladspaPlugins
     liblo
     libmad

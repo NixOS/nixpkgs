@@ -21,6 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-Fs/BuocZblMSlmP6yp+aykbs0n1AdvL3AVAQI1AnZ9o=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail '__version__ = "0.7.6"' '__version__ = "${version}"'
+  '';
+
   nativeBuildInputs = [
     numpy
     pybind11

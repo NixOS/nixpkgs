@@ -99,6 +99,7 @@ in
           "@chown"
         ];
       };
+      unitConfig.RequiresMountsFor = [ cfg.dataDir ];
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall {

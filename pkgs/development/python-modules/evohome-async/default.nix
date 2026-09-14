@@ -9,10 +9,11 @@
   debugpy,
   fetchFromGitHub,
   hatchling,
+  hatch-vcs,
+  keyring,
   pytest-asyncio,
   pytest-freezer,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   syrupy,
   voluptuous,
@@ -20,19 +21,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "evohome-async";
-  version = "1.1.3";
+  version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "zxdavb";
     repo = "evohome-async";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Xc5GWbKqgcIIHKBvcAIS8zL9rZeEDEkwHOhhUdnImbE=";
+    hash = "sha256-1wWUYhDj8lO8q8YF251z9uQDQTozTf5kIUjrNLrNdQA=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   dependencies = [
     aiohttp
@@ -45,6 +47,7 @@ buildPythonPackage (finalAttrs: {
       aiofiles
       asyncclick
       debugpy
+      keyring
     ];
   };
 

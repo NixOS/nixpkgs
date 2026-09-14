@@ -3,19 +3,22 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "arc4";
-  version = "0.4.0";
-  format = "setuptools";
+  version = "0.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "manicmaniac";
     repo = "arc4";
-    rev = version;
-    hash = "sha256-DlZIygf5v3ZNY2XFmrKOA15ccMo3Rv0kf6hZJ0CskeQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-kEgyZQmVdOmD/KkmEKxgZb9Hj0jGJswCJI7Np5TI1K4=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -24,7 +27,7 @@ buildPythonPackage rec {
   meta = {
     description = "ARCFOUR (RC4) cipher implementation";
     homepage = "https://github.com/manicmaniac/arc4";
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

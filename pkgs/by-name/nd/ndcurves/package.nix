@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ndcurves";
-  version = "2.1.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "loco-3d";
     repo = "ndcurves";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-YnpC2yYEe9VNcHHDyv+glLrue/J/HXbK/VP7DTAE/q0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-X9p01hMoAx6fMSEU/nf/eqyFgy23mZrpBFonjoT1DLo=";
   };
 
   outputs = [
@@ -29,34 +29,32 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    pkg-config
-  ]
-  ++ lib.optionals pythonSupport [
-    python3Packages.python
-    python3Packages.pythonImportsCheckHook
-  ];
-  propagatedBuildInputs = [
-    jrl-cmakemodules
-  ]
-  ++ lib.optionals pythonSupport [
-    python3Packages.eigenpy
-    python3Packages.pinocchio
-  ]
-  ++ lib.optional (!pythonSupport) pinocchio;
+  buildInputs = [ jrl-cmakemodules ];
+  nativeBuildInputs =
+    jrl-cmakemodules.docsNativeBuildInputs
+    ++ lib.optionals pythonSupport [
+      python3Packages.python
+      python3Packages.pythonImportsCheckHook
+    ];
+  propagatedBuildInputs =
+    lib.optionals pythonSupport [
+      python3Packages.eigenpy
+      python3Packages.pinocchio
+    ]
+    ++ lib.optional (!pythonSupport) pinocchio;
 
-  cmakeFlags = [
-    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
-    (lib.cmakeBool "CURVES_WITH_PINOCCHIO_SUPPORT" true)
-  ]
-  ++ lib.optional stdenv.hostPlatform.isAarch64 (
-    lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'curves_tests|python-curves'"
-  )
-  ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) (
-    lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'test-so3-smooth'"
-  );
+  cmakeFlags =
+    jrl-cmakemodules.docsCmakeFlags
+    ++ [
+      (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
+      (lib.cmakeBool "CURVES_WITH_PINOCCHIO_SUPPORT" true)
+    ]
+    ++ lib.optional stdenv.hostPlatform.isAarch64 (
+      lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'curves_tests|python-curves'"
+    )
+    ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) (
+      lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'test-so3-smooth'"
+    );
 
   doCheck = true;
 

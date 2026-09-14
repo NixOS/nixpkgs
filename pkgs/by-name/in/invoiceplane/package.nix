@@ -3,7 +3,6 @@
   fetchFromGitHub,
   nixosTests,
   fetchYarnDeps,
-  applyPatches,
   php,
   yarnConfigHook,
   yarnBuildHook,
@@ -12,13 +11,12 @@
   fetchzip,
 }:
 let
-  version = "1.7.0";
+  version = "1.7.2";
   # Fetch release tarball which contains language files
   # https://github.com/InvoicePlane/InvoicePlane/issues/1170
   languages = fetchzip {
-    #url = "https://github.com/InvoicePlane/InvoicePlane/releases/download/v${version}/v${version}.zip";
-    url = "https://github.com/InvoicePlane/InvoicePlane/releases/download/v1.7.0/v1.7.0.zip";
-    hash = "sha256-D5wZg745xjbBsEPUbvle8ynErFB4xn9zdxOGh0xKCCU=";
+    url = "https://github.com/InvoicePlane/InvoicePlane/releases/download/v${version}/v${version}.zip";
+    hash = "sha256-DpQazuLOJnNGrrQo7l6uQReoKZEd5es2DT0a50NuQB0=";
   };
 in
 php.buildComposerProject2 (finalAttrs: {
@@ -29,16 +27,13 @@ php.buildComposerProject2 (finalAttrs: {
     owner = "InvoicePlane";
     repo = "InvoicePlane";
     tag = "v${version}";
-    hash = "sha256-6fuUmXe8mFSnLYwQCwBzxmSQxM06rQXe00IKUZvWnpM=";
+    hash = "sha256-LC/c1wdVNguv8BrrY7ysVwomgG8uTPoY1Fw8/EPFk2I=";
   };
 
-  # Fixes error: Couldn't find any versions for "sass" that matches "^1.97" in our cache
-  patches = [ ./fix-yarn-lockfile.patch ];
-
   # Composer.lock validation currently fails for unknown reason
-  composerStrictValidation = false;
+  composerStrictValidation = true;
 
-  vendorHash = "sha256-/fNVq3WJCr9f/NE0s1x8N48W3ZMRUxdh1Qf3pLl0Lpg=";
+  vendorHash = "sha256-BRNglvJMREFD9iHPqXycw1WYlxuV9fL8/Zoba2Z3p8w=";
 
   nativeBuildInputs = [
     yarnConfigHook
@@ -50,7 +45,7 @@ php.buildComposerProject2 (finalAttrs: {
 
   offlineCache = fetchYarnDeps {
     inherit (finalAttrs) src patches;
-    hash = "sha256-YDknkQzdRKRRMXS6/cPRSrfhhIyTIDRnFPNGQueu74A=";
+    hash = "sha256-faEq9sVsE5xcqL07IIEmXcavcWPZicb7asmuhuBI+h4=";
   };
 
   postBuild = ''
@@ -62,7 +57,7 @@ php.buildComposerProject2 (finalAttrs: {
     chmod -R u+w $out/share
     mv $out/share/php/invoiceplane/* $out/
     cp -r ${languages}/application/language $out/application/
-    rm -r $out/{composer.json,composer.lock,CONTRIBUTING.md,docker-compose.yml,Gruntfile.js,package.json,node_modules,yarn.lock,share}
+    rm -r $out/{composer.json,composer.lock,docker-compose.yml,Gruntfile.js,package.json,node_modules,yarn.lock,share}
   '';
 
   passthru.tests = {

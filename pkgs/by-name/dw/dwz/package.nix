@@ -3,18 +3,18 @@
   stdenv,
   fetchurl,
   elfutils,
-  xxHash,
+  xxhash,
   dejagnu,
   gdb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dwz";
-  version = "0.16";
+  version = "0.17";
 
   src = fetchurl {
     url = "https://www.sourceware.org/ftp/dwz/releases/dwz-${finalAttrs.version}.tar.gz";
-    hash = "sha256-R1hT4bSebtjMLQqQnHpPwcxXHrzPxmJ4/UM0Lb4n1Q4=";
+    hash = "sha256-hJVMWmi/whF4x+BQx/BCmrJ80wLO4maPSRy4uUq2XVU=";
   };
 
   postPatch = ''
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ elfutils ];
 
   buildInputs = [
-    xxHash
+    xxhash
     elfutils
   ];
 

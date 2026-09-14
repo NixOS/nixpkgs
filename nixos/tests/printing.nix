@@ -1,6 +1,7 @@
 # Test printing via CUPS.
 {
   pkgs,
+  testName,
   socket ? true, # whether to use socket activation
   listenTcp ? true, # whether to open port 631 on client
   ...
@@ -11,7 +12,7 @@ let
 in
 
 {
-  name = "printing";
+  name = testName;
   meta = {
     maintainers = [ ];
   };
@@ -103,7 +104,7 @@ in
         "${pkgs.groff.doc}/share/doc/*/examples/mom/penguin.pdf",
         "${pkgs.groff.doc}/share/doc/*/meref.ps",
         "${pkgs.cups.out}/share/doc/cups/images/cups.png",
-        "${pkgs.pcre.doc}/share/doc/pcre/pcre.txt",
+        "${pkgs.groff.doc}/share/doc/*/examples/mom/README.txt",
     ]:
         file_name = os.path.basename(file)
         with subtest(f"print {file_name}"):

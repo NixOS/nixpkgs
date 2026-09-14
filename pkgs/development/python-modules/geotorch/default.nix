@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "geotorch";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lezcano";
     repo = "geotorch";
     tag = version;
-    hash = "sha256-kkn0PZzQRodXCeX3RcajVvrp1TrhSVgKYwyJGAMuvLM=";
+    hash = "sha256-mMVgN8ZmedSz5VxAAE7vdvmZXiP5y3GkO60o5hCSHn8=";
   };
 
   build-system = [ setuptools ];

@@ -46,7 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
       "armv7l-linux"
       "armv6l-linux"
       "x86_64-linux"
-      "x86_64-darwin"
     ];
   };
 })

@@ -30,7 +30,7 @@
   pytest-mock,
   pytest-socket,
   pytest-xdist,
-  pytestCheckHook,
+  pytest8_3CheckHook,
   requests-mock,
   responses,
   syrupy,
@@ -40,26 +40,22 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-classic";
-  version = "1.0.1";
+  version = "1.0.8";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-classic==${version}";
-    hash = "sha256-4DlKOxt5OoPm38szMEJpw6gDl247eRsx4LZpofUKpUk=";
+    tag = "langchain-classic==${finalAttrs.version}";
+    hash = "sha256-Xskg6bPmRv7iLjppUF11rqmHg2YJWETVT1EMhzK7Svo=";
   };
 
-  sourceRoot = "${src.name}/libs/langchain";
+  sourceRoot = "${finalAttrs.src.name}/libs/langchain";
 
   build-system = [ hatchling ];
-
-  pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    "langchain-core"
-  ];
 
   dependencies = [
     langchain-core
@@ -88,7 +84,7 @@ buildPythonPackage rec {
     pytest-mock
     pytest-socket
     pytest-xdist
-    pytestCheckHook
+    pytest8_3CheckHook
     requests-mock
     responses
     syrupy
@@ -103,6 +99,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Network access (web.example.com)
     "test_socket_disabled"
+    # Fails due to JSON formatting differences
+    "test_configurable"
   ];
 
   # Bulk updater selects wrong tag
@@ -110,6 +108,7 @@ buildPythonPackage rec {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-classic==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 
@@ -121,4 +120,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

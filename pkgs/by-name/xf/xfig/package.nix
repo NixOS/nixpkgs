@@ -9,7 +9,7 @@
   libxmu,
   libxi,
   libxp,
-  Xaw3d,
+  libxaw3d,
   libxaw,
   libxft,
   fig2dev,
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     libxmu
     libxi
     libxp
-    Xaw3d
+    libxaw3d
     libxaw
     libxft
   ];

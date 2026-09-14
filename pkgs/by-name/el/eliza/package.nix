@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eliza";
-  version = "0-unstable-2026-01-08";
+  version = "0-unstable-2026-08-17";
   src = fetchFromGitHub {
     owner = "anthay";
     repo = "ELIZA";
-    rev = "d03085e78f16e1febdbd878f602d58ef73072c93";
-    hash = "sha256-AGr/nWXp7NINxKg4wudcX0R1ckZSvbDDOLjv2kW0oP8=";
+    rev = "0d34ebc234090a417755afe8fe4a31f75e2e55bf";
+    hash = "sha256-hhyeVmtf9bkqzH5ORBkpgHrSBsHIKb1i/xK7tb3zt4M=";
   };
 
   doCheck = true;

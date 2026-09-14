@@ -37,8 +37,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-rE7SErOhl2fcmvLairq+mvdnbDIk1aPo3eYqwRx5kkA=";
 
+  postPatch = ''
+    substituteInPlace $cargoDepsCopy/*/sdl2-sys-0.37.0/SDL/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0.0)" "cmake_minimum_required(VERSION 3.0.0...3.5)" \
+      --replace-fail "cmake_minimum_required(VERSION 3.4)" "cmake_minimum_required(VERSION 3.4...3.5)"
+  '';
+
   # See https://github.com/mikedilger/gossip/blob/0.9/README.md.
   env.RUSTFLAGS = "--cfg tokio_unstable";
+
+  # Vendored SDL2 uses `bool` / `false` as identifiers, rejected by gcc 15's C23 default.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   # Some users might want to add "rustls-tls(-native)" for Rust TLS instead of OpenSSL.
   buildFeatures = [

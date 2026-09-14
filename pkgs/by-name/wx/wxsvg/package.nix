@@ -8,7 +8,7 @@
   libexif,
   pango,
   pkg-config,
-  wxGTK32,
+  wxwidgets_3_2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
     libexif
     pango
-    wxGTK32
+    wxwidgets_3_2
   ];
 
   enableParallelBuilding = true;
@@ -51,6 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    inherit (wxGTK32.meta) platforms;
+    inherit (wxwidgets_3_2.meta) platforms;
   };
 })

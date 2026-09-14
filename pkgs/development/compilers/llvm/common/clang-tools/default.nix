@@ -16,12 +16,20 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "clang-tools";
   version = lib.getVersion clang-unwrapped;
   dontUnpack = true;
-  clang = if enableLibcxx then libcxxClang else clang;
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin
+
+    for script in ${clang-unwrapped.python}/share/clang/* ${clang-unwrapped.python}/bin/*; do
+      if [[ -x "$script" ]]; then
+        ln -s $script $out/bin/$(basename "$script" .py)
+      fi
+    done
 
     for toolPath in ${clang-unwrapped}/bin/clangd ${clang-unwrapped}/bin/clang-*; do
       toolName=$(basename "$toolPath")
@@ -32,7 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
       fi
 
       cp $toolPath $out/bin/$toolName-unwrapped
-      substituteAll ${./wrapper} $out/bin/$toolName
+      substitute ${./wrapper} $out/bin/$toolName \
+        --replace-fail "@clang@" "${if enableLibcxx then libcxxClang else clang}" \
+        --replace-fail "@out@" "$out"
       chmod +x $out/bin/$toolName
     done
 
@@ -50,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests.smokeOk =
+  passthru.tests =
     let
       src = writeText "main.cpp" ''
         #include <iostream>
@@ -61,28 +71,24 @@ stdenv.mkDerivation (finalAttrs: {
       '';
 
     in
-    runCommand "clang-tools-test-smoke-ok" { } ''
-      ${finalAttrs.finalPackage}/bin/clangd  --check=${src}
-      touch $out
-    '';
-
-  passthru.tests.smokeErr =
-    let
-      src = writeText "main.cpp" ''
-        #include <iostream>
-
-        int main() {
-           std::cout << "Hi!";
-        }
+    {
+      smokeOk = runCommand "clang-tools-test-smoke-ok" { } ''
+        ${finalAttrs.finalPackage}/bin/clangd  --check=${src}
+        touch $out
       '';
+      smokeErr = runCommand "clang-tools-test-smoke-err" { } ''
+        (${finalAttrs.finalPackage}/bin/clangd --query-driver='**' --check=${src} 2>&1 || true) \
+            | grep 'use of undeclared identifier'
 
-    in
-    runCommand "clang-tools-test-smoke-err" { } ''
-      (${finalAttrs.finalPackage}/bin/clangd --query-driver='**' --check=${src} 2>&1 || true) \
-          | grep 'use of undeclared identifier'
+        touch $out
+      '';
+      environmentErr = runCommand "clang-tools-test-environment-err" { } ''
+         (CLANGD_FLAGS="--query-driver='**'" ${finalAttrs.finalPackage}/bin/clangd --check=${src} 2>&1 || true) \
+            | grep 'use of undeclared identifier'
 
-      touch $out
-    '';
+        touch $out
+      '';
+    };
 
   meta = llvm_meta // {
     description = "Standalone command line tools for C++ development";

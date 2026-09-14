@@ -121,15 +121,18 @@ in
         StateDirectory = "openbao";
         StateDirectoryMode = "0700";
         RuntimeDirectory = "openbao";
-        RuntimeDirectoryMode = "0700";
+        RuntimeDirectoryMode = "0755";
+
+        DynamicUser = true;
+        User = "openbao";
+        Group = "openbao";
 
         CapabilityBoundingSet = "";
-        DynamicUser = true;
         LimitCORE = 0;
         LockPersonality = true;
         MemorySwapMax = 0;
         MemoryZSwapMax = 0;
-        PrivateUsers = true;
+        PrivateUsers = "identity";
         ProcSubset = "pid";
         ProtectClock = true;
         ProtectControlGroups = true;
@@ -152,6 +155,7 @@ in
           "@system-service"
           "@resources"
           "~@privileged"
+          "@chown"
         ];
         UMask = "0077";
       };

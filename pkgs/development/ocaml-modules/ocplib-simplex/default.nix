@@ -7,14 +7,14 @@
   zarith,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ocplib-simplex";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "OCamlPro";
-    repo = pname;
-    rev = "v${version}";
+    repo = "ocplib-simplex";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fLTht+TlyJIsIAsRLmmkFKsnbSeW3BgyAyURFdnGfko=";
   };
 
@@ -40,4 +40,4 @@ buildDunePackage rec {
     license = lib.licenses.lgpl21Only;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

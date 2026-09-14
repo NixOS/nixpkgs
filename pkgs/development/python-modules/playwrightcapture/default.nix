@@ -7,12 +7,15 @@
   dateparser,
   dnspython,
   fetchFromGitHub,
+  lookyloo-models,
   orjson,
   playwright-stealth,
   playwright,
   poetry-core,
-  puremagic,
+  pure-magic-rs,
   pydub,
+  pyfaup-rs,
+  python-socks,
   pytz,
   requests,
   rfc3161-client,
@@ -22,24 +25,25 @@
   w3lib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "playwrightcapture";
-  version = "1.36.2";
+  version = "1.41.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lookyloo";
     repo = "PlaywrightCapture";
-    tag = "v${version}";
-    hash = "sha256-/lXoubcwV/Lt/qg17BhMM6p+0XUgAe2pMtowobs3MA8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aHdYewNwEc063QYLpZXTrg28uPVuy6NMS3JLokuH30k=";
   };
 
   pythonRelaxDeps = [
-    "aiohttp"
     "aiohttp-socks"
+    "aiohttp"
     "beautifulsoup4"
     "orjson"
     "playwright"
+    "python-socks"
     "setuptools"
     "tzdata"
   ];
@@ -52,10 +56,13 @@ buildPythonPackage rec {
     beautifulsoup4
     dateparser
     dnspython
+    lookyloo-models
     orjson
     playwright
     playwright-stealth
-    puremagic
+    pure-magic-rs
+    pyfaup-rs
+    python-socks
     pytz
     requests
     rfc3161-client
@@ -80,8 +87,8 @@ buildPythonPackage rec {
   meta = {
     description = "Capture a URL with Playwright";
     homepage = "https://github.com/Lookyloo/PlaywrightCapture";
-    changelog = "https://github.com/Lookyloo/PlaywrightCapture/releases/tag/${src.tag}";
+    changelog = "https://github.com/Lookyloo/PlaywrightCapture/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

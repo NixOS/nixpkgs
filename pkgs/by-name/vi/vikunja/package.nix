@@ -1,69 +1,17 @@
 {
   lib,
+  callPackage,
   fetchFromGitHub,
-  stdenv,
-  nodejs_24,
-  pnpm_10,
-  fetchPnpmDeps,
-  pnpmConfigHook,
-  buildGoModule,
+  buildGo127Module,
   mage,
-  dart-sass,
+  writableTmpDirAsHomeHook,
   writeShellScriptBin,
   nixosTests,
+  nix-update-script,
 }:
 
 let
-  version = "1.1.0";
-  src = fetchFromGitHub {
-    owner = "go-vikunja";
-    repo = "vikunja";
-    rev = "v${version}";
-    hash = "sha256-xxfn3UoKreRDRC5GR7pLL8gkBLe6VmBYdps9eFc5c3g=";
-  };
-
-  frontend = stdenv.mkDerivation (finalAttrs: {
-    pname = "vikunja-frontend";
-    inherit version src;
-
-    sourceRoot = "${finalAttrs.src.name}/frontend";
-
-    pnpmDeps = fetchPnpmDeps {
-      inherit (finalAttrs)
-        pname
-        version
-        src
-        sourceRoot
-        ;
-      pnpm = pnpm_10;
-      fetcherVersion = 1;
-      hash = "sha256-NrysokKNmKAUdiC0o4qEPvsHr7KH7mMrcrEjxwmgb+g=";
-    };
-
-    nativeBuildInputs = [
-      nodejs_24
-      dart-sass
-      pnpmConfigHook
-      pnpm_10
-    ];
-
-    doCheck = true;
-
-    postBuild = ''
-      # Force sass-embedded to use our dart-sass instead of bundled binaries.
-      substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
-        --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
-      pnpm run build
-    '';
-
-    checkPhase = ''
-      pnpm run test:unit --run
-    '';
-
-    installPhase = ''
-      cp -r dist/ $out
-    '';
-  });
+  buildGoModule = buildGo127Module;
 
   # Injects a `t.Skip()` into a given test since there's apparently no other way to skip tests here.
   skipTest =
@@ -77,15 +25,22 @@ let
       }' ${file}
     '';
 in
-buildGoModule {
-  inherit src version;
+buildGoModule (finalAttrs: {
   pname = "vikunja";
+  version = "2.6.0";
+
+  src = fetchFromGitHub {
+    owner = "go-vikunja";
+    repo = "vikunja";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Xh1ozUTOVqywk0i8xQWkG/bPRgPH9EABjRW8p4do1mE=";
+  };
 
   nativeBuildInputs =
     let
       fakeGit = writeShellScriptBin "git" ''
         if [[ $@ = "describe --tags --always --abbrev=10" ]]; then
-            echo "${version}"
+            echo "${finalAttrs.version}"
         else
             >&2 echo "Unknown command: $@"
             exit 1
@@ -95,14 +50,23 @@ buildGoModule {
     [
       fakeGit
       mage
+      # mage wants to write some files to HOME
+      writableTmpDirAsHomeHook
     ];
 
-  vendorHash = "sha256-PV6WlJlG839FtWUR6QONMuuBnmo+AA53xmUNbodQdzk=";
+  vendorHash = "sha256-R6M5UyF10pIdoAvjWnS6Dqe/U6LTxmS6OwRTgmxfU4g=";
 
-  inherit frontend;
+  frontend = callPackage ./frontend.nix {
+    inherit (finalAttrs) src version;
+  };
+
+  veans = callPackage ./veans.nix {
+    inherit (finalAttrs) src version meta;
+    inherit buildGoModule;
+  };
 
   prePatch = ''
-    cp -r ${frontend} frontend/dist
+    cp -r ${finalAttrs.frontend} frontend/dist
   '';
 
   postConfigure = ''
@@ -117,37 +81,54 @@ buildGoModule {
   buildPhase = ''
     runHook preBuild
 
-    # Fixes "mkdir /homeless-shelter: permission denied" - "Error: error compiling magefiles" during build
-    export HOME=$(mktemp -d)
     mage build:build
 
     runHook postBuild
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     mage test:feature
     mage test:web
+
+    runHook postCheck
   '';
 
   installPhase = ''
     runHook preInstall
+
     install -Dt $out/bin vikunja
+
     runHook postInstall
   '';
 
   passthru = {
+    # used by vikunja-desktop
+    inherit (finalAttrs) frontend;
+
     tests.vikunja = nixosTests.vikunja;
-    frontend = frontend;
-    updateScript = ./update.sh;
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+        "--subpackage"
+        "veans"
+      ];
+    };
   };
 
   meta = {
-    changelog = "https://kolaente.dev/vikunja/api/src/tag/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/go-vikunja/vikunja/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Todo-app to organize your life";
     homepage = "https://vikunja.io/";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ leona ];
+    maintainers = with lib.maintainers; [
+      leona
+      adamcstephens
+    ];
     mainProgram = "vikunja";
     platforms = lib.platforms.linux;
   };
-}
+})

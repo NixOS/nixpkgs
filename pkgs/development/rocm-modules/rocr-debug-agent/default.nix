@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocr-debug-agent";
-  version = "7.1.1";
+  version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocr_debug_agent";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-zW92HyK4nGcDaJxmBaHeURAivs6dU059WxaywL6dAk4=";
+    hash = "sha256-w2Zg4kpuKy68DkVGsBTUsjRZoV/Y/Z3Q8s0oSIR3Ask=";
   };
 
   nativeBuildInputs = [
@@ -43,16 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf $out/src
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "Library that provides some debugging functionality for ROCr";
     homepage = "https://github.com/ROCm/rocr_debug_agent";
-    license = with lib.licenses; [ ncsa ];
+    license = lib.licenses.ncsa;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };
