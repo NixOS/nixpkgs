@@ -13,7 +13,7 @@
 
 maven.buildMavenPackage {
   pname = "jchempaint";
-  version = "3.4-SNAPSHOT-2026-04-24"; # "3.4-SNAPSHOT" is the version given in the pom.xml
+  version = "3.4b"; # "3.4-SNAPSHOT" is the version given in the pom.xml
 
   src = fetchFromGitHub {
     owner = "JChemPaint";
