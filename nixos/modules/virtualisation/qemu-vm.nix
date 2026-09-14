@@ -1012,7 +1012,7 @@ in
             "i686-linux" = "tpm-tis";
             "x86_64-linux" = "tpm-tis";
             "ppc64-linux" = "tpm-spapr";
-            "armv7-linux" = "tpm-tis-device";
+            "armv7l-linux" = "tpm-tis-device";
             "aarch64-linux" = "tpm-tis-device";
           }
           .${pkgs.stdenv.hostPlatform.system} or (throw "Unsupported system for TPM2 emulation in QEMU")
