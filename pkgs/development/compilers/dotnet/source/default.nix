@@ -12,7 +12,7 @@
   bootstrapSdkFile ? dir + "/bootstrap-sdk.nix",
   bootstrapSdk ? null,
   depsFile ? dir + "/deps.json",
-  pkgsBuildHost,
+  pkgsBuildBuild,
   buildDotnetSdk,
   withBinary ? true,
   combinePackages,
@@ -75,7 +75,7 @@ let
           tarballHash
           depsFile
           ;
-        bootstrapSdk = (buildDotnetSdk bootstrapSdkFile).sdk.overrideAttrs (old: {
+        bootstrapSdk = (pkgsBuildBuild.dotnetCorePackages.buildDotnetSdk bootstrapSdkFile).sdk.overrideAttrs (old: {
           passthru = old.passthru or { } // {
             inherit artifacts;
           };

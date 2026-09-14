@@ -39,6 +39,7 @@ makeScopeWithSplicing' {
       runtimeIdentifierMap = {
         "x86_64-linux" = "linux-x64";
         "aarch64-linux" = "linux-arm64";
+        "riscv64-linux" = "linux-riscv64";
         "aarch64-darwin" = "osx-arm64";
         "x86_64-windows" = "win-x64";
         "i686-windows" = "win-x86";
@@ -75,6 +76,9 @@ makeScopeWithSplicing' {
         mkNugetSource = callPackage ../../../build-support/dotnet/make-nuget-source { };
         mkNugetDeps = callPackage ../../../build-support/dotnet/make-nuget-deps { };
         addNuGetDeps = callPackage ../../../build-support/dotnet/add-nuget-deps { };
+
+        sigtool = callPackage ../sigtool.nix { };
+        multi-cc-wrapper = buildPackages.callPackage ./multi-cc-wrapper.nix { };
       };
 
     in
