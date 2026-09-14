@@ -39,6 +39,51 @@
         };
       };
 
+      systemd.services =
+        let
+          sleeper = "/run/current-system/sw/bin/sleep infinity";
+        in
+        {
+          # The /etc copy gets a namespace-local child mount: umount
+          # propagation is blocked, the service must be restarted.
+          sandboxed = {
+            wantedBy = [ "multi-user.target" ];
+            serviceConfig = {
+              ExecStart = sleeper;
+              PrivateMounts = true;
+              BindReadOnlyPaths = [ "/etc/pam.d" ];
+            };
+          };
+          # Plain slave namespace: receives the mount replacement via
+          # propagation, must not be restarted.
+          ns-slave = {
+            wantedBy = [ "multi-user.target" ];
+            serviceConfig = {
+              ExecStart = sleeper;
+              PrivateMounts = true;
+            };
+          };
+          # Explicitly opted out of receiving host mount changes. Must
+          # neither see the new /etc nor be restarted.
+          ns-private = {
+            wantedBy = [ "multi-user.target" ];
+            serviceConfig = {
+              ExecStart = sleeper;
+              MountFlags = "private";
+            };
+          };
+          # Stranded like `sandboxed`, but opted out of the restart.
+          opted-out = {
+            wantedBy = [ "multi-user.target" ];
+            restartOnStaleEtc = false;
+            serviceConfig = {
+              ExecStart = sleeper;
+              PrivateMounts = true;
+              BindReadOnlyPaths = [ "/etc/pam.d" ];
+            };
+          };
+        };
+
       # Prerequisites
       boot.initrd.systemd.enable = true;
 
@@ -100,8 +145,15 @@
         assert machine.succeed("head -c 10 /etc/bigfile") == "aaaaaaaaaa"
         machine.succeed("getfattr -h -n trusted.overlay.redirect /run/nixos-etc-metadata/bigfile")
 
+      def main_pid(service_name):
+          return machine.succeed(f"systemctl show -P MainPID {service_name}.service").strip()
+
       with subtest("switching to the same generation"):
         machine.succeed("/run/current-system/bin/switch-to-configuration test")
+
+      # The switch above already replaced the /etc mount once. Capture the
+      # main PIDs now so that we can use them later in our assertions.
+      pids = {service: main_pid(service) for service in ["sandboxed", "ns-slave", "ns-private", "opted-out"]}
 
       with subtest("the initrd didn't get rebuilt"):
         machine.succeed("test /run/current-system/initrd -ef /run/current-system/specialisation/new-generation/initrd")
@@ -137,6 +189,29 @@
         print(machine.succeed("stat /etc/mountpoint/extra-file"))
         print(machine.succeed("findmnt /etc/filemount"))
 
+      with subtest("stranded mount namespaces are restarted, propagated ones are not"):
+        # The namespace-local bind mount under /etc blocked the umount
+        # propagation. The unit kept the old /etc and must have been
+        # restarted by the switch.
+        assert main_pid("sandboxed") != pids["sandboxed"], "sandboxed was not restarted"
+        pid = main_pid("sandboxed")
+        assert machine.succeed(f"nsenter -t {pid} -m cat /etc/newgen") == "newgen"
+
+        # The plain slave namespace received the mount replacement via
+        # propagation, so restarting it would be gratuitous.
+        assert main_pid("ns-slave") == pids["ns-slave"], "ns-slave was restarted"
+        assert machine.succeed(f"nsenter -t {pids['ns-slave']} -m cat /etc/newgen") == "newgen"
+
+        # MountFlags=private opted out of host mount changes: not
+        # restarted, still on the old /etc.
+        assert main_pid("ns-private") == pids["ns-private"], "ns-private was restarted"
+        machine.fail(f"nsenter -t {pids['ns-private']} -m test -e /etc/newgen")
+
+        # Stranded, but restartOnStaleEtc = false must be honored.
+        assert main_pid("opted-out") == pids["opted-out"], "opted-out was restarted"
+        machine.fail(f"nsenter -t {pids['opted-out']} -m test -e /etc/newgen")
+
+      with subtest("switching to yet another generation"):
         machine.succeed(f"{newergen} switch")
         assert machine.succeed("cat /etc/newergen") == "newergen"
 
