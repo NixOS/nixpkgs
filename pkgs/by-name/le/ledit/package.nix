@@ -22,6 +22,8 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
+  dontStrip = true;
+
   nativeBuildInputs = with ocamlPackages; [
     ocaml
     findlib
@@ -32,6 +34,15 @@ stdenv.mkDerivation {
     camlp5
     camlp-streams
   ];
+
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+    echo hello | $out/bin/ledit -h /dev/null cat > ledit-check.out
+    grep -q hello ledit-check.out
+    runHook postInstallCheck
+  '';
 
   meta = {
     homepage = "http://pauillac.inria.fr/~ddr/ledit/";
