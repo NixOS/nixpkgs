@@ -10,13 +10,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "drasl";
-  version = "3.4.4";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "unmojang";
     repo = "drasl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GHwgN1yWf/xav2t03/09x/U0c6fRBDmEn0mDIv+V9ic=";
+    hash = "sha256-wSQEW6DJzualvG/xjMS9iv4j0SRKP6HWG0EliuE32ik=";
   };
 
   nativeBuildInputs = [
@@ -27,10 +27,10 @@ buildGoModule (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-L0y04zLgno5kKUACyokma8uk/fNY2mwdMwsq217SCqI=";
+    hash = "sha256-2Oc7Ib/hcAaqBOGFAWMbj/YWnYyskCgWgZ4Jyo6y+ck=";
   };
 
-  vendorHash = "sha256-4Rk59bnDFYpraoGvkBUW6Z5fiXUmm2RLwS1wxScWAMQ=";
+  vendorHash = "sha256-07VlwgzgeHX4W2HAYqKzIpGmq6kN/kprYZPUsCwqhiw=";
 
   overrideModAttrs = oldAttrs: {
     nativeBuildInputs = lib.filter (drv: drv != npmHooks.npmConfigHook) oldAttrs.nativeBuildInputs;
@@ -55,7 +55,7 @@ buildGoModule (finalAttrs: {
   };
 
   meta = {
-    description = "Yggdrasil-compatible API server for Minecraft";
+    description = "Alternative API server for Minecraft";
     homepage = "https://github.com/unmojang/drasl";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
