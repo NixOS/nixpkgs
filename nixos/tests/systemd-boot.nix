@@ -946,4 +946,69 @@ in
   defaultEntryWithBootCounting = defaultEntry { withBootCounting = true; };
 
   garbageCollectEntryWithBootCounting = garbage-collect-entry { withBootCounting = true; };
+
+  lastBooted = runTest (
+    { lib, ... }:
+    {
+      name = "systemd-boot-last-booted";
+      meta.maintainers = with lib.maintainers; [
+        elliotberman
+      ];
+
+      nodes = {
+        machine =
+          { nodes, ... }:
+          {
+            imports = [ common ];
+            boot.loader.systemd-boot.keepBootedSystemEntry = true;
+            system.extraDependencies = [ nodes.other_machine.system.build.toplevel ];
+          };
+
+        other_machine =
+          { pkgs, ... }:
+          {
+            imports = [ common ];
+            boot.loader.systemd-boot.keepBootedSystemEntry = true;
+            environment.systemPackages = [ pkgs.hello ];
+          };
+      };
+
+      testScript =
+        { nodes, ... }:
+        let
+          orig = nodes.machine.system.build.toplevel;
+          other = nodes.other_machine.system.build.toplevel;
+        in
+        # python
+        ''
+          ${testScriptPreamble}
+
+          orig = "${orig}"
+          other = "${other}"
+
+          def check_last_booted(system_path):
+              conf_files = machine.succeed(
+                  "grep --line-regexp --fixed-strings --files-with-matches "
+                  "'title NixOS (last booted)' /boot/loader/entries/nixos-*.conf"
+              ).split()
+              assert len(conf_files) == 1, f"Expected exactly one last-booted entry, got {conf_files}"
+              machine.succeed(f"grep --fixed-strings 'init={system_path}/init' {conf_files[0]}")
+
+          machine.start()
+          machine.wait_for_unit("multi-user.target")
+          check_current_system(orig)
+
+          machine.succeed(f"{orig}/bin/switch-to-configuration boot")
+          check_last_booted(orig)
+
+          # Register a newer generation. The booted system is unchanged, so the
+          # last-booted entry must keep pointing at orig even though `other` is now
+          # the newest generation.
+          machine.succeed("nix-env -p /nix/var/nix/profiles/system --set ${other}")
+          machine.succeed(f"{other}/bin/switch-to-configuration boot")
+          check_generation(2)
+          check_last_booted(orig)
+        '';
+    }
+  );
 }
