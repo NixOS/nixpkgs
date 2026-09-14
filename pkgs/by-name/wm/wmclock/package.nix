@@ -12,6 +12,8 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "wmclock";
   version = "1.0.16";
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://www.dockapps.net/download/wmclock-${finalAttrs.version}.tar.gz";
