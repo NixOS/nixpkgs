@@ -1783,7 +1783,7 @@ class NspawnMachine(BaseMachine):
         # will continue to use the original /etc/profile.
         command = (
             "set -eo pipefail; "
-            "export USER=root HOME=/root; "
+            "export USER=root HOME=/root DISPLAY=:0.0; "
             f"source /etc/profile; set -u; {command}"
         )
 
