@@ -526,6 +526,7 @@ in
   };
   cri-o = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./cri-o.nix;
   croc = runTest ./croc.nix;
+  cron = runTest ./cron.nix;
   cross-seed = runTest ./cross-seed.nix;
   cryptpad = runTest ./cryptpad.nix;
   cups-pdf = runTest ./cups-pdf.nix;
