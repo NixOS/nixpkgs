@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  buildPackages,
 
   # nativeBuildInputs
   cmake,
@@ -71,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     python3
-    qt6.qttools
+    (lib.getBin qt6.qttools)
     qt6.wrapQtAppsHook
     wxwidgets
   ]
@@ -124,6 +125,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_OSX_DEPLOYMENT_TARGET" stdenv.hostPlatform.darwinMinVersion)
     # Nix performs stripping after deployment.
     (lib.cmakeFeature "AU4_MACDEPLOYQT_EXTRA_OPTIONS" "-no-strip")
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    (lib.cmakeFeature "QT_HOST_PATH" "${buildPackages.qt6.qtbase}")
+    (lib.cmakeFeature "Qt6QmlTools_DIR" "${buildPackages.qt6.qtdeclarative}/lib/cmake/Qt6QmlTools")
+    (lib.cmakeFeature "Qt6QuickTools_DIR" "${buildPackages.qt6.qtdeclarative}/lib/cmake/Qt6QuickTools")
+    (lib.cmakeFeature "Qt6ShaderToolsTools_DIR" "${buildPackages.qt6.qtshadertools}/lib/cmake/Qt6ShaderToolsTools")
   ];
 
   preConfigure = ''
