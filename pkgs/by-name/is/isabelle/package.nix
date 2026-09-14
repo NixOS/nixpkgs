@@ -20,14 +20,26 @@
   perl,
   procps,
   makeDesktopItem,
+  copyDesktopItems,
+  desktopToDarwinBundle,
   isabelle-components,
   symlinkJoin,
   fetchhg,
-  electron,
+  callPackage,
+  writeTextFile,
+  writableTmpDirAsHomeHook,
 }:
 
 let
   java = openjdk21;
+
+  platforms = {
+    x86_64-linux = "x86_64-linux";
+    aarch64-linux = "arm64-linux";
+    aarch64-darwin = "arm64-darwin";
+  };
+
+  platform = platforms."${stdenv.hostPlatform.system}";
 
   # There have been issues with proofs failing on NixOS in the past,
   # so we pin polyml to the exact commit that upstream isabelle uses
@@ -125,6 +137,27 @@ let
         };
       };
 
+  # Isabelle requires it's own version of vscodium, patched with support
+  # for it's unique charsets
+  vscodium = callPackage ./vscodium.nix { };
+
+  vscodium-settings = writeTextFile {
+    name = "vscodium-settings";
+    text =
+      if stdenv.hostPlatform.isDarwin then
+        ''
+          ISABELLE_VSCODIUM_HOME="${vscodium}/Applications"
+          ISABELLE_VSCODIUM_ELECTRON="$ISABELLE_VSCODIUM_HOME/VSCodium.app/Contents/MacOS/Electron"
+          ISABELLE_VSCODIUM_RESOURCES="$ISABELLE_VSCODIUM_HOME/VSCodium.app/Contents/Resources"
+        ''
+      else
+        ''
+          ISABELLE_VSCODIUM_HOME="${vscodium}/lib/vscode"
+          ISABELLE_VSCODIUM_ELECTRON="$ISABELLE_VSCODIUM_HOME/electron"
+          ISABELLE_VSCODIUM_RESOURCES="$ISABELLE_VSCODIUM_HOME/resources"
+        '';
+    destination = "/etc/settings";
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "isabelle";
@@ -149,7 +182,14 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-ZQqWabSgh2da+zQpTYLe0vBwTUfVgN2e1FzdyfF2S90=";
       };
 
-  nativeBuildInputs = [ java ];
+  nativeBuildInputs = [
+    java
+    copyDesktopItems
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
+  ];
 
   buildInputs = [
     polyml'
@@ -171,7 +211,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.dirname}${lib.optionalString stdenv.hostPlatform.isDarwin ".app"}";
 
-  doCheck = stdenv.hostPlatform.system != "aarch64-linux";
+  # The z3 version isabelle uses is only built for x86_64
+  # even though it can work on apple-silicon with rosetta, leave this up to the user
+  doCheck = stdenv.hostPlatform.isx86_64;
   checkPhase = "bin/isabelle build -v HOL-SMT_Examples";
 
   postUnpack = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -233,6 +275,10 @@ stdenv.mkDerivation (finalAttrs: {
     done
     rm -rf contrib/*/src
 
+    substituteInPlace etc/components \
+      --replace-fail 'contrib/vscodium-1.105.17075' '${vscodium-settings}'
+    rm -rf contrib/vscodium-*
+
     substituteInPlace lib/Tools/env \
       --replace-fail /usr/bin/env ${coreutils}/bin/env
 
@@ -250,19 +296,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'ISABELLE_APPLE_PLATFORM64=arm64-darwin' ""
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
-    arch=${
-      if stdenv.hostPlatform.system == "aarch64-linux" then "arm64-linux" else stdenv.hostPlatform.system
-    }
-    for f in contrib/*/$arch/{z3,nunchaku,SPASS,zipperposition}; do
+    for f in contrib/*/${platform}/{z3,nunchaku,SPASS,zipperposition}; do
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"${lib.optionalString stdenv.hostPlatform.isAarch64 " || true"}
     done
-    patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) contrib/bash_process-*/$arch/bash_process
+    patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) contrib/bash_process-*/${platform}/bash_process
 
-    ln -sf ${electron}/bin/electron contrib/vscodium-*/*/electron
-    rm contrib/vscodium-*/*/*.so{,.*}
-    rm contrib/vscodium-*/*/chrome*
-
-    for d in contrib/kodkodi-*/jni/$arch; do
+    for d in contrib/kodkodi-*/jni/${platform}; do
       patchelf --set-rpath "${
         lib.concatStringsSep ":" [
           "${java}/lib/openjdk/lib/server"
@@ -272,11 +311,12 @@ stdenv.mkDerivation (finalAttrs: {
     done
   ''
   + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
-    patchelf --set-rpath "${lib.getLib stdenv.cc.cc}/lib" contrib/z3-*/$arch/z3
+    patchelf --set-rpath "${lib.getLib stdenv.cc.cc}/lib" contrib/z3-*/${platform}/z3
   '';
 
   buildPhase = ''
-    export HOME=$TMP # The build fails if home is not set
+    runHook preBuild
+
     setup_name=$(basename contrib/isabelle_setup*)
 
     # Stop Isabelle trying to use `/tmp`.
@@ -303,9 +343,13 @@ stdenv.mkDerivation (finalAttrs: {
     echo "Building HOL heap"
     ln -s ${polyml'}/bin ./contrib/polyml-*/
     bin/isabelle build -v -o system_heaps -b HOL
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv $TMP/$dirname $out
     cd $out/$dirname
@@ -315,52 +359,38 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/share/icons/hicolor/isabelle/apps"
     cp "$out/Isabelle${finalAttrs.version}/lib/icons/isabelle.xpm" "$out/share/icons/hicolor/isabelle/apps/"
 
-    # desktop item
-    mkdir -p "$out/share"
-    cp -r "${finalAttrs.desktopItem}/share/applications" "$out/share/applications"
+    runHook postInstall
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "isabelle";
-    exec = "isabelle jedit";
-    icon = "isabelle";
-    desktopName = "Isabelle";
-    comment = finalAttrs.meta.description;
-    categories = [
-      "Education"
-      "Science"
-      "Math"
-    ];
-  };
-
-  meta = {
-    description = "Generic proof assistant";
-    longDescription = ''
-      Isabelle is a generic proof assistant.  It allows mathematical formulas
-      to be expressed in a formal language and provides tools for proving those
-      formulas in a logical calculus.
-    '';
-    homepage = "https://isabelle.in.tum.de/";
-    sourceProvenance = with lib.sourceTypes; [
-      fromSource
-      binaryNativeCode # source bundles binary dependencies
-    ];
-    license = lib.licenses.bsd3;
-    maintainers = [
-      lib.maintainers.jvanbruegge
-      lib.maintainers.sempiternal-aurora
-    ];
-    # need to compile the heaps for host on build
-    # which requires us to use the host polyml toolchain
-    broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-      "aarch64-darwin"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "isabelle";
+      exec = "isabelle jedit";
+      icon = "isabelle";
+      desktopName = "Isabelle";
+      comment = finalAttrs.meta.description;
+      categories = [
+        "Education"
+        "Science"
+        "Math"
+      ];
+    })
+    (makeDesktopItem {
+      name = "isabelle_vscodium";
+      exec = "isabelle vscode";
+      icon = "isabelle";
+      desktopName = "Isabelle (VSCodium)";
+      comment = finalAttrs.meta.description;
+      categories = [
+        "Education"
+        "Science"
+        "Math"
+      ];
+    })
+  ];
 
   passthru = {
+    inherit vscodium platform;
     vampire = vampire';
     polyml = polyml';
     cvc5 = cvc5';
@@ -393,5 +423,29 @@ stdenv.mkDerivation (finalAttrs: {
           echo contrib/${c.pname}-${c.version} >> ${base}/etc/components
         '') components;
       };
+  };
+
+  meta = {
+    description = "Generic proof assistant";
+    longDescription = ''
+      Isabelle is a generic proof assistant.  It allows mathematical formulas
+      to be expressed in a formal language and provides tools for proving those
+      formulas in a logical calculus.
+    '';
+    homepage = "https://isabelle.in.tum.de/";
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryNativeCode # source bundles binary dependencies
+      binaryBytecode # contains many jars
+    ];
+    license = lib.licenses.bsd3;
+    maintainers = [
+      lib.maintainers.jvanbruegge
+      lib.maintainers.sempiternal-aurora
+    ];
+    # need to compile the heaps for host on build
+    # which requires us to use the host polyml toolchain
+    broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
+    platforms = lib.attrNames platforms;
   };
 })
