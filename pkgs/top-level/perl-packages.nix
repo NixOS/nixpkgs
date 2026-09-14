@@ -16161,6 +16161,12 @@ with self;
       url = "mirror://cpan/authors/id/C/CF/CFRANKS/HTML-FormFu-2.07.tar.gz";
       hash = "sha256-Ty8Bf3qHVPu26RIGyI7RPHVqFOO+oXgYjDuXdGNm6zI=";
     };
+    patches = [
+      (fetchpatch {
+        url = "https://security.metacpan.org/patches/H/HTML-FormFu/2.08/CVE-2026-19873-r1.patch";
+        hash = "sha256-1QquxDl/NuNJe6MFbeEH49hYA8agXXeWm1Q23fOM+Nc=";
+      })
+    ];
     buildInputs = [
       CGI
       FileShareDirInstall
