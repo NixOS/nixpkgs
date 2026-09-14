@@ -11325,6 +11325,8 @@ self: super: with self; {
 
   mujoco-mjx = callPackage ../development/python-modules/mujoco-mjx { mujoco-main = pkgs.mujoco; };
 
+  mujoco-warp = callPackage ../development/python-modules/mujoco-warp { };
+
   mujson = callPackage ../development/python-modules/mujson { };
 
   mullvad-api = callPackage ../development/python-modules/mullvad-api { };
