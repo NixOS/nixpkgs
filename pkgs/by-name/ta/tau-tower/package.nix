@@ -11,17 +11,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tau-tower";
-  version = "0.2.3";
+  version = "0.2.101";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tau-org";
     repo = "tau-tower";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vbUR2ZfnomUkWdz2xdFReR6B0lzz4dKM88RonAWu994=";
+    hash = "sha256-nfPrxkvb09BkmdxAVy9Ltls01xdIlK6CNnGmtQFBar0=";
   };
 
-  cargoHash = "sha256-Qv97FTiccfQSBI2OBfl31p3oF/JCL/+UXkK+owuByDY=";
+  cargoHash = "sha256-btmkUoHZgGbAUOwMlfGn66d8lpDgMthrGRHrcBf8okI=";
 
   nativeBuildInputs = [
     perl
