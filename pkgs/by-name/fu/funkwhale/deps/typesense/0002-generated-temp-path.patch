@@ -1,0 +1,31 @@
+From 00466aff0a712ae75df85d818f5a86f5de8bef2d Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Wed, 25 Mar 2026 19:05:02 +0530
+Subject: [PATCH 2/5] generated temp path
+
+Signed-off-by: phanirithvij <phanirithvij2000@gmail.com>
+---
+ tests/operations_test.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tests/operations_test.py b/tests/operations_test.py
+index b48b946..71c134e 100644
+--- a/tests/operations_test.py
++++ b/tests/operations_test.py
+@@ -69,11 +69,11 @@ def test_cache_clear(actual_operations: Operations) -> None:
+     assert response["success"]
+ 
+ 
+-def test_snapshot(actual_operations: Operations) -> None:
++def test_snapshot(actual_operations: Operations, tmp_path) -> None:
+     """Test that the Operations object can perform the snapshot operation."""
+     response = actual_operations.perform(
+         "snapshot",
+-        {"snapshot_path": "/tmp"},  # noqa: S108
++        {"snapshot_path": str(tmp_path)},  # noqa: S108
+     )
+ 
+     assert response["success"]
+-- 
+2.53.0
+
