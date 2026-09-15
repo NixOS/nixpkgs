@@ -29,7 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
     # https://lists.gnu.org/archive/html/bug-gnulib/2025-07/msg00021.html
     # Multiple upstream commits squashed with adjustments, see header
     ./gnulib-float-h-tests-port-to-C23-PowerPC-GCC.patch
-  ];
+  ]
+  # dropping these headers fixes gnugrep compile on iOS
+  # where libc.h or nlist.h exist.
+  ++ lib.optional stdenv.hostPlatform.isiOS ./patches/ios-stackvma-drop-dead-includes.patch;
 
   # Some gnulib tests fail
   # - on Musl: https://github.com/NixOS/nixpkgs/pull/228714

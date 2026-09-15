@@ -361,6 +361,10 @@ rec {
     isiOS = {
       kernel = kernels.ios;
     };
+    isiOSSimulator = {
+      kernel = kernels.ios;
+      abi = abis.simulator;
+    };
     isLinux = {
       kernel = kernels.linux;
     };
