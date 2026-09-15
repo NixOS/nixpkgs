@@ -1,13 +1,15 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitLab,
   blueprint-compiler,
   desktop-file-utils,
+  dbus,
   meson,
   python3,
   ninja,
   pkg-config,
+  vala,
   wrapGAppsHook4,
   appstream,
   flatpak,
@@ -29,12 +31,13 @@
   md4c,
   webkitgtk_6_0,
   libsecret,
+  systemd,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bazaar";
-  version = "0.9.1";
+  version = "0.9.5";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -46,12 +49,20 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  src = fetchFromGitHub {
-    owner = "bazaar-org";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "World";
     repo = "bazaar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9J+XI5JnV8Yfk3xRI/VM5RSG4eMafbw2rBRpPMIu5yA=";
+    hash = "sha256-R3CVccM3kTqSc87HfIMIU/fyhUrWKmSWl776MJmWocw=";
   };
+
+  postPatch = ''
+    # The generated Vala C code includes headers that require these dependencies.
+    substituteInPlace src/meson.build \
+      --replace-fail 'vala_deps = [' \
+        "vala_deps = [declare_dependency(compile_args: run_command('pkg-config', '--cflags', 'appstream', 'flatpak', check: true).stdout().strip().split()),"
+  '';
 
   nativeBuildInputs = [
     blueprint-compiler
@@ -60,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    vala
     wrapGAppsHook4
     (python3.withPackages (p: [
       p.babel
@@ -69,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     appstream
+    dbus
     flatpak
     glib-networking
     gtk4
@@ -87,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     md4c
     webkitgtk_6_0
     libsecret
+    systemd
   ];
 
   postInstall = ''
@@ -112,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "FlatHub-first app store for GNOME";
-    homepage = "https://github.com/kolunmi/bazaar";
+    homepage = "https://gitlab.gnome.org/World/bazaar";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       dtomvan
