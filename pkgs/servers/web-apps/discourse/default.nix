@@ -518,7 +518,8 @@ let
       # a symlink in the way to the last directory. This patch explicitly resolves the symlink.
       ./resolve_generated_assets_symlink.patch
 
-      ./optimize-image-do-not-hide-errors.patch
+      # in the imagemagick sandbox, symlinks permissions are checked (as you would hope) but this causes other problems..
+      ./optimize-image-fix.patch
     ];
 
     postPatch = ''
