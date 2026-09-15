@@ -4,6 +4,7 @@
   rustPlatform,
   openssl,
   pkg-config,
+  stdenv, # for meta.broken
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -25,6 +26,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-5LKKjHzIlXw0bUmF7GDCVW0cptCxohq6CNPIrMZKorM=";
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     changelog = "https://github.com/kejadlen/git-together/releases/tag/v${finalAttrs.version}";
     description = "Better commit attribution while pairing without messing with your git workflow";
     homepage = "https://github.com/kejadlen/git-together";

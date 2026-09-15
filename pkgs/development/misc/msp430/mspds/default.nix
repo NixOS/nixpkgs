@@ -66,6 +66,8 @@ stdenv.mkDerivation {
   ++ lib.optional stdenv.hostPlatform.isLinux libusb1;
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     description = "TI MSP430 FET debug driver";
     homepage = "https://www.ti.com/tool/MSPDS";
     license = lib.licenses.bsd3;

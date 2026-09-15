@@ -6,6 +6,7 @@
   pkg-config,
   openssl,
   nix-update-script,
+  stdenv, # for meta.broken
 }:
 let
   # That is from cargoDeps/risc0-circuit-recursion/build.rs
@@ -44,6 +45,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Cargo extension to help create, manage, and test RISC Zero projects";
     mainProgram = "cargo-risczero";
     homepage = "https://risczero.com";
