@@ -9,7 +9,7 @@
   # dependencies
   bibtexparser,
   feedparser,
-  httpx,
+  httpx2,
   whenever,
   pytest-asyncio,
 
@@ -22,19 +22,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyzotero";
-  version = "1.13.0";
+  version = "1.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "urschrei";
     repo = "pyzotero";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5Ew5u6+a+8wv0scyQ4IOcZWCimEQLbe9OuKBIKrPoXc=";
+    hash = "sha256-9iWBGu2VJb+lfDg2By2m2p4zC/4tOHatR5FBP86ntYs=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.8.14,<0.9.0" "uv-build"
+      --replace-fail "uv_build>=0.8.14,<0.12.0" "uv-build"
   '';
 
   build-system = [
@@ -44,7 +44,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     bibtexparser
     feedparser
-    httpx
+    httpx2
     whenever
   ];
 
