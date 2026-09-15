@@ -111,6 +111,13 @@ in
     variant = "mainline";
     rev = "emacs-31.1";
     hash = "sha256-lFT5Vt49G17t/fRm5yppO5p9ui10I9JNJVaGO1GPZFI=";
+    patches = fetchpatch: [
+      (fetchpatch {
+        name = "CVE-2024-53920.patch";
+        url = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/patch/?id=abc802ee2eb0b1663349ddf22a461f8e54a383fb";
+        hash = "sha256-ViRD4E27WDs7lLO6YPNroMo3Zq5/ASqMlmNtVI1V/Lo=";
+      })
+    ];
   });
 
   emacs30-macport = import ./make-emacs.nix (mkArgs {
