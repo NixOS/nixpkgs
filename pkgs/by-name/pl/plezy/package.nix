@@ -21,17 +21,16 @@
   _7zz,
   makeBinaryWrapper,
   runCommand,
-  noto-fonts-cjk-sans ? null,
 }:
 let
   pname = "plezy";
-  version = "2.19.1";
+  version = "2.20.0";
 
   src = fetchFromGitHub {
     owner = "edde746";
     repo = "plezy";
     tag = version;
-    hash = "sha256-vafKdaMUR6O3QzsPbMc/cW4cPmKxe9nDEe7bfIvfVFA=";
+    hash = "sha256-q0oGOAHco7wWS8P2sUdplZS/Rvlh4a1/MVfRbrETQ/0=";
   };
 
   simdutf = fetchurl {
@@ -101,11 +100,6 @@ let
       substituteInPlace linux/CMakeLists.txt \
         --replace-fail "URL https://github.com/simdutf/simdutf/releases/download/v6.4.2/singleheader.zip" \
                        "URL file://${simdutf}"
-    ''
-    + lib.optionalString (stdenv.hostPlatform.system == "aarch64-linux") ''
-      # Opt-in workaround for invisible text on aarch64-linux systems. Text was invisible; bundling the font as a Dart asset fixed it,
-      # unknown why.
-      install -Dm644 ${noto-fonts-cjk-sans}/share/fonts/opentype/noto-cjk/NotoSansCJK-VF.otf.ttc assets/fonts/NotoSans.ttc
     '';
 
     desktopItems = [
@@ -143,7 +137,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/edde746/plezy/releases/download/${version}/plezy-macos.dmg";
-      hash = "sha256-fT/9DvzPTbX68GPo7MA+iX7jDQjp+jsAfRJ8Y8vxh+I=";
+      hash = "sha256-cQ5lGdhnWnfVUI6fqx8pk5zgdaQrZbZxD5mSwVpTbmM=";
     };
 
     nativeBuildInputs = [
