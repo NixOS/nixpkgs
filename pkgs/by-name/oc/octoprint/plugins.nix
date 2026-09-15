@@ -220,6 +220,16 @@ in
 
     propagatedBuildInputs = with super; [ pyserial ];
 
+    # Plugin imports the Python 2 compatibility shim `basestring` from
+    # `past.builtins` (part of the `future` package), which isn't declared
+    # as a dependency upstream and is unsupported on Python >= 3.13. It's
+    # only used for isinstance checks here, so drop the dead Python 2
+    # codepath instead of depending on the unsupported `future` package.
+    postPatch = ''
+      substituteInPlace octoprint_firmwareupdater/__init__.py \
+        --replace-fail "from past.builtins import basestring" "basestring = (bytes, str)"
+    '';
+
     meta = {
       description = "Printer Firmware Updater";
       homepage = "https://github.com/OctoPrint/OctoPrint-FirmwareUpdater";
