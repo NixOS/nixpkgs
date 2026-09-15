@@ -10,7 +10,7 @@
 
 buildPythonPackage {
   pname = "pyfunctional";
-  version = "1.5.0";
+  version = "1.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
