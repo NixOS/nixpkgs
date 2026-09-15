@@ -100,6 +100,7 @@ let
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "crystal";
+      __structuredAttrs = true;
       inherit buildFlags doCheck version;
 
       src = fetchFromGitHub {
