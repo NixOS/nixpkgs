@@ -5978,6 +5978,12 @@
     githubId = 1222362;
     name = "Matías Lang";
   };
+  crisautomata = {
+    email = "camnm.youthplus@gmail.com";
+    github = "CrisAutomata";
+    githubId = 132472609;
+    name = "Nguyen (Cris) Manh Cam";
+  };
   criyle = {
     email = "i+nixos@goj.ac";
     name = "Yang Gao";
