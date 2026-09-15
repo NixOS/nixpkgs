@@ -3861,7 +3861,7 @@ with pkgs;
   libllvm = llvmPackages.libllvm;
   llvm-manpages = llvmPackages.llvm-manpages;
 
-  llvmPackages = llvmPackages_21;
+  llvmPackages = llvmPackages_23;
 
   inherit
     (rec {
