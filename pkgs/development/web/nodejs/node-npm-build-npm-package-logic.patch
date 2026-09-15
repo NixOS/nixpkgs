@@ -2,7 +2,12 @@ This patch is based off of npm tag v9.1.5.
 
 This introduces fixes for 4 issues:
 
-1. When node-gyp is included as a dependency in a project, any scripts that run it will not use the copy included in Node. This is problematic because we patch node-gyp to work without xcbuild on Darwin, leading to these packages failing to build with a sandbox on Darwin.
+1. When node-gyp is included as a dependency in a project, any scripts that run it will not use the copy included in Node.
+   (Updated: the ambient PATH is no longer prepended ahead of `binPaths`
+   and the ancestor `node_modules/.bin` entries — only `node-gyp-bin` is
+   promoted. Prepending the whole PATH made a nested `npm run --workspace`
+   resolve scripts' binaries from the parent's injected `node_modules/.bin`,
+   shadowing the workspace's own versions.) This is problematic because we patch node-gyp to work without xcbuild on Darwin, leading to these packages failing to build with a sandbox on Darwin.
 2. When a Git dependency contains install scripts, it has to be built just like any other package. Thus, we need to patch shebangs appropriately, just like in npmConfigHook.
 3. We get useless warnings that clog up logs when using a v1 lockfile, so we silence them.
 4. npm looks at a hidden lockfile to determine if files have binaries to link into `node_modules/.bin`. When using a v1 lockfile offline, this lockfile does not contain enough info, leading to binaries for packages such as Webpack not being available to scripts. We used to work around this by making npm ignore the hidden lockfile by creating a file, but now we just disable the code path entirely.
@@ -13,27 +18,33 @@ To update:
 3. Include/update this frontmatter, please!
 
 diff --git a/deps/npm/node_modules/@npmcli/run-script/lib/set-path.js b/deps/npm/node_modules/@npmcli/run-script/lib/set-path.js
-index c59c270d9..98785192f 100644
 --- a/deps/npm/node_modules/@npmcli/run-script/lib/set-path.js
 +++ b/deps/npm/node_modules/@npmcli/run-script/lib/set-path.js
-@@ -12,7 +12,10 @@ const setPATH = (projectPath, binPaths, env) => {
+@@ -13,7 +13,13 @@
      .reduce((set, p) => set.concat(p.filter(concatted => !set.includes(concatted))), [])
      .join(delimiter)
  
 -  const pathArr = []
 +  // Ensure when using buildNpmPackage hooks that Node.js'
 +  // bundled copy of node-gyp is used, instead of any copy
-+  // pulled in as a dependency.
-+  const pathArr = process.env['NIX_NODEJS_BUILDNPMPACKAGE'] ? [nodeGypPath, PATH] : [];
++  // pulled in as a dependency. Only node-gyp-bin is promoted
++  // here: the ambient PATH keeps npm's original trailing
++  // position, so workspace-local binaries are not shadowed by
++  // whatever the parent process happened to inject into PATH.
++  const pathArr = process.env['NIX_NODEJS_BUILDNPMPACKAGE'] ? [nodeGypPath] : [];
    if (binPaths) {
-     pathArr.push(...binPaths)
-   }
-@@ -26,7 +29,8 @@ const setPATH = (projectPath, binPaths, env) => {
+     for (const bin of binPaths) {
+       if (bin.includes(delimiter)) {
+@@ -34,7 +40,12 @@
      pp = p
      p = dirname(p)
    } while (p !== pp)
 -  pathArr.push(nodeGypPath, PATH)
-+  if (!process.env['NIX_NODEJS_BUILDNPMPACKAGE']) { pathArr.push(nodeGypPath, PATH) }
++  if (process.env['NIX_NODEJS_BUILDNPMPACKAGE']) {
++    pathArr.push(PATH)
++  } else {
++    pathArr.push(nodeGypPath, PATH)
++  }
 +
  
    const pathVal = pathArr.join(delimiter)
