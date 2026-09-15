@@ -5,6 +5,7 @@
   buildGo126Module,
   makeWrapper,
   nix-update-script,
+  nixosTests,
   v2ray-rules-dat,
   assets ? [
     v2ray-rules-dat
@@ -53,6 +54,7 @@ buildGo126Module (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests = nixosTests.xray;
   };
 
   meta = {
