@@ -2,6 +2,7 @@
   rust-bindgen-unwrapped,
   zlib,
   bash,
+  lib,
   runCommand,
   runCommandCC,
   stdenv,
@@ -9,7 +10,7 @@
 let
   clang = rust-bindgen-unwrapped.clang;
   targetFlag =
-    if stdenv.targetPlatform != stdenv.hostPlatform then
+    if (!lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform) then
       "--target=${stdenv.targetPlatform.config}"
     else
       "";
