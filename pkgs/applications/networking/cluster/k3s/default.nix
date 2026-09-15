@@ -15,4 +15,5 @@ in
   k3s_1_34 = forVersions ./1_34/versions.nix;
   k3s_1_35 = forVersions ./1_35/versions.nix;
   k3s_1_36 = forVersions ./1_36/versions.nix;
+  k3s_1_37 = forVersions ./1_37/versions.nix;
 }
