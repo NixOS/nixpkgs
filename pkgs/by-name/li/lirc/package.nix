@@ -1,8 +1,9 @@
 {
   lib,
   stdenv,
+  fetchgit,
   fetchurl,
-  fetchpatch,
+  buildPackages,
   autoreconfHook,
   pkg-config,
   help2man,
@@ -17,59 +18,35 @@
   libice,
   libsm,
   libx11,
+  runtimeShellPackage,
 }:
 
 let
-  pythonEnv = python3.pythonOnBuildForHost.withPackages (
+  pythonBuildEnv = python3.pythonOnBuildForHost.withPackages (
+    p: with p; [
+      setuptools
+    ]
+  );
+  pythonHostEnv = python3.withPackages (
     p: with p; [
       pyyaml
-      setuptools
     ]
   );
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lirc";
-  version = "0.10.2";
+  version = "0.10.2-unstable-2026-06-07";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/lirc/lirc-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-PUTsgnSIHPJi8WCAVkHwgn/8wgreDYXn5vO5Dg09Iio=";
+  src = fetchgit {
+    url = "https://git.code.sf.net/p/lirc/git";
+    rev = "b0f06cbf027fa767d5456311d9195803167290f5";
+    hash = "sha256-i4acp2htuaR0mTOI8oZ6NWf0NUESxJZVI5Z+cRX9Cfw=";
   };
 
-  patches = [
-    # Fix installation of Python bindings
-    (fetchpatch {
-      url = "https://sourceforge.net/p/lirc/tickets/339/attachment/0001-Fix-Python-bindings.patch";
-      sha256 = "088a39x8c1qd81qwvbiqd6crb2lk777wmrs8rdh1ga06lglyvbly";
-    })
-
-    # Add a workaround for linux-headers-5.18 until upstream adapts:
-    #   https://sourceforge.net/p/lirc/git/merge-requests/45/
-    ./linux-headers-5.18.patch
-
-    # remove check for `Ubuntu` in /proc/version which will override
-    # --with-systemdsystemunitdir
-    # https://sourceforge.net/p/lirc/tickets/385/
-    ./ubuntu.diff
-
-    # fix overriding PYTHONPATH
-    ./pythonpath.patch
-  ];
-
   postPatch = ''
-    patchShebangs .
-
-    # Pull fix for new pyyaml pending upstream inclusion
-    #   https://sourceforge.net/p/lirc/git/merge-requests/39/
-    substituteInPlace python-pkg/lirc/database.py \
-      --replace-fail 'yaml.load(' 'yaml.safe_load('
-
+    patchShebangs tools/lirc-make-devinput tools/irdb-get doc/
     substituteInPlace systemd/*.service \
       --replace-fail "ExecStart=/usr/" "ExecStart=''${!outputBin}/"
-  '';
-
-  preConfigure = ''
-    export PKGCONFIG="$PKG_CONFIG"
   '';
 
   strictDeps = true;
@@ -78,11 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     help2man
     libxslt
-    pythonEnv
+    pythonBuildEnv
     pkg-config
   ];
 
   buildInputs = [
+    runtimeShellPackage
+    pythonHostEnv
     alsa-lib
     systemd
     libusb-compat-0_1
@@ -93,6 +72,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env.DEVINPUT_HEADER = "${linuxHeaders}/include/linux/input-event-codes.h";
+  env.LIRC_REMOTES_LIST =
+    "file://"
+    + (fetchurl {
+      name = "lirc-remotes.list";
+      url = "http://lirc-remotes.sourceforge.net/remotes.list";
+      hash = "sha256-TVkV19ApWiupiHEyBldaiDuJDc9k0uZzP5UKuuYplfU=";
+    });
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -101,7 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-uinput" # explicit activation because build env has no uinput
     "--enable-devinput" # explicit activation because build env has no /dev/input
     "--with-lockdir=/run/lirc/lock" # /run/lock is not writable for 'lirc' user
-    "PYTHON=${pythonEnv.interpreter}"
+    # So $out/bin/irexec will use the host platform's runtimeShell
+    "SH_PATH=${lib.getExe runtimeShellPackage}"
   ];
 
   installFlags = [
@@ -127,11 +114,39 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     moveToOutput "${python3.sitePackages}" "$out"
-    # $out/bin/lirc-setup is symlinked to $lib/''${python3.sitePackages}, so it
-    # has to be fixed due to the above.
+  ''
+  # $out/bin/lirc-setup is symlinked to $lib/''${python3.sitePackages}, so it
+  # has to be fixed due to the above.
+  + ''
     rm $out/bin/lirc-setup
     ln -s $out/${python3.sitePackages}/lirc-setup/lirc-setup $out/bin/lirc-setup
+  ''
+  # Fix the shebangs of scripts used during build and also distributed for
+  # the host to use.
+  + ''
+    patchShebangs --host --update \
+      ''${!outputBin}/bin/{lirc-make-devinput,irdb-get}
+  ''
+  # This script is used during build, and its shebang is patched during
+  # postPatch above. Upstream's doc/Makefile.am lists it as a _DATA file so it
+  # doesn't get the executable bit when installed. We don't make it an
+  # executable so `patchShebangs --host --update` will patch it too, as it is
+  # meant for imperative installations, where external drivers and their docs
+  # might be added by another package and the package manager regenerates the
+  # table of contents. This is not relevant for Nix because packages' outputs
+  # cannot be altered by other packages.
+  + ''
+    rm ''${!outputDoc}/share/doc/lirc/plugindocs/make-ext-driver-toc.sh
   '';
+  # Avoid retaining references to buildPlatform's interpreters that are used
+  # during build, but should not be part of $out. See fixes above in
+  # `postFixup`.
+  disallowedReferences =
+    lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)
+      [
+        buildPackages.runtimeShellPackage
+        buildPackages.python3
+      ];
 
   # Upstream ships broken symlinks in docs
   dontCheckForBrokenSymlinks = true;
@@ -141,6 +156,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.lirc.org/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ pSub ];
+    maintainers = with lib.maintainers; [
+      pSub
+      doronbehar
+    ];
   };
 })
