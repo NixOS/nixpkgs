@@ -11,6 +11,8 @@ buildPythonPackage (finalAttrs: {
   version = "0.3.322";
   pyproject = true;
 
+  # nixpkgs-update: no auto update
+  # updated via comfyui
   src = fetchPypi {
     pname = "comfyui_workflow_templates_core";
     inherit (finalAttrs) version;
