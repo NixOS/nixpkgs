@@ -422,14 +422,14 @@ in
 
   prusaslicerthumbnails = buildPlugin rec {
     pname = "prusaslicerthumbnails";
-    version = "1.0.8";
+    version = "1.2.3";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "jneilliii";
       repo = "OctoPrint-PrusaSlicerThumbnails";
       rev = version;
-      sha256 = "sha256-5TUx64i3VIUXtpIf4mo3hP//kXE+LuuLaZEJYgv4hVs=";
+      sha256 = "sha256-lcBdUPWffQqQi+JwAywXUilw9m/kGlx3nW5tDTmG3pk=";
     };
 
     propagatedBuildInputs = with super; [ psutil ];
