@@ -24,25 +24,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "geph5";
-  version = "0.2.102";
+  version = "0.3.10";
 
   src = fetchFromGitHub {
     owner = "geph-official";
     repo = "geph5";
     rev = "geph5-client-v${finalAttrs.version}";
-    hash = "sha256-E3msw4yG5RxKapHBvhGEVlsJiLgysCgjAtOrJ8fGES0=";
+    hash = "sha256-hTBIl1O6FZyFCmPHmfrXFGoO4gYl22kE6t2lm8dfA9I=";
   };
 
-  cargoHash = "sha256-w+1JLxvflb8PQqNi5MnxoEcWctuaC6Ux3oNYJzB6oaE=";
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace binaries/geph5-client/src/vpn/*.sh \
-      --replace-fail 'PATH=' 'PATH=${binPath}:'
-
-    substituteInPlace binaries/geph5-client/src/vpn/linux.rs \
-      --replace-fail 'Command::new("sh")' 'Command::new("${bash}/bin/sh")' \
-      --replace-fail '/usr/bin/env ' '${lib.getExe' coreutils "env"} '
-  '';
+  cargoHash = "sha256-z2YDk3OoOP9Rw3sQYYgT5Tnf9AX46lGd0wHFC2LRS0c=";
 
   postInstall = ''
     rm -rf "$out/lib"
@@ -73,6 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Wrong test
     "--skip=traffcount::tests::test_traffic_count_basic"
     # Requires network
+    "--skip=china::tests::resolve_baidu_via_alidns"
     "--skip=dns::tests::resolve_google"
     "--skip=tests::test_clib"
     # Never finish
@@ -103,7 +95,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Modular Internet censorship circumvention system designed specifically to deal with national filtering";
     homepage = "https://github.com/geph-official/geph5";
     changelog = "https://github.com/geph-official/geph5/releases/tag/geph5-client-v${finalAttrs.version}";
-    mainProgram = "geph5-client";
+    mainProgram = "geph5";
     platforms = lib.platforms.linux ++ lib.platforms.darwin; # VPN mode is not yet available on macOS.
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
