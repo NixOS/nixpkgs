@@ -23,6 +23,11 @@ stdenv.mkDerivation {
     ]
   );
 
+  makeFlags = [
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+    "CC=cc"
+  ];
+
   installPhase = ''
     runHook preInstall
     install -Dm555 {mk,unpack}bootimg -t $out/bin
