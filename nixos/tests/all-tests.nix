@@ -1789,6 +1789,7 @@ in
   syncthing-relay = runTest ./syncthing/relay.nix;
   sysfs = runTest ./sysfs.nix;
   sysinit-reactivation = runTest ./sysinit-reactivation.nix;
+  syslog-ng = runTest ./syslog-ng.nix;
   system-services-compliance = recurseIntoAttrs (
     import ./system-services-compliance.nix {
       inherit
