@@ -167,63 +167,13 @@ lib.extendMkDerivation {
       }
       // (attrs.env or { });
 
-      postFixup = ''
-        echo "removing files for Microsoft Windows"
-        rm -f "$out"/bin/*.bat
+      inherit erlang;
 
-        echo "wrapping programs in $out/bin with their runtime deps"
-        for f in $(find $out/bin/ -type f -executable); do
-          wrapProgram "$f" \
-            --prefix PATH : ${
-              lib.makeBinPath [
-                coreutils
-                gnused
-                gnugrep
-                gawk
-              ]
-            }
-        done
-      ''
-      + lib.optionalString removeCookie ''
-        if [ -e $out/releases/COOKIE ]; then
-          echo "removing $out/releases/COOKIE"
-          rm $out/releases/COOKIE
-        fi
-      ''
-      + ''
-        if [ -e $out/erts-* ]; then
-          # ERTS is included in the release, then erlang is not required as a runtime dependency.
-          # But, erlang is still referenced in some places. To removed references to erlang,
-          # following steps are required.
-
-          # 1. remove references to erlang from plain text files
-          for file in $(rg "${erlang}/lib/erlang" "$out" --files-with-matches); do
-            echo "removing references to erlang in $file"
-            substituteInPlace "$file" --replace "${erlang}/lib/erlang" "$out"
-          done
-
-          # 2. remove references to erlang from .beam files
-          #
-          # No need to do anything, because it has been handled by "deterministic" option specified
-          # by ERL_COMPILER_OPTIONS.
-
-          # 3. remove references to erlang from normal binary files
-          for file in $(rg "${erlang}/lib/erlang" "$out" --files-with-matches --binary --iglob '!*.beam'); do
-            echo "removing references to erlang in $file"
-            # use bbe to substitute strings in binary files, because using substituteInPlace
-            # on binaries will raise errors
-            bbe -e "s|${erlang}/lib/erlang|$out|" -o "$file".tmp "$file"
-            rm -f "$file"
-            mv "$file".tmp "$file"
-          done
-
-          # References to erlang should be removed from output after above processing.
-        fi
-      ''
-      + lib.optionalString stripDebug ''
-        # Strip debug symbols to avoid hardreferences to "foreign" closures actually
-        # not needed at runtime, while at the same time reduce size of BEAM files.
-        erl -noinput -eval 'lists:foreach(fun(F) -> io:format("Stripping ~p.~n", [F]), beam_lib:strip(F) end, filelib:wildcard("'"$out"'/**/*.beam"))' -s init stop
-      '';
+      mixReleaseRuntimePath = lib.makeBinPath [
+        coreutils
+        gnused
+        gnugrep
+        gawk
+      ];
     };
 }
