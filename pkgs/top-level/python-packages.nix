@@ -1623,6 +1623,8 @@ self: super: with self; {
 
   autobean = callPackage ../development/python-modules/autobean { };
 
+  autobean-refactor = callPackage ../development/python-modules/autobean-refactor { };
+
   autocommand = callPackage ../development/python-modules/autocommand { };
 
   autodocsumm = callPackage ../development/python-modules/autodocsumm { };
