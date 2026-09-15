@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchFromGitHub,
   gjs,
   glib,
   gobject-introspection,
@@ -22,9 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "gpaste";
   version = "45.5";
 
-  src = fetchurl {
-    url = "https://www.imagination-land.org/files/gpaste/GPaste-${finalAttrs.version}.tar.xz";
-    hash = "sha256-seoPqmec9F4/zwmLjpAOUBBIVvLbFRMVPZ3jcloRrZE=";
+  src = fetchFromGitHub {
+    owner = "Keruspe";
+    repo = "GPaste";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9IfKQP/L7N+n7gsgoROB3oV28WNB3eI/xJWNAcvYjd0=";
   };
 
   patches = [
