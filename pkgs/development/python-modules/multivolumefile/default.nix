@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "multivolumefile";
-  version = "0.2.3";
+  version = "0.2.2";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "miurahr";
     repo = "multivolume";
     tag = "v${version}";
-    hash = "sha256-7gjfF7biQZOcph2dfwi2ouDn/uIYik/KBQ0k6u5Ne+Q=";
+    hash = "sha256-zkiYnTB9yNhkM44ScZP/h6aHqmG5JSDPP4vpptfSa3g=";
   };
 
   postPatch =
