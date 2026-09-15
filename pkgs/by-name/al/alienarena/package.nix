@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "alienarena";
-  version = "7.72.1";
+  version = "7.72.3";
 
   src = fetchFromGitHub {
     owner = "alienarena";
     repo = "alienarena";
     rev = version;
-    hash = "sha256-GRvscAOYPY9wah9jweDSlWKT1oY4ZY0Bh79v4W/qKk8=";
+    hash = "sha256-BBPQNPpRF8NbgNH0Iha0gGPfu+qrS+yPXUBV895AsG0=";
   };
 
   nativeBuildInputs = [ pkg-config ];
