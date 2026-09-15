@@ -42,12 +42,15 @@ in
   options.system.installer.channel.enable =
     (lib.mkEnableOption "bundling NixOS/Nixpkgs channel in the installer")
     // {
-      default = true;
+      # Don't ship a channel if we are already providing nixpkgs through the
+      # flake registry
+      default = config.nixpkgs.flake.source == null;
     };
   config = lib.mkIf config.system.installer.channel.enable {
     # Pin the nixpkgs flake in the installer to our cleaned up nixpkgs source.
     # FIXME: this might be surprising and is really only needed for offline installations,
     # see discussion in https://github.com/NixOS/nixpkgs/pull/204178#issuecomment-1336289021
+    # N.B. also hits https://github.com/NixOS/nix/issues/7075
     nix.registry.nixpkgs.to = {
       type = "path";
       path = "${channelSources}/nixos";
