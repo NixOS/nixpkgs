@@ -21,18 +21,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpaste";
-  version = "45.5";
+  version = "50.10";
 
   src = fetchFromGitHub {
     owner = "Keruspe";
     repo = "GPaste";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9IfKQP/L7N+n7gsgoROB3oV28WNB3eI/xJWNAcvYjd0=";
+    hash = "sha256-DyCuDtDy8z2F9PTWexWhCCH/GzmqvGLb1qadxfEzX5Y=";
   };
-
-  patches = [
-    ./fix-paths.patch
-  ];
 
   # TODO: switch to substituteAll with placeholder
   # https://github.com/NixOS/nix/issues/1846
@@ -54,7 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gjs
     glib
-    gtk3
     gtk4
     gcr_4
     libadwaita
