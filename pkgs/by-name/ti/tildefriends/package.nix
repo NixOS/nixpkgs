@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchgit,
-  gnumake,
   openssl,
   which,
 }:
@@ -12,6 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.2026.7";
 
   __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchgit {
     url = "https://dev.tildefriends.net/cory/tildefriends.git";
@@ -20,27 +20,30 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    gnumake
-    openssl
     which
   ];
+  
+  buildInputs = [
+    openssl
+  ];
 
-  buildPhase = ''
-    make -j $NIX_BUILD_CORES release
-  '';
+  buildFlags = [ "release" ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp -r out/release/* $out/bin
+    runHook preInstall
+    
+    install -D out/release/tildefriends $out/bin/tildefriends
+    
+    runHook postInstall
   '';
 
   doCheck = false;
 
   meta = {
     homepage = "https://tildefriends.net";
-    description = "A Secure Scuttlebutt decentralized social network client.";
+    description = "A Secure Scuttlebutt decentralized social network client";
     mainProgram = "tildefriends";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GearKite ];
     platforms = lib.platforms.all;
   };
