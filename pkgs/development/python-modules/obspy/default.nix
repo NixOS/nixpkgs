@@ -14,24 +14,40 @@
   requests,
   scipy,
   sqlalchemy,
+
+  # optional-dependencies
+  cartopy,
+  geographiclib,
+  pyshp,
+
+  # tests
+  packaging,
+  pyproj,
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "obspy";
-  version = "1.4.2-unstable-2025-08-21";
+  version = "1.5.1";
   pyproject = true;
+  __structuredAttrs = true;
 
-  # Applies a gcc fix that can't be applied as a patch due to other repo changes
   src = fetchFromGitHub {
     owner = "obspy";
     repo = "obspy";
-    rev = "75bac0c96aa04a0e233e72a7c89ebe97a3b48954";
-    hash = "sha256-B55tVae8NRZZclekTvnxiFUk/bVijk7GpaccPFh15Xc=";
+    tag = finalAttrs.version;
+    hash = "sha256-bR1+0ohf6kS5nOTC8INuFesFRc+fsnjYZFEzZpuV2i4=";
   };
 
-  build-system = [ setuptools ];
+  postPatch =
+    # `setup.py` and `obspy.__version__` both determine the version through `git describe` and fall
+    # back to this file when that fails (which it does in the sandbox).
+    ''
+      echo "${finalAttrs.version}" > obspy/RELEASE-VERSION
+    '';
 
-  pythonRelaxDeps = [ "sqlalchemy" ];
+  build-system = [ setuptools ];
 
   dependencies = [
     decorator
@@ -40,18 +56,54 @@ buildPythonPackage (finalAttrs: {
     numpy
     requests
     scipy
+    setuptools
     sqlalchemy
   ];
 
-  # Tests require Internet access.
-  doCheck = false;
+  optional-dependencies = {
+    geo = [ geographiclib ];
+    imaging = [ cartopy ];
+    "io.shapefile" = [ pyshp ];
+  };
 
   pythonImportsCheck = [ "obspy" ];
+
+  # Darwin's `strip` misdetects the binary test fixtures that start with a long run of NUL bytes
+  # (`*.QBN`, some SEG-Y files) as object files and truncates them to a 24-byte stub.
+  stripExclude = [ "*/tests/data/*" ];
+
+  nativeCheckInputs = [
+    packaging
+    pyproj
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+
+  preCheck =
+    # The C extensions are not built in-tree, so run the test suite against the installed package.
+    ''
+      cd "$TMPDIR"
+    '';
+
+  pytestFlags = [
+    "--pyargs"
+    "obspy"
+  ];
+
+  disabledTests = [
+    # Require internet access (`cartopy` downloads Natural Earth map data)
+    "test_combined_station_event_plot"
+    "test_location_plot_global"
+    "test_location_plot_local"
+    "test_location_plot_ortho"
+    "test_plot_farfield_without_quiver_with_maps"
+  ];
 
   meta = {
     description = "Python framework for seismological observatories";
     homepage = "https://www.obspy.org";
-    changelog = "https://github.com/obspy/obspy/releases/tag/v1.4.2";
+    changelog = "https://github.com/obspy/obspy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = [ lib.maintainers.ametrine ];
   };
