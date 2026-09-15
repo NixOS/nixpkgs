@@ -192,14 +192,14 @@ in
 
   firmwareupdater = buildPlugin rec {
     pname = "firmwareupdater";
-    version = "1.14.0";
+    version = "1.15.0";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "OctoPrint";
       repo = "OctoPrint-FirmwareUpdater";
       rev = version;
-      sha256 = "sha256-CUNjM/IJJS/lqccZ2B0mDOzv3k8AgmDreA/X9wNJ7iY=";
+      sha256 = "sha256-Q/I2QkLM21DgwT/mM7ppAJRoIBOx1QMvI/FPUnRTrfs=";
     };
 
     propagatedBuildInputs = with super; [ pyserial ];
