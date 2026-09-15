@@ -234,14 +234,14 @@ in
 
   gcodeeditor = buildPlugin rec {
     pname = "gcodeeditor";
-    version = "0.2.12";
+    version = "0.2.14";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "ieatacid";
       repo = "OctoPrint-GcodeEditor";
       rev = version;
-      sha256 = "sha256-1Sk2ri3DKW8q8VJ/scFjpRsz65Pwt8OEURP1k70aydE=";
+      sha256 = "sha256-RpRyTR/iHUsVtzEVVoJ0iCOBWwOJa/oerPOGW/9WdrA=";
     };
 
     meta = {
