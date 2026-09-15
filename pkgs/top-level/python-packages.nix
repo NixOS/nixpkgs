@@ -5964,6 +5964,8 @@ self: super: with self; {
 
   fastmcp-slim = callPackage ../development/python-modules/fastmcp-slim { };
 
+  fastmcp-tasks = callPackage ../development/python-modules/fastmcp-tasks { };
+
   fastmri = callPackage ../development/python-modules/fastmri { };
 
   fastnlo-toolkit = toPythonModule (
