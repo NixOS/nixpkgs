@@ -1797,6 +1797,7 @@ let
     optionName: replacementInstructions:
     { options, ... }:
     {
+      key = "removedOptionModule#" + concatStringsSep "_" optionName;
       options = setAttrByPath optionName (mkOption {
         visible = false;
         apply =
@@ -2144,6 +2145,7 @@ let
         opt.type or (types.submodule { });
     in
     {
+      key = "renamedOptionModule#" + concatStringsSep "_" from + "->" + concatStringsSep "_" to;
       options = setAttrByPath from (
         mkOption {
           inherit visible;
