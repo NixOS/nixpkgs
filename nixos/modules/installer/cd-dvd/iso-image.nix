@@ -23,7 +23,7 @@ let
         # Fallback to UEFI console for boot, efifb sometimes has difficulties.
         terminal_output console
 
-        linux ${image} \''${isoboot} ${params}
+        linux ${image} ''${isoboot} ${params}
         initrd ${initrd}
       }
     '';
@@ -64,7 +64,8 @@ let
       )}
     '';
 
-  targetArch = if config.boot.loader.grub.forcei686 then "ia32" else pkgs.stdenv.hostPlatform.efiArch;
+  efiTargetArch =
+    if config.boot.loader.grub.forcei686 then "ia32" else pkgs.stdenv.hostPlatform.efiArch;
 
   # Timeout in syslinux is in units of 1/10 of a second.
   # null means max timeout (35996, just under 1h in 1/10 seconds)
@@ -75,7 +76,7 @@ let
   # Timeout in grub is in seconds.
   # null means max timeout (infinity)
   # 0 means disable timeout
-  grubEfiTimeout = if config.boot.loader.timeout == null then -1 else config.boot.loader.timeout;
+  grubTimeout = if config.boot.loader.timeout == null then -1 else config.boot.loader.timeout;
 
   optionsSubMenus = [
     {
@@ -216,21 +217,44 @@ let
     [ baseIsolinuxCfg ] ++ lib.optional config.boot.loader.grub.memtest86.enable isolinuxMemtest86Entry
   );
 
+  efiRoot = "/EFI/BOOT";
+
   refindBinary =
-    if targetArch == "x64" || targetArch == "aa64" then "refind_${targetArch}.efi" else null;
+    if efiTargetArch == "x64" || efiTargetArch == "aa64" then "refind_${efiTargetArch}.efi" else null;
 
   # Setup instructions for rEFInd.
   refind =
     if refindBinary != null then
       ''
         # Adds rEFInd to the ISO.
-        cp -v ${pkgs.refind}/share/refind/${refindBinary} $out/EFI/BOOT/
+        cp -v ${pkgs.refind}/share/refind/${refindBinary} $out/${efiRoot}
       ''
     else
-      "# No refind for ${targetArch}";
+      "# No refind for ${efiTargetArch}";
 
   grubPkgs = if config.boot.loader.grub.forcei686 then pkgs.pkgsi686Linux else pkgs;
 
+  grubRoot = efiRoot;
+
+  grubInstallerMarker = "/nixos-installer-image";
+  grubConfigPath = "${grubRoot}/grub.cfg";
+
+  # Tiny config embedded into GRUB, that finds the main config file
+  # * "#" is not understood by GRUB at this point, produces errors on the console
+  grubEmbeddedCfg = pkgs.writers.writeText "grub-embedded.cfg" (
+    # Search the drive we're booting from using the marker file
+    ''
+      search --set=root --file ${grubInstallerMarker}
+    ''
+    # Switch to real config file
+    + ''
+      configfile ($root)/${grubConfigPath}
+    ''
+  );
+
+  # Per-(sub)menu GRUB config snippet
+  # * ''${loadFontsCalls} gets substituted via envsubst in a final step, because it
+  #   requires running `find` on the configured theme path
   grubMenuCfg = ''
     set textmode=${lib.boolToString (config.isoImage.forceTextMode)}
 
@@ -238,8 +262,8 @@ let
     # Menu configuration
     #
 
-    # Search using a "marker file"
-    search --set=root --file /EFI/nixos-installer-image
+    # Search the drive we're booting from using the marker file
+    search --set=root --file ${grubInstallerMarker}
 
     insmod gfxterm
     insmod png
@@ -264,7 +288,7 @@ let
       ]
     }
 
-    if [ "\$textmode" == "false" ]; then
+    if [ "$textmode" == "false" ]; then
       terminal_output gfxterm
       terminal_input  console
     else
@@ -275,210 +299,256 @@ let
       set menu_color_highlight=white/blue
     fi
 
-    ${
-      # When there is a theme configured, use it, otherwise use the background image.
-      if config.isoImage.grubTheme != null then
-        ''
-          # Sets theme.
-          set theme=(\$root)/EFI/BOOT/grub-theme/theme.txt
-          # Load theme fonts
-          $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/BOOT/grub-theme/%P\n")
-        ''
-      else
-        ''
-          if background_image (\$root)/EFI/BOOT/efi-background.png; then
-            # Black background means transparent background when there
-            # is a background image set... This seems undocumented :(
-            set color_normal=black/black
-            set color_highlight=white/blue
-          else
-            # Falls back again to proper colors.
-            set menu_color_normal=cyan/blue
-            set menu_color_highlight=white/blue
+  ''
+  # When there is a theme configured, use it, otherwise use the background image.
+  + (
+    if config.isoImage.grubTheme != null then
+      ''
+        # Sets theme.
+        set theme=($root)/${grubRoot}/grub-theme/theme.txt
+        # Load theme fonts
+        ''${loadFontsCalls}
+      ''
+    else
+      ''
+        if background_image ($root)/${efiRoot}/efi-background.png; then
+          # Black background means transparent background when there
+          # is a background image set... This seems undocumented :(
+          set color_normal=black/black
+          set color_highlight=white/blue
+        else
+          # Falls back again to proper colors.
+          set menu_color_normal=cyan/blue
+          set menu_color_highlight=white/blue
           fi
-        ''
-    }
+      ''
+  )
+  + ''
 
     hiddenentry 'Text mode' --hotkey 't' {
-      loadfont (\$root)/EFI/BOOT/unicode.pf2
+      loadfont ($root)/${grubRoot}/unicode.pf2
       set textmode=true
       terminal_output console
     }
 
-    ${lib.optionalString (config.isoImage.grubTheme != null) ''
-      hiddenentry 'GUI mode' --hotkey 'g' {
-        $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/BOOT/grub-theme/%P\n")
-        set textmode=false
-        terminal_output gfxterm
-      }
-    ''}
+  ''
+  + lib.optionalString (config.isoImage.grubTheme != null) ''
+    hiddenentry 'GUI mode' --hotkey 'g' {
+      ''${loadFontsCalls}
+      set textmode=false
+      terminal_output gfxterm
+    }
   '';
 
-  # The EFI boot image.
-  # Notes about grub:
+  # The full GRUB config.
   #  * Yes, the grubMenuCfg has to be repeated in all submenus. Otherwise you
   #    will get white-on-black console-like text on sub-menus. *sigh*
-  efiDir =
-    pkgs.runCommand "efi-directory"
+  grubFullCfg = pkgs.writers.writeText "grub-full.cfg" (
+    ''
+      set timeout=${toString grubTimeout}
+
+      clear
+      # This message will only be viewable on the default (i.e. UEFI) console.
+      echo ""
+      echo "Loading graphical boot menu..."
+      echo ""
+      echo "Press 't' to use the text boot menu on this console..."
+      echo ""
+
+    ''
+    + grubMenuCfg
+    + ''
+
+      # If the parameter iso_path is set, append the findiso parameter to the kernel
+      # line. We need this to allow the nixos iso to be booted from grub directly.
+      if [ ''${iso_path} ] ; then
+        set isoboot="findiso=''${iso_path}"
+      fi
+
+      #
+      # Menu entries
+      #
+
+    ''
+    + (buildMenuGrub2 { })
+    + ''
+      submenu "Options" --class submenu --class hidpi {
+    ''
+    + grubMenuCfg
+    + (lib.concatMapStringsSep "\n" (
       {
-        nativeBuildInputs = [ pkgs.buildPackages.grub2_efi ];
+        title,
+        class,
+        params,
+      }:
+      ''
+        submenu "${title}" --class ${class} {
+          ${grubMenuCfg}
+          ${buildMenuGrub2 { inherit params; }}
+        }
+      ''
+    ) optionsSubMenus)
+    + ''
+      }
+    ''
+    + lib.optionalString (refindBinary != null) ''
+      # GRUB apparently cannot do "chainloader" operations on "CD".
+      if [ "$root" != "cd0" ]; then
+        menuentry 'rEFInd' --class refind {
+          # Force root to be the FAT partition
+          # Otherwise it breaks rEFInd's boot
+          search --set=root --no-floppy --fs-uuid 1234-5678
+          chainloader ($root)/${efiRoot}/${refindBinary}
+        }
+      fi
+    ''
+    + lib.optionalString config.boot.loader.grub.memtest86.enable ''
+      menuentry 'Memtest86+' --class debug {
+        linux ($root)/boot/memtest.bin ${toString config.boot.loader.grub.memtest86.params}
+      }
+    ''
+    + ''
+      menuentry 'Firmware Setup' --class settings {
+        fwsetup
+        clear
+        echo ""
+        echo "If you see this message, then your (i.e. EFI) system doesn't support this feature."
+        echo ""
+      }
+      menuentry 'Shutdown' --class shutdown {
+        halt
+      }
+    ''
+  );
+
+  grubModulesRequired = [
+    # Basic modules for filesystems and partition schemes
+    "fat"
+    "iso9660"
+    "part_gpt"
+    "part_msdos"
+
+    # Basic stuff
+    "normal"
+    "boot"
+    "linux"
+    "configfile"
+    "loopback"
+    "chain"
+    "halt"
+  ]
+  ++ lib.optionals config.isoImage.makeEfiBootable [
+    # Allows rebooting into firmware setup interface
+    "efifwsetup"
+
+    # EFI Graphics Output Protocol
+    "efi_gop"
+  ]
+  ++ [
+    # User commands
+    "ls"
+
+    # System commands
+    "search"
+    "search_label"
+    "search_fs_uuid"
+    "search_fs_file"
+    "echo"
+
+    # We're not using it anymore, but we'll leave it in so it can be used
+    # by user, with the console using "C"
+    "serial"
+
+    # Graphical mode stuff
+    "gfxmenu"
+    "gfxterm"
+    "gfxterm_background"
+    "test"
+    "loadenv"
+    "all_video"
+    "videoinfo"
+
+    # File types for graphical mode
+    "png"
+  ];
+
+  grubModulesOptional = lib.optionals config.isoImage.makeEfiBootable [
+    "efi_uga"
+  ];
+
+  # The GRUB (EFI) boot image.
+  grubDir =
+    let
+      grubBuildPkg = pkgs.buildPackages.grub2_efi;
+      grubHostPkg = grubPkgs.grub2_efi;
+      grubBootName = "BOOT${lib.toUpper efiTargetArch}.EFI";
+    in
+    pkgs.runCommand "grub-directory"
+      {
+        nativeBuildInputs = [
+          grubBuildPkg
+          pkgs.buildPackages.gettext
+        ];
         strictDeps = true;
       }
-      ''
-        mkdir -p $out/EFI/BOOT
+      (
+        ''
+          echo "Checking embedded config: ${grubEmbeddedCfg}"
+          grub-script-check ${grubEmbeddedCfg} || (
+            cat --number ${grubEmbeddedCfg}
+            exit 1
+          )
 
-        # Add a marker so GRUB can find the filesystem.
-        touch $out/EFI/nixos-installer-image
+          mkdir -p $(dirname $out/${grubConfigPath})
+          export loadFontsCalls="$(
+            find ${config.isoImage.grubTheme} \
+              -iname '*.pf2' \
+              -printf "loadfont (\$root)/${grubRoot}/grub-theme/%P\n"
+          )"
+          envsubst "\''${loadFontsCalls}" <${grubFullCfg} >$out/${grubConfigPath}
 
-        # ALWAYS required modules.
-        MODULES=(
-          # Basic modules for filesystems and partition schemes
-          "fat"
-          "iso9660"
-          "part_gpt"
-          "part_msdos"
+          echo "Checking full config: $out/${grubConfigPath}"
+          grub-script-check $out/${grubConfigPath} || (
+            cat --number $out/${grubConfigPath}
+            exit 1
+          )
 
-          # Basic stuff
-          "normal"
-          "boot"
-          "linux"
-          "configfile"
-          "loopback"
-          "chain"
-          "halt"
+          # Add a marker so GRUB can find the filesystem.
+          mkdir -p $(dirname $out/${grubInstallerMarker})
+          touch $out/${grubInstallerMarker}
 
-          # Allows rebooting into firmware setup interface
-          "efifwsetup"
+          # ALWAYS required modules.
+          MODULES=(${lib.strings.concatMapStringsSep " " lib.strings.escapeShellArg grubModulesRequired})
 
-          # EFI Graphics Output Protocol
-          "efi_gop"
-
-          # User commands
-          "ls"
-
-          # System commands
-          "search"
-          "search_label"
-          "search_fs_uuid"
-          "search_fs_file"
-          "echo"
-
-          # We're not using it anymore, but we'll leave it in so it can be used
-          # by user, with the console using "C"
-          "serial"
-
-          # Graphical mode stuff
-          "gfxmenu"
-          "gfxterm"
-          "gfxterm_background"
-          "test"
-          "loadenv"
-          "all_video"
-          "videoinfo"
-
-          # File types for graphical mode
-          "png"
-        )
-
-        echo "Building GRUB with modules:"
-        for mod in ''${MODULES[@]}; do
-          echo " - $mod"
-        done
-
-        # Modules that may or may not be available per-platform.
-        echo "Adding additional modules:"
-        for mod in efi_uga; do
-          if [ -f ${grubPkgs.grub2_efi}/lib/grub/${grubPkgs.grub2_efi.grubTarget}/$mod.mod ]; then
+          echo "Building GRUB with modules:"
+          for mod in ''${MODULES[@]}; do
             echo " - $mod"
-            MODULES+=("$mod")
-          fi
-        done
+          done
 
-        # Make our own efi program, we can't rely on "grub-install" since it seems to
-        # probe for devices, even with --skip-fs-probe.
-        grub-mkimage \
-          --directory=${grubPkgs.grub2_efi}/lib/grub/${grubPkgs.grub2_efi.grubTarget} \
-          -o $out/EFI/BOOT/BOOT${lib.toUpper targetArch}.EFI \
-          -p /EFI/BOOT \
-          -O ${grubPkgs.grub2_efi.grubTarget} \
-          ''${MODULES[@]}
-        cp ${grubPkgs.grub2_efi}/share/grub/unicode.pf2 $out/EFI/BOOT/
+          # Modules that may or may not be available per-platform.
+          echo "Adding additional modules:"
+          for mod in ${lib.strings.concatStringsSep " " grubModulesOptional}; do
+            if [ -f ${grubHostPkg}/lib/grub/${grubHostPkg.grubTarget}/$mod.mod ]; then
+              echo " - $mod"
+              MODULES+=("$mod")
+            fi
+          done
 
-        cat <<EOF > $out/EFI/BOOT/grub.cfg
+          mkdir -p $out/${grubRoot}
 
-        set timeout=${toString grubEfiTimeout}
-
-        clear
-        # This message will only be viewable on the default (UEFI) console.
-        echo ""
-        echo "Loading graphical boot menu..."
-        echo ""
-        echo "Press 't' to use the text boot menu on this console..."
-        echo ""
-
-        ${grubMenuCfg}
-
-        # If the parameter iso_path is set, append the findiso parameter to the kernel
-        # line. We need this to allow the nixos iso to be booted from grub directly.
-        if [ \''${iso_path} ] ; then
-          set isoboot="findiso=\''${iso_path}"
-        fi
-
-        #
-        # Menu entries
-        #
-
-        ${buildMenuGrub2 { }}
-        submenu "Options" --class submenu --class hidpi {
-          ${grubMenuCfg}
-
-          ${lib.concatMapStringsSep "\n" (
-            {
-              title,
-              class,
-              params,
-            }:
-            ''
-              submenu "${title}" --class ${class} {
-                ${grubMenuCfg}
-                ${buildMenuGrub2 { inherit params; }}
-              }
-            ''
-          ) optionsSubMenus}
-        }
-
-        ${lib.optionalString (refindBinary != null) ''
-          # GRUB apparently cannot do "chainloader" operations on "CD".
-          if [ "\$root" != "cd0" ]; then
-            menuentry 'rEFInd' --class refind {
-              # Force root to be the FAT partition
-              # Otherwise it breaks rEFInd's boot
-              search --set=root --no-floppy --fs-uuid 1234-5678
-              chainloader (\$root)/EFI/BOOT/${refindBinary}
-            }
-          fi
-        ''}
-        ${lib.optionalString config.boot.loader.grub.memtest86.enable ''
-          menuentry 'Memtest86+' --class debug {
-            linux (\$root)/boot/memtest.bin ${toString config.boot.loader.grub.memtest86.params}
-          }
-        ''}
-        menuentry 'Firmware Setup' --class settings {
-          fwsetup
-          clear
-          echo ""
-          echo "If you see this message, your EFI system doesn't support this feature."
-          echo ""
-        }
-        menuentry 'Shutdown' --class shutdown {
-          halt
-        }
-        EOF
-
-        grub-script-check $out/EFI/BOOT/grub.cfg
-
-        ${refind}
-      '';
+          # Make our own efi program, we can't rely on "grub-install" since it seems to
+          # probe for devices, even with --skip-fs-probe.
+          grub-mkimage \
+            --directory=${grubHostPkg}/lib/grub/${grubHostPkg.grubTarget} \
+            -o $out/${grubRoot}/${grubBootName} \
+            -c ${grubEmbeddedCfg} \
+            -p ${grubRoot} \
+            -O ${grubHostPkg.grubTarget} \
+            ''${MODULES[@]}
+          cp ${grubHostPkg}/share/grub/unicode.pf2 -t $out/${grubRoot}
+        ''
+        + lib.optionalString config.isoImage.makeEfiBootable refind
+      );
 
   efiImg =
     pkgs.runCommand "efi-image_eltorito"
@@ -494,8 +564,8 @@ let
       #   dates (cp -p, touch, mcopy -m, faketime for label), IDs (mkfs.vfat -i)
       ''
         mkdir ./contents && cd ./contents
-        mkdir -p ./EFI/BOOT
-        cp -rp "${efiDir}"/EFI/BOOT/{grub.cfg,*.EFI,*.efi} ./EFI/BOOT
+        mkdir -p ./${efiRoot}
+        cp -rp "${grubDir}"/${efiRoot}/{grub.cfg,*.EFI,*.efi} ./${efiRoot}
 
         # Rewrite dates for everything in the FS
         find . -exec touch --date=2000-01-01 {} +
@@ -876,7 +946,9 @@ in
       grubPkgs.grub2
     ]
     ++ lib.optional (config.isoImage.makeBiosBootable) pkgs.syslinux;
-    system.extraDependencies = [ grubPkgs.grub2_efi ];
+    system.extraDependencies =
+      lib.optionals (lib.meta.availableOn grubPkgs.hostPlatform grubPkgs.grub2_efi)
+        [ grubPkgs.grub2_efi ];
 
     # In stage 1 of the boot, mount the CD as the root FS by label so
     # that we don't need to know its device.  We pass the label of the
@@ -997,19 +1069,23 @@ in
           target = "/boot/efi.img";
         }
         {
-          source = "${efiDir}/EFI";
+          source = "${grubDir}/EFI";
           target = "/EFI";
         }
         {
           source = config.isoImage.efiSplashImage;
-          target = "/EFI/BOOT/efi-background.png";
+          target = "${efiRoot}/efi-background.png";
+        }
+        {
+          source = "${grubDir}/${grubInstallerMarker}";
+          target = grubInstallerMarker;
         }
       ]
       ++ lib.optionals (config.isoImage.makeEfiBootable && !config.boot.initrd.systemd.enable) [
         # http://www.supergrubdisk.org/wiki/Loopback.cfg
         # This feature will be removed, and thus is not supported by systemd initrd
         {
-          source = (pkgs.writeTextDir "grub/loopback.cfg" "source /EFI/BOOT/grub.cfg") + "/grub";
+          source = (pkgs.writeTextDir "grub/loopback.cfg" "source ${efiRoot}/grub.cfg") + "/grub";
           target = "/boot/grub";
         }
       ]
@@ -1022,7 +1098,7 @@ in
       ++ lib.optionals (config.isoImage.grubTheme != null) [
         {
           source = config.isoImage.grubTheme;
-          target = "/EFI/BOOT/grub-theme";
+          target = "${grubRoot}/grub-theme";
         }
       ];
 
