@@ -146,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Modern and easy to use SQL client for MySQL, Postgres, SQLite, SQL Server, and more";
     homepage = "https://www.beekeeperstudio.io";
     changelog = "https://github.com/beekeeper-studio/beekeeper-studio/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "beekeeper-studio";
     maintainers = with lib.maintainers; [
