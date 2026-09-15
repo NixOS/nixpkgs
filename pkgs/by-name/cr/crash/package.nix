@@ -26,6 +26,7 @@
   xz,
   zlib,
   zstd,
+  versionCheckHook,
   nix-update-script,
   nixosTests,
 }:
@@ -118,6 +119,12 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     installManPage crash.8
   '';
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   passthru = {
     updateScript = nix-update-script { };
