@@ -18,6 +18,9 @@
   pydantic,
   typing-inspection,
 
+  # optional-dependencies
+  openai,
+  tiktoken,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -48,6 +51,13 @@ buildPythonPackage (finalAttrs: {
     pydantic
     typing-inspection
   ];
+
+  optional-dependencies = {
+    openai = [
+      openai
+      tiktoken
+    ];
+  };
 
   pythonImportsCheck = [
     "pydantic_ai"
