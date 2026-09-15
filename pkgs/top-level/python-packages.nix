@@ -6725,6 +6725,8 @@ self: super: with self; {
     }
   );
 
+  gedcom7 = callPackage ../development/python-modules/gedcom7 { };
+
   gehomesdk = callPackage ../development/python-modules/gehomesdk { };
 
   gekitchen = callPackage ../development/python-modules/gekitchen { };
