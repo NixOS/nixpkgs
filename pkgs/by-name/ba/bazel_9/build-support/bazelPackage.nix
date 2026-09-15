@@ -30,6 +30,9 @@
   buildInputs ? [ ],
   nativeBuildInputs ? [ ],
   autoPatchelfIgnoreMissingDeps ? null,
+  # Extra impure env vars for the dependency-fetching derivations,
+  # in addition to the proxy variables which are always passed
+  impureEnvVars ? [ ],
   patches ? [ ],
 }:
 let
@@ -68,6 +71,7 @@ let
           "--repo_contents_cache="
         ]
         ++ commandArgs;
+        impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ impureEnvVars;
         bazelPreBuild = ''
           mkdir repo_cache
         '';
@@ -113,6 +117,7 @@ let
             command = "vendor";
             outputHashMode = "recursive";
             commandArgs = [ "--vendor_dir=vendor_dir" ] ++ commandArgs;
+            impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ impureEnvVars;
             bazelPreBuild = ''
               mkdir vendor_dir
             '';
