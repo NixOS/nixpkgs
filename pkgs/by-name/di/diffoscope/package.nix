@@ -128,6 +128,7 @@ python.pkgs.buildPythonApplication rec {
   patches = [
     ./androguard-4.1.4.patch
     ./ignore_links.patch
+    ./radare2.patch
   ];
 
   postPatch = ''
@@ -154,9 +155,7 @@ python.pkgs.buildPythonApplication rec {
   # otool
   # Other tools:
   # docx2txt (needs Debian's package called this, not the python package)
-  # radare2
-  # > FAILED tests/comparators/test_elf_decompiler.py::test_radare2_diff - KeyError: 'offset'
-  # > FAILED tests/comparators/test_macho_decompiler.py::test_radare2_diff - KeyError: 'offset'
+  # radare2 (the exact output of the r2 version debian ships is expected, and our more recent version has a slightly different one)
   #
   # We filter automatically all packages for the host platform (some dependencies are not supported on Darwin, aarch64, etc.).
   # Packages which are marked broken for a platform are not automatically filtered to avoid accidentally removing them without noticing it.
