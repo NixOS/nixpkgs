@@ -65,6 +65,15 @@ stdenv'.mkDerivation (finalAttrs: {
     hash = "sha256-OuN7GTfzqsALu8Qgx7GNERlyCq3cTxhpZo8UA/yDekw=";
   };
 
+  patches = [
+    # ctranslate2 uses a deprecated cmake FindCUDA cuda_select_nvcc_arch_flags()
+    # function. This function uses a regex that can not match two-digit
+    # capabilities such as 10.0 and 12.1, and it's default "Auto" fallback still
+    # targets compute_53, which CUDA 13 no longer supports, so the patch removes
+    # its arch selection, and we set CUDA_NVCC_FLAGS ourselves below.
+    ./cuda-arch-gencode-flags.patch
+  ];
+
   # Fix CMake 4 compatibility
   postPatch = ''
     substituteInPlace third_party/cpu_features/CMakeLists.txt \
@@ -102,6 +111,9 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_RUY" withRuy)
     (lib.cmakeBool "WITH_MKL" withMkl)
     (lib.cmakeBool "WITH_HIP" rocmSupport)
+  ]
+  ++ lib.optionals withCUDA [
+    (lib.cmakeFeature "CUDA_NVCC_FLAGS" (lib.concatStringsSep ";" cudaPackages.flags.gencode))
   ]
   ++ lib.optionals rocmSupport [
     (lib.cmakeBool "CMAKE_SKIP_RPATH" true)

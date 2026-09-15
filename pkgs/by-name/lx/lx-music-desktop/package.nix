@@ -19,13 +19,13 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "lx-music-desktop";
-  version = "2.12.4";
+  version = "2.12.5";
 
   src = fetchFromGitHub {
     owner = "lyswhut";
     repo = "lx-music-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sjdWDpObF+AxPLommw1biJU8OgTALYLEjJDV2yBiCPg=";
+    hash = "sha256-CWF3rHCKjuJ8bjmzxLtAuKIMufnr468BYB6JzCgWI9o=";
   };
 
   desktopItems = [
@@ -63,7 +63,7 @@ buildNpmPackage (finalAttrs: {
     copyDesktopItems
   ];
 
-  npmDepsHash = "sha256-A7tR1mZ9TlGj+srPb6ZrJcCPbafT4e51XDexE76jPXc=";
+  npmDepsHash = "sha256-k6XfNTHyZXXoCJR6oHQEZ5gDMQwl5OIW4Bgc+SJ/TKU=";
 
   makeCacheWritable = true;
 

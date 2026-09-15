@@ -18,7 +18,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fluux-messenger";
-  version = "0.17.2";
+  version = "0.17.3";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -27,16 +27,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "processone";
     repo = "fluux-messenger";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-APdzwVnDOGnngZJ3LjQMk2Y6KRbGqXaaFEb+NzhfkIo=";
+    hash = "sha256-RXu5eir1VhezblHCBsdJiZHjJyzxiqIUNs962lezdxE=";
   };
 
   cargoRoot = "apps/fluux/src-tauri";
-  cargoHash = "sha256-pjx4tP89aRx1/m5eYjI2DPhTtSuMnFudongEFhiaigE=";
+  cargoHash = "sha256-EirsNTfAMm0xCrN5JKokbtCCdUBWBprs8OzOiHL1zq4=";
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-rV5Q8WKcSmL1JSubFefsytOd3qiB5OandcwfZw9DJgE=";
+    hash = "sha256-/iwHjfsLB1c/QOo/I9oymDsYfhOfn7iJm0IhSIA4xNI=";
   };
 
   nativeBuildInputs = [
@@ -51,14 +51,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    cacert
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1
     libayatana-appindicator
     libxscrnsaver
-    cacert
   ];
 
   # libayatana-appindicator is not in the RUNPATH by default
-  runtimeDependencies = [ libayatana-appindicator ];
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [ libayatana-appindicator ];
 
   tauriBuildFlags = [ "--no-sign" ];
 
