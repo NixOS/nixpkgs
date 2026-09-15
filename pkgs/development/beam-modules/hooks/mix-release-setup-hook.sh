@@ -74,7 +74,9 @@ mixReleaseStripDebugHook() {
   erl -noinput -eval 'lists:foreach(fun(F) -> io:format("Stripping ~p.~n", [F]), beam_lib:strip(F) end, filelib:wildcard("'"$out"'/**/*.beam"))' -s init stop
 }
 
-preFixupHooks+=(mixReleaseFixupHook)
+if [ -z "${dontMixReleaseFixup-}" ]; then
+  preFixupHooks+=(mixReleaseFixupHook)
+fi
 
 if [ -n "${removeCookie-1}" ]; then
   preFixupHooks+=(mixReleaseRemoveCookieHook)

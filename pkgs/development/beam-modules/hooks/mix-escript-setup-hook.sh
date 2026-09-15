@@ -21,7 +21,9 @@ mixEscriptInstall() {
   echo "Finished mixEscriptInstall"
 }
 
-postBuildHooks+=(mixEscriptBuild)
+if [ -z "${dontMixEscriptBuild-}" ]; then
+  postBuildHooks+=(mixEscriptBuild)
+fi
 
 if [ -z "${dontMixEscriptInstall-}" ] && [ -z "${installPhase-}" ]; then
   installPhase=mixEscriptInstall

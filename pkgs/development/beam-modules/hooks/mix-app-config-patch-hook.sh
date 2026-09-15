@@ -16,4 +16,6 @@ mixAppConfigPatchHook() {
   echo "Finished mixAppConfigPatchHook"
 }
 
-prePatchHooks+=(mixAppConfigPatchHook)
+if [ -z "${dontMixAppConfigPatch-}" ]; then
+  prePatchHooks+=(mixAppConfigPatchHook)
+fi

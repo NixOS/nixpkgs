@@ -14,4 +14,6 @@ mixDepsCompileHook() {
   echo "Finished mixDepsCompileHook"
 }
 
-postConfigureHooks+=(mixDepsCompileHook)
+if [ -z "${dontMixDepsCompile-}" ]; then
+  postConfigureHooks+=(mixDepsCompileHook)
+fi
