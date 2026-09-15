@@ -14,7 +14,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tt-perf-report";
-  version = "1.2.4";
+  version = "1.3.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
     owner = "tenstorrent";
     repo = "tt-perf-report";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cSlQ9Byv9LzKc4gS3QLeq3bHdmIVpl8AeK3Gh0mNDAQ=";
+    hash = "sha256-IIyl+Sp+jtKwTN9oe5I0q+a25pAplW7LIbzyCeeGzTU=";
   };
 
   build-system = [
