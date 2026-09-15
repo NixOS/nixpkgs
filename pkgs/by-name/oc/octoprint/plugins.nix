@@ -158,6 +158,16 @@ in
       sha256 = "sha256-hhHc2SPixZCPJzCP8enMMWNYaYbNZAU0lNSx1B0d++4=";
     };
 
+    # Plugin imports the Python 2 compatibility shims `basestring`/`unicode`
+    # from `past.builtins` (part of the `future` package), which isn't
+    # declared as a dependency upstream and is unsupported on Python >= 3.13.
+    # Both names are only ever used as plain `str` aliases under Python 3, so
+    # drop the dead Python 2 codepath instead of depending on `future`.
+    postPatch = ''
+      substituteInPlace octoprint_DisplayLayerProgress/stringUtils.py \
+        --replace-fail "from past.builtins import basestring, unicode" "basestring = (bytes, str); unicode = str"
+    '';
+
     meta = {
       description = "OctoPrint-Plugin that sends the current progress of a print via M117 command";
       homepage = "https://github.com/OllisGit/OctoPrint-DisplayLayerProgress";
