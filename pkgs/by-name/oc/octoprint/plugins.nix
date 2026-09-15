@@ -391,14 +391,14 @@ in
 
   printtimegenius = buildPlugin rec {
     pname = "printtimegenius";
-    version = "2.4.0";
+    version = "2.5.1";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "eyal0";
       repo = "OctoPrint-PrintTimeGenius";
       rev = version;
-      sha256 = "sha256-+EmM61s8HHcTIf0xoHkxEP7eqaNYB6ls61YwSXiVzyA=";
+      sha256 = "sha256-DkFcfud291RmIBzr9dG61dE1BaXhZCp01FaV9NCeo1M=";
     };
 
     propagatedBuildInputs = with super; [
