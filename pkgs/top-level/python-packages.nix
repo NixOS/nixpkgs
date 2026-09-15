@@ -19173,8 +19173,6 @@ self: super: with self; {
 
   slpp = callPackage ../development/python-modules/slpp { };
 
-  slugid = callPackage ../development/python-modules/slugid { };
-
   sly = callPackage ../development/python-modules/sly { };
 
   smart-meter-texas = callPackage ../development/python-modules/smart-meter-texas { };
