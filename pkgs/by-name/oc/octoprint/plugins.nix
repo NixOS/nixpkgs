@@ -254,14 +254,14 @@ in
 
   marlingcodedocumentation = buildPlugin rec {
     pname = "marlingcodedocumentation";
-    version = "0.13.0";
+    version = "0.20.0";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "costas-basdekis";
       repo = "MarlinGcodeDocumentation";
       rev = "v${version}";
-      sha256 = "sha256-3ay6iCxZk8QkFM/2Y14VTpPoxr6NXq14BFSHofn3q7I=";
+      sha256 = "sha256-UuSDrepr5ey2EFxQnOG+cqetRLrrqZEqs4kXAxMjoQc=";
     };
 
     meta = {
