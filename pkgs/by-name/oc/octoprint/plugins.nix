@@ -118,6 +118,16 @@ in
       sha256 = "sha256-54siSmzgPlnCRpkpZhXU9theNQ3hqL3j+Ip4Ie2w2vA=";
     };
 
+    # Plugin imports the Python 2 compatibility shim `basestring` from
+    # `past.builtins` (part of the `future` package), which isn't declared
+    # as a dependency upstream and is unsupported on Python >= 3.13. It's
+    # only used for isinstance checks here, so drop the dead Python 2
+    # codepath instead of depending on the unsupported `future` package.
+    postPatch = ''
+      substituteInPlace octoprint_curalegacy/profile.py \
+        --replace-fail "from past.builtins import basestring, unicode" "basestring = (bytes, str); unicode = str"
+    '';
+
     meta = {
       description = "Plugin for slicing via Cura Legacy from within OctoPrint";
       homepage = "https://github.com/OctoPrint/OctoPrint-CuraEngineLegacy";
