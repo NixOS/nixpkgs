@@ -59,6 +59,66 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
+    security.pam.services.vmtoolsd = {
+      rules = {
+        account = {
+          unix = {
+            control = "required";
+            modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
+          };
+        };
+
+        auth = {
+          unix = {
+            control = "sufficient";
+            modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
+            settings = {
+              likeauth = true;
+              try_first_pass = true;
+            };
+          };
+          deny = {
+            control = "required";
+            modulePath = "${config.security.pam.package}/lib/security/pam_deny.so";
+          };
+        };
+
+        password = {
+          unix = {
+            control = "sufficient";
+            modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
+            settings = {
+              nullok = true;
+              yescrypt = true;
+            };
+          };
+        };
+
+        session = {
+          env = {
+            control = "required";
+            modulePath = "${config.security.pam.package}/lib/security/pam_env.so";
+            settings = {
+              conffile = "/etc/pam/environment";
+              readenv = 0;
+            };
+          };
+          unix = {
+            control = "required";
+            modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
+          };
+          loginuid = {
+            control = "required";
+            modulePath = "${config.security.pam.package}/lib/security/pam_loginuid.so";
+          };
+          systemd = {
+            control = "optional";
+            modulePath = "${config.systemd.package}/lib/security/pam_systemd.so";
+          };
+        };
+      };
+    };
+
     systemd.services.vmware = {
       description = "VMWare Guest Service";
       wantedBy = [ "multi-user.target" ];
