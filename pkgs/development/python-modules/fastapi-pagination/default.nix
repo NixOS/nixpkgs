@@ -14,7 +14,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fastapi-pagination";
-  version = "0.15.16";
+  version = "0.16.0b1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
     owner = "uriyyo";
     repo = "fastapi-pagination";
     tag = finalAttrs.version;
-    hash = "sha256-hsJbtR11Ej7lh8rqndnp47XdM67IypyT6cheMfskmio=";
+    hash = "sha256-aw199yOFp8kCDaVQmxWdHEUS4sS4QXT9J3w5FRMkFQM=";
   };
 
   build-system = [
