@@ -3,6 +3,7 @@
   fetchFromGitHub,
   jinja2,
   lib,
+  nix-update-script,
   pytest-cov-stub,
   pytestCheckHook,
   rich,
@@ -34,6 +35,8 @@ buildPythonPackage rec {
     pytestCheckHook
     versionCheckHook
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/aristanetworks/j2lint";
