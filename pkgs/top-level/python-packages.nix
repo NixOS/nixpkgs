@@ -7318,6 +7318,8 @@ self: super: with self; {
 
   gramps = callPackage ../development/python-modules/gramps { };
 
+  gramps-gedcom7 = callPackage ../development/python-modules/gramps-gedcom7 { };
+
   grandalf = callPackage ../development/python-modules/grandalf { };
 
   granian = callPackage ../development/python-modules/granian { };
