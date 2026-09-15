@@ -473,14 +473,14 @@ in
 
   resource-monitor = buildPlugin rec {
     pname = "resource-monitor";
-    version = "0.3.16";
+    version = "0.5.0";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "Renaud11232";
       repo = "OctoPrint-Resource-Monitor";
       rev = version;
-      sha256 = "sha256-w1PBxO+Qf7cSSNocu7BiulZE7kesSa+LGV3uJlmd0ao=";
+      sha256 = "sha256-Q7IvHXp+iWQZORVHZoiJPewC+CY506Oe8WeYJGXnp50=";
     };
 
     propagatedBuildInputs = with super; [ psutil ];
