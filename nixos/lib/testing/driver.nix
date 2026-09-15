@@ -13,6 +13,7 @@ let
     ;
 
   inherit (config) sshBackdoor;
+  inherit (config) testDriverPkgs;
 
   inherit (hostPkgs.stdenv.hostPlatform) isLinux isAarch64;
 
@@ -59,14 +60,14 @@ let
   withChecks = lib.warnIf config.skipLint "Linting is disabled";
 
   driver =
-    hostPkgs.runCommand "nixos-test-driver-${config.name}"
+    testDriverPkgs.runCommand "nixos-test-driver-${config.name}"
       {
         # inherit testName; TODO (roberth): need this?
         nativeBuildInputs = [
-          hostPkgs.makeWrapper
+          testDriverPkgs.makeWrapper
         ]
-        ++ lib.optionals (!config.skipTypeCheck) [ hostPkgs.ty ]
-        ++ lib.optionals (!config.skipLint) [ hostPkgs.ruff ];
+        ++ lib.optionals (!config.skipTypeCheck) [ testDriverPkgs.ty ]
+        ++ lib.optionals (!config.skipLint) [ testDriverPkgs.ruff ];
         buildInputs = [ testDriver ];
         preferLocalBuild = true;
         passthru = config.passthru // {
@@ -125,8 +126,8 @@ in
     pythonTestDriverPackage = mkOption {
       description = "Package containing the python NixOS test driver implementation";
       type = types.package;
-      default = hostPkgs.nixos-test-driver;
-      defaultText = literalExpression "hostPkgs.nixos-test-driver";
+      default = config.testDriverPkgs.nixos-test-driver;
+      defaultText = literalExpression "testDriverPkgs.nixos-test-driver";
       readOnly = true;
     };
 
@@ -142,6 +143,17 @@ in
       example = lib.literalExpression ''
         import nixpkgs { inherit system config overlays; }
       '';
+    };
+
+    testDriverPkgs = mkOption {
+      description = ''
+        Nixpkgs attrset used to build the test driver. This may differ from
+        `hostPkgs` when the test driver is executed inside a virtual machine.
+      '';
+      type = types.raw;
+      default = hostPkgs;
+      defaultText = literalExpression "hostPkgs";
+      internal = true;
     };
 
     qemu.package = mkOption {

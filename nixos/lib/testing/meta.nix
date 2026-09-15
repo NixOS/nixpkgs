@@ -76,9 +76,12 @@ in
             };
             platforms = mkOption {
               type = types.listOf types.raw;
-              default = lib.platforms.linux ++ lib.optionals (config.containers == { }) lib.platforms.darwin;
+              default =
+                lib.platforms.linux
+                ++ lib.optionals (config.containers == { } || config.nodes == { }) lib.platforms.darwin;
               defaultText = literalMD ''
-                `lib.platforms.linux ++ lib.platforms.darwin` when no containers are configured; otherwise `lib.platforms.linux`.
+                Linux, plus Darwin unless both virtual machines and containers
+                are configured.
               '';
               description = ''
                 Sets the [`meta.platforms`](https://nixos.org/manual/nixpkgs/stable/#var-meta-platforms) attribute on the [{option}`test`](#test-opt-test) derivation.
