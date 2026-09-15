@@ -10158,8 +10158,10 @@ with self;
       hash = "sha256-qYwh/Tfu2PhBFyh10XXZcv6H8GPX0NKjt3ZZCLsl61g=";
     };
 
-    env = lib.optionalAttrs stdenv.cc.isGNU {
-      NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+    env = {
+      NIX_CFLAGS_COMPILE =
+        lib.optionalString stdenv.cc.isGNU "-Wno-error=incompatible-pointer-types"
+        + lib.optionalString stdenv.hostPlatform.isMusl " -Doff64_t=off_t";
     };
 
     postInstall = lib.optionalString (perl ? crossVersion) ''
