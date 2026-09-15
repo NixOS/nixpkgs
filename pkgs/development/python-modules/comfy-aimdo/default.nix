@@ -24,6 +24,8 @@ buildPythonPackage (finalAttrs: {
   version = "0.5.3";
   pyproject = true;
 
+  # nixpkgs-update: no auto update
+  # updated via comfyui
   src = fetchFromGitHub {
     owner = "Comfy-Org";
     repo = "comfy-aimdo";

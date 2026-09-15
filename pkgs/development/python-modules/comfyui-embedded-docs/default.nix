@@ -11,6 +11,8 @@ buildPythonPackage (finalAttrs: {
   version = "0.5.11";
   pyproject = true;
 
+  # nixpkgs-update: no auto update
+  # updated via comfyui
   src = fetchPypi {
     pname = "comfyui_embedded_docs";
     inherit (finalAttrs) version;

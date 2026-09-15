@@ -2,11 +2,17 @@
   lib,
   callPackage,
   cudaPackages_13,
+  common-updater-scripts,
   fetchFromGitHub,
+  gnutar,
+  gzip,
+  nix-update,
   makeBinaryWrapper,
   python3,
   stdenvNoCC,
   withManager ? false,
+  writeShellApplication,
+  yq-go,
 }:
 
 let
@@ -118,6 +124,47 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit python pythonEnv;
+
+    updateScript = lib.getExe (writeShellApplication {
+      name = "update-comfyui";
+      runtimeInputs = [
+        common-updater-scripts
+        gnutar
+        gzip
+        nix-update
+        yq-go
+      ];
+      text = ''
+        nix-update comfyui
+
+        src=$(nix-build --no-out-link -A comfyui.src)
+
+        while IFS= read -r requirement; do
+          if [[ $requirement =~ ^comfy.+==.+ ]]; then
+            pkg=''${requirement%%==*}
+            version=''${requirement##*==}
+
+            nix-update "python3Packages.$pkg" --version "$version"
+
+            if [[ $pkg == comfyui-workflow-templates ]]; then
+              wtSrc=$(nix-build --no-out-link -A python3Packages.comfyui-workflow-templates.src)
+
+              while IFS= read -r subRequirement; do
+                if [[ $subRequirement =~ ^comfyui-workflow-templates-.+==.+ ]]; then
+                  subPkg=''${subRequirement%%==*}
+                  subVersion=''${subRequirement##*==}
+
+                  nix-update "python3Packages.$subPkg" --version "$subVersion"
+                fi
+              done < <(
+                tar --extract --gzip --to-stdout --file="$wtSrc" --strip-components=1 --wildcards '*/pyproject.toml' \
+                  | yq --input-format toml --output-format yaml '.project.dependencies[]'
+              )
+            fi
+          fi
+        done < "$src/requirements.txt"
+      '';
+    });
   }
   // lib.optionalAttrs (!withManager) {
     tests.withManager = callPackage ./package.nix {
