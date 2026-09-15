@@ -8,24 +8,24 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "apparency";
-  version = "2.3";
+  pname = "archaeology";
+  version = "1.4";
 
   src = fetchurl {
-    url = "https://www.mothersruin.com/software/archives/Apparency-${finalAttrs.version}.dmg";
-    hash = "sha256-QaP7Ll5ZK0QVHPFzDPmV8rd0XmY3Ie0VPBDXJEDMECU=";
+    url = "https://www.mothersruin.com/software/archives/Archaeology-${finalAttrs.version}.dmg";
+    hash = "sha256-3LIguYn2nGVMaWbHe+PlDZTMzgflGYcx6GSa+K9X/qg=";
   };
 
   nativeBuildInputs = [ undmg ];
 
-  sourceRoot = "Apparency.app";
+  sourceRoot = "Archaeology.app";
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out/Applications/Apparency.app" "$out/bin"
-    cp -R "." "$out/Applications/Apparency.app"
-    ln -s "../Applications/Apparency.app/Contents/MacOS/appy" "$out/bin"
+    mkdir -p "$out/Applications/Archaeology.app" "$out/bin"
+    cp -R "." "$out/Applications/Archaeology.app"
+    ln -s "../Applications/Archaeology.app/Contents/MacOS/trowel" "$out/bin"
 
     runHook postInstall
   '';
@@ -39,16 +39,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript.command = [
     (lib.getExe mrs-update-script)
-    "Apparency"
+    "Archaeology"
     ./package.nix
   ];
 
   meta = {
-    description = "Toolkit for analysing macOS applications";
-    homepage = "https://www.mothersruin.com/software/Apparency/";
+    description = "Tool for digging into binary files on macOS";
+    homepage = "https://www.mothersruin.com/software/Archaeology/";
     license = lib.licenses.unfreeRedistributable;
     maintainers = with lib.maintainers; [ andre4ik3 ];
-    mainProgram = "appy";
+    mainProgram = "trowel";
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
