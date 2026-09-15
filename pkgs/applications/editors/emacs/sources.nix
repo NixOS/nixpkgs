@@ -176,6 +176,11 @@ in
         url = "https://gitweb.gentoo.org/proj/emacs-patches.git/plain/emacs/30.2/05_all_tramp.patch?id=2a6292f81affedcc468c594c60808e652ae87118";
         hash = "sha256-WMjTscIuOXakuTO2H+w/Hd61V61V6ZrLh9WPMd58l+M=";
       })
+      (fetchpatch {
+        name = "CVE-2024-53920.patch";
+        url = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/patch/?id=abc802ee2eb0b1663349ddf22a461f8e54a383fb";
+        hash = "sha256-ViRD4E27WDs7lLO6YPNroMo3Zq5/ASqMlmNtVI1V/Lo=";
+      })
     ];
   });
 }
