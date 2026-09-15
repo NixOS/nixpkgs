@@ -64,6 +64,9 @@
   "cuda-passthru-tests": [
     "index.html#cuda-passthru-tests"
   ],
+  "cuda-pre-built-packages": [
+    "index.html#cuda-pre-built-packages"
+  ],
   "cuda-specifying-what-devices-to-expose-to-the-container": [
     "index.html#cuda-specifying-what-devices-to-expose-to-the-container",
     "index.html#specifying-what-devices-to-expose-to-the-container"
