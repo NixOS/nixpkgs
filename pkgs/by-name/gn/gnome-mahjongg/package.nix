@@ -58,7 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.gnome.org/GNOME/gnome-mahjongg/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Disassemble a pile of tiles by removing matching pairs";
     mainProgram = "gnome-mahjongg";
-    teams = [ lib.teams.gnome ];
+    teams = [
+      lib.teams.gnome
+      lib.teams.gnome-circle
+    ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };
