@@ -7294,6 +7294,10 @@ self: super: with self; {
 
   gramps-gedcom7 = callPackage ../development/python-modules/gramps-gedcom7 { };
 
+  gramps-object-query-language =
+    callPackage ../development/python-modules/gramps-object-query-language
+      { };
+
   gramps-ql = callPackage ../development/python-modules/gramps-ql { };
 
   grandalf = callPackage ../development/python-modules/grandalf { };
