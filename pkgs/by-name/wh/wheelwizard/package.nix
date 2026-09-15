@@ -7,18 +7,20 @@
   makeWrapper,
   # Runtime dependencies
   libglvnd,
+  libxkbcommon,
+  wayland,
   # passthru
   nix-update-script,
 }:
 buildDotnetModule (finalAttrs: {
   pname = "wheelwizard";
-  version = "2.5.1";
+  version = "2.5.7";
 
   src = fetchFromGitHub {
     owner = "TeamWheelWizard";
     repo = "WheelWizard";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lLGtzdE5MFfwwlGm5eA+MKYiY9oQhohtiVTqtmglols=";
+    hash = "sha256-bN0GtoPrMK5+cd7pTf+uRpVab8opTkCm22m4n4Uss8o=";
   };
   postPatch = ''
     rm .config/dotnet-tools.json
@@ -37,6 +39,8 @@ buildDotnetModule (finalAttrs: {
 
   runtimeDeps = [
     libglvnd
+    libxkbcommon
+    wayland
   ];
 
   installPhase = ''
