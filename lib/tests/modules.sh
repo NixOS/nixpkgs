@@ -865,6 +865,8 @@ checkConfigError 'the-defs-file\.nix' config.argv ./attrList-valueMeta-definitio
 # attrListOf does not support type merging
 checkConfigError 'The option .merged. in .*/declare-attrList-type-merge.nix. is already declared in .*/declare-attrList-type-merge.nix' config.merged ./declare-attrList-type-merge.nix
 
+checkConfigOutput '"ok"' config.result ./mapAttrsOfSubmodule.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass

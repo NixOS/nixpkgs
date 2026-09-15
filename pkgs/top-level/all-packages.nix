@@ -563,7 +563,7 @@ with pkgs;
       buildPackages.fetchurl # No need to do special overrides twice,
     else
       makeOverridable (import ../build-support/fetchurl) {
-        inherit lib stdenvNoCC buildPackages;
+        inherit lib stdenvNoCC;
         inherit cacert;
         inherit (config) hashedMirrors rewriteURL;
         curl = buildPackages.curlMinimal.override (old: rec {
@@ -1889,7 +1889,7 @@ with pkgs;
 
   cudaPackages_12 = cudaPackages_12_9;
 
-  cudaPackages_13 = cudaPackages_13_2;
+  cudaPackages_13 = cudaPackages_13_3;
 
   cudaPackages = recurseIntoAttrs cudaPackages_12;
 
@@ -3131,6 +3131,7 @@ with pkgs;
 
   chickenPackages_4 = recurseIntoAttrs (callPackage ../development/compilers/chicken/4 { });
   chickenPackages_5 = recurseIntoAttrs (callPackage ../development/compilers/chicken/5 { });
+  chickenPackages_6 = recurseIntoAttrs (callPackage ../development/compilers/chicken/6 { });
   chickenPackages = dontRecurseIntoAttrs chickenPackages_5;
 
   inherit (chickenPackages_5)
@@ -9074,7 +9075,6 @@ with pkgs;
   ringboard-wayland = callPackage ../by-name/ri/ringboard/package.nix { displayServer = "wayland"; };
 
   inherit (callPackage ../applications/networking/cluster/rke2 { })
-    rke2_1_33
     rke2_1_34
     rke2_1_35
     rke2_1_36
@@ -9352,7 +9352,7 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  virtualbox = libsForQt5.callPackage ../applications/virtualization/virtualbox {
+  virtualbox = callPackage ../applications/virtualization/virtualbox {
     stdenv = stdenv_32bit;
 
     # VirtualBox uses wsimport, which was removed after JDK 8.

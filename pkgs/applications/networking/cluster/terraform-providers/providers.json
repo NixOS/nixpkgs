@@ -977,13 +977,13 @@
     "vendorHash": "sha256-OAd8SeTqTrH0kMoM2LsK3vM2PI23b3gl57FaJYM9hM0="
   },
   "newrelic_newrelic": {
-    "hash": "sha256-HEnS5hgVePhG5dEB+ALKEXd0yUt+4QbAu/m+hWzkvz0=",
+    "hash": "sha256-feT15NquPB7KV3nw+hsyP5aqG67nFgLi3k5LKOSyp+Y=",
     "homepage": "https://registry.terraform.io/providers/newrelic/newrelic",
     "owner": "newrelic",
     "repo": "terraform-provider-newrelic",
-    "rev": "v3.97.1",
+    "rev": "v3.97.5",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-/KKT8PWCyfC0w39Mo8X33ycudupl0BDGw0DyLIyymRo="
+    "vendorHash": "sha256-dMNDu9uxrZXsqmmEsDWB0ruiRamCgm5jEK5372lLt8E="
   },
   "ns1-terraform_ns1": {
     "hash": "sha256-6w0r6QXm16h4I4PFj80dJhTDbF4FPMjJalO0TfXGBEA=",
@@ -1049,13 +1049,13 @@
     "vendorHash": "sha256-ofzbDmivXgH1i1Gjhpyp0bk3FDs5SnxwoRuNAWyMqyI="
   },
   "opentelekomcloud_opentelekomcloud": {
-    "hash": "sha256-U5F5pcCMGsJqVfIOt6sYUnlr1CkNnwnhUm22F+YekRQ=",
+    "hash": "sha256-8YCFGtVOzXOvmZGoy3T43RTttgLM7ebWQ6z8ypLtr6A=",
     "homepage": "https://registry.terraform.io/providers/opentelekomcloud/opentelekomcloud",
     "owner": "opentelekomcloud",
     "repo": "terraform-provider-opentelekomcloud",
-    "rev": "v1.37.7",
+    "rev": "v1.37.8",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-5YKZqyNUDgyY5dC7tJie8IcrLCkeKV92PPJZ+DVLq4w="
+    "vendorHash": "sha256-UeCpP05dG2OISRx6u1gV4b9SMk2rlyTr1OxpAsx2gts="
   },
   "opsgenie_opsgenie": {
     "hash": "sha256-Y67kcg/ovvZc22l1CBz0Mqu7DAIit5F0jQNfQrl2EGI=",
@@ -1067,11 +1067,11 @@
     "vendorHash": null
   },
   "oracle_oci": {
-    "hash": "sha256-3/apEon1W1iaB7UIkYgI4POV+f1uVDVXX4V6dyeqsLk=",
+    "hash": "sha256-N/0SwbH9eYbXmfRP/X534AsaQVgyUGztVkBlUOHgRGY=",
     "homepage": "https://registry.terraform.io/providers/oracle/oci",
     "owner": "oracle",
     "repo": "terraform-provider-oci",
-    "rev": "v8.28.0",
+    "rev": "v9.1.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1463,13 +1463,13 @@
     "vendorHash": "sha256-G3OCHFeCUCN5YUusxGNx+xnbpYoA2F+uGdpEn70ExN8="
   },
   "vmware_avi": {
-    "hash": "sha256-jhP8b6BpsBBMjYP2IPvoq9cvGQ+LMDcZyYAFTYbnhC8=",
+    "hash": "sha256-xENQPgjXt6hegLYh5muZUhhEd5x5IvdQyXs8HQBRCGs=",
     "homepage": "https://registry.terraform.io/providers/vmware/avi",
     "owner": "vmware",
     "repo": "terraform-provider-avi",
-    "rev": "v32.1.2",
+    "rev": "v32.1.3",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-3vlOA/0w2JKtSkz+p8VQcsLD42beIXa81Ahw7/jkkqs="
+    "vendorHash": "sha256-heaypQctuh0aqONOb8IAjBbYUGF2j4QMBiYvMiQM+rI="
   },
   "vmware_vcd": {
     "hash": "sha256-/o1bINYaSJXqFkda3N2iRwno2QVCE+KaLLGjvlllMEw=",

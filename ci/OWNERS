@@ -97,18 +97,13 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 # Contributor documentation
 /CONTRIBUTING.md
 /.github/PULL_REQUEST_TEMPLATE.md
-/doc/contributing/
-/doc/contributing/contributing-to-documentation.chapter.md @jtojnar
+/doc/contributing.md @infinisil
 /lib/README.md
 /doc/README.md
 /nixos/README.md
 /pkgs/README.md
 /pkgs/by-name/README.md
 /maintainers/README.md
-
-# User-facing development documentation
-/doc/development.md @infinisil
-/doc/development @infinisil
 
 # NixOS Internals
 /nixos/default.nix                                    @infinisil

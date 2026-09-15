@@ -19,14 +19,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-settings-daemon";
-  version = "1.6.0";
+  version = "1.8.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-settings-daemon";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-l9CwNLIrYstWuiEUvw/UnXRq6dpLEIEKxr9AzNQzbac=";
+    hash = "sha256-D7f5IERgNP9JrmAIiHp6jlBZUOt+n8FpEiGx1jqqwgs=";
   };
 
   postPatch = ''

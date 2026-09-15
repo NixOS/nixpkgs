@@ -25,16 +25,16 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "gopass-jsonapi";
-  version = "1.17.0";
+  version = "1.17.2";
 
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = "gopass-jsonapi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fYkBSwAeAlvqKyMugmITyXxbuvhdCO0Cmvnu8jFgCi4=";
+    hash = "sha256-rSRFw8Rco82Rg01MSq2Ds+RxbnaBbmQiBdBCFtHrA6k=";
   };
 
-  vendorHash = "sha256-Pa3s5Fv3IU6IeOq1TMl/zPynS+dPtUr+xTbastOQ05U=";
+  vendorHash = "sha256-yuZ6N26b/SaBxIX0apXndUK8XvtSt2SqVqfTqGZp+eY=";
 
   subPackages = [ "." ];
 

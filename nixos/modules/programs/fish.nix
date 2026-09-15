@@ -42,11 +42,16 @@ let
   # See https://github.com/fish-shell/fish-shell/issues/12079
   indentFishFile =
     name: text:
-    pkgs.runCommandLocal name {
-      nativeBuildInputs = [ cfg.package ];
-      inherit text;
-      passAsFile = [ "text" ];
-    } "fish --no-config -c 'fish_indent $textPath' > $out";
+    pkgs.runCommandLocal name
+      {
+        nativeBuildInputs = [ cfg.package ];
+        strictDeps = true;
+        inherit text;
+        __structuredAttrs = true;
+      }
+      ''
+        printf "%s" "$text" | fish --no-config -c fish_indent > $out
+      '';
 
   sourceEnv =
     file:

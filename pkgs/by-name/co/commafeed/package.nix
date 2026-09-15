@@ -13,13 +13,13 @@
   nix-update-script,
 }:
 let
-  version = "7.3.0";
+  version = "7.3.2";
 
   src = fetchFromGitHub {
     owner = "Athou";
     repo = "commafeed";
     tag = version;
-    hash = "sha256-VCN8NBVGQl7/D3fESxiw3ipUoK3qBM0SSnEYBB0E+64=";
+    hash = "sha256-AmmXM6lLGa5t9tHe4Ae8LCkIR/nkY89/4D2KIQnVcNU=";
   };
 
   frontend = buildNpmPackage {
@@ -29,7 +29,7 @@ let
 
     sourceRoot = "${src.name}/commafeed-client";
 
-    npmDepsHash = "sha256-usdJEjW/Oz993Ik8JZnEQ08ArqmLx/3hSdhlUJgCrig=";
+    npmDepsHash = "sha256-oh97YH9yaIqjjOqtd8iMvlZ5gc4cwJpkLrZyAZGS9Ho=";
 
     nativeBuildInputs = [ biome ];
 
@@ -55,7 +55,7 @@ maven.buildMavenPackage {
 
   pname = "commafeed";
 
-  mvnHash = "sha256-Gi+KMrdSXlnI34wvAYnJffVCa3WUYkPEFIv382+mwj4=";
+  mvnHash = "sha256-d6sq5v+BToT1rj7AXPpuLZP9uKpXyt8F3EYWxV7uyoY=";
   mvnJdk = jdk25;
 
   mvnParameters = lib.escapeShellArgs [

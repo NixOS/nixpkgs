@@ -14,17 +14,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proxyauth";
-  version = "1.2.0";
+  version = "1.2.7";
 
   src = fetchFromForgejo {
     domain = "git.proxyauth.app";
     owner = "ProxyAuth";
     repo = "ProxyAuth";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Im6BfBhzxrcbaZ0rvy0+dQ4Dx8L2NQz7zMc1SOY6xnY=";
+    hash = "sha256-48W6p7ApIXYbfyaVfTuXksqLjES8Rr5VcteoJpMf6hg=";
   };
 
-  cargoHash = "sha256-q7goMwGtcBnnYXqhylmygQFTEGzTQG6IbgUhuKRiw+8=";
+  cargoHash = "sha256-E5aRkUF+zE1+YjKdZVqsVhZSfMjmWzxcRflKyV9c7bo=";
 
   nativeBuildInputs = [
     pkg-config

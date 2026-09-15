@@ -215,39 +215,40 @@ stdenv.mkDerivation (
       ''}
     '';
 
-    preConfigure = ''
-      ${lib.optionalString (withNetflow || withOtel || withSystemdJournal) ''
-        export CMAKE_PREFIX_PATH="${corrosion}:$CMAKE_PREFIX_PATH"
-      ''}
+    preConfigure =
+      let
+        LOCAL_GOPROXY = lib.concatStringsSep "," (
+          [ "file://${finalAttrs.passthru.netdata-go-modules}" ]
+          ++ lib.optional withNdMcp "file://${finalAttrs.passthru.nd-mcp}"
+        );
+      in
+      ''
+        ${lib.optionalString (withNetflow || withOtel || withSystemdJournal) ''
+          export CMAKE_PREFIX_PATH="${corrosion}:$CMAKE_PREFIX_PATH"
+        ''}
 
-      export GOCACHE=$TMPDIR/go-cache
-      export GOPATH=$TMPDIR/go
-      export GOSUMDB=off
+        export GOCACHE=$TMPDIR/go-cache
+        export GOPATH=$TMPDIR/go
+        export GOSUMDB=off
 
-      substituteInPlace packaging/cmake/Modules/NetdataGoTools.cmake \
-        --replace-fail \
-          'GOPROXY=https://proxy.golang.org' \
-          'GOPROXY=${
-            lib.concatStringsSep "," (
-              [ "file://${finalAttrs.passthru.netdata-go-modules}" ]
-              ++ lib.optional withNdMcp "file://${finalAttrs.passthru.nd-mcp}"
-            )
-          }'
+        substituteInPlace packaging/cmake/Modules/NetdataGoTools.cmake \
+          --replace-fail 'GOPROXY=https://proxy.golang.org' 'GOPROXY=${LOCAL_GOPROXY}'
 
-      # Prevent the path to be caught into the Nix store path.
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'set(CACHE_DIR "''${NETDATA_RUNTIME_PREFIX}/var/cache/netdata")' 'set(CACHE_DIR "/var/cache/netdata")' \
-        --replace-fail 'set(CONFIG_DIR "''${NETDATA_RUNTIME_PREFIX}/etc/netdata")' 'set(CONFIG_DIR "/etc/netdata")' \
-        --replace-fail 'set(LIBCONFIG_DIR "''${NETDATA_RUNTIME_PREFIX}/usr/lib/netdata/conf.d")' 'set(LIBCONFIG_DIR "${placeholder "out"}/share/netdata/conf.d")' \
-        --replace-fail 'set(LOG_DIR "''${NETDATA_RUNTIME_PREFIX}/var/log/netdata")' 'set(LOG_DIR "/var/log/netdata")' \
-        --replace-fail 'set(PLUGINS_DIR "''${NETDATA_RUNTIME_PREFIX}/usr/libexec/netdata/plugins.d")' 'set(PLUGINS_DIR "${placeholder "out"}/libexec/netdata/plugins.d")' \
-        --replace-fail 'set(STOCK_DATA_DIR "''${NETDATA_RUNTIME_PREFIX}/''${STOCK_DATA_DEST}")' 'set(STOCK_DATA_DIR "${placeholder "out"}/share/netdata")' \
-        --replace-fail 'set(VARLIB_DIR "''${NETDATA_RUNTIME_PREFIX}/var/lib/netdata")' 'set(VARLIB_DIR "/var/lib/netdata")' \
-        --replace-fail 'set(pkglibexecdir_POST "''${NETDATA_RUNTIME_PREFIX}/usr/libexec/netdata")' 'set(pkglibexecdir_POST "${placeholder "out"}/libexec/netdata")' \
-        --replace-fail 'set(localstatedir_POST "''${NETDATA_RUNTIME_PREFIX}/var")' 'set(localstatedir_POST "/var")' \
-        --replace-fail 'set(BINDIR usr/sbin)' 'set(BINDIR "bin")' \
-        --replace-fail 'set(BUILD_INFO_CMAKE_CACHE_ARCHIVE_PATH "usr/share/netdata")' 'set(BUILD_INFO_CMAKE_CACHE_ARCHIVE_PATH "${placeholder "out"}/share/netdata")'
-    '';
+        # Prevent the path to be caught into the Nix store path.
+        substituteInPlace CMakeLists.txt \
+          --replace-fail 'GOPROXY=https://proxy.golang.org' 'GOPROXY=${LOCAL_GOPROXY}' \
+          --replace-fail 'set(CACHE_DIR "''${NETDATA_RUNTIME_PREFIX}/var/cache/netdata")' 'set(CACHE_DIR "/var/cache/netdata")' \
+          --replace-fail 'set(CONFIG_DIR "''${NETDATA_RUNTIME_PREFIX}/etc/netdata")' 'set(CONFIG_DIR "/etc/netdata")' \
+          --replace-fail 'set(LIBCONFIG_DIR "''${NETDATA_RUNTIME_PREFIX}/usr/lib/netdata/conf.d")' 'set(LIBCONFIG_DIR "${placeholder "out"}/share/netdata/conf.d")' \
+          --replace-fail 'set(LOG_DIR "''${NETDATA_RUNTIME_PREFIX}/var/log/netdata")' 'set(LOG_DIR "/var/log/netdata")' \
+          --replace-fail 'set(PLUGINS_DIR "''${NETDATA_RUNTIME_PREFIX}/usr/libexec/netdata/plugins.d")' 'set(PLUGINS_DIR "${placeholder "out"}/libexec/netdata/plugins.d")' \
+          --replace-fail 'set(STOCK_DATA_DIR "''${NETDATA_RUNTIME_PREFIX}/''${STOCK_DATA_DEST}")' 'set(STOCK_DATA_DIR "${placeholder "out"}/share/netdata")' \
+          --replace-fail 'set(VARLIB_DIR "''${NETDATA_RUNTIME_PREFIX}/var/lib/netdata")' 'set(VARLIB_DIR "/var/lib/netdata")' \
+          --replace-fail 'set(pkglibexecdir_POST "''${NETDATA_RUNTIME_PREFIX}/usr/libexec/netdata")' 'set(pkglibexecdir_POST "${placeholder "out"}/libexec/netdata")' \
+          --replace-fail 'set(localstatedir_POST "''${NETDATA_RUNTIME_PREFIX}/var")' 'set(localstatedir_POST "/var")' \
+          --replace-fail 'set(BINDIR usr/sbin)' 'set(BINDIR "bin")' \
+          --replace-fail 'set(BUILD_INFO_CMAKE_CACHE_ARCHIVE_PATH "usr/share/netdata")' 'set(BUILD_INFO_CMAKE_CACHE_ARCHIVE_PATH "${placeholder "out"}/share/netdata")'
+      '';
 
     cmakeFlags = [
       "-DWEB_DIR=share/netdata/web"
