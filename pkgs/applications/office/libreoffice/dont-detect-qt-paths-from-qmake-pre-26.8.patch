@@ -15,8 +15,8 @@ index 2c11703cb3ff..302a006bbf75 100644
          AC_MSG_NOTICE([Detected Qt6 version: $qmake6_test_ver])
      fi
  
--    qt6_incdirs="`$QMAKE6 -query QT_INSTALL_HEADERS | tr -d '\r'` $qt6_incdirs"
--    qt6_libdirs="`$QMAKE6 -query QT_INSTALL_LIBS | tr -d '\r'` $qt6_libdirs"
-     qt6_platformsdir="`$QMAKE6 -query QT_INSTALL_PLUGINS | tr -d '\r'`/platforms"
+-    qt6_incdirs="`$QMAKE6 -query QT_INSTALL_HEADERS` $qt6_incdirs"
+-    qt6_libdirs="`$QMAKE6 -query QT_INSTALL_LIBS` $qt6_libdirs"
+     qt6_platformsdir="`$QMAKE6 -query QT_INSTALL_PLUGINS`/platforms"
      QT6_PLATFORMS_SRCDIR="$qt6_platformsdir"
  
