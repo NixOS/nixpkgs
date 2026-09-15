@@ -3,29 +3,31 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  asn1crypto,
+  pyasn1,
+  pyasn1-modules,
   cbor2,
   cryptography,
   pyopenssl,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "webauthn";
-  version = "2.7.0";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "duo-labs";
     repo = "py_webauthn";
-    tag = "v${version}";
-    hash = "sha256-aZDptKJPFU6Oo4vKkIWkqkJ5ogDe5x3v7PAQRixWFe4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rT/B95ILb2cI/HH01IC5b4319zdKnrf4ZLUIpAeC3fM=";
   };
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    asn1crypto
+  dependencies = [
+    pyasn1
+    pyasn1-modules
     cbor2
     cryptography
     pyopenssl
@@ -38,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Implementation of the WebAuthn API";
     homepage = "https://github.com/duo-labs/py_webauthn";
-    changelog = "https://github.com/duo-labs/py_webauthn/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/duo-labs/py_webauthn/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})
