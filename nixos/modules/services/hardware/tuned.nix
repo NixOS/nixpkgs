@@ -20,6 +20,8 @@ let
     options = {
       main = lib.mkOption {
         type = lib.types.submodule {
+          freeformType = lib.types.attrsOf ppdSettingsFormat.lib.types.atom;
+
           options = {
             default = lib.mkOption {
               type = lib.types.str;
