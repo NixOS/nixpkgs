@@ -34,7 +34,7 @@ index 1c7186e..39cebd0 100644
 -
 -# Start project
 -project(KnobKraftOrm VERSION ${PROJECT_VERSION})
-+project(KnobKraftOrm VERSION 2.7.1)
++project(KnobKraftOrm VERSION ${KNOBKRAFT_EXTERNAL_VERSION})
  
  # Now you can use PROJECT_DEV_TAG in your CMake scripts or in your code to handle the "-dev" part.
  # For example, you could add a preprocessor definition that your code could use:
