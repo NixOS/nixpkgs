@@ -99,5 +99,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     mainProgram = "gzip";
     maintainers = [ lib.maintainers.mdaniels5757 ];
+    identifiers.purlParts = {
+      type = "nix";
+      spec = "nixpkgs/gzip@${finalAttrs.version}";
+    };
   };
 })

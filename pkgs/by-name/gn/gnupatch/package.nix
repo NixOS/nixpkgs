@@ -47,5 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ mdaniels5757 ];
     platforms = lib.platforms.all;
+    identifiers.purlParts = {
+      type = "nix";
+      spec = "nixpkgs/patch@${finalAttrs.version}";
+    };
   };
 })
