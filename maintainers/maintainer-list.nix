@@ -8578,6 +8578,12 @@
     githubId = 5085029;
     name = "Emanuele Peruffo";
   };
+  epic9491 = {
+    github = "epic9491";
+    githubId = 213664452;
+    matrix = "@gumbo:senseii.dev";
+    name = "sensei";
+  };
   EpicEric = {
     email = "eric@eric.dev.br";
     github = "EpicEric";
