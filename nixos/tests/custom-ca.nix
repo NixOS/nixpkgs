@@ -144,6 +144,10 @@ let
 
       testScript = ''
         from typing import Tuple
+
+        from test_driver.errors import RequestedAssertionFailed
+
+
         def execute_as(user: str, cmd: str) -> Tuple[int, str]:
             """
             Run a shell command as a specific user.
@@ -156,14 +160,23 @@ let
             Wait until a X11 window of a given user appears.
             """
 
-            def window_is_visible(last_try: bool) -> bool:
-                ret, stdout = execute_as(user, f"xdotool search --onlyvisible --class {cls}")
-                if last_try:
-                    machine.log(f"Last chance to match {cls} on the window list")
+            last_stdout = ""
+
+            def window_is_visible(_remaining: float | None) -> bool:
+                nonlocal last_stdout
+                ret, last_stdout = execute_as(
+                    user, f"xdotool search --onlyvisible --class {cls}"
+                )
                 return ret == 0
 
             with machine.nested("Waiting for a window to appear"):
-                retry(window_is_visible)
+                try:
+                    retry(window_is_visible)
+                except RequestedAssertionFailed:
+                    machine.log(
+                        f"Timed out matching {cls}. Last xdotool output: {last_stdout}"
+                    )
+                    raise
 
 
         machine.start()

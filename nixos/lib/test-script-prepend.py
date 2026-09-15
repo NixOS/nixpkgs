@@ -110,9 +110,9 @@ def polling_condition(
 
 
 def retry(
-    fn: Callable,
-    timeout_seconds: int | dt.timedelta | None = None,
-    timeout: dt.timedelta | None = None,
+    fn: Callable[[float | None], bool],
+    timeout_seconds: int | float | dt.timedelta | None = None,
+    timeout: dt.timedelta | None = dt.timedelta(minutes=15),
 ) -> None:
     pass
 

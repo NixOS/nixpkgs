@@ -68,7 +68,7 @@
       return ret, output
 
     def wait_until_rcode(node, cmd, rcode=0, retries=30, **kwargs):
-      def check_success(_last_try):
+      def check_success(_remaining):
         nonlocal output
         ret, output = run_with_debug(node, cmd, **kwargs)
         return ret == rcode
