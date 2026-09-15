@@ -4,6 +4,7 @@
   fetchurl,
   pkg-config,
   libtirpc,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,6 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libtirpc
   ];
+
+  passthru.tests.nixos = nixosTests.xinetd;
 
   meta = {
     description = "Secure replacement for inetd";
