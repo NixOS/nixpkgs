@@ -28,6 +28,11 @@
     meta.license = lib.licenses.mit;
   } ./mix-compile-hook.sh;
 
+  mixDepsCompileHook = makeSetupHook {
+    name = "mix-deps-compile-hook.sh";
+    meta.license = lib.licenses.mit;
+  } ./mix-deps-compile-hook.sh;
+
   mixEscriptSetupHook = makeSetupHook {
     name = "mix-escript-setup-hook.sh";
     meta.license = lib.licenses.mit;

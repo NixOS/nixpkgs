@@ -85,6 +85,7 @@ makeScopeWithSplicing' {
         mixAppConfigPatchHook
         mixBuildDirHook
         mixCompileHook
+        mixDepsCompileHook
         mixEscriptSetupHook
         mixFodDepsSetupHook
         mixNixDepsSetupHook

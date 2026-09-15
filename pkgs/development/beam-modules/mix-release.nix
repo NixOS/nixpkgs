@@ -19,6 +19,7 @@
   gawk,
   mixBuildDirHook,
   mixCompileHook,
+  mixDepsCompileHook,
   mixEscriptSetupHook,
   mixFodDepsSetupHook,
   mixNixDepsSetupHook,
@@ -122,6 +123,7 @@ lib.extendMkDerivation {
 
             mixBuildDirHook
             mixCompileHook
+            mixDepsCompileHook
           ]
         ++ lib.optionals (escriptBinName != null) [ mixEscriptSetupHook ]
         ++ lib.optionals (escriptBinName == null) [ mixReleaseSetupHook ]
@@ -164,20 +166,6 @@ lib.extendMkDerivation {
         LC_CTYPE = if stdenv.hostPlatform.isLinux then "C.UTF-8" else "UTF-8";
       }
       // (attrs.env or { });
-
-      configurePhase =
-        attrs.configurePhase or ''
-          runHook preConfigure
-
-          # This is needed for projects that have a specific compile step
-          # the dependency needs to be compiled in order for the task
-          # to be available.
-          #
-          # Phoenix projects for example will need compile.phoenix.
-          mix deps.compile --no-deps-check --skip-umbrella-children
-
-          runHook postConfigure
-        '';
 
       postFixup = ''
         echo "removing files for Microsoft Windows"
