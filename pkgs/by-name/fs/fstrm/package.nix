@@ -34,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ];
 
+  strictDeps = true;
+
   preBuild = ''
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -L${openssl}/lib"
   '';
