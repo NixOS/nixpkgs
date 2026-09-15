@@ -12,7 +12,7 @@
 
 buildPythonPackage {
   pname = "lunarcalendar";
-  version = "0.0.9";
+  version = "0.0.8";
   format = "setuptools";
 
   src = fetchFromGitHub {
