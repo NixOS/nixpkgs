@@ -11601,6 +11601,12 @@
     githubId = 362833;
     name = "Hongchang Wu";
   };
+  hongjr03 = {
+    email = "hongjr03@gmail.com";
+    github = "hongjr03";
+    githubId = 64763790;
+    name = "Hong Jiarong";
+  };
   honnip = {
     name = "Jung seungwoo";
     email = "me@honnip.page";
