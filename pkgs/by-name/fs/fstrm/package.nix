@@ -15,8 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "farsightsec";
     repo = "fstrm";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/WFP2g3Vuf/qaY8pprY8XFAlpEE+0SJUlFNWfa+7ZlE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/WFP2g3Vuf/qaY8pprY8XFAlpEE+0SJUlFNWfa+7ZlE=";
   };
 
   outputs = [
@@ -41,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   doCheck = true;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Frame Streams implementation in C";
