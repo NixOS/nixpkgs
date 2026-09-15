@@ -83,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     inherit (finalAttrs.src.meta) homepage;
     description = "Live rendering and error reporting for LaTeX";
+    changelog = "https://github.com/let-def/texpresso/blob/main/CHANGELOG.md";
     mainProgram = "texpresso";
     maintainers = with lib.maintainers; [
       nickhu
