@@ -50,7 +50,7 @@ appimageTools.wrapAppImage {
     license = licenses.unfree;
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ perryh ];
     mainProgram = pname;
   };
 }

@@ -22563,6 +22563,12 @@
     githubId = 13556996;
     name = "permahorse";
   };
+  perryh = {
+    email = "perry.huang@gmail.com";
+    github = "perryh";
+    githubId = 997236;
+    name = "Perry Huang";
+  };
   perstark = {
     email = "perstark.se@gmail.com";
     github = "perstarkse";
