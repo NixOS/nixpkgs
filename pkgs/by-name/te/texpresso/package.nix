@@ -84,7 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src.meta) homepage;
     description = "Live rendering and error reporting for LaTeX";
     mainProgram = "texpresso";
-    maintainers = with lib.maintainers; [ nickhu ];
+    maintainers = with lib.maintainers; [
+      nickhu
+      stephen-huan
+    ];
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };
