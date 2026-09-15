@@ -22,18 +22,20 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  wlroots_0_19,
+  wlroots_0_20,
   pango,
   libxcb-wm,
   yyjson,
+  libgbm,
+  fetchpatch,
 }:
 let
-  wlroots = wlroots_0_19;
+  wlroots = wlroots_0_20;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayfire";
-  version = "0.10.1";
+  version = "0.11.0";
 
   outputs = [
     "out"
@@ -45,13 +47,22 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "wayfire";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-yiqtnsXxvC7vk22ZQ5OFt5uX40FCRGWpfZrax9GItAg=";
+    hash = "sha256-G6GakEpnqw3xORXP7mr2YoyAEymozV0CYeof+a1Nh74=";
   };
 
-  postPatch = ''
-    substituteInPlace plugins/common/wayfire/plugins/common/cairo-util.hpp \
-      --replace "<drm_fourcc.h>" "<libdrm/drm_fourcc.h>"
-  '';
+  patches = [
+    (fetchpatch {
+      name = "wayfire_fix_hermiticity";
+      url = "https://github.com/WayfireWM/wayfire/commit/6cf51df330564d97d922cdaa84e0e130311d8337.patch";
+      hash = "sha256-Drs5wuyF4cfzm3Jdv0fv05FeWjqNhHfVzJK7ZLM04v0=";
+    })
+
+    (fetchpatch {
+      name = "wayfire_fix_squeezimize";
+      url = "https://github.com/WayfireWM/wayfire/commit/2bd9c6d175a788ba057add7eb762e8b0ca4ea7cd.patch";
+      hash = "sha256-pG6tnYiff9gj1AM6mNzhmU8JjoevSlMWeY0XREYq38Q=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -67,12 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
     libevdev
     libinput
     libjpeg
-    libxkbcommon
     libxml2
     vulkan-headers
-    wayland-protocols
     libxcb-wm
-    yyjson
   ];
 
   propagatedBuildInputs = [
@@ -81,6 +89,11 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     cairo
     pango
+
+    yyjson
+    wayland-protocols
+    libxkbcommon
+    libgbm
   ];
 
   nativeCheckInputs = [
