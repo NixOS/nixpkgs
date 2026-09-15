@@ -30,6 +30,10 @@ stdenvNoCC.mkDerivation rec {
   postPatch = ''
     substituteInPlace fonttools_script.py \
       --replace-fail 'print("exec hinting", options_)' 'options_.pop("epoch", None)'
+    # fontTools now preserves cmap format 14 during merging; avoid appending it twice.
+    substituteInPlace fonttools_script.py \
+      --replace-fail 'target_cmap.append(source_cmap_format_14)' \
+        'if target_cmap.find("cmap_format_14") is None: target_cmap.append(source_cmap_format_14)'
   '';
 
   nativeBuildInputs = [
