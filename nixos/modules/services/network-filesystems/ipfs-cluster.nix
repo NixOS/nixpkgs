@@ -88,7 +88,7 @@ in
 
       serviceConfig = {
         ExecStart = [
-          "${lib.getExe' pkgs.ipfs-cluster "ipfs-cluster-service"} init --consensus ${cfg.consensus} ${initFlags}"
+          "${lib.getExe' pkgs.ipfs-cluster "ipfs-cluster-service"} init --consensus ${cfg.consensus} ${initFlags} -f"
         ];
         Type = "oneshot";
         RemainAfterExit = true;
