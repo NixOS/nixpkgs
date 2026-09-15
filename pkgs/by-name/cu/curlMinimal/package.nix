@@ -37,6 +37,7 @@
   http3Support ? false,
   nghttp3,
   ngtcp2,
+  httpsigSupport ? false,
   websocketSupport ? false,
   idnSupport ? false,
   libidn2,
@@ -199,6 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature opensslSupport "ca-fallback")
     (lib.withFeature http3Support "nghttp3")
     (lib.withFeature http3Support "ngtcp2")
+    (lib.withFeature httpsigSupport "httpsig")
     (lib.withFeature rustlsSupport "rustls")
     (lib.withFeature zstdSupport "zstd")
     (lib.withFeature pslSupport "libpsl")
