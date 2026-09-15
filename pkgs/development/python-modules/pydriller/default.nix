@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pydriller";
-  version = "2.11";
+  version = "2.12";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "ishepard";
     repo = "pydriller";
     tag = version;
-    hash = "sha256-p4caHh95PnmWLC2fiSX8BCxfLymxSUUNIdxIWOc8O5w=";
+    hash = "sha256-5zBb9z2+Hvkf/XdA9SOMcEQwcSE/r4jg9vW+mpPc5wM=";
   };
 
   build-system = [ setuptools ];
