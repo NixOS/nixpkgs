@@ -20,11 +20,12 @@ let
             yq
             check-jsonschema
           ];
+          strictDeps = true;
           value = builtins.toJSON value;
-          passAsFile = [ "value" ];
+          __structuredAttrs = true;
         }
         ''
-          yq --yaml-output . $valuePath > $out
+          printf "%s" "$value" | yq --yaml-output . > $out
           check-jsonschema --schemafile "${cfg.package.passthru.jsonschema}" "$out"
           sed -i $'s|\'!include |!include \'|' $out
         '';
