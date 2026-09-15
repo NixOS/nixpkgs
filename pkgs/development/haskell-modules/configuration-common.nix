@@ -2800,6 +2800,12 @@ with haskellLib;
   proto3-suite = lib.pipe super.proto3-suite [
     dontCheck
     doJailbreak
+    (appendPatch (fetchpatch {
+      # https://github.com/awakesecurity/proto3-suite/pull/313 krank:ignore-line
+      name = "support-swagger-2.9.patch";
+      url = "https://github.com/awakesecurity/proto3-suite/commit/da9ec95900de7155c98e7936274b769b5760c636.patch";
+      sha256 = "sha256-YNRaz2VzNRZI1QFbKX2lzBoiFvaZjb8nCdsv8jiE1Gk";
+    }))
   ];
 
   optparse-generic = appendPatch (fetchpatch {
