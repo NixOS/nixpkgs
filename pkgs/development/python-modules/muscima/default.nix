@@ -15,7 +15,7 @@ let
 in
 buildPythonPackage {
   pname = "muscima";
-  version = "unstable-2023-04-26";
+  version = "0.0.1";
 
   src = fetchFromGitHub {
     owner = "hajicj";
