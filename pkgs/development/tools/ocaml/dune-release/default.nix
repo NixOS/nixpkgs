@@ -11,7 +11,6 @@
   rresult,
   logs,
   fpath,
-  odoc,
   opam-format,
   opam-core,
   opam-state,
@@ -60,14 +59,12 @@ buildDunePackage (finalAttrs: {
     opam-core
     rresult
     logs
-    odoc
     bos
     yojson
     astring
     fpath
   ];
   nativeCheckInputs = [
-    odoc
     gitMinimal
   ];
   checkInputs = [ alcotest ] ++ runtimeInputs;

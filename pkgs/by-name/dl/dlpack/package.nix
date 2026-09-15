@@ -19,6 +19,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-kIHBgTYaHEmweRBFtRl1pXhOyQ5TEwU8dLUssTMEnpc=";
   };
 
+  postPatch =
+    # Fix outdated version in CMakeLists.txt. It makes dlpackConfigVersion.cmake advertise 0.6 and
+    # any call to `find_package(dlpack <1.x>)` fails.
+    ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail \
+          'project(dlpack VERSION 0.6 LANGUAGES C CXX)' \
+          'project(dlpack VERSION ${finalAttrs.version} LANGUAGES C CXX)'
+    '';
+
   nativeBuildInputs = [
     cmake
   ];

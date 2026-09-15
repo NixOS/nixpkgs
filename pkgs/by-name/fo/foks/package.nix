@@ -19,7 +19,7 @@ let
 in
 buildGoModule (finalAttrs: {
   inherit pname;
-  version = "0.1.8";
+  version = "0.1.9";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -28,10 +28,10 @@ buildGoModule (finalAttrs: {
     owner = "foks-proj";
     repo = "go-foks";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JY0ec+LNRQf0S8gTeazvQhvQ7LRM3zz1qvopGPaKM1k=";
+    hash = "sha256-HnxMcYGb0fyGkZd1hRhQvb0eInay+/t8/cgI/SDlR24=";
   };
 
-  vendorHash = "sha256-W0lyLy7k3xin8VSdxNgeh1FpHprOKIDduHIW3Oqk1LY=";
+  vendorHash = "sha256-vI4MzpjCCtNnd0pv3MgDpttslUUk6JU/wcp+QTcZqgw=";
 
   postPatch = ''
     cd ./server/web/templates

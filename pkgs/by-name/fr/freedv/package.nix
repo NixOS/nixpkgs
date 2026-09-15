@@ -16,6 +16,7 @@
   libsamplerate,
   libsndfile,
   lpcnet,
+  openssl,
   portaudio,
   speexdsp,
   hamlib_4,
@@ -28,6 +29,12 @@
 
 let
   codec2' = codec2.override { freedvSupport = true; };
+  freedvBackendSrc = fetchFromGitHub {
+    owner = "tmiw";
+    repo = "freedv-backend";
+    rev = "v1.0.0";
+    hash = "sha256-t1Bu9XaNRa9zQKEffC4fJxclvzcu9UPMY4Gzt0kTfAY=";
+  };
   ebur128Src = fetchFromGitHub {
     owner = "jiixyj";
     repo = "libebur128";
@@ -49,10 +56,10 @@ let
     hash = "sha256-P84gjnuiQQBVBExJBY3sUbwo00lXY6HB+AMpx/oovRg=";
   };
   radaeSrc = fetchFromGitHub {
-    owner = "peterbmarks";
-    repo = "radae_nopy";
-    rev = "d72ec84e795493249db44d5939eb9b05438f956a";
-    hash = "sha256-ziEhYZarzQtQ1akAxF54kcX6o38gJeUJ08jipSWXnxQ=";
+    owner = "freedv";
+    repo = "rade_c";
+    rev = "a36161bce0fb37daf3f4602344b095f6817dddb1";
+    hash = "sha256-UixeatZpdcu/uQF+KKpivfPs5yMdLJtJhyMgu8zfMgI=";
   };
   rnnoiseSrc = fetchFromGitHub {
     owner = "xiph";
@@ -72,36 +79,41 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freedv";
-  version = "2.3.1";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TjE/iYg+VFvbZH7/1q1V4t0SgcS44pLVet4Pgt6L5HA=";
+    hash = "sha256-Nd0oOGiMrERviaGOtdOQ0KTSSL/+69Q2bRHjojBUknU=";
   };
 
   postPatch = ''
-    cp -R ${ebur128Src} ebur128
-    cp -R ${radaeSrc} radae
-    cp -R ${rnnoiseSrc} rnnoise
-    chmod -R u+w ebur128 radae rnnoise
-    substituteInPlace cmake/BuildEbur128.cmake \
-      --replace-fail "GIT_REPOSITORY https://github.com/jiixyj/libebur128.git" "URL $(realpath ebur128)" \
+    cp -R ${freedvBackendSrc} freedv-backend
+    chmod -R u+w freedv-backend
+    substituteInPlace cmake/BuildFreeDVBackend.cmake \
+      --replace-fail "GIT_REPOSITORY https://github.com/tmiw/freedv-backend" "URL $(realpath freedv-backend)" \
+      --replace-fail "GIT_TAG v1.0.0" ""
+    cp -R ${ebur128Src} freedv-backend/ebur128
+    cp -R ${radaeSrc} freedv-backend/radae
+    cp -R ${rnnoiseSrc} freedv-backend/rnnoise
+    chmod -R u+w freedv-backend/ebur128 freedv-backend/radae freedv-backend/rnnoise
+    substituteInPlace freedv-backend/cmake/BuildEbur128.cmake \
+      --replace-fail "GIT_REPOSITORY https://github.com/jiixyj/libebur128.git" "URL $(realpath freedv-backend/ebur128)" \
       --replace-fail 'GIT_TAG "v''${EBUR128_VERSION}"' "" \
       --replace-fail "git apply" "patch -p1 <"
-    substituteInPlace cmake/BuildRADE.cmake \
+    substituteInPlace freedv-backend/cmake/BuildRADE.cmake \
       --replace-fail "https://github.com/xiph/opus/archive/940d4e5af64351ca8ba8390df3f555484c567fbb.zip" "${opusSrc}" \
-      --replace-fail "GIT_REPOSITORY https://github.com/peterbmarks/radae_nopy/" "URL $(realpath radae)" \
+      --replace-fail "GIT_REPOSITORY https://github.com/freedv/rade_c" "URL $(realpath freedv-backend/radae)" \
       --replace-fail "GIT_TAG main" ""
-    substituteInPlace cmake/BuildRNNoise.cmake \
-      --replace-fail "GIT_REPOSITORY \''${RNNOISE_REPO}" "URL $(realpath rnnoise)" \
+    substituteInPlace freedv-backend/cmake/BuildRNNoise.cmake \
+      --replace-fail "GIT_REPOSITORY \''${RNNOISE_REPO}" "URL $(realpath freedv-backend/rnnoise)" \
       --replace-fail "GIT_TAG main" ""
+
     patchShebangs test/test_*.sh
     substituteInPlace cmake/CheckGit.cmake \
       --replace-fail "git describe --abbrev=4 --always HEAD" "echo v${finalAttrs.version}"
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+
     substituteInPlace CMakeLists.txt \
       --replace-fail "-Wl,-ld_classic" ""
     substituteInPlace src/CMakeLists.txt \
@@ -137,6 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
     speexdsp
     hamlib_4
     wxwidgets_3_2
+    openssl
   ]
   ++ (
     if stdenv.hostPlatform.isLinux then
@@ -165,14 +178,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false;
 
-  postInstall = ''
-    install -Dm755 rade_build/src/librade.* -t $out/lib
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p $out/Applications
-    mv $out/bin/FreeDV.app $out/Applications
-    makeWrapper $out/Applications/FreeDV.app/Contents/MacOS/FreeDV $out/bin/freedv
-  '';
+  postInstall =
+    lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      install -Dm755 _deps/freedv_backend-build/rade_build/src/librade.* -t $out/lib
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/Applications
+      mv $out/bin/FreeDV.app $out/Applications
+      makeWrapper $out/Applications/FreeDV.app/Contents/MacOS/FreeDV $out/bin/freedv
+    '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [

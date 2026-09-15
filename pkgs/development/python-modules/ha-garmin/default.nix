@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ha-garmin";
-  version = "0.1.36";
+  version = "0.1.37";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cyberjunky";
     repo = "ha-garmin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3KKvrLZ9SB5JToHGvWgkazKOk8MPUpsFFZrC6kBi3Jw=";
+    hash = "sha256-MNFy6nwEaENQ8+IP5vWprUUzrGLnb3Oh1X9VUGI0DIM=";
   };
 
   build-system = [ setuptools ];

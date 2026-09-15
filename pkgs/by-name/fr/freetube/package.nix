@@ -23,13 +23,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "freetube";
-  version = "0.25.2";
+  version = "0.25.3";
 
   src = fetchFromGitHub {
     owner = "FreeTubeApp";
     repo = "FreeTube";
     tag = "v${finalAttrs.version}-beta";
-    hash = "sha256-A25I64GP4FRyP21W5QuVvrWpThyU7hDosO25vkIx0UY=";
+    hash = "sha256-eaf10W8dBMJDlqOFd57hsqQqRcBOYAMavLrfmkuRbSw=";
   };
 
   __structuredAttrs = true;
@@ -58,7 +58,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-1OnmJi4xCxMALAac4jnLOKg5N/t3pcHgM0AgvF1+DpM=";
+    hash = "sha256-rsgDxK6X2EzgPwIb9A9I+STkKI882i8jDuL4pO5kJHU=";
   };
 
   nativeBuildInputs = [

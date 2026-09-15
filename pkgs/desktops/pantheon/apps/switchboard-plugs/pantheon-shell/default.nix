@@ -11,7 +11,7 @@
   libadwaita,
   libgee,
   granite7,
-  gexiv2,
+  gexiv2_0_10,
   gnome-settings-daemon,
   elementary-settings-daemon,
   gtk4,
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     elementary-settings-daemon
     gnome-settings-daemon
     gala
-    gexiv2
+    gexiv2_0_10
     glib
     granite7
     gtk4

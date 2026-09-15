@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pyprojectVersionPatchHook,
 
   # build-system
   setuptools,
@@ -24,19 +23,16 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "speechbrain";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "speechbrain";
     repo = "speechbrain";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-98g9HSCD6ahsmCSKSKIY1okYOuzUqVuJO9N9WUiZMPk=";
+    hash = "sha256-PpUnlg9/FQRm5PvVuFjA2xPi4RemKHIIN+E90NOPm1g=";
   };
-
-  nativeBuildInputs = [
-    pyprojectVersionPatchHook
-  ];
 
   build-system = [ setuptools ];
 

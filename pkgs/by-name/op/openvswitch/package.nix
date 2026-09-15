@@ -24,19 +24,20 @@
   python3,
   sphinxHook,
   tcpdump,
+  unbound,
   util-linux,
   which,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = if withDPDK then "openvswitch-dpdk" else "openvswitch";
-  version = "3.7.1";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "openvswitch";
     repo = "ovs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3FQjV4BZZpn7Loiu9Xm30cCqzkU1HgJ3sAc+I6D8OvQ=";
+    hash = "sha256-+WjpNJkM3AztBY1gPO6RdujGi86GDTjskJyDK16/9Dc=";
   };
 
   outputs = [
@@ -74,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     procps
     python3
+    unbound
     util-linux
     which
   ]
@@ -108,13 +110,9 @@ stdenv.mkDerivation (finalAttrs: {
     installShellCompletion utilities/ovs-vsctl-bashcomp.bash
 
     mkdir -p $tools/{bin,share/openvswitch/scripts}
-    mv $out/share/openvswitch/bugtool-plugins $tools/share/openvswitch
-    mv $out/share/openvswitch/scripts/ovs-{bugtool*,check-dead-ifs,monitor-ipsec,vtep} $tools/share/openvswitch/scripts
+    mv $out/share/openvswitch/scripts/ovs-{check-dead-ifs,monitor-ipsec,vtep} $tools/share/openvswitch/scripts
     mv $out/share/openvswitch/scripts/usdt $tools/share/openvswitch/scripts
-    mv $out/bin/ovs-{bugtool,dpctl-top,l3ping,parse-backtrace,pcap,tcpdump,tcpundump,test,vlan-test} $tools/bin
-
-    wrapProgram $tools/bin/ovs-l3ping \
-      --prefix PYTHONPATH : $out/share/openvswitch/python
+    mv $out/bin/ovs-{dpctl-top,pcap,tcpdump,tcpundump} $tools/bin
 
     wrapProgram $tools/bin/ovs-tcpdump \
       --prefix PATH : ${lib.makeBinPath [ tcpdump ]} \
@@ -125,6 +123,9 @@ stdenv.mkDerivation (finalAttrs: {
   preCheck = ''
     export TESTSUITEFLAGS="-j$NIX_BUILD_CORES"
     export RECHECK=yes
+
+    # Nix sandbox has no /etc/resolv.conf
+    export OVS_RESOLV_CONF=/dev/null
 
     patchShebangs tests/
   '';
@@ -138,7 +139,10 @@ stdenv.mkDerivation (finalAttrs: {
     pyparsing
     pytest
     setuptools
-  ]);
+    tftpy
+  ])
+  # pyftpdlib depends on pysendfile extension, which cannot be static
+  ++ lib.optionals (!stdenv.hostPlatform.isStatic) [ python3.pkgs.pyftpdlib ];
 
   passthru = {
     tests = {

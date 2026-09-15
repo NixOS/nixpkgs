@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ntirpc";
-  version = "14.1";
+  version = "15.2"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "nfs-ganesha";
     repo = "ntirpc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cOEmlsmXHTXiQcTmCkiQ8PeA+0U3W+xyUQ0Ba8kwvrw=";
+    hash = "sha256-YlWt2S2dggLATIBYb1hr281aeZ3AOWMzMt45tYOk6J8=";
   };
 
   outputs = [

@@ -35,7 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isStatic [
     "DISABLE_SHARED=y"
-  ];
+  ]
+  ++
+    lib.optionals (stdenv.buildPlatform.parsed.kernel.name != stdenv.hostPlatform.parsed.kernel.name)
+      [
+        "OS=${if stdenv.hostPlatform.isDarwin then "Darwin" else "Linux"}"
+      ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 

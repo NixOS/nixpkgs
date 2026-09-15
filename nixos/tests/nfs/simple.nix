@@ -24,7 +24,7 @@ import ../make-test-python.nix (
   in
 
   {
-    name = "nfs";
+    name = "nfsv${toString version}-simple";
     meta = {
       maintainers = [ ];
     };

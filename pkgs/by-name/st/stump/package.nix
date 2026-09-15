@@ -7,7 +7,7 @@
   yarnConfigHook,
   rustPlatform,
   nodejs,
-  pdfium-binaries,
+  pdfium,
   openssl,
   dbus,
   glib,
@@ -20,13 +20,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stump";
-  version = "0.1.6";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "stumpapp";
     repo = "stump";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-y870qA9r9uhFJthKiz0uIu6xFMtZ0L5xBj4iRr20/QI=";
+    hash = "sha256-ERERTzoh0RoWtVNrOejiyFu7ZmSVgUVGFaTsj36Je48=";
   };
 
   frontend = stdenv.mkDerivation (_: {
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = finalAttrs.src + "/yarn.lock";
-      hash = "sha256-j+S3FkiWZRZyX3CfwEDbspjG+oltECgIFOZZuN7FKRY=";
+      hash = "sha256-x5aZLRhNmoxcrMOQNvNDfuJCfc0ezYazVGm17v3CwqE=";
     };
 
     nativeBuildInputs = [
@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   __structuredAttrs = true;
 
-  cargoHash = "sha256-2WI/sjRM9GESBc3APrTwQ2F28CPkZCUfzEE+EMMWHKA=";
+  cargoHash = "sha256-4qCxyoo1WyurXLEw5Nq291Tglds0Lg1LGHfgZxsoZBQ=";
 
   cargoBuildFlags = [
     "--package"
@@ -98,7 +98,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --set-default STUMP_CLIENT_DIR ${finalAttrs.frontend} \
       --set-default STUMP_PORT 10001 \
       --set-default STUMP_PROFILE release \
-      --set-default PDFIUM_PATH ${pdfium-binaries}/lib/libpdfium.so \
+      --set-default PDFIUM_PATH ${pdfium}/lib/libpdfium.so \
       --set-default API_VERSION v1
   '';
 
@@ -118,5 +118,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
     mainProgram = "stump_server";
+    maintainers = with lib.maintainers; [ jvanbruegge ];
   };
 })

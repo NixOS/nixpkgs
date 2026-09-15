@@ -6,12 +6,12 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "bbot";
-  version = "3.0.1";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-2PmJFDvD1bFFO6AINU60P4yW7RGhcyFyZ6S9h42XqB4=";
+    hash = "sha256-kr1nKzBtUA2LJHh+43UP8DF6NHtmMish2uQyOvzxHEU=";
   };
 
   pythonRelaxDeps = [
@@ -77,7 +77,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   meta = {
     description = "OSINT automation for hackers";
     homepage = "https://github.com/blacklanternsecurity/bbot";
-    changelog = "https://github.com/blacklanternsecurity/bbot/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/blacklanternsecurity/bbot/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       fab

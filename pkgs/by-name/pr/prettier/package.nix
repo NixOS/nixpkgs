@@ -6,7 +6,7 @@
   makeBinaryWrapper,
   nodejs,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm,
   stdenv,
   versionCheckHook,
   yarn-berry,
@@ -73,21 +73,21 @@ let
         pathAbsoluteFallback -> ${pathAbsoluteFallback}
       '' throw "${plugin.pname}: does not provide parse-able entry point";
 
-  yarnHash = "sha256-KQywjBgJcT6CXT8bd11wT26qmfLen8E/gXhPBA5TY9A=";
+  yarnHash = "sha256-OjJbhIVea5fnPWJsPynBYTPmPVZZz9gB/nHFmQJCAJc=";
 
   prettier-oxc-wasm-parser = stdenv.mkDerivation (finalAttrs: {
     pname = "binding-wasm32-wasi";
-    version = "0.99.0";
+    version = "0.139.0";
 
     src = fetchurl {
       url = "https://registry.npmjs.org/@oxc-parser/${finalAttrs.pname}/-/${finalAttrs.pname}-${finalAttrs.version}.tgz";
-      sha256 = "sha256-7qPLrjsQ6+F565/k4HbVtcbr5HDok5AcaR8W+zTy/SM=";
+      sha256 = "sha256-mQYWVK52hHi3gsXKpPxK7liQEg16wxKjY2hjkX9NPZE=";
     };
 
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
-      pnpm_10
+      pnpm
     ];
 
     patches = [
@@ -102,9 +102,9 @@ let
         patches
         ;
 
-      pnpm = pnpm_10;
-      fetcherVersion = 3;
-      hash = "sha256-S9d89o5GNUGLoc9SBe58qKmbPEdGj3PEnQN+eADG4SU=";
+      inherit pnpm;
+      fetcherVersion = 4;
+      hash = "sha256-Vv6iiYCr/DS6sdQXaykeoPRbbqOVaVq2l8PK72mFjvo=";
     };
 
     buildPhase = ''
@@ -133,26 +133,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prettier";
-  version = "3.8.3";
+  version = "3.9.6";
 
   src = fetchFromGitHub {
     owner = "prettier";
     repo = "prettier";
     tag = finalAttrs.version;
-    hash = "sha256-7B8AnLPC2CcgdR/Jz0TvMhqYCCEf345U6xlWB7QaIqg=";
+    hash = "sha256-wuc6f8axnXPpdAyuH/YWgSC2HlrB4B/OATe6+lxD314=";
   };
-
-  patches = [
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/prettier/prettier/blob/main/package.json#L265
-    ./yarn-4.14-support.patch
-  ];
 
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
 
-    inherit (finalAttrs) src missingHashes patches;
+    inherit (finalAttrs) src missingHashes;
     hash = yarnHash;
 
   };
@@ -166,6 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    yarn config unset yarnPath
     yarn install --immutable
 
     mkdir -p .tmp/prettier-oxc-wasm-parser/node_modules/@oxc-parser
@@ -176,8 +171,8 @@ stdenv.mkDerivation (finalAttrs: {
     find .tmp/prettier-oxc-wasm-parser -type d -exec chmod u+w {} \;
 
     sed --in-place --expression '/^\s\+const installDirectory = await install(version);$/ {
-      s#await install(version)#new URL("../../.tmp/prettier-oxc-wasm-parser", import.meta.url)#;
-    }' scripts/build/build-oxc-wasm-parser.js
+      s#await install(version)#new URL("../../../.tmp/prettier-oxc-wasm-parser", import.meta.url)#;
+    }' scripts/build/hacks/build-oxc-wasm-parser.js
 
     yarn build --clean
 

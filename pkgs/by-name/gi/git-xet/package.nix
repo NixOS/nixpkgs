@@ -7,12 +7,14 @@
   pkg-config,
   openssl,
   zlib,
-  git,
+  gitMinimal,
   git-lfs,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-xet";
   version = "0.2.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
@@ -36,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildAndTestSubdir = "git_xet";
 
   nativeCheckInputs = [
-    git
+    gitMinimal
     git-lfs
   ];
   nativeInstallCheckInputs = [

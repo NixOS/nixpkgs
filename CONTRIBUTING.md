@@ -587,9 +587,9 @@ CI [enforces](./.github/workflows/lint.yml) all Nix files to be formatted using 
 
 You can ensure this locally using either of these commands:
 ```
-nix-shell --run treefmt
-nix develop --command treefmt
 nix fmt
+nix develop --command treefmt
+nix-shell --run treefmt
 ```
 
 If you're starting your editor in `nix-shell` or `nix develop`, you can also set it up to automatically run `treefmt` on save.
@@ -957,7 +957,6 @@ The following situations are fully or partially exempt:
 
 If you believe that someone is using automation without appropriate disclosure and review, you can politely ask them if that’s the case and point them to this policy as appropriate.
 Please assume good faith and remain civil; it’s not always possible to determine, and it is more likely that someone overlooked this policy than deliberately violated it.
-If you think someone is continuing to break the policy after this, please escalate to the [Nixpkgs core team](https://nixos.org/community/teams/nixpkgs-core/) rather than fighting over it.
 
 If a contribution is clearly in violation of the policy (e.g. the contributor admits it was not followed, or there are AI tool attributions that do not meet our required format), it can be closed or hidden, preferably after informing the contributor of the policy and giving them a chance to address the violations.
 Deliberate violations of this policy are considered to break the [Code of Conduct](https://github.com/NixOS/.github/blob/master/CODE_OF_CONDUCT.md) clause against “Wasting other people’s time with low quality contributions, including but not limited to LLM and bot spam”.

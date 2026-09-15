@@ -81,6 +81,7 @@ let
       changelog = "https://gitlab.com/saalen/highlight/-/blob/${finalAttrs.src.tag}/ChangeLog.adoc?ref_type=tags#user-content-highlight-${lib.versions.major finalAttrs.version}-${lib.versions.minor finalAttrs.version}";
       platforms = lib.platforms.unix;
       maintainers = [ ];
+      license = lib.licenses.gpl3Plus;
     };
   });
 

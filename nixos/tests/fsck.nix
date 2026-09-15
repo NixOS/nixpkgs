@@ -1,7 +1,7 @@
-{ systemdStage1, ... }:
+{ lib, systemdStage1, ... }:
 
 {
-  name = "fsck";
+  name = "fsck" + lib.optionalString systemdStage1 "-systemd-stage-1";
 
   nodes.machine = {
     virtualisation.emptyDiskImages = [ 1 ];

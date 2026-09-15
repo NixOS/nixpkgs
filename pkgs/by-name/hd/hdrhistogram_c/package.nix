@@ -32,6 +32,20 @@ stdenv.mkDerivation (finalAttrs: {
     validatePkgConfig
   ];
 
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isStatic [
+    (lib.cmakeBool "HDR_HISTOGRAM_BUILD_SHARED" false)
+    # Examples and tests depend on the shared library target; skip them in
+    # static builds (tests still run for the regular pkgs.hdrhistogram_c build).
+    (lib.cmakeBool "HDR_HISTOGRAM_BUILD_PROGRAMS" false)
+  ];
+
+  # The .pc file always references -lhdr_histogram, but in static builds only
+  # libhdr_histogram_static.a is produced. Provide a symlink so pkg-config
+  # consumers find the right archive.
+  postInstall = lib.optionalString stdenv.hostPlatform.isStatic ''
+    ln -s $out/lib/libhdr_histogram_static.a $out/lib/libhdr_histogram.a
+  '';
+
   doCheck = true;
 
   passthru = {

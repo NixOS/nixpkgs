@@ -103,31 +103,93 @@ def github_get(
         raise RuntimeError(f"Error fetching {api_url}: {e}")
 
 
-def fetch_plugin_content(
+def plugin_source_dirs(owner: str, plugin_pname: str) -> list[str]:
+    """Directories that may contain a plugin's source files."""
+    if owner == "yazi-rs":
+        return [plugin_pname, "."]
+    return [".", plugin_pname]
+
+
+def contents_api_path(dir_path: str) -> str:
+    """Map a repository directory to a GitHub contents API path."""
+    if dir_path in ("", "."):
+        return "contents"
+    return f"contents/{dir_path}"
+
+
+def decode_github_file(content_data: dict) -> str | None:
+    """Decode a GitHub contents API file payload."""
+    if "content" not in content_data:
+        return None
+    return base64.b64decode(content_data["content"]).decode("utf-8")
+
+
+def list_plugin_lua_paths(
     owner: str,
     repo: str,
     plugin_pname: str,
     ref: str,
     headers: dict[str, str],
-) -> str:
-    """Fetch the plugin's main.lua content from GitHub"""
-    paths = [f"{plugin_pname}/main.lua", "main.lua"] if owner == "yazi-rs" else [
-        "main.lua",
-        f"{plugin_pname}/main.lua",
-    ]
+) -> list[str]:
+    """List top-level *.lua files for a plugin at a given ref."""
+    for dir_path in plugin_source_dirs(owner, plugin_pname):
+        listing = github_get(owner, repo, contents_api_path(dir_path), headers, {"ref": ref}, allow_404=True)
+        if not isinstance(listing, list):
+            continue
 
-    for path in paths:
+        lua_paths = [
+            item["path"]
+            for item in listing
+            if item.get("type") == "file" and str(item.get("name", "")).endswith(".lua")
+        ]
+        if lua_paths:
+            return sorted(lua_paths)
+
+    return []
+
+
+def fetch_plugin_lua_contents(
+    owner: str,
+    repo: str,
+    plugin_pname: str,
+    ref: str,
+    headers: dict[str, str],
+) -> list[str]:
+    """Fetch a plugin's *.lua files from GitHub."""
+    lua_paths = list_plugin_lua_paths(owner, repo, plugin_pname, ref, headers)
+    if not lua_paths:
+        raise RuntimeError(f"Could not find *.lua at {ref}")
+
+    contents = []
+    for path in lua_paths:
         content_data = github_get(owner, repo, f"contents/{path}", headers, {"ref": ref}, allow_404=True)
-        if isinstance(content_data, dict) and "content" in content_data:
-            return base64.b64decode(content_data["content"]).decode("utf-8")
+        if isinstance(content_data, dict):
+            decoded = decode_github_file(content_data)
+            if decoded is not None:
+                contents.append(decoded)
 
-    raise RuntimeError(f"Could not fetch main.lua at {ref}")
+    if not contents:
+        raise RuntimeError(f"Could not fetch *.lua at {ref}")
+
+    return contents
 
 
-def check_version_compatibility(plugin_content: str, plugin_name: str, yazi_version: str) -> str:
+def required_version_from_lua(plugin_content: str) -> str | None:
+    """Read a Yazi @since requirement from the first line of a Lua file."""
+    first_line = plugin_content.split("\n", 1)[0]
+    required_version_match = re.search(r"since ([0-9.]+)", first_line)
+    return required_version_match.group(1) if required_version_match else None
+
+
+def check_version_compatibility(plugin_contents: list[str], plugin_name: str, yazi_version: str) -> str:
     """Check if the plugin is compatible with the current Yazi version"""
-    required_version_match = re.search(r"since ([0-9.]+)", plugin_content.split("\n")[0])
-    required_version = required_version_match.group(1) if required_version_match else "0"
+    required_version = "0"
+    for plugin_content in plugin_contents:
+        file_required_version = required_version_from_lua(plugin_content)
+        if file_required_version is None:
+            continue
+        if required_version == "0" or version.parse(file_required_version) > version.parse(required_version):
+            required_version = file_required_version
 
     if required_version == "0":
         print(f"No version requirement found for {plugin_name}, assuming compatible with any Yazi version")
@@ -191,7 +253,7 @@ def get_commit_candidates(owner: str, repo: str, plugin_pname: str, headers: dic
             repo,
             "commits",
             headers,
-            {"path": f"{plugin_pname}/main.lua", "per_page": 100},
+            {"path": plugin_pname, "per_page": 100},
         )
         if not isinstance(commits_data, list) or not commits_data:
             raise RuntimeError(f"Could not get recent commits for {plugin_pname}")
@@ -310,8 +372,8 @@ def is_yazi_compatible(
 ) -> bool:
     """Check if a candidate supports nixpkgs' Yazi version."""
     try:
-        plugin_content = fetch_plugin_content(owner, repo, plugin_pname, candidate.rev, headers)
-        check_version_compatibility(plugin_content, plugin_name, yazi_version)
+        plugin_contents = fetch_plugin_lua_contents(owner, repo, plugin_pname, candidate.rev, headers)
+        check_version_compatibility(plugin_contents, plugin_name, yazi_version)
         return True
     except RuntimeError as e:
         print(f"Skipping {candidate.rev}: {e}")

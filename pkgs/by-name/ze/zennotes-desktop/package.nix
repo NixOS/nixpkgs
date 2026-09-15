@@ -13,14 +13,14 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "zennotes-desktop";
-  version = "2.35.0";
-  npmDepsHash = "sha256-N2boTCIA+Ca//mEVAhTeiI33GPY8NEPCBdK2xdWKl9I=";
+  version = "2.45.0";
+  npmDepsHash = "sha256-+5eIwbSTpRupYj4gR33MDeJEEDBlt+K4idnlZFWG4Z4=";
 
   src = fetchFromGitHub {
     owner = "ZenNotes";
     repo = "zennotes";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q65CabiBg/azmHoJWQILThtaHcTPvdquVeyrnGh1qbg=";
+    hash = "sha256-/HoSAgt7INT5Hharc+ltb2ya8InAuZmhS8Tmftl0VOo=";
   };
 
   npmWorkspace = "apps/desktop";
@@ -34,6 +34,21 @@ buildNpmPackage (finalAttrs: {
     makeBinaryWrapper
     copyDesktopItems
   ];
+
+  preBuild = ''
+    # fixes error node_modules/.bin/electron-vite: /usr/bin/env: bad interpreter: No such file or directory
+    patchShebangs apps/desktop/node_modules/electron-vite
+  '';
+
+  configurePhase = ''
+    runHook preConfigure
+
+    # Allow getting information about latest releases
+    substituteInPlace apps/desktop/src/main/updater.ts \
+    --replace-fail "let managedInstall = false" "let managedInstall = true"
+
+    runHook postConfigure
+  '';
 
   installPhase = ''
     runHook preInstall

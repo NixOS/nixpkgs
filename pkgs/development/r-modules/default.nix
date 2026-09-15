@@ -25,7 +25,6 @@ let
 
   buildRPackage = pkgs.callPackage ./generic-builder.nix {
     inherit R;
-    inherit (pkgs) gettext gfortran;
   };
 
   # Generates package templates given per-repository settings
@@ -64,7 +63,6 @@ let
         };
         inherit doCheck requireX;
         propagatedBuildInputs = depends;
-        nativeBuildInputs = depends;
         meta.homepage = mkHomepage (args // { inherit name; });
         meta.platforms = platforms;
         meta.hydraPlatforms = hydraPlatforms;
@@ -142,7 +140,7 @@ let
   #
   # {
   #   foo = old.foo.overrideAttrs (attrs: {
-  #     nativeBuildInputs = attrs.nativeBuildInputs ++ [ pkgs.bar ];
+  #     nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [ pkgs.bar ];
   #   });
   # }
   overrideNativeBuildInputs =
@@ -150,7 +148,7 @@ let
     lib.mapAttrs (
       name: value:
       (builtins.getAttr name old).overrideAttrs (attrs: {
-        nativeBuildInputs = attrs.nativeBuildInputs ++ value;
+        nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ value;
       })
     ) overrides;
 
@@ -165,7 +163,7 @@ let
   #
   # {
   #   foo = old.foo.overrideAttrs (attrs: {
-  #     buildInputs = attrs.buildInputs ++ [ pkgs.bar ];
+  #     buildInputs = (attrs.buildInputs or [ ]) ++ [ pkgs.bar ];
   #   });
   # }
   overrideBuildInputs =
@@ -173,7 +171,7 @@ let
     lib.mapAttrs (
       name: value:
       (builtins.getAttr name old).overrideAttrs (attrs: {
-        buildInputs = attrs.buildInputs ++ value;
+        buildInputs = (attrs.buildInputs or [ ]) ++ value;
       })
     ) overrides;
 
@@ -211,7 +209,6 @@ let
   #
   # {
   #   foo = old.foo.overrideAttrs (attrs: {
-  #     nativeBuildInputs = attrs.nativeBuildInputs ++ [ self.bar ];
   #     propagatedBuildInputs = attrs.propagatedBuildInputs ++ [ self.bar ];
   #   });
   # }
@@ -220,7 +217,6 @@ let
     lib.mapAttrs (
       name: value:
       (builtins.getAttr name old).overrideAttrs (attrs: {
-        nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ value;
         propagatedBuildInputs = (attrs.propagatedBuildInputs or [ ]) ++ value;
       })
     ) overrides;
@@ -430,7 +426,6 @@ let
     JMcmprsk = [ pkgs.gsl ]; # for gsl-config
     KSgeneral = with pkgs; [ pkg-config ];
     LCMCR = [ pkgs.gsl ]; # for gsl-config
-    ModelMetrics = lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
     PEPBVS = [ pkgs.gsl ]; # for gsl-config
     PICS = [ pkgs.gsl ];
     QF = [ pkgs.gsl ]; # for gsl-config
@@ -612,13 +607,7 @@ let
       pkgs.which
       pkgs.cmake
     ];
-    data_table = (
-      # added extra parentheses so that `keep-sorted` doesn't get tripped up
-      [
-        pkgs.pkg-config
-      ]
-      ++ lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp
-    );
+    data_table = [ pkgs.pkg-config ];
     datefixR = with pkgs; [
       cargo
       rustc
@@ -717,6 +706,7 @@ let
       pkgs.which
       pkgs.cmake
     ];
+    httpuv = [ pkgs.pkg-config ];
     hypergeo2 = [ pkgs.pkg-config ];
     iBMQ = [ pkgs.gsl ]; # for gsl-config
     image_textlinedetector = [ pkgs.pkg-config ];
@@ -762,6 +752,7 @@ let
     mixlink = [ pkgs.gsl ]; # for gsl-config
     mixture = [ pkgs.gsl ]; # for gsl-config
     mmpca = [ pkgs.gsl ]; # for gsl-config via RcppGSL
+    mongolite = [ pkgs.pkg-config ];
     monoreg = [ pkgs.gsl ]; # for gsl-config
     multibridge = [ pkgs.pkg-config ];
     mvabund = [ pkgs.gsl ]; # for gsl-config via RcppGSL
@@ -782,6 +773,7 @@ let
     ];
     odbc = [ pkgs.pkg-config ];
     opencv = [ pkgs.pkg-config ];
+    openssl = [ pkgs.pkg-config ];
     orbweaver = with pkgs; [
       cargo
       rustc
@@ -853,7 +845,6 @@ let
       cargo
       rustc
     ];
-    rpanel = [ pkgs.tclPackages.bwidget ];
     rrd = [ pkgs.pkg-config ];
     rsamplr = with pkgs; [
       cargo
@@ -981,6 +972,7 @@ let
       rustc
     ];
     webp = [ pkgs.pkg-config ];
+    websocket = [ pkgs.pkg-config ];
     xactonomial = with pkgs; [
       cargo
       rustc
@@ -1077,6 +1069,7 @@ let
       ncurses
       zlib
     ];
+    ModelMetrics = lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
     NanoMethViz = [ pkgs.zlib ];
     OpenCL = with pkgs; [
       opencl-clhpp
@@ -1295,7 +1288,13 @@ let
       curl
     ];
     curl = [ pkgs.curl ];
-    data_table = [ pkgs.zlib ];
+    data_table = (
+      # added extra parentheses so that `keep-sorted` doesn't get tripped up
+      [
+        pkgs.zlib
+      ]
+      ++ lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp
+    );
     deepSNV = with pkgs; [
       xz
       bzip2
@@ -1373,7 +1372,10 @@ let
     hadron = [ pkgs.gsl ];
     haven = [ pkgs.zlib ];
     hipread = [ pkgs.zlib ];
-    httpuv = [ pkgs.zlib ];
+    httpuv = with pkgs; [
+      libuv
+      zlib
+    ];
     hypergeo2 = with pkgs; [
       gmp
       mpfr
@@ -1472,6 +1474,11 @@ let
       zlib
     ];
     mixcat = [ pkgs.gsl ];
+    mongolite = with pkgs; [
+      cyrus_sasl
+      openssl
+      zlib
+    ];
     multibridge = [ pkgs.mpfr ];
     mutscan = [ pkgs.zlib ];
     mvabund = [ pkgs.gsl ];
@@ -1489,6 +1496,7 @@ let
     npRmpi = [ pkgs.mpi ];
     odbc = [ pkgs.unixodbc ];
     oligo = [ pkgs.zlib ];
+    openssl = [ pkgs.openssl ];
     otelsdk = with pkgs; [
       curl
       protobuf
@@ -1765,6 +1773,7 @@ let
     ];
     vdiffr = [ pkgs.libpng ];
     webp = [ pkgs.libwebp ];
+    websocket = [ pkgs.openssl ];
     writexl = with pkgs; [ zlib ];
     xdvir = [ pkgs.freetype ];
     xml2 = [ pkgs.libxml2 ];
@@ -2006,7 +2015,7 @@ let
     ACME = old.ACME.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         # Avoid incompatible pointer type error
-        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-incompatible-pointer-types";
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE or "" + " -Wno-incompatible-pointer-types";
       };
     });
 
@@ -2021,7 +2030,7 @@ let
     BiocParallel = old.BiocParallel.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         NIX_CFLAGS_COMPILE =
-          attrs.env.NIX_CFLAGS_COMPILE
+          attrs.env.NIX_CFLAGS_COMPILE or ""
           + lib.optionalString stdenv.hostPlatform.isDarwin " -Wno-error=missing-template-arg-list-after-template-kw";
       };
     });
@@ -2059,7 +2068,7 @@ let
     FlexReg = old.FlexReg.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         # needed to avoid "log limit exceeded" on Hydra
-        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-ignored-attributes";
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE or "" + " -Wno-ignored-attributes";
       };
 
       # consumes a lot of resources in parallel
@@ -2084,7 +2093,7 @@ let
     ModelMetrics = old.ModelMetrics.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         NIX_CFLAGS_COMPILE =
-          attrs.env.NIX_CFLAGS_COMPILE + lib.optionalString stdenv.hostPlatform.isDarwin " -fopenmp";
+          attrs.env.NIX_CFLAGS_COMPILE or "" + lib.optionalString stdenv.hostPlatform.isDarwin " -fopenmp";
       };
     });
 
@@ -2099,7 +2108,7 @@ let
     OpenMx = old.OpenMx.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         # needed to avoid "log limit exceeded" on Hydra
-        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-ignored-attributes";
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE or "" + " -Wno-ignored-attributes";
       };
     });
 
@@ -2185,15 +2194,15 @@ let
     Rhdf5lib =
       let
         hdf5 = pkgs.hdf5.overrideAttrs (attrs: {
-          cmakeFlags = attrs.cmakeFlags ++ [ "-DHDF5_ENABLE_ROS3_VFD:BOOL=TRUE" ];
-          buildInputs = attrs.buildInputs ++ [ pkgs.curl ];
-          postInstall = attrs.postInstall or "" + ''
+          cmakeFlags = (attrs.cmakeFlags or [ ]) ++ [ "-DHDF5_ENABLE_ROS3_VFD:BOOL=TRUE" ];
+          buildInputs = (attrs.buildInputs or [ ]) ++ [ pkgs.curl ];
+          postInstall = (attrs.postInstall or "") + ''
             cp src/libhdf5.settings $dev/lib
           '';
         });
       in
       old.Rhdf5lib.overrideAttrs (attrs: {
-        propagatedBuildInputs = attrs.propagatedBuildInputs ++ [
+        propagatedBuildInputs = (attrs.propagatedBuildInputs or [ ]) ++ [
           hdf5
           pkgs.libaec
         ];
@@ -2214,16 +2223,26 @@ let
     Rrdrand = old.Rrdrand.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
 
     Rserve = old.Rserve.overrideAttrs (attrs: {
-      patches = [ ./patches/Rserve.patch ];
       configureFlags = [
         "--with-server"
         "--with-client"
       ];
+
+      patches = [
+        # Don't try to copy the Rserve binaries into $R_HOME/bin
+        ./patches/Rserve.patch
+      ];
+
+      # Instead, we symlink them into $out/bin
+      postInstall = ''
+        mkdir -p "$out/bin/"
+        ln -s "$out"/library/Rserve/libs/Rserve{,.dbg} "$out/bin/"
+      '';
     });
 
     SAIGEgds = old.SAIGEgds.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
-        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -fpermissive";
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE or "" + " -fpermissive";
       };
     });
 
@@ -2364,7 +2383,7 @@ let
       src = pkgs.arrow-cpp.src;
       name = "r-arrow-${pkgs.arrow-cpp.version}";
       prePatch = "cd r";
-      buildInputs = attrs.buildInputs ++ [
+      buildInputs = (attrs.buildInputs or [ ]) ++ [
         pkgs.arrow-cpp
       ];
     });
@@ -2383,7 +2402,7 @@ let
 
     data_table = old.data_table.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
-        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -fopenmp";
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE or "" + " -fopenmp";
       };
     });
 
@@ -2435,7 +2454,7 @@ let
     });
 
     geojsonio = old.geojsonio.overrideAttrs (attrs: {
-      buildInputs = [ cacert ] ++ attrs.buildInputs;
+      buildInputs = (attrs.buildInputs or [ ]) ++ [ cacert ];
     });
 
     geomorph = old.geomorph.overrideAttrs (attrs: {
@@ -2448,7 +2467,7 @@ let
       env = (attrs.env or { }) // {
         # Avoid incompatible pointer type error
         NIX_CFLAGS_COMPILE =
-          attrs.env.NIX_CFLAGS_COMPILE
+          attrs.env.NIX_CFLAGS_COMPILE or ""
           + " -Wno-implicit-function-declaration -Wno-incompatible-pointer-types";
       };
     });
@@ -2477,8 +2496,8 @@ let
     });
 
     hdf5r = old.hdf5r.overrideAttrs (attrs: {
-      nativeBuildInputs = attrs.nativeBuildInputs ++ [ new.Rhdf5lib.hdf5 ];
-      buildInputs = attrs.buildInputs ++ [ new.Rhdf5lib.hdf5 ];
+      nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [ new.Rhdf5lib.hdf5 ];
+      buildInputs = (attrs.buildInputs or [ ]) ++ [ new.Rhdf5lib.hdf5 ];
     });
 
     immunotation =
@@ -2506,25 +2525,26 @@ let
         };
       in
       old.immunotation.overrideAttrs (attrs: {
-        patches = [ ./patches/immunotation.patch ];
-        postPatch = ''
-          substituteInPlace "R/external_resources_input.R" --replace-fail \
-            "nix-NetMHCpan-4.1-allele-list" ${MHC41alleleList}
-
-          substituteInPlace "R/external_resources_input.R" --replace-fail \
-            "nix-NETMHCIIpan-4.0-alleles-name-list" ${MHCII40alleleList}
-
-          substituteInPlace "R/AFND_interface.R" --replace-fail \
-            "nix-valid-geographics" ${validGeographics}
-        '';
+        patches = [
+          (pkgs.replaceVars ./patches/immunotation.patch {
+            "mhc41_allele_list" = MHC41alleleList;
+            "mhcii40_alleles_name_list" = MHCII40alleleList;
+            "valid_geographics" = validGeographics;
+          })
+        ];
       });
 
     iscream = old.iscream.overrideAttrs (attrs: {
       # https://huishenlab.github.io/iscream/articles/htslib.html
       # Rhtslib (in LinkingTo) is not needed if we provide a proper htslib
-      propagatedBuildInputs =
-        builtins.filter (el: el != pkgs.rPackages.Rhtslib) attrs.propagatedBuildInputs
-        ++ [ pkgs.htslib ];
+      propagatedBuildInputs = builtins.filter (el: el.pname != "Rhtslib") attrs.propagatedBuildInputs;
+
+      buildInputs = (attrs.buildInputs or [ ]) ++ [ pkgs.htslib ];
+
+      postPatch = ''
+        substituteInPlace "DESCRIPTION" \
+          --replace-fail ", Rhtslib" ""
+      '';
     });
 
     littler = old.littler.overrideAttrs (attrs: {
@@ -2553,14 +2573,7 @@ let
     metahdep = old.metahdep.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         # Avoid incompatible pointer type error
-        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-int-conversion";
-      };
-    });
-
-    mongolite = old.mongolite.overrideAttrs (attrs: {
-      env = (attrs.env or { }) // {
-        PKGCONFIG_CFLAGS = "-I${lib.getDev pkgs.openssl}/include -I${lib.getDev pkgs.cyrus_sasl}/include -I${lib.getDev pkgs.zlib}/include";
-        PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -L${pkgs.cyrus_sasl.out}/lib -L${pkgs.zlib.out}/lib -lssl -lcrypto -lsasl2 -lz";
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE or "" + " -Wno-int-conversion";
       };
     });
 
@@ -2587,7 +2600,7 @@ let
     networkscaleup = old.networkscaleup.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         # needed to avoid "log limit exceeded" on Hydra
-        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-ignored-attributes";
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE or "" + " -Wno-ignored-attributes";
       };
 
       # consumes a lot of resources in parallel
@@ -2605,14 +2618,15 @@ let
         });
       in
       old.opencv.overrideAttrs (attrs: {
-        buildInputs = attrs.buildInputs ++ [ opencvGtk ];
+        buildInputs = (attrs.buildInputs or [ ]) ++ [ opencvGtk ];
       });
 
     openssl = old.openssl.overrideAttrs (attrs: {
-      env = (attrs.env or { }) // {
-        PKGCONFIG_CFLAGS = "-I${lib.getDev pkgs.openssl}/include";
-        PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -lssl -lcrypto";
-      };
+      # RPATH will be incorrect if the configure script replaces -lssl with -l:libssl.so.{n}
+      postPatch = ''
+        substituteInPlace configure \
+          --replace-fail 'PKG_LIBS="''${PKG_LIBS_VERSIONED}"' ':'
+      '';
     });
 
     pak = old.pak.overrideAttrs (attrs: {
@@ -2744,7 +2758,8 @@ let
 
     rhdf5 = old.rhdf5.overrideAttrs (attrs: {
       patches = [ ./patches/rhdf5.patch ];
-      env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+      env.NIX_CFLAGS_COMPILE =
+        attrs.env.NIX_CFLAGS_COMPILE or "" + " -Wno-error=implicit-function-declaration";
     });
 
     rhdf5filters = old.rhdf5filters.overrideAttrs (attrs: {
@@ -2771,24 +2786,25 @@ let
     });
 
     rpanel = old.rpanel.overrideAttrs (attrs: {
-      preConfigure = ''
-        export TCLLIBPATH="${pkgs.tclPackages.bwidget}/lib/bwidget${pkgs.tclPackages.bwidget.version}"
+      postPatch = ''
+        cat >> R/zzz.R <<EOF
+        .onLoad <- function(...) {
+          tcltk::tcl("lappend", "auto_path", "${pkgs.tclPackages.bwidget}/lib/bwidget${pkgs.tclPackages.bwidget.version}")
+        }
+        EOF
       '';
-      env = (attrs.env or { }) // {
-        TCLLIBPATH = "${pkgs.tclPackages.bwidget}/lib/bwidget${pkgs.tclPackages.bwidget.version}";
-      };
     });
 
     rstan = old.rstan.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
-        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -DBOOST_PHOENIX_NO_VARIADIC_EXPRESSION";
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE or "" + " -DBOOST_PHOENIX_NO_VARIADIC_EXPRESSION";
       };
     });
 
     rstanarm = old.rstanarm.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         # needed to avoid "log limit exceeded" on Hydra
-        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-ignored-attributes";
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE or "" + " -Wno-ignored-attributes";
       };
     });
 
@@ -2906,15 +2922,16 @@ let
     });
 
     websocket = old.websocket.overrideAttrs (attrs: {
-      env = (attrs.env or { }) // {
-        PKGCONFIG_CFLAGS = "-I${lib.getDev pkgs.openssl}/include";
-        PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -lssl -lcrypto";
-      };
+      # RPATH will be incorrect if the configure script replaces -lssl with -l:libssl.so.{n}
+      postPatch = ''
+        substituteInPlace configure \
+          --replace-fail 'PKG_LIBS="''${PKG_LIBS_VERSIONED}"' ':'
+      '';
     });
 
     xslt = old.xslt.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
-        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -fpermissive";
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE or "" + " -fpermissive";
       };
     });
     # keep-sorted end

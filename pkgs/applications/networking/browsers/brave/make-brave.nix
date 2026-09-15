@@ -2,7 +2,7 @@
   pname,
   version,
   # Map from Nix system strings ("x86_64-linux", "aarch64-darwin", ...) to
-  # the corresponding upstream `{ url, hash }` record. Encoding the per-system
+  # the corresponding upstream `{ url, sha256 }` record. Encoding the per-system
   # sources as data rather than positional arguments lets channel-specific
   # package.nix files drop platforms that upstream hasn't published yet.
   archives,
@@ -189,7 +189,7 @@ stdenv.mkDerivation {
   __structuredAttrs = true;
   strictDeps = true;
 
-  src = fetchurl { inherit (archive) url hash; };
+  src = fetchurl { inherit (archive) url sha256; };
 
   dontConfigure = true;
   dontBuild = true;

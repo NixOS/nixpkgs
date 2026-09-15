@@ -4,7 +4,7 @@
   nodejs,
   fetchFromGitHub,
   fetchPnpmDeps,
-  electron_41,
+  electron_43,
   pnpmConfigHook,
   pnpm_10,
   copyDesktopItems,
@@ -17,20 +17,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iptvnator";
-  version = "0.22.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "4gray";
     repo = "iptvnator";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LKLM9SQ7TJCmsH2cDN4GAkTbvMtEfsDA3y40i4dGqJs=";
+    hash = "sha256-JHEiazpC4rbbUELn7m2koVFXr6XzNJCCZt/s+AVtc24=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-gPeQ+LYsEmZa38/C7q6DqRijMUc7FZAwO5Sn2NRv5kc=";
+    hash = "sha256-Gs10M9mejtfKf/uBw+ojx726EMBRWQGByUQvjrUu3PM=";
   };
 
   __structuredAttrs = true;
@@ -69,12 +69,12 @@ stdenv.mkDerivation (finalAttrs: {
     export HOME="$NIX_BUILD_TOP/home"
     mkdir -p "$HOME"
 
-    cp -rL "${electron_41.dist}" "$HOME/.electron-dist"
+    cp -rL "${electron_43.dist}" "$HOME/.electron-dist"
     chmod -R u+w "$HOME/.electron-dist"
   '';
 
   preBuild = ''
-    export npm_config_nodedir=${electron_41.headers}
+    export npm_config_nodedir=${electron_43.headers}
     export npm_config_build_from_source=true
   '';
 
@@ -89,17 +89,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postBuild = ''
-    # Override electron-builder config: use local electron dist, pin version, dir-only for linux
+    # --config disables discovery of the repo's electron-builder.json
     jq --arg dist "$HOME/.electron-dist" \
-       --arg ver "${electron_41.version}" \
+       --arg ver "${electron_43.version}" \
        '. + {electronDist: $dist, electronVersion: $ver}
         | .linux.target = [{"target": "dir", "arch": ["x64"]}]
-        | .files = [
-            {"from": "dist/apps/remote-control-web", "to": "remote-control-web", "filter": ["**/*"]},
-            {"from": "dist/apps/electron-backend", "to": "electron-backend", "filter": ["**/*"]},
-            {"from": "dist/apps/web", "to": "web", "filter": ["**/*"]},
-            "!**/*.map"
-          ]' \
+        | .afterPack = null
+        | (["**/*", "!**/*.map"] as $packFilter
+           | .files = (["package.json"] + (["remote-control-web", "electron-backend", "web"] | map({from: "dist/apps/\(.)", to: ., filter: $packFilter}))))' \
        electron-builder.json > dist/electron-builder.nix.json
 
     npm exec electron-builder -- \
@@ -120,11 +117,12 @@ stdenv.mkDerivation (finalAttrs: {
     fi
     cp -r "$linuxDir"/{locales,resources{,.pak}} $out/share/iptvnator/
 
-    makeWrapper ${lib.getExe electron_41} $out/bin/iptvnator \
+    makeWrapper ${lib.getExe electron_43} $out/bin/iptvnator \
       --add-flags $out/share/iptvnator/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set ELECTRON_FORCE_IS_PACKAGED 1 \
       --set ELECTRON_IS_DEV 0 \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc.lib ]} \
       --inherit-argv0
 
     for s in 16 32 48 64 128 1024; do

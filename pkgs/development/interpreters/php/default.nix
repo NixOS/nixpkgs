@@ -12,9 +12,6 @@ let
     let
       base = callPackage ./generic.nix {
         stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
-        pcre2 = pcre2.override {
-          withJitSealloc = false; # See https://bugs.php.net/bug.php?id=78927 and https://bugs.php.net/bug.php?id=78630
-        };
         inherit version hash;
       };
     in
@@ -77,11 +74,11 @@ in
     hash = "sha256-+cn00M12ksbj2jY81MpyqCakmuGPXtQwtvyue8KIHhg=";
   };
   php84 = mkPhp {
-    version = "8.4.24";
-    hash = "sha256-KGiQRHWIUQ3xEO3p6c4J8etPmFZjC0f9xA7OcOIDc88=";
+    version = "8.4.25";
+    hash = "sha256-lSzMF4Uma5WPSh3PxYDgjqu7efRCItHv8ZK82Y2R9uM=";
   };
   php85 = mkPhp {
-    version = "8.5.9";
-    hash = "sha256-cDwIKtnSlGrGR/NZaBIwDSxis2DS8xqZkCFpKps5R2w=";
+    version = "8.5.10";
+    hash = "sha256-15vU86kkjly1gzdmug1RzTXdAbhyfyPzC826b6vFHT4=";
   };
 }

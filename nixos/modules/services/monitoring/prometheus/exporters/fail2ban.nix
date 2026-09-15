@@ -14,6 +14,7 @@ let
     getExe
     optionalString
     mkIf
+    boolToString
     ;
 in
 {
@@ -59,24 +60,33 @@ in
   ];
 
   serviceOpts = {
-    requires = mkIf config.services.fail2ban.enable [ "prometheus-fail2ban-exporter-setup.service" ];
     serviceConfig = {
-      DynamicUser = false;
-      ExecStart = ''
-        ${getExe pkgs.prometheus-fail2ban-exporter} \
-          ${optionalString cfg.exitOnError ''--collector.f2b.exit-on-socket-connection-error \''}
-          ${optionalString (cfg.username != null) ''
-            --web.basic-auth.username="${cfg.username}" \
-            --web.basic-auth.password="$(cat ${cfg.passwordFile})" \
-          ''}
-          --web.listen-address="${cfg.host}:${toString cfg.port}" \
-          --collector.f2b.socket=${cfg.fail2banSocket}
-      '';
+      SupplementaryGroups = [
+        config.systemd.sockets.fail2ban.socketConfig.SocketGroup
+      ];
       RestrictAddressFamilies = [
         "AF_INET"
         "AF_INET6"
         "AF_UNIX"
       ];
+      LoadCredential = mkIf (cfg.passwordFile != null) [
+        "web-basic-auth-password:${cfg.passwordFile}"
+      ];
     };
+
+    environment = {
+      F2B_COLLECTOR_SOCKET = cfg.fail2banSocket;
+      F2B_EXIT_ON_SOCKET_CONN_ERROR = boolToString cfg.exitOnError;
+      F2B_WEB_LISTEN_ADDRESS = "${cfg.host}:${toString cfg.port}";
+      F2B_WEB_BASICAUTH_USER = mkIf (cfg.username != null) cfg.username;
+    };
+
+    script = ''
+      ${optionalString (cfg.passwordFile != null) ''
+        export F2B_WEB_BASICAUTH_PASS="$(<"$CREDENTIALS_DIRECTORY/web-basic-auth-password")"
+      ''}
+
+      exec ${getExe pkgs.prometheus-fail2ban-exporter}
+    '';
   };
 }

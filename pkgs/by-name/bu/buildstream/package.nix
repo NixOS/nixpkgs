@@ -24,14 +24,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "buildstream";
-  version = "2.7.0";
+  version = "2.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "buildstream";
     tag = finalAttrs.version;
-    hash = "sha256-eHZmimuwOo3ZHZw5QF94B6wkso1+QbZIcgpDgsw1hiM=";
+    hash = "sha256-TS1er7lWoaMaVnfT1GAApt2qxxyTrl0o354v6rIpgCA=";
   };
 
   build-system = with python3Packages; [

@@ -140,6 +140,9 @@
   "ex-testEqualArrayOrMap-test-function-add-cowbell": [
     "index.html#ex-testEqualArrayOrMap-test-function-add-cowbell"
   ],
+  "ex-trivial-builder-finalAttrs": [
+    "index.html#ex-trivial-builder-finalAttrs"
+  ],
   "ex-writeShellApplication": [
     "index.html#ex-writeShellApplication"
   ],
@@ -217,6 +220,21 @@
   ],
   "julec-hook-variables": [
     "index.html#julec-hook-variables"
+  ],
+  "juce-projucer-hook": [
+    "index.html#juce-projucer-hook"
+  ],
+  "juce-projucer-hook-example": [
+    "index.html#juce-projucer-hook-example"
+  ],
+  "juce-projucer-hook-variables": [
+    "index.html#juce-projucer-hook-variables"
+  ],
+  "juce-dontuseprojucerconfigure": [
+    "index.html#juce-dontuseprojucerconfigure"
+  ],
+  "juce-dontuseprojucerinstall": [
+    "index.html#juce-dontuseprojucerinstall"
   ],
   "libcxxhardeningextensive": [
     "index.html#libcxxhardeningextensive"
@@ -983,6 +1001,9 @@
   ],
   "treefmt": [
     "index.html#treefmt"
+  ],
+  "trivial-builder-finalAttrs": [
+    "index.html#trivial-builder-finalAttrs"
   ],
   "typst": [
     "index.html#typst",
@@ -2449,6 +2470,18 @@
   ],
   "sec-checkpoint-build-example": [
     "index.html#sec-checkpoint-build-example"
+  ],
+  "sec-redisTestHook": [
+    "index.html#sec-redisTestHook"
+  ],
+  "sec-redisTestHook-variables": [
+    "index.html#sec-redisTestHook-variables"
+  ],
+  "sec-memcachedTestHook": [
+    "index.html#sec-memcachedTestHook"
+  ],
+  "sec-memcachedTestHook-variables": [
+    "index.html#sec-memcachedTestHook-variables"
   ],
   "chap-images": [
     "index.html#chap-images"

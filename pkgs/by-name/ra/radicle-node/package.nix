@@ -15,9 +15,9 @@
   xdg-utils,
   versionCheckHook,
 
-  version ? "1.10.1",
-  srcHash ? "sha256-F+64o9z/al0iaLFyQHAYk/3jjf5T0FdgqaU3nEWIheg=",
-  cargoHash ? "sha256-TLffetbkVwIbUDoI+96T99+lfYu2SIpGtwC0DbuJXnU=",
+  version ? "1.10.3",
+  srcHash ? "sha256-xbVu+s4TQMc6fA8iUNq01y5lDxfC76Pwe6Z2rqA6C5Q=",
+  cargoHash ? "sha256-zQ6XnDJt3pek0WzC0J8PY111LGuzZeSCZ1QxwYAhPWw=",
   updateScript ? ./update.sh,
 }:
 

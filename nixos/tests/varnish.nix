@@ -1,12 +1,14 @@
-{ pkgs, package, ... }:
+{ config, package, ... }:
 let
+  pkgs = config.node.pkgs;
+
   testPath = pkgs.hello;
 
   # Same stateDir logic as in nixos/modules/services/web-servers/varnish/default.nix
   stateDir = "/var/run/varnishd";
 in
 {
-  name = "varnish";
+  name = "varnish-${package.version}";
   meta = {
     maintainers = [ ];
   };
@@ -23,6 +25,7 @@ in
         services.nix-serve = {
           enable = true;
         };
+        nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
 
         services.varnish = {
           inherit package;
@@ -86,6 +89,7 @@ in
           require-sigs = false;
           substituters = lib.mkForce [ "http://varnish" ];
         };
+        nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
       };
   };
 

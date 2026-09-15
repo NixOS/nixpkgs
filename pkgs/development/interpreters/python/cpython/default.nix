@@ -366,6 +366,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ buildInputs;
 
+  strictDeps = true;
+
   prePatch = optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure --replace-fail '`/usr/bin/arch`' '"i386"'
   '';
@@ -833,6 +835,9 @@ stdenv.mkDerivation (finalAttrs: {
         sphinxHook
         python-docs-theme
       ];
+
+      strictDeps = true;
+      __structuredAttrs = true;
     };
 
     tests = passthru.tests // {

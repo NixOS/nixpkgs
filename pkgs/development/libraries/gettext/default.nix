@@ -12,12 +12,12 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gettext";
   version = "1.0";
 
   src = fetchurl {
-    url = "mirror://gnu/gettext/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/gettext/gettext-${finalAttrs.version}.tar.gz";
     hash = "sha256-hdmbecmBpASHTALgNCF2z3XHaY4rUf5BAxz2Um2XTxo=";
   };
   patches = [
@@ -43,6 +43,10 @@ stdenv.mkDerivation rec {
     # own wchar.h file, which does not cope well with the system's
     # wchar.h and stddef.h (gcc-4.3 - glibc-2.9)
     "gl_cv_func_wcwidth_works=yes"
+  ];
+
+  makeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "CFLAGS=-D_FORTIFY_SOURCE=0"
   ];
 
   postPatch = ''
@@ -103,6 +107,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   enableParallelChecking = false; # fails sometimes
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Well integrated set of translation tools and documentation";
 
@@ -131,8 +137,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
   };
-}
-
-// lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-  makeFlags = [ "CFLAGS=-D_FORTIFY_SOURCE=0" ];
-}
+})

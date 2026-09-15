@@ -52,7 +52,7 @@ let
       };
       aarch64-linux = {
         url = "https://github.com/encounter/dawn-build/releases/download/v20260603.191052/dawn-linux-aarch64.tar.gz";
-        hash = "sha256-C9pMaUOkSknwQfIw45+WIFve+noTiqud+RiQ0/kV4fA=";
+        hash = "sha256-EiNj16S0sIOWzOByiecsl2bZScBA5MOK348sqyxDchc=";
       };
     }
     .${stdenv.hostPlatform.system}
@@ -200,7 +200,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/TwilitRealm/dusklight/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.cc0;
     mainProgram = "dusklight";
-    platforms = lib.platforms.linux;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     maintainers = with lib.maintainers; [ liberodark ];
   };
 })

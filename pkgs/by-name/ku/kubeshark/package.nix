@@ -4,23 +4,24 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  testers,
-  kubeshark,
+  versionCheckHook,
   nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "kubeshark";
-  version = "53.3.0";
+  version = "53.4.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kubeshark";
     repo = "kubeshark";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YKR0P/4X134NTPuXeh1Ha781wav7daAxp+xJWCmgkIw=";
+    hash = "sha256-ijAiPJ8Bn6zZ8VK94vbjlRKSHDaVC7Ki5UNX+4EhXC4=";
   };
 
-  vendorHash = "sha256-4s1gxJo2w5BibZ9CJP7Jl9Z8Zzo8WpBokBnRN+zp8b4=";
+  vendorHash = "sha256-mJfjiVyKVGB410ned2E13i35mAN0XrPNERUa+MAzF58=";
 
   ldflags =
     let
@@ -28,7 +29,6 @@ buildGoModule (finalAttrs: {
     in
     [
       "-s"
-      "-w"
       "-X ${t}/misc.GitCommitHash=${finalAttrs.src.tag}"
       "-X ${t}/misc.Branch=master"
       "-X ${t}/misc.BuildTimestamp=0"
@@ -37,11 +37,6 @@ buildGoModule (finalAttrs: {
     ];
 
   nativeBuildInputs = [ installShellFiles ];
-
-  checkPhase = ''
-    go test ./...
-  '';
-  doCheck = true;
 
   # Tests bind loopback sockets via httptest.
   __darwinAllowLocalNetworking = true;
@@ -53,14 +48,11 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/kubeshark completion zsh)
   '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = kubeshark;
-      command = "kubeshark version";
-      inherit (finalAttrs) version;
-    };
-    updateScript = nix-update-script { };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/kubeshark/kubeshark/releases/tag/v${finalAttrs.version}";

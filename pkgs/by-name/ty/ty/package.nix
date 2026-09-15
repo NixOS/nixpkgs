@@ -17,7 +17,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ty";
-  version = "0.0.73";
+  version = "0.0.78";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "ty";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-LCXrMKyHYeLliEHejdYTSfDKmuw6/KgMhbp+YW1aHD8=";
+    hash = "sha256-sFUSKJsPu8HlJm4pWb5E3k5k36S3e6HHriDZ/tGa2z8=";
   };
 
   # For Darwin platforms, remove the integration test for file notifications,
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--package=ty" ];
 
-  cargoHash = "sha256-20rjLLi7uo0rgDhcI8KdVRwWvwpweLCU5GmzmCzbLw8=";
+  cargoHash = "sha256-TsspMKOxq5rh6dNWev297FQYi27n2ncQ1gUx9469WwY=";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = [ rust-jemalloc-sys ];
@@ -72,6 +72,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # flaky: unmatched assertion: revealed: Literal[1]
     "--skip=mdtest::generics/pep695/functions.md"
+
+    # flaky: https://github.com/astral-sh/ty/issues/1540
+    # fails with: Indexed project files contains '/build/.tmpOzGFH2/project/bar/baz.py' which was not expected.
+    "--skip=unix::symlink_inside_project"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];

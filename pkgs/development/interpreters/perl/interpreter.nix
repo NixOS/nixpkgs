@@ -37,7 +37,8 @@ let
     # Do not look in /usr etc. for dependencies.
     ./no-sys-dirs.patch
 
-    ./CVE-2026-8376.patch
+    ./CVE-2026-15534-1.patch
+    ./CVE-2026-15534-2.patch
   ]
 
   # Fix build on Solaris on x86_64
@@ -83,48 +84,7 @@ let
 
   # Inject fixed CPAN releases for bundled dual-life distributions until the
   # next perl maintenance release includes them.
-  vendoredPerlDistributions = [
-    {
-      # CVE-2026-7010
-      path = "cpan/HTTP-Tiny";
-      src = fetchurl {
-        url = "mirror://cpan/authors/id/H/HA/HAARG/HTTP-Tiny-0.094.tar.gz";
-        hash = "sha256-poQemfwbVdFd6VlHzL17dnvsxRxxAhl/qPBE333cB0M=";
-      };
-    }
-    {
-      # CVE-2026-3381, CVE-2026-4176
-      path = "cpan/Compress-Raw-Zlib";
-      src = fetchurl {
-        url = "mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Zlib-2.222.tar.gz";
-        hash = "sha256-Hf19URplVifIGBXTDTurwo+luIRV/wP4sECZ3LUShrg=";
-      };
-    }
-    {
-      # Runtime dependency of IO-Compress 2.220.
-      path = "cpan/Compress-Raw-Bzip2";
-      src = fetchurl {
-        url = "mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Bzip2-2.218.tar.gz";
-        hash = "sha256-iRU+ai69pSNJSTsHT6S3VJ/x+QU952E8GKXgXFtBX6g=";
-      };
-    }
-    {
-      # CVE-2026-48962, CVE-2026-48961, CVE-2026-48959
-      path = "cpan/IO-Compress";
-      src = fetchurl {
-        url = "mirror://cpan/authors/id/P/PM/PMQS/IO-Compress-2.220.tar.gz";
-        hash = "sha256-nZbqKR8sVO82fHOWuFfZO6GsHEsvG84T7Yo+Xz7rtic=";
-      };
-    }
-    {
-      # CVE-2026-42496, CVE-2026-42497, CVE-2026-9538
-      path = "cpan/Archive-Tar";
-      src = fetchurl {
-        url = "mirror://cpan/authors/id/B/BI/BINGOS/Archive-Tar-3.12.tar.gz";
-        hash = "sha256-ARTvObZfSfiWgoOrR3Gdfoj5jXNg/jZJvjMcf1PVgyw=";
-      };
-    }
-  ];
+  vendoredPerlDistributions = [ ];
 
   replaceVendoredPerlDistributions = lib.concatMapStringsSep "\n" (d: ''
     rm -rf ${d.path}
@@ -440,6 +400,8 @@ stdenv.mkDerivation (
       # fixes build failure due to missing d_fdopendir/HAS_FDOPENDIR configure option
       # https://github.com/arsv/perl-cross/pull/159
       ./cross-fdopendir.patch
+
+      ./perl-cross-1.6.4--5.42.3.patch
     ];
 
     depsBuildBuild = [

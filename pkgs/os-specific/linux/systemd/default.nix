@@ -5,6 +5,7 @@
   pkgsCross,
   testers,
   fetchFromGitHub,
+  fetchpatch,
   buildPackages,
   makeBinaryWrapper,
   ninja,
@@ -203,13 +204,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "261.1";
+  version = "261.2";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4iOitWGdRmGgJjEXGWtq2lEhPtGguma+qrjTShrps2g=";
+    hash = "sha256-w0Fxx+zYBs806whyaKBytGwSgn89ARdukAm6Hp+XlQQ=";
   };
 
   # PATCH POLICY
@@ -239,6 +240,13 @@ stdenv.mkDerivation (finalAttrs: {
     ./0003-add-rootprefix-to-lookup-dir-paths.patch
     ./0004-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
     ./0005-core-don-t-taint-on-unmerged-usr.patch
+    # Remove this with v262
+    # Fixes an issue for switch-to-configuration
+    (fetchpatch {
+      name = "postpone-d-bus-queue-dispatch.patch";
+      url = "https://github.com/systemd/systemd/commit/266b3e50218e2b27cd67d2371c165bf53ad3bf00.patch";
+      hash = "sha256-dEEzZUqicnmgDuXVBV1y0BxzgKbb6Q47Dmxj+O71bFE=";
+    })
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
     ./0006-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
@@ -798,6 +806,9 @@ stdenv.mkDerivation (finalAttrs: {
           fsck-systemd-stage-1
           hibernate-systemd-stage-1
           switchTest
+          switchTest-basics
+          switchTest-units
+          switchTest-user
           systemd
           systemd-analyze
           systemd-bpf
@@ -828,7 +839,6 @@ stdenv.mkDerivation (finalAttrs: {
           systemd-networkd-bridge
           systemd-networkd-dhcpserver
           systemd-networkd-dhcpserver-static-leases
-          systemd-networkd-ipv6-prefix-delegation
           systemd-networkd-vrf
           systemd-no-tainted
           systemd-nspawn

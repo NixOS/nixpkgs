@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://nmap.org/changelog.html#${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
+    mainProgram = "nmap";
     maintainers = with lib.maintainers; [
       thoughtpolice
       fpletz

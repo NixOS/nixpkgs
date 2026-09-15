@@ -23,18 +23,19 @@
   libxrandr,
   libxfixes,
   libjpeg_turbo,
+  versionCheckHook,
   wrapperDir ? "/run/wrappers/bin",
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpu-screen-recorder";
-  version = "6.0.1";
+  version = "6.1.1";
 
   src = fetchgit {
     url = "https://repo.dec05eba.com/gpu-screen-recorder";
     tag = finalAttrs.version;
-    hash = "sha256-mq+I90JaVsYZgPFLHRO/Qebv5p3XQZ6VaNbvHJBfXbQ=";
+    hash = "sha256-I5q2bvCjoXkXue/rr6IhwwhdQkxMmf1MgaKEjh+IZP8=";
   };
 
   postPatch = ''
@@ -47,7 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     meson
     ninja
+    wayland-scanner
   ];
+
+  depsBuildBuild = [ pkg-config ];
 
   buildInputs = [
     libxcomposite
@@ -56,7 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
     pipewire
     wayland
-    wayland-scanner
     vulkan-headers
     libdrm
     libva
@@ -65,6 +68,12 @@ stdenv.mkDerivation (finalAttrs: {
     libxrandr
     libxfixes
   ];
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   mesonFlags = [
     # Install the upstream systemd unit
@@ -104,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       babbaj
       js6pak
+      keenanweaver
     ];
     platforms = lib.platforms.linux;
   };

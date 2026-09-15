@@ -20,8 +20,8 @@ let
     abseil-cpp = fetchFromGitHub {
       owner = "abseil";
       repo = "abseil-cpp";
-      rev = "5650e9cf76d3be4318d5fa3af38ee483ddfd5e4a";
-      hash = "sha256-O9ClnGm4WSTX3g1Q2VYTMhUtGG52XBwxzgHtWW9WSG0=";
+      rev = "2065f4ded0558c6f89fee67c8e5228feb4eb960e";
+      hash = "sha256-CEtLO4il9/jk+bFDDV0rXeX1OkirA0u6nxrSiWq0NPM=";
     };
     benchmark = fetchFromGitHub {
       owner = "google";
@@ -44,14 +44,8 @@ let
     googletest = fetchFromGitHub {
       owner = "google";
       repo = "googletest";
-      rev = "52eb8108c5bdec04579160ae17225d66034bd723";
-      hash = "sha256-HIHMxAUR4bjmFLoltJeIAVSulVQ6kVuIT2Ku+lwAx/4=";
-    };
-    lodepng = fetchFromGitHub {
-      owner = "lvandeve";
-      repo = "lodepng";
-      rev = "17d08dd26cac4d63f43af217ebd70318bfb8189c";
-      hash = "sha256-vnw52G0lY68471dzH7NXc++bTbLRsITSxGYXOTicA5w=";
+      rev = "063de7e9578f82b369302001269680b4b1553359";
+      hash = "sha256-rXsn2L0xeWvfxTjMAoWEu0UFZ7xOSfYmhbKgRF5J9co=";
     };
     miniz = fetchFromGitHub {
       owner = "richgel999";
@@ -68,8 +62,8 @@ let
     tinyobjloader = fetchFromGitHub {
       owner = "tinyobjloader";
       repo = "tinyobjloader";
-      rev = "1421a10d6ed9742f5b2c1766d22faa6cfbc56248";
-      hash = "sha256-9z2Ne/WPCiXkQpT8Cun/pSGUwgClYH+kQ6Dx1JvW6w0=";
+      rev = "2945a967c5303b2c8c14174117c45f3302591150";
+      hash = "sha256-eEgy43IzhovTjEgLz3qNsRnOkp0bcvQdWve7jOidHX4=";
     };
     tinyxml2 = fetchFromGitHub {
       owner = "leethomason";
@@ -83,12 +77,20 @@ let
       rev = "f03a1b3ec29b1d7d865691ca8aea4f1eb2c2873d";
       hash = "sha256-90ei0lpJA8XuVGI0rGb3md0Qtq8/bdkU7dUCHpp88Bw=";
     };
+
+    # cmake/third_party_deps/lodepng.cmake
+    lodepng = fetchFromGitHub {
+      owner = "lvandeve";
+      repo = "lodepng";
+      rev = "17d08dd26cac4d63f43af217ebd70318bfb8189c";
+      hash = "sha256-vnw52G0lY68471dzH7NXc++bTbLRsITSxGYXOTicA5w=";
+    };
   };
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mujoco";
-  version = "3.12.0";
+  version = "3.13.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -99,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google-deepmind";
     repo = "mujoco";
     tag = finalAttrs.version;
-    hash = "sha256-BmppJK19YYgrLWdgv3i/eVXISIMIoJQ2OQVwcEXsMSI=";
+    hash = "sha256-uf1AGy9OBdZUNOKHzBnQOibIR7yPRDOKwnivIqakkOI=";
   };
 
   patches = [
@@ -151,7 +153,6 @@ stdenv.mkDerivation (finalAttrs: {
   + ''
     ln -s ${pin.eigen3} build/_deps/eigen3-src
     ln -s ${pin.googletest} build/_deps/googletest-src
-    ln -s ${pin.lodepng} build/_deps/lodepng-src
     ln -s ${pin.miniz} build/_deps/miniz-src
   ''
   # qhull is patched by mujoco's cmake and thus needs to be writable
@@ -159,6 +160,12 @@ stdenv.mkDerivation (finalAttrs: {
   + ''
     cp -r ${pin.qhull} build/_deps/qhull-src
     chmod -R +w build/_deps/qhull-src
+  ''
+  # lodepng needs a custom CMakeLists.txt copied into its source dir
+  # by FindOrFetch, so it must be writable
+  + ''
+    cp -r ${pin.lodepng} build/_deps/lodepng-src
+    chmod -R +w build/_deps/lodepng-src
   ''
   + ''
     ln -s ${pin.tinyobjloader} build/_deps/tinyobjloader-src

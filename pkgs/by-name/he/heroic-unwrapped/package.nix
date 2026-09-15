@@ -12,9 +12,10 @@
   makeWrapper,
   # Electron updates can break Heroic, so try to use same version as upstream.
   # If the used electron version is higher than upstream's then the node-abi package might need to be updated
-  electron,
+  electron_43,
   vulkan-helper,
   gogdl,
+  legendary-gl,
   nile,
   comet-gog_heroic,
   umu-launcher,
@@ -22,20 +23,20 @@
 
 let
   pnpm = pnpm_10;
+  electron = electron_43;
 
-  legendary = callPackage ./legendary.nix { };
   epic-integration = callPackage ./epic-integration.nix { };
   comet-gog = comet-gog_heroic;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
-  version = "2.22.0";
+  version = "2.22.1";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RDJDeL5exEzF2BhEWoiXWsTpV5hytrB6RDoXV0mTWTw=";
+    hash = "sha256-CpbCXmvfwXT16ZG/6fwPWSjBwK02ykJ/GuZk1VcW+tU=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -47,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-lPHL6pA39hvEtq5WkcAXfcY3a0VPseQL/nI+oEjIZeE=";
+    hash = "sha256-NrglT9vtDMAYXmZ4G3vifvLXu1yS6xbp+cqE6B6vQFc=";
   };
 
   nativeBuildInputs = [
@@ -96,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     ln -s \
       "${lib.getExe gogdl}" \
-      "${lib.getExe legendary}" \
+      "${lib.getExe legendary-gl}" \
       "${lib.getExe nile}" \
       "${lib.getExe comet-gog}" \
       "${lib.getExe vulkan-helper}" \
@@ -131,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    inherit epic-integration legendary;
+    inherit epic-integration;
   };
 
   meta = {

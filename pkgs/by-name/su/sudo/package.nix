@@ -106,12 +106,15 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.sudo.ws/";
     # From https://www.sudo.ws/about/license/
-    license = with lib.licenses; [
-      sudo
-      bsd2
-      bsd3
-      zlib
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        isc
+        bsdAskToEndorse
+        bsd2
+        bsd3
+        zlib
+      ];
     maintainers = with lib.maintainers; [ rhendric ];
     platforms = lib.platforms.linux ++ lib.platforms.freebsd ++ lib.platforms.openbsd;
     mainProgram = "sudo";

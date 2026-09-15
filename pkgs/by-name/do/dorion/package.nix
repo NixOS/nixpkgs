@@ -35,25 +35,25 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dorion";
-  version = "6.12.2";
+  version = "6.13.0";
 
   src = fetchFromGitHub {
     owner = "SpikeHD";
     repo = "Dorion";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aPYQOec4D0I4N/6nmSwodXsh3pvcHnlD37fUIw5kMjo=";
+    hash = "sha256-3AQX1q3qpu/QKqigmCvLKQJzQpsTnYgwT+1VWA+gIz0=";
   };
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-3FS8w9K3Wx7KbT7iy+0pAMdmreZnL+ZFMSAnwesnS7Y=";
+  cargoHash = "sha256-p/mj3BL61HlLpN3nqNkVExu0mWaMawg9I2+dKeFUOJ8=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-WzJD2Brg7+cx7TXRpEg2c1QSY0uo0Ppulj3ytdl0A4I=";
+    hash = "sha256-i20NSlWot8DmjSpdIGd2ne/82HyPB1cdxkBSxbOLA/8=";
   };
 
   # CMake (webkit extension, Linux only)

@@ -122,7 +122,7 @@ in
       [ "services" "netbox" "ldapConfigPath" ]
       [ "services" "netbox" "ldapConfigFile" ]
     )
-    (mkRemovedOptionModule [ "services" "nginx" "gunicornArgs" ] ''
+    (mkRemovedOptionModule [ "services" "netbox" "gunicornArgs" ] ''
       Removed in favor of `services.netbox.gunicorn.extraArgs`, an attribute set passed to `lib.cli.toCommandLineGNU`.
     '')
   ];
@@ -434,11 +434,12 @@ in
     package = lib.mkOption {
       type = types.package;
       default =
-        if lib.versionAtLeast config.system.stateVersion "26.05" then pkgs.netbox_4_5 else pkgs.netbox_4_4;
+        if lib.versionAtLeast config.system.stateVersion "26.11" then pkgs.netbox_4_6 else pkgs.netbox_4_5;
       defaultText = lib.literalExpression ''
-        if lib.versionAtLeast config.system.stateVersion "26.05"
-        then pkgs.netbox_4_5
-        else pkgs.netbox_4_4;
+        if lib.versionAtLeast config.system.stateVersion "26.11" then
+          pkgs.netbox_4_6
+        else
+          pkgs.netbox_4_5;
       '';
       description = ''
         NetBox package to use.
@@ -562,6 +563,15 @@ in
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
+        assertions = [
+          {
+            assertion =
+              cfg.postgresql.createLocally
+              -> lib.versionAtLeast config.services.postgresql.finalPackage.version "15";
+            message = "NetBox requires PostgreSQL >= 15. Please read the NixOS manual to upgrade your PostgreSQL version.";
+          }
+        ];
+
         services.netbox.plugins = lib.mkIf enableLDAP (ps: [ ps.django-auth-ldap ]);
 
         services.redis.servers.netbox.enable = cfg.redis.createLocally;
@@ -730,26 +740,6 @@ in
                   "low"
                 ];
                 PrivateTmp = true;
-              };
-            };
-
-            netbox-housekeeping = defaultUnitConfig // {
-              description = "NetBox housekeeping job";
-
-              wantedBy = [ "multi-user.target" ];
-
-              after = [
-                "network-online.target"
-                "netbox.service"
-              ];
-              wants = [ "network-online.target" ];
-
-              serviceConfig = defaultServiceConfig // {
-                Type = "oneshot";
-                ExecStart = toString [
-                  (lib.getExe finalPackage)
-                  "housekeeping"
-                ];
               };
             };
           };

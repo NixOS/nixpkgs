@@ -36,7 +36,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "nixl";
-  version = "1.4.0";
+  version = "1.4.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -45,7 +45,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     owner = "ai-dynamo";
     repo = "nixl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fOtPutRgKscP396J0Rh6V9PIQ+LsE7h71vtduviHvWI=";
+    hash = "sha256-8cvvCOyKLB62VhjlXup9a9yqvMiXanax2DRBkjEUBVI=";
   };
 
   postPatch =

@@ -141,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
     ocamlPackages.shine
     ocamlPackages.soundtouch
     ocamlPackages.speex
-    ocamlPackages.ocaml_sqlite3
+    ocamlPackages.sqlite3
     ocamlPackages.srt
     ocamlPackages.ssl
     ocamlPackages.taglib

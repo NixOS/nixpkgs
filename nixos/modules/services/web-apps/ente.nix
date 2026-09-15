@@ -209,7 +209,6 @@ in
           ${utils.genJqSecretsReplacementSnippet cfgApi.settings "/run/ente/local.yaml"}
 
           # Setup paths
-          mkdir -p ${dataDir}/configurations
           ln -sTf /run/ente/local.yaml ${dataDir}/configurations/local.yaml
         '';
 
@@ -259,7 +258,10 @@ in
           Group = cfgApi.group;
 
           SyslogIdentifier = "ente";
-          StateDirectory = "ente";
+          StateDirectory = [
+            (baseNameOf dataDir)
+            "${baseNameOf dataDir}/configurations"
+          ];
           WorkingDirectory = dataDir;
           RuntimeDirectory = "ente";
         };

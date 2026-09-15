@@ -11,9 +11,9 @@ in
 
 buildDotnetGlobalTool (finalAttrs: {
   pname = "csharp-ls";
-  version = "0.26.0";
+  version = "0.27.0";
 
-  nugetHash = "sha256-KwOYeu8Hu3CL/lanv7NwNkx8ggPmmqZ3o3WUu+IaFbA=";
+  nugetHash = "sha256-pJo01GZOT7pHgctQ1TfvrRdxOTgoNw4y7OP+deK87a8=";
 
   inherit dotnet-sdk;
   dotnet-runtime = dotnet-sdk;
@@ -33,11 +33,5 @@ buildDotnetGlobalTool (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ GaetanLepage ];
-    badPlatforms = [
-      # Crashes immediately at runtime
-      # terminated by signal SIGKILL (Forced quit)
-      # https://github.com/razzmatazz/csharp-language-server/issues/211
-      "aarch64-darwin"
-    ];
   };
 })

@@ -3,7 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_41,
+  electron_43,
   mpv-unwrapped,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -15,27 +15,24 @@
   makeDesktopItem,
   nix-update-script,
   webVersion ? false,
+  nixosTests,
 }:
 let
+  electron = electron_43;
+
+  # Fix pnpm issue on darwin https://github.com/NixOS/nixpkgs/issues/525627
+  pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_latest; };
+in
+buildNpmPackage (finalAttrs: {
   pname = "feishin";
   version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2UKJBUZNUpUUZIG1JFXok7YJdzqt+Ge0ykHUm8BeNcw=";
   };
-
-  electron = electron_41;
-
-  # Fix pnpm issue on darwin https://github.com/NixOS/nixpkgs/issues/525627
-  pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_latest; };
-in
-buildNpmPackage {
-  inherit pname version;
-
-  inherit src;
 
   __structuredAttrs = true;
 
@@ -44,9 +41,9 @@ buildNpmPackage {
 
   npmDeps = null;
   pnpmDeps = fetchPnpmDeps {
-    inherit
+    inherit pnpm;
+    inherit (finalAttrs)
       pname
-      pnpm
       version
       src
       ;
@@ -145,12 +142,19 @@ buildNpmPackage {
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+
+    # add a tests
+    tests = {
+      inherit (nixosTests.feishin) caddy nginx;
+    };
+  };
 
   meta = {
     description = "Full-featured Jellyfin, Navidrome, and OpenSubsonic Compatible Music Player";
     homepage = "https://github.com/jeffvli/feishin";
-    changelog = "https://github.com/jeffvli/feishin/releases/tag/v${version}";
+    changelog = "https://github.com/jeffvli/feishin/releases/tag/v${finalAttrs.version}";
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
@@ -161,4 +165,4 @@ buildNpmPackage {
     ];
   }
   // lib.optionalAttrs (!webVersion) { mainProgram = "feishin"; };
-}
+})

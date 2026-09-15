@@ -92,14 +92,27 @@ stdenv.mkDerivation rec {
     chmod +x igc/IGC/Scripts/igc_create_linker_script.sh
     patchShebangs --build igc/IGC/Scripts/igc_create_linker_script.sh
 
-    # The build system only applies patches when the sources are in a Git repository.
-    git -C llvm-project init
-    git -C llvm-project add .
-    git -C llvm-project -c user.name=nixbld -c user.email= commit -m stub
+    # Their slapdash CMake code checks the exit code of "git rev-parse" whether patches must be applied.
+    # Since we do not have a full git repo and cannot clone one due to reproducibility issues,
+    # git exits with 128 which is in newer versions of opencl-clang logged as a STATUS, but does not abort either.
+    # We could hack around this, but since we are certain we want the patches (eg for CL3.1), we just shortcircuit the condition.
+    substituteInPlace llvm-project/llvm/projects/opencl-clang/cmake/modules/CMakeFunctions.cmake \
+      --replace-fail "if(patches_needed EQUAL 1)" "if(TRUE)"
 
+    # "git am" wants to check the git history if the commit is already applied, but we do not have that.
+    # "git apply" works very similar, but without a git history and supports the same options unlike patch.
     substituteInPlace llvm-project/llvm/projects/opencl-clang/cmake/modules/CMakeFunctions.cmake \
       --replace-fail 'COMMAND ''${GIT_EXECUTABLE} am --3way --keep-non-patch --ignore-whitespace -C0 ' \
                      'COMMAND ''${GIT_EXECUTABLE} apply --3way --ignore-whitespace -C0 '
+
+    # The build system only applies patches when the sources are in a Git repository.
+    export HOME=$(mktemp -d)
+    git config --global user.email ""
+    git config --global user.name nixbld
+    git config --global gc.auto 0
+    git -C llvm-project init
+    git -C llvm-project add .
+    git -C llvm-project commit -m stub >/dev/null
   '';
 
   nativeBuildInputs = [

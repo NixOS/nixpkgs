@@ -31,7 +31,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ngff-zarr";
-  version = "0.42.1";
+  version = "0.43.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -40,7 +40,7 @@ buildPythonPackage (finalAttrs: {
     owner = "fideus-labs";
     repo = "ngff-zarr";
     tag = "py-v${finalAttrs.version}";
-    hash = "sha256-gioxY26IPQr9f917wYm24ned1/iQyGbASlOFSwkYflE=";
+    hash = "sha256-sif/OhQ/bfnUd7wp5Y+eWqY7uv5peiAt4Zl/alWvGu0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/py/";
@@ -153,6 +153,7 @@ buildPythonPackage (finalAttrs: {
     "test_tiff_file_to_ngff_images_with_channel_names"
     "test_tiff_file_to_ngff_images_with_channels"
     "test_tiff_file_to_ngff_images_with_ome_metadata"
+    "test_tiff_file_to_ngff_images_with_ome_translation"
     "test_tiff_file_to_ngff_images_with_partial_channel_names"
     "test_tiff_file_to_ngff_images_with_sample_axis"
     "test_tiff_file_to_ngff_images_without_channel_names"

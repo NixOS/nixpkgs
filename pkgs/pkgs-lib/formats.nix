@@ -24,7 +24,6 @@ let
     singleton
     strings
     toJSON
-    toPretty
     types
     versionAtLeast
     warn
@@ -39,6 +38,7 @@ let
     toLua
     mkLuaInline
     toPlist
+    toPretty
     ;
 
   inherit (lib.types)

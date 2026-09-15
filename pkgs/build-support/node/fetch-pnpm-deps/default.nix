@@ -129,6 +129,7 @@ in
             fi
             popd
 
+            pnpm config set reporter append-only
             pnpm config set store-dir $storePath
 
             # Run any additional pnpm configuration commands that users provide.

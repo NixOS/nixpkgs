@@ -7,17 +7,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ytsub";
-  version = "0.10.0";
+  version = "0.11.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "sarowish";
     repo = "ytsub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CrYRQ+0WJ6VDG+Y4J0Wk22wcNb+0SxhRbzPJRXQNTjs=";
+    hash = "sha256-xuS9CvJziJ0DghW3chWzn+k8DEGFsYg2co52EjnN9iA=";
   };
 
-  cargoHash = "sha256-8p2//37ATU9d3kMq0tM6Pr+wqbrfOh8Z4fxgwhU4rpA=";
+  cargoHash = "sha256-jZ49S4uUoZJCyyIfvHQvrvzbtXSlfR2ZtoliSi72RNU=";
 
   buildInputs = [ sqlite ];
 

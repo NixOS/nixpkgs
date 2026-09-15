@@ -36,7 +36,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.9.4";
+  version = "2.9.6";
 
   __structuredAttrs = true;
 
@@ -51,10 +51,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-ivch++yGRUyWtox/5QqomC4DlTvMBxK+gIcN9/7tt5E=";
+    hash = "sha256-4X7IfQk9NJizhZKqH2EuDnSfk8axkKFyiZEv1FOfWTM=";
   };
 
-  cargoHash = "sha256-ynbHLZXkPPYpsC4dCu6jA6x8ftiTHWZ/uxzdbUcUaa0=";
+  cargoHash = "sha256-EKRC+wqIos9O0GHaxjmb/ghyzV6oCi1qwhO2tjszWR4=";
 
   patches = [
     ./patches/0002-tests-replace-hardcoded-paths.patch
@@ -96,6 +96,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Disable the default feature `upgrade` (which controls the self-update subcommand and update checks)
   buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "v8"
+  ];
 
   # work around "error: unknown warning group '-Wunused-but-set-parameter'"
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unknown-warning-option";

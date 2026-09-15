@@ -13,6 +13,7 @@
   buildPythonPackage,
   click,
   cryptography,
+  expression,
   fastapi,
   fastapi-sso,
   fastuuid,
@@ -64,14 +65,14 @@
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.97.0";
+  version = "1.98.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";
     tag = "v${version}";
-    hash = "sha256-9nVVXRvtfxntAgSetCy66jfDpunR12DEIoQKAjSZn/4=";
+    hash = "sha256-eMquDSSlBo//huXXiys/F36O18VDjv7U1OUe7DrKhus=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -98,6 +99,7 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohttp
+    boto3
     click
     fastuuid
     httpx
@@ -118,8 +120,8 @@ buildPythonPackage rec {
       azure-identity
       azure-storage-blob
       backoff
-      boto3
       cryptography
+      expression
       fastapi
       fastapi-sso
       gunicorn
@@ -178,6 +180,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "aiohttp"
+    "boto3"
     "click"
     "importlib-metadata"
     "jsonschema"

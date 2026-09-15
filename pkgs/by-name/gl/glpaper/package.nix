@@ -12,14 +12,17 @@
 
 stdenv.mkDerivation {
   pname = "glpaper";
-  version = "unstable-2024-08-07";
+  version = "0-unstable-2024-08-07";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromSourcehut {
     owner = "~scoopta";
     repo = "glpaper";
     vc = "hg";
     rev = "af9827d20bfe1956dd88fb2202b38ed0de705305";
-    sha256 = "sha256-zgvnWqsw243jZ9e6fG6L0hDfRRHwzmIdsxwnnWhimu0=";
+    hash = "sha256-zgvnWqsw243jZ9e6fG6L0hDfRRHwzmIdsxwnnWhimu0=";
   };
 
   # nop() is used as a typed Wayland callback stub, which GCC 15 rejects as an error.

@@ -1,14 +1,16 @@
 {
-  stdenv,
-  lib,
+  # keep-sorted start
   fetchurl,
-  mkJetBrainsProduct,
-  libdbm,
   fsnotifier,
-  maven,
-  zlib,
+  jetbrains,
+  jetbrains-libdbm,
+  lib,
   lldb,
+  maven,
   musl,
+  stdenv,
+  zlib,
+  # keep-sorted end
 }:
 let
   system = stdenv.hostPlatform.system;
@@ -29,8 +31,8 @@ let
   };
   # update-script-end: urls
 in
-mkJetBrainsProduct {
-  inherit libdbm fsnotifier;
+jetbrains.mkJetBrainsProduct {
+  inherit jetbrains-libdbm fsnotifier;
 
   pname = "idea";
 
@@ -45,6 +47,13 @@ mkJetBrainsProduct {
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
 
+  # the jdk is bundled on Darwin.
+  jdk =
+    if lib.meta.availableOn stdenv.hostPlatform jetbrains.jdk-no-jcef then
+      jetbrains.jdk-no-jcef
+    else
+      null;
+
   extraLdPath = [ zlib ];
   extraWrapperArgs = [
     ''--set M2_HOME "${maven}/maven"''
@@ -52,8 +61,10 @@ mkJetBrainsProduct {
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    # keep-sorted start
     lldb
     musl
+    # keep-sorted end
   ];
 
   # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed
@@ -68,6 +79,7 @@ mkJetBrainsProduct {
       gytis-ivaskevicius
       tymscar
     ];
+    teams = [ lib.teams.jetbrains ];
     license = lib.licenses.unfree;
     sourceProvenance =
       if stdenv.hostPlatform.isDarwin then

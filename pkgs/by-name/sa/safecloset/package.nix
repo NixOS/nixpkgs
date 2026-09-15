@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "safecloset";
-  version = "1.4.2";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "safecloset";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZLAgSD03Qfoz+uGjVJF7vCkV1pUWqw6yG/9+redbQQ8=";
+    hash = "sha256-2Mvn2gWYcIotnAOBZnTSFawF9qORCh3Pfce6SVGjO24=";
   };
 
-  cargoHash = "sha256-BSWUWB8OrdmDtU+cGCVp75hakpdd9G3cs9ythDn4nnY=";
+  cargoHash = "sha256-l7/bgYpiCBBk1uKL2AQb+3UNXJLHA9AQJVMPs64Ka+Y=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libxcb

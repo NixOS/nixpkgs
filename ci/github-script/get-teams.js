@@ -1,14 +1,14 @@
 // @ts-nocheck
+import { writeFileSync } from 'node:fs'
+import withRateLimit from './withRateLimit.js'
+
 const excludeTeams = [
   /^voters.*$/,
   /^nixpkgs-maintainers$/,
   /^nixpkgs-committers$/,
 ]
 
-module.exports = async ({ github, context, core, outFile }) => {
-  const withRateLimit = require('./withRateLimit.js')
-  const { writeFileSync } = require('node:fs')
-
+export default async ({ github, context, core, outFile }) => {
   const org = context.repo.owner
 
   const result = {}

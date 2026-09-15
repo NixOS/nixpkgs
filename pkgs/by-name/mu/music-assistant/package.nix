@@ -241,6 +241,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # RuntimeError: failed to initialize QNNPACK
     "test_beat_detection"
+    "test_digital_silence_yields_finite_spectral_centroid"
     "test_extended_analysis_fields"
     "test_finalize_returns_audio_analysis_data"
     "test_finalize_returns_none_on_early_exit"

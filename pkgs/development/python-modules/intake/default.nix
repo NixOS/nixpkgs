@@ -1,66 +1,74 @@
 {
   lib,
-  stdenv,
-  platformdirs,
-  bokeh,
   buildPythonPackage,
-  dask,
-  entrypoints,
   fetchFromGitHub,
-  fsspec,
-  hvplot,
-  intake-parquet,
-  jinja2,
-  msgpack,
-  msgpack-numpy,
-  pandas,
-  panel,
-  pyarrow,
-  pytestCheckHook,
-  python-snappy,
-  pythonAtLeast,
-  pyyaml,
-  networkx,
-  requests,
+
+  # build-system
   setuptools,
   setuptools-scm,
+
+  # dependencies
+  dask,
+  entrypoints,
+  fsspec,
+  jinja2,
+  msgpack,
+  networkx,
+  pandas,
+  platformdirs,
+  pyyaml,
+
+  # optional-dependencies
+  # server:
+  msgpack-numpy,
+  python-snappy,
   tornado,
+  # dataframe:
+  pyarrow,
+  # plot
+  hvplot,
+  bokeh,
+  panel,
+  # remote:
+  requests,
+
+  # tests
+  addBinToPathHook,
+  intake-parquet,
+  pytestCheckHook,
+  pythonAtLeast,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "intake";
   version = "2.0.9";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "intake";
     repo = "intake";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-DiALGrJP4vLWygzZprjYCFM+TYtMS7NVM3+MTyjzcs0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    platformdirs
+  dependencies = [
     dask
     entrypoints
     fsspec
-    msgpack
     jinja2
-    pandas
-    pyyaml
+    msgpack
     networkx
+    pandas
+    platformdirs
+    pyyaml
   ];
-
-  nativeCheckInputs = [
-    intake-parquet
-    pytestCheckHook
-  ]
-  ++ lib.concatAttrValues optional-dependencies;
 
   optional-dependencies = {
     server = [
@@ -80,12 +88,13 @@ buildPythonPackage rec {
     remote = [ requests ];
   };
 
-  __darwinAllowLocalNetworking = true;
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-    export PATH="$PATH:$out/bin";
-  '';
+  nativeCheckInputs = [
+    addBinToPathHook
+    intake-parquet
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTestPaths = [
     # Missing plusins
@@ -132,11 +141,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "intake" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Data load and catalog system";
     homepage = "https://github.com/ContinuumIO/intake";
-    changelog = "https://github.com/intake/intake/blob/${version}/docs/source/changelog.rst";
+    changelog = "https://github.com/intake/intake/blob/${finalAttrs.src.rev}/docs/source/changelog.rst";
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

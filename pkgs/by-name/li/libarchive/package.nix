@@ -32,13 +32,13 @@
 assert xarSupport -> libxml2 != null;
 stdenv.mkDerivation (finalAttrs: {
   pname = "libarchive";
-  version = "3.8.8";
+  version = "3.8.9";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-l8xh+z6lP7VnxMIf9tfoSByerjwN6Z4dE3JNA9zS3LM=";
+    hash = "sha256-/CoInUlOiFvR83mEeV3Tx+2SQGywWDQ4nY+NstE/cP4=";
   };
 
   outputs = [
@@ -108,6 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
     acl
   ];
 
+  strictDeps = true;
+
   hardeningDisable = [
     "strictflexarrays3"
   ]
@@ -139,6 +141,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelBuilding = true;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "http://libarchive.org";

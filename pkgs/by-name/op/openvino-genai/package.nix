@@ -47,6 +47,7 @@ let
   archName =
     {
       "aarch64-linux" = "aarch64";
+      "riscv64-linux" = "riscv64";
       "x86_64-linux" = "intel64";
     }
     .${stdenv.hostPlatform.system};
@@ -54,7 +55,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvino-genai";
-  version = "2026.3.0.0";
+  version = "2026.3.1.0";
 
   __structuredAttrs = true;
 
@@ -64,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
       owner = "openvinotoolkit";
       repo = "openvino.genai";
       tag = finalAttrs.version;
-      hash = "sha256-NlMXX+PpFE2pVHXxGKwJuN0W6BslIVrGijFV2m6GaYA=";
+      hash = "sha256-iZfsOyqtpPdJXhxxzA9m17y6+TViXCI1XK19BnDDdTY=";
     };
 
   outputs = [
@@ -195,7 +196,21 @@ stdenv.mkDerivation (finalAttrs: {
     # GoogleTestVerification.UninstantiatedParameterizedTestSuite<*>, so
     # exclude that verification check for these two suites.
     ./tests/cpp/tests_continuous_batching \
-      --gtest_filter="-GoogleTestVerification.UninstantiatedParameterizedTestSuite*"
+      --gtest_filter="-${
+        lib.concatStringsSep ":" (
+          [ "GoogleTestVerification.UninstantiatedParameterizedTestSuite*" ]
+          ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
+            "TestCacheManager.*"
+            "TestLinearAttentionCacheManager.*"
+            "TestCacheOrchestratorHybrid.*"
+            "TestModelRunnerLinearAttentionPaging.*"
+            "TestScheduler.*"
+            "VariousSchedulerConfigs/*"
+            "SliceBeforeMatmul.*"
+            "GatherBeforeMatmul.*"
+          ]
+        )
+      }"
     runHook postCheck
   '';
 

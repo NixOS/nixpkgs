@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-technove";
-  version = "2.1.2";
+  version = "2.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Moustachauve";
     repo = "pytechnove";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Hbwrfib+ugjpYnVCuZZfbr+9eBeLN4q7WE5G2xGD0nk=";
+    hash = "sha256-8POreYBoGBKBsN+4EA7wenj90hKgqgFi1sfMp3S4/7Q=";
   };
 
   build-system = [ poetry-core ];

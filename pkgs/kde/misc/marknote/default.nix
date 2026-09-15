@@ -9,11 +9,11 @@
 }:
 mkKdeDerivation rec {
   pname = "marknote";
-  version = "1.4.1";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/marknote/marknote-${version}.tar.xz";
-    hash = "sha256-lsL1UcPZoJzbwtbMJC5ks6nIEd9/KUENW4WHHsKtJ5k=";
+    hash = "sha256-07s5YU4i/RqN3XS8+0w4TL/+JWhewBEW9pTkcIFihKk=";
   };
 
   extraBuildInputs = [

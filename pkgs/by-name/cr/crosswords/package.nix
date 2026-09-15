@@ -18,14 +18,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "crosswords";
-  version = "0.3.17";
+  version = "0.3.18.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "jrb";
     repo = "crosswords";
     rev = finalAttrs.version;
-    hash = "sha256-VeiVuMEfMCVjSk52BGtlypapeW6CBW1VQsrtDS8aCoY=";
+    hash = "sha256-d8KwZ06WubqIRq5aPm+W/MfLgNcLP+233gur5pLF/PY=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     json-glib
     libadwaita
     libipuz
+  ];
+
+  mesonFlags = [
+    (lib.mesonBool "development" false)
   ];
 
   postInstall = ''

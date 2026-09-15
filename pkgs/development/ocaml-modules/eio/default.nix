@@ -3,7 +3,7 @@
   ocaml,
   version ?
     if lib.versionAtLeast ocaml.version "5.2" then
-      "1.4"
+      "1.5"
     else if lib.versionAtLeast ocaml.version "5.1" then
       "1.2"
     else
@@ -36,9 +36,9 @@ let
         minimalOCamlVersion = "5.1";
         hash = "sha256-N5LpEr2NSUuy449zCBgl5NISsZcM8sHxspZsqp/WvEA=";
       };
-      "1.4" = {
+      "1.5" = {
         minimalOCamlVersion = "5.2";
-        hash = "sha256-uhGtSG9JITDbtIbys73EkFZD8QAWgG3fhumjTkNGqqU=";
+        hash = "sha256-fXDR9fsrcZC/GrKP/+snLaUf/m1snHyU4Ehfq987P9o=";
       };
     }
     ."${version}";

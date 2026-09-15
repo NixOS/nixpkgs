@@ -41,7 +41,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fastapi";
-  version = "0.139.0";
+  version = "0.141.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -49,7 +49,7 @@ buildPythonPackage (finalAttrs: {
     owner = "tiangolo";
     repo = "fastapi";
     tag = finalAttrs.version;
-    hash = "sha256-c4balkkmBv7zKRQnYRpRohVjP23m0HvtdiVrJtgNKYo=";
+    hash = "sha256-5P9aDMS7gLti2CBlrucvjgl4Od1mti9ityPdqxI1RIM=";
   };
 
   build-system = [ pdm-backend ];

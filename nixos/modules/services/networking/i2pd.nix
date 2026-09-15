@@ -263,6 +263,14 @@ in
           types.submodule {
             inherit freeformType;
             options = {
+              type = lib.mkOption {
+                type = types.str;
+                default = "server";
+                description = ''
+                  Type of server tunnel.
+                  See <https://docs.i2pd.website/en/latest/user-guide/tunnels/#tunnel-types>.
+                '';
+              };
               host = lib.mkOption {
                 type = types.either types.str credType;
                 description = "IP address of server (on this address i2pd will send data from I2P)";
@@ -289,6 +297,14 @@ in
           types.submodule {
             inherit freeformType;
             options = {
+              type = lib.mkOption {
+                type = types.str;
+                default = "client";
+                description = ''
+                  Type of client tunnel.
+                  See <https://docs.i2pd.website/en/latest/user-guide/tunnels/#tunnel-types>.
+                '';
+              };
               port = lib.mkOption {
                 type = types.port;
                 description = "Port of client tunnel (on this port i2pd will receive data)";
@@ -398,20 +414,31 @@ in
           sections = (lib.mapAttrs (_: unwrapPrefixes) (removeNulls attrs));
         };
 
-      gen = attr: {
-        conf = genConfig "i2pd.conf" (credSubstituteRec attr cfg.settings);
+      gen = attr: settings: {
+        conf = genConfig "i2pd.conf" (credSubstituteRec attr settings);
         tunconf = genTunnels "i2pd-tunnels.conf" (
-          lib.mapAttrs' (k: v: lib.nameValuePair "client-${k}" (v // { "type" = "client"; })) (
-            credSubstituteRec attr cfg.clientTunnels
-          )
-          // lib.mapAttrs' (k: v: lib.nameValuePair "server-${k}" (v // { "type" = "server"; })) (
+          lib.mapAttrs' (k: v: lib.nameValuePair "client-${k}" v) (credSubstituteRec attr cfg.clientTunnels)
+          // lib.mapAttrs' (k: v: lib.nameValuePair "server-${k}" v) (
             credSubstituteRec attr cfg.serverTunnels
           )
         );
       };
 
-      i2pdConfig = gen "id";
-      i2pdCheckedConfig = gen "placeholder";
+      i2pdConfig = gen "id" cfg.settings;
+      # i2pd has no parse-only mode and requires a transport during startup.
+      i2pdCheckedConfig = gen "placeholder" (
+        lib.recursiveUpdate cfg.settings (
+          {
+            # Disable connectivity, in case build sandbox is disabled
+            ipv4 = false;
+            ipv6 = false;
+          }
+          // lib.optionalAttrs (cfg.settings.meshnets.yggdrasil or false) {
+            # Yggdrasil is unavailable in the check environment, so provide a usable transport.
+            ntcp2.enabled = true;
+          }
+        )
+      );
 
       # List of all passed credentials: `[ { id = ...; path = ...; } ... ]`
       credentials = credCollectRec [
@@ -457,10 +484,6 @@ in
             conf="${i2pdCheckedConfig.conf}"
             tunconf="${i2pdCheckedConfig.tunconf}"
 
-            # Disable connectivity, in case build sandbox is disabled
-            echo "ipv4 = false" >>conf
-            echo "ipv6 = false" >>conf
-            grep -Pv "^(ipv4|ipv6)[\s=]" "$conf" >>conf
             opts="$("$i2pd" --help | grep -Eo "^  --\S*port(udp)? arg" | sed "s/ arg\$/=0/g")"
 
             echo Checking "$conf"

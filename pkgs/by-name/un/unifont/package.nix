@@ -1,6 +1,8 @@
 {
   lib,
   stdenv,
+  bashNonInteractive,
+  buildPackages,
   fetchurl,
   perl,
   bdftopcf,
@@ -25,6 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     rm -r font/precompiled
     patchShebangs ./src
+    ${lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      substituteInPlace Makefile --replace-fail \
+        'bin/unigenwidth ' \
+        '$(BINDIR)/unigenwidth '
+      substituteInPlace font/Makefile --replace-fail \
+        '"BINDIR:../../../$(BINDIR)/"' \
+        '"BINDIR:$(BINDIR)/"'
+    ''}
   '';
 
   nativeBuildInputs = [
@@ -35,10 +45,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    bashNonInteractive
     perlenv
   ];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "BINDIR=${buildPackages.unifont.bin}/bin"
+  ];
 
   buildFlags = [ "BUILDFONT=1" ];
 
@@ -62,6 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
       "$out"/share/fonts/X11/misc/*_sample.*
     mv -vt "$sample/share/fonts/opentype/unifont/" \
       "$out"/share/fonts/opentype/unifont/*_sample.*
+  '';
+
+  postFixup = ''
+    patchShebangs --host --update "$bin"
   '';
 
   outputs = [

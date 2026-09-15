@@ -34,5 +34,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/cptpiepmatz/nu-plugin-highlight";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mgttlinger ];
+    # "Plugin `highlight` is compiled for nushell version 0.114.1, which is
+    # not compatible with version 0.115.1"
+    broken = true;
   };
 })

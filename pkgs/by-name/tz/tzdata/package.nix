@@ -35,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   propagatedBuildOutputs = [ ];
 
+  strictDeps = true;
+
   makeFlags = [
     "TOPDIR=${placeholder "out"}"
     "TZDIR=${placeholder "out"}/share/zoneinfo"
@@ -112,6 +114,8 @@ stdenv.mkDerivation (finalAttrs: {
   # Upstream provides patches very quickly, we just need to apply them until the next
   # minor releases.
   passthru.tests = postgresql;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "http://www.iana.org/time-zones";

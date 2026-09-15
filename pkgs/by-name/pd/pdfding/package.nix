@@ -1,7 +1,7 @@
 {
   lib,
   callPackage,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   makeWrapper,
   nixosTests,
 
@@ -12,12 +12,12 @@ let
 in
 python.pkgs.buildPythonPackage (finalAttrs: {
   pname = "pdfding";
-  version = "1.13.0";
-  src = fetchFromGitHub {
-    owner = "mrmn2";
+  version = "1.14.0";
+  src = fetchFromCodeberg {
+    owner = "mrmn";
     repo = "PdfDing";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-HMoCmPlT40o6oitUw/X582dXie/5iglpnXQs4VEbp1g=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-yxDN6aFYRdrpDV7AdKeam1ZUcs5GTXU1fLaOHB7Mx8c=";
   };
   pyproject = true;
 
@@ -189,9 +189,9 @@ python.pkgs.buildPythonPackage (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/mrmn2/PdfDing/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://codeberg.org/mrmn/PdfDing/src/commit/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Selfhosted PDF manager, viewer and editor offering a seamless user experience on multiple devices";
-    downloadPage = "https://github.com/mrmn2/PdfDing";
+    downloadPage = "https://codeberg.org/mrmn/PdfDing";
     homepage = "https://pdfding.com";
     license = lib.licenses.agpl3Only;
     mainProgram = "pdfding-manage";

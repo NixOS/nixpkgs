@@ -179,7 +179,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://spidermonkey.dev/";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
-      catap
       bobby285271
     ];
     platforms = lib.platforms.unix;

@@ -40,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnu.org/software/ed/";
     description = "GNU implementation of the standard Unix editor";

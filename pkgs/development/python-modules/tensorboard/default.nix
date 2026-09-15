@@ -1,9 +1,7 @@
 {
   lib,
-  fetchpatch,
   fetchPypi,
   buildPythonPackage,
-  python,
 
   # dependencies
   absl-py,
@@ -16,30 +14,26 @@
   setuptools,
   tensorboard-data-server,
   werkzeug,
-  standard-imghdr,
 
+  # tests
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tensorboard";
-  version = "2.20.0";
+  version = "2.21.0";
   format = "wheel";
+  __structuredAttrs = true;
 
   # tensorflow/tensorboard is built from a downloaded wheel, because
   # https://github.com/tensorflow/tensorboard/issues/719 blocks buildBazelPackage.
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     format = "wheel";
     dist = "py3";
     python = "py3";
-    hash = "sha256-ncn5eMuEwHI6z5o0XZbBhPApPRjxZruNWe4Jjmz6q6Y=";
+    hash = "sha256-cnkxbctr1bw5HWI96oQVMSmc3hiHMQ6BM7w0qZbTIlU=";
   };
-
-  pythonRelaxDeps = [
-    "google-auth-oauthlib"
-    "protobuf"
-  ];
 
   dependencies = [
     absl-py
@@ -52,32 +46,7 @@ buildPythonPackage rec {
     setuptools
     tensorboard-data-server
     werkzeug
-
-    # Requires 'imghdr' which has been removed from python in 3.13
-    # ModuleNotFoundError: No module named 'imghdr'
-    # https://github.com/tensorflow/tensorboard/issues/6964
-    standard-imghdr
   ];
-
-  postInstall =
-    let
-      patch = fetchpatch {
-        name = "remove-runtime-pkg_resources-dependency.patch";
-        url = "https://github.com/tensorflow/tensorboard/commit/29f809f4737489912612635d9079a61f8e570bb8.patch";
-        excludes = [
-          "tensorboard/BUILD"
-          "tensorboard/data/BUILD"
-          "tensorboard/default_test.py"
-          "tensorboard/version_test.py"
-        ];
-        hash = "sha256-+jaXI4fVQP4mOg6y94KPMMCg3XuHV/gBUDNsp3ogS6c=";
-      };
-    in
-    ''
-      pushd $out/${python.sitePackages}
-      patch -p1 < ${patch}
-      popd
-    '';
 
   pythonImportsCheck = [
     "tensorboard"
@@ -94,12 +63,14 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/tensorflow/tensorboard/blob/${version}/RELEASE.md";
     description = "TensorFlow's Visualization Toolkit";
-    homepage = "https://www.tensorflow.org/";
+    homepage = "https://github.com/tensorflow/tensorboard";
+    changelog = "https://github.com/tensorflow/tensorboard/blob/${finalAttrs.version}/RELEASE.md";
     license = lib.licenses.asl20;
     mainProgram = "tensorboard";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

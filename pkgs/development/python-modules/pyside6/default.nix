@@ -8,6 +8,7 @@
   pythonImportsCheckHook,
   moveBuildTree,
   shiboken6,
+  shiboken6-generator,
   llvmPackages,
   symlinkJoin,
 }:
@@ -91,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     python
     pythonImportsCheckHook
+    shiboken6-generator
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
 

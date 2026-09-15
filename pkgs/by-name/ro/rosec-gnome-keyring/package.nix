@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: rec {
 
   sourceRoot = "${src.name}/rosec-gnome-keyring";
 
-  cargoHash = "sha256-gkbD1N4veXhETwc5uzL/eq7a6naGq6suqJOAp53suFI=";
+  cargoHash = "sha256-DaEdT/E4blOM/wFwuZoEuquwMgcSmTKlHT5CtSsqJ3g=";
 
   env.RUSTFLAGS = "-C linker=wasm-ld";
   nativeBuildInputs = [ lld ];

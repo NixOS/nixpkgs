@@ -8,16 +8,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "desync";
-  version = "1.0.4";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "folbricht";
     repo = "desync";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/ojucBo+UOr5WFahVMSz7xJ84dzenwuotZk+5QqODls=";
+    hash = "sha256-xiiN+0veHRxVNsIpob7W/iRH+dABYIiWfw22DH1bTEs=";
   };
 
-  vendorHash = "sha256-PU2EbYei6X/fmA/POaFI6flAZYb2WcBA10E9+rS651U=";
+  vendorHash = "sha256-FRXwQUOD1UiGSlGkBLXT0RGG382RJdEGUJxaQiyzR9A=";
+
+  ldflags = [ "-X main.version=${finalAttrs.src.tag}" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -26,23 +28,7 @@ buildGoModule (finalAttrs: {
 
   checkFlags =
     let
-      skippedTests = [
-        "TestExtract" # block cloning fails on ZFS
-        "TestExtractCommand/extract_while_regenerating_the_corrupted_seed" # block cloning fails on ZFS
-        "TestExtractCommand/extract_with_seed_directory" # block cloning fails on ZFS
-        "TestExtractCommand/extract_with_single_seed" # block cloning fails on ZFS
-        "TestExtractCommand/extract_with_single_seed,_explicit_data_directory_and_unexpected_seed_options" # block cloning fails on ZFS
-        "TestExtractCommand/extract_with_single_seed_and_explicit_data_directory" # block cloning fails on ZFS
-        "TestExtractWithNonStaticSeeds" # block cloning fails on ZFS
-        "TestLocalFSDirSetgidWhilePopulated" # cannot setgid in /tmp
-        "TestMountIndex" # FUSE does not work in sandbox
-        "TestSeed/extract_repetitive_file" # block cloning fails on ZFS
-        "TestTar" # xattr.list: operation not supported
-        "TestUnTarDirMTime" # xattr.list: operation not supported
-        "TestUnTarIntoReadOnlyDir" # xattr.list: operation not supported
-        "TestUnTarNoSamePermissionsOverReadOnlyTree" # xattr.list: operation not supported
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      skippedTests = lib.optionals stdenv.hostPlatform.isDarwin [
         "TestS3StoreGetChunk/fail" # sendfile is not permitted in Darwin sandbox
         "TestS3StoreGetChunk/recover" # sendfile is not permitted in Darwin sandbox
       ];

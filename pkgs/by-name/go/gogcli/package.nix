@@ -1,19 +1,19 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   testers,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "gogcli";
-  version = "0.36.0";
+  version = "0.38.1";
 
   src = fetchFromGitHub {
     owner = "openclaw";
     repo = "gogcli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7XfjpAzUHH1VUJzgllKa/4GvQZhTCX8TePTXRB+oJRE=";
+    hash = "sha256-AaChyDvbMnPkWkBCnpISQm8U2WjXvwBSCfuN6fuIHaY=";
   };
 
   vendorHash = "sha256-+Nbuwok3dY/82gUDKeGgrC0F1ZqXSW8IpV6Q1yzIPvo=";
@@ -38,7 +38,10 @@ buildGoModule (finalAttrs: {
     description = "CLI tool for interacting with Google APIs (Gmail, Calendar, Drive, and more)";
     homepage = "https://github.com/openclaw/gogcli";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ macalinao ];
+    maintainers = with lib.maintainers; [
+      macalinao
+      rschaffar
+    ];
     mainProgram = "gog";
   };
 })

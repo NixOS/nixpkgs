@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchFromGitLab,
+  fetchpatch,
   cairo,
   clang-tools,
   cmake,
@@ -39,6 +40,7 @@
   cups-filters,
   gdal,
   gegl,
+  gtk3,
   inkscape,
   scribus,
   vips,
@@ -62,7 +64,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "poppler-${suffix}";
-  version = "26.06.0"; # beware: updates often break cups-filters build, check scribus too!
+  version = "26.06.0";
 
   outputs = [
     "out"
@@ -73,6 +75,16 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://poppler.freedesktop.org/poppler-${finalAttrs.version}.tar.xz";
     hash = "sha256-TLTlo9yMte7HUciiPIuhn2H5be3AzQfSruawyOLPa6Q=";
   };
+
+  patches = [
+    # Backports Darwin crash fix from upstream
+    # https://gitlab.freedesktop.org/poppler/poppler/-/work_items/1743
+    (fetchpatch {
+      name = "darwin-mutex-lock-crash.patch";
+      url = "https://gitlab.freedesktop.org/poppler/poppler/-/commit/08f4bca6a669f9fce75dbab743db559a86591738.patch";
+      hash = "sha256-+eWqVK/v3Ys9k2+z/dCoS2o82m039UER1StMUW4PIgM=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -184,9 +196,17 @@ stdenv.mkDerivation (finalAttrs: {
       gdal = gdal.override { usePoppler = true; };
       python-poppler-qt5 = python3.pkgs.poppler-qt5;
 
-      pkg-config = testers.hasPkgConfigModules {
-        package = finalAttrs.finalPackage;
-      };
+      pkg-config =
+        testers.hasPkgConfigModules {
+          package = finalAttrs.finalPackage;
+        }
+        // lib.optionalAttrs (!minimal) {
+          # Poppler skips tests unless GTK3 is detected; add to closure
+          poppler-with-gtk-tests = finalAttrs.finalPackage.overrideAttrs (old: {
+            pname = "${old.pname}-gtk-tests";
+            buildInputs = old.buildInputs ++ [ gtk3 ];
+          });
+        };
     };
   };
 

@@ -15,13 +15,13 @@
 let
   pname = "rqbit";
 
-  version = "9.0.0";
+  version = "9.0.1";
 
   src = fetchFromGitHub {
     owner = "ikatson";
     repo = "rqbit";
     rev = "v${version}";
-    hash = "sha256-zcd3oVNntKxV25UWan//H523ph227Yhub/3N0wLfPiU=";
+    hash = "sha256-biF8AtHl2aYdxmuu0UNqN3Id2R0WoCOb5nKpdhCnKNY=";
   };
 
   rqbit-webui = buildNpmPackage {
@@ -46,7 +46,7 @@ in
 rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  cargoHash = "sha256-h0dPVqiQtkFo50CNHYn5Cqrm+l/j6RNJtFYUVyvioxI=";
+  cargoHash = "sha256-BnHAv1PnsNmqVNxiA7KRHvl89cHISUMhITQ8DZu73zA=";
 
   nativeBuildInputs = [
     installShellFiles

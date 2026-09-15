@@ -106,7 +106,7 @@ let
       gtk3
       ;
     binaryName = "thunderbird";
-    gssSupport = true;
+    withGSSAPI = true;
   };
 
 in

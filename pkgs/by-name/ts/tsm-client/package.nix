@@ -96,7 +96,7 @@ let
     version = "8.2.2.0";
     src = fetchurl {
       url = mkSrcUrl finalAttrs.version;
-      hash = "sha512-cK0IL3D5IDJmN9SKIHDXB5wcO6vPtn7XwHVq3dEgg3feZS8FhE62wZopLQoGLYKg11kz34JVOqBtfouthZWbUA==";
+      hash = "sha512-nxfwYyQ3jlwZxgfiXN5APb2lr+UlJgYX5IFUZxExuZbS518qQHMWFR+4BJEgMmsdIIg2Ic9QVXA+p89z4dJspA==";
     };
     inherit meta passthru;
 

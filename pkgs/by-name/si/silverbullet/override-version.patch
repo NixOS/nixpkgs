@@ -1,0 +1,64 @@
+diff --git a/build/version.ts b/build/version.ts
+index 0b1a2159..1234abcd 100644
+--- a/build/version.ts
++++ b/build/version.ts
+@@ -31,51 +31,15 @@
+  */
+ export function updateVersionFile(): Promise<void> {
+   return new Promise<void>((resolve, reject) => {
+-    const gitProcess = spawn("git", ["describe", "--tags", "--long"], {
+-      stdio: ["ignore", "pipe", "pipe"],
+-    });
++    const versionFilePath = "./version.json";
++    const versionContent = `${JSON.stringify({ version: "@version@" })}\n`;
+ 
+-    let stdout = "";
+-
+-    gitProcess.stdout?.on("data", (data) => {
+-      stdout += data.toString();
+-    });
+-
+-    gitProcess.on("close", async (code) => {
+-      let commitVersion = stdout.trim();
+-
+-      if (!commitVersion || code !== 0) {
+-        // Probably no valid .git repo, fallback to GITHUB_SHA env var (used in CI)
+-        commitVersion = `${version}-${process.env.GITHUB_SHA || "unknown"}`;
+-      }
+-
+-      // Keep the existing string when it was minted for this same commit, so
+-      // repeated builds stay byte-identical (see the note above).
+-      if (isForCommit(await readVersionFile(), commitVersion)) {
+-        resolve();
+-        return;
+-      }
+-
+-      // Attach the build date in YYYY-MM-DDTHH-MM-SSZ format to the version.
+-      const publicVersion = `${commitVersion}-${new Date()
+-        .toISOString()
+-        .split(".")[0]
+-        .replaceAll(":", "-")
+-        .concat("Z")}`;
+-
+-      try {
+-        await writeFile(
+-          "./version.json",
+-          `${JSON.stringify({ version: publicVersion })}\n`,
+-          "utf-8",
+-        );
+-        resolve();
+-      } catch (err) {
+-        reject(err);
+-      }
+-    });
+-
+-    gitProcess.on("error", reject);
++    try {
++      writeFile(versionFilePath, versionContent, "utf-8");
++      resolve();
++    } catch (err) {
++      reject(err);
++    }
+   });
+ }
+ 

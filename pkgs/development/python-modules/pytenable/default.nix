@@ -1,5 +1,6 @@
 {
   lib,
+  arrow,
   buildPythonPackage,
   cryptography,
   defusedxml,
@@ -9,6 +10,7 @@
   marshmallow,
   pydantic-extra-types,
   pydantic,
+  pyprojectVersionPatchHook,
   pytest-cov-stub,
   pytest-datafiles,
   pytest-vcr,
@@ -27,13 +29,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytenable";
-  version = "26.6.1";
+  version = "26.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
-    tag = finalAttrs.version;
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KRZbrJgIxdNAnlmP7Ww/JasoDJqJZkBkd0qXm9gfXp4=";
   };
 
@@ -45,7 +47,10 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
+
   dependencies = [
+    arrow
     cryptography
     defusedxml
     gql

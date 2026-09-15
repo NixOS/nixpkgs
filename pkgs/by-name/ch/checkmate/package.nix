@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "checkmate";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "adedayo";
     repo = "checkmate";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9RgX0jWXMPRcTz8kGKNHnQLJDiKqVh6ugmgXJapc99Q=";
+    hash = "sha256-163Cuma3110EztauICtiNZvWxIRFjTvYZF2mD6C0vjE=";
   };
 
-  vendorHash = "sha256-JJR0+fnERLfUIxyfdb2jlH9xHsyvfyycVazoZ3RE4C8=";
+  vendorHash = "sha256-BhdRAlMKjhb2haRb38JYBMTIMa4iFJEfzxWLQuMC1bI=";
 
   subPackages = [ "." ];
 

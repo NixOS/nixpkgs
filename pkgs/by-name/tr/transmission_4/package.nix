@@ -77,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
   __structuredAttrs = true;
+  doCheck = true;
 
   patches = [
     ./0001-Skip-bundle-fixup.patch
@@ -99,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_GTK" enableGTK)
     (cmakeBool "ENABLE_MAC" enableMac)
     (cmakeBool "ENABLE_QT" enableQt)
+    (cmakeBool "ENABLE_TESTS" finalAttrs.doCheck)
     (cmakeBool "INSTALL_LIB" installLib)
     (cmakeBool "RUN_CLANG_TIDY" false)
   ]

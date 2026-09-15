@@ -1,4 +1,5 @@
 import json
+import re
 import xml.parsers.expat as expat
 from html.entities import name2codepoint
 from pathlib import Path
@@ -379,3 +380,141 @@ def test_config_malformed_node_fails(tmp_path: Path) -> None:
             {"x.md": "# X {#x}\n\nB.\n"},
         )
     assert "a group requires a non-empty 'label'" in str(excinfo.value.__cause__)
+
+
+_NIXDOC_SNIPPET1 = (
+    "# lib.asserts: assertion functions {#sec-lib-asserts}\n\n"
+    "## `lib.asserts.assertMsg` {#function-library-assertMsg}\n\n"
+    "Body.\n\n"
+    "### Inputs\n\n"
+    "`pred`\n\n"
+    ": Predicate that needs to succeed\n"
+)
+_NIXDOC_SNIPPET2 = (
+    "# lib.attrsets: attribute set functions {#sec-lib-attrsets}\n\n"
+    "## `lib.attrsets.attrByPath` {#function-library-attrByPath}\n\n"
+    "Body.\n\n"
+    "### Inputs\n\n"
+    "`attrPath`\n\n"
+    ": A list of strings\n"
+)
+
+
+def _heading_ids(html: str) -> list[str]:
+    return re.findall(r'<h[1-6] id="([^"]+)"', html)
+
+
+def test_config_id_prefix(tmp_path: Path) -> None:
+    html = _render_with_config(
+        tmp_path,
+        {
+            "items": [
+                {
+                    "label": "Library",
+                    "id-prefix": "auto-generated",
+                    "children": [{"file": "functions/library/asserts.md"}],
+                }
+            ]
+        },
+        {"functions/library/asserts.md": _NIXDOC_SNIPPET1},
+    )
+    assert 'id="auto-generated-functions-library-asserts-1.1.1"' in html
+    assert "Predicate that needs to succeed" in html
+
+
+def test_config_id_prefix_keeps_explicit_ids(tmp_path: Path) -> None:
+    html = _render_with_config(
+        tmp_path,
+        {
+            "items": [
+                {
+                    "label": "Library",
+                    "id-prefix": "auto-generated",
+                    "children": [{"file": "asserts.md"}],
+                }
+            ]
+        },
+        {"asserts.md": _NIXDOC_SNIPPET1},
+    )
+    assert 'id="sec-lib-asserts"' in html
+    assert 'id="function-library-assertMsg"' in html
+    assert 'id="auto-generated-asserts-1"' not in html
+    assert 'id="auto-generated-asserts-1.1"' not in html
+
+
+def test_config_id_prefix_is_unique(tmp_path: Path) -> None:
+    html = _render_with_config(
+        tmp_path,
+        {
+            "items": [
+                {
+                    "label": "Library",
+                    "id-prefix": "auto-generated",
+                    "children": [
+                        {"file": "asserts.md"},
+                        {"file": "attrsets.md"},
+                    ],
+                }
+            ]
+        },
+        # Both snippets have "# Inputs" which would collide
+        {"asserts.md": _NIXDOC_SNIPPET1, "attrsets.md": _NIXDOC_SNIPPET2},
+    )
+    generated = [id for id in _heading_ids(html) if id.startswith("auto-generated-")]
+    assert len(generated) == 2
+    assert len(set(generated)) == 2
+
+
+def test_config_id_prefix_inherit(tmp_path: Path) -> None:
+    html = _render_with_config(
+        tmp_path,
+        {
+            "items": [
+                {
+                    "label": "Outer",
+                    "id-prefix": "outer",
+                    "children": [
+                        {"label": "Inner", "children": [{"file": "asserts.md"}]},
+                    ],
+                }
+            ]
+        },
+        {"asserts.md": _NIXDOC_SNIPPET1},
+    )
+    generated = [id for id in _heading_ids(html) if id.startswith("outer-")]
+    assert len(generated) == 1
+
+
+def test_config_id_prefix_nested_override(tmp_path: Path) -> None:
+    html = _render_with_config(
+        tmp_path,
+        {
+            "items": [
+                {
+                    "label": "Outer",
+                    "id-prefix": "outer",
+                    "children": [
+                        {
+                            "label": "Inner",
+                            "id-prefix": "inner",
+                            "children": [{"file": "asserts.md"}],
+                        },
+                    ],
+                }
+            ]
+        },
+        {"asserts.md": _NIXDOC_SNIPPET1},
+    )
+    generated = [id for id in _heading_ids(html) if id.startswith(("outer-", "inner-"))]
+    assert len(generated) == 1
+    assert generated[0].startswith("inner-")
+
+
+def test_config_id_prefix_fails(tmp_path: Path) -> None:
+    with pytest.raises(RuntimeError) as excinfo:
+        _render_with_config(
+            tmp_path,
+            {"items": [{"label": "Library", "children": [{"file": "asserts.md"}]}]},
+            {"asserts.md": _NIXDOC_SNIPPET1},
+        )
+    assert "heading does not have an id" in str(excinfo.value.__cause__)

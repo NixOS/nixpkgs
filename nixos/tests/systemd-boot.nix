@@ -2,7 +2,6 @@
   runTest,
   runTestOn,
   lib,
-  ...
 }:
 
 let
@@ -41,6 +40,8 @@ let
       boot.loader.efi.canTouchEfiVariables = true;
       environment.systemPackages = [ pkgs.efibootmgr ];
       system.switch.enable = true;
+      nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
+
       # Needed for machine-id to be persisted between reboots.
       # Must be a valid (non-zero) ID, otherwise sd_id128_get_machine()
       # returns -ENOMEDIUM and dbus-broker refuses to start.
@@ -932,6 +933,8 @@ in
               "test -e /sys/firmware/efi/efivars/LoaderBootCountPath-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f"
           )
 
+          # systemd-bless-boot should have already removed the "+2" suffix from the boot entry
+          machine.wait_for_unit("systemd-bless-boot.service")
           check_generation(1)
           check_current_system(orig)
 

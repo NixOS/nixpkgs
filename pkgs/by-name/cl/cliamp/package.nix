@@ -7,25 +7,34 @@
   pkg-config,
   makeWrapper,
   alsa-lib,
+  libmpg123,
   libogg,
   libvorbis,
   ffmpeg,
   flac,
   yt-dlp,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "cliamp";
-  version = "1.63.2";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "bjarneo";
     repo = "cliamp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HqFDT8jGvrKqb6bupvXqZ5ECpvColRB5dXPwcKCX4RQ=";
+    hash = "sha256-r7MrrcVt+/f+iPozn9jaczJmpPv431wAoW8LvHKBtB8=";
   };
 
-  vendorHash = "sha256-WYyv0w5KFA15axb+NA9tClfc1H4Znj8kI2boR8XziXg=";
+  vendorHash = "sha256-rtwUWbft5XGEbuBCn0OMCn4TS5Ul+UXJNIqNOzXfU+M=";
+
+  ldflags = [
+    "-s"
+    "-X main.version=${finalAttrs.version}"
+  ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   nativeBuildInputs = [
     pkg-config
@@ -33,6 +42,7 @@ buildGoModule (finalAttrs: {
   ];
 
   buildInputs = [
+    libmpg123
     libogg
     libvorbis
     flac

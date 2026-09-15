@@ -25,7 +25,7 @@
   torchvision,
   transformers,
   config,
-  cudatoolkit,
+  cudaPackages,
   writableTmpDirAsHomeHook,
 }:
 
@@ -33,6 +33,7 @@ buildPythonPackage (finalAttrs: {
   pname = "accelerate";
   version = "1.13.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
@@ -64,7 +65,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   preCheck = lib.optionalString config.cudaSupport ''
-    export TRITON_PTXAS_PATH="${lib.getExe' cudatoolkit "ptxas"}"
+    export TRITON_PTXAS_PATH="${lib.getExe' cudaPackages.cuda_nvcc "ptxas"}"
   '';
   enabledTestPaths = [ "tests" ];
   disabledTests = [

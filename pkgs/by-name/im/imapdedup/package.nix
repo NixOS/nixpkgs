@@ -5,7 +5,7 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "imapdedup";
-  version = "1.3";
+  version = "1.5";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "quentinsf";
     repo = "IMAPdedup";
     tag = finalAttrs.version;
-    hash = "sha256-NcIfTjswQmt8CW4tzBRo/8MaxAbrnifsQxqbZyNIbzg=";
+    hash = "sha256-YpnBMyNPQ9ciJJCk+fK6+k7h330xWtEW3PzyydDYmPA=";
   };
 
   build-system = with python3Packages; [ hatchling ];

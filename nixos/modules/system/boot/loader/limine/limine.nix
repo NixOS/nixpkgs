@@ -11,7 +11,7 @@ let
     builtins.toJSON {
       inherit (config.system.nixos) distroName;
       nixPath = config.nix.package;
-      efiBootMgrPath = pkgs.efibootmgr;
+      efiBootMgrPath = if cfg.efiSupport then pkgs.efibootmgr else null;
       liminePath = cfg.package;
       efiMountPoint = efi.efiSysMountPoint;
       fileSystems = config.fileSystems;

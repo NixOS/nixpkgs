@@ -1,13 +1,15 @@
 {
-  stdenv,
-  lib,
+  # keep-sorted start case=no
   fetchurl,
-  mkJetBrainsProduct,
-  libdbm,
   fsnotifier,
+  jetbrains,
+  jetbrains-libdbm,
+  lib,
   libgcc,
-  runCommand,
   R,
+  runCommand,
+  stdenv,
+  # keep-sorted end
 }:
 let
   system = stdenv.hostPlatform.system;
@@ -28,8 +30,8 @@ let
   };
   # update-script-end: urls
 in
-mkJetBrainsProduct {
-  inherit libdbm fsnotifier;
+jetbrains.mkJetBrainsProduct {
+  inherit jetbrains-libdbm fsnotifier;
 
   pname = "dataspell";
 
@@ -42,6 +44,13 @@ mkJetBrainsProduct {
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
+
+  # the jdk is bundled on Darwin.
+  jdk =
+    if lib.meta.availableOn stdenv.hostPlatform jetbrains.jdk-no-jcef then
+      jetbrains.jdk-no-jcef
+    else
+      null;
 
   # NOTE: This `lib.optionals` is only here because the old Darwin builder ignored `buildInputs`.
   #       DataSpell may need these, even on Darwin!
@@ -62,6 +71,7 @@ mkJetBrainsProduct {
       Mainly it integrates Jupyter notebooks in the IntelliJ platform.
     '';
     maintainers = with lib.maintainers; [ leona ];
+    teams = [ lib.teams.jetbrains ];
     license = lib.licenses.unfree;
     sourceProvenance =
       if stdenv.hostPlatform.isDarwin then

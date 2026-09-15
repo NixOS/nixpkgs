@@ -14,7 +14,7 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "netpeek";
-  version = "0.3.2";
+  version = "0.3.4";
   pyproject = false;
 
   __structuredAttrs = true;
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "ZingyTomato";
     repo = "NetPeek";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ATAhQN1p03zSbwLdSkY9vOcy3WJ3pcDVziOWvxGa0HQ=";
+    hash = "sha256-x7MI1sJThY6aEq5LF++DzWEQqhL50cGNChiaKBv+z74=";
   };
 
   nativeBuildInputs = [

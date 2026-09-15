@@ -6,7 +6,7 @@
   extlib,
   fuse3,
   gapi-ocaml,
-  ocaml_sqlite3,
+  sqlite3,
   otoml,
   tiny_httpd,
   ounit2,
@@ -32,7 +32,7 @@ buildDunePackage (finalAttrs: {
     extlib
     fuse3
     gapi-ocaml
-    ocaml_sqlite3
+    sqlite3
     otoml
     tiny_httpd
   ];

@@ -29,7 +29,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pandora-launcher-unwrapped";
-  version = "5.3.1";
+  version = "5.5.2";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Moulberry";
     repo = "PandoraLauncher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KjCpHg5n7VWN4OWt6IdxYUCaqC9auMbvolwIGSQ/BVs=";
+    hash = "sha256-mn+ZYSIJajc6gzYSdZUvDrfDouXJWlbSeO7nfjKN4sY=";
   };
 
   # Currently the client id is hardcoded and must be patched like this.

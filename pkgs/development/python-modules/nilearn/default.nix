@@ -48,6 +48,12 @@ buildPythonPackage (finalAttrs: {
     hatch-vcs
   ];
 
+  # nilearn excludes scikit-learn 1.9.0 due to a sluggish HTML repr bug,
+  # which is fixed by the patch applied to python3Packages.scikit-learn.
+  pythonRelaxDeps = [
+    "scikit-learn"
+  ];
+
   dependencies = [
     joblib
     nibabel

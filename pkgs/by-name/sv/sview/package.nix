@@ -46,7 +46,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DUSE_UPDATER=OFF"
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DCMAKE_INSTALL_LIBDIR=/lib"
     "-DCMAKE_INSTALL_BINDIR=/bin"
     "-DCMAKE_INSTALL_DATAROOTDIR=/share"

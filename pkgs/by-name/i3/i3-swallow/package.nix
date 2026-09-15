@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "i3-swallow";
-  version = "unstable-2022-02-19";
+  version = "0-unstable-2022-02-18";
 
   pyproject = true;
 

@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 6c1747f3..ab69cf5e 100644
+index 54aadcca..070057a3 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -158,7 +158,7 @@ target_link_libraries(
+@@ -210,7 +210,7 @@ target_link_libraries(
            lodepng
            qhullstatic_r
            tinyobjloader
@@ -10,21 +10,12 @@ index 6c1747f3..ab69cf5e 100644
 +          tinyxml2::tinyxml2
  )
  
- set_target_properties(
+ if(NOT EMSCRIPTEN)
 diff --git a/cmake/MujocoDependencies.cmake b/cmake/MujocoDependencies.cmake
-index d2404bc1..5c7ddaf6 100644
+index 6e205a7d..815d1c90 100644
 --- a/cmake/MujocoDependencies.cmake
 +++ b/cmake/MujocoDependencies.cmake
-@@ -87,8 +87,6 @@ set(BUILD_SHARED_LIBS
- if(NOT TARGET lodepng)
-   FetchContent_Declare(
-     lodepng
--    GIT_REPOSITORY https://github.com/lvandeve/lodepng.git
--    GIT_TAG ${MUJOCO_DEP_VERSION_lodepng}
-   )
- 
-   FetchContent_GetProperties(lodepng)
-@@ -111,8 +109,6 @@ endif()
+@@ -88,8 +88,6 @@ include(third_party_deps/lodepng)
  if(NOT TARGET marchingcubecpp)
    FetchContent_Declare(
      marchingcubecpp
@@ -33,12 +24,8 @@ index d2404bc1..5c7ddaf6 100644
    )
  
    FetchContent_GetProperties(marchingcubecpp)
-@@ -132,13 +128,9 @@ findorfetch(
-   USE_SYSTEM_PACKAGE
-   OFF
-   PACKAGE_NAME
--  qhull
-+  Qhull
+@@ -112,10 +110,6 @@ findorfetch(
+   qhull
    LIBRARY_NAME
    qhull
 -  GIT_REPO
@@ -48,7 +35,7 @@ index d2404bc1..5c7ddaf6 100644
    TARGETS
    qhull
    EXCLUDE_FROM_ALL
-@@ -160,12 +152,8 @@ findorfetch(
+@@ -137,10 +131,6 @@ findorfetch(
    tinyxml2
    LIBRARY_NAME
    tinyxml2
@@ -57,12 +44,9 @@ index d2404bc1..5c7ddaf6 100644
 -  GIT_TAG
 -  ${MUJOCO_DEP_VERSION_tinyxml2}
    TARGETS
--  tinyxml2
-+  tinyxml2::tinyxml2
+   tinyxml2
    EXCLUDE_FROM_ALL
- )
- target_compile_options(tinyxml2 PRIVATE ${MUJOCO_MACOS_COMPILE_OPTIONS})
-@@ -183,10 +171,6 @@ findorfetch(
+@@ -160,10 +150,6 @@ findorfetch(
    tinyobjloader
    LIBRARY_NAME
    tinyobjloader
@@ -73,7 +57,7 @@ index d2404bc1..5c7ddaf6 100644
    TARGETS
    tinyobjloader
    EXCLUDE_FROM_ALL
-@@ -216,10 +200,6 @@ findorfetch(
+@@ -198,10 +184,6 @@ findorfetch(
    ccd
    LIBRARY_NAME
    ccd
@@ -84,7 +68,7 @@ index d2404bc1..5c7ddaf6 100644
    TARGETS
    ccd
    EXCLUDE_FROM_ALL
-@@ -256,8 +256,6 @@ set(BUILD_TESTS OFF)
+@@ -234,8 +216,6 @@ endif()
  set(BUILD_TESTS OFF)
  fetchpackage(
    PACKAGE_NAME  miniz
@@ -93,7 +77,7 @@ index d2404bc1..5c7ddaf6 100644
    TARGETS       miniz
  )
  if(_BUILD_TESTS_WAS_DEFINED)
-@@ -261,10 +241,6 @@ if(MUJOCO_BUILD_TESTS OR MUJOCO_BUILD_STUDIO OR MUJOCO_USE_FILAMENT)
+@@ -267,10 +247,6 @@ if(MUJOCO_BUILD_TESTS OR MUJOCO_BUILD_STUDIO OR MUJOCO_USE_FILAMENT)
      absl
      LIBRARY_NAME
      abseil-cpp
@@ -104,7 +88,7 @@ index d2404bc1..5c7ddaf6 100644
      TARGETS
      absl::core_headers
      EXCLUDE_FROM_ALL
-@@ -291,14 +267,9 @@ if(MUJOCO_BUILD_TESTS)
+@@ -299,10 +275,6 @@ if(MUJOCO_BUILD_TESTS)
      GTest
      LIBRARY_NAME
      googletest
@@ -113,15 +97,9 @@ index d2404bc1..5c7ddaf6 100644
 -    GIT_TAG
 -    ${MUJOCO_DEP_VERSION_gtest}
      TARGETS
--    gtest
--    gmock
--    gtest_main
-+    GTest::gmock
-+    GTest::gtest_main
-     EXCLUDE_FROM_ALL
-   )
- 
-@@ -323,10 +294,6 @@ if(MUJOCO_BUILD_TESTS)
+     gtest
+     gmock
+@@ -331,10 +303,6 @@ if(MUJOCO_BUILD_TESTS)
      benchmark
      LIBRARY_NAME
      benchmark
@@ -132,14 +110,7 @@ index d2404bc1..5c7ddaf6 100644
      TARGETS
      benchmark::benchmark
      benchmark::benchmark_main
-@@ -337,14 +304,12 @@ endif()
- 
- if(MUJOCO_TEST_PYTHON_UTIL)
-   add_compile_definitions(EIGEN_MPL2_ONLY)
--  if(NOT TARGET eigen)
-+  if(NOT TARGET Eigen3::Eigen)
-     # Support new IN_LIST if() operator.
-     set(CMAKE_POLICY_DEFAULT_CMP0057 NEW)
+@@ -351,8 +319,6 @@ if(MUJOCO_TEST_PYTHON_UTIL)
  
      FetchContent_Declare(
        Eigen3
@@ -148,8 +119,20 @@ index d2404bc1..5c7ddaf6 100644
      )
  
      FetchContent_GetProperties(Eigen3)
+diff --git a/cmake/third_party_deps/lodepng.cmake b/cmake/third_party_deps/lodepng.cmake
+index b604f052..9f4d531d 100644
+--- a/cmake/third_party_deps/lodepng.cmake
++++ b/cmake/third_party_deps/lodepng.cmake
+@@ -22,7 +22,5 @@ include(FindOrFetch)
+ 
+ fetchpackage(
+     PACKAGE_NAME  lodepng
+-    GIT_REPO      https://github.com/lvandeve/lodepng.git
+-    GIT_TAG       ${MUJOCO_DEP_VERSION_lodepng}
+     CUSTOM_CMAKE  "${CMAKE_CURRENT_LIST_DIR}/lodepng/CMakeLists.txt"
+ )
 diff --git a/python/mujoco/util/CMakeLists.txt b/python/mujoco/util/CMakeLists.txt
-index 666a3725..8f4ce043 100644
+index 666a3725..d89bb499 100644
 --- a/python/mujoco/util/CMakeLists.txt
 +++ b/python/mujoco/util/CMakeLists.txt
 @@ -63,8 +63,8 @@ if(BUILD_TESTING)
@@ -185,26 +168,22 @@ index 666a3725..8f4ce043 100644
    )
    gtest_add_tests(TARGET func_wrap_test SOURCES func_wrap_test.cc)
  
-diff --git a/simulate/cmake/SimulateDependencies.cmake b/simulate/cmake/SimulateDependencies.cmake
-index 7885f5f9..97b8b783 100644
---- a/simulate/cmake/SimulateDependencies.cmake
-+++ b/simulate/cmake/SimulateDependencies.cmake
-@@ -81,10 +81,6 @@ findorfetch(
-   glfw3
-   LIBRARY_NAME
-   glfw3
--  GIT_REPO
--  https://github.com/glfw/glfw.git
--  GIT_TAG
--  ${MUJOCO_DEP_VERSION_glfw3}
-   TARGETS
-   glfw
-   EXCLUDE_FROM_ALL
+@@ -90,8 +90,8 @@ if(BUILD_TESTING)
+   target_link_libraries(
+     tuple_tools_test
+     func_wrap
+-    gmock
+-    gtest_main
++    GTest::gmock
++    GTest::gtest_main
+   )
+   gtest_add_tests(TARGET tuple_tools_test SOURCES tuple_tools_test.cc)
+ endif()
 diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
-index f459a6ca..6830509d 100644
+index f1bbba61..4c3ee22d 100644
 --- a/test/CMakeLists.txt
 +++ b/test/CMakeLists.txt
-@@ -82,8 +82,8 @@ target_link_libraries(
+@@ -98,8 +98,8 @@ target_link_libraries(
           absl::synchronization
           absl::flat_hash_map
           absl::flat_hash_set

@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "daktari";
-  version = "0.0.348";
+  version = "0.0.353";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "genio-learn";
     repo = "daktari";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-d1wSzz+GiH5R/8SzIlsd32Dz/FJxuYeMSLFGnL6aMPY=";
+    hash = "sha256-gVch0gfuUd6/33z6KK7hTHOjG0rPaBThruqMLHf+2PA=";
   };
 
   patches = [ ./optional-pyclip.patch ];

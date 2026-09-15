@@ -8,7 +8,7 @@
   electron_42,
   element-web,
   callPackage,
-  typescript,
+  typescript_7,
   tsx,
   sqlcipher,
   # command line arguments which are always set
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
     nodejs
     makeWrapper
-    typescript
+    typescript_7
     pnpm
     pnpmConfigHook
     tsx
@@ -176,7 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "Feature-rich client for Matrix.org";
+    description = "Matrix client for desktop";
     homepage = "https://element.io/";
     changelog = "https://github.com/element-hq/element-web/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.agpl3Plus;

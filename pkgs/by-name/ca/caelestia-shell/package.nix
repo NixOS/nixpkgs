@@ -202,6 +202,7 @@ stdenv.mkDerivation {
 
   passthru = {
     inherit plugin extras m3shapesModule;
+    updateScript = ./update.sh;
   };
 
   meta = {

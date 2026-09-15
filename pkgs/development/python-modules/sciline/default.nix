@@ -24,7 +24,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sciline";
-  version = "25.11.1";
+  version = "26.8.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
     owner = "scipp";
     repo = "sciline";
     tag = finalAttrs.version;
-    hash = "sha256-BTdvPAeI7SWV8gNfXVC63YKghZOfJ9eFousOqycpTAw=";
+    hash = "sha256-FJZjwQGuh8joRPIdA8aQ/MG6GhLVQfp0BtTQkMc4hzI=";
   };
 
   build-system = [
@@ -58,14 +58,6 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [
     "sciline"
-  ];
-
-  disabledTestPaths = [
-    # Causes all tests to abort due to TypeError, see:
-    # https://github.com/scipp/sciline/issues/233
-    "tests/complex_workflow_test.py"
-    # Fails too with a similar TypeError, reported in the above issue.
-    "tests/pipeline_test.py::test_subclasses_of_generic_array_provider_defined_with_Scope_work"
   ];
 
   meta = {

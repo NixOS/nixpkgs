@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "spicedb";
-  version = "1.54.0";
+  version = "1.56.1";
 
   src = fetchFromGitHub {
     owner = "authzed";
     repo = "spicedb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A07AHCfXZtd5Z71jRxIx6oIipCFskPzYtgSHv21zKpE=";
+    hash = "sha256-ak8AbbVMKzIWRJHezzpxF8vn2L0gu8069ghqf+/xYA4=";
   };
 
-  vendorHash = "sha256-VZYkS1UQ7w/BUYFF8FrjgsnYn7sNexNVczmrMvYERGY=";
+  vendorHash = "sha256-HOtYcs7F4Pf0yFyfuJOpROoFTTN630t+5lKoBLoJedM=";
 
   ldflags = [
     "-X 'github.com/jzelinskie/cobrautil/v2.Version=${finalAttrs.src.tag}'"

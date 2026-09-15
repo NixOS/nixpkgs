@@ -19,6 +19,7 @@
   fixDarwinDylibNames,
   fetchFromGitHub,
   psqlodbc,
+  duckdb-odbc,
 }:
 
 # Each of these ODBC drivers can be configured in your odbcinst.ini file using
@@ -41,6 +42,8 @@
     withUnixODBC = true;
     withLibiodbc = false;
   };
+
+  duckdb = duckdb-odbc;
 
   mariadb = stdenv.mkDerivation rec {
     pname = "mariadb-connector-odbc";

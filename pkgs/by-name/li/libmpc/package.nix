@@ -35,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true; # not cross;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Library for multiprecision complex arithmetic with exact rounding";
 

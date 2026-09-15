@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "switchfin";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "dragonflylee";
     repo = "switchfin";
     rev = finalAttrs.version;
-    hash = "sha256-khfcFRRccWPYvxETgQC52BlLySKnhgSUdF4hv/8znEM=";
+    hash = "sha256-PDDKrnW8kLx6Twm6gI4I0l7uZJXfk29q9RPstXOxt+0=";
     fetchSubmodules = true;
   };
 

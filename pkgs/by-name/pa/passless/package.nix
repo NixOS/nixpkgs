@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "passless";
-  version = "0.17.0";
+  version = "0.18.1";
 
   __structuredAttrs = true;
 
@@ -18,10 +18,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "pando85";
     repo = "passless";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5axlo670ust9QQsayahbAe5iPEEG+WUaDZlDtWpA5FA=";
+    hash = "sha256-Av92NBT8ZX8TSY448HV4AvdfsWL7v0nMdhZWkHdL+3k=";
   };
 
-  cargoHash = "sha256-bt08Gd1eAk/vT18XcTCEBz8vV9jNZ3Nu8cx1vKQfv8k=";
+  cargoHash = "sha256-q/7yHUp6B6OcXzgvoOr9zeWYxiho19J9Rq8VwbOI+Js=";
 
   nativeBuildInputs = [
     pkg-config

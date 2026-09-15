@@ -14,7 +14,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rufin";
-  version = "0.12.5";
+  version = "0.13.1";
 
   __structuredAttrs = true;
 
@@ -22,10 +22,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "screwys";
     repo = "Rufin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QOlDZAVjDgAV1G4+f82TpNbyv+96QGDAUqf5r+A4PuU=";
+    hash = "sha256-BCn88jedL9+5rLjwHmOIiG6Yg6EZwcDOALEJgDvzfNs=";
   };
 
-  cargoHash = "sha256-6u23YZSYYYAcnoOOZiCUCy9rbiOS59Nu4hj3WKhL/B0=";
+  cargoHash = "sha256-kAti4GinC/zcAuhuQi/t/VnbY0laie9BEeUphXLc/M8=";
 
   strictDeps = true;
 

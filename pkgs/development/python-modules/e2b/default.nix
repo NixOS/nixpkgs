@@ -28,7 +28,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "e2b";
-  version = "2.39.1";
+  version = "2.46.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
     owner = "e2b-dev";
     repo = "E2B";
     tag = "@e2b/python-sdk@${finalAttrs.version}";
-    hash = "sha256-bB5MGXd3W66/hjodSqTAmlnr6iJjGx/5ET6nOofdkrI=";
+    hash = "sha256-DtrTcDTpqHHRzDsboTdIDqyGUY2lCluw4EUMFt7lfo0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/python-sdk";
@@ -46,6 +46,8 @@ buildPythonPackage (finalAttrs: {
     substituteInPlace pyproject.toml \
       --replace-fail "uv_build>=0.10.0,<0.11.0" "uv_build"
   '';
+
+  pythonRelaxDeps = [ "h2" ];
 
   build-system = [
     uv-build

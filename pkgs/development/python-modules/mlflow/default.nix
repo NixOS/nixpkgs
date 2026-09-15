@@ -6,6 +6,7 @@
   # dependencies
   aiohttp,
   alembic,
+  anyio,
   cryptography,
   docker,
   flask,
@@ -27,7 +28,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mlflow";
-  version = "3.15.0";
+  version = "3.16.0";
   format = "wheel";
   __structuredAttrs = true;
 
@@ -39,7 +40,7 @@ buildPythonPackage (finalAttrs: {
     format = "wheel";
     dist = "py3";
     python = "py3";
-    hash = "sha256-OuVMf5GmuYrpNgqu2psx63kwVxwmkEkae1UMhPeVpwk=";
+    hash = "sha256-xKxehjSqytGj19WhoxvpJ5WT69SLhCcoQ2gtsRlwz3E=";
   };
 
   # Nix-wrapped python populates sys.path via NIX_PYTHONPATH/site hooks,
@@ -50,17 +51,10 @@ buildPythonPackage (finalAttrs: {
     patch -p1 -d "$out/lib/python"*/site-packages < ${./subprocess-pythonpath.patch}
   '';
 
-  pythonRelaxDeps = [
-    "cryptography"
-
-    # 3.14.0 dependency check fails with pandas >= 3.0. But the code changes required are minimal
-    # (strings are now `str` instead of `numpy.object`.)
-    "pandas"
-  ];
-
   dependencies = [
     aiohttp
     alembic
+    anyio
     cryptography
     docker
     flask

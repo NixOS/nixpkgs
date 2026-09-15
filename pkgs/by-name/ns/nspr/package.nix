@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nspr";
-  version = "4.39";
+  version = "4.40";
 
   src = fetchurl {
     url = "mirror://mozilla/nspr/releases/v${finalAttrs.version}/src/nspr-${finalAttrs.version}.tar.gz";
-    hash = "sha256-u9Au6HpVZ2Bjpj5byBngIn3iZmtHMHsqATRBTN9CNo4=";
+    hash = "sha256-wMGITGJ/Pbeng/fHMUxpUiayBDaWeR0VUZ5+BXjBm9w=";
   };
 
   patches = [
@@ -53,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://github.com/mozilla/nspr/releases/tag/NSPR_${lib.concatStringsSep "_" (lib.splitVersion finalAttrs.version)}_RTM";
     homepage = "https://firefox-source-docs.mozilla.org/nspr/index.html";
     description = "Netscape Portable Runtime, a platform-neutral API for system-level and libc-like functions";
     maintainers = with lib.maintainers; [

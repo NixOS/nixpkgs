@@ -161,7 +161,7 @@ stdenv.mkDerivation {
     saturn
     sedlex
     spawn
-    ocaml_sqlite3
+    sqlite3
     tdigest
     xmlm
     zarith

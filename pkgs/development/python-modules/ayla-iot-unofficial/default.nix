@@ -10,16 +10,16 @@
   ujson,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ayla-iot-unofficial";
-  version = "1.5.0";
+  version = "1.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rewardone";
     repo = "ayla-iot-unofficial";
-    tag = "v${version}";
-    hash = "sha256-/Js2XMhGe4zPAjpeH2ON4377TAPaWPvA8+HEliYKxlw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-reKXctSmGk1H3kEnvcC7AiDWLwr2fdezZqM5HI2qdYU=";
   };
 
   build-system = [ setuptools ];
@@ -43,10 +43,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/rewardone/ayla-iot-unofficial/releases/tag/${src.tag}";
+    changelog = "https://github.com/rewardone/ayla-iot-unofficial/releases/tag/${finalAttrs.src.tag}";
     description = "Unofficial python library for interacting with the Ayla IoT API";
     homepage = "https://github.com/rewardone/ayla-iot-unofficial";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

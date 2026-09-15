@@ -51,7 +51,7 @@ jobs:
             ci/github-script
 
       - name: Install dependencies
-        run: npm ci --package-lock-only=false bottleneck
+        run: npm ci --package-lock-only=false --no-audit bottleneck
         working-directory: trusted/ci/github-script
 
       - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
@@ -76,7 +76,8 @@ jobs:
           github-token: ${{ steps.app-token.outputs.token || github.token }}
           script: |
             const targetsStable = JSON.parse(process.env.TARGETS_STABLE)
-            require('./trusted/ci/github-script/commits.js')({
+            const { default: commits } = await import('${{ github.workspace }}/trusted/ci/github-script/commits.js')
+            await commits({
               github,
               context,
               core,
@@ -121,7 +122,8 @@ jobs:
         with:
           github-token: ${{ steps.app-token.outputs.token || github.token }}
           script: |
-            require('./trusted/ci/github-script/manual-file-edits.js')({
+            const { default: checkManualFileEdits } = await import('${{ github.workspace }}/trusted/ci/github-script/manual-file-edits.js')
+            await checkManualFileEdits({
               github,
               context,
               core,
@@ -151,7 +153,7 @@ jobs:
 
       - name: Install dependencies to trusted/
         run: |
-          npm ci --package-lock-only=false
+          npm ci --package-lock-only=false --no-audit
           echo "$PWD/node_modules/.bin" >> "$GITHUB_PATH"
         working-directory: nixpkgs/trusted/ci/github-script
 
@@ -159,8 +161,8 @@ jobs:
         run: ln -s "$PWD/trusted/ci/github-script/node_modules" untrusted/ci/github-script/node_modules
         working-directory: nixpkgs
 
-      - name: Type-check ci/github-script
-        run: tsc --build
+      - name: Check ci/github-script
+        run: npm test
         working-directory: nixpkgs/untrusted/ci/github-script
 
   owners:

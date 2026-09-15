@@ -28,7 +28,7 @@ skawarePackages.buildPackage {
     maintainers = [ lib.maintainers.sternenseemann ];
   };
 
-  description = "Small scripting language, to be used in place of a shell in non-interactive scripts";
+  meta.description = "Small scripting language, to be used in place of a shell in non-interactive scripts";
 
   outputs = [
     "bin"
@@ -37,17 +37,17 @@ skawarePackages.buildPackage {
     "doc"
     "out"
   ];
+  buildInputs = [ skalibs ];
 
   # TODO: nsss support
   configureFlags = [
-    "--libdir=\${lib}/lib"
-    "--dynlibdir=\${lib}/lib"
-    "--bindir=\${bin}/bin"
-    "--includedir=\${dev}/include"
+    "--libdir=${placeholder "lib"}/lib"
+    "--dynlibdir=${placeholder "out"}/lib"
+    "--libexecdir=${placeholder "lib"}/libexec"
+    "--bindir=${placeholder "bin"}/bin"
+    "--includedir=${placeholder "dev"}/include"
+    "--pkgconfdir=${placeholder "dev"}/lib/pkgconfig"
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
-    "--with-include=${skalibs.dev}/include"
-    "--with-lib=${skalibs.lib}/lib"
-    "--with-dynlib=${skalibs.lib}/lib"
   ];
 
   postInstall = ''
@@ -70,11 +70,10 @@ skawarePackages.buildPackage {
       -Wall -Wpedantic \
       -D "EXECLINEB_PATH()=\"$bin/bin/.execlineb-wrapped\"" \
       -D "EXECLINE_BIN_PATH()=\"$bin/bin\"" \
-      -I "${skalibs.dev}/include" \
-      -L "${skalibs.lib}/lib" \
+      $(pkg-config --cflags libskarnet) \
       -o "$bin/bin/execlineb" \
       ${./execlineb-wrapper.c} \
-      -lskarnet
+      $(pkg-config --libs libskarnet)
   '';
 
   # Write an execline script.

@@ -74,7 +74,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "comfyui";
-  version = "0.33.1";
+  version = "0.34.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -83,7 +83,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "Comfy-Org";
     repo = "ComfyUI";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r6amApYXBjfE8+UvhiJ/7VcUibd4kd5i+JLPXxo8H9w=";
+    hash = "sha256-ep0ghTptdzn82a5Mwwgzu4Ka7v7PrNBb3pAWqrykdcM=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];

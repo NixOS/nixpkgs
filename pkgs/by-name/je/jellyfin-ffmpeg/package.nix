@@ -1,28 +1,31 @@
 {
-  ffmpeg_7-full,
+  ffmpeg_8-full,
   fetchFromGitHub,
   lib,
 }:
 
 let
-  version = "7.1.4-3";
+  version = "8.1.2-4";
 in
 
-(ffmpeg_7-full.override {
+(ffmpeg_8-full.override {
   inherit version; # Important! This sets the ABI.
   source = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-ffmpeg";
     tag = "v${version}";
-    hash = "sha256-3aPiR4BJrR/5UFKRbrK8IbyW6HN9wC6oTSYKH4Ak4EU=";
+    hash = "sha256-+xUjwhVX/HyS/+Gmv8iQfUwHax7xjX3SSOjs34IDHHs=";
   };
+  buildFfplay = false; # requires SDL2 which gets disabled
+  buildFfprobe = true; # required by various programs like Immich
+  withSamba = false; # samba is rather big and unused
+  withSdl2 = false;
 }).overrideAttrs
   (old: {
     pname = "jellyfin-ffmpeg";
 
     configureFlags = old.configureFlags ++ [
       "--extra-version=Jellyfin"
-      "--disable-ptx-compression" # https://github.com/jellyfin/jellyfin/issues/7944#issuecomment-1156880067
     ];
 
     postPatch = ''

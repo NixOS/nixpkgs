@@ -30,9 +30,9 @@ buildHomeAssistantComponent rec {
     pytestCheckHook
   ];
 
-  pytestFlags = [
-    # delete unused snapshots in 0.4.8 release
-    "--snapshot-update"
+  disabledTests = [
+    # calls async_get_device with deprecated via_device=
+    "test_call_card_creator"
   ];
 
   ignoreVersionRequirement = [ "gtfs_station_stop" ];

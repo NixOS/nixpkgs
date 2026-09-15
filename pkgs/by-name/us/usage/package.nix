@@ -13,16 +13,26 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "usage";
-  version = "5.1.0";
+  version = "6.6.1";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "usage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UbZ1KCTgFTwzZWxxwaQcoR1B7uHdP0OxJUKBvanIvbQ=";
+    hash = "sha256-OQCIQqR8tO10w1WTi6rPCdBN5o9bZetmwGojU3p4o4I=";
   };
 
-  cargoHash = "sha256-4NZdBvURBpfaaPAjtCmpDV99OE4/6HTZf5mmHcQ5NNU=";
+  cargoHash = "sha256-dZo75rg3kh4R7D79A1JOYnq0s8iWzf1bJffm3oK7I2A=";
+
+  # Upstream's releases ship only the `usage` binary.
+  cargoBuildFlags = [
+    "-p"
+    "usage-cli"
+  ];
+  cargoTestFlags = [
+    "-p"
+    "usage-cli"
+  ];
 
   postPatch = ''
     substituteInPlace ./examples/*.sh \
@@ -37,15 +47,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     bashInteractive
   ];
 
-  # The bash completion tests drive `complete -D`, a builtin that bash only
-  # compiles in when readline support is enabled. The plain `bash` used in the
-  # build sandbox is built with `--disable-readline`, so the tests honor the
-  # USAGE_SHELL_BASH env var to run under a readline-enabled bash instead.
-  preCheck = ''
-    export USAGE_SHELL_BASH="${bashInteractive}/bin/bash"
-  '';
-
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
+    installManPage ./cli/assets/usage.1
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd usage \
       --bash <($out/bin/usage --completions bash) \
       --fish <($out/bin/usage --completions fish) \

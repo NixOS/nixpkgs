@@ -13,7 +13,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pipewire-control-center";
-  version = "0.5.1";
+  version = "0.6.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "knightinfected";
     repo = "PipeWireController";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9XODnl2FDQAVZ3mtiP24wgzK5K2qYO9eW1hFr3y5Ra0=";
+    hash = "sha256-yoM4tr3yJEt2QlTmYAWiTm28SEZ5LWk5JrA6YVQ+d8k=";
   };
 
   build-system = [

@@ -1,5 +1,5 @@
-const { classify } = require('../supportedBranches.js')
-const { getCommitDetailsForPR } = require('./get-pr-commit-details.js')
+import { getCommitDetailsForPR } from './get-pr-commit-details.js'
+import { classify } from './supportedBranches.js'
 
 /** @typedef {import('./get-pr-commit-details.js').Commit} Commit */
 
@@ -11,7 +11,7 @@ const { getCommitDetailsForPR } = require('./get-pr-commit-details.js')
  *  repoPath?: string,
  * }} LintCommitsProps
  */
-async function lintCommits({ github, context, core, repoPath }) {
+export default async function lintCommits({ github, context, core, repoPath }) {
   // This check should only be run when we have the pull_request context.
   const pull_number = context.payload.pull_request?.number
   if (!pull_number) {
@@ -220,5 +220,3 @@ async function checkCommitMetadata({ commits, core }) {
     core.setFailed('Committers: merging is discouraged.')
   }
 }
-
-module.exports = lintCommits

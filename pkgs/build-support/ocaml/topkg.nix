@@ -7,7 +7,6 @@
   topkg,
   ocamlbuild,
   cmdliner,
-  odoc,
   b0,
 }:
 

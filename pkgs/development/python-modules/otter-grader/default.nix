@@ -3,7 +3,11 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   poetry-core,
+
+  # dependencies
   click,
   dill,
   fica,
@@ -15,43 +19,57 @@
   nbconvert,
   nbformat,
   pandas,
+  python-frontmatter,
   python-on-whales,
   pyyaml,
   requests,
   wrapt,
+
+  # optional-dependencies
+  # grading:
   ipykernel,
   jupyter-client,
   pypdf,
+  # plugins:
   google-api-python-client,
   google-auth-oauthlib,
   gspread,
   six,
+  # r:
   rpy2,
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
-  pytest-html,
-  matplotlib,
-  tqdm,
+
+  # tests
   R,
+  matplotlib,
+  pytest-html,
+  pytestCheckHook,
+  quarto,
+  tqdm,
+  writableTmpDirAsHomeHook,
   rPackages,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "otter-grader";
-  version = "6.1.6";
+  version = "7.0.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ucbds-infra";
     repo = "otter-grader";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bqBwDbxnvRm7W9r87YK9vwi3sSyoyqbdnqVs5HxOzsg=";
+    hash = "sha256-1YevahUFesCDEfmMTIGa6qO7DwBYmGFivWFJFap/Djw=";
   };
 
   build-system = [
     poetry-core
   ];
 
+  pythonRelaxDeps = [
+    "fica"
+    "wrapt"
+  ];
   dependencies = [
     click
     dill
@@ -64,6 +82,7 @@ buildPythonPackage (finalAttrs: {
     nbconvert
     nbformat
     pandas
+    python-frontmatter
     python-on-whales
     pyyaml
     requests
@@ -87,21 +106,16 @@ buildPythonPackage (finalAttrs: {
     ];
   };
 
-  pythonRelaxDeps = [
-    "fica"
-  ];
-
-  pythonImportsCheck = [
-    "otter"
-  ];
+  pythonImportsCheck = [ "otter" ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    writableTmpDirAsHomeHook
-    pytest-html
-    matplotlib
-    tqdm
     R
+    matplotlib
+    pytest-html
+    pytestCheckHook
+    quarto
+    tqdm
+    writableTmpDirAsHomeHook
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
@@ -118,9 +132,17 @@ buildPythonPackage (finalAttrs: {
     "test_notebooks_with_pdfs"
     "test_config_overrides_integration"
     "test_queue"
+
     # testthat 3.x assertion message format differs from the expected results in
     # this R Markdown test, causing a partial credit output mismatch
     "test_rmd"
+
+    # pandas 3 renamed the public classes' `__module__` to `pandas`:
+    # AssertionError: assert 'pandas.DataFrame' == 'pandas.core.frame.DataFrame'
+    "test_get_variable_type"
+
+    # Grading qmd files requires ottr>=1.6.0, but rPackages.ottr is 1.5.3
+    "test_qmd"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # socket.bind() fails under macOS sandbox

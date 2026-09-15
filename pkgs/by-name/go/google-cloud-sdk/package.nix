@@ -155,6 +155,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # create cached byte-code at build time, see https://docs.python.org/3/library/compileall.html
+    # must match the optimization level in CLOUDSDK_PYTHON_ARGS, otherwise python ignores the .pyc files
     # the excluded files contain python 2 syntax that fails to compile with python 3
     find $out/google-cloud-sdk -name "*.py" \
       -not -path "*/lib/third_party/yaml/scanner.py" \
@@ -180,7 +181,7 @@ stdenv.mkDerivation rec {
       -not -path "*/lib/third_party/fancy_urllib/__init__.py" \
       -not -path "*/oauth2client/_pkce.py" \
       -not -path "*/ext-runtime/nodejs/test/runtime_test.py" \
-      -exec ${pythonEnv}/bin/python -OO -m compileall {} +
+      -exec ${pythonEnv}/bin/python -m compileall {} +
   '';
 
   doInstallCheck = true;
@@ -195,6 +196,9 @@ stdenv.mkDerivation rec {
     $out/bin/gcloud kms asymmetric-sign --help > /dev/null
     PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=upb $out/bin/gcloud kms asymmetric-sign --help > /dev/null
     $out/bin/gsutil version | grep -w "$(cat platform/gsutil/VERSION)"
+    # byte-code must exist at the path python looks up with the wrapper's CLOUDSDK_PYTHON_ARGS
+    ${pythonEnv}/bin/python -S -B -c 'import importlib.util, os, sys; sys.exit(not os.path.exists(importlib.util.cache_from_source(sys.argv[1])))' \
+      $out/google-cloud-sdk/lib/gcloud.py
   '';
 
   # Replace all vendored copies of CA bundle with the one used by Nixpkgs.

@@ -8,6 +8,7 @@
   ncurses,
   pkg-config,
   runCommand,
+  jemalloc,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   systemdLibs,
   # broken on i686-linux https://github.com/tmux/tmux/issues/4597
@@ -26,6 +27,9 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "tmux";
   version = "3.7c";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   outputs = [
     "out"
@@ -49,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
     libevent
   ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ jemalloc ]
   ++ lib.optionals withSystemd [ systemdLibs ]
   ++ lib.optionals withUtf8proc [ utf8proc ]
   ++ lib.optionals withUtempter [ libutempter ];
@@ -57,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
   ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--enable-jemalloc" ]
   ++ lib.optionals withSystemd [ "--enable-systemd" ]
   ++ lib.optionals withSixel [ "--enable-sixel" ]
   ++ lib.optionals withUtempter [ "--enable-utempter" ]

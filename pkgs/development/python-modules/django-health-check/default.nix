@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django-health-check";
-  version = "4.5.0";
+  version = "4.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "codingjoe";
     repo = "django-health-check";
     tag = finalAttrs.version;
-    hash = "sha256-YisYa2YAVhg9fganL7w1fnanXvtQJh6iccDDOxHG5WQ=";
+    hash = "sha256-PbimG445XclS7A4SBAZ+9W0WpoerhpqOI4A36Vyqscc=";
   };
 
   build-system = [

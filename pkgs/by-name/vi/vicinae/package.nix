@@ -13,6 +13,7 @@
   ninja,
   nodejs,
   npmHooks,
+  numen,
   pkg-config,
   qt6,
   stdenv,
@@ -24,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vicinae";
-  version = "0.23.2";
+  version = "0.28.1";
 
   src = fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/5fGvMWlLlyd5ibK7y1dqIK1MTpLABj3v1M0r/VArww=";
+    hash = "sha256-zRvJ9/LVAIoW2qKveqD6WSdr0jDypPrbQdw1aatRS70=";
   };
 
   apiDeps = fetchNpmDeps {
@@ -47,9 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
     "VICINAE_GIT_TAG" = "v${finalAttrs.version}";
     "VICINAE_PROVENANCE" = "nix";
     "INSTALL_NODE_MODULES" = "OFF";
-    "INSTALL_BROWSER_NATIVE_HOST" = "OFF";
     "USE_SYSTEM_CMARK_GFM" = "ON";
     "USE_SYSTEM_GLAZE" = "ON";
+    "USE_SYSTEM_NUMEN" = "ON";
     "USE_SYSTEM_KF6" = "ON";
     "USE_SYSTEM_QT_KEYCHAIN" = "ON";
     "BUNDLE_SOULVER_CORE" = "OFF";
@@ -66,10 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     nodejs
     pkg-config
+    qt6.qttools
     qt6.wrapQtAppsHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    qt6.qttools
     swift
   ];
 
@@ -81,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     libqalculate
     minizip
     nodejs
+    numen
     qt6.qtbase
     qt6.qtdeclarative
     qt6.qtimageformats
@@ -146,7 +148,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Native, fast, extensible launcher for the desktop";
     homepage = "https://github.com/vicinaehq/vicinae";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ zstg ];
+    maintainers = with lib.maintainers; [
+      zstg
+      nolight132
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "vicinae";
   };

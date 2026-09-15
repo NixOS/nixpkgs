@@ -1,7 +1,7 @@
 {
   buildNpmPackage,
   copyDesktopItems,
-  electron_41,
+  electron_43,
   fetchFromGitHub,
   lib,
   makeDesktopItem,
@@ -15,12 +15,12 @@
   cargo,
 }:
 let
-  electron = electron_41;
+  electron = electron_43;
   nodejs = nodejs_22;
 in
 buildNpmPackage rec {
   pname = "super-productivity";
-  version = "18.19.0";
+  version = "18.21.2";
 
   inherit nodejs;
 
@@ -28,7 +28,7 @@ buildNpmPackage rec {
     owner = "super-productivity";
     repo = "super-productivity";
     tag = "v${version}";
-    hash = "sha256-tUK2vytQ/fBSw8drjBLh4HlrnQh/0tX9e9otYMhXYsA=";
+    hash = "sha256-q95UwzY1G2FxxHrg6eWxGD/C4iy/nbSMzRUMCfunL3s=";
   };
 
   # Use custom fetcher for deps because super-productivity uses multiple
@@ -74,7 +74,7 @@ buildNpmPackage rec {
       dontInstall = true;
 
       outputHashMode = "recursive";
-      hash = "sha256-Je3pHgkBwt35sIvxQqnYX3F+uJQeBGc5kzCAL9czCYs=";
+      hash = "sha256-mKsIhYGYqI5iStaT/G+UssnbJjdwol2xXpno+oZ1Sek=";
     }
   );
 

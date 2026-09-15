@@ -1,11 +1,12 @@
 {
+  testName,
   lib,
   pkgs,
   ...
 }:
 
 {
-  name = "ncps";
+  name = testName;
   meta = with lib.maintainers; {
     maintainers = [
       aciceri
@@ -25,6 +26,8 @@
 
       networking.firewall.allowedTCPPorts = [ 5000 ];
       system.extraDependencies = [ pkgs.emptyFile ];
+
+      nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
     };
 
     ncps = {
@@ -49,6 +52,8 @@
       };
 
       networking.firewall.allowedTCPPorts = [ 8501 ];
+
+      nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
     };
 
     client = {
@@ -58,6 +63,7 @@
           "ncps:UtiE6C+3Tx0kgpP34vjyX/BKK6QZ/D1OzDYX72aCPJg="
         ];
       };
+      nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
     };
   };
 

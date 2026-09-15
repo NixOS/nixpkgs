@@ -10,13 +10,13 @@ let
   stubsSrc = fetchFromGitHub {
     owner = "JetBrains";
     repo = "phpstorm-stubs";
-    rev = "f6dd2dd35d99fb774251a83555fe07bf2109d57e";
-    hash = "sha256-H9Td/yi9Um0Z9ifxZdh74bvGCMVSC+MA1OHrtbGD8vE=";
+    rev = "5f68c1021badebe34119fb8fa10ba7cc25de6c0c";
+    hash = "sha256-GQW+N5FrWKf6PpLyhJ6Gywbe1lESwW/rxiv2ESNdH1s=";
   };
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "phpantom-lsp";
-  version = "0.9.0";
+  version = "0.10.0";
 
   __structuredAttrs = true;
 
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "PHPantom-dev";
     repo = "phpantom_lsp";
     tag = finalAttrs.version;
-    hash = "sha256-euWaFH40VHefZewUcKvsLwwHZP+GwfTN8kfuAkaABB8=";
+    hash = "sha256-P5adooUaNCidGTIh/PDKzwvtIXCQ0y8tUMbLUC4sk98=";
   };
 
   postPatch = ''
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       > stubs/jetbrains/phpstorm-stubs/.commit
   '';
 
-  cargoHash = "sha256-2MIJxVRqyCv5HzCwY1s+rCp1A4vFRsyAEEuyIEegZMA=";
+  cargoHash = "sha256-tZh1cn7Zu47FRVXozDjcoKW4MoxaaaxPmDX5OzlxnAs=";
 
   checkFlags = [
     "--test"

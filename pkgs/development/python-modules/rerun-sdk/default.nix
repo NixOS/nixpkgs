@@ -137,6 +137,7 @@ buildPythonPackage {
     "test_asset_mode_timeline_type_timestamp_applies_to_index_chunk"
     "test_custom_entity_path_applies_to_every_chunk"
     "test_default_mode_produces_video_stream_chunks"
+    "test_optimize_only_coarsens_the_readers_gop_partition"
     "test_output_codec_same_as_source_stays_on_the_direct_path"
     "test_stream_mode_chunk_by_gop_false_emits_one_sample_per_chunk"
     "test_stream_mode_chunk_by_gop_true_packs_multiple_samples"
@@ -144,10 +145,7 @@ buildPythonPackage {
 
     # ConnectionError: Connection: connecting to server: transport error
     "test_batch_shape"
-    "test_decode_matrix"
-    "test_fixed_rate_sampling_duplicates_decode_correctly"
     "test_isolated_streams"
-    "test_off_grid_capture_rate_decodes_correctly"
     "test_roundtrip_parity"
     "test_save_screenshot"
     "test_send_dataframe_roundtrip"
@@ -163,9 +161,7 @@ buildPythonPackage {
 
     # av.InvalidDataError: the mp4 asset is a Git LFS pointer, not the real
     # video (rerun.src is fetched without fetchLFS).
-    "test_anchor_path_decodes_mid_gop_target"
     "test_collect_optimize_video_stream_summary"
-    "test_heuristic_fallback_when_is_keyframe_column_absent"
 
     # AssertionError: the Git LFS pointer mp4 asset fails to demux before the
     # expected "FFmpeg executable not found" error can be raised, so the
@@ -174,6 +170,13 @@ buildPythonPackage {
   ];
 
   disabledTestPaths = [
+    # av.InvalidDataError: every test builds its recording from the mp4 asset, which is a Git LFS
+    # pointer, not the real video (rerun.src is fetched without fetchLFS).
+    "rerun_py/tests/integration/test_dataloader_video.py"
+
+    # ConnectionError: Connection: connecting to server: transport error
+    "rerun_py/tests/integration/test_dataloader_video_codecs.py"
+
     # RuntimeError: MCAP error: Bad magic number. The .mcap test assets are
     # Git LFS pointer files, not real binaries (rerun.src is fetched without
     # fetchLFS).

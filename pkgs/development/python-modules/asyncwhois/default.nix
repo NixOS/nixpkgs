@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "asyncwhois";
-  version = "1.1.13";
+  version = "1.1.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pogzyb";
     repo = "asyncwhois";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZokAOqnHmCNzMV45ZuniU0Bt36O+Kd29KK3FOOSpdFo=";
+    hash = "sha256-CFrvmPApOyTVrtjhae9rfmAufJTm4l2QCNlwCQwMod4=";
   };
 
   build-system = [ hatchling ];

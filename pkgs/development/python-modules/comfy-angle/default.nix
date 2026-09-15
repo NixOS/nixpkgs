@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Redistributable ANGLE libraries";
-    homepage = "https://github.com/Comfy-Org/comfy-aimdo";
+    homepage = "https://github.com/Comfy-Org/comfy-angle";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     inherit (comfyui.meta) maintainers;

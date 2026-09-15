@@ -1128,7 +1128,7 @@ in
     let
       isFunction = builtins.isFunction;
     in
-    f: isFunction f || (f ? __functor && isFunction (f.__functor f));
+    f: isFunction f || (f ? __functor && isFunction f.__functor && isFunction (f.__functor f));
 
   /**
     `mirrorFunctionArgs f g` creates a new function `g'` with the same behavior as `g` (`g' x == g x`)

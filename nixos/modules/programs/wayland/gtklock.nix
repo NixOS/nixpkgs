@@ -61,15 +61,19 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    programs.gtklock.config.main = {
-      style = lib.mkIf (cfg.style != null) "${pkgs.writeText "style.css" cfg.style}";
+    programs.gtklock.config.main = lib.mkMerge [
+      (lib.mkIf (cfg.style != null) {
+        style = "${pkgs.writeText "style.css" cfg.style}";
+      })
 
-      modules = lib.mkIf (cfg.modules != [ ]) (
-        map (pkg: "${pkg}/lib/gtklock/${lib.removePrefix "gtklock-" pkg.pname}.so") cfg.modules
-      );
+      (lib.mkIf (cfg.modules != [ ]) {
+        modules = map (pkg: "${pkg}/lib/gtklock/${lib.removePrefix "gtklock-" pkg.pname}.so") cfg.modules;
+      })
+    ];
+
+    environment.etc."xdg/gtklock/config.ini" = lib.mkIf (cfg.config != { }) {
+      source = configFormat.generate "config.ini" cfg.config;
     };
-
-    environment.etc."xdg/gtklock/config.ini".source = configFormat.generate "config.ini" cfg.config;
 
     environment.systemPackages = [ cfg.package ];
 

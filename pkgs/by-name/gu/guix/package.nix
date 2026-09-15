@@ -40,17 +40,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "guix";
-  version = "1.5.0";
+  version = "1.5.0-unstable-2026-08-23";
 
   src = fetchgit {
     url = "https://codeberg.org/guix/guix.git";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-/g8JMUGM5GaZjtPLnl4vlrBNYMxSTjsHUDdhKLtHaQA=";
+    rev = "bf8a5bce1bdbddc2a0097e153ef06210d637e398";
+    hash = "sha256-Emd26l9buF1P7Dj14ulT6W6lrNC3PSTY4steU1I7T84=";
   };
-
-  patches = [
-    ./missing-cstdint-include.patch
-  ];
 
   postPatch = ''
     sed nix/local.mk -i -E \
@@ -162,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://guix.gnu.org/";
     donationPage = "https://guix.gnu.org/donate/";
-    changelog = "https://codeberg.org/guix/guix/raw/tag/v${finalAttrs.version}/NEWS";
+    changelog = "https://codeberg.org/guix/guix/raw/commit/${finalAttrs.src.rev}/NEWS";
     license = lib.licenses.gpl3Plus;
     mainProgram = "guix";
     maintainers = with lib.maintainers; [

@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DARCH=default"
   ]
-  ++ lib.optional trezorSupport [
+  ++ lib.optionals trezorSupport [
     # fix build on recent gcc versions
     "-DCMAKE_CXX_FLAGS=-fpermissive"
   ];

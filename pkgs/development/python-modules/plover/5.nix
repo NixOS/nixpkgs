@@ -27,6 +27,7 @@
   wheel,
   python-xlib,
   qtbase,
+  qtsvg,
   wrapQtAppsHook,
   hidapi,
   xkbcommon,
@@ -127,6 +128,7 @@ buildPythonPackage (finalAttrs: {
 
   buildInputs = [
     qtbase
+    qtsvg
   ];
 
   nativeCheckInputs = [

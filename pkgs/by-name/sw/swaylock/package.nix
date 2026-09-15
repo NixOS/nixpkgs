@@ -28,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-AkH3i9egklFm8z+0M46jFx9VubGWsRGwN1eLkrwkgfs=";
   };
 
+  __structuredAttrs = true;
   strictDeps = true;
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [

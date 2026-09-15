@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openrgb";
-  version = "1.0rc3";
+  version = "1.0rc3.1";
 
   src = fetchFromCodeberg {
     owner = "OpenRGB";
     repo = "OpenRGB";
     tag = "release_candidate_${finalAttrs.version}";
-    hash = "sha256-x7B3Ht9+JM+w/3qL5Ku08r05BBLrbuO5JBqP4fnJ0nc=";
+    hash = "sha256-0HMF/Un78NqLyLUBAV3BKZKWGVxIH/a7ujC6P2wd1dA=";
   };
 
   patches = [

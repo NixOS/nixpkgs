@@ -251,6 +251,12 @@ stdenv.mkDerivation {
       url = "https://github.com/qt/qtbase/commit/515cbbacfba9f4259c9c3b0714a31222c2b4c879.diff";
       hash = "sha256-93tzp4O7dZxRZv7ilN/gbQSVmaeOGmxpYgM7aomN0n8=";
     })
+
+    # icon loading fix
+    (fetchpatch {
+      url = "https://github.com/qt/qtbase/commit/85420d5d4f78a6ba4cf70ed8ee092e0ef4fb9a54.diff";
+      hash = "sha256-BFL1mtwzEH0uUYbeUZDC2Fcp9pjBhtSYOaSxxVILe30=";
+    })
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

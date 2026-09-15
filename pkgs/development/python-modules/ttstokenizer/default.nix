@@ -2,23 +2,28 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   anyascii,
   inflect,
   nltk,
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ttstokenizer";
   version = "1.1.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-akXiscw57CMp2JDdJq7wqeBeML41yLyFh7fTZwEBlVA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     anyascii
     inflect
     nltk
@@ -36,4 +41,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

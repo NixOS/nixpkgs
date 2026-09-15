@@ -52,7 +52,7 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "ctranslate2";
-  version = "4.8.1";
+  version = "4.8.2";
 
   __strutcturedAttrs = true;
   strictDeps = true;
@@ -62,7 +62,7 @@ stdenv'.mkDerivation (finalAttrs: {
     repo = "CTranslate2";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-cchwv+esysn/0v6RqD5zp306HfzOjjlCxH5usLETXs0=";
+    hash = "sha256-OuN7GTfzqsALu8Qgx7GNERlyCq3cTxhpZo8UA/yDekw=";
   };
 
   # Fix CMake 4 compatibility

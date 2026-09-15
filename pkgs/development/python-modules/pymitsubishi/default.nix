@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pymitsubishi";
-  version = "0.5.2";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymitsubishi";
     repo = "pymitsubishi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e2BbeJQH1SSge/SoU5ylF1/wHz2BBcBRqlpvX8WFJhs=";
+    hash = "sha256-2lw12ElOhx+Sdjnh1P+p+L87e8kWLlYQDr7bHqaatS4=";
   };
 
   postPatch = ''

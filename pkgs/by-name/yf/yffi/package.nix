@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yffi";
-  version = "0.27.3";
+  version = "0.27.4";
 
   src = fetchFromGitHub {
     owner = "y-crdt";
     repo = "y-crdt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OYqBxhpNw4LAfCLN/xBxSFuwjUV/PZvbg7Kk4AQpvvs=";
+    hash = "sha256-lW6IvPyOsAOZlopLWTxqtHvuCRjGtmdYedmnyFVdQqk=";
   };
 
-  cargoHash = "sha256-eMGhHDcVeySESsgrP5Pj9BwsAgEe8rZHz+0FeFFp7IY=";
+  cargoHash = "sha256-r9wT9PIsAaRp2kHvwYB0vJIAKnsVmoqkQrdmoyKtZcs=";
 
   buildAndTestSubdir = "yffi";
 

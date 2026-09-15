@@ -1,4 +1,10 @@
 {
+  "activitypub": {
+    "path": "activitypub/tags/9.2.2",
+    "rev": "3642412",
+    "sha256": "1cq02p9fmz8mb0r7vrd7aak1xc4pxmnnmja1dw9471nbv9k68y51",
+    "version": "9.2.2"
+  },
   "add-widget-after-content": {
     "path": "add-widget-after-content/tags/2.5.4",
     "rev": "3548285",
@@ -124,6 +130,12 @@
     "rev": "3574673",
     "sha256": "0g98qgl1svf6jcybbqih466hp2w0ckjgbgwz6cl6ljr6fghk68k8",
     "version": "2.0.2"
+  },
+  "polls-for-activitypub": {
+    "path": "polls-for-activitypub/tags/1.0.11",
+    "rev": "3631874",
+    "sha256": "0s45a8zj94jrgvingw6k4sdmsdkqqq9xvl2x1hcbhi4qik5syfjw",
+    "version": "1.0.11"
   },
   "simple-login-captcha": {
     "path": "simple-login-captcha/tags/1.3.6",

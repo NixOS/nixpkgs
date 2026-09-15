@@ -3,18 +3,19 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  gitMinimal,
   lib,
-  openccu-loom-types,
   pydantic,
   pytest-asyncio,
   pytestCheckHook,
   python-slugify,
+  pyyaml,
   setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "openccu-loom-client";
-  version = "2026.8.9";
+  version = "2026.9.3";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -22,7 +23,7 @@ buildPythonPackage (finalAttrs: {
     owner = "SukramJ";
     repo = "openccu-loom-client";
     tag = finalAttrs.version;
-    hash = "sha256-wV9CVMBmztDHmg7kxYwELW+yDiJLBElvgnAvMGaGjoY=";
+    hash = "sha256-7aC5YNsfiAPDnJUlvXHBCxJttIFJ969Iqs7fwLf9UC4=";
   };
 
   build-system = [ setuptools ];
@@ -30,7 +31,6 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     aiohomematic
     aiohttp
-    openccu-loom-types
     pydantic
     python-slugify
   ];
@@ -38,8 +38,10 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "openccu_loom_client" ];
 
   nativeCheckInputs = [
+    gitMinimal
     pytest-asyncio
     pytestCheckHook
+    pyyaml
   ];
 
   __darwinAllowLocalNetworking = true;

@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "webanalyze";
-  version = "0.4.3";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "rverton";
     repo = "webanalyze";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Mz8YPx2pr0h8QpZ/q1ikfKfzyyLn7meLFeyv2meO5NA=";
+    hash = "sha256-7o052R7G207BgdR0rRPm6ox4qrkxRJjEmqvXTO+PQAc=";
   };
 
   vendorHash = "sha256-GesrxrPUMvMFrVPg1t+ArMfbkNUu7CHGmk1423IFnCY=";

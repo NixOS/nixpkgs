@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "prowler";
-  version = "5.39.1";
+  version = "5.41.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "prowler-cloud";
     repo = "prowler";
     tag = finalAttrs.version;
-    hash = "sha256-iWjdcw5IY7xkow0E1AYTi/OgkS14CdVM9AOW86VPMak=";
+    hash = "sha256-aWGMdpQXwxDXqYpil+MjlIRTZ9/KzxPGPtJ3eLyiTIY=";
   };
 
   postPatch = ''
@@ -122,9 +122,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     stackit-iaas
     stackit-objectstorage
     stackit-resourcemanager
+    stackit-ske
     tabulate
+    truststore
     tzlocal
     uuid6
+    zstandard
   ];
 
   postFixup = ''

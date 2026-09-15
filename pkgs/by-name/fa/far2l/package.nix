@@ -44,13 +44,13 @@
 
 stdenv.mkDerivation rec {
   pname = "far2l";
-  version = "2.8.0";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "elfmz";
     repo = "far2l";
     tag = "v_${version}";
-    hash = "sha256-LP+agJrYxjH6vLAg6cJTU4/9jYGF9iaZzxA7hozDKNY=";
+    hash = "sha256-9mSi3gqZ2jpgUawD3Jr2Pmn1shLpySuFCh4iOZe7CO8=";
   };
 
   nativeBuildInputs = [

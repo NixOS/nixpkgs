@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  nodejs_22,
+  nodejs,
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
@@ -26,9 +26,7 @@
 }:
 
 let
-  # nodejs pin should be obsolete once #522655 is in master
-  nodejs = nodejs_22;
-  yarn-berry = yarn-berry_4.override { inherit nodejs; };
+  yarn-berry = yarn-berry_4;
 
   releaseData = lib.importJSON ./release-data.json;
 in
@@ -73,10 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libGL
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libnotify
   ];
 

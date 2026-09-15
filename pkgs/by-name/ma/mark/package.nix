@@ -5,24 +5,27 @@
   fetchFromGitHub,
   iana-etc,
   libredirect,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "mark";
   version = "16.12.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "kovetskiy";
     repo = "mark";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-KSxMcHizvTQh3AuJ0NV7GQhBgpBIZwrbeI945PFzQJE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KSxMcHizvTQh3AuJ0NV7GQhBgpBIZwrbeI945PFzQJE=";
   };
 
   vendorHash = "sha256-EELqh6C8SZdyCJfHDqOEY5bhP5G6jlOUhpDaK93fmTA=";
 
   ldflags = [
     "-s"
-    "-w"
     "-X main.version=${finalAttrs.version}"
   ];
 
@@ -54,6 +57,13 @@ buildGoModule (finalAttrs: {
   # confluence/api_test.go serves a mock Confluence API over httptest, which
   # binds a localhost listener.
   __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  doInstallCheck = true;
 
   meta = {
     description = "Tool for syncing your markdown documentation with Atlassian Confluence pages";

@@ -255,13 +255,13 @@
       "sikmir": 688044,
       "siraben": 8219659,
       "siriobalmelli": 23038812,
-      "skulldogged": 33522919,
       "starcraft66": 1858154,
       "stepbrobd": 81826728,
       "stephank": 89950,
       "stephenstubbs": 18033664,
       "t-monaghan": 62273348,
       "thefloweringash": 42933,
+      "thtrf": 82712122,
       "tricktron": 16036882,
       "uncenter": 47499684,
       "usertam": 22500027,
@@ -657,7 +657,6 @@
       "djacu": 7043297
     },
     "members": {
-      "Sigmanificient": 53050011,
       "flyfloh": 74379,
       "thilobillerbeck": 7442383
     },
@@ -734,7 +733,7 @@
     "description": "Manage the current nixpkgs/NixOS release",
     "id": 3620128,
     "maintainers": {
-      "jopejoe1": 34899572,
+      "Scrumplex": 11587657,
       "yayayayaka": 73759599
     },
     "members": {},
@@ -856,6 +855,7 @@
       "lorenzleutgeb": 542154
     },
     "members": {
+      "Mic92": 96200,
       "ju1m": 21160136,
       "matthiasbeyer": 427866
     },
@@ -959,7 +959,6 @@
     },
     "members": {
       "andir": 638836,
-      "leona-ya": 11006031,
       "pyrox0": 35778371
     },
     "name": "Security review"

@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchPnpmDeps,
+  nix-update-script,
 
   # build
   brotli,
@@ -21,7 +22,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "peertube";
-  version = "8.2.3";
+  version = "8.2.4";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -30,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Chocobozzz";
     repo = "PeerTube";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-w+mSFr+uobq1TtqfewRmakGMYlEjwLs0k39mWHMbq+Q=";
+    hash = "sha256-ixSa4VV11vgG607I8PJET+0eC060XpAXIFFqJSJNHvM=";
   };
 
   outputs = [
@@ -150,6 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     nodejs = nodejs_24;
     tests.peertube = nixosTests.peertube;
+    updateScript = nix-update-script { };
   };
 
   meta = {

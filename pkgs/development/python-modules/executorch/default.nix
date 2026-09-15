@@ -4,6 +4,7 @@
   pkgs,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # nativeBuildInputs
   gitMinimal,
@@ -63,7 +64,7 @@ let
 in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "executorch";
-  version = "1.4.0";
+  version = "1.4.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -77,7 +78,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     name = "executorch";
 
     fetchSubmodules = true;
-    hash = "sha256-l8Wpjbu+jcuGAlt0kEGvmRQ/Xh4+mrPzTOpChc8g5nA=";
+    hash = "sha256-j43JX/3WLassyiyfwwIfSKO05ZmmS9wGUol4c+BZLEU=";
   };
 
   postPatch =
@@ -258,6 +259,11 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
     # RuntimeError: Failed to compile /build/tmplb6i266d/data.json to /build/tmplb6i266d/data.pte
     "test_flatbuffer_paths_match"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # ValueError: badly formed help string
+    "test_with_config"
+    "test_with_config_and_cli"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
     # RuntimeError: Error in dlopen:

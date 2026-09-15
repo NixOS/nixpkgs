@@ -1,27 +1,28 @@
 {
   lib,
-  gitUpdater,
+  nix-update-script,
   fetchFromGitHub,
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "legendary-gl"; # Name in pypi
-  version = "0.20.34";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "legendary-gl";
     repo = "legendary";
-    rev = "56d439ed2d3d9f34e2b08fa23e627c23a487b8d6";
-    hash = "sha256-yCHeeEGw+9gtRMGyIhbStxJhmSM/1Fqly7HSRDkZILQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-k5zVjXibYWS0F1by1uNOynuun9WfU0WuK3ResqsG7I0=";
   };
 
   build-system = with python3Packages; [
-    setuptools
+    uv-build
   ];
 
   dependencies = with python3Packages; [
+    pycryptodomex
     requests
     filelock
   ];
@@ -31,7 +32,7 @@ python3Packages.buildPythonApplication {
 
   pythonImportsCheck = [ "legendary" ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Free and open-source Epic Games Launcher alternative";
@@ -40,4 +41,4 @@ python3Packages.buildPythonApplication {
     maintainers = with lib.maintainers; [ equirosa ];
     mainProgram = "legendary";
   };
-}
+})

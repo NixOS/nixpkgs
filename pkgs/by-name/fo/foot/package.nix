@@ -27,7 +27,7 @@
 }:
 
 let
-  version = "1.27.0";
+  version = "1.28.0";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -40,7 +40,7 @@ let
 
     src = fetchurl {
       url = "https://codeberg.org/dnkl/foot/raw/tag/${version}/scripts/generate-alt-random-writes.py";
-      hash = "sha256-d7oE3hSStET9Bz8PcmRHSZ+ga+7lrL3/oJdx7phNei8=";
+      hash = "sha256-RUCG4EK9+aXe+EKvFYv6/JzQBglGZHyaEpr63v8akW4=";
     };
 
     dontUnpack = true;
@@ -103,7 +103,7 @@ stdenv.mkDerivation {
     owner = "dnkl";
     repo = "foot";
     tag = version;
-    hash = "sha256-jbE44SpMqDhOOT2o4Wh7UCdXn6bBqxOMskCHHTzEKmU=";
+    hash = "sha256-CZlbQut5jM8/dWuLlJPDaLBykV7K5l/caB3DLQ94mG8=";
   };
 
   separateDebugInfo = true;

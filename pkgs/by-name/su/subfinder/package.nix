@@ -2,20 +2,25 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "subfinder";
-  version = "2.15.0";
+  version = "2.16.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "subfinder";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J/sSTpVfEDJQldbyVEPQ0I+j2JfGXaRKIV8Lli/Lsh0=";
+    hash = "sha256-eBRi33UbaK5vLvt/ag7g0aN4v5rAS6aeNq1cgfr9qsc=";
   };
 
-  vendorHash = "sha256-WGOP7gQnHeqUzdF7oBHhHuNINeoMVaGKoQpSLTVq8ho=";
+  vendorHash = "sha256-VAnRGCiqmqEilWGuMtHTQg3hh38inPXJW3ImZrIE1+Y=";
 
   patches = [
     # Disable automatic version check
@@ -26,10 +31,18 @@ buildGoModule (finalAttrs: {
     "cmd/subfinder/"
   ];
 
-  ldflags = [
-    "-w"
-    "-s"
+  ldflags = [ "-s" ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
   ];
+
+  versionCheckKeepEnvironment = [ "HOME" ];
+
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Subdomain discovery tool";

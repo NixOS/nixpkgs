@@ -3,6 +3,7 @@
   bc-soci,
   bctoolbox,
   belcard,
+  cacert,
   belle-sip,
   belr,
   boost,
@@ -40,7 +41,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "linphone-desktop";
-  version = "6.1.0";
+  version = "6.2.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -48,13 +49,17 @@ stdenv.mkDerivation (finalAttrs: {
     group = "BC";
     repo = "linphone-desktop";
     tag = finalAttrs.version;
-    hash = "sha256-jCnovCFdPJExD0+ZLhU9np1R5uN+mPlSPi/Nb1aOD0U=";
+    hash = "sha256-JtNYeMu174afzuWSVIuLyI5M16iC5XGr2qTcTsixRg8=";
   };
 
   patches = [
     ./do-not-override-install-prefix.patch
     ./do-not-manually-compute-sdk-version.patch
     ./always-install-desktop-files.patch
+    ./use-absolute-resource-paths.patch
+    # Linphone creates a broken desktop file.
+    # See: https://github.com/NixOS/nixpkgs/issues/551204
+    ./no-user-desktop-file.patch
 
     # .mkv recordings are broken in NixOS and other distros (see
     # https://github.com/NixOS/nixpkgs/issues/219551), and simply changing the
@@ -79,8 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
     minizip-ng
     qt6Packages.qtbase
     qt6Packages.qtnetworkauth
+    qt6Packages.qtkeychain
     zxing-cpp
     boost
+    cacert
 
     python3Packages.pystache
     python3Packages.six
@@ -103,9 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
 
-    # Requires EQt5Keychain
-    "-DENABLE_QT_KEYCHAIN=OFF"
-
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
@@ -114,7 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DLINPHONEAPP_INSTALL_PREFIX=${placeholder "out"}"
     "-DLINPHONE_QML_DIR=${placeholder "out"}/${qt6Packages.qtbase.qtQmlPrefix}/ui"
     "-DLINPHONESDK_VERSION=${linphoneSdkVersion}"
-    "-DENABLE_APP_PACKAGE_ROOTCA=OFF"
 
     # normally set by the custom find modules, which we have disabled
     "-DLibLinphone_TARGET=liblinphone"
@@ -154,6 +157,12 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${msopenh264}/lib/mediastreamer/plugins/* $out/lib/mediastreamer/plugins/
     ln -s ${mediastreamer2}/lib/mediastreamer/plugins/* $out/lib/mediastreamer/plugins/
     ln -s ${grammars} $out/share/belr/grammars
+
+    # linphone looks for the TLS root CA bundle at `<dataResourcesDir>/rootca.pem`
+    # (with `<dataResourcesDir>` made absolute by `use-absolute-resource-paths.patch`).
+    # Provide nixpkgs' cacert bundle there instead of shipping the stale one
+    # bundled with linphone-sdk.
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/linphone/rootca.pem
 
     mkdir -p $out/share/sounds/linphone/
     ln -s ${liblinphone}/share/sounds/linphone/rings $out/share/sounds/linphone/rings

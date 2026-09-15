@@ -55,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     # tests require network facilities intentionally unavailable in the Nix sandbox
     ./skip-sandbox-incompatible-tests.patch
+
+    ./skip-tests-with-expired-certs.patch
   ];
 
   postPatch = lib.optionalString isDesktopVariant ''

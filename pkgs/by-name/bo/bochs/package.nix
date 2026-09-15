@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bochs";
-  version = "3.0";
+  version = "3.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/bochs/bochs/${finalAttrs.version}/bochs-${finalAttrs.version}.tar.gz";
-    hash = "sha256-y29UK1HzWizJIGsqmA21YCt80bfPLk7U8Ras1VB3gao=";
+    hash = "sha256-FKr3jb4TN5h5I//8TnqWKuVqvPmodHSs455ZP5+E7oQ=";
   };
   # Fix build on darwin, remove on next version
   # https://sourceforge.net/p/bochs/bugs/1466/

@@ -163,6 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     icon = "vesktop";
     startupWMClass = "Vesktop";
     genericName = "Internet Messenger";
+    comment = "Alternative Discord client with Vencord built-in";
     keywords = [
       "discord"
       "vencord"
@@ -185,7 +186,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Alternate client for Discord with Vencord built-in";
+    description = "Alternative Discord client with Vencord built-in";
     homepage = "https://github.com/Vencord/Vesktop";
     changelog = "https://github.com/Vencord/Vesktop/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Only;

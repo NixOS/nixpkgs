@@ -2,10 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   hatchling,
+  versioningit,
 
   # dependencies
   matplotlib,
@@ -22,6 +22,8 @@
 
   # tests
   pytestCheckHook,
+  pytest-xdist,
+  writableTmpDirAsHomeHook,
 
   # optional-dependencies
   pyside6,
@@ -31,7 +33,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "optiland";
-  version = "0.6.0";
+  version = "0.6.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -39,28 +41,19 @@ buildPythonPackage (finalAttrs: {
     owner = "HarrisonKramer";
     repo = "optiland";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s+EFsfj+3VIgpqhBv8f6IblyxfxXHWnO/i1lO3bEke4=";
+    hash = "sha256-4A58AdEDVvHtG3ZS67Ycpd+kRKt69BLEtPMaIGR1dvI=";
   };
 
-  patches = [
-    # wayland is not supported, see:
-    # https://github.com/optiland/optiland/issues/556
-    (fetchpatch {
-      url = "https://github.com/optiland/optiland/commit/9644df6e06bd24c5a3a7cf36c8df9dd83050bccc.patch";
-      hash = "sha256-a74Z7rp3ji3+9lM8Q/RttMIzwlRBki1N2Y0YtBiVaEA=";
-    })
-    # A fixup for the above, see:
-    #
-    # - https://github.com/optiland/optiland/pull/564#discussion_r3106831922
-    # - https://github.com/optiland/optiland/pull/568
-    (fetchpatch {
-      url = "https://github.com/optiland/optiland/commit/652922bce5e1854f1d067e292422d95dee129a46.patch";
-      hash = "sha256-9O+DNbqBDDSAaRkwCy3o76lwy5MJ7WHQqzfcN1fcmnE=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        'default-version = "0.0.0+unknown"' \
+        'default-version = "${finalAttrs.version}"'
+  '';
 
   build-system = [
     hatchling
+    versioningit
   ];
 
   dependencies = [
@@ -91,6 +84,8 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-xdist
+    writableTmpDirAsHomeHook
   ]
   # No need for optional-dependencies.gui, as the relevant tests requiring the
   # gui dependencies are disabled below.
@@ -100,6 +95,13 @@ buildPythonPackage (finalAttrs: {
     # From some reason, importing pyside6 during tests causes a core dump of the
     # python interpreter, so we disable all GUI tests.
     "tests/gui/"
+    # All of these 5 fail similarly, see:
+    # https://github.com/optiland/optiland/issues/746
+    "tests/test_ray_aiming.py::test_epd_invariant_under_translation[backend=numpy-25.0-issue613"
+    "tests/test_ray_aiming.py::test_epd_invariant_under_translation[backend=numpy--15.0-issue613"
+    "tests/test_ray_aiming.py::test_float_by_stop_epd_invariant_under_translation[backend=numpy-30.0"
+    "tests/test_ray_aiming.py::test_float_by_stop_epd_invariant_under_translation[backend=numpy--10.0"
+    "tests/test_ray_aiming.py::test_float_by_stop_epd_invariant_under_translation[backend=numpy-1000.0"
   ];
 
   pythonImportsCheck = [

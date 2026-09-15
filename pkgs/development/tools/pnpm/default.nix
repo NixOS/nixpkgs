@@ -23,6 +23,8 @@ let
         "CVE-2026-59194"
         "CVE-2026-59195"
         "CVE-2026-59196"
+        "CVE-2026-82392"
+        "CVE-2026-82393"
       ];
     };
     # 10.34.1 made a breaking change that causes
@@ -38,6 +40,8 @@ let
         "CVE-2026-59194"
         "CVE-2026-59195"
         "CVE-2026-59196"
+        "CVE-2026-82392"
+        "CVE-2026-82393"
       ];
     };
     "10" = {
@@ -45,8 +49,8 @@ let
       hash = "sha256-zLXEecqxsAYhMlv+fUyaioAx56Ul1ySeJ17L7IGwjbI=";
     };
     "11" = {
-      version = "11.21.0";
-      hash = "sha256-hyN9N+rbedxiagV26zpS0j1wQiwyOuXgD8BckfQyN4A=";
+      version = "11.25.0";
+      hash = "sha256-M90HSPJ+eRbE8ci2lDRhmD40U7BrvaYxKmKAEwtIgeU=";
     };
   };
 

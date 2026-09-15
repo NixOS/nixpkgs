@@ -16,7 +16,7 @@
 }:
 
 let
-  version = "7.0.0";
+  version = "7.0.1";
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
@@ -73,16 +73,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.redmine.org/releases/redmine-${finalAttrs.version}.tar.gz";
-    hash = "sha256-hX6fiGDDHkxTE4nl2T7qJkiNummDBISjsKqQS+YV6Qo=";
+    hash = "sha256-aFOLQxD6UKx5pSEEXLVf47z/7VwVYtaETPkOZudhkgk=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "update_rails_8_1_3_1.pach";
-      url = "https://github.com/redmine/redmine/commit/cbb2c341ca54baae28ba2dafc0573102c5d1099c.patch";
-      hash = "sha256-cAWUN1MB9DXNKwVxvZcStKXehRxTXTE9hjVrvkA98vk=";
-    })
-  ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [

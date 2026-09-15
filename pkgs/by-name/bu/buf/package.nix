@@ -44,7 +44,7 @@ buildGoModule (finalAttrs: {
 
   preCheck = ''
     # Some tests take longer depending on builder load.
-    substituteInPlace private/bufpkg/bufcheck/lint_test.go \
+    substituteInPlace private/bufpkg/bufcheck/lint_test.go private/bufpkg/bufcheck/breaking_test.go \
       --replace-fail 'context.WithTimeout(t.Context(), 60*time.Second)' \
                      'context.WithTimeout(t.Context(), 600*time.Second)'
     # For WebAssembly runtime tests

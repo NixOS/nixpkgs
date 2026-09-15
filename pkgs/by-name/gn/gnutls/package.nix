@@ -58,12 +58,12 @@ let
   util-linux = util-linuxMinimal;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnutls";
   version = "3.8.13";
 
   src = fetchurl {
-    url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
+    url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor finalAttrs.version}/gnutls-${finalAttrs.version}.tar.xz";
     hash = "sha256-/+2Owb8JwkJtTxSq43feR1O1PlN9aF5gTpmosWypyX4=";
   };
 
@@ -173,6 +173,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ nettle ];
 
+  strictDeps = true;
+
   inherit doCheck;
   # stdenv's `NIX_SSL_CERT_FILE=/no-cert-file.crt` breaks tests.
   # Also empty files won't work, and we want to avoid potentially impure /etc/
@@ -215,6 +217,8 @@ stdenv.mkDerivation rec {
     static = pkgsStatic.gnutls;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "GNU Transport Layer Security Library";
 
@@ -236,6 +240,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ vcunat ];
     platforms = lib.platforms.all;
-    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" version;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" finalAttrs.version;
   };
-}
+})

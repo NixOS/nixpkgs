@@ -25,5 +25,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/kubernetes-sigs/kwok/releases/tag/v${finalAttrs.version}";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    license = lib.licenses.asl20;
   };
 })

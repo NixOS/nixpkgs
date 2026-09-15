@@ -11,14 +11,14 @@
   curlWithGnuTls,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ngtcp2";
   version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = "ngtcp2";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BBV4nNtSWQOFuwVOeH3LJEUeF7v4LVhGbfcrkroBAvc=";
   };
 
@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ gnutls ];
 
+  strictDeps = true;
+
   configureFlags = [ "--with-gnutls=yes" ];
   enableParallelBuilding = true;
 
@@ -43,6 +45,8 @@ stdenv.mkDerivation rec {
     inherit curlWithGnuTls;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://github.com/ngtcp2/ngtcp2";
     description = "Effort to implement RFC9000 QUIC protocol";
@@ -52,7 +56,7 @@ stdenv.mkDerivation rec {
       vcunat # for knot-dns
     ];
   };
-}
+})
 
 /*
   Why split from ./default.nix?

@@ -1,12 +1,15 @@
-{ pkgs, ... }:
+{ ... }:
 {
   name = "grav";
 
-  nodes = {
+  containers = {
     machine =
       { pkgs, ... }:
       {
-        services.grav.enable = true;
+        services.grav = {
+          enable = true;
+          package = pkgs.grav_2;
+        };
       };
   };
 
@@ -17,7 +20,7 @@
 
     # The first request to a fresh install should result in a redirect to the
     # admin page, where the user is expected to set up an admin user.
-    actual = machine.succeed("curl -v --stderr - http://localhost/", timeout=10).splitlines()
+    actual = machine.succeed("curl -v --stderr - http://localhost/").splitlines()
     expected = "< Location: /admin"
     assert expected in actual, \
       f"unexpected reply from Grav: '{actual}'"

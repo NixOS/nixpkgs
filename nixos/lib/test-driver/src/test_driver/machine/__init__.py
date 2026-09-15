@@ -1809,15 +1809,16 @@ class NspawnMachine(BaseMachine):
 
         # 1. Wait for the directory to actually be created by the container
         self.log(f"Waiting for journal at {journal_path}...")
-        max_attempts = 10
+        warn_after = 10
         attempts = 0
-        while not journal_path.exists() and attempts < max_attempts:
+        while not journal_path.exists():
+            if proc.poll() is not None:
+                self.log(f"Error: Journal directory {journal_path} never appeared.")
+                return
             time.sleep(1)
             attempts += 1
-
-        if not journal_path.exists():
-            self.log(f"Error: Journal directory {journal_path} never appeared.")
-            return
+            if attempts == warn_after:
+                self.log(f"Still waiting for journal at {journal_path}...")
 
         # 2. Start the journalctl process
         # Using a loop here handles cases where journalctl might exit unexpectedly

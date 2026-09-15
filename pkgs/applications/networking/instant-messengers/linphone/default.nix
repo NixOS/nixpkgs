@@ -8,8 +8,8 @@ makeScopeWithSplicing' {
   extra = self: {
     mkLinphoneDerivation = self.mk-linphone-derivation;
 
-    linphoneSdkVersion = "5.4.85";
-    linphoneSdkHash = "sha256-mdJDCuCaZlcQ92P6oMgH/8iWgm8hGz8gTVUilC+yaSU=";
+    linphoneSdkVersion = "5.5.13";
+    linphoneSdkHash = "sha256-RsSMLO7wZ7azWF7/KcERkd5et73w0kUZpwsqj9QxZgc=";
   };
   f =
     self:

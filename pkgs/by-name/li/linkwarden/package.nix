@@ -69,13 +69,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "linkwarden";
-  version = "2.14.0";
+  version = "2.16.2";
 
   src = fetchFromGitHub {
     owner = "linkwarden";
     repo = "linkwarden";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mcdLOHGm0UyNDCBA5aheUAfsUONL/Q/KeVtwXTVcsxQ=";
+    hash = "sha256-4S2/TRZlMa3KHM+tmrWQsqGFk0TZjMbhdS2b1aNTVow=";
   };
 
   patches = [
@@ -98,7 +98,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-riijYhsnIUXwl5AHYfhTiKHZFPc+ORDTLO2GUY7Yl+g=";
+    hash = "sha256-f7xIzxN+0JWZeGfeK/3XTiUbxrnnzErbFEukolMMv/s=";
   };
 
   nativeBuildInputs = [
@@ -154,6 +154,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     # Shrink closure a bit
+    # Remove postinstall for web, fails to clean out dev deps without this.
+    substituteInPlace apps/web/package.json \
+      --replace-fail 'playwright install --with-deps chromium' ""
+    yarn workspaces focus --production linkwarden @linkwarden/web @linkwarden/worker
     shopt -s extglob
     rm -rf node_modules/bcrypt node_modules/@next/swc-* node_modules/lightningcss* node_modules/react-native* node_modules/@react-native* \
       node_modules/expo* node_modules/@expo node_modules/.bin/!(next|tsx) node_modules/zeego/node_modules/.bin node_modules/@react-navigation/native* \
@@ -168,7 +172,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r packages $out/share/linkwarden/
     cp -r node_modules $out/share/linkwarden/
     cp -r node_modules/.bin $out/share/linkwarden/node_modules/
-    rm -r $out/share/linkwarden/node_modules/@linkwarden/{mobile,react-native-render-html}
 
     echo "#!${lib.getExe bash} -e
     export DATABASE_URL=\''${DATABASE_URL-"postgresql://\$DATABASE_USER:\$POSTGRES_PASSWORD@\$DATABASE_HOST:\$DATABASE_PORT/\$DATABASE_NAME"}

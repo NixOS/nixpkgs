@@ -43,15 +43,16 @@
   cookiecutter,
   ipykernel,
   pytest-notebook,
+  pytest-xdist,
   pytestCheckHook,
-  voluptuous,
   versionCheckHook,
+  voluptuous,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "spsdk";
-  version = "3.9.0";
+  version = "3.11.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -59,8 +60,15 @@ buildPythonPackage (finalAttrs: {
     owner = "nxp-mcuxpresso";
     repo = "spsdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eA18DvQ0IIZtseJXXXMiFYkaOwBIhVXNaWiAObIj55I=";
+    hash = "sha256-BIYCOwXMw0PuZDWj7x4EG+mUBo+7RNJs0hvNVwbxlIg=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        "setuptools_scm<10" \
+        "setuptools_scm"
+  '';
 
   build-system = [
     setuptools
@@ -68,13 +76,16 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
+    "chardet"
     "cryptography"
+    "deepmerge"
     "filelock"
     "importlib-metadata"
     "packaging"
     "prettytable"
     "requests"
     "ruamel.yaml.clib"
+    "setuptools"
     "setuptools_scm"
     "typing-extensions"
   ];
@@ -126,8 +137,9 @@ buildPythonPackage (finalAttrs: {
     ipykernel
     pytest-notebook
     pytestCheckHook
-    voluptuous
+    pytest-xdist
     versionCheckHook
+    voluptuous
     writableTmpDirAsHomeHook
   ];
 

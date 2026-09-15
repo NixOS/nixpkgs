@@ -361,7 +361,7 @@ let
             MONITOR = <generated from config.power.ups.upsmon.monitor>
             NOTIFYCMD = "''${cfg.package}/bin/upssched";
             POWERDOWNFLAG = "/run/killpower";
-            SHUTDOWNCMD = "''${pkgs.systemd}/bin/shutdown now";
+            SHUTDOWNCMD = "''${config.systemd.package}/bin/shutdown now";
           }
         '';
         description = "Additional settings to add to `upsmon.conf`.";
@@ -398,7 +398,7 @@ let
         );
         NOTIFYCMD = lib.mkDefault "${cfg.package}/bin/upssched";
         POWERDOWNFLAG = lib.mkDefault "/run/killpower";
-        SHUTDOWNCMD = lib.mkDefault "${pkgs.systemd}/bin/shutdown now";
+        SHUTDOWNCMD = lib.mkDefault "${config.systemd.package}/bin/shutdown now";
       };
     };
   };

@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rofi-rbw";
-  version = "1.6.1";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fdw";
     repo = "rofi-rbw";
     tag = finalAttrs.version;
-    hash = "sha256-gV1rZg6GLk8xXJPmQ9TdrfvUv930R68PRiChmiT7MTs=";
+    hash = "sha256-ynOvp6BSK20hW1wZmYBRFTtCYSrZecJhRPcovLTG6d4=";
   };
 
   build-system = [
