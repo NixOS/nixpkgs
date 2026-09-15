@@ -374,12 +374,14 @@ stdenv.mkDerivation (finalAttrs: {
     # FIXME: get rid of this ASAP
     ./skip-broken-tests.patch
     (./skip-broken-tests- + variant + ".patch")
-
+  ]
+  ++ lib.optionals (variant == "stable") [
     # Don't detect Qt paths from qmake, so our patched-in onese are used
     ./dont-detect-qt-paths-from-qmake.patch
-
   ]
   ++ lib.optionals (variant != "stable") [
+    # Don't detect Qt paths from qmake, so our patched-in onese are used / old version
+    ./dont-detect-qt-paths-from-qmake-pre-26.8.patch
     # Fix build with Poppler 26.01
     (fetchpatch2 {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-2/fix_build_with_poppler_26.01.0.patch";
@@ -489,7 +491,6 @@ stdenv.mkDerivation (finalAttrs: {
       abseil-cpp
       bluez5
       boost
-      box2d_2
       cairo
       clucene-core_2
       cppunit
@@ -574,6 +575,8 @@ stdenv.mkDerivation (finalAttrs: {
       xmlsec
       zlib
       frozen-containers
+      md4c
+      fast-float
     ]
     ++ optionals kdeIntegration [
       qt6.qtbase
@@ -584,15 +587,12 @@ stdenv.mkDerivation (finalAttrs: {
       jre'
     ]
     ++ optionals (variant == "collabora" || variant == "collabora-coda") [
-      fast-float
       liborcus_0_19
       mdds_2_1
-      md4c
+      box2d_2
     ]
     ++ optionals (variant == "stable") [
-      fast-float
       liborcus
-      md4c
     ];
 
   preConfigure = ''
@@ -706,6 +706,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-system-zxcvbn"
 
     "--without-system-java-websocket"
+
+    # searches via pkg-config, upstream box2d has no mention of .pc files
+    "--without-system-box2d"
   ]
   ++ optionals kdeIntegration [
     "--enable-kf6"

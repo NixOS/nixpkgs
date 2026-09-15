@@ -23,6 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
+  makeFlags = [
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+    "CC=cc"
+  ];
+
   # Upstream has an install target, but doesn't install all required binaries
   installPhase = ''
     runHook preInstall

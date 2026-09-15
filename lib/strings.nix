@@ -1190,7 +1190,9 @@ rec {
 
   /**
     Quote `string` to be used safely within the Bourne shell if it has any
-    special characters.
+    special characters. Prior to escaping, if `string` is a path literal, copy
+    it into the store; otherwise, coerce `string` to a string via `toString` if
+    it is not one.
 
     # Inputs
 
@@ -1200,7 +1202,7 @@ rec {
     # Type
 
     ```
-    escapeShellArg :: String -> String
+    escapeShellArg :: a -> String
     ```
 
     # Examples
@@ -1217,7 +1219,14 @@ rec {
   escapeShellArg =
     arg:
     let
-      string = toString arg;
+      string =
+        # Even a store path can need escaping; as an extreme example, though
+        # it is deeply unwise, a store path prefix can contain any non-null
+        # character.
+        # If a path has a store path prefix but is not itself a store path, we
+        # still want to copy it into a fresh store object, so as not to take a
+        # dependency on the entire original source.
+        if isPath arg && !isStorePath arg then "${arg}" else toString arg;
     in
     if match "[[:alnum:],._+:@%/-]+" string == null then
       "'${replaceString "'" "'\\''" string}'"

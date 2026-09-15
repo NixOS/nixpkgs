@@ -1,0 +1,12 @@
+diff --git a/music_assistant/helpers/util.py b/music_assistant/helpers/util.py
+index cff01821a..5e0aa0957 100644
+--- a/music_assistant/helpers/util.py
++++ b/music_assistant/helpers/util.py
+@@ -480,6 +480,7 @@ async def _run_ml_inference_probe() -> int | None:
+             _ml_inference_probe.__name__,
+             stdout=asyncio.subprocess.DEVNULL,
+             stderr=asyncio.subprocess.DEVNULL,
++            env=os.environ.copy(),
+         )
+     except OSError as err:
+         LOGGER.warning("Could not start the ML inference capability probe: %s", err)

@@ -1881,6 +1881,11 @@
     githubId = 7112447;
     name = "Andre S. Ramos";
   };
+  andreszb = {
+    github = "andreszb";
+    githubId = 3385877;
+    name = "Andrés Zambrano";
+  };
   andrevmatos = {
     email = "andrevmatos@gmail.com";
     github = "andrevmatos";
@@ -7279,11 +7284,6 @@
     github = "Dietr1ch";
     githubId = 2096594;
     email = "Dietrich@Daroch.me";
-  };
-  different-error = {
-    name = "Sanfer D'souza";
-    github = "different-error";
-    githubId = 9338001;
   };
   different-name = {
     name = "different-name";

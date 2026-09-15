@@ -10,10 +10,14 @@
   # dependencies
   aiohttp,
   av,
+  cpace,
+  cryptography,
   mashumaro,
+  noiseprotocol,
   numpy,
   orjson,
   pillow,
+  soxr,
   zeroconf,
 
   # test dependencies
@@ -30,14 +34,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiosendspin";
-  version = "6.0.5";
+  version = "9.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Sendspin";
     repo = "aiosendspin";
     tag = finalAttrs.version;
-    hash = "sha256-veX6MZSqEQb+tEqZTEgdCObLdaVPJEdTFW5Ivmb0TNQ=";
+    hash = "sha256-ZWYUmiAhxzb/B4lRPuEe35tCeuO5tduZXCg6FpW8PlU=";
   };
 
   postPatch = ''
@@ -50,22 +54,34 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    # https://github.com/Sendspin/aiosendspin/blob/5.3.0/pyproject.toml#L27
+    # https://github.com/Sendspin/aiosendspin/blob/9.1.1/pyproject.toml#L30
     pyprojectVersionPatchHook
   ];
 
   dependencies = [
     aiohttp
+    cpace
+    cryptography
     mashumaro
+    noiseprotocol
     orjson
     zeroconf
   ];
 
   optional-dependencies = {
+    asrc = [
+      av
+      numpy
+      soxr
+    ];
     server = [
       av
       numpy
       pillow
+    ];
+    source = [
+      av
+      numpy
     ];
   };
 

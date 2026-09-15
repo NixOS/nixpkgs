@@ -23,6 +23,11 @@ stdenv.mkDerivation {
     ]
   );
 
+  makeFlags = [
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+    "CC=cc"
+  ];
+
   # Unstream has an install target, but installs dhtbsign as `$out/bin`
   # instead of `$out/bin/dhtbsign`
   installPhase = ''

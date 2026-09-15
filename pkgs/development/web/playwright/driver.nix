@@ -19,13 +19,13 @@ let
   throwSystem = throw "Unsupported system: ${system}";
   browsersJSON = (lib.importJSON ./browsers.json).browsers;
 
-  version = "1.61.1";
+  version = "1.62.1";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "playwright";
     rev = "v${version}";
-    hash = "sha256-FC3Sjh4LCTqftudcwt7KO3g3c2uyWv7PixhWqSZZR4Y=";
+    hash = "sha256-3gLXo9bd2qXCy8MYMbnYU6AXIWrqoitqMBPMF4g07nY=";
   };
 
   playwright = buildNpmPackage {
@@ -33,7 +33,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}"; # update.sh depends on sourceRoot presence
-    npmDepsHash = "sha256-DTRhYHRaPlthyRcD2azEIKMPaRwROLuLOdUC27Rk5zM=";
+    npmDepsHash = "sha256-iebe0sP3VMdk1vBFDkwM1L4x2VrHPZF/NbjMeU5diWM=";
 
     nativeBuildInputs = [
       cacert
@@ -58,11 +58,9 @@ let
       mkdir -p "$out/lib/node_modules/playwright"
       cp -r packages/playwright/!(bundles|src|node_modules|.*) "$out/lib/node_modules/playwright"
 
-      # for not supported platforms (such as NixOS) playwright assumes that it runs on ubuntu-20.04
-      # that forces it to use overridden webkit revision
-      # let's remove that override to make it use latest revision provided in Nixpkgs
-      # https://github.com/microsoft/playwright/blob/baeb065e9ea84502f347129a0b896a85d2a8dada/packages/playwright-core/src/server/utils/hostPlatform.ts#L111
-      jq '(.browsers[] | select(.name == "webkit") | .revisionOverrides) |= del(."ubuntu20.04-x64", ."ubuntu20.04-arm64")' \
+      # Nixpkgs packages only the top-level browser revisions. Remove platform-specific
+      # overrides so Playwright selects the revisions available in the browser link farm.
+      jq 'del(.browsers[].revisionOverrides)' \
         packages/playwright-core/browsers.json > browser.json.tmp && mv browser.json.tmp packages/playwright-core/browsers.json
       mkdir -p "$out/lib/node_modules/playwright-core"
       cp -r packages/playwright-core/!(bundles|src|bin|.*) "$out/lib/node_modules/playwright-core"
@@ -190,10 +188,7 @@ let
           let
             value = browsersJSON.${name};
           in
-          lib.nameValuePair
-            # TODO check platform for revisionOverrides
-            "${lib.replaceStrings [ "-" ] [ "_" ] name}-${value.revision}"
-            components.${name}
+          lib.nameValuePair "${lib.replaceStrings [ "-" ] [ "_" ] name}-${value.revision}" components.${name}
         ) browsers
       )
     )
