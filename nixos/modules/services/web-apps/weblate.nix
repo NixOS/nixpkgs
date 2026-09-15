@@ -114,14 +114,14 @@ let
     pkgs.runCommand "weblate_settings.py"
       {
         inherit weblateConfig;
-        passAsFile = [ "weblateConfig" ];
+        __structuredAttrs = true;
       }
       ''
         mkdir -p $out
-        cat \
-          ${finalPackage}/${python.sitePackages}/weblate/settings_example.py \
-          $weblateConfigPath \
-          > $out/settings.py
+        (
+          cat ${finalPackage}/${python.sitePackages}/weblate/settings_example.py
+          printf "%s" "$weblateConfig"
+        ) > $out/settings.py
       '';
 
   environment = {
