@@ -74,6 +74,21 @@ in
         '';
       };
 
+      chat-model = lib.mkOption {
+        type = types.str;
+        default = "TabbyML/Qwen2.5-Coder-7B-Instruct";
+        description = ''
+          Specify the model that tabby will use for chatting.
+
+          This model will be downloaded automatically if it is not already present.
+
+          Also see the model option.
+
+          See for Model Options:
+          > https://github.com/TabbyML/registry-tabby
+        '';
+      };
+
       acceleration = lib.mkOption {
         type = types.nullOr (
           types.enum [
@@ -156,7 +171,7 @@ in
           serviceConfig = lib.mkMerge [
             serviceUser
             {
-              ExecStart = "${lib.getExe tabbyPackage} serve --model ${cfg.model} --host ${cfg.host} --port ${toString cfg.port} --device ${tabbyPackage.featureDevice}";
+              ExecStart = "${lib.getExe tabbyPackage} serve --model ${cfg.model} --chat-model ${cfg.chat-model} --host ${cfg.host} --port ${toString cfg.port} --device ${tabbyPackage.featureDevice}";
             }
           ];
         };
