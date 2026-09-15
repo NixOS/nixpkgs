@@ -71,6 +71,7 @@
         cargoSetupHook
         maturinBuildHook
         bindgenHook
+        cargoDocHook
         ;
 
       # Let packages reference the build derivations, e.g. for disallowedReferences.
