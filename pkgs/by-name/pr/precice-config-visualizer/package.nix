@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "config-visualizer";
-  version = "unstable-2022-02-23";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
