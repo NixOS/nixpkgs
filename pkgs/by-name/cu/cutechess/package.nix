@@ -2,41 +2,48 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  pkg-config,
-  qt5,
+  qt6,
+  versionCheckHook,
+  nix-update-script,
   lib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cutechess";
-  version = "1.4.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "cutechess";
     repo = "cutechess";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vhS3Eenxcq7D8E5WVON5C5hCTytcEVbYUeuCkfB0apA=";
+    hash = "sha256-FbLYAvEb5g63T4Hp4MDY4uyZWdJdd46bOqC8c4GI7cw=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
-    pkg-config
-    qt5.wrapQtAppsHook
-  ];
-  buildInputs = [
-    qt5.qtbase
+    qt6.wrapQtAppsHook
   ];
 
-  postInstall = ''
-    install -Dm555 cutechess{,-cli} -t $out/bin/
-    install -Dm444 libcutechess.a -t $out/lib/
-    install -Dm444 $src/docs/cutechess-cli.6 -t $out/share/man/man6/
-    install -Dm444 $src/docs/cutechess-engines.json.5 -t $out/share/man/man5/
-  '';
+  buildInputs = [
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qt5compat
+  ];
+
+  doCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/cutechess-cli";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "GUI, CLI, and library for playing chess";
     homepage = "https://cutechess.com/";
+    changelog = "https://github.com/cutechess/cutechess/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = with lib.platforms; (linux ++ windows);
