@@ -1,19 +1,21 @@
 {
   lib,
   stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # dependencies
   base58,
   beautifulsoup4,
   bech32,
   brotli,
-  buildPythonPackage,
   colorama,
   cryptography,
-  deepdiff,
-  fetchFromGitHub,
   gitpython,
-  hatchling,
   humanfriendly,
-  hypothesis,
   lxml,
   numpy,
   odfpy,
@@ -21,39 +23,43 @@
   openpyxl,
   pandas,
   pdfminer-six,
-  psutil,
   pybase62,
   pygments,
   pyjks,
   pysquashfsimage,
-  pytestCheckHook,
   python-dateutil,
   python-docx,
   python-pptx,
-  pythonOlder,
   pyxlsb,
   pyyaml,
   rpmfile,
   striprtf,
   tqdm,
-  versionCheckHook,
   whatthepatch,
   xlrd,
+  # python>=3.14 only:
   zstandard,
+
+  # tests
+  deepdiff,
+  hypothesis,
+  psutil,
+  pytestCheckHook,
+  pythonOlder,
+  versionCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "credsweeper";
-  version = "1.18.3";
+  version = "1.18.4";
   pyproject = true;
-
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Samsung";
     repo = "CredSweeper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3PE/tf8GjDY6yakMuWCTcCVZMobiEx/o/QJQdJai4JY=";
+    hash = "sha256-1ElNvejQc5pzMvPJVjEyCkIY14M42W0ktNY83WKWk7A=";
   };
 
   build-system = [ hatchling ];
@@ -126,6 +132,7 @@ buildPythonPackage (finalAttrs: {
     "test_it_works_n"
     "test_log_n"
     "test_log_p"
+    "test_sqlite_injection_n"
   ];
 
   meta = {
