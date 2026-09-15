@@ -92,6 +92,12 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       --replace-fail "0.0.0" "${finalAttrs.version}" \
       --replace-fail "==" ">="
 
+    # mcp 2 renamed McpError to MCPError; the fastmcp_server provider pins
+    # fastmcp 3 upstream and has not migrated yet (see disabledTestPaths).
+    substituteInPlace \
+      music_assistant/providers/fastmcp_server/tools/_common.py \
+      --replace-fail McpError MCPError
+
     rm -rv \
       music_assistant/providers/airplay/bin/{cliap2-*,cliraop-*} \
       music_assistant/providers/airplay_receiver/bin/{build_binaries.sh,shairport-sync-*} \
@@ -234,6 +240,9 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "tests/providers/yandex_music"
     "tests/providers/yandex_ynison"
     "tests/providers/zvuk_music"
+    # provider pins fastmcp 3 upstream; elicitation and MCPError semantics
+    # changed in FastMCP 4 / mcp 2 and the tests encode the old behaviour
+    "tests/providers/fastmcp_server"
     # mocking music_assistant.providers.airplay.pairing.AirPlayPairing does not work
     "tests/providers/airplay/test_player.py::test_start_pairing__pin_decision"
   ];
