@@ -22,9 +22,6 @@
   atk,
   pkg-config,
   libxml2_13,
-  libredirect,
-  ghostscript,
-  pkgs,
   zlib,
 }:
 
@@ -36,8 +33,6 @@ let
       "arm"
     else
       throw "Unsupported platform for Canon UFR2 Drivers: ${stdenv.hostPlatform.system}";
-  ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
-  libs = pkgs: lib.makeLibraryPath buildInputs;
 
   version = "6.20";
   dl = "8/0100007658/47";
@@ -177,42 +172,6 @@ let
 
       awk -f ${convertSpec} -v phase=install cnrdrvcups-lb.spec | bash -eux
 
-      (
-        cd $out/lib
-
-        patchelf --set-rpath "$(cat $NIX_CC/nix-support/orig-cc)/lib:${libs pkgs}:${lib.getLib stdenv.cc.cc}/lib:${stdenv.cc.libc}/lib:$out/lib" libcanonufr2r.so.1.0.0
-        patchelf --set-rpath "$(cat $NIX_CC/nix-support/orig-cc)/lib:${libs pkgs}:${lib.getLib stdenv.cc.cc}/lib:${stdenv.cc.libc}/lib" libcaepcmufr2.so.1.0
-        patchelf --set-rpath "$(cat $NIX_CC/nix-support/orig-cc)/lib:${libs pkgs}:${lib.getLib stdenv.cc.cc}/lib:${stdenv.cc.libc}/lib" libColorGearCufr2.so.2.0.0
-        wrapProgram $out/lib/cups/filter/rastertoufr2 \
-          --prefix PATH ":" "$out/bin" \
-          --prefix LD_LIBRARY_PATH ":" "$out/lib" \
-          --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-          --set NIX_REDIRECTS /usr/bin=$out/bin:/usr/share=$out/share:/etc/cngplp2=$out/etc/cngplp2:/usr/local/canon/lib/profiles=$out/share/caepcm/ufr2
-      )
-
-      (
-        cd $out/bin
-        patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${lib.getLib stdenv.cc.cc}/lib:${stdenv.cc.libc}/lib" cnsetuputil2 cnpdfdrv
-        patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${lib.getLib stdenv.cc.cc}/lib:${stdenv.cc.libc}/lib:$out/lib" cnpkbidir cnrsdrvufr2 cnpkmoduleufr2r cnjbigufr2
-
-        wrapProgram $out/bin/cnpkbidir \
-          --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-          --set NIX_REDIRECTS /usr/share/cnpkbidir=$out/share/cnpkbidir
-
-        wrapProgram $out/bin/cnrsdrvufr2 \
-          --prefix LD_LIBRARY_PATH ":" "$out/lib" \
-          --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-          --set NIX_REDIRECTS /usr/bin/cnpkmoduleufr2r=$out/bin/cnpkmoduleufr2r:/usr/bin/cnjbigufr2=$out/bin/cnjbigufr2
-
-        wrapProgram $out/bin/cnsetuputil2 \
-          --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-          --set NIX_REDIRECTS /usr/share/cnsetuputil2=$out/usr/share/cnsetuputil2
-      )
-
-      makeWrapper "${ghostscript}/bin/gs" "$out/bin/gs" \
-        --prefix LD_LIBRARY_PATH ":" "$out/lib" \
-        --prefix PATH ":" "$out/bin"
-
       runHook postInstall
     '';
 
@@ -239,26 +198,24 @@ buildFHSEnv {
   # execve(2) calls with FHS paths, so libredirect cannot make them work.
   # Put the complete driver closure in the FHS environment and provide the
   # paths those binaries expect there.
-  targetPkgs =
-    fhsPkgs:
-    [
-      fhsPkgs.cups
-      fhsPkgs.zlib
-      fhsPkgs.jbigkit
-      fhsPkgs.libjpeg
-      fhsPkgs.libgcrypt
-      fhsPkgs.glib
-      fhsPkgs.gtk3
-      fhsPkgs.libxml2_13
-      fhsPkgs.gdk-pixbuf
-      fhsPkgs.pango
-      fhsPkgs.cairo
-      fhsPkgs.atk
-    ];
+  targetPkgs = fhsPkgs: [
+    driver
+    fhsPkgs.stdenv.cc.libc
+    fhsPkgs.cups
+    fhsPkgs.zlib
+    fhsPkgs.jbigkit
+    fhsPkgs.libjpeg
+    fhsPkgs.libgcrypt
+    fhsPkgs.glib
+    fhsPkgs.gtk3
+    fhsPkgs.libxml2_13
+    fhsPkgs.gdk-pixbuf
+    fhsPkgs.pango
+    fhsPkgs.cairo
+    fhsPkgs.atk
+  ];
   extraBuildCommands = ''
-    mkdir -p $out/usr/bin $out/usr/share $out/etc $out/usr/local/canon/lib
-    ln -s ${driver}/bin/cnjbigufr2 $out/usr/bin/cnjbigufr2
-    ln -s ${driver}/bin/cnpkmoduleufr2r $out/usr/bin/cnpkmoduleufr2r
+    mkdir -p $out/usr/local/canon/lib
   '';
 
   # buildFHSEnv normally replaces /etc with a private tmpfs.  The CUPS filter
@@ -269,18 +226,17 @@ buildFHSEnv {
   # The FHS wrapper is also used as the implementation for every driver
   # entry point that CUPS or another helper may invoke directly.
   runScript = "${stdenv.shell} -c 'command=\"$1\"; shift; exec \"$command\" \"$@\"' --";
+
   extraInstallCommands = ''
     cp -a ${driver}/. $out/
     chmod -R u+w $out
 
-    for binary in cnpkmoduleufr2r cnjbigufr2; do
-      rm -f $out/bin/$binary
-      makeWrapper $out/bin/canon-cups-ufr2-fhs $out/bin/$binary \
-        --add-flags ${driver}/bin/$binary
+    for binary in ${driver}/bin/* ${driver}/lib/cups/filter/* ${driver}/lib/cups/backend/*; do
+      local dest="$out/bin/$(basename $binary)"
+      rm -f $dest
+      makeWrapper $out/bin/canon-cups-ufr2-fhs $dest \
+        --add-flags $binary
     done
-    rm -f $out/lib/cups/filter/rastertoufr2
-    makeWrapper $out/bin/canon-cups-ufr2-fhs $out/lib/cups/filter/rastertoufr2 \
-      --add-flags ${driver}/lib/cups/filter/rastertoufr2
   '';
 
   meta = driver.meta // {
