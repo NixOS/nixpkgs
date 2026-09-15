@@ -2769,6 +2769,21 @@ with haskellLib;
   # https://github.com/google/proto-lens/issues/403
   proto-lens-arbitrary = doJailbreak super.proto-lens-arbitrary;
 
+  proto3-wire = appendPatches [
+    # https://github.com/awakesecurity/proto3-wire/pull/118/ krank:ignore-line
+    (fetchpatch {
+      name = "allow-ghc-9.14.patch";
+      url = "https://github.com/awakesecurity/proto3-wire/commit/ee308eab2a89111df6869304d358eaf7c15e591b.patch";
+      sha256 = "sha256-Hqr2gWIGrloAOiEovQ3JeDQme9hpWkzz89sO2sEBUss";
+    })
+    # https://github.com/awakesecurity/proto3-wire/pull/117/ krank:ignore-line
+    (fetchpatch {
+      name = "allow-doctest-25.patch";
+      url = "https://github.com/awakesecurity/proto3-wire/commit/225aaba3d055c969decc0ccf021836858eb01e6c.patch";
+      sha256 = "sha256-1huPp564w1YKJSslBB9Uxx0CI2ECtZ3x8Ao1LT9qB1M";
+    })
+  ] super.proto3-wire;
+
   # 2024-07-27: building test component requires non-trivial custom build steps
   # https://github.com/awakesecurity/proto3-suite/blob/bec9d40e2767143deed5b2d451197191f1d8c7d5/nix/overlays/haskell-packages.nix#L311
   proto3-suite = lib.pipe super.proto3-suite [
