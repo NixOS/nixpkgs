@@ -151,6 +151,8 @@ in
         Type = "forking";
         TimeoutStartSec = 120; # initial creating of journal can take some time
         PermissionsStartOnly = true;
+        # https://www.mongodb.com/docs/manual/reference/ulimit/#recommended-ulimit-settings
+        LimitNOFILE = lib.mkDefault 64000;
       };
 
       preStart =
