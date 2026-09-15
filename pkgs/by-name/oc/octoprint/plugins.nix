@@ -369,14 +369,14 @@ in
 
   octopod = buildPlugin rec {
     pname = "octopod";
-    version = "0.3.18";
+    version = "0.3.20";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "gdombiak";
       repo = "OctoPrint-OctoPod";
       rev = version;
-      sha256 = "sha256-HLR5402hFlUX0MLg3HXE7bIHKNnOI0buGAViqDt8mLc=";
+      sha256 = "sha256-Nf795I/VuonbyGuNeCYABTQjcIRlZIDxrwyKqWyytu8=";
     };
 
     propagatedBuildInputs = with super; [ pillow ];
