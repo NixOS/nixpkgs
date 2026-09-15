@@ -28,7 +28,7 @@ in
 {
   indradb-server = rustPlatform.buildRustPackage {
     pname = "indradb-server";
-    version = "unstable-2021-01-05";
+    version = "3.0.0-unstable-2021-01-05";
     inherit src meta;
 
     cargoHash = "sha256-wehQU0EOSkxQatoViqBJwgu4LG7NsbKjVZvKE6SoOFs=";
@@ -49,7 +49,7 @@ in
   };
   indradb-client = rustPlatform.buildRustPackage {
     pname = "indradb-client";
-    version = "unstable-2021-01-05";
+    version = "3.0.0-unstable-2021-01-05";
     inherit src meta;
 
     cargoHash = "sha256-wehQU0EOSkxQatoViqBJwgu4LG7NsbKjVZvKE6SoOFs=";
