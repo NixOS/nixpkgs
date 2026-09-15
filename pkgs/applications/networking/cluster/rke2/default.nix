@@ -5,7 +5,9 @@ let
   extraArgs = removeAttrs args [ "callPackage" ];
 in
 rec {
-  rke2_1_33 = common (import ./1_33/versions.nix) extraArgs;
+  rke2_1_33 = (common (import ./1_33/versions.nix) extraArgs).overrideAttrs {
+    meta.knownVulnerabilities = [ "rke2_1_33 has reached end-of-life on 2026-06-28" ];
+  };
 
   rke2_1_34 = common (import ./1_34/versions.nix) extraArgs;
 
