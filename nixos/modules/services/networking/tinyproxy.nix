@@ -60,7 +60,12 @@ in
             freeformType = settingsFormat.type;
             options = {
               Listen = lib.mkOption {
-                type = lib.types.nullOr lib.types.str;
+                type =
+                  with lib.types;
+                  nullOr (oneOf [
+                    str
+                    (listOf str)
+                  ]);
                 default = "127.0.0.1";
                 description = ''
                   Specify which address to listen to.
