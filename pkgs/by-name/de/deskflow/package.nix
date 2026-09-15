@@ -41,6 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-XcSG47Ysjn+wrJH5DC/XXGXcneXcW7xIhAn6sguuv+s=";
   };
 
+  patches = [
+    # wl-copy inherits the listening socket and keeps the port bound after exit
+    ./deskflow-socket-cloexec.patch
+    # one leaked QProcess (3 pipes + forkfd + zombie) per clipboard write -> EMFILE
+    ./deskflow-wlclipboard-no-fd-leak.patch
+  ];
+
   postPatch = ''
     substituteInPlace src/lib/deskflow/unix/AppUtilUnix.cpp \
       --replace-fail "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboard_config}/share/X11/xkb/rules/evdev.xml"
