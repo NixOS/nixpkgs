@@ -1572,6 +1572,7 @@ in
   pulseaudio-tcp = runTest ./pulseaudio-tcp.nix;
   pumpkin = runTest ./pumpkin.nix;
   pykms = runTest ./pykms.nix;
+  qauld = runTest ./qauld.nix;
   qbit-manage = runTest ./qbit-manage.nix;
   qbittorrent = runTest ./qbittorrent.nix;
   qboot = runTestOn [ "x86_64-linux" "i686-linux" ] ./qboot.nix;
