@@ -27,6 +27,7 @@ let
     ./name.nix
     ./network.nix
     ./nodes.nix
+    ./nspawn-in-qemu.nix
     ./pkgs.nix
     ./run.nix
     ./testScript.nix
