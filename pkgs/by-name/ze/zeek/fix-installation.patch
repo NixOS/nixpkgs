@@ -80,3 +80,24 @@ index 1ebe7c2..1435509 100644
  
  # A couple of configuration options that are needed are placed in here.
  configure_file(etc/zeekctl.cfg.in
+diff --git a/tools/systemd-generator/CMakeLists.txt b/tools/systemd-generator/CMakeLists.txt
+index 0e6a46f..031eb1f 100644
+--- a/tools/systemd-generator/CMakeLists.txt
++++ b/tools/systemd-generator/CMakeLists.txt
+@@ -14,6 +14,6 @@ if (NOT is_subproject)
+     set(_default_config_file "/usr/local/zeek/etc/zeek/zeek.conf")
+     set(_default_base_dir "/usr/local/zeek/")
+ else ()
+-    set(_default_config_file "${ZEEK_ETC_INSTALL_DIR}/zeek/zeek.conf")
++    set(_default_config_file "${ZEEK_ETC_INSTALL_DIR}/zeek.conf")
+     set(_default_base_dir "${CMAKE_INSTALL_PREFIX}")
+ endif ()
+@@ -49,7 +49,7 @@ if (ENABLE_ZEEK_SYSTEMD_GENERATOR)
+     if (is_subproject)
+         # Install a default configuration at <PREFXI>etc/default/zeek
+         include(InstallPackageConfigFile)
+         InstallPackageConfigFile(${CMAKE_CURRENT_SOURCE_DIR}/etc/zeek/zeek.conf
+-                                 ${ZEEK_ETC_INSTALL_DIR}/zeek zeek.conf)
++                                 ${CMAKE_INSTALL_PREFIX}/etc/zeek zeek.conf)
+     endif ()
+ endif ()
