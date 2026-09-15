@@ -48,6 +48,8 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
+    # last successful hydra build on darwin was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Benchmark to measure the performance of many different types of networking";
     homepage = "https://github.com/HewlettPackard/netperf/";
     license = lib.licenses.mit;
