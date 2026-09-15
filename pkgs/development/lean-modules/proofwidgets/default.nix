@@ -10,13 +10,13 @@
 buildLakePackage (finalAttrs: {
   pname = "lean4-proofwidgets";
   # nixpkgs-update: no auto update
-  version = "0.0.99";
+  version = "0.0.108-unstable-2026-08-10";
 
   src = fetchFromGitHub {
     owner = "leanprover-community";
     repo = "ProofWidgets4";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-kGoEkKGrucNUWFYkHW2LsS1gI4C0J8bAHQL2MiE4Pzc=";
+    rev = "4be2e3d5087eeb272cf5a8853b8f9dd025ef5957";
+    hash = "sha256-qbwEVOe57jNl9qulSi0tt9snSZbqVBLoeVsTXG2IvFs=";
   };
 
   leanPackageName = "proofwidgets";
@@ -32,7 +32,7 @@ buildLakePackage (finalAttrs: {
     name = "lean4-proofwidgets-npm-deps";
     src = finalAttrs.src;
     sourceRoot = "source/widget";
-    hash = "sha256-ssWSr2qfsIbX25DidiVPm0tsLGjrhQhQ6YKPL0rfc1k=";
+    hash = "sha256-z3LCBPmowLlkn5w/z72J1l8WnY60F8I7r48HMM/Lnns=";
   };
   npmRoot = "widget";
 
