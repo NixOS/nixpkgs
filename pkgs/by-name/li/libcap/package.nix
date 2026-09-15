@@ -9,7 +9,10 @@
   pam ? null,
   isStatic ? stdenv.hostPlatform.isStatic,
   go,
-  withGo ? lib.meta.availableOn stdenv.buildPlatform go && stdenv.hostPlatform.go.GOARCH != null,
+  withGo ?
+    lib.meta.availableOn stdenv.buildPlatform go
+    && stdenv.hostPlatform.go.GOARCH != null
+    && !stdenv.hostPlatform.useLLVM,
 
   # passthru.tests
   bind,
