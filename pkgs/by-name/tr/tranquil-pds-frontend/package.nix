@@ -3,11 +3,13 @@
   stdenvNoCC,
   fetchFromTangled,
   nodejs,
-  pnpm,
+  pnpm_11,
   pnpmConfigHook,
   fetchPnpmDeps,
 }:
-
+let
+  pnpm = pnpm_11;
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tranquil-frontend";
   version = "0.6.6";

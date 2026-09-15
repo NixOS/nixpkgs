@@ -18,7 +18,7 @@ let
         inherit (finalAttrs) src pnpmWorkspaces;
         inherit pnpm;
         fetcherVersion = 4;
-        hash = "sha256-dIp6CNh1Kn4aqJWku1G/FUdn/u+epzhqlqwnAkB2uW0=";
+        hash = "sha256-90OkzjIFr/JnjBBxdpM2sT185Yk+gWlLaxZ+eb64LDQ=";
       };
 
       pnpmWorkspaces = [
