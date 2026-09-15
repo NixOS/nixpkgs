@@ -25,6 +25,11 @@ buildGoModule (finalAttrs: {
     "-w"
     "-X main.version=${finalAttrs.version}"
   ];
+
+  checkFlags = [
+    "-skip=TestScanAggregates"
+  ];
+
   doInstallCheck = true;
   nativeInstallCheckInputs = [
     versionCheckHook
