@@ -11,20 +11,20 @@
   nodejs,
 
   makeWrapper,
-  v2ray,
   v2ray-geoip,
   v2ray-domain-list-community,
   nix-update-script,
 }:
 let
   pname = "v2raya";
-  version = "2.2.7.5";
+  version = "2.4.15";
 
   src = fetchFromGitHub {
     owner = "v2rayA";
     repo = "v2rayA";
     tag = "v${version}";
-    hash = "sha256-aa/Eb+fZQ1hwm6H7wb7mr0b4tCu12Mhy14OXNjZUJ0Y=";
+    fetchSubmodules = true;
+    hash = "sha256-JJQFH1HEsXes59bEpa6R6Ukuv1E/iOHGPlkUH2PFaso=";
     postFetch = "sed -i -e 's/npmmirror/yarnpkg/g' $out/gui/yarn.lock";
   };
 
@@ -35,7 +35,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/gui/yarn.lock";
-      hash = "sha256-g+hI9n+nfXAcuEpjvDDaHg/DfjtNusOaw3S6kC1QDn4=";
+      hash = "sha256-yrUyE0cgwstZ5SEbHwo9z4NSHLHsgjraUjhnEW8xReI=";
     };
 
     env.OUTPUT_DIR = placeholder "out";
@@ -55,13 +55,34 @@ let
     ];
   };
 
+  core = buildGoModule {
+    pname = "v2raya-core";
+    inherit version src;
+
+    sourceRoot = "${src.name}/core";
+
+    vendorHash = "sha256-nfIfJsMzf7BUpzbWPujVO02o6qSmcTcOeXF89z4prB4=";
+
+    ldflags = [
+      "-s"
+      "-w"
+      "-X main.Version=${version}"
+    ];
+
+    subPackages = [ "./main" ];
+
+    postInstall = ''
+      mv $out/bin/main $out/bin/v2raya_core
+    '';
+  };
+
 in
 buildGoModule {
   inherit pname version src;
 
   sourceRoot = "${src.name}/service";
 
-  vendorHash = "sha256-uiURsB1V4IB77YKLu5gdaqw9Fuja6fC5adWYDE3OE+Q=";
+  vendorHash = "sha256-dDtBV6Tv87CiDW/8/ZuhoEtfZWXZMKNsusSWm1wKn3U=";
 
   ldflags = [
     "-s"
@@ -84,12 +105,12 @@ buildGoModule {
       --replace-fail 'Icon=/usr/share/icons/hicolor/512x512/apps/v2raya.png' 'Icon=v2raya'
 
     wrapProgram $out/bin/v2rayA \
-      --prefix PATH ":" "${lib.makeBinPath [ v2ray ]}" \
+      --prefix PATH ":" "${lib.makeBinPath [ core ]}" \
       --prefix XDG_DATA_DIRS ":" ${assetsDir}/share
   '';
 
   passthru = {
-    inherit web;
+    inherit core web;
     updateScript = nix-update-script {
       extraArgs = [
         "--subpackage"
