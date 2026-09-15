@@ -6,7 +6,6 @@
   ninja,
   pkg-config,
   gnome,
-  gtk3,
   glib,
   gobject-introspection,
   libarchive,
@@ -33,10 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     vala
-  ];
-
-  buildInputs = [
-    gtk3
   ];
 
   propagatedBuildInputs = [
