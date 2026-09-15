@@ -6329,6 +6329,8 @@ self: super: with self; {
 
   flask-simpleldap = callPackage ../development/python-modules/flask-simpleldap { };
 
+  flask-smorest = callPackage ../development/python-modules/flask-smorest { };
+
   flask-sock = callPackage ../development/python-modules/flask-sock { };
 
   flask-socketio = callPackage ../development/python-modules/flask-socketio { };
