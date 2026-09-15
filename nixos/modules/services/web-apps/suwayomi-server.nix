@@ -216,6 +216,15 @@ in
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
 
+        environment.JAVA_TOOL_OPTIONS = "-Djava.io.tmpdir=${cfg.dataDir}/tmp";
+
+        preStart = lib.optionalString (cfg.package ? kcefRuntime) ''
+          kcefBinDir="${cfg.dataDir}/.local/share/Tachidesk/bin"
+          rm -rf "$kcefBinDir/kcef"
+          mkdir -p "$kcefBinDir" "${cfg.dataDir}/tmp/Tachidesk/webUI-serve"
+          ln -s ${cfg.package.kcefRuntime} "$kcefBinDir/kcef"
+        '';
+
         script = ''
           ${lib.optionalString cfg.settings.server.basicAuthEnabled ''
             export TACHIDESK_SERVER_BASIC_AUTH_PASSWORD="$(<${cfg.settings.server.basicAuthPasswordFile})"
