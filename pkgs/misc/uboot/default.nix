@@ -3,15 +3,11 @@
   lib,
   bc,
   bison,
-  dtc,
   fetchFromGitHub,
-  fetchpatch,
-  fetchurl,
   flex,
   gnutls,
   installShellFiles,
   libuuid,
-  meson-tools,
   ncurses,
   openssl,
   rkbin,
@@ -34,10 +30,12 @@
 }@pkgs:
 
 let
-  defaultVersion = "2026.07";
-  defaultSrc = fetchurl {
-    url = "https://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-eOi/w4L+OI+bVaodr4xWNSKgN3ebXUw0nRQV44HxJD4=";
+  defaultVersion = "2026.10";
+  defaultSrc = fetchFromGitHub {
+    owner = "u-boot";
+    repo = "u-boot";
+    tag = "v${defaultVersion}";
+    hash = "sha256-BXIpyAY+uKSohrdG4BxAo0zq4CYmh2z9rFw1jA7Yu8s=";
   };
 
   # Dependencies for the tools need to be included as either native or cross,
@@ -155,7 +153,7 @@ let
         __structuredAttrs = true;
 
         meta = {
-          homepage = "https://www.denx.de/wiki/U-Boot/";
+          homepage = "https://u-boot-project.org/";
           description = "Boot loader for embedded systems";
           license = lib.licenses.gpl2Plus;
           maintainers = with lib.maintainers; [
