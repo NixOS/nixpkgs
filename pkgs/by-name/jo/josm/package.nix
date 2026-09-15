@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchsvn,
+  gtk3,
   makeWrapper,
   unzip,
   jre,
@@ -55,9 +56,11 @@ stdenv.mkDerivation {
         cp -R ${srcs.pkg}/usr/share $out
 
         # Add libXxf86vm to path because it is needed by at least Kendzi3D plugin
+        # The GTK file chooser needs the gtk3 gsettings schemas
         makeWrapper ${jre}/bin/java $out/bin/josm \
           --add-flags "${baseJavaOpts} ${extraJavaOpts} -jar $out/share/josm/josm.jar" \
           --prefix LD_LIBRARY_PATH ":" '${libxxf86vm}/lib' \
+          --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}" \
           --prefix _JAVA_AWT_WM_NONREPARENTING : 1 \
           --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
       '';
