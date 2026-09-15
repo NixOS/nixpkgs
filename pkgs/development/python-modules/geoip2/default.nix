@@ -52,6 +52,8 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "GeoIP2 webservice client and database reader";
     homepage = "https://github.com/maxmind/GeoIP2-python";
