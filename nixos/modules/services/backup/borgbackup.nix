@@ -194,6 +194,7 @@ let
       timerConfig = {
         Persistent = cfg.persistentTimer;
         OnCalendar = cfg.startAt;
+        RandomizedDelaySec = cfg.randomizedDelaySec;
       };
       # if remote-backup wait for network
       after = lib.optional (cfg.persistentTimer && !isLocalPath cfg.repo) "network-online.target";
@@ -499,6 +500,18 @@ in
                 {manpage}`systemd.timer(5)`
                 which triggers the backup immediately if the last trigger
                 was missed (e.g. if the system was powered down).
+              '';
+            };
+
+            randomizedDelaySec = lib.mkOption {
+              default = "0";
+              type = lib.types.str;
+              example = "45min";
+              description = ''
+                Add a randomized delay before each backup.
+                The delay will be chosen between zero and this value.
+                This value must be a time span in the format specified by
+                {manpage}`systemd.time(7)`
               '';
             };
 
