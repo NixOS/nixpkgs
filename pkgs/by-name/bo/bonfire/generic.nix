@@ -947,7 +947,10 @@ beamPkgs.mixRelease (
           agpl3Only
           cc0
         ];
-        teams = [ lib.teams.ngi ];
+        teams = with lib.maintainers; [
+          julm
+          lib.teams.ngi
+        ];
         mainProgram = "bonfire";
       };
     };
