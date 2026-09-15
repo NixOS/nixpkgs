@@ -17530,6 +17530,8 @@ self: super: with self; {
 
   pyxbe = callPackage ../development/python-modules/pyxbe { };
 
+  pyxdia = callPackage ../development/python-modules/pyxdia { };
+
   pyxdg = callPackage ../development/python-modules/pyxdg { };
 
   pyxeoma = callPackage ../development/python-modules/pyxeoma { };
