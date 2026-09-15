@@ -1,0 +1,13 @@
+--- a/nan_callbacks_12_inl.h
++++ b/nan_callbacks_12_inl.h
+@@ -159,8 +159,8 @@
+ 
+   inline v8::Isolate* GetIsolate() const { return info_.GetIsolate(); }
+   inline v8::Local<v8::Value> Data() const { return data_; }
+-  inline v8::Local<v8::Object> This() const { return info_.This(); }
+-  inline v8::Local<v8::Object> Holder() const { return info_.Holder(); }
++  inline v8::Local<v8::Object> This() const { return info_.HolderV2(); }
++  inline v8::Local<v8::Object> Holder() const { return info_.HolderV2(); }
+   inline ReturnValue<T> GetReturnValue() const {
+     return ReturnValue<T>(info_.GetReturnValue());
+   }
