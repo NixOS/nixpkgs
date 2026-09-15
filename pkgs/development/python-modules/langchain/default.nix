@@ -128,9 +128,15 @@ buildPythonPackage (finalAttrs: {
     # AttributeError: 'ImportErrorProfileModel' object has no attribute 'profile'
     # https://github.com/langchain-ai/langchain/issues/36312
     "test_summarization_middleware_missing_profile"
+    # langchain.mcp requires fastmcp>=4 (nixpkgs has 3.x) and jsonschema
+    "test_import_all"
+    "test_import_all_using_dir"
   ];
 
   disabledTestPaths = [
+    # Requires fastmcp>=4 (nixpkgs has 3.x) and jsonschema
+    "tests/unit_tests/mcp"
+
     # Their configuration tests don't place nicely with nixpkgs
     "tests/unit_tests/test_pytest_config.py"
 
