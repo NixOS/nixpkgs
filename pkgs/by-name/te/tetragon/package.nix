@@ -44,7 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
     LOCAL_CLANG = 1;
     LOCAL_CLANG_FORMAT = 1;
     NIX_CFLAGS_COMPILE = "-fno-stack-protector -Qunused-arguments -Wno-default-const-init-var-unsafe";
+    # Without -trimpath the GOROOT store path ends up in the binaries and
+    # pulls the whole Go toolchain into the runtime closure.
+    GOFLAGS = "-trimpath";
   };
+
+  disallowedReferences = [ go ];
 
   buildPhase = ''
     runHook preBuild
