@@ -657,14 +657,14 @@ in
 
   dashboard = buildPlugin rec {
     pname = "dashboard";
-    version = "1.18.3";
+    version = "1.19.13";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "StefanCohen";
       repo = "OctoPrint-Dashboard";
       rev = version;
-      sha256 = "sha256-hLHT3Uze/6PlOCEICVZ2ieFTyXgcqCvgHOlIIEquujg=";
+      sha256 = "sha256-3PLUW6U8PPADHrQ2DtT6vfQb42hDZDfxT8UWfas6oDU=";
     };
 
     meta = {
