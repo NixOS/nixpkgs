@@ -11,7 +11,7 @@
 
 buildPythonPackage {
   pname = "badauth";
-  version = "0.1.4-unstable-2025-10-09";
+  version = "0.0.20";
   pyproject = true;
 
   src = fetchFromGitHub {
