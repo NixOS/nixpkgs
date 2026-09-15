@@ -72,14 +72,14 @@ in
 
   bedlevelvisualizer = buildPlugin rec {
     pname = "bedlevelvisualizer";
-    version = "1.1.1";
+    version = "1.1.2";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "jneilliii";
       repo = "OctoPrint-BedLevelVisualizer";
       rev = version;
-      sha256 = "sha256-6JcYvYgEmphp5zz4xZi4G0yTo4FCIR6Yh+MXYK7H7+w=";
+      sha256 = "sha256-TaKmb0reZObPxmZ7KuT1S+V8168pzDGFmUiU+RSyuss=";
     };
 
     meta = {
