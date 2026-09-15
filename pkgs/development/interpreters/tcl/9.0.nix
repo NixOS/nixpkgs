@@ -2,6 +2,8 @@
   callPackage,
   fetchpatch,
   fetchzip,
+  lib,
+  stdenv,
   ...
 }@args:
 
@@ -34,5 +36,10 @@ callPackage ./generic.nix (
         hash = "sha256-jEyT8GI8ZXNzL9OTX1z58fX8qlcixGwNlhFqxMiMga8=";
       })
     ];
+
+    extraPatch = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+      substituteInPlace unix/configure unix/configure.ac \
+        --replace-fail '`uname -s`' '${stdenv.hostPlatform.uname.system}'
+    '';
   }
 )
