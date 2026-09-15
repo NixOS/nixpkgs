@@ -126,9 +126,8 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${miniupnpd}/bin/miniupnpd -f ${configFile}";
-        PIDFile = "/run/miniupnpd.pid";
-        Type = "forking";
+        ExecStart = "${miniupnpd}/bin/miniupnpd -D -f ${configFile}";
+        Type = "notify";
       };
     };
   };
