@@ -12631,6 +12631,12 @@
     githubId = 49811314;
     keys = [ { fingerprint = "CC36 4CF4 32DD 443F 27FC  033C 3475 AA20 D72F 6A93"; } ];
   };
+  jaads = {
+    name = "Jan Arends";
+    email = "kontakt@jaads.de";
+    github = "jaads";
+    githubId = 34009329;
+  };
   jaanonim = {
     name = "Jaanonim";
     email = "mat8mro@gmail.com";
