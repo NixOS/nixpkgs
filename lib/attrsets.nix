@@ -1592,7 +1592,6 @@ rec {
     Merge a list of attribute sets together using the `//` operator.
     In case of duplicate attributes, values from later list elements take precedence over earlier ones.
     The result is the same as `foldl mergeAttrs { }`, but the performance is better for large inputs.
-    For n list elements, each with an attribute set containing m unique attributes, the complexity of this operation is O(nm log n).
 
     # Inputs
 
@@ -1619,29 +1618,7 @@ rec {
 
     :::
   */
-  mergeAttrsList =
-    list:
-    let
-      # `binaryMerge start end` merges the elements at indices `index` of `list` such that `start <= index < end`
-      # Type: Int -> Int -> AttrSet
-      binaryMerge =
-        start: end:
-        # assert start < end; # Invariant
-        if end - start == 1 then
-          # Base case - there will be exactly 1 element due to the invariant, in
-          # which case we just return it directly
-          elemAt list start
-        else
-          # If there's at least 2 elements, split the range in two, recurse on each part and merge the result
-          # Relies on floor for odd results
-          # The invariant is satisfied because each half will have at least 1 element
-          binaryMerge start ((start + end) / 2) // binaryMerge ((start + end) / 2) end;
-    in
-    if list == [ ] then
-      # Calling binaryMerge as below would not satisfy its invariant
-      { }
-    else
-      binaryMerge 0 (length list);
+  mergeAttrsList = zipAttrsWith (_: values: elemAt values (length values - 1));
 
   /**
     Update `lhs` so that `rhs` wins for any given attribute path that occurs in both.

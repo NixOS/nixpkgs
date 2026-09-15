@@ -2350,9 +2350,10 @@ runTests {
             m:
             let
               # Integer divide n by two to create duplicate attributes
-              str = "halfn${toString (n / 2)}m${toString m}";
+              key = "halfn${toString (n / 2)}m${toString m}";
+              val = "n${toString n}m${toString m}";
             in
-            nameValuePair str str
+            nameValuePair key val
           ) 100
         )
       ) 100;
