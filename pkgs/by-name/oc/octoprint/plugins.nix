@@ -637,14 +637,14 @@ in
 
   octoklipper = buildPlugin rec {
     pname = "octoklipper";
-    version = "0.3.8.3";
+    version = "0.3.9.5";
     format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "AliceGrey";
       repo = "OctoprintKlipperPlugin";
       rev = version;
-      sha256 = "sha256-6r5jJDSR0DxlDQ/XWmQgYUgeL1otNNBnwurX7bbcThg=";
+      sha256 = "sha256-Ctxg6jyrXIR9sQQDu/Tjo+6+pOuSKgdDTYbnOKlU5ak=";
     };
 
     meta = {
