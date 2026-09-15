@@ -79,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./fix-libxml2-include.patch
+    ./fix-verbatim.patch
   ];
 
   # Skips a broken test

@@ -1,0 +1,11 @@
+--- a/doc/cbrunt.tex	2023-07-28 14:20:48.000000000 -0300
++++ b/doc/cbrunt.tex	2025-07-25 13:18:43.553275270 -0300
+@@ -212,5 +212,7 @@
+                    current_date YYYYMMDDHHMMSS+01:00
+
+
++@end verbatim
++
+ @section Call environment
+ @verbatim
+
