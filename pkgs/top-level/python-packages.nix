@@ -19449,6 +19449,8 @@ self: super: with self; {
 
   spdx-tools = callPackage ../development/python-modules/spdx-tools { };
 
+  spdx3-validate = callPackage ../development/python-modules/spdx3-validate { };
+
   speak2mary = callPackage ../development/python-modules/speak2mary { };
 
   speaklater = callPackage ../development/python-modules/speaklater { };
