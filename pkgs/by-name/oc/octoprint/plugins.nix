@@ -5,6 +5,7 @@
   fetchFromGitLab,
   fetchpatch,
   marlin-calc,
+  nix-update-script,
 }:
 
 self: super:
@@ -19,6 +20,9 @@ let
         propagatedBuildInputs = (args.propagatedBuildInputs or [ ]) ++ [ super.octoprint ];
         # none of the following have tests
         doCheck = false;
+        passthru = (args.passthru or { }) // {
+          updateScript = nix-update-script { };
+        };
       }
     );
 in
