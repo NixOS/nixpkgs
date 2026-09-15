@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   versiondate = "20260605";
   src = fetchzip {
     url = "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${version}_build/ghidra_${version}_PUBLIC_${versiondate}.zip";
-    hash = lib.fakeHash;
+    hash = "sha256-k6XRGprVEGIqyq+QjFVqe5t2TTOOeKdWfzaJv1CB/VQ=";
   };
 
   nativeBuildInputs = [
