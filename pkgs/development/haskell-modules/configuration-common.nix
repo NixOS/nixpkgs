@@ -805,6 +805,17 @@ with haskellLib;
       sha256 = "sha256-EqvMQpRz/7hbY6wJ0xG8Ou6oKhwWdpjzBv+NPW6tnSY=";
       includes = [ "src/Turtle/Prelude.hs" ];
     })
+    # https://github.com/Gabriella439/turtle/pull/464
+    (fetchpatch {
+      name = "allow-ghc-9.14.patch";
+      url = "https://github.com/Gabriella439/turtle/commit/a4c0c1de8a69e31843b8b2ded720e5de388c1712.patch";
+      sha256 = "sha256-itTd48DB4JQdnMoUDF7RsTHAN72YIfCSJ/V3k3ieqIA";
+    })
+    (fetchpatch {
+      name = "allow-lts-25.patch";
+      url = "https://github.com/Gabriella439/turtle/commit/0205bf989d471cbc5225f7529c2d42c52e29ef14.patch";
+      sha256 = "sha256-5vElzfhWekfA8t70wVivka39whksshHEnOSNMlEEufg";
+    })
   ] super.turtle;
 
   inspection-testing = overrideCabal (drv: {
@@ -2769,12 +2780,39 @@ with haskellLib;
   # https://github.com/google/proto-lens/issues/403
   proto-lens-arbitrary = doJailbreak super.proto-lens-arbitrary;
 
+  proto3-wire = appendPatches [
+    # https://github.com/awakesecurity/proto3-wire/pull/118/ krank:ignore-line
+    (fetchpatch {
+      name = "allow-ghc-9.14.patch";
+      url = "https://github.com/awakesecurity/proto3-wire/commit/ee308eab2a89111df6869304d358eaf7c15e591b.patch";
+      sha256 = "sha256-Hqr2gWIGrloAOiEovQ3JeDQme9hpWkzz89sO2sEBUss";
+    })
+    # https://github.com/awakesecurity/proto3-wire/pull/117/ krank:ignore-line
+    (fetchpatch {
+      name = "allow-doctest-25.patch";
+      url = "https://github.com/awakesecurity/proto3-wire/commit/225aaba3d055c969decc0ccf021836858eb01e6c.patch";
+      sha256 = "sha256-1huPp564w1YKJSslBB9Uxx0CI2ECtZ3x8Ao1LT9qB1M";
+    })
+  ] super.proto3-wire;
+
   # 2024-07-27: building test component requires non-trivial custom build steps
   # https://github.com/awakesecurity/proto3-suite/blob/bec9d40e2767143deed5b2d451197191f1d8c7d5/nix/overlays/haskell-packages.nix#L311
   proto3-suite = lib.pipe super.proto3-suite [
     dontCheck
     doJailbreak
+    (appendPatch (fetchpatch {
+      # https://github.com/awakesecurity/proto3-suite/pull/313 krank:ignore-line
+      name = "support-swagger-2.9.patch";
+      url = "https://github.com/awakesecurity/proto3-suite/commit/da9ec95900de7155c98e7936274b769b5760c636.patch";
+      sha256 = "sha256-YNRaz2VzNRZI1QFbKX2lzBoiFvaZjb8nCdsv8jiE1Gk";
+    }))
   ];
+
+  optparse-generic = appendPatch (fetchpatch {
+    name = "bump-bounds.patch";
+    url = "https://github.com/Gabriella439/optparse-generic/commit/e59394937d43b09cf612e7bac67a390b94215b40.patch";
+    sha256 = "sha256-0yN22zv8ndc8YJnv+/fiWnFJasrbPgmAPPOrRhfddDw";
+  }) super.optparse-generic;
 
   # Tests require docker
   testcontainers = dontCheck super.testcontainers;
