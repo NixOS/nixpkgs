@@ -2678,6 +2678,8 @@ self: super: with self; {
 
   breezy = callPackage ../development/python-modules/breezy { };
 
+  brei = callPackage ../development/python-modules/brei { };
+
   brelpy = callPackage ../development/python-modules/brelpy { };
 
   brevo-python = callPackage ../development/python-modules/brevo-python { };
@@ -17958,6 +17960,8 @@ self: super: with self; {
   repeated-test = callPackage ../development/python-modules/repeated-test { };
 
   repl-python-wakatime = callPackage ../development/python-modules/repl-python-wakatime { };
+
+  repl-session = callPackage ../development/python-modules/repl-session { };
 
   replicate = callPackage ../development/python-modules/replicate { };
 
