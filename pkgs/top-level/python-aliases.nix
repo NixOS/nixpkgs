@@ -457,6 +457,7 @@ mapAliases {
   oauth = throw "oauth has been removed as it is unmaintained"; # added 2025-05-16
   objax = throw "objax has been removed because the upstream project was archived."; # Added 2025-10-04
   ocrmypdf_16 = throw "'ocrmypdf_16' was removed because paperless-ngx no longer uses it"; # Added 2026-07-23
+  ofxclient = throw "ofxclient has been removed as upstream has been unmaintained for 6 years"; # Added 2025-08-26
   openai-triton = throw "'openai-triton' has been renamed to/replaced by 'triton'"; # Converted to throw 2025-10-29
   openai-triton-bin = throw "'openai-triton-bin' has been renamed to/replaced by 'triton-bin'"; # Converted to throw 2025-10-29
   openai-triton-cuda = throw "'openai-triton-cuda' has been renamed to/replaced by 'triton-cuda'"; # Converted to throw 2025-10-29
