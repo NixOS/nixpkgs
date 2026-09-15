@@ -126,6 +126,8 @@ in
     networking.firewall.allowedTCPPorts = [ 80 ];
   };
 
+  interactive.sshBackdoor.enable = true;
+
   testScript =
     let
       changePassword = pkgs.writeText "change-password.py" ''
