@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "moon-child-fe";
-  version = "1.0.5";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "MorsGames";
     repo = "MoonChildFE";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SqoCSAFkQKcEbwDwHqicYXnQ8/HC523c+ePQFB+6rus=";
+    hash = "sha256-aWiLOHDBGIEmQD7HZVOT9yk1QzLsUlhEYLcAPi61aYE=";
   };
 
   __structuredAttrs = true;
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     mv ./Bin/Release $out/share/MoonChildFE
     icoFileToHiColorTheme game.ico MoonChildFE $out
 
-    ln -s $out/share/MoonChildFE/MoonChildFE $out/bin/MoonChildFE
+    ln -s "$out/share/MoonChildFE/Moon Child FE" $out/bin/MoonChildFE
 
     runHook postInstall
   '';

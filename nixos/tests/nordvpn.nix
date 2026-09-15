@@ -1,7 +1,7 @@
 { lib, ... }:
 {
   name = "nordvpn";
-  meta.maintainers = with lib.maintainers; [ different-error ];
+  meta.maintainers = [ ];
   nodes =
     let
       commonConfig = user: {
