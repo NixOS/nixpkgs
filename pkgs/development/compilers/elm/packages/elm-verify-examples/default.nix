@@ -3,6 +3,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   elmPackages,
+  fetchpatch,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -16,7 +17,15 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-HUmIrwmJyGvkCRHRiA069Aj25WBIGtJ7DJxwwF6OvWU=";
   };
 
-  npmDepsHash = "sha256-frNCo97GOwiClzQwRXHpqqjimJrmipsBebAshJqGZco=";
+  npmDepsHash = "sha256-QbYHG7A41ra/DM9U5USKDflohAL09VPTtPZl1tcx16Y=";
+
+  patches = [
+    # upstream PR: https://github.com/stoeffel/elm-verify-examples/pull/118/
+    (fetchpatch {
+      url = "https://github.com/turboMaCk/elm-verify-examples/commit/35791dc02d7ab1a9622bda6860783cc58c4340b5.patch";
+      hash = "sha256-3+JNY1sASuLF0XrzqGrOGto4Nqs1QCZEOJABJPJ3Bmg=";
+    })
+  ];
 
   nativeBuildInputs = [
     elmPackages.elm
