@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmongocrypt";
-  version = "1.7.4";
+  version = "1.20.4";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "libmongocrypt";
-    rev = finalAttrs.version;
-    hash = "sha256-I4KG2BHAovin9EaF8lNzJzucARvi0Qptz5Y9gTt3WkE=";
+    tag = finalAttrs.version;
+    hash = "sha256-u8g/ITw1nro4RVi+2aFfXAorUEPasOuptIBUFmw+hDc=";
   };
 
   patches = [
