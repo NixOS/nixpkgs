@@ -338,15 +338,19 @@ in
 
   obico = buildPlugin rec {
     pname = "obico";
-    version = "2.5.0";
-    format = "setuptools";
+    version = "2.7.0";
+    # Upstream switched from setup.py to a pyproject.toml-only build
+    # (setuptools backend) somewhere between 2.5.0 and this release.
+    format = "pyproject";
 
     src = fetchFromGitHub {
       owner = "TheSpaghettiDetective";
       repo = "OctoPrint-Obico";
       rev = version;
-      sha256 = "sha256-cAUXe/lRTqYuWnrRiNDuDjcayL5yV9/PtTd9oeSC8KA=";
+      sha256 = "sha256-dkBnrnyw153+z3cj0/h5E/onZropi1K1vtI5lgp88rQ=";
     };
+
+    build-system = with super; [ setuptools ];
 
     propagatedBuildInputs = with super; [
       backoff
