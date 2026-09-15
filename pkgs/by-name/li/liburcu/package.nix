@@ -35,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     rev-prefix = "v";
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Userspace RCU (read-copy-update) library";
     homepage = "https://lttng.org/urcu";
