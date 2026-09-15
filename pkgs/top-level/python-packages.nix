@@ -18982,6 +18982,8 @@ self: super: with self; {
 
   sievelib = callPackage ../development/python-modules/sievelib { };
 
+  sifts = callPackage ../development/python-modules/sifts { };
+
   sigima = callPackage ../development/python-modules/sigima { };
 
   signalrcore = callPackage ../development/python-modules/signalrcore { };
