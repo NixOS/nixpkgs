@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://cutechess.com/";
     changelog = "https://github.com/cutechess/cutechess/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ kangazero ];
     platforms = with lib.platforms; (linux ++ windows);
     mainProgram = "cutechess";
   };
