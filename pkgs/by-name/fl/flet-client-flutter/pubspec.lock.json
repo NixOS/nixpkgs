@@ -294,11 +294,11 @@
       "dependency": "transitive",
       "description": {
         "name": "equatable",
-        "sha256": "567c64b3cb4cf82397aac55f4f0cbd3ca20d77c6c03bedbc4ceaddc08904aef7",
+        "sha256": "3e0141505477fd8ad55d6eb4e7776d3fe8430be8e497ccb1521370c3f21a3e2b",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.0.7"
+      "version": "2.0.8"
     },
     "fake_async": {
       "dependency": "transitive",
@@ -314,11 +314,11 @@
       "dependency": "transitive",
       "description": {
         "name": "ffi",
-        "sha256": "289279317b4b16eb2bb7e271abccd4bf84ec9bdcbe999e278a94b804f5630418",
+        "sha256": "d07d37192dbf97461359c1518788f203b0c9102cfd2c35a716b823741219542c",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.1.4"
+      "version": "2.1.5"
     },
     "file": {
       "dependency": "transitive",
@@ -334,11 +334,11 @@
       "dependency": "transitive",
       "description": {
         "name": "file_picker",
-        "sha256": "7872545770c277236fd32b022767576c562ba28366204ff1a5628853cf8f2200",
+        "sha256": "d974b6ba2606371ac71dd94254beefb6fa81185bde0b59bdc1df09885da85fde",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "10.3.7"
+      "version": "10.3.8"
     },
     "fixnum": {
       "dependency": "transitive",
@@ -367,7 +367,7 @@
         "relative": true
       },
       "source": "path",
-      "version": "0.80.0"
+      "version": "0.80.2"
     },
     "flet_ads": {
       "dependency": "direct main",
@@ -558,11 +558,11 @@
       "dependency": "transitive",
       "description": {
         "name": "flutter_markdown",
-        "sha256": "e7bbc718adc9476aa14cfddc1ef048d2e21e4e8f18311aaac723266db9f9e7b5",
+        "sha256": "08fb8315236099ff8e90cb87bb2b935e0a724a3af1623000a9cec930468e0f27",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.7.6+2"
+      "version": "0.7.7+1"
     },
     "flutter_plugin_android_lifecycle": {
       "dependency": "transitive",
@@ -578,11 +578,11 @@
       "dependency": "transitive",
       "description": {
         "name": "flutter_svg",
-        "sha256": "b9c2ad5872518a27507ab432d1fb97e8813b05f0fc693f9d40fad06d073e0678",
+        "sha256": "87fbd7c534435b6c5d9d98b01e1fd527812b82e68ddd8bd35fc45ed0fa8f0a95",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.2.1"
+      "version": "2.2.3"
     },
     "flutter_test": {
       "dependency": "direct dev",
@@ -646,11 +646,11 @@
       "dependency": "transitive",
       "description": {
         "name": "geolocator_linux",
-        "sha256": "c4e966f0a7a87e70049eac7a2617f9e16fd4c585a26e4330bdfc3a71e6a721f3",
+        "sha256": "d64112a205931926f4363bb6bd48f14cb38e7326833041d170615586cd143797",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.2.3"
+      "version": "0.2.4"
     },
     "geolocator_platform_interface": {
       "dependency": "transitive",
@@ -686,11 +686,11 @@
       "dependency": "transitive",
       "description": {
         "name": "google_mobile_ads",
-        "sha256": "a4f59019f2c32769fb6c60ed8aa321e9c21a36297e2c4f23452b3e779a3e7a26",
+        "sha256": "f35e040875bb54e8a3455bcffed3b4ac9e9263fbf7751b9fd1ae7f30793faee8",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "6.0.0"
+      "version": "7.0.0"
     },
     "graphs": {
       "dependency": "transitive",
@@ -726,11 +726,11 @@
       "dependency": "transitive",
       "description": {
         "name": "http",
-        "sha256": "bb2ce4590bc2667c96f318d68cac1b5a7987ec819351d32b1c987239a815e007",
+        "sha256": "87721a4a50b19c7f1d49001e51409bddc46303966ce89a65af4f4e6004896412",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.5.0"
+      "version": "1.6.0"
     },
     "http_parser": {
       "dependency": "transitive",
@@ -746,11 +746,11 @@
       "dependency": "transitive",
       "description": {
         "name": "image",
-        "sha256": "4e973fcf4caae1a4be2fa0a13157aa38a8f9cb049db6529aa00b4d71abc4d928",
+        "sha256": "492bd52f6c4fbb6ee41f781ff27765ce5f627910e1e0cbecfa3d9add5562604c",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "4.5.4"
+      "version": "4.7.2"
     },
     "integration_test": {
       "dependency": "direct main",
@@ -1552,21 +1552,21 @@
       "dependency": "transitive",
       "description": {
         "name": "shared_preferences",
-        "sha256": "6e8bf70b7fef813df4e9a36f658ac46d107db4b4cfe1048b477d4e453a8159f5",
+        "sha256": "2939ae520c9024cb197fc20dee269cd8cdbf564c8b5746374ec6cacdc5169e64",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.5.3"
+      "version": "2.5.4"
     },
     "shared_preferences_android": {
       "dependency": "transitive",
       "description": {
         "name": "shared_preferences_android",
-        "sha256": "46a46fd64659eff15f4638bbe19de43f9483f0e0bf024a9fb6b3582064bacc7b",
+        "sha256": "83af5c682796c0f7719c2bbf74792d113e40ae97981b8f266fa84574573556bc",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.4.17"
+      "version": "2.4.18"
     },
     "shared_preferences_foundation": {
       "dependency": "transitive",
@@ -1978,21 +1978,21 @@
       "dependency": "transitive",
       "description": {
         "name": "webview_flutter",
-        "sha256": "c3e4fe614b1c814950ad07186007eff2f2e5dd2935eba7b9a9a1af8e5885f1ba",
+        "sha256": "a3da219916aba44947d3a5478b1927876a09781174b5a2b67fa5be0555154bf9",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "4.13.0"
+      "version": "4.13.1"
     },
     "webview_flutter_android": {
       "dependency": "transitive",
       "description": {
         "name": "webview_flutter_android",
-        "sha256": "3fcca88ee2ae568807ebd42deed235bb8dd8e62b3e4d5caff67daa6bce062cca",
+        "sha256": "eeeb3fcd5f0ff9f8446c9f4bbc18a99b809e40297528a3395597d03aafb9f510",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "4.10.9"
+      "version": "4.10.11"
     },
     "webview_flutter_platform_interface": {
       "dependency": "transitive",
@@ -2018,11 +2018,11 @@
       "dependency": "transitive",
       "description": {
         "name": "webview_flutter_wkwebview",
-        "sha256": "a57b76a081bed3bf3a71a486bdf83642b00f1a7342043d50367cea68f338b1af",
+        "sha256": "e49f378ed066efb13fc36186bbe0bd2425630d4ea0dbc71a18fdd0e4d8ed8ebc",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.23.4"
+      "version": "3.23.5"
     },
     "win32": {
       "dependency": "transitive",
@@ -2107,6 +2107,6 @@
   },
   "sdks": {
     "dart": ">=3.9.0 <4.0.0",
-    "flutter": ">=3.35.0"
+    "flutter": ">=3.35.1"
   }
 }
