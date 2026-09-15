@@ -22,7 +22,7 @@
 
 buildPythonPackage {
   pname = "badldap";
-  version = "0.7.1-unstable-2025-10-28";
+  version = "0.5.10";
   pyproject = true;
 
   src = fetchFromGitHub {
