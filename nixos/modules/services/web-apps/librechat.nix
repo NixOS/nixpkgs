@@ -286,7 +286,7 @@ in
 
     users.groups.librechat = lib.mkIf (cfg.user == "librechat") { };
 
-    services.librechat.env.MONGO_URI = lib.mkIf cfg.enableLocalDB "mongodb://localhost:27017";
+    services.librechat.env.MONGO_URI = lib.mkIf cfg.enableLocalDB "mongodb://localhost:27017/LibreChat";
     services.mongodb.enable = lib.mkIf cfg.enableLocalDB true;
 
     services.meilisearch.enable = lib.mkIf cfg.meilisearch.enable true;
