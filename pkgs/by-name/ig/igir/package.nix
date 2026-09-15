@@ -18,16 +18,16 @@
 
 buildNpmPackage rec {
   pname = "igir";
-  version = "5.4.1";
+  version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "emmercm";
     repo = "igir";
     rev = "v${version}";
-    hash = "sha256-8yx5FYF9WGBt00ylmhP4Z7v74ghWMk4aFLv4kbmyvu4=";
+    hash = "sha256-bQjfeDTtn75mxLjB0w4gPuuKQh3Ah5hZ2z2dfwwyNsU=";
   };
 
-  npmDepsHash = "sha256-KyrIOnwJomWULVqFfWbik53amHBqS1XU9HMtQnCKRxk=";
+  npmDepsHash = "sha256-3mZDLZ4IYcbePgkqRzr9eNC+OeTGwl5EZNyx1K8EgNg=";
 
   # I have no clue why I have to do this
   postPatch = ''
