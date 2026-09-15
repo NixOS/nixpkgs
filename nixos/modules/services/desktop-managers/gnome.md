@@ -69,7 +69,10 @@ You can install GNOME core developer tools with:
 GNOME Flashback provides a desktop environment based on the classic GNOME 2 architecture. You can enable the default GNOME Flashback session, which uses the Metacity window manager, with:
 
 ```nix
-{ services.desktopManager.gnome.flashback.enableMetacity = true; }
+{
+  services.xserver.enable = true;
+  services.desktopManager.gnome.flashback.enableMetacity = true;
+}
 ```
 
 It is also possible to create custom sessions that replace Metacity with a different window manager using [](#opt-services.desktopManager.gnome.flashback.customSessions).
