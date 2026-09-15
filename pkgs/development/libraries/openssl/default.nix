@@ -395,7 +395,7 @@ let
         changelog = "https://github.com/openssl/openssl/blob/openssl-${version}/CHANGES.md";
         donationPage = "https://openssl.foundation/donate/ways-to-give";
         description = "Cryptographic library that implements the SSL and TLS protocols";
-        license = lib.licenses.openssl;
+        license = lib.licenses.asl20;
         mainProgram = "openssl";
         maintainers = with lib.maintainers; [ thillux ];
         teams = [ lib.teams.security-review ];
@@ -443,10 +443,6 @@ in
       lib.optional stdenv.hostPlatform.isCygwin ./openssl-3.0.18-skip-dllmain-detach.patch;
 
     withDocs = true;
-
-    extraMeta = {
-      license = lib.licenses.asl20;
-    };
   };
 
   openssl_3_5 = common {
@@ -475,10 +471,6 @@ in
     ];
 
     withDocs = true;
-
-    extraMeta = {
-      license = lib.licenses.asl20;
-    };
   };
 
   openssl_3_6 = common {
@@ -504,10 +496,6 @@ in
     ];
 
     withDocs = true;
-
-    extraMeta = {
-      license = lib.licenses.asl20;
-    };
   };
 
   openssl_4_0 = common {
@@ -533,9 +521,30 @@ in
     ];
 
     withDocs = true;
+  };
 
-    extraMeta = {
-      license = lib.licenses.asl20;
-    };
+  openssl_4_1 = common {
+    version = "4.1.0-alpha1";
+    hash = "sha256-FgJx5mkChE7jfndrmN9ZqQNznNIqRPQxJtq5/p79Wb0=";
+
+    patches = [
+      # Support for NIX_SSL_CERT_FILE, motivation:
+      # https://github.com/NixOS/nixpkgs/commit/942dbf89c6120cb5b52fb2ab456855d1fbf2994e
+      ./3.0/nix-ssl-cert-file.patch
+
+      # openssl will only compile in KTLS if the current kernel supports it.
+      # This patch disables build-time detection.
+      ./3.0/openssl-disable-kernel-detection.patch
+
+      # Look up SSL certificates in /etc rather than the immutable installation directory
+      (
+        if stdenv.hostPlatform.isDarwin then
+          ./3.5/use-etc-ssl-certs-darwin.patch
+        else
+          ./3.5/use-etc-ssl-certs.patch
+      )
+    ];
+
+    withDocs = true;
   };
 }

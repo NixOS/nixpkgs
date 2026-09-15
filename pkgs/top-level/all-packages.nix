@@ -6358,6 +6358,7 @@ with pkgs;
     openssl_3_5
     openssl_3_6
     openssl_4_0
+    openssl_4_1
     ;
 
   # pcre32 seems unused
