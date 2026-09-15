@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index b70c562..34ed3c0 100755
+--- a/Makefile
++++ b/Makefile
+@@ -34,7 +34,7 @@ RM = rm
+ TOUCH = touch
+ FALSE = false
+ # Executable extension
+-EXT = .exe
++EXT =
+ 
+ # Target executable
+ EXE = reveng
