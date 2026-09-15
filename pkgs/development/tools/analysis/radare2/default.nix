@@ -41,8 +41,8 @@ let
   sdb = fetchFromGitHub {
     owner = "radareorg";
     repo = "sdb";
-    tag = "2.5.0"; # https://github.com/radareorg/radare2/blob/master/subprojects/sdb.wrap
-    hash = "sha256-TSZGAzryZcVHJPnCx7zrP1+nschsOm1zmkCJyqA4kbk=";
+    tag = "2.5.2"; # https://github.com/radareorg/radare2/blob/master/subprojects/sdb.wrap
+    hash = "sha256-qZdqa1xsQd/ebvd8QSDRZWsO+IX99XiN99DZgEguYKQ=";
   };
 
   qjs = fetchFromGitHub {
@@ -54,13 +54,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "radare2";
-  version = "6.2.0";
+  version = "6.2.2";
 
   src = fetchFromGitHub {
     owner = "radareorg";
     repo = "radare2";
     tag = finalAttrs.version;
-    hash = "sha256-7BCNdPWzsjUuVftbxUZ6iChR5KDp2yKVjKi+1oHt9O8=";
+    hash = "sha256-/YRJNXl3Bu7R5kGTxJbxJ9WNHx4sR97t4OeYkoT2Lok=";
   };
 
   mesonFlags = [
