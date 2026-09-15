@@ -1,0 +1,163 @@
+From 78bef516f93ca3b0bf016e5a7bfb9aba539f99db Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Wed, 25 Mar 2026 19:48:57 +0530
+Subject: [PATCH 5/5] tests fix removed fields
+
+Signed-off-by: phanirithvij <phanirithvij2000@gmail.com>
+---
+ tests/collection_test.py  |  6 +-----
+ tests/collections_test.py | 17 -----------------
+ 2 files changed, 1 insertion(+), 22 deletions(-)
+
+diff --git a/tests/collection_test.py b/tests/collection_test.py
+index 7eb29fa..ddf4acb 100644
+--- a/tests/collection_test.py
++++ b/tests/collection_test.py
+@@ -52,7 +52,6 @@ def test_actual_retrieve(
+                 "infix": False,
+                 "stem": False,
+                 "stem_dictionary": "",
+-                "truncate_len": 100,
+                 "store": True,
+             },
+             {
+@@ -66,7 +65,6 @@ def test_actual_retrieve(
+                 "infix": False,
+                 "stem": False,
+                 "stem_dictionary": "",
+-                "truncate_len": 100,
+                 "store": True,
+             },
+         ],
+@@ -74,8 +72,6 @@ def test_actual_retrieve(
+         "num_documents": 0,
+         "symbols_to_index": [],
+         "token_separators": [],
+-        "synonym_sets": [],
+-        "curation_sets": [],
+     }
+ 
+     response.pop("created_at")
+@@ -95,7 +91,7 @@ def test_actual_update(
+ 
+     expected: CollectionSchema = {
+         "fields": [
+-            {"name": "num_locations", "truncate_len": 100, "type": "int32"},
++            {"name": "num_locations", "type": "int32"},
+         ],
+     }
+ 
+diff --git a/tests/collections_test.py b/tests/collections_test.py
+index 788e3dc..bcee5ba 100644
+--- a/tests/collections_test.py
++++ b/tests/collections_test.py
+@@ -1,6 +1,5 @@
+ """Tests for the Collections class."""
+ 
+-
+ import sys
+ 
+ from typesense.async_.api_call import AsyncApiCall
+@@ -113,7 +112,6 @@ def test_actual_create(actual_collections: Collections, delete_all: None) -> Non
+                 "infix": False,
+                 "stem": False,
+                 "stem_dictionary": "",
+-                "truncate_len": 100,
+                 "store": True,
+             },
+             {
+@@ -127,7 +125,6 @@ def test_actual_create(actual_collections: Collections, delete_all: None) -> Non
+                 "infix": False,
+                 "stem": False,
+                 "stem_dictionary": "",
+-                "truncate_len": 100,
+                 "store": True,
+             },
+         ],
+@@ -135,8 +132,6 @@ def test_actual_create(actual_collections: Collections, delete_all: None) -> Non
+         "num_documents": 0,
+         "symbols_to_index": [],
+         "token_separators": [],
+-        "synonym_sets": [],
+-        "curation_sets": [],
+     }
+ 
+     response = actual_collections.create(
+@@ -185,7 +180,6 @@ def test_actual_retrieve(
+                     "infix": False,
+                     "stem": False,
+                     "stem_dictionary": "",
+-                    "truncate_len": 100,
+                     "store": True,
+                 },
+                 {
+@@ -199,7 +193,6 @@ def test_actual_retrieve(
+                     "infix": False,
+                     "stem": False,
+                     "stem_dictionary": "",
+-                    "truncate_len": 100,
+                     "store": True,
+                 },
+             ],
+@@ -207,8 +200,6 @@ def test_actual_retrieve(
+             "num_documents": 0,
+             "symbols_to_index": [],
+             "token_separators": [],
+-            "synonym_sets": [],
+-            "curation_sets": [],
+         },
+     ]
+ 
+@@ -250,7 +241,6 @@ async def test_actual_create_async(
+                 "infix": False,
+                 "stem": False,
+                 "stem_dictionary": "",
+-                "truncate_len": 100,
+                 "store": True,
+             },
+             {
+@@ -264,7 +254,6 @@ async def test_actual_create_async(
+                 "infix": False,
+                 "stem": False,
+                 "stem_dictionary": "",
+-                "truncate_len": 100,
+                 "store": True,
+             },
+         ],
+@@ -272,8 +261,6 @@ async def test_actual_create_async(
+         "num_documents": 0,
+         "symbols_to_index": [],
+         "token_separators": [],
+-        "synonym_sets": [],
+-        "curation_sets": [],
+     }
+ 
+     response = await actual_async_collections.create(
+@@ -322,7 +309,6 @@ async def test_actual_retrieve_async(
+                     "infix": False,
+                     "stem": False,
+                     "stem_dictionary": "",
+-                    "truncate_len": 100,
+                     "store": True,
+                 },
+                 {
+@@ -336,7 +322,6 @@ async def test_actual_retrieve_async(
+                     "infix": False,
+                     "stem": False,
+                     "stem_dictionary": "",
+-                    "truncate_len": 100,
+                     "store": True,
+                 },
+             ],
+@@ -344,8 +329,6 @@ async def test_actual_retrieve_async(
+             "num_documents": 0,
+             "symbols_to_index": [],
+             "token_separators": [],
+-            "synonym_sets": [],
+-            "curation_sets": [],
+         },
+     ]
+ 
+-- 
+2.53.0
+
