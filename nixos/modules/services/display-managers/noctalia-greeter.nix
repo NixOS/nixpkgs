@@ -93,9 +93,15 @@ in
         }
       ];
 
-      services.displayManager.noctalia-greeter.settings.cursor = mkIf (cfg.cursorTheme.package != null) {
-        theme = mkDefault cfg.cursorTheme.name;
-        path = mkDefault "${cfg.cursorTheme.package}/share/icons";
+      services.displayManager.noctalia-greeter.settings = {
+        session.default = mkIf (config.services.displayManager.defaultSession != null) (
+          mkDefault config.services.displayManager.defaultSession
+        );
+
+        cursor = mkIf (cfg.cursorTheme.package != null) {
+          theme = mkDefault cfg.cursorTheme.name;
+          path = mkDefault "${cfg.cursorTheme.package}/share/icons";
+        };
       };
 
       environment.systemPackages = [ cfg.package ];
