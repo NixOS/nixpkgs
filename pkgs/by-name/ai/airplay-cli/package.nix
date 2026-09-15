@@ -14,31 +14,26 @@ let
     else
       throw "libraop does not support this platform, yet";
 in
-stdenv.mkDerivation {
-  pname = "libraop";
-  version = "0-unstable-2026-02-20";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "airplay-cli";
+  version = "0.5.3";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
-    repo = "libraop";
-    # we try to closely match the commit used in the last music-assistant release from
-    # https://github.com/music-assistant/server/tree/stable/music_assistant/providers/airplay/bin
-    rev = "df3c055674c147eeaa9307b7d554b9d46ed6418a";
+    repo = "airplay-cli";
+    # we try to closely match the version used in the last music-assistant release from
+    # https://github.com/music-assistant/server/blob/stable/Dockerfile#L7
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-zD1DggBQjbiD7B/u0hmogXj8NhrzYgVXMyzvHkaM4Hg=";
+    hash = "sha256-gd9s+TW6UH2o5z2mYt60WvRkXJP3PsrcexzEMdEmxkw=";
   };
-
-  patches = [
-    # https://github.com/philippe44/libraop/pull/48
-    ./link-libssl.diff
-  ];
 
   postPatch = ''
     # the most security critical part we build ourself
-    rm -r libopenssl/
-
-    # do not confuse the prebuilt binaries with the ones we build
-    rm bin/*
+    rm -r libraop/libopenssl/
 
     # easen debugging and we strip ourselves, too
     substituteInPlace Makefile \
@@ -48,7 +43,7 @@ stdenv.mkDerivation {
     # on darwin the direct dlopen to system libcrypto crashes with
     # WARNING: /nix/store/.../bin/cliraop is loading libcrypto in an unsafe way
     # Abort trap: 6
-    substituteInPlace crosstools/src/cross_ssl.c \
+    substituteInPlace libraop/crosstools/src/cross_ssl.c \
       --replace-fail '"libcrypto.dylib"' '"${lib.getLib openssl}/lib/libcrypto.dylib"' \
       --replace-fail '"libssl.dylib"' '"${lib.getLib openssl}/lib/libssl.dylib"'
   '';
@@ -64,20 +59,16 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp bin/cliraop-${host}-${stdenv.hostPlatform.uname.processor} $out/bin/cliraop
+    cp bin/cliairplay-${host}-${stdenv.hostPlatform.uname.processor} $out/bin/cliairplay
   '';
 
   meta = {
-    description = "RAOP player and library (AirPlay)";
-    homepage = "https://github.com/music-assistant/libraop";
-    # https://github.com/philippe44/libraop/issues/36
-    license = with lib.licenses; [
-      gpl2Only
-      mit
-    ];
+    description = "Unified command-line binary for streaming to AirPlay 1 (RAOP) and AirPlay 2 devices";
+    homepage = "https://github.com/music-assistant/airplay-cli";
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
-    mainProgram = "cliraop";
+    mainProgram = "cliairplay";
     platforms = with lib.platforms; linux ++ darwin;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
-}
+})

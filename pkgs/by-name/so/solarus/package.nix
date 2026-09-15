@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "solarus";
-  version = "2.1.3";
+  version = "2.1.4";
 
   src = fetchFromGitLab {
     owner = "solarus-games";
     repo = "solarus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mneG7hkBRJZHkcBOLCAktgkprOpt8ti2qwtkK0SuMpA=";
+    hash = "sha256-gXqKDhjK6vZWFTBNDNCu5XTks7zr+ZUAIJregGEvtOc=";
   };
 
   outputs = [
