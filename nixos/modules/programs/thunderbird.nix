@@ -65,6 +65,84 @@ in
         - `"clear"`: Value has no effect. Resets to factory defaults on each startup.
       '';
     };
+
+    languagePacks = lib.mkOption {
+      # Available languages can be found in https://releases.mozilla.org/pub/thunderbird/releases/${cfg.package.version}/linux-x86_64/xpi/
+      type = lib.types.listOf (
+        lib.types.enum ([
+          "af"
+          "ar"
+          "ast"
+          "be"
+          "bg"
+          "br"
+          "ca"
+          "cak"
+          "cs"
+          "cy"
+          "da"
+          "de"
+          "dsb"
+          "el"
+          "en-CA"
+          "en-GB"
+          "en-US"
+          "es-AR"
+          "es-ES"
+          "es-MX"
+          "et"
+          "eu"
+          "fi"
+          "fr"
+          "fy-NL"
+          "ga-IE"
+          "gd"
+          "gl"
+          "he"
+          "hr"
+          "hsb"
+          "hu"
+          "hy-AM"
+          "id"
+          "is"
+          "it"
+          "ja"
+          "ka"
+          "kab"
+          "kk"
+          "ko"
+          "lt"
+          "lv"
+          "ms"
+          "nb-NO"
+          "nl"
+          "nn-NO"
+          "pa-IN"
+          "pl"
+          "pt-BR"
+          "pt-PT"
+          "rm"
+          "ro"
+          "ru"
+          "sk"
+          "sl"
+          "sq"
+          "sr"
+          "sv-SE"
+          "th"
+          "tr"
+          "uk"
+          "uz"
+          "vi"
+          "zh-CN"
+          "zh-TW"
+        ])
+      );
+      default = [ ];
+      description = ''
+        The language packs to install.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -82,6 +160,15 @@ in
         Value = value;
         Status = cfg.preferencesStatus;
       }) cfg.preferences;
+      ExtensionSettings = builtins.listToAttrs (
+        builtins.map (
+          lang:
+          lib.attrsets.nameValuePair "langpack-${lang}@thunderbird.mozilla.org" {
+            installation_mode = "normal_installed";
+            install_url = "https://releases.mozilla.org/pub/thunderbird/releases/${cfg.package.version}/linux-x86_64/xpi/${lang}.xpi";
+          }
+        ) cfg.languagePacks
+      );
     };
   };
 
