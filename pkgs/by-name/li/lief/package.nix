@@ -31,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
+    "dev"
     "py"
   ];
 
@@ -82,6 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
       versionCheck = true;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Library to Instrument Executable Formats";
