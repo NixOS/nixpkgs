@@ -5279,4 +5279,46 @@ runTests {
       ))
     ];
   };
+
+  testMkEnableOption = {
+    expr =
+      let
+        opt = lib.mkEnableOption "foo";
+      in
+      {
+        inherit (opt)
+          default
+          example
+          description
+          type
+          ;
+      };
+    expected = {
+      default = false;
+      example = true;
+      description = "Whether to enable foo.";
+      type = lib.types.bool;
+    };
+  };
+
+  testMkEnabledOption = {
+    expr =
+      let
+        opt = lib.mkEnabledOption "foo";
+      in
+      {
+        inherit (opt)
+          default
+          example
+          description
+          type
+          ;
+      };
+    expected = {
+      default = true;
+      example = false;
+      description = "Whether to enable foo.";
+      type = lib.types.bool;
+    };
+  };
 }
