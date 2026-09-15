@@ -147,6 +147,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-buHRph9oISR2snEIwm2l9EncCbYm1C+CeboNwuCPqFg=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   depsBuildBuild = [
     buildPackages.stdenv.cc
   ]
