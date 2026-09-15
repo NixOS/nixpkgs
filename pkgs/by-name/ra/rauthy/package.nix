@@ -15,13 +15,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rauthy";
-  version = "0-unstable-2026-09-11";
+  version = "0-unstable-2026-09-14";
 
   src = fetchFromGitHub {
     owner = "sebadob";
     repo = "rauthy";
-    rev = "53125a91665a8eb4038ece01bee1d121b5590f4c";
-    hash = "sha256-NFtdz8T7CKt3Hq+TmoH2Lv4LHsbguZFyzZufoRWGZwQ=";
+    rev = "5c3e2bb4f1735fd684d804eff03c98c9ef23f16e";
+    hash = "sha256-RKO4KHuzKq1k+jRL6Pl5RWMVkYx7QCstTSL7YIfnsC8=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-VdOJOine6UQ/muVANoOiw5F3ECQ1OXPXqCuCoA3sLEA=";
   };
 
-  cargoHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+  cargoHash = "sha256-MqLGaP+4H7UP6vuoexAnTrkxo8345lckWI6wwluwZN4=";
+
+  postPatch = ''
+        substituteInPlace src/api_types/src/users.rs \
+          --replace-fail \
+            '#[cfg_attr(debug_assertions, derive(Serialize))]
+    #[serde(rename_all = "lowercase")]' \
+            '#[derive(Serialize)]
+    #[serde(rename_all = "lowercase")]'
+  '';
 
   preBuild = ''
     pushd src/wasm-modules
