@@ -14,7 +14,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "tokenspeed-mla";
-  version = "0.1.5";
+  version = "0.1.0";
   pyproject = true;
   __structuredAttrs = true;
 
