@@ -41,7 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/usr/local/etc/zoneinfo" ""
   ''
   + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-    substituteInPlace unix/configure unix/configure.in \
+    substituteInPlace unix/configure unix/configure.${
+      if lib.versionAtLeast version "9.0" then "ac" else "in"
+    } \
       --replace-fail '`uname -s`' '${stdenv.hostPlatform.uname.system}'
   ''
   # A shared Cygwin build tries to configure the windows build system
