@@ -14,7 +14,6 @@
   nasm,
 
   # dependencies
-  fsspec,
   packaging,
   pyarrow,
   tqdm,
@@ -79,7 +78,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "daft";
-  version = "0.7.24";
+  version = "0.7.25";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -87,7 +86,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Eventual-Inc";
     repo = "Daft";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HCqkeN9kmQTvzlPlweeE1nYPf2YjLep2RUUIFRXlGGw=";
+    hash = "sha256-XVtMB+fZ1zbFoStwlZmmam3/t8eD7vRop+7YlNhuLhs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -143,11 +142,9 @@ buildPythonPackage (finalAttrs: {
   };
 
   pythonRelaxDeps = [
-    "fsspec"
     "tqdm"
   ];
   dependencies = [
-    fsspec
     packaging
     pyarrow
     tqdm
