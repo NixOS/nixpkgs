@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "splunk-sdk";
-  version = "3.0.0";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "splunk";
     repo = "splunk-sdk-python";
     tag = version;
-    hash = "sha256-8544jRlv//Qkcq4JqrMOBZhFC6K6BI1WGT6PK4AwVvs=";
+    hash = "sha256-wVndu+f7+6hWSnNZSZatTVuRxjZDA8o9MKMB3QzEOZQ=";
   };
 
   build-system = [ setuptools ];
