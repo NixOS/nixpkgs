@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "particl-core";
-  version = "23.2.10.0";
+  version = "23.2.11.0";
 
   src = fetchFromGitHub {
     owner = "particl";
     repo = "particl-core";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Iq/JOz4EIgcGS5bsGxau0IWuFFv46mlAMWTRIHvYyng=";
+    hash = "sha256-oL2CMsTmEW1F7TI5m3iJwepBA9zD0diCMSNgLQF3H+8=";
   };
 
   nativeBuildInputs = [
