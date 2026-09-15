@@ -2802,6 +2802,12 @@ with haskellLib;
     doJailbreak
   ];
 
+  optparse-generic = appendPatch (fetchpatch {
+    name = "bump-bounds.patch";
+    url = "https://github.com/Gabriella439/optparse-generic/commit/e59394937d43b09cf612e7bac67a390b94215b40.patch";
+    sha256 = "sha256-0yN22zv8ndc8YJnv+/fiWnFJasrbPgmAPPOrRhfddDw";
+  }) super.optparse-generic;
+
   # Tests require docker
   testcontainers = dontCheck super.testcontainers;
 
