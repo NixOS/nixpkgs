@@ -21,6 +21,24 @@
     in
     {
       /**
+        The Nixpkgs repository/flake houses multiple components that provide functions.
+
+        These include the Nixpkgs `lib` library, with a larger number of functions for various purposes, as well as the `nixpkgs` (TBD) and `nixos` libraries whose main purpose is to provide configurability for those respective components.
+       */
+      # This attribute set is intentionally not extensible. Its purpose is not dependency injection.
+      libs = {
+        /**
+          [The Nixpkgs library](https://nixos.org/manual/nixpkgs/unstable/#id-1.4)
+         */
+        lib = import ./lib;
+
+        /**
+          Entrypoints into [NixOS](https://nixos.org/manual/nixos/unstable/), including [`runTest`](https://nixos.org/manual/nixos/unstable/#sec-call-nixos-test-outside-nixos).
+        */
+        nixos = import ./nixos/lib { };
+      };
+
+      /**
         `nixpkgs.lib` is a combination of the [Nixpkgs library](https://nixos.org/manual/nixpkgs/unstable/#id-1.4), and other attributes
         that are _not_ part of the Nixpkgs library, but part of the Nixpkgs flake:
 
