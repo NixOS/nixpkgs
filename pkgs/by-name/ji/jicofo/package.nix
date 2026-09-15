@@ -9,10 +9,10 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jicofo";
-  version = "1.0-1189";
+  version = "1.0-1205";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/jicofo_${finalAttrs.version}-1_all.deb";
-    hash = "sha256-c6YQT/okrB/PZmD7jHPte+qWpevfKqnXm4oAtTVjm7s=";
+    hash = "sha256-DDfp6j4uPs0StXsDY6QUIaVYYWqbWwcy1KvWEmEWROQ=";
   };
 
   dontBuild = true;
