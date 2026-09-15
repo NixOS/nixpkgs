@@ -11,6 +11,7 @@
   libadwaita,
   meson,
   ninja,
+  nix-update-script,
   pango,
   pkg-config,
   vala,
@@ -79,6 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
       --subst-var-by originalName "prefs" \
       --subst-var-by typelibDir "${placeholder "out"}/lib/girepository-1.0"
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/Keruspe/GPaste";
