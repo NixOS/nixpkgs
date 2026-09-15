@@ -5,6 +5,7 @@
   cryptography,
   fetchFromGitHub,
   keyring,
+  pygobject3,
   pytestCheckHook,
   playwright,
   setuptools,
@@ -37,6 +38,10 @@ buildPythonPackage rec {
     cryptography
     keyring
   ];
+
+  optional-dependencies = {
+    pygobject3 = [ pygobject3 ];
+  };
 
   nativeCheckInputs = [
     playwright
