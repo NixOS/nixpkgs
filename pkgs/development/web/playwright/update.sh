@@ -98,6 +98,10 @@ replace_sha() {
     local new_hash="$3"
 
     sed -i "s|$attr_name = \".\{44,52\}\"|$attr_name = \"$new_hash\"|" "$target_file"
+    if ! grep -Fq "$attr_name = \"$new_hash\"" "$target_file"; then
+        echo "replace_sha: failed to update $attr_name hash in $target_file" >&2
+        return 1
+    fi
 }
 
 prefetch_browser() {
@@ -155,7 +159,7 @@ curl -fsSL \
       .comment = "This file is kept up to date via update.sh"
       | .browsers |= (
         [.[]
-          | select(.installByDefault) | del(.installByDefault)]
+          | select(.installByDefault) | del(.installByDefault, .revisionOverrides)]
           | map({(.name): . | del(.name)})
           | add
       )
