@@ -5279,4 +5279,39 @@ runTests {
       ))
     ];
   };
+
+  testAllBuiltinsExported = {
+    expr = lib.subtractLists (lib.attrNames lib) (lib.attrNames builtins);
+    expected = lib.intersectLists (lib.attrNames builtins) [
+      "abort"
+      "break"
+      "builtins"
+      "currentSystem"
+      "currentTime"
+      "derivation"
+      "derivationStrict"
+      "false"
+      "fetchGit"
+      "fetchMercurial"
+      "fetchTarball"
+      "fetchTree"
+      "fetchurl"
+      "findFile"
+      "getEnv"
+      "getFlake"
+      "import"
+      "isNull"
+      "langVersion"
+      "nixPath"
+      "nixVersion"
+      "null"
+      "scopedImport"
+      "storeDir"
+      "storePath"
+      "throw"
+      "toPath"
+      "traceVerbose"
+      "true"
+    ];
+  };
 }
