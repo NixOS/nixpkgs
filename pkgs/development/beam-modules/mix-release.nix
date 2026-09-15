@@ -12,6 +12,7 @@
   ripgrep,
   bbe,
   makeWrapper,
+  writableTmpDirAsHomeHook,
   coreutils,
   gnused,
   gnugrep,
@@ -116,6 +117,7 @@ lib.extendMkDerivation {
             git
             makeWrapper
             ripgrep
+            writableTmpDirAsHomeHook
 
             mixBuildDirHook
             mixCompileHook
@@ -162,14 +164,6 @@ lib.extendMkDerivation {
       // (attrs.env or { });
 
       postUnpack = ''
-        # Mix and Hex
-        export MIX_HOME="$TEMPDIR/mix"
-        export HEX_HOME="$TEMPDIR/hex"
-
-        # Rebar
-        export REBAR_GLOBAL_CONFIG_DIR="$TEMPDIR/rebar3"
-        export REBAR_CACHE_DIR="$TEMPDIR/rebar3.cache"
-
         ${lib.optionalString (mixFodDeps != null) ''
           # Compilation of the dependencies will require that the dependency path is
           # writable, thus a copy to the $TEMPDIR is inevitable here.
