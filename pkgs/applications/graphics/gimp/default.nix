@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch,
   replaceVars,
   meson,
   ninja,
@@ -116,6 +117,12 @@ stdenv.mkDerivation (finalAttrs: {
     # so we need to pick up the one from the package.
     (replaceVars ./tests-dbus-conf.patch {
       session_conf = "${dbus.out}/share/dbus-1/session.conf";
+    })
+
+    (fetchpatch {
+      name = "fix-cve-2026-58379";
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/b630f167ba7b73b17e7dd6df1fee1623f8324575.patch";
+      hash = "sha256-0QMLfn9h0FtvzqA+Ui+lg5KMBhss1gbHae90SfPGF4c=";
     })
   ];
 
