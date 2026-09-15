@@ -1,23 +1,63 @@
-# Common configuration for Xen DomU NixOS virtual machines.
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
-{ ... }:
+let
+  inherit (lib) mkEnableOption mkIf mkPackageOption;
+  inherit (lib.teams.xen) members;
+
+  xen = config.virtualisation.xen;
+  cfg = xen.guest;
+in
 
 {
-  boot.loader.grub.device = "nodev";
+  options.virtualisation.xen.guest = {
+    enable = mkEnableOption "the Xen Guest Agent daemon, for easier XenStore access inside unprivileged domains";
+    package = mkPackageOption pkgs "Xen Guest Agent" { default = "xen-guest-agent"; };
+  };
 
-  boot.initrd.kernelModules = [
-    "xen-blkfront"
-    "xen-tpmfront"
-    "xen-kbdfront"
-    "xen-fbfront"
-    "xen-netfront"
-    "xen-pcifront"
-    "xen-scsifront"
-  ];
+  config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = !xen.enable;
+        message = "The Xen domU module cannot be enabled in a Xen dom0.";
+      }
+      {
+        assertion = !config.services.xe-guest-utilities.enable;
+        message = "The XenServer guest utilities cannot be enabled alongside the Xen Guest Agent.";
+      }
+    ];
 
-  # Send syslog messages to the Xen console.
-  services.syslogd.tty = "hvc0";
+    environment.systemPackages = [ cfg.package ];
 
-  # Don't run ntpd, since we should get the correct time from Dom0.
-  services.timesyncd.enable = false;
+    systemd = {
+      packages = [ cfg.package ];
+      services.xen-guest-agent.wantedBy = [ "multi-user.target" ];
+    };
+
+    boot = {
+      kernelParams = [ "console=hvc0" ];
+      kernelModules = [
+        "9pnet_xen"
+        "xen_wdt"
+        "drm_xen_front"
+        "snd_xen_front"
+      ];
+      initrd.kernelModules = [
+        "xen_blkfront"
+        "xen_tpmfront"
+        "xen_kbdfront"
+        "xen_fbfront"
+        "xen_netfront"
+        "xen_pcifront"
+        "xen_scsifront"
+        "xen_hcd"
+        "xenfs"
+      ];
+    };
+  };
+  meta.maintainers = members;
 }
