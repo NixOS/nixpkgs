@@ -2,6 +2,7 @@
   callPackage,
   fetchurl,
   fetchpatch,
+  stdenv,
   ...
 }@args:
 
@@ -44,5 +45,10 @@ callPackage ./generic.nix (
       # Backport of upstream check-in `fd06472ef41e1d73`; see the patch.
       ./8.6-windows-disable-tzdata.patch
     ];
+
+    extraPatch = ''
+      substituteInPlace unix/configure unix/configure.in \
+        --replace-fail '`uname -s`' '${stdenv.hostPlatform.uname.system}'
+    '';
   }
 )
