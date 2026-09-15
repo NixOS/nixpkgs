@@ -18,10 +18,6 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-BxGIVt2gkNQkWXQyLnPQQAtCNFJKlXmTctKVAxFzjfM=";
 
-  # jsdom is both a peerDependency and devDependency; pruning
-  # devDependencies removes it, but the CLI needs it at runtime.
-  dontNpmPrune = true;
-
   passthru.updateScript = nix-update-script { };
 
   __structuredAttrs = true;
