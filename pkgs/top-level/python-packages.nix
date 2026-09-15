@@ -23049,6 +23049,8 @@ self: super: with self; {
 
   yaxmldiff = callPackage ../development/python-modules/yaxmldiff { };
 
+  yclade = callPackage ../development/python-modules/yclade { };
+
   ydata-profiling = callPackage ../development/python-modules/ydata-profiling { };
 
   ydiff = callPackage ../development/python-modules/ydiff { };
