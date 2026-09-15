@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  unstableGitUpdater,
 
   # nativeBuildInputs
   makeWrapper,
@@ -71,6 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_CFLAGS_COMPILE = toString [
       "-Wno-error=implicit-function-declaration"
     ];
+  };
+
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
   };
 
   installPhase = ''
