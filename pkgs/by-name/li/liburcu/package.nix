@@ -23,6 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [ perl ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   preCheck = "patchShebangs tests/unit";
