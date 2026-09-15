@@ -50,6 +50,10 @@ let
     writeText
     writeTOML
     writeYAML
+    writeYsh
+    writeYshBin
+    writeOsh
+    writeOshBin
     ;
 
   expectSuccess =
@@ -175,6 +179,22 @@ recurseIntoAttrs {
           - test: success
         """)
         print(y[0]['test'])
+      ''
+    );
+
+    ysh = expectSuccessBin (
+      writeYshBin "test-writers-ysh-bin" ''
+        if test "test" = "test" {
+          echo "success"
+        }
+      ''
+    );
+
+    osh = expectSuccessBin (
+      writeOshBin "test-writers-osh-bin" ''
+        if test "test" = "test"; then
+          echo "success"
+        fi
       ''
     );
 
@@ -347,6 +367,22 @@ recurseIntoAttrs {
           - test: success
         """)
         print(y[0]['test'])
+      ''
+    );
+
+    ysh = expectSuccess (
+      writeYsh "test-writers-ysh" ''
+        if test "test" = "test" {
+          echo "success"
+        }
+      ''
+    );
+
+    osh = expectSuccess (
+      writeOsh "test-writers-osh" ''
+        if test "test" = "test"; then
+          echo "success"
+        fi
       ''
     );
 
