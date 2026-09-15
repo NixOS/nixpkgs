@@ -406,6 +406,7 @@ in
     propagatedBuildInputs = with super; [
       psutil
       sarge
+      pkg-resources-backport
     ];
 
     preConfigure = ''
