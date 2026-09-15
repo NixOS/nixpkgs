@@ -2,9 +2,10 @@
   lib,
   buildPythonPackage,
   flet-client-flutter,
+  pyprojectVersionPatchHook,
 
   # build-system
-  poetry-core,
+  setuptools,
 
   flet,
   fastapi,
@@ -12,20 +13,26 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flet-web";
   inherit (flet-client-flutter) version src;
   pyproject = true;
 
-  sourceRoot = "${src.name}/sdk/python/packages/flet-web";
+  __structuredAttrs = true;
 
-  build-system = [ poetry-core ];
+  sourceRoot = "${finalAttrs.src.name}/sdk/python/packages/flet-web";
+
+  # pyproject.toml is version = "0.1.0"; hook rewrites it to match the derivation.
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
+
+  build-system = [ setuptools ];
 
   dependencies = [
     flet
     fastapi
     uvicorn
-  ];
+  ]
+  ++ uvicorn.optional-dependencies.standard;
 
   pythonImportsCheck = [ "flet_web" ];
 
@@ -34,16 +41,16 @@ buildPythonPackage rec {
   };
 
   postInstall = ''
-    ln -s $web $out/${python.sitePackages}/flet_web/web
+    ln -s ${finalAttrs.web} $out/${python.sitePackages}/flet_web/web
   '';
 
   meta = {
     description = "Flet web client in Flutter";
     homepage = "https://flet.dev/";
-    changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";
+    changelog = "https://github.com/flet-dev/flet/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       heyimnova
     ];
   };
-}
+})
