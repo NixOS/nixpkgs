@@ -805,6 +805,17 @@ with haskellLib;
       sha256 = "sha256-EqvMQpRz/7hbY6wJ0xG8Ou6oKhwWdpjzBv+NPW6tnSY=";
       includes = [ "src/Turtle/Prelude.hs" ];
     })
+    # https://github.com/Gabriella439/turtle/pull/464
+    (fetchpatch {
+      name = "allow-ghc-9.14.patch";
+      url = "https://github.com/Gabriella439/turtle/commit/a4c0c1de8a69e31843b8b2ded720e5de388c1712.patch";
+      sha256 = "sha256-itTd48DB4JQdnMoUDF7RsTHAN72YIfCSJ/V3k3ieqIA";
+    })
+    (fetchpatch {
+      name = "allow-lts-25.patch";
+      url = "https://github.com/Gabriella439/turtle/commit/0205bf989d471cbc5225f7529c2d42c52e29ef14.patch";
+      sha256 = "sha256-5vElzfhWekfA8t70wVivka39whksshHEnOSNMlEEufg";
+    })
   ] super.turtle;
 
   inspection-testing = overrideCabal (drv: {
