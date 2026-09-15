@@ -7,6 +7,7 @@
   cmake,
   makeWrapper,
   writeShellScript,
+  dbus,
   alsa-lib,
   libpulseaudio,
   libGL,
@@ -22,7 +23,7 @@
 let
   # projectm-sys expects CMake to install into lib/, while CMake defaults to
   # lib64/ on NixOS. Wrap cmake to force it, matching upstream's flake.nix.
-  cmakeWithLibdir = writeShellScript "cmake-fastpotify" ''
+  cmakeWithLibdir = writeShellScript "cmake-spotifast" ''
     if [[ "$1" == "--build" ]]; then
       exec ${cmake}/bin/cmake "$@"
     else
@@ -31,19 +32,19 @@ let
   '';
 in
 rustPlatform.buildRustPackage rec {
-  pname = "fastpotify";
-  version = "0.7.1";
+  pname = "spotifast";
+  version = "0.8.0";
 
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "crmne";
-    repo = "fastpotify";
+    repo = "spotifast";
     tag = "v${version}";
-    hash = "sha256-RZEM1b7oj0dAIXKf+B4z5g8RaO9lArMk04/h++roGME=";
+    hash = "sha256-cX9DXG4u7mBSl6sO768A1vJ9kHZZc12+STzRU0KuWh0=";
   };
 
-  cargoHash = "sha256-DrwPRPGr2QBXpTKJmCSHLnOJAymwuN7SKKqEYlNTQHc=";
+  cargoHash = "sha256-A17V9f8cueyYaX/aIPMTTYERGSxNbSJrd0bpwDZXUyI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -51,6 +52,8 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ makeWrapper ];
+
+  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [ dbus ];
 
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
@@ -64,19 +67,22 @@ rustPlatform.buildRustPackage rec {
   env.CMAKE = "${cmakeWithLibdir}";
 
   # The GUI dlopens its Wayland, X11 and GL libraries at run time.
+  # Both the spotifast binary and the fastpotify compatibility binary need it.
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    wrapProgram $out/bin/fastpotify \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          libxkbcommon
-          wayland
-          libGL
-          libx11
-          libxcursor
-          libxi
-          libxrandr
-        ]
-      }
+    for bin in spotifast fastpotify; do
+      wrapProgram $out/bin/$bin \
+        --prefix LD_LIBRARY_PATH : ${
+          lib.makeLibraryPath [
+            libxkbcommon
+            wayland
+            libGL
+            libx11
+            libxcursor
+            libxi
+            libxrandr
+          ]
+        }
+    done
   '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -88,11 +94,11 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Fast native Spotify client with local playback and Spotify Connect";
-    homepage = "https://fastpotify.rocks";
-    changelog = "https://github.com/crmne/fastpotify/releases/tag/v${version}";
+    homepage = "https://spotifast.rocks";
+    changelog = "https://github.com/crmne/spotifast/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ DmitrySkibitsky ];
-    mainProgram = "fastpotify";
+    mainProgram = "spotifast";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
