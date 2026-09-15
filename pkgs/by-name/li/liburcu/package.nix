@@ -23,6 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [ perl ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   preCheck = "patchShebangs tests/unit";
@@ -32,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://git.lttng.org/userspace-rcu.git";
     rev-prefix = "v";
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Userspace RCU (read-copy-update) library";
