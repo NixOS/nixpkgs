@@ -45,7 +45,8 @@ assert dmenuSupport && waylandSupport -> dmenu-wayland != null && ydotool != nul
 let
   passExtensions = import ./extensions { inherit pkgs; };
 
-  env =
+  env = lib.makeOverridable (
+    { pass }:
     extensions:
     let
       selected = [
@@ -55,7 +56,7 @@ let
       ++ lib.optional tombPluginSupport passExtensions.tomb;
     in
     buildEnv {
-      name = "pass-env";
+      name = "${pass.meta.mainProgram}-env";
       paths = selected;
       nativeBuildInputs = [ makeWrapper ];
       buildInputs = lib.concatMap (x: x.buildInputs) selected;
@@ -73,11 +74,12 @@ let
           fi
         done
 
-        wrapProgram $out/bin/pass \
+        wrapProgram $out/bin/${pass.meta.mainProgram} \
           --set SYSTEM_EXTENSION_DIR "$out/lib/password-store/extensions"
       '';
-      meta.mainProgram = "pass";
-    };
+      meta.mainProgram = pass.meta.mainProgram;
+    }
+  );
 in
 
 stdenv.mkDerivation rec {
@@ -190,7 +192,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     extensions = passExtensions;
-    withExtensions = env;
+    withExtensions = env { pass = pass; };
   };
 
   meta = {
