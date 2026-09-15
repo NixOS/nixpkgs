@@ -1,0 +1,20 @@
+--- a/liberaforms/config/setup.py
++++ b/liberaforms/config/setup.py
+@@ -7,6 +7,7 @@
+ 
+ import os
+ import shutil
++import stat
+ from pathlib import Path
+ 
+ def ensure_directories(app):
+@@ -20,6 +21,9 @@
+     if not os.path.isdir(brand_dir):
+         shutil.copytree(os.path.join(app.config['ASSETS_DIR'], 'brand'),
+                         os.path.join(uploads_dir, app.config['BRAND_DIR']))
++        # migrations/versions/6f0e2b9e9db3_.py
++        for root, _, _ in os.walk(brand_dir):
++            os.chmod(root, os.stat(root).st_mode | stat.S_IWUSR)
+ 
+     avatar_dir = os.path.join(uploads_dir, app.config['AVATAR_DIR'])
+     if not os.path.isdir(avatar_dir):
