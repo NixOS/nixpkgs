@@ -9,7 +9,7 @@
 
 buildPythonPackage {
   pname = "tubes";
-  version = "0.2.1-unstable-2023-11-06";
+  version = "0.2.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
