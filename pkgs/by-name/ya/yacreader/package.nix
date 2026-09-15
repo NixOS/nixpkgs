@@ -6,6 +6,7 @@
   pkg-config,
   ctestCheckHook,
   libGLU,
+  libarchive,
   libunarr,
   expat,
   libdeflate,
@@ -19,6 +20,12 @@
 }:
 let
   qtPackages = qt6Packages;
+
+  # libarchive reads RAR5 under a free license and already ships in nixpkgs core,
+  # so it is the Linux backend; it is Linux-only upstream, so Darwin keeps unarr.
+  # (YACReader's 7zip backend also reads RAR5, but only via a runtime 7z.so built
+  #  with the unfree unRAR codec, which would make this package unfree.)
+  useLibarchive = stdenv.hostPlatform.isLinux;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "yacreader";
@@ -50,10 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   cmakeFlags = [
-    # force unarr backend on all platforms
     (lib.cmakeBool "BUILD_SERVER_STANDALONE" onlyServer)
     (lib.cmakeFeature "PDF_BACKEND" "poppler")
-    (lib.cmakeFeature "DECOMPRESSION_BACKEND" "unarr")
+    (lib.cmakeFeature "DECOMPRESSION_BACKEND" (if useLibarchive then "libarchive" else "unarr"))
   ];
 
   nativeBuildInputs = [
@@ -64,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libGLU
-    libunarr
+    (if useLibarchive then libarchive else libunarr)
     expat
     libdeflate
     lerc
