@@ -455,7 +455,12 @@ in
       sha256 = "sha256-5TUx64i3VIUXtpIf4mo3hP//kXE+LuuLaZEJYgv4hVs=";
     };
 
-    propagatedBuildInputs = with super; [ psutil ];
+    # Plugin imports `imghdr`, part of the standard library removed in
+    # Python 3.13 (PEP 594). Add nixpkgs' backport of it.
+    propagatedBuildInputs = with super; [
+      psutil
+      standard-imghdr
+    ];
 
     meta = {
       description = "Plugin that extracts thumbnails from uploaded gcode files sliced by PrusaSlicer";
