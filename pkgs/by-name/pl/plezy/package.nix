@@ -2,7 +2,7 @@
   lib,
   stdenv,
   stdenvNoCC,
-  flutter344,
+  flutter347,
   fetchFromGitHub,
   fetchurl,
   pkg-config,
@@ -47,6 +47,7 @@ let
   meta = {
     description = "Modern cross-platform Emby, Plex & Jellyfin client built with Flutter";
     homepage = "https://github.com/edde746/plezy";
+    changelog = "https://github.com/edde746/plezy/releases/tag/${version}";
     mainProgram = "plezy";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
@@ -62,7 +63,7 @@ let
     );
   };
 
-  linux = flutter344.buildFlutterApplication rec {
+  linux = flutter347.buildFlutterApplication rec {
     inherit pname version src;
 
     pubspecLock = lib.importJSON ./pubspec.lock.json;
