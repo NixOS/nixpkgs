@@ -1,0 +1,18 @@
+diff --git a/demo/CMakeLists.txt b/demo/CMakeLists.txt
+index 5af09d86ae..971eee7774 100755
+--- a/demo/CMakeLists.txt
++++ b/demo/CMakeLists.txt
+@@ -20,6 +20,7 @@
+       "mpeghUiManager/mpeghUiManagerProcessor.h"
+     )
+   endif()
++  install(TARGETS mpeghDecoder RUNTIME)
+ endif()
+
+ if(${mpeghdec_BUILD_UIMANAGER})
+@@ -30,4 +31,5 @@
+     "mpeghUiManager/mpeghUiManagerProcessor.h"
+   )
+   target_link_libraries(mpeghUiManager mpeghdec mmtisobmff ilo)
++  install(TARGETS mpeghUiManager RUNTIME)
+ endif()
