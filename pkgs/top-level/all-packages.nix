@@ -3170,6 +3170,7 @@ with pkgs;
     crystal_1_17
     crystal_1_18
     crystal_1_19
+    crystal_1_21
     crystal
     ;
 
