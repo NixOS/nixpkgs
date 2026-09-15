@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  gradle,
+  gradle_8,
   jre,
   makeWrapper,
   nix-update-script,
@@ -10,7 +10,10 @@
   versionCheckHook,
   writeText,
 }:
-
+let
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "smithy-cli";
   version = "1.72.1";
