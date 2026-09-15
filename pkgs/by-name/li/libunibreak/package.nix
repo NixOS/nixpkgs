@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libunibreak";
-  version = "7.0";
+  version = "8_0";
 
   src =
     let
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
       owner = "adah1972";
       repo = "libunibreak";
       tag = "libunibreak_${rev_version}";
-      hash = "sha256-J+/L5pFudppf0l0Gk/6/Rwz5I59p9Aw11cUEPRPGP/8=";
+      hash = "sha256-ssIBl+lLOJsSXSS8lDqUqIcGRPRal0PXtRRK2dqivZQ=";
     };
 
   nativeBuildInputs = [ autoreconfHook ];
