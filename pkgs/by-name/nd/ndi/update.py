@@ -10,7 +10,7 @@ import tarfile
 import requests
 from absl import app, flags
 
-BASE_NAME = "Install_NDI_SDK_v5_Linux"
+BASE_NAME = "Install_NDI_SDK_v6_Linux"
 NDI_SDK_URL = f"https://downloads.ndi.tv/SDK/NDI_SDK_Linux/{BASE_NAME}.tar.gz"
 NDI_EXEC = f"{BASE_NAME}.sh"
 
@@ -22,7 +22,7 @@ FLAG_out = flags.DEFINE_string("out", None, "Path to read/write version.json fro
 def find_version_json() -> str:
     if FLAG_out.value:
         return FLAG_out.value
-    try_paths = ["pkgs/development/libraries/ndi/version.json", "version.json"]
+    try_paths = ["pkgs/by-name/nd/ndi/version.json", "version.json"]
     for path in try_paths:
         if os.path.exists(path):
             return path
