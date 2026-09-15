@@ -390,7 +390,7 @@ rec {
   licensesSpdx = mapAttrs' (_key: license: {
     name = license.spdxId;
     value = license;
-  }) (filterAttrs (_key: license: license ? spdxId) lib.licenses);
+  }) (filterAttrs (_key: license: license ? spdxId) (removeAttrs lib.licenses [ "apsl10" "apsl20" ]));
 
   /**
     Get the corresponding attribute in lib.licenses from the SPDX ID
