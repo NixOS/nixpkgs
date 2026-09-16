@@ -2908,10 +2908,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-Gu54g5p/RZGZXsMSK8yKGoT5xYTK5zvBrM69AEQjwb0=",
+                    "hash": "sha256-G1FHSkpXicBtYu0tuA9gR7roPQjmKiyhKF8ODTWEw5Q=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v44.3.0"
+                    "tag": "v44.4.1"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -3261,10 +3261,10 @@
             },
             "src/third_party/electron_node": {
                 "args": {
-                    "hash": "sha256-X7aZh0QOm79anmh77QRiHGRSi8TERuWnWXrcPqDYPjY=",
+                    "hash": "sha256-D0Emw+F+8fz41onhxfiCQuxEQx+4jjsT7Ym2mqrKkRI=",
                     "owner": "nodejs",
                     "repo": "node",
-                    "tag": "v24.20.0"
+                    "tag": "v24.21.0"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -4294,7 +4294,7 @@
             }
         },
         "modules": "149",
-        "node": "24.20.0",
-        "version": "44.3.0"
+        "node": "24.21.0",
+        "version": "44.4.1"
     }
 }
