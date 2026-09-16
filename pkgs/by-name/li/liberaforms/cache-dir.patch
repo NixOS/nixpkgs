@@ -1,3 +1,6 @@
+# Allow Flask-Assets to write compiled static assets to CACHE_DIRECTORY.
+# Nix store paths are read-only, but Flask-Assets needs a writable dir
+# for cache/compiled assets at runtime.
 --- a/liberaforms/__init__.py
 +++ b/liberaforms/__init__.py
 @@ -88,6 +88,11 @@

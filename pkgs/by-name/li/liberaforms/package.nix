@@ -16,7 +16,7 @@
 
 python3Packages.buildPythonPackage (finalAttrs: {
   pname = "liberaforms";
-  version = "4.9.2";
+  version = "4.11.1";
   pyproject = false;
   __structuredAttrs = true;
 
@@ -24,7 +24,7 @@ python3Packages.buildPythonPackage (finalAttrs: {
     owner = "LiberaForms";
     repo = "server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nhZvaoJ+qlvtohqE2K8wj6/UHMc9o/tuoNpeq++DzZ8=";
+    hash = "sha256-GTV6uivzOuUOlPDOSdFHAk1865e4yUmrO0xNbQlSV4c=";
   };
 
   patches = [
@@ -45,13 +45,6 @@ python3Packages.buildPythonPackage (finalAttrs: {
       --replace-fail "Migrate(app, db)" \
                      "Migrate(app, db, directory=os.environ.get('MIGRATIONS_DIR', 'migrations'))"
   '';
-
-  # postPatch = ''
-  #   echo "Compiling sass files"
-  #   pushd liberaforms/static
-  #   chronic sass sass:css --style=compressed --no-source-map
-  #   popd
-  # '';
 
   build-system = with python3Packages; [
     setuptools
@@ -148,14 +141,6 @@ python3Packages.buildPythonPackage (finalAttrs: {
     pushd tests
     cp test.ini.example test.ini
   '';
-
-  # # avoid writing in the migration process
-  # postFixup = ''
-  #   cp $out/assets/brand/logo-default.png $out/assets/brand/logo.png
-  #   cp $out/assets/brand/favicon-default.ico $out/assets/brand/favicon.ico
-  #   sed -i "/shutil.copyfile/d" $out/liberaforms/models/site.py
-  #   sed -i "/brand_dir/d" $out/migrations/versions/6f0e2b9e9db3_.py
-  # '';
 
   meta = {
     description = "Ethical form software";
