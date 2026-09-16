@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 
@@ -25,7 +26,6 @@ let
   ];
 
   builtInRemovedMsg = "This is now built-in in DMS and doesn't need additional dependencies.";
-
 in
 {
   imports = [
@@ -40,12 +40,12 @@ in
     (lib.mkRemovedOptionModule (path ++ [ "enableVPN" ])
       "Networking backends are detected by DMS at runtime. Configure the desired networking service separately."
     )
-    (lib.mkRemovedOptionModule (
-      path ++ [ "enableDynamicTheming" ]
-    ) "Install matugen separately to use DMS dynamic theming.")
-    (lib.mkRemovedOptionModule (
-      path ++ [ "enableAudioWavelength" ]
-    ) "Install cava separately to use the DMS audio visualizer.")
+    (lib.mkRemovedOptionModule (path ++ [ "enableDynamicTheming" ])
+      "matugen is included in the default DMS environment. Use programs.dms-shell.excludePackages to exclude it."
+    )
+    (lib.mkRemovedOptionModule (path ++ [ "enableAudioWavelength" ])
+      "cava is included in the default DMS environment. Use programs.dms-shell.excludePackages to exclude it."
+    )
     (lib.mkRemovedOptionModule (
       path ++ [ "enableCalendarEvents" ]
     ) "Install a supported calendar backend separately and select it in DMS settings.")
@@ -55,6 +55,12 @@ in
     enable = mkEnableOption "DankMaterialShell, a complete desktop shell for Wayland compositors";
 
     package = mkPackageOption pkgs "dms-shell" { };
+
+    excludePackages = mkOption {
+      type = types.listOf types.package;
+      default = [ ];
+      description = "Which packages DMS should exclude from its default environment.";
+    };
 
     systemd = {
       enable = mkOption {
@@ -138,10 +144,12 @@ in
       path = lib.mkForce [ ];
     };
 
-    environment.systemPackages = [
+    environment.systemPackages = utils.removePackagesByName [
       cfg.package
       cfg.quickshell.package
-    ];
+      pkgs.matugen
+      pkgs.cava
+    ] cfg.excludePackages;
 
     environment.etc =
       mapAttrs'
@@ -155,7 +163,6 @@ in
           }) (filterAttrs (n: v: v.enable) cfg.plugins)
         );
 
-    services.power-profiles-daemon.enable = lib.mkDefault true;
     services.accounts-daemon.enable = lib.mkDefault true;
     hardware.i2c.enable = lib.mkDefault true;
     hardware.graphics.enable = lib.mkDefault true;
