@@ -2674,6 +2674,8 @@ self: super: with self; {
 
   brax = callPackage ../development/python-modules/brax { };
 
+  breame = callPackage ../development/python-modules/breame { };
+
   breathe = callPackage ../development/python-modules/breathe { };
 
   breezy = callPackage ../development/python-modules/breezy { };
@@ -22137,6 +22139,8 @@ self: super: with self; {
   uvicorn-worker = callPackage ../development/python-modules/uvicorn-worker { };
 
   uvloop = callPackage ../development/python-modules/uvloop { };
+
+  uwotm8 = callPackage ../development/python-modules/uwotm8 { };
 
   uwsgi-chunked = callPackage ../development/python-modules/uwsgi-chunked { };
 
