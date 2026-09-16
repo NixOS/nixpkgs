@@ -4,11 +4,7 @@
   ocamlPackages,
 }:
 
-let
-  inherit (ocamlPackages) buildDunePackage lablgtk3-sourceview3 ocp-index;
-in
-
-buildDunePackage rec {
+ocamlPackages.buildDunePackage rec {
   pname = "ocaml-top";
   version = "1.2.0";
 
@@ -20,8 +16,8 @@ buildDunePackage rec {
   };
 
   buildInputs = [
-    lablgtk3-sourceview3
-    ocp-index
+    ocamlPackages.lablgtk3-sourceview3
+    ocamlPackages.ocp-index
   ];
 
   meta = {
