@@ -11,9 +11,8 @@
   writableTmpDirAsHomeHook,
   gitMinimal,
   versionCheckHook,
-  makeWrapper,
+  makeBinaryWrapper,
   which,
-  testers,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -61,7 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     protobuf
     nodejs
     npmHooks.npmConfigHook
-    makeWrapper
+    makeBinaryWrapper
   ];
 
   buildInputs = [
@@ -103,12 +102,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+  postInstallCheck = ''
+    versionCheckProgram="$out/bin/zerocode" versionCheckHook
+  '';
 
   passthru.updateScript = nix-update-script { };
-  passthru.tests.zerocode-version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = "zerocode --version";
-  };
 
   meta = {
     description = "Fast, small, and fully autonomous AI assistant infrastructure — deploy anywhere, swap anything";
