@@ -164,6 +164,9 @@
   "ghc-deprecation-policy": [
     "index.html#ghc-deprecation-policy"
   ],
+  "guileImportsCheckHook": [
+    "index.html#guileImportsCheckHook"
+  ],
   "how-channels-work": [
     "index.html#how-channels-work"
   ],
