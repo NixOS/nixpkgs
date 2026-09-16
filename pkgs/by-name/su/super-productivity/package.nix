@@ -18,17 +18,17 @@ let
   electron = electron_43;
   nodejs = nodejs_22;
 in
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "super-productivity";
-  version = "18.21.2";
+  version = "19.0.1";
 
   inherit nodejs;
 
   src = fetchFromGitHub {
     owner = "super-productivity";
     repo = "super-productivity";
-    tag = "v${version}";
-    hash = "sha256-q95UwzY1G2FxxHrg6eWxGD/C4iy/nbSMzRUMCfunL3s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-42Q+nv2zgS5dCS4hlDNqvU//hEgmFOgDLv2covy2P74=";
   };
 
   # Use custom fetcher for deps because super-productivity uses multiple
@@ -38,7 +38,7 @@ buildNpmPackage rec {
   npmDeps = stdenv.mkDerivation (
     lib.fetchers.normalizeHash { } {
       pname = "super-productivity-deps";
-      inherit version src;
+      inherit (finalAttrs) version src;
 
       nativeBuildInputs = [
         prefetch-npm-deps
@@ -74,7 +74,7 @@ buildNpmPackage rec {
       dontInstall = true;
 
       outputHashMode = "recursive";
-      hash = "sha256-mKsIhYGYqI5iStaT/G+UssnbJjdwol2xXpno+oZ1Sek=";
+      hash = "sha256-ApSPWa9t/xWM7oqbgmUI9mHrS+TyCoBP2sxCJLGFe7s=";
     }
   );
 
@@ -83,7 +83,7 @@ buildNpmPackage rec {
 
   cargoRoot = "electron/wayland-idle-helper";
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
@@ -211,4 +211,4 @@ buildNpmPackage rec {
     ];
     mainProgram = "superproductivity";
   };
-}
+})
