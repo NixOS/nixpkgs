@@ -43,7 +43,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gjs";
-  version = "1.89.90";
+  version = "1.90.0";
 
   outputs = [
     "out"
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor finalAttrs.version}/gjs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Za7JPCYcQR2jIVrsNCwkv7fndZIxZbODLZlUkdjAVOY=";
+    hash = "sha256-R+nyKx1KyoQcbEkrRJtt4y/2gJchg+Jv57mKRcXD/uE=";
   };
 
   patches = [
