@@ -13051,6 +13051,12 @@
     githubId = 1982341;
     name = "Jack Cummings";
   };
+  jd42 = {
+    email = "nixpkgs@julien-diot.com";
+    github = "juliendiot42";
+    githubId = 34234917;
+    name = "Julien Diot";
+  };
   jdagilliland = {
     email = "jdagilliland@gmail.com";
     github = "jdagilliland";
