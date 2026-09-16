@@ -7,19 +7,22 @@
 
 let
   inherit (lib)
+    mkDefault
     mkEnableOption
     mkPackageOption
     mkIf
     mkOption
-    recursiveUpdate
+    optional
     optionalAttrs
+    recursiveUpdate
     ;
 
   cfg = config.networking.wireless.iwd;
   ini = pkgs.formats.ini { };
+  isNetworkManagerBackend =
+    config.networking.networkmanager.enable && (config.networking.networkmanager.wifi.backend == "iwd");
   defaults =
-    with config.networking.networkmanager;
-    optionalAttrs (enable && (wifi.backend == "iwd")) {
+    optionalAttrs isNetworkManagerBackend {
       # without DefaultInterface, sometimes wlan0 simply goes AWOL with NetworkManager
       # https://iwd.wiki.kernel.org/interface_lifecycle#interface_management_in_iwd
       DriverQuirks.DefaultInterface = "?*";
@@ -85,7 +88,11 @@ in
 
     systemd.services.iwd = {
       path = [ config.networking.resolvconf.package ];
-      wantedBy = [ "multi-user.target" ];
+      # When NetworkManager is used with the iwd backend, iwd is started on-demand
+      # via D-Bus activation by NetworkManager. Starting iwd eagerly at boot causes
+      # a race condition with udev interface initialization when DefaultInterface
+      # quirk is active.
+      wantedBy = mkDefault (optional (!isNetworkManagerBackend) "multi-user.target");
       restartTriggers = [ configFile ];
       serviceConfig.ReadWritePaths = "-/etc/resolv.conf";
     };
