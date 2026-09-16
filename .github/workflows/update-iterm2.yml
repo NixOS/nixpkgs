@@ -1,0 +1,132 @@
+name: auto-update-iterm2
+
+on:
+  schedule:
+    - cron: "0 10 * * *" # daily, 10:00 UTC
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Don't open a PR, just commit and push the branch"
+        type: boolean
+        default: true
+
+concurrency:
+  group: update-iterm2
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout fork
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 1 # content is fully replaced by the reset below
+
+      - name: Sync local checkout with upstream nixpkgs
+        run: |
+          git remote add upstream https://github.com/NixOS/nixpkgs.git
+          git fetch --depth 1 upstream master
+          fork_workflows=$(mktemp -d)
+          cp -R .github/workflows "$fork_workflows/"
+          git reset --hard upstream/master
+          rm -rf .github/workflows
+          cp -R "$fork_workflows/workflows" .github/workflows
+
+      # TODO: remove once the upstream sed fix (gnused in update.sh's
+      # nix-shell -p) is merged into NixOS/nixpkgs.
+      - name: Apply temporary gnused patch (pending upstream PR)
+        run: |
+          sed -i '' \
+            's/-p curl coreutils common-updater-scripts/-p curl coreutils gnused common-updater-scripts/' \
+            pkgs/by-name/it/iterm2/update.sh
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+
+      - name: Run iterm2's update.sh
+        run: ./pkgs/by-name/it/iterm2/update.sh
+
+      - name: Check for a version change
+        id: diff
+        run: |
+          if git diff --quiet -- pkgs/by-name/it/iterm2/package.nix; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Read the new version
+        if: steps.diff.outputs.changed == 'true'
+        id: version
+        run: |
+          version=$(nix-instantiate --eval -E "with import ./. {}; iterm2.version" | tr -d '"')
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Build iterm2
+        if: steps.diff.outputs.changed == 'true'
+        run: nix-build -A iterm2 --no-out-link
+
+      - name: Commit and push the update/iterm2 branch
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "emaiax"
+          git config user.email "emaiax@users.noreply.github.com"
+          git checkout -B update/iterm2
+          git add pkgs/by-name/it/iterm2/package.nix .github/workflows
+          git commit -m "iterm2: update to ${{ steps.version.outputs.version }}"
+          git push --force "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/emaiax/nixpkgs.git" update/iterm2
+
+      - name: Close a stale PR and open a new one against NixOS/nixpkgs
+        if: steps.diff.outputs.changed == 'true' && github.event.inputs.dry_run != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.NIXPKGS_PR_TOKEN }}
+        run: |
+          existing=$(gh pr list --repo NixOS/nixpkgs --head update/iterm2 --state open --json number,headRepositoryOwner --jq '[.[] | select(.headRepositoryOwner.login == "emaiax")][0].number')
+          if [ -n "$existing" ]; then
+            gh pr close "$existing" --repo NixOS/nixpkgs \
+              --comment "superseded by iterm2 ${{ steps.version.outputs.version }}."
+          fi
+          cat > pr-body.md <<EOF
+          Automated bump via GitHub Actions running on a macos-latest (aarch64-darwin) runner: a workaround for nix-community/nixpkgs-update#513: the shared nixpkgs-update bot runs on Linux workers and can't evaluate/build darwin-only packages like \`iterm2\`.
+
+          ## Things done
+
+          - Built on platform:
+            - [ ] x86_64-linux
+            - [ ] aarch64-linux
+            - [x] aarch64-darwin
+          - Tested, as applicable:
+            - [ ] [NixOS tests] in [nixos/tests].
+            - [ ] [Package tests] at \`passthru.tests\`.
+            - [ ] Tests in [lib/tests] or [pkgs/test] for functions and "core" functionality.
+          - [ ] Ran \`nixpkgs-review\` on this PR. See [nixpkgs-review usage].
+          - [ ] Tested basic functionality of all binary files, usually in \`./result/bin/\`.
+          - Nixpkgs Release Notes
+            - [ ] Package update: when the change is major or breaking.
+          - NixOS Release Notes
+            - [ ] Module addition: when adding a new NixOS module.
+            - [ ] Module update: when the change is significant.
+          - [x] Fits [CONTRIBUTING.md], [pkgs/README.md], [maintainers/README.md] and other READMEs.
+          - [x] Follows the [automation/AI policy] — exempt as maintainer-approved automation running an existing update script, no LLM involved in this run's output.
+
+          [NixOS tests]: https://nixos.org/manual/nixos/unstable/index.html#sec-nixos-tests
+          [Package tests]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#package-tests
+          [nixpkgs-review usage]: https://github.com/Mic92/nixpkgs-review#usage
+          [CONTRIBUTING.md]: https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md
+          [automation/AI policy]: https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#automationai-policy
+          [maintainers/README.md]: https://github.com/NixOS/nixpkgs/blob/master/maintainers/README.md
+          [lib/tests]: https://github.com/NixOS/nixpkgs/blob/master/lib/tests
+          [nixos/tests]: https://github.com/NixOS/nixpkgs/blob/master/nixos/tests
+          [pkgs/README.md]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md
+          EOF
+          gh pr create \
+            --repo NixOS/nixpkgs \
+            --head emaiax:update/iterm2 \
+            --base master \
+            --title "iterm2: update to ${{ steps.version.outputs.version }}" \
+            --body-file pr-body.md
