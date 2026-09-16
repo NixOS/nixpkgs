@@ -20130,6 +20130,8 @@ self: super: with self; {
 
   sudachipy = callPackage ../development/python-modules/sudachipy { };
 
+  sudoku-engine = callPackage ../development/python-modules/sudoku-engine { };
+
   suds = callPackage ../development/python-modules/suds { };
 
   suds-community = callPackage ../development/python-modules/suds-community { };
