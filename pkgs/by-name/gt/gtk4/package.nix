@@ -4,7 +4,6 @@
   buildPackages,
   replaceVars,
   fetchurl,
-  fetchpatch,
   pkg-config,
   docutils,
   gettext,
@@ -76,7 +75,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4";
-  version = "4.22.4";
+  version = "4.22.5";
 
   outputs = [
     "out"
@@ -92,16 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor finalAttrs.version}/gtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Ub2fYMfSOmZaVWxzZMIfsuTiglZrPn4JJFXo+RAzCJM=";
+    hash = "sha256-L928kwhbAuqzORBdnQxBCIp1t8isN/zXYn6qwQyfeKU=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-32bit-VkImage-null.patch";
-      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/10d43de8f4f942cb591ada3103474bd7213425f1.patch";
-      hash = "sha256-DJIL6M3XcsjBoMO77OxNi84d1DxAphAfot3N7Nq1QqQ=";
-    })
-  ];
 
   depsBuildBuild = [
     pkg-config
