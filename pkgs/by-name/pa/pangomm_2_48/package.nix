@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pangomm";
-  version = "2.56.2";
+  version = "2.58.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/pangomm/${lib.versions.majorMinor version}/pangomm-${version}.tar.xz";
-    hash = "sha256-8emEyFqFtqDmFhY2ZSH1HdgoKgcrtF0VtQhHYrYvTA4=";
+    hash = "sha256-IXUUwaZQNcL85uaeM7DZK6+iWUzEdOmVpEc0QbEPOjM=";
   };
 
   nativeBuildInputs = [
