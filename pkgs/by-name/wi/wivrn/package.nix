@@ -25,7 +25,6 @@
   libdrm,
   libGL,
   libnotify,
-  libpulseaudio,
   librsvg,
   libva,
   libx11,
@@ -56,13 +55,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wivrn";
-  version = "26.6.2";
+  version = "26.9";
 
   src = fetchFromGitHub {
     owner = "wivrn";
     repo = "wivrn";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5e0XeP5DCdVrSQeDgNuCZP5McRbwybnpKuJw9cxHNPI=";
+    hash = "sha256-/kXgbku/4EeYY5YTwtY71csgxOP8bRACLqOvKXolg5g=";
   };
 
   monado = applyPatches {
@@ -70,8 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
       domain = "gitlab.freedesktop.org";
       owner = "monado";
       repo = "monado";
-      rev = "1b526bb3a0ff326ecd05af4c2c541407f53c6d4b";
-      hash = "sha256-SzuCQ1uX15vFGwGt3gswlVF2Su8sIND4R3tsTJ4T1LY=";
+      rev = "f037264d23e2472a444a157370647fcd601ed81b";
+      hash = "sha256-exHbecudAy57szL7kut7/fBYCoekEs3riZzhMtFWS/c=";
     };
 
     postPatch = ''
@@ -141,7 +140,6 @@ stdenv.mkDerivation (finalAttrs: {
     libarchive
     libdrm
     libnotify
-    libpulseaudio
     librsvg
     libva
     nlohmann_json
@@ -161,8 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     (lib.cmakeFeature "WIVRN_OPENXR_MANIFEST_TYPE" "absolute")
     (lib.cmakeBool "WIVRN_OPENXR_MANIFEST_ABI" clientLibOnly)
-    (lib.cmakeFeature "GIT_DESC" "v${finalAttrs.version}")
-    (lib.cmakeFeature "GIT_COMMIT" "v${finalAttrs.version}")
+    (lib.cmakeFeature "GIT_TAG" "v${finalAttrs.version}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MONADO" "${finalAttrs.monado}")
   ]
   ++ lib.optionals (!clientLibOnly) [
@@ -171,7 +168,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WIVRN_USE_VULKAN_ENCODE" true)
     (lib.cmakeBool "WIVRN_USE_X264" true)
     (lib.cmakeBool "WIVRN_USE_PIPEWIRE" true)
-    (lib.cmakeBool "WIVRN_USE_PULSEAUDIO" true)
     (lib.cmakeBool "WIVRN_FEATURE_STEAMVR_LIGHTHOUSE" true)
     (lib.cmakeFeature "OVR_COMPAT_SEARCH_PATH" ovrCompatSearchPaths)
   ];
