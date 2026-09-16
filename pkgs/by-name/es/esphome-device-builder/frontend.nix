@@ -4,12 +4,14 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_11,
   pyprojectVersionPatchHook,
   setuptools,
   meta,
 }:
-
+let
+  pnpm = pnpm_11;
+in
 buildPythonPackage (finalAttrs: {
   pname = "esphome-device-builder-frontend";
   version = "0.1.311";
