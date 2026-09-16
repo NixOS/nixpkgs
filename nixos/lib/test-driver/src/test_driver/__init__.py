@@ -9,8 +9,9 @@ import ptpython.ipython
 import ptpython.repl
 from colorama import Fore, Style
 
+from test_driver.config import load_driver_configuration
 from test_driver.debug import Debug, DebugAbstract, DebugNop
-from test_driver.driver import Driver, load_driver_configuration
+from test_driver.driver import Driver
 from test_driver.logger import (
     CompositeLogger,
     JunitXMLLogger,
@@ -178,6 +179,7 @@ def main() -> None:
         logger=logger,
         keep_machine_state=args.keep_machine_state,
         debug=debugger,
+        interactive=bool(args.interactive),
     ) as driver:
         if driver.config.enable_ssh_backdoor:
             driver.dump_machine_ssh()
