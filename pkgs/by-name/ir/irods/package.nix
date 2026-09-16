@@ -1,6 +1,6 @@
 {
   lib,
-  llvmPackages,
+  llvmPackages_19,
   fetchFromGitHub,
   cmake,
   ninja,
@@ -20,7 +20,9 @@
   spdlog,
 }:
 
-llvmPackages.stdenv.mkDerivation (finalAttrs: {
+# Using clang 19 because of: https://github.com/irods/irods/issues/8839
+# until 5.1 is out
+llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
   pname = "irods";
   version = "5.0.2";
 
