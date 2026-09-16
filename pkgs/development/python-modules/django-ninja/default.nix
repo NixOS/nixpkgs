@@ -3,6 +3,7 @@
   buildPythonPackage,
   django,
   fetchFromGitHub,
+  fetchpatch,
   flit-core,
   psycopg2,
   pydantic,
@@ -22,6 +23,14 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-nnGIhNGnK7q0nbw7EYJP+xCeS1uiuTrhQxf49dA+Sc8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "django-6.1-support.patch";
+      url = "https://github.com/vitalik/django-ninja/commit/18923770f6574ab38a45d0ed2d3d7c240984cdf9.patch";
+      hash = "sha256-NcKkgBfXYYQ14/lK5WK4w0ClqrPT1gqTdlPz2e4Ufcs=";
+    })
+  ];
 
   build-system = [ flit-core ];
 
