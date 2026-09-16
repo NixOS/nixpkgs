@@ -46,8 +46,8 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = nix-update-script {
       extraArgs = [
-        "-vr"
-        "libs/langgraph-store-mongodb/v(.*)"
+        "--version-regex"
+        "libs/langgraph-store-mongodb/v(.+)"
       ];
     };
   };
