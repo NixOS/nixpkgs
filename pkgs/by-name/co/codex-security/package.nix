@@ -30,8 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-WAU/vRpo3k2fIW1xIWoS9ZxopXoV0T80+95m2X/NUDY=";
   };
 
-  # The npm package lives in the `sdk/typescript` subdirectory of the
-  # repository, so root the whole build there.
   sourceRoot = "${finalAttrs.src.name}/sdk/typescript";
 
   pnpmDeps = fetchPnpmDeps {
@@ -54,9 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  # The prebuilt @openai/codex binary is a dynamically linked native
-  # executable that autoPatchelfHook needs to fix up on Linux. The bundled
-  # zsh in the codex resources links libtinfo.so.6, which ncurses provides.
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     stdenv.cc.cc.lib
     ncurses
@@ -119,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "CLI and TypeScript SDK for finding, validating, and fixing security vulnerabilities in your code";
     homepage = "https://github.com/openai/codex-security";
-    changelog = "https://github.com/openai/codex-security/releases/tag/npm-v${finalAttrs.version}";
+    changelog = "https://github.com/openai/codex-security/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sheeeng ];
     mainProgram = "codex-security";
