@@ -25335,6 +25335,12 @@
     githubId = 22859658;
     name = "RTUnreal";
   };
+  rub-br = {
+    name = "rub-br";
+    github = "rub-br";
+    githubId = 329537633;
+    email = "rubbr@sundhedsdata.dk";
+  };
   rubenhoenle = {
     email = "git@hoenle.xyz";
     github = "rubenhoenle";
