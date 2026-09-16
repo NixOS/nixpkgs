@@ -38,7 +38,7 @@ buildPythonPackage (finalAttrs: {
     owner = "microsoft";
     repo = "playwright-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DHMX7RaySqfy2Xi+Rw4nUg9pYrpxIksjq1JhWfknOaI=";
+    hash = "sha256-RwIn+0EcHnStjORVFmT7gp4bGjl+qer1FgtI3+aPF2w=";
   };
 
   patches = [
