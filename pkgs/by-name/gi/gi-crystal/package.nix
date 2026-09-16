@@ -44,5 +44,6 @@ crystal.buildCrystalPackage rec {
     homepage = "https://github.com/hugopl/gi-crystal";
     mainProgram = "gi-crystal";
     maintainers = with lib.maintainers; [ sund3RRR ];
+    license = lib.licenses.bsd3;
   };
 }
