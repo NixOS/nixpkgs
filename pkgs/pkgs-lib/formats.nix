@@ -304,7 +304,10 @@ optionalAttrs allowAliases aliases
           {
 
             type = attrsOf (iniSection atom);
-            lib.types.atom = atom;
+            lib.types = {
+              inherit atom;
+              section = iniSection atom;
+            };
 
             generate =
               name: value:
