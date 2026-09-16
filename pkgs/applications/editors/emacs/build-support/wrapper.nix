@@ -36,13 +36,15 @@
   makeFontsConf,
   makeBinaryWrapper,
   runCommand,
+  re-plistbuddy,
 }:
 self:
 let
   inherit (self) emacs;
   withNativeCompilation = emacs.withNativeCompilation or false;
   withTreeSitter = emacs.withTreeSitter or false;
-  withFontconfig = !emacs.stdenv.hostPlatform.isDarwin;
+  inherit (emacs.stdenv.hostPlatform) isDarwin;
+  withFontconfig = !isDarwin;
 in
 packagesFun: # packages explicitly requested by the user
 let
@@ -212,7 +214,8 @@ runCommand (lib.appendToName "with-packages" emacs).name
       emacs
       lndir
       makeBinaryWrapper
-    ];
+    ]
+    ++ lib.optionals isDarwin [ re-plistbuddy ];
 
     preferLocalBuild = true;
     allowSubstitutes = false;
@@ -226,6 +229,10 @@ runCommand (lib.appendToName "with-packages" emacs).name
     for prog in $emacs/bin/*; do # */
       local progname=$(basename "$prog")
       rm -f "$out/bin/$progname"
+
+      if [[ ( $progname == emacs || $progname == emacs-* ) && -d "$emacs/Applications/Emacs.app" ]]; then
+        prog="$out/Applications/Emacs.app/Contents/MacOS/Emacs-unwrapped"
+      fi
 
       substitute ${./wrapper.sh} $out/bin/$progname \
         --subst-var-by bash ${emacs.stdenv.shell} \
@@ -249,14 +256,19 @@ runCommand (lib.appendToName "with-packages" emacs).name
     # this has to pick up resources and metadata
     # to recognize it as an "app"
     if [ -d "$emacs/Applications/Emacs.app" ]; then
-      mkdir -p $out/Applications/Emacs.app/Contents/MacOS
+      app="$out/Applications/Emacs.app/Contents"
+      mkdir -p "$app/MacOS"
       cp -r $emacs/Applications/Emacs.app/Contents/Info.plist \
             $emacs/Applications/Emacs.app/Contents/PkgInfo \
             $emacs/Applications/Emacs.app/Contents/Resources \
-            $out/Applications/Emacs.app/Contents
+            "$app"
 
+      mkdir -p "$app/Resources/Fonts"
+      find -L "$deps/share/fonts" -type f -exec ln -s {} "$app/Resources/Fonts" \;
+      ln -s "$emacs/Applications/Emacs.app/Contents/MacOS/Emacs" "$app/MacOS/Emacs-unwrapped"
+      plutil -insert ATSApplicationFontsPath -string Fonts "$app/Info.plist"
 
-      substitute ${./wrapper.sh} $out/Applications/Emacs.app/Contents/MacOS/Emacs \
+      substitute ${./wrapper.sh} "$app/MacOS/Emacs" \
         --subst-var-by bash ${emacs.stdenv.shell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp" \
@@ -265,9 +277,9 @@ runCommand (lib.appendToName "with-packages" emacs).name
         --subst-var-by wrapperFontconfigFile "${fontconfigFile}" \
         --subst-var-by wrapperInvocationDirectory "$out/Applications/Emacs.app/Contents/MacOS/" \
         --subst-var-by wrapperInvocationName "Emacs" \
-        --subst-var-by prog "$emacs/Applications/Emacs.app/Contents/MacOS/Emacs"
-      chmod +x $out/Applications/Emacs.app/Contents/MacOS/Emacs
-      wrapProgramBinary $out/Applications/Emacs.app/Contents/MacOS/Emacs
+        --subst-var-by prog "$out/Applications/Emacs.app/Contents/MacOS/Emacs-unwrapped"
+      chmod +x "$app/MacOS/Emacs"
+      wrapProgramBinary "$app/MacOS/Emacs"
     fi
 
     mkdir -p $out/share
