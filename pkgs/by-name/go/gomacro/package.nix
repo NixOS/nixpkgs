@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "gomacro";
   version = "2.7-unstable-2024-01-07";
 
@@ -15,7 +15,26 @@ buildGoModule {
     hash = "sha256-16u3eByFmnY12M2CEhSJKLIT0KP9nbvTv+BnqWwNTcg=";
   };
 
-  vendorHash = "sha256-ok71QlBHGasGVt+CGwGqhgmx5JLkQcdlU/KX+W1A5Ws=";
+  vendorHash = "sha256-/2wnzc56knUH/GE5h7oMLhnM+8vPCFICu1wfgUcJJEE=";
+
+  overrideModAttrs = oldAttrs: {
+    postPatch = (oldAttrs.postPatch or "") + ''
+      export GOCACHE=$TMPDIR/go-cache
+      export GOPATH=$TMPDIR/go
+      go mod edit -replace golang.org/x/tools=golang.org/x/tools@v0.30.0
+      go mod tidy
+    '';
+    postBuild = (oldAttrs.postBuild or "") + ''
+      cp go.mod go.sum vendor/
+    '';
+  };
+
+  preBuild = ''
+    if [ -d vendor ]; then
+      chmod -R u+w vendor
+      cp vendor/go.mod vendor/go.sum .
+    fi
+  '';
 
   subPackages = [ "." ];
 
@@ -25,6 +44,5 @@ buildGoModule {
     homepage = "https://github.com/cosmos72/gomacro";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ shofius ];
-    broken = true;
   };
-}
+})
