@@ -30470,6 +30470,12 @@
     githubId = 2856634;
     name = "Tyler Compton";
   };
+  vendul0g = {
+    email = "a.navarro@um.es";
+    github = "vendul0g";
+    githubId = 113929833;
+    name = "Álvaro Navarro";
+  };
   venikx = {
     email = "code@venikx.com";
     github = "venikx";
