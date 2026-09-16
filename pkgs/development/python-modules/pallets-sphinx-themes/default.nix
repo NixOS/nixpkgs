@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pallets-sphinx-themes";
-  version = "2.3.0";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "pallets-sphinx-themes";
     tag = version;
-    hash = "sha256-+etmWzjCiYbM8cHSnJr0tHs3DpvozNYShQ6x60UADS4=";
+    hash = "sha256-nmukg/h6DMv6t0wl84VEvHIHzk0G0VDaHZsb8y+OO4M=";
   };
 
   build-system = [
